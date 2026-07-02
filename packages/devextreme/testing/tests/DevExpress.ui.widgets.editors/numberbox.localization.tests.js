@@ -138,3 +138,122 @@ QUnit.module('localization: global number format', {
         assert.strictEqual($input.val(), '1,235', 'defaultOptions format wins over global');
     });
 });
+
+QUnit.module('localization: global number format locale', {
+    beforeEach: function() {
+        this.savedConfig = { ...config() };
+        this.savedLocale = localization.locale();
+        localization.locale('en');
+    },
+
+    afterEach: function() {
+        localization.locale(this.savedLocale);
+        config(this.savedConfig);
+        NumberBox.defaultOptions([]);
+    },
+}, () => {
+    QUnit.test('uses format locale from global numberFormat map with de message locale', function(assert) {
+        localization.locale('de');
+        config({
+            ...config(),
+            numberFormat: {
+                default: {
+                    locale: 'en-US',
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                },
+            },
+        });
+
+        const $element = $('#numberbox').dxNumberBox({
+            value: 1234.56,
+            useMaskBehavior: true,
+        });
+        const $input = $element.find(TEXTEDITOR_INPUT_CLASS);
+
+        assert.strictEqual($input.val(), '1,234.56', 'display uses en-US separators');
+    });
+
+    QUnit.test('parses value using effective format locale separators', function(assert) {
+        localization.locale('de');
+        config({
+            ...config(),
+            numberFormat: {
+                default: {
+                    locale: 'en-US',
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                },
+            },
+        });
+
+        const $element = $('#numberbox').dxNumberBox({
+            value: null,
+            useMaskBehavior: true,
+        });
+        const instance = $element.dxNumberBox('instance');
+        const $input = $element.find(TEXTEDITOR_INPUT_CLASS);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard
+            .caret({ start: 0, end: 0 })
+            .type('1234.56');
+
+        assert.strictEqual(instance.option('value'), 1234.56, 'parses en-US decimal separator');
+    });
+
+    QUnit.test('dynamic format locale function is applied in NumberBox', function(assert) {
+        let dynamicLocale = 'en-US';
+
+        localization.locale('de');
+        config({
+            ...config(),
+            numberFormat: {
+                default: {
+                    locale: () => dynamicLocale,
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                },
+            },
+        });
+
+        const $element = $('#numberbox').dxNumberBox({
+            value: 1234.56,
+            useMaskBehavior: true,
+        });
+        const $input = $element.find(TEXTEDITOR_INPUT_CLASS);
+
+        assert.strictEqual($input.val(), '1,234.56');
+
+        dynamicLocale = 'de-DE';
+        $element.dxNumberBox('instance').option('value', 1234.56);
+
+        assert.strictEqual($input.val(), '1.234,56');
+    });
+
+    QUnit.test('local format option keeps type; global numberFormat locale applies to culture', function(assert) {
+        localization.locale('de');
+        config({
+            ...config(),
+            numberFormat: {
+                default: {
+                    locale: 'en-US',
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                },
+            },
+        });
+
+        const $element = $('#numberbox').dxNumberBox({
+            value: 1234.56,
+            useMaskBehavior: true,
+            format: {
+                type: 'fixedPoint',
+                precision: 0,
+            },
+        });
+        const $input = $element.find(TEXTEDITOR_INPUT_CLASS);
+
+        assert.strictEqual($input.val(), '1,235', 'precision from local format; en-US from global numberFormat');
+    });
+});

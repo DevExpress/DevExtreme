@@ -7,6 +7,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import fx from 'common/core/animation/fx';
 import dateLocalization from 'common/core/localization/date';
 import messageLocalization from 'common/core/localization/message';
+import { locale } from 'common/core/localization/core';
 import { DataSource } from 'common/data/data_source/data_source';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import devices from '__internal/core/m_devices';
@@ -115,6 +116,70 @@ module('Global formatting config (spec): Scheduler tooltip', {
         clock.restore();
 
         assert.strictEqual(scheduler.tooltip.getDateText(), 'Date9 Time23 - Date10 Time1');
+    });
+
+    test('implicit Scheduler tooltip time uses global timeFormat locale', async function(assert) {
+        const savedLocale = locale();
+
+        try {
+            locale('en');
+            config({
+                ...config(),
+                timeFormat: {
+                    default: {
+                        locale: 'de-DE',
+                        type: 'shortTime',
+                    },
+                },
+            });
+
+            const scheduler = await createScheduler();
+            const clock = sinon.useFakeTimers();
+            await scheduler.appointments.click(0, clock);
+            clock.restore();
+
+            assert.strictEqual(scheduler.tooltip.getDateText(), '11:00 - 12:00');
+        } finally {
+            locale(savedLocale);
+        }
+    });
+
+    test('implicit Scheduler tooltip date/time use global dateFormat and timeFormat locale', async function(assert) {
+        const savedLocale = locale();
+
+        try {
+            locale('en');
+            config({
+                ...config(),
+                dateFormat: {
+                    default: {
+                        locale: 'de-DE',
+                        type: 'shortDate',
+                    },
+                },
+                timeFormat: {
+                    default: {
+                        locale: 'de-DE',
+                        type: 'shortTime',
+                    },
+                },
+            });
+
+            const scheduler = await createScheduler({
+                dataSource: [{
+                    text: 'Task 1',
+                    startDate: new Date(2015, 1, 9, 23, 0),
+                    endDate: new Date(2015, 1, 10, 1, 0),
+                }],
+            });
+            const clock = sinon.useFakeTimers();
+            await scheduler.appointments.click(0, clock);
+            clock.restore();
+
+            assert.strictEqual(scheduler.tooltip.getDateText(), '09.02.2015 23:00 - 10.02.2015 01:00');
+        } finally {
+            locale(savedLocale);
+        }
     });
 });
 

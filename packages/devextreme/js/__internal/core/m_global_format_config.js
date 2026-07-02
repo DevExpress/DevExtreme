@@ -6,6 +6,26 @@ import { isFunction, isPlainObject, isString } from '@js/core/utils/type';
 
 const hasOwn = Object.prototype.hasOwnProperty;
 
+export const getEffectiveFormatLocale = (format) => {
+    if(isPlainObject(format) && format.locale) {
+        const formatLocale = format.locale;
+        return isFunction(formatLocale) ? formatLocale() : formatLocale;
+    }
+
+    return coreLocalization.locale();
+};
+
+export const getFormatterOptions = (format) => {
+    if(!isPlainObject(format) || !format.locale) {
+        return format;
+    }
+
+    const stripped = { ...format };
+    delete stripped.locale;
+
+    return stripped;
+};
+
 const resolveByLocaleMap = (localeMap) => {
     let currentLocale = coreLocalization.locale();
 
@@ -82,4 +102,6 @@ export const resolvePresetOverride = (presetName) => {
 export default {
     getGlobalFormatByDataType,
     resolvePresetOverride,
+    getEffectiveFormatLocale,
+    getFormatterOptions,
 };

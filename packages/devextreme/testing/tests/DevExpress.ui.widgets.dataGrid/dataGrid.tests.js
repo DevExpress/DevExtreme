@@ -13,6 +13,7 @@ import messageLocalization from 'common/core/localization/message';
 import { setTemplateEngine } from 'core/templates/template_engine_registry';
 import fx from 'common/core/animation/fx';
 import config from 'core/config';
+import localization from 'localization';
 import ajaxMock from '../../helpers/ajaxMock.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
@@ -5669,6 +5670,132 @@ QUnit.module('Global formatting config (spec)', baseModuleConfig, () => {
             const dateText = $(dataGrid.getCellElement(0, 0)).text().trim();
             assert.strictEqual(dateText, '02/01/2020', 'explicit shortDate preset uses dateTimeFormatPresets override');
         } finally {
+            restoreGlobalFormats(saved);
+        }
+    });
+
+    QUnit.test('implicit number column uses global numberFormat locale', function(assert) {
+        const saved = saveGlobalFormats();
+        const savedLocale = localization.locale();
+
+        try {
+            localization.locale('de');
+            config({
+                ...config(),
+                numberFormat: {
+                    default: {
+                        locale: 'en-US',
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                    },
+                },
+            });
+
+            const format = gridCore.getFormatByDataType('number');
+            const numberText = gridCore.formatValue(1234.56, { format });
+
+            assert.strictEqual(numberText, '1,234.56', 'global number format locale is applied for implicit number column');
+        } finally {
+            localization.locale(savedLocale);
+            restoreGlobalFormats(saved);
+        }
+    });
+
+    QUnit.test('filter row NumberBox uses global numberFormat locale for display and parsing', function(assert) {
+        const saved = saveGlobalFormats();
+        const savedLocale = localization.locale();
+        const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
+
+        try {
+            localization.locale('de');
+            config({
+                ...config(),
+                numberFormat: {
+                    default: {
+                        locale: 'en-US',
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                    },
+                },
+            });
+
+            const dataGrid = createDataGrid({
+                dataSource: [{ amount: 1234.56 }],
+                columns: [{ dataField: 'amount', dataType: 'number' }],
+                filterRow: { visible: true },
+            });
+            this.clock.tick(10);
+
+            const cellText = $(dataGrid.getCellElement(0, 0)).text().trim();
+            assert.strictEqual(cellText, '1,234.56', 'grid cell uses en-US number format');
+
+            const $filterInput = $(dataGrid.$element()).find('.dx-datagrid-filter-row').find(TEXTEDITOR_INPUT_SELECTOR).first();
+            const filterNumberBox = $filterInput.closest('.dx-numberbox').dxNumberBox('instance');
+
+            filterNumberBox.option('value', 1234.56);
+            assert.strictEqual($filterInput.val(), '1,234.56', 'filter row displays en-US separators');
+
+            filterNumberBox.option('value', null);
+            $filterInput.val('1234.56').trigger('change');
+            assert.strictEqual(filterNumberBox.option('value'), 1234.56, 'filter row parses en-US decimal separator');
+        } finally {
+            localization.locale(savedLocale);
+            restoreGlobalFormats(saved);
+        }
+    });
+
+    QUnit.test('explicit column.format uses global numberFormat locale for culture', function(assert) {
+        const saved = saveGlobalFormats();
+        const savedLocale = localization.locale();
+
+        try {
+            localization.locale('de');
+            config({
+                ...config(),
+                numberFormat: {
+                    default: {
+                        locale: 'en-US',
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                    },
+                },
+            });
+
+            const dataGrid = createDataGrid({
+                dataSource: [{ amount: 1234.56 }],
+                columns: [{
+                    dataField: 'amount',
+                    dataType: 'number',
+                    format: { type: 'fixedPoint', precision: 0 },
+                }],
+            });
+            this.clock.tick(10);
+
+            const numberText = $(dataGrid.getCellElement(0, 0)).text().trim();
+            assert.strictEqual(numberText, '1,235', 'column type from format; en-US locale from global numberFormat');
+        } finally {
+            localization.locale(savedLocale);
+            restoreGlobalFormats(saved);
+        }
+    });
+
+    QUnit.test('LDML global numberFormat is unaffected by message locale', function(assert) {
+        const saved = saveGlobalFormats();
+        const savedLocale = localization.locale();
+
+        try {
+            localization.locale('de');
+            config({
+                ...config(),
+                numberFormat: '#,##0.00',
+            });
+
+            const format = gridCore.getFormatByDataType('number');
+            const numberText = gridCore.formatValue(1234.5, { format });
+
+            assert.strictEqual(numberText, '1,234.50', 'LDML pattern is locale-independent');
+        } finally {
+            localization.locale(savedLocale);
             restoreGlobalFormats(saved);
         }
     });

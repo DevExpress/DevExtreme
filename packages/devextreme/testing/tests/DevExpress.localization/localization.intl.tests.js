@@ -949,6 +949,185 @@ QUnit.module('Global formatting config (spec, intl)', () => {
     });
 });
 
+QUnit.module('Global formatting config - format locale (spec, intl)', () => {
+    const saveGlobalFormats = () => {
+        const globalConfig = config();
+
+        return {
+            dateFormat: globalConfig.dateFormat,
+            timeFormat: globalConfig.timeFormat,
+            dateTimeFormat: globalConfig.dateTimeFormat,
+            numberFormat: globalConfig.numberFormat,
+            dateTimeFormatPresets: globalConfig.dateTimeFormatPresets,
+        };
+    };
+    const restoreGlobalFormats = (saved) => {
+        const globalConfig = config();
+
+        Object.keys(saved).forEach((key) => {
+            const value = saved[key];
+            if(value === undefined) {
+                delete globalConfig[key];
+            } else {
+                globalConfig[key] = value;
+            }
+        });
+    };
+
+    QUnit.test('numberFormat locale overrides message locale for Intl formatting', function(assert) {
+        const saved = saveGlobalFormats();
+        const savedLocale = locale();
+
+        try {
+            locale('de');
+            config({
+                ...config(),
+                numberFormat: {
+                    default: {
+                        locale: 'en-US',
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                    },
+                },
+            });
+
+            assert.strictEqual(numberLocalization.format(1234.56), '1,234.56');
+        } finally {
+            locale(savedLocale);
+            restoreGlobalFormats(saved);
+        }
+    });
+
+    QUnit.test('dateFormat locale overrides message locale for shortDate preset', function(assert) {
+        const saved = saveGlobalFormats();
+        const savedLocale = locale();
+
+        try {
+            locale('en');
+            config({
+                ...config(),
+                dateFormat: {
+                    default: {
+                        locale: 'de-DE',
+                        type: 'shortDate',
+                    },
+                },
+            });
+
+            assert.strictEqual(
+                dateLocalization.format(new Date(2020, 0, 2), {
+                    locale: 'de-DE',
+                    type: 'shortDate',
+                }),
+                '02.01.2020',
+            );
+        } finally {
+            locale(savedLocale);
+            restoreGlobalFormats(saved);
+        }
+    });
+
+    QUnit.test('numberFormat dynamic locale function is applied at format time', function(assert) {
+        const saved = saveGlobalFormats();
+        const savedLocale = locale();
+        let dynamicLocale = 'en-US';
+
+        try {
+            locale('de');
+            config({
+                ...config(),
+                numberFormat: {
+                    default: {
+                        locale: () => dynamicLocale,
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                    },
+                },
+            });
+
+            assert.strictEqual(numberLocalization.format(1234.56), '1,234.56');
+
+            dynamicLocale = 'de-DE';
+            assert.strictEqual(numberLocalization.format(1234.56), '1.234,56');
+        } finally {
+            locale(savedLocale);
+            restoreGlobalFormats(saved);
+        }
+    });
+
+    QUnit.test('locale map selects entry by message locale and applies format locale', function(assert) {
+        const saved = saveGlobalFormats();
+        const savedLocale = locale();
+
+        try {
+            locale('de');
+            config({
+                ...config(),
+                numberFormat: {
+                    de: {
+                        locale: 'en-US',
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                    },
+                    default: {
+                        locale: 'de-DE',
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                    },
+                },
+            });
+
+            assert.strictEqual(numberLocalization.format(1234.56), '1,234.56');
+        } finally {
+            locale(savedLocale);
+            restoreGlobalFormats(saved);
+        }
+    });
+
+    QUnit.test('LDML numberFormat is unaffected by message locale', function(assert) {
+        const saved = saveGlobalFormats();
+        const savedLocale = locale();
+
+        try {
+            locale('de');
+            config({
+                ...config(),
+                numberFormat: '#,##0.00',
+            });
+
+            assert.strictEqual(numberLocalization.format(1234.5), '1,234.50');
+        } finally {
+            locale(savedLocale);
+            restoreGlobalFormats(saved);
+        }
+    });
+
+    QUnit.test('format object without locale keeps message locale behavior', function(assert) {
+        const saved = saveGlobalFormats();
+        const savedLocale = locale();
+
+        try {
+            locale('de');
+            config({
+                ...config(),
+                numberFormat: {
+                    default: {
+                        type: 'fixedPoint',
+                        precision: 2,
+                    },
+                },
+            });
+
+            const result = numberLocalization.format(1234.56);
+            assert.ok(result.indexOf(',56') > -1, 'uses de decimal separator');
+            assert.ok(result.indexOf('.') > -1, 'uses de thousands separator');
+        } finally {
+            locale(savedLocale);
+            restoreGlobalFormats(saved);
+        }
+    });
+});
+
 QUnit.module('Exceljs format', () => {
     ExcelJSLocalizationFormatTests.runCurrencyTests([
         { value: 'USD', expected: '$#,##0_);\\($#,##0\\)' },
