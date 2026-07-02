@@ -1308,7 +1308,7 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     /**
      * @docid
      * @default undefined
-     * @type string | Array<any> | Store | DataSource | DataSourceOptions
+     * @type string | Array<any> | Store | DataSource | DataSourceOptions | undefined
      * @public
      */
     dataSource?: DataSourceLike<TCardData, TKey> | undefined;
