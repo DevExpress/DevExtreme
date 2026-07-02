@@ -59,7 +59,7 @@ test('should support custom translations', async (t) => {
   height: 600,
 }));
 
-test.meta({ unstable: true })('Filtering different data types', async (t) => {
+test('Filtering different data types', async (t) => {
   const cardView = new CardView('#container');
   const headerPanel = cardView.getHeaderPanel();
 
@@ -100,8 +100,14 @@ test.meta({ unstable: true })('Filtering different data types', async (t) => {
   // Date type
   await t
     .click(headerPanel.getHeaderItem(4).getFilterIcon())
+    .expect(treeView.getNodes().count)
+    .gte(1)
     .click(treeView.getNode(0).getExpandButton())
+    .expect(treeView.getNodes().count)
+    .gte(2)
     .click(treeView.getNode(1).getExpandButton())
+    .expect(treeView.getNodes().count)
+    .gte(3)
     .click(treeView.getNode(2).getCheckBox().element)
     .click(doneBtn.element)
     .expect(cardView.getCards().count)

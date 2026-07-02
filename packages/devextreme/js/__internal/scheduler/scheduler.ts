@@ -1933,6 +1933,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   private refreshWorkSpace(): void {
+    if (this._disposed) {
+      return;
+    }
+
     this.cleanWorkspace();
 
     // @ts-expect-error
@@ -2815,9 +2819,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   focus(): void {
     if (this.editAppointmentData) {
-      this._appointments.focus();
+      this._appointments?.focus();
     } else {
-      this._workSpace.focus();
+      this._workSpace?.focus();
     }
   }
 

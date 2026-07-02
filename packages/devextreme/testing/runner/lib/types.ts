@@ -1,5 +1,4 @@
 export const KNOWN_CONSTELLATION_NAMES = [
-  'export',
   'misc',
   'ui',
   'ui.widgets',
@@ -44,8 +43,6 @@ export interface BaseRunProps {
 export interface CategoryInfo {
   Name: string;
   Constellation: ConstellationName;
-  Explicit: boolean;
-  RunOnDevices: boolean;
 }
 
 export interface SuiteInfo {
