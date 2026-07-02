@@ -186,11 +186,6 @@ class VerticalHeadersArea extends HorizontalHeadersArea {
     return PIVOTGRID_AREA_ROW_CLASS;
   }
 
-  // Cell navigation for the row headers area is not implemented yet
-  _isCellNavigationEnabled() {
-    return false;
-  }
-
   _applyCustomStyles(options) {
     super._applyCustomStyles(options);
 

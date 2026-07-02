@@ -34,7 +34,7 @@ import { FieldChooser } from './field_chooser/m_field_chooser';
 import { FieldChooserBase } from './field_chooser/m_field_chooser_base';
 import { FieldsArea } from './fields_area/m_fields_area';
 import HeadersArea from './headers_area/m_headers_area';
-import { FAKE_TABLE_CLASS, HORIZONTAL_HEADERS_AREA_CLASS } from './keyboard_navigation/const';
+import { FAKE_TABLE_CLASS, HORIZONTAL_HEADERS_AREA_CLASS, VERTICAL_HEADERS_AREA_CLASS } from './keyboard_navigation/const';
 import { RovingTabIndex } from './keyboard_navigation/roving_tab_index';
 import type { CellNavigationDirection } from './keyboard_navigation/table_cell_navigation';
 import { getAdjacentCell } from './keyboard_navigation/table_cell_navigation';
@@ -123,6 +123,8 @@ class PivotGrid extends Widget {
   _dataController: any;
 
   _columnsAreaNavigation: RovingTabIndex | undefined;
+
+  _rowsAreaNavigation: RovingTabIndex | undefined;
 
   _scrollLeft: any;
 
@@ -929,18 +931,50 @@ class PivotGrid extends Widget {
     return `${row.sectionRowIndex}:${columnIndex}`;
   }
 
-  _getColumnHeaderCells(): HTMLElement[] {
+  _getRowsAreaNavigation() {
+    this._rowsAreaNavigation = this._rowsAreaNavigation ?? new RovingTabIndex({
+      component: this,
+      getItems: () => this._getRowHeaderCells(),
+      scrollToItem: (item) => this._rowsArea.scrollToElement(item),
+      getItemId: (item) => this._getRowHeaderCellId(item),
+    });
+
+    return this._rowsAreaNavigation;
+  }
+
+  // aria-rowindex is absolute as well, so it identifies the same logical row
+  // header cell across virtual scrolling re-renders.
+  _getRowHeaderCellId(cell: HTMLElement): string | undefined {
+    const rowIndex = cell.getAttribute('aria-rowindex');
+    const { cellIndex } = cell as HTMLTableCellElement;
+
+    if (!rowIndex || cellIndex < 0) {
+      return undefined;
+    }
+
+    return `${cellIndex}:${rowIndex}`;
+  }
+
+  _getHeaderAreaCells(cellSelector: string): HTMLElement[] {
     const element = this.$element().get(0);
 
     if (!element) {
       return [];
     }
 
-    // Only cells marked as navigable on render take part in the roving
-    // tabindex: whitespace filler cells are rendered without tabindex.
-    const cells: HTMLElement[] = Array.from(element.querySelectorAll(`thead.${HORIZONTAL_HEADERS_AREA_CLASS} td[tabindex]`));
+    const cells: HTMLElement[] = Array.from(element.querySelectorAll(cellSelector));
 
     return cells.filter((cell) => !cell.closest(`.${FAKE_TABLE_CLASS}`));
+  }
+
+  // Only cells marked as navigable on render take part in the roving
+  // tabindex: whitespace filler cells are rendered without tabindex.
+  _getColumnHeaderCells(): HTMLElement[] {
+    return this._getHeaderAreaCells(`thead.${HORIZONTAL_HEADERS_AREA_CLASS} td[tabindex]`);
+  }
+
+  _getRowHeaderCells(): HTMLElement[] {
+    return this._getHeaderAreaCells(`tbody.${VERTICAL_HEADERS_AREA_CLASS} td[tabindex]`);
   }
 
   _getCellAreaNavigation(cell): RovingTabIndex | undefined {
@@ -949,6 +983,9 @@ class PivotGrid extends Widget {
     }
     if (cell.closest?.(`thead.${HORIZONTAL_HEADERS_AREA_CLASS}`)) {
       return this._getColumnsAreaNavigation();
+    }
+    if (cell.closest?.(`tbody.${VERTICAL_HEADERS_AREA_CLASS}`)) {
+      return this._getRowsAreaNavigation();
     }
 
     return undefined;
@@ -1250,13 +1287,21 @@ class PivotGrid extends Widget {
     const that = this;
     const rowsArea = that._rowsArea || new HeadersArea.VerticalHeadersArea(that);
     that._rowsArea = rowsArea;
+
+    const navigation = that._getRowsAreaNavigation();
+    const needRestoreFocus = navigation.containsActiveElement();
+
     rowsArea.render(rowsAreaElement, that._dataController.getRowsInfo());
+    navigation.updateTabIndexes();
+
+    if (needRestoreFocus) {
+      navigation.refocusFocusedItem();
+      that._scheduleNavigationFocusRestore(navigation);
+    }
 
     return rowsArea;
   }
 
-  // Rendering moves header elements between area tables, which drops focus,
-  // so the focused cell is restored after the content is ready.
   _scheduleNavigationFocusRestore(navigation: RovingTabIndex) {
     const onReady = () => {
       this.off('contentReady', onReady);
