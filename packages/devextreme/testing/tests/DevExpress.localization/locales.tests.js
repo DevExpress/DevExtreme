@@ -29,6 +29,10 @@ import vi from 'localization/messages/vi.json!';
 // eslint-disable-next-line spellcheck/spell-checker
 import zhTw from 'localization/messages/zh-tw.json!';
 import zh from 'localization/messages/zh.json!';
+// eslint-disable-next-line spellcheck/spell-checker
+import zhCN from 'localization/messages/zh-CN.json!';
+// eslint-disable-next-line spellcheck/spell-checker
+import zhHans from 'localization/messages/zh-Hans.json!';
 import fa from 'localization/messages/fa.json!';
 
 const dictionaries = {
@@ -37,7 +41,9 @@ const dictionaries = {
     it, ja, lt, lv, nb,
     nl, pt, 'pt-BR': ptBR, 'pt-PT': ptPT, ro, ru, sl,
     // eslint-disable-next-line spellcheck/spell-checker
-    sv, tr, vi, 'zh-tw': zhTw, zh, fa
+    sv, tr, vi, 'zh-tw': zhTw, zh, fa,
+    // eslint-disable-next-line spellcheck/spell-checker
+    'zh-CN': zhCN, 'zh-Hans': zhHans
 };
 
 const LOCALES = Object.keys(dictionaries);
