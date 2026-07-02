@@ -537,40 +537,34 @@ export type HeaderPanel<TCardData = unknown, TKey = unknown> = {
         scrollSensitivity?: number;
         /**
          * @docid
-         * @default undefined
          * @public
          */
-        onDragChange?: ((e: any) => void) | undefined;
+        onDragChange?: ((e: any) => void);
         /**
          * @docid
-         * @default undefined
          * @public
          */
-        onDragEnd?: ((e: any) => void) | undefined;
+        onDragEnd?: ((e: any) => void);
         /**
          * @docid
-         * @default undefined
          * @public
          */
-        onDragMove?: ((e: any) => void) | undefined;
+        onDragMove?: ((e: any) => void);
         /**
          * @docid
-         * @default undefined
          * @public
          */
-        onDragStart?: ((e: any) => void) | undefined;
+        onDragStart?: ((e: any) => void);
         /**
          * @docid
-         * @default undefined
          * @public
          */
-        onRemove?: ((e: any) => void) | undefined;
+        onRemove?: ((e: any) => void);
         /**
          * @docid
-         * @default undefined
          * @public
          */
-        onReorder?: ((e: any) => void) | undefined;
+        onReorder?: ((e: any) => void);
     };
     /**
      * @docid
@@ -1337,13 +1331,12 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     remoteOperations?: RemoteOperations | boolean | Mode;
     /**
      * @docid
-     * @default undefined
      * @type_function_param1 e:object
      * @type_function_param1_field component:this
      * @action
      * @public
      */
-    onDataErrorOccurred?: ((e: EventInfo<dxCardView> & DataErrorOccurredInfo) => void) | undefined;
+    onDataErrorOccurred?: ((e: EventInfo<dxCardView> & DataErrorOccurredInfo) => void);
 
     // #endregion
 

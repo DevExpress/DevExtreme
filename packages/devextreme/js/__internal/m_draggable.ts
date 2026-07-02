@@ -329,7 +329,14 @@ class Draggable extends DOMComponent<Draggable, Properties> {
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
+      onDragStart: undefined,
+      onDragMove: undefined,
+      onDragEnd: undefined,
       // @ts-expect-error
+      onDragEnter: undefined,
+      onDragLeave: undefined,
+      onDragCancel: undefined,
+      onDrop: undefined,
       onCancelByEsc: false,
       immediate: true,
       dragDirection: 'both',

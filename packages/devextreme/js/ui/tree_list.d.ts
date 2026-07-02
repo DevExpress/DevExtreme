@@ -997,131 +997,115 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:CellClickEvent}
-     * @default undefined
      * @action
      * @public
      */
-    onCellClick?: ((e: CellClickEvent<TRowData, TKey>) => void) | undefined;
+    onCellClick?: ((e: CellClickEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:CellDblClickEvent}
-     * @default undefined
      * @action
      * @public
      */
-    onCellDblClick?: ((e: CellDblClickEvent<TRowData, TKey>) => void) | undefined;
+    onCellDblClick?: ((e: CellDblClickEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:CellHoverChangedEvent}
-     * @default undefined
      * @action
      * @public
      */
-    onCellHoverChanged?: ((e: CellHoverChangedEvent<TRowData, TKey>) => void) | undefined;
+    onCellHoverChanged?: ((e: CellHoverChangedEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:CellPreparedEvent}
-     * @default undefined
      * @action
      * @public
      */
-    onCellPrepared?: ((e: CellPreparedEvent<TRowData, TKey>) => void) | undefined;
+    onCellPrepared?: ((e: CellPreparedEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:ContextMenuPreparingEvent}
-     * @default undefined
      * @action
      * @public
      */
-    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent<TRowData, TKey>) => void) | undefined;
+    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:EditingStartEvent}
-     * @default undefined
      * @action
      * @public
      */
-    onEditingStart?: ((e: EditingStartEvent<TRowData, TKey>) => void) | undefined;
+    onEditingStart?: ((e: EditingStartEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:EditorPreparedEvent}
-     * @default undefined
      * @action
      * @public
      */
-    onEditorPrepared?: ((options: EditorPreparedEvent<TRowData, TKey>) => void) | undefined;
+    onEditorPrepared?: ((options: EditorPreparedEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:EditorPreparingEvent}
-     * @default undefined
      * @action
      * @public
      */
-    onEditorPreparing?: ((e: EditorPreparingEvent<TRowData, TKey>) => void) | undefined;
+    onEditorPreparing?: ((e: EditorPreparingEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:FocusedCellChangedEvent}
-     * @default undefined
      * @action
      * @public
      */
-    onFocusedCellChanged?: ((e: FocusedCellChangedEvent<TRowData, TKey>) => void) | undefined;
+    onFocusedCellChanged?: ((e: FocusedCellChangedEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:FocusedCellChangingEvent}
-     * @default undefined
      * @action
      * @public
      */
-    onFocusedCellChanging?: ((e: FocusedCellChangingEvent<TRowData, TKey>) => void) | undefined;
+    onFocusedCellChanging?: ((e: FocusedCellChangingEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:FocusedRowChangedEvent}
-     * @default undefined
      * @action
      * @public
      */
-    onFocusedRowChanged?: ((e: FocusedRowChangedEvent<TRowData, TKey>) => void) | undefined;
+    onFocusedRowChanged?: ((e: FocusedRowChangedEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:FocusedRowChangingEvent}
-     * @default undefined
      * @action
      * @public
      */
-    onFocusedRowChanging?: ((e: FocusedRowChangingEvent<TRowData, TKey>) => void) | undefined;
+    onFocusedRowChanging?: ((e: FocusedRowChangingEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:NodesInitializedEvent}
-     * @default undefined
      * @action
      * @public
      */
-    onNodesInitialized?: ((e: NodesInitializedEvent<TRowData, TKey>) => void) | undefined;
+    onNodesInitialized?: ((e: NodesInitializedEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:RowClickEvent}
-     * @default undefined
      * @action
      * @public
      */
-    onRowClick?: ((e: RowClickEvent<TRowData, TKey>) => void) | undefined;
+    onRowClick?: ((e: RowClickEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:RowDblClickEvent}
-     * @default undefined
      * @action
      * @public
      */
-    onRowDblClick?: ((e: RowDblClickEvent<TRowData, TKey>) => void) | undefined;
+    onRowDblClick?: ((e: RowDblClickEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:RowPreparedEvent}
-     * @default undefined
      * @action
      * @public
      */
-    onRowPrepared?: ((e: RowPreparedEvent<TRowData, TKey>) => void) | undefined;
+    onRowPrepared?: ((e: RowPreparedEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @public
@@ -1183,12 +1167,11 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     toolbar?: Toolbar | undefined;
     /**
      * @docid
-     * @default undefined
      * @type_function_param1 e:{ui/tree_list:AIColumnRequestCreatingEvent}
      * @action
      * @public
      */
-    onAIColumnRequestCreating?: ((e: AIColumnRequestCreatingEvent) => void) | undefined;
+    onAIColumnRequestCreating?: ((e: AIColumnRequestCreatingEvent) => void);
 };
 
 /**

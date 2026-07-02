@@ -97,6 +97,12 @@ class FilterBuilder extends Widget<any> {
   _getDefaultOptions() {
     // @ts-expect-error
     return extend(super._getDefaultOptions(), {
+      onEditorPreparing: undefined,
+
+      onEditorPrepared: undefined,
+
+      onValueChanged: undefined,
+
       fields: [],
 
       groupOperations: ['and', 'or', 'notAnd', 'notOr'],
