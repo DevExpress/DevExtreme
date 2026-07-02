@@ -194,7 +194,7 @@ class PivotGrid extends Widget {
         height: 600,
         applyChangesMode: 'instantly',
       },
-      onContextMenuPreparing: null,
+      onContextMenuPreparing: undefined,
       allowSorting: false,
       allowSortingBySummary: false,
       allowFiltering: false,
@@ -251,13 +251,13 @@ class PivotGrid extends Widget {
         exportToExcel: localizationMessage.format('dxDataGrid-exportToExcel'),
         dataNotAvailable: localizationMessage.format('dxPivotGrid-dataNotAvailable'),
       },
-      onCellClick: null,
-      onCellPrepared: null,
+      onCellClick: undefined,
+      onCellPrepared: undefined,
       showBorders: false,
 
       stateStoring: {
         enabled: false,
-        storageKey: null,
+        storageKey: undefined,
         type: 'localStorage',
         customLoad: null,
         customSave: null,
@@ -266,7 +266,7 @@ class PivotGrid extends Widget {
 
       onExpandValueChanging: null,
       renderCellCountLimit: 20000,
-      onExporting: null,
+      onExporting: undefined,
       headerFilter: {
         width: 252,
         height: 325,
