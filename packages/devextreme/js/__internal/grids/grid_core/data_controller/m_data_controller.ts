@@ -1801,7 +1801,7 @@ export const dataControllerModule: Module = {
   defaultOptions() {
     return {
       loadingTimeout: 0,
-      dataSource: null,
+      dataSource: undefined,
       cacheEnabled: true,
       repaintChangesOnly: false,
       highlightChanges: false,

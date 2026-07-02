@@ -1259,18 +1259,18 @@ export interface EditingBase<TRowData = any, TKey = any> {
   changes?: Array<DataChange<TRowData, TKey>>;
   /**
    * @docid GridBaseOptions.editing.editColumnName
-   * @default null
+   * @default undefined
    * @fires GridBaseOptions.onOptionChanged
    * @public
    */
-  editColumnName?: string | null;
+  editColumnName?: string | undefined;
   /**
    * @docid GridBaseOptions.editing.editRowKey
-   * @default null
+   * @default undefined
    * @fires GridBaseOptions.onOptionChanged
    * @public
    */
-  editRowKey?: TKey | null;
+  editRowKey?: TKey | undefined;
   /**
    * @docid GridBaseOptions.editing.form
    * @public
@@ -2272,11 +2272,11 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
   columns?: Array<ColumnBase<TRowData> | string> | undefined;
   /**
    * @docid
-   * @default null
+   * @default undefined
    * @public
-   * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
+   * @type Store|DataSource|DataSourceOptions|string|Array<any>|undefined
    */
-  dataSource?: DataSourceLike<TRowData, TKey> | null;
+  dataSource?: DataSourceLike<TRowData, TKey> | undefined;
   /**
    * @docid
    * @public
@@ -3537,9 +3537,9 @@ export type StateStoring = {
   savingTimeout?: number;
   /**
    * @docid GridBaseOptions.stateStoring.storageKey
-   * @default null
+   * @default undefined
    */
-  storageKey?: string | null;
+  storageKey?: string | undefined;
   /**
    * @docid GridBaseOptions.stateStoring.type
    * @default "localStorage"
