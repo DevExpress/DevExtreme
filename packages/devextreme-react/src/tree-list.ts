@@ -48,34 +48,34 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 type ITreeListOptionsNarrowedEvents<TRowData = any, TKey = any> = {
   onAdaptiveDetailRowPreparing?: ((e: AdaptiveDetailRowPreparingEvent<TRowData, TKey>) => void);
   onAIAssistantRequestCreating?: ((e: AIAssistantRequestCreatingEvent<TRowData, TKey>) => void);
-  onAIColumnRequestCreating?: ((e: AIColumnRequestCreatingEvent<TRowData, TKey>) => void) | undefined;
-  onCellClick?: ((e: CellClickEvent<TRowData, TKey>) => void) | undefined;
-  onCellDblClick?: ((e: CellDblClickEvent<TRowData, TKey>) => void) | undefined;
-  onCellPrepared?: ((e: CellPreparedEvent<TRowData, TKey>) => void) | undefined;
+  onAIColumnRequestCreating?: ((e: AIColumnRequestCreatingEvent<TRowData, TKey>) => void);
+  onCellClick?: ((e: CellClickEvent<TRowData, TKey>) => void);
+  onCellDblClick?: ((e: CellDblClickEvent<TRowData, TKey>) => void);
+  onCellPrepared?: ((e: CellPreparedEvent<TRowData, TKey>) => void);
   onContentReady?: ((e: ContentReadyEvent<TRowData, TKey>) => void);
-  onContextMenuPreparing?: ((e: ContextMenuPreparingEvent<TRowData, TKey>) => void) | undefined;
+  onContextMenuPreparing?: ((e: ContextMenuPreparingEvent<TRowData, TKey>) => void);
   onDataErrorOccurred?: ((e: DataErrorOccurredEvent<TRowData, TKey>) => void);
   onDisposing?: ((e: DisposingEvent<TRowData, TKey>) => void);
   onEditCanceled?: ((e: EditCanceledEvent<TRowData, TKey>) => void);
   onEditCanceling?: ((e: EditCancelingEvent<TRowData, TKey>) => void);
-  onEditingStart?: ((e: EditingStartEvent<TRowData, TKey>) => void) | undefined;
-  onEditorPrepared?: ((e: EditorPreparedEvent<TRowData, TKey>) => void) | undefined;
-  onEditorPreparing?: ((e: EditorPreparingEvent<TRowData, TKey>) => void) | undefined;
-  onFocusedCellChanging?: ((e: FocusedCellChangingEvent<TRowData, TKey>) => void) | undefined;
-  onFocusedRowChanging?: ((e: FocusedRowChangingEvent<TRowData, TKey>) => void) | undefined;
+  onEditingStart?: ((e: EditingStartEvent<TRowData, TKey>) => void);
+  onEditorPrepared?: ((e: EditorPreparedEvent<TRowData, TKey>) => void);
+  onEditorPreparing?: ((e: EditorPreparingEvent<TRowData, TKey>) => void);
+  onFocusedCellChanging?: ((e: FocusedCellChangingEvent<TRowData, TKey>) => void);
+  onFocusedRowChanging?: ((e: FocusedRowChangingEvent<TRowData, TKey>) => void);
   onInitialized?: ((e: InitializedEvent<TRowData, TKey>) => void);
   onInitNewRow?: ((e: InitNewRowEvent<TRowData, TKey>) => void);
   onKeyDown?: ((e: KeyDownEvent<TRowData, TKey>) => void);
-  onNodesInitialized?: ((e: NodesInitializedEvent<TRowData, TKey>) => void) | undefined;
-  onRowClick?: ((e: RowClickEvent<TRowData, TKey>) => void) | undefined;
+  onNodesInitialized?: ((e: NodesInitializedEvent<TRowData, TKey>) => void);
+  onRowClick?: ((e: RowClickEvent<TRowData, TKey>) => void);
   onRowCollapsed?: ((e: RowCollapsedEvent<TRowData, TKey>) => void);
   onRowCollapsing?: ((e: RowCollapsingEvent<TRowData, TKey>) => void);
-  onRowDblClick?: ((e: RowDblClickEvent<TRowData, TKey>) => void) | undefined;
+  onRowDblClick?: ((e: RowDblClickEvent<TRowData, TKey>) => void);
   onRowExpanded?: ((e: RowExpandedEvent<TRowData, TKey>) => void);
   onRowExpanding?: ((e: RowExpandingEvent<TRowData, TKey>) => void);
   onRowInserted?: ((e: RowInsertedEvent<TRowData, TKey>) => void);
   onRowInserting?: ((e: RowInsertingEvent<TRowData, TKey>) => void);
-  onRowPrepared?: ((e: RowPreparedEvent<TRowData, TKey>) => void) | undefined;
+  onRowPrepared?: ((e: RowPreparedEvent<TRowData, TKey>) => void);
   onRowRemoved?: ((e: RowRemovedEvent<TRowData, TKey>) => void);
   onRowRemoving?: ((e: RowRemovingEvent<TRowData, TKey>) => void);
   onRowUpdated?: ((e: RowUpdatedEvent<TRowData, TKey>) => void);
@@ -1037,8 +1037,8 @@ type IEditingProps = React.PropsWithChildren<{
   allowUpdating?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean);
   changes?: Array<DataChange>;
   confirmDelete?: boolean;
-  editColumnName?: null | string;
-  editRowKey?: any | null;
+  editColumnName?: string | undefined;
+  editRowKey?: any | undefined;
   form?: dxFormOptions;
   mode?: GridsEditMode;
   popup?: dxPopupOptions<any>;
@@ -1062,10 +1062,10 @@ type IEditingProps = React.PropsWithChildren<{
   useIcons?: boolean;
   defaultChanges?: Array<DataChange>;
   onChangesChange?: (value: Array<DataChange>) => void;
-  defaultEditColumnName?: null | string;
-  onEditColumnNameChange?: (value: null | string) => void;
-  defaultEditRowKey?: any | null;
-  onEditRowKeyChange?: (value: any | null) => void;
+  defaultEditColumnName?: string | undefined;
+  onEditColumnNameChange?: (value: string | undefined) => void;
+  defaultEditRowKey?: any | undefined;
+  onEditRowKeyChange?: (value: any | undefined) => void;
 }>
 const _componentEditing = (props: IEditingProps) => {
   return React.createElement(NestedOption<IEditingProps>, {
@@ -2986,7 +2986,7 @@ type IStateStoringProps = React.PropsWithChildren<{
   customSave?: ((gridState: any) => void);
   enabled?: boolean;
   savingTimeout?: number;
-  storageKey?: null | string;
+  storageKey?: string | undefined;
   type?: StateStoreType;
 }>
 const _componentStateStoring = (props: IStateStoringProps) => {

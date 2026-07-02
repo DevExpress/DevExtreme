@@ -88,18 +88,18 @@ export class DxoTreeListEditingComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get editColumnName(): null | string {
+    get editColumnName(): string | undefined {
         return this._getOption('editColumnName');
     }
-    set editColumnName(value: null | string) {
+    set editColumnName(value: string | undefined) {
         this._setOption('editColumnName', value);
     }
 
     @Input()
-    get editRowKey(): any | null {
+    get editRowKey(): any | undefined {
         return this._getOption('editRowKey');
     }
-    set editRowKey(value: any | null) {
+    set editRowKey(value: any | undefined) {
         this._setOption('editRowKey', value);
     }
 
@@ -180,14 +180,14 @@ export class DxoTreeListEditingComponent extends NestedOption implements OnDestr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() editColumnNameChange: EventEmitter<null | string>;
+    @Output() editColumnNameChange: EventEmitter<string | undefined>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() editRowKeyChange: EventEmitter<any | null>;
+    @Output() editRowKeyChange: EventEmitter<any | undefined>;
     protected get _optionPath() {
         return 'editing';
     }

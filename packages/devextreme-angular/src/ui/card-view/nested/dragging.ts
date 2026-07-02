@@ -40,50 +40,50 @@ export class DxoCardViewDraggingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get onDragChange(): ((e: any) => void) | undefined {
+    get onDragChange(): ((e: any) => void) {
         return this._getOption('onDragChange');
     }
-    set onDragChange(value: ((e: any) => void) | undefined) {
+    set onDragChange(value: ((e: any) => void)) {
         this._setOption('onDragChange', value);
     }
 
     @Input()
-    get onDragEnd(): ((e: any) => void) | undefined {
+    get onDragEnd(): ((e: any) => void) {
         return this._getOption('onDragEnd');
     }
-    set onDragEnd(value: ((e: any) => void) | undefined) {
+    set onDragEnd(value: ((e: any) => void)) {
         this._setOption('onDragEnd', value);
     }
 
     @Input()
-    get onDragMove(): ((e: any) => void) | undefined {
+    get onDragMove(): ((e: any) => void) {
         return this._getOption('onDragMove');
     }
-    set onDragMove(value: ((e: any) => void) | undefined) {
+    set onDragMove(value: ((e: any) => void)) {
         this._setOption('onDragMove', value);
     }
 
     @Input()
-    get onDragStart(): ((e: any) => void) | undefined {
+    get onDragStart(): ((e: any) => void) {
         return this._getOption('onDragStart');
     }
-    set onDragStart(value: ((e: any) => void) | undefined) {
+    set onDragStart(value: ((e: any) => void)) {
         this._setOption('onDragStart', value);
     }
 
     @Input()
-    get onRemove(): ((e: any) => void) | undefined {
+    get onRemove(): ((e: any) => void) {
         return this._getOption('onRemove');
     }
-    set onRemove(value: ((e: any) => void) | undefined) {
+    set onRemove(value: ((e: any) => void)) {
         this._setOption('onRemove', value);
     }
 
     @Input()
-    get onReorder(): ((e: any) => void) | undefined {
+    get onReorder(): ((e: any) => void) {
         return this._getOption('onReorder');
     }
-    set onReorder(value: ((e: any) => void) | undefined) {
+    set onReorder(value: ((e: any) => void)) {
         this._setOption('onReorder', value);
     }
 

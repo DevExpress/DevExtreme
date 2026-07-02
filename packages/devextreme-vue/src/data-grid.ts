@@ -423,7 +423,7 @@ const componentConfig = {
     columnWidth: [String, Number] as PropType<Mode | number>,
     customizeColumns: Function as PropType<((columns: Array<dxDataGridColumn>) => void)>,
     dataRowTemplate: {},
-    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
+    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | Store | string | Record<string, any>>,
     dateSerializationFormat: String,
     disabled: Boolean,
     editing: Object as PropType<Record<string, any>>,
@@ -1793,7 +1793,7 @@ const DxEditingConfig = {
     allowUpdating: [Boolean, Function] as PropType<boolean | (((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean))>,
     changes: Array as PropType<Array<DataChange>>,
     confirmDelete: Boolean,
-    editColumnName: String as PropType<null | string>,
+    editColumnName: String,
     editRowKey: {},
     form: Object as PropType<dxFormOptions | Record<string, any>>,
     mode: String as PropType<GridsEditMode>,
@@ -4113,7 +4113,7 @@ const DxStateStoringConfig = {
     customSave: Function as PropType<((gridState: any) => void)>,
     enabled: Boolean,
     savingTimeout: Number,
-    storageKey: String as PropType<null | string>,
+    storageKey: String,
     type: String as PropType<StateStoreType>
   }
 };

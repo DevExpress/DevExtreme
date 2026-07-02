@@ -527,10 +527,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
+    get dataSource(): Array<any> | DataSource | DataSourceOptions | Store | string | undefined {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Array<any> | DataSource | DataSourceOptions | null | Store | string) {
+    set dataSource(value: Array<any> | DataSource | DataSourceOptions | Store | string | undefined) {
         this._setOption('dataSource', value);
     }
 
@@ -579,10 +579,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get editing(): { allowAdding?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowDeleting?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: null | string, editRowKey?: any | null, form?: dxFormOptions, mode?: GridsEditMode, popup?: dxPopupOptions<any>, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean } {
+    get editing(): { allowAdding?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowDeleting?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string | undefined, editRowKey?: any | undefined, form?: dxFormOptions, mode?: GridsEditMode, popup?: dxPopupOptions<any>, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean } {
         return this._getOption('editing');
     }
-    set editing(value: { allowAdding?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowDeleting?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: null | string, editRowKey?: any | null, form?: dxFormOptions, mode?: GridsEditMode, popup?: dxPopupOptions<any>, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }) {
+    set editing(value: { allowAdding?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowDeleting?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string | undefined, editRowKey?: any | undefined, form?: dxFormOptions, mode?: GridsEditMode, popup?: dxPopupOptions<any>, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }) {
         this._setOption('editing', value);
     }
 
@@ -1177,10 +1177,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get stateStoring(): { customLoad?: Function, customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: null | string, type?: StateStoreType } {
+    get stateStoring(): { customLoad?: Function, customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string | undefined, type?: StateStoreType } {
         return this._getOption('stateStoring');
     }
-    set stateStoring(value: { customLoad?: Function, customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: null | string, type?: StateStoreType }) {
+    set stateStoring(value: { customLoad?: Function, customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string | undefined, type?: StateStoreType }) {
         this._setOption('stateStoring', value);
     }
 
@@ -1757,7 +1757,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | null | Store | string>;
+    @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | Store | string | undefined>;
 
     /**
     
@@ -1785,7 +1785,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() editingChange: EventEmitter<{ allowAdding?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowDeleting?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: null | string, editRowKey?: any | null, form?: dxFormOptions, mode?: GridsEditMode, popup?: dxPopupOptions<any>, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }>;
+    @Output() editingChange: EventEmitter<{ allowAdding?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowDeleting?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string | undefined, editRowKey?: any | undefined, form?: dxFormOptions, mode?: GridsEditMode, popup?: dxPopupOptions<any>, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }>;
 
     /**
     
@@ -2107,7 +2107,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stateStoringChange: EventEmitter<{ customLoad?: Function, customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: null | string, type?: StateStoreType }>;
+    @Output() stateStoringChange: EventEmitter<{ customLoad?: Function, customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string | undefined, type?: StateStoreType }>;
 
     /**
     

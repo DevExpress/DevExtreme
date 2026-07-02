@@ -64,10 +64,10 @@ export class DxoDataGridStateStoringComponent extends NestedOption implements On
     }
 
     @Input()
-    get storageKey(): null | string {
+    get storageKey(): string | undefined {
         return this._getOption('storageKey');
     }
-    set storageKey(value: null | string) {
+    set storageKey(value: string | undefined) {
         this._setOption('storageKey', value);
     }
 

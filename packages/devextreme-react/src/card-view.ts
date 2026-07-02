@@ -956,12 +956,12 @@ const CustomRule = Object.assign<typeof _componentCustomRule, NestedComponentMet
 // HeaderPanel
 type IDraggingProps = React.PropsWithChildren<{
   dropFeedbackMode?: DragHighlight;
-  onDragChange?: ((e: any) => void) | undefined;
-  onDragEnd?: ((e: any) => void) | undefined;
-  onDragMove?: ((e: any) => void) | undefined;
-  onDragStart?: ((e: any) => void) | undefined;
-  onRemove?: ((e: any) => void) | undefined;
-  onReorder?: ((e: any) => void) | undefined;
+  onDragChange?: ((e: any) => void);
+  onDragEnd?: ((e: any) => void);
+  onDragMove?: ((e: any) => void);
+  onDragStart?: ((e: any) => void);
+  onRemove?: ((e: any) => void);
+  onReorder?: ((e: any) => void);
   scrollSensitivity?: number;
   scrollSpeed?: number;
 }>
@@ -1595,12 +1595,12 @@ const HeaderFilter = Object.assign<typeof _componentHeaderFilter, NestedComponen
 type IHeaderPanelProps = React.PropsWithChildren<{
   dragging?: Record<string, any> | {
     dropFeedbackMode?: DragHighlight;
-    onDragChange?: ((e: any) => void) | undefined;
-    onDragEnd?: ((e: any) => void) | undefined;
-    onDragMove?: ((e: any) => void) | undefined;
-    onDragStart?: ((e: any) => void) | undefined;
-    onRemove?: ((e: any) => void) | undefined;
-    onReorder?: ((e: any) => void) | undefined;
+    onDragChange?: ((e: any) => void);
+    onDragEnd?: ((e: any) => void);
+    onDragMove?: ((e: any) => void);
+    onDragStart?: ((e: any) => void);
+    onRemove?: ((e: any) => void);
+    onReorder?: ((e: any) => void);
     scrollSensitivity?: number;
     scrollSpeed?: number;
   };
