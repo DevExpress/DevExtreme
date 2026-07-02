@@ -46,6 +46,9 @@ overrides:
   "undici@>=7.23.0 <7.28.0": ^7.28.0
   "http-proxy-middleware@>=0.16.0 <3.0.7": ^3.0.7
   "piscina@>=5.0.0-alpha.0 <=5.1.4": ^5.1.5
+  "@sigstore/core@<=3.2.0": "^3.2.1"
+  "sigstore@<=4.1.0": "^4.1.1"
+  "@sigstore/verify@3.1.0": "^3.1.1"
 
 catalog:
   axe-core: ^4.11.1

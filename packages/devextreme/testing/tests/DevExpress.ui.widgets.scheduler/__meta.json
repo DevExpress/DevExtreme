@@ -1,5 +1,3 @@
-{ 
-    "constellation": "ui.scheduler",
-    "explicit": false,
-    "runOnDevices": true
+{
+  "constellation": "ui.scheduler"
 }

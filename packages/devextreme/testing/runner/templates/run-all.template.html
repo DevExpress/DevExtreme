@@ -439,7 +439,7 @@
                 );
             }
 
-            $.post("/Main/NotifyTestCompleted", { name: getTestCaseName(testSuite, qunitData), passed:  qunitData.passed === qunitData.total});
+            $.post("/Main/NotifyTestCompleted", { name: getTestCaseName(testSuite, qunitData), passed:  qunitData.passed === qunitData.total, runtime: qunitData.runtime });
         };
 
         window.RUNNER_ON_DONE = function(worker, qunitData) {

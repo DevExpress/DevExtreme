@@ -1,5 +1,3 @@
-{ 
-    "constellation": "ui.editors",
-    "explicit": false,
-    "runOnDevices": true
+{
+  "constellation": "ui.editors"
 }
