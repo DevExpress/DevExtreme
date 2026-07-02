@@ -3,3 +3,7 @@ packages:
 
 minimumReleaseAgeExclude:
   - '@devexpress/sbom-toolkit'
+
+overrides:
+  "tar@<=7.5.15": ^7.5.16
+  "undici@<7.28.0": ^7.28.0
