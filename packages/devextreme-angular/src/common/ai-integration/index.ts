@@ -1,7 +1,5 @@
 export {
     AIIntegration,
-} from 'devextreme/common/ai-integration';
-export type {
     AIIntegrationOptions,
     AIProvider,
     AIResponse,

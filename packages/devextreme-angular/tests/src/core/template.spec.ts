@@ -4,7 +4,6 @@ import {
   ElementRef,
   EventEmitter,
   ViewChild,
-  NgZone,
   Input,
   Output,
   AfterViewInit,
@@ -57,13 +56,12 @@ export class DxTestWidgetComponent extends DxComponent {
 
   constructor(
     elementRef: ElementRef,
-    ngZone: NgZone,
     templateHost: DxTemplateHost,
     _watcherHelper: WatcherHelper,
     transferState: TransferState,
     @Inject(PLATFORM_ID) platformId: any,
   ) {
-    super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
+    super(elementRef, templateHost, _watcherHelper, transferState, platformId);
 
     this._createEventEmitters([
       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
@@ -87,13 +85,12 @@ export class DxTestComponent extends DxComponent implements AfterViewInit {
 
   constructor(
     elementRef: ElementRef,
-    ngZone: NgZone,
     templateHost: DxTemplateHost,
     _watcherHelper: WatcherHelper,
     transferState: TransferState,
     @Inject(PLATFORM_ID) platformId: any,
   ) {
-    super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
+    super(elementRef, templateHost, _watcherHelper, transferState, platformId);
   }
 
   protected _createInstance(element, options) {

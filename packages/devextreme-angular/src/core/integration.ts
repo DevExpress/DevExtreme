@@ -1,6 +1,6 @@
 /* tslint:disable:max-line-length */
 import {
-  NgModule, Inject, NgZone, Optional, VERSION,
+  NgModule, NgZone, VERSION, Injector,
 } from '@angular/core';
 import { DOCUMENT, XhrFactory } from '@angular/common';
 import httpRequest from 'devextreme/core/http_request';
@@ -97,12 +97,16 @@ let doInjections = (document: any, ngZone: NgZone, xhrFactory: XhrFactory) => {
   doInjections = runReadyCallbacksInZone;
 };
 
-@NgModule({})
-export class DxIntegrationModule {
-  static initialized = false;
+let integrationInitialized = false;
 
-  constructor(@Inject(DOCUMENT) document: any, ngZone: NgZone, @Optional() xhrFactory: XhrFactory) {
-    doInjections(document, ngZone, xhrFactory);
-    DxIntegrationModule.initialized = true;
-  }
+export function initializeDxIntegration(injector: Injector): void {
+  if (integrationInitialized) return;
+  const document = injector.get(DOCUMENT);
+  const ngZone = injector.get(NgZone);
+  const xhrFactory = injector.get(XhrFactory, null);
+  doInjections(document, ngZone, xhrFactory);
+  integrationInitialized = true;
 }
+
+@NgModule({})
+export class DxIntegrationModule {}

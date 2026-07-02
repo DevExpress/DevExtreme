@@ -1,4 +1,4 @@
-import { EventEmitter, NgZone } from '@angular/core';
+import { ChangeDetectorRef, EventEmitter } from '@angular/core';
 import { DxComponent } from './component';
 
 interface IEventSubscription {
@@ -10,7 +10,7 @@ export class NgEventsStrategy {
 
   private events: { [key: string]: EventEmitter<any> } = {};
 
-  constructor(private readonly instance: any, private readonly zone: NgZone) { }
+  constructor(private readonly instance: any, private readonly cdr: ChangeDetectorRef) { }
 
   hasEvent(name: string) {
     return this.getEmitter(name).observers.length !== 0;
@@ -20,10 +20,9 @@ export class NgEventsStrategy {
     const emitter = this.getEmitter(name);
     if (emitter.observers.length) {
       const internalSubs = this.subscriptions[name] || [];
-      if (internalSubs.length === emitter.observers.length) {
-        emitter.next(args?.[0]);
-      } else {
-        this.zone.run(() => emitter.next(args?.[0]));
+      emitter.next(args?.[0]);
+      if (internalSubs.length !== emitter.observers.length) {
+        this.cdr.markForCheck();
       }
     }
   }
@@ -80,7 +79,7 @@ export class NgEventsStrategy {
 export class EmitterHelper {
   lockedValueChangeEvent = false;
 
-  constructor(private readonly zone: NgZone, private component: DxComponent) { }
+  constructor(private readonly cdr: ChangeDetectorRef, private component: DxComponent) { }
 
   fireNgEvent(eventName: string, eventArgs: any) {
     if (this.lockedValueChangeEvent && eventName === 'valueChange') {
@@ -88,9 +87,8 @@ export class EmitterHelper {
     }
     const emitter = this.component[eventName];
     if (emitter?.observers.length) {
-      this.zone.run(() => {
-        emitter.next(eventArgs?.[0]);
-      });
+      emitter.next(eventArgs?.[0]);
+      this.cdr.markForCheck();
     }
   }
 

@@ -6,7 +6,6 @@ import {
     Component,
     NgModule,
     ElementRef,
-    NgZone,
     PLATFORM_ID,
     Inject,
 
@@ -262,7 +261,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     parentElement: any;
 
 
-    constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
+    constructor(elementRef: ElementRef, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
             @SkipSelf() @Optional() @Host() parentOptionHost: NestedOptionHost,
@@ -270,7 +269,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
             transferState: TransferState,
             @Inject(PLATFORM_ID) platformId: any) {
 
-        super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
+        super(elementRef, templateHost, _watcherHelper, transferState, platformId);
 
         this._createEventEmitters([
             { subscribe: 'disposing', emit: 'onDisposing' },

@@ -1,8 +1,4 @@
 export {
-    registerGradient,
-    registerPattern,
-} from 'devextreme/common/charts';
-export type {
     AnimationEaseMode,
     AnnotationType,
     ArgumentAxisHoverMode,
@@ -26,6 +22,8 @@ export type {
     PaletteExtensionMode,
     PointInteractionMode,
     PointSymbol,
+    registerGradient,
+    registerPattern,
     RelativePosition,
     ScaleBreak,
     ScaleBreakLineStyle,
