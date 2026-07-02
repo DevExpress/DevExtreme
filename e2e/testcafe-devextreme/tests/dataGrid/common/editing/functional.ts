@@ -2434,11 +2434,13 @@ test('Cells should be focused correctly on click when cell editing mode is used 
     const dataGrid = new DataGrid('#container');
     await t.expect(dataGrid.isReady()).ok();
 
-    // Inject the changes only after the grid has finished its initial load.
-    // Setting editing.changes for off-page rows before the store data is
-    // cached leaves their oldData unresolved, so their validators are never
-    // created (T1165529) and the invalid row is skipped - the grid then
-    // renders one row fewer (this made the test unstable).
+    /**
+     * Inject the changes only after the grid has finished its initial load.
+     * Setting editing.changes for off-page rows before the store data is
+     * cached leaves their oldData unresolved, so their validators are never
+     * created (T1165529) and the invalid row is skipped - the grid then
+     * renders one row fewer (this made the test unstable).
+     */
     const data = getData(10, 4);
     await ClientFunction(() => {
       const keys = data.map((e) => e.field_0);
