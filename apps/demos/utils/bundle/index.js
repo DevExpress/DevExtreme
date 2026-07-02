@@ -7,6 +7,15 @@ const url = require('url');
 
 const GRID_COMMON_STAR_IMPORT = 'exports.Grids = __importStar(require("./grids"));';
 
+const PRESET_ENV_DIR = path.dirname(require.resolve('@babel/preset-env/package.json'));
+const resolvePlugin = (name) => require.resolve(name, { paths: [PRESET_ENV_DIR] });
+const BABEL7_PREPASS_PLUGINS = [
+  '@babel/plugin-transform-nullish-coalescing-operator',
+  '@babel/plugin-transform-object-rest-spread',
+  '@babel/plugin-transform-optional-catch-binding',
+  '@babel/plugin-transform-optional-chaining',
+].map(resolvePlugin);
+
 // https://stackoverflow.com/questions/42412965/how-to-load-named-exports-with-systemjs/47108328
 const prepareModulesToNamedImport = () => {
   const modules = [
@@ -233,12 +242,7 @@ const prepareConfigs = (framework) => {
         if (load?.metadata?.transpile) {
           // access to path-specific meta if required: load?.metadata?.babelOptions
           const babelOptions = {
-            plugins: [
-              '@babel/plugin-transform-nullish-coalescing-operator',
-              '@babel/plugin-transform-object-rest-spread',
-              '@babel/plugin-transform-optional-catch-binding',
-              '@babel/plugin-transform-optional-chaining',
-            ],
+            plugins: BABEL7_PREPASS_PLUGINS,
           };
 
           // This auto-generated runtime import is useless because grid.js exports only types,
@@ -249,12 +253,12 @@ const prepareConfigs = (framework) => {
             }
           };
 
-          return new Promise((resolve) => {
+          return new Promise((resolve, reject) => {
             // systemjs-builder uses babel 6, so we use babel 7 here for transpiling ES2020
             babel.transformFile(url.fileURLToPath(load.name), babelOptions, (err, result) => {
               if (err) {
-                fetch(load).then((r) => resolve(r));
-                console.log(`Unexpected transipling error (babel 7): ${err}`);
+                console.error(`Babel 7 pre-pass failed for ${load.name}: ${err}`);
+                reject(err);
               } else {
                 removeImportTranspiledToCrashingCode(result);
                 resolve(result.code);
