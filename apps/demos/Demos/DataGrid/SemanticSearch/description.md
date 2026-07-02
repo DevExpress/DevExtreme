@@ -7,11 +7,11 @@ To review the benefits of this feature, search for dictionary entries and their 
 
 AI services used for this demo have been rate and data limited. As such, you may experience performance-related delays when exploring the capabilities of the DataGrid AI Assistant.
 
-When connected to your own AI model/service without rate and data limits, the AI Assistant will perform seamlessly, without artificial delays. Note that DevExtreme does not offer an AI REST API and does not ship any built-in LLMs/SLMs.
+When connected to your own AI model/service without rate and data limits, semantic search will perform seamlessly, without artificial delays. Note that DevExtreme does not offer an AI REST API and does not ship any built-in LLMs/SLMs.
 
 [/note]
 
-This demo configures semantic filtering on the server. Each request returns filtered data using two parameters:
+This demo configures semantic filtering on the server (using [AzureOpenAI embeddings](https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/embeddings?tabs=csharp)). Each request returns filtered data using two parameters:
 
 - A search value (entered in the built-in [search panel](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/searchPanel/))
 - A similarity factor (adjusted using a custom [toolbar](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/toolbar/) item)
