@@ -1,18 +1,11 @@
-/* global ts, System, translateSFC */
+/* global System, translateSFC */
+
+const {
+  ensureTypeScript,
+  getDemoTsCompilerOptions,
+} = require('demo-ts-shared');
 
 const DX_SYSTEMJS_VUE_BROWSER = 'npm:dx-systemjs-vue-browser/index.js';
-
-function getDemoTsCompilerOptions() {
-  const globalOpts = (typeof System !== 'undefined' && System.typescriptOptions) || {};
-
-  return {
-    target: ts.ScriptTarget.ES2015,
-    module: ts.ModuleKind.ES2015,
-    ignoreDeprecations: '6.0',
-    strict: false,
-    ...globalOpts,
-  };
-}
 
 let translateSfcModulePromise;
 
@@ -33,15 +26,20 @@ function ensureTranslateSFC() {
 }
 
 module.exports.translate = function translate(load) {
-  return ensureTranslateSFC().then(() => {
-    const loadOpts = load.metadata && load.metadata.typescriptOptions;
-    const tsCompilerOptions = loadOpts
-      ? { ...getDemoTsCompilerOptions(), ...loadOpts }
-      : getDemoTsCompilerOptions();
+  const parentName = load.name || load.address;
 
-    load.source = translateSFC(load.source, true, {
-      compilerOptions: tsCompilerOptions,
-    });
-    return load.source;
-  });
+  return ensureTypeScript(parentName)
+    .then((tsApi) => ensureTranslateSFC().then(() => {
+      const globalOpts = (typeof System !== 'undefined' && System.typescriptOptions) || {};
+      const loadOpts = (load.metadata && load.metadata.typescriptOptions) || {};
+      const compilerOptions = {
+        ...getDemoTsCompilerOptions(tsApi, globalOpts),
+        ...loadOpts,
+      };
+
+      load.source = translateSFC(load.source, true, { compilerOptions });
+      load.metadata.format = 'register';
+
+      return load.source;
+    }));
 };
