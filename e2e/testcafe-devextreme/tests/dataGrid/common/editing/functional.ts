@@ -2434,6 +2434,43 @@ test('Cells should be focused correctly on click when cell editing mode is used 
     const dataGrid = new DataGrid('#container');
     await t.expect(dataGrid.isReady()).ok();
 
+    // Inject the changes only after the grid has finished its initial load.
+    // Setting editing.changes for off-page rows before the store data is
+    // cached leaves their oldData unresolved, so their validators are never
+    // created (T1165529) and the invalid row is skipped - the grid then
+    // renders one row fewer (this made the test unstable).
+    const data = getData(10, 4);
+    await ClientFunction(() => {
+      const keys = data.map((e) => e.field_0);
+      const columnToModify = 'field_1';
+      const gridName = 'dxDataGrid';
+
+      const grid = $('#container')[gridName]('instance');
+      const changes = grid.option('editing.changes');
+      keys.forEach((key) => {
+        const editData = changes.find(
+          (change) => change.type === 'update' && change.key === key,
+        );
+        if (editData) {
+          editData.data[columnToModify] = 'EEEEEE';
+        } else {
+          const changingData = {};
+          changingData[columnToModify] = 'EEEEEE';
+
+          changes.push({
+            type: 'update',
+            key,
+            data: changingData,
+          });
+        }
+      });
+      grid.option('editing.changes', changes);
+    }, {
+      dependencies: {
+        data,
+      },
+    })();
+
     await t
       // act
       .click(dataGrid.getHeaderPanel().getSaveButton())
@@ -2473,36 +2510,5 @@ test('Cells should be focused correctly on click when cell editing mode is used 
         'field_3',
       ],
     });
-
-    await ClientFunction(() => {
-      const keys = data.map((e) => e.field_0);
-      const columnToModify = 'field_1';
-      const gridName = 'dxDataGrid';
-
-      const grid = $('#container')[gridName]('instance');
-      const changes = grid.option('editing.changes');
-      keys.forEach((key) => {
-        const editData = changes.find(
-          (change) => change.type === 'update' && change.key === key,
-        );
-        if (editData) {
-          editData.data[columnToModify] = 'EEEEEE';
-        } else {
-          const changingData = {};
-          changingData[columnToModify] = 'EEEEEE';
-
-          changes.push({
-            type: 'update',
-            key,
-            data: changingData,
-          });
-        }
-      });
-      grid.option('editing.changes', changes);
-    }, {
-      dependencies: {
-        data,
-      },
-    })();
   });
 });
