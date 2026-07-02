@@ -34,6 +34,14 @@ export class SchedulerModel {
     return new ToolbarModel(this.queries.getByRole('toolbar'));
   }
 
+  getHeader(): HTMLElement {
+    return this.container.querySelector('.dx-scheduler-header') as HTMLElement;
+  }
+
+  getWorkSpace(): HTMLElement {
+    return this.container.querySelector('.dx-scheduler-work-space') as HTMLElement;
+  }
+
   getStatusContent(): string {
     const statusElement = this.container.querySelector('.dx-screen-reader-only');
     return statusElement?.textContent ?? '';
