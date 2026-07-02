@@ -644,6 +644,13 @@ abstract class AreaItem {
     }
   }
 
+  scrollToElement(element) {
+    const scrollable = this._getScrollable();
+    if (scrollable) {
+      scrollable.scrollToElement(element);
+    }
+  }
+
   updateScrollable() {
     const scrollable = this._getScrollable();
     if (scrollable) {
