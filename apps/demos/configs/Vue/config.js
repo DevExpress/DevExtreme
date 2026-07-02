@@ -1,9 +1,6 @@
 window.exports = window.exports || {};
 window.config = {
-  transpiler: 'plugin-babel',
-  typescriptOptions: {
-    ignoreDeprecations: '6.0',
-  },
+  transpiler: false,
   meta: {
     '*.vue': {
       loader: 'vue-loader',
@@ -13,6 +10,19 @@ window.config = {
     },
     '*.svg': {
       loader: 'svg-loader',
+    },
+    'typescript': {
+      'exports': 'ts',
+    },
+    'vue': {
+      format: 'global',
+      exports: 'Vue',
+      esModule: true,
+    },
+    'vuex': {
+      format: 'global',
+      exports: 'Vuex',
+      esModule: true,
     },
     'devextreme/time_zone_utils.js': {
       'esModule': true,
@@ -47,6 +57,40 @@ window.config = {
     'zod-to-json-schema': {
       'esModule': true,
     },
+    'anti-forgery': {
+      loader: 'demo-ts-loader',
+    },
+    /** unified */
+    'unified': {
+      loader: 'demo-ts-loader',
+    },
+    'remark-parse': {
+      loader: 'demo-ts-loader',
+    },
+    'remark-rehype': {
+      loader: 'demo-ts-loader',
+    },
+    'remark-stringify': {
+      loader: 'demo-ts-loader',
+    },
+    'rehype-parse': {
+      loader: 'demo-ts-loader',
+    },
+    'rehype-remark': {
+      loader: 'demo-ts-loader',
+    },
+    'rehype-stringify': {
+      loader: 'demo-ts-loader',
+    },
+    'rehype-minify-whitespace': {
+      loader: 'demo-ts-loader',
+    },
+    /**/
+    /** canvg */
+    'canvg': {
+      loader: 'demo-ts-loader',
+    },
+    /**/
   },
   paths: {
     'project:': '../../../../',
@@ -57,11 +101,13 @@ window.config = {
   },
   map: {
     'anti-forgery': 'anti-forgery:fetch-override.js',
-    'vue': 'npm:vue/dist/vue.esm-browser.js',
+    'vue': 'npm:vue/dist/vue.global.js',
     '@vue/shared': 'npm:@vue/shared/dist/shared.cjs.prod.js',
     'vue-loader': 'project:utils/demo-vue-loader.js',
     'dx-systemjs-vue-browser': 'npm:dx-systemjs-vue-browser/index.js',
     'demo-ts-loader': 'project:utils/demo-ts-loader.js',
+    'demo-ts-shared': 'project:utils/demo-ts-shared.js',
+    'typescript': 'npm:typescript/lib/typescript.js',
     'jszip': 'npm:jszip/dist/jszip.min.js',
     'svg-loader': 'project:utils/svg-loader.js',
 
@@ -115,7 +161,7 @@ window.config = {
     'mitt': 'npm:mitt/dist/mitt.umd.js',
 
     /** vuex */
-    'vuex': 'npm:vuex/dist/vuex.esm-browser.js',
+    'vuex': 'npm:vuex/dist/vuex.global.js',
     /**/
 
     'rrule': 'npm:rrule/dist/es5/rrule.js',
@@ -155,9 +201,6 @@ window.config = {
     'inferno-create-class': 'npm:inferno-create-class/dist/inferno-create-class.min.js',
     'inferno-extras': 'npm:inferno-extras/dist/inferno-extras.min.js',
     '@preact/signals-core': 'npm:@preact/signals-core/dist/signals-core.min.js',
-
-    'plugin-babel': 'npm:systemjs-plugin-babel/plugin-babel.js',
-    'systemjs-babel-build': 'npm:systemjs-plugin-babel/systemjs-babel-browser.js',
 
     // Prettier
     'prettier/standalone': 'npm:prettier/standalone.js',
@@ -206,10 +249,6 @@ window.config = {
   packageConfigPaths: [
     'npm:@devextreme/*/package.json',
   ],
-  babelOptions: {
-    sourceMaps: false,
-    stage0: true,
-  },
 };
 
 window.process = {

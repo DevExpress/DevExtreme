@@ -1,28 +1,19 @@
-/* global ts, System */
+/* global System */
 
-function getDemoTsCompilerOptions() {
-  const globalOpts = (typeof System !== 'undefined' && System.typescriptOptions) || {};
+const {
+  ensureTypeScript,
+  transpileToSystemRegister,
+} = require('demo-ts-shared');
 
-  return {
-    target: ts.ScriptTarget.ES2015,
-    module: ts.ModuleKind.ES2015,
-    ignoreDeprecations: '6.0',
-    strict: false,
-    ...globalOpts,
-  };
-}
+module.exports.translate = function translate(load) {
+  const parentName = load.name || load.address;
 
-module.exports.translate = (data) => {
-  if (ts === undefined) {
-    throw new Error('TypeScript is required, but window.ts is not defined!\nInclude typescript.js to page');
-  }
+  return ensureTypeScript(parentName).then((tsApi) => {
+    const globalOpts = (typeof System !== 'undefined' && System.typescriptOptions) || {};
+    const loadOpts = (load.metadata && load.metadata.typescriptOptions) || {};
 
-  const jsCode = ts.transpileModule(
-    data.source,
-    {
-      compilerOptions: getDemoTsCompilerOptions(),
-    },
-  ).outputText;
+    load.metadata.format = 'register';
 
-  return `${jsCode}`;
+    return transpileToSystemRegister(tsApi, load.source, loadOpts, globalOpts);
+  });
 };
