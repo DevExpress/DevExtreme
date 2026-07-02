@@ -18,6 +18,8 @@ import lv from 'localization/messages/lv.json!';
 import nb from 'localization/messages/nb.json!';
 import nl from 'localization/messages/nl.json!';
 import pt from 'localization/messages/pt.json!';
+import ptBR from 'localization/messages/pt-BR.json!';
+import ptPT from 'localization/messages/pt-PT.json!';
 import ro from 'localization/messages/ro.json!';
 import ru from 'localization/messages/ru.json!';
 import sl from 'localization/messages/sl.json!';
@@ -33,7 +35,7 @@ const dictionaries = {
     ar, ca, cs, de, el,
     en, es, fi, fr, hu,
     it, ja, lt, lv, nb,
-    nl, pt, ro, ru, sl,
+    nl, pt, 'pt-BR': ptBR, 'pt-PT': ptPT, ro, ru, sl,
     // eslint-disable-next-line spellcheck/spell-checker
     sv, tr, vi, 'zh-tw': zhTw, zh, fa
 };
