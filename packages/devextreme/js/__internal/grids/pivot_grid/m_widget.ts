@@ -34,6 +34,10 @@ import { FieldChooser } from './field_chooser/m_field_chooser';
 import { FieldChooserBase } from './field_chooser/m_field_chooser_base';
 import { FieldsArea } from './fields_area/m_fields_area';
 import HeadersArea from './headers_area/m_headers_area';
+import { FAKE_TABLE_CLASS, HORIZONTAL_HEADERS_AREA_CLASS } from './keyboard_navigation/const';
+import { RovingTabIndex } from './keyboard_navigation/roving_tab_index';
+import type { CellNavigationDirection } from './keyboard_navigation/table_cell_navigation';
+import { getAdjacentCell } from './keyboard_navigation/table_cell_navigation';
 import { findField, mergeArraysByMaxValue, setFieldProperty } from './m_widget_utils';
 
 const window = getWindow();
@@ -59,6 +63,13 @@ const DIV = '<div>';
 const TEST_HEIGHT = 66666;
 
 const FIELD_CALCULATED_OPTIONS = ['allowSorting', 'allowSortingBySummary', 'allowFiltering', 'allowExpandAll'];
+
+const ARROW_KEY_DIRECTIONS: Record<string, CellNavigationDirection> = {
+  ArrowUp: 'up',
+  ArrowDown: 'down',
+  ArrowLeft: 'left',
+  ArrowRight: 'right',
+};
 
 function getArraySum(array) {
   let sum = 0;
@@ -110,6 +121,8 @@ function clickedOnFieldsArea($targetElement) {
 
 class PivotGrid extends Widget {
   _dataController: any;
+
+  _columnsAreaNavigation: RovingTabIndex | undefined;
 
   _scrollLeft: any;
 
@@ -891,7 +904,81 @@ class PivotGrid extends Widget {
     });
   }
 
+  _getColumnsAreaNavigation() {
+    this._columnsAreaNavigation = this._columnsAreaNavigation ?? new RovingTabIndex({
+      component: this,
+      getItems: () => this._getColumnHeaderCells(),
+      scrollToItem: (item) => this._columnsArea.scrollToElement(item),
+    });
+
+    return this._columnsAreaNavigation;
+  }
+
+  _getColumnHeaderCells(): HTMLElement[] {
+    const element = this.$element().get(0);
+
+    if (!element) {
+      return [];
+    }
+
+    const cells: HTMLElement[] = Array.from(element.querySelectorAll(`thead.${HORIZONTAL_HEADERS_AREA_CLASS} td`));
+
+    return cells.filter((cell) => !cell.closest(`.${FAKE_TABLE_CLASS}`));
+  }
+
+  _getCellAreaNavigation(cell): RovingTabIndex | undefined {
+    if (cell.closest?.(`.${FAKE_TABLE_CLASS}`)) {
+      return undefined;
+    }
+    if (cell.closest?.(`thead.${HORIZONTAL_HEADERS_AREA_CLASS}`)) {
+      return this._getColumnsAreaNavigation();
+    }
+
+    return undefined;
+  }
+
+  _normalizeCellNavigationDirection(direction: CellNavigationDirection): CellNavigationDirection {
+    if (!this.option('rtlEnabled')) {
+      return direction;
+    }
+    if (direction === 'left') {
+      return 'right';
+    }
+    if (direction === 'right') {
+      return 'left';
+    }
+
+    return direction;
+  }
+
+  _handleCellArrowKeyDown(e, direction: CellNavigationDirection) {
+    const cell = e.currentTarget;
+    const navigation = this._getCellAreaNavigation(cell);
+
+    if (!navigation) {
+      return;
+    }
+
+    e.preventDefault();
+
+    const section = cell.closest('thead, tbody');
+    const target = getAdjacentCell(section, cell, this._normalizeCellNavigationDirection(direction));
+
+    if (target) {
+      navigation.focusItem(target);
+    }
+  }
+
+  _handleCellFocusIn(e) {
+    this._getCellAreaNavigation(e.currentTarget)?.handleFocusIn(e.currentTarget);
+  }
+
   _handleCellKeyDown(e) {
+    const direction = ARROW_KEY_DIRECTIONS[e.key];
+    if (direction) {
+      this._handleCellArrowKeyDown(e, direction);
+      return;
+    }
     if (e.repeat) {
       return;
     }
@@ -1121,6 +1208,7 @@ class PivotGrid extends Widget {
 
     eventsEngine.on($table, addNamespace(clickEventName, 'dxPivotGrid'), 'td', that._handleCellClick.bind(that));
     eventsEngine.on($table, addNamespace('keydown', 'dxPivotGrid'), 'td', that._handleCellKeyDown.bind(that));
+    eventsEngine.on($table, addNamespace('focusin', 'dxPivotGrid'), 'td', that._handleCellFocusIn.bind(that));
 
     return $table;
   }
@@ -1143,11 +1231,33 @@ class PivotGrid extends Widget {
     return rowsArea;
   }
 
+  // Rendering moves header elements between area tables, which drops focus,
+  // so the focused cell is restored after the content is ready.
+  _scheduleNavigationFocusRestore(navigation: RovingTabIndex) {
+    const onReady = () => {
+      this.off('contentReady', onReady);
+      if (!navigation.containsActiveElement()) {
+        navigation.refocusFocusedItem();
+      }
+    };
+    this.on('contentReady', onReady);
+  }
+
   _renderColumnsArea(columnsAreaElement) {
     const that = this;
     const columnsArea = that._columnsArea || new HeadersArea.HorizontalHeadersArea(that);
     that._columnsArea = columnsArea;
+
+    const navigation = that._getColumnsAreaNavigation();
+    const needRestoreFocus = navigation.containsActiveElement();
+
     columnsArea.render(columnsAreaElement, that._dataController.getColumnsInfo());
+    navigation.updateTabIndexes();
+
+    if (needRestoreFocus) {
+      navigation.refocusFocusedItem();
+      that._scheduleNavigationFocusRestore(navigation);
+    }
 
     return columnsArea;
   }

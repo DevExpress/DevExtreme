@@ -133,6 +133,12 @@ $pivotgrid-expand-icon-text-offset: 0;
     outline-offset: -2px;
   }
 
+  .dx-pivotgrid-horizontal-headers td:focus-visible {
+    outline: 2px solid;
+    outline-color: $pivotgrid-accent-color;
+    outline-offset: -2px;
+  }
+
   .dx-expand-icon-container:focus-visible {
     outline: none;
   }

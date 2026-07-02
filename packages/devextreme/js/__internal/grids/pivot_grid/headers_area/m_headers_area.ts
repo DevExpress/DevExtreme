@@ -49,6 +49,10 @@ class HorizontalHeadersArea extends AreaItem {
     return PIVOTGRID_AREA_COLUMN_CLASS;
   }
 
+  _isCellNavigationEnabled() {
+    return true;
+  }
+
   _createGroupElement() {
     return $('<div>')
       .addClass(this._getAreaClassName())
@@ -178,6 +182,11 @@ class VerticalHeadersArea extends HorizontalHeadersArea {
 
   _getAreaClassName() {
     return PIVOTGRID_AREA_ROW_CLASS;
+  }
+
+  // Cell navigation for the row headers area is not implemented yet
+  _isCellNavigationEnabled() {
+    return false;
   }
 
   _applyCustomStyles(options) {

@@ -141,6 +141,10 @@ abstract class AreaItem {
     return tbody;
   }
 
+  _isCellNavigationEnabled() {
+    return false;
+  }
+
   _getCloseMainElementMarkup() {
     return '</tbody>';
   }
@@ -202,6 +206,7 @@ abstract class AreaItem {
     const rowsCount = data.length;
     const rtlEnabled = this.option('rtlEnabled');
     const encodeHtml = this.option('encodeHtml');
+    const isCellNavigationEnabled = this._isCellNavigationEnabled();
 
     tableElement.data('area', this._getAreaName());
     tableElement.data('data', data);
@@ -240,6 +245,10 @@ abstract class AreaItem {
           cell.rowspan && td.setAttribute('rowspan', cell.rowspan || 1);
           cell.colspan && td.setAttribute('colspan', cell.colspan || 1);
 
+          if (isCellNavigationEnabled) {
+            td.setAttribute('tabindex', '-1');
+          }
+
           const styleOptions = {
             cellElement: undefined,
             cell,
@@ -274,7 +283,7 @@ abstract class AreaItem {
             div.setAttribute('role', 'button');
             div.setAttribute('aria-label', encodeHtml ? ariaLabel : $('<div>').html(ariaLabel).text());
             div.setAttribute('aria-expanded', String(cell.expanded));
-            div.setAttribute('tabindex', '0');
+            div.setAttribute('tabindex', isCellNavigationEnabled ? '-1' : '0');
           }
 
           cellText = this._getCellText(cell, encodeHtml);
@@ -633,7 +642,9 @@ abstract class AreaItem {
         .removeAttr('id')
         .attr('aria-hidden', 'true')
         .addClass('dx-pivot-grid-fake-table')
-        .appendTo(that._virtualContent);
+        .attr('aria-hidden', 'true');
+      that._fakeTable.find('[tabindex]').removeAttr('tabindex');
+      that._fakeTable.appendTo(that._virtualContent);
     }
   }
 
