@@ -15,7 +15,6 @@ const schedulerDOMComponentOverrides = [
 
 const schedulerWidgetOverrides = [
     '_activeStateUnit',
-    '_attachKeyboardEvents',
     '_clean',
     '_cleanFocusState',
     '_eventBindingTarget',

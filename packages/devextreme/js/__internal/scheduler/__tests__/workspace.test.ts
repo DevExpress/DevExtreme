@@ -89,30 +89,29 @@ describe('Workspace', () => {
   });
 
   describe('A11y', () => {
-    it('should not have tabIndex attr', async () => {
+    it('should have tabIndex -1 to be skipped in the tab order', async () => {
       const { POM } = await createScheduler(defaultOptions);
 
-      expect(POM.getWorkSpace().hasAttribute('tabindex')).toBe(false);
+      expect(POM.getWorkSpace().getAttribute('tabindex')).toBe('-1');
     });
 
-    it('should not have tabIndex attr after tabIndex option change', async () => {
+    it('should have tabIndex -1 after tabIndex option change', async () => {
       const { scheduler, POM } = await createScheduler(defaultOptions);
 
       scheduler.option('tabIndex', 1);
 
-      expect(POM.getWorkSpace().hasAttribute('tabindex')).toBe(false);
+      expect(POM.getWorkSpace().getAttribute('tabindex')).toBe('-1');
     });
   });
 
   describe('Keyboard navigation', () => {
-    it('should move focus to the clicked cell', async () => {
+    it('should focus the clicked cell', async () => {
       const { POM } = await createScheduler(defaultOptions);
 
       const cell = POM.getDateTableCell(0, 0);
       fireEvent.mouseDown(cell, { which: 1 });
       fireEvent.mouseUp(cell);
 
-      expect(document.activeElement).toBe(cell);
       expect(cell.classList.contains(CLASSES.focusedState)).toBe(true);
     });
 
@@ -123,20 +122,19 @@ describe('Workspace', () => {
       const secondCell = POM.getDateTableCell(1, 0);
       fireEvent.mouseDown(firstCell, { which: 1 });
       fireEvent.mouseUp(firstCell);
-      fireEvent.keyDown(document.activeElement ?? firstCell, { key: 'ArrowDown' });
+      fireEvent.keyDown(POM.getWorkSpace(), { key: 'ArrowDown' });
 
-      expect(document.activeElement).toBe(secondCell);
       expect(secondCell.classList.contains(CLASSES.focusedState)).toBe(true);
       expect(firstCell.classList.contains(CLASSES.focusedState)).toBe(false);
     });
 
-    it('should keep selection while focus moves between cells', async () => {
+    it('should extend selection on shift + arrow key', async () => {
       const { scheduler, POM } = await createScheduler(defaultOptions);
 
       const firstCell = POM.getDateTableCell(0, 0);
       fireEvent.mouseDown(firstCell, { which: 1 });
       fireEvent.mouseUp(firstCell);
-      fireEvent.keyDown(document.activeElement ?? firstCell, { key: 'ArrowDown', shiftKey: true });
+      fireEvent.keyDown(POM.getWorkSpace(), { key: 'ArrowDown', shiftKey: true });
 
       expect(scheduler.option('selectedCellData')).toHaveLength(2);
     });
@@ -147,7 +145,7 @@ describe('Workspace', () => {
       const cell = POM.getDateTableCell(0, 0);
       fireEvent.mouseDown(cell, { which: 1 });
       fireEvent.mouseUp(cell);
-      fireEvent.focusOut(cell, { relatedTarget: document.body });
+      fireEvent.focusOut(POM.getWorkSpace());
 
       expect(cell.classList.contains(CLASSES.focusedState)).toBe(false);
     });

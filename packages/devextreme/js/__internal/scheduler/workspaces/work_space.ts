@@ -49,7 +49,6 @@ import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys, WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
-import { focus, keyboard } from '@ts/events/m_short';
 import {
   AllDayPanelTitleComponent,
   AllDayTableComponent,
@@ -371,8 +370,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   private isCellClick?: boolean;
 
   private contextMenuHandled?: boolean;
-
-  private $focusedCell?: dxElementWrapper;
 
   _disposed: boolean | undefined;
 
@@ -750,7 +747,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     this.updateCellsSelection();
     this.updateSelectedCellDataOption(this.getSelectedCellsData(), $nextFocusedCell);
-    this.focusCell($nextFocusedCell);
   }
 
   private hasAllDayClass($cell: dxElementWrapper): boolean {
@@ -791,17 +787,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   _focusOutHandler(e: DxEvent): void {
-    const { relatedTarget } = e as { relatedTarget?: Element | null };
-    const $relatedTarget = $(relatedTarget as Element | null);
-    const isFocusMovedToAnotherCell = Boolean(relatedTarget)
-      && ($relatedTarget.hasClass(DATE_TABLE_CELL_CLASS)
-        || $relatedTarget.hasClass(ALL_DAY_TABLE_CELL_CLASS))
-      && $relatedTarget.closest(this._focusTarget()).length > 0;
-
-    if (isFocusMovedToAnotherCell) {
-      return;
-    }
-
     super._focusOutHandler(e);
 
     if (!this.contextMenuHandled && !this._disposed) {
@@ -816,45 +801,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return this.$element();
   }
 
-  _renderFocusTarget(): void { return noop(); }
-
-  _attachKeyboardEvents(): void {
-    this._detachKeyboardEvents();
-
-    const { focusStateEnabled } = this.option();
-
-    if (focusStateEnabled) {
-      this._keyboardListenerId = keyboard.on(
-        this._keyboardEventBindingTarget(),
-        null,
-        (opts) => this._keyboardHandler(opts),
-      );
-    }
-  }
-
-  focus(): void {
-    const focusedCell = this.cellsSelectionState.getFocusedCell();
-
-    if (!focusedCell?.coordinates) {
-      return;
-    }
-
-    const { cellData, coordinates } = focusedCell;
-    const $cell = cellData.allDay && !this.isVerticalGroupedWorkSpace()
-      ? this.domGetAllDayPanelCell(coordinates.columnIndex)
-      : this.domGetDateCell(coordinates);
-
-    this.focusCell($cell);
-  }
-
-  private focusCell($cell: dxElementWrapper): void {
-    if (this.$focusedCell && !this.$focusedCell.is($cell)) {
-      this.$focusedCell.removeAttr('tabindex');
-    }
-
-    this.$focusedCell = $cell;
-    $cell.attr('tabindex', -1);
-    focus.trigger($cell);
+  _renderFocusTarget(): void {
+    this._focusTarget().attr('tabindex', -1);
   }
 
   protected isVerticalGroupedWorkSpace(): boolean { // TODO move to the Model
@@ -1299,7 +1247,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     if ($target.hasClass(DATE_TABLE_FOCUSED_CELL_CLASS)) {
       this.showPopup = true;
       this.isSelectionStartedOnCell = false;
-      this.focusCell($target);
     } else {
       this.isSelectionStartedOnCell = true;
       const cellCoordinates = this.getCoordinatesByCell($target);
@@ -3328,7 +3275,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this.showPopup = false;
     this.interval = undefined;
     this.isSelectionStartedOnCell = false;
-    this.$focusedCell = undefined;
 
     this.shader?.clean();
   }
