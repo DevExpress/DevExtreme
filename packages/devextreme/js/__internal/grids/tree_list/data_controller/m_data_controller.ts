@@ -94,16 +94,10 @@ export class TreeListDataController extends DataController {
     return super.publicMethods().concat(['expandRow', 'collapseRow', 'isRowExpanded', 'getRootNode', 'getNodeByKey', 'loadDescendants', 'forEachNode']);
   }
 
-  public updateItems(change: any = {}, isDataChanged?: boolean) {
-    if (isDataChanged) {
-      const operationTypes = this._dataSource?.operationTypes();
-
-      if (operationTypes?.nodeExpanding) {
-        change.needUpdateDimensions = true;
-      }
-    }
-
-    super.updateItems(change, isDataChanged);
+  protected override needUpdateDimensions(operationTypes) {
+    return super.needUpdateDimensions(operationTypes) || (
+      operationTypes && operationTypes.nodeExpanding
+    );
   }
 
   private changeRowExpand(key) {
