@@ -35,11 +35,23 @@ export class SchedulerModel {
   }
 
   getHeader(): HTMLElement {
-    return this.container.querySelector('.dx-scheduler-header') as HTMLElement;
+    const result = this.container.querySelector('.dx-scheduler-header');
+
+    if (!result) {
+      throw new Error('Scheduler header element not found');
+    }
+
+    return result as HTMLElement;
   }
 
   getWorkSpace(): HTMLElement {
-    return this.container.querySelector('.dx-scheduler-work-space') as HTMLElement;
+    const result = this.container.querySelector('.dx-scheduler-work-space');
+
+    if (!result) {
+      throw new Error('Scheduler workspace element not found');
+    }
+
+    return result as HTMLElement;
   }
 
   getStatusContent(): string {

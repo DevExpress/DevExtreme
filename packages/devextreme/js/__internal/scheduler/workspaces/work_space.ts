@@ -802,7 +802,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   _renderFocusTarget(): void {
-    this._focusTarget().attr('tabindex', -1);
+    this._focusTarget().attr('tabIndex', -1);
   }
 
   protected isVerticalGroupedWorkSpace(): boolean { // TODO move to the Model

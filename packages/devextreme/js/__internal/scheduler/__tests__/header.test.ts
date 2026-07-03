@@ -1,6 +1,7 @@
 import {
   afterEach, beforeEach, describe, expect, it,
 } from '@jest/globals';
+import $ from '@js/core/renderer';
 
 import { createScheduler } from './__mock__/create_scheduler';
 import { setupSchedulerTestEnvironment } from './__mock__/mock_scheduler';
@@ -11,6 +12,9 @@ describe('Header', () => {
   });
 
   afterEach(() => {
+    const $scheduler = $(document.querySelector('.dx-scheduler'));
+    // @ts-expect-error
+    $scheduler.dxScheduler('dispose');
     document.body.innerHTML = '';
   });
 
