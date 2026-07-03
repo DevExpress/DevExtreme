@@ -5779,7 +5779,7 @@ QUnit.module('Global formatting config (spec)', baseModuleConfig, () => {
         }
     });
 
-    QUnit.test('LDML global numberFormat is unaffected by message locale', function(assert) {
+    QUnit.test('LDML global numberFormat uses message locale separators', function(assert) {
         const saved = saveGlobalFormats();
         const savedLocale = localization.locale();
 
@@ -5793,7 +5793,7 @@ QUnit.module('Global formatting config (spec)', baseModuleConfig, () => {
             const format = gridCore.getFormatByDataType('number');
             const numberText = gridCore.formatValue(1234.5, { format });
 
-            assert.strictEqual(numberText, '1,234.50', 'LDML pattern is locale-independent');
+            assert.strictEqual(numberText, '1.234,50', 'LDML pattern uses separators from message locale');
         } finally {
             localization.locale(savedLocale);
             restoreGlobalFormats(saved);

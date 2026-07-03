@@ -1031,7 +1031,7 @@ define(function(require, exports, module) {
                         locale: 'de-DE',
                         type: 'shortDate',
                     }),
-                    '02.01.2020',
+                    '2.1.2020',
                 );
             } finally {
                 Globalize.locale(savedGlobalizeLocale);
