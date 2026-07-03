@@ -860,9 +860,7 @@ class TextEditorBase<
     return this.$element();
   }
 
-  _focusInHandler(event: DxEvent & {
-    relatedTarget: Element | dxElementWrapper;
-  }): void {
+  _focusInHandler(event: DxEvent<FocusEvent>): void {
     this._preventNestedFocusEvent(event);
 
     super._focusInHandler(event);

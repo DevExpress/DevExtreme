@@ -53,6 +53,8 @@ class DateBoxMask extends DateBoxBase {
 
   _isIMECommitPending?: boolean;
 
+  _wasAllSelectedBeforeComposition = false;
+
   _supportedKeys(): Record<string, (e: KeyboardEvent) => unknown> {
     const originalHandlers = super._supportedKeys();
     const callOriginalHandler = (e: KeyboardEvent): unknown => {
@@ -240,16 +242,6 @@ class DateBoxMask extends DateBoxBase {
       };
     }
 
-    const isBackwardDeletion = inputType === 'deleteContentBackward';
-    const isForwardDeletion = inputType === 'deleteContentForward';
-    if (isBackwardDeletion || isForwardDeletion) {
-      const direction = isBackwardDeletion ? BACKWARD : FORWARD;
-      this._maskInputHandler = (): void => {
-        this._revertPart();
-        this._selectNextPart(direction);
-      };
-    }
-
     if (!this._useMaskBehavior() || !this._isSingleCharKey(e)) {
       return false;
     }
@@ -268,6 +260,26 @@ class DateBoxMask extends DateBoxBase {
   _keyPressHandler(e: { originalEvent: InputEvent & KeyboardEvent }): void {
     const { originalEvent: event } = e;
 
+    const isBackwardDeletion = event?.inputType === 'deleteContentBackward';
+    const isForwardDeletion = event?.inputType === 'deleteContentForward';
+
+    if (this._useMaskBehavior() && (isBackwardDeletion || isForwardDeletion)) {
+      const isInputCleared = this._input().val() === '';
+
+      if (this._wasAllSelectedBeforeComposition || isInputCleared) {
+        super._keyPressHandler(e);
+      } else {
+        const direction = isBackwardDeletion ? BACKWARD : FORWARD;
+
+        this._revertPart(direction);
+        this._syncInputWithMask();
+      }
+
+      this._wasAllSelectedBeforeComposition = false;
+
+      return;
+    }
+
     const isCompositionDigit = event?.inputType === 'insertCompositionText'
       && this._isSingleDigitKey(e);
 
@@ -277,9 +289,15 @@ class DateBoxMask extends DateBoxBase {
 
     if (isCompositionDigit && event.data) {
       if (!this._isIMEDigitProcessed) {
+        if (this._wasAllSelectedBeforeComposition || this._isAllSelected()) {
+          this._clearSearchValue();
+          this._selectFirstPart();
+        }
+
         this._processInputKey(event.data);
         this._isIMEDigitProcessed = true;
         this._isIMECommitPending = true;
+        this._wasAllSelectedBeforeComposition = false;
       }
 
       this._syncInputWithMask();
@@ -290,17 +308,21 @@ class DateBoxMask extends DateBoxBase {
     if (isIMECommitDigit) {
       this._isIMECommitPending = false;
       this._pendingIMEDigit = null;
+      this._wasAllSelectedBeforeComposition = false;
 
       this._syncInputWithMask();
 
       return;
     }
+
     super._keyPressHandler(e);
 
     if (this._maskInputHandler) {
       this._maskInputHandler();
       this._maskInputHandler = null;
     }
+
+    this._wasAllSelectedBeforeComposition = false;
   }
 
   _processInputKey(key: string): void {
@@ -721,6 +743,7 @@ class DateBoxMask extends DateBoxBase {
   _maskCompositionStartHandler(): void {
     this._isIMEDigitProcessed = false;
     this._isIMECommitPending = false;
+    this._wasAllSelectedBeforeComposition = this._isAllSelected();
   }
 
   _maskCompositionEndHandler(): void {
@@ -728,6 +751,7 @@ class DateBoxMask extends DateBoxBase {
     this._caret(this._getActivePartProp('caret'));
 
     this._maskInputHandler = null;
+    this._wasAllSelectedBeforeComposition = false;
   }
 
   _maskPasteHandler(e: DxEvent): void {
