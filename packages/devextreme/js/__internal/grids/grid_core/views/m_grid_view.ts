@@ -182,29 +182,29 @@ export class ResizingController extends modules.ViewController {
     }
 
     if (changeType === 'update') {
-      if (!e.changeTypes?.length) {
-        // @ts-expect-error
-        return new Deferred<null>().resolve(null);
-      }
+      // if (!e.changeTypes?.length) {
+      //   // @ts-expect-error
+      //   return new Deferred<null>().resolve(null);
+      // }
 
-      const items = this._dataController.items();
-      const isHidingNoDataPanel = items.length <= 1 && e.changeTypes[0] === 'insert';
-      const isShowingNoDataPanel = items.length === 0 && e.changeTypes[0] === 'remove';
+      // const items = this._dataController.items();
+      // const isHidingNoDataPanel = items.length <= 1 && e.changeTypes[0] === 'insert';
+      // const isShowingNoDataPanel = items.length === 0 && e.changeTypes[0] === 'remove';
 
-      if (!isHidingNoDataPanel && !isShowingNoDataPanel && !e.needUpdateDimensions) {
-        // @ts-expect-error
-        const deferred = new Deferred();
+      // if (!isHidingNoDataPanel && !isShowingNoDataPanel && !e.needUpdateDimensions) {
+      //   // @ts-expect-error
+      //   const deferred = new Deferred();
 
-        this._waitAsyncTemplates().done(() => {
-          deferUpdate(() => deferRender(() => deferUpdate(() => {
-            this._setScrollerSpacing();
-            this._rowsView.resize();
-            deferred.resolve();
-          })));
-        }).fail(deferred.reject);
+      //   this._waitAsyncTemplates().done(() => {
+      //     deferUpdate(() => deferRender(() => deferUpdate(() => {
+      //       this._setScrollerSpacing();
+      //       this._rowsView.resize();
+      //       deferred.resolve();
+      //     })));
+      //   }).fail(deferred.reject);
 
-        return deferred;
-      }
+      //   return deferred;
+      // }
 
       return this.resize();
     }
