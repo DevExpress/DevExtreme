@@ -55,7 +55,7 @@ class DateBoxMask extends DateBoxBase {
 
   _wasAllSelectedBeforeComposition = false;
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | undefined> {
+  _supportedKeys(): Record<string, (e: KeyboardEvent) => unknown> {
     const originalHandlers = super._supportedKeys();
     const callOriginalHandler = (e: KeyboardEvent): unknown => {
       const normalizedKeyName = normalizeKeyName(e);
