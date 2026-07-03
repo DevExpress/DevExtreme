@@ -797,6 +797,27 @@ module('Keyboard navigation', setupModule, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 9, end: 11 }, 'first group has been filled again');
     });
 
+    test('Windows Bopomofo IME changes selection to last active part before insertCompositionText — first date part should still be updated (T1331089)', function(assert) {
+        this.instance.option({
+            displayFormat: 'MM/dd/yyyy',
+            value: new Date(2025, 9, 16),
+        });
+
+        this.keyboard.type('1016');
+
+        this.keyboard.caret({ start: 0, end: this.instance.option('text').length });
+
+        this.$input.trigger($.Event('compositionstart'));
+
+        this.keyboard.caret({ start: 6, end: 10 });
+
+        this.keyboard.input('1', 'insertCompositionText');
+
+        assert.strictEqual(this.instance.option('text'), '01/16/2025', 'month (first part) is updated, not year');
+        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, 'month part is active');
+    });
+
+
     test('enter should clear search value', function(assert) {
         this.keyboard.type('1');
 
@@ -1353,6 +1374,53 @@ module('Search', setupModule, () => {
             .change();
 
         assert.strictEqual(this.$input.val(), '2012/10/10', 'year was not changed');
+    });
+
+    test('deleteContentBackward input event should revert the active date part to its minimum value without clearing the value (Chinese MS IME composition backspace) (T1331089)', function(assert) {
+        this.instance.option({
+            displayFormat: 'MM/dd/yyyy',
+            value: new Date(2025, 9, 16),
+        });
+
+        this.$input.get(0).focus();
+
+        this.$input.trigger($.Event('compositionstart'));
+
+        this.keyboard.input(null, 'deleteContentBackward');
+
+        assert.strictEqual(this.instance.option('text'), '01/16/2025', 'text is not cleared, month is reset');
+        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, 'first date part (month) is still active');
+    });
+
+    test('deleteContentBackward during IME composition on non-first date part should revert that part to minimum without affecting other parts (T1331089)', function(assert) {
+        this.instance.option({
+            displayFormat: 'MM/dd/yyyy',
+            value: new Date(2025, 9, 16),
+        });
+
+        this.keyboard.type('10');
+
+        this.$input.trigger($.Event('compositionstart'));
+
+        this.keyboard.input(null, 'deleteContentBackward');
+
+        assert.strictEqual(this.instance.option('text'), '10/01/2025', 'day is reverted to minimum, month is unchanged');
+    });
+
+    test('IME digit on non-first date part without all-selected state should update that specific part and not reset to first (T1331089 regression)', function(assert) {
+        this.instance.option({
+            displayFormat: 'MM/dd/yyyy',
+            value: new Date(2025, 9, 16),
+        });
+
+        this.keyboard.type('10');
+
+        this.$input.trigger($.Event('compositionstart'));
+
+        this.keyboard.input('2', 'insertCompositionText');
+
+        assert.strictEqual(this.instance.option('text'), '10/02/2025', 'day part is updated, month is not reset to first');
+        assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'day part remains active');
     });
 });
 
