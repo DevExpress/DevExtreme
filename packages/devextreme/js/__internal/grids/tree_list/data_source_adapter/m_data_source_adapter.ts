@@ -264,6 +264,15 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     return gridCoreUtils.combineFilters(parentIdFilters, 'or');
   }
 
+  protected override _calculateOperationTypes(loadOptions, lastLoadOptions, isFullReload?: boolean) {
+    const currentExpandedKeys = this.option('expandedRowKeys');
+
+    return {
+      ...super._calculateOperationTypes(loadOptions, lastLoadOptions, isFullReload),
+      nodeExpanding: !equalByValue(this._lastExpandedRowKeys, currentExpandedKeys),
+    };
+  }
+
   protected _customizeRemoteOperations(options, operationTypes) {
     super._customizeRemoteOperations.apply(this, arguments as any);
 
@@ -300,14 +309,6 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     }
 
     options.expandVisibleNodes = expandVisibleNodes;
-
-    if (!options.isCustomLoading) {
-      const currentExpandedKeys = this.option('expandedRowKeys');
-
-      if (!equalByValue(this._lastExpandedRowKeys, currentExpandedKeys)) {
-        operationTypes.nodeExpanding = true;
-      }
-    }
   }
 
   private _getParentIdsToLoad(parentIds) {
