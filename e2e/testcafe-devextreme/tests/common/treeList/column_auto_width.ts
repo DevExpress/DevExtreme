@@ -115,6 +115,7 @@ test('columns should update auto width after loadDescendants call', async (t) =>
   await t.expect(sizeWidthAfter).eql(100);
   await t.expect(dateWidthAfter).eql(150);
 }).before(async () => createWidget('dxTreeList', {
+  ...treeListConfig,
   dataSource: {
     key: 'id',
     load: ClientFunction((loadOptions: any) => {
@@ -133,18 +134,6 @@ test('columns should update auto width after loadDescendants call', async (t) =>
       }
       return Promise.resolve(result);
     }, { dependencies: { treeListData } }),
-  },
-  keyExpr: 'id',
-  parentIdExpr: 'parentId',
-  columnAutoWidth: true,
-  width: 500,
-  columns: [
-    { dataField: 'name' },
-    { dataField: 'size', width: 100 },
-    { dataField: 'date', width: 150 },
-  ],
-  scrolling: {
-    mode: 'standard',
   },
   remoteOperations: {
     filtering: true,
