@@ -6,10 +6,108 @@ import { isFunction, isPlainObject, isString } from '@js/core/utils/type';
 
 const hasOwn = Object.prototype.hasOwnProperty;
 
-export const getEffectiveFormatLocale = (format) => {
+const GLOBAL_FORMAT_DATA_TYPES = ['time', 'datetime', 'date'];
+
+const DEFAULT_IMPLICIT_PRESET_BY_DATA_TYPE = {
+    date: 'shortdate',
+    datetime: 'shortdateshorttime',
+    time: 'shorttime',
+};
+
+const resolveFormatLocaleProperty = (formatObject) => {
+    const formatLocale = formatObject.locale;
+
+    return isFunction(formatLocale) ? formatLocale() : formatLocale;
+};
+
+const getGlobalFormatLocale = (dataType) => {
+    const globalFormat = getGlobalFormatByDataType(dataType);
+
+    if(isPlainObject(globalFormat) && globalFormat.locale) {
+        return resolveFormatLocaleProperty(globalFormat);
+    }
+
+    return undefined;
+};
+
+const resolveDataTypeFromGlobalConfig = (presetName) => {
+    if(!presetName) {
+        return undefined;
+    }
+
+    const lowerPreset = String(presetName).toLowerCase();
+
+    for(let i = 0; i < GLOBAL_FORMAT_DATA_TYPES.length; i++) {
+        const dataType = GLOBAL_FORMAT_DATA_TYPES[i];
+        const globalFormat = getGlobalFormatByDataType(dataType);
+
+        if(isPlainObject(globalFormat) && globalFormat.type?.toLowerCase() === lowerPreset) {
+            return dataType;
+        }
+    }
+
+    for(let i = 0; i < GLOBAL_FORMAT_DATA_TYPES.length; i++) {
+        const dataType = GLOBAL_FORMAT_DATA_TYPES[i];
+
+        if(DEFAULT_IMPLICIT_PRESET_BY_DATA_TYPE[dataType] === lowerPreset) {
+            return dataType;
+        }
+    }
+
+    return undefined;
+};
+
+const inferDataTypeFromFormatObject = (format) => {
+    if(!isPlainObject(format)) {
+        return undefined;
+    }
+
+    const hasTime = format.hour !== undefined
+        || format.minute !== undefined
+        || format.second !== undefined;
+    const hasDate = format.year !== undefined
+        || format.month !== undefined
+        || format.day !== undefined
+        || format.weekday !== undefined;
+
+    if(hasTime && hasDate) {
+        return 'datetime';
+    }
+
+    if(hasTime) {
+        return 'time';
+    }
+
+    if(hasDate) {
+        return 'date';
+    }
+
+    return undefined;
+};
+
+export const getEffectiveFormatLocale = (format, dataType, presetName) => {
     if(isPlainObject(format) && format.locale) {
-        const formatLocale = format.locale;
-        return isFunction(formatLocale) ? formatLocale() : formatLocale;
+        return resolveFormatLocaleProperty(format);
+    }
+
+    let resolvedDataType = dataType;
+
+    if(!resolvedDataType) {
+        const preset = presetName ?? (isPlainObject(format) ? format.type : undefined);
+
+        resolvedDataType = resolveDataTypeFromGlobalConfig(preset);
+    }
+
+    if(!resolvedDataType && isPlainObject(format)) {
+        resolvedDataType = inferDataTypeFromFormatObject(getFormatterOptions(format));
+    }
+
+    if(resolvedDataType) {
+        const globalFormatLocale = getGlobalFormatLocale(resolvedDataType);
+
+        if(globalFormatLocale) {
+            return globalFormatLocale;
+        }
     }
 
     return coreLocalization.locale();

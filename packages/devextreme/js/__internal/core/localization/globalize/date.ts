@@ -6,7 +6,11 @@ import 'globalize/date';
 import type { Format as LocalizationFormat, FormatObject } from '@js/localization';
 import type { DateFormatter, DateParser, Format } from '@ts/core/localization/date';
 import dateLocalization from '@ts/core/localization/date';
-import { resolvePresetOverride } from '@ts/core/m_global_format_config';
+import {
+  getEffectiveFormatLocale,
+  getFormatterOptions,
+  resolvePresetOverride,
+} from '@ts/core/m_global_format_config';
 import * as iteratorUtils from '@ts/core/utils/m_iterator';
 import { isObject } from '@ts/core/utils/m_type';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -21,6 +25,45 @@ type GlobalizeFormat = {
 
 const ACCEPTABLE_JSON_FORMAT_PROPERTIES = ['skeleton', 'date', 'time', 'datetime', 'raw'];
 const RTL_MARKS_REGEX = /[\u200E\u200F]/g;
+
+type GlobalizeDateFormatOptions = FormatObject & {
+  raw?: string;
+  skeleton?: string;
+  date?: string;
+  time?: string;
+  datetime?: string;
+};
+
+const resolveGlobalizeLocale = (formatLocale: string): string => {
+  const currentLocale = Globalize.locale().locale as string;
+
+  if (formatLocale === currentLocale) {
+    return currentLocale;
+  }
+
+  Globalize.locale(formatLocale);
+  try {
+    return Globalize.locale().locale as string;
+  } finally {
+    Globalize.locale(currentLocale);
+  }
+};
+
+const getGlobalizeDateFormatter = (
+  formatLocale: string,
+  format: GlobalizeDateFormatOptions | string,
+): DateFormatter => {
+  const resolvedLocale = resolveGlobalizeLocale(formatLocale);
+  const currentLocale = Globalize.locale().locale;
+
+  if (resolvedLocale === currentLocale) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return Globalize.dateFormatter(format);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return new Globalize(resolvedLocale).dateFormatter(format);
+};
 
 if (Globalize?.formatDate) {
   if (Globalize.locale().locale === 'en') {
@@ -96,7 +139,20 @@ if (Globalize?.formatDate) {
       return 'globalize';
     },
 
-    _getPatternByFormat(format: string): string | undefined {
+    _getGlobalizeFormatterOptions(
+      format: string,
+      formatLocale?: string,
+    ): GlobalizeDateFormatOptions {
+      if (format.toLowerCase() === 'datetime-local') {
+        return { raw: 'yyyy-MM-ddTHH\':\'mm\':\'ss' };
+      }
+
+      return {
+        raw: this._getPatternByFormat(format, formatLocale) || format,
+      };
+    },
+
+    _getPatternByFormat(format: string, formatLocale?: string): string | undefined {
       // eslint-disable-next-line @typescript-eslint/no-this-alias
       const that = this;
       const lowerFormat = format.toLowerCase();
@@ -111,20 +167,40 @@ if (Globalize?.formatDate) {
       }
 
       let result: string = 'path' in globalizeFormat
-        ? that._getFormatStringByPath(globalizeFormat.path)
+        ? that._getFormatStringByPath(globalizeFormat.path, formatLocale)
         : globalizeFormat.pattern;
 
       if ('parts' in globalizeFormat) {
         iteratorUtils.each(globalizeFormat.parts, (index: number, part: string): void => {
-          result = result.replace(`{${index}}`, that._getPatternByFormat(part));
+          result = result.replace(`{${index}}`, that._getPatternByFormat(part, formatLocale) ?? '');
         });
       }
       return result;
     },
 
-    _getFormatStringByPath(path: string): string {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return Globalize.locale().main(`dates/calendars/gregorian/${path}`);
+    _getFormatStringByPath(path: string, formatLocale?: string): string {
+      const fullPath = `dates/calendars/gregorian/${path}`;
+      const currentLocale = Globalize.locale().locale;
+
+      if (!formatLocale) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return Globalize.locale().main(fullPath);
+      }
+
+      const resolvedLocale = resolveGlobalizeLocale(formatLocale);
+
+      if (resolvedLocale === currentLocale) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return Globalize.locale().main(fullPath);
+      }
+
+      Globalize.locale(resolvedLocale);
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return Globalize.locale().main(fullPath);
+      } finally {
+        Globalize.locale(currentLocale);
+      }
     },
 
     getPeriodNames(format: Format, type: string): string[] {
@@ -169,11 +245,6 @@ if (Globalize?.formatDate) {
         return date;
       }
 
-      // eslint-disable-next-line @typescript-eslint/init-declarations
-      let formatter: DateFormatter;
-      // eslint-disable-next-line @typescript-eslint/init-declarations
-      let formatCacheKey: string;
-
       if (typeof format === 'function') {
         return (format as DateFormatter)(date);
       }
@@ -183,45 +254,73 @@ if (Globalize?.formatDate) {
         return (format.formatter as DateFormatter)(date);
       }
 
-      // eslint-disable-next-line no-param-reassign
-      format = (format as FormatObject).type ?? format;
+      const sourceFormat = format;
+      let resolvedFormat: LocalizationFormat = (format as FormatObject).type ?? format;
 
-      if (typeof format === 'string') {
-        const presetOverride = resolvePresetOverride(format);
+      if (typeof resolvedFormat === 'string') {
+        const presetOverride = resolvePresetOverride(resolvedFormat);
 
         if (presetOverride !== undefined) {
           if (typeof presetOverride === 'function') {
             return (presetOverride as DateFormatter)(date);
           }
-          if (typeof presetOverride === 'string') {
-            // eslint-disable-next-line no-param-reassign
-            format = presetOverride;
-          } else if (isObject(presetOverride) && this._isAcceptableFormat(presetOverride)) {
-            formatter = Globalize.dateFormatter(presetOverride);
 
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-            return this.removeRtlMarks(formatter(date));
-          }
+          resolvedFormat = presetOverride as LocalizationFormat;
         }
+      }
 
-        formatCacheKey = `${Globalize.locale().locale}:${format}`;
+      // eslint-disable-next-line @typescript-eslint/init-declarations
+      let formatter: DateFormatter;
+      // eslint-disable-next-line @typescript-eslint/init-declarations
+      let formatCacheKey: string;
+
+      if (typeof resolvedFormat === 'string') {
+        const formatLocale = getEffectiveFormatLocale(
+          typeof sourceFormat === 'object' ? sourceFormat : undefined,
+          undefined,
+          resolvedFormat,
+        );
+        const resolvedLocale = resolveGlobalizeLocale(formatLocale);
+        formatCacheKey = `${resolvedLocale}:${resolvedFormat}`;
         formatter = formattersCache[formatCacheKey];
         if (!formatter) {
-          // eslint-disable-next-line no-param-reassign
-          format = {
-            // @ts-expect-error
-            raw: this._getPatternByFormat(format) || format,
-          };
+          const globalizeFormat = this._getGlobalizeFormatterOptions(resolvedFormat, formatLocale);
 
-          formatter = Globalize.dateFormatter(format);
+          formatter = getGlobalizeDateFormatter(formatLocale, globalizeFormat);
           formattersCache[formatCacheKey] = formatter;
         }
-      } else {
-        if (!this._isAcceptableFormat(format)) {
-          return undefined;
-        }
+      } else if (isObject(resolvedFormat)) {
+        const typedFormat = resolvedFormat as FormatObject;
+        const typeFormat = typedFormat.type;
 
-        formatter = Globalize.dateFormatter(format);
+        if (typeFormat && typeof typeFormat === 'string') {
+          const formatLocale = getEffectiveFormatLocale(
+            typedFormat,
+            undefined,
+            typeFormat,
+          );
+          const resolvedLocale = resolveGlobalizeLocale(formatLocale);
+          formatCacheKey = `${resolvedLocale}:${typeFormat}`;
+          formatter = formattersCache[formatCacheKey];
+          if (!formatter) {
+            const globalizeFormat = this._getGlobalizeFormatterOptions(typeFormat, formatLocale);
+
+            formatter = getGlobalizeDateFormatter(formatLocale, globalizeFormat);
+            formattersCache[formatCacheKey] = formatter;
+          }
+        } else {
+          const formatterOptions = getFormatterOptions(typedFormat) as FormatObject;
+
+          if (!this._isAcceptableFormat(formatterOptions)) {
+            return undefined;
+          }
+
+          const formatLocale = getEffectiveFormatLocale(typedFormat);
+
+          formatter = getGlobalizeDateFormatter(formatLocale, formatterOptions);
+        }
+      } else {
+        return undefined;
       }
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return

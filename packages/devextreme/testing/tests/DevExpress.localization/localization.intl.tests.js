@@ -1,5 +1,7 @@
 import '../../helpers/noIntl.js';
 import Intl from 'intl';
+import $ from 'jquery';
+import DateBox from 'ui/date_box';
 import sharedTests from './sharedParts/localization.shared.js';
 import dateLocalization from 'common/core/localization/date';
 import numberLocalization from 'common/core/localization/number';
@@ -15,6 +17,7 @@ if(Intl.__disableRegExpRestore) {
 }
 
 const SYMBOLS_TO_REMOVE_REGEX = /[\u200E\u200F]/g;
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const ROUNDING_BUG_NUMBERS = [4.645, -4.645, 35.855, -35.855];
 const ROUNDING_CORRECTION = {
     '4.64': '4.65',
@@ -1019,7 +1022,7 @@ QUnit.module('Global formatting config - format locale (spec, intl)', () => {
                     locale: 'de-DE',
                     type: 'shortDate',
                 }),
-                '02.01.2020',
+                '2.1.2020',
             );
         } finally {
             locale(savedLocale);
@@ -1084,7 +1087,7 @@ QUnit.module('Global formatting config - format locale (spec, intl)', () => {
         }
     });
 
-    QUnit.test('LDML numberFormat is unaffected by message locale', function(assert) {
+    QUnit.test('LDML numberFormat uses message locale separators', function(assert) {
         const saved = saveGlobalFormats();
         const savedLocale = locale();
 
@@ -1095,7 +1098,7 @@ QUnit.module('Global formatting config - format locale (spec, intl)', () => {
                 numberFormat: '#,##0.00',
             });
 
-            assert.strictEqual(numberLocalization.format(1234.5), '1,234.50');
+            assert.strictEqual(numberLocalization.format(1234.5), '1.234,50');
         } finally {
             locale(savedLocale);
             restoreGlobalFormats(saved);
@@ -1122,6 +1125,41 @@ QUnit.module('Global formatting config - format locale (spec, intl)', () => {
             assert.ok(result.indexOf(',56') > -1, 'uses de decimal separator');
             assert.ok(result.indexOf('.') > -1, 'uses de thousands separator');
         } finally {
+            locale(savedLocale);
+            restoreGlobalFormats(saved);
+        }
+    });
+
+    QUnit.test('DateBox implicit displayFormat uses global dateFormat locale', function(assert) {
+        const saved = saveGlobalFormats();
+        const savedLocale = locale();
+        const $element = $('<div>').appendTo('#qunit-fixture');
+
+        try {
+            locale('en');
+            config({
+                ...config(),
+                dateFormat: {
+                    default: {
+                        locale: 'de-DE',
+                        type: 'shortDate',
+                    },
+                },
+            });
+
+            $element.dxDateBox({
+                type: 'date',
+                value: new Date(2020, 0, 2),
+                pickerType: 'calendar',
+            });
+
+            assert.strictEqual(
+                $element.find(`.${TEXTEDITOR_INPUT_CLASS}`).val(),
+                '2.1.2020',
+                'date input uses de-DE shortDate pattern',
+            );
+        } finally {
+            $element.remove();
             locale(savedLocale);
             restoreGlobalFormats(saved);
         }
