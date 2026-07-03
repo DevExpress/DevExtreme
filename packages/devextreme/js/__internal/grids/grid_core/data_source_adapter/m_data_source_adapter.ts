@@ -198,7 +198,7 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private _needClearStoreDataCache() {
     const remoteOperations = this.remoteOperations();
-    const operationTypes = calculateOperationTypes(this._lastLoadOptions || {}, {});
+    const operationTypes = this._calculateOperationTypes(this._lastLoadOptions || {}, {});
     const isLocalOperations = Object.keys(remoteOperations).every((operationName) => !operationTypes[operationName] || !remoteOperations[operationName]);
 
     return !isLocalOperations;
@@ -333,6 +333,10 @@ export default class DataSourceAdapter extends modules.Controller {
     return currentOperationTypes.some((operationType) => remoteOperations[operationType]);
   }
 
+  protected _calculateOperationTypes(loadOptions, lastLoadOptions, isFullReload?: boolean) {
+    return calculateOperationTypes(loadOptions, lastLoadOptions, isFullReload);
+  }
+
   /**
    * @extended: virtual_scrolling, TreeLists's data_source_adapter, DataGrid's m_grouping
    */
@@ -412,7 +416,7 @@ export default class DataSourceAdapter extends modules.Controller {
 
     const loadOptions = extend({ pageIndex: this.pageIndex(), pageSize: this.pageSize() }, options.storeLoadOptions);
 
-    const operationTypes = calculateOperationTypes(loadOptions, lastLoadOptions, isFullReload);
+    const operationTypes = this._calculateOperationTypes(loadOptions, lastLoadOptions, isFullReload);
 
     this._customizeRemoteOperations(options, operationTypes);
 
