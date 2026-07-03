@@ -729,7 +729,7 @@ class TagBox<
     this.option('text', '');
   }
 
-  _focusInHandler(e: DxEvent & { relatedTarget: Element | dxElementWrapper }): void {
+  _focusInHandler(e: DxEvent<FocusEvent>): void {
     if (!this._preventNestedFocusEvent(e)) {
       this._scrollContainer('end');
     }
