@@ -28,6 +28,7 @@ const treeListConfig = {
   parentIdExpr: 'parentId',
   columnAutoWidth: true,
   width: 500,
+  repaintChangesOnly: true,
   columns: [
     { dataField: 'name' },
     { dataField: 'size', width: 100 },
