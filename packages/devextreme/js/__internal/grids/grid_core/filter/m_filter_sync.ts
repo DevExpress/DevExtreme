@@ -339,12 +339,10 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterSyn
     this.component.beginUpdate();
     if (arguments.length > 0) {
       if (filterName === 'filterValue') {
-        // @ts-expect-error
         this.option('filterValue', null);
       }
       super.clearFilter(filterName);
     } else {
-      // @ts-expect-error
       this.option('filterValue', null);
       super.clearFilter();
     }

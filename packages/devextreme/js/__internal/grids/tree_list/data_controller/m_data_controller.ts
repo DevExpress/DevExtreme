@@ -221,8 +221,6 @@ treeListCore.registerModule('data', {
       filterMode: 'withAncestors',
       expandNodesOnFiltering: true,
       autoExpandAll: false,
-
-      onNodesInitialized: null,
       maxFilterLengthInRequest: 1500,
       paging: {
         enabled: false,
