@@ -204,7 +204,7 @@ const phoneAIOptions = { instruction: 'Format as the following: (000) 000-0000' 
 const emailValidationRules: ValidationRule[] = [{ type: 'email' }];
 const emailAIOptions = { instruction: 'Do not fill this field if the text contains an invalid email address. A valid email is in the following format: email@example.com' };
 
-const zipEditorOptions = { stylingMode, mode: 'text', value: null };
+const zipEditorOptions = { stylingMode, mode: 'text' };
 const zipAIOptions = { instruction: 'If the text does not contain a ZIP, determine the ZIP code from the provided address.' };
 
 const resetButtonOptions: DxButtonTypes.Properties = {

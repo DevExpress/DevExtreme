@@ -7,15 +7,14 @@ import { extend } from '@js/core/utils/extend';
 import { getDeltaTime } from './appointments/resizing/get_delta_time';
 import { getDateFormatType, getDateText } from './appointments_new/utils/get_date_text';
 import { VERTICAL_VIEW_TYPES } from './constants';
-import type Scheduler from './m_scheduler';
 import { isAppointmentTakesAllDay } from './r1/utils/base';
+import type Scheduler from './scheduler';
 import type {
   AppointmentTooltipItem,
   CompactAppointmentOptions,
   SafeAppointment,
   TargetedAppointment,
 } from './types';
-import { utils } from './utils';
 import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
 import type { AppointmentItemViewModel } from './view_model/types';
 
@@ -65,7 +64,7 @@ const subscribes = {
   },
 
   updateAppointmentAfterResize(options) {
-    const { info } = utils.dataAccessors.getAppointmentSettings(options.$appointment) as AppointmentItemViewModel;
+    const { info } = this._appointments.getAppointmentSettings(options.$appointment) as AppointmentItemViewModel;
     const { startDate } = info.sourceAppointment;
 
     this.checkRecurringAppointment(options.target, options.data, startDate, () => {
@@ -84,7 +83,7 @@ const subscribes = {
   updateAppointmentAfterDrag({
     event, element, rawAppointment, isDropToTheSameCell, isDropToSelfScheduler,
   }) {
-    const { info } = utils.dataAccessors.getAppointmentSettings(element) as AppointmentItemViewModel;
+    const { info } = this._appointments.getAppointmentSettings(element) as AppointmentItemViewModel;
     // NOTE: enrich target appointment with additional data from the source
     // in case of one appointment of series will change
     const targetedRawAppointment = extend({}, rawAppointment, this.getUpdatedData(rawAppointment));

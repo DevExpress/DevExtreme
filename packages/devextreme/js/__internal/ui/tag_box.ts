@@ -275,7 +275,6 @@ class TagBox<
     this._$tagsContainer = $element.addClass(TAGBOX_TAG_CONTAINER_CLASS);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _allowSelectItemByTab(): boolean {
     return false;
   }
@@ -327,8 +326,8 @@ class TagBox<
     this._$focusedTag = undefined;
   }
 
-  _focusClassTarget($element: dxElementWrapper): dxElementWrapper {
-    if ($element && $element.length && $element[0] !== this._focusTarget()[0]) {
+  _focusClassTarget($element?: dxElementWrapper): dxElementWrapper {
+    if ($element?.length && $element[0] !== this._focusTarget()[0]) {
       return $element;
     }
 
@@ -407,7 +406,6 @@ class TagBox<
     return scrollLeft;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _setNextValue(): void {}
 
   _getDefaultOptions(): TProperties {
@@ -579,7 +577,6 @@ class TagBox<
     super._initMarkup();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getNewLabelId(actualId?: string, newId?: string, shouldRemove?: boolean): string | undefined {
     if (!actualId) {
       return newId;
@@ -722,7 +719,6 @@ class TagBox<
     return this._renderMultiSelect();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _loadInputValue(): DeferredObj<unknown> {
     return when();
   }
@@ -733,7 +729,7 @@ class TagBox<
     this.option('text', '');
   }
 
-  _focusInHandler(e: DxEvent & { relatedTarget: Element | dxElementWrapper }): void {
+  _focusInHandler(e: DxEvent<FocusEvent>): void {
     if (!this._preventNestedFocusEvent(e)) {
       this._scrollContainer('end');
     }
@@ -1407,7 +1403,6 @@ class TagBox<
     this.setAria(aria, $tag);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getItemModel(item: TagBoxItem, displayValue: TagBoxItem): TagBoxItem {
     if (isObject(item) && isDefined(displayValue)) {
       return item;
@@ -1431,7 +1426,6 @@ class TagBox<
     return false;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _createTag(
     value: TagBoxItem,
     $input: dxElementWrapper,
@@ -1486,7 +1480,6 @@ class TagBox<
     this._refreshTagElements();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _updateField(): void {}
 
   _removeTagWithUpdate(itemValue: TagBoxItem): void {
@@ -1782,10 +1775,8 @@ class TagBox<
     this._restoreInputText();
     const defaultValue = this._getDefaultOptions().value;
     const { value: currentValue } = this.option();
-    if (defaultValue
-      && defaultValue.length === 0
-      && currentValue
-      && defaultValue.length === currentValue.length
+    if (defaultValue?.length === 0
+      && defaultValue.length === currentValue?.length
     ) {
       return;
     }

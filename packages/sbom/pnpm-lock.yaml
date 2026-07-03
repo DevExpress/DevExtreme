@@ -4,13 +4,16 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  tar@<=7.5.15: ^7.5.16
+
 importers:
 
   .:
     devDependencies:
       '@devexpress/sbom-toolkit':
-        specifier: 0.11.1
-        version: 0.11.1
+        specifier: 0.11.2
+        version: 0.11.2
 
 packages:
 
@@ -143,8 +146,8 @@ packages:
     engines: {node: ^20 || ^22 || ^24 || ^25, pnpm: '>=10'}
     hasBin: true
 
-  '@devexpress/sbom-toolkit@0.11.1':
-    resolution: {integrity: sha512-OfTykaea0qop433TxYZB8oh3eW1BBjk9nyyKfMMikntznFsLNQrEIN885+OzTBDPqqWiHCm37N0vsgO+MDZIzA==, tarball: https://npm.pkg.github.com/download/@devexpress/sbom-toolkit/0.11.1/2196468147511fa831d1252bbf4f1cc0c96d1461}
+  '@devexpress/sbom-toolkit@0.11.2':
+    resolution: {integrity: sha512-uIRA+rVgi5R2WRkXrr//wRSvcrlesMogrfLoONVuA743CY4xy5ACJ3sBxa1614PlJHFAHxu1CLzhKKGD81e8BA==, tarball: https://npm.pkg.github.com/download/@devexpress/sbom-toolkit/0.11.2/b79d441cc3c4171ec76b7aba2520bf2ae90baebf}
     hasBin: true
 
   '@gar/promise-retry@1.0.3':
@@ -687,8 +690,8 @@ packages:
     resolution: {integrity: sha512-WPn+h9RGEExOKdu4bsF4HksG/uzd3cFq3MFtq8PsFeExPse5Ha/VOjQNyHhjboBFwGXGev6muJYTSPAOkROq2g==}
     engines: {node: '>=18'}
 
-  qs@6.15.2:
-    resolution: {integrity: sha512-Rzq0KEyX/w/tEybncDgdkZrJgVUsUMk3xjh3t5bv3S1HTAtg+uOYt72+ZfwiQwKdysThkTBdL/rTi6HDmX9Ddw==}
+  qs@6.15.3:
+    resolution: {integrity: sha512-O9gl3zCl5h5blw1KGUzQKhA5oUXSl8rwUIM5o0S3nCXMliSvy5Dzx7/DJcI+SwgICv+IneSZwhBh1oSyEHA71A==}
     engines: {node: '>=0.6'}
 
   quick-lru@5.1.1:
@@ -785,8 +788,8 @@ packages:
     resolution: {integrity: sha512-yDPMNjp4WyfYBkHnjIRLfca1i6KMyGCtsVgoKe/z1+6vukgaENdgGBZt+ZmKPc4gavvEZ5OgHfHdrazhgNyG7w==}
     engines: {node: '>=12'}
 
-  tar@7.5.15:
-    resolution: {integrity: sha512-dzGK0boVlC4W5QFuQN1EFSl3bIDYsk7Tj40U6eIBnK2k/8ml7TZ5agbI5j5+qnoVcAA+rNtBml8SEiLxZpNqRQ==}
+  tar@7.5.16:
+    resolution: {integrity: sha512-56adEpPMouktRlBLXiaYFFzZ/3+JXa8P9n7WbR+ibIjtviN55mEaOkiysCnPnWm+7kkui1Dn8J9l+g6zV8731w==}
     engines: {node: '>=18'}
 
   toidentifier@1.0.1:
@@ -1031,7 +1034,7 @@ snapshots:
       read-package-json-fast: 5.0.0
       semver: 7.8.1
       ssri: 13.0.1
-      tar: 7.5.15
+      tar: 7.5.16
       treeverse: 3.0.0
       uuid: 14.0.0
       walk-up-path: 4.0.0
@@ -1063,7 +1066,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@devexpress/sbom-toolkit@0.11.1':
+  '@devexpress/sbom-toolkit@0.11.2':
     dependencies:
       '@cyclonedx/cdxgen': 12.5.1
       spdx-license-ids: 3.0.23
@@ -1179,7 +1182,7 @@ snapshots:
       http-errors: 2.0.1
       iconv-lite: 0.7.2
       on-finished: 2.4.1
-      qs: 6.15.2
+      qs: 6.15.3
       raw-body: 3.0.2
       type-is: 2.1.0
     transitivePeerDependencies:
@@ -1660,8 +1663,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  qs@6.15.2:
+  qs@6.15.3:
     dependencies:
+      es-define-property: 1.0.1
       side-channel: 1.1.1
     optional: true
 
@@ -1765,7 +1769,7 @@ snapshots:
     dependencies:
       ansi-regex: 6.2.2
 
-  tar@7.5.15:
+  tar@7.5.16:
     dependencies:
       '@isaacs/fs-minipass': 4.0.1
       chownr: 3.0.0

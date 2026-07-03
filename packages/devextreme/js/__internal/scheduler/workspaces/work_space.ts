@@ -25,6 +25,7 @@ import {
   getOuterHeight,
   getOuterWidth,
   getWidth,
+  setHeight,
   setOuterHeight,
   setWidth,
 } from '@js/core/utils/size';
@@ -95,8 +96,6 @@ import type {
   GroupBoundsOffset,
   ViewCellData,
 } from '../types';
-import type { RenovationWidget } from '../utils';
-import { utils } from '../utils';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
 import {
   getAppointmentGroupIndex,
@@ -130,6 +129,18 @@ interface RenderComponentOptions {
   dateTable?: boolean;
   allDayPanel?: boolean;
 }
+
+interface RenovationWidget {
+  $element: () => dxElementWrapper;
+  option: (options: Record<string, unknown>) => void;
+  dispose: () => void;
+}
+
+type CreateRenovationComponentFn = (
+  element: string | HTMLElement | dxElementWrapper | Element,
+  component: unknown,
+  config: Record<string, unknown>,
+) => RenovationWidget;
 
 interface RenderRWorkspaceOptions {
   renderComponents: RenderComponentOptions;
@@ -264,9 +275,9 @@ interface WorkspaceOptionActionMap {
   onCellContextMenu: Pick<CellContextMenuEvent, 'event' | 'cellElement' | 'cellData'>;
 }
 
-type WorkspaceCoordinates = Coordinates & { groupIndex?: number };
+export type WorkspaceCoordinates = Coordinates & { groupIndex?: number };
 
-type DroppableCellData = Pick<ViewCellData, 'startDate' | 'endDate' | 'allDay' | 'groups'>;
+export type DroppableCellData = Pick<ViewCellData, 'startDate' | 'endDate' | 'allDay' | 'groups'>;
 
 export interface WorkspaceOptionsInternal extends WidgetProperties<SchedulerWorkSpace> {
   newAppointments: boolean;
@@ -319,6 +330,7 @@ export interface WorkspaceOptionsInternal extends WidgetProperties<SchedulerWork
   onCellClick: ((e: CellClickEvent) => void) | undefined;
   onCellContextMenu: ((e: CellContextMenuEvent) => void) | undefined;
   currentDate: Date;
+  cellDuration: number;
   hoursInterval: number;
   allDayExpanded: boolean;
 
@@ -2356,8 +2368,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   renderRDateTable(): void {
-    utils.renovation.renderComponent(
-      this,
+    this.renderRenovatedComponent(
       this.$dateTable,
       DateTableComponent,
       'renovatedDateTable',
@@ -2382,8 +2393,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       this.attachGroupCountClass();
       const $groupHeaderContainer = this.getGroupHeaderContainer();
       if ($groupHeaderContainer) {
-        utils.renovation.renderComponent(
-          this,
+        this.renderRenovatedComponent(
           $groupHeaderContainer,
           GroupPanelComponent,
           'renovatedGroupPanel',
@@ -2392,6 +2402,36 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       }
     } else {
       this.detachGroupCountClass();
+    }
+  }
+
+  protected renderRenovatedComponent(
+    parentElement: dxElementWrapper,
+    componentClass: unknown,
+    componentName: string,
+    viewModel: Record<string, unknown>,
+  ): void {
+    const host = this as unknown as Record<string, unknown>;
+    let component = host[componentName] as RenovationWidget | undefined;
+    if (!component) {
+      const container = getPublicElement(parentElement);
+      const createFn = host._createComponent as CreateRenovationComponentFn;
+      component = createFn.call(this, container, componentClass, viewModel);
+      host[componentName] = component;
+    } else {
+      const $element = component.$element();
+      const elementStyle = ($element.get(0) as HTMLElement).style;
+      const { height } = elementStyle;
+      const { width } = elementStyle;
+
+      component.option(viewModel);
+
+      if (height) {
+        setHeight($element, height);
+      }
+      if (width) {
+        setWidth($element, width);
+      }
     }
   }
 
@@ -2410,9 +2450,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       };
 
       if (this.$allDayTable) {
-        utils.renovation.renderComponent(this, this.$allDayTable, AllDayTableComponent, 'renovatedAllDayPanel', options);
+        this.renderRenovatedComponent(this.$allDayTable, AllDayTableComponent, 'renovatedAllDayPanel', options);
       }
-      utils.renovation.renderComponent(this, this.$allDayTitle, AllDayPanelTitleComponent, 'renovatedAllDayPanelTitle', {});
+      this.renderRenovatedComponent(this.$allDayTitle, AllDayPanelTitleComponent, 'renovatedAllDayPanelTitle', {});
     }
 
     this.updateAllDayVisibility();
@@ -2420,8 +2460,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   renderRTimeTable(): void {
-    utils.renovation.renderComponent(
-      this,
+    this.renderRenovatedComponent(
       this.$timePanel,
       TimePanelComponent,
       'renovatedTimePanel',
@@ -2441,8 +2480,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       this.detachGroupCountClass();
     }
 
-    utils.renovation.renderComponent(
-      this,
+    this.renderRenovatedComponent(
       this.$thead,
       this.renovatedHeaderPanelComponent,
       'renovatedHeaderPanel',
@@ -2620,6 +2658,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       endDayHour: 24,
       viewOffset: 0,
       hoursInterval: 0.5,
+      cellDuration: 30,
       activeStateEnabled: true,
       hoverStateEnabled: true,
       groups: [],

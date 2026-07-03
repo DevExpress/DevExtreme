@@ -220,7 +220,7 @@ function extractDemoBodyInner(srcDir) {
     let previous;
     do {
       previous = withoutScripts;
-      withoutScripts = withoutScripts.replace(/<script\b[\s\S]*?<\/script>/gi, '');
+      withoutScripts = withoutScripts.replace(/<script\b[\s\S]*?<\/script\b[^>]*>/gi, '');
     } while (withoutScripts !== previous);
     const trimmed = withoutScripts.trim();
     return trimmed || null;
@@ -372,7 +372,9 @@ async function main() {
 
 const entrypoint = IS_ANGULAR ? require('./csp-bundle-angular').main : main;
 
-entrypoint().catch((err) => {
+entrypoint().then(() => {
+  process.exit(process.exitCode || 0);
+}).catch((err) => {
   console.error('csp-bundle failed:', err);
   process.exit(1);
 });

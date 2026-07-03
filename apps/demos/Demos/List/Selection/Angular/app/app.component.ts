@@ -1,4 +1,4 @@
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
 import { DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
@@ -23,6 +23,7 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   preserveWhitespaces: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     DxSelectBoxModule,
     DxListModule,

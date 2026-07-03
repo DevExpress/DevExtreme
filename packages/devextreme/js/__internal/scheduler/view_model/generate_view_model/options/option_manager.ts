@@ -1,5 +1,6 @@
 import { Cache } from '../../../global_cache';
-import type Scheduler from '../../../m_scheduler';
+import type Scheduler from '../../../scheduler';
+import type { DOMMetaData } from '../../../types';
 import type {
   CellInterval,
   CompareOptions,
@@ -8,13 +9,28 @@ import type {
   PanelName,
 } from '../../types';
 import type { CollectorOptions } from '../steps/add_collector/types';
-import type { GeometryOptions, VirtualCropOptions } from '../steps/add_geometry/types';
+import type {
+  CollectorCSS,
+  GeometryOptions,
+  RealSize,
+  VirtualCropOptions,
+} from '../steps/add_geometry/types';
 import { getGroupSize } from './get_group_size';
 import { getMonthIntervals } from './get_month_intervals';
 import { getPanelCollectorOptions } from './get_panel_collector_options';
 import type { ViewModelOptions } from './get_view_model_options';
 import { getViewModelOptions } from './get_view_model_options';
 import { getWeekIntervals } from './get_week_intervals';
+
+export interface WorkspaceLayoutData {
+  getPanelDOMSize: (panelName: PanelName) => RealSize;
+  getCollectorDimension: (
+    isCollectorCompact: boolean,
+    panelName: PanelName,
+  ) => CollectorCSS;
+  getDOMElementsMetaData: () => DOMMetaData;
+  getGroupHeights?: (panelName: PanelName) => number[] | undefined;
+}
 
 const getLayoutIntervals = (
   compareOptions: CompareOptions,
@@ -44,7 +60,10 @@ export class OptionManager {
 
   public readonly options: ViewModelOptions;
 
-  constructor(protected schedulerStore: Scheduler) {
+  constructor(
+    protected schedulerStore: Scheduler,
+    private readonly layoutData?: WorkspaceLayoutData,
+  ) {
     this.options = getViewModelOptions(schedulerStore);
   }
 
@@ -54,14 +73,21 @@ export class OptionManager {
     collectorOptions: CollectorOptions;
     geometryOptions: GeometryOptions;
   } {
-    const workspace = this.schedulerStore.getWorkSpace();
-    const panelDOMSize = workspace.getPanelDOMSize(
+    const layoutData: WorkspaceLayoutData = this.layoutData ?? this.schedulerStore.getWorkSpace();
+    const panelDOMSize = layoutData.getPanelDOMSize(
       this.options.groupOrientation === 'vertical'
         ? 'regularPanel'
         : panelName,
     );
+    const groupHeights = layoutData.getGroupHeights?.(panelName);
+    const cacheKey = [
+      panelDOMSize.width,
+      panelDOMSize.height,
+      panelName,
+      groupHeights,
+    ];
 
-    return this.cache.memo(`${panelDOMSize.width}.${panelDOMSize.height}.${panelName}`, () => {
+    return this.cache.memo(JSON.stringify(cacheKey), () => {
       const {
         type,
         viewOffset,
@@ -79,7 +105,7 @@ export class OptionManager {
       } = this.options;
       const viewOrientation = panelName === 'allDayPanel' ? 'horizontal' : nativeViewOrientation;
       const isCompactCollector = isAdaptivityEnabled || viewOrientation === 'vertical';
-      const collectorCSS = workspace.getCollectorDimension(isCompactCollector, panelName);
+      const collectorCSS = layoutData.getCollectorDimension(isCompactCollector, panelName);
       const {
         allDayPanelCellSize,
         cellSize,
@@ -92,7 +118,7 @@ export class OptionManager {
         viewOrientation,
         isAdaptivityEnabled,
         collectorCSS,
-        DOMMetaData: workspace.getDOMElementsMetaData(),
+        DOMMetaData: layoutData.getDOMElementsMetaData(),
         panelName,
       });
 
@@ -137,6 +163,7 @@ export class OptionManager {
           isAllDayPanel: panelName === 'allDayPanel',
         }),
         panelSize: panelDOMSize,
+        groupHeights,
       };
       const collectorOptions: CollectorOptions = {
         cells,

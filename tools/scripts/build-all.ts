@@ -42,20 +42,21 @@ sh.exec(`pnpm exec nx run devextreme-metadata:make-aspnet-metadata`);
 injectDescriptions();
 
 sh.exec('pnpm exec nx build devextreme-scss');
-sh.exec('pnpm exec nx build-dist devextreme --skipNxCache', {
+sh.exec('pnpm exec nx build-dist devextreme', {
     env: {
         ...sh.env,
         BUILD_INTERNAL_PACKAGE: 'false'
     }
 });
 
-sh.exec('pnpm exec nx build devextreme-themebuilder --skipNxCache');
+sh.exec('pnpm exec nx build devextreme-themebuilder');
 
 // Copy artifacts for DXBuild (Installation)
 sh.pushd(path.join(ROOT_DIR, 'packages/devextreme/artifacts'));
     sh.cp('-r', ['ts', 'js', 'css'], ARTIFACTS_DIR);
 sh.popd();
 
+sh.exec('pnpm exec nx copy:bootstrap workflows');
 sh.exec('pnpm run all:pack-and-copy');
 
 sh.exec('pnpm exec nx pack devextreme-react', { silent: true });

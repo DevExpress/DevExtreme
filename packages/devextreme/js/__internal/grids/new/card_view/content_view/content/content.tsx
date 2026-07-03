@@ -69,7 +69,7 @@ export const CLASSES = {
 
 const CardWithKbn = withKeyDownHandler(withKbnNavigationItem(Card));
 
-function getInfernoCardKey(card: CardInfo): undefined | string | number {
+function getInfernoCardKey(card: CardInfo): string | number | undefined {
   if (typeof card.key === 'string' || typeof card.key === 'number') {
     return card.key;
   }

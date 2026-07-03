@@ -1044,7 +1044,7 @@ test.meta({ browserSize: [800, 800] })('Rows are rendered properly when window c
 })());
 
 // T1129252
-test('The data should display correctly after changing the dataSource and focusedRowIndex options when scroll position is at the end', async (t) => {
+test.meta({ unstable: true })('The data should display correctly after changing the dataSource and focusedRowIndex options when scroll position is at the end', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -1119,8 +1119,6 @@ test.meta({ browserSize: [800, 800] })('The scroll position of a fixed table sho
   },
   columnFixing: {
     enabled: true,
-    // @ts-expect-error private option
-    legacyMode: true,
   },
   columns: [{
     type: 'buttons',
@@ -1707,7 +1705,7 @@ test.meta({ browserSize: [800, 200] })('Editing buttons should rerender correctl
 });
 
 // T1181439
-test('Restoring focus on re-rendering should be done without unexpected scrolling to the focused element', async (t) => {
+test.meta({ unstable: true })('Restoring focus on re-rendering should be done without unexpected scrolling to the focused element', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();

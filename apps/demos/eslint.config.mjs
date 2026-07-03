@@ -14,7 +14,6 @@ import jest from 'eslint-plugin-jest';
 import vuePlugin from 'eslint-plugin-vue';
 import vueParser from 'vue-eslint-parser';
 import tsParser from '@typescript-eslint/parser';
-import tsPlugin from '@typescript-eslint/eslint-plugin';
 import js from '@eslint/js';
 import { fixupPluginRules } from '@eslint/compat';
 import { FlatCompat } from '@eslint/eslintrc';
@@ -60,7 +59,6 @@ export default [
       'no-only-tests': noOnlyTests,
       '@stylistic': stylistic,
       jest,
-      '@typescript-eslint': tsPlugin,
       'deprecation': fixupPluginRules(deprecation),
     },
     languageOptions: {
@@ -112,6 +110,8 @@ export default [
           'yargs',
           'treshold', // should be updated to 'threshold' in the codebase
           'callstack',
+          'Deprecations',
+          'ignoreDeprecations',
         ];
 
         return spellcheckRule;
@@ -342,6 +342,7 @@ export default [
     },
     rules: {
       ...reactPlugin.configs.recommended.rules,
+      'import/no-unresolved': ['error', { ignore: ['^anti-forgery$'] }],
       'func-style': ['error', 'declaration', { 'allowArrowFunctions': true }],
 
       'react/display-name': 0,
@@ -524,6 +525,7 @@ export default [
       '@typescript-eslint/await-thenable': 0,
       'spellcheck/spell-checker': 0,
       'consistent-return': 0,
+      'import/no-unresolved': ['error', { ignore: ['^demo-ts-loader$', '^demo-ts-shared$'] }],
     },
   },
   {

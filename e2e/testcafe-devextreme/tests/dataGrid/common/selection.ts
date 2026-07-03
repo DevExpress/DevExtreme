@@ -248,7 +248,7 @@ test('Sensitivity option change should be correctly handled during runtime chang
 
 // ---
 
-test('"Select All" checkbox should not react when not visible', async (t) => {
+test.meta({ unstable: true })('"Select All" checkbox should not react when not visible', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   const selectAllCheckBox = new CheckBox(

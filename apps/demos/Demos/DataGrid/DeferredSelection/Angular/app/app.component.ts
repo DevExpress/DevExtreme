@@ -1,5 +1,10 @@
 import {
-  Component, ViewChild, AfterViewInit, enableProdMode, provideZoneChangeDetection,
+  Component,
+  ViewChild,
+  AfterViewInit,
+  enableProdMode,
+  provideZoneChangeDetection,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { DxDataGridModule, DxDataGridComponent, DxButtonModule } from 'devextreme-angular';
 import { query } from 'devextreme-angular/common/data';
@@ -17,6 +22,7 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],

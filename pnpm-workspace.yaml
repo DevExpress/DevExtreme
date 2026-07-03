@@ -20,8 +20,7 @@ overrides:
   "semver@<5.7.2": ^5.7.2
   qs: ">=6.15.2"
   "vite@>=7.0.0 <=7.3.4": ^7.3.5
-  "dompurify@<=3.4.6": ^3.4.7
-  "underscore@<=1.13.7": ^1.13.8
+  "dompurify@<=3.4.10": ^3.4.11
   "hono@<4.12.21": "^4.12.21"
   "minimatch@>=9.0.0 < 9.0.7": 9.0.9
   "picomatch@>=4.0.0 <4.0.4": 4.0.4
@@ -42,8 +41,14 @@ overrides:
   "uuid@<14.0.0": ~14.0.0
   "postcss@<8.5.10": 8.5.10
   "ip-address@<=10.1.0": ">=10.1.1"
-  "webpack-dev-server@<=5.2.3": ^5.2.4
+  "webpack-dev-server@<=5.2.4": ^5.2.5
   "form-data@<4.0.6": "^4.0.6"
+  "undici@>=7.23.0 <7.28.0": ^7.28.0
+  "http-proxy-middleware@>=0.16.0 <3.0.7": ^3.0.7
+  "piscina@>=5.0.0-alpha.0 <=5.1.4": ^5.1.5
+  "@sigstore/core@<=3.2.0": "^3.2.1"
+  "sigstore@<=4.1.0": "^4.1.1"
+  "@sigstore/verify@3.1.0": "^3.1.1"
 
 catalog:
   axe-core: ^4.11.1
@@ -54,7 +59,7 @@ catalog:
   devexpress-diagram: 2.2.29
   devexpress-gantt: 4.1.69
   devextreme-exceljs-fork: 4.4.11
-  devextreme-quill: 1.7.9
+  devextreme-quill: 1.7.10
   "@eslint/js": 9.39.4
   eslint: 9.39.4
   eslint-config-airbnb-typescript: 18.0.0
@@ -63,6 +68,7 @@ catalog:
   eslint-plugin-import: 2.32.0
   eslint-plugin-jsx-a11y: 6.10.2
   eslint-plugin-no-only-tests: 3.3.0
+  eslint-plugin-perfectionist: 5.9.1
   eslint-plugin-qunit: 8.2.6
   eslint-plugin-vue: 10.4.0
   vue-eslint-parser: 10.0.0
@@ -70,6 +76,7 @@ catalog:
   gulp-eslint-new: 2.4.0
   jquery: 4.0.0
   stylelint: 16.22.0
+  testcafe: 3.7.5
   zod: 3.24.4
   zod-to-json-schema: 3.24.6
   "@babel/eslint-parser": 7.29.7
@@ -102,7 +109,8 @@ catalogs:
     "devextreme-internal-tools": 20.4.0
     "prettier": 3.5.3
     "ts-node": 10.9.2
-    "@types/node": 20.12.8
+    "typescript": 5.9.3
+    "@types/node": 20.19.37
 
 allowBuilds:
   '@parcel/watcher': true
@@ -120,7 +128,23 @@ allowBuilds:
   unrs-resolver: true
 
 patchedDependencies:
-  testcafe-hammerhead@31.7.7: patches/testcafe-hammerhead@31.7.7.patch
+  testcafe-hammerhead@31.7.8: patches/testcafe-hammerhead@31.7.8.patch
 
 minimumReleaseAgeExclude:
   - "eslint-config-devextreme"
+  - devextreme-quill@1.7.10
+  - '@nx/devkit@23.0.1'
+  - '@nx/jest@23.0.1'
+  - '@nx/js@23.0.1'
+  - '@nx/nx-darwin-arm64@23.0.1'
+  - '@nx/nx-darwin-x64@23.0.1'
+  - '@nx/nx-freebsd-x64@23.0.1'
+  - '@nx/nx-linux-arm-gnueabihf@23.0.1'
+  - '@nx/nx-linux-arm64-gnu@23.0.1'
+  - '@nx/nx-linux-arm64-musl@23.0.1'
+  - '@nx/nx-linux-x64-gnu@23.0.1'
+  - '@nx/nx-linux-x64-musl@23.0.1'
+  - '@nx/nx-win32-arm64-msvc@23.0.1'
+  - '@nx/nx-win32-x64-msvc@23.0.1'
+  - '@nx/workspace@23.0.1'
+  - nx@23.0.1

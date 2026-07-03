@@ -51,6 +51,8 @@ Ng.makeMetadata({
     removeMembers(/\/grids:AIAssistant/),
     removeMembers(/\/calendar:dxCalendarOptions.todayButtonText/),
     removeMembers(/\/card_view:/),
+    removeMembers(/\/chat:MessageType/),
+    removeMembers(/\/chat:MessageBase.type/),
     removeMembers(/\/chat:TextMessage.attachments/),
     removeMembers(
       /\/chat:dxChatOptions\.(fileUploaderOptions|inputFieldText|sendButtonOptions|speechToTextOptions|suggestions|onAttachmentDownloadClick)/,

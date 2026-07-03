@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "title": "SCSS Build Executor",
+  "description": "Run SCSS theme compilation pipeline in all or CI mode",
+  "type": "object",
+  "properties": {
+    "mode": {
+      "type": "string",
+      "description": "Compilation mode. all = full themes set, ci = reduced dev themes set.",
+      "enum": ["all", "ci"]
+    },
+    "bundlesDir": {
+      "type": "string",
+      "description": "Generated SCSS bundles directory relative to project root",
+      "default": "./scss/bundles"
+    },
+    "cssOutputDir": {
+      "type": "string",
+      "description": "Output CSS artifacts directory relative to project root",
+      "default": "../devextreme/artifacts/css"
+    },
+    "devBundles": {
+      "type": "array",
+      "description": "Bundle names used in CI mode",
+      "items": {
+        "type": "string"
+      }
+    },
+    "watch": {
+      "type": "boolean",
+      "description": "Watch SCSS sources and rebuild on changes",
+      "default": false
+    },
+    "bundles": {
+      "description": "Bundle names for watch mode (array or comma-separated string)",
+      "oneOf": [
+        {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        {
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "required": ["mode"]
+}

@@ -21,6 +21,7 @@
   },
   "targetDefaults": {
     "build": {
+      "cache": true,
       "dependsOn": [
         "^build"
       ]
@@ -31,11 +32,14 @@
       ]
     },
     "test": {
+      "cache": true,
       "dependsOn": [
         "^build"
       ]
     },
-    "lint": {},
+    "lint": {
+      "cache": true
+    },
     "e2e": {}
   },
   "workspaceLayout": {
@@ -43,6 +47,7 @@
     "libsDir": "packages"
   },
   "defaultBase": "master",
+  "maxCacheSize": "5GB",
   "tui": {
     "enabled": false
   },

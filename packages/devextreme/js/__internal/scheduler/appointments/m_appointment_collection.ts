@@ -16,10 +16,17 @@ import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
 import { setOuterHeight, setOuterWidth } from '@js/core/utils/size';
 import { isDeferred, isPlainObject } from '@js/core/utils/type';
+import type {
+  AppointmentClickEvent,
+  AppointmentContextMenuEvent,
+  AppointmentDblClickEvent,
+  AppointmentRenderedEvent,
+} from '@js/ui/scheduler';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
 
+import type NotifyScheduler from '../base/widget_notify_scheduler';
 import {
   AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS,
   APPOINTMENT_CONTENT_CLASSES,
@@ -27,7 +34,10 @@ import {
   APPOINTMENT_ITEM_CLASS,
 } from '../classes';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
-import type { CompactAppointmentOptions } from '../types';
+import type { TimeZoneCalculator } from '../r1/timezone_calculator/index';
+import type { DesktopTooltipStrategy } from '../tooltip_strategies/desktop_tooltip_strategy';
+import type { MobileTooltipStrategy } from '../tooltip_strategies/mobile_tooltip_strategy';
+import type { CompactAppointmentOptions, DOMMetaData, ScrollToGroupValuesOrOptions } from '../types';
 import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
 import {
@@ -38,6 +48,7 @@ import { getAppointmentGroupValues } from '../utils/resource_manager/appointment
 import { getGroupTexts } from '../utils/resource_manager/group_utils';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
 import timeZoneUtils from '../utils_time_zone';
+import type { AppointmentDataSource } from '../view_model/m_appointment_data_source';
 import type {
   AppointmentAgendaViewModel,
   AppointmentCollectorViewModel,
@@ -45,6 +56,7 @@ import type {
   AppointmentViewModelPlain,
   SortedEntity,
 } from '../view_model/types';
+import type ViewDataProvider from '../workspaces/view_model/view_data_provider';
 import { AgendaAppointment } from './appointment/agenda_appointment';
 import { Appointment } from './appointment/m_appointment';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './m_appointment_layout';
@@ -53,6 +65,40 @@ import { DateFormatType } from './m_text_utils';
 import { getAppointmentDateRange } from './resizing/m_core';
 import { isNeedToAdd } from './utils/get_arrays_diff';
 import { getViewModelDiff } from './utils/get_view_model_diff';
+
+export interface AppointmentCollectionOptions {
+  getResourceManager: () => ResourceManager;
+  getAppointmentDataSource: () => AppointmentDataSource;
+  getSortedAppointments: () => SortedEntity[];
+  scrollTo: (
+    date: Date,
+    groupValuesOrOptions?: ScrollToGroupValuesOrOptions,
+    allDay?: boolean,
+  ) => void;
+  appointmentTooltip: MobileTooltipStrategy | DesktopTooltipStrategy;
+  dataAccessors: AppointmentDataAccessor;
+  notifyScheduler: NotifyScheduler;
+  onItemRendered: (args: AppointmentRenderedEvent) => void;
+  onItemClick: (args: AppointmentClickEvent) => void;
+  onItemContextMenu: (args: AppointmentContextMenuEvent) => void;
+  onAppointmentDblClick: (args: AppointmentDblClickEvent) => void;
+  tabIndex: number;
+  focusStateEnabled: boolean;
+  allowDrag: boolean;
+  allowDelete: boolean;
+  allowResize: boolean;
+  allowAllDayResize: boolean;
+  rtlEnabled: boolean;
+  groups: string[];
+  groupByDate: boolean;
+  timeZoneCalculator: TimeZoneCalculator;
+  getResizableStep: () => number;
+  getDOMElementsMetaData: () => DOMMetaData | undefined;
+  getViewDataProvider: () => ViewDataProvider | undefined;
+  isVerticalGroupedWorkSpace: () => boolean;
+  isDateAndTimeView: () => boolean;
+  onContentReady: () => void;
+}
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 
@@ -116,11 +162,6 @@ class SchedulerAppointments extends CollectionWidget<any> {
     return this.option('getResourceManager')();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  option(optionName?: string, value?: any) {
-    return super.option(...arguments);
-  }
-
   notifyObserver(subject, args) {
     const notifyScheduler: any = this.option('notifyScheduler');
     if (notifyScheduler) {
@@ -154,7 +195,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
   }
 
   public getAppointmentSettings($item: dxElementWrapper): AppointmentViewModelPlain {
-    return $item.data(APPOINTMENT_SETTINGS_KEY) as unknown as AppointmentViewModelPlain;
+    return $($item).data(APPOINTMENT_SETTINGS_KEY) as unknown as AppointmentViewModelPlain;
   }
 
   _moveFocus() {}
@@ -478,7 +519,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
     this._preventSingleAppointmentClick = false;
   }
 
-  // TODO: used externally in m_scheduler.ts
+  // TODO: used externally in scheduler.ts
   _renderAppointmentTemplate($container, appointment, model) {
     const config = {
       isAllDay: appointment.allDay,

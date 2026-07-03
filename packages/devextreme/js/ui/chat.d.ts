@@ -252,6 +252,13 @@ export type Attachment = {
 /**
  * @docid
  * @namespace DevExpress.ui.dxChat
+ * @public
+ */
+export type MessageType = 'text' | 'image';
+
+/**
+ * @docid
+ * @namespace DevExpress.ui.dxChat
  * @type object
  * @hidden
  */
@@ -263,11 +270,9 @@ export type MessageBase = {
     id?: number | string;
     /**
      * @docid
-     * @default undefined
-     * @type string|undefined
      * @public
      */
-    type?: 'text' | 'image' | undefined;
+    type?: MessageType;
     /**
      * @docid
      * @public
@@ -441,7 +446,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @type_function_return string|Element|jQuery
      * @public
      */
-    emptyViewTemplate?: template | null | ((data: EmptyViewTemplateData, itemElement: DxElement) => string | UserDefinedElement);
+    emptyViewTemplate?: template | ((data: EmptyViewTemplateData, itemElement: DxElement) => string | UserDefinedElement) | null;
     /**
      * @docid
      * @type dxFileUploaderOptions
@@ -479,7 +484,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @type_function_return string|Element|jQuery
      * @public
      */
-    messageTemplate?: template | null | ((data: MessageTemplateData, messageBubbleElement: DxElement) => string | UserDefinedElement);
+    messageTemplate?: template | ((data: MessageTemplateData, messageBubbleElement: DxElement) => string | UserDefinedElement) | null;
     /**
      * @docid
      * @default 'shorttime'

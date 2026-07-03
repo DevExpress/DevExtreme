@@ -1,0 +1,24 @@
+diff --git a/lib/client/hammerhead.js b/lib/client/hammerhead.js
+index 0ba2f29..b291413 100644
+--- a/lib/client/hammerhead.js
++++ b/lib/client/hammerhead.js
+@@ -3578,7 +3578,7 @@
+ 	}
+ 	function isShadowUIElement(element) {
+ 	    // @ts-ignore
+-	    return !!element[INTERNAL_PROPS.shadowUIElement];
++	    return !!element && !!element[INTERNAL_PROPS.shadowUIElement];
+ 	}
+ 	function isWindow(instance) {
+ 	    try {
+@@ -40365,6 +40365,10 @@
+ 	        this._onFocus = function (e) {
+ 	            var focusedEl = nativeMethods.eventTargetGetter.call(e);
+ 	            var activeEl = getActiveElement(document);
++	            // Chrome >=146: document.activeElement can transiently be null while focus moves.
++	            // Guards against TestCafe issue #8493 (TypeError in isShadowUIElement(null)).
++	            if (!focusedEl || !activeEl)
++	                return;
+ 	            if (!isShadowUIElement(focusedEl) && !isShadowUIElement(activeEl))
+ 	                shadowUI.setLastActiveElement(activeEl);
+ 	        };

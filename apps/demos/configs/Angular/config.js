@@ -92,16 +92,48 @@ const componentNames = [
 
 window.exports = window.exports || {};
 window.config = {
-  transpiler: 'ts',
-  typescriptOptions: {
-    module: 'system',
-    emitDecoratorMetadata: true,
-    experimentalDecorators: true,
-  },
+  transpiler: false,
   meta: {
+    '*.ts': {
+      loader: 'demo-ts-loader',
+    },
     'typescript': {
       'exports': 'ts',
     },
+    'anti-forgery': {
+      loader: 'demo-ts-loader',
+    },
+    /** unified */
+    'unified': {
+      loader: 'demo-ts-loader',
+    },
+    'remark-parse': {
+      loader: 'demo-ts-loader',
+    },
+    'remark-rehype': {
+      loader: 'demo-ts-loader',
+    },
+    'remark-stringify': {
+      loader: 'demo-ts-loader',
+    },
+    'rehype-parse': {
+      loader: 'demo-ts-loader',
+    },
+    'rehype-remark': {
+      loader: 'demo-ts-loader',
+    },
+    'rehype-stringify': {
+      loader: 'demo-ts-loader',
+    },
+    'rehype-minify-whitespace': {
+      loader: 'demo-ts-loader',
+    },
+    /**/
+    /** canvg */
+    'canvg': {
+      loader: 'demo-ts-loader',
+    },
+    /**/
     /** devextreme-aspnet-data-nojquery */
     'devextreme-aspnet-data-nojquery': {
       'esModule': true,
@@ -158,6 +190,7 @@ window.config = {
     },
   },
   paths: {
+    'project:': '../../../../',
     'npm:': '../../../../node_modules/',
     'bundles:': '../../../../bundles/',
     'externals:': '../../../../bundles/externals/',
@@ -165,7 +198,8 @@ window.config = {
   },
   map: {
     'anti-forgery': 'anti-forgery:fetch-override.js',
-    'ts': 'npm:plugin-typescript/lib/plugin.js',
+    'demo-ts-loader': 'project:utils/demo-ts-loader.js',
+    'demo-ts-shared': 'project:utils/demo-ts-shared.js',
     'typescript': 'npm:typescript/lib/typescript.js',
     'jszip': 'npm:jszip/dist/jszip.min.js',
 

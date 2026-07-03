@@ -3,6 +3,7 @@
     "target": "ES2022",
     "experimentalDecorators": true,
     "esModuleInterop": true,
+    "ignoreDeprecations": "6.0",
     "moduleResolution": "node",
     "skipLibCheck": true,
     "baseUrl": "./",
