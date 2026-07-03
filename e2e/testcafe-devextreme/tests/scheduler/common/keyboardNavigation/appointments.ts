@@ -206,7 +206,6 @@ const cellStyles = '#container .dx-scheduler-cell-sizes-vertical { height: 100px
       .click(scheduler.getAppointment('[Appointment 1]').element)
       .pressKey('tab')
       .click(scheduler.toolbar.viewSwitcher.element)
-      .pressKey('tab')
       .pressKey('tab');
 
     await t
@@ -251,7 +250,6 @@ test('should focus first visible appointment on tab (virtual scrolling)', async 
   await t
     .scroll(scheduler.workspaceScrollable, 0, 1000)
     .click(scheduler.toolbar.viewSwitcher.element)
-    .pressKey('tab')
     .pressKey('tab');
 
   await t
@@ -267,7 +265,6 @@ test('should focus first rendered appointment on tab (standard scrolling)', asyn
   await t
     .scroll(scheduler.workspaceScrollable, 0, 1000)
     .click(scheduler.toolbar.viewSwitcher.element)
-    .pressKey('tab')
     .pressKey('tab');
 
   await t
