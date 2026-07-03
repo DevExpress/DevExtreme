@@ -248,7 +248,7 @@ class DateBoxMask extends DateBoxBase {
   _keyPressHandler(e: { originalEvent: InputEvent & KeyboardEvent }): void {
     const { originalEvent: event } = e;
 
-       const isBackwardDeletion = event?.inputType === 'deleteContentBackward';
+    const isBackwardDeletion = event?.inputType === 'deleteContentBackward';
     const isForwardDeletion = event?.inputType === 'deleteContentForward';
 
     if (this._useMaskBehavior() && (isBackwardDeletion || isForwardDeletion)) {
@@ -267,7 +267,6 @@ class DateBoxMask extends DateBoxBase {
 
       return;
     }
-
 
     const isCompositionDigit = event?.inputType === 'insertCompositionText'
       && this._isSingleDigitKey(e);
