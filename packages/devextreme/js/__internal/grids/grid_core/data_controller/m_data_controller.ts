@@ -1250,9 +1250,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._fireChanged(change);
   }
 
-  /**
-   * @extended: tree_list/data_controller
-   */
   protected needUpdateDimensions(operationTypes) {
     return operationTypes && (
       operationTypes.reload || operationTypes.paging || operationTypes.groupExpanding
