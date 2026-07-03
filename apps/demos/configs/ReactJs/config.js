@@ -1,19 +1,61 @@
 window.exports = window.exports || {};
 window.config = {
-  transpiler: 'ts',
-  typescriptOptions: {
-    module: 'system',
-    emitDecoratorMetadata: true,
-    experimentalDecorators: true,
-    jsx: 'react',
-    ignoreDeprecations: '6.0',
-  },
+  transpiler: false,
   meta: {
-    'react': {
-      'esModule': true,
+    'demo-ts-loader': {
+      loader: false,
+    },
+    'demo-ts-shared': {
+      loader: false,
     },
     'typescript': {
-      'exports': 'ts',
+      exports: 'ts',
+      loader: false,
+    },
+    'anti-forgery': {
+      loader: 'demo-ts-loader',
+    },
+    /** unified */
+    'unified': {
+      loader: 'demo-ts-loader',
+    },
+    'remark-parse': {
+      loader: 'demo-ts-loader',
+    },
+    'remark-rehype': {
+      loader: 'demo-ts-loader',
+    },
+    'remark-stringify': {
+      loader: 'demo-ts-loader',
+    },
+    'rehype-parse': {
+      loader: 'demo-ts-loader',
+    },
+    'rehype-remark': {
+      loader: 'demo-ts-loader',
+    },
+    'rehype-stringify': {
+      loader: 'demo-ts-loader',
+    },
+    'rehype-minify-whitespace': {
+      loader: 'demo-ts-loader',
+    },
+    /**/
+    /** canvg */
+    'canvg': {
+      loader: 'demo-ts-loader',
+    },
+    /**/
+    'react': {
+      loader: false,
+      esModule: true,
+    },
+    'react-dom': {
+      loader: false,
+      esModule: true,
+    },
+    'prop-types': {
+      loader: false,
     },
     'devextreme/time_zone_utils.js': {
       'esModule': true,
@@ -50,6 +92,7 @@ window.config = {
     },
   },
   paths: {
+    'project:': '../../../../',
     'npm:': '../../../../node_modules/',
     'bundles:': '../../../../bundles/',
     'externals:': '../../../../bundles/externals/',
@@ -58,7 +101,8 @@ window.config = {
   defaultExtension: 'js',
   map: {
     'anti-forgery': 'anti-forgery:fetch-override.js',
-    'ts': 'npm:plugin-typescript/lib/plugin.js',
+    'demo-ts-loader': 'project:utils/demo-ts-loader.js',
+    'demo-ts-shared': 'project:utils/demo-ts-shared.js',
     'typescript': 'npm:typescript/lib/typescript.js',
     'jszip': 'npm:jszip/dist/jszip.min.js',
     'react': 'npm:react/umd/react.development.js',
@@ -155,15 +199,21 @@ window.config = {
     '@preact/signals-core': 'npm:@preact/signals-core/dist/signals-core.min.js',
     'devextreme-cldr-data': 'npm:devextreme-cldr-data',
 
-    // SystemJS plugins
-    'plugin-babel': 'npm:systemjs-plugin-babel/plugin-babel.js',
-    'systemjs-babel-build': 'npm:systemjs-plugin-babel/systemjs-babel-browser.js',
-
     // Prettier
     'prettier/standalone': 'npm:prettier/standalone.js',
     'prettier/parser-html': 'npm:prettier/parser-html.js',
   },
   packages: {
+    '.': {
+      meta: {
+        '*.js': {
+          loader: 'demo-ts-loader',
+          typescriptOptions: {
+            jsx: 'react',
+          },
+        },
+      },
+    },
     'devextreme': {
       defaultExtension: 'js',
     },
@@ -210,11 +260,6 @@ window.config = {
   packageConfigPaths: [
     'npm:@devextreme/*/package.json',
   ],
-  babelOptions: {
-    sourceMaps: false,
-    stage0: true,
-    react: true,
-  },
 };
 
 window.process = {
