@@ -2177,6 +2177,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const $element = $(e.element);
     const settings = this._appointments
       .getAppointmentSettings($element) as AppointmentItemViewModel;
+
+    if (!settings) {
+      return;
+    }
+
     const appointmentData = settings.itemData;
 
     const dateRange = settings.allDay
