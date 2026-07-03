@@ -1,10 +1,12 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { noop } from '@js/core/utils/common';
 import type { DxEvent } from '@js/events/events.types';
 import { getPublicElement } from '@ts/core/m_element';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import eventsEngine from '@ts/events/core/m_events_engine';
 
+import { isFocusLost } from '../utils/is_focus_lost';
 import { getRawAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 import type { SortedEntity } from '../view_model/types';
 import type SchedulerAppointments from './m_appointment_collection';
@@ -15,6 +17,8 @@ export class AppointmentsKeyboardNavigation {
   public focusedItemSortIndex = -1;
 
   public isNavigating = false;
+
+  private pendingDeleteFocusSortedIndex = -1;
 
   constructor(collection: SchedulerAppointments) {
     this._collection = collection;
@@ -81,9 +85,52 @@ export class AppointmentsKeyboardNavigation {
   private delHandler(e: DxEvent): void {
     if (this._collection.option('allowDelete')) {
       e.preventDefault();
-      const data = this._collection.getAppointmentSettings($(e.target)).itemData;
-      this._collection.notifyObserver('onDeleteButtonPress', { data, target: e.target });
+      const settings = this._collection.getAppointmentSettings($(e.target));
+      this.pendingDeleteFocusSortedIndex = settings.sortedIndex;
+      this._collection.notifyObserver('onDeleteButtonPress', { data: settings.itemData, target: e.target });
     }
+  }
+
+  public onItemsRendered(): void {
+    const pendingIndex = this.pendingDeleteFocusSortedIndex;
+    this.pendingDeleteFocusSortedIndex = -1;
+
+    if (pendingIndex < 0) {
+      return;
+    }
+
+    Promise.resolve().then(() => {
+      this.restoreFocusAfterDelete(pendingIndex);
+    }).catch(noop);
+  }
+
+  private restoreFocusAfterDelete(sortedIndex: number): void {
+    if (!isFocusLost()) {
+      return;
+    }
+
+    const $item = this.findNearestItem(sortedIndex);
+
+    if ($item) {
+      this.focus($item);
+      return;
+    }
+
+    this._collection.notifyObserver('focusFallbackAfterDelete', {});
+  }
+
+  private findNearestItem(sortedIndex: number): dxElementWrapper | undefined {
+    const $items = this._collection.$itemBySortedIndex;
+
+    for (let index = sortedIndex; index >= 0; index -= 1) {
+      const $item = $items?.[index];
+
+      if ($item?.length) {
+        return $item;
+      }
+    }
+
+    return undefined;
   }
 
   private escHandler(): void {
