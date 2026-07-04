@@ -75,8 +75,19 @@ export function parseDate(text: string, format: Format): Date;
  */
 export function parseNumber(text: string, format: Format): number;
 
-type ExternalFormat = Intl.DateTimeFormatOptions
-  | Intl.NumberFormatOptions;
+/**
+ * @docid
+ * @public
+ */
+export type FormatLocale = string | (() => string);
+
+type ExternalFormat = (Intl.DateTimeFormatOptions | Intl.NumberFormatOptions) & {
+  /**
+   * @docid Format.locale
+   * @public
+   */
+  locale?: FormatLocale;
+};
 
 type PredefinedFormat = FormatType;
 
@@ -130,4 +141,9 @@ export interface FormatObject {
     * @type Enums.Format|string
     */
    type?: PredefinedFormat | string;
+   /**
+    * @docid Format.locale
+    * @public
+    */
+   locale?: FormatLocale;
 }

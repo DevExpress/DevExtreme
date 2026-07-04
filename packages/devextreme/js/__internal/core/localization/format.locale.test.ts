@@ -179,7 +179,7 @@ describe('format locale integration', () => {
       numberLocalization.format(1.234);
 
       numberFormatSpy.mock.calls.forEach(([, options]) => {
-        expect(options?.locale).toBeUndefined();
+        expect(options).not.toHaveProperty('locale');
       });
 
       numberFormatSpy.mockRestore();
@@ -246,7 +246,7 @@ describe('format locale integration', () => {
       });
 
       dateTimeFormatSpy.mock.calls.forEach(([, options]) => {
-        expect(options?.locale).toBeUndefined();
+        expect(options).not.toHaveProperty('locale');
       });
 
       dateTimeFormatSpy.mockRestore();
