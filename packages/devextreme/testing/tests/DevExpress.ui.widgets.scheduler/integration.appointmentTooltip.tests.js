@@ -176,7 +176,7 @@ module('Global formatting config (spec): Scheduler tooltip', {
             await scheduler.appointments.click(0, clock);
             clock.restore();
 
-            assert.strictEqual(scheduler.tooltip.getDateText(), '09.02.2015 23:00 - 10.02.2015 01:00');
+            assert.strictEqual(scheduler.tooltip.getDateText(), '9.2.2015 23:00 - 10.2.2015 01:00');
         } finally {
             locale(savedLocale);
         }
