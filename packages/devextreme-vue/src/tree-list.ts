@@ -418,7 +418,7 @@ const componentConfig = {
     columns: Array as PropType<Array<dxTreeListColumn | string>>,
     columnWidth: [String, Number] as PropType<Mode | number>,
     customizeColumns: Function as PropType<((columns: Array<dxTreeListColumn>) => void)>,
-    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
+    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | Store | string | Record<string, any>>,
     dataStructure: String as PropType<DataStructure>,
     dateSerializationFormat: String,
     disabled: Boolean,

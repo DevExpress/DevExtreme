@@ -7,6 +7,7 @@ import { setWidth } from '@js/core/utils/size';
 import { setStyle } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
 import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
+import { foreachColumnInfo } from '@ts/grids/grid_core/virtual_columns/m_virtual_columns_core';
 
 const PIVOTGRID_EXPAND_CLASS = 'dx-expand';
 
@@ -139,6 +140,49 @@ abstract class AreaItem {
     return '</tbody>';
   }
 
+  _getColumnIndexOffset() {
+    return this.component._dataController?.getColumnIndexOffset() || 0;
+  }
+
+  _getRowIndexOffset() {
+    return this.component._dataController?.getRowIndexOffset() || 0;
+  }
+
+  _createColumnIndexMap(data) {
+    const columnIndexMap = new Map();
+
+    foreachColumnInfo(data, (cell, visibleIndex, rowIndex, colIndex) => {
+      columnIndexMap.set(`${rowIndex}-${colIndex}`, visibleIndex);
+    });
+
+    return columnIndexMap;
+  }
+
+  _setCellAriaIndexAttributes(td, options) {
+    const {
+      areaName,
+      rowIndex,
+      columnIndex,
+      columnIndexMap,
+      columnIndexOffset,
+      rowIndexOffset,
+    } = options;
+
+    if (areaName === 'column' || areaName === 'data') {
+      const visibleColumnIndex = areaName === 'column'
+        ? columnIndexMap.get(`${rowIndex}-${columnIndex}`)
+        : columnIndex;
+
+      if (visibleColumnIndex !== undefined) {
+        td.setAttribute('aria-colindex', String(visibleColumnIndex + columnIndexOffset + 1));
+      }
+    }
+
+    if (areaName === 'row' || areaName === 'data') {
+      td.setAttribute('aria-rowindex', String(rowIndex + rowIndexOffset + 1));
+    }
+  }
+
   _renderTableContent(tableElement, data) {
     const rowsCount = data.length;
     const rtlEnabled = this.option('rtlEnabled');
@@ -149,6 +193,12 @@ abstract class AreaItem {
     tableElement.css('width', '');
 
     const tbody = this._getMainElementMarkup();
+    const areaName = this._getAreaName();
+    const columnIndexOffset = this._getColumnIndexOffset();
+    const rowIndexOffset = this._getRowIndexOffset();
+    const columnIndexMap = areaName === 'column'
+      ? this._createColumnIndexMap(data)
+      : null;
 
     for (let i = 0; i < rowsCount; i += 1) {
       const row = data[i];
@@ -163,6 +213,7 @@ abstract class AreaItem {
         this._getRowClassNames(i, cell, rowClassNames);
 
         let cellText = '';
+        const span = domAdapter.createElement('span');
 
         if (cell) {
           cell.rowspan && td.setAttribute('rowspan', cell.rowspan || 1);
@@ -194,9 +245,9 @@ abstract class AreaItem {
           if (isDefined(cell.expanded)) {
             const div = domAdapter.createElement('div');
             div.classList.add('dx-expand-icon-container');
-            const span = domAdapter.createElement('span');
-            span.classList.add(PIVOTGRID_EXPAND_CLASS);
-            div.appendChild(span);
+            const expandSpan = domAdapter.createElement('span');
+            expandSpan.classList.add(PIVOTGRID_EXPAND_CLASS);
+            div.appendChild(expandSpan);
             td.appendChild(div);
             const ariaLabel = String(cell.text ?? cell.value ?? '');
             div.setAttribute('role', 'button');
@@ -206,22 +257,29 @@ abstract class AreaItem {
           }
 
           cellText = this._getCellText(cell, encodeHtml);
-        }
 
-        const span = domAdapter.createElement('span');
-
-        if (isDefined(cell.wordWrapEnabled)) {
-          span.style.whiteSpace = cell.wordWrapEnabled ? 'normal' : 'nowrap';
+          if (isDefined(cell.wordWrapEnabled)) {
+            span.style.whiteSpace = cell.wordWrapEnabled ? 'normal' : 'nowrap';
+          }
         }
 
         span.innerHTML = cellText;
         td.appendChild(span);
 
-        if (cell.sorted) {
-          const span = domAdapter.createElement('span');
-          span.classList.add('dx-icon-sorted');
-          td.appendChild(span);
+        if (cell?.sorted) {
+          const sortedSpan = domAdapter.createElement('span');
+          sortedSpan.classList.add('dx-icon-sorted');
+          td.appendChild(sortedSpan);
         }
+
+        this._setCellAriaIndexAttributes(td, {
+          areaName,
+          rowIndex: i,
+          columnIndex: j,
+          columnIndexMap,
+          columnIndexOffset,
+          rowIndexOffset,
+        });
 
         tr.appendChild(td);
       }
