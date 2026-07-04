@@ -5384,11 +5384,11 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.editing.editColumnName]
      */
-    editColumnName?: string;
+    editColumnName?: string | undefined;
     /**
      * [descr:GridBaseOptions.editing.editRowKey]
      */
-    editRowKey?: TKey;
+    editRowKey?: TKey | undefined;
     /**
      * [descr:GridBaseOptions.editing.form]
      */
@@ -6028,7 +6028,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceLike<TRowData, TKey> | null;
+    dataSource?: DevExpress.data.DataSourceLike<TRowData, TKey> | undefined;
     /**
      * [descr:GridBaseOptions.dateSerializationFormat]
      */
@@ -6064,7 +6064,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.filterValue]
      */
-    filterValue?: string | Array<any> | Function;
+    filterValue?: string | Array<any> | Function | null;
     /**
      * [descr:GridBaseOptions.focusedColumnIndex]
      */
@@ -7184,7 +7184,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.stateStoring.storageKey]
      */
-    storageKey?: string;
+    storageKey?: string | undefined;
     /**
      * [descr:GridBaseOptions.stateStoring.type]
      */
@@ -11154,7 +11154,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCardViewOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceLike<TCardData, TKey>;
+    dataSource?: DevExpress.data.DataSourceLike<TCardData, TKey> | undefined;
     /**
      * [descr:dxCardViewOptions.paging]
      */
@@ -11162,7 +11162,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCardViewOptions.keyExpr]
      */
-    keyExpr?: string | string[];
+    keyExpr?: string | string[] | undefined;
     /**
      * [descr:dxCardViewOptions.remoteOperations]
      */
@@ -11371,7 +11371,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCardViewOptions.filterValue]
      */
-    filterValue?: string | Array<any> | Function;
+    filterValue?: string | Array<any> | Function | null;
     /**
      * [descr:dxCardViewOptions.filterBuilderPopup]
      */
@@ -16675,15 +16675,21 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDraggableOptions.onDragEnd]
      */
-    onDragEnd?: (e: DevExpress.ui.dxDraggable.DragEndEvent) => void;
+    onDragEnd?:
+      | ((e: DevExpress.ui.dxDraggable.DragEndEvent) => void)
+      | undefined;
     /**
      * [descr:dxDraggableOptions.onDragMove]
      */
-    onDragMove?: (e: DevExpress.ui.dxDraggable.DragMoveEvent) => void;
+    onDragMove?:
+      | ((e: DevExpress.ui.dxDraggable.DragMoveEvent) => void)
+      | undefined;
     /**
      * [descr:dxDraggableOptions.onDragStart]
      */
-    onDragStart?: (e: DevExpress.ui.dxDraggable.DragStartEvent) => void;
+    onDragStart?:
+      | ((e: DevExpress.ui.dxDraggable.DragStartEvent) => void)
+      | undefined;
   }
   /**
    * [descr:dxDrawer]
@@ -19178,25 +19184,25 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderOptions.onEditorPrepared]
      */
-    onEditorPrepared?: (
-      e: DevExpress.ui.dxFilterBuilder.EditorPreparedEvent
-    ) => void;
+    onEditorPrepared?:
+      | ((e: DevExpress.ui.dxFilterBuilder.EditorPreparedEvent) => void)
+      | undefined;
     /**
      * [descr:dxFilterBuilderOptions.onEditorPreparing]
      */
-    onEditorPreparing?: (
-      e: DevExpress.ui.dxFilterBuilder.EditorPreparingEvent
-    ) => void;
+    onEditorPreparing?:
+      | ((e: DevExpress.ui.dxFilterBuilder.EditorPreparingEvent) => void)
+      | undefined;
     /**
      * [descr:dxFilterBuilderOptions.onValueChanged]
      */
-    onValueChanged?: (
-      e: DevExpress.ui.dxFilterBuilder.ValueChangedEvent
-    ) => void;
+    onValueChanged?:
+      | ((e: DevExpress.ui.dxFilterBuilder.ValueChangedEvent) => void)
+      | undefined;
     /**
      * [descr:dxFilterBuilderOptions.value]
      */
-    value?: string | Array<any> | Function;
+    value?: string | Array<any> | Function | null;
   }
   /**
    * [descr:dxForm]
@@ -28404,31 +28410,41 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSortableOptions.onAdd]
      */
-    onAdd?: (e: DevExpress.ui.dxSortable.AddEvent) => void;
+    onAdd?: ((e: DevExpress.ui.dxSortable.AddEvent) => void) | undefined;
     /**
      * [descr:dxSortableOptions.onDragChange]
      */
-    onDragChange?: (e: DevExpress.ui.dxSortable.DragChangeEvent) => void;
+    onDragChange?:
+      | ((e: DevExpress.ui.dxSortable.DragChangeEvent) => void)
+      | undefined;
     /**
      * [descr:dxSortableOptions.onDragEnd]
      */
-    onDragEnd?: (e: DevExpress.ui.dxSortable.DragEndEvent) => void;
+    onDragEnd?:
+      | ((e: DevExpress.ui.dxSortable.DragEndEvent) => void)
+      | undefined;
     /**
      * [descr:dxSortableOptions.onDragMove]
      */
-    onDragMove?: (e: DevExpress.ui.dxSortable.DragMoveEvent) => void;
+    onDragMove?:
+      | ((e: DevExpress.ui.dxSortable.DragMoveEvent) => void)
+      | undefined;
     /**
      * [descr:dxSortableOptions.onDragStart]
      */
-    onDragStart?: (e: DevExpress.ui.dxSortable.DragStartEvent) => void;
+    onDragStart?:
+      | ((e: DevExpress.ui.dxSortable.DragStartEvent) => void)
+      | undefined;
     /**
      * [descr:dxSortableOptions.onRemove]
      */
-    onRemove?: (e: DevExpress.ui.dxSortable.RemoveEvent) => void;
+    onRemove?: ((e: DevExpress.ui.dxSortable.RemoveEvent) => void) | undefined;
     /**
      * [descr:dxSortableOptions.onReorder]
      */
-    onReorder?: (e: DevExpress.ui.dxSortable.ReorderEvent) => void;
+    onReorder?:
+      | ((e: DevExpress.ui.dxSortable.ReorderEvent) => void)
+      | undefined;
   }
   /**
    * [descr:dxSpeechToText]

@@ -14,6 +14,8 @@ fixture.disablePageReloads`Focused row - markup`
 test('markup - generic.light', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
+
   const firstCell = dataGrid.getDataCell(0, 0);
   const secondCell = dataGrid.getDataCell(0, 1);
   const thirdCell = dataGrid.getDataCell(0, 2);
@@ -65,9 +67,11 @@ test('markup - generic.light', async (t) => {
 // visual: generic.light
 // visual: fluent.light
 // visual: material.blue.light
-test.meta({ unstable: true })('Invalid cells in a focused row should have the correct background color (T1197268) - generic.light', async (t) => {
+test('Invalid cells in a focused row should have the correct background color (T1197268) - generic.light', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
+
   // act
   await dataGrid.apiAddRow();
   await dataGrid.apiSaveEditData();
@@ -105,7 +109,10 @@ test.meta({ unstable: true })('Invalid cells in a focused row should have the co
 // visual: material.blue.light
 // visual: fluent.blue.light
 test('Link should not have background color in generic.light (T1282624)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
   // assert
   await testScreenshot(t, takeScreenshot, 'focused-row-link-background.png');
   await t
