@@ -12,7 +12,7 @@ import type { ContentReadyEvent, ContextMenuPreparingEvent, CustomCommandEvent, 
 import type { HorizontalAlignment, template, DataType, Format as CommonFormat, SortOrder, SearchMode, ToolbarItemLocation, ToolbarItemComponent, SingleMultipleOrNone } from "devextreme/common";
 import type { dxTreeListColumn, dxTreeListRowObject } from "devextreme/ui/tree_list";
 import type { FilterOperation, FilterType, ColumnHeaderFilter as GridsColumnHeaderFilter, SelectedFilterOperation, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig } from "devextreme/common/grids";
-import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
+import type { Format as LocalizationFormat, FormatLocale } from "devextreme/common/core/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
 import type { dxContextMenuItem } from "devextreme/ui/context_menu";
@@ -465,6 +465,7 @@ const FilterRow = Object.assign<typeof _componentFilterRow, NestedComponentMeta>
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | Date) => string);
+  locale?: FormatLocale;
   parser?: ((value: string) => number | Date);
   precision?: number;
   type?: CommonFormat | string;
