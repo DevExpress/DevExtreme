@@ -349,7 +349,7 @@ export function getElementSize(
     : getHeight($element);
 }
 
-export function isElementVisible(element: HTMLElement | undefined | null): boolean {
+export function isElementVisible(element: HTMLElement | null | undefined): boolean {
   if (element) {
     return !!(element.offsetWidth || element.offsetHeight || element.getClientRects?.().length);
   }

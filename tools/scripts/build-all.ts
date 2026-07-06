@@ -56,6 +56,7 @@ sh.pushd(path.join(ROOT_DIR, 'packages/devextreme/artifacts'));
     sh.cp('-r', ['ts', 'js', 'css'], ARTIFACTS_DIR);
 sh.popd();
 
+sh.exec('pnpm exec nx copy:bootstrap workflows');
 sh.exec('pnpm run all:pack-and-copy');
 
 sh.exec('pnpm exec nx pack devextreme-react', { silent: true });

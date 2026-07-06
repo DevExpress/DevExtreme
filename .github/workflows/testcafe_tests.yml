@@ -219,11 +219,11 @@ jobs:
 
           base_matrix_end=$(cat <<'JSON'
           [
-            { "componentFolder": "common", "name": "common" },
+            { "componentFolder": "common", "name": "common", "concurrency": 2 },
 
-            { "name": "generic", "theme": "generic.light" },
-            { "name": "material", "theme": "material.blue.light" },
-            { "name": "material - compact", "theme": "material.blue.light.compact" },
+            { "name": "generic", "theme": "generic.light", "concurrency": 2 },
+            { "name": "material", "theme": "material.blue.light", "concurrency": 2 },
+            { "name": "material - compact", "theme": "material.blue.light.compact", "concurrency": 2 },
 
             { "componentFolder": "cardView", "name": "cardView" },
             { "componentFolder": "dataGrid", "name": "dataGrid (1/4)", "indices": "1/4", "cache": true, "concurrency": 6 },

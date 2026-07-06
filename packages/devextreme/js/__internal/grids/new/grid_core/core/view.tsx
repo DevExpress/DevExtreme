@@ -11,7 +11,7 @@ import { hasWindow } from '@ts/core/utils/m_window';
 import { type ComponentType } from 'inferno';
 
 export abstract class View<T extends {}> {
-  private inferno: undefined | ComponentType;
+  private inferno: ComponentType | undefined;
 
   private props?: T;
 

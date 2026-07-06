@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import fx from 'common/core/animation/fx';
-import '__internal/scheduler/m_scheduler';
+import '__internal/scheduler/scheduler';
 
 import 'fluent_blue_light.css!';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';

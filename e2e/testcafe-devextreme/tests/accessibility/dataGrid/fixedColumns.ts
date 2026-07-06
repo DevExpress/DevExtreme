@@ -53,6 +53,7 @@ test('Accessibility: Scrollable should have focusable element', async (t) => {
 
 test('Accessibility: Scrollable should have focusable element when navigate through fixed columns', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   const columnsByFixing = await ClientFunction(
     () => (window as any).widget.getVisibleColumns().map((column) => column.fixed),
@@ -85,6 +86,7 @@ test('Accessibility: Scrollable should have focusable element when navigate thro
 
 test('Accessibility: Scrollable should always have focusable element when navigate back to column headers', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   // focus first cell in second row
   await a11yCheck(t);
@@ -112,6 +114,7 @@ test('Accessibility: Scrollable should always have focusable element when naviga
 
 test('Accessibility: Scrollable should have focusable element when click out of the grid', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   await t.click(dataGrid.getFixedDataCell(0, 0).element);
 
@@ -134,6 +137,7 @@ test('Accessibility: Scrollable should have focusable element when click out of 
 
 test('Accessibility: Scrollable should have focusable element when navigate out of the grid', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   await t.click(dataGrid.getFixedDataCell(0, 0).element);
 
@@ -158,8 +162,9 @@ test('Accessibility: Scrollable should have focusable element when navigate out 
   $('#myButton').remove();
 })());
 
-test.meta({ unstable: true })('Accessibility: Scrollable should have focusable when fixed on the right side columns are focused', async (t) => {
+test('Accessibility: Scrollable should have focusable when fixed on the right side columns are focused', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   // focus through headers
   await pressKey(t, 'tab', COLUMNS_LENGTH);

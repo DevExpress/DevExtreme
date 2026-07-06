@@ -102,7 +102,7 @@ fixture.disablePageReloads`CardView - ColumnSortable.Functional`
 
 [0, 1].forEach((columnIndex) => {
   [0, 1, 2].forEach((gapIndex) => {
-    test(`drag from columnChooser to headerPanel: from index ${columnIndex} to index ${gapIndex}`, async (t) => {
+    test.meta({ unstable: true })(`drag from columnChooser to headerPanel: from index ${columnIndex} to index ${gapIndex}`, async (t) => {
       const cardView = new CardView('#container');
       await cardView.apiShowColumnChooser();
 

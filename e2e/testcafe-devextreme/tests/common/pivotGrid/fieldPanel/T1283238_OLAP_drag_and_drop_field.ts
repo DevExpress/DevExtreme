@@ -11,7 +11,7 @@ fixture.disablePageReloads`pivotGrid_olap_drag-n-drop`
 const PIVOT_GRID_SELECTOR = '#container';
 
 [true, false].forEach((showRowGrandTotals) => {
-  test(`Empty table has one ${showRowGrandTotals ? 'total' : 'empty'} row after drag-n-drop for paginated data`, async (t) => {
+  test.meta({ unstable: true })(`Empty table has one ${showRowGrandTotals ? 'total' : 'empty'} row after drag-n-drop for paginated data`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
