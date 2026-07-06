@@ -295,4 +295,228 @@ QUnit.module('PivotGrid accessibility markup', {
             assert.strictEqual(container.getAttribute('tabindex'), null);
         });
     });
+
+    QUnit.test('Column header and data cells have aria-colindex along shared column axis', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.expect(0);
+            return;
+        }
+
+        const pivotGrid = createPivotGrid({
+            width: 600, height: 400,
+            dataSource: createExpandableDataSource()
+        });
+        this.clock.tick(10);
+
+        const $columnArea = pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers');
+        const $dataArea = pivotGrid.$element().find('.dx-pivotgrid-area-data');
+
+        $columnArea.find('td').each((_, cell) => {
+            assert.ok(parseInt(cell.getAttribute('aria-colindex'), 10) >= 1, 'column header cell has 1-based aria-colindex');
+            assert.strictEqual(cell.getAttribute('aria-rowindex'), null, 'column header cell has no aria-rowindex');
+        });
+
+        $dataArea.find('td').each((_, cell) => {
+            assert.ok(parseInt(cell.getAttribute('aria-colindex'), 10) >= 1, 'data cell has 1-based aria-colindex');
+        });
+
+        const $firstDataRowCells = $dataArea.find('tr').first().find('td');
+
+        $firstDataRowCells.each((_, dataCell) => {
+            const colIndex = dataCell.getAttribute('aria-colindex');
+            const $headerCells = $columnArea.find(`td[aria-colindex="${colIndex}"]`);
+
+            assert.ok($headerCells.length > 0, `column header exists for aria-colindex ${colIndex}`);
+        });
+    });
+
+    QUnit.test('Row header and data cells have aria-rowindex along shared row axis', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.expect(0);
+            return;
+        }
+
+        const pivotGrid = createPivotGrid({
+            width: 600, height: 400,
+            dataSource: createExpandableDataSource()
+        });
+        this.clock.tick(10);
+
+        const $rowArea = pivotGrid.$element().find('.dx-pivotgrid-vertical-headers');
+        const $dataArea = pivotGrid.$element().find('.dx-pivotgrid-area-data');
+
+        $rowArea.find('td').each((_, cell) => {
+            assert.ok(parseInt(cell.getAttribute('aria-rowindex'), 10) >= 1, 'row header cell has 1-based aria-rowindex');
+            assert.strictEqual(cell.getAttribute('aria-colindex'), null, 'row header cell has no aria-colindex');
+        });
+
+        $dataArea.find('tr').each((rowIndex, row) => {
+            const expectedRowIndex = String(rowIndex + 1);
+
+            $(row).find('td').each((_, cell) => {
+                assert.strictEqual(cell.getAttribute('aria-rowindex'), expectedRowIndex, 'data cell aria-rowindex');
+            });
+
+            const $rowHeaderCells = $rowArea.find('tr').eq(rowIndex).find('td');
+
+            $rowHeaderCells.each((_, cell) => {
+                assert.strictEqual(cell.getAttribute('aria-rowindex'), expectedRowIndex, 'row header aria-rowindex matches data row');
+            });
+        });
+    });
+
+    QUnit.test('Multi-level column header colspan is reflected in aria-colindex', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.expect(0);
+            return;
+        }
+
+        const pivotGrid = createPivotGrid({
+            width: 600, height: 400,
+            dataSource: createExpandableDataSource()
+        });
+        this.clock.tick(10);
+
+        const $columnArea = pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers');
+        const $topRowCells = $columnArea.find('tr').first().find('td');
+
+        assert.ok($topRowCells.length > 0, 'top header row has cells');
+
+        const $leafRow = $columnArea.find('tr').last();
+
+        $topRowCells.each((_, cell) => {
+            const colspan = cell.colSpan || 1;
+            const colIndex = parseInt(cell.getAttribute('aria-colindex'), 10);
+
+            assert.ok(colIndex >= 1, 'aria-colindex is 1-based');
+
+            if(colspan > 1) {
+                const leafColIndices = $leafRow.find('td').toArray()
+                    .map(c => parseInt(c.getAttribute('aria-colindex'), 10))
+                    .filter(ci => ci >= colIndex && ci < colIndex + colspan);
+
+                assert.strictEqual(leafColIndices.length, colspan,
+                    `parent with colspan=${colspan} at colindex=${colIndex} has exactly ${colspan} leaf columns`);
+                assert.strictEqual(leafColIndices[0], colIndex,
+                    'first leaf aria-colindex matches parent');
+                assert.strictEqual(leafColIndices[leafColIndices.length - 1], colIndex + colspan - 1,
+                    'last leaf aria-colindex equals parent colindex + colspan - 1');
+            }
+        });
+    });
+
+    QUnit.test('aria-colindex and aria-rowindex account for virtual scrolling offsets', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.expect(0);
+            return;
+        }
+
+        const store = [];
+        for(let i = 0; i < 50; i++) {
+            store.push({ row: `row${i}`, column: `col${i}`, value: i + 1 });
+        }
+
+        const pivotGrid = createPivotGrid({
+            width: 120,
+            height: 120,
+            fieldChooser: { enabled: false },
+            scrolling: {
+                mode: 'virtual',
+                timeout: 0,
+                virtualColumnWidth: 20,
+                virtualRowHeight: 20
+            },
+            dataSource: {
+                fields: [
+                    { dataField: 'row', area: 'row' },
+                    { dataField: 'column', area: 'column' },
+                    { dataField: 'value', area: 'data' }
+                ],
+                store
+            }
+        });
+        this.clock.tick(10);
+
+        const dataController = pivotGrid._dataController;
+        const columnPageSize = dataController._columnsScrollController.pageSize();
+        const rowPageSize = dataController._rowsScrollController.pageSize();
+
+        const assertAriaIndices = (columnOffset, rowOffset, messagePrefix) => {
+            const $dataRows = pivotGrid.$element().find('.dx-pivotgrid-area-data tr');
+            const $firstDataCell = $dataRows.first().find('td').first();
+            const $lastDataCell = $dataRows.last().find('td').last();
+            const $firstColumnHeaderCell = pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers td[aria-colindex]').first();
+            const $lastColumnHeaderCell = pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers tr').last().find('td[aria-colindex]').last();
+            const $firstRowHeaderCell = pivotGrid.$element().find('.dx-pivotgrid-vertical-headers tr').first().find('td').first();
+            const $lastRowHeaderCell = pivotGrid.$element().find('.dx-pivotgrid-vertical-headers tr').last().find('td').last();
+
+            assert.strictEqual(
+                dataController.getColumnIndexOffset(),
+                columnOffset,
+                `${messagePrefix}: getColumnIndexOffset`
+            );
+            assert.strictEqual(
+                dataController.getRowIndexOffset(),
+                rowOffset,
+                `${messagePrefix}: getRowIndexOffset`
+            );
+            assert.strictEqual(
+                $firstDataCell.attr('aria-colindex'),
+                String(columnOffset + 1),
+                `${messagePrefix}: first data cell aria-colindex`
+            );
+            assert.strictEqual(
+                $firstColumnHeaderCell.attr('aria-colindex'),
+                String(columnOffset + 1),
+                `${messagePrefix}: first column header aria-colindex`
+            );
+            assert.ok(
+                parseInt($lastColumnHeaderCell.attr('aria-colindex'), 10) > columnOffset + 1,
+                `${messagePrefix}: last column header aria-colindex is greater than first`
+            );
+            assert.strictEqual(
+                $firstDataCell.attr('aria-rowindex'),
+                String(rowOffset + 1),
+                `${messagePrefix}: first data cell aria-rowindex`
+            );
+            assert.strictEqual(
+                $firstRowHeaderCell.attr('aria-rowindex'),
+                String(rowOffset + 1),
+                `${messagePrefix}: first row header aria-rowindex`
+            );
+            assert.ok(
+                parseInt($lastDataCell.attr('aria-rowindex'), 10) > rowOffset + 1,
+                `${messagePrefix}: last data cell aria-rowindex is greater than first`
+            );
+            assert.ok(
+                parseInt($lastRowHeaderCell.attr('aria-rowindex'), 10) > rowOffset + 1,
+                `${messagePrefix}: last row header aria-rowindex is greater than first`
+            );
+        };
+
+        assertAriaIndices(0, 0, 'initial');
+
+        const columnBeginPageIndex = 2;
+        const rowBeginPageIndex = 1;
+
+        const stubs = [
+            sinon.stub(dataController._columnsScrollController, 'beginPageIndex').returns(columnBeginPageIndex),
+            sinon.stub(dataController._rowsScrollController, 'beginPageIndex').returns(rowBeginPageIndex),
+            sinon.stub(dataController._columnsScrollController, 'endPageIndex').returns(columnBeginPageIndex),
+            sinon.stub(dataController._rowsScrollController, 'endPageIndex').returns(rowBeginPageIndex),
+        ];
+
+        try {
+            dataController.changed.fire();
+            this.clock.tick(10);
+
+            assertAriaIndices(
+                columnBeginPageIndex * columnPageSize,
+                rowBeginPageIndex * rowPageSize,
+                'after virtual page change'
+            );
+        } finally {
+            stubs.forEach(s => s.restore());
+        }
+    });
 });
