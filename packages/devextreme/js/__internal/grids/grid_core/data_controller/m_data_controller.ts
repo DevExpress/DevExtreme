@@ -1244,7 +1244,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       change.isDataChanged = true;
       change.repaintChangesOnly = operationTypes && !operationTypes.grouping && !operationTypes.filtering && this.option('repaintChangesOnly');
 
-      if (operationTypes && (operationTypes.reload || operationTypes.paging || operationTypes.groupExpanding)) {
+      if (this.needUpdateDimensions(operationTypes)) {
         change.needUpdateDimensions = true;
       }
     }
@@ -1259,6 +1259,12 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     if (change.cancel) return;
 
     this._fireChanged(change);
+  }
+
+  protected needUpdateDimensions(operationTypes) {
+    return operationTypes && (
+      operationTypes.reload || operationTypes.paging || operationTypes.groupExpanding
+    );
   }
 
   public loadingOperationTypes() {
