@@ -34,8 +34,6 @@ import type { AppointmentForm } from './form';
 
 export const APPOINTMENT_POPUP_CLASS = 'dx-scheduler-appointment-popup';
 
-const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
-
 const POINTER_DOWN_EVENT_NAME = addNamespace(
   pointerEvents.down,
   'dxSchedulerAppointmentPopupAnimation',
@@ -276,10 +274,11 @@ export class AppointmentPopup {
     }
   }
 
-  private getPopupWrapper(): dxElementWrapper | undefined {
-    return this.popupInstance
-      ?.$overlayContent()
-      .closest(`.${OVERLAY_WRAPPER_CLASS}`);
+  private getPopupWrapper(): dxElementWrapper | null | undefined {
+    // Resolve the wrapper directly from the overlay (not via content.closest),
+    // so it is found regardless of where the content is currently rendered
+    // (e.g. deferRendering: false renders content outside the wrapper at first).
+    return this.popupInstance?.$wrapper();
   }
 
   private createAppointmentAdapter(rawAppointment): AppointmentAdapter {
