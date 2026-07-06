@@ -9,23 +9,26 @@
   <dxo-data-grid-scrolling mode="virtual"></dxo-data-grid-scrolling>
   <dxo-data-grid-search-panel [visible]="true"></dxo-data-grid-search-panel>
   <dxo-data-grid-toolbar>
-    <dxi-data-grid-item location="after" cssClass="align-bottom">
+    <dxi-data-grid-item location="before">
       <div *dxTemplate>
-        <dx-number-box
-          label="Similarity Factor"
-          labelMode="floating"
-          [value]="similarityFactor"
-          [min]="0"
-          [max]="1"
-          format="0.00"
-          [step]="0.05"
-          (onValueChanged)="onSimilarityFactorChanged($event)"
-        ></dx-number-box>
+        <div style="display: flex; align-items: center;">
+          <span style="margin-right: 8px;">Similarity Factor:</span>
+            <dx-number-box
+              [value]="similarityFactor"
+              [min]="0"
+              [max]="1"
+              format="0.00"
+              [step]="0.05"
+              [showSpinButtons]="true"
+              [inputAttr]="{ 'aria-label': 'Similarity Factor' }"
+              (onValueChanged)="onSimilarityFactorChanged($event)"
+            ></dx-number-box>
+        </div>
       </div>
     </dxi-data-grid-item>
-    <dxi-data-grid-item name="searchPanel" cssClass="align-bottom"></dxi-data-grid-item>
+    <dxi-data-grid-item name="searchPanel"></dxi-data-grid-item>
   </dxo-data-grid-toolbar>
-  <dxi-data-grid-column dataField="ID"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="ID" [width]="50"></dxi-data-grid-column>
   <dxi-data-grid-column dataField="Name"></dxi-data-grid-column>
   <dxi-data-grid-column dataField="Description"></dxi-data-grid-column>
 </dx-data-grid>

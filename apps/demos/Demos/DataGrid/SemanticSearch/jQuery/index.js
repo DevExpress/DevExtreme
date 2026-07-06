@@ -19,7 +19,14 @@ $(() => {
     showBorders: true,
     remoteOperations: true,
     height: 600,
-    columns: ['ID', 'Name', 'Description'],
+    columns: [{
+      dataField: 'ID',
+      width: 50
+    }, {
+      dataField: 'Name'
+    }, {
+      dataField: 'Description'
+    }],
     scrolling: {
       mode: 'virtual',
     },
@@ -29,19 +36,22 @@ $(() => {
     toolbar: {
       items: [
         {
-          location: 'after',
-          cssClass: 'align-bottom',
+          location: 'before',
           template: function (data, container) {
+            $('<span>')
+              .text('Similarity Factor:')
+              .css('margin-right', '8px')
+              .appendTo(container);
             $('<div>')
               .appendTo(container)
               .dxNumberBox({
-                label: 'Similarity Factor',
-                labelMode: 'floating',
                 value: similarityFactor,
                 min: 0,
                 max: 1,
                 format: '0.00',
                 step: 0.05,
+                showSpinButtons: true,
+                inputAttr: { 'aria-label': 'Similarity Factor' },
                 onValueChanged(e) {
                   similarityFactor = e.value;
                   if (searchValue !== '') {
@@ -53,7 +63,6 @@ $(() => {
         },
         {
           name: 'searchPanel',
-          cssClass: 'align-bottom',
         },
       ],
     },

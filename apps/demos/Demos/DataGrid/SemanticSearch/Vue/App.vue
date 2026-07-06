@@ -10,27 +10,26 @@
     <DxSearchPanel :visible="true"/>
     <DxToolbar>
       <DxItem
-        location="after"
-        css-class="align-bottom"
+        location="before"
         template="similarityFactorTemplate"
       />
       <DxItem
         name="searchPanel"
-        css-class="align-bottom"
       />
     </DxToolbar>
-    <DxColumn data-field="ID"/>
+    <DxColumn data-field="ID" :width="50"/>
     <DxColumn data-field="Name"/>
     <DxColumn data-field="Description"/>
     <template #similarityFactorTemplate>
+      <span style="margin-right: 8px">Similarity Factor:</span>
       <DxNumberBox
-        label="Similarity Factor"
-        label-mode="floating"
         :value="similarityFactor"
         :min="0"
         :max="1"
         format="0.00"
         :step="0.05"
+        :show-spin-buttons="true"
+        input-attr="{ 'aria-label': 'Similarity Factor' }"
         @value-changed="onSimilarityFactorChanged"
       />
     </template>
@@ -91,8 +90,3 @@ const onEditorPreparing = (e: DxDataGridTypes.EditorPreparingEvent) => {
   }
 };
 </script>
-<style scoped>
-.align-bottom.dx-toolbar-item {
-  vertical-align: bottom;
-}
-</style>
