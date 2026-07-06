@@ -42,6 +42,8 @@ overrides:
   "rollup@<4.59.0": "^4.59.0"
   "semver@<5.7.2": ^5.7.2
   "serialize-javascript@<=7.0.2": 7.0.5
+  "sigstore@<=4.1.0": ^4.1.1
+  "@sigstore/verify@3.1.0": ^3.1.1
   "shell-quote@>=1.1.0 <=1.8.3": ^1.8.4
   "tar@<=7.5.15": ^7.5.16
   "tmp@<0.2.7": "^0.2.7"
