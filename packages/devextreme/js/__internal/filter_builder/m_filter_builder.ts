@@ -97,11 +97,11 @@ class FilterBuilder extends Widget<any> {
   _getDefaultOptions() {
     // @ts-expect-error
     return extend(super._getDefaultOptions(), {
-      onEditorPreparing: null,
+      onEditorPreparing: undefined,
 
-      onEditorPrepared: null,
+      onEditorPrepared: undefined,
 
-      onValueChanged: null,
+      onValueChanged: undefined,
 
       fields: [],
 

@@ -1240,7 +1240,6 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/data_grid:CellClickEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1248,7 +1247,6 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/data_grid:CellDblClickEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1256,7 +1254,6 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/data_grid:CellHoverChangedEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1264,7 +1261,6 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/data_grid:CellPreparedEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1272,7 +1268,6 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/data_grid:ContextMenuPreparingEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1280,7 +1275,6 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/data_grid:EditingStartEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1288,7 +1282,6 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/data_grid:EditorPreparedEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1296,7 +1289,6 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/data_grid:EditorPreparingEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1304,7 +1296,6 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/data_grid:ExportingEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1312,7 +1303,6 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/data_grid:FocusedCellChangedEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1320,7 +1310,6 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/data_grid:FocusedCellChangingEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1328,7 +1317,6 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/data_grid:FocusedRowChangedEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1336,7 +1324,6 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/data_grid:FocusedRowChangingEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1344,7 +1331,6 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/data_grid:RowClickEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1352,7 +1338,6 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/data_grid:RowDblClickEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1360,7 +1345,6 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/data_grid:RowPreparedEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1465,7 +1449,6 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     toolbar?: Toolbar | undefined;
     /**
      * @docid
-     * @default null
      * @type_function_param1 e:{ui/data_grid:AIColumnRequestCreatingEvent}
      * @action
      * @public

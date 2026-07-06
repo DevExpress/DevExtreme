@@ -21,10 +21,10 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 type IFilterBuilderOptionsNarrowedEvents = {
   onContentReady?: ((e: ContentReadyEvent) => void);
   onDisposing?: ((e: DisposingEvent) => void);
-  onEditorPrepared?: ((e: EditorPreparedEvent) => void);
-  onEditorPreparing?: ((e: EditorPreparingEvent) => void);
+  onEditorPrepared?: ((e: EditorPreparedEvent) => void) | undefined;
+  onEditorPreparing?: ((e: EditorPreparingEvent) => void) | undefined;
   onInitialized?: ((e: InitializedEvent) => void);
-  onValueChanged?: ((e: ValueChangedEvent) => void);
+  onValueChanged?: ((e: ValueChangedEvent) => void) | undefined;
 }
 
 type IFilterBuilderOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IFilterBuilderOptionsNarrowedEvents> & IHtmlOptions & {
