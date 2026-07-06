@@ -14,7 +14,7 @@ import {
 
 
 
-import { ScrollMode, Mode } from 'devextreme/common';
+import type { ScrollMode, Mode } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-pivot-grid-scrolling',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

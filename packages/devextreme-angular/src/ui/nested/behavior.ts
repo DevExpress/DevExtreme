@@ -14,7 +14,7 @@ import {
 
 
 
-import { SliderValueChangeMode } from 'devextreme/common';
+import type { SliderValueChangeMode } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-behavior',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

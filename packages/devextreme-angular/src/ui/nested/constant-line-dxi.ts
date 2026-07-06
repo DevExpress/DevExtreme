@@ -12,8 +12,8 @@ import {
 
 
 
-import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
-import { DashStyle, Font, RelativePosition } from 'devextreme/common/charts';
+import type { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
+import type { DashStyle, Font, RelativePosition } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { PROPERTY_TOKEN_constantLines } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-constant-line',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -14,8 +14,8 @@ import {
 
 
 
-import { ApplyChangesMode } from 'devextreme/common/grids';
-import { FieldChooserLayout } from 'devextreme/common';
+import type { ApplyChangesMode } from 'devextreme/common/grids';
+import type { FieldChooserLayout } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-pivot-grid-field-chooser',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -14,8 +14,8 @@ import {
 
 
 
-import { Format } from 'devextreme/common/core/localization';
-import { DashStyle, Font, LabelPosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
+import type { Format } from 'devextreme/common/core/localization';
+import type { DashStyle, Font, LabelPosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-pie-chart-label',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

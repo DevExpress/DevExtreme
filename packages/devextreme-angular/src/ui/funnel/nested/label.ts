@@ -14,10 +14,10 @@ import {
 
 
 
-import { DashStyle, Font, LabelPosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
-import { dxFunnelItem } from 'devextreme/viz/funnel';
-import { Format } from 'devextreme/common/core/localization';
-import { HorizontalEdge } from 'devextreme/common';
+import type { DashStyle, Font, LabelPosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
+import type { dxFunnelItem } from 'devextreme/viz/funnel';
+import type { Format } from 'devextreme/common/core/localization';
+import type { HorizontalEdge } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -28,7 +28,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-funnel-label',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -14,8 +14,8 @@ import {
 
 
 
-import { dxSankeyNode } from 'devextreme/viz/sankey';
-import { Font, TextOverflow } from 'devextreme/common/charts';
+import type { dxSankeyNode } from 'devextreme/viz/sankey';
+import type { Font, TextOverflow } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-sankey-label',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

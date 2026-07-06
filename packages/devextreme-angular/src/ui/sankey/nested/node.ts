@@ -14,7 +14,7 @@ import {
 
 
 
-import { HatchDirection } from 'devextreme/common/charts';
+import type { HatchDirection } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-sankey-node',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

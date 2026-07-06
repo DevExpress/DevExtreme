@@ -14,7 +14,7 @@ import {
 
 
 
-import { Attachment, User, MessageType } from 'devextreme/ui/chat';
+import type { Attachment, User, MessageType } from 'devextreme/ui/chat';
 
 import {
     DxIntegrationModule,
@@ -29,7 +29,6 @@ import {
 
 @Component({
     selector: 'dxi-chat-item',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

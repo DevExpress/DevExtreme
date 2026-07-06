@@ -14,7 +14,7 @@ import {
 
 
 
-import { SubmenuShowMode } from 'devextreme/common';
+import type { SubmenuShowMode } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-show-first-submenu-mode',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

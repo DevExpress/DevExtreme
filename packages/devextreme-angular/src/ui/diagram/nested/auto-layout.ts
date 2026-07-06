@@ -14,8 +14,8 @@ import {
 
 
 
-import { Orientation } from 'devextreme/common';
-import { DataLayoutType } from 'devextreme/ui/diagram';
+import type { Orientation } from 'devextreme/common';
+import type { DataLayoutType } from 'devextreme/ui/diagram';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-diagram-auto-layout',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

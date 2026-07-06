@@ -5,7 +5,7 @@ import {
     Component,
 } from '@angular/core';
 
-import { PositionConfig } from 'devextreme/common/core/animation';
+import type { PositionConfig } from 'devextreme/common/core/animation';
 
 @Component({
     template: ''

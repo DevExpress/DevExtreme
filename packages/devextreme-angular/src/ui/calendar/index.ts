@@ -22,8 +22,8 @@ import {
 } from '@angular/core';
 
 
-import { DisabledDate, CalendarZoomLevel, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, CalendarSelectionMode, WeekNumberRule } from 'devextreme/ui/calendar';
-import { FirstDayOfWeek, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
+import type { DisabledDate, CalendarZoomLevel, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, CalendarSelectionMode, WeekNumberRule } from 'devextreme/ui/calendar';
+import type { FirstDayOfWeek, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
 
 import DxCalendar from 'devextreme/ui/calendar';
 
@@ -57,7 +57,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-calendar',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

@@ -14,8 +14,8 @@ import {
 
 
 
-import { DragDirection, DragHighlight } from 'devextreme/common';
-import { UserDefinedElement } from 'devextreme/core/element';
+import type { DragDirection, DragHighlight } from 'devextreme/common';
+import type { UserDefinedElement } from 'devextreme/core/element';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-row-dragging',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

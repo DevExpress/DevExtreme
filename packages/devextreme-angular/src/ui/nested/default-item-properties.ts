@@ -14,7 +14,7 @@ import {
 
 
 
-import { ConnectorLineEnd, ConnectorLineType } from 'devextreme/ui/diagram';
+import type { ConnectorLineEnd, ConnectorLineType } from 'devextreme/ui/diagram';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-default-item-properties',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

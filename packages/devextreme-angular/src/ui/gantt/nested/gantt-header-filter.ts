@@ -14,8 +14,8 @@ import {
 
 
 
-import { HeaderFilterSearchConfig } from 'devextreme/common/grids';
-import { dxGanttHeaderFilterTexts } from 'devextreme/ui/gantt';
+import type { HeaderFilterSearchConfig } from 'devextreme/common/grids';
+import type { dxGanttHeaderFilterTexts } from 'devextreme/ui/gantt';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-gantt-gantt-header-filter',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

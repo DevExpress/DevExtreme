@@ -14,7 +14,7 @@ import {
 
 
 
-import { AppointmentFormProperties } from 'devextreme/ui/scheduler';
+import type { AppointmentFormProperties } from 'devextreme/ui/scheduler';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-scheduler-editing',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

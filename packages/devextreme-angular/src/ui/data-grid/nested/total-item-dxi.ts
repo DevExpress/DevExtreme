@@ -12,9 +12,9 @@ import {
 
 
 
-import { HorizontalAlignment } from 'devextreme/common';
-import { SummaryType } from 'devextreme/common/grids';
-import { Format } from 'devextreme/common/core/localization';
+import type { HorizontalAlignment } from 'devextreme/common';
+import type { SummaryType } from 'devextreme/common/grids';
+import type { Format } from 'devextreme/common/core/localization';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { PROPERTY_TOKEN_totalItems } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-data-grid-total-item',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -16,7 +16,7 @@ import {
 
 
 
-import { Font } from 'devextreme/common/charts';
+import type { Font } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -27,7 +27,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-range-selector-loading-indicator',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

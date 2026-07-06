@@ -14,7 +14,7 @@ import {
 
 
 
-import { ScrollMode } from 'devextreme/common';
+import type { ScrollMode } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-scheduler-scrolling',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -22,8 +22,8 @@ import {
 } from '@angular/core';
 
 
-import { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/check_box';
-import { ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
+import type { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/check_box';
+import type { ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
 
 import DxCheckBox from 'devextreme/ui/check_box';
 
@@ -57,7 +57,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-check-box',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

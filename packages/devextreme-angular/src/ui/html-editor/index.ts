@@ -24,9 +24,9 @@ import {
 } from '@angular/core';
 
 
-import { AIIntegration } from 'devextreme/common/ai-integration';
-import { Converter, dxHtmlEditorImageUpload, dxHtmlEditorMediaResizing, dxHtmlEditorMention, ContentReadyEvent, DisposingEvent, FocusInEvent, FocusOutEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, dxHtmlEditorTableContextMenu, dxHtmlEditorTableResizing, dxHtmlEditorToolbar, dxHtmlEditorVariables } from 'devextreme/ui/html_editor';
-import { EditorStyle, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
+import type { AIIntegration } from 'devextreme/common/ai-integration';
+import type { Converter, dxHtmlEditorImageUpload, dxHtmlEditorMediaResizing, dxHtmlEditorMention, ContentReadyEvent, DisposingEvent, FocusInEvent, FocusOutEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, dxHtmlEditorTableContextMenu, dxHtmlEditorTableResizing, dxHtmlEditorToolbar, dxHtmlEditorVariables } from 'devextreme/ui/html_editor';
+import type { EditorStyle, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
 
 import DxHtmlEditor from 'devextreme/ui/html_editor';
 
@@ -93,7 +93,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-html-editor',
-    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

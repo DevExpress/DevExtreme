@@ -12,8 +12,8 @@ import {
 
 
 
-import { Format } from 'devextreme/common/core/localization';
-import { SummaryType } from 'devextreme/common/grids';
+import type { Format } from 'devextreme/common/core/localization';
+import type { SummaryType } from 'devextreme/common/grids';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { PROPERTY_TOKEN_groupItems } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-group-item',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

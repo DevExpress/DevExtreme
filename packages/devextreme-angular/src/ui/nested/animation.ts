@@ -14,8 +14,8 @@ import {
 
 
 
-import { AnimationEaseMode } from 'devextreme/common/charts';
-import { AnimationConfig } from 'devextreme/common/core/animation';
+import type { AnimationEaseMode } from 'devextreme/common/charts';
+import type { AnimationConfig } from 'devextreme/common/core/animation';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-animation',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

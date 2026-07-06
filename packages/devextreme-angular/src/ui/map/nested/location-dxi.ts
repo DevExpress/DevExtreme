@@ -23,7 +23,6 @@ import { PROPERTY_TOKEN_locations } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-map-location',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

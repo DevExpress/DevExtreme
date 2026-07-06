@@ -12,9 +12,9 @@ import {
 
 
 
-import { DashStyle, Font } from 'devextreme/common/charts';
-import { VectorMapLegendItem, VectorMapMarkerShape } from 'devextreme/viz/vector_map';
-import { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
+import type { DashStyle, Font } from 'devextreme/common/charts';
+import type { VectorMapLegendItem, VectorMapMarkerShape } from 'devextreme/viz/vector_map';
+import type { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { PROPERTY_TOKEN_legends } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-vector-map-legend',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

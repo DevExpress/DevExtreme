@@ -5,12 +5,12 @@ import {
     Component,
 } from '@angular/core';
 
-import { HorizontalAlignment } from 'devextreme/common';
-import { ChartsColor, ChartsDataType, DashStyle, Font, HatchDirection, LabelPosition, PointInteractionMode, PointSymbol, RelativePosition, SeriesHoverMode, SeriesSelectionMode, SeriesType, TextOverflow, ValueErrorBarDisplayMode, ValueErrorBarType, WordWrap } from 'devextreme/common/charts';
-import { Format } from 'devextreme/common/core/localization';
-import { ChartSeriesAggregationMethod, FinancialChartReductionLevel } from 'devextreme/viz/chart';
-import { PieChartSeriesInteractionMode, SmallValuesGroupingMode } from 'devextreme/viz/pie_chart';
-import { PolarChartSeriesType } from 'devextreme/viz/polar_chart';
+import type { HorizontalAlignment } from 'devextreme/common';
+import type { ChartsColor, ChartsDataType, DashStyle, Font, HatchDirection, LabelPosition, PointInteractionMode, PointSymbol, RelativePosition, SeriesHoverMode, SeriesSelectionMode, SeriesType, TextOverflow, ValueErrorBarDisplayMode, ValueErrorBarType, WordWrap } from 'devextreme/common/charts';
+import type { Format } from 'devextreme/common/core/localization';
+import type { ChartSeriesAggregationMethod, FinancialChartReductionLevel } from 'devextreme/viz/chart';
+import type { PieChartSeriesInteractionMode, SmallValuesGroupingMode } from 'devextreme/viz/pie_chart';
+import type { PolarChartSeriesType } from 'devextreme/viz/polar_chart';
 
 @Component({
     template: ''

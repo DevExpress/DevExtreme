@@ -16,10 +16,10 @@ import {
 
 
 
-import { dxChartCommonSeriesSettings } from 'devextreme/viz/chart';
-import { Palette, PaletteExtensionMode, ChartsDataType } from 'devextreme/common/charts';
-import { ChartSeries } from 'devextreme/viz/common';
-import { ChartAxisScale } from 'devextreme/viz/range_selector';
+import type { dxChartCommonSeriesSettings } from 'devextreme/viz/chart';
+import type { Palette, PaletteExtensionMode, ChartsDataType } from 'devextreme/common/charts';
+import type { ChartSeries } from 'devextreme/viz/common';
+import type { ChartAxisScale } from 'devextreme/viz/range_selector';
 
 import {
     DxIntegrationModule,
@@ -34,7 +34,6 @@ import {
 
 @Component({
     selector: 'dxo-range-selector-chart',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

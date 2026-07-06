@@ -18,7 +18,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem, FormItemType } from 'devextreme/ui/form';
+import type { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem, FormItemType } from 'devextreme/ui/form';
 
 import {
     DxIntegrationModule,
@@ -36,7 +36,6 @@ import {
 
 @Component({
     selector: 'dxi-form-group-item',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

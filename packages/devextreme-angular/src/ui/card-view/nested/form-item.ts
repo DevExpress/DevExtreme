@@ -20,9 +20,9 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import * as CommonTypes from 'devextreme/common';
-import { FormItemComponent, FormItemType, LabelLocation } from 'devextreme/ui/form';
-import { HorizontalAlignment } from 'devextreme/common';
+import type * as CommonTypes from 'devextreme/common';
+import type { FormItemComponent, FormItemType, LabelLocation } from 'devextreme/ui/form';
+import type { HorizontalAlignment } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -41,7 +41,6 @@ import {
 
 @Component({
     selector: 'dxo-card-view-form-item',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

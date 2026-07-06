@@ -14,7 +14,7 @@ import {
 
 
 
-import { CollisionResolution } from 'devextreme/common/core/animation';
+import type { CollisionResolution } from 'devextreme/common/core/animation';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-lookup-collision',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

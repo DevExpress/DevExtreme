@@ -16,10 +16,10 @@ import {
 
 
 
-import dxDataGrid from 'devextreme/ui/data_grid';
-import { SummaryType } from 'devextreme/common/grids';
-import { Format } from 'devextreme/common/core/localization';
-import { HorizontalAlignment } from 'devextreme/common';
+import type dxDataGrid from 'devextreme/ui/data_grid';
+import type { SummaryType } from 'devextreme/common/grids';
+import type { Format } from 'devextreme/common/core/localization';
+import type { HorizontalAlignment } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -35,7 +35,6 @@ import {
 
 @Component({
     selector: 'dxo-data-grid-summary',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

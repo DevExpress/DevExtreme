@@ -5,9 +5,9 @@ import {
     Component,
 } from '@angular/core';
 
-import { HorizontalAlignment, PositionAlignment, VerticalAlignment } from 'devextreme/common';
-import { CollisionResolution, CollisionResolutionCombination } from 'devextreme/common/core/animation';
-import { UserDefinedElement } from 'devextreme/core/element';
+import type { HorizontalAlignment, PositionAlignment, VerticalAlignment } from 'devextreme/common';
+import type { CollisionResolution, CollisionResolutionCombination } from 'devextreme/common/core/animation';
+import type { UserDefinedElement } from 'devextreme/core/element';
 
 @Component({
     template: ''

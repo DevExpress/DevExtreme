@@ -14,8 +14,8 @@ import {
 
 
 
-import { HorizontalAlignment, VerticalEdge } from 'devextreme/common';
-import { Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
+import type { HorizontalAlignment, VerticalEdge } from 'devextreme/common';
+import type { Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-title',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

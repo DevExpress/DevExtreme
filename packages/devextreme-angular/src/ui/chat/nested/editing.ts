@@ -14,8 +14,7 @@ import {
 
 
 
-import dxChat from 'devextreme/ui/chat';
-import { Message } from 'devextreme/ui/chat';
+import type { default as dxChat, Message } from 'devextreme/ui/chat';
 
 import {
     DxIntegrationModule,
@@ -26,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chat-editing',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

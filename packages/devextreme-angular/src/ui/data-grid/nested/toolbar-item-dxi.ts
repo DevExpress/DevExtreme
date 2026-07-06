@@ -16,9 +16,9 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
-import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
-import { ToolbarLocation } from 'devextreme/ui/popup';
+import type { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
+import type { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
+import type { ToolbarLocation } from 'devextreme/ui/popup';
 
 import {
     DxIntegrationModule,
@@ -34,7 +34,6 @@ import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-data-grid-toolbar-item',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

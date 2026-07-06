@@ -16,8 +16,8 @@ import {
 
 
 
-import { dxFileUploaderOptions } from 'devextreme/ui/file_uploader';
-import { HtmlEditorImageUploadMode, dxHtmlEditorImageUploadTabItem, HtmlEditorImageUploadTab } from 'devextreme/ui/html_editor';
+import type { dxFileUploaderOptions } from 'devextreme/ui/file_uploader';
+import type { HtmlEditorImageUploadMode, dxHtmlEditorImageUploadTabItem, HtmlEditorImageUploadTab } from 'devextreme/ui/html_editor';
 
 import {
     DxIntegrationModule,
@@ -32,7 +32,6 @@ import {
 
 @Component({
     selector: 'dxo-html-editor-image-upload',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

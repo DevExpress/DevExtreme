@@ -16,8 +16,8 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextreme/common/charts';
-import { dxPieChartAnnotationConfig, PieChartAnnotationLocation } from 'devextreme/viz/pie_chart';
+import type { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextreme/common/charts';
+import type { dxPieChartAnnotationConfig, PieChartAnnotationLocation } from 'devextreme/viz/pie_chart';
 
 import {
     DxIntegrationModule,
@@ -33,7 +33,6 @@ import { PROPERTY_TOKEN_annotations } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-pie-chart-annotation',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

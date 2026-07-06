@@ -14,7 +14,7 @@ import {
 
 
 
-import { chartPointAggregationInfoObject, chartSeriesObject, ChartSeriesAggregationMethod } from 'devextreme/viz/chart';
+import type { chartPointAggregationInfoObject, chartSeriesObject, ChartSeriesAggregationMethod } from 'devextreme/viz/chart';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-range-selector-aggregation',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

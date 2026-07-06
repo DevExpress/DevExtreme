@@ -14,7 +14,7 @@ import {
 
 
 
-import { SingleMultipleOrNone } from 'devextreme/common';
+import type { SingleMultipleOrNone } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-sorting',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

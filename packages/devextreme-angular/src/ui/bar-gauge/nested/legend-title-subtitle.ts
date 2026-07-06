@@ -14,7 +14,7 @@ import {
 
 
 
-import { Font } from 'devextreme/common/charts';
+import type { Font } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-bar-gauge-legend-title-subtitle',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

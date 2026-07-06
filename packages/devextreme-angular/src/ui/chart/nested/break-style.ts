@@ -14,7 +14,7 @@ import {
 
 
 
-import { ScaleBreakLineStyle } from 'devextreme/common/charts';
+import type { ScaleBreakLineStyle } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-break-style',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

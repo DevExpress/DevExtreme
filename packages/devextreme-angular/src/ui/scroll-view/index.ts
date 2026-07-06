@@ -17,8 +17,8 @@ import {
 } from '@angular/core';
 
 
-import { ScrollDirection } from 'devextreme/common';
-import { DisposingEvent, InitializedEvent, OptionChangedEvent, PullDownEvent, ReachBottomEvent, ScrollEvent, UpdatedEvent } from 'devextreme/ui/scroll_view';
+import type { ScrollDirection } from 'devextreme/common';
+import type { DisposingEvent, InitializedEvent, OptionChangedEvent, PullDownEvent, ReachBottomEvent, ScrollEvent, UpdatedEvent } from 'devextreme/ui/scroll_view';
 
 import DxScrollView from 'devextreme/ui/scroll_view';
 
@@ -41,7 +41,6 @@ import {
  */
 @Component({
     selector: 'dx-scroll-view',
-    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

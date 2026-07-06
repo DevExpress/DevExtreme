@@ -14,7 +14,7 @@ import {
 
 
 
-import { ChartsColor, DashStyle, HatchDirection } from 'devextreme/common/charts';
+import type { ChartsColor, DashStyle, HatchDirection } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-hover-style',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

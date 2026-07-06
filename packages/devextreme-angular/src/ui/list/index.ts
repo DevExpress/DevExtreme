@@ -21,15 +21,14 @@ import {
     QueryList
 } from '@angular/core';
 
-export { ExplicitTypes } from 'devextreme/ui/list';
+export type { ExplicitTypes } from 'devextreme/ui/list';
 
-import DataSource from 'devextreme/data/data_source';
-import { dxListItem, ItemDeleteMode, ListMenuMode, ContentReadyEvent, DisposingEvent, GroupRenderedEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemDeletedEvent, ItemDeletingEvent, ItemHoldEvent, ItemRenderedEvent, ItemReorderedEvent, ItemSwipeEvent, OptionChangedEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, SelectAllValueChangedEvent, SelectionChangedEvent, SelectionChangingEvent } from 'devextreme/ui/list';
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
-import { dxSortableOptions } from 'devextreme/ui/sortable';
-import { PageLoadMode, SearchMode, SelectAllMode, SingleMultipleAllOrNone, ScrollbarMode } from 'devextreme/common';
-import { dxTextBoxOptions } from 'devextreme/ui/text_box';
+import type { dxListItem, ItemDeleteMode, ListMenuMode, ContentReadyEvent, DisposingEvent, GroupRenderedEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemDeletedEvent, ItemDeletingEvent, ItemHoldEvent, ItemRenderedEvent, ItemReorderedEvent, ItemSwipeEvent, OptionChangedEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, SelectAllValueChangedEvent, SelectionChangedEvent, SelectionChangingEvent } from 'devextreme/ui/list';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data/store';
+import type { dxSortableOptions } from 'devextreme/ui/sortable';
+import type { PageLoadMode, SearchMode, SelectAllMode, SingleMultipleAllOrNone, ScrollbarMode } from 'devextreme/common';
+import type { dxTextBoxOptions } from 'devextreme/ui/text_box';
 
 import DxList from 'devextreme/ui/list';
 
@@ -48,7 +47,6 @@ import {
 import { DxoItemDraggingModule } from 'devextreme-angular/ui/nested';
 import { DxoCursorOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
-import { DxiMenuItemModule } from 'devextreme-angular/ui/nested';
 import { DxoSearchEditorOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
 import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
@@ -73,7 +71,6 @@ import {
  */
 @Component({
     selector: 'dx-list',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],
@@ -1501,7 +1498,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     DxoItemDraggingModule,
     DxoCursorOffsetModule,
     DxiItemModule,
-    DxiMenuItemModule,
     DxoSearchEditorOptionsModule,
     DxiButtonModule,
     DxoOptionsModule,
@@ -1520,7 +1516,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     DxoItemDraggingModule,
     DxoCursorOffsetModule,
     DxiItemModule,
-    DxiMenuItemModule,
     DxoSearchEditorOptionsModule,
     DxiButtonModule,
     DxoOptionsModule,

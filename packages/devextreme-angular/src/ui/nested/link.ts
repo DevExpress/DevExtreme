@@ -14,8 +14,8 @@ import {
 
 
 
-import { HatchDirection } from 'devextreme/common/charts';
-import { SankeyColorMode } from 'devextreme/viz/sankey';
+import type { HatchDirection } from 'devextreme/common/charts';
+import type { SankeyColorMode } from 'devextreme/viz/sankey';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-link',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -12,7 +12,7 @@ import {
 
 
 
-import { DataChangeType } from 'devextreme/common/grids';
+import type { DataChangeType } from 'devextreme/common/grids';
 
 import {
     DxIntegrationModule,
@@ -24,7 +24,6 @@ import { PROPERTY_TOKEN_changes } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-card-view-change',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

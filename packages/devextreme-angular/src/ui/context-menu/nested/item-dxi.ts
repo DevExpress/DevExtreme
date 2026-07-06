@@ -18,7 +18,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { dxContextMenuItem } from 'devextreme/ui/context_menu';
+import type { dxContextMenuItem } from 'devextreme/ui/context_menu';
 
 import {
     DxIntegrationModule,
@@ -36,7 +36,6 @@ import {
 
 @Component({
     selector: 'dxi-context-menu-item',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

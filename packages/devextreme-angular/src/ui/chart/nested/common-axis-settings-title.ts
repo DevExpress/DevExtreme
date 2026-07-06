@@ -14,8 +14,8 @@ import {
 
 
 
-import { HorizontalAlignment } from 'devextreme/common';
-import { Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
+import type { HorizontalAlignment } from 'devextreme/common';
+import type { Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-common-axis-settings-title',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

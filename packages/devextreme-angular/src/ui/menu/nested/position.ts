@@ -14,8 +14,8 @@ import {
 
 
 
-import { PositionAlignment, HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
-import { CollisionResolutionCombination, CollisionResolution } from 'devextreme/common/core/animation';
+import type { PositionAlignment, HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
+import type { CollisionResolutionCombination, CollisionResolution } from 'devextreme/common/core/animation';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-menu-position',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -14,7 +14,7 @@ import {
 
 
 
-import { ExportFormat } from 'devextreme/common';
+import type { ExportFormat } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-vector-map-export',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

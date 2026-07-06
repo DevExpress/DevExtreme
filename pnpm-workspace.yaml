@@ -107,7 +107,7 @@ catalogs:
     "typescript": 5.5.4
     "zone.js": 0.15.1
   tools:
-    "devextreme-internal-tools": 20.1.1
+    "devextreme-internal-tools": 20.5.0
     "prettier": 3.5.3
     "ts-node": 10.9.2
     "@types/node": 20.12.8
@@ -141,3 +141,4 @@ minimumReleaseAgeExclude:
   - '@angular/compiler@19.2.26'
   - undici@7.28.0
   - '@sigstore/core@3.2.1'
+  - devextreme-internal-tools@20.5.0

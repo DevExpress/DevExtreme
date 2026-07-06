@@ -12,8 +12,8 @@ import {
 
 
 
-import { AllDayPanelMode, CellAppointmentsLimit, dxSchedulerScrolling, ViewType } from 'devextreme/ui/scheduler';
-import { FirstDayOfWeek, Orientation } from 'devextreme/common';
+import type { AllDayPanelMode, CellAppointmentsLimit, dxSchedulerScrolling, ViewType } from 'devextreme/ui/scheduler';
+import type { FirstDayOfWeek, Orientation } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { PROPERTY_TOKEN_views } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-scheduler-view',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

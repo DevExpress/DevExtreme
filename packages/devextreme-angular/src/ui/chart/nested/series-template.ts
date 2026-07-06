@@ -14,7 +14,7 @@ import {
 
 
 
-import { ChartSeries } from 'devextreme/viz/common';
+import type { ChartSeries } from 'devextreme/viz/common';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-series-template',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

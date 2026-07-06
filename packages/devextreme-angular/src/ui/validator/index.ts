@@ -25,8 +25,8 @@ import {
 } from '@angular/core';
 
 
-import * as CommonTypes from 'devextreme/common';
-import { DisposingEvent, InitializedEvent, OptionChangedEvent, ValidatedEvent } from 'devextreme/ui/validator';
+import type * as CommonTypes from 'devextreme/common';
+import type { DisposingEvent, InitializedEvent, OptionChangedEvent, ValidatedEvent } from 'devextreme/ui/validator';
 
 import DxValidator from 'devextreme/ui/validator';
 
@@ -67,7 +67,6 @@ import {
  */
 @Component({
     selector: 'dx-validator',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

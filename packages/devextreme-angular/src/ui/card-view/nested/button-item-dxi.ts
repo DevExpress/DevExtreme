@@ -12,9 +12,9 @@ import {
 
 
 
-import { dxButtonOptions } from 'devextreme/ui/button';
-import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
-import { FormItemType, FormPredefinedButtonItem } from 'devextreme/ui/form';
+import type { dxButtonOptions } from 'devextreme/ui/button';
+import type { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
+import type { FormItemType, FormPredefinedButtonItem } from 'devextreme/ui/form';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-card-view-button-item',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -16,9 +16,8 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import DataSource from 'devextreme/data/data_source';
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data/store';
 
 import {
     DxIntegrationModule,
@@ -34,7 +33,6 @@ import { PROPERTY_TOKEN_mentions } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-html-editor-mention',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

@@ -16,7 +16,7 @@ import {
 
 
 
-import { PanelVisibility, ShapeCategory, ShapeType, ToolboxDisplayMode } from 'devextreme/ui/diagram';
+import type { PanelVisibility, ShapeCategory, ShapeType, ToolboxDisplayMode } from 'devextreme/ui/diagram';
 
 import {
     DxIntegrationModule,
@@ -31,7 +31,6 @@ import {
 
 @Component({
     selector: 'dxo-toolbox',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

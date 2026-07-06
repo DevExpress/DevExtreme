@@ -12,7 +12,7 @@ import {
 
 
 
-import { ChartsColor } from 'devextreme/common/charts';
+import type { ChartsColor } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -24,7 +24,6 @@ import { PROPERTY_TOKEN_ranges } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-range',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

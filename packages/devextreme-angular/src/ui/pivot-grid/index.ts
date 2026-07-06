@@ -20,11 +20,10 @@ import {
 } from '@angular/core';
 
 
-import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-import { PivotGridDataFieldArea, CellClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DisposingEvent, ExportingEvent, InitializedEvent, OptionChangedEvent, PivotGridRowHeaderLayout, PivotGridTotalDisplayMode } from 'devextreme/ui/pivot_grid';
-import { PivotGridDataSourceOptions } from 'devextreme/ui/pivot_grid/data_source';
-import { ApplyChangesMode, HeaderFilterSearchConfig, StateStoreType } from 'devextreme/common/grids';
-import { FieldChooserLayout, ScrollMode, Mode } from 'devextreme/common';
+import type { PivotGridDataFieldArea, CellClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DisposingEvent, ExportingEvent, InitializedEvent, OptionChangedEvent, PivotGridRowHeaderLayout, PivotGridTotalDisplayMode } from 'devextreme/ui/pivot_grid';
+import type { default as PivotGridDataSource, PivotGridDataSourceOptions } from 'devextreme/ui/pivot_grid/data_source';
+import type { ApplyChangesMode, HeaderFilterSearchConfig, StateStoreType } from 'devextreme/common/grids';
+import type { FieldChooserLayout, ScrollMode, Mode } from 'devextreme/common';
 
 import DxPivotGrid from 'devextreme/ui/pivot_grid';
 
@@ -70,7 +69,6 @@ import { DxoPivotGridTextsModule } from 'devextreme-angular/ui/pivot-grid/nested
  */
 @Component({
     selector: 'dx-pivot-grid',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

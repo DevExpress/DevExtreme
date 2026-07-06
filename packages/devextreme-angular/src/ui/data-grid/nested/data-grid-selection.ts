@@ -14,9 +14,9 @@ import {
 
 
 
-import { SingleMultipleOrNone, SelectAllMode } from 'devextreme/common';
-import { SelectionSensitivity } from 'devextreme/ui/data_grid';
-import { SelectionColumnDisplayMode } from 'devextreme/common/grids';
+import type { SingleMultipleOrNone, SelectAllMode } from 'devextreme/common';
+import type { SelectionSensitivity } from 'devextreme/ui/data_grid';
+import type { SelectionColumnDisplayMode } from 'devextreme/common/grids';
 
 import {
     DxIntegrationModule,
@@ -27,7 +27,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-data-grid-selection',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

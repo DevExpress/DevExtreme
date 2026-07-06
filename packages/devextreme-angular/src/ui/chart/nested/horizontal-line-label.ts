@@ -14,9 +14,9 @@ import {
 
 
 
-import { chartPointObject } from 'devextreme/viz/chart';
-import { Font } from 'devextreme/common/charts';
-import { Format } from 'devextreme/common/core/localization';
+import type { chartPointObject } from 'devextreme/viz/chart';
+import type { Font } from 'devextreme/common/charts';
+import type { Format } from 'devextreme/common/core/localization';
 
 import {
     DxIntegrationModule,
@@ -27,7 +27,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-horizontal-line-label',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -14,7 +14,7 @@ import {
 
 
 
-import { Format } from 'devextreme/common/core/localization';
+import type { Format } from 'devextreme/common/core/localization';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-range-selector-marker',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -14,7 +14,7 @@ import {
 
 
 
-import { Position } from 'devextreme/common';
+import type { Position } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-scroll-bar',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

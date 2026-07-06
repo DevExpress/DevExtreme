@@ -12,7 +12,7 @@ import {
 
 
 
-import { FormItemType } from 'devextreme/ui/form';
+import type { FormItemType } from 'devextreme/ui/form';
 
 import {
     DxIntegrationModule,
@@ -24,7 +24,6 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-form-empty-item',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

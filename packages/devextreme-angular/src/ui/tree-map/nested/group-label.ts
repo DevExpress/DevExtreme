@@ -14,7 +14,7 @@ import {
 
 
 
-import { Font, TextOverflow } from 'devextreme/common/charts';
+import type { Font, TextOverflow } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-map-group-label',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

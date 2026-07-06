@@ -14,7 +14,7 @@ import {
 
 
 
-import { ShapeCategory, ShapeType, ToolboxDisplayMode } from 'devextreme/ui/diagram';
+import type { ShapeCategory, ShapeType, ToolboxDisplayMode } from 'devextreme/ui/diagram';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-context-toolbox',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

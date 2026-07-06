@@ -16,7 +16,7 @@ import {
 
 
 
-import { TimeInterval } from 'devextreme/common/charts';
+import type { TimeInterval } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -27,7 +27,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-visual-range',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

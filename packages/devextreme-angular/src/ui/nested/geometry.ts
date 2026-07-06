@@ -14,7 +14,7 @@ import {
 
 
 
-import { Orientation } from 'devextreme/common';
+import type { Orientation } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-geometry',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

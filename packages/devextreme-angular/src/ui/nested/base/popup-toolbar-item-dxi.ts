@@ -5,9 +5,9 @@ import {
     Component,
 } from '@angular/core';
 
-import { ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
-import { ToolbarLocation } from 'devextreme/ui/popup';
-import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
+import type { ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
+import type { ToolbarLocation } from 'devextreme/ui/popup';
+import type { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 
 @Component({
     template: ''

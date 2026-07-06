@@ -16,9 +16,9 @@ import {
 
 
 
-import { DataChange } from 'devextreme/common/grids';
-import { dxFormOptions } from 'devextreme/ui/form';
-import { EditingTexts } from 'devextreme/ui/card_view';
+import type { DataChange } from 'devextreme/common/grids';
+import type { dxFormOptions } from 'devextreme/ui/form';
+import type { EditingTexts } from 'devextreme/ui/card_view';
 
 import {
     DxIntegrationModule,
@@ -33,7 +33,6 @@ import {
 
 @Component({
     selector: 'dxo-card-view-editing',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

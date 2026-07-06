@@ -14,7 +14,7 @@ import {
 
 
 
-import { PieChartSeries } from 'devextreme/viz/pie_chart';
+import type { PieChartSeries } from 'devextreme/viz/pie_chart';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-pie-chart-series-template',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

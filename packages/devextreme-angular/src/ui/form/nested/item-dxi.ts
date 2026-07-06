@@ -18,11 +18,11 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import * as CommonTypes from 'devextreme/common';
-import { FormItemComponent, FormItemType, LabelLocation, FormPredefinedButtonItem, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
-import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
-import { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
-import { dxButtonOptions } from 'devextreme/ui/button';
+import type * as CommonTypes from 'devextreme/common';
+import type { FormItemComponent, FormItemType, LabelLocation, FormPredefinedButtonItem, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
+import type { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
+import type { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
+import type { dxButtonOptions } from 'devextreme/ui/button';
 
 import {
     DxIntegrationModule,
@@ -42,7 +42,6 @@ import {
 
 @Component({
     selector: 'dxi-form-item',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

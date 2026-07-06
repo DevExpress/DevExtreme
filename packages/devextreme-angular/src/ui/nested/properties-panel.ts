@@ -16,7 +16,7 @@ import {
 
 
 
-import { Command, CustomCommand, PanelVisibility } from 'devextreme/ui/diagram';
+import type { Command, CustomCommand, PanelVisibility } from 'devextreme/ui/diagram';
 
 import {
     DxIntegrationModule,
@@ -31,7 +31,6 @@ import {
 
 @Component({
     selector: 'dxo-properties-panel',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

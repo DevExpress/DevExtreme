@@ -14,7 +14,7 @@ import {
 
 
 
-import { PolarChartSeries } from 'devextreme/viz/polar_chart';
+import type { PolarChartSeries } from 'devextreme/viz/polar_chart';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-series-template',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -14,7 +14,7 @@ import {
 
 
 
-import { ChartSeriesAggregationMethod } from 'devextreme/viz/chart';
+import type { ChartSeriesAggregationMethod } from 'devextreme/viz/chart';
 
 import {
     DxIntegrationModule,
@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-aggregation',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

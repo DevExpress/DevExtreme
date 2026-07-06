@@ -14,8 +14,8 @@ import {
 
 
 
-import { Mode } from 'devextreme/common';
-import { LoadPanelIndicatorProperties } from 'devextreme/ui/load_panel';
+import type { Mode } from 'devextreme/common';
+import type { LoadPanelIndicatorProperties } from 'devextreme/ui/load_panel';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-load-panel',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

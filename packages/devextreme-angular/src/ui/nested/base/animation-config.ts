@@ -5,8 +5,8 @@ import {
     Component,
 } from '@angular/core';
 
-import { Direction } from 'devextreme/common';
-import { AnimationState, AnimationType } from 'devextreme/common/core/animation';
+import type { Direction } from 'devextreme/common';
+import type { AnimationState, AnimationType } from 'devextreme/common/core/animation';
 
 @Component({
     template: ''

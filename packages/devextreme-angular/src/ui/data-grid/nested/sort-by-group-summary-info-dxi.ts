@@ -12,7 +12,7 @@ import {
 
 
 
-import { SortOrder } from 'devextreme/common';
+import type { SortOrder } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -24,7 +24,6 @@ import { PROPERTY_TOKEN_sortByGroupSummaryInfo } from 'devextreme-angular/core/t
 
 @Component({
     selector: 'dxi-data-grid-sort-by-group-summary-info',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

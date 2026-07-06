@@ -22,8 +22,8 @@ import {
 } from '@angular/core';
 
 
-import { dxButtonGroupItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/button_group';
-import { SingleMultipleOrNone, ButtonStyle } from 'devextreme/common';
+import type { dxButtonGroupItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/button_group';
+import type { SingleMultipleOrNone, ButtonStyle } from 'devextreme/common';
 
 import DxButtonGroup from 'devextreme/ui/button_group';
 
@@ -53,7 +53,6 @@ import {
  */
 @Component({
     selector: 'dx-button-group',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

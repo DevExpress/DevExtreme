@@ -22,9 +22,9 @@ import {
 } from '@angular/core';
 
 
-import { Format } from 'devextreme/common/core/localization';
-import { VerticalEdge, TooltipShowMode, ValidationMessageMode, Position, ValidationStatus, SliderValueChangeMode } from 'devextreme/common';
-import { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/range_slider';
+import type { Format } from 'devextreme/common/core/localization';
+import type { VerticalEdge, TooltipShowMode, ValidationMessageMode, Position, ValidationStatus, SliderValueChangeMode } from 'devextreme/common';
+import type { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/range_slider';
 
 import DxRangeSlider from 'devextreme/ui/range_slider';
 
@@ -64,7 +64,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-range-slider',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

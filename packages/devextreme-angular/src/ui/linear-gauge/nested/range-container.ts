@@ -16,8 +16,8 @@ import {
 
 
 
-import { ChartsColor, Palette, PaletteExtensionMode } from 'devextreme/common/charts';
-import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
+import type { ChartsColor, Palette, PaletteExtensionMode } from 'devextreme/common/charts';
+import type { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -32,7 +32,6 @@ import {
 
 @Component({
     selector: 'dxo-linear-gauge-range-container',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

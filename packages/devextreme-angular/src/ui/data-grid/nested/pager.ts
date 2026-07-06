@@ -14,8 +14,8 @@ import {
 
 
 
-import { PagerPageSize } from 'devextreme/common/grids';
-import { Mode, DisplayMode } from 'devextreme/common';
+import type { PagerPageSize } from 'devextreme/common/grids';
+import type { Mode, DisplayMode } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-pager',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

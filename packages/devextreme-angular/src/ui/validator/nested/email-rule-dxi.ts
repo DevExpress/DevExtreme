@@ -12,7 +12,7 @@ import {
 
 
 
-import { ValidationRuleType } from 'devextreme/common';
+import type { ValidationRuleType } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -24,7 +24,6 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-validator-email-rule',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

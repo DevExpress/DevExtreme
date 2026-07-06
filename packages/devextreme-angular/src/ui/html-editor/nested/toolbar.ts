@@ -16,7 +16,7 @@ import {
 
 
 
-import { AIToolbarItem, dxHtmlEditorToolbarItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
+import type { AIToolbarItem, dxHtmlEditorToolbarItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
 
 import {
     DxIntegrationModule,
@@ -31,7 +31,6 @@ import {
 
 @Component({
     selector: 'dxo-html-editor-toolbar',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

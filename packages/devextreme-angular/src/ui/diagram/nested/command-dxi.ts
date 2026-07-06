@@ -14,8 +14,8 @@ import {
 
 
 
-import { Command, CustomCommand } from 'devextreme/ui/diagram';
-import { ToolbarItemLocation } from 'devextreme/common';
+import type { Command, CustomCommand } from 'devextreme/ui/diagram';
+import type { ToolbarItemLocation } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -30,7 +30,6 @@ import {
 
 @Component({
     selector: 'dxi-diagram-command',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

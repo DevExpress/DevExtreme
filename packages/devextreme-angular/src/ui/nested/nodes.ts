@@ -14,10 +14,10 @@ import {
 
 
 
-import { Orientation } from 'devextreme/common';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { DataLayoutType } from 'devextreme/ui/diagram';
+import type { Orientation } from 'devextreme/common';
+import type { Store } from 'devextreme/data';
+import type { default as DataSource, Options as DataSourceOptions } from 'devextreme/data/data_source';
+import type { DataLayoutType } from 'devextreme/ui/diagram';
 
 import {
     DxIntegrationModule,
@@ -28,7 +28,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-nodes',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
