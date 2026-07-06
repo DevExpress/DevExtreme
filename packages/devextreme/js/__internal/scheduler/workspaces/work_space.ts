@@ -788,6 +788,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return this.$element();
   }
 
+  _renderFocusTarget(): void {
+    this._focusTarget().attr('tabindex', -1);
+  }
+
   protected isVerticalGroupedWorkSpace(): boolean { // TODO move to the Model
     return Boolean(this.option().groups?.length) && this.option().groupOrientation === 'vertical';
   }
