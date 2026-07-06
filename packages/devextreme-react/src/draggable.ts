@@ -16,9 +16,9 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 
 type IDraggableOptionsNarrowedEvents = {
   onDisposing?: ((e: DisposingEvent) => void);
-  onDragEnd?: ((e: DragEndEvent) => void);
-  onDragMove?: ((e: DragMoveEvent) => void);
-  onDragStart?: ((e: DragStartEvent) => void);
+  onDragEnd?: ((e: DragEndEvent) => void) | undefined;
+  onDragMove?: ((e: DragMoveEvent) => void) | undefined;
+  onDragStart?: ((e: DragStartEvent) => void) | undefined;
   onInitialized?: ((e: InitializedEvent) => void);
 }
 

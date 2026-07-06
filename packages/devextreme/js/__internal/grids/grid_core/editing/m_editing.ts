@@ -1168,7 +1168,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   protected _resetEditColumnName() {
-    this._setEditColumnName(null, true);
+    this._setEditColumnName(undefined, true);
   }
 
   protected _getEditColumn() {
@@ -1214,7 +1214,7 @@ class EditingControllerImpl extends modules.ViewController {
 
   protected _resetEditRowKey() {
     this._refocusEditCell = false;
-    this._setEditRowKey(null, true);
+    this._setEditRowKey(undefined, true);
   }
 
   protected _resetEditIndices() {
@@ -2624,7 +2624,7 @@ export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataControll
         (change) => change.type === 'insert' && equalByValue(editRowKey, change.key),
       );
       if (!isEditNewItem && dataSourceKeys.every((key) => !equalByValue(editRowKey, key))) {
-        this.option('editing.editRowKey', null);
+        this.option('editing.editRowKey', undefined);
       }
     }
     return result;
@@ -2939,9 +2939,9 @@ export const editingModule = {
 
         startEditAction: 'click',
 
-        editRowKey: null,
+        editRowKey: undefined,
 
-        editColumnName: null,
+        editColumnName: undefined,
 
         changes: [],
       },
