@@ -1,3 +1,4 @@
+import { ClientFunction } from 'testcafe';
 import type { WidgetName } from '../types';
 import DataGrid from '../dataGrid';
 
@@ -16,5 +17,14 @@ export default class TreeList extends DataGrid {
 
   getAdaptiveButtonSelector(): string {
     return `.${CLASS.adaptiveColumnButton}`;
+  }
+
+  apiLoadDescendants(key?: unknown): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).loadDescendants(key),
+      { dependencies: { getInstance, key } },
+    )();
   }
 }
