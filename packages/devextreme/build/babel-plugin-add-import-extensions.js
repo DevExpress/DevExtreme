@@ -13,12 +13,13 @@ module.exports = function addImportExtensions({ types: t }) {
 
         if (filename) {
             const resolved = path.resolve(path.dirname(filename), source);
-            try {
-                if (fs.statSync(resolved).isDirectory()) {
-                    return source + '/index.js';
-                }
-            } catch {
-                // path is a file (no bare entry) — fall through to .js
+            // Mirror TypeScript resolution: .ts file takes priority over directory index.ts
+            // (both can coexist with the same base name, e.g. funnel.ts + funnel/)
+            if (fs.existsSync(resolved + '.ts') || fs.existsSync(resolved + '.js')) {
+                return source + '.js';
+            }
+            if (fs.existsSync(path.join(resolved, 'index.ts')) || fs.existsSync(path.join(resolved, 'index.js'))) {
+                return source + '/index.js';
             }
         }
 
