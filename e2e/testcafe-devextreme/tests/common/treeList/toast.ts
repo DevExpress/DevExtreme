@@ -7,7 +7,7 @@ import { testScreenshot } from '../../../helpers/themeUtils';
 fixture.disablePageReloads`Toasts in TreeList`
   .page(url(__dirname, '../../container.html'));
 
-test('Toast should be visible after calling and should be not visible after default display time', async (t) => {
+test('Toast should be visible after calling', async (t) => {
   const treeList = new TreeList('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t
@@ -23,6 +23,24 @@ test('Toast should be visible after calling and should be not visible after defa
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
   await t.expect(treeList.getToast().exists).notOk();
+}).before(async () => {
+  await createWidget('dxTreeList', {});
+});
+
+test('Toast should hide after the display time', async (t) => {
+  const treeList = new TreeList('#container');
+
+  await t
+    .expect(treeList.isReady())
+    .ok();
+
+  await treeList.apiShowErrorToast({ displayTime: 1000 });
+  await t
+    .expect(treeList.getToast().exists).ok();
+
+  await t
+    .wait(1000)
+    .expect(treeList.getToast().exists).notOk();
 }).before(async () => {
   await createWidget('dxTreeList', {});
 });
