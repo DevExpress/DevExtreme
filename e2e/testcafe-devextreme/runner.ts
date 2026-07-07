@@ -130,9 +130,14 @@ function getArgs(): ParsedArgs {
   }) as ParsedArgs;
 }
 
-function writeTestsReport(reportPath: string, tests: Set<string>): void {
+function writeTestsReport(reportPath: string, tests: Set<string>, failedCount?: number): void {
   fs.mkdirSync(path.dirname(reportPath), { recursive: true });
-  fs.writeFileSync(reportPath, JSON.stringify({ tests: [...tests] }, null, 2));
+  fs.writeFileSync(
+    reportPath,
+    // failedCount can exceed tests.size: failures in test.before hooks
+    // don't reach the test.after hook, so their names are unknown
+    JSON.stringify({ tests: [...tests], failedCount: failedCount ?? tests.size }, null, 2),
+  );
 }
 
 async function main() {
@@ -347,6 +352,14 @@ async function main() {
       let attemptsLeft = retryAttempts;
 
       while (attemptsLeft > 0 && failedCount > 0) {
+        if (failedTests.size === 0) {
+          // Failures in test.before hooks don't reach the test.after hook,
+          // so their names are unknown - retrying would rerun the whole suite.
+          // eslint-disable-next-line no-console
+          console.info('Failed tests could not be identified (hook failures) - skipping retries.');
+          break;
+        }
+
         const attemptNumber = retryAttempts - attemptsLeft + 1;
 
         /* eslint-disable no-console */
@@ -409,7 +422,7 @@ async function main() {
     }
 
     if (args.reportFailures) {
-      writeTestsReport(args.reportFailures, failedTests);
+      writeTestsReport(args.reportFailures, failedTests, failedCount);
     }
 
     if (args.reportUnstable && failedCount === 1 && failedTests.size === 1) {
