@@ -23,7 +23,24 @@ test('Toast should be visible after calling and should be not visible after defa
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-  await t.expect(dataGrid.getToast().exists).notOk();
+}).before(async () => {
+  await createWidget('dxDataGrid', {});
+});
+
+test('Toast should hide after the display time', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  await dataGrid.apiShowErrorToast({ displayTime: 1000 });
+  await t
+    .expect(dataGrid.getToast().exists).ok();
+
+  await t
+    .wait(1000)
+    .expect(dataGrid.getToast().exists).notOk();
 }).before(async () => {
   await createWidget('dxDataGrid', {});
 });
