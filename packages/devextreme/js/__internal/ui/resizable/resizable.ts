@@ -773,6 +773,7 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
       case 'step':
       case 'roundStepValue':
       case 'keepAspectRatio':
+      case 'cancelOnEscape':
         break;
       default:
         super._optionChanged(args);
