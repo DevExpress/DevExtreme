@@ -165,7 +165,6 @@ export class FilterPanelView extends modules.View {
 
   private _getRemoveButtonElement() {
     const that = this;
-    // @ts-expect-error
     const clearFilterValue = () => that.option('filterValue', null);
     const clearFilterText = that.option('filterPanel.texts.clearFilter')
       ?? messageLocalization.format('dxDataGrid-filterPanelClearFilter');

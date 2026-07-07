@@ -34,6 +34,26 @@ export class SchedulerModel {
     return new ToolbarModel(this.queries.getByRole('toolbar'));
   }
 
+  getHeader(): HTMLElement {
+    const result = this.container.querySelector('.dx-scheduler-header');
+
+    if (!result) {
+      throw new Error('Scheduler header element not found');
+    }
+
+    return result as HTMLElement;
+  }
+
+  getWorkSpace(): HTMLElement {
+    const result = this.container.querySelector('.dx-scheduler-work-space');
+
+    if (!result) {
+      throw new Error('Scheduler workspace element not found');
+    }
+
+    return result as HTMLElement;
+  }
+
   getStatusContent(): string {
     const statusElement = this.container.querySelector('.dx-screen-reader-only');
     return statusElement?.textContent ?? '';
