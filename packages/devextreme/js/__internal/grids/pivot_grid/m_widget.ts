@@ -1157,7 +1157,7 @@ class PivotGrid extends Widget {
     super._initMarkup();
     that.$element()
       .addClass(PIVOTGRID_CLASS)
-      .attr('role', 'grid')
+      .attr('role', 'group')
       .attr('aria-label', localizationMessage.format('dxPivotGrid-ariaLabel'));
   }
 
@@ -1252,8 +1252,6 @@ class PivotGrid extends Widget {
 
     dataArea.tableElement().prepend(columnsArea.headElement());
 
-    that._setAriaGridAttributes(dataArea, rowsArea, columnsArea);
-
     if (isFirstDrawing) {
       that._renderLoadPanel(dataArea.groupElement().parent(), that.$element());
       that._renderDescriptionArea();
@@ -1262,6 +1260,8 @@ class PivotGrid extends Widget {
       columnsArea.renderScrollable();
       dataArea.renderScrollable();
     }
+
+    that._setAriaGridAttributes(dataArea, rowsArea);
 
     [dataArea, rowsArea, columnsArea].forEach((area) => {
       unsubscribeScrollEvents(area);
@@ -1277,15 +1277,13 @@ class PivotGrid extends Widget {
     that._update(isFirstDrawing);
   }
 
-  _setAriaGridAttributes(dataArea, rowsArea, columnsArea) {
-    const tableIds = [
-      columnsArea.tableElement().attr('id'),
-      rowsArea.tableElement().attr('id'),
-      dataArea.tableElement().attr('id'),
-    ].filter(isDefined).join(' ');
+  _setAriaGridAttributes(dataArea, rowsArea) {
+    const $gridElement = dataArea.tableElement().parent();
+    const rowsTableId = rowsArea.tableElement().attr('id');
 
-    this.$element()
-      .attr('aria-owns', tableIds)
+    $gridElement
+      .attr('role', 'grid')
+      .attr('aria-owns', rowsTableId)
       .attr('aria-rowcount', this._dataController.totalRowCount())
       .attr('aria-colcount', this._dataController.totalColumnCount());
   }

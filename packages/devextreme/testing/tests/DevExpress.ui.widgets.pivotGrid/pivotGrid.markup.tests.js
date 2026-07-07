@@ -204,10 +204,10 @@ QUnit.module('PivotGrid accessibility markup', {
         $('#qunit-fixture').html('<div id=\'pivotGrid\' />');
     });
 
-    QUnit.test('Root element has role="grid"', function(assert) {
+    QUnit.test('Root element has role="group"', function(assert) {
         const pivotGrid = createPivotGrid({});
 
-        assert.strictEqual(pivotGrid.$element().attr('role'), 'grid', 'root role');
+        assert.strictEqual(pivotGrid.$element().attr('role'), 'group', 'root role');
     });
 
     QUnit.test('Root element has aria-label after render', function(assert) {
@@ -593,7 +593,7 @@ QUnit.module('PivotGrid accessibility markup', {
         $whiteSpaceCells.each((_, cell) => assert.strictEqual(cell.getAttribute('role'), null, 'white-space filler cell has no header role'));
     });
 
-    QUnit.test('Root element has aria-owns linking the area tables and aria-rowcount/aria-colcount from the data source', function(assert) {
+    QUnit.test('Data area\'s grid element has role="grid", aria-owns linking the row headers table, and aria-rowcount/aria-colcount from the data source', function(assert) {
         if(!windowUtils.hasWindow()) {
             assert.expect(0);
             return;
@@ -606,23 +606,22 @@ QUnit.module('PivotGrid accessibility markup', {
         this.clock.tick(10);
 
         const dataController = pivotGrid._dataController;
-        const columnsTableId = pivotGrid._columnsArea.tableElement().attr('id');
         const rowsTableId = pivotGrid._rowsArea.tableElement().attr('id');
         const dataTableId = pivotGrid._dataArea.tableElement().attr('id');
+        const $gridElement = pivotGrid._dataArea.tableElement().parent();
 
-        const ariaOwns = pivotGrid.$element().attr('aria-owns').split(' ');
-
-        [columnsTableId, rowsTableId, dataTableId].forEach((id) => {
-            assert.ok(id, 'table has an id');
-            assert.ok(ariaOwns.includes(id), `aria-owns includes ${id}`);
-        });
+        assert.ok(dataTableId, 'data table has an id');
+        assert.ok($gridElement.hasClass('dx-scrollable-content'), 'grid element is the data table\'s scrollable content wrapper');
+        assert.strictEqual($gridElement.attr('role'), 'grid', 'grid element has role="grid"');
+        assert.ok(rowsTableId, 'rows table has an id');
+        assert.strictEqual($gridElement.attr('aria-owns'), rowsTableId, 'aria-owns references the row headers table');
 
         assert.strictEqual(
-            pivotGrid.$element().attr('aria-rowcount'),
+            $gridElement.attr('aria-rowcount'),
             String(dataController.totalRowCount())
         );
         assert.strictEqual(
-            pivotGrid.$element().attr('aria-colcount'),
+            $gridElement.attr('aria-colcount'),
             String(dataController.totalColumnCount())
         );
     });
