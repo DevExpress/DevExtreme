@@ -520,7 +520,7 @@ QUnit.module('PivotGrid accessibility markup', {
         }
     });
 
-    QUnit.test('Inner area tables and their thead/tbody have role="presentation"', function(assert) {
+    QUnit.test('Inner area tables have role="presentation", their tbody has role="presentation" and thead has role="rowgroup"', function(assert) {
         if(!windowUtils.hasWindow()) {
             assert.expect(0);
             return;
@@ -532,18 +532,25 @@ QUnit.module('PivotGrid accessibility markup', {
         });
         this.clock.tick(10);
 
-        const areaSelectors = [
-            'thead.dx-pivotgrid-horizontal-headers',
+        const presentationSelectors = [
             'tbody.dx-pivotgrid-vertical-headers',
             '.dx-pivotgrid-area-data table'
         ];
 
-        areaSelectors.forEach((selector) => {
+        presentationSelectors.forEach((selector) => {
             const $element = pivotGrid.$element().find(selector);
 
             assert.ok($element.length > 0, `${selector} exists`);
             assert.strictEqual($element.attr('role'), 'presentation', `${selector} has role="presentation"`);
         });
+
+        // thead is given a native "rowgroup" role instead of "presentation" so that its
+        // role="row" children satisfy aria-required-parent without depending on browsers
+        // flattening a role="presentation" thead down to its rows
+        const $thead = pivotGrid.$element().find('thead.dx-pivotgrid-horizontal-headers');
+
+        assert.ok($thead.length > 0, 'column headers thead exists');
+        assert.strictEqual($thead.attr('role'), 'rowgroup', 'column headers thead has role="rowgroup"');
     });
 
     QUnit.test('Each row of an area table has role="row"', function(assert) {
