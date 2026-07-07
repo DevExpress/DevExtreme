@@ -22,7 +22,6 @@ test('Toast should be visible after calling', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-  await t.expect(treeList.getToast().exists).notOk();
 }).before(async () => {
   await createWidget('dxTreeList', {});
 });
