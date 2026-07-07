@@ -2970,7 +2970,8 @@ test('New mode. A cell should be focused when the PageDow/Up key is pressed (T89
 
   // act
   await t
-    .pressKey('pagedown');
+    .pressKey('pagedown')
+    .expect(dataGrid.isReady()).ok();
 
   // assert
   const focusedRowIndex = await dataGrid.option('focusedRowIndex');
@@ -2984,7 +2985,8 @@ test('New mode. A cell should be focused when the PageDow/Up key is pressed (T89
 
   // act
   await t
-    .pressKey('pageup');
+    .pressKey('pageup')
+    .expect(dataGrid.isReady()).ok();
 
   // assert
   await t

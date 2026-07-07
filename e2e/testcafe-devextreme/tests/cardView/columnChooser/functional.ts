@@ -24,7 +24,6 @@ function testsFactory(testModel: {
     await testModel.assertFirstColumnHidden(t, cardView);
 
     await testModel.showFirstColumn(t, cardView);
-
     await testModel.assertFirstColumnVisible(t, cardView);
 
     await testModel.hideFirstColumn(t, cardView);
@@ -56,11 +55,13 @@ testsFactory({
   async hideFirstColumn(t: TestController, cardView: CardView) {
     await t.click(
       cardView.getColumnChooser().getCheckbox(0),
+      { offsetX: 5, offsetY: 5 },
     );
   },
   async showFirstColumn(t: TestController, cardView: CardView) {
     await t.click(
       cardView.getColumnChooser().getCheckbox(0),
+      { offsetX: 5, offsetY: 5 },
     );
   },
   async assertFirstColumnVisible(t: TestController, cardView: CardView) {
