@@ -1252,6 +1252,8 @@ class PivotGrid extends Widget {
 
     dataArea.tableElement().prepend(columnsArea.headElement());
 
+    that._setAriaGridAttributes(dataArea, rowsArea, columnsArea);
+
     if (isFirstDrawing) {
       that._renderLoadPanel(dataArea.groupElement().parent(), that.$element());
       that._renderDescriptionArea();
@@ -1273,6 +1275,19 @@ class PivotGrid extends Widget {
     );
 
     that._update(isFirstDrawing);
+  }
+
+  _setAriaGridAttributes(dataArea, rowsArea, columnsArea) {
+    const tableIds = [
+      columnsArea.tableElement().attr('id'),
+      rowsArea.tableElement().attr('id'),
+      dataArea.tableElement().attr('id'),
+    ].filter(isDefined).join(' ');
+
+    this.$element()
+      .attr('aria-owns', tableIds)
+      .attr('aria-rowcount', this._dataController.totalRowCount())
+      .attr('aria-colcount', this._dataController.totalColumnCount());
   }
 
   _update(isFirstDrawing) {

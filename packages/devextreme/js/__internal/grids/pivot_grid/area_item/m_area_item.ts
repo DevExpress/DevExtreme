@@ -1,5 +1,6 @@
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
+import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
@@ -105,7 +106,9 @@ abstract class AreaItem {
   }
 
   _createTableElement() {
-    return $('<table>');
+    return $('<table>')
+      .attr('id', `dx-${new Guid()}`)
+      .attr('role', 'presentation');
   }
 
   _getCellText(cell, encodeHtml) {
@@ -133,7 +136,9 @@ abstract class AreaItem {
   }
 
   _getMainElementMarkup() {
-    return domAdapter.createElement('tbody');
+    const tbody = domAdapter.createElement('tbody');
+    tbody.setAttribute('role', 'presentation');
+    return tbody;
   }
 
   _getCloseMainElementMarkup() {
@@ -156,6 +161,16 @@ abstract class AreaItem {
     });
 
     return columnIndexMap;
+  }
+
+  _getCellAriaRole() {
+    const rolesByArea = {
+      column: 'columnheader',
+      row: 'rowheader',
+      data: 'gridcell',
+    };
+
+    return rolesByArea[this._getAreaName()];
   }
 
   _setCellAriaIndexAttributes(td, options) {
@@ -199,16 +214,22 @@ abstract class AreaItem {
     const columnIndexMap = areaName === 'column'
       ? this._createColumnIndexMap(data)
       : null;
+    const cellAriaRole = this._getCellAriaRole();
 
     for (let i = 0; i < rowsCount; i += 1) {
       const row = data[i];
       const rowClassNames = [];
 
       const tr = domAdapter.createElement('tr');
+      tr.setAttribute('role', 'row');
 
       for (let j = 0; j < row.length; j += 1) {
         const cell = row[j];
         const td = domAdapter.createElement('td');
+
+        if (cellAriaRole) {
+          td.setAttribute('role', cellAriaRole);
+        }
 
         this._getRowClassNames(i, cell, rowClassNames);
 
