@@ -1,6 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
 import createTestCafe, { ClientFunction } from 'testcafe';
 import * as fs from 'fs';
+import * as path from 'path';
 import * as process from 'process';
 import parseArgs from 'minimist';
 import { DEFAULT_BROWSER_SIZE } from './helpers/const';
@@ -54,8 +55,13 @@ interface ParsedArgs {
   theme: string;
   shadowDom: boolean;
   skipUnstable: boolean;
+  onlyUnstable: boolean;
   disableScreenshots: boolean;
   retryFailed: boolean;
+  testsFile: string;
+  reportUnstable: string;
+  reportFailures: string;
+  retryAttempts: number;
 }
 
 const getTestCafeConfig = (cache: boolean): Partial<TestCafeConfigurationOptions> => ({
@@ -113,10 +119,20 @@ function getArgs(): ParsedArgs {
       theme: '',
       shadowDom: false,
       skipUnstable: true,
+      onlyUnstable: false,
       disableScreenshots: false,
       retryFailed: true,
+      testsFile: '',
+      reportUnstable: '',
+      reportFailures: '',
+      retryAttempts: FAILED_TESTS_RETRY_ATTEMPTS,
     },
   }) as ParsedArgs;
+}
+
+function writeTestsReport(reportPath: string, tests: Set<string>): void {
+  fs.mkdirSync(path.dirname(reportPath), { recursive: true });
+  fs.writeFileSync(reportPath, JSON.stringify({ tests: [...tests] }, null, 2));
 }
 
 async function main() {
@@ -137,6 +153,12 @@ async function main() {
 
     const componentFolderArg = typeof args.componentFolder === 'string' ? args.componentFolder.trim() : '';
     const componentFolder = componentFolderArg ? `${componentFolderArg}/**` : '**';
+
+    const onlyUnstable = `${args.onlyUnstable}` === 'true';
+    const retryAttempts = Number(args.retryAttempts) || 0;
+    const testsFromFile = new Set<string>(
+      args.testsFile ? JSON.parse(fs.readFileSync(args.testsFile, 'utf8')).tests : [],
+    );
 
     if (fs.existsSync('./screenshots')) {
       fs.rmSync('./screenshots', { recursive: true });
@@ -190,11 +212,22 @@ async function main() {
         filters.push((name: string) => name === testName);
       }
 
+      if (testsFromFile.size > 0) {
+        filters.push((name: string) => testsFromFile.has(name));
+      }
+
       if (filterByFailedTests && testsToFilter && testsToFilter.size > 0) {
         filters.push((name: string) => testsToFilter.has(name));
       }
 
-      if (args.skipUnstable) {
+      if (onlyUnstable) {
+        filters.push((
+          _testName: string,
+          _fixtureName: string,
+          _fixturePath: string,
+          testMeta?: any,
+        ) => !!(testMeta)?.unstable);
+      } else if (args.skipUnstable) {
         filters.push((
           _testName: string,
           _fixtureName: string,
@@ -290,12 +323,10 @@ async function main() {
           after: async (t: TestController) => {
             await clearTestPage(t);
 
-            if (args.retryFailed) {
-              // @ts-expect-error ts-errors
-              const { test, errs } = t.testRun;
-              if (errs && errs.length > 0) {
-                failedTests.add(test.name);
-              }
+            // @ts-expect-error ts-errors
+            const { test, errs } = t.testRun;
+            if (errs && errs.length > 0) {
+              failedTests.add(test.name);
             }
           },
         },
@@ -313,15 +344,15 @@ async function main() {
     // Retry failed tests multiple times if enabled and there are failures
     if (args.retryFailed && failedTests.size > 0 && failedCount > 0) {
       const initialFailedCount = failedTests.size;
-      let attemptsLeft = FAILED_TESTS_RETRY_ATTEMPTS;
+      let attemptsLeft = retryAttempts;
 
       while (attemptsLeft > 0 && failedCount > 0) {
-        const attemptNumber = FAILED_TESTS_RETRY_ATTEMPTS - attemptsLeft + 1;
+        const attemptNumber = retryAttempts - attemptsLeft + 1;
 
         /* eslint-disable no-console */
         console.info('\n');
         console.info('='.repeat(60));
-        console.info(`RETRY ATTEMPT ${attemptNumber}/${FAILED_TESTS_RETRY_ATTEMPTS}`);
+        console.info(`RETRY ATTEMPT ${attemptNumber}/${retryAttempts}`);
         console.info(`Retrying ${failedTests.size} failed test(s)`);
         console.info('='.repeat(60));
         console.info('Failed tests:');
@@ -369,12 +400,31 @@ async function main() {
       console.info('FINAL RETRY RESULTS');
       console.info('='.repeat(60));
       console.info(`Initially failed: ${initialFailedCount}`);
-      console.info(`Total retry attempts used: ${FAILED_TESTS_RETRY_ATTEMPTS - attemptsLeft}`);
+      console.info(`Total retry attempts used: ${retryAttempts - attemptsLeft}`);
       console.info(`Final failing count: ${failedCount}`);
       console.info(`Successfully recovered: ${initialFailedCount - failedCount}`);
       console.info('='.repeat(60));
       console.info('\n');
       /* eslint-enable no-console */
+    }
+
+    if (args.reportFailures) {
+      writeTestsReport(args.reportFailures, failedTests);
+    }
+
+    if (args.reportUnstable && failedCount === 1 && failedTests.size === 1) {
+      writeTestsReport(args.reportUnstable, failedTests);
+
+      /* eslint-disable no-console */
+      console.info('\n');
+      console.info('='.repeat(60));
+      console.info(`Single failed test "${[...failedTests][0]}" is treated as unstable.`);
+      console.info('It will be rerun in the "unstable" job.');
+      console.info('='.repeat(60));
+      console.info('\n');
+      /* eslint-enable no-console */
+
+      failedCount = 0;
     }
 
     await testCafe.close();
