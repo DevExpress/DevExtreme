@@ -1,6 +1,7 @@
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import { loadMessages, locale } from '@js/localization';
 import type { GroupItem } from '@js/ui/form';
 import { fireEvent } from '@testing-library/dom';
@@ -1544,6 +1545,70 @@ describe('Isolated AppointmentPopup environment', () => {
           description: 'New appointment description',
         }),
       );
+    });
+  });
+
+  describe('popup open animation is preserved on repeated open (T1330691)', () => {
+    const POINTER_DOWN_EVENT = 'dxpointerdown';
+
+    interface PopupBlockingApi {
+      blockPointerEventsDuringShowAnimation: () => void;
+      unblockPointerEvents: () => void;
+    }
+
+    it('should not propagate a wrapper pointerdown to the document handler while the open animation is running', async () => {
+      fx.off = false;
+      const documentPointerDown = jest.fn();
+
+      const { popup, POM } = await createAppointmentPopup();
+      const blockingApi = popup as unknown as PopupBlockingApi;
+      eventsEngine.on(document, POINTER_DOWN_EVENT, documentPointerDown);
+
+      fireEvent.mouseDown(POM.element);
+      const callsWhileAnimating = documentPointerDown.mock.calls.length;
+
+      blockingApi.unblockPointerEvents();
+      fireEvent.mouseDown(POM.element);
+      const callsAfterUnblock = documentPointerDown.mock.calls.length;
+
+      eventsEngine.off(document, POINTER_DOWN_EVENT, documentPointerDown);
+
+      expect(callsWhileAnimating).toBe(0);
+      expect(callsAfterUnblock).toBeGreaterThan(callsWhileAnimating);
+    });
+
+    it('should propagate a wrapper pointerdown to the document handler after the popup is fully shown', async () => {
+      const documentPointerDown = jest.fn();
+
+      const { POM } = await createAppointmentPopup();
+      eventsEngine.on(document, POINTER_DOWN_EVENT, documentPointerDown);
+      fireEvent.mouseDown(POM.element);
+
+      const callsAfterShown = documentPointerDown.mock.calls.length;
+      eventsEngine.off(document, POINTER_DOWN_EVENT, documentPointerDown);
+
+      expect(callsAfterShown).toBeGreaterThan(0);
+    });
+
+    it('should remove the temporary pointerdown blocker on unblock so no handler leaks', async () => {
+      const documentPointerDown = jest.fn();
+
+      const { popup, POM } = await createAppointmentPopup();
+      const blockingApi = popup as unknown as PopupBlockingApi;
+      eventsEngine.on(document, POINTER_DOWN_EVENT, documentPointerDown);
+
+      blockingApi.blockPointerEventsDuringShowAnimation();
+      fireEvent.mouseDown(POM.element);
+      const callsWhileBlocked = documentPointerDown.mock.calls.length;
+
+      blockingApi.unblockPointerEvents();
+      fireEvent.mouseDown(POM.element);
+      const callsAfterUnblock = documentPointerDown.mock.calls.length;
+
+      eventsEngine.off(document, POINTER_DOWN_EVENT, documentPointerDown);
+
+      expect(callsWhileBlocked).toBe(0);
+      expect(callsAfterUnblock).toBeGreaterThan(callsWhileBlocked);
     });
   });
 });
