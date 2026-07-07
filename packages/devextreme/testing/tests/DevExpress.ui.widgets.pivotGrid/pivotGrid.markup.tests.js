@@ -520,7 +520,7 @@ QUnit.module('PivotGrid accessibility markup', {
         }
     });
 
-    QUnit.test('Inner area tables have role="presentation", their tbody has role="presentation" and thead has role="rowgroup"', function(assert) {
+    QUnit.test('Inner area tables and their thead/tbody have role="presentation"', function(assert) {
         if(!windowUtils.hasWindow()) {
             assert.expect(0);
             return;
@@ -532,25 +532,18 @@ QUnit.module('PivotGrid accessibility markup', {
         });
         this.clock.tick(10);
 
-        const presentationSelectors = [
+        const areaSelectors = [
+            'thead.dx-pivotgrid-horizontal-headers',
             'tbody.dx-pivotgrid-vertical-headers',
             '.dx-pivotgrid-area-data table'
         ];
 
-        presentationSelectors.forEach((selector) => {
+        areaSelectors.forEach((selector) => {
             const $element = pivotGrid.$element().find(selector);
 
             assert.ok($element.length > 0, `${selector} exists`);
             assert.strictEqual($element.attr('role'), 'presentation', `${selector} has role="presentation"`);
         });
-
-        // thead is given a native "rowgroup" role instead of "presentation" so that its
-        // role="row" children satisfy aria-required-parent without depending on browsers
-        // flattening a role="presentation" thead down to its rows
-        const $thead = pivotGrid.$element().find('thead.dx-pivotgrid-horizontal-headers');
-
-        assert.ok($thead.length > 0, 'column headers thead exists');
-        assert.strictEqual($thead.attr('role'), 'rowgroup', 'column headers thead has role="rowgroup"');
     });
 
     QUnit.test('Each row of an area table has role="row"', function(assert) {
@@ -600,7 +593,7 @@ QUnit.module('PivotGrid accessibility markup', {
         $whiteSpaceCells.each((_, cell) => assert.strictEqual(cell.getAttribute('role'), null, 'white-space filler cell has no header role'));
     });
 
-    QUnit.test('Data area\'s grid element has role="grid", aria-owns linking the row headers table, and aria-rowcount/aria-colcount from the data source', function(assert) {
+    QUnit.test('Data area\'s grid element has role="grid", aria-owns linking the area tables, and aria-rowcount/aria-colcount from the data source', function(assert) {
         if(!windowUtils.hasWindow()) {
             assert.expect(0);
             return;
@@ -613,15 +606,20 @@ QUnit.module('PivotGrid accessibility markup', {
         this.clock.tick(10);
 
         const dataController = pivotGrid._dataController;
+        const columnsTableId = pivotGrid._columnsArea.tableElement().attr('id');
         const rowsTableId = pivotGrid._rowsArea.tableElement().attr('id');
         const dataTableId = pivotGrid._dataArea.tableElement().attr('id');
         const $gridElement = pivotGrid._dataArea.tableElement().parent();
 
-        assert.ok(dataTableId, 'data table has an id');
+        const ariaOwns = $gridElement.attr('aria-owns').split(' ');
+
         assert.ok($gridElement.hasClass('dx-scrollable-content'), 'grid element is the data table\'s scrollable content wrapper');
         assert.strictEqual($gridElement.attr('role'), 'grid', 'grid element has role="grid"');
-        assert.ok(rowsTableId, 'rows table has an id');
-        assert.strictEqual($gridElement.attr('aria-owns'), rowsTableId, 'aria-owns references the row headers table');
+
+        [columnsTableId, rowsTableId, dataTableId].forEach((id) => {
+            assert.ok(id, 'table has an id');
+            assert.ok(ariaOwns.includes(id), `aria-owns includes ${id}`);
+        });
 
         assert.strictEqual(
             $gridElement.attr('aria-rowcount'),

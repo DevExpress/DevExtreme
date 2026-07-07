@@ -1261,7 +1261,7 @@ class PivotGrid extends Widget {
       dataArea.renderScrollable();
     }
 
-    that._setAriaGridAttributes(dataArea, rowsArea);
+    that._setAriaGridAttributes(dataArea, rowsArea, columnsArea);
 
     [dataArea, rowsArea, columnsArea].forEach((area) => {
       unsubscribeScrollEvents(area);
@@ -1277,13 +1277,17 @@ class PivotGrid extends Widget {
     that._update(isFirstDrawing);
   }
 
-  _setAriaGridAttributes(dataArea, rowsArea) {
+  _setAriaGridAttributes(dataArea, rowsArea, columnsArea) {
     const $gridElement = dataArea.tableElement().parent();
-    const rowsTableId = rowsArea.tableElement().attr('id');
+    const tableIds = [
+      columnsArea.tableElement().attr('id'),
+      rowsArea.tableElement().attr('id'),
+      dataArea.tableElement().attr('id'),
+    ].filter(isDefined).join(' ');
 
     $gridElement
       .attr('role', 'grid')
-      .attr('aria-owns', rowsTableId)
+      .attr('aria-owns', tableIds)
       .attr('aria-rowcount', this._dataController.totalRowCount())
       .attr('aria-colcount', this._dataController.totalColumnCount());
   }
@@ -1620,6 +1624,7 @@ class PivotGrid extends Widget {
         /// #ENDDEBUG
 
         when.apply($, updateScrollableResults).done(() => {
+          that._setAriaGridAttributes(that._dataArea, that._rowsArea, that._columnsArea);
           that._updateScrollPosition(that._columnsArea, that._rowsArea, that._dataArea, true);
           that._subscribeToEvents(that._columnsArea, that._rowsArea, that._dataArea);
 
