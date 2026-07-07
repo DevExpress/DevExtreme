@@ -213,6 +213,7 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
       });
     });
 
+    eventsEngine.off(this.$element(), KEYDOWN_EVENT_NAME);
     eventsEngine.on(this.$element(), KEYDOWN_EVENT_NAME, this._keydownHandler.bind(this));
   }
 
