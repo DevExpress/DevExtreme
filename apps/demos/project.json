@@ -34,7 +34,6 @@
         { "env": "CHANGEDFILEINFOSPATH" },
         { "env": "BROWSERS" },
         { "env": "DEBUG" },
-        { "env": "TCQUARANTINE" },
         { "env": "CONSTEL" },
         { "env": "THEME" },
         { "env": "DISABLE_DEMO_TEST_SETTINGS" },
