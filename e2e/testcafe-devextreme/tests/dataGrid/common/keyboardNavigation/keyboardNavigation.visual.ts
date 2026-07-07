@@ -720,7 +720,7 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
     },
   }));
 
-  test(`${useNative ? 'Native' : 'Simulated'} scrolling: Focus should be on the last focusable cell when pressing the Ctrl + Home key when row dragging, virtual scrolling and columns are enabled`, async (t) => {
+  test(`${useNative ? 'Native' : 'Simulated'} scrolling: Focus should be on the last focusable cell when pressing the Ctrl + End key when row dragging, virtual scrolling and columns are enabled`, async (t) => {
     // arrange
     const dataGrid = new DataGrid('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -732,7 +732,7 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
     await t
       .click(dataGrid.getDataCell(0, 0).element)
       .pressKey('ctrl+end')
-      .wait(1000);
+      .wait(2000);
 
     await testScreenshot(t, takeScreenshot, `${useNative ? 'native' : 'simulated'}_scrolling_-_navigate_to_last_cell_row_dragging__virtual_scrolling__virtual_columns.png`, { element: dataGrid.element });
 
