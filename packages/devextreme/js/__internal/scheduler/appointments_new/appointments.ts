@@ -412,6 +412,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
 
     if (isGridAppointmentViewModel(appointmentViewModel)) {
       const resizableConfig = this.option().getResizableConfig(appointmentViewModel);
+      const allowResize = Boolean(resizableConfig?.handles) && resizableConfig?.handles !== 'none';
 
       return this._createComponent(
         $element,
@@ -427,7 +428,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
           modifiers: {
             empty: appointmentViewModel.empty,
           },
-          allowResize: Boolean(resizableConfig),
+          allowResize,
           resizableConfig,
         },
       );
