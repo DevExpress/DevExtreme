@@ -227,7 +227,7 @@ abstract class AreaItem {
         const cell = row[j];
         const td = domAdapter.createElement('td');
 
-        if (cellAriaRole) {
+        if (cellAriaRole && !cell?.isWhiteSpace) {
           td.setAttribute('role', cellAriaRole);
         }
 

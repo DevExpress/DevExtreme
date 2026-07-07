@@ -204,10 +204,10 @@ QUnit.module('PivotGrid accessibility markup', {
         $('#qunit-fixture').html('<div id=\'pivotGrid\' />');
     });
 
-    QUnit.test('Root element has role="group"', function(assert) {
+    QUnit.test('Root element has role="grid"', function(assert) {
         const pivotGrid = createPivotGrid({});
 
-        assert.strictEqual(pivotGrid.$element().attr('role'), 'group', 'root role');
+        assert.strictEqual(pivotGrid.$element().attr('role'), 'grid', 'root role');
     });
 
     QUnit.test('Root element has aria-label after render', function(assert) {
@@ -578,9 +578,10 @@ QUnit.module('PivotGrid accessibility markup', {
         });
         this.clock.tick(10);
 
-        const $columnHeaderCells = pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers td');
-        const $rowHeaderCells = pivotGrid.$element().find('.dx-pivotgrid-vertical-headers td');
+        const $columnHeaderCells = pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers td').not('.dx-white-space-column');
+        const $rowHeaderCells = pivotGrid.$element().find('.dx-pivotgrid-vertical-headers td').not('.dx-white-space-column');
         const $dataCells = pivotGrid.$element().find('.dx-pivotgrid-area-data td');
+        const $whiteSpaceCells = pivotGrid.$element().find('.dx-white-space-column');
 
         assert.ok($columnHeaderCells.length > 0, 'column header cells exist');
         assert.ok($rowHeaderCells.length > 0, 'row header cells exist');
@@ -589,6 +590,7 @@ QUnit.module('PivotGrid accessibility markup', {
         $columnHeaderCells.each((_, cell) => assert.strictEqual(cell.getAttribute('role'), 'columnheader'));
         $rowHeaderCells.each((_, cell) => assert.strictEqual(cell.getAttribute('role'), 'rowheader'));
         $dataCells.each((_, cell) => assert.strictEqual(cell.getAttribute('role'), 'gridcell'));
+        $whiteSpaceCells.each((_, cell) => assert.strictEqual(cell.getAttribute('role'), null, 'white-space filler cell has no header role'));
     });
 
     QUnit.test('Root element has aria-owns linking the area tables and aria-rowcount/aria-colcount from the data source', function(assert) {

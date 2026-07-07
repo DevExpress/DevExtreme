@@ -1157,7 +1157,7 @@ class PivotGrid extends Widget {
     super._initMarkup();
     that.$element()
       .addClass(PIVOTGRID_CLASS)
-      .attr('role', 'group')
+      .attr('role', 'grid')
       .attr('aria-label', localizationMessage.format('dxPivotGrid-ariaLabel'));
   }
 
