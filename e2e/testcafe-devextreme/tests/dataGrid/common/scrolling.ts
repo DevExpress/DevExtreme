@@ -1044,7 +1044,7 @@ test.meta({ browserSize: [800, 800] })('Rows are rendered properly when window c
 })());
 
 // T1129252
-test.meta({ unstable: true })('The data should display correctly after changing the dataSource and focusedRowIndex options when scroll position is at the end', async (t) => {
+test('The data should display correctly after changing the dataSource and focusedRowIndex options when scroll position is at the end', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -1067,6 +1067,7 @@ test.meta({ unstable: true })('The data should display correctly after changing 
     .expect(dataGrid.isReady())
     .ok();
 
+  await t.expect(dataGrid.apiGetTopVisibleRowData()).eql({ id: 96, text: 'item 96' });
   await testScreenshot(t, takeScreenshot, 'grid-virtual-scrolling-T1129252.png', { element: '#container' });
   await t
     .expect(compareResults.isValid())
@@ -1705,7 +1706,7 @@ test.meta({ browserSize: [800, 200] })('Editing buttons should rerender correctl
 });
 
 // T1181439
-test.meta({ unstable: true })('Restoring focus on re-rendering should be done without unexpected scrolling to the focused element', async (t) => {
+test('Restoring focus on re-rendering should be done without unexpected scrolling to the focused element', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
@@ -1714,7 +1715,7 @@ test.meta({ unstable: true })('Restoring focus on re-rendering should be done wi
 
   await t.click(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(19).element);
 
-  await dataGrid.scrollBy(t, { left: 0 });
+  await dataGrid.scrollBy(t, { left: -1000 });
   await dataGrid.scrollBy(t, { top: 50 });
 
   await t.expect(dataGrid.getScrollLeft()).eql(0);

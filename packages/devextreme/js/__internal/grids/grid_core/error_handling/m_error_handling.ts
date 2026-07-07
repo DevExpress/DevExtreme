@@ -4,6 +4,7 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
+import type { Properties as ToastProperties } from '@js/ui/toast';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
@@ -158,8 +159,8 @@ export class ErrorHandlingController extends modules.ViewController {
     }
   }
 
-  public showToastError(message: string) {
-    this._toastViewController.showToast(message, { type: 'error' });
+  public showToastError(message: string, options?: ToastProperties) {
+    this._toastViewController.showToast(message, { ...options, type: 'error' });
   }
 }
 
