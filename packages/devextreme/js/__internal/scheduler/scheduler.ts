@@ -55,7 +55,9 @@ import type {
 import errors from '@js/ui/widget/ui.errors';
 import type { Options } from '@ts/core/options/m_index';
 import { dateUtilsTs } from '@ts/core/utils/date';
+import { tabbable } from '@ts/core/utils/m_selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
+import { focus } from '@ts/events/m_short';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
@@ -1349,6 +1351,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         onDeleteKeyPress: (e) => {
           this.checkAndDeleteAppointment(e.appointmentData, e.targetedAppointmentData);
         },
+        focusFallbackAfterDelete: () => this.focusFallbackAfterDelete(),
 
         getResourceManager: () => this.resourceManager,
         getAppointmentDataSource: () => this.appointmentDataSource,
@@ -1557,6 +1560,22 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       event: e.event,
       model: e.model,
     }) as AppointmentTooltipContextMenuEventArgs;
+  }
+
+  focusFallbackAfterDelete(): void {
+    const $headerFocusable = this.header?.$element()
+      .find('*')
+      .not('.dx-state-invisible, .dx-state-invisible *')
+      // @ts-expect-error filter callback overload should be added on dxElementWrapper level
+      .filter(tabbable)
+      .first();
+
+    if ($headerFocusable?.length) {
+      focus.trigger($headerFocusable);
+      return;
+    }
+
+    this._workSpace?.focus();
   }
 
   checkAndDeleteAppointment(

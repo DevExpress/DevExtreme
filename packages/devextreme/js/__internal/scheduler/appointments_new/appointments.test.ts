@@ -56,6 +56,7 @@ const getProperties = (options: {
   showEditAppointmentPopup: (): void => {},
   allowDelete: false,
   onDeleteKeyPress: (): void => {},
+  focusFallbackAfterDelete: (): void => {},
 });
 
 const createAppointments = (
