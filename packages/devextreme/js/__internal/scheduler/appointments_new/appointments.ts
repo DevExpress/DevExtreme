@@ -85,6 +85,7 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
     appointmentData: SafeAppointment;
     targetedAppointmentData: TargetedAppointment;
   }) => void;
+  focusFallbackAfterDelete: () => void;
 }
 
 export class Appointments extends DOMComponent<Appointments, AppointmentsProperties> {
@@ -192,6 +193,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       onAppointmentContextMenu: noop,
       allowDelete: false,
       onDeleteKeyPress: noop,
+      focusFallbackAfterDelete: noop,
     };
   }
 
@@ -292,7 +294,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     this.$allDayContainer?.get(0).appendChild(allDayFragment);
     this.$commonContainer.get(0).appendChild(commonFragment);
 
-    this.focusController.resetTabIndex();
+    this.focusController.onViewItemsRendered();
   }
 
   private renderViewModelDiff(viewModelDiff: DiffItem[]): void {
@@ -341,7 +343,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     this.$allDayContainer?.get(0).appendChild(allDayFragment);
     this.$commonContainer.get(0).appendChild(commonFragment);
 
-    this.focusController.resetTabIndex();
+    this.focusController.onViewItemsRendered();
   }
 
   // TODO: remove passing index to appointmentTemplate, need only to avoid BC

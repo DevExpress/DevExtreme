@@ -325,5 +325,120 @@ describe('Appointments', () => {
         expect(POM.getAppointments().length).toBe(initialCount - 1);
       });
     });
+
+    describe('Focus after Delete', () => {
+      it('should focus next appointment after deleting via Delete key', async () => {
+        const { POM, keydown } = await createScheduler({
+          dataSource: [...dataSource],
+          currentView: 'day',
+          currentDate: new Date(2015, 1, 9),
+        });
+
+        const appointment = POM.getAppointment('Appointment 2');
+
+        appointment.element?.focus();
+        keydown(appointment.element as Element, 'Delete');
+        await new Promise(process.nextTick);
+
+        expect(POM.getAppointments().length).toBe(2);
+        expect(POM.getAppointment('Appointment 3').isFocused()).toBe(true);
+      });
+
+      it('should focus previous appointment after deleting the last one', async () => {
+        const { POM, keydown } = await createScheduler({
+          dataSource: [...dataSource],
+          currentView: 'day',
+          currentDate: new Date(2015, 1, 9),
+        });
+
+        const appointment = POM.getAppointment('Appointment 3');
+
+        appointment.element?.focus();
+        keydown(appointment.element as Element, 'Delete');
+        await new Promise(process.nextTick);
+
+        expect(POM.getAppointments().length).toBe(2);
+        expect(POM.getAppointment('Appointment 2').isFocused()).toBe(true);
+      });
+
+      it('should focus toolbar element when no appointments remain after delete', async () => {
+        const { POM, keydown } = await createScheduler({
+          dataSource: [dataSource[0]],
+          currentView: 'day',
+          currentDate: new Date(2015, 1, 9),
+        });
+
+        const appointment = POM.getAppointment('Appointment 1');
+
+        appointment.element?.focus();
+        keydown(appointment.element as Element, 'Delete');
+        await new Promise(process.nextTick);
+
+        expect(POM.getAppointments().length).toBe(0);
+        expect(POM.toolbar.element.contains(document.activeElement)).toBe(true);
+      });
+
+      it('should focus workspace when no appointments remain after delete and toolbar is hidden', async () => {
+        const { POM, keydown } = await createScheduler({
+          dataSource: [dataSource[0]],
+          currentView: 'day',
+          currentDate: new Date(2015, 1, 9),
+          toolbar: { items: [] },
+        });
+
+        const appointment = POM.getAppointment('Appointment 1');
+
+        appointment.element?.focus();
+        keydown(appointment.element as Element, 'Delete');
+        await new Promise(process.nextTick);
+
+        expect(POM.getAppointments().length).toBe(0);
+        expect(document.activeElement).toBe(POM.getWorkspace());
+      });
+
+      it('should keep focus on appointment when deleting is canceled', async () => {
+        const { POM, keydown } = await createScheduler({
+          dataSource: [...dataSource],
+          currentView: 'day',
+          currentDate: new Date(2015, 1, 9),
+          onAppointmentDeleting: (e) => {
+            e.cancel = true;
+          },
+        });
+
+        const appointment = POM.getAppointment('Appointment 2');
+
+        appointment.element?.focus();
+        keydown(appointment.element as Element, 'Delete');
+        await new Promise(process.nextTick);
+
+        expect(POM.getAppointments().length).toBe(3);
+        expect(document.activeElement).toBe(appointment.element);
+      });
+
+      it('should focus next occurrence after deleting recurring occurrence via dialog', async () => {
+        const { POM, keydown } = await createScheduler({
+          dataSource: [{
+            text: 'Recurring Appointment',
+            startDate: new Date(2015, 1, 9, 8),
+            endDate: new Date(2015, 1, 9, 9),
+            recurrenceRule: 'FREQ=DAILY',
+          }],
+          currentView: 'week',
+          currentDate: new Date(2015, 1, 9),
+        });
+
+        const initialCount = POM.getAppointments().length;
+        const appointment = POM.getAppointments()[2];
+
+        appointment.element.focus();
+        keydown(appointment.element, 'Delete');
+        POM.popup.deleteAppointmentButton.click();
+        await new Promise(process.nextTick);
+
+        expect(POM.getAppointments().length).toBe(initialCount - 1);
+        expect(POM.getAppointments()[2].isFocused()).toBe(true);
+      });
+    });
   });
 });
