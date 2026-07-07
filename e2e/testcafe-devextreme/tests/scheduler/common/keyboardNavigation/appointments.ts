@@ -1,4 +1,5 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
+import { Selector } from 'testcafe';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { generateAppointmentsWithResources, resources } from '../../helpers/generateAppointmentsWithResources';
@@ -275,4 +276,90 @@ test('should focus first rendered appointment on tab (standard scrolling)', asyn
 }).before(async () => {
   await insertStylesheetRulesToPage(cellStyles);
   await createWidget('dxScheduler', { ...getConfig(), scrolling: { mode: 'standard' } });
+});
+
+const getDeleteFocusConfig = () => ({
+  dataSource: [
+    { text: 'Appointment 1', startDate: new Date(2021, 1, 2, 9), endDate: new Date(2021, 1, 2, 10) },
+    { text: 'Appointment 2', startDate: new Date(2021, 1, 2, 10), endDate: new Date(2021, 1, 2, 11) },
+    { text: 'Appointment 3', startDate: new Date(2021, 1, 2, 11), endDate: new Date(2021, 1, 2, 12) },
+  ],
+  views: ['day'],
+  currentView: 'day',
+  currentDate: new Date(2021, 1, 2),
+  startDayHour: 8,
+  endDayHour: 20,
+  height: 600,
+});
+
+test('should focus next appointment after deleting appointment by Delete key', async (t) => {
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+
+  await t
+    .click(scheduler.getAppointment('Appointment 2').element)
+    .pressKey('delete');
+
+  await t
+    .expect(scheduler.getAppointmentCount()).eql(2)
+    .expect(scheduler.getAppointment('Appointment 3').isFocused).ok();
+}).before(async () => {
+  await createWidget('dxScheduler', getDeleteFocusConfig());
+});
+
+test('should focus previous appointment after deleting the last appointment by Delete key', async (t) => {
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+
+  await t
+    .click(scheduler.getAppointment('Appointment 3').element)
+    .pressKey('delete');
+
+  await t
+    .expect(scheduler.getAppointmentCount()).eql(2)
+    .expect(scheduler.getAppointment('Appointment 2').isFocused).ok();
+}).before(async () => {
+  await createWidget('dxScheduler', getDeleteFocusConfig());
+});
+
+test('should focus toolbar element when no appointments remain after deleting by Delete key', async (t) => {
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+
+  await t
+    .click(scheduler.getAppointment('Appointment 1').element)
+    .pressKey('delete');
+
+  await t
+    .expect(scheduler.getAppointmentCount()).eql(0)
+    .expect(scheduler.toolbar.element.find(':focus').exists).ok();
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    ...getDeleteFocusConfig(),
+    dataSource: [
+      { text: 'Appointment 1', startDate: new Date(2021, 1, 2, 9), endDate: new Date(2021, 1, 2, 10) },
+    ],
+  });
+});
+
+test('should focus next occurrence after deleting recurring occurrence via dialog', async (t) => {
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+
+  await t
+    .click(scheduler.getAppointment('Recurring Appointment', 2).element)
+    .pressKey('delete')
+    .click(Selector('.dx-dialog-button').withText('Delete appointment'));
+
+  await t
+    .expect(scheduler.getAppointmentCount()).eql(4)
+    .expect(scheduler.getAppointment('Recurring Appointment', 2).isFocused).ok();
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    ...getDeleteFocusConfig(),
+    views: ['week'],
+    currentView: 'week',
+    dataSource: [{
+      text: 'Recurring Appointment',
+      startDate: new Date(2021, 1, 1, 9),
+      endDate: new Date(2021, 1, 1, 10),
+      recurrenceRule: 'FREQ=DAILY;COUNT=5',
+    }],
+  });
 });
