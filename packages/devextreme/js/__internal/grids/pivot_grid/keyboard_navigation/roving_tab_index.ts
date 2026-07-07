@@ -1,11 +1,19 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
+import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
-import { restoreFocus, saveFocusedElementInfo, setTabIndex } from '@js/ui/shared/accessibility';
+import { setTabIndex } from '@js/ui/shared/accessibility';
 
 const NOT_FOCUSABLE_TAB_INDEX = '-1';
 
+export interface RovingTabIndexComponentOptions {
+  tabindex?: number;
+  useLegacyKeyboardNavigation?: boolean;
+}
+
 export interface RovingTabIndexComponent {
-  option: (optionName?: string) => unknown;
+  option: {
+    (): RovingTabIndexComponentOptions;
+    (optionName: string): unknown;
+  };
   element: () => Element | undefined;
 }
 
@@ -66,8 +74,20 @@ export class RovingTabIndex {
     const item = items[index];
 
     this.options.scrollToItem?.(item);
-    // @ts-expect-error ts-error
-    eventsEngine.trigger($(item), 'focus');
+    // scrollToItem positions the scrollable itself, so the native auto-scroll
+    // on focus must be suppressed to keep dxScrollable in sync.
+    item.focus({ preventScroll: true });
+  }
+
+  containsActiveElement(): boolean {
+    const activeElement = domAdapter.getActiveElement();
+
+    return this.getItems()
+      .some((item) => item === activeElement || item.contains(activeElement));
+  }
+
+  refocusFocusedItem(): void {
+    this.getFocusedItem()?.focus({ preventScroll: true });
   }
 
   handleFocusIn(item: HTMLElement): void {
@@ -77,18 +97,6 @@ export class RovingTabIndex {
       this.focusedItemIndex = index;
       this.updateTabIndexes();
     }
-  }
-
-  saveFocus(): void {
-    const item = this.getFocusedItem();
-
-    if (item) {
-      saveFocusedElementInfo(item, this.options.component);
-    }
-  }
-
-  restoreFocus(): void {
-    restoreFocus(this.options.component);
   }
 
   reset(): void {

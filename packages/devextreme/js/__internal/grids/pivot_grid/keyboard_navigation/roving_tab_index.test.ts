@@ -14,13 +14,13 @@ const createComponent = (
   container: HTMLElement,
   tabindex: number | undefined = undefined,
 ): RovingTabIndexComponent => ({
-  option: (optionName?: string) => {
+  option: ((optionName?: string) => {
     if (optionName === undefined) {
       return { tabindex };
     }
 
     return optionName === 'tabindex' ? tabindex : undefined;
-  },
+  }) as RovingTabIndexComponent['option'],
   element: () => container,
 });
 
@@ -189,15 +189,30 @@ describe('RovingTabIndex', () => {
     });
   });
 
-  describe('saveFocus and restoreFocus', () => {
-    it('should restore focus to the same position after a re-render', () => {
+  describe('containsActiveElement', () => {
+    it('should detect focus on an item and on its content', () => {
+      const helper = createHelper();
+      const content = document.createElement('button');
+      items[1].appendChild(content);
+
+      expect(helper.containsActiveElement()).toBe(false);
+
+      helper.focusItem(1);
+      expect(helper.containsActiveElement()).toBe(true);
+
+      content.focus();
+      expect(helper.containsActiveElement()).toBe(true);
+    });
+  });
+
+  describe('refocusFocusedItem', () => {
+    it('should focus the roving item after items are re-created', () => {
       const helper = createHelper();
       helper.focusItem(1);
 
-      helper.saveFocus();
       items = createItems(3);
       helper.updateTabIndexes();
-      helper.restoreFocus();
+      helper.refocusFocusedItem();
 
       expect(document.activeElement).toBe(items[1]);
     });

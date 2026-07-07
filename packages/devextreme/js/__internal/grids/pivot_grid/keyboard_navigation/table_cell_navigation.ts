@@ -10,10 +10,9 @@ export function buildCellMatrix(section: HTMLTableSectionElement): HTMLTableCell
 
   Array.from(section.rows).forEach((row, rowIndex) => {
     matrix[rowIndex] ??= [];
+    let columnIndex = 0;
 
     Array.from(row.cells).forEach((cell) => {
-      let columnIndex = 0;
-
       while (matrix[rowIndex][columnIndex]) {
         columnIndex += 1;
       }
@@ -24,6 +23,8 @@ export function buildCellMatrix(section: HTMLTableSectionElement): HTMLTableCell
           matrix[rowIndex + rowOffset][columnIndex + columnOffset] = cell;
         }
       }
+
+      columnIndex += cell.colSpan;
     });
   });
 
