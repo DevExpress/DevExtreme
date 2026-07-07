@@ -11,6 +11,7 @@ import {
   expectColumns,
   getColumnItem,
   triggerDragStart,
+  triggerDragEnd,
   SELECTORS,
 } from './utils';
 
@@ -36,6 +37,8 @@ fixture.disablePageReloads`CardView - ColumnSortable.Functional`
     } else {
       await t.expect(draggingElement.exists).notOk();
     }
+
+    await triggerDragEnd(columnElement);
   }).before(async () => createWidget('dxCardView', {
     allowColumnReordering,
     columns: [{
@@ -66,6 +69,8 @@ fixture.disablePageReloads`CardView - ColumnSortable.Functional`
     } else {
       await t.expect(draggingElement.exists).notOk();
     }
+
+    await triggerDragEnd(columnElement);
   }).before(async () => createWidget('dxCardView', {
     allowColumnReordering: true,
     columns: [{
@@ -102,7 +107,7 @@ fixture.disablePageReloads`CardView - ColumnSortable.Functional`
 
 [0, 1].forEach((columnIndex) => {
   [0, 1, 2].forEach((gapIndex) => {
-    test.meta({ unstable: true })(`drag from columnChooser to headerPanel: from index ${columnIndex} to index ${gapIndex}`, async (t) => {
+    test(`drag from columnChooser to headerPanel: from index ${columnIndex} to index ${gapIndex}`, async (t) => {
       const cardView = new CardView('#container');
       await cardView.apiShowColumnChooser();
 

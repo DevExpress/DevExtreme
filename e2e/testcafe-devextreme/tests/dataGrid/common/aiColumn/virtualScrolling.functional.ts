@@ -41,7 +41,7 @@ const deleteGlobalVariables = ClientFunction((): void => {
   delete (window as any).aiResolve;
 });
 
-test.meta({ unstable: true })('DataGrid should send an AI request for rendered rows after scrolling without changing the page index', async (t) => {
+test('DataGrid should send an AI request for rendered rows after scrolling without changing the page index', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -51,6 +51,7 @@ test.meta({ unstable: true })('DataGrid should send an AI request for rendered r
     .ok();
 
   // act
+  await t.expect(dataGrid.isReady()).ok();
   await resolveAIRequest();
 
   // assert
@@ -76,6 +77,7 @@ test.meta({ unstable: true })('DataGrid should send an AI request for rendered r
     .ok();
 
   // act
+  await t.expect(dataGrid.isReady()).ok();
   await resolveAIRequest();
 
   // assert
@@ -144,7 +146,7 @@ test.meta({ unstable: true })('DataGrid should send an AI request for rendered r
     await deleteGlobalVariables();
   });
 
-test.meta({ unstable: true })('DataGrid should send an AI request for rendered rows after scrolling with changing the page index', async (t) => {
+test('DataGrid should send an AI request for rendered rows after scrolling with changing the page index', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -154,6 +156,7 @@ test.meta({ unstable: true })('DataGrid should send an AI request for rendered r
     .ok();
 
   // act
+  await t.expect(dataGrid.isReady()).ok();
   await resolveAIRequest();
 
   // assert
@@ -179,6 +182,7 @@ test.meta({ unstable: true })('DataGrid should send an AI request for rendered r
     .ok();
 
   // act
+  await t.expect(dataGrid.isReady()).ok();
   await resolveAIRequest();
 
   // assert

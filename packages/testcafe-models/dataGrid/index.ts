@@ -1,6 +1,7 @@
 import { ClientFunction, Selector } from 'testcafe';
 import DataGridInstance from 'devextreme/ui/data_grid';
 import type { SelectionSensitivity } from 'devextreme/ui/data_grid';
+import type { Properties as ToastProperties } from 'devextreme/ui/toast';
 import Toolbar from '../toolbar';
 import DataRow from './data/row';
 import GroupRow from './groupRow';
@@ -1051,13 +1052,13 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  apiShowErrorToast(): Promise<void> {
+  apiShowErrorToast(options?: ToastProperties): Promise<void> {
     const { getInstance } = this;
     return ClientFunction(() => {
         const gridInstance = getInstance() as any;
-        gridInstance.getController('errorHandling').showToastError('Error');
+        gridInstance.getController('errorHandling').showToastError('Error', options);
       },
-      { dependencies: { getInstance } },
+      { dependencies: { getInstance, options } },
     )();
   }
 

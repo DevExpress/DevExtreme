@@ -14,7 +14,7 @@ test('Toast should be visible after calling and should be not visible after defa
     .expect(treeList.isReady())
     .ok();
 
-  await treeList.apiShowErrorToast();
+  await treeList.apiShowErrorToast({ displayTime: 100000 });
   await t.expect(treeList.getToast().exists).ok();
 
   await testScreenshot(t, takeScreenshot, 'ai-column__toast__at-the-right-position.png', { element: treeList.element });
