@@ -10,7 +10,7 @@ import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
 import { foreachColumnInfo } from '@ts/grids/grid_core/virtual_columns/m_virtual_columns_core';
 
 const PIVOTGRID_EXPAND_CLASS = 'dx-expand';
-
+// test
 const getRealElementWidth = function (element) {
   let width = 0;
 
