@@ -1067,6 +1067,7 @@ test('The data should display correctly after changing the dataSource and focuse
     .expect(dataGrid.isReady())
     .ok();
 
+  await t.expect(dataGrid.apiGetTopVisibleRowData()).eql({ id: 96, text: 'item 96' });
   await testScreenshot(t, takeScreenshot, 'grid-virtual-scrolling-T1129252.png', { element: '#container' });
   await t
     .expect(compareResults.isValid())
@@ -1714,7 +1715,7 @@ test('Restoring focus on re-rendering should be done without unexpected scrollin
 
   await t.click(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(19).element);
 
-  await dataGrid.scrollBy(t, { left: 0 });
+  await dataGrid.scrollBy(t, { left: -1000 });
   await dataGrid.scrollBy(t, { top: 50 });
 
   await t.expect(dataGrid.getScrollLeft()).eql(0);

@@ -52,6 +52,7 @@ test('DataGrid should send an AI request for rendered rows after scrolling witho
     .ok();
 
   // act
+  await t.expect(dataGrid.isReady()).ok();
   await resolveAIRequest();
 
   // assert
@@ -77,6 +78,7 @@ test('DataGrid should send an AI request for rendered rows after scrolling witho
     .ok();
 
   // act
+  await t.expect(dataGrid.isReady()).ok();
   await resolveAIRequest();
 
   // assert
@@ -155,6 +157,7 @@ test('DataGrid should send an AI request for rendered rows after scrolling with 
     .ok();
 
   // act
+  await t.expect(dataGrid.isReady()).ok();
   await resolveAIRequest();
 
   // assert
@@ -180,6 +183,7 @@ test('DataGrid should send an AI request for rendered rows after scrolling with 
     .ok();
 
   // act
+  await t.expect(dataGrid.isReady()).ok();
   await resolveAIRequest();
 
   // assert

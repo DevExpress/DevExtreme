@@ -16,6 +16,7 @@ function testsFactory(testModel: {
 }) {
   test(`column chooser in ${testModel.name} mode should work after multiple hide/show actions`, async (t) => {
     const cardView = new CardView('#container');
+    await t.expect(cardView.isReady()).ok();
 
     await cardView.apiShowColumnChooser();
 

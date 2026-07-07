@@ -245,9 +245,13 @@ test('It should not fire row events if focusedRowEnabled: false', async (t) => {
 });
 
 test('It should fire rowChanged event on initialization if focusedRowKey options is set', async (t) => {
+  const dataGrid = new DataGrid(GRID_SELECTOR);
+
   const expectedRowFocusChanged: FocusRowChangedData[] = [
     [1],
   ];
+
+  await t.expect(dataGrid.getDataRow(1).element).ok();
 
   const [
     ,

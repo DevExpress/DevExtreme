@@ -250,6 +250,7 @@ test('Sensitivity option change should be correctly handled during runtime chang
 
 test('"Select All" checkbox should not react when not visible', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   const selectAllCheckBox = new CheckBox(
     dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).getEditor().element,
