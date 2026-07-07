@@ -115,10 +115,10 @@ fixture.disablePageReloads`CardView - ColumnSortable.Functional`
 
       await dragToHeaderPanel(t, cardView, columnElement, gapIndex);
 
-      const headerPanelColumns = [2, 3, 4];
+      const headerPanelColumns = [2, 3];
       headerPanelColumns.splice(gapIndex, 0, columnIndex);
 
-      const chooserColumns = [0, 1, 2, 3, 4].filter((c) => !headerPanelColumns.includes(c));
+      const chooserColumns = [0, 1].filter((c) => c !== columnIndex);
 
       await expectColumns(t, cardView, headerPanelColumns);
       await expectColumns(t, cardView, chooserColumns, 'columnChooser');
@@ -129,7 +129,6 @@ fixture.disablePageReloads`CardView - ColumnSortable.Functional`
         { dataField: 'Column 1', visible: false },
         { dataField: 'Column 2' },
         { dataField: 'Column 3' },
-        { dataField: 'Column 4' },
       ],
     }));
   });
