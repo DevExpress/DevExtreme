@@ -2080,7 +2080,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return {
       ...rule,
       area: this.getAppointmentResizableArea(viewModel),
-      onCancelByEsc: true,
+      cancelOnEscape: true,
       onResizeStart: (e): void => this.onAppointmentResizeStart(
         e as unknown as AppointmentResizeEvent,
       ),
