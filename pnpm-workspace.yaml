@@ -54,6 +54,7 @@ catalogs:
 
 overrides:
   '@sigstore/core@<=3.2.0': '^3.2.1'
+  'sigstore@<=4.1.0': '^4.1.1'
 
 minimumReleaseAgeExclude:
   - "eslint-config-devextreme"
