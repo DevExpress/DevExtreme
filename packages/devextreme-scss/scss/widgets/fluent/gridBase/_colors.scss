@@ -2,6 +2,7 @@
 @use "../sizes" as *;
 @use "../colors" as *;
 @use "../button/colors" as *;
+@use "../color" as extcolor;
 
 // adduse
 
@@ -166,12 +167,12 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
 
 @if $mode == "light" {
   @if $color == "blue"{
-    $datagrid-row-focused-bg: color.adjust($base-accent, $hue: 3deg, $saturation: -0.98%, $space: hsl, $lightness: 50.00%) !default;
+    $datagrid-row-focused-bg: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 3deg, $saturation: -0.98%, $lightness: 50.00%) !default;
     $datagrid-filter-row-background-color: color.adjust($datagrid-base-background-color, $lightness: -2%, $space: hsl) !default;
   }
 
   @if $color == "saas" {
-    $datagrid-row-focused-bg: color.adjust($base-accent, $hue: -1deg, $space: hsl, $lightness: 26.47%) !default;
+    $datagrid-row-focused-bg: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: -1deg, $saturation: 0%, $lightness: 26.47%) !default;
     $datagrid-filter-row-background-color: $base-typography-bg !default;
   }
 
