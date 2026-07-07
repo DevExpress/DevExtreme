@@ -630,6 +630,8 @@ abstract class AreaItem {
     if (!that._fakeTable) {
       that._fakeTable = that.tableElement()
         .clone()
+        .removeAttr('id')
+        .attr('aria-hidden', 'true')
         .addClass('dx-pivot-grid-fake-table')
         .appendTo(that._virtualContent);
     }
