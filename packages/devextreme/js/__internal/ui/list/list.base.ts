@@ -1531,7 +1531,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     this._scrollView.scrollTo(location);
   }
 
-  scrollToItem(itemElement: number | Element | dxElementWrapper | Item | undefined): void {
+  scrollToItem(itemElement: number | Element | dxElementWrapper | Item | null | undefined): void {
     if (!isDefined(itemElement)) {
       return;
     }
