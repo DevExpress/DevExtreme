@@ -1347,70 +1347,70 @@ export interface dxChartOptions extends BaseChartOptions<dxChart, chartPointObje
     negativesAsZeroes?: boolean;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type function
      * @type_function_param1 e:{viz/chart:ArgumentAxisClickEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onArgumentAxisClick?: ((e: ArgumentAxisClickEvent) => void) | string;
+    onArgumentAxisClick?: ((e: ArgumentAxisClickEvent) => void) | string | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type function
      * @type_function_param1 e:{viz/chart:LegendClickEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onLegendClick?: ((e: LegendClickEvent) => void) | string;
+    onLegendClick?: ((e: LegendClickEvent) => void) | string | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type function
      * @type_function_param1 e:{viz/chart:SeriesClickEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onSeriesClick?: ((e: SeriesClickEvent) => void) | string;
+    onSeriesClick?: ((e: SeriesClickEvent) => void) | string | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/chart:SeriesHoverChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onSeriesHoverChanged?: ((e: SeriesHoverChangedEvent) => void);
+    onSeriesHoverChanged?: ((e: SeriesHoverChangedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/chart:SeriesSelectionChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onSeriesSelectionChanged?: ((e: SeriesSelectionChangedEvent) => void);
+    onSeriesSelectionChanged?: ((e: SeriesSelectionChangedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/chart:ZoomEndEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onZoomEnd?: ((e: ZoomEndEvent) => void);
+    onZoomEnd?: ((e: ZoomEndEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/chart:ZoomStartEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onZoomStart?: ((e: ZoomStartEvent) => void);
+    onZoomStart?: ((e: ZoomStartEvent) => void) | undefined;
     /**
      * @docid
      * @type Object|Array<Object>
@@ -1504,7 +1504,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart, chartPointObje
        * @default 'series'
        */
       nameField?: string;
-    };
+    } | undefined;
     /**
      * @docid
      * @default true
@@ -1620,7 +1620,7 @@ export type ArgumentAxis = CommonAxisSettings & {
      * @notUsedInTheme
      * @public
      */
-    breaks?: Array<ScaleBreak>;
+    breaks?: Array<ScaleBreak> | undefined;
     /**
      * @docid dxChartOptions.argumentAxis.categories
      * @public
@@ -1652,7 +1652,7 @@ export type ArgumentAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    holidays?: Array<Date | string> | Array<number>;
+    holidays?: Array<Date | string> | Array<number> | undefined;
     /**
      * @docid dxChartOptions.argumentAxis.hoverMode
      * @default 'none'
@@ -1685,7 +1685,7 @@ export type ArgumentAxis = CommonAxisSettings & {
      * @notUsedInTheme
      * @public
      */
-    minVisualRangeLength?: TimeIntervalConfig;
+    minVisualRangeLength?: TimeIntervalConfig | undefined;
     /**
      * @docid dxChartOptions.argumentAxis.minorTickCount
      * @default undefined
@@ -1728,7 +1728,7 @@ export type ArgumentAxis = CommonAxisSettings & {
      * @default undefined
      * @public
      */
-    singleWorkdays?: Array<Date | string> | Array<number>;
+    singleWorkdays?: Array<Date | string> | Array<number> | undefined;
     /**
      * @docid dxChartOptions.argumentAxis.strips
      * @type Array<Object>
@@ -2143,7 +2143,7 @@ export type CommonAxisSettings = {
      * @default null
      * @public
      */
-    placeholderSize?: number;
+    placeholderSize?: number | null;
     /**
      * @docid dxChartOptions.commonAxisSettings.stripStyle
      * @type object
@@ -2741,7 +2741,7 @@ export type ValueAxis = CommonAxisSettings & {
      * @notUsedInTheme
      * @public
      */
-    breaks?: Array<ScaleBreak>;
+    breaks?: Array<ScaleBreak> | undefined;
     /**
      * @docid dxChartOptions.valueAxis.categories
      * @public
@@ -2800,7 +2800,7 @@ export type ValueAxis = CommonAxisSettings & {
      * @notUsedInTheme
      * @public
      */
-    minVisualRangeLength?: TimeIntervalConfig;
+    minVisualRangeLength?: TimeIntervalConfig | undefined;
     /**
      * @docid dxChartOptions.valueAxis.minorTickCount
      * @default undefined
@@ -4019,7 +4019,7 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyleBorder {
     color?: string | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.border.dashStyle
-     * @default 'solid'
+     * @default undefined
      * @public
      */
     dashStyle?: DashStyle | undefined;
@@ -4117,7 +4117,7 @@ export interface dxChartSeriesTypesCommonSeriesSelectionStyleBorder {
     color?: string | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.border.dashStyle
-     * @default 'solid'
+     * @default undefined
      * @public
      */
     dashStyle?: DashStyle | undefined;
