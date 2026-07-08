@@ -307,7 +307,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @action
      * @public
      */
-    onBeforeSend?: ((e: BeforeSendEvent) => void);
+    onBeforeSend?: ((e: BeforeSendEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -315,7 +315,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @action
      * @public
      */
-    onDropZoneEnter?: ((e: DropZoneEnterEvent) => void);
+    onDropZoneEnter?: ((e: DropZoneEnterEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -323,7 +323,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @action
      * @public
      */
-    onDropZoneLeave?: ((e: DropZoneLeaveEvent) => void);
+    onDropZoneLeave?: ((e: DropZoneLeaveEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -331,7 +331,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @action
      * @public
      */
-    onFilesUploaded?: ((e: FilesUploadedEvent) => void);
+    onFilesUploaded?: ((e: FilesUploadedEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -339,7 +339,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @action
      * @public
      */
-    onProgress?: ((e: ProgressEvent) => void);
+    onProgress?: ((e: ProgressEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -347,7 +347,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @action
      * @public
      */
-    onUploadAborted?: ((e: UploadAbortedEvent) => void);
+    onUploadAborted?: ((e: UploadAbortedEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -355,7 +355,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @action
      * @public
      */
-    onUploadError?: ((e: UploadErrorEvent) => void);
+    onUploadError?: ((e: UploadErrorEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -363,7 +363,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @action
      * @public
      */
-    onUploadStarted?: ((e: UploadStartedEvent) => void);
+    onUploadStarted?: ((e: UploadStartedEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -371,7 +371,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @action
      * @public
      */
-    onUploaded?: ((e: UploadedEvent) => void);
+    onUploaded?: ((e: UploadedEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -379,7 +379,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @action
      * @public
      */
-    onValueChanged?: ((e: ValueChangedEvent) => void);
+    onValueChanged?: ((e: ValueChangedEvent) => void) | null;
     /**
      * @docid
      * @default 0
