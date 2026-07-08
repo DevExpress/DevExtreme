@@ -251,7 +251,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     contextMenu?: {
       /**
        * @docid
-       * @default undefined
        */
       commands?: Array<CustomCommand | Command>;
       /**
@@ -595,7 +594,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     };
     /**
      * @docid
-     * @default null
      * @public
      */
     edges?: {
@@ -715,7 +713,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     };
     /**
      * @docid
-     * @default null
      * @public
      */
     nodes?: {
@@ -843,7 +840,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @action
      * @public
      */
-    onItemClick?: ((e: ItemClickEvent) => void);
+    onItemClick?: ((e: ItemClickEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -851,7 +848,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @action
      * @public
      */
-    onItemDblClick?: ((e: ItemDblClickEvent) => void);
+    onItemDblClick?: ((e: ItemDblClickEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -859,7 +856,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @action
      * @public
      */
-    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -867,7 +864,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @action
      * @public
      */
-    onRequestEditOperation?: ((e: RequestEditOperationEvent) => void);
+    onRequestEditOperation?: ((e: RequestEditOperationEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -875,7 +872,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @action
      * @public
      */
-    onRequestLayoutUpdate?: ((e: RequestLayoutUpdateEvent) => void);
+    onRequestLayoutUpdate?: ((e: RequestLayoutUpdateEvent) => void) | null;
     /**
      * @docid
      * @default "white"
@@ -929,7 +926,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     propertiesPanel?: {
       /**
        * @docid
-       * @default undefined
        */
       tabs?: Array<{
         /**
@@ -999,7 +995,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     mainToolbar?: {
       /**
        * @docid
-       * @default undefined
        */
       commands?: Array<CustomCommand | Command>;
       /**
@@ -1016,7 +1011,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     historyToolbar?: {
       /**
        * @docid
-       * @default undefined
        */
       commands?: Array<CustomCommand | Command>;
       /**
@@ -1033,7 +1027,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     viewToolbar?: {
       /**
        * @docid
-       * @default undefined
        */
       commands?: Array<CustomCommand | Command>;
       /**
@@ -1050,7 +1043,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     toolbox?: {
       /**
        * @docid
-       * @default undefined
        */
       groups?: Array<{
         /**
@@ -1115,7 +1107,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     zoomLevel?: number | {
       /**
        * @docid
-       * @default undefined
        */
       items?: Array<number>;
       /**
