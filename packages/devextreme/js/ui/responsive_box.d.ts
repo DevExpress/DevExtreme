@@ -175,7 +175,7 @@ export interface dxResponsiveBoxOptions<
      * @default null
      * @public
      */
-    screenByWidth?: Function;
+    screenByWidth?: Function | null;
     /**
      * @docid
      * @default ""
