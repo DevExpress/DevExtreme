@@ -205,19 +205,19 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
       border?: {
         /**
          * @docid
-         * @default '#000000'
+         * @default '#ffffff'
          */
-        color?: string | undefined;
+        color?: string;
         /**
          * @docid
          * @default false
          */
-        visible?: boolean | undefined;
+        visible?: boolean;
         /**
          * @docid
          * @default 2
          */
-        width?: number | undefined;
+        width?: number;
       };
       /**
        * @docid
@@ -296,19 +296,19 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
       border?: {
         /**
          * @docid
-         * @default '#000000'
+         * @default '#ffffff'
          */
-        color?: string | undefined;
+        color?: string;
         /**
          * @docid
          * @default false
          */
-        visible?: boolean | undefined;
+        visible?: boolean;
         /**
          * @docid
-         * @default 2
+         * @default 1
          */
-        width?: number | undefined;
+        width?: number;
       };
       /**
        * @docid
@@ -376,7 +376,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
         };
         /**
          * @docid
-         * @default 0.5
+         * @default undefined
          */
         opacity?: number | undefined;
       };
@@ -397,19 +397,19 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
       border?: {
         /**
          * @docid
-         * @default '#000000'
+         * @default '#ffffff'
          */
-        color?: string | undefined;
+        color?: string;
         /**
          * @docid
          * @default false
          */
-        visible?: boolean | undefined;
+        visible?: boolean;
         /**
          * @docid
          * @default 1
          */
-        width?: number | undefined;
+        width?: number;
       };
       /**
        * @docid
@@ -494,42 +494,42 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     };
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type function
      * @type_function_param1 e:{viz/sankey:LinkClickEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onLinkClick?: ((e: LinkClickEvent) => void) | string;
+    onLinkClick?: ((e: LinkClickEvent) => void) | string | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/sankey:LinkHoverEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onLinkHoverChanged?: ((e: LinkHoverEvent) => void);
+    onLinkHoverChanged?: ((e: LinkHoverEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type function
      * @type_function_param1 e:{viz/sankey:NodeClickEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onNodeClick?: ((e: NodeClickEvent) => void) | string;
+    onNodeClick?: ((e: NodeClickEvent) => void) | string | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/sankey:NodeHoverEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onNodeHoverChanged?: ((e: NodeHoverEvent) => void);
+    onNodeHoverChanged?: ((e: NodeHoverEvent) => void) | undefined;
     /**
      * @docid
      * @default "Material"
