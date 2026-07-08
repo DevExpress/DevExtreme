@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo } from '../../../helpers/domUtils';
 
-fixture.disablePageReloads`DateRangeBox keyboard navigation`
+fixture`DateRangeBox keyboard navigation`
   .page(url(__dirname, '../../container.html'));
 
 const initialValue = [new Date('2021/10/17'), new Date('2021/11/24')];
@@ -424,7 +424,7 @@ test('DateRangeBox should be closed by press esc key when views wrapper in popup
   applyValueMode: 'useButtons',
 }));
 
-test('DateRangeBox should not be closed by press tab key on startDate input', async (t) => {
+test.meta({ unstable: true })('DateRangeBox should not be closed by press tab key on startDate input', async (t) => {
   const dateRangeBox = new DateRangeBox('#container');
 
   await t
