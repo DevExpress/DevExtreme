@@ -3,6 +3,7 @@
 @use "../colors" as *;
 @use "../textEditor/colors" as *;
 @use "../button/colors" as *;
+@use "../color" as extcolor;
 
 // adduse
 
@@ -151,7 +152,7 @@ $chat-suggestions-box-shadow: null !default;
   $chat-suggestions-box-shadow: 0 4px 12px 0 color.change($base-shadow-color, $alpha: 0.04), 0 4px 24px 0 color.change($base-shadow-color, $alpha: 0.02) !default;
 
   @if $color == "blue" {
-    $chat-bubble-background-color-primary: color.adjust($base-accent, $hue: 3.8deg, $saturation: -11.4%, $lightness: 55.5%, $space: hsl) !default;
+    $chat-bubble-background-color-primary: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 3.8deg, $saturation: -11.4%, $lightness: 55.5%) !default;
     $chat-messagelist-empty-icon-background-color: color.adjust($base-bg, $lightness: -3.92%, $space: hsl) !default;
   }
 
@@ -163,7 +164,7 @@ $chat-suggestions-box-shadow: null !default;
 
 @if $mode == "dark" {
   $chat-bubble-background-color-secondary: color.adjust($base-bg, $lightness: 7.84%, $space: hsl) !default;
-  $chat-bubble-background-color-primary: color.adjust($base-accent, $hue: 356.3deg, $saturation: -14.7%, $lightness: -49.4%, $space: hsl) !default;
+  $chat-bubble-background-color-primary: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 356.3deg, $saturation: -14.7%, $lightness: -49.4%) !default;
 
   $chat-information-author-name-color: color.adjust($base-bg, $lightness: 43.92%, $space: hsl) !default;
   $chat-information-timestamp-color: color.adjust($base-bg, $lightness: 43.92%, $space: hsl) !default;
