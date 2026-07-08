@@ -217,7 +217,6 @@ overrides:
   sigstore@<=4.1.0: ^4.1.1
   '@sigstore/verify@3.1.0': ^3.1.1
   babel-traverse: npm:@babel/traverse@^7.23.2
-  terser@<4.8.1: ^4.8.1
   systemjs-builder>terser: 5.46.2
 
 patchedDependencies:
