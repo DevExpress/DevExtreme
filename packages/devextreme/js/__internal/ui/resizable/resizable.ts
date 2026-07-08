@@ -213,7 +213,6 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
       });
     });
 
-    eventsEngine.off(this.$element(), KEYDOWN_EVENT_NAME);
     eventsEngine.on(this.$element(), KEYDOWN_EVENT_NAME, this._keydownHandler.bind(this));
   }
 
@@ -700,6 +699,14 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     this._toggleResizingClass(false);
   }
 
+  /**
+   * Cancels an active resize when Escape is pressed and `cancelOnEscape` is enabled.
+   *
+   * The handler is subscribed to the root element, so keydown reaches it only
+   * while focus is inside the widget. The root is not focusable by itself —
+   * the host must make it focusable: Scheduler appointments have `tabindex`,
+   * and clicking a resize handle keeps focus within the appointment element.
+   */
   _keydownHandler(e: DxEvent<KeyboardEvent>): void {
     if (!this.option('cancelOnEscape')) {
       return;
@@ -782,6 +789,7 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
   }
 
   _clean(): void {
+    eventsEngine.off(this.$element(), KEYDOWN_EVENT_NAME);
     this.$element().find(`.${RESIZABLE_HANDLE_CLASS}`).remove();
   }
 
