@@ -469,6 +469,7 @@ jobs:
         unstable_failed=0
         result=./artifacts/unstable-run-result.json
         new_flakes_summary=./artifacts/new-flakes-summary.txt
+        mkdir -p ./artifacts
         : > "$new_flakes_summary"
 
         # Every test gets up to 3 attempts (initial run + 2 retries) and passes
