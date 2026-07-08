@@ -118,6 +118,12 @@ catalogs:
     eslint-plugin-qunit:
       specifier: 7.3.4
       version: 7.3.4
+    eslint-plugin-vue:
+      specifier: 9.33.0
+      version: 9.33.0
+    vue-eslint-parser:
+      specifier: 9.4.3
+      version: 9.4.3
   tools:
     '@types/node':
       specifier: 20.12.8
@@ -613,7 +619,7 @@ importers:
         version: 5.62.0(eslint@8.56.0)(typescript@5.4.5)
       '@vue/eslint-config-typescript':
         specifier: 12.0.0
-        version: 12.0.0(eslint-plugin-vue@10.4.0(@typescript-eslint/parser@5.62.0(eslint@8.56.0)(typescript@5.4.5))(eslint@8.56.0)(vue-eslint-parser@10.0.0(eslint@8.56.0)))(eslint@8.56.0)(typescript@5.4.5)
+        version: 12.0.0(eslint-plugin-vue@9.33.0(eslint@8.56.0))(eslint@8.56.0)(typescript@5.4.5)
       '@vue/tsconfig':
         specifier: ^0.7.0
         version: 0.7.0(typescript@5.4.5)(vue@3.5.38(typescript@5.4.5))
@@ -657,8 +663,8 @@ importers:
         specifier: 3.3.3
         version: 3.3.3(eslint@8.56.0)
       eslint-plugin-vue:
-        specifier: 'catalog:'
-        version: 10.4.0(@typescript-eslint/parser@5.62.0(eslint@8.56.0)(typescript@5.4.5))(eslint@8.56.0)(vue-eslint-parser@10.0.0(eslint@8.56.0))
+        specifier: catalog:eslint8
+        version: 9.33.0(eslint@8.56.0)
       express:
         specifier: 4.21.2
         version: 4.21.2
@@ -704,6 +710,9 @@ importers:
       open:
         specifier: 8.4.2
         version: 8.4.2
+      postcss-html:
+        specifier: ^1.8.1
+        version: 1.8.1
       rollup:
         specifier: ^4.59.0
         version: 4.59.0
@@ -716,9 +725,6 @@ importers:
       stylelint:
         specifier: 'catalog:'
         version: 16.22.0(typescript@5.4.5)
-      stylelint-config-recommended-vue:
-        specifier: 1.5.0
-        version: 1.5.0(postcss-html@1.8.1)(stylelint@16.22.0(typescript@5.4.5))
       stylelint-config-standard:
         specifier: 35.0.0
         version: 35.0.0(stylelint@16.22.0(typescript@5.4.5))
@@ -735,8 +741,8 @@ importers:
         specifier: 10.9.2
         version: 10.9.2(@swc/core@1.15.41(@swc/helpers@0.5.23))(@types/node@20.12.8)(typescript@5.4.5)
       vue-eslint-parser:
-        specifier: 'catalog:'
-        version: 10.0.0(eslint@8.56.0)
+        specifier: catalog:eslint8
+        version: 9.4.3(eslint@8.56.0)
       vue-tsc:
         specifier: ^3.0.6
         version: 3.3.5(typescript@5.4.5)
@@ -9148,6 +9154,12 @@ packages:
       '@typescript-eslint/parser':
         optional: true
 
+  eslint-plugin-vue@9.33.0:
+    resolution: {integrity: sha512-174lJKuNsuDIlLpjeXc5E2Tss8P44uIimAfGD0b90k0NoirJqpG7stLuU9Vp/9ioTOrQdWVREc4mRd1BD+CvGw==}
+    engines: {node: ^14.17.0 || >=16.0.0}
+    peerDependencies:
+      eslint: ^6.2.0 || ^7.0.0 || ^8.0.0 || ^9.0.0
+
   eslint-scope@5.1.1:
     resolution: {integrity: sha512-2NxwbF/hZ0KpepYN0cNbo+FN6XoK7GaHlQhgx/hIZl6Va0bF45RQOOwhLIy8lQDbuCiadSLCBnH2CFYquit5bw==}
     engines: {node: '>=8.0.0'}
@@ -14840,13 +14852,6 @@ packages:
   style-to-object@1.0.14:
     resolution: {integrity: sha512-LIN7rULI0jBscWQYaSswptyderlarFkjQ+t79nzty8tcIAceVomEVlLzH5VP4Cmsv6MtKhs7qaAiwlcp+Mgaxw==}
 
-  stylelint-config-html@1.1.0:
-    resolution: {integrity: sha512-IZv4IVESjKLumUGi+HWeb7skgO6/g4VMuAYrJdlqQFndgbj6WJAXPhaysvBiXefX79upBdQVumgYcdd17gCpjQ==}
-    engines: {node: ^12 || >=14}
-    peerDependencies:
-      postcss-html: ^1.0.0
-      stylelint: '>=14.0.0'
-
   stylelint-config-recommended-scss@14.1.0:
     resolution: {integrity: sha512-bhaMhh1u5dQqSsf6ri2GVWWQW5iUjBYgcHkh7SgDDn92ijoItC/cfO/W+fpXshgTQWhwFkP1rVcewcv4jaftRg==}
     engines: {node: '>=18.12.0'}
@@ -14857,24 +14862,11 @@ packages:
       postcss:
         optional: true
 
-  stylelint-config-recommended-vue@1.5.0:
-    resolution: {integrity: sha512-65TAK/clUqkNtkZLcuytoxU0URQYlml+30Nhop7sRkCZ/mtWdXt7T+spPSB3KMKlb+82aEVJ4OrcstyDBdbosg==}
-    engines: {node: ^12 || >=14}
-    peerDependencies:
-      postcss-html: ^1.0.0
-      stylelint: '>=14.0.0'
-
   stylelint-config-recommended@14.0.1:
     resolution: {integrity: sha512-bLvc1WOz/14aPImu/cufKAZYfXs/A/owZfSMZ4N+16WGXLoX5lOir53M6odBxvhgmgdxCVnNySJmZKx73T93cg==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
       stylelint: ^16.1.0
-
-  stylelint-config-recommended@18.0.0:
-    resolution: {integrity: sha512-mxgT2XY6YZ3HWWe3Di8umG6aBmWmHTblTgu/f10rqFXnyWxjKWwNdjSWkgkwCtxIKnqjSJzvFmPT5yabVIRxZg==}
-    engines: {node: '>=20.19.0'}
-    peerDependencies:
-      stylelint: ^17.0.0
 
   stylelint-config-standard-scss@14.0.0:
     resolution: {integrity: sha512-6Pa26D9mHyi4LauJ83ls3ELqCglU6VfCXchovbEqQUiEkezvKdv6VgsIoMy58i00c854wVmOw0k8W5FTpuaVqg==}
@@ -19594,7 +19586,7 @@ snapshots:
       proc-log: 4.2.0
       promise-inflight: 1.0.1
       promise-retry: 2.0.1
-      semver: 7.6.0
+      semver: 7.8.4
       which: 4.0.0
     transitivePeerDependencies:
       - bluebird
@@ -22399,12 +22391,12 @@ snapshots:
 
   '@vue/devtools-api@6.6.4': {}
 
-  '@vue/eslint-config-typescript@12.0.0(eslint-plugin-vue@10.4.0(@typescript-eslint/parser@5.62.0(eslint@8.56.0)(typescript@5.4.5))(eslint@8.56.0)(vue-eslint-parser@10.0.0(eslint@8.56.0)))(eslint@8.56.0)(typescript@5.4.5)':
+  '@vue/eslint-config-typescript@12.0.0(eslint-plugin-vue@9.33.0(eslint@8.56.0))(eslint@8.56.0)(typescript@5.4.5)':
     dependencies:
       '@typescript-eslint/eslint-plugin': 6.21.0(@typescript-eslint/parser@6.21.0(eslint@8.56.0)(typescript@5.4.5))(eslint@8.56.0)(typescript@5.4.5)
       '@typescript-eslint/parser': 6.21.0(eslint@8.56.0)(typescript@5.4.5)
       eslint: 8.56.0
-      eslint-plugin-vue: 10.4.0(@typescript-eslint/parser@5.62.0(eslint@8.56.0)(typescript@5.4.5))(eslint@8.56.0)(vue-eslint-parser@10.0.0(eslint@8.56.0))
+      eslint-plugin-vue: 9.33.0(eslint@8.56.0)
       vue-eslint-parser: 9.4.3(eslint@8.56.0)
     optionalDependencies:
       typescript: 5.4.5
@@ -24719,7 +24711,7 @@ snapshots:
       postcss-modules-scope: 3.2.1(postcss@8.5.10)
       postcss-modules-values: 4.0.0(postcss@8.5.10)
       postcss-value-parser: 4.2.0
-      semver: 7.7.1
+      semver: 7.8.4
     optionalDependencies:
       webpack: 5.105.0(@swc/core@1.15.41(@swc/helpers@0.5.23))(esbuild@0.28.1)
 
@@ -26268,19 +26260,6 @@ snapshots:
       semver: 7.8.4
       strip-indent: 4.1.1
 
-  eslint-plugin-vue@10.4.0(@typescript-eslint/parser@5.62.0(eslint@8.56.0)(typescript@5.4.5))(eslint@8.56.0)(vue-eslint-parser@10.0.0(eslint@8.56.0)):
-    dependencies:
-      '@eslint-community/eslint-utils': 4.9.1(eslint@8.56.0)
-      eslint: 8.56.0
-      natural-compare: 1.4.0
-      nth-check: 2.1.1
-      postcss-selector-parser: 6.1.4
-      semver: 7.8.4
-      vue-eslint-parser: 10.0.0(eslint@8.56.0)
-      xml-name-validator: 4.0.0
-    optionalDependencies:
-      '@typescript-eslint/parser': 5.62.0(eslint@8.56.0)(typescript@5.4.5)
-
   eslint-plugin-vue@10.4.0(@typescript-eslint/parser@8.52.0(eslint@9.18.0(jiti@1.21.7))(typescript@4.9.5))(eslint@9.18.0(jiti@1.21.7))(vue-eslint-parser@10.0.0(eslint@9.18.0(jiti@1.21.7))):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@9.18.0(jiti@1.21.7))
@@ -26306,6 +26285,20 @@ snapshots:
       xml-name-validator: 4.0.0
     optionalDependencies:
       '@typescript-eslint/parser': 8.52.0(eslint@9.18.0(jiti@1.21.7))(typescript@5.4.5)
+
+  eslint-plugin-vue@9.33.0(eslint@8.56.0):
+    dependencies:
+      '@eslint-community/eslint-utils': 4.9.1(eslint@8.56.0)
+      eslint: 8.56.0
+      globals: 13.24.0
+      natural-compare: 1.4.0
+      nth-check: 2.1.1
+      postcss-selector-parser: 6.1.4
+      semver: 7.8.4
+      vue-eslint-parser: 9.4.3(eslint@8.56.0)
+      xml-name-validator: 4.0.0
+    transitivePeerDependencies:
+      - supports-color
 
   eslint-scope@5.1.1:
     dependencies:
@@ -28699,7 +28692,7 @@ snapshots:
       '@babel/parser': 7.29.7
       '@istanbuljs/schema': 0.1.6
       istanbul-lib-coverage: 3.2.2
-      semver: 7.7.1
+      semver: 7.8.4
     transitivePeerDependencies:
       - supports-color
 
@@ -31192,7 +31185,7 @@ snapshots:
 
   npm-install-checks@6.3.0:
     dependencies:
-      semver: 7.6.0
+      semver: 7.8.4
 
   npm-install-checks@7.1.2:
     dependencies:
@@ -31213,7 +31206,7 @@ snapshots:
     dependencies:
       hosted-git-info: 8.1.0
       proc-log: 5.0.0
-      semver: 7.7.1
+      semver: 7.8.4
       validate-npm-package-name: 6.0.2
 
   npm-packlist@8.0.2:
@@ -31229,7 +31222,7 @@ snapshots:
       npm-install-checks: 7.1.2
       npm-normalize-package-bin: 4.0.0
       npm-package-arg: 12.0.2
-      semver: 7.7.1
+      semver: 7.8.4
 
   npm-pick-manifest@9.0.0:
     dependencies:
@@ -33920,11 +33913,6 @@ snapshots:
     dependencies:
       inline-style-parser: 0.2.7
 
-  stylelint-config-html@1.1.0(postcss-html@1.8.1)(stylelint@16.22.0(typescript@5.4.5)):
-    dependencies:
-      postcss-html: 1.8.1
-      stylelint: 16.22.0(typescript@5.4.5)
-
   stylelint-config-recommended-scss@14.1.0(postcss@8.5.15)(stylelint@16.22.0(typescript@5.9.3)):
     dependencies:
       postcss-scss: 4.0.9(postcss@8.5.15)
@@ -33933,14 +33921,6 @@ snapshots:
       stylelint-scss: 6.10.0(stylelint@16.22.0(typescript@5.9.3))
     optionalDependencies:
       postcss: 8.5.15
-
-  stylelint-config-recommended-vue@1.5.0(postcss-html@1.8.1)(stylelint@16.22.0(typescript@5.4.5)):
-    dependencies:
-      postcss-html: 1.8.1
-      semver: 7.8.4
-      stylelint: 16.22.0(typescript@5.4.5)
-      stylelint-config-html: 1.1.0(postcss-html@1.8.1)(stylelint@16.22.0(typescript@5.4.5))
-      stylelint-config-recommended: 18.0.0(stylelint@16.22.0(typescript@5.4.5))
 
   stylelint-config-recommended@14.0.1(stylelint@16.22.0(typescript@4.9.5)):
     dependencies:
@@ -33953,10 +33933,6 @@ snapshots:
   stylelint-config-recommended@14.0.1(stylelint@16.22.0(typescript@5.9.3)):
     dependencies:
       stylelint: 16.22.0(typescript@5.9.3)
-
-  stylelint-config-recommended@18.0.0(stylelint@16.22.0(typescript@5.4.5)):
-    dependencies:
-      stylelint: 16.22.0(typescript@5.4.5)
 
   stylelint-config-standard-scss@14.0.0(postcss@8.5.15)(stylelint@16.22.0(typescript@5.9.3)):
     dependencies:
@@ -35660,19 +35636,6 @@ snapshots:
   void-elements@2.0.1: {}
 
   vscode-uri@3.1.0: {}
-
-  vue-eslint-parser@10.0.0(eslint@8.56.0):
-    dependencies:
-      debug: 4.4.3
-      eslint: 8.56.0
-      eslint-scope: 8.4.0
-      eslint-visitor-keys: 4.2.1
-      espree: 10.4.0
-      esquery: 1.7.0
-      lodash: 4.18.1
-      semver: 7.8.4
-    transitivePeerDependencies:
-      - supports-color
 
   vue-eslint-parser@10.0.0(eslint@9.18.0(jiti@1.21.7)):
     dependencies:

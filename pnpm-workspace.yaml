@@ -42,6 +42,8 @@ catalogs:
     eslint-plugin-import: 2.29.0
     eslint-plugin-no-only-tests: 3.1.0
     eslint-plugin-qunit: 7.3.4
+    eslint-plugin-vue: 9.33.0
+    vue-eslint-parser: 9.4.3
     gulp-eslint-new: 1.9.1
     "@babel/eslint-parser": 7.23.10
     "@typescript-eslint/eslint-plugin": 5.62.0

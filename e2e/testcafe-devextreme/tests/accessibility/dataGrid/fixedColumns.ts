@@ -53,6 +53,7 @@ test('Accessibility: Scrollable should have focusable element', async (t) => {
 
 test('Accessibility: Scrollable should have focusable element when navigate through fixed columns', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   const columnsByFixing = await ClientFunction(
     () => (window as any).widget.getVisibleColumns().map((column) => column.fixed),
