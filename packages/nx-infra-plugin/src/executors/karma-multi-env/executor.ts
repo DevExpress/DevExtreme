@@ -362,7 +362,10 @@ async function loadKarmaConfig(
   try {
     const karma = loadKarmaModule();
     const absoluteConfigPath = path.join(projectRoot, karmaConfigPath);
-    const resultConfig = await karma.config.parseConfig(absoluteConfigPath, config ?? {});
+    const resultConfig = await karma.config.parseConfig(absoluteConfigPath, config ?? {}, {
+      promiseConfig: true,
+      throwErrors: true,
+    });
 
     return resultConfig;
   } catch (error) {
