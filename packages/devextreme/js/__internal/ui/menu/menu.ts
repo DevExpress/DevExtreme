@@ -166,13 +166,9 @@ class Menu extends MenuBase<MenuProperties> {
         },
       },
       hideSubmenuOnMouseLeave: false,
-      // @ts-expect-error ts-error
       onSubmenuShowing: null,
-      // @ts-expect-error ts-error
       onSubmenuShown: null,
-      // @ts-expect-error ts-error
       onSubmenuHiding: null,
-      // @ts-expect-error ts-error
       onSubmenuHidden: null,
       adaptivityEnabled: false,
     };

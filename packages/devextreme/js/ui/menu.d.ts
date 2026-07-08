@@ -215,7 +215,7 @@ export interface dxMenuOptions<
      * @action
      * @public
      */
-    onSubmenuHidden?: ((e: SubmenuHiddenEvent<TItem, TKey>) => void);
+    onSubmenuHidden?: ((e: SubmenuHiddenEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -223,7 +223,7 @@ export interface dxMenuOptions<
      * @action
      * @public
      */
-    onSubmenuHiding?: ((e: SubmenuHidingEvent<TItem, TKey>) => void);
+    onSubmenuHiding?: ((e: SubmenuHidingEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -231,7 +231,7 @@ export interface dxMenuOptions<
      * @action
      * @public
      */
-    onSubmenuShowing?: ((e: SubmenuShowingEvent<TItem, TKey>) => void);
+    onSubmenuShowing?: ((e: SubmenuShowingEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -239,7 +239,7 @@ export interface dxMenuOptions<
      * @action
      * @public
      */
-    onSubmenuShown?: ((e: SubmenuShownEvent<TItem, TKey>) => void);
+    onSubmenuShown?: ((e: SubmenuShownEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default "horizontal"
