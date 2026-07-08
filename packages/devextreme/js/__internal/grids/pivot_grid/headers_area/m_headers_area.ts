@@ -89,6 +89,7 @@ class HorizontalHeadersArea extends AreaItem {
   _getMainElementMarkup() {
     const thead = domAdapter.createElement('thead');
     thead.setAttribute('class', this._getAreaClassName());
+    thead.setAttribute('role', 'presentation');
     return thead;
   }
 
@@ -290,6 +291,7 @@ class VerticalHeadersArea extends HorizontalHeadersArea {
   _getMainElementMarkup() {
     const tbody = domAdapter.createElement('tbody');
     tbody.classList.add(this._getAreaClassName());
+    tbody.setAttribute('role', 'presentation');
     return tbody;
   }
 
