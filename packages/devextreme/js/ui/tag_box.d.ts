@@ -243,7 +243,7 @@ export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Excl
      * @action
      * @public
      */
-    onMultiTagPreparing?: ((e: MultiTagPreparingEvent) => void);
+    onMultiTagPreparing?: ((e: MultiTagPreparingEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -251,7 +251,7 @@ export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Excl
      * @action
      * @public
      */
-    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void);
+    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -259,7 +259,7 @@ export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Excl
      * @action
      * @public
      */
-    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void) | null;
     /**
      * @docid
      * @default 'page'
