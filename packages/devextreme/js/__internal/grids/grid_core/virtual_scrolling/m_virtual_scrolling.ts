@@ -1440,12 +1440,11 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
   public renderDelayedTemplates() {
     this.waitAsyncTemplates().done(() => {
       this._updateContentPosition(true);
+      if (this.option(LEGACY_SCROLLING_MODE) === false) {
+        this._updateViewportSize(getOuterHeight(this.element()), this._scrollTop);
+      }
     });
     super.renderDelayedTemplates.apply(this, arguments as any);
-    const viewportHeight = this._hasHeight ? getOuterHeight(this.element()) : getOuterHeight(getWindow());
-    if (this.option(LEGACY_SCROLLING_MODE) === false) {
-      this._updateViewportSize(viewportHeight);
-    }
   }
 
   protected _renderCore(e) {
