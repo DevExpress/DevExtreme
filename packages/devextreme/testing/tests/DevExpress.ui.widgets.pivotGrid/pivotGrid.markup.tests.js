@@ -183,7 +183,7 @@ QUnit.module('PivotGrid markup tests', () => {
             assert.ok($dataCell.length > 0, 'data cell exists');
             assert.strictEqual($dataCell.find('.dx-expand-icon-container').length, 0, 'no expand control in a non-expandable cell');
             assert.strictEqual($dataCell.attr('role'), undefined, 'data cell has no role');
-            assert.strictEqual($dataCell.attr('tabindex'), undefined, 'data cell is not focusable');
+            assert.strictEqual($dataCell.attr('tabindex'), '0', 'first data cell is focusable to provide keyboard access to the scrollable data area');
         } finally {
             clock.restore();
         }
