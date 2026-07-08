@@ -4,7 +4,7 @@ run-name: "PR #${{ github.event.pull_request.number }}: ${{ github.event.pull_re
 on:
   pull_request:
     branches:
-      - 26_1
+      - main
     types:
       - opened
       - reopened
