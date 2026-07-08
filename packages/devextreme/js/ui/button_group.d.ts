@@ -126,7 +126,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @action
      * @public
      */
-    onItemClick?: ((e: ItemClickEvent) => void);
+    onItemClick?: ((e: ItemClickEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -134,7 +134,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @action
      * @public
      */
-    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void) | null;
     /**
      * @docid
      * @fires dxButtonGroupOptions.onSelectionChanged
