@@ -9,7 +9,7 @@ import ChangeCell from './ChangeCell.tsx';
 
 const App = () => {
   const [connectionStarted, setConnectionStarted] = useState(false);
-  const [dataSource, setDataSource] = useState<CustomStore | null>(null);
+  const [dataSource, setDataSource] = useState<CustomStore | undefined>(undefined);
 
   useEffect(() => {
     const hubConnection = new HubConnectionBuilder()

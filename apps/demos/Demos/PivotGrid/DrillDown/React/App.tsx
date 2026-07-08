@@ -15,7 +15,7 @@ import { sales } from './data.ts';
 
 const App = () => {
   const [popupTitle, setPopupTitle] = useState('');
-  const [drillDownDataSource, setDrillDownDataSource] = useState<DataSource | null>(null);
+  const [drillDownDataSource, setDrillDownDataSource] = useState<DataSource | undefined>(undefined);
   const [popupVisible, setPopupVisible] = useState(false);
   const dataGridRef = useRef<DataGridRef>(null);
 
