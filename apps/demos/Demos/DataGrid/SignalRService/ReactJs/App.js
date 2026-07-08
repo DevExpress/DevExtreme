@@ -7,7 +7,7 @@ import ChangeCell from './ChangeCell.js';
 
 const App = () => {
   const [connectionStarted, setConnectionStarted] = useState(false);
-  const [dataSource, setDataSource] = useState(null);
+  const [dataSource, setDataSource] = useState(undefined);
   useEffect(() => {
     const hubConnection = new HubConnectionBuilder()
       .withUrl('https://js.devexpress.com/Demos/NetCore/liveUpdateSignalRHub', {
