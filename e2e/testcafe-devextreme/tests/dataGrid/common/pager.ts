@@ -317,6 +317,64 @@ test('Pager info should show page 1 of 1 after changing pageSize to \'all\' and 
   },
 }));
 
+test('Pager should stay consistent after expanding/collapsing a group on the last page (T1322291)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const pager = dataGrid.getPager();
+  const lastGroup = dataGrid.getGroupRowSelector().withText('Group 24');
+  const lastGroupExpandCell = lastGroup.find('.dx-command-expand');
+  const pages = pager.element.find('.dx-page');
+
+  const checkPagerConsistent = (expectedPageCount: number): Promise<void> => t
+    // exactly one page is selected (no duplicated selection)
+    .expect(pager.element.find('.dx-page.dx-selection').count)
+    .eql(1)
+    // the last page button is pageCount
+    .expect(pages.nth(-1).innerText)
+    .eql(`${expectedPageCount}`)
+    // the pageCount button appears only once (not duplicated)
+    .expect(pages.withExactText(`${expectedPageCount}`).count)
+    .eql(1)
+    // no stale page button above pageCount
+    .expect(pages.withExactText(`${expectedPageCount + 1}`).count)
+    .eql(0);
+
+  // 1. Go to the last page (12).
+  await t.click(pager.getNavPage('12').element);
+  await checkPagerConsistent(12);
+
+  // 2. Expand the group on the last page -> a 13th page appears.
+  await t.click(lastGroupExpandCell);
+  await checkPagerConsistent(13);
+
+  // 3. Collapse it -> pageCount returns to 12.
+  await t.click(lastGroupExpandCell);
+  await checkPagerConsistent(12);
+
+  // 4. Expand again -> still consistent.
+  await t.click(lastGroupExpandCell);
+  await checkPagerConsistent(13);
+
+  // 5. Collapse again -> back to a clean 12-page pager.
+  await t.click(lastGroupExpandCell);
+  await checkPagerConsistent(12);
+}).before(async () => createWidget('dxDataGrid', {
+  // 24 single-item groups with pageSize 2 -> collapsed groups fill 12 pages.
+  // 12 pages (> 10) is what makes the pager use its windowed "1 ... n" layout with separators
+  dataSource: Array.from({ length: 24 }, (_, i) => ({
+    id: i,
+    product: `Group ${String(i + 1).padStart(2, '0')}`,
+    value: i,
+  })),
+  keyExpr: 'id',
+  columns: [
+    { dataField: 'product', groupIndex: 0 },
+    'value',
+  ],
+  grouping: { autoExpandAll: false },
+  paging: { pageSize: 2 },
+  pager: { visible: true },
+}));
+
 test('No error should occur if dataSource is not defined and pageIndex is promise chained (T1256070)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
