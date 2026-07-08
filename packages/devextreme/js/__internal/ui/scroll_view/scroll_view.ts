@@ -105,9 +105,7 @@ export class ScrollView extends Scrollable<ScrollViewProperties> {
       pulledDownText: messageLocalization.format('dxScrollView-pulledDownText'),
       refreshingText: messageLocalization.format('dxScrollView-refreshingText'),
       reachBottomText: messageLocalization.format('dxScrollView-reachBottomText'),
-      // @ts-expect-error ts-error
       onPullDown: null,
-      // @ts-expect-error ts-error
       onReachBottom: null,
       refreshStrategy: 'pullDown',
     };

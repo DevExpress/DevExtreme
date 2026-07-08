@@ -82,7 +82,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
      * @action
      * @public
      */
-    onPullDown?: ((e: PullDownEvent) => void);
+    onPullDown?: ((e: PullDownEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -90,7 +90,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
      * @action
      * @public
      */
-    onReachBottom?: ((e: ReachBottomEvent) => void);
+    onReachBottom?: ((e: ReachBottomEvent) => void) | null;
     /**
      * @docid
      * @default "Release to refresh..."
