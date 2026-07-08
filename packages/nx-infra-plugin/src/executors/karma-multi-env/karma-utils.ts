@@ -46,6 +46,7 @@ export interface KarmaModule {
     parseConfig(
       configPath: string | null,
       cliOptions: Record<string, unknown>,
+      parseOptions?: { promiseConfig?: boolean; throwErrors?: boolean },
     ): Promise<KarmaConfigOptions>;
   };
 }
