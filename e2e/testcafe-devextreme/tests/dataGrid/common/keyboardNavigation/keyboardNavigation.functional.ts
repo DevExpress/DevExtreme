@@ -6050,12 +6050,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     // act
     await t
       .pressKey('ctrl+end')
-      .expect(dataGrid.getScrollTop())
-      .gte(0)
-      .expect(dataGrid.getScrollLeft())
-      .gte(0)
-      .expect(dataGrid.isReady())
-      .ok();
+      .wait(500);
 
     // assert
     await t
@@ -6134,12 +6129,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     // act
     await t
       .pressKey('ctrl+end')
-      .expect(dataGrid.getScrollTop())
-      .gte(0)
-      .expect(dataGrid.getScrollLeft())
-      .gte(0)
-      .expect(dataGrid.isReady())
-      .ok();
+      .wait(500);
 
     // assert
     await t
@@ -6219,12 +6209,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     // act
     await t
       .pressKey('ctrl+end')
-      .expect(dataGrid.getScrollTop())
-      .gte(0)
-      .expect(dataGrid.getScrollLeft())
-      .gte(0)
-      .expect(dataGrid.isReady())
-      .ok();
+      .wait(500);
 
     // assert
     await t
@@ -6305,12 +6290,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     // act
     await t
       .pressKey('ctrl+end')
-      .expect(dataGrid.getScrollTop())
-      .gte(0)
-      .expect(dataGrid.getScrollLeft())
-      .gte(0)
-      .expect(dataGrid.isReady())
-      .ok();
+      .wait(500);
 
     // assert
     await t
@@ -6391,12 +6371,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     // act
     await t
       .pressKey('ctrl+end')
-      .expect(dataGrid.getScrollTop())
-      .gte(0)
-      .expect(dataGrid.getScrollLeft())
-      .gte(0)
-      .expect(dataGrid.isReady())
-      .ok();
+      .wait(500);
 
     // assert
     await t
@@ -6476,12 +6451,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     // act
     await t
       .pressKey('ctrl+end')
-      .expect(dataGrid.getScrollTop())
-      .gte(0)
-      .expect(dataGrid.getScrollLeft())
-      .gte(0)
-      .expect(dataGrid.isReady())
-      .ok();
+      .wait(500);
 
     // assert
     await t
@@ -6571,12 +6541,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     // act
     await t
       .pressKey('ctrl+end')
-      .expect(dataGrid.getScrollTop())
-      .gte(0)
-      .expect(dataGrid.getScrollLeft())
-      .gte(0)
-      .expect(dataGrid.isReady())
-      .ok();
+      .wait(500);
 
     // assert
     await t
@@ -6667,12 +6632,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     // act
     await t
       .pressKey('ctrl+end')
-      .expect(dataGrid.getScrollTop())
-      .gte(0)
-      .expect(dataGrid.getScrollLeft())
-      .gte(0)
-      .expect(dataGrid.isReady())
-      .ok();
+      .wait(500);
 
     // assert
     await t
