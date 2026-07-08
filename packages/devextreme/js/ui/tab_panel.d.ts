@@ -224,7 +224,7 @@ export interface dxTabPanelOptions<
      * @action
      * @public
      */
-    onTitleClick?: ((e: TitleClickEvent<TItem, TKey>) => void) | string;
+    onTitleClick?: ((e: TitleClickEvent<TItem, TKey>) => void) | string | null;
     /**
      * @docid
      * @default null
@@ -232,7 +232,7 @@ export interface dxTabPanelOptions<
      * @action
      * @public
      */
-    onTitleHold?: ((e: TitleHoldEvent<TItem, TKey>) => void);
+    onTitleHold?: ((e: TitleHoldEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -240,7 +240,7 @@ export interface dxTabPanelOptions<
      * @action
      * @public
      */
-    onTitleRendered?: ((e: TitleRenderedEvent<TItem, TKey>) => void);
+    onTitleRendered?: ((e: TitleRenderedEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default false
