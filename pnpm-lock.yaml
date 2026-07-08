@@ -201,6 +201,9 @@ importers:
       '@types/shelljs':
         specifier: 0.8.17
         version: 0.8.17
+      '@types/tar-fs':
+        specifier: 2.0.4
+        version: 2.0.4
       '@types/yargs':
         specifier: 17.0.35
         version: 17.0.35
@@ -5949,6 +5952,12 @@ packages:
 
   '@types/stack-utils@2.0.3':
     resolution: {integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==}
+
+  '@types/tar-fs@2.0.4':
+    resolution: {integrity: sha512-ipPec0CjTmVDWE+QKr9cTmIIoTl7dFG/yARCM5MqK8i6CNLIG1P8x4kwDsOQY1ChZOZjH0wO9nvfgBvWl4R3kA==}
+
+  '@types/tar-stream@3.1.4':
+    resolution: {integrity: sha512-921gW0+g29mCJX0fRvqeHzBlE/XclDaAG0Ousy1LCghsOhvaKacDeRGEVzQP9IPfKn8Vysy7FEXAIxycpc/CMg==}
 
   '@types/tough-cookie@4.0.5':
     resolution: {integrity: sha512-/Ad8+nIOV7Rl++6f1BdKxFSMgmoqEoYbHRpPcx3JEfv8VRsQe9Z4mCXeJBzxs7mbHY/XOZZuXlRNfhpVPbs6ZA==}
@@ -21662,6 +21671,15 @@ snapshots:
       '@types/node': 20.12.8
 
   '@types/stack-utils@2.0.3': {}
+
+  '@types/tar-fs@2.0.4':
+    dependencies:
+      '@types/node': 20.12.8
+      '@types/tar-stream': 3.1.4
+
+  '@types/tar-stream@3.1.4':
+    dependencies:
+      '@types/node': 20.12.8
 
   '@types/tough-cookie@4.0.5': {}
 

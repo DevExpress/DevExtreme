@@ -35,6 +35,7 @@
     "@types/jest": "29.5.12",
     "@types/node": "20.12.8",
     "@types/shelljs": "0.8.17",
+    "@types/tar-fs" : "2.0.4",
     "axe-core": "catalog:",
     "@types/yargs": "17.0.35",
     "devextreme-internal-tools": "catalog:tools",
