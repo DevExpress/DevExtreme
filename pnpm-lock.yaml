@@ -726,9 +726,6 @@ importers:
       globals:
         specifier: 'catalog:'
         version: 15.14.0
-      gulp:
-        specifier: 4.0.2
-        version: 4.0.2
       http-server:
         specifier: 14.1.1
         version: 14.1.1
