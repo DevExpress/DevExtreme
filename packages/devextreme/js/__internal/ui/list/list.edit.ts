@@ -155,7 +155,6 @@ class ListEdit extends ListBase {
       showSelectionControls: false,
       selectionMode: 'none',
       selectAllMode: 'page',
-      // @ts-expect-error ts-error
       onSelectAllValueChanged: null,
       selectAllText: localizationMessage.format('dxList-selectAll'),
       menuItems: [],
