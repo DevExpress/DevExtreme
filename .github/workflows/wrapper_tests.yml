@@ -142,8 +142,13 @@ jobs:
       - name: Download Browser
         if: matrix.framework == 'angular'
         run: |
-          PUPPETEER_CMD="browsers install chrome@130.0.6723.69"
-          pnpm --filter devextreme-angular exec puppeteer $PUPPETEER_CMD
+          CHROME_VERSION="149.0.7827.22"
+          CHROME_DIR="$HOME/.cache/puppeteer/chrome/linux-$CHROME_VERSION"
+          if [ -d "$CHROME_DIR" ] && [ ! -x "$CHROME_DIR/chrome-linux64/chrome" ]; then
+            echo "Removing corrupted puppeteer cache: $CHROME_DIR"
+            rm -rf "$CHROME_DIR"
+          fi
+          pnpm --filter devextreme-angular exec puppeteer browsers install "chrome@$CHROME_VERSION"
 
       - name: Test ${{ matrix.framework }}
         env:
