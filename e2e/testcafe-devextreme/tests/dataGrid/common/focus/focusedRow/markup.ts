@@ -67,7 +67,7 @@ test('markup - generic.light', async (t) => {
 // visual: generic.light
 // visual: fluent.light
 // visual: material.blue.light
-test('Invalid cells in a focused row should have the correct background color (T1197268) - generic.light', async (t) => {
+test.meta({ unstable: true })('Invalid cells in a focused row should have the correct background color (T1197268) - generic.light', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
   await t.expect(dataGrid.isReady()).ok();

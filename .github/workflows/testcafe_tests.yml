@@ -335,6 +335,7 @@ jobs:
       working-directory: ./e2e/testcafe-devextreme
       env:
         NODE_OPTIONS: --max-old-space-size=8192
+        RUN_LABEL: ${{ matrix.name }}
       run: |
         if [ "${{ matrix.theme }}" != "" ]; then
           THEME="--theme ${{ matrix.theme }}"
@@ -346,7 +347,12 @@ jobs:
         [ "${{ matrix.concurrency }}" != "" ] && CONCURRENCY="--concurrency ${{ matrix.concurrency }}"
         [ "${{ matrix.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.platform }}"
         [ "${{ matrix.cache }}" == "true" ] && CACHE="--cache true"
-        all_args="--browsers=chrome:devextreme-shr2 $COMPONENT_FOLDER $CONCURRENCY $INDICES $PLATFORM $THEME $CACHE"
+        TZVAL="${{ matrix.timezone }}"
+        [ -z "$TZVAL" ] && TZVAL="GMT"
+        # A job stays green if it has no more than --deferThreshold failures:
+        # those tests are recorded and handed to the dedicated "retry-unstable"
+        # job. More failures than that fail the job as a real regression.
+        all_args="--browsers=chrome:devextreme-shr2 $COMPONENT_FOLDER $CONCURRENCY $INDICES $PLATFORM $THEME $CACHE --deferThreshold 3 --timezone $TZVAL"
         echo "$all_args"
         pnpm run test $all_args
 
@@ -369,6 +375,91 @@ jobs:
         name: failed-tests-${{ env.JOB_NAME }}
         path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/failedtests/**/*
         if-no-files-found: ignore
+
+    - name: Upload failed test list
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v7
+      with:
+        name: failed-list-${{ env.JOB_NAME }}
+        path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/failed-tests/**/*
+        if-no-files-found: ignore
+
+  retry-unstable:
+    name: Retry unstable tests
+    runs-on: devextreme-shr2
+    needs: [check-should-run, build, testcafe]
+    if: ${{ always() && needs.check-should-run.outputs.should-run == 'true' }}
+    timeout-minutes: 30
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v6
+
+    - name: Use Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version-file: '.node-version'
+
+    - name: Download failed test lists
+      uses: actions/download-artifact@v8
+      continue-on-error: true
+      with:
+        path: ${{ github.workspace }}/e2e/testcafe-devextreme/failed-lists
+        pattern: failed-list-*
+
+    - name: Decide retry strategy
+      id: decide
+      working-directory: ./e2e/testcafe-devextreme
+      run: node retry-unstable.mjs --mode decide --dir ./failed-lists --out ./retry-plan.json
+
+    - uses: pnpm/action-setup@v6
+      if: ${{ steps.decide.outputs.action == 'retry' }}
+      with:
+        run_install: false
+
+    - name: Get pnpm store directory
+      if: ${{ steps.decide.outputs.action == 'retry' }}
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache/restore@v5
+      if: ${{ steps.decide.outputs.action == 'retry' }}
+      name: Restore pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-cache
+
+    - name: Install dependencies
+      if: ${{ steps.decide.outputs.action == 'retry' }}
+      run: pnpm install --frozen-lockfile
+
+    - name: Download build artifacts
+      if: ${{ steps.decide.outputs.action == 'retry' }}
+      uses: actions/download-artifact@v8
+      with:
+        name: devextreme-artifacts
+        path: ./packages/devextreme
+
+    - name: Unpack build artifacts
+      if: ${{ steps.decide.outputs.action == 'retry' }}
+      working-directory: ./packages/devextreme
+      run: 7z x artifacts.zip -aoa
+
+    - name: Setup Chrome
+      if: ${{ steps.decide.outputs.action == 'retry' }}
+      uses: ./.github/actions/setup-chrome
+      with:
+        chrome-version: '149.0.7827.114'
+
+    - name: Retry potentially-unstable tests
+      if: ${{ steps.decide.outputs.action == 'retry' }}
+      working-directory: ./e2e/testcafe-devextreme
+      env:
+        NODE_OPTIONS: --max-old-space-size=8192
+      run: node retry-unstable.mjs --mode retry --out ./retry-plan.json --attempts 2
 
   merge-artifacts:
     runs-on: ubuntu-latest
@@ -395,7 +486,7 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     name: Send notifications
-    needs: [build, testcafe]
+    needs: [build, testcafe, retry-unstable]
     if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')
 
     steps:

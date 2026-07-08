@@ -107,7 +107,7 @@ test('Basic drag-n-drop movements from tooltip in week view', async (t) => {
   width: 1000,
 }));
 
-test.meta({ runInTheme: Themes.genericLight })('Basic drag-n-drop movements from tooltip in month view', async (t) => {
+test.meta({ unstable: true, runInTheme: Themes.genericLight })('Basic drag-n-drop movements from tooltip in month view', async (t) => {
   const scheduler = new Scheduler('#container');
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

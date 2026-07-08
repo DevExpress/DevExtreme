@@ -1,7 +1,7 @@
 import createTestCafe, { ClientFunction } from 'testcafe';
 import fs from 'fs';
 
-const LAUNCH_RETRY_ATTEMPTS = 3;
+const LAUNCH_RETRY_ATTEMPTS = 0;
 const LAUNCH_RETRY_TIMEOUT = 10000;
 
 const wait = async (
@@ -96,7 +96,7 @@ async function main() {
 
   const failedCount = await retry(() => runner
     .reporter(reporters)
-    .browsers(process.env.BROWSERS || 'chrome --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning')
+    .browsers(process.env.BROWSERS || 'chrome --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding,KeyboardFocusableScrollers --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning')
     .concurrency(concurrency || 1)
     .run({
       quarantineMode: getQuarantineMode(),

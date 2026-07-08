@@ -138,6 +138,9 @@ module('Integration: Appointments in Month view', {
 
             const getAppointmentCount = () => scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).length;
 
+            // NOTE: the resource store resolves asynchronously (300ms), so appointments
+            // render only after the resources are loaded. Wait for them instead of relying
+            // on a fixed timing budget, which is flaky under CI load.
             await waitForAsync(() => getAppointmentCount() === 2, undefined, 2000);
 
             assert.deepEqual(getAppointmentCount(), 2, 'Appointments are rendered');

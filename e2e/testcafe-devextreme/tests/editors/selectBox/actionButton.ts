@@ -1,4 +1,4 @@
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import SelectBox from 'devextreme-testcafe-models/selectBox';
 import url from '../../../helpers/getPageUrl';
@@ -14,6 +14,13 @@ const purePressKey = async (t, key): Promise<void> => {
     .pressKey(key)
     .wait(100);
 };
+
+const FOCUSABLE_END_ID = 'focusable-end';
+const FOCUSABLE_END_SELECTOR = `#${FOCUSABLE_END_ID}`;
+
+const removeElementById = ClientFunction((elementId: string): void => {
+  document.getElementById(elementId)?.remove();
+});
 
 test('Click on action button should correctly work with SelectBox containing the field template (T811890)', async (t) => {
   const selectBox = new SelectBox('#container');
@@ -97,6 +104,7 @@ test('Click on action button after typing should correctly work with SelectBox c
 test('editor can be focused out after click on action button', async (t) => {
   const selectBox = new SelectBox('#container');
   const { getInstance } = selectBox;
+  const focusableEnd = Selector(FOCUSABLE_END_SELECTOR);
 
   await ClientFunction(
     () => {
@@ -123,11 +131,26 @@ test('editor can be focused out after click on action button', async (t) => {
     .expect(selectBox.isFocused).ok();
 
   await purePressKey(t, 'tab');
+
+  if (!await focusableEnd.focused) {
+    await purePressKey(t, 'tab');
+  }
+
   await t
+    .expect(focusableEnd.focused).ok()
     .expect(selectBox.isFocused).notOk();
-}).before(async () => createWidget('dxSelectBox', {
-  items: ['item1', 'item2'],
-}));
+}).before(async () => {
+  await createWidget('dxSelectBox', {
+    items: ['item1', 'item2'],
+  });
+
+  await appendElementTo('body', 'button', FOCUSABLE_END_ID, {
+    position: 'fixed',
+    top: '0',
+    left: '0',
+    opacity: '0',
+  });
+}).after(async () => removeElementById(FOCUSABLE_END_ID));
 
 test('selectbox should not be opened after click on disabled action button (T1117453)', async (t) => {
   const selectBox = new SelectBox('#container');

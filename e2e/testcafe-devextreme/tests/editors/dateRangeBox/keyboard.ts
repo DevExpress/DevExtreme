@@ -1,4 +1,4 @@
-import { Selector } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
@@ -8,6 +8,12 @@ fixture.disablePageReloads`DateRangeBox keyboard navigation`
   .page(url(__dirname, '../../container.html'));
 
 const initialValue = [new Date('2021/10/17'), new Date('2021/11/24')];
+const FOCUSABLE_END_ID = 'focusable-end';
+const FOCUSABLE_END_SELECTOR = `#${FOCUSABLE_END_ID}`;
+
+const removeElementById = ClientFunction((elementId: string): void => {
+  document.getElementById(elementId)?.remove();
+});
 
 const getDateByOffset = (date: Date | string, offset: number) => {
   const resultDate = new Date(date);
@@ -426,6 +432,7 @@ test('DateRangeBox should be closed by press esc key when views wrapper in popup
 
 test('DateRangeBox should not be closed by press tab key on startDate input', async (t) => {
   const dateRangeBox = new DateRangeBox('#container');
+  const focusableEnd = Selector(FOCUSABLE_END_SELECTOR);
 
   await t
     .click(dateRangeBox.getStartDateBox().input);
@@ -448,23 +455,38 @@ test('DateRangeBox should not be closed by press tab key on startDate input', as
   await t
     .pressKey('tab');
 
+  if (!await focusableEnd.focused) {
+    await t.pressKey('tab');
+  }
+
   await t
     .expect(dateRangeBox.option('opened'))
     .eql(false)
+    .expect(focusableEnd.focused)
+    .ok()
     .expect(dateRangeBox.isFocused)
     .notOk();
-}).before(async () => createWidget('dxDateRangeBox', {
-  value: ['2021/09/17', '2021/10/24'],
-  openOnFieldClick: true,
-  opened: true,
-  width: 500,
-  dropDownOptions: {
-    hideOnOutsideClick: false,
-  },
-  calendarOptions: {
-    focusStateEnabled: false,
-  },
-}));
+}).before(async () => {
+  await createWidget('dxDateRangeBox', {
+    value: ['2021/09/17', '2021/10/24'],
+    openOnFieldClick: true,
+    opened: true,
+    width: 500,
+    dropDownOptions: {
+      hideOnOutsideClick: false,
+    },
+    calendarOptions: {
+      focusStateEnabled: false,
+    },
+  });
+
+  await appendElementTo('body', 'button', FOCUSABLE_END_ID, {
+    position: 'fixed',
+    top: '0',
+    left: '0',
+    opacity: '0',
+  });
+}).after(async () => removeElementById(FOCUSABLE_END_ID));
 
 test('DateRangeBox keyboard navigation via `tab` key if applyValueMode is useButtons, start -> end -> prev -> caption -> next -> views -> today -> apply -> cancel -> start -> end', async (t) => {
   const dateRangeBox = new DateRangeBox('#dateRangeBox');

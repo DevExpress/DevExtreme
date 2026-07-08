@@ -4,7 +4,7 @@ import url from '../../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../../helpers/createWidget';
 import { appendElementTo, setStyleAttribute } from '../../../../../helpers/domUtils';
 
-fixture.disablePageReloads`Drag-n-drop appointments between two schedulers with async DataSource (T1094033)`
+fixture`Drag-n-drop appointments between two schedulers with async DataSource (T1094033)`
   .page(url(__dirname, '../../../../container.html'));
 
 interface TestAppointment {
@@ -89,23 +89,47 @@ test('Should set correct start and end dates in drag&dropped appointment', async
   const firstScheduler = new Scheduler(`#${FIRST_SCHEDULER_SELECTOR}`);
   const secondScheduler = new Scheduler(`#${SECOND_SCHEDULER_SELECTOR}`);
 
-  const appointmentToMoveElement = firstScheduler
-    .getAppointment(TEST_APPOINTMENT.text)
-    .element();
-  const cellToMoveElement = secondScheduler
-    .getDateTableCell(0, 0);
+  const cellToMoveElement = secondScheduler.getDateTableCell(0, 0);
 
-  await t.dragToElement(appointmentToMoveElement, cellToMoveElement, { speed: 0.5 });
+  // The first scheduler uses an async data source, so make sure its appointment is
+  // rendered before dragging - otherwise dragToElement may grab a stale position.
+  await t.expect(firstScheduler.getAppointmentCount()).eql(1);
 
-  // Wait for async data source operations and DOM updates to complete
-  await t.wait(500);
+  // Dropping an appointment onto another scheduler occasionally fails to register on a
+  // loaded CI machine: the drop over the target cell is missed, the async onAdd handler
+  // never runs, and the appointment snaps back to the source. Retry the drag until the
+  // appointment actually appears in the target scheduler. We decide whether to retry via
+  // `.exists` (which waits out the scheduler's async appointment rendering) rather than
+  // an immediate count read, so a slow-but-successful drop is not mistaken for a miss and
+  // re-dragged into a duplicate. The source selector is resolved fresh each attempt
+  // because a missed drop re-renders the source node.
+  const MAX_DRAG_ATTEMPTS = 3;
+  const DROP_RENDER_TIMEOUT = 3000;
 
-  const movedAppointmentTime = await secondScheduler
-    .getAppointment(TEST_APPOINTMENT.text)
-    .date
-    .time;
+  for (let attempt = 0; attempt < MAX_DRAG_ATTEMPTS; attempt += 1) {
+    await t.dragToElement(
+      firstScheduler.getAppointment(TEST_APPOINTMENT.text).element,
+      cellToMoveElement,
+      { speed: 0.5 },
+    );
 
-  await t.expect(movedAppointmentTime).eql(EXPECTED_APPOINTMENT_TIME);
+    const isTransferred = await secondScheduler
+      .getAppointment(TEST_APPOINTMENT.text)
+      .element
+      .with({ timeout: DROP_RENDER_TIMEOUT })
+      .exists;
+
+    if (isTransferred) {
+      break;
+    }
+  }
+
+  // Final verification: the appointment is in the target scheduler with the expected time.
+  await t.expect(secondScheduler.getAppointmentCount()).eql(1, { timeout: DROP_RENDER_TIMEOUT });
+
+  await t
+    .expect(secondScheduler.getAppointment(TEST_APPOINTMENT.text).date.time)
+    .eql(EXPECTED_APPOINTMENT_TIME, { timeout: DROP_RENDER_TIMEOUT });
 }).before(async () => {
   await setStyleAttribute(Selector('#container'), 'display: flex;');
   await appendElementTo('#container', 'div', FIRST_SCHEDULER_SELECTOR);

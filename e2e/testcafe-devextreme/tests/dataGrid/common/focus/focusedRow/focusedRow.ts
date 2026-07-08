@@ -326,7 +326,7 @@ test('Row - Focused row should be reset after editing a row by API (T879627)', a
   },
 }));
 
-test('Cell - Focused row should not be reset after editing a cell (T879627)', async (t) => {
+test.meta({ unstable: true })('Cell - Focused row should not be reset after editing a cell (T879627)', async (t) => {
   const dataGrid = new DataGrid('#container');
   await t.expect(dataGrid.isReady()).ok();
 

@@ -25,19 +25,19 @@ const safeEvent = (value) => ClientFunction(() => {
   (window as any).eventName = value;
 }, { dependencies: { value } });
 
+const getEventName = ClientFunction(() => (window as any).eventName);
+
 test('After drag to draggable component, should be called onAppointmentDeleting event only', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
   await t
     .dragToElement(scheduler.getAppointment('Regular test app').element, Selector('#drag-container'), { speed: 0.5 });
 
-  await t.wait(500);
-
   await t
-    .expect(ClientFunction(() => (window as any).eventName)())
-    .eql('onAppointmentDeleting');
+    .expect(getEventName())
+    .eql('onAppointmentDeleting', { timeout: 3000 });
 }).before(async () => {
-  safeEvent('');
+  await safeEvent('')();
   await setStyleAttribute(Selector('#container'), 'display: flex; flex-direction: column;');
 
   await ClientFunction(() => {

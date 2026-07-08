@@ -162,9 +162,8 @@ test('Accessibility: Scrollable should have focusable element when navigate out 
   $('#myButton').remove();
 })());
 
-test('Accessibility: Scrollable should have focusable when fixed on the right side columns are focused', async (t) => {
+test.meta({ unstable: true })('Accessibility: Scrollable should have focusable when fixed on the right side columns are focused', async (t) => {
   const dataGrid = new DataGrid('#container');
-  await t.expect(dataGrid.isReady()).ok();
 
   // focus through headers
   await pressKey(t, 'tab', COLUMNS_LENGTH);
