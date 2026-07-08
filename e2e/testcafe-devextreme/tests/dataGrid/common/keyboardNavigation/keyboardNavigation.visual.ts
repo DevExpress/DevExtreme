@@ -622,10 +622,6 @@ test('Navigate to last cell in the last row when virtual scrolling and columns a
     mode: 'virtual',
     columnRenderingMode: 'virtual',
     showScrollbar: 'never',
-    // Deterministic sync rendering: with the renderAsync heuristic, one-shot
-    // focus restoration after Ctrl+End/Home can run before the target row is
-    // rendered on a slow machine, and focus is lost (unstable in CI)
-    renderAsync: false,
   },
 }));
 
@@ -671,7 +667,6 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
     mode: 'virtual',
     showScrollbar: 'never',
     columnRenderingMode: 'virtual',
-    renderAsync: false,
   },
 }));
 
@@ -718,7 +713,6 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
       mode: 'virtual',
       columnRenderingMode: 'virtual',
       useNative,
-      renderAsync: false,
     },
     rowDragging: {
       allowReordering: true,
@@ -755,7 +749,6 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
       mode: 'virtual',
       columnRenderingMode: 'virtual',
       useNative,
-      renderAsync: false,
     },
     customizeColumns(columns) {
       columns.push({ type: 'drag' });
