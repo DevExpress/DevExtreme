@@ -91,6 +91,12 @@ test.meta({ unstable: true })('Disabled toolbar buttons are not grayed out in Ma
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
+  await t
+    .expect(dataGrid.isReady())
+    .ok()
+    .expect(dataGrid.getDataRow(4).element.exists)
+    .ok();
+
   await testScreenshot(t, takeScreenshot, 'disabled-toolbar-buttons.png', { element: dataGrid.element });
   await t
     .expect(compareResults.isValid())
