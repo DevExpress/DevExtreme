@@ -43,7 +43,6 @@ class ProgressBar extends TrackBar<ProgressBarProperties> {
         return `Progress: ${Math.round(ratio * 100)}%`;
       },
       showStatus: true,
-      // @ts-expect-error ts-error
       onComplete: null,
       activeStateEnabled: false,
       statusPosition: 'bottom left',
