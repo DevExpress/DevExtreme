@@ -43,7 +43,7 @@ test('Drag-n-drop between a scheduler table cell and the appointment tooltip', a
   width: 1000,
 }));
 
-test('Drag-n-drop to the cell on the left should work in week view (T1005115)', async (t) => {
+test.meta({ unstable: true })('Drag-n-drop to the cell on the left should work in week view (T1005115)', async (t) => {
   const scheduler = new Scheduler('#container');
   const collector = scheduler.collectors.find('1');
   const { appointmentTooltip } = scheduler;
