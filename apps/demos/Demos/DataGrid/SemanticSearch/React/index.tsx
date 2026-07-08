@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import App from './App.tsx';
+// eslint-disable-next-line import/no-unresolved
+import 'anti-forgery';
 
 ReactDOM.render(
   <App />,
