@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 
 import type { AppointmentDataSource } from '../../view_model/m_appointment_data_source';
-import { mockGridViewModel } from '../__mock__/appointment_view_model';
+import { mockAppointmentCollectorViewModel, mockGridViewModel } from '../__mock__/appointment_view_model';
 import { getViewModelDiff } from './get_view_model_diff';
 
 type ItemData = Record<string, unknown>;
@@ -25,6 +25,7 @@ const getOperations = (items: ReturnType<typeof getViewModelDiff>): string => it
     if (item.needToAdd) return '+';
     if (item.needToRemove) return '-';
     if (item.needToResize) return 'r';
+    if (item.needToUpdateItems) return 'u';
     return '=';
   })
   .join('');
@@ -272,6 +273,110 @@ describe('getViewModelDiff', () => {
         { item: b[1], needToResize: true, oldSortedIndex: 1 },
         { item: b[2], oldSortedIndex: 2 },
       ]);
+    });
+  });
+
+  describe('needToUpdateItems', () => {
+    it('should mark needToUpdateItems for a collector at the same position with changed items count', () => {
+      const data1: ItemData = {};
+      const data2: ItemData = {};
+      const a = [mockAppointmentCollectorViewModel(data1, {
+        sortedIndex: 0,
+        items: [mockGridViewModel(data1), mockGridViewModel(data2)],
+      })];
+      const b = [mockAppointmentCollectorViewModel(data1, {
+        sortedIndex: 0,
+        items: [mockGridViewModel(data1)],
+      })];
+
+      const diff = getViewModelDiff(a, b, defaultDataSource);
+
+      expect(getOperations(diff)).toBe('u');
+      expect(diff).toEqual([{ item: b[0], needToUpdateItems: true, oldSortedIndex: 0 }]);
+    });
+
+    it('should match collector by position and mark needToUpdateItems even when its itemData changed', () => {
+      const data1: ItemData = {};
+      const data2: ItemData = {};
+      const a = [mockAppointmentCollectorViewModel(data1, {
+        sortedIndex: 0,
+        items: [mockGridViewModel(data1), mockGridViewModel(data2)],
+      })];
+      const b = [mockAppointmentCollectorViewModel(data2, {
+        sortedIndex: 0,
+        items: [mockGridViewModel(data2)],
+      })];
+
+      const diff = getViewModelDiff(a, b, defaultDataSource);
+
+      expect(getOperations(diff)).toBe('u');
+    });
+
+    it('should mark no changes for a collector with the same items count and geometry', () => {
+      const data1: ItemData = {};
+      const data2: ItemData = {};
+      const a = [mockAppointmentCollectorViewModel(data1, {
+        sortedIndex: 0,
+        items: [mockGridViewModel(data1), mockGridViewModel(data2)],
+      })];
+      const b = [mockAppointmentCollectorViewModel(data1, {
+        sortedIndex: 0,
+        items: [mockGridViewModel(data1), mockGridViewModel(data2)],
+      })];
+
+      const diff = getViewModelDiff(a, b, defaultDataSource);
+
+      expect(getOperations(diff)).toBe('=');
+      expect(diff).toEqual([{ item: b[0], oldSortedIndex: 0 }]);
+    });
+
+    it('should mark remove and add for a collector moved to another position', () => {
+      const data1: ItemData = {};
+      const a = [mockAppointmentCollectorViewModel(data1, { sortedIndex: 0, top: 0, left: 0 })];
+      const b = [mockAppointmentCollectorViewModel(data1, { sortedIndex: 0, top: 100, left: 50 })];
+
+      const diff = getViewModelDiff(a, b, defaultDataSource);
+
+      expect(getOperations(diff)).toBe('+-');
+    });
+
+    it('should mark needToResize for a collector with the same items count and changed size', () => {
+      const data1: ItemData = {};
+      const a = [mockAppointmentCollectorViewModel(data1, {
+        sortedIndex: 0, height: 20, width: 20,
+      })];
+      const b = [mockAppointmentCollectorViewModel(data1, {
+        sortedIndex: 0, height: 40, width: 40,
+      })];
+
+      const diff = getViewModelDiff(a, b, defaultDataSource);
+
+      expect(getOperations(diff)).toBe('r');
+    });
+
+    it('should mix needToUpdateItems with operations on regular appointments', () => {
+      const data1: ItemData = {};
+      const data2: ItemData = {};
+      const data3: ItemData = {};
+      const a = [
+        makeItem(data1, { sortedIndex: 0 }),
+        mockAppointmentCollectorViewModel(data2, {
+          sortedIndex: 1,
+          items: [mockGridViewModel(data2), mockGridViewModel(data3)],
+        }),
+        makeItem(data3, { sortedIndex: 2 }),
+      ];
+      const b = [
+        makeItem(data1, { sortedIndex: 0 }),
+        mockAppointmentCollectorViewModel(data2, {
+          sortedIndex: 1,
+          items: [mockGridViewModel(data2)],
+        }),
+      ];
+
+      const diff = getViewModelDiff(a, b, defaultDataSource);
+
+      expect(getOperations(diff)).toBe('=u-');
     });
   });
 
