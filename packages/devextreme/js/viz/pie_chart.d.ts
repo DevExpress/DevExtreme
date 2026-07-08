@@ -349,14 +349,14 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart, piePoint
     minDiameter?: number;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type function
      * @type_function_param1 e:{viz/pie_chart:LegendClickEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onLegendClick?: ((e: LegendClickEvent) => void) | string;
+    onLegendClick?: ((e: LegendClickEvent) => void) | string | undefined;
     /**
      * @docid
      * @default "Material"
@@ -399,7 +399,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart, piePoint
        * @default 'series'
        */
       nameField?: string;
-    };
+    } | undefined;
     /**
      * @docid
      * @default undefined
@@ -739,12 +739,12 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border.color
            * @default  '#d3d3d3'
            */
-          color?: string | undefined;
+          color?: string;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border.dashStyle
            * @default 'solid'
            */
-          dashStyle?: DashStyle | undefined;
+          dashStyle?: DashStyle;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border.visible
            * @default false
