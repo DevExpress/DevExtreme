@@ -87,14 +87,10 @@ class Map extends Widget<MapProperties> {
       markers: [],
       // @ts-expect-error ts-error
       markerIconSrc: null,
-      // @ts-expect-error ts-error
       onMarkerAdded: null,
-      // @ts-expect-error ts-error
       onMarkerRemoved: null,
       routes: [],
-      // @ts-expect-error ts-error
       onRouteAdded: null,
-      // @ts-expect-error ts-error
       onRouteRemoved: null,
       apiKey: {
         bing: '',
@@ -106,12 +102,10 @@ class Map extends Widget<MapProperties> {
         useAdvancedMarkers: true,
       },
       controls: false,
-      // @ts-expect-error ts-error
       onReady: null,
       // for internal use only
       // @ts-expect-error ts-error
       onUpdated: null,
-      // @ts-expect-error ts-error
       onClick: null,
     };
   }
