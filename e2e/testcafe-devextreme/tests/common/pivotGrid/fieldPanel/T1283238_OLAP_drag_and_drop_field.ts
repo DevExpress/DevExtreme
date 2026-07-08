@@ -1,12 +1,23 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
+import { ClientFunction } from 'testcafe';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../../helpers/themeUtils';
 import { OLAPApiMock } from '../apiMocks/OLAP_api.mock';
 
+// After drag-n-drop the dragged field chip may keep focus depending on timing,
+// and its focus ring does not match the etalon (unstable in CI)
+const blurActiveElement = ClientFunction(() => {
+  (document.activeElement as HTMLElement | null)?.blur();
+});
+
 fixture.disablePageReloads`pivotGrid_olap_drag-n-drop`
-  .page(url(__dirname, '../../container.html'));
+  // NOTE: '../../container.html' pointed to a nonexistent tests/common/container.html;
+  // the fixture only worked when a page from a previous fixture was already loaded
+  // (disablePageReloads) and failed when it ran first in a fresh browser session
+  .page(url(__dirname, '../../../container.html'))
+  .requestHooks(OLAPApiMock);
 
 const PIVOT_GRID_SELECTOR = '#container';
 
@@ -28,6 +39,8 @@ const PIVOT_GRID_SELECTOR = '#container';
     );
     await t.expect(loadPanel.isInvisible()).ok();
 
+    await blurActiveElement();
+
     await testScreenshot(
       t,
       takeScreenshot,
@@ -37,8 +50,7 @@ const PIVOT_GRID_SELECTOR = '#container';
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    await t.addRequestHooks(OLAPApiMock);
+  }).before(async () => {
     await createWidget('dxPivotGrid', {
       height: 500,
       fieldPanel: { visible: true },

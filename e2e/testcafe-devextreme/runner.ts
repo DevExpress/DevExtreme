@@ -62,6 +62,7 @@ interface ParsedArgs {
   reportUnstable: string;
   reportFailures: string;
   retryAttempts: number;
+  forcePageReloads: boolean;
 }
 
 const getTestCafeConfig = (cache: boolean): Partial<TestCafeConfigurationOptions> => ({
@@ -126,6 +127,7 @@ function getArgs(): ParsedArgs {
       reportUnstable: '',
       reportFailures: '',
       retryAttempts: FAILED_TESTS_RETRY_ATTEMPTS,
+      forcePageReloads: false,
     },
   }) as ParsedArgs;
 }
@@ -161,6 +163,7 @@ async function main() {
 
     const onlyUnstable = `${args.onlyUnstable}` === 'true';
     const retryAttempts = Number(args.retryAttempts) || 0;
+    const forcePageReloads = `${args.forcePageReloads}` === 'true';
     const testsFromFile = new Set<string>(
       args.testsFile ? JSON.parse(fs.readFileSync(args.testsFile, 'utf8')).tests : [],
     );
@@ -293,6 +296,17 @@ async function main() {
       hooks: {
         test: {
           before: async (t: TestController) => {
+            if (forcePageReloads) {
+              // Fresh page per test even for fixtures with disablePageReloads:
+              // leftover DOM/window state from a previous test is a common
+              // source of cascading failures in the unstable run
+              const href = await ClientFunction(
+                () => window.location.href,
+              ).with({ boundTestRun: t })();
+
+              await t.navigateTo(href);
+            }
+
             if (args.shadowDom) {
               await loadShadowDomExtension(t);
               await addShadowRootTree(t);

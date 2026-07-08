@@ -226,10 +226,10 @@ jobs:
             { "name": "material - compact", "theme": "material.blue.light.compact", "concurrency": 2 },
 
             { "componentFolder": "cardView", "name": "cardView" },
-            { "componentFolder": "dataGrid", "name": "dataGrid (1/4)", "indices": "1/4", "cache": true, "concurrency": 4 },
-            { "componentFolder": "dataGrid", "name": "dataGrid (2/4)", "indices": "2/4", "cache": true, "concurrency": 4 },
-            { "componentFolder": "dataGrid", "name": "dataGrid (3/4)", "indices": "3/4", "cache": true, "concurrency": 4 },
-            { "componentFolder": "dataGrid", "name": "dataGrid (4/4)", "indices": "4/4", "cache": true, "concurrency": 4 },
+            { "componentFolder": "dataGrid", "name": "dataGrid (1/4)", "indices": "1/4", "cache": true, "concurrency": 5 },
+            { "componentFolder": "dataGrid", "name": "dataGrid (2/4)", "indices": "2/4", "cache": true, "concurrency": 5 },
+            { "componentFolder": "dataGrid", "name": "dataGrid (3/4)", "indices": "3/4", "cache": true, "concurrency": 5 },
+            { "componentFolder": "dataGrid", "name": "dataGrid (4/4)", "indices": "4/4", "cache": true, "concurrency": 5 },
 
             { "componentFolder": "editors", "name": "editors" },
             { "componentFolder": "navigation", "name": "navigation", "concurrency": 6 },
@@ -474,7 +474,7 @@ jobs:
         run_tests() {
           local rc=0
           rm -f "$result"
-          pnpm run test --browsers=chrome:devextreme-shr2 --concurrency 1 --retryAttempts 2 --reportFailures "$result" "$@" || rc=$?
+          pnpm run test --browsers=chrome:devextreme-shr2 --concurrency 1 --retryAttempts 2 --forcePageReloads true --reportFailures "$result" "$@" || rc=$?
           if [ ! -f "$result" ]; then
             echo "Test runner crashed (exit code $rc)"
             exit 1
