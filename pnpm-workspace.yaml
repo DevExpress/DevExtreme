@@ -106,7 +106,7 @@ catalogs:
     "typescript": ~5.8.0
     "zone.js": ~0.15.1
   tools:
-    "devextreme-internal-tools": 20.4.0
+    "devextreme-internal-tools": 22.0.0
     "prettier": 3.5.3
     "ts-node": 10.9.2
     "typescript": 5.9.3
@@ -148,3 +148,4 @@ minimumReleaseAgeExclude:
   - '@nx/nx-win32-x64-msvc@23.0.1'
   - '@nx/workspace@23.0.1'
   - nx@23.0.1
+  - devextreme-internal-tools@22.0.0
