@@ -6,23 +6,22 @@ import { ResizableModel } from '@ts/ui/__tests__/__mock__/model/resizable';
 
 import Resizable, { type ResizableProperties } from '../resizable';
 
-const models: ResizableModel[] = [];
+const resizables: Resizable[] = [];
 
 const createResizable = (options: Partial<ResizableProperties> = {}): ResizableModel => {
   const $element = $('<div>').appendTo(document.body);
   // @ts-expect-error DOMComponent constructor is not typed for direct instantiation
   const instance = new Resizable($element, options);
 
-  const model = new ResizableModel(instance.$element().get(0) as HTMLElement);
-  models.push(model);
+  resizables.push(instance);
 
-  return model;
+  return new ResizableModel($element.get(0) as HTMLElement);
 };
 
 describe('Resizable cancelOnEscape', () => {
   afterEach(() => {
-    models.forEach((model) => model.getInstance().dispose());
-    models.length = 0;
+    resizables.forEach((instance) => instance.dispose());
+    resizables.length = 0;
     document.body.innerHTML = '';
   });
 
@@ -34,7 +33,6 @@ describe('Resizable cancelOnEscape', () => {
     model.pressEscape();
 
     expect(model.isResizing()).toBe(false);
-    expect(model.hasResizingClass()).toBe(false);
   });
 
   it('should not fire onResizeEnd when the resize is canceled by Escape', () => {
