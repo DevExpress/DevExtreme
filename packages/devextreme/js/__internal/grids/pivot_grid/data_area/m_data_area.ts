@@ -24,10 +24,10 @@ class DataArea extends AreaItem {
   }
 
   _makeFirstCellFocusable() {
-    const $firstCell = this.tableElement().find('td').first();
+    const firstCell = this.tableElement().get(0)?.querySelector('td');
 
-    if ($firstCell.length) {
-      setTabIndex(this.component, $firstCell);
+    if (firstCell) {
+      setTabIndex(this.component, $(firstCell));
     }
   }
 
