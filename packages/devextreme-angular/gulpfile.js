@@ -289,36 +289,46 @@ gulp.task('watch.spec', () => {
 const getKarmaConfig = function (testsPath) {
   const preprocessors = {};
   preprocessors[testsPath] = ['webpack'];
+  // karma.conf.js is async (puppeteer >= 24: executablePath() is async),
+  // so the config must be parsed with promiseConfig: true
   return karmaConfig.parseConfig(path.resolve('./karma.conf.js'), {
     files: [{ pattern: testsPath, watched: false }],
     preprocessors,
-  }, { throwErrors: true });
+  }, { promiseConfig: true, throwErrors: true });
 };
 
 gulp.task('test.components.client', gulp.series('build.tests', (done) => {
-  new karmaServer(getKarmaConfig('./karma.test.shim.js'), done).start();
+  getKarmaConfig('./karma.test.shim.js').then((config) => {
+    new karmaServer(config, done).start();
+  });
 }));
 
 gulp.task('test.components.server', gulp.series('build.tests', (done) => {
-  new karmaServer(getKarmaConfig('./karma.server.test.shim.js'), done).start();
+  getKarmaConfig('./karma.server.test.shim.js').then((config) => {
+    new karmaServer(config, done).start();
+  });
 }, (done) => {
-  new karmaServer(getKarmaConfig('./karma.hydration.test.shim.js'), done).start();
+  getKarmaConfig('./karma.hydration.test.shim.js').then((config) => {
+    new karmaServer(config, done).start();
+  });
 }));
 
 gulp.task('test.components.client.debug', (done) => {
-  const config = getKarmaConfig('./karma.test.shim.js');
-  config.browsers = ['Chrome'];
-  config.singleRun = false;
+  getKarmaConfig('./karma.test.shim.js').then((config) => {
+    config.browsers = ['Chrome'];
+    config.singleRun = false;
 
-  new karmaServer(config, done).start();
+    new karmaServer(config, done).start();
+  });
 });
 
 gulp.task('test.components.server.debug', (done) => {
-  const config = getKarmaConfig('./karma.server.test.shim.js');
-  config.browsers = ['Chrome'];
-  config.singleRun = false;
+  getKarmaConfig('./karma.server.test.shim.js').then((config) => {
+    config.browsers = ['Chrome'];
+    config.singleRun = false;
 
-  new karmaServer(config, done).start();
+    new karmaServer(config, done).start();
+  });
 });
 
 gulp.task('run.tests', gulp.series('test.components.client', 'test.components.server'));
@@ -326,7 +336,10 @@ gulp.task('run.tests', gulp.series('test.components.client', 'test.components.se
 gulp.task('test', gulp.series('build', 'run.tests'));
 
 gulp.task('watch.test', (done) => {
-  new karmaServer({
-    configFile: `${__dirname}/karma.conf.js`,
-  }, done).start();
+  karmaConfig.parseConfig(`${__dirname}/karma.conf.js`, {}, {
+    promiseConfig: true,
+    throwErrors: true,
+  }).then((config) => {
+    new karmaServer(config, done).start();
+  });
 });
