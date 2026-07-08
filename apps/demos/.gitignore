@@ -22,7 +22,6 @@ bundles
 changed-files.json
 
 !.vscode/settings.json
-gulpfile.js/.eslintrc.js
 
 shared/empty-file.js
 

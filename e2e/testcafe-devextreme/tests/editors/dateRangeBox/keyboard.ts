@@ -424,7 +424,7 @@ test('DateRangeBox should be closed by press esc key when views wrapper in popup
   applyValueMode: 'useButtons',
 }));
 
-test.meta({ unstable: true })('DateRangeBox should not be closed by press tab key on startDate input', async (t) => {
+test('DateRangeBox should not be closed by press tab key on startDate input', async (t) => {
   const dateRangeBox = new DateRangeBox('#dateRangeBox');
 
   await t

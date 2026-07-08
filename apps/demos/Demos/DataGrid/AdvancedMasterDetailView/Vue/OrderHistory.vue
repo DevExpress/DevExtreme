@@ -55,7 +55,7 @@ const props = defineProps<{
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridAdvancedMasterDetailView';
 
-const orderHistoryStore = computed(() => (props.productId === null ? null : {
+const orderHistoryStore = computed(() => (props.productId === null ? undefined : {
   store: createStore({
     key: 'OrderID',
     loadParams: { ProductID: props.productId },
