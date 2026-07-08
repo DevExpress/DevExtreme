@@ -468,6 +468,8 @@ jobs:
         rerun_failed=0
         unstable_failed=0
         result=./artifacts/unstable-run-result.json
+        new_flakes_summary=./artifacts/new-flakes-summary.txt
+        : > "$new_flakes_summary"
 
         # Every test gets up to 3 attempts (initial run + 2 retries) and passes
         # if at least one attempt succeeds. A reported failure means all attempts failed.
@@ -485,7 +487,13 @@ jobs:
 
         shopt -s nullglob
         for report in unstable-reports/*/report.json; do
-          echo "=== Rerun of a test that failed in a regular job ==="
+          job_name=$(basename "$(dirname "$report")")
+          job_name=${job_name#unstable-report-}
+
+          echo ""
+          echo "============================================================"
+          echo " [NEW FLAKY] Rerun of test(s) that failed once in job '$job_name'"
+          echo "============================================================"
           cat "$report"
 
           theme=$(jq -r '.theme // empty' "$report")
@@ -501,24 +509,73 @@ jobs:
 
           run_tests "${extra_args[@]}"
           rerun_failed=$((rerun_failed + last_failed))
+
+          while IFS= read -r name; do
+            if jq -e --arg n "$name" '.tests | index($n)' "$result" > /dev/null; then
+              echo "FAILED | $name | $job_name" >> "$new_flakes_summary"
+            else
+              echo "passed | $name | $job_name" >> "$new_flakes_summary"
+            fi
+          done < <(jq -r '.tests[]' "$report")
         done
 
         sudo ln -sf /usr/share/zoneinfo/GMT /etc/localtime
 
-        echo "=== Run of all tests marked with test.meta({ unstable: true }) ==="
+        echo ""
+        echo "============================================================"
+        echo " [KNOWN UNSTABLE] Run of all tests marked with test.meta({ unstable: true })"
+        echo "============================================================"
         run_tests --onlyUnstable true
         unstable_failed=$last_failed
+        meta_failed_names=$(jq -r '.tests[]' "$result")
 
-        echo "Forwarded tests that failed all attempts: $rerun_failed"
-        echo "Meta-unstable tests that failed all attempts: $unstable_failed"
+        echo ""
+        echo "============================================================"
+        echo " UNSTABLE JOB SUMMARY"
+        echo "============================================================"
+        echo " NEW flaky tests (failed once in a regular job, rerun here):"
+        if [ -s "$new_flakes_summary" ]; then
+          sed 's/^/   /' "$new_flakes_summary"
+        else
+          echo "   (none)"
+        fi
+        echo ""
+        echo " KNOWN unstable tests (test.meta({ unstable: true })), failed all attempts: $unstable_failed"
+        if [ -n "$meta_failed_names" ]; then
+          echo "$meta_failed_names" | sed 's/^/   FAILED | /'
+        fi
+        echo "============================================================"
+
+        {
+          echo "## Unstable job summary"
+          echo ""
+          echo "### New flaky tests (forwarded from regular jobs)"
+          if [ -s "$new_flakes_summary" ]; then
+            echo ""
+            echo "| Result | Test | Source job |"
+            echo "|---|---|---|"
+            awk -F' \\| ' '{ printf "| %s | %s | %s |\n", $1, $2, $3 }' "$new_flakes_summary"
+          else
+            echo ""
+            echo "_none_"
+          fi
+          echo ""
+          echo "### Known unstable tests (\`test.meta({ unstable: true })\`)"
+          echo ""
+          echo "Failed all attempts: **$unstable_failed**"
+          if [ -n "$meta_failed_names" ]; then
+            echo ""
+            echo "$meta_failed_names" | sed 's/^/- /'
+          fi
+        } >> "$GITHUB_STEP_SUMMARY"
 
         if [ "$rerun_failed" -gt 0 ]; then
-          echo "A test forwarded from a regular job failed all attempts."
+          echo "A NEW flaky test failed all attempts."
           echo "This is a persistent failure, not a flake - marking the job as failed."
           exit 1
         fi
         if [ "$unstable_failed" -gt 1 ]; then
-          echo "More than one meta-unstable test failed - marking the job as failed."
+          echo "More than one KNOWN unstable test failed - marking the job as failed."
           exit 1
         fi
 
