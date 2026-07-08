@@ -256,20 +256,11 @@ test.meta({ unstable: true })('"Select All" checkbox should not react when not v
   );
   const editorCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).element;
 
-  // NOTE: Selector-based assertions instead of instance-based option('visible'):
-  // the instance lookup crashes when the checkbox is not rendered yet,
-  // and ClientFunction results are not retried by assertions (unstable in CI)
-  await t
-    .expect(selectAllCheckBox.element.exists)
-    .ok()
-    .expect(selectAllCheckBox.element.visible)
-    .notOk();
+  await t.expect(await selectAllCheckBox.option('visible')).notOk();
 
   await t.click(editorCell);
 
-  await t
-    .expect(selectAllCheckBox.element.visible)
-    .notOk();
+  await t.expect(await selectAllCheckBox.option('visible')).notOk();
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [],
   keyExpr: 'orderId',

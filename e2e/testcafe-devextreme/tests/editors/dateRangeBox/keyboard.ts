@@ -451,9 +451,6 @@ test('DateRangeBox should not be closed by press tab key on startDate input', as
   await t
     .expect(dateRangeBox.option('opened'))
     .eql(false)
-    // NOTE: an explicit focusable element next to the editor makes the tab
-    // target deterministic: otherwise focus can transiently enter the popup
-    // content and be restored to the input on close (unstable in CI)
     .expect(Selector('#lastFocusableElement').hasClass('dx-state-focused'))
     .ok()
     .expect(dateRangeBox.isFocused)

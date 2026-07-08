@@ -21,9 +21,7 @@ test.meta({ unstable: true })('Toast should be visible after calling and should 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-  // The toast lifetime partially overlaps with the screenshot comparison above,
-  // so give the hide timer a generous margin on slow machines
-  await t.expect(dataGrid.getToast().exists).notOk({ timeout: 10000 });
+  await t.expect(dataGrid.getToast().exists).notOk();
 }).before(async () => {
   await createWidget('dxDataGrid', {});
 });

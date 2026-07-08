@@ -8,10 +8,6 @@ fixture`Ai Column.Virtual Scrolling.Functional`
 
 const DATA_GRID_SELECTOR = '#container';
 
-const CLASS = {
-  loadPanelContent: 'dx-loadpanel-content',
-};
-
 const checkAIColumnTexts = async (
   t: TestController,
   component: DataGrid,
@@ -51,7 +47,7 @@ test.meta({ unstable: true })('DataGrid should send an AI request for rendered r
 
   // assert
   await t
-    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
+    .expect(dataGrid.getLoadPanel().isVisible())
     .ok();
 
   // act
@@ -61,7 +57,7 @@ test.meta({ unstable: true })('DataGrid should send an AI request for rendered r
   await t
     .expect(dataGrid.isReady())
     .ok()
-    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
+    .expect(dataGrid.getLoadPanel().isVisible())
     .notOk();
   await checkAIColumnTexts(t, dataGrid, 11);
 
@@ -76,7 +72,7 @@ test.meta({ unstable: true })('DataGrid should send an AI request for rendered r
     .eql(0)
     .expect(dataGrid.getDataCell(20, 0).element.textContent)
     .eql('21')
-    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
+    .expect(dataGrid.getLoadPanel().isVisible())
     .ok();
 
   // act
@@ -86,7 +82,7 @@ test.meta({ unstable: true })('DataGrid should send an AI request for rendered r
   await t
     .expect(dataGrid.isReady())
     .ok()
-    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
+    .expect(dataGrid.getLoadPanel().isVisible())
     .notOk();
   await checkAIColumnTexts(t, dataGrid, 12);
 })
@@ -154,7 +150,7 @@ test.meta({ unstable: true })('DataGrid should send an AI request for rendered r
 
   // assert
   await t
-    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
+    .expect(dataGrid.getLoadPanel().isVisible())
     .ok();
 
   // act
@@ -164,7 +160,7 @@ test.meta({ unstable: true })('DataGrid should send an AI request for rendered r
   await t
     .expect(dataGrid.isReady())
     .ok()
-    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
+    .expect(dataGrid.getLoadPanel().isVisible())
     .notOk();
   await checkAIColumnTexts(t, dataGrid, 11);
 
@@ -179,7 +175,7 @@ test.meta({ unstable: true })('DataGrid should send an AI request for rendered r
     .eql(1)
     .expect(dataGrid.getDataCell(20, 0).element.textContent)
     .eql('21')
-    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
+    .expect(dataGrid.getLoadPanel().isVisible())
     .ok();
 
   // act
@@ -189,7 +185,7 @@ test.meta({ unstable: true })('DataGrid should send an AI request for rendered r
   await t
     .expect(dataGrid.isReady())
     .ok()
-    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
+    .expect(dataGrid.getLoadPanel().isVisible())
     .notOk();
   await checkAIColumnTexts(t, dataGrid, 12);
 })
