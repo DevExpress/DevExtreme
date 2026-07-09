@@ -2,6 +2,7 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
+import devices from '@ts/core/m_devices';
 import { focused } from '@ts/core/utils/m_selectors';
 
 import mappedAddNamespace from './m_add_namespace';
@@ -55,6 +56,12 @@ const LEGACY_KEY_CODES = {
   16: 'shift',
   17: 'control',
   18: 'alt',
+};
+
+const MOUSE_BUTTON_MAP = {
+  left: 1,
+  middle: 2,
+  right: 3,
 };
 
 const EVENT_SOURCES_REGEX = {
@@ -151,7 +158,7 @@ export const needSkipEvent = (e) => {
   // TODO: this checking used in swipeable first move handler. is it correct?
   const { target } = e;
   const $target = $(target);
-  const isContentEditable = target?.isContentEditable || target?.hasAttribute('contenteditable');
+  const isContentEditable: boolean = target?.isContentEditable || target?.hasAttribute('contenteditable');
   const touchInEditable = $target.is('input, textarea, select') || isContentEditable;
 
   if (isDxMouseWheelEvent(e)) {
@@ -167,7 +174,12 @@ export const needSkipEvent = (e) => {
   }
 
   if (isMouseEvent(e)) {
-    return touchInEditable || e.which > 1; // only left mouse button
+    const isMiddleMouseButton = e.which === MOUSE_BUTTON_MAP.middle;
+    const isRightMouseButton = e.which === MOUSE_BUTTON_MAP.right;
+    // T1328053
+    const isMacContextMenuClick = Boolean(e.ctrlKey) && devices.real().mac;
+
+    return touchInEditable || isMiddleMouseButton || isRightMouseButton || isMacContextMenuClick;
   }
 
   if (isTouchEvent(e)) {
