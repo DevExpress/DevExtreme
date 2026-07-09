@@ -84,7 +84,7 @@ export const dragToHeaderPanel = async (
       columnElement,
       insertBeforeColumn,
       {
-        destinationOffsetX: -(Math.floor(width) + 5), // 5px left of the left edge
+        destinationOffsetX: -(Math.floor(width) + 3), // 5px left of the left edge
         destinationOffsetY: HEADER_DROP_OFFSET_Y,
         speed: 0.5,
       },
@@ -97,7 +97,7 @@ export const dragToHeaderPanel = async (
       columnElement,
       insertAfterColumn,
       {
-        destinationOffsetX: (Math.floor(width) + 5), // 5px right of the right edge
+        destinationOffsetX: (Math.floor(width) + 3), // 5px right of the right edge
         destinationOffsetY: HEADER_DROP_OFFSET_Y,
         speed: 0.5,
       },
