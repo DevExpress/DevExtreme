@@ -7,7 +7,6 @@ import {
   ViewContainerRef,
   Input,
   Renderer2,
-  NgZone,
   EmbeddedViewRef,
 } from '@angular/core';
 
@@ -42,7 +41,6 @@ export class DxTemplateDirective {
     private readonly viewContainerRef: ViewContainerRef,
     templateHost: DxTemplateHost,
     private readonly renderer: Renderer2,
-    private readonly zone: NgZone,
   ) {
     templateHost.setTemplate(this);
   }
@@ -64,12 +62,7 @@ export class DxTemplateDirective {
   }
 
   render(renderData: RenderData) {
-    let childView;
-    if (this.zone.isStable) {
-      childView = this.zone.run(() => this.renderTemplate(renderData));
-    } else {
-      childView = this.renderTemplate(renderData);
-    }
+    const childView = this.renderTemplate(renderData);
     // =========== WORKAROUND =============
     // https://github.com/angular/angular/issues/12243
     childView.detectChanges();

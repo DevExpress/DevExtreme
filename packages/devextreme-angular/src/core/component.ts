@@ -1,9 +1,10 @@
 import {
   TransferState,
   makeStateKey,
+  ChangeDetectorRef,
   Component,
   ElementRef,
-  NgZone,
+  Injector,
   QueryList,
   SimpleChanges,
   PLATFORM_ID,
@@ -16,9 +17,7 @@ import {
   AfterContentChecked,
   AfterViewInit,
   AfterViewChecked,
-  createNgModule,
   inject,
-  Injector,
 } from '@angular/core';
 
 import { isPlatformServer } from '@angular/common';
@@ -39,7 +38,7 @@ import {
   CollectionNestedOptionContainerImpl,
 } from './nested-option';
 
-import { DxIntegrationModule } from './integration';
+import { initializeDxIntegration } from './integration';
 
 config({
   buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeAngular.aspx',
@@ -121,11 +120,11 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
   }
 
   protected _createEventEmitters(events) {
-    const zone = this.ngZone;
+    const cdr = this.cdr;
     this.eventHelper.createEmitters(events);
 
     this._initialOptions.eventsStrategy = (instance) => {
-      const strategy = new NgEventsStrategy(instance, zone);
+      const strategy = new NgEventsStrategy(instance, cdr);
 
       events.filter((event) => event.subscribe).forEach((event) => {
         strategy.addEmitter(event.subscribe, this[event.emit]);
@@ -136,7 +135,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
 
     this._initialOptions.nestedComponentOptions = function (component) {
       return {
-        eventsStrategy: (instance) => new NgEventsStrategy(instance, zone),
+        eventsStrategy: (instance) => new NgEventsStrategy(instance, cdr),
         nestedComponentOptions: component.option('nestedComponentOptions'),
       };
     };
@@ -193,6 +192,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
   protected abstract _createInstance(element, options);
 
   protected _createWidget(element: any) {
+    initializeDxIntegration(this.injector);
     this._initialOptions.integrationOptions = {};
     this._initPlatform();
     this._initOptions();
@@ -222,22 +222,21 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     }
   }
 
+  private readonly cdr = inject(ChangeDetectorRef);
+
+  private readonly injector = inject(Injector);
+
   constructor(
     protected element: ElementRef,
-    private readonly ngZone: NgZone,
     templateHost: DxTemplateHost,
     private readonly watcherHelper: WatcherHelper,
     private readonly transferState: TransferState,
     @Inject(PLATFORM_ID) private readonly platformId: any,
   ) {
-    if (!DxIntegrationModule.initialized) {
-      createNgModule(DxIntegrationModule, inject(Injector));
-    }
-
     this.templates = [];
     templateHost.setHost(this);
     this._collectionContainerImpl = new CollectionNestedOptionContainerImpl(this._setOption.bind(this));
-    this.eventHelper = new EmitterHelper(ngZone, this);
+    this.eventHelper = new EmitterHelper(this.cdr, this);
   }
 
   ngOnChanges(changes: SimpleChanges) {

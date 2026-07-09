@@ -6,7 +6,6 @@ import {
     Component,
     NgModule,
     ElementRef,
-    NgZone,
     PLATFORM_ID,
     Inject,
 
@@ -737,14 +736,14 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
 
 
 
-    constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
+    constructor(elementRef: ElementRef, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
             optionHost: NestedOptionHost,
             transferState: TransferState,
             @Inject(PLATFORM_ID) platformId: any) {
 
-        super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
+        super(elementRef, templateHost, _watcherHelper, transferState, platformId);
 
         this._createEventEmitters([
             { subscribe: 'contentReady', emit: 'onContentReady' },

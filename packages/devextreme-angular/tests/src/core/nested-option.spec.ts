@@ -4,7 +4,6 @@ import {
   ElementRef,
   EventEmitter,
   ViewChild,
-  NgZone,
   Input,
   Renderer2,
   Inject,
@@ -230,14 +229,13 @@ export class DxTestWidgetComponent extends DxComponent {
 
   constructor(
     elementRef: ElementRef,
-    ngZone: NgZone,
     templateHost: DxTemplateHost,
     private readonly _noh: NestedOptionHost,
     _watcherHelper: WatcherHelper,
     transferState: TransferState,
     @Inject(PLATFORM_ID) platformId: any,
   ) {
-    super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
+    super(elementRef, templateHost, _watcherHelper, transferState, platformId);
 
     this._noh.setHost(this);
   }
