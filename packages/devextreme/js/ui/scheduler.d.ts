@@ -762,6 +762,7 @@ export interface dxSchedulerOptions extends Omit<
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:{ui/scheduler:AppointmentClickEvent}
      * @action
      * @public
@@ -770,6 +771,7 @@ export interface dxSchedulerOptions extends Omit<
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:{ui/scheduler:AppointmentContextMenuEvent}
      * @action
      * @public
@@ -778,6 +780,7 @@ export interface dxSchedulerOptions extends Omit<
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:{ui/scheduler:AppointmentDblClickEvent}
      * @action
      * @public
@@ -843,6 +846,7 @@ export interface dxSchedulerOptions extends Omit<
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:{ui/scheduler:CellClickEvent}
      * @action
      * @public
@@ -859,6 +863,7 @@ export interface dxSchedulerOptions extends Omit<
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:{ui/scheduler:CellContextMenuEvent}
      * @action
      * @public
@@ -1220,6 +1225,7 @@ export interface dxSchedulerOptions extends Omit<
 
 /**
  * @docid
+ * @type object
  * @inherits dxButtonGroupOptions
  * @namespace DevExpress.ui.dxScheduler
  * @public
