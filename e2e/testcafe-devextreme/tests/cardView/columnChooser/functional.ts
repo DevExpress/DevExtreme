@@ -61,6 +61,7 @@ function testsFactory(testModel: {
     await t.expect(cardView.isReady()).ok();
 
     await cardView.apiShowColumnChooser();
+    await t.expect(cardView.getColumnChooser().isOpened).ok();
 
     await testModel.hideFirstColumn(t, cardView);
     await testModel.assertFirstColumnHidden(t, cardView);
@@ -97,14 +98,12 @@ testsFactory({
   async hideFirstColumn(t: TestController, cardView: CardView) {
     await t.click(
       cardView.getColumnChooser().getCheckbox(0),
-      { offsetX: 5, offsetY: 5 },
     );
     await t.expect(cardView.isReady()).ok();
   },
   async showFirstColumn(t: TestController, cardView: CardView) {
     await t.click(
       cardView.getColumnChooser().getCheckbox(0),
-      { offsetX: 5, offsetY: 5 },
     );
     await t.expect(cardView.isReady()).ok();
   },
