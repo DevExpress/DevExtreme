@@ -14,7 +14,6 @@ import {
 
 import type { AllDayPanelMode, CellAppointmentsLimit, SnapToCellsMode, ViewType } from 'devextreme/ui/scheduler';
 import type { DayOfWeek, Orientation } from 'devextreme/common';
-import type { Scrolling } from 'UNKNOWN_MODULE';
 
 import {
     DxIntegrationModule,
@@ -191,10 +190,10 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get scrolling(): Scrolling {
+    get scrolling(): Record<string, any> {
         return this._getOption('scrolling');
     }
-    set scrolling(value: Scrolling) {
+    set scrolling(value: Record<string, any>) {
         this._setOption('scrolling', value);
     }
 

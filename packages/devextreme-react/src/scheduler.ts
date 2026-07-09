@@ -10,7 +10,7 @@ import NestedOption from "./core/nested-option";
 
 import type { ViewType, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, SelectionEndEvent, AppointmentFormProperties, AppointmentFormIconsShowMode, SchedulerPredefinedToolbarItem, DateNavigatorItemProperties, SchedulerPredefinedDateNavigatorItem, dxSchedulerToolbarItem, AllDayPanelMode, AppointmentCollectorTemplateData, AppointmentTemplateData, AppointmentTooltipTemplateData, CellAppointmentsLimit, SnapToCellsMode } from "devextreme/ui/scheduler";
 import type { event } from "devextreme/events/events.types";
-import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, template, ButtonType, ComparisonOperator, Mode, ToolbarItemLocation, ToolbarItemComponent, SingleMultipleOrNone, ScrollMode, TabsIconPosition, TabsStyle, Position, DayOfWeek, Orientation } from "devextreme/common";
+import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, template, ButtonType, ComparisonOperator, Mode, ToolbarItemLocation, ToolbarItemComponent, SingleMultipleOrNone, TabsIconPosition, TabsStyle, Position, DayOfWeek, Orientation } from "devextreme/common";
 import type { dxButtonOptions, ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from "devextreme/ui/button";
 import type { FormItemType, FormPredefinedButtonItem, ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, OptionChangedEvent as FormOptionChangedEvent, dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, SmartPastedEvent, SmartPastingEvent, FormItemComponent } from "devextreme/ui/form";
 import type { ContentReadyEvent as ButtonGroupContentReadyEvent, DisposingEvent as ButtonGroupDisposingEvent, InitializedEvent as ButtonGroupInitializedEvent, OptionChangedEvent as ButtonGroupOptionChangedEvent, dxButtonGroupItem, ItemClickEvent, SelectionChangedEvent } from "devextreme/ui/button_group";
@@ -20,7 +20,6 @@ import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collectio
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
-import type { Scrolling as AliasedScrolling } from "UNKNOWN_MODULE";
 
 import type dxSortable from "devextreme/ui/sortable";
 import type dxDraggable from "devextreme/ui/draggable";
@@ -101,7 +100,6 @@ const Scheduler = memo(
         appointmentDragging: { optionName: "appointmentDragging", isCollectionItem: false },
         editing: { optionName: "editing", isCollectionItem: false },
         resource: { optionName: "resources", isCollectionItem: true },
-        scrolling: { optionName: "scrolling", isCollectionItem: false },
         toolbar: { optionName: "toolbar", isCollectionItem: false },
         view: { optionName: "views", isCollectionItem: true }
       }), []);
@@ -993,25 +991,6 @@ const Resource = Object.assign<typeof _componentResource, NestedComponentMeta>(_
 });
 
 // owners:
-// Scheduler
-// View
-type IScrollingProps = React.PropsWithChildren<{
-  mode?: ScrollMode;
-}>
-const _componentScrolling = (props: IScrollingProps) => {
-  return React.createElement(NestedOption<IScrollingProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "scrolling",
-    },
-  });
-};
-
-const Scrolling = Object.assign<typeof _componentScrolling, NestedComponentMeta>(_componentScrolling, {
-  componentType: "option",
-});
-
-// owners:
 // Form
 type ISimpleItemProps = React.PropsWithChildren<{
   aiOptions?: Record<string, any> | {
@@ -1459,7 +1438,7 @@ type IViewProps = React.PropsWithChildren<{
   name?: string | undefined;
   offset?: number;
   resourceCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
-  scrolling?: AliasedScrolling;
+  scrolling?: Record<string, any>;
   snapToCellsMode?: SnapToCellsMode;
   startDate?: Date | number | string | undefined;
   startDayHour?: number;
@@ -1486,9 +1465,6 @@ const _componentView = (props: IViewProps) => {
     elementDescriptor: {
       OptionName: "views",
       IsCollectionItem: true,
-      ExpectedChildren: {
-        scrolling: { optionName: "scrolling", isCollectionItem: false }
-      },
       TemplateProps: [{
         tmplOption: "appointmentCollectorTemplate",
         render: "appointmentCollectorRender",
@@ -1575,8 +1551,6 @@ export {
   IRequiredRuleProps,
   Resource,
   IResourceProps,
-  Scrolling,
-  IScrollingProps,
   SimpleItem,
   ISimpleItemProps,
   StringLengthRule,
