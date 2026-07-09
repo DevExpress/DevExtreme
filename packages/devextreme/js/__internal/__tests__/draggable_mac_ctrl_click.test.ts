@@ -6,9 +6,9 @@ import {
   it,
   jest,
 } from '@jest/globals';
-import eventsEngine from '@js/common/core/events/core/events_engine';
-import $ from '@js/core/renderer';
-import Draggable from '@js/ui/draggable';
+import devices from '@ts/core/m_devices';
+
+import { createDraggable, disposeDraggable, fire } from './utils';
 
 jest.mock('@ts/core/m_devices', () => {
   const originalModule: any = jest.requireActual('@ts/core/m_devices');
@@ -25,50 +25,8 @@ jest.mock('@ts/core/m_devices', () => {
   };
 });
 
-// eslint-disable-next-line import/first
-import devices from '@ts/core/m_devices';
-
-const DRAGGABLE_ELEMENT_ID = 'draggable';
-
-interface DraggableTest extends Draggable {
-  getDragInProgress: () => boolean;
-}
-
 const setMac = (mac: boolean): void => {
   (devices.real as jest.Mock).mockReturnValue({ mac, deviceType: 'desktop', platform: 'generic' });
-};
-
-const fire = (
-  element: Element,
-  type: string,
-  { x = 0, y = 0, ctrlKey = false }: { x?: number; y?: number; ctrlKey?: boolean } = {},
-): void => {
-  // @ts-expect-error -- Event is absent from the public eventsEngine type
-  const event = eventsEngine.Event({
-    type,
-    pageX: x,
-    pageY: y,
-    clientX: x,
-    clientY: y,
-    offset: { x, y },
-    pointerType: 'mouse',
-    pointers: type === 'dxpointerup' ? [] : [{ pointerId: 1 }],
-    pointerId: 1,
-    which: 1,
-    ctrlKey,
-  });
-
-  // @ts-expect-error -- trigger is absent from the public eventsEngine type
-  eventsEngine.trigger(element, event);
-};
-
-const createDraggable = (options: Record<string, unknown> = {}): DraggableTest => {
-  const $element = $('<div>')
-    .attr('id', DRAGGABLE_ELEMENT_ID)
-    .css({ width: '100px', height: '40px' })
-    .appendTo(document.body);
-
-  return new Draggable($element.get(0), { autoScroll: false, ...options }) as DraggableTest;
 };
 
 beforeEach(() => {
@@ -76,11 +34,7 @@ beforeEach(() => {
   setMac(false);
 });
 
-afterEach(() => {
-  const instance = Draggable.getInstance($(`#${DRAGGABLE_ELEMENT_ID}`).get(0));
-
-  instance?.dispose();
-});
+afterEach(disposeDraggable);
 
 describe('Draggable macOS Ctrl+click (T1328053)', () => {
   it('should not start a drag when a mouse move follows a macOS Ctrl+click', () => {
@@ -89,8 +43,8 @@ describe('Draggable macOS Ctrl+click (T1328053)', () => {
     const draggable = createDraggable({ onDragStart });
     const element = draggable.$element().get(0);
 
-    fire(element, 'dxpointerdown', { x: 0, y: 0, ctrlKey: true });
-    fire(element, 'dxpointermove', { x: 0, y: 40 });
+    fire(element, 'dxpointerdown', { ctrlKey: true, pointerType: 'mouse' });
+    fire(element, 'dxpointermove', { y: 40, pointerType: 'mouse' });
 
     expect(onDragStart).not.toHaveBeenCalled();
     expect(draggable.getDragInProgress()).toBe(false);
@@ -102,8 +56,8 @@ describe('Draggable macOS Ctrl+click (T1328053)', () => {
     const draggable = createDraggable({ onDragStart });
     const element = draggable.$element().get(0);
 
-    fire(element, 'dxpointerdown', { x: 0, y: 0 });
-    fire(element, 'dxpointermove', { x: 0, y: 40 });
+    fire(element, 'dxpointerdown', { pointerType: 'mouse' });
+    fire(element, 'dxpointermove', { y: 40, pointerType: 'mouse' });
 
     expect(onDragStart).toHaveBeenCalledTimes(1);
     expect(draggable.getDragInProgress()).toBe(true);
@@ -115,8 +69,8 @@ describe('Draggable macOS Ctrl+click (T1328053)', () => {
     const draggable = createDraggable({ onDragStart });
     const element = draggable.$element().get(0);
 
-    fire(element, 'dxpointerdown', { x: 0, y: 0, ctrlKey: true });
-    fire(element, 'dxpointermove', { x: 0, y: 40 });
+    fire(element, 'dxpointerdown', { ctrlKey: true, pointerType: 'mouse' });
+    fire(element, 'dxpointermove', { y: 40, pointerType: 'mouse' });
 
     expect(onDragStart).toHaveBeenCalledTimes(1);
     expect(draggable.getDragInProgress()).toBe(true);
