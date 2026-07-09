@@ -569,7 +569,7 @@ test('Navigate to first cell in the first row when virtual scrolling is enabled'
     .click(dataGrid.getDataCell(199, 14).element)
     .pressKey('ctrl+home')
     .expect(dataGrid.getScrollLeft())
-    .eql(0);
+    .eql(0)
     .wait(1000);
 
   await testScreenshot(t, takeScreenshot, 'navigate_to_first_cell_in_first_row_when_virtual_scrolling_is_enabled_2.png', { element: dataGrid.element });
