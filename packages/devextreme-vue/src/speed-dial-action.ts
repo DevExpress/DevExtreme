@@ -46,7 +46,7 @@ const componentConfig = {
     index: Number,
     label: String,
     onClick: Function as PropType<((e: ClickEvent) => void)>,
-    onContentReady: Function as PropType<(((e: ContentReadyEvent) => void)) | null>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
     onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,

@@ -61,7 +61,7 @@ const componentConfig = {
     isValid: Boolean,
     max: Number,
     min: Number,
-    onComplete: Function as PropType<(((e: CompleteEvent) => void)) | null>,
+    onComplete: Function as PropType<((e: CompleteEvent) => void)>,
     onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
