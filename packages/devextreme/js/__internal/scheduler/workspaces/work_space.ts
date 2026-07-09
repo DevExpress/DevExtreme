@@ -2511,8 +2511,12 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     }
 
     const point = this.getPointFromDragTarget($dragTarget);
+    return this.getCellFromPoint(point.x, point.y);
+  }
+
+  public getCellFromPoint(x: number, y: number): dxElementWrapper | null {
     // @ts-expect-error
-    const elements = domAdapter.elementsFromPoint(point.x, point.y) as Element[];
+    const elements = domAdapter.elementsFromPoint(x, y) as Element[];
 
     const cell = elements.find((element) => element.classList.contains('dx-scheduler-date-table-cell')
       || element.classList.contains('dx-scheduler-all-day-table-cell'));
