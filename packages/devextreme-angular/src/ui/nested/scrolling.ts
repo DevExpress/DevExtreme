@@ -1,6 +1,5 @@
 /* tslint:disable:max-line-length */
 
-/* tslint:disable:use-input-property-decorator */
 
 import {
     Component,
@@ -8,18 +7,22 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
+    Input
 } from '@angular/core';
 
 
 
 
+import type { Mode, ScrollbarMode, ScrollMode } from 'devextreme/common';
+import type { DataRenderMode } from 'devextreme/common/grids';
+import type { DataGridScrollMode } from 'devextreme/ui/data_grid';
 
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { DxoScrolling } from './base/scrolling';
+import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
@@ -27,20 +30,81 @@ import { DxoScrolling } from './base/scrolling';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
-    inputs: [
-        'columnRenderingMode',
-        'mode',
-        'preloadEnabled',
-        'renderAsync',
-        'rowRenderingMode',
-        'scrollByContent',
-        'scrollByThumb',
-        'showScrollbar',
-        'useNative'
-    ]
+    providers: [NestedOptionHost]
 })
-export class DxoScrollingComponent extends DxoScrolling implements OnDestroy, OnInit  {
+export class DxoScrollingComponent extends NestedOption implements OnDestroy, OnInit  {
+    @Input()
+    get columnRenderingMode(): DataRenderMode {
+        return this._getOption('columnRenderingMode');
+    }
+    set columnRenderingMode(value: DataRenderMode) {
+        this._setOption('columnRenderingMode', value);
+    }
+
+    @Input()
+    get mode(): DataGridScrollMode | ScrollMode {
+        return this._getOption('mode');
+    }
+    set mode(value: DataGridScrollMode | ScrollMode) {
+        this._setOption('mode', value);
+    }
+
+    @Input()
+    get preloadEnabled(): boolean {
+        return this._getOption('preloadEnabled');
+    }
+    set preloadEnabled(value: boolean) {
+        this._setOption('preloadEnabled', value);
+    }
+
+    @Input()
+    get renderAsync(): boolean | undefined {
+        return this._getOption('renderAsync');
+    }
+    set renderAsync(value: boolean | undefined) {
+        this._setOption('renderAsync', value);
+    }
+
+    @Input()
+    get rowRenderingMode(): DataRenderMode {
+        return this._getOption('rowRenderingMode');
+    }
+    set rowRenderingMode(value: DataRenderMode) {
+        this._setOption('rowRenderingMode', value);
+    }
+
+    @Input()
+    get scrollByContent(): boolean {
+        return this._getOption('scrollByContent');
+    }
+    set scrollByContent(value: boolean) {
+        this._setOption('scrollByContent', value);
+    }
+
+    @Input()
+    get scrollByThumb(): boolean {
+        return this._getOption('scrollByThumb');
+    }
+    set scrollByThumb(value: boolean) {
+        this._setOption('scrollByThumb', value);
+    }
+
+    @Input()
+    get showScrollbar(): ScrollbarMode {
+        return this._getOption('showScrollbar');
+    }
+    set showScrollbar(value: ScrollbarMode) {
+        this._setOption('showScrollbar', value);
+    }
+
+    @Input()
+    get useNative(): Mode | boolean {
+        return this._getOption('useNative');
+    }
+    set useNative(value: Mode | boolean) {
+        this._setOption('useNative', value);
+    }
+
 
     protected get _optionPath() {
         return 'scrolling';

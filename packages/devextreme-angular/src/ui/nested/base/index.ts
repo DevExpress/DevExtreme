@@ -45,7 +45,6 @@ export * from './pager';
 export * from './popup-options';
 export * from './popup-toolbar-item-dxi';
 export * from './position-config';
-export * from './scrolling';
 export * from './search-panel';
 export * from './sortable-options';
 export * from './sorting';

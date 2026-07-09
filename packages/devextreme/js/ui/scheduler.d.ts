@@ -949,6 +949,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @public
+     * @type object
      */
     scrolling?: Scrolling;
     /**
@@ -1160,6 +1161,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       type?: ViewType | undefined;
       /**
        * @docid
+       * @type object
        */
       scrolling?: Scrolling;
       /**
