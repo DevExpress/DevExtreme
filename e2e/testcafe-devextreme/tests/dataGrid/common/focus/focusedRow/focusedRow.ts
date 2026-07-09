@@ -1017,3 +1017,77 @@ test('Group should expand when focusedRowKey is set and data items have \'items\
   height: 400,
   focusedRowEnabled: true,
 }));
+
+[false, true].forEach((useNative) => {
+  test(`navigateToRow method should scroll to the focused row after new rows are added via the push method when scrolling.mode is virtual and scrolling.useNative is ${useNative} (T1307127)`, async (t) => {
+    const dataGrid = new DataGrid('#container');
+    const changes: { type: string; data: Record<string, unknown> }[] = new Array(50)
+      .fill(null)
+      .map((_, index) => ({
+        type: 'insert',
+        data: { id: 501 + index, firstName: `First${501 + index}`, lastName: `Last${501 + index}` },
+      }));
+
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    // act
+    await dataGrid.apiNavigateToRow(81);
+    await t.click(dataGrid.getDataCell(80, 0).element);
+
+    await t
+      .expect(dataGrid.apiOption('focusedRowKey'))
+      .eql(81);
+
+    await dataGrid.scrollTo(t, { top: 0 });
+
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    await ClientFunction(() => {
+      (window as any).keyToNavigateTo = 81;
+    })();
+    await dataGrid.apiPush(changes);
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok()
+      .expect(dataGrid.apiTotalCount())
+      .eql(550)
+      .expect(dataGrid.apiGetTopVisibleRowKey())
+      .eql(81);
+  }).before(async () => createWidget('dxDataGrid', {
+    dataSource: new Array(500).fill(null).map((_, index) => ({
+      id: index + 1,
+      firstName: `First${index + 1}`,
+      lastName: `Last${index + 1}`,
+    })),
+    keyExpr: 'id',
+    height: 400,
+    repaintChangesOnly: true,
+    focusedRowEnabled: true,
+    scrolling: {
+      mode: 'virtual',
+      useNative,
+    },
+    columns: [
+      { dataField: 'firstName', width: 150 },
+      { dataField: 'lastName', width: 150 },
+    ],
+    onContentReady(e) {
+      const key = (window as any).keyToNavigateTo;
+
+      if (key !== undefined) {
+        (window as any).keyToNavigateTo = undefined;
+        e.component.navigateToRow(key);
+      }
+    },
+  })).after(async () => {
+    await ClientFunction(() => {
+      delete (window as any).keyToNavigateTo;
+    })();
+  });
+});
