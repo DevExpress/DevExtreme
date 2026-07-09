@@ -21,10 +21,13 @@ export interface RovingTabIndexOptions {
   component: RovingTabIndexComponent;
   getItems: () => HTMLElement[];
   scrollToItem?: (item: HTMLElement) => void;
+  getItemId?: (item: HTMLElement) => string | undefined;
 }
 
 export class RovingTabIndex {
   private focusedItemIndex = 0;
+
+  private focusedItemId: string | undefined;
 
   constructor(private readonly options: RovingTabIndexOptions) {}
 
@@ -33,13 +36,13 @@ export class RovingTabIndex {
   }
 
   getFocusedItemIndex(): number {
-    return this.getNormalizedItemIndex(this.getItems());
+    return this.getActualItemIndex(this.getItems());
   }
 
   getFocusedItem(): HTMLElement | undefined {
     const items = this.getItems();
 
-    return items[this.getNormalizedItemIndex(items)];
+    return items[this.getActualItemIndex(items)];
   }
 
   updateTabIndexes(): void {
@@ -49,7 +52,7 @@ export class RovingTabIndex {
       return;
     }
 
-    this.focusedItemIndex = this.getNormalizedItemIndex(items);
+    this.focusedItemIndex = this.getActualItemIndex(items);
 
     items.forEach((item, index) => {
       if (index === this.focusedItemIndex) {
@@ -68,7 +71,7 @@ export class RovingTabIndex {
       return;
     }
 
-    this.focusedItemIndex = index;
+    this.setFocusedItem(index, items);
     this.updateTabIndexes();
 
     const item = items[index];
@@ -91,16 +94,40 @@ export class RovingTabIndex {
   }
 
   handleFocusIn(item: HTMLElement): void {
-    const index = this.getItems().indexOf(item);
+    const items = this.getItems();
+    const index = items.indexOf(item);
 
     if (index >= 0 && index !== this.focusedItemIndex) {
-      this.focusedItemIndex = index;
+      this.setFocusedItem(index, items);
       this.updateTabIndexes();
     }
   }
 
   reset(): void {
     this.focusedItemIndex = 0;
+    this.focusedItemId = undefined;
+  }
+
+  private setFocusedItem(index: number, items: HTMLElement[]): void {
+    this.focusedItemIndex = index;
+    this.focusedItemId = this.options.getItemId?.(items[index]);
+  }
+
+  // Items are re-created on each render, and with virtual scrolling the same
+  // logical item can reappear at a different position, so the focused item is
+  // re-found by its id first and only then by the stored index.
+  private getActualItemIndex(items: HTMLElement[]): number {
+    const { getItemId } = this.options;
+
+    if (getItemId && this.focusedItemId !== undefined) {
+      const index = items.findIndex((item) => getItemId(item) === this.focusedItemId);
+
+      if (index >= 0) {
+        return index;
+      }
+    }
+
+    return this.getNormalizedItemIndex(items);
   }
 
   private getNormalizedItemIndex(items: HTMLElement[]): number {

@@ -284,6 +284,12 @@ abstract class AreaItem {
             div.setAttribute('aria-label', encodeHtml ? ariaLabel : $('<div>').html(ariaLabel).text());
             div.setAttribute('aria-expanded', String(cell.expanded));
             div.setAttribute('tabindex', isCellNavigationEnabled ? '-1' : '0');
+
+            // With cell navigation the cell itself is the focus target, so it
+            // must expose the expanded state to assistive technologies.
+            if (isCellNavigationEnabled) {
+              td.setAttribute('aria-expanded', String(cell.expanded));
+            }
           }
 
           cellText = this._getCellText(cell, encodeHtml);

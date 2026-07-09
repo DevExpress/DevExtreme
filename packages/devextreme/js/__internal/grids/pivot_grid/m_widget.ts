@@ -909,9 +909,24 @@ class PivotGrid extends Widget {
       component: this,
       getItems: () => this._getColumnHeaderCells(),
       scrollToItem: (item) => this._columnsArea.scrollToElement(item),
+      getItemId: (item) => this._getHeaderCellId(item),
     });
 
     return this._columnsAreaNavigation;
+  }
+
+  // aria-colindex is absolute (it includes the virtual scrolling offset), so
+  // it identifies the same logical cell across re-renders that re-slice the
+  // rendered header pages.
+  _getHeaderCellId(cell: HTMLElement): string | undefined {
+    const columnIndex = cell.getAttribute('aria-colindex');
+    const row = cell.parentElement as HTMLTableRowElement | null;
+
+    if (!columnIndex || !row) {
+      return undefined;
+    }
+
+    return `${row.sectionRowIndex}:${columnIndex}`;
   }
 
   _getColumnHeaderCells(): HTMLElement[] {
