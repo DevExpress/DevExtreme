@@ -24,7 +24,10 @@ import {
   PointerInteractionEvent,
 } from '../events';
 
-import { dxButtonGroupOptions, dxButtonGroupItem } from './button_group';
+import {
+  Properties as ButtonGroupProperties,
+  Item as ButtonGroupItem,
+} from './button_group';
 import {
   CollectionWidgetItem,
 } from './collection/ui.collection_widget.base';
@@ -35,7 +38,7 @@ import dxForm, { Properties as FormProperties } from './form';
 import dxPopup, { Properties as PopupProperties } from './popup';
 
 import dxSortable from './sortable';
-import { dxToolbarItem } from './toolbar';
+import { Item as ToolbarItemBase } from './toolbar';
 
 import Widget, {
   WidgetOptions,
@@ -947,7 +950,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @public
      */
-    scrolling?: dxSchedulerScrolling;
+    scrolling?: Scrolling;
     /**
      * @docid
      * @readonly
@@ -1158,7 +1161,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       /**
        * @docid
        */
-      scrolling?: dxSchedulerScrolling;
+      scrolling?: Scrolling;
       /**
        * @docid
        * @default "all"
@@ -1190,13 +1193,13 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
  * @namespace DevExpress.ui.dxScheduler
  * @public
  */
-export type DateNavigatorItemProperties = dxButtonGroupOptions & {
+export type DateNavigatorItemProperties = ButtonGroupProperties & {
   /**
    * @docid
    * @type Array<dxButtonGroupItem,Enums.SchedulerPredefinedDateNavigatorItem>
    * @public
    */
-  items: Array<dxButtonGroupItem | SchedulerPredefinedDateNavigatorItem>;
+  items: Array<ButtonGroupItem | SchedulerPredefinedDateNavigatorItem>;
 };
 
 /**
@@ -1211,7 +1214,7 @@ export type dxSchedulerToolbarItem = ToolbarItem;
  * @namespace DevExpress.ui.dxScheduler
  * @public
  */
-export type ToolbarItem = dxToolbarItem & {
+export type ToolbarItem = ToolbarItemBase & {
   /**
    * @docid dxSchedulerToolbarItem.name
    * @public
@@ -1273,7 +1276,7 @@ export type Toolbar = {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxScheduler extends Widget<dxSchedulerOptions> {
+export default class dxScheduler extends Widget<Properties> {
     /**
      * @docid
      * @publicName addAppointment(appointment)
@@ -1473,16 +1476,21 @@ export type Occurrence = {
 export type Properties = dxSchedulerOptions;
 
 /**
- * @docid
+ * @namespace DevExpress.ui
+ * @deprecated Use Scrolling instead
+ */
+export type dxSchedulerScrolling = Scrolling;
+
+/**
+ * @docid dxSchedulerScrolling
  * @public
  * @namespace DevExpress.ui
  */
-export interface dxSchedulerScrolling {
+export type Scrolling = {
   /**
    * @docid
    * @default "standard"
    * @public
    */
   mode?: ScrollMode;
-}
-
+};
