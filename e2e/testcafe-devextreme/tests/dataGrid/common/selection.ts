@@ -257,11 +257,17 @@ test('"Select All" checkbox should not react when not visible', async (t) => {
   );
   const editorCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).element;
 
-  await t.expect(await selectAllCheckBox.option('visible')).notOk();
+  await t
+    .expect(selectAllCheckBox.element.exists)
+    .ok()
+    .expect(selectAllCheckBox.element.visible)
+    .notOk();
 
   await t.click(editorCell);
 
-  await t.expect(await selectAllCheckBox.option('visible')).notOk();
+  await t
+    .expect(selectAllCheckBox.element.visible)
+    .notOk();
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [],
   keyExpr: 'orderId',
