@@ -56,6 +56,8 @@ const getProperties = (options: {
   showEditAppointmentPopup: (): void => {},
   allowDelete: false,
   onDeleteKeyPress: (): void => {},
+  focusFallbackAfterDelete: (): void => {},
+  getResizableConfig: () => undefined,
 });
 
 const createAppointments = (
@@ -405,6 +407,27 @@ describe('Appointments', () => {
       expect($(elementB).css('left')).toBe('20px');
       expect($(elementB).css('height')).toBe('60px');
       expect($(elementB).css('width')).toBe('110px');
+    });
+  });
+
+  describe('Resize', () => {
+    it('should restore view model geometry on resetAppointmentResize', () => {
+      const instance = createAppointments(getProperties());
+      instance.option('viewModel', [
+        mockGridViewModel(defaultAppointmentData, {
+          sortedIndex: 0, top: 10, left: 20, height: 50, width: 100,
+        }),
+      ]);
+
+      const $element = instance.getViewItemBySortedIndex(0)?.$element() as ReturnType<typeof $>;
+      $element.css({ height: '999px', width: '888px', top: '1px' });
+
+      instance.resetAppointmentResize($element);
+
+      expect($element.css('height')).toBe('50px');
+      expect($element.css('width')).toBe('100px');
+      expect($element.css('top')).toBe('10px');
+      expect($element.css('left')).toBe('20px');
     });
   });
 

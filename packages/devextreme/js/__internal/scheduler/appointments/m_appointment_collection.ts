@@ -291,6 +291,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
         }
 
         this._attachAppointmentsEvents();
+        this._kbn.onItemsRendered();
         break;
       case 'fixedContainer':
       case 'allDayContainer':

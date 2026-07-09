@@ -423,7 +423,7 @@ const componentConfig = {
     columnWidth: [String, Number] as PropType<Mode | number>,
     customizeColumns: Function as PropType<((columns: Array<dxDataGridColumn>) => void)>,
     dataRowTemplate: {},
-    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
+    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | Store | string | Record<string, any>>,
     dateSerializationFormat: String,
     disabled: Boolean,
     editing: Object as PropType<Record<string, any>>,

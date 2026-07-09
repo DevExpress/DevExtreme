@@ -4,7 +4,8 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  merge_group:
+  push:
+    branches: [26_1]
 
 concurrency:
   group: wf-${{github.event.pull_request.number || github.ref || github.sha}}-${{github.workflow}}
@@ -192,7 +193,7 @@ jobs:
             ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.framework }}-${{ github.sha }}-
             ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.framework }}-
             ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
-            ${{ runner.os }}-nx-v2-
+            ${{ runner.os }}-nx-v2-${{ github.workflow }}-build-
 
           lookup-only: true
 
@@ -227,13 +228,18 @@ jobs:
             ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.framework }}-${{ github.sha }}-
             ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.framework }}-
             ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
-            ${{ runner.os }}-nx-v2-
+            ${{ runner.os }}-nx-v2-${{ github.workflow }}-build-
 
       - name: Download Browser
         if: matrix.framework == 'angular'
         run: |
-          PUPPETEER_CMD="browsers install chrome@130.0.6723.69"
-          pnpm --filter devextreme-angular exec puppeteer $PUPPETEER_CMD
+          CHROME_VERSION="149.0.7827.22"
+          CHROME_DIR="$HOME/.cache/puppeteer/chrome/linux-$CHROME_VERSION"
+          if [ -d "$CHROME_DIR" ] && [ ! -x "$CHROME_DIR/chrome-linux64/chrome" ]; then
+            echo "Removing corrupted puppeteer cache: $CHROME_DIR"
+            rm -rf "$CHROME_DIR"
+          fi
+          pnpm --filter devextreme-angular exec puppeteer browsers install "chrome@$CHROME_VERSION"
 
       - name: Test ${{ matrix.framework }}
         env:

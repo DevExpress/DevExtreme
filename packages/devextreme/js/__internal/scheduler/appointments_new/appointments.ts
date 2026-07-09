@@ -16,6 +16,7 @@ import { isElementInDom } from '@ts/core/utils/m_dom';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { ResizableProperties } from '@ts/ui/resizable/resizable';
 
 import type { AppointmentTooltipExtraOptions } from '../tooltip_strategies/tooltip_strategy_base';
 import type {
@@ -85,6 +86,11 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
     appointmentData: SafeAppointment;
     targetedAppointmentData: TargetedAppointment;
   }) => void;
+  focusFallbackAfterDelete: () => void;
+
+  getResizableConfig: (
+    viewModel: AppointmentItemViewModel,
+  ) => ResizableProperties | undefined;
 }
 
 export class Appointments extends DOMComponent<Appointments, AppointmentsProperties> {
@@ -120,6 +126,18 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     }
 
     return this.getViewModelBySortedIndex(viewItem.option().sortedIndex);
+  }
+
+  public focusResizingAppointment($element: dxElementWrapper): void {
+    const viewItem = this.findViewItemByElement($element);
+
+    if (viewItem) {
+      this.focusController.focusViewItem(viewItem);
+    }
+  }
+
+  public resetAppointmentResize($element: dxElementWrapper): void {
+    this.findViewItemByElement($element)?.resize();
   }
 
   public getAppointmentData($element: dxElementWrapper): {
@@ -192,6 +210,8 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       onAppointmentContextMenu: noop,
       allowDelete: false,
       onDeleteKeyPress: noop,
+      focusFallbackAfterDelete: noop,
+      getResizableConfig: () => undefined,
     };
   }
 
@@ -292,7 +312,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     this.$allDayContainer?.get(0).appendChild(allDayFragment);
     this.$commonContainer.get(0).appendChild(commonFragment);
 
-    this.focusController.resetTabIndex();
+    this.focusController.onViewItemsRendered();
   }
 
   private renderViewModelDiff(viewModelDiff: DiffItem[]): void {
@@ -341,7 +361,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     this.$allDayContainer?.get(0).appendChild(allDayFragment);
     this.$commonContainer.get(0).appendChild(commonFragment);
 
-    this.focusController.resetTabIndex();
+    this.focusController.onViewItemsRendered();
   }
 
   // TODO: remove passing index to appointmentTemplate, need only to avoid BC
@@ -391,6 +411,9 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     };
 
     if (isGridAppointmentViewModel(appointmentViewModel)) {
+      const resizableConfig = this.option().getResizableConfig(appointmentViewModel);
+      const allowResize = Boolean(resizableConfig?.handles) && resizableConfig?.handles !== 'none';
+
       return this._createComponent(
         $element,
         GridAppointmentView,
@@ -405,6 +428,8 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
           modifiers: {
             empty: appointmentViewModel.empty,
           },
+          allowResize,
+          resizableConfig,
         },
       );
     }
