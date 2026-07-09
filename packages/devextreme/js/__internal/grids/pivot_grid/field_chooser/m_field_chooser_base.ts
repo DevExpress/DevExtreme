@@ -476,9 +476,18 @@ export class FieldChooserBase extends mixinWidget {
       component,
       getItems: () => this._getAreaFieldElements(area),
       scrollToItem: (item) => this._scrollFieldElementToView(item),
+      getItemId: (item) => this._getFieldElementId(item),
     });
 
     return this._fieldNavigationMap[area];
+  }
+
+  // field.index identifies the same logical field when fields are reordered,
+  // added or removed, so the tab stop does not drift to another field.
+  private _getFieldElementId(fieldElement: HTMLElement): string | undefined {
+    const field: any = $(fieldElement).data('field');
+
+    return isDefined(field?.index) ? String(field.index) : undefined;
   }
 
   // The field chooser popup can be rendered inside the pivot grid element, so
