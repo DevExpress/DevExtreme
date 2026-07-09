@@ -50,6 +50,8 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private _dataIndexGetter: any;
 
+  private _dataIndexByKey: any;
+
   private _isRefreshing: any;
 
   private _loadingOperationTypes: any;
@@ -183,8 +185,13 @@ export default class DataSourceAdapter extends modules.Controller {
     this._totalCountCorrection = 0;
   }
 
+  protected setCachedStoreData(data): void {
+    this._cachedStoreData = data;
+    this._dataIndexByKey = undefined;
+  }
+
   protected resetCache() {
-    this._cachedStoreData = undefined;
+    this.setCachedStoreData(undefined);
     this._cachedPagingData = undefined;
   }
 
@@ -208,7 +215,7 @@ export default class DataSourceAdapter extends modules.Controller {
     const store = this.store();
 
     if (this._needClearStoreDataCache()) {
-      this._cachedStoreData = undefined;
+      this.setCachedStoreData(undefined);
     }
 
     this._cachedPagingData = undefined;
@@ -222,6 +229,8 @@ export default class DataSourceAdapter extends modules.Controller {
         data: this._cachedStoreData,
         changes,
       });
+      // applyBatch mutates _cachedStoreData in place, bypassing setCachedStoreData
+      this._dataIndexByKey = undefined;
     }
 
     if (!fromStore) {
@@ -233,20 +242,20 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private getDataIndexGetter() {
     if (!this._dataIndexGetter) {
-      let indexByKey;
-      let storeData;
       const store = this.store();
 
       this._dataIndexGetter = (data) => {
-        const isCacheUpdated = storeData && storeData !== this._cachedStoreData;
-        if (!indexByKey || isCacheUpdated) {
-          storeData = this._cachedStoreData || [];
-          indexByKey = {};
+        if (!this._dataIndexByKey) {
+          const storeData = this._cachedStoreData ?? [];
+
+          this._dataIndexByKey = {};
+
           for (let i = 0; i < storeData.length; i++) {
-            indexByKey[getKeyHash(store.keyOf(storeData[i]))] = i;
+            this._dataIndexByKey[getKeyHash(store.keyOf(storeData[i]))] = i;
           }
         }
-        return indexByKey[getKeyHash(store.keyOf(data))];
+
+        return this._dataIndexByKey[getKeyHash(store.keyOf(data))];
       };
     }
 
@@ -381,7 +390,7 @@ export default class DataSourceAdapter extends modules.Controller {
     options.cachedData = cachedData;
 
     if (!options.isCustomLoading) {
-      this._cachedStoreData = cachedStoreData;
+      this.setCachedStoreData(cachedStoreData);
       this._cachedPagingData = cachedPagingData;
       this._cachedData = cachedData;
     }
@@ -528,9 +537,10 @@ export default class DataSourceAdapter extends modules.Controller {
       } else {
         if (needStoreCache) {
           if (!this._cachedStoreData) {
-            this._cachedStoreData = cloneItems(options.data, gridCoreUtils.normalizeSortingInfo(storeLoadOptions.group).length);
+            this.setCachedStoreData(cloneItems(options.data, gridCoreUtils.normalizeSortingInfo(storeLoadOptions.group).length));
           } else if (options.mergeStoreLoadData) {
-            options.data = this._cachedStoreData = this._cachedStoreData.concat(options.data);
+            this.setCachedStoreData(this._cachedStoreData.concat(options.data));
+            options.data = this._cachedStoreData;
           }
         }
         new ArrayStore(options.data).load(loadOptions).done((data) => {

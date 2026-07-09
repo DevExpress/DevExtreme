@@ -415,10 +415,12 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
 
     const concatLoadedData = (loadedData): any => {
       if (isRemoteFiltering) {
-        this._cachedStoreData = applySorting(
+        const updatedData = applySorting(
           this._cachedStoreData.concat(loadedData),
           sort,
         );
+
+        this.setCachedStoreData(updatedData);
       }
 
       return applySorting(
