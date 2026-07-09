@@ -24,11 +24,13 @@ import {
 
 import type dxSortable from 'devextreme/ui/sortable';
 import type dxDraggable from 'devextreme/ui/draggable';
-import type { default as dxScheduler, AllDayPanelMode, ViewType, dxSchedulerAppointment, AppointmentFormProperties, CellAppointmentsLimit, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, SelectionEndEvent, RecurrenceEditMode, dxSchedulerScrolling, SnapToCellsMode, dxSchedulerToolbar } from 'devextreme/ui/scheduler';
+import type { default as dxScheduler, AllDayPanelMode, ViewType, dxSchedulerAppointment, AppointmentFormProperties, CellAppointmentsLimit, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, SelectionEndEvent, RecurrenceEditMode, SnapToCellsMode, dxSchedulerToolbar } from 'devextreme/ui/scheduler';
 import type { event } from 'devextreme/events/events.types';
 import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 import type { DayOfWeek, Orientation } from 'devextreme/common';
+import type { EventInfo } from 'devextreme/common/core/events';
+import type { Scrolling } from 'UNKNOWN_MODULE';
 
 import DxScheduler from 'devextreme/ui/scheduler';
 
@@ -711,10 +713,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get scrolling(): dxSchedulerScrolling {
+    get scrolling(): Scrolling {
         return this._getOption('scrolling');
     }
-    set scrolling(value: dxSchedulerScrolling) {
+    set scrolling(value: Scrolling) {
         this._setOption('scrolling', value);
     }
 
@@ -903,10 +905,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get views(): Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, endDayHour?: number, firstDayOfWeek?: DayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, hiddenWeekDays?: Array<DayOfWeek> | undefined, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, snapToCellsMode?: SnapToCellsMode, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[] {
+    get views(): Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, endDayHour?: number, firstDayOfWeek?: DayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, hiddenWeekDays?: Array<DayOfWeek> | undefined, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: Scrolling, snapToCellsMode?: SnapToCellsMode, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[] {
         return this._getOption('views');
     }
-    set views(value: Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, endDayHour?: number, firstDayOfWeek?: DayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, hiddenWeekDays?: Array<DayOfWeek> | undefined, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, snapToCellsMode?: SnapToCellsMode, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[]) {
+    set views(value: Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, endDayHour?: number, firstDayOfWeek?: DayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, hiddenWeekDays?: Array<DayOfWeek> | undefined, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: Scrolling, snapToCellsMode?: SnapToCellsMode, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[]) {
         this._setOption('views', value);
     }
 
@@ -1050,35 +1052,35 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
     
-     * [descr:dxSchedulerOptions.onContentReady]
+     * [descr:WidgetOptions.onContentReady]
     
     
      */
-    @Output() onContentReady: EventEmitter<ContentReadyEvent>;
+    @Output() onContentReady: EventEmitter<EventInfo<any>>;
 
     /**
     
-     * [descr:dxSchedulerOptions.onDisposing]
+     * [descr:DOMComponentOptions.onDisposing]
     
     
      */
-    @Output() onDisposing: EventEmitter<DisposingEvent>;
+    @Output() onDisposing: EventEmitter<EventInfo<any>>;
 
     /**
     
-     * [descr:dxSchedulerOptions.onInitialized]
+     * [descr:ComponentOptions.onInitialized]
     
     
      */
-    @Output() onInitialized: EventEmitter<InitializedEvent>;
+    @Output() onInitialized: EventEmitter<Object>;
 
     /**
     
-     * [descr:dxSchedulerOptions.onOptionChanged]
+     * [descr:DOMComponentOptions.onOptionChanged]
     
     
      */
-    @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
+    @Output() onOptionChanged: EventEmitter<Object>;
 
     /**
     
@@ -1401,7 +1403,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scrollingChange: EventEmitter<dxSchedulerScrolling>;
+    @Output() scrollingChange: EventEmitter<Scrolling>;
 
     /**
     
@@ -1506,7 +1508,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() viewsChange: EventEmitter<Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, endDayHour?: number, firstDayOfWeek?: DayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, hiddenWeekDays?: Array<DayOfWeek> | undefined, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, snapToCellsMode?: SnapToCellsMode, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[]>;
+    @Output() viewsChange: EventEmitter<Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, endDayHour?: number, firstDayOfWeek?: DayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, hiddenWeekDays?: Array<DayOfWeek> | undefined, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: Scrolling, snapToCellsMode?: SnapToCellsMode, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[]>;
 
     /**
     

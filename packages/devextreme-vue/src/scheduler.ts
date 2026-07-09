@@ -3,6 +3,7 @@ import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import Scheduler, { Properties } from "devextreme/ui/scheduler";
 import  DataSource from "devextreme/data/data_source";
+import  DOMComponent from "devextreme/core/dom_component";
 import  dxScheduler from "devextreme/ui/scheduler";
 import  dxSortable from "devextreme/ui/sortable";
 import  dxDraggable from "devextreme/ui/draggable";
@@ -25,18 +26,12 @@ import {
  AppointmentUpdatingEvent,
  CellClickEvent,
  CellContextMenuEvent,
- ContentReadyEvent,
- DisposingEvent,
- InitializedEvent,
- OptionChangedEvent,
  SelectionEndEvent,
  RecurrenceEditMode,
- dxSchedulerScrolling,
  SnapToCellsMode,
  dxSchedulerToolbar,
  AppointmentFormIconsShowMode,
  SchedulerPredefinedToolbarItem,
- DateNavigatorItemProperties,
  SchedulerPredefinedDateNavigatorItem,
  dxSchedulerToolbarItem,
 } from "devextreme/ui/scheduler";
@@ -65,15 +60,21 @@ import {
  Orientation,
 } from "devextreme/common";
 import {
+ EventInfo,
+} from "devextreme/common/core/events";
+import {
+ Component,
+} from "devextreme/core/component";
+import {
  event,
 } from "devextreme/events/events.types";
 import {
  dxButtonOptions,
  ClickEvent,
- ContentReadyEvent as ButtonContentReadyEvent,
- DisposingEvent as ButtonDisposingEvent,
- InitializedEvent as ButtonInitializedEvent,
- OptionChangedEvent as ButtonOptionChangedEvent,
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
 } from "devextreme/ui/button";
 import {
  FormItemType,
@@ -120,7 +121,6 @@ import {
  ShowTextMode,
 } from "devextreme/ui/toolbar";
 import {
- dxButtonGroupOptions,
  dxButtonGroupItem,
  ContentReadyEvent as ButtonGroupContentReadyEvent,
  DisposingEvent as ButtonGroupDisposingEvent,
@@ -261,9 +261,9 @@ const componentConfig = {
     offset: Number,
     onAppointmentAdded: Function as PropType<((e: AppointmentAddedEvent) => void)>,
     onAppointmentAdding: Function as PropType<((e: AppointmentAddingEvent) => void)>,
-    onAppointmentClick: Function as PropType<((e: AppointmentClickEvent) => void)>,
-    onAppointmentContextMenu: Function as PropType<((e: AppointmentContextMenuEvent) => void)>,
-    onAppointmentDblClick: Function as PropType<((e: AppointmentDblClickEvent) => void)>,
+    onAppointmentClick: [Function, String] as PropType<(((e: AppointmentClickEvent) => void)) | string>,
+    onAppointmentContextMenu: [Function, String] as PropType<(((e: AppointmentContextMenuEvent) => void)) | string>,
+    onAppointmentDblClick: [Function, String] as PropType<(((e: AppointmentDblClickEvent) => void)) | string>,
     onAppointmentDeleted: Function as PropType<((e: AppointmentDeletedEvent) => void)>,
     onAppointmentDeleting: Function as PropType<((e: AppointmentDeletingEvent) => void)>,
     onAppointmentFormOpening: Function as PropType<((e: AppointmentFormOpeningEvent) => void)>,
@@ -271,12 +271,12 @@ const componentConfig = {
     onAppointmentTooltipShowing: Function as PropType<((e: AppointmentTooltipShowingEvent) => void)>,
     onAppointmentUpdated: Function as PropType<((e: AppointmentUpdatedEvent) => void)>,
     onAppointmentUpdating: Function as PropType<((e: AppointmentUpdatingEvent) => void)>,
-    onCellClick: Function as PropType<((e: CellClickEvent) => void)>,
-    onCellContextMenu: Function as PropType<((e: CellContextMenuEvent) => void)>,
-    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
-    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
-    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
-    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onCellClick: [Function, String] as PropType<(((e: CellClickEvent) => void)) | string>,
+    onCellContextMenu: [Function, String] as PropType<(((e: CellContextMenuEvent) => void)) | string>,
+    onContentReady: Function as PropType<((e: EventInfo<any>) => void)>,
+    onDisposing: Function as PropType<((e: EventInfo<any>) => void)>,
+    onInitialized: Function as PropType<((e: { component: Component<any>, element: any }) => void)>,
+    onOptionChanged: Function as PropType<((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)>,
     onSelectionEnd: Function as PropType<((e: SelectionEndEvent) => void)>,
     recurrenceEditMode: String as PropType<RecurrenceEditMode>,
     recurrenceExceptionExpr: String,
@@ -285,7 +285,7 @@ const componentConfig = {
     resourceCellTemplate: {},
     resources: Array as PropType<Array<Record<string, any>>>,
     rtlEnabled: Boolean,
-    scrolling: Object as PropType<dxSchedulerScrolling>,
+    scrolling: Object,
     selectedCellData: Array as PropType<Array<any>>,
     shadeUntilCurrentTime: Boolean,
     showAllDayPanel: Boolean,
@@ -576,10 +576,10 @@ const DxButtonOptionsConfig = {
     hoverStateEnabled: Boolean,
     icon: String,
     onClick: Function as PropType<((e: ClickEvent) => void)>,
-    onContentReady: Function as PropType<((e: ButtonContentReadyEvent) => void)>,
-    onDisposing: Function as PropType<((e: ButtonDisposingEvent) => void)>,
-    onInitialized: Function as PropType<((e: ButtonInitializedEvent) => void)>,
-    onOptionChanged: Function as PropType<((e: ButtonOptionChangedEvent) => void)>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
     rtlEnabled: Boolean,
     stylingMode: String as PropType<ButtonStyle>,
     tabIndex: Number,
@@ -1006,7 +1006,7 @@ const DxItemConfig = {
     location: String as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
     name: String as PropType<string | FormPredefinedButtonItem | SchedulerPredefinedToolbarItem>,
-    options: Object as PropType<DateNavigatorItemProperties | Record<string, any> | dxButtonGroupOptions>,
+    options: {},
     showText: String as PropType<ShowTextMode>,
     tabPanelOptions: Object as PropType<dxTabPanelOptions | Record<string, any>>,
     tabs: Array as PropType<Array<Record<string, any>>>,
@@ -1704,7 +1704,7 @@ const DxToolbarItemConfig = {
     location: String as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
     name: String as PropType<SchedulerPredefinedToolbarItem>,
-    options: Object as PropType<DateNavigatorItemProperties | Record<string, any> | dxButtonGroupOptions>,
+    options: {},
     showText: String as PropType<ShowTextMode>,
     template: {},
     text: String,
@@ -1814,7 +1814,7 @@ const DxViewConfig = {
     name: String,
     offset: Number,
     resourceCellTemplate: {},
-    scrolling: Object as PropType<dxSchedulerScrolling>,
+    scrolling: Object,
     snapToCellsMode: String as PropType<SnapToCellsMode>,
     startDate: [Date, Number, String],
     startDayHour: Number,
