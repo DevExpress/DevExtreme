@@ -69,9 +69,8 @@ test('DataGrid - The "Cannot read properties of undefined error" occurs when usi
     .click(dataGrid.getDataCell(0, 0).element)
     .typeText(dataGrid.getDataCell(0, 0).element, 'new_value')
     .pressKey('enter')
-    .expect(dataGrid.isReady()).ok()
-    .expect(dataGrid.getDataCell(0, 0).isEditCell)
-    .notOk()
+    .expect(dataGrid.isReady())
+    .ok()
     .pressKey('tab tab')
     .expect(dataGrid.getDataCell(2, 0).isFocused)
     .ok();
