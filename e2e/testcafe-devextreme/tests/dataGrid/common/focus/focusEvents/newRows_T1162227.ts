@@ -252,7 +252,13 @@ test('It should fire rowChanged event on initialization if focusedRowKey options
     [1],
   ];
 
-  await t.expect(dataGrid.getDataRow(1).element).ok();
+  // The focused row is applied asynchronously on initialization:
+  // wait for it before collecting callback results (one-shot read, no retries)
+  await t
+    .expect(dataGrid.isReady())
+    .ok()
+    .expect(dataGrid.getDataRow(1).isFocusedRow)
+    .ok();
 
   const [
     ,

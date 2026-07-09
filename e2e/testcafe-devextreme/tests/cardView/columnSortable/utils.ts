@@ -79,24 +79,26 @@ export const dragToHeaderPanel = async (
 
   if (gapIndex < columnsNum) {
     const insertBeforeColumn = headers.getHeaderItemNth(gapIndex).element;
+    const { width } = await insertBeforeColumn.boundingClientRect;
 
     await t.dragToElement(
       columnElement,
       insertBeforeColumn,
       {
-        destinationOffsetX: 5,
+        destinationOffsetX: -(width + 5), // 5px left of the left edge
         destinationOffsetY: HEADER_DROP_OFFSET_Y,
         speed: 0.5,
       },
     );
   } else {
     const insertAfterColumn = headers.getHeaderItemNth(columnsNum - 1).element;
+    const { width } = await insertAfterColumn.boundingClientRect;
 
     await t.dragToElement(
       columnElement,
       insertAfterColumn,
       {
-        destinationOffsetX: -5,
+        destinationOffsetX: (width + 5), // 5px right of the right edge
         destinationOffsetY: HEADER_DROP_OFFSET_Y,
         speed: 0.5,
       },
@@ -139,23 +141,20 @@ export const expectColumns = async (
   expectedColumns: number[],
   source: 'headerPanel' | 'columnChooser' = 'headerPanel',
 ): Promise<void> => {
+  const actualColumns: string[] = [];
   const adjustedExpectedColumns = expectedColumns.map((columnIndex) => `Column ${columnIndex}`);
 
-  for (let i = 0; i < expectedColumns.length; i += 1) {
-    // eslint-disable-next-line @typescript-eslint/init-declarations
-    let column: Selector;
+  const actualColumnsCount = source === 'headerPanel'
+    ? await cardView.getHeaders().getHeaderItemsElements().count
+    : await cardView.getColumnChooser().getColumns().count;
 
-    if (source === 'headerPanel') {
-      column = cardView.getHeaders().getHeaderItemNth(i)?.element;
-    } else {
-      const treeView = new TreeView(cardView.getColumnChooser().element.find(SELECTORS.treeView));
-      column = treeView.getNodeItem(i);
-    }
+  for (let i = 0; i < actualColumnsCount; i += 1) {
+    const column = source === 'headerPanel'
+      ? cardView.getHeaders().getHeaderItemNth(i).element
+      : cardView.getColumnChooser().getColumn(i);
 
-    await t
-      .expect(column.exists)
-      .ok({ timeout: DRAG_ASSERTION_TIMEOUT })
-      .expect(column.innerText)
-      .eql(adjustedExpectedColumns[i], { timeout: DRAG_ASSERTION_TIMEOUT });
+    actualColumns.push(await column.innerText);
   }
+
+  await t.expect(actualColumns).eql(adjustedExpectedColumns, 'Columns order should match');
 };

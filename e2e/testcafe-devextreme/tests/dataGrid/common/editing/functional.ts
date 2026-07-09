@@ -68,9 +68,15 @@ test('DataGrid - The "Cannot read properties of undefined error" occurs when usi
   await t
     .click(dataGrid.getDataCell(0, 0).element)
     .typeText(dataGrid.getDataCell(0, 0).element, 'new_value')
-    .pressKey('enter tab tab');
+    .pressKey('enter tab tab')
+    .expect(dataGrid.getDataCell(2, 0).isFocused)
+    .ok();
+
   await resolveOnSavingDeferred();
-  await t.expect(dataGrid.getDataCell(2, 0).isFocused).ok();
+
+  await t
+    .expect(dataGrid.isReady()).ok()
+    .expect(dataGrid.getDataCell(2, 0).isFocused).ok();
 }).before(async () => {
   await ClientFunction(() => {
     (window as any).deferred = $.Deferred();
@@ -94,6 +100,10 @@ test('DataGrid - The "Cannot read properties of undefined error" occurs when usi
       e.promise = (window as any).deferred;
     },
   });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).deferred;
+  })();
 });
 
 test('Tab key on editor should focus next cell if editing mode is cell', async (t) => {
