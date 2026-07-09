@@ -451,7 +451,10 @@ export type DateNavigatorTextInfo = {
  * @namespace DevExpress.ui
  * @docid
  */
-export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
+export interface dxSchedulerOptions extends Omit<
+  WidgetOptions<dxScheduler>,
+  'onContentReady' | 'onDisposing' | 'onInitialized' | 'onOptionChanged'
+> {
     /**
      * @docid
      * @default false
@@ -861,6 +864,34 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @public
      */
     onCellContextMenu?: ((e: CellContextMenuEvent) => void) | string;
+    /**
+     * @docid
+     * @public
+     * @type_function_param1 e:{ui/scheduler:ContentReadyEvent}
+     * @action
+     */
+    onContentReady?: (e: ContentReadyEvent) => void;
+    /**
+     * @docid
+     * @public
+     * @type_function_param1 e:{ui/scheduler:DisposingEvent}
+     * @action
+     */
+    onDisposing?: (e: DisposingEvent) => void;
+    /**
+     * @docid
+     * @public
+     * @type_function_param1 e:{ui/scheduler:InitializedEvent}
+     * @action
+     */
+    onInitialized?: (e: InitializedEvent) => void;
+    /**
+     * @docid
+     * @public
+     * @type_function_param1 e:{ui/scheduler:OptionChangedEvent}
+     * @action
+     */
+    onOptionChanged?: (e: OptionChangedEvent) => void;
     /**
      * @docid
      * @default "dialog"

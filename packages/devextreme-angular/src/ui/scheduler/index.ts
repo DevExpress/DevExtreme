@@ -24,12 +24,11 @@ import {
 
 import type dxSortable from 'devextreme/ui/sortable';
 import type dxDraggable from 'devextreme/ui/draggable';
-import type { default as dxScheduler, AllDayPanelMode, ViewType, dxSchedulerAppointment, AppointmentFormProperties, CellAppointmentsLimit, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, SelectionEndEvent, RecurrenceEditMode, dxSchedulerScrolling, SnapToCellsMode, dxSchedulerToolbar } from 'devextreme/ui/scheduler';
+import type { default as dxScheduler, AllDayPanelMode, ViewType, dxSchedulerAppointment, AppointmentFormProperties, CellAppointmentsLimit, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, SelectionEndEvent, RecurrenceEditMode, dxSchedulerScrolling, SnapToCellsMode, dxSchedulerToolbar } from 'devextreme/ui/scheduler';
 import type { event } from 'devextreme/events/events.types';
 import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 import type { DayOfWeek, Orientation } from 'devextreme/common';
-import type { EventInfo } from 'devextreme/common/core/events';
 
 import DxScheduler from 'devextreme/ui/scheduler';
 
@@ -1051,35 +1050,35 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
     
-     * [descr:WidgetOptions.onContentReady]
+     * [descr:dxSchedulerOptions.onContentReady]
     
     
      */
-    @Output() onContentReady: EventEmitter<EventInfo<any>>;
+    @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
     
-     * [descr:DOMComponentOptions.onDisposing]
+     * [descr:dxSchedulerOptions.onDisposing]
     
     
      */
-    @Output() onDisposing: EventEmitter<EventInfo<any>>;
+    @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
     
-     * [descr:ComponentOptions.onInitialized]
+     * [descr:dxSchedulerOptions.onInitialized]
     
     
      */
-    @Output() onInitialized: EventEmitter<Object>;
+    @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
     
-     * [descr:DOMComponentOptions.onOptionChanged]
+     * [descr:dxSchedulerOptions.onOptionChanged]
     
     
      */
-    @Output() onOptionChanged: EventEmitter<Object>;
+    @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
     
