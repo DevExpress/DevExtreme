@@ -9,6 +9,7 @@ import Scheduler, {
 import { query } from 'devextreme-react/common/data';
 import type { SchedulerTypes } from 'devextreme-react/scheduler';
 import type { SelectBoxTypes } from 'devextreme-react/select-box';
+import 'devextreme/ui/select_box';
 import type { FormTypes } from 'devextreme-react/form';
 import type { PopupTypes } from 'devextreme-react/popup';
 import type { ToolbarItem } from 'devextreme/ui/popup';

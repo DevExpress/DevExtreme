@@ -103,6 +103,7 @@ import DxScheduler, {
 } from 'devextreme-vue/scheduler';
 import type { DxFormTypes } from 'devextreme-vue/form';
 import type { DxSelectBoxTypes } from 'devextreme-vue/select-box';
+import 'devextreme/ui/select_box';
 import type { DxPopupTypes } from 'devextreme-vue/popup';
 import { query } from 'devextreme-vue/common/data';
 import type { MovieResource } from './data.ts';

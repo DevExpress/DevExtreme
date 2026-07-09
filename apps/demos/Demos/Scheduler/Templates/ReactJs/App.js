@@ -7,6 +7,7 @@ import Scheduler, {
   Label,
 } from 'devextreme-react/scheduler';
 import { query } from 'devextreme-react/common/data';
+import 'devextreme/ui/select_box';
 import Appointment from './Appointment.js';
 import AppointmentTooltip from './AppointmentTooltip.js';
 import MovieInfoContainer from './MovieInfoContainer.js';

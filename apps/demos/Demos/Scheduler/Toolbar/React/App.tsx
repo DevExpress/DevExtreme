@@ -5,6 +5,7 @@ import { SelectBox } from 'devextreme-react/select-box';
 import type { DataSource } from 'devextreme-react/common/data';
 import type { SchedulerRef, SchedulerTypes } from 'devextreme-react/scheduler';
 import type { SelectBoxTypes } from 'devextreme-react/select-box';
+import 'devextreme/ui/button';
 
 import { assignees, data, currentDate } from './data.ts';
 

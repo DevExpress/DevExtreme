@@ -12,6 +12,7 @@ import { formatDate } from 'devextreme-angular/common/core/localization';
 import { query } from 'devextreme-angular/common/data';
 import { DxSchedulerModule, DxSchedulerComponent } from 'devextreme-angular/ui/scheduler';
 import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
+import 'devextreme/ui/select_box';
 import { DxFormTypes } from 'devextreme-angular/ui/form';
 import { DxPopupTypes } from 'devextreme-angular/ui/popup';
 
