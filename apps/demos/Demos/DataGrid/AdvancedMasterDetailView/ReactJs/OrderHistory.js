@@ -11,7 +11,7 @@ import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridAdvancedMasterDetailView';
 const OrderHistory = ({ productId }) => {
-  const [orderHistoryStore, setOrderHistoryStore] = useState(null);
+  const [orderHistoryStore, setOrderHistoryStore] = useState(undefined);
   useEffect(() => {
     if (productId) {
       const newOrderHistoryStore = createStore({

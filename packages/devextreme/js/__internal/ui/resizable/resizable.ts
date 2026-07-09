@@ -38,6 +38,9 @@ const RESIZABLE_HANDLE_CORNER_CLASS = 'dx-resizable-handle-corner';
 const DRAGSTART_START_EVENT_NAME = addNamespace(dragEventStart, RESIZABLE);
 const DRAGSTART_EVENT_NAME = addNamespace(dragEventMove, RESIZABLE);
 const DRAGSTART_END_EVENT_NAME = addNamespace(dragEventEnd, RESIZABLE);
+const KEYDOWN_EVENT_NAME = addNamespace('keydown', RESIZABLE);
+
+const ESCAPE_KEY = 'Escape';
 
 const SIDE_BORDER_WIDTH_STYLES: Record<Position, string> = {
   left: 'borderLeftWidth',
@@ -85,6 +88,8 @@ export interface ResizableProperties extends Properties {
   step?: string;
 
   roundStepValue?: boolean;
+
+  cancelOnEscape?: boolean;
 }
 
 class Resizable extends DOMComponent<Resizable, ResizableProperties> {
@@ -110,10 +115,13 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
 
   _resizeAction?: (e: Record<string, unknown>) => void;
 
+  _isResizing = false;
+
   _getDefaultOptions(): ResizableProperties {
     return {
       ...super._getDefaultOptions(),
       handles: 'all',
+      cancelOnEscape: false,
       // NOTE: does not affect proportional resize
       step: '1',
       stepPrecision: 'simple',
@@ -204,12 +212,16 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
         immediate: true,
       });
     });
+
+    eventsEngine.on(this.$element(), KEYDOWN_EVENT_NAME, this._keydownHandler.bind(this));
   }
 
   _detachEventHandlers(): void {
     this._handles.forEach((handleElement) => {
       eventsEngine.off(handleElement);
     });
+
+    eventsEngine.off(this.$element(), KEYDOWN_EVENT_NAME);
   }
 
   _toggleEventHandlers(shouldAttachEvents: boolean | undefined): void {
@@ -240,6 +252,7 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
       return;
     }
 
+    this._isResizing = true;
     this._toggleResizingClass(true);
     this._movingSides = this._getMovingSides(e);
 
@@ -682,7 +695,46 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
       handles: this._movingSides,
     });
 
+    this._isResizing = false;
     this._toggleResizingClass(false);
+  }
+
+  /**
+   * Cancels an active resize when Escape is pressed and `cancelOnEscape` is enabled.
+   *
+   * The handler is subscribed to the root element, so keydown reaches it only
+   * while focus is inside the widget. The root is not focusable by itself —
+   * the host must make it focusable: Scheduler appointments have `tabindex`,
+   * and clicking a resize handle keeps focus within the appointment element.
+   */
+  _keydownHandler(e: DxEvent<KeyboardEvent>): void {
+    if (!this.option('cancelOnEscape')) {
+      return;
+    }
+
+    if (this._isResizing && e.key === ESCAPE_KEY) {
+      this._cancelResize();
+    }
+  }
+
+  _cancelResize(): void {
+    this._isResizing = false;
+    this._restoreSize();
+    this._toggleResizingClass(false);
+
+    this._detachEventHandlers();
+    this._attachEventHandlers();
+  }
+
+  _restoreSize(): void {
+    this.option({
+      width: this._elementSize.width,
+      height: this._elementSize.height,
+    });
+
+    move(this.$element(), this._elementLocation);
+
+    triggerResizeEvent(this.$element());
   }
 
   _renderWidth(width: number): void {
@@ -728,6 +780,7 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
       case 'step':
       case 'roundStepValue':
       case 'keepAspectRatio':
+      case 'cancelOnEscape':
         break;
       default:
         super._optionChanged(args);
@@ -736,6 +789,7 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
   }
 
   _clean(): void {
+    eventsEngine.off(this.$element(), KEYDOWN_EVENT_NAME);
     this.$element().find(`.${RESIZABLE_HANDLE_CLASS}`).remove();
   }
 
