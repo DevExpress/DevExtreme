@@ -1,6 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxFileManagerModule, DxFileManagerComponent, DxFileManagerTypes } from 'devextreme-angular/ui/file-manager';
+import 'devextreme/ui/menu';
 import { Service, FileItem } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

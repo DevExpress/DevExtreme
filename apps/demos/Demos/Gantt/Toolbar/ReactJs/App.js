@@ -10,6 +10,7 @@ import Gantt, {
   Item,
 } from 'devextreme-react/gantt';
 import { Popup } from 'devextreme-react/popup';
+import 'devextreme/ui/button';
 import {
   tasks, dependencies, resources, resourceAssignments,
 } from './data.js';

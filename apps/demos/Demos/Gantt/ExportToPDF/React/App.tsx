@@ -11,6 +11,7 @@ import type { IDateBoxOptions } from 'devextreme-react/date-box';
 import {
   Gantt, Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing, Toolbar, Item,
 } from 'devextreme-react/gantt';
+import 'devextreme/ui/button';
 
 import * as pdfExporter from 'devextreme-react/common/export/pdf';
 

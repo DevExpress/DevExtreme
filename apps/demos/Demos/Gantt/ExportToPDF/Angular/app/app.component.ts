@@ -12,6 +12,7 @@ import { jsPDF } from 'jspdf';
 import { applyPlugin } from 'jspdf-autotable';
 import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { DxButtonTypes } from 'devextreme-angular/ui/button';
+import 'devextreme/ui/button';
 import {
   Service, Task, Dependency, Resource, ResourceAssignment,
 } from './app.service';

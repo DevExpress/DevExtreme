@@ -9,6 +9,7 @@ import FileManager, {
   Details,
   Column,
 } from 'devextreme-react/file-manager';
+import 'devextreme/ui/menu';
 import { fileItems, getItemInfo } from './data.js';
 
 export default function App() {

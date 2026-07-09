@@ -161,6 +161,7 @@ import DxCheckBox from 'devextreme-vue/check-box';
 import DxNumberBox, { type DxNumberBoxTypes } from 'devextreme-vue/number-box';
 import DxDateBox from 'devextreme-vue/date-box';
 import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
+import 'devextreme/ui/button';
 import { jsPDF } from 'jspdf';
 import { applyPlugin } from 'jspdf-autotable';
 import { exportGantt as exportGanttToPdf } from 'devextreme-vue/common/export/pdf';
