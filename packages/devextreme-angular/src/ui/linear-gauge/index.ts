@@ -285,10 +285,10 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get scale(): { allowDecimals?: boolean | undefined, customMinorTicks?: Array<number>, customTicks?: Array<number>, endValue?: number, horizontalOrientation?: HorizontalAlignment, label?: { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number | undefined, scaleDivisionFactor?: number, startValue?: number, tick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number | undefined, verticalOrientation?: VerticalAlignment } {
+    get scale(): { allowDecimals?: boolean | undefined, customMinorTicks?: Array<number> | undefined, customTicks?: Array<number> | undefined, endValue?: number, horizontalOrientation?: HorizontalAlignment, label?: { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number | undefined, scaleDivisionFactor?: number, startValue?: number, tick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number | undefined, verticalOrientation?: VerticalAlignment } {
         return this._getOption('scale');
     }
-    set scale(value: { allowDecimals?: boolean | undefined, customMinorTicks?: Array<number>, customTicks?: Array<number>, endValue?: number, horizontalOrientation?: HorizontalAlignment, label?: { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number | undefined, scaleDivisionFactor?: number, startValue?: number, tick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number | undefined, verticalOrientation?: VerticalAlignment }) {
+    set scale(value: { allowDecimals?: boolean | undefined, customMinorTicks?: Array<number> | undefined, customTicks?: Array<number> | undefined, endValue?: number, horizontalOrientation?: HorizontalAlignment, label?: { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number | undefined, scaleDivisionFactor?: number, startValue?: number, tick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number | undefined, verticalOrientation?: VerticalAlignment }) {
         this._setOption('scale', value);
     }
 
@@ -324,10 +324,10 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get subvalues(): Array<number> {
+    get subvalues(): Array<number> | undefined {
         return this._getOption('subvalues');
     }
-    set subvalues(value: Array<number>) {
+    set subvalues(value: Array<number> | undefined) {
         this._setOption('subvalues', value);
     }
 
@@ -565,7 +565,7 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scaleChange: EventEmitter<{ allowDecimals?: boolean | undefined, customMinorTicks?: Array<number>, customTicks?: Array<number>, endValue?: number, horizontalOrientation?: HorizontalAlignment, label?: { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number | undefined, scaleDivisionFactor?: number, startValue?: number, tick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number | undefined, verticalOrientation?: VerticalAlignment }>;
+    @Output() scaleChange: EventEmitter<{ allowDecimals?: boolean | undefined, customMinorTicks?: Array<number> | undefined, customTicks?: Array<number> | undefined, endValue?: number, horizontalOrientation?: HorizontalAlignment, label?: { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number | undefined, scaleDivisionFactor?: number, startValue?: number, tick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number | undefined, verticalOrientation?: VerticalAlignment }>;
 
     /**
     
@@ -586,7 +586,7 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() subvaluesChange: EventEmitter<Array<number>>;
+    @Output() subvaluesChange: EventEmitter<Array<number> | undefined>;
 
     /**
     

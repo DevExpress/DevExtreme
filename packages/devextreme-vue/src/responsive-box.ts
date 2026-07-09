@@ -74,7 +74,7 @@ const componentConfig = {
     onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
     rows: Array as PropType<Array<Record<string, any>>>,
     rtlEnabled: Boolean,
-    screenByWidth: Function as PropType<(() => void)>,
+    screenByWidth: Function as PropType<((() => void)) | null>,
     singleColumnScreen: String,
     visible: Boolean,
     width: [Number, String]

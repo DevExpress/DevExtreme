@@ -21,14 +21,14 @@ type ITreeMapOptionsNarrowedEvents = {
   onClick?: ((e: ClickEvent) => void);
   onDisposing?: ((e: DisposingEvent) => void);
   onDrawn?: ((e: DrawnEvent) => void);
-  onDrill?: ((e: DrillEvent) => void);
+  onDrill?: ((e: DrillEvent) => void) | undefined;
   onExported?: ((e: ExportedEvent) => void);
   onExporting?: ((e: ExportingEvent) => void);
   onFileSaving?: ((e: FileSavingEvent) => void);
   onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
-  onNodesInitialized?: ((e: NodesInitializedEvent) => void);
-  onNodesRendering?: ((e: NodesRenderingEvent) => void);
+  onNodesInitialized?: ((e: NodesInitializedEvent) => void) | undefined;
+  onNodesRendering?: ((e: NodesRenderingEvent) => void) | undefined;
 }
 
 type ITreeMapOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, ITreeMapOptionsNarrowedEvents> & IHtmlOptions & {
@@ -120,7 +120,7 @@ type IColorizerProps = React.PropsWithChildren<{
   colorizeGroups?: boolean;
   palette?: Array<string> | Palette;
   paletteExtensionMode?: PaletteExtensionMode;
-  range?: Array<number>;
+  range?: Array<number> | undefined;
   type?: TreeMapColorizerType | undefined;
 }>
 const _componentColorizer = (props: IColorizerProps) => {

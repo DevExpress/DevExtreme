@@ -158,10 +158,10 @@ export class DxoChatSuggestionsComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get onItemClick(): ((e: ItemClickEvent) => void) {
+    get onItemClick(): ((e: ItemClickEvent) => void) | null {
         return this._getOption('onItemClick');
     }
-    set onItemClick(value: ((e: ItemClickEvent) => void)) {
+    set onItemClick(value: ((e: ItemClickEvent) => void) | null) {
         this._setOption('onItemClick', value);
     }
 
@@ -174,10 +174,10 @@ export class DxoChatSuggestionsComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get onSelectionChanged(): ((e: SelectionChangedEvent) => void) {
+    get onSelectionChanged(): ((e: SelectionChangedEvent) => void) | null {
         return this._getOption('onSelectionChanged');
     }
-    set onSelectionChanged(value: ((e: SelectionChangedEvent) => void)) {
+    set onSelectionChanged(value: ((e: SelectionChangedEvent) => void) | null) {
         this._setOption('onSelectionChanged', value);
     }
 

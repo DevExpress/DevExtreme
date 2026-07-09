@@ -220,10 +220,10 @@ export class DxoDataGridPopupComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get onContentReady(): ((e: EventInfo<any>) => void) {
+    get onContentReady(): ((e: EventInfo<any>) => void) | null {
         return this._getOption('onContentReady');
     }
-    set onContentReady(value: ((e: EventInfo<any>) => void)) {
+    set onContentReady(value: ((e: EventInfo<any>) => void) | null) {
         this._setOption('onContentReady', value);
     }
 
@@ -268,26 +268,26 @@ export class DxoDataGridPopupComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get onResize(): ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) {
+    get onResize(): ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | null {
         return this._getOption('onResize');
     }
-    set onResize(value: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)) {
+    set onResize(value: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | null) {
         this._setOption('onResize', value);
     }
 
     @Input()
-    get onResizeEnd(): ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) {
+    get onResizeEnd(): ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | null {
         return this._getOption('onResizeEnd');
     }
-    set onResizeEnd(value: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)) {
+    set onResizeEnd(value: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | null) {
         this._setOption('onResizeEnd', value);
     }
 
     @Input()
-    get onResizeStart(): ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) {
+    get onResizeStart(): ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | null {
         return this._getOption('onResizeStart');
     }
-    set onResizeStart(value: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)) {
+    set onResizeStart(value: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | null) {
         this._setOption('onResizeStart', value);
     }
 
@@ -308,10 +308,10 @@ export class DxoDataGridPopupComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get onTitleRendered(): ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void) {
+    get onTitleRendered(): ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void) | null {
         return this._getOption('onTitleRendered');
     }
-    set onTitleRendered(value: ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void)) {
+    set onTitleRendered(value: ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void) | null) {
         this._setOption('onTitleRendered', value);
     }
 

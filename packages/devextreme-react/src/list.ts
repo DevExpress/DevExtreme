@@ -23,20 +23,20 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 type IListOptionsNarrowedEvents<TItem = any, TKey = any> = {
   onContentReady?: ((e: ContentReadyEvent<TItem, TKey>) => void);
   onDisposing?: ((e: DisposingEvent<TItem, TKey>) => void);
-  onGroupRendered?: ((e: GroupRenderedEvent<TItem, TKey>) => void);
+  onGroupRendered?: ((e: GroupRenderedEvent<TItem, TKey>) => void) | null;
   onInitialized?: ((e: InitializedEvent<TItem, TKey>) => void);
   onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void);
-  onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void);
-  onItemDeleted?: ((e: ItemDeletedEvent<TItem, TKey>) => void);
-  onItemDeleting?: ((e: ItemDeletingEvent<TItem, TKey>) => void);
-  onItemHold?: ((e: ItemHoldEvent<TItem, TKey>) => void);
+  onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void) | null;
+  onItemDeleted?: ((e: ItemDeletedEvent<TItem, TKey>) => void) | null;
+  onItemDeleting?: ((e: ItemDeletingEvent<TItem, TKey>) => void) | null;
+  onItemHold?: ((e: ItemHoldEvent<TItem, TKey>) => void) | null;
   onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void);
-  onItemReordered?: ((e: ItemReorderedEvent<TItem, TKey>) => void);
-  onItemSwipe?: ((e: ItemSwipeEvent<TItem, TKey>) => void);
-  onPageLoading?: ((e: PageLoadingEvent<TItem, TKey>) => void);
-  onPullRefresh?: ((e: PullRefreshEvent<TItem, TKey>) => void);
-  onScroll?: ((e: ScrollEvent<TItem, TKey>) => void);
-  onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TItem, TKey>) => void);
+  onItemReordered?: ((e: ItemReorderedEvent<TItem, TKey>) => void) | null;
+  onItemSwipe?: ((e: ItemSwipeEvent<TItem, TKey>) => void) | null;
+  onPageLoading?: ((e: PageLoadingEvent<TItem, TKey>) => void) | null;
+  onPullRefresh?: ((e: PullRefreshEvent<TItem, TKey>) => void) | null;
+  onScroll?: ((e: ScrollEvent<TItem, TKey>) => void) | null;
+  onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TItem, TKey>) => void) | null;
   onSelectionChanging?: ((e: SelectionChangingEvent<TItem, TKey>) => void);
 }
 
@@ -287,7 +287,7 @@ type IOptionsProps = React.PropsWithChildren<{
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   icon?: string;
-  onClick?: ((e: ClickEvent) => void);
+  onClick?: ((e: ClickEvent) => void) | undefined;
   onContentReady?: ((e: ButtonContentReadyEvent) => void);
   onDisposing?: ((e: ButtonDisposingEvent) => void);
   onInitialized?: ((e: ButtonInitializedEvent) => void);
@@ -328,7 +328,7 @@ const Options = Object.assign<typeof _componentOptions, NestedComponentMeta>(_co
 type ISearchEditorOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  buttons?: Array<string | TextBoxPredefinedButton | TextEditorButton>;
+  buttons?: Array<string | TextBoxPredefinedButton | TextEditorButton> | undefined;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
@@ -344,7 +344,7 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   maskChar?: string;
   maskInvalidMessage?: string;
   maskRules?: any;
-  maxLength?: number | string;
+  maxLength?: null | number | string;
   mode?: TextBoxType;
   name?: string;
   onChange?: ((e: ChangeEvent) => void);
@@ -372,8 +372,8 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   tabIndex?: number;
   text?: string;
   useMaskedValue?: boolean;
-  validationError?: any;
-  validationErrors?: Array<any>;
+  validationError?: any | null;
+  validationErrors?: Array<any> | null;
   validationMessageMode?: ValidationMessageMode;
   validationMessagePosition?: Position;
   validationStatus?: ValidationStatus;

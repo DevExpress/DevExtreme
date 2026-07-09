@@ -35,8 +35,8 @@ type IChartOptionsNarrowedEvents = {
   onSeriesClick?: ((e: SeriesClickEvent) => void);
   onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
   onTooltipShown?: ((e: TooltipShownEvent) => void);
-  onZoomEnd?: ((e: ZoomEndEvent) => void);
-  onZoomStart?: ((e: ZoomStartEvent) => void);
+  onZoomEnd?: ((e: ZoomEndEvent) => void) | undefined;
+  onZoomStart?: ((e: ZoomStartEvent) => void) | undefined;
 }
 
 type IChartOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IChartOptionsNarrowedEvents> & IHtmlOptions & {
@@ -359,7 +359,7 @@ type IArgumentAxisProps = React.PropsWithChildren<{
   allowDecimals?: boolean | undefined;
   argumentType?: ChartsDataType | undefined;
   axisDivisionFactor?: number;
-  breaks?: Array<ScaleBreak> | {
+  breaks?: Array<ScaleBreak> | undefined | {
     endValue?: Date | number | string | undefined;
     startValue?: Date | number | string | undefined;
   }[];
@@ -412,7 +412,7 @@ type IArgumentAxisProps = React.PropsWithChildren<{
     visible?: boolean;
     width?: number;
   };
-  holidays?: Array<Date | string> | Array<number>;
+  holidays?: Array<Date | string> | Array<number> | undefined;
   hoverMode?: ArgumentAxisHoverMode;
   inverted?: boolean;
   label?: Record<string, any> | {
@@ -475,9 +475,9 @@ type IArgumentAxisProps = React.PropsWithChildren<{
   };
   offset?: number | undefined;
   opacity?: number | undefined;
-  placeholderSize?: number;
+  placeholderSize?: null | number;
   position?: Position;
-  singleWorkdays?: Array<Date | string> | Array<number>;
+  singleWorkdays?: Array<Date | string> | Array<number> | undefined;
   strips?: Array<Record<string, any>> | {
     color?: string | undefined;
     endValue?: Date | number | string | undefined;
@@ -1076,7 +1076,7 @@ type ICommonAxisSettingsProps = React.PropsWithChildren<{
   };
   minValueMargin?: number | undefined;
   opacity?: number | undefined;
-  placeholderSize?: number;
+  placeholderSize?: null | number;
   stripStyle?: Record<string, any> | {
     label?: Record<string, any> | {
       font?: ChartsFont;
@@ -2272,9 +2272,9 @@ type ILegendProps = React.PropsWithChildren<{
     subtitle?: Record<string, any> | string | {
       font?: ChartsFont;
       offset?: number;
-      text?: string;
+      text?: string | undefined;
     };
-    text?: string;
+    text?: string | undefined;
     verticalAlignment?: VerticalEdge;
   };
   verticalAlignment?: VerticalEdge;
@@ -2323,9 +2323,9 @@ type ILegendTitleProps = React.PropsWithChildren<{
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
-    text?: string;
+    text?: string | undefined;
   };
-  text?: string;
+  text?: string | undefined;
   verticalAlignment?: VerticalEdge;
 }>
 const _componentLegendTitle = (props: ILegendTitleProps) => {
@@ -2352,7 +2352,7 @@ const LegendTitle = Object.assign<typeof _componentLegendTitle, NestedComponentM
 type ILegendTitleSubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
-  text?: string;
+  text?: string | undefined;
 }>
 const _componentLegendTitleSubtitle = (props: ILegendTitleSubtitleProps) => {
   return React.createElement(NestedOption<ILegendTitleSubtitleProps>, {
@@ -3285,7 +3285,7 @@ const StripStyleLabel = Object.assign<typeof _componentStripStyleLabel, NestedCo
 type ISubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
-  text?: string;
+  text?: string | undefined;
   textOverflow?: TextOverflow;
   wordWrap?: WordWrap;
 }>
@@ -3380,7 +3380,7 @@ type ITitleProps = React.PropsWithChildren<{
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
-    text?: string;
+    text?: string | undefined;
     textOverflow?: TextOverflow;
     wordWrap?: WordWrap;
   };
@@ -3516,7 +3516,7 @@ type IValueAxisProps = React.PropsWithChildren<{
   allowDecimals?: boolean | undefined;
   autoBreaksEnabled?: boolean;
   axisDivisionFactor?: number;
-  breaks?: Array<ScaleBreak> | {
+  breaks?: Array<ScaleBreak> | undefined | {
     endValue?: Date | number | string | undefined;
     startValue?: Date | number | string | undefined;
   }[];
@@ -3633,7 +3633,7 @@ type IValueAxisProps = React.PropsWithChildren<{
   offset?: number | undefined;
   opacity?: number | undefined;
   pane?: string | undefined;
-  placeholderSize?: number;
+  placeholderSize?: null | number;
   position?: Position;
   showZero?: boolean | undefined;
   strips?: Array<Record<string, any>> | {

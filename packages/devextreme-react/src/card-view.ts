@@ -319,7 +319,7 @@ type IButtonOptionsProps = React.PropsWithChildren<{
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   icon?: string;
-  onClick?: ((e: ClickEvent) => void);
+  onClick?: ((e: ClickEvent) => void) | undefined;
   onContentReady?: ((e: ContentReadyEvent) => void);
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
@@ -2583,14 +2583,14 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   onSelectionChanged?: ((e: SelectionChangedEvent) => void);
   onSelectionChanging?: ((e: SelectionChangingEvent) => void);
   onTitleClick?: ((e: TitleClickEvent) => void);
-  onTitleHold?: ((e: TitleHoldEvent) => void);
-  onTitleRendered?: ((e: TitleRenderedEvent) => void);
+  onTitleHold?: ((e: TitleHoldEvent) => void) | null;
+  onTitleRendered?: ((e: TitleRenderedEvent) => void) | null;
   repaintChangesOnly?: boolean;
   rtlEnabled?: boolean;
   scrollByContent?: boolean;
   scrollingEnabled?: boolean;
   selectedIndex?: number;
-  selectedItem?: any;
+  selectedItem?: any | null;
   showNavButtons?: boolean;
   stylingMode?: TabsStyle;
   swipeEnabled?: boolean;
@@ -2602,8 +2602,8 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   onItemsChange?: (value: Array<any | dxTabPanelItem | string>) => void;
   defaultSelectedIndex?: number;
   onSelectedIndexChange?: (value: number) => void;
-  defaultSelectedItem?: any;
-  onSelectedItemChange?: (value: any) => void;
+  defaultSelectedItem?: any | null;
+  onSelectedItemChange?: (value: any | null) => void;
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
   itemTitleRender?: (...params: any) => React.ReactNode;

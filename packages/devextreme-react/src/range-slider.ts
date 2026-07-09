@@ -20,7 +20,7 @@ type IRangeSliderOptionsNarrowedEvents = {
   onContentReady?: ((e: ContentReadyEvent) => void);
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
-  onValueChanged?: ((e: ValueChangedEvent) => void);
+  onValueChanged?: ((e: ValueChangedEvent) => void) | null;
 }
 
 type IRangeSliderOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IRangeSliderOptionsNarrowedEvents> & IHtmlOptions & {

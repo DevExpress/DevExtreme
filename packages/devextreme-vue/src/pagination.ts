@@ -62,7 +62,7 @@ const componentConfig = {
     infoText: String,
     itemCount: Number,
     label: String,
-    onContentReady: Function as PropType<((e: EventInfo<any>) => void)>,
+    onContentReady: Function as PropType<(((e: EventInfo<any>) => void)) | null>,
     onDisposing: Function as PropType<((e: EventInfo<any>) => void)>,
     onInitialized: Function as PropType<((e: { component: Component<any>, element: any }) => void)>,
     onOptionChanged: Function as PropType<((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)>,

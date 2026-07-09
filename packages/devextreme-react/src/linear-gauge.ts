@@ -31,10 +31,10 @@ type ILinearGaugeOptionsNarrowedEvents = {
 
 type ILinearGaugeOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, ILinearGaugeOptionsNarrowedEvents> & IHtmlOptions & {
   defaultLoadingIndicator?: Record<string, any>;
-  defaultSubvalues?: Array<number>;
+  defaultSubvalues?: Array<number> | undefined;
   defaultValue?: number | undefined;
   onLoadingIndicatorChange?: (value: Record<string, any>) => void;
-  onSubvaluesChange?: (value: Array<number>) => void;
+  onSubvaluesChange?: (value: Array<number> | undefined) => void;
   onValueChange?: (value: number | undefined) => void;
 }>
 
@@ -437,8 +437,8 @@ const RangeContainer = Object.assign<typeof _componentRangeContainer, NestedComp
 // LinearGauge
 type IScaleProps = React.PropsWithChildren<{
   allowDecimals?: boolean | undefined;
-  customMinorTicks?: Array<number>;
-  customTicks?: Array<number>;
+  customMinorTicks?: Array<number> | undefined;
+  customTicks?: Array<number> | undefined;
   endValue?: number;
   horizontalOrientation?: HorizontalAlignment;
   label?: Record<string, any> | {
