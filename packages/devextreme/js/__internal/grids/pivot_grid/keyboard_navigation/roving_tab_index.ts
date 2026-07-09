@@ -6,6 +6,10 @@ const NOT_FOCUSABLE_TAB_INDEX = '-1';
 
 export interface RovingTabIndexComponentOptions {
   tabindex?: number;
+  // Widgets declare tabIndex, while the shared setTabIndex helper reads the
+  // lowercase tabindex option; the overlap also makes WidgetProperties
+  // structurally assignable to this weak type.
+  tabIndex?: number;
   useLegacyKeyboardNavigation?: boolean;
 }
 
