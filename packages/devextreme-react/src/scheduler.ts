@@ -501,12 +501,12 @@ type IFormProps = React.PropsWithChildren<{
   minColWidth?: number;
   onContentReady?: ((e: FormContentReadyEvent) => void);
   onDisposing?: ((e: FormDisposingEvent) => void);
-  onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void);
-  onFieldDataChanged?: ((e: FieldDataChangedEvent) => void);
+  onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void) | null;
+  onFieldDataChanged?: ((e: FieldDataChangedEvent) => void) | null;
   onInitialized?: ((e: FormInitializedEvent) => void);
   onOptionChanged?: ((e: FormOptionChangedEvent) => void);
-  onSmartPasted?: ((e: SmartPastedEvent) => void);
-  onSmartPasting?: ((e: SmartPastingEvent) => void);
+  onSmartPasted?: ((e: SmartPastedEvent) => void) | null;
+  onSmartPasting?: ((e: SmartPastingEvent) => void) | null;
   optionalMark?: string;
   readOnly?: boolean;
   requiredMark?: string;

@@ -151,7 +151,6 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
       labelLocation: 'left',
       // @ts-expect-error ts-error
       onFieldDataChanged: null,
-      // @ts-expect-error ts-error
       onEditorEnterKey: null,
       // @ts-expect-error ts-error
       customizeItem: null,

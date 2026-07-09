@@ -112,47 +112,46 @@ export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComp
      * @public
      */
     margin?: BaseWidgetMargin;
-    /**
-     * @docid
-     * @default null
-     * @notUsedInTheme
-     * @action
-     * @public
-     */
-    onDrawn?: ((e: EventInfo<TComponent>) => void);
-    /**
-     * @docid
-     * @default null
-     * @action
-     * @public
-     */
-    onExported?: ((e: EventInfo<TComponent>) => void);
-    /**
-     * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
-     * @default null
-     * @action
-     * @public
-     */
-    onExporting?: ((e: EventInfo<TComponent> & ExportInfo) => void);
-    /**
-     * @docid
-     * @type_function_param1 e:{viz/core/base_widget:FileSavingEventInfo}
-     * @default null
-     * @action
-     * @public
-     */
-    onFileSaving?: ((e: FileSavingEventInfo<TComponent>) => void);
-    /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
-     * @action
-     * @public
-     */
-    onIncidentOccurred?: ((e: EventInfo<TComponent> & IncidentInfo) => void);
+     /**
+      * @docid
+      * @default undefined
+      * @notUsedInTheme
+      * @action
+      * @public
+      */
+     onDrawn?: ((e: EventInfo<TComponent>) => void) | undefined;
+     /**
+      * @docid
+      * @default undefined
+      * @action
+      * @public
+      */
+     onExported?: ((e: EventInfo<TComponent>) => void) | undefined;
+     /**
+      * @docid
+      * @type_function_param1 e:object
+      * @type_function_param1_field component:this
+      * @default undefined
+      * @action
+      * @public
+      */
+     onExporting?: ((e: EventInfo<TComponent> & ExportInfo) => void) | undefined;
+     /**
+      * @docid
+      * @type_function_param1 e:{viz/core/base_widget:FileSavingEventInfo}
+      * @default undefined
+      * @action
+      * @public
+      */
+     onFileSaving?: ((e: FileSavingEventInfo<TComponent>) => void) | undefined;
+     /**
+      * @docid
+      * @type_function_param1 e:object
+      * @type_function_param1_field component:this
+      * @action
+      * @public
+      */
+     onIncidentOccurred?: ((e: EventInfo<TComponent> & IncidentInfo) => void);
     /**
      * @docid
      * @default false
@@ -418,11 +417,11 @@ export interface BaseWidgetTitle {
        * @default 0
        */
       offset?: number;
-      /**
-       * @docid BaseWidgetOptions.title.subtitle.text
-       * @default null
-       */
-      text?: string;
+       /**
+        * @docid BaseWidgetOptions.title.subtitle.text
+        * @default undefined
+        */
+       text?: string | undefined;
       /**
        * @docid BaseWidgetOptions.title.subtitle.textOverflow
        * @default "ellipsis"
@@ -434,12 +433,12 @@ export interface BaseWidgetTitle {
        */
       wordWrap?: WordWrap;
     } | string;
-    /**
-     * @docid BaseWidgetOptions.title.text
-     * @default null
-     * @public
-     */
-    text?: string;
+     /**
+      * @docid BaseWidgetOptions.title.text
+      * @default undefined
+      * @public
+      */
+     text?: string | undefined;
     /**
      * @docid BaseWidgetOptions.title.textOverflow
      * @default "ellipsis"
