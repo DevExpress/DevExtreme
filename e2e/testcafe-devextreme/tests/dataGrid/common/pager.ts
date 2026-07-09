@@ -39,7 +39,7 @@ test('Full size pager', async (t) => {
     .eql('Page 6 of 20 (100 items)')
     .expect(dataGrid.getDataCell(29, 2).element.textContent)
     .eql('29');
-  // set page sige to 10
+  // set page size to 10
   await t
     .click(pager.getPageSize(1).element)
     .expect(dataGrid.getDataCell(10 * 6 - 1, 2).element.textContent)
@@ -320,41 +320,35 @@ test('Pager info should show page 1 of 1 after changing pageSize to \'all\' and 
 test('Pager should stay consistent after expanding/collapsing a group on the last page (T1322291)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const pager = dataGrid.getPager();
-  const lastGroup = dataGrid.getGroupRowSelector().withText('Group 24');
-  const lastGroupExpandCell = lastGroup.find('.dx-command-expand');
-  const pages = pager.element.find('.dx-page');
 
   const checkPagerConsistent = (expectedPageCount: number): Promise<void> => t
     // exactly one page is selected (no duplicated selection)
-    .expect(pager.element.find('.dx-page.dx-selection').count)
+    .expect(pager.getSelectedPages().count)
     .eql(1)
     // the last page button is pageCount
-    .expect(pages.nth(-1).innerText)
+    .expect(pager.getPageByIndex(-1).innerText)
     .eql(`${expectedPageCount}`)
     // the pageCount button appears only once (not duplicated)
-    .expect(pages.withExactText(`${expectedPageCount}`).count)
+    .expect(pager.getPagesByText(`${expectedPageCount}`).count)
     .eql(1)
     // no stale page button above pageCount
-    .expect(pages.withExactText(`${expectedPageCount + 1}`).count)
+    .expect(pager.getPagesByText(`${expectedPageCount + 1}`).count)
     .eql(0);
 
-  // 1. Go to the last page (12).
   await t.click(pager.getNavPage('12').element);
   await checkPagerConsistent(12);
 
-  // 2. Expand the group on the last page -> a 13th page appears.
+  const lastGroupExpandCell = dataGrid.getGroupRow(-1).getExpandCell();
+
   await t.click(lastGroupExpandCell);
   await checkPagerConsistent(13);
 
-  // 3. Collapse it -> pageCount returns to 12.
   await t.click(lastGroupExpandCell);
   await checkPagerConsistent(12);
 
-  // 4. Expand again -> still consistent.
   await t.click(lastGroupExpandCell);
   await checkPagerConsistent(13);
 
-  // 5. Collapse again -> back to a clean 12-page pager.
   await t.click(lastGroupExpandCell);
   await checkPagerConsistent(12);
 }).before(async () => createWidget('dxDataGrid', {

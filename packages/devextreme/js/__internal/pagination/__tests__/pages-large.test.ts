@@ -35,15 +35,12 @@ describe('PagesLarge sliding window', () => {
 
     // Collapse it -> pageCount is back to 15.
     updateProps(pages, 15, 14);
-    const afterCollapse = visiblePageNumbers(pages);
-
-    expect(afterCollapse).toEqual([1, 11, 12, 13, 14, 15]);
-    expect(Math.max(...afterCollapse)).toBeLessThanOrEqual(15);
-    expect(new Set(afterCollapse).size).toBe(afterCollapse.length);
+    expect(visiblePageNumbers(pages)).toEqual([1, 11, 12, 13, 14, 15]);
 
     // Expand / collapse again -> stays consistent.
     updateProps(pages, 16, 14);
     expect(visiblePageNumbers(pages)).toEqual([1, 12, 13, 14, 15, 16]);
+
     updateProps(pages, 15, 14);
     expect(visiblePageNumbers(pages)).toEqual([1, 11, 12, 13, 14, 15]);
   });
@@ -57,9 +54,6 @@ describe('PagesLarge sliding window', () => {
     // Shrink count so index 14 is the last page, and it also equals the
     // stored window's first slot -> the "pageIndex === window[0]" branch.
     updateProps(pages, 15, 14);
-    const result = visiblePageNumbers(pages);
-    expect(result).toEqual([1, 11, 12, 13, 14, 15]);
-    expect(Math.max(...result)).toBeLessThanOrEqual(15);
-    expect(new Set(result).size).toBe(result.length);
+    expect(visiblePageNumbers(pages)).toEqual([1, 11, 12, 13, 14, 15]);
   });
 });
