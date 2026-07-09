@@ -28,6 +28,7 @@ import {
  CellContextMenuEvent,
  SelectionEndEvent,
  RecurrenceEditMode,
+ dxSchedulerScrolling,
  SnapToCellsMode,
  dxSchedulerToolbar,
  AppointmentFormIconsShowMode,
@@ -53,6 +54,7 @@ import {
  ToolbarItemLocation,
  ToolbarItemComponent,
  SingleMultipleOrNone,
+ ScrollMode,
  TabsIconPosition,
  TabsStyle,
  Position,
@@ -284,7 +286,7 @@ const componentConfig = {
     resourceCellTemplate: {},
     resources: Array as PropType<Array<Record<string, any>>>,
     rtlEnabled: Boolean,
-    scrolling: Object as PropType<Record<string, any>>,
+    scrolling: Object as PropType<dxSchedulerScrolling>,
     selectedCellData: Array as PropType<Array<any>>,
     shadeUntilCurrentTime: Boolean,
     showAllDayPanel: Boolean,
@@ -400,6 +402,7 @@ const componentConfig = {
       appointmentDragging: { isCollectionItem: false, optionName: "appointmentDragging" },
       editing: { isCollectionItem: false, optionName: "editing" },
       resource: { isCollectionItem: true, optionName: "resources" },
+      scrolling: { isCollectionItem: false, optionName: "scrolling" },
       toolbar: { isCollectionItem: false, optionName: "toolbar" },
       view: { isCollectionItem: true, optionName: "views" }
     };
@@ -1317,6 +1320,23 @@ const DxResource = defineComponent(DxResourceConfig);
 (DxResource as any).$_optionName = "resources";
 (DxResource as any).$_isCollectionItem = true;
 
+const DxScrollingConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:mode": null,
+  },
+  props: {
+    mode: String as PropType<ScrollMode>
+  }
+};
+
+prepareConfigurationComponentConfig(DxScrollingConfig);
+
+const DxScrolling = defineComponent(DxScrollingConfig);
+
+(DxScrolling as any).$_optionName = "scrolling";
+
 const DxSimpleItemConfig = {
   emits: {
     "update:isActive": null,
@@ -1795,7 +1815,7 @@ const DxViewConfig = {
     name: String,
     offset: Number,
     resourceCellTemplate: {},
-    scrolling: Object as PropType<Record<string, any>>,
+    scrolling: Object as PropType<dxSchedulerScrolling>,
     snapToCellsMode: String as PropType<SnapToCellsMode>,
     startDate: [Date, Number, String],
     startDayHour: Number,
@@ -1810,6 +1830,9 @@ const DxView = defineComponent(DxViewConfig);
 
 (DxView as any).$_optionName = "views";
 (DxView as any).$_isCollectionItem = true;
+(DxView as any).$_expectedChildren = {
+  scrolling: { isCollectionItem: false, optionName: "scrolling" }
+};
 
 export default DxScheduler;
 export {
@@ -1836,6 +1859,7 @@ export {
   DxRangeRule,
   DxRequiredRule,
   DxResource,
+  DxScrolling,
   DxSimpleItem,
   DxStringLengthRule,
   DxTab,

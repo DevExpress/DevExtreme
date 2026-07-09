@@ -949,9 +949,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @public
-     * @type object
      */
-    scrolling?: Scrolling;
+    scrolling?: dxSchedulerScrolling;
     /**
      * @docid
      * @readonly
@@ -1161,9 +1160,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       type?: ViewType | undefined;
       /**
        * @docid
-       * @type object
        */
-      scrolling?: Scrolling;
+      scrolling?: dxSchedulerScrolling;
       /**
        * @docid
        * @default "all"
@@ -1478,21 +1476,15 @@ export type Occurrence = {
 export type Properties = dxSchedulerOptions;
 
 /**
- * @namespace DevExpress.ui
- * @deprecated Use Scrolling instead
- */
-export type dxSchedulerScrolling = Scrolling;
-
-/**
- * @docid dxSchedulerScrolling
+ * @docid
  * @public
  * @namespace DevExpress.ui
  */
-export type Scrolling = {
+export interface dxSchedulerScrolling {
   /**
    * @docid
    * @default "standard"
    * @public
    */
   mode?: ScrollMode;
-};
+}

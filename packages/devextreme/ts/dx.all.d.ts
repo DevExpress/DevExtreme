@@ -27180,7 +27180,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.scrolling]
      */
-    scrolling?: Scrolling;
+    scrolling?: dxSchedulerScrolling;
     /**
      * [descr:dxSchedulerOptions.selectedCellData]
      */
@@ -27387,7 +27387,7 @@ declare module DevExpress.ui {
           /**
            * [descr:dxSchedulerOptions.views.scrolling]
            */
-          scrolling?: Scrolling;
+          scrolling?: dxSchedulerScrolling;
           /**
            * [descr:dxSchedulerOptions.views.allDayPanelMode]
            */
@@ -27406,6 +27406,15 @@ declare module DevExpress.ui {
      * [descr:dxSchedulerOptions.toolbar]
      */
     toolbar?: DevExpress.ui.dxScheduler.Toolbar | undefined;
+  }
+  /**
+   * [descr:dxSchedulerScrolling]
+   */
+  export interface dxSchedulerScrolling {
+    /**
+     * [descr:dxSchedulerScrolling.mode]
+     */
+    mode?: DevExpress.common.ScrollMode;
   }
   /**
    * @deprecated Use DevExpress.ui.dxScheduler.Toolbar instead
@@ -33774,15 +33783,6 @@ declare module DevExpress.ui {
    * [descr:ui.repaintFloatingActionButton()]
    */
   export function repaintFloatingActionButton(): void;
-  /**
-   * [descr:dxSchedulerScrolling]
-   */
-  export type Scrolling = {
-    /**
-     * [descr:Scrolling.mode]
-     */
-    mode?: DevExpress.common.ScrollMode;
-  };
   /**
    * [descr:SearchBoxMixin]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
