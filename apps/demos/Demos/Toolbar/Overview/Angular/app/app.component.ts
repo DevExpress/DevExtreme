@@ -1,6 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import { DxListModule, DxToolbarModule, DxSelectBoxModule } from 'devextreme-angular';
+import { DxListModule, DxToolbarModule } from 'devextreme-angular';
+import 'devextreme/ui/select_box';
+import 'devextreme/ui/button';
 import { DataSource } from 'devextreme-angular/common/data';
 import notify from 'devextreme/ui/notify';
 import type { DxButtonTypes } from 'devextreme-angular/ui/button';
@@ -25,7 +27,6 @@ if (window && window.config?.packageConfigPaths) {
   imports: [
     DxListModule,
     DxToolbarModule,
-    DxSelectBoxModule,
   ],
 })
 export class AppComponent {

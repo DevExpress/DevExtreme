@@ -179,8 +179,9 @@ import DxForm, {
   DxCustomRule,
   type DxFormTypes,
 } from 'devextreme-vue/form';
-import DxAutocomplete from 'devextreme-vue/autocomplete'; // for editor-type=dxAutocomplete
-import 'devextreme-vue/date-range-box';
+import 'devextreme/ui/autocomplete';
+import 'devextreme/ui/date_range_box';
+import 'devextreme/ui/select_box';
 import notify from 'devextreme/ui/notify';
 import Validator from 'devextreme/ui/validator';
 import service from './data.ts';
