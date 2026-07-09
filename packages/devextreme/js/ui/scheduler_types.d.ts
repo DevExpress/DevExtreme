@@ -48,5 +48,5 @@ export {
   Appointment,
   Occurrence,
   Properties,
-  Scrolling,
+  dxSchedulerScrolling,
 } from './scheduler';

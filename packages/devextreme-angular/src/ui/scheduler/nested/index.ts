@@ -20,6 +20,7 @@ export * from './pattern-rule-dxi';
 export * from './range-rule-dxi';
 export * from './required-rule-dxi';
 export * from './resource-dxi';
+export * from './scrolling';
 export * from './simple-item-dxi';
 export * from './string-length-rule-dxi';
 export * from './tab-dxi';

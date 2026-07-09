@@ -1,6 +1,5 @@
 /* tslint:disable:max-line-length */
 
-/* tslint:disable:use-input-property-decorator */
 
 import {
     Component,
@@ -8,39 +7,38 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
+    Input
 } from '@angular/core';
 
 
 
 
+import type { ScrollMode } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { DxoSchedulerScrolling } from './base/scheduler-scrolling';
+import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-scrolling',
+    selector: 'dxo-scheduler-scrolling',
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
-    inputs: [
-        'columnRenderingMode',
-        'mode',
-        'preloadEnabled',
-        'renderAsync',
-        'rowRenderingMode',
-        'scrollByContent',
-        'scrollByThumb',
-        'showScrollbar',
-        'useNative'
-    ]
+    providers: [NestedOptionHost]
 })
-export class DxoScrollingComponent extends DxoSchedulerScrolling implements OnDestroy, OnInit  {
+export class DxoSchedulerScrollingComponent extends NestedOption implements OnDestroy, OnInit  {
+    @Input()
+    get mode(): ScrollMode {
+        return this._getOption('mode');
+    }
+    set mode(value: ScrollMode) {
+        this._setOption('mode', value);
+    }
+
 
     protected get _optionPath() {
         return 'scrolling';
@@ -68,10 +66,10 @@ export class DxoScrollingComponent extends DxoSchedulerScrolling implements OnDe
 
 @NgModule({
   imports: [
-    DxoScrollingComponent
+    DxoSchedulerScrollingComponent
   ],
   exports: [
-    DxoScrollingComponent
+    DxoSchedulerScrollingComponent
   ],
 })
-export class DxoScrollingModule { }
+export class DxoSchedulerScrollingModule { }
