@@ -647,8 +647,7 @@ abstract class AreaItem {
         .clone()
         .removeAttr('id')
         .attr('aria-hidden', 'true')
-        .addClass('dx-pivot-grid-fake-table')
-        .attr('aria-hidden', 'true');
+        .addClass('dx-pivot-grid-fake-table');
       that._fakeTable.find('[tabindex]').removeAttr('tabindex');
       that._fakeTable.appendTo(that._virtualContent);
     }
