@@ -1025,10 +1025,9 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     };
     /**
      * @docid
-     * @default null
      * @public
      */
-    toolbar?: dxGanttToolbar | null;
+    toolbar?: dxGanttToolbar;
     /**
      * @docid
      * @public
@@ -1036,10 +1035,9 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     contextMenu?: dxGanttContextMenu;
     /**
      * @docid
-     * @default undefined
      * @public
      */
-    stripLines?: Array<dxGanttStripLine> | undefined;
+    stripLines?: Array<dxGanttStripLine>;
     /**
      * @docid
      * @type_function_return string|Element|jQuery

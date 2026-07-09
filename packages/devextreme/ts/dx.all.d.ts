@@ -16207,29 +16207,31 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramOptions.onItemClick]
      */
-    onItemClick?: (e: DevExpress.ui.dxDiagram.ItemClickEvent) => void;
+    onItemClick?: ((e: DevExpress.ui.dxDiagram.ItemClickEvent) => void) | null;
     /**
      * [descr:dxDiagramOptions.onItemDblClick]
      */
-    onItemDblClick?: (e: DevExpress.ui.dxDiagram.ItemDblClickEvent) => void;
+    onItemDblClick?:
+      | ((e: DevExpress.ui.dxDiagram.ItemDblClickEvent) => void)
+      | null;
     /**
      * [descr:dxDiagramOptions.onSelectionChanged]
      */
-    onSelectionChanged?: (
-      e: DevExpress.ui.dxDiagram.SelectionChangedEvent
-    ) => void;
+    onSelectionChanged?:
+      | ((e: DevExpress.ui.dxDiagram.SelectionChangedEvent) => void)
+      | null;
     /**
      * [descr:dxDiagramOptions.onRequestEditOperation]
      */
-    onRequestEditOperation?: (
-      e: DevExpress.ui.dxDiagram.RequestEditOperationEvent
-    ) => void;
+    onRequestEditOperation?:
+      | ((e: DevExpress.ui.dxDiagram.RequestEditOperationEvent) => void)
+      | null;
     /**
      * [descr:dxDiagramOptions.onRequestLayoutUpdate]
      */
-    onRequestLayoutUpdate?: (
-      e: DevExpress.ui.dxDiagram.RequestLayoutUpdateEvent
-    ) => void;
+    onRequestLayoutUpdate?:
+      | ((e: DevExpress.ui.dxDiagram.RequestLayoutUpdateEvent) => void)
+      | null;
     /**
      * [descr:dxDiagramOptions.pageColor]
      */
@@ -18038,7 +18040,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileManagerOptions.fileSystemProvider]
      */
-    fileSystemProvider?: any;
+    fileSystemProvider?: any | null;
     /**
      * [descr:dxFileManagerOptions.itemView]
      */
@@ -18081,33 +18083,33 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileManagerOptions.onContextMenuItemClick]
      */
-    onContextMenuItemClick?: (
-      e: DevExpress.ui.dxFileManager.ContextMenuItemClickEvent
-    ) => void;
+    onContextMenuItemClick?:
+      | ((e: DevExpress.ui.dxFileManager.ContextMenuItemClickEvent) => void)
+      | undefined;
     /**
      * [descr:dxFileManagerOptions.onContextMenuShowing]
      */
-    onContextMenuShowing?: (
-      e: DevExpress.ui.dxFileManager.ContextMenuShowingEvent
-    ) => void;
+    onContextMenuShowing?:
+      | ((e: DevExpress.ui.dxFileManager.ContextMenuShowingEvent) => void)
+      | undefined;
     /**
      * [descr:dxFileManagerOptions.onCurrentDirectoryChanged]
      */
-    onCurrentDirectoryChanged?: (
-      e: DevExpress.ui.dxFileManager.CurrentDirectoryChangedEvent
-    ) => void;
+    onCurrentDirectoryChanged?:
+      | ((e: DevExpress.ui.dxFileManager.CurrentDirectoryChangedEvent) => void)
+      | undefined;
     /**
      * [descr:dxFileManagerOptions.onSelectedFileOpened]
      */
-    onSelectedFileOpened?: (
-      e: DevExpress.ui.dxFileManager.SelectedFileOpenedEvent
-    ) => void;
+    onSelectedFileOpened?:
+      | ((e: DevExpress.ui.dxFileManager.SelectedFileOpenedEvent) => void)
+      | undefined;
     /**
      * [descr:dxFileManagerOptions.onSelectionChanged]
      */
-    onSelectionChanged?: (
-      e: DevExpress.ui.dxFileManager.SelectionChangedEvent
-    ) => void;
+    onSelectionChanged?:
+      | ((e: DevExpress.ui.dxFileManager.SelectionChangedEvent) => void)
+      | undefined;
     /**
      * [descr:dxFileManagerOptions.onToolbarItemClick]
      */
@@ -18117,75 +18119,93 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileManagerOptions.onFocusedItemChanged]
      */
-    onFocusedItemChanged?: (
-      e: DevExpress.ui.dxFileManager.FocusedItemChangedEvent
-    ) => void;
+    onFocusedItemChanged?:
+      | ((e: DevExpress.ui.dxFileManager.FocusedItemChangedEvent) => void)
+      | undefined;
     /**
      * [descr:dxFileManagerOptions.onErrorOccurred]
      */
-    onErrorOccurred?: (
-      e: DevExpress.ui.dxFileManager.ErrorOccurredEvent
-    ) => void;
+    onErrorOccurred?:
+      | ((e: DevExpress.ui.dxFileManager.ErrorOccurredEvent) => void)
+      | undefined;
     /**
      * [descr:dxFileManagerOptions.onDirectoryCreating]
      */
-    onDirectoryCreating?: (
-      e: DevExpress.ui.dxFileManager.DirectoryCreatingEvent
-    ) => void;
+    onDirectoryCreating?:
+      | ((e: DevExpress.ui.dxFileManager.DirectoryCreatingEvent) => void)
+      | undefined;
     /**
      * [descr:dxFileManagerOptions.onDirectoryCreated]
      */
-    onDirectoryCreated?: (
-      e: DevExpress.ui.dxFileManager.DirectoryCreatedEvent
-    ) => void;
+    onDirectoryCreated?:
+      | ((e: DevExpress.ui.dxFileManager.DirectoryCreatedEvent) => void)
+      | undefined;
     /**
      * [descr:dxFileManagerOptions.onItemRenaming]
      */
-    onItemRenaming?: (e: DevExpress.ui.dxFileManager.ItemRenamingEvent) => void;
+    onItemRenaming?:
+      | ((e: DevExpress.ui.dxFileManager.ItemRenamingEvent) => void)
+      | undefined;
     /**
      * [descr:dxFileManagerOptions.onItemRenamed]
      */
-    onItemRenamed?: (e: DevExpress.ui.dxFileManager.ItemRenamedEvent) => void;
+    onItemRenamed?:
+      | ((e: DevExpress.ui.dxFileManager.ItemRenamedEvent) => void)
+      | undefined;
     /**
      * [descr:dxFileManagerOptions.onItemMoving]
      */
-    onItemMoving?: (e: DevExpress.ui.dxFileManager.ItemMovingEvent) => void;
+    onItemMoving?:
+      | ((e: DevExpress.ui.dxFileManager.ItemMovingEvent) => void)
+      | undefined;
     /**
      * [descr:dxFileManagerOptions.onItemMoved]
      */
-    onItemMoved?: (e: DevExpress.ui.dxFileManager.ItemMovedEvent) => void;
+    onItemMoved?:
+      | ((e: DevExpress.ui.dxFileManager.ItemMovedEvent) => void)
+      | undefined;
     /**
      * [descr:dxFileManagerOptions.onItemCopying]
      */
-    onItemCopying?: (e: DevExpress.ui.dxFileManager.ItemCopyingEvent) => void;
+    onItemCopying?:
+      | ((e: DevExpress.ui.dxFileManager.ItemCopyingEvent) => void)
+      | undefined;
     /**
      * [descr:dxFileManagerOptions.onItemCopied]
      */
-    onItemCopied?: (e: DevExpress.ui.dxFileManager.ItemCopiedEvent) => void;
+    onItemCopied?:
+      | ((e: DevExpress.ui.dxFileManager.ItemCopiedEvent) => void)
+      | undefined;
     /**
      * [descr:dxFileManagerOptions.onItemDeleting]
      */
-    onItemDeleting?: (e: DevExpress.ui.dxFileManager.ItemDeletingEvent) => void;
+    onItemDeleting?:
+      | ((e: DevExpress.ui.dxFileManager.ItemDeletingEvent) => void)
+      | undefined;
     /**
      * [descr:dxFileManagerOptions.onItemDeleted]
      */
-    onItemDeleted?: (e: DevExpress.ui.dxFileManager.ItemDeletedEvent) => void;
+    onItemDeleted?:
+      | ((e: DevExpress.ui.dxFileManager.ItemDeletedEvent) => void)
+      | undefined;
     /**
      * [descr:dxFileManagerOptions.onFileUploading]
      */
-    onFileUploading?: (
-      e: DevExpress.ui.dxFileManager.FileUploadingEvent
-    ) => void;
+    onFileUploading?:
+      | ((e: DevExpress.ui.dxFileManager.FileUploadingEvent) => void)
+      | undefined;
     /**
      * [descr:dxFileManagerOptions.onFileUploaded]
      */
-    onFileUploaded?: (e: DevExpress.ui.dxFileManager.FileUploadedEvent) => void;
+    onFileUploaded?:
+      | ((e: DevExpress.ui.dxFileManager.FileUploadedEvent) => void)
+      | undefined;
     /**
      * [descr:dxFileManagerOptions.onItemDownloading]
      */
-    onItemDownloading?: (
-      e: DevExpress.ui.dxFileManager.ItemDownloadingEvent
-    ) => void;
+    onItemDownloading?:
+      | ((e: DevExpress.ui.dxFileManager.ItemDownloadingEvent) => void)
+      | undefined;
     /**
      * [descr:dxFileManagerOptions.permissions]
      */
@@ -18234,7 +18254,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileManagerOptions.focusedItemKey]
      */
-    focusedItemKey?: string;
+    focusedItemKey?: string | undefined;
     /**
      * [descr:dxFileManagerOptions.toolbar]
      */
@@ -21179,143 +21199,161 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttOptions.onSelectionChanged]
      */
-    onSelectionChanged?: (
-      e: DevExpress.ui.dxGantt.SelectionChangedEvent
-    ) => void;
+    onSelectionChanged?:
+      | ((e: DevExpress.ui.dxGantt.SelectionChangedEvent) => void)
+      | null;
     /**
      * [descr:dxGanttOptions.onCustomCommand]
      */
-    onCustomCommand?: (e: DevExpress.ui.dxGantt.CustomCommandEvent) => void;
+    onCustomCommand?:
+      | ((e: DevExpress.ui.dxGantt.CustomCommandEvent) => void)
+      | null;
     /**
      * [descr:dxGanttOptions.onContextMenuPreparing]
      */
-    onContextMenuPreparing?: (
-      e: DevExpress.ui.dxGantt.ContextMenuPreparingEvent
-    ) => void;
+    onContextMenuPreparing?:
+      | ((e: DevExpress.ui.dxGantt.ContextMenuPreparingEvent) => void)
+      | null;
     /**
      * [descr:dxGanttOptions.onTaskInserting]
      */
-    onTaskInserting?: (e: DevExpress.ui.dxGantt.TaskInsertingEvent) => void;
+    onTaskInserting?:
+      | ((e: DevExpress.ui.dxGantt.TaskInsertingEvent) => void)
+      | null;
     /**
      * [descr:dxGanttOptions.onTaskInserted]
      */
-    onTaskInserted?: (e: DevExpress.ui.dxGantt.TaskInsertedEvent) => void;
+    onTaskInserted?:
+      | ((e: DevExpress.ui.dxGantt.TaskInsertedEvent) => void)
+      | null;
     /**
      * [descr:dxGanttOptions.onTaskDeleting]
      */
-    onTaskDeleting?: (e: DevExpress.ui.dxGantt.TaskDeletingEvent) => void;
+    onTaskDeleting?:
+      | ((e: DevExpress.ui.dxGantt.TaskDeletingEvent) => void)
+      | null;
     /**
      * [descr:dxGanttOptions.onTaskDeleted]
      */
-    onTaskDeleted?: (e: DevExpress.ui.dxGantt.TaskDeletedEvent) => void;
+    onTaskDeleted?:
+      | ((e: DevExpress.ui.dxGantt.TaskDeletedEvent) => void)
+      | null;
     /**
      * [descr:dxGanttOptions.onTaskUpdating]
      */
-    onTaskUpdating?: (e: DevExpress.ui.dxGantt.TaskUpdatingEvent) => void;
+    onTaskUpdating?:
+      | ((e: DevExpress.ui.dxGantt.TaskUpdatingEvent) => void)
+      | null;
     /**
      * [descr:dxGanttOptions.onTaskUpdated]
      */
-    onTaskUpdated?: (e: DevExpress.ui.dxGantt.TaskUpdatedEvent) => void;
+    onTaskUpdated?:
+      | ((e: DevExpress.ui.dxGantt.TaskUpdatedEvent) => void)
+      | null;
     /**
      * [descr:dxGanttOptions.onTaskMoving]
      */
-    onTaskMoving?: (e: DevExpress.ui.dxGantt.TaskMovingEvent) => void;
+    onTaskMoving?: ((e: DevExpress.ui.dxGantt.TaskMovingEvent) => void) | null;
     /**
      * [descr:dxGanttOptions.onTaskEditDialogShowing]
      */
-    onTaskEditDialogShowing?: (
-      e: DevExpress.ui.dxGantt.TaskEditDialogShowingEvent
-    ) => void;
+    onTaskEditDialogShowing?:
+      | ((e: DevExpress.ui.dxGantt.TaskEditDialogShowingEvent) => void)
+      | null;
     /**
      * [descr:dxGanttOptions.onResourceManagerDialogShowing]
      */
-    onResourceManagerDialogShowing?: (
-      e: DevExpress.ui.dxGantt.ResourceManagerDialogShowingEvent
-    ) => void;
+    onResourceManagerDialogShowing?:
+      | ((e: DevExpress.ui.dxGantt.ResourceManagerDialogShowingEvent) => void)
+      | undefined;
     /**
      * [descr:dxGanttOptions.onDependencyInserting]
      */
-    onDependencyInserting?: (
-      e: DevExpress.ui.dxGantt.DependencyInsertingEvent
-    ) => void;
+    onDependencyInserting?:
+      | ((e: DevExpress.ui.dxGantt.DependencyInsertingEvent) => void)
+      | null;
     /**
      * [descr:dxGanttOptions.onDependencyInserted]
      */
-    onDependencyInserted?: (
-      e: DevExpress.ui.dxGantt.DependencyInsertedEvent
-    ) => void;
+    onDependencyInserted?:
+      | ((e: DevExpress.ui.dxGantt.DependencyInsertedEvent) => void)
+      | null;
     /**
      * [descr:dxGanttOptions.onDependencyDeleting]
      */
-    onDependencyDeleting?: (
-      e: DevExpress.ui.dxGantt.DependencyDeletingEvent
-    ) => void;
+    onDependencyDeleting?:
+      | ((e: DevExpress.ui.dxGantt.DependencyDeletingEvent) => void)
+      | null;
     /**
      * [descr:dxGanttOptions.onDependencyDeleted]
      */
-    onDependencyDeleted?: (
-      e: DevExpress.ui.dxGantt.DependencyDeletedEvent
-    ) => void;
+    onDependencyDeleted?:
+      | ((e: DevExpress.ui.dxGantt.DependencyDeletedEvent) => void)
+      | null;
     /**
      * [descr:dxGanttOptions.onResourceInserting]
      */
-    onResourceInserting?: (
-      e: DevExpress.ui.dxGantt.ResourceInsertingEvent
-    ) => void;
+    onResourceInserting?:
+      | ((e: DevExpress.ui.dxGantt.ResourceInsertingEvent) => void)
+      | null;
     /**
      * [descr:dxGanttOptions.onResourceInserted]
      */
-    onResourceInserted?: (
-      e: DevExpress.ui.dxGantt.ResourceInsertedEvent
-    ) => void;
+    onResourceInserted?:
+      | ((e: DevExpress.ui.dxGantt.ResourceInsertedEvent) => void)
+      | null;
     /**
      * [descr:dxGanttOptions.onResourceDeleting]
      */
-    onResourceDeleting?: (
-      e: DevExpress.ui.dxGantt.ResourceDeletingEvent
-    ) => void;
+    onResourceDeleting?:
+      | ((e: DevExpress.ui.dxGantt.ResourceDeletingEvent) => void)
+      | null;
     /**
      * [descr:dxGanttOptions.onResourceDeleted]
      */
-    onResourceDeleted?: (e: DevExpress.ui.dxGantt.ResourceDeletedEvent) => void;
+    onResourceDeleted?:
+      | ((e: DevExpress.ui.dxGantt.ResourceDeletedEvent) => void)
+      | null;
     /**
      * [descr:dxGanttOptions.onResourceAssigning]
      */
-    onResourceAssigning?: (
-      e: DevExpress.ui.dxGantt.ResourceAssigningEvent
-    ) => void;
+    onResourceAssigning?:
+      | ((e: DevExpress.ui.dxGantt.ResourceAssigningEvent) => void)
+      | null;
     /**
      * [descr:dxGanttOptions.onResourceAssigned]
      */
-    onResourceAssigned?: (
-      e: DevExpress.ui.dxGantt.ResourceAssignedEvent
-    ) => void;
+    onResourceAssigned?:
+      | ((e: DevExpress.ui.dxGantt.ResourceAssignedEvent) => void)
+      | null;
     /**
      * [descr:dxGanttOptions.onResourceUnassigning]
      */
-    onResourceUnassigning?: (
-      e: DevExpress.ui.dxGantt.ResourceUnassigningEvent
-    ) => void;
+    onResourceUnassigning?:
+      | ((e: DevExpress.ui.dxGantt.ResourceUnassigningEvent) => void)
+      | null;
     /**
      * [descr:dxGanttOptions.onResourceUnassigned]
      */
-    onResourceUnassigned?: (
-      e: DevExpress.ui.dxGantt.ResourceUnassignedEvent
-    ) => void;
+    onResourceUnassigned?:
+      | ((e: DevExpress.ui.dxGantt.ResourceUnassignedEvent) => void)
+      | null;
     /**
      * [descr:dxGanttOptions.onTaskClick]
      */
-    onTaskClick?: (e: DevExpress.ui.dxGantt.TaskClickEvent) => void;
+    onTaskClick?: ((e: DevExpress.ui.dxGantt.TaskClickEvent) => void) | null;
     /**
      * [descr:dxGanttOptions.onTaskDblClick]
      */
-    onTaskDblClick?: (e: DevExpress.ui.dxGantt.TaskDblClickEvent) => void;
+    onTaskDblClick?:
+      | ((e: DevExpress.ui.dxGantt.TaskDblClickEvent) => void)
+      | null;
     /**
      * [descr:dxGanttOptions.onScaleCellPrepared]
      */
-    onScaleCellPrepared?: (
-      e: DevExpress.ui.dxGantt.ScaleCellPreparedEvent
-    ) => void;
+    onScaleCellPrepared?:
+      | ((e: DevExpress.ui.dxGantt.ScaleCellPreparedEvent) => void)
+      | undefined;
 
     /**
      * [descr:dxGanttOptions.resourceAssignments]
@@ -21444,7 +21482,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttOptions.toolbar]
      */
-    toolbar?: dxGanttToolbar;
+    toolbar?: dxGanttToolbar | null;
     /**
      * [descr:dxGanttOptions.contextMenu]
      */
@@ -21452,7 +21490,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttOptions.stripLines]
      */
-    stripLines?: Array<dxGanttStripLine>;
+    stripLines?: Array<dxGanttStripLine> | undefined;
     /**
      * [descr:dxGanttOptions.taskTooltipContentTemplate]
      */
@@ -21496,11 +21534,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttOptions.startDateRange]
      */
-    startDateRange?: Date;
+    startDateRange?: Date | undefined;
     /**
      * [descr:dxGanttOptions.endDateRange]
      */
-    endDateRange?: Date;
+    endDateRange?: Date | undefined;
   }
   /**
    * [descr:dxGanttSorting]
@@ -44722,16 +44760,18 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.chart.seriesTemplate]
        */
-      seriesTemplate?: {
-        /**
-         * [descr:dxRangeSelectorOptions.chart.seriesTemplate.customizeSeries]
-         */
-        customizeSeries?: (seriesName: any) => ChartSeries;
-        /**
-         * [descr:dxRangeSelectorOptions.chart.seriesTemplate.nameField]
-         */
-        nameField?: string;
-      };
+      seriesTemplate?:
+        | {
+            /**
+             * [descr:dxRangeSelectorOptions.chart.seriesTemplate.customizeSeries]
+             */
+            customizeSeries?: (seriesName: any) => ChartSeries;
+            /**
+             * [descr:dxRangeSelectorOptions.chart.seriesTemplate.nameField]
+             */
+            nameField?: string;
+          }
+        | undefined;
       /**
        * [descr:dxRangeSelectorOptions.chart.topIndent]
        */
@@ -44794,9 +44834,9 @@ declare module DevExpress.viz {
     /**
      * [descr:dxRangeSelectorOptions.onValueChanged]
      */
-    onValueChanged?: (
-      e: DevExpress.viz.dxRangeSelector.ValueChangedEvent
-    ) => void;
+    onValueChanged?:
+      | ((e: DevExpress.viz.dxRangeSelector.ValueChangedEvent) => void)
+      | undefined;
     /**
      * [descr:dxRangeSelectorOptions.scale]
      */
@@ -44837,7 +44877,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.breaks]
        */
-      breaks?: Array<DevExpress.common.charts.ScaleBreak>;
+      breaks?: Array<DevExpress.common.charts.ScaleBreak> | undefined;
       /**
        * [descr:dxRangeSelectorOptions.scale.categories]
        */
@@ -44853,7 +44893,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.holidays]
        */
-      holidays?: Array<Date | string> | Array<number>;
+      holidays?: Array<Date | string> | Array<number> | undefined;
       /**
        * [descr:dxRangeSelectorOptions.scale.label]
        */
@@ -44983,7 +45023,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.singleWorkdays]
        */
-      singleWorkdays?: Array<Date | string> | Array<number>;
+      singleWorkdays?: Array<Date | string> | Array<number> | undefined;
       /**
        * [descr:dxRangeSelectorOptions.scale.startValue]
        */
@@ -46715,7 +46755,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxVectorMapCommonAnnotationConfig.coordinates]
      */
-    coordinates?: Array<number>;
+    coordinates?: Array<number> | undefined;
     /**
      * [descr:dxVectorMapCommonAnnotationConfig.customizeTooltip]
      */
@@ -46765,7 +46805,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxVectorMapOptions.bounds]
      */
-    bounds?: Array<number>;
+    bounds?: Array<number> | undefined;
     /**
      * [descr:dxVectorMapOptions.center]
      */
@@ -46835,7 +46875,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxVectorMapOptions.layers.colorGroups]
            */
-          colorGroups?: Array<number>;
+          colorGroups?: Array<number> | undefined;
           /**
            * [descr:dxVectorMapOptions.layers.customize]
            */
@@ -46940,7 +46980,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxVectorMapOptions.layers.sizeGroups]
            */
-          sizeGroups?: Array<number>;
+          sizeGroups?: Array<number> | undefined;
           /**
            * [descr:dxVectorMapOptions.layers.type]
            */
@@ -46979,7 +47019,8 @@ declare module DevExpress.viz {
           sizeGroupingField?: string;
           sizeGroups?: Array<number>;
           type?: 'area' | 'line' | 'marker';
-        };
+        }
+      | undefined;
     /**
      * [descr:dxVectorMapOptions.legends]
      */
@@ -46995,35 +47036,40 @@ declare module DevExpress.viz {
     /**
      * [descr:dxVectorMapOptions.onCenterChanged]
      */
-    onCenterChanged?: (
-      e: DevExpress.viz.dxVectorMap.CenterChangedEvent
-    ) => void;
+    onCenterChanged?:
+      | ((e: DevExpress.viz.dxVectorMap.CenterChangedEvent) => void)
+      | undefined;
     /**
      * [descr:dxVectorMapOptions.onClick]
      */
-    onClick?: ((e: DevExpress.viz.dxVectorMap.ClickEvent) => void) | string;
+    onClick?:
+      | ((e: DevExpress.viz.dxVectorMap.ClickEvent) => void)
+      | string
+      | undefined;
     /**
      * [descr:dxVectorMapOptions.onSelectionChanged]
      */
-    onSelectionChanged?: (
-      e: DevExpress.viz.dxVectorMap.SelectionChangedEvent
-    ) => void;
+    onSelectionChanged?:
+      | ((e: DevExpress.viz.dxVectorMap.SelectionChangedEvent) => void)
+      | undefined;
     /**
      * [descr:dxVectorMapOptions.onTooltipHidden]
      */
-    onTooltipHidden?: (
-      e: DevExpress.viz.dxVectorMap.TooltipHiddenEvent
-    ) => void;
+    onTooltipHidden?:
+      | ((e: DevExpress.viz.dxVectorMap.TooltipHiddenEvent) => void)
+      | undefined;
     /**
      * [descr:dxVectorMapOptions.onTooltipShown]
      */
-    onTooltipShown?: (e: DevExpress.viz.dxVectorMap.TooltipShownEvent) => void;
+    onTooltipShown?:
+      | ((e: DevExpress.viz.dxVectorMap.TooltipShownEvent) => void)
+      | undefined;
     /**
      * [descr:dxVectorMapOptions.onZoomFactorChanged]
      */
-    onZoomFactorChanged?: (
-      e: DevExpress.viz.dxVectorMap.ZoomFactorChangedEvent
-    ) => void;
+    onZoomFactorChanged?:
+      | ((e: DevExpress.viz.dxVectorMap.ZoomFactorChangedEvent) => void)
+      | undefined;
     /**
      * [descr:dxVectorMapOptions.panningEnabled]
      */

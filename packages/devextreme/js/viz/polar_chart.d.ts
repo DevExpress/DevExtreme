@@ -538,7 +538,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart, pola
        * @default 'series'
        */
       nameField?: string;
-    } | undefined;
+    };
     /**
      * @docid
      * @type object
@@ -2065,12 +2065,12 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.color
        * @default  '#d3d3d3'
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.dashStyle
        * @default 'solid'
        */
-      dashStyle?: DashStyle;
+      dashStyle?: DashStyle | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.visible
        * @default false

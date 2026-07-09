@@ -292,7 +292,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       series?: ChartSeries | Array<ChartSeries> | undefined;
       /**
        * @docid
-       * @default undefined
        */
       seriesTemplate?: {
         /**
@@ -304,7 +303,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
          * @default 'series'
          */
         nameField?: string;
-      } | undefined;
+      };
       /**
        * @docid
        * @default 0.1

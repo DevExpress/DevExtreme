@@ -273,17 +273,17 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
          * @docid
          * @default #ffffff
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * @docid
          * @default false
          */
-        visible?: boolean;
+        visible?: boolean | undefined;
         /**
          * @docid
          * @default 2
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * @docid
