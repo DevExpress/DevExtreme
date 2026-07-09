@@ -62,6 +62,8 @@ const MOUSE_BUTTON_MAP = {
   left: 1,
   middle: 2,
   right: 3,
+  back: 4,
+  forward: 5,
 };
 
 const EVENT_SOURCES_REGEX = {
@@ -174,12 +176,11 @@ export const needSkipEvent = (e) => {
   }
 
   if (isMouseEvent(e)) {
-    const isMiddleMouseButton = e.which === MOUSE_BUTTON_MAP.middle;
-    const isRightMouseButton = e.which === MOUSE_BUTTON_MAP.right;
+    const isNotLeftMouseButton = e.which > MOUSE_BUTTON_MAP.left;
     // T1328053
     const isMacContextMenuClick = Boolean(e.ctrlKey) && devices.real().mac;
 
-    return touchInEditable || isMiddleMouseButton || isRightMouseButton || isMacContextMenuClick;
+    return touchInEditable || isNotLeftMouseButton || isMacContextMenuClick;
   }
 
   if (isTouchEvent(e)) {
