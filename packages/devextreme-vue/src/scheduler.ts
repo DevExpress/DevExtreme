@@ -3,7 +3,6 @@ import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import Scheduler, { Properties } from "devextreme/ui/scheduler";
 import  DataSource from "devextreme/data/data_source";
-import  DOMComponent from "devextreme/core/dom_component";
 import  dxScheduler from "devextreme/ui/scheduler";
 import  dxSortable from "devextreme/ui/sortable";
 import  dxDraggable from "devextreme/ui/draggable";
@@ -26,6 +25,10 @@ import {
  AppointmentUpdatingEvent,
  CellClickEvent,
  CellContextMenuEvent,
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
  SelectionEndEvent,
  RecurrenceEditMode,
  dxSchedulerScrolling,
@@ -61,21 +64,15 @@ import {
  Orientation,
 } from "devextreme/common";
 import {
- EventInfo,
-} from "devextreme/common/core/events";
-import {
- Component,
-} from "devextreme/core/component";
-import {
  event,
 } from "devextreme/events/events.types";
 import {
  dxButtonOptions,
  ClickEvent,
- ContentReadyEvent,
- DisposingEvent,
- InitializedEvent,
- OptionChangedEvent,
+ ContentReadyEvent as ButtonContentReadyEvent,
+ DisposingEvent as ButtonDisposingEvent,
+ InitializedEvent as ButtonInitializedEvent,
+ OptionChangedEvent as ButtonOptionChangedEvent,
 } from "devextreme/ui/button";
 import {
  FormItemType,
@@ -274,10 +271,10 @@ const componentConfig = {
     onAppointmentUpdating: Function as PropType<((e: AppointmentUpdatingEvent) => void)>,
     onCellClick: [Function, String] as PropType<(((e: CellClickEvent) => void)) | string>,
     onCellContextMenu: [Function, String] as PropType<(((e: CellContextMenuEvent) => void)) | string>,
-    onContentReady: Function as PropType<((e: EventInfo<any>) => void)>,
-    onDisposing: Function as PropType<((e: EventInfo<any>) => void)>,
-    onInitialized: Function as PropType<((e: { component: Component<any>, element: any }) => void)>,
-    onOptionChanged: Function as PropType<((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
     onSelectionEnd: Function as PropType<((e: SelectionEndEvent) => void)>,
     recurrenceEditMode: String as PropType<RecurrenceEditMode>,
     recurrenceExceptionExpr: String,
@@ -577,10 +574,10 @@ const DxButtonOptionsConfig = {
     hoverStateEnabled: Boolean,
     icon: String,
     onClick: Function as PropType<((e: ClickEvent) => void)>,
-    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
-    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
-    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
-    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onContentReady: Function as PropType<((e: ButtonContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: ButtonDisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: ButtonInitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: ButtonOptionChangedEvent) => void)>,
     rtlEnabled: Boolean,
     stylingMode: String as PropType<ButtonStyle>,
     tabIndex: Number,
