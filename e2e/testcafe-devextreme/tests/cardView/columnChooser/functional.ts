@@ -61,7 +61,7 @@ function testsFactory(testModel: {
     await t.expect(cardView.isReady()).ok();
 
     await cardView.apiShowColumnChooser();
-    await t.expect(cardView.getColumnChooser().isOpened).ok();
+    await t.expect(cardView.getColumnChooser().element.exists).ok();
 
     await testModel.hideFirstColumn(t, cardView);
     await testModel.assertFirstColumnHidden(t, cardView);
