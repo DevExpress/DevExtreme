@@ -37,7 +37,8 @@ module.exports = {
             [['@babel/plugin-transform-runtime', {
                 useESModules: true,
                 version: '7.5.0' // https://github.com/babel/babel/issues/10261#issuecomment-514687857
-            }]]
+            }]],
+            [require('../babel-plugin-add-import-extensions')],
         )
     })
 };

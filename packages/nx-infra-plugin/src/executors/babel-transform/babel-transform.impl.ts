@@ -45,6 +45,20 @@ function applyExtensionRenames(filePath: string, renameExtensions: Record<string
   return filePath;
 }
 
+// `artifacts/dist_ts` only mirrors the subtree it was asked to compile (e.g. just
+// `__internal`), so sibling directories like `common/` don't exist there. Babel plugins
+// that resolve relative imports via fs existence checks (e.g. add-import-extensions) need
+// `filename` to point at the real `js/` source tree, not this partial intermediate mirror.
+function toLogicalFilename(filePath: string, projectRoot: string): string {
+  const distTsRoot = path.join(projectRoot, 'artifacts', 'dist_ts') + path.sep;
+
+  if (filePath.startsWith(distTsRoot)) {
+    return path.join(projectRoot, 'js', filePath.slice(distTsRoot.length));
+  }
+
+  return filePath;
+}
+
 async function transformFile(
   filePath: string,
   projectRoot: string,
@@ -62,7 +76,7 @@ async function transformFile(
 
   const result = await babel.transformAsync(content, {
     ...babelConfig,
-    filename: filePath,
+    filename: toLogicalFilename(filePath, projectRoot),
   });
 
   if (!result?.code) {

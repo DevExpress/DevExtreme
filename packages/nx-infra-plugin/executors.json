@@ -129,6 +129,11 @@
       "implementation": "./src/executors/scss-build/executor",
       "schema": "./src/executors/scss-build/schema.json",
       "description": "Run SCSS themes build pipeline in all or CI mode"
+    },
+    "generate-exports-map": {
+      "implementation": "./src/executors/generate-exports-map/executor",
+      "schema": "./src/executors/generate-exports-map/schema.json",
+      "description": "Generate the Node.js package exports map from per-directory package.json shims"
     }
   }
 }
