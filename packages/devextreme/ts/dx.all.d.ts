@@ -7549,9 +7549,8 @@ declare module DevExpress.core.utils {
     * [descr:DxPromise]
     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
     */
-   export type DxPromise<T = void> = {} extends PromiseType<T>
-    ? Promise<T>
-    : PromiseType<T>;
+   export type DxPromise<T = void> =
+    {} extends PromiseType<T> ? Promise<T> : PromiseType<T>;
 }
 declare module DevExpress.data {
   /**
@@ -9207,7 +9206,8 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class DateBoxBase<
-    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxDateBox.Properties
+    TProperties extends
+      DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxDateBox.Properties
   > extends dxDropDownEditor<TProperties> {
     /**
      * [descr:DateBoxBase.close()]
@@ -17212,7 +17212,8 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class dxDropDownEditor<
-    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxDropDownEditor.Properties
+    TProperties extends
+      DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxDropDownEditor.Properties
   > extends dxTextBox<TProperties> {
     /**
      * [descr:dxDropDownEditor.close()]
@@ -26242,7 +26243,7 @@ declare module DevExpress.ui {
   /**
    * [descr:dxScheduler]
    */
-  export class dxScheduler extends Widget<dxSchedulerOptions> {
+  export class dxScheduler extends Widget<DevExpress.ui.dxScheduler.Properties> {
     /**
      * [descr:dxScheduler.addAppointment(appointment)]
      */
@@ -27180,7 +27181,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.scrolling]
      */
-    scrolling?: dxSchedulerScrolling;
+    scrolling?: Scrolling;
     /**
      * [descr:dxSchedulerOptions.selectedCellData]
      */
@@ -27387,7 +27388,7 @@ declare module DevExpress.ui {
           /**
            * [descr:dxSchedulerOptions.views.scrolling]
            */
-          scrolling?: dxSchedulerScrolling;
+          scrolling?: Scrolling;
           /**
            * [descr:dxSchedulerOptions.views.allDayPanelMode]
            */
@@ -27406,15 +27407,6 @@ declare module DevExpress.ui {
      * [descr:dxSchedulerOptions.toolbar]
      */
     toolbar?: DevExpress.ui.dxScheduler.Toolbar | undefined;
-  }
-  /**
-   * [descr:dxSchedulerScrolling]
-   */
-  export interface dxSchedulerScrolling {
-    /**
-     * [descr:dxSchedulerScrolling.mode]
-     */
-    mode?: DevExpress.common.ScrollMode;
   }
   /**
    * @deprecated Use DevExpress.ui.dxScheduler.Toolbar instead
@@ -27659,7 +27651,8 @@ declare module DevExpress.ui {
    * [descr:dxSelectBox]
    */
   export class dxSelectBox<
-    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxSelectBox.Properties
+    TProperties extends
+      DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxSelectBox.Properties
   > extends dxDropDownList<TProperties> {}
   module dxSelectBox {
     /**
@@ -30013,7 +30006,8 @@ declare module DevExpress.ui {
    * [descr:dxTextBox]
    */
   export class dxTextBox<
-    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxTextBox.Properties
+    TProperties extends
+      DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxTextBox.Properties
   > extends dxTextEditor<TProperties> {
     /**
      * [descr:dxTextBox.reset(value)]
@@ -30163,7 +30157,8 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class dxTextEditor<
-    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxTextEditor.Properties
+    TProperties extends
+      DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxTextEditor.Properties
   > extends Editor<TProperties> {
     /**
      * [descr:dxTextEditor.blur()]
@@ -33564,7 +33559,8 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class Editor<
-    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.Editor.Properties
+    TProperties extends
+      DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.Editor.Properties
   > extends Widget<TProperties> {
     /**
      * [descr:Editor.clear()]
@@ -33783,6 +33779,15 @@ declare module DevExpress.ui {
    * [descr:ui.repaintFloatingActionButton()]
    */
   export function repaintFloatingActionButton(): void;
+  /**
+   * [descr:dxSchedulerScrolling]
+   */
+  export type Scrolling = {
+    /**
+     * [descr:Scrolling.mode]
+     */
+    mode?: DevExpress.common.ScrollMode;
+  };
   /**
    * [descr:SearchBoxMixin]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -35012,12 +35017,15 @@ declare module DevExpress.ui.dxScheduler {
   /**
    * [descr:DateNavigatorItemProperties]
    */
-  export type DateNavigatorItemProperties = dxButtonGroupOptions & {
-    /**
-     * [descr:DateNavigatorItemProperties.items]
-     */
-    items: Array<dxButtonGroupItem | SchedulerPredefinedDateNavigatorItem>;
-  };
+  export type DateNavigatorItemProperties =
+    DevExpress.ui.dxButtonGroup.Properties & {
+      /**
+       * [descr:DateNavigatorItemProperties.items]
+       */
+      items: Array<
+        DevExpress.ui.dxButtonGroup.Item | SchedulerPredefinedDateNavigatorItem
+      >;
+    };
   /**
    * [descr:dxSchedulerToolbar]
    */
@@ -35042,7 +35050,7 @@ declare module DevExpress.ui.dxScheduler {
   /**
    * [descr:dxSchedulerToolbarItem]
    */
-  export type ToolbarItem = dxToolbarItem & {
+  export type ToolbarItem = DevExpress.ui.dxToolbar.Item & {
     /**
      * [descr:dxSchedulerToolbarItem.name]
      */

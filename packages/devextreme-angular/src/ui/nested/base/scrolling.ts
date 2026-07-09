@@ -12,7 +12,7 @@ import type { DataGridScrollMode } from 'devextreme/ui/data_grid';
 @Component({
     template: ''
 })
-export abstract class DxoSchedulerScrolling extends NestedOption {
+export abstract class DxoScrolling extends NestedOption {
     get columnRenderingMode(): DataRenderMode {
         return this._getOption('columnRenderingMode');
     }

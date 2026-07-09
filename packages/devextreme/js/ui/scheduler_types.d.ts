@@ -49,5 +49,4 @@ export {
   Occurrence,
   Properties,
   Scrolling,
-  dxSchedulerScrolling,
 } from './scheduler';
