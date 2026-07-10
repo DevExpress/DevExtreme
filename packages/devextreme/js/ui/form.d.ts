@@ -759,11 +759,11 @@ export interface dxFormSimpleItem {
      * @public
      */
     itemType?: FormItemType;
-     /**
-      * @docid
-      * @public
-      */
-     label?: {
+    /**
+     * @docid
+     * @public
+     */
+    label?: {
       /**
        * @docid
        * @default "left"
@@ -810,11 +810,11 @@ export interface dxFormSimpleItem {
      * @public
      */
     template?: template | ((data: SimpleItemTemplateData, itemElement: DxElement) => string | UserDefinedElement);
-     /**
-      * @docid
-      * @public
-      */
-     validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
+    /**
+     * @docid
+     * @public
+     */
+    validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
     /**
      * @docid
      * @default true
@@ -870,11 +870,11 @@ export interface dxFormTabbedItem {
      * @public
      */
     tabPanelOptions?: dxTabPanelOptions | undefined;
-     /**
-      * @docid
-      * @public
-      */
-     tabs?: Array<{
+    /**
+     * @docid
+     * @public
+     */
+    tabs?: Array<{
       /**
        * @docid
        * @default true

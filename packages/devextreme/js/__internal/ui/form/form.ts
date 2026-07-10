@@ -204,8 +204,7 @@ class Form extends Widget<FormProperties> {
       labelLocation: 'left',
       readOnly: false,
       onFieldDataChanged: null,
-      // @ts-expect-error ts-error
-      customizeItem: null,
+      customizeItem: undefined,
       onEditorEnterKey: null,
       minColWidth: 200,
       alignItemLabels: true,
