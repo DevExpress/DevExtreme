@@ -1,6 +1,7 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { ClientFunction } from 'testcafe';
 import TextBox from 'devextreme-testcafe-models/textBox';
+import { GridsEditMode } from 'devextreme/artifacts/npm/devextreme/common/grids';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
@@ -376,3 +377,37 @@ test('Focus method should focus the first data row when focusedRowEnabled = true
     },
   ],
 }));
+
+(['batch', 'cell'] as GridsEditMode[]).forEach((editMode) => {
+  // T1331376
+  test(`Tab should focus the next cell after editing a cell by API when focusedRowEnabled (editing.mode=${editMode})`, async (t) => {
+    const dataGrid = new DataGrid(GRID_SELECTOR);
+    await t.expect(dataGrid.isReady()).ok();
+
+    await dataGrid.apiEditCell(0, 0);
+
+    await t
+      .expect(dataGrid.getDataCell(0, 0).getEditor().element.focused)
+      .ok();
+
+    await t.pressKey('tab');
+
+    await t
+      .expect(dataGrid.getDataCell(0, 1).isEditCell)
+      .ok()
+      .expect(dataGrid.getDataCell(0, 1).getEditor().element.focused)
+      .ok();
+  }).before(async () => createWidget('dxDataGrid', {
+    dataSource: [
+      { ID: 1, FirstName: 'John', LastName: 'Heart' },
+      { ID: 2, FirstName: 'Olivia', LastName: 'Peyton' },
+    ],
+    keyExpr: 'ID',
+    focusedRowEnabled: true,
+    editing: {
+      mode: editMode,
+      allowUpdating: true,
+    },
+    columns: ['FirstName', 'LastName'],
+  }));
+});
