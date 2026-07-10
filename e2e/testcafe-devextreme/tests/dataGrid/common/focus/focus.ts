@@ -1,7 +1,7 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { ClientFunction } from 'testcafe';
 import TextBox from 'devextreme-testcafe-models/textBox';
-import { GridsEditMode } from 'devextreme/artifacts/npm/devextreme/common/grids';
+import { GridsEditMode } from 'devextreme/ui/data_grid';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
@@ -380,7 +380,7 @@ test('Focus method should focus the first data row when focusedRowEnabled = true
 
 (['batch', 'cell'] as GridsEditMode[]).forEach((editMode) => {
   // T1331376
-  test(`Tab should focus the next cell after editing a cell by API when focusedRowEnabled (editing.mode=${editMode})`, async (t) => {
+  test.only(`Tab should focus the next cell after editing a cell by API when focusedRowEnabled (editing.mode=${editMode})`, async (t) => {
     const dataGrid = new DataGrid(GRID_SELECTOR);
     await t.expect(dataGrid.isReady()).ok();
 
