@@ -223,7 +223,7 @@ export class AppointmentsFocusController {
     }
   }
 
-  private focusViewItem(viewItem: ViewItem): void {
+  public focusViewItem(viewItem: ViewItem): void {
     this.resetTabIndex(viewItem.option().sortedIndex);
     focus.trigger(viewItem?.$element());
   }
