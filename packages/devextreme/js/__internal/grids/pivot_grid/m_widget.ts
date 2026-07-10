@@ -936,7 +936,9 @@ class PivotGrid extends Widget {
       return [];
     }
 
-    const cells: HTMLElement[] = Array.from(element.querySelectorAll(`thead.${HORIZONTAL_HEADERS_AREA_CLASS} td`));
+    // Only cells marked as navigable on render take part in the roving
+    // tabindex: whitespace filler cells are rendered without tabindex.
+    const cells: HTMLElement[] = Array.from(element.querySelectorAll(`thead.${HORIZONTAL_HEADERS_AREA_CLASS} td[tabindex]`));
 
     return cells.filter((cell) => !cell.closest(`.${FAKE_TABLE_CLASS}`));
   }
@@ -977,7 +979,14 @@ class PivotGrid extends Widget {
     e.preventDefault();
 
     const section = cell.closest('thead, tbody');
-    const target = getAdjacentCell(section, cell, this._normalizeCellNavigationDirection(direction));
+    const normalizedDirection = this._normalizeCellNavigationDirection(direction);
+    let target = getAdjacentCell(section, cell, normalizedDirection);
+
+    // Non-navigable placeholders (e.g. whitespace filler cells) have no
+    // tabindex and are skipped over.
+    while (target && !target.hasAttribute('tabindex')) {
+      target = getAdjacentCell(section, target, normalizedDirection);
+    }
 
     if (target) {
       navigation.focusItem(target);

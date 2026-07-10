@@ -10,6 +10,8 @@ import { isDefined } from '@js/core/utils/type';
 import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
 import { foreachColumnInfo } from '@ts/grids/grid_core/virtual_columns/m_virtual_columns_core';
 
+import { FAKE_TABLE_CLASS } from '../keyboard_navigation/const';
+
 const PIVOTGRID_EXPAND_CLASS = 'dx-expand';
 
 const getRealElementWidth = function (element) {
@@ -245,7 +247,7 @@ abstract class AreaItem {
           cell.rowspan && td.setAttribute('rowspan', cell.rowspan || 1);
           cell.colspan && td.setAttribute('colspan', cell.colspan || 1);
 
-          if (isCellNavigationEnabled) {
+          if (isCellNavigationEnabled && !cell.isWhiteSpace) {
             td.setAttribute('tabindex', '-1');
           }
 
@@ -647,7 +649,7 @@ abstract class AreaItem {
         .clone()
         .removeAttr('id')
         .attr('aria-hidden', 'true')
-        .addClass('dx-pivot-grid-fake-table');
+        .addClass(FAKE_TABLE_CLASS);
       that._fakeTable.find('[tabindex]').removeAttr('tabindex');
       that._fakeTable.appendTo(that._virtualContent);
     }
