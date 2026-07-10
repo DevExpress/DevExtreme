@@ -8082,7 +8082,7 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields]
      */
-    fields?: Array<DevExpress.data.PivotGridDataSource.Field>;
+    fields?: Array<DevExpress.data.PivotGridDataSource.Field> | undefined;
     /**
      * [descr:PivotGridDataSourceOptions.filter]
      */
@@ -24773,9 +24773,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPivotGridFieldChooserOptions.onContextMenuPreparing]
      */
-    onContextMenuPreparing?: (
-      e: DevExpress.ui.dxPivotGridFieldChooser.ContextMenuPreparingEvent
-    ) => void;
+    onContextMenuPreparing?:
+      | ((
+          e: DevExpress.ui.dxPivotGridFieldChooser.ContextMenuPreparingEvent
+        ) => void)
+      | undefined;
     /**
      * [descr:dxPivotGridFieldChooserOptions.searchTimeout]
      */
@@ -24783,7 +24785,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPivotGridFieldChooserOptions.state]
      */
-    state?: any;
+    state?: any | undefined;
     /**
      * [descr:dxPivotGridFieldChooserOptions.texts]
      */
@@ -25069,21 +25071,27 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPivotGridOptions.onCellClick]
      */
-    onCellClick?: (e: DevExpress.ui.dxPivotGrid.CellClickEvent) => void;
+    onCellClick?:
+      | ((e: DevExpress.ui.dxPivotGrid.CellClickEvent) => void)
+      | undefined;
     /**
      * [descr:dxPivotGridOptions.onCellPrepared]
      */
-    onCellPrepared?: (e: DevExpress.ui.dxPivotGrid.CellPreparedEvent) => void;
+    onCellPrepared?:
+      | ((e: DevExpress.ui.dxPivotGrid.CellPreparedEvent) => void)
+      | undefined;
     /**
      * [descr:dxPivotGridOptions.onContextMenuPreparing]
      */
-    onContextMenuPreparing?: (
-      e: DevExpress.ui.dxPivotGrid.ContextMenuPreparingEvent
-    ) => void;
+    onContextMenuPreparing?:
+      | ((e: DevExpress.ui.dxPivotGrid.ContextMenuPreparingEvent) => void)
+      | undefined;
     /**
      * [descr:dxPivotGridOptions.onExporting]
      */
-    onExporting?: (e: DevExpress.ui.dxPivotGrid.ExportingEvent) => void;
+    onExporting?:
+      | ((e: DevExpress.ui.dxPivotGrid.ExportingEvent) => void)
+      | undefined;
     /**
      * [descr:dxPivotGridOptions.rowHeaderLayout]
      */
@@ -25148,7 +25156,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxPivotGridOptions.stateStoring.storageKey]
        */
-      storageKey?: string;
+      storageKey?: string | undefined;
       /**
        * [descr:dxPivotGridOptions.stateStoring.type]
        */
@@ -26903,7 +26911,8 @@ declare module DevExpress.ui {
           itemData: any,
           itemIndex: number,
           itemElement: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
+        ) => string | DevExpress.core.UserDefinedElement)
+      | undefined;
     /**
      * [descr:dxSchedulerOptions.dataSource]
      */
@@ -26917,7 +26926,8 @@ declare module DevExpress.ui {
           itemData: any,
           itemIndex: number,
           itemElement: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
+        ) => string | DevExpress.core.UserDefinedElement)
+      | undefined;
     /**
      * [descr:dxSchedulerOptions.dateSerializationFormat]
      */
@@ -27022,82 +27032,86 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.onAppointmentAdded]
      */
-    onAppointmentAdded?: (
-      e: DevExpress.ui.dxScheduler.AppointmentAddedEvent
-    ) => void;
+    onAppointmentAdded?:
+      | ((e: DevExpress.ui.dxScheduler.AppointmentAddedEvent) => void)
+      | undefined;
     /**
      * [descr:dxSchedulerOptions.onAppointmentAdding]
      */
-    onAppointmentAdding?: (
-      e: DevExpress.ui.dxScheduler.AppointmentAddingEvent
-    ) => void;
+    onAppointmentAdding?:
+      | ((e: DevExpress.ui.dxScheduler.AppointmentAddingEvent) => void)
+      | undefined;
     /**
      * [descr:dxSchedulerOptions.onAppointmentClick]
      */
     onAppointmentClick?:
       | ((e: DevExpress.ui.dxScheduler.AppointmentClickEvent) => void)
-      | string;
+      | string
+      | undefined;
     /**
      * [descr:dxSchedulerOptions.onAppointmentContextMenu]
      */
     onAppointmentContextMenu?:
       | ((e: DevExpress.ui.dxScheduler.AppointmentContextMenuEvent) => void)
-      | string;
+      | string
+      | undefined;
     /**
      * [descr:dxSchedulerOptions.onAppointmentDblClick]
      */
     onAppointmentDblClick?:
       | ((e: DevExpress.ui.dxScheduler.AppointmentDblClickEvent) => void)
-      | string;
+      | string
+      | undefined;
     /**
      * [descr:dxSchedulerOptions.onAppointmentDeleted]
      */
-    onAppointmentDeleted?: (
-      e: DevExpress.ui.dxScheduler.AppointmentDeletedEvent
-    ) => void;
+    onAppointmentDeleted?:
+      | ((e: DevExpress.ui.dxScheduler.AppointmentDeletedEvent) => void)
+      | undefined;
 
     /**
      * [descr:dxSchedulerOptions.onAppointmentDeleting]
      */
-    onAppointmentDeleting?: (
-      e: DevExpress.ui.dxScheduler.AppointmentDeletingEvent
-    ) => void;
+    onAppointmentDeleting?:
+      | ((e: DevExpress.ui.dxScheduler.AppointmentDeletingEvent) => void)
+      | undefined;
     /**
      * [descr:dxSchedulerOptions.onAppointmentTooltipShowing]
      */
-    onAppointmentTooltipShowing?: (
-      e: DevExpress.ui.dxScheduler.AppointmentTooltipShowingEvent
-    ) => void;
+    onAppointmentTooltipShowing?:
+      | ((e: DevExpress.ui.dxScheduler.AppointmentTooltipShowingEvent) => void)
+      | undefined;
     /**
      * [descr:dxSchedulerOptions.onAppointmentFormOpening]
      */
-    onAppointmentFormOpening?: (
-      e: DevExpress.ui.dxScheduler.AppointmentFormOpeningEvent
-    ) => void;
+    onAppointmentFormOpening?:
+      | ((e: DevExpress.ui.dxScheduler.AppointmentFormOpeningEvent) => void)
+      | undefined;
     /**
      * [descr:dxSchedulerOptions.onAppointmentRendered]
      */
-    onAppointmentRendered?: (
-      e: DevExpress.ui.dxScheduler.AppointmentRenderedEvent
-    ) => void;
+    onAppointmentRendered?:
+      | ((e: DevExpress.ui.dxScheduler.AppointmentRenderedEvent) => void)
+      | undefined;
     /**
      * [descr:dxSchedulerOptions.onAppointmentUpdated]
      */
-    onAppointmentUpdated?: (
-      e: DevExpress.ui.dxScheduler.AppointmentUpdatedEvent
-    ) => void;
+    onAppointmentUpdated?:
+      | ((e: DevExpress.ui.dxScheduler.AppointmentUpdatedEvent) => void)
+      | undefined;
     /**
      * [descr:dxSchedulerOptions.onAppointmentUpdating]
      */
-    onAppointmentUpdating?: (
-      e: DevExpress.ui.dxScheduler.AppointmentUpdatingEvent
-    ) => void;
+    onAppointmentUpdating?:
+      | ((e: DevExpress.ui.dxScheduler.AppointmentUpdatingEvent) => void)
+      | undefined;
     /**
      * [descr:dxSchedulerOptions.onCellClick]
      */
     onCellClick?:
       | ((e: DevExpress.ui.dxScheduler.CellClickEvent) => void)
-      | string;
+      | string
+      | undefined;
     /**
      * [descr:dxSchedulerOptions.onSelectionEnd]
      */
@@ -27109,7 +27123,8 @@ declare module DevExpress.ui {
      */
     onCellContextMenu?:
       | ((e: DevExpress.ui.dxScheduler.CellContextMenuEvent) => void)
-      | string;
+      | string
+      | undefined;
     /**
      * [descr:dxSchedulerOptions.recurrenceEditMode]
      */
@@ -27135,7 +27150,8 @@ declare module DevExpress.ui {
           itemData: any,
           itemIndex: number,
           itemElement: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
+        ) => string | DevExpress.core.UserDefinedElement)
+      | undefined;
     /**
      * [descr:dxSchedulerOptions.resources]
      */
@@ -27222,7 +27238,8 @@ declare module DevExpress.ui {
           itemData: any,
           itemIndex: number,
           itemElement: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
+        ) => string | DevExpress.core.UserDefinedElement)
+      | undefined;
     /**
      * [descr:dxSchedulerOptions.timeZone]
      */
