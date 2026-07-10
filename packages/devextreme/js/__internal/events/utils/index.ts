@@ -2,7 +2,6 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import devices from '@ts/core/m_devices';
 import { focused } from '@ts/core/utils/m_selectors';
 
 import mappedAddNamespace from './m_add_namespace';
@@ -150,7 +149,6 @@ export const hasTouches = (e) => {
 let skipEvents = false;
 export const forceSkipEvents = () => { skipEvents = true; };
 export const stopEventsSkipping = () => { skipEvents = false; };
-// eslint-disable-next-line consistent-return
 export const needSkipEvent = (e) => {
   // TODO: for tests
   if (skipEvents) {
@@ -177,15 +175,15 @@ export const needSkipEvent = (e) => {
 
   if (isMouseEvent(e)) {
     const isNotLeftMouseButton = e.which > MOUSE_BUTTON_MAP.left;
-    // T1328053
-    const isMacContextMenuClick = Boolean(e.ctrlKey) && devices.real().mac;
 
-    return touchInEditable || isNotLeftMouseButton || isMacContextMenuClick;
+    return touchInEditable || isNotLeftMouseButton;
   }
 
   if (isTouchEvent(e)) {
     return touchInEditable && focused($target);
   }
+
+  return false;
 };
 
 export const setEventFixMethod = (func) => { fixMethod = func; };
