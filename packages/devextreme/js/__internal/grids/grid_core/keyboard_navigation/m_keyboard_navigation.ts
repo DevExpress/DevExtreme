@@ -3081,25 +3081,14 @@ const editing = (Base: ModuleType<EditingController>) => class EditingController
       return false;
     }
 
-    return super.editCell(rowIndex, columnIndex);
-  }
+    const isCellEditing = super.editCell(rowIndex, columnIndex);
 
-  protected _prepareEditCell(parameters: NormalizedEditCellOptions): boolean {
-    const isPrepared = super._prepareEditCell(parameters);
-
-    if (isPrepared) {
-      this._keyboardNavigationController.setCellFocusType();
+    if (isCellEditing) {
       this._keyboardNavigationController.setupFocusedView();
-
-      const rowIndexOffset = this._dataController.getRowIndexOffset();
-      const columnIndexOffset = this._columnsController.getColumnIndexOffset();
-      const globalRowIndex = parameters.rowIndex + rowIndexOffset;
-      const globalColumnIndex = parameters.columnIndex + columnIndexOffset;
-
-      this._keyboardNavigationController.setFocusedCellPosition(globalRowIndex, globalColumnIndex);
+      this._keyboardNavigationController.setCellFocusType();
     }
 
-    return isPrepared;
+    return isCellEditing;
   }
 
   public editRow(rowIndex) {
