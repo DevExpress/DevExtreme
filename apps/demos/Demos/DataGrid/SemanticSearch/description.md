@@ -17,5 +17,3 @@ This demo configures semantic filtering on the server (using [AzureOpenAI embedd
 - A similarity factor (adjusted using a custom [toolbar](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/toolbar/) item)
 
 The DataGrid is configured to reload data after you enter a query in the search editor.
-
-Review the `DataGridSemanticSearchController.cs` tab in the [ASP.NET Core version](https://demos.devexpress.com/ASPNetCore/Demo/DataGrid/SemanticSearch) of this demo for backend implementation details.
