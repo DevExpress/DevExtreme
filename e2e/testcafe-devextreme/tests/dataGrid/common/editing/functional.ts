@@ -2329,7 +2329,8 @@ test('Cells should be focused correctly on click when cell editing mode is used 
   // act
   await t
     .typeText(dataGrid.getDataCell(0, 0).getEditor().element, '1')
-    .click(dataGrid.getDataCell(1, 0).getEditor().element);
+    .click(dataGrid.getDataCell(1, 0).getEditor().element)
+    .expect(dataGrid.isReady()).ok();
 
   await t.expect(getStoredName(1)).eql('Name 11');
 
@@ -2345,7 +2346,8 @@ test('Cells should be focused correctly on click when cell editing mode is used 
   // act
   await t
     .typeText(dataGrid.getDataCell(1, 0).getEditor().element, '2')
-    .click(dataGrid.getDataCell(2, 0).getEditor().element);
+    .click(dataGrid.getDataCell(2, 0).getEditor().element)
+    .expect(dataGrid.isReady()).ok();
 
   await t.expect(getStoredName(2)).eql('Name 22');
 
@@ -2356,12 +2358,15 @@ test('Cells should be focused correctly on click when cell editing mode is used 
     .expect(dataGrid.getDataCell(2, 0).isFocused)
     .ok()
     .expect(dataGrid.getDataCell(2, 0).getEditor().element.focused)
+    .ok()
+    .expect(dataGrid.isReady())
     .ok();
 
   // act
   await t
     .typeText(dataGrid.getDataCell(2, 0).getEditor().element, '3')
-    .click(dataGrid.getDataCell(1, 0).getEditor().element);
+    .click(dataGrid.getDataCell(1, 0).getEditor().element)
+    .expect(dataGrid.isReady()).ok();
 
   await t.expect(getStoredName(3)).eql('Name 33');
 
@@ -2377,7 +2382,8 @@ test('Cells should be focused correctly on click when cell editing mode is used 
   // act
   await t
     .typeText(dataGrid.getDataCell(1, 0).getEditor().element, '2')
-    .click(dataGrid.getDataCell(0, 0).getEditor().element);
+    .click(dataGrid.getDataCell(0, 0).getEditor().element)
+    .expect(dataGrid.isReady()).ok();
 
   await t.expect(getStoredName(2)).eql('Name 222');
 
