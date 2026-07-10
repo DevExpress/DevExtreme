@@ -114,7 +114,9 @@ const mixinWidget = sortingMixin(
 export class FieldChooserBase extends mixinWidget {
   private _focusedFieldIndex = -1;
 
-  private _fieldNavigationMap: Record<string, RovingTabIndex> = {};
+  // NOTE: no initializer — class field initializers do not run for classes
+  // built on the legacy DevExtreme class system in the systemjs build.
+  private _fieldNavigationMap: Record<string, RovingTabIndex> | undefined;
 
   _getDefaultOptions() {
     return {
@@ -472,6 +474,7 @@ export class FieldChooserBase extends mixinWidget {
     // component contract has to be restored explicitly.
     const component = this as unknown as RovingTabIndexComponent;
 
+    this._fieldNavigationMap = this._fieldNavigationMap ?? {};
     this._fieldNavigationMap[area] = this._fieldNavigationMap[area] ?? new RovingTabIndex({
       component,
       getItems: () => this._getAreaFieldElements(area),
