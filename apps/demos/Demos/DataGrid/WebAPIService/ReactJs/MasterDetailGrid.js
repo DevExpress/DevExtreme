@@ -13,7 +13,7 @@ const getMasterDetailGridDataSource = (id) => ({
   }),
 });
 const MasterDetailGrid = (props) => {
-  const [dataSource, setDataSource] = useState(null);
+  const [dataSource, setDataSource] = useState(undefined);
   useEffect(() => {
     const masterDetailDataSource = getMasterDetailGridDataSource(props.data.key);
     setDataSource(masterDetailDataSource);

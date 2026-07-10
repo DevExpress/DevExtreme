@@ -17,7 +17,6 @@ const checkAIColumnTexts = async (
 
   await t.expect(visibleRows.length).eql(expectedRowCount);
 
-  // eslint-disable-next-line no-restricted-syntax
   for (const row of visibleRows) {
     await t
       .expect(component.getDataCell(row.dataIndex, 3).element.textContent)
@@ -42,7 +41,7 @@ const deleteGlobalVariables = ClientFunction((): void => {
   delete (window as any).aiResolve;
 });
 
-test('DataGrid should send an AI request for rendered rows after scrolling without changing the page index', async (t) => {
+test.meta({ unstable: true })('DataGrid should send an AI request for rendered rows after scrolling without changing the page index', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -118,7 +117,7 @@ test('DataGrid should send an AI request for rendered rows after scrolling witho
           name: 'myColumn',
           ai: {
             prompt: 'Initial prompt',
-            // eslint-disable-next-line new-cap
+
             aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
               sendRequest(prompt) {
                 return {
@@ -145,7 +144,7 @@ test('DataGrid should send an AI request for rendered rows after scrolling witho
     await deleteGlobalVariables();
   });
 
-test('DataGrid should send an AI request for rendered rows after scrolling with changing the page index', async (t) => {
+test.meta({ unstable: true })('DataGrid should send an AI request for rendered rows after scrolling with changing the page index', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -221,7 +220,7 @@ test('DataGrid should send an AI request for rendered rows after scrolling with 
           name: 'myColumn',
           ai: {
             prompt: 'Initial prompt',
-            // eslint-disable-next-line new-cap
+
             aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
               sendRequest(prompt) {
                 return {

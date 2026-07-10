@@ -275,9 +275,9 @@ interface WorkspaceOptionActionMap {
   onCellContextMenu: Pick<CellContextMenuEvent, 'event' | 'cellElement' | 'cellData'>;
 }
 
-type WorkspaceCoordinates = Coordinates & { groupIndex?: number };
+export type WorkspaceCoordinates = Coordinates & { groupIndex?: number };
 
-type DroppableCellData = Pick<ViewCellData, 'startDate' | 'endDate' | 'allDay' | 'groups'>;
+export type DroppableCellData = Pick<ViewCellData, 'startDate' | 'endDate' | 'allDay' | 'groups'>;
 
 export interface WorkspaceOptionsInternal extends WidgetProperties<SchedulerWorkSpace> {
   newAppointments: boolean;
@@ -330,6 +330,7 @@ export interface WorkspaceOptionsInternal extends WidgetProperties<SchedulerWork
   onCellClick: ((e: CellClickEvent) => void) | undefined;
   onCellContextMenu: ((e: CellContextMenuEvent) => void) | undefined;
   currentDate: Date;
+  cellDuration: number;
   hoursInterval: number;
   allDayExpanded: boolean;
 
@@ -798,6 +799,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   _focusTarget(): dxElementWrapper {
     return this.$element();
+  }
+
+  _renderFocusTarget(): void {
+    this._focusTarget().attr('tabIndex', -1);
   }
 
   protected isVerticalGroupedWorkSpace(): boolean { // TODO move to the Model
@@ -2657,6 +2662,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       endDayHour: 24,
       viewOffset: 0,
       hoursInterval: 0.5,
+      cellDuration: 30,
       activeStateEnabled: true,
       hoverStateEnabled: true,
       groups: [],

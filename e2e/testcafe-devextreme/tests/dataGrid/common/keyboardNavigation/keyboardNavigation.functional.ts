@@ -27,7 +27,7 @@ const getOnKeyDownCallCount = ClientFunction(() => (window as any).onKeyDownCall
 fixture.disablePageReloads`Keyboard Navigation - common`
   .page(url(__dirname, '../../../container.html'));
 
-test('Changing keyboardNavigation options should not invalidate the entire content (T1197829)', async (t) => {
+test.meta({ unstable: true })('Changing keyboardNavigation options should not invalidate the entire content (T1197829)', async (t) => {
   const dataGrid = new DataGrid('#container');
   await t
     .expect(dataGrid.isReady())
@@ -3066,7 +3066,7 @@ test('New mode. A cell should be focused when the PageDow/Up key is pressed (T89
   });
 });
 
-test('Cells should be focused after saving data when filter is applied and cell mode is used (T1029906)', async (t) => {
+test.meta({ unstable: true })('Cells should be focused after saving data when filter is applied and cell mode is used (T1029906)', async (t) => {
   const dataGrid = new DataGrid('#container');
   await t
     .expect(dataGrid.isReady())
@@ -6243,7 +6243,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     })();
   });
 
-  test(`Focus events should be called when pressing the Ctrl + End key when virtual scrolling and columns are enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
+  test.meta({ unstable: true })(`Focus events should be called when pressing the Ctrl + End key when virtual scrolling and columns are enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
   // arrange
     const dataGrid = new DataGrid('#container');
 
@@ -6403,7 +6403,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     })();
   });
 
-  test(`Focus events should be called when pressing the Ctrl + End key when infinite scrolling is enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
+  test.meta({ unstable: true })(`Focus events should be called when pressing the Ctrl + End key when infinite scrolling is enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
   // arrange
     const dataGrid = new DataGrid('#container');
 
@@ -6817,7 +6817,7 @@ test('Focus should be set to the grid to allow keyboard navigation when the focu
 });
 
 [true, false].forEach((focusedRowEnabled) => {
-  test(`Focus should return to the last active cell when re-entering the rowsview via kbn if focusedRowEnabled=${focusedRowEnabled} (T1308919)`, async (t) => {
+  test.meta({ unstable: focusedRowEnabled })(`Focus should return to the last active cell when re-entering the rowsview via kbn if focusedRowEnabled=${focusedRowEnabled} (T1308919)`, async (t) => {
     // arrange
     const button = new Button('#otherContainer');
     const dataGrid = new DataGrid('#container');

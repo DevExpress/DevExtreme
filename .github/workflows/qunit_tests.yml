@@ -8,7 +8,8 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  merge_group:
+  push:
+    branches: [26_1]
   workflow_dispatch:
 
 env:
@@ -129,7 +130,7 @@ jobs:
     needs: build
     runs-on: devextreme-shr2
     name: Constel ${{ matrix.CONSTEL }}${{ matrix.TIMEZONE != '' && format('-{0}', matrix.TIMEZONE) || '' }}${{ matrix.CSP == 'false' && '-no-csp' || '' }}
-    timeout-minutes: 20
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
@@ -137,7 +138,6 @@ jobs:
           misc,
           ui,
           ui.editors,
-          ui.grid,
           ui.scheduler,
         ]
         TIMEZONE: ['']
@@ -145,8 +145,8 @@ jobs:
         useJQuery: ['false']
         MAX_WORKERS: ['']
         include:
-          - CONSTEL: export
-            MAX_WORKERS: '3'
+          - CONSTEL: ui.grid
+            MAX_WORKERS: '1'
             useJQuery: 'false'
             CSP: 'true'
           - CONSTEL: ui.scheduler
@@ -158,7 +158,7 @@ jobs:
           - CONSTEL: ui.widgets
             CSP: 'false'
             useJQuery: 'false'
-            MAX_WORKERS: '3'
+            MAX_WORKERS: '1'
 
     steps:
     - name: Get sources
@@ -203,7 +203,7 @@ jobs:
           useJQuery: 'true'
           useShadowDom: 'true'
           useCsp: 'true'
-          maxWorkers: ${{ (matrix.constel == 'ui.editors' || matrix.constel == 'ui.widgets') && '3' || '' }}
+          maxWorkers: ${{ (matrix.constel == 'ui.editors' || matrix.constel == 'ui.widgets') && '1' || '' }}
 
   notify:
     runs-on: ubuntu-latest

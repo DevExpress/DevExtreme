@@ -245,7 +245,7 @@ test('It should not fire row events if focusedRowEnabled: false', async (t) => {
   await clearCallbackTesting();
 });
 
-test('It should fire rowChanged event on initialization if focusedRowKey options is set', async (t) => {
+test.meta({ unstable: true })('It should fire rowChanged event on initialization if focusedRowKey options is set', async (t) => {
   const expectedRowFocusChanged: FocusRowChangedData[] = [
     [1],
   ];

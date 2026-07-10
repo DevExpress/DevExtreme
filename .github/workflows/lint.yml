@@ -8,14 +8,15 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  merge_group:
+  push:
+    branches: [26_1]
 
 env:
   NX_SKIP_NX_CACHE: ${{ contains(github.event.pull_request.labels.*.name, 'skip-cache') && 'true' || 'false' }}
 
 jobs:
   TS:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -116,7 +117,7 @@ jobs:
       run: pnpm exec nx lint
 
   JS:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -204,7 +205,7 @@ jobs:
       run: pnpm exec nx lint-js
 
   texts:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     timeout-minutes: 60
     steps:
     - name: Get sources

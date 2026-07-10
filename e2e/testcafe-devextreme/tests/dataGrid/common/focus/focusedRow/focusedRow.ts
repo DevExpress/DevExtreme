@@ -10,6 +10,7 @@ fixture.disablePageReloads`Focused row`
 
 test('onFocusedRowChanged event should fire once after changing focusedRowKey if paging.enabled = false (T755722)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   await t.expect(ClientFunction(() => (window as any).onFocusedRowChangedCounter)()).eql(1);
 
@@ -41,6 +42,8 @@ test('onFocusedRowChanged event should fire once after changing focusedRowKey if
 
 test('Form - Focused row should not be reset after editing a row (T851400)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
+
   const dataRow0 = dataGrid.getDataRow(0);
   const dataRow1 = dataGrid.getDataRow(1);
   const editForm = dataGrid.getEditForm();
@@ -106,6 +109,8 @@ test('Form - Focused row should not be reset after editing a row (T851400)', asy
 
 test('Popup - Focused row should not be reset after editing a row (T879627)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
+
   const dataRow0 = dataGrid.getDataRow(0);
   const dataRow1 = dataGrid.getDataRow(1);
   const popupEditForm = dataGrid.getPopupEditForm();
@@ -175,6 +180,8 @@ test('Popup - Focused row should not be reset after editing a row (T879627)', as
 ['Form', 'Popup'].forEach((mode) => {
   test(`${mode} - Focused row should not be reset after editing a row by API (T879627)`, async (t) => {
     const dataGrid = new DataGrid('#container');
+    await t.expect(dataGrid.isReady()).ok();
+
     const dataRow1 = dataGrid.getDataRow(1);
 
     await t
@@ -216,6 +223,8 @@ test('Popup - Focused row should not be reset after editing a row (T879627)', as
 
 test('Row - Focused row should not be reset after editing a row (T879627)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
+
   const dataRow0 = dataGrid.getDataRow(0);
   const dataRow1 = dataGrid.getDataRow(1);
 
@@ -281,6 +290,7 @@ test('Row - Focused row should not be reset after editing a row (T879627)', asyn
 
 test('Row - Focused row should be reset after editing a row by API (T879627)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
   const dataRow1 = dataGrid.getDataRow(1);
 
   await t
@@ -316,8 +326,10 @@ test('Row - Focused row should be reset after editing a row by API (T879627)', a
   },
 }));
 
-test.meta({ unstable: true })('Cell - Focused row should not be reset after editing a cell (T879627)', async (t) => {
+test('Cell - Focused row should not be reset after editing a cell (T879627)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
+
   const dataRow0 = dataGrid.getDataRow(0);
   const dataRow1 = dataGrid.getDataRow(1);
   const dataCell01 = dataRow0.getDataCell(1);
@@ -399,6 +411,8 @@ test.meta({ unstable: true })('Cell - Focused row should not be reset after edit
 
 test('Batch - Focused row should not be reset after editing a cell (T879627)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
+
   const saveButton = dataGrid.getHeaderPanel().getSaveButton();
   const dataRow0 = dataGrid.getDataRow(0);
   const dataRow1 = dataGrid.getDataRow(1);
@@ -492,6 +506,8 @@ test('Batch - Focused row should not be reset after editing a cell (T879627)', a
 ['Cell', 'Batch'].forEach((mode) => {
   test(`${mode} - Focused row should not be reset after editing a cell by API (T879627)`, async (t) => {
     const dataGrid = new DataGrid('#container');
+    await t.expect(dataGrid.isReady()).ok();
+
     const dataRow1 = dataGrid.getDataRow(1);
 
     await t
@@ -532,6 +548,7 @@ test('Batch - Focused row should not be reset after editing a cell (T879627)', a
 
 test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged events on scrolling if scrolling.mode and rowRenderingMode are virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   await t.expect(dataGrid.getFocusedRow().exists).ok();
 
@@ -627,6 +644,7 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
 
 test('Scrolling should work if scrolling.mode and rowRenderingMode are virtual row is focused (T907192)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   await t
     .expect(dataGrid.getFocusedRow().exists).ok()
@@ -660,6 +678,7 @@ test('Scrolling should work if scrolling.mode and rowRenderingMode are virtual r
 
 test('Scrolling should not occured after deleting via push API if scrolling.mode is virtual (T930434)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   await t
     .expect(dataGrid.getFocusedRow().exists).ok();
@@ -719,6 +738,8 @@ test('Scrolling should not occured after deleting via push API if scrolling.mode
 ['virtual', 'infinite'].forEach((scrollingMode) => {
   test(`Row should be focused after reloading the data source (scrolling.mode is ${scrollingMode}) (T1022502)`, async (t) => {
     const dataGrid = new DataGrid('#container');
+    await t.expect(dataGrid.isReady()).ok();
+
     const reloadDataSource = ClientFunction(() => (window as any).widget.getDataSource().reload());
     const getVisibleRowCount = ClientFunction(() => (window as any).widget.getVisibleRows().length);
 
@@ -763,6 +784,7 @@ test('Scrolling should not occured after deleting via push API if scrolling.mode
 
 test('Scroll should not change focused row if focus method is called inside onContentReady (T1047794)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   await t
     .expect(dataGrid.option('focusedRowKey')).eql(1)
@@ -842,6 +864,7 @@ const getDataGridConfig = (): any => ({
 
 test('Focused row should be shown after reloading the page (T1058983)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   await t
     .wait(1000);
@@ -865,6 +888,8 @@ test('Focused row should be shown after reloading the page (T1058983)', async (t
   await t
     .eval(() => location.reload());
   await createWidget('dxDataGrid', getDataGridConfig());
+  await t.expect(dataGrid.isReady()).ok();
+
   await t
     .wait(1000);
 
@@ -883,6 +908,7 @@ test('Focused row should be shown after reloading the page (T1058983)', async (t
 
 test('It is possible to focus row that was added via push method if previously row with same index was focused (T1202646)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   await t.click(dataGrid.getDataRow(0).element);
 
@@ -928,6 +954,7 @@ test('It is possible to focus row that was added via push method if previously r
   test(`Group should expand when focusedRowKey is set - group: ${groupValue}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid('#container');
+    await t.expect(dataGrid.isReady()).ok();
 
     await dataGrid.apiOption('focusedRowKey', 1);
 
@@ -990,3 +1017,93 @@ test('Group should expand when focusedRowKey is set and data items have \'items\
   height: 400,
   focusedRowEnabled: true,
 }));
+
+[false, true].forEach((useNative) => {
+  test(`navigateToRow method should scroll to the focused row after new rows are added via the push method when scrolling.mode is virtual and scrolling.useNative is ${useNative} (T1307127)`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid('#container');
+    const changes: { type: string; data: Record<string, unknown> }[] = new Array(50)
+      .fill(null)
+      .map((_, index) => ({
+        type: 'insert',
+        data: { id: 501 + index, firstName: `First${501 + index}`, lastName: `Last${501 + index}` },
+      }));
+
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    // act
+    await dataGrid.apiNavigateToRow(81);
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok()
+      .expect(dataGrid.apiGetTopVisibleRowKey())
+      .eql(81);
+
+    // act
+    await t.click(dataGrid.getDataCell(80, 0).element);
+
+    // assert
+    await t
+      .expect(dataGrid.apiOption('focusedRowKey'))
+      .eql(81);
+
+    // act
+    await dataGrid.scrollTo(t, { top: 0 });
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok()
+      .expect(dataGrid.apiGetTopVisibleRowKey())
+      .eql(1);
+
+    // act
+    await ClientFunction(() => {
+      (window as any).keyToNavigateTo = 81;
+    })();
+    await dataGrid.apiPush(changes);
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok()
+      .expect(dataGrid.apiTotalCount())
+      .eql(550)
+      .expect(dataGrid.apiGetTopVisibleRowKey())
+      .eql(81);
+  }).before(async () => createWidget('dxDataGrid', {
+    dataSource: new Array(500).fill(null).map((_, index) => ({
+      id: index + 1,
+      firstName: `First${index + 1}`,
+      lastName: `Last${index + 1}`,
+    })),
+    keyExpr: 'id',
+    height: 400,
+    repaintChangesOnly: true,
+    focusedRowEnabled: true,
+    scrolling: {
+      mode: 'virtual',
+      useNative,
+    },
+    columns: [
+      { dataField: 'firstName', width: 150 },
+      { dataField: 'lastName', width: 150 },
+    ],
+    onContentReady(e) {
+      const key = (window as any).keyToNavigateTo;
+
+      if (key !== undefined) {
+        (window as any).keyToNavigateTo = undefined;
+        e.component.navigateToRow(key);
+      }
+    },
+  })).after(async () => {
+    await ClientFunction(() => {
+      delete (window as any).keyToNavigateTo;
+    })();
+  });
+});

@@ -2264,7 +2264,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     $cell: dxElementWrapper,
     position: FocusedCellPosition,
     keyCode: NavigationKeyCode,
-  ): dxElementWrapper | undefined | null {
+  ): dxElementWrapper | null | undefined {
     if (!isElementDefined($cell) || this._isCellValid($cell)) {
       return $cell;
     }
@@ -2285,7 +2285,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   private resolveHiddenRowCell(
-    $cell: dxElementWrapper | undefined | null,
+    $cell: dxElementWrapper | null | undefined,
     originalPosition: FocusedCellPosition,
     keyCode: NavigationKeyCode,
   ): dxElementWrapper | null {

@@ -4,7 +4,8 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  merge_group:
+  push:
+    branches: [26_1]
   workflow_dispatch:
     inputs:
       SBOM:
@@ -111,7 +112,7 @@ jobs:
           retention-days: 1
 
       - name: Build SBOMs
-        if: ${{ github.event.inputs.SBOM == 'true' }}
+        if: ${{ github.event_name == 'push' || github.event.inputs.SBOM == 'true' }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -119,7 +120,7 @@ jobs:
           pnpm nx build sbom;
 
       - name: Upload SBOM artifacts
-        if: ${{ github.event.inputs.SBOM == 'true' }}
+        if: ${{ github.event_name == 'push' || github.event.inputs.SBOM == 'true' }}
         uses: actions/upload-artifact@v7
         with:
           name: sbom

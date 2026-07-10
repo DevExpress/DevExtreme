@@ -12,9 +12,9 @@ import {
     createWrapper,
     supportedScrollingModes
 } from '../../helpers/scheduler/helpers.js';
-import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
+import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
-import '__internal/scheduler/m_scheduler';
+import '__internal/scheduler/scheduler';
 import 'ui/switch';
 
 import 'fluent_blue_light.css!';
@@ -136,7 +136,11 @@ module('Integration: Appointments in Month view', {
                 ]
             });
 
-            assert.deepEqual(scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).length, 2, 'Appointments are rendered');
+            const getAppointmentCount = () => scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).length;
+
+            await waitForAsync(() => getAppointmentCount() === 2, undefined, 2000);
+
+            assert.deepEqual(getAppointmentCount(), 2, 'Appointments are rendered');
         });
     });
 

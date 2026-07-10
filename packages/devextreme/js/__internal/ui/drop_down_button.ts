@@ -211,7 +211,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     super._render();
   }
 
-  _renderContentImpl(): void | Promise<void> {
+  _renderContentImpl(): Promise<void> | void {
     if (this._popup) {
       this._renderPopupContent();
     }

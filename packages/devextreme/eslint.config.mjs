@@ -13,6 +13,7 @@ import globals from 'globals';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import { changeRulesToStylistic } from 'eslint-migration-utils';
 import unicorn from 'eslint-plugin-unicorn';
+import perfectionist from 'eslint-plugin-perfectionist';
 import customRules from './eslint_plugins/index.js';
 import spellCheckConfig from 'eslint-config-devextreme/spell-check';
 import typescriptConfig from 'eslint-config-devextreme/typescript';
@@ -390,6 +391,24 @@ export default [
             '@typescript-eslint/consistent-type-definitions': 'off',
             '@typescript-eslint/no-empty-interface': 'off',
             'devextreme-custom/jsdoc-default-matches-type': 'warn',
+        },
+    },
+    // Require `null` and `undefined` to be placed at the end of union types,
+    // with `null` before `undefined` when both are present.
+    // Applies to public API definitions and internal TS source.
+    {
+        files: ['js/**/*.d.ts', 'js/__internal/**/*.ts?(x)'],
+        plugins: {
+            perfectionist,
+        },
+        rules: {
+            'perfectionist/sort-union-types': ['error', {
+                type: 'unsorted',
+                groups: ['unknown', 'null', 'nullish'],
+                customGroups: [
+                    { groupName: 'null', elementNamePattern: '^null$' },
+                ],
+            }],
         },
     },
     // Rules for build folder

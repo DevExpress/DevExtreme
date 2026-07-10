@@ -86,7 +86,7 @@ class ResizeHandle extends Widget<ResizeHandleProperties> {
   private DOUBLE_CLICK_EVENT_NAME?: string;
 
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-  _supportedKeys(): Record<string, (e: KeyboardEvent) => void | boolean> {
+  _supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | void> {
     return {
       ...super._supportedKeys(),
       rightArrow(e: KeyboardEvent): void {

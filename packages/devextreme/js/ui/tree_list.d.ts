@@ -987,7 +987,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
      * @default "items"
      * @public
      */
-    itemsExpr?: string | ((item: TRowData, value: undefined | TRowData[]) => TRowData[] | undefined);
+    itemsExpr?: string | ((item: TRowData, value: TRowData[] | undefined) => TRowData[] | undefined);
     /**
      * @docid
      * @default "id"
@@ -997,7 +997,6 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:CellClickEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1005,7 +1004,6 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:CellDblClickEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1013,7 +1011,6 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:CellHoverChangedEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1021,7 +1018,6 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:CellPreparedEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1029,7 +1025,6 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:ContextMenuPreparingEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1037,7 +1032,6 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:EditingStartEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1045,7 +1039,6 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:EditorPreparedEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1053,7 +1046,6 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:EditorPreparingEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1061,7 +1053,6 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:FocusedCellChangedEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1069,7 +1060,6 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:FocusedCellChangingEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1077,7 +1067,6 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:FocusedRowChangedEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1085,7 +1074,6 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:FocusedRowChangingEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1093,7 +1081,6 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:NodesInitializedEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1101,7 +1088,6 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:RowClickEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1109,7 +1095,6 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:RowDblClickEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1117,7 +1102,6 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     /**
      * @docid
      * @type_function_param1 e:{ui/tree_list:RowPreparedEvent}
-     * @default null
      * @action
      * @public
      */
@@ -1183,7 +1167,6 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     toolbar?: Toolbar | undefined;
     /**
      * @docid
-     * @default null
      * @type_function_param1 e:{ui/tree_list:AIColumnRequestCreatingEvent}
      * @action
      * @public

@@ -1,0 +1,22 @@
+diff --git a/lib/transformation/internal-plugins/shadow-functions.js b/lib/transformation/internal-plugins/shadow-functions.js
+index e7f8739c31b4e079730a15e738ad864dbc458502..3ca4861b941c594e9500dcd6c0380f5dea7379cc 100644
+--- a/lib/transformation/internal-plugins/shadow-functions.js
++++ b/lib/transformation/internal-plugins/shadow-functions.js
+@@ -58,7 +58,7 @@ function shouldShadow(path, shadowPath) {
+ }
+ 
+ function remap(path, key) {
+-  var shadowPath = path.inShadow(key);
++  var shadowPath = typeof path.inShadow === 'function' ? path.inShadow(key) : false;
+   if (!shouldShadow(path, shadowPath)) return;
+ 
+   var shadowFunction = path.node._shadowedFunctionLiteral;
+@@ -83,7 +83,7 @@ function remap(path, key) {
+       if (shadowFunction) {
+         if (innerPath === shadowFunction || innerPath.node === shadowFunction.node) return true;
+       } else {
+-        if (!innerPath.is("shadow")) return true;
++        if (typeof innerPath.is !== 'function' || !innerPath.is("shadow")) return true;
+       }
+ 
+       passedShadowFunction = true;

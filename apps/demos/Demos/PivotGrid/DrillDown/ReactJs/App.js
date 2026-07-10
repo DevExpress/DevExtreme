@@ -7,7 +7,7 @@ import { sales } from './data.js';
 
 const App = () => {
   const [popupTitle, setPopupTitle] = useState('');
-  const [drillDownDataSource, setDrillDownDataSource] = useState(null);
+  const [drillDownDataSource, setDrillDownDataSource] = useState(undefined);
   const [popupVisible, setPopupVisible] = useState(false);
   const dataGridRef = useRef(null);
   const onCellClick = useCallback((e) => {

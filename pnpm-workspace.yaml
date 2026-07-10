@@ -46,7 +46,11 @@ overrides:
   "undici@>=7.23.0 <7.28.0": ^7.28.0
   "http-proxy-middleware@>=0.16.0 <3.0.7": ^3.0.7
   "piscina@>=5.0.0-alpha.0 <=5.1.4": ^5.1.5
-
+  "@sigstore/core@<=3.2.0": "^3.2.1"
+  "sigstore@<=4.1.0": "^4.1.1"
+  "@sigstore/verify@3.1.0": "^3.1.1"
+  "babel-traverse": "npm:@babel/traverse@^7.23.2"
+  "systemjs-builder>terser": 5.46.2
 catalog:
   axe-core: ^4.11.1
   inferno: ^8.2.3
@@ -65,6 +69,7 @@ catalog:
   eslint-plugin-import: 2.32.0
   eslint-plugin-jsx-a11y: 6.10.2
   eslint-plugin-no-only-tests: 3.3.0
+  eslint-plugin-perfectionist: 5.9.1
   eslint-plugin-qunit: 8.2.6
   eslint-plugin-vue: 10.4.0
   vue-eslint-parser: 10.0.0
@@ -102,7 +107,7 @@ catalogs:
     "typescript": ~5.8.0
     "zone.js": ~0.15.1
   tools:
-    "devextreme-internal-tools": 20.4.0
+    "devextreme-internal-tools": 22.0.0
     "prettier": 3.5.3
     "ts-node": 10.9.2
     "typescript": 5.9.3
@@ -125,6 +130,8 @@ allowBuilds:
 
 patchedDependencies:
   testcafe-hammerhead@31.7.8: patches/testcafe-hammerhead@31.7.8.patch
+  systemjs-builder@0.16.15: patches/systemjs-builder@0.16.15.patch
+  babel-core@6.26.3: patches/babel-core@6.26.3.patch
 
 minimumReleaseAgeExclude:
   - "eslint-config-devextreme"
@@ -144,3 +151,4 @@ minimumReleaseAgeExclude:
   - '@nx/nx-win32-x64-msvc@23.0.1'
   - '@nx/workspace@23.0.1'
   - nx@23.0.1
+  - devextreme-internal-tools@22.0.0

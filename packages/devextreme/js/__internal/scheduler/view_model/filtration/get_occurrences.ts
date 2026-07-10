@@ -1,6 +1,6 @@
 import type { Occurrence } from '@js/ui/scheduler';
 
-import type Scheduler from '../../m_scheduler';
+import type Scheduler from '../../scheduler';
 import type {
   CompareOptions, FilterOptions, MinimalAppointmentEntity,
 } from '../types';
