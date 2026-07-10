@@ -58,17 +58,19 @@ const App = () => {
       <SearchPanel visible={true} />
       <Toolbar>
         <Item location="before">
-          <span style={{ marginRight: '8px' }}>Similarity Factor:</span>
-          <NumberBox
-            defaultValue={similarityFactorRef.current}
-            min={0}
-            max={1}
-            format="0.00"
-            step={0.05}
-            showSpinButtons={true}
-            inputAttr={numberBoxAttr}
-            onValueChanged={onSimilarityFactorChanged}
-          />
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <span style={{ marginRight: '8px' }}>Similarity Factor:</span>
+            <NumberBox
+              defaultValue={similarityFactorRef.current}
+              min={0}
+              max={1}
+              format="0.00"
+              step={0.05}
+              showSpinButtons={true}
+              inputAttr={numberBoxAttr}
+              onValueChanged={onSimilarityFactorChanged}
+            />
+          </div>
         </Item>
         <Item name="searchPanel" />
       </Toolbar>

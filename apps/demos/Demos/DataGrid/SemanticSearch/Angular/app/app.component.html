@@ -13,16 +13,16 @@
       <div *dxTemplate>
         <div style="display: flex; align-items: center;">
           <span style="margin-right: 8px;">Similarity Factor:</span>
-            <dx-number-box
-              [value]="similarityFactor"
-              [min]="0"
-              [max]="1"
-              format="0.00"
-              [step]="0.05"
-              [showSpinButtons]="true"
-              [inputAttr]="{ 'aria-label': 'Similarity Factor' }"
-              (onValueChanged)="onSimilarityFactorChanged($event)"
-            ></dx-number-box>
+          <dx-number-box
+            [value]="similarityFactor"
+            [min]="0"
+            [max]="1"
+            format="0.00"
+            [step]="0.05"
+            [showSpinButtons]="true"
+            [inputAttr]="{ 'aria-label': 'Similarity Factor' }"
+            (onValueChanged)="onSimilarityFactorChanged($event)"
+          ></dx-number-box>
         </div>
       </div>
     </dxi-data-grid-item>

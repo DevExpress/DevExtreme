@@ -21,17 +21,19 @@
     <DxColumn data-field="Name"/>
     <DxColumn data-field="Description"/>
     <template #similarityFactorTemplate>
-      <span style="margin-right: 8px">Similarity Factor:</span>
-      <DxNumberBox
-        :value="similarityFactor"
-        :min="0"
-        :max="1"
-        format="0.00"
-        :step="0.05"
-        :show-spin-buttons="true"
-        input-attr="{ 'aria-label': 'Similarity Factor' }"
-        @value-changed="onSimilarityFactorChanged"
-      />
+      <div style="display: flex; align-items: center;">
+        <span style="margin-right: 8px">Similarity Factor:</span>
+        <DxNumberBox
+          :value="similarityFactor"
+          :min="0"
+          :max="1"
+          format="0.00"
+          :step="0.05"
+          :show-spin-buttons="true"
+          input-attr="{ 'aria-label': 'Similarity Factor' }"
+          @value-changed="onSimilarityFactorChanged"
+        />
+      </div>
     </template>
   </DxDataGrid>
 </template>

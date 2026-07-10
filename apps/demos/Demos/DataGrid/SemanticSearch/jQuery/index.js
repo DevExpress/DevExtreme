@@ -37,13 +37,16 @@ $(() => {
       items: [
         {
           location: 'before',
-          template: function (data, container) {
-            $('<span>')
+          template: function () {
+            const container = $('<div>')
+              .css('display', 'flex')
+              .css('align-items', 'center');
+
+            const label = $('<span>')
               .text('Similarity Factor:')
-              .css('margin-right', '8px')
-              .appendTo(container);
-            $('<div>')
-              .appendTo(container)
+              .css('margin-right', '8px');
+
+            const editor = $('<div>')
               .dxNumberBox({
                 value: similarityFactor,
                 min: 0,
@@ -59,6 +62,8 @@ $(() => {
                   }
                 },
               });
+
+              return container.append(label, editor);
           }
         },
         {
