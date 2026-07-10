@@ -495,9 +495,10 @@ export class FieldChooserBase extends mixinWidget {
   // fields by the closest field chooser root.
   private _getAreaFieldElements(area: string): HTMLElement[] {
     const ownFieldChooserRoot = this.$element().closest(`.${CLASSES.fieldChooser.self}`).get(0) ?? null;
+    // NOTE: get() without an index is not supported by the native renderer.
     const fields: HTMLElement[] = this.$element()
       .find(`[group="${area}"] .${CLASSES.area.field}.${CLASSES.area.box}`)
-      .get();
+      .toArray();
 
     return fields.filter((field) => {
       const fieldChooserRoot = $(field).closest(`.${CLASSES.fieldChooser.self}`).get(0) ?? null;
