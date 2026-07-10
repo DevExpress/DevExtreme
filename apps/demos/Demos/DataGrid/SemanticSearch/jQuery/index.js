@@ -21,11 +21,11 @@ $(() => {
     height: 600,
     columns: [{
       dataField: 'ID',
-      width: 50
+      width: 50,
     }, {
-      dataField: 'Name'
+      dataField: 'Name',
     }, {
-      dataField: 'Description'
+      dataField: 'Description',
     }],
     scrolling: {
       mode: 'virtual',
@@ -37,7 +37,7 @@ $(() => {
       items: [
         {
           location: 'before',
-          template: function () {
+          template() {
             const container = $('<div>')
               .css('display', 'flex')
               .css('align-items', 'center');
@@ -63,8 +63,8 @@ $(() => {
                 },
               });
 
-              return container.append(label, editor);
-          }
+            return container.append(label, editor);
+          },
         },
         {
           name: 'searchPanel',

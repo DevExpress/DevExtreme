@@ -22,7 +22,7 @@ const App = () => {
       onBeforeSend(method, ajaxOptions) {
         ajaxOptions.xhrFields = { withCredentials: true };
       },
-    })
+    }),
   }), []);
 
   const onSimilarityFactorChanged = useCallback(({ value }: NumberBoxTypes.ValueChangedEvent) => {

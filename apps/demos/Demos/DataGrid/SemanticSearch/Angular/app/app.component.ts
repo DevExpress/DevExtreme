@@ -46,7 +46,7 @@ export class AppComponent {
         onBeforeSend: (method, ajaxOptions) => {
           ajaxOptions.xhrFields = { withCredentials: true };
         },
-      })
+      }),
     });
   }
 

@@ -17,7 +17,10 @@
         name="searchPanel"
       />
     </DxToolbar>
-    <DxColumn data-field="ID" :width="50"/>
+    <DxColumn
+      data-field="ID"
+      :width="50"
+    />
     <DxColumn data-field="Name"/>
     <DxColumn data-field="Description"/>
     <template #similarityFactorTemplate>
@@ -68,7 +71,7 @@ const dataSource = new DataSource({
     onBeforeSend(method, ajaxOptions) {
       ajaxOptions.xhrFields = { withCredentials: true };
     },
-  })
+  }),
 });
 
 const onSimilarityFactorChanged = (e: DxNumberBoxTypes.ValueChangedEvent) => {
