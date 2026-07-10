@@ -4,7 +4,6 @@ import { DxDataGridModule, type DxDataGridTypes } from 'devextreme-angular/ui/da
 import { DxNumberBoxModule, type DxNumberBoxTypes } from 'devextreme-angular/ui/number-box';
 import { DataSource } from 'devextreme-angular/common/data';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
-import 'anti-forgery';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
