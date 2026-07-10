@@ -21,7 +21,6 @@ const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridSemanticSearch'
 @Component({
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
   imports: [
     DxDataGridModule,
     DxNumberBoxModule,
