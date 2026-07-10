@@ -1,0 +1,143 @@
+diff --git a/lib/output.js b/lib/output.js
+index 18999ece8f59ff4f7f94b70244f8080dcc9b8da5..99749e9c67be7848f7e9629a0a10ec27c9300636 100644
+--- a/lib/output.js
++++ b/lib/output.js
+@@ -9,17 +9,6 @@ var terser = require('terser');
+ var fromFileURL = require('./utils').fromFileURL;
+ var toFileURL = require('./utils').toFileURL;
+ 
+-// Ugly hack to get around terser's strange code loading and export system
+-// (inherited from uglify-js), and the fact that their SourceMap wrapper is
+-// not exported
+-var TerserSourceMap = new Function('MOZ_SourceMap', "exports", "require", function() {
+-  var code = ['terser/lib/utils.js', 'terser/lib/sourcemap.js'].map(function(file) {
+-    return fs.readFileSync(require.resolve(file), 'utf8');
+-  });
+-  code.push('return SourceMap;');
+-  return code.join('\n');
+-}())(require('source-map'), terser, require);
+-
+ function countLines(str) {
+   return str.split(/\r\n|\r|\n/).length;
+ }
+@@ -84,48 +73,43 @@ function createOutput(outFile, outputs, basePath, sourceMaps, sourceMapContents)
+ }
+ 
+ function minify(output, fileName, mangle, uglifyOpts) {
+-  var files = {};
+-  files[fileName] = output.source;
+-  var result;
+-  try{
+-    result = terser.minify(files, {
+-      parse: {},
+-      compress: uglifyOpts.compress,
+-      mangle: mangle,
+-      output: { ast: true, code: false }
+-    });
+-  } catch(e){
+-    throw new Error(e);
+-  }
+-
+-  if (result.error) {
+-    throw new Error(result.error);
+-  }
+-
+-  var ast = result.ast;
++  uglifyOpts = uglifyOpts || {};
+ 
+-  var sourceMap;
++  var sourceMapConfig = false;
+   if (output.sourceMap) {
+-    if (typeof output.sourceMap === 'string')
+-      output.sourceMap = JSON.parse(output.sourceMap);
+-
+-    sourceMap = TerserSourceMap({
+-      file: fileName,
+-      orig: output.sourceMap
+-    });
++    var mapContent = output.sourceMap;
++    if (typeof mapContent !== 'string')
++      mapContent = JSON.stringify(mapContent);
++
++    sourceMapConfig = {
++      filename: fileName,
++      content: mapContent,
++    };
+   }
+ 
+-  var outputOptions = uglifyOpts.beautify;
+-  // keep first comment
+-  outputOptions.comments = outputOptions.comments || function(node, comment) {
++  var formatOptions = uglifyOpts.beautify || uglifyOpts.output || {};
++  var comments = formatOptions.comments || function(_node, comment) {
+     return comment.line === 1 && comment.col === 0;
+   };
+-  outputOptions.source_map = sourceMap;
+ 
+-  output.source = ast.print_to_string(outputOptions);
+-  output.sourceMap = sourceMap;
++  return Promise.resolve(terser.minify(output.source, {
++    compress: uglifyOpts.compress,
++    mangle: mangle,
++    sourceMap: sourceMapConfig,
++    format: extend({
++      comments: comments,
++    }, formatOptions),
++  })).then(function(result) {
++    if (result.error)
++      throw new Error(result.error);
++
++    output.source = result.code;
+ 
+-  return output;
++    if (result.map)
++      output.sourceMap = typeof result.map === 'string' ? result.map : JSON.stringify(result.map);
++
++    return output;
++  });
+ }
+ 
+ function writeOutputFile(outFile, source, sourceMap) {
+@@ -138,7 +122,7 @@ function writeOutputFile(outFile, source, sourceMap) {
+ 
+     var sourceMapFileName = path.basename(outFile) + '.map';
+     source += '\n//# sourceMappingURL=' + sourceMapFileName;
+-    
++
+     return asp(fs.writeFile)(path.resolve(outDir, sourceMapFileName), sourceMap);
+   })
+   .then(function() {
+@@ -160,19 +144,22 @@ exports.writeOutputs = function(outputs, baseURL, outputOpts) {
+   var fileName = outFile && path.basename(outFile) || 'output.js';
+ 
+   var output = createOutput(outFile || path.resolve(basePath, fileName), outputs, basePath, outputOpts.sourceMaps, outputOpts.sourceMapContents);
+-	
+-  if (outputOpts.minify)
+-    output = minify(output, fileName, outputOpts.mangle, outputOpts.uglify);
+ 
+-  if (outputOpts.sourceMaps == 'inline') {
+-    output.source = inlineSourceMap(output.source, output.sourceMap);
+-    output.sourceMap = undefined;
+-  }
++  var outputPromise = outputOpts.minify
++    ? minify(output, fileName, outputOpts.mangle, outputOpts.uglify)
++    : Promise.resolve(output);
+ 
+-  if (!outputOpts.outFile)
+-    return Promise.resolve(output);
++  return outputPromise.then(function(output) {
++    if (outputOpts.sourceMaps == 'inline') {
++      output.source = inlineSourceMap(output.source, output.sourceMap);
++      output.sourceMap = undefined;
++    }
+ 
+-  return writeOutputFile(outFile, output.source, output.sourceMap).then(function() {
+-    return output;
++    if (!outputOpts.outFile)
++      return output;
++
++    return writeOutputFile(outFile, output.source, output.sourceMap).then(function() {
++      return output;
++    });
+   });
+ };

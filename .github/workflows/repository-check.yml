@@ -16,8 +16,6 @@ jobs:
       config: |
         {
           ignoredAdvisories: [
-            'GHSA-67hx-6x53-jw92', // babel-traverse
-            'GHSA-4wf5-vphf-c2xc', // terser
             'GHSA-rgjc-h3x7-9mwg', // @angular/core
             'GHSA-48r7-hpm6-gfxm', // @angular/common
             'GHSA-39pv-4j6c-2g6v', // @angular/common
