@@ -117,8 +117,6 @@
                 "gulp-sass",
                 "gulp-babel",
                 "gulp-typescript",
-                "gulp-clean",
-                "gulp-minify",
                 "gulp-replace",
                 "gulp-sourcemaps",
                 "gulp-cache",
