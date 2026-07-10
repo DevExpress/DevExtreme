@@ -1018,6 +1018,7 @@ test('Group should expand when focusedRowKey is set and data items have \'items\
 
 [false, true].forEach((useNative) => {
   test(`navigateToRow method should scroll to the focused row after new rows are added via the push method when scrolling.mode is virtual and scrolling.useNative is ${useNative} (T1307127)`, async (t) => {
+    // arrange
     const dataGrid = new DataGrid('#container');
     const changes: { type: string; data: Record<string, unknown> }[] = new Array(50)
       .fill(null)
@@ -1032,18 +1033,33 @@ test('Group should expand when focusedRowKey is set and data items have \'items\
 
     // act
     await dataGrid.apiNavigateToRow(81);
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok()
+      .expect(dataGrid.apiGetTopVisibleRowKey())
+      .eql(81);
+
+    // act
     await t.click(dataGrid.getDataCell(80, 0).element);
 
+    // assert
     await t
       .expect(dataGrid.apiOption('focusedRowKey'))
       .eql(81);
 
+    // act
     await dataGrid.scrollTo(t, { top: 0 });
 
+    // assert
     await t
       .expect(dataGrid.isReady())
-      .ok();
+      .ok()
+      .expect(dataGrid.apiGetTopVisibleRowKey())
+      .eql(1);
 
+    // act
     await ClientFunction(() => {
       (window as any).keyToNavigateTo = 81;
     })();
