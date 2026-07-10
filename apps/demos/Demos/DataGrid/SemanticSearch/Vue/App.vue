@@ -54,7 +54,7 @@ import {
   type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import DxNumberBox, { type DxNumberBoxTypes } from 'devextreme-vue/number-box';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-vue/common/data';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridSemanticSearch';

@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useMemo } from 'react';
 import DataGrid, { Column, Scrolling, SearchPanel, Toolbar, Item, type DataGridTypes } from 'devextreme-react/data-grid';
 import NumberBox, { type NumberBoxTypes } from 'devextreme-react/number-box';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-react/common/data';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridSemanticSearch';
