@@ -11,8 +11,8 @@
   <dxo-data-grid-toolbar>
     <dxi-data-grid-item location="before">
       <div *dxTemplate>
-        <div style="display: flex; align-items: center">
-          <span style="margin-right: 8px">Similarity Factor:</span>
+        <div [style]="{ display: 'flex', alignItems: 'center' }">
+          <span [style]="{ marginRight: '8px' }">Similarity Factor:</span>
           <dx-number-box
             [value]="similarityFactor"
             [min]="0"
