@@ -163,9 +163,19 @@ export class FieldChooserBase extends mixinWidget {
   _refreshDataSource() {
     const dataSource = this.option('dataSource');
 
+    // Field indexes are only meaningful within one data source, so the roving
+    // tab stops fall back to the first field of each area.
+    this._resetFieldNavigation();
+
     if (dataSource?.fields && dataSource.load/* instanceof DX.ui.dxPivotGrid.DataSource */) {
       this._dataSource = dataSource;
     }
+  }
+
+  private _resetFieldNavigation(): void {
+    Object.values(this._fieldNavigationMap ?? {}).forEach((navigation) => {
+      navigation.reset();
+    });
   }
 
   _optionChanged(args) {
