@@ -14,7 +14,7 @@ import { getCurrentTheme } from './helpers/themeUtils';
 
 const LAUNCH_RETRY_ATTEMPTS = 3;
 const LAUNCH_RETRY_TIMEOUT = 10000;
-const FAILED_TESTS_RETRY_ATTEMPTS = 2;
+const FAILED_TESTS_RETRY_ATTEMPTS = 0;
 
 const wait = async (
   timeout: number,
@@ -313,10 +313,7 @@ async function main() {
     // Retry failed tests multiple times if enabled and there are failures
     if (args.retryFailed && failedTests.size > 0 && failedCount > 0) {
       const initialFailedCount = failedTests.size;
-      const noRetryFolders = ['cardView', 'dataGrid', 'common'];
-      let attemptsLeft = noRetryFolders.some((folder) => componentFolderArg === folder || componentFolderArg.startsWith(`${folder}/`))
-        ? 0
-        : FAILED_TESTS_RETRY_ATTEMPTS;
+      let attemptsLeft = FAILED_TESTS_RETRY_ATTEMPTS;
 
       while (attemptsLeft > 0 && failedCount > 0) {
         const attemptNumber = FAILED_TESTS_RETRY_ATTEMPTS - attemptsLeft + 1;

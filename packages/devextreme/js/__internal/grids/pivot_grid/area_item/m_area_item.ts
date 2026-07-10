@@ -1,5 +1,6 @@
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
+import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
@@ -7,6 +8,7 @@ import { setWidth } from '@js/core/utils/size';
 import { setStyle } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
 import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
+import { foreachColumnInfo } from '@ts/grids/grid_core/virtual_columns/m_virtual_columns_core';
 
 const PIVOTGRID_EXPAND_CLASS = 'dx-expand';
 
@@ -104,7 +106,9 @@ abstract class AreaItem {
   }
 
   _createTableElement() {
-    return $('<table>');
+    return $('<table>')
+      .attr('id', `dx-${new Guid()}`)
+      .attr('role', 'presentation');
   }
 
   _getCellText(cell, encodeHtml) {
@@ -132,11 +136,66 @@ abstract class AreaItem {
   }
 
   _getMainElementMarkup() {
-    return domAdapter.createElement('tbody');
+    const tbody = domAdapter.createElement('tbody');
+    tbody.setAttribute('role', 'presentation');
+    return tbody;
   }
 
   _getCloseMainElementMarkup() {
     return '</tbody>';
+  }
+
+  _getColumnIndexOffset() {
+    return this.component._dataController?.getColumnIndexOffset() || 0;
+  }
+
+  _getRowIndexOffset() {
+    return this.component._dataController?.getRowIndexOffset() || 0;
+  }
+
+  _createColumnIndexMap(data) {
+    const columnIndexMap = new Map();
+
+    foreachColumnInfo(data, (cell, visibleIndex, rowIndex, colIndex) => {
+      columnIndexMap.set(`${rowIndex}-${colIndex}`, visibleIndex);
+    });
+
+    return columnIndexMap;
+  }
+
+  _getCellAriaRole() {
+    const rolesByArea = {
+      column: 'columnheader',
+      row: 'rowheader',
+      data: 'gridcell',
+    };
+
+    return rolesByArea[this._getAreaName()];
+  }
+
+  _setCellAriaIndexAttributes(td, options) {
+    const {
+      areaName,
+      rowIndex,
+      columnIndex,
+      columnIndexMap,
+      columnIndexOffset,
+      rowIndexOffset,
+    } = options;
+
+    if (areaName === 'column' || areaName === 'data') {
+      const visibleColumnIndex = areaName === 'column'
+        ? columnIndexMap.get(`${rowIndex}-${columnIndex}`)
+        : columnIndex;
+
+      if (visibleColumnIndex !== undefined) {
+        td.setAttribute('aria-colindex', String(visibleColumnIndex + columnIndexOffset + 1));
+      }
+    }
+
+    if (areaName === 'row' || areaName === 'data') {
+      td.setAttribute('aria-rowindex', String(rowIndex + rowIndexOffset + 1));
+    }
   }
 
   _renderTableContent(tableElement, data) {
@@ -149,20 +208,33 @@ abstract class AreaItem {
     tableElement.css('width', '');
 
     const tbody = this._getMainElementMarkup();
+    const areaName = this._getAreaName();
+    const columnIndexOffset = this._getColumnIndexOffset();
+    const rowIndexOffset = this._getRowIndexOffset();
+    const columnIndexMap = areaName === 'column'
+      ? this._createColumnIndexMap(data)
+      : null;
+    const cellAriaRole = this._getCellAriaRole();
 
     for (let i = 0; i < rowsCount; i += 1) {
       const row = data[i];
       const rowClassNames = [];
 
       const tr = domAdapter.createElement('tr');
+      tr.setAttribute('role', 'row');
 
       for (let j = 0; j < row.length; j += 1) {
         const cell = row[j];
         const td = domAdapter.createElement('td');
 
+        if (cellAriaRole && !cell?.isWhiteSpace) {
+          td.setAttribute('role', cellAriaRole);
+        }
+
         this._getRowClassNames(i, cell, rowClassNames);
 
         let cellText = '';
+        const span = domAdapter.createElement('span');
 
         if (cell) {
           cell.rowspan && td.setAttribute('rowspan', cell.rowspan || 1);
@@ -194,9 +266,9 @@ abstract class AreaItem {
           if (isDefined(cell.expanded)) {
             const div = domAdapter.createElement('div');
             div.classList.add('dx-expand-icon-container');
-            const span = domAdapter.createElement('span');
-            span.classList.add(PIVOTGRID_EXPAND_CLASS);
-            div.appendChild(span);
+            const expandSpan = domAdapter.createElement('span');
+            expandSpan.classList.add(PIVOTGRID_EXPAND_CLASS);
+            div.appendChild(expandSpan);
             td.appendChild(div);
             const ariaLabel = String(cell.text ?? cell.value ?? '');
             div.setAttribute('role', 'button');
@@ -206,22 +278,29 @@ abstract class AreaItem {
           }
 
           cellText = this._getCellText(cell, encodeHtml);
-        }
 
-        const span = domAdapter.createElement('span');
-
-        if (isDefined(cell.wordWrapEnabled)) {
-          span.style.whiteSpace = cell.wordWrapEnabled ? 'normal' : 'nowrap';
+          if (isDefined(cell.wordWrapEnabled)) {
+            span.style.whiteSpace = cell.wordWrapEnabled ? 'normal' : 'nowrap';
+          }
         }
 
         span.innerHTML = cellText;
         td.appendChild(span);
 
-        if (cell.sorted) {
-          const span = domAdapter.createElement('span');
-          span.classList.add('dx-icon-sorted');
-          td.appendChild(span);
+        if (cell?.sorted) {
+          const sortedSpan = domAdapter.createElement('span');
+          sortedSpan.classList.add('dx-icon-sorted');
+          td.appendChild(sortedSpan);
         }
+
+        this._setCellAriaIndexAttributes(td, {
+          areaName,
+          rowIndex: i,
+          columnIndex: j,
+          columnIndexMap,
+          columnIndexOffset,
+          rowIndexOffset,
+        });
 
         tr.appendChild(td);
       }
@@ -551,6 +630,8 @@ abstract class AreaItem {
     if (!that._fakeTable) {
       that._fakeTable = that.tableElement()
         .clone()
+        .removeAttr('id')
+        .attr('aria-hidden', 'true')
         .addClass('dx-pivot-grid-fake-table')
         .appendTo(that._virtualContent);
     }
@@ -641,6 +722,13 @@ abstract class AreaItem {
     if (this._virtualContent) {
       this._createFakeTable();
       this._moveFakeTable(pos);
+    }
+  }
+
+  scrollToElement(element) {
+    const scrollable = this._getScrollable();
+    if (scrollable) {
+      scrollable.scrollToElement(element);
     }
   }
 

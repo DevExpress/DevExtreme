@@ -120,6 +120,11 @@ const subscribes = {
   },
 
   // TODO<Appointments>: delete this method when old impl is removed
+  focusFallbackAfterDelete() {
+    this.focusFallbackAfterDelete();
+  },
+
+  // TODO<Appointments>: delete this method when old impl is removed
   createFormattedDateText(
     appointment: AppointmentTooltipItem['appointment'],
     targetedAppointmentRaw: TargetedAppointment,

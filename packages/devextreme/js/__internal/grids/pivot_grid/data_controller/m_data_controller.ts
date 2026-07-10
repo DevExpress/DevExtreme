@@ -1336,6 +1336,18 @@ class DataController {
     return this._columnPageIndex || 0;
   }
 
+  getColumnIndexOffset() {
+    return this._columnsScrollController
+      ? this._columnsScrollController.beginPageIndex() * this._columnsScrollController.pageSize()
+      : 0;
+  }
+
+  getRowIndexOffset() {
+    return this._rowsScrollController
+      ? this._rowsScrollController.beginPageIndex() * this._rowsScrollController.pageSize()
+      : 0;
+  }
+
   getCellsInfo(getAllData) {
     const rowsInfo = this.getRowsInfo(getAllData);
     const columnsInfo = this.getColumnsInfo(getAllData);

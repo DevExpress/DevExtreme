@@ -64,10 +64,10 @@ export class DxoStateStoringComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get storageKey(): string {
+    get storageKey(): string | undefined {
         return this._getOption('storageKey');
     }
-    set storageKey(value: string) {
+    set storageKey(value: string | undefined) {
         this._setOption('storageKey', value);
     }
 

@@ -309,60 +309,60 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     moveItemOnDrop?: boolean;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/sortable:AddEvent}
      * @action
      * @public
      */
-    onAdd?: ((e: AddEvent) => void);
+    onAdd?: ((e: AddEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/sortable:DragChangeEvent}
      * @action
      * @public
      */
-    onDragChange?: ((e: DragChangeEvent) => void);
+    onDragChange?: ((e: DragChangeEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/sortable:DragEndEvent}
      * @action
      * @public
      */
-    onDragEnd?: ((e: DragEndEvent) => void);
+    onDragEnd?: ((e: DragEndEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/sortable:DragMoveEvent}
      * @action
      * @public
      */
-    onDragMove?: ((e: DragMoveEvent) => void);
+    onDragMove?: ((e: DragMoveEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/sortable:DragStartEvent}
      * @action
      * @public
      */
-    onDragStart?: ((e: DragStartEvent) => void);
+    onDragStart?: ((e: DragStartEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/sortable:RemoveEvent}
      * @action
      * @public
      */
-    onRemove?: ((e: RemoveEvent) => void);
+    onRemove?: ((e: RemoveEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/sortable:ReorderEvent}
      * @action
      * @public
      */
-    onReorder?: ((e: ReorderEvent) => void);
+    onReorder?: ((e: ReorderEvent) => void) | undefined;
 }
 /**
  * @docid

@@ -1037,8 +1037,8 @@ type IEditingProps = React.PropsWithChildren<{
   allowUpdating?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean);
   changes?: Array<DataChange>;
   confirmDelete?: boolean;
-  editColumnName?: string;
-  editRowKey?: any;
+  editColumnName?: string | undefined;
+  editRowKey?: any | undefined;
   form?: dxFormOptions;
   mode?: GridsEditMode;
   popup?: dxPopupOptions<any>;
@@ -1062,10 +1062,10 @@ type IEditingProps = React.PropsWithChildren<{
   useIcons?: boolean;
   defaultChanges?: Array<DataChange>;
   onChangesChange?: (value: Array<DataChange>) => void;
-  defaultEditColumnName?: string;
-  onEditColumnNameChange?: (value: string) => void;
-  defaultEditRowKey?: any;
-  onEditRowKeyChange?: (value: any) => void;
+  defaultEditColumnName?: string | undefined;
+  onEditColumnNameChange?: (value: string | undefined) => void;
+  defaultEditRowKey?: any | undefined;
+  onEditRowKeyChange?: (value: any | undefined) => void;
 }>
 const _componentEditing = (props: IEditingProps) => {
   return React.createElement(NestedOption<IEditingProps>, {
@@ -1387,11 +1387,11 @@ type IFilterBuilderProps = React.PropsWithChildren<{
   maxGroupLevel?: number | undefined;
   onContentReady?: ((e: FilterBuilderContentReadyEvent) => void);
   onDisposing?: ((e: FilterBuilderDisposingEvent) => void);
-  onEditorPrepared?: ((e: FilterBuilderEditorPreparedEvent) => void);
-  onEditorPreparing?: ((e: FilterBuilderEditorPreparingEvent) => void);
+  onEditorPrepared?: ((e: FilterBuilderEditorPreparedEvent) => void) | undefined;
+  onEditorPreparing?: ((e: FilterBuilderEditorPreparingEvent) => void) | undefined;
   onInitialized?: ((e: FilterBuilderInitializedEvent) => void);
   onOptionChanged?: ((e: FilterBuilderOptionChangedEvent) => void);
-  onValueChanged?: ((e: FilterBuilderValueChangedEvent) => void);
+  onValueChanged?: ((e: FilterBuilderValueChangedEvent) => void) | undefined;
   rtlEnabled?: boolean;
   tabIndex?: number;
   value?: Array<any> | (() => any) | string;
@@ -2986,7 +2986,7 @@ type IStateStoringProps = React.PropsWithChildren<{
   customSave?: ((gridState: any) => void);
   enabled?: boolean;
   savingTimeout?: number;
-  storageKey?: string;
+  storageKey?: string | undefined;
   type?: StateStoreType;
 }>
 const _componentStateStoring = (props: IStateStoringProps) => {

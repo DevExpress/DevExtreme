@@ -6817,7 +6817,7 @@ test('Focus should be set to the grid to allow keyboard navigation when the focu
 });
 
 [true, false].forEach((focusedRowEnabled) => {
-  test(`Focus should return to the last active cell when re-entering the rowsview via kbn if focusedRowEnabled=${focusedRowEnabled} (T1308919)`, async (t) => {
+  test.meta({ unstable: focusedRowEnabled })(`Focus should return to the last active cell when re-entering the rowsview via kbn if focusedRowEnabled=${focusedRowEnabled} (T1308919)`, async (t) => {
     // arrange
     const button = new Button('#otherContainer');
     const dataGrid = new DataGrid('#container');

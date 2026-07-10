@@ -1172,11 +1172,11 @@ type IFilterBuilderProps = React.PropsWithChildren<{
   maxGroupLevel?: number | undefined;
   onContentReady?: ((e: FilterBuilderContentReadyEvent) => void);
   onDisposing?: ((e: FilterBuilderDisposingEvent) => void);
-  onEditorPrepared?: ((e: EditorPreparedEvent) => void);
-  onEditorPreparing?: ((e: EditorPreparingEvent) => void);
+  onEditorPrepared?: ((e: EditorPreparedEvent) => void) | undefined;
+  onEditorPreparing?: ((e: EditorPreparingEvent) => void) | undefined;
   onInitialized?: ((e: FilterBuilderInitializedEvent) => void);
   onOptionChanged?: ((e: FilterBuilderOptionChangedEvent) => void);
-  onValueChanged?: ((e: ValueChangedEvent) => void);
+  onValueChanged?: ((e: ValueChangedEvent) => void) | undefined;
   rtlEnabled?: boolean;
   tabIndex?: number;
   value?: Array<any> | (() => any) | string;
