@@ -67,10 +67,10 @@ function getArraysDiff(options: {
   match: (x: Item, y: Item) => boolean;
   equal: (x: Item, y: Item) => boolean;
   canResize: (x: Item, y: Item) => boolean;
-  itemsLengthEqual: (x: Item, y: Item) => boolean;
+  itemsEqual: (x: Item, y: Item) => boolean;
 }): DiffItem[] {
   const {
-    a, b, match, equal, canResize, itemsLengthEqual,
+    a, b, match, equal, canResize, itemsEqual,
   } = options;
   const n = a.length;
   const m = b.length;
@@ -96,7 +96,7 @@ function getArraysDiff(options: {
 
     if (match(ai, bj)) {
       switch (true) {
-        case !itemsLengthEqual(ai, bj):
+        case !itemsEqual(ai, bj):
           result.push({ item: bj, needToUpdateItems: true, oldSortedIndex: ai.sortedIndex });
           break;
         case equal(ai, bj):
@@ -158,9 +158,14 @@ export const getViewModelDiff = (
     // eslint-disable-next-line @stylistic/implicit-arrow-linebreak
     equalByValue(getObjectToCompare(a, false), getObjectToCompare(b, false));
 
-  const itemsLengthEqual = (a: Item, b: Item): boolean => !isCollectorViewModel(a)
-    || !isCollectorViewModel(b)
-    || a.items.length === b.items.length;
+  const itemsEqual = (a: Item, b: Item): boolean => {
+    if (!isCollectorViewModel(a) || !isCollectorViewModel(b)) {
+      return true;
+    }
+
+    return a.items.length === b.items.length
+      && !b.items.some((item) => isAppointmentDataChanged(item.itemData, appointmentDataSource));
+  };
 
   const result = getArraysDiff({
     a: oldViewModel,
@@ -168,7 +173,7 @@ export const getViewModelDiff = (
     match,
     equal,
     canResize,
-    itemsLengthEqual,
+    itemsEqual,
   });
 
   return result;
