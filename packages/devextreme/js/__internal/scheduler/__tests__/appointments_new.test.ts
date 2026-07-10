@@ -762,6 +762,29 @@ describe('New Appointments', () => {
 
         expect(POM.tooltip.isVisible()).toBe(false);
       });
+
+      it('should show updated appointment data in the collector tooltip after a hidden appointment is updated', async () => {
+        const dataSource = [
+          { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+          { text: 'Appointment 2', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+          { text: 'Appointment 3', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+        ];
+        const { POM, scheduler } = await createScheduler({ ...getConfig(), dataSource });
+
+        await scheduler.updateAppointment(dataSource[1], {
+          ...dataSource[1],
+          endDate: new Date(2015, 1, 9, 8, 30),
+        });
+
+        jest.useFakeTimers();
+        POM.getCollectorButton().click();
+        jest.runAllTimers();
+
+        const updatedItem = POM.tooltip.getAppointmentItems().find(
+          (item) => item.textContent?.includes('Appointment 2'),
+        );
+        expect(updatedItem?.textContent).toContain('8:30');
+      });
     });
   });
 

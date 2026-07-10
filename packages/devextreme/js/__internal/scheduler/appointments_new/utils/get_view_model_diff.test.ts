@@ -295,6 +295,43 @@ describe('getViewModelDiff', () => {
       expect(diff).toEqual([{ item: b[0], needToUpdateItems: true, oldSortedIndex: 0 }]);
     });
 
+    it('should mark needToUpdateItems for a collector when a hidden appointment data changed', () => {
+      const data1: ItemData = {};
+      const data2: ItemData = {};
+      const a = [mockAppointmentCollectorViewModel(data1, {
+        sortedIndex: 0,
+        items: [mockGridViewModel(data1), mockGridViewModel(data2)],
+      })];
+      const b = [mockAppointmentCollectorViewModel(data1, {
+        sortedIndex: 0,
+        items: [mockGridViewModel(data1), mockGridViewModel(data2)],
+      })];
+      const dataSource = createMockDataSource(data2);
+
+      const diff = getViewModelDiff(a, b, dataSource);
+
+      expect(getOperations(diff)).toBe('u');
+      expect(diff).toEqual([{ item: b[0], needToUpdateItems: true, oldSortedIndex: 0 }]);
+    });
+
+    it('should mark needToUpdateItems for a collector when its item matches an updatedAppointmentKey', () => {
+      const data1: ItemData = { id: 1 };
+      const data2: ItemData = { id: 2 };
+      const a = [mockAppointmentCollectorViewModel(data1, {
+        sortedIndex: 0,
+        items: [mockGridViewModel(data1), mockGridViewModel(data2)],
+      })];
+      const b = [mockAppointmentCollectorViewModel(data1, {
+        sortedIndex: 0,
+        items: [mockGridViewModel(data1), mockGridViewModel(data2)],
+      })];
+      const dataSource = createMockDataSource(null, [{ key: 'id', value: 2 }]);
+
+      const diff = getViewModelDiff(a, b, dataSource);
+
+      expect(getOperations(diff)).toBe('u');
+    });
+
     it('should match collector by position and mark needToUpdateItems even when its itemData changed', () => {
       const data1: ItemData = {};
       const data2: ItemData = {};
