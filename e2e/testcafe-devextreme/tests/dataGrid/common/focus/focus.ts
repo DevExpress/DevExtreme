@@ -380,7 +380,7 @@ test('Focus method should focus the first data row when focusedRowEnabled = true
 
 (['batch', 'cell'] as GridsEditMode[]).forEach((editMode) => {
   // T1331376
-  test.only(`Tab should focus the next cell after editing a cell by API when focusedRowEnabled (editing.mode=${editMode})`, async (t) => {
+  test(`Tab should focus the next cell after editing a cell by API when focusedRowEnabled (editing.mode=${editMode})`, async (t) => {
     const dataGrid = new DataGrid(GRID_SELECTOR);
     await t.expect(dataGrid.isReady()).ok();
 
