@@ -29,7 +29,6 @@ import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
-import type { NormalizedEditCellOptions } from '@ts/grids/grid_core/editing/types';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import { memoize } from '@ts/utils/memoize';
 
