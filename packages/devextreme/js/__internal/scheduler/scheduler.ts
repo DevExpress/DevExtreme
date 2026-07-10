@@ -1385,6 +1385,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
         scrollTo: this.scrollTo.bind(this),
         showAppointmentTooltip: this.showAppointmentTooltipCore.bind(this),
+        isTooltipShownForTarget: (target) => this.appointmentTooltip.isShownForTarget(target),
+        updateAppointmentTooltip: (target, data) => {
+          this.appointmentTooltip.setTarget(target);
+          this.appointmentTooltip.setListItems(data);
+        },
+        hideAppointmentTooltip: () => this.hideAppointmentTooltip(),
         showEditAppointmentPopup: (
           appointmentData: SafeAppointment,
           targetedAppointmentData: TargetedAppointment,
