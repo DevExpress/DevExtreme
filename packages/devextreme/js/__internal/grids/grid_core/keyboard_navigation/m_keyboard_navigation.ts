@@ -29,6 +29,7 @@ import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
+import type { NormalizedEditCellOptions } from '@ts/grids/grid_core/editing/types';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import { memoize } from '@ts/utils/memoize';
 
@@ -3081,12 +3082,25 @@ const editing = (Base: ModuleType<EditingController>) => class EditingController
       return false;
     }
 
-    const isCellEditing = super.editCell(rowIndex, columnIndex);
-    if (isCellEditing) {
+    return super.editCell(rowIndex, columnIndex);
+  }
+
+  protected _prepareEditCell(parameters: NormalizedEditCellOptions): boolean {
+    const isPrepared = super._prepareEditCell(parameters);
+
+    if (isPrepared) {
+      this._keyboardNavigationController.setCellFocusType();
       this._keyboardNavigationController.setupFocusedView();
+
+      const rowIndexOffset = this._dataController.getRowIndexOffset();
+      const columnIndexOffset = this._columnsController.getColumnIndexOffset();
+      const globalRowIndex = parameters.rowIndex + rowIndexOffset;
+      const globalColumnIndex = parameters.columnIndex + columnIndexOffset;
+
+      this._keyboardNavigationController.setFocusedCellPosition(globalRowIndex, globalColumnIndex);
     }
 
-    return isCellEditing;
+    return isPrepared;
   }
 
   public editRow(rowIndex) {
