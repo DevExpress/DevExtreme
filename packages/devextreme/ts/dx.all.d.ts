@@ -23499,19 +23499,25 @@ declare module DevExpress.ui {
       /**
        * [descr:dxMapOptions.providerConfig.tileServer]
        */
-      tileServer?: DevExpress.ui.dxMap.OsmTileServer;
+      tileServer?: DevExpress.ui.dxMap.OsmTileServer | undefined;
       /**
        * [descr:dxMapOptions.providerConfig.geocodeLocation]
        */
-      geocodeLocation?: (
-        query: string
-      ) => Promise<MapLocation | null | undefined>;
+      geocodeLocation?:
+        | ((query: string) => Promise<MapLocation | null | undefined>)
+        | undefined;
       /**
        * [descr:dxMapOptions.providerConfig.getRoute]
        */
-      getRoute?: (
-        params: DevExpress.ui.dxMap.OsmGetRouteParams
-      ) => Promise<Array<[number, number]>>;
+      getRoute?:
+        | ((
+            params: DevExpress.ui.dxMap.OsmGetRouteParams
+          ) => Promise<Array<[number, number]>>)
+        | undefined;
+      /**
+       * [descr:dxMapOptions.providerConfig.mapEngine]
+       */
+      mapEngine?: object | undefined;
     };
     /**
      * [descr:dxMapOptions.routes]

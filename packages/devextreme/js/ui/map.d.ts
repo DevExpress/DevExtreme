@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 import {
     DxPromise,
 } from '../core/utils/deferred';
@@ -396,19 +397,25 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
        * @public
        * @default undefined
        */
-      tileServer?: OsmTileServer;
+      tileServer?: OsmTileServer | undefined;
       /**
        * @docid
        * @public
        * @default undefined
        */
-      geocodeLocation?: ((query: string) => Promise<MapLocation | null | undefined>);
+      geocodeLocation?: ((query: string) => Promise<MapLocation | null | undefined>) | undefined;
       /**
        * @docid
        * @public
        * @default undefined
        */
-      getRoute?: ((params: OsmGetRouteParams) => Promise<Array<[number, number]>>);
+      getRoute?: ((params: OsmGetRouteParams) => Promise<Array<[number, number]>>) | undefined;
+      /**
+       * @docid
+       * @public
+       * @default undefined
+       */
+      mapEngine?: object | undefined;
     };
     /**
      * @docid

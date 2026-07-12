@@ -249,6 +249,7 @@ const DxProviderConfigConfig = {
     "update:hoveredElement": null,
     "update:geocodeLocation": null,
     "update:getRoute": null,
+    "update:mapEngine": null,
     "update:mapId": null,
     "update:tileServer": null,
     "update:useAdvancedMarkers": null,
@@ -256,6 +257,7 @@ const DxProviderConfigConfig = {
   props: {
     geocodeLocation: Function as PropType<((query: string) => any)>,
     getRoute: Function as PropType<((params: OsmGetRouteParams) => any)>,
+    mapEngine: Object as PropType<Record<string, any>>,
     mapId: String,
     tileServer: [Object, Function, String] as PropType<OsmTileServer | (((type: MapType | string) => string | OsmTileServerConfig | null | undefined)) | OsmTileServerConfig | string>,
     useAdvancedMarkers: Boolean

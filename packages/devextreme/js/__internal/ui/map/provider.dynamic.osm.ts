@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import Color from '@js/color';
-import { noop } from '@js/core/utils/common';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import type { RouteMode } from '@js/ui/map';
@@ -12,37 +11,65 @@ import type {
 } from './provider.dynamic';
 import DynamicProvider from './provider.dynamic';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare let L: any;
-
 const window = getWindow();
-
-let LEAFLET_JS_URL = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-let LEAFLET_CSS_URL = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
 
 const DEFAULT_MAX_ZOOM = 19;
 const DEFAULT_SUBDOMAINS = 'abc';
+const REQUIRED_ENGINE_METHODS = [
+  'divIcon',
+  'icon',
+  'latLng',
+  'latLngBounds',
+  'map',
+  'marker',
+  'point',
+  'polyline',
+  'popup',
+  'tileLayer',
+];
 
+// Leaflet is an optional client-owned dependency.
+// Its public types must not leak into DevExtreme.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, spellcheck/spell-checker -- OSM API
+type OsmMapEngine = Record<string, any>;
+
+// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
 interface OsmTileServerConfig {
   url: string;
   attribution?: string;
+  // eslint-disable-next-line spellcheck/spell-checker -- Leaflet tile server option name
   subdomains?: string | string[];
   maxZoom?: number;
 }
 
+// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifiers
 type OsmTileServerObject = OsmTileServerConfig
+  // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
   | ((type: string) => string | OsmTileServerConfig | null | undefined);
+// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifiers
 type OsmTileServerOption = string | OsmTileServerObject;
 
+// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
 export type OsmLocation = PlainLocation;
 
-// @ts-expect-error ts-error
-const osmMapsLoaded = (): boolean => Boolean(window.L?.map);
+// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
+const isMapEngine = (engine: unknown): engine is OsmMapEngine => {
+  if (!engine || typeof engine !== 'object') {
+    return false;
+  }
 
-// eslint-disable-next-line @typescript-eslint/init-declarations
-let osmMapsLoader: Promise<void> | undefined;
+  // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
+  const candidate = engine as OsmMapEngine;
 
+  return REQUIRED_ENGINE_METHODS.every((method) => typeof candidate[method] === 'function')
+    && typeof candidate.control?.zoom === 'function';
+};
+
+// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
 class OsmProvider extends DynamicProvider {
+  // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
+  _mapEngine!: OsmMapEngine;
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _tileLayer?: any;
 
@@ -51,6 +78,7 @@ class OsmProvider extends DynamicProvider {
 
   _currentTileType!: string;
 
+  // eslint-disable-next-line spellcheck/spell-checker -- Leaflet/OpenStreetMap API identifiers
   _clickHandler?: (e: { latlng: OsmLocation; originalEvent: Event }) => void;
 
   _viewChangeHandler?: () => void;
@@ -62,24 +90,27 @@ class OsmProvider extends DynamicProvider {
     return type || 'driving';
   }
 
+  // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
   _resolveLocation(location?: LocationOption | null): Promise<OsmLocation> {
     return new Promise((resolve) => {
       const latLng = this._getLatLng(location);
       if (latLng) {
-        resolve(L.latLng(latLng.lat, latLng.lng));
+        resolve(this._mapEngine.latLng(latLng.lat, latLng.lng));
       } else {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._geocodeLocation(location as string).then((geocodedLocation) => {
+          // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
           resolve(geocodedLocation as OsmLocation);
         });
       }
     });
   }
 
+  // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
   _geocodeLocationImpl(location: string): Promise<OsmLocation> {
     return new Promise((resolve) => {
       if (!isDefined(location)) {
-        resolve(L.latLng(0, 0));
+        resolve(this._mapEngine.latLng(0, 0));
         return;
       }
 
@@ -87,22 +118,25 @@ class OsmProvider extends DynamicProvider {
 
       if (!geocodeFn) {
         errors.log('W1031', location);
-        resolve(L.latLng(0, 0));
+        resolve(this._mapEngine.latLng(0, 0));
         return;
       }
 
-      geocodeFn(location).then((result) => {
-        if (result?.lat != null && result?.lng != null) {
-          resolve(L.latLng(result.lat, result.lng));
-        } else {
-          resolve(L.latLng(0, 0));
-        }
-      }).catch(() => {
-        resolve(L.latLng(0, 0));
-      });
+      Promise.resolve()
+        .then(() => geocodeFn(location))
+        .then((result) => {
+          if (result?.lat != null && result?.lng != null) {
+            resolve(this._mapEngine.latLng(result.lat, result.lng));
+          } else {
+            resolve(this._mapEngine.latLng(0, 0));
+          }
+        }).catch(() => {
+          resolve(this._mapEngine.latLng(0, 0));
+        });
     });
   }
 
+  // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
   _normalizeLocation(location: OsmLocation): { lat: number; lng: number } {
     return {
       lat: location.lat,
@@ -111,76 +145,38 @@ class OsmProvider extends DynamicProvider {
   }
 
   _loadImpl(): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      if (osmMapsLoaded()) {
-        resolve();
-        return;
-      }
+    const configuredEngine = this._option('providerConfig')?.mapEngine;
+    const globalEngine = (window as Window & { L?: unknown }).L;
+    const engine = configuredEngine ?? globalEngine;
 
-      const fail = (): void => { reject(errors.Error('W1033')); };
+    if (!isMapEngine(engine)) {
+      return Promise.reject(errors.Error('W1033'));
+    }
 
-      osmMapsLoader ??= this._loadMapResources();
+    this._mapEngine = engine;
 
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      osmMapsLoader.then(() => {
-        if (osmMapsLoaded()) {
-          resolve();
-          return;
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this._loadMapResources().then(() => {
-          if (osmMapsLoaded()) {
-            resolve();
-          } else {
-            fail();
-          }
-        }, fail);
-      }, fail);
-    });
-  }
-
-  _loadMapResources(): Promise<void> {
-    return Promise.all([
-      this._loadMapScript(),
-      this._loadMapStyles(),
-    ]).then(() => {});
-  }
-
-  _loadMapScript(): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      const script = window.document.createElement('script');
-      script.async = true;
-      script.onload = (): void => { resolve(); };
-      script.onerror = (): void => { reject(); };
-      script.src = LEAFLET_JS_URL;
-      window.document.head.appendChild(script);
-    });
-  }
-
-  _loadMapStyles(): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      const link = window.document.createElement('link');
-      link.rel = 'stylesheet';
-      link.onload = (): void => { resolve(); };
-      link.onerror = (): void => { reject(); };
-      link.href = LEAFLET_CSS_URL;
-      window.document.head.appendChild(link);
-    });
+    return Promise.resolve();
   }
 
   _init(): Promise<void> {
     return this._resolveLocation(this._option('center')).then((center) => {
       const type = this._option('type') ?? 'roadmap';
+      const interactionsEnabled = !this._option('disabled');
 
-      this._map = L.map(this._$container[0], {
+      this._map = this._mapEngine.map(this._$container[0], {
         center,
         zoom: this._option('zoom'),
         zoomControl: false,
         attributionControl: true,
+        dragging: interactionsEnabled,
+        touchZoom: interactionsEnabled,
+        doubleClickZoom: interactionsEnabled,
+        scrollWheelZoom: interactionsEnabled,
+        boxZoom: interactionsEnabled,
+        keyboard: interactionsEnabled,
       });
 
-      this._zoomControl = L.control.zoom();
+      this._zoomControl = this._mapEngine.control.zoom();
       if (this._option('controls')) {
         this._zoomControl.addTo(this._map);
       }
@@ -193,7 +189,9 @@ class OsmProvider extends DynamicProvider {
     });
   }
 
+  // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
   _resolveTileConfig(type: string): OsmTileServerConfig | undefined {
+    // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
     const option = this._option('providerConfig')?.tileServer as OsmTileServerOption | null | undefined;
 
     const resolved = typeof option === 'function' ? option(type) : option;
@@ -223,10 +221,11 @@ class OsmProvider extends DynamicProvider {
     };
 
     if (config.url.includes('{s}')) {
+      // eslint-disable-next-line spellcheck/spell-checker -- Leaflet tile server option name
       options.subdomains = config.subdomains ?? DEFAULT_SUBDOMAINS;
     }
 
-    return L.tileLayer(config.url, options);
+    return this._mapEngine.tileLayer(config.url, options);
   }
 
   _attachHandlers(): void {
@@ -256,8 +255,10 @@ class OsmProvider extends DynamicProvider {
     }
   }
 
+  // eslint-disable-next-line spellcheck/spell-checker -- Leaflet/OpenStreetMap API identifiers
   _onMapClick(e: { latlng: OsmLocation; originalEvent: Event }): void {
     this._fireClickAction({
+      // eslint-disable-next-line spellcheck/spell-checker -- Leaflet event field name
       location: this._normalizeLocation(e.latlng),
       event: e.originalEvent,
     });
@@ -325,7 +326,7 @@ class OsmProvider extends DynamicProvider {
       this._resolveLocation(bounds?.northEast),
       this._resolveLocation(bounds?.southWest),
     ]).then((result) => {
-      this._map.fitBounds(L.latLngBounds(result[1], result[0]));
+      this._map.fitBounds(this._mapEngine.latLngBounds(result[1], result[0]));
     });
   }
 
@@ -354,35 +355,74 @@ class OsmProvider extends DynamicProvider {
     return Promise.resolve();
   }
 
-  _anchorIconBottomCenter(marker: unknown): void {
+  _anchorIconBottomCenter(marker: unknown): (() => void) | undefined {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const leafletMarker = marker as any;
     const iconElement = leafletMarker.getElement?.() ?? leafletMarker._icon;
     if (!iconElement || typeof iconElement.addEventListener !== 'function') {
-      return;
+      return undefined;
     }
+
     const applyAnchor = (): void => {
-      const iconWidth = iconElement.naturalWidth;
-      const iconHeight = iconElement.naturalHeight;
+      const iconRect = iconElement.getBoundingClientRect?.();
+      const getDimension = (...dimensions: (number | undefined)[]): number => dimensions
+        .find((dimension) => (dimension ?? 0) > 0) ?? 0;
+      const iconWidth = getDimension(
+        iconRect?.width,
+        iconElement.offsetWidth,
+        iconElement.naturalWidth,
+      );
+      const iconHeight = getDimension(
+        iconRect?.height,
+        iconElement.offsetHeight,
+        iconElement.naturalHeight,
+      );
       if (!iconWidth || !iconHeight) {
         return;
       }
+
+      const iconOptions = leafletMarker.options?.icon?.options;
+      if (iconOptions) {
+        iconOptions.iconSize = this._mapEngine.point(iconWidth, iconHeight);
+        iconOptions.iconAnchor = this._mapEngine.point(iconWidth / 2, iconHeight);
+        iconOptions.popupAnchor = this._mapEngine.point(0, -iconHeight);
+      }
+
       iconElement.style.marginLeft = `${-iconWidth / 2}px`;
       iconElement.style.marginTop = `${-iconHeight}px`;
 
       const popup = leafletMarker.getPopup?.();
-      if (popup) {
-        popup.options.offset = L.point(0, -iconHeight);
-        if (leafletMarker.isPopupOpen()) {
-          leafletMarker.openPopup();
-        }
+      if (popup && leafletMarker.isPopupOpen()) {
+        popup.update?.();
       }
     };
+
+    const handleImageEvent = (event: Event): void => {
+      iconElement.removeEventListener('load', handleImageEvent);
+      iconElement.removeEventListener('error', handleImageEvent);
+      if (event.type === 'load') {
+        applyAnchor();
+      }
+    };
+
+    const removeLoadListeners = (): void => {
+      iconElement.removeEventListener('load', handleImageEvent);
+      iconElement.removeEventListener('error', handleImageEvent);
+    };
+
     if (iconElement.complete && iconElement.naturalWidth) {
       applyAnchor();
-    } else {
-      iconElement.addEventListener('load', applyAnchor, { once: true });
+      return undefined;
     }
+
+    if (iconElement.complete) {
+      return undefined;
+    }
+
+    iconElement.addEventListener('load', handleImageEvent);
+    iconElement.addEventListener('error', handleImageEvent);
+
+    return removeLoadListeners;
   }
 
   _renderMarker(options: MarkerOptions): Promise<MarkerObject> {
@@ -393,48 +433,40 @@ class OsmProvider extends DynamicProvider {
       const icon = options.iconSrc || this._option('markerIconSrc');
 
       if (options.html) {
-        const divIcon = L.divIcon({
+        const divIcon = this._mapEngine.divIcon({
           html: options.html,
           className: '',
           iconAnchor: options.htmlOffset
             ? [-options.htmlOffset.left, -options.htmlOffset.top]
             : [0, 0],
         });
-        marker = L.marker(location, { icon: divIcon });
+        marker = this._mapEngine.marker(location, { icon: divIcon });
       } else if (icon) {
-        const customIcon = L.icon({
+        const customIcon = this._mapEngine.icon({
           iconUrl: icon,
           className: 'dx-map-marker',
         });
-        marker = L.marker(location, { icon: customIcon });
+        marker = this._mapEngine.marker(location, { icon: customIcon });
       } else {
-        marker = L.marker(location);
+        marker = this._mapEngine.marker(location);
       }
 
       marker.addTo(this._map);
 
       const popup = this._renderTooltip(marker, options.tooltip);
 
-      if (icon && !options.html) {
-        this._anchorIconBottomCenter(marker);
-      }
+      const removeIconLoadListeners = icon && !options.html
+        ? this._anchorIconBottomCenter(marker)
+        : undefined;
 
       // eslint-disable-next-line @typescript-eslint/init-declarations
       let clickHandler: (() => void) | undefined;
-      if (options.onClick || options.tooltip) {
-        const markerClickAction = this._mapWidget._createAction(options.onClick ?? noop);
+      if (options.onClick) {
+        const markerClickAction = this._mapWidget._createAction(options.onClick);
         const normalizedLocation = this._normalizeLocation(location);
 
         clickHandler = (): void => {
           markerClickAction({ location: normalizedLocation });
-
-          if (popup) {
-            if (marker.isPopupOpen()) {
-              marker.closePopup();
-            } else {
-              marker.openPopup();
-            }
-          }
         };
 
         marker.on('click', clickHandler);
@@ -445,6 +477,7 @@ class OsmProvider extends DynamicProvider {
         marker,
         popup,
         handler: clickHandler,
+        removeIconLoadListeners,
       };
     });
   }
@@ -456,7 +489,8 @@ class OsmProvider extends DynamicProvider {
     }
 
     const parsedOptions = this._parseTooltipOptions(options);
-    const popup = L.popup({ autoClose: false, closeOnClick: false }).setContent(parsedOptions.text);
+    const popup = this._mapEngine.popup({ autoClose: false, closeOnClick: false })
+      .setContent(parsedOptions.text);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const leafletMarker = marker as any;
     leafletMarker.bindPopup(popup);
@@ -472,7 +506,9 @@ class OsmProvider extends DynamicProvider {
   _destroyMarker(markerObj: {
     marker: { off: (event: string, fn: unknown) => void; remove: () => void };
     handler?: () => void;
+    removeIconLoadListeners?: () => void;
   }): void {
+    markerObj.removeIconLoadListeners?.();
     if (markerObj.handler) {
       markerObj.marker.off('click', markerObj.handler);
     }
@@ -498,14 +534,18 @@ class OsmProvider extends DynamicProvider {
         const getRouteFn = this._option('providerConfig')?.getRoute as ((params: { locations: { lat: number; lng: number }[]; mode: string }) => Promise<[number, number][]>) | undefined;
 
         const drawPolyline = (coords: [number, number][]): void => {
-          const polyline = L.polyline(coords, polylineOptions).addTo(this._map);
+          const polyline = this._mapEngine.polyline(coords, polylineOptions).addTo(this._map);
           const routeBounds = polyline.getBounds();
+          const northEast = routeBounds.getNorthEast();
+          const southWest = routeBounds.getSouthWest();
+          const routeObject: RouteObject = { instance: polyline };
 
-          resolve({
-            instance: polyline,
-            northEast: [routeBounds.getNorthEast().lat, routeBounds.getNorthEast().lng],
-            southWest: [routeBounds.getSouthWest().lat, routeBounds.getSouthWest().lng],
-          });
+          if (northEast && southWest) {
+            routeObject.northEast = [northEast.lat, northEast.lng];
+            routeObject.southWest = [southWest.lat, southWest.lng];
+          }
+
+          resolve(routeObject);
         };
 
         if (!getRouteFn) {
@@ -513,13 +553,15 @@ class OsmProvider extends DynamicProvider {
           return;
         }
 
-        getRouteFn({ locations: normalizedLocations, mode }).then((coords) => {
-          drawPolyline(coords);
-        }).catch((e: unknown) => {
-          errors.log('W1006', e);
+        Promise.resolve()
+          .then(() => getRouteFn({ locations: normalizedLocations, mode }))
+          .then((coords) => {
+            drawPolyline(coords);
+          }).catch((e: unknown) => {
+            errors.log('W1006', e);
 
-          drawPolyline(resolvedLocations.map((loc) => [loc.lat, loc.lng] as [number, number]));
-        });
+            drawPolyline(resolvedLocations.map((loc) => [loc.lat, loc.lng] as [number, number]));
+          });
       }));
   }
 
@@ -534,7 +576,7 @@ class OsmProvider extends DynamicProvider {
       const zoomBeforeFitting = this._map.getZoom();
       this._preventZoomChangeEvent = true;
 
-      this._map.fitBounds(this._bounds);
+      this._map.fitBounds(this._bounds, { animate: false });
 
       const zoomAfterFitting = this._map.getZoom();
       if (zoomBeforeFitting < zoomAfterFitting) {
@@ -553,13 +595,13 @@ class OsmProvider extends DynamicProvider {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const loc = location as any;
     const latLng = Array.isArray(loc)
-      ? L.latLng(loc[0], loc[1])
-      : L.latLng(loc.lat, loc.lng);
+      ? this._mapEngine.latLng(loc[0], loc[1])
+      : this._mapEngine.latLng(loc.lat, loc.lng);
 
     if (this._bounds) {
       this._bounds.extend(latLng);
     } else {
-      this._bounds = L.latLngBounds(latLng, latLng);
+      this._bounds = this._mapEngine.latLngBounds(latLng, latLng);
     }
   }
 
@@ -581,13 +623,5 @@ class OsmProvider extends DynamicProvider {
   }
 }
 
-/// #DEBUG
-// @ts-expect-error ts-error
-OsmProvider.remapConstant = (newValue: string): void => {
-  LEAFLET_JS_URL = newValue;
-  LEAFLET_CSS_URL = newValue;
-};
-
-/// #ENDDEBUG
-
+// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
 export default OsmProvider;

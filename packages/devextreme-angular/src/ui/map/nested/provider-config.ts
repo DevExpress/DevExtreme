@@ -32,19 +32,27 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoMapProviderConfigComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get geocodeLocation(): ((query: string) => any) {
+    get geocodeLocation(): ((query: string) => any) | undefined {
         return this._getOption('geocodeLocation');
     }
-    set geocodeLocation(value: ((query: string) => any)) {
+    set geocodeLocation(value: ((query: string) => any) | undefined) {
         this._setOption('geocodeLocation', value);
     }
 
     @Input()
-    get getRoute(): ((params: OsmGetRouteParams) => any) {
+    get getRoute(): ((params: OsmGetRouteParams) => any) | undefined {
         return this._getOption('getRoute');
     }
-    set getRoute(value: ((params: OsmGetRouteParams) => any)) {
+    set getRoute(value: ((params: OsmGetRouteParams) => any) | undefined) {
         this._setOption('getRoute', value);
+    }
+
+    @Input()
+    get mapEngine(): Record<string, any> | undefined {
+        return this._getOption('mapEngine');
+    }
+    set mapEngine(value: Record<string, any> | undefined) {
+        this._setOption('mapEngine', value);
     }
 
     @Input()
@@ -56,10 +64,10 @@ export class DxoMapProviderConfigComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get tileServer(): OsmTileServer {
+    get tileServer(): OsmTileServer | undefined {
         return this._getOption('tileServer');
     }
-    set tileServer(value: OsmTileServer) {
+    set tileServer(value: OsmTileServer | undefined) {
         this._setOption('tileServer', value);
     }
 

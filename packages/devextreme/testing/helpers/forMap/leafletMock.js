@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker -- Leaflet/geo domain terms in the test mock (e.g. Polylines, lngs) */
 (() => {
     const makeLatLng = (lat, lng) => ({
         lat: typeof lat === 'object' ? lat.lat : lat,
@@ -69,13 +68,17 @@
                         { lat: (this._center.lat ?? 0) + 1, lng: (this._center.lng ?? 0) + 1 }
                     );
                 },
-                fitBounds(bounds) {
+                fitBounds(bounds, options) {
                     L.fitBoundsArg = bounds;
+                    L.fitBoundsOptions = options;
                     if(bounds && bounds.getNorthEast) {
                         this._center = {
                             lat: (bounds.getNorthEast().lat + bounds.getSouthWest().lat) / 2,
                             lng: (bounds.getNorthEast().lng + bounds.getSouthWest().lng) / 2,
                         };
+                    }
+                    if(L.fitBoundsCallback) {
+                        L.fitBoundsCallback();
                     }
                 },
                 invalidateSize() { L.mapResized = true; },
@@ -128,6 +131,11 @@
             return makeBounds(sw, ne ?? sw);
         },
 
+        // --- Point ---
+        point: function(x, y) {
+            return { x, y };
+        },
+
         // --- Marker ---
         marker: function(latLng, options) {
             L.markerOptions = options;
@@ -138,6 +146,7 @@
                 _popup: null,
                 _popupOpen: false,
                 _handlers: {},
+                options: options || {},
 
                 addTo(map) {
                     L.addedMarkers = L.addedMarkers || [];
@@ -149,17 +158,34 @@
                     L.removedMarkers.push(marker);
                 },
                 on(event, handler) {
-                    this._handlers[event] = handler;
+                    this._handlers[event] = this._handlers[event] || [];
+                    this._handlers[event].push(handler);
                     if(event === 'click') {
-                        L.markerClickCallback = handler;
+                        L.markerClickCallback = (args) => {
+                            this._handlers.click.slice().forEach((clickHandler) => { clickHandler(args); });
+                        };
                     }
+                    return marker;
                 },
-                off(event) {
-                    delete this._handlers[event];
+                off(event, handler) {
+                    if(handler && this._handlers[event]) {
+                        this._handlers[event] = this._handlers[event]
+                            .filter((eventHandler) => eventHandler !== handler);
+                    } else {
+                        delete this._handlers[event];
+                    }
+                    return marker;
                 },
                 bindPopup(popup) {
                     this._popup = popup;
                     L.boundPopup = popup;
+                    this.on('click', () => {
+                        if(this.isPopupOpen()) {
+                            this.closePopup();
+                        } else {
+                            this.openPopup();
+                        }
+                    });
                     return marker;
                 },
                 openPopup() {
@@ -174,6 +200,12 @@
                 },
                 isPopupOpen() {
                     return this._popupOpen;
+                },
+                getElement() {
+                    return L.markerElement;
+                },
+                getPopup() {
+                    return this._popup;
                 },
             };
 
@@ -196,10 +228,15 @@
         popup: function(options) {
             L.popupOptions = options;
             const popup = {
+                options: { offset: L.point(0, 7), ...options },
                 _content: '',
                 setContent(text) {
                     this._content = text;
                     L.popupContent = text;
+                    return popup;
+                },
+                update() {
+                    L.popupUpdateCount = (L.popupUpdateCount || 0) + 1;
                     return popup;
                 },
             };
@@ -214,22 +251,32 @@
             const polyline = {
                 _coords: coords,
                 addTo(map) {
+                    // eslint-disable-next-line spellcheck/spell-checker -- Leaflet mock state identifier
                     L.addedPolylines = L.addedPolylines || [];
+                    // eslint-disable-next-line spellcheck/spell-checker -- Leaflet mock state identifier
                     L.addedPolylines.push(polyline);
                     return polyline;
                 },
                 remove() {
+                    // eslint-disable-next-line spellcheck/spell-checker -- Leaflet mock state identifier
                     L.removedPolylines = L.removedPolylines || [];
+                    // eslint-disable-next-line spellcheck/spell-checker -- Leaflet mock state identifier
                     L.removedPolylines.push(polyline);
                 },
                 getBounds() {
                     if(!coords || coords.length === 0) {
-                        return makeBounds({ lat: 0, lng: 0 }, { lat: 0, lng: 0 });
+                        return {
+                            getNorthEast: () => undefined,
+                            getSouthWest: () => undefined,
+                        };
                     }
                     const lats = coords.map(c => c[0]);
+                    // eslint-disable-next-line spellcheck/spell-checker -- Longitude collection identifier
                     const lngs = coords.map(c => c[1]);
                     return makeBounds(
+                        // eslint-disable-next-line spellcheck/spell-checker -- Longitude collection identifier
                         { lat: Math.min(...lats), lng: Math.min(...lngs) },
+                        // eslint-disable-next-line spellcheck/spell-checker -- Longitude collection identifier
                         { lat: Math.max(...lats), lng: Math.max(...lngs) }
                     );
                 },

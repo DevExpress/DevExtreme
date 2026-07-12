@@ -1,11 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
 
-import React, { useMemo } from 'react';
-import Map from 'devextreme-react/map';
+import React, { useMemo, useRef } from 'react';
+import Button from 'devextreme-react/button';
+import Map, { type MapRef } from 'devextreme-react/map';
 
-// OpenStreetMap (OSM) provider for the DevExtreme Map — powered by Leaflet.
-// The provider needs no API key of its own, but it does not bundle a tile/geocoding/routing
-// service: you supply them via `providerConfig` (tileServer / geocodeLocation / getRoute).
+// OpenStreetMap (OSM) provider for the DevExtreme Map — powered by client-owned Leaflet.
+// This Storybook loads Leaflet in `.storybook/preview-head.html`, which demonstrates the global
+// `window.L` setup. Applications can instead pass an imported API through `providerConfig.mapEngine`.
+// The provider needs no API key of its own, but it does not bundle a tile/geocoding/routing service:
+// you supply them via `providerConfig` (tileServer / geocodeLocation / getRoute).
 //
 // This story lets you switch between several commercial OSM-based tile providers and paste your
 // own key for each (the "Tile provider" controls). The public OpenStreetMap tile server
@@ -84,6 +87,13 @@ const routeWaypoints: [number, number][] = [
   [40.755833, -73.986389],
   [40.753889, -73.981389],
   [40.705748, -73.996299],
+];
+
+const addedMarkerLocation = { lat: 40.748817, lng: -73.985428 };
+const addedRouteWaypoints: [number, number][] = [
+  [40.758896, -73.98513],
+  [40.748817, -73.985428],
+  [40.74106, -73.989699],
 ];
 
 const centers: Record<string, { lat: number; lng: number }> = {
@@ -181,6 +191,7 @@ export default meta;
 type Story = StoryObj<OsmStoryArgs>;
 
 const render: Story['render'] = (args) => {
+  const mapRef = useRef<MapRef>(null);
   const {
     tileProvider, maptilerKey, thunderforestKey, stadiaKey,
     type, center, zoom, controls, disabled, autoAdjust,
@@ -201,28 +212,63 @@ const render: Story['render'] = (args) => {
     ? [{ weight: 6, opacity: 0.6, color: routeColor, locations: routeWaypoints }]
     : []), [showRoutes, routeColor]);
 
+  const addMarker = () => {
+    mapRef.current?.instance().addMarker({
+      location: addedMarkerLocation,
+      tooltip: { text: 'Empire State Building' },
+    });
+  };
+
+  const addRoute = () => {
+    mapRef.current?.instance().addRoute({
+      weight: 6,
+      opacity: 0.7,
+      color: routeColor,
+      locations: addedRouteWaypoints,
+    });
+  };
+
+  const showAllTooltips = () => {
+    const map = mapRef.current?.instance();
+    const currentMarkers = map?.option('markers') ?? [];
+
+    map?.option('markers', currentMarkers.map((marker) => ({
+      ...marker,
+      tooltip: {
+        ...((marker.tooltip ?? {}) as Record<string, any>),
+        isShown: true,
+      },
+    })));
+  };
+
   return (
-    <Map
-      // center/zoom are UNCONTROLLED (defaultCenter/defaultZoom) so the user can freely pan & zoom.
-      // A *controlled* center/zoom without an on*Change handler locks the map (it snaps back to the
-      // prop on every render), so the uncontrolled defaults keep this story simple. The `key`
-      // re-mounts the map when the Center/Zoom controls change so those controls re-seed the
-      // initial view.
-      key={`${center}|${zoom}`}
-      provider="osm"
-      providerConfig={providerConfig}
-      defaultCenter={centers[center]}
-      defaultZoom={zoom}
-      type={type}
-      height={height}
-      width={width}
-      controls={controls}
-      disabled={disabled}
-      autoAdjust={autoAdjust}
-      markerIconSrc={customMarkerIcons ? markerUrl : undefined}
-      markers={markers}
-      routes={routes}
-    />
+    <>
+      <div style={{ display: 'flex', gap: 8, padding: 12 }}>
+        <Button text="Add marker" onClick={addMarker} />
+        <Button text="Add route" onClick={addRoute} />
+        <Button text="Show all tooltips" onClick={showAllTooltips} />
+      </div>
+      <Map
+        ref={mapRef}
+        // Center, zoom, markers, and routes are uncontrolled so the user and the method buttons can
+        // mutate the Map instance. The key re-mounts it when the corresponding Storybook controls
+        // change, which re-seeds those defaults.
+        key={`${center}|${zoom}|${showMarkers}|${showRoutes}|${routeColor}`}
+        provider="osm"
+        providerConfig={providerConfig}
+        defaultCenter={centers[center]}
+        defaultZoom={zoom}
+        type={type}
+        height={height}
+        width={width}
+        controls={controls}
+        disabled={disabled}
+        autoAdjust={autoAdjust}
+        markerIconSrc={customMarkerIcons ? markerUrl : undefined}
+        defaultMarkers={markers}
+        defaultRoutes={routes}
+      />
+    </>
   );
 };
 

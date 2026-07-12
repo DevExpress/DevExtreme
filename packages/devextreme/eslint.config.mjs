@@ -28,16 +28,6 @@ const compat = new FlatCompat({
     allConfig: js.configs.all
 });
 
-// Allow OSM/Leaflet domain identifiers used by the Map's OpenStreetMap provider
-// (feature/library names that cannot be renamed: the `osm` provider, Leaflet's `latlng`
-// event field, and the `subdomains` tile-layer option).
-const spellCheckerRule = spellCheckConfig
-    .map((config) => config?.rules?.['spellcheck/spell-checker'])
-    .find((rule) => Array.isArray(rule) && Array.isArray(rule[1]?.skipWords));
-if (spellCheckerRule) {
-    spellCheckerRule[1].skipWords.push('osm', 'latlng', 'subdomains');
-}
-
 export default [
     {
         ignores: [
@@ -409,6 +399,13 @@ export default [
                     { groupName: 'null', elementNamePattern: '^null$' },
                 ],
             }],
+        },
+    },
+    // Rules for generated public API re-exports
+    {
+        files: ['js/{ui,viz}/**/*_types.d.ts'],
+        rules: {
+            'spellcheck/spell-checker': 'off',
         },
     },
     // Rules for build folder

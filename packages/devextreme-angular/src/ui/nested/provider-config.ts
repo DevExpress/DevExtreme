@@ -32,19 +32,27 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoProviderConfigComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get geocodeLocation(): Function {
+    get geocodeLocation(): Function | undefined {
         return this._getOption('geocodeLocation');
     }
-    set geocodeLocation(value: Function) {
+    set geocodeLocation(value: Function | undefined) {
         this._setOption('geocodeLocation', value);
     }
 
     @Input()
-    get getRoute(): Function {
+    get getRoute(): Function | undefined {
         return this._getOption('getRoute');
     }
-    set getRoute(value: Function) {
+    set getRoute(value: Function | undefined) {
         this._setOption('getRoute', value);
+    }
+
+    @Input()
+    get mapEngine(): any | undefined {
+        return this._getOption('mapEngine');
+    }
+    set mapEngine(value: any | undefined) {
+        this._setOption('mapEngine', value);
     }
 
     @Input()
@@ -56,10 +64,10 @@ export class DxoProviderConfigComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get tileServer(): OsmTileServer {
+    get tileServer(): OsmTileServer | undefined {
         return this._getOption('tileServer');
     }
-    set tileServer(value: OsmTileServer) {
+    set tileServer(value: OsmTileServer | undefined) {
         this._setOption('tileServer', value);
     }
 

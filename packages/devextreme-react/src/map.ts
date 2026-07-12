@@ -182,10 +182,11 @@ const Marker = Object.assign<typeof _componentMarker, NestedComponentMeta>(_comp
 // owners:
 // Map
 type IProviderConfigProps = React.PropsWithChildren<{
-  geocodeLocation?: ((query: string) => any);
-  getRoute?: ((params: OsmGetRouteParams) => any);
+  geocodeLocation?: ((query: string) => any) | undefined;
+  getRoute?: ((params: OsmGetRouteParams) => any) | undefined;
+  mapEngine?: Record<string, any> | undefined;
   mapId?: string;
-  tileServer?: OsmTileServer;
+  tileServer?: OsmTileServer | undefined;
   useAdvancedMarkers?: boolean;
 }>
 const _componentProviderConfig = (props: IProviderConfigProps) => {

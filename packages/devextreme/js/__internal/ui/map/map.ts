@@ -21,6 +21,7 @@ import type { LocationOption } from './provider.dynamic';
 import azure from './provider.dynamic.azure';
 import bing from './provider.dynamic.bing';
 import google from './provider.dynamic.google';
+// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap provider identifier
 import osm from './provider.dynamic.osm';
 // NOTE external urls must have protocol explicitly specified
 // (because inside Cordova package the protocol is "file:")
@@ -31,6 +32,7 @@ const PROVIDERS = {
   googleStatic,
   google,
   bing,
+  // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap provider identifier
   osm,
 };
 
@@ -56,6 +58,7 @@ class Map extends Widget<MapProperties> {
 
   _lastAsyncAction!: Promise<void>;
 
+  // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap provider identifier
   _provider!: azure | googleStatic | google | bing | osm;
 
   _asyncActionSuppressed?: boolean;

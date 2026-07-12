@@ -421,5 +421,5 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     /**
      * @name ErrorsUIWidgets.W1033
      */
-    W1033: 'The OSM map provider failed to load the Leaflet library. Make sure the Leaflet script and stylesheet URLs are reachable.',
+    W1033: 'The OSM map provider requires the Leaflet library. Pass the Leaflet API through "providerConfig.mapEngine" or load it globally as "window.L" before initializing the map. Include the Leaflet stylesheet separately.',
 });
