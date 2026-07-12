@@ -1,7 +1,7 @@
 /*!
 * DevExtreme (dx.ai-integration.js)
 * Version: 26.1.3
-* Build date: Fri Jul 10 2026
+* Build date: Sun Jul 12 2026
 *
 * Copyright (c) 2012 - 2026 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
@@ -2701,7 +2701,7 @@ var _default = exports["default"] = (0, _error.default)(_errors.default.ERROR_ME
   /**
    * @name ErrorsUIWidgets.W1033
    */
-  W1033: 'The OSM map provider failed to load the Leaflet library. Make sure the Leaflet script and stylesheet URLs are reachable.'
+  W1033: 'The OSM map provider requires the Leaflet library. Pass the Leaflet API through "providerConfig.mapEngine" or load it globally as "window.L" before initializing the map. Include the Leaflet stylesheet separately.'
 });
 module.exports = exports.default;
 module.exports["default"] = exports.default;
