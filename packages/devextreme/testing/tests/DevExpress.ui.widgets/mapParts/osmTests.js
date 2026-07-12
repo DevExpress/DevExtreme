@@ -203,7 +203,7 @@ QUnit.module('OSM: map loading', moduleConfig, () => {
         }).dxMap('instance');
     });
 
-    QUnit.test('load rejects with W1033 when no map engine is configured or global', function(assert) {
+    QUnit.test('load rejects with E1069 when no map engine is configured or global', function(assert) {
         const done = assert.async();
         const mapWidget = { option: () => ({ providerConfig: {} }) };
         // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap provider identifier
@@ -217,7 +217,7 @@ QUnit.module('OSM: map loading', moduleConfig, () => {
                 done();
             },
             (error) => {
-                assert.strictEqual(error.message, errors.Error('W1033').message, 'W1033 is returned');
+                assert.strictEqual(error.message, errors.Error('E1069').message, 'E1069 is returned');
                 done();
             }
         );
@@ -235,7 +235,7 @@ QUnit.module('OSM: map loading', moduleConfig, () => {
                 done();
             },
             (error) => {
-                assert.strictEqual(error.message, errors.Error('W1033').message, 'W1033 is returned');
+                assert.strictEqual(error.message, errors.Error('E1069').message, 'E1069 is returned');
                 assert.notStrictEqual(provider._mapEngine, leafletMock, 'global engine was not used');
                 done();
             }

@@ -163,7 +163,7 @@ class OsmProvider extends DynamicProvider {
     const engine = configuredEngine ?? globalEngine;
 
     if (!isMapEngine(engine)) {
-      return Promise.reject(errors.Error('W1033'));
+      return Promise.reject(errors.Error('E1069'));
     }
 
     this._mapEngine = engine;

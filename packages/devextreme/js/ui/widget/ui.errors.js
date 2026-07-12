@@ -282,6 +282,11 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     E1068: '\'aiIntegration\' is not configured for the AI Assistant.',
 
     /**
+    * @name ErrorsUIWidgets.E1069
+    */
+    E1069: 'The OSM map provider requires Leaflet. Configure "providerConfig.mapEngine" or load Leaflet as "window.L".',
+
+    /**
     * @name ErrorsUIWidgets.W1001
     */
     W1001: 'The "key" option cannot be modified after initialization',
@@ -418,8 +423,4 @@ export default errorUtils(errors.ERROR_MESSAGES, {
      * @name ErrorsUIWidgets.W1032
      */
     W1032: 'The OSM map provider tile server is configured without an "attribution". Attribution is required when displaying OpenStreetMap data; set the "attribution" field of the "providerConfig.tileServer" option (for example, "© OpenStreetMap contributors").',
-    /**
-     * @name ErrorsUIWidgets.W1033
-     */
-    W1033: 'The OSM map provider requires the Leaflet library. Pass the Leaflet API through "providerConfig.mapEngine" or load it globally as "window.L" before initializing the map. Include the Leaflet stylesheet separately.',
 });
