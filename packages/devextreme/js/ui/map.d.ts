@@ -71,7 +71,7 @@ export interface OsmTileServerConfig {
  * @public
  */
 export type OsmTileServer = string | OsmTileServerConfig
-| ((type: MapType | string) => string | OsmTileServerConfig | null | undefined);
+| ((type: MapType) => string | OsmTileServerConfig | null | undefined);
 
 /** @public */
 export type MapType = 'hybrid' | 'roadmap' | 'satellite';
