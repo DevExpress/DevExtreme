@@ -2701,7 +2701,11 @@ var _default = exports["default"] = (0, _error.default)(_errors.default.ERROR_ME
   /**
    * @name ErrorsUIWidgets.W1032
    */
-  W1032: 'The OSM map provider tile server is configured without an "attribution". Attribution is required when displaying OpenStreetMap data; set the "attribution" field of the "providerConfig.tileServer" option (for example, "© OpenStreetMap contributors").'
+  W1032: 'The OSM map provider tile server is configured without an "attribution". Attribution is required when displaying OpenStreetMap data; set the "attribution" field of the "providerConfig.tileServer" option (for example, "© OpenStreetMap contributors").',
+  /**
+   * @name ErrorsUIWidgets.W1033
+   */
+  W1033: 'No routing service is configured for the OSM map provider. Configure "providerConfig.getRoute" to draw routed paths.'
 });
 module.exports = exports.default;
 module.exports["default"] = exports.default;
