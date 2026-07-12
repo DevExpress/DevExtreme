@@ -23521,7 +23521,7 @@ declare module DevExpress.ui {
       getRoute?:
         | ((
             params: DevExpress.ui.dxMap.OsmGetRouteParams
-          ) => Promise<Array<[number, number]>>)
+          ) => Promise<DevExpress.ui.dxMap.OsmRouteResult>)
         | undefined;
       /**
        * [descr:dxMapOptions.providerConfig.mapEngine]

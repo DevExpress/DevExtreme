@@ -3,7 +3,7 @@ import Color from '@js/color';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifiers
-import type { OsmGetRouteFunction as GetRouteFunction, OsmRouteResult as RouteResult, RouteMode } from '@js/ui/map';
+import type { OsmRouteResult as RouteResult, RouteMode } from '@js/ui/map';
 import errors from '@js/ui/widget/ui.errors';
 
 import type {
@@ -544,7 +544,7 @@ class OsmProvider extends DynamicProvider {
         const polylineOptions = { color, opacity, weight };
         const normalizedLocations = resolvedLocations.map((loc) => this._normalizeLocation(loc));
 
-        const getRouteFn = this._option('providerConfig')?.getRoute as GetRouteFunction | undefined;
+        const getRouteFn = this._option('providerConfig')?.getRoute;
 
         const drawPolyline = (coords: [number, number][]): void => {
           const polyline = this._mapEngine.polyline(coords, polylineOptions).addTo(this._map);
@@ -562,6 +562,7 @@ class OsmProvider extends DynamicProvider {
         };
 
         if (!getRouteFn) {
+          errors.log('W1033');
           drawPolyline(resolvedLocations.map((loc) => [loc.lat, loc.lng] as [number, number]));
           return;
         }

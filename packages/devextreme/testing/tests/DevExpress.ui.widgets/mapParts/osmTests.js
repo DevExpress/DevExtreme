@@ -1399,8 +1399,9 @@ QUnit.module('OSM: routes', moduleConfig, () => {
         });
     });
 
-    QUnit.test('straight-line polyline is drawn when osmGetRoute is not provided', function(assert) {
+    QUnit.test('straight-line polyline is drawn and W1033 is logged when osmGetRoute is not provided', function(assert) {
         const done = assert.async();
+        const errorStub = sinon.stub(errors, 'log');
 
         $('#map').dxMap({
             provider: 'osm',
@@ -1408,6 +1409,9 @@ QUnit.module('OSM: routes', moduleConfig, () => {
             onReady: () => {
                 // eslint-disable-next-line spellcheck/spell-checker -- Leaflet mock state identifier
                 assert.strictEqual(L.addedPolylines.length, 1, 'straight-line polyline added');
+                assert.ok(errorStub.withArgs('W1033').calledOnce, 'W1033 warning logged');
+
+                errorStub.restore();
                 done();
             }
         });

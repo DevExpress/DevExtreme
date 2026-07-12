@@ -423,4 +423,8 @@ export default errorUtils(errors.ERROR_MESSAGES, {
      * @name ErrorsUIWidgets.W1032
      */
     W1032: 'The OSM map provider tile server is configured without an "attribution". Attribution is required when displaying OpenStreetMap data; set the "attribution" field of the "providerConfig.tileServer" option (for example, "© OpenStreetMap contributors").',
+    /**
+     * @name ErrorsUIWidgets.W1033
+     */
+    W1033: 'No routing service is configured for the OSM map provider. Configure "providerConfig.getRoute" to draw routed paths.',
 });

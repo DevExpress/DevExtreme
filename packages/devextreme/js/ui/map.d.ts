@@ -425,7 +425,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
        * @public
        * @default undefined
        */
-      getRoute?: ((params: OsmGetRouteParams) => Promise<Array<[number, number]>>) | undefined;
+      getRoute?: ((params: OsmGetRouteParams) => Promise<OsmRouteResult>) | undefined;
       /**
        * @docid
        * @public
