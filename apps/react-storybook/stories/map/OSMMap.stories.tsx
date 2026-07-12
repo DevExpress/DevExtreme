@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-webpack5';
 import React, { useMemo, useRef } from 'react';
 import Button from 'devextreme-react/button';
 import Map, { type MapRef } from 'devextreme-react/map';
+import type { OsmGetRouteFunction } from 'devextreme/ui/map';
 
 // OpenStreetMap (OSM) provider for the DevExtreme Map — powered by client-owned Leaflet.
 // This Storybook loads Leaflet in `.storybook/preview-head.html`, which demonstrates the global
@@ -67,12 +68,11 @@ const buildTileServer = (provider: TileProvider, type: string, keys: ProviderKey
 };
 
 // Real road routing via the public OSRM demo server (evaluation only; host your own in production).
-const getRoute = ({ locations }: { locations: { lat: number; lng: number }[] }): Promise<[number, number][]> => {
+const getRoute: OsmGetRouteFunction = ({ locations }) => {
   const coords = locations.map((l) => `${l.lng},${l.lat}`).join(';');
   return fetch(`https://router.project-osrm.org/route/v1/driving/${coords}?overview=full&geometries=geojson`)
     .then((r) => r.json())
-    .then((res) => (res.routes[0].geometry.coordinates as [number, number][])
-      .map(([lng, lat]) => [lat, lng] as [number, number]));
+    .then((res) => res.routes[0].geometry);
 };
 
 const markersData = [

@@ -1346,14 +1346,56 @@ QUnit.module('OSM: routes', moduleConfig, () => {
             } },
             routes: [{
                 locations: [{ lat: 10, lng: 20 }, { lat: 30, lng: 40 }],
-                mode: 'walking',
+                mode: 'cycling',
             }],
             onReady: () => {
                 assert.ok(capturedParams, 'callback was called');
-                assert.strictEqual(capturedParams.mode, 'walking', 'mode passed to callback');
+                assert.strictEqual(capturedParams.mode, 'cycling', 'custom mode passed to callback without changes');
                 assert.deepEqual(capturedParams.locations, [{ lat: 10, lng: 20 }, { lat: 30, lng: 40 }], 'locations passed to callback');
                 done();
             }
+        });
+    });
+
+    QUnit.test('GeoJSON LineString result is converted from longitude-latitude order', function(assert) {
+        const done = assert.async();
+
+        $('#map').dxMap({
+            provider: 'osm',
+            providerConfig: {
+                getRoute: () => Promise.resolve({
+                    type: 'LineString',
+                    coordinates: [[-73.99, 40.74], [-73.98, 40.75]],
+                }),
+            },
+            routes: [ROUTES[0]],
+            onReady: () => {
+                assert.deepEqual(L.polylineCoords, [[40.74, -73.99], [40.75, -73.98]], 'coordinates converted to latitude-longitude order');
+                done();
+            },
+        });
+    });
+
+    QUnit.test('unsupported GeoJSON result falls back to a straight polyline', function(assert) {
+        const done = assert.async();
+        const errorStub = sinon.stub(errors, 'log');
+
+        $('#map').dxMap({
+            provider: 'osm',
+            providerConfig: {
+                getRoute: () => Promise.resolve({
+                    type: 'MultiLineString',
+                    coordinates: [],
+                }),
+            },
+            routes: [{ locations: [[10, 20], [30, 40]] }],
+            onReady: () => {
+                assert.deepEqual(L.polylineCoords, [[10, 20], [30, 40]], 'unsupported result is not interpreted as a route');
+                assert.ok(errorStub.withArgs('W1006').calledOnce, 'W1006 warning logged');
+
+                errorStub.restore();
+                done();
+            },
         });
     });
 

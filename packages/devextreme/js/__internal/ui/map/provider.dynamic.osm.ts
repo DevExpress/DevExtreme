@@ -2,7 +2,8 @@
 import Color from '@js/color';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import type { RouteMode } from '@js/ui/map';
+// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifiers
+import type { OsmGetRouteFunction as GetRouteFunction, OsmRouteResult as RouteResult, RouteMode } from '@js/ui/map';
 import errors from '@js/ui/widget/ui.errors';
 
 import type {
@@ -48,6 +49,18 @@ type OsmTileServerObject = OsmTileServerConfig
   | ((type: string) => string | OsmTileServerConfig | null | undefined);
 // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifiers
 type OsmTileServerOption = string | OsmTileServerObject;
+
+const normalizeRouteResult = (result: RouteResult): [number, number][] => {
+  if (Array.isArray(result)) {
+    return result;
+  }
+
+  if (result?.type === 'LineString' && Array.isArray(result.coordinates)) {
+    return result.coordinates.map(([lng, lat]) => [lat, lng]);
+  }
+
+  throw new Error('Unsupported route result');
+};
 
 // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
 export type OsmLocation = PlainLocation;
@@ -531,7 +544,7 @@ class OsmProvider extends DynamicProvider {
         const polylineOptions = { color, opacity, weight };
         const normalizedLocations = resolvedLocations.map((loc) => this._normalizeLocation(loc));
 
-        const getRouteFn = this._option('providerConfig')?.getRoute as ((params: { locations: { lat: number; lng: number }[]; mode: string }) => Promise<[number, number][]>) | undefined;
+        const getRouteFn = this._option('providerConfig')?.getRoute as GetRouteFunction | undefined;
 
         const drawPolyline = (coords: [number, number][]): void => {
           const polyline = this._mapEngine.polyline(coords, polylineOptions).addTo(this._map);
@@ -555,8 +568,8 @@ class OsmProvider extends DynamicProvider {
 
         Promise.resolve()
           .then(() => getRouteFn({ locations: normalizedLocations, mode }))
-          .then((coords) => {
-            drawPolyline(coords);
+          .then((result) => {
+            drawPolyline(normalizeRouteResult(result));
           }).catch((e: unknown) => {
             errors.log('W1006', e);
 

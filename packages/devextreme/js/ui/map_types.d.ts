@@ -3,6 +3,8 @@ export {
   RouteMode,
   OsmGeocodeFunction,
   OsmGetRouteParams,
+  OsmGeoJsonLineString,
+  OsmRouteResult,
   OsmGetRouteFunction,
   OsmTileServerConfig,
   OsmTileServer,

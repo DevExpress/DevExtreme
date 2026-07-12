@@ -23291,11 +23291,18 @@ declare module DevExpress.ui {
       query: string
     ) => Promise<MapLocation | null | undefined>;
     /**
+     * [descr:OsmGeoJsonLineString]
+     */
+    export interface OsmGeoJsonLineString {
+      type: 'LineString';
+      coordinates: Array<Array<number>>;
+    }
+    /**
      * [descr:OsmGetRouteFunction]
      */
     export type OsmGetRouteFunction = (
       params: OsmGetRouteParams
-    ) => Promise<Array<[number, number]>>;
+    ) => Promise<OsmRouteResult>;
     /**
      * [descr:OsmGetRouteParams]
      */
@@ -23304,14 +23311,16 @@ declare module DevExpress.ui {
       mode: RouteMode | string;
     }
     /**
+     * [descr:OsmRouteResult]
+     */
+    export type OsmRouteResult = Array<[number, number]> | OsmGeoJsonLineString;
+    /**
      * [descr:OsmTileServer]
      */
     export type OsmTileServer =
       | string
       | OsmTileServerConfig
-      | ((
-          type: MapType | string
-        ) => string | OsmTileServerConfig | null | undefined);
+      | ((type: MapType) => string | OsmTileServerConfig | null | undefined);
     /**
      * [descr:OsmTileServerConfig]
      */

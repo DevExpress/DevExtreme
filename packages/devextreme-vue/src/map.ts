@@ -259,7 +259,7 @@ const DxProviderConfigConfig = {
     getRoute: Function as PropType<((params: OsmGetRouteParams) => any)>,
     mapEngine: Object as PropType<Record<string, any>>,
     mapId: String,
-    tileServer: [Object, Function, String] as PropType<OsmTileServer | (((type: MapType | string) => string | OsmTileServerConfig | null | undefined)) | OsmTileServerConfig | string>,
+    tileServer: [Object, Function, String] as PropType<OsmTileServer | (((type: MapType) => string | OsmTileServerConfig | null | undefined)) | OsmTileServerConfig | string>,
     useAdvancedMarkers: Boolean
   }
 };

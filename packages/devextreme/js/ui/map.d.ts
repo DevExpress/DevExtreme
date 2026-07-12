@@ -38,7 +38,23 @@ export interface OsmGetRouteParams {
  * @docid
  * @public
  */
-export type OsmGetRouteFunction = (params: OsmGetRouteParams) => Promise<Array<[number, number]>>;
+export interface OsmGeoJsonLineString {
+  type: 'LineString';
+  coordinates: Array<Array<number>>;
+}
+
+/**
+ * @docid
+ * @type Array<Array<number>>|OsmGeoJsonLineString
+ * @public
+ */
+export type OsmRouteResult = Array<[number, number]> | OsmGeoJsonLineString;
+
+/**
+ * @docid
+ * @public
+ */
+export type OsmGetRouteFunction = (params: OsmGetRouteParams) => Promise<OsmRouteResult>;
 
 /**
  * @docid
