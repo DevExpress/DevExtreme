@@ -92,12 +92,12 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
     onClick?: ((e: ClickEvent) => void);
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/speed_dial_action:ContentReadyEvent}
      * @action
      * @public
      */
-    onContentReady?: ((e: ContentReadyEvent) => void) | null;
+    onContentReady?: ((e: ContentReadyEvent) => void) | undefined;
     /**
      * @docid
      * @public

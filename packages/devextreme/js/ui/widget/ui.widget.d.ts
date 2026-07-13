@@ -51,11 +51,11 @@ export interface WidgetOptions<TComponent> extends DOMComponentOptions<TComponen
     hoverStateEnabled?: boolean;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onContentReady?: ((e: EventInfo<TComponent>) => void) | null;
+    onContentReady?: ((e: EventInfo<TComponent>) => void) | undefined;
     /**
      * @docid
      * @default 0
