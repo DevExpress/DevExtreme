@@ -55,7 +55,11 @@ function cleanVueMetadata(metaData: any): any {
 
   const cleanProp = (prop: any) => {
     if (prop && Array.isArray(prop.types)) {
-      const isFunction = /^on[A-Z]/.test(prop.name) || prop.types.some((t: any) => t && (t.type === 'Function' || t.acceptableValueType === 'Function'));
+      const isFunction =
+        /^on[A-Z]/.test(prop.name)
+        || prop.types.some(
+          (t: any) => t && (t.type === 'Function' || t.acceptableValueType === 'Function'),
+        );
       if (isFunction) {
         prop.types = prop.types.filter((t: any) => t && t.type !== 'Null');
       }
