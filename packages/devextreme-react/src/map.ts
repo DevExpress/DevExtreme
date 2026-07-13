@@ -18,11 +18,11 @@ type IMapOptionsNarrowedEvents = {
   onClick?: ((e: ClickEvent) => void);
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
-  onMarkerAdded?: ((e: MarkerAddedEvent) => void) | null;
-  onMarkerRemoved?: ((e: MarkerRemovedEvent) => void) | null;
-  onReady?: ((e: ReadyEvent) => void) | null;
-  onRouteAdded?: ((e: RouteAddedEvent) => void) | null;
-  onRouteRemoved?: ((e: RouteRemovedEvent) => void) | null;
+  onMarkerAdded?: ((e: MarkerAddedEvent) => void) | undefined;
+  onMarkerRemoved?: ((e: MarkerRemovedEvent) => void) | undefined;
+  onReady?: ((e: ReadyEvent) => void) | undefined;
+  onRouteAdded?: ((e: RouteAddedEvent) => void) | undefined;
+  onRouteRemoved?: ((e: RouteRemovedEvent) => void) | undefined;
 }
 
 type IMapOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IMapOptionsNarrowedEvents> & IHtmlOptions & {

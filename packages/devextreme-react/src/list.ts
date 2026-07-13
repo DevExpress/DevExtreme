@@ -23,20 +23,20 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 type IListOptionsNarrowedEvents<TItem = any, TKey = any> = {
   onContentReady?: ((e: ContentReadyEvent<TItem, TKey>) => void);
   onDisposing?: ((e: DisposingEvent<TItem, TKey>) => void);
-  onGroupRendered?: ((e: GroupRenderedEvent<TItem, TKey>) => void) | null;
+  onGroupRendered?: ((e: GroupRenderedEvent<TItem, TKey>) => void) | undefined;
   onInitialized?: ((e: InitializedEvent<TItem, TKey>) => void);
   onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void);
-  onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void) | null;
-  onItemDeleted?: ((e: ItemDeletedEvent<TItem, TKey>) => void) | null;
-  onItemDeleting?: ((e: ItemDeletingEvent<TItem, TKey>) => void) | null;
-  onItemHold?: ((e: ItemHoldEvent<TItem, TKey>) => void) | null;
+  onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void) | undefined;
+  onItemDeleted?: ((e: ItemDeletedEvent<TItem, TKey>) => void) | undefined;
+  onItemDeleting?: ((e: ItemDeletingEvent<TItem, TKey>) => void) | undefined;
+  onItemHold?: ((e: ItemHoldEvent<TItem, TKey>) => void) | undefined;
   onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void);
-  onItemReordered?: ((e: ItemReorderedEvent<TItem, TKey>) => void) | null;
-  onItemSwipe?: ((e: ItemSwipeEvent<TItem, TKey>) => void) | null;
-  onPageLoading?: ((e: PageLoadingEvent<TItem, TKey>) => void) | null;
-  onPullRefresh?: ((e: PullRefreshEvent<TItem, TKey>) => void) | null;
-  onScroll?: ((e: ScrollEvent<TItem, TKey>) => void) | null;
-  onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TItem, TKey>) => void) | null;
+  onItemReordered?: ((e: ItemReorderedEvent<TItem, TKey>) => void) | undefined;
+  onItemSwipe?: ((e: ItemSwipeEvent<TItem, TKey>) => void) | undefined;
+  onPageLoading?: ((e: PageLoadingEvent<TItem, TKey>) => void) | undefined;
+  onPullRefresh?: ((e: PullRefreshEvent<TItem, TKey>) => void) | undefined;
+  onScroll?: ((e: ScrollEvent<TItem, TKey>) => void) | undefined;
+  onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TItem, TKey>) => void) | undefined;
   onSelectionChanging?: ((e: SelectionChangingEvent<TItem, TKey>) => void);
 }
 

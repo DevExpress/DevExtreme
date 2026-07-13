@@ -41,9 +41,9 @@ type ITagBoxOptionsNarrowedEvents = {
   onItemClick?: ((e: ItemClickEvent) => void);
   onKeyDown?: ((e: KeyDownEvent) => void);
   onKeyUp?: ((e: KeyUpEvent) => void);
-  onMultiTagPreparing?: ((e: MultiTagPreparingEvent) => void) | null;
+  onMultiTagPreparing?: ((e: MultiTagPreparingEvent) => void) | undefined;
   onOpened?: ((e: OpenedEvent) => void);
-  onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void) | null;
+  onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void) | undefined;
   onValueChanged?: ((e: ValueChangedEvent) => void);
 }
 

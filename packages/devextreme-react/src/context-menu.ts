@@ -21,15 +21,15 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 type IContextMenuOptionsNarrowedEvents<TItem = any, TKey = any> = {
   onContentReady?: ((e: ContentReadyEvent<TItem, TKey>) => void);
   onDisposing?: ((e: DisposingEvent<TItem, TKey>) => void);
-  onHidden?: ((e: HiddenEvent<TItem, TKey>) => void) | null;
-  onHiding?: ((e: HidingEvent<TItem, TKey>) => void) | null;
+  onHidden?: ((e: HiddenEvent<TItem, TKey>) => void) | undefined;
+  onHiding?: ((e: HidingEvent<TItem, TKey>) => void) | undefined;
   onInitialized?: ((e: InitializedEvent<TItem, TKey>) => void);
   onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void);
   onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void);
   onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void);
-  onPositioning?: ((e: PositioningEvent<TItem, TKey>) => void) | null;
-  onShowing?: ((e: ShowingEvent<TItem, TKey>) => void) | null;
-  onShown?: ((e: ShownEvent<TItem, TKey>) => void) | null;
+  onPositioning?: ((e: PositioningEvent<TItem, TKey>) => void) | undefined;
+  onShowing?: ((e: ShowingEvent<TItem, TKey>) => void) | undefined;
+  onShown?: ((e: ShownEvent<TItem, TKey>) => void) | undefined;
 }
 
 type IContextMenuOptions<TItem = any, TKey = any> = React.PropsWithChildren<ReplaceFieldTypes<Properties<TItem, TKey>, IContextMenuOptionsNarrowedEvents<TItem, TKey>> & IHtmlOptions & {

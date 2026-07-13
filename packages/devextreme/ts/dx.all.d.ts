@@ -12345,31 +12345,31 @@ declare module DevExpress.ui {
      */
     onHidden?:
       | ((e: DevExpress.ui.dxContextMenu.HiddenEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxContextMenuOptions.onHiding]
      */
     onHiding?:
       | ((e: DevExpress.ui.dxContextMenu.HidingEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxContextMenuOptions.onPositioning]
      */
     onPositioning?:
       | ((e: DevExpress.ui.dxContextMenu.PositioningEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxContextMenuOptions.onShowing]
      */
     onShowing?:
       | ((e: DevExpress.ui.dxContextMenu.ShowingEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxContextMenuOptions.onShown]
      */
     onShown?:
       | ((e: DevExpress.ui.dxContextMenu.ShownEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxContextMenuOptions.position]
      */
@@ -16209,31 +16209,33 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramOptions.onItemClick]
      */
-    onItemClick?: ((e: DevExpress.ui.dxDiagram.ItemClickEvent) => void) | null;
+    onItemClick?:
+      | ((e: DevExpress.ui.dxDiagram.ItemClickEvent) => void)
+      | undefined;
     /**
      * [descr:dxDiagramOptions.onItemDblClick]
      */
     onItemDblClick?:
       | ((e: DevExpress.ui.dxDiagram.ItemDblClickEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxDiagramOptions.onSelectionChanged]
      */
     onSelectionChanged?:
       | ((e: DevExpress.ui.dxDiagram.SelectionChangedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxDiagramOptions.onRequestEditOperation]
      */
     onRequestEditOperation?:
       | ((e: DevExpress.ui.dxDiagram.RequestEditOperationEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxDiagramOptions.onRequestLayoutUpdate]
      */
     onRequestLayoutUpdate?:
       | ((e: DevExpress.ui.dxDiagram.RequestLayoutUpdateEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxDiagramOptions.pageColor]
      */
@@ -21209,65 +21211,67 @@ declare module DevExpress.ui {
      */
     onSelectionChanged?:
       | ((e: DevExpress.ui.dxGantt.SelectionChangedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxGanttOptions.onCustomCommand]
      */
     onCustomCommand?:
       | ((e: DevExpress.ui.dxGantt.CustomCommandEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxGanttOptions.onContextMenuPreparing]
      */
     onContextMenuPreparing?:
       | ((e: DevExpress.ui.dxGantt.ContextMenuPreparingEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxGanttOptions.onTaskInserting]
      */
     onTaskInserting?:
       | ((e: DevExpress.ui.dxGantt.TaskInsertingEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxGanttOptions.onTaskInserted]
      */
     onTaskInserted?:
       | ((e: DevExpress.ui.dxGantt.TaskInsertedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxGanttOptions.onTaskDeleting]
      */
     onTaskDeleting?:
       | ((e: DevExpress.ui.dxGantt.TaskDeletingEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxGanttOptions.onTaskDeleted]
      */
     onTaskDeleted?:
       | ((e: DevExpress.ui.dxGantt.TaskDeletedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxGanttOptions.onTaskUpdating]
      */
     onTaskUpdating?:
       | ((e: DevExpress.ui.dxGantt.TaskUpdatingEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxGanttOptions.onTaskUpdated]
      */
     onTaskUpdated?:
       | ((e: DevExpress.ui.dxGantt.TaskUpdatedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxGanttOptions.onTaskMoving]
      */
-    onTaskMoving?: ((e: DevExpress.ui.dxGantt.TaskMovingEvent) => void) | null;
+    onTaskMoving?:
+      | ((e: DevExpress.ui.dxGantt.TaskMovingEvent) => void)
+      | undefined;
     /**
      * [descr:dxGanttOptions.onTaskEditDialogShowing]
      */
     onTaskEditDialogShowing?:
       | ((e: DevExpress.ui.dxGantt.TaskEditDialogShowingEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxGanttOptions.onResourceManagerDialogShowing]
      */
@@ -21279,83 +21283,85 @@ declare module DevExpress.ui {
      */
     onDependencyInserting?:
       | ((e: DevExpress.ui.dxGantt.DependencyInsertingEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxGanttOptions.onDependencyInserted]
      */
     onDependencyInserted?:
       | ((e: DevExpress.ui.dxGantt.DependencyInsertedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxGanttOptions.onDependencyDeleting]
      */
     onDependencyDeleting?:
       | ((e: DevExpress.ui.dxGantt.DependencyDeletingEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxGanttOptions.onDependencyDeleted]
      */
     onDependencyDeleted?:
       | ((e: DevExpress.ui.dxGantt.DependencyDeletedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxGanttOptions.onResourceInserting]
      */
     onResourceInserting?:
       | ((e: DevExpress.ui.dxGantt.ResourceInsertingEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxGanttOptions.onResourceInserted]
      */
     onResourceInserted?:
       | ((e: DevExpress.ui.dxGantt.ResourceInsertedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxGanttOptions.onResourceDeleting]
      */
     onResourceDeleting?:
       | ((e: DevExpress.ui.dxGantt.ResourceDeletingEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxGanttOptions.onResourceDeleted]
      */
     onResourceDeleted?:
       | ((e: DevExpress.ui.dxGantt.ResourceDeletedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxGanttOptions.onResourceAssigning]
      */
     onResourceAssigning?:
       | ((e: DevExpress.ui.dxGantt.ResourceAssigningEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxGanttOptions.onResourceAssigned]
      */
     onResourceAssigned?:
       | ((e: DevExpress.ui.dxGantt.ResourceAssignedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxGanttOptions.onResourceUnassigning]
      */
     onResourceUnassigning?:
       | ((e: DevExpress.ui.dxGantt.ResourceUnassigningEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxGanttOptions.onResourceUnassigned]
      */
     onResourceUnassigned?:
       | ((e: DevExpress.ui.dxGantt.ResourceUnassignedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxGanttOptions.onTaskClick]
      */
-    onTaskClick?: ((e: DevExpress.ui.dxGantt.TaskClickEvent) => void) | null;
+    onTaskClick?:
+      | ((e: DevExpress.ui.dxGantt.TaskClickEvent) => void)
+      | undefined;
     /**
      * [descr:dxGanttOptions.onTaskDblClick]
      */
     onTaskDblClick?:
       | ((e: DevExpress.ui.dxGantt.TaskDblClickEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxGanttOptions.onScaleCellPrepared]
      */
@@ -22740,7 +22746,7 @@ declare module DevExpress.ui {
      */
     onGroupRendered?:
       | ((e: DevExpress.ui.dxList.GroupRenderedEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxListOptions.onItemClick]
      */
@@ -22753,55 +22759,55 @@ declare module DevExpress.ui {
      */
     onItemContextMenu?:
       | ((e: DevExpress.ui.dxList.ItemContextMenuEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxListOptions.onItemDeleted]
      */
     onItemDeleted?:
       | ((e: DevExpress.ui.dxList.ItemDeletedEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxListOptions.onItemDeleting]
      */
     onItemDeleting?:
       | ((e: DevExpress.ui.dxList.ItemDeletingEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxListOptions.onItemHold]
      */
     onItemHold?:
       | ((e: DevExpress.ui.dxList.ItemHoldEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxListOptions.onItemReordered]
      */
     onItemReordered?:
       | ((e: DevExpress.ui.dxList.ItemReorderedEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxListOptions.onItemSwipe]
      */
     onItemSwipe?:
       | ((e: DevExpress.ui.dxList.ItemSwipeEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxListOptions.onPageLoading]
      */
     onPageLoading?:
       | ((e: DevExpress.ui.dxList.PageLoadingEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxListOptions.onPullRefresh]
      */
     onPullRefresh?:
       | ((e: DevExpress.ui.dxList.PullRefreshEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxListOptions.onScroll]
      */
     onScroll?:
       | ((e: DevExpress.ui.dxList.ScrollEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxListOptions.onSelectAllValueChanged]
      */
@@ -22809,7 +22815,7 @@ declare module DevExpress.ui {
       | ((
           e: DevExpress.ui.dxList.SelectAllValueChangedEvent<TItem, TKey>
         ) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxListOptions.pageLoadMode]
      */
@@ -23221,23 +23227,23 @@ declare module DevExpress.ui {
      */
     onPageLoading?:
       | ((e: DevExpress.ui.dxLookup.PageLoadingEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxLookupOptions.onPullRefresh]
      */
     onPullRefresh?:
       | ((e: DevExpress.ui.dxLookup.PullRefreshEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxLookupOptions.onScroll]
      */
-    onScroll?: ((e: DevExpress.ui.dxLookup.ScrollEvent) => void) | null;
+    onScroll?: ((e: DevExpress.ui.dxLookup.ScrollEvent) => void) | undefined;
     /**
      * [descr:dxLookupOptions.onValueChanged]
      */
     onValueChanged?:
       | ((e: DevExpress.ui.dxLookup.ValueChangedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxLookupOptions.pageLoadMode]
      */
@@ -23513,27 +23519,31 @@ declare module DevExpress.ui {
     /**
      * [descr:dxMapOptions.onMarkerAdded]
      */
-    onMarkerAdded?: ((e: DevExpress.ui.dxMap.MarkerAddedEvent) => void) | null;
+    onMarkerAdded?:
+      | ((e: DevExpress.ui.dxMap.MarkerAddedEvent) => void)
+      | undefined;
     /**
      * [descr:dxMapOptions.onMarkerRemoved]
      */
     onMarkerRemoved?:
       | ((e: DevExpress.ui.dxMap.MarkerRemovedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxMapOptions.onReady]
      */
-    onReady?: ((e: DevExpress.ui.dxMap.ReadyEvent) => void) | null;
+    onReady?: ((e: DevExpress.ui.dxMap.ReadyEvent) => void) | undefined;
     /**
      * [descr:dxMapOptions.onRouteAdded]
      */
-    onRouteAdded?: ((e: DevExpress.ui.dxMap.RouteAddedEvent) => void) | null;
+    onRouteAdded?:
+      | ((e: DevExpress.ui.dxMap.RouteAddedEvent) => void)
+      | undefined;
     /**
      * [descr:dxMapOptions.onRouteRemoved]
      */
     onRouteRemoved?:
       | ((e: DevExpress.ui.dxMap.RouteRemovedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxMapOptions.provider]
      */
@@ -25849,7 +25859,7 @@ declare module DevExpress.ui {
      */
     onComplete?:
       | ((e: DevExpress.ui.dxProgressBar.CompleteEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxProgressBarOptions.showStatus]
      */
@@ -26010,7 +26020,7 @@ declare module DevExpress.ui {
      */
     onValueChanged?:
       | ((e: DevExpress.ui.dxRangeSlider.ValueChangedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxRangeSliderOptions.start]
      */
@@ -26354,7 +26364,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxResponsiveBoxOptions.screenByWidth]
      */
-    screenByWidth?: Function | null;
+    screenByWidth?: Function | undefined;
     /**
      * [descr:dxResponsiveBoxOptions.singleColumnScreen]
      */
@@ -27758,13 +27768,15 @@ declare module DevExpress.ui {
     /**
      * [descr:dxScrollViewOptions.onPullDown]
      */
-    onPullDown?: ((e: DevExpress.ui.dxScrollView.PullDownEvent) => void) | null;
+    onPullDown?:
+      | ((e: DevExpress.ui.dxScrollView.PullDownEvent) => void)
+      | undefined;
     /**
      * [descr:dxScrollViewOptions.onReachBottom]
      */
     onReachBottom?:
       | ((e: DevExpress.ui.dxScrollView.ReachBottomEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxScrollViewOptions.pulledDownText]
      */
@@ -29961,19 +29973,19 @@ declare module DevExpress.ui {
      */
     onMultiTagPreparing?:
       | ((e: DevExpress.ui.dxTagBox.MultiTagPreparingEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxTagBoxOptions.onSelectAllValueChanged]
      */
     onSelectAllValueChanged?:
       | ((e: DevExpress.ui.dxTagBox.SelectAllValueChangedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxTagBoxOptions.onSelectionChanged]
      */
     onSelectionChanged?:
       | ((e: DevExpress.ui.dxTagBox.SelectionChangedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxTagBoxOptions.selectAllMode]
      */

@@ -593,9 +593,9 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       onScroll: (e: ScrollEvent): void => {
         this._scrollHandler(e);
       },
-      onPullDown: isPullRefreshEnabled ? this._pullDownHandler.bind(this) : null,
+      onPullDown: isPullRefreshEnabled ? this._pullDownHandler.bind(this) : undefined,
       // @ts-expect-error ts-error
-      onReachBottom: autoPagingEnabled ? this._scrollBottomHandler.bind(this) : null,
+      onReachBottom: autoPagingEnabled ? this._scrollBottomHandler.bind(this) : undefined,
       showScrollbar,
       useNative: useNativeScrolling,
       bounceEnabled,
