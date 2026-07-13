@@ -12,15 +12,18 @@ import type { OsmGetRouteFunction } from 'devextreme/ui/map';
 // you supply them via `providerConfig` (tileServer / geocodeLocation / getRoute).
 //
 // This story lets you switch between several commercial OSM-based tile providers and paste your
-// own key for each (the "Tile provider" controls). The public OpenStreetMap tile server
-// (tile.openstreetmap.org) MUST NOT be used in production per the OSM Tile Usage Policy, so it is
-// intentionally not offered here. Routing uses the public OSRM demo server (evaluation only).
+// own key for each (the "Tile provider" controls). The public OpenStreetMap tile service is
+// best-effort and subject to the OSM Tile Usage Policy, so it is intentionally not offered here.
+// Routing uses the public OSRM demo server (evaluation only).
 //
 // NOTE: there is deliberately no "self-hosted" option in this published Storybook — a localhost
 // URL would point at the viewer's own machine, not a shared server. For the fully free, no-key,
 // self-hosted setup (tiles + routing + geocoding), run the OSM_SelfHosted_Server Docker stack
 // locally (see the devextreme-how-to-use-openstreetmap example repo).
 const OSM_ATTR = '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+const OPENMAPTILES_ATTR = '© <a href="https://openmaptiles.org/">OpenMapTiles</a>';
+const STADIA_ATTR = `© <a href="https://stadiamaps.com/">Stadia Maps</a> ${OPENMAPTILES_ATTR} ${OSM_ATTR}`;
+const STADIA_SATELLITE_ATTR = `${STADIA_ATTR} © CNES, Distribution Airbus DS, © Airbus DS, © PlanetObserver (Contains Copernicus Data)`;
 const markerUrl = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/maps/map-marker.png';
 
 type TileProvider = 'MapTiler' | 'Thunderforest' | 'Stadia Maps';
@@ -51,7 +54,7 @@ const buildTileServer = (provider: TileProvider, type: string, keys: ProviderKey
       const style = { roadmap: 'alidade_smooth', satellite: 'alidade_satellite', hybrid: 'alidade_satellite' }[type] ?? 'alidade_smooth';
       return {
         url: `https://tiles.stadiamaps.com/tiles/${style}/{z}/{x}/{y}.png?api_key=${keys.stadia}`,
-        attribution: `© <a href="https://stadiamaps.com/">Stadia Maps</a> ${OSM_ATTR}`,
+        attribution: style === 'alidade_satellite' ? STADIA_SATELLITE_ATTR : STADIA_ATTR,
         maxZoom: 20,
       };
     }
@@ -248,26 +251,36 @@ const render: Story['render'] = (args) => {
         <Button text="Add route" onClick={addRoute} />
         <Button text="Show all tooltips" onClick={showAllTooltips} />
       </div>
-      <Map
-        ref={mapRef}
-        // Center, zoom, markers, and routes are uncontrolled so the user and the method buttons can
-        // mutate the Map instance. The key re-mounts it when the corresponding Storybook controls
-        // change, which re-seeds those defaults.
-        key={`${center}|${zoom}|${showMarkers}|${showRoutes}|${routeColor}`}
-        provider="osm"
-        providerConfig={providerConfig}
-        defaultCenter={centers[center]}
-        defaultZoom={zoom}
-        type={type}
-        height={height}
-        width={width}
-        controls={controls}
-        disabled={disabled}
-        autoAdjust={autoAdjust}
-        markerIconSrc={customMarkerIcons ? markerUrl : undefined}
-        defaultMarkers={markers}
-        defaultRoutes={routes}
-      />
+      <div style={{ position: 'relative', width }}>
+        <Map
+          ref={mapRef}
+          // Center, zoom, markers, and routes are uncontrolled so the user and the method buttons can
+          // mutate the Map instance. The key re-mounts it when the corresponding Storybook controls
+          // change, which re-seeds those defaults.
+          key={`${center}|${zoom}|${showMarkers}|${showRoutes}|${routeColor}`}
+          provider="osm"
+          providerConfig={providerConfig}
+          defaultCenter={centers[center]}
+          defaultZoom={zoom}
+          type={type}
+          height={height}
+          width="100%"
+          controls={controls}
+          disabled={disabled}
+          autoAdjust={autoAdjust}
+          markerIconSrc={customMarkerIcons ? markerUrl : undefined}
+          defaultMarkers={markers}
+          defaultRoutes={routes}
+        />
+        {tileProvider === 'MapTiler' && (
+          <a
+            href="https://www.maptiler.com"
+            style={{ position: 'absolute', left: 10, bottom: 10, zIndex: 999 }}
+          >
+            <img src="https://api.maptiler.com/resources/logo.svg" alt="MapTiler logo" />
+          </a>
+        )}
+      </div>
     </>
   );
 };
