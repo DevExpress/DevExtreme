@@ -10261,13 +10261,13 @@ declare module DevExpress.ui {
      */
     onItemClick?:
       | ((e: DevExpress.ui.dxButtonGroup.ItemClickEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxButtonGroupOptions.onSelectionChanged]
      */
     onSelectionChanged?:
       | ((e: DevExpress.ui.dxButtonGroup.SelectionChangedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxButtonGroupOptions.selectedItemKeys]
      */
@@ -18638,61 +18638,61 @@ declare module DevExpress.ui {
      */
     onBeforeSend?:
       | ((e: DevExpress.ui.dxFileUploader.BeforeSendEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxFileUploaderOptions.onDropZoneEnter]
      */
     onDropZoneEnter?:
       | ((e: DevExpress.ui.dxFileUploader.DropZoneEnterEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxFileUploaderOptions.onDropZoneLeave]
      */
     onDropZoneLeave?:
       | ((e: DevExpress.ui.dxFileUploader.DropZoneLeaveEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxFileUploaderOptions.onFilesUploaded]
      */
     onFilesUploaded?:
       | ((e: DevExpress.ui.dxFileUploader.FilesUploadedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxFileUploaderOptions.onProgress]
      */
     onProgress?:
       | ((e: DevExpress.ui.dxFileUploader.ProgressEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxFileUploaderOptions.onUploadAborted]
      */
     onUploadAborted?:
       | ((e: DevExpress.ui.dxFileUploader.UploadAbortedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxFileUploaderOptions.onUploadError]
      */
     onUploadError?:
       | ((e: DevExpress.ui.dxFileUploader.UploadErrorEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxFileUploaderOptions.onUploadStarted]
      */
     onUploadStarted?:
       | ((e: DevExpress.ui.dxFileUploader.UploadStartedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxFileUploaderOptions.onUploaded]
      */
     onUploaded?:
       | ((e: DevExpress.ui.dxFileUploader.UploadedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxFileUploaderOptions.onValueChanged]
      */
     onValueChanged?:
       | ((e: DevExpress.ui.dxFileUploader.ValueChangedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxFileUploaderOptions.progress]
      */
@@ -19620,23 +19620,25 @@ declare module DevExpress.ui {
      */
     onEditorEnterKey?:
       | ((e: DevExpress.ui.dxForm.EditorEnterKeyEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxFormOptions.onFieldDataChanged]
      */
     onFieldDataChanged?:
       | ((e: DevExpress.ui.dxForm.FieldDataChangedEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxFormOptions.onSmartPasting]
      */
     onSmartPasting?:
       | ((e: DevExpress.ui.dxForm.SmartPastingEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxFormOptions.onSmartPasted]
      */
-    onSmartPasted?: ((e: DevExpress.ui.dxForm.SmartPastedEvent) => void) | null;
+    onSmartPasted?:
+      | ((e: DevExpress.ui.dxForm.SmartPastedEvent) => void)
+      | undefined;
     /**
      * [descr:dxFormOptions.optionalMark]
      */
@@ -25715,17 +25717,19 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopupOptions.onResize]
      */
-    onResize?: ((e: DevExpress.ui.dxPopup.ResizeEvent) => void) | null;
+    onResize?: ((e: DevExpress.ui.dxPopup.ResizeEvent) => void) | undefined;
     /**
      * [descr:dxPopupOptions.onResizeEnd]
      */
-    onResizeEnd?: ((e: DevExpress.ui.dxPopup.ResizeEndEvent) => void) | null;
+    onResizeEnd?:
+      | ((e: DevExpress.ui.dxPopup.ResizeEndEvent) => void)
+      | undefined;
     /**
      * [descr:dxPopupOptions.onResizeStart]
      */
     onResizeStart?:
       | ((e: DevExpress.ui.dxPopup.ResizeStartEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxPopupOptions.onTitleRendered]
      */
@@ -25734,7 +25738,7 @@ declare module DevExpress.ui {
           e: DevExpress.common.core.events.EventInfo<TComponent> &
             DevExpress.ui.dxPopup.TitleRenderedInfo
         ) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxPopupOptions.position]
      */
@@ -28779,7 +28783,7 @@ declare module DevExpress.ui {
      */
     onContentReady?:
       | ((e: DevExpress.ui.dxSpeedDialAction.ContentReadyEvent) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxSpeedDialActionOptions.visible]
      */
@@ -34121,7 +34125,7 @@ declare module DevExpress.ui {
      */
     onContentReady?:
       | ((e: DevExpress.common.core.events.EventInfo<TComponent>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:WidgetOptions.tabIndex]
      */

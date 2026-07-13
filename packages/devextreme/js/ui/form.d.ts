@@ -268,36 +268,36 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     minColWidth?: number;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/form:EditorEnterKeyEvent}
      * @action
      * @public
      */
-    onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void) | null;
+    onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/form:FieldDataChangedEvent}
      * @action
      * @public
      */
-    onFieldDataChanged?: ((e: FieldDataChangedEvent) => void) | null;
+    onFieldDataChanged?: ((e: FieldDataChangedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/form:SmartPastingEvent}
      * @action
      * @public
      */
-    onSmartPasting?: ((e: SmartPastingEvent) => void) | null;
+    onSmartPasting?: ((e: SmartPastingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/form:SmartPastedEvent}
      * @action
      * @public
      */
-    onSmartPasted?: ((e: SmartPastedEvent) => void) | null;
+    onSmartPasted?: ((e: SmartPastedEvent) => void) | undefined;
     /**
      * @docid
      * @default "optional"

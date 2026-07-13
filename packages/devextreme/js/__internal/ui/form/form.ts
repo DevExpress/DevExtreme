@@ -203,9 +203,9 @@ class Form extends Widget<FormProperties> {
       screenByWidth: defaultScreenFactorFunc,
       labelLocation: 'left',
       readOnly: false,
-      onFieldDataChanged: null,
+      onFieldDataChanged: undefined,
       customizeItem: undefined,
-      onEditorEnterKey: null,
+      onEditorEnterKey: undefined,
       minColWidth: 200,
       alignItemLabels: true,
       alignItemLabelsInAllGroups: true,
@@ -222,8 +222,8 @@ class Form extends Widget<FormProperties> {
       stylingMode: config().editorStylingMode,
       labelMode: 'outside',
       isDirty: false,
-      onSmartPasting: null,
-      onSmartPasted: null,
+      onSmartPasting: undefined,
+      onSmartPasted: undefined,
     };
   }
 
