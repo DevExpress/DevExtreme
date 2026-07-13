@@ -69,12 +69,12 @@ export type ValueChangedEvent = NativeEventInfo<dxProgressBar> & ValueChangedInf
 export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/progress_bar:CompleteEvent}
      * @action
      * @public
      */
-    onComplete?: ((e: CompleteEvent) => void) | null;
+    onComplete?: ((e: CompleteEvent) => void) | undefined;
     /**
      * @docid
      * @default true

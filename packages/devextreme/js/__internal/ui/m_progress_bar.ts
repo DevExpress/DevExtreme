@@ -43,7 +43,7 @@ class ProgressBar extends TrackBar<ProgressBarProperties> {
         return `Progress: ${Math.round(ratio * 100)}%`;
       },
       showStatus: true,
-      onComplete: null,
+      onComplete: undefined,
       activeStateEnabled: false,
       statusPosition: 'bottom left',
       _animatingSegmentCount: 0,
