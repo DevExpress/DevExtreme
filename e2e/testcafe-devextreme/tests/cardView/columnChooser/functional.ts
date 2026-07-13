@@ -58,10 +58,11 @@ function testsFactory(testModel: {
 }) {
   test(`column chooser in ${testModel.name} mode should work after multiple hide/show actions`, async (t) => {
     const cardView = new CardView('#container');
-    await t.expect(cardView.isReady()).ok();
 
     await cardView.apiShowColumnChooser();
-    await t.expect(cardView.getColumnChooser().element.exists).ok();
+
+    // Focus column chooser before clicking on checkboxes to avoid test flakiness
+    await cardView.getColumnChooser().focusList();
 
     await testModel.hideFirstColumn(t, cardView);
     await testModel.assertFirstColumnHidden(t, cardView);

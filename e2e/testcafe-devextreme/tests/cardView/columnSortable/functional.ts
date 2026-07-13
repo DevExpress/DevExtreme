@@ -30,15 +30,17 @@ fixture.disablePageReloads`CardView - ColumnSortable.Functional`
 
     await triggerDragStart(columnElement);
 
-    const draggingElement = Selector(SELECTORS.dragging);
+    try {
+      const draggingElement = Selector(SELECTORS.dragging);
 
-    if (result) {
-      await t.expect(draggingElement.exists).ok();
-    } else {
-      await t.expect(draggingElement.exists).notOk();
+      if (result) {
+        await t.expect(draggingElement.exists).ok();
+      } else {
+        await t.expect(draggingElement.exists).notOk();
+      }
+    } finally {
+      await triggerDragEnd(columnElement);
     }
-
-    await triggerDragEnd(columnElement);
   }).before(async () => createWidget('dxCardView', {
     allowColumnReordering,
     columns: [{
@@ -62,15 +64,17 @@ fixture.disablePageReloads`CardView - ColumnSortable.Functional`
 
     await triggerDragStart(columnElement);
 
-    const draggingElement = Selector(SELECTORS.dragging);
+    try {
+      const draggingElement = Selector(SELECTORS.dragging);
 
-    if (result) {
-      await t.expect(draggingElement.exists).ok();
-    } else {
-      await t.expect(draggingElement.exists).notOk();
+      if (result) {
+        await t.expect(draggingElement.exists).ok();
+      } else {
+        await t.expect(draggingElement.exists).notOk();
+      }
+    } finally {
+      await triggerDragEnd(columnElement);
     }
-
-    await triggerDragEnd(columnElement);
   }).before(async () => createWidget('dxCardView', {
     allowColumnReordering: true,
     columns: [{

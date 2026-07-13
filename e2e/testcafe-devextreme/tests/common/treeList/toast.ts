@@ -1,11 +1,18 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import TreeList from 'devextreme-testcafe-models/treeList';
+import { ClientFunction } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
 
-fixture.disablePageReloads`Toasts in TreeList`
+fixture`Toasts in TreeList`
   .page(url(__dirname, '../../container.html'));
+
+const setToastDisplayTime = (displayTime: number) => ClientFunction(() => {
+  (window as any).DevExpress.ui.dxToast.defaultOptions({
+    displayTime,
+  });
+}, { dependencies: { displayTime } })();
 
 test('Toast should be visible after calling', async (t) => {
   const treeList = new TreeList('#container');
@@ -14,7 +21,8 @@ test('Toast should be visible after calling', async (t) => {
     .expect(treeList.isReady())
     .ok();
 
-  await treeList.apiShowErrorToast({ displayTime: 100000 });
+  await setToastDisplayTime(100000);
+  await treeList.apiShowErrorToast();
   await t.expect(treeList.getToast().exists).ok();
 
   await testScreenshot(t, takeScreenshot, 'ai-column__toast__at-the-right-position.png', { element: treeList.element });
@@ -33,12 +41,13 @@ test('Toast should hide after the display time', async (t) => {
     .expect(treeList.isReady())
     .ok();
 
-  await treeList.apiShowErrorToast({ displayTime: 1000 });
+  await setToastDisplayTime(100);
+  await treeList.apiShowErrorToast();
   await t
     .expect(treeList.getToast().exists).ok();
 
   await t
-    .wait(1000)
+    .wait(150)
     .expect(treeList.getToast().exists).notOk();
 }).before(async () => {
   await createWidget('dxTreeList', {});
