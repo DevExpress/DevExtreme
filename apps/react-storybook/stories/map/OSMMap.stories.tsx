@@ -24,7 +24,7 @@ const OSM_ATTR = '© <a href="https://www.openstreetmap.org/copyright">OpenStree
 const OPENMAPTILES_ATTR = '© <a href="https://openmaptiles.org/">OpenMapTiles</a>';
 const STADIA_ATTR = `© <a href="https://stadiamaps.com/">Stadia Maps</a> ${OPENMAPTILES_ATTR} ${OSM_ATTR}`;
 const STADIA_SATELLITE_ATTR = `${STADIA_ATTR} © CNES, Distribution Airbus DS, © Airbus DS, © PlanetObserver (Contains Copernicus Data)`;
-const markerUrl = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/maps/map-marker.png';
+const markerUrl = 'images/osm-map-marker.svg';
 
 type TileProvider = 'MapTiler' | 'Thunderforest' | 'Stadia Maps';
 type MapType = 'roadmap' | 'satellite' | 'hybrid';
