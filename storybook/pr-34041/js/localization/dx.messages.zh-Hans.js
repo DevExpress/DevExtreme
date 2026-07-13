@@ -1,7 +1,7 @@
 /*!
 * DevExtreme (dx.messages.zh-Hans.js)
 * Version: 26.1.3
-* Build date: Sun Jul 12 2026
+* Build date: Mon Jul 13 2026
 *
 * Copyright (c) 2012 - 2026 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
