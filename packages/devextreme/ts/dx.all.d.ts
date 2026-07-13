@@ -19618,21 +19618,25 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormOptions.onEditorEnterKey]
      */
-    onEditorEnterKey?: (e: DevExpress.ui.dxForm.EditorEnterKeyEvent) => void;
+    onEditorEnterKey?:
+      | ((e: DevExpress.ui.dxForm.EditorEnterKeyEvent) => void)
+      | null;
     /**
      * [descr:dxFormOptions.onFieldDataChanged]
      */
-    onFieldDataChanged?: (
-      e: DevExpress.ui.dxForm.FieldDataChangedEvent
-    ) => void;
+    onFieldDataChanged?:
+      | ((e: DevExpress.ui.dxForm.FieldDataChangedEvent) => void)
+      | null;
     /**
      * [descr:dxFormOptions.onSmartPasting]
      */
-    onSmartPasting?: (e: DevExpress.ui.dxForm.SmartPastingEvent) => void;
+    onSmartPasting?:
+      | ((e: DevExpress.ui.dxForm.SmartPastingEvent) => void)
+      | null;
     /**
      * [descr:dxFormOptions.onSmartPasted]
      */
-    onSmartPasted?: (e: DevExpress.ui.dxForm.SmartPastedEvent) => void;
+    onSmartPasted?: ((e: DevExpress.ui.dxForm.SmartPastedEvent) => void) | null;
     /**
      * [descr:dxFormOptions.optionalMark]
      */
@@ -36638,26 +36642,30 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.onDrawn]
      */
-    onDrawn?: (e: DevExpress.common.core.events.EventInfo<TComponent>) => void;
+    onDrawn?:
+      | ((e: DevExpress.common.core.events.EventInfo<TComponent>) => void)
+      | undefined;
     /**
      * [descr:BaseWidgetOptions.onExported]
      */
-    onExported?: (
-      e: DevExpress.common.core.events.EventInfo<TComponent>
-    ) => void;
+    onExported?:
+      | ((e: DevExpress.common.core.events.EventInfo<TComponent>) => void)
+      | undefined;
     /**
      * [descr:BaseWidgetOptions.onExporting]
      */
-    onExporting?: (
-      e: DevExpress.common.core.events.EventInfo<TComponent> &
-        DevExpress.viz.BaseWidget.ExportInfo
-    ) => void;
+    onExporting?:
+      | ((
+          e: DevExpress.common.core.events.EventInfo<TComponent> &
+            DevExpress.viz.BaseWidget.ExportInfo
+        ) => void)
+      | undefined;
     /**
      * [descr:BaseWidgetOptions.onFileSaving]
      */
-    onFileSaving?: (
-      e: DevExpress.viz.BaseWidget.FileSavingEventInfo<TComponent>
-    ) => void;
+    onFileSaving?:
+      | ((e: DevExpress.viz.BaseWidget.FileSavingEventInfo<TComponent>) => void)
+      | undefined;
     /**
      * [descr:BaseWidgetOptions.onIncidentOccurred]
      */
@@ -36768,7 +36776,7 @@ declare module DevExpress.viz {
           /**
            * [descr:BaseWidgetOptions.title.subtitle.text]
            */
-          text?: string;
+          text?: string | undefined;
           /**
            * [descr:BaseWidgetOptions.title.subtitle.textOverflow]
            */
@@ -36782,7 +36790,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.title.text]
      */
-    text?: string;
+    text?: string | undefined;
     /**
      * [descr:BaseWidgetOptions.title.textOverflow]
      */
