@@ -11,7 +11,9 @@ fixture`Toasts in DataGrid`.page(
 
 const setToastDisplayTime = (displayTime: number) => ClientFunction(() => {
   (window as any).DevExpress.ui.dxToast.defaultOptions({
-    displayTime,
+    options: {
+      displayTime,
+    },
   });
 }, { dependencies: { displayTime } })();
 
