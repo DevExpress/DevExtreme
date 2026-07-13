@@ -401,9 +401,9 @@ export default [
             }],
         },
     },
-    // Rules for generated public API re-exports
+    // Rules for generated Map public API re-exports
     {
-        files: ['js/{ui,viz}/**/*_types.d.ts'],
+        files: ['js/ui/map_types.d.ts'],
         rules: {
             'spellcheck/spell-checker': 'off',
         },
