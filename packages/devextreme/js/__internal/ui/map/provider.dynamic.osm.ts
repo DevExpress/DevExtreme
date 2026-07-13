@@ -2,8 +2,14 @@
 import Color from '@js/color';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifiers
-import type { OsmRouteResult as RouteResult, RouteMode } from '@js/ui/map';
+import type {
+  MapType,
+  // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
+  OsmRouteResult as RouteResult,
+  // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
+  OsmTileServerConfig as TileServerConfig,
+  RouteMode,
+} from '@js/ui/map';
 import errors from '@js/ui/widget/ui.errors';
 
 import type {
@@ -34,22 +40,6 @@ const REQUIRED_ENGINE_METHODS = [
 // Its public types must not leak into DevExtreme.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, spellcheck/spell-checker -- OSM API
 type OsmMapEngine = Record<string, any>;
-
-// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
-interface OsmTileServerConfig {
-  url: string;
-  attribution?: string;
-  // eslint-disable-next-line spellcheck/spell-checker -- Leaflet tile server option name
-  subdomains?: string | string[];
-  maxZoom?: number;
-}
-
-// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifiers
-type OsmTileServerObject = OsmTileServerConfig
-  // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
-  | ((type: string) => string | OsmTileServerConfig | null | undefined);
-// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifiers
-type OsmTileServerOption = string | OsmTileServerObject;
 
 const normalizeRouteResult = (result: RouteResult): [number, number][] => {
   if (Array.isArray(result)) {
@@ -90,7 +80,7 @@ class OsmProvider extends DynamicProvider {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _zoomControl?: any;
 
-  _currentTileType!: string;
+  _currentTileType!: MapType;
 
   // eslint-disable-next-line spellcheck/spell-checker -- Leaflet/OpenStreetMap API identifiers
   _clickHandler?: (e: { latlng: OsmLocation; originalEvent: Event }) => void;
@@ -215,10 +205,8 @@ class OsmProvider extends DynamicProvider {
     });
   }
 
-  // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
-  _resolveTileConfig(type: string): OsmTileServerConfig | undefined {
-    // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
-    const option = this._option('providerConfig')?.tileServer as OsmTileServerOption | null | undefined;
+  _resolveTileConfig(type: MapType): TileServerConfig | undefined {
+    const option = this._option('providerConfig')?.tileServer;
 
     const resolved = typeof option === 'function' ? option(type) : option;
 
@@ -229,7 +217,7 @@ class OsmProvider extends DynamicProvider {
     return typeof resolved === 'string' ? { url: resolved } : resolved;
   }
 
-  _buildTileLayer(type: string): unknown {
+  _buildTileLayer(type: MapType): unknown {
     const config = this._resolveTileConfig(type);
 
     if (!config?.url) {
@@ -307,7 +295,7 @@ class OsmProvider extends DynamicProvider {
     return Promise.resolve();
   }
 
-  _rebuildTileLayer(type: string): void {
+  _rebuildTileLayer(type: MapType): void {
     if (this._tileLayer) {
       this._map.removeLayer(this._tileLayer);
     }
