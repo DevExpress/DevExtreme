@@ -153,7 +153,7 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
      * @action
      * @public
      */
-    onResize?: ((e: ResizeEvent) => void);
+    onResize?: ((e: ResizeEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -163,7 +163,7 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
      * @action
      * @public
      */
-    onResizeEnd?: ((e: ResizeEndEvent) => void);
+    onResizeEnd?: ((e: ResizeEndEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -173,7 +173,7 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
      * @action
      * @public
      */
-    onResizeStart?: ((e: ResizeStartEvent) => void);
+    onResizeStart?: ((e: ResizeStartEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -182,7 +182,7 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
      * @action
      * @public
      */
-    onTitleRendered?: ((e: EventInfo<TComponent> & TitleRenderedInfo) => void);
+    onTitleRendered?: ((e: EventInfo<TComponent> & TitleRenderedInfo) => void) | null;
     /**
      * @docid
      * @public

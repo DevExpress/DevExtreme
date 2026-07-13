@@ -158,7 +158,6 @@ class Lookup extends DropDownList<LookupProperties> {
         animation: {},
         title: '',
         titleTemplate: 'title',
-        // @ts-expect-error ts-error
         onTitleRendered: null,
         fullScreen: false,
         maxHeight: '100vh',
