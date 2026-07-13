@@ -90,7 +90,6 @@ class OsmProvider extends DynamicProvider {
   _preventZoomChangeEvent?: boolean;
 
   _movementMode(type: RouteMode | string = ''): string {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return type || 'driving';
   }
 
@@ -260,7 +259,7 @@ class OsmProvider extends DynamicProvider {
 
     const center = this._normalizeLocation(this._map.getCenter());
     const currentCenter = this._getLatLng(this._option('center'));
-    if (!currentCenter || currentCenter.lat !== center.lat || currentCenter.lng !== center.lng) {
+    if (currentCenter?.lat !== center.lat || currentCenter?.lng !== center.lng) {
       this._option('center', center);
     }
 
