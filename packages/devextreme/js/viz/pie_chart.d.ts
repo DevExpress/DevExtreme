@@ -399,7 +399,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart, piePoint
        * @default 'series'
        */
       nameField?: string;
-    } | undefined;
+    };
     /**
      * @docid
      * @default undefined
@@ -739,12 +739,12 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border.color
            * @default  '#d3d3d3'
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border.dashStyle
            * @default 'solid'
            */
-          dashStyle?: DashStyle;
+          dashStyle?: DashStyle | undefined;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border.visible
            * @default false

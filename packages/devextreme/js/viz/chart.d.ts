@@ -1504,7 +1504,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart, chartPointObje
        * @default 'series'
        */
       nameField?: string;
-    } | undefined;
+    };
     /**
      * @docid
      * @default true

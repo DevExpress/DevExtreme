@@ -260,7 +260,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
          * @docid
          * @default 1
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * @docid
@@ -484,12 +484,12 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
          * @docid
          * @default "#000000"
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * @docid
          * @default 1
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * @docid

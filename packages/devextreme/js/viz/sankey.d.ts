@@ -207,17 +207,17 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
          * @docid
          * @default '#ffffff'
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * @docid
          * @default false
          */
-        visible?: boolean;
+        visible?: boolean | undefined;
         /**
          * @docid
          * @default 2
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * @docid
@@ -298,17 +298,17 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
          * @docid
          * @default '#ffffff'
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * @docid
          * @default false
          */
-        visible?: boolean;
+        visible?: boolean | undefined;
         /**
          * @docid
          * @default 1
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * @docid
@@ -399,17 +399,17 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
          * @docid
          * @default '#ffffff'
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * @docid
          * @default false
          */
-        visible?: boolean;
+        visible?: boolean | undefined;
         /**
          * @docid
          * @default 1
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * @docid

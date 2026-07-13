@@ -640,12 +640,12 @@ export interface SeriesLabel {
        * @docid dxChartSeriesTypes.CommonSeries.label.border.color
        * @default  '#d3d3d3'
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * @docid dxChartSeriesTypes.CommonSeries.label.border.dashStyle
        * @default 'solid'
        */
-      dashStyle?: DashStyle;
+      dashStyle?: DashStyle | undefined;
       /**
        * @docid dxChartSeriesTypes.CommonSeries.label.border.visible
        * @default false
