@@ -177,8 +177,8 @@ class ButtonGroup extends Widget<Properties> {
       keyExpr: 'text',
       items: [],
       buttonTemplate: 'content',
-      onSelectionChanged: null,
-      onItemClick: null,
+      onSelectionChanged: undefined,
+      onItemClick: undefined,
     };
   }
 
