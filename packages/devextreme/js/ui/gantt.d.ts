@@ -519,7 +519,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     columns?: Array<Column | string> | undefined;
     /**
      * @docid
-     * @default null
      * @public
      */
     dependencies?: {
@@ -649,7 +648,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -657,7 +656,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onCustomCommand?: ((e: CustomCommandEvent) => void);
+    onCustomCommand?: ((e: CustomCommandEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -665,7 +664,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void);
+    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -673,7 +672,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onTaskInserting?: ((e: TaskInsertingEvent) => void);
+    onTaskInserting?: ((e: TaskInsertingEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -681,7 +680,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onTaskInserted?: ((e: TaskInsertedEvent) => void);
+    onTaskInserted?: ((e: TaskInsertedEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -689,7 +688,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onTaskDeleting?: ((e: TaskDeletingEvent) => void);
+    onTaskDeleting?: ((e: TaskDeletingEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -697,7 +696,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onTaskDeleted?: ((e: TaskDeletedEvent) => void);
+    onTaskDeleted?: ((e: TaskDeletedEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -705,7 +704,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onTaskUpdating?: ((e: TaskUpdatingEvent) => void);
+    onTaskUpdating?: ((e: TaskUpdatingEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -713,7 +712,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onTaskUpdated?: ((e: TaskUpdatedEvent) => void);
+    onTaskUpdated?: ((e: TaskUpdatedEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -721,7 +720,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onTaskMoving?: ((e: TaskMovingEvent) => void);
+    onTaskMoving?: ((e: TaskMovingEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -729,15 +728,15 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onTaskEditDialogShowing?: ((e: TaskEditDialogShowingEvent) => void);
+    onTaskEditDialogShowing?: ((e: TaskEditDialogShowingEvent) => void) | null;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:ResourceManagerDialogShowingEvent}
      * @action
      * @public
      */
-    onResourceManagerDialogShowing?: ((e: ResourceManagerDialogShowingEvent) => void);
+    onResourceManagerDialogShowing?: ((e: ResourceManagerDialogShowingEvent) => void) | undefined;
     /**
      * @docid
      * @default null
@@ -745,7 +744,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onDependencyInserting?: ((e: DependencyInsertingEvent) => void);
+    onDependencyInserting?: ((e: DependencyInsertingEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -753,7 +752,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onDependencyInserted?: ((e: DependencyInsertedEvent) => void);
+    onDependencyInserted?: ((e: DependencyInsertedEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -761,7 +760,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onDependencyDeleting?: ((e: DependencyDeletingEvent) => void);
+    onDependencyDeleting?: ((e: DependencyDeletingEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -769,7 +768,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onDependencyDeleted?: ((e: DependencyDeletedEvent) => void);
+    onDependencyDeleted?: ((e: DependencyDeletedEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -777,7 +776,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onResourceInserting?: ((e: ResourceInsertingEvent) => void);
+    onResourceInserting?: ((e: ResourceInsertingEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -785,7 +784,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onResourceInserted?: ((e: ResourceInsertedEvent) => void);
+    onResourceInserted?: ((e: ResourceInsertedEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -793,7 +792,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onResourceDeleting?: ((e: ResourceDeletingEvent) => void);
+    onResourceDeleting?: ((e: ResourceDeletingEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -801,7 +800,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onResourceDeleted?: ((e: ResourceDeletedEvent) => void);
+    onResourceDeleted?: ((e: ResourceDeletedEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -809,7 +808,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onResourceAssigning?: ((e: ResourceAssigningEvent) => void);
+    onResourceAssigning?: ((e: ResourceAssigningEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -817,7 +816,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onResourceAssigned?: ((e: ResourceAssignedEvent) => void);
+    onResourceAssigned?: ((e: ResourceAssignedEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -825,7 +824,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onResourceUnassigning?: ((e: ResourceUnassigningEvent) => void);
+    onResourceUnassigning?: ((e: ResourceUnassigningEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -833,7 +832,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onResourceUnassigned?: ((e: ResourceUnassignedEvent) => void);
+    onResourceUnassigned?: ((e: ResourceUnassignedEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -841,7 +840,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onTaskClick?: ((e: TaskClickEvent) => void);
+    onTaskClick?: ((e: TaskClickEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -849,19 +848,18 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    onTaskDblClick?: ((e: TaskDblClickEvent) => void);
+    onTaskDblClick?: ((e: TaskDblClickEvent) => void) | null;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:ScaleCellPreparedEvent}
      * @action
      * @public
      */
-    onScaleCellPrepared?: ((e: ScaleCellPreparedEvent) => void);
+    onScaleCellPrepared?: ((e: ScaleCellPreparedEvent) => void) | undefined;
 
     /**
      * @docid
-     * @default null
      * @public
      */
     resourceAssignments?: {
@@ -889,7 +887,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     };
     /**
      * @docid
-     * @default null
      * @public
      */
     resources?: {
@@ -981,7 +978,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     firstDayOfWeek?: DayOfWeek | undefined;
     /**
      * @docid
-     * @default null
      * @public
      */
     tasks?: {
@@ -1032,7 +1028,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @public
      */
-    toolbar?: dxGanttToolbar;
+    toolbar?: dxGanttToolbar | null;
     /**
      * @docid
      * @public
@@ -1043,7 +1039,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default undefined
      * @public
      */
-    stripLines?: Array<dxGanttStripLine>;
+    stripLines?: Array<dxGanttStripLine> | undefined;
     /**
      * @docid
      * @type_function_return string|Element|jQuery
@@ -1085,16 +1081,16 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     rootValue?: any;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @public
      */
-    startDateRange?: Date;
+    startDateRange?: Date | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @public
      */
-    endDateRange?: Date;
+    endDateRange?: Date | undefined;
 }
 /**
  * @docid
