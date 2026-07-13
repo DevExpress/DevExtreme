@@ -103,7 +103,7 @@ export class FieldChooserBase extends mixinWidget {
       ...{
         allowFieldDragging: true,
         applyChangesMode: 'instantly',
-        state: null,
+        state: undefined,
         headerFilter: {
           width: 252,
           height: 325,
