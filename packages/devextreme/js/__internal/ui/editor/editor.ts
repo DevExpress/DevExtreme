@@ -117,7 +117,7 @@ class Editor<
       ...super._getDefaultOptions(),
       value: null,
       name: '',
-      onValueChanged: null,
+      onValueChanged: undefined,
       readOnly: false,
       isValid: true,
       validationError: null,

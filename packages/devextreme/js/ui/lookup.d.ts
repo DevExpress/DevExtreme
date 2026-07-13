@@ -215,36 +215,36 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     nextButtonText?: string;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/lookup:PageLoadingEvent}
      * @action
      * @public
      */
-    onPageLoading?: ((e: PageLoadingEvent) => void) | null;
+    onPageLoading?: ((e: PageLoadingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/lookup:PullRefreshEvent}
      * @action
      * @public
      */
-    onPullRefresh?: ((e: PullRefreshEvent) => void) | null;
+    onPullRefresh?: ((e: PullRefreshEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/lookup:ScrollEvent}
      * @action
      * @public
      */
-    onScroll?: ((e: ScrollEvent) => void) | null;
+    onScroll?: ((e: ScrollEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/lookup:ValueChangedEvent}
      * @action
      * @public
      */
-    onValueChanged?: ((e: ValueChangedEvent) => void) | null;
+    onValueChanged?: ((e: ValueChangedEvent) => void) | undefined;
     /**
      * @docid
      * @default "scrollBottom"
