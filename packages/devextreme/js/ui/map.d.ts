@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import {
     DxPromise,
 } from '../core/utils/deferred';
@@ -23,12 +22,14 @@ export type RouteMode = 'driving' | 'walking';
  * @docid
  * @public
  */
+// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
 export type OsmGeocodeFunction = (query: string) => Promise<MapLocation | null | undefined>;
 
 /**
  * @docid
  * @public
  */
+// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
 export interface OsmGetRouteParams {
   locations: Array<MapLocation>;
   mode: RouteMode | string;
@@ -38,6 +39,7 @@ export interface OsmGetRouteParams {
  * @docid
  * @public
  */
+// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap and GeoJSON API identifiers
 export interface OsmGeoJsonLineString {
   type: 'LineString';
   coordinates: Array<Array<number>>;
@@ -48,18 +50,21 @@ export interface OsmGeoJsonLineString {
  * @type Array<Array<number>>|OsmGeoJsonLineString
  * @public
  */
+// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifiers
 export type OsmRouteResult = Array<[number, number]> | OsmGeoJsonLineString;
 
 /**
  * @docid
  * @public
  */
+// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifiers
 export type OsmGetRouteFunction = (params: OsmGetRouteParams) => Promise<OsmRouteResult>;
 
 /**
  * @docid
  * @public
  */
+// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
 export interface OsmTileServerConfig {
   /**
    * @docid
@@ -74,6 +79,7 @@ export interface OsmTileServerConfig {
    * @docid
    * @default 'abc'
    */
+  // eslint-disable-next-line spellcheck/spell-checker -- Leaflet tile server option name
   subdomains?: string | Array<string>;
   /**
    * @docid
@@ -86,7 +92,9 @@ export interface OsmTileServerConfig {
  * @docid
  * @public
  */
+// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifiers
 export type OsmTileServer = string | OsmTileServerConfig
+// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
 | ((type: MapType) => string | OsmTileServerConfig | null | undefined);
 
 /** @public */
@@ -413,6 +421,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
        * @public
        * @default undefined
        */
+      // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
       tileServer?: OsmTileServer | undefined;
       /**
        * @docid
@@ -425,6 +434,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
        * @public
        * @default undefined
        */
+      // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifiers
       getRoute?: ((params: OsmGetRouteParams) => Promise<OsmRouteResult>) | undefined;
       /**
        * @docid
