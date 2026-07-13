@@ -302,84 +302,84 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     name?: string;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/file_uploader:BeforeSendEvent}
      * @action
      * @public
      */
-    onBeforeSend?: ((e: BeforeSendEvent) => void) | null;
+    onBeforeSend?: ((e: BeforeSendEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/file_uploader:DropZoneEnterEvent}
      * @action
      * @public
      */
-    onDropZoneEnter?: ((e: DropZoneEnterEvent) => void) | null;
+    onDropZoneEnter?: ((e: DropZoneEnterEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/file_uploader:DropZoneLeaveEvent}
      * @action
      * @public
      */
-    onDropZoneLeave?: ((e: DropZoneLeaveEvent) => void) | null;
+    onDropZoneLeave?: ((e: DropZoneLeaveEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/file_uploader:FilesUploadedEvent}
      * @action
      * @public
      */
-    onFilesUploaded?: ((e: FilesUploadedEvent) => void) | null;
+    onFilesUploaded?: ((e: FilesUploadedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/file_uploader:ProgressEvent}
      * @action
      * @public
      */
-    onProgress?: ((e: ProgressEvent) => void) | null;
+    onProgress?: ((e: ProgressEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/file_uploader:UploadAbortedEvent}
      * @action
      * @public
      */
-    onUploadAborted?: ((e: UploadAbortedEvent) => void) | null;
+    onUploadAborted?: ((e: UploadAbortedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/file_uploader:UploadErrorEvent}
      * @action
      * @public
      */
-    onUploadError?: ((e: UploadErrorEvent) => void) | null;
+    onUploadError?: ((e: UploadErrorEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/file_uploader:UploadStartedEvent}
      * @action
      * @public
      */
-    onUploadStarted?: ((e: UploadStartedEvent) => void) | null;
+    onUploadStarted?: ((e: UploadStartedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/file_uploader:UploadedEvent}
      * @action
      * @public
      */
-    onUploaded?: ((e: UploadedEvent) => void) | null;
+    onUploaded?: ((e: UploadedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/file_uploader:ValueChangedEvent}
      * @action
      * @public
      */
-    onValueChanged?: ((e: ValueChangedEvent) => void) | null;
+    onValueChanged?: ((e: ValueChangedEvent) => void) | undefined;
     /**
      * @docid
      * @default 0
