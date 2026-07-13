@@ -105,8 +105,8 @@ export class ScrollView extends Scrollable<ScrollViewProperties> {
       pulledDownText: messageLocalization.format('dxScrollView-pulledDownText'),
       refreshingText: messageLocalization.format('dxScrollView-refreshingText'),
       reachBottomText: messageLocalization.format('dxScrollView-reachBottomText'),
-      onPullDown: null,
-      onReachBottom: null,
+      onPullDown: undefined,
+      onReachBottom: undefined,
       refreshStrategy: 'pullDown',
     };
   }
