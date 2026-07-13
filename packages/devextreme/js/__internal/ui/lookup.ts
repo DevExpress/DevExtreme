@@ -158,7 +158,7 @@ class Lookup extends DropDownList<LookupProperties> {
         animation: {},
         title: '',
         titleTemplate: 'title',
-        onTitleRendered: null,
+        onTitleRendered: undefined,
         fullScreen: false,
         maxHeight: '100vh',
       },
