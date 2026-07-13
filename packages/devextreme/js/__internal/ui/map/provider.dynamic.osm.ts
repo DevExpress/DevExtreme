@@ -504,8 +504,7 @@ class OsmProvider extends DynamicProvider {
     leafletMarker.bindPopup(popup);
 
     if (parsedOptions.visible) {
-      // eslint-disable-next-line no-restricted-globals
-      setTimeout(() => { leafletMarker.openPopup(); }, 0);
+      leafletMarker.openPopup();
     }
 
     return popup;

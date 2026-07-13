@@ -1073,6 +1073,40 @@ QUnit.module('OSM: markers', moduleConfig, () => {
         });
     });
 
+    QUnit.test('tooltip with isShown is open when the map is ready', function(assert) {
+        const done = assert.async();
+
+        $('#map').dxMap({
+            provider: 'osm',
+            markers: [{
+                location: [10, 20],
+                tooltip: { text: 'Austin, TX', isShown: true },
+            }],
+            onReady: () => {
+                assert.strictEqual(L.popupOpened, true, 'popup is opened before onReady');
+                done();
+            }
+        });
+    });
+
+    QUnit.test('click on marker closes an initially shown tooltip', function(assert) {
+        const done = assert.async();
+
+        $('#map').dxMap({
+            provider: 'osm',
+            markers: [{
+                location: [10, 20],
+                tooltip: { text: 'Austin, TX', isShown: true },
+            }],
+            onReady: () => {
+                assert.strictEqual(L.popupOpened, true, 'popup is initially open');
+                L.markerClickCallback();
+                assert.strictEqual(L.popupOpened, false, 'popup is closed by marker click');
+                done();
+            }
+        });
+    });
+
     QUnit.test('click on marker toggles popup and fires onClick', function(assert) {
         const done = assert.async();
         let clickFired = 0;
