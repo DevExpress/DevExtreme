@@ -86,7 +86,6 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
     noDataText?: string;
     /**
      * @docid
-     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field itemData:object
      * @type_function_param1_field itemElement:object
@@ -106,7 +105,7 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
      * @action
      * @public
      */
-    onSelectionChanged?: ((e: EventInfo<TComponent> & SelectionChangedInfo) => void);
+    onSelectionChanged?: ((e: EventInfo<TComponent> & SelectionChangedInfo) => void) | null;
     /**
      * @docid
      * @default null
@@ -118,7 +117,7 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
      * @action
      * @public
      */
-    onValueChanged?: ((e: NativeEventInfo<TComponent, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo) => void);
+    onValueChanged?: ((e: NativeEventInfo<TComponent, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo) => void) | null;
     /**
      * @docid
      * @default false
@@ -131,7 +130,7 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
      * @default null
      * @public
      */
-    searchExpr?: string | Function | Array<string | Function>;
+    searchExpr?: string | Function | Array<string | Function> | null;
     /**
      * @docid
      * @default "contains"
@@ -151,7 +150,7 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
      * @ref
      * @public
      */
-    selectedItem?: any;
+    selectedItem?: any | null;
     /**
      * @docid
      * @default false
