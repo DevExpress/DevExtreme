@@ -55,7 +55,7 @@ export interface WidgetOptions<TComponent> extends DOMComponentOptions<TComponen
      * @action
      * @public
      */
-    onContentReady?: ((e: EventInfo<TComponent>) => void);
+    onContentReady?: ((e: EventInfo<TComponent>) => void) | null;
     /**
      * @docid
      * @default 0

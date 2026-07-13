@@ -97,7 +97,7 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
      * @action
      * @public
      */
-    onContentReady?: ((e: ContentReadyEvent) => void);
+    onContentReady?: ((e: ContentReadyEvent) => void) | null;
     /**
      * @docid
      * @public
