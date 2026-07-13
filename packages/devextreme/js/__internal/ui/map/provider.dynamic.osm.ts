@@ -16,6 +16,7 @@ const window = getWindow();
 
 const DEFAULT_MAX_ZOOM = 19;
 const DEFAULT_SUBDOMAINS = 'abc';
+const GEOCODING_FAILED = new Error('Geocoding failed');
 const REQUIRED_ENGINE_METHODS = [
   'divIcon',
   'icon',
@@ -112,41 +113,53 @@ class OsmProvider extends DynamicProvider {
       } else {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._geocodeLocation(location as string).then((geocodedLocation) => {
-          // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
-          resolve(geocodedLocation as OsmLocation);
+          resolve(geocodedLocation);
         });
       }
     });
   }
 
   // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
+  _geocodeLocation(location: string): Promise<OsmLocation> {
+    // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
+    const cachedLocation = this._geocodedLocations[location] as OsmLocation | undefined;
+
+    if (cachedLocation) {
+      return Promise.resolve(cachedLocation);
+    }
+
+    return this._geocodeLocationImpl(location)
+      .then((geocodedLocation) => {
+        this._geocodedLocations[location] = geocodedLocation;
+
+        return geocodedLocation;
+      })
+      .catch(() => this._mapEngine.latLng(0, 0) as PlainLocation);
+  }
+
+  // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
   _geocodeLocationImpl(location: string): Promise<OsmLocation> {
-    return new Promise((resolve) => {
-      if (!isDefined(location)) {
-        resolve(this._mapEngine.latLng(0, 0));
-        return;
-      }
+    if (!isDefined(location)) {
+      return Promise.reject(GEOCODING_FAILED);
+    }
 
-      const geocodeFn = this._option('providerConfig')?.geocodeLocation as ((query: string) => Promise<{ lat: number; lng: number } | null | undefined>) | undefined;
+    const geocodeFn = this._option('providerConfig')?.geocodeLocation as ((query: string) => Promise<{ lat: number; lng: number } | null | undefined>) | undefined;
 
-      if (!geocodeFn) {
-        errors.log('W1031', location);
-        resolve(this._mapEngine.latLng(0, 0));
-        return;
-      }
+    if (!geocodeFn) {
+      errors.log('W1031', location);
 
-      Promise.resolve()
-        .then(() => geocodeFn(location))
-        .then((result) => {
-          if (result?.lat != null && result?.lng != null) {
-            resolve(this._mapEngine.latLng(result.lat, result.lng));
-          } else {
-            resolve(this._mapEngine.latLng(0, 0));
-          }
-        }).catch(() => {
-          resolve(this._mapEngine.latLng(0, 0));
-        });
-    });
+      return Promise.reject(GEOCODING_FAILED);
+    }
+
+    return Promise.resolve()
+      .then(() => geocodeFn(location))
+      .then((result) => {
+        if (result?.lat != null && result?.lng != null) {
+          return this._mapEngine.latLng(result.lat, result.lng) as PlainLocation;
+        }
+
+        return Promise.reject(GEOCODING_FAILED);
+      });
   }
 
   // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier

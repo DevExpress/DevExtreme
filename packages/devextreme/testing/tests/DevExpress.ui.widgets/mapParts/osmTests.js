@@ -408,6 +408,35 @@ QUnit.module('OSM: basic options', moduleConfig, () => {
         });
     });
 
+    QUnit.test('failed geocoding results are not cached', function(assert) {
+        const done = assert.async();
+        const ready = $.Deferred();
+        const center = 'Austin, TX';
+        const geocodeLocation = sinon.stub();
+
+        geocodeLocation.onFirstCall().returns(Promise.reject(new Error('geocoding unavailable')));
+        geocodeLocation.onSecondCall().returns(Promise.resolve({ lat: 10, lng: 20 }));
+
+        const map = $('#map').dxMap({
+            provider: 'osm',
+            providerConfig: { geocodeLocation },
+            center,
+            onReady: () => { ready.resolve(); },
+        }).dxMap('instance');
+
+        ready.done(() => {
+            assert.deepEqual(map.option('center'), { lat: 0, lng: 0 }, 'failed request falls back to (0,0)');
+            assert.ok(geocodeLocation.calledOnce, 'geocoding was requested once');
+
+            map.option('onUpdated', () => {
+                assert.ok(geocodeLocation.calledTwice, 'geocoding is requested again');
+                assert.deepEqual(map.option('center'), { lat: 10, lng: 20 }, 'later successful result is applied');
+                done();
+            });
+            map.option('center', center);
+        });
+    });
+
     QUnit.test('string center resolves to (0,0) and logs W1031 when osmGeocodeLocation is not provided', function(assert) {
         const done = assert.async();
         const errorStub = sinon.stub(errors, 'log');
