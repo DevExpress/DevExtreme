@@ -115,11 +115,8 @@ class TabPanel extends MultiView<TabPanelProperties> {
       tabsPosition: TABS_POSITION.top,
       iconPosition: ICON_POSITION.start,
       stylingMode: STYLING_MODE.primary,
-      // @ts-expect-error ts-error
       onTitleClick: null,
-      // @ts-expect-error ts-error
       onTitleHold: null,
-      // @ts-expect-error ts-error
       onTitleRendered: null,
       badgeExpr(data: Item): string | undefined {
         return data?.badge;
