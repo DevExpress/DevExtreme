@@ -2329,10 +2329,11 @@ test('Cells should be focused correctly on click when cell editing mode is used 
   // act
   await t
     .typeText(dataGrid.getDataCell(0, 0).getEditor().element, '1')
-    .click(dataGrid.getDataCell(1, 0).getEditor().element)
-    .expect(dataGrid.isReady()).ok();
+    .click(dataGrid.getDataCell(1, 0).getEditor().element);
 
-  await t.expect(getStoredName(1)).eql('Name 11');
+  await t
+    .expect(dataGrid.isReady()).ok()
+    .expect(getStoredName(1)).eql('Name 11');
 
   // assert
   await t
@@ -2346,10 +2347,11 @@ test('Cells should be focused correctly on click when cell editing mode is used 
   // act
   await t
     .typeText(dataGrid.getDataCell(1, 0).getEditor().element, '2')
-    .click(dataGrid.getDataCell(2, 0).getEditor().element)
-    .expect(dataGrid.isReady()).ok();
+    .click(dataGrid.getDataCell(2, 0).getEditor().element);
 
-  await t.expect(getStoredName(2)).eql('Name 22');
+  await t
+    .expect(dataGrid.isReady()).ok()
+    .expect(getStoredName(2)).eql('Name 22');
 
   // assert
   await t
@@ -2365,10 +2367,11 @@ test('Cells should be focused correctly on click when cell editing mode is used 
   // act
   await t
     .typeText(dataGrid.getDataCell(2, 0).getEditor().element, '3')
-    .click(dataGrid.getDataCell(1, 0).getEditor().element)
-    .expect(dataGrid.isReady()).ok();
+    .click(dataGrid.getDataCell(1, 0).getEditor().element);
 
-  await t.expect(getStoredName(3)).eql('Name 33');
+  await t
+    .expect(dataGrid.isReady()).ok()
+    .expect(getStoredName(3)).eql('Name 33');
 
   // assert
   await t
@@ -2382,10 +2385,11 @@ test('Cells should be focused correctly on click when cell editing mode is used 
   // act
   await t
     .typeText(dataGrid.getDataCell(1, 0).getEditor().element, '2')
-    .click(dataGrid.getDataCell(0, 0).getEditor().element)
-    .expect(dataGrid.isReady()).ok();
+    .click(dataGrid.getDataCell(0, 0).getEditor().element);
 
-  await t.expect(getStoredName(2)).eql('Name 222');
+  await t
+    .expect(dataGrid.isReady()).ok()
+    .expect(getStoredName(2)).eql('Name 222');
 
   // assert
   await t

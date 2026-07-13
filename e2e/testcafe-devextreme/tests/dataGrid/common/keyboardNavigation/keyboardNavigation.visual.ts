@@ -733,12 +733,17 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
     // act
     await t
       .click(dataGrid.getDataCell(0, 0).element)
-      .pressKey('ctrl+end')
-      .wait(2000);
+      .pressKey('ctrl+end');
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok()
+      .expect(dataGrid.getDataCell(199, 34).element.focused)
+      .ok();
 
     await testScreenshot(t, takeScreenshot, `${useNative ? 'native' : 'simulated'}_scrolling_-_navigate_to_last_cell_row_dragging__virtual_scrolling__virtual_columns.png`, { element: dataGrid.element });
 
-    // assert
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
