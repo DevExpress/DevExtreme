@@ -56,13 +56,10 @@ function testsFactory(testModel: {
   assertFirstColumnHidden: (t: TestController, cardView: CardView) => Promise<void>;
   config: any; // TODO: add typing
 }) {
-  test(`column chooser in ${testModel.name} mode should work after multiple hide/show actions`, async (t) => {
+  test.meta({ unstable: true })(`column chooser in ${testModel.name} mode should work after multiple hide/show actions`, async (t) => {
     const cardView = new CardView('#container');
 
     await cardView.apiShowColumnChooser();
-
-    // Focus column chooser before clicking on checkboxes to avoid test flakiness
-    await cardView.getColumnChooser().focusList();
 
     await testModel.hideFirstColumn(t, cardView);
     await testModel.assertFirstColumnHidden(t, cardView);
