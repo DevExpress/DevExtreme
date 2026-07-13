@@ -48,6 +48,10 @@ interface MarkerWithImage {
   setIcon?: (icon: unknown) => void;
 }
 
+interface TileLayer {
+  addTo: (map: unknown) => unknown;
+}
+
 const normalizeRouteResult = (result: RouteResult): [number, number][] => {
   if (Array.isArray(result)) {
     return result;
@@ -81,8 +85,7 @@ class OsmProvider extends DynamicProvider {
   // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
   _mapEngine!: OsmMapEngine;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _tileLayer?: any;
+  _tileLayer?: TileLayer;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _zoomControl?: any;
@@ -223,7 +226,7 @@ class OsmProvider extends DynamicProvider {
     return typeof resolved === 'string' ? { url: resolved } : resolved;
   }
 
-  _buildTileLayer(type: MapType): unknown {
+  _buildTileLayer(type: MapType): TileLayer | undefined {
     const config = this._resolveTileConfig(type);
 
     if (!config?.url) {
@@ -245,7 +248,7 @@ class OsmProvider extends DynamicProvider {
       options.subdomains = config.subdomains ?? DEFAULT_SUBDOMAINS;
     }
 
-    return this._mapEngine.tileLayer(config.url, options);
+    return this._mapEngine.tileLayer(config.url, options) as TileLayer;
   }
 
   _attachHandlers(): void {
@@ -294,19 +297,22 @@ class OsmProvider extends DynamicProvider {
     const type = this._option('type') ?? this._currentTileType;
 
     if (type !== this._currentTileType) {
-      this._currentTileType = type;
       this._rebuildTileLayer(type);
+      this._currentTileType = type;
     }
 
     return Promise.resolve();
   }
 
   _rebuildTileLayer(type: MapType): void {
+    const tileLayer = this._buildTileLayer(type);
+    tileLayer?.addTo(this._map);
+
     if (this._tileLayer) {
       this._map.removeLayer(this._tileLayer);
     }
-    this._tileLayer = this._buildTileLayer(type);
-    this._tileLayer?.addTo(this._map);
+
+    this._tileLayer = tileLayer;
   }
 
   updateDisabled(): Promise<void> {

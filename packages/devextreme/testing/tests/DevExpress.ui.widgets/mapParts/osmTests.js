@@ -841,6 +841,58 @@ QUnit.module('OSM: tile server', moduleConfig, () => {
         });
     });
 
+    QUnit.test('type change preserves the current tile layer when the new layer cannot be created', function(assert) {
+        const done = assert.async();
+        const tileServerError = new Error('tile server failed');
+        const previousTileLayer = {};
+        const mapEngine = {
+            ...L,
+            tileLayer: sinon.spy(L.tileLayer),
+        };
+        const map = {
+            removeLayer: sinon.spy(),
+        };
+        let shouldFail = true;
+        const mapWidget = {
+            option: () => ({
+                type: 'satellite',
+                providerConfig: {
+                    tileServer: () => {
+                        if(shouldFail) {
+                            shouldFail = false;
+                            throw tileServerError;
+                        }
+
+                        return {
+                            url: 'https://tiles.example.com/satellite/{z}/{x}/{y}.png',
+                            attribution: 'Test attribution',
+                        };
+                    },
+                },
+            }),
+        };
+        // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap provider identifier
+        const provider = new OsmProvider(mapWidget, null);
+
+        provider._mapEngine = mapEngine;
+        provider._map = map;
+        provider._tileLayer = previousTileLayer;
+        provider._currentTileType = 'roadmap';
+
+        assert.throws(() => provider.updateMapType(), tileServerError, 'tile server error is propagated');
+        assert.notOk(map.removeLayer.called, 'current tile layer is not removed after the error');
+        assert.strictEqual(provider._tileLayer, previousTileLayer, 'current tile layer is preserved');
+        assert.strictEqual(provider._currentTileType, 'roadmap', 'current tile type is preserved');
+
+        provider.updateMapType().then(() => {
+            assert.ok(mapEngine.tileLayer.calledOnce, 'new tile layer is created on retry');
+            assert.ok(map.removeLayer.calledOnceWith(previousTileLayer), 'previous tile layer is removed after the retry succeeds');
+            assert.notStrictEqual(provider._tileLayer, previousTileLayer, 'new tile layer is stored');
+            assert.strictEqual(provider._currentTileType, 'satellite', 'new tile type is stored');
+            done();
+        });
+    });
+
     QUnit.test('no tile layer is created and W1030 is logged when osmTileServer is not provided', function(assert) {
         const done = assert.async();
         const errorStub = sinon.stub(errors, 'log');
