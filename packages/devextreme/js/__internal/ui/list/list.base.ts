@@ -275,18 +275,13 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       pulledDownText: messageLocalization.format('dxList-pulledDownText'),
       refreshingText: messageLocalization.format('dxList-refreshingText'),
       pageLoadingText: messageLocalization.format('dxList-pageLoadingText'),
-      // @ts-expect-error ts-error
       onScroll: null,
-      // @ts-expect-error ts-error
       onPullRefresh: null,
-      // @ts-expect-error ts-error
       onPageLoading: null,
       pageLoadMode: 'scrollBottom',
       nextButtonText: messageLocalization.format('dxList-nextButtonText'),
-      // @ts-expect-error ts-error
       onItemSwipe: null,
       grouped: false,
-      // @ts-expect-error ts-error
       onGroupRendered: null,
       collapsibleGroups: false,
       groupTemplate: 'group',

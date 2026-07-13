@@ -406,7 +406,7 @@ export interface dxListOptions<
      * @action
      * @public
      */
-    onGroupRendered?: ((e: GroupRenderedEvent<TItem, TKey>) => void);
+    onGroupRendered?: ((e: GroupRenderedEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -415,7 +415,7 @@ export interface dxListOptions<
      * @action
      * @public
      */
-    onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void) | string;
+    onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void) | string | null;
     /**
      * @docid
      * @default null
@@ -423,7 +423,7 @@ export interface dxListOptions<
      * @action
      * @public
      */
-    onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void);
+    onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -432,7 +432,7 @@ export interface dxListOptions<
      * @hidden false
      * @public
      */
-    onItemDeleted?: ((e: ItemDeletedEvent<TItem, TKey>) => void);
+    onItemDeleted?: ((e: ItemDeletedEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -441,7 +441,7 @@ export interface dxListOptions<
      * @hidden false
      * @public
      */
-    onItemDeleting?: ((e: ItemDeletingEvent<TItem, TKey>) => void);
+    onItemDeleting?: ((e: ItemDeletingEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -449,7 +449,7 @@ export interface dxListOptions<
      * @action
      * @public
      */
-    onItemHold?: ((e: ItemHoldEvent<TItem, TKey>) => void);
+    onItemHold?: ((e: ItemHoldEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -458,7 +458,7 @@ export interface dxListOptions<
      * @hidden false
      * @public
      */
-    onItemReordered?: ((e: ItemReorderedEvent<TItem, TKey>) => void);
+    onItemReordered?: ((e: ItemReorderedEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -466,7 +466,7 @@ export interface dxListOptions<
      * @action
      * @public
      */
-    onItemSwipe?: ((e: ItemSwipeEvent<TItem, TKey>) => void);
+    onItemSwipe?: ((e: ItemSwipeEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -474,7 +474,7 @@ export interface dxListOptions<
      * @action
      * @public
      */
-    onPageLoading?: ((e: PageLoadingEvent<TItem, TKey>) => void);
+    onPageLoading?: ((e: PageLoadingEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -482,7 +482,7 @@ export interface dxListOptions<
      * @action
      * @public
      */
-    onPullRefresh?: ((e: PullRefreshEvent<TItem, TKey>) => void);
+    onPullRefresh?: ((e: PullRefreshEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -490,7 +490,7 @@ export interface dxListOptions<
      * @action
      * @public
      */
-    onScroll?: ((e: ScrollEvent<TItem, TKey>) => void);
+    onScroll?: ((e: ScrollEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -498,7 +498,7 @@ export interface dxListOptions<
      * @action
      * @public
      */
-    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TItem, TKey>) => void);
+    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default "scrollBottom"
