@@ -103,9 +103,7 @@ class Map extends Widget<MapProperties> {
       },
       controls: false,
       onReady: null,
-      // for internal use only
-      // @ts-expect-error ts-error
-      onUpdated: null,
+      onUpdated: undefined,
       onClick: null,
     };
   }

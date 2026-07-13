@@ -273,7 +273,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @action
      * @public
      */
-     onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void) | null;
+    onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -281,7 +281,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @action
      * @public
      */
-     onFieldDataChanged?: ((e: FieldDataChangedEvent) => void) | null;
+    onFieldDataChanged?: ((e: FieldDataChangedEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -289,7 +289,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @action
      * @public
      */
-     onSmartPasting?: ((e: SmartPastingEvent) => void) | null;
+    onSmartPasting?: ((e: SmartPastingEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -297,7 +297,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @action
      * @public
      */
-     onSmartPasted?: ((e: SmartPastedEvent) => void) | null;
+    onSmartPasted?: ((e: SmartPastedEvent) => void) | null;
     /**
      * @docid
      * @default "optional"

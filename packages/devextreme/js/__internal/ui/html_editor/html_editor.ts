@@ -113,16 +113,12 @@ class HtmlEditor extends Editor<Properties> {
 
     return {
       ...super._getDefaultOptions(),
-      // @ts-expect-error undefined is not allowed
-      aiIntegration: null,
+      aiIntegration: undefined,
       allowSoftLineBreak: false,
-      // @ts-expect-error undefined is not allowed
-      converter: null,
-      // @ts-expect-error undefined is not allowed
-      customizeModules: null,
+      converter: undefined,
+      customizeModules: undefined,
       focusStateEnabled: true,
-      // @ts-expect-error undefined is not allowed
-      imageUpload: null,
+      imageUpload: undefined,
       mediaResizing: null,
       mentions: null,
       placeholder: '',
