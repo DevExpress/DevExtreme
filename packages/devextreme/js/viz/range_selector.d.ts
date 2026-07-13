@@ -304,7 +304,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
          * @default 'series'
          */
         nameField?: string;
-      };
+      } | undefined;
       /**
        * @docid
        * @default 0.1
@@ -385,13 +385,13 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
     };
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/range_selector:ValueChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onValueChanged?: ((e: ValueChangedEvent) => void);
+    onValueChanged?: ((e: ValueChangedEvent) => void) | undefined;
     /**
      * @docid
      * @public
@@ -445,7 +445,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @default undefined
        * @notUsedInTheme
        */
-      breaks?: Array<ScaleBreak>;
+      breaks?: Array<ScaleBreak> | undefined;
       /**
        * @docid
        */
@@ -465,7 +465,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @docid
        * @default undefined
        */
-      holidays?: Array<Date | string> | Array<number>;
+      holidays?: Array<Date | string> | Array<number> | undefined;
       /**
        * @docid
        */
@@ -619,7 +619,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @docid
        * @default undefined
        */
-      singleWorkdays?: Array<Date | string> | Array<number>;
+      singleWorkdays?: Array<Date | string> | Array<number> | undefined;
       /**
        * @docid
        * @default undefined
