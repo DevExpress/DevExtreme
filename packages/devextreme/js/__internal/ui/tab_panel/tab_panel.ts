@@ -116,8 +116,8 @@ class TabPanel extends MultiView<TabPanelProperties> {
       iconPosition: ICON_POSITION.start,
       stylingMode: STYLING_MODE.primary,
       onTitleClick: null,
-      onTitleHold: null,
-      onTitleRendered: null,
+      onTitleHold: undefined,
+      onTitleRendered: undefined,
       badgeExpr(data: Item): string | undefined {
         return data?.badge;
       },
