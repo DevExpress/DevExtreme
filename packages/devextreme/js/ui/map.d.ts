@@ -270,7 +270,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @action
      * @public
      */
-    onClick?: ((e: ClickEvent) => void) | string;
+    onClick?: ((e: ClickEvent) => void) | string | null;
     /**
      * @docid
      * @default null
@@ -278,7 +278,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @action
      * @public
      */
-    onMarkerAdded?: ((e: MarkerAddedEvent) => void);
+    onMarkerAdded?: ((e: MarkerAddedEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -286,7 +286,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @action
      * @public
      */
-    onMarkerRemoved?: ((e: MarkerRemovedEvent) => void);
+    onMarkerRemoved?: ((e: MarkerRemovedEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -294,7 +294,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @action
      * @public
      */
-    onReady?: ((e: ReadyEvent) => void);
+    onReady?: ((e: ReadyEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -302,7 +302,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @action
      * @public
      */
-    onRouteAdded?: ((e: RouteAddedEvent) => void);
+    onRouteAdded?: ((e: RouteAddedEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -310,7 +310,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @action
      * @public
      */
-    onRouteRemoved?: ((e: RouteRemovedEvent) => void);
+    onRouteRemoved?: ((e: RouteRemovedEvent) => void) | null;
     /**
      * @docid
      * @default "google"
