@@ -50,9 +50,9 @@ test('DataGrid should send an AI request for rendered rows after scrolling witho
 
   // assert
   await t
-    .expect(dataGrid.getLoadPanel().isVisible())
-    .ok()
     .expect(isAIRequestPending())
+    .ok()
+    .expect(dataGrid.getLoadPanel().isVisible())
     .ok();
 
   // act
@@ -77,9 +77,9 @@ test('DataGrid should send an AI request for rendered rows after scrolling witho
     .eql(0)
     .expect(dataGrid.getDataCell(20, 0).element.textContent)
     .eql('21')
-    .expect(dataGrid.getLoadPanel().isVisible())
-    .ok()
     .expect(isAIRequestPending())
+    .ok()
+    .expect(dataGrid.getLoadPanel().isVisible())
     .ok();
 
   // act
