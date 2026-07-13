@@ -255,7 +255,7 @@ export type VisualRange = {
     * @default undefined
     * @public
     */
-    length?: TimeIntervalConfig;
+    length?: TimeIntervalConfig | undefined;
     /**
     * @docid
     * @default undefined
@@ -640,12 +640,12 @@ export interface SeriesLabel {
        * @docid dxChartSeriesTypes.CommonSeries.label.border.color
        * @default  '#d3d3d3'
        */
-      color?: string | undefined;
+      color?: string;
       /**
        * @docid dxChartSeriesTypes.CommonSeries.label.border.dashStyle
        * @default 'solid'
        */
-      dashStyle?: DashStyle | undefined;
+      dashStyle?: DashStyle;
       /**
        * @docid dxChartSeriesTypes.CommonSeries.label.border.visible
        * @default false
