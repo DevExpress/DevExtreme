@@ -57,10 +57,6 @@ class Provider {
     Class.abstract();
   }
 
-  updateTileServer(): Promise<unknown> {
-    return Promise.resolve();
-  }
-
   updateDisabled(): void {
     Class.abstract();
   }

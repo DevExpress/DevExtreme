@@ -294,12 +294,6 @@ class OsmProvider extends DynamicProvider {
     return Promise.resolve();
   }
 
-  updateTileServer(): Promise<void> {
-    this._rebuildTileLayer(this._currentTileType);
-
-    return Promise.resolve();
-  }
-
   _rebuildTileLayer(type: string): void {
     if (this._tileLayer) {
       this._map.removeLayer(this._tileLayer);

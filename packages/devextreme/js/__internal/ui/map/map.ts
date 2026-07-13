@@ -267,7 +267,7 @@ class Map extends Widget<MapProperties> {
   }
 
   _optionChanged(args: OptionChanged<MapProperties>): void {
-    const { name, fullName, value } = args;
+    const { name, value } = args;
 
     const changeBag = this._optionChangeBag;
     this._optionChangeBag = null;
@@ -341,15 +341,8 @@ class Map extends Widget<MapProperties> {
         this._queueAsyncAction('updateMarkers', this._rendered.markers, this._rendered.markers);
         break;
       case 'providerConfig':
-        // The OSM tile server can be swapped at runtime without recreating the map.
-        // Any other providerConfig change requires a full provider re-initialization.
-        if (fullName === 'providerConfig.tileServer') {
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          this._queueAsyncAction('updateTileServer');
-        } else {
-          this._suppressAsyncAction = true;
-          this._invalidate();
-        }
+        this._suppressAsyncAction = true;
+        this._invalidate();
         break;
       case 'onReady':
       case 'onUpdated':

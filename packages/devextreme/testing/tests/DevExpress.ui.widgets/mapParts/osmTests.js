@@ -759,26 +759,32 @@ QUnit.module('OSM: tile server', moduleConfig, () => {
         });
     });
 
-    QUnit.test('subdomains are passed only when the URL contains the {s} placeholder', function(assert) {
+    QUnit.test('subdomains are passed when the URL contains the {s} placeholder', function(assert) {
         const done = assert.async();
-        const d = $.Deferred();
 
-        const map = $('#map').dxMap({
+        $('#map').dxMap({
             provider: 'osm',
             // eslint-disable-next-line spellcheck/spell-checker -- Leaflet tile server option name
             providerConfig: { tileServer: { url: 'https://{s}.tiles.example.com/{z}/{x}/{y}.png', subdomains: '1234' } },
-            onReady: () => { d.resolve(); }
-        }).dxMap('instance');
+            onReady: () => {
+                // eslint-disable-next-line spellcheck/spell-checker -- Leaflet tile server option name
+                assert.strictEqual(L.tileLayerOptions.subdomains, '1234', 'subdomains passed when {s} present');
+                done();
+            }
+        });
+    });
 
-        d.done(() => {
+    QUnit.test('subdomains are omitted when the URL does not contain the {s} placeholder', function(assert) {
+        const done = assert.async();
+
+        $('#map').dxMap({
+            provider: 'osm',
             // eslint-disable-next-line spellcheck/spell-checker -- Leaflet tile server option name
-            assert.strictEqual(L.tileLayerOptions.subdomains, '1234', 'subdomains passed when {s} present');
-
-            map.option('onUpdated', () => {
+            providerConfig: { tileServer: { url: 'https://tiles.example.com/{z}/{x}/{y}.png', subdomains: '1234' } },
+            onReady: () => {
                 assert.notOk('subdomains' in L.tileLayerOptions, 'subdomains omitted when {s} absent');
                 done();
-            });
-            map.option('providerConfig.tileServer', { url: 'https://tiles.example.com/{z}/{x}/{y}.png' });
+            }
         });
     });
 
@@ -820,23 +826,27 @@ QUnit.module('OSM: tile server', moduleConfig, () => {
         });
     });
 
-    QUnit.test('tile layer is rebuilt when osmTileServer changes at runtime', function(assert) {
+    QUnit.test('provider is reinitialized when osmTileServer changes', function(assert) {
         const done = assert.async();
         const d = $.Deferred();
+        let initialMap;
 
         const map = $('#map').dxMap({
             provider: 'osm',
             providerConfig: { tileServer: 'https://a.example.com/{z}/{x}/{y}.png' },
-            onReady: () => { d.resolve(); }
+            onReady: ({ originalMap }) => {
+                initialMap = originalMap;
+                d.resolve();
+            }
         }).dxMap('instance');
 
         d.done(() => {
-            map.option('onUpdated', () => {
-                assert.ok(L.removedLayers.length > 0, 'old tile layer removed');
+            map.option('onReady', ({ originalMap }) => {
+                assert.notStrictEqual(originalMap, initialMap, 'Leaflet map is recreated');
                 assert.strictEqual(L.tileLayerUrl, 'https://b.example.com/{z}/{x}/{y}.png', 'new tile URL used');
                 done();
             });
-            map.option('providerConfig.tileServer', 'https://b.example.com/{z}/{x}/{y}.png');
+            map.option('providerConfig', { tileServer: 'https://b.example.com/{z}/{x}/{y}.png' });
         });
     });
 });

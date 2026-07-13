@@ -201,8 +201,8 @@ const render: Story['render'] = (args) => {
     customMarkerIcons, showMarkers, showRoutes, routeColor, height, width,
   } = args;
 
-  // providerConfig identity changes only when the provider or a key changes, so the map rebuilds
-  // its tile layer then — not on every unrelated control change.
+  // providerConfig identity changes only when the provider or a key changes, so the map provider
+  // is reinitialized then — not on every unrelated control change.
   const providerConfig = useMemo(() => ({
     tileServer: (t: string) => buildTileServer(tileProvider, t, {
       maptiler: maptilerKey, thunderforest: thunderforestKey, stadia: stadiaKey,
