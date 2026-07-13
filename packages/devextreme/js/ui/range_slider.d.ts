@@ -85,10 +85,10 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
      * @docid
      * @type_function_param1 e:{ui/range_slider:ValueChangedEvent}
      * @action
-     * @default null
+     * @default undefined
      * @public
      */
-    onValueChanged?: ((e: ValueChangedEvent) => void) | null;
+    onValueChanged?: ((e: ValueChangedEvent) => void) | undefined;
     /**
      * @docid
      * @default 40
