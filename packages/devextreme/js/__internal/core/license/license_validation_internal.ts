@@ -1,14 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Token } from './types';
 
-export declare function parseLicenseKey(
+export function parseLicenseKey(
   encodedKey: string | undefined,
   allowAspNetProductCompatibility?: boolean,
-): Token;
+): Token {
+  return undefined as unknown as Token;
+}
 
 export function validateLicense(licenseKey: string, version?: string): void {}
 
-export declare function peekValidationPerformed(): boolean;
+export function peekValidationPerformed(): boolean {
+  return false;
+}
 
 export function setLicenseCheckSkipCondition(): void {}
 
