@@ -26,15 +26,15 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 type IHtmlEditorOptionsNarrowedEvents = {
   onContentReady?: ((e: ContentReadyEvent) => void);
   onDisposing?: ((e: DisposingEvent) => void);
-  onFocusIn?: ((e: FocusInEvent) => void);
-  onFocusOut?: ((e: FocusOutEvent) => void);
+  onFocusIn?: ((e: FocusInEvent) => void) | undefined;
+  onFocusOut?: ((e: FocusOutEvent) => void) | undefined;
   onInitialized?: ((e: InitializedEvent) => void);
   onValueChanged?: ((e: ValueChangedEvent) => void);
 }
 
 type IHtmlEditorOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IHtmlEditorOptionsNarrowedEvents> & IHtmlOptions & {
-  defaultValue?: any;
-  onValueChange?: (value: any) => void;
+  defaultValue?: any | null;
+  onValueChange?: (value: any | null) => void;
 }>
 
 interface HtmlEditorRef {
@@ -158,20 +158,20 @@ type IFileUploaderOptionsProps = React.PropsWithChildren<{
   minFileSize?: number;
   multiple?: boolean;
   name?: string;
-  onBeforeSend?: ((e: BeforeSendEvent) => void);
+  onBeforeSend?: ((e: BeforeSendEvent) => void) | null;
   onContentReady?: ((e: FileUploaderContentReadyEvent) => void);
   onDisposing?: ((e: FileUploaderDisposingEvent) => void);
-  onDropZoneEnter?: ((e: DropZoneEnterEvent) => void);
-  onDropZoneLeave?: ((e: DropZoneLeaveEvent) => void);
-  onFilesUploaded?: ((e: FilesUploadedEvent) => void);
+  onDropZoneEnter?: ((e: DropZoneEnterEvent) => void) | null;
+  onDropZoneLeave?: ((e: DropZoneLeaveEvent) => void) | null;
+  onFilesUploaded?: ((e: FilesUploadedEvent) => void) | null;
   onInitialized?: ((e: FileUploaderInitializedEvent) => void);
   onOptionChanged?: ((e: OptionChangedEvent) => void);
-  onProgress?: ((e: ProgressEvent) => void);
-  onUploadAborted?: ((e: UploadAbortedEvent) => void);
-  onUploaded?: ((e: UploadedEvent) => void);
-  onUploadError?: ((e: UploadErrorEvent) => void);
-  onUploadStarted?: ((e: UploadStartedEvent) => void);
-  onValueChanged?: ((e: FileUploaderValueChangedEvent) => void);
+  onProgress?: ((e: ProgressEvent) => void) | null;
+  onUploadAborted?: ((e: UploadAbortedEvent) => void) | null;
+  onUploaded?: ((e: UploadedEvent) => void) | null;
+  onUploadError?: ((e: UploadErrorEvent) => void) | null;
+  onUploadStarted?: ((e: UploadStartedEvent) => void) | null;
+  onValueChanged?: ((e: FileUploaderValueChangedEvent) => void) | null;
   progress?: number;
   readOnly?: boolean;
   readyToUploadMessage?: string;
@@ -190,8 +190,8 @@ type IFileUploaderOptionsProps = React.PropsWithChildren<{
   uploadMethod?: UploadHttpMethod;
   uploadMode?: FileUploadMode;
   uploadUrl?: string;
-  validationError?: any;
-  validationErrors?: Array<any>;
+  validationError?: any | null;
+  validationErrors?: Array<any> | null;
   validationStatus?: ValidationStatus;
   value?: Array<any>;
   visible?: boolean;

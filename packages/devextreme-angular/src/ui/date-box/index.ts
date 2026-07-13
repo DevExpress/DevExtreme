@@ -209,10 +209,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get buttons(): Array<DropDownPredefinedButton | TextEditorButton> {
+    get buttons(): Array<DropDownPredefinedButton | TextEditorButton> | undefined {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<DropDownPredefinedButton | TextEditorButton>) {
+    set buttons(value: Array<DropDownPredefinedButton | TextEditorButton> | undefined) {
         this._setOption('buttons', value);
     }
 
@@ -300,10 +300,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get disabledDates(): Array<Date> | ((data: { component: dxDateBox, date: Date, view: string }) => boolean) {
+    get disabledDates(): Array<Date> | ((data: { component: dxDateBox, date: Date, view: string }) => boolean) | null {
         return this._getOption('disabledDates');
     }
-    set disabledDates(value: Array<Date> | ((data: { component: dxDateBox, date: Date, view: string }) => boolean)) {
+    set disabledDates(value: Array<Date> | ((data: { component: dxDateBox, date: Date, view: string }) => boolean) | null) {
         this._setOption('disabledDates', value);
     }
 
@@ -313,10 +313,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get displayFormat(): Format {
+    get displayFormat(): Format | null {
         return this._getOption('displayFormat');
     }
-    set displayFormat(value: Format) {
+    set displayFormat(value: Format | null) {
         this._setOption('displayFormat', value);
     }
 
@@ -521,10 +521,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get maxLength(): number | string {
+    get maxLength(): null | number | string {
         return this._getOption('maxLength');
     }
-    set maxLength(value: number | string) {
+    set maxLength(value: null | number | string) {
         this._setOption('maxLength', value);
     }
 
@@ -768,10 +768,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get validationError(): any {
+    get validationError(): any | null {
         return this._getOption('validationError');
     }
-    set validationError(value: any) {
+    set validationError(value: any | null) {
         this._setOption('validationError', value);
     }
 
@@ -781,10 +781,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get validationErrors(): Array<any> {
+    get validationErrors(): Array<any> | null {
         return this._getOption('validationErrors');
     }
-    set validationErrors(value: Array<any>) {
+    set validationErrors(value: Array<any> | null) {
         this._setOption('validationErrors', value);
     }
 
@@ -1062,7 +1062,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() buttonsChange: EventEmitter<Array<DropDownPredefinedButton | TextEditorButton>>;
+    @Output() buttonsChange: EventEmitter<Array<DropDownPredefinedButton | TextEditorButton> | undefined>;
 
     /**
     
@@ -1111,14 +1111,14 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() disabledDatesChange: EventEmitter<Array<Date> | ((data: { component: dxDateBox, date: Date, view: string }) => boolean)>;
+    @Output() disabledDatesChange: EventEmitter<Array<Date> | ((data: { component: dxDateBox, date: Date, view: string }) => boolean) | null>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() displayFormatChange: EventEmitter<Format>;
+    @Output() displayFormatChange: EventEmitter<Format | null>;
 
     /**
     
@@ -1230,7 +1230,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxLengthChange: EventEmitter<number | string>;
+    @Output() maxLengthChange: EventEmitter<null | number | string>;
 
     /**
     
@@ -1363,14 +1363,14 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationErrorChange: EventEmitter<any>;
+    @Output() validationErrorChange: EventEmitter<any | null>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationErrorsChange: EventEmitter<Array<any>>;
+    @Output() validationErrorsChange: EventEmitter<Array<any> | null>;
 
     /**
     

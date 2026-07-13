@@ -28,10 +28,10 @@ type ILookupOptionsNarrowedEvents = {
   onInitialized?: ((e: InitializedEvent) => void);
   onItemClick?: ((e: ItemClickEvent) => void);
   onOpened?: ((e: OpenedEvent) => void);
-  onPageLoading?: ((e: PageLoadingEvent) => void);
-  onPullRefresh?: ((e: PullRefreshEvent) => void);
-  onScroll?: ((e: ScrollEvent) => void);
-  onValueChanged?: ((e: ValueChangedEvent) => void);
+  onPageLoading?: ((e: PageLoadingEvent) => void) | null;
+  onPullRefresh?: ((e: PullRefreshEvent) => void) | null;
+  onScroll?: ((e: ScrollEvent) => void) | null;
+  onValueChanged?: ((e: ValueChangedEvent) => void) | null;
 }
 
 type ILookupOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, ILookupOptionsNarrowedEvents> & IHtmlOptions & {

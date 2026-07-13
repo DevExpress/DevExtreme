@@ -133,10 +133,10 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get colorizer(): { colorCodeField?: string | undefined, colorizeGroups?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, range?: Array<number>, type?: TreeMapColorizerType | undefined } {
+    get colorizer(): { colorCodeField?: string | undefined, colorizeGroups?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, range?: Array<number> | undefined, type?: TreeMapColorizerType | undefined } {
         return this._getOption('colorizer');
     }
-    set colorizer(value: { colorCodeField?: string | undefined, colorizeGroups?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, range?: Array<number>, type?: TreeMapColorizerType | undefined }) {
+    set colorizer(value: { colorCodeField?: string | undefined, colorizeGroups?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, range?: Array<number> | undefined, type?: TreeMapColorizerType | undefined }) {
         this._setOption('colorizer', value);
     }
 
@@ -583,7 +583,7 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() colorizerChange: EventEmitter<{ colorCodeField?: string | undefined, colorizeGroups?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, range?: Array<number>, type?: TreeMapColorizerType | undefined }>;
+    @Output() colorizerChange: EventEmitter<{ colorCodeField?: string | undefined, colorizeGroups?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, range?: Array<number> | undefined, type?: TreeMapColorizerType | undefined }>;
 
     /**
     

@@ -246,10 +246,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     
      */
     @Input()
-    get screenByWidth(): Function {
+    get screenByWidth(): Function | null {
         return this._getOption('screenByWidth');
     }
-    set screenByWidth(value: Function) {
+    set screenByWidth(value: Function | null) {
         this._setOption('screenByWidth', value);
     }
 
@@ -438,7 +438,7 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() screenByWidthChange: EventEmitter<Function>;
+    @Output() screenByWidthChange: EventEmitter<Function | null>;
 
     /**
     

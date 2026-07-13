@@ -419,17 +419,17 @@ export abstract class DxoFileUploaderOptions extends NestedOption {
         this._setOption('uploadUrl', value);
     }
 
-    get validationError(): any {
+    get validationError(): any | null {
         return this._getOption('validationError');
     }
-    set validationError(value: any) {
+    set validationError(value: any | null) {
         this._setOption('validationError', value);
     }
 
-    get validationErrors(): Array<any> {
+    get validationErrors(): null | Array<any> {
         return this._getOption('validationErrors');
     }
-    set validationErrors(value: Array<any>) {
+    set validationErrors(value: null | Array<any>) {
         this._setOption('validationErrors', value);
     }
 

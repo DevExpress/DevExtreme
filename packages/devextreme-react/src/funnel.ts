@@ -548,9 +548,9 @@ type ILegendProps = React.PropsWithChildren<{
     subtitle?: Record<string, any> | string | {
       font?: ChartsFont;
       offset?: number;
-      text?: string;
+      text?: string | undefined;
     };
-    text?: string;
+    text?: string | undefined;
     verticalAlignment?: VerticalEdge;
   };
   verticalAlignment?: VerticalEdge;
@@ -622,9 +622,9 @@ type ILegendTitleProps = React.PropsWithChildren<{
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
-    text?: string;
+    text?: string | undefined;
   };
-  text?: string;
+  text?: string | undefined;
   verticalAlignment?: VerticalEdge;
 }>
 const _componentLegendTitle = (props: ILegendTitleProps) => {
@@ -651,7 +651,7 @@ const LegendTitle = Object.assign<typeof _componentLegendTitle, NestedComponentM
 type ILegendTitleSubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
-  text?: string;
+  text?: string | undefined;
 }>
 const _componentLegendTitleSubtitle = (props: ILegendTitleSubtitleProps) => {
   return React.createElement(NestedOption<ILegendTitleSubtitleProps>, {
@@ -803,7 +803,7 @@ const Size = Object.assign<typeof _componentSize, NestedComponentMeta>(_componen
 type ISubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
-  text?: string;
+  text?: string | undefined;
   textOverflow?: TextOverflow;
   wordWrap?: WordWrap;
 }>
@@ -839,11 +839,11 @@ type ITitleProps = React.PropsWithChildren<{
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
-    text?: string;
+    text?: string | undefined;
     textOverflow?: TextOverflow;
     wordWrap?: WordWrap;
   };
-  text?: string;
+  text?: string | undefined;
   verticalAlignment?: VerticalEdge;
   textOverflow?: TextOverflow;
   wordWrap?: WordWrap;

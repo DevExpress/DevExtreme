@@ -25,10 +25,10 @@ type IMenuOptionsNarrowedEvents<TItem = any, TKey = any> = {
   onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void);
   onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void);
   onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void);
-  onSubmenuHidden?: ((e: SubmenuHiddenEvent<TItem, TKey>) => void);
-  onSubmenuHiding?: ((e: SubmenuHidingEvent<TItem, TKey>) => void);
-  onSubmenuShowing?: ((e: SubmenuShowingEvent<TItem, TKey>) => void);
-  onSubmenuShown?: ((e: SubmenuShownEvent<TItem, TKey>) => void);
+  onSubmenuHidden?: ((e: SubmenuHiddenEvent<TItem, TKey>) => void) | null;
+  onSubmenuHiding?: ((e: SubmenuHidingEvent<TItem, TKey>) => void) | null;
+  onSubmenuShowing?: ((e: SubmenuShowingEvent<TItem, TKey>) => void) | null;
+  onSubmenuShown?: ((e: SubmenuShownEvent<TItem, TKey>) => void) | null;
 }
 
 type IMenuOptions<TItem = any, TKey = any> = React.PropsWithChildren<ReplaceFieldTypes<Properties<TItem, TKey>, IMenuOptionsNarrowedEvents<TItem, TKey>> & IHtmlOptions & {
@@ -36,9 +36,9 @@ type IMenuOptions<TItem = any, TKey = any> = React.PropsWithChildren<ReplaceFiel
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
   defaultItems?: Array<any | dxMenuItem>;
-  defaultSelectedItem?: any;
+  defaultSelectedItem?: any | null;
   onItemsChange?: (value: Array<any | dxMenuItem>) => void;
-  onSelectedItemChange?: (value: any) => void;
+  onSelectedItemChange?: (value: any | null) => void;
 }>
 
 interface MenuRef<TItem = any, TKey = any> {

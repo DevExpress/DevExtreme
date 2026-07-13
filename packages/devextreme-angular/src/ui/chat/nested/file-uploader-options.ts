@@ -244,10 +244,10 @@ export class DxoChatFileUploaderOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get onBeforeSend(): ((e: BeforeSendEvent) => void) {
+    get onBeforeSend(): ((e: BeforeSendEvent) => void) | null {
         return this._getOption('onBeforeSend');
     }
-    set onBeforeSend(value: ((e: BeforeSendEvent) => void)) {
+    set onBeforeSend(value: ((e: BeforeSendEvent) => void) | null) {
         this._setOption('onBeforeSend', value);
     }
 
@@ -268,26 +268,26 @@ export class DxoChatFileUploaderOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get onDropZoneEnter(): ((e: DropZoneEnterEvent) => void) {
+    get onDropZoneEnter(): ((e: DropZoneEnterEvent) => void) | null {
         return this._getOption('onDropZoneEnter');
     }
-    set onDropZoneEnter(value: ((e: DropZoneEnterEvent) => void)) {
+    set onDropZoneEnter(value: ((e: DropZoneEnterEvent) => void) | null) {
         this._setOption('onDropZoneEnter', value);
     }
 
     @Input()
-    get onDropZoneLeave(): ((e: DropZoneLeaveEvent) => void) {
+    get onDropZoneLeave(): ((e: DropZoneLeaveEvent) => void) | null {
         return this._getOption('onDropZoneLeave');
     }
-    set onDropZoneLeave(value: ((e: DropZoneLeaveEvent) => void)) {
+    set onDropZoneLeave(value: ((e: DropZoneLeaveEvent) => void) | null) {
         this._setOption('onDropZoneLeave', value);
     }
 
     @Input()
-    get onFilesUploaded(): ((e: FilesUploadedEvent) => void) {
+    get onFilesUploaded(): ((e: FilesUploadedEvent) => void) | null {
         return this._getOption('onFilesUploaded');
     }
-    set onFilesUploaded(value: ((e: FilesUploadedEvent) => void)) {
+    set onFilesUploaded(value: ((e: FilesUploadedEvent) => void) | null) {
         this._setOption('onFilesUploaded', value);
     }
 
@@ -308,50 +308,50 @@ export class DxoChatFileUploaderOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get onProgress(): ((e: ProgressEvent) => void) {
+    get onProgress(): ((e: ProgressEvent) => void) | null {
         return this._getOption('onProgress');
     }
-    set onProgress(value: ((e: ProgressEvent) => void)) {
+    set onProgress(value: ((e: ProgressEvent) => void) | null) {
         this._setOption('onProgress', value);
     }
 
     @Input()
-    get onUploadAborted(): ((e: UploadAbortedEvent) => void) {
+    get onUploadAborted(): ((e: UploadAbortedEvent) => void) | null {
         return this._getOption('onUploadAborted');
     }
-    set onUploadAborted(value: ((e: UploadAbortedEvent) => void)) {
+    set onUploadAborted(value: ((e: UploadAbortedEvent) => void) | null) {
         this._setOption('onUploadAborted', value);
     }
 
     @Input()
-    get onUploaded(): ((e: UploadedEvent) => void) {
+    get onUploaded(): ((e: UploadedEvent) => void) | null {
         return this._getOption('onUploaded');
     }
-    set onUploaded(value: ((e: UploadedEvent) => void)) {
+    set onUploaded(value: ((e: UploadedEvent) => void) | null) {
         this._setOption('onUploaded', value);
     }
 
     @Input()
-    get onUploadError(): ((e: UploadErrorEvent) => void) {
+    get onUploadError(): ((e: UploadErrorEvent) => void) | null {
         return this._getOption('onUploadError');
     }
-    set onUploadError(value: ((e: UploadErrorEvent) => void)) {
+    set onUploadError(value: ((e: UploadErrorEvent) => void) | null) {
         this._setOption('onUploadError', value);
     }
 
     @Input()
-    get onUploadStarted(): ((e: UploadStartedEvent) => void) {
+    get onUploadStarted(): ((e: UploadStartedEvent) => void) | null {
         return this._getOption('onUploadStarted');
     }
-    set onUploadStarted(value: ((e: UploadStartedEvent) => void)) {
+    set onUploadStarted(value: ((e: UploadStartedEvent) => void) | null) {
         this._setOption('onUploadStarted', value);
     }
 
     @Input()
-    get onValueChanged(): ((e: ValueChangedEvent) => void) {
+    get onValueChanged(): ((e: ValueChangedEvent) => void) | null {
         return this._getOption('onValueChanged');
     }
-    set onValueChanged(value: ((e: ValueChangedEvent) => void)) {
+    set onValueChanged(value: ((e: ValueChangedEvent) => void) | null) {
         this._setOption('onValueChanged', value);
     }
 
@@ -500,18 +500,18 @@ export class DxoChatFileUploaderOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get validationError(): any {
+    get validationError(): any | null {
         return this._getOption('validationError');
     }
-    set validationError(value: any) {
+    set validationError(value: any | null) {
         this._setOption('validationError', value);
     }
 
     @Input()
-    get validationErrors(): Array<any> {
+    get validationErrors(): Array<any> | null {
         return this._getOption('validationErrors');
     }
-    set validationErrors(value: Array<any>) {
+    set validationErrors(value: Array<any> | null) {
         this._setOption('validationErrors', value);
     }
 

@@ -23,13 +23,13 @@ type ITreeViewOptionsNarrowedEvents<TItem = any, TKey = any> = {
   onContentReady?: ((e: ContentReadyEvent<TItem, TKey>) => void);
   onDisposing?: ((e: DisposingEvent<TItem, TKey>) => void);
   onInitialized?: ((e: InitializedEvent<TItem, TKey>) => void);
-  onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void);
-  onItemCollapsed?: ((e: ItemCollapsedEvent<TItem, TKey>) => void);
-  onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void);
-  onItemExpanded?: ((e: ItemExpandedEvent<TItem, TKey>) => void);
-  onItemHold?: ((e: ItemHoldEvent<TItem, TKey>) => void);
-  onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void);
-  onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TItem, TKey>) => void);
+  onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void) | null;
+  onItemCollapsed?: ((e: ItemCollapsedEvent<TItem, TKey>) => void) | null;
+  onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void) | null;
+  onItemExpanded?: ((e: ItemExpandedEvent<TItem, TKey>) => void) | null;
+  onItemHold?: ((e: ItemHoldEvent<TItem, TKey>) => void) | null;
+  onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void) | null;
+  onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TItem, TKey>) => void) | null;
 }
 
 type ITreeViewOptions<TItem = any, TKey = any> = React.PropsWithChildren<ReplaceFieldTypes<Properties<TItem, TKey>, ITreeViewOptionsNarrowedEvents<TItem, TKey>> & IHtmlOptions & {
@@ -171,7 +171,7 @@ type IOptionsProps = React.PropsWithChildren<{
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   icon?: string;
-  onClick?: ((e: ClickEvent) => void);
+  onClick?: ((e: ClickEvent) => void) | undefined;
   onContentReady?: ((e: ButtonContentReadyEvent) => void);
   onDisposing?: ((e: ButtonDisposingEvent) => void);
   onInitialized?: ((e: ButtonInitializedEvent) => void);
@@ -212,7 +212,7 @@ const Options = Object.assign<typeof _componentOptions, NestedComponentMeta>(_co
 type ISearchEditorOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  buttons?: Array<string | TextBoxPredefinedButton | TextEditorButton>;
+  buttons?: Array<string | TextBoxPredefinedButton | TextEditorButton> | undefined;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
@@ -228,7 +228,7 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   maskChar?: string;
   maskInvalidMessage?: string;
   maskRules?: any;
-  maxLength?: number | string;
+  maxLength?: null | number | string;
   mode?: TextBoxType;
   name?: string;
   onChange?: ((e: ChangeEvent) => void);
@@ -256,8 +256,8 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   tabIndex?: number;
   text?: string;
   useMaskedValue?: boolean;
-  validationError?: any;
-  validationErrors?: Array<any>;
+  validationError?: any | null;
+  validationErrors?: Array<any> | null;
   validationMessageMode?: ValidationMessageMode;
   validationMessagePosition?: Position;
   validationStatus?: ValidationStatus;
