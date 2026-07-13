@@ -360,7 +360,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @notUsedInTheme
      * @public
      */
-    bounds?: Array<number>;
+    bounds?: Array<number> | undefined;
     /**
      * @docid
      * @default [0, 0]
@@ -450,7 +450,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
        * @docid
        * @default undefined
        */
-      colorGroups?: Array<number>;
+      colorGroups?: Array<number> | undefined;
       /**
        * @docid
        * @notUsedInTheme
@@ -579,13 +579,13 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
        * @docid
        * @default undefined
        */
-      sizeGroups?: Array<number>;
+      sizeGroups?: Array<number> | undefined;
       /**
        * @docid
        * @notUsedInTheme
        */
       type?: VectorMapLayerType;
-    }> | { borderColor?: string; borderWidth?: number; color?: string; colorGroupingField?: string; colorGroups?: Array<number>; customize?: ((elements: Array<MapLayerElement>) => any); dataField?: string; dataSource?: object | DataSourceLike<any> | null; elementType?: 'bubble' | 'dot' | 'image' | 'pie'; hoverEnabled?: boolean; hoveredBorderColor?: string; hoveredBorderWidth?: number; hoveredColor?: string; label?: { dataField?: string; enabled?: boolean; font?: Font }; maxSize?: number; minSize?: number; name?: string; opacity?: number; palette?: Array<string> | Palette; paletteSize?: number; selectedBorderColor?: string; selectedBorderWidth?: number; selectedColor?: string; selectionMode?: SingleMultipleOrNone; size?: number; sizeGroupingField?: string; sizeGroups?: Array<number>; type?: 'area' | 'line' | 'marker' };
+    }> | { borderColor?: string; borderWidth?: number; color?: string; colorGroupingField?: string; colorGroups?: Array<number>; customize?: ((elements: Array<MapLayerElement>) => any); dataField?: string; dataSource?: object | DataSourceLike<any> | null; elementType?: 'bubble' | 'dot' | 'image' | 'pie'; hoverEnabled?: boolean; hoveredBorderColor?: string; hoveredBorderWidth?: number; hoveredColor?: string; label?: { dataField?: string; enabled?: boolean; font?: Font }; maxSize?: number; minSize?: number; name?: string; opacity?: number; palette?: Array<string> | Palette; paletteSize?: number; selectedBorderColor?: string; selectedBorderWidth?: number; selectedColor?: string; selectionMode?: SingleMultipleOrNone; size?: number; sizeGroupingField?: string; sizeGroups?: Array<number>; type?: 'area' | 'line' | 'marker' } | undefined;
     /**
      * @docid
      * @type Array<Object>
@@ -609,59 +609,59 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     maxZoomFactor?: number;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/vector_map:CenterChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onCenterChanged?: ((e: CenterChangedEvent) => void);
+    onCenterChanged?: ((e: CenterChangedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type function
      * @type_function_param1 e:{viz/vector_map:ClickEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onClick?: ((e: ClickEvent) => void) | string;
+    onClick?: ((e: ClickEvent) => void) | string | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/vector_map:SelectionChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/vector_map:TooltipHiddenEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
+    onTooltipHidden?: ((e: TooltipHiddenEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/vector_map:TooltipShownEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onTooltipShown?: ((e: TooltipShownEvent) => void);
+    onTooltipShown?: ((e: TooltipShownEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/vector_map:ZoomFactorChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onZoomFactorChanged?: ((e: ZoomFactorChangedEvent) => void);
+    onZoomFactorChanged?: ((e: ZoomFactorChangedEvent) => void) | undefined;
     /**
      * @docid
      * @default true
@@ -754,7 +754,7 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
      * @default undefined
      * @public
      */
-    coordinates?: Array<number>;
+    coordinates?: Array<number> | undefined;
     /**
      * @docid
      * @type_function_return object
