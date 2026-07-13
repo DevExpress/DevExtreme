@@ -185,7 +185,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @type_function_return string|Element|jQuery
      * @public
      */
-    fieldTemplate?: template | ((selectedItem: any, fieldElement: DxElement) => string | UserDefinedElement);
+    fieldTemplate?: template | ((selectedItem: any, fieldElement: DxElement) => string | UserDefinedElement) | null;
     /**
      * @docid
      * @default false
@@ -220,7 +220,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @action
      * @public
      */
-    onPageLoading?: ((e: PageLoadingEvent) => void);
+    onPageLoading?: ((e: PageLoadingEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -228,7 +228,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @action
      * @public
      */
-    onPullRefresh?: ((e: PullRefreshEvent) => void);
+    onPullRefresh?: ((e: PullRefreshEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -236,7 +236,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @action
      * @public
      */
-    onScroll?: ((e: ScrollEvent) => void);
+    onScroll?: ((e: ScrollEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -244,7 +244,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @action
      * @public
      */
-    onValueChanged?: ((e: ValueChangedEvent) => void);
+    onValueChanged?: ((e: ValueChangedEvent) => void) | null;
     /**
      * @docid
      * @default "scrollBottom"

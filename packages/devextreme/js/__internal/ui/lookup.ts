@@ -135,11 +135,8 @@ class Lookup extends DropDownList<LookupProperties> {
       pulledDownText: messageLocalization.format('dxList-pulledDownText'),
       refreshingText: messageLocalization.format('dxList-refreshingText'),
       pageLoadingText: messageLocalization.format('dxList-pageLoadingText'),
-      // @ts-expect-error public API
       onScroll: null,
-      // @ts-expect-error public API
       onPullRefresh: null,
-      // @ts-expect-error public API
       onPageLoading: null,
       pageLoadMode: 'scrollBottom',
       nextButtonText: messageLocalization.format('dxList-nextButtonText'),
