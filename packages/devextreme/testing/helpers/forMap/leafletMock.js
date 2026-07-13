@@ -201,17 +201,6 @@
                 isPopupOpen() {
                     return this._popupOpen;
                 },
-                getElement() {
-                    return L.markerElement;
-                },
-                setIcon(icon) {
-                    this.options.icon = icon;
-                    L.markerSetIcon = icon;
-                    return marker;
-                },
-                getPopup() {
-                    return this._popup;
-                },
             };
 
             return marker;
@@ -238,10 +227,6 @@
                 setContent(text) {
                     this._content = text;
                     L.popupContent = text;
-                    return popup;
-                },
-                update() {
-                    L.popupUpdateCount = (L.popupUpdateCount || 0) + 1;
                     return popup;
                 },
             };

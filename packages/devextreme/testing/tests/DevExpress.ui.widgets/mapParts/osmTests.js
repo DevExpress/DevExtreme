@@ -42,13 +42,10 @@ const prepareTestingOsmProvider = () => {
     L.mockCenter = null;
     L.mockBounds = null;
     L.mapInstance = null;
-    L.markerElement = null;
-    L.markerSetIcon = null;
     L.iconOptions = null;
     L.boundPopup = null;
     L.popupOptions = null;
     L.popupContent = null;
-    L.popupUpdateCount = 0;
 };
 
 const moduleConfig = {
@@ -999,101 +996,33 @@ QUnit.module('OSM: markers', moduleConfig, () => {
         });
     });
 
-    QUnit.test('default marker keeps Leaflet icon anchors', function(assert) {
+    QUnit.test('default marker uses the Leaflet default icon', function(assert) {
         const done = assert.async();
-        const iconElement = document.createElement('img');
-        const getBoundingClientRectSpy = sinon.spy(iconElement, 'getBoundingClientRect');
-
-        L.markerElement = iconElement;
 
         $('#map').dxMap({
             provider: 'osm',
             markers: [{ location: [10, 20], tooltip: 'Default marker' }],
             onReady: () => {
-                assert.notOk(getBoundingClientRectSpy.called, 'default icon size is not measured');
-                assert.strictEqual(iconElement.style.marginLeft, '', 'default horizontal anchor is preserved');
-                assert.strictEqual(iconElement.style.marginTop, '', 'default vertical anchor is preserved');
-                getBoundingClientRectSpy.restore();
+                assert.strictEqual(L.markerOptions, undefined, 'no custom icon is passed to Leaflet');
                 done();
             }
         });
     });
 
-    QUnit.test('custom marker uses rendered size for Leaflet icon and popup anchors', function(assert) {
+    QUnit.test('custom marker uses the supported Leaflet icon size and anchors', function(assert) {
         const done = assert.async();
-        const iconElement = document.createElement('img');
-
-        Object.defineProperties(iconElement, {
-            complete: { configurable: true, value: true },
-            naturalWidth: { configurable: true, value: 40 },
-            naturalHeight: { configurable: true, value: 60 },
-        });
-        sinon.stub(iconElement, 'getBoundingClientRect').returns({ width: 20, height: 30 });
-        L.markerElement = iconElement;
 
         $('#map').dxMap({
             provider: 'osm',
             markers: [{ location: [10, 20], iconSrc: 'customMarker.png', tooltip: 'Custom marker' }],
             onReady: () => {
-                assert.ok(L.markerSetIcon, 'adjusted icon is applied through the public marker API');
-                assert.deepEqual(L.iconOptions.iconSize, { x: 20, y: 30 }, 'Leaflet receives rendered icon size');
-                assert.deepEqual(L.iconOptions.iconAnchor, { x: 10, y: 30 }, 'Leaflet receives bottom-center icon anchor');
-                assert.deepEqual(L.iconOptions.popupAnchor, { x: 0, y: -30 }, 'popup anchor points to the icon top');
+                assert.deepEqual(L.iconOptions.iconSize, [25, 41], 'Leaflet receives the supported icon size');
+                assert.deepEqual(L.iconOptions.iconAnchor, [12, 41], 'Leaflet receives the bottom-center icon anchor');
+                assert.deepEqual(L.iconOptions.popupAnchor, [1, -34], 'Leaflet receives the standard popup anchor');
                 assert.deepEqual(L.boundPopup.options.offset, { x: 0, y: 7 }, 'Leaflet default popup offset is preserved');
                 done();
             }
         });
-    });
-
-    QUnit.test('custom marker updates an open popup after the icon loads', function(assert) {
-        const done = assert.async();
-        const iconElement = document.createElement('img');
-
-        Object.defineProperties(iconElement, {
-            complete: { configurable: true, value: false },
-            naturalWidth: { configurable: true, value: 40 },
-            naturalHeight: { configurable: true, value: 60 },
-        });
-        sinon.stub(iconElement, 'getBoundingClientRect').returns({ width: 20, height: 30 });
-        L.markerElement = iconElement;
-
-        $('#map').dxMap({
-            provider: 'osm',
-            markers: [{
-                location: [10, 20],
-                iconSrc: 'customMarker.png',
-                tooltip: 'Custom marker',
-            }],
-            onReady: () => {
-                L.addedMarkers[0].openPopup();
-                iconElement.dispatchEvent(new Event('load'));
-
-                assert.strictEqual(L.popupUpdateCount, 1, 'open popup position is updated once');
-                assert.deepEqual(L.iconOptions.popupAnchor, { x: 0, y: -30 }, 'loaded icon updates popup anchor');
-                done();
-            }
-        });
-    });
-
-    QUnit.test('custom marker removes pending image listeners on removal', function(assert) {
-        const done = assert.async();
-        const iconElement = document.createElement('img');
-        const removeEventListenerSpy = sinon.spy(iconElement, 'removeEventListener');
-
-        Object.defineProperty(iconElement, 'complete', { configurable: true, value: false });
-        L.markerElement = iconElement;
-
-        const map = $('#map').dxMap({
-            provider: 'osm',
-            markers: [{ location: [10, 20], iconSrc: 'customMarker.png' }],
-            onReady: () => {
-                map.removeMarker(0).done(() => {
-                    assert.ok(removeEventListenerSpy.calledWith('load'), 'load listener is removed');
-                    assert.ok(removeEventListenerSpy.calledWith('error'), 'error listener is removed');
-                    done();
-                });
-            }
-        }).dxMap('instance');
     });
 
     QUnit.test('marker uses divIcon when html option is set', function(assert) {
