@@ -184,7 +184,7 @@ export interface dxContextMenuOptions<
      * @action
      * @public
      */
-    onHidden?: ((e: HiddenEvent<TItem, TKey>) => void);
+    onHidden?: ((e: HiddenEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -192,7 +192,7 @@ export interface dxContextMenuOptions<
      * @action
      * @public
      */
-    onHiding?: ((e: HidingEvent<TItem, TKey>) => void);
+    onHiding?: ((e: HidingEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -200,7 +200,7 @@ export interface dxContextMenuOptions<
      * @action
      * @public
      */
-    onPositioning?: ((e: PositioningEvent<TItem, TKey>) => void);
+    onPositioning?: ((e: PositioningEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -208,7 +208,7 @@ export interface dxContextMenuOptions<
      * @action
      * @public
      */
-    onShowing?: ((e: ShowingEvent<TItem, TKey>) => void);
+    onShowing?: ((e: ShowingEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -216,7 +216,7 @@ export interface dxContextMenuOptions<
      * @action
      * @public
      */
-    onShown?: ((e: ShownEvent<TItem, TKey>) => void);
+    onShown?: ((e: ShownEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default { my: 'top left', at: 'top left' }
