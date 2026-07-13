@@ -94,7 +94,7 @@ class CalendarStrategy extends DateBoxStrategy {
     };
   }
 
-  getDisplayFormat(displayFormat?: Format): Format {
+  getDisplayFormat(displayFormat?: Format | null): Format {
     const globalDateFormat = getGlobalFormatByDataType('date');
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return displayFormat || globalDateFormat || 'shortdate';

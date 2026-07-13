@@ -38,7 +38,7 @@ class DateViewStrategy extends DateBoxStrategy {
     };
   }
 
-  getDisplayFormat(displayFormat: Format): Format {
+  getDisplayFormat(displayFormat: Format | null | undefined): Format {
     const { type = 'date' } = this.dateBox.option();
     const globalFormat = type === 'date' || type === 'datetime'
       ? getGlobalFormatByDataType(type)
