@@ -48,8 +48,14 @@ test('DataGrid should send an AI request for rendered rows after scrolling witho
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
+  // assert
+  await t
+    .expect(dataGrid.getLoadPanel().isVisible())
+    .ok()
+    .expect(isAIRequestPending())
+    .ok();
+
   // act
-  await t.expect(isAIRequestPending()).ok();
   await resolveAIRequest();
 
   // assert
@@ -72,10 +78,11 @@ test('DataGrid should send an AI request for rendered rows after scrolling witho
     .expect(dataGrid.getDataCell(20, 0).element.textContent)
     .eql('21')
     .expect(dataGrid.getLoadPanel().isVisible())
+    .ok()
+    .expect(isAIRequestPending())
     .ok();
 
   // act
-  await t.expect(isAIRequestPending()).ok();
   await resolveAIRequest();
 
   // assert
@@ -148,8 +155,14 @@ test('DataGrid should send an AI request for rendered rows after scrolling with 
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
+  // assert
+  await t
+    .expect(dataGrid.getLoadPanel().isVisible())
+    .ok()
+    .expect(isAIRequestPending())
+    .ok();
+
   // act
-  await t.expect(isAIRequestPending()).ok();
   await resolveAIRequest();
 
   // assert
@@ -172,10 +185,11 @@ test('DataGrid should send an AI request for rendered rows after scrolling with 
     .expect(dataGrid.getDataCell(20, 0).element.textContent)
     .eql('21')
     .expect(dataGrid.getLoadPanel().isVisible())
+    .ok()
+    .expect(isAIRequestPending())
     .ok();
 
   // act
-  await t.expect(isAIRequestPending()).ok();
   await resolveAIRequest();
 
   // assert

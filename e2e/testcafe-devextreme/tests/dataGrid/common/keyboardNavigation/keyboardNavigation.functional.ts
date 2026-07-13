@@ -2966,11 +2966,11 @@ test('New mode. A cell should be focused when the PageDow/Up key is pressed (T89
     .eql(0);
 
   // act
-  await t
-    .pressKey('pagedown')
-    .expect(dataGrid.isReady()).ok();
+  await t.pressKey('pagedown');
 
   // assert
+  await t.expect(dataGrid.isReady()).ok();
+
   const focusedRowIndex = await dataGrid.option('focusedRowIndex');
   await t
     .expect(dataGrid.getDataCell(focusedRowIndex, 0).isFocused)
@@ -2981,12 +2981,11 @@ test('New mode. A cell should be focused when the PageDow/Up key is pressed (T89
     .eql(0);
 
   // act
-  await t
-    .pressKey('pageup')
-    .expect(dataGrid.isReady()).ok();
+  await t.pressKey('pageup');
 
   // assert
   await t
+    .expect(dataGrid.isReady()).ok()
     .expect(dataGrid.getDataCell(0, 0).isFocused)
     .ok()
     .expect(dataGrid.option('focusedRowIndex'))
@@ -3107,11 +3106,10 @@ test('Cells should be focused after saving data when filter is applied and cell 
     .pressKey('d')
     .pressKey('enter');
 
+  // assert
   await t.expect(dataGrid.isReady()).ok();
 
   const visibleRows = await dataGrid.apiGetVisibleRows();
-
-  // assert
   await t
     .expect(visibleRows.length)
     .eql(4)
@@ -3268,13 +3266,12 @@ test('Lookup editor should update cell value on down or up key when cell is focu
       .ok();
 
     // act
-    await t
-      .typeText(filterRowEditor.element, 'Name')
-      .wait(1000);
-
-    let visibleRows = await dataGrid.apiGetVisibleRows();
+    await t.typeText(filterRowEditor.element, 'Name');
 
     // assert
+    await t.expect(dataGrid.isReady()).ok();
+
+    let visibleRows = await dataGrid.apiGetVisibleRows();
     await t
       .expect(visibleRows.length)
       .eql(5)
@@ -3284,13 +3281,12 @@ test('Lookup editor should update cell value on down or up key when cell is focu
       .ok();
 
     // act
-    await t
-      .typeText(filterRowEditor.element, '_1')
-      .wait(1000);
-
-    visibleRows = await dataGrid.apiGetVisibleRows();
+    await t.typeText(filterRowEditor.element, '_1');
 
     // assert
+    await t.expect(dataGrid.isReady()).ok();
+
+    visibleRows = await dataGrid.apiGetVisibleRows();
     await t
       .expect(visibleRows.length)
       .eql(2)
@@ -6048,12 +6044,12 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     await resetFocusedEventsTestData();
 
     // act
-    await t
-      .pressKey('ctrl+end')
-      .wait(500);
+    await t.pressKey('ctrl+end');
 
     // assert
     await t
+      .expect(dataGrid.isReady())
+      .ok()
       .expect(dataGrid.getDataCell(19, 14).element.focused)
       .ok()
       .expect(getOrderOfEventCalls())
@@ -6127,12 +6123,12 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     await resetFocusedEventsTestData();
 
     // act
-    await t
-      .pressKey('ctrl+end')
-      .wait(500);
+    await t.pressKey('ctrl+end');
 
     // assert
     await t
+      .expect(dataGrid.isReady())
+      .ok()
       .expect(dataGrid.getDataCell(19, 34).element.focused)
       .ok()
       .expect(getOrderOfEventCalls())
@@ -6207,12 +6203,12 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     await resetFocusedEventsTestData();
 
     // act
-    await t
-      .pressKey('ctrl+end')
-      .wait(500);
+    await t.pressKey('ctrl+end');
 
     // assert
     await t
+      .expect(dataGrid.isReady())
+      .ok()
       .expect(dataGrid.getDataCell(199, 34).element.focused)
       .ok()
       .expect(getOrderOfEventCalls())
@@ -6288,12 +6284,12 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     await resetFocusedEventsTestData();
 
     // act
-    await t
-      .pressKey('ctrl+end')
-      .wait(500);
+    await t.pressKey('ctrl+end');
 
     // assert
     await t
+      .expect(dataGrid.isReady())
+      .ok()
       .expect(dataGrid.getDataCell(19, 14).element.focused)
       .ok()
       .expect(getOrderOfEventCalls())
@@ -6449,12 +6445,12 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     await resetFocusedEventsTestData();
 
     // act
-    await t
-      .pressKey('ctrl+end')
-      .wait(500);
+    await t.pressKey('ctrl+end');
 
     // assert
     await t
+      .expect(dataGrid.isReady())
+      .ok()
       .expect(dataGrid.getDataCell(19, 14).element.focused)
       .ok()
       .expect(getOrderOfEventCalls())
@@ -6539,12 +6535,11 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     await resetFocusedEventsTestData();
 
     // act
-    await t
-      .pressKey('ctrl+end')
-      .wait(500);
+    await t.pressKey('ctrl+end');
 
     // assert
     await t
+      .expect(dataGrid.isReady()).ok()
       .expect(dataGrid.getDataCell(19, 34).element.focused)
       .ok()
       .expect(getOrderOfEventCalls())
@@ -6630,12 +6625,12 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     await resetFocusedEventsTestData();
 
     // act
-    await t
-      .pressKey('ctrl+end')
-      .wait(500);
+    await t.pressKey('ctrl+end');
 
     // assert
     await t
+      .expect(dataGrid.isReady())
+      .ok()
       .expect(dataGrid.getDataCell(199, 34).element.focused)
       .ok()
       .expect(getOrderOfEventCalls())
