@@ -150,7 +150,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
       colCount: 1,
       labelLocation: 'left',
       onFieldDataChanged: undefined,
-      onEditorEnterKey: null,
+      onEditorEnterKey: undefined,
       customizeItem: undefined,
       alignItemLabels: true,
       minColWidth: MIN_COLUMN_WIDTH,
