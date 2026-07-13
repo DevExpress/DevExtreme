@@ -41,6 +41,13 @@ const REQUIRED_ENGINE_METHODS = [
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, spellcheck/spell-checker -- OSM API
 type OsmMapEngine = Record<string, any>;
 
+interface MarkerWithImage {
+  getElement?: () => HTMLImageElement | undefined;
+  getPopup?: () => { update?: () => void } | undefined;
+  isPopupOpen: () => boolean;
+  setIcon?: (icon: unknown) => void;
+}
+
 const normalizeRouteResult = (result: RouteResult): [number, number][] => {
   if (Array.isArray(result)) {
     return result;
@@ -362,11 +369,11 @@ class OsmProvider extends DynamicProvider {
     return Promise.resolve();
   }
 
-  _anchorIconBottomCenter(marker: unknown): (() => void) | undefined {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const leafletMarker = marker as any;
-    const iconElement = leafletMarker.getElement?.() ?? leafletMarker._icon;
-    if (!iconElement || typeof iconElement.addEventListener !== 'function') {
+  _anchorIconBottomCenter(marker: unknown, iconUrl: string): (() => void) | undefined {
+    const leafletMarker = marker as MarkerWithImage;
+    const iconElement = leafletMarker.getElement?.();
+    const setIcon = leafletMarker.setIcon?.bind(leafletMarker);
+    if (!iconElement || !setIcon) {
       return undefined;
     }
 
@@ -388,15 +395,13 @@ class OsmProvider extends DynamicProvider {
         return;
       }
 
-      const iconOptions = leafletMarker.options?.icon?.options;
-      if (iconOptions) {
-        iconOptions.iconSize = this._mapEngine.point(iconWidth, iconHeight);
-        iconOptions.iconAnchor = this._mapEngine.point(iconWidth / 2, iconHeight);
-        iconOptions.popupAnchor = this._mapEngine.point(0, -iconHeight);
-      }
-
-      iconElement.style.marginLeft = `${-iconWidth / 2}px`;
-      iconElement.style.marginTop = `${-iconHeight}px`;
+      setIcon(this._mapEngine.icon({
+        iconUrl,
+        className: 'dx-map-marker',
+        iconSize: this._mapEngine.point(iconWidth, iconHeight),
+        iconAnchor: this._mapEngine.point(iconWidth / 2, iconHeight),
+        popupAnchor: this._mapEngine.point(0, -iconHeight),
+      }));
 
       const popup = leafletMarker.getPopup?.();
       if (popup && leafletMarker.isPopupOpen()) {
@@ -463,7 +468,7 @@ class OsmProvider extends DynamicProvider {
       const popup = this._renderTooltip(marker, options.tooltip);
 
       const removeIconLoadListeners = icon && !options.html
-        ? this._anchorIconBottomCenter(marker)
+        ? this._anchorIconBottomCenter(marker, icon)
         : undefined;
 
       // eslint-disable-next-line @typescript-eslint/init-declarations

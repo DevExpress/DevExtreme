@@ -43,6 +43,7 @@ const prepareTestingOsmProvider = () => {
     L.mockBounds = null;
     L.mapInstance = null;
     L.markerElement = null;
+    L.markerSetIcon = null;
     L.iconOptions = null;
     L.boundPopup = null;
     L.popupOptions = null;
@@ -982,8 +983,7 @@ QUnit.module('OSM: markers', moduleConfig, () => {
             provider: 'osm',
             markers: [{ location: [10, 20], iconSrc: 'customMarker.png', tooltip: 'Custom marker' }],
             onReady: () => {
-                assert.strictEqual(iconElement.style.marginLeft, '-10px', 'horizontal anchor uses rendered width');
-                assert.strictEqual(iconElement.style.marginTop, '-30px', 'vertical anchor uses rendered height');
+                assert.ok(L.markerSetIcon, 'adjusted icon is applied through the public marker API');
                 assert.deepEqual(L.iconOptions.iconSize, { x: 20, y: 30 }, 'Leaflet receives rendered icon size');
                 assert.deepEqual(L.iconOptions.iconAnchor, { x: 10, y: 30 }, 'Leaflet receives bottom-center icon anchor');
                 assert.deepEqual(L.iconOptions.popupAnchor, { x: 0, y: -30 }, 'popup anchor points to the icon top');

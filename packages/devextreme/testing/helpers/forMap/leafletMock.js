@@ -204,6 +204,11 @@
                 getElement() {
                     return L.markerElement;
                 },
+                setIcon(icon) {
+                    this.options.icon = icon;
+                    L.markerSetIcon = icon;
+                    return marker;
+                },
                 getPopup() {
                     return this._popup;
                 },
