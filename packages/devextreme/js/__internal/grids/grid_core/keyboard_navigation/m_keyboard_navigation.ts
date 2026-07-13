@@ -3082,8 +3082,10 @@ const editing = (Base: ModuleType<EditingController>) => class EditingController
     }
 
     const isCellEditing = super.editCell(rowIndex, columnIndex);
+
     if (isCellEditing) {
       this._keyboardNavigationController.setupFocusedView();
+      this._keyboardNavigationController.setCellFocusType();
     }
 
     return isCellEditing;
