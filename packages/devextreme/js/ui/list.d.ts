@@ -401,12 +401,12 @@ export interface dxListOptions<
     nextButtonText?: string;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/list:GroupRenderedEvent}
      * @action
      * @public
      */
-    onGroupRendered?: ((e: GroupRenderedEvent<TItem, TKey>) => void) | null;
+    onGroupRendered?: ((e: GroupRenderedEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
      * @default null
@@ -418,87 +418,87 @@ export interface dxListOptions<
     onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void) | string | null;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/list:ItemContextMenuEvent}
      * @action
      * @public
      */
-    onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void) | null;
+    onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/list:ItemDeletedEvent}
      * @action
      * @hidden false
      * @public
      */
-    onItemDeleted?: ((e: ItemDeletedEvent<TItem, TKey>) => void) | null;
+    onItemDeleted?: ((e: ItemDeletedEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/list:ItemDeletingEvent}
      * @action
      * @hidden false
      * @public
      */
-    onItemDeleting?: ((e: ItemDeletingEvent<TItem, TKey>) => void) | null;
+    onItemDeleting?: ((e: ItemDeletingEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/list:ItemHoldEvent}
      * @action
      * @public
      */
-    onItemHold?: ((e: ItemHoldEvent<TItem, TKey>) => void) | null;
+    onItemHold?: ((e: ItemHoldEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/list:ItemReorderedEvent}
      * @action
      * @hidden false
      * @public
      */
-    onItemReordered?: ((e: ItemReorderedEvent<TItem, TKey>) => void) | null;
+    onItemReordered?: ((e: ItemReorderedEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/list:ItemSwipeEvent}
      * @action
      * @public
      */
-    onItemSwipe?: ((e: ItemSwipeEvent<TItem, TKey>) => void) | null;
+    onItemSwipe?: ((e: ItemSwipeEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/list:PageLoadingEvent}
      * @action
      * @public
      */
-    onPageLoading?: ((e: PageLoadingEvent<TItem, TKey>) => void) | null;
+    onPageLoading?: ((e: PageLoadingEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/list:PullRefreshEvent}
      * @action
      * @public
      */
-    onPullRefresh?: ((e: PullRefreshEvent<TItem, TKey>) => void) | null;
+    onPullRefresh?: ((e: PullRefreshEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/list:ScrollEvent}
      * @action
      * @public
      */
-    onScroll?: ((e: ScrollEvent<TItem, TKey>) => void) | null;
+    onScroll?: ((e: ScrollEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/list:SelectAllValueChangedEvent}
      * @action
      * @public
      */
-    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TItem, TKey>) => void) | null;
+    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
      * @default "scrollBottom"

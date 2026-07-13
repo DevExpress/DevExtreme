@@ -155,7 +155,7 @@ class ListEdit extends ListBase {
       showSelectionControls: false,
       selectionMode: 'none',
       selectAllMode: 'page',
-      onSelectAllValueChanged: null,
+      onSelectAllValueChanged: undefined,
       selectAllText: localizationMessage.format('dxList-selectAll'),
       menuItems: [],
       menuMode: 'context',
