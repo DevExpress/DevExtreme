@@ -1512,6 +1512,40 @@ QUnit.module('OSM: routes', moduleConfig, () => {
         });
     });
 
+    QUnit.test('route rendering rejects when the fallback polyline cannot be created', function(assert) {
+        const done = assert.async();
+        const polylineError = new Error('polyline rendering failed');
+        const polylineStub = sinon.stub(L, 'polyline').throws(polylineError);
+        const errorStub = sinon.stub(errors, 'log');
+        const mapWidget = {
+            option: () => ({
+                providerConfig: { getRoute: () => Promise.resolve([[10, 20], [30, 40]]) },
+            }),
+        };
+        // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap provider identifier
+        const provider = new OsmProvider(mapWidget, null);
+
+        provider._mapEngine = L;
+        provider._map = {};
+
+        provider._renderRoute({ locations: [[10, 20], [30, 40]] }).then(
+            () => {
+                polylineStub.restore();
+                errorStub.restore();
+                assert.ok(false, 'route rendering should reject');
+                done();
+            },
+            (error) => {
+                assert.strictEqual(error, polylineError, 'fallback rendering error is propagated');
+                assert.ok(polylineStub.calledTwice, 'route and fallback polylines were attempted');
+                assert.ok(errorStub.withArgs('W1006', polylineError).calledOnce, 'initial rendering error is logged');
+                polylineStub.restore();
+                errorStub.restore();
+                done();
+            }
+        );
+    });
+
     QUnit.test('onRouteAdded fires with options and originalRoute', function(assert) {
         const done = assert.async();
         let routeAddedFired = false;

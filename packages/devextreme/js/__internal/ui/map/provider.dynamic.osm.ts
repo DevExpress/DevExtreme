@@ -526,7 +526,7 @@ class OsmProvider extends DynamicProvider {
     const locations = options.locations ?? [];
 
     return Promise.all(locations.map((point) => this._resolveLocation(point)))
-      .then((resolvedLocations) => new Promise((resolve) => {
+      .then((resolvedLocations) => {
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         const color = new Color(options.color || this._defaultRouteColor()).toHex();
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
@@ -540,7 +540,7 @@ class OsmProvider extends DynamicProvider {
 
         const getRouteFn = this._option('providerConfig')?.getRoute;
 
-        const drawPolyline = (coords: [number, number][]): void => {
+        const drawPolyline = (coords: [number, number][]): RouteObject => {
           const polyline = this._mapEngine.polyline(coords, polylineOptions).addTo(this._map);
           const routeBounds = polyline.getBounds();
           const northEast = routeBounds.getNorthEast();
@@ -552,25 +552,27 @@ class OsmProvider extends DynamicProvider {
             routeObject.southWest = [southWest.lat, southWest.lng];
           }
 
-          resolve(routeObject);
+          return routeObject;
         };
 
         if (!getRouteFn) {
           errors.log('W1033');
-          drawPolyline(resolvedLocations.map((loc) => [loc.lat, loc.lng] as [number, number]));
-          return;
+          return drawPolyline(
+            resolvedLocations.map((loc) => [loc.lat, loc.lng] as [number, number]),
+          );
         }
 
-        Promise.resolve()
+        return Promise.resolve()
           .then(() => getRouteFn({ locations: normalizedLocations, mode }))
-          .then((result) => {
-            drawPolyline(normalizeRouteResult(result));
-          }).catch((e: unknown) => {
+          .then((result) => drawPolyline(normalizeRouteResult(result)))
+          .catch((e: unknown) => {
             errors.log('W1006', e);
 
-            drawPolyline(resolvedLocations.map((loc) => [loc.lat, loc.lng] as [number, number]));
+            return drawPolyline(
+              resolvedLocations.map((loc) => [loc.lat, loc.lng] as [number, number]),
+            );
           });
-      }));
+      });
   }
 
   _destroyRoute(routeObj: { instance: { remove: () => void } }): void {
