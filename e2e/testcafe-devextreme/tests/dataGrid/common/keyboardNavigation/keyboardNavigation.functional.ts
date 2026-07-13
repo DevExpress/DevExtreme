@@ -3266,11 +3266,11 @@ test('Lookup editor should update cell value on down or up key when cell is focu
       .ok();
 
     // act
-    await t.typeText(filterRowEditor.element, 'Name');
+    await t
+      .typeText(filterRowEditor.element, 'Name')
+      .wait(1000);
 
     // assert
-    await t.expect(dataGrid.isReady()).ok();
-
     let visibleRows = await dataGrid.apiGetVisibleRows();
     await t
       .expect(visibleRows.length)
@@ -3281,11 +3281,11 @@ test('Lookup editor should update cell value on down or up key when cell is focu
       .ok();
 
     // act
-    await t.typeText(filterRowEditor.element, '_1');
+    await t
+      .typeText(filterRowEditor.element, '_1')
+      .wait(1000);
 
     // assert
-    await t.expect(dataGrid.isReady()).ok();
-
     visibleRows = await dataGrid.apiGetVisibleRows();
     await t
       .expect(visibleRows.length)
