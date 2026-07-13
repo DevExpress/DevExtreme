@@ -417,11 +417,11 @@ export interface BaseWidgetTitle {
        * @default 0
        */
       offset?: number;
-       /**
-        * @docid BaseWidgetOptions.title.subtitle.text
-        * @default undefined
-        */
-       text?: string | undefined;
+      /**
+      * @docid BaseWidgetOptions.title.subtitle.text
+      * @default undefined
+      */
+      text?: string | undefined;
       /**
        * @docid BaseWidgetOptions.title.subtitle.textOverflow
        * @default "ellipsis"
@@ -433,12 +433,12 @@ export interface BaseWidgetTitle {
        */
       wordWrap?: WordWrap;
     } | string;
-     /**
-      * @docid BaseWidgetOptions.title.text
-      * @default undefined
-      * @public
-      */
-     text?: string | undefined;
+    /**
+    * @docid BaseWidgetOptions.title.text
+    * @default undefined
+    * @public
+    */
+    text?: string | undefined;
     /**
      * @docid BaseWidgetOptions.title.textOverflow
      * @default "ellipsis"
