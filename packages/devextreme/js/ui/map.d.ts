@@ -273,44 +273,44 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     onClick?: ((e: ClickEvent) => void) | string | null;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/map:MarkerAddedEvent}
      * @action
      * @public
      */
-    onMarkerAdded?: ((e: MarkerAddedEvent) => void) | null;
+    onMarkerAdded?: ((e: MarkerAddedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/map:MarkerRemovedEvent}
      * @action
      * @public
      */
-    onMarkerRemoved?: ((e: MarkerRemovedEvent) => void) | null;
+    onMarkerRemoved?: ((e: MarkerRemovedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/map:ReadyEvent}
      * @action
      * @public
      */
-    onReady?: ((e: ReadyEvent) => void) | null;
+    onReady?: ((e: ReadyEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/map:RouteAddedEvent}
      * @action
      * @public
      */
-    onRouteAdded?: ((e: RouteAddedEvent) => void) | null;
+    onRouteAdded?: ((e: RouteAddedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/map:RouteRemovedEvent}
      * @action
      * @public
      */
-    onRouteRemoved?: ((e: RouteRemovedEvent) => void) | null;
+    onRouteRemoved?: ((e: RouteRemovedEvent) => void) | undefined;
     /**
      * @docid
      * @default "google"
