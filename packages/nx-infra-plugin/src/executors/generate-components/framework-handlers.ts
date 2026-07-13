@@ -50,6 +50,46 @@ function createReactHandler(): FrameworkHandler {
   };
 }
 
+function cleanVueMetadata(metaData: any): any {
+  if (!metaData) return metaData;
+
+  const cleanProp = (prop: any) => {
+    if (prop && Array.isArray(prop.types)) {
+      const isFunction = /^on[A-Z]/.test(prop.name) || prop.types.some((t: any) => t && (t.type === 'Function' || t.acceptableValueType === 'Function'));
+      if (isFunction) {
+        prop.types = prop.types.filter((t: any) => t && t.type !== 'Null');
+      }
+    }
+    if (prop && Array.isArray(prop.props)) {
+      prop.props.forEach(cleanProp);
+    }
+  };
+
+  if (Array.isArray(metaData.widgets)) {
+    metaData.widgets.forEach((widget: any) => {
+      if (widget) {
+        if (Array.isArray(widget.options)) {
+          widget.options.forEach(cleanProp);
+        }
+        if (Array.isArray(widget.complexOptions)) {
+          widget.complexOptions.forEach((co: any) => {
+            if (co) {
+              if (Array.isArray(co.options)) {
+                co.options.forEach(cleanProp);
+              }
+              if (Array.isArray(co.props)) {
+                co.props.forEach(cleanProp);
+              }
+            }
+          });
+        }
+      }
+    });
+  }
+
+  return metaData;
+}
+
 function createVueHandler(): FrameworkHandler {
   return {
     getDefaults: () => ({
@@ -59,9 +99,10 @@ function createVueHandler(): FrameworkHandler {
 
     executeGeneration: async (generateFunction, config, metaData) => {
       const componentGeneratorTplConfig = config.componentGeneratorTplConfig || {};
+      const cleanedMetaData = cleanVueMetadata(JSON.parse(JSON.stringify(metaData)));
 
       await generateFunction(
-        metaData,
+        cleanedMetaData,
         componentGeneratorTplConfig,
         config.out,
         config.widgetsPackage,
