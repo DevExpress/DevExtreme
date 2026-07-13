@@ -74,7 +74,7 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
      * @action
      * @public
      */
-    onComplete?: ((e: CompleteEvent) => void);
+    onComplete?: ((e: CompleteEvent) => void) | null;
     /**
      * @docid
      * @default true
