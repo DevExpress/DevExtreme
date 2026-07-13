@@ -835,44 +835,44 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     hasChanges?: boolean;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/diagram:ItemClickEvent}
      * @action
      * @public
      */
-    onItemClick?: ((e: ItemClickEvent) => void) | null;
+    onItemClick?: ((e: ItemClickEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/diagram:ItemDblClickEvent}
      * @action
      * @public
      */
-    onItemDblClick?: ((e: ItemDblClickEvent) => void) | null;
+    onItemDblClick?: ((e: ItemDblClickEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/diagram:SelectionChangedEvent}
      * @action
      * @public
      */
-    onSelectionChanged?: ((e: SelectionChangedEvent) => void) | null;
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/diagram:RequestEditOperationEvent}
      * @action
      * @public
      */
-    onRequestEditOperation?: ((e: RequestEditOperationEvent) => void) | null;
+    onRequestEditOperation?: ((e: RequestEditOperationEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/diagram:RequestLayoutUpdateEvent}
      * @action
      * @public
      */
-    onRequestLayoutUpdate?: ((e: RequestLayoutUpdateEvent) => void) | null;
+    onRequestLayoutUpdate?: ((e: RequestLayoutUpdateEvent) => void) | undefined;
     /**
      * @docid
      * @default "white"
