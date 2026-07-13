@@ -1,6 +1,7 @@
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { fireEvent } from '@testing-library/dom';
 
@@ -14,6 +15,7 @@ import {
   mockAppointmentCollectorViewModel,
   mockGridViewModel,
 } from './__mock__/appointment_view_model';
+import type { AppointmentCollector } from './appointment_collector';
 import type { AppointmentsProperties } from './appointments';
 import { Appointments } from './appointments';
 import {
@@ -53,10 +55,14 @@ const getProperties = (options: {
   getDataAccessor: () => mockAppointmentDataAccessor,
 
   showAppointmentTooltip: (): void => {},
+  isTooltipShownForTarget: () => false,
+  updateAppointmentTooltip: (): void => {},
+  hideAppointmentTooltip: (): void => {},
   showEditAppointmentPopup: (): void => {},
   allowDelete: false,
   onDeleteKeyPress: (): void => {},
   focusFallbackAfterDelete: (): void => {},
+  getResizableConfig: () => undefined,
 });
 
 const createAppointments = (
@@ -362,6 +368,44 @@ describe('Appointments', () => {
       expect(instance.getViewItemBySortedIndex(2)?.$element().get(0)).not.toBe(element2);
     });
 
+    it('should rerender only the collector when its items count changes', () => {
+      const dataA = { ...defaultAppointmentData };
+      const dataB = { ...defaultAppointmentData, text: 'Appointment B' };
+      const dataC = { ...defaultAppointmentData, text: 'Appointment C' };
+
+      const instance = createAppointments(getProperties());
+      instance.option('viewModel', [
+        mockGridViewModel(dataA, { sortedIndex: 0 }),
+        mockAppointmentCollectorViewModel(dataB, {
+          sortedIndex: 1,
+          items: [mockGridViewModel(dataB), mockGridViewModel(dataC)],
+        }),
+      ]);
+
+      const viewItemA = instance.getViewItemBySortedIndex(0);
+      const collector = instance.getViewItemBySortedIndex(1);
+      const elementA = viewItemA?.$element().get(0);
+      const collectorElement = collector?.$element().get(0);
+
+      instance.option('viewModel', [
+        mockGridViewModel(dataA, { sortedIndex: 0 }),
+        mockAppointmentCollectorViewModel(dataB, {
+          sortedIndex: 1,
+          items: [mockGridViewModel(dataB)],
+        }),
+      ]);
+
+      const newCollector = instance.getViewItemBySortedIndex(1);
+
+      expect(instance.$element().find(`.${APPOINTMENT_COLLECTOR_CLASSES.CONTAINER}`).length).toBe(1);
+      expect(instance.getViewItemBySortedIndex(0)).toBe(viewItemA);
+      expect(instance.getViewItemBySortedIndex(0)?.$element().get(0)).toBe(elementA);
+      expect(newCollector).not.toBe(collector);
+      expect(newCollector?.$element().get(0)).not.toBe(collectorElement);
+      expect(collectorElement?.isConnected).toBe(false);
+      expect((newCollector as AppointmentCollector).option().items.length).toBe(1);
+    });
+
     it('should only resize view item if its size changed', () => {
       const dataA = { ...defaultAppointmentData };
       const dataB = { ...defaultAppointmentData, text: 'Appointment B' };
@@ -406,6 +450,171 @@ describe('Appointments', () => {
       expect($(elementB).css('left')).toBe('20px');
       expect($(elementB).css('height')).toBe('60px');
       expect($(elementB).css('width')).toBe('110px');
+    });
+  });
+
+  describe('Resize', () => {
+    it('should restore view model geometry on resetAppointmentResize', () => {
+      const instance = createAppointments(getProperties());
+      instance.option('viewModel', [
+        mockGridViewModel(defaultAppointmentData, {
+          sortedIndex: 0, top: 10, left: 20, height: 50, width: 100,
+        }),
+      ]);
+
+      const $element = instance.getViewItemBySortedIndex(0)?.$element() as ReturnType<typeof $>;
+      $element.css({ height: '999px', width: '888px', top: '1px' });
+
+      instance.resetAppointmentResize($element);
+
+      expect($element.css('height')).toBe('50px');
+      expect($element.css('width')).toBe('100px');
+      expect($element.css('top')).toBe('10px');
+      expect($element.css('left')).toBe('20px');
+    });
+  });
+
+  describe('Tooltip update on rerender', () => {
+    const collectorViewModel = (
+      data: Record<string, unknown>,
+      items: Record<string, unknown>[],
+    ): AppointmentCollectorViewModel => mockAppointmentCollectorViewModel(data, {
+      sortedIndex: 1,
+      items: items.map((itemData) => mockGridViewModel(itemData)),
+    });
+
+    it('should update tooltip target and items when a collector with shown tooltip is rerendered', () => {
+      const dataA = { ...defaultAppointmentData };
+      const dataB = { ...defaultAppointmentData, text: 'Appointment B' };
+      const dataC = { ...defaultAppointmentData, text: 'Appointment C' };
+      const updateAppointmentTooltip = jest.fn();
+
+      const instance = createAppointments({
+        ...getProperties(),
+        updateAppointmentTooltip,
+      });
+      instance.option('viewModel', [
+        mockGridViewModel(dataA, { sortedIndex: 0 }),
+        collectorViewModel(dataB, [dataB, dataC]),
+      ]);
+      const tooltipTarget = instance.getViewItemBySortedIndex(1)?.$element().get(0);
+      instance.option(
+        'isTooltipShownForTarget',
+        ($target: dxElementWrapper) => $target.get(0) === tooltipTarget,
+      );
+
+      instance.option('viewModel', [
+        mockGridViewModel(dataA, { sortedIndex: 0 }),
+        collectorViewModel(dataB, [dataB]),
+      ]);
+
+      const newCollectorElement = instance.getViewItemBySortedIndex(1)?.$element().get(0);
+      expect(updateAppointmentTooltip).toHaveBeenCalledTimes(1);
+
+      const [$target, tooltipItems] = updateAppointmentTooltip.mock.calls[0] as [
+        dxElementWrapper,
+        { appointment: Record<string, unknown> }[],
+      ];
+      expect($target.get(0)).toBe(newCollectorElement);
+      expect(tooltipItems).toHaveLength(1);
+      expect(tooltipItems[0].appointment).toBe(dataB);
+    });
+
+    it('should not update tooltip when it is not shown for the rerendered collector', () => {
+      const dataA = { ...defaultAppointmentData };
+      const dataB = { ...defaultAppointmentData, text: 'Appointment B' };
+      const dataC = { ...defaultAppointmentData, text: 'Appointment C' };
+      const updateAppointmentTooltip = jest.fn();
+
+      const instance = createAppointments({
+        ...getProperties(),
+        isTooltipShownForTarget: () => false,
+        updateAppointmentTooltip,
+      });
+      instance.option('viewModel', [
+        mockGridViewModel(dataA, { sortedIndex: 0 }),
+        collectorViewModel(dataB, [dataB, dataC]),
+      ]);
+
+      instance.option('viewModel', [
+        mockGridViewModel(dataA, { sortedIndex: 0 }),
+        collectorViewModel(dataB, [dataB]),
+      ]);
+
+      expect(updateAppointmentTooltip).not.toHaveBeenCalled();
+    });
+
+    it('should hide tooltip when the appointment it is shown for is removed', () => {
+      const dataA = { ...defaultAppointmentData };
+      const dataB = { ...defaultAppointmentData, text: 'Appointment B' };
+      const hideAppointmentTooltip = jest.fn();
+
+      const instance = createAppointments({
+        ...getProperties(),
+        hideAppointmentTooltip,
+      });
+      instance.option('viewModel', [
+        mockGridViewModel(dataA, { sortedIndex: 0 }),
+        mockGridViewModel(dataB, { sortedIndex: 1 }),
+      ]);
+      const tooltipTarget = instance.getViewItemBySortedIndex(1)?.$element().get(0);
+      instance.option(
+        'isTooltipShownForTarget',
+        ($target: dxElementWrapper) => $target.get(0) === tooltipTarget,
+      );
+
+      instance.option('viewModel', [
+        mockGridViewModel(dataA, { sortedIndex: 0 }),
+      ]);
+
+      expect(hideAppointmentTooltip).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not hide tooltip when removed appointments are not its target', () => {
+      const dataA = { ...defaultAppointmentData };
+      const dataB = { ...defaultAppointmentData, text: 'Appointment B' };
+      const hideAppointmentTooltip = jest.fn();
+
+      const instance = createAppointments({
+        ...getProperties(),
+        isTooltipShownForTarget: () => false,
+        hideAppointmentTooltip,
+      });
+      instance.option('viewModel', [
+        mockGridViewModel(dataA, { sortedIndex: 0 }),
+        mockGridViewModel(dataB, { sortedIndex: 1 }),
+      ]);
+
+      instance.option('viewModel', [
+        mockGridViewModel(dataA, { sortedIndex: 0 }),
+      ]);
+
+      expect(hideAppointmentTooltip).not.toHaveBeenCalled();
+    });
+
+    it('should hide tooltip on full rerender when it is shown for a view item', () => {
+      const dataA = { ...defaultAppointmentData };
+      const dataB = { ...defaultAppointmentData, text: 'Appointment B' };
+      const hideAppointmentTooltip = jest.fn();
+
+      const instance = createAppointments({
+        ...getProperties(),
+        hideAppointmentTooltip,
+      });
+      instance.option('viewModel', [
+        mockGridViewModel(dataA, { sortedIndex: 0 }),
+      ]);
+      const tooltipTarget = instance.getViewItemBySortedIndex(0)?.$element().get(0);
+      instance.option(
+        'isTooltipShownForTarget',
+        ($target: dxElementWrapper) => $target.get(0) === tooltipTarget,
+      );
+
+      instance.option('viewModel', [
+        mockGridViewModel(dataB, { sortedIndex: 0 }),
+      ]);
+
+      expect(hideAppointmentTooltip).toHaveBeenCalledTimes(1);
     });
   });
 

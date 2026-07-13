@@ -16,6 +16,7 @@ import { isElementInDom } from '@ts/core/utils/m_dom';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { ResizableProperties } from '@ts/ui/resizable/resizable';
 
 import type { AppointmentTooltipExtraOptions } from '../tooltip_strategies/tooltip_strategy_base';
 import type {
@@ -75,6 +76,12 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
     data: AppointmentTooltipItem[],
     options?: AppointmentTooltipExtraOptions,
   ) => void;
+  isTooltipShownForTarget: (target: dxElementWrapper) => boolean;
+  updateAppointmentTooltip: (
+    target: dxElementWrapper,
+    data: AppointmentTooltipItem[],
+  ) => void;
+  hideAppointmentTooltip: () => void;
   showEditAppointmentPopup: (
     appointmentData: SafeAppointment,
     targetedAppointmentData: TargetedAppointment,
@@ -86,6 +93,10 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
     targetedAppointmentData: TargetedAppointment;
   }) => void;
   focusFallbackAfterDelete: () => void;
+
+  getResizableConfig: (
+    viewModel: AppointmentItemViewModel,
+  ) => ResizableProperties | undefined;
 }
 
 export class Appointments extends DOMComponent<Appointments, AppointmentsProperties> {
@@ -121,6 +132,18 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     }
 
     return this.getViewModelBySortedIndex(viewItem.option().sortedIndex);
+  }
+
+  public focusResizingAppointment($element: dxElementWrapper): void {
+    const viewItem = this.findViewItemByElement($element);
+
+    if (viewItem) {
+      this.focusController.focusViewItem(viewItem);
+    }
+  }
+
+  public resetAppointmentResize($element: dxElementWrapper): void {
+    this.findViewItemByElement($element)?.resize();
   }
 
   public getAppointmentData($element: dxElementWrapper): {
@@ -191,9 +214,13 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       onAppointmentClick: noop,
       onAppointmentDblClick: noop,
       onAppointmentContextMenu: noop,
+      isTooltipShownForTarget: () => false,
+      updateAppointmentTooltip: noop,
+      hideAppointmentTooltip: noop,
       allowDelete: false,
       onDeleteKeyPress: noop,
       focusFallbackAfterDelete: noop,
+      getResizableConfig: () => undefined,
     };
   }
 
@@ -275,6 +302,8 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     const allDayFragment = domAdapter.createDocumentFragment();
     const commonFragment = domAdapter.createDocumentFragment();
 
+    this.hideTooltipShownForViewItems();
+
     this.viewItemBySortedIndex = {};
     this.$allDayContainer?.empty();
     this.$commonContainer.empty();
@@ -310,6 +339,10 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
 
       switch (true) {
         case diffItem.needToRemove: {
+          if (this.option().isTooltipShownForTarget(viewItem.$element())) {
+            this.option().hideAppointmentTooltip();
+          }
+
           viewItem.$element().remove();
           break;
         }
@@ -319,6 +352,20 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
 
           const fragment = allDay ? allDayFragment : commonFragment;
           fragment.appendChild(newViewItem.$element().get(0));
+          break;
+        }
+        case diffItem.needToUpdateItems: {
+          const newViewItem = this.renderViewItem(diffItem.item, index);
+          newViewItemBySortedIndex[sortedIndex] = newViewItem;
+
+          viewItem.$element().replaceWith(newViewItem.$element());
+
+          if (this.option().isTooltipShownForTarget(viewItem.$element())) {
+            this.option().updateAppointmentTooltip(
+              newViewItem.$element(),
+              this.getTooltipItems(newViewItem),
+            );
+          }
           break;
         }
         default:
@@ -393,6 +440,9 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     };
 
     if (isGridAppointmentViewModel(appointmentViewModel)) {
+      const resizableConfig = this.option().getResizableConfig(appointmentViewModel);
+      const allowResize = Boolean(resizableConfig?.handles) && resizableConfig?.handles !== 'none';
+
       return this._createComponent(
         $element,
         GridAppointmentView,
@@ -407,6 +457,8 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
           modifiers: {
             empty: appointmentViewModel.empty,
           },
+          allowResize,
+          resizableConfig,
         },
       );
     }
@@ -430,6 +482,16 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
 
   public renderDragClone(appointmentViewModel: AppointmentViewModelPlain): dxElementWrapper {
     return this.renderViewItem(appointmentViewModel, this.viewItems.length).$element();
+  }
+
+  private hideTooltipShownForViewItems(): void {
+    const isTooltipShownForViewItem = this.viewItems.some(
+      (viewItem) => this.option().isTooltipShownForTarget(viewItem.$element()),
+    );
+
+    if (isTooltipShownForViewItem) {
+      this.option().hideAppointmentTooltip();
+    }
   }
 
   private findViewItemByElement($element: dxElementWrapper): ViewItem | undefined {

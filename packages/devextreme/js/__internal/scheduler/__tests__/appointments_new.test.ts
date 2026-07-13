@@ -705,6 +705,87 @@ describe('New Appointments', () => {
       expect(POM.tooltip.getAppointmentItem(0).textContent).toContain('Appointment 2');
       expect(POM.tooltip.getAppointmentItem(1).textContent).toContain('Appointment 3');
     });
+
+    describe('Update on deletion', () => {
+      const getConfig = (): Properties => ({
+        dataSource: [
+          { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+          { text: 'Appointment 2', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+          { text: 'Appointment 3', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+        ],
+        maxAppointmentsPerCell: 1,
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+        editing: true,
+      });
+
+      it('should keep tooltip open and update items after deleting an appointment from the collector tooltip', async () => {
+        const { POM } = await createScheduler(getConfig());
+
+        jest.useFakeTimers();
+        POM.getCollectorButton().click();
+        jest.runAllTimers();
+
+        POM.tooltip.getDeleteButton(0).click();
+        jest.runAllTimers();
+
+        expect(POM.tooltip.isVisible()).toBe(true);
+        expect(POM.tooltip.getAppointmentItems().length).toBe(1);
+        expect(POM.tooltip.getAppointmentItem(0).textContent).toContain('Appointment 3');
+        expect(POM.tooltip.target?.isConnected).toBe(true);
+      });
+
+      it('should close tooltip after deleting all appointments from the collector tooltip', async () => {
+        const { POM } = await createScheduler(getConfig());
+
+        jest.useFakeTimers();
+        POM.getCollectorButton().click();
+        jest.runAllTimers();
+
+        POM.tooltip.getDeleteButton(0).click();
+        jest.runAllTimers();
+        POM.tooltip.getDeleteButton(0).click();
+        jest.runAllTimers();
+
+        expect(POM.tooltip.isVisible()).toBe(false);
+      });
+
+      it('should close tooltip when the appointment it is shown for is deleted', async () => {
+        const { POM } = await createScheduler(getConfig());
+
+        jest.useFakeTimers();
+        POM.getAppointments()[0].element.click();
+        jest.runAllTimers();
+
+        POM.tooltip.getDeleteButton(0).click();
+        jest.runAllTimers();
+
+        expect(POM.tooltip.isVisible()).toBe(false);
+      });
+
+      it('should show updated appointment data in the collector tooltip after a hidden appointment is updated', async () => {
+        const dataSource = [
+          { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+          { text: 'Appointment 2', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+          { text: 'Appointment 3', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) },
+        ];
+        const { POM, scheduler } = await createScheduler({ ...getConfig(), dataSource });
+
+        await scheduler.updateAppointment(dataSource[1], {
+          ...dataSource[1],
+          endDate: new Date(2015, 1, 9, 8, 30),
+        });
+
+        jest.useFakeTimers();
+        POM.getCollectorButton().click();
+        jest.runAllTimers();
+
+        const updatedItem = POM.tooltip.getAppointmentItems().find(
+          (item) => item.textContent?.includes('Appointment 2'),
+        );
+        expect(updatedItem?.textContent).toContain('8:30');
+      });
+    });
   });
 
   describe('Appointment Popup', () => {
