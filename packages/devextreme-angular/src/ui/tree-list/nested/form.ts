@@ -223,18 +223,18 @@ export class DxoTreeListFormComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get onEditorEnterKey(): ((e: EditorEnterKeyEvent) => void) {
+    get onEditorEnterKey(): ((e: EditorEnterKeyEvent) => void) | null {
         return this._getOption('onEditorEnterKey');
     }
-    set onEditorEnterKey(value: ((e: EditorEnterKeyEvent) => void)) {
+    set onEditorEnterKey(value: ((e: EditorEnterKeyEvent) => void) | null) {
         this._setOption('onEditorEnterKey', value);
     }
 
     @Input()
-    get onFieldDataChanged(): ((e: FieldDataChangedEvent) => void) {
+    get onFieldDataChanged(): ((e: FieldDataChangedEvent) => void) | null {
         return this._getOption('onFieldDataChanged');
     }
-    set onFieldDataChanged(value: ((e: FieldDataChangedEvent) => void)) {
+    set onFieldDataChanged(value: ((e: FieldDataChangedEvent) => void) | null) {
         this._setOption('onFieldDataChanged', value);
     }
 
@@ -255,18 +255,18 @@ export class DxoTreeListFormComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get onSmartPasted(): ((e: SmartPastedEvent) => void) {
+    get onSmartPasted(): ((e: SmartPastedEvent) => void) | null {
         return this._getOption('onSmartPasted');
     }
-    set onSmartPasted(value: ((e: SmartPastedEvent) => void)) {
+    set onSmartPasted(value: ((e: SmartPastedEvent) => void) | null) {
         this._setOption('onSmartPasted', value);
     }
 
     @Input()
-    get onSmartPasting(): ((e: SmartPastingEvent) => void) {
+    get onSmartPasting(): ((e: SmartPastingEvent) => void) | null {
         return this._getOption('onSmartPasting');
     }
-    set onSmartPasting(value: ((e: SmartPastingEvent) => void)) {
+    set onSmartPasting(value: ((e: SmartPastingEvent) => void) | null) {
         this._setOption('onSmartPasting', value);
     }
 

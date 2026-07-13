@@ -1975,11 +1975,11 @@ type IPolarChartTitleProps = React.PropsWithChildren<{
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
-    text?: string;
+    text?: string | undefined;
     textOverflow?: TextOverflow;
     wordWrap?: WordWrap;
   };
-  text?: string;
+  text?: string | undefined;
   textOverflow?: TextOverflow;
   verticalAlignment?: VerticalEdge;
   wordWrap?: WordWrap;
@@ -2008,7 +2008,7 @@ const PolarChartTitle = Object.assign<typeof _componentPolarChartTitle, NestedCo
 type IPolarChartTitleSubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
-  text?: string;
+  text?: string | undefined;
   textOverflow?: TextOverflow;
   wordWrap?: WordWrap;
 }>

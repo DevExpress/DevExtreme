@@ -27,10 +27,10 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 type IFormOptionsNarrowedEvents = {
   onContentReady?: ((e: ContentReadyEvent) => void);
   onDisposing?: ((e: DisposingEvent) => void);
-  onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void);
+  onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void) | null;
   onInitialized?: ((e: InitializedEvent) => void);
-  onSmartPasted?: ((e: SmartPastedEvent) => void);
-  onSmartPasting?: ((e: SmartPastingEvent) => void);
+  onSmartPasted?: ((e: SmartPastedEvent) => void) | null;
+  onSmartPasting?: ((e: SmartPastingEvent) => void) | null;
 }
 
 type IFormOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IFormOptionsNarrowedEvents> & IHtmlOptions & {

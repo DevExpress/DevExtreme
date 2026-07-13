@@ -967,11 +967,11 @@ type IPieChartTitleProps = React.PropsWithChildren<{
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
-    text?: string;
+    text?: string | undefined;
     textOverflow?: TextOverflow;
     wordWrap?: WordWrap;
   };
-  text?: string;
+  text?: string | undefined;
   textOverflow?: TextOverflow;
   verticalAlignment?: VerticalEdge;
   wordWrap?: WordWrap;
@@ -1000,7 +1000,7 @@ const PieChartTitle = Object.assign<typeof _componentPieChartTitle, NestedCompon
 type IPieChartTitleSubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
-  text?: string;
+  text?: string | undefined;
   textOverflow?: TextOverflow;
   wordWrap?: WordWrap;
 }>

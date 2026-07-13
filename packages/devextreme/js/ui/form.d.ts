@@ -273,7 +273,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @action
      * @public
      */
-    onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void);
+     onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -281,7 +281,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @action
      * @public
      */
-    onFieldDataChanged?: ((e: FieldDataChangedEvent) => void);
+     onFieldDataChanged?: ((e: FieldDataChangedEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -289,7 +289,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @action
      * @public
      */
-    onSmartPasting?: ((e: SmartPastingEvent) => void);
+     onSmartPasting?: ((e: SmartPastingEvent) => void) | null;
     /**
      * @docid
      * @default null
@@ -297,7 +297,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @action
      * @public
      */
-    onSmartPasted?: ((e: SmartPastedEvent) => void);
+     onSmartPasted?: ((e: SmartPastedEvent) => void) | null;
     /**
      * @docid
      * @default "optional"
@@ -324,10 +324,9 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     requiredMessage?: string;
     /**
      * @docid
-     * @default null
      * @public
      */
-    screenByWidth?: Function;
+     screenByWidth?: Function;
     /**
      * @docid
      * @default false
@@ -760,12 +759,11 @@ export interface dxFormSimpleItem {
      * @public
      */
     itemType?: FormItemType;
-    /**
-     * @docid
-     * @default undefined
-     * @public
-     */
-    label?: {
+     /**
+      * @docid
+      * @public
+      */
+     label?: {
       /**
        * @docid
        * @default "left"
@@ -812,12 +810,11 @@ export interface dxFormSimpleItem {
      * @public
      */
     template?: template | ((data: SimpleItemTemplateData, itemElement: DxElement) => string | UserDefinedElement);
-    /**
-     * @docid
-     * @default undefined
-     * @public
-     */
-    validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
+     /**
+      * @docid
+      * @public
+      */
+     validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
     /**
      * @docid
      * @default true
@@ -873,12 +870,11 @@ export interface dxFormTabbedItem {
      * @public
      */
     tabPanelOptions?: dxTabPanelOptions | undefined;
-    /**
-     * @docid
-     * @default undefined
-     * @public
-     */
-    tabs?: Array<{
+     /**
+      * @docid
+      * @public
+      */
+     tabs?: Array<{
       /**
        * @docid
        * @default true
