@@ -210,36 +210,36 @@ export interface dxMenuOptions<
     items?: Array<TItem>;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/menu:SubmenuHiddenEvent}
      * @action
      * @public
      */
-    onSubmenuHidden?: ((e: SubmenuHiddenEvent<TItem, TKey>) => void) | null;
+    onSubmenuHidden?: ((e: SubmenuHiddenEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/menu:SubmenuHidingEvent}
      * @action
      * @public
      */
-    onSubmenuHiding?: ((e: SubmenuHidingEvent<TItem, TKey>) => void) | null;
+    onSubmenuHiding?: ((e: SubmenuHidingEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/menu:SubmenuShowingEvent}
      * @action
      * @public
      */
-    onSubmenuShowing?: ((e: SubmenuShowingEvent<TItem, TKey>) => void) | null;
+    onSubmenuShowing?: ((e: SubmenuShowingEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/menu:SubmenuShownEvent}
      * @action
      * @public
      */
-    onSubmenuShown?: ((e: SubmenuShownEvent<TItem, TKey>) => void) | null;
+    onSubmenuShown?: ((e: SubmenuShownEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
      * @default "horizontal"

@@ -166,10 +166,10 @@ class Menu extends MenuBase<MenuProperties> {
         },
       },
       hideSubmenuOnMouseLeave: false,
-      onSubmenuShowing: null,
-      onSubmenuShown: null,
-      onSubmenuHiding: null,
-      onSubmenuHidden: null,
+      onSubmenuShowing: undefined,
+      onSubmenuShown: undefined,
+      onSubmenuHiding: undefined,
+      onSubmenuHidden: undefined,
       adaptivityEnabled: false,
     };
   }
