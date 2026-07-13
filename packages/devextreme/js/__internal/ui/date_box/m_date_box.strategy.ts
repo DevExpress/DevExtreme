@@ -63,8 +63,7 @@ class DateBoxStrategy extends (Class.inherit({}) as new() => {}) {
   }
 
   getDisplayFormat(displayFormat?: Format | null): Format {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return displayFormat || 'shortdate';
+    return displayFormat ?? 'shortdate';
   }
 
   supportedKeys(): Record<string, (e: KeyboardEvent) => void> {
