@@ -253,11 +253,11 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   minHeight?: number | string;
   minWidth?: number | string;
   onContentReady?: ((e: EventInfo<any>) => void) | undefined;
-  onDisposing?: ((e: EventInfo<any>) => void);
+  onDisposing?: ((e: EventInfo<any>) => void) | undefined;
   onHidden?: ((e: EventInfo<any>) => void);
   onHiding?: ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void);
-  onInitialized?: ((e: { component: Component<any>, element: any }) => void);
-  onOptionChanged?: ((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void);
+  onInitialized?: ((e: { component: Component<any>, element: any }) => void) | undefined;
+  onOptionChanged?: ((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void) | undefined;
   onResize?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | undefined;
   onResizeEnd?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | undefined;
   onResizeStart?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | undefined;

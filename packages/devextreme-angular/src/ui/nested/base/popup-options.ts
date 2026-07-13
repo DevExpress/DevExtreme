@@ -169,10 +169,10 @@ export abstract class DxoPopupOptions extends NestedOption {
         this._setOption('onContentReady', value);
     }
 
-    get onDisposing(): Function {
+    get onDisposing(): Function | undefined {
         return this._getOption('onDisposing');
     }
-    set onDisposing(value: Function) {
+    set onDisposing(value: Function | undefined) {
         this._setOption('onDisposing', value);
     }
 
@@ -190,17 +190,17 @@ export abstract class DxoPopupOptions extends NestedOption {
         this._setOption('onHiding', value);
     }
 
-    get onInitialized(): Function {
+    get onInitialized(): Function | undefined {
         return this._getOption('onInitialized');
     }
-    set onInitialized(value: Function) {
+    set onInitialized(value: Function | undefined) {
         this._setOption('onInitialized', value);
     }
 
-    get onOptionChanged(): Function {
+    get onOptionChanged(): Function | undefined {
         return this._getOption('onOptionChanged');
     }
-    set onOptionChanged(value: Function) {
+    set onOptionChanged(value: Function | undefined) {
         this._setOption('onOptionChanged', value);
     }
 

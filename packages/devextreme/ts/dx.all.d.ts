@@ -587,15 +587,15 @@ declare module DevExpress {
     /**
      * [descr:ComponentOptions.onDisposing]
      */
-    onDisposing?: (e: TDisposingEvent) => void;
+    onDisposing?: ((e: TDisposingEvent) => void) | undefined;
     /**
      * [descr:ComponentOptions.onInitialized]
      */
-    onInitialized?: (e: TInitializedEvent) => void;
+    onInitialized?: ((e: TInitializedEvent) => void) | undefined;
     /**
      * [descr:ComponentOptions.onOptionChanged]
      */
-    onOptionChanged?: (e: TOptionChangedEvent) => void;
+    onOptionChanged?: ((e: TOptionChangedEvent) => void) | undefined;
   }
   /**
    * [descr:config()]
@@ -714,15 +714,17 @@ declare module DevExpress {
     /**
      * [descr:DOMComponentOptions.onDisposing]
      */
-    onDisposing?: (
-      e: DevExpress.common.core.events.EventInfo<TComponent>
-    ) => void;
+    onDisposing?:
+      | ((e: DevExpress.common.core.events.EventInfo<TComponent>) => void)
+      | undefined;
     /**
      * [descr:DOMComponentOptions.onOptionChanged]
      */
-    onOptionChanged?: (
-      e: DevExpress.DOMComponent.OptionChangedEventInfo<TComponent>
-    ) => void;
+    onOptionChanged?:
+      | ((
+          e: DevExpress.DOMComponent.OptionChangedEventInfo<TComponent>
+        ) => void)
+      | undefined;
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */

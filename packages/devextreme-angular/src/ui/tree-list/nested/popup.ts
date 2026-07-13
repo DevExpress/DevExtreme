@@ -228,10 +228,10 @@ export class DxoTreeListPopupComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get onDisposing(): ((e: EventInfo<any>) => void) {
+    get onDisposing(): ((e: EventInfo<any>) => void) | undefined {
         return this._getOption('onDisposing');
     }
-    set onDisposing(value: ((e: EventInfo<any>) => void)) {
+    set onDisposing(value: ((e: EventInfo<any>) => void) | undefined) {
         this._setOption('onDisposing', value);
     }
 
@@ -252,18 +252,18 @@ export class DxoTreeListPopupComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get onInitialized(): ((e: { component: CoreComponent<any>, element: any }) => void) {
+    get onInitialized(): ((e: { component: CoreComponent<any>, element: any }) => void) | undefined {
         return this._getOption('onInitialized');
     }
-    set onInitialized(value: ((e: { component: CoreComponent<any>, element: any }) => void)) {
+    set onInitialized(value: ((e: { component: CoreComponent<any>, element: any }) => void) | undefined) {
         this._setOption('onInitialized', value);
     }
 
     @Input()
-    get onOptionChanged(): ((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void) {
+    get onOptionChanged(): ((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void) | undefined {
         return this._getOption('onOptionChanged');
     }
-    set onOptionChanged(value: ((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)) {
+    set onOptionChanged(value: ((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void) | undefined) {
         this._setOption('onOptionChanged', value);
     }
 
