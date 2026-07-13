@@ -177,9 +177,7 @@ class ButtonGroup extends Widget<Properties> {
       keyExpr: 'text',
       items: [],
       buttonTemplate: 'content',
-      // @ts-expect-error ts-error
       onSelectionChanged: null,
-      // @ts-expect-error ts-error
       onItemClick: null,
     };
   }
