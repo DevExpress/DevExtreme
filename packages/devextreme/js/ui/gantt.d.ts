@@ -643,92 +643,92 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      headerFilter?: dxGanttHeaderFilter;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:SelectionChangedEvent}
      * @action
      * @public
      */
-    onSelectionChanged?: ((e: SelectionChangedEvent) => void) | null;
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:CustomCommandEvent}
      * @action
      * @public
      */
-    onCustomCommand?: ((e: CustomCommandEvent) => void) | null;
+    onCustomCommand?: ((e: CustomCommandEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:ContextMenuPreparingEvent}
      * @action
      * @public
      */
-    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void) | null;
+    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:TaskInsertingEvent}
      * @action
      * @public
      */
-    onTaskInserting?: ((e: TaskInsertingEvent) => void) | null;
+    onTaskInserting?: ((e: TaskInsertingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:TaskInsertedEvent}
      * @action
      * @public
      */
-    onTaskInserted?: ((e: TaskInsertedEvent) => void) | null;
+    onTaskInserted?: ((e: TaskInsertedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:TaskDeletingEvent}
      * @action
      * @public
      */
-    onTaskDeleting?: ((e: TaskDeletingEvent) => void) | null;
+    onTaskDeleting?: ((e: TaskDeletingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:TaskDeletedEvent}
      * @action
      * @public
      */
-    onTaskDeleted?: ((e: TaskDeletedEvent) => void) | null;
+    onTaskDeleted?: ((e: TaskDeletedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:TaskUpdatingEvent}
      * @action
      * @public
      */
-    onTaskUpdating?: ((e: TaskUpdatingEvent) => void) | null;
+    onTaskUpdating?: ((e: TaskUpdatingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:TaskUpdatedEvent}
      * @action
      * @public
      */
-    onTaskUpdated?: ((e: TaskUpdatedEvent) => void) | null;
+    onTaskUpdated?: ((e: TaskUpdatedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:TaskMovingEvent}
      * @action
      * @public
      */
-    onTaskMoving?: ((e: TaskMovingEvent) => void) | null;
+    onTaskMoving?: ((e: TaskMovingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:TaskEditDialogShowingEvent}
      * @action
      * @public
      */
-    onTaskEditDialogShowing?: ((e: TaskEditDialogShowingEvent) => void) | null;
+    onTaskEditDialogShowing?: ((e: TaskEditDialogShowingEvent) => void) | undefined;
     /**
      * @docid
      * @default undefined
@@ -739,116 +739,116 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onResourceManagerDialogShowing?: ((e: ResourceManagerDialogShowingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:DependencyInsertingEvent}
      * @action
      * @public
      */
-    onDependencyInserting?: ((e: DependencyInsertingEvent) => void) | null;
+    onDependencyInserting?: ((e: DependencyInsertingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:DependencyInsertedEvent}
      * @action
      * @public
      */
-    onDependencyInserted?: ((e: DependencyInsertedEvent) => void) | null;
+    onDependencyInserted?: ((e: DependencyInsertedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:DependencyDeletingEvent}
      * @action
      * @public
      */
-    onDependencyDeleting?: ((e: DependencyDeletingEvent) => void) | null;
+    onDependencyDeleting?: ((e: DependencyDeletingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:DependencyDeletedEvent}
      * @action
      * @public
      */
-    onDependencyDeleted?: ((e: DependencyDeletedEvent) => void) | null;
+    onDependencyDeleted?: ((e: DependencyDeletedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:ResourceInsertingEvent}
      * @action
      * @public
      */
-    onResourceInserting?: ((e: ResourceInsertingEvent) => void) | null;
+    onResourceInserting?: ((e: ResourceInsertingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:ResourceInsertedEvent}
      * @action
      * @public
      */
-    onResourceInserted?: ((e: ResourceInsertedEvent) => void) | null;
+    onResourceInserted?: ((e: ResourceInsertedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:ResourceDeletingEvent}
      * @action
      * @public
      */
-    onResourceDeleting?: ((e: ResourceDeletingEvent) => void) | null;
+    onResourceDeleting?: ((e: ResourceDeletingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:ResourceDeletedEvent}
      * @action
      * @public
      */
-    onResourceDeleted?: ((e: ResourceDeletedEvent) => void) | null;
+    onResourceDeleted?: ((e: ResourceDeletedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:ResourceAssigningEvent}
      * @action
      * @public
      */
-    onResourceAssigning?: ((e: ResourceAssigningEvent) => void) | null;
+    onResourceAssigning?: ((e: ResourceAssigningEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:ResourceAssignedEvent}
      * @action
      * @public
      */
-    onResourceAssigned?: ((e: ResourceAssignedEvent) => void) | null;
+    onResourceAssigned?: ((e: ResourceAssignedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:ResourceUnassigningEvent}
      * @action
      * @public
      */
-    onResourceUnassigning?: ((e: ResourceUnassigningEvent) => void) | null;
+    onResourceUnassigning?: ((e: ResourceUnassigningEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:ResourceUnassignedEvent}
      * @action
      * @public
      */
-    onResourceUnassigned?: ((e: ResourceUnassignedEvent) => void) | null;
+    onResourceUnassigned?: ((e: ResourceUnassignedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:TaskClickEvent}
      * @action
      * @public
      */
-    onTaskClick?: ((e: TaskClickEvent) => void) | null;
+    onTaskClick?: ((e: TaskClickEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:TaskDblClickEvent}
      * @action
      * @public
      */
-    onTaskDblClick?: ((e: TaskDblClickEvent) => void) | null;
+    onTaskDblClick?: ((e: TaskDblClickEvent) => void) | undefined;
     /**
      * @docid
      * @default undefined
