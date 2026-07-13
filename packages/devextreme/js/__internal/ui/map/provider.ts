@@ -10,6 +10,8 @@ import type Map from './map';
 import type { MapProperties } from './map';
 import type { LocationOption, MarkerOptions, RouteOptions } from './provider.dynamic';
 
+type KeyedMapProvider = Exclude<MapProvider, 'osm'>;
+
 class Provider {
   _mapWidget!: Map;
 
@@ -167,15 +169,13 @@ class Provider {
     return undefined;
   }
 
-  _keyOption(providerName: MapProvider): string {
+  _keyOption(providerName: KeyedMapProvider): string {
     const key = this._option('apiKey') ?? '';
     if (typeof key === 'string') {
       return key;
     }
     if (isPlainObject(key)) {
-      // apiKey only carries keyed providers (azure/bing/google/googleStatic); other providers
-      // such as 'osm' simply have no entry, so index through a string-keyed view.
-      return (key as Record<string, string | undefined>)[providerName] ?? '';
+      return key[providerName] ?? '';
     }
     return '';
   }
