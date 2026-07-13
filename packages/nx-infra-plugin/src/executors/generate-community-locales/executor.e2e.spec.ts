@@ -34,9 +34,6 @@ const FR_JSON_INPUT = `{
 }
 `;
 
-// "No" keeps the English default (source value contains TODO), "Cancel" keeps the
-// English default (missing in fr), "Extra" is dropped (absent from en), quotes are
-// escaped, and en.json's key order/indentation/trailing newline are inherited verbatim.
 const EXPECTED_FR = `{
     "fr": {
         "Yes": "Oui",
