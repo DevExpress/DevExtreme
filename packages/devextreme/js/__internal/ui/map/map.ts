@@ -85,8 +85,7 @@ class Map extends Widget<MapProperties> {
       provider: 'google',
       autoAdjust: true,
       markers: [],
-      // @ts-expect-error ts-error
-      markerIconSrc: null,
+      markerIconSrc: undefined,
       onMarkerAdded: null,
       onMarkerRemoved: null,
       routes: [],

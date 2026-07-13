@@ -326,7 +326,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @docid
      * @public
      */
-     screenByWidth?: Function;
+    screenByWidth?: Function;
     /**
      * @docid
      * @default false
