@@ -27,8 +27,8 @@ type ITabPanelOptionsNarrowedEvents<TItem = any, TKey = any> = {
   onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void);
   onSelectionChanging?: ((e: SelectionChangingEvent<TItem, TKey>) => void);
   onTitleClick?: ((e: TitleClickEvent<TItem, TKey>) => void);
-  onTitleHold?: ((e: TitleHoldEvent<TItem, TKey>) => void) | null;
-  onTitleRendered?: ((e: TitleRenderedEvent<TItem, TKey>) => void) | null;
+  onTitleHold?: ((e: TitleHoldEvent<TItem, TKey>) => void) | undefined;
+  onTitleRendered?: ((e: TitleRenderedEvent<TItem, TKey>) => void) | undefined;
 }
 
 type ITabPanelOptions<TItem = any, TKey = any> = React.PropsWithChildren<ReplaceFieldTypes<Properties<TItem, TKey>, ITabPanelOptionsNarrowedEvents<TItem, TKey>> & IHtmlOptions & {

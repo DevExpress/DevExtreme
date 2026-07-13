@@ -288,18 +288,18 @@ export class DxoSchedulerTabPanelOptionsComponent extends NestedOption implement
     }
 
     @Input()
-    get onTitleHold(): ((e: TitleHoldEvent) => void) | null {
+    get onTitleHold(): ((e: TitleHoldEvent) => void) | undefined {
         return this._getOption('onTitleHold');
     }
-    set onTitleHold(value: ((e: TitleHoldEvent) => void) | null) {
+    set onTitleHold(value: ((e: TitleHoldEvent) => void) | undefined) {
         this._setOption('onTitleHold', value);
     }
 
     @Input()
-    get onTitleRendered(): ((e: TitleRenderedEvent) => void) | null {
+    get onTitleRendered(): ((e: TitleRenderedEvent) => void) | undefined {
         return this._getOption('onTitleRendered');
     }
-    set onTitleRendered(value: ((e: TitleRenderedEvent) => void) | null) {
+    set onTitleRendered(value: ((e: TitleRenderedEvent) => void) | undefined) {
         this._setOption('onTitleRendered', value);
     }
 

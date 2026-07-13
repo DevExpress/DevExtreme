@@ -1438,7 +1438,7 @@ const DxColumnHeaderFilterConfig = {
   props: {
     allowSearch: Boolean,
     allowSelectAll: Boolean,
-    dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void)) | Store | Record<string, any>>,
+    dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void)) | null | Store | Record<string, any>>,
     groupInterval: [Array, String, Number] as PropType<(Array<number | string>) | HeaderFilterGroupInterval | number>,
     height: [Number, String],
     search: Object as PropType<ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig | Record<string, any>>,
@@ -1495,7 +1495,7 @@ const DxColumnLookupConfig = {
   props: {
     allowClearing: Boolean,
     calculateCellValue: Function as PropType<((rowData: any) => any)>,
-    dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions)) | Store | Record<string, any>>,
+    dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions)) | null | Store | Record<string, any>>,
     displayExpr: [Function, String] as PropType<(((data: any) => string)) | string>,
     valueExpr: String
   }
@@ -2931,7 +2931,7 @@ const DxHeaderFilterConfig = {
   props: {
     allowSearch: Boolean,
     allowSelectAll: Boolean,
-    dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void)) | Store | Record<string, any>>,
+    dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void)) | null | Store | Record<string, any>>,
     groupInterval: [Array, String, Number] as PropType<(Array<number | string>) | HeaderFilterGroupInterval | number>,
     height: [Number, String],
     search: Object as PropType<ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig | Record<string, any>>,
@@ -3254,7 +3254,7 @@ const DxLookupConfig = {
   props: {
     allowClearing: Boolean,
     calculateCellValue: Function as PropType<((rowData: any) => any)>,
-    dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions)) | Store | Record<string, any>>,
+    dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions)) | null | Store | Record<string, any>>,
     displayExpr: [Function, String] as PropType<(((data: any) => string)) | string>,
     valueExpr: [String, Function] as PropType<string | (((data: any) => string | number | boolean))>
   }

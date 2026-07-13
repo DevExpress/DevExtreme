@@ -14,19 +14,19 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 }
 
 type IFileUploaderOptionsNarrowedEvents = {
-  onBeforeSend?: ((e: BeforeSendEvent) => void) | null;
+  onBeforeSend?: ((e: BeforeSendEvent) => void) | undefined;
   onContentReady?: ((e: ContentReadyEvent) => void);
   onDisposing?: ((e: DisposingEvent) => void);
-  onDropZoneEnter?: ((e: DropZoneEnterEvent) => void) | null;
-  onDropZoneLeave?: ((e: DropZoneLeaveEvent) => void) | null;
-  onFilesUploaded?: ((e: FilesUploadedEvent) => void) | null;
+  onDropZoneEnter?: ((e: DropZoneEnterEvent) => void) | undefined;
+  onDropZoneLeave?: ((e: DropZoneLeaveEvent) => void) | undefined;
+  onFilesUploaded?: ((e: FilesUploadedEvent) => void) | undefined;
   onInitialized?: ((e: InitializedEvent) => void);
-  onProgress?: ((e: ProgressEvent) => void) | null;
-  onUploadAborted?: ((e: UploadAbortedEvent) => void) | null;
-  onUploaded?: ((e: UploadedEvent) => void) | null;
-  onUploadError?: ((e: UploadErrorEvent) => void) | null;
-  onUploadStarted?: ((e: UploadStartedEvent) => void) | null;
-  onValueChanged?: ((e: ValueChangedEvent) => void) | null;
+  onProgress?: ((e: ProgressEvent) => void) | undefined;
+  onUploadAborted?: ((e: UploadAbortedEvent) => void) | undefined;
+  onUploaded?: ((e: UploadedEvent) => void) | undefined;
+  onUploadError?: ((e: UploadErrorEvent) => void) | undefined;
+  onUploadStarted?: ((e: UploadStartedEvent) => void) | undefined;
+  onValueChanged?: ((e: ValueChangedEvent) => void) | undefined;
 }
 
 type IFileUploaderOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IFileUploaderOptionsNarrowedEvents> & IHtmlOptions & {

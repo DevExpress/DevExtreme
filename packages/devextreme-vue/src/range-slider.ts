@@ -90,7 +90,7 @@ const componentConfig = {
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
     onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
-    onValueChanged: Function as PropType<((e: ValueChangedEvent) => void)>,
+    onValueChanged: Function as PropType<(((e: ValueChangedEvent) => void)) | null>,
     readOnly: Boolean,
     rtlEnabled: Boolean,
     showRange: Boolean,

@@ -223,18 +223,18 @@ export class DxoDataGridFormComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get onEditorEnterKey(): ((e: EditorEnterKeyEvent) => void) | null {
+    get onEditorEnterKey(): ((e: EditorEnterKeyEvent) => void) | undefined {
         return this._getOption('onEditorEnterKey');
     }
-    set onEditorEnterKey(value: ((e: EditorEnterKeyEvent) => void) | null) {
+    set onEditorEnterKey(value: ((e: EditorEnterKeyEvent) => void) | undefined) {
         this._setOption('onEditorEnterKey', value);
     }
 
     @Input()
-    get onFieldDataChanged(): ((e: FieldDataChangedEvent) => void) | null {
+    get onFieldDataChanged(): ((e: FieldDataChangedEvent) => void) | undefined {
         return this._getOption('onFieldDataChanged');
     }
-    set onFieldDataChanged(value: ((e: FieldDataChangedEvent) => void) | null) {
+    set onFieldDataChanged(value: ((e: FieldDataChangedEvent) => void) | undefined) {
         this._setOption('onFieldDataChanged', value);
     }
 
@@ -255,18 +255,18 @@ export class DxoDataGridFormComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get onSmartPasted(): ((e: SmartPastedEvent) => void) | null {
+    get onSmartPasted(): ((e: SmartPastedEvent) => void) | undefined {
         return this._getOption('onSmartPasted');
     }
-    set onSmartPasted(value: ((e: SmartPastedEvent) => void) | null) {
+    set onSmartPasted(value: ((e: SmartPastedEvent) => void) | undefined) {
         this._setOption('onSmartPasted', value);
     }
 
     @Input()
-    get onSmartPasting(): ((e: SmartPastingEvent) => void) | null {
+    get onSmartPasting(): ((e: SmartPastingEvent) => void) | undefined {
         return this._getOption('onSmartPasting');
     }
-    set onSmartPasting(value: ((e: SmartPastingEvent) => void) | null) {
+    set onSmartPasting(value: ((e: SmartPastingEvent) => void) | undefined) {
         this._setOption('onSmartPasting', value);
     }
 

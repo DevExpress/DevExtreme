@@ -25,10 +25,10 @@ type IMenuOptionsNarrowedEvents<TItem = any, TKey = any> = {
   onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void);
   onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void);
   onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void);
-  onSubmenuHidden?: ((e: SubmenuHiddenEvent<TItem, TKey>) => void) | null;
-  onSubmenuHiding?: ((e: SubmenuHidingEvent<TItem, TKey>) => void) | null;
-  onSubmenuShowing?: ((e: SubmenuShowingEvent<TItem, TKey>) => void) | null;
-  onSubmenuShown?: ((e: SubmenuShownEvent<TItem, TKey>) => void) | null;
+  onSubmenuHidden?: ((e: SubmenuHiddenEvent<TItem, TKey>) => void) | undefined;
+  onSubmenuHiding?: ((e: SubmenuHidingEvent<TItem, TKey>) => void) | undefined;
+  onSubmenuShowing?: ((e: SubmenuShowingEvent<TItem, TKey>) => void) | undefined;
+  onSubmenuShown?: ((e: SubmenuShownEvent<TItem, TKey>) => void) | undefined;
 }
 
 type IMenuOptions<TItem = any, TKey = any> = React.PropsWithChildren<ReplaceFieldTypes<Properties<TItem, TKey>, IMenuOptionsNarrowedEvents<TItem, TKey>> & IHtmlOptions & {

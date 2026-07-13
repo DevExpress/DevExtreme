@@ -1317,12 +1317,12 @@ type IFormProps = React.PropsWithChildren<{
   minColWidth?: number;
   onContentReady?: ((e: FormContentReadyEvent) => void);
   onDisposing?: ((e: FormDisposingEvent) => void);
-  onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void) | null;
-  onFieldDataChanged?: ((e: FieldDataChangedEvent) => void) | null;
+  onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void) | undefined;
+  onFieldDataChanged?: ((e: FieldDataChangedEvent) => void) | undefined;
   onInitialized?: ((e: FormInitializedEvent) => void);
   onOptionChanged?: ((e: FormOptionChangedEvent) => void);
-  onSmartPasted?: ((e: SmartPastedEvent) => void) | null;
-  onSmartPasting?: ((e: SmartPastingEvent) => void) | null;
+  onSmartPasted?: ((e: SmartPastedEvent) => void) | undefined;
+  onSmartPasting?: ((e: SmartPastingEvent) => void) | undefined;
   optionalMark?: string;
   readOnly?: boolean;
   requiredMark?: string;
@@ -2583,8 +2583,8 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   onSelectionChanged?: ((e: SelectionChangedEvent) => void);
   onSelectionChanging?: ((e: SelectionChangingEvent) => void);
   onTitleClick?: ((e: TitleClickEvent) => void);
-  onTitleHold?: ((e: TitleHoldEvent) => void) | null;
-  onTitleRendered?: ((e: TitleRenderedEvent) => void) | null;
+  onTitleHold?: ((e: TitleHoldEvent) => void) | undefined;
+  onTitleRendered?: ((e: TitleRenderedEvent) => void) | undefined;
   repaintChangesOnly?: boolean;
   rtlEnabled?: boolean;
   scrollByContent?: boolean;

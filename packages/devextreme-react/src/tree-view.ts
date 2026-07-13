@@ -23,13 +23,13 @@ type ITreeViewOptionsNarrowedEvents<TItem = any, TKey = any> = {
   onContentReady?: ((e: ContentReadyEvent<TItem, TKey>) => void);
   onDisposing?: ((e: DisposingEvent<TItem, TKey>) => void);
   onInitialized?: ((e: InitializedEvent<TItem, TKey>) => void);
-  onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void) | null;
-  onItemCollapsed?: ((e: ItemCollapsedEvent<TItem, TKey>) => void) | null;
-  onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void) | null;
-  onItemExpanded?: ((e: ItemExpandedEvent<TItem, TKey>) => void) | null;
-  onItemHold?: ((e: ItemHoldEvent<TItem, TKey>) => void) | null;
-  onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void) | null;
-  onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TItem, TKey>) => void) | null;
+  onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void) | undefined;
+  onItemCollapsed?: ((e: ItemCollapsedEvent<TItem, TKey>) => void) | undefined;
+  onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void) | undefined;
+  onItemExpanded?: ((e: ItemExpandedEvent<TItem, TKey>) => void) | undefined;
+  onItemHold?: ((e: ItemHoldEvent<TItem, TKey>) => void) | undefined;
+  onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void) | undefined;
+  onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TItem, TKey>) => void) | undefined;
 }
 
 type ITreeViewOptions<TItem = any, TKey = any> = React.PropsWithChildren<ReplaceFieldTypes<Properties<TItem, TKey>, ITreeViewOptionsNarrowedEvents<TItem, TKey>> & IHtmlOptions & {

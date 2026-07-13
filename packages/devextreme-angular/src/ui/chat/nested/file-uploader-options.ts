@@ -244,10 +244,10 @@ export class DxoChatFileUploaderOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get onBeforeSend(): ((e: BeforeSendEvent) => void) | null {
+    get onBeforeSend(): ((e: BeforeSendEvent) => void) | undefined {
         return this._getOption('onBeforeSend');
     }
-    set onBeforeSend(value: ((e: BeforeSendEvent) => void) | null) {
+    set onBeforeSend(value: ((e: BeforeSendEvent) => void) | undefined) {
         this._setOption('onBeforeSend', value);
     }
 
@@ -268,26 +268,26 @@ export class DxoChatFileUploaderOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get onDropZoneEnter(): ((e: DropZoneEnterEvent) => void) | null {
+    get onDropZoneEnter(): ((e: DropZoneEnterEvent) => void) | undefined {
         return this._getOption('onDropZoneEnter');
     }
-    set onDropZoneEnter(value: ((e: DropZoneEnterEvent) => void) | null) {
+    set onDropZoneEnter(value: ((e: DropZoneEnterEvent) => void) | undefined) {
         this._setOption('onDropZoneEnter', value);
     }
 
     @Input()
-    get onDropZoneLeave(): ((e: DropZoneLeaveEvent) => void) | null {
+    get onDropZoneLeave(): ((e: DropZoneLeaveEvent) => void) | undefined {
         return this._getOption('onDropZoneLeave');
     }
-    set onDropZoneLeave(value: ((e: DropZoneLeaveEvent) => void) | null) {
+    set onDropZoneLeave(value: ((e: DropZoneLeaveEvent) => void) | undefined) {
         this._setOption('onDropZoneLeave', value);
     }
 
     @Input()
-    get onFilesUploaded(): ((e: FilesUploadedEvent) => void) | null {
+    get onFilesUploaded(): ((e: FilesUploadedEvent) => void) | undefined {
         return this._getOption('onFilesUploaded');
     }
-    set onFilesUploaded(value: ((e: FilesUploadedEvent) => void) | null) {
+    set onFilesUploaded(value: ((e: FilesUploadedEvent) => void) | undefined) {
         this._setOption('onFilesUploaded', value);
     }
 
@@ -308,50 +308,50 @@ export class DxoChatFileUploaderOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get onProgress(): ((e: ProgressEvent) => void) | null {
+    get onProgress(): ((e: ProgressEvent) => void) | undefined {
         return this._getOption('onProgress');
     }
-    set onProgress(value: ((e: ProgressEvent) => void) | null) {
+    set onProgress(value: ((e: ProgressEvent) => void) | undefined) {
         this._setOption('onProgress', value);
     }
 
     @Input()
-    get onUploadAborted(): ((e: UploadAbortedEvent) => void) | null {
+    get onUploadAborted(): ((e: UploadAbortedEvent) => void) | undefined {
         return this._getOption('onUploadAborted');
     }
-    set onUploadAborted(value: ((e: UploadAbortedEvent) => void) | null) {
+    set onUploadAborted(value: ((e: UploadAbortedEvent) => void) | undefined) {
         this._setOption('onUploadAborted', value);
     }
 
     @Input()
-    get onUploaded(): ((e: UploadedEvent) => void) | null {
+    get onUploaded(): ((e: UploadedEvent) => void) | undefined {
         return this._getOption('onUploaded');
     }
-    set onUploaded(value: ((e: UploadedEvent) => void) | null) {
+    set onUploaded(value: ((e: UploadedEvent) => void) | undefined) {
         this._setOption('onUploaded', value);
     }
 
     @Input()
-    get onUploadError(): ((e: UploadErrorEvent) => void) | null {
+    get onUploadError(): ((e: UploadErrorEvent) => void) | undefined {
         return this._getOption('onUploadError');
     }
-    set onUploadError(value: ((e: UploadErrorEvent) => void) | null) {
+    set onUploadError(value: ((e: UploadErrorEvent) => void) | undefined) {
         this._setOption('onUploadError', value);
     }
 
     @Input()
-    get onUploadStarted(): ((e: UploadStartedEvent) => void) | null {
+    get onUploadStarted(): ((e: UploadStartedEvent) => void) | undefined {
         return this._getOption('onUploadStarted');
     }
-    set onUploadStarted(value: ((e: UploadStartedEvent) => void) | null) {
+    set onUploadStarted(value: ((e: UploadStartedEvent) => void) | undefined) {
         this._setOption('onUploadStarted', value);
     }
 
     @Input()
-    get onValueChanged(): ((e: ValueChangedEvent) => void) | null {
+    get onValueChanged(): ((e: ValueChangedEvent) => void) | undefined {
         return this._getOption('onValueChanged');
     }
-    set onValueChanged(value: ((e: ValueChangedEvent) => void) | null) {
+    set onValueChanged(value: ((e: ValueChangedEvent) => void) | undefined) {
         this._setOption('onValueChanged', value);
     }
 

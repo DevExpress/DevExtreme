@@ -510,7 +510,7 @@ const DxCalendarOptionsConfig = {
     cellTemplate: {},
     dateSerializationFormat: String,
     disabled: Boolean,
-    disabledDates: [Array, Function] as PropType<Array<Date> | (((data: DisabledDate) => boolean))>,
+    disabledDates: [Array, Function] as PropType<Array<Date> | (((data: DisabledDate) => boolean)) | null>,
     elementAttr: Object as PropType<Record<string, any>>,
     firstDayOfWeek: Number as PropType<DayOfWeek>,
     focusStateEnabled: Boolean,

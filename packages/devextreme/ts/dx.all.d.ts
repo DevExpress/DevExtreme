@@ -23964,25 +23964,25 @@ declare module DevExpress.ui {
      */
     onSubmenuHidden?:
       | ((e: DevExpress.ui.dxMenu.SubmenuHiddenEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxMenuOptions.onSubmenuHiding]
      */
     onSubmenuHiding?:
       | ((e: DevExpress.ui.dxMenu.SubmenuHidingEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxMenuOptions.onSubmenuShowing]
      */
     onSubmenuShowing?:
       | ((e: DevExpress.ui.dxMenu.SubmenuShowingEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxMenuOptions.onSubmenuShown]
      */
     onSubmenuShown?:
       | ((e: DevExpress.ui.dxMenu.SubmenuShownEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxMenuOptions.orientation]
      */
@@ -29536,13 +29536,13 @@ declare module DevExpress.ui {
      */
     onTitleHold?:
       | ((e: DevExpress.ui.dxTabPanel.TitleHoldEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxTabPanelOptions.onTitleRendered]
      */
     onTitleRendered?:
       | ((e: DevExpress.ui.dxTabPanel.TitleRenderedEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxTabPanelOptions.repaintChangesOnly]
      */
@@ -33264,13 +33264,13 @@ declare module DevExpress.ui {
      */
     onItemClick?:
       | ((e: DevExpress.ui.dxTreeView.ItemClickEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxTreeViewOptions.onItemCollapsed]
      */
     onItemCollapsed?:
       | ((e: DevExpress.ui.dxTreeView.ItemCollapsedEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxTreeViewOptions.onItemContextMenu]
      */
@@ -33278,25 +33278,25 @@ declare module DevExpress.ui {
       | ((
           e: DevExpress.ui.dxTreeView.ItemContextMenuEvent<TItem, TKey>
         ) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxTreeViewOptions.onItemExpanded]
      */
     onItemExpanded?:
       | ((e: DevExpress.ui.dxTreeView.ItemExpandedEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxTreeViewOptions.onItemHold]
      */
     onItemHold?:
       | ((e: DevExpress.ui.dxTreeView.ItemHoldEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxTreeViewOptions.onItemRendered]
      */
     onItemRendered?:
       | ((e: DevExpress.ui.dxTreeView.ItemRenderedEvent<TItem, TKey>) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxTreeViewOptions.onItemSelectionChanged]
      */
@@ -33304,7 +33304,7 @@ declare module DevExpress.ui {
       | ((
           e: DevExpress.ui.dxTreeView.ItemSelectionChangedEvent<TItem, TKey>
         ) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxTreeViewOptions.onSelectAllValueChanged]
      */
@@ -33312,7 +33312,7 @@ declare module DevExpress.ui {
       | ((
           e: DevExpress.ui.dxTreeView.SelectAllValueChangedEvent<TItem, TKey>
         ) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxTreeViewOptions.onSelectionChanged]
      */
@@ -33320,7 +33320,7 @@ declare module DevExpress.ui {
       | ((
           e: DevExpress.ui.dxTreeView.SelectionChangedEvent<TItem, TKey>
         ) => void)
-      | null;
+      | undefined;
     /**
      * [descr:dxTreeViewOptions.parentIdExpr]
      */

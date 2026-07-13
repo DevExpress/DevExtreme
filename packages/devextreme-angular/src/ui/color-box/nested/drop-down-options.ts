@@ -220,10 +220,10 @@ export class DxoColorBoxDropDownOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get onContentReady(): ((e: EventInfo<any>) => void) | null {
+    get onContentReady(): ((e: EventInfo<any>) => void) | undefined {
         return this._getOption('onContentReady');
     }
-    set onContentReady(value: ((e: EventInfo<any>) => void) | null) {
+    set onContentReady(value: ((e: EventInfo<any>) => void) | undefined) {
         this._setOption('onContentReady', value);
     }
 
@@ -268,26 +268,26 @@ export class DxoColorBoxDropDownOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get onResize(): ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | null {
+    get onResize(): ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | undefined {
         return this._getOption('onResize');
     }
-    set onResize(value: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | null) {
+    set onResize(value: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | undefined) {
         this._setOption('onResize', value);
     }
 
     @Input()
-    get onResizeEnd(): ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | null {
+    get onResizeEnd(): ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | undefined {
         return this._getOption('onResizeEnd');
     }
-    set onResizeEnd(value: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | null) {
+    set onResizeEnd(value: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | undefined) {
         this._setOption('onResizeEnd', value);
     }
 
     @Input()
-    get onResizeStart(): ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | null {
+    get onResizeStart(): ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | undefined {
         return this._getOption('onResizeStart');
     }
-    set onResizeStart(value: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | null) {
+    set onResizeStart(value: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | undefined) {
         this._setOption('onResizeStart', value);
     }
 
@@ -308,10 +308,10 @@ export class DxoColorBoxDropDownOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get onTitleRendered(): ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void) | null {
+    get onTitleRendered(): ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void) | undefined {
         return this._getOption('onTitleRendered');
     }
-    set onTitleRendered(value: ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void) | null) {
+    set onTitleRendered(value: ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void) | undefined) {
         this._setOption('onTitleRendered', value);
     }
 

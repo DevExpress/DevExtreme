@@ -20,7 +20,7 @@ type IButtonGroupOptionsNarrowedEvents = {
   onContentReady?: ((e: ContentReadyEvent) => void);
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
-  onItemClick?: ((e: ItemClickEvent) => void) | null;
+  onItemClick?: ((e: ItemClickEvent) => void) | undefined;
 }
 
 type IButtonGroupOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IButtonGroupOptionsNarrowedEvents> & IHtmlOptions & {
