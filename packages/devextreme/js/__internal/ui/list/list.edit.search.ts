@@ -38,7 +38,6 @@ class ListSearch extends ListEdit {
       ...super._getDefaultOptions(),
       // @ts-expect-error ts-error
       searchMode: '',
-      // @ts-expect-error ts-error
       searchExpr: null,
       searchValue: '',
       searchEnabled: false,

@@ -550,7 +550,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     | null
     | undefined {
     const { grouped } = this.option();
-    const dataSource = this.option('dataSource');
+    const dataSource = this.option('dataSource') as DataSourceLike<Item> | undefined;
 
     if (dataSource && grouped) {
       return getDataSourceOptions<Item>(dataSource);
