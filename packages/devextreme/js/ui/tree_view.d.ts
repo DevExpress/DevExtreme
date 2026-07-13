@@ -263,7 +263,7 @@ export interface dxTreeViewOptions<TItem extends ItemLike = any, TKey = any>
      * @action
      * @public
      */
-    onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void);
+    onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -271,7 +271,7 @@ export interface dxTreeViewOptions<TItem extends ItemLike = any, TKey = any>
      * @action
      * @public
      */
-    onItemCollapsed?: ((e: ItemCollapsedEvent<TItem, TKey>) => void);
+    onItemCollapsed?: ((e: ItemCollapsedEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -279,7 +279,7 @@ export interface dxTreeViewOptions<TItem extends ItemLike = any, TKey = any>
      * @action
      * @public
      */
-    onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void);
+    onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -287,7 +287,7 @@ export interface dxTreeViewOptions<TItem extends ItemLike = any, TKey = any>
      * @action
      * @public
      */
-    onItemExpanded?: ((e: ItemExpandedEvent<TItem, TKey>) => void);
+    onItemExpanded?: ((e: ItemExpandedEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -295,7 +295,7 @@ export interface dxTreeViewOptions<TItem extends ItemLike = any, TKey = any>
      * @action
      * @public
      */
-    onItemHold?: ((e: ItemHoldEvent<TItem, TKey>) => void);
+    onItemHold?: ((e: ItemHoldEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -303,7 +303,7 @@ export interface dxTreeViewOptions<TItem extends ItemLike = any, TKey = any>
      * @action
      * @public
      */
-    onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void);
+    onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -311,7 +311,7 @@ export interface dxTreeViewOptions<TItem extends ItemLike = any, TKey = any>
      * @action
      * @public
      */
-    onItemSelectionChanged?: ((e: ItemSelectionChangedEvent<TItem, TKey>) => void);
+    onItemSelectionChanged?: ((e: ItemSelectionChangedEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -319,7 +319,7 @@ export interface dxTreeViewOptions<TItem extends ItemLike = any, TKey = any>
      * @action
      * @public
      */
-    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TItem, TKey>) => void);
+    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default null
@@ -328,7 +328,7 @@ export interface dxTreeViewOptions<TItem extends ItemLike = any, TKey = any>
      * @public
      * @override
      */
-    onSelectionChanged?: ((e: SelectionChangedEvent<TItem, TKey>) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent<TItem, TKey>) => void) | null;
     /**
      * @docid
      * @default 'parentId'
