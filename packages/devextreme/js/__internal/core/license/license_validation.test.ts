@@ -3,6 +3,7 @@ import {
 } from '@jest/globals';
 import config from '@js/core/config';
 import errors from '@js/core/errors';
+import { fullVersion } from '@js/core/version';
 
 import { base } from '../../ui/overlay/z_index';
 import {
@@ -11,12 +12,14 @@ import {
   clearAssertedVersions,
 } from '../../utils/version';
 import { LICENSE_KEY_PLACEHOLDER } from './const';
+import * as productKeyValidator from './lcp_key_validation/lcp_key_validator';
 import {
   parseLicenseKey,
   setLicenseCheckSkipCondition,
   validateLicense,
 } from './license_validation';
 import * as trialPanel from './trial_panel.client';
+import { TokenKind } from './types';
 
 jest.mock('./key', () => ({
   PUBLIC_KEY: {
@@ -581,5 +584,53 @@ describe('assertedVersions integration', () => {
       expect(result).toBe(false);
       expect(errors.log).toHaveBeenCalledWith('W0023', expect.stringContaining('test-package'));
     });
+  });
+});
+
+describe('AspNet compatibility gate', () => {
+  const LCP_LICENSE = 'LCPv1mock-license';
+
+  beforeEach(() => {
+    jest.spyOn(errors, 'log').mockImplementation(() => {});
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
+    jest.spyOn(trialPanel, 'renderTrialPanel');
+    setLicenseCheckSkipCondition(false);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+    clearAssertedVersions();
+  });
+
+  it('passes AspNet compatibility=true when DevExtreme.AspNet assertion exists', () => {
+    const parseSpy = jest.spyOn(productKeyValidator, 'parseDevExpressProductKey').mockReturnValue({
+      kind: TokenKind.verified,
+      payload: {
+        customerId: 'test',
+        maxVersionAllowed: 999,
+        format: 1,
+      },
+    });
+
+    assertDevExtremeVersion('DevExtreme.AspNet.Core', fullVersion);
+    validateLicense(LCP_LICENSE, fullVersion);
+
+    expect(parseSpy).toHaveBeenCalledWith(LCP_LICENSE, true);
+  });
+
+  it('passes AspNet compatibility=false when there is no AspNet assertion', () => {
+    const parseSpy = jest.spyOn(productKeyValidator, 'parseDevExpressProductKey').mockReturnValue({
+      kind: TokenKind.verified,
+      payload: {
+        customerId: 'test',
+        maxVersionAllowed: 999,
+        format: 1,
+      },
+    });
+
+    assertDevExtremeVersion('DevExtreme.React', fullVersion);
+    validateLicense(LCP_LICENSE, fullVersion);
+
+    expect(parseSpy).toHaveBeenCalledWith(LCP_LICENSE, false);
   });
 });
