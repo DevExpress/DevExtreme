@@ -5,10 +5,12 @@ export interface Config {
   rtlEnabled: WidgetProperties['rtlEnabled'];
   disabled: WidgetProperties['disabled'];
   templatesRenderAsynchronously: unknown; // TODO: Properties['templatesRenderAsynchronously'];
+  integrationOptions: WidgetProperties['integrationOptions'];
 }
 
 export const ConfigContext = createContext<Config>({
   rtlEnabled: undefined,
   disabled: undefined,
   templatesRenderAsynchronously: undefined,
+  integrationOptions: undefined,
 });

@@ -107,6 +107,9 @@ export class MainView extends View<MainViewProps> {
     rtlEnabled: this.options.oneWay('rtlEnabled').value,
     disabled: this.options.oneWay('disabled').value,
     templatesRenderAsynchronously: this.options.oneWay('templatesRenderAsynchronously').value,
+    integrationOptions: {
+      templates: this.options.oneWay('integrationOptions.templates').value,
+    },
   }));
 
   private readonly commonProps = {
