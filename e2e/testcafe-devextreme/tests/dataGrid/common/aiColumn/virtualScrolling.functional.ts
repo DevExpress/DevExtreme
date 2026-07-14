@@ -24,6 +24,8 @@ const checkAIColumnTexts = async (
   }
 };
 
+const isAIRequestPending = ClientFunction(() => !!(window as any).aiResolve);
+
 const resolveAIRequest = ClientFunction((): void => {
   const { aiResponseData } = (window as any);
   const { aiResolve } = (window as any);
@@ -41,12 +43,14 @@ const deleteGlobalVariables = ClientFunction((): void => {
   delete (window as any).aiResolve;
 });
 
-test.meta({ unstable: true })('DataGrid should send an AI request for rendered rows after scrolling without changing the page index', async (t) => {
+test('DataGrid should send an AI request for rendered rows after scrolling without changing the page index', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   // assert
   await t
+    .expect(isAIRequestPending())
+    .ok()
     .expect(dataGrid.getLoadPanel().isVisible())
     .ok();
 
@@ -72,6 +76,8 @@ test.meta({ unstable: true })('DataGrid should send an AI request for rendered r
     .eql(0)
     .expect(dataGrid.getDataCell(20, 0).element.textContent)
     .eql('21')
+    .expect(isAIRequestPending())
+    .ok()
     .expect(dataGrid.getLoadPanel().isVisible())
     .ok();
 
@@ -144,12 +150,14 @@ test.meta({ unstable: true })('DataGrid should send an AI request for rendered r
     await deleteGlobalVariables();
   });
 
-test.meta({ unstable: true })('DataGrid should send an AI request for rendered rows after scrolling with changing the page index', async (t) => {
+test('DataGrid should send an AI request for rendered rows after scrolling with changing the page index', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   // assert
   await t
+    .expect(isAIRequestPending())
+    .ok()
     .expect(dataGrid.getLoadPanel().isVisible())
     .ok();
 
@@ -175,6 +183,8 @@ test.meta({ unstable: true })('DataGrid should send an AI request for rendered r
     .eql(1)
     .expect(dataGrid.getDataCell(20, 0).element.textContent)
     .eql('21')
+    .expect(isAIRequestPending())
+    .ok()
     .expect(dataGrid.getLoadPanel().isVisible())
     .ok();
 
