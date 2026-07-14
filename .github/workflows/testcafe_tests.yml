@@ -626,7 +626,35 @@ jobs:
     if: ${{ always() }}
 
     steps:
+    - name: Detect mergeable artifacts
+      id: mergeable-artifacts
+      uses: actions/github-script@v9
+      with:
+        script: |
+          const artifacts = await github.paginate(github.rest.actions.listWorkflowRunArtifacts, {
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            run_id: context.runId,
+            per_page: 100,
+          });
+
+          const artifactGroups = {
+            compared_screenshots: /^compared-screenshots-/,
+            failed_tests: /^failed-tests-/,
+            flaky_reports: /^flaky-report-/,
+          };
+
+          for (const [outputName, pattern] of Object.entries(artifactGroups)) {
+            const names = artifacts
+              .map((artifact) => artifact.name)
+              .filter((name) => pattern.test(name));
+
+            core.setOutput(outputName, names.length > 0 ? 'true' : 'false');
+            core.info(`${outputName}: ${names.length ? names.join(', ') : '(none)'}`);
+          }
+
     - name: Merge screenshot artifacts
+      if: steps.mergeable-artifacts.outputs.compared_screenshots == 'true'
       uses: actions/upload-artifact/merge@v7
       continue-on-error: true
       with:
@@ -635,6 +663,7 @@ jobs:
         delete-merged: true
 
     - name: Merge failed test artifacts
+      if: steps.mergeable-artifacts.outputs.failed_tests == 'true'
       uses: actions/upload-artifact/merge@v7
       continue-on-error: true
       with:
@@ -643,6 +672,7 @@ jobs:
         delete-merged: true
 
     - name: Merge flaky test reports
+      if: steps.mergeable-artifacts.outputs.flaky_reports == 'true'
       uses: actions/upload-artifact/merge@v7
       continue-on-error: true
       with:
