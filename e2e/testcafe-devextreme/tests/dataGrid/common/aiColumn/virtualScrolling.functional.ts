@@ -8,6 +8,10 @@ fixture`Ai Column.Virtual Scrolling.Functional`
 
 const DATA_GRID_SELECTOR = '#container';
 
+const CLASS = {
+  loadPanelContent: 'dx-loadpanel-content',
+};
+
 const checkAIColumnTexts = async (
   t: TestController,
   component: DataGrid,
@@ -41,13 +45,13 @@ const deleteGlobalVariables = ClientFunction((): void => {
   delete (window as any).aiResolve;
 });
 
-test.meta({ unstable: true })('DataGrid should send an AI request for rendered rows after scrolling without changing the page index', async (t) => {
+test('DataGrid should send an AI request for rendered rows after scrolling without changing the page index', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   // assert
   await t
-    .expect(dataGrid.getLoadPanel().isVisible())
+    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
     .ok();
 
   // act
@@ -57,7 +61,7 @@ test.meta({ unstable: true })('DataGrid should send an AI request for rendered r
   await t
     .expect(dataGrid.isReady())
     .ok()
-    .expect(dataGrid.getLoadPanel().isVisible())
+    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
     .notOk();
   await checkAIColumnTexts(t, dataGrid, 11);
 
@@ -72,7 +76,7 @@ test.meta({ unstable: true })('DataGrid should send an AI request for rendered r
     .eql(0)
     .expect(dataGrid.getDataCell(20, 0).element.textContent)
     .eql('21')
-    .expect(dataGrid.getLoadPanel().isVisible())
+    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
     .ok();
 
   // act
@@ -82,7 +86,7 @@ test.meta({ unstable: true })('DataGrid should send an AI request for rendered r
   await t
     .expect(dataGrid.isReady())
     .ok()
-    .expect(dataGrid.getLoadPanel().isVisible())
+    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
     .notOk();
   await checkAIColumnTexts(t, dataGrid, 12);
 })
@@ -144,13 +148,13 @@ test.meta({ unstable: true })('DataGrid should send an AI request for rendered r
     await deleteGlobalVariables();
   });
 
-test.meta({ unstable: true })('DataGrid should send an AI request for rendered rows after scrolling with changing the page index', async (t) => {
+test('DataGrid should send an AI request for rendered rows after scrolling with changing the page index', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   // assert
   await t
-    .expect(dataGrid.getLoadPanel().isVisible())
+    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
     .ok();
 
   // act
@@ -160,7 +164,7 @@ test.meta({ unstable: true })('DataGrid should send an AI request for rendered r
   await t
     .expect(dataGrid.isReady())
     .ok()
-    .expect(dataGrid.getLoadPanel().isVisible())
+    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
     .notOk();
   await checkAIColumnTexts(t, dataGrid, 11);
 
@@ -175,7 +179,7 @@ test.meta({ unstable: true })('DataGrid should send an AI request for rendered r
     .eql(1)
     .expect(dataGrid.getDataCell(20, 0).element.textContent)
     .eql('21')
-    .expect(dataGrid.getLoadPanel().isVisible())
+    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
     .ok();
 
   // act
@@ -185,7 +189,7 @@ test.meta({ unstable: true })('DataGrid should send an AI request for rendered r
   await t
     .expect(dataGrid.isReady())
     .ok()
-    .expect(dataGrid.getLoadPanel().isVisible())
+    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
     .notOk();
   await checkAIColumnTexts(t, dataGrid, 12);
 })
