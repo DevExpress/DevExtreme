@@ -361,11 +361,12 @@ jobs:
       run: |
         report=artifacts/flaky-report/report.json
         if [ -f "$report" ]; then
-          jq --arg theme "${{ matrix.theme }}" \
+          jq --arg jobName "${{ matrix.name }}" \
+             --arg theme "${{ matrix.theme }}" \
              --arg componentFolder "${{ matrix.componentFolder }}" \
              --arg timezone "${{ matrix.timezone }}" \
              --arg platform "${{ matrix.platform }}" \
-             '. + { theme: $theme, componentFolder: $componentFolder, timezone: $timezone, platform: $platform }' \
+             '. + { jobName: $jobName, theme: $theme, componentFolder: $componentFolder, timezone: $timezone, platform: $platform }' \
              "$report" > "$report.tmp" && mv "$report.tmp" "$report"
           cat "$report"
         fi
@@ -486,21 +487,44 @@ jobs:
           echo " > tests that failed all attempts in this run: $last_failed"
         }
 
-        shopt -s nullglob
-        for report in flaky-reports/*/report.json; do
-          job_name=$(basename "$(dirname "$report")")
-          job_name=${job_name#flaky-report-}
+        flaky_reports=()
+        if [ -d flaky-reports ]; then
+          while IFS= read -r report; do
+            flaky_reports+=("$report")
+          done < <(find flaky-reports -type f -name report.json | sort)
+        fi
+
+        echo "Downloaded flaky test reports:"
+        if [ "${#flaky_reports[@]}" -eq 0 ]; then
+          echo "   (none)"
+        else
+          printf '   %s\n' "${flaky_reports[@]}"
+        fi
+
+        for report in "${flaky_reports[@]}"; do
+          theme=$(jq -r '.theme // empty' "$report")
+          componentFolder=$(jq -r '.componentFolder // empty' "$report")
+          timezone=$(jq -r '.timezone // empty' "$report")
+          platform=$(jq -r '.platform // empty' "$report")
+          job_name=$(jq -r '.jobName // empty' "$report")
+
+          if [ -z "$job_name" ]; then
+            report_dir=$(basename "$(dirname "$report")")
+            if [ "$report_dir" != "flaky-reports" ]; then
+              job_name=${report_dir#flaky-report-}
+            else
+              job_name=${componentFolder:-unknown}
+              [ -n "$theme" ] && job_name="$job_name / $theme"
+              [ -n "$timezone" ] && job_name="$job_name / $timezone"
+              [ -n "$platform" ] && job_name="$job_name / $platform"
+            fi
+          fi
 
           echo ""
           echo "============================================================"
           echo " [NEW FLAKY] Rerun of test(s) that failed once in job '$job_name'"
           echo "============================================================"
           cat "$report"
-
-          theme=$(jq -r '.theme // empty' "$report")
-          componentFolder=$(jq -r '.componentFolder // empty' "$report")
-          timezone=$(jq -r '.timezone // empty' "$report")
-          platform=$(jq -r '.platform // empty' "$report")
 
           sudo ln -sf "/usr/share/zoneinfo/${timezone:-GMT}" /etc/localtime
 
