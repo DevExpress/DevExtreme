@@ -175,7 +175,10 @@ describe('ConcatenateFilesExecutor E2E', () => {
     const originalOnce = process.once;
     let stopWatch: (() => void) | undefined;
 
-    (process as unknown as { once: typeof process.once }).once = ((event: string, handler: () => void) => {
+    (process as unknown as { once: typeof process.once }).once = ((
+      event: string,
+      handler: () => void,
+    ) => {
       if (event === 'SIGINT' || event === 'SIGTERM') {
         stopWatch = handler;
         return process;

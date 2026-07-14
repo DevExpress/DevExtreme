@@ -189,7 +189,9 @@ function loadChokidar(projectRoot: string): Chokidar {
     return projectRequire('chokidar') as Chokidar;
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    throw new Error(`concatenate-files watch mode requires 'chokidar' to be installed in the project (${projectRoot}): ${message}`);
+    throw new Error(
+      `concatenate-files watch mode requires 'chokidar' to be installed in the project (${projectRoot}): ${message}`,
+    );
   }
 }
 
