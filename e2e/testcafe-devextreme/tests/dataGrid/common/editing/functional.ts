@@ -362,6 +362,8 @@ test('Async Validation(Row) - Data is not saved when a dependant cell value beco
 
 test('Async Validation(Cell) - Only the last cell should be switched to edit mode', async (t) => {
   const dataGrid = new DataGrid('#container');
+  const resolveValidation = ClientFunction(() => (window as any).deferred.resolve(true));
+
   await t.expect(dataGrid.isReady()).ok();
 
   const cell0 = dataGrid.getDataCell(0, 0);
@@ -374,33 +376,43 @@ test('Async Validation(Cell) - Only the last cell should be switched to edit mod
     .click(cell1.element)
     .expect(cell1.isFocused)
     .notOk('the second cell should not be focused')
-    .click(cell2.element)
+    .click(cell2.element);
+
+  await resolveValidation();
+
+  await t
     .expect(cell0.isValidationPending)
     .notOk('validating is completed')
     .expect(cell2.hasHiddenFocusState)
     .notOk()
     .expect(cell2.isFocused)
     .ok('the third cell should be focused');
-}).before(async () => createWidget('dxDataGrid', getGridConfig({
-  editing: {
-    mode: 'cell',
-    allowUpdating: true,
-    allowAdding: true,
-  },
-  columns: [{
-    dataField: 'age',
-    validationRules: [{
-      type: 'async',
-      validationCallback(): JQueryPromise<unknown> {
-        const d = $.Deferred();
-        setTimeout(() => {
-          d.resolve(true);
-        }, 1000);
-        return d.promise();
-      },
-    }],
-  }, 'name', 'lastName'],
-})));
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).deferred = $.Deferred();
+  })();
+
+  return createWidget('dxDataGrid', getGridConfig({
+    editing: {
+      mode: 'cell',
+      allowUpdating: true,
+      allowAdding: true,
+    },
+    columns: [{
+      dataField: 'age',
+      validationRules: [{
+        type: 'async',
+        validationCallback(): JQueryPromise<unknown> {
+          return (window as any).deferred.promise();
+        },
+      }],
+    }, 'name', 'lastName'],
+  }));
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).deferred;
+  })();
+});
 
 test('Async Validation(Cell) - Only valid data is saved in a new row', async (t) => {
   const dataGrid = new DataGrid('#container');
