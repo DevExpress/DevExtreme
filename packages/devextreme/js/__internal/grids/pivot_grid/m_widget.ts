@@ -126,6 +126,8 @@ class PivotGrid extends Widget {
 
   _rowsAreaNavigation: RovingTabIndex | undefined;
 
+  _contextMenuOwnerNavigation: RovingTabIndex | undefined;
+
   _scrollLeft: any;
 
   _scrollTop: any;
@@ -712,8 +714,21 @@ class PivotGrid extends Widget {
         const items = that._getContextMenuItems(args);
         if (items) {
           actionArgs.component.option('items', items);
+          if (event.type === 'keydown') {
+            // A keyboard event carries no pointer coordinates, so the menu is
+            // anchored to the focused cell instead.
+            if (actionArgs.position) {
+              actionArgs.position.of = $(targetElement);
+            }
+          } else {
+            that._contextMenuOwnerNavigation = undefined;
+          }
           actionArgs.cancel = false;
         }
+      },
+      onHidden() {
+        that._contextMenuOwnerNavigation?.refocusFocusedItem();
+        that._contextMenuOwnerNavigation = undefined;
       },
       onItemClick(params) {
         params.itemData.onItemClick && params.itemData.onItemClick(params);
@@ -1034,6 +1049,23 @@ class PivotGrid extends Widget {
     this._getCellAreaNavigation(e.currentTarget)?.handleFocusIn(e.currentTarget);
   }
 
+  _handleCellContextMenuKeyDown(e) {
+    const cell = e.currentTarget;
+    const navigation = this._getCellAreaNavigation(cell);
+
+    if (!navigation || !this._contextMenu) {
+      return;
+    }
+
+    // The internal _show is called instead of the public show() because only
+    // _show accepts the initiating event that onPositioning builds items from.
+    this._contextMenu._show(e);
+
+    if (this._contextMenu.option('visible')) {
+      this._contextMenuOwnerNavigation = navigation;
+    }
+  }
+
   _handleCellKeyDown(e) {
     const direction = ARROW_KEY_DIRECTIONS[e.key];
     if (direction) {
@@ -1041,6 +1073,10 @@ class PivotGrid extends Widget {
       return;
     }
     if (e.repeat) {
+      return;
+    }
+    if (e.key === 'ContextMenu' || (e.shiftKey && e.key === 'F10')) {
+      this._handleCellContextMenuKeyDown(e);
       return;
     }
     if (e.key !== 'Enter' && e.key !== ' ') {
