@@ -1,7 +1,7 @@
 import Emitter from '@js/common/core/events/core/emitter';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
-  createEvent, eventData, eventDelta, isDxMouseWheelEvent, isTouchEvent, needSkipEvent,
+  createEvent, eventData, eventDelta, isDxMouseWheelEvent, isMouseEvent, isTouchEvent, needSkipEvent,
 } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
 import callOnce from '@js/core/utils/call_once';
@@ -87,7 +87,12 @@ const GestureEmitter = Emitter.inherit({
   },
 
   start(e) {
-    if (e._needSkipEvent || needSkipEvent(e)) {
+    // T1328053: macOS Ctrl+click opens the system context menu. Kept out of needSkipEvent()
+    // because importing m_devices into that low-level events util forces `new Devices()` into
+    // early module init and breaks init order (resizeCallbacks stops firing).
+    const isMacContextMenuClick = isMouseEvent(e) && Boolean(e.ctrlKey) && devices.real().mac;
+
+    if (e._needSkipEvent || needSkipEvent(e) || isMacContextMenuClick) {
       this._cancel(e);
       return;
     }
