@@ -425,7 +425,7 @@ test('DateRangeBox should be closed by press esc key when views wrapper in popup
 }));
 
 test('DateRangeBox should not be closed by press tab key on startDate input', async (t) => {
-  const dateRangeBox = new DateRangeBox('#container');
+  const dateRangeBox = new DateRangeBox('#dateRangeBox');
 
   await t
     .click(dateRangeBox.getStartDateBox().input);
@@ -451,20 +451,31 @@ test('DateRangeBox should not be closed by press tab key on startDate input', as
   await t
     .expect(dateRangeBox.option('opened'))
     .eql(false)
+    .expect(Selector('#lastFocusableElement').hasClass('dx-state-focused'))
+    .ok()
     .expect(dateRangeBox.isFocused)
     .notOk();
-}).before(async () => createWidget('dxDateRangeBox', {
-  value: ['2021/09/17', '2021/10/24'],
-  openOnFieldClick: true,
-  opened: true,
-  width: 500,
-  dropDownOptions: {
-    hideOnOutsideClick: false,
-  },
-  calendarOptions: {
-    focusStateEnabled: false,
-  },
-}));
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'dateRangeBox');
+  await appendElementTo('#container', 'div', 'lastFocusableElement');
+
+  await createWidget('dxButton', {
+    text: 'Last Focusable Element',
+  }, '#lastFocusableElement');
+
+  return createWidget('dxDateRangeBox', {
+    value: ['2021/09/17', '2021/10/24'],
+    openOnFieldClick: true,
+    opened: true,
+    width: 500,
+    dropDownOptions: {
+      hideOnOutsideClick: false,
+    },
+    calendarOptions: {
+      focusStateEnabled: false,
+    },
+  }, '#dateRangeBox');
+});
 
 test('DateRangeBox keyboard navigation via `tab` key if applyValueMode is useButtons, start -> end -> prev -> caption -> next -> views -> today -> apply -> cancel -> start -> end', async (t) => {
   const dateRangeBox = new DateRangeBox('#dateRangeBox');
