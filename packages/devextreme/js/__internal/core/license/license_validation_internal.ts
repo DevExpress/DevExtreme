@@ -3,7 +3,7 @@ import type { Token } from './types';
 
 export function parseLicenseKey(
   encodedKey: string | undefined,
-  allowAspNetProductCompatibility?: boolean,
+  acceptAspNetEntitlement?: boolean,
 ): Token {
   return undefined as unknown as Token;
 }

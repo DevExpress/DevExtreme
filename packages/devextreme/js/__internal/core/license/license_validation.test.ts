@@ -587,7 +587,7 @@ describe('assertedVersions integration', () => {
   });
 });
 
-describe('AspNet compatibility gate', () => {
+describe('AspNet entitlement gate', () => {
   const LCP_LICENSE = 'LCPv1mock-license';
 
   beforeEach(() => {
@@ -602,7 +602,7 @@ describe('AspNet compatibility gate', () => {
     clearAssertedVersions();
   });
 
-  it('passes AspNet compatibility=true when DevExtreme.AspNet assertion exists', () => {
+  it('accepts the AspNet entitlement when a DevExtreme.AspNet assertion exists', () => {
     const parseSpy = jest.spyOn(productKeyValidator, 'parseDevExpressProductKey').mockReturnValue({
       kind: TokenKind.verified,
       payload: {
@@ -618,7 +618,7 @@ describe('AspNet compatibility gate', () => {
     expect(parseSpy).toHaveBeenCalledWith(LCP_LICENSE, true);
   });
 
-  it('passes AspNet compatibility=false when there is no AspNet assertion', () => {
+  it('does not accept the AspNet entitlement when there is no AspNet assertion', () => {
     const parseSpy = jest.spyOn(productKeyValidator, 'parseDevExpressProductKey').mockReturnValue({
       kind: TokenKind.verified,
       payload: {
@@ -631,6 +631,75 @@ describe('AspNet compatibility gate', () => {
     assertDevExtremeVersion('DevExtreme.React', fullVersion);
     validateLicense(LCP_LICENSE, fullVersion);
 
+    expect(parseSpy).toHaveBeenCalledWith(LCP_LICENSE, false);
+  });
+
+  it('does not accept the AspNet entitlement for an unrelated package with a matching prefix', () => {
+    const parseSpy = jest.spyOn(productKeyValidator, 'parseDevExpressProductKey').mockReturnValue({
+      kind: TokenKind.verified,
+      payload: {
+        customerId: 'test',
+        maxVersionAllowed: 999,
+        format: 1,
+      },
+    });
+
+    assertDevExtremeVersion('DevExtreme.AspNetFake', fullVersion);
+    validateLicense(LCP_LICENSE, fullVersion);
+
+    expect(parseSpy).toHaveBeenCalledWith(LCP_LICENSE, false);
+  });
+
+  it('keeps version mismatch warnings for other packages when accepting the AspNet entitlement', () => {
+    const parseSpy = jest.spyOn(productKeyValidator, 'parseDevExpressProductKey').mockReturnValue({
+      kind: TokenKind.verified,
+      payload: {
+        customerId: 'test',
+        maxVersionAllowed: 999,
+        format: 1,
+      },
+    });
+
+    assertDevExtremeVersion('DevExpress.SomeOtherProduct', '1.2.3');
+    assertDevExtremeVersion('DevExtreme.AspNet.Core', fullVersion);
+    validateLicense(LCP_LICENSE, fullVersion);
+
+    expect(errors.log).toHaveBeenCalledWith(
+      'W0023',
+      expect.stringContaining('DevExpress.SomeOtherProduct'),
+    );
+    expect(parseSpy).toHaveBeenCalledWith(LCP_LICENSE, true);
+  });
+
+  it('does not revalidate an early JavaScript component after a later AspNet assertion', () => {
+    const parseSpy = jest.spyOn(productKeyValidator, 'parseDevExpressProductKey').mockReturnValue({
+      kind: TokenKind.corrupted,
+      error: 'product-kind',
+    });
+
+    validateLicense(LCP_LICENSE, fullVersion);
+    assertDevExtremeVersion('DevExtreme.AspNet.Core', fullVersion);
+    validateLicense(LCP_LICENSE, fullVersion);
+
+    expect(parseSpy).toHaveBeenCalledTimes(1);
+    expect(parseSpy).toHaveBeenCalledWith(LCP_LICENSE, false);
+  });
+
+  it('does not revalidate an early JavaScript component whose license is valid without the AspNet entitlement', () => {
+    const parseSpy = jest.spyOn(productKeyValidator, 'parseDevExpressProductKey').mockReturnValue({
+      kind: TokenKind.verified,
+      payload: {
+        customerId: 'test',
+        maxVersionAllowed: 999,
+        format: 1,
+      },
+    });
+
+    validateLicense(LCP_LICENSE, fullVersion);
+    assertDevExtremeVersion('DevExtreme.AspNet.Core', fullVersion);
+    validateLicense(LCP_LICENSE, fullVersion);
+
+    expect(parseSpy).toHaveBeenCalledTimes(1);
     expect(parseSpy).toHaveBeenCalledWith(LCP_LICENSE, false);
   });
 });
