@@ -50,6 +50,14 @@
         "{projectRoot}/js/__internal/core/localization/cldr-data"
       ]
     },
+    "build:community-localization": {
+      "cache": false,
+      "executor": "devextreme-nx-infra-plugin:generate-community-locales",
+      "options": {
+        "messagesDir": "./js/localization/messages",
+        "defaultLocale": "en"
+      }
+    },
     "build:localization": {
       "cache": true,
       "executor": "nx:run-commands",
