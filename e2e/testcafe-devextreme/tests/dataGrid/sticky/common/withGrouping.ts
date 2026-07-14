@@ -292,7 +292,7 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
 test.meta({
   browserSize: [900, 800],
   themes: ['generic.light', 'material.blue.light'],
-})('DataGrid - Expand/collapse icon is misaligned and a group row gets a white background when focused if there is a fixed column (T1303478)', async (t) => {
+})('Focused group row keeps focused background and centered expand icon with fixed columns (T1303478)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
