@@ -1,6 +1,7 @@
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import CardView from 'devextreme-testcafe-models/cardView';
 import TreeView from 'devextreme-testcafe-models/treeView';
+import { MouseUpEvents, MouseAction } from '../../../helpers/mouseUpEvents';
 
 const HEADER_DROP_OFFSET_Y = 5;
 
@@ -72,9 +73,12 @@ export const dragToHeaderPanel = async (
   cardView: CardView,
   columnElement: Selector,
   gapIndex: number,
+  isNoOp = false,
 ): Promise<void> => {
   const headers = cardView.getHeaders();
   const columnsNum = await headers.getHeaderItemsElements().count;
+
+  await MouseUpEvents.disable(MouseAction.dragToElement);
 
   if (gapIndex < columnsNum) {
     const insertBeforeColumn = headers.getHeaderItemNth(gapIndex).element;
@@ -84,6 +88,8 @@ export const dragToHeaderPanel = async (
       columnElement,
       insertBeforeColumn,
       {
+        offsetX: 5,
+        offsetY: 5,
         destinationOffsetX: -(Math.floor(width) + 3), // 3px left of the left edge
         destinationOffsetY: HEADER_DROP_OFFSET_Y,
         speed: 0.5,
@@ -97,6 +103,8 @@ export const dragToHeaderPanel = async (
       columnElement,
       insertAfterColumn,
       {
+        offsetX: 5,
+        offsetY: 5,
         destinationOffsetX: (Math.floor(width) + 3), // 3px right of the right edge
         destinationOffsetY: HEADER_DROP_OFFSET_Y,
         speed: 0.5,
@@ -104,7 +112,19 @@ export const dragToHeaderPanel = async (
     );
   }
 
-  await t.wait(300);
+  if (!isNoOp) {
+    await t
+      .expect(cardView.getHeaderPanel().getDropPlaceholder().exists)
+      .ok();
+  }
+
+  await MouseUpEvents.enable(MouseAction.dragToElement);
+
+  await t.dispatchEvent(columnElement, 'mouseup');
+
+  await t
+    .expect(Selector(SELECTORS.dragging).exists)
+    .notOk();
 };
 
 export const dragToColumnChooser = async (
@@ -119,9 +139,7 @@ export const dragToColumnChooser = async (
 
   await t
     .expect(Selector(SELECTORS.dragging).exists)
-    .notOk({ timeout: DRAG_ASSERTION_TIMEOUT })
-    .expect(cardView.isReady())
-    .ok({ timeout: DRAG_ASSERTION_TIMEOUT });
+    .notOk();
 };
 
 export const arrayMoveToGap = (arr: number[], index: number, gapIndex: number): number[] => {

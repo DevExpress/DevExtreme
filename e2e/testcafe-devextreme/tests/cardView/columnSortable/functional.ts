@@ -99,7 +99,10 @@ fixture.disablePageReloads`CardView - ColumnSortable.Functional`
 
       const columnElement = getColumnItem(cardView, columnIndex);
 
-      await dragToHeaderPanel(t, cardView, columnElement, gapIndex);
+      // dropping next to the dragged column is a no-op, so no placeholder appears
+      const isNoOp = gapIndex === columnIndex || gapIndex === columnIndex + 1;
+
+      await dragToHeaderPanel(t, cardView, columnElement, gapIndex, isNoOp);
 
       await expectColumns(t, cardView, expectedColumns);
     }).before(async () => createWidget('dxCardView', {
@@ -186,7 +189,10 @@ fixture.disablePageReloads`CardView - ColumnSortable.Functional`
     const cardView = new CardView('#container');
     const columnElement = getColumnItem(cardView, draggingColumnIndex);
 
-    await dragToHeaderPanel(t, cardView, columnElement, gapIndex);
+    // dropping next to the dragged column is a no-op, so no placeholder appears
+    const isNoOp = gapIndex === draggingColumnIndex || gapIndex === draggingColumnIndex + 1;
+
+    await dragToHeaderPanel(t, cardView, columnElement, gapIndex, isNoOp);
 
     await expectColumns(t, cardView, expectedColumns);
   }).before(async () => createWidget('dxCardView', {
