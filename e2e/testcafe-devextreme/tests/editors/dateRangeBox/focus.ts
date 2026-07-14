@@ -181,7 +181,7 @@ test('onFocusIn should be called only after first click on drop down button', as
   })();
 });
 
-test.meta({ unstable: true })('onFocusIn should be called only on focus of startDate input', async (t) => {
+test('onFocusIn should be called only on focus of startDate input', async (t) => {
   const dateRangeBox = new DateRangeBox('#container');
 
   await t

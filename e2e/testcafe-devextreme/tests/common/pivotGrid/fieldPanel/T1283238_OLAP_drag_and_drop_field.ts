@@ -6,23 +6,18 @@ import url from '../../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../../helpers/themeUtils';
 import { OLAPApiMock } from '../apiMocks/OLAP_api.mock';
 
-// After drag-n-drop the dragged field chip may keep focus depending on timing,
-// and its focus ring does not match the etalon (unstable in CI)
 const blurActiveElement = ClientFunction(() => {
   (document.activeElement as HTMLElement | null)?.blur();
 });
 
 fixture.disablePageReloads`pivotGrid_olap_drag-n-drop`
-  // NOTE: '../../container.html' pointed to a nonexistent tests/common/container.html;
-  // the fixture only worked when a page from a previous fixture was already loaded
-  // (disablePageReloads) and failed when it ran first in a fresh browser session
   .page(url(__dirname, '../../../container.html'))
   .requestHooks(OLAPApiMock);
 
 const PIVOT_GRID_SELECTOR = '#container';
 
 [true, false].forEach((showRowGrandTotals) => {
-  test.meta({ unstable: true })(`Empty table has one ${showRowGrandTotals ? 'total' : 'empty'} row after drag-n-drop for paginated data`, async (t) => {
+  test(`Empty table has one ${showRowGrandTotals ? 'total' : 'empty'} row after drag-n-drop for paginated data`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);

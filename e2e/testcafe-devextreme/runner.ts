@@ -74,6 +74,10 @@ interface QuarantineEntry {
 
 // test name -> fixture files ('' = match any file, for entries without "file")
 function readQuarantinedTests(): Map<string, string[]> {
+  if (!fs.existsSync(QUARANTINE_FILE)) {
+    return new Map<string, string[]>();
+  }
+
   const { tests } = JSON.parse(fs.readFileSync(QUARANTINE_FILE, 'utf8'));
   const result = new Map<string, string[]>();
 
@@ -157,8 +161,6 @@ function writeTestsReport(reportPath: string, tests: Set<string>, failedCount?: 
   fs.mkdirSync(path.dirname(reportPath), { recursive: true });
   fs.writeFileSync(
     reportPath,
-    // failedCount can exceed tests.size: failures in test.before hooks
-    // don't reach the test.after hook, so their names are unknown
     JSON.stringify({ tests: [...tests], failedCount: failedCount ?? tests.size }, null, 2),
   );
 }
@@ -190,8 +192,6 @@ async function main() {
     );
 
     const quarantinedTests = readQuarantinedTests();
-    // test.meta({ unstable }) is the legacy marker; quarantine.json is the registry.
-    // Matching respects the fixture file: same-named tests in other files stay active.
     const isQuarantined = (testNameArg: string, fixturePath: string, testMeta?: any): boolean => {
       if (testMeta?.unstable) {
         return true;
@@ -333,9 +333,6 @@ async function main() {
         test: {
           before: async (t: TestController) => {
             if (forcePageReloads) {
-              // Fresh page per test even for fixtures with disablePageReloads:
-              // leftover DOM/window state from a previous test is a common
-              // source of cascading failures in the quarantine run
               const href = await ClientFunction(
                 () => window.location.href,
               ).with({ boundTestRun: t })();
@@ -392,19 +389,15 @@ async function main() {
       runOptions.disableScreenshots = true;
     }
 
-    // First run - all tests
     const runner = createRunner(false);
     let failedCount = await retry(() => runner.run(runOptions), LAUNCH_RETRY_ATTEMPTS);
 
-    // Retry failed tests multiple times if enabled and there are failures
     if (args.retryFailed && failedTests.size > 0 && failedCount > 0) {
       const initialFailedCount = failedTests.size;
       let attemptsLeft = retryAttempts;
 
       while (attemptsLeft > 0 && failedCount > 0) {
         if (failedTests.size === 0) {
-          // Failures in test.before hooks don't reach the test.after hook,
-          // so their names are unknown - retrying would rerun the whole suite.
           // eslint-disable-next-line no-console
           console.info('Failed tests could not be identified (hook failures) - skipping retries.');
           break;
