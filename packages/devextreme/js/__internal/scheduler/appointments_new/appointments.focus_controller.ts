@@ -1,8 +1,10 @@
 import $ from '@js/core/renderer';
+import { noop } from '@js/core/utils/common';
 import type { DxEvent } from '@js/events';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
 import { focus } from '@ts/events/m_short';
 
+import { isFocusLost } from '../utils/is_focus_lost';
 import { getRawAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 import type { SortedEntity } from '../view_model/types';
 import type { BaseAppointmentView } from './appointment/base_appointment';
@@ -18,6 +20,8 @@ export class AppointmentsFocusController {
   private focusableSortedIndex = 0;
 
   private needRestoreFocusIndex = -1;
+
+  private pendingDeleteFocusSortedIndex = -1;
 
   private get sortedItems(): SortedEntity[] {
     return this.appointments.option().getSortedItems();
@@ -83,6 +87,48 @@ export class AppointmentsFocusController {
     }
   }
 
+  public onViewItemsRendered(): void {
+    const pendingIndex = this.pendingDeleteFocusSortedIndex;
+    this.pendingDeleteFocusSortedIndex = -1;
+
+    this.resetTabIndex();
+
+    if (pendingIndex < 0) {
+      return;
+    }
+
+    Promise.resolve().then(() => {
+      this.restoreFocusAfterDelete(pendingIndex);
+    }).catch(noop);
+  }
+
+  private restoreFocusAfterDelete(sortedIndex: number): void {
+    if (!isFocusLost()) {
+      return;
+    }
+
+    const viewItem = this.findNearestViewItem(sortedIndex);
+
+    if (viewItem) {
+      this.focusViewItem(viewItem);
+      return;
+    }
+
+    this.appointments.option().focusFallbackAfterDelete();
+  }
+
+  private findNearestViewItem(sortedIndex: number): ViewItem | undefined {
+    for (let index = sortedIndex; index >= 0; index -= 1) {
+      const viewItem = this.appointments.getViewItemBySortedIndex(index);
+
+      if (viewItem) {
+        return viewItem;
+      }
+    }
+
+    return undefined;
+  }
+
   public resetTabIndex(newFocusableIndex?: number): void {
     if (this.needRestoreFocusIndex >= 0) {
       const viewItem = this.appointments.getViewItemBySortedIndex(
@@ -127,6 +173,7 @@ export class AppointmentsFocusController {
     if (!allowDelete) { return; }
 
     const appointmentViewItem = viewItem as BaseAppointmentView;
+    this.pendingDeleteFocusSortedIndex = appointmentViewItem.option().sortedIndex;
     onDeleteKeyPress({
       appointmentData: appointmentViewItem.appointmentData,
       targetedAppointmentData: appointmentViewItem.targetedAppointmentData,
@@ -176,7 +223,7 @@ export class AppointmentsFocusController {
     }
   }
 
-  private focusViewItem(viewItem: ViewItem): void {
+  public focusViewItem(viewItem: ViewItem): void {
     this.resetTabIndex(viewItem.option().sortedIndex);
     focus.trigger(viewItem?.$element());
   }

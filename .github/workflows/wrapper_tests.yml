@@ -192,7 +192,7 @@ jobs:
             ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.framework }}-${{ github.sha }}-
             ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.framework }}-
             ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
-            ${{ runner.os }}-nx-v2-
+            ${{ runner.os }}-nx-v2-${{ github.workflow }}-build-
 
           lookup-only: true
 
@@ -227,12 +227,12 @@ jobs:
             ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.framework }}-${{ github.sha }}-
             ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.framework }}-
             ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
-            ${{ runner.os }}-nx-v2-
+            ${{ runner.os }}-nx-v2-${{ github.workflow }}-build-
 
       - name: Download Browser
         if: matrix.framework == 'angular'
         run: |
-          PUPPETEER_CMD="browsers install chrome@130.0.6723.69"
+          PUPPETEER_CMD="browsers install chrome@149.0.7827.22"
           pnpm --filter devextreme-angular exec puppeteer $PUPPETEER_CMD
 
       - name: Test ${{ matrix.framework }}

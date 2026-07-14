@@ -400,7 +400,6 @@ editingModes.forEach((mode) => {
           await dataGrid.apiCellValue(0, 0, 'modified');
         }
 
-        // eslint-disable-next-line no-restricted-syntax
         for (const columnInfo of columnInfos) {
           const cell = dataGrid.getDataCell(0, columnInfo.columnIndex);
           const editor = form
@@ -418,7 +417,6 @@ editingModes.forEach((mode) => {
           await t.click(saveButton, { offsetX: 5, offsetY: 5 });
         }
 
-        // eslint-disable-next-line no-restricted-syntax
         for (const columnInfo of expectedResult) {
           await checkSavedCell(
             t,
@@ -461,7 +459,6 @@ editingModes.forEach((mode) => {
           { columnIndex: 5, dataField: 'calculated', newValue: '9' },
         ];
 
-        // eslint-disable-next-line no-restricted-syntax
         for (const resultColumnInfo of expectedColumnResult) {
           await checkSavedCell(
             t,
@@ -498,7 +495,6 @@ editingModes.forEach((mode) => {
         await t.expect(dataGrid.isReady()).ok();
         await moveToFirstCellEditor(t, mode);
 
-        // eslint-disable-next-line no-restricted-syntax
         for (const columnInfo of columnInfos) {
           const cell = dataGrid.getDataCell(0, columnInfo.columnIndex);
           const editor = form
@@ -523,7 +519,6 @@ editingModes.forEach((mode) => {
           }
         }
 
-        // eslint-disable-next-line no-restricted-syntax
         for (const columnInfo of expectedResult) {
           await checkSavedCell(
             t,
@@ -548,7 +543,6 @@ editingModes.forEach((mode) => {
       await t.expect(dataGrid.isReady()).ok();
       await moveToFirstCellEditor(t, mode);
 
-      // eslint-disable-next-line no-restricted-syntax
       for (const columnInfo of textColumnInfos) {
         const cell = dataGrid.getDataCell(0, columnInfo.columnIndex);
         const editor = form ? new CellEditor(form.getItem(columnInfo.dataField)) : cell.getEditor();
@@ -575,13 +569,12 @@ editingModes.forEach((mode) => {
   }));
 
   [true, false].forEach((repaintChangesOnly) => {
-    test(
+    test.meta({ unstable: mode === 'batch' && !repaintChangesOnly })(
       `Update cell value and focus next cell, mode: ${mode}, repaintChangesOnly: ${repaintChangesOnly}, useKeyboard: false`,
       async (t) => {
         const form = getEditForm(mode);
         let modifiedCellCount = mode === 'batch' ? 1 : 0;
 
-        // eslint-disable-next-line no-restricted-syntax
         for (const columnInfo of textColumnInfos) {
           const cell = dataGrid.getDataCell(0, columnInfo.columnIndex);
           const editor = form

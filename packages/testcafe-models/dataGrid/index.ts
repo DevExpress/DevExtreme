@@ -627,9 +627,25 @@ export default class DataGrid extends GridCore {
   apiGetTopVisibleRowData(): Promise<any> {
     const { getInstance } = this;
     return ClientFunction(() => {
-      const dataGrid = getInstance() as any;
-      return dataGrid.getTopVisibleRowData();
+      return (getInstance() as any).getTopVisibleRowData();
     }, { dependencies: { getInstance } })();
+  }
+
+  apiGetTopVisibleRowKey(): Promise<any> {
+    const { getInstance } = this;
+    return ClientFunction(() => {
+      const dataGrid = getInstance() as any;
+
+      return dataGrid.keyOf(dataGrid.getTopVisibleRowData());
+    }, { dependencies: { getInstance } })();
+  }
+
+  apiTotalCount(): Promise<number> {
+    const { getInstance } = this;
+    return ClientFunction(
+      () => (getInstance() as DataGridInstance).totalCount(),
+      { dependencies: { getInstance } },
+    )();
   }
 
   apiUpdateDimensions(): Promise<void> {

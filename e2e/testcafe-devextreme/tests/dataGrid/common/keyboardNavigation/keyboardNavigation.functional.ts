@@ -1780,7 +1780,7 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
     columns: ['a', 'b'],
   }));
 
-  test(`${editMode} mode - Cells in a modified row should be updated on Tab (T898356)`, async (t) => {
+  test.meta({ unstable: editMode === 'Cell' })(`${editMode} mode - Cells in a modified row should be updated on Tab (T898356)`, async (t) => {
     const dataGrid = new DataGrid('#container') as any;
     const cell00 = dataGrid.getDataCell(0, 0);
     const editor00 = cell00.getEditor();
@@ -6758,7 +6758,7 @@ test('Focus should be set to the grid to allow keyboard navigation when the focu
 });
 
 [true, false].forEach((focusedRowEnabled) => {
-  test(`Focus should return to the last active cell when re-entering the rowsview via kbn if focusedRowEnabled=${focusedRowEnabled} (T1308919)`, async (t) => {
+  test.meta({ unstable: focusedRowEnabled })(`Focus should return to the last active cell when re-entering the rowsview via kbn if focusedRowEnabled=${focusedRowEnabled} (T1308919)`, async (t) => {
     // arrange
     const button = new Button('#otherContainer');
     const dataGrid = new DataGrid('#container');

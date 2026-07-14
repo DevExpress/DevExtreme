@@ -9,7 +9,7 @@ import { testScreenshot } from '../../../helpers/themeUtils';
 fixture.disablePageReloads`Selection`
   .page(url(__dirname, '../../container.html'));
 
-test('selectAll state should be correct after unselect item if refresh(true) is called inside onSelectionChanged (T1048081)', async (t) => {
+test.meta({ unstable: true })('selectAll state should be correct after unselect item if refresh(true) is called inside onSelectionChanged (T1048081)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   const firstRowSelectionCheckBox = new CheckBox(dataGrid.getDataCell(0, 0).getEditor().element);

@@ -1,6 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
 import createTestCafe, { ClientFunction } from 'testcafe';
 import * as fs from 'fs';
+import * as path from 'path';
 import * as process from 'process';
 import parseArgs from 'minimist';
 import { DEFAULT_BROWSER_SIZE } from './helpers/const';
@@ -14,7 +15,7 @@ import { getCurrentTheme } from './helpers/themeUtils';
 
 const LAUNCH_RETRY_ATTEMPTS = 3;
 const LAUNCH_RETRY_TIMEOUT = 10000;
-const FAILED_TESTS_RETRY_ATTEMPTS = 2;
+const FAILED_TESTS_RETRY_ATTEMPTS = 0;
 
 const wait = async (
   timeout: number,
@@ -53,9 +54,40 @@ interface ParsedArgs {
   platform: string;
   theme: string;
   shadowDom: boolean;
-  skipUnstable: boolean;
+  skipQuarantined: boolean;
+  onlyQuarantined: boolean;
   disableScreenshots: boolean;
   retryFailed: boolean;
+  testsFile: string;
+  reportFlaky: string;
+  reportFailures: string;
+  retryAttempts: number;
+  forcePageReloads: boolean;
+}
+
+const QUARANTINE_FILE = path.join(__dirname, 'quarantine.json');
+
+interface QuarantineEntry {
+  test: string;
+  file?: string;
+}
+
+// test name -> fixture files ('' = match any file, for entries without "file")
+function readQuarantinedTests(): Map<string, string[]> {
+  if (!fs.existsSync(QUARANTINE_FILE)) {
+    return new Map<string, string[]>();
+  }
+
+  const { tests } = JSON.parse(fs.readFileSync(QUARANTINE_FILE, 'utf8'));
+  const result = new Map<string, string[]>();
+
+  (tests as QuarantineEntry[]).forEach(({ test, file }) => {
+    const files = result.get(test) ?? [];
+    files.push(file ?? '');
+    result.set(test, files);
+  });
+
+  return result;
 }
 
 const getTestCafeConfig = (cache: boolean): Partial<TestCafeConfigurationOptions> => ({
@@ -112,11 +144,25 @@ function getArgs(): ParsedArgs {
       platform: '',
       theme: '',
       shadowDom: false,
-      skipUnstable: true,
+      skipQuarantined: true,
+      onlyQuarantined: false,
       disableScreenshots: false,
       retryFailed: true,
+      testsFile: '',
+      reportFlaky: '',
+      reportFailures: '',
+      retryAttempts: FAILED_TESTS_RETRY_ATTEMPTS,
+      forcePageReloads: false,
     },
   }) as ParsedArgs;
+}
+
+function writeTestsReport(reportPath: string, tests: Set<string>, failedCount?: number): void {
+  fs.mkdirSync(path.dirname(reportPath), { recursive: true });
+  fs.writeFileSync(
+    reportPath,
+    JSON.stringify({ tests: [...tests], failedCount: failedCount ?? tests.size }, null, 2),
+  );
 }
 
 async function main() {
@@ -137,6 +183,26 @@ async function main() {
 
     const componentFolderArg = typeof args.componentFolder === 'string' ? args.componentFolder.trim() : '';
     const componentFolder = componentFolderArg ? `${componentFolderArg}/**` : '**';
+
+    const onlyQuarantined = `${args.onlyQuarantined}` === 'true';
+    const retryAttempts = Number(args.retryAttempts) || 0;
+    const forcePageReloads = `${args.forcePageReloads}` === 'true';
+    const testsFromFile = new Set<string>(
+      args.testsFile ? JSON.parse(fs.readFileSync(args.testsFile, 'utf8')).tests : [],
+    );
+
+    const quarantinedTests = readQuarantinedTests();
+    const isQuarantined = (testNameArg: string, fixturePath: string, testMeta?: any): boolean => {
+      if (testMeta?.unstable) {
+        return true;
+      }
+
+      const files = quarantinedTests.get(testNameArg);
+
+      return !!files?.some(
+        (fixtureFile) => !fixtureFile || fixturePath.replace(/\\/g, '/').endsWith(fixtureFile),
+      );
+    };
 
     if (fs.existsSync('./screenshots')) {
       fs.rmSync('./screenshots', { recursive: true });
@@ -190,17 +256,28 @@ async function main() {
         filters.push((name: string) => name === testName);
       }
 
+      if (testsFromFile.size > 0) {
+        filters.push((name: string) => testsFromFile.has(name));
+      }
+
       if (filterByFailedTests && testsToFilter && testsToFilter.size > 0) {
         filters.push((name: string) => testsToFilter.has(name));
       }
 
-      if (args.skipUnstable) {
+      if (onlyQuarantined) {
         filters.push((
-          _testName: string,
+          filterTestName: string,
           _fixtureName: string,
-          _fixturePath: string,
+          fixturePath: string,
           testMeta?: any,
-        ) => !(testMeta)?.unstable);
+        ) => isQuarantined(filterTestName, fixturePath, testMeta));
+      } else if (args.skipQuarantined) {
+        filters.push((
+          filterTestName: string,
+          _fixtureName: string,
+          fixturePath: string,
+          testMeta?: any,
+        ) => !isQuarantined(filterTestName, fixturePath, testMeta));
       }
 
       filters.push((
@@ -255,6 +332,14 @@ async function main() {
       hooks: {
         test: {
           before: async (t: TestController) => {
+            if (forcePageReloads) {
+              const href = await ClientFunction(
+                () => window.location.href,
+              ).with({ boundTestRun: t })();
+
+              await t.navigateTo(href);
+            }
+
             if (args.shadowDom) {
               await loadShadowDomExtension(t);
               await addShadowRootTree(t);
@@ -290,12 +375,10 @@ async function main() {
           after: async (t: TestController) => {
             await clearTestPage(t);
 
-            if (args.retryFailed) {
-              // @ts-expect-error ts-errors
-              const { test, errs } = t.testRun;
-              if (errs && errs.length > 0) {
-                failedTests.add(test.name);
-              }
+            // @ts-expect-error ts-errors
+            const { test, errs } = t.testRun;
+            if (errs && errs.length > 0) {
+              failedTests.add(test.name);
             }
           },
         },
@@ -306,25 +389,26 @@ async function main() {
       runOptions.disableScreenshots = true;
     }
 
-    // First run - all tests
     const runner = createRunner(false);
     let failedCount = await retry(() => runner.run(runOptions), LAUNCH_RETRY_ATTEMPTS);
 
-    // Retry failed tests multiple times if enabled and there are failures
     if (args.retryFailed && failedTests.size > 0 && failedCount > 0) {
       const initialFailedCount = failedTests.size;
-      const noRetryFolders = ['cardView', 'dataGrid', 'common'];
-      let attemptsLeft = noRetryFolders.some((folder) => componentFolderArg === folder || componentFolderArg.startsWith(`${folder}/`))
-        ? 0
-        : FAILED_TESTS_RETRY_ATTEMPTS;
+      let attemptsLeft = retryAttempts;
 
       while (attemptsLeft > 0 && failedCount > 0) {
-        const attemptNumber = FAILED_TESTS_RETRY_ATTEMPTS - attemptsLeft + 1;
+        if (failedTests.size === 0) {
+          // eslint-disable-next-line no-console
+          console.info('Failed tests could not be identified (hook failures) - skipping retries.');
+          break;
+        }
+
+        const attemptNumber = retryAttempts - attemptsLeft + 1;
 
         /* eslint-disable no-console */
         console.info('\n');
         console.info('='.repeat(60));
-        console.info(`RETRY ATTEMPT ${attemptNumber}/${FAILED_TESTS_RETRY_ATTEMPTS}`);
+        console.info(`RETRY ATTEMPT ${attemptNumber}/${retryAttempts}`);
         console.info(`Retrying ${failedTests.size} failed test(s)`);
         console.info('='.repeat(60));
         console.info('Failed tests:');
@@ -372,12 +456,31 @@ async function main() {
       console.info('FINAL RETRY RESULTS');
       console.info('='.repeat(60));
       console.info(`Initially failed: ${initialFailedCount}`);
-      console.info(`Total retry attempts used: ${FAILED_TESTS_RETRY_ATTEMPTS - attemptsLeft}`);
+      console.info(`Total retry attempts used: ${retryAttempts - attemptsLeft}`);
       console.info(`Final failing count: ${failedCount}`);
       console.info(`Successfully recovered: ${initialFailedCount - failedCount}`);
       console.info('='.repeat(60));
       console.info('\n');
       /* eslint-enable no-console */
+    }
+
+    if (args.reportFailures) {
+      writeTestsReport(args.reportFailures, failedTests, failedCount);
+    }
+
+    if (args.reportFlaky && failedCount === 1 && failedTests.size === 1) {
+      writeTestsReport(args.reportFlaky, failedTests);
+
+      /* eslint-disable no-console */
+      console.info('\n');
+      console.info('='.repeat(60));
+      console.info(`Single failed test "${[...failedTests][0]}" is treated as flaky.`);
+      console.info('It will be rerun in the "quarantine" job.');
+      console.info('='.repeat(60));
+      console.info('\n');
+      /* eslint-enable no-console */
+
+      failedCount = 0;
     }
 
     await testCafe.close();

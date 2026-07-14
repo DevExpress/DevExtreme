@@ -120,7 +120,7 @@ $header-panel-cell-date: null !default;
 
   @if $color == "saas" {
     $scheduler-cell-active-bg: color.adjust($base-bg, $lightness: 4.31%, $space: hsl) !default;
-    $scheduler-workspace-focused-cell-color: color.adjust($base-accent, $hue: -7deg, $saturation: -65.00%, $space: hsl, $lightness: -41.18%) !default;
+    $scheduler-workspace-focused-cell-color: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: -7deg, $saturation: -65.00%, $lightness: -41.18%) !default;
   }
 }
 

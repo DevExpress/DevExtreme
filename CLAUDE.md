@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 DevExtreme is an enterprise UI component suite for Angular, React, Vue, and jQuery. This is a large-scale monorepo (pnpm workspaces + Nx 22) containing the core library, framework wrappers, demos, themes, and test suites.
 
-**Required tooling:** Node.js 24.15.0, pnpm 11.6.0.
+**Required tooling:** Node.js 24.16.0, pnpm 11.9.0.
 
 ## Setup
 
@@ -53,9 +53,12 @@ Example: `pnpm exec jest --no-coverage --runInBand --selectProjects jsdom-tests 
 
 Jest tests for grid components live under `js/__internal/grids/` — typically in `__tests__/` subdirectories alongside the source (in `grid_core/`, `data_grid/`, and `tree_list/`).
 
-### QUnit tests (legacy, browser-based)
+### QUnit tests (browser-based)
 
-QUnit tests are not written for new code but used to verify existing grid behavior after refactoring. To run them:
+QUnit tests are browser-based. New QUnit tests are still written for most components. The exception is grid-based components (DataGrid, TreeList, etc.) and the Scheduler: 
+do not write new QUnit tests for those — cover new code with Jest instead, and use the existing QUnit tests only to verify behavior after refactoring. 
+
+To run QUnit tests:
 
 1. Ensure `pnpm run dev` is running (started manually in WebStorm)
 2. Open `http://localhost:20060/` in browser

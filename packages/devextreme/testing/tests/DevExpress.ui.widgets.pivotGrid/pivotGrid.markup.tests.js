@@ -123,7 +123,7 @@ QUnit.module('PivotGrid markup tests', () => {
         }
     });
 
-    QUnit.test('Expand control is a focusable button, td keeps native cell semantics', function(assert) {
+    QUnit.test('Expand control is a focusable button, td keeps its header cell role', function(assert) {
         if(!windowUtils.hasWindow()) {
             assert.ok(true, 'skipped on serverSide');
             return;
@@ -138,7 +138,7 @@ QUnit.module('PivotGrid markup tests', () => {
 
             assert.strictEqual($collapsedControl.attr('role'), 'button', 'control has role="button"');
             assert.strictEqual($collapsedControl.attr('tabindex'), '0', 'control is focusable');
-            assert.strictEqual($collapsedTd.attr('role'), undefined, 'td keeps native cell role');
+            assert.ok(['columnheader', 'rowheader'].includes($collapsedTd.attr('role')), 'td has a header cell role');
             assert.strictEqual($collapsedTd.attr('tabindex'), undefined, 'td is not in the tab order');
             assert.strictEqual($collapsedTd.attr('aria-expanded'), undefined, 'td has no aria-expanded');
         } finally {
@@ -183,8 +183,8 @@ QUnit.module('PivotGrid markup tests', () => {
 
             assert.ok($dataCell.length > 0, 'data cell exists');
             assert.strictEqual($dataCell.find('.dx-expand-icon-container').length, 0, 'no expand control in a non-expandable cell');
-            assert.strictEqual($dataCell.attr('role'), undefined, 'data cell has no role');
-            assert.strictEqual($dataCell.attr('tabindex'), undefined, 'data cell is not focusable');
+            assert.strictEqual($dataCell.attr('role'), 'gridcell', 'data cell has role="gridcell"');
+            assert.strictEqual($dataCell.attr('tabindex'), '0', 'first data cell is focusable to provide keyboard access to the scrollable data area');
         } finally {
             clock.restore();
         }
@@ -518,5 +518,116 @@ QUnit.module('PivotGrid accessibility markup', {
         } finally {
             stubs.forEach(s => s.restore());
         }
+    });
+
+    QUnit.test('Inner area tables and their thead/tbody have role="presentation"', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.expect(0);
+            return;
+        }
+
+        const pivotGrid = createPivotGrid({
+            width: 600, height: 400,
+            dataSource: createExpandableDataSource()
+        });
+        this.clock.tick(10);
+
+        const areaSelectors = [
+            'thead.dx-pivotgrid-horizontal-headers',
+            'tbody.dx-pivotgrid-vertical-headers',
+            '.dx-pivotgrid-area-data table'
+        ];
+
+        areaSelectors.forEach((selector) => {
+            const $element = pivotGrid.$element().find(selector);
+
+            assert.ok($element.length > 0, `${selector} exists`);
+            assert.strictEqual($element.attr('role'), 'presentation', `${selector} has role="presentation"`);
+        });
+    });
+
+    QUnit.test('Each row of an area table has role="row"', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.expect(0);
+            return;
+        }
+
+        const pivotGrid = createPivotGrid({
+            width: 600, height: 400,
+            dataSource: createExpandableDataSource()
+        });
+        this.clock.tick(10);
+
+        const $rows = pivotGrid.$element().find('.dx-pivotgrid-area table tr');
+
+        assert.ok($rows.length > 0, 'rows exist');
+        $rows.each((_, row) => {
+            assert.strictEqual(row.getAttribute('role'), 'row');
+        });
+    });
+
+    QUnit.test('Cells have role="columnheader"/"rowheader"/"gridcell" per area', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.expect(0);
+            return;
+        }
+
+        const pivotGrid = createPivotGrid({
+            width: 600, height: 400,
+            dataSource: createExpandableDataSource()
+        });
+        this.clock.tick(10);
+
+        const $columnHeaderCells = pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers td').not('.dx-white-space-column');
+        const $rowHeaderCells = pivotGrid.$element().find('.dx-pivotgrid-vertical-headers td').not('.dx-white-space-column');
+        const $dataCells = pivotGrid.$element().find('.dx-pivotgrid-area-data td');
+        const $whiteSpaceCells = pivotGrid.$element().find('.dx-white-space-column');
+
+        assert.ok($columnHeaderCells.length > 0, 'column header cells exist');
+        assert.ok($rowHeaderCells.length > 0, 'row header cells exist');
+        assert.ok($dataCells.length > 0, 'data cells exist');
+
+        $columnHeaderCells.each((_, cell) => assert.strictEqual(cell.getAttribute('role'), 'columnheader'));
+        $rowHeaderCells.each((_, cell) => assert.strictEqual(cell.getAttribute('role'), 'rowheader'));
+        $dataCells.each((_, cell) => assert.strictEqual(cell.getAttribute('role'), 'gridcell'));
+        $whiteSpaceCells.each((_, cell) => assert.strictEqual(cell.getAttribute('role'), null, 'white-space filler cell has no header role'));
+    });
+
+    QUnit.test('Data area\'s grid element has role="grid", aria-owns linking the area tables, and aria-rowcount/aria-colcount from the data source', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.expect(0);
+            return;
+        }
+
+        const pivotGrid = createPivotGrid({
+            width: 600, height: 400,
+            dataSource: createExpandableDataSource()
+        });
+        this.clock.tick(10);
+
+        const dataController = pivotGrid._dataController;
+        const columnsTableId = pivotGrid._columnsArea.tableElement().attr('id');
+        const rowsTableId = pivotGrid._rowsArea.tableElement().attr('id');
+        const dataTableId = pivotGrid._dataArea.tableElement().attr('id');
+        const $gridElement = pivotGrid._dataArea.tableElement().parent();
+
+        const ariaOwns = $gridElement.attr('aria-owns').split(' ');
+
+        assert.ok($gridElement.hasClass('dx-scrollable-content'), 'grid element is the data table\'s scrollable content wrapper');
+        assert.strictEqual($gridElement.attr('role'), 'grid', 'grid element has role="grid"');
+
+        [columnsTableId, rowsTableId, dataTableId].forEach((id) => {
+            assert.ok(id, 'table has an id');
+            assert.ok(ariaOwns.includes(id), `aria-owns includes ${id}`);
+        });
+
+        assert.strictEqual(
+            $gridElement.attr('aria-rowcount'),
+            String(dataController.totalRowCount())
+        );
+        assert.strictEqual(
+            $gridElement.attr('aria-colcount'),
+            String(dataController.totalColumnCount())
+        );
     });
 });

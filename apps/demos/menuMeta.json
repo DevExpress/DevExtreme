@@ -4,7 +4,6 @@
     "Groups": [
       {
         "Name": "Data Grid",
-        "Badge": "Updated",
         "Equivalents": "dxDataGrid, dx-data-grid",
         "Groups": [
           {
@@ -66,7 +65,6 @@
       {
         "Name": "Chat",
         "Equivalents": "dxChat, dx-chat, chat",
-        "Badge": "Updated",
         "Groups": [
           {
             "Name": "AI and Chatbot Integration",
@@ -171,7 +169,6 @@
     "Groups": [
       {
         "Name": "Data Grid",
-        "Badge": "Updated",
         "Equivalents": "dxDataGrid, dx-data-grid",
         "Groups": [
           {
@@ -3760,7 +3757,6 @@
                 "Title": "Timeline",
                 "Name": "Timelines",
                 "Widget": "Scheduler",
-                "Badge": "Updated",
                 "MvcAdditionalFiles": [
                   "/Models/EmployeeTask.cs",
                   "/Models/SampleData/TimelineTasks.cs"
@@ -3817,7 +3813,6 @@
                 "Title": "Resolve Time Conflicts",
                 "Name": "ResolveTimeConflicts",
                 "Widget": "Scheduler",
-                "Badge": "New",
                 "MvcAdditionalFiles": [
                   "/Models/Scheduler/ResolveTimeConflicts.cs"
                 ],
@@ -3827,7 +3822,6 @@
                 "Title": "Create from Selection",
                 "Name": "CreateFromSelection",
                 "Widget": "Scheduler",
-                "Badge": "New",
                 "DemoType": "Web"
               }
             ]
@@ -3889,7 +3883,6 @@
                 "Title": "Hidden Week Days",
                 "Name": "HiddenDays",
                 "Widget": "Scheduler",
-                "Badge": "New",
                 "Equivalents": "",
                 "DemoType": "Web"
               }
@@ -4313,7 +4306,6 @@
                 "Name": "Overview",
                 "DocUrl": "Guide/UI_Components/Chat/Overview/",
                 "Widget": "Chat",
-                "Badge": "Updated",
                 "DemoType": "Web",
                 "MvcAdditionalFiles": [
                   "/Models/SampleData/ChatData.cs",
@@ -6067,7 +6059,6 @@
                 "Name": "ItemSelectionAndCustomization",
                 "DocUrl": "Guide/UI_Components/TreeView/Select_Nodes/",
                 "Widget": "TreeView",
-                "Badge": "Updated",
                 "MvcAdditionalFiles": [
                   "/Models/TreeView/Employee.cs",
                   "/Models/SampleData/TreeViewHierarchicalDataForSelection.cs"

@@ -9,7 +9,7 @@ const injectDescriptions = () => {
     sh.pushd(ROOT_DIR);
 
     const DOCUMENTATION_TEMP_DIR = path.join(ROOT_DIR, '..', 'doc_tmp');
-    sh.exec(`git clone -b ${MAJOR_VERSION} --depth 1 --config core.longpaths=true https://github.com/DevExpress/devextreme-documentation.git ${DOCUMENTATION_TEMP_DIR}`);
+    sh.exec(`git clone -b ${DEFAULT_BRANCH_NAME} --depth 1 --config core.longpaths=true https://github.com/DevExpress/devextreme-documentation.git ${DOCUMENTATION_TEMP_DIR}`);
 
     sh.pushd(DOCUMENTATION_TEMP_DIR);
     sh.exec('pnpm i --frozen-lockfile');
@@ -31,8 +31,7 @@ const packAndCopy = (outputDir: string) => {
     sh.cp('*.tgz', outputDir);
 }
 
-const monorepoVersion = sh.exec('pnpm pkg get version', { silent: true }).stdout.replaceAll('"', '');
-const MAJOR_VERSION = monorepoVersion.split('.').slice(0, 2).join('_');
+const DEFAULT_BRANCH_NAME = 'main';
 
 sh.cd(ROOT_DIR);
 
