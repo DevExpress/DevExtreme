@@ -12,7 +12,7 @@ import { AIChat } from '../ai_chat/ai_chat';
 import type { AIChatOptions } from '../ai_chat/types';
 import { View } from '../m_modules';
 import type { AIAssistantController } from './ai_assistant_controller';
-import { AI_ASSISTANT_POPUP_HEIGHT, AI_ASSISTANT_POPUP_OFFSET, CLASSES } from './const';
+import { AI_ASSISTANT_POPUP_OFFSET, CLASSES } from './const';
 import type { AIMessage } from './types';
 import {
   createConfirmDialog,
@@ -76,7 +76,6 @@ export class AIAssistantView extends View {
     return {
       title: this.option('aiAssistant.title') ?? '',
       position,
-      height: AI_ASSISTANT_POPUP_HEIGHT,
       onShowing: (): void => {
         this.visibilityChanged?.fire(true);
       },
