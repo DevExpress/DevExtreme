@@ -17,6 +17,12 @@ const blurActiveElement = ClientFunction(() => {
   activeElement?.blur();
 });
 
+// TestCafe's pressKey does not support function keys (F1-F12), so the Shift+F10
+// shortcut is reproduced by dispatching the keydown event on the focused cell.
+const SHIFT_F10_KEYDOWN = {
+  key: 'F10', code: 'F10', shiftKey: true, bubbles: true, cancelable: true,
+};
+
 const createConfig = () => ({
   width: 800,
   allowExpandAll: true,
@@ -57,7 +63,7 @@ test('Shift+F10 should open the context menu anchored to the focused row header 
     .pressKey('tab tab')
     .expect(cell.focused)
     .ok('a row header cell is focused')
-    .pressKey('shift+f10');
+    .dispatchEvent(cell, 'keydown', SHIFT_F10_KEYDOWN);
 
   const menu = Selector(CONTEXT_MENU_SELECTOR);
 
@@ -89,7 +95,7 @@ test('Shift+F10 should open the context menu for a column header cell', async (t
     .pressKey('tab')
     .expect(columnsArea.getCell(0, 0).focused)
     .ok('a column header cell is focused')
-    .pressKey('shift+f10');
+    .dispatchEvent(columnsArea.getCell(0, 0), 'keydown', SHIFT_F10_KEYDOWN);
 
   await t
     .expect(Selector(CONTEXT_MENU_SELECTOR).visible)
@@ -128,7 +134,7 @@ test('Escape should close the menu and return focus to the originating cell', as
     .pressKey('tab tab')
     .expect(cell.focused)
     .ok('a row header cell is focused')
-    .pressKey('shift+f10')
+    .dispatchEvent(cell, 'keydown', SHIFT_F10_KEYDOWN)
     .expect(Selector(CONTEXT_MENU_SELECTOR).focused)
     .ok('the context menu is opened and focused');
 
@@ -151,7 +157,7 @@ test('Menu items should be operable by keyboard and focus should return to the c
     .pressKey('tab tab')
     .expect(rowsArea.getCellByPosition(0, 0).focused)
     .ok('a row header cell is focused')
-    .pressKey('shift+f10')
+    .dispatchEvent(rowsArea.getCellByPosition(0, 0), 'keydown', SHIFT_F10_KEYDOWN)
     .expect(Selector(CONTEXT_MENU_SELECTOR).focused)
     .ok('the context menu is opened and focused')
     .pressKey('down')
