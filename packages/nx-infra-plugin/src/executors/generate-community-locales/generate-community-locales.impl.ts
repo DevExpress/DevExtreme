@@ -34,8 +34,7 @@ function normalizeLocaleFile(
 
   defaultDictionaryKeys.forEach((key) => {
     let replaceValue: string | null = null;
-    // eslint-disable-next-line no-prototype-builtins
-    if (dictionary.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(dictionary, key)) {
       const val = dictionary[key];
       if (!val.includes(TODO_MARKER)) {
         replaceValue = val.replace(/"/g, '\\"');
