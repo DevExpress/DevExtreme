@@ -169,30 +169,33 @@ async function runWebpackWatch(
         ...(process.platform === 'win32' ? { poll: 1000 } : {}),
       },
       (err, stats) => {
-      if (isClosing) {
-        return;
-      }
-      if (err) {
-        logger.error(err.message);
-        return;
-      }
-      if (!stats) {
-        return;
-      }
-      if (stats.hasErrors()) {
-        logger.error(collectWebpackErrorMessages(stats));
-        return;
-      }
+        if (isClosing) {
+          return;
+        }
+        if (err) {
+          logger.error(err.message);
+          return;
+        }
+        if (!stats) {
+          return;
+        }
+        if (stats.hasErrors()) {
+          logger.error(collectWebpackErrorMessages(stats));
+          return;
+        }
 
-      logWebpackWarnings(stats);
+        logWebpackWarnings(stats);
 
-      void onSuccess(stats).then(() => {
-        logger.info('bundle watch: rebuild complete');
-      }).catch((error) => {
-        const message = error instanceof Error ? error.message : String(error);
-        logger.error(`bundle watch post-build failed: ${message}`);
-      });
-    });
+        void onSuccess(stats)
+          .then(() => {
+            logger.info('bundle watch: rebuild complete');
+          })
+          .catch((error) => {
+            const message = error instanceof Error ? error.message : String(error);
+            logger.error(`bundle watch post-build failed: ${message}`);
+          });
+      },
+    );
 
     logger.info('bundle watch mode is watching for changes...');
 
