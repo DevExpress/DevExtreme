@@ -137,6 +137,21 @@ export const addFocusableElementBefore = ClientFunction((
   return button.id;
 });
 
+export const addFocusableElementAfter = ClientFunction((
+  targetSelector: string,
+  elementId = 'focusable-end',
+) => {
+  const existing = document.getElementById(elementId);
+  existing?.remove();
+
+  const target = document.querySelector(targetSelector);
+  const button = document.createElement('button');
+  button.id = elementId;
+  button.textContent = 'End';
+  target?.parentElement?.insertBefore(button, target.nextElementSibling);
+  return button.id;
+});
+
 export const hasHorizontalScroll = ClientFunction((selector) => {
   const element = selector();
 
