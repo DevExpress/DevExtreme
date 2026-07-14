@@ -47,4 +47,8 @@ export class AIChatModel {
       .find(`.${CLASSES.messageRegenerateButton}`)
       .get(0) as HTMLElement;
   }
+
+  public getRegenerateButtonTitle(messageIndex: number): string | null {
+    return this.getRegenerateButton(messageIndex).getAttribute('title');
+  }
 }
