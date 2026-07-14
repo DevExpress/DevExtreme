@@ -213,7 +213,8 @@ describe('ConcatenateFilesExecutor E2E', () => {
         await run;
       }
       (process as unknown as { once: typeof process.once }).once = originalOnce;
-      delete (globalThis as unknown as { __concatWatchHandler?: WatchHandler }).__concatWatchHandler;
+      delete (globalThis as unknown as { __concatWatchHandler?: WatchHandler })
+        .__concatWatchHandler;
     }
   });
 });
