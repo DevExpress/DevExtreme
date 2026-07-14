@@ -14,7 +14,7 @@ test.meta({ browserSize: [300, 400] })('SelectBox without data', async (t) => {
 
   await t.click(selectBox.element);
 
-  await testScreenshot(t, takeScreenshot, 'SelectBox no data1.png');
+  await testScreenshot(t, takeScreenshot, 'SelectBox no data.png');
 
   await t.click(await selectBox.getPopup());
 
