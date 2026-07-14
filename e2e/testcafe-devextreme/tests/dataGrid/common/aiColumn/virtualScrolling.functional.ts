@@ -157,9 +157,9 @@ test('DataGrid should send an AI request for rendered rows after scrolling with 
 
   // assert
   await t
-    .expect(dataGrid.getLoadPanel().isVisible())
-    .ok()
     .expect(isAIRequestPending())
+    .ok()
+    .expect(dataGrid.getLoadPanel().isVisible())
     .ok();
 
   // act
