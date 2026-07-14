@@ -25,6 +25,8 @@ const checkAIColumnTexts = async (
   }
 };
 
+const isAIRequestPending = ClientFunction(() => !!(window as any).aiResolve);
+
 const resolveAIRequest = ClientFunction((): void => {
   const { aiResponseData } = (window as any);
   const { aiResolve } = (window as any);
@@ -48,6 +50,8 @@ test('DataGrid should send an AI request for rendered rows after scrolling witho
 
   // assert
   await t
+    .expect(isAIRequestPending())
+    .ok()
     .expect(dataGrid.getLoadPanel().isVisible())
     .ok();
 
@@ -73,6 +77,8 @@ test('DataGrid should send an AI request for rendered rows after scrolling witho
     .eql(0)
     .expect(dataGrid.getDataCell(20, 0).element.textContent)
     .eql('21')
+    .expect(isAIRequestPending())
+    .ok()
     .expect(dataGrid.getLoadPanel().isVisible())
     .ok();
 
@@ -151,6 +157,8 @@ test('DataGrid should send an AI request for rendered rows after scrolling with 
 
   // assert
   await t
+    .expect(isAIRequestPending())
+    .ok()
     .expect(dataGrid.getLoadPanel().isVisible())
     .ok();
 
@@ -176,6 +184,8 @@ test('DataGrid should send an AI request for rendered rows after scrolling with 
     .eql(1)
     .expect(dataGrid.getDataCell(20, 0).element.textContent)
     .eql('21')
+    .expect(isAIRequestPending())
+    .ok()
     .expect(dataGrid.getLoadPanel().isVisible())
     .ok();
 

@@ -409,6 +409,7 @@ editingModes.forEach((mode) => {
 
           await clickCellEditor(t, mode, columnInfo, form, cell, editor);
           await setEditorValue(t, mode, columnInfo, editor, false, useMask);
+          await t.expect(dataGrid.isReady()).ok();
         }
 
         const saveButton = getSaveButton(mode, form);

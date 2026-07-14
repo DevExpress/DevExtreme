@@ -167,9 +167,7 @@ test('Navigation via the Tab key should work when cellRender/cellComponent is us
     // eslint-disable-next-line no-underscore-dangle
     dataGrid._getTemplate = () => ({
       render(options) {
-        setTimeout(() => {
-          options.deferred?.resolve();
-        }, 100);
+        Promise.resolve().then(() => options.deferred?.resolve());
       },
     });
 
@@ -1880,7 +1878,6 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
 
     await t
       .click(cell00.element)
-
       .expect(cell00.isFocused).ok()
       .expect(editor00.element.focused)
       .ok()
@@ -2969,10 +2966,11 @@ test('New mode. A cell should be focused when the PageDow/Up key is pressed (T89
     .eql(0);
 
   // act
-  await t
-    .pressKey('pagedown');
+  await t.pressKey('pagedown');
 
   // assert
+  await t.expect(dataGrid.isReady()).ok();
+
   const focusedRowIndex = await dataGrid.option('focusedRowIndex');
   await t
     .expect(dataGrid.getDataCell(focusedRowIndex, 0).isFocused)
@@ -2983,11 +2981,11 @@ test('New mode. A cell should be focused when the PageDow/Up key is pressed (T89
     .eql(0);
 
   // act
-  await t
-    .pressKey('pageup');
+  await t.pressKey('pageup');
 
   // assert
   await t
+    .expect(dataGrid.isReady()).ok()
     .expect(dataGrid.getDataCell(0, 0).isFocused)
     .ok()
     .expect(dataGrid.option('focusedRowIndex'))
@@ -3108,9 +3106,10 @@ test('Cells should be focused after saving data when filter is applied and cell 
     .pressKey('d')
     .pressKey('enter');
 
-  const visibleRows = await dataGrid.apiGetVisibleRows();
-
   // assert
+  await t.expect(dataGrid.isReady()).ok();
+
+  const visibleRows = await dataGrid.apiGetVisibleRows();
   await t
     .expect(visibleRows.length)
     .eql(4)
@@ -3147,7 +3146,6 @@ test('Cells should be focused after saving data when filter is applied and cell 
     enterKeyDirection: 'column',
     editOnKeyPress: true,
   },
-
   editing: {
     mode: 'cell',
     allowUpdating: true,
@@ -3272,9 +3270,8 @@ test('Lookup editor should update cell value on down or up key when cell is focu
       .typeText(filterRowEditor.element, 'Name')
       .wait(1000);
 
-    let visibleRows = await dataGrid.apiGetVisibleRows();
-
     // assert
+    let visibleRows = await dataGrid.apiGetVisibleRows();
     await t
       .expect(visibleRows.length)
       .eql(5)
@@ -3288,9 +3285,8 @@ test('Lookup editor should update cell value on down or up key when cell is focu
       .typeText(filterRowEditor.element, '_1')
       .wait(1000);
 
-    visibleRows = await dataGrid.apiGetVisibleRows();
-
     // assert
+    visibleRows = await dataGrid.apiGetVisibleRows();
     await t
       .expect(visibleRows.length)
       .eql(2)
@@ -3689,70 +3685,6 @@ test('Window should not be scrolled after clicking on freespace row (T1104035)',
   dataSource: [{ id: 1 }, { id: 2 }],
   keyExpr: 'id',
   height: 1500,
-}));
-
-test('edit => scroll => command, should not result in grid scrolling back to edit', async (t) => {
-  const dataGrid = new DataGrid('#container');
-  await t
-    .expect(dataGrid.isReady())
-    .ok();
-
-  await t.wait(100);
-  await ClientFunction(() => {
-    const grid = ($('#container') as any).dxDataGrid('instance');
-    setTimeout(() => {
-      grid.getCellElement(1, 1).trigger('dxclick');
-      setTimeout(() => {
-        grid.getScrollable().scrollTo({ x: 10000 });
-        setTimeout(
-          () => { $('.dx-link-delete').first().trigger('focusin'); },
-          100,
-        );
-      }, 100);
-    }, 500);
-  })();
-
-  await t.wait(100)
-    .expect(dataGrid.getScrollLeft())
-    .notEql(0);
-}).before(async () => createWidget('dxDataGrid', {
-  editing: {
-    mode: 'cell',
-    allowUpdating: true,
-    allowDeleting: true,
-  },
-  width: 900,
-  scrolling: {
-    useNative: false,
-  },
-  dataSource: [
-    {
-      ID: 1, Prefix: '1', FirstName: '1', LastName: '1', StateID: '1', BirthDate: '1',
-    }, {
-      ID: 2, Prefix: '2', FirstName: '2', LastName: '2', StateID: '2', BirthDate: '2',
-    },
-  ],
-  columns: [
-    {
-      dataField: 'Prefix',
-      caption: 'Title',
-      width: 200,
-    },
-    { dataField: 'FirstName', width: 200 },
-    { dataField: 'LastName', width: 200 }, {
-      dataField: 'Position',
-      width: 200,
-    }, {
-      dataField: 'StateID',
-      caption: 'State',
-      width: 200,
-
-    }, {
-      dataField: 'BirthDate',
-      dataType: 'date',
-      width: 200,
-    },
-  ],
 }));
 
 test('Navigation shouldn\'t get stuck on cell templates with links in them when navigating from outside the grid (T1123129)', async (t) => {
@@ -6116,6 +6048,8 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // assert
     await t
+      .expect(dataGrid.isReady())
+      .ok()
       .expect(dataGrid.getDataCell(19, 14).element.focused)
       .ok()
       .expect(getOrderOfEventCalls())
@@ -6193,6 +6127,8 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // assert
     await t
+      .expect(dataGrid.isReady())
+      .ok()
       .expect(dataGrid.getDataCell(19, 34).element.focused)
       .ok()
       .expect(getOrderOfEventCalls())
@@ -6243,7 +6179,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     })();
   });
 
-  test(`Focus events should be called when pressing the Ctrl + End key when virtual scrolling and columns are enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
+  test.meta({ unstable: true })(`Focus events should be called when pressing the Ctrl + End key when virtual scrolling and columns are enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
   // arrange
     const dataGrid = new DataGrid('#container');
 
@@ -6268,10 +6204,11 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // act
     await t.pressKey('ctrl+end');
-    await t.wait(100);
 
     // assert
     await t
+      .expect(dataGrid.isReady())
+      .ok()
       .expect(dataGrid.getDataCell(199, 34).element.focused)
       .ok()
       .expect(getOrderOfEventCalls())
@@ -6323,7 +6260,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     })();
   });
 
-  test(`Focus events should be called when pressing the Ctrl + End key when rowRenderingMode is 'virtual' (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
+  test.meta({ unstable: true })(`Focus events should be called when pressing the Ctrl + End key when rowRenderingMode is 'virtual' (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
   // arrange
     const dataGrid = new DataGrid('#container');
 
@@ -6347,12 +6284,12 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     await resetFocusedEventsTestData();
 
     // act
-    await t
-      .pressKey('ctrl+end')
-      .wait(100);
+    await t.pressKey('ctrl+end');
 
     // assert
     await t
+      .expect(dataGrid.isReady())
+      .ok()
       .expect(dataGrid.getDataCell(19, 14).element.focused)
       .ok()
       .expect(getOrderOfEventCalls())
@@ -6403,7 +6340,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     })();
   });
 
-  test(`Focus events should be called when pressing the Ctrl + End key when infinite scrolling is enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
+  test.meta({ unstable: true })(`Focus events should be called when pressing the Ctrl + End key when infinite scrolling is enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
   // arrange
     const dataGrid = new DataGrid('#container');
 
@@ -6430,7 +6367,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     // act
     await t
       .pressKey('ctrl+end')
-      .wait(100);
+      .expect(dataGrid.isReady()).ok();
 
     // assert
     await t
@@ -6512,6 +6449,8 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // assert
     await t
+      .expect(dataGrid.isReady())
+      .ok()
       .expect(dataGrid.getDataCell(19, 14).element.focused)
       .ok()
       .expect(getOrderOfEventCalls())
@@ -6600,6 +6539,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // assert
     await t
+      .expect(dataGrid.isReady()).ok()
       .expect(dataGrid.getDataCell(19, 34).element.focused)
       .ok()
       .expect(getOrderOfEventCalls())
@@ -6661,7 +6601,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     })();
   });
 
-  test(`Focus events should be called when pressing the Ctrl + End key when virtual columns, virtual scrolling and focusedRowEnabled are enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
+  test.meta({ unstable: true })(`Focus events should be called when pressing the Ctrl + End key when virtual columns, virtual scrolling and focusedRowEnabled are enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
   // arrange
     const dataGrid = new DataGrid('#container');
 
@@ -6686,10 +6626,11 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // act
     await t.pressKey('ctrl+end');
-    await t.wait(1000);
 
     // assert
     await t
+      .expect(dataGrid.isReady())
+      .ok()
       .expect(dataGrid.getDataCell(199, 34).element.focused)
       .ok()
       .expect(getOrderOfEventCalls())

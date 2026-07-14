@@ -68,9 +68,18 @@ test('DataGrid - The "Cannot read properties of undefined error" occurs when usi
   await t
     .click(dataGrid.getDataCell(0, 0).element)
     .typeText(dataGrid.getDataCell(0, 0).element, 'new_value')
-    .pressKey('enter tab tab');
+    .pressKey('enter')
+    .expect(dataGrid.isReady())
+    .ok()
+    .pressKey('tab tab')
+    .expect(dataGrid.getDataCell(2, 0).isFocused)
+    .ok();
+
   await resolveOnSavingDeferred();
-  await t.expect(dataGrid.getDataCell(2, 0).isFocused).ok();
+
+  await t
+    .expect(dataGrid.isReady()).ok()
+    .expect(dataGrid.getDataCell(2, 0).isFocused).ok();
 }).before(async () => {
   await ClientFunction(() => {
     (window as any).deferred = $.Deferred();
@@ -94,6 +103,10 @@ test('DataGrid - The "Cannot read properties of undefined error" occurs when usi
       e.promise = (window as any).deferred;
     },
   });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).deferred;
+  })();
 });
 
 test('Tab key on editor should focus next cell if editing mode is cell', async (t) => {
@@ -2318,7 +2331,9 @@ test('Cells should be focused correctly on click when cell editing mode is used 
     .typeText(dataGrid.getDataCell(0, 0).getEditor().element, '1')
     .click(dataGrid.getDataCell(1, 0).getEditor().element);
 
-  await t.expect(getStoredName(1)).eql('Name 11');
+  await t
+    .expect(dataGrid.isReady()).ok()
+    .expect(getStoredName(1)).eql('Name 11');
 
   // assert
   await t
@@ -2334,7 +2349,9 @@ test('Cells should be focused correctly on click when cell editing mode is used 
     .typeText(dataGrid.getDataCell(1, 0).getEditor().element, '2')
     .click(dataGrid.getDataCell(2, 0).getEditor().element);
 
-  await t.expect(getStoredName(2)).eql('Name 22');
+  await t
+    .expect(dataGrid.isReady()).ok()
+    .expect(getStoredName(2)).eql('Name 22');
 
   // assert
   await t
@@ -2343,6 +2360,8 @@ test('Cells should be focused correctly on click when cell editing mode is used 
     .expect(dataGrid.getDataCell(2, 0).isFocused)
     .ok()
     .expect(dataGrid.getDataCell(2, 0).getEditor().element.focused)
+    .ok()
+    .expect(dataGrid.isReady())
     .ok();
 
   // act
@@ -2350,7 +2369,9 @@ test('Cells should be focused correctly on click when cell editing mode is used 
     .typeText(dataGrid.getDataCell(2, 0).getEditor().element, '3')
     .click(dataGrid.getDataCell(1, 0).getEditor().element);
 
-  await t.expect(getStoredName(3)).eql('Name 33');
+  await t
+    .expect(dataGrid.isReady()).ok()
+    .expect(getStoredName(3)).eql('Name 33');
 
   // assert
   await t
@@ -2366,7 +2387,9 @@ test('Cells should be focused correctly on click when cell editing mode is used 
     .typeText(dataGrid.getDataCell(1, 0).getEditor().element, '2')
     .click(dataGrid.getDataCell(0, 0).getEditor().element);
 
-  await t.expect(getStoredName(2)).eql('Name 222');
+  await t
+    .expect(dataGrid.isReady()).ok()
+    .expect(getStoredName(2)).eql('Name 222');
 
   // assert
   await t

@@ -87,9 +87,15 @@ test('Drop-down window should be positioned correctly after resizing the toolbar
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
 
-test('Disabled toolbar buttons are not grayed out in Material themes (T1217416)', async (t) => {
+test('Disabled toolbar buttons should be grayed out in Material themes (T1217416)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
+
+  await t
+    .expect(dataGrid.isReady())
+    .ok()
+    .expect(dataGrid.getDataRow(4).element.exists)
+    .ok();
 
   await testScreenshot(t, takeScreenshot, 'disabled-toolbar-buttons.png', { element: dataGrid.element });
   await t
