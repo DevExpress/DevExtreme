@@ -1450,6 +1450,9 @@ importers:
       babel-plugin-inferno:
         specifier: 6.8.5
         version: 6.8.5(@babel/core@7.29.7)
+      chokidar:
+        specifier: 5.0.0
+        version: 5.0.0
       cldr-core:
         specifier: 41.0.0
         version: 41.0.0
