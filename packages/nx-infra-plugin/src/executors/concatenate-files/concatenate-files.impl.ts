@@ -1,11 +1,12 @@
 import * as path from 'path';
+import { createRequire } from 'module';
 import { logger } from '@nx/devkit';
 import { glob } from 'glob';
 import { createExecutor } from '../../utils/create-executor';
 import { toPosixPath } from '../../utils/path-resolver';
 import { containsGlobPattern } from '../../utils/common';
 import { exists, normalizeEol, readFileText, writeFileText } from '../../utils/file-operations';
-import { ConcatenateFilesExecutorSchema } from './schema';
+import { ConcatenateFilesExecutorSchema, ConcatenatePass } from './schema';
 
 const ERROR_SOURCE_FILES_EMPTY = 'sourceFiles must contain at least one file';
 const ERROR_NO_FILES_RESOLVED = 'No source files found after resolving patterns';
@@ -133,44 +134,153 @@ async function resolveSourceFiles(sourceFiles: string[], projectRoot: string): P
   return resolved;
 }
 
+const WATCH_DEBOUNCE_MS = 200;
+
+// Sources are resolved per pass at run time (not once in `resolve`) so that an
+// additional pass can consume a file produced by an earlier pass, and so rebuilds
+// re-resolve any glob patterns on each run.
+async function runPass(projectRoot: string, pass: ConcatenatePass): Promise<void> {
+  if (!pass.sourceFiles?.length) {
+    throw new Error(ERROR_SOURCE_FILES_EMPTY);
+  }
+
+  const resolvedFiles = await resolveSourceFiles(pass.sourceFiles, projectRoot);
+  if (resolvedFiles.length === 0) {
+    throw new Error(ERROR_NO_FILES_RESOLVED);
+  }
+
+  const outputPath = path.resolve(projectRoot, pass.outputFile);
+  logger.verbose(`Concatenating ${resolvedFiles.length} files...`);
+  await concatToFile(outputPath, {
+    sourceFiles: resolvedFiles,
+    header: pass.header,
+    footer: pass.footer,
+    extractPattern: pass.extractPattern,
+    extractPatternFlags: pass.extractPatternFlags,
+    transforms: pass.transforms,
+    normalizeLineEndings: pass.normalizeLineEndings,
+    separator: pass.separator,
+  });
+  logger.verbose(`Created: ${path.relative(projectRoot, outputPath)}`);
+}
+
+async function runAllPasses(
+  projectRoot: string,
+  options: ConcatenateFilesExecutorSchema,
+): Promise<void> {
+  await runPass(projectRoot, options);
+  for (const pass of options.additionalPasses ?? []) {
+    await runPass(projectRoot, pass);
+  }
+}
+
+interface ChokidarWatcher {
+  on: (event: string, handler: (...args: unknown[]) => void) => unknown;
+  close: () => Promise<void> | void;
+}
+
+interface Chokidar {
+  watch: (paths: string | string[], options?: Record<string, unknown>) => ChokidarWatcher;
+}
+
+function loadChokidar(projectRoot: string): Chokidar {
+  const projectRequire = createRequire(path.join(projectRoot, 'package.json'));
+  try {
+    return projectRequire('chokidar') as Chokidar;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(
+      `concatenate-files watch mode requires 'chokidar' to be installed in the project (${projectRoot}): ${message}`,
+    );
+  }
+}
+
+async function runWatchBuild(
+  projectRoot: string,
+  options: ConcatenateFilesExecutorSchema,
+): Promise<void> {
+  // chokidar v4+ dropped glob support, so expand watch patterns to concrete files upfront.
+  const watchTargets = options.watchPaths?.length ? options.watchPaths : options.sourceFiles;
+  const watchFiles = await resolveSourceFiles(watchTargets, projectRoot);
+  if (watchFiles.length === 0) {
+    throw new Error('No watch files found after resolving watchPaths');
+  }
+  await runAllPasses(projectRoot, options);
+  logger.info('concatenate-files watch mode is watching for changes...');
+
+  await new Promise<void>((resolve) => {
+    let timer: NodeJS.Timeout | undefined;
+    let busy = false;
+    let pending = false;
+
+    const runRebuild = async (): Promise<void> => {
+      if (busy) {
+        pending = true;
+        return;
+      }
+
+      busy = true;
+      try {
+        await runAllPasses(projectRoot, options);
+        logger.info('concatenate-files watch: rebuild complete');
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        logger.error(`concatenate-files watch rebuild failed: ${message}`);
+      } finally {
+        busy = false;
+        if (pending) {
+          pending = false;
+          void runRebuild();
+        }
+      }
+    };
+
+    const scheduleRebuild = () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+
+      timer = setTimeout(() => {
+        void runRebuild();
+      }, WATCH_DEBOUNCE_MS);
+    };
+
+    const chokidar = loadChokidar(projectRoot);
+    const watcher = chokidar.watch(watchFiles, { ignoreInitial: true });
+    watcher.on('all', scheduleRebuild);
+
+    const stopWatcher = () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+      void Promise.resolve(watcher.close()).finally(resolve);
+    };
+
+    process.once('SIGINT', stopWatcher);
+    process.once('SIGTERM', stopWatcher);
+  });
+}
+
 interface ResolvedConcatenate {
   projectRoot: string;
-  resolvedFiles: string[];
-  outputPath: string;
   options: ConcatenateFilesExecutorSchema;
 }
 
 export default createExecutor<ConcatenateFilesExecutorSchema, ResolvedConcatenate>({
   name: 'ConcatenateFiles',
-  resolve: async (options, { projectRoot }) => {
+  resolve: (options, { projectRoot }) => {
     if (!options.sourceFiles?.length) {
       throw new Error(ERROR_SOURCE_FILES_EMPTY);
     }
 
-    const resolvedFiles = await resolveSourceFiles(options.sourceFiles, projectRoot);
-    if (resolvedFiles.length === 0) {
-      throw new Error(ERROR_NO_FILES_RESOLVED);
+    return { projectRoot, options };
+  },
+  run: async ({ projectRoot, options }) => {
+    if (options.watch) {
+      await runWatchBuild(projectRoot, options);
+      return;
     }
 
-    return {
-      projectRoot,
-      resolvedFiles,
-      outputPath: path.resolve(projectRoot, options.outputFile),
-      options,
-    };
-  },
-  run: async ({ projectRoot, resolvedFiles, outputPath, options }) => {
-    logger.verbose(`Concatenating ${resolvedFiles.length} files...`);
-    await concatToFile(outputPath, {
-      sourceFiles: resolvedFiles,
-      header: options.header,
-      footer: options.footer,
-      extractPattern: options.extractPattern,
-      extractPatternFlags: options.extractPatternFlags,
-      transforms: options.transforms,
-      normalizeLineEndings: options.normalizeLineEndings,
-      separator: options.separator,
-    });
-    logger.verbose(`Created: ${path.relative(projectRoot, outputPath)}`);
+    await runAllPasses(projectRoot, options);
   },
 });

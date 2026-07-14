@@ -144,6 +144,54 @@
         "{projectRoot}/artifacts/npm/devextreme-internal/bundles/dx.custom.config.js"
       ]
     },
+    "build:devextreme-bundler-config:watch": {
+      "executor": "devextreme-nx-infra-plugin:concatenate-files",
+      "cache": false,
+      "options": {
+        "sourceFiles": [
+          "./build/bundle-templates/modules/parts/core.js",
+          "./build/bundle-templates/modules/parts/data.js",
+          "./build/bundle-templates/modules/parts/widgets-base.js",
+          "./build/bundle-templates/modules/parts/widgets-web.js",
+          "./build/bundle-templates/modules/parts/viz.js",
+          "./build/bundle-templates/modules/parts/aspnet.js"
+        ],
+        "outputFile": "./build/bundle-templates/dx.custom.js",
+        "extractPattern": "[^]*BUNDLER_PARTS.*?$([^]*)^.*?BUNDLER_PARTS_END[^]*",
+        "extractPatternFlags": "gm",
+        "header": "\"use strict\";\n\n/* Comment lines below for the widgets you don't require and run \"devextreme-bundler\" in this directory, then include dx.custom.js in your project */\n\n",
+        "transforms": [
+          {
+            "find": "require *\\( *[\"']..\\/\\.\\.\\/",
+            "replace": "require('"
+          },
+          {
+            "find": "^[ ]{4}",
+            "replace": "",
+            "flags": "gm"
+          },
+          {
+            "find": "\\n{3,}",
+            "replace": "\n\n",
+            "flags": "g"
+          }
+        ],
+        "additionalPasses": [
+          {
+            "sourceFiles": ["./build/bundle-templates/dx.custom.js"],
+            "outputFile": "./artifacts/npm/devextreme/bundles/dx.custom.config.js",
+            "transforms": [
+              {
+                "find": "require *\\( *[\"']\\.\\.\\/",
+                "replace": "require('devextreme/"
+              }
+            ]
+          }
+        ],
+        "watch": true,
+        "watchPaths": ["./build/bundle-templates/modules/parts/**/*.js"]
+      }
+    },
     "clean:dist-ts": {
       "executor": "devextreme-nx-infra-plugin:clean",
       "options": {
