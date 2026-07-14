@@ -88,7 +88,6 @@
     "@typescript-eslint/parser": "catalog:",
     "axe-core": "catalog:",
     "babel-plugin-inferno": "6.8.5",
-    "chokidar": "5.0.0",
     "cldr-core": "41.0.0",
     "cldrjs": "0.5.5",
     "cross-env": "7.0.3",
