@@ -5,7 +5,7 @@ import { pad, numberParam, skipOf } from '../utils';
 
 const matches = (url: string): boolean => /\/api\/orders\b/i.test(url);
 
-const TOTAL_COUNT = 96;
+const TOTAL_COUNT = 93;
 
 const cities = [
   'Anchorage', 'Boston', 'Chicago', 'Denver',
@@ -45,8 +45,6 @@ export const ordersHandler: MockHandler = {
     return {
       data: Array.from({ length: Math.min(take, TOTAL_COUNT - skip) }, (_, i) => buildRow(skip + i)),
       totalCount: TOTAL_COUNT,
-      summary: null,
-      groupCount: null,
     };
   },
 };
