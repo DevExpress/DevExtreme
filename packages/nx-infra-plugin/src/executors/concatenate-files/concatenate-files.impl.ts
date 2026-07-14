@@ -202,7 +202,9 @@ async function runWatchBuild(
   // chokidar v4+ dropped glob support, so expand watch patterns to concrete files upfront.
   const watchTargets = options.watchPaths?.length ? options.watchPaths : options.sourceFiles;
   const watchFiles = await resolveSourceFiles(watchTargets, projectRoot);
-
+  if (watchFiles.length === 0) {
+    throw new Error('No watch files found after resolving watchPaths');
+  }
   await runAllPasses(projectRoot, options);
   logger.info('concatenate-files watch mode is watching for changes...');
 

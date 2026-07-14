@@ -174,6 +174,7 @@ describe('ConcatenateFilesExecutor E2E', () => {
 
     const originalOnce = process.once;
     let stopWatch: (() => void) | undefined;
+    let run: Promise<{ success: boolean }> | undefined;
 
     (process as unknown as { once: typeof process.once }).once = ((
       event: string,
@@ -186,25 +187,33 @@ describe('ConcatenateFilesExecutor E2E', () => {
       return originalOnce.call(process, event, handler as never);
     }) as typeof process.once;
 
-    const run = executor(options, context);
-
-    await waitFor(() => fs.existsSync(primaryPath) && fs.existsSync(derivedPath));
-    expect(await readFileText(primaryPath)).toBe('AAA\nBBB');
-    expect(await readFileText(derivedPath)).toBe('AAA\nBBB');
-    expect(typeof getWatchHandler()).toBe('function');
-
-    await writeFileText(path.join(projectDir, 'a.js'), 'CCC');
-    getWatchHandler()?.('change', path.join(projectDir, 'a.js'));
-
-    await waitFor(async () => (await readFileText(primaryPath)) === 'CCC\nBBB');
-    expect(await readFileText(derivedPath)).toBe('CCC\nBBB');
-
     try {
+      run = executor(options, context);
+
+      await waitFor(() => fs.existsSync(primaryPath) && fs.existsSync(derivedPath));
+      expect(await readFileText(primaryPath)).toBe('AAA\nBBB');
+      expect(await readFileText(derivedPath)).toBe('AAA\nBBB');
+      expect(typeof getWatchHandler()).toBe('function');
+
+      await writeFileText(path.join(projectDir, 'a.js'), 'CCC');
+      getWatchHandler()?.('change', path.join(projectDir, 'a.js'));
+
+      await waitFor(async () => (await readFileText(primaryPath)) === 'CCC\nBBB');
+      expect(await readFileText(derivedPath)).toBe('CCC\nBBB');
+
       stopWatch?.();
+      stopWatch = undefined;
+
       expect((await run).success).toBe(true);
+      run = undefined;
     } finally {
+      // Ensure the long-running watch executor is stopped even if an assertion fails above.
+      stopWatch?.();
+      if (run) {
+        await run;
+      }
       (process as unknown as { once: typeof process.once }).once = originalOnce;
+      delete (globalThis as unknown as { __concatWatchHandler?: WatchHandler }).__concatWatchHandler;
     }
-    delete (globalThis as unknown as { __concatWatchHandler?: WatchHandler }).__concatWatchHandler;
   });
 });
