@@ -351,9 +351,9 @@
     padding-top: $material-grid-base-cell-vertical-padding + 1px;
   }
 
-  // (0,5,1)
-  .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row.dx-selection:not(.dx-edit-row):not(.dx-row-lines) > td:not(.dx-editor-cell, .dx-master-detail-cell),
-  .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row.dx-row-focused:not(.dx-edit-row):not(.dx-row-lines) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+  // (0,5,1) T1303478
+  .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row.dx-selection:not(.dx-edit-row):not(.dx-row-lines):not(.dx-group-row) > td:not(.dx-editor-cell, .dx-master-detail-cell),
+  .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row.dx-row-focused:not(.dx-edit-row):not(.dx-row-lines):not(.dx-group-row) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
     padding-bottom: $material-grid-base-cell-vertical-padding - 1px;
   }
 
