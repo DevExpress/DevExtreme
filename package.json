@@ -36,6 +36,7 @@
     "@types/node": "catalog:tools",
     "@types/shelljs": "0.8.15",
     "axe-core": "catalog:",
+    "chokidar": "5.0.0",
     "@types/yargs": "17.0.35",
     "devextreme-internal-tools": "catalog:tools",
     "devextreme-metadata": "workspace:*",

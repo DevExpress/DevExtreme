@@ -252,6 +252,9 @@ importers:
       axe-core:
         specifier: 'catalog:'
         version: 4.11.3
+      chokidar:
+        specifier: 5.0.0
+        version: 5.0.0
       devextreme-internal-tools:
         specifier: catalog:tools
         version: 22.0.0
@@ -2005,9 +2008,6 @@ importers:
       autoprefixer:
         specifier: 10.5.0
         version: 10.5.0(postcss@8.5.10)
-      chokidar:
-        specifier: 5.0.0
-        version: 5.0.0
       clean-css:
         specifier: 5.3.3
         version: 5.3.3
