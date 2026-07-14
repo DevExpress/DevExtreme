@@ -213,33 +213,33 @@ jobs:
         run: |
           base_matrix_start=$(cat <<'JSON'
           [
-            { "componentFolder": "accessibility", "name": "accessibility" }
+            { "componentFolder": "accessibility", "name": "accessibility", "concurrency": 6 }
           ]
           JSON
           )
 
           base_matrix_end=$(cat <<'JSON'
           [
-            { "componentFolder": "common", "name": "common", "concurrency": 2 },
+            { "componentFolder": "common", "name": "common", "concurrency": 3 },
 
             { "name": "generic", "theme": "generic.light", "concurrency": 2 },
             { "name": "material", "theme": "material.blue.light", "concurrency": 2 },
             { "name": "material - compact", "theme": "material.blue.light.compact", "concurrency": 2 },
 
             { "componentFolder": "cardView", "name": "cardView" },
-            { "componentFolder": "dataGrid", "name": "dataGrid (1/4)", "indices": "1/4", "cache": true, "concurrency": 6 },
-            { "componentFolder": "dataGrid", "name": "dataGrid (2/4)", "indices": "2/4", "cache": true, "concurrency": 6 },
-            { "componentFolder": "dataGrid", "name": "dataGrid (3/4)", "indices": "3/4", "cache": true, "concurrency": 6 },
-            { "componentFolder": "dataGrid", "name": "dataGrid (4/4)", "indices": "4/4", "cache": true, "concurrency": 6 },
+            { "componentFolder": "dataGrid", "name": "dataGrid (1/4)", "indices": "1/4", "cache": true, "concurrency": 5 },
+            { "componentFolder": "dataGrid", "name": "dataGrid (2/4)", "indices": "2/4", "cache": true, "concurrency": 5 },
+            { "componentFolder": "dataGrid", "name": "dataGrid (3/4)", "indices": "3/4", "cache": true, "concurrency": 5 },
+            { "componentFolder": "dataGrid", "name": "dataGrid (4/4)", "indices": "4/4", "cache": true, "concurrency": 5 },
 
             { "componentFolder": "editors", "name": "editors" },
             { "componentFolder": "navigation", "name": "navigation", "concurrency": 6 },
 
-            { "componentFolder": "scheduler/common", "name": "scheduler / common (1/3)", "indices": "1/3" },
-            { "componentFolder": "scheduler/common", "name": "scheduler / common (2/3)", "indices": "2/3" },
-            { "componentFolder": "scheduler/common", "name": "scheduler / common (3/3)", "indices": "3/3" },
-            { "componentFolder": "scheduler/viewOffset", "name": "scheduler / viewOffset (1/2)", "indices": "1/2" },
-            { "componentFolder": "scheduler/viewOffset", "name": "scheduler / viewOffset (2/2)", "indices": "2/2" },
+            { "componentFolder": "scheduler/common", "name": "scheduler / common (1/3)", "indices": "1/3", "concurrency": 6 },
+            { "componentFolder": "scheduler/common", "name": "scheduler / common (2/3)", "indices": "2/3", "concurrency": 6 },
+            { "componentFolder": "scheduler/common", "name": "scheduler / common (3/3)", "indices": "3/3", "concurrency": 6 },
+            { "componentFolder": "scheduler/viewOffset", "name": "scheduler / viewOffset (1/2)", "indices": "1/2", "concurrency": 4 },
+            { "componentFolder": "scheduler/viewOffset", "name": "scheduler / viewOffset (2/2)", "indices": "2/2", "concurrency": 4 },
             { "componentFolder": "scheduler/timezones", "name": "scheduler / timezones (Europe/Berlin)", "timezone": "Europe/Berlin" },
             { "componentFolder": "scheduler/timezones", "name": "scheduler / timezones (America/Los_Angeles)", "timezone": "America/Los_Angeles" }
           ]
@@ -248,10 +248,10 @@ jobs:
 
           style_dependent_matrix=$(cat <<'JSON'
           [
-            { "componentFolder": "accessibility", "name": "accessibility - fluent.dark", "theme": "fluent.blue.dark" },
-            { "componentFolder": "accessibility", "name": "accessibility - material.light", "theme": "material.blue.light" },
-            { "componentFolder": "accessibility", "name": "accessibility - material.dark", "theme": "material.blue.dark" }
-          ]
+            { "componentFolder": "accessibility", "name": "accessibility - fluent.dark", "theme": "fluent.blue.dark", "concurrency": 6 },
+              { "componentFolder": "accessibility", "name": "accessibility - material.light", "theme": "material.blue.light", "concurrency": 6 },
+              { "componentFolder": "accessibility", "name": "accessibility - material.dark", "theme": "material.blue.dark", "concurrency": 6 }
+            ]
           JSON
           )
 
@@ -347,13 +347,38 @@ jobs:
         [ "${{ matrix.concurrency }}" != "" ] && CONCURRENCY="--concurrency ${{ matrix.concurrency }}"
         [ "${{ matrix.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.platform }}"
         [ "${{ matrix.cache }}" == "true" ] && CACHE="--cache true"
-        all_args="--browsers=chrome:devextreme-shr2 $COMPONENT_FOLDER $CONCURRENCY $INDICES $PLATFORM $THEME $CACHE"
+        REPORT_FLAKY="--reportFlaky ./artifacts/flaky-report/report.json"
+        all_args="--browsers=chrome:devextreme-shr2 $COMPONENT_FOLDER $CONCURRENCY $INDICES $PLATFORM $THEME $CACHE $REPORT_FLAKY"
         echo "$all_args"
         pnpm run test $all_args
 
     - name: Sanitize job name
       if: ${{ always() }}
       run: echo "JOB_NAME=$(echo "${{ matrix.name }}" | tr '/' '-')" >> $GITHUB_ENV
+
+    - name: Add run config to flaky test report
+      if: ${{ always() }}
+      working-directory: ./e2e/testcafe-devextreme
+      run: |
+        report=artifacts/flaky-report/report.json
+        if [ -f "$report" ]; then
+          jq --arg jobName "${{ matrix.name }}" \
+             --arg theme "${{ matrix.theme }}" \
+             --arg componentFolder "${{ matrix.componentFolder }}" \
+             --arg timezone "${{ matrix.timezone }}" \
+             --arg platform "${{ matrix.platform }}" \
+             '. + { jobName: $jobName, theme: $theme, componentFolder: $componentFolder, timezone: $timezone, platform: $platform }' \
+             "$report" > "$report.tmp" && mv "$report.tmp" "$report"
+          cat "$report"
+        fi
+
+    - name: Upload flaky test report
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v7
+      with:
+        name: flaky-report-${{ env.JOB_NAME }}
+        path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/flaky-report/report.json
+        if-no-files-found: ignore
 
     - name: Copy compared screenshot artifacts
       if: ${{ always() }}
@@ -371,13 +396,266 @@ jobs:
         path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/failedtests/**/*
         if-no-files-found: ignore
 
+  testcafe-quarantine:
+    name: quarantine
+    needs: [check-should-run, build, testcafe]
+    if: |
+      !cancelled() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.build.result == 'success'
+    runs-on: devextreme-shr2
+    timeout-minutes: 45
+
+    steps:
+    - name: Set machine timezone
+      run: |
+        sudo ln -sf /usr/share/zoneinfo/GMT /etc/localtime
+        date
+
+    - name: Get sources
+      uses: actions/checkout@v6
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v8
+      with:
+        name: devextreme-artifacts
+        path: ./packages/devextreme
+
+    - name: Unpack artifacts
+      working-directory: ./packages/devextreme
+      run: 7z x artifacts.zip -aoa
+
+    - name: Setup Chrome
+      uses: ./.github/actions/setup-chrome
+      with:
+        chrome-version: '149.0.7827.114'
+
+    - name: Use Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version-file: '.node-version'
+
+    - uses: pnpm/action-setup@v6
+      with:
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache/restore@v5
+      name: Restore pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-cache
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Download flaky test reports
+      uses: actions/download-artifact@v8
+      with:
+        pattern: flaky-report-*
+        path: ./e2e/testcafe-devextreme/flaky-reports
+
+    - name: Run quarantined tests
+      working-directory: ./e2e/testcafe-devextreme
+      env:
+        NODE_OPTIONS: --max-old-space-size=8192
+      run: |
+        last_failed=0
+        rerun_failed=0
+        quarantined_failed=0
+        result=./artifacts/quarantine-run-result.json
+        new_flakes_summary=./artifacts/new-flakes-summary.txt
+        mkdir -p ./artifacts
+        : > "$new_flakes_summary"
+
+        # Every test gets up to 3 attempts (initial run + 2 retries) and passes
+        # if at least one attempt succeeds. A reported failure means all attempts failed.
+        run_tests() {
+          local rc=0
+          rm -f "$result"
+          pnpm run test --browsers=chrome:devextreme-shr2 --concurrency 1 --retryAttempts 2 --forcePageReloads true --reportFailures "$result" "$@" || rc=$?
+          if [ ! -f "$result" ]; then
+            echo "Test runner crashed (exit code $rc)"
+            exit 1
+          fi
+          last_failed=$(jq '.failedCount // (.tests | length)' "$result")
+          echo " > tests that failed all attempts in this run: $last_failed"
+        }
+
+        flaky_reports=()
+        if [ -d flaky-reports ]; then
+          while IFS= read -r report; do
+            flaky_reports+=("$report")
+          done < <(find flaky-reports -type f -name report.json | sort)
+        fi
+
+        echo "Downloaded flaky test reports:"
+        if [ "${#flaky_reports[@]}" -eq 0 ]; then
+          echo "   (none)"
+        else
+          printf '   %s\n' "${flaky_reports[@]}"
+        fi
+
+        for report in "${flaky_reports[@]}"; do
+          theme=$(jq -r '.theme // empty' "$report")
+          componentFolder=$(jq -r '.componentFolder // empty' "$report")
+          timezone=$(jq -r '.timezone // empty' "$report")
+          platform=$(jq -r '.platform // empty' "$report")
+          job_name=$(jq -r '.jobName // empty' "$report")
+
+          if [ -z "$job_name" ]; then
+            report_dir=$(basename "$(dirname "$report")")
+            if [ "$report_dir" != "flaky-reports" ]; then
+              job_name=${report_dir#flaky-report-}
+            else
+              job_name=${componentFolder:-unknown}
+              [ -n "$theme" ] && job_name="$job_name / $theme"
+              [ -n "$timezone" ] && job_name="$job_name / $timezone"
+              [ -n "$platform" ] && job_name="$job_name / $platform"
+            fi
+          fi
+
+          echo ""
+          echo "============================================================"
+          echo " [NEW FLAKY] Rerun of test(s) that failed once in job '$job_name'"
+          echo "============================================================"
+          cat "$report"
+
+          sudo ln -sf "/usr/share/zoneinfo/${timezone:-GMT}" /etc/localtime
+
+          extra_args=(--testsFile "$report" --theme "${theme:-fluent.blue.light}")
+          [ -n "$componentFolder" ] && extra_args+=(--componentFolder "$componentFolder")
+          [ -n "$platform" ] && extra_args+=(--platform "$platform")
+
+          run_tests "${extra_args[@]}"
+          rerun_failed=$((rerun_failed + last_failed))
+
+          while IFS= read -r name; do
+            if jq -e --arg n "$name" '.tests | index($n)' "$result" > /dev/null; then
+              echo "FAILED | $name | $job_name" >> "$new_flakes_summary"
+            else
+              echo "passed | $name | $job_name" >> "$new_flakes_summary"
+            fi
+          done < <(jq -r '.tests[]' "$report")
+        done
+
+        sudo ln -sf /usr/share/zoneinfo/GMT /etc/localtime
+
+        echo ""
+        echo "============================================================"
+        echo " [QUARANTINED] Run of all quarantined tests (quarantine.json)"
+        echo "============================================================"
+        run_tests --onlyQuarantined true
+        quarantined_failed=$last_failed
+        meta_failed_names=$(jq -r '.tests[]' "$result")
+
+        echo ""
+        echo "============================================================"
+        echo " QUARANTINE JOB SUMMARY"
+        echo "============================================================"
+        echo " NEW flaky tests (failed once in a regular job, rerun here):"
+        if [ -s "$new_flakes_summary" ]; then
+          sed 's/^/   /' "$new_flakes_summary"
+        else
+          echo "   (none)"
+        fi
+        echo ""
+        echo " QUARANTINED tests (quarantine.json), failed all attempts: $quarantined_failed"
+        if [ -n "$meta_failed_names" ]; then
+          echo "$meta_failed_names" | sed 's/^/   FAILED | /'
+        fi
+        echo "============================================================"
+
+        {
+          echo "## Quarantine job summary"
+          echo ""
+          echo "### New flaky tests (forwarded from regular jobs)"
+          if [ -s "$new_flakes_summary" ]; then
+            echo ""
+            echo "| Result | Test | Source job |"
+            echo "|---|---|---|"
+            awk -F' \\| ' '{ printf "| %s | %s | %s |\n", $1, $2, $3 }' "$new_flakes_summary"
+          else
+            echo ""
+            echo "_none_"
+          fi
+          echo ""
+          echo "### Quarantined tests (\`quarantine.json\`)"
+          echo ""
+          echo "Failed all attempts: **$quarantined_failed**"
+          if [ -n "$meta_failed_names" ]; then
+            echo ""
+            echo "$meta_failed_names" | sed 's/^/- /'
+          fi
+        } >> "$GITHUB_STEP_SUMMARY"
+
+        if [ "$rerun_failed" -gt 0 ]; then
+          echo "A NEW flaky test failed all attempts."
+          echo "This is a persistent failure, not a flake - marking the job as failed."
+          exit 1
+        fi
+        if [ "$quarantined_failed" -gt 1 ]; then
+          echo "More than one QUARANTINED test failed - marking the job as failed."
+          exit 1
+        fi
+
+    - name: Copy compared screenshot artifacts
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v7
+      with:
+        name: compared-screenshots-quarantine
+        path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/compared-screenshots/**/*
+        if-no-files-found: ignore
+
+    - name: Copy failed test artifacts
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v7
+      with:
+        name: failed-tests-quarantine
+        path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/failedtests/**/*
+        if-no-files-found: ignore
+
   merge-artifacts:
     runs-on: ubuntu-latest
-    needs: testcafe
+    needs: [testcafe, testcafe-quarantine]
     if: ${{ always() }}
 
     steps:
+    - name: Detect mergeable artifacts
+      id: mergeable-artifacts
+      uses: actions/github-script@v9
+      with:
+        script: |
+          const artifacts = await github.paginate(github.rest.actions.listWorkflowRunArtifacts, {
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            run_id: context.runId,
+            per_page: 100,
+          });
+
+          const artifactGroups = {
+            compared_screenshots: /^compared-screenshots-/,
+            failed_tests: /^failed-tests-/,
+            flaky_reports: /^flaky-report-/,
+          };
+
+          for (const [outputName, pattern] of Object.entries(artifactGroups)) {
+            const names = artifacts
+              .map((artifact) => artifact.name)
+              .filter((name) => pattern.test(name));
+
+            core.setOutput(outputName, names.length > 0 ? 'true' : 'false');
+            core.info(`${outputName}: ${names.length ? names.join(', ') : '(none)'}`);
+          }
+
     - name: Merge screenshot artifacts
+      if: steps.mergeable-artifacts.outputs.compared_screenshots == 'true'
       uses: actions/upload-artifact/merge@v7
       continue-on-error: true
       with:
@@ -386,6 +664,7 @@ jobs:
         delete-merged: true
 
     - name: Merge failed test artifacts
+      if: steps.mergeable-artifacts.outputs.failed_tests == 'true'
       uses: actions/upload-artifact/merge@v7
       continue-on-error: true
       with:
@@ -393,10 +672,20 @@ jobs:
         pattern: failed-tests-*
         delete-merged: true
 
+    - name: Merge flaky test reports
+      if: steps.mergeable-artifacts.outputs.flaky_reports == 'true'
+      uses: actions/upload-artifact/merge@v7
+      continue-on-error: true
+      with:
+        name: flaky-reports
+        pattern: flaky-report-*
+        separate-directories: true
+        delete-merged: true
+
   notify:
     runs-on: ubuntu-latest
     name: Send notifications
-    needs: [build, testcafe]
+    needs: [build, testcafe, testcafe-quarantine]
     if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')
 
     steps:
