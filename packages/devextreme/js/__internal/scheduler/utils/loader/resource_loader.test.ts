@@ -54,4 +54,56 @@ describe('resource loader', () => {
       expect(loader.isLoaded()).toBe(true);
     });
   });
+
+  describe('Hierarchy', () => {
+    const roomData = [
+      {
+        id: 'board', text: 'Board rooms', color: '#111', parentId: null,
+      },
+      {
+        id: 'open', text: 'Open spaces', color: '#222', parentId: null,
+      },
+      {
+        id: 11, text: 'Room 11', color: '#333', parentId: 'board',
+      },
+      {
+        id: 12, text: 'Room 12', color: '#444', parentId: 'board',
+      },
+      {
+        id: 21, text: 'Room 21', color: '#555', parentId: 'open',
+      },
+    ];
+    const getHierarchyConfig = (dataSource) => ({
+      fieldExpr: 'roomId',
+      parentIdExpr: 'parentId',
+      dataSource,
+      label: 'Room',
+    });
+
+    it('should build hierarchy tree and leaf items from flat dataSource', async () => {
+      const loader = new ResourceLoader(getHierarchyConfig(roomData));
+
+      await loader.load();
+
+      expect(loader.hasHierarchy).toBe(true);
+      expect(loader.items).toHaveLength(5);
+      expect(loader.leafItems.map((item) => item.id)).toEqual([11, 12, 21]);
+      expect(loader.hierarchyTree.map((node) => node.data.id)).toEqual(['board', 'open']);
+      expect(loader.hierarchyTree[0].children.map((node) => node.data.id)).toEqual([11, 12]);
+    });
+
+    it('should keep flat behavior when parentIdExpr is not configured', async () => {
+      const loader = new ResourceLoader({
+        fieldExpr: 'roomId',
+        dataSource: roomData,
+        label: 'Room',
+      });
+
+      await loader.load();
+
+      expect(loader.hasHierarchy).toBe(false);
+      expect(loader.hierarchyTree).toEqual([]);
+      expect(loader.leafItems).toEqual(loader.items);
+    });
+  });
 });

@@ -11,6 +11,8 @@ export class ResourceDataAccessor extends DataAccessor<RawResourceData, Resource
 
   public colorExpr: string;
 
+  public parentIdExpr?: string;
+
   constructor(
     config: ResourceConfig,
   ) {
@@ -19,11 +21,19 @@ export class ResourceDataAccessor extends DataAccessor<RawResourceData, Resource
     this.idExpr = config.valueExpr ?? 'id';
     this.textExpr = config.displayExpr ?? 'text';
     this.colorExpr = config.colorExpr ?? 'color';
-    this.updateExpressions({
-      idExpr: this.idExpr,
-      textExpr: this.textExpr,
+    this.parentIdExpr = config.parentIdExpr;
+
+    const expressions: Record<string, string> = {
+      idExpr: this.idExpr as string,
+      textExpr: this.textExpr as string,
       colorExpr: this.colorExpr,
-    });
+    };
+
+    if (this.parentIdExpr) {
+      expressions.parentIdExpr = this.parentIdExpr;
+    }
+
+    this.updateExpressions(expressions);
   }
 
   public updateExpression(field: string, expr: string | undefined): void {

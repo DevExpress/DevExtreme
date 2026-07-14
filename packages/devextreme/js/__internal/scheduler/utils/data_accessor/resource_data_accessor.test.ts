@@ -2,6 +2,7 @@ import {
   describe, expect, it,
 } from '@jest/globals';
 
+import type { RawResourceData } from '../loader/types';
 import { ResourceDataAccessor } from './resource_data_accessor';
 
 describe('ResourceDataAccessor', () => {
@@ -54,6 +55,26 @@ describe('ResourceDataAccessor', () => {
       expect(customResource.complex.item.guid).toBe(10);
       expect(customResource.name).toBe('text');
       expect(customResource.mainColor).toBe('color');
+    });
+  });
+
+  describe('parentId', () => {
+    const hierarchicalResource: RawResourceData = { id: 11, text: 'Room 11', parentId: 'board' };
+    const accessor = new ResourceDataAccessor({
+      fieldExpr: 'roomId',
+      dataSource: [],
+      parentIdExpr: 'parentId',
+      label: 'Room',
+    });
+
+    it('should get parentId with default parentIdExpr', () => {
+      expect(accessor.get('parentId', hierarchicalResource)).toBe('board');
+    });
+
+    it('should set parentId with default parentIdExpr', () => {
+      accessor.set('parentId', hierarchicalResource, 'open');
+
+      expect(hierarchicalResource.parentId).toBe('open');
     });
   });
 });
