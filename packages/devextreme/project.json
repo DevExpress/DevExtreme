@@ -619,6 +619,34 @@
         "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration,custom}.debug.js"
       ]
     },
+    "bundle:watch": {
+      "executor": "devextreme-nx-infra-plugin:bundle",
+      "options": {
+        "watch": true,
+        "entries": [
+          "bundles/dx.all.js",
+          "bundles/dx.web.js",
+          "bundles/dx.viz.js",
+          "bundles/dx.ai-integration.js",
+          "bundles/dx.custom.js"
+        ],
+        "sourceDir": "./artifacts/transpiled-renovation-npm",
+        "outDir": "./artifacts/js",
+        "mode": "debug",
+        "webpackConfigPath": "./webpack.config.js",
+        "applyLicenseHeaders": {
+          "prependAfterLicense": "\"use strict\";\n\n",
+          "separator": "",
+          "includePatterns": ["dx.*.debug.js"]
+        }
+      },
+      "configurations": {
+        "production": {
+          "sourceMap": false
+        }
+      },
+      "cache": false
+    },
     "bundle:prod": {
       "executor": "nx:run-commands",
       "options": {

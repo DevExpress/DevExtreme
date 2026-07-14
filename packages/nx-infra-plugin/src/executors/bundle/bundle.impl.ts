@@ -51,6 +51,7 @@ function createWebpackConfig(
   mode: 'debug' | 'production',
   projectRoot: string,
   sourceMap: boolean,
+  watch: boolean,
 ): Configuration {
   const config: Configuration = {
     ...baseConfig,
@@ -67,6 +68,10 @@ function createWebpackConfig(
     ...(config.optimization || {}),
     minimize: false,
   };
+
+  if (watch) {
+    config.mode = 'development';
+  }
 
   if (mode === 'debug') {
     config.output = {
@@ -98,6 +103,19 @@ function createWebpackConfig(
   return config;
 }
 
+function collectWebpackErrorMessages(stats: Stats): string {
+  const info = stats.toJson({ errors: true });
+  return (info.errors || []).map((entry) => entry.message).join('\n');
+}
+
+function logWebpackWarnings(stats: Stats): void {
+  if (!stats.hasWarnings()) {
+    return;
+  }
+  const info = stats.toJson({ warnings: true });
+  (info.warnings || []).forEach((warning) => logger.warn(warning.message));
+}
+
 function runWebpack(webpack: typeof import('webpack'), config: Configuration): Promise<Stats> {
   return new Promise((resolve, reject) => {
     webpack(config, (err, stats) => {
@@ -110,13 +128,76 @@ function runWebpack(webpack: typeof import('webpack'), config: Configuration): P
         return;
       }
       if (stats.hasErrors()) {
-        const info = stats.toJson({ errors: true });
-        const errorMessages = (info.errors || []).map((entry) => entry.message).join('\n');
-        reject(new Error(errorMessages));
+        reject(new Error(collectWebpackErrorMessages(stats)));
         return;
       }
       resolve(stats);
     });
+  });
+}
+
+async function runWebpackWatch(
+  webpack: typeof import('webpack'),
+  config: Configuration,
+  onSuccess: (stats: Stats) => Promise<void>,
+): Promise<void> {
+  await new Promise<void>((resolve) => {
+    const compiler = webpack(config);
+    let watching: ReturnType<typeof compiler.watch> | undefined;
+    let isClosing = false;
+
+    const stopWatching = () => {
+      if (isClosing) {
+        return;
+      }
+      isClosing = true;
+      if (!watching) {
+        resolve();
+        return;
+      }
+      watching.close(() => {
+        setTimeout(() => {
+          resolve();
+        }, 100);
+      });
+    };
+
+    watching = compiler.watch(
+      {
+        aggregateTimeout: 200,
+        ignored: /node_modules/,
+        ...(process.platform === 'win32' ? { poll: 1000 } : {}),
+      },
+      (err, stats) => {
+      if (isClosing) {
+        return;
+      }
+      if (err) {
+        logger.error(err.message);
+        return;
+      }
+      if (!stats) {
+        return;
+      }
+      if (stats.hasErrors()) {
+        logger.error(collectWebpackErrorMessages(stats));
+        return;
+      }
+
+      logWebpackWarnings(stats);
+
+      void onSuccess(stats).then(() => {
+        logger.info('bundle watch: rebuild complete');
+      }).catch((error) => {
+        const message = error instanceof Error ? error.message : String(error);
+        logger.error(`bundle watch post-build failed: ${message}`);
+      });
+    });
+
+    logger.info('bundle watch mode is watching for changes...');
+
+    process.once('SIGINT', stopWatching);
+    process.once('SIGTERM', stopWatching);
   });
 }
 
@@ -146,6 +227,7 @@ interface ResolvedBundle {
   resolvedOutDir: string;
   mode: 'debug' | 'production';
   sourceMap: boolean;
+  watch: boolean;
   webpack: typeof import('webpack');
   baseConfig: Configuration;
   licenseHeaders?: ResolvedLicenseHeaders;
@@ -195,6 +277,7 @@ export default createExecutor<BundleExecutorSchema, ResolvedBundle>({
       mode,
       webpackConfigPath = './webpack.config.js',
       sourceMap = true,
+      watch = false,
       applyLicenseHeaders,
     } = options;
 
@@ -217,6 +300,7 @@ export default createExecutor<BundleExecutorSchema, ResolvedBundle>({
       resolvedOutDir,
       mode,
       sourceMap,
+      watch,
       webpack,
       baseConfig,
       licenseHeaders,
@@ -232,19 +316,31 @@ export default createExecutor<BundleExecutorSchema, ResolvedBundle>({
       resolved.mode,
       resolved.projectRoot,
       resolved.sourceMap,
+      resolved.watch,
     );
 
     logger.verbose(`Bundling ${resolved.entries.length} entries in ${resolved.mode} mode`);
     logger.verbose(`Source: ${resolved.resolvedSourceDir}`);
     logger.verbose(`Output: ${resolved.resolvedOutDir}`);
 
+    const applyHeadersIfNeeded = async (): Promise<void> => {
+      if (resolved.licenseHeaders) {
+        await applyLicenseHeadersStep(resolved.resolvedOutDir, resolved.licenseHeaders);
+      }
+    };
+
+    if (resolved.watch) {
+      await runWebpackWatch(resolved.webpack, config, async (stats) => {
+        const assets = Object.keys(stats.compilation.assets);
+        logger.verbose(`Produced ${assets.length} bundle(s): ${assets.join(', ')}`);
+        await applyHeadersIfNeeded();
+      });
+      return;
+    }
+
     try {
       const stats = await runWebpack(resolved.webpack, config);
-
-      if (stats.hasWarnings()) {
-        const info = stats.toJson({ warnings: true });
-        (info.warnings || []).forEach((warning) => logger.warn(warning.message));
-      }
+      logWebpackWarnings(stats);
 
       const assets = Object.keys(stats.compilation.assets);
       logger.verbose(`Produced ${assets.length} bundle(s): ${assets.join(', ')}`);
@@ -253,8 +349,6 @@ export default createExecutor<BundleExecutorSchema, ResolvedBundle>({
       throw new Error(ERROR_MESSAGES.WEBPACK_ERROR(message));
     }
 
-    if (resolved.licenseHeaders) {
-      await applyLicenseHeadersStep(resolved.resolvedOutDir, resolved.licenseHeaders);
-    }
+    await applyHeadersIfNeeded();
   },
 });
