@@ -5,6 +5,7 @@ import fx from '@js/common/core/animation/fx';
 import $ from '@js/core/renderer';
 import type { Properties } from '@js/ui/scheduler';
 import eventsEngine from '@ts/events/core/m_events_engine';
+import Draggable from '@ts/m_draggable';
 
 import { createScheduler as baseCreateScheduler } from './__mock__/create_scheduler';
 import { setupSchedulerTestEnvironment } from './__mock__/mock_scheduler';
@@ -944,6 +945,399 @@ describe('Appointments Dragging', () => {
           }),
         }),
       );
+    });
+  });
+
+  describe('appointmentDragging options', () => {
+    const appointmentData = {
+      text: 'Appointment 1',
+      startDate: new Date(2015, 1, 9, 8),
+      endDate: new Date(2015, 1, 9, 9),
+    };
+
+    const createDraggingScheduler = (
+      appointmentDragging: Record<string, unknown>,
+    ) => createScheduler({
+      dataSource: [{ ...appointmentData }],
+      currentView: 'day',
+      currentDate: new Date(2015, 1, 9),
+      editing: true,
+      appointmentDragging,
+    } as unknown as Properties);
+
+    describe('callbacks', () => {
+      it('should call onDragStart with the raw appointment as itemData', async () => {
+        const onDragStart = jest.fn();
+        const { POM, scheduler } = await createDraggingScheduler({ onDragStart });
+
+        const appointment = POM.getAppointments()[0].element;
+        dragStart(POM, appointment);
+
+        expect(onDragStart).toHaveBeenCalledTimes(1);
+        expect(onDragStart).toHaveBeenCalledWith(
+          expect.objectContaining({
+            component: scheduler,
+            itemData: expect.objectContaining(appointmentData),
+          }),
+        );
+      });
+
+      it('should call onDragMove', async () => {
+        const onDragMove = jest.fn();
+        const { POM } = await createDraggingScheduler({ onDragMove });
+
+        const appointment = POM.getAppointments()[0].element;
+        dragStart(POM, appointment);
+        dragMove(POM, appointment, POM.getDateTableCell(4, 0));
+
+        expect(onDragMove).toHaveBeenCalledTimes(1);
+      });
+
+      it('should call onDragEnd with drop-adjusted toItemData', async () => {
+        const captured: { itemData?: object; toItemData?: object } = {};
+        const onDragEnd = jest.fn((e: { itemData: object; toItemData: object }) => {
+          captured.itemData = { ...e.itemData };
+          captured.toItemData = { ...e.toItemData };
+        });
+        const { POM } = await createDraggingScheduler({ onDragEnd });
+
+        const appointment = POM.getAppointments()[0].element;
+        const targetCell = POM.getDateTableCell(4, 0);
+
+        dragStart(POM, appointment);
+        dragMove(POM, appointment, targetCell);
+        dragEnd(POM, appointment);
+
+        expect(onDragEnd).toHaveBeenCalledTimes(1);
+        expect(captured.itemData).toEqual(expect.objectContaining(appointmentData));
+        expect(captured.toItemData).toEqual(expect.objectContaining({
+          startDate: new Date(2015, 1, 9, 2),
+          endDate: new Date(2015, 1, 9, 3),
+        }));
+      });
+    });
+
+    describe('toItemData', () => {
+      it('should provide toItemData on a same-component drop even without a highlighted cell', async () => {
+        const captured: { toItemData?: unknown } = {};
+        const onDragEnd = jest.fn((e: { toItemData: unknown }) => {
+          captured.toItemData = e.toItemData;
+        });
+        const { POM } = await createDraggingScheduler({ onDragEnd });
+
+        const appointment = POM.getAppointments()[0].element;
+        dragStart(POM, appointment);
+        dragEnd(POM, appointment);
+
+        expect(onDragEnd).toHaveBeenCalledTimes(1);
+        expect(captured.toItemData).toBeDefined();
+      });
+    });
+
+    describe('cancellation', () => {
+      it('should not start dragging when onDragStart cancels', async () => {
+        const { POM } = await createDraggingScheduler({
+          onDragStart: (e: { cancel: boolean }) => { e.cancel = true; },
+        });
+
+        const appointment = POM.getAppointments()[0];
+        dragStart(POM, appointment.element);
+
+        expect(POM.getDraggedAppointment()).toBeNull();
+        expect(appointment.isDragSource()).toBe(false);
+      });
+
+      it('should not save appointment when onDragEnd cancels', async () => {
+        const onAppointmentUpdating = jest.fn();
+        const { POM } = await createScheduler({
+          dataSource: [{ ...appointmentData }],
+          currentView: 'day',
+          currentDate: new Date(2015, 1, 9),
+          editing: true,
+          onAppointmentUpdating,
+          appointmentDragging: {
+            onDragEnd: (e: { cancel: boolean }) => { e.cancel = true; },
+          },
+        } as unknown as Properties);
+
+        const appointment = POM.getAppointments()[0].element;
+        const targetCell = POM.getDateTableCell(4, 0);
+
+        dragStart(POM, appointment);
+        dragMove(POM, appointment, targetCell);
+        dragEnd(POM, appointment);
+
+        expect(onAppointmentUpdating).not.toHaveBeenCalled();
+      });
+
+      it('should not highlight cell when onDragMove cancels', async () => {
+        const { POM } = await createDraggingScheduler({
+          onDragMove: (e: { cancel: boolean }) => { e.cancel = true; },
+        });
+
+        const appointment = POM.getAppointments()[0].element;
+        const targetCell = POM.getDateTableCell(4, 0);
+
+        dragStart(POM, appointment);
+        dragMove(POM, appointment, targetCell);
+
+        expect(targetCell.classList.contains('dx-scheduler-date-table-droppable-cell')).toBe(false);
+      });
+    });
+
+    describe('pass-through options', () => {
+      it('should pass draggable options to the workspace draggable', async () => {
+        const data = { role: 'external' };
+        const { POM } = await createDraggingScheduler({
+          autoScroll: false,
+          scrollSpeed: 30,
+          scrollSensitivity: 20,
+          group: 'appointmentsGroup',
+          data,
+        });
+
+        const draggable = Draggable.getInstance(POM.getWorkspace());
+
+        expect(draggable.option('autoScroll')).toBe(false);
+        expect(draggable.option('scrollSpeed')).toBe(30);
+        expect(draggable.option('scrollSensitivity')).toBe(20);
+        expect(draggable.option('group')).toBe('appointmentsGroup');
+        expect(draggable.option('data')).toEqual(data);
+      });
+
+      it('should keep draggable defaults when appointmentDragging is not configured', async () => {
+        const { POM } = await createScheduler({
+          dataSource: [{ ...appointmentData }],
+          currentView: 'day',
+          currentDate: new Date(2015, 1, 9),
+          editing: true,
+        } as unknown as Properties);
+
+        const draggable = Draggable.getInstance(POM.getWorkspace());
+
+        expect(draggable.option('autoScroll')).toBe(true);
+        expect(draggable.option('scrollSpeed')).toBe(30);
+        expect(draggable.option('scrollSensitivity')).toBe(60);
+      });
+    });
+
+    describe('drag between components', () => {
+      it('should call onRemove when dropped on another component', async () => {
+        const onRemove = jest.fn();
+        const { POM, scheduler } = await createDraggingScheduler({ onRemove });
+
+        const appointment = POM.getAppointments()[0].element;
+        dragStart(POM, appointment);
+
+        const draggable = Draggable.getInstance(POM.getWorkspace());
+        draggable.option('onDragEnd')({
+          itemElement: appointment,
+          itemData: { ...appointmentData },
+          fromComponent: scheduler,
+          toComponent: {},
+        });
+
+        expect(onRemove).toHaveBeenCalledTimes(1);
+      });
+
+      it('should call onAdd with the drop-cell time after the source finishes dragging', async () => {
+        const onAdd = jest.fn();
+        const { POM, scheduler } = await createDraggingScheduler({ onAdd });
+
+        const appointment = POM.getAppointments()[0].element;
+        const targetCell = POM.getDateTableCell(4, 0);
+
+        dragStart(POM, appointment);
+        dragMove(POM, appointment, targetCell);
+
+        const draggable = Draggable.getInstance(POM.getWorkspace());
+        draggable.option('onDragEnd')({
+          itemElement: appointment,
+          itemData: { ...appointmentData },
+          fromComponent: scheduler,
+          toComponent: {},
+        });
+        document.elementsFromPoint = jest.fn(() => [targetCell]);
+        draggable.option('onDrop')({
+          itemElement: appointment,
+          itemData: { ...appointmentData },
+          fromComponent: {},
+          toComponent: scheduler,
+          event: { clientX: 10, clientY: 20 },
+        });
+
+        expect(onAdd).toHaveBeenCalledTimes(1);
+        expect(onAdd).toHaveBeenCalledWith(
+          expect.objectContaining({
+            itemData: expect.objectContaining({
+              startDate: new Date(2015, 1, 9, 2),
+              endDate: new Date(2015, 1, 9, 3),
+            }),
+          }),
+        );
+      });
+
+      it('should highlight the cell an external drag enters and drop onto it', async () => {
+        const onAdd = jest.fn();
+        const { POM, scheduler } = await createDraggingScheduler({ onAdd });
+
+        const targetCell = POM.getDateTableCell(4, 0);
+
+        eventsEngine.trigger(targetCell, { type: 'dxdragenter', target: targetCell });
+
+        expect(targetCell.classList.contains('dx-scheduler-date-table-droppable-cell')).toBe(true);
+
+        const draggable = Draggable.getInstance(POM.getWorkspace());
+        draggable.option('onDrop')({
+          itemElement: document.createElement('div'),
+          itemData: {
+            text: 'External',
+            startDate: new Date(2015, 1, 9, 8),
+            endDate: new Date(2015, 1, 9, 9),
+          },
+          fromComponent: {},
+          toComponent: scheduler,
+        });
+
+        expect(onAdd).toHaveBeenCalledWith(
+          expect.objectContaining({
+            itemData: expect.objectContaining({
+              startDate: new Date(2015, 1, 9, 2),
+              endDate: new Date(2015, 1, 9, 3),
+            }),
+          }),
+        );
+        expect(targetCell.classList.contains('dx-scheduler-date-table-droppable-cell')).toBe(false);
+      });
+
+      it('should still highlight external drags after a cancelled drag start', async () => {
+        const { POM } = await createDraggingScheduler({
+          onDragStart: (e: { cancel: boolean }) => { e.cancel = true; },
+        });
+
+        const appointment = POM.getAppointments()[0].element;
+        dragStart(POM, appointment);
+
+        const targetCell = POM.getDateTableCell(4, 0);
+        eventsEngine.trigger(targetCell, { type: 'dxdragenter', target: targetCell });
+
+        expect(targetCell.classList.contains('dx-scheduler-date-table-droppable-cell')).toBe(true);
+      });
+
+      it('should resolve the drop cell from the drop coordinates', async () => {
+        const onAdd = jest.fn();
+        const { POM, scheduler } = await createDraggingScheduler({ onAdd });
+
+        const targetCell = POM.getDateTableCell(4, 0);
+        document.elementsFromPoint = jest.fn(() => [targetCell]);
+
+        const draggable = Draggable.getInstance(POM.getWorkspace());
+        draggable.option('onDrop')({
+          itemElement: document.createElement('div'),
+          itemData: {
+            text: 'External',
+            startDate: new Date(2015, 1, 9, 8),
+            endDate: new Date(2015, 1, 9, 9),
+          },
+          fromComponent: {},
+          toComponent: scheduler,
+          event: { clientX: 10, clientY: 20 },
+        });
+
+        expect(onAdd).toHaveBeenCalledWith(
+          expect.objectContaining({
+            itemData: expect.objectContaining({
+              startDate: new Date(2015, 1, 9, 2),
+              endDate: new Date(2015, 1, 9, 3),
+            }),
+          }),
+        );
+      });
+
+      it('should not move the appointment when dropped on another scheduler without a group', async () => {
+        const onAppointmentUpdating = jest.fn();
+        const commonConfig = {
+          currentView: 'day',
+          currentDate: new Date(2015, 1, 9),
+          editing: true,
+        };
+        const { POM: sourcePOM } = await createScheduler({
+          ...commonConfig,
+          dataSource: [{
+            text: 'Source', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9),
+          }],
+          onAppointmentUpdating,
+        } as unknown as Properties);
+        const { POM: targetPOM } = await createScheduler({
+          ...commonConfig,
+          dataSource: [{
+            text: 'Target',
+            startDate: new Date(2015, 1, 9, 10),
+            endDate: new Date(2015, 1, 9, 11),
+          }],
+        } as unknown as Properties);
+
+        const sourceAppointment = sourcePOM.getAppointments()[0].element;
+        const targetCell = targetPOM.getDateTableCell(4, 0);
+
+        dragStart(sourcePOM, sourceAppointment);
+        dragMove(sourcePOM, sourceAppointment, targetCell);
+        dragEnd(sourcePOM, sourceAppointment);
+
+        expect(onAppointmentUpdating).not.toHaveBeenCalled();
+      });
+
+      it('should populate toItemData on a cross-component drag end', async () => {
+        const captured: { toItemData?: unknown } = {};
+        const onDragEnd = jest.fn((e: { toItemData: unknown }) => {
+          captured.toItemData = e.toItemData;
+        });
+        const { POM, scheduler } = await createDraggingScheduler({
+          onDragEnd,
+          onRemove: jest.fn(),
+        });
+
+        const appointment = POM.getAppointments()[0].element;
+        dragStart(POM, appointment);
+
+        const draggable = Draggable.getInstance(POM.getWorkspace());
+        draggable.option('onDragEnd')({
+          itemElement: appointment,
+          itemData: { ...appointmentData },
+          fromComponent: scheduler,
+          toComponent: {},
+        });
+
+        expect(captured.toItemData).toBeDefined();
+      });
+
+      it('should not save the appointment into the source scheduler on cross-component drop', async () => {
+        const onAppointmentUpdating = jest.fn();
+        const { POM, scheduler } = await createScheduler({
+          dataSource: [{ ...appointmentData }],
+          currentView: 'day',
+          currentDate: new Date(2015, 1, 9),
+          editing: true,
+          onAppointmentUpdating,
+          appointmentDragging: { onRemove: jest.fn() },
+        } as unknown as Properties);
+
+        const appointment = POM.getAppointments()[0].element;
+        const targetCell = POM.getDateTableCell(4, 0);
+
+        dragStart(POM, appointment);
+        dragMove(POM, appointment, targetCell);
+
+        const draggable = Draggable.getInstance(POM.getWorkspace());
+        draggable.option('onDragEnd')({
+          itemElement: appointment,
+          itemData: { ...appointmentData },
+          fromComponent: scheduler,
+          toComponent: {},
+        });
+
+        expect(onAppointmentUpdating).not.toHaveBeenCalled();
+      });
     });
   });
 });
