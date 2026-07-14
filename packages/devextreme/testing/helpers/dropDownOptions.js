@@ -34,7 +34,7 @@ const defaultDropDownOptions = {
     onDisposing: undefined,
     onHidden: null,
     onHiding: null,
-    onInitialized: null,
+    onInitialized: undefined,
     onOptionChanged: undefined,
     onResize: undefined,
     onResizeEnd: undefined,
