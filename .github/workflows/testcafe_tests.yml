@@ -8,8 +8,7 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  push:
-    branches: [26_1]
+  merge_group:
   workflow_dispatch:
 
 env:
@@ -347,8 +346,8 @@ jobs:
         [ "${{ matrix.concurrency }}" != "" ] && CONCURRENCY="--concurrency ${{ matrix.concurrency }}"
         [ "${{ matrix.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.platform }}"
         [ "${{ matrix.cache }}" == "true" ] && CACHE="--cache true"
-        REPORT_UNSTABLE="--reportUnstable ./artifacts/unstable-report/report.json"
-        all_args="--browsers=chrome:devextreme-shr2 $COMPONENT_FOLDER $CONCURRENCY $INDICES $PLATFORM $THEME $CACHE $REPORT_UNSTABLE"
+        REPORT_FLAKY="--reportFlaky ./artifacts/flaky-report/report.json"
+        all_args="--browsers=chrome:devextreme-shr2 $COMPONENT_FOLDER $CONCURRENCY $INDICES $PLATFORM $THEME $CACHE $REPORT_FLAKY"
         echo "$all_args"
         pnpm run test $all_args
 
@@ -356,11 +355,11 @@ jobs:
       if: ${{ always() }}
       run: echo "JOB_NAME=$(echo "${{ matrix.name }}" | tr '/' '-')" >> $GITHUB_ENV
 
-    - name: Add run config to unstable test report
+    - name: Add run config to flaky test report
       if: ${{ always() }}
       working-directory: ./e2e/testcafe-devextreme
       run: |
-        report=artifacts/unstable-report/report.json
+        report=artifacts/flaky-report/report.json
         if [ -f "$report" ]; then
           jq --arg theme "${{ matrix.theme }}" \
              --arg componentFolder "${{ matrix.componentFolder }}" \
@@ -371,12 +370,12 @@ jobs:
           cat "$report"
         fi
 
-    - name: Upload unstable test report
+    - name: Upload flaky test report
       if: ${{ always() }}
       uses: actions/upload-artifact@v7
       with:
-        name: unstable-report-${{ env.JOB_NAME }}
-        path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/unstable-report/report.json
+        name: flaky-report-${{ env.JOB_NAME }}
+        path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/flaky-report/report.json
         if-no-files-found: ignore
 
     - name: Copy compared screenshot artifacts
@@ -395,8 +394,8 @@ jobs:
         path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/failedtests/**/*
         if-no-files-found: ignore
 
-  testcafe-unstable:
-    name: unstable
+  testcafe-quarantine:
+    name: quarantine
     needs: [check-should-run, build, testcafe]
     if: |
       !cancelled() &&
@@ -454,21 +453,21 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
-    - name: Download unstable test reports
+    - name: Download flaky test reports
       uses: actions/download-artifact@v8
       with:
-        pattern: unstable-report-*
-        path: ./e2e/testcafe-devextreme/unstable-reports
+        pattern: flaky-report-*
+        path: ./e2e/testcafe-devextreme/flaky-reports
 
-    - name: Run unstable tests
+    - name: Run quarantined tests
       working-directory: ./e2e/testcafe-devextreme
       env:
         NODE_OPTIONS: --max-old-space-size=8192
       run: |
         last_failed=0
         rerun_failed=0
-        unstable_failed=0
-        result=./artifacts/unstable-run-result.json
+        quarantined_failed=0
+        result=./artifacts/quarantine-run-result.json
         new_flakes_summary=./artifacts/new-flakes-summary.txt
         mkdir -p ./artifacts
         : > "$new_flakes_summary"
@@ -488,9 +487,9 @@ jobs:
         }
 
         shopt -s nullglob
-        for report in unstable-reports/*/report.json; do
+        for report in flaky-reports/*/report.json; do
           job_name=$(basename "$(dirname "$report")")
-          job_name=${job_name#unstable-report-}
+          job_name=${job_name#flaky-report-}
 
           echo ""
           echo "============================================================"
@@ -525,15 +524,15 @@ jobs:
 
         echo ""
         echo "============================================================"
-        echo " [KNOWN UNSTABLE] Run of all tests marked with test.meta({ unstable: true })"
+        echo " [QUARANTINED] Run of all quarantined tests (quarantine.json)"
         echo "============================================================"
-        run_tests --onlyUnstable true
-        unstable_failed=$last_failed
+        run_tests --onlyQuarantined true
+        quarantined_failed=$last_failed
         meta_failed_names=$(jq -r '.tests[]' "$result")
 
         echo ""
         echo "============================================================"
-        echo " UNSTABLE JOB SUMMARY"
+        echo " QUARANTINE JOB SUMMARY"
         echo "============================================================"
         echo " NEW flaky tests (failed once in a regular job, rerun here):"
         if [ -s "$new_flakes_summary" ]; then
@@ -542,14 +541,14 @@ jobs:
           echo "   (none)"
         fi
         echo ""
-        echo " KNOWN unstable tests (test.meta({ unstable: true })), failed all attempts: $unstable_failed"
+        echo " QUARANTINED tests (quarantine.json), failed all attempts: $quarantined_failed"
         if [ -n "$meta_failed_names" ]; then
           echo "$meta_failed_names" | sed 's/^/   FAILED | /'
         fi
         echo "============================================================"
 
         {
-          echo "## Unstable job summary"
+          echo "## Quarantine job summary"
           echo ""
           echo "### New flaky tests (forwarded from regular jobs)"
           if [ -s "$new_flakes_summary" ]; then
@@ -562,9 +561,9 @@ jobs:
             echo "_none_"
           fi
           echo ""
-          echo "### Known unstable tests (\`test.meta({ unstable: true })\`)"
+          echo "### Quarantined tests (\`quarantine.json\`)"
           echo ""
-          echo "Failed all attempts: **$unstable_failed**"
+          echo "Failed all attempts: **$quarantined_failed**"
           if [ -n "$meta_failed_names" ]; then
             echo ""
             echo "$meta_failed_names" | sed 's/^/- /'
@@ -576,8 +575,8 @@ jobs:
           echo "This is a persistent failure, not a flake - marking the job as failed."
           exit 1
         fi
-        if [ "$unstable_failed" -gt 1 ]; then
-          echo "More than one KNOWN unstable test failed - marking the job as failed."
+        if [ "$quarantined_failed" -gt 1 ]; then
+          echo "More than one QUARANTINED test failed - marking the job as failed."
           exit 1
         fi
 
@@ -585,7 +584,7 @@ jobs:
       if: ${{ always() }}
       uses: actions/upload-artifact@v7
       with:
-        name: compared-screenshots-unstable
+        name: compared-screenshots-quarantine
         path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/compared-screenshots/**/*
         if-no-files-found: ignore
 
@@ -593,13 +592,13 @@ jobs:
       if: ${{ always() }}
       uses: actions/upload-artifact@v7
       with:
-        name: failed-tests-unstable
+        name: failed-tests-quarantine
         path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/failedtests/**/*
         if-no-files-found: ignore
 
   merge-artifacts:
     runs-on: ubuntu-latest
-    needs: [testcafe, testcafe-unstable]
+    needs: [testcafe, testcafe-quarantine]
     if: ${{ always() }}
 
     steps:
@@ -619,19 +618,19 @@ jobs:
         pattern: failed-tests-*
         delete-merged: true
 
-    - name: Merge unstable test reports
+    - name: Merge flaky test reports
       uses: actions/upload-artifact/merge@v7
       continue-on-error: true
       with:
-        name: unstable-reports
-        pattern: unstable-report-*
+        name: flaky-reports
+        pattern: flaky-report-*
         separate-directories: true
         delete-merged: true
 
   notify:
     runs-on: ubuntu-latest
     name: Send notifications
-    needs: [build, testcafe, testcafe-unstable]
+    needs: [build, testcafe, testcafe-quarantine]
     if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')
 
     steps:

@@ -54,15 +54,36 @@ interface ParsedArgs {
   platform: string;
   theme: string;
   shadowDom: boolean;
-  skipUnstable: boolean;
-  onlyUnstable: boolean;
+  skipQuarantined: boolean;
+  onlyQuarantined: boolean;
   disableScreenshots: boolean;
   retryFailed: boolean;
   testsFile: string;
-  reportUnstable: string;
+  reportFlaky: string;
   reportFailures: string;
   retryAttempts: number;
   forcePageReloads: boolean;
+}
+
+const QUARANTINE_FILE = path.join(__dirname, 'quarantine.json');
+
+interface QuarantineEntry {
+  test: string;
+  file?: string;
+}
+
+// test name -> fixture files ('' = match any file, for entries without "file")
+function readQuarantinedTests(): Map<string, string[]> {
+  const { tests } = JSON.parse(fs.readFileSync(QUARANTINE_FILE, 'utf8'));
+  const result = new Map<string, string[]>();
+
+  (tests as QuarantineEntry[]).forEach(({ test, file }) => {
+    const files = result.get(test) ?? [];
+    files.push(file ?? '');
+    result.set(test, files);
+  });
+
+  return result;
 }
 
 const getTestCafeConfig = (cache: boolean): Partial<TestCafeConfigurationOptions> => ({
@@ -119,12 +140,12 @@ function getArgs(): ParsedArgs {
       platform: '',
       theme: '',
       shadowDom: false,
-      skipUnstable: true,
-      onlyUnstable: false,
+      skipQuarantined: true,
+      onlyQuarantined: false,
       disableScreenshots: false,
       retryFailed: true,
       testsFile: '',
-      reportUnstable: '',
+      reportFlaky: '',
       reportFailures: '',
       retryAttempts: FAILED_TESTS_RETRY_ATTEMPTS,
       forcePageReloads: false,
@@ -161,12 +182,27 @@ async function main() {
     const componentFolderArg = typeof args.componentFolder === 'string' ? args.componentFolder.trim() : '';
     const componentFolder = componentFolderArg ? `${componentFolderArg}/**` : '**';
 
-    const onlyUnstable = `${args.onlyUnstable}` === 'true';
+    const onlyQuarantined = `${args.onlyQuarantined}` === 'true';
     const retryAttempts = Number(args.retryAttempts) || 0;
     const forcePageReloads = `${args.forcePageReloads}` === 'true';
     const testsFromFile = new Set<string>(
       args.testsFile ? JSON.parse(fs.readFileSync(args.testsFile, 'utf8')).tests : [],
     );
+
+    const quarantinedTests = readQuarantinedTests();
+    // test.meta({ unstable }) is the legacy marker; quarantine.json is the registry.
+    // Matching respects the fixture file: same-named tests in other files stay active.
+    const isQuarantined = (testNameArg: string, fixturePath: string, testMeta?: any): boolean => {
+      if (testMeta?.unstable) {
+        return true;
+      }
+
+      const files = quarantinedTests.get(testNameArg);
+
+      return !!files?.some(
+        (fixtureFile) => !fixtureFile || fixturePath.replace(/\\/g, '/').endsWith(fixtureFile),
+      );
+    };
 
     if (fs.existsSync('./screenshots')) {
       fs.rmSync('./screenshots', { recursive: true });
@@ -228,20 +264,20 @@ async function main() {
         filters.push((name: string) => testsToFilter.has(name));
       }
 
-      if (onlyUnstable) {
+      if (onlyQuarantined) {
         filters.push((
-          _testName: string,
+          filterTestName: string,
           _fixtureName: string,
-          _fixturePath: string,
+          fixturePath: string,
           testMeta?: any,
-        ) => !!(testMeta)?.unstable);
-      } else if (args.skipUnstable) {
+        ) => isQuarantined(filterTestName, fixturePath, testMeta));
+      } else if (args.skipQuarantined) {
         filters.push((
-          _testName: string,
+          filterTestName: string,
           _fixtureName: string,
-          _fixturePath: string,
+          fixturePath: string,
           testMeta?: any,
-        ) => !(testMeta)?.unstable);
+        ) => !isQuarantined(filterTestName, fixturePath, testMeta));
       }
 
       filters.push((
@@ -299,7 +335,7 @@ async function main() {
             if (forcePageReloads) {
               // Fresh page per test even for fixtures with disablePageReloads:
               // leftover DOM/window state from a previous test is a common
-              // source of cascading failures in the unstable run
+              // source of cascading failures in the quarantine run
               const href = await ClientFunction(
                 () => window.location.href,
               ).with({ boundTestRun: t })();
@@ -439,14 +475,14 @@ async function main() {
       writeTestsReport(args.reportFailures, failedTests, failedCount);
     }
 
-    if (args.reportUnstable && failedCount === 1 && failedTests.size === 1) {
-      writeTestsReport(args.reportUnstable, failedTests);
+    if (args.reportFlaky && failedCount === 1 && failedTests.size === 1) {
+      writeTestsReport(args.reportFlaky, failedTests);
 
       /* eslint-disable no-console */
       console.info('\n');
       console.info('='.repeat(60));
-      console.info(`Single failed test "${[...failedTests][0]}" is treated as unstable.`);
-      console.info('It will be rerun in the "unstable" job.');
+      console.info(`Single failed test "${[...failedTests][0]}" is treated as flaky.`);
+      console.info('It will be rerun in the "quarantine" job.');
       console.info('='.repeat(60));
       console.info('\n');
       /* eslint-enable no-console */
