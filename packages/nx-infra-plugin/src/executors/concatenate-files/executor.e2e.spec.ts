@@ -172,6 +172,17 @@ describe('ConcatenateFilesExecutor E2E', () => {
     const primaryPath = path.join(projectDir, 'out', 'primary.js');
     const derivedPath = path.join(projectDir, 'out', 'derived.js');
 
+    const originalOnce = process.once;
+    let stopWatch: (() => void) | undefined;
+
+    (process as unknown as { once: typeof process.once }).once = ((event: string, handler: () => void) => {
+      if (event === 'SIGINT' || event === 'SIGTERM') {
+        stopWatch = handler;
+        return process;
+      }
+      return originalOnce.call(process, event, handler as never);
+    }) as typeof process.once;
+
     const run = executor(options, context);
 
     await waitFor(() => fs.existsSync(primaryPath) && fs.existsSync(derivedPath));
@@ -185,9 +196,12 @@ describe('ConcatenateFilesExecutor E2E', () => {
     await waitFor(async () => (await readFileText(primaryPath)) === 'CCC\nBBB');
     expect(await readFileText(derivedPath)).toBe('CCC\nBBB');
 
-    process.emit('SIGINT');
-    expect((await run).success).toBe(true);
-
+    try {
+      stopWatch?.();
+      expect((await run).success).toBe(true);
+    } finally {
+      (process as unknown as { once: typeof process.once }).once = originalOnce;
+    }
     delete (globalThis as unknown as { __concatWatchHandler?: WatchHandler }).__concatWatchHandler;
   });
 });

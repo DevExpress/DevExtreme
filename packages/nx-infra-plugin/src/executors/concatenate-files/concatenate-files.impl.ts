@@ -137,8 +137,8 @@ async function resolveSourceFiles(sourceFiles: string[], projectRoot: string): P
 const WATCH_DEBOUNCE_MS = 200;
 
 // Sources are resolved per pass at run time (not once in `resolve`) so that an
-// additional pass can consume a file produced by an earlier pass, and so watch
-// rebuilds pick up newly added source files.
+// additional pass can consume a file produced by an earlier pass, and so rebuilds
+// re-resolve any glob patterns on each run.
 async function runPass(projectRoot: string, pass: ConcatenatePass): Promise<void> {
   if (!pass.sourceFiles?.length) {
     throw new Error(ERROR_SOURCE_FILES_EMPTY);
@@ -185,7 +185,12 @@ interface Chokidar {
 
 function loadChokidar(projectRoot: string): Chokidar {
   const projectRequire = createRequire(path.join(projectRoot, 'package.json'));
-  return projectRequire('chokidar') as Chokidar;
+  try {
+    return projectRequire('chokidar') as Chokidar;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`concatenate-files watch mode requires 'chokidar' to be installed in the project (${projectRoot}): ${message}`);
+  }
 }
 
 async function runWatchBuild(
@@ -241,11 +246,10 @@ async function runWatchBuild(
     watcher.on('all', scheduleRebuild);
 
     const stopWatcher = () => {
-      void watcher.close();
       if (timer) {
         clearTimeout(timer);
       }
-      resolve();
+      void Promise.resolve(watcher.close()).finally(resolve);
     };
 
     process.once('SIGINT', stopWatcher);
