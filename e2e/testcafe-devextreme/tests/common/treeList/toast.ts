@@ -43,13 +43,13 @@ test('Toast should hide after the display time', async (t) => {
     .expect(treeList.isReady())
     .ok();
 
-  await setToastDisplayTime(100);
+  await setToastDisplayTime(1000);
   await treeList.apiShowErrorToast();
   await t
     .expect(treeList.getToast().exists).ok();
 
   await t
-    .wait(150)
+    .wait(1100)
     .expect(treeList.getToast().exists).notOk();
 }).before(async () => {
   await createWidget('dxTreeList', {});
