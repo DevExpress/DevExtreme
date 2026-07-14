@@ -18,6 +18,7 @@ const DOT_NET_TICKS_EPOCH_OFFSET = 621355968000000000n;
 const DOT_NET_TICKS_PER_MS = 10000n;
 const DEVEXTREME_HTML_JS_BIT = 1n << 54n;
 const DEVEXTREME_ASPNET_BIT = 1n << 17n;
+const DEVEXTREME_COMPLETE_BITS = DEVEXTREME_HTML_JS_BIT | DEVEXTREME_ASPNET_BIT;
 
 function msToDotNetTicks(ms: number): string {
   return (BigInt(ms) * DOT_NET_TICKS_PER_MS + DOT_NET_TICKS_EPOCH_OFFSET).toString();
@@ -106,6 +107,58 @@ describe('LCP key validation', () => {
     expect(token.kind).toBe(TokenKind.verified);
     if (token.kind === TokenKind.verified) {
       expect(token.payload.maxVersionAllowed).toBe(251);
+    }
+  });
+
+  it.each([false, true])('accepts HtmlJs-only product bit (acceptAspNetEntitlement=%s)', (acceptAspNetEntitlement) => {
+    const { parseDevExpressProductKey, TokenKind } = loadParserWithBypassedSignatureCheck();
+    const payload = `meta;251,${DEVEXTREME_HTML_JS_BIT};`;
+
+    const token = parseDevExpressProductKey(createLcpSource(payload), acceptAspNetEntitlement);
+
+    expect(token.kind).toBe(TokenKind.verified);
+    if (token.kind === TokenKind.verified) {
+      expect(token.payload.maxVersionAllowed).toBe(251);
+    }
+  });
+
+  it.each([
+    { acceptAspNetEntitlement: false, expectedVersion: 251 },
+    { acceptAspNetEntitlement: true, expectedVersion: 252 },
+  ])('selects the correct entitlement for Complete followed by legacy AspNet (acceptAspNetEntitlement=$acceptAspNetEntitlement)', ({
+    acceptAspNetEntitlement,
+    expectedVersion,
+  }) => {
+    const { parseDevExpressProductKey, TokenKind } = loadParserWithBypassedSignatureCheck();
+    const payload = [
+      'meta',
+      `251,${DEVEXTREME_COMPLETE_BITS}`,
+      `252,${DEVEXTREME_ASPNET_BIT}`,
+      '',
+    ].join(';');
+
+    const token = parseDevExpressProductKey(createLcpSource(payload), acceptAspNetEntitlement);
+
+    expect(token.kind).toBe(TokenKind.verified);
+    if (token.kind === TokenKind.verified) {
+      expect(token.payload.maxVersionAllowed).toBe(expectedVersion);
+    }
+  });
+
+  it.each([false, true])('selects newer Complete after an older AspNet-only entitlement (acceptAspNetEntitlement=%s)', (acceptAspNetEntitlement) => {
+    const { parseDevExpressProductKey, TokenKind } = loadParserWithBypassedSignatureCheck();
+    const payload = [
+      'meta',
+      `251,${DEVEXTREME_ASPNET_BIT}`,
+      `252,${DEVEXTREME_COMPLETE_BITS}`,
+      '',
+    ].join(';');
+
+    const token = parseDevExpressProductKey(createLcpSource(payload), acceptAspNetEntitlement);
+
+    expect(token.kind).toBe(TokenKind.verified);
+    if (token.kind === TokenKind.verified) {
+      expect(token.payload.maxVersionAllowed).toBe(252);
     }
   });
 });

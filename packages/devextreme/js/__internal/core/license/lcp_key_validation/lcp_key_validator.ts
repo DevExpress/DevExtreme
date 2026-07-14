@@ -13,10 +13,7 @@ import {
   RSA_PUBLIC_KEY_XML,
   SIGN_LENGTH,
 } from './const';
-import {
-  findLatestDevExtremeVersion,
-  findLatestDevExtremeVersionWithAspNetCompatibility,
-} from './license_info';
+import { findLatestDevExtremeVersion } from './license_info';
 import { createProductInfo, type ProductInfo } from './product_info';
 import {
   dotNetTicksToMs,
@@ -70,7 +67,7 @@ function productsFromString(encodedString: string): ParsedProducts {
 
 export function parseDevExpressProductKey(
   productsLicenseSource: string,
-  allowAspNetProductCompatibility = false,
+  acceptAspNetEntitlement = false,
 ): Token {
   if (!isProductOnlyLicense(productsLicenseSource)) {
     return GENERAL_ERROR;
@@ -99,9 +96,10 @@ export function parseDevExpressProductKey(
       return errorToken;
     }
 
-    const maxVersionAllowed = allowAspNetProductCompatibility
-      ? findLatestDevExtremeVersionWithAspNetCompatibility({ products })
-      : findLatestDevExtremeVersion({ products });
+    const maxVersionAllowed = findLatestDevExtremeVersion(
+      { products },
+      acceptAspNetEntitlement,
+    );
 
     if (!maxVersionAllowed) {
       return PRODUCT_KIND_ERROR;
