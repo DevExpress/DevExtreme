@@ -1,6 +1,7 @@
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { Item } from '@js/ui/toolbar';
+import { getFirstFocusableElement } from '@ts/core/utils/focus';
 import type { OptionChanged } from '@ts/core/widget/types';
 
 import { MultiLineStrategy } from './strategy/toolbar.multiline';
@@ -158,6 +159,18 @@ class Toolbar extends ToolbarBase<Properties> {
 
   _updateFocusableItemsTabIndex(): void {
     this._getToolbarItems().forEach((item) => toggleItemFocusableElementTabIndex(this, item));
+  }
+
+  focusFirstItem(): boolean {
+    if (this.option('disabled')) {
+      return false;
+    }
+
+    const target = getFirstFocusableElement(this.$element().get(0) as HTMLElement);
+
+    target?.focus();
+
+    return Boolean(target);
   }
 
   _isMenuItem(itemData: Item): boolean {
