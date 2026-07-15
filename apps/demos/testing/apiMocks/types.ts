@@ -1,7 +1,7 @@
 export interface MockRequest {
   url: string;
   method: string;
-  body: Buffer;
+  body?: string | Buffer;
 }
 
 export interface MockHandler {

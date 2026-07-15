@@ -62,13 +62,22 @@ const cases: AIColumnCase[] = [
 const isOpenAIUrl = (url: string): boolean => /demo-openai\b/i.test(url);
 
 const findCase = (req: MockRequest): AIColumnCase | undefined => {
-  const body = req.body?.toString() ?? '';
+  const body = typeof req.body === 'string'
+    ? req.body
+    : req.body?.toString() ?? '';
+
   return cases.find((c) => body.includes(c.promptIncludes));
 };
 
-const matches = (req: MockRequest): boolean => isOpenAIUrl(req.url)
-  && req.method.toLowerCase() === 'post'
-  && !!findCase(req);
+const matches = (req: MockRequest): boolean => {
+  const method = req.method.toLowerCase();
+  // Answer the CORS preflight for the endpoint too, so it isn't sent to the
+  // real service (which would reintroduce flakiness).
+  if (method === 'options') {
+    return isOpenAIUrl(req.url);
+  }
+  return isOpenAIUrl(req.url) && method === 'post' && !!findCase(req);
+};
 
 const completion = (content: string): object => ({
   choices: [
@@ -78,5 +87,11 @@ const completion = (content: string): object => ({
 
 export const openAIHandler: MockHandler = {
   matches,
-  respond: (req) => completion(JSON.stringify(findCase(req)?.answers ?? {})),
+  respond: (req) => {
+    // CORS preflight — a minimal body is enough (the browser discards it).
+    if (req.method.toLowerCase() === 'options') {
+      return {};
+    }
+    return completion(JSON.stringify(findCase(req)?.answers ?? {}));
+  },
 };
