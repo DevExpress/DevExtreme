@@ -38,10 +38,10 @@ const buildRow = (index: number) => ({
 });
 
 export const ordersHandler: MockHandler = {
-  matches,
-  respond: (url) => {
-    const skip = skipOf(url);
-    const take = numberParam(url, 'take', 12);
+  matches: (req) => matches(req.url),
+  respond: (req) => {
+    const skip = skipOf(req.url);
+    const take = numberParam(req.url, 'take', 12);
     const available = Math.max(0, TOTAL_COUNT - skip);
     return {
       data: Array.from({ length: Math.min(take, available) }, (_, i) => buildRow(skip + i)),
