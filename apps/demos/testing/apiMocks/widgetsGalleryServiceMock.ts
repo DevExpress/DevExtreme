@@ -2,6 +2,7 @@ import { RequestMock } from 'testcafe';
 import type { MockHandler } from './types';
 import { salesHandler } from './handlers/sales';
 import { ordersHandler } from './handlers/orders';
+import { openAIHandler } from './handlers/openai';
 
 // Router for the remote WidgetsGalleryDataService endpoints used by demos,
 // so screenshot tests don't depend on the (flaky) live service.
@@ -14,15 +15,17 @@ const handlers: MockHandler[] = [
   salesHandler,
   // GET /api/orders
   ordersHandler,
+  // POST demo-openai chat completions (AI column)
+  openAIHandler,
 ];
 
 export const widgetsGalleryServiceMock = handlers.reduce(
   (mock, handler) => mock
-    .onRequestTo((req) => handler.matches(req.url))
+    .onRequestTo((req) => handler.matches(req))
     .respond((req, res) => {
       res.headers = { ...res.headers, ...CORS, 'content-type': 'application/json' };
       res.statusCode = 200;
-      res.setBody(JSON.stringify(handler.respond(req.url)));
+      res.setBody(JSON.stringify(handler.respond(req)));
     }),
   RequestMock(),
 );

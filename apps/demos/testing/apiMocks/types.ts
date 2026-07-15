@@ -1,4 +1,10 @@
+export interface MockRequest {
+  url: string;
+  method: string;
+  body: Buffer;
+}
+
 export interface MockHandler {
-  matches: (url: string) => boolean;
-  respond: (url: string) => unknown;
+  matches: (req: MockRequest) => boolean;
+  respond: (req: MockRequest) => unknown;
 }
