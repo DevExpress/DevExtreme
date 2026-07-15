@@ -382,7 +382,7 @@ export class ResizingController extends modules.ViewController {
     };
   }
 
-  private _synchronizeColumns():void {
+  private _synchronizeColumns(): void {
     const columnsController = this._columnsController;
     const visibleColumns = columnsController.getVisibleColumns();
     const columnAutoWidth = this.option('columnAutoWidth') as boolean;
