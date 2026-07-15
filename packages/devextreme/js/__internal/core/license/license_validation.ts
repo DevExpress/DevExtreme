@@ -5,6 +5,7 @@ import { fullVersion } from '@js/core/version';
 import type { Version } from '../../utils/version';
 import {
   assertedVersionsCompatible,
+  getAssertedVersions,
   parseVersion,
 } from '../../utils/version';
 import {
@@ -24,14 +25,23 @@ import {
 } from './types';
 
 let validationPerformed = false;
+const ASPNET_ASSERTION_PREFIX = 'devextreme.aspnet.';
 
-export function parseLicenseKey(encodedKey: string | undefined): Token {
+function hasAspNetVersionAssertion(): boolean {
+  return getAssertedVersions()
+    .some(({ packageName }) => packageName.toLowerCase().startsWith(ASPNET_ASSERTION_PREFIX));
+}
+
+export function parseLicenseKey(
+  encodedKey: string | undefined,
+  acceptAspNetEntitlement = false,
+): Token {
   if (encodedKey === undefined) {
     return GENERAL_ERROR;
   }
 
   if (isProductOnlyLicense(encodedKey)) {
-    return parseDevExpressProductKey(encodedKey);
+    return parseDevExpressProductKey(encodedKey, acceptAspNetEntitlement);
   }
 
   return GENERAL_ERROR;
@@ -77,7 +87,8 @@ function getLicenseCheckParams({
       return { preview, error: 'W0021', warningType: 'old-devextreme-key' };
     }
 
-    const license = parseLicenseKey(licenseKey);
+    const acceptAspNetEntitlement = hasAspNetVersionAssertion();
+    const license = parseLicenseKey(licenseKey, acceptAspNetEntitlement);
 
     if (license.kind === TokenKind.corrupted) {
       if (license.error === 'product-kind') {
