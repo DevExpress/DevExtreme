@@ -58,6 +58,27 @@ describe('ResourceDataAccessor', () => {
     });
   });
 
+  describe('function valueExpr/displayExpr', () => {
+    const customResource: any = { complex: { item: { guid: '0' } }, name: 'Room 1' };
+    const accessor = new ResourceDataAccessor({
+      fieldExpr: 'roomId',
+      dataSource: [],
+      valueExpr: (resource: any) => resource.complex.item.guid,
+      displayExpr: (resource: any) => resource.name,
+      label: 'Room',
+    });
+
+    it('should get fields via a function expression', () => {
+      expect(accessor.get('id', customResource)).toBe(customResource.complex.item.guid);
+      expect(accessor.get('text', customResource)).toBe(customResource.name);
+    });
+
+    it('should not throw when setting a field defined by a function expression', () => {
+      expect(() => accessor.set('id', customResource, 10)).not.toThrow();
+      expect(() => accessor.set('text', customResource, 'text')).not.toThrow();
+    });
+  });
+
   describe('parentId', () => {
     const hierarchicalResource: RawResourceData = { id: 11, text: 'Room 11', parentId: 'board' };
     const accessor = new ResourceDataAccessor({
