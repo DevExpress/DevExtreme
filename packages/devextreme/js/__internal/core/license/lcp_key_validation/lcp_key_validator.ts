@@ -65,7 +65,10 @@ function productsFromString(encodedString: string): ParsedProducts {
   }
 }
 
-export function parseDevExpressProductKey(productsLicenseSource: string): Token {
+export function parseDevExpressProductKey(
+  productsLicenseSource: string,
+  acceptAspNetEntitlement = false,
+): Token {
   if (!isProductOnlyLicense(productsLicenseSource)) {
     return GENERAL_ERROR;
   }
@@ -93,7 +96,10 @@ export function parseDevExpressProductKey(productsLicenseSource: string): Token 
       return errorToken;
     }
 
-    const maxVersionAllowed = findLatestDevExtremeVersion({ products });
+    const maxVersionAllowed = findLatestDevExtremeVersion(
+      { products },
+      acceptAspNetEntitlement,
+    );
 
     if (!maxVersionAllowed) {
       return PRODUCT_KIND_ERROR;
