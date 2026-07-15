@@ -396,6 +396,19 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 
     /**
+     * [descr:dxChatOptions.showClearButton]
+    
+     */
+    @Input()
+    get showClearButton(): boolean {
+        return this._getOption('showClearButton');
+    }
+    set showClearButton(value: boolean) {
+        this._setOption('showClearButton', value);
+    }
+
+
+    /**
      * [descr:dxChatOptions.showDayHeaders]
     
      */
@@ -789,6 +802,13 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() showClearButtonChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() showDayHeadersChange: EventEmitter<boolean>;
 
     /**
@@ -903,6 +923,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'rtlEnabledChange' },
             { emit: 'sendButtonOptionsChange' },
             { emit: 'showAvatarChange' },
+            { emit: 'showClearButtonChange' },
             { emit: 'showDayHeadersChange' },
             { emit: 'showMessageTimestampChange' },
             { emit: 'showUserNameChange' },

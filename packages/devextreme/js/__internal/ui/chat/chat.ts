@@ -27,6 +27,7 @@ import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 import { invokeConditionally } from '@ts/core/utils/conditional_invoke';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 import AlertList from '@ts/ui/chat/alertlist';
 import ConfirmationPopup from '@ts/ui/chat/confirmationpopup';
 import type {
@@ -45,6 +46,8 @@ import MessageList from '@ts/ui/chat/messagelist';
 import Suggestions, { type SuggestionsOptions } from '@ts/ui/chat/suggestions';
 import type { DataChange } from '@ts/ui/collection/collection_widget.base';
 
+import Toolbar from '../toolbar/toolbar';
+
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
@@ -52,6 +55,8 @@ class Chat extends Widget<ChatProperties> {
   _messageBox!: MessageBox;
 
   _messageList!: MessageList;
+
+  _toolbar?: Toolbar;
 
   _alertList!: AlertList;
 
@@ -130,6 +135,8 @@ class Chat extends Widget<ChatProperties> {
       onTypingStart: undefined,
       onAttachmentDownloadClick: undefined,
       onInputFieldTextChanged: undefined,
+      showClearButton: false,
+      onClearButtonClick: undefined,
     };
   }
 
@@ -184,9 +191,14 @@ class Chat extends Widget<ChatProperties> {
   }
 
   _initMarkup(): void {
+    const { showClearButton } = this.option();
     $(this.element()).addClass(CHAT_CLASS);
 
     super._initMarkup();
+
+    if (showClearButton) {
+      this._renderToolbar();
+    }
 
     this._renderMessageList();
     this._renderAlertList();
@@ -502,6 +514,27 @@ class Chat extends Widget<ChatProperties> {
     };
 
     return config;
+  }
+
+  _getClearButtonConfig(): ToolbarItem {
+    const { onClearButtonClick } = this.option();
+    return {
+      widget: 'dxButton',
+      location: 'after',
+      options: {
+        icon: 'trash',
+        onClick: (): void => {
+          onClearButtonClick?.();
+        },
+      },
+    } as ToolbarItem;
+  }
+
+  _renderToolbar(): void {
+    // @ts-expect-error Toolbar typings?
+    this._toolbar = new Toolbar(this.$element(), {
+      items: [this._getClearButtonConfig()],
+    });
   }
 
   _renderSuggestions(): void {

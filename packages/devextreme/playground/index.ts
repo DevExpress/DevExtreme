@@ -1,32 +1,121 @@
 import '../js/__internal/integration/jquery';
-import '../js/ui/card_view';
+import '../js/ui/chat';
 import $ from 'jquery';
 import { setupThemeSelector } from './themeSelector.ts';
 
-const customers = [
-  { ID: 1, Company: 'Super Mart of the West', Address: '702 SW 8th Street', City: 'Bentonville', State: 'Arkansas', Zipcode: 72716, Phone: '(800) 555-2797' },
-  { ID: 2, Company: 'Electronics Depot', Address: '2455 Paces Ferry Road NW', City: 'Atlanta', State: 'Georgia', Zipcode: 30339, Phone: '(800) 595-3232' },
-  { ID: 3, Company: 'K&S Music', Address: '1000 Nicllet Mall', City: 'Minneapolis', State: 'Minnesota', Zipcode: 55403, Phone: '(612) 304-6073' },
-  { ID: 4, Company: "Tom's Club", Address: '999 Lake Drive', City: 'Issaquah', State: 'Washington', Zipcode: 98027, Phone: '(800) 955-2292' },
-  { ID: 5, Company: 'E-Mart', Address: '3333 Beverly Rd', City: 'Hoffman Estates', State: 'Illinois', Zipcode: 60179, Phone: '(847) 286-2500' },
-  { ID: 6, Company: 'Walters', Address: '200 Wilmot Rd', City: 'Deerfield', State: 'Illinois', Zipcode: 60015, Phone: '(847) 940-2500' },
-  { ID: 7, Company: 'StereoShack', Address: '400 Commerce S', City: 'Fort Worth', State: 'Texas', Zipcode: 76102, Phone: '(817) 820-0741' },
-  { ID: 8, Company: 'Circuit Town', Address: '2200 Kensington Court', City: 'Oak Brook', State: 'Illinois', Zipcode: 60523, Phone: '(800) 955-2929' },
-  { ID: 9, Company: 'Premier Buy', Address: '7601 Penn Avenue South', City: 'Richfield', State: 'Minnesota', Zipcode: 55423, Phone: '(612) 291-1000' },
-  { ID: 10, Company: 'ElectrixMax', Address: '263 Shuman Blvd', City: 'Naperville', State: 'Illinois', Zipcode: 60563, Phone: '(630) 438-7800' },
-  { ID: 11, Company: 'Video Emporium', Address: '1201 Elm Street', City: 'Dallas', State: 'Texas', Zipcode: 75270, Phone: '(214) 854-3000' },
-  { ID: 12, Company: 'Screen Shop', Address: '1000 Lowes Blvd', City: 'Mooresville', State: 'North Carolina', Zipcode: 28117, Phone: '(800) 445-6937' },
+//data.js
+const getTimestamp = function (date, offsetMinutes = 0) {
+  return date.getTime() + offsetMinutes * 60000;
+};
+
+const date = new Date();
+date.setHours(0, 0, 0, 0);
+
+const currentUser = {
+  id: 'c94c0e76-fb49-4b9b-8f07-9f93ed93b4f3',
+  name: 'John Doe',
+};
+
+const supportAgent = {
+  id: 'd16d1a4c-5c67-4e20-b70e-2991c22747c3',
+  name: 'Support Agent',
+  avatarUrl: 'images/petersmith.png',
+};
+
+let initialMessages = [
+  {
+    timestamp: getTimestamp(date, -9),
+    author: supportAgent,
+    text: 'Hello, John!\nHow can I assist you today?',
+  },
+  {
+    timestamp: getTimestamp(date, -7),
+    author: currentUser,
+    text: "Hi, I'm having trouble accessing my account.",
+  },
+  {
+    timestamp: getTimestamp(date, -7),
+    author: currentUser,
+    text: 'It says my password is incorrect.',
+  },
+  {
+    timestamp: getTimestamp(date, -7),
+    author: supportAgent,
+    text: 'I can help you with that. Can you please confirm your UserID for security purposes?',
+  },
+  {
+    timestamp: getTimestamp(date, 1),
+    author: currentUser,
+    text: 'john.doe1357',
+  },
+  {
+    timestamp: getTimestamp(date, 1),
+    author: supportAgent,
+    text: '✅ Instructions to restore access have been sent to the email address associated with your account.',
+  },
 ];
 
-window.addEventListener('load', () =>
+const initialMessagesForSupport = initialMessages.slice();
+
+
+
+
+function onWindowLoad() {
+  $(() => {
+    let userChat;
+
+    function onMessageEntered({ message }) {
+      userChat.renderMessage(message);
+      supportChat.renderMessage(message);
+    }
+
+    function userChatTypingStart() {
+      supportChat.option('typingUsers', [currentUser]);
+    }
+
+    function userChatTypingEnd() {
+      supportChat.option('typingUsers', []);
+    }
+
+    function supportChatTypingStart() {
+      userChat.option('typingUsers', [supportAgent]);
+    }
+
+    function supportChatTypingEnd() {
+      userChat.option('typingUsers', []);
+    }
+
+    const removeMessages = () => {
+      initialMessages = [];
+      userChat.option('items', []);
+    }
+
+
+    userChat = $('#user-chat').dxChat({
+      items: initialMessages,
+      user: currentUser,
+      speechToTextEnabled: true,
+      onMessageEntered,
+      onTypingStart: userChatTypingStart,
+      onTypingEnd: userChatTypingEnd,
+      showClearButton: true,
+      onClearButtonClick: removeMessages,
+    }).dxChat('instance');
+
+    const supportChat = $('#support-chat').dxChat({
+      items: initialMessagesForSupport,
+      user: supportAgent,
+      speechToTextEnabled: true,
+      onMessageEntered,
+      onTypingStart: supportChatTypingStart,
+      onTypingEnd: supportChatTypingEnd,
+    }).dxChat('instance');
+  });
+
+}
+
+window.addEventListener('load', () => {
   setupThemeSelector('theme-selector')
     .catch((err) => console.error('Theme loading failed:', err))
-    .then(() => {
-      $('#widget-container').dxCardView({
-        dataSource: customers,
-        keyExpr: 'ID',
-        cardsPerRow: 'auto',
-        cardMinWidth: 320,
-        columns: ['Company', 'Address', 'City', 'State', 'Zipcode', 'Phone'],
-      });
-    }));
+    .then(() => onWindowLoad())
+});

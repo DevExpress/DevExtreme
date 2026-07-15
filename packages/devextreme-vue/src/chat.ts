@@ -127,6 +127,7 @@ type AccessibleOptions = Pick<Properties,
   "rtlEnabled" |
   "sendButtonOptions" |
   "showAvatar" |
+  "showClearButton" |
   "showDayHeaders" |
   "showMessageTimestamp" |
   "showUserName" |
@@ -181,6 +182,7 @@ const componentConfig = {
     rtlEnabled: Boolean,
     sendButtonOptions: Object as PropType<SendButtonProperties | Record<string, any>>,
     showAvatar: Boolean,
+    showClearButton: Boolean,
     showDayHeaders: Boolean,
     showMessageTimestamp: Boolean,
     showUserName: Boolean,
@@ -231,6 +233,7 @@ const componentConfig = {
     "update:rtlEnabled": null,
     "update:sendButtonOptions": null,
     "update:showAvatar": null,
+    "update:showClearButton": null,
     "update:showDayHeaders": null,
     "update:showMessageTimestamp": null,
     "update:showUserName": null,

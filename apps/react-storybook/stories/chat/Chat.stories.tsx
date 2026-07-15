@@ -988,6 +988,46 @@ export const ControlledMode: Story = {
     }
 }
 
+export const ClearButton: Story = {
+    args: {
+        showClearButton: true,
+    },
+    argTypes: {
+        showClearButton: {
+            control: 'boolean',
+        },
+    },
+    render: ({ showClearButton }) => {
+        const [messages, setMessages] = useState<ChatTypes.Message[]>([...initialMessages]);
+
+        const onMessageEntered = useCallback(({ message }: ChatTypes.MessageEnteredEvent) => {
+            setMessages((prev) => [...prev, message]);
+        }, []);
+
+        const onClearButtonClick = useCallback(() => {
+            setMessages([]);
+        }, []);
+
+        return (
+            <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+            }}>
+                <Chat
+                    width={400}
+                    height={500}
+                    items={messages}
+                    user={secondAuthor}
+                    onMessageEntered={onMessageEntered}
+                    showClearButton={showClearButton}
+                    onClearButtonClick={onClearButtonClick}
+                />
+            </div>
+        );
+    },
+};
+
 export const SendButtonOptions: Story = {
     args: {
         action: 'send',

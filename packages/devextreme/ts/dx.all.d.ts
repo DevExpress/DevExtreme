@@ -11871,6 +11871,14 @@ declare module DevExpress.ui {
     onTypingStart?:
       | ((e: DevExpress.ui.dxChat.TypingStartEvent) => void)
       | undefined;
+    /**
+     * [descr:dxChatOptions.showClearButton]
+     */
+    showClearButton?: boolean;
+    /**
+     * [descr:dxChatOptions.onClearButtonClick]
+     */
+    onClearButtonClick?: (() => void) | undefined;
   }
   /**
    * [descr:dxCheckBox]
