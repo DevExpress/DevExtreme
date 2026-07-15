@@ -12,8 +12,25 @@ gulp.task('clean', shell.task('pnpm nx clean:artifacts devextreme'));
 
 require('./build/gulp/bundler-config');
 require('./build/gulp/transpile');
-require('./build/gulp/js-bundles');
 require('./build/gulp/localization');
+
+gulp.task('js-bundles-prod', shell.task(
+    context.uglify
+        ? 'pnpm nx run devextreme:bundle:prod -c production'
+        : 'pnpm nx run devextreme:bundle:prod'
+));
+
+gulp.task('js-bundles-debug', shell.task(
+    context.uglify
+        ? 'pnpm nx run devextreme:bundle:debug -c production'
+        : 'pnpm nx run devextreme:bundle:debug'
+));
+
+gulp.task('js-bundles-watch', shell.task(
+    context.uglify
+        ? 'pnpm nx run devextreme:bundle:watch -c production'
+        : 'pnpm nx run devextreme:bundle:watch'
+));
 
 function getTranspileConfig() {
     if(env.TEST_CI) {
