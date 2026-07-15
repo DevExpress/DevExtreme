@@ -7,12 +7,12 @@ export interface ResourceHierarchyNode {
   children: ResourceHierarchyNode[];
 }
 
-// ResourceId can be an object, so ids need hashing to be usable as Map/Set keys
-const hashOf = (id: ResourceData['id']): string | number => getKeyHash(id) as string | number;
+type Hash = string | number | object;
+const hashOf = (id: ResourceData['id']): Hash => getKeyHash(id) as Hash;
 
 const isRootItem = (
   item: ResourceData,
-  nodeByHash: Map<string | number, ResourceHierarchyNode>,
+  nodeByHash: Map<Hash, ResourceHierarchyNode>,
 ): boolean => {
   const { parentId, id } = item;
 
@@ -23,10 +23,10 @@ const isRootItem = (
 const isAncestorCycle = (
   id: ResourceData['id'],
   parentId: ResourceData['id'],
-  nodeByHash: Map<string | number, ResourceHierarchyNode>,
+  nodeByHash: Map<Hash, ResourceHierarchyNode>,
 ): boolean => {
   const targetHash = hashOf(id);
-  const visited = new Set<string | number>();
+  const visited = new Set<Hash>();
   let currentId: ResourceData['id'] | null | undefined = parentId;
 
   while (currentId != null && !visited.has(hashOf(currentId))) {
@@ -42,8 +42,8 @@ const isAncestorCycle = (
 };
 
 export const buildHierarchyTree = (items: ResourceData[]): ResourceHierarchyNode[] => {
-  const nodeByHash = new Map<string | number, ResourceHierarchyNode>();
-  const attachedHashes = new Set<string | number>();
+  const nodeByHash = new Map<Hash, ResourceHierarchyNode>();
+  const attachedHashes = new Set<Hash>();
 
   items.forEach((data) => {
     nodeByHash.set(hashOf(data.id), { data, children: [] });
