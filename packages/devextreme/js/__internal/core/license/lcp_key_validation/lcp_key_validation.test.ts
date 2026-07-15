@@ -9,6 +9,7 @@ import {
 import { version as currentVersion } from '@js/core/version';
 
 import { parseVersion } from '../../../utils/version';
+import { ProductKind } from './types';
 import { TokenKind } from '../types';
 import { parseDevExpressProductKey } from './lcp_key_validator';
 import { findLatestDevExtremeVersion, isLicenseValid } from './license_info';
@@ -159,6 +160,24 @@ describe('LCP key validation', () => {
     expect(token.kind).toBe(TokenKind.verified);
     if (token.kind === TokenKind.verified) {
       expect(token.payload.maxVersionAllowed).toBe(252);
+    }
+  });
+
+  it.each([false, true])('keeps older DevExtreme entitlement when newer entries are trial/non-DevExtreme (acceptAspNetEntitlement=%s)', (acceptAspNetEntitlement) => {
+    const { parseDevExpressProductKey, TokenKind } = loadParserWithBypassedSignatureCheck();
+    const payload = [
+      'meta',
+      `261,${ProductKind.Default}`,
+      `260,${ProductKind.DXperienceWin}`,
+      `251,${DEVEXTREME_COMPLETE_BITS}`,
+      '',
+    ].join(';');
+
+    const token = parseDevExpressProductKey(createLcpSource(payload), acceptAspNetEntitlement);
+
+    expect(token.kind).toBe(TokenKind.verified);
+    if (token.kind === TokenKind.verified) {
+      expect(token.payload.maxVersionAllowed).toBe(251);
     }
   });
 });
