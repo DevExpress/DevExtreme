@@ -1,4 +1,4 @@
-import { equalByValue } from '@ts/core/utils/m_common';
+import { getKeyHash } from '@ts/core/utils/m_common';
 
 import type { ResourceData } from '../loader/types';
 
@@ -7,104 +7,77 @@ export interface ResourceHierarchyNode {
   children: ResourceHierarchyNode[];
 }
 
-type PrimitiveId = string | number;
-
-const isPrimitiveId = (id: ResourceData['id']): id is PrimitiveId => typeof id !== 'object' || id === null;
-
-const createIdMap = <T>(): {
-  get: (id: ResourceData['id']) => T | undefined;
-  has: (id: ResourceData['id']) => boolean;
-  set: (id: ResourceData['id'], value: T) => void;
-} => {
-  const byPrimitiveId = new Map<PrimitiveId, T>();
-  const objectEntries: { id: ResourceData['id']; value: T }[] = [];
-
-  const get = (id: ResourceData['id']): T | undefined => (isPrimitiveId(id)
-    ? byPrimitiveId.get(id)
-    : objectEntries.find((entry) => equalByValue(entry.id, id))?.value);
-
-  return {
-    get,
-    has: (id: ResourceData['id']): boolean => get(id) !== undefined,
-    set: (id: ResourceData['id'], value: T): void => {
-      if (isPrimitiveId(id)) {
-        byPrimitiveId.set(id, value);
-      } else {
-        objectEntries.push({ id, value });
-      }
-    },
-  };
-};
-
-type NodeMap = ReturnType<typeof createIdMap<ResourceHierarchyNode>>;
+// ResourceId can be an object, so ids need hashing to be usable as Map/Set keys
+const hashOf = (id: ResourceData['id']): string | number => getKeyHash(id) as string | number;
 
 const isRootItem = (
   item: ResourceData,
-  nodeById: NodeMap,
+  nodeByHash: Map<string | number, ResourceHierarchyNode>,
 ): boolean => {
   const { parentId, id } = item;
 
-  return parentId == null || !nodeById.has(parentId) || Boolean(equalByValue(parentId, id));
+  return parentId == null || !nodeByHash.has(hashOf(parentId)) || hashOf(parentId) === hashOf(id);
 };
 
 // Without this check, a parentId loop (A's parent is B, B's parent is A) causes a stack overflow
 const isAncestorCycle = (
   id: ResourceData['id'],
   parentId: ResourceData['id'],
-  nodeById: NodeMap,
+  nodeByHash: Map<string | number, ResourceHierarchyNode>,
 ): boolean => {
-  const visited = createIdMap<true>();
+  const targetHash = hashOf(id);
+  const visited = new Set<string | number>();
   let currentId: ResourceData['id'] | null | undefined = parentId;
 
-  while (currentId != null && !visited.has(currentId)) {
-    if (equalByValue(currentId, id)) {
+  while (currentId != null && !visited.has(hashOf(currentId))) {
+    if (hashOf(currentId) === targetHash) {
       return true;
     }
 
-    visited.set(currentId, true);
-    currentId = nodeById.get(currentId)?.data.parentId;
+    visited.add(hashOf(currentId));
+    currentId = nodeByHash.get(hashOf(currentId))?.data.parentId;
   }
 
   return false;
 };
 
 export const buildHierarchyTree = (items: ResourceData[]): ResourceHierarchyNode[] => {
-  const nodeById = createIdMap<ResourceHierarchyNode>();
-  const attachedAsChild = createIdMap<true>();
+  const nodeByHash = new Map<string | number, ResourceHierarchyNode>();
+  const attachedHashes = new Set<string | number>();
 
   items.forEach((data) => {
-    nodeById.set(data.id, { data, children: [] });
+    nodeByHash.set(hashOf(data.id), { data, children: [] });
   });
 
   items.forEach((data) => {
-    if (isRootItem(data, nodeById)) {
+    if (isRootItem(data, nodeByHash)) {
       return;
     }
 
-    const node = nodeById.get(data.id);
+    const node = nodeByHash.get(hashOf(data.id));
     const { parentId } = data;
 
     if (node === undefined || parentId == null) {
       return;
     }
 
-    if (isAncestorCycle(data.id, parentId, nodeById)) {
+    if (isAncestorCycle(data.id, parentId, nodeByHash)) {
       return;
     }
 
-    const parent = nodeById.get(parentId);
+    const parent = nodeByHash.get(hashOf(parentId));
 
     if (parent === undefined) {
       return;
     }
 
     parent.children.push(node);
-    attachedAsChild.set(data.id, true);
+    attachedHashes.add(hashOf(data.id));
   });
 
   return items
-    .filter((data) => !attachedAsChild.has(data.id))
-    .map((data) => nodeById.get(data.id))
+    .filter((data) => !attachedHashes.has(hashOf(data.id)))
+    .map((data) => nodeByHash.get(hashOf(data.id)))
     .filter((node): node is ResourceHierarchyNode => node !== undefined);
 };
 
