@@ -191,7 +191,6 @@
     "build:modular": "cd ./playground/modular && webpack",
     "build:modular:watch": "cd ./playground/modular && webpack --watch",
     "build:community-localization": "pnpm nx build:community-localization devextreme",
-    "build:systemjs": "gulp transpile-systemjs",
     "dev": "cross-env DEVEXTREME_TEST_CI=true gulp dev",
     "dev:watch": "cross-env DEVEXTREME_TEST_CI=true gulp dev-watch",
     "dev:playground": "vite",

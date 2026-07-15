@@ -1614,9 +1614,16 @@
       "cache": true
     },
     "build:systemjs": {
-      "executor": "nx:run-script",
+      "executor": "nx:run-commands",
       "options": {
-        "script": "build:systemjs"
+        "cwd": "{projectRoot}",
+        "parallel": true,
+        "commands": [
+          "node testing/systemjs-builder.js --transpile=modules",
+          "node testing/systemjs-builder.js --transpile=testing",
+          "node testing/systemjs-builder.js --transpile=css",
+          "node testing/systemjs-builder.js --transpile=js-vendors"
+        ]
       },
       "dependsOn": [
         "build:dev"
@@ -1645,7 +1652,6 @@
         "{projectRoot}/testing/helpers/**/*",
         "{projectRoot}/testing/tests/**/*",
         "{projectRoot}/testing/systemjs-builder.js",
-        "{projectRoot}/build/gulp/systemjs.js",
         "{workspaceRoot}/pnpm-lock.yaml"
       ],
       "outputs": [
