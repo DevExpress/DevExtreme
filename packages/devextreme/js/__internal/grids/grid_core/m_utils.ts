@@ -572,8 +572,8 @@ export default {
     try {
       if (focusedElement) {
         return {
-          selectionStart: focusedElement.selectionStart,
-          selectionEnd: focusedElement.selectionEnd,
+          selectionStart: isNumeric(focusedElement.selectionStart) ? focusedElement.selectionStart : -1,
+          selectionEnd: isNumeric(focusedElement.selectionEnd) ? focusedElement.selectionEnd : -1,
           selectionDirection: focusedElement.selectionDirection ?? undefined,
         };
       }
