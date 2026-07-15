@@ -200,7 +200,7 @@ class Popover<
       const { visible } = this.option();
 
       const overlayStack = this._overlayStack();
-      const isTopOverlay = overlayStack[overlayStack.length - 1] === this as unknown;
+      const isTopOverlay = overlayStack[overlayStack.length - 1] === this;
 
       if (normalizeKeyName(e) === ESC_KEY_NAME && visible && isTopOverlay) {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
