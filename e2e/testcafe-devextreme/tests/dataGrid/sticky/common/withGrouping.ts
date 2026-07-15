@@ -289,6 +289,37 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
   },
 }));
 
+test.meta({
+  browserSize: [900, 800],
+  themes: ['generic.light', 'material.blue.light'],
+})('Focused group row keeps focused background and centered expand icon with fixed columns (T1303478)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await t.click(dataGrid.getGroupRow(0).element);
+
+  await testScreenshot(t, takeScreenshot, 'grouping-focused-group-row.png', { element: dataGrid.element });
+
+  await dataGrid.scrollTo(t, { x: 100 });
+  await testScreenshot(t, takeScreenshot, 'grouping-focused-group-row-scroll.png', { element: dataGrid.element });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  ...defaultConfig,
+  focusedRowEnabled: true,
+  customizeColumns(columns) {
+    columns[2].groupIndex = 0;
+  },
+  scrolling: {
+    showScrollbar: 'never',
+  },
+}));
+
 [false, true].forEach((rtlEnabled) => {
   // T1284612
   test(`DataGrid - Group summaries are shown over sticky columns on a horizontal scroll - intersection (rtl=${rtlEnabled})`, async (t) => {
