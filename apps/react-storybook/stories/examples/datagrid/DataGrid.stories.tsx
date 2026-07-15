@@ -353,3 +353,46 @@ export const AiColumn: Story = {
         allowColumnReordering: true,
     },
 };
+
+export const RowDraggingWithFixedColumns: Story = {
+    args: {
+        showBorders: true,
+        showRowLines: false,
+        rowDragging: {
+            showDragIcons: true,
+        },
+    },
+    render: ({ showBorders, showRowLines, rowDragging }) => {
+        const [data, setData] = useState(countries);
+
+        const onReorder = useCallback((e: DataGridTypes.RowDraggingReorderEvent) => {
+            setData((items) => {
+                const reorderedItems = [...items];
+                const [movedItem] = reorderedItems.splice(e.fromIndex, 1);
+
+                reorderedItems.splice(e.toIndex, 0, movedItem);
+
+                return reorderedItems;
+            });
+        }, []);
+
+        return (
+            <DataGrid
+                dataSource={data}
+                keyExpr="ID"
+                height={440}
+                showBorders={showBorders}
+                showRowLines={showRowLines}
+                columnFixing={{ enabled: true }}
+                focusedRowEnabled={true}
+                selection={{ mode: 'single' }}
+                rowDragging={{
+                    allowReordering: true,
+                    showDragIcons: rowDragging?.showDragIcons,
+                    onReorder,
+                }}
+                columns={['Country', 'Area', 'Population_Total', 'GDP_Total']}
+            />
+        );
+    },
+};
