@@ -88,11 +88,11 @@ describe('ResourceDataAccessor', () => {
       label: 'Room',
     });
 
-    it('should get parentId with default parentIdExpr', () => {
+    it('should get parentId with configured parentIdExpr', () => {
       expect(accessor.get('parentId', hierarchicalResource)).toBe('board');
     });
 
-    it('should set parentId with default parentIdExpr', () => {
+    it('should set parentId with configured parentIdExpr', () => {
       accessor.set('parentId', hierarchicalResource, 'open');
 
       expect(hierarchicalResource.parentId).toBe('open');
