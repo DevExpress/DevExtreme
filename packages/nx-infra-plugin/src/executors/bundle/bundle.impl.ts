@@ -162,6 +162,8 @@ async function runWebpackWatch(
       });
     };
 
+    let postBuildChain = Promise.resolve();
+
     watching = compiler.watch(
       {
         aggregateTimeout: 200,
@@ -186,7 +188,8 @@ async function runWebpackWatch(
 
         logWebpackWarnings(stats);
 
-        void onSuccess(stats)
+        postBuildChain = postBuildChain
+          .then(() => onSuccess(stats))
           .then(() => {
             logger.info('bundle watch: rebuild complete');
           })
