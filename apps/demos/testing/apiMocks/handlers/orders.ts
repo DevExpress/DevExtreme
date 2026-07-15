@@ -42,8 +42,9 @@ export const ordersHandler: MockHandler = {
   respond: (url) => {
     const skip = skipOf(url);
     const take = numberParam(url, 'take', 12);
+    const available = Math.max(0, TOTAL_COUNT - skip);
     return {
-      data: Array.from({ length: Math.min(take, TOTAL_COUNT - skip) }, (_, i) => buildRow(skip + i)),
+      data: Array.from({ length: Math.min(take, available) }, (_, i) => buildRow(skip + i)),
       totalCount: TOTAL_COUNT,
     };
   },
