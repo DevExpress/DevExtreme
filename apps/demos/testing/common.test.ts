@@ -21,6 +21,7 @@ import { accessibilityUnsupportedComponents } from './accessibility-unsupported-
 import { knownWarnings } from './known-warnings';
 import { skipJsErrorsComponents } from './skip-js-errors-components';
 import { skippedTests } from './skipped-tests';
+import { widgetsGalleryServiceMock } from './apiMocks/widgetsGalleryServiceMock';
 
 import { gitHubIgnored } from '../utils/visual-tests/github-ignored-list';
 
@@ -85,7 +86,8 @@ Object.values(FRAMEWORKS).forEach((approach) => {
       }
     })
     .afterEach(async (t) => clearTimeout(t.ctx.watchDogHandle))
-    .clientScripts(getClientScripts());
+    .clientScripts(getClientScripts())
+    .requestHooks(widgetsGalleryServiceMock);
 
   const getDemoPaths = (platform) => glob.sync('Demos/*/*')
     .map((path) => join(path, platform));
