@@ -134,11 +134,6 @@
       "implementation": "./src/executors/scss-build/executor",
       "schema": "./src/executors/scss-build/schema.json",
       "description": "Run SCSS themes build pipeline in all or CI mode"
-    },
-    "transpile-systemjs": {
-      "implementation": "./src/executors/transpile-systemjs/executor",
-      "schema": "./src/executors/transpile-systemjs/schema.json",
-      "description": "Transpile SystemJS bundles by running the systemjs-builder for each mode in parallel"
     }
   }
 }

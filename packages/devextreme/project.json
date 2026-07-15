@@ -1614,7 +1614,17 @@
       "cache": true
     },
     "build:systemjs": {
-      "executor": "devextreme-nx-infra-plugin:transpile-systemjs",
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "parallel": true,
+        "commands": [
+          "node testing/systemjs-builder.js --transpile=modules",
+          "node testing/systemjs-builder.js --transpile=testing",
+          "node testing/systemjs-builder.js --transpile=css",
+          "node testing/systemjs-builder.js --transpile=js-vendors"
+        ]
+      },
       "dependsOn": [
         "build:dev"
       ],
