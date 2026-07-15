@@ -65,7 +65,6 @@ function testsFactory(testModel: {
     await testModel.assertFirstColumnHidden(t, cardView);
 
     await testModel.showFirstColumn(t, cardView);
-
     await testModel.assertFirstColumnVisible(t, cardView);
 
     await testModel.hideFirstColumn(t, cardView);
