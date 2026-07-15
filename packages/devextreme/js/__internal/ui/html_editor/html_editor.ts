@@ -31,7 +31,6 @@ import type { Properties as FormProperties } from '@js/ui/form';
 import type { Converter, HtmlEditorFormat, Properties } from '@js/ui/html_editor';
 import { getNextFocusableElement, getPreviousFocusableElement } from '@ts/core/utils/focus';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { ValueChangedEvent } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
 import ConverterController, { type BaseConverter } from '@ts/ui/html_editor/m_converterController';
 import { getQuill } from '@ts/ui/html_editor/m_quill_importer';
@@ -357,9 +356,9 @@ class HtmlEditor extends Editor<Properties> {
     eventsEngine.on(this._$htmlContainer, keyDownEvent, this._keyDownHandler.bind(this));
   }
 
-  _keyDownHandler(e: ValueChangedEvent): void {
+  _keyDownHandler(e: DxEvent<KeyboardEvent>): void {
     this._saveValueChangeEvent(e);
-    this._handleFocusEscape(e as unknown as KeyboardEvent);
+    this._handleFocusEscape(e);
   }
 
   _handleFocusEscape(e: KeyboardEvent): void {
