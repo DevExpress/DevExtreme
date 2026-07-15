@@ -135,4 +135,46 @@ describe('BundleExecutor E2E', () => {
     expect(bundleContent).toMatch(/^\/\*!/);
     expect(bundleContent).toContain('DevExtreme (dx.all.js)');
   }, 60000);
+
+  async function waitUntil(
+    predicate: () => boolean | Promise<boolean>,
+    timeoutMs = 30000,
+    intervalMs = 200,
+  ): Promise<void> {
+    const startedAt = Date.now();
+
+    while (Date.now() - startedAt < timeoutMs) {
+      if (await predicate()) {
+        return;
+      }
+      await new Promise((resolve) => setTimeout(resolve, intervalMs));
+    }
+
+    throw new Error(`Timed out after ${timeoutMs}ms`);
+  }
+
+  it('should produce bundles on initial watch compilation', async () => {
+    const outputPath = path.join(projectDir, 'artifacts', 'js', 'dx.all.debug.js');
+
+    const options: BundleExecutorSchema = {
+      entries: ['bundles/dx.all.js'],
+      sourceDir: './artifacts/transpiled-renovation-npm',
+      outDir: './artifacts/js',
+      mode: 'debug',
+      webpackConfigPath: './webpack.config.js',
+      watch: true,
+    };
+
+    const watchPromise = executor(options, context);
+
+    await waitUntil(() => fs.existsSync(outputPath));
+    expect(await readFileText(outputPath)).toContain('Hello,');
+
+    setImmediate(() => {
+      process.emit('SIGINT');
+    });
+
+    const result = await watchPromise;
+    expect(result.success).toBe(true);
+  }, 60000);
 });
