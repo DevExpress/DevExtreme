@@ -151,6 +151,6 @@ const groupedPage = (url: string): object => {
 };
 
 export const salesHandler: MockHandler = {
-  matches,
-  respond: (url) => (hasGroup(url) ? groupedPage(url) : flatPage(url)),
+  matches: (req) => matches(req.url),
+  respond: (req) => (hasGroup(req.url) ? groupedPage(req.url) : flatPage(req.url)),
 };
