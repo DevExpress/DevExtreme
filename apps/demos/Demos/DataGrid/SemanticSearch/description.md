@@ -14,6 +14,6 @@ When connected to your own AI model/service without rate and data limits, semant
 This demo configures semantic filtering on the server (using [AzureOpenAI embeddings](https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/embeddings?tabs=csharp)). You can incorporate server-side semantic search using built-in DataGrid visual elements. In this demo, each request returns filtered data using two parameters:
 
 - A search value (entered in the built-in [search panel](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/searchPanel/))
-- A similarity factor (can be adjusted via a custom [toolbar](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/toolbar/) item)
+- A similarity factor (can be modified via a custom [toolbar](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/toolbar/) item)
 
-After you enter a query in the search panel, DataGrid passes the new search value to the backend and loads the filtered data set.
+After you enter a query in the search panel, the DevExtreme DataGrid passes the new search value to the backend and loads the filtered data set.
