@@ -94,6 +94,18 @@ describe('hierarchy_tree_utils', () => {
       expect(tree.map((node) => node.data.id)).toEqual(['a', 'b']);
       expect(tree.every((node) => node.children.length === 0)).toBe(true);
     });
+
+    it('should link a child to its parent when the id is an object compared by value', () => {
+      const items = [
+        item({ room: 1 }, 'Board', null),
+        item({ room: 2 }, 'Room 11', { room: 1 }),
+      ];
+
+      const tree = buildHierarchyTree(items);
+
+      expect(tree).toHaveLength(1);
+      expect(tree[0].children.map((node) => node.data.id)).toEqual([{ room: 2 }]);
+    });
   });
 
   describe('collectHierarchyLeaves', () => {

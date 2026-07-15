@@ -1,3 +1,5 @@
+import { equalByValue } from '@ts/core/utils/m_common';
+
 import type { ResourceData } from '../loader/types';
 
 export interface ResourceHierarchyNode {
@@ -5,30 +7,61 @@ export interface ResourceHierarchyNode {
   children: ResourceHierarchyNode[];
 }
 
+type PrimitiveId = string | number;
+
+const isPrimitiveId = (id: ResourceData['id']): id is PrimitiveId => typeof id !== 'object' || id === null;
+
+const createIdMap = <T>(): {
+  get: (id: ResourceData['id']) => T | undefined;
+  has: (id: ResourceData['id']) => boolean;
+  set: (id: ResourceData['id'], value: T) => void;
+} => {
+  const byPrimitiveId = new Map<PrimitiveId, T>();
+  const objectEntries: { id: ResourceData['id']; value: T }[] = [];
+
+  const get = (id: ResourceData['id']): T | undefined => (isPrimitiveId(id)
+    ? byPrimitiveId.get(id)
+    : objectEntries.find((entry) => equalByValue(entry.id, id))?.value);
+
+  return {
+    get,
+    has: (id: ResourceData['id']): boolean => get(id) !== undefined,
+    set: (id: ResourceData['id'], value: T): void => {
+      if (isPrimitiveId(id)) {
+        byPrimitiveId.set(id, value);
+      } else {
+        objectEntries.push({ id, value });
+      }
+    },
+  };
+};
+
+type NodeMap = ReturnType<typeof createIdMap<ResourceHierarchyNode>>;
+
 const isRootItem = (
   item: ResourceData,
-  nodeById: Map<ResourceData['id'], ResourceHierarchyNode>,
+  nodeById: NodeMap,
 ): boolean => {
   const { parentId, id } = item;
 
-  return parentId == null || !nodeById.has(parentId) || parentId === id;
+  return parentId == null || !nodeById.has(parentId) || Boolean(equalByValue(parentId, id));
 };
 
 // Without this check, a parentId loop (A's parent is B, B's parent is A) causes a stack overflow
 const isAncestorCycle = (
   id: ResourceData['id'],
   parentId: ResourceData['id'],
-  nodeById: Map<ResourceData['id'], ResourceHierarchyNode>,
+  nodeById: NodeMap,
 ): boolean => {
-  const visited = new Set<ResourceData['id']>();
+  const visited = createIdMap<true>();
   let currentId: ResourceData['id'] | null | undefined = parentId;
 
   while (currentId != null && !visited.has(currentId)) {
-    if (currentId === id) {
+    if (equalByValue(currentId, id)) {
       return true;
     }
 
-    visited.add(currentId);
+    visited.set(currentId, true);
     currentId = nodeById.get(currentId)?.data.parentId;
   }
 
@@ -36,8 +69,8 @@ const isAncestorCycle = (
 };
 
 export const buildHierarchyTree = (items: ResourceData[]): ResourceHierarchyNode[] => {
-  const nodeById = new Map<ResourceData['id'], ResourceHierarchyNode>();
-  const attachedAsChild = new Set<ResourceData['id']>();
+  const nodeById = createIdMap<ResourceHierarchyNode>();
+  const attachedAsChild = createIdMap<true>();
 
   items.forEach((data) => {
     nodeById.set(data.id, { data, children: [] });
@@ -66,7 +99,7 @@ export const buildHierarchyTree = (items: ResourceData[]): ResourceHierarchyNode
     }
 
     parent.children.push(node);
-    attachedAsChild.add(data.id);
+    attachedAsChild.set(data.id, true);
   });
 
   return items
