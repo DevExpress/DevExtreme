@@ -146,23 +146,34 @@ async function runWebpackWatch(
     let watching: ReturnType<typeof compiler.watch> | undefined;
     let isClosing = false;
 
-    const stopWatching = () => {
+    let postBuildChain = Promise.resolve();
+
+    const removeSignalHandlers = (): void => {
+      process.removeListener('SIGINT', stopWatching);
+      process.removeListener('SIGTERM', stopWatching);
+    };
+
+    const finishShutdown = (): void => {
+      void postBuildChain.finally(() => {
+        resolve();
+      });
+    };
+
+    const stopWatching = (): void => {
       if (isClosing) {
         return;
       }
       isClosing = true;
+      removeSignalHandlers();
+
       if (!watching) {
-        resolve();
+        finishShutdown();
         return;
       }
       watching.close(() => {
-        setTimeout(() => {
-          resolve();
-        }, 100);
+        setTimeout(finishShutdown, 100);
       });
     };
-
-    let postBuildChain = Promise.resolve();
 
     watching = compiler.watch(
       {
