@@ -491,6 +491,8 @@
         "dxFilterBuilder-filterAriaItemOperation": "アイテム操作",
         "dxFilterBuilder-filterAriaItemValue": "アイテムの値",
 
+        "dxHtmlEditor-editorAriaLabel": "Editor content",
+        "dxHtmlEditor-ariaEscapeInstruction": "Press Ctrl + Shift + Up arrow or Ctrl + Shift + Down arrow to move focus out of the editing area",
         "dxHtmlEditor-dialogColorCaption": "フォントの色を変更",
         "dxHtmlEditor-dialogBackgroundCaption": "背景色を変更",
         "dxHtmlEditor-dialogLinkCaption": "リンクの追加",

@@ -491,6 +491,8 @@
         "dxFilterBuilder-filterAriaItemOperation": "項目操作",
         "dxFilterBuilder-filterAriaItemValue": "項目值",
 
+        "dxHtmlEditor-editorAriaLabel": "Editor content",
+        "dxHtmlEditor-ariaEscapeInstruction": "Press Ctrl + Shift + Up arrow or Ctrl + Shift + Down arrow to move focus out of the editing area",
         "dxHtmlEditor-dialogColorCaption": "更改字體顏色",
         "dxHtmlEditor-dialogBackgroundCaption": "更改背景顏色",
         "dxHtmlEditor-dialogLinkCaption": "新增連結",

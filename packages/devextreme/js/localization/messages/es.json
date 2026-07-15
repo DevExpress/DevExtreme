@@ -491,6 +491,8 @@
         "dxFilterBuilder-filterAriaItemOperation": "Operación del elemento",
         "dxFilterBuilder-filterAriaItemValue": "Valor del elemento",
 
+        "dxHtmlEditor-editorAriaLabel": "Editor content",
+        "dxHtmlEditor-ariaEscapeInstruction": "Press Ctrl + Shift + Up arrow or Ctrl + Shift + Down arrow to move focus out of the editing area",
         "dxHtmlEditor-dialogColorCaption": "Cambiar el color de la fuente",
         "dxHtmlEditor-dialogBackgroundCaption": "Cambiar el color de fondo",
         "dxHtmlEditor-dialogLinkCaption": "Añadir enlace",

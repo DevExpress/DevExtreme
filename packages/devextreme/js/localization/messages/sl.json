@@ -491,6 +491,8 @@
         "dxFilterBuilder-filterAriaItemOperation": "Operacija elementa",
         "dxFilterBuilder-filterAriaItemValue": "Vrednost elementa",
 
+        "dxHtmlEditor-editorAriaLabel": "Editor content",
+        "dxHtmlEditor-ariaEscapeInstruction": "Press Ctrl + Shift + Up arrow or Ctrl + Shift + Down arrow to move focus out of the editing area",
         "dxHtmlEditor-dialogColorCaption": "Zamenjaj barvo pisave",
         "dxHtmlEditor-dialogBackgroundCaption": "Zamenjaj barvo ozadja",
         "dxHtmlEditor-dialogLinkCaption": "Dodaj povezavo",
