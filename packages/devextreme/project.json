@@ -1614,10 +1614,7 @@
       "cache": true
     },
     "build:systemjs": {
-      "executor": "nx:run-script",
-      "options": {
-        "script": "build:systemjs"
-      },
+      "executor": "devextreme-nx-infra-plugin:transpile-systemjs",
       "dependsOn": [
         "build:dev"
       ],
@@ -1645,7 +1642,6 @@
         "{projectRoot}/testing/helpers/**/*",
         "{projectRoot}/testing/tests/**/*",
         "{projectRoot}/testing/systemjs-builder.js",
-        "{projectRoot}/build/gulp/systemjs.js",
         "{workspaceRoot}/pnpm-lock.yaml"
       ],
       "outputs": [

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "title": "Transpile SystemJS Executor Schema",
+  "description": "Transpile SystemJS bundles by running the systemjs-builder script for each transpile mode in parallel",
+  "type": "object",
+  "properties": {
+    "builderScript": {
+      "type": "string",
+      "description": "Path (relative to the project root) to the systemjs-builder script",
+      "default": "./testing/systemjs-builder.js"
+    },
+    "modes": {
+      "type": "array",
+      "description": "Transpile modes forwarded to the builder via --transpile=<mode>, run in parallel",
+      "items": {
+        "type": "string"
+      },
+      "default": ["modules", "testing", "css", "js-vendors"]
+    }
+  }
+}

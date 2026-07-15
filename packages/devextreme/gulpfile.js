@@ -14,7 +14,6 @@ require('./build/gulp/bundler-config');
 require('./build/gulp/transpile');
 require('./build/gulp/js-bundles');
 require('./build/gulp/localization');
-require('./build/gulp/systemjs');
 
 function getTranspileConfig() {
     if(env.TEST_CI) {
