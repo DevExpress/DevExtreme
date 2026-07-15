@@ -1,6 +1,17 @@
-import { RequestMock } from 'testcafe';
+import type { MockHandler } from '../types';
+import {
+  pad, numberParam, skipOf, hasGroup, hasFilter, isGroupedBy,
+} from '../utils';
 
-const CORS = { 'access-control-allow-origin': '*' };
+// GET /api/Sales, excluding /api/Sales/Orders
+
+const isSalesOrdersUrl = (url: string): boolean => /\/api\/Sales\/Orders\b/i.test(url);
+
+const matches = (url: string): boolean => /\/api\/Sales\b/i.test(url) && !isSalesOrdersUrl(url);
+
+// ---------------------------------------------------------------------------
+// Grouped responses
+// ---------------------------------------------------------------------------
 
 const toGroup = ({ key, count }: { key: string; count: number }) => ({
   key,
@@ -80,44 +91,66 @@ const categoryGroups = {
 
 const emptyGroups = { data: [], totalCount: 0, groupCount: 0 };
 
-const isSalesUrl = (url: string): boolean => /\/api\/Sales\b/i.test(url);
+// ---------------------------------------------------------------------------
+// Flat page
+// ---------------------------------------------------------------------------
 
-const hasFilter = (url: string): boolean => /[?&]filter=/.test(url);
+const TOTAL_COUNT = 1000000;
 
-const groupParam = (url: string): string => {
-  const match = url.match(/[?&]group=([^&]*)/);
-  return match ? decodeURIComponent(match[1]) : '';
-};
-
-const isGroupedBy = (url: string, selector: string): boolean => groupParam(url).includes(`"selector":"${selector}"`);
-
-const skipOf = (url: string): number => {
-  const match = url.match(/[?&]skip=(\d+)/);
-  return match ? Number(match[1]) : 0;
-};
-
-const entries: { match: (url: string) => boolean; data: object }[] = [
-  {
-    match: (url) => isSalesUrl(url) && isGroupedBy(url, 'StoreName') && !hasFilter(url) && skipOf(url) === 0,
-    data: storeGroupsInitPage,
-  },
-  {
-    match: (url) => isSalesUrl(url) && isGroupedBy(url, 'StoreName') && !hasFilter(url) && skipOf(url) > 0,
-    data: storeGroupsScrolledPage,
-  },
-  {
-    match: (url) => isSalesUrl(url) && isGroupedBy(url, 'ProductCategoryName') && hasFilter(url),
-    data: categoryGroups,
-  },
-  {
-    match: (url) => isSalesUrl(url),
-    data: emptyGroups,
-  },
+const stores = [
+  'Contoso Albany Store', 'Contoso Boston Store', 'Contoso Chicago Store',
+  'Contoso Denver Store', 'Contoso Eugene Store', 'Contoso Fresno Store',
 ];
 
-export const remoteGroupingMock = entries.reduce(
-  (mock, { match, data }) => mock
-    .onRequestTo((req) => match(req.url))
-    .respond(data, 200, CORS),
-  RequestMock(),
-);
+const categories = [
+  'Audio', 'Cameras and camcorders', 'Cell phones',
+  'Computers', 'Home Appliances', 'TV and Video',
+];
+
+const products = [
+  'Contoso 512MB MP3 Player E51 Silver',
+  'Adventure Works 26" 720p LCD HDTV M140',
+  'The Phone Company Touch Screen Phones PE7 Black',
+  'Proseware Projector 1080p LCD86 Silver',
+  'Fabrikam Refrigerator 24.7CuFt X9800 White',
+  'Litware Home Theater System 5.1 Channel M515 Silver',
+];
+
+const salesDate = (index: number): string => {
+  const base = new Date(Date.UTC(2024, 0, 1));
+  base.setUTCDate(base.getUTCDate() + index);
+  return `${base.getUTCFullYear()}-${pad(base.getUTCMonth() + 1)}-${pad(base.getUTCDate())}T00:00:00`;
+};
+
+const buildRow = (index: number) => ({
+  Id: index + 1,
+  StoreName: stores[index % stores.length],
+  ProductCategoryName: categories[index % categories.length],
+  ProductName: products[index % products.length],
+  DateKey: salesDate(index),
+  SalesAmount: 100 + ((index * 37) % 900),
+});
+
+const flatPage = (url: string): object => {
+  const skip = skipOf(url);
+  const take = numberParam(url, 'take', 100);
+  return {
+    data: Array.from({ length: take }, (_, i) => buildRow(skip + i)),
+    totalCount: TOTAL_COUNT,
+  };
+};
+
+const groupedPage = (url: string): object => {
+  if (isGroupedBy(url, 'StoreName') && !hasFilter(url)) {
+    return skipOf(url) === 0 ? storeGroupsInitPage : storeGroupsScrolledPage;
+  }
+  if (isGroupedBy(url, 'ProductCategoryName') && hasFilter(url)) {
+    return categoryGroups;
+  }
+  return emptyGroups;
+};
+
+export const salesHandler: MockHandler = {
+  matches: (req) => matches(req.url),
+  respond: (req) => (hasGroup(req.url) ? groupedPage(req.url) : flatPage(req.url)),
+};
