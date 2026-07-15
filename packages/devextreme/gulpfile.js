@@ -13,7 +13,6 @@ gulp.task('clean', shell.task('pnpm nx clean:artifacts devextreme'));
 require('./build/gulp/bundler-config');
 require('./build/gulp/transpile');
 require('./build/gulp/localization');
-require('./build/gulp/systemjs');
 
 gulp.task('js-bundles-prod', shell.task(
     context.uglify
