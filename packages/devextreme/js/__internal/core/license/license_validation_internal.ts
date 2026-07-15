@@ -1,13 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Token } from './types';
 
-// @ts-expect-error - only for internal usage
-export function parseLicenseKey(encodedKey: string | undefined): Token {}
+export function parseLicenseKey(
+  encodedKey: string | undefined,
+  acceptAspNetEntitlement?: boolean,
+): Token {
+  return undefined as unknown as Token;
+}
 
 export function validateLicense(licenseKey: string, version?: string): void {}
 
-// @ts-expect-error - only for internal usage
-export function peekValidationPerformed(): boolean {}
+export function peekValidationPerformed(): boolean {
+  return false;
+}
 
 export function setLicenseCheckSkipCondition(): void {}
 
