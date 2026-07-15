@@ -21,7 +21,7 @@ test('cardHeader item with a named template should render the template content (
   cardHeader: {
     visible: true,
     items: [
-        { template: 'myTemplate' },
+      { template: 'myTemplate' },
     ],
   },
   templatesRenderAsynchronously: true,
