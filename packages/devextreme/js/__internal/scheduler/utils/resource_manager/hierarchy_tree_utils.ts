@@ -14,6 +14,27 @@ const isRootItem = (
   return parentId == null || !nodeById.has(parentId) || parentId === id;
 };
 
+// Without this check, a parentId loop (A's parent is B, B's parent is A) causes a stack overflow
+const isAncestorCycle = (
+  id: ResourceData['id'],
+  parentId: ResourceData['id'],
+  nodeById: Map<ResourceData['id'], ResourceHierarchyNode>,
+): boolean => {
+  const visited = new Set<ResourceData['id']>();
+  let currentId: ResourceData['id'] | null | undefined = parentId;
+
+  while (currentId != null && !visited.has(currentId)) {
+    if (currentId === id) {
+      return true;
+    }
+
+    visited.add(currentId);
+    currentId = nodeById.get(currentId)?.data.parentId;
+  }
+
+  return false;
+};
+
 export const buildHierarchyTree = (items: ResourceData[]): ResourceHierarchyNode[] => {
   const nodeById = new Map<ResourceData['id'], ResourceHierarchyNode>();
   const attachedAsChild = new Set<ResourceData['id']>();
@@ -34,6 +55,10 @@ export const buildHierarchyTree = (items: ResourceData[]): ResourceHierarchyNode
       return;
     }
 
+    if (isAncestorCycle(data.id, parentId, nodeById)) {
+      return;
+    }
+
     const parent = nodeById.get(parentId);
 
     if (parent === undefined) {
@@ -44,18 +69,10 @@ export const buildHierarchyTree = (items: ResourceData[]): ResourceHierarchyNode
     attachedAsChild.add(data.id);
   });
 
-  const roots = items
+  return items
     .filter((data) => !attachedAsChild.has(data.id))
     .map((data) => nodeById.get(data.id))
     .filter((node): node is ResourceHierarchyNode => node !== undefined);
-
-  if (roots.length === 0 && items.length > 0) {
-    return items
-      .map((data) => nodeById.get(data.id))
-      .filter((node): node is ResourceHierarchyNode => node !== undefined);
-  }
-
-  return roots;
 };
 
 export const collectHierarchyLeaves = (

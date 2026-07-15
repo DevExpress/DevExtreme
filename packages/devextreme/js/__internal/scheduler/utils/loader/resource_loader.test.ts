@@ -105,5 +105,15 @@ describe('resource loader', () => {
       expect(loader.hierarchyTree).toEqual([]);
       expect(loader.leafItems).toEqual(loader.items);
     });
+
+    it('should clear hierarchy tree and leaf items on dispose', async () => {
+      const loader = new ResourceLoader(getHierarchyConfig(roomData));
+
+      await loader.load();
+      loader.dispose();
+
+      expect(loader.hierarchyTree).toEqual([]);
+      expect(loader.leafItems).toEqual([]);
+    });
   });
 });

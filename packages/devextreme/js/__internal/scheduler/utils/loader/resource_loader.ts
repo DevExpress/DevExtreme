@@ -72,9 +72,11 @@ export class ResourceLoader extends Loader<RawResourceData, ResourceData> {
   }
 
   protected applyChanges(items: RawResourceData[]): void {
-    if (items && items !== this.data) {
-      this.data = items;
-      this.items = this.onLoadTransform(this.data);
+    const hasChanged = Boolean(items) && items !== this.data;
+
+    super.applyChanges(items);
+
+    if (hasChanged) {
       this.rebuildHierarchy();
     }
   }
@@ -93,4 +95,10 @@ export class ResourceLoader extends Loader<RawResourceData, ResourceData> {
   protected onLoadError(): void {}
 
   protected onChange(): void {}
+
+  public dispose(): void {
+    super.dispose();
+    this.hierarchyTree = [];
+    this.leafItems = [];
+  }
 }

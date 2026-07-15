@@ -82,6 +82,18 @@ describe('hierarchy_tree_utils', () => {
         tree[0].children[0].children[0].children[0].children[0].data.id,
       ).toBe(5);
     });
+
+    it('should break a two-node parentId cycle instead of looping forever', () => {
+      const items = [
+        item('a', 'A', 'b'),
+        item('b', 'B', 'a'),
+      ];
+
+      const tree = buildHierarchyTree(items);
+
+      expect(tree.map((node) => node.data.id)).toEqual(['a', 'b']);
+      expect(tree.every((node) => node.children.length === 0)).toBe(true);
+    });
   });
 
   describe('collectHierarchyLeaves', () => {
@@ -110,6 +122,18 @@ describe('hierarchy_tree_utils', () => {
       const leaves = collectHierarchyLeaves(tree);
 
       expect(leaves.map((leaf) => leaf.id)).toEqual([1, 2]);
+    });
+
+    it('should not recurse infinitely when the tree came from a parentId cycle', () => {
+      const items = [
+        item('a', 'A', 'b'),
+        item('b', 'B', 'a'),
+      ];
+
+      const tree = buildHierarchyTree(items);
+      const leaves = collectHierarchyLeaves(tree);
+
+      expect(leaves.map((leaf) => leaf.id)).toEqual(['a', 'b']);
     });
   });
 });
