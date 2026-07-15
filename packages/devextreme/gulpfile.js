@@ -27,7 +27,11 @@ gulp.task('js-bundles-debug', shell.task(
         : 'pnpm nx run devextreme:bundle:debug'
 ));
 
-gulp.task('js-bundles-watch', shell.task('pnpm nx run devextreme:bundle:watch'));
+gulp.task('js-bundles-watch', shell.task(
+    context.uglify
+        ? 'pnpm nx run devextreme:bundle:watch -c production'
+        : 'pnpm nx run devextreme:bundle:watch'
+));
 
 function getTranspileConfig() {
     if(env.TEST_CI) {
