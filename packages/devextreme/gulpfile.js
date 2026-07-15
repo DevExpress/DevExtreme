@@ -140,7 +140,7 @@ gulp.task('main-batch-dev', createMainBatch(true));
 gulp.task('default', createDefaultBatch());
 gulp.task('default-dev', createDefaultBatch(true));
 
-gulp.task('test-env', shell.task('node ./testing/launch'));
+gulp.task('test-env', shell.task('pnpm nx test-env devextreme'));
 
 gulp.task('dev-watch', gulp.parallel(
     'transpile-watch',
