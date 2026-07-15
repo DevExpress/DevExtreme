@@ -1156,6 +1156,24 @@ QUnit.module('Lookup', {
         });
     });
 
+    QUnit.test('popover mode should keep role="dialog" after the cancel button toolbar becomes empty', function(assert) {
+        const instance = $('#lookup').dxLookup({
+            usePopover: true,
+            showCancelButton: true
+        }).dxLookup('instance');
+
+        this.togglePopup();
+
+        const $overlayContent = $(instance.content()).parent();
+
+        assert.strictEqual($overlayContent.attr('role'), 'dialog', 'role is dialog after opening');
+
+        instance.option('showCancelButton', false);
+
+        assert.strictEqual($overlayContent.attr('role'), 'dialog', 'role stays dialog with an empty toolbar');
+        assert.strictEqual($('#lookup').attr('aria-describedby'), undefined, 'lookup element is not described by the popover content');
+    });
+
     QUnit.test('showEvent/hideEvent is null when usePopover is true', function(assert) {
         this.instance.option({
             usePopover: true

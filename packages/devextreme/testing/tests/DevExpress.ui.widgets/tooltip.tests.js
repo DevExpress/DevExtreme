@@ -184,6 +184,30 @@ QUnit.module('accessibility', () => {
 
     });
 
+    QUnit.test('role should stay "tooltip" when showTitle and showCloseButton are enabled', function(assert) {
+        const $tooltip = $('#tooltip');
+        new Tooltip($tooltip, {
+            target: '#target',
+            showTitle: true,
+            title: 'title',
+            showCloseButton: true
+        });
+        const $overlayContent = $tooltip.find(`.${OVERLAY_CONTENT_CLASS}`);
+
+        assert.equal($overlayContent.attr('role'), 'tooltip');
+    });
+
+    QUnit.test('role should be "dialog" when toolbarItems are specified', function(assert) {
+        const $tooltip = $('#tooltip');
+        new Tooltip($tooltip, {
+            target: '#target',
+            toolbarItems: [{ text: 'ok' }]
+        });
+        const $overlayContent = $tooltip.find(`.${OVERLAY_CONTENT_CLASS}`);
+
+        assert.equal($overlayContent.attr('role'), 'dialog');
+    });
+
     QUnit.module('WCAG - dismissible', () => {
         QUnit.test('should hide visible tooltip on Escape key press', function(assert) {
             const tooltip = new Tooltip($('#tooltip'), {

@@ -775,10 +775,13 @@ class Popup<
 
   _toggleAriaLabel(): void {
     const { title, showTitle } = this.option();
-    const shouldSetAriaLabel = showTitle && Boolean(title);
+    const $label = this._$topToolbar?.find(`.${TOOLBAR_LABEL_CLASS}`).eq(0);
+    // NOTE: A custom titleTemplate can render no label element; aria-labelledby
+    // must not reference a missing id then.
+    const shouldSetAriaLabel = Boolean(showTitle) && Boolean(title) && Boolean($label?.length);
     const titleId = shouldSetAriaLabel ? new Guid().toString() : null;
 
-    this._$topToolbar?.find(`.${TOOLBAR_LABEL_CLASS}`).eq(0).attr('id', titleId);
+    $label?.attr('id', titleId);
     this.$overlayContent().attr('aria-labelledby', titleId);
   }
 
@@ -1408,6 +1411,7 @@ class Popup<
         break;
       case 'titleTemplate': {
         this._renderTopToolbarImpl();
+        this._toggleAriaLabel();
         this._renderGeometry();
         triggerResizeEvent(this.$overlayContent());
         break;
