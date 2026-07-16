@@ -5,7 +5,7 @@ export interface Config {
   rtlEnabled: WidgetProperties['rtlEnabled'];
   disabled: WidgetProperties['disabled'];
   templatesRenderAsynchronously: unknown; // TODO: Properties['templatesRenderAsynchronously'];
-  integrationOptions: WidgetProperties['integrationOptions'];
+  integrationOptions: Pick<NonNullable<WidgetProperties['integrationOptions']>, 'templates'> | undefined;
 }
 
 export const ConfigContext = createContext<Config>({
