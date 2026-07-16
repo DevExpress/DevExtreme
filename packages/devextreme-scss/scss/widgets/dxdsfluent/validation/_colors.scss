@@ -1,0 +1,9 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+$validation-message-color: $base-inverted-text-color !default;
+$validation-message-background-color: $base-invalid-color !default;
+$validation-summary-color: $base-invalid-color !default;

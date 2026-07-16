@@ -1,0 +1,80 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../menu/colors" as *;
+@use "../button/sizes" as *;
+@use "../common/mixins" as *;
+@use "../../base/icon_fonts" as *;
+@use "../../base/mixins" as *;
+@use "../../base/menuBase";
+
+// adduse
+
+.dx-menu-item {
+  color: $menu-color;
+
+  a {
+    color: $menu-item-link-color;
+  }
+
+  &.dx-state-disabled {
+    color: $menu-item-color-disabled;
+  }
+
+  &.dx-state-hover {
+    background-color: $menu-item-hover-bg;
+  }
+
+  &.dx-state-focused {
+    background-color: $menu-item-hover-bg;
+  }
+
+  &.dx-state-active {
+    background-color: $menu-item-bg-active;
+  }
+
+  .dx-item-url {
+    display: inherit;
+    gap: inherit;
+  }
+
+  .dx-icon-with-url {
+    &::before {
+      display: inline-block;
+    }
+  }
+}
+
+.dx-menu-item-selected {
+  background-color: $menu-item-selected-bg;
+  color: $menu-item-selected-color;
+
+  &.dx-state-focused {
+    background-color: $menu-item-focused-selected-bg;
+  }
+}
+
+.dx-menu-item-expanded,
+.dx-menu-item-expanded.dx-state-hover,
+.dx-menu-item-expanded.dx-state-focused {
+  color: $menu-item-expanded-color;
+  background-color: $menu-item-selected-bg;
+}
+
+.dx-menu-base {
+  &.dx-state-focused {
+    outline: none;
+  }
+
+  .dx-icon {
+    @include dx-icon-sizing($fluent-button-icon-size);
+  }
+
+  .dx-menu-item {
+    .dx-menu-item-content {
+      line-height: $fluent-menu-item-line-height;
+    }
+  }
+}

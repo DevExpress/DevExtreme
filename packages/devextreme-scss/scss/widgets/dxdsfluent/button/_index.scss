@@ -1,0 +1,219 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "mixins" as *;
+@use "../../base/button";
+
+// adduse
+
+.dx-button-content {
+  line-height: $fluent-button-content-line-height;
+}
+
+.dx-button-text {
+  line-height: $fluent-button-text-line-height;
+  text-transform: $fluent-button-text-transform;
+  font-weight: $fluent-button-text-font-weight;
+  letter-spacing: $fluent-button-text-letter-spacing;
+}
+
+.dx-button {
+  @include dx-button-onlyicon-sizing();
+}
+
+.dx-button-has-icon {
+  @include dx-button-onlyicon-sizing();
+}
+
+.dx-button-has-text {
+  @include dx-button-withtext-sizing();
+}
+
+.dx-button-has-icon.dx-button-has-text {
+  @include dx-button-text-and-icon-sizing();
+}
+
+// NOTE: Button styles
+
+.dx-button-mode-contained {
+  &.dx-button-normal {
+    box-shadow: $fluent-button-box-shadow-size $button-shadow-color;
+  }
+}
+
+.dx-button { // stylelint-disable-line no-duplicate-selectors
+  height: $fluent-button-height;
+  position: relative;
+
+  .dx-button-content {
+    position: relative;
+  }
+
+  @include dx-button-styling(
+    $button-normal-bg,
+    $button-normal-color,
+    $button-normal-hover-bg,
+    $button-normal-focused-bg,
+    $button-normal-active-bg,
+    $button-normal-icon-color,
+    $button-normal-selected-bg,
+    $button-normal-selected-color,
+  );
+
+  &.dx-button-default {
+    @include dx-button-styling(
+      $button-default-bg,
+      $button-default-color,
+      $button-default-hover-bg,
+      $button-default-focused-bg,
+      $button-default-active-bg,
+      $button-default-icon-color,
+      $button-default-selected-bg,
+      $button-default-selected-color,
+    );
+  }
+
+  &.dx-button-danger {
+    @include dx-button-styling(
+      $button-danger-bg,
+      $button-danger-color,
+      $button-danger-hover-bg,
+      $button-danger-focused-bg,
+      $button-danger-active-bg,
+      $button-danger-icon-color,
+      $button-danger-selected-bg,
+      $button-danger-selected-color,
+    );
+  }
+
+  &.dx-button-success {
+    @include dx-button-styling(
+      $button-success-bg,
+      $button-success-color,
+      $button-success-hover-bg,
+      $button-success-focused-bg,
+      $button-success-active-bg,
+      $button-success-icon-color,
+      $button-success-selected-bg,
+      $button-success-selected-color,
+    );
+  }
+}
+
+.dx-button-mode-text {
+  @include dx-button-flat-color-styling(
+    $button-normal-color,
+    $button-normal-color,
+    $button-normal-color,
+    $button-normal-text-bg,
+    $button-normal-text-hover-bg,
+    $button-normal-text-focused-bg,
+    $button-normal-text-active-bg,
+    $button-normal-text-selected-bg,
+    $button-normal-selected-color,
+  );
+
+  &.dx-button-default {
+    @include dx-button-flat-color-styling(
+      $button-default-text-color,
+      $button-default-text-color-hover,
+      $button-default-text-color-active,
+      $button-default-text-bg,
+      $button-default-text-hover-bg,
+      $button-default-text-focused-bg,
+      $button-default-text-active-bg,
+      $button-default-text-selected-bg,
+      $button-default-text-selected-color,
+    );
+  }
+
+  &.dx-button-danger {
+    @include dx-button-flat-color-styling(
+      $button-danger-text-color,
+      $button-danger-text-color-hover,
+      $button-danger-text-color-active,
+      $button-danger-text-bg,
+      $button-danger-text-hover-bg,
+      $button-danger-text-focused-bg,
+      $button-danger-text-active-bg,
+      $button-danger-text-selected-bg,
+      $button-danger-text-selected-color,
+    );
+  }
+
+  &.dx-button-success {
+    @include dx-button-flat-color-styling(
+      $button-success-text-color,
+      $button-success-text-color-hover,
+      $button-success-text-color-active,
+      $button-success-text-bg,
+      $button-success-text-hover-bg,
+      $button-success-text-focused-bg,
+      $button-success-text-active-bg,
+      $button-success-text-selected-bg,
+      $button-success-text-selected-color,
+    );
+  }
+}
+
+.dx-button-mode-outlined {
+  @include dx-button-outlined-color-styling(
+    $button-normal-color,
+    $button-normal-color,
+    $button-normal-color,
+    $base-border-color,
+    $button-normal-outlined-bg,
+    $button-normal-outlined-hover-bg,
+    $button-normal-outlined-focused-bg,
+    $button-normal-outlined-active-bg,
+    $button-normal-outlined-selected-bg,
+    $button-normal-selected-color,
+  );
+
+  &.dx-button-default {
+    @include dx-button-outlined-color-styling(
+      $button-default-outlined-color,
+      $button-default-outlined-color-hover,
+      $button-default-outlined-color-active,
+      $button-default-outlined-border-color,
+      $button-default-outlined-bg,
+      $button-default-outlined-hover-bg,
+      $button-default-outlined-focused-bg,
+      $button-default-outlined-active-bg,
+      $button-default-outlined-selected-bg,
+      $button-default-outlined-selected-color,
+    );
+  }
+
+  &.dx-button-danger {
+    @include dx-button-outlined-color-styling(
+      $button-danger-outlined-color,
+      $button-danger-outlined-color-hover,
+      $button-danger-outlined-color-active,
+      $button-danger-outlined-border-color,
+      $button-danger-outlined-bg,
+      $button-danger-outlined-hover-bg,
+      $button-danger-outlined-focused-bg,
+      $button-danger-outlined-active-bg,
+      $button-danger-outlined-selected-bg,
+      $button-danger-outlined-selected-color,
+    );
+  }
+
+  &.dx-button-success {
+    @include dx-button-outlined-color-styling(
+      $button-success-outlined-color,
+      $button-success-outlined-color-hover,
+      $button-success-outlined-color-active,
+      $button-success-outlined-border-color,
+      $button-success-outlined-bg,
+      $button-success-outlined-hover-bg,
+      $button-success-outlined-focused-bg,
+      $button-success-outlined-active-bg,
+      $button-success-outlined-selected-bg,
+      $button-success-outlined-selected-color,
+    );
+  }
+}

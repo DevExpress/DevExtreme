@@ -1,0 +1,62 @@
+@use "sass:color";
+@use "../../../colors" as *;
+@use "../../../sizes" as *;
+@use "../../../button/colors" as *;
+@use "../../../button/mixins" as *;
+@use "../../../../base/icon_fonts" as *;
+@use "../../../../base/tabs";
+@use "../../variables/colors" as *;
+@use "../../variables/sizes" as *;
+@use "../../mixins" as *;
+
+// adduse
+@use "../../../scrollable";
+@use "../../../badge";
+
+.dx-tabs .dx-tabs-nav-button {
+  box-shadow: none;
+}
+
+.dx-tabs-styling-mode-secondary .dx-tabs-nav-button {
+  border-radius: $fluent-tab-item-border-radius-secondary;
+}
+
+.dx-tabs-nav-button {
+  border: none;
+  height: $fluent-tab-height;
+  background-color: $tabs-nav-button-bg-color;
+
+  &.dx-button.dx-state-disabled.dx-button-mode-contained {
+    visibility: hidden;
+  }
+
+  &.dx-button-has-icon .dx-icon {
+    width: $fluent-tab-nav-button-icon-width;
+    height: $fluent-tab-nav-button-icon-height;
+    font-size: $fluent-tab-nav-button-icon-font-size;
+  }
+
+  &.dx-state-active {
+    border: none;
+  }
+
+  &.dx-state-disabled {
+    opacity: 1;
+    background-color: $tabs-tab-background;
+
+    .dx-button-content {
+      opacity: $tabs-tab-button-disabled-opacity;
+    }
+  }
+
+  .dx-button-content {
+    flex: unset;
+    padding: $fluent-tab-nav-button-content-padding;
+  }
+}
+
+.dx-tabs-vertical {
+  .dx-tabs-nav-button {
+    padding: $fluent-tab-vertical-nav-button-content-padding;
+  }
+}

@@ -1,0 +1,19 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-badge-padding: null !default;
+$fluent-badge-font-size: null !default;
+$badge-line-height: null !default;
+
+@if $size == "default" {
+  $fluent-badge-padding: 0 6px !default;
+  $fluent-badge-font-size: 12px !default;
+  $badge-line-height: 20px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-badge-padding: 0 6px !default;
+  $fluent-badge-font-size: 10px !default;
+  $badge-line-height: 16px !default;
+}

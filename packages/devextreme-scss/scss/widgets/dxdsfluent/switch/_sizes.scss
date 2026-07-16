@@ -1,0 +1,35 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-switch-width: null !default;
+$switch-handle-margin: null !default;
+$switch-padding: 8px !default;
+$switch-container-vertical-margin: null !default;
+$switch-container-horizontal-padding: null !default;
+$fluent-switch-height: null !default;
+$switch-handle-height: null !default;
+$switch-container-height: null !default;
+
+$fluent-switch-shadow-blur-radius: 0 !default;
+$fluent-switch-container-adjustment: 6px !default;
+
+@if $size == "default" {
+  $fluent-switch-width: 40px !default;
+  $switch-handle-height: 14px !default;
+  $switch-handle-margin: 3px !default;
+  $switch-container-vertical-margin: 0 !default;
+  $switch-container-horizontal-padding: $switch-handle-margin !default;
+  $fluent-switch-height: 20px !default;
+  $switch-container-height: $fluent-switch-height !default;
+}
+
+@else if $size == "compact" {
+  $fluent-switch-width: 32px !default;
+  $switch-handle-height: 12px !default;
+  $switch-handle-margin: 2px !default;
+  $switch-container-vertical-margin: 0 !default;
+  $switch-container-horizontal-padding: $switch-handle-margin !default;
+  $fluent-switch-height: 16px !default;
+  $switch-container-height: $fluent-switch-height !default;
+}

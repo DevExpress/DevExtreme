@@ -1,0 +1,21 @@
+@use "../sizes" as *;
+
+// adduse
+
+$toast-border-radius: $fluent-base-border-radius !default;
+$fluent-toast-height: null !default;
+$fluent-toast-item-gap: null !default;
+$fluent-toast-content-vertical-padding: null !default;
+$fluent-toast-content-horizontal-padding: 12px !default;
+
+@if $size == "default" {
+  $fluent-toast-content-vertical-padding: 12px !default;
+  $fluent-toast-height: 44px !default;
+  $fluent-toast-item-gap: 12px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-toast-content-vertical-padding: 8px !default;
+  $fluent-toast-height: 36px !default;
+  $fluent-toast-item-gap: 8px !default;
+}

@@ -1,0 +1,17 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-radio-button-vertical-margin: null !default;
+$fluent-radio-group-horizontal-gap: null !default;
+
+@if $size == "default" {
+  $fluent-radio-group-horizontal-gap: 16px !default;
+  $fluent-radio-button-vertical-margin: 12px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-radio-group-horizontal-gap: 12px !default;
+  $fluent-radio-button-vertical-margin: 6px !default;
+}
+

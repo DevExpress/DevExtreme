@@ -1,0 +1,13 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+/**
+* $name 10. Background color
+* $type color
+*/
+$toolbar-bg: transparent !default;
+$toolbar-color: $base-text-color !default;
+$toolbar-separator-color: $base-separator-color !default;

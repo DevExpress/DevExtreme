@@ -1,0 +1,19 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-recurrence-until-date-box-top-margin: null !default;
+$fluent-recurrence-count-number-box-top-margin: null !default;
+$fluent-recurrence-interval-number-box-margin-top: null !default;
+
+@if $size == "default" {
+  $fluent-recurrence-until-date-box-top-margin: 60px !default;
+  $fluent-recurrence-count-number-box-top-margin: 102px !default;
+  $fluent-recurrence-interval-number-box-margin-top: 30px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-recurrence-until-date-box-top-margin: 46px !default;
+  $fluent-recurrence-count-number-box-top-margin: 78px !default;
+  $fluent-recurrence-interval-number-box-margin-top: 22px !default;
+}

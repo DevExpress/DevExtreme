@@ -1,0 +1,53 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/toast";
+
+// adduse
+@use "../overlay";
+
+
+.dx-toast-stack {
+  gap: $fluent-toast-item-gap;
+}
+
+.dx-toast-content {
+  font-size: $fluent-base-font-size;
+  font-weight: 400;
+  padding: $fluent-toast-content-vertical-padding $fluent-toast-content-horizontal-padding;
+  border-radius: $toast-border-radius;
+  box-shadow: 0 0 2px 0 color.change($base-shadow-color, $alpha: 0.12), 0 8px 16px 0 color.change($base-shadow-color, $alpha: 0.14);
+  min-height: $fluent-toast-height;
+  display: flex;
+  align-items: center;
+}
+
+.dx-toast-icon {
+  display: none;
+}
+
+.dx-toast-message {
+  padding: 0;
+}
+
+.dx-toast-info {
+  background-color: $toast-info-bg;
+  color: $toast-info-color;
+}
+
+.dx-toast-warning {
+  background-color: $toast-warning-bg;
+  color: $toast-warning-color;
+}
+
+.dx-toast-error {
+  background-color: $toast-error-bg;
+  color: $toast-error-color;
+}
+
+.dx-toast-success {
+  background-color: $toast-success-bg;
+  color: $toast-success-color;
+}

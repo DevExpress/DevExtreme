@@ -1,0 +1,87 @@
+@use "sass:color";
+@use "../../colors" as *;
+@use "../../button/colors" as *;
+
+// adduse
+
+/**
+* $name 10. Tab text color
+* $type color
+*/
+$tabs-tab-color: $base-text-color !default;
+
+/**
+* $name 20. Selected tab text color
+* $type color
+*/
+$tabs-tab-selected-color: $base-text-color !default;
+
+/**
+* $name 30. Disabled tab color
+* $type color
+*/
+$tabs-tab-disabled-color: $base-foreground-disabled !default;
+
+/**
+* $name 40. Selected tab border color
+* $type color
+*/
+$tabs-tab-border-color-selected-basic: $base-accent !default;
+$tabs-tab-border-color-selected-active: $base-accent-active !default;
+$tabs-tab-border-color-selected-hover: $base-accent-hover !default;
+$tabs-tab-border-color-selected-focused: $base-accent !default;
+$tabs-tab-border-color-active: $base-border-color-focused !default;
+$tabs-tab-border-color-hover: $base-border-color-hover !default;
+
+/**
+* $name 50. Disabled tab border color
+* $type color
+*/
+$tabs-tab-border-color-disabled: $base-foreground-disabled !default;
+
+/**
+* $name 60. Tab background color
+* $type color
+*/
+$tabs-tab-background: transparent !default;
+
+/**
+* $name 70. Tab icon color
+* $type color
+*/
+$tabs-tab-icon-color: $tabs-tab-color !default;
+
+/**
+* $name 80. Selected tab icon color
+* $type color
+*/
+$tabs-tab-icon-selected-color: $base-accent !default;
+
+/**
+* $name 90. Disabled tab icon color
+* $type color
+*/
+$tabs-tab-icon-disabled-color: $base-foreground-disabled !default;
+$tabs-tab-button-disabled-opacity: 0 !default;
+
+/**
+* $name 100. Hovered tab background color
+* $type color
+*/
+$tabs-hovered-tab-bg-color: transparent !default;
+
+/**
+* $name 110. Focused tab background color
+* $type color
+*/
+$tabs-focused-tab-bg-color: $base-hover-bg !default;
+$tabs-tab-bg-color-hover-primary: $base-hover-bg !default;
+$tabs-tab-bg-color-focus-primary: $base-hover-bg !default;
+$tabs-tab-bg-color-active-primary: $base-selected-bg !default;
+
+/**
+* $name 120. Active tab background color
+* $type color
+*/
+$tabs-active-tab-bg-color: $base-element-bg !default;
+$tabs-nav-button-bg-color: transparent !default;

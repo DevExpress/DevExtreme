@@ -1,0 +1,37 @@
+@use "colors" as *;
+@use "../colors" as *;
+@use "../sizes" as *;
+@use "../typography/sizes" as *;
+
+// adduse
+
+$stepper-padding: null !default;
+$stepper-step-min-size: null !default;
+$stepper-step-indicator-size: null !default;
+$stepper-step-content-row-gap: null !default;
+$stepper-step-content-column-gap: null !default;
+$stepper-step-optional-mark-font-size: $fluent-xs-font-size !default;
+$stepper-step-icon-size: $fluent-button-icon-size !default;
+
+$stepper-step-selected-font-weight: 600 !default;
+$stepper-step-transition-duration: .4s !default;
+
+@if $size == "default" {
+  $stepper-padding: 12px !default;
+  $stepper-step-min-size: 48px !default;
+  $stepper-step-indicator-size: 32px !default;
+  $stepper-step-content-row-gap: 8px !default;
+  $stepper-step-content-column-gap: 12px !default;
+}
+
+@else if $size == "compact" {
+  $stepper-padding: 8px !default;
+  $stepper-step-min-size: 40px !default;
+  $stepper-step-indicator-size: 24px !default;
+  $stepper-step-content-row-gap: 6px !default;
+  $stepper-step-content-column-gap: 8px !default;
+}
+
+$stepper-connector-thickness: 2px !default;
+$stepper-connector-size: $stepper-step-indicator-size !default;
+$stepper-connector-padding: $stepper-padding !default;

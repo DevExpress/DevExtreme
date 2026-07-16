@@ -1,0 +1,12 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/box";
+
+// adduse
+
+.dx-box-item-content {
+  font-size: $fluent-base-font-size;
+}

@@ -1,0 +1,86 @@
+$size: null !default;
+
+@use "colors" as *;
+
+$fluent-size-postfix: null !default;
+$fluent-base-font-size: null !default;
+$fluent-base-inline-widget-height: null !default;
+$fluent-base-inline-block-height: null !default;
+$fluent-base-icon-size: null !default;
+$fluent-base-icon-margin: 8px !default;
+$fluent-base-inline-horizontal-padding: null !default;
+$fluent-base-border-radius: null !default;
+$fluent-html-editor-add-image-dialog-base-padding: 5px !default;
+
+/**
+* $name 11. Button height
+* $type text
+*/
+$fluent-button-height: null !default;
+
+/**
+* $name 12. Icon size
+* $type text
+*/
+$fluent-button-icon-size: null !default;
+
+/**
+* $name 13. Icon margin
+* $type text
+*/
+$fluent-button-icon-margin: null !default;
+
+@if $size == "default" {
+  $fluent-size-postfix: "" !default;
+
+  // Font sizes
+  $fluent-base-font-size: 14px !default;
+
+  // Base sizes
+  $fluent-base-inline-widget-height: 32px !default;
+  $fluent-base-inline-block-height: 20px !default;
+  $fluent-base-icon-size: 20px !default;
+  $fluent-base-inline-horizontal-padding: 12px !default;
+  $fluent-base-border-radius: 4px !default;
+  $fluent-button-height: 32px !default;
+  $fluent-button-icon-size: 20px !default;
+  $fluent-button-icon-margin: 8px !default;
+}
+
+@if $size == "compact" {
+  $fluent-size-postfix: ".compact" !default;
+
+  // Font sizes
+  $fluent-base-font-size: 12px !default;
+
+  // Base sizes
+  $fluent-base-inline-widget-height: 24px !default;
+  $fluent-base-inline-block-height: 16px !default;
+  $fluent-base-icon-size: 16px !default;
+  $fluent-base-inline-horizontal-padding: 8px !default;
+  $fluent-base-border-radius: 4px !default;
+  $fluent-button-height: 24px !default;
+  $fluent-button-icon-size: 16px !default;
+  $fluent-button-icon-margin: 4px !default;
+}
+
+// Base bordered inline widgets sizes
+$fluent-base-border-width: 1px !default;
+
+
+/**
+* $name 200. Border radius
+* $type text
+*/
+$base-border-radius: $fluent-base-border-radius !default;
+
+$fluent-base-standard-texteditor-input-horizontal-padding: 0 !default;
+
+
+:root {
+  --dx-component-height: #{$fluent-base-inline-widget-height};
+  --dx-font-size: #{$fluent-base-font-size};
+  --dx-border-width: #{$fluent-base-border-width};
+  --dx-border-radius: #{$fluent-base-border-radius};
+  --dx-font-size-icon: #{$fluent-base-icon-size};
+}

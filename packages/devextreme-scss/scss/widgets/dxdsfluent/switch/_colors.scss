@@ -1,0 +1,45 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+$switch-accent-color: $base-accent !default;
+$switch-accent-color-hover: $base-accent-hover !default;
+$switch-accent-color-focused: $base-accent-active !default;
+
+/**
+* $name 20. Track 'OFF' background color
+* $type color
+*/
+$switch-bg: transparent !default;
+
+/**
+* $name 30. Handle 'OFF' background color
+* $type color
+*/
+$switch-handle-off-bg: $base-border-color-accessible !default;
+
+/**
+* $name 40. Track 'ON' background color
+* $type color
+*/
+$switch-on-bg: $base-accent !default;
+
+/**
+* $name 50. Handle 'ON' background color
+* $type color
+*/
+$switch-handle-on-bg: $base-element-bg !default;
+$switch-handle-border-radius: 50% !default;
+$switch-on-disabled-bg: $base-background-disabled !default;
+$switch-handle-disabled-bg: $base-foreground-disabled !default;
+$switch-border-color-disabled: $base-border-color-disabled !default;
+$switch-off-border-color: $base-border-color-accessible !default;
+$switch-off-border-hover-color: $base-border-color-accessible-hover !default;
+$switch-off-border-active-color: $base-border-color-accessible-focused !default;
+
+$switch-invalid-color: $base-invalid-color !default;
+$switch-invalid-color-hover: $base-invalid-color-hover !default;
+$switch-invalid-color-focused: $base-invalid-color-selected !default;
+

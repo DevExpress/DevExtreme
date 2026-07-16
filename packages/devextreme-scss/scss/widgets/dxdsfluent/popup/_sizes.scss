@@ -1,0 +1,50 @@
+@use "../sizes" as *;
+@use "colors" as *;
+
+// adduse
+
+$fluent-popup-content-padding: null !default;
+$fluent-popup-content-vertical-padding: null !default;
+$fluent-popup-content-withtitle-top-padding: null !default;
+$fluent-popup-content-withtitle-bottom-padding: null !default;
+$fluent-popup-toolbar-horizontal-padding: null !default;
+$fluent-popup-bottom-toolbar-height: null !default;
+$fluent-popup-toolbar-height: null !default;
+
+$fluent-popup-button-margin: 0 8px !default;
+$fluent-popup-toolbar-item-spacing: 8px !default;
+
+$fluent-popup-content-shadow: null !default;
+$fluent-popup-focused-content-shadow: null !default;
+
+@if $size == "default" {
+  $fluent-popup-content-padding: 24px !default;
+  $fluent-popup-content-vertical-padding: 16px !default;
+  $fluent-popup-content-withtitle-top-padding: 24px !default;
+  $fluent-popup-content-withtitle-bottom-padding: 16px !default;
+
+  $fluent-popup-toolbar-horizontal-padding: 24px !default;
+  $fluent-popup-bottom-toolbar-height: 48px !default;
+  $fluent-popup-toolbar-height: 48px !default;
+
+  $fluent-popup-content-shadow: 0 0 8px 0 $popup-content-shadow-color1, 0 32px 64px 0 $popup-content-shadow-color2 !default;
+  $fluent-popup-focused-content-shadow: 0 0 12px 0 $popup-focused-content-shadow-color, 0 32px 64px 0 $popup-focused-content-shadow-color !default;
+}
+
+@else if $size == "compact" {
+  $fluent-popup-content-padding: 16px !default;
+  $fluent-popup-content-vertical-padding: 12px !default;
+  $fluent-popup-content-withtitle-top-padding: 16px !default;
+  $fluent-popup-content-withtitle-bottom-padding: 12px !default;
+
+  $fluent-popup-toolbar-horizontal-padding: 16px !default;
+  $fluent-popup-bottom-toolbar-height: 36px !default;
+  $fluent-popup-toolbar-height: 36px !default;
+
+  $fluent-popup-content-shadow: 0 0 8px 0 $popup-content-shadow-color1, 0 32px 64px 0 $popup-content-shadow-color2 !default;
+  $fluent-popup-focused-content-shadow: 0 0 12px 0 $popup-focused-content-shadow-color, 0 32px 64px 0 $popup-focused-content-shadow-color !default;
+}
+
+:root {
+  --dx-popup-toolbar-item-padding-inline: #{$fluent-popup-toolbar-item-spacing};
+}

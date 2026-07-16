@@ -1,0 +1,19 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-dropdownbutton-action-horizontal-padding: null !default;
+$fluent-dropdownbutton-icon-spindown-size: null !default;
+$fluent-dropdownbutton-icon-spindown-right-size: null !default;
+
+@if $size == "default" {
+  $fluent-dropdownbutton-action-horizontal-padding: 12px !default;
+  $fluent-dropdownbutton-icon-spindown-size: 24px;
+  $fluent-dropdownbutton-icon-spindown-right-size: 16px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-dropdownbutton-action-horizontal-padding: 8px !default;
+  $fluent-dropdownbutton-icon-spindown-size: 18px;
+  $fluent-dropdownbutton-icon-spindown-right-size: 12px !default;
+}

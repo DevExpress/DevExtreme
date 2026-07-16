@@ -1,0 +1,53 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/mixins" as *;
+@use "../../base/switch";
+@use "../../base/switch/mixins" as *;
+
+// adduse
+
+$fluent-switch-transition: all 0.2s cubic-bezier(0.33,0,0.67,1);
+$fluent-switch-handle-on-shadow: 0 0 0 $fluent-switch-shadow-blur-radius color.change($switch-handle-on-bg, $alpha: 0.1);
+$fluent-switch-shadow: none;
+
+@include dx-switch(
+  $fluent-switch-width,
+  $fluent-switch-height,
+  $switch-padding,
+  $switch-handle-height,
+  $switch-container-height,
+  $switch-container-horizontal-padding,
+  $switch-container-vertical-margin,
+  $switch-handle-margin,
+  $switch-handle-border-radius,
+  $fluent-switch-transition,
+);
+@include dx-switch-states-fluent(
+  $switch-on-disabled-bg,
+  $switch-handle-disabled-bg,
+  $fluent-switch-shadow,
+  $switch-bg,
+  $switch-on-bg,
+  $switch-accent-color-hover,
+  $switch-accent-color-focused,
+  $fluent-switch-handle-on-shadow,
+  $switch-handle-off-bg,
+  $switch-handle-on-bg,
+  1px solid,
+  $switch-off-border-color,
+  $switch-off-border-hover-color,
+  $switch-off-border-active-color,
+  $switch-accent-color,
+  $switch-invalid-color,
+  $switch-invalid-color-hover,
+  $switch-invalid-color-focused,
+  $switch-border-color-disabled,
+);
+@include dx-switch-rtl(
+  $switch-handle-height - $switch-handle-margin,
+  $fluent-switch-shadow-blur-radius,
+  $fluent-switch-container-adjustment,
+);

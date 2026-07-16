@@ -1,0 +1,71 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../button/sizes" as *;
+@use "../button/mixins" as *;
+@use "../../base/calendar/calendar";
+@use "../../base/calendar/mixins" as *;
+
+// adduse
+
+@include dx-calendar-mixin(
+  $calendar-bg,
+  $fluent-calendar-legacy-width,
+  $fluent-calendar-legacy-height,
+  $fluent-calendar-element-padding,
+  $fluent-calendar-footer-button-height,
+  $calendar-invalid-border-color,
+  $calendar-invalid-border-color-focused,
+);
+
+.dx-calendar-navigator-previous-view,
+.dx-calendar-navigator-next-view {
+  @include dx-button-onlyicon-sizing($fluent-base-icon-size);
+}
+
+@include dx-calendar-navigator-mixin(
+  $calendar-navigator-text-color,
+);
+@include dx-calendar-body-mixin(
+  $calendar-week-number-cell-color,
+  $calendar-week-number-cell-bg,
+  $calendar-week-number-border-radius,
+  $fluent-calendar-cell-font-size,
+  $calendar-header-color,
+);
+@include dx-calendar-cell-mixin(
+  $calendar-cell-contoured-border-radius,
+  $calendar-color,
+  $base-border-radius,
+  $calendar-cell-selected-bg,
+  $calendar-hover-bg,
+  $calendar-cell-hover-color,
+  $calendar-cell-active-bg,
+  $calendar-cell-selected-bg,
+  $calendar-cell-selected-color,
+  $calendar-cell-contoured-border-color,
+  $calendar-cell-other-color,
+  $calendar-cell-other-hover-color,
+  $calendar-cell-hover-border-color,
+  999em,
+);
+@include dx-calendar-cell-in-range-mixin(
+  "::before",
+  $calendar-hover-bg,
+  $calendar-cell-hover-border-color,
+  999em,
+  0,
+);
+@include dx-calendar-cell-in-range-mixin(
+  "::after",
+  inherit,
+  $calendar-cell-hover-border-color,
+  999em,
+  1px,
+  '.dx-calendar-cell-range-hover',
+  '.dx-calendar-cell-range-hover-start',
+  '.dx-calendar-cell-range-hover-end',
+);

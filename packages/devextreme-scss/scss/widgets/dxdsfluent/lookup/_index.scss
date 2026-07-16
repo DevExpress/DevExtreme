@@ -1,0 +1,175 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icon_fonts" as *;
+@use "../textEditor/sizes" as *;
+@use "../textEditor/colors" as *;
+@use "../dropDownEditor" as *;
+@use "../common/mixins" as *;
+@use "../../base/lookup";
+@use "../../base/lookup/mixins" as *;
+@use "../overlay/colors" as *;
+
+// adduse
+@use "../dropDownList";
+
+.dx-lookup {
+  .dx-lookup-arrow {
+    inset-inline-end: $texteditor-spin-button-horizontal-padding;
+  }
+
+  &.dx-editor-filled,
+  &.dx-editor-outlined {
+    .dx-lookup-field {
+      padding-inline-start: $fluent-filled-texteditor-input-horizontal-padding;
+      padding-inline-end: $fluent-filled-texteditor-input-horizontal-padding + $fluent-base-icon-size;
+    }
+
+    &.dx-invalid {
+      .dx-lookup-field {
+        padding-inline-end: $fluent-filled-texteditor-input-horizontal-padding + $fluent-base-icon-size * 2;
+      }
+    }
+  }
+
+  &.dx-editor-underlined {
+    .dx-lookup-field {
+      padding-inline-start: $fluent-base-standard-texteditor-input-horizontal-padding;
+      padding-inline-end: $fluent-base-standard-texteditor-input-horizontal-padding + $fluent-base-icon-size + $texteditor-spin-button-horizontal-padding;
+    }
+
+    &.dx-invalid {
+      .dx-lookup-field {
+        padding-inline-end: $fluent-base-standard-texteditor-input-horizontal-padding + $fluent-base-icon-size * 2 + $texteditor-spin-button-horizontal-padding;
+      }
+    }
+  }
+
+  &.dx-invalid {
+    .dx-lookup-arrow::after {
+      @include dx-invalid-fluent-badge();
+
+      inset-inline-end: $fluent-base-icon-size;
+    }
+  }
+
+  &.dx-valid {
+    .dx-lookup-arrow::after {
+      @include dx-valid-fluent-badge();
+
+      inset-inline-end: $fluent-base-icon-size;
+    }
+  }
+
+  &.dx-validation-pending {
+    .dx-lookup-field-wrapper {
+      .dx-pending-indicator {
+        @include dx-pending-indicator-fluent();
+
+        inset-inline-end: $fluent-base-icon-size;
+      }
+    }
+  }
+}
+
+.dx-lookup-field {
+  min-height: $lookup-field-height;
+  line-height: $fluent-texteditor-line-height;
+  padding-top: $fluent-filled-texteditor-input-top-padding;
+  padding-bottom: $fluent-filled-texteditor-input-bottom-padding;
+
+  &::before {
+    line-height: normal;
+  }
+
+  .dx-texteditor {
+    border: none;
+
+    &::before,
+    &::after {
+      content: none;
+    }
+
+    &.dx-state-hover,
+    &.dx-state-focused,
+    &.dx-state-active,
+    &.dx-state-disabled,
+    &.dx-state-readonly,
+    &.dx-state-readonly.dx-state-hover,
+    & {
+      background-color: transparent;
+    }
+  }
+}
+
+@include dx-lookup-arrow(
+  spindown,
+  "\f001",
+  $fluent-base-icon-size,
+  $lookup-icon-color,
+  $lookup-icon-color-active,
+  $fluent-base-icon-size,
+);
+
+.dx-lookup-popup-wrapper {
+  @include dx-dropdownlist-list-appearance();
+
+  .dx-list-item {
+    border-top: none;
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+
+  .dx-popup-content {
+    top: 0;
+    padding: 0;
+  }
+
+  .dx-popup-title + .dx-popup-content {
+    top: $fluent-lookup-popup-content-top;
+  }
+
+  &.dx-popup-wrapper {
+    .dx-overlay-content {
+      overflow: visible;
+    }
+  }
+
+  .dx-popover-arrow {
+    display: block;
+
+    &::after {
+      box-shadow: 0 0 2px 0 color.change($base-shadow-color, $alpha: 0.12);
+      background: $overlay-content-bg;
+      border-top-right-radius: $lookup-arrow-border-radius;
+    }
+  }
+
+  &.dx-position-top {
+    .dx-popover-arrow {
+      &::after {
+        border-bottom-left-radius: $lookup-arrow-border-radius;
+      }
+    }
+  }
+}
+
+.dx-lookup-empty {
+  .dx-lookup-field {
+    color: $texteditor-placeholder-color;
+  }
+}
+
+.dx-lookup-popup-search .dx-list {
+  height: calc(100% - #{$fluent-texteditor-input-height + $lookup-search-padding-vertical + $lookup-search-padding-vertical-top });
+}
+
+.dx-lookup-search-wrapper {
+  padding: $lookup-search-padding-vertical $lookup-search-padding-horizontal;
+  padding-top: $lookup-search-padding-vertical-top;
+}

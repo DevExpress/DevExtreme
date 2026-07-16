@@ -1,0 +1,84 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icon_fonts" as *;
+@use "../../base/accordion";
+
+// adduse
+
+.dx-accordion {
+  background-color: $accordion-background-color;
+  color: $accordion-color;
+}
+
+.dx-accordion-item {
+  transition: margin 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: margin, height;
+
+  &.dx-state-hover {
+    & > .dx-accordion-item-title {
+      background-color: $accordion-title-bg-hover;
+    }
+  }
+
+  &.dx-state-active,
+  &.dx-state-focused {
+    > .dx-accordion-item-title {
+      color: $accordion-title-active-color;
+      background-color: $accordion-title-bg-active;
+    }
+  }
+}
+
+.dx-accordion-item-opened {
+  margin-block: $fluent-accordion-item-opened-margin;
+
+  & > .dx-accordion-item-title {
+    &::before {
+      content: "\f014";
+    }
+  }
+}
+
+.dx-accordion-item-title {
+  border-radius: $accordion-item-border-radius;
+  min-height: $fluent-accordion-title-height;
+  padding: $fluent-accordion-title-vertical-padding $fluent-accordion-title-horizontal-padding;
+
+  &::before {
+    content: "\f016";
+    font-weight: normal;
+    font-size: $accordion-title-icon-size;
+    font-family: DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes
+    line-height: 100%;
+    margin-inline-end: $accordion-title-icon-margin;
+  }
+
+  .dx-icon {
+    @include dx-icon-sizing($accordion-title-icon-size);
+  }
+}
+
+.dx-accordion-item-title-caption {
+  color: $accordion-title-color;
+  font-size: $fluent-accordion-title-font-size;
+  font-weight: 500;
+
+  .dx-icon {
+    @include dx-icon-margin($accordion-title-icon-margin);
+  }
+}
+
+.dx-state-disabled {
+  &.dx-accordion {
+    opacity: 1;
+    color: $accordion-disabled-color;
+  }
+}
+
+.dx-accordion-item-body {
+  padding: $fluent-accordion-body-padding;
+}

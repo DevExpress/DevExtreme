@@ -1,0 +1,85 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icon_fonts" as *;
+@use "../button/sizes" as *;
+@use "../menuBase/sizes" as *;
+@use "../menu/colors" as *;
+@use "../menu/sizes" as *;
+@use "../../base/contextMenu";
+
+// adduse
+@use "../overlay";
+@use "../menuBase" as *;
+
+
+.dx-context-menu {
+  color: $menu-color;
+
+  .dx-menu-items-container {
+    display: flex;
+    flex-direction: column;
+    padding: $fluent-context-menu-items-container-padding;
+    gap: $fluent-context-menu-items-container-gap;
+  }
+
+  .dx-menu-item {
+    border-radius: $fluent-context-menu-item-border-radius;
+
+    .dx-menu-item-content {
+      display: flex;
+      align-items: center;
+      padding: $fluent-menu-vertical-padding $fluent-context-menu-horizontal-padding;
+      gap: $fluent-context-menu-item-content-gap;
+
+      .dx-menu-item-text {
+        padding-inline: $fluent-context-menu-item-text-padding-inline;
+      }
+
+      .dx-menu-item-popout-container {
+        inset-inline-end: $fluent-context-menu-horizontal-padding;
+        width: $fluent-base-icon-size;
+        display: flex;
+        align-items: center;
+
+        .dx-menu-item-popout {
+          display: flex;
+          align-items: center;
+
+          @include dx-icon(spinright);
+          @include dx-icon-sizing($fluent-button-icon-size);
+        }
+      }
+    }
+
+    .dx-menu-item-popout {
+      color: $base-icon-color;
+    }
+
+    &.dx-state-disabled {
+      .dx-menu-item-popout {
+        color: $base-foreground-disabled;
+      }
+    }
+
+    &.dx-menu-item-has-submenu > .dx-menu-item-content {
+      padding-inline-end: $fluent-menu-item-with-icon-horizontal-padding;
+    }
+  }
+
+  &.dx-overlay-content.dx-state-focused {
+    box-shadow: none;
+  }
+
+  .dx-submenu {
+    background-color: $menu-popup-bg;
+    border-radius: $fluent-context-menu-border-radius;
+    box-shadow: color.change($base-shadow-color, $alpha: 0.12) 0 2px 7.2px 0, color.change($base-shadow-color, $alpha: 0.14) 0 8px 16px 0;
+  }
+
+  .dx-menu-separator {
+    background-color: $menu-separator-bg;
+  }
+}

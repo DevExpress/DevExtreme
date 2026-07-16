@@ -1,0 +1,23 @@
+@use "../sizes" as *;
+
+// adduse
+
+$lookup-field-height: null !default;
+$lookup-search-padding-vertical: 4px !default;
+$lookup-search-padding-vertical-top: null !default;
+$lookup-search-padding-horizontal: null !default;
+$lookup-arrow-border-radius: 2px !default;
+
+$fluent-lookup-popup-content-top: 49px !default;
+
+@if $size == "default" {
+  $lookup-field-height: 30px !default;
+  $lookup-search-padding-horizontal: 12px !default;
+  $lookup-search-padding-vertical-top: 12px !default;
+}
+
+@else if $size == "compact" {
+  $lookup-field-height: 22px !default;
+  $lookup-search-padding-horizontal: 8px !default;
+  $lookup-search-padding-vertical-top: 8px !default;
+}

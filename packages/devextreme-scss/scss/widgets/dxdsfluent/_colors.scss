@@ -1,0 +1,314 @@
+@forward "./variables";
+@use "./variables" as *;
+@use "sass:color";
+@use "./color" as extcolor;
+
+$color: null !default;
+$mode: null !default;
+
+$fluent-color-accent-modificator: null !default;
+
+/**
+  * $name 10. Accent color
+  * $type color
+  */
+$base-accent: null !default;
+$base-accent-hover: null !default;
+$base-accent-active: null !default;
+$base-accent-selected: null !default;
+
+$fluent-color-theme-modificator: null !default;
+
+/**
+* $name 10. Font family
+* $type text
+*/
+$base-font-family: 'segoe ui', -apple-system, BlinkMacSystemFont, 'avenir next', avenir, 'helvetica neue', 'adwaita sans', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif !default;
+
+/**
+* $name 30. Page background color
+* $type color
+*/
+$base-typography-bg: null !default;
+
+/**
+* $name 31. Component background color
+* $type color
+*/
+$base-bg: null !default;
+
+/**
+* $name 90. Hover state background color
+* $type color
+*/
+$base-hover-bg: null !default;
+
+/**
+* $name 120. Active state background color
+* $type color
+*/
+$base-active-bg: null !default;
+
+/**
+* $name 130. Selected state background color
+* $type color
+*/
+$base-selected-bg: null !default;
+
+/**
+* $name 40. Border color
+* $type color
+*/
+$base-border-color: null !default;
+$base-border-color-hover: null !default;
+$base-border-color-focused: null !default;
+
+/**
+* $name 41. Border color accessible
+* $type color
+*/
+$base-border-color-accessible: null !default;
+$base-border-color-accessible-hover: null !default;
+$base-border-color-accessible-focused: null !default;
+
+$base-separator-color: null !default;
+
+$base-inverted-bg: null !default;
+$base-shadow-color: null !default;
+
+$base-foreground-disabled: null !default;
+$base-background-disabled: null !default;
+
+/**
+* $name 50. Success color
+* $type color
+*/
+$base-success: null !default;
+
+/**
+* $name 60. Warning color
+* $type color
+*/
+$base-warning: #fde300 !default;
+
+/**
+* $name 70. Danger color
+* $type color
+*/
+$base-danger: null !default;
+$base-danger-hover: null !default;
+$base-danger-active: null !default;
+$base-danger-selected: null !default;
+
+/**
+* $name 20. Text color
+* $type color
+*/
+$base-text-color: null !default;
+$base-inverted-text-color: null !default;
+
+/**
+* $name 20. Label color
+* $type color
+*/
+$base-label-color: null !default;
+
+/**
+* $name 40. Icon color
+* $type color
+*/
+$base-icon-color: null !default;
+
+$base-disabled-opacity: 0.38 !default;
+$base-border-color-disabled: null !default;
+
+$scrollview-pulldown-path: null !default;
+
+
+@if $color == "blue" {
+  $fluent-color-accent-modificator: "blue" !default;
+}
+
+@if $color == "saas" {
+  $fluent-color-accent-modificator: "saas" !default;
+}
+
+@if $mode == "light" {
+  $fluent-color-theme-modificator: "light" !default;
+
+  $base-bg: rgba(255, 255, 255, 1) !default;
+
+  @if $color == "blue" {
+    $base-hover-bg: color.adjust($base-bg, $lightness: -3.9%, $space: hsl) !default;
+    $base-typography-bg: rgba(250, 250, 250, 1) !default;
+
+    $base-accent: rgba(15, 108, 189, 1) !default;
+    $base-success: rgba(16, 124, 16, 1) !default;
+    $base-danger: rgba(209, 52, 56, 1) !default;
+    $base-text-color: rgba(36, 36, 36, 1) !default;
+    $base-label-color: color.adjust($base-text-color, $lightness: 29.80%, $space: hsl) !default;
+    $base-icon-color: color.adjust($base-text-color, $lightness: 23.92%, $space: hsl) !default;
+    $base-border-color: rgba(224, 224, 224, 1) !default;
+    $base-border-color-accessible: color.adjust($base-border-color, $lightness: -49.8%, $space: hsl) !default;
+    $base-shadow-color: #000 !default;
+  }
+
+  @if $color == "saas" {
+    $base-accent: #5486ff !default;
+    $base-typography-bg: #FAFBFF !default;
+
+    $base-hover-bg: color.mix(#FFF, $base-accent, 85%) !default;
+
+    $base-success: #19914B !default;
+    $base-danger: #DC2828 !default;
+    $base-text-color: #21293b !default;
+    $base-label-color: color.adjust($base-text-color, $lightness: 19%, $space: hsl) !default;
+    $base-icon-color: color.adjust($base-text-color, $lightness: 10%, $space: hsl) !default;
+    $base-border-color: #e5e8f0 !default;
+    $base-border-color-accessible: color.adjust($base-border-color, $lightness: -20%, $space: hsl) !default;
+    $base-shadow-color: #3D4A6C !default;
+  }
+
+  $base-accent-hover: color.adjust($base-accent, $saturation: -4.18%, $space: hsl, $lightness: -4.71%) !default;
+  $base-accent-active: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: -1deg, $saturation: -4.65%, $lightness: -9.61%) !default;
+  $base-accent-selected: color.adjust($base-accent-active, $saturation: -2.02%, $space: hsl, $lightness: -4.71%) !default;
+
+  $base-foreground-disabled: color.adjust($base-text-color, $lightness: 60%, $space: hsl) !default;
+
+  $base-selected-bg: color.adjust($base-hover-bg, $lightness: -3.92%, $space: hsl) !default;
+  $base-active-bg: color.adjust($base-hover-bg, $lightness: -8.24%, $space: hsl) !default;
+  $base-background-disabled: color.adjust($base-hover-bg, $lightness: -1.96%, $space: hsl) !default;
+
+  $base-border-color-hover: color.adjust($base-border-color, $lightness: -9.8%, $space: hsl) !default;
+  $base-border-color-focused: color.adjust($base-border-color, $lightness: -17.65%, $space: hsl) !default;
+
+  $base-border-color-accessible-hover: color.adjust($base-border-color-accessible, $lightness: -3.92%, $space: hsl) !default;
+  $base-border-color-accessible-focused: color.adjust($base-border-color-accessible-hover, $lightness: -3.92%, $space: hsl) !default;
+  $base-border-color-disabled: $base-border-color !default;
+
+  $base-separator-color: $base-border-color !default;
+
+  $base-inverted-bg: color.adjust($base-bg, $lightness: -100%, $space: hsl) !default;
+
+  $base-inverted-text-color: #fff !default;
+
+  $base-danger-hover: color.adjust($base-danger, $saturation: -3.05%, $space: hsl, $lightness: -5.10%) !default;
+  $base-danger-active: color.adjust($base-danger, $saturation: -3.56%, $space: hsl, $lightness: -35.69%) !default;
+  $base-danger-selected: color.adjust($base-danger, $saturation: -2.78%, $space: hsl, $lightness: -22.55%) !default;
+
+  $scrollview-pulldown-path: data-uri('images/widgets/dxdsfluent/color-schemes/light/pulldown.png') !default;
+}
+
+@if $mode == "dark" {
+  $fluent-color-theme-modificator: "dark" !default;
+
+  @if $color == "blue" {
+    $base-bg: rgba(41, 41, 41, 1) !default;
+    $base-accent: rgba(71, 158, 245, 1) !default;
+    $base-success: #54B054 !default;
+    $base-danger: rgba(227, 125, 128, 1) !default;
+    $base-border-color: rgba(97, 97, 97, 1) !default;
+
+    $base-typography-bg: #1F1F1F !default;
+  }
+
+  @if $color == "saas" {
+    $base-bg: rgba(30, 40, 50, 1) !default;
+    $base-accent: #5492F6 !default;
+    $base-success: #10B230 !default;
+    $base-danger: #F92F2F !default;
+    $base-border-color: #414B5F !default;
+
+    $base-typography-bg: #141E28 !default;
+  }
+
+  $base-accent-hover: color.adjust($base-accent, $saturation: -1.67%, $space: hsl, $lightness: 5.29%) !default;
+  $base-accent-active: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: -1deg, $saturation: -16.30%, $lightness: -10.59%) !default;
+  $base-accent-selected: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: -3deg, $saturation: -9.05%, $lightness: -31.57%) !default;
+
+  $base-text-color: rgba(255, 255, 255, 1) !default;
+  $base-label-color: color.adjust($base-text-color, $lightness: -40.00%, $space: hsl) !default;
+  $base-icon-color: color.adjust($base-text-color, $lightness: -32.16%, $space: hsl) !default;
+  $base-foreground-disabled: color.adjust($base-text-color, $lightness: -63.9%, $space: hsl) !default;
+
+  $base-bg: rgba(41, 41, 41, 1) !default;
+  $base-hover-bg: color.adjust($base-bg, $lightness: 7.8%, $space: hsl) !default;
+  $base-selected-bg: color.adjust($base-bg, $lightness: 5.9%, $space: hsl) !default;
+  $base-active-bg: color.adjust($base-bg, $lightness: -3.9%, $space: hsl) !default;
+  $base-background-disabled: color.adjust($base-bg, $lightness: -8.2%, $space: hsl) !default;
+
+  $base-border-color-hover: color.adjust($base-border-color, $lightness: 7.84%, $space: hsl) !default;
+  $base-border-color-focused: color.adjust($base-border-color, $lightness: 3.92%, $space: hsl) !default;
+  $base-border-color-accessible: color.adjust($base-border-color, $lightness: 29.8%, $space: hsl) !default;
+  $base-border-color-accessible-hover: color.adjust($base-border-color-accessible, $lightness: 6.27%, $space: hsl) !default;
+  $base-border-color-accessible-focused: color.adjust($base-border-color-accessible-hover, $lightness: 3.92%, $space: hsl) !default;
+  $base-border-color-disabled: color.adjust($base-border-color, $lightness: -12.16%, $space: hsl) !default;
+  $base-separator-color: color.adjust($base-border-color, $lightness: -5.88%, $space: hsl) !default;
+
+  $base-inverted-bg: color.adjust($base-bg, $lightness: 100%, $space: hsl) !default;
+  $base-shadow-color: #000 !default;
+  $base-inverted-text-color: #000 !default;
+
+  $base-danger-hover: color.adjust($base-danger, $saturation: 0.44%, $space: hsl, $lightness: 7.45%) !default;
+  $base-danger-active: extcolor.adjust-if-not-achromatic($color: $base-danger, $hue: 1.8deg, $saturation: -0.9%, $lightness: 28.8%) !default;
+  $base-danger-selected: extcolor.adjust-if-not-achromatic($color: $base-danger, $hue: 0.7deg, $saturation: 1.3%, $lightness: 14.9%);
+
+  $scrollview-pulldown-path: data-uri('images/widgets/dxdsfluent/color-schemes/dark/pulldown.png') !default;
+}
+
+/**
+* $name 80. Hover state text color
+* $type color
+*/
+$base-hover-color: $base-text-color !default;
+
+/**
+* $name 100. Focused state text color
+* $type color
+*/
+$base-focus-color: $base-inverted-text-color !default;
+
+/**
+* $name 110. Focused state background color
+* $type color
+*/
+$base-focus-bg: $base-hover-bg !default;
+
+/**
+* $name 50. Arrow icon color
+* $type color
+*/
+$base-spin-icon-color: $base-icon-color !default;
+
+/**
+* $name 30. Link color
+* $type color
+*/
+$base-link-color: $base-accent !default;
+
+$typography-color: $base-text-color !default;
+$typography-link-color: $base-link-color !default;
+
+$base-element-bg: $base-bg !default;
+
+$base-invalid-color: $base-danger !default;
+$base-invalid-color-hover: $base-danger-hover !default;
+$base-invalid-color-active: $base-danger-active !default;
+$base-invalid-color-selected: $base-danger-selected !default;
+
+
+:root {
+  --dx-component-color-bg: #{$base-bg};
+  --dx-color-main-bg: #{$base-typography-bg};
+  --dx-color-primary: #{$base-accent};
+  --dx-color-danger: #{$base-danger};
+  --dx-color-success: #{$base-success};
+  --dx-color-warning: #{$base-warning};
+  --dx-color-border: #{$base-border-color};
+  --dx-color-text: #{$base-text-color};
+  --dx-color-icon: #{$base-icon-color};
+  --dx-color-spin-icon: #{$base-spin-icon-color};
+  --dx-color-link: #{$base-link-color};
+  --dx-color-shadow: #{$base-shadow-color};
+  --dx-color-separator: #{$base-separator-color};
+}

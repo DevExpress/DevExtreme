@@ -1,0 +1,200 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/mixins" as *;
+@use "../../base/fileUploader";
+
+// adduse
+
+$fluent-fileuploader-file-wrapper-border-size: 3px;
+$fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-shadow-color, $alpha: 0.1);
+
+.dx-fileuploader-wrapper {
+  padding: $fluent-fileuploader-vertical-padding;
+}
+
+.dx-fileuploader-content > .dx-fileuploader-upload-button {
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.dx-fileuploader-input-wrapper {
+  padding: $fluent-fileuploader-vertical-padding 0 $fluent-fileuploader-vertical-padding;
+  border: $fluent-fileuploader-file-wrapper-border-size dashed transparent;
+}
+
+.dx-fileuploader.dx-state-disabled .dx-fileuploader-input-label {
+  position: relative;
+}
+
+.dx-fileuploader-dragover {
+  .dx-fileuploader-input-wrapper {
+    border: none;
+    padding: 0;
+
+    .dx-fileuploader-button {
+      display: none;
+    }
+  }
+
+  .dx-fileuploader-input-label {
+    text-align: center;
+  }
+
+  .dx-fileuploader-input-container {
+    display: block;
+    width: 100%;
+  }
+
+  .dx-fileuploader-input {
+    display: block;
+    width: 100%;
+    padding-top: $fluent-fileuploader-vertical-padding * 2 + $fluent-fileuploader-file-wrapper-border-size;
+    padding-right: $fluent-fileuploader-file-wrapper-border-size;
+
+    // NOTE: height of the widget should be the same in default and drag over states, but not with margin help
+    padding-bottom: $fluent-fileuploader-vertical-padding * 2 + $fluent-fileuploader-file-wrapper-border-size + 1px;
+    padding-left: $fluent-fileuploader-file-wrapper-border-size;
+    box-sizing: content-box;
+  }
+
+  .dx-fileuploader-input-label { // stylelint-disable-line no-duplicate-selectors
+    padding: $fluent-fileuploader-vertical-padding * 2 $fluent-fileuploader-vertical-padding + 2px;
+    border: $fluent-fileuploader-file-wrapper-border-size dashed;
+    border-color: $fileuploader-border-color;
+  }
+}
+
+.dx-fileuploader-file-status-message,
+.dx-fileuploader-file-size {
+  color: $fileuploader-falename-status-color;
+}
+
+.dx-fileuploader-input {
+  padding: $fluent-fileuploader-vertical-padding 0;
+}
+
+.dx-fileuploader-input-label {
+  padding: $fluent-fileuploader-vertical-padding + math.div(math.div($fluent-base-font-size, 2) - $fluent-fileuploader-vertical-padding, 2) + 1px $fluent-fileuploader-vertical-padding + 2px;
+  color: $fileuploader-filename-color;
+
+  @include dx-overflow();
+}
+
+.dx-fileuploader-files-container {
+  .dx-fileuploader-show-file-list & {
+    padding: $fluent-fileuploader-files-container-padding;
+  }
+
+  .dx-fileuploader-empty & {
+    padding: 0;
+  }
+
+  .dx-invalid & {
+    padding-top: 50px;
+  }
+
+  .dx-fileuploader-button .dx-button-content {
+    padding: 0;
+  }
+
+  .dx-fileuploader-file-container {
+    padding: $fluent-fileuploader-file-container-padding;
+    margin-bottom: 4px;
+    border-radius: $fluent-fileuploader-files-container-rounding;
+    background-color: $fluent-fileuploader-files-container-bg-color;
+    box-shadow: $fluent-fileuploader-file-container-boxshadow;
+
+    .dx-fileuploader-button-container + .dx-fileuploader-button-container {
+      .dx-button {
+        margin-right: $fluent-fileuploader-file-container-text-margin;
+
+        .dx-rtl & {
+          margin-left: $fluent-fileuploader-file-container-text-margin;
+          margin-right: 0;
+        }
+      }
+    }
+
+    .dx-fileuploader-button-container {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dx-button {
+      height: $fluent-fileuploader-file-container-button-size;
+      width: $fluent-fileuploader-file-container-button-size;
+      margin-right: $fluent-fileuploader-file-container-button-margin;
+
+      &.dx-fileuploader-cancel-button-position-end {
+        margin-right: 0;
+        margin-left: $fluent-fileuploader-file-cancel-button-margin-left;
+      }
+
+      .dx-rtl & {
+        margin-left: $fluent-fileuploader-file-container-button-margin;
+        margin-right: 0;
+
+        &.dx-fileuploader-cancel-button-position-end {
+          margin-left: 0;
+          margin-right: $fluent-fileuploader-file-cancel-button-margin-left;
+        }
+      }
+    }
+  }
+}
+
+.dx-fileuploader .dx-progressbar-status {
+  color: $fileuploader-progressbar-status-color;
+}
+
+.dx-fileuploader-file {
+  display: block;
+  padding-top: 5px;
+  line-height: 13px;
+}
+
+.dx-fileuploader-file-icon {
+  color: $fileuploader-file-icon-color;
+  font-size: $fluent-fileuploader-file-icon-font-size;
+}
+
+.dx-fileuploader-file-name {
+  padding-bottom: math.div($fluent-fileuploader-vertical-padding, 2);
+  color: $fileuploader-filename-color;
+  font-weight: 500;
+}
+
+.dx-fileuploader-file-size {
+  float: right;
+  padding: $fluent-fileuploader-file-size-margin;
+  color: $base-label-color;
+}
+
+.dx-fileuploader-invalid {
+  .dx-fileuploader-file-status-message {
+    color: $base-danger;
+
+    span {
+      &:first-child {
+        margin-top: 2px;
+      }
+
+      &:last-child {
+        margin-bottom: 2px;
+      }
+    }
+  }
+
+  .dx-fileuploader-button-container {
+    vertical-align: middle;
+  }
+
+  .dx-fileuploader-cancel-button {
+    margin-top: 0;
+  }
+}

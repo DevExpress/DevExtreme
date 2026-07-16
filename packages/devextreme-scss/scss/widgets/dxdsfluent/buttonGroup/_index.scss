@@ -1,0 +1,43 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../button/sizes" as *;
+@use "../button/colors" as *;
+@use "../../base/buttonGroup";
+@use "../../base/buttonGroup/mixins" as *;
+
+// adduse
+
+.dx-buttongroup {
+  &.dx-state-disabled {
+    opacity: 1;
+  }
+}
+
+@include dx-buttongroup-sizing(
+  $button-border-radius,
+  1px,
+);
+
+.dx-buttongroup-mode-contained {
+  border-radius: $button-border-radius;
+  box-shadow: $fluent-button-box-shadow-size $button-shadow-color;
+
+  .dx-button-mode-contained {
+    box-shadow: none;
+    border-width: 0;
+    border-style: solid;
+    border-inline-end-width: 1px;
+    border-inline-end-color: $button-group-separator-color;
+
+    &.dx-buttongroup-last-item {
+      border-inline-end-width: 0;
+    }
+  }
+
+  &.dx-state-disabled {
+    box-shadow: none;
+  }
+}

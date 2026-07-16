@@ -1,0 +1,28 @@
+@use "../sizes" as *;
+@use "colors" as *;
+
+// adduse
+
+$fluent-checkbox-icon-font-size: 16px !default;
+
+$fluent-checkbox-border-width: 1px !default;
+$fluent-checkbox-icon-border-radius: 2px !default;
+
+$fluent-checkbox-arrow-icon-size: 1em !default;
+$fluent-checkbox-arrow-font-size: 0.75em !default;
+$fluent-checkbox-indeterminate-icon-height: 0.5em !default;
+$fluent-checkbox-indeterminate-icon-width: 0.5em !default;
+$fluent-checkbox-indeterminate-icon-border-radius: 2px !default;
+
+$fluent-checkbox-text-padding-start: null !default;
+$fluent-checkbox-text-padding-end: null !default;
+
+@if $size == "default" {
+  $fluent-checkbox-text-padding-start: 12px !default;
+  $fluent-checkbox-text-padding-end: 8px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-checkbox-text-padding-start: 8px !default;
+  $fluent-checkbox-text-padding-end: 6px !default;
+}

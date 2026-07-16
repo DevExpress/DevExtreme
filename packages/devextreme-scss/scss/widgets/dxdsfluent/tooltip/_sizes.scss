@@ -1,0 +1,19 @@
+@use "../common/colors" as *;
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-tooltip-padding: null !default;
+$fluent-tooltip-font-size: null !default;
+$fluent-tooltip-arrow-border-radius: 2px !default;
+$fluent-tooltip-shadow: 0 0 2px 0 $base-dropdown-shadow-color1 !default;
+
+@if $size == "default" {
+  $fluent-tooltip-padding: 7px 11px !default;
+  $fluent-tooltip-font-size: 12px;
+}
+
+@else if $size == "compact" {
+  $fluent-tooltip-padding: 3px 5px !default;
+  $fluent-tooltip-font-size: 12px;
+}

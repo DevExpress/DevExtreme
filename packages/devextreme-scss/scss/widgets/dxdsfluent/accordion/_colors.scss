@@ -1,0 +1,25 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+$accordion-color: $base-text-color !default;
+
+/**
+* $name 10. Item title text color
+* $type color
+*/
+$accordion-title-color: inherit !default;
+
+/**
+* $name 20. Item title font size
+* $type text
+*/
+$fluent-accordion-title-font-size: $fluent-base-font-size !default;
+
+$accordion-background-color: transparent !default;
+$accordion-title-active-color: $accordion-color !default;
+$accordion-title-bg-hover: $base-hover-bg !default;
+$accordion-title-bg-active: $base-hover-bg !default;
+$accordion-disabled-color: $base-foreground-disabled !default;

@@ -1,0 +1,330 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../button/sizes" as *;
+@use "../button/colors" as *;
+@use "../buttonGroup/colors" as *;
+@use "../textEditor/colors" as *;
+@use "../textEditor/index" as *;
+@use "../toolbar/sizes" as *;
+@use "../common/mixins" as *;
+@use "../common/sizes" as *;
+@use "../fileUploader/sizes" as *;
+@use "../popup/sizes" as *;
+@use "../../base/mixins" as *;
+@use "../../base/htmlEditor";
+
+// adduse
+
+.dx-htmleditor {
+  border-color: transparent;
+  position: relative;
+
+  .dx-htmleditor-toolbar-wrapper {
+    padding: 0 $fluent-htmleditor-toolbar-padding;
+    position: relative;
+  }
+
+  &::before {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 0;
+    width: 100%;
+    content: '';
+    position: absolute;
+    z-index: 2;
+    transform: scale(0);
+  }
+
+  &.dx-state-readonly,
+  &.dx-state-disabled {
+    .dx-htmleditor-toolbar-wrapper::before {
+      position: absolute;
+      top: 1px;
+      bottom: 1px;
+      left: 1px;
+      right: 1px;
+      z-index: 2;
+      background-color: color.change($base-bg, $alpha: 0.4);
+      content: '';
+      pointer-events: none;
+    }
+  }
+
+  &.dx-state-focused,
+  &.dx-state-active {
+    &::before {
+      border-bottom: 2px solid;
+      border-bottom-color: $texteditor-indicator-border-color;
+      transform: scale(1);
+      transition-property: transform;
+      transition-duration: 0.2s;
+      transition-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1);
+    }
+  }
+
+  &.dx-htmleditor-outlined {
+    @include texteditor-outlined-styling();
+
+    .dx-htmleditor-content {
+      margin: 1px;
+      margin-inline-start: 0;
+    }
+
+    .dx-htmleditor-toolbar-wrapper + .dx-quill-container .dx-htmleditor-content {
+      margin-top: 0;
+    }
+  }
+
+  &.dx-htmleditor-filled {
+    @include texteditor-filled-styling();
+  }
+
+  &.dx-htmleditor-underlined {
+    &::after {
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 0;
+      width: 100%;
+      content: '';
+      position: absolute;
+    }
+
+    @include texteditor-underlined-styling();
+
+    .dx-htmleditor-content {
+      padding-inline-start: 0;
+    }
+  }
+
+  &.dx-state-disabled {
+    opacity: 1;
+  }
+}
+
+.dx-invalid.dx-htmleditor {
+  &.dx-state-hover {
+    &::after {
+      border-bottom-color: $texteditor-invalid-faded-border-color;
+    }
+  }
+
+  &.dx-state-focused,
+  &.dx-state-active {
+    &::before {
+      border-bottom: 2px solid;
+      border-bottom-color: $texteditor-invalid-focused-border-color;
+    }
+  }
+}
+
+.dx-htmleditor-content {
+  line-height: $fluent-line-height;
+  padding: $fluent-html-editor-vertical-padding $fluent-html-editor-horizontal-padding;
+
+  &.ql-blank::before { // stylelint-disable-line selector-class-pattern
+    color: $texteditor-placeholder-color;
+  }
+
+  code,
+  .ql-code-block-container { // stylelint-disable-line selector-class-pattern
+    color: color.change($base-text-color, $alpha: 0.8);
+  }
+
+  blockquote {
+    color: color.change($base-text-color, $alpha: 0.8);
+    border-inline-start-color: $htmleditor-toolbar-border-color;
+  }
+
+  .dx-variable {
+    & > span {
+      background: $htmleditor-variable-bg;
+    }
+  }
+
+  td,
+  th {
+    border-color: $htmleditor-table-border-color;
+  }
+}
+
+@mixin dx-htmleditor-button-states($default-color, $hover-color, $focused-color) {
+  background-color: $default-color;
+
+  &.dx-state-hover {
+    background-color: $hover-color;
+  }
+
+  &.dx-state-focused {
+    background-color: $focused-color;
+  }
+}
+
+.dx-htmleditor-toolbar {
+  background-color: transparent;
+}
+
+.dx-htmleditor-toolbar-format {
+  &.dx-dropdowneditor.dx-editor-filled {
+    background-color: transparent;
+
+    &::after {
+      border-bottom-color: transparent;
+    }
+  }
+
+  &.dx-color-format,
+  &.dx-background-format {
+    .dx-button-content {
+      padding-bottom: $fluent-button-vertical-padding - 3px;
+    }
+  }
+
+  &.dx-size-format {
+    width: $fluent-toolbar-size-editor-width;
+  }
+}
+
+.dx-htmleditor-toolbar-separator {
+  height: math.div($fluent-toolbar-height, 2);
+  border-inline-start-color: $htmleditor-toolbar-border-color;
+}
+
+.dx-htmleditor-toolbar-menu-separator {
+  border-top-color: $htmleditor-toolbar-border-color;
+  margin-top: $fluent-html-editor-toolbar-menu-separator-margin;
+  margin-bottom: $fluent-html-editor-toolbar-menu-separator-margin;
+}
+
+.dx-resize-frame {
+  border-color: $htmleditor-resize-frame-border-color;
+
+  .dx-resizable-handle-corner-top-right,
+  .dx-resizable-handle-corner-top-left,
+  .dx-resizable-handle-corner-bottom-right,
+  .dx-resizable-handle-corner-bottom-left {
+    background-color: $htmleditor-resize-handle-bg;
+  }
+
+  .dx-resizable-handle-top,
+  .dx-resizable-handle-left,
+  .dx-resizable-handle-right,
+  .dx-resizable-handle-bottom {
+    &::after {
+      background-color: $htmleditor-resize-handle-bg;
+    }
+  }
+}
+
+.dx-htmleditor-add-image-popup > .dx-overlay-content > .dx-popup-content {
+  .dx-collection .dx-field-item:not(.dx-last-col) {
+    padding-inline-end: $fluent-html-editor-add-image-dialog-base-padding;
+  }
+
+  .dx-fix-ratio-container {
+    .dx-textbox {
+      width: calc(100% - $fluent-button-height - $fluent-html-editor-add-image-dialog-base-padding);
+    }
+
+    .dx-buttongroup {
+      margin-inline-start: $fluent-html-editor-add-image-dialog-base-padding;
+      width: $fluent-button-height;
+      margin-top: math.div($fluent-base-inline-widget-height - $fluent-button-height, 2);
+    }
+  }
+
+  .dx-collection .dx-field-item:not(.dx-first-col) {
+    padding-inline-start: 0;
+  }
+
+  .dx-tabs {
+    padding: 0 $fluent-html-editor-add-image-dialog-tabs-padding;
+  }
+
+  .dx-fileuploader-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: $fluent-html-editor-add-image-dialog-fileuploader-padding;
+    border-width: $fluent-html-editor-fileuploader-input-wrapper-border-size;
+    border-style: dashed;
+    border-color: $htmleditor-fileuploader-input-wrapper-border-color;
+    border-radius: $fluent-html-editor-fileuploader-input-wrapper-border-radius;
+    background-color: $htmleditor-fileuploader-input-wrapper-bg-color;
+
+    &::after,
+    &::before {
+      content: none;
+    }
+
+    .dx-fileuploader-input-label {
+      text-align: center;
+      border-width: 0;
+    }
+  }
+}
+
+.dx-htmleditor-add-image-popup {
+  .dx-fileuploader-dragover {
+    .dx-fileuploader-input {
+      padding-top: $fluent-fileuploader-vertical-padding;
+      padding-bottom: $fluent-fileuploader-vertical-padding + 1px;
+    }
+
+    .dx-fileuploader-content {
+      background-color: color.change($htmleditor-border-color, $alpha: 0.8);
+    }
+  }
+}
+
+.dx-formdialog-field-target .dx-field-item-content {
+  text-align: start;
+}
+
+.dx-mention {
+  background-color: $htmleditor-mention-bg;
+}
+
+.dx-suggestion-list-wrapper {
+  @include dx-dropdownlist-list-appearance();
+}
+
+.dx-table-resize-frame {
+  > .dx-draggable-dragging + .dx-htmleditor-highlighted-column,
+  > .dx-draggable-dragging + .dx-htmleditor-highlighted-row {
+    background-color: color.change($base-accent, $alpha: 0.5);
+  }
+}
+
+.dx-formdialog.dx-dropdowneditor-overlay.dx-popup-wrapper .dx-overlay-content {
+  box-shadow: $fluent-popup-content-shadow;
+}
+
+.dx-aidialog-controls {
+  gap: $fluent-aidialog-selects-gap;
+
+  .dx-selectbox {
+    max-width: calc(50% - $fluent-aidialog-selects-gap * 0.5);
+  }
+}
+
+.dx-aidialog-content {
+  padding: $fluent-aidialog-content-padding;
+  gap: $fluent-aidialog-content-gap;
+}
+
+.dx-aidialog {
+  .dx-pending-indicator {
+    @include dx-pending-indicator-centered();
+  }
+
+  &.dx-popup-wrapper > .dx-overlay-content {
+    border-radius: $fluent-aidialog-border-radius;
+  }
+}

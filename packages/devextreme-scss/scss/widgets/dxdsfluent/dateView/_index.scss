@@ -1,0 +1,142 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/mixins" as *;
+@use "../../base/dateView";
+
+// adduse
+@use "../scrollable";
+
+$fluent-dateview-roller-padding: math.div($fluent-dateview-roller-height - $fluent-dateview-roller-item-height, 2);
+
+.dx-dateview-rollers {
+  width: auto;
+  text-align: center;
+  display: block;
+}
+
+.dx-dateviewroller-current {
+  .dx-dateview-item {
+    transition: font-size 0.2s ease-out;
+  }
+}
+
+.dx-dateviewroller {
+  min-width: 4em;
+  text-align: center;
+  display: inline-block;
+
+  .dx-button {
+    display: none;
+  }
+
+  .dx-scrollable-content::before,
+  .dx-scrollable-content::after {
+    content: "";
+    height: $fluent-dateview-roller-padding;
+    display: block;
+  }
+
+  .dx-scrollable-container {
+    height: $fluent-dateview-roller-height;
+  }
+
+  &.dx-dateviewroller-year {
+    min-width: 4.85em;
+  }
+
+  &.dx-state-active {
+    .dx-button {
+      display: none;
+    }
+  }
+}
+
+.dx-dateviewroller-month {
+  min-width: 12em;
+}
+
+.dx-dateviewroller-hours {
+  &::after {
+    content: ":";
+    font-size: 2.2em;
+    position: absolute;
+    inset-inline-end: -9%;
+    font-weight: bold;
+    top: 37%;
+    color: $dateview-color;
+  }
+
+  .dx-dateview-item-selected-frame {
+    padding-left: 20%;
+  }
+}
+
+.dx-dateviewroller-minutes {
+  .dx-dateview-item-selected-frame {
+    width: 80%;
+  }
+}
+
+.dx-dateview-item {
+  height: $fluent-dateview-roller-item-height;
+  line-height: $fluent-dateview-roller-item-height;
+  text-align: center;
+  font-size: 1.3em;
+  color: $dateview-color;
+}
+
+.dx-dateview-item-selected {
+  font-size: 1.8em;
+  color: $base-accent;
+}
+
+.dx-dateview-item-selected-frame {
+  position: absolute;
+  top: $fluent-dateview-roller-padding;
+  width: 100%;
+
+  &::before,
+  &::after {
+    backface-visibility: hidden;
+    content: "";
+    display: block;
+    width: 100%;
+    position: absolute;
+    height: $fluent-dateview-roller-padding;
+  }
+
+  &::before {
+    top: -$fluent-dateview-roller-padding;
+
+    @include gradient-linear($dateview-shadow-up);
+  }
+
+  &::after {
+    top: $fluent-dateview-roller-item-height;
+
+    @include gradient-linear($dateview-shadow-down);
+  }
+}
+
+.dx-device-tablet,
+.dx-device-phone {
+  .dx-dateview-rollers {
+    @include flex-container(row, nowrap);
+  }
+
+  .dx-dateviewroller-month {
+    min-width: 4em;
+  }
+
+  .dx-dateview-item {
+    font-size: 1.1em;
+  }
+
+  .dx-dateview-item-selected {
+    font-size: 1.4em;
+  }
+}

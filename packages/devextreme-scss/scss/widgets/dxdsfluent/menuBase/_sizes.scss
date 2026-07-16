@@ -1,0 +1,20 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-menu-item-line-height: null !default;
+$fluent-menu-item-with-icon-horizontal-padding: null !default;
+$fluent-menu-horizontal-padding: null !default;
+$fluent-menu-icon-to-text-offset: 4px;
+
+@if $size == "default" {
+  $fluent-menu-item-line-height: 20px !default;
+  $fluent-menu-horizontal-padding: 12px !default;
+  $fluent-menu-item-with-icon-horizontal-padding: 40px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-menu-item-line-height: 16px !default;
+  $fluent-menu-horizontal-padding: 8px !default;
+  $fluent-menu-item-with-icon-horizontal-padding: 32px !default;
+}

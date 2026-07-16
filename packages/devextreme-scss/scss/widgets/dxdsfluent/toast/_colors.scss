@@ -1,0 +1,64 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+$toast-default-bg: $base-bg !default;
+$warning-color: null !default;
+
+@if $mode == "light" {
+  $warning-color: $base-text-color !default;
+}
+
+@if $mode == "dark" {
+  $warning-color: $base-inverted-text-color !default;
+}
+
+/**
+* $name 10. Info background color
+* $type color
+*/
+$toast-info-bg: $toast-default-bg !default;
+
+/**
+* $name 20. Info text color
+* $type color
+*/
+$toast-info-color: $base-text-color !default;
+
+/**
+* $name 30. Warning background color
+* $type color
+*/
+$toast-warning-bg: $base-warning !default;
+
+/**
+* $name 40. Warning text color
+* $type color
+*/
+$toast-warning-color: $warning-color !default;
+
+/**
+* $name 50. Error background color
+* $type color
+*/
+$toast-error-bg: $base-danger !default;
+
+/**
+* $name 60. Error text color
+* $type color
+*/
+$toast-error-color: $base-inverted-text-color !default;
+
+/**
+* $name 70. Success background color
+* $type color
+*/
+$toast-success-bg: $base-success !default;
+
+/**
+* $name 80. Success text color
+* $type color
+*/
+$toast-success-color: $base-inverted-text-color !default;

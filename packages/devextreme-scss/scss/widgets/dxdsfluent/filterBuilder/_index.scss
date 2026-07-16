@@ -1,0 +1,127 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../common/sizes" as *;
+@use "../../base/filterBuilder" as * with (
+    $filterbuilder-bg: $filterbuilder-bg,
+    $filterbuilder-text-color: $filterbuilder-text-color,
+    $filterbuilder-text-focus-color: $filterbuilder-text-focus-color,
+    $filterbuilder-group-operation-color: $filterbuilder-group-operation-color,
+    $filterbuilder-group-operation-hover-color: $filterbuilder-group-operation-hover-color,
+    $filterbuilder-group-operation-focus-color: $filterbuilder-group-operation-focus-color,
+    $filterbuilder-item-operator-color: $filterbuilder-item-operator-color,
+    $filterbuilder-item-operator-hover-color: $filterbuilder-item-operator-hover-color,
+    $filterbuilder-item-operator-focus-color: $filterbuilder-item-operator-focus-color,
+    $filterbuilder-item-field-color: $filterbuilder-item-field-color,
+    $filterbuilder-item-field-hover-color: $filterbuilder-item-field-hover-color,
+    $filterbuilder-item-field-focus-color: $filterbuilder-item-field-focus-color,
+    $filterbuilder-item-value-color: $filterbuilder-item-value-color,
+    $filterbuilder-item-value-hover-color: $filterbuilder-item-value-hover-color,
+    $filterbuilder-item-value-focus-color: $filterbuilder-item-value-focus-color,
+    $filterbuilder-plus-icon-color: $filterbuilder-plus-icon-color,
+    $filterbuilder-plus-icon-hover-color: $filterbuilder-plus-icon-hover-color,
+    $filterbuilder-plus-icon-focus-color: $filterbuilder-plus-icon-focus-color,
+    $filterbuilder-remove-icon-color: $filterbuilder-remove-icon-color,
+    $filterbuilder-remove-icon-hover-color: $filterbuilder-remove-icon-hover-color,
+    $filterbuilder-remove-icon-focus-color: $filterbuilder-remove-icon-focus-color,
+    $filterbuilder-menu-icon-color: $filterbuilder-menu-icon-color,
+);
+@use "../textEditor/colors" as *;
+
+// adduse
+
+
+.dx-filterbuilder {
+  .dx-filterbuilder-action-icon {
+    font-size: 21px;
+  }
+
+  .dx-filterbuilder-group {
+    .dx-filterbuilder-group-item {
+      .dx-filterbuilder-action.dx-filterbuilder-action-icon {
+        padding: $fluent-filterbuilder-icon-padding;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .dx-filterbuilder-item-value {
+    .dx-editor-filled,
+    .dx-editor-outlined {
+      .dx-texteditor-input {
+        padding: $fluent-filterbuilder-filled-editor-padding;
+      }
+    }
+  }
+
+  .dx-filterbuilder-text,
+  .dx-filterbuilder-item-value-text {
+    border-radius: 5px;
+  }
+}
+
+.dx-filterbuilder-range-separator {
+  color: $texteditor-color;
+}
+
+.dx-filterbuilder-overlay {
+  &.dx-popup-wrapper > .dx-overlay-content {
+    box-shadow: $fluent-base-dropdown-widgets-shadow;
+  }
+
+  &.dx-filterbuilder-operations {
+    .dx-rtl {
+      .dx-treeview-item {
+        padding-right: $fluent-filterbuilder-treeview-item-left-padding;
+      }
+    }
+  }
+
+  .dx-treeview-node {
+    .dx-treeview-node-container-opened {
+      margin-left: $fluent-filterbuilder-treeview-item-left-padding;
+    }
+  }
+
+  .dx-treeview-item {
+    padding: $fluent-filterbuilder-treeview-item-padding;
+    min-height: $fluent-filterbuilder-treeview-item-min-heigth;
+
+    .dx-icon {
+      margin-right: 10px;
+    }
+  }
+
+  .dx-treeview-toggle-item-visibility {
+    left: $fluent-filterbuilder-treeview-toggle-left;
+  }
+
+  .dx-rtl {
+    .dx-treeview-node {
+      > .dx-treeview-item {
+        padding-right: $fluent-filterbuilder-treeview-item-left-padding * 2;
+      }
+
+      &.dx-treeview-node-is-leaf > .dx-treeview-item {
+        padding-right: $fluent-filterbuilder-treeview-item-left-padding;
+      }
+
+      .dx-treeview-node-container-opened {
+        margin-right: $fluent-filterbuilder-treeview-item-left-padding;
+        margin-left: 0;
+      }
+    }
+
+    .dx-treeview-item {
+      .dx-icon {
+        margin-left: 10px;
+      }
+    }
+
+    .dx-treeview-toggle-item-visibility {
+      right: 16px;
+    }
+  }
+}

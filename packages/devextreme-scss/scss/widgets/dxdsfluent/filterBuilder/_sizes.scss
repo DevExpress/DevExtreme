@@ -1,0 +1,29 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-filterbuilder-icon-padding: null !default;
+$fluent-filterbuilder-filled-editor-padding: null !default;
+$fluent-filterbuilder-treeview-item-left-padding: null !default;
+$fluent-filterbuilder-treeview-item-padding: null !default;
+$fluent-filterbuilder-treeview-toggle-left: null !default;
+$fluent-filterbuilder-treeview-item-min-heigth: null !default;
+
+@if $size == "default" {
+  $fluent-filterbuilder-icon-padding: 8px !default;
+  $fluent-filterbuilder-filled-editor-padding: 13px 12px !default;
+
+  $fluent-filterbuilder-treeview-item-left-padding: 12px !default;
+  $fluent-filterbuilder-treeview-item-padding: 6px 12px 6px $fluent-filterbuilder-treeview-item-left-padding !default;
+  $fluent-filterbuilder-treeview-toggle-left: 16px !default;
+  $fluent-filterbuilder-treeview-item-min-heigth: 32px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-filterbuilder-icon-padding: 4px !default;
+  $fluent-filterbuilder-filled-editor-padding: 8px 8px !default;
+  $fluent-filterbuilder-treeview-item-left-padding: 4px !default;
+  $fluent-filterbuilder-treeview-item-padding: 4px 12px 4px $fluent-filterbuilder-treeview-item-left-padding !default;
+  $fluent-filterbuilder-treeview-toggle-left: 0 !default;
+  $fluent-filterbuilder-treeview-item-min-heigth: 24px !default;
+}

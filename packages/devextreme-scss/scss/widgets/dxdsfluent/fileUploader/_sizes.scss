@@ -1,0 +1,35 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-fileuploader-file-container-padding: null !default;
+$fluent-fileuploader-file-container-text-margin: null !default;
+$fluent-fileuploader-file-container-button-margin: null !default;
+$fluent-fileuploader-file-cancel-button-margin-left: 4px !default;
+$fluent-fileuploader-file-container-button-size: null !default;
+
+$fluent-fileuploader-vertical-padding: 7px !default;
+$fluent-fileuploader-files-container-padding: null !default;
+$fluent-fileuploader-file-size-margin: null !default;
+$fluent-fileuploader-file-icon-font-size: null !default;
+$fluent-fileuploader-files-container-rounding: 4px !default;
+
+@if $size == "default" {
+  $fluent-fileuploader-file-container-padding: 5px 8px !default;
+  $fluent-fileuploader-file-container-text-margin: 15px !default;
+  $fluent-fileuploader-file-container-button-margin: 8px !default;
+  $fluent-fileuploader-file-container-button-size: 32px !default;
+  $fluent-fileuploader-files-container-padding: 12px 4px 0 !default;
+  $fluent-fileuploader-file-size-margin: 0 0 0 4px !default;
+  $fluent-fileuploader-file-icon-font-size: 20px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-fileuploader-file-container-padding: 2px 4px !default;
+  $fluent-fileuploader-file-container-text-margin: 6px !default;
+  $fluent-fileuploader-file-container-button-margin: 2px !default;
+  $fluent-fileuploader-file-container-button-size: 28px !default;
+  $fluent-fileuploader-files-container-padding: 12px 4px 0 !default;
+  $fluent-fileuploader-file-size-margin: 0 0 4px !default;
+  $fluent-fileuploader-file-icon-font-size: 16px !default;
+}

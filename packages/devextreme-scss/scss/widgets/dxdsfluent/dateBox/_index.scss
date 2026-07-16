@@ -1,0 +1,144 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icon_fonts" as *;
+@use "../dropDownEditor" as *;
+@use "../../base/dropDownEditor/mixins" as *;
+@use "../textEditor" as *;
+@use "../textEditor/sizes" as *;
+@use "../textEditor/colors" as *;
+@use "../calendar/sizes" as *;
+@use "../../base/dateBox";
+@use "mixins" as *;
+
+// adduse
+@use "../timeView";
+@use "../dateView";
+
+.dx-datebox-wrapper {
+  .dx-popup-title {
+    min-height: 10px;
+    border-bottom: none;
+    background: none;
+  }
+
+  .dx-item {
+    border: none;
+  }
+
+  .dx-popup-bottom {
+    .dx-button {
+      width: auto;
+    }
+  }
+}
+
+.dx-datebox-datetime-time-side {
+  justify-content: flex-end;
+}
+
+.dx-datebox-wrapper-rollers.dx-datebox-wrapper-time .dx-popup-content {
+  margin: $fluent-datebox-popup-content-margin;
+}
+
+.dx-datebox-wrapper-list {
+  .dx-overlay-content {
+    border-top: none;
+  }
+}
+
+.dx-device-phone .dx-datebox-wrapper-rollers {
+  .dx-popup-content {
+    padding: 10px;
+  }
+}
+
+.dx-datebox-time {
+  @include dx-dropdowneditor-button-icon-styling(clock);
+}
+
+.dx-datebox-date {
+  @include dx-dropdowneditor-button-icon-styling(event);
+}
+
+.dx-datebox-datetime {
+  @include dx-dropdowneditor-button-icon-styling(eventall);
+}
+
+.dx-datebox-wrapper-calendar {
+  .dx-popup-content {
+    padding: 0;
+  }
+
+  .dx-calendar {
+    border: none;
+    margin: $fluent-datebox-overlay-item-margin;
+  }
+
+  .dx-datebox-container-cell {
+    margin-right: $fluent-datebox-overlay-item-margin;
+    margin-bottom: $fluent-datebox-overlay-item-margin;
+  }
+}
+
+.dx-datebox-wrapper-calendar.dx-datebox-wrapper-datetime {
+  .dx-timeview {
+    padding: $fluent-datebox-overlay-item-margin;
+  }
+
+  .dx-datebox-container-cell {
+    margin-top: -1px;
+    margin-right: $fluent-datebox-overlay-item-margin;
+  }
+}
+
+@media (max-width: 320px) {
+  .dx-datebox-wrapper-calendar .dx-calendar {
+    margin: $fluent-datebox-overlay-item-margin-adaptive;
+  }
+}
+
+.dx-rtl {
+  .dx-datebox-wrapper {
+    .dx-popup-bottom {
+      .dx-toolbar-button + .dx-toolbar-button {
+        .dx-button {
+          margin-right: 5px;
+          margin-left: 0;
+        }
+      }
+    }
+  }
+}
+
+.dx-datebox-wrapper-list .dx-popup-content {
+  padding: 0;
+}
+
+.dx-datebox {
+  input[type="date"] {
+    line-height: normal;
+  }
+
+  &,
+  &:not(.dx-texteditor-empty) {
+    &.dx-auto-width {
+      @include invalid-dropdowneditor-input-padding(
+        $fluent-dropdowneditor-invalid-badge-size,
+        $fluent-base-standard-texteditor-input-horizontal-padding,
+        $fluent-filled-texteditor-input-horizontal-padding
+      );
+    }
+  }
+}
+
+.dx-texteditor {
+  &.dx-datebox-native {
+    .dx-texteditor-input {
+      padding-right: $texteditor-spin-button-horizontal-padding;
+    }
+  }
+}
