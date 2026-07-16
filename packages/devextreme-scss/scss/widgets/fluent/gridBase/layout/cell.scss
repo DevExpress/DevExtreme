@@ -320,6 +320,11 @@
   }
 
   // (0,6,1)
+  .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-data-row.dx-row-focused:not(.dx-row-lines, .dx-edit-row, .dx-row-removed) > td:not(.dx-editor-cell, .dx-master-detail-cell, .dx-command-drag) {
+    padding-top: $fluent-grid-base-cell-vertical-padding + 1px;
+  }
+
+  // (0,6,1)
   .dx-#{$widget-name}-headers.dx-header-multi-row .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row.dx-header-row > td {
     padding-top: 12px;
     padding-bottom: 12px;
