@@ -867,7 +867,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      */
     onCellContextMenu?: ((e: CellContextMenuEvent) => void) | string;
     /**
-     * @hidden
      * @docid
      * @public
      * @type_function_param1 e:{ui/scheduler:ContentReadyEvent}
@@ -875,7 +874,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      */
     onContentReady?: (e: ContentReadyEvent) => void;
     /**
-     * @hidden
      * @docid
      * @public
      * @type_function_param1 e:{ui/scheduler:DisposingEvent}
@@ -883,7 +881,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      */
     onDisposing?: (e: DisposingEvent) => void;
     /**
-     * @hidden
      * @docid
      * @public
      * @type_function_param1 e:{ui/scheduler:InitializedEvent}
@@ -891,7 +888,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      */
     onInitialized?: (e: InitializedEvent) => void;
     /**
-     * @hidden
      * @docid
      * @public
      * @type_function_param1 e:{ui/scheduler:OptionChangedEvent}
