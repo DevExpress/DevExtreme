@@ -112,6 +112,7 @@ jobs:
           retention-days: 1
 
       - name: Set GitHub Packages auth
+        if: ${{ github.event_name == 'push' || github.event.inputs.SBOM == 'true' }}
         run: pnpm set //npm.pkg.github.com/:_authToken='${NODE_AUTH_TOKEN}'
 
       - name: Build SBOMs
