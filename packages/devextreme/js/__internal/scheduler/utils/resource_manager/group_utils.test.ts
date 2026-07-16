@@ -343,6 +343,18 @@ describe('groups utils', () => {
       expect(groupTree[0].resourceText).toBe('Board rooms');
       expect(groupTree[0].children[0].children[0].resourceText).toBe('Samantha Bright');
     });
+
+    it('should return an empty group tree when an earlier resource in groups has an empty dataSource', async () => {
+      const emptyRoom = await createResourceLoader('roomId', [], 'Room');
+
+      expect(groupResources({
+        roomId: emptyRoom,
+        assigneeId: resourceById.assigneeId,
+      }, ['roomId', 'assigneeId'])).toEqual({
+        groupTree: [],
+        groupLeafs: [],
+      });
+    });
   });
 
   describe('getAllGroupValues', () => {

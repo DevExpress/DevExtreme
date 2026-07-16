@@ -7,11 +7,10 @@ const isVirtualRoot = (node: GroupNode): boolean => !node.resourceIndex;
 
 const createFlatResourceNodes = (
   resource: ResourceLoader,
-  parentGrouped: Record<string, ResourceId>,
 ): GroupNode[] => resource.items.map((item) => ({
   resourceText: item.text,
   resourceIndex: resource.resourceIndex,
-  grouped: { ...parentGrouped, [resource.resourceIndex]: item.id },
+  grouped: { [resource.resourceIndex]: item.id },
   children: [],
 }));
 
@@ -58,13 +57,12 @@ const mergeGroupedIntoTree = (
 
 const createResourceNodes = (
   resource: ResourceLoader,
-  parentGrouped: Record<string, ResourceId>,
 ): GroupNode[] => {
   if (resource.hasHierarchy) {
-    return hierarchyToGroupNodes(resource.hierarchyTree, resource.resourceIndex, parentGrouped);
+    return hierarchyToGroupNodes(resource.hierarchyTree, resource.resourceIndex, {});
   }
 
-  return createFlatResourceNodes(resource, parentGrouped);
+  return createFlatResourceNodes(resource);
 };
 
 const attachResourceNodes = (
@@ -102,9 +100,9 @@ export const groupResources = (resourceById: Record<string, ResourceLoader>, gro
     .filter((group) => resourceById[group])
     .forEach((group) => {
       const resource = resourceById[group];
-      const nodes = createResourceNodes(resource, {});
+      const nodes = createResourceNodes(resource);
 
-      if (isVirtualRoot(leafs[0])) {
+      if (leafs.length > 0 && isVirtualRoot(leafs[0])) {
         head[0].children = nodes;
         leafs = collectGroupLeaves(nodes);
         return;
