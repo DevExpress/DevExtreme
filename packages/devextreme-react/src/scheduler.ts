@@ -8,13 +8,13 @@ import dxScheduler, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ViewType, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, SelectionEndEvent, AppointmentFormProperties, AppointmentFormIconsShowMode, SchedulerPredefinedToolbarItem, DateNavigatorItemProperties, SchedulerPredefinedDateNavigatorItem, dxSchedulerToolbarItem, AllDayPanelMode, AppointmentCollectorTemplateData, AppointmentTemplateData, AppointmentTooltipTemplateData, CellAppointmentsLimit, dxSchedulerScrolling, SnapToCellsMode } from "devextreme/ui/scheduler";
-import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, ClickEvent, OptionChangedEvent } from "devextreme/ui/button";
-import type { ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, FormItemType, FormPredefinedButtonItem, OptionChangedEvent as FormOptionChangedEvent, dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, SmartPastedEvent, SmartPastingEvent, FormItemComponent } from "devextreme/ui/form";
-import type { ContentReadyEvent as ButtonGroupContentReadyEvent, DisposingEvent as ButtonGroupDisposingEvent, InitializedEvent as ButtonGroupInitializedEvent, OptionChangedEvent as ButtonGroupOptionChangedEvent, dxButtonGroupItem, ItemClickEvent, SelectionChangedEvent } from "devextreme/ui/button_group";
-import type { ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as TabPanelDisposingEvent, InitializedEvent as TabPanelInitializedEvent, OptionChangedEvent as TabPanelOptionChangedEvent, dxTabPanelOptions, ItemClickEvent as TabPanelItemClickEvent, SelectionChangedEvent as TabPanelSelectionChangedEvent, dxTabPanelItem, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
+import type { ViewType, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, SelectionEndEvent, AppointmentFormProperties, AppointmentFormIconsShowMode, SchedulerPredefinedToolbarItem, DateNavigatorItemProperties, SchedulerPredefinedDateNavigatorItem, dxSchedulerToolbarItem, AllDayPanelMode, AppointmentCollectorTemplateData, AppointmentTemplateData, AppointmentTooltipTemplateData, CellAppointmentsLimit, dxSchedulerScrolling, SnapToCellsMode } from "devextreme/ui/scheduler";
 import type { event } from "devextreme/events/events.types";
 import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, template, ButtonType, ComparisonOperator, Mode, ToolbarItemLocation, ToolbarItemComponent, SingleMultipleOrNone, ScrollMode, TabsIconPosition, TabsStyle, Position, DayOfWeek, Orientation } from "devextreme/common";
+import type { dxButtonOptions, ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from "devextreme/ui/button";
+import type { FormItemType, FormPredefinedButtonItem, ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, OptionChangedEvent as FormOptionChangedEvent, dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, SmartPastedEvent, SmartPastingEvent, FormItemComponent } from "devextreme/ui/form";
+import type { ContentReadyEvent as ButtonGroupContentReadyEvent, DisposingEvent as ButtonGroupDisposingEvent, InitializedEvent as ButtonGroupInitializedEvent, OptionChangedEvent as ButtonGroupOptionChangedEvent, dxButtonGroupItem, ItemClickEvent, SelectionChangedEvent } from "devextreme/ui/button_group";
+import type { ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as TabPanelDisposingEvent, InitializedEvent as TabPanelInitializedEvent, OptionChangedEvent as TabPanelOptionChangedEvent, dxTabPanelOptions, ItemClickEvent as TabPanelItemClickEvent, SelectionChangedEvent as TabPanelSelectionChangedEvent, dxTabPanelItem, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
 import type { AIIntegration } from "devextreme/common/ai-integration";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
@@ -47,9 +47,6 @@ type ISchedulerOptionsNarrowedEvents = {
   onAppointmentUpdating?: ((e: AppointmentUpdatingEvent) => void);
   onCellClick?: ((e: CellClickEvent) => void);
   onCellContextMenu?: ((e: CellContextMenuEvent) => void);
-  onContentReady?: ((e: ContentReadyEvent) => void);
-  onDisposing?: ((e: DisposingEvent) => void);
-  onInitialized?: ((e: InitializedEvent) => void);
   onSelectionEnd?: ((e: SelectionEndEvent) => void) | undefined;
 }
 
@@ -92,7 +89,7 @@ const Scheduler = memo(
       ), []);
 
       const subscribableOptions = useMemo(() => (["currentDate","currentView","editing.form.formData"]), []);
-      const independentEvents = useMemo(() => (["onAppointmentAdded","onAppointmentAdding","onAppointmentClick","onAppointmentContextMenu","onAppointmentDblClick","onAppointmentDeleted","onAppointmentDeleting","onAppointmentFormOpening","onAppointmentRendered","onAppointmentTooltipShowing","onAppointmentUpdated","onAppointmentUpdating","onCellClick","onCellContextMenu","onContentReady","onDisposing","onInitialized","onSelectionEnd"]), []);
+      const independentEvents = useMemo(() => (["onAppointmentAdded","onAppointmentAdding","onAppointmentClick","onAppointmentContextMenu","onAppointmentDblClick","onAppointmentDeleted","onAppointmentDeleting","onAppointmentFormOpening","onAppointmentRendered","onAppointmentTooltipShowing","onAppointmentUpdated","onAppointmentUpdating","onCellClick","onCellContextMenu","onSelectionEnd"]), []);
 
       const defaults = useMemo(() => ({
         defaultCurrentDate: "currentDate",
@@ -281,9 +278,9 @@ type IButtonOptionsProps = React.PropsWithChildren<{
   hoverStateEnabled?: boolean;
   icon?: string;
   onClick?: ((e: ClickEvent) => void);
-  onContentReady?: ((e: ButtonContentReadyEvent) => void);
-  onDisposing?: ((e: ButtonDisposingEvent) => void);
-  onInitialized?: ((e: ButtonInitializedEvent) => void);
+  onContentReady?: ((e: ContentReadyEvent) => void);
+  onDisposing?: ((e: DisposingEvent) => void);
+  onInitialized?: ((e: InitializedEvent) => void);
   onOptionChanged?: ((e: OptionChangedEvent) => void);
   rtlEnabled?: boolean;
   stylingMode?: ButtonStyle;
