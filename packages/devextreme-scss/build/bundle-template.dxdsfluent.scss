@@ -1,5 +1,6 @@
 @use "../widgets/dxdsfluent/colors" with ($color: "$COLOR", $mode: "$MODE");
 @use "../widgets/dxdsfluent/sizes" with ($size: "$SIZE");
+@use "../widgets/dxdsfluent/design-system";
 @use "../widgets/dxdsfluent/typography";
 @use "../widgets/dxdsfluent/icons";
 @use "../widgets/dxdsfluent/widget";
