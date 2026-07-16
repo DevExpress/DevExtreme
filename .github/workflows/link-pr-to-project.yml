@@ -1,0 +1,95 @@
+name: Link PR to Project
+
+on:
+  workflow_call:
+    inputs:
+      project-owner:
+        description: 'Organization (or user) login that owns the target project'
+        required: true
+        type: string
+      project-number:
+        description: 'Number of the target GitHub Projects v2 board (e.g. devextreme-private)'
+        required: true
+        type: number
+    secrets:
+      project-token:
+        description: 'PAT/App token with org Projects v2 read+write access'
+        required: true
+
+jobs:
+  link:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Link PR to project card
+        uses: actions/github-script@v9
+        with:
+          github-token: ${{ secrets.project-token }}
+          script: |
+            const { owner, repo } = context.repo;
+            const pr = context.payload.pull_request;
+
+            const titleIdRe = /^[\w.-]+\/(\d+)_/;
+            const titleMatch = pr.title.match(titleIdRe);
+            if (!titleMatch) {
+              core.notice(
+                `PR title "${pr.title}" doesn't match the "type/<id>_description" convention - skipping project link.`,
+              );
+              return;
+            }
+            const issueNumber = parseInt(titleMatch[1], 10);
+
+            const issueResult = await github.graphql(
+              `query($owner: String!, $repo: String!, $number: Int!) {
+                repository(owner: $owner, name: $repo) {
+                  issue(number: $number) { id }
+                }
+              }`,
+              { owner, repo, number: issueNumber },
+            );
+            const issueNode = issueResult.repository && issueResult.repository.issue;
+            if (!issueNode) {
+              core.warning(`Issue #${issueNumber} not found in ${owner}/${repo} - skipping.`);
+              return;
+            }
+
+            const projectOwner = '${{ inputs.project-owner }}';
+            const projectNumber = ${{ inputs.project-number }};
+
+            const itemsResult = await github.graphql(
+              `query($id: ID!) {
+                node(id: $id) {
+                  ... on Issue {
+                    projectItems(first: 20) {
+                      nodes {
+                        project { id number owner { login } }
+                      }
+                    }
+                  }
+                }
+              }`,
+              { id: issueNode.id },
+            );
+            const projectItems = itemsResult.node.projectItems.nodes;
+            const projectItem = projectItems.find(
+              (i) => i.project.number === projectNumber && i.project.owner.login === projectOwner,
+            );
+            if (!projectItem) {
+              core.warning(
+                `Issue #${issueNumber} is not on project ${projectOwner}#${projectNumber} - nothing to link.`,
+              );
+              return;
+            }
+
+            await github.graphql(
+              `mutation($projectId: ID!, $contentId: ID!) {
+                addProjectV2ItemById(input: { projectId: $projectId, contentId: $contentId }) {
+                  item { id }
+                }
+              }`,
+              { projectId: projectItem.project.id, contentId: pr.node_id },
+            );
+            core.notice(
+              `Linked PR #${pr.number} to the card for issue #${issueNumber} on ${projectOwner}#${projectNumber}.`,
+            );

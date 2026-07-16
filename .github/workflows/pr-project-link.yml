@@ -1,0 +1,15 @@
+name: PR Project Link
+
+on:
+  pull_request_target:
+    types: [opened, edited, reopened, synchronize]
+
+jobs:
+  link-to-devextreme-private:
+    uses: ./.github/workflows/link-pr-to-project.yml
+    with:
+      project-owner: DevExpress
+      # TODO: set to the actual devextreme-private project number
+      project-number: 0
+    secrets:
+      project-token: ${{ secrets.DX_ROBOT_PAT }}
