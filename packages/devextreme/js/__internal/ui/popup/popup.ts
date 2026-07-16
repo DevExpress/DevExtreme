@@ -721,6 +721,7 @@ class Popup<
       disabled,
       rtlEnabled,
       items,
+      allowKeyboardNavigation: false,
       useDefaultButtons: useDefaultToolbarButtons,
       useFlatButtons: useFlatToolbarButtons,
       integrationOptions,

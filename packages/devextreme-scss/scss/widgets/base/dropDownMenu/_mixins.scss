@@ -1,0 +1,22 @@
+@mixin dx-dropdownmenu-focus-outline(
+  $accent-color,
+  $border-radius,
+  $section-horizontal-margin,
+) {
+  .dx-dropdownmenu-popup-wrapper.dx-dropdownmenu-list-focus-mode {
+    .dx-dropdownmenu-list {
+      .dx-list-item:has([tabindex="0"]:focus-visible),
+      .dx-list-item[tabindex="0"]:focus-visible {
+        position: relative;
+        z-index: 1;
+        outline: 2px solid $accent-color;
+        outline-offset: 1px;
+        border-radius: $border-radius;
+      }
+    }
+
+    .dx-toolbar-menu-section {
+      margin-inline: $section-horizontal-margin;
+    }
+  }
+}
