@@ -69,7 +69,7 @@ import { getElementMargin } from '@ts/ui/scroll_view/utils/get_element_style';
 
 const LIST_CLASS = 'dx-list';
 const LIST_ITEMS_CLASS = 'dx-list-items';
-const LIST_ITEM_CLASS = 'dx-list-item';
+export const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_SELECTOR = `.${LIST_ITEM_CLASS}`;
 const LIST_ITEM_ICON_CONTAINER_CLASS = 'dx-list-item-icon-container';
 const LIST_ITEM_ICON_CLASS = 'dx-list-item-icon';
