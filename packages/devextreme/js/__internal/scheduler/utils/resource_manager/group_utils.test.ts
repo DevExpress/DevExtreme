@@ -109,6 +109,13 @@ describe('groups utils', () => {
       });
     });
 
+    it('should return empty tree when groups only contains keys missing from resourceById', () => {
+      expect(groupResources(resourceById, ['unknownId'])).toEqual({
+        groupTree: [],
+        groupLeafs: [],
+      });
+    });
+
     it('should group by one group', () => {
       expect(groupResources(resourceById, ['roomId'])).toEqual({
         groupTree: [

@@ -86,30 +86,35 @@ export const groupResources = (resourceById: Record<string, ResourceLoader>, gro
   groupTree: GroupNode[];
   groupLeafs: GroupLeaf[];
 } => {
-  if (!groups.length || Object.keys(resourceById).length === 0) {
+  const validGroups = groups.filter((group) => resourceById[group]);
+
+  if (!validGroups.length) {
     return {
       groupTree: [],
       groupLeafs: [],
     };
   }
 
-  const head: GroupNode[] = [{} as GroupNode];
+  const head: GroupNode[] = [{
+    resourceText: '',
+    resourceIndex: '',
+    grouped: {},
+    children: [],
+  }];
   let leafs: GroupNode[] = head;
 
-  groups
-    .filter((group) => resourceById[group])
-    .forEach((group) => {
-      const resource = resourceById[group];
-      const nodes = createResourceNodes(resource);
+  validGroups.forEach((group) => {
+    const resource = resourceById[group];
+    const nodes = createResourceNodes(resource);
 
-      if (leafs.length > 0 && isVirtualRoot(leafs[0])) {
-        head[0].children = nodes;
-        leafs = collectGroupLeaves(nodes);
-        return;
-      }
+    if (leafs.length > 0 && isVirtualRoot(leafs[0])) {
+      head[0].children = nodes;
+      leafs = collectGroupLeaves(nodes);
+      return;
+    }
 
-      leafs = attachResourceNodes(leafs, nodes);
-    });
+    leafs = attachResourceNodes(leafs, nodes);
+  });
 
   const groupLeafs = leafs.map<GroupLeaf>((leaf, index) => ({
     ...leaf,
