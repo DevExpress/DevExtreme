@@ -10,7 +10,7 @@
     },
     "configKey": {
       "type": "string",
-      "description": "Key in the config object to use (e.g., 'cjs', 'tsCjs', 'esm')"
+      "description": "Key in the config object to use (e.g., 'cjs', 'tsCjs', 'esm'). Omit to use the loaded module as the config directly (e.g., a flat .babelrc.json)."
     },
     "sourcePattern": {
       "type": "string",
@@ -59,11 +59,15 @@
           "to"
         ]
       }
+    },
+    "watch": {
+      "type": "boolean",
+      "default": false,
+      "description": "Watch the source pattern and re-transform files as they change (file-level incremental rebuild)."
     }
   },
   "required": [
     "babelConfigPath",
-    "configKey",
     "sourcePattern",
     "outDir"
   ]

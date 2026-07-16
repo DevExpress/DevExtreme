@@ -1,11 +1,11 @@
 import * as path from 'path';
-import { createRequire } from 'module';
 import { logger } from '@nx/devkit';
 import { glob } from 'glob';
 import { createExecutor } from '../../utils/create-executor';
 import { toPosixPath } from '../../utils/path-resolver';
 import { containsGlobPattern } from '../../utils/common';
 import { exists, normalizeEol, readFileText, writeFileText } from '../../utils/file-operations';
+import { watchWithChokidar } from '../../utils/watch';
 import { ConcatenateFilesExecutorSchema, ConcatenatePass } from './schema';
 
 const ERROR_SOURCE_FILES_EMPTY = 'sourceFiles must contain at least one file';
@@ -134,8 +134,6 @@ async function resolveSourceFiles(sourceFiles: string[], projectRoot: string): P
   return resolved;
 }
 
-const WATCH_DEBOUNCE_MS = 200;
-
 // Sources are resolved per pass at run time (not once in `resolve`) so that an
 // additional pass can consume a file produced by an earlier pass, and so rebuilds
 // re-resolve any glob patterns on each run.
@@ -174,27 +172,6 @@ async function runAllPasses(
   }
 }
 
-interface ChokidarWatcher {
-  on: (event: string, handler: (...args: unknown[]) => void) => unknown;
-  close: () => Promise<void> | void;
-}
-
-interface Chokidar {
-  watch: (paths: string | string[], options?: Record<string, unknown>) => ChokidarWatcher;
-}
-
-function loadChokidar(projectRoot: string): Chokidar {
-  const projectRequire = createRequire(path.join(projectRoot, 'package.json'));
-  try {
-    return projectRequire('chokidar') as Chokidar;
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    throw new Error(
-      `concatenate-files watch mode requires 'chokidar' to be installed in the project (${projectRoot}): ${message}`,
-    );
-  }
-}
-
 async function runWatchBuild(
   projectRoot: string,
   options: ConcatenateFilesExecutorSchema,
@@ -206,58 +183,12 @@ async function runWatchBuild(
     throw new Error('No watch files found after resolving watchPaths');
   }
   await runAllPasses(projectRoot, options);
-  logger.info('concatenate-files watch mode is watching for changes...');
 
-  await new Promise<void>((resolve) => {
-    let timer: NodeJS.Timeout | undefined;
-    let busy = false;
-    let pending = false;
-
-    const runRebuild = async (): Promise<void> => {
-      if (busy) {
-        pending = true;
-        return;
-      }
-
-      busy = true;
-      try {
-        await runAllPasses(projectRoot, options);
-        logger.info('concatenate-files watch: rebuild complete');
-      } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        logger.error(`concatenate-files watch rebuild failed: ${message}`);
-      } finally {
-        busy = false;
-        if (pending) {
-          pending = false;
-          void runRebuild();
-        }
-      }
-    };
-
-    const scheduleRebuild = () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-
-      timer = setTimeout(() => {
-        void runRebuild();
-      }, WATCH_DEBOUNCE_MS);
-    };
-
-    const chokidar = loadChokidar(projectRoot);
-    const watcher = chokidar.watch(watchFiles, { ignoreInitial: true });
-    watcher.on('all', scheduleRebuild);
-
-    const stopWatcher = () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-      void Promise.resolve(watcher.close()).finally(resolve);
-    };
-
-    process.once('SIGINT', stopWatcher);
-    process.once('SIGTERM', stopWatcher);
+  await watchWithChokidar({
+    projectRoot,
+    watchTargets: watchFiles,
+    label: 'concatenate-files watch',
+    onRebuild: () => runAllPasses(projectRoot, options),
   });
 }
 

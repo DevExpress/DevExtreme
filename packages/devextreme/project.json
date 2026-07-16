@@ -237,6 +237,18 @@
         "{projectRoot}/artifacts/dist_ts"
       ]
     },
+    "build:ts:internal:watch": {
+      "executor": "devextreme-nx-infra-plugin:build-typescript",
+      "cache": false,
+      "options": {
+        "srcPattern": "./js/__internal/**/*.{ts,tsx}",
+        "tsconfig": "./js/__internal/tsconfig.json",
+        "outDir": "./artifacts/dist_ts",
+        "resolvePaths": true,
+        "resolvePathsBaseDir": "./js",
+        "watch": true
+      }
+    },
     "build:cjs": {
       "executor": "devextreme-nx-infra-plugin:babel-transform",
       "options": {
@@ -267,6 +279,31 @@
         "{projectRoot}/artifacts/transpiled",
         "{projectRoot}/artifacts/transpiled-renovation-npm"
       ]
+    },
+    "build:cjs:watch": {
+      "executor": "devextreme-nx-infra-plugin:babel-transform",
+      "cache": false,
+      "options": {
+        "babelConfigPath": "./build/gulp/transpile-config.js",
+        "configKey": "cjs",
+        "sourcePattern": "./js/**/*.{js,jsx}",
+        "excludePatterns": [
+          "./js/**/*.d.ts",
+          "./js/__internal/**/*"
+        ],
+        "outDir": "./artifacts/transpiled",
+        "watch": true,
+        "copyAssets": [
+          { "from": "./js/localization/messages", "to": "./localization/messages" },
+          { "from": "./js/viz/vector_map.utils/_settings.json", "to": "./viz/vector_map.utils/_settings.json" }
+        ]
+      },
+      "configurations": {
+        "production": {
+          "outDir": "./artifacts/transpiled-renovation-npm",
+          "removeDebug": true
+        }
+      }
     },
     "build:npm:esm": {
       "executor": "devextreme-nx-infra-plugin:babel-transform",
@@ -340,6 +377,27 @@
         "{projectRoot}/artifacts/transpiled/__internal",
         "{projectRoot}/artifacts/transpiled-renovation-npm/__internal"
       ]
+    },
+    "build:cjs:internal:watch": {
+      "executor": "devextreme-nx-infra-plugin:babel-transform",
+      "cache": false,
+      "options": {
+        "babelConfigPath": "./build/gulp/transpile-config.js",
+        "configKey": "tsCjs",
+        "sourcePattern": "./artifacts/dist_ts/__internal/**/*.{js,jsx}",
+        "outDir": "./artifacts/transpiled/__internal",
+        "renameExtensions": {
+          ".jsx": ".js"
+        },
+        "watch": true
+      },
+      "configurations": {
+        "production": {
+          "outDir": "./artifacts/transpiled-renovation-npm/__internal",
+          "removeDebug": true
+        }
+      },
+      "dependsOn": ["build:ts:internal"]
     },
     "build:npm:esm:internal": {
       "executor": "devextreme-nx-infra-plugin:babel-transform",
@@ -506,6 +564,33 @@
           ]
         }
       }
+    },
+    "build:transpile:watch": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "commands": [
+          "pnpm nx build:ts:internal:watch devextreme",
+          "pnpm nx build:cjs:watch devextreme",
+          "pnpm nx build:cjs:watch devextreme -c production",
+          "pnpm nx build:cjs:internal:watch devextreme",
+          "pnpm nx build:cjs:internal:watch devextreme -c production"
+        ],
+        "cwd": "{projectRoot}",
+        "parallel": true
+      }
+    },
+    "transpile:tests": {
+      "executor": "devextreme-nx-infra-plugin:babel-transform",
+      "cache": false,
+      "options": {
+        "babelConfigPath": "./testing/tests.babelrc.json",
+        "sourcePattern": "./testing/**/*.js",
+        "outDir": "./testing"
+      },
+      "dependsOn": [
+        "build:devextreme-bundler-config"
+      ]
     },
     "state-manager:optimize": {
       "executor": "devextreme-nx-infra-plugin:state-manager-optimize",

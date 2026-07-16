@@ -147,6 +147,8 @@ pnpm run all:build                        # full production build
 pnpm nx build:dev devextreme              # single package, dev mode
 pnpm nx build devextreme -c=testing       # CI testing configuration
 pnpm nx build:transpile devextreme        # transpile only (babel-transform / build-typescript)
+pnpm nx build:transpile:watch devextreme  # transpile in watch mode (incremental JS + TS rebuild)
+pnpm nx transpile:tests devextreme        # transpile testing/**/*.js in place (replaces gulp transpile-tests)
 pnpm nx bundle:debug devextreme           # debug bundle (Webpack via nx-infra-plugin)
 pnpm nx bundle:prod devextreme            # production bundle
 pnpm nx build:localization devextreme     # localization files only

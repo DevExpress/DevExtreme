@@ -3,10 +3,12 @@ import * as fs from 'fs-extra';
 import { stat } from 'fs/promises';
 import * as babel from '@babel/core';
 import { glob } from 'glob';
+import { minimatch } from 'minimatch';
 import { logger } from '@nx/devkit';
 import { createExecutor } from '../../utils/create-executor';
 import { toPosixPath } from '../../utils/path-resolver';
 import { copyFile } from '../../utils/file-operations';
+import { watchWithChokidar } from '../../utils/watch';
 import { copyDirectory } from '../copy-files/copy-files.impl';
 import { stripDebug } from '../compress/compress.impl';
 import { BabelTransformAsset, BabelTransformExecutorSchema } from './schema';
@@ -17,7 +19,7 @@ const ERROR_ASSET_NOT_FOUND = (source: string) => `Asset source not found: ${sou
 function loadBabelConfig(
   projectRoot: string,
   configPath: string,
-  configKey: string,
+  configKey?: string,
 ): babel.TransformOptions {
   const fullConfigPath = path.join(projectRoot, configPath);
 
@@ -26,6 +28,10 @@ function loadBabelConfig(
   }
 
   const config = require(fullConfigPath);
+
+  if (!configKey) {
+    return config;
+  }
 
   if (!config[configKey]) {
     const availableKeys = Object.keys(config).join(', ');
@@ -43,6 +49,17 @@ function applyExtensionRenames(filePath: string, renameExtensions: Record<string
   }
 
   return filePath;
+}
+
+// Fixed prefix before the first glob wildcard — used as both the output-path anchor and the watch root.
+function resolveSourceBase(projectRoot: string, sourcePattern: string): string {
+  const cleanPattern = sourcePattern.replace(/^\.\//, '');
+  const globIndex = cleanPattern.search(/\*+/);
+  const patternBase =
+    globIndex > 0
+      ? cleanPattern.substring(0, globIndex).replace(/\/$/, '')
+      : cleanPattern.split('/')[0];
+  return path.join(projectRoot, patternBase);
 }
 
 async function transformFile(
@@ -69,13 +86,7 @@ async function transformFile(
     throw new Error(`Babel returned no code for ${filePath}`);
   }
 
-  const cleanPattern = sourcePattern.replace(/^\.\//, '');
-  const globIndex = cleanPattern.search(/\*+/);
-  const patternBase =
-    globIndex > 0
-      ? cleanPattern.substring(0, globIndex).replace(/\/$/, '')
-      : cleanPattern.split('/')[0];
-  const sourceBase = path.join(projectRoot, patternBase);
+  const sourceBase = resolveSourceBase(projectRoot, sourcePattern);
   const relativePath = path.relative(sourceBase, filePath);
 
   const renamedRelativePath = applyExtensionRenames(relativePath, renameExtensions);
@@ -116,6 +127,7 @@ interface ResolvedBabelTransform {
   globPattern: string;
   excludePatterns: string[];
   resolvedAssets: ResolvedBabelTransformAsset[];
+  watchDir: string;
 }
 
 function resolveAssets(
@@ -128,6 +140,98 @@ function resolveAssets(
     source: path.isAbsolute(asset.from) ? asset.from : path.join(projectRoot, asset.from),
     destination: path.isAbsolute(asset.to) ? asset.to : path.join(outDirAbsolute, asset.to),
   }));
+}
+
+function transformOne(
+  resolved: ResolvedBabelTransform,
+  options: BabelTransformExecutorSchema,
+  filePath: string,
+): Promise<void> {
+  return transformFile(
+    filePath,
+    resolved.projectRoot,
+    options.outDir,
+    options.sourcePattern,
+    resolved.babelConfig,
+    resolved.removeDebug,
+    resolved.renameExtensions,
+  );
+}
+
+async function copyResolvedAssets(resolved: ResolvedBabelTransform, outDir: string): Promise<void> {
+  if (resolved.resolvedAssets.length === 0) {
+    return;
+  }
+  logger.verbose(`Copying ${resolved.resolvedAssets.length} asset entries to ${outDir}`);
+  for (const asset of resolved.resolvedAssets) {
+    await copyResolvedAsset(asset);
+  }
+}
+
+async function runFullTransform(
+  resolved: ResolvedBabelTransform,
+  options: BabelTransformExecutorSchema,
+): Promise<void> {
+  const sourceFiles = await glob(resolved.globPattern, {
+    absolute: true,
+    ignore: resolved.excludePatterns,
+  });
+
+  if (sourceFiles.length === 0) {
+    logger.warn(ERROR_NO_FILES_MATCHED);
+    throw new Error(ERROR_NO_FILES_MATCHED);
+  }
+
+  logger.verbose(
+    `Transforming ${sourceFiles.length} files with config '${options.configKey ?? 'default'}'...`,
+  );
+  if (resolved.removeDebug) {
+    logger.verbose('Debug blocks will be removed (production mode)');
+  }
+
+  await Promise.all(sourceFiles.map((file) => transformOne(resolved, options, file)));
+
+  logger.verbose(`Successfully transformed ${sourceFiles.length} files to ${options.outDir}`);
+
+  await copyResolvedAssets(resolved, options.outDir);
+}
+
+// Deletions are ignored on purpose — gulp-watch left stale output in place too.
+const WATCHED_EVENTS = new Set(['add', 'change']);
+
+function isRelevantSource(
+  resolved: ResolvedBabelTransform,
+  event: string,
+  filePath: string,
+): boolean {
+  if (!WATCHED_EVENTS.has(event)) {
+    return false;
+  }
+  const posixPath = toPosixPath(filePath);
+  if (!minimatch(posixPath, resolved.globPattern)) {
+    return false;
+  }
+  return !resolved.excludePatterns.some((pattern) => minimatch(posixPath, pattern));
+}
+
+async function runWatch(
+  resolved: ResolvedBabelTransform,
+  options: BabelTransformExecutorSchema,
+): Promise<void> {
+  // dist_ts may not exist yet if the TS watcher hasn't emitted anything — chokidar needs the dir to attach.
+  await fs.ensureDir(resolved.watchDir);
+  await copyResolvedAssets(resolved, options.outDir);
+
+  await watchWithChokidar({
+    projectRoot: resolved.projectRoot,
+    watchTargets: resolved.watchDir,
+    label: `babel-transform watch (${options.outDir})`,
+    eventFilter: (event, filePath) => isRelevantSource(resolved, event, filePath),
+    onRebuild: async (events) => {
+      const files = [...new Set(events.map((e) => e.filePath))];
+      await Promise.all(files.map((file) => transformOne(resolved, options, file)));
+    },
+  });
 }
 
 export default createExecutor<BabelTransformExecutorSchema, ResolvedBabelTransform>({
@@ -147,6 +251,7 @@ export default createExecutor<BabelTransformExecutorSchema, ResolvedBabelTransfo
     });
 
     const resolvedAssets = resolveAssets(options.copyAssets ?? [], projectRoot, options.outDir);
+    const watchDir = resolveSourceBase(projectRoot, options.sourcePattern);
 
     return {
       projectRoot,
@@ -156,49 +261,15 @@ export default createExecutor<BabelTransformExecutorSchema, ResolvedBabelTransfo
       globPattern,
       excludePatterns,
       resolvedAssets,
+      watchDir,
     };
   },
   run: async (resolved, options) => {
-    const sourceFiles = await glob(resolved.globPattern, {
-      absolute: true,
-      ignore: resolved.excludePatterns,
-    });
-
-    if (sourceFiles.length === 0) {
-      logger.warn(ERROR_NO_FILES_MATCHED);
-      throw new Error(ERROR_NO_FILES_MATCHED);
+    if (options.watch) {
+      await runWatch(resolved, options);
+      return;
     }
 
-    logger.verbose(
-      `Transforming ${sourceFiles.length} files with config '${options.configKey}'...`,
-    );
-    if (resolved.removeDebug) {
-      logger.verbose('Debug blocks will be removed (production mode)');
-    }
-
-    await Promise.all(
-      sourceFiles.map((file) =>
-        transformFile(
-          file,
-          resolved.projectRoot,
-          options.outDir,
-          options.sourcePattern,
-          resolved.babelConfig,
-          resolved.removeDebug,
-          resolved.renameExtensions,
-        ),
-      ),
-    );
-
-    logger.verbose(`Successfully transformed ${sourceFiles.length} files to ${options.outDir}`);
-
-    if (resolved.resolvedAssets.length > 0) {
-      logger.verbose(
-        `Copying ${resolved.resolvedAssets.length} asset entries to ${options.outDir}`,
-      );
-      for (const asset of resolved.resolvedAssets) {
-        await copyResolvedAsset(asset);
-      }
-    }
+    await runFullTransform(resolved, options);
   },
 });
