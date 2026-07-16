@@ -5,9 +5,6 @@ import { logWarning } from './warning-helper';
 
 const warnedUsages = new Set<string>();
 
-// A leading underscore tolerates esbuild's self-reference rename: a class that
-// references its own binding in decorator metadata (e.g. `useExisting: DxiItemComponent`)
-// is emitted as `_DxiItemComponent`, so `constructor.name` gains the `_` prefix at runtime.
 const NESTED_CLASS_NAME_REGEXP = /^_*(Dx[io][A-Z]\w+)Component$/;
 
 type DeprecatedConfigEntry = Record<string, string>;
