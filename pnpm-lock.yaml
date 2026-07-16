@@ -1643,8 +1643,8 @@ importers:
         specifier: 3.8.4
         version: 3.8.4(jspdf@4.2.1)
       knockout:
-        specifier: 3.5.2
-        version: 3.5.2
+        specifier: 3.5.3
+        version: 3.5.3
       lazypipe:
         specifier: 1.0.2
         version: 1.0.2
@@ -2100,8 +2100,8 @@ importers:
         specifier: 11.2.0
         version: 11.2.0
       immutable:
-        specifier: 5.1.5
-        version: 5.1.5
+        specifier: 5.1.6
+        version: 5.1.6
       precinct:
         specifier: 11.0.5
         version: 11.0.5
@@ -11622,6 +11622,9 @@ packages:
   immutable@5.1.5:
     resolution: {integrity: sha512-t7xcm2siw+hlUM68I+UEOK+z84RzmN59as9DZ7P1l0994DKUWV7UXBMQZVxaoMSRQ+PBZbHCOoBt7a2wxOMt+A==}
 
+  immutable@5.1.6:
+    resolution: {integrity: sha512-q1swsS8K7L8usSHuOqF2TAoCCkonYz0SG38wLAggaa4Wml70zixIvt2ql4coQ2C2B3hTjltJry4r6bULwgAXLQ==}
+
   import-fresh@3.3.1:
     resolution: {integrity: sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==}
     engines: {node: '>=6'}
@@ -12719,9 +12722,8 @@ packages:
     resolution: {integrity: sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ==}
     engines: {node: '>=6'}
 
-  knockout@3.5.2:
-    resolution: {integrity: sha512-AcJS2PqsYspjtOAlnnVS8hAuBnHMEqRVEwdvmQTeXj/9zfjV//KHurzdYc8MtBd/Pu8bZLMGHc7x0cj8qUvKxQ==}
-    deprecated: Version 3.5.2 contains breaking changes that are fixed in 3.5.3
+  knockout@3.5.3:
+    resolution: {integrity: sha512-6iPv8M/xDPYfsiKyEyIPcSYBt8L+FZoJS/frLT8Nq3n9kMvP+WZ6ZPehYZV5c22Qc64Ie7unmTqYqgSdCB1Taw==}
 
   known-css-properties@0.35.0:
     resolution: {integrity: sha512-a/RAk2BfKk+WFGhhOCAYqSiFLc34k8Mt/6NWRI4joER0EYUzXIcFivjjnoD3+XU1DggLn/tZc3DOAgke7l8a4A==}
@@ -30748,6 +30750,8 @@ snapshots:
 
   immutable@5.1.5: {}
 
+  immutable@5.1.6: {}
+
   import-fresh@3.3.1:
     dependencies:
       parent-module: 1.0.1
@@ -32906,7 +32910,7 @@ snapshots:
 
   kleur@4.1.5: {}
 
-  knockout@3.5.2: {}
+  knockout@3.5.3: {}
 
   known-css-properties@0.35.0: {}
 
@@ -36040,7 +36044,7 @@ snapshots:
   sass@1.90.0:
     dependencies:
       chokidar: 4.0.3
-      immutable: 5.1.5
+      immutable: 5.1.6
       source-map-js: 1.2.1
     optionalDependencies:
       '@parcel/watcher': 2.5.6
