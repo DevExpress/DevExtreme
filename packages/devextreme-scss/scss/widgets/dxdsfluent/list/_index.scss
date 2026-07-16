@@ -1,0 +1,532 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icon_fonts" as *;
+@use "../button/sizes" as *;
+@use "../button/mixins" as *;
+@use "../checkBox/colors" as *;
+@use "../textEditor/sizes" as *;
+@use "../../base/list" as *;
+@use "../../base/list/mixins" as *;
+@use "../radioGroup/colors" as *;
+
+// adduse
+@use "../badge";
+
+$fluent-list-item-border-width: 1px;
+$fluent-list-border-width: 1px;
+$fluent-list-border: $fluent-list-border-width solid;
+$fluent-list-item-border: $fluent-list-item-border-width solid;
+
+.dx-state-disabled {
+  &.dx-list {
+    opacity: 1;
+
+    .dx-list-item {
+      opacity: 1;
+      color: $base-foreground-disabled;
+    }
+  }
+
+  .dx-list-select-all-label {
+    color: $base-foreground-disabled;
+
+    &::after {
+      color: $base-border-color-disabled;
+    }
+  }
+
+  .dx-list-item-chevron {
+    color: $base-foreground-disabled;
+  }
+
+  .dx-list-reorder-handle {
+    &::before {
+      color: $base-foreground-disabled;
+    }
+  }
+}
+
+.dx-list-item-chevron-container {
+  padding-inline: $fluent-list-item-vertical-padding;
+}
+
+.dx-list-item-chevron {
+  @include dx-icon(chevronnext);
+  @include dx-icon-sizing($fluent-base-icon-size);
+
+  display: flex;
+  align-items: center;
+  color: $list-icon-color;
+}
+
+.dx-list-item-badge-container {
+  padding-inline-end: $fluent-list-item-horizontal-padding;
+}
+
+.dx-list-item-icon-container {
+  width: $fluent-base-icon-size + $fluent-list-item-horizontal-padding;
+  height: $fluent-base-icon-size;
+  vertical-align: bottom;
+}
+
+.dx-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dx-list-item-icon {
+  @include dx-icon-sizing($fluent-base-icon-size);
+}
+
+.dx-list-select-all,
+.dx-list-item,
+.dx-list-group-header {
+  position: relative;
+}
+
+.dx-list-group-body {
+  display: flex;
+  flex-direction: column;
+  row-gap: $fluent-list-item-gap;
+}
+
+.dx-list {
+  .dx-list-group-header-indicator {
+    display: none;
+  }
+}
+
+.dx-list-collapsible-groups {
+  .dx-list-group-header {
+    &::before {
+      content: none;
+    }
+  }
+}
+
+@mixin item-states() {
+  &.dx-list-item-selected {
+    background-color: $list-item-selected-bg;
+    color: $list-item-selected-color;
+
+    &.dx-state-hover:not(.dx-state-focused) {
+      background-color: $list-item-selected-hover-bg;
+      color: $list-item-selected-color;
+    }
+  }
+
+  &.dx-state-focused {
+    background-color: $list-item-hover-bg;
+    color: $list-item-hover-color;
+  }
+
+  &.dx-state-focused.dx-list-item-selected {
+    background-color: $list-item-focused-selected-bg;
+    color: $list-item-selected-color;
+  }
+
+  &.dx-state-active {
+    background-color: $list-item-active-bg;
+
+    .dx-list-slide-item-content {
+      background-color: $list-item-active-bg;
+    }
+  }
+}
+
+@mixin dx-list-sizing($item-horizontal-padding) {
+  .dx-list {
+    border: none;
+
+    .dx-scrollable-content {
+      width: 100%;
+    }
+
+    &.dx-list-with-search .dx-scrollable-wrapper {
+      height: calc(100% - #{$fluent-texteditor-input-height + $fluent-list-searchbox-margin-bottom});
+    }
+
+    .dx-empty-message {
+      min-height: 2em;
+    }
+
+    &.dx-list-select-decorator-enabled {
+      .dx-list-select-all,
+      .dx-list-item {
+        .dx-list-select-all-label,
+        .dx-list-item-content {
+          padding-inline-start: $fluent-list-vertical-padding;
+        }
+
+        &.dx-state-hover {
+          .dx-radiobutton-icon {
+            border-color: $radiogroup-accent-color-hover;
+          }
+
+          .dx-checkbox-icon {
+            border-color: $checkbox-accent-color-hover;
+          }
+
+          .dx-radiobutton-checked {
+            .dx-radiobutton-icon-dot {
+              background-color: $radiogroup-accent-color-hover;
+            }
+          }
+
+          .dx-checkbox-checked {
+            .dx-checkbox-icon {
+              background-color: $checkbox-accent-color-hover;
+            }
+          }
+
+          .dx-checkbox-indeterminate {
+            .dx-checkbox-icon {
+              &::before {
+                background-color: $checkbox-accent-color-hover;
+              }
+            }
+          }
+        }
+
+        &.dx-state-focused {
+          .dx-radiobutton-icon {
+            border-color: $radiogroup-accent-color-active;
+          }
+
+          .dx-checkbox-icon {
+            border-color: $checkbox-accent-color-focused;
+          }
+
+          .dx-radiobutton-checked {
+            .dx-radiobutton-icon-dot {
+              background-color: $radiogroup-accent-color-active;
+            }
+          }
+
+          .dx-checkbox-checked {
+            .dx-checkbox-icon {
+              background-color: $checkbox-accent-color-focused;
+            }
+          }
+
+          .dx-checkbox-indeterminate {
+            .dx-checkbox-icon {
+              &::before {
+                background-color: $checkbox-accent-color-focused;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &:not(.dx-list-select-decorator-enabled) {
+      .dx-list-item {
+        @include item-states();
+      }
+
+      .dx-list-group-header {
+        @include item-states();
+
+        &.dx-state-hover {
+          background-color: $list-item-hover-bg;
+          color: $list-item-hover-color;
+        }
+      }
+    }
+  }
+
+  .dx-list-group {
+    &:not(.dx-list-group-collapsed) {
+      &:not(:last-child) {
+        padding-bottom: $fluent-list-vertical-padding;
+        border-bottom: $fluent-list-item-border;
+        border-bottom-color: $list-border-color;
+      }
+    }
+
+    &:not(.dx-list-group-collapsed) + &:not(.dx-list-group-collapsed) {
+      .dx-list-group-header {
+        border-top-color: transparent;
+      }
+    }
+
+    &.dx-list-group-collapsed {
+      .dx-list-group-header-indicator {
+        .dx-list-collapsible-groups & {
+          @include dx-icon(chevronright);
+          @include dx-icon-sizing($fluent-base-icon-size);
+        }
+      }
+
+      .dx-list-group-header {
+        color: $list-group-color;
+      }
+    }
+
+    &:last-of-type {
+      .dx-list-item {
+        &:last-of-type {
+          margin-bottom: $fluent-list-bottom-padding;
+        }
+      }
+    }
+
+    .dx-list-item {
+      &:first-of-type {
+        margin-top: 0;
+      }
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .dx-list-group-header {
+    font-weight: 500;
+    padding: $fluent-list-group-header-vertical-padding $item-horizontal-padding;
+    background: $list-group-header-bg;
+    color: $list-expanded-group-color;
+    border-top: $fluent-list-item-border;
+    border-top-color: transparent;
+    display: flex;
+    align-items: center;
+    column-gap: $fluent-list-item-horizontal-padding;
+
+    .dx-list-group-header-indicator {
+      color: $list-header-indicator-color;
+
+      .dx-list-collapsible-groups & {
+        display: flex;
+        align-items: center;
+
+        @include dx-icon(chevrondown);
+        @include dx-icon-sizing($fluent-base-icon-size);
+      }
+    }
+
+    &::before {
+      content: none;
+    }
+  }
+
+  .dx-list-items {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2px;
+
+    &:not(:first-of-type) {
+      .dx-list-item {
+        margin-top: 0;
+      }
+    }
+  }
+
+  .dx-list-item {
+    border-radius: $base-border-radius;
+
+    @include toggle-delete-icon($list-icon-color);
+
+    &.dx-state-hover,
+    &.dx-state-active {
+      background-color: $list-item-hover-bg;
+      color: $list-item-hover-color;
+
+      .dx-list-switchable-delete-button-inner-wrapper {
+        background-color: $list-item-hover-bg;
+      }
+    }
+
+    &:first-of-type {
+      border-top: none;
+      margin-top: $fluent-list-vertical-padding;
+    }
+
+    &:last-of-type {
+      border-bottom: none;
+      margin-bottom: $fluent-list-vertical-padding;
+    }
+
+    .dx-icon {
+      color: $list-icon-color;
+    }
+
+    .dx-icon-toggle-delete {
+      background-size: 100%;
+    }
+
+    &.dx-list-item-ghost-reordering {
+      &.dx-state-focused {
+        &.dx-state-hover {
+          color: $list-item-ghost-color;
+          background: $list-item-ghost-bg;
+          border: 1px solid;
+          border-color: $list-item-ghost-border-color;
+        }
+      }
+    }
+  }
+
+  .dx-list-item,
+  .dx-list .dx-empty-message {
+    color: $list-normal-color;
+
+    .dx-list-item-separator-hidden & {
+      border-top: none;
+      border-bottom: none;
+    }
+  }
+
+  .dx-list-item-content {
+    padding: $fluent-list-item-vertical-padding $item-horizontal-padding $fluent-list-item-vertical-padding;
+  }
+
+  .dx-list .dx-empty-message { // stylelint-disable-line no-duplicate-selectors
+    padding: $fluent-list-item-vertical-padding $fluent-list-item-horizontal-padding;
+  }
+
+  .dx-list-next-button .dx-button {
+    @include dx-button-withtext-sizing();
+
+    .dx-button-content {
+      padding-left: $fluent-list-next-button-horizontal-padding;
+      padding-right: $fluent-list-next-button-horizontal-padding;
+    }
+  }
+
+  .dx-list-border-visible {
+    border: $fluent-list-border;
+    border-color: $list-border-color;
+  }
+
+  .dx-list-item-before-bag {
+    &.dx-list-select-checkbox-container,
+    &.dx-list-select-radiobutton-container {
+      display: flex;
+      flex-shrink: 0;
+      width: $fluent-list-item-height;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .dx-button.dx-list-toggle-delete-switch {
+      border: none;
+      background: transparent;
+      padding: 0;
+      box-shadow: none;
+
+      .dx-button-content {
+        padding: 0;
+      }
+    }
+  }
+
+  .dx-list-select-all {
+    padding: $fluent-list-item-vertical-padding 0;
+    position: relative;
+    display: flex;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background-color: $base-select-all-separator-color;
+    }
+  }
+
+  .dx-list-select-all-checkbox {
+    margin: 0 $item-horizontal-padding - 4px;
+  }
+
+  .dx-list-select-all-label {
+    padding: 0 $fluent-list-item-horizontal-padding;
+  }
+
+  .dx-list-item-after-bag {
+    padding-inline: $fluent-list-item-vertical-padding;
+
+    &.dx-list-static-delete-button-container {
+      width: $item-horizontal-padding + $fluent-button-icon-size;
+      padding: 0;
+    }
+
+    .dx-list-reorder-handle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @include dx-icon(dragvertical);
+
+      color: $list-icon-color;
+
+      @include dx-icon-sizing($fluent-base-icon-size);
+    }
+  }
+
+  .dx-list-slide-menu-button {
+    bottom: 1px;
+  }
+
+  .dx-list-slide-menu-button-delete {
+    @include dx-icon(trash);
+
+    color: $base-inverted-text-color;
+    background-color: $list-menu-button-delete-bg;
+    font-size: $fluent-base-icon-size;
+    display: table-cell;
+    vertical-align: middle;
+    padding: 0 $item-horizontal-padding;
+    width: $item-horizontal-padding * 2 + $fluent-base-icon-size;
+  }
+
+  .dx-list-slide-menu-button-menu {
+    border: 1px solid transparent;
+    color: $list-menu-button-default-color;
+    background-color: $list-menu-button-default-bg;
+  }
+
+  .dx-list-static-delete-button {
+    padding: 0;
+
+    &.dx-button {
+      box-shadow: none;
+      background-color: transparent;
+
+      .dx-button-content {
+        z-index: 1;
+      }
+    }
+  }
+
+  .dx-list-context-menucontent {
+    background-color: $list-holdmenu-bg;
+    border: 1px solid;
+    border-color: $list-holdmenu-border-color;
+    border-radius: $base-border-radius;
+    box-shadow: $list-holdmenu-shadow-color 0 2px 7.2px 0;
+
+    .dx-list-items {
+      margin-left: $fluent-list-vertical-padding;
+      margin-right: $fluent-list-vertical-padding;
+    }
+  }
+
+  .dx-state-disabled {
+    &.dx-list-item,
+    .dx-list-item {
+      background-color: transparent;
+      opacity: 0.6;
+    }
+  }
+}
+
+@include dx-list-sizing($fluent-list-item-horizontal-padding);

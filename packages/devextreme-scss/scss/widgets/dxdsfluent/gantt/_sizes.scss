@@ -1,0 +1,28 @@
+@use "../sizes" as *;
+
+// adduse
+
+$gantt-header-item-height: null !default;
+$gantt-task-title-padding-left: null !default;
+$gantt-task-height: null !default;
+$gantt-dependency-successor-size: null !default;
+$gantt-milestone-size: null !default;
+
+$gantt-task-wrapper-padding-top: 0 !default;
+
+@if $size == "default" {
+  $gantt-header-item-height: 57px !default;
+  $gantt-task-title-padding-left: 11px !default;
+  $gantt-task-height: 27px !default;
+  $gantt-dependency-successor-size: 12px !default;
+  $gantt-milestone-size: 17px !default;
+}
+
+@else if $size == "compact" {
+  $gantt-header-item-height: 51px !default;
+  $gantt-task-title-padding-left: 9px !default;
+  $gantt-task-height: 20px !default;
+  $gantt-dependency-successor-size: 10px !default;
+  $gantt-milestone-size: 14px !default;
+}
+

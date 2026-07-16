@@ -26,6 +26,11 @@ const DEFAULT_DEV_BUNDLE_NAMES = [
   'fluent.blue.dark',
   'fluent.saas.light',
   'fluent.saas.dark',
+  'dxdsfluent.blue.light',
+  'dxdsfluent.blue.light.compact',
+  'dxdsfluent.blue.dark',
+  'dxdsfluent.saas.light',
+  'dxdsfluent.saas.dark',
 ];
 
 interface BuildDependencies {
@@ -74,7 +79,7 @@ function prependLicenseAndMoveCharsetFirst(minifiedCss: string, license: string)
 function generateBundleName(theme: string, size: string, color: string, mode?: string): string {
   return (
     'dx'
-    + (theme === 'material' || theme === 'fluent' ? `.${theme}` : '')
+    + (theme === 'material' || theme === 'fluent' || theme === 'dxdsfluent' ? `.${theme}` : '')
     + `.${color}`
     + (mode ? `.${mode}` : '')
     + (size === 'default' ? '' : '.compact')

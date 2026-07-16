@@ -1,0 +1,86 @@
+@use "../variables/sizes" as *;
+
+// adduse
+
+
+@mixin dx-tabs-indicator {
+  &::after {
+    content: "";
+    position: absolute;
+  }
+}
+
+@mixin dx-tabs-indicator-background($background-color) {
+  &::after {
+    background-color: $background-color;
+  }
+}
+
+@mixin dx-tabs-indicator-primary($position) {
+  @include dx-tabs-indicator();
+
+  &::after {
+    @if $position == top {
+      top: 0;
+      right: 0;
+      left: 0;
+      width: $fluent-indicator-length-primary;
+      height: $fluent-indicator-thickness-primary;
+    } @else if $position == right {
+      top: 0;
+      right: 0;
+      bottom: 0;
+      height: $fluent-indicator-length-primary;
+      width: $fluent-indicator-thickness-primary;
+    } @else if $position == bottom {
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: $fluent-indicator-length-primary;
+      height: $fluent-indicator-thickness-primary;
+    } @else if $position == left {
+      top: 0;
+      bottom: 0;
+      left: 0;
+      height: $fluent-indicator-length-primary;
+      width: $fluent-indicator-thickness-primary;
+    }
+  }
+}
+
+@mixin dx-tabs-indicator-secondary {
+  @include dx-tabs-indicator();
+
+  &::after {
+    border-radius: $fluent-indicator-border-radius-secondary;
+  }
+}
+
+@mixin dx-tabs-horizontal-indicator-secondary($position) {
+  &::after {
+    right: 0;
+    left: 0;
+    width: $fluent-indicator-length-secondary;
+    height: $fluent-indicator-thickness-secondary;
+
+    @if $position == top {
+      top: -$fluent-tabs-item-padding-top-bottom;
+    } @else if $position == bottom {
+      bottom: -$fluent-tabs-item-padding-top-bottom;
+    }
+  }
+}
+
+@mixin dx-tabs-vertical-indicator-secondary($position) {
+  &::after {
+    top: $fluent-tabs-item-padding-top-bottom;
+    width: $fluent-indicator-thickness-secondary;
+    height: calc($fluent-indicator-length-secondary - 2 * $fluent-tabs-item-padding-top-bottom);
+
+    @if $position == right {
+      right: 0;
+    } @else if $position == left {
+      left: 0;
+    }
+  }
+}

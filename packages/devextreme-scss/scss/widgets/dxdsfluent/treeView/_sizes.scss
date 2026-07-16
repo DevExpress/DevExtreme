@@ -1,0 +1,50 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-treeview-toggle-item-width: null !default;
+$fluent-treeview-item-height: null !default;
+$fluent-checkbox-container-size: null !default;
+$fluent-treeview-container-with-border-offset: 8px;
+$fluent-treeview-item-element-gap: 8px !default;
+$fluent-treeview-item-margin: 1px 0;
+$fluent-treeview-item-border-radius: 4px;
+$fluent-treeview-border-padding: 1px;
+$fluent-treeview-container-padding:
+  $fluent-treeview-border-padding
+  $fluent-treeview-border-padding
+  $fluent-treeview-border-padding
+  $fluent-treeview-container-with-border-offset;
+
+$fluent-treeview-checkbox-offset: null !default;
+$fluent-select-all-item-padding: null !default;
+$fluent-treeview-item-padding: null !default;
+$fluent-treeview-load-indicator-size: null !default;
+$fluent-treeview-searchbox-margin-bottom: null !default;
+$fluent-treeview-search-editor-height: null !default;
+$fluent-treeview-item-side-padding: 12px !default;
+$fluent-select-all-item-border-visible-padding: 26px !default;
+
+@if $size == "default" {
+  $fluent-treeview-item-height: 44px !default;
+  $fluent-treeview-toggle-item-width: 20px !default;
+  $fluent-checkbox-container-size: 20px !default;
+  $fluent-treeview-checkbox-offset: 42px !default;
+  $fluent-select-all-item-padding: 15px 42px !default;
+  $fluent-treeview-item-padding: 12px $fluent-treeview-item-side-padding !default;
+  $fluent-treeview-load-indicator-size: 20px !default;
+  $fluent-treeview-searchbox-margin-bottom: 8px !default;
+  $fluent-treeview-search-editor-height: 48px;
+}
+
+@else if $size == "compact" {
+  $fluent-treeview-item-height: 32px !default;
+  $fluent-treeview-toggle-item-width: 16px !default;
+  $fluent-treeview-checkbox-offset: 36px !default;
+  $fluent-checkbox-container-size: 16px !default;
+  $fluent-select-all-item-padding: 10px $fluent-treeview-checkbox-offset !default;
+  $fluent-treeview-item-padding: 10px $fluent-treeview-item-side-padding !default;
+  $fluent-treeview-load-indicator-size: 16px !default;
+  $fluent-treeview-searchbox-margin-bottom: 4px !default;
+  $fluent-treeview-search-editor-height: 32px;
+}

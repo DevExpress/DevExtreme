@@ -1,0 +1,114 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icon_fonts" as *;
+@use "../../base/gallery";
+
+// adduse
+
+.dx-gallery {
+  .dx-gallery-nav-button-prev,
+  .dx-gallery-nav-button-next {
+    position: absolute;
+    top: 0;
+    width: 34%;
+    height: 100%;
+    background: transparent;
+    cursor: pointer;
+
+    &.dx-state-hover::after {
+      background-color: $gallery-navbutton-hover-color;
+    }
+
+    &.dx-state-active::after {
+      background-color: $gallery-navbutton-active-color;
+    }
+
+    @include dx-icon-font-centered-sizing(32px);
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      background: $gallery-navbutton-color;
+      border-radius: 50%;
+      top: 50%;
+      margin-top: -16px;
+    }
+
+    &::before {
+      position: absolute;
+      z-index: 10;
+      clear: both;
+      font-size: 32px;
+      color: $gallery-nav-arrow-color;
+    }
+  }
+
+  .dx-gallery-nav-button-prev {
+    @include dx-icon(chevronleft);
+
+    &::after {
+      left: $fluent-gallery-button-padding;
+    }
+
+    &::before {
+      left: $fluent-gallery-button-padding - 1;
+      right: auto;
+      margin-left: 0;
+    }
+  }
+
+  .dx-gallery-nav-button-next {
+    @include dx-icon(chevronright);
+
+    &::after {
+      right: $fluent-gallery-button-padding;
+    }
+
+    &::before {
+      right: $fluent-gallery-button-padding - 1;
+      left: auto;
+    }
+  }
+}
+
+
+.dx-gallery-indicator {
+  pointer-events: none;
+  text-align: center;
+}
+
+.dx-gallery-indicator-item {
+  border-radius: 50%;
+  box-sizing: border-box;
+  border: 1px solid;
+  border-color: $gallery-indicator-item-border-color;
+  pointer-events: auto;
+  margin: 5px - math.div($fluent-gallery-indicator-size, 2) 6px;
+  width: $fluent-gallery-indicator-size;
+  height: $fluent-gallery-indicator-size;
+  background: $gallery-indicator-bg;
+}
+
+.dx-gallery-indicator-item-active,
+.dx-gallery-indicator-item-selected {
+  width: $fluent-gallery-indicator-selected-size;
+  height: $fluent-gallery-indicator-selected-size;
+  background: $gallery-indicator-item-selected-bg;
+  border: 2px solid;
+  border-color: $gallery-indicator-selected-border-color;
+  margin: 5px - math.div($fluent-gallery-indicator-selected-size, 2) 6px;
+}
+
+.dx-state-focused.dx-gallery {
+  border-color: $base-accent;
+
+  .dx-gallery-indicator-item-selected {
+    background: $gallery-indicator-focused-bg;
+  }
+}

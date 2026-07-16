@@ -1,0 +1,115 @@
+@use "sass:math";
+@use "../textEditor/sizes" as *;
+@use "../textEditor/colors" as *;
+@use "../dateBox/mixins" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "colors" as *;
+@use "../colors" as *;
+@use "../../base/dateRangeBox";
+@use "../../base/icon_fonts" as *;
+@use "../textEditor" as *;
+
+// adduse
+
+$fluent-editor-custom-button-margin: 6px;
+
+.dx-daterangebox {
+  @include dx-dropdowneditor-button-icon-styling(daterangepicker);
+
+  &.dx-editor-outlined,
+  &.dx-editor-filled {
+    &::before {
+      content: none;
+    }
+  }
+
+  .dx-editor-outlined,
+  .dx-editor-filled {
+    &.dx-datebox {
+      &::before {
+        border-radius: 0;
+        width: calc(100% - 2 * $fluent-daterangebox-active-bar-horizontal-margin);
+        margin: 0 $fluent-daterangebox-active-bar-horizontal-margin;
+      }
+    }
+  }
+
+  &.dx-editor-underlined,
+  &.dx-editor-filled {
+    &::before {
+      border-bottom-width: 1px;
+      transition: none;
+    }
+
+    &.dx-state-hover {
+      &::after {
+        border-bottom-width: 1px;
+        transition: none;
+      }
+    }
+
+    &.dx-state-focused {
+      &.dx-invalid {
+        &::before {
+          border-bottom-width: 1px;
+          transition: none;
+        }
+      }
+    }
+  }
+
+  &.dx-editor-underlined {
+    .dx-daterangebox-separator {
+      padding-right: $fluent-filled-texteditor-input-horizontal-padding;
+    }
+  }
+
+  &.dx-texteditor {
+    > .dx-texteditor-buttons-container {
+      > .dx-button,
+      > .dx-clear-button-area {
+        margin-inline-start: $fluent-editor-custom-button-margin;
+        margin-inline-end: $fluent-editor-custom-button-margin;
+
+        &:first-child {
+          margin-inline-start: 0;
+        }
+
+        &:last-child {
+          margin-inline-end: $fluent-editor-custom-button-margin;
+        }
+      }
+
+      > .dx-dropdowneditor-button:last-child {
+        margin-inline-end: $texteditor-spin-button-horizontal-padding;
+      }
+
+      > .dx-clear-button-area:last-child,
+      > .dx-clear-button-area + div:empty:last-child {
+        margin-inline-end: $fluent-filled-texteditor-input-button-horizontal-padding;
+      }
+    }
+  }
+
+  .dx-datebox {
+    &.dx-end-datebox {
+      &.dx-texteditor {
+        &.dx-invalid {
+          .dx-texteditor-input {
+            padding-inline-end: $fluent-texteditor-invalid-badge-size;
+          }
+        }
+      }
+    }
+  }
+}
+
+.dx-daterangebox-separator {
+  padding-left: $fluent-filled-texteditor-input-horizontal-padding;
+  color: $texteditor-disabled-text-color;
+
+  .dx-icon {
+    @include dx-icon-sizing($fluent-base-icon-size);
+  }
+}

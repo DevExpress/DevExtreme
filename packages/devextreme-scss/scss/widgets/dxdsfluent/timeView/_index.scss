@@ -1,0 +1,56 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../textEditor/sizes" as *;
+@use "../../base/timeView/mixins" as *;
+@use "../../base/timeView";
+
+// adduse
+
+@include clock-action-icons-mixin($base-inverted-bg, $base-typography-bg, $clock-digits-color);
+
+.dx-timeview {
+  height: auto;
+  width: auto;
+
+  .dx-texteditor {
+    .dx-texteditor-input {
+      padding-inline-end: 0;
+      padding-inline-start: 12px;
+    }
+
+    .dx-texteditor-container {
+      .dx-texteditor-buttons-container .dx-dropdowneditor-button {
+        margin-inline-end: 0;
+      }
+    }
+  }
+}
+
+.dx-timeview-clock {
+  margin-bottom: 10px;
+}
+
+.dx-timeview-format12 {
+  width: $fluent-timeview-format12-width;
+  margin-inline-start: $fluent-timeview-time-separator-margin;
+}
+
+.dx-timeview-time-separator {
+  margin: 0 $fluent-timeview-time-separator-margin;
+}
+
+.dx-timeview-field {
+  min-height: $fluent-timeview-field-min-height;
+}
+
+.dx-timeview-field .dx-numberbox {
+  width: $fluent-timeview-format12-width;
+
+  &.dx-numberbox-spin-touch-friendly {
+    width: 110px;
+  }
+}

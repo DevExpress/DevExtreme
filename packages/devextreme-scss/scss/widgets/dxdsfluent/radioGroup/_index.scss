@@ -1,0 +1,26 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/radioGroup/mixins" as *;
+@use "../../base/radioGroup";
+
+// adduse
+@use "../radioButton";
+@include dx-radiogroup-mixin(
+  $fluent-radio-button-vertical-margin,
+  0,
+);
+
+.dx-radiogroup {
+  &.dx-state-disabled {
+    opacity: 1;
+  }
+}
+
+.dx-radiogroup-horizontal {
+  .dx-collection {
+    column-gap: 16px;
+  }
+}

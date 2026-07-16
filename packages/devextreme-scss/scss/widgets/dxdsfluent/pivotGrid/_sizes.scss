@@ -1,0 +1,40 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-pivotgrid-cell-padding: null !default;
+$pivotgrid-common-left-right-padding: null !default;
+$fluent-pivotgrid-expanded-cell-padding: null !default;
+$fluent-pivotgrid-total-text-left-padding: null !default;
+$pivotgrid-header-top-bottom-padding: null !default;
+$pivotgrid-button-top-padding: null !default;
+$area-field-top-bottom-padding: null !default;
+
+$pivotgrid-empty-column-width: 19px !default;
+$pivotgrid-field-indicators-offset: 6px !default;
+$pivotgrid-indicators-line-height: 12px !default;
+$pivotgrid-empty-area-text-padding: 5px !default;
+
+$area-field-border-radius: null !default;
+
+@if $size == "default" {
+  $fluent-pivotgrid-cell-padding: 10px 16px !default;
+  $pivotgrid-common-left-right-padding: 10px !default;
+  $pivotgrid-header-top-bottom-padding: 14px !default;
+  $fluent-pivotgrid-expanded-cell-padding: 10px 14px 10px 19px !default;
+  $fluent-pivotgrid-total-text-left-padding: 22px !default;
+  $pivotgrid-button-top-padding: 10px !default;
+  $area-field-border-radius: 6px !default;
+  $area-field-top-bottom-padding: 5px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-pivotgrid-cell-padding: 7px 11px !default;
+  $pivotgrid-common-left-right-padding: 8px !default;
+  $pivotgrid-header-top-bottom-padding: 5px !default;
+  $fluent-pivotgrid-expanded-cell-padding: 7px 8px 7px 13px !default;
+  $fluent-pivotgrid-total-text-left-padding: 16px !default;
+  $pivotgrid-button-top-padding: 5px !default;
+  $area-field-border-radius: 4px !default;
+  $area-field-top-bottom-padding: 1px !default;
+}

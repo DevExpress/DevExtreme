@@ -1,0 +1,44 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../color" as extcolor;
+
+// adduse
+
+/**
+* $name 10. Indicator color
+* $type color
+*/
+$load-indicator-segment-bg-color: $base-accent !default;
+
+/**
+* $name 20. Indicator background color
+* $type color
+*/
+$load-indicator-inner-segment-border-color: null !default;
+$load-indicator-animation-sparkle-bg-color1: null !default;
+$load-indicator-animation-sparkle-bg-color2: null !default;
+$load-indicator-animation-sparkle-bg-color3: null !default;
+
+@if $mode == "light" {
+  @if $color == "blue" {
+    $load-indicator-inner-segment-border-color: extcolor.adjust-if-not-achromatic($color: $load-indicator-segment-bg-color, $hue: 2.9deg, $saturation: 2.2%, $lightness: 44.3%) !default;
+    $load-indicator-animation-sparkle-bg-color1: $base-accent !default;
+    $load-indicator-animation-sparkle-bg-color2: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 2deg, $saturation: 2.73%, $lightness: 27.25%) !default;
+    $load-indicator-animation-sparkle-bg-color3: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 3deg, $saturation: 5.61%, $lightness: 38.43%) !default;
+  }
+
+  @if $color == "saas" {
+    $load-indicator-inner-segment-border-color: color.mix($base-bg, $load-indicator-segment-bg-color, 68.82%) !default;
+    $load-indicator-animation-sparkle-bg-color1: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: -15deg, $saturation: -14.71%, $lightness: -26.47%) !default;
+    $load-indicator-animation-sparkle-bg-color2: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: -12deg, $saturation: -11.98%, $lightness: 0.78%) !default;
+    $load-indicator-animation-sparkle-bg-color3: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: -12deg, $saturation: -9.09%, $lightness: 11.96%) !default;
+  }
+}
+
+@if $mode == "dark" {
+  $load-indicator-inner-segment-border-color: $base-accent-selected !default;
+  $load-indicator-animation-sparkle-bg-color1: color.adjust($base-accent, $saturation: -1.67%, $space: hsl, $lightness: 5.29%) !default;
+  $load-indicator-animation-sparkle-bg-color2: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: -2deg, $saturation: -4.40%, $lightness: -21.96%) !default;
+  $load-indicator-animation-sparkle-bg-color3: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: -2deg, $saturation: -8.58%, $lightness: -26.67%) !default;
+}

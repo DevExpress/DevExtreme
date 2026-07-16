@@ -1,0 +1,51 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/speedDialAction" as *;
+@use "../button/colors" as *;
+
+// adduse
+@use "../overlay";
+
+$fluent-fa-button-label-offset: 16px;
+$fluent-fa-button-label-padding: 4px 8px;
+
+@include dx-fa-button-mixin(
+  $fluent-main-fa-button-size,
+  $fluent-fa-button-size,
+  $fluent-base-icon-size,
+  $fluent-base-font-size,
+  $fluent-fa-button-label-padding,
+  $fluent-fa-button-label-offset,
+  $speed-dial-action-color,
+  $speed-dial-action-bg,
+  $speed-dial-action-shadow,
+  $speed-dial-action-shading-color,
+  $speed-dial-action-hover-bg,
+  $speed-dial-action-active-bg,
+  $speed-dial-action-label-shadow,
+  $button-default-bg,
+  $button-default-color
+);
+
+.dx-fa-button {
+  &.dx-fa-button-main {
+    .dx-overlay-content {
+      .dx-fa-button-label {
+        padding: $fluent-main-fa-button-label-padding;
+        font-size: $fluent-base-font-size;
+        font-weight: 500;
+      }
+    }
+
+    &.dx-fa-button-with-label {
+      .dx-overlay-content {
+        .dx-fa-button-icon {
+          padding-inline-start: $fluent-main-fa-button-horizontal-padding;
+        }
+      }
+    }
+  }
+}

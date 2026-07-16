@@ -1,0 +1,22 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+$radiogroup-accent-color: $base-accent !default;
+$radiogroup-accent-color-hover: $base-accent-hover !default;
+$radiogroup-accent-color-active: $base-accent-active !default;
+
+$radiogroup-border-color: $base-border-color-accessible !default;
+$radiogroup-border-color-hover: $base-border-color-accessible-hover !default;
+$radiogroup-border-color-active: $base-border-color-accessible-focused !default;
+$radiogroup-bg: $base-element-bg !default;
+
+$radiobutton-invalid-color: $base-invalid-color !default;
+$radiobutton-invalid-color-hover: $base-invalid-color-hover !default;
+$radiobutton-invalid-color-focused: $base-invalid-color-selected !default;
+
+$radiogroup-readonly-border-color: $radiogroup-border-color !default;
+
+$radiobutton-focused-bg: color.change($base-text-color, $alpha: 0.1) !default;

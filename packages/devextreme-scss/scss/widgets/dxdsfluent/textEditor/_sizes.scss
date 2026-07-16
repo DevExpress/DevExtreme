@@ -1,0 +1,71 @@
+@use "sass:math";
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-texteditor-line-height: null !default;
+$fluent-texteditor-font-size: null !default;
+$fluent-texteditor-input-height: null !default;
+$fluent-texteditor-label-top-offset: null !default;
+$fluent-texteditor-label-outside-top-offset: null !default;
+$fluent-filled-texteditor-input-horizontal-padding: null !default;
+$fluent-filled-texteditor-input-top-padding: null !default;
+$fluent-filled-texteditor-input-bottom-padding: null !default;
+$fluent-standard-texteditor-input-top-padding: null !default;
+$fluent-underlined-editor-button-height: null !default;
+$fluent-texteditor-label-font-size: null !default;
+$fluent-texteditor-label-outside-height: null !default;
+$fluent-standard-texteditor-input-bottom-padding: null !default;
+$fluent-standard-texteditor-with-label-input-top-padding: null !default;
+$fluent-standard-texteditor-with-label-input-bottom-padding: null !default;
+$fluent-filled-texteditor-input-with-label-top-padding: null !default;
+$fluent-filled-texteditor-input-with-label-bottom-padding: null !default;
+$texteditor-icon-container-size: $fluent-base-icon-size !default;
+
+@if $size == "default" {
+  $fluent-texteditor-line-height: 1.428571 !default;
+  $fluent-texteditor-font-size: 14px !default;
+  $fluent-texteditor-input-height: 32px !default;
+  $fluent-texteditor-label-outside-height: 20px !default;
+  $fluent-texteditor-label-outside-top-offset: 24px !default;
+  $fluent-texteditor-label-font-size: 12px !default;
+  $fluent-texteditor-label-top-offset: -1px !default;
+  $fluent-filled-texteditor-input-horizontal-padding: 12px !default;
+  $fluent-filled-texteditor-input-top-padding: 5px !default;
+  $fluent-filled-texteditor-input-with-label-top-padding: 8px !default;
+  $fluent-filled-texteditor-input-bottom-padding: 5px !default;
+  $fluent-filled-texteditor-input-with-label-bottom-padding: 2px !default;
+  $fluent-standard-texteditor-input-top-padding: 5px !default;
+  $fluent-standard-texteditor-input-bottom-padding: 5px !default;
+  $fluent-standard-texteditor-with-label-input-top-padding: 9px !default;
+  $fluent-standard-texteditor-with-label-input-bottom-padding: 3px !default;
+  $fluent-underlined-editor-button-height: 22px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-texteditor-line-height: 1.3333 !default;
+  $fluent-texteditor-font-size: 12px !default;
+  $fluent-texteditor-input-height: 24px !default;
+  $fluent-texteditor-label-outside-height: 16px !default;
+  $fluent-texteditor-label-outside-top-offset: 18px !default;
+  $fluent-texteditor-label-font-size: 10px !default;
+  $fluent-texteditor-label-top-offset: -1px !default;
+  $fluent-filled-texteditor-input-horizontal-padding: 8px !default;
+  $fluent-filled-texteditor-input-top-padding: 3px !default;
+  $fluent-filled-texteditor-input-with-label-top-padding: 6px !default;
+  $fluent-filled-texteditor-input-bottom-padding: 3px !default;
+  $fluent-filled-texteditor-input-with-label-bottom-padding: 0 !default;
+  $fluent-standard-texteditor-input-top-padding: 3px !default;
+  $fluent-standard-texteditor-input-bottom-padding: 3px !default;
+  $fluent-standard-texteditor-with-label-input-top-padding: 6px !default;
+  $fluent-standard-texteditor-with-label-input-bottom-padding: 2px !default;
+  $fluent-underlined-editor-button-height: 22px !default;
+}
+
+$fluent-filled-texteditor-input-padding:
+  $fluent-filled-texteditor-input-top-padding
+  $fluent-filled-texteditor-input-horizontal-padding
+  $fluent-filled-texteditor-input-bottom-padding !default;
+
+$fluent-filled-texteditor-input-button-horizontal-padding: $fluent-filled-texteditor-input-horizontal-padding - 4px !default;
+$texteditor-spin-button-horizontal-padding: math.div($fluent-filled-texteditor-input-horizontal-padding, 2) !default;

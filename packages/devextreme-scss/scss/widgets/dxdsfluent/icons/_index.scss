@@ -1,0 +1,47 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icon_fonts" as *;
+
+// adduse
+
+
+@include dx-font-icons("dxiconsfluent", "DevExtreme Fluent Icons", "devextreme_fluent_icons", optimizeLegibility);
+
+.dx-icon {
+  font-size: $fluent-base-icon-size;
+  line-height: 1;
+  white-space: nowrap;
+  font-feature-settings: 'liga';
+}
+
+.dx-tab {
+  .dx-icon,
+  &.dx-tab-selected .dx-icon {
+    background-size: 100% 100%;
+    background-position: 50% 50%;
+  }
+}
+
+.dx-scrollview-pulldown {
+  background-image: $scrollview-pulldown-path;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+}
+
+.dx-loadindicator-image {
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.dx-loadindicator-image-small {
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.dx-loadindicator-image-large {
+  background-position: center center;
+  background-repeat: no-repeat;
+}

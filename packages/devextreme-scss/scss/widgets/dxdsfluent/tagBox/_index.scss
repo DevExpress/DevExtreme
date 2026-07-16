@@ -1,0 +1,186 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icon_fonts" as *;
+@use "../textEditor" as *;
+@use "../common/sizes" as *;
+@use "../../base/tagBox";
+
+// adduse
+
+.dx-tagbox {
+  .dx-tag-container {
+    height: 100%;
+    padding-top: $fluent-tagbox-tag-container-vertical-padding;
+    padding-bottom: $fluent-tagbox-tag-container-vertical-padding;
+    gap: $fluent-tagbox-tag-container-gap;
+
+    .dx-texteditor-input {
+      padding: 0;
+      min-height: 0;
+    }
+  }
+
+  &.dx-editor-underlined {
+    .dx-tag-container {
+      padding-top: $fluent-tagbox-tag-container-vertical-padding + 1px;
+      padding-bottom: $fluent-tagbox-tag-container-vertical-padding + 1px;
+    }
+  }
+
+  &.dx-editor-outlined,
+  &.dx-editor-filled,
+  &.dx-editor-underlined {
+    .dx-texteditor-input {
+      height: $fluent-tagbox-tag-height;
+    }
+  }
+
+  &.dx-editor-outlined,
+  &.dx-editor-filled {
+    .dx-tag-container {
+      padding-inline-start: $fluent-tagbox-tag-container-padding-left;
+    }
+  }
+
+  &.dx-texteditor-with-label:not(.dx-texteditor-label-outside),
+  &.dx-texteditor-with-floating-label {
+    &.dx-editor-filled,
+    &.dx-editor-underlined {
+      .dx-tag {
+        margin: 0;
+      }
+
+      .dx-texteditor-input {
+        padding: 0;
+      }
+    }
+
+    &.dx-editor-filled {
+      .dx-tag-container,
+      .dx-placeholder::before {
+        padding-top: $fluent-tagbox-filled-with-label-top-padding;
+        padding-bottom: $fluent-tagbox-filled-with-label-bottom-padding;
+      }
+    }
+
+    &.dx-editor-underlined {
+      .dx-tag-container,
+      .dx-placeholder::before {
+        padding-top: $fluent-tagbox-filled-with-label-top-padding + 1px;
+        padding-bottom: $fluent-tagbox-filled-with-label-bottom-padding + 1px;
+      }
+    }
+  }
+
+  &.dx-state-disabled {
+    .dx-tag-content {
+      color: $tagbox-tag-foreground-disabled;
+      background-color: $tagbox-tag-disabled;
+    }
+
+    .dx-tag-remove-button {
+      &::before {
+        color: $tagbox-tag-foreground-disabled;
+      }
+    }
+  }
+}
+
+.dx-tagbox-single-line {
+  .dx-tag-container {
+    padding-right: 0;
+  }
+}
+
+.dx-tag-content {
+  display: inline-flex;
+  align-items: center;
+  font-size: $fluent-tagbox-tag-content-font-size;
+  line-height: $fluent-tagbox-tag-content-line-height;
+  margin: 0;
+  padding-top: $fluent-tagbox-tag-content-vertical-padding;
+  padding-bottom: $fluent-tagbox-tag-content-vertical-padding;
+  padding-inline-start: $fluent-tagbox-tag-content-padding-left;
+  padding-inline-end: $fluent-tagbox-tag-content-padding-right;
+  min-width: 40px;
+  background-color: $tagbox-tag-bg;
+  color: $tagbox-tag-color;
+  border-radius: $tagbox-tag-border-radius;
+  border-width: 1px;
+  border-style: solid;
+  border-color: $base-border-color-disabled;
+}
+
+.dx-tag-remove-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $fluent-tagbox-tag-height;
+  height: 100%;
+
+  @include dx-icon(clear);
+
+  font-size: $fluent-tagbox-tag-content-font-size + 2px;
+
+  &::before {
+    content: "\f15f";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $tagbox-tag-button-remove-bg;
+  }
+}
+
+.dx-tag {
+  &:hover {
+    .dx-tag-content {
+      background-color: $tagbox-tag-hover-bg;
+      color: $tagbox-tag-active-color;
+    }
+  }
+
+  &.dx-state-focused {
+    .dx-tag-content {
+      color: $tagbox-tag-active-color;
+      border-color: $tagbox-tag-border-color-focused;
+    }
+  }
+}
+
+@mixin tagbox-editor-container-offset() {
+  inset-inline-end: $fluent-invalid-badge-horizontal-padding;
+}
+
+.dx-tagbox.dx-invalid,
+.dx-tagbox.dx-valid {
+  .dx-texteditor-container {
+    &::after {
+      @include tagbox-editor-container-offset();
+    }
+  }
+}
+
+.dx-tagbox.dx-validation-pending {
+  .dx-texteditor-container {
+    .dx-pending-indicator {
+      @include tagbox-editor-container-offset();
+    }
+  }
+}
+
+.dx-tagbox-popup-wrapper {
+  .dx-list-select-all {
+    border-bottom: 1px solid;
+    border-bottom-color: $tagbox-select-all-border-color;
+    padding-bottom: $fluent-tagbox-select-all-padding-bottom;
+    margin-bottom: $fluent-tagbox-select-all-margin-bottom;
+
+    &::after {
+      background-color: transparent;
+    }
+  }
+}

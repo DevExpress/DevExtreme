@@ -1,0 +1,107 @@
+@use "sass:math";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/mixins" as *;
+@use "../../base/validation" as *;
+@use "../list/sizes" as *;
+
+$badge-invalid-bg: $base-invalid-color;
+
+@mixin dx-base-typography() {
+  @include dx-base-typography-mixin(
+      $typography-color,
+      $fluent-base-font-size,
+      $base-font-family,
+      $fluent-line-height
+    );
+}
+
+@mixin disabled-widget($opacity: $base-disabled-opacity) {
+  @include disabled-widget-mixin($opacity);
+}
+
+@mixin badge-settings() {
+  pointer-events: none;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 50%;
+  margin-top: math.div(-$fluent-invalid-badge-size, 2);
+  width: $fluent-invalid-badge-size;
+  height: $fluent-invalid-badge-size;
+  line-height: $fluent-invalid-badge-size + 1;
+  font-size: $fluent-base-font-size;
+}
+
+@mixin dx-invalid-fluent-badge() {
+  @include badge-settings();
+
+  font-size: $fluent-base-font-size;
+  font-weight: 500;
+  background-color: $badge-invalid-bg;
+  color: $base-inverted-text-color;
+  content: '!';
+  border-radius: 50%;
+}
+
+@mixin dx-valid-fluent-badge() {
+  @include badge-settings();
+
+  font-size: $fluent-valid-badge-font-size;
+  font-weight: bold;
+  font-family: 'DXIcons', sans-serif;
+  color: $base-success;
+  content: '\f005';
+
+  @include validation-badge-animation();
+}
+
+@mixin dx-pending-indicator-fluent() {
+  @include dx-pending-indicator($fluent-invalid-badge-size);
+}
+
+@mixin dx-dropdownlist-list-appearance() {
+  height: 100%;
+
+  &.dx-popup-wrapper .dx-overlay-content {
+    box-shadow: $fluent-base-dropdown-widgets-shadow;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+
+    &.dx-dropdowneditor-overlay-flipped {
+      border-top-width: 1px;
+      border-bottom-width: 0;
+    }
+  }
+
+  .dx-popup-content {
+    height: 100%;
+    padding: 1px;
+  }
+
+  .dx-list {
+    height: 100%;
+    min-height: $fluent-list-item-height;
+  }
+
+  .dx-list-select-all {
+    margin-inline: $fluent-list-item-margin-inline;
+    padding: $fluent-list-item-vertical-padding + 2px 0 $fluent-list-item-vertical-padding - 2px;
+  }
+
+  .dx-list-items {
+    margin-inline: $fluent-list-item-margin-inline;
+  }
+
+  .dx-list-item,
+  .dx-empty-message {
+    border-top: 0;
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+}

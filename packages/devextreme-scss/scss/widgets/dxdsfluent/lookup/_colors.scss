@@ -1,0 +1,9 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../dropDownEditor/colors" as *;
+
+// adduse
+
+$lookup-icon-color: $dropdowneditor-icon-color !default;
+$lookup-icon-color-active: $dropdowneditor-icon-active-color !default;

@@ -1,0 +1,33 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../color" as extcolor;
+
+// adduse
+
+/**
+* $name 10. Bar background color
+* $type color
+*/
+$fluent-slider-bar-bg: $base-border-color-accessible !default;
+
+/**
+* $name 20. Selected range background color
+* $type color
+*/
+$slider-accent-color: $base-accent !default;
+$slider-accent-color-hover: $base-accent-hover !default;
+$slider-accent-color-focused: $base-accent-active !default;
+
+$slider-invalid-color: $base-invalid-color !default;
+$slider-invalid-color-hover: $base-invalid-color-hover !default;
+$slider-invalid-color-focused: $base-invalid-color-selected !default;
+
+$fluent-slider-disabled-bg: $base-foreground-disabled !default;
+$fluent-slider-bar-disabled-bg: $base-background-disabled !default;
+
+/**
+* $name 30. Slider tooltip text color
+* $type color
+*/
+$fluent-slider-tooltip-color: $base-text-color !default;

@@ -1,0 +1,17 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-radiobutton-size: 16px !default;
+$fluent-radiobutton-dot-size: 10px !default;
+
+$fluent-radiobutton-border-width: 1px !default;
+$fluent-radio-value-container-padding: null !default;
+
+@if $size == "default" {
+  $fluent-radio-value-container-padding: 12px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-radio-value-container-padding: 8px !default;
+}

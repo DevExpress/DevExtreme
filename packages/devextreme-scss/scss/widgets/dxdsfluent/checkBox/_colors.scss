@@ -1,0 +1,22 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+$checkbox-border-color: $base-border-color-accessible !default;
+$checkbox-border-color-hover: $base-border-color-accessible-hover !default;
+$checkbox-border-color-active: $base-border-color-accessible-focused !default;
+
+$checkbox-foreground-color: $base-element-bg !default;
+
+$checkbox-accent-color: $base-accent !default;
+$checkbox-accent-color-hover: $base-accent-hover !default;
+$checkbox-accent-color-focused: $base-accent-active !default;
+
+$checkbox-invalid-color: $base-invalid-color !default;
+$checkbox-invalid-color-hover: $base-invalid-color-hover !default;
+$checkbox-invalid-color-focused: $base-invalid-color-selected !default;
+
+$checkbox-border-color-disabled: $base-border-color-disabled !default;
+$checkbox-foreground-disabled-color: $base-foreground-disabled !default;

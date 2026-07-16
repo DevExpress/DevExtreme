@@ -1,0 +1,12 @@
+@use "../widgets/dxdsfluent/colors" with ($color: "$COLOR", $mode: "$MODE");
+@use "../widgets/dxdsfluent/sizes" with ($size: "$SIZE");
+@use "../widgets/dxdsfluent/typography";
+@use "../widgets/dxdsfluent/icons";
+@use "../widgets/dxdsfluent/widget";
+@use "../widgets/dxdsfluent/card";
+@use "../widgets/dxdsfluent/fieldset";
+@use "../widgets/dxdsfluent/common";
+@use "../widgets/base/resizable";
+@use "../widgets/base/draggable";
+@use "../widgets/base/ui";
+@use "../widgets/dxdsfluent";

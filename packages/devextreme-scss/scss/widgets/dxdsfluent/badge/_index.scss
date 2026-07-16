@@ -1,0 +1,22 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/badge";
+
+// adduse
+
+.dx-badge {
+  background-color: $badge-bg;
+  color: $badge-color;
+  font-size: $fluent-badge-font-size;
+  padding: $fluent-badge-padding;
+  border-radius: 999em;
+  line-height: $badge-line-height;
+
+  .dx-state-disabled & {
+    color: $badge-text-color-disabled;
+    background-color: $badge-background-color-disabled;
+  }
+}

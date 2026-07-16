@@ -1,0 +1,59 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/mixins" as *;
+@use "../../base/icon_fonts" as *;
+@use "../gridBase" as *;
+@use "../gridBase/colors" as *;
+@use "../gridBase/sizes" as *;
+@use "../../base/treeList" as baseTreeList with (
+  $datagrid-border: $datagrid-border,
+  $datagrid-drag-header-border-color: $datagrid-drag-header-border-color,
+  $datagrid-row-error-bg: $datagrid-row-error-bg,
+  $datagrid-base-color: $datagrid-base-color,
+  $datagrid-base-background-color: $datagrid-base-background-color,
+  $datagrid-border-color: $datagrid-border-color,
+  $datagrid-focused-border-color: $datagrid-focused-border-color,
+  $datagrid-text-stub-background-image-path: $datagrid-text-stub-background-image-path,
+  $datagrid-row-error-color: $datagrid-row-error-color,
+  $header-filter-color: $header-filter-color,
+  $header-filter-color-empty: $header-filter-color-empty,
+  $base-focus-color: $base-focus-color,
+);
+@use 'layout/cell';
+@include grid-base(treelist);
+
+.dx-treelist-rowsview {
+  tr:not(.dx-row-focused) .dx-treelist-empty-space {
+    color: $treelist-chevron-icon-color;
+  }
+
+  .dx-sort-up,
+  .dx-sort-down,
+  .dx-header-filter {
+    vertical-align: middle;
+  }
+
+  tr:not(.dx-row-focused).dx-selection {
+    .dx-treelist-empty-space {
+      color: $treelist-selection-chevron-icon-color;
+    }
+  }
+
+  .dx-treelist-cell-expandable {
+    .dx-treelist-text-content {
+      white-space: normal;
+    }
+  }
+
+  &.dx-treelist-nowrap .dx-treelist-table {
+    .dx-treelist-cell-expandable {
+      .dx-treelist-text-content {
+        white-space: nowrap;
+      }
+    }
+  }
+}

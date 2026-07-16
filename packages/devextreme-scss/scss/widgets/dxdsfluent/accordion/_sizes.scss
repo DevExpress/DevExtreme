@@ -1,0 +1,36 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-accordion-title-horizontal-padding: null !default;
+$fluent-accordion-title-vertical-padding: 6px !default;
+$fluent-accordion-body-padding: null !default;
+$fluent-accordion-title-height: null !default;
+
+$accordion-title-icon-margin: null !default;
+$accordion-title-icon-size: null !default;
+$accordion-item-border-radius: $fluent-base-border-radius !default;
+
+/**
+* $name 10. Item expanded margin
+* $type text
+*/
+$fluent-accordion-item-opened-margin: null !default;
+
+@if $size == "default" {
+  $fluent-accordion-title-horizontal-padding: 12px !default;
+  $fluent-accordion-body-padding: 12px !default;
+  $fluent-accordion-title-height: 44px !default;
+  $accordion-title-icon-margin: 8px !default;
+  $accordion-title-icon-size: 20px !default;
+  $fluent-accordion-item-opened-margin: 0 !default;
+}
+
+@else if $size == "compact" {
+  $fluent-accordion-title-horizontal-padding: 8px !default;
+  $fluent-accordion-body-padding: 8px !default;
+  $fluent-accordion-title-height: 32px !default;
+  $accordion-title-icon-margin: 6px !default;
+  $accordion-title-icon-size: 16px !default;
+  $fluent-accordion-item-opened-margin: 0 !default;
+}

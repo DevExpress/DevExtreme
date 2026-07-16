@@ -1,0 +1,40 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/tooltip";
+
+// adduse
+
+
+.dx-tooltip-wrapper {
+  .dx-overlay-content {
+    background-color: $tooltip-bg;
+    color: $tooltip-color;
+    border: 1px solid transparent;
+    border-radius: $tooltip-border-radius;
+    min-height: auto;
+
+    .dx-popup-content {
+      padding: $fluent-tooltip-padding;
+      font-size: $fluent-tooltip-font-size;
+    }
+  }
+
+  &.dx-popover-wrapper .dx-popover-arrow {
+    &::after {
+      box-shadow: $fluent-tooltip-shadow;
+      background: $tooltip-bg;
+      border-top-right-radius: $fluent-tooltip-arrow-border-radius;
+    }
+  }
+
+  &.dx-popover-wrapper.dx-position-top {
+    .dx-popover-arrow {
+      &::after {
+        border-bottom-left-radius: $fluent-tooltip-arrow-border-radius;
+      }
+    }
+  }
+}

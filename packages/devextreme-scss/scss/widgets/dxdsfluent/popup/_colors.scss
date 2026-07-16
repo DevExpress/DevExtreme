@@ -1,0 +1,31 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+/**
+* $name 20. Header background color
+* $type color
+*/
+$popup-title-bg: transparent !default;
+$popup-title-color: $base-text-color !default;
+$popup-title-border-color: $base-border-color !default;
+$popup-bottom-bg: $popup-title-bg !default;
+$popup-bottom-color: $base-text-color !default;
+$popup-border-radius: $base-border-radius * 2 !default;
+$popup-content-shadow-color1: null !default;
+$popup-content-shadow-color2: null !default;
+$popup-focused-content-shadow-color: null !default;
+
+@if $mode == "light" {
+  $popup-content-shadow-color1: color.change($base-shadow-color, $alpha: 0.2) !default;
+  $popup-content-shadow-color2: color.change($base-shadow-color, $alpha: 0.24) !default;
+  $popup-focused-content-shadow-color: color.change($base-shadow-color, $alpha: 0.24) !default;
+}
+
+@if $mode == "dark" {
+  $popup-content-shadow-color1: color.change($base-shadow-color, $alpha: 0.4) !default;
+  $popup-content-shadow-color2: color.change($base-shadow-color, $alpha: 0.48) !default;
+  $popup-focused-content-shadow-color: color.change($base-shadow-color, $alpha: 0.48) !default;
+}

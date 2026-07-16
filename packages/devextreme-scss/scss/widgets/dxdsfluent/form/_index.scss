@@ -1,0 +1,131 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/form";
+@use "../../base/icon_fonts" as *;
+
+// adduse
+@use "../scrollable";
+
+
+.dx-form-group-caption {
+  font-size: $fluent-form-group-caption-font-size;
+}
+
+.dx-form-group-with-caption { // stylelint-disable-line no-duplicate-selectors
+  & > .dx-form-group-content {
+    border-top: 1px solid;
+    border-top-color: $form-group-border-color;
+    padding-bottom: $fluent-form-group-content-bottom-padding;
+    padding-top: $fluent-form-group-caption-top-padding;
+    margin-top: $fluent-form-group-caption-bottom-margin;
+  }
+}
+
+.dx-layout-manager {
+  .dx-field-item {
+    &:not(.dx-last-col) {
+      padding-inline-end: $fluent-form-layout-manager-horizontal-padding;
+    }
+
+    &:not(.dx-first-col) {
+      padding-inline-start: $fluent-form-layout-manager-horizontal-padding;
+    }
+
+    &:not(.dx-first-row) {
+      padding-top: $fluent-form-layout-manager-vertical-padding;
+    }
+
+    padding-bottom: $fluent-form-layout-manager-vertical-padding;
+    font-size: $fluent-form-label-font-size;
+
+    .dx-field-item {
+      &.dx-last-row {
+        padding-bottom: 0;
+      }
+    }
+  }
+
+  .dx-tabpanel .dx-multiview-item-content {
+    padding: $fluent-form-layout-manager-tabpanel-content-padding;
+  }
+}
+
+.dx-form > .dx-layout-manager.dx-layout-manager-one-col {
+  .dx-field-item {
+    .dx-field-item.dx-last-row:not(.dx-last-col) {
+      padding-bottom: $fluent-form-layout-manager-vertical-padding;
+    }
+  }
+}
+
+.dx-field-item {
+  &:not(.dx-field-item-has-group):not(.dx-field-item-has-tabs):not(.dx-first-row):not(.dx-label-v-align) {
+    padding-top: $fluent-form-default-top-padding;
+  }
+
+  .dx-switch {
+    vertical-align: middle;
+  }
+}
+
+.dx-field-item-content-wrapper.dx-invalid {
+  .dx-field-item-help-text {
+    color: transparent;
+  }
+}
+
+.dx-field-item-label-location-top {
+  padding: $fluent-form-top-label-padding;
+  margin-bottom: $fluent-form-top-label-bottom-margin;
+
+  .dx-form-styling-mode-underlined & {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.dx-field-item-label-text {
+  color: $form-field-item-color;
+}
+
+.dx-field-item-help-text {
+  color: $form-item-help-text-color;
+  padding-top: 2px;
+  font-size: $fluent-form-help-text-font-size;
+  font-style: normal;
+
+  .dx-form-styling-mode-underlined & {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.dx-field-item-optional .dx-label > span::after,
+.dx-field-item-optional-mark {
+  color: $form-field-mark-color;
+}
+
+.dx-field-item-required .dx-label > span::after,
+.dx-field-item-required-mark {
+  color: $form-field-required-color;
+}
+
+.dx-field-item-custom-label-content {
+  .dx-icon {
+    @include dx-icon-sizing($fluent-form-label-icon-size);
+    @include dx-icon-margin(math.div($fluent-base-icon-size, 3));
+  }
+}
+
+.dx-form-group-custom-caption {
+  font-size: $fluent-form-group-caption-font-size;
+
+  .dx-icon {
+    @include dx-icon-sizing($fluent-base-icon-size);
+    @include dx-icon-margin($fluent-form-group-custom-caption-icon-margin);
+  }
+}

@@ -1,0 +1,24 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/validation" as *;
+@use "../textEditor/sizes" as *;
+
+// adduse
+@use "../overlay";
+@include dx-base-validation(
+  $validation-summary-color,
+  $validation-message-color,
+  $validation-message-background-color,
+  $fluent-validation-overlay-border-radius
+);
+@include dx-modern-styles-validation(
+  $fluent-validation-message-font-size,
+  $fluent-validation-message-line-height,
+  $fluent-filled-texteditor-input-horizontal-padding,
+  $fluent-validationsummary-item-margin,
+  $fluent-validation-message-vertical-padding,
+  $fluent-validation-message-horizontal-padding,
+);

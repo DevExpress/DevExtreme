@@ -1,0 +1,21 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+$fluent-datagrid-grouppanel-item-bg: null !default;
+
+@if $mode == "light" {
+  @if $color == "blue"{
+    $fluent-datagrid-grouppanel-item-bg: color.adjust($base-bg, $lightness: -5.88%, $space: hsl) !default;
+  }
+
+  @if $color == "saas" {
+    $fluent-datagrid-grouppanel-item-bg: color.change($base-hover-bg, $alpha: 0.4) !default;
+  }
+}
+
+@if $mode == "dark" {
+  $fluent-datagrid-grouppanel-item-bg: color.adjust($base-bg, $lightness: -12.16%, $space: hsl) !default;
+}

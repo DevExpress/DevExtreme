@@ -1,0 +1,28 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-validation-message-padding: null !default;
+$fluent-validationsummary-item-margin: null !default;
+$fluent-validation-message-line-height: null !default;
+$fluent-validation-message-horizontal-padding: null !default;
+
+$fluent-validation-overlay-border-radius: 4px !default;
+$fluent-validation-message-vertical-padding: 4px !default;
+$fluent-validation-message-font-size: 12px !default;
+
+@if $size == "default" {
+  $fluent-validation-message-padding: 6px !default;
+  $fluent-validationsummary-item-margin: 6px !default;
+
+  $fluent-validation-message-horizontal-padding: 8px !default;
+  $fluent-validation-message-line-height: 16px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-validation-message-padding: 4px !default;
+  $fluent-validationsummary-item-margin: 4px !default;
+
+  $fluent-validation-message-horizontal-padding: 6px !default;
+  $fluent-validation-message-line-height: 12px !default;
+}

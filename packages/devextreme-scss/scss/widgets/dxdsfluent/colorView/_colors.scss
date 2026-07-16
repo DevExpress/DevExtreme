@@ -1,0 +1,17 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../overlay/colors" as *;
+
+// adduse
+
+/**
+* $name 10. Overlay background
+* $type color
+*/
+$colorbox-overlay-bg: $overlay-content-bg !default;
+$colorbox-palette-cell-bg: $colorbox-overlay-bg !default;
+$colorview-border-color: $base-border-color !default;
+$colorview-label-color: $base-label-color !default;
+$colorview-handle-color: $base-bg !default;
+$colorview-handle-border-color: $base-border-color !default;

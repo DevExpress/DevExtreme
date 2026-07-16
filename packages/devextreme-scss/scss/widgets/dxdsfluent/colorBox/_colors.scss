@@ -1,0 +1,7 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+$colorbox-preview-icon-color: $base-icon-color !default;

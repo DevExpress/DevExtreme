@@ -1,0 +1,154 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/radioButton/mixins" as *;
+@use "../radioGroup/colors" as *;
+@use "../../base/radioButton";
+
+// adduse
+
+@include dx-radiobutton-icon-mixin(
+  $fluent-radiobutton-size,
+  $fluent-radiobutton-border-width,
+  $fluent-radiobutton-dot-size,
+  true,
+);
+@include dx-radiobutton-states-mixin(
+  $radiogroup-bg,
+  $radiogroup-border-color,
+  $radiogroup-readonly-border-color,
+  null,
+  null,
+  $radiobutton-focused-bg,
+  $radiogroup-accent-color,
+  $radiobutton-invalid-color,
+  $radiobutton-invalid-color-hover,
+  $radiobutton-invalid-color-focused,
+  1,
+  true,
+);
+
+.dx-radiobutton-icon {
+  &::after {
+    content: none;
+  }
+}
+
+.dx-radio-value-container {
+  padding-inline-end: $fluent-radio-value-container-padding;
+}
+
+.dx-state-readonly {
+  .dx-radiobutton-icon-dot {
+    background-color: $base-foreground-disabled;
+  }
+
+  .dx-radiobutton-icon {
+    border-color: $base-foreground-disabled;
+  }
+
+  .dx-radiobutton-checked {
+    &.dx-state-hover,
+    &.dx-state-focused,
+    &.dx-state-active {
+      .dx-radiobutton-icon-dot {
+        background-color: $base-foreground-disabled;
+      }
+    }
+  }
+}
+
+.dx-radiobutton {
+  &.dx-state-hover {
+    .dx-radiobutton-icon {
+      border-color: $radiogroup-border-color-hover;
+    }
+  }
+
+  &.dx-state-active {
+    .dx-radiobutton-icon {
+      border-color: $radiogroup-border-color-active;
+    }
+  }
+
+  &.dx-state-focused {
+    .dx-radiobutton-icon {
+      border-color: $radiogroup-accent-color-active;
+    }
+  }
+}
+
+.dx-radiobutton-checked {
+  &.dx-state-hover {
+    .dx-radiobutton-icon {
+      border-color: $radiogroup-accent-color-hover;
+    }
+
+    .dx-radiobutton-icon-dot {
+      background-color: $radiogroup-accent-color-hover;
+    }
+  }
+
+  &.dx-state-active,
+  &.dx-state-focused {
+    .dx-radiobutton-icon {
+      border-color: $radiogroup-accent-color-active;
+    }
+
+    .dx-radiobutton-icon-dot {
+      background-color: $radiogroup-accent-color-active;
+    }
+  }
+}
+
+.dx-invalid {
+  .dx-state-hover {
+    &.dx-radiobutton {
+      .dx-radiobutton-icon {
+        border-color: $radiobutton-invalid-color-focused;
+      }
+
+      .dx-radiobutton-icon-dot {
+        background-color: $radiobutton-invalid-color-focused;
+      }
+    }
+  }
+
+  .dx-state-active,
+  .dx-state-focused {
+    &.dx-radiobutton {
+      .dx-radiobutton-icon {
+        border-color: $radiobutton-invalid-color-focused;
+      }
+
+      .dx-radiobutton-icon-dot {
+        background-color: $radiobutton-invalid-color-focused;
+      }
+    }
+  }
+
+  &.dx-state-readonly {
+    .dx-radiobutton {
+      .dx-radiobutton-icon-dot {
+        background-color: $base-foreground-disabled;
+      }
+    }
+  }
+}
+
+.dx-state-disabled {
+  .dx-radiobutton {
+    color: $base-foreground-disabled;
+
+    .dx-radiobutton-icon {
+      border-color: $base-foreground-disabled;
+    }
+
+    .dx-radiobutton-icon-dot {
+      background-color: $base-foreground-disabled;
+    }
+  }
+}

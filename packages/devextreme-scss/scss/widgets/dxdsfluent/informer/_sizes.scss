@@ -1,0 +1,24 @@
+@use "../common/sizes" as *;
+@use "../sizes" as *;
+
+// adduse
+
+$informer-icon-size: $fluent-base-icon-size !default;
+$informer-padding-inline: null !default;
+$informer-padding-block: null !default;
+$informer-column-gap: null !default;
+$informer-border-radius: null !default;
+
+@if $size == "default" {
+  $informer-padding-inline: 12px !default;
+  $informer-padding-block: 8px !default;
+  $informer-column-gap: 6px !default;
+  $informer-border-radius: 4px !default;
+}
+
+@else if $size == "compact" {
+  $informer-padding-inline: 8px !default;
+  $informer-padding-block: 4px !default;
+  $informer-column-gap: 4px !default;
+  $informer-border-radius: 3px !default;
+}

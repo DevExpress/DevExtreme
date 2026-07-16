@@ -1,0 +1,35 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/textArea";
+@use "../../base/textArea/mixins" as *;
+@use "../textEditor/sizes" as *;
+
+// adduse
+
+@include dx-textarea(
+  2px,
+  $textarea-content-line-height,
+  $fluent-filled-texteditor-input-top-padding,
+  $fluent-filled-texteditor-input-with-label-top-padding,
+  $fluent-standard-texteditor-with-label-input-top-padding,
+);
+
+.dx-textarea {
+  &.dx-editor-underlined {
+    .dx-texteditor-input {
+      padding-top: $fluent-standard-texteditor-input-top-padding + 1;
+      padding-bottom: $fluent-standard-texteditor-input-bottom-padding + 1;
+    }
+
+    &.dx-texteditor-with-label:not(.dx-texteditor-label-outside),
+    &.dx-texteditor-with-floating-label {
+      .dx-texteditor-input {
+        padding-bottom: $fluent-standard-texteditor-with-label-input-bottom-padding;
+      }
+    }
+  }
+}

@@ -1,0 +1,55 @@
+@use "../../base/stepper";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/stepper/mixins" as *;
+
+// adduse
+
+@include stepper(
+  $stepper-padding,
+);
+@include connector(
+  $stepper-connector-bg,
+  $stepper-connector-value-bg,
+  $stepper-connector-size,
+  $stepper-connector-padding,
+  $stepper-connector-thickness,
+);
+@include step(
+  $stepper-step-min-size,
+  $stepper-step-indicator-size,
+  $stepper-step-indicator-size,
+  $stepper-step-content-row-gap,
+  $stepper-step-content-column-gap,
+  $stepper-step-optional-mark-font-size,
+  $stepper-step-icon-size,
+  $stepper-step-transition-duration,
+);
+@include step-states(
+  $stepper-step-shadow-color,
+  $stepper-step-base-bg,
+  $stepper-step-base-hover-bg,
+  $stepper-step-base-border-color,
+  $stepper-step-base-hover-border-color,
+  $stepper-step-base-text-color,
+  $stepper-step-base-label-color,
+  $stepper-step-selected-bg,
+  $stepper-step-selected-hover-bg,
+  $stepper-step-selected-text-color,
+  $stepper-step-selected-label-color,
+  $stepper-step-selected-font-weight,
+  $stepper-step-invalid-bg,
+  $stepper-step-invalid-hover-bg,
+  $stepper-step-invalid-border-color,
+  $stepper-step-invalid-hover-border-color,
+  $stepper-step-invalid-text-color,
+  $stepper-step-invalid-hover-text-color,
+  $stepper-step-invalid-label-color,
+  $stepper-step-invalid-selected-bg,
+  $stepper-step-invalid-selected-hover-bg,
+  $stepper-step-disabled-text-color,
+  $stepper-step-disabled-bg,
+  $stepper-step-disabled-shadow,
+);

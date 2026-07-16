@@ -1,0 +1,175 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../button/colors" as *;
+
+// adduse
+
+/**
+* $name 10. Active color
+* $type color
+*/
+$stepper-step-accent-bg: $base-accent !default;
+
+/**
+* $name 20. Hover state active color
+* $type color
+*/
+$stepper-step-accent-hover-bg: $base-accent-hover !default;
+
+/**
+* $name 30. Invalid color
+* $type color
+*/
+$stepper-step-danger-bg: $base-danger !default;
+
+/**
+* $name 40. Hover state invalid color
+* $type color
+*/
+$stepper-step-danger-hover-bg: $base-danger-hover !default;
+
+/**
+* $name 60. Background color
+* $type color
+*/
+$stepper-step-base-bg: $base-bg !default;
+
+/**
+* $name 70. Hover state background color
+* $type color
+*/
+$stepper-step-base-hover-bg: $base-hover-bg !default;
+
+/**
+* $name 80. Border color
+* $type color
+*/
+$stepper-step-base-border-color: $base-border-color !default;
+
+/**
+* $name 90. Hover state border color
+* $type color
+*/
+$stepper-step-base-hover-border-color: $base-border-color-hover !default;
+
+/**
+* $name 100. Text or icon color
+* $type color
+*/
+$stepper-step-base-text-color: $base-text-color !default;
+
+/**
+* $name 110. Label text color
+* $type color
+*/
+$stepper-step-base-label-color: $base-text-color !default;
+
+/**
+* $name 120. Background color
+* $type color
+*/
+$stepper-step-selected-bg: $stepper-step-accent-bg !default;
+
+/**
+* $name 130. Hover state background color
+* $type color
+*/
+$stepper-step-selected-hover-bg: $stepper-step-accent-hover-bg !default;
+
+/**
+* $name 140. Text or icon color
+* $type color
+*/
+$stepper-step-selected-text-color: $base-inverted-text-color !default;
+
+/**
+* $name 150. Label text color
+* $type color
+*/
+$stepper-step-selected-label-color: $stepper-step-accent-bg !default;
+
+/**
+* $name 160. Background color
+* $type color
+*/
+$stepper-step-invalid-bg: $stepper-step-base-bg !default;
+
+/**
+* $name 170. Hover state background color
+* $type color
+*/
+$stepper-step-invalid-hover-bg: $stepper-step-base-hover-bg !default;
+
+/**
+* $name 180. Border color
+* $type color
+*/
+$stepper-step-invalid-border-color: $stepper-step-base-border-color !default;
+
+/**
+* $name 190. Hover state border color
+* $type color
+*/
+$stepper-step-invalid-hover-border-color: $stepper-step-base-hover-border-color !default;
+
+/**
+* $name 200. Text or icon color
+* $type color
+*/
+$stepper-step-invalid-text-color: $stepper-step-danger-bg !default;
+
+/**
+* $name 210. Hover state text or icon color
+* $type color
+*/
+$stepper-step-invalid-hover-text-color: $stepper-step-danger-hover-bg !default;
+
+/**
+* $name 220. Invalid label text color
+* $type color
+*/
+$stepper-step-invalid-label-color: $stepper-step-danger-bg !default;
+
+/**
+* $name 230. Background color
+* $type color
+*/
+$stepper-step-invalid-selected-bg: $stepper-step-danger-bg !default;
+
+/**
+* $name 240. Hover state background color
+* $type color
+*/
+$stepper-step-invalid-selected-hover-bg: $stepper-step-danger-hover-bg !default;
+$stepper-step-disabled-shadow: $base-bg !default;
+
+/**
+* $name 260. Background color
+* $type color
+*/
+$stepper-step-disabled-bg: $base-background-disabled !default;
+
+/**
+* $name 270. Text color
+* $type color
+*/
+$stepper-step-disabled-text-color: $base-foreground-disabled !default;
+
+/**
+* $name 280. Pending color
+* $type color
+*/
+$stepper-connector-bg: $base-separator-color !default;
+
+/**
+* $name 290. Completed color
+* $type color
+*/
+$stepper-connector-value-bg: $base-accent !default;
+
+/**
+* $name 300. Shadow color
+* $type color
+*/
+$stepper-step-shadow-color: $base-typography-bg !default;

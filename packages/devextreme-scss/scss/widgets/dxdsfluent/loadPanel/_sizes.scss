@@ -1,0 +1,9 @@
+@use "sass:color";
+@use "../colors" as *;
+@use "../sizes" as *;
+
+// adduse
+
+$load-panel-padding: 12px 24px !default;
+$load-panel-border-radius: 8px !default;
+$load-panel-box-shadow: 0 8px 16px 0 color.change($base-shadow-color, $alpha: 0.14) !default;
