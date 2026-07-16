@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="long-title">
-      <h3>Sales Amount by Region</h3>
+      <h2>Sales Amount by Region</h2>
     </div>
     <DxPivotGrid
       :height="440"
@@ -166,7 +166,7 @@ function onExporting(e: DxPivotGridTypes.ExportingEvent) {
 // We recommend that you use the official 'file-saver' package in your applications.
 </script>
 <style scoped>
-.long-title h3 {
+.long-title h2 {
   font-family:
     "Segoe UI Light",
     "Helvetica Neue Light",
@@ -177,7 +177,7 @@ function onExporting(e: DxPivotGridTypes.ExportingEvent) {
   font-weight: 200;
   font-size: 28px;
   text-align: center;
-  margin-bottom: 20px;
+  margin: 28px 0 20px;
 }
 
 .export-options {
