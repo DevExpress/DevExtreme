@@ -6,7 +6,7 @@ import { SORT_ORDER } from './const';
 const I18N_KEYS = {
   fieldLabel: 'dxPivotGrid-ariaFieldLabel',
   hasHeaderFilter: 'dxPivotGrid-ariaFieldHeaderFilterLabel',
-  sortingAsc: 'dxPivotGrid-ariaFieldISortAscLabel',
+  sortingAsc: 'dxPivotGrid-ariaFieldSortAscLabel',
   sortingDesc: 'dxPivotGrid-ariaFieldSortDescLabel',
 };
 

@@ -12,7 +12,7 @@ describe('getFieldItemA11yLabel', () => {
       en: {
         'dxPivotGrid-ariaFieldLabel': 'Field: {0}',
         'dxPivotGrid-ariaFieldHeaderFilterLabel': 'Header filter applied',
-        'dxPivotGrid-ariaFieldISortAscLabel': 'Sort order: ascending',
+        'dxPivotGrid-ariaFieldSortAscLabel': 'Sort order: ascending',
         'dxPivotGrid-ariaFieldSortDescLabel': 'Sort order: descending',
       },
     });

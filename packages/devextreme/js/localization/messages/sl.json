@@ -286,7 +286,7 @@
         "dxPivotGrid-filterFieldArea": "Povleci filtre tukaj",
         "dxPivotGrid-ariaFieldLabel": "Field: {0}",
         "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
-        "dxPivotGrid-ariaFieldISortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
         "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "od {0} do {1}",

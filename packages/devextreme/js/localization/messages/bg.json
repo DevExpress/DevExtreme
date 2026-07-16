@@ -286,7 +286,7 @@
         "dxPivotGrid-filterFieldArea": "Пуснете полета за филтриране тук",
         "dxPivotGrid-ariaFieldLabel": "Field: {0}",
         "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
-        "dxPivotGrid-ariaFieldISortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
         "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "от {0} до {1}",

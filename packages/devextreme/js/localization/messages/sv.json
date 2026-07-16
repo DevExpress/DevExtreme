@@ -286,7 +286,7 @@
         "dxPivotGrid-filterFieldArea": "Släpp filterfält här",
         "dxPivotGrid-ariaFieldLabel": "Field: {0}",
         "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
-        "dxPivotGrid-ariaFieldISortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
         "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "från {0} till {1}",
