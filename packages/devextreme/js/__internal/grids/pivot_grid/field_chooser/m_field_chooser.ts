@@ -287,6 +287,7 @@ export class FieldChooser extends FieldChooserBase {
     this.renderSortable();
     this._renderContextMenu();
     this.updateDimensions();
+    this.updateFieldsTabIndexes();
   }
 
   _fireContentReadyAction() {
