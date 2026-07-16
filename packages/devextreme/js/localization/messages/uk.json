@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "Перетягніть поля даних сюди",
         "dxPivotGrid-rowFieldArea": "Перетягніть поля рядків сюди",
         "dxPivotGrid-filterFieldArea": "Перетягніть поля фільтрації сюди",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldISortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "з {0} по {1}",
         "dxScheduler-ariaLabel": "Планувальник. Вид {0}: {1}, подій: {2}",

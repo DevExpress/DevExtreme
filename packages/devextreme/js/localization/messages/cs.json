@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "Zde vložte pole dat",
         "dxPivotGrid-rowFieldArea": "Zde vložte pole řádků",
         "dxPivotGrid-filterFieldArea": "Zde vložte filtr pole",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldISortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "od {0} do {1}",
         "dxScheduler-ariaLabel": "Plánovač. Zobrazení {0}: {1} s {2} schůzkami",

@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "Arrastra campos de dato aquí",
         "dxPivotGrid-rowFieldArea": "Arrastra campos de fila aquí",
         "dxPivotGrid-filterFieldArea": "Arrastra campos de filtro aquí",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldISortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "desde {0} hasta {1}",
         "dxScheduler-ariaLabel": "Programador. Vista {0}: {1} con {2} citas",

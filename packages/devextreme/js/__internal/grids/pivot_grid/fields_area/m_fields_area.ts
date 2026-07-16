@@ -46,7 +46,7 @@ class FieldsArea extends AreaItem {
       .attr('group', this._area);
   }
 
-  _createTableElement() {
+  _getAreaLabel() {
     const localizationMessageMap = {
       row: 'dxPivotGrid-rowFields',
       column: 'dxPivotGrid-columnFields',
@@ -54,9 +54,12 @@ class FieldsArea extends AreaItem {
       filter: 'dxPivotGrid-filterFields',
     };
 
+    return localizationMessage.format(localizationMessageMap[this._area]);
+  }
+
+  _createTableElement() {
     return $('<table>')
-      .attr('role', 'group')
-      .attr('aria-label', localizationMessage.format(localizationMessageMap[this._area]));
+      .attr('role', 'presentation');
   }
 
   isVisible() {
@@ -145,7 +148,10 @@ class FieldsArea extends AreaItem {
     const groupElement = this.groupElement();
     const isVisible = this.isVisible();
     const fieldChooserBase = that.component.$element().dxPivotGridFieldChooserBase('instance');
-    const head = $('<thead>').addClass('dx-pivotgrid-fields-area-head').appendTo(tableElement);
+    const head = $('<thead>')
+      .addClass('dx-pivotgrid-fields-area-head')
+      .attr('role', 'presentation')
+      .appendTo(tableElement);
     const area = that._area;
     const row = $('<tr>');
 
@@ -158,7 +164,9 @@ class FieldsArea extends AreaItem {
 
     each(data, (index: number, field) => {
       if (field.area === area && field.visible !== false) {
-        const td = $('<td>').append(fieldChooserBase.renderField(field, field.area === 'row'));
+        const td = $('<td>')
+          .attr('role', 'none')
+          .append(fieldChooserBase.renderField(field, field.area === 'row'));
         const indicators = td.find('.dx-column-indicators');
         if (indicators.length && that._shouldCreateButton()) {
           indicators.insertAfter((indicators as any).next());
@@ -167,7 +175,23 @@ class FieldsArea extends AreaItem {
         renderGroupConnector(field, data[index + 1], data[index - 1], td);
       }
     });
-    if (!row.children().length) {
+    if (row.children().length) {
+      // Expose the fields as a menubar of menu items, consistent with the
+      // field chooser and CardView. The menubar role lives on the table
+      // element (it is invalid on a table row); thead/tr/td are kept out of
+      // the accessibility tree so the field items become the menubar's items.
+      row.attr('role', 'presentation');
+      tableElement
+        .attr('role', 'menubar')
+        .attr('aria-label', this._getAreaLabel());
+    } else {
+      // A menubar without menu items is invalid ARIA, so an empty area keeps
+      // the plain placeholder text and the table stays presentational. The
+      // role is reset explicitly because the table element is reused across
+      // re-renders.
+      tableElement
+        .attr('role', 'presentation')
+        .removeAttr('aria-label');
       $('<td>').append($(DIV).addClass('dx-empty-area-text').text(this.option(`fieldPanel.texts.${area}FieldArea`))).appendTo(row);
     }
 

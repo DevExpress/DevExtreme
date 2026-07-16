@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "여기에 데이터 필드를 놓으세요",
         "dxPivotGrid-rowFieldArea": "여기에 행 필드를 놓으세요",
         "dxPivotGrid-filterFieldArea": "여기에 필터 필드를 놓으세요",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldISortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "{0}부터 {1}까지",
         "dxScheduler-ariaLabel": "스케줄러. {0} 보기: {1}, 일정 {2}개",

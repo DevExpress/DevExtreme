@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "Déposer les champs de données ici",
         "dxPivotGrid-rowFieldArea": "Déposer les champs de ligne ici",
         "dxPivotGrid-filterFieldArea": "Déposer les champs de filtre ici",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldISortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "de {0} à {1}",
         "dxScheduler-ariaLabel": "Agenda. {0} vue : {1} avec {2} rendez-vous",

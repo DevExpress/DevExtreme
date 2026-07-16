@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "Släpp datafält här",
         "dxPivotGrid-rowFieldArea": "Släpp radfält här",
         "dxPivotGrid-filterFieldArea": "Släpp filterfält här",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldISortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "från {0} till {1}",
         "dxScheduler-ariaLabel": "Schemaläggare. {0}-vy: {1} med {2} bokningar",

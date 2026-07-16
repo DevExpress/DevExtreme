@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "Τοποθετήστε τα πεδία δεδομένων εδώ",
         "dxPivotGrid-rowFieldArea": "Τοποθετήστε τα πεδία γραμμών εδώ",
         "dxPivotGrid-filterFieldArea": "Τοποθετήστε τα πεδία φίλτρων εδώ",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldISortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "από {0} έως {1}",
         "dxScheduler-ariaLabel": "Χρονοδιάγραμμα. Προβολή {0}: {1} με {2} ραντεβού",

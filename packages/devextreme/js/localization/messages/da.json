@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "Slip datafelter her",
         "dxPivotGrid-rowFieldArea": "Slip rækkefelter her",
         "dxPivotGrid-filterFieldArea": "Slip filterfelter her",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldISortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "fra {0} til {1}",
         "dxScheduler-ariaLabel": "Planlægger. {0} visning: {1} med {2} aftaler",

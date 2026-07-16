@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "データ フィールドをこちらへドラッグ＆ドロップ",
         "dxPivotGrid-rowFieldArea": "行フィールドをこちらへドラッグ＆ドロップ",
         "dxPivotGrid-filterFieldArea": "フィルター フィールドをこちらへドラッグ＆ドロップ",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldISortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "{0} から {1} まで",
         "dxScheduler-ariaLabel": "スケジューラー。{0} ビュー: {2} 件の予定がある {1}",
