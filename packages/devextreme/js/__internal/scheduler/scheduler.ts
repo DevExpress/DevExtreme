@@ -250,6 +250,8 @@ interface SchedulerWorkSpaceLike {
   option: (name: string | Record<string, unknown>, value?: unknown) => unknown;
   getDateRange: () => Date[];
   getCellFromDragTarget: ($dragTarget: dxElementWrapper) => dxElementWrapper | null;
+  getCellFromPoint: (x: number, y: number) => dxElementWrapper | null;
+  getDroppableCell: () => dxElementWrapper;
   renderAgendaLayout?: (viewModel: AppointmentViewModelPlain[]) => void;
   calculateEndDate: (startDate: Date) => Date;
   updateScrollPosition: (date: Date, groupValues: GroupValues, inAllDayRow: boolean) => void;
@@ -1090,10 +1092,19 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       getCellFromDragTarget: ($dragTarget: dxElementWrapper): dxElementWrapper | null => (
         this._workSpace.getCellFromDragTarget($dragTarget)
       ),
+      getCellFromPoint: (x: number, y: number): dxElementWrapper | null => (
+        this._workSpace.getCellFromPoint(x, y)
+      ),
+      getDroppableCell: (): dxElementWrapper => this._workSpace.getDroppableCell(),
 
       // @ts-expect-error _createComponent is not defined in ts
       createComponent: this._createComponent.bind(this),
       hideAppointmentTooltip: this.hideAppointmentTooltip.bind(this),
+
+      getAppointmentDraggingConfig: (): NonNullable<SchedulerProperties['appointmentDragging']> => (
+        this.option('appointmentDragging') ?? {}
+      ),
+      getUpdatedItemData: this.getUpdatedData.bind(this),
 
       updateAppointmentOnDrop: this.updateAppointmentOnDrop.bind(this),
     });
@@ -1392,6 +1403,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
         scrollTo: this.scrollTo.bind(this),
         showAppointmentTooltip: this.showAppointmentTooltipCore.bind(this),
+        isTooltipShownForTarget: (target) => this.appointmentTooltip.isShownForTarget(target),
+        updateAppointmentTooltip: (target, data) => {
+          this.appointmentTooltip.setTarget(target);
+          this.appointmentTooltip.setListItems(data);
+        },
+        hideAppointmentTooltip: () => this.hideAppointmentTooltip(),
         showEditAppointmentPopup: (
           appointmentData: SafeAppointment,
           targetedAppointmentData: TargetedAppointment,

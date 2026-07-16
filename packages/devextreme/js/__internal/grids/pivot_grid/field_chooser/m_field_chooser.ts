@@ -97,7 +97,7 @@ export class FieldChooser extends FieldChooserBase {
         layout: 0,
         dataSource: null,
         encodeHtml: true,
-        onContextMenuPreparing: null,
+        onContextMenuPreparing: undefined,
         allowSearch: false,
         searchTimeout: 500,
         texts: {
@@ -287,6 +287,7 @@ export class FieldChooser extends FieldChooserBase {
     this.renderSortable();
     this._renderContextMenu();
     this.updateDimensions();
+    this.updateFieldsTabIndexes();
   }
 
   _fireContentReadyAction() {

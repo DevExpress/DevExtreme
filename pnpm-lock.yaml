@@ -216,8 +216,12 @@ overrides:
   '@sigstore/core@<=3.2.0': ^3.2.1
   sigstore@<=4.1.0: ^4.1.1
   '@sigstore/verify@3.1.0': ^3.1.1
+  babel-traverse: npm:@babel/traverse@^7.23.2
+  systemjs-builder>terser: 5.46.2
 
 patchedDependencies:
+  babel-core@6.26.3: c0f53059bb7026b811209ee3af7fd4c700c900c615d0a0b14981ce911fcf3392
+  systemjs-builder@0.16.15: c78b3d7eb812436aa2d80299b3d3f2738f0366b53f710a25956a3762edf73014
   testcafe-hammerhead@31.7.8: 8655c07786177d3b611a05abf6b0ea87d32796eb2601f92a800ef041095f264c
 
 importers:
@@ -768,7 +772,7 @@ importers:
         version: 38.0.0(stylelint@16.22.0(typescript@6.0.3))
       systemjs-builder:
         specifier: 0.16.15
-        version: 0.16.15
+        version: 0.16.15(patch_hash=c78b3d7eb812436aa2d80299b3d3f2738f0366b53f710a25956a3762edf73014)
       testcafe:
         specifier: 'catalog:'
         version: 3.7.5
@@ -8475,9 +8479,6 @@ packages:
   babel-template@6.26.0:
     resolution: {integrity: sha512-PCOcLFW7/eazGUKIoqH97sO9A2UYMahsn/yRQ7uOk37iutwjq7ODtcTNF+iFDSHNfkctqsLRjLP7URnOx0T1fg==}
 
-  babel-traverse@6.26.0:
-    resolution: {integrity: sha512-iSxeXx7apsjCHe9c7n8VtRXGzI2Bk1rBSOJgCCjfyXb6v1aCqE1KSEpq/8SXuVN8Ka/Rh1WDTF0MDzkvTA4MIA==}
-
   babel-types@6.26.0:
     resolution: {integrity: sha512-zhe3V/26rCWsEZK8kZN+HaQj5yQ1CilTObixFzKW1UWjqG7618Twz6YEsCnjfg5gBcJh02DrpCkS9h98ZqDY+g==}
 
@@ -9159,9 +9160,6 @@ packages:
 
   commander@2.11.0:
     resolution: {integrity: sha512-b0553uYA5YAEGgyYIGYROzKQ7X5RAqedkfjiZxwi0kL1g3bOaBNNZfYkzt/CL0umgD5wc9Jec2FbB98CjkMRvQ==}
-
-  commander@2.16.0:
-    resolution: {integrity: sha512-sVXqklSaotK9at437sFlFpyOcJonxe0yST/AG9DkQKUdIE6IqGIMv4SfAQSKaJbSdVEJYItASCrBiVQHq1HQew==}
 
   commander@2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
@@ -11093,10 +11091,6 @@ packages:
     resolution: {integrity: sha512-c/c15i26VrJ4IRt5Z89DnIzCGDn9EcebibhAOjw5ibqEHsE1wLUgkPn9RDmNcUKyU87GeaL633nyJ+pplFR2ZQ==}
     engines: {node: '>=18'}
 
-  globals@9.18.0:
-    resolution: {integrity: sha512-S0nG3CLEQiY/ILxqtztTWH/3iRRdyBLw6KMDxnKMchrtbj2OFmehVh0WUCfW3DUrIgx/qFrJPICrq4Z4sTR9UQ==}
-    engines: {node: '>=0.10.0'}
-
   globalthis@1.0.4:
     resolution: {integrity: sha512-DpLKbNU4WylpxJykQujfCcwYWiV/Jhm50Goo0wrVILAv5jOr9d+H+UR3PhSCD2rCCEIg0uc+G+muBTwD54JhDQ==}
     engines: {node: '>= 0.4'}
@@ -11733,9 +11727,6 @@ packages:
 
   intl@1.2.5:
     resolution: {integrity: sha512-rK0KcPHeBFBcqsErKSpvZnrOmWOj+EmDkyJ57e90YWaQNqbcivcqmKDlHEeNprDWOsKzPsh1BfSpPQdDvclHVw==}
-
-  invariant@2.2.4:
-    resolution: {integrity: sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==}
 
   invert-kv@1.0.0:
     resolution: {integrity: sha512-xgs2NH9AE66ucSq4cNG1nhSFghr5l6tdL15Pk+jl46bmmBapgoaY/AacXyaDznAqmGL99TiLSQgO/XazFSKYeQ==}
@@ -16129,11 +16120,6 @@ packages:
         optional: true
       uglify-js:
         optional: true
-
-  terser@3.8.1:
-    resolution: {integrity: sha512-FRin3gKQ0vm0xPPLuxw1FqpVgv1b2pBpYCaFb5qe6A7sD749Fnq1VbDiX3CEFM0BV0fqDzFtBfgmxhxCdzKQIg==}
-    engines: {node: '>=0.8.0'}
-    hasBin: true
 
   terser@5.43.1:
     resolution: {integrity: sha512-+6erLbBm0+LROX2sPXlUYx/ux5PyE9K/a92Wrt6oA+WDAoFTdpHE5tCYCI5PNzq2y8df4rA+QgHLJuR4jNymsg==}
@@ -25953,7 +25939,7 @@ snapshots:
       esutils: 2.0.3
       js-tokens: 3.0.2
 
-  babel-core@6.26.3:
+  babel-core@6.26.3(patch_hash=c0f53059bb7026b811209ee3af7fd4c700c900c615d0a0b14981ce911fcf3392):
     dependencies:
       babel-code-frame: 6.26.0
       babel-generator: 6.26.1
@@ -25962,7 +25948,7 @@ snapshots:
       babel-register: 6.26.0
       babel-runtime: 6.26.0
       babel-template: 6.26.0
-      babel-traverse: 6.26.0
+      babel-traverse: '@babel/traverse@7.29.7'
       babel-types: 6.26.0
       babylon: 6.18.0
       convert-source-map: 1.9.0
@@ -26251,7 +26237,7 @@ snapshots:
 
   babel-register@6.26.0:
     dependencies:
-      babel-core: 6.26.3
+      babel-core: 6.26.3(patch_hash=c0f53059bb7026b811209ee3af7fd4c700c900c615d0a0b14981ce911fcf3392)
       babel-runtime: 6.26.0
       core-js: 2.6.12
       home-or-tmp: 2.0.0
@@ -26269,23 +26255,9 @@ snapshots:
   babel-template@6.26.0:
     dependencies:
       babel-runtime: 6.26.0
-      babel-traverse: 6.26.0
+      babel-traverse: '@babel/traverse@7.29.7'
       babel-types: 6.26.0
       babylon: 6.18.0
-      lodash: 4.18.1
-    transitivePeerDependencies:
-      - supports-color
-
-  babel-traverse@6.26.0:
-    dependencies:
-      babel-code-frame: 6.26.0
-      babel-messages: 6.23.0
-      babel-runtime: 6.26.0
-      babel-types: 6.26.0
-      babylon: 6.18.0
-      debug: 2.6.9
-      globals: 9.18.0
-      invariant: 2.2.4
       lodash: 4.18.1
     transitivePeerDependencies:
       - supports-color
@@ -27121,8 +27093,6 @@ snapshots:
   commander@14.0.3: {}
 
   commander@2.11.0: {}
-
-  commander@2.16.0: {}
 
   commander@2.20.3: {}
 
@@ -30003,8 +29973,6 @@ snapshots:
 
   globals@16.5.0: {}
 
-  globals@9.18.0: {}
-
   globalthis@1.0.4:
     dependencies:
       define-properties: 1.2.1
@@ -30879,10 +30847,6 @@ snapshots:
   interpret@3.1.1: {}
 
   intl@1.2.5: {}
-
-  invariant@2.2.4:
-    dependencies:
-      loose-envify: 1.4.0
 
   invert-kv@1.0.0: {}
 
@@ -37150,9 +37114,9 @@ snapshots:
     dependencies:
       acorn-node: 1.8.2
 
-  systemjs-builder@0.16.15:
+  systemjs-builder@0.16.15(patch_hash=c78b3d7eb812436aa2d80299b3d3f2738f0366b53f710a25956a3762edf73014):
     dependencies:
-      babel-core: 6.26.3
+      babel-core: 6.26.3(patch_hash=c0f53059bb7026b811209ee3af7fd4c700c900c615d0a0b14981ce911fcf3392)
       babel-plugin-syntax-dynamic-import: 6.18.0
       babel-plugin-transform-amd-system-wrapper: 0.3.7
       babel-plugin-transform-cjs-system-wrapper: 0.6.2
@@ -37167,7 +37131,7 @@ snapshots:
       rollup: 4.59.0
       source-map: 0.5.7
       systemjs: 0.19.47
-      terser: 3.8.1
+      terser: 5.46.2
       traceur: 0.0.105
     transitivePeerDependencies:
       - supports-color
@@ -37316,13 +37280,6 @@ snapshots:
       webpack: 5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21))(webpack-cli@5.1.4)
     optionalDependencies:
       '@swc/core': 1.15.30(@swc/helpers@0.5.21)
-
-  terser@3.8.1:
-    dependencies:
-      acorn: 8.17.0
-      commander: 2.16.0
-      source-map: 0.6.1
-      source-map-support: 0.5.21
 
   terser@5.43.1:
     dependencies:
