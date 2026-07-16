@@ -26581,11 +26581,11 @@ declare module DevExpress.ui {
         /**
          * [descr:_ui_scheduler_AppointmentUpdatingEvent.oldData]
          */
-        readonly oldData: any;
+        readonly oldData: Object;
         /**
          * [descr:_ui_scheduler_AppointmentUpdatingEvent.newData]
          */
-        readonly newData: any;
+        readonly newData: Object;
         /**
          * [descr:_ui_scheduler_AppointmentUpdatingEvent.cancel]
          */
@@ -26779,11 +26779,7 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxSchedulerOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxSchedulerOptions
-    extends Omit<
-      WidgetOptions<dxScheduler>,
-      'onContentReady' | 'onDisposing' | 'onInitialized' | 'onOptionChanged'
-    > {
+  export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * [descr:dxSchedulerOptions.adaptivityEnabled]
      */
@@ -35065,7 +35061,7 @@ declare module DevExpress.ui.dxScheduler {
   /**
    * [descr:dxSchedulerToolbarItem]
    */
-  export type ToolbarItem = DevExpress.ui.dxToolbar.Item & {
+  export type ToolbarItem = dxToolbarItem & {
     /**
      * [descr:dxSchedulerToolbarItem.name]
      */

@@ -25,10 +25,6 @@ import {
  AppointmentUpdatingEvent,
  CellClickEvent,
  CellContextMenuEvent,
- ContentReadyEvent,
- DisposingEvent,
- InitializedEvent,
- OptionChangedEvent,
  SelectionEndEvent,
  RecurrenceEditMode,
  dxSchedulerScrolling,
@@ -70,10 +66,10 @@ import {
 import {
  dxButtonOptions,
  ClickEvent,
- ContentReadyEvent as ButtonContentReadyEvent,
- DisposingEvent as ButtonDisposingEvent,
- InitializedEvent as ButtonInitializedEvent,
- OptionChangedEvent as ButtonOptionChangedEvent,
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
 } from "devextreme/ui/button";
 import {
  FormItemType,
@@ -183,10 +179,6 @@ type AccessibleOptions = Pick<Properties,
   "onAppointmentUpdating" |
   "onCellClick" |
   "onCellContextMenu" |
-  "onContentReady" |
-  "onDisposing" |
-  "onInitialized" |
-  "onOptionChanged" |
   "onSelectionEnd" |
   "recurrenceEditMode" |
   "recurrenceExceptionExpr" |
@@ -272,10 +264,6 @@ const componentConfig = {
     onAppointmentUpdating: Function as PropType<((e: AppointmentUpdatingEvent) => void)>,
     onCellClick: Function as PropType<((e: CellClickEvent) => void)>,
     onCellContextMenu: Function as PropType<((e: CellContextMenuEvent) => void)>,
-    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
-    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
-    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
-    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
     onSelectionEnd: Function as PropType<((e: SelectionEndEvent) => void)>,
     recurrenceEditMode: String as PropType<RecurrenceEditMode>,
     recurrenceExceptionExpr: String,
@@ -357,10 +345,6 @@ const componentConfig = {
     "update:onAppointmentUpdating": null,
     "update:onCellClick": null,
     "update:onCellContextMenu": null,
-    "update:onContentReady": null,
-    "update:onDisposing": null,
-    "update:onInitialized": null,
-    "update:onOptionChanged": null,
     "update:onSelectionEnd": null,
     "update:recurrenceEditMode": null,
     "update:recurrenceExceptionExpr": null,
@@ -575,10 +559,10 @@ const DxButtonOptionsConfig = {
     hoverStateEnabled: Boolean,
     icon: String,
     onClick: Function as PropType<((e: ClickEvent) => void)>,
-    onContentReady: Function as PropType<((e: ButtonContentReadyEvent) => void)>,
-    onDisposing: Function as PropType<((e: ButtonDisposingEvent) => void)>,
-    onInitialized: Function as PropType<((e: ButtonInitializedEvent) => void)>,
-    onOptionChanged: Function as PropType<((e: ButtonOptionChangedEvent) => void)>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
     rtlEnabled: Boolean,
     stylingMode: String as PropType<ButtonStyle>,
     tabIndex: Number,

@@ -38,7 +38,7 @@ import dxForm, { Properties as FormProperties } from './form';
 import dxPopup, { Properties as PopupProperties } from './popup';
 
 import dxSortable from './sortable';
-import { Item as ToolbarItemBase } from './toolbar';
+import { dxToolbarItem } from './toolbar';
 
 import Widget, {
   WidgetOptions,
@@ -282,11 +282,11 @@ export type AppointmentUpdatingEvent = EventInfo<dxScheduler> & {
   /**
    * @docid _ui_scheduler_AppointmentUpdatingEvent.oldData
    */
-  readonly oldData: any;
+  readonly oldData: Object;
   /**
    * @docid _ui_scheduler_AppointmentUpdatingEvent.newData
    */
-  readonly newData: any;
+  readonly newData: Object;
   /**
    * @docid _ui_scheduler_AppointmentUpdatingEvent.cancel
    */
@@ -451,10 +451,7 @@ export type DateNavigatorTextInfo = {
  * @namespace DevExpress.ui
  * @docid
  */
-export interface dxSchedulerOptions extends Omit<
-  WidgetOptions<dxScheduler>,
-  'onContentReady' | 'onDisposing' | 'onInitialized' | 'onOptionChanged'
-> {
+export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @default false
@@ -870,6 +867,7 @@ export interface dxSchedulerOptions extends Omit<
      */
     onCellContextMenu?: ((e: CellContextMenuEvent) => void) | string;
     /**
+     * @hidden
      * @docid
      * @public
      * @type_function_param1 e:{ui/scheduler:ContentReadyEvent}
@@ -877,6 +875,7 @@ export interface dxSchedulerOptions extends Omit<
      */
     onContentReady?: (e: ContentReadyEvent) => void;
     /**
+     * @hidden
      * @docid
      * @public
      * @type_function_param1 e:{ui/scheduler:DisposingEvent}
@@ -884,6 +883,7 @@ export interface dxSchedulerOptions extends Omit<
      */
     onDisposing?: (e: DisposingEvent) => void;
     /**
+     * @hidden
      * @docid
      * @public
      * @type_function_param1 e:{ui/scheduler:InitializedEvent}
@@ -891,12 +891,13 @@ export interface dxSchedulerOptions extends Omit<
      */
     onInitialized?: (e: InitializedEvent) => void;
     /**
+     * @hidden
      * @docid
      * @public
      * @type_function_param1 e:{ui/scheduler:OptionChangedEvent}
      * @action
      */
-    onOptionChanged?: (e: OptionChangedEvent) => void;
+  onOptionChanged?: (e: OptionChangedEvent) => void;
     /**
      * @docid
      * @default "dialog"
@@ -1251,7 +1252,7 @@ export type dxSchedulerToolbarItem = ToolbarItem;
  * @namespace DevExpress.ui.dxScheduler
  * @public
  */
-export type ToolbarItem = ToolbarItemBase & {
+export type ToolbarItem = dxToolbarItem & {
   /**
    * @docid dxSchedulerToolbarItem.name
    * @public

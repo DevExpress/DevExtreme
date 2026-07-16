@@ -24,7 +24,7 @@ import {
 
 import type dxSortable from 'devextreme/ui/sortable';
 import type dxDraggable from 'devextreme/ui/draggable';
-import type { default as dxScheduler, AllDayPanelMode, ViewType, dxSchedulerAppointment, AppointmentFormProperties, CellAppointmentsLimit, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, SelectionEndEvent, RecurrenceEditMode, dxSchedulerScrolling, SnapToCellsMode, dxSchedulerToolbar } from 'devextreme/ui/scheduler';
+import type { default as dxScheduler, AllDayPanelMode, ViewType, dxSchedulerAppointment, AppointmentFormProperties, CellAppointmentsLimit, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, SelectionEndEvent, RecurrenceEditMode, dxSchedulerScrolling, SnapToCellsMode, dxSchedulerToolbar } from 'devextreme/ui/scheduler';
 import type { event } from 'devextreme/events/events.types';
 import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
@@ -1050,38 +1050,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
     
-     * [descr:dxSchedulerOptions.onContentReady]
-    
-    
-     */
-    @Output() onContentReady: EventEmitter<ContentReadyEvent>;
-
-    /**
-    
-     * [descr:dxSchedulerOptions.onDisposing]
-    
-    
-     */
-    @Output() onDisposing: EventEmitter<DisposingEvent>;
-
-    /**
-    
-     * [descr:dxSchedulerOptions.onInitialized]
-    
-    
-     */
-    @Output() onInitialized: EventEmitter<InitializedEvent>;
-
-    /**
-    
-     * [descr:dxSchedulerOptions.onOptionChanged]
-    
-    
-     */
-    @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
-
-    /**
-    
      * [descr:dxSchedulerOptions.onSelectionEnd]
     
     
@@ -1549,10 +1517,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
             { subscribe: 'appointmentUpdating', emit: 'onAppointmentUpdating' },
             { subscribe: 'cellClick', emit: 'onCellClick' },
             { subscribe: 'cellContextMenu', emit: 'onCellContextMenu' },
-            { subscribe: 'contentReady', emit: 'onContentReady' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
             { subscribe: 'selectionEnd', emit: 'onSelectionEnd' },
             { emit: 'accessKeyChange' },
             { emit: 'adaptivityEnabledChange' },
