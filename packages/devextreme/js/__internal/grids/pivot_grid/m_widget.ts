@@ -1053,7 +1053,19 @@ class PivotGrid extends Widget {
     const cell = e.currentTarget;
     const navigation = this._getCellAreaNavigation(cell);
 
-    if (!navigation || !this._contextMenu) {
+    if (!navigation) {
+      return;
+    }
+
+    this._showContextMenuFromKeyboard(e, navigation);
+  }
+
+  _handleFieldContextMenuKeyDown(e, navigation: RovingTabIndex) {
+    this._showContextMenuFromKeyboard(e, navigation);
+  }
+
+  _showContextMenuFromKeyboard(e, navigation: RovingTabIndex) {
+    if (!this._contextMenu) {
       return;
     }
 
@@ -1449,6 +1461,7 @@ class PivotGrid extends Widget {
       visible: that.option('visible'),
       // @ts-expect-error ts-error
       remoteSort: that.option('scrolling.mode') === 'virtual',
+      onFieldContextMenuKeyDown: that._handleFieldContextMenuKeyDown.bind(that),
     };
 
     if (that._fieldChooserBase) {
