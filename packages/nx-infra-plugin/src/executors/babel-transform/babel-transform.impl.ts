@@ -56,7 +56,7 @@ function resolveSourceBase(projectRoot: string, sourcePattern: string): string {
   const cleanPattern = sourcePattern.replace(/^\.\//, '');
   const globIndex = cleanPattern.search(/\*+/);
   const patternBase =
-    globIndex > 0
+    globIndex >= 0
       ? cleanPattern.substring(0, globIndex).replace(/\/$/, '')
       : cleanPattern.split('/')[0];
   return path.join(projectRoot, patternBase);

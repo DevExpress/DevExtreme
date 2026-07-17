@@ -396,8 +396,7 @@
           "outDir": "./artifacts/transpiled-renovation-npm/__internal",
           "removeDebug": true
         }
-      },
-      "dependsOn": ["build:ts:internal"]
+      }
     },
     "build:npm:esm:internal": {
       "executor": "devextreme-nx-infra-plugin:babel-transform",
@@ -578,7 +577,8 @@
         ],
         "cwd": "{projectRoot}",
         "parallel": true
-      }
+      },
+      "dependsOn": ["build:ts:internal"]
     },
     "transpile:tests": {
       "executor": "devextreme-nx-infra-plugin:babel-transform",

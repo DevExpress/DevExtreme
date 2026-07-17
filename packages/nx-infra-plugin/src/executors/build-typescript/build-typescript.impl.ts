@@ -252,7 +252,7 @@ async function runWatch(config: ResolvedConfig): Promise<void> {
     formatDiagnostics([diagnostic]).forEach((message) => logger.error(message));
   };
   const reportWatchStatus = (diagnostic: ts.Diagnostic): void => {
-    logger.info(ts.flattenDiagnosticMessageText(diagnostic.messageText, NEWLINE_CHAR));
+    logger.verbose(ts.flattenDiagnosticMessageText(diagnostic.messageText, NEWLINE_CHAR));
   };
 
   const host = ts.createWatchCompilerHost(
@@ -278,7 +278,7 @@ async function runWatch(config: ResolvedConfig): Promise<void> {
   };
   (host as { writeFile?: ts.WriteFileCallback }).writeFile = emitWriteFile;
   const watchProgram = ts.createWatchProgram(host);
-  logger.info(`TypeScript watch is emitting to ${config.outDir}...`);
+  logger.verbose(`TypeScript watch is emitting to ${config.outDir}...`);
 
   await new Promise<void>((resolve) => {
     const stop = (): void => {

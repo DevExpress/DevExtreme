@@ -38,7 +38,7 @@ export interface WatchWithChokidarOptions {
   watchTargets: string | string[];
   /** Label used in watch log messages. */
   label: string;
-  /** Debounced rebuild invoked with the batch of events collected during the window. */
+  /** Rebuild callback invoked with the batch of events; debounced while idle, queued to run again immediately once a running rebuild finishes. */
   onRebuild: (events: WatchEvent[]) => Promise<void> | void;
   /** Optional filter deciding whether a raw chokidar event is relevant. */
   eventFilter?: (event: string, filePath: string) => boolean;
@@ -75,7 +75,7 @@ export async function watchWithChokidar(options: WatchWithChokidarOptions): Prom
       busy = true;
       try {
         await onRebuild(events);
-        logger.info(`${label}: rebuild complete`);
+        logger.verbose(`${label}: rebuild complete`);
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
         logger.error(`${label} rebuild failed: ${message}`);
@@ -109,7 +109,7 @@ export async function watchWithChokidar(options: WatchWithChokidarOptions): Prom
       scheduleRebuild();
     });
 
-    logger.info(`${label} is watching for changes...`);
+    logger.verbose(`${label} is watching for changes...`);
 
     const stopWatcher = (): void => {
       if (timer) {
