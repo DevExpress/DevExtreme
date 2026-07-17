@@ -27407,7 +27407,6 @@ declare module DevExpress.ui {
      */
     toolbar?: DevExpress.ui.dxScheduler.Toolbar | undefined;
   }
-
   /**
    * [descr:dxSchedulerScrolling]
    */
