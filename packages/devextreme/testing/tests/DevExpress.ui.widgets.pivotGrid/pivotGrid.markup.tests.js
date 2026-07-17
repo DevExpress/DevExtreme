@@ -137,10 +137,10 @@ QUnit.module('PivotGrid markup tests', () => {
             const $collapsedControl = $collapsedTd.find('.dx-expand-icon-container');
 
             assert.strictEqual($collapsedControl.attr('role'), 'button', 'control has role="button"');
-            assert.strictEqual($collapsedControl.attr('tabindex'), '0', 'control is focusable');
+            assert.strictEqual($collapsedControl.attr('tabindex'), '-1', 'control is focusable programmatically only');
             assert.ok(['columnheader', 'rowheader'].includes($collapsedTd.attr('role')), 'td has a header cell role');
-            assert.strictEqual($collapsedTd.attr('tabindex'), undefined, 'td is not in the tab order');
-            assert.strictEqual($collapsedTd.attr('aria-expanded'), undefined, 'td has no aria-expanded');
+            assert.strictEqual($collapsedTd.attr('tabindex'), '0', 'td is the roving tab stop of the row headers area');
+            assert.strictEqual($collapsedTd.attr('aria-expanded'), 'false', 'td exposes the collapsed state');
         } finally {
             clock.restore();
         }

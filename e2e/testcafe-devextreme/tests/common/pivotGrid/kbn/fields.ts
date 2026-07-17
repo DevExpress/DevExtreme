@@ -137,7 +137,37 @@ const createConfig = () => ({
   }).before(async () => createWidget('dxPivotGrid', createConfig()));
 
   ['filter', 'data', 'column', 'row'].forEach((area) => {
-    test(`${testTitlePrefix}: Fields in ${area} area should be focusable by tab`, async (t) => {
+    test(`${testTitlePrefix}: Fields in ${area} area should form a single tab stop`, async (t) => {
+      const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
+
+      if (isFieldChooser) {
+        await t.click(pivotGrid.getFieldChooserButton());
+      }
+
+      const areaContainer = getAreaFieldsContainer(area);
+
+      await t
+        .expect(areaContainer.find('.dx-area-field[tabindex="0"]').count)
+        .eql(1, 'only one field of the area is in the tab order');
+
+      const firstField = getField(pivotGrid, area, 0);
+      const secondField = getField(pivotGrid, area, 1);
+
+      await t
+        .click(secondField)
+        .expect(secondField.focused)
+        .ok('second field is focused after click')
+        .expect(secondField.getAttribute('tabindex'))
+        .eql('0', 'focused field is the tab stop')
+        .expect(firstField.getAttribute('tabindex'))
+        .eql('-1', 'first field is removed from the tab order');
+
+      await t
+        .expect(areaContainer.find('.dx-area-field[tabindex="0"]').count)
+        .eql(1, 'the focused field is the only tab stop');
+    }).before(async () => createWidget('dxPivotGrid', createConfig()));
+
+    test(`${testTitlePrefix}: Fields in ${area} area should be navigable by arrows`, async (t) => {
       const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
 
       if (isFieldChooser) {
@@ -153,14 +183,29 @@ const createConfig = () => ({
         .ok('first field is focused after click');
 
       await t
-        .pressKey('tab')
+        .pressKey('right')
         .expect(secondField.focused)
-        .ok('second field is focused after Tab');
+        .ok('second field is focused after ArrowRight');
 
       await t
-        .pressKey('shift+tab')
+        .pressKey('left')
         .expect(firstField.focused)
-        .ok('first field is focused after Shift+Tab');
+        .ok('first field is focused after ArrowLeft');
+
+      await t
+        .pressKey('down')
+        .expect(secondField.focused)
+        .ok('second field is focused after ArrowDown');
+
+      await t
+        .pressKey('up')
+        .expect(firstField.focused)
+        .ok('first field is focused after ArrowUp');
+
+      await t
+        .pressKey('up')
+        .expect(firstField.focused)
+        .ok('focus stays on the first field at the area boundary');
     }).before(async () => createWidget('dxPivotGrid', createConfig()));
   });
 
@@ -177,9 +222,9 @@ const createConfig = () => ({
 
       await t
         .click(firstField)
-        .pressKey('tab')
+        .pressKey('right')
         .expect(secondField.focused)
-        .ok('second field is focused after Tab')
+        .ok('second field is focused after ArrowRight')
         .expect(secondField.find('.dx-sort-up').exists)
         .ok('second field has asc sort indicator initially');
 
@@ -210,9 +255,9 @@ const createConfig = () => ({
 
       await t
         .click(firstField)
-        .pressKey('tab')
+        .pressKey('right')
         .expect(secondField.focused)
-        .ok('second field is focused after Tab')
+        .ok('second field is focused after ArrowRight')
         .expect(secondField.find('.dx-sort-up').exists)
         .ok('second field has asc sort indicator initially');
 
@@ -314,17 +359,17 @@ test('PivotGrid: Should traverse fields in all areas by tab', async (t) => {
     .ok('first field in filter area is focused after click');
 
   await t
-    .pressKey('tab tab')
+    .pressKey('tab')
     .expect(dataFirstField.focused)
     .ok('first field in data area is focused');
 
   await t
-    .pressKey('tab tab')
+    .pressKey('tab')
     .expect(columnFirstField.focused)
     .ok('first field in column area is focused');
 
   await t
-    .pressKey('tab tab tab tab')
+    .pressKey('tab')
     .expect(rowFirstField.focused)
     .ok('first field in row area is focused');
 }).before(async () => createWidget('dxPivotGrid', createConfig()));
@@ -346,17 +391,17 @@ test('FieldChooser: Should traverse fields in all areas by tab', async (t) => {
     .ok('first field in row area is focused after click');
 
   await t
-    .pressKey('tab tab')
+    .pressKey('tab')
     .expect(columnFirstField.focused)
     .ok('first field in column area is focused');
 
   await t
-    .pressKey('tab tab')
+    .pressKey('tab')
     .expect(filterFirstField.focused)
     .ok('first field in filter area is focused');
 
   await t
-    .pressKey('tab tab')
+    .pressKey('tab')
     .expect(dataFirstField.focused)
     .ok('first field in data area is focused');
 }).before(async () => createWidget('dxPivotGrid', createConfig()));
