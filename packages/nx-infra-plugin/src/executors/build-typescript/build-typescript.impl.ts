@@ -255,9 +255,14 @@ async function runWatch(config: ResolvedConfig): Promise<void> {
     logger.verbose(ts.flattenDiagnosticMessageText(diagnostic.messageText, NEWLINE_CHAR));
   };
 
+  const compilerOptions: ts.CompilerOptions = {
+    outDir: config.outDir,
+    ...(config.resolvePaths ? {} : { paths: {} }),
+  };
+
   const host = ts.createWatchCompilerHost(
     config.tsconfigPath,
-    { outDir: config.outDir },
+    compilerOptions,
     ts.sys,
     ts.createSemanticDiagnosticsBuilderProgram,
     reportDiagnostic,
