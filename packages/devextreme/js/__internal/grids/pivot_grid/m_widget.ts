@@ -1520,10 +1520,12 @@ class PivotGrid extends Widget {
       .attr('aria-rowcount', this._dataController.totalRowCount())
       .attr('aria-colcount', this._dataController.totalColumnCount());
 
+    // The areas can be partially stubbed in tests, so the sections are
+    // resolved defensively.
     describeDataCellsWithHeaders(
-      columnsArea.headElement().get(0),
-      rowsArea.tableElement().children('tbody').get(0),
-      dataArea.tableElement().children('tbody').get(0),
+      columnsArea.headElement?.()?.get(0),
+      rowsArea.tableElement()?.children('tbody').get(0),
+      dataArea.tableElement()?.children('tbody').get(0),
     );
   }
 
