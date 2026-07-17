@@ -26242,7 +26242,7 @@ declare module DevExpress.ui {
   /**
    * [descr:dxScheduler]
    */
-  export class dxScheduler extends Widget<DevExpress.ui.dxScheduler.Properties> {
+  export class dxScheduler extends Widget<dxSchedulerOptions> {
     /**
      * [descr:dxScheduler.addAppointment(appointment)]
      */
@@ -26779,11 +26779,7 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxSchedulerOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxSchedulerOptions
-    extends Omit<
-      WidgetOptions<dxScheduler>,
-      'onContentReady' | 'onDisposing' | 'onInitialized' | 'onOptionChanged'
-    > {
+  export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * [descr:dxSchedulerOptions.adaptivityEnabled]
      */
@@ -27114,22 +27110,6 @@ declare module DevExpress.ui {
     onCellContextMenu?:
       | ((e: DevExpress.ui.dxScheduler.CellContextMenuEvent) => void)
       | string;
-    /**
-     * [descr:dxSchedulerOptions.onContentReady]
-     */
-    onContentReady?: (e: DevExpress.ui.dxScheduler.ContentReadyEvent) => void;
-    /**
-     * [descr:dxSchedulerOptions.onDisposing]
-     */
-    onDisposing?: (e: DevExpress.ui.dxScheduler.DisposingEvent) => void;
-    /**
-     * [descr:dxSchedulerOptions.onInitialized]
-     */
-    onInitialized?: (e: DevExpress.ui.dxScheduler.InitializedEvent) => void;
-    /**
-     * [descr:dxSchedulerOptions.onOptionChanged]
-     */
-    onOptionChanged?: (e: DevExpress.ui.dxScheduler.OptionChangedEvent) => void;
     /**
      * [descr:dxSchedulerOptions.recurrenceEditMode]
      */
@@ -30819,6 +30799,10 @@ declare module DevExpress.ui {
     TItem extends DevExpress.ui.dxToolbar.ItemLike = any,
     TKey = any
   > extends CollectionWidgetOptions<dxToolbar<TItem, TKey>, TItem, TKey> {
+    /**
+     * [descr:dxToolbarOptions.allowKeyboardNavigation]
+     */
+    allowKeyboardNavigation?: boolean;
     /**
      * [descr:dxToolbarOptions.dataSource]
      */
@@ -35032,15 +35016,12 @@ declare module DevExpress.ui.dxScheduler {
   /**
    * [descr:DateNavigatorItemProperties]
    */
-  export type DateNavigatorItemProperties =
-    DevExpress.ui.dxButtonGroup.Properties & {
-      /**
-       * [descr:DateNavigatorItemProperties.items]
-       */
-      items: Array<
-        DevExpress.ui.dxButtonGroup.Item | SchedulerPredefinedDateNavigatorItem
-      >;
-    };
+  export type DateNavigatorItemProperties = dxButtonGroupOptions & {
+    /**
+     * [descr:DateNavigatorItemProperties.items]
+     */
+    items: Array<dxButtonGroupItem | SchedulerPredefinedDateNavigatorItem>;
+  };
   /**
    * [descr:dxSchedulerToolbar]
    */
@@ -35065,7 +35046,7 @@ declare module DevExpress.ui.dxScheduler {
   /**
    * [descr:dxSchedulerToolbarItem]
    */
-  export type ToolbarItem = DevExpress.ui.dxToolbar.Item & {
+  export type ToolbarItem = dxToolbarItem & {
     /**
      * [descr:dxSchedulerToolbarItem.name]
      */
