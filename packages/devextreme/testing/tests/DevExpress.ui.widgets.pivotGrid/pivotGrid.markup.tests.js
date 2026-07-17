@@ -339,6 +339,49 @@ QUnit.module('PivotGrid accessibility markup', {
         });
     });
 
+    QUnit.test('Data cells are described by their row and column header cells', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.expect(0);
+            return;
+        }
+
+        const pivotGrid = createPivotGrid({
+            width: 600, height: 400,
+            dataSource: createExpandableDataSource()
+        });
+        this.clock.tick(10);
+
+        const $columnArea = pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers');
+        const $rowsArea = pivotGrid.$element().find('.dx-pivotgrid-vertical-headers');
+        const $dataArea = pivotGrid.$element().find('.dx-pivotgrid-area-data');
+
+        $dataArea.find('td').each((_, dataCell) => {
+            const describedBy = dataCell.getAttribute('aria-describedby');
+
+            assert.ok(describedBy, 'data cell has aria-describedby');
+
+            describedBy.split(' ').forEach((id) => {
+                const header = document.getElementById(id);
+
+                assert.ok(header, `referenced element #${id} exists`);
+                assert.ok(
+                    $columnArea.find(header).length || $rowsArea.find(header).length,
+                    'referenced element is a row or column header cell'
+                );
+            });
+        });
+
+        const firstDataCell = $dataArea.find('td').get(0);
+        const describedTexts = firstDataCell.getAttribute('aria-describedby')
+            .split(' ')
+            .map((id) => document.getElementById(id).textContent.trim());
+        const firstRowHeaderText = $rowsArea.find('td').first().text().trim();
+        const firstColumnHeaderText = $columnArea.find('td').first().text().trim();
+
+        assert.ok(describedTexts.includes(firstRowHeaderText), 'description includes the row header caption');
+        assert.ok(describedTexts.includes(firstColumnHeaderText), 'description includes the column header caption');
+    });
+
     QUnit.test('Row header and data cells have aria-rowindex along shared row axis', function(assert) {
         if(!windowUtils.hasWindow()) {
             assert.expect(0);

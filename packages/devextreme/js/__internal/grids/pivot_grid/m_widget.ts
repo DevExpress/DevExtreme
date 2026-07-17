@@ -26,6 +26,7 @@ import { current, isGeneric } from '@js/ui/themes';
 import Widget from '@ts/core/widget/widget';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
+import { describeDataCellsWithHeaders } from './a11y/data_cell_description';
 import { ChartIntegrationMixin } from './chart_integration/m_chart_integration';
 import DataAreaImport from './data_area/m_data_area';
 import DataControllerImport from './data_controller/m_data_controller';
@@ -1518,6 +1519,12 @@ class PivotGrid extends Widget {
       .attr('aria-owns', tableIds)
       .attr('aria-rowcount', this._dataController.totalRowCount())
       .attr('aria-colcount', this._dataController.totalColumnCount());
+
+    describeDataCellsWithHeaders(
+      columnsArea.headElement().get(0),
+      rowsArea.tableElement().children('tbody').get(0),
+      dataArea.tableElement().children('tbody').get(0),
+    );
   }
 
   _update(isFirstDrawing) {
