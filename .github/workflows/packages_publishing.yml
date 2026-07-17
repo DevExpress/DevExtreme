@@ -56,7 +56,6 @@ jobs:
       # Builds the dx-make-sbom package argument list from known package names and the tgz files produced in artifacts/npm.
       # Produces SBOM_PACKAGES for the SBOM build step.
       - name: Prepare SBOM package inputs
-        shell: bash
         run: |
           package_version=$(node -p "require('./package.json').version")
           IFS=',' read -ra package_names <<< "$SBOM_PACKAGE_NAMES"
@@ -96,7 +95,6 @@ jobs:
       # Produces the sbomFiles.outputs.files multiline output.
       - name: Collect SBOM files
         id: sbomFiles
-        shell: bash
         run: |
           shopt -s nullglob
           sbom_files=(packages/sbom/dist/*.cdx.json)
@@ -130,24 +128,25 @@ jobs:
         with:
           name: sbom-packages
           path: packages/sbom/dist
-          retention-days: 7
+          if-no-files-found: error
+          retention-days: 1
 
       - name: Upload packages
         uses: actions/upload-artifact@v7
         with:
           name: npm-packages
           path: artifacts/npm/*.tgz
-          retention-days: 2
+          if-no-files-found: error
+          retention-days: 1
 
       - name: Filter packages
         id: filter
         working-directory: artifacts/npm
-        shell: bash
         run: ls *.tgz | grep -E -i "$FILTER" | sed -r 's/^(.*).tgz$/"\1"/g' | paste -sd "," - | sed -r 's/(.*)/packages=[\1]/' >> "$GITHUB_OUTPUT"
 
   publish:
     name: Publish package
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     needs: build
     strategy:
       fail-fast: false
