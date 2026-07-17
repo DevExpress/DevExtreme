@@ -41,12 +41,7 @@ sh.exec(`pnpm exec nx run devextreme-metadata:make-aspnet-metadata`);
 injectDescriptions();
 
 sh.exec('pnpm exec nx build devextreme-scss');
-sh.exec('pnpm exec nx build-dist devextreme', {
-    env: {
-        ...sh.env,
-        BUILD_INTERNAL_PACKAGE: 'false'
-    }
-});
+sh.exec('pnpm exec nx build-dist devextreme');
 
 sh.exec('pnpm exec nx build devextreme-themebuilder');
 
@@ -80,7 +75,7 @@ sh.cp(path.join(ROOT_DIR, 'packages', 'devextreme-react', 'npm', '*.tgz'), NPM_D
 sh.cp(path.join(ROOT_DIR, 'packages', 'devextreme-vue', 'npm', '*.tgz'), NPM_DIR);
 
 if (sh.env.BUILD_INTERNAL_PACKAGE === 'true') {
-    sh.exec('pnpm exec nx build-dist devextreme');
+    sh.exec('pnpm exec nx build-dist devextreme -c internal');
 
     sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme-internal'));
         sh.exec(`pnpm pkg set version="${devextremeNpmVersion}"`);
