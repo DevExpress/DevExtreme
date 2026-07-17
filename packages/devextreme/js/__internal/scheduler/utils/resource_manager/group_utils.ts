@@ -1,41 +1,120 @@
 import type { ResourceLoader } from '../loader/resource_loader';
+import type { ResourceId } from '../loader/types';
+import type { ResourceHierarchyNode } from './hierarchy_tree_utils';
 import type { GroupLeaf, GroupNode } from './types';
+
+const isVirtualRoot = (node: GroupNode): boolean => !node.resourceIndex;
+
+const createFlatResourceNodes = (
+  resource: ResourceLoader,
+): GroupNode[] => resource.items.map((item) => ({
+  resourceText: item.text,
+  resourceIndex: resource.resourceIndex,
+  grouped: { [resource.resourceIndex]: item.id },
+  children: [],
+}));
+
+const hierarchyToGroupNodes = (
+  hierarchyNodes: ResourceHierarchyNode[],
+  resourceIndex: string,
+  parentGrouped: Record<string, ResourceId>,
+): GroupNode[] => hierarchyNodes.map((node) => {
+  const grouped = { ...parentGrouped, [resourceIndex]: node.data.id };
+
+  return {
+    resourceText: node.data.text,
+    resourceIndex,
+    grouped,
+    children: hierarchyToGroupNodes(node.children, resourceIndex, grouped),
+  };
+});
+
+const collectGroupLeaves = (nodes: GroupNode[]): GroupNode[] => {
+  const leaves: GroupNode[] = [];
+
+  const walk = (node: GroupNode): void => {
+    if (node.children.length === 0) {
+      leaves.push(node);
+      return;
+    }
+
+    node.children.forEach(walk);
+  };
+
+  nodes.forEach(walk);
+
+  return leaves;
+};
+
+const mergeGroupedIntoTree = (
+  node: GroupNode,
+  parentGrouped: Record<string, ResourceId>,
+): GroupNode => ({
+  ...node,
+  grouped: { ...parentGrouped, ...node.grouped },
+  children: node.children.map((child) => mergeGroupedIntoTree(child, parentGrouped)),
+});
+
+const createResourceNodes = (
+  resource: ResourceLoader,
+): GroupNode[] => {
+  if (resource.hasHierarchy) {
+    return hierarchyToGroupNodes(resource.hierarchyTree, resource.resourceIndex, {});
+  }
+
+  return createFlatResourceNodes(resource);
+};
+
+const attachResourceNodes = (
+  leafs: GroupNode[],
+  nodes: GroupNode[],
+): GroupNode[] => {
+  const nextLeafs: GroupNode[] = [];
+
+  leafs.forEach((leaf) => {
+    leaf.children = nodes.map((node) => mergeGroupedIntoTree(node, leaf.grouped));
+
+    leaf.children.forEach((child) => {
+      nextLeafs.push(...collectGroupLeaves([child]));
+    });
+  });
+
+  return nextLeafs;
+};
 
 export const groupResources = (resourceById: Record<string, ResourceLoader>, groups: string[]): {
   groupTree: GroupNode[];
   groupLeafs: GroupLeaf[];
 } => {
-  if (!groups.length || Object.keys(resourceById).length === 0) {
+  const validGroups = groups.filter((group) => resourceById[group]);
+
+  if (!validGroups.length) {
     return {
       groupTree: [],
       groupLeafs: [],
     };
   }
 
-  const head: GroupNode[] = [{} as GroupNode];
+  const head: GroupNode[] = [{
+    resourceText: '',
+    resourceIndex: '',
+    grouped: {},
+    children: [],
+  }];
   let leafs: GroupNode[] = head;
 
-  groups
-    .filter((group) => resourceById[group])
-    .forEach((group) => {
-      const resource = resourceById[group];
-      const nodes = resource.items.map<GroupNode>((item) => ({
-        resourceText: item.text,
-        resourceIndex: resource.resourceIndex,
-        grouped: { [resource.resourceIndex]: item.id },
-        children: [],
-      }));
-      const nextLeafs: GroupNode[] = [];
+  validGroups.forEach((group) => {
+    const resource = resourceById[group];
+    const nodes = createResourceNodes(resource);
 
-      leafs.forEach((leaf) => {
-        leaf.children = nodes.map((node) => ({
-          ...node,
-          grouped: { ...node.grouped, ...leaf.grouped },
-        }));
-        nextLeafs.push(...leaf.children);
-      });
-      leafs = nextLeafs;
-    });
+    if (leafs.length > 0 && isVirtualRoot(leafs[0])) {
+      head[0].children = nodes;
+      leafs = collectGroupLeaves(nodes);
+      return;
+    }
+
+    leafs = attachResourceNodes(leafs, nodes);
+  });
 
   const groupLeafs = leafs.map<GroupLeaf>((leaf, index) => ({
     ...leaf,
