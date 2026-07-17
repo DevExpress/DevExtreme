@@ -1,5 +1,6 @@
 @use "../common/sizes" as *;
 @use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -10,15 +11,15 @@ $informer-column-gap: null !default;
 $informer-border-radius: null !default;
 
 @if $size == "default" {
-  $informer-padding-inline: 12px !default;
-  $informer-padding-block: 8px !default;
-  $informer-column-gap: 6px !default;
-  $informer-border-radius: 4px !default;
+  $informer-padding-inline: ds.$spacing-120 !default;
+  $informer-padding-block: ds.$spacing-80 !default;
+  $informer-column-gap: ds.$spacing-60 !default;
+  $informer-border-radius: ds.$border-radius-40 !default;
 }
 
 @else if $size == "compact" {
-  $informer-padding-inline: 8px !default;
-  $informer-padding-block: 4px !default;
-  $informer-column-gap: 4px !default;
-  $informer-border-radius: 3px !default;
+  $informer-padding-inline: ds.$spacing-80 !default;
+  $informer-padding-block: ds.$spacing-40 !default;
+  $informer-column-gap: ds.$spacing-40 !default;
+  $informer-border-radius: ds.$border-radius-30 !default;
 }

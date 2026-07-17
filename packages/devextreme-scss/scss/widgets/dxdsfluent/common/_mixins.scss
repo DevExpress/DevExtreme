@@ -28,10 +28,10 @@ $badge-invalid-bg: $common-invalid-color;
   justify-content: center;
   align-items: center;
   top: 50%;
-  margin-top: math.div(-$fluent-invalid-badge-size, 2);
+  margin-top: calc(#{$fluent-invalid-badge-size} / -2);
   width: $fluent-invalid-badge-size;
   height: $fluent-invalid-badge-size;
-  line-height: $fluent-invalid-badge-size + 1;
+  line-height: calc(#{$fluent-invalid-badge-size} + 1px);
   font-size: $fluent-base-font-size;
 }
 
@@ -88,7 +88,7 @@ $badge-invalid-bg: $common-invalid-color;
 
   .dx-list-select-all {
     margin-inline: $fluent-list-item-margin-inline;
-    padding: $fluent-list-item-vertical-padding + 2px 0 $fluent-list-item-vertical-padding - 2px;
+    padding: calc(#{$fluent-list-item-vertical-padding} + 2px) 0 calc(#{$fluent-list-item-vertical-padding} - 2px);
   }
 
   .dx-list-items {

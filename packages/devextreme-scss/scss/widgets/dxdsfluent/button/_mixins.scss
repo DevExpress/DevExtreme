@@ -9,7 +9,7 @@
 @mixin dx-button-onlyicon-sizing($icon-size: $fluent-button-icon-size) {
   min-width: $fluent-button-height;
 
-  $button-content-padding: math.div($fluent-button-height - $icon-size - $fluent-base-border-width * 2, 2);
+  $button-content-padding: calc((#{$fluent-button-height} - #{$icon-size} - #{$fluent-base-border-width} * 2) / 2);
 
   @include dx-button-sizing(
     $button-content-padding,
@@ -26,7 +26,7 @@
     $fluent-button-horizontal-padding,
     $fluent-button-horizontal-padding,
     $fluent-button-icon-size,
-    math.div($fluent-button-icon-size, 2)
+    calc(#{$fluent-button-icon-size} / 2)
   );
 }
 

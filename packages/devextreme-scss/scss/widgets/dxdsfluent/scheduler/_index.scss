@@ -57,7 +57,7 @@
 @use "../recurrenceEditor" as *;
 @use "../scrollable";
 
-$fluent-scheduler-all-day-table-cell-height: $fluent-scheduler-workspace-date-table-cell-height * 1.5;
+$fluent-scheduler-all-day-table-cell-height: calc(#{$fluent-scheduler-workspace-date-table-cell-height} * 1.5);
 
 $fluent-scheduler-month-date-text-size: 14px;
 
@@ -93,7 +93,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     font-size: $fluent-scheduler-time-panel-font-size;
 
     .dx-scheduler-small & {
-      font-size: $fluent-scheduler-time-panel-font-size - 1;
+      font-size: calc(#{$fluent-scheduler-time-panel-font-size} - 1px);
     }
   }
 
@@ -137,7 +137,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   }
 
   .dx-scheduler-small & {
-    font-size: $fluent-scheduler-all-day-title-font-size * 0.8;
+    font-size: calc(#{$fluent-scheduler-all-day-title-font-size} * 0.8);
     padding-right: 2px;
   }
 
@@ -368,7 +368,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     font-size: 14px;
 
     .dx-scheduler-small & {
-      margin: 0 $fluent-scheduler-header-panel-margin * baseScheduler.$scheduler-small-size-factor;
+      margin: 0 calc(#{$fluent-scheduler-header-panel-margin} * #{baseScheduler.$scheduler-small-size-factor});
     }
 
     &:last-child {

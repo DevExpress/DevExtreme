@@ -1,7 +1,8 @@
 @use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$fluent-gallery-indicator-size: 8px !default;
-$fluent-gallery-indicator-selected-size: 12px !default;
-$fluent-gallery-button-padding: 8px !default;
+$fluent-gallery-indicator-size: ds.$spacing-80 !default;
+$fluent-gallery-indicator-selected-size: ds.$spacing-120 !default;
+$fluent-gallery-button-padding: ds.$spacing-80 !default;

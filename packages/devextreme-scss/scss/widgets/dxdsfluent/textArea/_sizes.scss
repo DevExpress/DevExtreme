@@ -1,13 +1,14 @@
 @use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
 $textarea-content-line-height: null !default;
 
 @if $size == "default" {
-  $textarea-content-line-height: 20px !default;
+  $textarea-content-line-height: ds.$line-height-200 !default;
 }
 
 @else if $size == "compact" {
-  $textarea-content-line-height: 16px !default;
+  $textarea-content-line-height: ds.$line-height-160 !default;
 }

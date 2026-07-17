@@ -1,23 +1,24 @@
 @use "../sizes" as *;
 @use "../typography/sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
 $fluent-toolbar-height: null !default;
 
 $fluent-toolbar-padding: 0 !default;
-$fluent-toolbar-item-spacing: 4px !default;
+$fluent-toolbar-item-spacing: ds.$spacing-40 !default;
 $fluent-toolbar-label-font-size: $fluent-m-font-size !default;
 $fluent-toolbar-section-padding: null !default;
 
 @if $size == "default" {
-  $fluent-toolbar-height: 48px !default;
-  $fluent-toolbar-section-padding: 12px !default;
+  $fluent-toolbar-height: ds.$spacing-480 !default;
+  $fluent-toolbar-section-padding: ds.$spacing-120 !default;
 }
 
 @else if $size == "compact" {
-  $fluent-toolbar-height: 36px !default;
-  $fluent-toolbar-section-padding: 8px !default;
+  $fluent-toolbar-height: ds.$spacing-360 !default;
+  $fluent-toolbar-section-padding: ds.$spacing-80 !default;
 }
 
 :root {

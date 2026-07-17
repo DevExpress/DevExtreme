@@ -1,4 +1,5 @@
 @use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -29,12 +30,12 @@ $fluent-filter-row-between-editor-padding: null !default;
 $fluent-command-column-additional-right-margin: null !default;
 $fluent-grid-base-treeview-select-all-item-offset: null !default;
 
-$fluent-grid-base-header-line-height: 18px !default;
+$fluent-grid-base-header-line-height: ds.$line-height-180 !default;
 $fluent-grid-base-header-icon-size: null !default;
-$fluent-grid-base-header-icon-container-size: 20px !default;
-$fluent-grid-base-column-chooser-item-margin: 8px !default;
-$fluent-command-edit-icon-margin: 4px !default;
-$fluent-command-edit-text-margin: 2px !default;
+$fluent-grid-base-header-icon-container-size: ds.$spacing-200 !default;
+$fluent-grid-base-column-chooser-item-margin: ds.$spacing-80 !default;
+$fluent-command-edit-icon-margin: ds.$spacing-40 !default;
+$fluent-command-edit-text-margin: ds.$spacing-20 !default;
 
 $fluent-command-edit-icon-size: null !default;
 $fluent-filter-panel-icon-size: null !default;
@@ -43,76 +44,76 @@ $fluent-grid-base-filter-icon-size: $fluent-button-icon-size !default;
 $fluent-grid-base-command-ai-chatsparkleoutline-icon-size: null !default;
 $fluent-grid-base-command-ai-text-content-padding: null !default;
 $fluent-grid-base-command-ai-header-button-offset: null !default;
-$fluent-grid-base-ai-prompt-editor-progressbar-height: 4px !default;
+$fluent-grid-base-ai-prompt-editor-progressbar-height: ds.$spacing-40 !default;
 
 @if $size == "default" {
-  $fluent-grid-base-cell-height: 48px !default;
-  $fluent-grid-base-header-height: 48px !default;
-  $fluent-grid-base-cell-line-height: 20px !default;
-  $fluent-grid-base-cell-font-size: 14px !default;
+  $fluent-grid-base-cell-height: ds.$spacing-480 !default;
+  $fluent-grid-base-header-height: ds.$spacing-480 !default;
+  $fluent-grid-base-cell-line-height: ds.$line-height-200 !default;
+  $fluent-grid-base-cell-font-size: ds.$font-size-140 !default;
 
-  $fluent-grid-base-checkbox-size: 18px !default;
-  $fluent-grid-base-cell-horizontal-padding: 16px !default;
+  $fluent-grid-base-checkbox-size: ds.$spacing-180 !default;
+  $fluent-grid-base-cell-horizontal-padding: ds.$spacing-160 !default;
 
-  $fluent-grid-base-texteditor-input-padding: 40px !default;
-  $fluent-grid-base-menu-item-padding: 11px 4px !default;
-  $fluent-grid-base-column-chooser-horizontal-padding: 24px !default;
-  $fluent-grid-base-column-chooser-paddings: 16px $fluent-grid-base-column-chooser-horizontal-padding 9px !default;
-  $fluent-grid-base-header-panel-padding: 8px 0 !default;
-  $fluent-grid-base-grouppanel-item-margin: 6px !default;
+  $fluent-grid-base-texteditor-input-padding: ds.$spacing-400 !default;
+  $fluent-grid-base-menu-item-padding: ds.$spacing-110 ds.$spacing-40 !default;
+  $fluent-grid-base-column-chooser-horizontal-padding: ds.$spacing-240 !default;
+  $fluent-grid-base-column-chooser-paddings: ds.$spacing-160 $fluent-grid-base-column-chooser-horizontal-padding ds.$spacing-90 !default;
+  $fluent-grid-base-header-panel-padding: ds.$spacing-80 0 !default;
+  $fluent-grid-base-grouppanel-item-margin: ds.$spacing-60 !default;
 
-  $fluent-grid-base-command-edit-column-width: 115px !default;
-  $fluent-grid-base-command-edit-column-with-icons-width: 93px !default;
-  $fluent-grid-base-adaptive-column-height: 40px !default;
-  $fluent-grid-base-treeview-search-margin: 10px !default;
-  $fluent-grid-base-nodata-font-size: 17px !default;
+  $fluent-grid-base-command-edit-column-width: 115px !default; // dx-offscale: 115px
+  $fluent-grid-base-command-edit-column-with-icons-width: 93px !default; // dx-offscale: 93px
+  $fluent-grid-base-adaptive-column-height: ds.$spacing-400 !default;
+  $fluent-grid-base-treeview-search-margin: ds.$spacing-100 !default;
+  $fluent-grid-base-nodata-font-size: ds.$spacing-170 !default;
 
-  $fluent-filter-row-between-editor-padding: 12px !default;
+  $fluent-filter-row-between-editor-padding: ds.$spacing-120 !default;
   $fluent-command-column-additional-right-margin: 0 !default;
 
-  $fluent-grid-base-treeview-select-all-item-offset: 34px !default;
+  $fluent-grid-base-treeview-select-all-item-offset: ds.$spacing-340 !default;
 
-  $fluent-grid-base-header-icon-size: 20px !default;
-  $fluent-command-edit-icon-size: 20px !default;
-  $fluent-filter-panel-icon-size: 20px !default;
-  $fluent-grid-base-command-ai-chatsparkleoutline-icon-size: 20px !default;
-  $fluent-grid-base-command-ai-text-content-padding: $fluent-grid-base-command-ai-chatsparkleoutline-icon-size + 8px !default;
-  $fluent-grid-base-command-ai-header-button-offset: 8px !default;
+  $fluent-grid-base-header-icon-size: ds.$spacing-200 !default;
+  $fluent-command-edit-icon-size: ds.$spacing-200 !default;
+  $fluent-filter-panel-icon-size: ds.$spacing-200 !default;
+  $fluent-grid-base-command-ai-chatsparkleoutline-icon-size: ds.$spacing-200 !default;
+  $fluent-grid-base-command-ai-text-content-padding: calc(#{$fluent-grid-base-command-ai-chatsparkleoutline-icon-size} + 8px) !default;
+  $fluent-grid-base-command-ai-header-button-offset: ds.$spacing-80 !default;
 }
 
 @else if $size == "compact" {
-  $fluent-grid-base-cell-height: 36px !default;
-  $fluent-grid-base-header-height: 36px !default;
-  $fluent-grid-base-cell-line-height: 16px !default;
-  $fluent-grid-base-cell-font-size: 12px !default;
+  $fluent-grid-base-cell-height: ds.$spacing-360 !default;
+  $fluent-grid-base-header-height: ds.$spacing-360 !default;
+  $fluent-grid-base-cell-line-height: ds.$line-height-160 !default;
+  $fluent-grid-base-cell-font-size: ds.$font-size-120 !default;
 
-  $fluent-grid-base-checkbox-size: 16px !default;
-  $fluent-grid-base-cell-horizontal-padding: 11px !default;
+  $fluent-grid-base-checkbox-size: ds.$spacing-160 !default;
+  $fluent-grid-base-cell-horizontal-padding: ds.$spacing-110 !default;
 
-  $fluent-grid-base-texteditor-input-padding: 36px !default;
-  $fluent-grid-base-menu-item-padding: 8px 4px !default;
-  $fluent-grid-base-column-chooser-horizontal-padding: 8px !default;
-  $fluent-grid-base-column-chooser-paddings: 8px $fluent-grid-base-column-chooser-horizontal-padding 8px !default;
-  $fluent-grid-base-header-panel-padding: 6px 0 !default;
-  $fluent-grid-base-grouppanel-item-margin: 6px !default;
+  $fluent-grid-base-texteditor-input-padding: ds.$spacing-360 !default;
+  $fluent-grid-base-menu-item-padding: ds.$spacing-80 ds.$spacing-40 !default;
+  $fluent-grid-base-column-chooser-horizontal-padding: ds.$spacing-80 !default;
+  $fluent-grid-base-column-chooser-paddings: ds.$spacing-80 $fluent-grid-base-column-chooser-horizontal-padding ds.$spacing-80 !default;
+  $fluent-grid-base-header-panel-padding: ds.$spacing-60 0 !default;
+  $fluent-grid-base-grouppanel-item-margin: ds.$spacing-60 !default;
 
-  $fluent-grid-base-command-edit-column-width: 105px !default;
-  $fluent-grid-base-command-edit-column-with-icons-width: 80px !default;
-  $fluent-grid-base-adaptive-column-height: 26px !default;
-  $fluent-grid-base-treeview-search-margin: 10px !default;
-  $fluent-grid-base-nodata-font-size: 14px !default;
+  $fluent-grid-base-command-edit-column-width: 105px !default; // dx-offscale: 105px
+  $fluent-grid-base-command-edit-column-with-icons-width: ds.$spacing-800 !default;
+  $fluent-grid-base-adaptive-column-height: ds.$spacing-260 !default;
+  $fluent-grid-base-treeview-search-margin: ds.$spacing-100 !default;
+  $fluent-grid-base-nodata-font-size: ds.$font-size-140 !default;
 
-  $fluent-filter-row-between-editor-padding: 8px !default;
-  $fluent-command-column-additional-right-margin: 2px !default;
+  $fluent-filter-row-between-editor-padding: ds.$spacing-80 !default;
+  $fluent-command-column-additional-right-margin: ds.$spacing-20 !default;
 
-  $fluent-grid-base-treeview-select-all-item-offset: 28px !default;
+  $fluent-grid-base-treeview-select-all-item-offset: ds.$spacing-280 !default;
 
-  $fluent-grid-base-header-icon-size: 16px !default;
-  $fluent-command-edit-icon-size: 16px !default;
-  $fluent-filter-panel-icon-size: 16px !default;
-  $fluent-grid-base-command-ai-chatsparkleoutline-icon-size: 16px !default;
-  $fluent-grid-base-command-ai-text-content-padding: $fluent-grid-base-command-ai-chatsparkleoutline-icon-size + 6px !default;
-  $fluent-grid-base-command-ai-header-button-offset: 6px !default;
+  $fluent-grid-base-header-icon-size: ds.$spacing-160 !default;
+  $fluent-command-edit-icon-size: ds.$spacing-160 !default;
+  $fluent-filter-panel-icon-size: ds.$spacing-160 !default;
+  $fluent-grid-base-command-ai-chatsparkleoutline-icon-size: ds.$spacing-160 !default;
+  $fluent-grid-base-command-ai-text-content-padding: calc(#{$fluent-grid-base-command-ai-chatsparkleoutline-icon-size} + 6px) !default;
+  $fluent-grid-base-command-ai-header-button-offset: ds.$spacing-60 !default;
 }
 
 $fluent-grid-base-header-cell-font-size: $fluent-grid-base-cell-font-size !default;

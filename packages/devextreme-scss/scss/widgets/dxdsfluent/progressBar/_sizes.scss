@@ -1,4 +1,5 @@
 @use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -8,11 +9,11 @@ $progressbar-status-margin-top: null !default;
 $progressbar-indeterminate-background-width: 90%;
 
 @if $size == "default" {
-  $progressbar-height: 4px !default;
-  $progressbar-status-margin-top: 12px !default;
+  $progressbar-height: ds.$spacing-40 !default;
+  $progressbar-status-margin-top: ds.$spacing-120 !default;
 }
 
 @else if $size == "compact" {
-  $progressbar-height: 2px !default;
-  $progressbar-status-margin-top: 8px !default;
+  $progressbar-height: ds.$spacing-20 !default;
+  $progressbar-status-margin-top: ds.$spacing-80 !default;
 }

@@ -1,4 +1,5 @@
 @use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -7,13 +8,13 @@ $fluent-badge-font-size: null !default;
 $badge-line-height: null !default;
 
 @if $size == "default" {
-  $fluent-badge-padding: 0 6px !default;
-  $fluent-badge-font-size: 12px !default;
-  $badge-line-height: 20px !default;
+  $fluent-badge-padding: 0 ds.$spacing-60 !default;
+  $fluent-badge-font-size: ds.$font-size-120 !default;
+  $badge-line-height: ds.$line-height-200 !default;
 }
 
 @else if $size == "compact" {
-  $fluent-badge-padding: 0 6px !default;
-  $fluent-badge-font-size: 10px !default;
-  $badge-line-height: 16px !default;
+  $fluent-badge-padding: 0 ds.$spacing-60 !default;
+  $fluent-badge-font-size: ds.$font-size-100 !default;
+  $badge-line-height: ds.$line-height-160 !default;
 }

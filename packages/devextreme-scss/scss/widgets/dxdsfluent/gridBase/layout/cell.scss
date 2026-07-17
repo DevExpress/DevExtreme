@@ -31,14 +31,14 @@
 
   // (0,1,0)
   .dx-command-adaptive {
-    width: 2 * $fluent-grid-base-cell-horizontal-padding + $fluent-base-icon-size;
-    min-width: 2 * $fluent-grid-base-cell-horizontal-padding + $fluent-base-icon-size;
+    width: calc(2 * #{$fluent-grid-base-cell-horizontal-padding} + #{$fluent-base-icon-size});
+    min-width: calc(2 * #{$fluent-grid-base-cell-horizontal-padding} + #{$fluent-base-icon-size});
   }
 
   // (0,2,0)
   .dx-#{$widget-name} .dx-command-drag {
-    width: 2 * $fluent-grid-base-cell-horizontal-padding + $fluent-base-icon-size;
-    min-width: 2 * $fluent-grid-base-cell-horizontal-padding + $fluent-base-icon-size;
+    width: calc(2 * #{$fluent-grid-base-cell-horizontal-padding} + #{$fluent-base-icon-size});
+    min-width: calc(2 * #{$fluent-grid-base-cell-horizontal-padding} + #{$fluent-base-icon-size});
   }
 
   // (0,7,1) - (0,9,1)
@@ -310,12 +310,12 @@
 
   // (0,5,1)
   .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-data-row:not(.dx-row-lines, .dx-edit-row, .dx-selection, .dx-row-focused, .dx-row-removed) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
-    padding-top: $fluent-grid-base-cell-vertical-padding + 1px;
+    padding-top: calc(#{$fluent-grid-base-cell-vertical-padding} + 1px);
   }
 
   // (0,5,1)
   .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row.dx-edit-row > td.dx-command-edit {
-    padding-top: $fluent-grid-base-cell-vertical-padding - 1px;
+    padding-top: calc(#{$fluent-grid-base-cell-vertical-padding} - 1px);
   }
 
   // (0,6,1)
@@ -332,13 +332,13 @@
 
   // (0,7,0)
   .dx-#{$widget-name}-headers.dx-header-multi-row .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row.dx-header-row .dx-command-select {
-    padding-bottom: math.div($fluent-grid-base-header-height - $fluent-grid-base-checkbox-size, 2);
+    padding-bottom: calc((#{$fluent-grid-base-header-height} - #{$fluent-grid-base-checkbox-size}) / 2);
   }
 
   // (0,8,1) T1303478
   .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row.dx-selection:not(.dx-edit-row):not(.dx-row-lines):not(.dx-group-row) > td:not(.dx-editor-cell, .dx-master-detail-cell),
   .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row.dx-row-focused:not(.dx-edit-row):not(.dx-row-lines):not(.dx-group-row) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
-    padding-bottom: $fluent-grid-base-cell-vertical-padding - 1px;
+    padding-bottom: calc(#{$fluent-grid-base-cell-vertical-padding} - 1px);
   }
 
   // (0,7,1) - (0,9,1)

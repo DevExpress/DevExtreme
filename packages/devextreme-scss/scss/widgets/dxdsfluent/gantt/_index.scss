@@ -101,8 +101,8 @@ $gantt-successor-background-color: white;
       }
 
       &.dx-gantt-parent {
-        height: $gantt-task-height - 2px;
-        line-height: $gantt-task-height - 2px;
+        height: calc(#{$gantt-task-height} - 2px);
+        line-height: calc(#{$gantt-task-height} - 2px);
         background-color: $gantt-parent-task-background-color;
         border-left-color: $gantt-parent-task-background-color;
         border-right-color: $gantt-parent-task-background-color;
@@ -155,7 +155,7 @@ $gantt-successor-background-color: white;
         }
 
         .dx-gantt-task-edit-frame {
-          height: $gantt-task-height - 2px;
+          height: calc(#{$gantt-task-height} - 2px);
         }
       }
     }
@@ -239,12 +239,12 @@ $gantt-successor-background-color: white;
 
   .dx-gantt-task-edit-dependency-r,
   .dx-gantt-task-edit-successor-dependency-r {
-    left: -$gantt-dependency-successor-size - 1px;
+    left: calc(-1 * #{$gantt-dependency-successor-size} - 1px);
   }
 
   .dx-gantt-task-edit-dependency-l,
   .dx-gantt-task-edit-successor-dependency-l {
-    right: -$gantt-dependency-successor-size - 1px;
+    right: calc(-1 * #{$gantt-dependency-successor-size} - 1px);
   }
 
   .dx-gantt-task-edit-dependency-line {

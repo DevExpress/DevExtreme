@@ -1,6 +1,7 @@
 @use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$fluent-dateview-roller-height: 182px !default;
-$fluent-dateview-roller-item-height: 40px !default;
+$fluent-dateview-roller-height: 182px !default; // dx-offscale: 182px
+$fluent-dateview-roller-item-height: ds.$spacing-400 !default;

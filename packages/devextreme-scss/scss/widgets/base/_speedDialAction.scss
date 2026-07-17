@@ -1,4 +1,5 @@
 @use "sass:math";
+@use "sass:meta";
 @use "sass:color";
 
 .dx-fa-button .dx-overlay-content {
@@ -23,6 +24,11 @@
   $button-default-bg,
   $button-default-color
 ) {
+  $fa-main-radius: if(meta.type-of($main-action-button-size) == number, math.div($main-action-button-size, 2), calc(#{$main-action-button-size} / 2));
+  $fa-action-radius: if(meta.type-of($action-button-size) == number, math.div($action-button-size, 2), calc(#{$action-button-size} / 2));
+  $fa-main-icon-padding: if(meta.type-of($main-action-button-size) == number and meta.type-of($icon-size) == number, math.div($main-action-button-size - $icon-size, 2), calc((#{$main-action-button-size} - #{$icon-size}) / 2));
+  $fa-action-icon-padding: if(meta.type-of($action-button-size) == number and meta.type-of($icon-size) == number, math.div($action-button-size - $icon-size, 2), calc((#{$action-button-size} - #{$icon-size}) / 2));
+
   .dx-fa-button {
     &.dx-fa-button-main {
       .dx-overlay-shader {
@@ -35,7 +41,7 @@
         background-color: $button-default-bg;
         color: $button-default-color;
         overflow: visible;
-        border-radius: math.div($main-action-button-size, 2);
+        border-radius: $fa-main-radius;
         box-shadow: $speed-dial-action-shadow;
 
         &.dx-state-hover {
@@ -56,7 +62,7 @@
 
         .dx-fa-button-icon,
         .dx-fa-button-icon-close {
-          padding: math.div($main-action-button-size - $icon-size, 2);
+          padding: $fa-main-icon-padding;
           box-shadow: none;
           background-color: transparent;
         }
@@ -74,7 +80,7 @@
         }
 
         .dx-inkripple {
-          border-radius: math.div($main-action-button-size, 2);
+          border-radius: $fa-main-radius;
         }
       }
 
@@ -85,7 +91,7 @@
 
           .dx-fa-button-icon,
           .dx-fa-button-icon-close {
-            padding: math.div($main-action-button-size - $icon-size, 2) 0 math.div($main-action-button-size - $icon-size, 2) math.div($main-action-button-size - $icon-size, 2);
+            padding: $fa-main-icon-padding 0 $fa-main-icon-padding $fa-main-icon-padding;
           }
         }
       }
@@ -99,7 +105,7 @@
 
     .dx-fa-button-icon,
     .dx-fa-button-icon-close {
-      padding: math.div($action-button-size - $icon-size, 2);
+      padding: $fa-action-icon-padding;
       width: $icon-size;
       height: $icon-size;
       box-sizing: content-box;
@@ -175,7 +181,7 @@
 
       .dx-inkripple {
         overflow: hidden;
-        border-radius: math.div($action-button-size, 2);
+        border-radius: $fa-action-radius;
       }
     }
   }

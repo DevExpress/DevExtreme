@@ -49,7 +49,7 @@
 @mixin dx-field-value-widget-position($name, $size) {
   &.#{$name},
   &:not(.dx-widget) > .#{$name} {
-    margin: math.div($fluent-field-min-height - $size, 2) 0;
+    margin: calc((#{$fluent-field-min-height} - #{$size}) / 2) 0;
   }
 }
 

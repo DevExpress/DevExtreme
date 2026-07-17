@@ -1,4 +1,5 @@
 @use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -8,15 +9,15 @@ $fluent-main-fa-button-size: null !default;
 $fluent-fa-button-size: null !default;
 
 @if $size == "default" {
-  $fluent-main-fa-button-size: 44px !default;
-  $fluent-fa-button-size: 44px !default;
-  $fluent-main-fa-button-horizontal-padding: 16px;
-  $fluent-main-fa-button-label-padding: 0 $fluent-main-fa-button-horizontal-padding 0 8px;
+  $fluent-main-fa-button-size: ds.$spacing-440 !default;
+  $fluent-fa-button-size: ds.$spacing-440 !default;
+  $fluent-main-fa-button-horizontal-padding: ds.$spacing-160;
+  $fluent-main-fa-button-label-padding: 0 $fluent-main-fa-button-horizontal-padding 0 ds.$spacing-80;
 }
 
 @else if $size == "compact" {
-  $fluent-main-fa-button-size: 32px !default;
-  $fluent-fa-button-size: 32px !default;
-  $fluent-main-fa-button-horizontal-padding: 12px;
-  $fluent-main-fa-button-label-padding: 0 $fluent-main-fa-button-horizontal-padding 0 4px;
+  $fluent-main-fa-button-size: ds.$spacing-320 !default;
+  $fluent-fa-button-size: ds.$spacing-320 !default;
+  $fluent-main-fa-button-horizontal-padding: ds.$spacing-120;
+  $fluent-main-fa-button-label-padding: 0 $fluent-main-fa-button-horizontal-padding 0 ds.$spacing-40;
 }

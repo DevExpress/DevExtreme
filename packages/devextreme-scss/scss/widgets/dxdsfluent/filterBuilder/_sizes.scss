@@ -1,4 +1,5 @@
 @use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -10,20 +11,20 @@ $fluent-filterbuilder-treeview-toggle-left: null !default;
 $fluent-filterbuilder-treeview-item-min-heigth: null !default;
 
 @if $size == "default" {
-  $fluent-filterbuilder-icon-padding: 8px !default;
-  $fluent-filterbuilder-filled-editor-padding: 13px 12px !default;
+  $fluent-filterbuilder-icon-padding: ds.$spacing-80 !default;
+  $fluent-filterbuilder-filled-editor-padding: ds.$spacing-130 ds.$spacing-120 !default;
 
-  $fluent-filterbuilder-treeview-item-left-padding: 12px !default;
-  $fluent-filterbuilder-treeview-item-padding: 6px 12px 6px $fluent-filterbuilder-treeview-item-left-padding !default;
-  $fluent-filterbuilder-treeview-toggle-left: 16px !default;
-  $fluent-filterbuilder-treeview-item-min-heigth: 32px !default;
+  $fluent-filterbuilder-treeview-item-left-padding: ds.$spacing-120 !default;
+  $fluent-filterbuilder-treeview-item-padding: ds.$spacing-60 ds.$spacing-120 ds.$spacing-60 $fluent-filterbuilder-treeview-item-left-padding !default;
+  $fluent-filterbuilder-treeview-toggle-left: ds.$spacing-160 !default;
+  $fluent-filterbuilder-treeview-item-min-heigth: ds.$spacing-320 !default;
 }
 
 @else if $size == "compact" {
-  $fluent-filterbuilder-icon-padding: 4px !default;
-  $fluent-filterbuilder-filled-editor-padding: 8px 8px !default;
-  $fluent-filterbuilder-treeview-item-left-padding: 4px !default;
-  $fluent-filterbuilder-treeview-item-padding: 4px 12px 4px $fluent-filterbuilder-treeview-item-left-padding !default;
+  $fluent-filterbuilder-icon-padding: ds.$spacing-40 !default;
+  $fluent-filterbuilder-filled-editor-padding: ds.$spacing-80 ds.$spacing-80 !default;
+  $fluent-filterbuilder-treeview-item-left-padding: ds.$spacing-40 !default;
+  $fluent-filterbuilder-treeview-item-padding: ds.$spacing-40 ds.$spacing-120 ds.$spacing-40 $fluent-filterbuilder-treeview-item-left-padding !default;
   $fluent-filterbuilder-treeview-toggle-left: 0 !default;
-  $fluent-filterbuilder-treeview-item-min-heigth: 24px !default;
+  $fluent-filterbuilder-treeview-item-min-heigth: ds.$spacing-240 !default;
 }

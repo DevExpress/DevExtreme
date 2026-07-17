@@ -20,8 +20,8 @@
 .dx-textarea {
   &.dx-editor-underlined {
     .dx-texteditor-input {
-      padding-top: $fluent-standard-texteditor-input-top-padding + 1;
-      padding-bottom: $fluent-standard-texteditor-input-bottom-padding + 1;
+      padding-top: calc(#{$fluent-standard-texteditor-input-top-padding} + 1px);
+      padding-bottom: calc(#{$fluent-standard-texteditor-input-bottom-padding} + 1px);
     }
 
     &.dx-texteditor-with-label:not(.dx-texteditor-label-outside),

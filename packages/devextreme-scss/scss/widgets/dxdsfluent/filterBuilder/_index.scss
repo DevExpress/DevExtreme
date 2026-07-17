@@ -100,7 +100,7 @@
   .dx-rtl {
     .dx-treeview-node {
       > .dx-treeview-item {
-        padding-right: $fluent-filterbuilder-treeview-item-left-padding * 2;
+        padding-right: calc(#{$fluent-filterbuilder-treeview-item-left-padding} * 2);
       }
 
       &.dx-treeview-node-is-leaf > .dx-treeview-item {

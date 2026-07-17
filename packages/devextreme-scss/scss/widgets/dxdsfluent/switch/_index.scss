@@ -46,7 +46,7 @@ $fluent-switch-shadow: none;
   $switch-border-color-disabled,
 );
 @include dx-switch-rtl(
-  $switch-handle-height - $switch-handle-margin,
+  calc(#{$switch-handle-height} - #{$switch-handle-margin}),
   $fluent-switch-shadow-blur-radius,
   $fluent-switch-container-adjustment,
 );

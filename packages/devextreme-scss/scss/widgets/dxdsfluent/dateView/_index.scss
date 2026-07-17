@@ -9,7 +9,7 @@
 // adduse
 @use "../scrollable";
 
-$fluent-dateview-roller-padding: math.div($fluent-dateview-roller-height - $fluent-dateview-roller-item-height, 2);
+$fluent-dateview-roller-padding: calc((#{$fluent-dateview-roller-height} - #{$fluent-dateview-roller-item-height}) / 2);
 
 .dx-dateview-rollers {
   width: auto;
@@ -109,7 +109,7 @@ $fluent-dateview-roller-padding: math.div($fluent-dateview-roller-height - $flue
   }
 
   &::before {
-    top: -$fluent-dateview-roller-padding;
+    top: calc(-1 * #{$fluent-dateview-roller-padding});
 
     @include gradient-linear($dateview-shadow-up);
   }

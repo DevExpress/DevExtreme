@@ -1,28 +1,29 @@
 @use "../sizes" as *;
 @use "colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$fluent-checkbox-icon-font-size: 16px !default;
+$fluent-checkbox-icon-font-size: ds.$font-size-160 !default;
 
-$fluent-checkbox-border-width: 1px !default;
-$fluent-checkbox-icon-border-radius: 2px !default;
+$fluent-checkbox-border-width: ds.$border-width-10 !default;
+$fluent-checkbox-icon-border-radius: ds.$border-radius-20 !default;
 
 $fluent-checkbox-arrow-icon-size: 1em !default;
 $fluent-checkbox-arrow-font-size: 0.75em !default;
 $fluent-checkbox-indeterminate-icon-height: 0.5em !default;
 $fluent-checkbox-indeterminate-icon-width: 0.5em !default;
-$fluent-checkbox-indeterminate-icon-border-radius: 2px !default;
+$fluent-checkbox-indeterminate-icon-border-radius: ds.$border-radius-20 !default;
 
 $fluent-checkbox-text-padding-start: null !default;
 $fluent-checkbox-text-padding-end: null !default;
 
 @if $size == "default" {
-  $fluent-checkbox-text-padding-start: 12px !default;
-  $fluent-checkbox-text-padding-end: 8px !default;
+  $fluent-checkbox-text-padding-start: ds.$spacing-120 !default;
+  $fluent-checkbox-text-padding-end: ds.$spacing-80 !default;
 }
 
 @else if $size == "compact" {
-  $fluent-checkbox-text-padding-start: 8px !default;
-  $fluent-checkbox-text-padding-end: 6px !default;
+  $fluent-checkbox-text-padding-start: ds.$spacing-80 !default;
+  $fluent-checkbox-text-padding-end: ds.$spacing-60 !default;
 }

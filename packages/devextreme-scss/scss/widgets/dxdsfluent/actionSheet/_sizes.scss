@@ -1,6 +1,7 @@
 @use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$fluent-actionsheet-item-margin-value: 12px;
+$fluent-actionsheet-item-margin-value: ds.$spacing-120;
 $fluent-actionsheet-item-margin: 0 0 $fluent-actionsheet-item-margin-value 0 !default;
