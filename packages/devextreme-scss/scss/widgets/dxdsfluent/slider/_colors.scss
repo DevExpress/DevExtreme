@@ -1,7 +1,4 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
-@use "../color" as extcolor;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -9,30 +6,30 @@
 * $name 10. Bar background color
 * $type color
 */
-$fluent-slider-bar-bg: $base-border-color-accessible !default;
+$fluent-slider-bar-bg: ds.$color-border-neutral-accessible-rest !default;
 
 /**
 * $name 20. Selected range background color
 * $type color
 */
-$slider-accent-color: $base-accent !default;
-$slider-accent-color-hover: $base-accent-hover !default;
-$slider-accent-color-focused: $base-accent-active !default;
+$slider-accent-color: ds.$color-surface-primary-default-rest !default;
+$slider-accent-color-hover: ds.$color-surface-primary-default-hovered !default;
+$slider-accent-color-focused: ds.$color-surface-primary-default-active !default;
 
-$slider-invalid-color: $base-invalid-color !default;
-$slider-invalid-color-hover: $base-invalid-color-hover !default;
-$slider-invalid-color-focused: $base-invalid-color-selected !default;
+$slider-invalid-color: ds.$color-border-danger-default-rest !default;
+$slider-invalid-color-hover: ds.$color-border-danger-default-hovered !default;
+$slider-invalid-color-focused: ds.$color-border-danger-default-hovered !default;
 
-$fluent-slider-disabled-bg: $base-foreground-disabled !default;
-$fluent-slider-bar-disabled-bg: $base-background-disabled !default;
+$fluent-slider-disabled-bg: ds.$color-content-neutral-default-disabled !default;
+$fluent-slider-bar-disabled-bg: ds.$color-surface-neutral-default-disabled !default;
 
 /**
 * $name 30. Slider tooltip text color
 * $type color
 */
-$fluent-slider-tooltip-color: $base-text-color !default;
+$fluent-slider-tooltip-color: ds.$color-content-neutral-default-rest !default;
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$slider-border-color: $base-border-color !default;
-$slider-element-bg: $base-element-bg !default;
-$slider-theme-invalid-color: $base-invalid-color !default;
+$slider-border-color: ds.$color-border-neutral-default-rest !default;
+$slider-element-bg: ds.$color-surface-neutral-default-rest !default;
+$slider-theme-invalid-color: ds.$color-border-danger-default-rest !default;

@@ -1,8 +1,5 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$radiobutton-foreground-disabled: $base-foreground-disabled !default;
+$radiobutton-foreground-disabled: ds.$color-content-neutral-default-disabled !default;

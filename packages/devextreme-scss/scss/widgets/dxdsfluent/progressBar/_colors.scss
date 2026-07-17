@@ -1,7 +1,4 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
-@use "../color" as extcolor;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -9,17 +6,17 @@
 * $name 10. Bar background color
 * $type color
 */
-$progressbar-bg: null !default;
+$progressbar-bg: ds.$progress-bar-progress-line-color-track-rest !default;
 
 /**
 * $name 20. Selected range background color
 * $type color
 */
-$progressbar-range-bg: $base-accent !default;
-$progressbar-container-disabled-bg: $base-background-disabled !default;
-$progressbar-range-disabled-bg: $base-foreground-disabled !default;
-$progressbar-range-indeterminate-color: $base-accent !default;
-$progressbar-range-invalid-color: $base-invalid-color !default;
+$progressbar-range-bg: ds.$progress-bar-progress-line-color-indicator-rest !default;
+$progressbar-container-disabled-bg: ds.$progress-bar-progress-line-color-track-disabled !default;
+$progressbar-range-disabled-bg: ds.$progress-bar-progress-line-color-indicator-disabled !default;
+$progressbar-range-indeterminate-color: ds.$progress-bar-progress-line-color-indicator-indeterminate-gradient-center !default;
+$progressbar-range-invalid-color: ds.$color-surface-danger-default-rest !default;
 
 $progressbar-interdeterminate-state-gradient: -90deg, transparent 5%, $progressbar-range-indeterminate-color, transparent 95%;
 $progressbar-disabled-interdeterminate-state-gradient: -90deg, transparent 5%, $progressbar-range-disabled-bg, transparent 95%;
@@ -29,15 +26,6 @@ $progressbar-invalid-interdeterminate-state-gradient: -90deg, transparent 5%, $p
 * $name 30. Label color
 * $type color
 */
-$progressbar-label-color: $base-text-color !default;
+$progressbar-label-color: ds.$color-content-neutral-default-rest !default;
 
-@if $mode == "light" {
-  $progressbar-bg: color.adjust($base-typography-bg, $lightness: -7.84%, $space: hsl) !default;
-}
-
-@if $mode == "dark" {
-  $progressbar-bg: color.adjust($base-typography-bg, $lightness: 7.84%, $space: hsl) !default;
-}
-
-// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$progressbar-foreground-disabled: $base-foreground-disabled !default;
+$progressbar-foreground-disabled: ds.$color-content-neutral-default-disabled !default;

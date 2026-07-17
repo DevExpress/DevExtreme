@@ -1,6 +1,4 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -8,5 +6,5 @@
 * $name 10. Label text color
 * $type color
 */
-$fieldset-field-label-color: $base-text-color !default;
-$fieldset-field-value-invalid-color: $base-invalid-color !default;
+$fieldset-field-label-color: ds.$color-content-neutral-default-rest !default;
+$fieldset-field-value-invalid-color: ds.$color-border-danger-default-rest !default;

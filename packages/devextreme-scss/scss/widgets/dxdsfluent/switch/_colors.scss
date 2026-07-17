@@ -1,47 +1,45 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$switch-accent-color: $base-accent !default;
-$switch-accent-color-hover: $base-accent-hover !default;
-$switch-accent-color-focused: $base-accent-active !default;
+$switch-accent-color: ds.$switch-color-checked-bg-rest !default;
+$switch-accent-color-hover: ds.$switch-color-checked-bg-hovered !default;
+$switch-accent-color-focused: ds.$switch-color-checked-bg-active !default;
 
 /**
 * $name 20. Track 'OFF' background color
 * $type color
 */
-$switch-bg: transparent !default;
+$switch-bg: ds.$switch-color-unchecked-bg-rest !default;
 
 /**
 * $name 30. Handle 'OFF' background color
 * $type color
 */
-$switch-handle-off-bg: $base-border-color-accessible !default;
+$switch-handle-off-bg: ds.$switch-color-unchecked-trigger-rest !default;
 
 /**
 * $name 40. Track 'ON' background color
 * $type color
 */
-$switch-on-bg: $base-accent !default;
+$switch-on-bg: ds.$switch-color-checked-bg-rest !default;
 
 /**
 * $name 50. Handle 'ON' background color
 * $type color
 */
-$switch-handle-on-bg: $base-element-bg !default;
+$switch-handle-on-bg: ds.$switch-color-checked-trigger-rest !default;
 $switch-handle-border-radius: 50% !default;
-$switch-on-disabled-bg: $base-background-disabled !default;
-$switch-handle-disabled-bg: $base-foreground-disabled !default;
-$switch-border-color-disabled: $base-border-color-disabled !default;
-$switch-off-border-color: $base-border-color-accessible !default;
-$switch-off-border-hover-color: $base-border-color-accessible-hover !default;
-$switch-off-border-active-color: $base-border-color-accessible-focused !default;
+$switch-on-disabled-bg: ds.$switch-color-checked-bg-disable !default;
+$switch-handle-disabled-bg: ds.$switch-color-unchecked-trigger-disabled !default;
+$switch-border-color-disabled: ds.$switch-color-unchecked-border-disabled !default;
+$switch-off-border-color: ds.$switch-color-unchecked-border-rest !default;
+$switch-off-border-hover-color: ds.$switch-color-unchecked-border-hovered !default;
+$switch-off-border-active-color: ds.$switch-color-unchecked-border-active !default;
 
-$switch-invalid-color: $base-invalid-color !default;
-$switch-invalid-color-hover: $base-invalid-color-hover !default;
-$switch-invalid-color-focused: $base-invalid-color-selected !default;
+$switch-invalid-color: ds.$color-border-danger-default-rest !default;
+$switch-invalid-color-hover: ds.$color-border-danger-default-hovered !default;
+$switch-invalid-color-focused: ds.$color-border-danger-default-hovered !default;
 
-// Color computations hoisted from style files (phase 0.5 layer normalization)
-$switch-handle-on-shadow-color: color.change($switch-handle-on-bg, $alpha: 0.1) !default;
+// Subtle ring around the ON handle; no switch shadow role — relative-color bridge over the handle token (see DIVERGENCES.md)
+$switch-handle-on-shadow-color: rgb(from #{ds.$switch-color-checked-trigger-rest} r g b / 0.1) !default;
