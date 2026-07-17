@@ -1,6 +1,5 @@
 @use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/gantt";
@@ -16,15 +15,15 @@ $gantt-successor-background-color: white;
 
 .dx-gantt {
   border: 1px solid;
-  border-color: $base-border-color;
+  border-color: $gantt-border-color;
 
   .dx-gantt-toolbar-wrapper {
     padding: 5px;
     border-bottom: 1px solid;
-    border-bottom-color: $base-border-color;
+    border-bottom-color: $gantt-border-color;
 
     .dx-gantt-toolbar-separator {
-      border-left-color: $base-border-color;
+      border-left-color: $gantt-border-color;
     }
 
     .dx-toolbar .dx-toolbar-items-container {
@@ -33,7 +32,7 @@ $gantt-successor-background-color: white;
   }
 
   .dx-gantt-view {
-    background-color: $base-bg;
+    background-color: $gantt-bg;
   }
 
   .dx-header-row,
@@ -49,8 +48,8 @@ $gantt-successor-background-color: white;
     .dx-gantt-tsa,
     .dx-gantt-hb,
     .dx-gantt-vb {
-      border-color: $base-border-color;
-      background-color: $base-bg;
+      border-color: $gantt-border-color;
+      background-color: $gantt-bg;
     }
   }
 
@@ -62,17 +61,17 @@ $gantt-successor-background-color: white;
   .dx-gantt-tsac,
   .dx-gantt-tsa {
     border-bottom: 1px solid;
-    border-bottom-color: $base-border-color;
+    border-bottom-color: $gantt-border-color;
   }
 
   .dx-gantt-hb {
     border-top: 1px solid;
-    border-top-color: $base-border-color;
+    border-top-color: $gantt-border-color;
   }
 
   .dx-gantt-vb {
     border-left: 1px solid;
-    border-left-color: $base-border-color;
+    border-left-color: $gantt-border-color;
   }
 
   .dx-gantt-taskWrapper {
@@ -85,7 +84,7 @@ $gantt-successor-background-color: white;
     }
 
     .dx-gantt-task {
-      background-color: $base-accent;
+      background-color: $gantt-accent;
       border-radius: $base-border-radius;
 
       .dx-gantt-tPrg {
@@ -183,7 +182,7 @@ $gantt-successor-background-color: white;
   }
 
   .dx-gantt-milestone {
-    background-color: $base-text-color;
+    background-color: $gantt-text-color;
     width: $gantt-milestone-size;
     height: $gantt-milestone-size;
   }
@@ -195,18 +194,18 @@ $gantt-successor-background-color: white;
     .dx-gantt-task-edit-frame {
       height: 100%;
       border: 1px solid;
-      border-color: color.adjust($base-accent, $lightness: -10%, $space: hsl);
+      border-color: $gantt-accent-border-color;
       border-radius: $base-border-radius;
 
       .dx-gantt-task-edit-progress {
-        border-color: transparent transparent color.adjust($base-accent, $lightness: -10%, $space: hsl) transparent;
+        border-color: transparent transparent $gantt-accent-border-color transparent;
 
         &::before {
           width: 12px;
           height: 6px;
           bottom: -14px;
           border: 1px solid;
-          border-color: color.adjust($base-accent, $lightness: -10%, $space: hsl);
+          border-color: $gantt-accent-border-color;
         }
       }
 
@@ -230,7 +229,7 @@ $gantt-successor-background-color: white;
   .dx-gantt-task-edit-successor-dependency-l {
     background: $gantt-successor-background-color;
     border: 1px solid;
-    border-color: color.adjust($base-accent, $lightness: -10%, $space: hsl);
+    border-color: $gantt-accent-border-color;
     width: $gantt-dependency-successor-size;
     height: $gantt-dependency-successor-size;
     margin: auto;
@@ -249,7 +248,7 @@ $gantt-successor-background-color: white;
   }
 
   .dx-gantt-task-edit-dependency-line {
-    background-color: $base-text-color;
+    background-color: $gantt-text-color;
   }
 
   .dx-gantt-sel {
@@ -257,29 +256,29 @@ $gantt-successor-background-color: white;
   }
 
   .dx-gantt-conn-v {
-    border-left-color: $base-text-color;
+    border-left-color: $gantt-text-color;
   }
 
   .dx-gantt-conn-h {
-    border-top-color: $base-text-color;
+    border-top-color: $gantt-text-color;
   }
 
   .dx-gantt-arrow {
     border: 5px solid;
-    border-color: $base-text-color;
+    border-color: $gantt-text-color;
   }
 
   .dx-gantt-tm {
     border-left: 1px dashed;
-    border-left-color: $base-accent;
+    border-left-color: $gantt-accent;
   }
 
   .dx-gantt-ti {
     border-left: 1px dashed;
-    border-left-color: $base-accent;
+    border-left-color: $gantt-accent;
     border-right: 1px dashed;
-    border-right-color: $base-accent;
-    background-color: color.change($base-accent, $alpha: 0.15);
+    border-right-color: $gantt-accent;
+    background-color: $gantt-accent-light-bg;
   }
 
   .dx-gantt-altRow,

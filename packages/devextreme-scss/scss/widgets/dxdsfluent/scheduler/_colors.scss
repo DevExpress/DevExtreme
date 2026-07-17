@@ -126,3 +126,9 @@ $header-panel-cell-date: null !default;
 
 $scheduler-first-month-cell-background-color: color.adjust($scheduler-appointment-base-color, $alpha: -0.85) !default;
 $scheduler-appointment-focus-color: $scheduler-appointment-text-color;
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$scheduler-accent: $base-accent !default;
+$scheduler-bg: $base-bg !default;
+$scheduler-border-color: $base-border-color !default;
+$scheduler-inverted-text-color: $base-inverted-text-color !default;

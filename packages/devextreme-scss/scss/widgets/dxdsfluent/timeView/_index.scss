@@ -1,7 +1,6 @@
 @use "sass:math";
 @use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../textEditor/sizes" as *;
@@ -10,7 +9,7 @@
 
 // adduse
 
-@include clock-action-icons-mixin($base-inverted-bg, $base-typography-bg, $clock-digits-color);
+@include clock-action-icons-mixin($timeview-inverted-bg, $timeview-typography-bg, $clock-digits-color);
 
 .dx-timeview {
   height: auto;

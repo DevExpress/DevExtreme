@@ -7,3 +7,9 @@
 
 $lookup-icon-color: $dropdowneditor-icon-color !default;
 $lookup-icon-color-active: $dropdowneditor-icon-active-color !default;
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$lookup-shadow-color: $base-shadow-color !default;
+
+// Color computations hoisted from style files (phase 0.5 layer normalization)
+$lookup-shadow: 0 0 2px 0 color.change($lookup-shadow-color, $alpha: 0.12) !default;

@@ -77,3 +77,8 @@ $list-group-color: $base-text-color !default;
 */
 $list-expanded-group-color: $list-group-color !default;
 $list-item-selected-color: $list-normal-color !default;
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$list-border-color-disabled: $base-border-color-disabled !default;
+$list-foreground-disabled: $base-foreground-disabled !default;
+$list-inverted-text-color: $base-inverted-text-color !default;

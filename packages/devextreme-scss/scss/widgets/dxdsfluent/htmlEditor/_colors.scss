@@ -15,3 +15,14 @@ $htmleditor-mention-bg: $base-selected-bg !default;
 $htmleditor-table-border-color: $base-border-color !default;
 $htmleditor-fileuploader-input-wrapper-border-color: $base-border-color !default;
 $htmleditor-fileuploader-input-wrapper-bg-color: $base-typography-bg !default;
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$htmleditor-accent: $base-accent !default;
+$htmleditor-bg: $base-bg !default;
+$htmleditor-text-color: $base-text-color !default;
+
+// Color computations hoisted from style files (phase 0.5 layer normalization)
+$htmleditor-cover-bg: color.change($htmleditor-bg, $alpha: 0.4) !default;
+$htmleditor-faded-text-color: color.change($htmleditor-text-color, $alpha: 0.8) !default;
+$htmleditor-uploader-cover-bg: color.change($htmleditor-border-color, $alpha: 0.8) !default;
+$htmleditor-highlighted-row-bg: color.change($htmleditor-accent, $alpha: 0.5) !default;

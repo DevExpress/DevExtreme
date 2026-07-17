@@ -1,7 +1,6 @@
 @use "sass:math";
 @use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
@@ -91,7 +90,7 @@ $fluent-dateview-roller-padding: math.div($fluent-dateview-roller-height - $flue
 
 .dx-dateview-item-selected {
   font-size: 1.8em;
-  color: $base-accent;
+  color: $dateview-accent;
 }
 
 .dx-dateview-item-selected-frame {

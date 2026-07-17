@@ -1,7 +1,6 @@
 @use "sass:color";
 @use "sass:selector";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/tabPanel";
@@ -28,7 +27,7 @@
   > .dx-tabpanel-tabs {
     .dx-tabs {
       border-bottom: 1px solid;
-      border-bottom-color: $base-border-color;
+      border-bottom-color: $tabpanel-border-color;
 
       @at-root #{selector.append(".dx-empty-collection", &)} {
         border-bottom: none;
@@ -41,7 +40,7 @@
   > .dx-tabpanel-tabs {
     .dx-tabs {
       border-top: 1px solid;
-      border-top-color: $base-border-color;
+      border-top-color: $tabpanel-border-color;
 
       @at-root #{selector.append(".dx-empty-collection", &)} {
         border-top: none;
@@ -54,7 +53,7 @@
   > .dx-tabpanel-tabs {
     .dx-tabs {
       border-right: 1px solid;
-      border-right-color: $base-border-color;
+      border-right-color: $tabpanel-border-color;
 
       @at-root #{selector.append(".dx-empty-collection", &)} {
         border-right: none;
@@ -67,7 +66,7 @@
   > .dx-tabpanel-tabs {
     .dx-tabs {
       border-left: 1px solid;
-      border-left-color: $base-border-color;
+      border-left-color: $tabpanel-border-color;
 
       @at-root #{selector.append(".dx-empty-collection", &)} {
         border-left: none;

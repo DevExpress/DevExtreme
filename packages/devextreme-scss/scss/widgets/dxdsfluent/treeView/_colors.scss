@@ -44,3 +44,5 @@ $treeview-checkbox-accent-color-focused: null !default;
   $treeview-checkbox-accent-color-focused: color.change($base-accent, $lightness: 84%, $space: hsl) !default;
 }
 
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$treeview-text-color: $base-text-color !default;

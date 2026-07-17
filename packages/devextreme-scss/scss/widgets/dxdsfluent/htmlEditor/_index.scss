@@ -1,7 +1,6 @@
 @use "sass:math";
 @use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../button/sizes" as *;
@@ -49,7 +48,7 @@
       left: 1px;
       right: 1px;
       z-index: 2;
-      background-color: color.change($base-bg, $alpha: 0.4);
+      background-color: $htmleditor-cover-bg;
       content: '';
       pointer-events: none;
     }
@@ -133,11 +132,11 @@
 
   code,
   .ql-code-block-container { // stylelint-disable-line selector-class-pattern
-    color: color.change($base-text-color, $alpha: 0.8);
+    color: $htmleditor-faded-text-color;
   }
 
   blockquote {
-    color: color.change($base-text-color, $alpha: 0.8);
+    color: $htmleditor-faded-text-color;
     border-inline-start-color: $htmleditor-toolbar-border-color;
   }
 
@@ -278,7 +277,7 @@
     }
 
     .dx-fileuploader-content {
-      background-color: color.change($htmleditor-border-color, $alpha: 0.8);
+      background-color: $htmleditor-uploader-cover-bg;
     }
   }
 }
@@ -298,7 +297,7 @@
 .dx-table-resize-frame {
   > .dx-draggable-dragging + .dx-htmleditor-highlighted-column,
   > .dx-draggable-dragging + .dx-htmleditor-highlighted-row {
-    background-color: color.change($base-accent, $alpha: 0.5);
+    background-color: $htmleditor-highlighted-row-bg;
   }
 }
 

@@ -33,3 +33,9 @@ $menu-item-focused-selected-bg: null !default;
 @if $mode == "dark" {
   $menu-item-focused-selected-bg: color.adjust($base-bg, $lightness: 18.04%, $space: hsl) !default;
 }
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$menu-shadow-color: $base-shadow-color !default;
+
+// Color computations hoisted from style files (phase 0.5 layer normalization)
+$menu-focused-shadow: 0 3px 10px color.change($menu-shadow-color, $alpha: 0.1) !default;

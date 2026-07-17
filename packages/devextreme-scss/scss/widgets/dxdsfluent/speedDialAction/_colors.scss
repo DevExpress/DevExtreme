@@ -14,3 +14,8 @@ $speed-dial-action-shading-color: $overlay-shader-bg !default;
 $speed-dial-action-bg: $button-normal-bg !default;
 $speed-dial-action-hover-bg: $button-normal-hover-bg !default;
 $speed-dial-action-active-bg: $button-normal-active-bg !default;
+
+// The shared base mixin derives hover/active via color.adjust() from this
+// value, so it must stay a Sass color (theme layer) until the mixin accepts
+// ready-made hover/active arguments — see TOKENS_MIGRATION.md.
+$speed-dial-action-main-bg: $base-accent !default;

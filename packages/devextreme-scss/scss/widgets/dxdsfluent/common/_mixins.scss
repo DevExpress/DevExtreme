@@ -1,24 +1,23 @@
 @use "sass:math";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
 @use "../../base/validation" as *;
 @use "../list/sizes" as *;
 
-$badge-invalid-bg: $base-invalid-color;
+$badge-invalid-bg: $common-invalid-color;
 
 @mixin dx-base-typography() {
   @include dx-base-typography-mixin(
-      $typography-color,
+      $common-typography-color,
       $fluent-base-font-size,
-      $base-font-family,
+      $common-font-family,
       $fluent-line-height
     );
 }
 
-@mixin disabled-widget($opacity: $base-disabled-opacity) {
+@mixin disabled-widget($opacity: $common-disabled-opacity) {
   @include disabled-widget-mixin($opacity);
 }
 
@@ -42,7 +41,7 @@ $badge-invalid-bg: $base-invalid-color;
   font-size: $fluent-base-font-size;
   font-weight: 500;
   background-color: $badge-invalid-bg;
-  color: $base-inverted-text-color;
+  color: $common-inverted-text-color;
   content: '!';
   border-radius: 50%;
 }
@@ -53,7 +52,7 @@ $badge-invalid-bg: $base-invalid-color;
   font-size: $fluent-valid-badge-font-size;
   font-weight: bold;
   font-family: 'DXIcons', sans-serif;
-  color: $base-success;
+  color: $common-success;
   content: '\f005';
 
   @include validation-badge-animation();

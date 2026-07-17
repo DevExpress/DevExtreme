@@ -4,3 +4,9 @@
 
 // adduse
 
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$card-bg: $base-bg !default;
+$card-shadow-color: $base-shadow-color !default;
+
+// Color computations hoisted from style files (phase 0.5 layer normalization)
+$card-shadow: 0 1px 3px color.change($card-shadow-color, $alpha: 0.12), 0 1px 2px color.change($card-shadow-color, $alpha: 0.24) !default;

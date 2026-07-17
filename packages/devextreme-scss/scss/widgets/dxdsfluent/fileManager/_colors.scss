@@ -32,3 +32,10 @@ $filemanager-progressbox-shadow-color: null !default;
   $filemanager-progressbox-shadow-color: color.change($base-shadow-color, $alpha: 0.3) !default;
 }
 
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$filemanager-accent: $base-accent !default;
+$filemanager-bg: $base-bg !default;
+$filemanager-danger: $base-danger !default;
+$filemanager-inverted-text-color: $base-inverted-text-color !default;
+$filemanager-success: $base-success !default;
+$filemanager-text-color: $base-text-color !default;

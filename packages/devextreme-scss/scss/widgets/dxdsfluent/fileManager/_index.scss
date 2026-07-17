@@ -1,6 +1,5 @@
 @use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/fileManager";
@@ -15,7 +14,7 @@
 
   .dx-filemanager-notification-common {
     border-color: $filemanager-border-color;
-    color: $base-danger;
+    color: $filemanager-danger;
   }
 
   .dx-drawer-shrink .dx-filemanager-progress-panel {
@@ -23,7 +22,7 @@
   }
 
   .dx-filemanager-progress-panel {
-    background-color: $base-bg;
+    background-color: $filemanager-bg;
 
     .dx-filemanager-progress-panel-title {
       padding-top: $filemanager-progress-panel-title-padding;
@@ -38,8 +37,8 @@
   }
 
   .dx-filemanager-progress-box-error {
-    color: $base-inverted-text-color;
-    background: $base-danger;
+    color: $filemanager-inverted-text-color;
+    background: $filemanager-danger;
   }
 
   .dx-filemanager-progress-box .dx-filemanager-progress-box-close-button {
@@ -48,7 +47,7 @@
 
   .dx-filemanager-toolbar {
     padding: 0 10px;
-    background: $base-bg;
+    background: $filemanager-bg;
     min-height: $filemanager-toolbar-height;
 
     &.dx-filemanager-file-toolbar,
@@ -97,7 +96,7 @@
 
   .dx-filemanager-fileuploader-dropzone-placeholder {
     border: 2px solid;
-    border-color: $base-accent;
+    border-color: $filemanager-accent;
   }
 
   .dx-filemanager-container {
@@ -167,7 +166,7 @@
   }
 
   .dx-filemanager-files-view {
-    background: $base-bg;
+    background: $filemanager-bg;
 
     &.dx-filemanager-details {
       .dx-filemanager-details-item-thumbnail {
@@ -259,4 +258,4 @@
   margin-left: $filemanager-contextmenu-text-item-left-margin;
 }
 
-@include filemanager-icons-mixin($base-text-color, $base-success, $base-inverted-text-color, $base-danger, $base-inverted-text-color, $filemanager-large-icon-size);
+@include filemanager-icons-mixin($filemanager-text-color, $filemanager-success, $filemanager-inverted-text-color, $filemanager-danger, $filemanager-inverted-text-color, $filemanager-large-icon-size);

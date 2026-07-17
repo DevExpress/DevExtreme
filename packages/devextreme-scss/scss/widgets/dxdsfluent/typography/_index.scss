@@ -1,6 +1,5 @@
 @use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../common/mixins" as *;
@@ -9,7 +8,7 @@
 // adduse
 
 .dx-theme-dxdsfluent-typography {
-  background-color: $base-typography-bg;
+  background-color: $typography-typography-bg;
 
   @include dx-base-typography();
 
@@ -65,6 +64,6 @@
   }
 
   a {
-    color: $typography-link-color;
+    color: $typography-typography-link-color;
   }
 }

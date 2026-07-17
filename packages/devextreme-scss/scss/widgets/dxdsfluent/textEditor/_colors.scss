@@ -151,3 +151,7 @@ $texteditor-label-color-focused: $base-accent;
   --dx-texteditor-color-text: #{$texteditor-color};
   --dx-texteditor-color-label: #{$texteditor-label-color};
 }
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$texteditor-foreground-disabled: $base-foreground-disabled !default;
+$texteditor-invalid-color: $base-invalid-color !default;

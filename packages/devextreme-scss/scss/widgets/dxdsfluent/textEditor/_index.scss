@@ -1,7 +1,6 @@
 @use "sass:math";
 @use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
@@ -311,7 +310,7 @@ $fluent-editor-border-width: 1px;
 
     &.dx-invalid {
       .dx-texteditor-label {
-        color: $base-invalid-color;
+        color: $texteditor-invalid-color;
       }
     }
   }
@@ -323,7 +322,7 @@ $fluent-editor-border-width: 1px;
 
     &.dx-invalid {
       .dx-texteditor-label {
-        color: $base-invalid-color;
+        color: $texteditor-invalid-color;
       }
     }
   }
@@ -417,7 +416,7 @@ $fluent-editor-border-width: 1px;
 
   &.dx-state-disabled {
     .dx-icon-clear {
-      color: $base-foreground-disabled;
+      color: $texteditor-foreground-disabled;
     }
   }
 
@@ -492,7 +491,7 @@ $fluent-editor-border-width: 1px;
   }
 
   .dx-invalid & {
-    color: $base-invalid-color;
+    color: $texteditor-invalid-color;
   }
 }
 
