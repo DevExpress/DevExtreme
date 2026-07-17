@@ -149,6 +149,8 @@ pnpm nx build devextreme -c=testing       # CI testing configuration
 pnpm nx build:transpile devextreme        # transpile only (babel-transform / build-typescript)
 pnpm nx build:transpile:watch devextreme  # transpile in watch mode (incremental JS + TS rebuild)
 pnpm nx transpile:tests devextreme        # transpile testing/**/*.js in place (replaces gulp transpile-tests)
+pnpm nx dev devextreme                    # build:dev, then start all dev watches (replaces gulp dev)
+pnpm nx dev-watch devextreme              # start all dev watches in parallel, skipping the initial build
 pnpm nx bundle:debug devextreme           # debug bundle (Webpack via nx-infra-plugin)
 pnpm nx bundle:prod devextreme            # production bundle
 pnpm nx build:localization devextreme     # localization files only
@@ -199,7 +201,7 @@ For the full executor catalogue, conventions, and refactoring guidance, see @pac
 
 ## Build Pipeline
 
-clean (`devextreme-nx-infra-plugin:clean` preserving CSS and npm metadata) → localization → component generation (Renovation) → transpile (`babel-transform` for JS, `build-typescript` for TS) → bundle (Webpack via `devextreme-nx-infra-plugin:bundle`, debug + prod targets) → TypeScript declarations → SCSS compile (`devextreme-scss`) → npm package preparation. Task orchestration goes through Nx; cross-package builds (`all:build-dev`, `all:build`) live in the `workflows` package. The `gulpfile.js` clean task is a thin delegate to `pnpm nx clean:artifacts devextreme`. Pre-commit hook runs `lint-staged` (stylelint + eslint --quiet).
+clean (`devextreme-nx-infra-plugin:clean` preserving CSS and npm metadata) → localization → component generation (Renovation) → transpile (`babel-transform` for JS, `build-typescript` for TS) → bundle (Webpack via `devextreme-nx-infra-plugin:bundle`, debug + prod targets) → TypeScript declarations → SCSS compile (`devextreme-scss`) → npm package preparation. Task orchestration goes through Nx; cross-package builds (`all:build-dev`, `all:build`) live in the `workflows` package. The `gulpfile.js` clean task is a thin delegate to `pnpm nx clean:artifacts devextreme`. Pre-commit hook runs `lint-staged` (stylelint + eslint --quiet). The developer watch workflow (`pnpm run dev` / `dev:watch`) is now native composite Nx targets (`dev`, `dev-watch`) rather than gulp orchestrators — see the "Migrated gulp tasks" table in @packages/nx-infra-plugin/AGENTS.md.
 
 ## Conventions
 

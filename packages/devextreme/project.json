@@ -1776,13 +1776,29 @@
       "cache": true
     },
     "dev": {
-      "executor": "nx:run-script",
-      "options": {
-        "script": "dev"
-      },
+      "executor": "nx:run-commands",
+      "cache": false,
       "dependsOn": [
-        "^build"
-      ]
+        "build:dev"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm nx dev-watch devextreme"
+      }
+    },
+    "dev-watch": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "cwd": "{projectRoot}",
+        "parallel": true,
+        "commands": [
+          "pnpm nx build:transpile:watch devextreme",
+          "pnpm nx build:devextreme-bundler-config:watch devextreme",
+          "pnpm nx bundle:watch devextreme",
+          "pnpm nx test-env devextreme"
+        ]
+      }
     },
     "test-env": {
       "executor": "nx:run-commands",

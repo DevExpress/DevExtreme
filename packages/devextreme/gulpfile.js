@@ -26,12 +26,6 @@ gulp.task('js-bundles-debug', shell.task(
         : 'pnpm nx run devextreme:bundle:debug'
 ));
 
-gulp.task('js-bundles-watch', shell.task(
-    context.uglify
-        ? 'pnpm nx run devextreme:bundle:watch -c production'
-        : 'pnpm nx run devextreme:bundle:watch'
-));
-
 function getTranspileConfig() {
     if(env.TEST_CI) {
         return 'ci';
@@ -120,9 +114,9 @@ function createMiscBatch() {
     return gulp.parallel(tasks);
 }
 
-function createMainBatch(dev) {
+function createMainBatch() {
     const tasks = [];
-    if(!dev && !env.BUILD_TESTCAFE) {
+    if(!env.BUILD_TESTCAFE) {
         tasks.push('js-bundles-debug');
     }
     if(!env.TEST_CI || env.BUILD_TESTCAFE) {
@@ -132,8 +126,8 @@ function createMainBatch(dev) {
     return (callback) => multiProcess(tasks, callback, true);
 }
 
-function createDefaultBatch(dev) {
-    const tasks = dev ? [] : ['clean'];
+function createDefaultBatch() {
+    const tasks = ['clean'];
     tasks.push('localization');
     tasks.push('transpile');
 
@@ -141,8 +135,8 @@ function createDefaultBatch(dev) {
         tasks.push('state-manager-optimize');
     }
 
-    tasks.push(dev && !env.BUILD_TESTCAFE ? 'main-batch-dev' : 'main-batch');
-    if(!env.TEST_CI && !dev && !env.BUILD_TESTCAFE) {
+    tasks.push('main-batch');
+    if(!env.TEST_CI && !env.BUILD_TESTCAFE) {
         tasks.push('npm');
         tasks.push('check-license-notices');
     }
@@ -150,22 +144,6 @@ function createDefaultBatch(dev) {
 }
 
 gulp.task('misc-batch', createMiscBatch());
-gulp.task('main-batch', createMainBatch(false));
-gulp.task('main-batch-dev', createMainBatch(true));
+gulp.task('main-batch', createMainBatch());
 
 gulp.task('default', createDefaultBatch());
-gulp.task('default-dev', createDefaultBatch(true));
-
-gulp.task('test-env', shell.task('pnpm nx test-env devextreme'));
-
-gulp.task('dev-watch', gulp.parallel(
-    'transpile-watch',
-    'bundler-config-watch',
-    'js-bundles-watch',
-    'test-env'
-));
-
-gulp.task('dev', gulp.series(
-    'default-dev',
-    'dev-watch'
-));
