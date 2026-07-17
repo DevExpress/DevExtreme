@@ -599,8 +599,8 @@ jobs:
           echo "This is a persistent failure, not a flake - marking the job as failed."
           exit 1
         fi
-        if [ "$quarantined_failed" -gt 1 ]; then
-          echo "More than one QUARANTINED test failed - marking the job as failed."
+        if [ "$quarantined_failed" -gt 0 ]; then
+          echo "At least one QUARANTINED test failed - marking the job as failed."
           exit 1
         fi
 
@@ -660,6 +660,7 @@ jobs:
       with:
         name: compared-screenshots
         pattern: compared-screenshots-*
+        separate-directories: true
         delete-merged: true
 
     - name: Merge failed test artifacts
@@ -669,6 +670,7 @@ jobs:
       with:
         name: failed-tests
         pattern: failed-tests-*
+        separate-directories: true
         delete-merged: true
 
     - name: Merge flaky test reports
