@@ -11,11 +11,12 @@ import { DropDownEditorModel } from './__mock__/model/drop_down_editor';
 
 const FIELD_WIDTH = 200;
 
+const dropDownBoxes: DropDownBox[] = [];
+
 const createDropDownBox = (options: Partial<Properties> = {}): DropDownEditorModel => {
   const $element = $('<div>').appendTo(document.body);
 
-  // eslint-disable-next-line no-new
-  new DropDownBox($element.get(0) as HTMLElement, {
+  const instance = new DropDownBox($element.get(0) as HTMLElement, {
     dataSource: [{ id: 1, text: 'Item one' }],
     valueExpr: 'id',
     displayExpr: 'text',
@@ -23,6 +24,8 @@ const createDropDownBox = (options: Partial<Properties> = {}): DropDownEditorMod
     contentTemplate: (): dxElementWrapper => $('<div>').text('Hello world'),
     ...options,
   });
+
+  dropDownBoxes.push(instance);
 
   return new DropDownEditorModel($element.get(0) as HTMLElement);
 };
@@ -33,6 +36,8 @@ describe('DropDownBox', () => {
   });
 
   afterEach(() => {
+    dropDownBoxes.forEach((instance) => instance.dispose());
+    dropDownBoxes.length = 0;
     document.body.innerHTML = '';
     jest.clearAllMocks();
     jest.useRealTimers();
