@@ -19,18 +19,21 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import Button from '@ts/ui/button/wrapper';
-import type { ListBase } from '@ts/ui/list/list.base';
 import Popup from '@ts/ui/popup/popup';
+import { DROP_DOWN_MENU_BUTTON_CLASS } from '@ts/ui/toolbar/constants';
+import { focusElement } from '@ts/ui/toolbar/internal/roving.utils';
 import ToolbarMenuList, { TOOLBAR_MENU_ACTION_CLASS } from '@ts/ui/toolbar/internal/toolbar.menu.list';
 import { toggleItemFocusableElementTabIndex } from '@ts/ui/toolbar/toolbar.utils';
 
 const DROP_DOWN_MENU_CLASS = 'dx-dropdownmenu';
 const DROP_DOWN_MENU_POPUP_CLASS = 'dx-dropdownmenu-popup';
-const DROP_DOWN_MENU_POPUP_WRAPPER_CLASS = 'dx-dropdownmenu-popup-wrapper';
+export const DROP_DOWN_MENU_POPUP_WRAPPER_CLASS = 'dx-dropdownmenu-popup-wrapper';
+export const DROP_DOWN_MENU_LIST_FOCUS_MODE_CLASS = 'dx-dropdownmenu-list-focus-mode';
 const DROP_DOWN_MENU_LIST_CLASS = 'dx-dropdownmenu-list';
-const DROP_DOWN_MENU_BUTTON_CLASS = 'dx-dropdownmenu-button';
 const POPUP_BOUNDARY_VERTICAL_OFFSET = 10;
 const POPUP_VERTICAL_OFFSET = 3;
+
+type OpenFocusTarget = 'first' | 'last' | null;
 
 export interface DropDownMenuProperties extends WidgetProperties<DropDownMenu> {
   opened?: boolean;
@@ -44,6 +47,7 @@ export interface DropDownMenuProperties extends WidgetProperties<DropDownMenu> {
   onButtonClick?: (e: ClickEvent) => void;
   useInkRipple?: boolean;
   closeOnClick?: boolean;
+  allowKeyboardNavigation?: boolean;
 }
 
 export default class DropDownMenu extends Widget<DropDownMenuProperties> {
@@ -51,7 +55,7 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
 
   _popup?: Popup;
 
-  _list?: ListBase;
+  _list?: ToolbarMenuList;
 
   _$popup?: dxElementWrapper;
 
@@ -60,6 +64,8 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
   _itemClickAction?: (e: Partial<ItemClickEvent<ListItem>>) => void;
 
   _buttonClickAction?: (e: ClickEvent) => void;
+
+  _openFocusTarget: OpenFocusTarget = null;
 
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   _supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | void> {
@@ -74,7 +80,7 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       ...super._supportedKeys(),
       ...extension,
       tab(): void {
-        this._popup?.hide();
+        this.option('opened', false);
       },
     };
   }
@@ -90,6 +96,7 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       opened: false,
       closeOnClick: true,
       useInkRipple: false,
+      allowKeyboardNavigation: false,
       container: undefined,
       animation: {
         show: { type: 'fade', from: 0, to: 1 },
@@ -204,7 +211,8 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       hoverStateEnabled: false,
       focusStateEnabled: false,
       onClick: (e: ClickEvent) => {
-        this.option('opened', !this.option('opened'));
+        const { opened } = this.option();
+        this.option('opened', !opened);
         this._buttonClickAction?.(e);
       },
     });
@@ -239,15 +247,18 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       rtlEnabled,
       container,
       animation,
+      allowKeyboardNavigation,
     } = this.option();
 
     this._popup = this._createComponent(this._$popup, Popup, {
+      focusStateEnabled: !allowKeyboardNavigation,
       onInitialized(e) {
         const { component } = e;
         // @ts-expect-error
         component.$wrapper()
           .addClass(DROP_DOWN_MENU_POPUP_WRAPPER_CLASS)
-          .addClass(DROP_DOWN_MENU_POPUP_CLASS);
+          .addClass(DROP_DOWN_MENU_POPUP_CLASS)
+          .toggleClass(DROP_DOWN_MENU_LIST_FOCUS_MODE_CLASS, !!allowKeyboardNavigation);
       },
       deferRendering: false,
       preventScrollEvents: false,
@@ -269,6 +280,23 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       onOptionChanged: ({ name, value }) => {
         if (name === 'visible') {
           this.option('opened', value);
+        }
+      },
+      onShown: () => {
+        const { allowKeyboardNavigation: enabled } = this.option();
+        if (enabled) {
+          if (this._openFocusTarget === 'last') {
+            this._list?.focusLastItem();
+          } else {
+            this._list?.focusFirstItem();
+          }
+          this._openFocusTarget = null;
+        }
+      },
+      onHiding: () => {
+        const popupEl = this._popup?.$overlayContent().get(0);
+        if (popupEl?.contains(document.activeElement)) {
+          focusElement(this._button?.$element());
         }
       },
       container,
@@ -306,6 +334,11 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
     });
   }
 
+  openWithFocus(focusTarget: OpenFocusTarget = 'first'): void {
+    this._openFocusTarget = focusTarget;
+    this.option('opened', true);
+  }
+
   _getMaxHeight(): number {
     const $element = this.$element();
 
@@ -338,8 +371,11 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
     const $content = $(contentElement);
     $content.addClass(DROP_DOWN_MENU_LIST_CLASS);
 
-    const { itemTemplate, onItemRendered } = this.option();
-
+    const {
+      itemTemplate,
+      onItemRendered,
+      allowKeyboardNavigation,
+    } = this.option();
     this._list = this._createComponent($content, ToolbarMenuList, {
       dataSource: this._getListDataSource(),
       pageLoadMode: 'scrollBottom',
@@ -352,17 +388,26 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
         this._itemClickHandler(e);
       },
       tabIndex: -1,
-      focusStateEnabled: false,
+      focusStateEnabled: allowKeyboardNavigation,
       activeStateEnabled: true,
       onItemRendered,
       _itemAttributes: { role: 'menuitem' },
       _onItemsRendered: (): void => {
         // T1322123
-        if (this.option('templatesRenderAsynchronously')) {
+        const { templatesRenderAsynchronously } = this.option();
+        if (templatesRenderAsynchronously) {
           this._popup?._renderGeometry();
         }
       },
     });
+
+    this._list._onEscapePress = (): void => {
+      this.option('opened', false);
+    };
+
+    this._list._onTabPress = (): void => {
+      this.option('opened', false);
+    };
   }
 
   _popupKeyHandler(e: DxEvent<KeyboardEvent>): void {
@@ -389,7 +434,7 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
     value: unknown,
   ): void {
     this._list?._itemOptionChanged(item, property, value);
-    toggleItemFocusableElementTabIndex(this._list, item);
+    this._updateFocusableItemsTabIndex();
   }
 
   _getListDataSource(): DataSourceLike<Item, string | number> | Item[] {
@@ -418,13 +463,15 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
 
     switch (name) {
       case 'items':
-      case 'dataSource':
-        if (!this.option('opened')) {
+      case 'dataSource': {
+        const { opened } = this.option();
+        if (!opened) {
           this._deferRendering = true;
         } else {
           this._setListDataSource();
         }
         break;
+      }
       case 'itemTemplate':
         this._list?.option(name, this._getTemplate(value));
         break;
@@ -438,8 +485,12 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
         this._invalidate();
         break;
       case 'focusStateEnabled':
-        this._list?.option(name, value);
         super._optionChanged(args);
+        break;
+      case 'allowKeyboardNavigation':
+        this._list?.option('focusStateEnabled', value);
+        this._popup?.option('focusStateEnabled', !value);
+        this._popup?.$wrapper()?.toggleClass(DROP_DOWN_MENU_LIST_FOCUS_MODE_CLASS, !!value);
         break;
       case 'onItemRendered':
         this._list?.option(name, value);
@@ -467,8 +518,14 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
   }
 
   _updateFocusableItemsTabIndex(): void {
-    const { items = [] } = this.option();
-
-    items.forEach((item) => toggleItemFocusableElementTabIndex(this._list, item));
+    if (this._list) {
+      const { allowKeyboardNavigation } = this.option();
+      if (allowKeyboardNavigation) {
+        this._list._resetRovingTabIndex();
+      } else {
+        const { items = [] } = this.option();
+        items.forEach((item) => toggleItemFocusableElementTabIndex(this._list, item));
+      }
+    }
   }
 }

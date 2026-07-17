@@ -120,6 +120,7 @@ import {
  ShowTextMode,
 } from "devextreme/ui/toolbar";
 import {
+ dxButtonGroupOptions,
  dxButtonGroupItem,
  ContentReadyEvent as ButtonGroupContentReadyEvent,
  DisposingEvent as ButtonGroupDisposingEvent,
@@ -1005,7 +1006,7 @@ const DxItemConfig = {
     location: String as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
     name: String as PropType<string | FormPredefinedButtonItem | SchedulerPredefinedToolbarItem>,
-    options: Object as PropType<DateNavigatorItemProperties | Record<string, any>>,
+    options: Object as PropType<DateNavigatorItemProperties | Record<string, any> | dxButtonGroupOptions>,
     showText: String as PropType<ShowTextMode>,
     tabPanelOptions: Object as PropType<dxTabPanelOptions | Record<string, any>>,
     tabs: Array as PropType<Array<Record<string, any>>>,
@@ -1703,7 +1704,7 @@ const DxToolbarItemConfig = {
     location: String as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
     name: String as PropType<SchedulerPredefinedToolbarItem>,
-    options: Object as PropType<DateNavigatorItemProperties | Record<string, any>>,
+    options: Object as PropType<DateNavigatorItemProperties | Record<string, any> | dxButtonGroupOptions>,
     showText: String as PropType<ShowTextMode>,
     template: {},
     text: String,

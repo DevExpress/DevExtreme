@@ -1808,6 +1808,14 @@
         "cwd": "{projectRoot}"
       }
     },
+    "test-env": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "node ./testing/launch",
+        "cwd": "{projectRoot}"
+      }
+    },
     "lint": {
       "executor": "nx:noop",
       "dependsOn": [

@@ -19,6 +19,8 @@ import {
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import sortingMixin from '@ts/grids/grid_core/sorting/m_sorting_mixin';
 
+import type { RovingTabIndexComponent } from '../keyboard_navigation/roving_tab_index';
+import { RovingTabIndex } from '../keyboard_navigation/roving_tab_index';
 import { createPath, foreachTree } from '../m_widget_utils';
 import SortableModule from '../sortable/m_sortable';
 import { ATTRIBUTES, CLASSES } from './const';
@@ -28,6 +30,21 @@ import { reverseSortOrder, shouldCancelDragging } from './utils';
 const { Sortable } = SortableModule;
 
 const DIV = '<div>';
+
+const FIELD_AREAS = ['filter', 'row', 'column', 'data'];
+
+const FIELD_NAVIGATION_DELTAS = {
+  ArrowUp: -1,
+  ArrowLeft: -1,
+  ArrowDown: 1,
+  ArrowRight: 1,
+};
+
+function isFieldNavigationEvent(e): boolean {
+  return e.type === 'keydown'
+    && FIELD_NAVIGATION_DELTAS[e.key] !== undefined
+    && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey;
+}
 
 class HeaderFilterView extends HeaderFilterViewBase {
   _getSearchExpr(options, headerFilterOptions) {
@@ -97,6 +114,10 @@ const mixinWidget = sortingMixin(
 export class FieldChooserBase extends mixinWidget {
   private _focusedFieldIndex = -1;
 
+  // NOTE: no initializer — class field initializers do not run for classes
+  // built on the legacy DevExtreme class system in the systemjs build.
+  private _fieldNavigationMap: Record<string, RovingTabIndex> | undefined;
+
   _getDefaultOptions() {
     return {
       ...super._getDefaultOptions(),
@@ -142,9 +163,19 @@ export class FieldChooserBase extends mixinWidget {
   _refreshDataSource() {
     const dataSource = this.option('dataSource');
 
+    // Field indexes are only meaningful within one data source, so the roving
+    // tab stops fall back to the first field of each area.
+    this._resetFieldNavigation();
+
     if (dataSource?.fields && dataSource.load/* instanceof DX.ui.dxPivotGrid.DataSource */) {
       this._dataSource = dataSource;
     }
+  }
+
+  private _resetFieldNavigation(): void {
+    Object.values(this._fieldNavigationMap ?? {}).forEach((navigation) => {
+      navigation.reset();
+    });
   }
 
   _optionChanged(args) {
@@ -370,6 +401,11 @@ export class FieldChooserBase extends mixinWidget {
         return;
       }
 
+      if (isFieldNavigationEvent(e)) {
+        this._handleFieldNavigation(e, field);
+        return;
+      }
+
       if (!isClick) {
         return;
       }
@@ -389,6 +425,10 @@ export class FieldChooserBase extends mixinWidget {
       }
 
       this._focusedFieldIndex = field.index;
+
+      if (field.area) {
+        this._getFieldNavigation(field.area).handleFocusIn(e.currentTarget);
+      }
     };
 
     const focusOutHandler = (e) => {
@@ -426,8 +466,98 @@ export class FieldChooserBase extends mixinWidget {
   }
 
   restoreFieldFocus(): void {
+    this.updateFieldsTabIndexes();
+
     if (this._focusedFieldIndex !== -1) {
       this.focusFieldElement(this._focusedFieldIndex);
+    }
+  }
+
+  updateFieldsTabIndexes(): void {
+    FIELD_AREAS.forEach((area) => {
+      this._getFieldNavigation(area).updateTabIndexes();
+    });
+  }
+
+  private _getFieldNavigation(area: string): RovingTabIndex {
+    // The sorting and column state mixins lose the Widget typing, so the
+    // component contract has to be restored explicitly.
+    const component = this as unknown as RovingTabIndexComponent;
+
+    this._fieldNavigationMap = this._fieldNavigationMap ?? {};
+    this._fieldNavigationMap[area] = this._fieldNavigationMap[area] ?? new RovingTabIndex({
+      component,
+      getItems: () => this._getAreaFieldElements(area),
+      scrollToItem: (item) => this._scrollFieldElementToView(item),
+      getItemId: (item) => this._getFieldElementId(item),
+    });
+
+    return this._fieldNavigationMap[area];
+  }
+
+  // field.index identifies the same logical field when fields are reordered,
+  // added or removed, so the tab stop does not drift to another field.
+  private _getFieldElementId(fieldElement: HTMLElement): string | undefined {
+    const field: any = $(fieldElement).data('field');
+
+    return isDefined(field?.index) ? String(field.index) : undefined;
+  }
+
+  // The field chooser popup can be rendered inside the pivot grid element, so
+  // the fields of this instance are told apart from the other instance's
+  // fields by the closest field chooser root.
+  private _getAreaFieldElements(area: string): HTMLElement[] {
+    const ownFieldChooserRoot = this.$element().closest(`.${CLASSES.fieldChooser.self}`).get(0) ?? null;
+    // NOTE: get() without an index is not supported by the native renderer.
+    const fields: HTMLElement[] = this.$element()
+      .find(`[group="${area}"] .${CLASSES.area.field}.${CLASSES.area.box}`)
+      .toArray();
+
+    return fields.filter((field) => {
+      const fieldChooserRoot = $(field).closest(`.${CLASSES.fieldChooser.self}`).get(0) ?? null;
+
+      return fieldChooserRoot === ownFieldChooserRoot;
+    });
+  }
+
+  private _scrollFieldElementToView(fieldElement: HTMLElement): void {
+    const $scrollable = $(fieldElement).closest(`.${CLASSES.scrollable.self}`);
+    const scrollable = $scrollable.length ? ($scrollable as any).dxScrollable('instance') : undefined;
+
+    scrollable?.scrollToElement(fieldElement);
+  }
+
+  private _getFieldNavigationDelta(key: string): number {
+    const isHorizontal = key === 'ArrowLeft' || key === 'ArrowRight';
+
+    if (isHorizontal && this.option('rtlEnabled')) {
+      return -FIELD_NAVIGATION_DELTAS[key];
+    }
+
+    return FIELD_NAVIGATION_DELTAS[key];
+  }
+
+  private _handleFieldNavigation(e, field): void {
+    if (!field.area) {
+      return;
+    }
+
+    const navigation = this._getFieldNavigation(field.area);
+    const items = navigation.getItems();
+    const index = items.indexOf(e.currentTarget);
+
+    // The event can bubble to another instance subscribed to an ancestor
+    // element; the field then does not belong to this instance's items.
+    if (index < 0) {
+      return;
+    }
+
+    e.preventDefault();
+
+    const targetIndex = index + this._getFieldNavigationDelta(e.key);
+
+    if (targetIndex >= 0 && targetIndex < items.length) {
+      navigation.focusItem(targetIndex);
     }
   }
 
