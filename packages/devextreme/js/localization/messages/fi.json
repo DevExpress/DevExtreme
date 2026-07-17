@@ -288,6 +288,7 @@
         "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
         "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
         "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
+        "dxPivotGrid-ariaFieldsAreaDescription": "Press Enter or Space to sort by the field, Alt + Down arrow to open the header filter, Shift + F10 to open the context menu",
 
         "dxScheduler-dateRange": "{0}–{1}",
         "dxScheduler-ariaLabel": "Kalenteri. {0} näkymä: {1}, {2} tapaamista",

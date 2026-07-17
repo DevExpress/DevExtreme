@@ -288,6 +288,7 @@
         "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
         "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
         "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
+        "dxPivotGrid-ariaFieldsAreaDescription": "Press Enter or Space to sort by the field, Alt + Down arrow to open the header filter, Shift + F10 to open the context menu",
 
         "dxScheduler-dateRange": "從 {0} 到 {1}",
         "dxScheduler-ariaLabel": "日程表。{0} 視圖：{1}，共 {2} 個日程",

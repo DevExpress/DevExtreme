@@ -271,6 +271,7 @@ QUnit.module('PivotGrid accessibility markup', {
             assert.strictEqual($table.length, 1, `${area} field table exists`);
             assert.strictEqual($table.attr('role'), 'menubar', `${area} field table is a menubar`);
             assert.strictEqual($table.attr('aria-label'), expectedLabels[area], `${area} menubar has localized label`);
+            assert.ok($table.attr('aria-description'), `${area} menubar has an interaction description`);
         });
 
         // The filter area has no fields in this data source; a menubar without
@@ -280,6 +281,7 @@ QUnit.module('PivotGrid accessibility markup', {
 
         assert.strictEqual($filterTable.attr('role'), 'presentation', 'empty filter area table is presentational');
         assert.strictEqual($filterTable.attr('aria-label'), undefined, 'empty filter area table has no aria-label');
+        assert.strictEqual($filterTable.attr('aria-description'), undefined, 'empty filter area table has no aria-description');
     });
 
     QUnit.test('Scrollable containers have no tabindex', function(assert) {

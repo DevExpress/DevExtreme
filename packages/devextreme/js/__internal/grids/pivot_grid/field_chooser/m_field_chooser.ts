@@ -12,6 +12,7 @@ import ContextMenu from '@js/ui/context_menu';
 import TreeView from '@js/ui/tree_view';
 
 import { foreachDataLevel, getCompareFunction } from '../m_widget_utils';
+import { getFieldsAreaA11yDescription } from './a11y';
 import { ATTRIBUTES, CLASSES, ICONS } from './const';
 import { FieldChooserBase } from './m_field_chooser_base';
 
@@ -554,7 +555,8 @@ export class FieldChooser extends FieldChooserBase {
     const hasFields = !!$container.children().length;
     $container
       .attr('role', hasFields ? 'menubar' : null)
-      .attr('aria-label', hasFields ? that.option(`texts.${area}Fields`) : null);
+      .attr('aria-label', hasFields ? that.option(`texts.${area}Fields`) : null)
+      .attr('aria-description', hasFields ? getFieldsAreaA11yDescription() : null);
   }
 
   _renderArea(container, area) {
