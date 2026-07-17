@@ -7,12 +7,6 @@ on:
   push:
     branches: [26_1]
   workflow_dispatch:
-    inputs:
-      SBOM:
-        description: 'Build SBOM'
-        required: false
-        default: false
-        type: boolean
 
 concurrency:
   group: wf-${{github.event.pull_request.number || github.ref || github.sha}}-${{github.workflow}}
@@ -109,25 +103,6 @@ jobs:
           name: devextreme-npm-packages
           path: |
             artifacts/npm/*.tgz
-          retention-days: 1
-
-      - name: Set GitHub Packages auth
-        if: ${{ github.event_name == 'push' || github.event.inputs.SBOM == 'true' }}
-        run: pnpm set //npm.pkg.github.com/:_authToken='${NODE_AUTH_TOKEN}'
-
-      - name: Build SBOMs
-        if: ${{ github.event_name == 'push' || github.event.inputs.SBOM == 'true' }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm nx build sbom
-
-      - name: Upload SBOM artifacts
-        if: ${{ github.event_name == 'push' || github.event.inputs.SBOM == 'true' }}
-        uses: actions/upload-artifact@v7
-        with:
-          name: sbom
-          path: |
-            packages/sbom/dist/**/*
           retention-days: 1
 
   custom_bundles:
