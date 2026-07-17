@@ -172,4 +172,63 @@ describe('BuildTypescriptExecutor E2E', () => {
       expect(result.success).toBe(false);
     });
   });
+
+  describe('watch mode', () => {
+    async function waitFor(predicate: () => boolean, timeoutMs = 20000): Promise<void> {
+      const start = Date.now();
+      while (Date.now() - start < timeoutMs) {
+        if (predicate()) return;
+        await new Promise((resolve) => setTimeout(resolve, 50));
+      }
+      throw new Error('waitFor timed out');
+    }
+
+    it('emits to outDir with alias resolution and stops on SIGINT', async () => {
+      const options: BuildTypescriptExecutorSchema = {
+        module: 'esm',
+        tsconfig: './tsconfig.esm.json',
+        outDir: './npm/esm-watch',
+        resolvePaths: true,
+        resolvePathsBaseDir: './src',
+        watch: true,
+      };
+
+      const outIndex = path.join(projectDir, 'npm', 'esm-watch', 'index.js');
+
+      const originalOnce = process.once;
+      let stopWatch: (() => void) | undefined;
+      let run: Promise<{ success: boolean }> | undefined;
+
+      (process as unknown as { once: typeof process.once }).once = ((
+        event: string,
+        handler: () => void,
+      ) => {
+        if (event === 'SIGINT' || event === 'SIGTERM') {
+          stopWatch = handler;
+          return process;
+        }
+        return originalOnce.call(process, event, handler as never);
+      }) as typeof process.once;
+
+      try {
+        run = executor(options, context);
+
+        await waitFor(() => fs.existsSync(outIndex));
+        const indexContent = await readFileText(outIndex);
+        expect(indexContent).not.toContain('@lib/utils');
+
+        stopWatch?.();
+        stopWatch = undefined;
+
+        expect((await run).success).toBe(true);
+        run = undefined;
+      } finally {
+        stopWatch?.();
+        if (run) {
+          await run;
+        }
+        (process as unknown as { once: typeof process.once }).once = originalOnce;
+      }
+    }, 30000);
+  });
 });

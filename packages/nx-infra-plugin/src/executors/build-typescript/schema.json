@@ -43,6 +43,11 @@
     "resolvePathsBaseDir": {
       "type": "string",
       "description": "Base directory for path alias resolution (used as aliasRoot for tsc-alias). Relative to project root. Required when resolvePaths is true. Example: './js' for DevExtreme's __internal TypeScript compilation."
+    },
+    "watch": {
+      "type": "boolean",
+      "default": false,
+      "description": "Watch the sources via the TypeScript incremental watch program and re-emit changed files to outDir."
     }
   }
 }
