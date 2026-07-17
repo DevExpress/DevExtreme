@@ -868,34 +868,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     onCellContextMenu?: ((e: CellContextMenuEvent) => void) | string;
     /**
      * @docid
-     * @public
-     * @type_function_param1 e:{ui/scheduler:ContentReadyEvent}
-     * @action
-     */
-    onContentReady?: (e: ContentReadyEvent) => void;
-    /**
-     * @docid
-     * @public
-     * @type_function_param1 e:{ui/scheduler:DisposingEvent}
-     * @action
-     */
-    onDisposing?: (e: DisposingEvent) => void;
-    /**
-     * @docid
-     * @public
-     * @type_function_param1 e:{ui/scheduler:InitializedEvent}
-     * @action
-     */
-    onInitialized?: (e: InitializedEvent) => void;
-    /**
-     * @docid
-     * @public
-     * @type_function_param1 e:{ui/scheduler:OptionChangedEvent}
-     * @action
-     */
-  onOptionChanged?: (e: OptionChangedEvent) => void;
-    /**
-     * @docid
      * @default "dialog"
      * @public
      */
@@ -1522,3 +1494,38 @@ export interface dxSchedulerScrolling {
    */
   mode?: ScrollMode;
 }
+
+/// #DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onAppointmentAdded' | 'onAppointmentAdding' | 'onAppointmentClick' | 'onAppointmentContextMenu' | 'onAppointmentDblClick' | 'onAppointmentDeleted' | 'onAppointmentDeleting' | 'onAppointmentFormOpening' | 'onAppointmentRendered' | 'onAppointmentTooltipShowing' | 'onAppointmentUpdated' | 'onAppointmentUpdating' | 'onCellClick' | 'onCellContextMenu' | 'onSelectionEnd'>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @docid dxSchedulerOptions.onContentReady
+ * @type_function_param1 e:{ui/scheduler:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @docid dxSchedulerOptions.onDisposing
+ * @type_function_param1 e:{ui/scheduler:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @docid dxSchedulerOptions.onInitialized
+ * @type_function_param1 e:{ui/scheduler:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @docid dxSchedulerOptions.onOptionChanged
+ * @type_function_param1 e:{ui/scheduler:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+};
+/// #ENDDEBUG
