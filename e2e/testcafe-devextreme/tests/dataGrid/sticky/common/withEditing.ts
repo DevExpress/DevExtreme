@@ -68,41 +68,43 @@ test.meta({ browserSize: [800, 800] })('The form edit mode: Edit row when there 
   },
 }));
 
-test.meta({ browserSize: [800, 800] })('The batch edit mode: Edit cell when there are sticky columns', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+for (let i = 0; i < 50; i++) {
+  test.meta({ browserSize: [800, 800] })(`${i}: ` + 'The batch edit mode: Edit cell when there are sticky columns', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
-  await t.expect(dataGrid.isReady()).ok();
+    await t.expect(dataGrid.isReady()).ok();
 
-  const editCell = dataGrid.getDataCell(0, 2);
-  await t.click(editCell.element);
-  await t
-    .expect(editCell.isEditCell).ok()
-    .expect(editCell.getEditor().element.focused).ok();
+    const editCell = dataGrid.getDataCell(0, 2);
+    await t.click(editCell.element);
+    await t
+      .expect(editCell.isEditCell).ok()
+      .expect(editCell.getEditor().element.focused).ok();
 
-  await testScreenshot(t, takeScreenshot, 'edit_cell_with_sticky_columns_1.png', { element: dataGrid.element });
+    await testScreenshot(t, takeScreenshot, 'edit_cell_with_sticky_columns_1.png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { x: 10000 });
+    await dataGrid.scrollTo(t, { x: 10000 });
 
-  await testScreenshot(t, takeScreenshot, 'edit_cell_with_sticky_columns_2.png', { element: dataGrid.element });
+    await testScreenshot(t, takeScreenshot, 'edit_cell_with_sticky_columns_2.png', { element: dataGrid.element });
 
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxDataGrid', {
-  ...defaultConfig,
-  editing: {
-    mode: 'batch',
-    allowUpdating: true,
-  },
-  customizeColumns(columns) {
-    columns[1].fixed = true;
-    columns[1].fixedPosition = 'left';
-  },
-  scrolling: {
-    showScrollbar: 'never',
-  },
-}));
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxDataGrid', {
+    ...defaultConfig,
+    editing: {
+      mode: 'batch',
+      allowUpdating: true,
+    },
+    customizeColumns(columns) {
+      columns[1].fixed = true;
+      columns[1].fixedPosition = 'left';
+    },
+    scrolling: {
+      showScrollbar: 'never',
+    },
+  }));
+}
 
 test.meta({ browserSize: [800, 800] })('The batch edit mode: Edit fixed cell', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

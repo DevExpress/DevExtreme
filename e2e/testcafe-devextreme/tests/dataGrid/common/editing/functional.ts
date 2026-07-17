@@ -360,59 +360,61 @@ test('Async Validation(Row) - Data is not saved when a dependant cell value beco
   }, 'lastName'],
 })));
 
-test('Async Validation(Cell) - Only the last cell should be switched to edit mode', async (t) => {
-  const dataGrid = new DataGrid('#container');
-  const resolveValidation = ClientFunction(() => (window as any).deferred.resolve(true));
+for (let i = 0; i < 50; i++) {
+  test(`${i}: ` + 'Async Validation(Cell) - Only the last cell should be switched to edit mode', async (t) => {
+    const dataGrid = new DataGrid('#container');
+    const resolveValidation = ClientFunction(() => (window as any).deferred.resolve(true));
 
-  await t.expect(dataGrid.isReady()).ok();
+    await t.expect(dataGrid.isReady()).ok();
 
-  const cell0 = dataGrid.getDataCell(0, 0);
-  const cell1 = dataGrid.getDataCell(0, 1);
-  const cell2 = dataGrid.getDataCell(0, 2);
+    const cell0 = dataGrid.getDataCell(0, 0);
+    const cell1 = dataGrid.getDataCell(0, 1);
+    const cell2 = dataGrid.getDataCell(0, 2);
 
-  await t
-    .click(cell0.element)
-    .expect(cell0.isValidationPending).ok()
-    .click(cell1.element)
-    .expect(cell1.isFocused)
-    .notOk('the second cell should not be focused')
-    .click(cell2.element);
+    await t
+      .click(cell0.element)
+      .expect(cell0.isValidationPending).ok()
+      .click(cell1.element)
+      .expect(cell1.isFocused)
+      .notOk('the second cell should not be focused')
+      .click(cell2.element);
 
-  await resolveValidation();
+    await resolveValidation();
 
-  await t
-    .expect(cell0.isValidationPending)
-    .notOk('validating is completed')
-    .expect(cell2.hasHiddenFocusState)
-    .notOk()
-    .expect(cell2.isFocused)
-    .ok('the third cell should be focused');
-}).before(async () => {
-  await ClientFunction(() => {
-    (window as any).deferred = $.Deferred();
-  })();
+    await t
+      .expect(cell0.isValidationPending)
+      .notOk('validating is completed')
+      .expect(cell2.hasHiddenFocusState)
+      .notOk()
+      .expect(cell2.isFocused)
+      .ok('the third cell should be focused');
+  }).before(async () => {
+    await ClientFunction(() => {
+      (window as any).deferred = $.Deferred();
+    })();
 
-  return createWidget('dxDataGrid', getGridConfig({
-    editing: {
-      mode: 'cell',
-      allowUpdating: true,
-      allowAdding: true,
-    },
-    columns: [{
-      dataField: 'age',
-      validationRules: [{
-        type: 'async',
-        validationCallback(): JQueryPromise<unknown> {
-          return (window as any).deferred.promise();
-        },
-      }],
-    }, 'name', 'lastName'],
-  }));
-}).after(async () => {
-  await ClientFunction(() => {
-    delete (window as any).deferred;
-  })();
-});
+    return createWidget('dxDataGrid', getGridConfig({
+      editing: {
+        mode: 'cell',
+        allowUpdating: true,
+        allowAdding: true,
+      },
+      columns: [{
+        dataField: 'age',
+        validationRules: [{
+          type: 'async',
+          validationCallback(): JQueryPromise<unknown> {
+            return (window as any).deferred.promise();
+          },
+        }],
+      }, 'name', 'lastName'],
+    }));
+  }).after(async () => {
+    await ClientFunction(() => {
+      delete (window as any).deferred;
+    })();
+  });
+}
 
 test('Async Validation(Cell) - Only valid data is saved in a new row', async (t) => {
   const dataGrid = new DataGrid('#container');

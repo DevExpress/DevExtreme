@@ -573,35 +573,37 @@ editingModes.forEach((mode) => {
   }));
 
   [true, false].forEach((repaintChangesOnly) => {
-    test(
-      `Update cell value and focus next cell, mode: ${mode}, repaintChangesOnly: ${repaintChangesOnly}, useKeyboard: false`,
-      async (t) => {
-        const form = getEditForm(mode);
-        let modifiedCellCount = mode === 'batch' ? 1 : 0;
+    for (let i = 0; i < 50; i++) {
+      test(
+        `Update cell value and focus next cell, mode: ${mode}, repaintChangesOnly: ${repaintChangesOnly}, useKeyboard: false`,
+        async (t) => {
+          const form = getEditForm(mode);
+          let modifiedCellCount = mode === 'batch' ? 1 : 0;
 
-        await t.expect(dataGrid.isReady()).ok();
+          await t.expect(dataGrid.isReady()).ok();
 
-        for (const columnInfo of textColumnInfos) {
-          const cell = dataGrid.getDataCell(0, columnInfo.columnIndex);
-          const editor = form
-            ? new CellEditor(form.getItem(columnInfo.dataField))
-            : cell.getEditor();
+          for (const columnInfo of textColumnInfos) {
+            const cell = dataGrid.getDataCell(0, columnInfo.columnIndex);
+            const editor = form
+              ? new CellEditor(form.getItem(columnInfo.dataField))
+              : cell.getEditor();
 
-          await clickCellEditor(t, mode, columnInfo, form, cell, editor);
-          await setEditorValue(t, mode, columnInfo, editor);
+            await clickCellEditor(t, mode, columnInfo, form, cell, editor);
+            await setEditorValue(t, mode, columnInfo, editor);
 
-          await focusNextCellEditor(t, mode, columnInfo);
+            await focusNextCellEditor(t, mode, columnInfo);
 
-          if (mode === 'batch') {
-            modifiedCellCount += 1;
+            if (mode === 'batch') {
+              modifiedCellCount += 1;
+            }
+
+            await checkModifiedCell(t, mode, columnInfo, cell, editor, modifiedCellCount);
           }
-
-          await checkModifiedCell(t, mode, columnInfo, cell, editor, modifiedCellCount);
-        }
-      },
-    ).before(createDataGrid({
-      mode,
-      repaintChangesOnly,
-    }));
+        },
+      ).before(createDataGrid({
+        mode,
+        repaintChangesOnly,
+      }));
+    }
   });
 });

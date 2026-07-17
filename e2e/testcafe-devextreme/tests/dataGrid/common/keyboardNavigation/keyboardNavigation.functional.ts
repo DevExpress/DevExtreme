@@ -1689,200 +1689,202 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
 }));
 
 ['Batch', 'Cell'].forEach((editMode) => {
-  test(`${editMode} mode - Cells in a new row should be updated on Tab (T898356)`, async (t) => {
-    const dataGrid = new DataGrid('#container') as any;
-    const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
-    const cell00 = dataGrid.getDataCell(0, 0);
-    const editor00 = cell00.getEditor();
-    const cell01 = dataGrid.getDataCell(0, 1);
-    const editor01 = cell01.getEditor();
+  for (let i = 0; i < 50; i++) {
+    test(`${i}: ${editMode} mode - Cells in a new row should be updated on Tab (T898356)`, async (t) => {
+      const dataGrid = new DataGrid('#container') as any;
+      const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
+      const cell00 = dataGrid.getDataCell(0, 0);
+      const editor00 = cell00.getEditor();
+      const cell01 = dataGrid.getDataCell(0, 1);
+      const editor01 = cell01.getEditor();
 
-    await t.expect(dataGrid.isReady()).ok();
+      await t.expect(dataGrid.isReady()).ok();
 
-    await t
-      .click(addRowButton)
+      await t
+        .click(addRowButton)
 
-      .expect(cell00.isFocused).ok()
-      .expect(editor00.element.exists)
-      .ok()
-      .expect(editor00.element.focused)
-      .ok()
+        .expect(cell00.isFocused).ok()
+        .expect(editor00.element.exists)
+        .ok()
+        .expect(editor00.element.focused)
+        .ok()
 
-      .typeText(editor00.element, '1')
-      .pressKey('tab')
+        .typeText(editor00.element, '1')
+        .pressKey('tab')
 
-      .expect(cell00.isFocused)
-      .notOk()
-      .expect(dataGrid.apiGetCellValue(0, 0))
-      .eql('1')
-      .expect(cell01.isFocused)
-      .ok()
-      .expect(editor01.element.exists)
-      .ok()
-      .expect(editor01.element.focused)
-      .ok()
+        .expect(cell00.isFocused)
+        .notOk()
+        .expect(dataGrid.apiGetCellValue(0, 0))
+        .eql('1')
+        .expect(cell01.isFocused)
+        .ok()
+        .expect(editor01.element.exists)
+        .ok()
+        .expect(editor01.element.focused)
+        .ok()
 
-      .typeText(editor01.element, '2')
-      .pressKey('tab')
+        .typeText(editor01.element, '2')
+        .pressKey('tab')
 
-      .expect(cell01.isFocused)
-      .notOk()
-      .expect(dataGrid.apiGetCellValue(0, 1))
-      .eql('2');
-  }).before(async () => createWidget('dxDataGrid', {
-    dataSource: [],
-    editing: {
-      mode: editMode.toLowerCase() as any,
-      allowAdding: true,
-    },
-    columns: ['a', 'b'],
-  }));
+        .expect(cell01.isFocused)
+        .notOk()
+        .expect(dataGrid.apiGetCellValue(0, 1))
+        .eql('2');
+    }).before(async () => createWidget('dxDataGrid', {
+      dataSource: [],
+      editing: {
+        mode: editMode.toLowerCase() as any,
+        allowAdding: true,
+      },
+      columns: ['a', 'b'],
+    }));
 
-  test(`${editMode} mode - Cells in a new row should be updated on Shift+Tab (T898356)`, async (t) => {
-    const dataGrid = new DataGrid('#container') as any;
-    const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
-    const cell00 = dataGrid.getDataCell(0, 0);
-    const editor00 = cell00.getEditor();
-    const cell01 = dataGrid.getDataCell(0, 1);
-    const editor01 = cell01.getEditor();
+    test(`${i}: ${editMode} mode - Cells in a new row should be updated on Shift+Tab (T898356)`, async (t) => {
+      const dataGrid = new DataGrid('#container') as any;
+      const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
+      const cell00 = dataGrid.getDataCell(0, 0);
+      const editor00 = cell00.getEditor();
+      const cell01 = dataGrid.getDataCell(0, 1);
+      const editor01 = cell01.getEditor();
 
-    await t.expect(dataGrid.isReady()).ok();
+      await t.expect(dataGrid.isReady()).ok();
 
-    await t
-      .click(addRowButton)
-      .click(cell01.element)
+      await t
+        .click(addRowButton)
+        .click(cell01.element)
 
-      .expect(cell01.isFocused).ok()
-      .expect(editor01.element.exists)
-      .ok()
-      .expect(editor01.element.focused)
-      .ok()
+        .expect(cell01.isFocused).ok()
+        .expect(editor01.element.exists)
+        .ok()
+        .expect(editor01.element.focused)
+        .ok()
 
-      .typeText(editor01.element, '2')
-      .pressKey('shift+tab')
+        .typeText(editor01.element, '2')
+        .pressKey('shift+tab')
 
-      .expect(cell01.isFocused)
-      .notOk()
-      .expect(dataGrid.apiGetCellValue(0, 1))
-      .eql('2')
-      .expect(cell00.isFocused)
-      .ok()
-      .expect(editor00.element.exists)
-      .ok()
-      .expect(editor00.element.focused)
-      .ok()
+        .expect(cell01.isFocused)
+        .notOk()
+        .expect(dataGrid.apiGetCellValue(0, 1))
+        .eql('2')
+        .expect(cell00.isFocused)
+        .ok()
+        .expect(editor00.element.exists)
+        .ok()
+        .expect(editor00.element.focused)
+        .ok()
 
-      .typeText(editor00.element, '1')
-      .pressKey('shift+tab')
+        .typeText(editor00.element, '1')
+        .pressKey('shift+tab')
 
-      .expect(cell00.isFocused)
-      .notOk()
-      .expect(dataGrid.apiGetCellValue(0, 0))
-      .eql('1');
-  }).before(async () => createWidget('dxDataGrid', {
-    dataSource: [],
-    editing: {
-      mode: editMode.toLowerCase() as any,
-      allowAdding: true,
-    },
-    columns: ['a', 'b'],
-  }));
+        .expect(cell00.isFocused)
+        .notOk()
+        .expect(dataGrid.apiGetCellValue(0, 0))
+        .eql('1');
+    }).before(async () => createWidget('dxDataGrid', {
+      dataSource: [],
+      editing: {
+        mode: editMode.toLowerCase() as any,
+        allowAdding: true,
+      },
+      columns: ['a', 'b'],
+    }));
 
-  test(`${editMode} mode - Cells in a modified row should be updated on Tab (T898356)`, async (t) => {
-    const dataGrid = new DataGrid('#container') as any;
-    const cell00 = dataGrid.getDataCell(0, 0);
-    const editor00 = cell00.getEditor();
-    const cell01 = dataGrid.getDataCell(0, 1);
-    const editor01 = cell01.getEditor();
+    test(`${editMode} mode - Cells in a modified row should be updated on Tab (T898356)`, async (t) => {
+      const dataGrid = new DataGrid('#container') as any;
+      const cell00 = dataGrid.getDataCell(0, 0);
+      const editor00 = cell00.getEditor();
+      const cell01 = dataGrid.getDataCell(0, 1);
+      const editor01 = cell01.getEditor();
 
-    await t.expect(dataGrid.isReady()).ok();
+      await t.expect(dataGrid.isReady()).ok();
 
-    await t
-      .click(cell00.element)
+      await t
+        .click(cell00.element)
 
-      .expect(cell00.isFocused).ok()
-      .expect(editor00.element.exists)
-      .ok()
-      .expect(editor00.element.focused)
-      .ok()
+        .expect(cell00.isFocused).ok()
+        .expect(editor00.element.exists)
+        .ok()
+        .expect(editor00.element.focused)
+        .ok()
 
-      .typeText(editor00.element, '1')
-      .pressKey('tab')
+        .typeText(editor00.element, '1')
+        .pressKey('tab')
 
-      .expect(cell00.isFocused)
-      .notOk()
-      .expect(dataGrid.apiGetCellValue(0, 0))
-      .eql('11')
-      .expect(cell01.isFocused)
-      .ok()
-      .expect(editor01.element.exists)
-      .ok()
-      .expect(editor01.element.focused)
-      .ok()
+        .expect(cell00.isFocused)
+        .notOk()
+        .expect(dataGrid.apiGetCellValue(0, 0))
+        .eql('11')
+        .expect(cell01.isFocused)
+        .ok()
+        .expect(editor01.element.exists)
+        .ok()
+        .expect(editor01.element.focused)
+        .ok()
 
-      .typeText(editor01.element, '2')
-      .pressKey('tab')
+        .typeText(editor01.element, '2')
+        .pressKey('tab')
 
-      .expect(cell01.isFocused)
-      .notOk()
-      .expect(dataGrid.apiGetCellValue(0, 1))
-      .eql('22');
-  }).before(async () => createWidget('dxDataGrid', {
-    dataSource: [{ a: '1', b: '2' }],
-    editing: {
-      mode: editMode.toLowerCase() as any,
-      allowUpdating: true,
-    },
-    columns: ['a', 'b'],
-  }));
+        .expect(cell01.isFocused)
+        .notOk()
+        .expect(dataGrid.apiGetCellValue(0, 1))
+        .eql('22');
+    }).before(async () => createWidget('dxDataGrid', {
+      dataSource: [{ a: '1', b: '2' }],
+      editing: {
+        mode: editMode.toLowerCase() as any,
+        allowUpdating: true,
+      },
+      columns: ['a', 'b'],
+    }));
 
-  test(`${editMode} mode - Cells in a modified row should be updated on Shift+Tab (T898356)`, async (t) => {
-    const dataGrid = new DataGrid('#container') as any;
-    const cell00 = dataGrid.getDataCell(0, 0);
-    const editor00 = cell00.getEditor();
-    const cell01 = dataGrid.getDataCell(0, 1);
-    const editor01 = cell01.getEditor();
+    test(`${editMode} mode - Cells in a modified row should be updated on Shift+Tab (T898356)`, async (t) => {
+      const dataGrid = new DataGrid('#container') as any;
+      const cell00 = dataGrid.getDataCell(0, 0);
+      const editor00 = cell00.getEditor();
+      const cell01 = dataGrid.getDataCell(0, 1);
+      const editor01 = cell01.getEditor();
 
-    await t.expect(dataGrid.isReady()).ok();
+      await t.expect(dataGrid.isReady()).ok();
 
-    await t
-      .click(cell01.element)
+      await t
+        .click(cell01.element)
 
-      .expect(cell01.isFocused).ok()
-      .expect(editor01.element.exists)
-      .ok()
-      .expect(editor01.element.focused)
-      .ok()
+        .expect(cell01.isFocused).ok()
+        .expect(editor01.element.exists)
+        .ok()
+        .expect(editor01.element.focused)
+        .ok()
 
-      .typeText(editor01.element, '2')
-      .pressKey('shift+tab')
+        .typeText(editor01.element, '2')
+        .pressKey('shift+tab')
 
-      .expect(cell01.isFocused)
-      .notOk()
-      .expect(dataGrid.apiGetCellValue(0, 1))
-      .eql('22')
-      .expect(cell00.isFocused)
-      .ok()
-      .expect(editor00.element.exists)
-      .ok()
-      .expect(editor00.element.focused)
-      .ok()
+        .expect(cell01.isFocused)
+        .notOk()
+        .expect(dataGrid.apiGetCellValue(0, 1))
+        .eql('22')
+        .expect(cell00.isFocused)
+        .ok()
+        .expect(editor00.element.exists)
+        .ok()
+        .expect(editor00.element.focused)
+        .ok()
 
-      .typeText(editor00.element, '1')
-      .pressKey('shift+tab')
+        .typeText(editor00.element, '1')
+        .pressKey('shift+tab')
 
-      .expect(cell00.isFocused)
-      .notOk()
-      .expect(dataGrid.apiGetCellValue(0, 0))
-      .eql('11');
-  }).before(async () => createWidget('dxDataGrid', {
-    dataSource: [{ a: '1', b: '2' }],
-    editing: {
-      mode: editMode.toLowerCase() as any,
-      allowUpdating: true,
-    },
-    columns: ['a', 'b'],
-  }));
+        .expect(cell00.isFocused)
+        .notOk()
+        .expect(dataGrid.apiGetCellValue(0, 0))
+        .eql('11');
+    }).before(async () => createWidget('dxDataGrid', {
+      dataSource: [{ a: '1', b: '2' }],
+      editing: {
+        mode: editMode.toLowerCase() as any,
+        allowUpdating: true,
+      },
+      columns: ['a', 'b'],
+    }));
+  }
 
   test(`${editMode} mode - Shift+Tab from the first editable cell should move focus to the last header (T1329750)`, async (t) => {
     const dataGrid = new DataGrid('#container') as any;
