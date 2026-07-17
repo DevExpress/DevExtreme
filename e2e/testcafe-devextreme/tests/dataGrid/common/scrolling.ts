@@ -365,6 +365,7 @@ test('Scroll position after grouping when RTL (T388508)', async (t) => {
 
 [false, true].forEach((rtlEnabled) => {
   test(`Headers should have a border before the scrollbar gutter when the vertical scrollbar occupies space (rtlEnabled = ${rtlEnabled}) (T1306973)`, async (t) => {
+    // arrange, act
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid('#container');
 
@@ -376,11 +377,19 @@ test('Scroll position after grouping when RTL (T388508)', async (t) => {
     const paddingProperty = rtlEnabled ? 'padding-left' : 'padding-right';
     const padding = parseFloat(await headersElement.getStyleProperty(paddingProperty));
 
+    // assert
     await t
       .expect(headersElement.hasClass('dx-datagrid-scroller-spacing'))
-      .eql(padding > 0);
+      .ok()
+      .expect(padding)
+      .eql(14);
 
-    await testScreenshot(t, takeScreenshot, `grid-headers-scroller-spacing-border${rtlEnabled ? '-rtl' : ''}.png`, { element: '#container' });
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `grid-headers-scroller-spacing-border${rtlEnabled ? '-rtl' : ''}.png`,
+      { element: '#container' },
+    );
 
     await t
       .expect(compareResults.isValid())
