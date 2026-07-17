@@ -575,7 +575,7 @@ editingModes.forEach((mode) => {
   [true, false].forEach((repaintChangesOnly) => {
     for (let i = 0; i < 50; i++) {
       test(
-        `Update cell value and focus next cell, mode: ${mode}, repaintChangesOnly: ${repaintChangesOnly}, useKeyboard: false`,
+        `${i}: Update cell value and focus next cell, mode: ${mode}, repaintChangesOnly: ${repaintChangesOnly}, useKeyboard: false`,
         async (t) => {
           const form = getEditForm(mode);
           let modifiedCellCount = mode === 'batch' ? 1 : 0;
