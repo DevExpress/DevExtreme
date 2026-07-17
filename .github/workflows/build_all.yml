@@ -111,14 +111,13 @@ jobs:
             artifacts/npm/*.tgz
           retention-days: 1
 
-      - name: Set GitHub Packages auth
-        run: pnpm set //npm.pkg.github.com/:_authToken='${NODE_AUTH_TOKEN}'
-
       - name: Build SBOMs
         if: ${{ github.event_name == 'push' || github.event.inputs.SBOM == 'true' }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm nx build sbom
+        run: |
+          pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN";
+          pnpm nx build sbom;
 
       - name: Upload SBOM artifacts
         if: ${{ github.event_name == 'push' || github.event.inputs.SBOM == 'true' }}
