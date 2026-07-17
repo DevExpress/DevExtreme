@@ -193,6 +193,9 @@ export class FieldChooserBase extends mixinWidget {
         break;
       case 'applyChangesMode':
       case 'remoteSort':
+      case 'onFieldContextMenuKeyDown':
+        // The context menu handler is read from the options on each keydown,
+        // so a runtime change requires no re-render.
         break;
       case 'state':
         if (this._skipStateChange || !this._dataSource) {
