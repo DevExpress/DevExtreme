@@ -31,9 +31,9 @@
   }
 
   .dx-filemanager-progress-box-image {
-    width: $fluent-base-icon-size * 2;
-    height: $fluent-base-icon-size * 2;
-    font-size: $fluent-base-icon-size * 2;
+    width: calc(#{$fluent-base-icon-size} * 2);
+    height: calc(#{$fluent-base-icon-size} * 2);
+    font-size: calc(#{$fluent-base-icon-size} * 2);
   }
 
   .dx-filemanager-progress-box-error {
@@ -155,9 +155,9 @@
     }
 
     .dx-filemanager-thumbnails-item-thumbnail {
-      width: $fluent-base-icon-size * 2;
-      height: $fluent-base-icon-size * 2;
-      font-size: $fluent-base-icon-size * 2;
+      width: calc(#{$fluent-base-icon-size} * 2);
+      height: calc(#{$fluent-base-icon-size} * 2);
+      font-size: calc(#{$fluent-base-icon-size} * 2);
     }
 
     .dx-filemanager-item-custom-thumbnail {
@@ -230,10 +230,10 @@
 }
 
 .dx-filemanager-view-switcher-popup {
-  width: 2 * $filemanager-toolbar-viewmode-padding + $fluent-base-icon-size;
+  width: calc(2 * #{$filemanager-toolbar-viewmode-padding} + #{$fluent-base-icon-size});
 
   .dx-dropdownbutton-popup-wrapper.dx-dropdownbutton-popup-wrapper .dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item-content {
-    padding-left: $filemanager-toolbar-viewmode-padding - 1px;
+    padding-left: calc(#{$filemanager-toolbar-viewmode-padding} - 1px);
     padding-right: $filemanager-toolbar-viewmode-padding;
     text-overflow: clip;
   }

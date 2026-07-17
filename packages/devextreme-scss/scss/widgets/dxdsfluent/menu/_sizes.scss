@@ -1,14 +1,15 @@
 @use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
 $fluent-menu-vertical-padding: null !default;
 
 @if $size == "default" {
-  $fluent-menu-vertical-padding: 6px !default;
+  $fluent-menu-vertical-padding: ds.$spacing-60 !default;
 }
 
 @if $size == "compact" {
-  $fluent-menu-vertical-padding: 4px !default;
+  $fluent-menu-vertical-padding: ds.$spacing-40 !default;
 }
 

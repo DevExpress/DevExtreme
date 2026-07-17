@@ -67,7 +67,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
 }
 
 .dx-list-item-icon-container {
-  width: $fluent-base-icon-size + $fluent-list-item-horizontal-padding;
+  width: calc(#{$fluent-base-icon-size} + #{$fluent-list-item-horizontal-padding});
   height: $fluent-base-icon-size;
   vertical-align: bottom;
 }
@@ -147,7 +147,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
     }
 
     &.dx-list-with-search .dx-scrollable-wrapper {
-      height: calc(100% - #{$fluent-texteditor-input-height + $fluent-list-searchbox-margin-bottom});
+      height: calc(100% - (#{$fluent-texteditor-input-height} + #{$fluent-list-searchbox-margin-bottom}));
     }
 
     .dx-empty-message {
@@ -443,7 +443,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
   }
 
   .dx-list-select-all-checkbox {
-    margin: 0 $item-horizontal-padding - 4px;
+    margin: 0 calc(#{$item-horizontal-padding} - 4px);
   }
 
   .dx-list-select-all-label {
@@ -454,7 +454,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
     padding-inline: $fluent-list-item-vertical-padding;
 
     &.dx-list-static-delete-button-container {
-      width: $item-horizontal-padding + $fluent-button-icon-size;
+      width: calc(#{$item-horizontal-padding} + #{$fluent-button-icon-size});
       padding: 0;
     }
 
@@ -484,7 +484,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
     display: table-cell;
     vertical-align: middle;
     padding: 0 $item-horizontal-padding;
-    width: $item-horizontal-padding * 2 + $fluent-base-icon-size;
+    width: calc(#{$item-horizontal-padding} * 2 + #{$fluent-base-icon-size});
   }
 
   .dx-list-slide-menu-button-menu {

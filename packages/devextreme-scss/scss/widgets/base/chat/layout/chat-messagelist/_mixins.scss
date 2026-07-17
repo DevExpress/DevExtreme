@@ -1,4 +1,5 @@
 @use "sass:math";
+@use "sass:meta";
 
 @mixin chat-messagelist(
   $padding,
@@ -51,7 +52,7 @@
   .dx-chat-messagelist-empty-image {
     color: $messagelist-empty-icon-color;
     background-color: $messagelist-empty-icon-background-color;
-    padding: math.div($messagelist-empty-icon-box-size - $messagelist-empty-icon-size, 2);
+    padding: if(meta.type-of($messagelist-empty-icon-box-size) == number and meta.type-of($messagelist-empty-icon-size) == number, math.div($messagelist-empty-icon-box-size - $messagelist-empty-icon-size, 2), calc((#{$messagelist-empty-icon-box-size} - #{$messagelist-empty-icon-size}) / 2));
     margin-bottom: $messagelist-empty-icon-margin-bottom;
 
     &::before {

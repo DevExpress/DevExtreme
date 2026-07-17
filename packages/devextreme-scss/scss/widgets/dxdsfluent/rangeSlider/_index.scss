@@ -9,5 +9,5 @@
 // adduse
 
 .dx-rangeslider-start-handle {
-  margin-inline-start: math.div(-$fluent-slider-handle-size, 2);
+  margin-inline-start: calc(#{$fluent-slider-handle-size} / -2);
 }

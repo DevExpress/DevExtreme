@@ -1,7 +1,8 @@
 @use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$fluent-datebox-overlay-item-margin: 16px !default;
-$fluent-datebox-overlay-item-margin-adaptive: 18px !default;
-$fluent-datebox-popup-content-margin: 0 34px !default;
+$fluent-datebox-overlay-item-margin: ds.$spacing-160 !default;
+$fluent-datebox-overlay-item-margin-adaptive: ds.$spacing-180 !default;
+$fluent-datebox-popup-content-margin: 0 ds.$spacing-340 !default;

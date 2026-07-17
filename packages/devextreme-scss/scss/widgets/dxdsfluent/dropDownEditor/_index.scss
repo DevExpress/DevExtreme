@@ -14,15 +14,11 @@
 
 $fluent-dropdowneditor-container-button-size: $fluent-base-icon-size;
 
-$fluent-dropdowneditor-invalid-badge-offset:
-  $fluent-dropdowneditor-container-button-size +
-  $fluent-invalid-badge-halfhorizontal-padding;
+$fluent-dropdowneditor-invalid-badge-offset: calc(#{$fluent-dropdowneditor-container-button-size} + #{$fluent-invalid-badge-halfhorizontal-padding});
 
-$fluent-dropdowneditor-invalid-badge-with-clear-offset:
-  $fluent-dropdowneditor-container-button-size * 2 +
-  $fluent-invalid-badge-halfhorizontal-padding;
+$fluent-dropdowneditor-invalid-badge-with-clear-offset: calc(#{$fluent-dropdowneditor-container-button-size} * 2 + #{$fluent-invalid-badge-halfhorizontal-padding});
 
-$fluent-dropdowneditor-invalid-badge-size: $fluent-invalid-badge-size + $fluent-invalid-badge-horizontal-padding;
+$fluent-dropdowneditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + #{$fluent-invalid-badge-horizontal-padding});
 
 @mixin dx-dropdowneditor-button-icon() {
   width: $fluent-dropdowneditor-container-button-size;

@@ -1,4 +1,5 @@
 @use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -10,31 +11,31 @@ $pivotgrid-header-top-bottom-padding: null !default;
 $pivotgrid-button-top-padding: null !default;
 $area-field-top-bottom-padding: null !default;
 
-$pivotgrid-empty-column-width: 19px !default;
-$pivotgrid-field-indicators-offset: 6px !default;
-$pivotgrid-indicators-line-height: 12px !default;
-$pivotgrid-empty-area-text-padding: 5px !default;
+$pivotgrid-empty-column-width: ds.$spacing-190 !default;
+$pivotgrid-field-indicators-offset: ds.$spacing-60 !default;
+$pivotgrid-indicators-line-height: ds.$line-height-120 !default;
+$pivotgrid-empty-area-text-padding: ds.$spacing-50 !default;
 
 $area-field-border-radius: null !default;
 
 @if $size == "default" {
-  $fluent-pivotgrid-cell-padding: 10px 16px !default;
-  $pivotgrid-common-left-right-padding: 10px !default;
-  $pivotgrid-header-top-bottom-padding: 14px !default;
-  $fluent-pivotgrid-expanded-cell-padding: 10px 14px 10px 19px !default;
-  $fluent-pivotgrid-total-text-left-padding: 22px !default;
-  $pivotgrid-button-top-padding: 10px !default;
-  $area-field-border-radius: 6px !default;
-  $area-field-top-bottom-padding: 5px !default;
+  $fluent-pivotgrid-cell-padding: ds.$spacing-100 ds.$spacing-160 !default;
+  $pivotgrid-common-left-right-padding: ds.$spacing-100 !default;
+  $pivotgrid-header-top-bottom-padding: ds.$spacing-140 !default;
+  $fluent-pivotgrid-expanded-cell-padding: ds.$spacing-100 ds.$spacing-140 ds.$spacing-100 ds.$spacing-190 !default;
+  $fluent-pivotgrid-total-text-left-padding: ds.$spacing-220 !default;
+  $pivotgrid-button-top-padding: ds.$spacing-100 !default;
+  $area-field-border-radius: ds.$border-radius-60 !default;
+  $area-field-top-bottom-padding: ds.$spacing-50 !default;
 }
 
 @else if $size == "compact" {
-  $fluent-pivotgrid-cell-padding: 7px 11px !default;
-  $pivotgrid-common-left-right-padding: 8px !default;
-  $pivotgrid-header-top-bottom-padding: 5px !default;
-  $fluent-pivotgrid-expanded-cell-padding: 7px 8px 7px 13px !default;
-  $fluent-pivotgrid-total-text-left-padding: 16px !default;
-  $pivotgrid-button-top-padding: 5px !default;
-  $area-field-border-radius: 4px !default;
-  $area-field-top-bottom-padding: 1px !default;
+  $fluent-pivotgrid-cell-padding: ds.$spacing-70 ds.$spacing-110 !default;
+  $pivotgrid-common-left-right-padding: ds.$spacing-80 !default;
+  $pivotgrid-header-top-bottom-padding: ds.$spacing-50 !default;
+  $fluent-pivotgrid-expanded-cell-padding: ds.$spacing-70 ds.$spacing-80 ds.$spacing-70 ds.$spacing-130 !default;
+  $fluent-pivotgrid-total-text-left-padding: ds.$spacing-160 !default;
+  $pivotgrid-button-top-padding: ds.$spacing-50 !default;
+  $area-field-border-radius: ds.$border-radius-40 !default;
+  $area-field-top-bottom-padding: ds.$spacing-10 !default;
 }

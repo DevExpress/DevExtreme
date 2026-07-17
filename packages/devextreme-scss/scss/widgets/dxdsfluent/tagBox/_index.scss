@@ -25,8 +25,8 @@
 
   &.dx-editor-underlined {
     .dx-tag-container {
-      padding-top: $fluent-tagbox-tag-container-vertical-padding + 1px;
-      padding-bottom: $fluent-tagbox-tag-container-vertical-padding + 1px;
+      padding-top: calc(#{$fluent-tagbox-tag-container-vertical-padding} + 1px);
+      padding-bottom: calc(#{$fluent-tagbox-tag-container-vertical-padding} + 1px);
     }
   }
 
@@ -69,8 +69,8 @@
     &.dx-editor-underlined {
       .dx-tag-container,
       .dx-placeholder::before {
-        padding-top: $fluent-tagbox-filled-with-label-top-padding + 1px;
-        padding-bottom: $fluent-tagbox-filled-with-label-bottom-padding + 1px;
+        padding-top: calc(#{$fluent-tagbox-filled-with-label-top-padding} + 1px);
+        padding-bottom: calc(#{$fluent-tagbox-filled-with-label-bottom-padding} + 1px);
       }
     }
   }
@@ -123,7 +123,7 @@
 
   @include dx-icon(clear);
 
-  font-size: $fluent-tagbox-tag-content-font-size + 2px;
+  font-size: calc(#{$fluent-tagbox-tag-content-font-size} + 2px);
 
   &::before {
     content: "\f15f";

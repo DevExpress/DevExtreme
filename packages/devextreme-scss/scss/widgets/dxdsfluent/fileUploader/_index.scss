@@ -50,17 +50,17 @@ $fluent-fileuploader-file-wrapper-border-size: 3px;
   .dx-fileuploader-input {
     display: block;
     width: 100%;
-    padding-top: $fluent-fileuploader-vertical-padding * 2 + $fluent-fileuploader-file-wrapper-border-size;
+    padding-top: calc(#{$fluent-fileuploader-vertical-padding} * 2 + #{$fluent-fileuploader-file-wrapper-border-size});
     padding-right: $fluent-fileuploader-file-wrapper-border-size;
 
     // NOTE: height of the widget should be the same in default and drag over states, but not with margin help
-    padding-bottom: $fluent-fileuploader-vertical-padding * 2 + $fluent-fileuploader-file-wrapper-border-size + 1px;
+    padding-bottom: calc(#{$fluent-fileuploader-vertical-padding} * 2 + #{$fluent-fileuploader-file-wrapper-border-size} + 1px);
     padding-left: $fluent-fileuploader-file-wrapper-border-size;
     box-sizing: content-box;
   }
 
   .dx-fileuploader-input-label { // stylelint-disable-line no-duplicate-selectors
-    padding: $fluent-fileuploader-vertical-padding * 2 $fluent-fileuploader-vertical-padding + 2px;
+    padding: calc(#{$fluent-fileuploader-vertical-padding} * 2) calc(#{$fluent-fileuploader-vertical-padding} + 2px);
     border: $fluent-fileuploader-file-wrapper-border-size dashed;
     border-color: $fileuploader-border-color;
   }
@@ -76,7 +76,7 @@ $fluent-fileuploader-file-wrapper-border-size: 3px;
 }
 
 .dx-fileuploader-input-label {
-  padding: $fluent-fileuploader-vertical-padding + math.div(math.div($fluent-base-font-size, 2) - $fluent-fileuploader-vertical-padding, 2) + 1px $fluent-fileuploader-vertical-padding + 2px;
+  padding: calc(#{$fluent-fileuploader-vertical-padding} + (#{$fluent-base-font-size} / 2 - #{$fluent-fileuploader-vertical-padding}) / 2 + 1px) calc(#{$fluent-fileuploader-vertical-padding} + 2px);
   color: $fileuploader-filename-color;
 
   @include dx-overflow();
@@ -162,7 +162,7 @@ $fluent-fileuploader-file-wrapper-border-size: 3px;
 }
 
 .dx-fileuploader-file-name {
-  padding-bottom: math.div($fluent-fileuploader-vertical-padding, 2);
+  padding-bottom: calc((#{$fluent-fileuploader-vertical-padding}) / 2);
   color: $fileuploader-filename-color;
   font-weight: 500;
 }

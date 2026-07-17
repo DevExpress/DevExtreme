@@ -1,6 +1,7 @@
 @use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$fluent-scrollbar-size-thin: 6px;
-$fluent-scrollbar-size: 13px;
+$fluent-scrollbar-size-thin: ds.$spacing-60;
+$fluent-scrollbar-size: ds.$spacing-130;

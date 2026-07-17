@@ -1,13 +1,14 @@
 @use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
 $fluent-daterangebox-active-bar-horizontal-margin: null !default;
 
 @if $size == "default" {
-  $fluent-daterangebox-active-bar-horizontal-margin: 12px !default;
+  $fluent-daterangebox-active-bar-horizontal-margin: ds.$spacing-120 !default;
 }
 
 @else if $size == "compact" {
-  $fluent-daterangebox-active-bar-horizontal-margin: 8px !default;
+  $fluent-daterangebox-active-bar-horizontal-margin: ds.$spacing-80 !default;
 }

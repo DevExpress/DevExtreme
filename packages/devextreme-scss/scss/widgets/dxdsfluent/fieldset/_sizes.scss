@@ -1,5 +1,6 @@
 @use "../sizes" as *;
 @use "../common/sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -10,24 +11,24 @@ $fluent-field-vertical-margin: null !default;
 $fluent-field-labelvalue-spacing: null !default;
 
 @if $size == "default" {
-  $fluent-fieldset-vertical-margin: 30px !default;
-  $fluent-fieldset-horizontal-margin: 20px !default;
-  $fluent-fieldset-header-vertical-margin: 20px !default;
-  $fluent-field-vertical-margin: 30px !default;
-  $fluent-field-labelvalue-spacing: 15px !default;
+  $fluent-fieldset-vertical-margin: ds.$spacing-300 !default;
+  $fluent-fieldset-horizontal-margin: ds.$spacing-200 !default;
+  $fluent-fieldset-header-vertical-margin: ds.$spacing-200 !default;
+  $fluent-field-vertical-margin: ds.$spacing-300 !default;
+  $fluent-field-labelvalue-spacing: ds.$spacing-150 !default;
 }
 
 @else if $size == "compact" {
-  $fluent-fieldset-vertical-margin: 20px !default;
-  $fluent-fieldset-horizontal-margin: 16px !default;
-  $fluent-fieldset-header-vertical-margin: 16px !default;
-  $fluent-field-vertical-margin: 20px !default;
-  $fluent-field-labelvalue-spacing: 12px !default;
+  $fluent-fieldset-vertical-margin: ds.$spacing-200 !default;
+  $fluent-fieldset-horizontal-margin: ds.$spacing-160 !default;
+  $fluent-fieldset-header-vertical-margin: ds.$spacing-160 !default;
+  $fluent-field-vertical-margin: ds.$spacing-200 !default;
+  $fluent-field-labelvalue-spacing: ds.$spacing-120 !default;
 }
 
 $fluent-field-min-height: $fluent-base-inline-widget-height !default;
-$fluent-field-value-top-padding: 21px !default;
+$fluent-field-value-top-padding: ds.$spacing-210 !default;
 $fluent-field-value-horizontal-padding: $fluent-base-inline-horizontal-padding !default;
-$fluent-field-value-bottom-padding: 20px !default;
-$fluent-fieldset-attention-icon-offset: $fluent-base-inline-horizontal-padding + $fluent-invalid-badge-size !default;
-$fluent-radiogroup-min-height: 26px !default;
+$fluent-field-value-bottom-padding: ds.$spacing-200 !default;
+$fluent-fieldset-attention-icon-offset: calc(#{$fluent-base-inline-horizontal-padding} + #{$fluent-invalid-badge-size}) !default;
+$fluent-radiogroup-min-height: ds.$spacing-260 !default;

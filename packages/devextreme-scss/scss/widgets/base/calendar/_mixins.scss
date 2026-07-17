@@ -1,4 +1,5 @@
 @use "sass:color";
+@use "sass:meta";
 
 @mixin dx-calendar-mixin(
   $calendar-bg,
@@ -16,7 +17,7 @@
     gap: $calendar-element-padding;
 
     &.dx-calendar-with-footer {
-      height: $calendar-height + $calendar-element-padding + $footer-button-height;
+      height: if(meta.type-of($calendar-height) == number and meta.type-of($calendar-element-padding) == number and meta.type-of($footer-button-height) == number, $calendar-height + $calendar-element-padding + $footer-button-height, calc(#{$calendar-height} + #{$calendar-element-padding} + #{$footer-button-height}));
     }
 
     &.dx-calendar-multiview {

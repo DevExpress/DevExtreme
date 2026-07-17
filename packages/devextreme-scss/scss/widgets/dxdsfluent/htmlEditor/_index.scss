@@ -180,7 +180,7 @@
   &.dx-color-format,
   &.dx-background-format {
     .dx-button-content {
-      padding-bottom: $fluent-button-vertical-padding - 3px;
+      padding-bottom: calc(#{$fluent-button-vertical-padding} - 3px);
     }
   }
 
@@ -190,7 +190,7 @@
 }
 
 .dx-htmleditor-toolbar-separator {
-  height: math.div($fluent-toolbar-height, 2);
+  height: calc((#{$fluent-toolbar-height}) / 2);
   border-inline-start-color: $htmleditor-toolbar-border-color;
 }
 
@@ -233,7 +233,7 @@
     .dx-buttongroup {
       margin-inline-start: $fluent-html-editor-add-image-dialog-base-padding;
       width: $fluent-button-height;
-      margin-top: math.div($fluent-base-inline-widget-height - $fluent-button-height, 2);
+      margin-top: calc((#{$fluent-base-inline-widget-height} - #{$fluent-button-height}) / 2);
     }
   }
 
@@ -273,7 +273,7 @@
   .dx-fileuploader-dragover {
     .dx-fileuploader-input {
       padding-top: $fluent-fileuploader-vertical-padding;
-      padding-bottom: $fluent-fileuploader-vertical-padding + 1px;
+      padding-bottom: calc(#{$fluent-fileuploader-vertical-padding} + 1px);
     }
 
     .dx-fileuploader-content {

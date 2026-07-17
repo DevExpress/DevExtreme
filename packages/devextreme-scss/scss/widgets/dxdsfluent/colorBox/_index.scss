@@ -21,7 +21,7 @@
     }
 
     &::after {
-      left: $fluent-colorbox-preview-padding + 1;
+      left: calc(#{$fluent-colorbox-preview-padding} + 1px);
     }
   }
 

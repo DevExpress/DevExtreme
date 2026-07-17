@@ -1,32 +1,33 @@
 @use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$fluent-list-vertical-padding: 4px !default;
-$fluent-list-item-margin-inline: 4px !default;
-$fluent-list-bottom-padding: 4px !default;
-$fluent-list-searchbox-margin-bottom: 4px !default;
+$fluent-list-vertical-padding: ds.$spacing-40 !default;
+$fluent-list-item-margin-inline: ds.$spacing-40 !default;
+$fluent-list-bottom-padding: ds.$spacing-40 !default;
+$fluent-list-searchbox-margin-bottom: ds.$spacing-40 !default;
 $fluent-list-item-height: null !default;
 $fluent-list-item-vertical-padding: null !default;
 $fluent-list-item-horizontal-padding: null !default;
-$fluent-list-item-gap: 2px !default;
+$fluent-list-item-gap: ds.$spacing-20 !default;
 $fluent-list-group-header-vertical-padding: null !default;
 $fluent-list-next-button-horizontal-padding: null !default;
 
 @if $size == "default" {
-  $fluent-list-item-height: 32px !default;
-  $fluent-list-item-vertical-padding: 6px !default;
-  $fluent-list-item-horizontal-padding: 12px !default;
-  $fluent-list-group-header-vertical-padding: 6px !default;
-  $fluent-list-next-button-horizontal-padding: 32px !default;
+  $fluent-list-item-height: ds.$spacing-320 !default;
+  $fluent-list-item-vertical-padding: ds.$spacing-60 !default;
+  $fluent-list-item-horizontal-padding: ds.$spacing-120 !default;
+  $fluent-list-group-header-vertical-padding: ds.$spacing-60 !default;
+  $fluent-list-next-button-horizontal-padding: ds.$spacing-320 !default;
 }
 
 @else if $size == "compact" {
-  $fluent-list-item-height: 24px !default;
-  $fluent-list-item-vertical-padding: 4px !default;
-  $fluent-list-item-horizontal-padding: 8px !default;
-  $fluent-list-group-header-vertical-padding: 8px !default;
-  $fluent-list-next-button-horizontal-padding: 24px !default;
+  $fluent-list-item-height: ds.$spacing-240 !default;
+  $fluent-list-item-vertical-padding: ds.$spacing-40 !default;
+  $fluent-list-item-horizontal-padding: ds.$spacing-80 !default;
+  $fluent-list-group-header-vertical-padding: ds.$spacing-80 !default;
+  $fluent-list-next-button-horizontal-padding: ds.$spacing-240 !default;
 }
 
 :root {

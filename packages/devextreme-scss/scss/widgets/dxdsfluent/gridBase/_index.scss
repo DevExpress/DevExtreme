@@ -53,7 +53,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
     .dx-menu {
       background-color: transparent;
-      margin-top: math.div(($fluent-grid-base-header-height - $fluent-button-height), 2);
+      margin-top: calc((#{$fluent-grid-base-header-height} - #{$fluent-button-height}) / 2);
       margin-left: 5px !important; // stylelint-disable-line declaration-no-important
       height: $fluent-button-height;
 
@@ -103,41 +103,41 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       .dx-menu-items-container {
         .dx-icon-context-menu-sort-asc {
           @include dx-icon(sortuptext);
-          @include dx-icon-sizing($fluent-grid-base-filter-icon-size - 4);
+          @include dx-icon-sizing(calc(#{$fluent-grid-base-filter-icon-size} - 4px));
         }
 
         .dx-icon-context-menu-sort-desc {
           @include dx-icon(sortdowntext);
-          @include dx-icon-sizing($fluent-grid-base-filter-icon-size - 4);
+          @include dx-icon-sizing(calc(#{$fluent-grid-base-filter-icon-size} - 4px));
         }
 
         .dx-icon-context-menu-sort-none {
-          @include dx-icon-sizing($fluent-grid-base-filter-icon-size - 4);
+          @include dx-icon-sizing(calc(#{$fluent-grid-base-filter-icon-size} - 4px));
         }
 
         .dx-icon-fix-column {
           @include dx-icon(fixcolumn);
-          @include dx-icon-sizing($fluent-grid-base-filter-icon-size - 4);
+          @include dx-icon-sizing(calc(#{$fluent-grid-base-filter-icon-size} - 4px));
         }
 
         .dx-icon-fix-column-left {
           @include dx-icon(fixcolumnleft);
-          @include dx-icon-sizing($fluent-grid-base-filter-icon-size - 4);
+          @include dx-icon-sizing(calc(#{$fluent-grid-base-filter-icon-size} - 4px));
         }
 
         .dx-icon-fix-column-right {
           @include dx-icon(fixcolumnright);
-          @include dx-icon-sizing($fluent-grid-base-filter-icon-size - 4);
+          @include dx-icon-sizing(calc(#{$fluent-grid-base-filter-icon-size} - 4px));
         }
 
         .dx-icon-stick-column {
           @include dx-icon(stickcolumn);
-          @include dx-icon-sizing($fluent-grid-base-filter-icon-size - 4);
+          @include dx-icon-sizing(calc(#{$fluent-grid-base-filter-icon-size} - 4px));
         }
 
         .dx-icon-unfix-column {
           @include dx-icon(unfixcolumn);
-          @include dx-icon-sizing($fluent-grid-base-filter-icon-size - 4);
+          @include dx-icon-sizing(calc(#{$fluent-grid-base-filter-icon-size} - 4px));
         }
       }
     }
@@ -206,7 +206,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       .dx-sort-index-icon {
         padding-right: 4px;
         margin-left: -1px;
-        font-size: $fluent-grid-base-header-cell-font-size - 1px;
+        font-size: calc(#{$fluent-grid-base-header-cell-font-size} - 1px);
         position: relative;
         bottom: 1px;
       }
@@ -247,7 +247,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     .dx-error-row {
       .dx-closebutton {
         float: right;
-        margin: $fluent-grid-base-cell-vertical-padding + 2px;
+        margin: calc(#{$fluent-grid-base-cell-vertical-padding} + 2px);
 
         @include dx-icon(close);
         @include dx-icon-sizing(14px);
@@ -677,7 +677,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
         .dx-texteditor-input {
           font-size: $fluent-grid-base-cell-font-size;
-          height: $fluent-grid-base-cell-height + 1;
+          height: calc(#{$fluent-grid-base-cell-height} + 1px);
           padding-right: $fluent-filter-row-between-editor-padding;
           padding-left: $fluent-filter-row-between-editor-padding;
         }
@@ -883,8 +883,8 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
     &.dx-#{$widget-name}-sticky-columns {
       .dx-row.dx-edit-row > td:not(.dx-master-detail-cell) .dx-texteditor-input {
-        height: $fluent-grid-base-cell-height - 2px;
-        line-height: $fluent-grid-base-cell-height - 2px;
+        height: calc(#{$fluent-grid-base-cell-height} - 2px);
+        line-height: calc(#{$fluent-grid-base-cell-height} - 2px);
       }
 
       .dx-master-detail-row > .dx-master-detail-cell {

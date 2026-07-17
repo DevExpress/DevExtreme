@@ -14,7 +14,7 @@ $scrollview-loading-indicator-size: 42px;
 .dx-scrollview-scrollbottom-text,
 .dx-scrollview-pull-down-text {
   margin-left: 10px;
-  top: math.div(50px - $fluent-base-font-size, 2);
+  top: calc((50px - #{$fluent-base-font-size}) / 2);
   display: inline-block;
 
   .dx-rtl & {

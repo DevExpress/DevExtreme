@@ -332,7 +332,7 @@ $diagram-toolbox-title-size: 18px;
     padding: 0 $diagram-properties-panel-spacing $diagram-properties-panel-spacing;
 
     .dx-toolbar-item {
-      margin-bottom: math.div($diagram-properties-panel-spacing, 2);
+      margin-bottom: calc((#{$diagram-properties-panel-spacing}) / 2);
 
       .dx-button {
         height: auto;
@@ -460,7 +460,7 @@ $diagram-toolbox-title-size: 18px;
 
   .dx-menu-separator {
     width: 1px;
-    height: $fluent-diagram-toolbar-icon-size + $diagram-touchbar-item-padding + $diagram-touchbar-item-padding + 2;
+    height: calc(#{$fluent-diagram-toolbar-icon-size} + #{$diagram-touchbar-item-padding} + #{$diagram-touchbar-item-padding} + 2px);
     margin: 0;
   }
 }

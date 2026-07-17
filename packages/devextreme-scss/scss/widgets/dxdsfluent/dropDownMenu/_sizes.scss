@@ -1,6 +1,7 @@
 @use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$fluent-dropdownmenu-section-horizontal-margin: 4px !default;
-$fluent-dropdownmenu-section-row-gap: 2px !default;
+$fluent-dropdownmenu-section-horizontal-margin: ds.$spacing-40 !default;
+$fluent-dropdownmenu-section-row-gap: ds.$spacing-20 !default;

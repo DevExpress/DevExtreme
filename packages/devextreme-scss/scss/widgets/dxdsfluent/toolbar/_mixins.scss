@@ -33,7 +33,7 @@
     padding-inline-end: $item-spacing;
 
     &.dx-toolbar-first-in-group {
-      padding-left: $fluent-toolbar-item-spacing * 4;
+      padding-left: calc(#{$fluent-toolbar-item-spacing} * 4);
     }
 
     &:last-child {

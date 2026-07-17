@@ -1,4 +1,5 @@
 @use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -21,54 +22,54 @@ $diagram-small-editor-width: null !default;
 $diagram-medium-editor-width: null !default;
 $diagram-large-editor-width: null !default;
 
-$diagram-toolbox-input-margin: 2px !default;
+$diagram-toolbox-input-margin: ds.$spacing-20 !default;
 
 @if $size == "default" {
-  $diagram-toolbox-width: 156px !default;
-  $diagram-toolbox-h-padding: 12px !default;
-  $diagram-toolbox-accordion-v-padding: 8px !default;
-  $diagram-toolbox-input-h-padding: 9px !default;
-  $diagram-toolbox-input-v-padding: 12px !default;
-  $diagram-toolbox-input-image-size: 18px !default;
-  $diagram-toolbox-input-image-padding: 6px 4px !default;
-  $diagram-toolbox-mobile-padding: 68px !default;
+  $diagram-toolbox-width: 156px !default; // dx-offscale: 156px
+  $diagram-toolbox-h-padding: ds.$spacing-120 !default;
+  $diagram-toolbox-accordion-v-padding: ds.$spacing-80 !default;
+  $diagram-toolbox-input-h-padding: ds.$spacing-90 !default;
+  $diagram-toolbox-input-v-padding: ds.$spacing-120 !default;
+  $diagram-toolbox-input-image-size: ds.$spacing-180 !default;
+  $diagram-toolbox-input-image-padding: ds.$spacing-60 ds.$spacing-40 !default;
+  $diagram-toolbox-mobile-padding: 68px !default; // dx-offscale: 68px
 
   $diagram-properties-panel-padding: 0 !default;
-  $diagram-properties-panel-spacing: 16px !default;
-  $diagram-properties-layout-icon-size: 64px !default;
+  $diagram-properties-panel-spacing: ds.$spacing-160 !default;
+  $diagram-properties-layout-icon-size: ds.$spacing-640 !default;
 
-  $diagram-touchbar-item-padding: 10px !default;
+  $diagram-touchbar-item-padding: ds.$spacing-100 !default;
 
-  $diagram-floating-toolbar-items-height: 36px !default;
-  $diagram-floating-toolbar-editor-padding: 8px 6px !default;
-  $diagram-floating-toolbar-editor-button-padding: 4px !default;
+  $diagram-floating-toolbar-items-height: ds.$spacing-360 !default;
+  $diagram-floating-toolbar-editor-padding: ds.$spacing-80 ds.$spacing-60 !default;
+  $diagram-floating-toolbar-editor-button-padding: ds.$spacing-40 !default;
 
-  $diagram-small-editor-width: 100px !default;
-  $diagram-medium-editor-width: 180px !default;
-  $diagram-large-editor-width: 280px !default;
+  $diagram-small-editor-width: ds.$spacing-1000 !default;
+  $diagram-medium-editor-width: 180px !default; // dx-offscale: 180px
+  $diagram-large-editor-width: 280px !default; // dx-offscale: 280px
 }
 
 @else if $size == "compact" {
-  $diagram-toolbox-width: 130px !default;
-  $diagram-toolbox-h-padding: 10px !default;
-  $diagram-toolbox-accordion-v-padding: 6px !default;
-  $diagram-toolbox-input-h-padding: 8px !default;
-  $diagram-toolbox-input-v-padding: 8px !default;
-  $diagram-toolbox-input-image-size: 14px !default;
-  $diagram-toolbox-input-image-padding: 3px 4px !default;
-  $diagram-toolbox-mobile-padding: 58px !default;
+  $diagram-toolbox-width: 130px !default; // dx-offscale: 130px
+  $diagram-toolbox-h-padding: ds.$spacing-100 !default;
+  $diagram-toolbox-accordion-v-padding: ds.$spacing-60 !default;
+  $diagram-toolbox-input-h-padding: ds.$spacing-80 !default;
+  $diagram-toolbox-input-v-padding: ds.$spacing-80 !default;
+  $diagram-toolbox-input-image-size: ds.$spacing-140 !default;
+  $diagram-toolbox-input-image-padding: ds.$spacing-30 ds.$spacing-40 !default;
+  $diagram-toolbox-mobile-padding: 58px !default; // dx-offscale: 58px
 
-  $diagram-properties-panel-padding: 6px !default;
-  $diagram-properties-panel-spacing: 8px !default;
-  $diagram-properties-layout-icon-size: 48px !default;
+  $diagram-properties-panel-padding: ds.$spacing-60 !default;
+  $diagram-properties-panel-spacing: ds.$spacing-80 !default;
+  $diagram-properties-layout-icon-size: ds.$spacing-480 !default;
 
-  $diagram-touchbar-item-padding: 7px !default;
+  $diagram-touchbar-item-padding: ds.$spacing-70 !default;
 
-  $diagram-floating-toolbar-items-height: 28px !default;
-  $diagram-floating-toolbar-editor-padding: 6px 4px !default;
-  $diagram-floating-toolbar-editor-button-padding: 2px !default;
+  $diagram-floating-toolbar-items-height: ds.$spacing-280 !default;
+  $diagram-floating-toolbar-editor-padding: ds.$spacing-60 ds.$spacing-40 !default;
+  $diagram-floating-toolbar-editor-button-padding: ds.$spacing-20 !default;
 
-  $diagram-small-editor-width: 80px !default;
-  $diagram-medium-editor-width: 120px !default;
-  $diagram-large-editor-width: 220px !default;
+  $diagram-small-editor-width: ds.$spacing-800 !default;
+  $diagram-medium-editor-width: ds.$spacing-1200 !default;
+  $diagram-large-editor-width: 220px !default; // dx-offscale: 220px
 }

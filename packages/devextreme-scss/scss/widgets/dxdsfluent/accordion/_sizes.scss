@@ -1,9 +1,10 @@
 @use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
 $fluent-accordion-title-horizontal-padding: null !default;
-$fluent-accordion-title-vertical-padding: 6px !default;
+$fluent-accordion-title-vertical-padding: ds.$spacing-60 !default;
 $fluent-accordion-body-padding: null !default;
 $fluent-accordion-title-height: null !default;
 
@@ -18,19 +19,19 @@ $accordion-item-border-radius: $fluent-base-border-radius !default;
 $fluent-accordion-item-opened-margin: null !default;
 
 @if $size == "default" {
-  $fluent-accordion-title-horizontal-padding: 12px !default;
-  $fluent-accordion-body-padding: 12px !default;
-  $fluent-accordion-title-height: 44px !default;
-  $accordion-title-icon-margin: 8px !default;
-  $accordion-title-icon-size: 20px !default;
+  $fluent-accordion-title-horizontal-padding: ds.$spacing-120 !default;
+  $fluent-accordion-body-padding: ds.$spacing-120 !default;
+  $fluent-accordion-title-height: ds.$spacing-440 !default;
+  $accordion-title-icon-margin: ds.$spacing-80 !default;
+  $accordion-title-icon-size: ds.$spacing-200 !default;
   $fluent-accordion-item-opened-margin: 0 !default;
 }
 
 @else if $size == "compact" {
-  $fluent-accordion-title-horizontal-padding: 8px !default;
-  $fluent-accordion-body-padding: 8px !default;
-  $fluent-accordion-title-height: 32px !default;
-  $accordion-title-icon-margin: 6px !default;
-  $accordion-title-icon-size: 16px !default;
+  $fluent-accordion-title-horizontal-padding: ds.$spacing-80 !default;
+  $fluent-accordion-body-padding: ds.$spacing-80 !default;
+  $fluent-accordion-title-height: ds.$spacing-320 !default;
+  $accordion-title-icon-margin: ds.$spacing-60 !default;
+  $accordion-title-icon-size: ds.$spacing-160 !default;
   $fluent-accordion-item-opened-margin: 0 !default;
 }

@@ -1,4 +1,5 @@
 @use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -7,29 +8,29 @@ $fluent-slider-wrapper-height: null !default;
 $fluent-slider-tooltip-width: null !default;
 $fluent-slider-top-tooltip-margin: null !default;
 
-$fluent-slider-height: 28px !default; // for fieldset height
+$fluent-slider-height: ds.$spacing-280 !default; // for fieldset height
 $fluent-slider-radius: 50% !default;
 $fluent-slider-track-height: null !default;
-$fluent-slider-track-border-radius: 2px !default;
+$fluent-slider-track-border-radius: ds.$border-radius-20 !default;
 $fluent-slider-handle-height: null !default;
 $fluent-slider-handle-inner-size: null !default;
 
 @if $size == "default" {
-  $fluent-slider-track-height: 4px !default;
-  $fluent-slider-handle-height: 18px !default;
-  $fluent-slider-handle-size: 20px !default;
-  $fluent-slider-handle-inner-size: 18px !default;
-  $fluent-slider-wrapper-height: 32px !default;
-  $fluent-slider-tooltip-width: 34px !default;
-  $fluent-slider-top-tooltip-margin: -5px !default;
+  $fluent-slider-track-height: ds.$spacing-40 !default;
+  $fluent-slider-handle-height: ds.$spacing-180 !default;
+  $fluent-slider-handle-size: ds.$spacing-200 !default;
+  $fluent-slider-handle-inner-size: ds.$spacing-180 !default;
+  $fluent-slider-wrapper-height: ds.$spacing-320 !default;
+  $fluent-slider-tooltip-width: ds.$spacing-340 !default;
+  $fluent-slider-top-tooltip-margin: -5px !default; // dx-offscale: -5px
 }
 
 @else if $size == "compact" {
-  $fluent-slider-track-height: 2px !default;
-  $fluent-slider-handle-height: 14px !default;
-  $fluent-slider-handle-size: 16px !default;
-  $fluent-slider-handle-inner-size: 14px !default;
-  $fluent-slider-wrapper-height: 26px !default;
-  $fluent-slider-tooltip-width: 28px !default;
-  $fluent-slider-top-tooltip-margin: -2px !default;
+  $fluent-slider-track-height: ds.$spacing-20 !default;
+  $fluent-slider-handle-height: ds.$spacing-140 !default;
+  $fluent-slider-handle-size: ds.$spacing-160 !default;
+  $fluent-slider-handle-inner-size: ds.$spacing-140 !default;
+  $fluent-slider-wrapper-height: ds.$spacing-260 !default;
+  $fluent-slider-tooltip-width: ds.$spacing-280 !default;
+  $fluent-slider-top-tooltip-margin: ds.$spacing-minus-20 !default;
 }

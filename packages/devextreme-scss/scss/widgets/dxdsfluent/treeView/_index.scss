@@ -116,7 +116,7 @@
   $treeview-hover-bg,
   $treeview-item-hover-color,
   $treeview-item-selected-color,
-  $fluent-treeview-toggle-item-width + $fluent-treeview-item-element-gap,
+  calc(#{$fluent-treeview-toggle-item-width} + #{$fluent-treeview-item-element-gap}),
   $fluent-treeview-item-margin,
   $fluent-treeview-item-border-radius,
 );

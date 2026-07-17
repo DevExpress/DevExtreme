@@ -1,31 +1,30 @@
 @use "sass:math";
 @use "../sizes" as *;
 @use "./colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
 $fluent-line-height: null !default;
 
-$fluent-inline-borderedwidget-inner-size:
-  $fluent-base-inline-widget-height -
-  $fluent-base-border-width * 2 !default;
+$fluent-inline-borderedwidget-inner-size: calc(#{$fluent-base-inline-widget-height} - #{$fluent-base-border-width} * 2) !default;
 
-$fluent-invalid-badge-size: $fluent-base-icon-size - 2px !default;
-$fluent-invalid-badge-horizontal-padding: math.div($fluent-inline-borderedwidget-inner-size - $fluent-invalid-badge-size, 2) !default;
-$fluent-invalid-badge-halfhorizontal-padding: math.div($fluent-invalid-badge-horizontal-padding, 2) !default;
+$fluent-invalid-badge-size: calc(#{$fluent-base-icon-size} - #{ds.$spacing-20}) !default;
+$fluent-invalid-badge-horizontal-padding: calc((#{$fluent-inline-borderedwidget-inner-size} - #{$fluent-invalid-badge-size}) / 2) !default;
+$fluent-invalid-badge-halfhorizontal-padding: calc((#{$fluent-invalid-badge-horizontal-padding}) / 2) !default;
 
-$fluent-valid-badge-font-size: $fluent-base-font-size + 6px !default;
+$fluent-valid-badge-font-size: calc(#{$fluent-base-font-size} + 6px) !default;
 
 $fluent-base-dropdown-widgets-shadow: null !default;
 
 @if $size == "default" {
   $fluent-line-height: 1.428571 !default;
-  $fluent-base-dropdown-widgets-shadow: 0 0 2px 0 $base-dropdown-shadow-color1, 0 8px 16px 0 $base-dropdown-shadow-color2 !default;
+  $fluent-base-dropdown-widgets-shadow: 0 0 ds.$spacing-20 0 $base-dropdown-shadow-color1, 0 ds.$spacing-80 ds.$spacing-160 0 $base-dropdown-shadow-color2 !default;
 }
 
 @else if $size == "compact" {
   $fluent-line-height: 1.3333 !default;
-  $fluent-base-dropdown-widgets-shadow: 0 0 2px 0 $base-dropdown-shadow-color1, 0 4px 8px 0 $base-dropdown-shadow-color2 !default;
+  $fluent-base-dropdown-widgets-shadow: 0 0 ds.$spacing-20 0 $base-dropdown-shadow-color1, 0 ds.$spacing-40 ds.$spacing-80 0 $base-dropdown-shadow-color2 !default;
 }
 
 :root {

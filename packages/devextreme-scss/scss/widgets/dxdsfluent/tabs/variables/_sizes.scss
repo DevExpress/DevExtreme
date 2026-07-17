@@ -1,16 +1,17 @@
 @use "../../sizes" as *;
+@use "../../../../_design-system/variables/ds" as ds;
 
 // adduse
 
 
-$fluent-tabs-item-gap: 4px !default;
+$fluent-tabs-item-gap: ds.$spacing-40 !default;
 $fluent-tabs-item-padding: null !default;
 $fluent-tabs-item-padding-top-bottom: null !default;
 $fluent-tabs-item-padding-right-left: null !default;
 $fluent-tab-height: null !default;
 
-$fluent-tab-font-weight-basic: 400 !default;
-$fluent-tab-font-weight-accent: 500 !default;
+$fluent-tab-font-weight-basic: ds.$font-weight-400 !default;
+$fluent-tab-font-weight-accent: ds.$font-weight-500 !default;
 $fluent-base-icon-margin: null !default;
 $fluent-tabs-icon-size: $fluent-base-icon-size !default;
 
@@ -21,41 +22,41 @@ $fluent-tab-nav-button-content-padding: null !default;
 
 $fluent-tab-vertical-nav-button-content-padding: null !default;
 
-$fluent-indicator-thickness-primary: 2px !default;
-$fluent-indicator-thickness-secondary: 3px !default;
+$fluent-indicator-thickness-primary: ds.$spacing-20 !default;
+$fluent-indicator-thickness-secondary: ds.$spacing-30 !default;
 
 $fluent-indicator-length-primary: 100% !default;
 $fluent-indicator-length-secondary: 100% !default;
 
-$fluent-tab-item-border-radius-secondary: 4px !default;
-$fluent-indicator-border-radius-secondary: 4px !default;
+$fluent-tab-item-border-radius-secondary: ds.$border-radius-40 !default;
+$fluent-indicator-border-radius-secondary: ds.$border-radius-40 !default;
 
 $fluent-badge-min-size: null !default;
 
 @if $size == "default" {
-  $fluent-tabs-item-padding-top-bottom: 12px !default;
-  $fluent-tabs-item-padding-right-left: 10px !default;
+  $fluent-tabs-item-padding-top-bottom: ds.$spacing-120 !default;
+  $fluent-tabs-item-padding-right-left: ds.$spacing-100 !default;
   $fluent-tabs-item-padding: $fluent-tabs-item-padding-top-bottom $fluent-tabs-item-padding-right-left !default;
   $fluent-tab-height: auto !default;
-  $fluent-base-icon-margin: 8px !default;
-  $fluent-tab-nav-button-icon-width: 20px !default;
-  $fluent-tab-nav-button-icon-height: 20px !default;
-  $fluent-tab-nav-button-icon-font-size: 20px !default;
-  $fluent-tab-nav-button-content-padding: 0 4px !default;
-  $fluent-tab-vertical-nav-button-content-padding: 4px 0 !default;
-  $fluent-badge-min-size: 20px !default;
+  $fluent-base-icon-margin: ds.$spacing-80 !default;
+  $fluent-tab-nav-button-icon-width: ds.$spacing-200 !default;
+  $fluent-tab-nav-button-icon-height: ds.$spacing-200 !default;
+  $fluent-tab-nav-button-icon-font-size: ds.$font-size-200 !default;
+  $fluent-tab-nav-button-content-padding: 0 ds.$spacing-40 !default;
+  $fluent-tab-vertical-nav-button-content-padding: ds.$spacing-40 0 !default;
+  $fluent-badge-min-size: ds.$spacing-200 !default;
 }
 
 @else if $size == "compact" {
-  $fluent-tabs-item-padding-top-bottom: 8px !default;
-  $fluent-tabs-item-padding-right-left: 8px !default;
+  $fluent-tabs-item-padding-top-bottom: ds.$spacing-80 !default;
+  $fluent-tabs-item-padding-right-left: ds.$spacing-80 !default;
   $fluent-tabs-item-padding: $fluent-tabs-item-padding-top-bottom $fluent-tabs-item-padding-right-left !default;
   $fluent-tab-height: auto !default;
-  $fluent-base-icon-margin: 8px !default;
-  $fluent-tab-nav-button-icon-width: 16px !default;
-  $fluent-tab-nav-button-icon-height: 16px !default;
-  $fluent-tab-nav-button-icon-font-size: 16px !default;
-  $fluent-tab-nav-button-content-padding: 0 4px !default;
-  $fluent-tab-vertical-nav-button-content-padding: 4px 0 !default;
-  $fluent-badge-min-size: 16px !default;
+  $fluent-base-icon-margin: ds.$spacing-80 !default;
+  $fluent-tab-nav-button-icon-width: ds.$spacing-160 !default;
+  $fluent-tab-nav-button-icon-height: ds.$spacing-160 !default;
+  $fluent-tab-nav-button-icon-font-size: ds.$font-size-160 !default;
+  $fluent-tab-nav-button-content-padding: 0 ds.$spacing-40 !default;
+  $fluent-tab-vertical-nav-button-content-padding: ds.$spacing-40 0 !default;
+  $fluent-badge-min-size: ds.$spacing-160 !default;
 }

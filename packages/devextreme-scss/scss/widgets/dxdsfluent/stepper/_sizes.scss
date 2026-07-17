@@ -2,6 +2,7 @@
 @use "../colors" as *;
 @use "../sizes" as *;
 @use "../typography/sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -13,25 +14,25 @@ $stepper-step-content-column-gap: null !default;
 $stepper-step-optional-mark-font-size: $fluent-xs-font-size !default;
 $stepper-step-icon-size: $fluent-button-icon-size !default;
 
-$stepper-step-selected-font-weight: 600 !default;
+$stepper-step-selected-font-weight: ds.$font-weight-600 !default;
 $stepper-step-transition-duration: .4s !default;
 
 @if $size == "default" {
-  $stepper-padding: 12px !default;
-  $stepper-step-min-size: 48px !default;
-  $stepper-step-indicator-size: 32px !default;
-  $stepper-step-content-row-gap: 8px !default;
-  $stepper-step-content-column-gap: 12px !default;
+  $stepper-padding: ds.$spacing-120 !default;
+  $stepper-step-min-size: ds.$spacing-480 !default;
+  $stepper-step-indicator-size: ds.$spacing-320 !default;
+  $stepper-step-content-row-gap: ds.$spacing-80 !default;
+  $stepper-step-content-column-gap: ds.$spacing-120 !default;
 }
 
 @else if $size == "compact" {
-  $stepper-padding: 8px !default;
-  $stepper-step-min-size: 40px !default;
-  $stepper-step-indicator-size: 24px !default;
-  $stepper-step-content-row-gap: 6px !default;
-  $stepper-step-content-column-gap: 8px !default;
+  $stepper-padding: ds.$spacing-80 !default;
+  $stepper-step-min-size: ds.$spacing-400 !default;
+  $stepper-step-indicator-size: ds.$spacing-240 !default;
+  $stepper-step-content-row-gap: ds.$spacing-60 !default;
+  $stepper-step-content-column-gap: ds.$spacing-80 !default;
 }
 
-$stepper-connector-thickness: 2px !default;
+$stepper-connector-thickness: ds.$spacing-20 !default;
 $stepper-connector-size: $stepper-step-indicator-size !default;
 $stepper-connector-padding: $stepper-padding !default;

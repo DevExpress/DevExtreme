@@ -13,7 +13,7 @@ $popup-title-color: $base-text-color !default;
 $popup-title-border-color: $base-border-color !default;
 $popup-bottom-bg: $popup-title-bg !default;
 $popup-bottom-color: $base-text-color !default;
-$popup-border-radius: $base-border-radius * 2 !default;
+$popup-border-radius: calc(#{$base-border-radius} * 2) !default;
 $popup-content-shadow-color1: null !default;
 $popup-content-shadow-color2: null !default;
 $popup-focused-content-shadow-color: null !default;

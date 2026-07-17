@@ -1,19 +1,20 @@
 @use "../common/colors" as *;
 @use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
 $fluent-tooltip-padding: null !default;
 $fluent-tooltip-font-size: null !default;
-$fluent-tooltip-arrow-border-radius: 2px !default;
-$fluent-tooltip-shadow: 0 0 2px 0 $base-dropdown-shadow-color1 !default;
+$fluent-tooltip-arrow-border-radius: ds.$border-radius-20 !default;
+$fluent-tooltip-shadow: 0 0 ds.$spacing-20 0 $base-dropdown-shadow-color1 !default;
 
 @if $size == "default" {
-  $fluent-tooltip-padding: 7px 11px !default;
-  $fluent-tooltip-font-size: 12px;
+  $fluent-tooltip-padding: ds.$spacing-70 ds.$spacing-110 !default;
+  $fluent-tooltip-font-size: ds.$font-size-120;
 }
 
 @else if $size == "compact" {
-  $fluent-tooltip-padding: 3px 5px !default;
-  $fluent-tooltip-font-size: 12px;
+  $fluent-tooltip-padding: ds.$spacing-30 ds.$spacing-50 !default;
+  $fluent-tooltip-font-size: ds.$font-size-120;
 }

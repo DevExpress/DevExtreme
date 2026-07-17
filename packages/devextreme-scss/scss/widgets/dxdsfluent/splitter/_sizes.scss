@@ -1,5 +1,6 @@
 @use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$splitter-resize-handle-icon-size: 20px;
+$splitter-resize-handle-icon-size: ds.$spacing-200;

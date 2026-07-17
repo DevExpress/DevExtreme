@@ -64,9 +64,9 @@
     height: $fluent-indicator-thickness-secondary;
 
     @if $position == top {
-      top: -$fluent-tabs-item-padding-top-bottom;
+      top: calc(-1 * #{$fluent-tabs-item-padding-top-bottom});
     } @else if $position == bottom {
-      bottom: -$fluent-tabs-item-padding-top-bottom;
+      bottom: calc(-1 * #{$fluent-tabs-item-padding-top-bottom});
     }
   }
 }

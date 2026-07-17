@@ -22,6 +22,7 @@ $pivotgrid-button-top-padding: null !default;
 @use "../mixins" as *;
 @use "../icon_fonts" as *;
 @use "./common";
+@use "sass:meta";
 
 $pivotgrid-drag-header-border: 1px solid;
 $pivotgrid-drag-header-first-shadow: 0 0 1px $pivotgrid-drag-header-first-shadow-color;
@@ -30,7 +31,7 @@ $pivotgrid-border-width: 1px;
 $pivotgrid-border: $pivotgrid-border-width solid;
 $pivotgrid-icon-size: 14px;
 $pivotgrid-common-field-padding: 2px;
-$pivotgrid-filter-area-border-spacing: $pivotgrid-common-left-right-padding - $pivotgrid-common-field-padding $pivotgrid-header-top-bottom-padding - $pivotgrid-common-field-padding;
+$pivotgrid-filter-area-border-spacing: if(meta.type-of($pivotgrid-common-left-right-padding) == number and meta.type-of($pivotgrid-common-field-padding) == number, $pivotgrid-common-left-right-padding - $pivotgrid-common-field-padding, calc(#{$pivotgrid-common-left-right-padding} - #{$pivotgrid-common-field-padding})) if(meta.type-of($pivotgrid-header-top-bottom-padding) == number and meta.type-of($pivotgrid-common-field-padding) == number, $pivotgrid-header-top-bottom-padding - $pivotgrid-common-field-padding, calc(#{$pivotgrid-header-top-bottom-padding} - #{$pivotgrid-common-field-padding}));
 $pivotgrid-expand-icon-offset: -5px;
 $pivotgrid-expand-icon-text-offset: 0;
 

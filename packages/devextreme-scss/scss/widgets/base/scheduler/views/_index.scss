@@ -1,3 +1,4 @@
+@use "sass:meta";
 @use "../../mixins" as *;
 @use "sass:math";
 
@@ -38,7 +39,7 @@ $scheduler-workspace-date-table-cell-height: 50px;
 $scheduler-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height * 1.5;
 $scheduler-collapsed-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height * 0.5;
 $scheduler-vertical-grouped-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height;
-$scheduler-header-panel-table-cell-height: $scheduler-workspace-date-table-cell-height - 10px;
+$scheduler-header-panel-table-cell-height: if(meta.type-of($scheduler-workspace-date-table-cell-height) == number, $scheduler-workspace-date-table-cell-height - 10px, calc(#{$scheduler-workspace-date-table-cell-height} - 10px));
 $scheduler-group-header-table-cell-height: 30px;
 
 $scheduler-group-header-table-cell-width: 80px;
@@ -84,7 +85,7 @@ $scheduler-month-date-text-padding: 6px;
 
   &::before {
     position: absolute;
-    top: $scheduler-header-panel-table-cell-height - $scheduler-current-time-cell-border-size - 1;
+    top: if(meta.type-of($scheduler-header-panel-table-cell-height) == number and meta.type-of($scheduler-current-time-cell-border-size) == number, $scheduler-header-panel-table-cell-height - $scheduler-current-time-cell-border-size - 1, calc(#{$scheduler-header-panel-table-cell-height} - #{$scheduler-current-time-cell-border-size} - 1px));
     right: 0;
     width: 100%;
     height: $scheduler-current-time-cell-border-size;
