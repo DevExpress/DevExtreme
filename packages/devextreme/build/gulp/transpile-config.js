@@ -3,6 +3,7 @@
 const common = {
     plugins: [
         ['babel-plugin-inferno', { 'imports': true }],
+        ['@babel/plugin-transform-object-rest-spread', { loose: true }],
     ],
     ignore: ['**/*.json'],
 };
