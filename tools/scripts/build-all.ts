@@ -1,88 +1,10 @@
+/**
+ * @deprecated Use `pnpm nx all:build workflows` (or `-c internal`).
+ * Kept as a thin env-aware wrapper for any remaining direct callers.
+ */
 import sh from 'shelljs';
-import path from 'node:path';
-import { ARTIFACTS_DIR, INTERNAL_TOOLS_ARTIFACTS, ROOT_DIR, NPM_DIR } from './common/paths';
-import { version as devextremeNpmVersion } from '../../packages/devextreme/package.json';
-
-const DEVEXTREME_NPM_DIR = path.join(ROOT_DIR, 'packages/devextreme/artifacts/npm');
-
-const injectDescriptions = () => {
-    sh.pushd(ROOT_DIR);
-
-    const DOCUMENTATION_TEMP_DIR = path.join(ROOT_DIR, '..', 'doc_tmp');
-    sh.exec(`git clone -b ${DEFAULT_BRANCH_NAME} --depth 1 --config core.longpaths=true https://github.com/DevExpress/devextreme-documentation.git ${DOCUMENTATION_TEMP_DIR}`);
-
-    sh.pushd(DOCUMENTATION_TEMP_DIR);
-    sh.exec('pnpm i --frozen-lockfile');
-    sh.exec(`pnpm run update-topics --artifacts ${INTERNAL_TOOLS_ARTIFACTS}`);
-    sh.popd();
-
-    sh.rm('-rf', DOCUMENTATION_TEMP_DIR);
-
-    sh.exec('pnpm run devextreme:inject-descriptions');
-    sh.popd();
-}
 
 sh.set('-e');
 
-sh.mkdir('-p', NPM_DIR);
-
-const packAndCopy = (outputDir: string) => {
-    sh.exec('pnpm pack', { silent: true });
-    sh.cp('*.tgz', outputDir);
-}
-
-const DEFAULT_BRANCH_NAME = 'main';
-
-sh.cd(ROOT_DIR);
-
-// aspnet metadata will be used in Build custom-tasks to inject aspnet descriptions
-sh.exec(`pnpm exec nx run devextreme-metadata:make-aspnet-metadata`);
-
-injectDescriptions();
-
-sh.exec('pnpm exec nx build devextreme-scss');
-sh.exec('pnpm exec nx build-dist devextreme');
-
-sh.exec('pnpm exec nx build devextreme-themebuilder');
-
-// Copy artifacts for DXBuild (Installation)
-sh.pushd(path.join(ROOT_DIR, 'packages/devextreme/artifacts'));
-    sh.cp('-r', ['ts', 'js', 'css'], ARTIFACTS_DIR);
-sh.popd();
-
-sh.exec('pnpm exec nx copy:bootstrap workflows');
-sh.exec('pnpm run all:pack-and-copy');
-
-sh.exec('pnpm exec nx pack devextreme-react', { silent: true });
-sh.exec('pnpm exec nx pack devextreme-vue', { silent: true });
-sh.exec('pnpm exec nx pack-with-descriptions devextreme-angular', { silent: true });
-
-sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme'));
-    packAndCopy(NPM_DIR);
-sh.popd();
-
-sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme-dist'));
-    packAndCopy(NPM_DIR);
-sh.popd();
-
-sh.pushd(path.join(ROOT_DIR, 'packages', 'devextreme-themebuilder', 'dist'));
-    sh.exec(`pnpm pkg set version="${devextremeNpmVersion}"`);
-    packAndCopy(NPM_DIR);
-sh.popd();
-
-sh.cp(path.join(ROOT_DIR, 'packages', 'devextreme-angular', 'npm', 'dist', '*.tgz'), NPM_DIR);
-sh.cp(path.join(ROOT_DIR, 'packages', 'devextreme-react', 'npm', '*.tgz'), NPM_DIR);
-sh.cp(path.join(ROOT_DIR, 'packages', 'devextreme-vue', 'npm', '*.tgz'), NPM_DIR);
-
-if (sh.env.BUILD_INTERNAL_PACKAGE === 'true') {
-    sh.exec('pnpm exec nx build-dist devextreme -c internal');
-
-    sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme-internal'));
-        sh.exec(`pnpm pkg set version="${devextremeNpmVersion}"`);
-        packAndCopy(NPM_DIR);
-    sh.popd();
-
-    sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme-dist-internal'));
-        packAndCopy(NPM_DIR);
-    sh.popd();
-}
+const configuration = sh.env.BUILD_INTERNAL_PACKAGE === 'true' ? ' -c internal' : '';
+sh.exec(`pnpm exec nx all:build workflows${configuration}`);

@@ -10,6 +10,7 @@
       "executor": "devextreme-nx-infra-plugin:copy-files",
       "options": {
         "files": [
+          { "from": "../devextreme/artifacts/ts", "to": "../../artifacts/ts" },
           { "from": "../devextreme/artifacts/js", "to": "../../artifacts/js" },
           { "from": "../devextreme/artifacts/css", "to": "../../artifacts/css" }
         ]
@@ -53,6 +54,54 @@
         ]
       }
     },
+    "inject-descriptions": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "pnpm exec ts-node tools/scripts/inject-descriptions.ts"
+      },
+      "metadata": {
+        "description": "Clone documentation, update topics against metadata artifacts, inject descriptions into dx.all.d.ts and modules."
+      }
+    },
+    "pack:themebuilder-to-artifacts": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "pnpm exec ts-node tools/scripts/pack-package-to-artifacts.ts --dir packages/devextreme-themebuilder/dist --setVersionFrom packages/devextreme/package.json"
+      }
+    },
+    "pack:devextreme-internal-to-artifacts": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "pnpm exec ts-node tools/scripts/pack-package-to-artifacts.ts --dir packages/devextreme/artifacts/npm/devextreme-internal --setVersionFrom packages/devextreme/package.json"
+      }
+    },
+    "pack:devextreme-dist-internal-to-artifacts": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "pnpm exec ts-node tools/scripts/pack-package-to-artifacts.ts --dir packages/devextreme/artifacts/npm/devextreme-dist-internal"
+      }
+    },
+    "pack:release-tgz": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "commands": [
+          "pnpm nx pack:devextreme-npm devextreme",
+          "pnpm nx pack:devextreme-dist-npm devextreme",
+          "pnpm nx copy:npm-tgz workflows",
+          "pnpm nx pack:themebuilder-to-artifacts workflows",
+          "pnpm nx copy:wrappers-tgz workflows"
+        ],
+        "parallel": false
+      },
+      "metadata": {
+        "description": "Pack public npm packages and copy tgz files into root artifacts/npm."
+      }
+    },
     "all:build-dev": {
       "executor": "nx:run-commands",
       "options": {
@@ -87,6 +136,50 @@
       },
       "metadata": {
         "description": "Build all packages for the testing environment."
+      }
+    },
+    "all:build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm nx make-aspnet-metadata devextreme-metadata",
+          "pnpm nx inject-descriptions workflows",
+          "pnpm nx build devextreme-scss",
+          "pnpm nx build-dist devextreme",
+          "pnpm nx build devextreme-themebuilder",
+          "pnpm nx copy:artifacts-to-root workflows",
+          "pnpm nx copy:bootstrap workflows",
+          "pnpm run all:pack-and-copy",
+          "pnpm nx pack devextreme-react",
+          "pnpm nx pack devextreme-vue",
+          "pnpm nx pack --configuration with-descriptions devextreme-angular",
+          "pnpm nx pack:release-tgz workflows"
+        ],
+        "parallel": false
+      },
+      "configurations": {
+        "internal": {
+          "commands": [
+            "pnpm nx make-aspnet-metadata devextreme-metadata",
+            "pnpm nx inject-descriptions workflows",
+            "pnpm nx build devextreme-scss",
+            "pnpm nx build-dist devextreme",
+            "pnpm nx build devextreme-themebuilder",
+            "pnpm nx copy:artifacts-to-root workflows",
+            "pnpm nx copy:bootstrap workflows",
+            "pnpm run all:pack-and-copy",
+            "pnpm nx pack devextreme-react",
+            "pnpm nx pack devextreme-vue",
+            "pnpm nx pack --configuration with-descriptions devextreme-angular",
+            "pnpm nx pack:release-tgz workflows",
+            "pnpm nx build-dist devextreme -c internal",
+            "pnpm nx pack:devextreme-internal-to-artifacts workflows",
+            "pnpm nx pack:devextreme-dist-internal-to-artifacts workflows"
+          ]
+        }
+      },
+      "metadata": {
+        "description": "Full production release build (replaces tools/scripts/build-all.ts). Use -c internal when BUILD_INTERNAL_PACKAGE is required."
       }
     }
   }

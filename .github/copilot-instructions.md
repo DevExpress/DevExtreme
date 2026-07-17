@@ -71,7 +71,7 @@ pnpm install --frozen-lockfile
   devextreme-metadata/     # Metadata generation for wrappers
   devextreme-monorepo-tools/ # Internal tooling
   nx-infra-plugin/         # Custom Nx executors for build automation
-  workflows/               # Cross-package NX build orchestration (all:build-dev, all:build-testing)
+  workflows/               # Cross-package NX build orchestration (all:build, all:build-dev, all:build-testing)
   testcafe-models/         # TestCafe page object models
 
 /apps/
@@ -189,7 +189,7 @@ packages/
   devextreme-metadata/              # metadata for wrapper generation
   devextreme-monorepo-tools/        # internal tooling
   nx-infra-plugin/                  # custom Nx executors
-  workflows/                        # cross-package Nx orchestration (all:build-dev, all:build-testing)
+  workflows/                        # cross-package Nx orchestration (all:build, all:build-dev, all:build-testing)
   testcafe-models/                  # TestCafe page object models
 apps/                               # demos and per-framework playgrounds (+ react-storybook)
 e2e/testcafe-devextreme/            # TestCafe e2e suite
