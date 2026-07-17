@@ -65,24 +65,29 @@
       }
     },
     "pack:themebuilder-to-artifacts": {
-      "executor": "nx:run-commands",
+      "executor": "devextreme-nx-infra-plugin:pack-npm",
       "cache": false,
       "options": {
-        "command": "pnpm exec ts-node tools/scripts/pack-package-to-artifacts.ts --dir packages/devextreme-themebuilder/dist --setVersionFrom packages/devextreme/package.json"
+        "packageDir": "../devextreme-themebuilder/dist",
+        "destination": "../../artifacts/npm",
+        "setVersionFrom": "../devextreme/package.json"
       }
     },
     "pack:devextreme-internal-to-artifacts": {
-      "executor": "nx:run-commands",
+      "executor": "devextreme-nx-infra-plugin:pack-npm",
       "cache": false,
       "options": {
-        "command": "pnpm exec ts-node tools/scripts/pack-package-to-artifacts.ts --dir packages/devextreme/artifacts/npm/devextreme-internal --setVersionFrom packages/devextreme/package.json"
+        "packageDir": "../devextreme/artifacts/npm/devextreme-internal",
+        "destination": "../../artifacts/npm",
+        "setVersionFrom": "../devextreme/package.json"
       }
     },
     "pack:devextreme-dist-internal-to-artifacts": {
-      "executor": "nx:run-commands",
+      "executor": "devextreme-nx-infra-plugin:pack-npm",
       "cache": false,
       "options": {
-        "command": "pnpm exec ts-node tools/scripts/pack-package-to-artifacts.ts --dir packages/devextreme/artifacts/npm/devextreme-dist-internal"
+        "packageDir": "../devextreme/artifacts/npm/devextreme-dist-internal",
+        "destination": "../../artifacts/npm"
       }
     },
     "pack:release-tgz": {

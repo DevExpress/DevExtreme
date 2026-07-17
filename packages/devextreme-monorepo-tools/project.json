@@ -18,9 +18,10 @@
     },
     "pack-and-copy": {
       "dependsOn": ["build"],
-      "executor": "nx:run-commands",
+      "executor": "devextreme-nx-infra-plugin:pack-npm",
       "options": {
-        "command": "pnpm exec ts-node tools/scripts/pack-package-to-artifacts.ts --dir packages/devextreme-monorepo-tools/npm"
+        "packageDir": "./npm",
+        "destination": "../../artifacts/npm"
       }
     },
     "test": {
