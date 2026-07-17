@@ -159,6 +159,11 @@ class FieldsArea extends AreaItem {
     tableElement.addClass('dx-area-field-container');
 
     if (!isVisible) {
+      // The reused table element may carry the menubar role from the previous
+      // render, so it is reset even though the hidden area skips rendering.
+      tableElement
+        .attr('role', 'presentation')
+        .removeAttr('aria-label');
       return;
     }
 
