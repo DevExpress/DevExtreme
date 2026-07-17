@@ -27111,22 +27111,6 @@ declare module DevExpress.ui {
       | ((e: DevExpress.ui.dxScheduler.CellContextMenuEvent) => void)
       | string;
     /**
-     * [descr:dxSchedulerOptions.onContentReady]
-     */
-    onContentReady?: (e: DevExpress.ui.dxScheduler.ContentReadyEvent) => void;
-    /**
-     * [descr:dxSchedulerOptions.onDisposing]
-     */
-    onDisposing?: (e: DevExpress.ui.dxScheduler.DisposingEvent) => void;
-    /**
-     * [descr:dxSchedulerOptions.onInitialized]
-     */
-    onInitialized?: (e: DevExpress.ui.dxScheduler.InitializedEvent) => void;
-    /**
-     * [descr:dxSchedulerOptions.onOptionChanged]
-     */
-    onOptionChanged?: (e: DevExpress.ui.dxScheduler.OptionChangedEvent) => void;
-    /**
      * [descr:dxSchedulerOptions.recurrenceEditMode]
      */
     recurrenceEditMode?: DevExpress.ui.dxScheduler.RecurrenceEditMode;
@@ -27423,6 +27407,7 @@ declare module DevExpress.ui {
      */
     toolbar?: DevExpress.ui.dxScheduler.Toolbar | undefined;
   }
+
   /**
    * [descr:dxSchedulerScrolling]
    */
