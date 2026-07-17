@@ -398,6 +398,7 @@ test('Scroll position after grouping when RTL (T388508)', async (t) => {
     await insertStylesheetRulesToPage(`
       ::-webkit-scrollbar { -webkit-appearance: none; width: 14px; height: 14px; }
       ::-webkit-scrollbar-thumb { background-color: rgba(0, 0, 0, .5); border-radius: 7px; }
+      ::-webkit-scrollbar-track { background-color: #fafafa; border-${rtlEnabled ? 'right' : 'left'}: 1px solid #e0e0e0; }
     `);
 
     return createWidget('dxDataGrid', {
