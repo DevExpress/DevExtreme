@@ -3,7 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
 import type { DataGridScrollMode } from 'devextreme/ui/data_grid';
-import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
+import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { salesApiMock } from './apiMocks/salesApiMock';
@@ -362,6 +362,59 @@ test('Scroll position after grouping when RTL (T388508)', async (t) => {
     field4: '4',
   }],
 }));
+
+[false, true].forEach((rtlEnabled) => {
+  test(`Headers should have a border before the scrollbar gutter when the vertical scrollbar occupies space (rtlEnabled = ${rtlEnabled}) (T1306973)`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid('#container');
+
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    const headersElement = dataGrid.getHeaders().element;
+    const paddingProperty = rtlEnabled ? 'padding-left' : 'padding-right';
+    const padding = parseFloat(await headersElement.getStyleProperty(paddingProperty));
+
+    await t
+      .expect(headersElement.hasClass('dx-datagrid-scroller-spacing'))
+      .eql(padding > 0);
+
+    await testScreenshot(t, takeScreenshot, `grid-headers-scroller-spacing-border${rtlEnabled ? '-rtl' : ''}.png`, { element: '#container' });
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await insertStylesheetRulesToPage(`
+      ::-webkit-scrollbar { -webkit-appearance: none; width: 14px; height: 14px; }
+      ::-webkit-scrollbar-thumb { background-color: rgba(0, 0, 0, .5); border-radius: 7px; }
+    `);
+
+    return createWidget('dxDataGrid', {
+      rtlEnabled,
+      width: 700,
+      height: 300,
+      showBorders: true,
+      dataSource: getData(30, 5),
+      columns: ['field_0', 'field_1', 'field_2', 'field_3', 'field_4'],
+      filterRow: {
+        visible: true,
+      },
+      summary: {
+        totalItems: [{
+          column: 'field_0',
+          summaryType: 'count',
+        }],
+      },
+      scrolling: {
+        useNative: true,
+      },
+    });
+  }).after(async () => {
+    await removeStylesheetRulesFromPage();
+  });
+});
 
 test('Header container should have padding-right after expanding the master row with a detail grid when using native scrolling (T1004507)', async (t) => {
   const dataGrid = new DataGrid('#container');
