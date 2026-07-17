@@ -64,6 +64,7 @@ const dataSource = new PivotGridDataSource({
   font-weight: 200;
   font-size: 28px;
   text-align: center;
+  letter-spacing: normal;
   margin: 28px 0 20px;
 }
 </style>

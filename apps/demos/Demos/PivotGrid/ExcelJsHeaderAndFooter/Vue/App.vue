@@ -177,6 +177,7 @@ function onExporting(e: DxPivotGridTypes.ExportingEvent) {
   font-weight: 200;
   font-size: 28px;
   text-align: center;
+  letter-spacing: normal;
   margin: 28px 0 20px;
 }
 
