@@ -1,9 +1,7 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$validation-message-color: $base-inverted-text-color !default;
-$validation-message-background-color: $base-invalid-color !default;
-$validation-summary-color: $base-invalid-color !default;
+$validation-message-color: ds.$color-content-neutral-default-static-dark-rest !default;
+$validation-message-background-color: ds.$color-surface-danger-default-rest !default;
+$validation-summary-color: ds.$color-content-danger-default-rest !default;

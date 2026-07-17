@@ -1,14 +1,13 @@
-@use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../overlay/colors" as *;
 @use "../button/colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$speed-dial-action-color: $base-text-color !default;
-$speed-dial-action-shadow: 0 2px 6px 0 color.change($base-shadow-color, $alpha: 0.2) !default;
-$speed-dial-action-label-shadow: 0 2px 6px color.change($base-shadow-color, $alpha: 0.16) !default;
+$speed-dial-action-color: ds.$color-content-neutral-default-rest !default;
+$speed-dial-action-shadow: ds.$box-shadow-md !default;
+$speed-dial-action-label-shadow: ds.$box-shadow-sm !default;
 $speed-dial-action-shading-color: $overlay-shader-bg !default;
 
 $speed-dial-action-bg: $button-normal-bg !default;

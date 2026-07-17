@@ -1,31 +1,22 @@
-@use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$base-dropdown-shadow-color1: null !default;
-$base-dropdown-shadow-color2: null !default;
+// Dropdown/overlay shadow layer colors (mode-aware via the shadow roles).
+$base-dropdown-shadow-color1: ds.$color-shadow-ambient !default;
+$base-dropdown-shadow-color2: ds.$color-shadow-key !default;
 
-@if $mode == "light" {
-  $base-dropdown-shadow-color1: color.change($base-shadow-color, $alpha: 0.12) !default;
-  $base-dropdown-shadow-color2: color.change($base-shadow-color, $alpha: 0.14) !default;
-}
+$common-accent: ds.$color-surface-primary-default-rest !default;
+$common-bg: ds.$color-surface-neutral-default-rest !default;
+$common-border-color: ds.$color-border-neutral-default-rest !default;
 
-@if $mode == "dark" {
-  $base-dropdown-shadow-color1: color.change($base-shadow-color, $alpha: 0.24) !default;
-  $base-dropdown-shadow-color2: color.change($base-shadow-color, $alpha: 0.28) !default;
-}
-
-// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$common-accent: $base-accent !default;
-$common-bg: $base-bg !default;
-$common-border-color: $base-border-color !default;
+// Non-color theme-level values (opacity/font family) — kept referencing the theme layer.
 $common-disabled-opacity: $base-disabled-opacity !default;
 $common-font-family: $base-font-family !default;
-$common-invalid-color: $base-invalid-color !default;
-$common-inverted-text-color: $base-inverted-text-color !default;
-$common-success: $base-success !default;
-$common-text-color: $base-text-color !default;
-$common-typography-bg: $base-typography-bg !default;
-$common-typography-color: $typography-color !default;
+$common-invalid-color: ds.$color-border-danger-default-rest !default;
+$common-inverted-text-color: ds.$color-content-neutral-default-static-dark-rest !default;
+$common-success: ds.$color-surface-success-default-rest !default;
+$common-text-color: ds.$color-content-neutral-default-rest !default;
+$common-typography-bg: ds.$color-surface-neutral-default-rest !default;
+$common-typography-color: ds.$color-content-neutral-default-rest !default;

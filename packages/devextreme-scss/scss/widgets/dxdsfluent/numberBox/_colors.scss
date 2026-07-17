@@ -1,14 +1,9 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
-@use "../button/colors" as *;
-@use "../color" as extcolor;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$numberbox-spin-icon-color: $base-spin-icon-color !default;
-$numberbox-spin-icon-background-hover: $base-hover-bg !default;
-$numberbox-spin-icon-background-active: $base-active-bg !default;
+$numberbox-spin-icon-color: ds.$color-content-neutral-subdued-rest !default;
+$numberbox-spin-icon-background-hover: ds.$color-surface-neutral-default-hovered !default;
+$numberbox-spin-icon-background-active: ds.$color-surface-neutral-default-active !default;
 
-// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$numberbox-foreground-disabled: $base-foreground-disabled !default;
+$numberbox-foreground-disabled: ds.$color-content-neutral-default-disabled !default;

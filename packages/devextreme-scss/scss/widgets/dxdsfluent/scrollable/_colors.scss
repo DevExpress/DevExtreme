@@ -1,23 +1,12 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$scrollable-bg: $base-element-bg !default;
+$scrollable-bg: ds.$color-surface-neutral-default-rest !default;
 
 /**
 * $name 10. Scroll bar background color
 * $type color
 */
-$scrollable-scroll-bg: null !default;
-$scrollable-scrollbar-bg: transparent !default;
-
-@if $mode == "light" {
-  $scrollable-scroll-bg: color.change(color.adjust($scrollable-bg, $lightness: -25%, $space: hsl), $alpha: 0.7) !default;
-}
-
-@if $mode == "dark" {
-  $scrollable-scroll-bg: color.change(color.adjust($scrollable-bg, $lightness: 25%, $space: hsl), $alpha: 0.7) !default;
-}
-
+$scrollable-scroll-bg: ds.$scroll-bar-color-thumb-rest !default;
+$scrollable-scrollbar-bg: ds.$scroll-bar-color-bg-rest !default;

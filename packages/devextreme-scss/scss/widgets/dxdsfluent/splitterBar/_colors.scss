@@ -1,8 +1,6 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$splitter-inactive-color: $base-border-color !default;
-$splitter-bg: color.change($base-accent, $alpha: 0.5) !default;
+$splitter-inactive-color: ds.$color-border-neutral-default-rest !default;
+$splitter-bg: ds.$color-surface-primary-alpha-active !default;
