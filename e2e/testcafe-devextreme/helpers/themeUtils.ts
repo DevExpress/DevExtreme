@@ -18,7 +18,7 @@ export const getCurrentTheme = async (t: TestController): Promise<string> => {
 
 export const isMaterial = (): boolean => (process.env.theme ?? defaultThemeName).startsWith('material');
 
-export const isFluent = (): boolean => (process.env.theme ?? defaultThemeName).startsWith('fluent');
+export const isFluent = (): boolean => /^(dxds)?fluent/.test(process.env.theme ?? defaultThemeName);
 
 export const isMaterialBased = (): boolean => isMaterial() || isFluent();
 
