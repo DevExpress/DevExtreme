@@ -184,7 +184,7 @@
         }
       },
       "metadata": {
-        "description": "Full production release build (replaces tools/scripts/build-all.ts). Use -c internal when BUILD_INTERNAL_PACKAGE is required."
+        "description": "Full production release build. Use -c internal for the internal package pass."
       }
     },
     "make-artifacts-package": {

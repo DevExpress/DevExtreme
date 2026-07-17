@@ -87,7 +87,7 @@ pnpm install --frozen-lockfile
   bundlers/                # Bundler compatibility tests
   compilation-cases/       # TypeScript compilation tests
 
-/tools/scripts/            # Build and utility scripts
+/tools/scripts/            # Leaf helpers invoked by workflows targets (inject-descriptions, versioning, etc.)
 ```
 
 ### Configuration Files
@@ -194,7 +194,7 @@ packages/
 apps/                               # demos and per-framework playgrounds (+ react-storybook)
 e2e/testcafe-devextreme/            # TestCafe e2e suite
 e2e/{wrappers,bundlers,compilation-cases}/   # integration / bundler / TS compilation tests
-tools/scripts/                      # build and utility scripts
+tools/scripts/                      # leaf helpers for workflows targets (not orchestration)
 ```
 
 For the full executor catalogue, conventions, and refactoring guidance, see @packages/nx-infra-plugin/AGENTS.md. File-specific coding rules live under @.github/instructions/.
