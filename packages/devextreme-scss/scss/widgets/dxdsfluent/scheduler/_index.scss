@@ -1,7 +1,6 @@
 @use "sass:math";
 @use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../list/colors" as *;
@@ -352,7 +351,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     }
 
     .dx-scheduler-header-panel-cell-date:last-child {
-      color: $base-inverted-text-color;
+      color: $scheduler-inverted-text-color;
       background-color: $scheduler-current-time-cell-color;
       display: inline-flex;
       align-items: center;
@@ -848,7 +847,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     position: absolute;
     width: 6px;
     height: 100%;
-    background-color: $base-accent;
+    background-color: $scheduler-accent;
   }
 
   @container (max-width: 8px) {
@@ -889,7 +888,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 
   .dx-scheduler-date-table-row,
   .dx-scheduler-time-panel-row {
-    box-shadow: inset 0 -1px 0 0 $base-border-color;
+    box-shadow: inset 0 -1px 0 0 $scheduler-border-color;
   }
 
   .dx-scheduler-time-panel-cell {
@@ -978,7 +977,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 .dx-scheduler-appointment-tooltip-wrapper,
 .dx-scheduler-overlay-panel {
   .dx-overlay-content {
-    background-color: $base-bg;
+    background-color: $scheduler-bg;
 
     .dx-popup-content {
       padding: 0;
@@ -989,7 +988,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
         margin-bottom: 0;
         margin-top: 0;
         border-bottom: 1px solid;
-        border-bottom-color: $base-border-color;
+        border-bottom-color: $scheduler-border-color;
 
         &:last-of-type {
           border-bottom-left-radius: $tooltip-border-radius;

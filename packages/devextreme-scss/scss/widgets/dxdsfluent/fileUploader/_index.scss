@@ -1,7 +1,6 @@
 @use "sass:math";
 @use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
@@ -10,7 +9,6 @@
 // adduse
 
 $fluent-fileuploader-file-wrapper-border-size: 3px;
-$fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-shadow-color, $alpha: 0.1);
 
 .dx-fileuploader-wrapper {
   padding: $fluent-fileuploader-vertical-padding;
@@ -172,12 +170,12 @@ $fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-sh
 .dx-fileuploader-file-size {
   float: right;
   padding: $fluent-fileuploader-file-size-margin;
-  color: $base-label-color;
+  color: $fileuploader-label-color;
 }
 
 .dx-fileuploader-invalid {
   .dx-fileuploader-file-status-message {
-    color: $base-danger;
+    color: $fileuploader-danger;
 
     span {
       &:first-child {

@@ -2,7 +2,6 @@
 @use "sass:color";
 @use "sass:selector";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
@@ -751,7 +750,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
     @include dx-icon-sizing($fluent-base-icon-size);
 
-    color: $base-icon-color;
+    color: $gridbase-icon-color;
   }
 
   .dx-row.dx-row-focused {

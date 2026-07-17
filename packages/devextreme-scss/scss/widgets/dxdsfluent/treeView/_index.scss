@@ -1,7 +1,6 @@
 @use "sass:math";
 @use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/treeView" as *;
@@ -123,7 +122,7 @@
 );
 @include treeview-checkbox(
   $fluent-checkbox-container-size,
-  $base-text-color,
+  $treeview-text-color,
   $checkbox-border-color-focused,
   $treeview-item-selected-color,
   $treeview-item-selected-bg,

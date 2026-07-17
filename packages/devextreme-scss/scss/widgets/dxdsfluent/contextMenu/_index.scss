@@ -1,6 +1,5 @@
 @use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
@@ -55,12 +54,12 @@
     }
 
     .dx-menu-item-popout {
-      color: $base-icon-color;
+      color: $contextmenu-icon-color;
     }
 
     &.dx-state-disabled {
       .dx-menu-item-popout {
-        color: $base-foreground-disabled;
+        color: $contextmenu-foreground-disabled;
       }
     }
 
@@ -76,7 +75,7 @@
   .dx-submenu {
     background-color: $menu-popup-bg;
     border-radius: $fluent-context-menu-border-radius;
-    box-shadow: color.change($base-shadow-color, $alpha: 0.12) 0 2px 7.2px 0, color.change($base-shadow-color, $alpha: 0.14) 0 8px 16px 0;
+    box-shadow: $contextmenu-shadow;
   }
 
   .dx-menu-separator {

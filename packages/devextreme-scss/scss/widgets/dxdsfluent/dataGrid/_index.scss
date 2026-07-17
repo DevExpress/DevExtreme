@@ -1,6 +1,6 @@
+@use "../colors" as *;
 @use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
@@ -48,14 +48,14 @@
     padding: $area-field-top-bottom-padding 10px;
     border-width: 1px;
     border-style: solid;
-    border-color: $base-border-color-disabled;
+    border-color: $datagrid-border-color-disabled;
   }
 
   .dx-block-separator {
     margin-right: $fluent-grid-base-grouppanel-item-margin;
     color: $datagrid-columnchooser-item-color;
     font-weight: $datagrid-columnchooser-font-weight;
-    background-color: $base-accent;
+    background-color: $datagrid-accent;
   }
 
   .dx-sort {

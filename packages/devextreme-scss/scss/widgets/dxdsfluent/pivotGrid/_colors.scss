@@ -56,3 +56,13 @@ $pivotgrid-chevron-icon-color: $pivotgrid-area-color !default;
 @if $mode == "dark" {
   $pivotgrid-field-area-box-background-color: color.adjust($base-bg, $lightness: -12.16%, $space: hsl) !default;
 }
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$pivotgrid-accent: $base-accent !default;
+$pivotgrid-border-color-disabled: $base-border-color-disabled !default;
+$pivotgrid-shadow-color: $base-shadow-color !default;
+$pivotgrid-text-color: $base-text-color !default;
+
+// Color computations hoisted from style files (phase 0.5 layer normalization)
+$fluent-pivotgrid-drag-header-shadow: 0 3px 4px color.change($pivotgrid-shadow-color, $alpha: 0.15) !default;
+$pivotgrid-area-field-bg: color.change($pivotgrid-field-area-box-background-color, $alpha: 0.9) !default;

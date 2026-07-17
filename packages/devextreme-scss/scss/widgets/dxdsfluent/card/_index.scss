@@ -1,6 +1,5 @@
 @use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/card";
@@ -8,8 +7,8 @@
 // adduse
 
 .dx-card {
-  box-shadow: 0 1px 3px color.change($base-shadow-color, $alpha: 0.12), 0 1px 2px color.change($base-shadow-color, $alpha: 0.24);
+  box-shadow: $card-shadow;
   border-radius: $base-border-radius;
-  background-color: $base-bg;
+  background-color: $card-bg;
   margin: 2px 2px 3px;
 }

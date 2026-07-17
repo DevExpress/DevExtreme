@@ -43,3 +43,5 @@ $switch-invalid-color: $base-invalid-color !default;
 $switch-invalid-color-hover: $base-invalid-color-hover !default;
 $switch-invalid-color-focused: $base-invalid-color-selected !default;
 
+// Color computations hoisted from style files (phase 0.5 layer normalization)
+$switch-handle-on-shadow-color: color.change($switch-handle-on-bg, $alpha: 0.1) !default;

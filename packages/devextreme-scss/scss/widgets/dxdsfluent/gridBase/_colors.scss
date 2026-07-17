@@ -209,3 +209,10 @@ $datagrid-border: 1px solid !default;
 :root {
   --dx-datagrid-row-alternation-bg: #{$datagrid-row-alternation-bg};
 }
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$gridbase-accent: $base-accent !default;
+$gridbase-border-color: $base-border-color !default;
+$gridbase-danger: $base-danger !default;
+$gridbase-icon-color: $base-icon-color !default;
+$gridbase-success: $base-success !default;

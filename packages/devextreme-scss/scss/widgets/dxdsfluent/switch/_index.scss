@@ -1,6 +1,5 @@
 @use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
@@ -10,7 +9,7 @@
 // adduse
 
 $fluent-switch-transition: all 0.2s cubic-bezier(0.33,0,0.67,1);
-$fluent-switch-handle-on-shadow: 0 0 0 $fluent-switch-shadow-blur-radius color.change($switch-handle-on-bg, $alpha: 0.1);
+$fluent-switch-handle-on-shadow: 0 0 0 $fluent-switch-shadow-blur-radius $switch-handle-on-shadow-color;
 $fluent-switch-shadow: none;
 
 @include dx-switch(

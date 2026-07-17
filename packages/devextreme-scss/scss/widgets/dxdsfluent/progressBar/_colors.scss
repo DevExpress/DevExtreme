@@ -38,3 +38,6 @@ $progressbar-label-color: $base-text-color !default;
 @if $mode == "dark" {
   $progressbar-bg: color.adjust($base-typography-bg, $lightness: 7.84%, $space: hsl) !default;
 }
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$progressbar-foreground-disabled: $base-foreground-disabled !default;

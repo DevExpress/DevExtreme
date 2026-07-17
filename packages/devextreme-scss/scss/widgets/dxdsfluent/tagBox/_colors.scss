@@ -42,3 +42,6 @@ $tagbox-tag-disabled: $base-background-disabled !default;
 @if $mode == "dark" {
   $tagbox-tag-bg: color.adjust($base-element-bg, $lightness: -12.16%, $space: hsl) !default;
 }
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$tagbox-border-color-disabled: $base-border-color-disabled !default;

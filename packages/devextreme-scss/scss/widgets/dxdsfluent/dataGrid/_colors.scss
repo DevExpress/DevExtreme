@@ -19,3 +19,7 @@ $fluent-datagrid-grouppanel-item-bg: null !default;
 @if $mode == "dark" {
   $fluent-datagrid-grouppanel-item-bg: color.adjust($base-bg, $lightness: -12.16%, $space: hsl) !default;
 }
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$datagrid-accent: $base-accent !default;
+$datagrid-border-color-disabled: $base-border-color-disabled !default;

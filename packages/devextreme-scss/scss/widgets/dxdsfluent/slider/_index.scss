@@ -1,7 +1,6 @@
 @use "sass:math";
 @use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/slider";
@@ -41,8 +40,8 @@
   border-radius: $fluent-slider-radius;
   border-width: 1px;
   border-style: solid;
-  border-color: $base-border-color;
-  background-color: $base-element-bg;
+  border-color: $slider-border-color;
+  background-color: $slider-element-bg;
 
   &::after {
     position: absolute;
@@ -53,7 +52,7 @@
     border-radius: $fluent-slider-radius;
     border-width: 3px;
     border-style: solid;
-    border-color: $base-element-bg;
+    border-color: $slider-element-bg;
   }
 
   &.dx-state-hover {
@@ -118,7 +117,7 @@
 .dx-invalid {
   .dx-slider-handle {
     &::after {
-      background-color: $base-invalid-color;
+      background-color: $slider-theme-invalid-color;
     }
 
     &.dx-state-hover {

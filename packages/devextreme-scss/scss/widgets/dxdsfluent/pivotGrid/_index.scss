@@ -1,6 +1,5 @@
 @use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../common/mixins" as *;
@@ -39,15 +38,14 @@ $fluent-pivotgrid-headers-font-size: 14px;
 $fluent-pivotgrid-area-font-size: 13px;
 $fluent-pivotgrid-chevron-icon-size: 20px;
 
-$fluent-pivotgrid-drag-header-shadow: 0 3px 4px color.change($base-shadow-color, $alpha: 0.15);
 $fluent-pivotgridfieldchooser-field-min-height: 36px;
 
 .dx-pivotgrid-fields-container {
   &.dx-drag {
     .dx-area-field.dx-area-box {
-      background-color: color.change($pivotgrid-field-area-box-background-color, $alpha: 0.9);
+      background-color: $pivotgrid-area-field-bg;
       border: 1px solid;
-      border-color: $base-border-color-disabled;
+      border-color: $pivotgrid-border-color-disabled;
       box-shadow: $fluent-pivotgrid-drag-header-shadow;
     }
   }
@@ -57,13 +55,13 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
     background-color: $pivotgrid-field-area-box-background-color;
     border-radius: $area-field-border-radius;
     border: 1px solid;
-    border-color: $base-border-color-disabled;
+    border-color: $pivotgrid-border-color-disabled;
     font-size: $fluent-pivotgrid-headers-font-size;
     font-weight: $pivotgrid-field-area-box-font-weight;
     line-height: 20px;
 
     .dx-header-filter {
-      color: $base-accent;
+      color: $pivotgrid-accent;
 
       &.dx-header-filter-empty {
         color: $pivotgrid-area-color;
@@ -103,7 +101,7 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
 
       .dx-grandtotal,
       .dx-total {
-        color: $base-text-color;
+        color: $pivotgrid-text-color;
       }
     }
 

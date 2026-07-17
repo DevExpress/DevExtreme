@@ -49,7 +49,9 @@ const removeAllCommentsFromContent = (content: string): string => content
 
 const extractVariables = (filePath: string): string[] => {
   const content = removeAllCommentsFromContent(readFileSync(filePath, 'utf8'));
-  const regex = new RegExp(`\\$[${VAR_NAME_CHARS}]+`, 'g');
+  // `ds.$…` references point to the generated design-tokens module
+  // (scss/_design-system/variables/_ds.scss) and are not theme-local variables.
+  const regex = new RegExp(`(?<!ds\\.)\\$[${VAR_NAME_CHARS}]+`, 'g');
   return content.match(regex) ?? [];
 };
 

@@ -31,3 +31,8 @@ $fluent-slider-bar-disabled-bg: $base-background-disabled !default;
 * $type color
 */
 $fluent-slider-tooltip-color: $base-text-color !default;
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$slider-border-color: $base-border-color !default;
+$slider-element-bg: $base-element-bg !default;
+$slider-theme-invalid-color: $base-invalid-color !default;

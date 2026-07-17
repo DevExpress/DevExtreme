@@ -1,7 +1,6 @@
 @use "sass:math";
 @use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/diagram";
@@ -28,7 +27,7 @@ $diagram-toolbox-title-size: 18px;
 
   // stylelint-disable selector-class-pattern
   .dxdi-control .dxdi-canvas {
-    background-color: color.adjust($overlay-content-bg, $lightness: -15%, $space: hsl);
+    background-color: $diagram-canvas-bg;
 
     .selection-mark,
     .item-selection-rect,
@@ -85,7 +84,7 @@ $diagram-toolbox-title-size: 18px;
 
       .dxdi-warning {
         ellipse {
-          fill: $base-danger;
+          fill: $diagram-danger;
         }
       }
     }
@@ -140,7 +139,7 @@ $diagram-toolbox-title-size: 18px;
 
 
   &.dx-diagram-fullscreen {
-    background-color: $base-bg;
+    background-color: $diagram-bg;
   }
 }
 
@@ -151,7 +150,7 @@ $diagram-toolbox-title-size: 18px;
 
 .dx-diagram-floating-toolbar-container {
   background: $overlay-content-bg;
-  box-shadow: 0 1px 8px color.change($base-shadow-color, $alpha: 0.175);
+  box-shadow: $diagram-shadow;
   border-radius: $popup-border-radius;
   padding: 4px;
 
@@ -203,7 +202,7 @@ $diagram-toolbox-title-size: 18px;
 
 .dx-diagram-toolbox-popup {
   & > .dx-overlay-content {
-    box-shadow: 0 1px 8px color.change($base-shadow-color, $alpha: 0.175);
+    box-shadow: $diagram-shadow;
   }
 
   .dx-popup-title {
@@ -438,7 +437,7 @@ $diagram-toolbox-title-size: 18px;
 
       .dx-icon {
         font-size: $fluent-diagram-toolbar-icon-size;
-        color: $base-text-color;
+        color: $diagram-text-color;
       }
     }
   }
@@ -466,7 +465,7 @@ $diagram-toolbox-title-size: 18px;
   }
 }
 
-@include diagram-action-icons-mixin($base-text-color, $base-text-color, $fluent-diagram-toolbar-icon-size, $diagram-toolbar-colorbutton-border-width);
+@include diagram-action-icons-mixin($diagram-text-color, $diagram-text-color, $fluent-diagram-toolbar-icon-size, $diagram-toolbar-colorbutton-border-width);
 
 .dx-diagram-toolbox-popup .dx-button-has-icon .dx-icon.dx-icon-diagram-toolbox-drag {
   @include diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/toolbox-drag.svg'), $popup-title-color, $diagram-toolbox-title-size, $diagram-toolbox-title-size);
