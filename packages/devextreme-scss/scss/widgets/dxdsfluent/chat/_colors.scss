@@ -1,9 +1,6 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
 @use "../textEditor/colors" as *;
 @use "../button/colors" as *;
-@use "../color" as extcolor;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -11,178 +8,126 @@
 * $name 10. Background color
 * $type color
 */
-$chat-background-color: $base-bg !default;
+$chat-background-color: ds.$color-surface-neutral-default-rest !default;
 
 /**
 * $name 20. Border color
 * $type color
 */
-$chat-border-color: $base-border-color !default;
+$chat-border-color: ds.$color-border-neutral-default-rest !default;
 $chat-messagebox-border-color: $chat-border-color !default;
 $chat-messagebox-file-background-color: $button-normal-text-hover-bg !default;
 $chat-messagebox-file-cancel-button-secondary-color: $button-normal-text-selected-bg !default;
-$chat-message-editing-preview-accent-color: $base-accent !default;
+$chat-message-editing-preview-accent-color: ds.$color-surface-primary-default-rest !default;
 $chat-message-editing-preview-cancel-button-color: $texteditor-label-color !default;
 
 /**
 * $name 30. Text color
 * $type color
 */
-$chat-avatar-color: $base-text-color !default;
+$chat-avatar-color: ds.$color-content-neutral-default-rest !default;
 
 /**
 * $name 31. Background color
 * $type color
 */
-$chat-avatar-background-color: $base-active-bg !default;
+$chat-avatar-background-color: ds.$color-surface-neutral-default-active !default;
 
 /**
 * $name 40. Text color (sent messages)
 * $type color
 */
-$chat-bubble-color-primary: $base-text-color !default;
+$chat-bubble-color-primary: ds.$color-content-neutral-default-rest !default;
 
 /**
 * $name 41. Background color (sent messages)
 * $type color
 */
-$chat-bubble-background-color-primary: null !default;
+$chat-bubble-background-color-primary: ds.$color-surface-primary-subdued-rest !default;
 
 /**
 * $name 42. Text color (received messages)
 * $type color
 */
-$chat-bubble-color-secondary: $base-text-color !default;
+$chat-bubble-color-secondary: ds.$color-content-neutral-default-rest !default;
 
 /**
 * $name 43. Background color (received messages)
 * $type color
 */
-$chat-bubble-background-color-secondary: null !default;
+$chat-bubble-background-color-secondary: ds.$color-surface-neutral-subdued-rest !default;
 
 /**
 * $name 50. User name color
 * $type color
 */
-$chat-information-author-name-color: null !default;
+$chat-information-author-name-color: ds.$color-content-neutral-subdued-rest !default;
 
 /**
 * $name 51. Timestamp color
 * $type color
 */
-$chat-information-timestamp-color: null !default;
+$chat-information-timestamp-color: ds.$color-content-neutral-subdued-rest !default;
 
 /**
 * $name 52. Day header color
 * $type color
 */
-$chat-messagelist-day-header-color: null !default;
+$chat-messagelist-day-header-color: ds.$color-content-neutral-subdued-rest !default;
 
 /**
 * $name 55. Alert color
 * $type color
 */
-$chat-alertlist-color: $base-invalid-color !default;
+$chat-alertlist-color: ds.$color-content-danger-default-rest !default;
 
 /**
 * $name 65. Icon color
 * $type color
 */
-$chat-messagelist-empty-icon-color: null !default;
+$chat-messagelist-empty-icon-color: ds.$color-content-neutral-subdued-rest !default;
 
 /**
 * $name 66. Icon background color
 * $type color
 */
-$chat-messagelist-empty-icon-background-color: null !default;
+$chat-messagelist-empty-icon-background-color: ds.$color-surface-neutral-subdued-rest !default;
 
 /**
 * $name 67. Title color
 * $type color
 */
-$chat-messagelist-empty-message-color: $base-text-color !default;
+$chat-messagelist-empty-message-color: ds.$color-content-neutral-default-rest !default;
 
 /**
 * $name 68. Subtitle color
 * $type color
 */
-$chat-messagelist-empty-prompt-color: null !default;
+$chat-messagelist-empty-prompt-color: ds.$color-content-neutral-subdued-rest !default;
 
 /**
 * $name 80. Text color
 * $type color
 */
-$chat-typingindicator-color: null !default;
+$chat-typingindicator-color: ds.$color-content-neutral-subdued-rest !default;
 
 /**
 * $name 82. Central circle color
 * $type color
 */
-$chat-typingindicator-circle-bg-color-center: null !default;
+$chat-typingindicator-circle-bg-color-center: ds.$color-content-neutral-subdued-rest !default;
 
 /**
 * $name 83. Outer circles color
 * $type color
 */
-$chat-typingindicator-circle-bg-color: null !default;
+$chat-typingindicator-circle-bg-color: ds.$color-content-neutral-default-disabled !default;
 
-$chat-file-container-background-color: $base-bg !default;
-$chat-file-container-box-shadow: null !default;
-$chat-file-secondary-color: null !default;
+$chat-file-container-background-color: ds.$color-surface-neutral-default-rest !default;
+$chat-file-container-box-shadow: ds.$box-shadow-sm !default;
+$chat-file-secondary-color: ds.$color-content-neutral-subdued-rest !default;
 
-$chat-suggestions-box-shadow: null !default;
-
-@if $mode == "light" {
-  $chat-bubble-background-color-secondary: color.adjust($base-bg, $lightness: -3.92%, $space: hsl) !default;
-  $chat-information-author-name-color: color.adjust($base-bg, $lightness: -56.08%, $space: hsl) !default;
-  $chat-information-timestamp-color: color.adjust($base-bg, $lightness: -56.08%, $space: hsl) !default;
-  $chat-typingindicator-color: color.adjust($base-bg, $lightness: -56.08%, $space: hsl) !default;
-
-  $chat-messagelist-day-header-color: color.adjust($base-bg, $lightness: -56.08%, $space: hsl) !default;
-  $chat-messagelist-empty-icon-color: color.adjust($base-icon-color, $lightness: 32.16%, $space: hsl) !default;
-  $chat-messagelist-empty-icon-background-color: color.adjust($base-bg, $lightness: -3.92%, $space: hsl) !default;
-  $chat-messagelist-empty-prompt-color: color.adjust($base-label-color, $lightness: -5.88%, $space: hsl) !default;
-
-  $chat-typingindicator-circle-bg-color: color.adjust($base-bg, $lightness: -29.16%, $space: hsl) !default;
-  $chat-typingindicator-circle-bg-color-center: color.adjust($base-bg, $lightness: -56.08%, $space: hsl) !default;
-
-  $chat-file-container-box-shadow: 0 0 2px 0 color.change($base-shadow-color, $alpha: 0.12), 0 1px 2px 0 color.change($base-shadow-color, $alpha: 0.14) !default;
-  $chat-file-secondary-color: $base-icon-color !default;
-
-  $chat-suggestions-box-shadow: 0 4px 12px 0 color.change($base-shadow-color, $alpha: 0.04), 0 4px 24px 0 color.change($base-shadow-color, $alpha: 0.02) !default;
-
-  @if $color == "blue" {
-    $chat-bubble-background-color-primary: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 3.8deg, $saturation: -11.4%, $lightness: 55.5%) !default;
-    $chat-messagelist-empty-icon-background-color: color.adjust($base-bg, $lightness: -3.92%, $space: hsl) !default;
-  }
-
-  @if $color == "saas" {
-    $chat-bubble-background-color-primary: color.mix($base-bg, $base-accent, 90%) !default;
-    $chat-messagelist-empty-icon-background-color: $base-border-color !default;
-  }
-}
-
-@if $mode == "dark" {
-  $chat-bubble-background-color-secondary: color.adjust($base-bg, $lightness: 7.84%, $space: hsl) !default;
-  $chat-bubble-background-color-primary: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 356.3deg, $saturation: -14.7%, $lightness: -49.4%) !default;
-
-  $chat-information-author-name-color: color.adjust($base-bg, $lightness: 43.92%, $space: hsl) !default;
-  $chat-information-timestamp-color: color.adjust($base-bg, $lightness: 43.92%, $space: hsl) !default;
-  $chat-typingindicator-color: color.adjust($base-bg, $lightness: 43.92%, $space: hsl) !default;
-
-  $chat-messagelist-day-header-color: color.adjust($base-bg, $lightness: 43.92%, $space: hsl) !default;
-  $chat-messagelist-empty-icon-color: color.adjust($base-icon-color, $lightness: -25.88%, $space: hsl) !default;
-  $chat-messagelist-empty-icon-background-color: color.adjust($base-bg, $lightness: 7.84%, $space: hsl) !default;
-  $chat-messagelist-empty-prompt-color: color.adjust($base-label-color, $lightness: 7.84%, $space: hsl) !default;
-
-  $chat-typingindicator-circle-bg-color: color.adjust($base-bg, $lightness: 33.92%, $space: hsl) !default;
-  $chat-typingindicator-circle-bg-color-center: color.adjust($base-bg, $lightness: 43.92%, $space: hsl) !default;
-
-  $chat-file-container-box-shadow: 0 0 2px 0 color.change($base-shadow-color, $alpha: 0.24), 0 1px 2px 0 color.change($base-shadow-color, $alpha: 0.28) !default;
-  $chat-file-secondary-color: $base-icon-color !default;
-
-  $chat-suggestions-box-shadow: 0 4px 24px 0 color.change($base-shadow-color, $alpha: 0.02), 0 4px 12px 0 color.change($base-shadow-color, $alpha: 0.04) !default;
-}
+$chat-suggestions-box-shadow: ds.$box-shadow-md !default;
 
 /**
 * $name 81. Background color
@@ -190,6 +135,6 @@ $chat-suggestions-box-shadow: null !default;
 */
 $chat-typingindicator-bubble-bg-color: $chat-bubble-background-color-secondary !default;
 
-$chat-messagelist-contextmenu-delete-button-color: $base-danger !default;
-$chat-messagelist-contextmenu-delete-button-focused-color: $base-danger !default;
-$chat-messagelist-contextmenu-delete-button-focused-bg: $base-hover-bg !default;
+$chat-messagelist-contextmenu-delete-button-color: ds.$color-content-danger-default-rest !default;
+$chat-messagelist-contextmenu-delete-button-focused-color: ds.$color-content-danger-default-rest !default;
+$chat-messagelist-contextmenu-delete-button-focused-bg: ds.$color-surface-neutral-default-hovered !default;

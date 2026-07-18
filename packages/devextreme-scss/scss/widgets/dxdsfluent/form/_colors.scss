@@ -1,6 +1,4 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -8,27 +6,13 @@
 * $name 10. Label text color
 * $type color
 */
-$form-field-item-color: null !default;
-$form-item-help-text-color: $base-label-color !default;
+$form-field-item-color: ds.$color-content-neutral-default-rest !default;
+$form-item-help-text-color: ds.$color-content-neutral-subdued-rest !default;
 
 /**
 * $name 20. Group border color
 * $type color
 */
-$form-group-border-color: $base-border-color !default;
+$form-group-border-color: ds.$color-border-neutral-default-rest !default;
 $form-field-required-color: $form-field-item-color !default;
 $form-field-mark-color: $form-field-item-color !default;
-
-@if $mode == "light" {
-  @if $color == "blue" {
-    $form-field-item-color: $base-text-color !default;
-  }
-
-  @if $color == "saas" {
-    $form-field-item-color: $base-label-color !default;
-  }
-}
-
-@if $mode == "dark" {
-  $form-field-item-color: $base-text-color !default;
-}

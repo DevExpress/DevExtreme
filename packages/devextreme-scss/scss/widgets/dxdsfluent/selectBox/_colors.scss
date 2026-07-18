@@ -1,6 +1,4 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -8,4 +6,4 @@
 * $name 10. Item background color
 * $type color
 */
-$selectbox-list-bg: $base-element-bg !default;
+$selectbox-list-bg: ds.$color-surface-neutral-default-rest !default;
