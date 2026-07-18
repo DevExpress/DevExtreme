@@ -1,6 +1,4 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -8,27 +6,23 @@
 * $name 10. File name text color
 * $type color
 */
-$fileuploader-filename-color: $base-text-color !default;
-$fileuploader-file-icon-color: $base-icon-color !default;
-$fileuploader-progressbar-status-color: $base-text-color !default;
-$fluent-fileuploader-files-container-bg-color: $base-bg !default;
+$fileuploader-filename-color: ds.$color-content-neutral-default-rest !default;
+$fileuploader-file-icon-color: ds.$color-content-neutral-subdued-rest !default;
+$fileuploader-progressbar-status-color: ds.$color-content-neutral-default-rest !default;
+$fluent-fileuploader-files-container-bg-color: ds.$color-surface-neutral-default-rest !default;
 
 /**
 * $name 20. File status text color
 * $type color
 */
-$fileuploader-falename-status-color: $base-label-color !default;
+$fileuploader-falename-status-color: ds.$color-content-neutral-subdued-rest !default;
 
 /**
 * $name 30. Drag-and-drop border color
 * $type color
 */
-$fileuploader-border-color: $base-border-color !default;
+$fileuploader-border-color: ds.$color-border-neutral-default-rest !default;
 
-// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$fileuploader-danger: $base-danger !default;
-$fileuploader-label-color: $base-label-color !default;
-$fileuploader-shadow-color: $base-shadow-color !default;
-
-// Color computations hoisted from style files (phase 0.5 layer normalization)
-$fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($fileuploader-shadow-color, $alpha: 0.1) !default;
+$fileuploader-danger: ds.$color-surface-danger-default-rest !default;
+$fileuploader-label-color: ds.$color-content-neutral-subdued-rest !default;
+$fluent-fileuploader-file-container-boxshadow: ds.$box-shadow-sm !default;

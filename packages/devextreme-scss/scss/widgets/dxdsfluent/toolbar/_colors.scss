@@ -1,6 +1,4 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -9,5 +7,5 @@
 * $type color
 */
 $toolbar-bg: transparent !default;
-$toolbar-color: $base-text-color !default;
-$toolbar-separator-color: $base-separator-color !default;
+$toolbar-color: ds.$color-content-neutral-default-rest !default;
+$toolbar-separator-color: ds.$separator-color !default;

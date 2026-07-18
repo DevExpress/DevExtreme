@@ -1,10 +1,7 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$colorbox-preview-icon-color: $base-icon-color !default;
+$colorbox-preview-icon-color: ds.$color-content-neutral-subdued-rest !default;
 
-// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$colorbox-foreground-disabled: $base-foreground-disabled !default;
+$colorbox-foreground-disabled: ds.$color-content-neutral-default-disabled !default;

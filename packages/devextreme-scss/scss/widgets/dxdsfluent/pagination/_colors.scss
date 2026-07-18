@@ -1,6 +1,4 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -8,11 +6,11 @@
 * $name 180. Pager selected item text color
 * $type color
 */
-$pagination-page-selected-color: $base-inverted-text-color !default;
-$pagination-page-hovered-bg: $base-hover-bg !default;
+$pagination-page-selected-color: ds.$color-content-neutral-default-static-dark-rest !default;
+$pagination-page-hovered-bg: ds.$color-surface-neutral-default-hovered !default;
 
 /**
 * $name 190. Pager selected item background color
 * $type color
 */
-$pagination-page-selected-bg: $base-accent !default;
+$pagination-page-selected-bg: ds.$color-surface-primary-default-rest !default;

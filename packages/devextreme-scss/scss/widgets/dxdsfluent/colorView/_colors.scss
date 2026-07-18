@@ -1,7 +1,5 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
 @use "../overlay/colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -11,7 +9,7 @@
 */
 $colorbox-overlay-bg: $overlay-content-bg !default;
 $colorbox-palette-cell-bg: $colorbox-overlay-bg !default;
-$colorview-border-color: $base-border-color !default;
-$colorview-label-color: $base-label-color !default;
-$colorview-handle-color: $base-bg !default;
-$colorview-handle-border-color: $base-border-color !default;
+$colorview-border-color: ds.$color-border-neutral-default-rest !default;
+$colorview-label-color: ds.$color-content-neutral-subdued-rest !default;
+$colorview-handle-color: ds.$color-surface-neutral-default-rest !default;
+$colorview-handle-border-color: ds.$color-border-neutral-default-rest !default;

@@ -1,8 +1,5 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
-@use "../color" as extcolor;
 @use "../textEditor/colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -10,38 +7,29 @@
 * $name 10. Tag text color
 * $type color
 */
-$tagbox-tag-color: $base-text-color !default;
+$tagbox-tag-color: ds.$color-content-neutral-default-rest !default;
 
 /**
 * $name 20. Tag background color
 * $type color
 */
-$tagbox-tag-bg: null !default;
-$tagbox-tag-hover-bg: $base-typography-bg !default;
+$tagbox-tag-bg: ds.$tag-color-bg-rest !default;
+$tagbox-tag-hover-bg: ds.$color-surface-neutral-default-hovered !default;
 
 /**
 * $name 30. Tag active text color
 * $type color
 */
-$tagbox-tag-active-color: $base-text-color !default;
+$tagbox-tag-active-color: ds.$color-content-neutral-default-rest !default;
 
 /**
 * $name 40. Tag close button color
 * $type color
 */
-$tagbox-tag-button-remove-bg: $base-icon-color !default;
-$tagbox-tag-border-color-focused: $base-accent-active !default;
-$tagbox-select-all-border-color: $base-border-color !default;
-$tagbox-tag-foreground-disabled: $base-foreground-disabled !default;
-$tagbox-tag-disabled: $base-background-disabled !default;
+$tagbox-tag-button-remove-bg: ds.$color-content-neutral-subdued-rest !default;
+$tagbox-tag-border-color-focused: ds.$color-border-primary-default-rest !default;
+$tagbox-select-all-border-color: ds.$color-border-neutral-default-rest !default;
+$tagbox-tag-foreground-disabled: ds.$color-content-neutral-default-disabled !default;
+$tagbox-tag-disabled: ds.$tag-color-bg-disabled !default;
 
-@if $mode == "light" {
-  $tagbox-tag-bg: color.adjust($base-hover-bg, $lightness: -1.96%, $space: hsl) !default;
-}
-
-@if $mode == "dark" {
-  $tagbox-tag-bg: color.adjust($base-element-bg, $lightness: -12.16%, $space: hsl) !default;
-}
-
-// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$tagbox-border-color-disabled: $base-border-color-disabled !default;
+$tagbox-border-color-disabled: ds.$color-border-neutral-default-disabled !default;
