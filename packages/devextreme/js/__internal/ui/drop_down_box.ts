@@ -318,6 +318,11 @@ class DropDownBox<
     };
   }
 
+  _popupShowingHandler(): void {
+    super._popupShowingHandler();
+    this._updatePopupWidth();
+  }
+
   _popupShownHandler(): void {
     super._popupShownHandler();
     const $firstElement = this._getTabbableElements().first();
