@@ -1,7 +1,4 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
-@use "../color" as extcolor;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -9,35 +6,36 @@
 * $name 10. Indicator background color
 * $type color
 */
-$gallery-indicator-bg: $base-bg !default;
+$gallery-indicator-bg: ds.$color-surface-neutral-default-rest !default;
 
 /**
 * $name 20. Selected indicator background color
 * $type color
 */
-$gallery-indicator-item-selected-bg: $base-accent !default;
+$gallery-indicator-item-selected-bg: ds.$color-surface-primary-default-rest !default;
 
 /**
 * $name 30. Focused indicator background color
 * $type color
 */
-$gallery-indicator-focused-bg: $base-accent !default;
-$gallery-indicator-item-border-color: color.change(#000, $alpha: 0.2) !default;
-$gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
-$gallery-navbutton-color: color.change($base-text-color, $alpha: 0.54) !default;
-$gallery-nav-arrow-color: $base-inverted-text-color !default;
+$gallery-indicator-focused-bg: ds.$color-surface-primary-default-rest !default;
+$gallery-indicator-item-border-color: ds.$color-border-neutral-subdued-rest !default;
+
+// Semi-transparent surface over the indicator — relative-color bridge.
+$gallery-indicator-selected-border-color: rgb(from #{ds.$color-surface-neutral-default-rest} r g b / 0.8) !default;
+$gallery-navbutton-color: ds.$color-content-neutral-subdued-rest !default;
+$gallery-nav-arrow-color: ds.$color-content-neutral-default-static-dark-rest !default;
 
 /**
 * $name 40. Hovered navigation button color
 * $type color
 */
-$gallery-navbutton-hover-color: $base-accent !default;
+$gallery-navbutton-hover-color: ds.$color-surface-primary-default-rest !default;
 
 /**
 * $name 50. Active navigation button color
 * $type color
 */
-$gallery-navbutton-active-color: $base-accent !default;
+$gallery-navbutton-active-color: ds.$color-surface-primary-default-active !default;
 
-// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$gallery-accent: $base-accent !default;
+$gallery-accent: ds.$color-surface-primary-default-rest !default;

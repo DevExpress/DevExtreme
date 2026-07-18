@@ -1,41 +1,27 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$menu-popup-bg: $base-bg !default;
-$menu-item-hover-bg: $base-hover-bg !default;
-$menu-item-bg-active: $base-active-bg !default;
+$menu-popup-bg: ds.$color-surface-neutral-default-rest !default;
+$menu-item-hover-bg: ds.$color-surface-neutral-default-hovered !default;
+$menu-item-bg-active: ds.$color-surface-neutral-default-active !default;
 
 /**
 * $name 10. Text color
 * $type color
 */
-$menu-color: $base-text-color !default;
+$menu-color: ds.$color-content-neutral-default-rest !default;
 $menu-item-expanded-color: $menu-color !default;
 
 /**
 * $name 20. Selected item background color
 * $type color
 */
-$menu-item-selected-bg: $base-selected-bg !default;
-$menu-popup-border-color: $base-border-color !default;
-$menu-separator-bg: $base-border-color !default;
-$menu-item-selected-color: $base-text-color !default;
-$menu-item-link-color: $base-link-color !default;
-$menu-item-focused-selected-bg: null !default;
+$menu-item-selected-bg: ds.$color-surface-neutral-default-selected !default;
+$menu-popup-border-color: ds.$color-border-neutral-default-rest !default;
+$menu-separator-bg: ds.$separator-color !default;
+$menu-item-selected-color: ds.$color-content-neutral-default-rest !default;
+$menu-item-link-color: ds.$color-content-primary-default-rest !default;
+$menu-item-focused-selected-bg: ds.$color-surface-neutral-default-selected-hovered !default;
 
-@if $mode == "light" {
-  $menu-item-focused-selected-bg: color.adjust($base-bg, $lightness: -9.8%, $space: hsl) !default;
-}
-
-@if $mode == "dark" {
-  $menu-item-focused-selected-bg: color.adjust($base-bg, $lightness: 18.04%, $space: hsl) !default;
-}
-
-// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$menu-shadow-color: $base-shadow-color !default;
-
-// Color computations hoisted from style files (phase 0.5 layer normalization)
-$menu-focused-shadow: 0 3px 10px color.change($menu-shadow-color, $alpha: 0.1) !default;
+$menu-focused-shadow: ds.$box-shadow-md !default;

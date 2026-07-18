@@ -1,13 +1,7 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$contextmenu-foreground-disabled: $base-foreground-disabled !default;
-$contextmenu-icon-color: $base-icon-color !default;
-$contextmenu-shadow-color: $base-shadow-color !default;
-
-// Color computations hoisted from style files (phase 0.5 layer normalization)
-$contextmenu-shadow: color.change($contextmenu-shadow-color, $alpha: 0.12) 0 2px 7.2px 0, color.change($contextmenu-shadow-color, $alpha: 0.14) 0 8px 16px 0 !default;
+$contextmenu-foreground-disabled: ds.$color-content-neutral-default-disabled !default;
+$contextmenu-icon-color: ds.$color-content-neutral-subdued-rest !default;
+$contextmenu-shadow: ds.$box-shadow-md !default;

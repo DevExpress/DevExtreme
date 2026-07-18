@@ -1,8 +1,5 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$menu-item-color-disabled: $base-foreground-disabled;
-
+$menu-item-color-disabled: ds.$color-content-neutral-default-disabled;

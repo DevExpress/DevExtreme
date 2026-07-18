@@ -240,7 +240,7 @@
 
     &.dx-calendar-empty-cell {
       cursor: default;
-      color: color.change($cell-text-color, $alpha: 0.24);
+      color: if(meta.type-of($cell-text-color) == color, color.change($cell-text-color, $alpha: 0.24), rgb(from #{$cell-text-color} r g b / 0.24));
 
       &.dx-state-hover,
       &.dx-state-active {

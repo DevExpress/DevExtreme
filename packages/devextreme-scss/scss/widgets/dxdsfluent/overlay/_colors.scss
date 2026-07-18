@@ -1,6 +1,4 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -8,19 +6,10 @@
 * $name 10. Content background color
 * $type color
 */
-$overlay-content-bg: $base-bg !default;
+$overlay-content-bg: ds.$color-surface-neutral-default-rest !default;
 
 /**
 * $name 20. Shader background color
 * $type color
 */
-$overlay-shader-bg: null !default;
-
-@if $mode == "light" {
-  $overlay-shader-bg: color.change($base-shadow-color, $alpha: 0.32) !default;
-}
-
-@if $mode == "dark" {
-  $overlay-shader-bg: color.change($base-shadow-color, $alpha: 0.61) !default;
-}
-
+$overlay-shader-bg: ds.$color-surface-backdrop-default-rest !default;
