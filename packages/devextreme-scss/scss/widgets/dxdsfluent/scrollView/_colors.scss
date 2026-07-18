@@ -1,7 +1,5 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$scrollview-shadow-color: color.change($base-shadow-color, $alpha: 0.37) !default;
+$scrollview-shadow-color: ds.$color-shadow-key !default;

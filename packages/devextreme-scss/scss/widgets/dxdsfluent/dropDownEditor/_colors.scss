@@ -1,15 +1,11 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
-@use "../button/colors" as *;
-@use "../textEditor/colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$dropdowneditor-icon-color: $base-spin-icon-color !default;
+$dropdowneditor-icon-color: ds.$color-content-neutral-subdued-rest !default;
 
 /**
 * $name 90. Active arrow icon color
 * $type color
 */
-$dropdowneditor-icon-active-color: $base-spin-icon-color !default;
+$dropdowneditor-icon-active-color: ds.$color-content-neutral-subdued-rest !default;

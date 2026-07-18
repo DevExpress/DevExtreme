@@ -1,12 +1,10 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$dateview-shadow-up: 0deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
-$dateview-shadow-down: 180deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
-$dateview-color: $base-text-color !default;
+// Fade gradients over the surface — relative-color bridge (no gradient role in foundation).
+$dateview-shadow-up: 0deg, rgb(from #{ds.$color-surface-neutral-default-rest} r g b / 0) 0%, rgb(from #{ds.$color-surface-neutral-default-rest} r g b / 0.8) 60% !default;
+$dateview-shadow-down: 180deg, rgb(from #{ds.$color-surface-neutral-default-rest} r g b / 0) 0%, rgb(from #{ds.$color-surface-neutral-default-rest} r g b / 0.8) 60% !default;
+$dateview-color: ds.$color-content-neutral-default-rest !default;
 
-// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$dateview-accent: $base-accent !default;
+$dateview-accent: ds.$color-surface-primary-default-rest !default;

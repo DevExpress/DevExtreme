@@ -1,8 +1,5 @@
-@use "sass:color";
 @use "../sizes" as *;
-@use "../colors" as *;
-@use "../overlay/colors" as *;
-@use "../color" as extcolor;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -10,21 +7,12 @@
 * $name 10. Text color
 * $type color
 */
-$tooltip-color: $base-text-color !default;
+$tooltip-color: ds.$color-content-neutral-default-rest !default;
 
 /**
 * $name 20. Background color
 * $type color
 */
-$tooltip-bg: null !default;
+$tooltip-bg: ds.$tooltip-color-bg-rest !default;
 
 $tooltip-border-radius: $base-border-radius !default;
-
-@if $mode == "light" {
-  $tooltip-bg: $base-bg !default;
-}
-
-@if $mode == "dark" {
-  $tooltip-bg: $base-hover-bg !default;
-}
-

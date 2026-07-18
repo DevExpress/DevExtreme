@@ -1,6 +1,4 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -8,4 +6,4 @@
 * $name 10. Shader background color
 * $type color
 */
-$drawer-shader-background-color: color.change($base-shadow-color, $alpha: 0.5) !default;
+$drawer-shader-background-color: ds.$color-surface-backdrop-default-rest !default;

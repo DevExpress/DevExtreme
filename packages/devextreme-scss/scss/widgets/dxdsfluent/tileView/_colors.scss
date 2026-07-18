@@ -1,6 +1,4 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -8,10 +6,10 @@
 * $name 10. Item text color
 * $type color
 */
-$tileview-color: $base-text-color !default;
-$tileview-bg: $base-element-bg !default;
-$tileview-border-color: color.change($base-border-color, $alpha: 0.6) !default;
-$tileview-hover-bg: $base-element-bg !default;
-$tileview-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
-$tileview-active-bg: color.change(color.adjust($tileview-bg, $lightness: -62.5%, $space: hsl), $alpha: 0.2) !default;
+$tileview-color: ds.$color-content-neutral-default-rest !default;
+$tileview-bg: ds.$color-surface-neutral-default-rest !default;
+$tileview-border-color: ds.$color-border-neutral-subdued-rest !default;
+$tileview-hover-bg: ds.$color-surface-neutral-default-rest !default;
+$tileview-hover-border-color: ds.$color-border-primary-default-rest !default;
+$tileview-active-bg: ds.$color-surface-neutral-alpha-active !default;
 $tileview-active-color: $tileview-color !default;

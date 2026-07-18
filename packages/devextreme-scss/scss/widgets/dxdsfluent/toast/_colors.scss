@@ -1,19 +1,8 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$toast-default-bg: $base-bg !default;
-$warning-color: null !default;
-
-@if $mode == "light" {
-  $warning-color: $base-text-color !default;
-}
-
-@if $mode == "dark" {
-  $warning-color: $base-inverted-text-color !default;
-}
+$toast-default-bg: ds.$toast-color-bg-rest !default;
 
 /**
 * $name 10. Info background color
@@ -25,46 +14,42 @@ $toast-info-bg: $toast-default-bg !default;
 * $name 20. Info text color
 * $type color
 */
-$toast-info-color: $base-text-color !default;
+$toast-info-color: ds.$color-content-neutral-default-rest !default;
 
 /**
 * $name 30. Warning background color
 * $type color
 */
-$toast-warning-bg: $base-warning !default;
+$toast-warning-bg: ds.$color-surface-warning-default-rest !default;
 
 /**
 * $name 40. Warning text color
 * $type color
 */
-$toast-warning-color: $warning-color !default;
+$toast-warning-color: ds.$color-content-neutral-default-static-light-rest !default;
 
 /**
 * $name 50. Error background color
 * $type color
 */
-$toast-error-bg: $base-danger !default;
+$toast-error-bg: ds.$color-surface-danger-default-rest !default;
 
 /**
 * $name 60. Error text color
 * $type color
 */
-$toast-error-color: $base-inverted-text-color !default;
+$toast-error-color: ds.$color-content-neutral-default-static-dark-rest !default;
 
 /**
 * $name 70. Success background color
 * $type color
 */
-$toast-success-bg: $base-success !default;
+$toast-success-bg: ds.$color-surface-success-default-rest !default;
 
 /**
 * $name 80. Success text color
 * $type color
 */
-$toast-success-color: $base-inverted-text-color !default;
+$toast-success-color: ds.$color-content-neutral-default-static-dark-rest !default;
 
-// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$toast-shadow-color: $base-shadow-color !default;
-
-// Color computations hoisted from style files (phase 0.5 layer normalization)
-$toast-shadow: 0 0 2px 0 color.change($toast-shadow-color, $alpha: 0.12), 0 8px 16px 0 color.change($toast-shadow-color, $alpha: 0.14) !default;
+$toast-shadow: ds.$box-shadow-lg !default;
