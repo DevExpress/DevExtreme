@@ -5,17 +5,17 @@
   "scripts": {
     "dev:react19": "vite builders/react19",
     "dev:vue3": "vite builders/vue3",
-    "dev:angular19": "cd builders/angular19 && node scripts/link-external.js && ng serve --configuration development",
+    "dev:angular": "cd builders/angular && node scripts/link-external.js && ng serve --configuration development",
     "build:react19": "vite build builders/react19",
     "build:vue3": "vite build builders/vue3",
-    "build:angular19": "cd builders/angular19 && node scripts/link-external.js && ng build",
+    "build:angular": "cd builders/angular && node scripts/link-external.js && ng build",
     "start:react19": "pnpm run dev:react19 -- --host",
     "start:vue3": "pnpm run dev:vue3 -- --host",
-    "start:angular19": "cd builders/angular19 && pnpm run start",
-    "build:all": "pnpm run build:react19 && pnpm run build:vue3 && pnpm run build:angular19",
+    "start:angular": "cd builders/angular && pnpm run start",
+    "build:all": "pnpm run build:react19 && pnpm run build:vue3 && pnpm run build:angular",
     "test:react19": "node ./runner.js --framework=react",
     "test:vue3": "node ./runner.js --framework=vue",
-    "test:angular19": "node ./runner.js --framework=angular"
+    "test:angular": "node ./runner.js --framework=angular"
   },
   "dependencies": {
     "@angular/common": "catalog:angular",
