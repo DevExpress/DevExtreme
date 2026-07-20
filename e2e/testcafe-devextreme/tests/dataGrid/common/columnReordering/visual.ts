@@ -8,51 +8,49 @@ import { testScreenshot } from '../../../../helpers/themeUtils';
 fixture.disablePageReloads`Column reordering.Visual`
   .page(url(__dirname, '../../../container.html'));
 
-for (let i = 0; i < 50; i += 1) {
-  test(`column separator should work properly with expand columns ${i}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const dataGrid = new DataGrid('#container');
+test('column separator should work properly with expand columns', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
 
-    await t.expect(dataGrid.isReady()).ok();
-    await MouseUpEvents.disable(MouseAction.dragToOffset);
+  await t.expect(dataGrid.isReady()).ok();
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
 
-    await t.drag(dataGrid.getGroupPanel().getHeader(0).element, 0, 30);
-    await testScreenshot(t, takeScreenshot, `column-separator-with-expand-columns${i}.png`);
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
+  await t.drag(dataGrid.getGroupPanel().getHeader(0).element, 0, 30);
+  await testScreenshot(t, takeScreenshot, 'column-separator-with-expand-columns.png');
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 
-    await MouseUpEvents.enable(MouseAction.dragToOffset);
-  }).before(async () => createWidget('dxDataGrid', {
-    width: 800,
-    dataSource: [
-      {
-        field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4',
-      },
-    ],
-    groupPanel: {
-      visible: true,
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
+}).before(async () => createWidget('dxDataGrid', {
+  width: 800,
+  dataSource: [
+    {
+      field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4',
     },
-    columns: [
-      {
-        dataField: 'field1',
-        width: 200,
-        groupIndex: 0,
-      }, {
-        dataField: 'field2',
-        width: 200,
-        groupIndex: 1,
-      }, {
-        dataField: 'field3',
-        width: 200,
-      }, {
-        dataField: 'field4',
-        width: 200,
-      },
-    ],
-    allowColumnReordering: true,
-  }));
-}
+  ],
+  groupPanel: {
+    visible: true,
+  },
+  columns: [
+    {
+      dataField: 'field1',
+      width: 200,
+      groupIndex: 0,
+    }, {
+      dataField: 'field2',
+      width: 200,
+      groupIndex: 1,
+    }, {
+      dataField: 'field3',
+      width: 200,
+    }, {
+      dataField: 'field4',
+      width: 200,
+    },
+  ],
+  allowColumnReordering: true,
+}));
 
 test('HeaderRow should be highlighted when dragging column with allowColumnReordering=false', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
