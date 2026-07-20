@@ -1681,6 +1681,9 @@
           ]
         },
         "production-internal": {
+          "env": {
+            "BUILD_INTERNAL_PACKAGE": "true"
+          },
           "commands": [
             "pnpm nx clean:artifacts devextreme",
             "pnpm nx build:localization devextreme",
