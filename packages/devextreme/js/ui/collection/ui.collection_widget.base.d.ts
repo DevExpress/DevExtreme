@@ -80,7 +80,7 @@ export interface CollectionWidgetOptions<
      * @default null
      * @public
      */
-    keyExpr?: string | ((item: TItem) => TKey);
+    keyExpr?: string | ((item: TItem) => TKey) | null;
     /**
      * @docid
      * @default "No data to display"
@@ -98,7 +98,7 @@ export interface CollectionWidgetOptions<
      * @action
      * @public
      */
-    onItemClick?: ((e: NativeEventInfo<TComponent, MouseEvent | PointerEvent> & ItemInfo<TItem>) => void) | string;
+    onItemClick?: ((e: NativeEventInfo<TComponent, MouseEvent | PointerEvent> & ItemInfo<TItem>) => void) | string | null;
     /**
      * @docid
      * @default null
@@ -109,7 +109,7 @@ export interface CollectionWidgetOptions<
      * @action
      * @public
      */
-    onItemContextMenu?: ((e: NativeEventInfo<TComponent, PointerInteractionEvent> & ItemInfo<TItem>) => void);
+    onItemContextMenu?: ((e: NativeEventInfo<TComponent, PointerInteractionEvent> & ItemInfo<TItem>) => void) | null;
     /**
      * @docid
      * @default null
@@ -120,7 +120,7 @@ export interface CollectionWidgetOptions<
      * @action
      * @public
      */
-    onItemHold?: ((e: NativeEventInfo<TComponent, PointerInteractionEvent> & ItemInfo<TItem>) => void);
+    onItemHold?: ((e: NativeEventInfo<TComponent, PointerInteractionEvent> & ItemInfo<TItem>) => void) | null;
     /**
      * @docid
      * @default null
@@ -130,7 +130,7 @@ export interface CollectionWidgetOptions<
      * @action
      * @public
      */
-    onItemRendered?: ((e: EventInfo<TComponent> & ItemInfo<TItem>) => void);
+    onItemRendered?: ((e: EventInfo<TComponent> & ItemInfo<TItem>) => void) | null;
     /**
      * @docid
      * @default null
@@ -142,7 +142,7 @@ export interface CollectionWidgetOptions<
      * @action
      * @public
      */
-    onSelectionChanging?: ((e: SelectionChangingEventBase<TComponent>) => void);
+    onSelectionChanging?: ((e: SelectionChangingEventBase<TComponent>) => void) | null;
     /**
      * @docid
      * @default null
@@ -153,7 +153,7 @@ export interface CollectionWidgetOptions<
      * @action
      * @public
      */
-    onSelectionChanged?: ((e: EventInfo<TComponent> & SelectionChangeInfo<TItem>) => void);
+    onSelectionChanged?: ((e: EventInfo<TComponent> & SelectionChangeInfo<TItem>) => void) | null;
     /**
      * @docid
      * @default -1
@@ -168,7 +168,7 @@ export interface CollectionWidgetOptions<
      * @ref
      * @public
      */
-    selectedItem?: TItem;
+    selectedItem?: TItem | null;
     /**
      * @docid
      * @fires CollectionWidgetOptions.onSelectionChanged

@@ -42,18 +42,18 @@ export class DxoLinearGaugeScaleComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get customMinorTicks(): Array<number> {
+    get customMinorTicks(): Array<number> | undefined {
         return this._getOption('customMinorTicks');
     }
-    set customMinorTicks(value: Array<number>) {
+    set customMinorTicks(value: Array<number> | undefined) {
         this._setOption('customMinorTicks', value);
     }
 
     @Input()
-    get customTicks(): Array<number> {
+    get customTicks(): Array<number> | undefined {
         return this._getOption('customTicks');
     }
-    set customTicks(value: Array<number>) {
+    set customTicks(value: Array<number> | undefined) {
         this._setOption('customTicks', value);
     }
 

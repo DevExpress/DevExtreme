@@ -245,15 +245,15 @@ export interface BaseLegend {
         offset?: number;
         /**
          * @docid
-         * @default null
+         * @default undefined
          */
-        text?: string;
+        text?: string | undefined;
       } | string;
       /**
        * @docid
-       * @default null
+       * @default undefined
        */
-      text?: string;
+      text?: string | undefined;
       /**
        * @docid
        * @default 'top'

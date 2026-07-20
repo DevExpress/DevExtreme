@@ -21,8 +21,8 @@ type ICheckBoxOptionsNarrowedEvents = {
 }
 
 type ICheckBoxOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, ICheckBoxOptionsNarrowedEvents> & IHtmlOptions & {
-  defaultValue?: boolean | null | undefined;
-  onValueChange?: (value: boolean | null | undefined) => void;
+  defaultValue?: boolean | null;
+  onValueChange?: (value: boolean | null) => void;
 }>
 
 interface CheckBoxRef {
