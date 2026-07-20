@@ -1,6 +1,6 @@
 {
   "name": "eslint-migration-utils",
-  "version": "25.1.12",
+  "version": "25.1.13",
   "type": "module",
   "main": "src/index.mjs",
   "devDependencies": {
