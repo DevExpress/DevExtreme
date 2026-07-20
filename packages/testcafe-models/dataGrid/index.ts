@@ -447,6 +447,37 @@ export default class DataGrid extends GridCore {
     )();
   }
 
+  // In virtual scrolling scrollHeight is estimated, so once the last rows render
+  // the offset from the bottom can settle slightly below zero (overscroll). Treat
+  // any value within 1px of the edge as "scrolled to the bottom / right".
+  isScrolledToBottom(): Promise<boolean> {
+    const { getInstance } = this;
+    return ClientFunction(() => {
+      const scrollable = (getInstance() as any).getScrollable();
+
+      // Early return if scrollable isn't available yet, so ClientFunction doesn't throw and TestCafe can retry the assertion
+      if (!scrollable) {
+        return false;
+      }
+
+      return scrollable.scrollHeight() - scrollable.clientHeight() - scrollable.scrollTop() <= 1;
+    }, { dependencies: { getInstance } })();
+  }
+
+  isScrolledToRight(): Promise<boolean> {
+    const { getInstance } = this;
+    return ClientFunction(() => {
+      const scrollable = (getInstance() as any).getScrollable();
+
+      // Early return if scrollable isn't available yet, so ClientFunction doesn't throw and TestCafe can retry the assertion
+      if (!scrollable) {
+        return false;
+      }
+
+      return scrollable.scrollWidth() - scrollable.clientWidth() - scrollable.scrollLeft() <= 1;
+    }, { dependencies: { getInstance } })();
+  }
+
   getScrollbarWidth(isHorizontal: boolean): Promise<number> {
     const { getInstance } = this;
 
