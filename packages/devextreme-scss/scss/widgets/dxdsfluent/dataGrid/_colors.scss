@@ -1,25 +1,9 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$fluent-datagrid-grouppanel-item-bg: null !default;
-
-@if $mode == "light" {
-  @if $color == "blue"{
-    $fluent-datagrid-grouppanel-item-bg: color.adjust($base-bg, $lightness: -5.88%, $space: hsl) !default;
-  }
-
-  @if $color == "saas" {
-    $fluent-datagrid-grouppanel-item-bg: color.change($base-hover-bg, $alpha: 0.4) !default;
-  }
-}
-
-@if $mode == "dark" {
-  $fluent-datagrid-grouppanel-item-bg: color.adjust($base-bg, $lightness: -12.16%, $space: hsl) !default;
-}
+$fluent-datagrid-grouppanel-item-bg: ds.$color-surface-neutral-deep-rest !default;
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$datagrid-accent: $base-accent !default;
-$datagrid-border-color-disabled: $base-border-color-disabled !default;
+$datagrid-accent: ds.$color-surface-primary-default-rest !default;
+$datagrid-border-color-disabled: ds.$color-border-neutral-default-disabled !default;

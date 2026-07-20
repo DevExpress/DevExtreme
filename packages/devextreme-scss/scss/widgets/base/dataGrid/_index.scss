@@ -12,6 +12,7 @@ $base-focus-color: null !default;
 $datagrid-text-stub-background-image-path: null !default;
 
 @use "sass:color";
+@use "sass:meta";
 @use "../mixins" as *;
 @use "../icon_fonts" as *;
 @use "./common";
@@ -309,11 +310,11 @@ $datagrid-text-stub-background-image-path: null !default;
 
 @keyframes dx-datagrid-highlight-change {
   from {
-    background-color: color.change($datagrid-base-color, $alpha: 0.08);
+    background-color: if(meta.type-of($datagrid-base-color) == color, color.change($datagrid-base-color, $alpha: 0.08), rgb(from #{$datagrid-base-color} r g b / 0.08));
   }
 
   50% {
-    background-color: color.change($datagrid-base-color, $alpha: 0.08);
+    background-color: if(meta.type-of($datagrid-base-color) == color, color.change($datagrid-base-color, $alpha: 0.08), rgb(from #{$datagrid-base-color} r g b / 0.08));
   }
 }
 

@@ -257,12 +257,6 @@ $scrollview-pulldown-path: null !default;
 }
 
 /**
-* $name 80. Hover state text color
-* $type color
-*/
-$base-hover-color: $base-text-color !default;
-
-/**
 * $name 100. Focused state text color
 * $type color
 */
@@ -281,8 +275,6 @@ $base-spin-icon-color: $base-icon-color !default;
 $base-link-color: $base-accent !default;
 
 $base-element-bg: $base-bg !default;
-
-$base-invalid-color: $base-danger !default;
 
 
 :root {

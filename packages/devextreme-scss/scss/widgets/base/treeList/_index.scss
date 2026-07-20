@@ -12,6 +12,7 @@ $header-filter-color-empty: null !default;
 $base-focus-color: null !default;
 
 @use "sass:color";
+@use "sass:meta";
 @use "../mixins" as *;
 @use "../icon_fonts" as *;
 @use "./common" as *;
@@ -284,11 +285,11 @@ $treelist-row-error-color: $datagrid-row-error-color;
 
 @keyframes dx-treelist-highlight-change {
   from {
-    background-color: color.change($treelist-base-color, $alpha: 0.08);
+    background-color: if(meta.type-of($treelist-base-color) == color, color.change($treelist-base-color, $alpha: 0.08), rgb(from #{$treelist-base-color} r g b / 0.08));
   }
 
   50% {
-    background-color: color.change($treelist-base-color, $alpha: 0.08);
+    background-color: if(meta.type-of($treelist-base-color) == color, color.change($treelist-base-color, $alpha: 0.08), rgb(from #{$treelist-base-color} r g b / 0.08));
   }
 }
 

@@ -1,9 +1,6 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
-@use "../gridBase/colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$treelist-chevron-icon-color: $base-spin-icon-color !default;
+$treelist-chevron-icon-color: ds.$color-content-neutral-subdued-rest !default;
 $treelist-selection-chevron-icon-color: $treelist-chevron-icon-color !default;
