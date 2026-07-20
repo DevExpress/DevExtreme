@@ -90,7 +90,6 @@ test('Drag-n-drop in the same table cell', async (t) => {
   const scheduler = new Scheduler('#container');
   const { appointmentTooltip } = scheduler;
   const appointmentTooltipItem = appointmentTooltip.getListItem('Approve Personal Computer Upgrade Plan');
-
   await t
     .click(scheduler.collectors.find('2').element)
     .expect(appointmentTooltip.isVisible()).ok()
