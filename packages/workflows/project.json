@@ -197,17 +197,6 @@
         "description": "Assemble root artifacts/js|ts|css + metadata into devextreme-artifacts package and pack to artifacts/npm."
       }
     },
-    "change-package-scope": {
-      "executor": "nx:run-commands",
-      "cache": false,
-      "options": {
-        "command": "pnpm exec ts-node tools/scripts/change-package-scope.ts",
-        "forwardAllArgs": true
-      },
-      "metadata": {
-        "description": "Repack a .tgz under a new npm scope (or remove scope). Prints package dir path to stdout for CI."
-      }
-    },
     "set-timestamp-version": {
       "executor": "nx:run-commands",
       "cache": false,

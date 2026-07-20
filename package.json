@@ -16,7 +16,7 @@
     "regenerate-all": "nx run-many -t regenerate",
     "lint-staged": "lint-staged",
     "prepare": "husky install",
-    "change-package-scope": "nx run workflows:change-package-scope --",
+    "change-package-scope": "ts-node tools/scripts/change-package-scope.ts",
     "make-artifacts-package": "nx make-artifacts-package workflows",
     "all:set-timestamp-version": "nx set-timestamp-version workflows",
     "all:update-version": "nx run workflows:update-version --",
