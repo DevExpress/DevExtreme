@@ -108,6 +108,15 @@ $datagrid-text-stub-background-image-path: null !default;
       outline: none;
     }
 
+    /*
+    Overrides the toolbar items' :focus-visible outline,
+    because in e2e tests flaky outline would appear
+    */
+    .dx-group-panel-item[tabindex]:focus-visible:not(.dx-toolbar-item),
+    .dx-header-filter[tabindex]:focus-visible:not(.dx-toolbar-item) {
+      outline: none;
+    }
+
     &.dx-state-focused .dx-datagrid-group-panel {
       .dx-group-panel-item:focus,
       .dx-header-filter:focus {
