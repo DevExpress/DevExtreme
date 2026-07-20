@@ -12,8 +12,7 @@ const MSG_PACK_SUCCESS = 'pnpm pack completed successfully';
 const ERROR_PACKAGE_DIR_NOT_FOUND = (dir: string) => `PackNpm: packageDir not found: ${dir}`;
 const ERROR_SET_VERSION_FROM_NOT_FOUND = (file: string) =>
   `PackNpm: setVersionFrom package.json not found: ${file}`;
-const ERROR_VERSION_MISSING = (file: string) =>
-  `PackNpm: version field missing in ${file}`;
+const ERROR_VERSION_MISSING = (file: string) => `PackNpm: version field missing in ${file}`;
 const ERROR_NO_TARBALLS = (dir: string) =>
   `PackNpm: no *.tgz files found in ${dir} after pnpm pack`;
 
@@ -56,9 +55,7 @@ export default createExecutor<PackNpmExecutorSchema, ResolvedPackNpm>({
   },
   run: async (resolved) => {
     if (resolved.versionToSet) {
-      logger.verbose(
-        `Setting version=${resolved.versionToSet} in ${resolved.packageDir}...`,
-      );
+      logger.verbose(`Setting version=${resolved.versionToSet} in ${resolved.packageDir}...`);
       execSync(`pnpm pkg set version="${resolved.versionToSet}"`, {
         cwd: resolved.packageDir,
         stdio: 'inherit',
