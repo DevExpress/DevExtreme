@@ -121,8 +121,12 @@ jobs:
             { "STRATEGY": "screenshots", "THEME": "fluent.blue.light", "CONSTEL": "jquery(1/3)" },
             { "STRATEGY": "screenshots", "THEME": "fluent.blue.light", "CONSTEL": "jquery(2/3)" },
             { "STRATEGY": "screenshots", "THEME": "fluent.blue.light", "CONSTEL": "jquery(3/3)" },
+            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(1/3)" },
+            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(2/3)" },
+            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(3/3)" },
             { "STRATEGY": "accessibility", "THEME": "material.blue.light", "CONSTEL": "jquery" },
-            { "STRATEGY": "accessibility", "THEME": "fluent.blue.light", "CONSTEL": "jquery" }
+            { "STRATEGY": "accessibility", "THEME": "fluent.blue.light", "CONSTEL": "jquery" },
+            { "STRATEGY": "accessibility", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery" }
           ]
           JSON
           )
@@ -130,7 +134,8 @@ jobs:
           dark_accessibility_matrix=$(cat <<'JSON'
           [
             { "STRATEGY": "accessibility", "THEME": "material.blue.dark", "CONSTEL": "jquery" },
-            { "STRATEGY": "accessibility", "THEME": "fluent.blue.dark", "CONSTEL": "jquery" }
+            { "STRATEGY": "accessibility", "THEME": "fluent.blue.dark", "CONSTEL": "jquery" },
+            { "STRATEGY": "accessibility", "THEME": "dxdsfluent.blue.dark", "CONSTEL": "jquery" }
           ]
           JSON
           )
@@ -861,7 +866,7 @@ jobs:
           angular(9/10),
           angular(10/10),
         ]
-        THEME: ['fluent.blue.light']
+        THEME: ['fluent.blue.light', 'dxdsfluent.blue.light']
 
     runs-on: devextreme-shr2
     name: ${{ matrix.CONSTEL }}-screenshots-${{ matrix.THEME }}
@@ -990,7 +995,7 @@ jobs:
       fail-fast: false
       matrix:
         CONSTEL: [react, vue, angular]
-        THEME: ['fluent.blue.light']
+        THEME: ['fluent.blue.light', 'dxdsfluent.blue.light']
 
     runs-on: devextreme-shr2
     name: ${{ matrix.CONSTEL }}-screenshots-${{ matrix.THEME }}
