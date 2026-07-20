@@ -9,8 +9,10 @@ sh.cd(ROOT_DIR);
 
 const DOCUMENTATION_TEMP_DIR = path.join(ROOT_DIR, '..', 'doc_tmp');
 
+sh.rm('-rf', DOCUMENTATION_TEMP_DIR);
+
 sh.exec(
-  `git clone -b ${DEFAULT_BRANCH_NAME} --depth 1 --config core.longpaths=true https://github.com/DevExpress/devextreme-documentation.git ${DOCUMENTATION_TEMP_DIR}`,
+  `git clone -b ${DEFAULT_BRANCH_NAME} --depth 1 --config core.longpaths=true https://github.com/DevExpress/devextreme-documentation.git "${DOCUMENTATION_TEMP_DIR}"`,
 );
 
 sh.pushd(DOCUMENTATION_TEMP_DIR);
