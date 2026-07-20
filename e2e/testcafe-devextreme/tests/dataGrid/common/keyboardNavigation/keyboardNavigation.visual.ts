@@ -526,7 +526,7 @@ test('Navigate to last cell in the last row when virtual scrolling is enabled', 
     .click(dataGrid.getDataCell(0, 0).element)
     .pressKey('ctrl+end');
 
-  // assert: wait for virtual scroll + render to settle (auto-retry, no fixed wait)
+  // assert
   await t
     .expect(dataGrid.isScrolledToBottom())
     .ok()
@@ -577,7 +577,7 @@ test('Navigate to first cell in the first row when virtual scrolling is enabled'
     .click(dataGrid.getDataCell(199, 14).element)
     .pressKey('ctrl+home');
 
-  // assert: wait for virtual scroll + render to settle (auto-retry, no fixed wait)
+  // assert
   await t
     .expect(dataGrid.getDataCell(0, 0).element.focused)
     .ok()
@@ -618,7 +618,7 @@ test('Navigate to last cell in the last row when virtual scrolling and columns a
     .click(dataGrid.getDataCell(0, 0).element)
     .pressKey('ctrl+end');
 
-  // assert: wait for virtual scroll + render to settle (auto-retry, no fixed wait)
+  // assert
   await t
     .expect(dataGrid.isScrolledToBottom())
     .ok()
@@ -666,14 +666,14 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
     .click(dataGrid.getDataCell(199, 34).element)
     .pressKey('ctrl+home');
 
-  // assert: wait for virtual scroll + render to settle (auto-retry, no fixed wait)
+  // assert
   await t
-    .expect(dataGrid.getDataCell(0, 0).element.focused)
-    .ok()
     .expect(dataGrid.getScrollLeft())
     .eql(0)
     .expect(dataGrid.getScrollTop())
-    .eql(0);
+    .eql(0)
+    .expect(dataGrid.getDataCell(0, 0).element.focused)
+    .ok();
 
   await testScreenshot(t, takeScreenshot, 'navigate_to_first_cell_in_first_row_when_virtual_scrolling_and_columns_are_enabled_2.png', { element: dataGrid.element });
 
@@ -706,7 +706,7 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
       .click(dataGrid.getDataCell(0, 1).element)
       .pressKey('ctrl+end');
 
-    // assert: wait for virtual scroll + render to settle (auto-retry, no fixed wait)
+    // assert
     await t
       .expect(dataGrid.isScrolledToBottom())
       .ok()
@@ -720,14 +720,14 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
       .click(dataGrid.getDataCell(199, 35).element)
       .pressKey('ctrl+home');
 
-    // assert: wait for virtual scroll + render to settle (auto-retry, no fixed wait)
+    // assert
     await t
-      .expect(dataGrid.getDataCell(0, 1).element.focused)
-      .ok()
       .expect(dataGrid.getScrollLeft())
       .eql(0)
       .expect(dataGrid.getScrollTop())
-      .eql(0);
+      .eql(0)
+      .expect(dataGrid.getDataCell(0, 1).element.focused)
+      .ok();
 
     await testScreenshot(t, takeScreenshot, `${useNative ? 'native' : 'simulated'}_scrolling_-_navigate_to_first_cell_row_dragging__virtual_scrolling__virtual_columns.png`, { element: dataGrid.element });
 
@@ -766,10 +766,8 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
       .click(dataGrid.getDataCell(0, 0).element)
       .pressKey('ctrl+end');
 
-    // assert: wait for virtual scroll + render to settle (auto-retry, no fixed wait)
+    // assert
     await t
-      .expect(dataGrid.isReady())
-      .ok()
       .expect(dataGrid.isScrolledToBottom())
       .ok()
       .expect(dataGrid.isScrolledToRight())

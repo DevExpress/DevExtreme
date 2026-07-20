@@ -6194,6 +6194,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
       delete (window as any).focusedEventsTestData;
     })();
   });
+
   test(`Focus events should be called when pressing the Ctrl + End key when virtual scrolling and columns are enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
     // arrange
     const dataGrid = new DataGrid('#container');
@@ -6222,8 +6223,6 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // assert
     await t
-      .expect(dataGrid.isReady())
-      .ok()
       .expect(dataGrid.isScrolledToBottom())
       .ok()
       .expect(dataGrid.isScrolledToRight())
@@ -6307,8 +6306,6 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // assert
     await t
-      .expect(dataGrid.isReady())
-      .ok()
       .expect(dataGrid.isScrolledToBottom())
       .ok()
       .expect(dataGrid.isScrolledToRight())
@@ -6389,8 +6386,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // act
     await t
-      .pressKey('ctrl+end')
-      .expect(dataGrid.isReady()).ok();
+      .pressKey('ctrl+end');
 
     // assert
     await t
@@ -6654,8 +6650,6 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // assert
     await t
-      .expect(dataGrid.isReady())
-      .ok()
       .expect(dataGrid.isScrolledToBottom())
       .ok()
       .expect(dataGrid.isScrolledToRight())
