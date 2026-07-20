@@ -88,9 +88,8 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
   }
 
   private _calculateGlobalRowIndexByGroupedData(key) {
-    const that = this;
-    const dataSource = that._dataSource;
-    const filter = that._generateFilterByKey(key);
+    const dataSource = this._dataSource;
+    const filter = this._generateFilterByKey(key);
     // @ts-expect-error
     const deferred = new Deferred();
     const isGroupKey = Array.isArray(key);
@@ -101,35 +100,39 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
     }
 
     if (!dataSource._grouping._updatePagingOptions) {
-      that._calculateGlobalRowIndexByFlatData(key, null, true)
+      this._calculateGlobalRowIndexByFlatData(key, null, true)
         .done(deferred.resolve)
         .fail(deferred.reject);
       return deferred;
     }
 
     dataSource.load({
-      filter: that._concatWithCombinedFilter(filter),
+      filter: this._concatWithCombinedFilter(filter),
       group,
     }).done((data) => {
       const hasData = isDefined(data) && data.length > 0;
 
-      if (!hasData) {
+      if (this._dataSource !== dataSource || !hasData) {
         return deferred.resolve(-1).promise();
       }
 
-      const groupPath = that._getGroupPath(data, group.length);
+      const groupPath = this._getGroupPath(data, group.length);
 
-      that._expandGroupByPath(that, groupPath, 0).done(() => {
-        that._calculateExpandedRowGlobalIndex(deferred, key, groupPath, group);
+      this._expandGroupByPath(this, groupPath, 0).done(() => {
+        this._calculateExpandedRowGlobalIndex(deferred, key, groupPath, group, dataSource);
       }).fail(deferred.reject);
     }).fail(deferred.reject);
 
     return deferred.promise();
   }
 
-  private _calculateExpandedRowGlobalIndex(deferred, key, groupPath, group) {
+  private _calculateExpandedRowGlobalIndex(deferred, key, groupPath, group, dataSource) {
+    if (this._dataSource !== dataSource) {
+      deferred.resolve(-1);
+      return;
+    }
+
     const groupFilter = createGroupFilter(groupPath, { group });
-    const dataSource = this._dataSource;
     const scrollingMode = this.option('scrolling.mode');
     const isVirtualScrolling = scrollingMode === 'virtual' || scrollingMode === 'infinite';
     const pageSize = dataSource.pageSize();
