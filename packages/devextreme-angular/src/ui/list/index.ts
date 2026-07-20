@@ -378,10 +378,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get keyExpr(): ((item: any) => any) | string {
+    get keyExpr(): ((item: any) => any) | null | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: ((item: any) => any) | string) {
+    set keyExpr(value: ((item: any) => any) | null | string) {
         this._setOption('keyExpr', value);
     }
 
@@ -1118,7 +1118,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() keyExprChange: EventEmitter<((item: any) => any) | string>;
+    @Output() keyExprChange: EventEmitter<((item: any) => any) | null | string>;
 
     /**
     

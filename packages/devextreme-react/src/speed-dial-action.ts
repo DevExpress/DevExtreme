@@ -15,7 +15,7 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 
 type ISpeedDialActionOptionsNarrowedEvents = {
   onClick?: ((e: ClickEvent) => void);
-  onContentReady?: ((e: ContentReadyEvent) => void);
+  onContentReady?: ((e: ContentReadyEvent) => void) | undefined;
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
 }

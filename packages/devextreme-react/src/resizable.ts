@@ -16,9 +16,9 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 type IResizableOptionsNarrowedEvents = {
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
-  onResize?: ((e: ResizeEvent) => void);
-  onResizeEnd?: ((e: ResizeEndEvent) => void);
-  onResizeStart?: ((e: ResizeStartEvent) => void);
+  onResize?: ((e: ResizeEvent) => void) | undefined;
+  onResizeEnd?: ((e: ResizeEndEvent) => void) | undefined;
+  onResizeStart?: ((e: ResizeStartEvent) => void) | undefined;
 }
 
 type IResizableOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IResizableOptionsNarrowedEvents> & IHtmlOptions & {
