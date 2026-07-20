@@ -1,6 +1,6 @@
 {
   "name": "devextreme-modules-test",
-  "version": "25.2.8",
+  "version": "25.2.9",
   "devDependencies": {
     "@babel/eslint-parser": "catalog:",
     "@eslint/eslintrc": "catalog:",
