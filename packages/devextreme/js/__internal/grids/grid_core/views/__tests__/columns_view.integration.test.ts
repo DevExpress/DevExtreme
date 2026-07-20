@@ -27,7 +27,7 @@ describe('ColumnsView scroller spacing (T1306973)', () => {
     columnHeadersView.setScrollerSpacing(15);
 
     expect(columnHeadersView.element().hasClass(SCROLLER_SPACING_CLASS)).toBe(true);
-    expect(columnHeadersView.element().css('paddingRight')).toBe('15px');
+    expect(columnHeadersView.element().css('paddingInlineEnd')).toBe('15px');
 
     columnHeadersView.setScrollerSpacing(0);
 
