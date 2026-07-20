@@ -1,4 +1,4 @@
-export {
+export type {
     AdaptiveDetailRowPreparingInfo,
     AIColumnMode,
     AIColumnRequestCreatingInfo,
