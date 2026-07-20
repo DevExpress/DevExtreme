@@ -1715,7 +1715,7 @@
         }
       },
       "metadata": {
-        "description": "Production dist build (replaces gulp default --uglify). Use -c internal for BUILD_INTERNAL_PACKAGE parity."
+        "description": "Production dist build. Use -c internal for BUILD_INTERNAL_PACKAGE parity."
       }
     },
     "build:dev": {
@@ -1754,7 +1754,7 @@
       ],
       "cache": true,
       "metadata": {
-        "description": "Dev/CI test build (replaces gulp default with DEVEXTREME_TEST_CI). Skips prod bundles, aspnet, declarations, npm, and license checks."
+        "description": "Dev/CI test build. Skips prod bundles, aspnet, declarations, npm, and license checks."
       }
     },
     "build:systemjs": {
