@@ -38,7 +38,7 @@ export async function testScreenshot(
 
   const finalOptions = {
     ...comparisonOptions,
-    ...themeOptions,
+    // ...themeOptions,
   };
 
   await t
