@@ -182,7 +182,7 @@ test.meta({ browserSize: [900, 800] })('Sticky columns with grouping - overflow 
 // visual: material.blue.light
 // visual: fluent.blue.light
 for (let i = 0; i < 50; i++) {
-  test.meta({ browserSize: [900, 800] })('The header row should be highlighted correctly when dragging column when there are fixed columns and allowColumnReordering=false (generic.light theme)', async (t) => {
+  test.meta({ browserSize: [900, 800] })('The header row should be highlighted correctly when dragging column when there are fixed columns and allowColumnReordering=false', async (t) => {
     await t.setTestSpeed(0.4);
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid('#container');

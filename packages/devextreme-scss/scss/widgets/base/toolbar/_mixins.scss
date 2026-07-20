@@ -4,7 +4,6 @@
 ) {
   .dx-toolbar.dx-toolbar-focus-mode {
     [tabindex="0"]:focus-visible:not(.dx-toolbar-item) {
-      outline: 2px solid $accent-color;
       outline-offset: 1px;
       border-radius: $border-radius;
     }
