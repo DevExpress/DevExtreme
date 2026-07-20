@@ -162,17 +162,17 @@ export abstract class DxoPopupOptions extends NestedOption {
         this._setOption('minWidth', value);
     }
 
-    get onContentReady(): Function {
+    get onContentReady(): Function | undefined {
         return this._getOption('onContentReady');
     }
-    set onContentReady(value: Function) {
+    set onContentReady(value: Function | undefined) {
         this._setOption('onContentReady', value);
     }
 
-    get onDisposing(): Function {
+    get onDisposing(): Function | undefined {
         return this._getOption('onDisposing');
     }
-    set onDisposing(value: Function) {
+    set onDisposing(value: Function | undefined) {
         this._setOption('onDisposing', value);
     }
 
@@ -190,38 +190,38 @@ export abstract class DxoPopupOptions extends NestedOption {
         this._setOption('onHiding', value);
     }
 
-    get onInitialized(): Function {
+    get onInitialized(): Function | undefined {
         return this._getOption('onInitialized');
     }
-    set onInitialized(value: Function) {
+    set onInitialized(value: Function | undefined) {
         this._setOption('onInitialized', value);
     }
 
-    get onOptionChanged(): Function {
+    get onOptionChanged(): Function | undefined {
         return this._getOption('onOptionChanged');
     }
-    set onOptionChanged(value: Function) {
+    set onOptionChanged(value: Function | undefined) {
         this._setOption('onOptionChanged', value);
     }
 
-    get onResize(): Function {
+    get onResize(): Function | undefined {
         return this._getOption('onResize');
     }
-    set onResize(value: Function) {
+    set onResize(value: Function | undefined) {
         this._setOption('onResize', value);
     }
 
-    get onResizeEnd(): Function {
+    get onResizeEnd(): Function | undefined {
         return this._getOption('onResizeEnd');
     }
-    set onResizeEnd(value: Function) {
+    set onResizeEnd(value: Function | undefined) {
         this._setOption('onResizeEnd', value);
     }
 
-    get onResizeStart(): Function {
+    get onResizeStart(): Function | undefined {
         return this._getOption('onResizeStart');
     }
-    set onResizeStart(value: Function) {
+    set onResizeStart(value: Function | undefined) {
         this._setOption('onResizeStart', value);
     }
 
@@ -239,10 +239,10 @@ export abstract class DxoPopupOptions extends NestedOption {
         this._setOption('onShown', value);
     }
 
-    get onTitleRendered(): Function {
+    get onTitleRendered(): Function | undefined {
         return this._getOption('onTitleRendered');
     }
-    set onTitleRendered(value: Function) {
+    set onTitleRendered(value: Function | undefined) {
         this._setOption('onTitleRendered', value);
     }
 

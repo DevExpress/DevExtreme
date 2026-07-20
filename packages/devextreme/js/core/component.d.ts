@@ -8,21 +8,21 @@ export interface ComponentOptions<TDisposingEvent, TInitializedEvent, TOptionCha
    * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
-   * @default null
+   * @default undefined
    * @action
    * @public
    */
-  onDisposing?: ((e: TDisposingEvent) => void);
+  onDisposing?: ((e: TDisposingEvent) => void) | undefined;
   /**
    * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field element:DxElement
-   * @default null
+   * @default undefined
    * @action
    * @public
    */
-  onInitialized?: ((e: TInitializedEvent) => void);
+  onInitialized?: ((e: TInitializedEvent) => void) | undefined;
   /**
    * @docid
    * @type_function_param1 e:object
@@ -30,11 +30,11 @@ export interface ComponentOptions<TDisposingEvent, TInitializedEvent, TOptionCha
    * @type_function_param1_field name:string
    * @type_function_param1_field fullName:string
    * @type_function_param1_field value:any
-   * @default null
+   * @default undefined
    * @action
    * @public
    */
-  onOptionChanged?: ((e: TOptionChangedEvent) => void);
+  onOptionChanged?: ((e: TOptionChangedEvent) => void) | undefined;
 }
 /**
  * @docid Component

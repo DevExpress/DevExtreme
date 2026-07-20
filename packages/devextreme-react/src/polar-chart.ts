@@ -34,8 +34,8 @@ type IPolarChartOptionsNarrowedEvents = {
   onSeriesClick?: ((e: SeriesClickEvent) => void);
   onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
   onTooltipShown?: ((e: TooltipShownEvent) => void);
-  onZoomEnd?: ((e: ZoomEndEvent) => void);
-  onZoomStart?: ((e: ZoomStartEvent) => void);
+  onZoomEnd?: ((e: ZoomEndEvent) => void) | undefined;
+  onZoomStart?: ((e: ZoomStartEvent) => void) | undefined;
 }
 
 type IPolarChartOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IPolarChartOptionsNarrowedEvents> & IHtmlOptions & {
@@ -1541,9 +1541,9 @@ type ILegendProps = React.PropsWithChildren<{
     subtitle?: Record<string, any> | string | {
       font?: ChartsFont;
       offset?: number;
-      text?: string;
+      text?: string | undefined;
     };
-    text?: string;
+    text?: string | undefined;
     verticalAlignment?: VerticalEdge;
   };
   verticalAlignment?: VerticalEdge;
@@ -1592,9 +1592,9 @@ type ILegendTitleProps = React.PropsWithChildren<{
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
-    text?: string;
+    text?: string | undefined;
   };
-  text?: string;
+  text?: string | undefined;
   verticalAlignment?: VerticalEdge;
 }>
 const _componentLegendTitle = (props: ILegendTitleProps) => {
@@ -1621,7 +1621,7 @@ const LegendTitle = Object.assign<typeof _componentLegendTitle, NestedComponentM
 type ILegendTitleSubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
-  text?: string;
+  text?: string | undefined;
 }>
 const _componentLegendTitleSubtitle = (props: ILegendTitleSubtitleProps) => {
   return React.createElement(NestedOption<ILegendTitleSubtitleProps>, {
@@ -1975,11 +1975,11 @@ type IPolarChartTitleProps = React.PropsWithChildren<{
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
-    text?: string;
+    text?: string | undefined;
     textOverflow?: TextOverflow;
     wordWrap?: WordWrap;
   };
-  text?: string;
+  text?: string | undefined;
   textOverflow?: TextOverflow;
   verticalAlignment?: VerticalEdge;
   wordWrap?: WordWrap;
@@ -2008,7 +2008,7 @@ const PolarChartTitle = Object.assign<typeof _componentPolarChartTitle, NestedCo
 type IPolarChartTitleSubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
-  text?: string;
+  text?: string | undefined;
   textOverflow?: TextOverflow;
   wordWrap?: WordWrap;
 }>
@@ -2425,7 +2425,7 @@ const StripStyleLabel = Object.assign<typeof _componentStripStyleLabel, NestedCo
 type ISubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
-  text?: string;
+  text?: string | undefined;
   textOverflow?: TextOverflow;
   wordWrap?: WordWrap;
 }>
@@ -2513,11 +2513,11 @@ type ITitleProps = React.PropsWithChildren<{
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
-    text?: string;
+    text?: string | undefined;
     textOverflow?: TextOverflow;
     wordWrap?: WordWrap;
   };
-  text?: string;
+  text?: string | undefined;
   verticalAlignment?: VerticalEdge;
   textOverflow?: TextOverflow;
   wordWrap?: WordWrap;
