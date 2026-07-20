@@ -113,17 +113,20 @@ jobs:
       - name: Build matrix
         id: matrix
         run: |
+          # Temporarily disabled screenshot shards:
+          # - material.blue.light: jquery(1/3), jquery(2/3), jquery(3/3)
+          # - fluent.blue.light: jquery(1/3), jquery(2/3), jquery(3/3)
           base_matrix=$(cat <<'JSON'
           [
-            { "STRATEGY": "screenshots", "THEME": "material.blue.light", "CONSTEL": "jquery(1/3)" },
-            { "STRATEGY": "screenshots", "THEME": "material.blue.light", "CONSTEL": "jquery(2/3)" },
-            { "STRATEGY": "screenshots", "THEME": "material.blue.light", "CONSTEL": "jquery(3/3)" },
-            { "STRATEGY": "screenshots", "THEME": "fluent.blue.light", "CONSTEL": "jquery(1/3)" },
-            { "STRATEGY": "screenshots", "THEME": "fluent.blue.light", "CONSTEL": "jquery(2/3)" },
-            { "STRATEGY": "screenshots", "THEME": "fluent.blue.light", "CONSTEL": "jquery(3/3)" },
-            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(1/3)" },
-            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(2/3)" },
-            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(3/3)" },
+            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(1/9)" },
+            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(2/9)" },
+            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(3/9)" },
+            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(4/9)" },
+            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(5/9)" },
+            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(6/9)" },
+            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(7/9)" },
+            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(8/9)" },
+            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(9/9)" },
             { "STRATEGY": "accessibility", "THEME": "material.blue.light", "CONSTEL": "jquery" },
             { "STRATEGY": "accessibility", "THEME": "fluent.blue.light", "CONSTEL": "jquery" },
             { "STRATEGY": "accessibility", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery" }
