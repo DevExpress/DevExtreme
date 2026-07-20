@@ -10,6 +10,8 @@ import { PackNpmExecutorSchema } from './schema';
 
 const MSG_PACK_SUCCESS = 'pnpm pack completed successfully';
 const ERROR_PACKAGE_DIR_NOT_FOUND = (dir: string) => `PackNpm: packageDir not found: ${dir}`;
+const ERROR_PACKAGE_DIR_NOT_DIRECTORY = (dir: string) =>
+  `PackNpm: packageDir is not a directory: ${dir}`;
 const ERROR_SET_VERSION_FROM_NOT_FOUND = (file: string) =>
   `PackNpm: setVersionFrom package.json not found: ${file}`;
 const ERROR_VERSION_MISSING = (file: string) => `PackNpm: version field missing in ${file}`;
@@ -41,6 +43,9 @@ export default createExecutor<PackNpmExecutorSchema, ResolvedPackNpm>({
     const packageDir = path.resolve(projectRoot, options.packageDir ?? '.');
     if (!fs.existsSync(packageDir)) {
       throw new Error(ERROR_PACKAGE_DIR_NOT_FOUND(packageDir));
+    }
+    if (!fs.statSync(packageDir).isDirectory()) {
+      throw new Error(ERROR_PACKAGE_DIR_NOT_DIRECTORY(packageDir));
     }
 
     const destination = options.destination
