@@ -5,6 +5,7 @@ import {
 } from '@jest/globals';
 import type { EditorPreparingEvent } from '@js/ui/data_grid';
 import { TagBoxModel } from '@ts/ui/__tests__/__mock__/model/tag_box';
+import { TextBoxModel } from '@ts/ui/__tests__/__mock__/model/textbox';
 
 import {
   afterTest,
@@ -66,6 +67,32 @@ describe('FilterRow', () => {
       // assert
       expect(tagBox.getValue()).toEqual([0, 2]);
       expect(tagBox.getTags()).toHaveLength(2);
+    });
+  });
+
+  describe('sync with filter panel when applyFilter is onClick (T1331971)', () => {
+    it('should update the filter row editor when the condition is changed via the filter panel', async () => {
+      const { component, instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, city: 'Las Vegas' },
+          { id: 2, city: 'San Jose' },
+        ],
+        filterRow: { visible: true, applyFilter: 'onClick' },
+        filterPanel: { visible: true },
+        columns: ['city'],
+      });
+
+      await flushAsync();
+
+      instance.option('filterValue', ['city', 'contains', 'Las']);
+      await flushAsync();
+
+      instance.option('filterValue', ['city', 'contains', 'San']);
+      await flushAsync();
+
+      const editor = component.getFilterRow().getFilterCell(0).getEditor(TextBoxModel);
+
+      expect(editor.getInput().value).toBe('San');
     });
   });
 });
