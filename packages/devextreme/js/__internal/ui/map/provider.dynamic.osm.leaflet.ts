@@ -48,9 +48,7 @@ export interface LeafletZoomControl {
 }
 
 interface LeafletMapCreationOptions {
-  center: PlainLocation;
   interactionsEnabled: boolean;
-  zoom?: number;
 }
 
 interface LeafletFactoryApi {
@@ -108,7 +106,7 @@ const FACTORY_METHODS = [
 ];
 
 const isRecord = (value: unknown): value is Record<string, unknown> => (
-  Boolean(value) && typeof value === 'object'
+  Boolean(value) && (typeof value === 'object' || typeof value === 'function')
 );
 
 const hasMethods = (
@@ -127,18 +125,16 @@ const isFactoryApi = (engine: unknown): engine is LeafletFactoryApi => {
 const createMapOptions = (
   options: LeafletMapCreationOptions,
 ): LeafletOptions => {
-  const { center, interactionsEnabled, zoom } = options;
+  const { interactionsEnabled } = options;
 
   return {
     attributionControl: true,
     boxZoom: interactionsEnabled,
-    center,
     doubleClickZoom: interactionsEnabled,
     dragging: interactionsEnabled,
     keyboard: interactionsEnabled,
     scrollWheelZoom: interactionsEnabled,
     touchZoom: interactionsEnabled,
-    zoom,
     zoomControl: false,
   };
 };

@@ -156,27 +156,23 @@ class OsmProvider extends DynamicProvider {
   }
 
   _init(): Promise<void> {
-    return this._resolveLocation(this._option('center')).then((center) => {
-      const type = this._option('type') ?? 'roadmap';
-      const interactionsEnabled = !this._option('disabled');
+    const type = this._option('type') ?? 'roadmap';
+    const interactionsEnabled = !this._option('disabled');
 
-      this._map = this._leaflet.createMap(this._$container[0], {
-        center,
-        interactionsEnabled,
-        zoom: this._option('zoom'),
-      });
-
-      this._zoomControl = this._leaflet.createZoomControl();
-      if (this._option('controls')) {
-        this._zoomControl.addTo(this._map);
-      }
-
-      this._currentTileType = type;
-      this._tileLayer = this._buildTileLayer(type);
-      this._tileLayer?.addTo(this._map);
-
-      this._option('center', this._normalizeLocation(center));
+    this._map = this._leaflet.createMap(this._$container[0], {
+      interactionsEnabled,
     });
+
+    this._zoomControl = this._leaflet.createZoomControl();
+    if (this._option('controls')) {
+      this._zoomControl.addTo(this._map);
+    }
+
+    this._currentTileType = type;
+    this._tileLayer = this._buildTileLayer(type);
+    this._tileLayer?.addTo(this._map);
+
+    return Promise.resolve();
   }
 
   _resolveTileConfig(type: MapType): TileServerConfig | undefined {

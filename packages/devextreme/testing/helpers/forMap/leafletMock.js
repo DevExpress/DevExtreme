@@ -23,6 +23,15 @@
         return bounds;
     };
 
+    const control = function() {};
+    control.zoom = function() {
+        const ctrl = {
+            addTo(map) { L.zoomControlAdded = true; return ctrl; },
+            remove() { L.zoomControlAdded = false; return ctrl; },
+        };
+        return ctrl;
+    };
+
     window.L = {
         // --- Map ---
         map: function(container, options) {
@@ -275,15 +284,7 @@
         },
 
         // --- Control ---
-        control: {
-            zoom: function() {
-                const ctrl = {
-                    addTo(map) { L.zoomControlAdded = true; return ctrl; },
-                    remove() { L.zoomControlAdded = false; return ctrl; },
-                };
-                return ctrl;
-            },
-        },
+        control,
 
         // --- Icon.Default ---
         Icon: {

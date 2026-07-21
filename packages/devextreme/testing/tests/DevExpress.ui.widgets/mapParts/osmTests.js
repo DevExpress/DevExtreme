@@ -133,6 +133,8 @@ QUnit.module('OSM: map loading', moduleConfig, () => {
     QUnit.test('map initializes with Leaflet from window.L', function(assert) {
         const done = assert.async();
 
+        assert.strictEqual(typeof L.control, 'function', 'mock matches the Leaflet control factory API');
+
         $('#map').dxMap({
             provider: 'osm',
             onReady: ({ originalMap }) => {
@@ -250,7 +252,7 @@ QUnit.module('OSM: basic options', moduleConfig, () => {
             provider: 'osm',
             zoom: 10,
             onReady: () => {
-                assert.strictEqual(L.mapOptions.zoom, 10, 'zoom passed to L.map');
+                assert.strictEqual(L.setViewArgs.zoom, 10, 'zoom passed to the Leaflet map view');
                 done();
             }
         });
@@ -282,7 +284,7 @@ QUnit.module('OSM: basic options', moduleConfig, () => {
             provider: 'osm',
             center: { lat: 10, lng: 20 },
             onReady: () => {
-                assert.deepEqual(L.mapOptions.center, { lat: 10, lng: 20 }, 'center passed to L.map');
+                assert.deepEqual(L.setViewArgs.center, { lat: 10, lng: 20 }, 'center passed to the Leaflet map view');
                 done();
             }
         });
@@ -295,7 +297,7 @@ QUnit.module('OSM: basic options', moduleConfig, () => {
             provider: 'osm',
             center: [10, 20],
             onReady: () => {
-                assert.deepEqual(L.mapOptions.center, { lat: 10, lng: 20 }, 'array center is passed to L.map');
+                assert.deepEqual(L.setViewArgs.center, { lat: 10, lng: 20 }, 'array center is passed to the Leaflet map view');
                 done();
             }
         });
@@ -310,7 +312,7 @@ QUnit.module('OSM: basic options', moduleConfig, () => {
             providerConfig: { geocodeLocation },
             center: '10, 20',
             onReady: () => {
-                assert.deepEqual(L.mapOptions.center, { lat: 10, lng: 20 }, 'numeric string center is passed to L.map');
+                assert.deepEqual(L.setViewArgs.center, { lat: 10, lng: 20 }, 'numeric string center is passed to the Leaflet map view');
                 assert.notOk(geocodeLocation.called, 'numeric string center is not geocoded');
                 done();
             }
@@ -346,7 +348,7 @@ QUnit.module('OSM: basic options', moduleConfig, () => {
             center: 'Austin, TX',
             onReady: () => {
                 assert.deepEqual(
-                    L.mapOptions.center,
+                    L.setViewArgs.center,
                     this.geocodedLatLng,
                     'center is geocoded via user-supplied callback'
                 );
@@ -444,7 +446,7 @@ QUnit.module('OSM: basic options', moduleConfig, () => {
             center: 'Austin, TX',
             onReady: () => {
                 assert.deepEqual(
-                    L.mapOptions.center,
+                    L.setViewArgs.center,
                     { lat: 0, lng: 0 },
                     'falls back to (0,0) with no geocoding callback'
                 );
@@ -464,7 +466,7 @@ QUnit.module('OSM: basic options', moduleConfig, () => {
             providerConfig: { geocodeLocation: () => Promise.reject(new Error('geocoding unavailable')) },
             center: 'Austin, TX',
             onReady: () => {
-                assert.deepEqual(L.mapOptions.center, { lat: 0, lng: 0 }, 'rejected geocoding falls back to (0,0)');
+                assert.deepEqual(L.setViewArgs.center, { lat: 0, lng: 0 }, 'rejected geocoding falls back to (0,0)');
                 done();
             }
         });
@@ -478,7 +480,7 @@ QUnit.module('OSM: basic options', moduleConfig, () => {
             providerConfig: { geocodeLocation: () => { throw new Error('geocoding unavailable'); } },
             center: 'Austin, TX',
             onReady: () => {
-                assert.deepEqual(L.mapOptions.center, { lat: 0, lng: 0 }, 'thrown geocoding error falls back to (0,0)');
+                assert.deepEqual(L.setViewArgs.center, { lat: 0, lng: 0 }, 'thrown geocoding error falls back to (0,0)');
                 done();
             }
         });
@@ -492,7 +494,25 @@ QUnit.module('OSM: basic options', moduleConfig, () => {
             providerConfig: { geocodeLocation: () => Promise.resolve({ lat: 10 }) },
             center: 'Austin, TX',
             onReady: () => {
-                assert.deepEqual(L.mapOptions.center, { lat: 0, lng: 0 }, 'incomplete geocoding falls back to (0,0)');
+                assert.deepEqual(L.setViewArgs.center, { lat: 0, lng: 0 }, 'incomplete geocoding falls back to (0,0)');
+                done();
+            }
+        });
+    });
+
+    QUnit.test('center is written back once on init', function(assert) {
+        const done = assert.async();
+        let setOptionSilentSpy;
+
+        $('#map').dxMap({
+            provider: 'osm',
+            center: [10, 20],
+            onInitialized: ({ component }) => {
+                setOptionSilentSpy = sinon.spy(component, 'setOptionSilent');
+            },
+            onReady: () => {
+                assert.ok(setOptionSilentSpy.withArgs('center').calledOnce, 'center is written back once');
+                setOptionSilentSpy.restore();
                 done();
             }
         });
