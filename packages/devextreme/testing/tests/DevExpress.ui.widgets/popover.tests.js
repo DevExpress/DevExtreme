@@ -3002,4 +3002,52 @@ QUnit.module('accessibility', {
             assert.ok(instance.option('visible'), 'popover remains visible when pointer re-enters overlay before delay expires');
         });
     });
+
+    QUnit.module('dialog mode focus management and accessibility', {
+        beforeEach() {
+            this.clock = sinon.useFakeTimers();
+            this.$element = $('#what');
+            this.$target = $('#where');
+        },
+        afterEach() {
+            this.clock.restore();
+        }
+    }, () => {
+        QUnit.test('Popover in dialog mode should enable focusStateEnabled and tabFocusLoopEnabled on show', function(assert) {
+            const instance = new Popover(this.$element, {
+                target: this.$target,
+                toolbarItems: [{ text: 'OK' }],
+                visible: false,
+            });
+
+            instance.show();
+            this.clock.tick(0);
+
+            assert.strictEqual(instance.option('focusStateEnabled'), true, 'focusStateEnabled is enabled for dialog mode');
+            assert.strictEqual(instance.option('tabFocusLoopEnabled'), true, 'tabFocusLoopEnabled is enabled for dialog mode');
+        });
+
+        QUnit.test('Popover in dialog mode should move focus inside on show and restore focus to target when hidden', function(assert) {
+            this.$target.attr('tabindex', 0).focus();
+            assert.strictEqual(document.activeElement, this.$target.get(0), 'target is focused before show');
+
+            const instance = new Popover(this.$element, {
+                target: this.$target,
+                toolbarItems: [{ text: 'OK' }],
+                visible: false,
+            });
+
+            instance.show();
+            this.clock.tick(500);
+
+            const isFocusInside = $(document.activeElement).closest(wrapper()).length > 0;
+            assert.strictEqual(isFocusInside, true, 'focus moved inside popover wrapper on show');
+
+            instance.hide();
+            this.clock.tick(500);
+
+            assert.strictEqual(document.activeElement, this.$target.get(0), 'focus is restored to target after hide');
+        });
+    });
 });
+
