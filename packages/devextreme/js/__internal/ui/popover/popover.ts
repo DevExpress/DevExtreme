@@ -274,6 +274,48 @@ class Popover<
   _syncAriaAttributes(): void {
     this._renderAriaRole();
     this._syncTargetAriaDescription();
+    this._syncFocusOptions();
+  }
+
+  _syncFocusOptions(): void {
+    if (this._getEffectiveAriaRole() === 'dialog') {
+      this._setOptionWithoutOptionChange('focusStateEnabled', true);
+      this._setOptionWithoutOptionChange('tabFocusLoopEnabled', true);
+    }
+  }
+
+  _focusTarget(): dxElementWrapper | null | undefined {
+    if (this._getEffectiveAriaRole() === 'dialog') {
+      const tabbable = this._findTabbableBounds().$first;
+      if (tabbable && tabbable.length) {
+        return tabbable;
+      }
+
+      const $content = this.$overlayContent();
+      if ($content.attr('tabindex') === undefined) {
+        $content.attr('tabindex', -1);
+      }
+      return $content;
+    }
+
+    return super._focusTarget();
+  }
+
+  _forceFocusLost(): void {
+    if (this._getEffectiveAriaRole() === 'dialog') {
+      this._restoreTargetFocus();
+    } else {
+      super._forceFocusLost();
+    }
+  }
+
+  _restoreTargetFocus(): void {
+    const $targets = this._getAriaDescriptionTargets();
+
+    if ($targets.length) {
+      // @ts-expect-error trigger should be typed on type 'EventsEngineType'
+      eventsEngine.trigger($targets.first(), 'focus');
+    }
   }
 
   _getExpectedAriaRole(): string {
@@ -929,6 +971,9 @@ class Popover<
   }
 
   _dispose(): void {
+    if (this.option('visible') && this._getEffectiveAriaRole() === 'dialog') {
+      this._restoreTargetFocus();
+    }
     this._removeTargetAriaDescription();
     this._detachEscapeKeyHandler();
     super._dispose();
