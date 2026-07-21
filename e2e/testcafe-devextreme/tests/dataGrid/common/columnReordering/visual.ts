@@ -72,44 +72,57 @@ test('HeaderRow should be highlighted when dragging column with allowColumnReord
   const dataGrid = new DataGrid('#container');
   await t.expect(dataGrid.isReady()).ok();
 
-  await MouseUpEvents.disable(MouseAction.dragToOffset);
-
   await t.drag(dataGrid.getGroupPanel().getHeader(0).element, 0, 30);
   await testScreenshot(t, takeScreenshot, 'headerRow-highlight-on-drag.png');
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
+}).before(async () => {
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
 
+  /*
+    Overrides the toolbar items' :focus-visible outline,
+    because in e2e tests flaky outline would appear
+    */
+  await insertStylesheetRulesToPage(`
+    .dx-group-panel-item[tabindex]:focus-visible:not(.dx-toolbar-item) {
+      outline: none !important;
+    }
+  `);
+
+  return createWidget('dxDataGrid', {
+    width: 800,
+    dataSource: [
+      {
+        field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4',
+      },
+    ],
+    groupPanel: {
+      visible: true,
+    },
+    columns: [
+      {
+        dataField: 'field1',
+        width: 200,
+        groupIndex: 0,
+      }, {
+        dataField: 'field2',
+        width: 200,
+        groupIndex: 1,
+      }, {
+        dataField: 'field3',
+        width: 200,
+      }, {
+        dataField: 'field4',
+        width: 200,
+      },
+    ],
+    allowColumnReordering: false,
+  });
+}).after(async () => {
   await MouseUpEvents.enable(MouseAction.dragToOffset);
-}).before(async () => createWidget('dxDataGrid', {
-  width: 800,
-  dataSource: [
-    {
-      field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4',
-    },
-  ],
-  groupPanel: {
-    visible: true,
-  },
-  columns: [
-    {
-      dataField: 'field1',
-      width: 200,
-      groupIndex: 0,
-    }, {
-      dataField: 'field2',
-      width: 200,
-      groupIndex: 1,
-    }, {
-      dataField: 'field3',
-      width: 200,
-    }, {
-      dataField: 'field4',
-      width: 200,
-    },
-  ],
-  allowColumnReordering: false,
-}));
+  await removeStylesheetRulesFromPage();
+});
 
 test('The group separator should not appear when dragging a grouped column to the same position', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -125,6 +138,16 @@ test('The group separator should not appear when dragging a grouped column to th
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await MouseUpEvents.disable(MouseAction.dragToOffset);
+
+  /*
+    Overrides the toolbar items' :focus-visible outline,
+    because in e2e tests flaky outline would appear
+    */
+  await insertStylesheetRulesToPage(`
+    .dx-group-panel-item[tabindex]:focus-visible:not(.dx-toolbar-item) {
+      outline: none !important;
+    }
+  `);
 
   return createWidget('dxDataGrid', {
     width: 800,
@@ -156,4 +179,5 @@ test('The group separator should not appear when dragging a grouped column to th
   });
 }).after(async () => {
   await MouseUpEvents.enable(MouseAction.dragToOffset);
+  await removeStylesheetRulesFromPage();
 });
