@@ -1,3 +1,5 @@
+import HtmlEditor from '@ts/ui/html_editor/html_editor';
+
 const CLASSES = {
   content: 'dx-htmleditor-content',
   toolbarWrapper: 'dx-htmleditor-toolbar-wrapper',
@@ -8,6 +10,15 @@ export class HtmlEditorModel {
 
   public getContent(): HTMLElement {
     return this.root.querySelector(`.${CLASSES.content}`) as HTMLElement;
+  }
+
+  public getInstance(): HtmlEditor {
+    return HtmlEditor.getInstance(this.root);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public getQuillInstance(): any {
+    return this.getInstance().getQuillInstance();
   }
 
   public getToolbarWrapper(): HTMLElement {

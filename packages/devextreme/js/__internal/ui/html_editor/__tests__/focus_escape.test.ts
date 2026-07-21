@@ -108,10 +108,9 @@ describe('HtmlEditor Tab key handling (inlineTabInsertion)', () => {
     document.body.innerHTML = '';
   });
 
-  it('should leave the editor on Tab keypress by default', () => {
+  it('should not paste the /t symbol in editor on Tab keypress by default', () => {
     const model = createEditor();
-    const instance = editors[editors.length - 1];
-    const quill = instance.getQuillInstance();
+    const quill = model.getQuillInstance();
     quill.setSelection(0, 0);
 
     const event = model.pressKeyInContent('Tab');
@@ -126,8 +125,7 @@ describe('HtmlEditor Tab key handling (inlineTabInsertion)', () => {
         modules.keyboard.inlineTabInsertion = true;
       },
     });
-    const instance = editors[editors.length - 1];
-    const quill = instance.getQuillInstance();
+    const quill = model.getQuillInstance();
     quill.setSelection(0, 0);
 
     const event = model.pressKeyInContent('Tab');
