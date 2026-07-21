@@ -180,44 +180,44 @@ export interface dxSplitterOptions<
     separatorSize?: number;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/splitter:ResizeEvent}
      * @action
      * @public
      */
-    onResize?: ((e: ResizeEvent) => void);
+    onResize?: ((e: ResizeEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/splitter:ResizeEndEvent}
      * @action
      * @public
      */
-    onResizeEnd?: ((e: ResizeEndEvent) => void);
+    onResizeEnd?: ((e: ResizeEndEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/splitter:ResizeStartEvent}
      * @action
      * @public
      */
-    onResizeStart?: ((e: ResizeStartEvent) => void);
+    onResizeStart?: ((e: ResizeStartEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/splitter:ItemExpandedEvent}
      * @action
      * @public
      */
-    onItemExpanded?: ((e: ItemExpandedEvent) => void);
+    onItemExpanded?: ((e: ItemExpandedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/splitter:ItemCollapsedEvent}
      * @action
      * @public
      */
-    onItemCollapsed?: ((e: ItemCollapsedEvent) => void);
+    onItemCollapsed?: ((e: ItemCollapsedEvent) => void) | undefined;
 }
 /**
  * @docid

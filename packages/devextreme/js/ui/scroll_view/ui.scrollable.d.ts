@@ -70,7 +70,7 @@ export interface dxScrollableOptions<TComponent> extends DOMComponentOptions<TCo
      * @action
      * @public
      */
-    onScroll?: ((e: ScrollEventInfo<TComponent>) => void);
+    onScroll?: ((e: ScrollEventInfo<TComponent>) => void) | null;
     /**
      * @docid
      * @default null
@@ -78,7 +78,7 @@ export interface dxScrollableOptions<TComponent> extends DOMComponentOptions<TCo
      * @action
      * @public
      */
-    onUpdated?: ((e: ScrollEventInfo<TComponent>) => void);
+    onUpdated?: ((e: ScrollEventInfo<TComponent>) => void) | null;
     /**
      * @docid
      * @default false &for(non-touch_devices)

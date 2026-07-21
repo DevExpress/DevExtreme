@@ -62,8 +62,8 @@ class DateBoxStrategy extends (Class.inherit({}) as new() => {}) {
     return { mode: 'text' };
   }
 
-  getDisplayFormat(displayFormat: Format): Format {
-    return displayFormat;
+  getDisplayFormat(displayFormat?: Format | null): Format {
+    return displayFormat || 'shortdate';
   }
 
   supportedKeys(): Record<string, (e: KeyboardEvent) => void> {

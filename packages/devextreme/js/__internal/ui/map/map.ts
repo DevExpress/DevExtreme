@@ -85,17 +85,12 @@ class Map extends Widget<MapProperties> {
       provider: 'google',
       autoAdjust: true,
       markers: [],
-      // @ts-expect-error ts-error
-      markerIconSrc: null,
-      // @ts-expect-error ts-error
-      onMarkerAdded: null,
-      // @ts-expect-error ts-error
-      onMarkerRemoved: null,
+      markerIconSrc: undefined,
+      onMarkerAdded: undefined,
+      onMarkerRemoved: undefined,
       routes: [],
-      // @ts-expect-error ts-error
-      onRouteAdded: null,
-      // @ts-expect-error ts-error
-      onRouteRemoved: null,
+      onRouteAdded: undefined,
+      onRouteRemoved: undefined,
       apiKey: {
         bing: '',
         google: '',
@@ -106,12 +101,8 @@ class Map extends Widget<MapProperties> {
         useAdvancedMarkers: true,
       },
       controls: false,
-      // @ts-expect-error ts-error
-      onReady: null,
-      // for internal use only
-      // @ts-expect-error ts-error
-      onUpdated: null,
-      // @ts-expect-error ts-error
+      onReady: undefined,
+      onUpdated: undefined,
       onClick: null,
     };
   }

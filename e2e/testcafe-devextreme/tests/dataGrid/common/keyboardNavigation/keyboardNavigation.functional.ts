@@ -1703,6 +1703,8 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
       .click(addRowButton)
 
       .expect(cell00.isFocused).ok()
+      .expect(editor00.element.exists)
+      .ok()
       .expect(editor00.element.focused)
       .ok()
 
@@ -1714,6 +1716,8 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
       .expect(dataGrid.apiGetCellValue(0, 0))
       .eql('1')
       .expect(cell01.isFocused)
+      .ok()
+      .expect(editor01.element.exists)
       .ok()
       .expect(editor01.element.focused)
       .ok()
@@ -1749,6 +1753,8 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
       .click(cell01.element)
 
       .expect(cell01.isFocused).ok()
+      .expect(editor01.element.exists)
+      .ok()
       .expect(editor01.element.focused)
       .ok()
 
@@ -1760,6 +1766,8 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
       .expect(dataGrid.apiGetCellValue(0, 1))
       .eql('2')
       .expect(cell00.isFocused)
+      .ok()
+      .expect(editor00.element.exists)
       .ok()
       .expect(editor00.element.focused)
       .ok()
@@ -1780,7 +1788,7 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
     columns: ['a', 'b'],
   }));
 
-  test.meta({ unstable: editMode === 'Cell' })(`${editMode} mode - Cells in a modified row should be updated on Tab (T898356)`, async (t) => {
+  test(`${editMode} mode - Cells in a modified row should be updated on Tab (T898356)`, async (t) => {
     const dataGrid = new DataGrid('#container') as any;
     const cell00 = dataGrid.getDataCell(0, 0);
     const editor00 = cell00.getEditor();
@@ -1793,6 +1801,8 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
       .click(cell00.element)
 
       .expect(cell00.isFocused).ok()
+      .expect(editor00.element.exists)
+      .ok()
       .expect(editor00.element.focused)
       .ok()
 
@@ -1804,6 +1814,8 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
       .expect(dataGrid.apiGetCellValue(0, 0))
       .eql('11')
       .expect(cell01.isFocused)
+      .ok()
+      .expect(editor01.element.exists)
       .ok()
       .expect(editor01.element.focused)
       .ok()
@@ -1837,6 +1849,8 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
       .click(cell01.element)
 
       .expect(cell01.isFocused).ok()
+      .expect(editor01.element.exists)
+      .ok()
       .expect(editor01.element.focused)
       .ok()
 
@@ -1848,6 +1862,8 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
       .expect(dataGrid.apiGetCellValue(0, 1))
       .eql('22')
       .expect(cell00.isFocused)
+      .ok()
+      .expect(editor00.element.exists)
       .ok()
       .expect(editor00.element.focused)
       .ok()

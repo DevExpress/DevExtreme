@@ -204,15 +204,15 @@ export interface BaseChartOptions<
     legend?: BaseChartLegend;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @notUsedInTheme
      * @action
      * @public
      */
-    onDone?: ((e: EventInfo<TComponent>) => void);
+    onDone?: ((e: EventInfo<TComponent>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field component:this
@@ -222,7 +222,7 @@ export interface BaseChartOptions<
      * @action
      * @public
      */
-    onPointClick?: ((e: NativeEventInfo<TComponent, MouseEvent | PointerEvent> & PointInteractionInfo<TPoint>) => void) | string;
+    onPointClick?: ((e: NativeEventInfo<TComponent, MouseEvent | PointerEvent> & PointInteractionInfo<TPoint>) => void) | string | undefined;
     /**
      * @docid
      * @type_function_param1 e:object
@@ -247,7 +247,7 @@ export interface BaseChartOptions<
     onPointSelectionChanged?: ((e: EventInfo<TComponent> & PointInteractionInfo<TPoint>) => void);
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:object
      * @type_function_param1_field component:this
      * @type_function_param1_field target:object
@@ -255,10 +255,10 @@ export interface BaseChartOptions<
      * @action
      * @public
      */
-    onTooltipHidden?: ((e: EventInfo<TComponent> & TooltipInfo<TPoint>) => void);
+    onTooltipHidden?: ((e: EventInfo<TComponent> & TooltipInfo<TPoint>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:object
      * @type_function_param1_field component:this
      * @type_function_param1_field target:object
@@ -266,7 +266,7 @@ export interface BaseChartOptions<
      * @action
      * @public
      */
-    onTooltipShown?: ((e: EventInfo<TComponent> & TooltipInfo<TPoint>) => void);
+    onTooltipShown?: ((e: EventInfo<TComponent> & TooltipInfo<TPoint>) => void) | undefined;
     /**
      * @docid
      * @default "Material"

@@ -97,10 +97,10 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get breaks(): Array<ScaleBreak> | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[] {
+    get breaks(): Array<ScaleBreak> | undefined | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[] {
         return this._getOption('breaks');
     }
-    set breaks(value: Array<ScaleBreak> | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[]) {
+    set breaks(value: Array<ScaleBreak> | undefined | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[]) {
         this._setOption('breaks', value);
     }
 
@@ -313,10 +313,10 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get placeholderSize(): number {
+    get placeholderSize(): null | number {
         return this._getOption('placeholderSize');
     }
-    set placeholderSize(value: number) {
+    set placeholderSize(value: null | number) {
         this._setOption('placeholderSize', value);
     }
 
