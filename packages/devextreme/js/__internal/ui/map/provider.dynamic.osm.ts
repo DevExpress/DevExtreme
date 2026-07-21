@@ -17,6 +17,17 @@ import type {
   MarkerObject, MarkerOptions, PlainLocation, RouteObject, RouteOptions,
 } from './provider.dynamic';
 import DynamicProvider from './provider.dynamic';
+import type {
+  LeafletAdapter,
+  LeafletBounds,
+  LeafletLayer,
+  LeafletMarker,
+  LeafletPopup,
+  LeafletZoomControl,
+} from './provider.dynamic.osm.leaflet';
+import {
+  createLeafletAdapter,
+} from './provider.dynamic.osm.leaflet';
 
 const window = getWindow();
 
@@ -26,26 +37,6 @@ const MARKER_ICON_SIZE = [25, 41];
 const MARKER_ICON_ANCHOR = [12, 41];
 const MARKER_POPUP_ANCHOR = [1, -34];
 const GEOCODING_FAILED = new Error('Geocoding failed');
-const REQUIRED_ENGINE_METHODS = [
-  'divIcon',
-  'icon',
-  'latLng',
-  'latLngBounds',
-  'map',
-  'marker',
-  'polyline',
-  'popup',
-  'tileLayer',
-];
-
-// Leaflet is an optional client-owned dependency.
-// Its public types must not leak into DevExtreme.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any, spellcheck/spell-checker -- OSM API
-type OsmMapEngine = Record<string, any>;
-
-interface TileLayer {
-  addTo: (map: unknown) => unknown;
-}
 
 const normalizeRouteResult = (result: RouteResult): [number, number][] => {
   if (Array.isArray(result)) {
@@ -63,27 +54,12 @@ const normalizeRouteResult = (result: RouteResult): [number, number][] => {
 export type OsmLocation = PlainLocation;
 
 // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
-const isMapEngine = (engine: unknown): engine is OsmMapEngine => {
-  if (!engine || typeof engine !== 'object') {
-    return false;
-  }
-
-  // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
-  const candidate = engine as OsmMapEngine;
-
-  return REQUIRED_ENGINE_METHODS.every((method) => typeof candidate[method] === 'function')
-    && typeof candidate.control?.zoom === 'function';
-};
-
-// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
 class OsmProvider extends DynamicProvider {
-  // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
-  _mapEngine!: OsmMapEngine;
+  _leaflet!: LeafletAdapter;
 
-  _tileLayer?: TileLayer;
+  _tileLayer?: LeafletLayer;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _zoomControl?: any;
+  _zoomControl?: LeafletZoomControl;
 
   _currentTileType!: MapType;
 
@@ -103,7 +79,7 @@ class OsmProvider extends DynamicProvider {
     return new Promise((resolve) => {
       const latLng = this._getLatLng(location);
       if (latLng) {
-        resolve(this._mapEngine.latLng(latLng.lat, latLng.lng));
+        resolve({ lat: latLng.lat, lng: latLng.lng });
       } else {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._geocodeLocation(location as string).then((geocodedLocation) => {
@@ -128,7 +104,7 @@ class OsmProvider extends DynamicProvider {
 
         return geocodedLocation;
       })
-      .catch(() => this._mapEngine.latLng(0, 0) as PlainLocation);
+      .catch(() => ({ lat: 0, lng: 0 }));
   }
 
   // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
@@ -149,7 +125,7 @@ class OsmProvider extends DynamicProvider {
       .then(() => geocodeFn(location))
       .then((result) => {
         if (result?.lat != null && result?.lng != null) {
-          return this._mapEngine.latLng(result.lat, result.lng) as PlainLocation;
+          return { lat: result.lat, lng: result.lng };
         }
 
         return Promise.reject(GEOCODING_FAILED);
@@ -168,12 +144,13 @@ class OsmProvider extends DynamicProvider {
     const configuredEngine = this._option('providerConfig')?.mapEngine;
     const globalEngine = (window as Window & { L?: unknown }).L;
     const engine = configuredEngine ?? globalEngine;
+    const leaflet = createLeafletAdapter(engine);
 
-    if (!isMapEngine(engine)) {
+    if (!leaflet) {
       return Promise.reject(errors.Error('E1069'));
     }
 
-    this._mapEngine = engine;
+    this._leaflet = leaflet;
 
     return Promise.resolve();
   }
@@ -183,20 +160,13 @@ class OsmProvider extends DynamicProvider {
       const type = this._option('type') ?? 'roadmap';
       const interactionsEnabled = !this._option('disabled');
 
-      this._map = this._mapEngine.map(this._$container[0], {
+      this._map = this._leaflet.createMap(this._$container[0], {
         center,
+        interactionsEnabled,
         zoom: this._option('zoom'),
-        zoomControl: false,
-        attributionControl: true,
-        dragging: interactionsEnabled,
-        touchZoom: interactionsEnabled,
-        doubleClickZoom: interactionsEnabled,
-        scrollWheelZoom: interactionsEnabled,
-        boxZoom: interactionsEnabled,
-        keyboard: interactionsEnabled,
       });
 
-      this._zoomControl = this._mapEngine.control.zoom();
+      this._zoomControl = this._leaflet.createZoomControl();
       if (this._option('controls')) {
         this._zoomControl.addTo(this._map);
       }
@@ -221,7 +191,7 @@ class OsmProvider extends DynamicProvider {
     return typeof resolved === 'string' ? { url: resolved } : resolved;
   }
 
-  _buildTileLayer(type: MapType): TileLayer | undefined {
+  _buildTileLayer(type: MapType): LeafletLayer | undefined {
     const config = this._resolveTileConfig(type);
 
     if (!config?.url) {
@@ -243,7 +213,7 @@ class OsmProvider extends DynamicProvider {
       options.subdomains = config.subdomains ?? DEFAULT_SUBDOMAINS;
     }
 
-    return this._mapEngine.tileLayer(config.url, options) as TileLayer;
+    return this._leaflet.createTileLayer(config.url, options);
   }
 
   _attachHandlers(): void {
@@ -311,25 +281,7 @@ class OsmProvider extends DynamicProvider {
   }
 
   updateDisabled(): Promise<void> {
-    const disabled = this._option('disabled');
-    const handlers = [
-      this._map.dragging,
-      this._map.touchZoom,
-      this._map.doubleClickZoom,
-      this._map.scrollWheelZoom,
-      this._map.boxZoom,
-      this._map.keyboard,
-    ];
-
-    handlers.forEach((handler) => {
-      if (handler) {
-        if (disabled) {
-          handler.disable();
-        } else {
-          handler.enable();
-        }
-      }
-    });
+    this._leaflet.setInteractionsEnabled(this._map, !this._option('disabled'));
 
     return Promise.resolve();
   }
@@ -341,7 +293,7 @@ class OsmProvider extends DynamicProvider {
       this._resolveLocation(bounds?.northEast),
       this._resolveLocation(bounds?.southWest),
     ]).then((result) => {
-      this._map.fitBounds(this._mapEngine.latLngBounds(result[1], result[0]));
+      this._map.fitBounds(this._leaflet.createBounds(result[1], result[0]));
     });
   }
 
@@ -362,9 +314,9 @@ class OsmProvider extends DynamicProvider {
     const controls = this._option('controls');
 
     if (controls) {
-      this._zoomControl.addTo(this._map);
+      this._zoomControl?.addTo(this._map);
     } else {
-      this._zoomControl.remove();
+      this._zoomControl?.remove();
     }
 
     return Promise.resolve();
@@ -373,30 +325,30 @@ class OsmProvider extends DynamicProvider {
   _renderMarker(options: MarkerOptions): Promise<MarkerObject> {
     return this._resolveLocation(options.location).then((location) => {
       // eslint-disable-next-line @typescript-eslint/init-declarations
-      let marker;
+      let marker: LeafletMarker;
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       const icon = options.iconSrc || this._option('markerIconSrc');
 
       if (options.html) {
-        const divIcon = this._mapEngine.divIcon({
+        const divIcon = this._leaflet.createDivIcon({
           html: options.html,
           className: '',
           iconAnchor: options.htmlOffset
             ? [-options.htmlOffset.left, -options.htmlOffset.top]
             : [0, 0],
         });
-        marker = this._mapEngine.marker(location, { icon: divIcon });
+        marker = this._leaflet.createMarker(location, { icon: divIcon });
       } else if (icon) {
-        const customIcon = this._mapEngine.icon({
+        const customIcon = this._leaflet.createIcon({
           iconUrl: icon,
           className: 'dx-map-marker',
           iconSize: MARKER_ICON_SIZE,
           iconAnchor: MARKER_ICON_ANCHOR,
           popupAnchor: MARKER_POPUP_ANCHOR,
         });
-        marker = this._mapEngine.marker(location, { icon: customIcon });
+        marker = this._leaflet.createMarker(location, { icon: customIcon });
       } else {
-        marker = this._mapEngine.marker(location);
+        marker = this._leaflet.createMarker(location);
       }
 
       marker.addTo(this._map);
@@ -425,28 +377,28 @@ class OsmProvider extends DynamicProvider {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _renderTooltip(marker: unknown, options: MarkerOptions['tooltip']): any {
+  _renderTooltip(
+    marker: LeafletMarker,
+    options: MarkerOptions['tooltip'],
+  ): LeafletPopup | undefined {
     if (!options) {
       return undefined;
     }
 
     const parsedOptions = this._parseTooltipOptions(options);
-    const popup = this._mapEngine.popup({ autoClose: false, closeOnClick: false })
+    const popup = this._leaflet.createPopup({ autoClose: false, closeOnClick: false })
       .setContent(parsedOptions.text);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const leafletMarker = marker as any;
-    leafletMarker.bindPopup(popup);
+    marker.bindPopup(popup);
 
     if (parsedOptions.visible) {
-      leafletMarker.openPopup();
+      marker.openPopup();
     }
 
     return popup;
   }
 
   _destroyMarker(markerObj: {
-    marker: { off: (event: string, fn: unknown) => void; remove: () => void };
+    marker: LeafletMarker;
     handler?: () => void;
   }): void {
     if (markerObj.handler) {
@@ -474,7 +426,8 @@ class OsmProvider extends DynamicProvider {
         const getRouteFn = this._option('providerConfig')?.getRoute;
 
         const drawPolyline = (coords: [number, number][]): RouteObject => {
-          const polyline = this._mapEngine.polyline(coords, polylineOptions).addTo(this._map);
+          const polyline = this._leaflet.createPolyline(coords, polylineOptions);
+          polyline.addTo(this._map);
           const routeBounds = polyline.getBounds();
           const northEast = routeBounds.getNorthEast();
           const southWest = routeBounds.getSouthWest();
@@ -508,7 +461,7 @@ class OsmProvider extends DynamicProvider {
       });
   }
 
-  _destroyRoute(routeObj: { instance: { remove: () => void } }): void {
+  _destroyRoute(routeObj: { instance: LeafletLayer }): void {
     routeObj.instance.remove();
   }
 
@@ -537,15 +490,14 @@ class OsmProvider extends DynamicProvider {
   _extendBounds(location: unknown): void {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const loc = location as any;
-    const latLng = Array.isArray(loc)
-      ? this._mapEngine.latLng(loc[0], loc[1])
-      : this._mapEngine.latLng(loc.lat, loc.lng);
+    const normalizedLocation = Array.isArray(loc)
+      ? { lat: loc[0], lng: loc[1] }
+      : { lat: loc.lat, lng: loc.lng };
 
-    if (this._bounds) {
-      this._bounds.extend(latLng);
-    } else {
-      this._bounds = this._mapEngine.latLngBounds(latLng, latLng);
-    }
+    this._bounds = this._leaflet.extendBounds(
+      this._bounds as LeafletBounds | undefined,
+      normalizedLocation,
+    );
   }
 
   clean(): Promise<void> {

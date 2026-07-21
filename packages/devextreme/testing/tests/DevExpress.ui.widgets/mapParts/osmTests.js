@@ -4,6 +4,7 @@ import $ from 'jquery';
 import { MARKERS, ROUTES } from './utils.js';
 // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap provider identifier
 import OsmProvider from '__internal/ui/map/provider.dynamic.osm';
+import { createLeafletAdapter } from '__internal/ui/map/provider.dynamic.osm.leaflet';
 import errors from 'ui/widget/ui.errors';
 
 import 'ui/map';
@@ -193,7 +194,6 @@ QUnit.module('OSM: map loading', moduleConfig, () => {
                 assert.ok(secondEngine.map.calledOnce, 'second engine created the reinitialized map');
                 assert.ok(firstMapRemoveSpy.calledOnce, 'initial map is disposed');
                 assert.notStrictEqual(originalMap, firstMap, 'a new map instance is returned');
-                assert.strictEqual(map._provider._mapEngine, secondEngine, 'new provider uses the second engine');
 
                 firstMapRemoveSpy.restore();
                 done();
@@ -234,7 +234,7 @@ QUnit.module('OSM: map loading', moduleConfig, () => {
             },
             (error) => {
                 assert.strictEqual(error.message, errors.Error('E1069').message, 'E1069 is returned');
-                assert.notStrictEqual(provider._mapEngine, leafletMock, 'global engine was not used');
+                assert.strictEqual(provider._leaflet, undefined, 'global engine was not used');
                 done();
             }
         );
@@ -871,7 +871,7 @@ QUnit.module('OSM: tile server', moduleConfig, () => {
         // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap provider identifier
         const provider = new OsmProvider(mapWidget, null);
 
-        provider._mapEngine = mapEngine;
+        provider._leaflet = createLeafletAdapter(mapEngine);
         provider._map = map;
         provider._tileLayer = previousTileLayer;
         provider._currentTileType = 'roadmap';
@@ -1569,7 +1569,7 @@ QUnit.module('OSM: routes', moduleConfig, () => {
         // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap provider identifier
         const provider = new OsmProvider(mapWidget, null);
 
-        provider._mapEngine = L;
+        provider._leaflet = createLeafletAdapter(L);
         provider._map = {};
 
         provider._renderRoute({ locations: [[10, 20], [30, 40]] }).then(
