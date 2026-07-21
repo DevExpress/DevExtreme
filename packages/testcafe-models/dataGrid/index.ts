@@ -447,6 +447,32 @@ export default class DataGrid extends GridCore {
     )();
   }
 
+  isScrolledToBottom(): Promise<boolean> {
+    const { getInstance } = this;
+    return ClientFunction(() => {
+      const scrollable = (getInstance() as any).getScrollable();
+
+      if (!scrollable) {
+        return false;
+      }
+
+      return scrollable.scrollHeight() - scrollable.clientHeight() - scrollable.scrollTop() <= 1;
+    }, { dependencies: { getInstance } })();
+  }
+
+  isScrolledToRight(): Promise<boolean> {
+    const { getInstance } = this;
+    return ClientFunction(() => {
+      const scrollable = (getInstance() as any).getScrollable();
+
+      if (!scrollable) {
+        return false;
+      }
+
+      return scrollable.scrollWidth() - scrollable.clientWidth() - scrollable.scrollLeft() <= 1;
+    }, { dependencies: { getInstance } })();
+  }
+
   getScrollbarWidth(isHorizontal: boolean): Promise<number> {
     const { getInstance } = this;
 
