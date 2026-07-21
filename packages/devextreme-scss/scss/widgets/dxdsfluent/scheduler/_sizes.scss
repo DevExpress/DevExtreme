@@ -65,10 +65,10 @@ $scheduler-border-radius: 0 !default;
 $fluent-scheduler-navigator-icon-font-size: $fluent-base-icon-size;
 $fluent-scheduler-appointment-month-text-size: ds.$spacing-120 !default;
 $fluent-scheduler-workspace-info-text-size: ds.$spacing-160 !default;
-$fluent-scheduler-all-day-title-font-size: ds.$font-size-120 !default;
-$fluent-scheduler-time-panel-font-size: ds.$font-size-120 !default;
+$fluent-scheduler-all-day-title-font-size: ds.$font-size-caption-md !default;
+$fluent-scheduler-time-panel-font-size: ds.$font-size-caption-md !default;
 $fluent-scheduler-header-panel-margin: ds.$spacing-140 !default;
-$fluent-scheduler-group-header-font-size: ds.$font-size-140 !default;
+$fluent-scheduler-group-header-font-size: ds.$font-size-title-xs !default;
 $fluent-scheduler-group-header-table-cell-width: ds.$spacing-1000 !default;
 $fluent-scheduler-appointment-transparent-left-border: ds.$spacing-10 solid transparent !default;
 $fluent-scheduler-appointment-transparent-right-border: ds.$spacing-10 solid transparent !default;
@@ -97,13 +97,13 @@ $header-panel-time-cell-padding: null !default;
   $fluent-scheduler-workspace-date-table-cell-height: 38px !default; // dx-offscale: 38px
 
   $fluent-scheduler-navigator-height: ds.$spacing-360 !default;
-  $fluent-scheduler-header-panel-day-font-size: ds.$font-size-160 !default;
+  $fluent-scheduler-header-panel-day-font-size: ds.$font-size-title-sm !default;
   $fluent-scheduler-header-height: 46px !default; // dx-offscale: 46px
   $fluent-scheduler-header-offset: 0 ds.$spacing-120 !default;
   $fluent-scheduler-toolbar-item-offset: ds.$spacing-40 !default;
 
-  $fluent-scheduler-appointment-tooltip-title-font-size: ds.$font-size-160 !default;
-  $fluent-scheduler-appointment-tooltip-date-font-size: ds.$font-size-140 !default;
+  $fluent-scheduler-appointment-tooltip-title-font-size: ds.$font-size-title-sm !default;
+  $fluent-scheduler-appointment-tooltip-date-font-size: ds.$font-size-140 !default; // dx-no-semantic-role: compact branch (110) is off the role scale
   $fluent-scheduler-workspace-month-cell-left-offset: ds.$spacing-80 !default;
 
   $fluent-scheduler-appointment-content-padding: ds.$spacing-60 ds.$spacing-80 ds.$spacing-60 ds.$spacing-120 !default;
@@ -131,7 +131,7 @@ $header-panel-time-cell-padding: null !default;
   $fluent-scheduler-appointment-popup-days-of-week-buttons-gap: ds.$spacing-120 !default;
   $fluent-scheduler-appointment-popup-repeat-end-item-height: ds.$spacing-320 !default;
 
-  $agenda-appointment-title-font-size: ds.$font-size-140;
+  $agenda-appointment-title-font-size: ds.$font-size-base-md;
 
   $fluent-scheduler-appointment-short-content-padding: 0 ds.$spacing-80 0 ds.$spacing-120 !default;
   $fluent-scheduler-appointment-15min-height: 17px !default; // literal: used in @container conditions where var() is invalid
@@ -140,14 +140,14 @@ $header-panel-time-cell-padding: null !default;
 
   $fluent-scheduler-appointment-10min-recurrence-padding-right: ds.$spacing-140 !default;
   $fluent-scheduler-appointment-10min-title-font-size: ds.$spacing-80 !default;
-  $fluent-scheduler-appointment-10min-title-line-height: ds.$line-height-120 !default;
-  $fluent-scheduler-appointment-10min-icon-font-size: ds.$font-size-120 !default;
+  $fluent-scheduler-appointment-10min-title-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
+  $fluent-scheduler-appointment-10min-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
   $fluent-scheduler-appointment-10min-icon-right: ds.$spacing-20 !default;
 
   $fluent-scheduler-appointment-15min-recurrence-padding-right: ds.$spacing-140 !default;
-  $fluent-scheduler-appointment-15min-title-font-size: ds.$font-size-120 !default;
-  $fluent-scheduler-appointment-15min-title-line-height: ds.$line-height-180 !default;
-  $fluent-scheduler-appointment-15min-icon-font-size: ds.$font-size-120 !default;
+  $fluent-scheduler-appointment-15min-title-font-size: ds.$font-size-base-sm !default;
+  $fluent-scheduler-appointment-15min-title-line-height: ds.$line-height-180 !default; // dx-no-semantic-role: 180 is off the line-height-role scale
+  $fluent-scheduler-appointment-15min-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
   $fluent-scheduler-appointment-15min-icon-right: ds.$spacing-20 !default;
 
   $fluent-scheduler-appointment-20min-icon-right: ds.$spacing-20 !default;
@@ -162,13 +162,13 @@ $header-panel-time-cell-padding: null !default;
   $fluent-scheduler-workspace-date-table-cell-height: ds.$spacing-280 !default;
 
   $fluent-scheduler-navigator-height: ds.$spacing-280 !default;
-  $fluent-scheduler-header-panel-day-font-size: ds.$font-size-140 !default;
+  $fluent-scheduler-header-panel-day-font-size: ds.$font-size-title-xs !default;
   $fluent-scheduler-header-height: ds.$spacing-340 !default;
   $fluent-scheduler-header-offset: ds.$spacing-20 ds.$spacing-80 !default;
   $fluent-scheduler-toolbar-item-offset: ds.$spacing-40 !default;
 
-  $fluent-scheduler-appointment-tooltip-title-font-size: ds.$font-size-140 !default;
-  $fluent-scheduler-appointment-tooltip-date-font-size: ds.$font-size-110 !default;
+  $fluent-scheduler-appointment-tooltip-title-font-size: ds.$font-size-title-xs !default;
+  $fluent-scheduler-appointment-tooltip-date-font-size: ds.$font-size-110 !default; // dx-no-semantic-role: 110 is off the font-size-role scale
   $fluent-scheduler-workspace-month-cell-left-offset: ds.$spacing-40 !default;
 
   $fluent-scheduler-appointment-content-padding: ds.$spacing-40 ds.$spacing-60 ds.$spacing-40 ds.$spacing-80 !default;
@@ -205,14 +205,14 @@ $header-panel-time-cell-padding: null !default;
 
   $fluent-scheduler-appointment-10min-recurrence-padding-right: ds.$spacing-140 !default;
   $fluent-scheduler-appointment-10min-title-font-size: ds.$spacing-80 !default;
-  $fluent-scheduler-appointment-10min-title-line-height: ds.$line-height-120 !default;
-  $fluent-scheduler-appointment-10min-icon-font-size: ds.$font-size-120 !default;
+  $fluent-scheduler-appointment-10min-title-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
+  $fluent-scheduler-appointment-10min-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
   $fluent-scheduler-appointment-10min-icon-right: ds.$spacing-20 !default;
 
   $fluent-scheduler-appointment-15min-recurrence-padding-right: ds.$spacing-160 !default;
-  $fluent-scheduler-appointment-15min-title-font-size: ds.$font-size-120 !default;
-  $fluent-scheduler-appointment-15min-title-line-height: ds.$line-height-120 !default;
-  $fluent-scheduler-appointment-15min-icon-font-size: ds.$font-size-120 !default;
+  $fluent-scheduler-appointment-15min-title-font-size: ds.$font-size-base-sm !default;
+  $fluent-scheduler-appointment-15min-title-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
+  $fluent-scheduler-appointment-15min-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
   $fluent-scheduler-appointment-15min-icon-right: ds.$spacing-50 !default;
 
   $fluent-scheduler-appointment-20min-recurrence-padding-right: ds.$spacing-200 !default;

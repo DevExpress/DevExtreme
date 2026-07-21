@@ -9,13 +9,13 @@ $fluent-menu-horizontal-padding: null !default;
 $fluent-menu-icon-to-text-offset: ds.$spacing-40;
 
 @if $size == "default" {
-  $fluent-menu-item-line-height: ds.$line-height-200 !default;
+  $fluent-menu-item-line-height: ds.$line-height-base-md !default;
   $fluent-menu-horizontal-padding: ds.$spacing-120 !default;
   $fluent-menu-item-with-icon-horizontal-padding: ds.$spacing-400 !default;
 }
 
 @else if $size == "compact" {
-  $fluent-menu-item-line-height: ds.$line-height-160 !default;
+  $fluent-menu-item-line-height: ds.$line-height-base-sm !default;
   $fluent-menu-horizontal-padding: ds.$spacing-80 !default;
   $fluent-menu-item-with-icon-horizontal-padding: ds.$spacing-320 !default;
 }

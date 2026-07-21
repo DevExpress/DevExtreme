@@ -14,7 +14,7 @@ $stepper-step-content-column-gap: null !default;
 $stepper-step-optional-mark-font-size: $fluent-xs-font-size !default;
 $stepper-step-icon-size: $fluent-button-icon-size !default;
 
-$stepper-step-selected-font-weight: ds.$font-weight-600 !default;
+$stepper-step-selected-font-weight: ds.$font-weight-base-strong !default;
 $stepper-step-transition-duration: .4s !default;
 
 @if $size == "default" {

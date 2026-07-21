@@ -9,12 +9,12 @@ $badge-line-height: null !default;
 
 @if $size == "default" {
   $fluent-badge-padding: 0 ds.$spacing-60 !default;
-  $fluent-badge-font-size: ds.$font-size-120 !default;
-  $badge-line-height: ds.$line-height-200 !default;
+  $fluent-badge-font-size: ds.$font-size-caption-md !default;
+  $badge-line-height: ds.$line-height-caption-lg !default;
 }
 
 @else if $size == "compact" {
   $fluent-badge-padding: 0 ds.$spacing-60 !default;
-  $fluent-badge-font-size: ds.$font-size-100 !default;
-  $badge-line-height: ds.$line-height-160 !default;
+  $fluent-badge-font-size: ds.$font-size-caption-sm !default;
+  $badge-line-height: ds.$line-height-caption-md !default;
 }

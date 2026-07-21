@@ -29,7 +29,7 @@ $chat-information-gap: ds.$spacing-80 !default;
 $chat-avatar-size: ds.$spacing-320 !default;
 $chat-messagegroup-alignment-start-template: auto 82.5% 1fr !default;
 $chat-messagegroup-alignment-start-gap: ds.$spacing-120 !default;
-$chat-information-font-size: ds.$font-size-120 !default;
+$chat-information-font-size: ds.$font-size-caption-md !default;
 $chat-information-icon-size: ds.$spacing-120 !default;
 $chat-information-edited-gap: ds.$spacing-20 !default;
 
@@ -57,7 +57,7 @@ $chat-messagelist-empty-message-font-size: null !default;
 $chat-messagelist-empty-prompt-font-size: null !default;
 $chat-messagelist-day-header-padding-bottom: ds.$spacing-120 !default;
 $chat-messagelist-day-header-first-padding-top: ds.$spacing-200 !default;
-$chat-messagelist-day-header-font-size: ds.$font-size-120 !default;
+$chat-messagelist-day-header-font-size: ds.$font-size-caption-md !default;
 
 $chat-typingindicator-template: $chat-messagegroup-alignment-start-template !default;
 $chat-typingindicator-padding: null !default;
@@ -80,7 +80,7 @@ $chat-file-container-width: 17.14em !default;
 $chat-file-container-padding: ds.$spacing-70 ds.$spacing-80 !default;
 $chat-file-container-border-radius: $fluent-base-border-radius !default;
 $chat-file-button-size: $fluent-button-height !default;
-$chat-file-secondary-font-size: ds.$font-size-100 !default;
+$chat-file-secondary-font-size: ds.$font-size-caption-sm !default;
 $chat-file-base-section-gap: ds.$spacing-40 !default;
 $chat-file-size-max-width: 4em !default;
 $chat-file-icon-font-size: null !default;
@@ -112,8 +112,8 @@ $chat-bubble-gap: ds.$spacing-80 !default;
   $chat-messagelist-empty-icon-size: ds.$spacing-400 !default;
   $chat-messagelist-empty-icon-margin-bottom: ds.$spacing-120 !default;
   $chat-messagelist-empty-row-gap: ds.$spacing-40 !default;
-  $chat-messagelist-empty-message-font-size: ds.$font-size-180 !default;
-  $chat-messagelist-empty-prompt-font-size: ds.$font-size-140 !default;
+  $chat-messagelist-empty-message-font-size: ds.$font-size-180 !default; // dx-no-semantic-role: 180 is off the font-size-role scale
+  $chat-messagelist-empty-prompt-font-size: ds.$font-size-base-md !default;
 
   $chat-typingindicator-circle-size: math.div(8, 14) * 1em !default;
   $chat-typingindicator-circle-size-center: math.div(12, 14) * 1em !default;
@@ -124,7 +124,7 @@ $chat-bubble-gap: ds.$spacing-80 !default;
 
   $chat-confirmation-popup-toolbar-gap: ds.$spacing-80 !default;
 
-  $chat-file-icon-font-size: ds.$font-size-200 !default;
+  $chat-file-icon-font-size: ds.$font-size-200 !default; // dx-icon-glyph-size: text roles not applicable
 }
 
 @else if $size == "compact" {
@@ -152,8 +152,8 @@ $chat-bubble-gap: ds.$spacing-80 !default;
   $chat-messagelist-empty-icon-size: ds.$spacing-320 !default;
   $chat-messagelist-empty-icon-margin-bottom: ds.$spacing-140 !default;
   $chat-messagelist-empty-row-gap: ds.$spacing-20 !default;
-  $chat-messagelist-empty-message-font-size: ds.$font-size-140 !default;
-  $chat-messagelist-empty-prompt-font-size: ds.$font-size-120 !default;
+  $chat-messagelist-empty-message-font-size: ds.$font-size-140 !default; // dx-no-semantic-role: default branch (180) is off the role scale
+  $chat-messagelist-empty-prompt-font-size: ds.$font-size-base-sm !default;
 
   $chat-typingindicator-circle-size: math.div(8, 12) * 1em !default;
   $chat-typingindicator-circle-size-center: math.div(12, 12) * 1em !default;
@@ -164,5 +164,5 @@ $chat-bubble-gap: ds.$spacing-80 !default;
 
   $chat-confirmation-popup-toolbar-gap: ds.$spacing-40 !default;
 
-  $chat-file-icon-font-size: ds.$font-size-160 !default;
+  $chat-file-icon-font-size: ds.$font-size-160 !default; // dx-icon-glyph-size: text roles not applicable
 }

@@ -10,14 +10,14 @@ $fluent-validation-message-horizontal-padding: null !default;
 
 $fluent-validation-overlay-border-radius: ds.$border-radius-40 !default;
 $fluent-validation-message-vertical-padding: ds.$spacing-40 !default;
-$fluent-validation-message-font-size: ds.$font-size-120 !default;
+$fluent-validation-message-font-size: ds.$font-size-caption-md !default;
 
 @if $size == "default" {
   $fluent-validation-message-padding: ds.$spacing-60 !default;
   $fluent-validationsummary-item-margin: ds.$spacing-60 !default;
 
   $fluent-validation-message-horizontal-padding: ds.$spacing-80 !default;
-  $fluent-validation-message-line-height: ds.$line-height-160 !default;
+  $fluent-validation-message-line-height: ds.$line-height-160 !default; // dx-no-semantic-role: compact branch (120) is off the role scale
 }
 
 @else if $size == "compact" {
@@ -25,5 +25,5 @@ $fluent-validation-message-font-size: ds.$font-size-120 !default;
   $fluent-validationsummary-item-margin: ds.$spacing-40 !default;
 
   $fluent-validation-message-horizontal-padding: ds.$spacing-60 !default;
-  $fluent-validation-message-line-height: ds.$line-height-120 !default;
+  $fluent-validation-message-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
 }

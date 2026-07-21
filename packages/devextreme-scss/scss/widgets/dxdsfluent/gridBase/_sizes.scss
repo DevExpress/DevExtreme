@@ -30,7 +30,7 @@ $fluent-filter-row-between-editor-padding: null !default;
 $fluent-command-column-additional-right-margin: null !default;
 $fluent-grid-base-treeview-select-all-item-offset: null !default;
 
-$fluent-grid-base-header-line-height: ds.$line-height-180 !default;
+$fluent-grid-base-header-line-height: ds.$line-height-180 !default; // dx-no-semantic-role: 180 is off the line-height-role scale
 $fluent-grid-base-header-icon-size: null !default;
 $fluent-grid-base-header-icon-container-size: ds.$spacing-200 !default;
 $fluent-grid-base-column-chooser-item-margin: ds.$spacing-80 !default;
@@ -49,8 +49,8 @@ $fluent-grid-base-ai-prompt-editor-progressbar-height: ds.$spacing-40 !default;
 @if $size == "default" {
   $fluent-grid-base-cell-height: ds.$spacing-480 !default;
   $fluent-grid-base-header-height: ds.$spacing-480 !default;
-  $fluent-grid-base-cell-line-height: ds.$line-height-200 !default;
-  $fluent-grid-base-cell-font-size: ds.$font-size-140 !default;
+  $fluent-grid-base-cell-line-height: ds.$line-height-base-md !default;
+  $fluent-grid-base-cell-font-size: ds.$font-size-base-md !default;
 
   $fluent-grid-base-checkbox-size: ds.$spacing-180 !default;
   $fluent-grid-base-cell-horizontal-padding: ds.$spacing-160 !default;
@@ -84,8 +84,8 @@ $fluent-grid-base-ai-prompt-editor-progressbar-height: ds.$spacing-40 !default;
 @else if $size == "compact" {
   $fluent-grid-base-cell-height: ds.$spacing-360 !default;
   $fluent-grid-base-header-height: ds.$spacing-360 !default;
-  $fluent-grid-base-cell-line-height: ds.$line-height-160 !default;
-  $fluent-grid-base-cell-font-size: ds.$font-size-120 !default;
+  $fluent-grid-base-cell-line-height: ds.$line-height-base-sm !default;
+  $fluent-grid-base-cell-font-size: ds.$font-size-base-sm !default;
 
   $fluent-grid-base-checkbox-size: ds.$spacing-160 !default;
   $fluent-grid-base-cell-horizontal-padding: ds.$spacing-110 !default;
@@ -101,7 +101,7 @@ $fluent-grid-base-ai-prompt-editor-progressbar-height: ds.$spacing-40 !default;
   $fluent-grid-base-command-edit-column-with-icons-width: ds.$spacing-800 !default;
   $fluent-grid-base-adaptive-column-height: ds.$spacing-260 !default;
   $fluent-grid-base-treeview-search-margin: ds.$spacing-100 !default;
-  $fluent-grid-base-nodata-font-size: ds.$font-size-140 !default;
+  $fluent-grid-base-nodata-font-size: ds.$font-size-base-md !default;
 
   $fluent-filter-row-between-editor-padding: ds.$spacing-80 !default;
   $fluent-command-column-additional-right-margin: ds.$spacing-20 !default;

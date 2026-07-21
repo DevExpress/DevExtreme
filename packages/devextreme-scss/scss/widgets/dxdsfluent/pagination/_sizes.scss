@@ -6,8 +6,8 @@
 $fluent-pagination-paddings: ds.$spacing-130 !default;
 $fluent-pagination-separator-paddings: ds.$spacing-80 !default;
 $fluent-pagination-page-padding: ds.$spacing-90 ds.$spacing-120 !default;
-$fluent-pagination-page-line-height: ds.$line-height-120 !default;
-$fluent-pagination-page-font-size: ds.$font-size-120 !default;
+$fluent-pagination-page-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
+$fluent-pagination-page-font-size: ds.$font-size-base-sm !default;
 $fluent-pagination-navbutton-paddings: $fluent-pagination-page-padding !default;
 $fluent-pagination-navbutton-height: ds.$spacing-120 !default;
 $fluent-pagination-navbutton-icon-size: null !default;

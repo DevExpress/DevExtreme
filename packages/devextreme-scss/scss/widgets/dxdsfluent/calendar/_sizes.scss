@@ -15,7 +15,7 @@ $fluent-calendar-element-padding: ds.$spacing-80 !default;
   $fluent-calendar-legacy-width: 272px !default; // dx-offscale: 272px
   $fluent-calendar-legacy-height: 264px !default; // dx-offscale: 264px
 
-  $fluent-calendar-cell-font-size: ds.$font-size-140 !default;
+  $fluent-calendar-cell-font-size: ds.$font-size-base-md !default;
 
   $fluent-calendar-footer-button-height: ds.$spacing-360 !default;
 }
@@ -24,6 +24,6 @@ $fluent-calendar-element-padding: ds.$spacing-80 !default;
   $fluent-calendar-legacy-width: 252px !default; // dx-offscale: 252px
   $fluent-calendar-legacy-height: 260px !default; // dx-offscale: 260px
 
-  $fluent-calendar-cell-font-size: ds.$font-size-120 !default;
+  $fluent-calendar-cell-font-size: ds.$font-size-base-sm !default;
   $fluent-calendar-footer-button-height: ds.$spacing-280 !default;
 }

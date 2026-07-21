@@ -11,10 +11,10 @@ $fluent-tooltip-shadow: 0 0 ds.$spacing-20 0 $base-dropdown-shadow-color1 !defau
 
 @if $size == "default" {
   $fluent-tooltip-padding: ds.$spacing-70 ds.$spacing-110 !default;
-  $fluent-tooltip-font-size: ds.$font-size-120;
+  $fluent-tooltip-font-size: ds.$font-size-caption-md;
 }
 
 @else if $size == "compact" {
   $fluent-tooltip-padding: ds.$spacing-30 ds.$spacing-50 !default;
-  $fluent-tooltip-font-size: ds.$font-size-120;
+  $fluent-tooltip-font-size: ds.$font-size-caption-md;
 }

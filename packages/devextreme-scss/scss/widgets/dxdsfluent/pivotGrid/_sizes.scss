@@ -13,7 +13,7 @@ $area-field-top-bottom-padding: null !default;
 
 $pivotgrid-empty-column-width: ds.$spacing-190 !default;
 $pivotgrid-field-indicators-offset: ds.$spacing-60 !default;
-$pivotgrid-indicators-line-height: ds.$line-height-120 !default;
+$pivotgrid-indicators-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
 $pivotgrid-empty-area-text-padding: ds.$spacing-50 !default;
 
 $area-field-border-radius: null !default;

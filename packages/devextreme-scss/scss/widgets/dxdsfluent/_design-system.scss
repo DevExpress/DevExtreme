@@ -8,9 +8,12 @@ $accent: if(colors.$color == "saas", "blue", colors.$color);
 // DevExtreme sizes map onto design-token component sizes.
 $component-size: if(sizes.$size == "compact", "small", "medium");
 
+// Tier order mirrors the design-tokens package: base scales/palettes → semantic roles → components.
 @include meta.load-css("../../_design-system/base");
 @include meta.load-css("../../_design-system/fluent/base");
-@include meta.load-css("../../_design-system/fluent/modes/#{colors.$mode}");
 @include meta.load-css("../../_design-system/fluent/accents/#{$accent}");
+@include meta.load-css("../../_design-system/fluent/semantic/typography");
+@include meta.load-css("../../_design-system/fluent/semantic/box-shadow");
+@include meta.load-css("../../_design-system/fluent/semantic/colors/#{colors.$mode}");
 @include meta.load-css("../../_design-system/fluent/components/theme");
 @include meta.load-css("../../_design-system/fluent/components/sizes/#{$component-size}");

@@ -25,11 +25,11 @@ $texteditor-icon-container-size: $fluent-base-icon-size !default;
 
 @if $size == "default" {
   $fluent-texteditor-line-height: 1.428571 !default;
-  $fluent-texteditor-font-size: ds.$font-size-140 !default;
+  $fluent-texteditor-font-size: ds.$font-size-base-md !default;
   $fluent-texteditor-input-height: ds.$spacing-320 !default;
   $fluent-texteditor-label-outside-height: ds.$spacing-200 !default;
   $fluent-texteditor-label-outside-top-offset: ds.$spacing-240 !default;
-  $fluent-texteditor-label-font-size: ds.$font-size-120 !default;
+  $fluent-texteditor-label-font-size: ds.$font-size-caption-md !default;
   $fluent-texteditor-label-top-offset: ds.$spacing-minus-10 !default;
   $fluent-filled-texteditor-input-horizontal-padding: ds.$spacing-120 !default;
   $fluent-filled-texteditor-input-top-padding: ds.$spacing-50 !default;
@@ -45,11 +45,11 @@ $texteditor-icon-container-size: $fluent-base-icon-size !default;
 
 @else if $size == "compact" {
   $fluent-texteditor-line-height: 1.3333 !default;
-  $fluent-texteditor-font-size: ds.$font-size-120 !default;
+  $fluent-texteditor-font-size: ds.$font-size-base-sm !default;
   $fluent-texteditor-input-height: ds.$spacing-240 !default;
   $fluent-texteditor-label-outside-height: ds.$spacing-160 !default;
   $fluent-texteditor-label-outside-top-offset: ds.$spacing-180 !default;
-  $fluent-texteditor-label-font-size: ds.$font-size-100 !default;
+  $fluent-texteditor-label-font-size: ds.$font-size-caption-sm !default;
   $fluent-texteditor-label-top-offset: ds.$spacing-minus-10 !default;
   $fluent-filled-texteditor-input-horizontal-padding: ds.$spacing-80 !default;
   $fluent-filled-texteditor-input-top-padding: ds.$spacing-30 !default;

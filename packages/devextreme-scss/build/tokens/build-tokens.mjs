@@ -264,17 +264,30 @@ const createModeConfig = (mode) => createConfig(mode, getModeFiles(mode), [
     filter: (token) => {
       const filePath = normalizeFilePath(token);
 
-      return filePath.includes(`semantic/typography/${THEME_NAME}`)
-        || filePath.includes(`semantic/box-shadow/${THEME_NAME}.json`)
-        || filePath.includes(`base/colors/utility/${THEME_NAME}.json`)
+      return filePath.includes(`base/colors/utility/${THEME_NAME}.json`)
         || filePath.includes(`global/${THEME_NAME}.json`)
         || filePath.includes(`figma-utils/box-shadow/semantic/${THEME_NAME}.json`)
         || filePath.includes(`figma-utils/icon/set/${THEME_NAME}.json`);
     },
     options: FILE_OPTIONS,
   },
+  // The semantic tier is emitted under an explicit semantic/ folder mirroring the
+  // package layout (tokens/semantic/{typography,box-shadow,colors}) so the middle
+  // customization layer is discoverable in the generated output.
   {
-    destination: `${THEME_NAME}/modes/${mode}.scss`,
+    destination: `${THEME_NAME}/semantic/typography.scss`,
+    format: 'css/variables',
+    filter: (token) => normalizeFilePath(token).includes(`semantic/typography/${THEME_NAME}`),
+    options: FILE_OPTIONS,
+  },
+  {
+    destination: `${THEME_NAME}/semantic/box-shadow.scss`,
+    format: 'css/variables',
+    filter: (token) => normalizeFilePath(token).includes(`semantic/box-shadow/${THEME_NAME}.json`),
+    options: FILE_OPTIONS,
+  },
+  {
+    destination: `${THEME_NAME}/semantic/colors/${mode}.scss`,
     format: 'css/variables',
     filter: (token) => {
       const filePath = normalizeFilePath(token);

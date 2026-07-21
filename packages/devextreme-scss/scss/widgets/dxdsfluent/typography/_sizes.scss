@@ -15,6 +15,11 @@ $fluent-h4-font-size: null !default;
 $fluent-h5-font-size: null !default;
 $fluent-h6-font-size: null !default;
 
+/*
+ * The xl/l/m/s/xs classes are raw size utilities (.dx-font-*), not text roles —
+ * they intentionally stay on the base scale. Headings map to semantic headline
+ * roles where a role with the exact legacy value exists (see TOKENS_MIGRATION.md).
+ */
 @if $size == "default" {
   $fluent-xl-font-size: ds.$spacing-340 !default;
   $fluent-l-font-size: ds.$font-size-280 !default;
@@ -22,12 +27,12 @@ $fluent-h6-font-size: null !default;
   $fluent-s-font-size: ds.$font-size-180 !default;
   $fluent-xs-font-size: ds.$font-size-120 !default;
 
-  $fluent-h1-font-size: ds.$font-size-400 !default;
-  $fluent-h2-font-size: ds.$font-size-360 !default;
-  $fluent-h3-font-size: ds.$font-size-320 !default;
-  $fluent-h4-font-size: ds.$font-size-260 !default;
-  $fluent-h5-font-size: ds.$font-size-220 !default;
-  $fluent-h6-font-size: ds.$font-size-220 !default;
+  $fluent-h1-font-size: ds.$font-size-headline-xl !default;
+  $fluent-h2-font-size: ds.$font-size-360 !default; // dx-no-semantic-role: 360 is off the font-size-role scale
+  $fluent-h3-font-size: ds.$font-size-headline-lg !default;
+  $fluent-h4-font-size: ds.$font-size-260 !default; // dx-no-semantic-role: 260 is off the font-size-role scale
+  $fluent-h5-font-size: ds.$font-size-220 !default; // dx-no-semantic-role: 220 is off the font-size-role scale
+  $fluent-h6-font-size: ds.$font-size-220 !default; // dx-no-semantic-role: 220 is off the font-size-role scale
 }
 
 @else if $size == "compact" {
@@ -37,12 +42,12 @@ $fluent-h6-font-size: null !default;
   $fluent-s-font-size: ds.$font-size-140 !default;
   $fluent-xs-font-size: ds.$font-size-120 !default;
 
-  $fluent-h1-font-size: ds.$font-size-320 !default;
-  $fluent-h2-font-size: ds.$font-size-280 !default;
-  $fluent-h3-font-size: ds.$font-size-240 !default;
-  $fluent-h4-font-size: ds.$font-size-200 !default;
-  $fluent-h5-font-size: ds.$font-size-160 !default;
-  $fluent-h6-font-size: ds.$font-size-160 !default;
+  $fluent-h1-font-size: ds.$font-size-headline-lg !default;
+  $fluent-h2-font-size: ds.$font-size-280 !default; // dx-no-semantic-role: default branch (360) is off the role scale
+  $fluent-h3-font-size: ds.$font-size-headline-sm !default;
+  $fluent-h4-font-size: ds.$font-size-200 !default; // dx-no-semantic-role: default branch (260) is off the role scale
+  $fluent-h5-font-size: ds.$font-size-160 !default; // dx-no-semantic-role: default branch (220) is off the role scale
+  $fluent-h6-font-size: ds.$font-size-160 !default; // dx-no-semantic-role: default branch (220) is off the role scale
 }
 
 :root {

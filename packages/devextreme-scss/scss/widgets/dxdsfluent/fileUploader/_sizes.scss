@@ -22,7 +22,7 @@ $fluent-fileuploader-files-container-rounding: ds.$spacing-40 !default;
   $fluent-fileuploader-file-container-button-size: ds.$spacing-320 !default;
   $fluent-fileuploader-files-container-padding: ds.$spacing-120 ds.$spacing-40 0 !default;
   $fluent-fileuploader-file-size-margin: 0 0 0 ds.$spacing-40 !default;
-  $fluent-fileuploader-file-icon-font-size: ds.$font-size-200 !default;
+  $fluent-fileuploader-file-icon-font-size: ds.$font-size-200 !default; // dx-icon-glyph-size: text roles not applicable
 }
 
 @else if $size == "compact" {
@@ -32,5 +32,5 @@ $fluent-fileuploader-files-container-rounding: ds.$spacing-40 !default;
   $fluent-fileuploader-file-container-button-size: ds.$spacing-280 !default;
   $fluent-fileuploader-files-container-padding: ds.$spacing-120 ds.$spacing-40 0 !default;
   $fluent-fileuploader-file-size-margin: 0 0 ds.$spacing-40 !default;
-  $fluent-fileuploader-file-icon-font-size: ds.$font-size-160 !default;
+  $fluent-fileuploader-file-icon-font-size: ds.$font-size-160 !default; // dx-icon-glyph-size: text roles not applicable
 }

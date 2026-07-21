@@ -292,7 +292,7 @@ $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !defau
 
   // Header panel
   $cardview-fluent-header-panel-vertical-margin: ds.$spacing-80 !default;
-  $cardview-fluent-header-panel--empty-line-height: ds.$line-height-320 !default;
+  $cardview-fluent-header-panel--empty-line-height: ds.$line-height-title-lg !default;
 
   // Header panel item - default
   $cardview-fluent-header-panel__item-border-width: ds.$border-width-10 !default;
@@ -374,7 +374,7 @@ $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !defau
 
   // Header panel
   $cardview-fluent-header-panel-vertical-margin: ds.$spacing-40 !default;
-  $cardview-fluent-header-panel--empty-line-height: ds.$line-height-240 !default;
+  $cardview-fluent-header-panel--empty-line-height: ds.$line-height-title-sm !default;
 
   // Header panel item - default
   $cardview-fluent-header-panel__item-border-width: ds.$border-width-10 !default;
