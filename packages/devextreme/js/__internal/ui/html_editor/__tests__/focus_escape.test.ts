@@ -100,3 +100,39 @@ describe('HtmlEditor focus escape (Ctrl+Shift+Up/Down)', () => {
     expect(event.defaultPrevented).toBe(false);
   });
 });
+
+describe('HtmlEditor Tab key handling (inlineTabInsertion)', () => {
+  afterEach(() => {
+    editors.forEach((instance) => instance.dispose());
+    editors.length = 0;
+    document.body.innerHTML = '';
+  });
+
+  it('Tab leaves the editor by default', () => {
+    const model = createEditor();
+    const instance = editors[editors.length - 1];
+    const quill = instance.getQuillInstance();
+    quill.setSelection(0, 0);
+
+    const event = model.pressKeyInContent('Tab');
+
+    expect(event.defaultPrevented).toBe(false);
+    expect(quill.getText()).not.toContain('\t');
+  });
+
+  it('Tab inserts a tab character when inlineTabInsertion is enabled', () => {
+    const model = createEditor({
+      customizeModules: (modules) => {
+        modules.keyboard.inlineTabInsertion = true;
+      },
+    });
+    const instance = editors[editors.length - 1];
+    const quill = instance.getQuillInstance();
+    quill.setSelection(0, 0);
+
+    const event = model.pressKeyInContent('Tab');
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(quill.getText()).toContain('\t');
+  });
+});
