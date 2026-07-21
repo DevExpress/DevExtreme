@@ -4,6 +4,7 @@ import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { MouseAction, MouseUpEvents } from '../../../../helpers/mouseUpEvents';
 import { testScreenshot } from '../../../../helpers/themeUtils';
+import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
 
 fixture.disablePageReloads`Column reordering.Visual`
   .page(url(__dirname, '../../../container.html'));
@@ -13,44 +14,58 @@ test('column separator should work properly with expand columns', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
-  await MouseUpEvents.disable(MouseAction.dragToOffset);
 
   await t.drag(dataGrid.getGroupPanel().getHeader(0).element, 0, 30);
   await testScreenshot(t, takeScreenshot, 'column-separator-with-expand-columns.png');
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
+}).before(async () => {
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
 
+  /*
+    Overrides the toolbar items' :focus-visible outline,
+    because in e2e tests flaky outline would appear
+    */
+  await insertStylesheetRulesToPage(`
+    .dx-group-panel-item[tabindex]:focus-visible:not(.dx-toolbar-item) {
+      outline: none !important;
+    }
+  `);
+
+  return createWidget('dxDataGrid', {
+    width: 800,
+    dataSource: [
+      {
+        field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4',
+      },
+    ],
+    groupPanel: {
+      visible: true,
+    },
+    columns: [
+      {
+        dataField: 'field1',
+        width: 200,
+        groupIndex: 0,
+      }, {
+        dataField: 'field2',
+        width: 200,
+        groupIndex: 1,
+      }, {
+        dataField: 'field3',
+        width: 200,
+      }, {
+        dataField: 'field4',
+        width: 200,
+      },
+    ],
+    allowColumnReordering: true,
+  });
+}).after(async () => {
   await MouseUpEvents.enable(MouseAction.dragToOffset);
-}).before(async () => createWidget('dxDataGrid', {
-  width: 800,
-  dataSource: [
-    {
-      field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4',
-    },
-  ],
-  groupPanel: {
-    visible: true,
-  },
-  columns: [
-    {
-      dataField: 'field1',
-      width: 200,
-      groupIndex: 0,
-    }, {
-      dataField: 'field2',
-      width: 200,
-      groupIndex: 1,
-    }, {
-      dataField: 'field3',
-      width: 200,
-    }, {
-      dataField: 'field4',
-      width: 200,
-    },
-  ],
-  allowColumnReordering: true,
-}));
+  await removeStylesheetRulesFromPage();
+});
 
 test('HeaderRow should be highlighted when dragging column with allowColumnReordering=false', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
