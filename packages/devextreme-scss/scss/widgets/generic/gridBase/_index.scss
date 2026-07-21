@@ -434,6 +434,12 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
     }
   }
 
+  .dx-#{$widget-name}-headers.dx-#{$widget-name}-scroller-spacing {
+    > .dx-#{$widget-name}-scroll-container:not(.dx-#{$widget-name}-content-fixed) {
+      box-shadow: 1px 0 0 $datagrid-border-color;
+    }
+  }
+
   .dx-#{$widget-name}-filter-row {
     .dx-menu {
       .dx-overlay-content {
@@ -817,6 +823,12 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
       .dx-checkbox-text {
         padding-right: 34px;
         padding-left: 27px;
+      }
+    }
+
+    .dx-#{$widget-name}-headers.dx-#{$widget-name}-scroller-spacing {
+      > .dx-#{$widget-name}-scroll-container:not(.dx-#{$widget-name}-content-fixed) {
+        box-shadow: -1px 0 0 $datagrid-border-color;
       }
     }
 
