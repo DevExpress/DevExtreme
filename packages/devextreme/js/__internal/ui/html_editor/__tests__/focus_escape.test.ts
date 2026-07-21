@@ -108,7 +108,7 @@ describe('HtmlEditor Tab key handling (inlineTabInsertion)', () => {
     document.body.innerHTML = '';
   });
 
-  it('Tab leaves the editor by default', () => {
+  it('should leave the editor on Tab keypress by default', () => {
     const model = createEditor();
     const instance = editors[editors.length - 1];
     const quill = instance.getQuillInstance();
@@ -120,7 +120,7 @@ describe('HtmlEditor Tab key handling (inlineTabInsertion)', () => {
     expect(quill.getText()).not.toContain('\t');
   });
 
-  it('Tab inserts a tab character when inlineTabInsertion is enabled', () => {
+  it('should insert a tab character on Tab keypress when inlineTabInsertion is enabled', () => {
     const model = createEditor({
       customizeModules: (modules) => {
         modules.keyboard.inlineTabInsertion = true;
