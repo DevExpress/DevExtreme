@@ -73,7 +73,6 @@ export function isDateType(dataType: string | undefined): boolean {
 export interface SelectionRange {
   selectionStart: number;
   selectionEnd: number;
-  selectionDirection?: 'forward' | 'backward' | 'none';
 }
 
 const getIntervalSelector = function () {
@@ -574,7 +573,6 @@ export default {
         return {
           selectionStart: isNumeric(focusedElement.selectionStart) ? focusedElement.selectionStart : -1,
           selectionEnd: isNumeric(focusedElement.selectionEnd) ? focusedElement.selectionEnd : -1,
-          selectionDirection: focusedElement.selectionDirection ?? undefined,
         };
       }
     } catch (e) { /* empty */ }
@@ -588,7 +586,7 @@ export default {
   setSelectionRange(focusedElement, selectionRange: SelectionRange): void {
     try {
       if (focusedElement && focusedElement.setSelectionRange && selectionRange.selectionStart >= 0 && selectionRange.selectionEnd >= 0) {
-        focusedElement.setSelectionRange(selectionRange.selectionStart, selectionRange.selectionEnd, selectionRange.selectionDirection);
+        focusedElement.setSelectionRange(selectionRange.selectionStart, selectionRange.selectionEnd);
       }
     } catch (e) { /* empty */ }
   },
