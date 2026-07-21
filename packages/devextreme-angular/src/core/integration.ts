@@ -12,9 +12,15 @@ import eventsEngine from 'devextreme/common/core/events/core/events_engine';
 const outsideZoneEvents = ['mousemove', 'mouseover', 'mouseout'];
 const insideZoneEvents = ['mouseup', 'click', 'mousedown', 'transitionend', 'wheel'];
 
-let originalAdd;
-let callbacks = [];
-let readyCallbackAdd = function (callback) {
+type ReadyCallback = () => void;
+type ReadyCallbackAdd = (callback: ReadyCallback) => void;
+interface ReadyCallbackAddContext {
+  callBase: ReadyCallbackAdd;
+}
+
+let originalAdd: ReadyCallbackAdd;
+let callbacks: ReadyCallback[] = [];
+let readyCallbackAdd = function (this: ReadyCallbackAddContext, callback: ReadyCallback) {
   if (!originalAdd) {
     originalAdd = this.callBase.bind(this);
   }
@@ -36,7 +42,7 @@ let doInjections = (document: any, ngZone: NgZone, xhrFactory: XhrFactory) => {
   domAdapter.inject({
     _document: document,
 
-    listen(...args) {
+    listen(this: { callBase: (...args: any[]) => any }, ...args) {
       const eventName = args[1];
       if (outsideZoneEvents.includes(eventName)) {
         return ngZone.runOutsideAngular(() => this.callBase.apply(this, args));

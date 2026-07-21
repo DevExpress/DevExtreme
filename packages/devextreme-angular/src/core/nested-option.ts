@@ -220,14 +220,17 @@ export interface IOptionWithTemplate extends BaseNestedOption {
   template: any;
 }
 
-const triggerShownEvent = function (element) {
-  const changeHandlers = [];
+const triggerShownEvent = function (element: Element) {
+  const changeHandlers: Element[] = [];
 
   if (!render(element).hasClass(VISIBILITY_CHANGE_SELECTOR)) {
     changeHandlers.push(element);
   }
 
-  changeHandlers.push.apply(changeHandlers, element.querySelectorAll(`.${VISIBILITY_CHANGE_SELECTOR}`));
+  const nestedHandlers = Array.prototype.slice.call(
+    element.querySelectorAll(`.${VISIBILITY_CHANGE_SELECTOR}`),
+  ) as Element[];
+  changeHandlers.push(...nestedHandlers);
 
   for (let i = 0; i < changeHandlers.length; i++) {
     triggerHandler(changeHandlers[i], 'dxshown');
