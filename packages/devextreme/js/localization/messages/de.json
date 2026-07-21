@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "Datenfelder hierher ziehen",
         "dxPivotGrid-rowFieldArea": "Zeilenfelder hierher ziehen",
         "dxPivotGrid-filterFieldArea": "Filterfelder hierher ziehen",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "von {0} bis {1}",
         "dxScheduler-ariaLabel": "Planer. {0} Ansicht: {1} mit {2} Terminen",

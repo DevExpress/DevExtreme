@@ -23,6 +23,8 @@ import type { RovingTabIndexComponent } from '../keyboard_navigation/roving_tab_
 import { RovingTabIndex } from '../keyboard_navigation/roving_tab_index';
 import { createPath, foreachTree } from '../m_widget_utils';
 import SortableModule from '../sortable/m_sortable';
+import { getFieldItemA11yLabel } from './a11y';
+import type { SortOrderType } from './const';
 import { ATTRIBUTES, CLASSES } from './const';
 import { dragAndDropItemRender } from './dom';
 import { reverseSortOrder, shouldCancelDragging } from './utils';
@@ -242,7 +244,23 @@ export class FieldChooserBase extends mixinWidget {
       $fieldElement.attr(ATTRIBUTES.itemGroup, field.groupName);
     }
 
+    $fieldElement
+      .attr('role', 'menuitem')
+      .attr('aria-label', this._getFieldItemAriaLabel(field, caption));
+
     return $fieldElement;
+  }
+
+  private _getFieldItemAriaLabel(field, caption: string): string {
+    // The sort indicator is rendered for every sortable non-data field, with
+    // ascending shown by default, so the label mirrors the visible state.
+    const sortOrder = field.allowSorting && field.area !== 'data'
+      ? (field.sortOrder === 'desc' ? 'desc' : 'asc') as SortOrderType
+      : undefined;
+    const hasHeaderFilterValue = fieldHasHeaderFilter(this._dataSource, field)
+      && !!getMainGroupField(this._dataSource, field).filterValues?.length;
+
+    return getFieldItemA11yLabel(caption, { sortOrder, hasHeaderFilterValue });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
