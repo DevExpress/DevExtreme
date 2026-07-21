@@ -1,8 +1,5 @@
-@use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
 @use "../button/colors" as *;
-@use "../color" as extcolor;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
@@ -10,125 +7,89 @@
 * $name 10. Border color
 * $type color
 */
-$scheduler-base-border-color: $base-border-color !default;
-$scheduler-cell-active-bg: null !default;
-$scheduler-cell-hover-bg: null !default;
-$scheduler-group-separator-border-color: color.adjust($base-border-color, $lightness: -13%, $space: hsl) !default;
+$scheduler-base-border-color: ds.$color-border-neutral-default-rest !default;
+$scheduler-cell-active-bg: ds.$color-surface-neutral-default-active !default;
+$scheduler-cell-hover-bg: ds.$color-surface-neutral-default-hovered !default;
+$scheduler-group-separator-border-color: ds.$color-border-neutral-accessible-rest !default;
 
 /**
 * $name 20. Hour separator color
 * $type color
 */
-$scheduler-accent-border-color: $base-border-color !default;
+$scheduler-accent-border-color: ds.$color-border-neutral-default-rest !default;
 
 /**
 * $name 30. Appointment text color
 * $type color
 */
-$scheduler-appointment-text-color: null !default;
+$scheduler-appointment-text-color: ds.$color-content-neutral-default-rest !default;
 $scheduler-appointment-focus-color: null !default;
 
 /**
 * $name 40. Appointment background color
 * $type color
 */
-$scheduler-appointment-base-color: null !default;
+$scheduler-appointment-base-color: ds.$color-surface-primary-subdued-rest !default;
 
 /**
 * $name 50. Appointment start color
 * $type color
 */
-$scheduler-appointment-start-color: color.change($base-shadow-color, $alpha: 0.3) !default;
+$scheduler-appointment-start-color: ds.$color-shadow-key-darker !default;
 $scheduler-appointment-active-color: $button-default-outlined-active-bg;
 
 /**
 * $name 60. Focused cell color
 * $type color
 */
-$scheduler-workspace-focused-cell-color: null !default;
+$scheduler-workspace-focused-cell-color: ds.$color-surface-primary-alpha-rest !default;
 
 /**
 * $name 70. First day of month separator color
 * $type color
 */
-$scheduler-first-month-border-color: $base-border-color !default;
-$scheduler-droppable-cell-background-color: color.adjust($base-element-bg, $lightness: -5%, $space: hsl) !default;
-$scheduler-panel-text-color: $base-label-color !default;
-$scheduler-workspace-background-color: $base-bg !default;
-$scheduler-workspace-accent-color: $base-accent !default;
+$scheduler-first-month-border-color: ds.$color-border-neutral-default-rest !default;
+$scheduler-droppable-cell-background-color: ds.$color-surface-neutral-deep-rest !default;
+$scheduler-panel-text-color: ds.$color-content-neutral-subdued-rest !default;
+$scheduler-workspace-background-color: ds.$color-surface-neutral-default-rest !default;
+$scheduler-workspace-accent-color: ds.$color-content-primary-default-rest !default;
 
 /**
 * $name 80. Date-time indicator color
 * $type color
 */
-$scheduler-current-time-cell-color: $base-accent !default;
-$scheduler-time-indicator-color: #eb5757 !default;
-$scheduler-dd-appointment-hover-text-color: $base-inverted-text-color !default;
-$scheduler-form-icon-color: $base-icon-color !default;
-$scheduler-workspace-month-text-color: $base-text-color !default;
-$scheduler-workspace-other-month-text-color: $base-label-color !default;
-$scheduler-dropdown-appointment-date-color: color.change($base-text-color, $alpha: 0.54) !default;
+$scheduler-current-time-cell-color: ds.$color-content-primary-default-rest !default;
+$scheduler-time-indicator-color: ds.$color-surface-danger-default-rest !default;
+$scheduler-dd-appointment-hover-text-color: ds.$color-content-neutral-default-inverted-rest !default;
+$scheduler-form-icon-color: ds.$color-content-neutral-subdued-rest !default;
+$scheduler-workspace-month-text-color: ds.$color-content-neutral-default-rest !default;
+$scheduler-workspace-other-month-text-color: ds.$color-content-neutral-subdued-rest !default;
+$scheduler-dropdown-appointment-date-color: ds.$color-content-neutral-subdued-rest !default;
 $scheduler-workspace-active-cell-color: $scheduler-accent-border-color !default;
 $scheduler-workspace-hovered-cell-color: $scheduler-workspace-month-text-color !default;
-$scheduler-header-bg: $base-bg !default;
-$scheduler-alldaypanel-bg: $base-element-bg !default;
+$scheduler-header-bg: ds.$color-surface-neutral-default-rest !default;
+$scheduler-alldaypanel-bg: ds.$color-surface-neutral-default-rest !default;
 $scheduler-other-month-cell-opacity: 1 !default;
 $scheduler-fill-focused-appointment: false !default;
 $scheduler-is-shadow-color-for-focused-state: false !default;
-$scheduler-time-indicator-background-color: rgba(0, 0, 0, 0.03) !default;
+$scheduler-time-indicator-background-color: rgb(from #{ds.$color-content-neutral-default-rest} r g b / 0.03) !default;
 
-$scheduler-tooltip-appointment-text-color: $base-text-color !default;
-$scheduler-appointment-overlay-bg: $base-bg !default;
+$scheduler-tooltip-appointment-text-color: ds.$color-content-neutral-default-rest !default;
+$scheduler-appointment-overlay-bg: ds.$color-surface-neutral-default-rest !default;
 
 // Agenda
-$agenda-appointment-recurrence-icon-color: $base-inverted-text-color !default;
-$agenda-appointment-hover-bg: $base-hover-bg !default;
-$agenda-appointment-active-bg: color.change(#000, $alpha: 0.08) !default;
-$agenda-appointment-text-color: $base-text-color !default;
+$agenda-appointment-recurrence-icon-color: ds.$color-content-neutral-default-inverted-rest !default;
+$agenda-appointment-hover-bg: ds.$color-surface-neutral-default-hovered !default;
+$agenda-appointment-active-bg: ds.$color-surface-neutral-alpha-active !default;
+$agenda-appointment-text-color: ds.$color-content-neutral-default-rest !default;
 
-$header-panel-cell-date: null !default;
+$header-panel-cell-date: ds.$color-content-neutral-subdued-rest !default;
 
-@if $mode == "light" {
-  $scheduler-appointment-text-color: #000 !default;
-  $header-panel-cell-date: #424242;
-
-  @if $color == "blue"{
-    $scheduler-appointment-base-color: color.adjust($base-accent, $lightness: 48%, $space: hsl) !default;
-    $scheduler-cell-hover-bg: $base-hover-bg !default;
-    $scheduler-cell-active-bg: color.change(color.adjust($base-bg, $lightness: -13.3%, $space: hsl), $alpha: 0.7) !default;
-    $scheduler-workspace-focused-cell-color: color.change($base-accent, $alpha: 0.12) !default;
-  }
-
-  @if $color == "saas" {
-    $scheduler-appointment-base-color: color.adjust($base-accent, $lightness: 30%, $space: hsl) !default;
-    $scheduler-cell-hover-bg: color.adjust($base-hover-bg, $lightness: 4.10%, $space: hsl) !default;
-    $scheduler-cell-active-bg: extcolor.adjust-if-not-achromatic($color: $base-bg, $hue: 222deg, $saturation: 100%, $lightness: -2%) !default;
-    $scheduler-workspace-focused-cell-color: color.adjust($base-accent, $lightness: 32.53%, $space: hsl) !default;
-  }
-}
-
-@if $mode == "dark" {
-  $scheduler-appointment-base-color: color.adjust($base-accent, $lightness: -48%, $space: hsl) !default;
-  $scheduler-appointment-text-color: #fff !default;
-  $header-panel-cell-date: #adadad;
-  $scheduler-cell-hover-bg: $base-hover-bg !default;
-
-  @if $color == "blue"{
-    $scheduler-cell-active-bg: color.change(color.adjust($base-bg, $lightness: -13.3%, $space: hsl), $alpha: 0.7) !default;
-    $scheduler-workspace-focused-cell-color: color.change($base-accent, $alpha: 0.12) !default;
-  }
-
-  @if $color == "saas" {
-    $scheduler-cell-active-bg: color.adjust($base-bg, $lightness: 4.31%, $space: hsl) !default;
-    $scheduler-workspace-focused-cell-color: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: -7deg, $saturation: -65.00%, $lightness: -41.18%) !default;
-  }
-}
-
-$scheduler-first-month-cell-background-color: color.adjust($scheduler-appointment-base-color, $alpha: -0.85) !default;
+$scheduler-first-month-cell-background-color: rgb(from #{$scheduler-appointment-base-color} r g b / 0.15) !default;
 $scheduler-appointment-focus-color: $scheduler-appointment-text-color;
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$scheduler-accent: $base-accent !default;
-$scheduler-bg: $base-bg !default;
-$scheduler-border-color: $base-border-color !default;
-$scheduler-inverted-text-color: $base-inverted-text-color !default;
+$scheduler-accent: ds.$color-surface-primary-default-rest !default;
+$scheduler-bg: ds.$color-surface-neutral-default-rest !default;
+$scheduler-border-color: ds.$color-border-neutral-default-rest !default;
+$scheduler-inverted-text-color: ds.$color-content-neutral-default-inverted-rest !default;

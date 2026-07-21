@@ -1,3 +1,4 @@
+@use "../colors" as *;
 @use "../button/colors" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
@@ -52,6 +53,13 @@ $list-item-ghost-bg: ds.$color-surface-neutral-default-rest !default;
 $list-item-ghost-color: ds.$color-content-neutral-subdued-rest !default;
 $list-item-ghost-border-color: ds.$color-border-primary-default-rest !default;
 $list-icon-color: ds.$color-content-neutral-subdued-rest !default;
+
+/*
+ * toggle-delete is an SVG data-uri image: the color is baked into the background-image at
+ * build time. CSS var() tokens do NOT resolve inside a data-uri (they render black), so this
+ * stays a concrete $base-* value. See DIVERGENCES.md.
+ */
+$list-toggle-delete-icon-color: $base-icon-color !default;
 
 $base-select-all-separator-color: ds.$separator-color !default;
 

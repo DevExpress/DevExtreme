@@ -1,41 +1,37 @@
-@use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$filemanager-border-color: $base-border-color !default;
-$filemanager-file-toolbar-bg: color.adjust($base-bg, $lightness: -3%, $space: hsl) !default;
-$filemanager-editor-active-bg: color.change($base-text-color, $alpha: 0.1) !default;
-$filemanager-dirs-tree-item-focus-color: $base-text-color !default;
-$filemanager-breadcrumbs-item-focus-bg: $base-border-color !default;
-$filemanager-breadcrumbs-item-focus-color: $base-text-color !default;
-$filemanager-custom-thumbnail-color: $base-border-color !default;
-$filemanager-file-item-select-color: $base-bg !default;
-$filemanager-file-item-select-bg: color.change($base-accent, $alpha: 0.8) !default;
-$filemanager-file-item-select-focus-color: $base-bg !default;
-$filemanager-file-item-select-focus-bg: color.change($base-accent, $alpha: 0.7) !default;
-$filemanager-file-item-hover-bg: $base-hover-bg !default;
-$filemanager-file-item-focused-border: $base-accent !default;
-$filemanager-item-focused-color: $base-inverted-text-color !default;
-$filemanager-dirs-tree-item-focus-bg: null !default;
-$filemanager-progressbox-shadow-color: null !default;
+$filemanager-border-color: ds.$color-border-neutral-default-rest !default;
+$filemanager-file-toolbar-bg: ds.$color-surface-neutral-subdued-rest !default;
+$filemanager-editor-active-bg: rgb(from #{ds.$color-content-neutral-default-rest} r g b / 0.1) !default;
+$filemanager-dirs-tree-item-focus-color: ds.$color-content-neutral-default-rest !default;
+$filemanager-breadcrumbs-item-focus-bg: ds.$color-surface-neutral-default-active !default;
+$filemanager-breadcrumbs-item-focus-color: ds.$color-content-neutral-default-rest !default;
+$filemanager-custom-thumbnail-color: ds.$color-content-neutral-default-disabled !default;
+$filemanager-file-item-select-color: ds.$color-content-neutral-default-inverted-rest !default;
+$filemanager-file-item-select-bg: rgb(from #{ds.$color-surface-primary-default-rest} r g b / 0.8) !default;
+$filemanager-file-item-select-focus-color: ds.$color-content-neutral-default-inverted-rest !default;
+$filemanager-file-item-select-focus-bg: rgb(from #{ds.$color-surface-primary-default-rest} r g b / 0.7) !default;
+$filemanager-file-item-hover-bg: ds.$color-surface-neutral-default-hovered !default;
+$filemanager-file-item-focused-border: ds.$color-border-primary-default-rest !default;
+$filemanager-item-focused-color: ds.$color-content-neutral-default-inverted-rest !default;
+$filemanager-dirs-tree-item-focus-bg: ds.$color-surface-neutral-default-active !default;
 
-
-@if $mode == "light" {
-  $filemanager-dirs-tree-item-focus-bg: color.adjust($base-bg, $lightness: -8%, $space: hsl) !default;
-  $filemanager-progressbox-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
-}
-
-@if $mode == "dark" {
-  $filemanager-dirs-tree-item-focus-bg: color.adjust($base-bg, $lightness: 8%, $space: hsl) !default;
-  $filemanager-progressbox-shadow-color: color.change($base-shadow-color, $alpha: 0.3) !default;
-}
+/*
+ * The status icons (refresh/progress/done/error overlays) are SVG data-uri images: colors are
+ * baked into the background-image at build time (string replace). CSS var() tokens do NOT
+ * resolve inside a data-uri (they render black), so these stay concrete $base-* values.
+ * See DIVERGENCES.md.
+ */
+$filemanager-icon-color: $base-text-color !default;
+$filemanager-icon-success-color: $base-success !default;
+$filemanager-icon-danger-color: $base-danger !default;
+$filemanager-icon-inverted-color: $base-inverted-text-color !default;
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$filemanager-accent: $base-accent !default;
-$filemanager-bg: $base-bg !default;
-$filemanager-danger: $base-danger !default;
-$filemanager-inverted-text-color: $base-inverted-text-color !default;
-$filemanager-success: $base-success !default;
-$filemanager-text-color: $base-text-color !default;
+$filemanager-accent: ds.$color-border-primary-default-rest !default;
+$filemanager-bg: ds.$color-surface-neutral-default-rest !default;
+$filemanager-danger: ds.$color-surface-danger-default-rest !default;
+$filemanager-inverted-text-color: ds.$color-content-neutral-default-static-dark-rest !default;

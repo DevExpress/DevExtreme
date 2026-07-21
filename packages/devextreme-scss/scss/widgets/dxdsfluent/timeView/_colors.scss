@@ -1,7 +1,13 @@
-@use "../../../_design-system/variables/ds" as ds;
+@use "../colors" as *;
 
 // adduse
-$clock-digits-color: ds.$color-content-neutral-default-rest !default;
 
-$timeview-inverted-bg: ds.$color-surface-neutral-default-inverted-rest !default;
-$timeview-typography-bg: ds.$color-surface-neutral-default-rest !default;
+/*
+ * The clock face and arrows are SVG data-uri images: colors are baked into the
+ * background-image at build time (string replace). CSS var() tokens do NOT resolve inside a
+ * data-uri (they render black), so these stay concrete $base-* values. See DIVERGENCES.md.
+ */
+$clock-digits-color: $base-text-color !default;
+
+$timeview-inverted-bg: $base-inverted-bg !default;
+$timeview-typography-bg: $base-typography-bg !default;

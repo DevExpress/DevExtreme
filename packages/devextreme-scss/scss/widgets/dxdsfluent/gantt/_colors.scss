@@ -1,39 +1,28 @@
-@use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../gridBase/colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$gantt-collapsable-row-bg: null !default;
-$gantt-icon-color: $datagrid-columnchooser-item-color !default;
-$gantt-parent-task-background-color: null !default;
-$gantt-task-color: $base-inverted-text-color !default;
-$gantt-task-background-color: null !default;
-$gantt-task-progress-background-color: null !default;
+$gantt-collapsable-row-bg: ds.$color-surface-neutral-deep-rest !default;
 
-@if $color == "blue" {
-  $gantt-parent-task-background-color: $base-success !default;
-}
-
-@if $mode == "light" {
-  $gantt-collapsable-row-bg: color.adjust($base-bg, $lightness: -5%, $space: hsl) !default;
-  $gantt-task-background-color: color.adjust($base-bg, $lightness: -60%) !default;
-  $gantt-task-progress-background-color: rgba(0, 0, 0, 0.2) !default;
-}
-
-@if $mode == "dark" {
-  $gantt-collapsable-row-bg: color.adjust($base-bg, $lightness: 5%, $space: hsl) !default;
-  $gantt-task-background-color: color.adjust($base-bg, $lightness: 60%) !default;
-  $gantt-task-progress-background-color: rgba(255, 255, 255, 0.2) !default;
-}
+/*
+ * Toolbar icons are SVG data-uri images: the color is baked into the background-image at
+ * build time (string replace). CSS var() tokens do NOT resolve inside a data-uri (they render
+ * black), so this stays a concrete $base-* value. See DIVERGENCES.md.
+ */
+$gantt-icon-color: $base-text-color !default;
+$gantt-parent-task-background-color: ds.$color-surface-success-default-rest !default;
+$gantt-task-color: ds.$color-content-neutral-default-inverted-rest !default;
+$gantt-task-background-color: ds.$color-surface-neutral-default-inverted-rest !default;
+$gantt-task-progress-background-color: rgb(from #{ds.$color-surface-neutral-default-inverted-rest} r g b / 0.2) !default;
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$gantt-accent: $base-accent !default;
-$gantt-bg: $base-bg !default;
-$gantt-border-color: $base-border-color !default;
-$gantt-text-color: $base-text-color !default;
+$gantt-accent: ds.$color-surface-primary-default-rest !default;
+$gantt-bg: ds.$color-surface-neutral-default-rest !default;
+$gantt-border-color: ds.$color-border-neutral-default-rest !default;
+$gantt-text-color: ds.$color-content-neutral-default-rest !default;
 
 // Color computations hoisted from style files (phase 0.5 layer normalization)
-$gantt-accent-border-color: color.adjust($gantt-accent, $lightness: -10%, $space: hsl) !default;
-$gantt-accent-light-bg: color.change($gantt-accent, $alpha: 0.15) !default;
+$gantt-accent-border-color: ds.$color-border-primary-default-rest !default;
+$gantt-accent-light-bg: ds.$color-surface-primary-alpha-hovered !default;
