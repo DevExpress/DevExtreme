@@ -16,7 +16,6 @@ import { isEmpty } from '@js/core/utils/string';
 import { setHeight } from '@js/core/utils/style';
 import { isDefined, isNumeric, isString } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import type { ScrollEvent } from '@js/ui/scroll_view';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type {
@@ -33,6 +32,7 @@ import type { EditingController } from '../editing/m_editing';
 import gridCoreUtils from '../m_utils';
 import { CLASSES } from '../sticky_columns/const';
 import { ColumnsView } from './m_columns_view';
+import type { RowsViewScrollEvent } from './types';
 import { getCellText, getMaxHorizontalScrollOffset } from './utils';
 
 const ROWS_VIEW_CLASS = 'rowsview';
@@ -378,7 +378,7 @@ export class RowsView extends ColumnsView {
   /**
    * @extended: column_fixing, virtual_column, virtual_scrolling
    */
-  protected _handleScroll(e: ScrollEvent): void {
+  protected _handleScroll(e: RowsViewScrollEvent): void {
     const { top, left } = e.scrollOffset;
     const rtlEnabled = this.option('rtlEnabled');
     const isNativeScrolling = e.component.option('useNative');
