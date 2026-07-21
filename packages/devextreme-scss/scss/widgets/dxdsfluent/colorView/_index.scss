@@ -21,7 +21,7 @@ $fluent-colorview-hue-scale-height: $fluent-colorview-palette-height;
     line-height: $fluent-colorview-container-line-height;
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: $fluent-colorview-colorview-container-margin-bottom;
 
     &.dx-colorview-label-hex {
       margin: $fluent-colorview-container-hex-margin;
@@ -89,8 +89,8 @@ $fluent-colorview-hue-scale-height: $fluent-colorview-palette-height;
 .dx-colorview-alpha-channel-border,
 .dx-colorview-hue-scale-wrapper,
 .dx-colorview-color-preview-container {
-  padding: 1px;
-  margin: 1px;
+  padding: $fluent-colorview-colorview-color-preview-container-padding;
+  margin: $fluent-colorview-colorview-color-preview-container-margin;
   margin-top: 0;
   background-color: $colorbox-palette-cell-bg;
   box-shadow: 0 0 0 1px $colorview-border-color;

@@ -19,7 +19,7 @@
 
 .dx-datebox-wrapper {
   .dx-popup-title {
-    min-height: 10px;
+    min-height: $fluent-datebox-popup-title-min-height;
     border-bottom: none;
     background: none;
   }
@@ -51,7 +51,7 @@
 
 .dx-device-phone .dx-datebox-wrapper-rollers {
   .dx-popup-content {
-    padding: 10px;
+    padding: $fluent-datebox-content-padding;
   }
 }
 
@@ -89,7 +89,7 @@
   }
 
   .dx-datebox-container-cell {
-    margin-top: -1px;
+    margin-top: $fluent-datebox-datebox-container-cell-margin-top;
     margin-right: $fluent-datebox-overlay-item-margin;
   }
 }
@@ -105,7 +105,7 @@
     .dx-popup-bottom {
       .dx-toolbar-button + .dx-toolbar-button {
         .dx-button {
-          margin-right: 5px;
+          margin-right: $fluent-datebox-button-margin-right;
           margin-left: 0;
         }
       }

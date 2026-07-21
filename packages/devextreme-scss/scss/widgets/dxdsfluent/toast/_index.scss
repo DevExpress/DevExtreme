@@ -14,7 +14,7 @@
 
 .dx-toast-content {
   font-size: $fluent-base-font-size;
-  font-weight: 400;
+  font-weight: $toast-content-font-weight;
   padding: $fluent-toast-content-vertical-padding $fluent-toast-content-horizontal-padding;
   border-radius: $toast-border-radius;
   box-shadow: $toast-shadow;

@@ -7,10 +7,6 @@
 
 // adduse
 @use "../overlay";
-
-$fluent-fa-button-label-offset: 16px;
-$fluent-fa-button-label-padding: 4px 8px;
-
 @include dx-fa-button-mixin(
   $fluent-main-fa-button-size,
   $fluent-fa-button-size,
@@ -35,7 +31,7 @@ $fluent-fa-button-label-padding: 4px 8px;
       .dx-fa-button-label {
         padding: $fluent-main-fa-button-label-padding;
         font-size: $fluent-base-font-size;
-        font-weight: 500;
+        font-weight: $fluent-fa-button-label-font-weight;
       }
     }
 

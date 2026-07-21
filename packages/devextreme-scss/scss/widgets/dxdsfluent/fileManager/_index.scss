@@ -46,7 +46,7 @@
   }
 
   .dx-filemanager-toolbar {
-    padding: 0 10px;
+    padding: $fluent-filemanager-toolbar-padding;
     background: $filemanager-bg;
     min-height: $filemanager-toolbar-height;
 
@@ -95,7 +95,7 @@
   }
 
   .dx-filemanager-fileuploader-dropzone-placeholder {
-    border: 2px solid;
+    border: $fluent-filemanager-fileuploader-dropzone-placeholder-border;
     border-color: $filemanager-accent;
   }
 
@@ -145,7 +145,7 @@
     }
 
     &.dx-state-focused {
-      border: 1px solid;
+      border: $fluent-filemanager-state-focused-border;
       border-color: $filemanager-file-item-focused-border;
     }
 
@@ -249,7 +249,7 @@
     height: $filemanager-file-actions-button-size;
 
     .dx-button-content {
-      padding: $filemanager-file-actions-button-top-bottom-padding 6px;
+      padding: $fluent-filemanager-button-content-padding;
     }
   }
 }

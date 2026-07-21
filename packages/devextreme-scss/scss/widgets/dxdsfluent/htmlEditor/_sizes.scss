@@ -42,3 +42,12 @@ $fluent-aidialog-border-radius: null !default;
 }
 
 $fluent-htmleditor-toolbar-padding: $fluent-html-editor-horizontal-padding !default;
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-htmleditor-toolbar-wrapper-top: ds.$spacing-10 !default;
+$fluent-htmleditor-toolbar-wrapper-bottom: ds.$spacing-10 !default;
+$fluent-htmleditor-toolbar-wrapper-left: ds.$spacing-10 !default;
+$fluent-htmleditor-toolbar-wrapper-right: ds.$spacing-10 !default;
+$fluent-htmleditor-content-margin: ds.$spacing-10 !default;
+$fluent-htmleditor-input-wrapper-gap: ds.$spacing-80 !default;
+$fluent-htmleditor-state-active-border-bottom: ds.$border-width-20 solid !default;

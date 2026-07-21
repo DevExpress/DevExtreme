@@ -24,3 +24,8 @@ $fluent-toolbar-section-padding: null !default;
 :root {
   --dx-toolbar-height: #{$fluent-toolbar-height};
 }
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-toolbar-button-text-font-weight: ds.$font-weight-base-default !default;
+$fluent-toolbar-label-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)
+$fluent-toolbar-menu-section-border-bottom: ds.$border-width-10 solid !default;

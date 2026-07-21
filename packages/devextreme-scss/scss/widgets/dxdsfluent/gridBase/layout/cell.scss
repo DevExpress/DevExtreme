@@ -108,22 +108,22 @@
 
   // (0,3,1)
   .dx-#{$widget-name}-rowsview .dx-row-removed.dx-row-lines > td {
-    border-top: 1px solid;
+    border-top: $fluent-grid-base-row-lines-border-top;
     border-top-color: $datagrid-cell-removed-border-color;
-    border-bottom: 1px solid;
+    border-bottom: $fluent-grid-base-row-lines-border-bottom;
     border-bottom-color: $datagrid-cell-removed-border-color;
   }
 
   // (0,3,1)
   .dx-#{$widget-name}-rowsview .dx-row-removed:not(.dx-row-lines) > td {
-    border-top: 1px solid;
+    border-top: $fluent-grid-base-row-lines-border-top;
     border-top-color: $datagrid-hover-bg;
   }
 
   // (0,3,1) - (0,4,2)
   .dx-#{$widget-name}-rowsview .dx-row-focused:not(.dx-row-lines) > td,
   .dx-#{$widget-name}-rowsview .dx-row-focused:not(.dx-row-lines) > tr:first-child > td {
-    border-bottom: 1px solid;
+    border-bottom: $fluent-grid-base-row-lines-border-bottom;
     border-bottom-color: $datagrid-row-focused-bg;
   }
 
@@ -160,9 +160,9 @@
   // (0,5,1) - (0,6,1)
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):not(.dx-row-lines) > td,
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover:not(.dx-row-lines) > td {
-    border-bottom: 1px solid;
+    border-bottom: $fluent-grid-base-row-lines-border-bottom;
     border-bottom-color: $datagrid-selection-bg;
-    border-top: 1px solid;
+    border-top: $fluent-grid-base-row-lines-border-top;
     border-top-color: $datagrid-selection-bg;
   }
 
@@ -181,7 +181,7 @@
     .dx-#{$widget-name}-column-no-border,
     .dx-pointer-events-none
   ) {
-    border-left: 1px solid;
+    border-left: $fluent-grid-base-row-lines-border-left;
     border-left-color: $datagrid-border-color;
   }
 
@@ -218,7 +218,7 @@
     .dx-#{$widget-name}-column-no-border,
     .dx-pointer-events-none
   ) {
-    border-right: 1px solid;
+    border-right: $fluent-grid-base-pointer-events-none-border-right;
     border-right-color: $datagrid-border-color;
   }
 
@@ -320,8 +320,8 @@
 
   // (0,6,1)
   .dx-#{$widget-name}-headers.dx-header-multi-row .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row.dx-header-row > td {
-    padding-top: 12px;
-    padding-bottom: 12px;
+    padding-top: $fluent-grid-base-header-row-padding-top;
+    padding-bottom: $fluent-grid-base-header-row-padding-bottom;
   }
 
   // (0,6,1)
@@ -348,7 +348,7 @@
   .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending) .dx-#{$widget-name}-group-space,
   .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-command-expand,
   .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all) .dx-#{$widget-name}-group-space {
-    padding: 0 4px 0 8px;
+    padding: $fluent-grid-base-validation-pending-padding;
   }
 
   // (0,8,1) - (0,10,1)

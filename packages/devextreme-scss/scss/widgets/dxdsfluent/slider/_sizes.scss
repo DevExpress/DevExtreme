@@ -34,3 +34,10 @@ $fluent-slider-handle-inner-size: null !default;
   $fluent-slider-tooltip-width: ds.$spacing-280 !default;
   $fluent-slider-top-tooltip-margin: ds.$spacing-minus-20 !default;
 }
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-slider-handle-border-width: ds.$border-width-10 !default;
+$fluent-slider-handle-inner-border-width: ds.$border-width-30 !default;
+$fluent-slider-tooltip-position-top-padding-top: ds.$spacing-60 !default;
+$fluent-slider-label-bottom: -18px !default; // dx-offscale: -18px
+$fluent-slider-label-top: -15px !default; // dx-offscale: -15px

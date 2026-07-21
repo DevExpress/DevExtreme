@@ -18,7 +18,7 @@
   .dx-texteditor {
     .dx-texteditor-input {
       padding-inline-end: 0;
-      padding-inline-start: 12px;
+      padding-inline-start: $fluent-timeview-input-padding-inline-start;
     }
 
     .dx-texteditor-container {
@@ -30,7 +30,7 @@
 }
 
 .dx-timeview-clock {
-  margin-bottom: 10px;
+  margin-bottom: $fluent-timeview-timeview-clock-margin-bottom;
 }
 
 .dx-timeview-format12 {
@@ -50,6 +50,6 @@
   width: $fluent-timeview-format12-width;
 
   &.dx-numberbox-spin-touch-friendly {
-    width: 110px;
+    width: $fluent-timeview-numberbox-spin-touch-friendly-width;
   }
 }

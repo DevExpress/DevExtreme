@@ -13,3 +13,7 @@ $fluent-menu-vertical-padding: null !default;
   $fluent-menu-vertical-padding: ds.$spacing-40 !default;
 }
 
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-menu-treeview-border: ds.$border-width-10 solid !default;
+$fluent-menu-treeview-node-border-bottom: ds.$border-width-10 solid !default;

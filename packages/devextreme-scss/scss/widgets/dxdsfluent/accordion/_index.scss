@@ -64,7 +64,7 @@
 .dx-accordion-item-title-caption {
   color: $accordion-title-color;
   font-size: $fluent-accordion-title-font-size;
-  font-weight: 500;
+  font-weight: $fluent-accordion-title-font-weight;
 
   .dx-icon {
     @include dx-icon-margin($accordion-title-icon-margin);

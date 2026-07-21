@@ -32,3 +32,6 @@ $fluent-button-box-shadow-size: 0 ds.$spacing-10 ds.$spacing-30 !default;
 :root {
   --dx-button-padding-inline: #{$fluent-button-horizontal-padding};
 }
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-button-border-width: ds.$border-width-10 !default;

@@ -15,8 +15,6 @@
 // adduse
 @use "../badge";
 
-$fluent-list-item-border-width: 1px;
-$fluent-list-border-width: 1px;
 $fluent-list-border: $fluent-list-border-width solid;
 $fluent-list-item-border: $fluent-list-item-border-width solid;
 
@@ -151,7 +149,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
     }
 
     .dx-empty-message {
-      min-height: 2em;
+      min-height: $fluent-list-empty-message-min-height;
     }
 
     &.dx-list-select-decorator-enabled {
@@ -288,7 +286,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
   }
 
   .dx-list-group-header {
-    font-weight: 500;
+    font-weight: $fluent-list-group-header-font-weight;
     padding: $fluent-list-group-header-vertical-padding $item-horizontal-padding;
     background: $list-group-header-bg;
     color: $list-expanded-group-color;
@@ -318,7 +316,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
   .dx-list-items {
     display: flex;
     flex-direction: column;
-    row-gap: 2px;
+    row-gap: $fluent-list-items-row-gap;
 
     &:not(:first-of-type) {
       .dx-list-item {
@@ -365,7 +363,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
         &.dx-state-hover {
           color: $list-item-ghost-color;
           background: $list-item-ghost-bg;
-          border: 1px solid;
+          border: $fluent-list-state-hover-border;
           border-color: $list-item-ghost-border-color;
         }
       }
@@ -437,7 +435,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
       bottom: 0;
       left: 0;
       right: 0;
-      height: 1px;
+      height: $fluent-list-select-all-height;
       background-color: $base-select-all-separator-color;
     }
   }
@@ -472,7 +470,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
   }
 
   .dx-list-slide-menu-button {
-    bottom: 1px;
+    bottom: $fluent-list-slide-menu-button-bottom;
   }
 
   .dx-list-slide-menu-button-delete {
@@ -488,7 +486,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
   }
 
   .dx-list-slide-menu-button-menu {
-    border: 1px solid transparent;
+    border: $fluent-list-slide-menu-button-menu-border;
     color: $list-menu-button-default-color;
     background-color: $list-menu-button-default-bg;
   }
@@ -508,7 +506,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
 
   .dx-list-context-menucontent {
     background-color: $list-holdmenu-bg;
-    border: 1px solid;
+    border: $fluent-list-context-menucontent-border;
     border-color: $list-holdmenu-border-color;
     border-radius: $base-border-radius;
     box-shadow: $list-holdmenu-shadow-color 0 2px 7.2px 0;
@@ -523,7 +521,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
     &.dx-list-item,
     .dx-list-item {
       background-color: transparent;
-      opacity: 0.6;
+      opacity: $list-item-disabled-opacity;
     }
   }
 }

@@ -44,7 +44,7 @@
 }
 
 .dx-toolbar-menu-section {
-  border-bottom: 1px solid;
+  border-bottom: $fluent-toolbar-menu-section-border-bottom;
   border-bottom-color: $toolbar-separator-color;
 
   .dx-list-item-content,
@@ -85,7 +85,7 @@
 
     .dx-button-text {
       text-transform: none;
-      font-weight: 400;
+      font-weight: $fluent-toolbar-button-text-font-weight;
     }
 
     .dx-button-content {

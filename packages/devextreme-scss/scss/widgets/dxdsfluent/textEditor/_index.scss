@@ -16,8 +16,6 @@
 
 $fluent-base-standard-texteditor-input-horizontal-padding: 0;
 $fluent-texteditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 2 * #{$fluent-invalid-badge-horizontal-padding});
-$fluent-editor-custom-button-margin: 6px;
-$fluent-editor-border-width: 1px;
 
 @mixin texteditor-outlined-styling() {
   background-color: $texteditor-outlined-bg;
@@ -31,9 +29,9 @@ $fluent-editor-border-width: 1px;
     box-sizing: border-box;
     content: "";
     position: absolute;
-    left: -1px;
-    bottom: -1px;
-    right: -1px;
+    left: $fluent-texteditor-before-left;
+    bottom: $fluent-texteditor-before-bottom;
+    right: $fluent-texteditor-before-right;
     height: $texteditor-input-border-radius;
     width: calc(100% + 2 * $fluent-editor-border-width);
     border-bottom-left-radius: $texteditor-input-border-radius;
@@ -50,7 +48,7 @@ $fluent-editor-border-width: 1px;
   &.dx-texteditor-with-floating-label {
     .dx-texteditor-label {
       width: calc(100% + 2 * $fluent-editor-border-width);
-      inset: -1px;
+      inset: $fluent-texteditor-label-inset;
     }
 
     .dx-datebox {
@@ -116,9 +114,9 @@ $fluent-editor-border-width: 1px;
   }
 
   &::before {
-    left: -1px;
-    bottom: -1px;
-    right: -1px;
+    left: $fluent-texteditor-before-left;
+    bottom: $fluent-texteditor-before-bottom;
+    right: $fluent-texteditor-before-right;
     height: $texteditor-input-border-radius;
     width: calc(100% + 2 * $fluent-editor-border-width);
     border-bottom-left-radius: $texteditor-input-border-radius;
@@ -157,7 +155,7 @@ $fluent-editor-border-width: 1px;
   border-radius: 0;
 
   &::after {
-    border-bottom-width: 1px;
+    border-bottom-width: $fluent-texteditor-state-focused-border-bottom-width;
     border-bottom-style: solid;
     border-bottom-color: $texteditor-border-bottom-color;
   }
@@ -330,7 +328,7 @@ $fluent-editor-border-width: 1px;
   &.dx-state-focused,
   &.dx-state-active {
     &::before {
-      border-bottom-width: 2px;
+      border-bottom-width: $fluent-texteditor-state-active-border-bottom-width;
       border-bottom-style: solid;
       border-bottom-color: $texteditor-indicator-border-color;
       transform: scale(1);
@@ -451,7 +449,7 @@ $fluent-editor-border-width: 1px;
   &.dx-state-focused,
   &.dx-state-active {
     &::before {
-      border-bottom: 2px solid;
+      border-bottom: $fluent-texteditor-state-active-border-bottom;
       border-bottom-color: $texteditor-invalid-focused-border-color;
     }
   }
@@ -486,7 +484,7 @@ $fluent-editor-border-width: 1px;
       width: auto;
       max-width: 100%;
       display: block;
-      margin-bottom: -1px;
+      margin-bottom: $fluent-texteditor-label-margin-bottom;
     }
   }
 

@@ -38,7 +38,7 @@
   width: $fluent-slider-handle-size;
   height: $fluent-slider-handle-size;
   border-radius: $fluent-slider-radius;
-  border-width: 1px;
+  border-width: $fluent-slider-handle-border-width;
   border-style: solid;
   border-color: $slider-border-color;
   background-color: $slider-element-bg;
@@ -50,7 +50,7 @@
     background: $slider-accent-color;
     content: "";
     border-radius: $fluent-slider-radius;
-    border-width: 3px;
+    border-width: $fluent-slider-handle-inner-border-width;
     border-style: solid;
     border-color: $slider-element-bg;
   }
@@ -76,7 +76,7 @@
         color: $fluent-slider-tooltip-color;
 
         .dx-slider-tooltip-position-top & {
-          padding-top: 6px;
+          padding-top: $fluent-slider-tooltip-position-top-padding-top;
         }
       }
 
@@ -85,7 +85,7 @@
           padding-top: calc((#{$fluent-slider-tooltip-width}) / 2);
 
           .dx-slider-tooltip-position-top & {
-            padding-top: 6px;
+            padding-top: $fluent-slider-tooltip-position-top-padding-top;
             padding-bottom: calc((#{$fluent-slider-tooltip-width}) / 2);
           }
         }
@@ -104,13 +104,13 @@
 
 .dx-slider-label-position-bottom {
   .dx-slider-label {
-    bottom: -18px;
+    bottom: $fluent-slider-label-bottom;
   }
 }
 
 .dx-slider-label-position-top {
   .dx-slider-label {
-    top: -15px;
+    top: $fluent-slider-label-top;
   }
 }
 

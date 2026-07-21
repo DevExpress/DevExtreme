@@ -39,7 +39,7 @@ $badge-invalid-bg: $common-invalid-color;
   @include badge-settings();
 
   font-size: $fluent-base-font-size;
-  font-weight: 500;
+  font-weight: $common-invalid-badge-font-weight;
   background-color: $badge-invalid-bg;
   color: $common-inverted-text-color;
   content: '!';
@@ -68,17 +68,17 @@ $badge-invalid-bg: $common-invalid-color;
   &.dx-popup-wrapper .dx-overlay-content {
     box-shadow: $fluent-base-dropdown-widgets-shadow;
     border-top-width: 0;
-    border-bottom-width: 1px;
+    border-bottom-width: $common-overlay-content-border-bottom-width;
 
     &.dx-dropdowneditor-overlay-flipped {
-      border-top-width: 1px;
+      border-top-width: $common-dropdowneditor-overlay-flipped-border-top-width;
       border-bottom-width: 0;
     }
   }
 
   .dx-popup-content {
     height: 100%;
-    padding: 1px;
+    padding: $common-content-padding;
   }
 
   .dx-list {

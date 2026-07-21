@@ -1,4 +1,8 @@
+@use "../../../_design-system/variables/ds" as ds;
 @use "../sizes" as *;
 
 // adduse
 
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-buttongroup-button-mode-contained-border-inline-end-width: ds.$border-width-10 !default;

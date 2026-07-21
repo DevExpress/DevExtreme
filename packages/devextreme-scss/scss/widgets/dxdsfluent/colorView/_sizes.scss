@@ -21,3 +21,8 @@ $fluent-colorview-container-textbox-margin: 0 0 0 ds.$spacing-100 !default;
 
 $fluent-colorview-controls-container-width: 90px !default; // dx-offscale: 90px
 $fluent-colorview-controls-container-margin: 27px !default; // dx-offscale: 27px
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-colorview-colorview-container-margin-bottom: ds.$spacing-100 !default;
+$fluent-colorview-colorview-color-preview-container-padding: ds.$spacing-10 !default;
+$fluent-colorview-colorview-color-preview-container-margin: ds.$spacing-10 !default;

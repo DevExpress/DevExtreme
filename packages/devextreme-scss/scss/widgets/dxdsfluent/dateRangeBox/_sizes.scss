@@ -12,3 +12,9 @@ $fluent-daterangebox-active-bar-horizontal-margin: null !default;
 @else if $size == "compact" {
   $fluent-daterangebox-active-bar-horizontal-margin: ds.$spacing-80 !default;
 }
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-daterangebox-custom-button-margin: ds.$spacing-60 !default;
+$fluent-daterangebox-editor-filled-border-bottom-width: ds.$border-width-10 !default;
+$fluent-daterangebox-state-hover-border-bottom-width: ds.$border-width-10 !default;
+$fluent-daterangebox-invalid-border-bottom-width: ds.$border-width-10 !default;

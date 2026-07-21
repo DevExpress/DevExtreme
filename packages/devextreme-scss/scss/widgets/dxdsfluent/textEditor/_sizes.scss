@@ -70,3 +70,15 @@ $fluent-filled-texteditor-input-padding:
 
 $fluent-filled-texteditor-input-button-horizontal-padding: calc(#{$fluent-filled-texteditor-input-horizontal-padding} - #{ds.$spacing-40}) !default;
 $texteditor-spin-button-horizontal-padding: calc((#{$fluent-filled-texteditor-input-horizontal-padding}) / 2) !default;
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-editor-border-width: ds.$border-width-10 !default;
+$fluent-texteditor-before-left: -1px !default; // dx-offscale: -1px
+$fluent-texteditor-before-bottom: -1px !default; // dx-offscale: -1px
+$fluent-texteditor-before-right: -1px !default; // dx-offscale: -1px
+$fluent-texteditor-label-inset: -1px !default; // dx-offscale: -1px
+$fluent-texteditor-label-margin-bottom: -1px !default; // dx-offscale: -1px
+$fluent-texteditor-state-active-border-bottom: ds.$border-width-20 solid !default;
+$fluent-editor-custom-button-margin: ds.$spacing-60 !default;
+$fluent-texteditor-state-focused-border-bottom-width: ds.$border-width-10 !default;
+$fluent-texteditor-state-active-border-bottom-width: ds.$border-width-20 !default;

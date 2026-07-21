@@ -13,32 +13,32 @@
   @include dx-base-typography();
 
   h1 {
-    font-weight: 600;
+    font-weight: $fluent-h1-font-weight;
     font-size: $fluent-h1-font-size;
   }
 
   h2 {
-    font-weight: 600;
+    font-weight: $fluent-h2-font-weight;
     font-size: $fluent-h2-font-size;
   }
 
   h3 {
-    font-weight: 600;
+    font-weight: $fluent-h3-font-weight;
     font-size: $fluent-h3-font-size;
   }
 
   h4 {
-    font-weight: 600;
+    font-weight: $fluent-h4-font-weight;
     font-size: $fluent-h4-font-size;
   }
 
   h5 {
-    font-weight: 700;
+    font-weight: $fluent-h5-font-weight;
     font-size: $fluent-h5-font-size;
   }
 
   h6 {
-    font-weight: 500;
+    font-weight: $fluent-h6-font-weight;
     font-size: $fluent-h6-font-size;
   }
 

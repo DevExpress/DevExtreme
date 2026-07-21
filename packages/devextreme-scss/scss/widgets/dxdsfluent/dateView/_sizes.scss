@@ -5,3 +5,14 @@
 
 $fluent-dateview-roller-height: 182px !default; // dx-offscale: 182px
 $fluent-dateview-roller-item-height: ds.$spacing-400 !default;
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-dateview-roller-min-width: 4em !default; // dx-relative: scales with the parent font-size
+$fluent-dateview-roller-year-min-width: 4.85em !default; // dx-relative: scales with the parent font-size
+$fluent-dateview-roller-month-min-width: 12em !default; // dx-relative: scales with the parent font-size
+$fluent-dateview-hours-colon-font-size: 2.2em !default; // dx-relative: scales with the parent font-size
+$fluent-dateview-item-font-size: 1.3em !default; // dx-relative: scales with the parent font-size
+$fluent-dateview-item-selected-font-size: 1.8em !default; // dx-relative: scales with the parent font-size
+$fluent-dateview-phone-roller-month-min-width: 4em !default; // dx-relative: scales with the parent font-size
+$fluent-dateview-phone-item-font-size: 1.1em !default; // dx-relative: scales with the parent font-size
+$fluent-dateview-phone-item-selected-font-size: 1.4em !default; // dx-relative: scales with the parent font-size

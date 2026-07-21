@@ -73,3 +73,29 @@ $diagram-toolbox-input-margin: ds.$spacing-20 !default;
   $diagram-medium-editor-width: ds.$spacing-1200 !default;
   $diagram-large-editor-width: 220px !default; // dx-offscale: 220px
 }
+
+// Values hoisted from style-file literals (tokenized)
+$diagram-popup-close-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
+$diagram-popup-close-icon-line-height: ds.$line-height-120 !default; // dx-icon-glyph-size: text roles not applicable
+$diagram-toolbar-colorbutton-border-width: ds.$border-width-30 !default;
+$diagram-floating-toolbar-container-padding: ds.$spacing-40 !default;
+$diagram-button-margin: ds.$spacing-20 !default;
+$diagram-item-padding: 0 ds.$spacing-40 0 0 !default;
+$diagram-closebutton-margin: ds.$spacing-10 0 0 !default;
+$diagram-icon-width: ds.$spacing-140 !default;
+$diagram-icon-height: ds.$spacing-140 !default;
+$diagram-icon-padding: ds.$spacing-20 !default;
+$diagram-title-padding: ds.$spacing-80 ds.$spacing-80 0 0 !default;
+$diagram-icon-margin-left: ds.$spacing-120 !default;
+$diagram-icon-margin-right: ds.$spacing-120 !default;
+$diagram-item-text-padding-left: ds.$spacing-40 !default;
+$diagram-separator-width: ds.$spacing-10 !default;
+$diagram-toolbar-wrapper-border-bottom: ds.$border-width-10 solid !default;
+$diagram-toolbox-input-container-border-bottom: ds.$border-width-10 solid transparent !default;
+$diagram-toolbox-input-container-border-top: ds.$border-width-10 solid transparent !default;
+$diagram-accordion-item-border-bottom: ds.$border-width-10 solid transparent !default;
+$diagram-toolbox-title-size: ds.$spacing-180 !default;
+$diagram-button-min-width: ds.$spacing-240 !default;
+$diagram-button-min-height: ds.$spacing-240 !default;
+$diagram-accordion-item-title-min-height: ds.$spacing-320 !default;
+$diagram-popup-title-toolbar-font-size: 0.8em !default; // dx-relative: scales with the parent font-size

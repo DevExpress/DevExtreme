@@ -9,17 +9,16 @@
 @use "../scrollable";
 @use "../../base/scrollView";
 
-$scrollview-loading-indicator-size: 42px;
 
 .dx-scrollview-scrollbottom-text,
 .dx-scrollview-pull-down-text {
-  margin-left: 10px;
+  margin-left: $fluent-scrollview-pull-down-text-margin-left;
   top: calc((50px - #{$fluent-base-font-size}) / 2);
   display: inline-block;
 
   .dx-rtl & {
     margin-left: 0;
-    margin-right: 10px;
+    margin-right: $fluent-scrollview-rtl-margin-right;
   }
 }
 
@@ -38,8 +37,8 @@ $scrollview-loading-indicator-size: 42px;
 
 .dx-scrollview-scrollbottom-loading {
   .dx-scrollview-scrollbottom-image {
-    width: 24px;
-    height: 24px;
+    width: $fluent-scrollview-scrollbottom-image-width;
+    height: $fluent-scrollview-scrollbottom-image-height;
   }
 }
 
@@ -58,11 +57,11 @@ $scrollview-loading-indicator-size: 42px;
 
 
   > .dx-loadindicator {
-    height: 24px;
-    width: 24px;
+    height: $fluent-scrollview-scrollbottom-image-height;
+    width: $fluent-scrollview-scrollbottom-image-width;
 
     > .dx-loadindicator-wrapper {
-      font-size: 24px;
+      font-size: $fluent-scrollview-load-indicator-font-size;
     }
   }
 }

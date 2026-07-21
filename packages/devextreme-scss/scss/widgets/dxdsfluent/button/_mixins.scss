@@ -181,7 +181,7 @@
   $button-selected-bg,
   $button-selected-color: $button-color-active,
 ) {
-  border-width: 1px;
+  border-width: $fluent-button-border-width;
   border-style: solid;
   border-color: $border-color;
 

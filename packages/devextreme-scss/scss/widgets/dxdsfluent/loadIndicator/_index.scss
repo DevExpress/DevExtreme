@@ -31,7 +31,7 @@
   position: relative;
   height: 100%;
   border-color: $load-indicator-segment-bg-color;
-  border-width: 0.12em;
+  border-width: $load-indicator-segment-border-width;
   border-style: solid;
   border-bottom-color: transparent;
   animation: none;

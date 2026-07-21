@@ -36,3 +36,8 @@ $diagram-properties-panel-icon-color: $base-inverted-text-color !default;
 // Canvas = deeper neutral surface
 $diagram-canvas-bg: ds.$color-surface-neutral-subdued-rest !default;
 $diagram-shadow: 0 1px 8px ds.$color-shadow-key !default;
+
+// Values hoisted from style-file literals (tokenized)
+$diagram-selection-mark-color: ds.$color-border-neutral-accessible-rest !default;
+$diagram-selection-fill-color: rgb(from #{ds.$color-border-neutral-accessible-rest} r g b / 0.02) !default;
+$diagram-image-icon-muted-opacity: ds.$opacity-50 !default;

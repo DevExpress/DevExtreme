@@ -20,3 +20,6 @@ $fluent-toast-content-horizontal-padding: ds.$spacing-120 !default;
   $fluent-toast-height: ds.$spacing-360 !default;
   $fluent-toast-item-gap: ds.$spacing-80 !default;
 }
+
+// Values hoisted from style-file literals (tokenized)
+$toast-content-font-weight: ds.$font-weight-base-default !default;

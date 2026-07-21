@@ -18,3 +18,6 @@ $fluent-colorbox-preview-icon-size: $fluent-base-icon-size !default;
 }
 
 $fluent-colorbox-preview-width: calc(#{$fluent-colorbox-preview-padding} * 2 + #{$fluent-colorbox-preview-icon-size}) !default;
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-colorbox-color-result-preview-border: ds.$border-width-10 solid !default;

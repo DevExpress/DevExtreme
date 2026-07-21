@@ -43,10 +43,10 @@
   &.dx-state-disabled {
     .dx-htmleditor-toolbar-wrapper::before {
       position: absolute;
-      top: 1px;
-      bottom: 1px;
-      left: 1px;
-      right: 1px;
+      top: $fluent-htmleditor-toolbar-wrapper-top;
+      bottom: $fluent-htmleditor-toolbar-wrapper-bottom;
+      left: $fluent-htmleditor-toolbar-wrapper-left;
+      right: $fluent-htmleditor-toolbar-wrapper-right;
       z-index: 2;
       background-color: $htmleditor-cover-bg;
       content: '';
@@ -57,7 +57,7 @@
   &.dx-state-focused,
   &.dx-state-active {
     &::before {
-      border-bottom: 2px solid;
+      border-bottom: $fluent-htmleditor-state-active-border-bottom;
       border-bottom-color: $texteditor-indicator-border-color;
       transform: scale(1);
       transition-property: transform;
@@ -70,7 +70,7 @@
     @include texteditor-outlined-styling();
 
     .dx-htmleditor-content {
-      margin: 1px;
+      margin: $fluent-htmleditor-content-margin;
       margin-inline-start: 0;
     }
 
@@ -116,7 +116,7 @@
   &.dx-state-focused,
   &.dx-state-active {
     &::before {
-      border-bottom: 2px solid;
+      border-bottom: $fluent-htmleditor-state-active-border-bottom;
       border-bottom-color: $texteditor-invalid-focused-border-color;
     }
   }
@@ -249,7 +249,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: $fluent-htmleditor-input-wrapper-gap;
     padding: $fluent-html-editor-add-image-dialog-fileuploader-padding;
     border-width: $fluent-html-editor-fileuploader-input-wrapper-border-size;
     border-style: dashed;

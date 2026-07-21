@@ -46,7 +46,7 @@
     }
 
     .dx-navigate-button {
-      width: 9px;
+      width: $fluent-pagination-navigate-button-width;
       height: $fluent-pagination-navbutton-height;
       padding: $fluent-pagination-navbutton-paddings;
     }
@@ -73,7 +73,7 @@
       background-color: $pagination-page-hovered-bg;
     }
 
-    border-radius: 20px;
+    border-radius: $fluent-pagination-page-border-radius;
   }
 
   .dx-page-sizes .dx-page-size {
@@ -89,7 +89,7 @@
   .dx-pages,
   .dx-page-sizes {
     .dx-selection {
-      font-weight: 500;
+      font-weight: $fluent-pagination-selected-font-weight;
       background-color: $pagination-page-selected-bg;
       color: $pagination-page-selected-color;
     }

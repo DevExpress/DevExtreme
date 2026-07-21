@@ -25,3 +25,8 @@ $fluent-pagination-light-pageindex-min-width: null !default;
   $fluent-pagination-light-pagesizes-min-width: 42px !default; // dx-offscale: 42px
   $fluent-pagination-light-pageindex-min-width: 27px !default; // dx-offscale: 27px
 }
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-pagination-selected-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)
+$fluent-pagination-page-border-radius: 20px !default; // dx-offscale: 20px (pill; candidate: ds.$border-radius-full)
+$fluent-pagination-navigate-button-width: ds.$spacing-90 !default;

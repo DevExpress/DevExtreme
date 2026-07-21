@@ -64,3 +64,11 @@ $fluent-h6-font-size: null !default;
   --dx-font-size-xs: #{$fluent-xs-font-size};
 }
 
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-h1-font-weight: ds.$font-weight-headline-default !default;
+$fluent-h2-font-weight: ds.$font-weight-headline-default !default;
+$fluent-h3-font-weight: ds.$font-weight-headline-default !default;
+$fluent-h4-font-weight: ds.$font-weight-headline-default !default;
+$fluent-h5-font-weight: ds.$font-weight-headline-strong !default;
+$fluent-h6-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)

@@ -1,4 +1,13 @@
+@use "../../../_design-system/variables/ds" as ds;
 @use "../sizes" as *;
 
 // adduse
 
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-scrollview-load-indicator-font-size: ds.$font-size-240 !default; // dx-icon-glyph-size: text roles not applicable
+$fluent-scrollview-pull-down-text-margin-left: ds.$spacing-100 !default;
+$fluent-scrollview-rtl-margin-right: ds.$spacing-100 !default;
+$fluent-scrollview-scrollbottom-image-width: ds.$spacing-240 !default;
+$fluent-scrollview-scrollbottom-image-height: ds.$spacing-240 !default;
+$scrollview-loading-indicator-size: 42px !default; // dx-offscale: 42px

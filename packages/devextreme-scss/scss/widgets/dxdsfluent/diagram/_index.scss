@@ -17,9 +17,6 @@
 // adduse
 
 $fluent-diagram-toolbar-icon-size: $fluent-base-icon-size;
-$diagram-toolbar-colorbutton-border-width: 3px;
-
-$diagram-toolbox-title-size: 18px;
 
 
 .dx-diagram {
@@ -73,13 +70,13 @@ $diagram-toolbox-title-size: 18px;
 
         ellipse {
           stroke: $diagram-image-icon-base-color;
-          stroke-opacity: 0.5;
+          stroke-opacity: $diagram-image-icon-muted-opacity;
         }
       }
 
       .dxdi-user .dxdi-background {
         fill: $diagram-image-icon-base-color;
-        opacity: 0.5;
+        opacity: $diagram-image-icon-muted-opacity;
       }
 
       .dxdi-warning {
@@ -93,36 +90,36 @@ $diagram-toolbox-title-size: 18px;
   .dxdi-control:not(.focused) .dxdi-canvas {
     .selection-mark,
     .geometry-mark {
-      stroke: #666;
+      stroke: $diagram-selection-mark-color;
     }
 
     .item-selection-rect,
     .items-selection-rect {
       fill: transparent;
-      stroke: #666;
+      stroke: $diagram-selection-mark-color;
     }
 
     .items-selection-rect {
-      fill: rgba(144, 144, 144, 0.02);
+      fill: $diagram-selection-fill-color;
     }
 
     .item-multi-selection-rect {
-      fill: rgba(144, 144, 144, 0.02);
-      stroke: #666;
+      fill: $diagram-selection-fill-color;
+      stroke: $diagram-selection-mark-color;
     }
 
     .connector-selection,
     .connector-multi-selection {
-      stroke: #666;
+      stroke: $diagram-selection-mark-color;
     }
 
     .connector-point-mark,
     .connector-side-mark {
-      stroke: #666;
+      stroke: $diagram-selection-mark-color;
     }
 
     .connector-side-mark {
-      fill: #666;
+      fill: $diagram-selection-mark-color;
     }
   }
 
@@ -133,7 +130,7 @@ $diagram-toolbox-title-size: 18px;
   // stylelint-enable selector-class-pattern
 
   .dx-diagram-toolbar-wrapper {
-    border-bottom: 1px solid;
+    border-bottom: $diagram-toolbar-wrapper-border-bottom;
     border-bottom-color: $diagram-toolbar-border-color;
   }
 
@@ -152,7 +149,7 @@ $diagram-toolbox-title-size: 18px;
   background: $overlay-content-bg;
   box-shadow: $diagram-shadow;
   border-radius: $popup-border-radius;
-  padding: 4px;
+  padding: $diagram-floating-toolbar-container-padding;
 
   .dx-toolbar .dx-toolbar-items-container {
     height: $diagram-floating-toolbar-items-height;
@@ -167,9 +164,9 @@ $diagram-toolbox-title-size: 18px;
       .dx-button {
         width: auto;
         height: auto;
-        min-width: 24px;
-        min-height: 24px;
-        margin: 2px;
+        min-width: $diagram-button-min-width;
+        min-height: $diagram-button-min-height;
+        margin: $diagram-button-margin;
 
         .dx-button-content {
           padding: $diagram-floating-toolbar-editor-button-padding;
@@ -196,7 +193,7 @@ $diagram-toolbox-title-size: 18px;
   }
 
   .dx-toolbar-item {
-    padding: 0 4px 0 0;
+    padding: $diagram-item-padding;
   }
 }
 
@@ -209,7 +206,7 @@ $diagram-toolbox-title-size: 18px;
     margin-bottom: 0;
 
     &.dx-toolbar {
-      font-size: 0.8em;
+      font-size: $diagram-popup-title-toolbar-font-size;
       min-height: $diagram-toolbox-title-size;
 
       .dx-toolbar-items-container {
@@ -233,7 +230,7 @@ $diagram-toolbox-title-size: 18px;
   }
 
   .dx-diagram-toolbox-input-container {
-    border-bottom: 1px solid transparent;
+    border-bottom: $diagram-toolbox-input-container-border-bottom;
   }
 
   .dx-diagram-toolbox-input {
@@ -263,15 +260,15 @@ $diagram-toolbox-title-size: 18px;
   .dx-popup-title .dx-closebutton {
     width: $diagram-toolbox-title-size;
     height: $diagram-toolbox-title-size;
-    margin: 1px 0 0;
+    margin: $diagram-closebutton-margin;
   }
 
   .dx-popup-title .dx-closebutton .dx-icon {
-    width: 14px;
-    height: 14px;
-    padding: 2px;
-    font-size: 12px;
-    line-height: 12px;
+    width: $diagram-icon-width;
+    height: $diagram-icon-height;
+    padding: $diagram-icon-padding;
+    font-size: $diagram-popup-close-icon-font-size;
+    line-height: $diagram-popup-close-icon-line-height;
     background-position: 2px 2px;
     background-size: 12px 12px;
   }
@@ -281,7 +278,7 @@ $diagram-toolbox-title-size: 18px;
       padding-top: $diagram-toolbox-mobile-padding;
 
       .dx-diagram-toolbox-input-container {
-        border-top: 1px solid transparent;
+        border-top: $diagram-toolbox-input-container-border-top;
       }
     }
   }
@@ -294,7 +291,7 @@ $diagram-toolbox-title-size: 18px;
     .dx-accordion-item {
       border-left: none;
       border-right: none;
-      border-bottom: 1px solid transparent;
+      border-bottom: $diagram-accordion-item-border-bottom;
       border-top: none;
       box-shadow: none;
     }
@@ -304,7 +301,7 @@ $diagram-toolbox-title-size: 18px;
     }
 
     .dx-item-content.dx-accordion-item-title {
-      min-height: 32px;
+      min-height: $diagram-accordion-item-title-min-height;
     }
 
     .dx-item-content.dx-accordion-item-body {
@@ -352,7 +349,7 @@ $diagram-toolbox-title-size: 18px;
 
   &.dx-diagram-mobile-popup {
     .dx-popup-title {
-      padding: 8px 8px 0 0;
+      padding: $diagram-title-padding;
     }
 
     .dx-tabpanel {
@@ -431,8 +428,8 @@ $diagram-toolbox-title-size: 18px;
     .dx-dropdowneditor-field-before-template-wrapper {
       .dx-diagram-i,
       .dx-icon {
-        margin-left: 12px;
-        margin-right: 12px;
+        margin-left: $diagram-icon-margin-left;
+        margin-right: $diagram-icon-margin-right;
       }
 
       .dx-icon {
@@ -449,7 +446,7 @@ $diagram-toolbox-title-size: 18px;
   }
 
   .dx-menu-no-icons > .dx-menu-item-wrapper > .dx-menu-item > .dx-menu-item-content .dx-menu-item-text {
-    padding-left: 4px;
+    padding-left: $diagram-item-text-padding-left;
   }
 }
 
@@ -459,7 +456,7 @@ $diagram-toolbox-title-size: 18px;
   }
 
   .dx-menu-separator {
-    width: 1px;
+    width: $diagram-separator-width;
     height: calc(#{$fluent-diagram-toolbar-icon-size} + #{$diagram-touchbar-item-padding} + #{$diagram-touchbar-item-padding} + 2px);
     margin: 0;
   }

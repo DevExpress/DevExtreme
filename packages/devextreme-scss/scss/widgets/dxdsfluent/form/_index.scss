@@ -16,7 +16,7 @@
 
 .dx-form-group-with-caption { // stylelint-disable-line no-duplicate-selectors
   & > .dx-form-group-content {
-    border-top: 1px solid;
+    border-top: $fluent-form-group-content-border-top;
     border-top-color: $form-group-border-color;
     padding-bottom: $fluent-form-group-content-bottom-padding;
     padding-top: $fluent-form-group-caption-top-padding;
@@ -93,7 +93,7 @@
 
 .dx-field-item-help-text {
   color: $form-item-help-text-color;
-  padding-top: 2px;
+  padding-top: $fluent-form-field-item-help-text-padding-top;
   font-size: $fluent-form-help-text-font-size;
   font-style: normal;
 

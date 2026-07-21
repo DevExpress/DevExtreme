@@ -42,7 +42,7 @@
   height: $fluent-colorbox-preview-icon-size;
   margin-top: math.div(-$fluent-colorbox-preview-icon-size, 2);
   inset-inline-start: $fluent-colorbox-preview-padding;
-  border: 1px solid;
+  border: $fluent-colorbox-color-result-preview-border;
   border-color: $colorview-border-color;
 
   .dx-icon-colordismiss {

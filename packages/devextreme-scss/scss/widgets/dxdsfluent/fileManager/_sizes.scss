@@ -52,3 +52,9 @@ $filemanager-toolbar-height: $fluent-toolbar-height;
   $filemanager-progress-box-button-close-margin-top: ds.$spacing-50 !default;
 }
 
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-filemanager-toolbar-padding: 0 ds.$spacing-100 !default;
+$fluent-filemanager-button-content-padding: $filemanager-file-actions-button-top-bottom-padding ds.$spacing-60 !default;
+$fluent-filemanager-fileuploader-dropzone-placeholder-border: ds.$border-width-20 solid !default;
+$fluent-filemanager-state-focused-border: ds.$border-width-10 solid !default;

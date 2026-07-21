@@ -79,7 +79,7 @@
   background-color: $menu-popup-bg;
 
   .dx-treeview {
-    border: 1px solid;
+    border: $fluent-menu-treeview-border;
     border-color: $menu-popup-border-color;
     border-radius: $base-border-radius;
 
@@ -102,7 +102,7 @@
   }
 
   .dx-treeview-node-container:first-child > .dx-treeview-node {
-    border-bottom: 1px solid;
+    border-bottom: $fluent-menu-treeview-node-border-bottom;
     border-bottom-color: $menu-popup-border-color
   }
 }

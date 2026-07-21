@@ -24,7 +24,7 @@ $fluent-dateview-roller-padding: calc((#{$fluent-dateview-roller-height} - #{$fl
 }
 
 .dx-dateviewroller {
-  min-width: 4em;
+  min-width: $fluent-dateview-roller-min-width;
   text-align: center;
   display: inline-block;
 
@@ -44,7 +44,7 @@ $fluent-dateview-roller-padding: calc((#{$fluent-dateview-roller-height} - #{$fl
   }
 
   &.dx-dateviewroller-year {
-    min-width: 4.85em;
+    min-width: $fluent-dateview-roller-year-min-width;
   }
 
   &.dx-state-active {
@@ -55,13 +55,13 @@ $fluent-dateview-roller-padding: calc((#{$fluent-dateview-roller-height} - #{$fl
 }
 
 .dx-dateviewroller-month {
-  min-width: 12em;
+  min-width: $fluent-dateview-roller-month-min-width;
 }
 
 .dx-dateviewroller-hours {
   &::after {
     content: ":";
-    font-size: 2.2em;
+    font-size: $fluent-dateview-hours-colon-font-size;
     position: absolute;
     inset-inline-end: -9%;
     font-weight: bold;
@@ -84,12 +84,12 @@ $fluent-dateview-roller-padding: calc((#{$fluent-dateview-roller-height} - #{$fl
   height: $fluent-dateview-roller-item-height;
   line-height: $fluent-dateview-roller-item-height;
   text-align: center;
-  font-size: 1.3em;
+  font-size: $fluent-dateview-item-font-size;
   color: $dateview-color;
 }
 
 .dx-dateview-item-selected {
-  font-size: 1.8em;
+  font-size: $fluent-dateview-item-selected-font-size;
   color: $dateview-accent;
 }
 
@@ -128,14 +128,14 @@ $fluent-dateview-roller-padding: calc((#{$fluent-dateview-roller-height} - #{$fl
   }
 
   .dx-dateviewroller-month {
-    min-width: 4em;
+    min-width: $fluent-dateview-phone-roller-month-min-width;
   }
 
   .dx-dateview-item {
-    font-size: 1.1em;
+    font-size: $fluent-dateview-phone-item-font-size;
   }
 
   .dx-dateview-item-selected {
-    font-size: 1.4em;
+    font-size: $fluent-dateview-phone-item-selected-font-size;
   }
 }

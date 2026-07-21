@@ -6,3 +6,8 @@
 $fluent-timeview-field-min-height: 35px !default; // dx-offscale: 35px
 $fluent-timeview-time-separator-margin: ds.$spacing-50 !default;
 $fluent-timeview-format12-width: ds.$spacing-640 !default;
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-timeview-input-padding-inline-start: ds.$spacing-120 !default;
+$fluent-timeview-timeview-clock-margin-bottom: ds.$spacing-100 !default;
+$fluent-timeview-numberbox-spin-touch-friendly-width: 110px !default; // dx-offscale: 110px

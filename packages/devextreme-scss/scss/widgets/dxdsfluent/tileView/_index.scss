@@ -10,7 +10,7 @@
 .dx-tile {
   color: $tileview-color;
   background-color: $tileview-bg;
-  border: 1px solid;
+  border: $fluent-tileview-tile-border;
   border-color: $tileview-border-color;
   text-align: left;
 

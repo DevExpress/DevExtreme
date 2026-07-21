@@ -8,15 +8,14 @@
 
 // adduse
 
-$fluent-fileuploader-file-wrapper-border-size: 3px;
 
 .dx-fileuploader-wrapper {
   padding: $fluent-fileuploader-vertical-padding;
 }
 
 .dx-fileuploader-content > .dx-fileuploader-upload-button {
-  margin-left: 3px;
-  margin-right: 3px;
+  margin-left: $fluent-fileuploader-upload-button-margin-left;
+  margin-right: $fluent-fileuploader-upload-button-margin-right;
 }
 
 .dx-fileuploader-input-wrapper {
@@ -92,7 +91,7 @@ $fluent-fileuploader-file-wrapper-border-size: 3px;
   }
 
   .dx-invalid & {
-    padding-top: 50px;
+    padding-top: $fluent-fileuploader-invalid-padding-top;
   }
 
   .dx-fileuploader-button .dx-button-content {
@@ -101,7 +100,7 @@ $fluent-fileuploader-file-wrapper-border-size: 3px;
 
   .dx-fileuploader-file-container {
     padding: $fluent-fileuploader-file-container-padding;
-    margin-bottom: 4px;
+    margin-bottom: $fluent-fileuploader-file-container-margin-bottom;
     border-radius: $fluent-fileuploader-files-container-rounding;
     background-color: $fluent-fileuploader-files-container-bg-color;
     box-shadow: $fluent-fileuploader-file-container-boxshadow;
@@ -152,8 +151,8 @@ $fluent-fileuploader-file-wrapper-border-size: 3px;
 
 .dx-fileuploader-file {
   display: block;
-  padding-top: 5px;
-  line-height: 13px;
+  padding-top: $fluent-fileuploader-file-padding-top;
+  line-height: $fluent-fileuploader-file-line-height;
 }
 
 .dx-fileuploader-file-icon {
@@ -164,7 +163,7 @@ $fluent-fileuploader-file-wrapper-border-size: 3px;
 .dx-fileuploader-file-name {
   padding-bottom: calc((#{$fluent-fileuploader-vertical-padding}) / 2);
   color: $fileuploader-filename-color;
-  font-weight: 500;
+  font-weight: $fluent-fileuploader-file-name-font-weight;
 }
 
 .dx-fileuploader-file-size {
@@ -179,11 +178,11 @@ $fluent-fileuploader-file-wrapper-border-size: 3px;
 
     span {
       &:first-child {
-        margin-top: 2px;
+        margin-top: $fluent-fileuploader-file-status-message-margin-top;
       }
 
       &:last-child {
-        margin-bottom: 2px;
+        margin-bottom: $fluent-fileuploader-file-status-message-margin-bottom;
       }
     }
   }

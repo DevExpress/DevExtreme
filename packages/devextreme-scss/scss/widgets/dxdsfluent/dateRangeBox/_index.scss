@@ -11,7 +11,6 @@
 
 // adduse
 
-$fluent-editor-custom-button-margin: 6px;
 
 .dx-daterangebox {
   @include dx-dropdowneditor-button-icon-styling(daterangepicker);
@@ -37,13 +36,13 @@ $fluent-editor-custom-button-margin: 6px;
   &.dx-editor-underlined,
   &.dx-editor-filled {
     &::before {
-      border-bottom-width: 1px;
+      border-bottom-width: $fluent-daterangebox-editor-filled-border-bottom-width;
       transition: none;
     }
 
     &.dx-state-hover {
       &::after {
-        border-bottom-width: 1px;
+        border-bottom-width: $fluent-daterangebox-state-hover-border-bottom-width;
         transition: none;
       }
     }
@@ -51,7 +50,7 @@ $fluent-editor-custom-button-margin: 6px;
     &.dx-state-focused {
       &.dx-invalid {
         &::before {
-          border-bottom-width: 1px;
+          border-bottom-width: $fluent-daterangebox-invalid-border-bottom-width;
           transition: none;
         }
       }
@@ -68,15 +67,15 @@ $fluent-editor-custom-button-margin: 6px;
     > .dx-texteditor-buttons-container {
       > .dx-button,
       > .dx-clear-button-area {
-        margin-inline-start: $fluent-editor-custom-button-margin;
-        margin-inline-end: $fluent-editor-custom-button-margin;
+        margin-inline-start: $fluent-daterangebox-custom-button-margin;
+        margin-inline-end: $fluent-daterangebox-custom-button-margin;
 
         &:first-child {
           margin-inline-start: 0;
         }
 
         &:last-child {
-          margin-inline-end: $fluent-editor-custom-button-margin;
+          margin-inline-end: $fluent-daterangebox-custom-button-margin;
         }
       }
 

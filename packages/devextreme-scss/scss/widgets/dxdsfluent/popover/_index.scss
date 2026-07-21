@@ -11,7 +11,7 @@
 .dx-popover-wrapper {
   .dx-popup-title {
     margin: 0;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
+    border-top-left-radius: $fluent-popover-popup-title-border-top-left-radius;
+    border-top-right-radius: $fluent-popover-popup-title-border-top-right-radius;
   }
 }

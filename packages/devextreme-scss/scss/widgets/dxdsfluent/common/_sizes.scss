@@ -30,3 +30,9 @@ $fluent-base-dropdown-widgets-shadow: null !default;
 :root {
   --dx-line-height: #{$fluent-line-height};
 }
+
+// Values hoisted from style-file literals (tokenized)
+$common-invalid-badge-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)
+$common-content-padding: ds.$spacing-10 !default;
+$common-overlay-content-border-bottom-width: ds.$border-width-10 !default;
+$common-dropdowneditor-overlay-flipped-border-top-width: ds.$border-width-10 !default;

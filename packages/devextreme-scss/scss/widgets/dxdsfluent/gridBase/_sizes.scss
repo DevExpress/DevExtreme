@@ -117,3 +117,37 @@ $fluent-grid-base-ai-prompt-editor-progressbar-height: ds.$spacing-40 !default;
 }
 
 $fluent-grid-base-header-cell-font-size: $fluent-grid-base-cell-font-size !default;
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-grid-base-icon-button-border-radius: ds.$border-radius-20 !default;
+$fluent-grid-base-root-margin-left: ds.$spacing-50 !important !default;
+$fluent-grid-base-icon-margin: 0 ds.$spacing-30 !default;
+$fluent-grid-base-icon-filter-operation-default-margin-top: ds.$spacing-20 !default;
+$fluent-grid-base-sort-index-icon-padding-right: ds.$spacing-40 !default;
+$fluent-grid-base-sort-index-icon-margin-left: -1px !default; // dx-offscale: -1px
+$fluent-grid-base-sort-index-icon-bottom: ds.$spacing-10 !default;
+$fluent-grid-base-sort-index-icon-margin-left-219: ds.$spacing-40 !default;
+$fluent-grid-base-error-message-padding-right: 35px !default; // dx-offscale: 35px
+$fluent-grid-base-treeview-node-padding-left: ds.$spacing-200 !default;
+$fluent-grid-base-column-chooser-list-item-margin: ds.$spacing-20 ds.$spacing-20 $fluent-grid-base-column-chooser-item-margin ds.$spacing-20 !default;
+$fluent-grid-base-column-chooser-item-height: ds.$spacing-20 !default;
+$fluent-grid-base-after-right: ds.$spacing-10 !default;
+$fluent-grid-base-overlay-content-padding: ds.$spacing-90 ds.$spacing-170 ds.$spacing-90 !default;
+$fluent-grid-base-revert-button-margin: 0 0 0 ds.$spacing-10 !default;
+$fluent-grid-base-content-padding: ds.$spacing-80 ds.$spacing-80 0 ds.$spacing-80 !default;
+$fluent-grid-base-content-padding-993: ds.$spacing-180 $fluent-grid-base-cell-horizontal-padding !default;
+$fluent-grid-base-header-row-padding-top: ds.$spacing-120 !default;
+$fluent-grid-base-header-row-padding-bottom: ds.$spacing-120 !default;
+$fluent-grid-base-validation-pending-padding: 0 ds.$spacing-40 0 ds.$spacing-80 !default;
+$fluent-grid-base-row-removed-border-top: ds.$border-width-10 solid !default;
+$fluent-grid-base-row-removed-border-bottom: ds.$border-width-10 solid !default;
+$fluent-grid-base-popup-title-border-bottom: ds.$border-width-10 solid !default;
+$fluent-grid-base-row-focused-border-top: ds.$border-width-10 solid !default;
+$fluent-grid-base-row-lines-border-top: ds.$border-width-10 solid !default;
+$fluent-grid-base-row-lines-border-bottom: ds.$border-width-10 solid !default;
+$fluent-grid-base-row-lines-border-left: ds.$border-width-10 solid !default;
+$fluent-grid-base-pointer-events-none-border-right: ds.$border-width-10 solid !default;
+$fluent-grid-base-border-hidden: ds.$border-width-10 solid transparent !default;
+$fluent-grid-base-row-border: ds.$border-width-10 solid transparent !default;
+$fluent-grid-base-link-icon-min-width: ds.$spacing-200 !default;
+$fluent-grid-base-texteditor-input-border-bottom-width: ds.$border-width-10 !default;

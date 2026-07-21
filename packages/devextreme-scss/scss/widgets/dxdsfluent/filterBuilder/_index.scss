@@ -34,7 +34,7 @@
 
 .dx-filterbuilder {
   .dx-filterbuilder-action-icon {
-    font-size: 21px;
+    font-size: $fluent-filterbuilder-action-icon-font-size;
   }
 
   .dx-filterbuilder-group {
@@ -57,7 +57,7 @@
 
   .dx-filterbuilder-text,
   .dx-filterbuilder-item-value-text {
-    border-radius: 5px;
+    border-radius: $fluent-filterbuilder-text-border-radius;
   }
 }
 
@@ -89,7 +89,7 @@
     min-height: $fluent-filterbuilder-treeview-item-min-heigth;
 
     .dx-icon {
-      margin-right: 10px;
+      margin-right: $fluent-filterbuilder-icon-margin-right;
     }
   }
 
@@ -115,12 +115,12 @@
 
     .dx-treeview-item {
       .dx-icon {
-        margin-left: 10px;
+        margin-left: $fluent-filterbuilder-icon-margin-left;
       }
     }
 
     .dx-treeview-toggle-item-visibility {
-      right: 16px;
+      right: $fluent-filterbuilder-treeview-toggle-item-visibility-right;
     }
   }
 }

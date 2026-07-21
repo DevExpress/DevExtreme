@@ -31,19 +31,19 @@
     &::after {
       content: '';
       position: absolute;
-      width: 32px;
-      height: 32px;
+      width: $fluent-gallery-state-active-width;
+      height: $fluent-gallery-state-active-height;
       background: $gallery-navbutton-color;
       border-radius: 50%;
       top: 50%;
-      margin-top: -16px;
+      margin-top: $fluent-gallery-state-active-margin-top;
     }
 
     &::before {
       position: absolute;
       z-index: 10;
       clear: both;
-      font-size: 32px;
+      font-size: $fluent-gallery-nav-icon-font-size;
       color: $gallery-nav-arrow-color;
     }
   }
@@ -85,7 +85,7 @@
 .dx-gallery-indicator-item {
   border-radius: 50%;
   box-sizing: border-box;
-  border: 1px solid;
+  border: $fluent-gallery-indicator-item-border;
   border-color: $gallery-indicator-item-border-color;
   pointer-events: auto;
   margin: calc(5px - #{$fluent-gallery-indicator-size} / 2) 6px;
@@ -99,7 +99,7 @@
   width: $fluent-gallery-indicator-selected-size;
   height: $fluent-gallery-indicator-selected-size;
   background: $gallery-indicator-item-selected-bg;
-  border: 2px solid;
+  border: $fluent-gallery-indicator-item-selected-border;
   border-color: $gallery-indicator-selected-border-color;
   margin: calc(5px - #{$fluent-gallery-indicator-selected-size} / 2) 6px;
 }

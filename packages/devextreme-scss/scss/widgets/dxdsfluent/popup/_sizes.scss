@@ -49,3 +49,7 @@ $fluent-popup-focused-content-shadow: null !default;
 :root {
   --dx-popup-toolbar-item-padding-inline: #{$fluent-popup-toolbar-item-spacing};
 }
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-popup-title-border-bottom: ds.$border-width-10 solid !default;
+$fluent-popup-title-min-height: ds.$spacing-280 !default;

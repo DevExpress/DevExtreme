@@ -20,6 +20,6 @@
 
 .dx-radiogroup-horizontal {
   .dx-collection {
-    column-gap: 16px;
+    column-gap: $fluent-radiogroup-collection-column-gap;
   }
 }

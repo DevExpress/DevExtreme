@@ -45,8 +45,8 @@
     line-height: $fluent-grid-base-header-line-height;
     background: $fluent-datagrid-grouppanel-item-bg;
     border-radius: $area-field-border-radius;
-    padding: $area-field-top-bottom-padding 10px;
-    border-width: 1px;
+    padding: $fluent-datagrid-group-panel-item-padding;
+    border-width: $fluent-datagrid-grouppanel-item-border-width;
     border-style: solid;
     border-color: $datagrid-border-color-disabled;
   }
@@ -87,7 +87,7 @@
     }
 
     font-size: $fluent-grid-base-header-cell-font-size;
-    font-weight: 500;
+    font-weight: $fluent-datagrid-group-row-font-weight;
   }
 }
 

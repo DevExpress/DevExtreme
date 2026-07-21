@@ -18,3 +18,6 @@ $badge-line-height: null !default;
   $fluent-badge-font-size: ds.$font-size-caption-sm !default;
   $badge-line-height: ds.$line-height-caption-md !default;
 }
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-badge-border-radius: ds.$border-radius-full !default; // pill idiom (999em -> radius-full, visually identical)

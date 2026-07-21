@@ -44,3 +44,7 @@ $fluent-form-group-custom-caption-icon-margin: null !default;
   $fluent-form-layout-manager-vertical-padding: ds.$spacing-60 !default;
   $fluent-form-layout-manager-tabpanel-content-padding: ds.$spacing-160 !default;
 }
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-form-field-item-help-text-padding-top: ds.$spacing-20 !default;
+$fluent-form-group-content-border-top: ds.$border-width-10 solid !default;

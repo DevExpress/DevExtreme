@@ -79,3 +79,6 @@ $list-item-selected-color: $list-normal-color !default;
 $list-border-color-disabled: ds.$color-border-neutral-default-disabled !default;
 $list-foreground-disabled: ds.$color-content-neutral-default-disabled !default;
 $list-inverted-text-color: ds.$color-content-neutral-default-static-dark-rest !default;
+
+// Values hoisted from style-file literals (tokenized)
+$list-item-disabled-opacity: ds.$opacity-60 !default;

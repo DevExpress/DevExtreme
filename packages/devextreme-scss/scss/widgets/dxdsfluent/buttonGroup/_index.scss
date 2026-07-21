@@ -28,7 +28,7 @@
     box-shadow: none;
     border-width: 0;
     border-style: solid;
-    border-inline-end-width: 1px;
+    border-inline-end-width: $fluent-buttongroup-button-mode-contained-border-inline-end-width;
     border-inline-end-color: $button-group-separator-color;
 
     &.dx-buttongroup-last-item {

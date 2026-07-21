@@ -45,3 +45,8 @@ $fluent-tagbox-tag-container-gap: null !default;
   $fluent-tagbox-filled-with-label-top-padding: ds.$spacing-60 !default;
   $fluent-tagbox-filled-with-label-bottom-padding: 0 !default;
 }
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-tagbox-tag-border-width: ds.$border-width-10 !default;
+$fluent-tagbox-list-select-all-border-bottom: ds.$border-width-10 solid !default;
+$fluent-tagbox-tag-content-min-width: ds.$spacing-400 !default;

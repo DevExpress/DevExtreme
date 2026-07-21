@@ -35,3 +35,6 @@ $fluent-accordion-item-opened-margin: null !default;
   $accordion-title-icon-size: ds.$spacing-160 !default;
   $fluent-accordion-item-opened-margin: 0 !default;
 }
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-accordion-title-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)

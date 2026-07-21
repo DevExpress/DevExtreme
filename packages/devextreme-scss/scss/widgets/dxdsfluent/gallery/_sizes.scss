@@ -6,3 +6,11 @@
 $fluent-gallery-indicator-size: ds.$spacing-80 !default;
 $fluent-gallery-indicator-selected-size: ds.$spacing-120 !default;
 $fluent-gallery-button-padding: ds.$spacing-80 !default;
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-gallery-nav-icon-font-size: ds.$font-size-320 !default; // dx-icon-glyph-size: text roles not applicable
+$fluent-gallery-state-active-width: ds.$spacing-320 !default;
+$fluent-gallery-state-active-height: ds.$spacing-320 !default;
+$fluent-gallery-state-active-margin-top: -16px !default; // dx-offscale: -16px
+$fluent-gallery-indicator-item-border: ds.$border-width-10 solid !default;
+$fluent-gallery-indicator-item-selected-border: ds.$border-width-20 solid !default;

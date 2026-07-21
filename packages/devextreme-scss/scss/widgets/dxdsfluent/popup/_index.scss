@@ -34,8 +34,8 @@ $fluent-popup-toolbar-label-font-size: $fluent-m-font-size;
 
 .dx-popup-title {
   position: relative;
-  min-height: 28px;
-  border-bottom: 1px solid;
+  min-height: $fluent-popup-title-min-height;
+  border-bottom: $fluent-popup-title-border-bottom;
   border-bottom-color: $popup-title-border-color;
   background: $popup-title-bg;
   color: $popup-title-color;

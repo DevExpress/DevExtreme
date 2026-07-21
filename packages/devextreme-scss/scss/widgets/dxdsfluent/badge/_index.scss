@@ -11,7 +11,7 @@
   color: $badge-color;
   font-size: $fluent-badge-font-size;
   padding: $fluent-badge-padding;
-  border-radius: 999em;
+  border-radius: $fluent-badge-border-radius;
   line-height: $badge-line-height;
 
   .dx-state-disabled & {

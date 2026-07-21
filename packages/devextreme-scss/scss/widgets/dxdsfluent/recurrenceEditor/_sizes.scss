@@ -18,3 +18,8 @@ $fluent-recurrence-interval-number-box-margin-top: null !default;
   $fluent-recurrence-count-number-box-top-margin: 78px !default; // dx-offscale: 78px
   $fluent-recurrence-interval-number-box-margin-top: ds.$spacing-220 !default;
 }
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-recurrence-number-box-margin: ds.$spacing-110 !default;
+$fluent-recurrence-button-group-padding: ds.$spacing-60 !default;
+$fluent-recurrence-radio-group-margin: ds.$spacing-150 !default;

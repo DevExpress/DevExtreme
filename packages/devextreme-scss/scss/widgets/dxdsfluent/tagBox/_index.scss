@@ -105,11 +105,11 @@
   padding-bottom: $fluent-tagbox-tag-content-vertical-padding;
   padding-inline-start: $fluent-tagbox-tag-content-padding-left;
   padding-inline-end: $fluent-tagbox-tag-content-padding-right;
-  min-width: 40px;
+  min-width: $fluent-tagbox-tag-content-min-width;
   background-color: $tagbox-tag-bg;
   color: $tagbox-tag-color;
   border-radius: $tagbox-tag-border-radius;
-  border-width: 1px;
+  border-width: $fluent-tagbox-tag-border-width;
   border-style: solid;
   border-color: $tagbox-border-color-disabled;
 }
@@ -173,7 +173,7 @@
 
 .dx-tagbox-popup-wrapper {
   .dx-list-select-all {
-    border-bottom: 1px solid;
+    border-bottom: $fluent-tagbox-list-select-all-border-bottom;
     border-bottom-color: $tagbox-select-all-border-color;
     padding-bottom: $fluent-tagbox-select-all-padding-bottom;
     margin-bottom: $fluent-tagbox-select-all-margin-bottom;
