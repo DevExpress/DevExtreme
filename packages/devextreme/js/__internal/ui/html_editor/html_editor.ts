@@ -499,9 +499,10 @@ class HtmlEditor extends Editor<Properties> {
     };
   }
 
-  _getKeyboardModuleConfig(): { onKeydown: (e: DxEvent) => void } {
+  _getKeyboardModuleConfig(): { onKeydown: (e: DxEvent) => void, inlineTabInsertion: boolean } {
     return {
       onKeydown: (e) => this._saveValueChangeEvent(dxEvent(e)),
+      inlineTabInsertion: false,
     };
   }
 

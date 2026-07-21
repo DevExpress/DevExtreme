@@ -1,3 +1,5 @@
+import HtmlEditor from '@ts/ui/html_editor/html_editor';
+
 const CLASSES = {
   content: 'dx-htmleditor-content',
   toolbarWrapper: 'dx-htmleditor-toolbar-wrapper',
@@ -8,6 +10,15 @@ export class HtmlEditorModel {
 
   public getContent(): HTMLElement {
     return this.root.querySelector(`.${CLASSES.content}`) as HTMLElement;
+  }
+
+  public getInstance(): HtmlEditor {
+    return HtmlEditor.getInstance(this.root);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public getQuillInstance(): any {
+    return this.getInstance().getQuillInstance();
   }
 
   public getToolbarWrapper(): HTMLElement {
@@ -31,5 +42,12 @@ export class HtmlEditorModel {
     this.getContent().dispatchEvent(event);
 
     return event;
+  }
+
+  // Since Jest doesn't have native events, Quill can't process
+  // click on itself to focus and do all its internal work.
+  // So we need to set selection manually to simulate focus.
+  public setQuillFocus(): void {
+    this.getQuillInstance().setSelection(0, 0);
   }
 }
