@@ -43,4 +43,11 @@ export class HtmlEditorModel {
 
     return event;
   }
+
+  // Since Jest doesn't have native events, Quill can't process
+  // click on itself to focus and do all its internal work.
+  // So we need to set selection manually to simulate focus.
+  public setQuillFocus(): void {
+    this.getQuillInstance().setSelection(0, 0);
+  }
 }

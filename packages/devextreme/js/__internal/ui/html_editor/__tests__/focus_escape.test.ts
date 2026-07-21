@@ -111,7 +111,9 @@ describe('HtmlEditor Tab key handling (inlineTabInsertion)', () => {
   it('should not paste the /t symbol in editor on Tab keypress by default', () => {
     const model = createEditor();
     const quill = model.getQuillInstance();
-    quill.setSelection(0, 0);
+    model.setQuillFocus();
+
+    expect(quill.getText()).not.toContain('\t');
 
     const event = model.pressKeyInContent('Tab');
 
@@ -126,8 +128,9 @@ describe('HtmlEditor Tab key handling (inlineTabInsertion)', () => {
       },
     });
     const quill = model.getQuillInstance();
-    quill.setSelection(0, 0);
+    model.setQuillFocus();
 
+    expect(quill.getText()).not.toContain('\t');
     const event = model.pressKeyInContent('Tab');
 
     expect(event.defaultPrevented).toBe(true);
