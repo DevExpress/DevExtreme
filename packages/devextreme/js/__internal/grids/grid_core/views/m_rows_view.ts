@@ -16,6 +16,7 @@ import { isEmpty } from '@js/core/utils/string';
 import { setHeight } from '@js/core/utils/style';
 import { isDefined, isNumeric, isString } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
+import type { ScrollEvent } from '@js/ui/scroll_view';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type {
@@ -32,7 +33,7 @@ import type { EditingController } from '../editing/m_editing';
 import gridCoreUtils from '../m_utils';
 import { CLASSES } from '../sticky_columns/const';
 import { ColumnsView } from './m_columns_view';
-import { getCellText } from './utils';
+import { getCellText, getMaxHorizontalScrollOffset } from './utils';
 
 const ROWS_VIEW_CLASS = 'rowsview';
 const CONTENT_CLASS = 'content';
@@ -51,9 +52,6 @@ export const ROW_LINES_CLASS = 'dx-row-lines';
 
 const LOADPANEL_HIDE_TIMEOUT = 200;
 
-function getMaxHorizontalScrollOffset(scrollable) {
-  return scrollable ? Math.round(scrollable.scrollWidth() - scrollable.clientWidth()) : 0;
-}
 export function isGroupRow({ rowType, column }) {
   return rowType === 'group'
     && isDefined(column.groupIndex)
@@ -380,26 +378,26 @@ export class RowsView extends ColumnsView {
   /**
    * @extended: column_fixing, virtual_column, virtual_scrolling
    */
-  protected _handleScroll(e) {
-    const that = this;
-    const rtlEnabled = that.option('rtlEnabled');
+  protected _handleScroll(e: ScrollEvent): void {
+    const { top, left } = e.scrollOffset;
+    const rtlEnabled = this.option('rtlEnabled');
     const isNativeScrolling = e.component.option('useNative');
+    const isHorizontalScrollbarVisible = this.isScrollbarVisible(true);
 
-    that._scrollTop = e.scrollOffset.top;
-    that._scrollLeft = e.scrollOffset.left;
-    let scrollLeft = e.scrollOffset.left;
+    this._scrollTop = top;
+    this._scrollLeft = rtlEnabled && !isHorizontalScrollbarVisible ? -1 : left;
+
     if (rtlEnabled) {
-      this._scrollRight = getMaxHorizontalScrollOffset(e.component) - this._scrollLeft;
+      const maxHorizontalScrollOffset = getMaxHorizontalScrollOffset(
+        this._scrollableContainer?.get(0),
+      );
 
-      if (isNativeScrolling) {
-        scrollLeft = -this._scrollRight;
-      }
-
-      if (!this.isScrollbarVisible(true)) {
-        this._scrollLeft = -1;
-      }
+      this._scrollRight = maxHorizontalScrollOffset - left;
     }
-    that.scrollChanged.fire({ ...e.scrollOffset, left: scrollLeft }, that.name);
+
+    const scrollLeft = rtlEnabled && isNativeScrolling ? -this._scrollRight : left;
+
+    this.scrollChanged.fire({ ...e.scrollOffset, left: scrollLeft }, this.name);
   }
 
   private _renderScrollableCore($element) {
@@ -1161,8 +1159,11 @@ export class RowsView extends ColumnsView {
     const rtlEnabled = this.option('rtlEnabled');
 
     if (rtlEnabled) {
-      const maxHorizontalScrollOffset = getMaxHorizontalScrollOffset(scrollable);
+      const maxHorizontalScrollOffset = getMaxHorizontalScrollOffset(
+        this._scrollableContainer?.get(0),
+      );
       const scrollRight = maxHorizontalScrollOffset - scrollLeft;
+
       if (scrollRight !== this._scrollRight) {
         this._scrollLeft = maxHorizontalScrollOffset - this._scrollRight;
       }
