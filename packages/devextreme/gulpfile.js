@@ -1,10 +1,149 @@
 /* eslint-env node */
+/* eslint-disable no-console */
 
 const gulp = require('gulp');
+const multiProcess = require('gulp-multi-process');
+const env = require('./build/gulp/env-variables');
 const shell = require('gulp-shell');
+const context = require('./build/gulp/context');
+const { REMOVE_NON_PRODUCTION_MODULE } = context;
 
 gulp.task('clean', shell.task('pnpm nx clean:artifacts devextreme'));
 
 require('./build/gulp/bundler-config');
 require('./build/gulp/transpile');
 require('./build/gulp/localization');
+
+gulp.task('js-bundles-prod', shell.task(
+    context.uglify
+        ? 'pnpm nx run devextreme:bundle:prod -c production'
+        : 'pnpm nx run devextreme:bundle:prod'
+));
+
+gulp.task('js-bundles-debug', shell.task(
+    context.uglify
+        ? 'pnpm nx run devextreme:bundle:debug -c production'
+        : 'pnpm nx run devextreme:bundle:debug'
+));
+
+function getTranspileConfig() {
+    if(env.TEST_CI) {
+        return 'ci';
+    }
+
+    if(env.BUILD_INTERNAL_PACKAGE) {
+        return 'internal';
+    }
+
+    return '';
+}
+
+const transpileConfig = getTranspileConfig();
+
+function getDeclarationsConfiguration() {
+    return env.BUILD_INTERNAL_PACKAGE ? 'internal' : '';
+}
+
+const declarationsConfig = getDeclarationsConfiguration();
+
+gulp.task('transpile', shell.task(
+    transpileConfig
+        ? `pnpm nx run devextreme:build:transpile -c ${transpileConfig}`
+        : 'pnpm nx run devextreme:build:transpile'
+));
+
+gulp.task('vectormap', shell.task(
+    context.uglify
+        ? 'pnpm nx run devextreme:build:vectormap -c production'
+        : 'pnpm nx run devextreme:build:vectormap'
+));
+
+gulp.task('aspnet', shell.task(
+    context.uglify
+        ? 'pnpm nx run devextreme:build:aspnet -c production'
+        : 'pnpm nx run devextreme:build:aspnet'
+));
+
+gulp.task('vendor', shell.task('pnpm nx run devextreme:copy:vendor'));
+
+gulp.task('ts', shell.task(
+    declarationsConfig
+        ? `pnpm nx run devextreme:build:declarations -c ${declarationsConfig}`
+        : 'pnpm nx run devextreme:build:declarations'
+));
+
+gulp.task('check-license-notices', shell.task('pnpm nx run devextreme:verify:licenses'));
+
+gulp.task('state-manager-optimize', shell.task('pnpm nx run devextreme:state-manager:optimize'));
+
+function getNpmConfiguration() {
+    if(context.uglify && env.BUILD_INTERNAL_PACKAGE) {
+        return 'production-internal';
+    }
+    if(env.BUILD_INTERNAL_PACKAGE) {
+        return 'internal';
+    }
+    if(context.uglify && env.BUILD_TEST_INTERNAL_PACKAGE) {
+        return 'production-test-internal';
+    }
+    if(env.BUILD_TEST_INTERNAL_PACKAGE) {
+        return 'test-internal';
+    }
+    if(context.uglify) {
+        return 'production';
+    }
+    return '';
+}
+
+gulp.task('npm', shell.task((function() {
+    const config = getNpmConfiguration();
+    return config
+        ? `pnpm nx run devextreme:build:npm -c ${config}`
+        : 'pnpm nx run devextreme:build:npm';
+})()));
+
+if(env.TEST_CI) {
+    console.warn('Using test CI mode!');
+}
+
+function createMiscBatch() {
+    const tasks = ['vectormap', 'vendor'];
+    if(!env.TEST_CI) {
+        tasks.push('aspnet', 'ts');
+    }
+    return gulp.parallel(tasks);
+}
+
+function createMainBatch() {
+    const tasks = [];
+    if(!env.BUILD_TESTCAFE) {
+        tasks.push('js-bundles-debug');
+    }
+    if(!env.TEST_CI || env.BUILD_TESTCAFE) {
+        tasks.push('js-bundles-prod');
+    }
+    tasks.push('misc-batch');
+    return (callback) => multiProcess(tasks, callback, true);
+}
+
+function createDefaultBatch() {
+    const tasks = ['clean'];
+    tasks.push('localization');
+    tasks.push('transpile');
+
+    if(REMOVE_NON_PRODUCTION_MODULE) {
+        tasks.push('state-manager-optimize');
+    }
+
+    tasks.push('main-batch');
+    if(!env.TEST_CI && !env.BUILD_TESTCAFE) {
+        tasks.push('npm');
+        tasks.push('check-license-notices');
+    }
+    return gulp.series(tasks);
+}
+
+gulp.task('misc-batch', createMiscBatch());
+gulp.task('main-batch', createMainBatch());
+
+gulp.task('default', createDefaultBatch());

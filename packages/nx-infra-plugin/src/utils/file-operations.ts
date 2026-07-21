@@ -1,6 +1,7 @@
 import * as fs from 'fs/promises';
 import * as fse from 'fs-extra';
 import * as path from 'path';
+import * as os from 'os';
 import { glob } from 'glob';
 import type { PackageJson } from './types';
 
@@ -68,11 +69,11 @@ export async function copyRecursive(from: string, to: string): Promise<void> {
 }
 
 export function normalizeEol(content: string): string {
-  return content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  return content.replace(/\r?\n/g, os.EOL);
 }
 
 export function ensureTrailingNewline(content: string): string {
-  return content.endsWith('\n') ? content : `${content}\n`;
+  return content.endsWith(os.EOL) ? content : content + os.EOL;
 }
 
 export async function loadProjectPackageJson(projectRoot: string): Promise<PackageJson> {

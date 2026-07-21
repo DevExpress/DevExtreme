@@ -1676,31 +1676,16 @@
             "pnpm nx build:transpile devextreme",
             "pnpm nx state-manager:optimize devextreme",
             "pnpm nx run-many --targets=bundle:debug,bundle:prod,build:vectormap,copy:vendor,build:aspnet,build:declarations --projects=devextreme --parallel -c production",
-            "pnpm nx build:npm devextreme -c production",
-            "pnpm nx verify:licenses devextreme"
-          ]
-        },
-        "production-internal": {
-          "env": {
-            "BUILD_INTERNAL_PACKAGE": "true"
-          },
-          "commands": [
-            "pnpm nx clean:artifacts devextreme",
-            "pnpm nx build:localization devextreme",
-            "pnpm nx build:transpile devextreme -c internal",
-            "pnpm nx state-manager:optimize devextreme",
-            "pnpm nx run-many --targets=bundle:debug,bundle:prod,build:vectormap,copy:vendor,build:aspnet --projects=devextreme --parallel -c production",
-            "pnpm nx build:declarations devextreme -c internal",
-            "pnpm nx build:npm devextreme -c production-internal",
+            "pnpm nx build:npm devextreme",
             "pnpm nx verify:licenses devextreme"
           ]
         }
       }
     },
     "build-dist": {
-      "executor": "nx:run-commands",
+      "executor": "nx:run-script",
       "options": {
-        "command": "pnpm nx run devextreme:build -c production"
+        "script": "build-dist"
       },
       "inputs": [
         "internalPackageEnv",
@@ -1709,31 +1694,15 @@
         "{workspaceRoot}/pnpm-lock.yaml"
       ],
       "outputs": [
-        "{projectRoot}/artifacts"
+        "{projectRoot}/artifacts",
+        "{projectRoot}/scss/bundles"
       ],
-      "cache": true,
-      "configurations": {
-        "internal": {
-          "command": "pnpm nx run devextreme:build -c production-internal"
-        }
-      },
-      "metadata": {
-        "description": "Production dist build. Use -c internal for BUILD_INTERNAL_PACKAGE parity."
-      }
+      "cache": true
     },
     "build:dev": {
-      "executor": "nx:run-commands",
+      "executor": "nx:run-script",
       "options": {
-        "env": {
-          "DEVEXTREME_TEST_CI": "true"
-        },
-        "commands": [
-          "pnpm nx clean:artifacts devextreme",
-          "pnpm nx build:localization devextreme",
-          "pnpm nx build:transpile devextreme -c ci",
-          "pnpm nx run-many --targets=bundle:debug,build:vectormap,copy:vendor --projects=devextreme --parallel"
-        ],
-        "parallel": false
+        "script": "build:dev"
       },
       "dependsOn": [
         "^build"
@@ -1755,10 +1724,7 @@
         "{projectRoot}/js/__internal/core/localization/cldr-data",
         "{projectRoot}/js/__internal/core/localization/default_messages.ts"
       ],
-      "cache": true,
-      "metadata": {
-        "description": "Dev/CI test build. Skips prod bundles, aspnet, declarations, npm, and license checks."
-      }
+      "cache": true
     },
     "build:systemjs": {
       "executor": "nx:run-commands",

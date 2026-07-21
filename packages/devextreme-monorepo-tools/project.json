@@ -18,11 +18,7 @@
     },
     "pack-and-copy": {
       "dependsOn": ["build"],
-      "executor": "devextreme-nx-infra-plugin:pack-npm",
-      "options": {
-        "packageDir": "./npm",
-        "destination": "../../artifacts/npm"
-      }
+      "command": "ts-node tools/scripts/pack devextreme-monorepo-tools"
     },
     "test": {
       "executor": "@nx/jest:jest",

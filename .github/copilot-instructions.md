@@ -71,7 +71,7 @@ pnpm install --frozen-lockfile
   devextreme-metadata/     # Metadata generation for wrappers
   devextreme-monorepo-tools/ # Internal tooling
   nx-infra-plugin/         # Custom Nx executors for build automation
-  workflows/               # Cross-package NX build orchestration (all:build, all:build-dev, all:build-testing)
+  workflows/               # Cross-package NX build orchestration (all:build-dev, all:build-testing)
   testcafe-models/         # TestCafe page object models
 
 /apps/
@@ -87,7 +87,7 @@ pnpm install --frozen-lockfile
   bundlers/                # Bundler compatibility tests
   compilation-cases/       # TypeScript compilation tests
 
-/tools/scripts/            # Leaf helpers invoked by workflows targets (inject-descriptions, versioning, etc.)
+/tools/scripts/            # Build and utility scripts
 ```
 
 ### Configuration Files
@@ -189,12 +189,12 @@ packages/
   devextreme-metadata/              # metadata for wrapper generation
   devextreme-monorepo-tools/        # internal tooling
   nx-infra-plugin/                  # custom Nx executors
-  workflows/                        # cross-package Nx orchestration (all:build, all:build-dev, all:build-testing)
+  workflows/                        # cross-package Nx orchestration (all:build-dev, all:build-testing)
   testcafe-models/                  # TestCafe page object models
 apps/                               # demos and per-framework playgrounds (+ react-storybook)
 e2e/testcafe-devextreme/            # TestCafe e2e suite
 e2e/{wrappers,bundlers,compilation-cases}/   # integration / bundler / TS compilation tests
-tools/scripts/                      # leaf helpers for workflows targets (not orchestration)
+tools/scripts/                      # build and utility scripts
 ```
 
 For the full executor catalogue, conventions, and refactoring guidance, see @packages/nx-infra-plugin/AGENTS.md. File-specific coding rules live under @.github/instructions/.
