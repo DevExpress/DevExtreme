@@ -5,7 +5,8 @@ import url from '../../../../helpers/getPageUrl';
 import { defaultConfig } from '../helpers/data';
 import { MouseAction, MouseUpEvents } from '../../../../helpers/mouseUpEvents';
 import { testScreenshot } from '../../../../helpers/themeUtils';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
+import { removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
+import { insertStylesToSuppressGroupPanelFocusOutline } from '../../helpers/domUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -199,16 +200,7 @@ test.meta({ browserSize: [900, 800] })('The header row should be highlighted cor
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await MouseUpEvents.disable(MouseAction.dragToOffset);
-
-  /*
-  Overrides the toolbar items' :focus-visible outline,
-  because in e2e tests flaky outline would appear
-  */
-  await insertStylesheetRulesToPage(`
-    .dx-group-panel-item[tabindex]:focus-visible:not(.dx-toolbar-item) {
-      outline: none !important;
-    }
-  `);
+  await insertStylesToSuppressGroupPanelFocusOutline();
 
   return createWidget('dxDataGrid', {
     ...defaultConfig,

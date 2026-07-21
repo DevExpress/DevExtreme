@@ -4,7 +4,8 @@ import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { MouseAction, MouseUpEvents } from '../../../../helpers/mouseUpEvents';
 import { testScreenshot } from '../../../../helpers/themeUtils';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
+import { insertStylesToSuppressGroupPanelFocusOutline } from '../../helpers/domUtils';
+import { removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
 
 fixture.disablePageReloads`Column reordering.Visual`
   .page(url(__dirname, '../../../container.html'));
@@ -22,16 +23,7 @@ test('column separator should work properly with expand columns', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await MouseUpEvents.disable(MouseAction.dragToOffset);
-
-  /*
-    Overrides the toolbar items' :focus-visible outline,
-    because in e2e tests flaky outline would appear
-    */
-  await insertStylesheetRulesToPage(`
-    .dx-group-panel-item[tabindex]:focus-visible:not(.dx-toolbar-item) {
-      outline: none !important;
-    }
-  `);
+  await insertStylesToSuppressGroupPanelFocusOutline();
 
   return createWidget('dxDataGrid', {
     width: 800,
@@ -79,16 +71,7 @@ test('HeaderRow should be highlighted when dragging column with allowColumnReord
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await MouseUpEvents.disable(MouseAction.dragToOffset);
-
-  /*
-    Overrides the toolbar items' :focus-visible outline,
-    because in e2e tests flaky outline would appear
-    */
-  await insertStylesheetRulesToPage(`
-    .dx-group-panel-item[tabindex]:focus-visible:not(.dx-toolbar-item) {
-      outline: none !important;
-    }
-  `);
+  await insertStylesToSuppressGroupPanelFocusOutline();
 
   return createWidget('dxDataGrid', {
     width: 800,
@@ -138,16 +121,7 @@ test('The group separator should not appear when dragging a grouped column to th
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await MouseUpEvents.disable(MouseAction.dragToOffset);
-
-  /*
-    Overrides the toolbar items' :focus-visible outline,
-    because in e2e tests flaky outline would appear
-    */
-  await insertStylesheetRulesToPage(`
-    .dx-group-panel-item[tabindex]:focus-visible:not(.dx-toolbar-item) {
-      outline: none !important;
-    }
-  `);
+  await insertStylesToSuppressGroupPanelFocusOutline();
 
   return createWidget('dxDataGrid', {
     width: 800,
