@@ -135,12 +135,9 @@ class Lookup extends DropDownList<LookupProperties> {
       pulledDownText: messageLocalization.format('dxList-pulledDownText'),
       refreshingText: messageLocalization.format('dxList-refreshingText'),
       pageLoadingText: messageLocalization.format('dxList-pageLoadingText'),
-      // @ts-expect-error public API
-      onScroll: null,
-      // @ts-expect-error public API
-      onPullRefresh: null,
-      // @ts-expect-error public API
-      onPageLoading: null,
+      onScroll: undefined,
+      onPullRefresh: undefined,
+      onPageLoading: undefined,
       pageLoadMode: 'scrollBottom',
       nextButtonText: messageLocalization.format('dxList-nextButtonText'),
       grouped: false,
@@ -161,8 +158,7 @@ class Lookup extends DropDownList<LookupProperties> {
         animation: {},
         title: '',
         titleTemplate: 'title',
-        // @ts-expect-error ts-error
-        onTitleRendered: null,
+        onTitleRendered: undefined,
         fullScreen: false,
         maxHeight: '100vh',
       },

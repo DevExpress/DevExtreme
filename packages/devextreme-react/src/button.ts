@@ -14,7 +14,7 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 }
 
 type IButtonOptionsNarrowedEvents = {
-  onClick?: ((e: ClickEvent) => void);
+  onClick?: ((e: ClickEvent) => void) | undefined;
   onContentReady?: ((e: ContentReadyEvent) => void);
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);

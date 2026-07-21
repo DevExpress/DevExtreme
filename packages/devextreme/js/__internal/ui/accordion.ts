@@ -62,7 +62,6 @@ class Accordion extends CollectionWidgetLiveUpdate<AccordionProperties, Item, Co
       ...super._getDefaultOptions(),
       hoverStateEnabled: true,
       itemTitleTemplate: 'title',
-      // @ts-expect-error ts-error
       onItemTitleClick: null,
       selectedIndex: 0,
       collapsible: false,

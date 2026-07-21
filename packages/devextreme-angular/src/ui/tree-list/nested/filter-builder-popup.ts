@@ -220,18 +220,18 @@ export class DxoTreeListFilterBuilderPopupComponent extends NestedOption impleme
     }
 
     @Input()
-    get onContentReady(): ((e: EventInfo<any>) => void) {
+    get onContentReady(): ((e: EventInfo<any>) => void) | undefined {
         return this._getOption('onContentReady');
     }
-    set onContentReady(value: ((e: EventInfo<any>) => void)) {
+    set onContentReady(value: ((e: EventInfo<any>) => void) | undefined) {
         this._setOption('onContentReady', value);
     }
 
     @Input()
-    get onDisposing(): ((e: EventInfo<any>) => void) {
+    get onDisposing(): ((e: EventInfo<any>) => void) | undefined {
         return this._getOption('onDisposing');
     }
-    set onDisposing(value: ((e: EventInfo<any>) => void)) {
+    set onDisposing(value: ((e: EventInfo<any>) => void) | undefined) {
         this._setOption('onDisposing', value);
     }
 
@@ -252,42 +252,42 @@ export class DxoTreeListFilterBuilderPopupComponent extends NestedOption impleme
     }
 
     @Input()
-    get onInitialized(): ((e: { component: CoreComponent<any>, element: any }) => void) {
+    get onInitialized(): ((e: { component: CoreComponent<any>, element: any }) => void) | undefined {
         return this._getOption('onInitialized');
     }
-    set onInitialized(value: ((e: { component: CoreComponent<any>, element: any }) => void)) {
+    set onInitialized(value: ((e: { component: CoreComponent<any>, element: any }) => void) | undefined) {
         this._setOption('onInitialized', value);
     }
 
     @Input()
-    get onOptionChanged(): ((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void) {
+    get onOptionChanged(): ((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void) | undefined {
         return this._getOption('onOptionChanged');
     }
-    set onOptionChanged(value: ((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)) {
+    set onOptionChanged(value: ((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void) | undefined) {
         this._setOption('onOptionChanged', value);
     }
 
     @Input()
-    get onResize(): ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) {
+    get onResize(): ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | undefined {
         return this._getOption('onResize');
     }
-    set onResize(value: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)) {
+    set onResize(value: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | undefined) {
         this._setOption('onResize', value);
     }
 
     @Input()
-    get onResizeEnd(): ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) {
+    get onResizeEnd(): ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | undefined {
         return this._getOption('onResizeEnd');
     }
-    set onResizeEnd(value: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)) {
+    set onResizeEnd(value: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | undefined) {
         this._setOption('onResizeEnd', value);
     }
 
     @Input()
-    get onResizeStart(): ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) {
+    get onResizeStart(): ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | undefined {
         return this._getOption('onResizeStart');
     }
-    set onResizeStart(value: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)) {
+    set onResizeStart(value: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | undefined) {
         this._setOption('onResizeStart', value);
     }
 
@@ -308,10 +308,10 @@ export class DxoTreeListFilterBuilderPopupComponent extends NestedOption impleme
     }
 
     @Input()
-    get onTitleRendered(): ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void) {
+    get onTitleRendered(): ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void) | undefined {
         return this._getOption('onTitleRendered');
     }
-    set onTitleRendered(value: ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void)) {
+    set onTitleRendered(value: ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void) | undefined) {
         this._setOption('onTitleRendered', value);
     }
 

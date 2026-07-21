@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "Veri Alanlarını Buraya Bırak",
         "dxPivotGrid-rowFieldArea": "Satır Alanlarını Buraya Bırak",
         "dxPivotGrid-filterFieldArea": "Filtre Alanlarını Buraya Bırak",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "{0} - {1}",
         "dxScheduler-ariaLabel": "Zamanlayıcı. {0} görünümü: {1}, {2} randevu",

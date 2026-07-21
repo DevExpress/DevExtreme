@@ -12,6 +12,8 @@ import { CheckBoxIcon } from './check_box_icon';
 import type { EditorProps } from './editor_base/editor';
 import { defaultEditorProps, Editor } from './editor_base/editor';
 
+export const CHECK_BOX_CLASS = 'dx-checkbox';
+
 const getCssClasses = (model: CheckBoxProps): string => {
   const {
     text,
@@ -20,7 +22,7 @@ const getCssClasses = (model: CheckBoxProps): string => {
   const checked = value;
   const indeterminate = checked === null;
   const classesMap = {
-    'dx-checkbox': true,
+    [CHECK_BOX_CLASS]: true,
     'dx-checkbox-checked': checked === true,
     'dx-checkbox-has-text': !!text,
     'dx-checkbox-indeterminate': indeterminate,

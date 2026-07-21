@@ -1703,6 +1703,8 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
       .click(addRowButton)
 
       .expect(cell00.isFocused).ok()
+      .expect(editor00.element.exists)
+      .ok()
       .expect(editor00.element.focused)
       .ok()
 
@@ -1714,6 +1716,8 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
       .expect(dataGrid.apiGetCellValue(0, 0))
       .eql('1')
       .expect(cell01.isFocused)
+      .ok()
+      .expect(editor01.element.exists)
       .ok()
       .expect(editor01.element.focused)
       .ok()
@@ -1749,6 +1753,8 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
       .click(cell01.element)
 
       .expect(cell01.isFocused).ok()
+      .expect(editor01.element.exists)
+      .ok()
       .expect(editor01.element.focused)
       .ok()
 
@@ -1760,6 +1766,8 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
       .expect(dataGrid.apiGetCellValue(0, 1))
       .eql('2')
       .expect(cell00.isFocused)
+      .ok()
+      .expect(editor00.element.exists)
       .ok()
       .expect(editor00.element.focused)
       .ok()
@@ -1780,7 +1788,7 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
     columns: ['a', 'b'],
   }));
 
-  test.meta({ unstable: editMode === 'Cell' })(`${editMode} mode - Cells in a modified row should be updated on Tab (T898356)`, async (t) => {
+  test(`${editMode} mode - Cells in a modified row should be updated on Tab (T898356)`, async (t) => {
     const dataGrid = new DataGrid('#container') as any;
     const cell00 = dataGrid.getDataCell(0, 0);
     const editor00 = cell00.getEditor();
@@ -1793,6 +1801,8 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
       .click(cell00.element)
 
       .expect(cell00.isFocused).ok()
+      .expect(editor00.element.exists)
+      .ok()
       .expect(editor00.element.focused)
       .ok()
 
@@ -1804,6 +1814,8 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
       .expect(dataGrid.apiGetCellValue(0, 0))
       .eql('11')
       .expect(cell01.isFocused)
+      .ok()
+      .expect(editor01.element.exists)
       .ok()
       .expect(editor01.element.focused)
       .ok()
@@ -1837,6 +1849,8 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
       .click(cell01.element)
 
       .expect(cell01.isFocused).ok()
+      .expect(editor01.element.exists)
+      .ok()
       .expect(editor01.element.focused)
       .ok()
 
@@ -1848,6 +1862,8 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
       .expect(dataGrid.apiGetCellValue(0, 1))
       .eql('22')
       .expect(cell00.isFocused)
+      .ok()
+      .expect(editor00.element.exists)
       .ok()
       .expect(editor00.element.focused)
       .ok()
@@ -6179,8 +6195,8 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     })();
   });
 
-  test.meta({ unstable: true })(`Focus events should be called when pressing the Ctrl + End key when virtual scrolling and columns are enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
-  // arrange
+  test(`Focus events should be called when pressing the Ctrl + End key when virtual scrolling and columns are enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
+    // arrange
     const dataGrid = new DataGrid('#container');
 
     await t.expect(dataGrid.isReady()).ok();
@@ -6207,7 +6223,9 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // assert
     await t
-      .expect(dataGrid.isReady())
+      .expect(dataGrid.isScrolledToBottom())
+      .ok()
+      .expect(dataGrid.isScrolledToRight())
       .ok()
       .expect(dataGrid.getDataCell(199, 34).element.focused)
       .ok()
@@ -6260,8 +6278,8 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     })();
   });
 
-  test.meta({ unstable: true })(`Focus events should be called when pressing the Ctrl + End key when rowRenderingMode is 'virtual' (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
-  // arrange
+  test(`Focus events should be called when pressing the Ctrl + End key when rowRenderingMode is 'virtual' (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
+    // arrange
     const dataGrid = new DataGrid('#container');
 
     await t.expect(dataGrid.isReady()).ok();
@@ -6288,7 +6306,9 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // assert
     await t
-      .expect(dataGrid.isReady())
+      .expect(dataGrid.isScrolledToBottom())
+      .ok()
+      .expect(dataGrid.isScrolledToRight())
       .ok()
       .expect(dataGrid.getDataCell(19, 14).element.focused)
       .ok()
@@ -6340,8 +6360,8 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     })();
   });
 
-  test.meta({ unstable: true })(`Focus events should be called when pressing the Ctrl + End key when infinite scrolling is enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
-  // arrange
+  test(`Focus events should be called when pressing the Ctrl + End key when infinite scrolling is enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
+    // arrange
     const dataGrid = new DataGrid('#container');
 
     await t.expect(dataGrid.isReady()).ok();
@@ -6366,11 +6386,12 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // act
     await t
-      .pressKey('ctrl+end')
-      .expect(dataGrid.isReady()).ok();
+      .pressKey('ctrl+end');
 
     // assert
     await t
+      .expect(dataGrid.isScrolledToRight())
+      .ok()
       .expect(dataGrid.getDataCell(19, 14).element.focused)
       .ok()
       .expect(getOrderOfEventCalls())
@@ -6601,8 +6622,8 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     })();
   });
 
-  test.meta({ unstable: true })(`Focus events should be called when pressing the Ctrl + End key when virtual columns, virtual scrolling and focusedRowEnabled are enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
-  // arrange
+  test(`Focus events should be called when pressing the Ctrl + End key when virtual columns, virtual scrolling and focusedRowEnabled are enabled (scrolling.useNative = ${useNativeScrolling})`, async (t) => {
+    // arrange
     const dataGrid = new DataGrid('#container');
 
     await t.expect(dataGrid.isReady()).ok();
@@ -6629,7 +6650,9 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // assert
     await t
-      .expect(dataGrid.isReady())
+      .expect(dataGrid.isScrolledToBottom())
+      .ok()
+      .expect(dataGrid.isScrolledToRight())
       .ok()
       .expect(dataGrid.getDataCell(199, 34).element.focused)
       .ok()
@@ -6758,7 +6781,7 @@ test('Focus should be set to the grid to allow keyboard navigation when the focu
 });
 
 [true, false].forEach((focusedRowEnabled) => {
-  test.meta({ unstable: focusedRowEnabled })(`Focus should return to the last active cell when re-entering the rowsview via kbn if focusedRowEnabled=${focusedRowEnabled} (T1308919)`, async (t) => {
+  test(`Focus should return to the last active cell when re-entering the rowsview via kbn if focusedRowEnabled=${focusedRowEnabled} (T1308919)`, async (t) => {
     // arrange
     const button = new Button('#otherContainer');
     const dataGrid = new DataGrid('#container');
@@ -6772,7 +6795,11 @@ test('Focus should be set to the grid to allow keyboard navigation when the focu
     // act
     await t
       .click(searchPanel.input)
-      .pressKey('tab tab tab tab tab');
+      .pressKey('tab')
+      .pressKey('tab')
+      .pressKey('tab')
+      .pressKey('tab')
+      .pressKey('tab');
 
     // assert
     await t.expect(secondIDCell.isFocused).ok();
@@ -6788,13 +6815,18 @@ test('Focus should be set to the grid to allow keyboard navigation when the focu
       .notOk('focus should be on the search panel');
 
     // act
-    await t.pressKey('tab tab tab');
+    await t
+      .pressKey('tab')
+      .pressKey('tab')
+      .pressKey('tab');
 
     // assert
     await t.expect(secondIDCell.isFocused).ok();
 
     // act
-    await t.pressKey('tab tab');
+    await t
+      .pressKey('tab')
+      .pressKey('tab');
 
     // assert
     await t.expect(button.isFocused).ok();

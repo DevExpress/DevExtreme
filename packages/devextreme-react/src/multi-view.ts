@@ -33,10 +33,10 @@ type IMultiViewOptions<TItem = any, TKey = any> = React.PropsWithChildren<Replac
   itemComponent?: React.ComponentType<any>;
   defaultItems?: Array<any | dxMultiViewItem | string>;
   defaultSelectedIndex?: number;
-  defaultSelectedItem?: any;
+  defaultSelectedItem?: any | null;
   onItemsChange?: (value: Array<any | dxMultiViewItem | string>) => void;
   onSelectedIndexChange?: (value: number) => void;
-  onSelectedItemChange?: (value: any) => void;
+  onSelectedItemChange?: (value: any | null) => void;
 }>
 
 interface MultiViewRef<TItem = any, TKey = any> {

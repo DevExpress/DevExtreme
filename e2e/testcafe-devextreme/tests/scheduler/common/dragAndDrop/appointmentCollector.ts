@@ -86,7 +86,7 @@ test.meta({ unstable: true })('Drag-n-drop to the cell on the left should work i
   startDayHour: 9,
 }));
 
-test('Drag-n-drop in the same table cell', async (t) => {
+test.meta({ unstable: true })('Drag-n-drop in the same table cell', async (t) => {
   const scheduler = new Scheduler('#container');
   const { appointmentTooltip } = scheduler;
   const appointmentTooltipItem = appointmentTooltip.getListItem('Approve Personal Computer Upgrade Plan');

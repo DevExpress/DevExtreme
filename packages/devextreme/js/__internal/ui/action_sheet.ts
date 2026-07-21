@@ -52,7 +52,6 @@ class ActionSheet extends CollectionWidget<Properties> {
       showTitle: true,
       showCancelButton: true,
       cancelText: messageLocalization.format('Cancel'),
-      // @ts-expect-error ts-error
       onCancelClick: null,
       visible: false,
       noDataText: '',

@@ -234,7 +234,7 @@ export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TC
      * @public
      * @deprecated dxDropDownEditorOptions.fieldAddons
      */
-    fieldTemplate?: template | ((selectedItem: any, fieldElement: DxElement) => string | UserDefinedElement);
+    fieldTemplate?: template | ((selectedItem: any, fieldElement: DxElement) => string | UserDefinedElement) | null;
     /**
      * @docid
      * @default null

@@ -34,7 +34,7 @@ import List from '@ts/ui/list/list.edit.search';
 import type { PopupProperties } from '@ts/ui/popup/popup';
 import Popup from '@ts/ui/popup/popup';
 
-const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
+export const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
 const DROP_DOWN_BUTTON_CONTENT = 'dx-dropdownbutton-content';
 const DROP_DOWN_BUTTON_ACTION_CLASS = 'dx-dropdownbutton-action';
 const DROP_DOWN_BUTTON_TOGGLE_CLASS = 'dx-dropdownbutton-toggle';

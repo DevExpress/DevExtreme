@@ -313,10 +313,10 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get selectedItem(): any {
+    get selectedItem(): any | null {
         return this._getOption('selectedItem');
     }
-    set selectedItem(value: any) {
+    set selectedItem(value: any | null) {
         this._setOption('selectedItem', value);
     }
 
@@ -575,7 +575,7 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectedItemChange: EventEmitter<any>;
+    @Output() selectedItemChange: EventEmitter<any | null>;
 
     /**
     

@@ -83,13 +83,13 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @default null
      * @public
      */
-    maxSize?: number;
+    maxSize?: number | null;
     /**
      * @docid
      * @default null
      * @public
      */
-    minSize?: number;
+    minSize?: number | null;
     /**
      * @docid
      * @fires dxDrawerOptions.onOptionChanged

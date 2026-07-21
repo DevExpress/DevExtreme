@@ -47,7 +47,7 @@ export interface DataAdapterOptions {
   dataType: DataStructure;
   sort: SortOption | SortOption[] | null;
   langParams?: LangParams;
-  searchExpr?: string | Function | (string | Function)[] | ((item: ItemData) => unknown);
+  searchExpr?: string | Function | (string | Function)[] | ((item: ItemData) => unknown) | null;
 
   dataConverter: HierarchicalDataConverter;
   onNodeChanged: (node: InternalNode) => void;

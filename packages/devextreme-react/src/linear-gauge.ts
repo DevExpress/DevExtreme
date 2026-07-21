@@ -31,10 +31,10 @@ type ILinearGaugeOptionsNarrowedEvents = {
 
 type ILinearGaugeOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, ILinearGaugeOptionsNarrowedEvents> & IHtmlOptions & {
   defaultLoadingIndicator?: Record<string, any>;
-  defaultSubvalues?: Array<number>;
+  defaultSubvalues?: Array<number> | undefined;
   defaultValue?: number | undefined;
   onLoadingIndicatorChange?: (value: Record<string, any>) => void;
-  onSubvaluesChange?: (value: Array<number>) => void;
+  onSubvaluesChange?: (value: Array<number> | undefined) => void;
   onValueChange?: (value: number | undefined) => void;
 }>
 
@@ -437,8 +437,8 @@ const RangeContainer = Object.assign<typeof _componentRangeContainer, NestedComp
 // LinearGauge
 type IScaleProps = React.PropsWithChildren<{
   allowDecimals?: boolean | undefined;
-  customMinorTicks?: Array<number>;
-  customTicks?: Array<number>;
+  customMinorTicks?: Array<number> | undefined;
+  customTicks?: Array<number> | undefined;
   endValue?: number;
   horizontalOrientation?: HorizontalAlignment;
   label?: Record<string, any> | {
@@ -534,7 +534,7 @@ const Size = Object.assign<typeof _componentSize, NestedComponentMeta>(_componen
 type ISubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
-  text?: string;
+  text?: string | undefined;
   textOverflow?: TextOverflow;
   wordWrap?: WordWrap;
 }>
@@ -662,11 +662,11 @@ type ITitleProps = React.PropsWithChildren<{
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
-    text?: string;
+    text?: string | undefined;
     textOverflow?: TextOverflow;
     wordWrap?: WordWrap;
   };
-  text?: string;
+  text?: string | undefined;
   textOverflow?: TextOverflow;
   verticalAlignment?: VerticalEdge;
   wordWrap?: WordWrap;

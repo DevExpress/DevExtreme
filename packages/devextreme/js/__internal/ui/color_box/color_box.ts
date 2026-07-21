@@ -116,7 +116,6 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
       editAlphaChannel: false,
       applyValueMode: 'useButtons',
       keyStep: 1,
-      // @ts-expect-error fieldTemplate is deprecated --- IGNORE ---
       fieldTemplate: null,
       buttonsLocation: 'bottom after',
     };

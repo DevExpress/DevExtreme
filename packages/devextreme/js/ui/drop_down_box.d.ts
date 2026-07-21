@@ -213,7 +213,7 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @public
      * @deprecated dxDropDownEditorOptions.fieldAddons
      */
-    fieldTemplate?: template | ((value: any, fieldElement: DxElement) => string | UserDefinedElement);
+    fieldTemplate?: template | ((value: any, fieldElement: DxElement) => string | UserDefinedElement) | null;
     /**
      * @docid
      * @public

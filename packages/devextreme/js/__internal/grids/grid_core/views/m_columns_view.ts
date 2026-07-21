@@ -1486,15 +1486,12 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   /**
    * @extended: column_fixing
    */
-  public setScrollerSpacing(width) {
-    const that = this;
-    const $element = that.element();
-    const rtlEnabled = that.option('rtlEnabled');
+  public setScrollerSpacing(width: number): void {
+    const $element = this.element();
 
-    $element && $element.css({
-      paddingLeft: rtlEnabled ? width : '',
-      paddingRight: !rtlEnabled ? width : '',
-    });
+    $element
+      ?.toggleClass(this.addWidgetPrefix(CLASSES.scrollerSpacing), !!width)
+      .css('paddingInlineEnd', width ? `${width}px` : '');
   }
 
   protected isScrollbarVisible(isHorizontal) {

@@ -12,6 +12,7 @@
 @use "../checkBox/sizes" as *;
 @use "mixins" as *;
 @use "../../base/toolbar";
+@use "../../base/toolbar/mixins" as *;
 
 // adduse
 @use "../dropDownMenu";
@@ -180,3 +181,5 @@
     line-height: 0;
   }
 }
+
+@include dx-toolbar-focus-outline($base-accent, $fluent-base-border-radius);
