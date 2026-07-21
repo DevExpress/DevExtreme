@@ -710,6 +710,23 @@ export const fireOptionChanged = function (that: ColumnsController, options) {
   }
 };
 
+const isVisibleWidthChangePendingForColumn = (that: ColumnsController, columnIndex): boolean => {
+  const columnChanges = that._columnChanges;
+
+  if (!columnChanges?.optionNames?.visibleWidth) {
+    return false;
+  }
+
+  return columnChanges.columnIndex === columnIndex
+    || !!columnChanges.columnIndices?.includes(columnIndex);
+};
+
+const invalidateStaleVisibleWidth = (that: ColumnsController, column): void => {
+  if (isDefined(column.visibleWidth) && !isVisibleWidthChangePendingForColumn(that, column.index)) {
+    column.visibleWidth = null;
+  }
+};
+
 export const columnOptionCore = function (that: ColumnsController, column, optionName, value?, notFireEvent?) {
   const optionGetter = compileGetter(optionName);
   const columnIndex = column.index;
@@ -733,6 +750,10 @@ export const columnOptionCore = function (that: ColumnsController, column, optio
       changeType = 'sorting';
     } else {
       changeType = 'columns';
+    }
+
+    if (optionName === 'width') {
+      invalidateStaleVisibleWidth(that, column);
     }
 
     const optionSetter = compileSetter(optionName);
