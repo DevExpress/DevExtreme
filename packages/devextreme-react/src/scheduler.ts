@@ -33,18 +33,18 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 }
 
 type ISchedulerOptionsNarrowedEvents = {
-  onAppointmentAdded?: ((e: AppointmentAddedEvent) => void);
-  onAppointmentAdding?: ((e: AppointmentAddingEvent) => void);
+  onAppointmentAdded?: ((e: AppointmentAddedEvent) => void) | undefined;
+  onAppointmentAdding?: ((e: AppointmentAddingEvent) => void) | undefined;
   onAppointmentClick?: ((e: AppointmentClickEvent) => void);
   onAppointmentContextMenu?: ((e: AppointmentContextMenuEvent) => void);
   onAppointmentDblClick?: ((e: AppointmentDblClickEvent) => void);
-  onAppointmentDeleted?: ((e: AppointmentDeletedEvent) => void);
-  onAppointmentDeleting?: ((e: AppointmentDeletingEvent) => void);
-  onAppointmentFormOpening?: ((e: AppointmentFormOpeningEvent) => void);
-  onAppointmentRendered?: ((e: AppointmentRenderedEvent) => void);
-  onAppointmentTooltipShowing?: ((e: AppointmentTooltipShowingEvent) => void);
-  onAppointmentUpdated?: ((e: AppointmentUpdatedEvent) => void);
-  onAppointmentUpdating?: ((e: AppointmentUpdatingEvent) => void);
+  onAppointmentDeleted?: ((e: AppointmentDeletedEvent) => void) | undefined;
+  onAppointmentDeleting?: ((e: AppointmentDeletingEvent) => void) | undefined;
+  onAppointmentFormOpening?: ((e: AppointmentFormOpeningEvent) => void) | undefined;
+  onAppointmentRendered?: ((e: AppointmentRenderedEvent) => void) | undefined;
+  onAppointmentTooltipShowing?: ((e: AppointmentTooltipShowingEvent) => void) | undefined;
+  onAppointmentUpdated?: ((e: AppointmentUpdatedEvent) => void) | undefined;
+  onAppointmentUpdating?: ((e: AppointmentUpdatingEvent) => void) | undefined;
   onCellClick?: ((e: CellClickEvent) => void);
   onCellContextMenu?: ((e: CellContextMenuEvent) => void);
   onContentReady?: ((e: ContentReadyEvent) => void);
