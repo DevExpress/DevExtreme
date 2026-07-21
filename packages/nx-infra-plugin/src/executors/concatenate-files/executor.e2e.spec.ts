@@ -198,7 +198,14 @@ describe('ConcatenateFilesExecutor E2E', () => {
       await writeFileText(path.join(projectDir, 'a.js'), 'CCC');
       getWatchHandler()?.('change', path.join(projectDir, 'a.js'));
 
-      await waitFor(async () => (await readFileText(primaryPath)) === 'CCC\nBBB');
+      await waitFor(async () => {
+        const [primary, derived] = await Promise.all([
+          readFileText(primaryPath),
+          readFileText(derivedPath),
+        ]);
+        return primary === 'CCC\nBBB' && derived === 'CCC\nBBB';
+      });
+      expect(await readFileText(primaryPath)).toBe('CCC\nBBB');
       expect(await readFileText(derivedPath)).toBe('CCC\nBBB');
 
       stopWatch?.();
