@@ -6781,7 +6781,7 @@ test('Focus should be set to the grid to allow keyboard navigation when the focu
 });
 
 [true, false].forEach((focusedRowEnabled) => {
-  test.meta({ unstable: focusedRowEnabled })(`Focus should return to the last active cell when re-entering the rowsview via kbn if focusedRowEnabled=${focusedRowEnabled} (T1308919)`, async (t) => {
+  test(`Focus should return to the last active cell when re-entering the rowsview via kbn if focusedRowEnabled=${focusedRowEnabled} (T1308919)`, async (t) => {
     // arrange
     const button = new Button('#otherContainer');
     const dataGrid = new DataGrid('#container');
@@ -6795,7 +6795,11 @@ test('Focus should be set to the grid to allow keyboard navigation when the focu
     // act
     await t
       .click(searchPanel.input)
-      .pressKey('tab tab tab tab tab');
+      .pressKey('tab')
+      .pressKey('tab')
+      .pressKey('tab')
+      .pressKey('tab')
+      .pressKey('tab');
 
     // assert
     await t.expect(secondIDCell.isFocused).ok();
@@ -6811,13 +6815,18 @@ test('Focus should be set to the grid to allow keyboard navigation when the focu
       .notOk('focus should be on the search panel');
 
     // act
-    await t.pressKey('tab tab tab');
+    await t
+      .pressKey('tab')
+      .pressKey('tab')
+      .pressKey('tab');
 
     // assert
     await t.expect(secondIDCell.isFocused).ok();
 
     // act
-    await t.pressKey('tab tab');
+    await t
+      .pressKey('tab')
+      .pressKey('tab');
 
     // assert
     await t.expect(button.isFocused).ok();
