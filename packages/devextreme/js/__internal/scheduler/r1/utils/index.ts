@@ -82,6 +82,12 @@ export {
   formatWeekday,
   formatWeekdayAndDay,
 } from './format_weekday';
+export {
+  buildGroupPanelTree,
+  flattenGroupPanelTreeToRows,
+  getGroupPanelTreeDepth,
+  stringifyId,
+} from './group_panel_tree';
 
 export const agendaUtils = {
   calculateEndViewDate,

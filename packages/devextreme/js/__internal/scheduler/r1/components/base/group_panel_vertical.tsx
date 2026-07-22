@@ -3,7 +3,7 @@ import { BaseInfernoComponent, normalizeStyles } from '@ts/core/r1/runtime/infer
 import { renderUtils } from '../../utils/index';
 import type { GroupPanelProps } from './group_panel';
 import { GroupPanelBaseDefaultProps } from './group_panel_props';
-import { GroupPanelVerticalRow } from './group_panel_vertical_row';
+import { GroupPanelVerticalNode } from './group_panel_vertical_node';
 
 export class GroupPanelVertical extends BaseInfernoComponent<GroupPanelProps> {
   render(): JSX.Element {
@@ -14,7 +14,6 @@ export class GroupPanelVertical extends BaseInfernoComponent<GroupPanelProps> {
       resourceCellTemplate,
       height,
       styles,
-      rowHeights,
     } = this.props;
     const style = normalizeStyles(renderUtils.addHeightToStyle(height, styles));
 
@@ -26,11 +25,11 @@ export class GroupPanelVertical extends BaseInfernoComponent<GroupPanelProps> {
       >
         <div className="dx-scheduler-group-flex-container">
           {
-            groupPanelData.groupPanelItems
-              .map((group, index) => <GroupPanelVerticalRow
-                key={group[0].key}
-                groupItems={group}
-                height={rowHeights?.[index]}
+            groupPanelData.groupTree
+              .map((node, index) => <GroupPanelVerticalNode
+                key={node.key}
+                node={node}
+                index={index}
                 cellTemplate={resourceCellTemplate}
               />)
           }

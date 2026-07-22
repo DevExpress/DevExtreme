@@ -196,12 +196,12 @@ export default class ViewDataProvider {
 
   getGroupPanelData(options: ViewDataProviderOptions): GroupPanelData | undefined {
     const renderOptions = this.transformRenderOptions(options);
-    const groupResources = renderOptions.getResourceManager().groupResources();
+    const { groupsTree } = renderOptions.getResourceManager();
 
-    if (groupResources.length > 0) {
+    if (groupsTree.length > 0) {
       const cellCount = this.getCellCount(renderOptions);
       return getGroupPanelData(
-        groupResources,
+        groupsTree,
         cellCount,
         renderOptions.isGroupedByDate,
         renderOptions.isGroupedByDate ? 1 : cellCount,

@@ -1,6 +1,5 @@
 import type { InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
 import { createReRenderEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno/index';
-import type { RefObject } from '@ts/core/r1/types';
 
 import { VERTICAL_GROUP_ORIENTATION } from '../../../constants';
 import type { Group, GroupOrientation } from '../../../types';
@@ -14,7 +13,6 @@ import { GroupPanelVertical } from './group_panel_vertical';
 export interface GroupPanelProps extends GroupPanelBaseProps {
   groups: Group[];
   groupOrientation: GroupOrientation;
-  elementRef?: RefObject<HTMLDivElement>;
 }
 
 export const GroupPanelDefaultProps: DefaultProps<GroupPanelProps> = {
@@ -39,7 +37,6 @@ export class GroupPanel extends InfernoWrapperComponent<GroupPanelProps> {
       groupOrientation,
       groups,
       styles,
-      rowHeights,
     } = this.props;
     const isVerticalLayout = isVerticalGroupingApplied(groups.length, groupOrientation);
 
@@ -54,9 +51,6 @@ export class GroupPanel extends InfernoWrapperComponent<GroupPanelProps> {
        groupPanelData={groupPanelData}
        elementRef={elementRef}
        styles={styles}
-       rowHeights={rowHeights}
-       groups={GroupPanelDefaultProps.groups}
-       groupOrientation={GroupPanelDefaultProps.groupOrientation}
        groupByDate={GroupPanelDefaultProps.groupByDate}
      />
     );

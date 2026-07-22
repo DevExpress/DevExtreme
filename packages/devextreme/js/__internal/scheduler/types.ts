@@ -131,11 +131,22 @@ export interface ViewOptions {
 
 export interface GroupRenderItem extends GroupItem {
   key: string;
-  resourceName: string;
+  resourceIndex: string;
   data: GroupItem;
   colSpan?: number;
+  rowSpan?: number;
   isFirstGroupCell?: boolean;
   isLastGroupCell?: boolean;
+}
+
+export interface GroupPanelTreeNode extends GroupItem {
+  key: string;
+  resourceIndex: string;
+  data: GroupItem;
+  leafCount: number;
+  isFirstGroupCell: boolean;
+  isLastGroupCell: boolean;
+  children: GroupPanelTreeNode[];
 }
 
 export interface CellPositionData {
@@ -223,7 +234,9 @@ export interface DateHeaderData {
 }
 
 export interface GroupPanelData {
+  groupTree: GroupPanelTreeNode[];
   groupPanelItems: GroupRenderItem[][];
+  maxDepth: number;
   baseColSpan: number;
 }
 

@@ -1,0 +1,80 @@
+import { isObject } from '@js/core/utils/type';
+
+import type { GroupPanelTreeNode, GroupRenderItem } from '../../types';
+import type { ResourceId } from '../../utils/loader/types';
+import type { GroupNode } from '../../utils/resource_manager/types';
+
+export const stringifyId = (id: ResourceId): string => (isObject(id)
+  ? JSON.stringify(id)
+  : String(id));
+
+const getLeafCount = (node: GroupNode): number => (node.children.length === 0
+  ? 1
+  : node.children.reduce((sum, child) => sum + getLeafCount(child), 0));
+
+const buildGroupPanelNode = (
+  node: GroupNode,
+  index: number,
+  siblingsCount: number,
+  parentKey: string,
+): GroupPanelTreeNode => {
+  const key = `${parentKey}${node.resourceIndex}_${stringifyId(node.id)}`;
+
+  return {
+    key,
+    id: node.id,
+    text: node.resourceText,
+    color: node.color,
+    data: { id: node.id, text: node.resourceText, color: node.color },
+    resourceIndex: node.resourceIndex,
+    leafCount: getLeafCount(node),
+    isFirstGroupCell: index === 0,
+    isLastGroupCell: index === siblingsCount - 1,
+    children: node.children.map(
+      (child, childIndex) => buildGroupPanelNode(child, childIndex, node.children.length, `${key}_`),
+    ),
+  } as GroupPanelTreeNode;
+};
+
+export const buildGroupPanelTree = (
+  groupsTree: GroupNode[],
+): GroupPanelTreeNode[] => groupsTree.map(
+  (node, index) => buildGroupPanelNode(node, index, groupsTree.length, ''),
+);
+
+export const getGroupPanelTreeDepth = (tree: GroupPanelTreeNode[]): number => {
+  if (tree.length === 0) {
+    return 0;
+  }
+
+  return 1 + Math.max(...tree.map((node) => getGroupPanelTreeDepth(node.children)));
+};
+
+export const flattenGroupPanelTreeToRows = (
+  tree: GroupPanelTreeNode[],
+  maxDepth: number,
+  baseColSpan: number,
+): GroupRenderItem[][] => {
+  const rows: GroupRenderItem[][] = Array.from({ length: maxDepth }, () => []);
+
+  const walk = (node: GroupPanelTreeNode, depth: number): void => {
+    const isShallowLeaf = node.children.length === 0 && depth < maxDepth - 1;
+
+    rows[depth].push({
+      id: node.id,
+      text: node.text,
+      color: node.color,
+      key: node.key,
+      resourceIndex: node.resourceIndex,
+      data: node.data,
+      colSpan: node.leafCount * baseColSpan,
+      rowSpan: isShallowLeaf ? maxDepth - depth : undefined,
+    });
+
+    node.children.forEach((child) => walk(child, depth + 1));
+  };
+
+  tree.forEach((node) => walk(node, 0));
+
+  return rows;
+};

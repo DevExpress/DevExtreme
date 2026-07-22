@@ -8,7 +8,9 @@ const isVirtualRoot = (node: GroupNode): boolean => !node.resourceIndex;
 const createFlatResourceNodes = (
   resource: ResourceLoader,
 ): GroupNode[] => resource.items.map((item) => ({
+  id: item.id,
   resourceText: item.text,
+  color: item.color,
   resourceIndex: resource.resourceIndex,
   grouped: { [resource.resourceIndex]: item.id },
   children: [],
@@ -22,7 +24,9 @@ const hierarchyToGroupNodes = (
   const grouped = { ...parentGrouped, [resourceIndex]: node.data.id };
 
   return {
+    id: node.data.id,
     resourceText: node.data.text,
+    color: node.data.color,
     resourceIndex,
     grouped,
     children: hierarchyToGroupNodes(node.children, resourceIndex, grouped),
@@ -96,6 +100,7 @@ export const groupResources = (resourceById: Record<string, ResourceLoader>, gro
   }
 
   const head: GroupNode[] = [{
+    id: '',
     resourceText: '',
     resourceIndex: '',
     grouped: {},

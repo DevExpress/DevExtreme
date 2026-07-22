@@ -15,14 +15,20 @@ describe('agenda group utils', () => {
         { itemData: { roomId: 1, nested: { priorityId: 2 } } },
       ] as any)).toEqual([
         {
+          id: 0,
+          color: '#aaa',
           children: [
             {
+              id: 1,
+              color: '#1e90ff',
               children: [],
               grouped: { 'nested.priorityId': 1, roomId: 0 },
               resourceIndex: 'nested.priorityId',
               resourceText: 'Low Priority',
             },
             {
+              id: 2,
+              color: '#ff9747',
               children: [],
               grouped: { 'nested.priorityId': 2, roomId: 0 },
               resourceIndex: 'nested.priorityId',
@@ -34,14 +40,20 @@ describe('agenda group utils', () => {
           resourceText: 'Room 1',
         },
         {
+          id: 1,
+          color: '#ccc',
           children: [
             {
+              id: 1,
+              color: '#1e90ff',
               children: [],
               grouped: { 'nested.priorityId': 1, roomId: 1 },
               resourceIndex: 'nested.priorityId',
               resourceText: 'Low Priority',
             },
             {
+              id: 2,
+              color: '#ff9747',
               children: [],
               grouped: { 'nested.priorityId': 2, roomId: 1 },
               resourceIndex: 'nested.priorityId',
