@@ -156,6 +156,8 @@ class Popover<
       hideOnParentScroll: true,
       arrowPosition: '',
       arrowOffset: 0,
+      focusStateEnabled: undefined,
+      tabFocusLoopEnabled: undefined,
       _fixWrapperPosition: true,
       _describeTarget: true,
     };
@@ -280,8 +282,15 @@ class Popover<
 
   _syncFocusOptions(): void {
     if (this._getEffectiveAriaRole() === 'dialog') {
-      this._setOptionWithoutOptionChange('focusStateEnabled', true);
-      this._setOptionWithoutOptionChange('tabFocusLoopEnabled', true);
+      const { focusStateEnabled, tabFocusLoopEnabled } = this.option();
+
+      if (focusStateEnabled === undefined) {
+        this._setOptionWithoutOptionChange('focusStateEnabled', true);
+      }
+
+      if (tabFocusLoopEnabled === undefined) {
+        this._setOptionWithoutOptionChange('tabFocusLoopEnabled', true);
+      }
     }
   }
 
