@@ -9,7 +9,6 @@ import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import ArrayStore from 'common/data/array_store';
-import DataGrid from 'ui/data_grid';
 import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
 
 import 'generic_light.css!';
@@ -365,13 +364,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             focusedRowIndex: 0,
             onOptionChanged: function(e) {
                 if(e.name === 'focusedRowIndex' && e.value < 0) {
-                    if(DataGrid.IS_RENOVATED_WIDGET) {
-                        setTimeout(() => {
-                            e.component.option('focusedRowIndex', 0);
-                        });
-                    } else {
-                        e.component.option('focusedRowIndex', 0);
-                    }
+                    e.component.option('focusedRowIndex', 0);
                 }
             }
         }).dxDataGrid('instance');

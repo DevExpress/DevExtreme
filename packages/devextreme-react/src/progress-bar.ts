@@ -14,7 +14,7 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 }
 
 type IProgressBarOptionsNarrowedEvents = {
-  onComplete?: ((e: CompleteEvent) => void);
+  onComplete?: ((e: CompleteEvent) => void) | undefined;
   onContentReady?: ((e: ContentReadyEvent) => void);
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);

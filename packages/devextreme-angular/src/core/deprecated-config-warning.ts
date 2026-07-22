@@ -5,7 +5,7 @@ import { logWarning } from './warning-helper';
 
 const warnedUsages = new Set<string>();
 
-const NESTED_CLASS_NAME_REGEXP = /^(Dx[io][A-Z]\w+)Component$/;
+const NESTED_CLASS_NAME_REGEXP = /^_*(Dx[io][A-Z]\w+)Component$/;
 
 type DeprecatedConfigEntry = Record<string, string>;
 
@@ -32,7 +32,7 @@ function getHostMapping(host: INestedOptionContainer | undefined): DeprecatedCon
   while (current && !visited.has(current)) {
     visited.add(current);
 
-    const ctorName = current.constructor?.name;
+    const ctorName = current.constructor?.name?.replace(/^_+/, '');
     if (ctorName && Object.prototype.hasOwnProperty.call(DEPRECATED_CONFIG_COMPONENTS, ctorName)) {
       return DEPRECATED_CONFIG_COMPONENTS[ctorName] as DeprecatedConfigEntry;
     }

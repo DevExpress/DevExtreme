@@ -28,7 +28,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @default undefined
      * @public
      */
-    buttons?: Array<string | TextBoxPredefinedButton | TextEditorButton>;
+    buttons?: Array<string | TextBoxPredefinedButton | TextEditorButton> | undefined;
     /**
      * @docid
      * @default true
@@ -98,7 +98,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @action
      * @public
      */
-    onChange?: ((e: NativeEventInfo<TComponent, Event>) => void);
+    onChange?: ((e: NativeEventInfo<TComponent, Event>) => void) | null;
     /**
      * @docid
      * @default null
@@ -106,7 +106,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @action
      * @public
      */
-    onCopy?: ((e: NativeEventInfo<TComponent, ClipboardEvent>) => void);
+    onCopy?: ((e: NativeEventInfo<TComponent, ClipboardEvent>) => void) | null;
     /**
      * @docid
      * @default null
@@ -114,7 +114,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @action
      * @public
      */
-    onCut?: ((e: NativeEventInfo<TComponent, ClipboardEvent>) => void);
+    onCut?: ((e: NativeEventInfo<TComponent, ClipboardEvent>) => void) | null;
     /**
      * @docid
      * @default null
@@ -122,7 +122,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @action
      * @public
      */
-    onEnterKey?: ((e: NativeEventInfo<TComponent, KeyboardEvent>) => void);
+    onEnterKey?: ((e: NativeEventInfo<TComponent, KeyboardEvent>) => void) | null;
     /**
      * @docid
      * @default null
@@ -130,7 +130,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @action
      * @public
      */
-    onFocusIn?: ((e: NativeEventInfo<TComponent, FocusEvent>) => void);
+    onFocusIn?: ((e: NativeEventInfo<TComponent, FocusEvent>) => void) | null;
     /**
      * @docid
      * @default null
@@ -138,7 +138,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @action
      * @public
      */
-    onFocusOut?: ((e: NativeEventInfo<TComponent, FocusEvent>) => void);
+    onFocusOut?: ((e: NativeEventInfo<TComponent, FocusEvent>) => void) | null;
     /**
      * @docid
      * @default null
@@ -146,7 +146,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @action
      * @public
      */
-    onInput?: ((e: NativeEventInfo<TComponent, UIEvent>) => void);
+    onInput?: ((e: NativeEventInfo<TComponent, UIEvent>) => void) | null;
     /**
      * @docid
      * @type_function_param1 e:NativeEventInfo
@@ -154,7 +154,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @action
      * @public
      */
-    onKeyDown?: ((e: NativeEventInfo<TComponent, KeyboardEvent>) => void);
+    onKeyDown?: ((e: NativeEventInfo<TComponent, KeyboardEvent>) => void) | null;
     /**
      * @docid
      * @default null
@@ -162,7 +162,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @action
      * @public
      */
-    onKeyUp?: ((e: NativeEventInfo<TComponent, KeyboardEvent>) => void);
+    onKeyUp?: ((e: NativeEventInfo<TComponent, KeyboardEvent>) => void) | null;
     /**
      * @docid
      * @default null
@@ -170,7 +170,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @action
      * @public
      */
-    onPaste?: ((e: NativeEventInfo<TComponent, ClipboardEvent>) => void);
+    onPaste?: ((e: NativeEventInfo<TComponent, ClipboardEvent>) => void) | null;
     /**
      * @docid
      * @default ""

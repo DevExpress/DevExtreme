@@ -1,1 +1,10 @@
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "colors" as *;
+@use "../colors" as *;
 @use "../../base/dropDownMenu";
+@use "../../base/dropDownMenu/mixins" as *;
+
+// adduse
+
+@include dx-dropdownmenu-focus-outline($base-accent, $base-border-radius, $generic-dropdownmenu-section-horizontal-margin);

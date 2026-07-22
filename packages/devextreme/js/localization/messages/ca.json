@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "Deixar els camps de dades aquí",
         "dxPivotGrid-rowFieldArea": "Els camps de fila de la fila aquí",
         "dxPivotGrid-filterFieldArea": "Els camps de filtre de baixada aquí",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "de {0} a {1}",
         "dxScheduler-ariaLabel": "Planificador. Vista {0}: {1} amb {2} cites",

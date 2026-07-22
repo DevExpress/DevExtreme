@@ -172,10 +172,10 @@ export interface dxResponsiveBoxOptions<
     }>;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @public
      */
-    screenByWidth?: Function;
+    screenByWidth?: Function | undefined;
     /**
      * @docid
      * @default ""

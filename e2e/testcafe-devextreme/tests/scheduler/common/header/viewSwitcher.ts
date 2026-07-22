@@ -80,6 +80,7 @@ test('Changing view does not reset toolbar items state', async (t) => {
       },
       'viewSwitcher',
     ],
+    allowKeyboardNavigation: false,
   },
 }));
 

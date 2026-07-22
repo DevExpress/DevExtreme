@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "Plasați câmpurile de date aici",
         "dxPivotGrid-rowFieldArea": "Plasați câmpurile rândului aici",
         "dxPivotGrid-filterFieldArea": "Plasați câmpurile de filtrare aici",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "de la {0} până la {1}",
         "dxScheduler-ariaLabel": "Planificator. Vedere {0}: {1} cu {2} programări",

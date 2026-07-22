@@ -33,18 +33,18 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 }
 
 type ISchedulerOptionsNarrowedEvents = {
-  onAppointmentAdded?: ((e: AppointmentAddedEvent) => void);
-  onAppointmentAdding?: ((e: AppointmentAddingEvent) => void);
+  onAppointmentAdded?: ((e: AppointmentAddedEvent) => void) | undefined;
+  onAppointmentAdding?: ((e: AppointmentAddingEvent) => void) | undefined;
   onAppointmentClick?: ((e: AppointmentClickEvent) => void);
   onAppointmentContextMenu?: ((e: AppointmentContextMenuEvent) => void);
   onAppointmentDblClick?: ((e: AppointmentDblClickEvent) => void);
-  onAppointmentDeleted?: ((e: AppointmentDeletedEvent) => void);
-  onAppointmentDeleting?: ((e: AppointmentDeletingEvent) => void);
-  onAppointmentFormOpening?: ((e: AppointmentFormOpeningEvent) => void);
-  onAppointmentRendered?: ((e: AppointmentRenderedEvent) => void);
-  onAppointmentTooltipShowing?: ((e: AppointmentTooltipShowingEvent) => void);
-  onAppointmentUpdated?: ((e: AppointmentUpdatedEvent) => void);
-  onAppointmentUpdating?: ((e: AppointmentUpdatingEvent) => void);
+  onAppointmentDeleted?: ((e: AppointmentDeletedEvent) => void) | undefined;
+  onAppointmentDeleting?: ((e: AppointmentDeletingEvent) => void) | undefined;
+  onAppointmentFormOpening?: ((e: AppointmentFormOpeningEvent) => void) | undefined;
+  onAppointmentRendered?: ((e: AppointmentRenderedEvent) => void) | undefined;
+  onAppointmentTooltipShowing?: ((e: AppointmentTooltipShowingEvent) => void) | undefined;
+  onAppointmentUpdated?: ((e: AppointmentUpdatedEvent) => void) | undefined;
+  onAppointmentUpdating?: ((e: AppointmentUpdatingEvent) => void) | undefined;
   onCellClick?: ((e: CellClickEvent) => void);
   onCellContextMenu?: ((e: CellContextMenuEvent) => void);
   onContentReady?: ((e: ContentReadyEvent) => void);
@@ -280,7 +280,7 @@ type IButtonOptionsProps = React.PropsWithChildren<{
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   icon?: string;
-  onClick?: ((e: ClickEvent) => void);
+  onClick?: ((e: ClickEvent) => void) | undefined;
   onContentReady?: ((e: ButtonContentReadyEvent) => void);
   onDisposing?: ((e: ButtonDisposingEvent) => void);
   onInitialized?: ((e: ButtonInitializedEvent) => void);
@@ -501,12 +501,12 @@ type IFormProps = React.PropsWithChildren<{
   minColWidth?: number;
   onContentReady?: ((e: FormContentReadyEvent) => void);
   onDisposing?: ((e: FormDisposingEvent) => void);
-  onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void);
-  onFieldDataChanged?: ((e: FieldDataChangedEvent) => void);
+  onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void) | undefined;
+  onFieldDataChanged?: ((e: FieldDataChangedEvent) => void) | undefined;
   onInitialized?: ((e: FormInitializedEvent) => void);
   onOptionChanged?: ((e: FormOptionChangedEvent) => void);
-  onSmartPasted?: ((e: SmartPastedEvent) => void);
-  onSmartPasting?: ((e: SmartPastingEvent) => void);
+  onSmartPasted?: ((e: SmartPastedEvent) => void) | undefined;
+  onSmartPasting?: ((e: SmartPastingEvent) => void) | undefined;
   optionalMark?: string;
   readOnly?: boolean;
   requiredMark?: string;
@@ -814,9 +814,9 @@ type IOptionsProps = React.PropsWithChildren<{
   onContentReady?: ((e: ButtonGroupContentReadyEvent) => void);
   onDisposing?: ((e: ButtonGroupDisposingEvent) => void);
   onInitialized?: ((e: ButtonGroupInitializedEvent) => void);
-  onItemClick?: ((e: ItemClickEvent) => void);
+  onItemClick?: ((e: ItemClickEvent) => void) | undefined;
   onOptionChanged?: ((e: ButtonGroupOptionChangedEvent) => void);
-  onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+  onSelectionChanged?: ((e: SelectionChangedEvent) => void) | undefined;
   rtlEnabled?: boolean;
   selectedItemKeys?: Array<any>;
   selectedItems?: Array<any>;
@@ -1238,14 +1238,14 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   onSelectionChanged?: ((e: TabPanelSelectionChangedEvent) => void);
   onSelectionChanging?: ((e: SelectionChangingEvent) => void);
   onTitleClick?: ((e: TitleClickEvent) => void);
-  onTitleHold?: ((e: TitleHoldEvent) => void);
-  onTitleRendered?: ((e: TitleRenderedEvent) => void);
+  onTitleHold?: ((e: TitleHoldEvent) => void) | undefined;
+  onTitleRendered?: ((e: TitleRenderedEvent) => void) | undefined;
   repaintChangesOnly?: boolean;
   rtlEnabled?: boolean;
   scrollByContent?: boolean;
   scrollingEnabled?: boolean;
   selectedIndex?: number;
-  selectedItem?: any;
+  selectedItem?: any | null;
   showNavButtons?: boolean;
   stylingMode?: TabsStyle;
   swipeEnabled?: boolean;
@@ -1257,8 +1257,8 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   onItemsChange?: (value: Array<any | dxTabPanelItem | string>) => void;
   defaultSelectedIndex?: number;
   onSelectedIndexChange?: (value: number) => void;
-  defaultSelectedItem?: any;
-  onSelectedItemChange?: (value: any) => void;
+  defaultSelectedItem?: any | null;
+  onSelectedItemChange?: (value: any | null) => void;
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
   itemTitleRender?: (...params: any) => React.ReactNode;

@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "Velciet datu laukus šeit",
         "dxPivotGrid-rowFieldArea": "Velciet rindu laukus šeit",
         "dxPivotGrid-filterFieldArea": "Velciet filtra laukus šeit",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "no {0} līdz {1}",
         "dxScheduler-ariaLabel": "Plānotājs. {0} skats: {1} ar {2} apmeklējumiem",

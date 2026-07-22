@@ -114,29 +114,19 @@ class HtmlEditor extends Editor<Properties> {
 
     return {
       ...super._getDefaultOptions(),
-      // @ts-expect-error undefined is not allowed
-      aiIntegration: null,
+      aiIntegration: undefined,
       allowSoftLineBreak: false,
-      // @ts-expect-error undefined is not allowed
-      converter: null,
-      // @ts-expect-error undefined is not allowed
-      customizeModules: null,
+      converter: undefined,
+      customizeModules: undefined,
       focusStateEnabled: true,
-      // @ts-expect-error undefined is not allowed
-      imageUpload: null,
-      // @ts-expect-error undefined is not allowed
+      imageUpload: undefined,
       mediaResizing: null,
-      // @ts-expect-error undefined is not allowed
       mentions: null,
       placeholder: '',
       stylingMode,
-      // @ts-expect-error undefined is not allowed
       tableContextMenu: null,
-      // @ts-expect-error undefined is not allowed
       tableResizing: null,
-      // @ts-expect-error undefined is not allowed
       toolbar: null,
-      // @ts-expect-error undefined is not allowed
       variables: null,
     };
   }

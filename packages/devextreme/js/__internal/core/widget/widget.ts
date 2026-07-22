@@ -29,7 +29,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
 
 export const WIDGET_CLASS = 'dx-widget';
-const DISABLED_STATE_CLASS = 'dx-state-disabled';
+export const DISABLED_STATE_CLASS = 'dx-state-disabled';
 export const ACTIVE_STATE_CLASS = 'dx-state-active';
 export const FOCUSED_STATE_CLASS = 'dx-state-focused';
 export const HOVER_STATE_CLASS = 'dx-state-hover';
@@ -125,7 +125,7 @@ class Widget<
       visible: true,
       hint: undefined,
       activeStateEnabled: false,
-      onContentReady: null,
+      onContentReady: undefined,
       hoverStateEnabled: false,
       focusStateEnabled: false,
       tabIndex: 0,

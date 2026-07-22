@@ -33,10 +33,10 @@ type IGalleryOptions<TItem = any, TKey = any> = React.PropsWithChildren<ReplaceF
   itemComponent?: React.ComponentType<any>;
   defaultItems?: Array<any | dxGalleryItem | string>;
   defaultSelectedIndex?: number;
-  defaultSelectedItem?: any;
+  defaultSelectedItem?: any | null;
   onItemsChange?: (value: Array<any | dxGalleryItem | string>) => void;
   onSelectedIndexChange?: (value: number) => void;
-  onSelectedItemChange?: (value: any) => void;
+  onSelectedItemChange?: (value: any | null) => void;
 }>
 
 interface GalleryRef<TItem = any, TKey = any> {

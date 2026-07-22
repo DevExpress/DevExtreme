@@ -16,8 +16,8 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 type IScrollViewOptionsNarrowedEvents = {
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
-  onPullDown?: ((e: PullDownEvent) => void);
-  onReachBottom?: ((e: ReachBottomEvent) => void);
+  onPullDown?: ((e: PullDownEvent) => void) | undefined;
+  onReachBottom?: ((e: ReachBottomEvent) => void) | undefined;
   onScroll?: ((e: ScrollEvent) => void);
   onUpdated?: ((e: UpdatedEvent) => void);
 }
