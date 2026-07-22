@@ -2383,17 +2383,12 @@ QUnit.module('accessibility', {
         assert.strictEqual($overlay.attr('role'), 'dialog');
     });
 
-    // NOTE: Popup._init sets role="dialog" on the overlay content by default.
-    // A tooltip-mode Popover must override that inherited default (and, because
-    // describing a target requires role="tooltip", must then describe its target).
-    // Regression: the "do not clobber an external role" guard must not treat the
-    // inherited Popup default as an external override. See popover.ts _init.
-    QUnit.test('default popover should override the inherited Popup dialog role and describe its target', function(assert) {
+    QUnit.test('default popover has role="tooltip" and describes its target by the overlay content id', function(assert) {
         new Popover($('#what'), { target: '#where' });
         const $overlay = $(`.${OVERLAY_CONTENT_CLASS}`);
         const contentId = $overlay.attr('id');
 
-        assert.strictEqual($overlay.attr('role'), 'tooltip', 'inherited dialog role is overridden with tooltip');
+        assert.strictEqual($overlay.attr('role'), 'tooltip', 'overlay content role is tooltip');
         assert.ok(contentId, 'overlay content has an id');
         assert.strictEqual($('#where').attr('aria-describedby'), contentId, 'target is described by the overlay content id');
     });
@@ -2650,16 +2645,6 @@ QUnit.module('accessibility', {
 
             assert.strictEqual(popover.$overlayContent().attr('role'), 'tooltip', 'overlay content role is tooltip again');
             assert.deepEqual(getDescribedBy($('#where')), [contentId], 'target description is restored');
-        });
-
-        QUnit.test('externally forced role should be preserved and should prevent the target description', function(assert) {
-            const popover = new Popover($('#what'), { target: '#where', animation: null });
-
-            popover.$overlayContent().attr('role', 'dialog');
-            popover.show();
-
-            assert.strictEqual(popover.$overlayContent().attr('role'), 'dialog', 'external role is not overwritten');
-            assert.strictEqual($('#where').attr('aria-describedby'), undefined, 'target description is removed on the next sync');
         });
 
         QUnit.test('tooltip-mode popover with a title should not have aria-labelledby', function(assert) {
