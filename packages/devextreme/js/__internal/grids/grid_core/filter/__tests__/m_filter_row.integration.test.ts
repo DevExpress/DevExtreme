@@ -94,5 +94,29 @@ describe('FilterRow', () => {
 
       expect(editor.getInput().value).toBe('San');
     });
+
+    it('should clear the filter row editor when the filter is reset via the filter panel', async () => {
+      const { component, instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, city: 'Las Vegas' },
+          { id: 2, city: 'San Jose' },
+        ],
+        filterRow: { visible: true, applyFilter: 'onClick' },
+        filterPanel: { visible: true },
+        columns: ['city'],
+      });
+
+      await flushAsync();
+
+      instance.option('filterValue', ['city', 'contains', 'Las']);
+      await flushAsync();
+
+      instance.option('filterValue', null as any);
+      await flushAsync();
+
+      const editor = component.getFilterRow().getFilterCell(0).getEditor(TextBoxModel);
+
+      expect(editor.getInput().value).toBe('');
+    });
   });
 });
