@@ -9,6 +9,7 @@ preferWorkspacePackages: true
 saveWorkspaceProtocol: false
 packageManagerStrict: false
 engineStrict: true
+minimumReleaseAge: 0
 
 overrides:
   "basic-ftp@<5.3.1": ">=5.3.1"
@@ -63,7 +64,7 @@ catalog:
   devexpress-diagram: 2.2.29
   devexpress-gantt: 4.1.69
   devextreme-exceljs-fork: 4.4.11
-  devextreme-quill: 1.7.10
+  devextreme-quill: 1.8.0
   "@eslint/js": 9.39.4
   eslint: 9.39.4
   eslint-config-airbnb-typescript: 18.0.0
@@ -135,23 +136,3 @@ patchedDependencies:
   testcafe-hammerhead@31.7.8: patches/testcafe-hammerhead@31.7.8.patch
   systemjs-builder@0.16.15: patches/systemjs-builder@0.16.15.patch
   babel-core@6.26.3: patches/babel-core@6.26.3.patch
-
-minimumReleaseAgeExclude:
-  - "eslint-config-devextreme"
-  - devextreme-quill@1.7.10
-  - '@nx/devkit@23.0.1'
-  - '@nx/jest@23.0.1'
-  - '@nx/js@23.0.1'
-  - '@nx/nx-darwin-arm64@23.0.1'
-  - '@nx/nx-darwin-x64@23.0.1'
-  - '@nx/nx-freebsd-x64@23.0.1'
-  - '@nx/nx-linux-arm-gnueabihf@23.0.1'
-  - '@nx/nx-linux-arm64-gnu@23.0.1'
-  - '@nx/nx-linux-arm64-musl@23.0.1'
-  - '@nx/nx-linux-x64-gnu@23.0.1'
-  - '@nx/nx-linux-x64-musl@23.0.1'
-  - '@nx/nx-win32-arm64-msvc@23.0.1'
-  - '@nx/nx-win32-x64-msvc@23.0.1'
-  - '@nx/workspace@23.0.1'
-  - nx@23.0.1
-  - devextreme-internal-tools@22.0.0
