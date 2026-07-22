@@ -53,7 +53,7 @@ class EditingController extends editingModule.controllers.editing {
   protected _getLoadedRowIndex(items, change, isProcessedItems?) {
     const dataSourceAdapter = this._dataController.dataSource();
     const insertParentKey = this._getInternalData(change.key)?.insertInfo?.parentKey;
-    const parentKey = isDefined(insertParentKey)
+    const parentKey = insertParentKey !== undefined
       ? insertParentKey
       : dataSourceAdapter?.parentKeyOf(change.data);
 

@@ -43,11 +43,12 @@ describe('TreeList editing parentIdExpr column', () => {
   });
 
   // T1307499
-  it('should keep the new row visible after editing the parentId column with setCellValue', async () => {
+  it.each([0, null])('should keep the new row visible after editing the parentId column with setCellValue (rootValue: %p)', async (rootValue) => {
     const { component, instance } = createTreeList({
-      dataSource: [{ id: 1, parentId: 0, text: 'item 1' }],
+      dataSource: [{ id: 1, parentId: rootValue, text: 'item 1' }],
       keyExpr: 'id',
       parentIdExpr: 'parentId',
+      rootValue,
       editing: {
         allowAdding: true,
       },
