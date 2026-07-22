@@ -495,6 +495,8 @@
         "dxFilterBuilder-filterAriaItemOperation": "Операція елемента",
         "dxFilterBuilder-filterAriaItemValue": "Значення елемента",
 
+        "dxHtmlEditor-editorAriaLabel": "Editor content",
+        "dxHtmlEditor-ariaEscapeInstruction": "Press Ctrl + Shift + Up arrow or Ctrl + Shift + Down arrow to move focus out of the editing area",
         "dxHtmlEditor-dialogColorCaption": "Змінити колір тексту",
         "dxHtmlEditor-dialogBackgroundCaption": "Змінити колір фону",
         "dxHtmlEditor-dialogLinkCaption": "Додати посилання",

@@ -495,6 +495,8 @@
         "dxFilterBuilder-filterAriaItemOperation": "Thao tác mục",
         "dxFilterBuilder-filterAriaItemValue": "Giá trị mục",
 
+        "dxHtmlEditor-editorAriaLabel": "Editor content",
+        "dxHtmlEditor-ariaEscapeInstruction": "Press Ctrl + Shift + Up arrow or Ctrl + Shift + Down arrow to move focus out of the editing area",
         "dxHtmlEditor-dialogColorCaption": "Đổi màu phông chữ",
         "dxHtmlEditor-dialogBackgroundCaption": "Đổi màu nền",
         "dxHtmlEditor-dialogLinkCaption": "Thêm Liên kết",

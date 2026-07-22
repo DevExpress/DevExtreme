@@ -17,10 +17,10 @@ import {
 import type { AICommandName, AICustomCommand, AIToolbarItem } from '@js/ui/html_editor';
 import type { ContentReadyEvent, ItemClickEvent } from '@js/ui/menu';
 import type { Item } from '@js/ui/toolbar';
-import Toolbar from '@js/ui/toolbar';
 import errors from '@js/ui/widget/ui.errors';
 import { capitalize } from '@ts/core/utils/capitalize';
 import { DX_MENU_ITEM_CLASS } from '@ts/ui/menu/menu';
+import Toolbar from '@ts/ui/toolbar/toolbar';
 import Quill from 'devextreme-quill';
 
 import type { CommandsMap } from '../utils/ai';
@@ -235,6 +235,10 @@ if (Quill) {
 
     repaint() {
       this.toolbarInstance && this.toolbarInstance.repaint();
+    }
+
+    focusFirstItem(): boolean {
+      return this.toolbarInstance?.focusFirstItem() ?? false;
     }
 
     _getContainer() {
