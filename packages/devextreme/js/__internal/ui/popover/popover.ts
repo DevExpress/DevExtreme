@@ -129,8 +129,6 @@ class Popover<
 
   _$describedTargets?: dxElementWrapper;
 
-  _lastAppliedAriaRole?: string;
-
   _getDefaultOptions(): TProperties {
     return {
       ...super._getDefaultOptions(),
@@ -215,13 +213,6 @@ class Popover<
 
     const { visible } = this.option();
 
-    // NOTE: Popup applies a default role on the overlay content in its own _init.
-    // Popover owns role management from here, so claim the current value before
-    // syncing; otherwise the "do not clobber an external role" guard in
-    // _renderAriaRole would mistake the inherited default for a user override.
-    this._lastAppliedAriaRole = this._getActualAriaRole();
-    this._renderAriaRole();
-
     if (visible) {
       this._attachEscapeKeyHandler();
     }
@@ -272,49 +263,23 @@ class Popover<
   }
 
   _syncAriaAttributes(): void {
-    this._renderAriaRole();
+    this.setAria('role', this._getEffectiveAriaRole());
     this._syncTargetAriaDescription();
   }
 
-  _getExpectedAriaRole(): string {
-    const {
-      toolbarItems,
-      showTitle,
-      showCloseButton,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      _overlayContentRole,
-    } = this.option();
-
-    if (_overlayContentRole) {
-      return _overlayContentRole;
-    }
+  _getAriaRole(): string {
+    const { toolbarItems, showTitle, showCloseButton } = this.option();
 
     const isDialog = Boolean(toolbarItems?.length) || Boolean(showTitle && showCloseButton);
 
     return isDialog ? 'dialog' : 'tooltip';
   }
 
-  // NOTE: An externally assigned role (user code) must win: the expected role
-  // applies only while this instance owns the current attribute value.
   _getEffectiveAriaRole(): string {
-    const actualRole = this._getActualAriaRole();
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _overlayContentRole } = this.option();
 
-    if (actualRole === undefined || actualRole === this._lastAppliedAriaRole) {
-      return this._getExpectedAriaRole();
-    }
-
-    return actualRole;
-  }
-
-  _renderAriaRole(): void {
-    const role = this._getEffectiveAriaRole();
-
-    if (role === this._getActualAriaRole()) {
-      return;
-    }
-
-    this.setAria('role', role);
-    this._lastAppliedAriaRole = role;
+    return _overlayContentRole ?? this._getAriaRole();
   }
 
   // NOTE: An accessible name on a tooltip can mask its content for assistive

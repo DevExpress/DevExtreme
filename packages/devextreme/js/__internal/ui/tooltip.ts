@@ -51,7 +51,7 @@ class Tooltip<
 
   // NOTE: dxTooltip keeps its legacy role behavior: only toolbarItems make it
   // a dialog; the Popover showTitle/showCloseButton predicate does not apply.
-  _getExpectedAriaRole(): string {
+  _getAriaRole(): string {
     const { toolbarItems } = this.option();
 
     return toolbarItems?.length ? 'dialog' : 'tooltip';
