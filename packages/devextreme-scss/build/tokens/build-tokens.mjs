@@ -143,12 +143,6 @@ const FLUENT_MODES = [
   'light',
 ];
 
-const COMPONENT_SIZES = [
-  'small',
-  'medium',
-  'large',
-];
-
 const getThemeCommonFiles = () => [
   'base/borders',
   'base/opacity',
@@ -182,11 +176,6 @@ const getModeFiles = (mode) => [
 const getComponentThemeFiles = () => [
   ...getModeFiles('light'),
   `components/core/theme/${THEME_NAME}`,
-];
-
-const getComponentSizeFiles = (size) => [
-  ...getComponentThemeFiles(),
-  `components/core/size/${THEME_NAME}_${size}`,
 ];
 
 StyleDictionary.registerFormat({
@@ -311,19 +300,12 @@ const createComponentThemeConfig = () => createConfig('components-theme', getCom
   },
 ]);
 
-const createComponentSizeConfig = (size) => createConfig(`components-${size}`, getComponentSizeFiles(size), [
-  {
-    destination: `${THEME_NAME}/components/sizes/${size}.scss`,
-    format: 'css/variables',
-    filter: (token) => normalizeFilePath(token).includes(`components/core/size/${THEME_NAME}_${size}.json`),
-    options: FILE_OPTIONS,
-  },
-]);
-
-// All token names for the SCSS bridge file: medium sizes include the full
-// common + light mode + component theme set, and size variable names are
-// identical across small/medium/large.
-const createDsConfig = () => createConfig('ds', getComponentSizeFiles('medium'), [
+// All token names for the SCSS bridge file: the common + light-mode + component
+// *theme* (color) set. Component *size* tokens are intentionally excluded — dxdsfluent
+// maps sizes onto the base scales (spacing/font-size/border-radius/…), so no widget
+// references the component `*-layout-*` tokens and they are not emitted (see
+// widgets/dxdsfluent/_design-system.scss).
+const createDsConfig = () => createConfig('ds', getComponentThemeFiles(), [
   {
     destination: 'variables/_ds.scss',
     format: 'scssToCss',
@@ -334,7 +316,6 @@ const configs = [
   ...FLUENT_PALETTES.map(createPaletteConfig),
   ...FLUENT_MODES.map(createModeConfig),
   createComponentThemeConfig(),
-  ...COMPONENT_SIZES.map(createComponentSizeConfig),
   createDsConfig(),
 ];
 
