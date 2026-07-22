@@ -3038,8 +3038,8 @@ QUnit.module('accessibility', {
             const instance = new Popover(this.$element, {
                 target: this.$target,
                 toolbarItems: [
-                    { text: 'OK', options: { focusStateEnabled: true } },
-                    { text: 'Cancel', options: { focusStateEnabled: true } }
+                    { widget: 'dxButton', options: { text: 'OK' } },
+                    { widget: 'dxButton', options: { text: 'Cancel' } }
                 ],
                 visible: false,
             });
@@ -3063,8 +3063,8 @@ QUnit.module('accessibility', {
             const instance = new Popover(this.$element, {
                 target: this.$target,
                 toolbarItems: [
-                    { text: 'OK', options: { focusStateEnabled: true } },
-                    { text: 'Cancel', options: { focusStateEnabled: true } }
+                    { widget: 'dxButton', options: { text: 'OK', } },
+                    { widget: 'dxButton', options: { text: 'Cancel', } }
                 ],
                 visible: false,
             });
@@ -3082,6 +3082,39 @@ QUnit.module('accessibility', {
             $(document).trigger(shiftTabEvent);
 
             assert.strictEqual(document.activeElement, lastFocusable, 'focus looped to the last element');
+        });
+
+        QUnit.test('Popover in dialog mode should focus first tabbable element inside content on show', function(assert) {
+            const instance = new Popover(this.$element, {
+                target: this.$target,
+                contentTemplate: function() {
+                    return $('<div><input id="input1" /><input id="input2" /></div>');
+                },
+                toolbarItems: [{ text: 'OK' }],
+                visible: false,
+            });
+
+            instance.show();
+            this.clock.tick(500);
+
+            const $input1 = $('#input1');
+            assert.strictEqual(document.activeElement, $input1.get(0), 'first tabbable element is focused');
+        });
+
+        QUnit.test('Popover in dialog mode should restore focus to target on dispose when visible', function(assert) {
+            this.$target.attr('tabindex', 0).focus();
+
+            const instance = new Popover(this.$element, {
+                target: this.$target,
+                toolbarItems: [{ text: 'OK' }],
+                visible: false,
+            });
+
+            instance.show();
+
+            instance.dispose();
+
+            assert.strictEqual(document.activeElement, this.$target.get(0), 'focus is restored to target after dispose');
         });
     });
 });

@@ -247,16 +247,6 @@ class Popover<
     eventsEngine.off(domAdapter.getDocument(), eventName, this._documentEscapeKeyHandler);
   }
 
-  _visibilityChanged(visible: boolean): void {
-    super._visibilityChanged(visible);
-
-    if (visible) {
-      this._attachEscapeKeyHandler();
-    } else {
-      this._detachEscapeKeyHandler();
-    }
-  }
-
   _render(): void {
     super._render();
 
@@ -280,6 +270,8 @@ class Popover<
     this._syncFocusOptions();
   }
 
+  // NOTE: If options are explicitly specified, they are not overwritten.
+  // Now Lookup uses focusStateEnabled false and overlayRole dialog.
   _syncFocusOptions(): void {
     if (this._getEffectiveAriaRole() === 'dialog') {
       const { focusStateEnabled, tabFocusLoopEnabled } = this.option();
@@ -294,18 +286,26 @@ class Popover<
     }
   }
 
+  _renderFocusTarget(): void {
+    if (this._getEffectiveAriaRole() !== 'dialog') {
+      const { tabIndex } = this.option();
+      // @ts-expect-error
+      this._focusTarget().attr('tabIndex', tabIndex);
+    }
+  }
+
   _focusTarget(): dxElementWrapper | null | undefined {
     if (this._getEffectiveAriaRole() === 'dialog') {
-      const tabbable = this._findTabbableBounds().$first;
-      if (tabbable && tabbable.length) {
-        return tabbable;
+      const $firstFocusableTarget = this._findTabbableBounds().$first;
+      if ($firstFocusableTarget?.length) {
+        return $firstFocusableTarget;
       }
 
-      const $content = this.$overlayContent();
-      if ($content.attr('tabindex') === undefined) {
-        $content.attr('tabindex', -1);
-      }
-      return $content;
+      const $overlayContent = this.$overlayContent();
+      const { tabIndex } = this.option();
+      // @ts-expect-error
+      $overlayContent.attr('tabindex', tabIndex);
+      return $overlayContent;
     }
 
     return super._focusTarget();
