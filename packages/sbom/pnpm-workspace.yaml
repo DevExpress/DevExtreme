@@ -7,3 +7,4 @@ minimumReleaseAgeExclude:
 overrides:
   tar@<=7.5.15: ^7.5.16
   brace-expansion@>=3.0.0 <5.0.7: ^5.0.7
+  body-parser@>=2.0.0 <2.3.0: ^2.3.0
