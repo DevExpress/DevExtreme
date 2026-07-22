@@ -58,3 +58,46 @@ test('TreeList - Insertafterkey doesn\'t work on children nodes', async (t) => {
     }
   },
 }));
+
+// T1307499
+test('TreeList - New row should stay visible after editing the parentId column with setCellValue', async (t) => {
+  const treeList = new TreeList('#container');
+  const addRowButton = treeList.getHeaderPanel().getAddRowButton();
+
+  await t.expect(treeList.isReady()).ok();
+
+  await t.click(addRowButton);
+
+  const newRow = treeList.getDataRow(0);
+  const parentIdCellEditor = newRow.getDataCell(1).getEditor();
+
+  await t
+    .expect(newRow.isInserted).ok()
+    .expect(parentIdCellEditor.element.value)
+    .eql('0')
+    .expect(treeList.dataRows.count)
+    .eql(2);
+
+  await t
+    .typeText(parentIdCellEditor.element, '1', { replace: true })
+    .pressKey('tab');
+
+  await t
+    .expect(parentIdCellEditor.element.value)
+    .eql('1')
+    .expect(treeList.dataRows.count)
+    .eql(2);
+}).before(async () => createWidget('dxTreeList', {
+  dataSource: [{ id: 1, parentId: 0, text: 'item 1' }],
+  keyExpr: 'id',
+  parentIdExpr: 'parentId',
+  editing: {
+    allowAdding: true,
+  },
+  columns: ['id', {
+    dataField: 'parentId',
+    setCellValue(newData, value) {
+      newData.parentId = value;
+    },
+  }, 'text'],
+}));
