@@ -1672,16 +1672,10 @@ describe('onXXXChange', () => {
     });
   });
 
-  describe('independent events', () => {
-    beforeAll(() => {
-      jest.spyOn<{ isIndependentEvent: () => boolean }, 'isIndependentEvent'>(
-        OptionsManagerModule.OptionsManager.prototype as
-        OptionsManagerModule.OptionsManager & { isIndependentEvent: () => boolean },
-        'isIndependentEvent',
-      )
-        .mockImplementation(() => true);
-    });
-
+  // Plan B: there is no longer an "independent vs dependent" split decided by event
+  // name. A handler fires unless the change it reports is an echo of React's own write
+  // (correlated at runtime by value + previousValue). These blocks cover both sides.
+  describe('non-echo events', () => {
     afterEach(() => {
       jest.clearAllMocks();
       jest.clearAllTimers();
@@ -1729,23 +1723,14 @@ describe('onXXXChange', () => {
     });
   });
 
-  describe('dependent events', () => {
-    beforeAll(() => {
-      jest.spyOn<{ isIndependentEvent: () => boolean }, 'isIndependentEvent'>(
-        OptionsManagerModule.OptionsManager.prototype as
-        OptionsManagerModule.OptionsManager & { isIndependentEvent: () => boolean },
-        'isIndependentEvent',
-      )
-        .mockImplementation(() => false);
-    });
-
+  describe('echo events', () => {
     afterEach(() => {
       jest.clearAllMocks();
       jest.clearAllTimers();
       cleanup();
     });
 
-    it('it is fired on outher change', () => {
+    it('is not fired when the change echoes React\'s own write', () => {
       const onPropChange = jest.fn();
       const { rerender } = render(
         <TestComponent
@@ -1755,18 +1740,19 @@ describe('onXXXChange', () => {
       );
       expect(onPropChange).not.toBeCalled();
       Widget.option.mockImplementation(
-        (name: string) => {
+        (name: string, value: unknown) => {
           if (name === 'text') {
-            WidgetClass.mock.calls[0][1].onTextChange();
+            // widget echoes exactly what React wrote (optionChanged before action),
+            // then raises the action with matching value/previousValue
+            fireOptionChange('text', value, '0');
+            WidgetClass.mock.calls[0][1].onTextChange({ value, previousValue: '0' });
           }
         },
       );
-      const sampleProps = { text: '1' };
       rerender(
         <TestComponent
-          text="0"
+          text="1"
           onTextChange={onPropChange}
-          sampleProps={sampleProps}
         />,
       );
       expect(onPropChange).toHaveBeenCalledTimes(0);
