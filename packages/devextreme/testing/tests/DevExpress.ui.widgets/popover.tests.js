@@ -3033,6 +3033,56 @@ QUnit.module('accessibility', {
 
             assert.strictEqual(document.activeElement, this.$target.get(0), 'focus is restored to target after hide');
         });
+
+        QUnit.test('Popover in dialog mode should loop focus from last to first element on tab keypress', function(assert) {
+            const instance = new Popover(this.$element, {
+                target: this.$target,
+                toolbarItems: [
+                    { text: 'OK', options: { focusStateEnabled: true } },
+                    { text: 'Cancel', options: { focusStateEnabled: true } }
+                ],
+                visible: false,
+            });
+
+            instance.show();
+            this.clock.tick(500);
+
+            const bounds = instance._findTabbableBounds();
+            const firstFocusable = bounds.$first.get(0);
+            const lastFocusable = bounds.$last.get(0);
+
+            $(lastFocusable).focus();
+
+            const tabEvent = $.Event('keydown', { key: 'Tab' });
+            $(document).trigger(tabEvent);
+
+            assert.strictEqual(document.activeElement, firstFocusable, 'focus looped to the first element');
+        });
+
+        QUnit.test('Popover in dialog mode should loop focus from first to last element on shift+tab keypress', function(assert) {
+            const instance = new Popover(this.$element, {
+                target: this.$target,
+                toolbarItems: [
+                    { text: 'OK', options: { focusStateEnabled: true } },
+                    { text: 'Cancel', options: { focusStateEnabled: true } }
+                ],
+                visible: false,
+            });
+
+            instance.show();
+            this.clock.tick(500);
+
+            const bounds = instance._findTabbableBounds();
+            const firstFocusable = bounds.$first.get(0);
+            const lastFocusable = bounds.$last.get(0);
+
+            $(firstFocusable).focus();
+
+            const shiftTabEvent = $.Event('keydown', { key: 'Tab', shiftKey: true });
+            $(document).trigger(shiftTabEvent);
+
+            assert.strictEqual(document.activeElement, lastFocusable, 'focus looped to the last element');
+        });
     });
 });
 

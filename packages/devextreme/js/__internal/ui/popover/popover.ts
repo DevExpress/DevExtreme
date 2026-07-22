@@ -245,6 +245,16 @@ class Popover<
     eventsEngine.off(domAdapter.getDocument(), eventName, this._documentEscapeKeyHandler);
   }
 
+  _visibilityChanged(visible: boolean): void {
+    super._visibilityChanged(visible);
+
+    if (visible) {
+      this._attachEscapeKeyHandler();
+    } else {
+      this._detachEscapeKeyHandler();
+    }
+  }
+
   _render(): void {
     super._render();
 
@@ -292,20 +302,20 @@ class Popover<
     return super._focusTarget();
   }
 
-  _forceFocusLost(): void {
-    if (this._getEffectiveAriaRole() === 'dialog') {
-      this._restoreTargetFocus();
-    } else {
-      super._forceFocusLost();
-    }
-  }
-
   _restoreTargetFocus(): void {
     const $targets = this._getAriaDescriptionTargets();
 
     if ($targets.length) {
       // @ts-expect-error trigger should be typed on type 'EventsEngineType'
       eventsEngine.trigger($targets.first(), 'focus');
+    }
+  }
+
+  _forceFocusLost(): void {
+    if (this._getEffectiveAriaRole() === 'dialog') {
+      this._restoreTargetFocus();
+    } else {
+      super._forceFocusLost();
     }
   }
 
