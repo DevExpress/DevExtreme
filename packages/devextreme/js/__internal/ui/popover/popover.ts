@@ -200,6 +200,7 @@ class Popover<
       const { visible } = this.option();
 
       const overlayStack = this._overlayStack();
+      // @ts-ignore expected: types Overlay<OverlayProperties> and this have no overlap
       const isTopOverlay = overlayStack[overlayStack.length - 1] === this;
 
       if (normalizeKeyName(e) === ESC_KEY_NAME && visible && isTopOverlay) {

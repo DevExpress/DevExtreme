@@ -15,7 +15,7 @@ test('Image uploader from url appearance', async (t) => {
   const htmlEditor = new HtmlEditor('#container');
 
   await t
-    .click(htmlEditor.toolbar.getItemByName('image'));
+    .click(htmlEditor.toolbar.getItemByName('image').element);
 
   await t
     .click(htmlEditor.dialog.addImageUrlForm.lockButton.element);
@@ -38,7 +38,7 @@ test('Image url should be validate before wil be inserted by add button click', 
   const htmlEditor = new HtmlEditor('#container');
 
   await t
-    .click(htmlEditor.toolbar.getItemByName('image'))
+    .click(htmlEditor.toolbar.getItemByName('image').element)
     .click(htmlEditor.dialog.footerToolbar.addButton.element);
 
   await t
@@ -71,7 +71,7 @@ test('Image url should be validate before wil be inserted by add enter press', a
   const htmlEditor = new HtmlEditor('#container');
 
   await t
-    .click(htmlEditor.toolbar.getItemByName('image'));
+    .click(htmlEditor.toolbar.getItemByName('image').element);
 
   await t
     .pressKey('enter')
@@ -104,7 +104,7 @@ test('Image url should be updated', async (t) => {
   const htmlEditor = new HtmlEditor('#container');
 
   await t
-    .click(htmlEditor.toolbar.getItemByName('image'))
+    .click(htmlEditor.toolbar.getItemByName('image').element)
 
     .expect(htmlEditor.dialog.footerToolbar.addButton.text)
     .eql(isMaterial() ? 'ADD' : 'Add');
@@ -118,7 +118,7 @@ test('Image url should be updated', async (t) => {
   await testScreenshot(t, takeScreenshot, 'editor-add-url-image-before-updated.png', { element: htmlEditor.content });
 
   await t
-    .click(htmlEditor.toolbar.getItemByName('image'))
+    .click(htmlEditor.toolbar.getItemByName('image').element)
 
     .expect(htmlEditor.dialog.footerToolbar.addButton.text)
     .eql(isMaterial() ? 'UPDATE' : 'Update');
