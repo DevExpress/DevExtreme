@@ -277,7 +277,7 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  private _getInternalData(key: RowKey): InternalEditData | undefined {
+  protected _getInternalData(key: RowKey): InternalEditData | undefined {
     return this._internalState.get(getKeyHash(key));
   }
 
@@ -858,8 +858,8 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  private _createInsertInfo(): InsertInfo {
-    return { [INSERT_INDEX]: this._getInsertIndex() };
+  private _createInsertInfo(parentKey?: RowKey): InsertInfo {
+    return { [INSERT_INDEX]: this._getInsertIndex(), parentKey };
   }
 
   private _addInsertInfo(
@@ -877,7 +877,7 @@ class EditingControllerImpl extends modules.ViewController {
     if (!isDefined(insertInfo)) {
       const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
 
-      insertInfo = this._createInsertInfo();
+      insertInfo = this._createInsertInfo(parentKey);
 
       if (!isDefined(insertAfterOrBeforeKey)) {
         this._setInsertAfterOrBeforeKey(change, parentKey);
