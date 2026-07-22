@@ -35,3 +35,18 @@ $fluent-filterbuilder-text-border-radius: ds.$border-radius-50 !default;
 $fluent-filterbuilder-icon-margin-right: ds.$spacing-100 !default;
 $fluent-filterbuilder-icon-margin-left: ds.$spacing-100 !default;
 $fluent-filterbuilder-treeview-toggle-item-visibility-right: ds.$spacing-160 !default;
+
+// Base-layer sizing injected with design tokens (wave B2 — filterBuilder/common)
+$fluent-filterbuilder-action-icon-margin-left: ds.$spacing-50 !default;
+$fluent-filterbuilder-action-icon-margin-right: ds.$spacing-50 !default;
+$fluent-filterbuilder-group-content-padding-right: ds.$spacing-260 !default;
+$fluent-filterbuilder-range-separator-margin: 0 ds.$spacing-70 !default;
+$fluent-filterbuilder-item-value-text-min-width: ds.$spacing-200 !default;
+$fluent-filterbuilder-item-value-text-padding: ds.$spacing-20 ds.$spacing-70 ds.$spacing-30 ds.$spacing-70 !default;
+$fluent-filterbuilder-action-icon-padding: ds.$spacing-50 ds.$spacing-80 !default;
+$fluent-filterbuilder-group-content-padding-left: ds.$spacing-260 !default;
+$fluent-filterbuilder-treeview-item-padding-left: ds.$spacing-50 !default;
+$fluent-filterbuilder-treeview-item-padding-right: ds.$spacing-50 !default;
+$fluent-filterbuilder-treeview-node-margin-left: ds.$spacing-150 !default;
+$fluent-filterbuilder-treeview-node-margin-right: ds.$spacing-150 !default;
+$fluent-filterbuilder-scrollable-max-height: 360px !default; // dx-offscale: 360px

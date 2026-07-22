@@ -4,6 +4,21 @@
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/pagination" with (
+  $pagination-page-padding-2: $fluent-pagination-page-padding-2,
+  $pagination-page-margin-left: $fluent-pagination-page-margin-left,
+  $pagination-page-margin-right: $fluent-pagination-page-margin-right,
+  $pagination-separator-padding-left: $fluent-pagination-separator-padding-left,
+  $pagination-separator-padding-right: $fluent-pagination-separator-padding-right,
+  $pagination-navigate-button-width-2: $fluent-pagination-navigate-button-width-2,
+  $pagination-navigate-button-height: $fluent-pagination-navigate-button-height,
+  $pagination-first-child-margin-left: $fluent-pagination-first-child-margin-left,
+  $pagination-first-child-padding-left: $fluent-pagination-first-child-padding-left,
+  $pagination-first-child-padding-right: $fluent-pagination-first-child-padding-right,
+  $pagination-first-child-padding-top: $fluent-pagination-first-child-padding-top,
+  $pagination-first-child-padding-bottom: $fluent-pagination-first-child-padding-bottom,
+  $pagination-first-child-margin-left-2: $fluent-pagination-first-child-margin-left-2,
+  $pagination-page-index-width: $fluent-pagination-page-index-width,
+  $pagination-pages-count-padding-left: $fluent-pagination-pages-count-padding-left,
   $pagination-info-opacity: $fluent-pagination-info-opacity,
   $pagination-nav-disabled-opacity: $fluent-pagination-nav-disabled-opacity,
 );

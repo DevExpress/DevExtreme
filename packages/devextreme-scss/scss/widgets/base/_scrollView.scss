@@ -3,6 +3,18 @@
 // adduse
 
 
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$scrollview-top-pocket-width: 40px !default;
+$scrollview-top-pocket-height: 40px !default;
+$scrollview-pull-down-indicator-padding: 4px !default;
+$scrollview-icon-pulldown-padding: 8px !default;
+$scrollview-pull-down-indicator-width: 20px !default;
+$scrollview-pull-down-image-margin: 0 20px !default;
+$scrollview-pull-down-image-height: 50px !default;
+$scrollview-scrollbottom-padding: 10px 0 !default;
+$scrollview-scrollbottom-indicator-margin: 0 10px 0 0 !default;
+$scrollview-scrollbottom-indicator-margin-2: 0 0 0 10px !default;
+
 $scrollview-pulldown-icon-font-size: 24px !default;
 
 $pulldown-height: 50px;
@@ -18,8 +30,8 @@ $pulldown-padding: 15px;
 
   &.dx-scrollable-native-android {
     .dx-scrollview-top-pocket {
-      width: 40px;
-      height: 40px;
+      width: $scrollview-top-pocket-width;
+      height: $scrollview-top-pocket-height;
       left: 50%;
       position: absolute;
       z-index: 1;
@@ -42,7 +54,7 @@ $pulldown-padding: 15px;
       .dx-scrollview-pull-down-indicator {
         position: relative;
         top: 0;
-        padding: 4px;
+        padding: $scrollview-pull-down-indicator-padding;
         margin: 0;
         height: 100%;
         width: 100%;
@@ -58,7 +70,7 @@ $pulldown-padding: 15px;
     .dx-icon-pulldown {
       width: 100%;
       height: 100%;
-      padding: 8px;
+      padding: $scrollview-icon-pulldown-padding;
       font-size: $scrollview-pulldown-icon-font-size;
       box-sizing: border-box;
       transition: opacity 0.2s;
@@ -131,16 +143,16 @@ $pulldown-padding: 15px;
   top: 50%;
   display: inline-block;
   margin: -15px 20px 0 15px;
-  width: 20px;
+  width: $scrollview-pull-down-indicator-width;
   -webkit-user-drag: none;
 }
 
 .dx-scrollview-pull-down-image {
   display: inline-block;
   vertical-align: middle;
-  margin: 0 20px;
-  width: 20px;
-  height: 50px;
+  margin: $scrollview-pull-down-image-margin;
+  width: $scrollview-pull-down-indicator-width;
+  height: $scrollview-pull-down-image-height;
   background-size: contain;
   -webkit-user-drag: none;
 
@@ -190,7 +202,7 @@ $pulldown-padding: 15px;
 
 .dx-scrollview-scrollbottom {
   width: 100%;
-  padding: 10px 0;
+  padding: $scrollview-scrollbottom-padding;
   overflow: hidden;
   text-align: center;
   transform: translate(0, 0);
@@ -205,7 +217,7 @@ $pulldown-padding: 15px;
 
 .dx-scrollview-scrollbottom-indicator {
   display: inline-block;
-  margin: 0 10px 0 0;
+  margin: $scrollview-scrollbottom-indicator-margin;
   -webkit-user-drag: none;
 }
 
@@ -247,5 +259,5 @@ $pulldown-padding: 15px;
 }
 
 .dx-rtl .dx-scrollview-scrollbottom-indicator {
-  margin: 0 0 0 10px;
+  margin: $scrollview-scrollbottom-indicator-margin-2;
 }

@@ -8,6 +8,13 @@
 @use "../gridBase/colors" as *;
 @use "../gridBase/sizes" as *;
 @use "../../base/dataGrid" as baseGrid with (
+  $datagrid-header-filter-outline: $fluent-datagrid-header-filter-outline,
+  $datagrid-header-filter-outline-offset: $fluent-datagrid-header-filter-outline-offset,
+  $datagrid-filter-panel-clear-filter-outline-offset: $fluent-datagrid-filter-panel-clear-filter-outline-offset,
+  $datagrid-button-margin-left: $fluent-datagrid-button-margin-left,
+  $datagrid-button-margin-top: $fluent-datagrid-button-margin-top,
+  $datagrid-error-message-margin-bottom: $fluent-datagrid-error-message-margin-bottom,
+  $datagrid-button-margin-right: $fluent-datagrid-button-margin-right,
   $datagrid-border: $datagrid-border,
   $datagrid-border-color: $datagrid-border-color,
   $datagrid-drag-header-border-color: $datagrid-drag-header-border-color,
@@ -20,6 +27,9 @@
   $header-filter-color-empty: $header-filter-color-empty,
   $base-focus-color: $base-focus-color,
   $datagrid-text-stub-background-image-path: $datagrid-text-stub-background-image-path,
+  $datagrid-group-row-border: $fluent-datagrid-group-row-border,
+  $datagrid-sticky-column-border: $fluent-datagrid-sticky-column-border,
+  $datagrid-cell-focus-outline: $fluent-datagrid-cell-focus-outline,
 );
 @use 'layout/cell';
 @include grid-base(datagrid);

@@ -50,3 +50,22 @@ $fluent-fileuploader-file-wrapper-border-size: ds.$border-width-30 !default;
 // Base-layer values injected with design tokens (wave B1)
 $fluent-fileuploader-status-message-font-size: ds.$font-size-caption-md !default;
 $fluent-fileuploader-file-size-font-size: ds.$font-size-caption-sm !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-fileuploader-button-margin-left: ds.$spacing-120 !default;
+$fluent-fileuploader-upload-button-margin-top: ds.$spacing-100 !default;
+$fluent-fileuploader-show-file-list-padding-top: ds.$spacing-220 !default;
+$fluent-fileuploader-file-container-padding-2: ds.$spacing-40 0 ds.$spacing-40 !default;
+$fluent-fileuploader-button-width: ds.$spacing-280 !default;
+$fluent-fileuploader-button-height: ds.$spacing-280 !default;
+$fluent-fileuploader-button-margin-right: ds.$spacing-100 !default;
+$fluent-fileuploader-cancel-button-position-end-margin-left: ds.$spacing-40 !default;
+$fluent-fileuploader-file-status-message-height: ds.$spacing-160 !default;
+$fluent-fileuploader-progressbar-height: ds.$spacing-220 !default;
+$fluent-fileuploader-file-size-padding-left: ds.$spacing-40 !default;
+$fluent-fileuploader-file-icon-padding-right: ds.$spacing-60 !default;
+$fluent-fileuploader-button-margin-left-2: ds.$spacing-100 !default;
+$fluent-fileuploader-cancel-button-position-end-margin-right: ds.$spacing-40 !default;
+$fluent-fileuploader-file-size-padding-right: ds.$spacing-40 !default;
+$fluent-fileuploader-file-status-message-margin-bottom-2: ds.$spacing-20 !default;
+$fluent-fileuploader-cancel-button-margin-top: ds.$spacing-50 !default;

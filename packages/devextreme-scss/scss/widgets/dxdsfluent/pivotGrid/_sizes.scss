@@ -55,3 +55,24 @@ $fluent-pivotgrid-icon-margin: 0 ds.$spacing-50 -1px 0 !default; // dx-offscale:
 $fluent-pivotgrid-area-box-border: ds.$border-width-10 solid !default;
 $fluent-pivotgrid-chevron-icon-size: ds.$spacing-200 !default;
 $fluent-pivotgridfieldchooser-field-min-height: ds.$spacing-360 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-pivotgrid-position-indicator-vertical-height: ds.$spacing-20 !default;
+$fluent-pivotgrid-position-indicator-horizontal-width: ds.$spacing-20 !default;
+$fluent-pivotgrid-position-indicator-last-margin-left: ds.$spacing-30 !default;
+$fluent-pivotgrid-area-box-margin-bottom: ds.$spacing-40 !default;
+$fluent-pivotgrid-expand-icon-container-outline: ds.$spacing-20 solid !default;
+$fluent-pivotgrid-toolbar-margin-right: ds.$spacing-100 !default;
+$fluent-pivotgrid-field-chooser-button-margin-right: ds.$spacing-40 !default;
+$fluent-pivotgrid-button-margin: ds.$spacing-10 !default;
+$fluent-pivotgrid-last-cell-min-width: 50px !default; // dx-offscale: 50px
+$fluent-pivotgrid-icon-sorted-margin-left: ds.$spacing-50 !default;
+$fluent-pivotgrid-fields-area-head-padding: 0 ds.$spacing-20 !default;
+$fluent-pivotgrid-treeview-search-margin: ds.$spacing-50 !default;
+$fluent-pivotgrid-area-padding: ds.$spacing-50 !default;
+$fluent-pivotgrid-area-fields-margin-top-2: ds.$spacing-30 !default;
+$fluent-pivotgrid-position-indicator-last-margin-left-2: ds.$spacing-10 !default;
+$fluent-pivotgrid-toolbar-margin-left: ds.$spacing-100 !default;
+$fluent-pivotgrid-field-chooser-button-margin-left: ds.$spacing-40 !default;
+$fluent-pivotgrid-fields-area-head-padding-left: ds.$spacing-20 !default;
+$fluent-pivotgrid-icon-sorted-margin-right: ds.$spacing-50 !default;

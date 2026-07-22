@@ -4,6 +4,19 @@
 @use "../sizes" as *;
 @use "../common/sizes" as *;
 @use "../../base/filterBuilder" as * with (
+  $filterbuilder-action-icon-margin-left: $fluent-filterbuilder-action-icon-margin-left,
+  $filterbuilder-action-icon-margin-right: $fluent-filterbuilder-action-icon-margin-right,
+  $filterbuilder-group-content-padding-right: $fluent-filterbuilder-group-content-padding-right,
+  $filterbuilder-range-separator-margin: $fluent-filterbuilder-range-separator-margin,
+  $filterbuilder-item-value-text-min-width: $fluent-filterbuilder-item-value-text-min-width,
+  $filterbuilder-item-value-text-padding: $fluent-filterbuilder-item-value-text-padding,
+  $filterbuilder-action-icon-padding: $fluent-filterbuilder-action-icon-padding,
+  $filterbuilder-group-content-padding-left: $fluent-filterbuilder-group-content-padding-left,
+  $filterbuilder-treeview-item-padding-left: $fluent-filterbuilder-treeview-item-padding-left,
+  $filterbuilder-treeview-item-padding-right: $fluent-filterbuilder-treeview-item-padding-right,
+  $filterbuilder-treeview-node-margin-left: $fluent-filterbuilder-treeview-node-margin-left,
+  $filterbuilder-treeview-node-margin-right: $fluent-filterbuilder-treeview-node-margin-right,
+  $filterbuilder-scrollable-max-height: $fluent-filterbuilder-scrollable-max-height,
   $filterbuilder-range-separator-opacity: $fluent-filterbuilder-range-separator-opacity,
     $filterbuilder-bg: $filterbuilder-bg,
     $filterbuilder-text-color: $filterbuilder-text-color,

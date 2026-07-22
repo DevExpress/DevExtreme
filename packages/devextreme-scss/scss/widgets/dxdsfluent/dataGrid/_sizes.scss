@@ -26,3 +26,16 @@ $datagrid-cell-padding: $fluent-datagrid-cell-padding !default;
 $fluent-datagrid-group-row-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)
 $fluent-datagrid-grouppanel-item-border-width: ds.$border-width-10 !default;
 $fluent-datagrid-group-panel-item-padding: $area-field-top-bottom-padding ds.$spacing-100 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-datagrid-header-filter-outline: ds.$spacing-20 solid !default;
+$fluent-datagrid-header-filter-outline-offset: ds.$spacing-20 !default;
+$fluent-datagrid-filter-panel-clear-filter-outline-offset: ds.$spacing-30 !default;
+$fluent-datagrid-button-margin-left: ds.$spacing-100 !default;
+$fluent-datagrid-button-margin-top: ds.$spacing-100 !default;
+$fluent-datagrid-error-message-margin-bottom: ds.$spacing-200 !default;
+$fluent-datagrid-button-margin-right: ds.$spacing-100 !default;
+
+$fluent-datagrid-group-row-border: ds.$border-width-10 solid !default;
+$fluent-datagrid-sticky-column-border: ds.$border-width-20 solid !default;
+$fluent-datagrid-cell-focus-outline: ds.$spacing-20 solid !default;

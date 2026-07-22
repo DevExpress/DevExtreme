@@ -142,6 +142,18 @@ $agenda-appointment-details-opacity: 0.7 !default;
   $agenda-appointment-active-bg: $agenda-appointment-active-bg,
   $agenda-appointment-title-font-size: $agenda-appointment-title-font-size
 );
+$scheduler-views-header-border: 2px solid !default;
+$scheduler-views-empty-cell-border-bottom: 1px solid !default;
+$scheduler-views-empty-cell-border-right: 1px solid !default;
+$scheduler-views-empty-cell-border-left: 1px solid !default;
+$scheduler-views-first-child-border-left: 1px solid transparent !default;
+$scheduler-views-time-panel-border-bottom: 1px solid transparent !default;
+$scheduler-views-group-header-padding: 0 5px !default;
+$scheduler-views-group-header-padding-alt: 0 5px 0 10px !default;
+$scheduler-views-time-indicator-height: 1px !default;
+$scheduler-views-group-header-content-height: 40px !default;
+$scheduler-views-vertical-group-min-height: 100px !default;
+
 @use "./views" with (
   $scheduler-workspace-background-color: $scheduler-workspace-background-color,
   $scheduler-workspace-accent-color: $scheduler-workspace-accent-color,
@@ -169,6 +181,17 @@ $agenda-appointment-details-opacity: 0.7 !default;
   $scheduler-first-month-cell-background-color: $scheduler-first-month-cell-background-color,
 
   $scheduler-panel-text-color: $scheduler-panel-text-color,
+  $scheduler-views-header-border: $scheduler-views-header-border,
+  $scheduler-views-empty-cell-border-bottom: $scheduler-views-empty-cell-border-bottom,
+  $scheduler-views-empty-cell-border-right: $scheduler-views-empty-cell-border-right,
+  $scheduler-views-empty-cell-border-left: $scheduler-views-empty-cell-border-left,
+  $scheduler-views-first-child-border-left: $scheduler-views-first-child-border-left,
+  $scheduler-views-time-panel-border-bottom: $scheduler-views-time-panel-border-bottom,
+  $scheduler-views-group-header-padding: $scheduler-views-group-header-padding,
+  $scheduler-views-group-header-padding-alt: $scheduler-views-group-header-padding-alt,
+  $scheduler-views-time-indicator-height: $scheduler-views-time-indicator-height,
+  $scheduler-views-group-header-content-height: $scheduler-views-group-header-content-height,
+  $scheduler-views-vertical-group-min-height: $scheduler-views-vertical-group-min-height,
 );
 
 @function calculate-small-left-column-size($size) {

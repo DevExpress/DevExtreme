@@ -10,6 +10,9 @@ $header-filter-color: null !default;
 $header-filter-color-empty: null !default;
 $base-focus-color: null !default;
 $datagrid-text-stub-background-image-path: null !default;
+$datagrid-group-row-border: 1px solid !default;
+$datagrid-sticky-column-border: 2px solid !default;
+$datagrid-cell-focus-outline: 2px solid !default;
 
 @use "sass:color";
 @use "sass:meta";
@@ -23,7 +26,20 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-base-background-color: $datagrid-base-background-color,
   $datagrid-row-error-color: $datagrid-row-error-color,
   $datagrid-focused-border-color: $datagrid-focused-border-color,
+  $datagrid-group-row-border: $datagrid-group-row-border,
+  $datagrid-sticky-column-border: $datagrid-sticky-column-border,
+  $datagrid-cell-focus-outline: $datagrid-cell-focus-outline,
 );
+
+
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$datagrid-header-filter-outline: 2px solid !default;
+$datagrid-header-filter-outline-offset: 2px !default;
+$datagrid-filter-panel-clear-filter-outline-offset: 3px !default;
+$datagrid-button-margin-left: 10px !default;
+$datagrid-button-margin-top: 10px !default;
+$datagrid-error-message-margin-bottom: 20px !default;
+$datagrid-button-margin-right: 10px !default;
 
 .dx-datagrid-borders {
   > .dx-datagrid-headers,
@@ -112,13 +128,13 @@ $datagrid-text-stub-background-image-path: null !default;
     &.dx-state-focused .dx-datagrid-group-panel {
       .dx-group-panel-item:focus,
       .dx-header-filter:focus {
-        outline: 2px solid;
+        outline: $datagrid-header-filter-outline;
         outline-color: $datagrid-focused-border-color;
         outline-offset: -2px;
       }
 
       .dx-header-filter:focus {
-        outline-offset: 2px;
+        outline-offset: $datagrid-header-filter-outline-offset;
       }
     }
   }
@@ -130,9 +146,9 @@ $datagrid-text-stub-background-image-path: null !default;
 
     &.dx-state-focused .dx-header-row {
       td .dx-header-filter:focus {
-        outline: 2px solid;
+        outline: $datagrid-header-filter-outline;
         outline-color: $datagrid-focused-border-color;
-        outline-offset: 2px;
+        outline-offset: $datagrid-header-filter-outline-offset;
       }
     }
   }
@@ -164,9 +180,9 @@ $datagrid-text-stub-background-image-path: null !default;
 
   .dx-datagrid-rowsview.dx-state-focused .dx-data-row {
     & > td.dx-command-edit > a.dx-link:focus {
-      outline: 2px solid;
+      outline: $datagrid-header-filter-outline;
       outline-color: $datagrid-focused-border-color;
-      outline-offset: 2px;
+      outline-offset: $datagrid-header-filter-outline-offset;
     }
 
     &.dx-row-focused > td.dx-command-edit > a.dx-link:focus {
@@ -249,9 +265,9 @@ $datagrid-text-stub-background-image-path: null !default;
     .dx-icon-filter:focus,
     .dx-datagrid-filter-panel-text:focus,
     .dx-datagrid-filter-panel-clear-filter:focus {
-      outline: 2px solid;
+      outline: $datagrid-header-filter-outline;
       outline-color: $datagrid-focused-border-color;
-      outline-offset: 3px;
+      outline-offset: $datagrid-filter-panel-clear-filter-outline-offset;
     }
   }
 }
@@ -260,8 +276,8 @@ $datagrid-text-stub-background-image-path: null !default;
   float: right;
 
   .dx-button {
-    margin-left: 10px;
-    margin-top: 10px;
+    margin-left: $datagrid-button-margin-left;
+    margin-top: $datagrid-button-margin-top;
   }
 }
 
@@ -276,7 +292,7 @@ $datagrid-text-stub-background-image-path: null !default;
   @include dx-datagrid-error-message();
 
   color: $datagrid-row-error-color;
-  margin-bottom: 20px;
+  margin-bottom: $datagrid-error-message-margin-bottom;
 }
 
 .dx-rtl {
@@ -299,7 +315,7 @@ $datagrid-text-stub-background-image-path: null !default;
 
     .dx-button {
       margin-left: 0;
-      margin-right: 10px;
+      margin-right: $datagrid-button-margin-right;
     }
   }
 }
@@ -331,7 +347,7 @@ $datagrid-text-stub-background-image-path: null !default;
     left: 0;
     bottom: 0;
     right: 0;
-    outline: 2px solid;
+    outline: $datagrid-header-filter-outline;
     outline-color: $datagrid-focused-border-color;
     outline-offset: -1px;
     z-index: 4; // should overlap sticky column cells
@@ -341,6 +357,6 @@ $datagrid-text-stub-background-image-path: null !default;
 }
 
 .dx-command-ai-header-button .dx-button.dx-state-focused {
-  outline: 2px solid;
+  outline: $datagrid-header-filter-outline;
   outline-color: $datagrid-focused-border-color;
 }

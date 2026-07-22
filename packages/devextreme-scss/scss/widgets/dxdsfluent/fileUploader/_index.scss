@@ -5,6 +5,23 @@
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
 @use "../../base/fileUploader" with (
+  $fileuploader-button-margin-left: $fluent-fileuploader-button-margin-left,
+  $fileuploader-upload-button-margin-top: $fluent-fileuploader-upload-button-margin-top,
+  $fileuploader-show-file-list-padding-top: $fluent-fileuploader-show-file-list-padding-top,
+  $fileuploader-file-container-padding-2: $fluent-fileuploader-file-container-padding-2,
+  $fileuploader-button-width: $fluent-fileuploader-button-width,
+  $fileuploader-button-height: $fluent-fileuploader-button-height,
+  $fileuploader-button-margin-right: $fluent-fileuploader-button-margin-right,
+  $fileuploader-cancel-button-position-end-margin-left: $fluent-fileuploader-cancel-button-position-end-margin-left,
+  $fileuploader-file-status-message-height: $fluent-fileuploader-file-status-message-height,
+  $fileuploader-progressbar-height: $fluent-fileuploader-progressbar-height,
+  $fileuploader-file-size-padding-left: $fluent-fileuploader-file-size-padding-left,
+  $fileuploader-file-icon-padding-right: $fluent-fileuploader-file-icon-padding-right,
+  $fileuploader-button-margin-left-2: $fluent-fileuploader-button-margin-left-2,
+  $fileuploader-cancel-button-position-end-margin-right: $fluent-fileuploader-cancel-button-position-end-margin-right,
+  $fileuploader-file-size-padding-right: $fluent-fileuploader-file-size-padding-right,
+  $fileuploader-file-status-message-margin-bottom-2: $fluent-fileuploader-file-status-message-margin-bottom-2,
+  $fileuploader-cancel-button-margin-top: $fluent-fileuploader-cancel-button-margin-top,
   $fileuploader-status-message-font-size: $fluent-fileuploader-status-message-font-size,
   $fileuploader-file-size-font-size: $fluent-fileuploader-file-size-font-size,
 );

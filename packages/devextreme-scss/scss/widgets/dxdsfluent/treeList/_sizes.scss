@@ -21,3 +21,14 @@ $treelist-expand-icon-name-collapsed: chevronright !default;
 $treelist-expand-icon-right-gap: ds.$spacing-40 !default;
 $treelist-expand-checkbox-size: ds.$spacing-160 !default;
 $treelist-expand-checkbox-right-gap: ds.$spacing-80 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-treelist-header-filter-outline: ds.$spacing-20 solid !default;
+$fluent-treelist-header-filter-outline-offset: ds.$spacing-20 !default;
+$fluent-treelist-button-margin-left: ds.$spacing-100 !default;
+$fluent-treelist-button-margin-top: ds.$spacing-100 !default;
+$fluent-treelist-error-message-margin-bottom: ds.$spacing-200 !default;
+$fluent-treelist-button-margin-right: ds.$spacing-100 !default;
+
+$fluent-treelist-sticky-column-border: ds.$border-width-20 solid !default;
+$fluent-treelist-cell-focus-outline: ds.$spacing-20 solid !default;

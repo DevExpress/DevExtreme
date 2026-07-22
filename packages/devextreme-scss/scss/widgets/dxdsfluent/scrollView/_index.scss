@@ -8,6 +8,16 @@
 // adduse
 @use "../scrollable";
 @use "../../base/scrollView" with (
+  $scrollview-top-pocket-width: $fluent-scrollview-top-pocket-width,
+  $scrollview-top-pocket-height: $fluent-scrollview-top-pocket-height,
+  $scrollview-pull-down-indicator-padding: $fluent-scrollview-pull-down-indicator-padding,
+  $scrollview-icon-pulldown-padding: $fluent-scrollview-icon-pulldown-padding,
+  $scrollview-pull-down-indicator-width: $fluent-scrollview-pull-down-indicator-width,
+  $scrollview-pull-down-image-margin: $fluent-scrollview-pull-down-image-margin,
+  $scrollview-pull-down-image-height: $fluent-scrollview-pull-down-image-height,
+  $scrollview-scrollbottom-padding: $fluent-scrollview-scrollbottom-padding,
+  $scrollview-scrollbottom-indicator-margin: $fluent-scrollview-scrollbottom-indicator-margin,
+  $scrollview-scrollbottom-indicator-margin-2: $fluent-scrollview-scrollbottom-indicator-margin-2,
   $scrollview-pulldown-icon-font-size: $fluent-scrollview-pulldown-icon-font-size,
 );
 

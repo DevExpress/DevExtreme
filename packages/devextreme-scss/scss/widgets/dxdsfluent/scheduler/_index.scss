@@ -11,6 +11,17 @@
 @use "../../base/mixins" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/scheduler" as baseScheduler with (
+  $scheduler-views-header-border: $fluent-scheduler-views-header-border,
+  $scheduler-views-empty-cell-border-bottom: $fluent-scheduler-views-empty-cell-border-bottom,
+  $scheduler-views-empty-cell-border-right: $fluent-scheduler-views-empty-cell-border-right,
+  $scheduler-views-empty-cell-border-left: $fluent-scheduler-views-empty-cell-border-left,
+  $scheduler-views-first-child-border-left: $fluent-scheduler-views-first-child-border-left,
+  $scheduler-views-time-panel-border-bottom: $fluent-scheduler-views-time-panel-border-bottom,
+  $scheduler-views-group-header-padding: $fluent-scheduler-views-group-header-padding,
+  $scheduler-views-group-header-padding-alt: $fluent-scheduler-views-group-header-padding-alt,
+  $scheduler-views-time-indicator-height: $fluent-scheduler-views-time-indicator-height,
+  $scheduler-views-group-header-content-height: $fluent-scheduler-views-group-header-content-height,
+  $scheduler-views-vertical-group-min-height: $fluent-scheduler-views-vertical-group-min-height,
   $scheduler-tooltip-shadow: $fluent-scheduler-tooltip-shadow,
   $scheduler-appointment-icon-font-size: $fluent-scheduler-appointment-icon-font-size,
   $scheduler-appointment-date-opacity: $fluent-scheduler-appointment-date-opacity,

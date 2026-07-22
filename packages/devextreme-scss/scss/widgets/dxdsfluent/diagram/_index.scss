@@ -4,6 +4,17 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/diagram" with (
+  $diagram-root-height: $fluent-diagram-root-height,
+  $diagram-root-min-height: $fluent-diagram-root-min-height,
+  $diagram-toolbar-wrapper-padding: $fluent-diagram-toolbar-wrapper-padding,
+  $diagram-button-min-height: $fluent-diagram-button-min-height,
+  $diagram-popup-content-padding: $fluent-diagram-popup-content-padding,
+  $diagram-colorview-palette-min-width: $fluent-diagram-colorview-palette-min-width,
+  $diagram-colorview-hue-scale-cell-margin-left: $fluent-diagram-colorview-hue-scale-cell-margin-left,
+  $diagram-loading-indicator-width: $fluent-diagram-loading-indicator-width,
+  $diagram-loading-indicator-height: $fluent-diagram-loading-indicator-height,
+  $diagram-context-toolbox-target-width: $fluent-diagram-context-toolbox-target-width,
+  $diagram-context-toolbox-target-height: $fluent-diagram-context-toolbox-target-height,
   $diagram-popup-title-toolbar-bg: $diagram-popup-title-toolbar-bg-color,
 );
 @use "../../base/diagram/mixins" as *;

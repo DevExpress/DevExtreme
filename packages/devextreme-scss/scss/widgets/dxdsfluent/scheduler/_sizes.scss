@@ -268,3 +268,16 @@ $fluent-scheduler-appointment-strip-border-bottom-left-radius: ds.$border-radius
 $fluent-scheduler-agenda-title-font-weight: ds.$font-weight-base-stronger !default;
 $fluent-scheduler-agenda-details-font-size: ds.$font-size-caption-md !default;
 $fluent-scheduler-appointment-icon-font-size: ds.$font-size-180 !default; // dx-icon-glyph-size: text roles not applicable
+
+// Base-layer sizing injected with design tokens (wave B2 — scheduler/views)
+$fluent-scheduler-views-header-border: ds.$border-width-20 solid !default;
+$fluent-scheduler-views-empty-cell-border-bottom: ds.$border-width-10 solid !default;
+$fluent-scheduler-views-empty-cell-border-right: ds.$border-width-10 solid !default;
+$fluent-scheduler-views-empty-cell-border-left: ds.$border-width-10 solid !default;
+$fluent-scheduler-views-first-child-border-left: ds.$border-width-10 solid transparent !default;
+$fluent-scheduler-views-time-panel-border-bottom: ds.$border-width-10 solid transparent !default;
+$fluent-scheduler-views-group-header-padding: 0 ds.$spacing-50 !default;
+$fluent-scheduler-views-group-header-padding-alt: 0 ds.$spacing-50 0 ds.$spacing-100 !default;
+$fluent-scheduler-views-time-indicator-height: ds.$spacing-10 !default;
+$fluent-scheduler-views-group-header-content-height: ds.$spacing-400 !default;
+$fluent-scheduler-views-vertical-group-min-height: ds.$spacing-1000 !default;

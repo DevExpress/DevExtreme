@@ -30,3 +30,20 @@ $fluent-pagination-light-pageindex-min-width: null !default;
 $fluent-pagination-selected-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)
 $fluent-pagination-page-border-radius: 20px !default; // dx-offscale: 20px (pill; candidate: ds.$border-radius-full)
 $fluent-pagination-navigate-button-width: ds.$spacing-90 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-pagination-page-padding-2: ds.$spacing-70 ds.$spacing-80 ds.$spacing-80 !default;
+$fluent-pagination-page-margin-left: ds.$spacing-50 !default;
+$fluent-pagination-page-margin-right: ds.$spacing-10 !default;
+$fluent-pagination-separator-padding-left: ds.$spacing-80 !default;
+$fluent-pagination-separator-padding-right: ds.$spacing-80 !default;
+$fluent-pagination-navigate-button-width-2: ds.$spacing-100 !default;
+$fluent-pagination-navigate-button-height: ds.$spacing-200 !default;
+$fluent-pagination-first-child-margin-left: ds.$spacing-10 !default;
+$fluent-pagination-first-child-padding-left: ds.$spacing-100 !default;
+$fluent-pagination-first-child-padding-right: ds.$spacing-90 !default;
+$fluent-pagination-first-child-padding-top: ds.$spacing-70 !default;
+$fluent-pagination-first-child-padding-bottom: ds.$spacing-80 !default;
+$fluent-pagination-first-child-margin-left-2: ds.$spacing-40 !default;
+$fluent-pagination-page-index-width: ds.$spacing-400 !default;
+$fluent-pagination-pages-count-padding-left: ds.$spacing-60 !default;
