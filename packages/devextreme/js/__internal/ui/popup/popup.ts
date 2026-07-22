@@ -438,7 +438,7 @@ class Popup<
 
     this._toggleContentScrollClass();
 
-    this.$overlayContent().attr('role', 'dialog');
+    this.setAria('role', this._getAriaRole());
   }
 
   _render(): void {
@@ -771,6 +771,10 @@ class Popup<
       ...options,
       integrationOptions,
     });
+  }
+
+  _getAriaRole(): string {
+    return 'dialog';
   }
 
   _toggleAriaLabel(): void {
