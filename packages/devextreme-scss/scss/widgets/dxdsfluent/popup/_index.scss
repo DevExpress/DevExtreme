@@ -7,7 +7,9 @@
 @use "../toolbar/mixins" as *;
 @use "../toolbar/sizes" as *;
 @use "../typography/sizes" as *;
-@use "../../base/popup";
+@use "../../base/popup" with (
+  $popup-dialog-shader-color: $fluent-popup-dialog-shader-bg,
+);
 
 // adduse
 @use "../overlay";

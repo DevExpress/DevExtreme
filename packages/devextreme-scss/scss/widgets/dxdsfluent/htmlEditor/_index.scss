@@ -14,7 +14,11 @@
 @use "../fileUploader/sizes" as *;
 @use "../popup/sizes" as *;
 @use "../../base/mixins" as *;
-@use "../../base/htmlEditor";
+@use "../../base/htmlEditor" with (
+  $htmleditor-code-block-bg: $fluent-htmleditor-code-block-bg,
+  $htmleditor-placeholder-color: $fluent-htmleditor-placeholder-color,
+  $htmleditor-aidialog-title-font-weight: $fluent-htmleditor-aidialog-title-font-weight,
+);
 
 // adduse
 

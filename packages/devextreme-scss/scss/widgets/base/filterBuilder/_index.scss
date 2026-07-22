@@ -22,7 +22,11 @@ $filterbuilder-remove-icon-focus-color: null !default;
 $filterbuilder-menu-icon-color: null !default;
 
 @use "../icon_fonts" as *;
-@use "./common";
+$filterbuilder-range-separator-opacity: 0.3 !default;
+
+@use "./common" with (
+  $filterbuilder-range-separator-opacity: $filterbuilder-range-separator-opacity,
+);
 
 .dx-filterbuilder {
   background-color: $filterbuilder-bg;

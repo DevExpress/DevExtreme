@@ -1,5 +1,6 @@
 @use "./mixins" as *;
 
+$scheduler-tooltip-shadow: null !default;
 $scheduler-appointment-base-color: null !default;
 $scheduler-tooltip-appointment-text-color: null !default;
 $scheduler-appointment-overlay-bg: null !default;
@@ -24,7 +25,7 @@ $scheduler-tooltip-list-focused-bg: null !default;
   }
 
   .dx-overlay-content {
-    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: $scheduler-tooltip-shadow;
   }
 
   .dx-tooltip-appointment-item {

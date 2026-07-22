@@ -16,3 +16,7 @@ $htmleditor-cover-bg: rgb(from #{ds.$color-surface-neutral-default-rest} r g b /
 $htmleditor-faded-text-color: rgb(from #{ds.$color-content-neutral-default-rest} r g b / 0.8) !default;
 $htmleditor-uploader-cover-bg: rgb(from #{ds.$color-border-neutral-default-rest} r g b / 0.8) !default;
 $htmleditor-highlighted-row-bg: ds.$color-surface-primary-alpha-active !default;
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-htmleditor-code-block-bg: rgb(from #{ds.$color-content-neutral-subdued-rest} r g b / 0.15) !default;
+$fluent-htmleditor-placeholder-color: ds.$text-content-color-default-placeholder-rest !default;

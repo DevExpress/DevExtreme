@@ -3,6 +3,8 @@
 
 // adduse
 
+$popup-dialog-shader-color: #444 !default;
+
 .dx-popup-title {
   padding: 10px;
   min-height: 19px;
@@ -100,7 +102,7 @@
 
 .dx-dialog-root {
   .dx-overlay-shader {
-    background-color: #444;
+    background-color: $popup-dialog-shader-color;
   }
 }
 

@@ -3,6 +3,9 @@
 // adduse
 
 
+$fileuploader-status-message-font-size: 12px !default;
+$fileuploader-file-size-font-size: 10px !default;
+
 .dx-fileuploader {
   &.dx-state-disabled .dx-fileuploader-input {
     display: none;
@@ -178,7 +181,7 @@
 
 .dx-fileuploader-file-status-message {
   float: left;
-  font-size: 12px;
+  font-size: $fileuploader-status-message-font-size;
   height: 16px;
 }
 
@@ -200,7 +203,7 @@
   padding-left: 4px;
   float: left;
   vertical-align: super;
-  font-size: 10px;
+  font-size: $fileuploader-file-size-font-size;
 }
 
 .dx-fileuploader-file-icon {

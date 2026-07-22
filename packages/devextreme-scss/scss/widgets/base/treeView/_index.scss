@@ -1,6 +1,10 @@
+$treeview-disabled-opacity: 0.5 !default;
+
 @use 'sass:math';
 @use 'sass:meta';
-@use "./common";
+@use "./common" with (
+  $treeview-disabled-opacity: $treeview-disabled-opacity,
+);
 @use "../../base/icon_fonts" as *;
 
 .dx-treeview-custom-expand-icon,

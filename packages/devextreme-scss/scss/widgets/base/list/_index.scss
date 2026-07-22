@@ -4,6 +4,8 @@
 // adduse
 
 
+$list-response-wait-opacity: 0.5 !default;
+
 $list-searchbox-margin-bottom: 5px;
 
 .dx-list {
@@ -95,7 +97,7 @@ $list-searchbox-margin-bottom: 5px;
 
 
 .dx-list-item-response-wait {
-  opacity: 0.5;
+  opacity: $list-response-wait-opacity;
   transition: opacity 0.2s linear;
 }
 

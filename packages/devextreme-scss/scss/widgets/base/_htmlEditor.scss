@@ -4,6 +4,10 @@
 
 // adduse
 
+$htmleditor-code-block-bg: rgba(191, 191, 191, 0.15) !default;
+$htmleditor-placeholder-color: rgba(0, 0, 0, 0.6) !default;
+$htmleditor-aidialog-title-font-weight: 600 !default;
+
 $list-style: decimal lower-alpha lower-roman;
 $list-style-width: 1.2em;
 $list-style-margin: 0.3em;
@@ -283,7 +287,7 @@ $transparent-border: 1px solid transparent;
 
   code,
   .ql-code-block-container {
-    background-color: rgba(191, 191, 191, 0.15);
+    background-color: $htmleditor-code-block-bg;
   }
 
   .ql-video {
@@ -314,7 +318,7 @@ $transparent-border: 1px solid transparent;
 
   &.ql-blank {
     &::before {
-      color: rgba(0, 0, 0, 0.6);
+      color: $htmleditor-placeholder-color;
       content: attr(data-placeholder);
       font-style: italic;
       left: 15px;
@@ -392,7 +396,7 @@ $transparent-border: 1px solid transparent;
   display: flex;
   align-items: center;
   gap: 6px;
-  font-weight: 600;
+  font-weight: $htmleditor-aidialog-title-font-weight;
 }
 
 .dx-overlay-content {

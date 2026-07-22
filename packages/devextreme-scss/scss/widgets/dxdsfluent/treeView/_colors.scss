@@ -26,3 +26,6 @@ $treeview-checkbox-accent-color-focused: ds.$checkbox-color-checked-default-bg-h
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
 $treeview-text-color: ds.$color-content-neutral-default-rest !default;
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-treeview-disabled-opacity: ds.$opacity-50 !default;

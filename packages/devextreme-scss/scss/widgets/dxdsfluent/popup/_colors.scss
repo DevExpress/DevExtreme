@@ -16,3 +16,6 @@ $popup-border-radius: calc(#{$base-border-radius} * 2) !default;
 $popup-content-shadow-color1: ds.$color-shadow-ambient !default;
 $popup-content-shadow-color2: ds.$color-shadow-key !default;
 $popup-focused-content-shadow-color: ds.$color-shadow-key !default;
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-popup-dialog-shader-bg: ds.$color-surface-backdrop-default-rest !default;

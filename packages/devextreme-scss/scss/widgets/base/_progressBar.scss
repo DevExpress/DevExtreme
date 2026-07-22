@@ -2,6 +2,8 @@
 
 // adduse
 
+$progressbar-status-font-size: 12px !default;
+
 .dx-progressbar {
   .dx-position-left,
   .dx-position-right {
@@ -80,7 +82,7 @@
   top: 0;
   left: 0;
   width: auto;
-  font-size: 12px;
+  font-size: $progressbar-status-font-size;
 }
 
 .dx-progressbar-animating-segment {

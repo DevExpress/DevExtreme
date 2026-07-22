@@ -4,7 +4,9 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
-@use "../../base/progressBar";
+@use "../../base/progressBar" with (
+  $progressbar-status-font-size: $fluent-progressbar-status-font-size,
+);
 
 // adduse
 

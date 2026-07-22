@@ -58,3 +58,8 @@ $fluent-filemanager-toolbar-padding: 0 ds.$spacing-100 !default;
 $fluent-filemanager-button-content-padding: $filemanager-file-actions-button-top-bottom-padding ds.$spacing-60 !default;
 $fluent-filemanager-fileuploader-dropzone-placeholder-border: ds.$border-width-20 solid !default;
 $fluent-filemanager-state-focused-border: ds.$border-width-10 solid !default;
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-filemanager-progress-title-font-size: ds.$font-size-180 !default; // dx-no-semantic-role: 180 is off the font-size-role scale
+$fluent-filemanager-progress-title-font-weight: ds.$font-weight-title-default !default;
+$fluent-filemanager-progress-bold-font-weight: ds.$font-weight-base-strong !default;

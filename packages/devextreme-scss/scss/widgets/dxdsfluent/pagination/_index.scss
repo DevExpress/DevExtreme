@@ -3,7 +3,10 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
-@use "../../base/pagination";
+@use "../../base/pagination" with (
+  $pagination-info-opacity: $fluent-pagination-info-opacity,
+  $pagination-nav-disabled-opacity: $fluent-pagination-nav-disabled-opacity,
+);
 @use "../gridBase/sizes" as *;
 
 // adduse

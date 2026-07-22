@@ -4,6 +4,7 @@
 @use "../sizes" as *;
 @use "../common/sizes" as *;
 @use "../../base/filterBuilder" as * with (
+  $filterbuilder-range-separator-opacity: $fluent-filterbuilder-range-separator-opacity,
     $filterbuilder-bg: $filterbuilder-bg,
     $filterbuilder-text-color: $filterbuilder-text-color,
     $filterbuilder-text-focus-color: $filterbuilder-text-focus-color,

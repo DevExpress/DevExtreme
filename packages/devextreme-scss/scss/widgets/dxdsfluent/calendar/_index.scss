@@ -5,7 +5,10 @@
 @use "../sizes" as *;
 @use "../button/sizes" as *;
 @use "../button/mixins" as *;
-@use "../../base/calendar/calendar";
+@use "../../base/calendar/calendar" with (
+  $calendar-week-day-header-font-size: $fluent-calendar-week-day-header-font-size,
+  $calendar-week-day-header-font-weight: $fluent-calendar-week-day-header-font-weight,
+);
 @use "../../base/calendar/mixins" as *;
 
 // adduse

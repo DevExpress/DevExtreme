@@ -3,6 +3,10 @@
 // adduse
 
 
+$filemanager-progress-title-font-size: 18px !default;
+$filemanager-progress-title-font-weight: 600 !default;
+$filemanager-progress-bold-font-weight: 600 !default;
+
 .dx-filemanager {
   height: 500px;
   border: 1px solid;
@@ -68,13 +72,13 @@
       .dx-filemanager-progress-panel-title-text {
         flex: 1 1 auto;
         align-self: center;
-        font-size: 18px;
-        font-weight: 600;
+        font-size: $filemanager-progress-title-font-size;
+        font-weight: $filemanager-progress-title-font-weight;
       }
     }
 
     .dx-filemanager-progress-panel-common .dx-filemanager-progress-box-common {
-      font-weight: 600;
+      font-weight: $filemanager-progress-bold-font-weight;
     }
 
     .dx-filemanager-progress-panel-separator {

@@ -3,6 +3,11 @@
 
 // adduse
 
+$sortable-clone-shadow-color-first: rgba(0, 0, 0, 0.1) !default;
+$sortable-clone-shadow-color-second: rgba(0, 0, 0, 0.2) !default;
+$sortable-clone-opacity: 0.9 !default;
+$sortable-source-opacity: 0.5 !default;
+
 $base-accent: null !default;
 
 .dx-sortable {
@@ -14,7 +19,7 @@ $base-accent: null !default;
   top: 0;
   left: 0;
   box-sizing: border-box;
-  opacity: 0.9;
+  opacity: $sortable-clone-opacity;
   z-index: $max-integer;
 
   .dx-inkripple {
@@ -27,7 +32,7 @@ $base-accent: null !default;
 }
 
 .dx-sortable-source {
-  opacity: 0.5;
+  opacity: $sortable-source-opacity;
 }
 
 .dx-sortable-source-hidden {
@@ -50,5 +55,5 @@ $base-accent: null !default;
 
 .dx-sortable-dragging > * {
   border-color: color.change($base-accent, $alpha: 0.5);
-  box-shadow: 0 1px 3px color.change(#000, $alpha: 0.1), 0 6px 8px color.change(#000, $alpha: 0.2);
+  box-shadow: 0 1px 3px $sortable-clone-shadow-color-first, 0 6px 8px $sortable-clone-shadow-color-second;
 }

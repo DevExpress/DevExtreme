@@ -8,7 +8,9 @@
 @use "../button/mixins" as *;
 @use "../checkBox/colors" as *;
 @use "../textEditor/sizes" as *;
-@use "../../base/list" as *;
+@use "../../base/list" as * with (
+  $list-response-wait-opacity: $fluent-list-response-wait-opacity,
+);
 @use "../../base/list/mixins" as *;
 @use "../radioGroup/colors" as *;
 

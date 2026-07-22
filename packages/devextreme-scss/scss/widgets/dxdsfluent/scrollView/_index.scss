@@ -7,7 +7,9 @@
 
 // adduse
 @use "../scrollable";
-@use "../../base/scrollView";
+@use "../../base/scrollView" with (
+  $scrollview-pulldown-icon-font-size: $fluent-scrollview-pulldown-icon-font-size,
+);
 
 
 .dx-scrollview-scrollbottom-text,

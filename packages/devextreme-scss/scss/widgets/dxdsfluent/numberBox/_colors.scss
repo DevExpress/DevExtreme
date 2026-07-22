@@ -7,3 +7,6 @@ $numberbox-spin-icon-background-hover: ds.$color-surface-neutral-default-hovered
 $numberbox-spin-icon-background-active: ds.$color-surface-neutral-default-active !default;
 
 $numberbox-foreground-disabled: ds.$color-content-neutral-default-disabled !default;
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-numberbox-spin-idle-opacity: ds.$opacity-20 !default;

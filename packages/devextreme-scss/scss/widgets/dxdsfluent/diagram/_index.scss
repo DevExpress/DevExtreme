@@ -3,7 +3,9 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/diagram";
+@use "../../base/diagram" with (
+  $diagram-popup-title-toolbar-bg: $diagram-popup-title-toolbar-bg-color,
+);
 @use "../../base/diagram/mixins" as *;
 @use "../button/colors" as *;
 @use "../overlay/colors" as *;

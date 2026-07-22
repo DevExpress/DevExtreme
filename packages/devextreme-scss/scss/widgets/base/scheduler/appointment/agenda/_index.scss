@@ -6,6 +6,9 @@ $recurrence-icon-color: null !default;
 $hover-bg: null !default;
 $active-bg: null !default;
 $active-color: null !default;
+$title-font-weight: null !default;
+$details-font-size: null !default;
+$details-opacity: null !default;
 $title-font-size: null !default;
 
 .dx-scheduler-agenda {
@@ -62,14 +65,14 @@ $title-font-size: null !default;
   .dx-scheduler-appointment-title {
     @include use-text-overflow-ellipsis();
 
-    font-weight: 700;
+    font-weight: $title-font-weight;
     font-size: $title-font-size;
   }
 
   .dx-scheduler-appointment-content-details {
     display: flex;
-    font-size: 12px;
-    opacity: 0.7;
+    font-size: $details-font-size;
+    opacity: $details-opacity;
   }
 
   .dx-scheduler-appointment-content-allday {

@@ -1,6 +1,9 @@
-@use "../../base/chat";
 @use "colors" as *;
 @use "sizes" as *;
+@use "../../base/chat" with (
+  $chat-file-name-font-weight: $fluent-chat-file-name-font-weight,
+  $chat-editing-preview-caption-font-weight: $fluent-chat-editing-preview-caption-font-weight,
+);
 @use "../../base/chat/mixins" as *;
 @use "../common/mixins" as *;
 

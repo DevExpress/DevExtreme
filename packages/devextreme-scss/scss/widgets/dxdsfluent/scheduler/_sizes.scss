@@ -263,3 +263,8 @@ $fluent-scheduler-appointment-strip-border-top-right-radius: ds.$border-radius-6
 $fluent-scheduler-appointment-strip-border-bottom-right-radius: ds.$border-radius-60 !default;
 $fluent-scheduler-appointment-strip-border-top-left-radius: ds.$border-radius-60 !default;
 $fluent-scheduler-appointment-strip-border-bottom-left-radius: ds.$border-radius-60 !default;
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-scheduler-agenda-title-font-weight: ds.$font-weight-base-stronger !default;
+$fluent-scheduler-agenda-details-font-size: ds.$font-size-caption-md !default;
+$fluent-scheduler-appointment-icon-font-size: ds.$font-size-180 !default; // dx-icon-glyph-size: text roles not applicable

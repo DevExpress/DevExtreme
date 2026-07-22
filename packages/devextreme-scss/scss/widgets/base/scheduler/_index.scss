@@ -45,7 +45,10 @@ $agenda-appointment-recurrence-icon-color: null !default;
 @use "../mixins" as *;
 @use "../icon_fonts" as *;
 @use "./common";
+$scheduler-tooltip-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15) !default;
+
 @use "./tooltip" with (
+  $scheduler-tooltip-shadow: $scheduler-tooltip-shadow,
   $scheduler-appointment-base-color: $scheduler-appointment-base-color,
   $scheduler-tooltip-appointment-text-color: $scheduler-tooltip-appointment-text-color,
   $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg,
@@ -64,7 +67,7 @@ $scheduler-vertical-appointment-hovering-shadow: inset 0 $scheduler-hovered-appo
 $scheduler-vertical-appointment-shadow: inset 0 2px 0 0 $scheduler-appointment-start-color;
 $scheduler-vertical-appointment-resizing-shadow: inset 0 -2px 0 0 $scheduler-appointment-start-color, $scheduler-vertical-appointment-shadow;
 
-$scheduler-appointment-dragging-shadow: 7px 7px 15px 0 rgba(50, 50, 50, 0.2);
+$scheduler-appointment-dragging-shadow: 7px 7px 15px 0 rgba(50, 50, 50, 0.2) !default;
 
 $scheduler-horizontal-appointment-resizable-hovering-shadow: inset $scheduler-hovered-appointment-top-shadow-size 0 0 0 $scheduler-appointment-start-color, inset -2px 0 0 0 $scheduler-appointment-start-color;
 $scheduler-horizontal-appointment-resizable-hovering-shadow-rtl: inset (-$scheduler-hovered-appointment-top-shadow-size) 0 0 0 $scheduler-appointment-start-color, inset 2px 0 0 0 $scheduler-appointment-start-color;
@@ -95,11 +98,28 @@ $scheduler-time-indicator-size: 1px;
 $scheduler-time-indicator-top: 14px;
 $scheduler-time-indicator-left: 12px;
 
-$scheduler-time-indicator-shadow-color: rgba(255, 255, 255, 0.1);
+$scheduler-time-indicator-shadow-color: rgba(255, 255, 255, 0.1) !default;
 $scheduler-time-indicator-shadow: 0 1px 0 0 $scheduler-time-indicator-shadow-color;
 $scheduler-time-indicator-text-shadow: $scheduler-time-indicator-shadow-color 1px 0 0;
 
+$scheduler-appointment-icon-font-size: 18px !default;
+$scheduler-appointment-date-opacity: 0.7 !default;
+$scheduler-appointment-resizing-opacity: 0.7 !default;
+$scheduler-appointment-disabled-opacity: 0.6 !default;
+$scheduler-appointment-drag-source-opacity: 0.7 !default;
+$agenda-appointment-title-font-weight: 700 !default;
+$agenda-appointment-details-font-size: 12px !default;
+$agenda-appointment-details-opacity: 0.7 !default;
+
 @use "./appointment" with (
+  $scheduler-appointment-icon-font-size: $scheduler-appointment-icon-font-size,
+  $scheduler-appointment-date-opacity: $scheduler-appointment-date-opacity,
+  $scheduler-appointment-resizing-opacity: $scheduler-appointment-resizing-opacity,
+  $scheduler-appointment-disabled-opacity: $scheduler-appointment-disabled-opacity,
+  $scheduler-appointment-drag-source-opacity: $scheduler-appointment-drag-source-opacity,
+  $agenda-appointment-title-font-weight: $agenda-appointment-title-font-weight,
+  $agenda-appointment-details-font-size: $agenda-appointment-details-font-size,
+  $agenda-appointment-details-opacity: $agenda-appointment-details-opacity,
   $scheduler-transparent-top-border: $scheduler-transparent-top-border,
   $scheduler-appointment-base-color: $scheduler-appointment-base-color,
   $scheduler-appointment-text-color: $scheduler-appointment-text-color,

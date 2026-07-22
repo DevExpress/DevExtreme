@@ -9,3 +9,6 @@ $dropdowneditor-icon-color: ds.$color-content-neutral-subdued-rest !default;
 * $type color
 */
 $dropdowneditor-icon-active-color: ds.$color-content-neutral-subdued-rest !default;
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-dropdowneditor-icon-idle-opacity: ds.$opacity-35 !default;

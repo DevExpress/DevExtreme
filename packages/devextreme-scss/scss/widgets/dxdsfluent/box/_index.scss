@@ -2,7 +2,9 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/box";
+@use "../../base/box" with (
+  $box-item-content-font-size: $fluent-box-item-content-font-size,
+);
 
 // adduse
 

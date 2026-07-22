@@ -46,3 +46,7 @@ $fluent-fileuploader-file-padding-top: ds.$spacing-50 !default;
 $fluent-fileuploader-file-status-message-margin-top: ds.$spacing-20 !default;
 $fluent-fileuploader-file-status-message-margin-bottom: ds.$spacing-20 !default;
 $fluent-fileuploader-file-wrapper-border-size: ds.$border-width-30 !default;
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-fileuploader-status-message-font-size: ds.$font-size-caption-md !default;
+$fluent-fileuploader-file-size-font-size: ds.$font-size-caption-sm !default;

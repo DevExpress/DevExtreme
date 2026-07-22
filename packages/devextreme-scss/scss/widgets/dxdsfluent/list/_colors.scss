@@ -82,3 +82,6 @@ $list-inverted-text-color: ds.$color-content-neutral-default-static-dark-rest !d
 
 // Values hoisted from style-file literals (tokenized)
 $list-item-disabled-opacity: ds.$opacity-60 !default;
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-list-response-wait-opacity: ds.$opacity-50 !default;

@@ -3,6 +3,9 @@
 // adduse
 
 
+$pagination-info-opacity: 0.7 !default;
+$pagination-nav-disabled-opacity: 0.3 !default;
+
 $pagination-paddings: 8px;
 $pagination-info-paddings: 9px;
 
@@ -41,7 +44,7 @@ $pagination-info-paddings: 9px;
     .dx-info {
       display: inline-block;
       margin-right: $pagination-info-paddings;
-      opacity: 0.7;
+      opacity: $pagination-info-opacity;
     }
 
     .dx-navigate-button {
@@ -54,7 +57,7 @@ $pagination-info-paddings: 9px;
       box-sizing: content-box;
 
       &.dx-button-disable {
-        opacity: 0.3;
+        opacity: $pagination-nav-disabled-opacity;
         cursor: inherit;
       }
     }

@@ -93,3 +93,12 @@ $scheduler-accent: ds.$color-surface-primary-default-rest !default;
 $scheduler-bg: ds.$color-surface-neutral-default-rest !default;
 $scheduler-border-color: ds.$color-border-neutral-default-rest !default;
 $scheduler-inverted-text-color: ds.$color-content-neutral-default-inverted-rest !default;
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-scheduler-appointment-dragging-shadow: 7px 7px 15px 0 ds.$color-shadow-key !default;
+$fluent-scheduler-tooltip-shadow: ds.$box-shadow-md !default;
+$fluent-scheduler-agenda-details-opacity: ds.$opacity-70 !default;
+$fluent-scheduler-appointment-date-opacity: ds.$opacity-70 !default;
+$fluent-scheduler-appointment-resizing-opacity: ds.$opacity-70 !default;
+$fluent-scheduler-appointment-disabled-opacity: ds.$opacity-60 !default;
+$fluent-scheduler-appointment-drag-source-opacity: ds.$opacity-70 !default;

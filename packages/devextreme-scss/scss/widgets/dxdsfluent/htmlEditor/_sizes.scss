@@ -51,3 +51,6 @@ $fluent-htmleditor-toolbar-wrapper-right: ds.$spacing-10 !default;
 $fluent-htmleditor-content-margin: ds.$spacing-10 !default;
 $fluent-htmleditor-input-wrapper-gap: ds.$spacing-80 !default;
 $fluent-htmleditor-state-active-border-bottom: ds.$border-width-20 solid !default;
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-htmleditor-aidialog-title-font-weight: ds.$font-weight-title-default !default;

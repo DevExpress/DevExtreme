@@ -4,7 +4,10 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
-@use "../../base/fileUploader";
+@use "../../base/fileUploader" with (
+  $fileuploader-status-message-font-size: $fluent-fileuploader-status-message-font-size,
+  $fileuploader-file-size-font-size: $fluent-fileuploader-file-size-font-size,
+);
 
 // adduse
 

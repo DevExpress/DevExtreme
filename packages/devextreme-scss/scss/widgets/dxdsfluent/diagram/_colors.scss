@@ -41,3 +41,6 @@ $diagram-shadow: 0 1px 8px ds.$color-shadow-key !default;
 $diagram-selection-mark-color: ds.$color-border-neutral-accessible-rest !default;
 $diagram-selection-fill-color: rgb(from #{ds.$color-border-neutral-accessible-rest} r g b / 0.02) !default;
 $diagram-image-icon-muted-opacity: ds.$opacity-50 !default;
+
+// Base-layer values injected with design tokens (wave B1)
+$diagram-popup-title-toolbar-bg-color: ds.$color-surface-neutral-alpha-hovered !default;

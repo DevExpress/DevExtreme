@@ -11,6 +11,16 @@
 @use "../../base/mixins" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/scheduler" as baseScheduler with (
+  $scheduler-tooltip-shadow: $fluent-scheduler-tooltip-shadow,
+  $scheduler-appointment-icon-font-size: $fluent-scheduler-appointment-icon-font-size,
+  $scheduler-appointment-date-opacity: $fluent-scheduler-appointment-date-opacity,
+  $scheduler-appointment-resizing-opacity: $fluent-scheduler-appointment-resizing-opacity,
+  $scheduler-appointment-disabled-opacity: $fluent-scheduler-appointment-disabled-opacity,
+  $scheduler-appointment-drag-source-opacity: $fluent-scheduler-appointment-drag-source-opacity,
+  $agenda-appointment-title-font-weight: $fluent-scheduler-agenda-title-font-weight,
+  $agenda-appointment-details-font-size: $fluent-scheduler-agenda-details-font-size,
+  $agenda-appointment-details-opacity: $fluent-scheduler-agenda-details-opacity,
+  $scheduler-appointment-dragging-shadow: $fluent-scheduler-appointment-dragging-shadow,
   $scheduler-tooltip-appointment-text-color: $scheduler-tooltip-appointment-text-color,
   $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg,
   $scheduler-tooltip-list-focused-bg: $list-item-hover-bg,

@@ -1,3 +1,5 @@
+$filterbuilder-range-separator-opacity: null !default;
+
 // adduse
 
 
@@ -48,7 +50,7 @@
         .dx-filterbuilder-text-separator,
         .dx-filterbuilder-range-separator {
           margin: 0 7px;
-          opacity: 0.3;
+          opacity: $filterbuilder-range-separator-opacity;
         }
 
         &.dx-filterbuilder-group-operation,

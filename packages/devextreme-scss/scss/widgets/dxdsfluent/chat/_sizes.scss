@@ -166,3 +166,7 @@ $chat-bubble-gap: ds.$spacing-80 !default;
 
   $chat-file-icon-font-size: ds.$font-size-160 !default; // dx-icon-glyph-size: text roles not applicable
 }
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-chat-file-name-font-weight: ds.$font-weight-base-strong !default;
+$fluent-chat-editing-preview-caption-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)

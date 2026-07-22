@@ -5,7 +5,9 @@
 @use "../../base/icon_fonts" as *;
 @use "../textEditor/sizes" as *;
 @use "../textEditor/colors" as *;
-@use "../../base/numberBox";
+@use "../../base/numberBox" with (
+  $numberbox-spin-idle-opacity: $fluent-numberbox-spin-idle-opacity,
+);
 
 // adduse
 @use "../textEditor" as *;

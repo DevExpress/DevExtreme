@@ -2,7 +2,11 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/fileManager";
+@use "../../base/fileManager" with (
+  $filemanager-progress-title-font-size: $fluent-filemanager-progress-title-font-size,
+  $filemanager-progress-title-font-weight: $fluent-filemanager-progress-title-font-weight,
+  $filemanager-progress-bold-font-weight: $fluent-filemanager-progress-bold-font-weight,
+);
 @use "../../base/fileManager/mixins" as *;
 
 // adduse

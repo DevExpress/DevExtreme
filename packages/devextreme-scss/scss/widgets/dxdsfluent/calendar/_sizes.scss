@@ -27,3 +27,7 @@ $fluent-calendar-element-padding: ds.$spacing-80 !default;
   $fluent-calendar-cell-font-size: ds.$font-size-base-sm !default;
   $fluent-calendar-footer-button-height: ds.$spacing-280 !default;
 }
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-calendar-week-day-header-font-size: ds.$font-size-caption-sm !default;
+$fluent-calendar-week-day-header-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)

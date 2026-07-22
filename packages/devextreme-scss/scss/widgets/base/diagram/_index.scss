@@ -3,6 +3,8 @@
 // adduse
 
 
+$diagram-popup-title-toolbar-bg: rgba(0, 0, 0, 0.05) !default;
+
 $transparent-border: 1px solid transparent;
 
 .dx-diagram {
@@ -61,7 +63,7 @@ $transparent-border: 1px solid transparent;
 
   .dx-popup-title.dx-toolbar {
     padding: 0;
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: $diagram-popup-title-toolbar-bg;
   }
 
   .dx-popup-title .dx-button.dx-button-has-icon:not(.dx-button-has-text),

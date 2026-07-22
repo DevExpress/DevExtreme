@@ -17,3 +17,6 @@ $progressbar-indeterminate-background-width: 90%;
   $progressbar-height: ds.$spacing-20 !default;
   $progressbar-status-margin-top: ds.$spacing-80 !default;
 }
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-progressbar-status-font-size: ds.$font-size-caption-md !default;
