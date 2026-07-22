@@ -298,7 +298,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '149.0.7827.114'
+        chrome-version: '150.0.7871.181'
 
     - name: Use Node.js
       uses: actions/setup-node@v6
@@ -427,7 +427,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '149.0.7827.114'
+        chrome-version: '150.0.7871.181'
 
     - name: Use Node.js
       uses: actions/setup-node@v6
