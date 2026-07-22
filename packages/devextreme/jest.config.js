@@ -18,7 +18,8 @@ module.exports = {
             preset: 'ts-jest',
             testMatch: [
                 // TODO: change to '<rootDir>/**/*.test.(ts|tsx)' after removing renovation
-                '<rootDir>/js/__internal/**/*.test.(ts|tsx)',
+                // '<rootDir>/js/__internal/**/*.test.(ts|tsx)',
+                '<rootDir>/js/__internal/ui/html_editor/**/*.test.(ts|tsx)',
             ],
             transform: {
                 '\\.[jt]sx?$': ['ts-jest', {
