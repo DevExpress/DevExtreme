@@ -5,10 +5,11 @@ import { Event as dxEvent } from '@js/common/core/events';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import scrollEvents from '@js/common/core/events/gesture/emitter.gesture.scroll';
 import pointerEvents from '@js/common/core/events/pointer';
-import { addNamespace } from '@js/common/core/events/utils/index';
+import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import config from '@js/core/config';
 import devices from '@js/core/devices';
+import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -28,8 +29,8 @@ import { isDefined, isFunction } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type { Properties as FormProperties } from '@js/ui/form';
 import type { Converter, HtmlEditorFormat, Properties } from '@js/ui/html_editor';
+import { getNextFocusableElement, getPreviousFocusableElement } from '@ts/core/utils/focus';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { ValueChangedEvent } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
 import ConverterController, { type BaseConverter } from '@ts/ui/html_editor/m_converterController';
 import { getQuill } from '@ts/ui/html_editor/m_quill_importer';
@@ -345,8 +346,39 @@ class HtmlEditor extends Editor<Properties> {
     eventsEngine.on(this._$htmlContainer, keyDownEvent, this._keyDownHandler.bind(this));
   }
 
-  _keyDownHandler(e: ValueChangedEvent): void {
+  _keyDownHandler(e: DxEvent<KeyboardEvent>): void {
     this._saveValueChangeEvent(e);
+    this._handleFocusEscape(e);
+  }
+
+  _handleFocusEscape(e: KeyboardEvent): void {
+    if (!e.ctrlKey || !e.shiftKey) {
+      return;
+    }
+
+    const keyName = normalizeKeyName(e);
+
+    if (keyName !== 'upArrow' && keyName !== 'downArrow') {
+      return;
+    }
+
+    const isBackward = keyName === 'upArrow';
+
+    e.preventDefault();
+
+    if (isBackward && this._applyToolbarMethod('focusFirstItem')) {
+      return;
+    }
+
+    const editorNode = this.$element().get(0) as HTMLElement;
+    const target = (
+      isBackward
+        ? getPreviousFocusableElement(editorNode)
+        : getNextFocusableElement(editorNode)
+    )
+      ?? domAdapter.getBody();
+
+    target.focus();
   }
 
   _renderHtmlEditor(): void {
@@ -457,9 +489,10 @@ class HtmlEditor extends Editor<Properties> {
     };
   }
 
-  _getKeyboardModuleConfig(): { onKeydown: (e: DxEvent) => void } {
+  _getKeyboardModuleConfig(): { onKeydown: (e: DxEvent) => void, inlineTabInsertion: boolean } {
     return {
       onKeydown: (e) => this._saveValueChangeEvent(dxEvent(e)),
+      inlineTabInsertion: false,
     };
   }
 
@@ -761,8 +794,8 @@ class HtmlEditor extends Editor<Properties> {
     }
   }
 
-  _applyToolbarMethod(methodName: string): void {
-    this.getModule('toolbar')?.[methodName]();
+  _applyToolbarMethod(methodName: string): unknown {
+    return this.getModule('toolbar')?.[methodName]();
   }
 
   addCleanCallback(callback: () => unknown): void {
