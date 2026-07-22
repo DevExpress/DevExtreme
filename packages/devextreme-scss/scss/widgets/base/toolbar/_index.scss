@@ -2,6 +2,12 @@
 
 // adduse
 
+
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$toolbar-item-padding: 0 5px !default;
+$toolbar-group-margin: 0 10px !default;
+$toolbar-texteditor-width: 150px !default;
+
 .dx-toolbar {
   width: 100%;
 
@@ -51,7 +57,7 @@
 }
 
 .dx-toolbar-item {
-  padding: 0 5px;
+  padding: $toolbar-item-padding;
 
   @include dx-toolbar-item();
 }
@@ -62,7 +68,7 @@
 
 .dx-toolbar-group {
   float: left;
-  margin: 0 10px;
+  margin: $toolbar-group-margin;
 }
 
 .dx-toolbar-before,
@@ -96,7 +102,7 @@
 
   // NOTE: Prevent croping of italic text in label (T126187)
   margin: 0 -5px;
-  padding: 0 5px;
+  padding: $toolbar-item-padding;
 }
 
 .dx-toolbar-center {
@@ -212,7 +218,7 @@
 .dx-toolbar-item-content {
   > .dx-texteditor,
   &.dx-texteditor {
-    width: 150px;
+    width: $toolbar-texteditor-width;
   }
 }
 

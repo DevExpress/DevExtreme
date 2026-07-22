@@ -2,6 +2,8 @@
 @use "../icon_fonts" as *;
 @use "sass:meta";
 
+$node-line-height: null !default;
+
 .dx-treelist-headers {
   .dx-header-row {
     & > td {
@@ -41,7 +43,7 @@
 
         .dx-treelist-empty-space {
           width: $treelist-expand-icon-size;
-          height: 1px;
+          height: $node-line-height;
           user-select: none;
 
           &--last {
@@ -82,7 +84,7 @@
         .dx-treelist-select-checkbox-container {
           position: relative;
           width: $treelist-expand-checkbox-size;
-          height: 1px;
+          height: $node-line-height;
           margin: 0 $treelist-expand-checkbox-right-gap 0 0;
 
           .dx-select-checkbox {

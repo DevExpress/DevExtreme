@@ -76,3 +76,11 @@ $fluent-pivotgrid-toolbar-margin-left: ds.$spacing-100 !default;
 $fluent-pivotgrid-field-chooser-button-margin-left: ds.$spacing-40 !default;
 $fluent-pivotgrid-fields-area-head-padding-left: ds.$spacing-20 !default;
 $fluent-pivotgrid-icon-sorted-margin-right: ds.$spacing-50 !default;
+
+// Base submodule sizing injected with design tokens (B2 tail)
+$fluent-pivotgrid-common-field-chooser-drag-width: ds.$spacing-1000 !default;
+$fluent-pivotgrid-common-field-chooser-drag-height: ds.$spacing-1000 !default;
+
+// B2 tail: pivotGrid cell side paddings
+$fluent-pivotgrid-header-cell-side-padding: ds.$spacing-20 !default;
+$fluent-pivotgrid-fields-area-head-cell-side-padding: ds.$spacing-20 !default;

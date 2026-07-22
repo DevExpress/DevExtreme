@@ -53,3 +53,8 @@ $fluent-popup-focused-content-shadow: null !default;
 // Values hoisted from style-file literals (tokenized)
 $fluent-popup-title-border-bottom: ds.$border-width-10 solid !default;
 $fluent-popup-title-min-height: ds.$spacing-280 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-popup-title-padding: ds.$spacing-100 !default;
+$fluent-popup-title-min-height-2: ds.$spacing-190 !default;
+$fluent-popup-dialog-message-padding: ds.$spacing-100 ds.$spacing-100 ds.$spacing-50 ds.$spacing-100 !default;

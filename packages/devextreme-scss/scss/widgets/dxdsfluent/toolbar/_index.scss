@@ -10,7 +10,11 @@
 @use "../button/sizes" as *;
 @use "../checkBox/sizes" as *;
 @use "mixins" as *;
-@use "../../base/toolbar";
+@use "../../base/toolbar" with (
+  $toolbar-item-padding: $fluent-toolbar-item-padding,
+  $toolbar-group-margin: $fluent-toolbar-group-margin,
+  $toolbar-texteditor-width: $fluent-toolbar-texteditor-width,
+);
 
 // adduse
 @use "../dropDownMenu";

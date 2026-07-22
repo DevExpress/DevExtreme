@@ -20,3 +20,8 @@ $fluent-context-menu-item-text-padding-inline: ds.$spacing-20 !default;
   $fluent-context-menu-horizontal-padding: ds.$spacing-40 !default;
   $fluent-context-menu-item-content-gap: ds.$spacing-40 !default;
 }
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-contextmenu-menu-items-container-padding: ds.$spacing-10 !default;
+$fluent-contextmenu-menu-separator-height: ds.$spacing-10 !default;
+$fluent-contextmenu-menu-separator-margin: ds.$spacing-50 0 !default;

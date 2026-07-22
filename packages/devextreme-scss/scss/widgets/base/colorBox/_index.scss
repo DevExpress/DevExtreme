@@ -6,6 +6,14 @@
 
 $colorbox-input-left-padding: 40px;
 
+
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$colorbox-texteditor-input-container-width: 15px !default;
+$colorbox-texteditor-input-container-height: 15px !default;
+$colorbox-texteditor-input-container-inset-inline-start: 14px !default;
+$colorbox-overlay-padding-2: 20px !default;
+$colorbox-toolbar-item-padding-right: 10px !default;
+
 .dx-colorbox-input-container {
   &.dx-colorbox-color-is-not-defined {
     .dx-colorbox-color-result-preview {
@@ -26,10 +34,10 @@ $colorbox-input-left-padding: 40px;
       position: absolute;
       top: 50%;
       z-index: 1;
-      width: 15px;
-      height: 15px;
+      width: $colorbox-texteditor-input-container-width;
+      height: $colorbox-texteditor-input-container-height;
       margin-top: -7.5px;
-      inset-inline-start: 14px;
+      inset-inline-start: $colorbox-texteditor-input-container-inset-inline-start;
     }
   }
 
@@ -49,7 +57,7 @@ $colorbox-input-left-padding: 40px;
 }
 
 .dx-colorbox-overlay {
-  padding: 20px;
+  padding: $colorbox-overlay-padding-2;
 
   .dx-popup-content {
     overflow: hidden;
@@ -58,7 +66,7 @@ $colorbox-input-left-padding: 40px;
 
   .dx-popup-bottom {
     .dx-toolbar-item:first-child {
-      padding-right: 10px;
+      padding-right: $colorbox-toolbar-item-padding-right;
     }
   }
 

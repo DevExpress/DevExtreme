@@ -8,7 +8,12 @@
 
 // adduse
 @use "../menuBase" as *;
-@use "../../base/menu";
+@use "../../base/menu" with (
+  $menu-separator-margin-inline-end: $fluent-menu-separator-margin-inline-end,
+  $menu-separator-margin-bottom: $fluent-menu-separator-margin-bottom,
+  $menu-treeview-node-padding: $fluent-menu-treeview-node-padding,
+  $menu-item-content-padding-inline-start: $fluent-menu-item-content-padding-inline-start,
+);
 
 .dx-context-menu-container-border {
   background-color: transparent;

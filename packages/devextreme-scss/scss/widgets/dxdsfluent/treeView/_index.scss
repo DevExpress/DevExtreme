@@ -4,6 +4,8 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/treeView" as * with (
+  $treeview-select-all-item-border-bottom: $fluent-treeview-select-all-item-border-bottom,
+  $treeview-border-visible-border: $fluent-treeview-border-visible-border,
   $treeview-disabled-opacity: $fluent-treeview-disabled-opacity,
 );
 @use "../../base/icon_fonts" as *;

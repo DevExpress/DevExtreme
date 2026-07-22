@@ -10,7 +10,9 @@
 @use "../checkBox/sizes" as *;
 @use "../switch/sizes" as *;
 @use "../slider/sizes" as *;
-@use "../../base/fieldset";
+@use "../../base/fieldset" with (
+  $fieldset-root-margin-bottom: $fluent-fieldset-root-margin-bottom,
+);
 
 // adduse
 

@@ -28,7 +28,16 @@ $agenda-appointment-details-font-size: null !default;
 $agenda-appointment-details-opacity: null !default;
 $agenda-appointment-title-font-size: null !default;
 
+$scheduler-appointment-reduced-icon-top: 3px !default;
+$scheduler-appointment-active-marker-border-radius: 4px !default;
+$scheduler-appointment-content-details-margin-top: 2px !default;
+$scheduler-appointment-reduced-icon-rtl-left: 3px !default;
+
 @use "./regular" with (
+  $appointment-reduced-icon-top: $scheduler-appointment-reduced-icon-top,
+  $appointment-active-marker-border-radius: $scheduler-appointment-active-marker-border-radius,
+  $appointment-content-details-margin-top: $scheduler-appointment-content-details-margin-top,
+  $appointment-reduced-icon-rtl-left: $scheduler-appointment-reduced-icon-rtl-left,
   $appointment-icon-font-size: $scheduler-appointment-icon-font-size,
   $appointment-date-opacity: $scheduler-appointment-date-opacity,
   $appointment-resizing-opacity: $scheduler-appointment-resizing-opacity,
@@ -50,7 +59,22 @@ $agenda-appointment-title-font-size: null !default;
   $appointment-dragging-shadow: $scheduler-appointment-dragging-shadow,
   $reduced-icon-offset: $scheduler-reduced-icon-offset
 );
+$agenda-appointment-item-padding: 10px !default;
+$agenda-appointment-item-border-radius: 5px !default;
+$agenda-appointment-right-layout-margin-left: 10px !default;
+$agenda-appointment-allday-padding-right: 5px !default;
+$agenda-appointment-resource-item-margin-left: 15px !default;
+$agenda-appointment-resource-value-margin-left: 3px !default;
+$agenda-appointment-rtl-margin-right: 10px !default;
+
 @use "./agenda" with (
+  $agenda-item-padding: $agenda-appointment-item-padding,
+  $agenda-item-border-radius: $agenda-appointment-item-border-radius,
+  $agenda-right-layout-margin-left: $agenda-appointment-right-layout-margin-left,
+  $agenda-allday-padding-right: $agenda-appointment-allday-padding-right,
+  $agenda-resource-item-margin-left: $agenda-appointment-resource-item-margin-left,
+  $agenda-resource-value-margin-left: $agenda-appointment-resource-value-margin-left,
+  $agenda-rtl-margin-right: $agenda-appointment-rtl-margin-right,
   $title-font-weight: $agenda-appointment-title-font-weight,
   $details-font-size: $agenda-appointment-details-font-size,
   $details-opacity: $agenda-appointment-details-opacity,

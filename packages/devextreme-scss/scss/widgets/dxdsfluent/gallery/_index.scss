@@ -4,7 +4,12 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
-@use "../../base/gallery";
+@use "../../base/gallery" with (
+  $gallery-root-border-width: $fluent-gallery-root-border-width,
+  $gallery-indicator-bottom: $fluent-gallery-indicator-bottom,
+  $gallery-indicator-height: $fluent-gallery-indicator-height,
+  $gallery-indicator-item-margin: $fluent-gallery-indicator-item-margin,
+);
 
 // adduse
 

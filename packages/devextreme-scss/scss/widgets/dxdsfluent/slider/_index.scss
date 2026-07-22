@@ -3,7 +3,10 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/slider";
+@use "../../base/slider" with (
+  $slider-label-position-bottom-padding-bottom: $fluent-slider-label-position-bottom-padding-bottom,
+  $slider-label-position-top-padding-top: $fluent-slider-label-position-top-padding-top,
+);
 @use "../../base/popover/mixins" as *;
 
 // adduse

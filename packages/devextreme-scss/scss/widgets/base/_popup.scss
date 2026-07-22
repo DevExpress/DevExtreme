@@ -5,9 +5,15 @@
 
 $popup-dialog-shader-color: #444 !default;
 
+
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$popup-title-padding: 10px !default;
+$popup-title-min-height-2: 19px !default;
+$popup-dialog-message-padding: 10px 10px 5px 10px !default;
+
 .dx-popup-title {
-  padding: 10px;
-  min-height: 19px;
+  padding: $popup-title-padding;
+  min-height: $popup-title-min-height-2;
   -webkit-user-drag: none;
 
   @include user-select(none);
@@ -76,7 +82,7 @@ $popup-dialog-shader-color: #444 !default;
 }
 
 .dx-popup-content {
-  padding: 10px;
+  padding: $popup-title-padding;
   -webkit-user-drag: none;
 
   &.dx-dialog-content {
@@ -107,7 +113,7 @@ $popup-dialog-shader-color: #444 !default;
 }
 
 .dx-dialog-message {
-  padding: 10px 10px 5px 10px;
+  padding: $popup-dialog-message-padding;
 }
 
 .dx-prevent-safari-scrolling {

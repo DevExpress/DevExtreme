@@ -8,6 +8,12 @@
 @use "../gridBase/colors" as *;
 @use "../gridBase/sizes" as *;
 @use "../../base/dataGrid" as baseGrid with (
+  $datagrid-common-group-min-width: $fluent-datagrid-common-group-min-width,
+  $datagrid-common-addrow-margin-right: $fluent-datagrid-common-addrow-margin-right,
+  $datagrid-common-addrow-margin-left: $fluent-datagrid-common-addrow-margin-left,
+  $datagrid-common-form-buttons-border-radius: $fluent-datagrid-common-form-buttons-border-radius,
+  $datagrid-common-form-buttons-margin-left: $fluent-datagrid-common-form-buttons-margin-left,
+  $datagrid-common-form-buttons-margin-right: $fluent-datagrid-common-form-buttons-margin-right,
   $datagrid-header-filter-outline: $fluent-datagrid-header-filter-outline,
   $datagrid-header-filter-outline-offset: $fluent-datagrid-header-filter-outline-offset,
   $datagrid-filter-panel-clear-filter-outline-offset: $fluent-datagrid-filter-panel-clear-filter-outline-offset,

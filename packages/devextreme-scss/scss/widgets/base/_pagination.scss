@@ -5,6 +5,7 @@
 
 // Design sizing values (parametrizable; dxdsfluent injects tokens)
 $pagination-page-padding-2: 7px 8px 8px !default;
+$pagination-page-horizontal-padding: 13px !default;
 $pagination-page-margin-left: 5px !default;
 $pagination-page-margin-right: 1px !default;
 $pagination-separator-padding-left: 8px !default;
@@ -70,7 +71,7 @@ $pagination-info-paddings: 9px;
       cursor: pointer;
       display: inline-block;
       vertical-align: top;
-      padding: $pagination-paddings - 1px 13px;
+      padding: $pagination-paddings - 1px $pagination-page-horizontal-padding;
       box-sizing: content-box;
 
       &.dx-button-disable {

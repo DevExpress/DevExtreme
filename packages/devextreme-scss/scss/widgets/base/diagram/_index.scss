@@ -20,6 +20,7 @@ $diagram-popup-title-toolbar-bg: rgba(0, 0, 0, 0.05) !default;
 
 $transparent-border: 1px solid transparent;
 
+$diagram-toolbox-input-font-size: 0.9em !default; // dx-relative
 .dx-diagram {
   border: $transparent-border;
   display: flex;
@@ -103,7 +104,7 @@ $transparent-border: 1px solid transparent;
     .dx-diagram-toolbox-input input,
     .dx-diagram-toolbox-input .dx-placeholder::before {
       min-height: 0;
-      font-size: 0.9em;
+      font-size: $diagram-toolbox-input-font-size;
     }
 
     .dx-diagram-toolbox-input .dx-button {

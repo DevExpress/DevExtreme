@@ -3,7 +3,11 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/scrollable";
+@use "../../base/scrollable" with (
+  $scrollable-scroll-width: $fluent-scrollable-scroll-width,
+  $scrollable-scroll-height: $fluent-scrollable-scroll-height,
+  $scrollable-scroll-padding: $fluent-scrollable-scroll-padding,
+);
 @use "../../base/scrollable/mixins" as *;
 
 // adduse

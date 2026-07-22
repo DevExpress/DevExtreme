@@ -5,7 +5,13 @@
 @use "../sizes" as *;
 @use "../colorView/colors" as *;
 @use "../textEditor/sizes" as *;
-@use "../../base/colorBox";
+@use "../../base/colorBox" with (
+  $colorbox-texteditor-input-container-width: $fluent-colorbox-texteditor-input-container-width,
+  $colorbox-texteditor-input-container-height: $fluent-colorbox-texteditor-input-container-height,
+  $colorbox-texteditor-input-container-inset-inline-start: $fluent-colorbox-texteditor-input-container-inset-inline-start,
+  $colorbox-overlay-padding-2: $fluent-colorbox-overlay-padding-2,
+  $colorbox-toolbar-item-padding-right: $fluent-colorbox-toolbar-item-padding-right,
+);
 @use "../../base/colorBox/mixins" as *;
 
 // adduse

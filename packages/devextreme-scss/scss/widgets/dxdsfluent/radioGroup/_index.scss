@@ -3,7 +3,10 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/radioGroup/mixins" as *;
-@use "../../base/radioGroup";
+@use "../../base/radioGroup" with (
+  $radiogroup-radio-value-container-padding-inline-end: $fluent-radiogroup-radio-value-container-padding-inline-end,
+  $radiogroup-collection-column-gap-2: $fluent-radiogroup-collection-column-gap-2,
+);
 
 // adduse
 @use "../radioButton";

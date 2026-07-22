@@ -3,6 +3,12 @@
 // adduse
 
 
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$menu-separator-margin-inline-end: 15px !default;
+$menu-separator-margin-bottom: 15px !default;
+$menu-treeview-node-padding: 1px !default;
+$menu-item-content-padding-inline-start: 15px !default;
+
 .dx-menu {
   position: relative;
 }
@@ -17,7 +23,7 @@
 
   .dx-menu-separator {
     display: inline-block;
-    margin-inline-end: 15px;
+    margin-inline-end: $menu-separator-margin-inline-end;
   }
 }
 
@@ -29,7 +35,7 @@
   }
 
   .dx-menu-separator {
-    margin-bottom: 15px;
+    margin-bottom: $menu-separator-margin-bottom;
   }
 }
 
@@ -63,10 +69,10 @@
   }
 
   .dx-treeview-node-container:first-child > .dx-treeview-node {
-    padding: 1px;
+    padding: $menu-treeview-node-padding;
 
     .dx-item-content {
-      padding-inline-start: 15px;
+      padding-inline-start: $menu-item-content-padding-inline-start;
     }
 
     &:last-child {

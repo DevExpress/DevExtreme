@@ -49,3 +49,7 @@ $fluent-select-all-item-border-visible-padding: ds.$spacing-260 !default;
   $fluent-treeview-searchbox-margin-bottom: ds.$spacing-40 !default;
   $fluent-treeview-search-editor-height: ds.$spacing-320;
 }
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-treeview-select-all-item-border-bottom: ds.$border-width-10 solid !default;
+$fluent-treeview-border-visible-border: ds.$border-width-10 solid !default;

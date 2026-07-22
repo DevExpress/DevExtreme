@@ -5,6 +5,8 @@
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
 @use "../../base/progressBar" with (
+  $progressbar-status-padding-right: $fluent-progressbar-status-padding-right,
+  $progressbar-status-padding-left: $fluent-progressbar-status-padding-left,
   $progressbar-status-font-size: $fluent-progressbar-status-font-size,
 );
 

@@ -18,7 +18,21 @@ $datagrid-cell-focus-outline: 2px solid !default;
 @use "sass:meta";
 @use "../mixins" as *;
 @use "../icon_fonts" as *;
-@use "./common";
+$datagrid-common-group-min-width: 30px !default;
+$datagrid-common-addrow-margin-right: 10px !default;
+$datagrid-common-addrow-margin-left: 6px !default;
+$datagrid-common-form-buttons-border-radius: 3px !default;
+$datagrid-common-form-buttons-margin-left: 10px !default;
+$datagrid-common-form-buttons-margin-right: 6px !default;
+
+@use "./common" with (
+  $datagrid-common-group-min-width: $datagrid-common-group-min-width,
+  $datagrid-common-addrow-margin-right: $datagrid-common-addrow-margin-right,
+  $datagrid-common-addrow-margin-left: $datagrid-common-addrow-margin-left,
+  $datagrid-common-form-buttons-border-radius: $datagrid-common-form-buttons-border-radius,
+  $datagrid-common-form-buttons-margin-left: $datagrid-common-form-buttons-margin-left,
+  $datagrid-common-form-buttons-margin-right: $datagrid-common-form-buttons-margin-right,
+);
 @use "./variables" as *;
 @use 'layout/cell' with (
   $datagrid-border: $datagrid-border,

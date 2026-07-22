@@ -3,7 +3,11 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
-@use "../../base/validation" as *;
+@use "../../../_design-system/variables/ds" as ds;
+@use "../../base/validation" as * with (
+  $validation-summary-margin-top: ds.$spacing-200,
+  $validation-message-content-padding: ds.$spacing-100,
+);
 @use "../list/sizes" as *;
 
 $badge-invalid-bg: $common-invalid-color;

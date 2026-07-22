@@ -46,3 +46,9 @@ $fluent-list-slide-menu-button-menu-border: ds.$border-width-10 solid transparen
 $fluent-list-context-menucontent-border: ds.$border-width-10 solid !default;
 $fluent-list-items-row-gap: ds.$spacing-20 !default;
 $fluent-list-empty-message-min-height: 2em !default; // dx-relative: scales with the parent font-size
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-list-item-badge-container-width: ds.$spacing-200 !default;
+$fluent-list-slide-menu-button-padding: 0 ds.$spacing-100 !default;
+$fluent-list-static-delete-button-padding: 0 ds.$spacing-50 !default;
+$fluent-list-next-button-padding: ds.$spacing-50 !default;

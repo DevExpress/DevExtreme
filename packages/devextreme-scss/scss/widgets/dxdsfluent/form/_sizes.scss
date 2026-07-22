@@ -48,3 +48,14 @@ $fluent-form-group-custom-caption-icon-margin: null !default;
 // Values hoisted from style-file literals (tokenized)
 $fluent-form-field-item-help-text-padding-top: ds.$spacing-20 !default;
 $fluent-form-group-content-border-top: ds.$border-width-10 solid !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-form-first-row-padding-top: ds.$spacing-100 !default;
+$fluent-form-switch-margin-top: ds.$spacing-70 !default;
+$fluent-form-switch-margin-bottom: ds.$spacing-40 !default;
+$fluent-form-multiview-item-content-padding: ds.$spacing-200 !default;
+$fluent-form-group-content-padding-top: ds.$spacing-190 !default;
+$fluent-form-group-content-padding-bottom: ds.$spacing-200 !default;
+$fluent-form-group-content-margin-top: ds.$spacing-60 !default;
+$fluent-form-field-item-label-location-left-padding-inline-end: ds.$spacing-100 !default;
+$fluent-form-field-item-label-location-right-padding-inline-start: ds.$spacing-100 !default;

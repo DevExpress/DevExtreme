@@ -6,3 +6,6 @@
 
 // Values hoisted from style-file literals (tokenized)
 $fluent-tileview-tile-border: ds.$border-width-10 solid !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-tileview-wrapper-height: ds.$spacing-10 !default;

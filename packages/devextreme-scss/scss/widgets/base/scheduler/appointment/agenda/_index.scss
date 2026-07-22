@@ -11,13 +11,21 @@ $details-font-size: null !default;
 $details-opacity: null !default;
 $title-font-size: null !default;
 
+$agenda-item-padding: null !default;
+$agenda-item-border-radius: null !default;
+$agenda-right-layout-margin-left: null !default;
+$agenda-allday-padding-right: null !default;
+$agenda-resource-item-margin-left: null !default;
+$agenda-resource-value-margin-left: null !default;
+$agenda-rtl-margin-right: null !default;
+
 .dx-scheduler-agenda {
   .dx-scheduler-appointment {
     box-shadow: none;
     background-color: transparent;
     color: $text-color;
-    padding: 10px;
-    border-radius: 5px;
+    padding: $agenda-item-padding;
+    border-radius: $agenda-item-border-radius;
 
     &.dx-state-hover {
       background-color: $hover-bg;
@@ -44,7 +52,7 @@ $title-font-size: null !default;
   }
 
   .dx-scheduler-agenda-appointment-right-layout {
-    margin-left: 10px;
+    margin-left: $agenda-right-layout-margin-left;
   }
 
   .dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content,
@@ -77,7 +85,7 @@ $title-font-size: null !default;
 
   .dx-scheduler-appointment-content-allday {
     display: flex;
-    padding-right: 5px;
+    padding-right: $agenda-allday-padding-right;
   }
 
   .dx-scheduler-appointment-resource-list,
@@ -86,11 +94,11 @@ $title-font-size: null !default;
   }
 
   .dx-scheduler-appointment-resource-item {
-    margin-left: 15px;
+    margin-left: $agenda-resource-item-margin-left;
   }
 
   .dx-scheduler-appointment-resource-item-value {
-    margin-left: 3px;
+    margin-left: $agenda-resource-value-margin-left;
   }
 
   .dx-scheduler-agenda-appointment-marker {
@@ -103,7 +111,7 @@ $title-font-size: null !default;
   .dx-rtl {
     .dx-scheduler-agenda-appointment-right-layout {
       margin-left: 0;
-      margin-right: 10px;
+      margin-right: $agenda-rtl-margin-right;
     }
 
     .dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content,

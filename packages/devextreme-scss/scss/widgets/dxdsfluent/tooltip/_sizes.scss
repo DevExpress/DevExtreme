@@ -21,3 +21,8 @@ $fluent-tooltip-shadow: 0 0 ds.$spacing-20 0 $base-dropdown-shadow-color1 !defau
 
 // Values hoisted from style-file literals (tokenized)
 $fluent-tooltip-overlay-content-border: ds.$border-width-10 solid transparent !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-tooltip-overlay-content-min-width: ds.$spacing-340 !default;
+$fluent-tooltip-overlay-content-min-height: ds.$spacing-260 !default;
+$fluent-tooltip-popup-content-padding: ds.$spacing-120 ds.$spacing-170 !default;

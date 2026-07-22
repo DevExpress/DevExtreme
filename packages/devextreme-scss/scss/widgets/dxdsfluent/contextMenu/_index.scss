@@ -7,7 +7,11 @@
 @use "../menuBase/sizes" as *;
 @use "../menu/colors" as *;
 @use "../menu/sizes" as *;
-@use "../../base/contextMenu";
+@use "../../base/contextMenu" with (
+  $contextmenu-menu-items-container-padding: $fluent-contextmenu-menu-items-container-padding,
+  $contextmenu-menu-separator-height: $fluent-contextmenu-menu-separator-height,
+  $contextmenu-menu-separator-margin: $fluent-contextmenu-menu-separator-margin,
+);
 
 // adduse
 @use "../overlay";

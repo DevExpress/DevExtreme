@@ -82,3 +82,6 @@ $fluent-texteditor-state-active-border-bottom: ds.$border-width-20 solid !defaul
 $fluent-editor-custom-button-margin: ds.$spacing-60 !default;
 $fluent-texteditor-state-focused-border-bottom-width: ds.$border-width-10 !default;
 $fluent-texteditor-state-active-border-bottom-width: ds.$border-width-20 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-texteditor-clear-button-area-width: ds.$spacing-340 !default;

@@ -4,6 +4,11 @@
 
 $progressbar-status-font-size: 12px !default;
 
+
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$progressbar-status-padding-right: 8px !default;
+$progressbar-status-padding-left: 8px !default;
+
 .dx-progressbar {
   .dx-position-left,
   .dx-position-right {
@@ -38,11 +43,11 @@ $progressbar-status-font-size: 12px !default;
   }
 
   .dx-position-left .dx-progressbar-status {
-    padding-right: 8px;
+    padding-right: $progressbar-status-padding-right;
   }
 
   .dx-position-right .dx-progressbar-status {
-    padding-left: 8px;
+    padding-left: $progressbar-status-padding-left;
   }
 
   &::before {

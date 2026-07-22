@@ -2,6 +2,10 @@
 @use "sass:meta";
 @use "sass:color";
 
+
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$speeddialaction-fa-button-label-border-radius: 4px !default;
+
 .dx-fa-button .dx-overlay-content {
   border-radius: 50%;
   cursor: pointer;
@@ -164,7 +168,7 @@
           background-color: $speed-dial-action-bg;
           color: $speed-dial-action-color;
           white-space: nowrap;
-          border-radius: 4px;
+          border-radius: $speeddialaction-fa-button-label-border-radius;
           padding: $label-padding;
           margin-right: $label-offset;
           box-shadow: $speed-dial-action-label-shadow;

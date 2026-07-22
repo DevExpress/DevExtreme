@@ -5,3 +5,8 @@
 
 $fluent-scrollbar-size-thin: ds.$spacing-60;
 $fluent-scrollbar-size: ds.$spacing-130;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-scrollable-scroll-width: ds.$spacing-50 !default;
+$fluent-scrollable-scroll-height: ds.$spacing-50 !default;
+$fluent-scrollable-scroll-padding: ds.$spacing-20 !default;

@@ -2,7 +2,11 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/loadPanel";
+@use "../../base/loadPanel" with (
+  $loadpanel-content-padding: $fluent-loadpanel-content-padding,
+  $loadpanel-content-border: $fluent-loadpanel-content-border,
+  $loadpanel-content-border-radius: $fluent-loadpanel-content-border-radius,
+);
 
 // adduse
 @use "../overlay";

@@ -14,3 +14,9 @@ $fluent-gallery-state-active-height: ds.$spacing-320 !default;
 $fluent-gallery-state-active-margin-top: -16px !default; // dx-offscale: -16px
 $fluent-gallery-indicator-item-border: ds.$border-width-10 solid !default;
 $fluent-gallery-indicator-item-selected-border: ds.$border-width-20 solid !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-gallery-root-border-width: ds.$border-width-10 !default;
+$fluent-gallery-indicator-bottom: ds.$spacing-100 !default;
+$fluent-gallery-indicator-height: ds.$spacing-100 !default;
+$fluent-gallery-indicator-item-margin: 0 ds.$spacing-20 !default;

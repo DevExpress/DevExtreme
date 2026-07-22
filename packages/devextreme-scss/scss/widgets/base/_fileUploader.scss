@@ -25,6 +25,7 @@ $fileuploader-cancel-button-margin-top: 5px !default;
 $fileuploader-status-message-font-size: 12px !default;
 $fileuploader-file-size-font-size: 10px !default;
 
+$fileuploader-input-wrapper-vertical-padding: 1em !default; // dx-relative
 .dx-fileuploader {
   &.dx-state-disabled .dx-fileuploader-input {
     display: none;
@@ -53,12 +54,12 @@ $fileuploader-file-size-font-size: 10px !default;
   }
 
   &::before {
-    padding-top: 1em;
+    padding-top: $fileuploader-input-wrapper-vertical-padding;
     margin-top: -1em;
   }
 
   &::after {
-    padding-bottom: 1em;
+    padding-bottom: $fileuploader-input-wrapper-vertical-padding;
     margin-bottom: -1em;
   }
 

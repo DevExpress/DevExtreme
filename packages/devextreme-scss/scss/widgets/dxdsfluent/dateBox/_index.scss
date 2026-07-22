@@ -10,7 +10,13 @@
 @use "../textEditor/sizes" as *;
 @use "../textEditor/colors" as *;
 @use "../calendar/sizes" as *;
-@use "../../base/dateBox";
+@use "../../base/dateBox" with (
+  $datebox-texteditor-height: $fluent-datebox-texteditor-height,
+  $datebox-popup-content-padding-top: $fluent-datebox-popup-content-padding-top,
+  $datebox-popup-content-padding-bottom: $fluent-datebox-popup-content-padding-bottom,
+  $datebox-button-min-width: $fluent-datebox-button-min-width,
+  $datebox-apply-button-margin-right: $fluent-datebox-apply-button-margin-right,
+);
 @use "mixins" as *;
 
 // adduse

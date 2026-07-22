@@ -9,6 +9,10 @@
 @use "../checkBox/colors" as *;
 @use "../textEditor/sizes" as *;
 @use "../../base/list" as * with (
+  $list-item-badge-container-width: $fluent-list-item-badge-container-width,
+  $list-slide-menu-button-padding: $fluent-list-slide-menu-button-padding,
+  $list-static-delete-button-padding: $fluent-list-static-delete-button-padding,
+  $list-next-button-padding: $fluent-list-next-button-padding,
   $list-response-wait-opacity: $fluent-list-response-wait-opacity,
 );
 @use "../../base/list/mixins" as *;

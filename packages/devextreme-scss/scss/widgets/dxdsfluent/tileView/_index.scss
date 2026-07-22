@@ -2,7 +2,9 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/tileView";
+@use "../../base/tileView" with (
+  $tileview-wrapper-height: $fluent-tileview-wrapper-height,
+);
 
 // adduse
 

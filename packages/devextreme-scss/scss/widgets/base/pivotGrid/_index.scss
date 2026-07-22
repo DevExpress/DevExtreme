@@ -18,6 +18,8 @@ $pivotgrid-toolbar-margin-left: 10px !default;
 $pivotgrid-field-chooser-button-margin-left: 4px !default;
 $pivotgrid-fields-area-head-padding-left: 2px !default;
 $pivotgrid-icon-sorted-margin-right: 5px !default;
+$pivotgrid-header-cell-side-padding: 2px !default;
+$pivotgrid-fields-area-head-cell-side-padding: 2px !default;
 
 $pivotgrid-drag-header-border-color: null !default;
 $pivotgrid-drag-header-first-shadow-color: null !default;
@@ -42,7 +44,13 @@ $pivotgrid-button-top-padding: null !default;
 
 @use "../mixins" as *;
 @use "../icon_fonts" as *;
-@use "./common";
+$pivotgrid-common-field-chooser-drag-width: 100px !default;
+$pivotgrid-common-field-chooser-drag-height: 100px !default;
+
+@use "./common" with (
+  $pivotgrid-common-field-chooser-drag-width: $pivotgrid-common-field-chooser-drag-width,
+  $pivotgrid-common-field-chooser-drag-height: $pivotgrid-common-field-chooser-drag-height,
+);
 @use "sass:meta";
 
 $pivotgrid-drag-header-border: 1px solid;
@@ -284,7 +292,7 @@ $pivotgrid-expand-icon-text-offset: 0;
     td {
       position: relative;
       border: none;
-      padding: $pivotgrid-header-top-bottom-padding 2px;
+      padding: $pivotgrid-header-top-bottom-padding $pivotgrid-header-cell-side-padding;
     }
 
     tr > td:first-child {
@@ -621,7 +629,7 @@ $pivotgrid-expand-icon-text-offset: 0;
 
     .dx-pivotgrid-fields-area-head {
       tr > td {
-        padding: $pivotgrid-common-left-right-padding 2px;
+        padding: $pivotgrid-common-left-right-padding $pivotgrid-fields-area-head-cell-side-padding;
       }
 
       tr > td:first-child {

@@ -11,6 +11,41 @@
 @use "../../base/mixins" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/scheduler" as baseScheduler with (
+  $scheduler-appointment-reduced-icon-top: $fluent-scheduler-appointment-reduced-icon-top,
+  $scheduler-appointment-active-marker-border-radius: $fluent-scheduler-appointment-active-marker-border-radius,
+  $scheduler-appointment-content-details-margin-top: $fluent-scheduler-appointment-content-details-margin-top,
+  $scheduler-appointment-reduced-icon-rtl-left: $fluent-scheduler-appointment-reduced-icon-rtl-left,
+  $agenda-appointment-item-padding: $fluent-agenda-appointment-item-padding,
+  $agenda-appointment-item-border-radius: $fluent-agenda-appointment-item-border-radius,
+  $agenda-appointment-right-layout-margin-left: $fluent-agenda-appointment-right-layout-margin-left,
+  $agenda-appointment-allday-padding-right: $fluent-agenda-appointment-allday-padding-right,
+  $agenda-appointment-resource-item-margin-left: $fluent-agenda-appointment-resource-item-margin-left,
+  $agenda-appointment-resource-value-margin-left: $fluent-agenda-appointment-resource-value-margin-left,
+  $agenda-appointment-rtl-margin-right: $fluent-agenda-appointment-rtl-margin-right,
+  $scheduler-timeline-min-height: $fluent-scheduler-timeline-min-height,
+  $scheduler-timeline-group-two-empty-cell-width: $fluent-scheduler-timeline-group-two-empty-cell-width,
+  $scheduler-timeline-group-header-width: $fluent-scheduler-timeline-group-header-width,
+  $scheduler-timeline-group-three-empty-cell-width: $fluent-scheduler-timeline-group-three-empty-cell-width,
+  $scheduler-timeline-cell-width: $fluent-scheduler-timeline-cell-width,
+  $scheduler-agenda-left-column-width: $fluent-scheduler-agenda-left-column-width,
+  $scheduler-group-header-agenda-font-size: $fluent-scheduler-group-header-agenda-font-size,
+  $scheduler-agenda-date-table-padding-top: $fluent-scheduler-agenda-date-table-padding-top,
+  $scheduler-renovation-virtual-row-height: $fluent-scheduler-renovation-virtual-row-height,
+  $scheduler-tooltip-width: $fluent-scheduler-tooltip-width,
+  $scheduler-tooltip-content-padding: $fluent-scheduler-tooltip-content-padding,
+  $scheduler-tooltip-title-margin-top: $fluent-scheduler-tooltip-title-margin-top,
+  $scheduler-tooltip-title-margin-left: $fluent-scheduler-tooltip-title-margin-left,
+  $scheduler-tooltip-date-margin: $fluent-scheduler-tooltip-date-margin,
+  $scheduler-tooltip-remove-margin-top: $fluent-scheduler-tooltip-remove-margin-top,
+  $scheduler-common-collector-margin: $fluent-scheduler-common-collector-margin,
+  $scheduler-common-collector-size: $fluent-scheduler-common-collector-size,
+  $scheduler-appointment-content-padding-2: $fluent-scheduler-appointment-content-padding-2,
+  $scheduler-appointment-recurrence-icon-top: $fluent-scheduler-appointment-recurrence-icon-top,
+  $scheduler-header-panel-current-time-cell-height: $fluent-scheduler-header-panel-current-time-cell-height,
+  $scheduler-appointment-content-padding-3: $fluent-scheduler-appointment-content-padding-3,
+  $scheduler-rtl-padding: $fluent-scheduler-rtl-padding,
+  $scheduler-appointment-collector-width: $fluent-scheduler-appointment-collector-width,
+  $scheduler-appointment-content-padding-right: $fluent-scheduler-appointment-content-padding-right,
   $scheduler-views-header-border: $fluent-scheduler-views-header-border,
   $scheduler-views-empty-cell-border-bottom: $fluent-scheduler-views-empty-cell-border-bottom,
   $scheduler-views-empty-cell-border-right: $fluent-scheduler-views-empty-cell-border-right,
@@ -68,7 +103,10 @@
 
   $scheduler-appointment-popup-icon-margin-top: $fluent-scheduler-appointment-popup-icon-margin-top,
   $scheduler-appointment-popup-repeat-end-item-height: $fluent-scheduler-appointment-popup-repeat-end-item-height,
-  $scheduler-appointment-popup-repeat-end-item-vertical-margin: $fluent-radio-button-vertical-margin
+  $scheduler-appointment-popup-repeat-end-item-vertical-margin: $fluent-radio-button-vertical-margin,
+  $scheduler-appointment-content-details-font-size: $fluent-scheduler-appointment-content-details-font-size,
+  $scheduler-tooltip-subject-font-size: $fluent-scheduler-tooltip-subject-font-size,
+  $scheduler-tooltip-date-font-size: $fluent-scheduler-tooltip-date-font-size
 );
 @use "../button/colors" as *;
 @use "../button/mixins" as *;

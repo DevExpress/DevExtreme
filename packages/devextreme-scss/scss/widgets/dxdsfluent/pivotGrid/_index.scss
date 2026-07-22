@@ -9,6 +9,8 @@
 @use "../button/mixins" as *;
 @use "../button/colors" as *;
 @use "../../base/pivotGrid" as basePivotGrid with (
+  $pivotgrid-common-field-chooser-drag-width: $fluent-pivotgrid-common-field-chooser-drag-width,
+  $pivotgrid-common-field-chooser-drag-height: $fluent-pivotgrid-common-field-chooser-drag-height,
   $pivotgrid-position-indicator-vertical-height: $fluent-pivotgrid-position-indicator-vertical-height,
   $pivotgrid-position-indicator-horizontal-width: $fluent-pivotgrid-position-indicator-horizontal-width,
   $pivotgrid-position-indicator-last-margin-left: $fluent-pivotgrid-position-indicator-last-margin-left,
@@ -48,6 +50,8 @@
   $pivotgrid-accent-color: $pivotgrid-accent-color,
   $pivotgrid-empty-area-text-padding: $pivotgrid-empty-area-text-padding,
   $pivotgrid-button-top-padding: $pivotgrid-button-top-padding,
+  $pivotgrid-header-cell-side-padding: $fluent-pivotgrid-header-cell-side-padding,
+  $pivotgrid-fields-area-head-cell-side-padding: $fluent-pivotgrid-fields-area-head-cell-side-padding,
 );
 
 // adduse

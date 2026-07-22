@@ -2,7 +2,10 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/splitterBar";
+@use "../../base/splitterBar" with (
+  $splitterbar-splitter-border-width: $fluent-splitterbar-splitter-border-width,
+  $splitterbar-splitter-bar-width: $fluent-splitterbar-splitter-bar-width,
+);
 
 // adduse
 .dx-splitter-bar {

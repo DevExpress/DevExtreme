@@ -8,6 +8,9 @@
 @use "../toolbar/sizes" as *;
 @use "../typography/sizes" as *;
 @use "../../base/popup" with (
+  $popup-title-padding: $fluent-popup-title-padding,
+  $popup-title-min-height-2: $fluent-popup-title-min-height-2,
+  $popup-dialog-message-padding: $fluent-popup-dialog-message-padding,
   $popup-dialog-shader-color: $fluent-popup-dialog-shader-bg,
 );
 

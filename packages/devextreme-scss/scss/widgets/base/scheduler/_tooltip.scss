@@ -6,16 +6,25 @@ $scheduler-tooltip-appointment-text-color: null !default;
 $scheduler-appointment-overlay-bg: null !default;
 $scheduler-tooltip-list-focused-bg: null !default;
 
+$scheduler-tooltip-width: null !default;
+$scheduler-tooltip-content-padding: null !default;
+$scheduler-tooltip-title-margin-top: null !default;
+$scheduler-tooltip-title-margin-left: null !default;
+$scheduler-tooltip-date-margin: null !default;
+$scheduler-tooltip-remove-margin-top: null !default;
+$scheduler-tooltip-subject-font-size: null !default;
+$scheduler-tooltip-date-font-size: null !default;
+
 .dx-popup-wrapper.dx-scheduler-appointment-tooltip-wrapper,
 .dx-scheduler-overlay-panel {
   .dx-popup-content {
     padding: 0;
 
     .dx-list-item {
-      width: 360px;
+      width: $scheduler-tooltip-width;
 
       .dx-list-item-content {
-        padding: 5px;
+        padding: $scheduler-tooltip-content-padding;
       }
 
       &.dx-state-focused {
@@ -32,8 +41,8 @@ $scheduler-tooltip-list-focused-bg: null !default;
     display: flex;
 
     .dx-tooltip-appointment-item-marker-body {
-      margin-top: 7px;
-      margin-left: 5px;
+      margin-top: $scheduler-tooltip-title-margin-top;
+      margin-left: $scheduler-tooltip-title-margin-left;
       background: $scheduler-appointment-base-color;
 
       @include use-colored-marker(20);
@@ -45,7 +54,7 @@ $scheduler-tooltip-list-focused-bg: null !default;
 
     .dx-tooltip-appointment-item-content {
       flex-basis: 100%;
-      margin: 5px 10px;
+      margin: $scheduler-tooltip-date-margin;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -54,7 +63,7 @@ $scheduler-tooltip-list-focused-bg: null !default;
       .dx-tooltip-appointment-item-content-subject {
         text-align: left;
         font-weight: bold;
-        font-size: 16px;
+        font-size: $scheduler-tooltip-subject-font-size;
         letter-spacing: 0.01em;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -63,9 +72,9 @@ $scheduler-tooltip-list-focused-bg: null !default;
 
       .dx-tooltip-appointment-item-content-date {
         text-align: left;
-        font-size: 12px;
+        font-size: $scheduler-tooltip-date-font-size;
         opacity: 0.8;
-        margin-top: 10px;
+        margin-top: $scheduler-tooltip-remove-margin-top;
       }
     }
   }

@@ -4,6 +4,8 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/sortable" as * with (
+  $sortable-placeholder-border: $fluent-sortable-placeholder-border,
+  $sortable-placeholder-inside-border-width: $fluent-sortable-placeholder-inside-border-width,
   $sortable-clone-shadow-color-first: $fluent-sortable-clone-shadow-color-first,
   $sortable-clone-shadow-color-second: $fluent-sortable-clone-shadow-color-second,
   $sortable-clone-opacity: $fluent-sortable-clone-opacity,

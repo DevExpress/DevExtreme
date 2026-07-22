@@ -27,3 +27,6 @@ $fluent-checkbox-text-padding-end: null !default;
   $fluent-checkbox-text-padding-start: ds.$spacing-80 !default;
   $fluent-checkbox-text-padding-end: ds.$spacing-60 !default;
 }
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-checkbox-text-padding-inline-start: ds.$spacing-50 !default;

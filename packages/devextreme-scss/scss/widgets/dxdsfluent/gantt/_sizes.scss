@@ -54,3 +54,8 @@ $gantt-arrow-border: 5px solid !default; // dx-offscale
 $gantt-tm-border-left: ds.$border-width-10 dashed !default;
 $gantt-ti-border-right: ds.$border-width-10 dashed !default;
 $gantt-toolbar-items-container-min-height: 42px !default; // dx-offscale: 42px
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-gantt-toolbar-separator-border-left: ds.$border-width-10 solid transparent !default;
+$fluent-gantt-splitter-bar-width: ds.$spacing-20 !default;
+$fluent-gantt-view-min-width: ds.$spacing-10 !default;

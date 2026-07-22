@@ -12,3 +12,10 @@ $fluent-datebox-content-padding: ds.$spacing-100 !default;
 $fluent-datebox-datebox-container-cell-margin-top: -1px !default; // dx-offscale: -1px
 $fluent-datebox-button-margin-right: ds.$spacing-50 !default;
 $fluent-datebox-popup-title-min-height: ds.$spacing-100 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-datebox-texteditor-height: ds.$spacing-200 !default;
+$fluent-datebox-popup-content-padding-top: ds.$spacing-200 !default;
+$fluent-datebox-popup-content-padding-bottom: ds.$spacing-200 !default;
+$fluent-datebox-button-min-width: 90px !default; // dx-offscale: 90px
+$fluent-datebox-apply-button-margin-right: ds.$spacing-100 !default;

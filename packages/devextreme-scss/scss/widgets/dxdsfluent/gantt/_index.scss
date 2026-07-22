@@ -2,7 +2,11 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/gantt";
+@use "../../base/gantt" with (
+  $gantt-toolbar-separator-border-left: $fluent-gantt-toolbar-separator-border-left,
+  $gantt-splitter-bar-width: $fluent-gantt-splitter-bar-width,
+  $gantt-view-min-width: $fluent-gantt-view-min-width,
+);
 @use "../../base/gantt/mixins" as *;
 @use "../gridBase/colors" as *;
 @use "../form/sizes" as *;

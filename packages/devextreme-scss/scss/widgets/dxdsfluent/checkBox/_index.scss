@@ -4,7 +4,9 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
-@use "../../base/checkBox";
+@use "../../base/checkBox" with (
+  $checkbox-text-padding-inline-start: $fluent-checkbox-text-padding-inline-start,
+);
 @use "../../base/checkBox/mixins" as *;
 
 // adduse

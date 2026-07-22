@@ -2,7 +2,11 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/tooltip";
+@use "../../base/tooltip" with (
+  $tooltip-overlay-content-min-width: $fluent-tooltip-overlay-content-min-width,
+  $tooltip-overlay-content-min-height: $fluent-tooltip-overlay-content-min-height,
+  $tooltip-popup-content-padding: $fluent-tooltip-popup-content-padding,
+);
 
 // adduse
 

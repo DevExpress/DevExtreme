@@ -62,6 +62,8 @@ $filemanager-progress-title-font-size: 18px !default;
 $filemanager-progress-title-font-weight: 600 !default;
 $filemanager-progress-bold-font-weight: 600 !default;
 
+$filemanager-error-message-font-size: 0.85em !default; // dx-relative
+$filemanager-drawer-panel-content-width: 30% !default; // dx-relative-%
 .dx-filemanager {
   height: $filemanager-root-height;
   border: $filemanager-root-border;
@@ -195,7 +197,7 @@ $filemanager-progress-bold-font-weight: 600 !default;
     display: inline-block;
     border-width: 0;
     padding: $filemanager-progress-box-error-padding;
-    font-size: 0.85em;
+    font-size: $filemanager-error-message-font-size;
     line-height: normal;
     word-wrap: break-word;
     overflow-y: auto;
@@ -244,7 +246,7 @@ $filemanager-progress-bold-font-weight: 600 !default;
 
     .dx-drawer-panel-content {
       display: block;
-      width: 30%;
+      width: $filemanager-drawer-panel-content-width;
 
       &.dx-drawer-panel-content-initial {
         min-width: $filemanager-drawer-panel-content-initial-min-width;

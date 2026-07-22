@@ -32,3 +32,6 @@ $fluent-treelist-button-margin-right: ds.$spacing-100 !default;
 
 $fluent-treelist-sticky-column-border: ds.$border-width-20 solid !default;
 $fluent-treelist-cell-focus-outline: ds.$spacing-20 solid !default;
+
+// Base submodule sizing injected with design tokens (B2 tail)
+$fluent-treelist-expandable-node-line-height: ds.$spacing-10 !default;

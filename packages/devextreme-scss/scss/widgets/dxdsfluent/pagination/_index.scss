@@ -21,6 +21,7 @@
   $pagination-pages-count-padding-left: $fluent-pagination-pages-count-padding-left,
   $pagination-info-opacity: $fluent-pagination-info-opacity,
   $pagination-nav-disabled-opacity: $fluent-pagination-nav-disabled-opacity,
+  $pagination-page-horizontal-padding: $fluent-pagination-page-horizontal-padding,
 );
 @use "../gridBase/sizes" as *;
 

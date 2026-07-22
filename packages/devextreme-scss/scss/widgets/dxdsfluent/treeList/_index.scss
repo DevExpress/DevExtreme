@@ -10,6 +10,7 @@
 @use "../gridBase/colors" as *;
 @use "../gridBase/sizes" as *;
 @use "../../base/treeList" as baseTreeList with (
+  $treelist-expandable-node-line-height: $fluent-treelist-expandable-node-line-height,
   $treelist-sticky-column-border: $fluent-treelist-sticky-column-border,
   $treelist-cell-focus-outline: $fluent-treelist-cell-focus-outline,
   $treelist-header-filter-outline: $fluent-treelist-header-filter-outline,

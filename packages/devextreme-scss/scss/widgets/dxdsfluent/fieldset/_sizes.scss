@@ -32,3 +32,6 @@ $fluent-field-value-horizontal-padding: $fluent-base-inline-horizontal-padding !
 $fluent-field-value-bottom-padding: ds.$spacing-200 !default;
 $fluent-fieldset-attention-icon-offset: calc(#{$fluent-base-inline-horizontal-padding} + #{$fluent-invalid-badge-size}) !default;
 $fluent-radiogroup-min-height: ds.$spacing-260 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-fieldset-root-margin-bottom: ds.$spacing-200 !default;

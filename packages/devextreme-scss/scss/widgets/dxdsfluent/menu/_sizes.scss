@@ -17,3 +17,9 @@ $fluent-menu-vertical-padding: null !default;
 // Values hoisted from style-file literals (tokenized)
 $fluent-menu-treeview-border: ds.$border-width-10 solid !default;
 $fluent-menu-treeview-node-border-bottom: ds.$border-width-10 solid !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-menu-separator-margin-inline-end: ds.$spacing-150 !default;
+$fluent-menu-separator-margin-bottom: ds.$spacing-150 !default;
+$fluent-menu-treeview-node-padding: ds.$spacing-10 !default;
+$fluent-menu-item-content-padding-inline-start: ds.$spacing-150 !default;

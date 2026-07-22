@@ -281,3 +281,51 @@ $fluent-scheduler-views-group-header-padding-alt: 0 ds.$spacing-50 0 ds.$spacing
 $fluent-scheduler-views-time-indicator-height: ds.$spacing-10 !default;
 $fluent-scheduler-views-group-header-content-height: ds.$spacing-400 !default;
 $fluent-scheduler-views-vertical-group-min-height: ds.$spacing-1000 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-scheduler-appointment-content-padding-2: 0 ds.$spacing-70 !default;
+$fluent-scheduler-appointment-recurrence-icon-top: ds.$spacing-90 !default;
+$fluent-scheduler-header-panel-current-time-cell-height: ds.$spacing-20 !default;
+$fluent-scheduler-appointment-content-padding-3: 0 25px 0 ds.$spacing-70 !default; // dx-offscale: 25px
+$fluent-scheduler-rtl-padding: 0 ds.$spacing-70 0 25px !default; // dx-offscale: 25px
+$fluent-scheduler-appointment-collector-width: ds.$spacing-240 !default;
+$fluent-scheduler-appointment-content-padding-right: ds.$spacing-50 !default;
+
+// Base submodule sizing injected with design tokens (B2 tail)
+$fluent-scheduler-common-collector-margin: 0 ds.$spacing-30 !default;
+$fluent-scheduler-common-collector-size: ds.$spacing-280 !default;
+
+// Base submodule sizing injected with design tokens (B2 tail)
+$fluent-scheduler-tooltip-width: 360px !default;  // dx-offscale: 360px
+$fluent-scheduler-tooltip-content-padding: ds.$spacing-50 !default;
+$fluent-scheduler-tooltip-title-margin-top: ds.$spacing-70 !default;
+$fluent-scheduler-tooltip-title-margin-left: ds.$spacing-50 !default;
+$fluent-scheduler-tooltip-date-margin: ds.$spacing-50 ds.$spacing-100 !default;
+$fluent-scheduler-tooltip-remove-margin-top: ds.$spacing-100 !default;
+
+// B2 tail: scheduler font-sizes
+$fluent-scheduler-appointment-content-details-font-size: ds.$font-size-110 !default; // dx-no-semantic-role: 11px has no font-size role
+$fluent-scheduler-tooltip-subject-font-size: ds.$font-size-title-sm !default;
+$fluent-scheduler-tooltip-date-font-size: ds.$font-size-caption-md !default;
+
+// B2 tail: deep scheduler submodules (multi-hop)
+$fluent-scheduler-appointment-reduced-icon-top: ds.$spacing-30 !default;
+$fluent-scheduler-appointment-active-marker-border-radius: ds.$border-radius-40 !default;
+$fluent-scheduler-appointment-content-details-margin-top: ds.$spacing-20 !default;
+$fluent-scheduler-appointment-reduced-icon-rtl-left: ds.$spacing-30 !default;
+$fluent-agenda-appointment-item-padding: ds.$spacing-100 !default;
+$fluent-agenda-appointment-item-border-radius: ds.$border-radius-50 !default;
+$fluent-agenda-appointment-right-layout-margin-left: ds.$spacing-100 !default;
+$fluent-agenda-appointment-allday-padding-right: ds.$spacing-50 !default;
+$fluent-agenda-appointment-resource-item-margin-left: ds.$spacing-150 !default;
+$fluent-agenda-appointment-resource-value-margin-left: ds.$spacing-30 !default;
+$fluent-agenda-appointment-rtl-margin-right: ds.$spacing-100 !default;
+$fluent-scheduler-timeline-min-height: ds.$spacing-1000 !default;
+$fluent-scheduler-timeline-group-two-empty-cell-width: ds.$spacing-1600 !default;
+$fluent-scheduler-timeline-group-header-width: ds.$spacing-800 !default;
+$fluent-scheduler-timeline-group-three-empty-cell-width: 240px !default; // dx-offscale: 240px
+$fluent-scheduler-timeline-cell-width: 200px !default; // dx-offscale: 200px
+$fluent-scheduler-agenda-left-column-width: 70px !default; // dx-offscale: 70px
+$fluent-scheduler-group-header-agenda-font-size: ds.$font-size-180 !default; // dx-no-semantic-role: 18px has no font-size role
+$fluent-scheduler-agenda-date-table-padding-top: ds.$spacing-100 !default;
+$fluent-scheduler-renovation-virtual-row-height: 50px !default; // dx-offscale: 50px

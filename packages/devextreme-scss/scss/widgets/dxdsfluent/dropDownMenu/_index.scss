@@ -2,7 +2,11 @@
 @use "../sizes" as *;
 @use "../common/mixins" as *;
 @use "../common/sizes" as *;
-@use "../../base/dropDownMenu";
+@use "../../base/dropDownMenu" with (
+  $dropdownmenu-list-min-width: $fluent-dropdownmenu-list-min-width,
+  $dropdownmenu-list-border-radius: $fluent-dropdownmenu-list-border-radius,
+  $dropdownmenu-popup-content-padding: $fluent-dropdownmenu-popup-content-padding,
+);
 
 // adduse
 

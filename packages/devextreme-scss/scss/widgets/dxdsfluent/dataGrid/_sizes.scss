@@ -39,3 +39,11 @@ $fluent-datagrid-button-margin-right: ds.$spacing-100 !default;
 $fluent-datagrid-group-row-border: ds.$border-width-10 solid !default;
 $fluent-datagrid-sticky-column-border: ds.$border-width-20 solid !default;
 $fluent-datagrid-cell-focus-outline: ds.$spacing-20 solid !default;
+
+// Base submodule sizing injected with design tokens (B2 tail)
+$fluent-datagrid-common-group-min-width: ds.$spacing-300 !default;
+$fluent-datagrid-common-addrow-margin-right: ds.$spacing-100 !default;
+$fluent-datagrid-common-addrow-margin-left: ds.$spacing-60 !default;
+$fluent-datagrid-common-form-buttons-border-radius: ds.$border-radius-30 !default;
+$fluent-datagrid-common-form-buttons-margin-left: ds.$spacing-100 !default;
+$fluent-datagrid-common-form-buttons-margin-right: ds.$spacing-60 !default;

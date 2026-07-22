@@ -1,4 +1,9 @@
+@use "../../../_design-system/variables/ds" as ds;
 @use "../sizes" as *;
 
 // adduse
 
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-sortable-placeholder-border: ds.$border-width-10 solid !default;
+$fluent-sortable-placeholder-inside-border-width: ds.$border-width-20 !default;

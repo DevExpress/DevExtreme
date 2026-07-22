@@ -2,7 +2,9 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/speedDialAction" as *;
+@use "../../base/speedDialAction" as * with (
+  $speeddialaction-fa-button-label-border-radius: $fluent-speeddialaction-fa-button-label-border-radius,
+);
 @use "../button/colors" as *;
 
 // adduse

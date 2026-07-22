@@ -8,7 +8,9 @@
 @use "../button/sizes" as *;
 @use "../common/mixins" as *;
 @use "../common/sizes" as *;
-@use "../../base/textEditor";
+@use "../../base/textEditor" with (
+  $texteditor-clear-button-area-width: $fluent-texteditor-clear-button-area-width,
+);
 @use "../../base/textEditor/mixins" as *;
 @use "../colorBox/sizes" as *;
 

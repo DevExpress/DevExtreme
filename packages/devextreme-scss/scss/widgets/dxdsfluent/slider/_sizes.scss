@@ -41,3 +41,7 @@ $fluent-slider-handle-inner-border-width: ds.$border-width-30 !default;
 $fluent-slider-tooltip-position-top-padding-top: ds.$spacing-60 !default;
 $fluent-slider-label-bottom: -18px !default; // dx-offscale: -18px
 $fluent-slider-label-top: -15px !default; // dx-offscale: -15px
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-slider-label-position-bottom-padding-bottom: ds.$spacing-140 !default;
+$fluent-slider-label-position-top-padding-top: ds.$spacing-140 !default;

@@ -2,7 +2,14 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/toast";
+@use "../../base/toast" with (
+  $toast-content-padding: $fluent-toast-content-padding,
+  $toast-icon-width: $fluent-toast-icon-width,
+  $toast-icon-height: $fluent-toast-icon-height,
+  $toast-icon-margin-right: $fluent-toast-icon-margin-right,
+  $toast-icon-margin-left: $fluent-toast-icon-margin-left,
+  $toast-stack-gap: $fluent-toast-stack-gap,
+);
 
 // adduse
 @use "../overlay";

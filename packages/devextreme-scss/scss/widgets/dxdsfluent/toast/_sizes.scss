@@ -23,3 +23,11 @@ $fluent-toast-content-horizontal-padding: ds.$spacing-120 !default;
 
 // Values hoisted from style-file literals (tokenized)
 $toast-content-font-weight: ds.$font-weight-base-default !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-toast-content-padding: ds.$spacing-100 !default;
+$fluent-toast-icon-width: 35px !default; // dx-offscale: 35px
+$fluent-toast-icon-height: 35px !default; // dx-offscale: 35px
+$fluent-toast-icon-margin-right: ds.$spacing-100 !default;
+$fluent-toast-icon-margin-left: ds.$spacing-100 !default;
+$fluent-toast-stack-gap: ds.$spacing-30 !default;

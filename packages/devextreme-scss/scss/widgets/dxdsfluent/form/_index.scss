@@ -3,7 +3,17 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/form";
+@use "../../base/form" with (
+  $form-first-row-padding-top: $fluent-form-first-row-padding-top,
+  $form-switch-margin-top: $fluent-form-switch-margin-top,
+  $form-switch-margin-bottom: $fluent-form-switch-margin-bottom,
+  $form-multiview-item-content-padding: $fluent-form-multiview-item-content-padding,
+  $form-group-content-padding-top: $fluent-form-group-content-padding-top,
+  $form-group-content-padding-bottom: $fluent-form-group-content-padding-bottom,
+  $form-group-content-margin-top: $fluent-form-group-content-margin-top,
+  $form-field-item-label-location-left-padding-inline-end: $fluent-form-field-item-label-location-left-padding-inline-end,
+  $form-field-item-label-location-right-padding-inline-start: $fluent-form-field-item-label-location-right-padding-inline-start,
+);
 @use "../../base/icon_fonts" as *;
 
 // adduse

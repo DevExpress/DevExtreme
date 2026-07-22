@@ -7,6 +7,11 @@ $treeview-disabled-opacity: 0.5 !default;
 );
 @use "../../base/icon_fonts" as *;
 
+
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$treeview-select-all-item-border-bottom: 1px solid !default;
+$treeview-border-visible-border: 1px solid !default;
+
 .dx-treeview-custom-expand-icon,
 .dx-treeview-custom-collapse-icon {
   cursor: pointer;
@@ -92,7 +97,7 @@ $treeview-disabled-opacity: 0.5 !default;
   }
 
   .dx-treeview-select-all-item {
-    border-bottom: 1px solid;
+    border-bottom: $treeview-select-all-item-border-bottom;
     border-bottom-color: $border-color;
     padding: $select-all-item-padding;
 
@@ -112,7 +117,7 @@ $treeview-disabled-opacity: 0.5 !default;
   }
 
   .dx-treeview-border-visible {
-    border: 1px solid;
+    border: $treeview-border-visible-border;
     border-color: $border-color;
 
     .dx-treeview-select-all-item {

@@ -5,7 +5,10 @@
 @use "../sizes" as *;
 @use "../textEditor/sizes" as *;
 @use "../../base/timeView/mixins" as *;
-@use "../../base/timeView";
+@use "../../base/timeView" with (
+  $timeview-numberbox-width: $fluent-timeview-numberbox-width,
+  $timeview-numberbox-spin-touch-friendly-width-2: $fluent-timeview-numberbox-spin-touch-friendly-width-2,
+);
 
 // adduse
 

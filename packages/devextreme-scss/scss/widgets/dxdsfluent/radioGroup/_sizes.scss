@@ -19,3 +19,7 @@ $fluent-radio-group-horizontal-gap: null !default;
 
 // Values hoisted from style-file literals (tokenized)
 $fluent-radiogroup-collection-column-gap: ds.$spacing-160 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-radiogroup-radio-value-container-padding-inline-end: ds.$spacing-100 !default;
+$fluent-radiogroup-collection-column-gap-2: ds.$spacing-170 !default;

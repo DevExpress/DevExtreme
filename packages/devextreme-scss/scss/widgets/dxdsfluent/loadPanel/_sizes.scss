@@ -8,3 +8,8 @@
 $load-panel-padding: ds.$spacing-120 ds.$spacing-240 !default;
 $load-panel-border-radius: ds.$border-radius-80 !default;
 $load-panel-box-shadow: 0 ds.$spacing-80 ds.$spacing-160 0 color.change($base-shadow-color, $alpha: 0.14) !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-loadpanel-content-padding: ds.$spacing-100 !default;
+$fluent-loadpanel-content-border: ds.$border-width-10 solid #ccc !default;
+$fluent-loadpanel-content-border-radius: ds.$border-radius-50 !default;

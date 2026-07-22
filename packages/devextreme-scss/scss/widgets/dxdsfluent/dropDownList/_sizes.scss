@@ -1,4 +1,8 @@
+@use "../../../_design-system/variables/ds" as ds;
 @use "../sizes" as *;
 
 // adduse
 
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-dropdownlist-list-min-height: 35px !default; // dx-offscale: 35px

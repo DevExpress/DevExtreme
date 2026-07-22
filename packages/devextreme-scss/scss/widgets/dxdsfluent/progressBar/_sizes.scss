@@ -20,3 +20,7 @@ $progressbar-indeterminate-background-width: 90%;
 
 // Base-layer values injected with design tokens (wave B1)
 $fluent-progressbar-status-font-size: ds.$font-size-caption-md !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-progressbar-status-padding-right: ds.$spacing-80 !default;
+$fluent-progressbar-status-padding-left: ds.$spacing-80 !default;

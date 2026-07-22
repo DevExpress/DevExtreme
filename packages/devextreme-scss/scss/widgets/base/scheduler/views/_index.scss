@@ -37,6 +37,7 @@ $scheduler-views-time-panel-border-bottom: null !default;
 $scheduler-views-group-header-padding: null !default;
 $scheduler-views-group-header-padding-alt: null !default;
 $scheduler-views-time-indicator-height: null !default;
+$scheduler-views-time-indicator-width: 10% !default; // dx-relative-%
 $scheduler-views-group-header-content-height: null !default;
 $scheduler-views-vertical-group-min-height: null !default;
 
@@ -73,21 +74,42 @@ $scheduler-month-date-text-padding: 6px;
   $scheduler-month-date-text-padding: $scheduler-month-date-text-padding,
   $scheduler-first-month-cell-background-color: $scheduler-first-month-cell-background-color,
 );
+$scheduler-timeline-min-height: 100px !default;
+$scheduler-timeline-group-two-empty-cell-width: 160px !default;
+$scheduler-timeline-group-header-width: 80px !default;
+$scheduler-timeline-group-three-empty-cell-width: 240px !default;
+$scheduler-timeline-cell-width: 200px !default;
+
 @use "./timelines" with (
+  $scheduler-timeline-min-height: $scheduler-timeline-min-height,
+  $scheduler-timeline-group-two-empty-cell-width: $scheduler-timeline-group-two-empty-cell-width,
+  $scheduler-timeline-group-header-width: $scheduler-timeline-group-header-width,
+  $scheduler-timeline-group-three-empty-cell-width: $scheduler-timeline-group-three-empty-cell-width,
+  $scheduler-timeline-cell-width: $scheduler-timeline-cell-width,
   $scheduler-workspace-date-table-cell-height: $scheduler-workspace-date-table-cell-height,
   $scheduler-accent-border: $scheduler-accent-border,
   $scheduler-base-border: $scheduler-base-border,
   $scheduler-base-border-color: $scheduler-base-border-color,
   $scheduler-accent-border-color: $scheduler-accent-border-color,
 );
+$scheduler-agenda-left-column-width: 70px !default;
+$scheduler-group-header-agenda-font-size: 18px !default;
+$scheduler-agenda-date-table-padding-top: 10px !default;
+
 @use "./agenda" with (
+  $scheduler-agenda-left-column-width: $scheduler-agenda-left-column-width,
+  $scheduler-group-header-agenda-font-size: $scheduler-group-header-agenda-font-size,
+  $scheduler-agenda-date-table-padding-top: $scheduler-agenda-date-table-padding-top,
   $scheduler-group-header-table-cell-width: $scheduler-group-header-table-cell-width,
   $scheduler-small-size-factor: $scheduler-small-size-factor,
   $scheduler-small-font-size: $scheduler-small-font-size,
   $scheduler-workspace-info-font-size: $scheduler-workspace-info-font-size,
   $scheduler-other-month-cell-opacity: $scheduler-other-month-cell-opacity,
 );
+$scheduler-renovation-virtual-row-height: 50px !default;
+
 @use "./renovation" with (
+  $scheduler-renovation-virtual-row-height: $scheduler-renovation-virtual-row-height,
   $scheduler-timeline-cell-height: $scheduler-timeline-cell-height,
 );
 
@@ -614,7 +636,7 @@ $scheduler-month-date-text-padding: 6px;
   &::after {
     position: absolute;
     bottom: -1px;
-    width: 10%;
+    width: $scheduler-views-time-indicator-width;
     height: $scheduler-views-time-indicator-height;
     right: 0;
     background-color: $scheduler-base-border-color;

@@ -26,3 +26,6 @@ $fluent-fa-button-size: null !default;
 $fluent-fa-button-label-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)
 $fluent-fa-button-label-offset: ds.$spacing-160 !default;
 $fluent-fa-button-label-padding: ds.$spacing-40 ds.$spacing-80 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-speeddialaction-fa-button-label-border-radius: ds.$border-radius-40 !default;

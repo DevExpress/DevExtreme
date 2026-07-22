@@ -16,7 +16,11 @@ $base-focus-color: null !default;
 @use "../mixins" as *;
 @use "../icon_fonts" as *;
 @use "./common" as *;
-@use "./expandable" as *;
+$treelist-expandable-node-line-height: 1px !default;
+
+@use "./expandable" as * with (
+  $node-line-height: $treelist-expandable-node-line-height,
+);
 $treelist-sticky-column-border: 2px solid !default;
 $treelist-cell-focus-outline: 2px solid !default;
 
