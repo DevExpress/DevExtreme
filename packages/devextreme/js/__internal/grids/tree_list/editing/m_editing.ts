@@ -50,21 +50,22 @@ class EditingController extends editingModule.controllers.editing {
     }
   }
 
-  protected _getLoadedRowIndex(items, change) {
+  protected _getLoadedRowIndex(items, change, isProcessedItems?) {
     const dataSourceAdapter = this._dataController.dataSource();
-    const parentKey = dataSourceAdapter?.parentKeyOf(change.data);
+    const insertParentKey = this._getInternalData(change.key)?.insertInfo?.parentKey;
+    const parentKey = isDefined(insertParentKey)
+      ? insertParentKey
+      : dataSourceAdapter?.parentKeyOf(change.data);
 
     if (parentKey !== undefined && parentKey !== this.option('rootValue')) {
       const rowIndex = gridCoreUtils.getIndexByKey(parentKey, items);
       // @ts-expect-error
-      if (rowIndex >= 0 && this._dataController.isRowExpanded(parentKey)) {
-        // @ts-expect-error
-        return super._getLoadedRowIndex.apply(this, arguments);
+      if (!(rowIndex >= 0 && this._dataController.isRowExpanded(parentKey))) {
+        return -1;
       }
-      return -1;
     }
-    // @ts-expect-error
-    return super._getLoadedRowIndex.apply(this, arguments);
+
+    return super._getLoadedRowIndex(items, change, isProcessedItems);
   }
 
   protected _isEditColumnVisible() {

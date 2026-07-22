@@ -15,6 +15,7 @@ export interface NormalizedEditCellOptions {
 
 export interface InsertInfo {
   [INSERT_INDEX]: number;
+  parentKey?: RowKey;
 }
 
 export interface InternalEditData {
