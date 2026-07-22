@@ -386,9 +386,10 @@ describe('option control', () => {
         />,
       );
       Widget.option.mockImplementation(
-        (name: string) => {
+        (name: string, value: unknown) => {
           if (name === 'controlledOption') {
-            WidgetClass.mock.calls[0][1].onControlledOptionChanged();
+            fireOptionChange('controlledOption', value, 'controlled');
+            WidgetClass.mock.calls[0][1].onControlledOptionChanged({ value, previousValue: 'controlled' });
           }
         },
       );
@@ -412,9 +413,10 @@ describe('option control', () => {
       );
 
       Widget.option.mockImplementation(
-        (name: string) => {
+        (name: string, value: unknown) => {
           if (name === 'controlledOption') {
-            Widget.option.mock.calls[0][1]();
+            fireOptionChange('controlledOption', value, 'controlled');
+            Widget.option.mock.calls[0][1]({ value, previousValue: 'controlled' });
           }
         },
       );
