@@ -53,6 +53,7 @@ overrides:
   "@sigstore/verify@3.1.0": "^3.1.1"
   "body-parser@<1.20.6": ^1.20.6
   "body-parser@>=2.0.0 <2.3.0": ^2.3.0
+  "engine.io@>=4.1.0 <6.6.7": ^6.6.7
   "babel-traverse": "npm:@babel/traverse@^7.23.2"
   "systemjs-builder>terser": 5.46.2
 catalog:
