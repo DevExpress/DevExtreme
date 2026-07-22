@@ -53,12 +53,24 @@ describe('HtmlEditor focus escape (Ctrl+Shift+Up/Down)', () => {
 
   it('Ctrl+Shift+Up moves focus into the toolbar when it is present', () => {
     $('<button>').attr('id', 'before').appendTo(document.body);
-    const model = createEditor({ toolbar: { items: ['bold'] } });
 
-    model.moveFocusFromContent('up');
+    // jsdom performs no real layout, so the toolbar's roving tabindex logic
+    // (which relies on offsetWidth/getClientRects to detect visible items)
+    // would otherwise treat every item as invisible and never assign it a
+    // non-negative tabIndex.
+    const originalGetClientRects = Element.prototype.getClientRects;
+    Element.prototype.getClientRects = () => [{}] as unknown as DOMRectList;
 
-    const activeElement = document.activeElement as HTMLElement;
-    expect(model.getToolbarWrapper()?.contains(activeElement)).toBe(true);
+    try {
+      const model = createEditor({ toolbar: { items: ['bold'] } });
+
+      model.moveFocusFromContent('up');
+
+      const activeElement = document.activeElement as HTMLElement;
+      expect(model.getToolbarWrapper()?.contains(activeElement)).toBe(true);
+    } finally {
+      Element.prototype.getClientRects = originalGetClientRects;
+    }
   });
 
   it('Ctrl+Shift+Up falls back to the previous focusable when the toolbar has no focusable item', () => {
