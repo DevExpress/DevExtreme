@@ -401,6 +401,13 @@ export default [
             }],
         },
     },
+    // Rules for generated Map public API re-exports
+    {
+        files: ['js/ui/map_types.d.ts'],
+        rules: {
+            'spellcheck/spell-checker': 'off',
+        },
+    },
     // Rules for build folder
     ...compat.extends('plugin:n/recommended').map(config => ({
         ...config,

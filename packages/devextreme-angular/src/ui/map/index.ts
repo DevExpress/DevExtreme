@@ -22,7 +22,7 @@ import {
 } from '@angular/core';
 
 
-import type { ClickEvent, DisposingEvent, InitializedEvent, MarkerAddedEvent, MarkerRemovedEvent, OptionChangedEvent, ReadyEvent, RouteAddedEvent, RouteRemovedEvent, MapProvider, RouteMode, MapType } from 'devextreme/ui/map';
+import type { ClickEvent, DisposingEvent, InitializedEvent, MarkerAddedEvent, MarkerRemovedEvent, OptionChangedEvent, ReadyEvent, RouteAddedEvent, RouteRemovedEvent, MapProvider, OsmGetRouteParams, OsmTileServer, RouteMode, MapType } from 'devextreme/ui/map';
 
 import DxMap from 'devextreme/ui/map';
 
@@ -302,10 +302,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get providerConfig(): { mapId?: string, useAdvancedMarkers?: boolean } {
+    get providerConfig(): { geocodeLocation?: ((query: string) => any) | undefined, getRoute?: ((params: OsmGetRouteParams) => any) | undefined, mapEngine?: Record<string, any> | undefined, mapId?: string, tileServer?: OsmTileServer | undefined, useAdvancedMarkers?: boolean } {
         return this._getOption('providerConfig');
     }
-    set providerConfig(value: { mapId?: string, useAdvancedMarkers?: boolean }) {
+    set providerConfig(value: { geocodeLocation?: ((query: string) => any) | undefined, getRoute?: ((params: OsmGetRouteParams) => any) | undefined, mapEngine?: Record<string, any> | undefined, mapId?: string, tileServer?: OsmTileServer | undefined, useAdvancedMarkers?: boolean }) {
         this._setOption('providerConfig', value);
     }
 
@@ -582,7 +582,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() providerConfigChange: EventEmitter<{ mapId?: string, useAdvancedMarkers?: boolean }>;
+    @Output() providerConfigChange: EventEmitter<{ geocodeLocation?: ((query: string) => any) | undefined, getRoute?: ((params: OsmGetRouteParams) => any) | undefined, mapEngine?: Record<string, any> | undefined, mapId?: string, tileServer?: OsmTileServer | undefined, useAdvancedMarkers?: boolean }>;
 
     /**
     

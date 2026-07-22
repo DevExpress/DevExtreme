@@ -23358,7 +23358,12 @@ declare module DevExpress.ui {
      */
     export type InitializedEvent =
       DevExpress.common.core.events.InitializedEventInfo<dxMap>;
-    export type MapProvider = 'azure' | 'bing' | 'google' | 'googleStatic';
+    export type MapProvider =
+      | 'azure'
+      | 'bing'
+      | 'google'
+      | 'googleStatic'
+      | 'osm';
     export type MapType = 'hybrid' | 'roadmap' | 'satellite';
     /**
      * [descr:_ui_map_MarkerAddedEvent]
@@ -23390,6 +23395,64 @@ declare module DevExpress.ui {
     export type OptionChangedEvent =
       DevExpress.common.core.events.EventInfo<dxMap> &
         DevExpress.common.core.events.ChangedOptionInfo;
+    /**
+     * [descr:OsmGeocodeFunction]
+     */
+    export type OsmGeocodeFunction = (
+      query: string
+    ) => Promise<MapLocation | null | undefined>;
+    /**
+     * [descr:OsmGeoJsonLineString]
+     */
+    export interface OsmGeoJsonLineString {
+      type: 'LineString';
+      coordinates: Array<Array<number>>;
+    }
+    /**
+     * [descr:OsmGetRouteFunction]
+     */
+    export type OsmGetRouteFunction = (
+      params: OsmGetRouteParams
+    ) => Promise<OsmRouteResult>;
+    /**
+     * [descr:OsmGetRouteParams]
+     */
+    export interface OsmGetRouteParams {
+      locations: Array<MapLocation>;
+      mode: RouteMode | string;
+    }
+    /**
+     * [descr:OsmRouteResult]
+     */
+    export type OsmRouteResult = Array<[number, number]> | OsmGeoJsonLineString;
+    /**
+     * [descr:OsmTileServer]
+     */
+    export type OsmTileServer =
+      | string
+      | OsmTileServerConfig
+      | ((type: MapType) => string | OsmTileServerConfig | null | undefined);
+    /**
+     * [descr:OsmTileServerConfig]
+     */
+    export interface OsmTileServerConfig {
+      /**
+       * [descr:OsmTileServerConfig.url]
+       */
+      url: string;
+      /**
+       * [descr:OsmTileServerConfig.attribution]
+       */
+      attribution?: string;
+      /**
+       * [descr:OsmTileServerConfig.subdomains]
+       */
+      subdomains?: string | Array<string>;
+      /**
+       * [descr:OsmTileServerConfig.maxZoom]
+       */
+      maxZoom?: number;
+    }
     export type Properties = dxMapOptions;
     /**
      * [descr:_ui_map_ReadyEvent]
@@ -23561,6 +23624,28 @@ declare module DevExpress.ui {
        * @deprecated [depNote:dxMapOptions.providerConfig.useAdvancedMarkers]
        */
       useAdvancedMarkers?: boolean;
+      /**
+       * [descr:dxMapOptions.providerConfig.tileServer]
+       */
+      tileServer?: DevExpress.ui.dxMap.OsmTileServer | undefined;
+      /**
+       * [descr:dxMapOptions.providerConfig.geocodeLocation]
+       */
+      geocodeLocation?:
+        | ((query: string) => Promise<MapLocation | null | undefined>)
+        | undefined;
+      /**
+       * [descr:dxMapOptions.providerConfig.getRoute]
+       */
+      getRoute?:
+        | ((
+            params: DevExpress.ui.dxMap.OsmGetRouteParams
+          ) => Promise<DevExpress.ui.dxMap.OsmRouteResult>)
+        | undefined;
+      /**
+       * [descr:dxMapOptions.providerConfig.mapEngine]
+       */
+      mapEngine?: object | undefined;
     };
     /**
      * [descr:dxMapOptions.routes]
