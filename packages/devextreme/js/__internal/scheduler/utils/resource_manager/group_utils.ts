@@ -1,35 +1,44 @@
 import type { ResourceLoader } from '../loader/resource_loader';
-import type { ResourceId } from '../loader/types';
+import type { RawResourceData, ResourceId } from '../loader/types';
 import type { ResourceHierarchyNode } from './hierarchy_tree_utils';
 import type { GroupLeaf, GroupNode } from './types';
 
 const isVirtualRoot = (node: GroupNode): boolean => !node.resourceIndex;
 
+const findRawResourceData = (
+  resource: ResourceLoader,
+  id: ResourceId,
+): RawResourceData | undefined => resource.data.find(
+  (item) => resource.dataAccessor.get('id', item) === id,
+);
+
 const createFlatResourceNodes = (
   resource: ResourceLoader,
-): GroupNode[] => resource.items.map((item) => ({
+): GroupNode[] => resource.items.map((item, index) => ({
   id: item.id,
   resourceText: item.text,
   color: item.color,
   resourceIndex: resource.resourceIndex,
   grouped: { [resource.resourceIndex]: item.id },
   children: [],
+  resourceData: resource.data[index],
 }));
 
 const hierarchyToGroupNodes = (
   hierarchyNodes: ResourceHierarchyNode[],
-  resourceIndex: string,
+  resource: ResourceLoader,
   parentGrouped: Record<string, ResourceId>,
 ): GroupNode[] => hierarchyNodes.map((node) => {
-  const grouped = { ...parentGrouped, [resourceIndex]: node.data.id };
+  const grouped = { ...parentGrouped, [resource.resourceIndex]: node.data.id };
 
   return {
     id: node.data.id,
     resourceText: node.data.text,
     color: node.data.color,
-    resourceIndex,
+    resourceIndex: resource.resourceIndex,
     grouped,
-    children: hierarchyToGroupNodes(node.children, resourceIndex, grouped),
+    resourceData: findRawResourceData(resource, node.data.id),
+    children: hierarchyToGroupNodes(node.children, resource, grouped),
   };
 });
 
@@ -63,7 +72,7 @@ const createResourceNodes = (
   resource: ResourceLoader,
 ): GroupNode[] => {
   if (resource.hasHierarchy) {
-    return hierarchyToGroupNodes(resource.hierarchyTree, resource.resourceIndex, {});
+    return hierarchyToGroupNodes(resource.hierarchyTree, resource, {});
   }
 
   return createFlatResourceNodes(resource);

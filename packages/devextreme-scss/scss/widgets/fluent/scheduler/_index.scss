@@ -1035,7 +1035,13 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 }
 
 .dx-scheduler-timeline .dx-scheduler-group-flex-container .dx-scheduler-group-header {
-  width: 100px;
+  width: $fluent-scheduler-group-header-table-cell-width;
+}
+
+.dx-scheduler-timeline .dx-scheduler-group-flex-container-hierarchical > .dx-scheduler-group-row > .dx-scheduler-group-header.dx-scheduler-group-header-leaf:only-child {
+  width: $fluent-scheduler-group-header-table-cell-width;
+  min-width: $fluent-scheduler-group-header-table-cell-width;
+  flex: 0 0 auto;
 }
 
 .dx-scheduler-header-panel-empty-cell {

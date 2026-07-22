@@ -75,6 +75,26 @@ const createGroupLeaf = (
   children: [],
 });
 
+const omitResourceData = <T>(value: T): T => {
+  const strip = (obj: unknown): unknown => {
+    if (Array.isArray(obj)) {
+      return obj.map(strip);
+    }
+
+    if (obj && typeof obj === 'object') {
+      const { resourceData, ...rest } = obj as Record<string, unknown>;
+
+      return Object.fromEntries(
+        Object.entries(rest).map(([key, val]) => [key, strip(val)]),
+      );
+    }
+
+    return obj;
+  };
+
+  return strip(value) as T;
+};
+
 const groupsLeafs: GroupLeaf[] = [
   createGroupLeaf(0, { assigneeId: 1, roomId: 3 }),
   createGroupLeaf(1, { assigneeId: 3, roomId: 4 }),
@@ -118,7 +138,7 @@ describe('groups utils', () => {
     });
 
     it('should group by one group', () => {
-      expect(groupResources(resourceById, ['roomId'])).toEqual({
+      expect(omitResourceData(groupResources(resourceById, ['roomId']))).toEqual({
         groupTree: [
           {
             id: 0,
@@ -160,10 +180,18 @@ describe('groups utils', () => {
       });
     });
 
+    it('should attach raw resourceData to group nodes', () => {
+      const { groupTree } = groupResources(resourceById, ['roomId', 'assigneeId']);
+
+      expect(groupTree[0].resourceData).toEqual(roomData[0]);
+      expect(groupTree[0].children[0].resourceData).toEqual(assigneeData[0]);
+      expect(groupTree[0].children[1].resourceData).toEqual(assigneeData[1]);
+    });
+
     it('should ignore missed resources and group by one group', () => {
-      expect(groupResources({
+      expect(omitResourceData(groupResources({
         roomId: resourceById.roomId,
-      }, ['roomId', 'assigneeId'])).toEqual({
+      }, ['roomId', 'assigneeId']))).toEqual({
         groupTree: [
           {
             id: 0,
@@ -206,7 +234,7 @@ describe('groups utils', () => {
     });
 
     it('should group by multiple groups with correct order', () => {
-      expect(groupResources(resourceById, ['roomId', 'assigneeId'])).toEqual({
+      expect(omitResourceData(groupResources(resourceById, ['roomId', 'assigneeId']))).toEqual({
         groupTree: [
           {
             id: 0,
@@ -303,7 +331,7 @@ describe('groups utils', () => {
     it('should group hierarchical resource by parent-child tree', async () => {
       const hierarchicalRoom = await createHierarchicalRoomResource();
 
-      expect(groupResources({ roomId: hierarchicalRoom }, ['roomId'])).toEqual({
+      expect(omitResourceData(groupResources({ roomId: hierarchicalRoom }, ['roomId']))).toEqual({
         groupTree: [
           {
             id: 'board',

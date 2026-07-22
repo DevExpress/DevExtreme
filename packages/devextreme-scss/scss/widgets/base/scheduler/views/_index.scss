@@ -303,9 +303,41 @@ $scheduler-month-date-text-padding: 6px;
   flex: 0 0 100%;
   min-height: 100%;
   display: flex;
-  flex-direction: column;
 
   .dx-scheduler-group-row {
+    @include flex-container(column, nowrap);
+
+    flex: 0 0 auto;
+    min-width: 0;
+
+    &:last-child .dx-scheduler-group-header {
+      border-right: $scheduler-base-border;
+      border-right-color: $scheduler-base-border-color;
+    }
+
+    .dx-scheduler-group-header {
+      @include flex-container(row, nowrap);
+
+      flex: 1 1 0;
+      padding: 0 5px;
+      height: auto;
+      width: $scheduler-left-column-width;
+      justify-content: flex-start;
+      align-items: flex-start;
+      text-align: left;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border: none;
+      border-top: $scheduler-base-border;
+      border-top-color: $scheduler-base-border-color;
+    }
+  }
+}
+
+.dx-scheduler-group-flex-container-hierarchical {
+  flex-direction: column;
+
+  > .dx-scheduler-group-row {
     @include flex-container(row, nowrap);
 
     flex: 1 1 0;
@@ -336,12 +368,18 @@ $scheduler-month-date-text-padding: 6px;
       }
     }
 
-    // nested recursion: a non-leaf node's own children stack in the remaining width
     .dx-scheduler-group-flex-container {
       flex: 1 1 auto;
+      flex-direction: column;
       min-height: 0;
       width: auto;
     }
+  }
+
+  > .dx-scheduler-group-row > .dx-scheduler-group-header.dx-scheduler-group-header-leaf:only-child {
+    flex: 0 0 auto;
+    width: $scheduler-left-column-width;
+    min-width: $scheduler-left-column-width;
   }
 }
 
@@ -809,6 +847,7 @@ $scheduler-month-date-text-padding: 6px;
 
   .dx-scheduler-work-space-vertical-grouped,
   .dx-scheduler-sidebar-scrollable {
+    .dx-scheduler-group-row:last-child .dx-scheduler-group-header,
     .dx-scheduler-group-header-leaf {
       border-right: none;
       border-left: $scheduler-base-border;

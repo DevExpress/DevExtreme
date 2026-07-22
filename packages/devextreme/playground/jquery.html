@@ -44,93 +44,21 @@
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 </head>
 <body class="dx-surface">
-    <div role="main">
-        <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
+<div role="main">
+    <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
 
-        <select id="theme-selector" style="display: block;">
-        </select>
-        <br />
-
-        <label>
-            Group orientation:
-            <select id="group-orientation-selector">
-                <option value="horizontal">horizontal</option>
-                <option value="vertical">vertical</option>
-            </select>
-        </label>
-        <label>
-            View:
-            <select id="view-selector">
-                <option value="day">day</option>
-                <option value="week" selected>week</option>
-                <option value="workWeek">workWeek</option>
-                <option value="timelineDay">timelineDay</option>
-                <option value="timelineWeek">timelineWeek</option>
-                <option value="timelineWorkWeek">timelineWorkWeek</option>
-            </select>
-        </label>
-        <br />
-        <br />
-        <div id="scheduler"></div>
-        <script>
-            $(() => {
-                // Multilevel grouping demo: a single hierarchical resource ("Room") with
-                // non-uniform depth - the "Building A" branch is 3 levels deep
-                // (Building -> Floor -> Room), while "Building B" only goes 2 levels deep
-                // (Building -> Room, no intermediate floor).
-                const roomHierarchy = [
-                    { id: 'buildingA', text: 'Building A', parentId: null },
-                    { id: 'floorA1', text: 'Floor 1', parentId: 'buildingA' },
-                    { id: 'roomA101', text: 'Room 101', parentId: 'floorA1', color: '#1e90ff' },
-                    { id: 'roomA102', text: 'Room 102', parentId: 'floorA1', color: '#32c9ed' },
-                    { id: 'floorA2', text: 'Floor 2', parentId: 'buildingA' },
-                    { id: 'roomA201', text: 'Room 201', parentId: 'floorA2', color: '#2a7ee4' },
-                    { id: 'buildingB', text: 'Building B', parentId: null },
-                    { id: 'roomB01', text: 'Room B01', parentId: 'buildingB', color: '#7b49d3' },
-                    { id: 'roomB02', text: 'Room B02', parentId: 'buildingB', color: '#ff9747' },
-                ];
-
-                const leafRoomIds = ['roomA101', 'roomA102', 'roomA201', 'roomB01', 'roomB02'];
-
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-
-                const appointments = leafRoomIds.map((roomId, index) => ({
-                    text: `Meeting in ${roomId}`,
-                    startDate: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 9 + index, 0),
-                    endDate: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10 + index, 0),
-                    roomId,
-                }));
-
-                $("#scheduler").dxScheduler({
-                    dataSource: appointments,
-                    views: ['day', 'week', 'workWeek', 'timelineDay', 'timelineWeek', 'timelineWorkWeek'],
-                    currentView: 'week',
-                    currentDate: today,
-                    startDayHour: 8,
-                    endDayHour: 18,
-                    allDayPanel: false,
-                    showAllDayPanel: false,
-                    groups: ['roomId'],
-                    groupOrientation: 'horizontal',
-                    resources: [{
-                        fieldExpr: 'roomId',
-                        dataSource: roomHierarchy,
-                        parentIdExpr: 'parentId',
-                        label: 'Room',
-                        allowMultiple: false,
-                    }],
-                });
-
-                $("#group-orientation-selector").on('change', (e) => {
-                    $("#scheduler").dxScheduler('option', 'groupOrientation', e.target.value);
-                });
-
-                $("#view-selector").on('change', (e) => {
-                    $("#scheduler").dxScheduler('option', 'currentView', e.target.value);
-                });
+    <select id="theme-selector" style="display: block;">
+    </select>
+    <br />
+    <div id="button"></div>
+    <script>
+        $(() => {
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: () => { alert("clicked"); }
             });
-        </script>
-    </div>
+        });
+    </script>
+</div>
 </body>
 </html>

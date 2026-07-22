@@ -1,6 +1,6 @@
 import { isObject } from '@js/core/utils/type';
 
-import type { GroupPanelTreeNode, GroupRenderItem } from '../../types';
+import type { GroupItem, GroupPanelTreeNode, GroupRenderItem } from '../../types';
 import type { ResourceId } from '../../utils/loader/types';
 import type { GroupNode } from '../../utils/resource_manager/types';
 
@@ -11,6 +11,20 @@ export const stringifyId = (id: ResourceId): string => (isObject(id)
 const getLeafCount = (node: GroupNode): number => (node.children.length === 0
   ? 1
   : node.children.reduce((sum, child) => sum + getLeafCount(child), 0));
+
+const buildGroupPanelData = (node: GroupNode): GroupItem => {
+  if (node.resourceData) {
+    return node.resourceData as GroupItem;
+  }
+
+  const data: GroupItem = { id: node.id as GroupItem['id'], text: node.resourceText };
+
+  if (node.color !== undefined) {
+    data.color = node.color;
+  }
+
+  return data;
+};
 
 const buildGroupPanelNode = (
   node: GroupNode,
@@ -25,7 +39,7 @@ const buildGroupPanelNode = (
     id: node.id,
     text: node.resourceText,
     color: node.color,
-    data: { id: node.id, text: node.resourceText, color: node.color },
+    data: buildGroupPanelData(node),
     resourceIndex: node.resourceIndex,
     leafCount: getLeafCount(node),
     isFirstGroupCell: index === 0,
@@ -68,7 +82,7 @@ export const flattenGroupPanelTreeToRows = (
       resourceIndex: node.resourceIndex,
       data: node.data,
       colSpan: node.leafCount * baseColSpan,
-      rowSpan: isShallowLeaf ? maxDepth - depth : undefined,
+      ...(isShallowLeaf ? { rowSpan: maxDepth - depth } : {}),
     });
 
     node.children.forEach((child) => walk(child, depth + 1));

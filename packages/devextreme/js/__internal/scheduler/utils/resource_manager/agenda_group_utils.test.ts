@@ -5,15 +5,35 @@ import {
 import { getResourceManagerMock } from '../../__mock__/resource_manager.mock';
 import { reduceResourcesTree } from './agenda_group_utils';
 
+const omitResourceData = <T>(value: T): T => {
+  const strip = (obj: unknown): unknown => {
+    if (Array.isArray(obj)) {
+      return obj.map(strip);
+    }
+
+    if (obj && typeof obj === 'object') {
+      const { resourceData, ...rest } = obj as Record<string, unknown>;
+
+      return Object.fromEntries(
+        Object.entries(rest).map(([key, val]) => [key, strip(val)]),
+      );
+    }
+
+    return obj;
+  };
+
+  return strip(value) as T;
+};
+
 describe('agenda group utils', () => {
   describe('reduceResourcesTree', () => {
     it('should reduce tree by appointments resources', async () => {
       const manager = getResourceManagerMock();
       await manager.loadGroupResources(['roomId', 'nested.priorityId']);
-      expect(reduceResourcesTree(manager.resourceById, manager.groupsTree, [
+      expect(omitResourceData(reduceResourcesTree(manager.resourceById, manager.groupsTree, [
         { itemData: { roomId: 0, nested: { priorityId: [1, 2] } } },
         { itemData: { roomId: 1, nested: { priorityId: 2 } } },
-      ] as any)).toEqual([
+      ] as any))).toEqual([
         {
           id: 0,
           color: '#aaa',

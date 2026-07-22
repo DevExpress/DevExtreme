@@ -62,6 +62,42 @@ describe('group_panel_tree', () => {
       ]);
     });
 
+    it('should pass through full resourceData for resourceCellTemplate', () => {
+      const tree = [{
+        ...node('1', 'John Heart', 'employeeID', [], '#aaa'),
+        resourceData: {
+          id: 1,
+          text: 'John Heart',
+          color: '#aaa',
+          age: 27,
+          avatar: '19.png',
+          discipline: 'ABS, Fitball, StepFit',
+        },
+      }];
+
+      const result = buildGroupPanelTree(tree);
+
+      expect(result[0].data).toEqual({
+        id: 1,
+        text: 'John Heart',
+        color: '#aaa',
+        age: 27,
+        avatar: '19.png',
+        discipline: 'ABS, Fitball, StepFit',
+      });
+    });
+
+    it('should omit color from data when it is undefined', () => {
+      const tree = [
+        node('1', 'John', 'ownerId'),
+      ];
+
+      const result = buildGroupPanelTree(tree);
+
+      expect(result[0].data).toEqual({ id: '1', text: 'John' });
+      expect(result[0].data).not.toHaveProperty('color');
+    });
+
     it('should compute leafCount for a uniform-depth tree from real descendant counts', () => {
       const tree = [
         node('A', 'Room A', 'roomId', [
@@ -149,12 +185,12 @@ describe('group_panel_tree', () => {
       expect(maxDepth).toBe(2);
       expect(rows).toHaveLength(2);
       expect(rows[0]).toEqual([
-        expect.objectContaining({ id: 'A', colSpan: 2 * 3, rowSpan: undefined }),
+        expect.objectContaining({ id: 'A', colSpan: 2 * 3 }),
         expect.objectContaining({ id: 'B', colSpan: 1 * 3, rowSpan: 2 }),
       ]);
       expect(rows[1]).toEqual([
-        expect.objectContaining({ id: '1', colSpan: 1 * 3, rowSpan: undefined }),
-        expect.objectContaining({ id: '2', colSpan: 1 * 3, rowSpan: undefined }),
+        expect.objectContaining({ id: '1', colSpan: 1 * 3 }),
+        expect.objectContaining({ id: '2', colSpan: 1 * 3 }),
       ]);
     });
 
@@ -174,15 +210,15 @@ describe('group_panel_tree', () => {
 
       expect(maxDepth).toBe(3);
       expect(rows[0]).toEqual([
-        expect.objectContaining({ id: 'X', colSpan: 3, rowSpan: undefined }),
+        expect.objectContaining({ id: 'X', colSpan: 3 }),
       ]);
       expect(rows[1]).toEqual([
-        expect.objectContaining({ id: 'X1', colSpan: 2, rowSpan: undefined }),
+        expect.objectContaining({ id: 'X1', colSpan: 2 }),
         expect.objectContaining({ id: 'X2', colSpan: 1, rowSpan: 2 }),
       ]);
       expect(rows[2]).toEqual([
-        expect.objectContaining({ id: 'a', colSpan: 1, rowSpan: undefined }),
-        expect.objectContaining({ id: 'b', colSpan: 1, rowSpan: undefined }),
+        expect.objectContaining({ id: 'a', colSpan: 1 }),
+        expect.objectContaining({ id: 'b', colSpan: 1 }),
       ]);
     });
   });

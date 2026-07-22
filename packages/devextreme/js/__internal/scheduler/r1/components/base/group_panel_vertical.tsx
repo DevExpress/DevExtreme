@@ -3,7 +3,54 @@ import { BaseInfernoComponent, normalizeStyles } from '@ts/core/r1/runtime/infer
 import { renderUtils } from '../../utils/index';
 import type { GroupPanelProps } from './group_panel';
 import { GroupPanelBaseDefaultProps } from './group_panel_props';
+import { GroupPanelVerticalCell } from './group_panel_vertical_cell';
 import { GroupPanelVerticalNode } from './group_panel_vertical_node';
+import { GroupPanelVerticalRow } from './group_panel_vertical_row';
+
+const HIERARCHICAL_GROUP_FLEX_CONTAINER_CLASS = 'dx-scheduler-group-flex-container-hierarchical';
+const TIMELINE_GROUP_TABLE_CLASS = 'dx-scheduler-group-table';
+
+const renderGroupPanelContent = (
+  groupPanelData: GroupPanelProps['groupPanelData'],
+  resourceCellTemplate: GroupPanelProps['resourceCellTemplate'],
+  isTimelineGroupTable: boolean,
+  isHierarchical: boolean,
+): JSX.Element | JSX.Element[] => {
+  if (isTimelineGroupTable) {
+    return groupPanelData.groupPanelItems
+      .map((group) => <GroupPanelVerticalRow
+        key={group[0].key}
+        groupItems={group}
+        cellTemplate={resourceCellTemplate}
+      />);
+  }
+
+  if (isHierarchical) {
+    return groupPanelData.groupTree
+      .map((node, index) => <GroupPanelVerticalNode
+        key={node.key}
+        node={node}
+        index={index}
+        cellTemplate={resourceCellTemplate}
+      />);
+  }
+
+  return (
+    <div className="dx-scheduler-group-row">
+      {
+        groupPanelData.groupTree.map((node, index) => <GroupPanelVerticalCell
+          key={node.key}
+          text={node.text}
+          id={node.id}
+          data={node.data}
+          index={index}
+          color={node.color}
+          cellTemplate={resourceCellTemplate}
+        />)
+      }
+    </div>
+  );
+};
 
 export class GroupPanelVertical extends BaseInfernoComponent<GroupPanelProps> {
   render(): JSX.Element {
@@ -16,6 +63,17 @@ export class GroupPanelVertical extends BaseInfernoComponent<GroupPanelProps> {
       styles,
     } = this.props;
     const style = normalizeStyles(renderUtils.addHeightToStyle(height, styles));
+    const isTimelineGroupTable = className === TIMELINE_GROUP_TABLE_CLASS;
+    const isHierarchical = !isTimelineGroupTable && groupPanelData.maxDepth > 1;
+    const flexContainerClassName = isHierarchical
+      ? `dx-scheduler-group-flex-container ${HIERARCHICAL_GROUP_FLEX_CONTAINER_CLASS}`
+      : 'dx-scheduler-group-flex-container';
+    const groupPanelContent = renderGroupPanelContent(
+      groupPanelData,
+      resourceCellTemplate,
+      isTimelineGroupTable,
+      isHierarchical,
+    );
 
     return (
       <div
@@ -23,16 +81,8 @@ export class GroupPanelVertical extends BaseInfernoComponent<GroupPanelProps> {
         className={className}
         style={style}
       >
-        <div className="dx-scheduler-group-flex-container">
-          {
-            groupPanelData.groupTree
-              .map((node, index) => <GroupPanelVerticalNode
-                key={node.key}
-                node={node}
-                index={index}
-                cellTemplate={resourceCellTemplate}
-              />)
-          }
+        <div className={flexContainerClassName}>
+          {groupPanelContent}
         </div>
       </div>
     );
