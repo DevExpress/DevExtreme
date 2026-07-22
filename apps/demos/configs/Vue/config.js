@@ -93,6 +93,7 @@ window.config = {
     /**/
   },
   paths: {
+    'project:': '../../../../',
     'npm:': '../../../../node_modules/',
     'bundles:': '../../../../bundles/',
     'externals:': '../../../../bundles/externals/',
