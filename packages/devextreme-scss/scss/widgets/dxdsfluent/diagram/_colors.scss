@@ -1,0 +1,46 @@
+@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$diagram-border-color: ds.$color-border-neutral-default-rest !default;
+$diagram-toolbar-border-color: ds.$color-border-neutral-default-rest !default;
+$diagram-normal-format-active-bg: ds.$button-outline-color-bg-active !default;
+$diagram-default-format-active-bg: ds.$button-contained-color-bg-active !default;
+$diagram-danger-format-active-bg: ds.$color-surface-danger-default-active !default;
+$diagram-success-format-active-bg: ds.$color-surface-success-default-active !default;
+$diagram-image-icon-base-color: ds.$color-content-neutral-subdued-rest !default;
+$diagram-image-icon-accent-color: ds.$color-content-primary-default-rest !default;
+$diagram-toolbox-shape-text-opacity: null !default;
+
+@if $mode == "light" {
+  $diagram-toolbox-shape-text-opacity: 0.25 !default;
+}
+
+@if $mode == "dark" {
+  $diagram-toolbox-shape-text-opacity: 0.5 !default;
+}
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$diagram-bg: ds.$color-surface-neutral-default-rest !default;
+$diagram-danger: ds.$color-content-danger-default-rest !default;
+
+/*
+ * SVG data-uri icons are colored by baking the value into a background-image data-uri at build
+ * time (string replace of `currentColor`). CSS var() tokens do NOT resolve inside such a data-uri
+ * (they render black), so the icon colors below must stay concrete $base-* values. See DIVERGENCES.
+ */
+$diagram-text-color: $base-text-color !default;
+$diagram-properties-panel-icon-color: $base-inverted-text-color !default;
+
+// Canvas = deeper neutral surface
+$diagram-canvas-bg: ds.$color-surface-neutral-subdued-rest !default;
+$diagram-shadow: 0 1px 8px ds.$color-shadow-key !default;
+
+// Values hoisted from style-file literals (tokenized)
+$diagram-selection-mark-color: ds.$color-border-neutral-accessible-rest !default;
+$diagram-selection-fill-color: rgb(from #{ds.$color-border-neutral-accessible-rest} r g b / 0.02) !default;
+$diagram-image-icon-muted-opacity: ds.$opacity-50 !default;
+
+// Base-layer values injected with design tokens (wave B1)
+$diagram-popup-title-toolbar-bg-color: ds.$color-surface-neutral-alpha-hovered !default;

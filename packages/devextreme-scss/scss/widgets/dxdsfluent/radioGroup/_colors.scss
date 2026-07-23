@@ -1,0 +1,20 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$radiogroup-accent-color: ds.$color-surface-primary-default-rest !default;
+$radiogroup-accent-color-hover: ds.$color-surface-primary-default-hovered !default;
+$radiogroup-accent-color-active: ds.$color-surface-primary-default-active !default;
+
+$radiogroup-border-color: ds.$color-border-neutral-accessible-rest !default;
+$radiogroup-border-color-hover: ds.$color-border-neutral-accessible-hovered !default;
+$radiogroup-border-color-active: ds.$color-border-neutral-accessible-active !default;
+$radiogroup-bg: ds.$color-surface-neutral-default-rest !default;
+
+$radiobutton-invalid-color: ds.$color-border-danger-default-rest !default;
+$radiobutton-invalid-color-hover: ds.$color-border-danger-default-hovered !default;
+$radiobutton-invalid-color-focused: ds.$color-border-danger-default-hovered !default;
+
+$radiogroup-readonly-border-color: $radiogroup-border-color !default;
+
+$radiobutton-focused-bg: ds.$color-surface-neutral-alpha-hovered !default;

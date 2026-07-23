@@ -4,6 +4,9 @@
 // adduse
 
 
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$checkbox-text-padding-inline-start: 5px !default;
+
 .dx-checkbox {
   display: inline-block;
   cursor: pointer;
@@ -41,7 +44,7 @@
   white-space: pre-wrap;
   word-wrap: break-word;
   line-height: normal;
-  padding-inline-start: 5px;
+  padding-inline-start: $checkbox-text-padding-inline-start;
 }
 
 .dx-state-disabled {

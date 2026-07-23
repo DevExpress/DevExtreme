@@ -1,0 +1,10 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$tooltip-color: ds.$color-content-neutral-default-rest !default;
+
+$tooltip-bg: ds.$tooltip-color-bg-rest !default;
+
+$tooltip-border-radius: $base-border-radius !default;

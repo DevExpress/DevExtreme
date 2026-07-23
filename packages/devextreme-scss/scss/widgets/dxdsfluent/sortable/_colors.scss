@@ -1,0 +1,13 @@
+@use "../../../_design-system/variables/ds" as ds;
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-sortable-clone-shadow-color-first: ds.$color-shadow-ambient !default;
+$fluent-sortable-clone-shadow-color-second: ds.$color-shadow-key !default;
+$fluent-sortable-clone-opacity: ds.$opacity-90 !default;
+$fluent-sortable-source-opacity: ds.$opacity-50 !default;

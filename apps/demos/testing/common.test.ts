@@ -239,7 +239,10 @@ Object.values(FRAMEWORKS).forEach((approach) => {
 
         if (process.env.STRATEGY === 'accessibility') {
           const ignoredRules = getIgnoredRules(testName);
-          const options = { rules: {} };
+          // dxdsfluent shares fluent's structure/ARIA (already covered by the fluent run),
+          // so only color-contrast is re-checked for it across the demos.
+          const isDesignSystemFluent = process.env.THEME?.startsWith('dxdsfluent');
+          const options = isDesignSystemFluent ? { runOnly: 'color-contrast', rules: {} } : { rules: {} };
 
           ignoredRules.forEach((ruleName) => {
             options.rules[ruleName] = { enabled: false };

@@ -1,0 +1,71 @@
+$size: null !default;
+
+@use "colors" as *;
+@use "../../_design-system/variables/ds" as ds;
+
+$fluent-size-postfix: null !default;
+$fluent-base-font-size: null !default;
+$fluent-base-inline-widget-height: null !default;
+$fluent-base-inline-block-height: null !default;
+$fluent-base-icon-size: null !default;
+$fluent-base-icon-margin: ds.$spacing-80 !default;
+$fluent-base-inline-horizontal-padding: null !default;
+$fluent-base-border-radius: null !default;
+$fluent-html-editor-add-image-dialog-base-padding: ds.$spacing-50 !default;
+
+$fluent-button-height: null !default;
+
+$fluent-button-icon-size: null !default;
+
+$fluent-button-icon-margin: null !default;
+
+@if $size == "default" {
+  $fluent-size-postfix: "" !default;
+
+  // Font sizes
+  $fluent-base-font-size: ds.$font-size-base-md !default;
+
+  // Base sizes
+  $fluent-base-inline-widget-height: ds.$spacing-320 !default;
+  $fluent-base-inline-block-height: ds.$spacing-200 !default;
+  $fluent-base-icon-size: ds.$spacing-200 !default;
+  $fluent-base-inline-horizontal-padding: ds.$spacing-120 !default;
+  $fluent-base-border-radius: ds.$border-radius-40 !default;
+  $fluent-button-height: ds.$spacing-320 !default;
+  $fluent-button-icon-size: ds.$spacing-200 !default;
+  $fluent-button-icon-margin: ds.$spacing-80 !default;
+}
+
+@if $size == "compact" {
+  $fluent-size-postfix: ".compact" !default;
+
+  // Font sizes
+  $fluent-base-font-size: ds.$font-size-base-sm !default;
+
+  // Base sizes
+  $fluent-base-inline-widget-height: ds.$spacing-240 !default;
+  $fluent-base-inline-block-height: ds.$spacing-160 !default;
+  $fluent-base-icon-size: ds.$spacing-160 !default;
+  $fluent-base-inline-horizontal-padding: ds.$spacing-80 !default;
+  $fluent-base-border-radius: ds.$border-radius-40 !default;
+  $fluent-button-height: ds.$spacing-240 !default;
+  $fluent-button-icon-size: ds.$spacing-160 !default;
+  $fluent-button-icon-margin: ds.$spacing-40 !default;
+}
+
+// Base bordered inline widgets sizes
+$fluent-base-border-width: ds.$border-width-10 !default;
+
+
+$base-border-radius: $fluent-base-border-radius !default;
+
+$fluent-base-standard-texteditor-input-horizontal-padding: 0 !default;
+
+
+:root {
+  --dx-component-height: #{$fluent-base-inline-widget-height};
+  --dx-font-size: #{$fluent-base-font-size};
+  --dx-border-width: #{$fluent-base-border-width};
+  --dx-border-radius: #{$fluent-base-border-radius};
+  --dx-font-size-icon: #{$fluent-base-icon-size};
+}

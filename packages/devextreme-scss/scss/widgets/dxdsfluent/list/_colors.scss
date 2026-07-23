@@ -1,0 +1,55 @@
+@use "../colors" as *;
+@use "../button/colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$list-normal-color: ds.$color-content-neutral-default-rest !default;
+
+$list-border-color: ds.$color-border-neutral-default-rest !default;
+
+$list-group-header-bg: transparent !default;
+
+$list-item-hover-bg: ds.$color-surface-neutral-default-hovered !default;
+
+$list-item-selected-bg: ds.$color-surface-neutral-default-selected !default;
+$list-item-selected-hover-bg: ds.$color-surface-neutral-default-selected-hovered !default;
+$list-item-focused-selected-bg: ds.$color-surface-neutral-default-active !default;
+$list-item-hover-color: ds.$color-content-neutral-default-rest !default;
+$list-header-indicator-color: ds.$color-content-neutral-subdued-rest !default;
+
+$list-item-active-bg: ds.$color-surface-neutral-default-active !default;
+$list-holdmenu-bg: ds.$color-surface-neutral-default-rest !default;
+$list-holdmenu-border-color: $list-border-color !default;
+$list-holdmenu-shadow-color: ds.$color-shadow-ambient !default;
+$list-menu-button-default-color: $button-default-color !default;
+$list-menu-button-default-bg: $button-default-bg !default;
+$list-menu-button-delete-bg: ds.$color-surface-danger-default-rest !default;
+$list-item-ghost-bg: ds.$color-surface-neutral-default-rest !default;
+$list-item-ghost-color: ds.$color-content-neutral-subdued-rest !default;
+$list-item-ghost-border-color: ds.$color-border-primary-default-rest !default;
+$list-icon-color: ds.$color-content-neutral-subdued-rest !default;
+
+/*
+ * toggle-delete is an SVG data-uri image: the color is baked into the background-image at
+ * build time. CSS var() tokens do NOT resolve inside a data-uri (they render black), so this
+ * stays a concrete $base-* value. See DIVERGENCES.md.
+ */
+$list-toggle-delete-icon-color: $base-icon-color !default;
+
+$base-select-all-separator-color: ds.$separator-color !default;
+
+$list-group-color: ds.$color-content-neutral-default-rest !default;
+
+$list-expanded-group-color: $list-group-color !default;
+$list-item-selected-color: $list-normal-color !default;
+
+$list-border-color-disabled: ds.$color-border-neutral-default-disabled !default;
+$list-foreground-disabled: ds.$color-content-neutral-default-disabled !default;
+$list-inverted-text-color: ds.$color-content-neutral-default-static-dark-rest !default;
+
+// Values hoisted from style-file literals (tokenized)
+$list-item-disabled-opacity: ds.$opacity-60 !default;
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-list-response-wait-opacity: ds.$opacity-50 !default;

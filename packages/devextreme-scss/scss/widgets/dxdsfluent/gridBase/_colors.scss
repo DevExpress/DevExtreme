@@ -1,0 +1,100 @@
+@use "../colors" as *;
+@use "../button/colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$datagrid-base-color: ds.$color-content-neutral-default-rest !default;
+
+$datagrid-base-background-color: ds.$color-surface-neutral-default-rest !default;
+$datagrid-border-color: ds.$color-border-neutral-default-rest !default;
+
+$datagrid-columnchooser-item-color: $datagrid-base-color !default;
+
+$datagrid-columnchooser-font-weight: 600 !default;
+
+$datagrid-drag-header-border-color: rgb(from #{ds.$color-border-primary-default-rest} r g b / 0.5) !default;
+$datagrid-drag-header-shadow-color: ds.$color-shadow-ambient !default;
+$datagrid-drag-header-second-shadow-color: ds.$color-shadow-key !default;
+$datagrid-header-drag-bg: $datagrid-base-background-color !default;
+$header-filter-color: $datagrid-columnchooser-item-color !default;
+
+$datagrid-selection-bg: $button-default-outlined-hover-bg !default;
+
+$datagrid-row-selected-border-color: $datagrid-border-color !default;
+
+$datagrid-row-selected-color: $datagrid-base-color !default;
+
+$datagrid-row-focused-color: ds.$color-content-neutral-default-rest !default;
+
+$datagrid-row-focused-bg: ds.$color-surface-primary-subdued-rest !default;
+$datagrid-hover-bg: ds.$color-surface-neutral-default-hovered !default;
+$datagrid-row-hovered-color: ds.$color-content-neutral-default-rest !default;
+
+$datagrid-cell-modified-border-color: $button-success-text-hover-bg !default;
+$datagrid-cell-removed-border-color: $datagrid-border-color !default;
+$datagrid-row-removed-bg: $datagrid-hover-bg !default;
+$datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
+
+$datagrid-row-invalid-faded-border-color: $button-danger-text-hover-bg !default;
+$datagrid-nodata-color: ds.$color-content-neutral-subdued-rest !default;
+
+$datagrid-group-row-color: $datagrid-columnchooser-item-color !default;
+
+$datagrid-group-row-bg: ds.$color-surface-neutral-default-rest !default;
+$datagrid-master-detail-cell-bg: ds.$color-surface-neutral-subdued-rest !default;
+
+$datagrid-search-color: ds.$color-content-neutral-default-static-dark-rest !default;
+$datagrid-chevron-icon-color: ds.$color-content-neutral-subdued-rest !default;
+
+$datagrid-search-bg: ds.$color-surface-primary-default-rest !default;
+
+$datagrid-row-error-color: ds.$color-content-neutral-default-static-dark-rest !default;
+
+$datagrid-row-error-bg: ds.$color-surface-danger-default-rest !default;
+$datagrid-link-color: ds.$color-content-primary-default-rest !default;
+
+$datagrid-focused-border-color: ds.$color-border-primary-default-rest !default;
+
+$datagrid-editor-bg: transparent !default;
+$datagrid-drop-highlight-bg: ds.$color-surface-primary-default-rest !default;
+$datagrid-drop-highlight-color: ds.$color-content-neutral-default-static-dark-rest !default;
+$datagrid-columnchooser-bg: ds.$color-surface-neutral-default-rest !default;
+$datagrid-columnchooser-item-bg: $datagrid-columnchooser-bg !default;
+
+$datagrid-row-alternation-bg: ds.$color-surface-neutral-deep-rest !default;
+
+$datagrid-summary-color: ds.$color-content-neutral-subdued-rest !default;
+$datagrid-columnchooser-message-color: ds.$color-content-neutral-subdued-rest !default;
+$datagrid-summary-bg: $datagrid-base-background-color !default;
+$datagrid-column-separator-bg: ds.$color-surface-primary-default-rest !default;
+$datagrid-filter-row-background-color: ds.$color-surface-neutral-subdued-rest !default;
+$datagrid-active-header-filter-icon-color: ds.$color-content-primary-default-rest !default;
+$datagrid-text-stub-background-image-path: null !default;
+$datagrid-filter-panel-color: ds.$color-content-primary-default-rest !default;
+$datagrid-draggable-column-text-color: ds.$color-content-neutral-subdued-rest !default;
+
+$datagrid-text-link-disabled-opacity: $base-disabled-opacity;
+$datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
+
+@if $mode == "light" {
+  $datagrid-text-stub-background-image-path: data-uri('images/widgets/dxdsfluent/color-schemes/light/grid/text-stub.png') !default;
+}
+
+@if $mode == "dark" {
+  $datagrid-text-stub-background-image-path: data-uri('images/widgets/dxdsfluent/color-schemes/dark/grid/text-stub.png') !default;
+}
+
+$header-filter-color-empty: $header-filter-color !default;
+$datagrid-border: 1px solid !default;
+
+:root {
+  --dx-datagrid-row-alternation-bg: #{$datagrid-row-alternation-bg};
+}
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$gridbase-accent: ds.$color-content-primary-default-rest !default;
+$gridbase-border-color: ds.$color-border-neutral-default-rest !default;
+$gridbase-danger: ds.$color-content-danger-default-rest !default;
+$gridbase-icon-color: ds.$color-content-neutral-subdued-rest !default;
+$gridbase-success: ds.$color-content-success-default-rest !default;

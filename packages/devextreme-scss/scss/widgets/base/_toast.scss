@@ -1,19 +1,28 @@
 // adduse
 
+
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$toast-content-padding: 10px !default;
+$toast-icon-width: 35px !default;
+$toast-icon-height: 35px !default;
+$toast-icon-margin-right: 10px !default;
+$toast-icon-margin-left: 10px !default;
+$toast-stack-gap: 3px !default;
+
 .dx-toast-content {
   display: flex;
-  padding: 10px;
+  padding: $toast-content-padding;
   align-items: center;
 }
 
 .dx-toast-icon {
   display: inline-flex;
   background-size: contain;
-  width: 35px;
-  height: 35px;
+  width: $toast-icon-width;
+  height: $toast-icon-height;
   background-position: left center;
   background-repeat: no-repeat;
-  margin-right: 10px;
+  margin-right: $toast-icon-margin-right;
 }
 
 .dx-toast-message {
@@ -38,7 +47,7 @@
 
 .dx-rtl {
   .dx-toast-icon {
-    margin-left: 10px;
+    margin-left: $toast-icon-margin-left;
     margin-right: 0;
   }
 }
@@ -46,7 +55,7 @@
 .dx-toast-stack {
   position: fixed;
   display: flex;
-  gap: 3px;
+  gap: $toast-stack-gap;
   align-items: center;
   z-index: 9500;
 

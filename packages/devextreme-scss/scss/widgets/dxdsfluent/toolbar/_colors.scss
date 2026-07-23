@@ -1,0 +1,7 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$toolbar-bg: transparent !default;
+$toolbar-color: ds.$color-content-neutral-default-rest !default;
+$toolbar-separator-color: ds.$separator-color !default;

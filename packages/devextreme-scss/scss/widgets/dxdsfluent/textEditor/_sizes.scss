@@ -1,0 +1,87 @@
+@use "sass:math";
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$fluent-texteditor-line-height: null !default;
+$fluent-texteditor-font-size: null !default;
+$fluent-texteditor-input-height: null !default;
+$fluent-texteditor-label-top-offset: null !default;
+$fluent-texteditor-label-outside-top-offset: null !default;
+$fluent-filled-texteditor-input-horizontal-padding: null !default;
+$fluent-filled-texteditor-input-top-padding: null !default;
+$fluent-filled-texteditor-input-bottom-padding: null !default;
+$fluent-standard-texteditor-input-top-padding: null !default;
+$fluent-underlined-editor-button-height: null !default;
+$fluent-texteditor-label-font-size: null !default;
+$fluent-texteditor-label-outside-height: null !default;
+$fluent-standard-texteditor-input-bottom-padding: null !default;
+$fluent-standard-texteditor-with-label-input-top-padding: null !default;
+$fluent-standard-texteditor-with-label-input-bottom-padding: null !default;
+$fluent-filled-texteditor-input-with-label-top-padding: null !default;
+$fluent-filled-texteditor-input-with-label-bottom-padding: null !default;
+$texteditor-icon-container-size: $fluent-base-icon-size !default;
+
+@if $size == "default" {
+  $fluent-texteditor-line-height: 1.428571 !default;
+  $fluent-texteditor-font-size: ds.$font-size-base-md !default;
+  $fluent-texteditor-input-height: ds.$spacing-320 !default;
+  $fluent-texteditor-label-outside-height: ds.$spacing-200 !default;
+  $fluent-texteditor-label-outside-top-offset: ds.$spacing-240 !default;
+  $fluent-texteditor-label-font-size: ds.$font-size-caption-md !default;
+  $fluent-texteditor-label-top-offset: ds.$spacing-minus-10 !default;
+  $fluent-filled-texteditor-input-horizontal-padding: ds.$spacing-120 !default;
+  $fluent-filled-texteditor-input-top-padding: ds.$spacing-50 !default;
+  $fluent-filled-texteditor-input-with-label-top-padding: ds.$spacing-80 !default;
+  $fluent-filled-texteditor-input-bottom-padding: ds.$spacing-50 !default;
+  $fluent-filled-texteditor-input-with-label-bottom-padding: ds.$spacing-20 !default;
+  $fluent-standard-texteditor-input-top-padding: ds.$spacing-50 !default;
+  $fluent-standard-texteditor-input-bottom-padding: ds.$spacing-50 !default;
+  $fluent-standard-texteditor-with-label-input-top-padding: ds.$spacing-90 !default;
+  $fluent-standard-texteditor-with-label-input-bottom-padding: ds.$spacing-30 !default;
+  $fluent-underlined-editor-button-height: ds.$spacing-220 !default;
+}
+
+@else if $size == "compact" {
+  $fluent-texteditor-line-height: 1.3333 !default;
+  $fluent-texteditor-font-size: ds.$font-size-base-sm !default;
+  $fluent-texteditor-input-height: ds.$spacing-240 !default;
+  $fluent-texteditor-label-outside-height: ds.$spacing-160 !default;
+  $fluent-texteditor-label-outside-top-offset: ds.$spacing-180 !default;
+  $fluent-texteditor-label-font-size: ds.$font-size-caption-sm !default;
+  $fluent-texteditor-label-top-offset: ds.$spacing-minus-10 !default;
+  $fluent-filled-texteditor-input-horizontal-padding: ds.$spacing-80 !default;
+  $fluent-filled-texteditor-input-top-padding: ds.$spacing-30 !default;
+  $fluent-filled-texteditor-input-with-label-top-padding: ds.$spacing-60 !default;
+  $fluent-filled-texteditor-input-bottom-padding: ds.$spacing-30 !default;
+  $fluent-filled-texteditor-input-with-label-bottom-padding: 0 !default;
+  $fluent-standard-texteditor-input-top-padding: ds.$spacing-30 !default;
+  $fluent-standard-texteditor-input-bottom-padding: ds.$spacing-30 !default;
+  $fluent-standard-texteditor-with-label-input-top-padding: ds.$spacing-60 !default;
+  $fluent-standard-texteditor-with-label-input-bottom-padding: ds.$spacing-20 !default;
+  $fluent-underlined-editor-button-height: ds.$spacing-220 !default;
+}
+
+$fluent-filled-texteditor-input-padding:
+  $fluent-filled-texteditor-input-top-padding
+  $fluent-filled-texteditor-input-horizontal-padding
+  $fluent-filled-texteditor-input-bottom-padding !default;
+
+$fluent-filled-texteditor-input-button-horizontal-padding: calc(#{$fluent-filled-texteditor-input-horizontal-padding} - #{ds.$spacing-40}) !default;
+$texteditor-spin-button-horizontal-padding: calc((#{$fluent-filled-texteditor-input-horizontal-padding}) / 2) !default;
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-editor-border-width: ds.$border-width-10 !default;
+$fluent-texteditor-before-left: -1px !default; // dx-offscale: -1px
+$fluent-texteditor-before-bottom: -1px !default; // dx-offscale: -1px
+$fluent-texteditor-before-right: -1px !default; // dx-offscale: -1px
+$fluent-texteditor-label-inset: -1px !default; // dx-offscale: -1px
+$fluent-texteditor-label-margin-bottom: -1px !default; // dx-offscale: -1px
+$fluent-texteditor-state-active-border-bottom: ds.$border-width-20 solid !default;
+$fluent-editor-custom-button-margin: ds.$spacing-60 !default;
+$fluent-texteditor-state-focused-border-bottom-width: ds.$border-width-10 !default;
+$fluent-texteditor-state-active-border-bottom-width: ds.$border-width-20 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-texteditor-clear-button-area-width: ds.$spacing-340 !default;

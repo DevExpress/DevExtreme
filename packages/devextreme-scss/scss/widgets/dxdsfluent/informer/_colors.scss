@@ -1,0 +1,8 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$informer-error-color: ds.$color-content-danger-default-rest !default;
+$informer-error-background-color: ds.$color-surface-danger-subdued-rest !default;
+$informer-info-color: ds.$color-content-neutral-default-rest !default;
+$informer-info-background-color: ds.$color-surface-neutral-subdued-rest !default;

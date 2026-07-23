@@ -1,0 +1,33 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$pivotgrid-area-background: ds.$color-surface-neutral-default-rest !default;
+$pivotgrid-border-color: ds.$color-border-neutral-default-rest !default;
+
+$pivotgrid-area-color: ds.$color-content-neutral-default-rest !default;
+$pivotgrid-field-area-box-text-color: $pivotgrid-area-color !default;
+$pivotgrid-field-area-box-background-color: ds.$color-surface-neutral-deep-rest !default;
+$pivotgrid-field-area-box-font-weight: 400 !default;
+$pivotgrid-data-area-color: ds.$color-content-neutral-default-rest !default;
+
+$pivotgrid-totalcolor: ds.$color-surface-neutral-default-rest !default;
+
+$pivotgrid-grandtotalcolor: ds.$color-surface-neutral-deep-rest !default;
+
+$pivotgrid-field-area-text-color: ds.$color-content-neutral-subdued-rest !default;
+$pivotgrid-accent-color: ds.$color-border-primary-default-rest !default;
+$pivotgrid-drag-header-border-color: rgb(from #{ds.$color-border-primary-default-rest} r g b / 0.5) !default;
+$pivotgrid-drag-header-first-shadow-color: ds.$color-shadow-ambient !default;
+$pivotgrid-drag-header-second-shadow-color: ds.$color-shadow-key !default;
+$pivotgrid-position-indicator-color: ds.$color-border-neutral-accessible-rest !default;
+$pivotgrid-chevron-icon-color: $pivotgrid-area-color !default;
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$pivotgrid-accent: ds.$color-content-primary-default-rest !default;
+$pivotgrid-border-color-disabled: ds.$color-border-neutral-default-disabled !default;
+$pivotgrid-text-color: ds.$color-content-neutral-default-rest !default;
+
+// Color computations hoisted from style files (phase 0.5 layer normalization)
+$fluent-pivotgrid-drag-header-shadow: 0 3px 4px ds.$color-shadow-key !default;
+$pivotgrid-area-field-bg: rgb(from #{$pivotgrid-field-area-box-background-color} r g b / 0.9) !default;

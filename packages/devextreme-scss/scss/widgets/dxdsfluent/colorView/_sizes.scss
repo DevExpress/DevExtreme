@@ -1,0 +1,28 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$fluent-colorview-container-width: 450px !default; // dx-offscale: 450px
+$fluent-colorview-palette-width: 288px !default; // dx-offscale: 288px
+$fluent-colorview-palette-height: 299px !default; // dx-offscale: 299px
+$fluent-colorview-alpha-margin: ds.$spacing-100 !default;
+$fluent-colorview-hue-scale-width: ds.$spacing-180 !default;
+$fluent-colorview-hue-scale-margin: ds.$spacing-190 !default;
+$fluent-colorview-color-preview-height: ds.$spacing-400 !default;
+$fluent-colorview-preview-container-margin: ds.$spacing-340 !default;
+
+$fluent-colorview-container-line-height: normal !default;
+$fluent-colorview-container-hex-margin: ds.$spacing-200 0 0 0 !default;
+$fluent-colorview-container-alpha-label-width: 115px !default; // dx-offscale: 115px
+$fluent-colorview-container-alpha-label-margin: 43px !default; // dx-offscale: 43px
+$fluent-colorview-container-textbox-width: 69px !default; // dx-offscale: 69px
+$fluent-colorview-container-textbox-margin: 0 0 0 ds.$spacing-100 !default;
+
+$fluent-colorview-controls-container-width: 90px !default; // dx-offscale: 90px
+$fluent-colorview-controls-container-margin: 27px !default; // dx-offscale: 27px
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-colorview-colorview-container-margin-bottom: ds.$spacing-100 !default;
+$fluent-colorview-colorview-color-preview-container-padding: ds.$spacing-10 !default;
+$fluent-colorview-colorview-color-preview-container-margin: ds.$spacing-10 !default;

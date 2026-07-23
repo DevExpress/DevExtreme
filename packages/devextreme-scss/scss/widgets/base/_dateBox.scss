@@ -3,10 +3,17 @@
 // adduse
 
 
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$datebox-texteditor-height: 20px !default;
+$datebox-popup-content-padding-top: 20px !default;
+$datebox-popup-content-padding-bottom: 20px !default;
+$datebox-button-min-width: 90px !default;
+$datebox-apply-button-margin-right: 10px !default;
+
 .dx-texteditor {
   input[type="date"] {
     &::-webkit-inner-spin-button {
-      height: 20px;
+      height: $datebox-texteditor-height;
     }
   }
 }
@@ -45,8 +52,8 @@
   }
 
   .dx-popup-content {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: $datebox-popup-content-padding-top;
+    padding-bottom: $datebox-popup-content-padding-bottom;
   }
 }
 
@@ -58,10 +65,10 @@
 
 .dx-datebox-button-cell {
   .dx-button {
-    min-width: 90px;
+    min-width: $datebox-button-min-width;
 
     &.dx-datebox-apply-button {
-      margin-right: 10px;
+      margin-right: $datebox-apply-button-margin-right;
       margin-left: 0;
     }
 

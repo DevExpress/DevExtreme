@@ -2,6 +2,10 @@
 
 // adduse
 
+
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$buttongroup-mode-text-column-gap: 1px !default;
+
 .dx-buttongroup {
   display: inline-block;
 }
@@ -13,7 +17,7 @@
   width: 100%;
 
   .dx-buttongroup-mode-text & {
-    column-gap: 1px;
+    column-gap: $buttongroup-mode-text-column-gap;
   }
 }
 

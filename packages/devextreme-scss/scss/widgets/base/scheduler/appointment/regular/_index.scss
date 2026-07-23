@@ -2,6 +2,11 @@
 @use "../../../mixins" as *;
 @use "../../../icon_fonts" as *;
 
+$appointment-icon-font-size: null !default;
+$appointment-date-opacity: null !default;
+$appointment-resizing-opacity: null !default;
+$appointment-disabled-opacity: null !default;
+$appointment-drag-source-opacity: null !default;
 $transparent-top-border: null !default;
 $appointment-base-color: null !default;
 $appointment-text-color: null !default;
@@ -21,11 +26,16 @@ $appointment-dragging-shadow: null !default;
 
 $reduced-icon-offset: null !default;
 
+$appointment-reduced-icon-top: null !default;
+$appointment-active-marker-border-radius: null !default;
+$appointment-content-details-margin-top: null !default;
+$appointment-reduced-icon-rtl-left: null !default;
+
 @mixin dx-appointment-icon($name) {
   @include dx-icon($name);
 
-  top: 3px;
-  font-size: 18px;
+  top: $appointment-reduced-icon-top;
+  font-size: $appointment-icon-font-size;
   position: absolute;
   right: $reduced-icon-offset;
 }
@@ -59,7 +69,7 @@ $reduced-icon-offset: null !default;
       } @else {
         &:not(.dx-scheduler-appointment-has-resource-color):not(.dx-scheduler-appointment-drag-source)::before {
           background-color: $appointment-active-color;
-          border-radius: 4px;
+          border-radius: $appointment-active-marker-border-radius;
         }
 
         &.dx-scheduler-appointment-has-resource-color:not(.dx-scheduler-appointment-drag-source)::before {
@@ -76,13 +86,13 @@ $reduced-icon-offset: null !default;
 }
 
 .dx-scheduler-appointment-content-date {
-  opacity: 0.7;
+  opacity: $appointment-date-opacity;
   display: inline-block;
   white-space: pre-wrap;
 }
 
 .dx-scheduler-appointment-content-details {
-  margin-top: 2px;
+  margin-top: $appointment-content-details-margin-top;
 }
 
 .dx-scheduler-appointment-content-allday {
@@ -130,7 +140,7 @@ $reduced-icon-offset: null !default;
 
   &.dx-resizable-resizing {
     z-index: 1000;
-    opacity: 0.7;
+    opacity: $appointment-resizing-opacity;
   }
 
   .dx-resizable-handle-left {
@@ -146,7 +156,7 @@ $reduced-icon-offset: null !default;
 
     .dx-rtl & {
       right: auto;
-      left: 3px;
+      left: $appointment-reduced-icon-rtl-left;
     }
   }
 
@@ -159,12 +169,12 @@ $reduced-icon-offset: null !default;
 
   &.dx-state-disabled {
     cursor: default;
-    opacity: 0.6;
+    opacity: $appointment-disabled-opacity;
     pointer-events: auto;
   }
 
   &.dx-scheduler-appointment-drag-source {
-    opacity: 0.7;
+    opacity: $appointment-drag-source-opacity;
   }
 }
 

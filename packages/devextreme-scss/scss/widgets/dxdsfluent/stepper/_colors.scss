@@ -1,0 +1,60 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$stepper-step-accent-bg: ds.$color-surface-primary-default-rest !default;
+
+$stepper-step-accent-hover-bg: ds.$color-surface-primary-default-hovered !default;
+
+$stepper-step-danger-bg: ds.$color-surface-danger-default-rest !default;
+
+$stepper-step-danger-hover-bg: ds.$color-surface-danger-default-hovered !default;
+
+$stepper-step-base-bg: ds.$color-surface-neutral-default-rest !default;
+
+$stepper-step-base-hover-bg: ds.$color-surface-neutral-default-hovered !default;
+
+$stepper-step-base-border-color: ds.$color-border-neutral-default-rest !default;
+
+$stepper-step-base-hover-border-color: ds.$color-border-neutral-default-hovered !default;
+
+$stepper-step-base-text-color: ds.$color-content-neutral-default-rest !default;
+
+$stepper-step-base-label-color: ds.$color-content-neutral-default-rest !default;
+
+$stepper-step-selected-bg: $stepper-step-accent-bg !default;
+
+$stepper-step-selected-hover-bg: $stepper-step-accent-hover-bg !default;
+
+$stepper-step-selected-text-color: ds.$color-content-neutral-default-static-dark-rest !default;
+
+$stepper-step-selected-label-color: $stepper-step-accent-bg !default;
+
+$stepper-step-invalid-bg: $stepper-step-base-bg !default;
+
+$stepper-step-invalid-hover-bg: $stepper-step-base-hover-bg !default;
+
+$stepper-step-invalid-border-color: $stepper-step-base-border-color !default;
+
+$stepper-step-invalid-hover-border-color: $stepper-step-base-hover-border-color !default;
+
+$stepper-step-invalid-text-color: $stepper-step-danger-bg !default;
+
+$stepper-step-invalid-hover-text-color: $stepper-step-danger-hover-bg !default;
+
+$stepper-step-invalid-label-color: $stepper-step-danger-bg !default;
+
+$stepper-step-invalid-selected-bg: $stepper-step-danger-bg !default;
+
+$stepper-step-invalid-selected-hover-bg: $stepper-step-danger-hover-bg !default;
+$stepper-step-disabled-shadow: $stepper-step-base-bg !default;
+
+$stepper-step-disabled-bg: ds.$color-surface-neutral-default-disabled !default;
+
+$stepper-step-disabled-text-color: ds.$color-content-neutral-default-disabled !default;
+
+$stepper-connector-bg: ds.$separator-color !default;
+
+$stepper-connector-value-bg: ds.$color-surface-primary-default-rest !default;
+
+$stepper-step-shadow-color: ds.$color-surface-neutral-default-rest !default;

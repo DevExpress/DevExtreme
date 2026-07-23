@@ -1,0 +1,12 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$fluent-dropdownmenu-section-horizontal-margin: ds.$spacing-40 !default;
+$fluent-dropdownmenu-section-row-gap: ds.$spacing-20 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-dropdownmenu-list-min-width: ds.$spacing-1000 !default;
+$fluent-dropdownmenu-list-border-radius: ds.$border-radius-80 !default;
+$fluent-dropdownmenu-popup-content-padding: ds.$spacing-10 !default;

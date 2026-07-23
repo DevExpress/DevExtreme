@@ -1,0 +1,13 @@
+@use "../colors" as *;
+
+// adduse
+
+/*
+ * The clock face and arrows are SVG data-uri images: colors are baked into the
+ * background-image at build time (string replace). CSS var() tokens do NOT resolve inside a
+ * data-uri (they render black), so these stay concrete $base-* values. See DIVERGENCES.md.
+ */
+$clock-digits-color: $base-text-color !default;
+
+$timeview-inverted-bg: $base-inverted-bg !default;
+$timeview-typography-bg: $base-typography-bg !default;

@@ -1,4 +1,5 @@
 @use "sass:math";
+@use "sass:meta";
 
 // stylelint-disable selector-class-pattern
 
@@ -128,7 +129,7 @@
   pointer-events: none;
   position: absolute;
   top: 50%;
-  margin-top: math.div(-$indicator-size, 2);
+  margin-top: if(meta.type-of($indicator-size) == number, math.div(-$indicator-size, 2), calc(#{$indicator-size} / -2));
   width: $indicator-size;
   height: $indicator-size;
 }

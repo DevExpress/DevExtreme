@@ -1,0 +1,37 @@
+@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$filemanager-border-color: ds.$color-border-neutral-default-rest !default;
+$filemanager-file-toolbar-bg: ds.$color-surface-neutral-subdued-rest !default;
+$filemanager-editor-active-bg: rgb(from #{ds.$color-content-neutral-default-rest} r g b / 0.1) !default;
+$filemanager-dirs-tree-item-focus-color: ds.$color-content-neutral-default-rest !default;
+$filemanager-breadcrumbs-item-focus-bg: ds.$color-surface-neutral-default-active !default;
+$filemanager-breadcrumbs-item-focus-color: ds.$color-content-neutral-default-rest !default;
+$filemanager-custom-thumbnail-color: ds.$color-content-neutral-default-disabled !default;
+$filemanager-file-item-select-color: ds.$color-content-neutral-default-inverted-rest !default;
+$filemanager-file-item-select-bg: rgb(from #{ds.$color-surface-primary-default-rest} r g b / 0.8) !default;
+$filemanager-file-item-select-focus-color: ds.$color-content-neutral-default-inverted-rest !default;
+$filemanager-file-item-select-focus-bg: rgb(from #{ds.$color-surface-primary-default-rest} r g b / 0.7) !default;
+$filemanager-file-item-hover-bg: ds.$color-surface-neutral-default-hovered !default;
+$filemanager-file-item-focused-border: ds.$color-border-primary-default-rest !default;
+$filemanager-item-focused-color: ds.$color-content-neutral-default-inverted-rest !default;
+$filemanager-dirs-tree-item-focus-bg: ds.$color-surface-neutral-default-active !default;
+
+/*
+ * The status icons (refresh/progress/done/error overlays) are SVG data-uri images: colors are
+ * baked into the background-image at build time (string replace). CSS var() tokens do NOT
+ * resolve inside a data-uri (they render black), so these stay concrete $base-* values.
+ * See DIVERGENCES.md.
+ */
+$filemanager-icon-color: $base-text-color !default;
+$filemanager-icon-success-color: $base-success !default;
+$filemanager-icon-danger-color: $base-danger !default;
+$filemanager-icon-inverted-color: $base-inverted-text-color !default;
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$filemanager-accent: ds.$color-border-primary-default-rest !default;
+$filemanager-bg: ds.$color-surface-neutral-default-rest !default;
+$filemanager-danger: ds.$color-surface-danger-default-rest !default;
+$filemanager-inverted-text-color: ds.$color-content-neutral-default-static-dark-rest !default;

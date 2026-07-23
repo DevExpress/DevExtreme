@@ -91,7 +91,7 @@ async function main() {
     .browsers(process.env.BROWSERS || 'chrome --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning')
     .concurrency(concurrency || 1)
     .run({
-      quarantineMode: { successThreshold: 1, attemptLimit: 3 },
+      quarantineMode: false, //{ successThreshold: 1, attemptLimit: 3 },
       // @ts-expect-error ts-error
       hooks: {
         test: {

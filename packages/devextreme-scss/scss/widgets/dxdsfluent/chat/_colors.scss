@@ -1,0 +1,60 @@
+@use "../textEditor/colors" as *;
+@use "../button/colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$chat-background-color: ds.$color-surface-neutral-default-rest !default;
+
+$chat-border-color: ds.$color-border-neutral-default-rest !default;
+$chat-messagebox-border-color: $chat-border-color !default;
+$chat-messagebox-file-background-color: $button-normal-text-hover-bg !default;
+$chat-messagebox-file-cancel-button-secondary-color: $button-normal-text-selected-bg !default;
+$chat-message-editing-preview-accent-color: ds.$color-surface-primary-default-rest !default;
+$chat-message-editing-preview-cancel-button-color: $texteditor-label-color !default;
+
+$chat-avatar-color: ds.$color-content-neutral-default-rest !default;
+
+$chat-avatar-background-color: ds.$color-surface-neutral-default-active !default;
+
+$chat-bubble-color-primary: ds.$color-content-neutral-default-rest !default;
+
+$chat-bubble-background-color-primary: ds.$color-surface-primary-subdued-rest !default;
+
+$chat-bubble-color-secondary: ds.$color-content-neutral-default-rest !default;
+
+$chat-bubble-background-color-secondary: ds.$color-surface-neutral-subdued-rest !default;
+
+$chat-information-author-name-color: ds.$color-content-neutral-subdued-rest !default;
+
+$chat-information-timestamp-color: ds.$color-content-neutral-subdued-rest !default;
+
+$chat-messagelist-day-header-color: ds.$color-content-neutral-subdued-rest !default;
+
+$chat-alertlist-color: ds.$color-content-danger-default-rest !default;
+
+$chat-messagelist-empty-icon-color: ds.$color-content-neutral-subdued-rest !default;
+
+$chat-messagelist-empty-icon-background-color: ds.$color-surface-neutral-subdued-rest !default;
+
+$chat-messagelist-empty-message-color: ds.$color-content-neutral-default-rest !default;
+
+$chat-messagelist-empty-prompt-color: ds.$color-content-neutral-subdued-rest !default;
+
+$chat-typingindicator-color: ds.$color-content-neutral-subdued-rest !default;
+
+$chat-typingindicator-circle-bg-color-center: ds.$color-content-neutral-subdued-rest !default;
+
+$chat-typingindicator-circle-bg-color: ds.$color-content-neutral-default-disabled !default;
+
+$chat-file-container-background-color: ds.$color-surface-neutral-default-rest !default;
+$chat-file-container-box-shadow: ds.$box-shadow-sm !default;
+$chat-file-secondary-color: ds.$color-content-neutral-subdued-rest !default;
+
+$chat-suggestions-box-shadow: ds.$box-shadow-md !default;
+
+$chat-typingindicator-bubble-bg-color: $chat-bubble-background-color-secondary !default;
+
+$chat-messagelist-contextmenu-delete-button-color: ds.$color-content-danger-default-rest !default;
+$chat-messagelist-contextmenu-delete-button-focused-color: ds.$color-content-danger-default-rest !default;
+$chat-messagelist-contextmenu-delete-button-focused-bg: ds.$color-surface-neutral-default-hovered !default;

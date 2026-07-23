@@ -3,6 +3,10 @@
 // adduse
 
 
+$calendar-week-day-header-font-size: 10px !default;
+$calendar-week-day-header-font-weight: 500 !default;
+
+$calendar-week-number-cell-width: 2em !default; // dx-relative
 .dx-calendar {
   @include user-select(none);
 
@@ -71,8 +75,8 @@
   }
 
   thead th {
-    font-weight: 500;
-    font-size: 10px;
+    font-weight: $calendar-week-day-header-font-weight;
+    font-size: $calendar-week-day-header-font-size;
 
     @include dx-overflow();
   }
@@ -92,7 +96,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    width: 2em;
+    width: $calendar-week-number-cell-width;
     inset: 0;
   }
 }

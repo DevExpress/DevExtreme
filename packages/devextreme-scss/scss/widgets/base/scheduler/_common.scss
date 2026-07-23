@@ -6,6 +6,9 @@
 $scheduler-appointment-collector-margin: 3px;
 $scheduler-appointment-collector-height: 22px;
 
+$scheduler-common-collector-margin: null !default;
+$scheduler-common-collector-size: null !default;
+
 .dx-scheduler {
   .dx-empty-message {
     line-height: normal;
@@ -49,7 +52,7 @@ $scheduler-appointment-collector-height: 22px;
 }
 
 .dx-scheduler-adaptive .dx-scheduler-appointment-collector {
-  margin: 0 3px;
+  margin: $scheduler-common-collector-margin;
 }
 
 .dx-scheduler-work-space-mouse-selection {
@@ -84,9 +87,9 @@ $scheduler-appointment-collector-height: 22px;
 
   .dx-scheduler-appointment-collector,
   .dx-scheduler-appointment-collector.dx-scheduler-appointment-collector-compact {
-    height: 28px;
-    width: 28px;
-    margin: 0 3px;
+    height: $scheduler-common-collector-size;
+    width: $scheduler-common-collector-size;
+    margin: $scheduler-common-collector-margin;
   }
 
   .dx-scheduler-work-space.dx-scheduler-timeline {

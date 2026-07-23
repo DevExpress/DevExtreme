@@ -1,0 +1,86 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$fluent-pivotgrid-cell-padding: null !default;
+$pivotgrid-common-left-right-padding: null !default;
+$fluent-pivotgrid-expanded-cell-padding: null !default;
+$fluent-pivotgrid-total-text-left-padding: null !default;
+$pivotgrid-header-top-bottom-padding: null !default;
+$pivotgrid-button-top-padding: null !default;
+$area-field-top-bottom-padding: null !default;
+
+$pivotgrid-empty-column-width: ds.$spacing-190 !default;
+$pivotgrid-field-indicators-offset: ds.$spacing-60 !default;
+$pivotgrid-indicators-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
+$pivotgrid-empty-area-text-padding: ds.$spacing-50 !default;
+
+$area-field-border-radius: null !default;
+
+@if $size == "default" {
+  $fluent-pivotgrid-cell-padding: ds.$spacing-100 ds.$spacing-160 !default;
+  $pivotgrid-common-left-right-padding: ds.$spacing-100 !default;
+  $pivotgrid-header-top-bottom-padding: ds.$spacing-140 !default;
+  $fluent-pivotgrid-expanded-cell-padding: ds.$spacing-100 ds.$spacing-140 ds.$spacing-100 ds.$spacing-190 !default;
+  $fluent-pivotgrid-total-text-left-padding: ds.$spacing-220 !default;
+  $pivotgrid-button-top-padding: ds.$spacing-100 !default;
+  $area-field-border-radius: ds.$border-radius-60 !default;
+  $area-field-top-bottom-padding: ds.$spacing-50 !default;
+}
+
+@else if $size == "compact" {
+  $fluent-pivotgrid-cell-padding: ds.$spacing-70 ds.$spacing-110 !default;
+  $pivotgrid-common-left-right-padding: ds.$spacing-80 !default;
+  $pivotgrid-header-top-bottom-padding: ds.$spacing-50 !default;
+  $fluent-pivotgrid-expanded-cell-padding: ds.$spacing-70 ds.$spacing-80 ds.$spacing-70 ds.$spacing-130 !default;
+  $fluent-pivotgrid-total-text-left-padding: ds.$spacing-160 !default;
+  $pivotgrid-button-top-padding: ds.$spacing-50 !default;
+  $area-field-border-radius: ds.$border-radius-40 !default;
+  $area-field-top-bottom-padding: ds.$spacing-10 !default;
+}
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-pivotgrid-headers-font-size: ds.$font-size-title-xs !default;
+$fluent-pivotgrid-area-font-size: 13px !default; // dx-offscale: 13px
+$fluent-pivotgrid-area-field-line-height: ds.$line-height-base-md !default;
+$fluent-pivotgrid-header-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)
+$fluent-pivotgrid-expanded-padding: 0 ds.$spacing-50 0 ds.$spacing-100 !default;
+$fluent-pivotgrid-toolbar-padding-left: ds.$spacing-80 !default;
+$fluent-pivotgrid-area-fields-margin-top: ds.$spacing-80 !default;
+$fluent-pivotgrid-treeview-node-container-padding-right: ds.$spacing-80 !default;
+$fluent-pivotgrid-checkbox-left: ds.$spacing-80 !default;
+$fluent-pivotgrid-treeview-item-padding: ds.$spacing-90 ds.$spacing-80 !default;
+$fluent-pivotgrid-icon-margin: 0 ds.$spacing-50 -1px 0 !default; // dx-offscale: -1px
+$fluent-pivotgrid-area-box-border: ds.$border-width-10 solid !default;
+$fluent-pivotgrid-chevron-icon-size: ds.$spacing-200 !default;
+$fluent-pivotgridfieldchooser-field-min-height: ds.$spacing-360 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-pivotgrid-position-indicator-vertical-height: ds.$spacing-20 !default;
+$fluent-pivotgrid-position-indicator-horizontal-width: ds.$spacing-20 !default;
+$fluent-pivotgrid-position-indicator-last-margin-left: ds.$spacing-30 !default;
+$fluent-pivotgrid-area-box-margin-bottom: ds.$spacing-40 !default;
+$fluent-pivotgrid-expand-icon-container-outline: ds.$spacing-20 solid !default;
+$fluent-pivotgrid-toolbar-margin-right: ds.$spacing-100 !default;
+$fluent-pivotgrid-field-chooser-button-margin-right: ds.$spacing-40 !default;
+$fluent-pivotgrid-button-margin: ds.$spacing-10 !default;
+$fluent-pivotgrid-last-cell-min-width: 50px !default; // dx-offscale: 50px
+$fluent-pivotgrid-icon-sorted-margin-left: ds.$spacing-50 !default;
+$fluent-pivotgrid-fields-area-head-padding: 0 ds.$spacing-20 !default;
+$fluent-pivotgrid-treeview-search-margin: ds.$spacing-50 !default;
+$fluent-pivotgrid-area-padding: ds.$spacing-50 !default;
+$fluent-pivotgrid-area-fields-margin-top-2: ds.$spacing-30 !default;
+$fluent-pivotgrid-position-indicator-last-margin-left-2: ds.$spacing-10 !default;
+$fluent-pivotgrid-toolbar-margin-left: ds.$spacing-100 !default;
+$fluent-pivotgrid-field-chooser-button-margin-left: ds.$spacing-40 !default;
+$fluent-pivotgrid-fields-area-head-padding-left: ds.$spacing-20 !default;
+$fluent-pivotgrid-icon-sorted-margin-right: ds.$spacing-50 !default;
+
+// Base submodule sizing injected with design tokens (B2 tail)
+$fluent-pivotgrid-common-field-chooser-drag-width: ds.$spacing-1000 !default;
+$fluent-pivotgrid-common-field-chooser-drag-height: ds.$spacing-1000 !default;
+
+// B2 tail: pivotGrid cell side paddings
+$fluent-pivotgrid-header-cell-side-padding: ds.$spacing-20 !default;
+$fluent-pivotgrid-fields-area-head-cell-side-padding: ds.$spacing-20 !default;

@@ -1,0 +1,172 @@
+@use "sass:math";
+@use "../textEditor/colors" as *;
+@use "../common/sizes" as *;
+@use "../sizes" as *;
+@use "../typography/sizes" as *;
+@use "../popup/sizes" as *;
+@use "../button/colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$chat-border-radius: calc(#{$base-border-radius} * 3) !default;
+$chat-bubble-border-radius: null !default;
+$chat-bubble-padding: null !default;
+$chat-bubble-container-gap: ds.$spacing-40 !default;
+$chat-bubble-delete-gap: null !default;
+$chat-bubble-delete-icon-size: null !default;
+$chat-messagebox-padding: null !default;
+$chat-messagebox-textarea-padding: null !default;
+$chat-messagebox-textarea-border-radius: null !default;
+$chat-messagebox-toolbar-min-height: null !default;
+$chat-messagebox-gap: ds.$spacing-80 !default;
+$chat-messagebox-files-container-padding: ds.$spacing-30 !default;
+$chat-messagebox-files-container-padding-top: ds.$spacing-20 !default;
+$chat-messagelist-padding: null !default;
+$chat-messagegroup-gap: ds.$spacing-40 !default;
+$chat-messagegroup-padding: null !default;
+$chat-information-gap: ds.$spacing-80 !default;
+$chat-avatar-size: ds.$spacing-320 !default;
+$chat-messagegroup-alignment-start-template: auto 82.5% 1fr !default;
+$chat-messagegroup-alignment-start-gap: ds.$spacing-120 !default;
+$chat-information-font-size: ds.$font-size-caption-md !default;
+$chat-information-icon-size: ds.$spacing-120 !default;
+$chat-information-edited-gap: ds.$spacing-20 !default;
+
+$chat-alerts-padding-block: null !default;
+$chat-alerts-padding-inline: ds.$spacing-80 !default;
+$chat-alerts-row-gap: null !default;
+$chat-alert-padding-block: null !default;
+
+$chat-suggestions-padding: null !default;
+$chat-suggestions-border-width: $fluent-base-border-width !default;
+$chat-suggestions-button-border-radius: $button-border-radius !default;
+$chat-suggestions-button-max-width: 200px !default; // dx-offscale: 200px
+$chat-suggestions-gap: ds.$spacing-120 !default;
+
+$chat-message-editing-preview-caption-font-size: $fluent-xs-font-size !default;
+$chat-message-editing-preview-content-row-gap: null !default;
+$chat-message-editing-preview-content-padding-inline: null !default;
+$chat-message-editing-preview-border-width: ds.$border-width-30 !default;
+
+$chat-messagelist-empty-icon-box-size: null !default;
+$chat-messagelist-empty-icon-size: null !default;
+$chat-messagelist-empty-icon-margin-bottom: null !default;
+$chat-messagelist-empty-row-gap: null !default;
+$chat-messagelist-empty-message-font-size: null !default;
+$chat-messagelist-empty-prompt-font-size: null !default;
+$chat-messagelist-day-header-padding-bottom: ds.$spacing-120 !default;
+$chat-messagelist-day-header-first-padding-top: ds.$spacing-200 !default;
+$chat-messagelist-day-header-font-size: ds.$font-size-caption-md !default;
+
+$chat-typingindicator-template: $chat-messagegroup-alignment-start-template !default;
+$chat-typingindicator-padding: null !default;
+$chat-typingindicator-row-gap: $chat-messagegroup-gap !default;
+$chat-typingindicator-font-size: $chat-information-font-size !default;
+$chat-typingindicator-bubble-padding-block: null !default;
+$chat-typingindicator-bubble-padding-inline: null !default;
+$chat-typingindicator-bubble-border-radius: null !default;
+$chat-typingindicator-bubble-column-gap: ds.$spacing-40 !default;
+$chat-typingindicator-circle-size: null !default;
+$chat-typingindicator-circle-size-center: null !default;
+$chat-typingindicator-circle-border-radius: 999em !default;
+
+$chat-confirmation-popup-content-padding: $fluent-popup-content-vertical-padding !default;
+$chat-confirmation-popup-toolbar-padding-block: $fluent-popup-content-withtitle-bottom-padding !default;
+$chat-confirmation-popup-toolbar-padding-inline: $fluent-popup-content-withtitle-top-padding !default;
+$chat-confirmation-popup-toolbar-gap: null !default;
+
+$chat-file-container-width: 17.14em !default;
+$chat-file-container-padding: ds.$spacing-70 ds.$spacing-80 !default;
+$chat-file-container-border-radius: $fluent-base-border-radius !default;
+$chat-file-button-size: $fluent-button-height !default;
+$chat-file-secondary-font-size: ds.$font-size-caption-sm !default;
+$chat-file-base-section-gap: ds.$spacing-40 !default;
+$chat-file-size-max-width: 4em !default;
+$chat-file-icon-font-size: null !default;
+$chat-file-view-items-gap: ds.$spacing-80 !default;
+$chat-bubble-gap: ds.$spacing-80 !default;
+
+@if $size == "default" {
+  $chat-bubble-border-radius: calc(#{$fluent-base-border-radius} * 3) !default;
+  $chat-bubble-padding: ds.$spacing-80 ds.$spacing-120 !default;
+  $chat-bubble-delete-gap: ds.$spacing-40 !default;
+  $chat-bubble-delete-icon-size: ds.$spacing-200 !default;
+  $chat-messagebox-padding: ds.$spacing-200 !default;
+  $chat-messagebox-textarea-border-radius: ds.$border-radius-80 !default;
+  $chat-messagebox-textarea-padding: ds.$spacing-120 !default;
+  $chat-messagebox-toolbar-min-height: ds.$spacing-320 !default;
+  $chat-messagelist-padding: ds.$spacing-200 !default;
+  $chat-messagegroup-padding: ds.$spacing-240 !default;
+
+  $chat-alerts-padding-block: ds.$spacing-120 !default;
+  $chat-alerts-row-gap: ds.$spacing-20 !default;
+  $chat-alert-padding-block: ds.$spacing-60 !default;
+
+  $chat-suggestions-padding: ds.$spacing-200 !default;
+
+  $chat-message-editing-preview-content-padding-inline: ds.$spacing-120 !default;
+  $chat-message-editing-preview-content-row-gap: ds.$spacing-40 !default;
+
+  $chat-messagelist-empty-icon-box-size: ds.$spacing-640 !default;
+  $chat-messagelist-empty-icon-size: ds.$spacing-400 !default;
+  $chat-messagelist-empty-icon-margin-bottom: ds.$spacing-120 !default;
+  $chat-messagelist-empty-row-gap: ds.$spacing-40 !default;
+  $chat-messagelist-empty-message-font-size: ds.$font-size-180 !default; // dx-no-semantic-role: 180 is off the font-size-role scale
+  $chat-messagelist-empty-prompt-font-size: ds.$font-size-base-md !default;
+
+  $chat-typingindicator-circle-size: math.div(8, 14) * 1em !default;
+  $chat-typingindicator-circle-size-center: math.div(12, 14) * 1em !default;
+  $chat-typingindicator-bubble-padding-block: ds.$spacing-120 !default;
+  $chat-typingindicator-bubble-padding-inline: ds.$spacing-200 !default;
+  $chat-typingindicator-padding: $chat-messagegroup-padding !default;
+  $chat-typingindicator-bubble-border-radius: $chat-bubble-border-radius !default;
+
+  $chat-confirmation-popup-toolbar-gap: ds.$spacing-80 !default;
+
+  $chat-file-icon-font-size: ds.$font-size-200 !default; // dx-icon-glyph-size: text roles not applicable
+}
+
+@else if $size == "compact" {
+  $chat-bubble-border-radius: calc(#{$fluent-base-border-radius} * 2) !default;
+  $chat-bubble-padding: ds.$spacing-60 ds.$spacing-80 !default;
+  $chat-bubble-delete-gap: ds.$spacing-20 !default;
+  $chat-bubble-delete-icon-size: ds.$spacing-160 !default;
+  $chat-messagebox-padding: ds.$spacing-160 !default;
+  $chat-messagebox-textarea-border-radius: ds.$border-radius-80 !default;
+  $chat-messagebox-textarea-padding: ds.$spacing-80 !default;
+  $chat-messagebox-toolbar-min-height: ds.$spacing-240 !default;
+  $chat-messagelist-padding: ds.$spacing-160 !default;
+  $chat-messagegroup-padding: ds.$spacing-120 !default;
+
+  $chat-alerts-padding-block: ds.$spacing-80 !default;
+  $chat-alerts-row-gap: ds.$spacing-20 !default;
+  $chat-alert-padding-block: ds.$spacing-50 !default;
+
+  $chat-suggestions-padding: ds.$spacing-160 !default;
+
+  $chat-message-editing-preview-content-padding-inline: ds.$spacing-80 !default;
+  $chat-message-editing-preview-content-row-gap: ds.$spacing-20 !default;
+
+  $chat-messagelist-empty-icon-box-size: ds.$spacing-480 !default;
+  $chat-messagelist-empty-icon-size: ds.$spacing-320 !default;
+  $chat-messagelist-empty-icon-margin-bottom: ds.$spacing-140 !default;
+  $chat-messagelist-empty-row-gap: ds.$spacing-20 !default;
+  $chat-messagelist-empty-message-font-size: ds.$font-size-140 !default; // dx-no-semantic-role: default branch (180) is off the role scale
+  $chat-messagelist-empty-prompt-font-size: ds.$font-size-base-sm !default;
+
+  $chat-typingindicator-circle-size: math.div(8, 12) * 1em !default;
+  $chat-typingindicator-circle-size-center: math.div(12, 12) * 1em !default;
+  $chat-typingindicator-bubble-padding-block: ds.$spacing-80 !default;
+  $chat-typingindicator-bubble-padding-inline: ds.$spacing-120 !default;
+  $chat-typingindicator-padding: $chat-messagegroup-padding !default;
+  $chat-typingindicator-bubble-border-radius: $chat-bubble-border-radius !default;
+
+  $chat-confirmation-popup-toolbar-gap: ds.$spacing-40 !default;
+
+  $chat-file-icon-font-size: ds.$font-size-160 !default; // dx-icon-glyph-size: text roles not applicable
+}
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-chat-file-name-font-weight: ds.$font-weight-base-strong !default;
+$fluent-chat-editing-preview-caption-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)

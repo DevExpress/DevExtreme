@@ -1,0 +1,22 @@
+@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+// Dropdown/overlay shadow layer colors (mode-aware via the shadow roles).
+$base-dropdown-shadow-color1: ds.$color-shadow-ambient !default;
+$base-dropdown-shadow-color2: ds.$color-shadow-key !default;
+
+$common-accent: ds.$color-surface-primary-default-rest !default;
+$common-bg: ds.$color-surface-neutral-default-rest !default;
+$common-border-color: ds.$color-border-neutral-default-rest !default;
+
+// Non-color theme-level values (opacity/font family) — kept referencing the theme layer.
+$common-disabled-opacity: $base-disabled-opacity !default;
+$common-font-family: $base-font-family !default;
+$common-invalid-color: ds.$color-border-danger-default-rest !default;
+$common-inverted-text-color: ds.$color-content-neutral-default-static-dark-rest !default;
+$common-success: ds.$color-surface-success-default-rest !default;
+$common-text-color: ds.$color-content-neutral-default-rest !default;
+$common-typography-bg: ds.$color-surface-neutral-default-rest !default;
+$common-typography-color: ds.$color-content-neutral-default-rest !default;

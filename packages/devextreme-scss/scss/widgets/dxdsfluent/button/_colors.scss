@@ -1,0 +1,162 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$button-border-radius: $base-border-radius !default;
+$button-disabled-background: ds.$button-contained-color-bg-disabled !default;
+$button-disabled-icon-opacity: 0.6 !default;
+$button-shadow-color: ds.$color-shadow-key !default;
+
+$button-normal-color: ds.$button-outline-color-content-rest !default;
+
+$button-normal-bg: ds.$button-outline-color-bg-rest !default;
+
+$button-normal-outlined-bg: transparent !default;
+
+$button-normal-text-bg: transparent !default;
+
+$button-normal-selected-color: ds.$button-outline-color-content-rest !default;
+
+$button-normal-hover-bg: ds.$button-outline-color-bg-hovered !default;
+
+$button-normal-focused-bg: ds.$button-outline-color-bg-hovered !default;
+
+$button-normal-active-bg: ds.$button-outline-color-bg-active !default;
+
+$button-normal-selected-bg: ds.$color-surface-neutral-alpha-selected !default;
+
+$button-default-color: ds.$button-contained-color-content-rest !default;
+
+$button-default-bg: ds.$button-contained-color-bg-rest !default;
+
+$button-default-selected-color: ds.$button-contained-color-content-rest !default;
+
+$button-default-hover-bg: ds.$button-contained-color-bg-hovered !default;
+
+$button-default-focused-bg: ds.$button-contained-color-bg-hovered !default;
+
+$button-default-active-bg: ds.$button-contained-color-bg-active !default;
+
+$button-default-selected-bg: ds.$color-surface-primary-default-selected !default;
+
+$button-default-outlined-color: ds.$color-content-primary-default-rest !default;
+$button-default-outlined-border-color: ds.$color-border-primary-default-rest !default;
+
+$button-default-outlined-bg: transparent !default;
+$button-default-outlined-hover-bg: ds.$color-surface-primary-deep-hovered !default;
+$button-default-outlined-focused-bg: ds.$color-surface-primary-deep-hovered !default;
+$button-default-outlined-active-bg: ds.$color-surface-primary-deep-active !default;
+$button-default-outlined-selected-bg: ds.$color-surface-primary-deep-selected !default;
+
+$button-default-text-color: ds.$color-content-primary-default-rest !default;
+
+$button-danger-color: ds.$button-contained-color-content-rest !default;
+
+$button-danger-bg: ds.$color-surface-danger-default-rest !default;
+
+$button-danger-selected-color: ds.$button-contained-color-content-rest !default;
+
+$button-danger-hover-bg: ds.$color-surface-danger-default-hovered !default;
+
+$button-danger-focused-bg: ds.$color-surface-danger-default-hovered !default;
+
+$button-danger-active-bg: ds.$color-surface-danger-default-active !default;
+
+$button-danger-selected-bg: ds.$color-surface-danger-default-selected !default;
+
+$button-danger-outlined-color: ds.$color-content-danger-default-rest !default;
+$button-danger-outlined-border-color: ds.$color-border-danger-default-rest !default;
+$button-danger-outlined-color-hover: ds.$color-content-danger-default-hovered !default;
+$button-danger-outlined-color-active: ds.$color-content-danger-default-active !default;
+$button-danger-outlined-selected-color: ds.$color-content-danger-default-hovered !default;
+$button-danger-outlined-bg: transparent !default;
+$button-danger-outlined-hover-bg: ds.$color-surface-danger-deep-hovered !default;
+$button-danger-outlined-focused-bg: ds.$color-surface-danger-deep-hovered !default;
+$button-danger-outlined-active-bg: ds.$color-surface-danger-deep-active !default;
+$button-danger-outlined-selected-bg: ds.$color-surface-danger-deep-selected !default;
+
+$button-success-color: ds.$button-contained-color-content-rest !default;
+
+$button-success-bg: ds.$color-surface-success-default-rest !default;
+
+$button-success-selected-color: ds.$button-contained-color-content-rest !default;
+
+$button-success-hover-bg: ds.$color-surface-success-default-hovered !default;
+
+$button-success-focused-bg: ds.$color-surface-success-default-hovered !default;
+
+$button-success-active-bg: ds.$color-surface-success-default-active !default;
+
+$button-success-selected-bg: ds.$color-surface-success-default-selected !default;
+
+$button-success-outlined-color: ds.$color-content-success-default-rest !default;
+$button-success-outlined-border-color: ds.$color-border-success-default-rest !default;
+$button-success-outlined-color-hover: ds.$color-content-success-default-hovered !default;
+$button-success-outlined-color-active: ds.$color-content-success-default-active !default;
+$button-success-outlined-selected-color: ds.$color-content-success-default-hovered !default;
+$button-success-outlined-bg: transparent !default;
+$button-success-outlined-hover-bg: ds.$color-surface-success-deep-hovered !default;
+$button-success-outlined-focused-bg: ds.$color-surface-success-deep-hovered !default;
+$button-success-outlined-active-bg: ds.$color-surface-success-deep-active !default;
+$button-success-outlined-selected-bg: ds.$color-surface-success-deep-selected !default;
+
+$button-default-icon-color: $button-default-color !default;
+$button-normal-icon-color: $button-normal-color !default;
+$button-danger-icon-color: $button-danger-color !default;
+$button-success-icon-color: $button-success-color !default;
+
+$button-disabled-text-color: ds.$button-contained-color-content-disabled !default;
+
+$button-normal-outlined-hover-bg: $button-normal-hover-bg !default;
+$button-normal-outlined-focused-bg: $button-normal-focused-bg !default;
+$button-normal-outlined-active-bg: $button-normal-active-bg !default;
+$button-normal-outlined-selected-bg: $button-normal-selected-bg !default;
+
+$button-normal-text-hover-bg: $button-normal-hover-bg !default;
+$button-normal-text-focused-bg: $button-normal-focused-bg !default;
+$button-normal-text-active-bg: $button-normal-active-bg !default;
+$button-normal-text-selected-bg: $button-normal-selected-bg !default;
+
+$button-default-outlined-color-hover: ds.$color-content-primary-default-hovered !default;
+
+$button-default-outlined-color-active: ds.$color-content-primary-default-active !default;
+
+$button-default-outlined-selected-color: ds.$color-content-primary-default-hovered !default;
+
+$button-default-text-color-hover: ds.$color-content-primary-default-hovered !default;
+
+$button-default-text-color-active: $button-default-outlined-color-active !default;
+
+$button-default-text-selected-color: ds.$color-content-primary-default-hovered !default;
+
+$button-default-text-bg: transparent !default;
+$button-default-text-hover-bg: $button-default-outlined-hover-bg !default;
+$button-default-text-focused-bg: $button-default-outlined-focused-bg !default;
+$button-default-text-active-bg: $button-default-outlined-active-bg !default;
+$button-default-text-selected-bg: $button-default-outlined-selected-bg !default;
+
+$button-danger-text-color: $button-danger-outlined-color !default;
+$button-danger-text-color-hover: $button-danger-outlined-color-hover !default;
+$button-danger-text-color-active: $button-danger-outlined-color-active !default;
+$button-danger-text-selected-color: $button-danger-outlined-selected-color !default;
+
+$button-danger-text-bg: transparent !default;
+$button-danger-text-hover-bg: $button-danger-outlined-hover-bg !default;
+$button-danger-text-focused-bg: $button-danger-outlined-focused-bg !default;
+$button-danger-text-active-bg: $button-danger-outlined-active-bg !default;
+$button-danger-text-selected-bg: $button-danger-outlined-selected-bg !default;
+
+$button-success-text-color: $button-success-outlined-color !default;
+$button-success-text-color-hover: $button-success-outlined-color-hover !default;
+$button-success-text-color-active: $button-success-outlined-color-active !default;
+$button-success-text-selected-color: $button-success-outlined-selected-color !default;
+
+$button-success-text-bg: transparent !default;
+$button-success-text-hover-bg: $button-success-outlined-hover-bg !default;
+$button-success-text-focused-bg: $button-success-outlined-hover-bg !default;
+$button-success-text-active-bg: $button-success-outlined-active-bg !default;
+$button-success-text-selected-bg: $button-success-outlined-selected-bg !default;
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$button-border-color: ds.$button-outline-color-border-rest !default;

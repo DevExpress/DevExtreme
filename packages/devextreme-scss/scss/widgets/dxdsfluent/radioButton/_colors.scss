@@ -1,0 +1,5 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$radiobutton-foreground-disabled: ds.$color-content-neutral-default-disabled !default;

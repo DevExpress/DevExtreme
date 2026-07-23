@@ -1,6 +1,11 @@
 // adduse
 
 
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$gantt-toolbar-separator-border-left: 1px solid transparent !default;
+$gantt-splitter-bar-width: 2px !default;
+$gantt-view-min-width: 1px !default;
+
 .dx-gantt {
   display: flex;
   flex-direction: column;
@@ -22,7 +27,7 @@
   .dx-gantt-toolbar-separator {
     display: table;
     height: 100%;
-    border-left: 1px solid transparent;
+    border-left: $gantt-toolbar-separator-border-left;
   }
 
   .dx-gantt-si {
@@ -45,14 +50,14 @@
   }
 
   .dx-splitter-wrapper .dx-splitter-border .dx-splitter-bar {
-    width: 2px;
+    width: $gantt-splitter-bar-width;
   }
 
   .dx-gantt-view {
     -webkit-user-select: none; // stylelint-disable-line property-no-vendor-prefix
     user-select: none;
     width: 100%;
-    min-width: 1px;
+    min-width: $gantt-view-min-width;
 
     .dx-gantt-tac-hb {
       margin-top: -1px;

@@ -1,0 +1,18 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$fluent-radiobutton-size: ds.$spacing-160 !default;
+$fluent-radiobutton-dot-size: ds.$spacing-100 !default;
+
+$fluent-radiobutton-border-width: ds.$border-width-10 !default;
+$fluent-radio-value-container-padding: null !default;
+
+@if $size == "default" {
+  $fluent-radio-value-container-padding: ds.$spacing-120 !default;
+}
+
+@else if $size == "compact" {
+  $fluent-radio-value-container-padding: ds.$spacing-80 !default;
+}

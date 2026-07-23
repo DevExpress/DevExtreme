@@ -1,0 +1,140 @@
+@use "sass:color";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../common/sizes" as *;
+@use "../../base/filterBuilder" as * with (
+  $filterbuilder-action-icon-margin-left: $fluent-filterbuilder-action-icon-margin-left,
+  $filterbuilder-action-icon-margin-right: $fluent-filterbuilder-action-icon-margin-right,
+  $filterbuilder-group-content-padding-right: $fluent-filterbuilder-group-content-padding-right,
+  $filterbuilder-range-separator-margin: $fluent-filterbuilder-range-separator-margin,
+  $filterbuilder-item-value-text-min-width: $fluent-filterbuilder-item-value-text-min-width,
+  $filterbuilder-item-value-text-padding: $fluent-filterbuilder-item-value-text-padding,
+  $filterbuilder-action-icon-padding: $fluent-filterbuilder-action-icon-padding,
+  $filterbuilder-group-content-padding-left: $fluent-filterbuilder-group-content-padding-left,
+  $filterbuilder-treeview-item-padding-left: $fluent-filterbuilder-treeview-item-padding-left,
+  $filterbuilder-treeview-item-padding-right: $fluent-filterbuilder-treeview-item-padding-right,
+  $filterbuilder-treeview-node-margin-left: $fluent-filterbuilder-treeview-node-margin-left,
+  $filterbuilder-treeview-node-margin-right: $fluent-filterbuilder-treeview-node-margin-right,
+  $filterbuilder-scrollable-max-height: $fluent-filterbuilder-scrollable-max-height,
+  $filterbuilder-range-separator-opacity: $fluent-filterbuilder-range-separator-opacity,
+    $filterbuilder-bg: $filterbuilder-bg,
+    $filterbuilder-text-color: $filterbuilder-text-color,
+    $filterbuilder-text-focus-color: $filterbuilder-text-focus-color,
+    $filterbuilder-group-operation-color: $filterbuilder-group-operation-color,
+    $filterbuilder-group-operation-hover-color: $filterbuilder-group-operation-hover-color,
+    $filterbuilder-group-operation-focus-color: $filterbuilder-group-operation-focus-color,
+    $filterbuilder-item-operator-color: $filterbuilder-item-operator-color,
+    $filterbuilder-item-operator-hover-color: $filterbuilder-item-operator-hover-color,
+    $filterbuilder-item-operator-focus-color: $filterbuilder-item-operator-focus-color,
+    $filterbuilder-item-field-color: $filterbuilder-item-field-color,
+    $filterbuilder-item-field-hover-color: $filterbuilder-item-field-hover-color,
+    $filterbuilder-item-field-focus-color: $filterbuilder-item-field-focus-color,
+    $filterbuilder-item-value-color: $filterbuilder-item-value-color,
+    $filterbuilder-item-value-hover-color: $filterbuilder-item-value-hover-color,
+    $filterbuilder-item-value-focus-color: $filterbuilder-item-value-focus-color,
+    $filterbuilder-plus-icon-color: $filterbuilder-plus-icon-color,
+    $filterbuilder-plus-icon-hover-color: $filterbuilder-plus-icon-hover-color,
+    $filterbuilder-plus-icon-focus-color: $filterbuilder-plus-icon-focus-color,
+    $filterbuilder-remove-icon-color: $filterbuilder-remove-icon-color,
+    $filterbuilder-remove-icon-hover-color: $filterbuilder-remove-icon-hover-color,
+    $filterbuilder-remove-icon-focus-color: $filterbuilder-remove-icon-focus-color,
+    $filterbuilder-menu-icon-color: $filterbuilder-menu-icon-color,
+);
+@use "../textEditor/colors" as *;
+
+// adduse
+
+
+.dx-filterbuilder {
+  .dx-filterbuilder-action-icon {
+    font-size: $fluent-filterbuilder-action-icon-font-size;
+  }
+
+  .dx-filterbuilder-group {
+    .dx-filterbuilder-group-item {
+      .dx-filterbuilder-action.dx-filterbuilder-action-icon {
+        padding: $fluent-filterbuilder-icon-padding;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .dx-filterbuilder-item-value {
+    .dx-editor-filled,
+    .dx-editor-outlined {
+      .dx-texteditor-input {
+        padding: $fluent-filterbuilder-filled-editor-padding;
+      }
+    }
+  }
+
+  .dx-filterbuilder-text,
+  .dx-filterbuilder-item-value-text {
+    border-radius: $fluent-filterbuilder-text-border-radius;
+  }
+}
+
+.dx-filterbuilder-range-separator {
+  color: $texteditor-color;
+}
+
+.dx-filterbuilder-overlay {
+  &.dx-popup-wrapper > .dx-overlay-content {
+    box-shadow: $fluent-base-dropdown-widgets-shadow;
+  }
+
+  &.dx-filterbuilder-operations {
+    .dx-rtl {
+      .dx-treeview-item {
+        padding-right: $fluent-filterbuilder-treeview-item-left-padding;
+      }
+    }
+  }
+
+  .dx-treeview-node {
+    .dx-treeview-node-container-opened {
+      margin-left: $fluent-filterbuilder-treeview-item-left-padding;
+    }
+  }
+
+  .dx-treeview-item {
+    padding: $fluent-filterbuilder-treeview-item-padding;
+    min-height: $fluent-filterbuilder-treeview-item-min-heigth;
+
+    .dx-icon {
+      margin-right: $fluent-filterbuilder-icon-margin-right;
+    }
+  }
+
+  .dx-treeview-toggle-item-visibility {
+    left: $fluent-filterbuilder-treeview-toggle-left;
+  }
+
+  .dx-rtl {
+    .dx-treeview-node {
+      > .dx-treeview-item {
+        padding-right: calc(#{$fluent-filterbuilder-treeview-item-left-padding} * 2);
+      }
+
+      &.dx-treeview-node-is-leaf > .dx-treeview-item {
+        padding-right: $fluent-filterbuilder-treeview-item-left-padding;
+      }
+
+      .dx-treeview-node-container-opened {
+        margin-right: $fluent-filterbuilder-treeview-item-left-padding;
+        margin-left: 0;
+      }
+    }
+
+    .dx-treeview-item {
+      .dx-icon {
+        margin-left: $fluent-filterbuilder-icon-margin-left;
+      }
+    }
+
+    .dx-treeview-toggle-item-visibility {
+      right: $fluent-filterbuilder-treeview-toggle-item-visibility-right;
+    }
+  }
+}

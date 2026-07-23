@@ -49,7 +49,9 @@ const removeAllCommentsFromContent = (content: string): string => content
 
 const extractVariables = (filePath: string): string[] => {
   const content = removeAllCommentsFromContent(readFileSync(filePath, 'utf8'));
-  const regex = new RegExp(`\\$[${VAR_NAME_CHARS}]+`, 'g');
+  // `ds.$…` references point to the generated design-tokens module
+  // (scss/_design-system/variables/_ds.scss) and are not theme-local variables.
+  const regex = new RegExp(`(?<!ds\\.)\\$[${VAR_NAME_CHARS}]+`, 'g');
   return content.match(regex) ?? [];
 };
 
@@ -85,7 +87,7 @@ test('There are no unused images in repository', () => {
   expect(fullImagesFileList).toEqual(usedImagesFileList);
 });
 
-['generic', 'material', 'fluent'].forEach((themeName) => {
+['generic', 'material', 'fluent', 'dxdsfluent'].forEach((themeName) => {
   test(`There are no unused variables in ${themeName} SCSS files`, () => {
     const baseScssFiles = getFilesFromDirectory(join('scss', 'widgets', 'base'), ['.scss'])
       .map((fileName) => resolve(fileName));
@@ -102,10 +104,16 @@ test('There are no unused images in repository', () => {
 
     const uniqueVariables = findUniqueVariables(variables);
 
-    const exclusions: { generic: string[]; material: string[]; fluent: string[] } = {
+    const exclusions: {
+      generic: string[];
+      material: string[];
+      fluent: string[];
+      dxdsfluent: string[];
+    } = {
       generic: [],
       material: [],
       fluent: [],
+      dxdsfluent: [],
     };
 
     expect(uniqueVariables).toEqual(exclusions[themeName]);

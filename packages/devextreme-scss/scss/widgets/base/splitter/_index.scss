@@ -1,5 +1,9 @@
 
 // adduse
+
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$splitter-resize-handle-gap: 8px !default;
+
 .dx-splitter {
   display: flex;
   height: 100%;
@@ -31,7 +35,7 @@
   flex: 0 0 auto;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: $splitter-resize-handle-gap;
   overflow: hidden;
   user-select: none;
 

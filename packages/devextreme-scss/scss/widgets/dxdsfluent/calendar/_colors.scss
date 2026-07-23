@@ -1,0 +1,29 @@
+@use "../button/colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$calendar-color: ds.$color-content-neutral-default-rest !default;
+
+$calendar-navigator-text-color: $button-normal-color !default;
+
+$calendar-header-color: $calendar-color !default;
+
+$calendar-cell-other-color: ds.$color-content-neutral-subdued-rest !default;
+$calendar-bg: transparent !default;
+$calendar-hover-bg: $button-default-outlined-selected-bg !default;
+$calendar-cell-hover-border-color: $calendar-hover-bg !default;
+$calendar-cell-hover-color: $calendar-color !default;
+
+$calendar-cell-selected-bg: ds.$color-surface-primary-default-rest !default;
+$calendar-cell-selected-color: ds.$color-content-neutral-default-static-dark-rest !default;
+$calendar-cell-contoured-border-radius: 50% !default;
+$calendar-cell-active-bg: $button-default-outlined-active-bg !default;
+$calendar-cell-contoured-border-color: $calendar-cell-active-bg !default;
+$calendar-invalid-border-color: ds.$color-border-danger-default-rest !default;
+$calendar-invalid-border-color-focused: ds.$color-border-danger-default-hovered !default;
+$calendar-week-number-cell-color: ds.$color-content-neutral-subdued-rest !default;
+$calendar-week-number-cell-bg: ds.$color-surface-neutral-subdued-rest !default;
+$calendar-week-number-border-radius: 0 !default;
+
+$calendar-cell-other-hover-color: $calendar-cell-other-color !default;

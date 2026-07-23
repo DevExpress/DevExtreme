@@ -1,4 +1,10 @@
 
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$validation-summary-margin-top: 20px !default;
+$validation-message-content-padding: 10px !default;
+
+$validation-message-font-size: 0.85em !default; // dx-relative
+
 @mixin dx-base-validation($summary-color, $message-color, $message-bg-color, $border-radius) {
   .dx-validationsummary-item {
     color: $summary-color;
@@ -39,7 +45,7 @@
   }
 
   .dx-form-validation-summary {
-    margin-top: 20px;
+    margin-top: $validation-summary-margin-top;
   }
 }
 
@@ -61,8 +67,8 @@
   & > .dx-overlay-content {
     display: inline-block;
     border-width: 0;
-    padding: 10px;
-    font-size: 0.85em;
+    padding: $validation-message-content-padding;
+    font-size: $validation-message-font-size;
     line-height: normal;
     word-wrap: break-word;
   }

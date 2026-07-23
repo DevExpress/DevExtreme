@@ -1,0 +1,1056 @@
+@use "sass:math";
+@use "sass:color";
+@use "sass:selector";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icon_fonts" as *;
+@use "../dropDownEditor" as *;
+@use "../textEditor" as *;
+@use "../textEditor/sizes" as *;
+@use "../common/mixins" as *;
+@use "../common/sizes" as *;
+@use "../popup/colors" as *;
+@use "../popup/sizes" as *;
+@use "../menu/colors" as *;
+@use "../toolbar/colors" as *;
+@use "../button/mixins" as *;
+@use "../button/sizes" as *;
+@use "../../base/button/mixins" as *;
+@use "../button/colors" as *;
+@use "../validation/colors" as *;
+@use "../typography/sizes" as *;
+
+// adduse
+@use "../scrollable";
+@use "../overlay";
+@use "../pagination";
+@use 'variables' as *;
+@forward 'variables';
+@use 'layout/cell' as *;
+@use "layout/aiChat" as *;
+
+$fluent-grid-base-drag-header-first-shadow: 0 0 1px $datagrid-drag-header-shadow-color;
+$fluent-grid-base-drag-header-second-shadow: 0 1px 3px $datagrid-drag-header-second-shadow-color;
+$fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-height;
+
+@mixin grid-base($widget-name) {
+  @include fluent-grid-base-cell($widget-name);
+
+  .dx-#{$widget-name},
+  .dx-#{$widget-name}-container {
+    .dx-bordered-top-view {
+      border-top-left-radius: $datagrid-border-radius;
+      border-top-right-radius: $datagrid-border-radius;
+    }
+
+    .dx-bordered-bottom-view {
+      border-bottom-left-radius: $datagrid-border-radius;
+      border-bottom-right-radius: $datagrid-border-radius;
+    }
+
+    .dx-menu {
+      background-color: transparent;
+      margin-top: calc((#{$fluent-grid-base-header-height} - #{$fluent-button-height}) / 2);
+      margin-left: $fluent-grid-base-root-margin-left;
+      height: $fluent-button-height;
+
+      .dx-menu-item {
+        .dx-menu-item-content {
+          padding: $fluent-grid-base-menu-item-padding;
+
+          .dx-icon {
+            @include dx-icon-sizing($fluent-grid-base-filter-icon-size);
+
+            margin: $fluent-grid-base-icon-margin;
+          }
+        }
+      }
+    }
+
+    &.dx-filter-menu {
+      .dx-menu-item-content {
+        .dx-icon {
+          @include dx-icon-sizing($fluent-grid-base-filter-icon-size);
+
+          &.dx-icon-filter-operation-default {
+            margin-top: $fluent-grid-base-icon-filter-operation-default-margin-top;
+          }
+        }
+      }
+    }
+
+    .dx-#{$widget-name}-filter-row .dx-editor-with-menu {
+      .dx-menu-item-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .dx-texteditor {
+        .dx-texteditor-container {
+          .dx-texteditor-input,
+          .dx-placeholder::before {
+            padding-left: $fluent-grid-base-texteditor-input-padding;
+          }
+        }
+      }
+    }
+
+    &.dx-context-menu {
+      .dx-menu-items-container {
+        .dx-icon-context-menu-sort-asc {
+          @include dx-icon(sortuptext);
+          @include dx-icon-sizing(calc(#{$fluent-grid-base-filter-icon-size} - 4px));
+        }
+
+        .dx-icon-context-menu-sort-desc {
+          @include dx-icon(sortdowntext);
+          @include dx-icon-sizing(calc(#{$fluent-grid-base-filter-icon-size} - 4px));
+        }
+
+        .dx-icon-context-menu-sort-none {
+          @include dx-icon-sizing(calc(#{$fluent-grid-base-filter-icon-size} - 4px));
+        }
+
+        .dx-icon-fix-column {
+          @include dx-icon(fixcolumn);
+          @include dx-icon-sizing(calc(#{$fluent-grid-base-filter-icon-size} - 4px));
+        }
+
+        .dx-icon-fix-column-left {
+          @include dx-icon(fixcolumnleft);
+          @include dx-icon-sizing(calc(#{$fluent-grid-base-filter-icon-size} - 4px));
+        }
+
+        .dx-icon-fix-column-right {
+          @include dx-icon(fixcolumnright);
+          @include dx-icon-sizing(calc(#{$fluent-grid-base-filter-icon-size} - 4px));
+        }
+
+        .dx-icon-stick-column {
+          @include dx-icon(stickcolumn);
+          @include dx-icon-sizing(calc(#{$fluent-grid-base-filter-icon-size} - 4px));
+        }
+
+        .dx-icon-unfix-column {
+          @include dx-icon(unfixcolumn);
+          @include dx-icon-sizing(calc(#{$fluent-grid-base-filter-icon-size} - 4px));
+        }
+      }
+    }
+
+    .dx-sort-up,
+    .dx-sort-down,
+    .dx-header-filter {
+      @include dx-icon-sizing($fluent-grid-base-header-icon-size, $fluent-grid-base-header-icon-container-size);
+    }
+
+    .dx-header-filter:not(.dx-header-filter-empty) {
+      color: $datagrid-active-header-filter-icon-color;
+    }
+
+    .dx-icon-filter-operation-equals {
+      @include dx-icon(equal);
+    }
+
+    .dx-icon-filter-operation-default {
+      @include dx-icon(find);
+    }
+
+    .dx-icon-filter-operation-not-equals {
+      @include dx-icon(notequal);
+    }
+
+    .dx-icon-filter-operation-less {
+      @include dx-icon(less);
+    }
+
+    .dx-icon-filter-operation-less-equal {
+      @include dx-icon(lessorequal);
+    }
+
+    .dx-icon-filter-operation-greater {
+      @include dx-icon(greater);
+    }
+
+    .dx-icon-filter-operation-greater-equal {
+      @include dx-icon(greaterorequal);
+    }
+
+    .dx-icon-filter-operation-contains {
+      @include dx-icon(contains);
+    }
+
+    .dx-icon-filter-operation-not-contains {
+      @include dx-icon(doesnotcontain);
+    }
+
+    .dx-icon-filter-operation-starts-with {
+      @include dx-icon(startswith);
+    }
+
+    .dx-icon-filter-operation-ends-with {
+      @include dx-icon(endswith);
+    }
+
+    .dx-icon-filter-operation-between {
+      @include dx-icon(range);
+    }
+
+    .dx-column-indicators {
+      height: $fluent-grid-base-header-line-height;
+
+      .dx-sort-index-icon {
+        padding-right: $fluent-grid-base-sort-index-icon-padding-right;
+        margin-left: $fluent-grid-base-sort-index-icon-margin-left;
+        font-size: calc(#{$fluent-grid-base-header-cell-font-size} - 1px);
+        position: relative;
+        bottom: $fluent-grid-base-sort-index-icon-bottom;
+      }
+
+      > div {
+        @include dx-icon-sizing($fluent-grid-base-header-icon-size, $fluent-grid-base-header-icon-container-size);
+      }
+
+      > span {
+        margin-left: $fluent-grid-base-sort-index-icon-margin-left-219;
+      }
+    }
+
+    .dx-placeholder::before {
+      font-size: $fluent-grid-base-cell-font-size;
+    }
+  }
+
+  .dx-#{$widget-name} {
+    line-height: inherit;
+
+    .dx-row-alt {
+      &.dx-row:not(.dx-row-removed) {
+        border-bottom-color: transparent;
+      }
+
+      // T838734
+      border-top: $fluent-grid-base-row-removed-border-top;
+      border-top-color: $datagrid-row-alternation-bg;
+      border-bottom: $fluent-grid-base-row-removed-border-bottom;
+      border-bottom-color: $datagrid-row-alternation-bg;
+    }
+
+    .dx-link {
+      color: $datagrid-link-color;
+    }
+
+    .dx-error-row {
+      .dx-closebutton {
+        float: right;
+        margin: calc(#{$fluent-grid-base-cell-vertical-padding} + 2px);
+
+        @include dx-icon(close);
+        @include dx-icon-sizing(14px);
+      }
+
+      .dx-error-message {
+        padding: $fluent-grid-base-cell-vertical-padding;
+        padding-right: $fluent-grid-base-error-message-padding-right;
+      }
+    }
+
+    .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row {
+      > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all),
+      > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending),
+      > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all) {
+        &.dx-command-edit {
+          .dx-link:not(.dx-link-icon) {
+            margin: 0 $fluent-command-edit-text-margin;
+            min-width: $fluent-grid-base-link-icon-min-width;
+          }
+
+          &.dx-command-edit-with-icons {
+            .dx-link {
+              @include dx-icon-sizing($fluent-command-edit-icon-size);
+
+              margin: 0 $fluent-command-edit-icon-margin;
+              vertical-align: middle;
+            }
+
+            .dx-link:not(.dx-link-icon) {
+              width: auto;
+            }
+          }
+
+          .dx-state-disabled {
+            &.dx-link {
+              opacity: $datagrid-text-link-disabled-opacity;
+            }
+
+            &.dx-link-icon {
+              opacity: $datagrid-icon-link-disabled-opacity;
+            }
+          }
+        }
+      }
+    }
+
+    .dx-#{$widget-name}-rowsview .dx-virtual-row > td[style*="text-align: right"]:before {
+      background-position-y: 49px;
+    }
+
+    .dx-command-drag {
+      .dx-#{$widget-name}-drag-icon {
+        @include dx-icon-sizing($fluent-base-icon-size);
+      }
+    }
+
+    .dx-#{$widget-name}-drop-highlight {
+      & > td {
+        .dx-header-filter {
+          color: $datagrid-drop-highlight-color;
+        }
+
+        .dx-checkbox {
+          .dx-checkbox-icon {
+            background-color: $datagrid-drop-highlight-color;
+            color: $datagrid-drop-highlight-bg;
+          }
+        }
+      }
+    }
+  }
+
+  .dx-#{$widget-name}-edit-popup {
+    .dx-popup-content {
+      padding: 0;
+    }
+
+    .dx-error-message {
+      padding: $fluent-grid-base-cell-padding;
+    }
+  }
+
+  .dx-#{$widget-name}-edit-popup-form {
+    padding: $fluent-popup-content-vertical-padding $fluent-popup-content-padding;
+  }
+
+  .dx-#{$widget-name}-headers,
+  .dx-#{$widget-name}-rowsview {
+    .dx-texteditor-input {
+      min-height: $fluent-grid-base-header-line-height;
+    }
+
+    .dx-lookup {
+      height: auto;
+
+      .dx-lookup-field {
+        padding-left: $fluent-grid-base-cell-horizontal-padding;
+        padding-top: $fluent-grid-base-cell-vertical-padding;
+        padding-bottom: $fluent-grid-base-cell-vertical-padding;
+        font-size: $fluent-grid-base-cell-font-size;
+      }
+    }
+
+    .dx-dropdowneditor-button-visible.dx-dropdowneditor {
+      &.dx-show-clear-button {
+        &.dx-invalid,
+        &.dx-valid,
+        &.dx-validation-pending {
+          .dx-texteditor-input {
+            padding-right: $fluent-dropdowneditor-invalid-badge-size;
+          }
+
+          &.dx-rtl .dx-texteditor-input {
+            padding-right: 0;
+            padding-left: $fluent-dropdowneditor-invalid-badge-size;
+          }
+        }
+      }
+
+      &.dx-invalid,
+      &.dx-valid,
+      &.dx-validation-pending {
+        .dx-texteditor-input {
+          padding-right: $fluent-dropdowneditor-invalid-badge-size;
+        }
+
+        &.dx-rtl .dx-texteditor-input {
+          padding-right: 0;
+          padding-left: $fluent-dropdowneditor-invalid-badge-size;
+        }
+      }
+
+      &.dx-rtl .dx-texteditor-input {
+        padding-right: 0;
+      }
+    }
+  }
+
+  .dx-editor-cell {
+    .dx-numberbox-spin-button {
+      background-color: transparent;
+    }
+
+    .dx-icon-clear {
+      left: 0;
+    }
+
+    .dx-texteditor {
+      &,
+      &.dx-state-hover,
+      &.dx-state-focused,
+      &.dx-state-active {
+        background: $datagrid-editor-bg;
+        box-shadow: none;
+      }
+
+      &:not(.dx-tagbox) .dx-texteditor-input {
+        background: $datagrid-editor-bg;
+        font-size: $fluent-grid-base-cell-font-size;
+        height: $fluent-grid-base-cell-height;
+        line-height: $fluent-grid-base-cell-height;
+        margin-top: 0;
+      }
+
+      &:not(.dx-tagbox):not(.dx-colorbox) .dx-texteditor-input {
+        padding: 0 $fluent-grid-base-cell-horizontal-padding;
+      }
+
+      .dx-placeholder::before {
+        padding-right: $fluent-grid-base-cell-horizontal-padding;
+        padding-left: $fluent-grid-base-cell-horizontal-padding;
+      }
+
+      &.dx-validation-pending {
+        .dx-texteditor-input-container {
+          .dx-texteditor-input {
+            padding-top: 0;
+            padding-bottom: 0;
+          }
+        }
+      }
+
+      &:not(.dx-tagbox) .dx-tag-container {
+        min-height: $fluent-grid-base-cell-height;
+        padding: 0;
+      }
+
+      &:not(.dx-editor-filled):not(.dx-editor-outlined) {
+        .dx-texteditor-input,
+        .dx-tag-container {
+          margin-top: 0;
+        }
+      }
+
+      .dx-texteditor-buttons-container {
+        right: 0;
+      }
+
+      &::after,
+      &::before {
+        content: none;
+      }
+
+      &.dx-rtl,
+      .dx-rtl & {
+        .dx-texteditor-buttons-container {
+          left: 0;
+        }
+      }
+    }
+
+    .dx-dropdowneditor {
+      background-color: $datagrid-editor-bg;
+    }
+
+    &.dx-focused .dx-dropdowneditor-icon {
+      border-radius: 0;
+    }
+
+    &.dx-editor-inline-block:not(.dx-command-select) {
+      &::before {
+        padding-top: $fluent-grid-base-cell-vertical-padding;
+        padding-bottom: $fluent-grid-base-cell-vertical-padding;
+      }
+    }
+  }
+
+  .dx-#{$widget-name}-column-chooser-list {
+    .dx-empty-message {
+      color: $datagrid-columnchooser-message-color;
+      padding: 0 $fluent-grid-base-column-chooser-horizontal-padding;
+    }
+  }
+
+  .dx-#{$widget-name}-column-chooser {
+    @include dx-base-typography();
+
+    &.dx-#{$widget-name}-column-chooser-mode-drag {
+      .dx-popup-content {
+        padding: $fluent-grid-base-column-chooser-paddings;
+
+        .dx-treeview-search {
+          margin-bottom: $fluent-grid-base-treeview-search-margin;
+        }
+
+        .dx-treeview-node {
+          padding-left: $fluent-grid-base-treeview-node-padding-left;
+        }
+      }
+    }
+
+    &.dx-#{$widget-name}-column-chooser-mode-select {
+      .dx-popup-content {
+        padding: $fluent-grid-base-column-chooser-paddings;
+      }
+
+      .dx-#{$widget-name}-column-chooser-plain, .dx-#{$widget-name}-column-chooser-list {
+        .dx-treeview-select-all-item {
+          padding-inline-start: $fluent-grid-base-treeview-select-all-item-offset;
+        }
+      }
+    }
+
+    .dx-overlay-content {
+      background-color: $datagrid-columnchooser-bg;
+
+      .dx-popup-title {
+        background-color: transparent;
+        border-bottom: $fluent-grid-base-popup-title-border-bottom;
+        border-bottom-color: $popup-title-border-color;
+
+        .dx-toolbar-label {
+          font-size: $fluent-m-font-size;
+        }
+      }
+
+      .dx-popup-content {
+        .dx-column-chooser-item {
+          margin: $fluent-grid-base-column-chooser-list-item-margin;
+          background-color: $datagrid-columnchooser-item-bg;
+          color: $datagrid-columnchooser-item-color;
+          font-weight: $datagrid-columnchooser-font-weight;
+          font-size: $fluent-grid-base-header-cell-font-size;
+          padding: $fluent-grid-base-cell-vertical-padding;
+          line-height: $fluent-grid-base-header-line-height;
+          box-shadow: $fluent-grid-base-drag-header-first-shadow, $fluent-grid-base-drag-header-second-shadow;
+        }
+      }
+    }
+  }
+
+  .dx-#{$widget-name}-drag-header {
+    border-color: $datagrid-drag-header-border-color;
+    box-shadow: $fluent-grid-base-drag-header-first-shadow, $fluent-grid-base-drag-header-second-shadow;
+    color: $datagrid-columnchooser-item-color;
+    font-weight: $datagrid-columnchooser-font-weight;
+    padding: $fluent-grid-base-header-cell-vertical-padding;
+    background-color: $datagrid-header-drag-bg;
+    line-height: $fluent-grid-base-header-line-height;
+    font-size: $fluent-grid-base-header-cell-font-size;
+  }
+
+  .dx-#{$widget-name}-columns-separator {
+    background-color: $datagrid-column-separator-bg;
+  }
+
+  .dx-#{$widget-name}-columns-separator-transparent {
+    background-color: transparent;
+  }
+
+  .dx-#{$widget-name}-focus-overlay {
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      height: $fluent-grid-base-column-chooser-item-height;
+      background-color: $datagrid-focused-border-color;
+      left: 0;
+      right: $fluent-grid-base-after-right;
+    }
+
+    &.dx-focused-cell-modified::after {
+      background-color: $button-success-hover-bg;
+    }
+
+    &.dx-focused-cell-invalid::after {
+      background-color: $button-danger-hover-bg;
+    }
+  }
+
+  .dx-data-row.dx-state-hover {
+    &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) {
+      & > .dx-#{$widget-name}-readonly .dx-texteditor {
+        .dx-texteditor-input {
+          background-color: $datagrid-hover-bg;
+          color: $datagrid-row-hovered-color;
+        }
+      }
+    }
+  }
+
+  .dx-#{$widget-name}-headers {
+    color: $datagrid-columnchooser-item-color;
+    touch-action: pinch-zoom;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      pointer-events: none;
+      border-bottom: $datagrid-border;
+      border-bottom-color: $datagrid-border-color;
+    }
+
+    .dx-#{$widget-name}-table {
+      .dx-#{$widget-name}-borders & {
+        border-bottom-width: $fluent-grid-base-texteditor-input-border-bottom-width;
+      }
+
+      .dx-row {
+        > td {
+          .dx-sort {
+            color: $header-filter-color-empty;
+          }
+
+          &:not([class*="dx-command"], .dx-editor-cell, .dx-#{$widget-name}-group-space):hover {
+            .dx-#{$widget-name}-text-content {
+              color: $datagrid-base-color;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .dx-#{$widget-name}-filter-row {
+    background-color: $datagrid-filter-row-background-color;
+
+    .dx-menu {
+      margin-left: 0;
+
+      .dx-menu-horizontal {
+        .dx-menu-items-container {
+          height: 100%;
+          position: absolute;
+
+          .dx-menu-item-wrapper {
+            height: 100%;
+          }
+        }
+      }
+
+      .dx-overlay-content {
+        color: $menu-color;
+      }
+    }
+
+    .dx-filter-modified {
+      background-color: $datagrid-cell-modified-border-color;
+    }
+
+    td .dx-editor-container .dx-filter-range-content {
+      padding:
+        $fluent-grid-base-cell-vertical-padding
+        $fluent-grid-base-cell-horizontal-padding
+        $fluent-grid-base-cell-vertical-padding
+        $fluent-grid-base-texteditor-input-padding;
+    }
+  }
+
+  .dx-#{$widget-name}-filter-range-overlay {
+    .dx-overlay-content {
+      overflow: inherit;
+      background-color: $datagrid-filter-row-background-color;
+      box-shadow: $fluent-grid-base-drag-header-first-shadow, $fluent-grid-base-drag-header-second-shadow;
+
+      .dx-texteditor {
+        &.dx-state-focused::after,
+        &.dx-state-hover::after {
+          top: auto;
+          bottom: 0;
+        }
+
+        .dx-texteditor-input {
+          font-size: $fluent-grid-base-cell-font-size;
+          height: calc(#{$fluent-grid-base-cell-height} + 1px);
+          padding-right: $fluent-filter-row-between-editor-padding;
+          padding-left: $fluent-filter-row-between-editor-padding;
+        }
+
+        .dx-placeholder::before {
+          padding-left: $fluent-filter-row-between-editor-padding;
+        }
+      }
+
+      .dx-invalid-message.dx-overlay-wrapper {
+        display: none;
+      }
+    }
+  }
+
+  .dx-#{$widget-name}-header-panel {
+    border-bottom: $datagrid-border;
+    border-bottom-color: $datagrid-border-color;
+    padding: $fluent-grid-base-header-panel-padding;
+
+    .dx-toolbar-text-auto-hide .dx-button.dx-button-has-icon {
+      border-radius: $fluent-base-border-radius;
+    }
+  }
+
+  .dx-icon-column-chooser {
+    @include dx-icon(columnchooser);
+  }
+
+  .dx-#{$widget-name}-addrow-button {
+    .dx-icon-edit-button-addrow {
+      @include dx-icon(add);
+      @include dx-icon-sizing($fluent-base-icon-size);
+    }
+  }
+
+  .dx-#{$widget-name}-cancel-button {
+    .dx-icon-edit-button-cancel {
+      @include dx-icon(revert);
+      @include dx-icon-sizing($fluent-base-icon-size);
+    }
+  }
+
+  .dx-#{$widget-name}-save-button {
+    .dx-icon-edit-button-save {
+      @include dx-icon(save);
+      @include dx-icon-sizing($fluent-base-icon-size);
+    }
+  }
+
+  .dx-apply-button {
+    .dx-icon-apply-filter {
+      @include dx-icon(filter);
+      @include dx-icon-sizing($fluent-base-icon-size);
+    }
+  }
+
+  .dx-datagrid-export-menu {
+    .dx-menu-item .dx-icon-xlsxfile {
+      @include dx-icon-sizing($fluent-base-icon-size);
+    }
+
+    .dx-menu-item .dx-icon-exportselected {
+      @include dx-icon-sizing($fluent-base-icon-size);
+    }
+  }
+
+  .dx-#{$widget-name}-adaptive-more {
+    vertical-align: middle;
+
+    @include dx-icon-sizing($fluent-base-icon-size);
+
+    color: $gridbase-icon-color;
+  }
+
+  .dx-row.dx-row-focused {
+    .dx-#{$widget-name}-adaptive-more {
+      color: inherit;
+    }
+  }
+
+  .dx-#{$widget-name}-rowsview {
+    border-top: $fluent-grid-base-row-focused-border-top;
+    border-top-color: $fluent-grid-base-border-color;
+
+    .dx-#{$widget-name}-headers + &,
+    &.dx-#{$widget-name}-after-headers {
+      border-top: none;
+    }
+
+    .dx-row {
+      border-top: $fluent-grid-base-row-border;
+      border-bottom: $fluent-grid-base-row-border;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .dx-data-row,
+    .dx-adaptive-detail-row {
+      &,
+      &.dx-selection,
+      &.dx-selection:hover {
+        .dx-validator {
+          &.dx-#{$widget-name}-invalid,
+          &.dx-invalid {
+            background-color: $datagrid-row-invalid-faded-border-color;
+          }
+        }
+      }
+    }
+
+    .dx-overlay-wrapper.dx-invalid-message {
+      .dx-overlay-content {
+        padding: $fluent-grid-base-overlay-content-padding;
+        background-color: $validation-message-background-color;
+        color: $validation-message-color;
+      }
+    }
+
+    .dx-adaptive-detail-row {
+      .dx-field-item-label {
+        padding-top: 0;
+      }
+
+      .dx-field-item-content {
+        line-height: $fluent-grid-base-adaptive-column-height;
+        min-height: $fluent-grid-base-adaptive-column-height;
+        font-size: $fluent-grid-base-cell-font-size;
+
+        &.dx-focused {
+          padding: 0;
+        }
+      }
+
+      .dx-texteditor-input {
+        font-size: $fluent-grid-base-cell-font-size;
+        height: $fluent-grid-base-adaptive-column-height;
+        line-height: $fluent-grid-base-adaptive-column-height;
+      }
+
+      .dx-texteditor::after,
+      .dx-texteditor::before {
+        content: none;
+      }
+
+      .dx-texteditor.dx-editor-outlined {
+        box-shadow: none;
+      }
+    }
+
+    .dx-item-modified {
+      background-color: $datagrid-cell-modified-border-color;
+    }
+
+    .dx-row-focused {
+      &.dx-data-row {
+        & .dx-command-edit .dx-link {
+          color: $datagrid-row-focused-color;
+        }
+
+        & > td:not(.dx-focused):not(.dx-cell-modified):not(.dx-#{$widget-name}-invalid),
+        & .dx-command-edit .dx-link {
+          & .dx-#{$widget-name}-group-opened,
+          & .dx-#{$widget-name}-group-closed {
+            color: $datagrid-row-focused-color;
+          }
+        }
+      }
+
+      &.dx-group-row {
+        background-color: $datagrid-row-focused-bg;
+        color: $datagrid-row-focused-color;
+
+        & .dx-#{$widget-name}-group-opened,
+        & .dx-#{$widget-name}-group-closed {
+          color: $datagrid-row-focused-color;
+        }
+      }
+    }
+
+    &.dx-scrollable-scrollbars-alwaysvisible.dx-scrollable-both .dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content {
+      padding-right: 0;
+    }
+
+    td {
+      &.dx-validation-pending {
+        > .dx-pending-indicator {
+          @include dx-pending-indicator-fluent();
+          @include texteditor-validation-icon-offset();
+
+          right: $fluent-invalid-badge-size;
+          background-color: transparent;
+
+          @at-root #{selector.append(".dx-rtl", &)},
+          .dx-rtl & {
+            left: $fluent-invalid-badge-size;
+          }
+        }
+      }
+    }
+
+    &.dx-#{$widget-name}-sticky-columns {
+      .dx-row.dx-edit-row > td:not(.dx-master-detail-cell) .dx-texteditor-input {
+        height: calc(#{$fluent-grid-base-cell-height} - 2px);
+        line-height: calc(#{$fluent-grid-base-cell-height} - 2px);
+      }
+
+      .dx-master-detail-row > .dx-master-detail-cell {
+        > .dx-#{$widget-name}-master-detail-container {
+          padding: $grid-masterdetail-padding;
+        }
+      }
+    }
+  }
+
+  .dx-#{$widget-name}-search-text {
+    color: $datagrid-search-color;
+    background-color: $datagrid-search-bg;
+  }
+
+  .dx-#{$widget-name}-nodata {
+    color: $datagrid-nodata-color;
+    font-size: $fluent-grid-base-nodata-font-size;
+  }
+
+  .dx-#{$widget-name}-bottom-load-panel {
+    border-top: $datagrid-border;
+    border-top-color: $datagrid-border-color;
+    background-color: $datagrid-base-background-color;
+  }
+
+  .dx-#{$widget-name}-summary-item {
+    color: $datagrid-summary-color;
+  }
+
+  .dx-#{$widget-name}-total-footer {
+    border-bottom: $datagrid-border;
+    border-bottom-color: $datagrid-border-color;
+    border-top: $datagrid-border;
+    border-top-color: $datagrid-border-color;
+
+    > .dx-#{$widget-name}-content {
+      padding: 0;
+    }
+  }
+
+  .dx-#{$widget-name}-revert-tooltip {
+    .dx-overlay-content {
+      background-color: transparent;
+      min-width: inherit;
+    }
+
+    .dx-revert-button {
+      @include dx-button-sizing(2px, 2px, 2px, 18px, 0);
+
+      border-radius: $button-border-radius;
+
+      @include dx-button-styling-variant(
+        $button-danger-bg,
+        $button-danger-color,
+        $button-danger-color,
+        $button-danger-color,
+        $button-danger-bg,
+        $button-danger-bg,
+        $button-danger-bg,
+        $button-danger-color
+      );
+
+      margin: $fluent-grid-base-revert-button-margin;
+      height: $fluent-grid-base-cell-height;
+      box-shadow: none;
+      min-width: inherit;
+
+      &.dx-button-has-icon:not(.dx-button-has-text) {
+        border-radius: $fluent-grid-base-icon-button-border-radius;
+      }
+
+      &.dx-state-hover {
+        box-shadow: none;
+      }
+    }
+  }
+
+  .dx-rtl {
+    .dx-#{$widget-name},
+    .dx-#{$widget-name}-container {
+      .dx-menu {
+        .dx-menu-item-has-submenu.dx-menu-item-has-icon {
+          .dx-icon {
+            margin: $fluent-grid-base-icon-margin;
+          }
+        }
+      }
+    }
+
+    .dx-#{$widget-name}-rowsview {
+      &.dx-scrollable-scrollbars-alwaysvisible.dx-scrollable-both .dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content {
+        padding-left: 0;
+      }
+    }
+  }
+
+  .dx-header-filter-menu {
+    .dx-popup-content {
+      padding: $fluent-grid-base-content-padding;
+    }
+  }
+
+  .dx-#{$widget-name}-filter-panel {
+    background-color: $datagrid-base-background-color;
+    padding: $fluent-grid-base-content-padding-993;
+
+    .dx-#{$widget-name}-filter-panel-text,
+    .dx-#{$widget-name}-filter-panel-clear-filter {
+      color: $datagrid-filter-panel-color;
+      font-size: $fluent-grid-base-cell-font-size;
+      line-height: $fluent-grid-base-checkbox-size;
+    }
+
+    .dx-icon-filter {
+      color: $datagrid-filter-panel-color;
+
+      @include dx-icon-sizing($fluent-filter-panel-icon-size);
+    }
+  }
+
+  .dx-adaptive-item-text {
+    padding-left: $fluent-filled-texteditor-input-horizontal-padding;
+    padding-right: $fluent-filled-texteditor-input-horizontal-padding;
+    &.dx-cell-modified,
+    &.dx-#{$widget-name}-invalid {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  }
+
+  .dx-#{$widget-name}-dragview {
+    border-radius: $datagrid-border-radius;
+
+    .dx-#{$widget-name}-borders {
+      border-radius: $datagrid-border-radius;
+    }
+  }
+
+  .dx-#{$widget-name}-sticky-columns .dx-#{$widget-name}-draggable-column {
+    opacity: 1;
+    color: $datagrid-draggable-column-text-color;
+  }
+
+  .dx-command-ai-header-content {
+    max-width: calc(100% - ($fluent-button-height - $fluent-grid-base-cell-horizontal-padding + $fluent-grid-base-command-ai-header-button-offset));
+
+    .dx-#{$widget-name}-text-content {
+      padding-left: $fluent-grid-base-command-ai-text-content-padding;
+    }
+
+    .dx-icon-chatsparkleoutline {
+      @include dx-icon-sizing($fluent-grid-base-command-ai-chatsparkleoutline-icon-size);
+    }
+  }
+
+  .dx-command-ai-header-button {
+    left: auto;
+    right: $fluent-grid-base-command-ai-header-button-offset;
+  }
+
+  td[style*="text-align: right"] .dx-command-ai-header-button {
+    left: $fluent-grid-base-command-ai-header-button-offset;
+    right: auto;
+  }
+
+  .dx-ai-prompt-editor__progressbar .dx-progressbar-animating-container {
+    height: $fluent-grid-base-ai-prompt-editor-progressbar-height;
+    border-radius: 0;
+  }
+}

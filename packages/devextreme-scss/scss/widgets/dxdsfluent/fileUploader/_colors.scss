@@ -1,0 +1,16 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$fileuploader-filename-color: ds.$color-content-neutral-default-rest !default;
+$fileuploader-file-icon-color: ds.$color-content-neutral-subdued-rest !default;
+$fileuploader-progressbar-status-color: ds.$color-content-neutral-default-rest !default;
+$fluent-fileuploader-files-container-bg-color: ds.$color-surface-neutral-default-rest !default;
+
+$fileuploader-falename-status-color: ds.$color-content-neutral-subdued-rest !default;
+
+$fileuploader-border-color: ds.$color-border-neutral-default-rest !default;
+
+$fileuploader-danger: ds.$color-surface-danger-default-rest !default;
+$fileuploader-label-color: ds.$color-content-neutral-subdued-rest !default;
+$fluent-fileuploader-file-container-boxshadow: ds.$box-shadow-sm !default;

@@ -1,0 +1,36 @@
+@use "sass:math";
+@use "sass:color";
+
+@function difference($minuend, $subtrahend) {
+  @return color.adjust(
+        $minuend,
+        $red: - (color.channel($subtrahend, "red", $space: rgb)),
+        $green: - (color.channel($subtrahend, "green", $space: rgb)),
+        $blue: - (color.channel($subtrahend, "blue", $space: rgb)));
+}
+
+@function screen($color1, $color2) {
+  $r1: math.div(color.channel($color1, "red", $space: rgb), 255);
+  $g1: math.div(color.channel($color1, "green", $space: rgb), 255);
+  $b1: math.div(color.channel($color1, "blue", $space: rgb), 255);
+
+  $r2: math.div(color.channel($color2, "red", $space: rgb), 255);
+  $g2: math.div(color.channel($color2, "green", $space: rgb), 255);
+  $b2: math.div(color.channel($color2, "blue", $space: rgb), 255);
+
+  @return color.change(
+        $color1,
+        $red: ($r1 + $r2 - $r1 * $r2) * 255,
+        $green: ($g1 + $g2 - $g1 * $g2) * 255,
+        $blue: ($b1 + $b2 - $b1 * $b2) * 255);
+}
+
+@function adjust-if-not-achromatic($color, $hue, $saturation, $lightness) {
+  $out: color.adjust($color, $saturation: $saturation, $lightness: $lightness, $space: hsl);
+
+  @if not color.is-powerless($out, "hue", $space: hsl) {
+    $out: color.adjust($out, $hue: $hue, $space: hsl);
+  }
+
+  @return $out;
+}

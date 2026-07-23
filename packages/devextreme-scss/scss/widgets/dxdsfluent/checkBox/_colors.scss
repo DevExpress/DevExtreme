@@ -1,0 +1,20 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$checkbox-border-color: ds.$checkbox-color-unchecked-default-border-rest !default;
+$checkbox-border-color-hover: ds.$checkbox-color-unchecked-default-border-hovered !default;
+$checkbox-border-color-active: ds.$checkbox-color-unchecked-default-border-active !default;
+
+$checkbox-foreground-color: ds.$checkbox-color-checked-default-icon-rest !default;
+
+$checkbox-accent-color: ds.$checkbox-color-checked-default-bg-rest !default;
+$checkbox-accent-color-hover: ds.$checkbox-color-checked-default-bg-hovered !default;
+$checkbox-accent-color-focused: ds.$checkbox-color-checked-default-bg-active !default;
+
+$checkbox-invalid-color: ds.$color-border-danger-default-rest !default;
+$checkbox-invalid-color-hover: ds.$color-border-danger-default-hovered !default;
+$checkbox-invalid-color-focused: ds.$color-border-danger-default-hovered !default;
+
+$checkbox-border-color-disabled: ds.$checkbox-color-unchecked-default-border-disabled !default;
+$checkbox-foreground-disabled-color: ds.$checkbox-color-checked-default-icon-disabled !default;
