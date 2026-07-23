@@ -1,3 +1,5 @@
+import { getKeyHash } from '@js/core/utils/common';
+
 import type { ResourceLoader } from '../loader/resource_loader';
 import type { RawResourceData, ResourceId } from '../loader/types';
 import type { ResourceHierarchyNode } from './hierarchy_tree_utils';
@@ -8,9 +10,13 @@ const isVirtualRoot = (node: GroupNode): boolean => !node.resourceIndex;
 const findRawResourceData = (
   resource: ResourceLoader,
   id: ResourceId,
-): RawResourceData | undefined => resource.data.find(
-  (item) => resource.dataAccessor.get('id', item) === id,
-);
+): RawResourceData | undefined => {
+  const idHash = getKeyHash(id);
+
+  return resource.data.find(
+    (item) => getKeyHash(resource.dataAccessor.get('id', item)) === idHash,
+  );
+};
 
 const createFlatResourceNodes = (
   resource: ResourceLoader,

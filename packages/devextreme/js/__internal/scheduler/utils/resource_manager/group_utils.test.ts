@@ -188,6 +188,37 @@ describe('groups utils', () => {
       expect(groupTree[0].children[1].resourceData).toEqual(assigneeData[1]);
     });
 
+    it('should attach raw resourceData to hierarchical nodes when valueExpr returns new object ids', async () => {
+      const hierarchyData: RawResourceData[] = [
+        {
+          id: { guid: 'board' },
+          text: 'Board rooms',
+          color: '#111',
+          parentId: null,
+        },
+        {
+          id: { guid: 11 },
+          text: 'Room 11',
+          color: '#333',
+          parentId: { guid: 'board' },
+        },
+      ];
+      const loader = new ResourceLoader({
+        fieldExpr: 'roomId',
+        dataSource: hierarchyData,
+        label: 'Room',
+        parentIdExpr: 'parentId',
+        valueExpr: (item: RawResourceData) => ({ ...(item.id as object) }),
+      });
+
+      await loader.load();
+
+      const { groupTree } = groupResources({ roomId: loader }, ['roomId']);
+
+      expect(groupTree[0].resourceData).toEqual(hierarchyData[0]);
+      expect(groupTree[0].children[0].resourceData).toEqual(hierarchyData[1]);
+    });
+
     it('should ignore missed resources and group by one group', () => {
       expect(omitResourceData(groupResources({
         roomId: resourceById.roomId,
