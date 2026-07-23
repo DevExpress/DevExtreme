@@ -1953,6 +1953,8 @@ module('View Data Provider', {
                 const expectedGroupPanelData = {
                     baseColSpan: 2,
                     maxDepth: 1,
+                    columnCountPerGroup: 2,
+                    hasHierarchy: false,
                     groupTree: [{
                         key: 'groupId_1',
                         id: 1,

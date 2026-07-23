@@ -603,6 +603,44 @@ describe('base utils', () => {
       expect(timelineRows).toHaveLength(1);
     });
 
+    it('should keep depth rows for multi-group cartesian timeline grouping', () => {
+      const groups: GroupNode[] = [
+        {
+          id: 1,
+          resourceText: 'item 1',
+          resourceIndex: 'group1',
+          grouped: { group1: 1 },
+          children: [
+            {
+              id: 1, resourceText: 'item 3', resourceIndex: 'group2', grouped: { group1: 1, group2: 1 }, children: [],
+            },
+            {
+              id: 2, resourceText: 'item 4', resourceIndex: 'group2', grouped: { group1: 1, group2: 2 }, children: [],
+            },
+          ],
+        },
+        {
+          id: 2,
+          resourceText: 'item 2',
+          resourceIndex: 'group1',
+          grouped: { group1: 2 },
+          children: [
+            {
+              id: 1, resourceText: 'item 3', resourceIndex: 'group2', grouped: { group1: 2, group2: 1 }, children: [],
+            },
+            {
+              id: 2, resourceText: 'item 4', resourceIndex: 'group2', grouped: { group1: 2, group2: 2 }, children: [],
+            },
+          ],
+        },
+      ];
+      const groupPanelData = getGroupPanelData(groups, 1, false, 3, false);
+      const timelineRows = getTimelineGroupPanelRows(groupPanelData, false);
+
+      expect(timelineRows).toEqual(groupPanelData.groupPanelItems);
+      expect(timelineRows).toHaveLength(2);
+    });
+
     it('should use one row per leaf path for hierarchical timeline grouping', () => {
       const groups: GroupNode[] = [
         {
@@ -620,7 +658,7 @@ describe('base utils', () => {
           id: 'B', resourceText: 'Building B', resourceIndex: 'buildingId', grouped: { buildingId: 'B' }, children: [],
         },
       ];
-      const groupPanelData = getGroupPanelData(groups, 1, false, 1);
+      const groupPanelData = getGroupPanelData(groups, 1, false, 1, true);
       const timelineRows = getTimelineGroupPanelRows(groupPanelData, false);
 
       expect(timelineRows).toEqual([

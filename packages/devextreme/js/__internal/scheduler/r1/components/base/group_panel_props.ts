@@ -23,6 +23,7 @@ export const GroupPanelBaseDefaultProps: DefaultProps<GroupPanelBaseProps> = {
     maxDepth: 0,
     baseColSpan: 1,
     columnCountPerGroup: 1,
+    hasHierarchy: false,
   },
   groupByDate: false,
   styles: {},

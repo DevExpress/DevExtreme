@@ -58,6 +58,7 @@ const hierarchicalGroupPanelData: GroupPanelData = {
   maxDepth: 2,
   baseColSpan: 1,
   columnCountPerGroup: 1,
+  hasHierarchy: true,
 };
 
 const baseProps = {

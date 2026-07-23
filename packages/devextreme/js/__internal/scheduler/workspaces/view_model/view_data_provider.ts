@@ -196,15 +196,21 @@ export default class ViewDataProvider {
 
   getGroupPanelData(options: ViewDataProviderOptions): GroupPanelData | undefined {
     const renderOptions = this.transformRenderOptions(options);
-    const { groupsTree } = renderOptions.getResourceManager();
+    const resourceManager = renderOptions.getResourceManager();
+    const { groupsTree, groups } = resourceManager;
 
     if (groupsTree.length > 0) {
       const cellCount = this.getCellCount(renderOptions);
+      const hasHierarchy = groups.some(
+        (group) => resourceManager.isHierarchicalResource(group),
+      );
+
       return getGroupPanelData(
         groupsTree,
         cellCount,
         renderOptions.isGroupedByDate,
         renderOptions.isGroupedByDate ? 1 : cellCount,
+        hasHierarchy,
       );
     }
 

@@ -238,6 +238,7 @@ export interface GroupPanelData {
   maxDepth: number;
   baseColSpan: number;
   columnCountPerGroup: number;
+  hasHierarchy: boolean;
 }
 
 export interface ViewDataBase {

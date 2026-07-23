@@ -459,6 +459,7 @@ export const getGroupPanelData = (
   columnCountPerGroup: number,
   groupByDate: boolean,
   baseColSpan: number,
+  hasHierarchy = false,
 ): GroupPanelData => {
   const groupTree = buildGroupPanelTree(groupsTree);
   const maxDepth = getGroupPanelTreeDepth(groupTree);
@@ -474,6 +475,7 @@ export const getGroupPanelData = (
     maxDepth,
     baseColSpan,
     columnCountPerGroup,
+    hasHierarchy,
   };
 };
 
@@ -481,7 +483,7 @@ export const getTimelineGroupPanelRows = (
   groupPanelData: GroupPanelData,
   groupByDate: boolean,
 ): GroupRenderItem[][] => {
-  let rows = groupPanelData.maxDepth > 1
+  let rows = groupPanelData.hasHierarchy
     ? flattenGroupPanelTreeToLeafRows(groupPanelData.groupTree, groupPanelData.baseColSpan)
     : groupPanelData.groupPanelItems;
 
