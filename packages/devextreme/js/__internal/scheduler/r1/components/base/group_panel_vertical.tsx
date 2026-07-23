@@ -1,22 +1,21 @@
 import { BaseInfernoComponent, normalizeStyles } from '@ts/core/r1/runtime/inferno/index';
 
 import { renderUtils } from '../../utils/index';
-import type { GroupPanelProps } from './group_panel';
+import type { GroupPanelBaseProps } from './group_panel_props';
 import { GroupPanelBaseDefaultProps } from './group_panel_props';
 import { GroupPanelVerticalCell } from './group_panel_vertical_cell';
 import { GroupPanelVerticalNode } from './group_panel_vertical_node';
 import { GroupPanelVerticalRow } from './group_panel_vertical_row';
 
 const HIERARCHICAL_GROUP_FLEX_CONTAINER_CLASS = 'dx-scheduler-group-flex-container-hierarchical';
-const TIMELINE_GROUP_TABLE_CLASS = 'dx-scheduler-group-table';
 
 const renderGroupPanelContent = (
-  groupPanelData: GroupPanelProps['groupPanelData'],
-  resourceCellTemplate: GroupPanelProps['resourceCellTemplate'],
-  isTimelineGroupTable: boolean,
+  groupPanelData: GroupPanelBaseProps['groupPanelData'],
+  resourceCellTemplate: GroupPanelBaseProps['resourceCellTemplate'],
+  isTimelineLayout: boolean,
   isHierarchical: boolean,
 ): JSX.Element | JSX.Element[] => {
-  if (isTimelineGroupTable) {
+  if (isTimelineLayout) {
     return groupPanelData.groupPanelItems
       .map((group) => <GroupPanelVerticalRow
         key={group[0].key}
@@ -52,7 +51,7 @@ const renderGroupPanelContent = (
   );
 };
 
-export class GroupPanelVertical extends BaseInfernoComponent<GroupPanelProps> {
+export class GroupPanelVertical extends BaseInfernoComponent<GroupPanelBaseProps> {
   render(): JSX.Element {
     const {
       className,
@@ -61,17 +60,18 @@ export class GroupPanelVertical extends BaseInfernoComponent<GroupPanelProps> {
       resourceCellTemplate,
       height,
       styles,
+      verticalLayout,
     } = this.props;
     const style = normalizeStyles(renderUtils.addHeightToStyle(height, styles));
-    const isTimelineGroupTable = className === TIMELINE_GROUP_TABLE_CLASS;
-    const isHierarchical = !isTimelineGroupTable && groupPanelData.maxDepth > 1;
+    const isTimelineLayout = verticalLayout === 'timeline';
+    const isHierarchical = !isTimelineLayout && groupPanelData.maxDepth > 1;
     const flexContainerClassName = isHierarchical
       ? `dx-scheduler-group-flex-container ${HIERARCHICAL_GROUP_FLEX_CONTAINER_CLASS}`
       : 'dx-scheduler-group-flex-container';
     const groupPanelContent = renderGroupPanelContent(
       groupPanelData,
       resourceCellTemplate,
-      isTimelineGroupTable,
+      isTimelineLayout,
       isHierarchical,
     );
 

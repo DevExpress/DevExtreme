@@ -4,6 +4,8 @@ import type { JSXTemplate, RefObject } from '@ts/core/r1/types';
 import type { GroupItem, GroupPanelData, GroupRenderItem } from '../../../types';
 import type { DefaultProps, PropsWithViewContext, ResourceCellTemplateProps } from '../types';
 
+export type GroupPanelVerticalLayout = 'sidebar' | 'timeline';
+
 export interface GroupPanelBaseProps extends
   Partial<PropsWithClassName>,
   PropsWithStyles,
@@ -13,6 +15,7 @@ export interface GroupPanelBaseProps extends
   height?: number;
   elementRef?: RefObject<HTMLDivElement>;
   resourceCellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
+  verticalLayout?: GroupPanelVerticalLayout;
 }
 
 export const GroupPanelBaseDefaultProps: DefaultProps<GroupPanelBaseProps> = {
@@ -24,6 +27,7 @@ export const GroupPanelBaseDefaultProps: DefaultProps<GroupPanelBaseProps> = {
   },
   groupByDate: false,
   styles: {},
+  verticalLayout: 'sidebar',
 };
 
 export interface GroupPanelCellProps extends PropsWithClassName {

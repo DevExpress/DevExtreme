@@ -31,6 +31,7 @@ export class GroupPanelComponent extends ComponentWrapper {
         'groupByDate',
         'height',
         'className',
+        'verticalLayout',
         'resourceCellTemplate',
       ],
     };

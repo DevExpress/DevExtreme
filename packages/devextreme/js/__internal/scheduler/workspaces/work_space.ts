@@ -464,6 +464,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   readonly viewDirection: 'vertical' | 'horizontal' = 'vertical';
 
+  readonly verticalGroupPanelLayout = 'sidebar';
+
   protected _activeStateUnit(): string {
     return CELL_SELECTOR;
   }
@@ -2388,6 +2390,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       groupByDate: this.isGroupedByDate(),
       resourceCellTemplate: this.option().resourceCellTemplate,
       className: this.verticalGroupTableClass,
+      verticalLayout: this.verticalGroupPanelLayout,
       groupPanelData: this.viewDataProvider.getGroupPanelData(
         this.generateRenderOptions(),
       ),
