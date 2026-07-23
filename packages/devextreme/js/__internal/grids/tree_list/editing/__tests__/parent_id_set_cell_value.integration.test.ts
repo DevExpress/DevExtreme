@@ -42,7 +42,7 @@ describe('TreeList editing parentIdExpr column', () => {
     jest.useRealTimers();
   });
 
-  it.each([0, null])('T1307499 - new row stays visible after editing the parentId column with setCellValue (rootValue: %p)', async (rootValue) => {
+  it.each([0, null])('new row should stay visible after editing the parentId column with setCellValue, rootValue %p (T1307499)', async (rootValue) => {
     const { component, instance } = createTreeList({
       dataSource: [{ id: 1, parentId: rootValue, text: 'item 1' }],
       keyExpr: 'id',
