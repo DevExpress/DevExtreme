@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 
 import { Popup, Position, ToolbarItem } from 'devextreme-react/popup';
 import type { ButtonTypes } from 'devextreme-react/button';
+import 'devextreme/ui/button';
 
 import notify from 'devextreme/ui/notify';
 
