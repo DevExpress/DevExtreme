@@ -6,7 +6,7 @@ import DataGrid, {
   Paging,
   Lookup,
 } from 'devextreme-react/data-grid';
-import 'devextreme-react/text-area';
+import 'devextreme/ui/text_area';
 import { employees, states } from './data.ts';
 
 const notesEditorOptions = { height: 100 };

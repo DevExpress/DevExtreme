@@ -144,7 +144,7 @@
 import {
   DxCardView, DxColumn, DxCardCover, DxSearchPanel, DxEditing, DxForm, DxItem,
 } from 'devextreme-vue/card-view';
-import 'devextreme-vue/text-area';
+import 'devextreme/ui/text_area';
 import { employees, type Employee } from './data.ts';
 
 function altExpr({ fullName }: Employee) {

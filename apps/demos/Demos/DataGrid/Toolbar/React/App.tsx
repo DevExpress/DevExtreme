@@ -4,6 +4,7 @@ import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 import DataGrid, {
   Grouping, Column, ColumnChooser, LoadPanel, Toolbar, Item,
 } from 'devextreme-react/data-grid';
+import 'devextreme/ui/button';
 import type { DataGridRef } from 'devextreme-react/data-grid';
 import { query } from 'devextreme-react/common/data';
 

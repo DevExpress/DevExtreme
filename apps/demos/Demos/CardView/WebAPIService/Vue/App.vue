@@ -68,8 +68,8 @@
 import {
   DxCardView, DxColumn, DxEditing, DxSearchPanel, DxHeaderFilter, DxRequiredRule, DxForm, DxItem,
 } from 'devextreme-vue/card-view';
+import 'devextreme/ui/select_box';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
-import 'devextreme-vue/text-area';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
 

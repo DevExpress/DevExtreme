@@ -101,7 +101,7 @@ import {
   DxLookup,
   DxForm,
 } from 'devextreme-vue/data-grid';
-import 'devextreme-vue/text-area';
+import 'devextreme/ui/text_area';
 import { DxItem } from 'devextreme-vue/form';
 import { employees, states } from './data.ts';
 
