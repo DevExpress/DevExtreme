@@ -16,29 +16,12 @@
 
 // #region COMMON SETTINGS
 
-/**
-* $name 101. Border radius
-* $type text
-*/
 $cardview-fluent-common-border-radius: null !default;
 
-/**
-* $name 104. Text weight
-* $type select
-* $type-values 100|200|300|400|500|600|700|800|900
-*/
 $cardview-fluent-common-text-weight: null !default;
 
-/**
-* $name 105. Vertical gap between cards
-* $type text
-*/
 $cardview-fluent-common-cards-row-gap: null !default;
 
-/**
-* $name 106. Horizontal gap between cards
-* $type text
-*/
 $cardview-fluent-common-cards-column-gap: null !default;
 
 $cardview-fluent-common-gap: null !default;
@@ -53,10 +36,6 @@ $cardview-fluent-card-min-width: null !default;
 
 $cardview-fluent-card-border-width: null !default;
 
-/**
-* $name 202. Border radius
-* $type text
-*/
 $cardview-fluent-card-border-radius: null !default;
 
 $cardview-fluent-card__header-height: null !default;
@@ -65,11 +44,6 @@ $cardview-fluent-card__header-text-size: null !default;
 
 $cardview-fluent-card__header__selection-checkbox-padding-right: null !default;
 
-/**
-* $name 205. Field name text weight
-* $type select
-* $type-values 100|200|300|400|500|600|700|800|900
-*/
 $cardview-fluent-card__field-caption-weight: null !default;
 
 $cardview-fluent-card__cover-max-height: null !default;
@@ -88,11 +62,6 @@ $cardview-fluent-card__content__cell-padding-horizontal: null !default;
 
 // #region CARD (SELECTED)
 
-/**
-* $name 304. Field name text weight
-* $type select
-* $type-values 100|200|300|400|500|600|700|800|900
-*/
 $cardview-fluent-card--selected__field-caption-weight: null !default;
 
 // #endregion
@@ -115,28 +84,14 @@ $cardview-fluent-header-panel--empty-line-height: null !default;
 
 $cardview-fluent-header-panel__item-border-width: null !default;
 
-/**
-* $name 402. Border radius
-* $type text
-*/
 $cardview-fluent-header-panel__item-border-radius: null !default;
 
 $cardview-fluent-header-panel__item-padding-vertical: null !default;
 
 $cardview-fluent-header-panel__item-padding-horizontal: null !default;
 
-/**
-* $name 404. Text weight
-* $type select
-* $type-values 100|200|300|400|500|600|700|800|900
-*/
 $cardview-fluent-header-panel__item-text-weight: null !default;
 
-/**
-* $name 408. Sort index text weight
-* $type select
-* $type-values 100|200|300|400|500|600|700|800|900
-*/
 $cardview-fluent-header-panel__item__sort-index-text-weight: null !default;
 
 $cardview-fluent-header-panel__item__icon-size: null !default;
@@ -148,47 +103,22 @@ $cardview-fluent-header-item__right-padding: null !default;
 
 // #region HEADER PANEL ITEM (HOVERED)
 
-/**
-* $name 503. Text weight
-* $type select
-* $type-values 100|200|300|400|500|600|700|800|900
-*/
 $cardview-fluent-header-panel__item--hovered-text-weight: null !default;
 
-/**
-* $name 507. Sort index text weight
-* $type select
-* $type-values 100|200|300|400|500|600|700|800|900
-*/
 $cardview-fluent-header-panel__item--hovered__sort-index-text-weight: null !default;
 
 // #endregion
 
 // #region HEADER PANEL ITEM (DISABLED)
 
-/**
-* $name 603. Text weight
-* $type select
-* $type-values 100|200|300|400|500|600|700|800|900
-*/
 $cardview-fluent-header-panel__item--disabled-text-weight: null !default;
 
-/**
-* $name 607. Sort index text weight
-* $type select
-* $type-values 100|200|300|400|500|600|700|800|900
-*/
 $cardview-fluent-header-panel__item--disabled__sort-index-text-weight: null !default;
 
 // #endregion
 
 // #region HEADER PANEL ITEM (ON DRAG)
 
-/**
-* $name 703. Text weight
-* $type select
-* $type-values 100|200|300|400|500|600|700|800|900
-*/
 $cardview-fluent-header-panel__item--dragged-text-weight: null !default;
 
 $cardview-fluent-header-item__sort-indicator__border-size: null;
@@ -204,20 +134,12 @@ $cardview-fluent-header-panel__dropzone-top: null !default;
 
 $cardview-fluent-header-panel__dropzone-border-width: null !default;
 
-/**
-* $name 801. Border radius
-* $type text
-*/
 $cardview-fluent-header-panel__dropzone-border-radius: null !default;
 
 // #endregion
 
 // #region FILTER PANEL
 
-/**
-* $name 901. Border radius
-* $type text
-*/
 $cardview-fluent-filter-panel-border-radius: null !default;
 
 // #endregion
@@ -234,19 +156,10 @@ $cardview-fluent-nodata-view__icon-size: null !default;
 
 // #region HIGHLIGHTS IN SEARCH
 
-/**
-* $name 1101. Border radius
-* $type text
-*/
 $cardview-fluent-card__content__field-value--highlighted-border-radius: null !default;
 
 $cardview-fluent-card__content__field-value--highlighted-border-padding: null !default;
 
-/**
-* $name 1103. Text weight
-* $type select
-* $type-values 100|200|300|400|500|600|700|800|900
-*/
 $cardview-fluent-card__content__field-value--highlighted-text-weight: null !default;
 
 // #endregion

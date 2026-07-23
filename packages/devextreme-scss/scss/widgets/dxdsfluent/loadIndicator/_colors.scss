@@ -2,16 +2,8 @@
 
 // adduse
 
-/**
-* $name 10. Indicator color
-* $type color
-*/
 $load-indicator-segment-bg-color: ds.$spinner-color-primary-loader-rest !default;
 
-/**
-* $name 20. Indicator background color
-* $type color
-*/
 
 // Light track: DS spinner loader==track kills the ring contrast (see DIVERGENCES.md)
 $load-indicator-inner-segment-border-color: ds.$color-surface-primary-subdued-rest !default;

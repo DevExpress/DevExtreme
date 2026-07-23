@@ -4,62 +4,30 @@
 
 $filterbuilder-bg: ds.$color-surface-neutral-default-rest !default;
 
-/**
-* $name 10. Text color
-* $type color
-*/
 $filterbuilder-text-color: ds.$color-content-neutral-default-rest !default;
 
-/**
-* $name 20. Focused text color
-* $type color
-*/
 $filterbuilder-text-focus-color: ds.$color-content-neutral-default-static-dark-rest !default;
 
-/**
-* $name 30. Plus icon color
-* $type color
-*/
 $filterbuilder-plus-icon-color: ds.$color-content-success-default-rest !default;
 $filterbuilder-plus-icon-hover-color: ds.$color-content-success-default-hovered !default;
 $filterbuilder-plus-icon-focus-color: ds.$color-content-success-default-active !default;
 
-/**
-* $name 40. Remove icon color
-* $type color
-*/
 $filterbuilder-remove-icon-color: ds.$color-content-danger-default-rest !default;
 $filterbuilder-remove-icon-hover-color: ds.$color-content-danger-default-hovered !default;
 $filterbuilder-remove-icon-focus-color: ds.$color-content-danger-default-active !default;
 
-/**
-* $name 50. Group operation button color
-* $type color
-*/
 $filterbuilder-group-operation-color: ds.$color-surface-danger-subdued-rest !default;
 $filterbuilder-group-operation-hover-color: ds.$color-surface-danger-subdued-hovered !default;
 $filterbuilder-group-operation-focus-color: ds.$color-surface-danger-default-rest !default;
 
-/**
-* $name 60. Data field button color
-* $type color
-*/
 $filterbuilder-item-field-color: ds.$color-surface-primary-subdued-rest !default;
 $filterbuilder-item-field-hover-color: ds.$color-surface-primary-subdued-hovered !default;
 $filterbuilder-item-field-focus-color: ds.$color-surface-primary-default-rest !default;
 
-/**
-* $name 70. Operation button color
-* $type color
-*/
 $filterbuilder-item-operator-color: ds.$color-surface-success-subdued-rest !default;
 $filterbuilder-item-operator-hover-color: ds.$color-surface-success-subdued-hovered !default;
 $filterbuilder-item-operator-focus-color: ds.$color-surface-success-default-rest !default;
 
-/**
-* $name 80. Value button color
-* $type color
-*/
 $filterbuilder-item-value-color: ds.$color-surface-neutral-alpha-rest !default;
 $filterbuilder-item-value-hover-color: ds.$color-surface-neutral-alpha-hovered !default;
 $filterbuilder-item-value-focus-color: ds.$color-surface-neutral-alpha-active !default;

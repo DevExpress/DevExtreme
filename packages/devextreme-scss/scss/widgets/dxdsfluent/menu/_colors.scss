@@ -6,17 +6,9 @@ $menu-popup-bg: ds.$color-surface-neutral-default-rest !default;
 $menu-item-hover-bg: ds.$color-surface-neutral-default-hovered !default;
 $menu-item-bg-active: ds.$color-surface-neutral-default-active !default;
 
-/**
-* $name 10. Text color
-* $type color
-*/
 $menu-color: ds.$color-content-neutral-default-rest !default;
 $menu-item-expanded-color: $menu-color !default;
 
-/**
-* $name 20. Selected item background color
-* $type color
-*/
 $menu-item-selected-bg: ds.$color-surface-neutral-default-selected !default;
 $menu-popup-border-color: ds.$color-border-neutral-default-rest !default;
 $menu-separator-bg: ds.$separator-color !default;

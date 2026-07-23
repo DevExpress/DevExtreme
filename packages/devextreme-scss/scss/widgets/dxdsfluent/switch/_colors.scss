@@ -6,28 +6,12 @@ $switch-accent-color: ds.$switch-color-checked-bg-rest !default;
 $switch-accent-color-hover: ds.$switch-color-checked-bg-hovered !default;
 $switch-accent-color-focused: ds.$switch-color-checked-bg-active !default;
 
-/**
-* $name 20. Track 'OFF' background color
-* $type color
-*/
 $switch-bg: ds.$switch-color-unchecked-bg-rest !default;
 
-/**
-* $name 30. Handle 'OFF' background color
-* $type color
-*/
 $switch-handle-off-bg: ds.$switch-color-unchecked-trigger-rest !default;
 
-/**
-* $name 40. Track 'ON' background color
-* $type color
-*/
 $switch-on-bg: ds.$switch-color-checked-bg-rest !default;
 
-/**
-* $name 50. Handle 'ON' background color
-* $type color
-*/
 $switch-handle-on-bg: ds.$switch-color-checked-trigger-rest !default;
 $switch-handle-border-radius: 50% !default;
 $switch-on-disabled-bg: ds.$switch-color-checked-bg-disable !default;

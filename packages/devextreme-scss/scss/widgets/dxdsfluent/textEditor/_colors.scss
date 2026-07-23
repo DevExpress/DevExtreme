@@ -3,80 +3,32 @@
 
 // adduse
 
-/**
-* $name 10. Text color
-* $type color
-*/
 $texteditor-color: ds.$text-input-color-default-content-rest !default;
 
-/**
-* $name 20. Placeholder text color
-* $type color
-*/
 $texteditor-placeholder-color: ds.$text-content-color-default-placeholder-rest !default;
 
-/**
-* $name 30. Outlined background color
-* $type color
-*/
 $texteditor-outlined-bg: ds.$text-input-color-default-bg-rest !default;
 
-/**
-* $name 31. Outlined hovered background color
-* $type color
-*/
 $texteditor-outlined-bg-hover: $texteditor-outlined-bg !default;
 
-/**
-* $name 32. Outlined focused background color
-* $type color
-*/
 $texteditor-outlined-bg-focused: $texteditor-outlined-bg !default;
 
-/**
-* $name 40. Filled background color
-* $type color
-*/
 $texteditor-filled-bg: ds.$color-surface-neutral-deep-rest !default;
 
-/**
-* $name 50. Underlined background color
-* $type color
-*/
 $texteditor-underlined-bg: transparent !default;
 
-/**
-* $name 51. Underlined hovered background color
-* $type color
-*/
 $texteditor-underlined-bg-hover: $texteditor-underlined-bg !default;
 
-/**
-* $name 52. Underlined focused background color
-* $type color
-*/
 $texteditor-underlined-bg-focused: $texteditor-underlined-bg !default;
 
-/**
-* $name 60. Border color
-* $type color
-*/
 $texteditor-border-color: ds.$text-input-color-default-border-rest !default;
 $texteditor-border-color-hover: ds.$text-input-color-default-border-hovered !default;
 $texteditor-border-color-focused: ds.$text-input-color-default-border-active !default;
 
-/**
-* $name 70. Bottom border color
-* $type color
-*/
 $texteditor-border-bottom-color: ds.$text-input-color-default-line-rest !default;
 $texteditor-border-bottom-color-hover: ds.$text-input-color-default-line-hovered !default;
 $texteditor-border-bottom-color-focused: ds.$text-input-color-default-line-hovered !default;
 
-/**
-* $name 80. Focused state indicator color
-* $type color
-*/
 $texteditor-indicator-border-color: ds.$text-input-color-default-line-focused !default;
 
 $texteditor-button-clear-icon-color: ds.$color-content-neutral-subdued-rest !default;
@@ -90,16 +42,8 @@ $texteditor-label-transition:
   transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
   top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
 
-/**
-* $name 41. Filled hovered background color
-* $type color
-*/
 $texteditor-filled-bg-hover: $texteditor-filled-bg !default;
 
-/**
-* $name 42. Filled focused background color
-* $type color
-*/
 $texteditor-filled-bg-focused: $texteditor-filled-bg !default;
 
 $texteditor-label-color: $texteditor-placeholder-color;

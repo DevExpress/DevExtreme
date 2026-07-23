@@ -5,32 +5,16 @@
 
 $calendar-color: ds.$color-content-neutral-default-rest !default;
 
-/**
-* $name 20. Navigator text color
-* $type color
-*/
 $calendar-navigator-text-color: $button-normal-color !default;
 
-/**
-* $name 30. Header text color
-* $type color
-*/
 $calendar-header-color: $calendar-color !default;
 
-/**
-* $name 40. Other month text color
-* $type color
-*/
 $calendar-cell-other-color: ds.$color-content-neutral-subdued-rest !default;
 $calendar-bg: transparent !default;
 $calendar-hover-bg: $button-default-outlined-selected-bg !default;
 $calendar-cell-hover-border-color: $calendar-hover-bg !default;
 $calendar-cell-hover-color: $calendar-color !default;
 
-/**
-* $name 50. Selected cell background color
-* $type color
-*/
 $calendar-cell-selected-bg: ds.$color-surface-primary-default-rest !default;
 $calendar-cell-selected-color: ds.$color-content-neutral-default-static-dark-rest !default;
 $calendar-cell-contoured-border-radius: 50% !default;

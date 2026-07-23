@@ -5,32 +5,16 @@
 $pivotgrid-area-background: ds.$color-surface-neutral-default-rest !default;
 $pivotgrid-border-color: ds.$color-border-neutral-default-rest !default;
 
-/**
-* $name 10. Header text color
-* $type color
-*/
 $pivotgrid-area-color: ds.$color-content-neutral-default-rest !default;
 $pivotgrid-field-area-box-text-color: $pivotgrid-area-color !default;
 $pivotgrid-field-area-box-background-color: ds.$color-surface-neutral-deep-rest !default;
 $pivotgrid-field-area-box-font-weight: 400 !default;
 $pivotgrid-data-area-color: ds.$color-content-neutral-default-rest !default;
 
-/**
-* $name 20. Total background color
-* $type color
-*/
 $pivotgrid-totalcolor: ds.$color-surface-neutral-default-rest !default;
 
-/**
-* $name 30. Grand total background color
-* $type color
-*/
 $pivotgrid-grandtotalcolor: ds.$color-surface-neutral-deep-rest !default;
 
-/**
-* $name 40. Field area text color
-* $type color
-*/
 $pivotgrid-field-area-text-color: ds.$color-content-neutral-subdued-rest !default;
 $pivotgrid-accent-color: ds.$color-border-primary-default-rest !default;
 $pivotgrid-drag-header-border-color: rgb(from #{ds.$color-border-primary-default-rest} r g b / 0.5) !default;

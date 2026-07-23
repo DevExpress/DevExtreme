@@ -3,61 +3,29 @@
 
 // adduse
 
-/**
-* $name 10. Border color
-* $type color
-*/
 $scheduler-base-border-color: ds.$color-border-neutral-default-rest !default;
 $scheduler-cell-active-bg: ds.$color-surface-neutral-default-active !default;
 $scheduler-cell-hover-bg: ds.$color-surface-neutral-default-hovered !default;
 $scheduler-group-separator-border-color: ds.$color-border-neutral-accessible-rest !default;
 
-/**
-* $name 20. Hour separator color
-* $type color
-*/
 $scheduler-accent-border-color: ds.$color-border-neutral-default-rest !default;
 
-/**
-* $name 30. Appointment text color
-* $type color
-*/
 $scheduler-appointment-text-color: ds.$color-content-neutral-default-rest !default;
 $scheduler-appointment-focus-color: null !default;
 
-/**
-* $name 40. Appointment background color
-* $type color
-*/
 $scheduler-appointment-base-color: ds.$color-surface-primary-subdued-rest !default;
 
-/**
-* $name 50. Appointment start color
-* $type color
-*/
 $scheduler-appointment-start-color: ds.$color-shadow-key-darker !default;
 $scheduler-appointment-active-color: $button-default-outlined-active-bg;
 
-/**
-* $name 60. Focused cell color
-* $type color
-*/
 $scheduler-workspace-focused-cell-color: ds.$color-surface-primary-alpha-rest !default;
 
-/**
-* $name 70. First day of month separator color
-* $type color
-*/
 $scheduler-first-month-border-color: ds.$color-border-neutral-default-rest !default;
 $scheduler-droppable-cell-background-color: ds.$color-surface-neutral-deep-rest !default;
 $scheduler-panel-text-color: ds.$color-content-neutral-subdued-rest !default;
 $scheduler-workspace-background-color: ds.$color-surface-neutral-default-rest !default;
 $scheduler-workspace-accent-color: ds.$color-content-primary-default-rest !default;
 
-/**
-* $name 80. Date-time indicator color
-* $type color
-*/
 $scheduler-current-time-cell-color: ds.$color-content-primary-default-rest !default;
 $scheduler-time-indicator-color: ds.$color-surface-danger-default-rest !default;
 $scheduler-dd-appointment-hover-text-color: ds.$color-content-neutral-default-inverted-rest !default;

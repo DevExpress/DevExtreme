@@ -13,22 +13,10 @@ $fluent-base-inline-horizontal-padding: null !default;
 $fluent-base-border-radius: null !default;
 $fluent-html-editor-add-image-dialog-base-padding: ds.$spacing-50 !default;
 
-/**
-* $name 11. Button height
-* $type text
-*/
 $fluent-button-height: null !default;
 
-/**
-* $name 12. Icon size
-* $type text
-*/
 $fluent-button-icon-size: null !default;
 
-/**
-* $name 13. Icon margin
-* $type text
-*/
 $fluent-button-icon-margin: null !default;
 
 @if $size == "default" {
@@ -69,10 +57,6 @@ $fluent-button-icon-margin: null !default;
 $fluent-base-border-width: ds.$border-width-10 !default;
 
 
-/**
-* $name 200. Border radius
-* $type text
-*/
 $base-border-radius: $fluent-base-border-radius !default;
 
 $fluent-base-standard-texteditor-input-horizontal-padding: 0 !default;

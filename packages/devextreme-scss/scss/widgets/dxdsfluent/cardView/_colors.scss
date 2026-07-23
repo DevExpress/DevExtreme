@@ -17,68 +17,28 @@
 
 // #region COMMON SETTINGS
 
-/**
-* $name 100. Background color
-* $type color
-*/
 $cardview-fluent-common-bg-color: ds.$color-surface-neutral-subdued-rest !default;
 
-/**
-* $name 102. Link color
-* $type color
-*/
 $cardview-fluent-common-link-color: ds.$color-content-primary-default-rest !default;
 
-/**
-* $name 103. Text color
-* $type color
-*/
 $cardview-fluent-common-text-color: ds.$color-content-neutral-default-rest !default;
 
 // #endregion
 
 // #region CARD
 
-/**
-* $name 200. Background color
-* $type color
-*/
 $cardview-fluent-card-bg-color: ds.$color-surface-neutral-default-rest !default;
 
-/**
-* $name 201. Border color
-* $type color
-*/
 $cardview-fluent-card-border-color: ds.$color-border-neutral-default-rest !default;
 
-/**
-* $name 203. Divider color
-* $type color
-*/
 $cardview-fluent-card-divider-color: $cardview-fluent-card-border-color !default;
 
-/**
-* $name 204. Text color
-* $type color
-*/
 $cardview-fluent-card-text-color: $cardview-fluent-common-text-color !default;
 
-/**
-* $name 206. Cover background color
-* $type color
-*/
 $cardview-fluent-card__cover-bg-color: ds.$color-surface-neutral-default-static-light-rest !default;
 
-/**
-* $name 207. "Empty cover" background color
-* $type color
-*/
 $cardview-fluent-card__cover--noimage-bg-color: ds.$color-surface-neutral-deep-rest !default;
 
-/**
-* $name 208. "Empty cover" icon color
-* $type color
-*/
 $cardview-fluent-card__cover--noimage__icon-color: ds.$color-content-neutral-subdued-rest !default;
 
 $cardview-fluent-card--focused-outline-color: ds.$color-border-primary-default-rest !default;
@@ -87,86 +47,34 @@ $cardview-fluent-card--focused-outline-color: ds.$color-border-primary-default-r
 
 // #region CARD (SELECTED)
 
-/**
-* $name 300. Background color
-* $type color
-*/
 $cardview-fluent-card--selected-bg-color: ds.$color-surface-primary-subdued-rest !default;
 
-/**
-* $name 301. Border color
-* $type color
-*/
 $cardview-fluent-card--selected-border-color: ds.$color-border-primary-default-rest !default;
 
-/**
-* $name 302. Divider color
-* $type color
-*/
 $cardview-fluent-card--selected-divider-color: $cardview-fluent-card--selected-border-color !default;
 
-/**
-* $name 303. Text color
-* $type color
-*/
 $cardview-fluent-card--selected-text-color: $cardview-fluent-card-text-color !default;
 
-/**
-* $name 305. Cover background color
-* $type color
-*/
 $cardview-fluent-card--selected__cover-bg-color: $cardview-fluent-card__cover-bg-color !default;
 
-/**
-* $name 306. "Empty cover" background color
-* $type color
-*/
 $cardview-fluent-card--selected__cover--noimage-bg-color: $cardview-fluent-card__cover--noimage-bg-color !default;
 
-/**
-* $name 307. "Empty cover" icon color
-* $type color
-*/
 $cardview-fluent-card--selected__cover--noimage__icon-color: $cardview-fluent-card__cover--noimage__icon-color !default;
 
 // #endregion
 
 // #region HEADER PANEL ITEM
 
-/**
-* $name 400. Background color
-* $type color
-*/
 $cardview-fluent-header-panel__item-bg-color: ds.$color-surface-neutral-deep-rest !default;
 
-/**
-* $name 401. Border color
-* $type color
-*/
 $cardview-fluent-header-panel__item-border-color: ds.$color-border-neutral-default-rest !default;
 
-/**
-* $name 403. Text color
-* $type color
-*/
 $cardview-fluent-header-panel__item-text-color: $cardview-fluent-common-text-color !default;
 
-/**
-* $name 405. Icon color
-* $type color
-*/
 $cardview-fluent-header-panel__item__icon-color: $cardview-fluent-common-text-color !default;
 
-/**
-* $name 406. Active "Filter" icon color
-* $type color
-*/
 $cardview-fluent-header-panel__item__header-filter-icon--selected-color: ds.$color-content-primary-default-rest !default;
 
-/**
-* $name 407. Sort index text color
-* $type color
-*/
 $cardview-fluent-header-panel__item__sort-index-text-color: $cardview-fluent-common-text-color !default;
 
 $cardview-fluent-header-panel__item--focused-outline-color: ds.$color-border-primary-default-rest !default;
@@ -175,226 +83,94 @@ $cardview-fluent-header-panel__item--focused-outline-color: ds.$color-border-pri
 
 // #region HEADER PANEL ITEM (HOVERED)
 
-/**
-* $name 500. Background color
-* $type color
-*/
 $cardview-fluent-header-panel__item--hovered-bg-color: ds.$color-surface-neutral-deep-hovered !default;
 
-/**
-* $name 501. Border color
-* $type color
-*/
 $cardview-fluent-header-panel__item--hovered-border-color: ds.$color-border-neutral-default-hovered !default;
 
-/**
-* $name 502. Text color
-* $type color
-*/
 $cardview-fluent-header-panel__item--hovered-text-color: $cardview-fluent-header-panel__item-text-color !default;
 
-/**
-* $name 504. Icon color
-* $type color
-*/
 $cardview-fluent-header-panel__item--hovered__icon-color: $cardview-fluent-header-panel__item__icon-color !default;
 
-/**
-* $name 505. Active "Filter" icon color
-* $type color
-*/
 $cardview-fluent-header-panel__item--hovered__header-filter-icon--selected-color: $cardview-fluent-header-panel__item__header-filter-icon--selected-color !default;
 
-/**
-* $name 506. Sort index text color
-* $type color
-*/
 $cardview-fluent-header-panel__item--hovered__sort-index-text-color: $cardview-fluent-header-panel__item__sort-index-text-color !default;
 
 // #endregion
 
 // #region HEADER PANEL ITEM (DISABLED)
 
-/**
-* $name 600. Background color
-* $type color
-*/
 $cardview-fluent-header-panel__item--disabled-bg-color: $cardview-fluent-header-panel__item-bg-color !default;
 
-/**
-* $name 601. Border color
-* $type color
-*/
 $cardview-fluent-header-panel__item--disabled-border-color: $cardview-fluent-header-panel__item-border-color !default;
 
-/**
-* $name 602. Text color
-* $type color
-*/
 $cardview-fluent-header-panel__item--disabled-text-color: ds.$color-content-neutral-default-disabled !default;
 
-/**
-* $name 604. Icon color
-* $type color
-*/
 $cardview-fluent-header-panel__item--disabled__icon-color: ds.$color-content-neutral-default-disabled !default;
 
-/**
-* $name 605. Active "Filter" icon color
-* $type color
-*/
 $cardview-fluent-header-panel__item--disabled__header-filter-icon--selected-color: ds.$color-content-neutral-default-disabled !default;
 
-/**
-* $name 606. Sort index text color
-* $type color
-*/
 $cardview-fluent-header-panel__item--disabled__sort-index-text-color: ds.$color-content-neutral-default-disabled !default;
 
 // #endregion
 
 // #region HEADER PANEL ITEM (ON DRAG)
 
-/**
-* $name 700. Background color
-* $type color
-*/
 $cardview-fluent-header-panel__item--dragged-bg-color: $cardview-fluent-header-panel__item-bg-color !default;
 
-/**
-* $name 701. Border color
-* $type color
-*/
 $cardview-fluent-header-panel__item--dragged-border-color: $cardview-fluent-header-panel__item-border-color !default;
 
-/**
-* $name 702. Text color
-* $type color
-*/
 $cardview-fluent-header-panel__item--dragged-text-color: $cardview-fluent-header-panel__item-text-color !default;
 
-/**
-* $name 704. "Drag allowed" icon color
-* $type color
-*/
 $cardview-fluent-header-panel__item--dragged__allowance-icon-color: $cardview-fluent-common-text-color !default;
 
-/**
-* $name 705. "Drag blocked" icon color
-* $type color
-*/
 $cardview-fluent-header-panel__item--dragged__prohibition-icon-color: ds.$color-content-danger-default-rest !default;
 
-/**
-* $name 706. Box shadow color
-* $type color
-*/
 $cardview-fluent-header-panel__item--dragged-box-shadow-color: ds.$color-shadow-key !default;
 
 // #endregion
 
 // #region HEADER PANEL DROP ZONE
 
-/**
-* $name 800. Background color
-* $type color
-*/
 $cardview-fluent-header-panel__dropzone-bg-color: ds.$color-surface-primary-subdued-rest !default;
 
-/**
-* $name 802. Border color
-* $type color
-*/
 $cardview-fluent-header-panel__dropzone-border-color: ds.$color-border-primary-default-rest !default;
 
-/**
-* $name 803. Text color
-* $type color
-*/
 $cardview-fluent-header-panel__dropzone-text-color: ds.$color-content-primary-default-rest !default;
 
-/**
-* $name 804. Icon color
-* $type color
-*/
 $cardview-fluent-header-panel__dropzone__icon-color: ds.$color-content-primary-default-rest !default;
 
 // #endregion
 
 // #region FILTER PANEL
 
-/**
-* $name 900. Background color
-* $type color
-*/
 $cardview-fluent-filter-panel-bg-color: $cardview-fluent-common-bg-color !default;
 
-/**
-* $name 902. Border color
-* $type color
-*/
 $cardview-fluent-filter-panel-border-color: ds.$color-border-neutral-default-rest !default;
 
-/**
-* $name 903. Text color
-* $type color
-*/
 $cardview-fluent-filter-panel-text-color: ds.$color-content-primary-default-rest !default;
 
-/**
-* $name 904. Icon color
-* $type color
-*/
 $cardview-fluent-filter-panel__icon-color: ds.$color-content-primary-default-rest !default;
 
 // #endregion
 
 // #region EMPTY VIEW
 
-/**
-* $name 1000. Background color
-* $type color
-*/
 $cardview-fluent-nodata-view-bg-color: $cardview-fluent-common-bg-color !default;
 
-/**
-* $name 1001. Text color
-* $type color
-*/
 $cardview-fluent-nodata-view-text-color: ds.$color-content-neutral-subdued-rest !default;
 
-/**
-* $name 1002. Icon color
-* $type color
-*/
 $cardview-fluent-nodata-view__icon-color: $cardview-fluent-nodata-view-text-color !default;
 
-/**
-* $name 1003. Icon background color
-* $type color
-*/
 $cardview-fluent-nodata-view__icon-bg-color: ds.$color-surface-neutral-deep-rest !default;
 
 // #endregion
 
 // #region HIGHLIGHTS IN SEARCH
 
-/**
-* $name 1100. Background color
-* $type color
-*/
 $cardview-fluent-card__content__field-value--highlighted-bg-color: ds.$color-surface-highlight-rest !default;
 
-/**
-* $name 1102. Text color
-* $type color
-*/
 $cardview-fluent-card__content__field-value--highlighted-text-color: ds.$color-content-highlight-rest !default;
 
-/**
-* $name 1104. Box shadow color
-* $type color
-*/
 $cardview-fluent-card__content__field-value--highlighted-box-shadow-color: ds.$color-shadow-key !default;
 
 // #endregion

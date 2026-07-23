@@ -2,16 +2,8 @@
 
 // adduse
 
-/**
-* $name 10. Bar background color
-* $type color
-*/
 $progressbar-bg: ds.$progress-bar-progress-line-color-track-rest !default;
 
-/**
-* $name 20. Selected range background color
-* $type color
-*/
 $progressbar-range-bg: ds.$progress-bar-progress-line-color-indicator-rest !default;
 $progressbar-container-disabled-bg: ds.$progress-bar-progress-line-color-track-disabled !default;
 $progressbar-range-disabled-bg: ds.$progress-bar-progress-line-color-indicator-disabled !default;
@@ -22,10 +14,6 @@ $progressbar-interdeterminate-state-gradient: -90deg, transparent 5%, $progressb
 $progressbar-disabled-interdeterminate-state-gradient: -90deg, transparent 5%, $progressbar-range-disabled-bg, transparent 95%;
 $progressbar-invalid-interdeterminate-state-gradient: -90deg, transparent 5%, $progressbar-range-invalid-color, transparent 95%;
 
-/**
-* $name 30. Label color
-* $type color
-*/
 $progressbar-label-color: ds.$color-content-neutral-default-rest !default;
 
 $progressbar-foreground-disabled: ds.$color-content-neutral-default-disabled !default;

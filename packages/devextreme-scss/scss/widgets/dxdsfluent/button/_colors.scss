@@ -8,106 +8,38 @@ $button-disabled-background: ds.$button-contained-color-bg-disabled !default;
 $button-disabled-icon-opacity: 0.6 !default;
 $button-shadow-color: ds.$color-shadow-key !default;
 
-/**
-* $name 10. Text color
-* $type color
-*/
 $button-normal-color: ds.$button-outline-color-content-rest !default;
 
-/**
-* $name 15. Background color (contained)
-* $type color
-*/
 $button-normal-bg: ds.$button-outline-color-bg-rest !default;
 
-/**
-* $name 16. Background color (outlined)
-* $type color
-*/
 $button-normal-outlined-bg: transparent !default;
 
-/**
-* $name 17. Background color (text)
-* $type color
-*/
 $button-normal-text-bg: transparent !default;
 
-/**
-* $name 20. Selected state text color
-* $type color
-*/
 $button-normal-selected-color: ds.$button-outline-color-content-rest !default;
 
-/**
-* $name 30. Hover state background color
-* $type color
-*/
 $button-normal-hover-bg: ds.$button-outline-color-bg-hovered !default;
 
-/**
-* $name 40. Focused state background color
-* $type color
-*/
 $button-normal-focused-bg: ds.$button-outline-color-bg-hovered !default;
 
-/**
-* $name 50. Active state background color
-* $type color
-*/
 $button-normal-active-bg: ds.$button-outline-color-bg-active !default;
 
-/**
-* $name 25. Selected state background color
-* $type color
-*/
 $button-normal-selected-bg: ds.$color-surface-neutral-alpha-selected !default;
 
-/**
-* $name 10. Text color (contained)
-* $type color
-*/
 $button-default-color: ds.$button-contained-color-content-rest !default;
 
-/**
-* $name 15. Background color
-* $type color
-*/
 $button-default-bg: ds.$button-contained-color-bg-rest !default;
 
-/**
-* $name 20. Selected state text color
-* $type color
-*/
 $button-default-selected-color: ds.$button-contained-color-content-rest !default;
 
-/**
-* $name 30. Hover state background color
-* $type color
-*/
 $button-default-hover-bg: ds.$button-contained-color-bg-hovered !default;
 
-/**
-* $name 40. Focused state background color
-* $type color
-*/
 $button-default-focused-bg: ds.$button-contained-color-bg-hovered !default;
 
-/**
-* $name 50. Active state background color
-* $type color
-*/
 $button-default-active-bg: ds.$button-contained-color-bg-active !default;
 
-/**
-* $name 25. Selected state background color
-* $type color
-*/
 $button-default-selected-bg: ds.$color-surface-primary-default-selected !default;
 
-/**
-* $name 11. Text color (outlined)
-* $type color
-*/
 $button-default-outlined-color: ds.$color-content-primary-default-rest !default;
 $button-default-outlined-border-color: ds.$color-border-primary-default-rest !default;
 
@@ -117,52 +49,20 @@ $button-default-outlined-focused-bg: ds.$color-surface-primary-deep-hovered !def
 $button-default-outlined-active-bg: ds.$color-surface-primary-deep-active !default;
 $button-default-outlined-selected-bg: ds.$color-surface-primary-deep-selected !default;
 
-/**
-* $name 11. Text color (text)
-* $type color
-*/
 $button-default-text-color: ds.$color-content-primary-default-rest !default;
 
-/**
-* $name 10. Text color
-* $type color
-*/
 $button-danger-color: ds.$button-contained-color-content-rest !default;
 
-/**
-* $name 15. Background color
-* $type color
-*/
 $button-danger-bg: ds.$color-surface-danger-default-rest !default;
 
-/**
-* $name 20. Selected state text color
-* $type color
-*/
 $button-danger-selected-color: ds.$button-contained-color-content-rest !default;
 
-/**
-* $name 30. Hover state background color
-* $type color
-*/
 $button-danger-hover-bg: ds.$color-surface-danger-default-hovered !default;
 
-/**
-* $name 40. Focused state background color
-* $type color
-*/
 $button-danger-focused-bg: ds.$color-surface-danger-default-hovered !default;
 
-/**
-* $name 50. Active state background color
-* $type color
-*/
 $button-danger-active-bg: ds.$color-surface-danger-default-active !default;
 
-/**
-* $name 25. Selected state background color
-* $type color
-*/
 $button-danger-selected-bg: ds.$color-surface-danger-default-selected !default;
 
 $button-danger-outlined-color: ds.$color-content-danger-default-rest !default;
@@ -176,46 +76,18 @@ $button-danger-outlined-focused-bg: ds.$color-surface-danger-deep-hovered !defau
 $button-danger-outlined-active-bg: ds.$color-surface-danger-deep-active !default;
 $button-danger-outlined-selected-bg: ds.$color-surface-danger-deep-selected !default;
 
-/**
-* $name 10. Text color
-* $type color
-*/
 $button-success-color: ds.$button-contained-color-content-rest !default;
 
-/**
-* $name 15. Background color
-* $type color
-*/
 $button-success-bg: ds.$color-surface-success-default-rest !default;
 
-/**
-* $name 20. Selected state text color
-* $type color
-*/
 $button-success-selected-color: ds.$button-contained-color-content-rest !default;
 
-/**
-* $name 30. Hover state background color
-* $type color
-*/
 $button-success-hover-bg: ds.$color-surface-success-default-hovered !default;
 
-/**
-* $name 40. Focused state background color
-* $type color
-*/
 $button-success-focused-bg: ds.$color-surface-success-default-hovered !default;
 
-/**
-* $name 50. Active state background color
-* $type color
-*/
 $button-success-active-bg: ds.$color-surface-success-default-active !default;
 
-/**
-* $name 25. Selected state background color
-* $type color
-*/
 $button-success-selected-bg: ds.$color-surface-success-default-selected !default;
 
 $button-success-outlined-color: ds.$color-content-success-default-rest !default;
@@ -246,40 +118,16 @@ $button-normal-text-focused-bg: $button-normal-focused-bg !default;
 $button-normal-text-active-bg: $button-normal-active-bg !default;
 $button-normal-text-selected-bg: $button-normal-selected-bg !default;
 
-/**
-* $name 12. Hover state text color (outlined)
-* $type color
-*/
 $button-default-outlined-color-hover: ds.$color-content-primary-default-hovered !default;
 
-/**
-* $name 13. Active state text color (outlined)
-* $type color
-*/
 $button-default-outlined-color-active: ds.$color-content-primary-default-active !default;
 
-/**
-* $name 21. Selected state text color (outlined)
-* $type color
-*/
 $button-default-outlined-selected-color: ds.$color-content-primary-default-hovered !default;
 
-/**
-* $name 12. Hover state text color (text)
-* $type color
-*/
 $button-default-text-color-hover: ds.$color-content-primary-default-hovered !default;
 
-/**
-* $name 13. Active state text color (text)
-* $type color
-*/
 $button-default-text-color-active: $button-default-outlined-color-active !default;
 
-/**
-* $name 21. Selected state text color (text)
-* $type color
-*/
 $button-default-text-selected-color: ds.$color-content-primary-default-hovered !default;
 
 $button-default-text-bg: transparent !default;

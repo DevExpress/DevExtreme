@@ -2,38 +2,14 @@
 
 // adduse
 
-/**
-* $name 10. Icon color
-* $type color
-*/
 $splitter-resize-handle-color: ds.$color-content-neutral-subdued-rest !default;
 
-/**
-* $name 30. Focused state icon color
-* $type color
-*/
 $splitter-resize-handle-color-focused: ds.$color-content-neutral-default-static-dark-rest !default;
 
-/**
-* $name 40. Handle background color
-* $type color
-*/
 $splitter-resize-handle-bg: ds.$color-border-neutral-default-rest !default;
 
-/**
-* $name 50. Handle hover state background color
-* $type color
-*/
 $splitter-resize-handle-bg-hover: ds.$color-border-neutral-default-hovered !default;
 
-/**
-* $name 60. Handle focused state background color
-* $type color
-*/
 $splitter-resize-handle-bg-focused: ds.$color-surface-primary-default-rest !default;
 
-/**
-* $name 20. Hover state icon color
-* $type color
-*/
 $splitter-resize-handle-color-hover: $splitter-resize-handle-color !default;

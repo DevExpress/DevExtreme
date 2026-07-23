@@ -4,44 +4,20 @@
 
 // adduse
 
-/**
-* $name 10. Item text color
-* $type color
-*/
 $list-normal-color: ds.$color-content-neutral-default-rest !default;
 
-/**
-* $name 20. Group border color
-* $type color
-*/
 $list-border-color: ds.$color-border-neutral-default-rest !default;
 
-/**
-* $name 20. Group header background color
-* $type color
-*/
 $list-group-header-bg: transparent !default;
 
-/**
-* $name 30. Hovered state item background color
-* $type color
-*/
 $list-item-hover-bg: ds.$color-surface-neutral-default-hovered !default;
 
-/**
-* $name 30. Selected state item background color
-* $type color
-*/
 $list-item-selected-bg: ds.$color-surface-neutral-default-selected !default;
 $list-item-selected-hover-bg: ds.$color-surface-neutral-default-selected-hovered !default;
 $list-item-focused-selected-bg: ds.$color-surface-neutral-default-active !default;
 $list-item-hover-color: ds.$color-content-neutral-default-rest !default;
 $list-header-indicator-color: ds.$color-content-neutral-subdued-rest !default;
 
-/**
-* $name 40. Active state item background color
-* $type color
-*/
 $list-item-active-bg: ds.$color-surface-neutral-default-active !default;
 $list-holdmenu-bg: ds.$color-surface-neutral-default-rest !default;
 $list-holdmenu-border-color: $list-border-color !default;
@@ -63,16 +39,8 @@ $list-toggle-delete-icon-color: $base-icon-color !default;
 
 $base-select-all-separator-color: ds.$separator-color !default;
 
-/**
-* $name 10. Group header text color
-* $type color
-*/
 $list-group-color: ds.$color-content-neutral-default-rest !default;
 
-/**
-* $name 25. Expanded group header text color
-* $type color
-*/
 $list-expanded-group-color: $list-group-color !default;
 $list-item-selected-color: $list-normal-color !default;
 

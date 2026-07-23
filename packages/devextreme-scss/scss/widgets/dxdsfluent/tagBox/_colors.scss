@@ -3,29 +3,13 @@
 
 // adduse
 
-/**
-* $name 10. Tag text color
-* $type color
-*/
 $tagbox-tag-color: ds.$color-content-neutral-default-rest !default;
 
-/**
-* $name 20. Tag background color
-* $type color
-*/
 $tagbox-tag-bg: ds.$tag-color-bg-rest !default;
 $tagbox-tag-hover-bg: ds.$color-surface-neutral-default-hovered !default;
 
-/**
-* $name 30. Tag active text color
-* $type color
-*/
 $tagbox-tag-active-color: ds.$color-content-neutral-default-rest !default;
 
-/**
-* $name 40. Tag close button color
-* $type color
-*/
 $tagbox-tag-button-remove-bg: ds.$color-content-neutral-subdued-rest !default;
 $tagbox-tag-border-color-focused: ds.$color-border-primary-default-rest !default;
 $tagbox-select-all-border-color: ds.$color-border-neutral-default-rest !default;
