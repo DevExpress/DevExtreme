@@ -127,9 +127,9 @@ const createConfig = () => ({
       .expect(menubar.count)
       .eql(1, 'the area has a single menubar')
       .expect(menubar.getAttribute('aria-label'))
-      .eql('Row Fields', 'the menubar is labelled with the area name')
-      .expect(menubar.getAttribute('aria-description'))
-      .ok('the menubar describes the available keyboard interactions');
+      .contains('Row Fields', 'the menubar label starts with the area name')
+      .expect(menubar.getAttribute('aria-label'))
+      .contains('Shift + F10', 'the menubar label also describes the keyboard interactions');
 
     await t
       .expect(firstField.getAttribute('role'))

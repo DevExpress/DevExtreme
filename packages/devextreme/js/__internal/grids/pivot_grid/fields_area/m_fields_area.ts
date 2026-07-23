@@ -9,7 +9,7 @@ import Popup from '@js/ui/popup/ui.popup';
 import { capitalize } from '@ts/core/utils/capitalize';
 
 import { AreaItem } from '../area_item/m_area_item';
-import { getFieldsAreaA11yDescription } from '../field_chooser/a11y';
+import { getFieldsAreaA11yLabel } from '../field_chooser/a11y';
 
 const DIV = '<div>';
 
@@ -164,8 +164,7 @@ class FieldsArea extends AreaItem {
       // render, so it is reset even though the hidden area skips rendering.
       tableElement
         .attr('role', 'presentation')
-        .removeAttr('aria-label')
-        .removeAttr('aria-description');
+        .removeAttr('aria-label');
       return;
     }
 
@@ -190,8 +189,7 @@ class FieldsArea extends AreaItem {
       row.attr('role', 'presentation');
       tableElement
         .attr('role', 'menubar')
-        .attr('aria-label', this._getAreaLabel())
-        .attr('aria-description', getFieldsAreaA11yDescription());
+        .attr('aria-label', getFieldsAreaA11yLabel(this._getAreaLabel()));
     } else {
       // A menubar without menu items is invalid ARIA, so an empty area keeps
       // the plain placeholder text and the table stays presentational. The
@@ -199,8 +197,7 @@ class FieldsArea extends AreaItem {
       // re-renders.
       tableElement
         .attr('role', 'presentation')
-        .removeAttr('aria-label')
-        .removeAttr('aria-description');
+        .removeAttr('aria-label');
       $('<td>').append($(DIV).addClass('dx-empty-area-text').text(this.option(`fieldPanel.texts.${area}FieldArea`))).appendTo(row);
     }
 

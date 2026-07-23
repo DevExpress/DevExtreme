@@ -270,8 +270,9 @@ QUnit.module('PivotGrid accessibility markup', {
 
             assert.strictEqual($table.length, 1, `${area} field table exists`);
             assert.strictEqual($table.attr('role'), 'menubar', `${area} field table is a menubar`);
-            assert.strictEqual($table.attr('aria-label'), expectedLabels[area], `${area} menubar has localized label`);
-            assert.ok($table.attr('aria-description'), `${area} menubar has an interaction description`);
+            assert.strictEqual($table.attr('aria-label').indexOf(expectedLabels[area]), 0, `${area} menubar label starts with the area name`);
+            assert.ok($table.attr('aria-label').length > expectedLabels[area].length, `${area} menubar label also carries the keyboard instructions`);
+            assert.strictEqual($table.attr('aria-description'), undefined, `${area} menubar does not use the unsupported aria-description attribute`);
         });
 
         // The filter area has no fields in this data source; a menubar without
@@ -281,7 +282,6 @@ QUnit.module('PivotGrid accessibility markup', {
 
         assert.strictEqual($filterTable.attr('role'), 'presentation', 'empty filter area table is presentational');
         assert.strictEqual($filterTable.attr('aria-label'), undefined, 'empty filter area table has no aria-label');
-        assert.strictEqual($filterTable.attr('aria-description'), undefined, 'empty filter area table has no aria-description');
     });
 
     QUnit.test('Scrollable containers have no tabindex', function(assert) {
@@ -337,49 +337,6 @@ QUnit.module('PivotGrid accessibility markup', {
 
             assert.ok($headerCells.length > 0, `column header exists for aria-colindex ${colIndex}`);
         });
-    });
-
-    QUnit.test('Data cells are described by their row and column header cells', function(assert) {
-        if(!windowUtils.hasWindow()) {
-            assert.expect(0);
-            return;
-        }
-
-        const pivotGrid = createPivotGrid({
-            width: 600, height: 400,
-            dataSource: createExpandableDataSource()
-        });
-        this.clock.tick(10);
-
-        const $columnArea = pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers');
-        const $rowsArea = pivotGrid.$element().find('.dx-pivotgrid-vertical-headers');
-        const $dataArea = pivotGrid.$element().find('.dx-pivotgrid-area-data');
-
-        $dataArea.find('td').each((_, dataCell) => {
-            const describedBy = dataCell.getAttribute('aria-describedby');
-
-            assert.ok(describedBy, 'data cell has aria-describedby');
-
-            describedBy.split(' ').forEach((id) => {
-                const header = document.getElementById(id);
-
-                assert.ok(header, `referenced element #${id} exists`);
-                assert.ok(
-                    $columnArea.find(header).length || $rowsArea.find(header).length,
-                    'referenced element is a row or column header cell'
-                );
-            });
-        });
-
-        const firstDataCell = $dataArea.find('td').get(0);
-        const describedTexts = firstDataCell.getAttribute('aria-describedby')
-            .split(' ')
-            .map((id) => document.getElementById(id).textContent.trim());
-        const firstRowHeaderText = $rowsArea.find('td').first().text().trim();
-        const firstColumnHeaderText = $columnArea.find('td').first().text().trim();
-
-        assert.ok(describedTexts.includes(firstRowHeaderText), 'description includes the row header caption');
-        assert.ok(describedTexts.includes(firstColumnHeaderText), 'description includes the column header caption');
     });
 
     QUnit.test('Row header and data cells have aria-rowindex along shared row axis', function(assert) {

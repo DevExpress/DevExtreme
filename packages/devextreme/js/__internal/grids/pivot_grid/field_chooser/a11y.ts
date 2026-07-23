@@ -32,6 +32,12 @@ const getSortingLabel = (sortOrder?: SortOrderType): string | null => {
 export const getFieldsAreaA11yDescription = (): string => messageLocalization
   .format(I18N_KEYS.fieldsAreaDescription);
 
+// The keyboard instructions are folded into the area's aria-label rather than
+// exposed via aria-description: aria-description is an ARIA 1.3 draft attribute
+// that screen readers do not read reliably, whereas the label composition
+// mirrors how DataGrid/TreeList surface such instructions.
+export const getFieldsAreaA11yLabel = (areaLabel: string): string => `${areaLabel}. ${getFieldsAreaA11yDescription()}`;
+
 export const getFieldItemA11yLabel = (
   caption: string,
   { sortOrder, hasHeaderFilterValue }: FieldItemA11yOptions,

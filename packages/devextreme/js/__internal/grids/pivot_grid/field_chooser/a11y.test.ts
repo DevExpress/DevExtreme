@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 import messageLocalization from '@js/common/core/localization/message';
 
-import { getFieldItemA11yLabel, getFieldsAreaA11yDescription } from './a11y';
+import { getFieldItemA11yLabel, getFieldsAreaA11yDescription, getFieldsAreaA11yLabel } from './a11y';
 
 const AREA_DESCRIPTION = 'Press Enter or Space to sort by the field, Alt + Down arrow to open the header filter, Shift + F10 to open the context menu';
 
@@ -49,5 +49,11 @@ describe('getFieldItemA11yLabel', () => {
 describe('getFieldsAreaA11yDescription', () => {
   it('should return the localized interaction description', () => {
     expect(getFieldsAreaA11yDescription()).toBe(AREA_DESCRIPTION);
+  });
+});
+
+describe('getFieldsAreaA11yLabel', () => {
+  it('should compose the area name with the interaction description', () => {
+    expect(getFieldsAreaA11yLabel('Row Fields')).toBe(`Row Fields. ${AREA_DESCRIPTION}`);
   });
 });
