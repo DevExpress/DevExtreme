@@ -1,6 +1,6 @@
 import dateLocalization from '@js/common/core/localization/date';
 import dateUtils from '@js/core/utils/date';
-import { isDefined, isObject } from '@js/core/utils/type';
+import { isDefined } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { VERTICAL_GROUP_COUNT_CLASSES } from '../../classes';
@@ -20,11 +20,16 @@ import type {
   ViewDataProviderType,
   ViewType,
 } from '../../types';
-import type { ResourceLoader } from '../../utils/loader/resource_loader';
-import type { ResourceId } from '../../utils/loader/types';
 import { VIEWS } from '../../utils/options/constants_view';
+import type { GroupNode } from '../../utils/resource_manager/types';
 import timeZoneUtils from '../../utils_time_zone';
 import type { TimeZoneCalculator } from '../timezone_calculator';
+import {
+  buildGroupPanelTree,
+  flattenGroupPanelTreeToLeafRows,
+  flattenGroupPanelTreeToRows,
+  getGroupPanelTreeDepth,
+} from './group_panel_tree';
 
 const toMs = dateUtils.dateToMilliseconds;
 const DAY_HOURS = 24;
@@ -449,48 +454,44 @@ export const extendGroupItemsForGroupingByDate = (
     ] as GroupRenderItem[];
   }), []) as GroupRenderItem[][];
 
-const stringifyId = (id: ResourceId): string => (isObject(id)
-  ? JSON.stringify(id)
-  : String(id));
-
 export const getGroupPanelData = (
-  groupResources: ResourceLoader[],
+  groupsTree: GroupNode[],
   columnCountPerGroup: number,
   groupByDate: boolean,
   baseColSpan: number,
+  hasHierarchy = false,
 ): GroupPanelData => {
-  let repeatCount = 1;
-  let groupPanelItems = groupResources
-    .map((group) => {
-      const result = [] as GroupRenderItem[];
-      const {
-        resourceName, resourceIndex, items, data,
-      } = group;
-
-      for (let i = 0; i < repeatCount; i += 1) {
-        result.push(...items.map(({ id, text, color }, index) => ({
-          id,
-          text,
-          color,
-          key: `${i}_${resourceIndex}_${stringifyId(id)}`,
-          resourceName,
-          data: data?.[index],
-        }) as GroupRenderItem));
-      }
-
-      repeatCount *= items.length;
-      return result;
-    })
-    .filter((group) => group.length);
+  const groupTree = buildGroupPanelTree(groupsTree);
+  const maxDepth = getGroupPanelTreeDepth(groupTree);
+  let groupPanelItems = flattenGroupPanelTreeToRows(groupTree, maxDepth, baseColSpan);
 
   if (groupByDate) {
     groupPanelItems = extendGroupItemsForGroupingByDate(groupPanelItems, columnCountPerGroup);
   }
 
   return {
+    groupTree,
     groupPanelItems,
+    maxDepth,
     baseColSpan,
+    columnCountPerGroup,
+    hasHierarchy,
   };
+};
+
+export const getTimelineGroupPanelRows = (
+  groupPanelData: GroupPanelData,
+  groupByDate: boolean,
+): GroupRenderItem[][] => {
+  let rows = groupPanelData.hasHierarchy
+    ? flattenGroupPanelTreeToLeafRows(groupPanelData.groupTree, groupPanelData.baseColSpan)
+    : groupPanelData.groupPanelItems;
+
+  if (groupByDate) {
+    rows = extendGroupItemsForGroupingByDate(rows, groupPanelData.columnCountPerGroup);
+  }
+
+  return rows;
 };
 
 export const splitNumber = (value: number, splitValue: number): number[] => Array.from(

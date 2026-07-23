@@ -1,48 +1,39 @@
 import {
-  describe, expect, it, jest,
+  describe, expect, it,
 } from '@jest/globals';
 
 import { GroupPanelVerticalRow } from './group_panel_vertical_row';
 
-interface RenderUtilsMock {
-  renderUtils: {
-    addHeightToStyle: (
-      height: number | undefined,
-      styles?: Record<string, unknown>,
-    ) => Record<string, unknown>;
-  };
-}
-
-jest.mock('../../utils/index', (): RenderUtilsMock => ({
-  renderUtils: {
-    addHeightToStyle: (
-      height: number | undefined,
-      styles: Record<string, unknown> = {},
-    ): Record<string, unknown> => (height === undefined ? styles : { ...styles, height }),
-  },
-}));
-
 interface VirtualNodeLike {
-  props?: {
-    style?: unknown;
-  };
+  className?: string;
+  children?: VirtualNodeLike | VirtualNodeLike[];
 }
+
+const toChildrenArray = (
+  children: VirtualNodeLike | VirtualNodeLike[] | undefined,
+): VirtualNodeLike[] => {
+  if (!children) {
+    return [];
+  }
+
+  return Array.isArray(children) ? children : [children];
+};
 
 describe('GroupPanelVerticalRow', () => {
-  it('should apply row height', () => {
+  it('should render one group row with a cell per group item', () => {
     const component = new GroupPanelVerticalRow({
-      groupItems: [{
-        key: '0',
-        id: 0,
-        text: 'Group 0',
-        data: { id: 0 },
-        resourceName: 'ownerId',
-      }],
-      height: 140,
-      className: '',
+      groupItems: [
+        {
+          id: 1, text: 'a', key: 'one_1', resourceIndex: 'one', data: { id: 1, text: 'a' }, colSpan: 2,
+        },
+        {
+          id: 2, text: 'b', key: 'one_2', resourceIndex: 'one', data: { id: 2, text: 'b' }, colSpan: 2,
+        },
+      ],
     });
     const result = component.render() as VirtualNodeLike;
 
-    expect(result.props?.style).toEqual({ height: '140px' });
+    expect(result.className).toContain('dx-scheduler-group-row');
+    expect(toChildrenArray(result.children)).toHaveLength(2);
   });
 });

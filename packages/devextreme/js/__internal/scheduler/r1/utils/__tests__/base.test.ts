@@ -3,7 +3,8 @@ import {
 } from '@jest/globals';
 import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '@ts/scheduler/constants';
 
-import type { ViewType } from '../../../types';
+import type { GroupRenderItem, ViewType } from '../../../types';
+import type { GroupNode } from '../../../utils/resource_manager/types';
 import {
   getAppointmentKey,
   getCellDuration,
@@ -12,6 +13,7 @@ import {
   getIsGroupedAllDayPanel,
   getKeyByGroup,
   getSkippedHoursInRange,
+  getTimelineGroupPanelRows,
   isAppointmentTakesAllDay,
   isGroupingByDate,
   isHorizontalGroupingApplied,
@@ -434,218 +436,241 @@ describe('base utils', () => {
   });
 
   describe('getGroupPanelData', () => {
-    const groupsBase: any = [{
-      resourceIndex: 'group1',
-      resourceName: 'group 1',
-      items: [{
-        text: 'item 1', id: 1, color: 'color 1',
-      }, {
-        text: 'item 2', id: 2, color: 'color 2',
-      }],
-      data: [{
-        text: 'item 1', id: 1, color: 'color 1',
-      }, {
-        text: 'item 2', id: 2, color: 'color 2',
-      }],
-    }, {
-      resourceIndex: 'group2',
-      resourceName: 'group 2',
-      items: [{
-        text: 'item 3', id: 1, color: 'color 3',
-      }, {
-        text: 'item 4', id: 2, color: 'color 4',
-      }],
-      data: [{
-        text: 'item 3', id: 1, color: 'color 3',
-      }, {
-        text: 'item 4', id: 2, color: 'color 4',
-      }],
-    }];
+    // group1 (2 items) x group2 (2 items), uniform 2-level tree
+    const groupsTreeBase: GroupNode[] = [
+      {
+        id: 1,
+        resourceText: 'item 1',
+        color: 'color 1',
+        resourceIndex: 'group1',
+        grouped: { group1: 1 },
+        children: [
+          {
+            id: 1, resourceText: 'item 3', color: 'color 3', resourceIndex: 'group2', grouped: { group1: 1, group2: 1 }, children: [],
+          },
+          {
+            id: 2, resourceText: 'item 4', color: 'color 4', resourceIndex: 'group2', grouped: { group1: 1, group2: 2 }, children: [],
+          },
+        ],
+      },
+      {
+        id: 2,
+        resourceText: 'item 2',
+        color: 'color 2',
+        resourceIndex: 'group1',
+        grouped: { group1: 2 },
+        children: [
+          {
+            id: 1, resourceText: 'item 3', color: 'color 3', resourceIndex: 'group2', grouped: { group1: 2, group2: 1 }, children: [],
+          },
+          {
+            id: 2, resourceText: 'item 4', color: 'color 4', resourceIndex: 'group2', grouped: { group1: 2, group2: 2 }, children: [],
+          },
+        ],
+      },
+    ];
 
-    it('should transform grouping data into group items', () => {
-      const groupPanelData = getGroupPanelData(groupsBase, 1, false, 3);
-
-      expect(groupPanelData)
-        .toEqual({
-          groupPanelItems: [[{
-            ...groupsBase[0].items[0],
-            data: groupsBase[0].data[0],
-            resourceName: groupsBase[0].resourceName,
-            key: '0_group1_1',
-          }, {
-            ...groupsBase[0].items[1],
-            data: groupsBase[0].data[1],
-            resourceName: groupsBase[0].resourceName,
-            key: '0_group1_2',
-          }], [{
-            ...groupsBase[1].items[0],
-            data: groupsBase[1].data[0],
-            resourceName: groupsBase[1].resourceName,
-            key: '0_group2_1',
-          }, {
-            ...groupsBase[1].items[1],
-            data: groupsBase[1].data[1],
-            resourceName: groupsBase[1].resourceName,
-            key: '0_group2_2',
-          }, {
-            ...groupsBase[1].items[0],
-            data: groupsBase[1].data[0],
-            resourceName: groupsBase[1].resourceName,
-            key: '1_group2_1',
-          }, {
-            ...groupsBase[1].items[1],
-            data: groupsBase[1].data[1],
-            resourceName: groupsBase[1].resourceName,
-            key: '1_group2_2',
-          }]],
-          baseColSpan: 3,
-        });
+    const renderItem = (
+      id: number | string,
+      text: string,
+      color: string | undefined,
+      key: string,
+      resourceIndex: string,
+      colSpan: number,
+      extra: Partial<GroupRenderItem> = {},
+    ): GroupRenderItem => ({
+      id,
+      text,
+      color,
+      key,
+      resourceIndex,
+      data: { id, text, color },
+      colSpan,
+      ...extra,
     });
 
-    it('should work when data parameter is undefined', () => {
-      const groups = [{
-        resourceIndex: 'group1',
-        resourceName: 'group 1',
-        items: [{
-          text: 'item 1', id: 1, color: 'color 1',
-        }, {
-          text: 'item 2', id: 2, color: 'color 2',
-        }],
-      }] as any;
+    it('should transform a uniform-depth tree into per-depth rows with real colSpan', () => {
+      const groupPanelData = getGroupPanelData(groupsTreeBase, 1, false, 3);
+
+      expect(groupPanelData.maxDepth).toBe(2);
+      expect(groupPanelData.baseColSpan).toBe(3);
+      expect(groupPanelData.groupTree[0].leafCount).toBe(2);
+      expect(groupPanelData.groupTree[0].children[0].leafCount).toBe(1);
+      expect(groupPanelData.groupPanelItems).toEqual([
+        [
+          renderItem(1, 'item 1', 'color 1', 'group1_1', 'group1', 6),
+          renderItem(2, 'item 2', 'color 2', 'group1_2', 'group1', 6),
+        ],
+        [
+          renderItem(1, 'item 3', 'color 3', 'group1_1_group2_1', 'group2', 3),
+          renderItem(2, 'item 4', 'color 4', 'group1_1_group2_2', 'group2', 3),
+          renderItem(1, 'item 3', 'color 3', 'group1_2_group2_1', 'group2', 3),
+          renderItem(2, 'item 4', 'color 4', 'group1_2_group2_2', 'group2', 3),
+        ],
+      ]);
+    });
+
+    it('should work for a single-level tree (maxDepth 1, no rowSpan)', () => {
+      const groups: GroupNode[] = [
+        {
+          id: 1, resourceText: 'item 1', color: 'color 1', resourceIndex: 'group1', grouped: { group1: 1 }, children: [],
+        },
+        {
+          id: 2, resourceText: 'item 2', color: 'color 2', resourceIndex: 'group1', grouped: { group1: 2 }, children: [],
+        },
+      ];
       const groupPanelData = getGroupPanelData(groups, 1, false, 5);
 
-      expect(groupPanelData)
-        .toEqual({
-          groupPanelItems: [[{
-            ...groups[0].items[0],
-            resourceName: groups[0].resourceName,
-            key: '0_group1_1',
-          }, {
-            ...groups[0].items[1],
-            resourceName: groups[0].resourceName,
-            key: '0_group1_2',
-          }]],
-          baseColSpan: 5,
-        });
+      expect(groupPanelData.maxDepth).toBe(1);
+      expect(groupPanelData.groupPanelItems).toEqual([
+        [
+          renderItem(1, 'item 1', 'color 1', 'group1_1', 'group1', 5),
+          renderItem(2, 'item 2', 'color 2', 'group1_2', 'group1', 5),
+        ],
+      ]);
     });
 
-    it('should exclude zero items resources', () => {
-      const groups = [{
-        resourceIndex: 'group1',
-        resourceName: 'group 1',
-        items: [{
-          text: 'item 1', id: 1, color: 'color 1',
-        }],
-      }, {
-        resourceIndex: 'group2',
-        resourceName: 'group 2',
-        items: [],
-      }] as any;
-      const groupPanelData = getGroupPanelData(groups, 1, false, 5);
+    it('should fill a childless (shallower) branch down via rowSpan for non-uniform depth', () => {
+      const groups: GroupNode[] = [
+        {
+          id: 'A',
+          resourceText: 'Building A',
+          resourceIndex: 'buildingId',
+          grouped: { buildingId: 'A' },
+          children: [
+            {
+              id: 1, resourceText: 'Room A1', resourceIndex: 'roomId', grouped: { buildingId: 'A', roomId: 1 }, children: [],
+            },
+          ],
+        },
+        {
+          id: 'B', resourceText: 'Building B', resourceIndex: 'buildingId', grouped: { buildingId: 'B' }, children: [],
+        },
+      ];
+      const groupPanelData = getGroupPanelData(groups, 1, false, 1);
 
-      expect(groupPanelData)
-        .toEqual({
-          groupPanelItems: [[{
-            ...groups[0].items[0],
-            resourceName: groups[0].resourceName,
-            key: '0_group1_1',
-          }]],
-          baseColSpan: 5,
-        });
+      expect(groupPanelData.maxDepth).toBe(2);
+      expect(groupPanelData.groupPanelItems).toEqual([
+        [
+          renderItem('A', 'Building A', undefined, 'buildingId_A', 'buildingId', 1),
+          renderItem('B', 'Building B', undefined, 'buildingId_B', 'buildingId', 1, { rowSpan: 2 }),
+        ],
+        [
+          renderItem(1, 'Room A1', undefined, 'buildingId_A_roomId_1', 'roomId', 1),
+        ],
+      ]);
     });
 
-    it('should transform grouping data into group items corectly when appointments are groupped by date', () => {
-      const groupPanelData = getGroupPanelData(groupsBase, 2, true, 7);
+    it('should transform grouping data into group items correctly when appointments are grouped by date', () => {
+      const groupPanelData = getGroupPanelData(groupsTreeBase, 2, true, 7);
 
-      expect(groupPanelData)
-        .toEqual({
-          groupPanelItems: [[{
-            ...groupsBase[0].items[0],
-            data: groupsBase[0].data[0],
-            resourceName: groupsBase[0].resourceName,
-            key: '0_group1_1_group_by_date_0',
-            isFirstGroupCell: true,
-            isLastGroupCell: false,
-          }, {
-            ...groupsBase[0].items[1],
-            data: groupsBase[0].data[1],
-            resourceName: groupsBase[0].resourceName,
-            key: '0_group1_2_group_by_date_0',
-            isFirstGroupCell: false,
-            isLastGroupCell: true,
-          }, {
-            ...groupsBase[0].items[0],
-            data: groupsBase[0].data[0],
-            resourceName: groupsBase[0].resourceName,
-            key: '0_group1_1_group_by_date_1',
-            isFirstGroupCell: true,
-            isLastGroupCell: false,
-          }, {
-            ...groupsBase[0].items[1],
-            data: groupsBase[0].data[1],
-            resourceName: groupsBase[0].resourceName,
-            key: '0_group1_2_group_by_date_1',
-            isFirstGroupCell: false,
-            isLastGroupCell: true,
-          }], [{
-            ...groupsBase[1].items[0],
-            data: groupsBase[1].data[0],
-            resourceName: groupsBase[1].resourceName,
-            key: '0_group2_1_group_by_date_0',
-            isFirstGroupCell: true,
-            isLastGroupCell: false,
-          }, {
-            ...groupsBase[1].items[1],
-            data: groupsBase[1].data[1],
-            resourceName: groupsBase[1].resourceName,
-            key: '0_group2_2_group_by_date_0',
-            isFirstGroupCell: false,
-            isLastGroupCell: false,
-          }, {
-            ...groupsBase[1].items[0],
-            data: groupsBase[1].data[0],
-            resourceName: groupsBase[1].resourceName,
-            key: '1_group2_1_group_by_date_0',
-            isFirstGroupCell: false,
-            isLastGroupCell: false,
-          }, {
-            ...groupsBase[1].items[1],
-            data: groupsBase[1].data[1],
-            resourceName: groupsBase[1].resourceName,
-            key: '1_group2_2_group_by_date_0',
-            isFirstGroupCell: false,
-            isLastGroupCell: true,
-          }, {
-            ...groupsBase[1].items[0],
-            data: groupsBase[1].data[0],
-            resourceName: groupsBase[1].resourceName,
-            key: '0_group2_1_group_by_date_1',
-            isFirstGroupCell: true,
-            isLastGroupCell: false,
-          }, {
-            ...groupsBase[1].items[1],
-            data: groupsBase[1].data[1],
-            resourceName: groupsBase[1].resourceName,
-            key: '0_group2_2_group_by_date_1',
-            isFirstGroupCell: false,
-            isLastGroupCell: false,
-          }, {
-            ...groupsBase[1].items[0],
-            data: groupsBase[1].data[0],
-            resourceName: groupsBase[1].resourceName,
-            key: '1_group2_1_group_by_date_1',
-            isFirstGroupCell: false,
-            isLastGroupCell: false,
-          }, {
-            ...groupsBase[1].items[1],
-            data: groupsBase[1].data[1],
-            resourceName: groupsBase[1].resourceName,
-            key: '1_group2_2_group_by_date_1',
-            isFirstGroupCell: false,
-            isLastGroupCell: true,
-          }]],
-          baseColSpan: 7,
-        });
+      expect(groupPanelData.groupPanelItems).toEqual([
+        [
+          renderItem(1, 'item 1', 'color 1', 'group1_1_group_by_date_0', 'group1', 14, { isFirstGroupCell: true, isLastGroupCell: false }),
+          renderItem(2, 'item 2', 'color 2', 'group1_2_group_by_date_0', 'group1', 14, { isFirstGroupCell: false, isLastGroupCell: true }),
+          renderItem(1, 'item 1', 'color 1', 'group1_1_group_by_date_1', 'group1', 14, { isFirstGroupCell: true, isLastGroupCell: false }),
+          renderItem(2, 'item 2', 'color 2', 'group1_2_group_by_date_1', 'group1', 14, { isFirstGroupCell: false, isLastGroupCell: true }),
+        ],
+        [
+          renderItem(1, 'item 3', 'color 3', 'group1_1_group2_1_group_by_date_0', 'group2', 7, { isFirstGroupCell: true, isLastGroupCell: false }),
+          renderItem(2, 'item 4', 'color 4', 'group1_1_group2_2_group_by_date_0', 'group2', 7, { isFirstGroupCell: false, isLastGroupCell: false }),
+          renderItem(1, 'item 3', 'color 3', 'group1_2_group2_1_group_by_date_0', 'group2', 7, { isFirstGroupCell: false, isLastGroupCell: false }),
+          renderItem(2, 'item 4', 'color 4', 'group1_2_group2_2_group_by_date_0', 'group2', 7, { isFirstGroupCell: false, isLastGroupCell: true }),
+          renderItem(1, 'item 3', 'color 3', 'group1_1_group2_1_group_by_date_1', 'group2', 7, { isFirstGroupCell: true, isLastGroupCell: false }),
+          renderItem(2, 'item 4', 'color 4', 'group1_1_group2_2_group_by_date_1', 'group2', 7, { isFirstGroupCell: false, isLastGroupCell: false }),
+          renderItem(1, 'item 3', 'color 3', 'group1_2_group2_1_group_by_date_1', 'group2', 7, { isFirstGroupCell: false, isLastGroupCell: false }),
+          renderItem(2, 'item 4', 'color 4', 'group1_2_group2_2_group_by_date_1', 'group2', 7, { isFirstGroupCell: false, isLastGroupCell: true }),
+        ],
+      ]);
+      expect(groupPanelData.baseColSpan).toBe(7);
+    });
+  });
+
+  describe('getTimelineGroupPanelRows', () => {
+    it('should keep a single stacked row for flat timeline grouping', () => {
+      const groups: GroupNode[] = [
+        {
+          id: 0, resourceText: 'Group_0', resourceIndex: 'any', grouped: { any: 0 }, children: [],
+        },
+        {
+          id: 1, resourceText: 'Group_1', resourceIndex: 'any', grouped: { any: 1 }, children: [],
+        },
+      ];
+      const groupPanelData = getGroupPanelData(groups, 1, false, 3);
+      const timelineRows = getTimelineGroupPanelRows(groupPanelData, false);
+
+      expect(timelineRows).toEqual(groupPanelData.groupPanelItems);
+      expect(timelineRows).toHaveLength(1);
+    });
+
+    it('should keep depth rows for multi-group cartesian timeline grouping', () => {
+      const groups: GroupNode[] = [
+        {
+          id: 1,
+          resourceText: 'item 1',
+          resourceIndex: 'group1',
+          grouped: { group1: 1 },
+          children: [
+            {
+              id: 1, resourceText: 'item 3', resourceIndex: 'group2', grouped: { group1: 1, group2: 1 }, children: [],
+            },
+            {
+              id: 2, resourceText: 'item 4', resourceIndex: 'group2', grouped: { group1: 1, group2: 2 }, children: [],
+            },
+          ],
+        },
+        {
+          id: 2,
+          resourceText: 'item 2',
+          resourceIndex: 'group1',
+          grouped: { group1: 2 },
+          children: [
+            {
+              id: 1, resourceText: 'item 3', resourceIndex: 'group2', grouped: { group1: 2, group2: 1 }, children: [],
+            },
+            {
+              id: 2, resourceText: 'item 4', resourceIndex: 'group2', grouped: { group1: 2, group2: 2 }, children: [],
+            },
+          ],
+        },
+      ];
+      const groupPanelData = getGroupPanelData(groups, 1, false, 3, false);
+      const timelineRows = getTimelineGroupPanelRows(groupPanelData, false);
+
+      expect(timelineRows).toEqual(groupPanelData.groupPanelItems);
+      expect(timelineRows).toHaveLength(2);
+    });
+
+    it('should use one row per leaf path for hierarchical timeline grouping', () => {
+      const groups: GroupNode[] = [
+        {
+          id: 'A',
+          resourceText: 'Building A',
+          resourceIndex: 'buildingId',
+          grouped: { buildingId: 'A' },
+          children: [
+            {
+              id: 1, resourceText: 'Room A1', resourceIndex: 'roomId', grouped: { buildingId: 'A', roomId: 1 }, children: [],
+            },
+          ],
+        },
+        {
+          id: 'B', resourceText: 'Building B', resourceIndex: 'buildingId', grouped: { buildingId: 'B' }, children: [],
+        },
+      ];
+      const groupPanelData = getGroupPanelData(groups, 1, false, 1, true);
+      const timelineRows = getTimelineGroupPanelRows(groupPanelData, false);
+
+      expect(timelineRows).toEqual([
+        [
+          expect.objectContaining({ key: 'buildingId_A', text: 'Building A' }),
+          expect.objectContaining({ key: 'buildingId_A_roomId_1', text: 'Room A1' }),
+        ],
+        [
+          expect.objectContaining({ key: 'buildingId_B', text: 'Building B' }),
+        ],
+      ]);
+      expect(timelineRows).not.toEqual(groupPanelData.groupPanelItems);
     });
   });
 

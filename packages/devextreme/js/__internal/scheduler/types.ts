@@ -4,6 +4,7 @@ import type { Appointment, Properties } from '@js/ui/scheduler';
 import type { Component } from '@ts/core/widget/component';
 
 import type { ResourceLoader } from './utils/loader/resource_loader';
+import type { ResourceId } from './utils/loader/types';
 import type { GroupLeaf, GroupValues, RawGroupValues } from './utils/resource_manager/types';
 import type { AppointmentItemViewModel } from './view_model/types';
 
@@ -57,7 +58,7 @@ export type GetDateForHeaderText = (
 ) => Date;
 
 export interface GroupItem {
-  id: number | string;
+  id: ResourceId;
   text?: string;
   color?: string;
 }
@@ -131,11 +132,20 @@ export interface ViewOptions {
 
 export interface GroupRenderItem extends GroupItem {
   key: string;
-  resourceName: string;
+  resourceIndex: string;
   data: GroupItem;
   colSpan?: number;
+  rowSpan?: number;
   isFirstGroupCell?: boolean;
   isLastGroupCell?: boolean;
+}
+
+export interface GroupPanelTreeNode extends GroupItem {
+  key: string;
+  resourceIndex: string;
+  data: GroupItem;
+  leafCount: number;
+  children: GroupPanelTreeNode[];
 }
 
 export interface CellPositionData {
@@ -223,8 +233,12 @@ export interface DateHeaderData {
 }
 
 export interface GroupPanelData {
+  groupTree: GroupPanelTreeNode[];
   groupPanelItems: GroupRenderItem[][];
+  maxDepth: number;
   baseColSpan: number;
+  columnCountPerGroup: number;
+  hasHierarchy: boolean;
 }
 
 export interface ViewDataBase {

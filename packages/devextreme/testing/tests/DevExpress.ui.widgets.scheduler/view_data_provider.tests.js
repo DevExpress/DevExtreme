@@ -1952,6 +1952,36 @@ module('View Data Provider', {
 
                 const expectedGroupPanelData = {
                     baseColSpan: 2,
+                    maxDepth: 1,
+                    columnCountPerGroup: 2,
+                    hasHierarchy: false,
+                    groupTree: [{
+                        key: 'groupId_1',
+                        id: 1,
+                        text: 'First group',
+                        color: 'red',
+                        data: {
+                            id: 1,
+                            color: 'red',
+                            text: 'First group'
+                        },
+                        resourceIndex: 'groupId',
+                        leafCount: 1,
+                        children: [],
+                    }, {
+                        key: 'groupId_2',
+                        id: 2,
+                        text: 'Second group',
+                        color: 'green',
+                        data: {
+                            id: 2,
+                            color: 'green',
+                            text: 'Second group'
+                        },
+                        resourceIndex: 'groupId',
+                        leafCount: 1,
+                        children: [],
+                    }],
                     groupPanelItems: [[{
                         color: 'red',
                         data: {
@@ -1960,8 +1990,9 @@ module('View Data Provider', {
                             text: 'First group'
                         },
                         id: 1,
-                        key: '0_groupId_1',
-                        resourceName: 'groupId',
+                        key: 'groupId_1',
+                        resourceIndex: 'groupId',
+                        colSpan: 2,
                         text: 'First group'
                     }, {
                         color: 'green',
@@ -1971,8 +2002,9 @@ module('View Data Provider', {
                             text: 'Second group'
                         },
                         id: 2,
-                        key: '0_groupId_2',
-                        resourceName: 'groupId',
+                        key: 'groupId_2',
+                        resourceIndex: 'groupId',
+                        colSpan: 2,
                         text: 'Second group'
                     }]]
                 };

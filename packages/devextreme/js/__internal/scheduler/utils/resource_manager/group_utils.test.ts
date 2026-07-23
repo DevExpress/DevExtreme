@@ -69,10 +69,31 @@ const createGroupLeaf = (
 ): GroupLeaf => ({
   groupIndex,
   grouped,
+  id: 0,
   resourceText: '',
   resourceIndex: '',
   children: [],
 });
+
+const omitResourceData = <T>(value: T): T => {
+  const strip = (obj: unknown): unknown => {
+    if (Array.isArray(obj)) {
+      return obj.map(strip);
+    }
+
+    if (obj && typeof obj === 'object') {
+      const { resourceData, ...rest } = obj as Record<string, unknown>;
+
+      return Object.fromEntries(
+        Object.entries(rest).map(([key, val]) => [key, strip(val)]),
+      );
+    }
+
+    return obj;
+  };
+
+  return strip(value) as T;
+};
 
 const groupsLeafs: GroupLeaf[] = [
   createGroupLeaf(0, { assigneeId: 1, roomId: 3 }),
@@ -117,15 +138,19 @@ describe('groups utils', () => {
     });
 
     it('should group by one group', () => {
-      expect(groupResources(resourceById, ['roomId'])).toEqual({
+      expect(omitResourceData(groupResources(resourceById, ['roomId']))).toEqual({
         groupTree: [
           {
+            id: 0,
+            color: '#aaa',
             children: [],
             grouped: { roomId: 0 },
             resourceIndex: 'roomId',
             resourceText: 'Room 1',
           },
           {
+            id: 1,
+            color: '#ccc',
             children: [],
             grouped: { roomId: 1 },
             resourceIndex: 'roomId',
@@ -134,6 +159,8 @@ describe('groups utils', () => {
         ],
         groupLeafs: [
           {
+            id: 0,
+            color: '#aaa',
             children: [],
             groupIndex: 0,
             grouped: { roomId: 0 },
@@ -141,6 +168,8 @@ describe('groups utils', () => {
             resourceText: 'Room 1',
           },
           {
+            id: 1,
+            color: '#ccc',
             children: [],
             groupIndex: 1,
             grouped: { roomId: 1 },
@@ -151,18 +180,61 @@ describe('groups utils', () => {
       });
     });
 
+    it('should attach raw resourceData to group nodes', () => {
+      const { groupTree } = groupResources(resourceById, ['roomId', 'assigneeId']);
+
+      expect(groupTree[0].resourceData).toEqual(roomData[0]);
+      expect(groupTree[0].children[0].resourceData).toEqual(assigneeData[0]);
+      expect(groupTree[0].children[1].resourceData).toEqual(assigneeData[1]);
+    });
+
+    it('should attach raw resourceData to hierarchical nodes when valueExpr returns new object ids', async () => {
+      const hierarchyData: RawResourceData[] = [
+        {
+          id: { guid: 'board' },
+          text: 'Board rooms',
+          color: '#111',
+          parentId: null,
+        },
+        {
+          id: { guid: 11 },
+          text: 'Room 11',
+          color: '#333',
+          parentId: { guid: 'board' },
+        },
+      ];
+      const loader = new ResourceLoader({
+        fieldExpr: 'roomId',
+        dataSource: hierarchyData,
+        label: 'Room',
+        parentIdExpr: 'parentId',
+        valueExpr: (item: RawResourceData) => ({ ...(item.id as object) }),
+      });
+
+      await loader.load();
+
+      const { groupTree } = groupResources({ roomId: loader }, ['roomId']);
+
+      expect(groupTree[0].resourceData).toEqual(hierarchyData[0]);
+      expect(groupTree[0].children[0].resourceData).toEqual(hierarchyData[1]);
+    });
+
     it('should ignore missed resources and group by one group', () => {
-      expect(groupResources({
+      expect(omitResourceData(groupResources({
         roomId: resourceById.roomId,
-      }, ['roomId', 'assigneeId'])).toEqual({
+      }, ['roomId', 'assigneeId']))).toEqual({
         groupTree: [
           {
+            id: 0,
+            color: '#aaa',
             children: [],
             grouped: { roomId: 0 },
             resourceIndex: 'roomId',
             resourceText: 'Room 1',
           },
           {
+            id: 1,
+            color: '#ccc',
             children: [],
             grouped: { roomId: 1 },
             resourceIndex: 'roomId',
@@ -171,6 +243,8 @@ describe('groups utils', () => {
         ],
         groupLeafs: [
           {
+            id: 0,
+            color: '#aaa',
             children: [],
             groupIndex: 0,
             grouped: { roomId: 0 },
@@ -178,6 +252,8 @@ describe('groups utils', () => {
             resourceText: 'Room 1',
           },
           {
+            id: 1,
+            color: '#ccc',
             children: [],
             groupIndex: 1,
             grouped: { roomId: 1 },
@@ -189,17 +265,23 @@ describe('groups utils', () => {
     });
 
     it('should group by multiple groups with correct order', () => {
-      expect(groupResources(resourceById, ['roomId', 'assigneeId'])).toEqual({
+      expect(omitResourceData(groupResources(resourceById, ['roomId', 'assigneeId']))).toEqual({
         groupTree: [
           {
+            id: 0,
+            color: '#aaa',
             children: [
               {
+                id: 0,
+                color: '#727bd2',
                 children: [],
                 grouped: { assigneeId: 0, roomId: 0 },
                 resourceIndex: 'assigneeId',
                 resourceText: 'Samantha Bright',
               },
               {
+                id: 1,
+                color: '#32c9ed',
                 children: [],
                 grouped: { assigneeId: 1, roomId: 0 },
                 resourceIndex: 'assigneeId',
@@ -211,14 +293,20 @@ describe('groups utils', () => {
             resourceText: 'Room 1',
           },
           {
+            id: 1,
+            color: '#ccc',
             children: [
               {
+                id: 0,
+                color: '#727bd2',
                 children: [],
                 grouped: { assigneeId: 0, roomId: 1 },
                 resourceIndex: 'assigneeId',
                 resourceText: 'Samantha Bright',
               },
               {
+                id: 1,
+                color: '#32c9ed',
                 children: [],
                 grouped: { assigneeId: 1, roomId: 1 },
                 resourceIndex: 'assigneeId',
@@ -232,6 +320,8 @@ describe('groups utils', () => {
         ],
         groupLeafs: [
           {
+            id: 0,
+            color: '#727bd2',
             children: [],
             groupIndex: 0,
             grouped: { assigneeId: 0, roomId: 0 },
@@ -239,6 +329,8 @@ describe('groups utils', () => {
             resourceText: 'Samantha Bright',
           },
           {
+            id: 1,
+            color: '#32c9ed',
             children: [],
             groupIndex: 1,
             grouped: { assigneeId: 1, roomId: 0 },
@@ -246,6 +338,8 @@ describe('groups utils', () => {
             resourceText: 'John Heart',
           },
           {
+            id: 0,
+            color: '#727bd2',
             children: [],
             groupIndex: 2,
             grouped: { assigneeId: 0, roomId: 1 },
@@ -253,6 +347,8 @@ describe('groups utils', () => {
             resourceText: 'Samantha Bright',
           },
           {
+            id: 1,
+            color: '#32c9ed',
             children: [],
             groupIndex: 3,
             grouped: { assigneeId: 1, roomId: 1 },
@@ -266,20 +362,26 @@ describe('groups utils', () => {
     it('should group hierarchical resource by parent-child tree', async () => {
       const hierarchicalRoom = await createHierarchicalRoomResource();
 
-      expect(groupResources({ roomId: hierarchicalRoom }, ['roomId'])).toEqual({
+      expect(omitResourceData(groupResources({ roomId: hierarchicalRoom }, ['roomId']))).toEqual({
         groupTree: [
           {
+            id: 'board',
+            color: '#111',
             resourceText: 'Board rooms',
             resourceIndex: 'roomId',
             grouped: { roomId: 'board' },
             children: [
               {
+                id: 11,
+                color: '#333',
                 resourceText: 'Room 11',
                 resourceIndex: 'roomId',
                 grouped: { roomId: 11 },
                 children: [],
               },
               {
+                id: 12,
+                color: '#444',
                 resourceText: 'Room 12',
                 resourceIndex: 'roomId',
                 grouped: { roomId: 12 },
@@ -288,11 +390,15 @@ describe('groups utils', () => {
             ],
           },
           {
+            id: 'open',
+            color: '#222',
             resourceText: 'Open spaces',
             resourceIndex: 'roomId',
             grouped: { roomId: 'open' },
             children: [
               {
+                id: 21,
+                color: '#555',
                 resourceText: 'Room 21',
                 resourceIndex: 'roomId',
                 grouped: { roomId: 21 },
@@ -303,6 +409,8 @@ describe('groups utils', () => {
         ],
         groupLeafs: [
           {
+            id: 11,
+            color: '#333',
             resourceText: 'Room 11',
             resourceIndex: 'roomId',
             grouped: { roomId: 11 },
@@ -310,6 +418,8 @@ describe('groups utils', () => {
             groupIndex: 0,
           },
           {
+            id: 12,
+            color: '#444',
             resourceText: 'Room 12',
             resourceIndex: 'roomId',
             grouped: { roomId: 12 },
@@ -317,6 +427,8 @@ describe('groups utils', () => {
             groupIndex: 1,
           },
           {
+            id: 21,
+            color: '#555',
             resourceText: 'Room 21',
             resourceIndex: 'roomId',
             grouped: { roomId: 21 },

@@ -1,7 +1,8 @@
 import type { PropsWithClassName, PropsWithStyles } from '@ts/core/r1/index';
-import type { JSXTemplate } from '@ts/core/r1/types';
+import type { JSXTemplate, RefObject } from '@ts/core/r1/types';
 
 import type { GroupItem, GroupPanelData, GroupRenderItem } from '../../../types';
+import type { ResourceId } from '../../../utils/loader/types';
 import type { DefaultProps, PropsWithViewContext, ResourceCellTemplateProps } from '../types';
 
 export interface GroupPanelBaseProps extends
@@ -11,21 +12,25 @@ export interface GroupPanelBaseProps extends
   groupPanelData: GroupPanelData;
   groupByDate: boolean;
   height?: number;
-  rowHeights?: number[];
+  elementRef?: RefObject<HTMLDivElement>;
   resourceCellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
 }
 
 export const GroupPanelBaseDefaultProps: DefaultProps<GroupPanelBaseProps> = {
   groupPanelData: {
+    groupTree: [],
     groupPanelItems: [],
+    maxDepth: 0,
     baseColSpan: 1,
+    columnCountPerGroup: 1,
+    hasHierarchy: false,
   },
   groupByDate: false,
   styles: {},
 };
 
 export interface GroupPanelCellProps extends PropsWithClassName {
-  id: string | number;
+  id: ResourceId;
   text?: string;
   color?: string;
   data: GroupItem;
@@ -44,7 +49,6 @@ export const GroupPanelCellDefaultProps = {
 
 export interface GroupPanelRowProps extends PropsWithClassName {
   groupItems: GroupRenderItem[];
-  height?: number;
   cellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
 }
 

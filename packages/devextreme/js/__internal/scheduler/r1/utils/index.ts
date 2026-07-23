@@ -57,6 +57,7 @@ export {
   getSkippedHoursInRange,
   getStartViewDateTimeOffset,
   getStartViewDateWithoutDST,
+  getTimelineGroupPanelRows,
   getToday,
   getTotalCellCountByCompleteData,
   getTotalRowCountByCompleteData,
@@ -82,6 +83,13 @@ export {
   formatWeekday,
   formatWeekdayAndDay,
 } from './format_weekday';
+export {
+  buildGroupPanelTree,
+  flattenGroupPanelTreeToLeafRows,
+  flattenGroupPanelTreeToRows,
+  getGroupPanelTreeDepth,
+  stringifyId,
+} from './group_panel_tree';
 
 export const agendaUtils = {
   calculateEndViewDate,

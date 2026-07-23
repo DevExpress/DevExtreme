@@ -10,6 +10,7 @@ export interface GroupPanelHorizontalCellProps extends GroupPanelCellProps {
   isFirstGroupCell: boolean;
   isLastGroupCell: boolean;
   colSpan: number;
+  rowSpan?: number;
 }
 
 export const GroupPanelHorizontalCellDefaultProps = {
@@ -24,6 +25,7 @@ export class GroupPanelHorizontalCell extends BaseInfernoComponent<GroupPanelHor
     const {
       cellTemplate,
       colSpan,
+      rowSpan,
       color,
       data,
       id,
@@ -40,10 +42,16 @@ export class GroupPanelHorizontalCell extends BaseInfernoComponent<GroupPanelHor
       [className ?? '']: Boolean(className),
     });
 
+    const scope = colSpan > 1 ? 'colgroup' : 'col';
+
     return (
       <th
         className={classes}
         colSpan={colSpan}
+        rowSpan={rowSpan && rowSpan > 1 ? rowSpan : undefined}
+        title={text}
+        scope={scope}
+        role="columnheader"
       >
         <div className="dx-scheduler-group-header-content">
           {
