@@ -7,15 +7,16 @@ import type { GroupLeaf, GroupNode } from './types';
 
 const isVirtualRoot = (node: GroupNode): boolean => !node.resourceIndex;
 
-const findRawResourceData = (
+const buildRawResourceDataById = (
   resource: ResourceLoader,
-  id: ResourceId,
-): RawResourceData | undefined => {
-  const idHash = getKeyHash(id);
+): Map<ReturnType<typeof getKeyHash>, RawResourceData> => {
+  const rawDataById = new Map<ReturnType<typeof getKeyHash>, RawResourceData>();
 
-  return resource.data.find(
-    (item) => getKeyHash(resource.dataAccessor.get('id', item)) === idHash,
-  );
+  resource.data.forEach((item) => {
+    rawDataById.set(getKeyHash(resource.dataAccessor.get('id', item)), item);
+  });
+
+  return rawDataById;
 };
 
 const createFlatResourceNodes = (
@@ -34,6 +35,7 @@ const hierarchyToGroupNodes = (
   hierarchyNodes: ResourceHierarchyNode[],
   resource: ResourceLoader,
   parentGrouped: Record<string, ResourceId>,
+  rawDataById: Map<ReturnType<typeof getKeyHash>, RawResourceData>,
 ): GroupNode[] => hierarchyNodes.map((node) => {
   const grouped = { ...parentGrouped, [resource.resourceIndex]: node.data.id };
 
@@ -43,8 +45,8 @@ const hierarchyToGroupNodes = (
     color: node.data.color,
     resourceIndex: resource.resourceIndex,
     grouped,
-    resourceData: findRawResourceData(resource, node.data.id),
-    children: hierarchyToGroupNodes(node.children, resource, grouped),
+    resourceData: rawDataById.get(getKeyHash(node.data.id)),
+    children: hierarchyToGroupNodes(node.children, resource, grouped, rawDataById),
   };
 });
 
@@ -78,7 +80,12 @@ const createResourceNodes = (
   resource: ResourceLoader,
 ): GroupNode[] => {
   if (resource.hasHierarchy) {
-    return hierarchyToGroupNodes(resource.hierarchyTree, resource, {});
+    return hierarchyToGroupNodes(
+      resource.hierarchyTree,
+      resource,
+      {},
+      buildRawResourceDataById(resource),
+    );
   }
 
   return createFlatResourceNodes(resource);
