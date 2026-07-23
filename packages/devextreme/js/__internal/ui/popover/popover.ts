@@ -955,7 +955,8 @@ class Popover<
   }
 
   _dispose(): void {
-    if (this.option('visible') && this._getEffectiveAriaRole() === 'dialog') {
+    const { visible } = this.option();
+    if (visible && this._getEffectiveAriaRole() === 'dialog') {
       this._restoreTargetFocus();
     }
     this._removeTargetAriaDescription();
