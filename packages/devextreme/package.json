@@ -180,7 +180,6 @@
   },
   "scripts": {
     "clean": "gulp clean",
-    "lint": "nx run devextreme:lint",
     "lint-js": "eslint --quiet '**/*.js'",
     "lint-ts": "eslint --quiet '**/*.{tsx,ts}' --ignore-pattern '**/*.d.ts'",
     "lint-dts": "eslint './js/**/*.d.ts'",

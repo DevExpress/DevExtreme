@@ -68,7 +68,7 @@ QUnit tests are not written for new code but used to verify existing grid behavi
 
 **From `packages/devextreme`:**
 ```bash
-pnpm run lint           # All linting
+pnpm nx run devextreme:lint  # All linting (aggregates lint-js, lint-ts, lint-dts, lint-texts)
 pnpm run lint-js        # JS only
 pnpm run lint-ts        # TS only
 pnpm run lint-dts       # .d.ts files
