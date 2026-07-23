@@ -6,7 +6,6 @@ export default CollectionWidget;
  * @name CollectionWidgetOptions.selectionMode
  * @type string
  * @default 'none'
- * @acceptValues 'multiple'|'single'|'all'|'none'
  * @hidden
  */
 
