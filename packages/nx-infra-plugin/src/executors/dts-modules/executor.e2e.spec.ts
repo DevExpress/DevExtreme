@@ -55,10 +55,7 @@ describe('DtsModulesExecutor E2E', () => {
       version: '26.1.0',
     });
 
-    await writeFileText(
-      path.join(projectDir, 'build', 'license-header.txt'),
-      LICENSE_TEMPLATE,
-    );
+    await writeFileText(path.join(projectDir, 'build', 'license-header.txt'), LICENSE_TEMPLATE);
 
     await writeFileText(path.join(projectDir, 'js', 'accordion.d.ts'), DEBUG_CONTENT);
     await writeFileText(

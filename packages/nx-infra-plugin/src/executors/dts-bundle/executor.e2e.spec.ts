@@ -59,10 +59,7 @@ describe('DtsBundleExecutor E2E', () => {
       version: '26.1.0',
     });
 
-    await writeFileText(
-      path.join(projectDir, 'build', 'license-header.txt'),
-      LICENSE_TEMPLATE,
-    );
+    await writeFileText(path.join(projectDir, 'build', 'license-header.txt'), LICENSE_TEMPLATE);
     await writeFileText(path.join(projectDir, 'ts', 'dx.all.d.ts'), DX_ALL_CONTENT);
     await writeFileText(path.join(projectDir, 'ts', 'aliases.d.ts'), ALIASES_CONTENT);
   });

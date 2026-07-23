@@ -51,10 +51,7 @@ describe('NpmAssembleExecutor E2E', () => {
       path.join(projectDir, 'package.json'),
       JSON.stringify({ name: 'devextreme', version: '26.1.0' }),
     );
-    await writeFileText(
-      path.join(projectDir, 'build', 'license-header.txt'),
-      LICENSE_TEMPLATE,
-    );
+    await writeFileText(path.join(projectDir, 'build', 'license-header.txt'), LICENSE_TEMPLATE);
     await writeFileText(path.join(projectDir, 'webpack.config.js'), 'module.exports = {};');
   });
 
