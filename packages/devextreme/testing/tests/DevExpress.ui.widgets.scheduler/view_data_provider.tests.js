@@ -1965,8 +1965,6 @@ module('View Data Provider', {
                         },
                         resourceIndex: 'groupId',
                         leafCount: 1,
-                        isFirstGroupCell: true,
-                        isLastGroupCell: false,
                         children: [],
                     }, {
                         key: 'groupId_2',
@@ -1980,8 +1978,6 @@ module('View Data Provider', {
                         },
                         resourceIndex: 'groupId',
                         leafCount: 1,
-                        isFirstGroupCell: false,
-                        isLastGroupCell: true,
                         children: [],
                     }],
                     groupPanelItems: [[{

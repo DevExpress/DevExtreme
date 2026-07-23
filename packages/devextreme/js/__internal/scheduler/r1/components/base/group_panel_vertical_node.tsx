@@ -21,8 +21,6 @@ export const GroupPanelVerticalNodeDefaultProps: GroupPanelVerticalNodeProps = {
     data: { id: 0 },
     resourceIndex: '',
     leafCount: 1,
-    isFirstGroupCell: true,
-    isLastGroupCell: true,
     children: [],
   },
   index: 0,

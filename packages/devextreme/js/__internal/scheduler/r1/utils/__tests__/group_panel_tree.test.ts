@@ -43,8 +43,6 @@ describe('group_panel_tree', () => {
           data: { id: '1', text: 'Room 1', color: '#aaa' },
           resourceIndex: 'roomId',
           leafCount: 1,
-          isFirstGroupCell: true,
-          isLastGroupCell: false,
           children: [],
         },
         {
@@ -55,8 +53,6 @@ describe('group_panel_tree', () => {
           data: { id: '2', text: 'Room 2', color: '#ccc' },
           resourceIndex: 'roomId',
           leafCount: 1,
-          isFirstGroupCell: false,
-          isLastGroupCell: true,
           children: [],
         },
       ]);

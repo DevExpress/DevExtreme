@@ -22,8 +22,6 @@ const leafNode = (
   data: { id: key, text },
   resourceIndex: 'roomId',
   leafCount,
-  isFirstGroupCell: true,
-  isLastGroupCell: true,
   children: [],
 });
 

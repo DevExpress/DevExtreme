@@ -144,8 +144,6 @@ export interface GroupPanelTreeNode extends GroupItem {
   resourceIndex: string;
   data: GroupItem;
   leafCount: number;
-  isFirstGroupCell: boolean;
-  isLastGroupCell: boolean;
   children: GroupPanelTreeNode[];
 }
 

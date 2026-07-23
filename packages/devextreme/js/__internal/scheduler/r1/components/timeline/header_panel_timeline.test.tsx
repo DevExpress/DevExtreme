@@ -20,8 +20,6 @@ const hierarchicalGroupPanelData: GroupPanelData = {
       data: { id: 'A', text: 'Building A' },
       resourceIndex: 'buildingId',
       leafCount: 2,
-      isFirstGroupCell: true,
-      isLastGroupCell: true,
       children: [
         {
           key: 'buildingId_A_roomId_1',
@@ -30,8 +28,6 @@ const hierarchicalGroupPanelData: GroupPanelData = {
           data: { id: 1, text: 'Room A1' },
           resourceIndex: 'roomId',
           leafCount: 1,
-          isFirstGroupCell: true,
-          isLastGroupCell: false,
           children: [],
         },
         {
@@ -41,8 +37,6 @@ const hierarchicalGroupPanelData: GroupPanelData = {
           data: { id: 2, text: 'Room A2' },
           resourceIndex: 'roomId',
           leafCount: 1,
-          isFirstGroupCell: false,
-          isLastGroupCell: true,
           children: [],
         },
       ],

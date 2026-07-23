@@ -28,8 +28,6 @@ const buildGroupPanelData = (node: GroupNode): GroupItem => {
 
 const buildGroupPanelNode = (
   node: GroupNode,
-  index: number,
-  siblingsCount: number,
   parentKey: string,
 ): GroupPanelTreeNode => {
   const key = `${parentKey}${node.resourceIndex}_${stringifyId(node.id)}`;
@@ -42,10 +40,8 @@ const buildGroupPanelNode = (
     data: buildGroupPanelData(node),
     resourceIndex: node.resourceIndex,
     leafCount: getLeafCount(node),
-    isFirstGroupCell: index === 0,
-    isLastGroupCell: index === siblingsCount - 1,
     children: node.children.map(
-      (child, childIndex) => buildGroupPanelNode(child, childIndex, node.children.length, `${key}_`),
+      (child) => buildGroupPanelNode(child, `${key}_`),
     ),
   } as GroupPanelTreeNode;
 };
@@ -53,7 +49,7 @@ const buildGroupPanelNode = (
 export const buildGroupPanelTree = (
   groupsTree: GroupNode[],
 ): GroupPanelTreeNode[] => groupsTree.map(
-  (node, index) => buildGroupPanelNode(node, index, groupsTree.length, ''),
+  (node) => buildGroupPanelNode(node, ''),
 );
 
 export const getGroupPanelTreeDepth = (tree: GroupPanelTreeNode[]): number => {
