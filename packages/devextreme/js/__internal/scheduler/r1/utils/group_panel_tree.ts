@@ -1,12 +1,10 @@
-import { isObject } from '@js/core/utils/type';
+import { getKeyHash } from '@js/core/utils/common';
 
 import type { GroupItem, GroupPanelTreeNode, GroupRenderItem } from '../../types';
 import type { ResourceId } from '../../utils/loader/types';
 import type { GroupNode } from '../../utils/resource_manager/types';
 
-export const stringifyId = (id: ResourceId): string => (isObject(id)
-  ? JSON.stringify(id)
-  : String(id));
+export const stringifyId = (id: ResourceId): string => String(getKeyHash(id));
 
 const buildGroupPanelData = (node: GroupNode): GroupItem => {
   if (node.resourceData) {
