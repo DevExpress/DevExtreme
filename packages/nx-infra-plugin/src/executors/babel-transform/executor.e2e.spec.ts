@@ -106,7 +106,7 @@ describe('BabelTransformExecutor E2E', () => {
 
     process.chdir(projectDir);
 
-    const buildDir = path.join(projectDir, 'build', 'gulp');
+    const buildDir = path.join(projectDir, 'build');
     fs.mkdirSync(buildDir, { recursive: true });
     await writeFileText(path.join(buildDir, 'transpile-config.js'), BABEL_CONFIG);
 
@@ -162,7 +162,7 @@ export function helper() {
   ])('$configKey config', ({ configKey, outDir, shouldContain, shouldNotContain }) => {
     it('should transform files correctly', async () => {
       const options: BabelTransformExecutorSchema = {
-        babelConfigPath: './build/gulp/transpile-config.js',
+        babelConfigPath: './build/transpile-config.js',
         configKey,
         sourcePattern: './js/**/*.js',
         outDir,
@@ -185,7 +185,7 @@ export function helper() {
 
   it('should forward removeDebug option to stripDebug helper', async () => {
     const options: BabelTransformExecutorSchema = {
-      babelConfigPath: './build/gulp/transpile-config.js',
+      babelConfigPath: './build/transpile-config.js',
       configKey: 'cjs',
       sourcePattern: './js/**/*.js',
       outDir: './artifacts/transpiled-prod',
@@ -211,7 +211,7 @@ module.exports = {
   },
 };
 `;
-    const minimalConfigPath = './build/gulp/minimal-config.js';
+    const minimalConfigPath = './build/minimal-config.js';
 
     beforeEach(async () => {
       await writeFileText(path.join(projectDir, minimalConfigPath), MINIMAL_BABEL_CONFIG);

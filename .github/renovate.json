@@ -123,37 +123,6 @@
             "matchPackageNames": [
                 "*"
             ]
-        },
-        {
-            "matchPackageNames": [
-                "gulp-sass",
-                "gulp-babel",
-                "gulp-typescript",
-                "gulp-clean",
-                "gulp-minify",
-                "gulp-replace",
-                "gulp-sourcemaps",
-                "gulp-cache",
-                "gulp-plumber",
-                "gulp-shell",
-                "gulp-cached",
-                "gulp-concat",
-                "gulp-each",
-                "gulp-eol",
-                "gulp-file",
-                "gulp-flatmap",
-                "gulp-footer",
-                "gulp-header",
-                "gulp-if",
-                "gulp-jsbeautifier",
-                "gulp-multi-process",
-                "gulp-notify",
-                "gulp-rename",
-                "gulp-tap",
-                "gulp-uglify-es",
-                "gulp-watch"
-            ],
-            "enabled": false
         }
     ],
     "lockFileMaintenance": {

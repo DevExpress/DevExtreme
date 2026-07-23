@@ -28,9 +28,9 @@
       "executor": "devextreme-nx-infra-plugin:localization",
       "options": {
         "messagesDir": "./js/localization/messages",
-        "messageTemplate": "./build/gulp/localization-template.jst",
+        "messageTemplate": "./build/localization-templates/localization-template.jst",
         "messageOutputDir": "./artifacts/js/localization",
-        "generatedTemplate": "./build/gulp/generated_js.jst",
+        "generatedTemplate": "./build/localization-templates/generated_js.jst",
         "cldrDataOutputDir": "./js/__internal/core/localization/cldr-data",
         "defaultMessagesOutputDir": "./js/__internal/core/localization",
         "applyLicenseHeaders": {
@@ -41,8 +41,8 @@
       },
       "inputs": [
         "{projectRoot}/js/localization/messages/**/*.json",
-        "{projectRoot}/build/gulp/localization-template.jst",
-        "{projectRoot}/build/gulp/generated_js.jst"
+        "{projectRoot}/build/localization-templates/localization-template.jst",
+        "{projectRoot}/build/localization-templates/generated_js.jst"
       ],
       "outputs": [
         "{projectRoot}/artifacts/js/localization",
@@ -70,8 +70,8 @@
       },
       "inputs": [
         "{projectRoot}/js/localization/messages/**/*.json",
-        "{projectRoot}/build/gulp/localization-template.jst",
-        "{projectRoot}/build/gulp/generated_js.jst",
+        "{projectRoot}/build/localization-templates/localization-template.jst",
+        "{projectRoot}/build/localization-templates/generated_js.jst",
         { "externalDependencies": ["cldrjs", "cldr-core", "devextreme-cldr-data"] }
       ],
       "outputs": [
@@ -252,7 +252,7 @@
     "build:cjs": {
       "executor": "devextreme-nx-infra-plugin:babel-transform",
       "options": {
-        "babelConfigPath": "./build/gulp/transpile-config.js",
+        "babelConfigPath": "./build/transpile-config.js",
         "configKey": "cjs",
         "sourcePattern": "./js/**/*.{js,jsx}",
         "excludePatterns": [
@@ -284,7 +284,7 @@
       "executor": "devextreme-nx-infra-plugin:babel-transform",
       "cache": false,
       "options": {
-        "babelConfigPath": "./build/gulp/transpile-config.js",
+        "babelConfigPath": "./build/transpile-config.js",
         "configKey": "cjs",
         "sourcePattern": "./js/**/*.{js,jsx}",
         "excludePatterns": [
@@ -308,7 +308,7 @@
     "build:npm:esm": {
       "executor": "devextreme-nx-infra-plugin:babel-transform",
       "options": {
-        "babelConfigPath": "./build/gulp/transpile-config.js",
+        "babelConfigPath": "./build/transpile-config.js",
         "configKey": "esm",
         "sourcePattern": "./js/**/*.{js,jsx}",
         "excludePatterns": [
@@ -333,7 +333,7 @@
     "build:npm:cjs": {
       "executor": "devextreme-nx-infra-plugin:babel-transform",
       "options": {
-        "babelConfigPath": "./build/gulp/transpile-config.js",
+        "babelConfigPath": "./build/transpile-config.js",
         "configKey": "cjs",
         "sourcePattern": "./js/**/*.{js,jsx}",
         "excludePatterns": [
@@ -358,7 +358,7 @@
     "build:cjs:internal": {
       "executor": "devextreme-nx-infra-plugin:babel-transform",
       "options": {
-        "babelConfigPath": "./build/gulp/transpile-config.js",
+        "babelConfigPath": "./build/transpile-config.js",
         "configKey": "tsCjs",
         "sourcePattern": "./artifacts/dist_ts/__internal/**/*.{js,jsx}",
         "outDir": "./artifacts/transpiled/__internal",
@@ -382,7 +382,7 @@
       "executor": "devextreme-nx-infra-plugin:babel-transform",
       "cache": false,
       "options": {
-        "babelConfigPath": "./build/gulp/transpile-config.js",
+        "babelConfigPath": "./build/transpile-config.js",
         "configKey": "tsCjs",
         "sourcePattern": "./artifacts/dist_ts/__internal/**/*.{js,jsx}",
         "outDir": "./artifacts/transpiled/__internal",
@@ -401,7 +401,7 @@
     "build:npm:esm:internal": {
       "executor": "devextreme-nx-infra-plugin:babel-transform",
       "options": {
-        "babelConfigPath": "./build/gulp/transpile-config.js",
+        "babelConfigPath": "./build/transpile-config.js",
         "configKey": "esm",
         "sourcePattern": "./artifacts/dist_ts/__internal/**/*.{js,jsx}",
         "outDir": "./artifacts/transpiled-esm-npm/esm/__internal",
@@ -420,7 +420,7 @@
     "build:npm:cjs:internal": {
       "executor": "devextreme-nx-infra-plugin:babel-transform",
       "options": {
-        "babelConfigPath": "./build/gulp/transpile-config.js",
+        "babelConfigPath": "./build/transpile-config.js",
         "configKey": "tsCjs",
         "sourcePattern": "./artifacts/dist_ts/__internal/**/*.{js,jsx}",
         "outDir": "./artifacts/transpiled-esm-npm/cjs/__internal",
@@ -439,7 +439,7 @@
     "build:cjs:bundles": {
       "executor": "devextreme-nx-infra-plugin:babel-transform",
       "options": {
-        "babelConfigPath": "./build/gulp/transpile-config.js",
+        "babelConfigPath": "./build/transpile-config.js",
         "configKey": "cjs",
         "sourcePattern": "./build/bundle-templates/**/*.js",
         "outDir": "./artifacts/transpiled/bundles",
@@ -836,8 +836,8 @@
         "sourcesSettingsFile": "./_settings.js",
         "utilsOutDir": "./artifacts/js/vectormap-utils",
         "dataOutDir": "./artifacts/js/vectormap-data",
-        "utilsTemplatePath": "./build/gulp/vectormaputils-template.jst",
-        "dataTemplatePath": "./build/gulp/vectormapdata-template.jst",
+        "utilsTemplatePath": "./build/vectormap-templates/vectormaputils-template.jst",
+        "dataTemplatePath": "./build/vectormap-templates/vectormapdata-template.jst",
         "applyLicenseHeaders": {
           "separator": "",
           "prependAfterLicense": "\"use strict\";\n\n"
@@ -846,8 +846,8 @@
       "inputs": [
         "{projectRoot}/js/viz/vector_map.utils/**/*",
         "{projectRoot}/build/vectormap-sources/**/*",
-        "{projectRoot}/build/gulp/vectormaputils-template.jst",
-        "{projectRoot}/build/gulp/vectormapdata-template.jst"
+        "{projectRoot}/build/vectormap-templates/vectormaputils-template.jst",
+        "{projectRoot}/build/vectormap-templates/vectormapdata-template.jst"
       ],
       "outputs": [
         "{projectRoot}/artifacts/js/vectormap-utils",
@@ -896,8 +896,8 @@
       "inputs": [
         "{projectRoot}/js/viz/vector_map.utils/**/*",
         "{projectRoot}/build/vectormap-sources/**/*",
-        "{projectRoot}/build/gulp/vectormaputils-template.jst",
-        "{projectRoot}/build/gulp/vectormapdata-template.jst"
+        "{projectRoot}/build/vectormap-templates/vectormaputils-template.jst",
+        "{projectRoot}/build/vectormap-templates/vectormapdata-template.jst"
       ],
       "outputs": [
         "{projectRoot}/artifacts/js/vectormap-utils",
@@ -980,8 +980,7 @@
       "inputs": [
         "{projectRoot}/artifacts/ts/dx.all.d.ts",
         "{projectRoot}/ts/dx.all.d.ts",
-        "{projectRoot}/ts/aliases.d.ts",
-        "{projectRoot}/build/gulp/license-header.txt"
+        "{projectRoot}/ts/aliases.d.ts"
       ]
     },
     "verify:ts-jquery": {
@@ -998,7 +997,7 @@
         "{projectRoot}/artifacts/ts/dx.all.d.ts",
         "{projectRoot}/ts/dx.all.d.ts",
         "{projectRoot}/ts/aliases.d.ts",
-        "{projectRoot}/build/gulp/modules_metadata.json"
+        "{projectRoot}/build/modules_metadata.json"
       ]
     },
     "copy:ts-vendor": {
@@ -1025,8 +1024,7 @@
       "inputs": [
         "{projectRoot}/ts/**/*.d.ts",
         "{projectRoot}/ts/vendor/**/*",
-        "{projectRoot}/build/gulp/modules_metadata.json",
-        "{projectRoot}/build/gulp/license-header.txt",
+        "{projectRoot}/build/modules_metadata.json",
         "{workspaceRoot}/pnpm-lock.yaml"
       ],
       "outputs": [
@@ -1489,7 +1487,7 @@
         "{projectRoot}/artifacts/npm/devextreme/bundles/dx.all.d.ts",
         "{projectRoot}/artifacts/npm/devextreme-internal/**/*.d.ts",
         "{projectRoot}/artifacts/npm/devextreme-internal/bundles/dx.all.d.ts",
-        "{projectRoot}/build/gulp/modules_metadata.json",
+        "{projectRoot}/build/modules_metadata.json",
         "{projectRoot}/ts/dx.all.d.ts",
         "{projectRoot}/ts/aliases.d.ts"
       ],
@@ -1516,7 +1514,7 @@
         "{projectRoot}/js/**/*.d.ts",
         "{projectRoot}/ts/dx.all.d.ts",
         "{projectRoot}/ts/aliases.d.ts",
-        "{projectRoot}/build/gulp/modules_metadata.json",
+        "{projectRoot}/build/modules_metadata.json",
         "{projectRoot}/artifacts/npm/devextreme/**/*.d.ts",
         "{projectRoot}/artifacts/npm/devextreme-internal/**/*.d.ts",
         "{workspaceRoot}/pnpm-lock.yaml"
@@ -1551,7 +1549,7 @@
         "{projectRoot}/license/**/*",
         "{projectRoot}/build/npm-bin/**/*",
         "{projectRoot}/build/npm-templates/**/*",
-        "{projectRoot}/build/gulp/modules_metadata.json",
+        "{projectRoot}/build/modules_metadata.json",
         "{projectRoot}/ts/dx.all.d.ts",
         "{projectRoot}/ts/aliases.d.ts",
         "webpackConfig",

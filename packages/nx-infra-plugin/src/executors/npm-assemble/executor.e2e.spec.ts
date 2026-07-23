@@ -23,7 +23,7 @@ const OPTIONS: NpmAssembleExecutorSchema = {
   webpackConfig: './webpack.config.js',
   artifactsDir: './artifacts',
   outputDir: './artifacts/npm/devextreme',
-  licenseTemplateFile: './build/gulp/license-header.txt',
+  licenseTemplateFile: './build/license-header.txt',
   eulaUrl: 'https://js.devexpress.com/Licensing/',
   srcExcludes: ['bundles/**/*'],
   distExcludes: ['js/jquery*'],
@@ -45,14 +45,14 @@ describe('NpmAssembleExecutor E2E', () => {
     fs.mkdirSync(path.join(projectDir, 'license'), { recursive: true });
     fs.mkdirSync(path.join(projectDir, 'build', 'npm-bin'), { recursive: true });
     fs.mkdirSync(path.join(projectDir, 'artifacts'), { recursive: true });
-    fs.mkdirSync(path.join(projectDir, 'build', 'gulp'), { recursive: true });
+    fs.mkdirSync(path.join(projectDir, 'build'), { recursive: true });
 
     await writeFileText(
       path.join(projectDir, 'package.json'),
       JSON.stringify({ name: 'devextreme', version: '26.1.0' }),
     );
     await writeFileText(
-      path.join(projectDir, 'build', 'gulp', 'license-header.txt'),
+      path.join(projectDir, 'build', 'license-header.txt'),
       LICENSE_TEMPLATE,
     );
     await writeFileText(path.join(projectDir, 'webpack.config.js'), 'module.exports = {};');
