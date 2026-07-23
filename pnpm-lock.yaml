@@ -220,6 +220,7 @@ overrides:
   engine.io@>=4.1.0 <6.6.7: ^6.6.7
   body-parser@<1.20.6: ^1.20.6
   body-parser@>=2.0.0 <2.3.0: ^2.3.0
+  tar@<7.5.19: ^7.5.19
   babel-traverse: npm:@babel/traverse@^7.23.2
   systemjs-builder>terser: 5.46.2
 
@@ -16094,8 +16095,8 @@ packages:
   tar-stream@3.1.8:
     resolution: {integrity: sha512-U6QpVRyCGHva435KoNWy9PRoi2IFYCgtEhq9nmrPPpbRacPs9IH4aJ3gbrFC8dPcXvdSZ4XXfXT5Fshbp2MtlQ==}
 
-  tar@7.5.16:
-    resolution: {integrity: sha512-56adEpPMouktRlBLXiaYFFzZ/3+JXa8P9n7WbR+ibIjtviN55mEaOkiysCnPnWm+7kkui1Dn8J9l+g6zV8731w==}
+  tar@7.5.21:
+    resolution: {integrity: sha512-XdhtCvlMywwxpCW8YEq3lOXBJpUPTR2OHHcwLPO3HwsJqOHa2Ok/oJ7ruGzp+JrKoRPVCzJwAdEjqLW/vNRPHA==}
     engines: {node: '>=18'}
 
   teex@1.0.1:
@@ -34057,7 +34058,7 @@ snapshots:
       nopt: 9.0.0
       proc-log: 6.1.0
       semver: 7.8.4
-      tar: 7.5.16
+      tar: 7.5.21
       tinyglobby: 0.2.17
       which: 6.0.1
     transitivePeerDependencies:
@@ -34625,7 +34626,7 @@ snapshots:
       promise-retry: 2.0.1
       sigstore: 4.1.1
       ssri: 13.0.1
-      tar: 7.5.16
+      tar: 7.5.21
     transitivePeerDependencies:
       - supports-color
 
@@ -34647,7 +34648,7 @@ snapshots:
       proc-log: 6.1.0
       sigstore: 4.1.1
       ssri: 13.0.1
-      tar: 7.5.16
+      tar: 7.5.21
     transitivePeerDependencies:
       - supports-color
 
@@ -37191,7 +37192,7 @@ snapshots:
       - bare-buffer
       - react-native-b4a
 
-  tar@7.5.16:
+  tar@7.5.21:
     dependencies:
       '@isaacs/fs-minipass': 4.0.1
       chownr: 3.0.0
