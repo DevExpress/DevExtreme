@@ -21,17 +21,11 @@ const baseProps = {
 };
 
 describe('GroupPanelVerticalCell', () => {
-  it('should set a title attribute with the cell text for overflow tooltips', () => {
+  it('should set title and row-header accessibility attributes', () => {
     const component = new GroupPanelVerticalCell(baseProps);
     const result = component.render() as VirtualNodeLike;
 
     expect(result.props?.title).toBe('Room 1');
-  });
-
-  it('should set basic row-header accessibility attributes', () => {
-    const component = new GroupPanelVerticalCell(baseProps);
-    const result = component.render() as VirtualNodeLike;
-
     expect(result.props?.role).toBe('rowheader');
     expect(result.props?.['aria-label']).toBe('Room 1');
   });

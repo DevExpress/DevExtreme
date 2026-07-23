@@ -30,6 +30,7 @@ describe('group_panel_tree', () => {
       const tree = [
         node('1', 'Room 1', 'roomId', [], '#aaa'),
         node('2', 'Room 2', 'roomId', [], '#ccc'),
+        node('3', 'Room 3', 'roomId'),
       ];
 
       const result = buildGroupPanelTree(tree);
@@ -55,7 +56,17 @@ describe('group_panel_tree', () => {
           leafCount: 1,
           children: [],
         },
+        {
+          key: 'roomId_3',
+          id: '3',
+          text: 'Room 3',
+          data: { id: '3', text: 'Room 3' },
+          resourceIndex: 'roomId',
+          leafCount: 1,
+          children: [],
+        },
       ]);
+      expect(result[2].data).not.toHaveProperty('color');
     });
 
     it('should pass through full resourceData for resourceCellTemplate', () => {
@@ -81,17 +92,6 @@ describe('group_panel_tree', () => {
         avatar: '19.png',
         discipline: 'ABS, Fitball, StepFit',
       });
-    });
-
-    it('should omit color from data when it is undefined', () => {
-      const tree = [
-        node('1', 'John', 'ownerId'),
-      ];
-
-      const result = buildGroupPanelTree(tree);
-
-      expect(result[0].data).toEqual({ id: '1', text: 'John' });
-      expect(result[0].data).not.toHaveProperty('color');
     });
 
     it('should compute leafCount for a uniform-depth tree from real descendant counts', () => {
