@@ -4,6 +4,7 @@ import type { Appointment, Properties } from '@js/ui/scheduler';
 import type { Component } from '@ts/core/widget/component';
 
 import type { ResourceLoader } from './utils/loader/resource_loader';
+import type { ResourceId } from './utils/loader/types';
 import type { GroupLeaf, GroupValues, RawGroupValues } from './utils/resource_manager/types';
 import type { AppointmentItemViewModel } from './view_model/types';
 
@@ -57,7 +58,7 @@ export type GetDateForHeaderText = (
 ) => Date;
 
 export interface GroupItem {
-  id: number | string;
+  id: ResourceId;
   text?: string;
   color?: string;
 }

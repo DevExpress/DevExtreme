@@ -2,6 +2,7 @@ import {
   describe, expect, it,
 } from '@jest/globals';
 
+import type { ResourceId } from '../../../utils/loader/types';
 import type { GroupNode } from '../../../utils/resource_manager/types';
 import {
   buildGroupPanelTree,
@@ -10,7 +11,7 @@ import {
 } from '../group_panel_tree';
 
 const node = (
-  id: string,
+  id: ResourceId,
   resourceText: string,
   resourceIndex: string,
   children: GroupNode[] = [],
@@ -81,6 +82,24 @@ describe('group_panel_tree', () => {
         avatar: '19.png',
         discipline: 'ABS, Fitball, StepFit',
       });
+    });
+
+    it('should preserve object resource ids in group panel data', () => {
+      const objectId = { _value: 'guid-1' };
+      const tree = [{
+        ...node(objectId, 'Owner one', 'ownerId', [], 'rgb(255, 0, 0)'),
+        resourceData: {
+          id: objectId,
+          text: 'Owner one',
+          color: 'rgb(255, 0, 0)',
+        },
+      }];
+
+      const result = buildGroupPanelTree(tree);
+
+      expect(result[0].id).toBe(objectId);
+      expect(result[0].data.id).toBe(objectId);
+      expect(result[0].key).toBe('ownerId_{"_value":"guid-1"}');
     });
 
     it('should omit color from data when it is undefined', () => {

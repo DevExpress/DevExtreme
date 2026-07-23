@@ -8,16 +8,12 @@ export const stringifyId = (id: ResourceId): string => (isObject(id)
   ? JSON.stringify(id)
   : String(id));
 
-const getLeafCount = (node: GroupNode): number => (node.children.length === 0
-  ? 1
-  : node.children.reduce((sum, child) => sum + getLeafCount(child), 0));
-
 const buildGroupPanelData = (node: GroupNode): GroupItem => {
   if (node.resourceData) {
     return node.resourceData as GroupItem;
   }
 
-  const data: GroupItem = { id: node.id as GroupItem['id'], text: node.resourceText };
+  const data: GroupItem = { id: node.id, text: node.resourceText };
 
   if (node.color !== undefined) {
     data.color = node.color;
@@ -31,6 +27,12 @@ const buildGroupPanelNode = (
   parentKey: string,
 ): GroupPanelTreeNode => {
   const key = `${parentKey}${node.resourceIndex}_${stringifyId(node.id)}`;
+  const children = node.children.map(
+    (child) => buildGroupPanelNode(child, `${key}_`),
+  );
+  const leafCount = children.length === 0
+    ? 1
+    : children.reduce((sum, child) => sum + child.leafCount, 0);
 
   return {
     key,
@@ -39,11 +41,9 @@ const buildGroupPanelNode = (
     color: node.color,
     data: buildGroupPanelData(node),
     resourceIndex: node.resourceIndex,
-    leafCount: getLeafCount(node),
-    children: node.children.map(
-      (child) => buildGroupPanelNode(child, `${key}_`),
-    ),
-  } as GroupPanelTreeNode;
+    leafCount,
+    children,
+  };
 };
 
 export const buildGroupPanelTree = (
