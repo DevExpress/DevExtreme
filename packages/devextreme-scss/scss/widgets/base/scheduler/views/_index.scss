@@ -306,7 +306,7 @@ $scheduler-month-date-text-padding: 6px;
   flex-direction: column;
 
   .dx-scheduler-group-row {
-    @include flex-container(row, nowrap);
+    @include flex-container(column, nowrap);
 
     flex: 0 0 auto;
     min-width: 0;
@@ -333,6 +333,12 @@ $scheduler-month-date-text-padding: 6px;
       border-top: $scheduler-base-border;
       border-top-color: $scheduler-base-border-color;
     }
+  }
+}
+
+.dx-scheduler-group-table .dx-scheduler-group-flex-container {
+  .dx-scheduler-group-row {
+    @include flex-container(row, nowrap);
   }
 }
 

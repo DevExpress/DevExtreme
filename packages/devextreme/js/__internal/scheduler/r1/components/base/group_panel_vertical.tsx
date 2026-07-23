@@ -34,19 +34,21 @@ const renderGroupPanelContent = (
       />);
   }
 
-  return groupPanelData.groupTree.map((node, index) => (
+  return (
     <div className="dx-scheduler-group-row" role="row">
-      <GroupPanelVerticalCell
-        key={node.key}
-        text={node.text}
-        id={node.id}
-        data={node.data}
-        index={index}
-        color={node.color}
-        cellTemplate={resourceCellTemplate}
-      />
+      {
+        groupPanelData.groupTree.map((node, index) => <GroupPanelVerticalCell
+          key={node.key}
+          text={node.text}
+          id={node.id}
+          data={node.data}
+          index={index}
+          color={node.color}
+          cellTemplate={resourceCellTemplate}
+        />)
+      }
     </div>
-  ));
+  );
 };
 
 export class GroupPanelVertical extends BaseInfernoComponent<GroupPanelBaseProps> {
