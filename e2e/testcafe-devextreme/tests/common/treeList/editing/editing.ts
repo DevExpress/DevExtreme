@@ -59,8 +59,7 @@ test('TreeList - Insertafterkey doesn\'t work on children nodes', async (t) => {
   },
 }));
 
-// T1307499
-test('TreeList - New row should stay visible after editing the parentId column with setCellValue', async (t) => {
+test('TreeList - New row should stay visible after editing the parentId column with setCellValue (T1307499)', async (t) => {
   const treeList = new TreeList('#container');
   const addRowButton = treeList.getHeaderPanel().getAddRowButton();
 
