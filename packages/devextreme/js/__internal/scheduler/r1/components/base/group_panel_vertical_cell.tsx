@@ -18,7 +18,12 @@ export class GroupPanelVerticalCell extends BaseInfernoComponent<GroupPanelCellP
     } = this.props;
 
     return (
-      <div className={`dx-scheduler-group-header ${className ?? ''}`}>
+      <div
+        className={`dx-scheduler-group-header ${className ?? ''}`}
+        title={text}
+        role="rowheader"
+        aria-label={text}
+      >
         {
           cellTemplate
             ? <PublicTemplate
