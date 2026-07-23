@@ -508,10 +508,11 @@ export default [
     files: ['utils/tests/**/*.*'],
   })),
 
-  // utils directory
+  // utils / shared loaders
   {
     files: [
       'utils/**/*.js',
+      'shared/loaders/**/*.js',
     ],
     ignores: [
       'utils/testing/',
