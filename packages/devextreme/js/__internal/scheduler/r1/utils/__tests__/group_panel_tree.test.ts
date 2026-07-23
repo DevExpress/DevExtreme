@@ -6,6 +6,7 @@ import type { ResourceId } from '../../../utils/loader/types';
 import type { GroupNode } from '../../../utils/resource_manager/types';
 import {
   buildGroupPanelTree,
+  flattenGroupPanelTreeToLeafRows,
   flattenGroupPanelTreeToRows,
   getGroupPanelTreeDepth,
 } from '../group_panel_tree';
@@ -234,6 +235,44 @@ describe('group_panel_tree', () => {
       expect(rows[2]).toEqual([
         expect.objectContaining({ id: 'a', colSpan: 1 }),
         expect.objectContaining({ id: 'b', colSpan: 1 }),
+      ]);
+    });
+  });
+
+  describe('flattenGroupPanelTreeToLeafRows', () => {
+    it('should produce one row per leaf with cells along the root-to-leaf path', () => {
+      const tree = buildGroupPanelTree([
+        node('A', 'Building A', 'buildingId', [
+          node('1', 'Room A1', 'roomId'),
+          node('2', 'Room A2', 'roomId'),
+        ]),
+        node('B', 'Building B', 'buildingId'),
+      ]);
+
+      expect(flattenGroupPanelTreeToLeafRows(tree, 1)).toEqual([
+        [
+          expect.objectContaining({ key: 'buildingId_A', text: 'Building A' }),
+          expect.objectContaining({ key: 'buildingId_A_roomId_1', text: 'Room A1' }),
+        ],
+        [
+          expect.objectContaining({ key: 'buildingId_A', text: 'Building A' }),
+          expect.objectContaining({ key: 'buildingId_A_roomId_2', text: 'Room A2' }),
+        ],
+        [
+          expect.objectContaining({ key: 'buildingId_B', text: 'Building B' }),
+        ],
+      ]);
+    });
+
+    it('should produce one row per top-level leaf for a flat tree', () => {
+      const tree = buildGroupPanelTree([
+        node('1', 'Room 1', 'roomId'),
+        node('2', 'Room 2', 'roomId'),
+      ]);
+
+      expect(flattenGroupPanelTreeToLeafRows(tree, 3)).toEqual([
+        [expect.objectContaining({ key: 'roomId_1', text: 'Room 1', colSpan: 3 })],
+        [expect.objectContaining({ key: 'roomId_2', text: 'Room 2', colSpan: 3 })],
       ]);
     });
   });

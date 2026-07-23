@@ -84,6 +84,7 @@ export {
 } from './format_weekday';
 export {
   buildGroupPanelTree,
+  flattenGroupPanelTreeToLeafRows,
   flattenGroupPanelTreeToRows,
   getGroupPanelTreeDepth,
   stringifyId,

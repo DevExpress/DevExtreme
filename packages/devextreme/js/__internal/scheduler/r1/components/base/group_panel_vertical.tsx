@@ -1,6 +1,6 @@
 import { BaseInfernoComponent, normalizeStyles } from '@ts/core/r1/runtime/inferno/index';
 
-import { renderUtils } from '../../utils/index';
+import { extendGroupItemsForGroupingByDate, flattenGroupPanelTreeToLeafRows, renderUtils } from '../../utils/index';
 import type { GroupPanelProps } from './group_panel';
 import { GroupPanelBaseDefaultProps } from './group_panel_props';
 import { GroupPanelVerticalCell } from './group_panel_vertical_cell';
@@ -10,16 +10,33 @@ import { GroupPanelVerticalRow } from './group_panel_vertical_row';
 const HIERARCHICAL_GROUP_FLEX_CONTAINER_CLASS = 'dx-scheduler-group-flex-container-hierarchical';
 const TIMELINE_GROUP_TABLE_CLASS = 'dx-scheduler-group-table';
 
+const getTimelineGroupPanelRows = (
+  groupPanelData: GroupPanelProps['groupPanelData'],
+  groupByDate: boolean,
+): GroupPanelProps['groupPanelData']['groupPanelItems'] => {
+  let rows = flattenGroupPanelTreeToLeafRows(
+    groupPanelData.groupTree,
+    groupPanelData.baseColSpan,
+  );
+
+  if (groupByDate) {
+    rows = extendGroupItemsForGroupingByDate(rows, groupPanelData.columnCountPerGroup);
+  }
+
+  return rows;
+};
+
 const renderGroupPanelContent = (
   groupPanelData: GroupPanelProps['groupPanelData'],
   resourceCellTemplate: GroupPanelProps['resourceCellTemplate'],
   isTimelineGroupTable: boolean,
   isHierarchical: boolean,
+  groupByDate: boolean,
 ): JSX.Element | JSX.Element[] => {
   if (isTimelineGroupTable) {
-    return groupPanelData.groupPanelItems
+    return getTimelineGroupPanelRows(groupPanelData, groupByDate)
       .map((group) => <GroupPanelVerticalRow
-        key={group[0].key}
+        key={group[group.length - 1].key}
         groupItems={group}
         cellTemplate={resourceCellTemplate}
       />);
@@ -61,6 +78,7 @@ export class GroupPanelVertical extends BaseInfernoComponent<GroupPanelProps> {
       resourceCellTemplate,
       height,
       styles,
+      groupByDate,
     } = this.props;
     const style = normalizeStyles(renderUtils.addHeightToStyle(height, styles));
     const isTimelineGroupTable = className === TIMELINE_GROUP_TABLE_CLASS;
@@ -73,6 +91,7 @@ export class GroupPanelVertical extends BaseInfernoComponent<GroupPanelProps> {
       resourceCellTemplate,
       isTimelineGroupTable,
       isHierarchical,
+      groupByDate,
     );
 
     return (

@@ -86,3 +86,38 @@ export const flattenGroupPanelTreeToRows = (
 
   return rows;
 };
+
+const toGroupRenderItem = (
+  node: GroupPanelTreeNode,
+  baseColSpan: number,
+): GroupRenderItem => ({
+  id: node.id,
+  text: node.text,
+  color: node.color,
+  key: node.key,
+  resourceIndex: node.resourceIndex,
+  data: node.data,
+  colSpan: baseColSpan,
+});
+
+export const flattenGroupPanelTreeToLeafRows = (
+  tree: GroupPanelTreeNode[],
+  baseColSpan: number,
+): GroupRenderItem[][] => {
+  const rows: GroupRenderItem[][] = [];
+
+  const walk = (node: GroupPanelTreeNode, path: GroupRenderItem[]): void => {
+    const currentPath = [...path, toGroupRenderItem(node, baseColSpan)];
+
+    if (node.children.length === 0) {
+      rows.push(currentPath);
+      return;
+    }
+
+    node.children.forEach((child) => walk(child, currentPath));
+  };
+
+  tree.forEach((node) => walk(node, []));
+
+  return rows;
+};

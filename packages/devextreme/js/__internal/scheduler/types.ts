@@ -237,6 +237,7 @@ export interface GroupPanelData {
   groupPanelItems: GroupRenderItem[][];
   maxDepth: number;
   baseColSpan: number;
+  columnCountPerGroup: number;
 }
 
 export interface ViewDataBase {

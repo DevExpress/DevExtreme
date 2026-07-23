@@ -472,6 +472,7 @@ export const getGroupPanelData = (
     groupPanelItems,
     maxDepth,
     baseColSpan,
+    columnCountPerGroup,
   };
 };
 

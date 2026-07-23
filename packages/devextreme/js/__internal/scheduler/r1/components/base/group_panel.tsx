@@ -37,6 +37,7 @@ export class GroupPanel extends InfernoWrapperComponent<GroupPanelProps> {
       groupOrientation,
       groups,
       styles,
+      groupByDate,
     } = this.props;
     const isVerticalLayout = isVerticalGroupingApplied(groups.length, groupOrientation);
 
@@ -51,7 +52,7 @@ export class GroupPanel extends InfernoWrapperComponent<GroupPanelProps> {
        groupPanelData={groupPanelData}
        elementRef={elementRef}
        styles={styles}
-       groupByDate={GroupPanelDefaultProps.groupByDate}
+       groupByDate={groupByDate}
      />
     );
   }
