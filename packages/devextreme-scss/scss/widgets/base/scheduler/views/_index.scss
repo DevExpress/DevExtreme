@@ -303,12 +303,14 @@ $scheduler-month-date-text-padding: 6px;
   flex: 0 0 100%;
   min-height: 100%;
   display: flex;
+  flex-direction: column;
 
   .dx-scheduler-group-row {
-    @include flex-container(column, nowrap);
+    @include flex-container(row, nowrap);
 
     flex: 0 0 auto;
     min-width: 0;
+    width: 100%;
 
     &:last-child .dx-scheduler-group-header {
       border-right: $scheduler-base-border;
