@@ -44,7 +44,7 @@ export class GroupPanelVerticalNode extends BaseInfernoComponent<GroupPanelVerti
     });
 
     return (
-      <div className={rowClasses} style={normalizeStyles({ flexGrow: node.leafCount })}>
+      <div className={rowClasses} style={normalizeStyles({ flexGrow: node.leafCount })} role="row">
         <div
           className={cellClasses}
           title={node.text}
@@ -74,7 +74,7 @@ export class GroupPanelVerticalNode extends BaseInfernoComponent<GroupPanelVerti
         </div>
         {
           !isLeaf && (
-            <div className="dx-scheduler-group-flex-container">
+            <div className="dx-scheduler-group-flex-container" role="rowgroup">
               {
                 node.children.map((child, childIndex) => <GroupPanelVerticalNode
                   key={child.key}

@@ -13,7 +13,7 @@ export class GroupPanelVerticalRow extends BaseInfernoComponent<GroupPanelRowPro
     } = this.props;
 
     return (
-      <div className={`dx-scheduler-group-row ${className ?? ''}`}>
+      <div className={`dx-scheduler-group-row ${className ?? ''}`} role="row">
         {
           groupItems.map(({
             color,

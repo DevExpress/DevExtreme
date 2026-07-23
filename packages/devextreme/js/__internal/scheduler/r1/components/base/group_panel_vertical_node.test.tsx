@@ -67,6 +67,7 @@ describe('GroupPanelVerticalNode', () => {
 
     const nestedContainer = children[1];
     expect(nestedContainer.className).toBe('dx-scheduler-group-flex-container');
+    expect(nestedContainer.props?.role).toBe('rowgroup');
     expect(nestedContainer.children).toHaveLength(2);
   });
 });

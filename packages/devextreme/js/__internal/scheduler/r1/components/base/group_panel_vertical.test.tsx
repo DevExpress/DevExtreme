@@ -133,7 +133,9 @@ describe('GroupPanelVertical', () => {
     const flexContainer = toChildrenArray(result.children)[0];
 
     expect(flexContainer.className).toBe('dx-scheduler-group-flex-container');
+    expect(flexContainer.props?.role).toBe('grid');
     const row = toChildrenArray(flexContainer.children)[0];
     expect(row.className).toContain('dx-scheduler-group-row');
+    expect(row.props?.role).toBe('row');
   });
 });
