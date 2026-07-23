@@ -29,8 +29,6 @@ const DEFAULT_DEV_BUNDLE_NAMES = [
   'dxdsfluent.blue.light',
   'dxdsfluent.blue.light.compact',
   'dxdsfluent.blue.dark',
-  'dxdsfluent.saas.light',
-  'dxdsfluent.saas.dark',
 ];
 
 interface BuildDependencies {

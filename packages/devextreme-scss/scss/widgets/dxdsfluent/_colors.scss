@@ -130,10 +130,6 @@ $scrollview-pulldown-path: null !default;
   $fluent-color-accent-modificator: "blue" !default;
 }
 
-@if $color == "saas" {
-  $fluent-color-accent-modificator: "saas" !default;
-}
-
 @if $mode == "light" {
   $fluent-color-theme-modificator: "light" !default;
 
@@ -152,22 +148,6 @@ $scrollview-pulldown-path: null !default;
     $base-border-color: rgba(224, 224, 224, 1) !default;
     $base-border-color-accessible: color.adjust($base-border-color, $lightness: -49.8%, $space: hsl) !default;
     $base-shadow-color: #000 !default;
-  }
-
-  @if $color == "saas" {
-    $base-accent: #5486ff !default;
-    $base-typography-bg: #FAFBFF !default;
-
-    $base-hover-bg: color.mix(#FFF, $base-accent, 85%) !default;
-
-    $base-success: #19914B !default;
-    $base-danger: #DC2828 !default;
-    $base-text-color: #21293b !default;
-    $base-label-color: color.adjust($base-text-color, $lightness: 19%, $space: hsl) !default;
-    $base-icon-color: color.adjust($base-text-color, $lightness: 10%, $space: hsl) !default;
-    $base-border-color: #e5e8f0 !default;
-    $base-border-color-accessible: color.adjust($base-border-color, $lightness: -20%, $space: hsl) !default;
-    $base-shadow-color: #3D4A6C !default;
   }
 
   $base-accent-hover: color.adjust($base-accent, $saturation: -4.18%, $space: hsl, $lightness: -4.71%) !default;
@@ -211,16 +191,6 @@ $scrollview-pulldown-path: null !default;
     $base-border-color: rgba(97, 97, 97, 1) !default;
 
     $base-typography-bg: #1F1F1F !default;
-  }
-
-  @if $color == "saas" {
-    $base-bg: rgba(30, 40, 50, 1) !default;
-    $base-accent: #5492F6 !default;
-    $base-success: #10B230 !default;
-    $base-danger: #F92F2F !default;
-    $base-border-color: #414B5F !default;
-
-    $base-typography-bg: #141E28 !default;
   }
 
   $base-accent-hover: color.adjust($base-accent, $saturation: -1.67%, $space: hsl, $lightness: 5.29%) !default;

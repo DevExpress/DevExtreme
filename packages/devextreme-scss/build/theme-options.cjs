@@ -5,7 +5,7 @@ const materialColors = ['blue', 'lime', 'orange', 'purple', 'teal'];
 const materialModes = ['light', 'dark'];
 const fluentColors = ['blue', 'saas'];
 const fluentModes = ['light', 'dark'];
-const dxdsfluentColors = ['blue', 'saas'];
+const dxdsfluentColors = ['blue'];
 const dxdsfluentModes = ['light', 'dark'];
 const genericColors = ['carmine', 'contrast', 'dark', 'darkmoon', 'darkviolet', 'greenmist', 'light', 'softblue'];
 

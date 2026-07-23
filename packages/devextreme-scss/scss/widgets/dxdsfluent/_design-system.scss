@@ -1,8 +1,7 @@
 @use "sass:meta";
 @use "colors";
 
-// The design-tokens package has no "saas" palette yet; use blue until it ships.
-$accent: if(colors.$color == "saas", "blue", colors.$color);
+$accent: colors.$color;
 
 /*
  * Tier order mirrors the design-tokens package: base scales and palettes, then semantic roles,

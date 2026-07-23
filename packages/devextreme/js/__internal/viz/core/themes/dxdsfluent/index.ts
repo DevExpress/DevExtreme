@@ -12,18 +12,6 @@ const themes = [
     },
   },
   {
-    baseThemeName: 'fluent.saas.light',
-    theme: {
-      name: 'dxdsfluent.saas.light',
-    },
-  },
-  {
-    baseThemeName: 'dxdsfluent.saas.light',
-    theme: {
-      name: 'dxdsfluent.saas.light.compact',
-    },
-  },
-  {
     baseThemeName: 'fluent.blue.dark',
     theme: {
       name: 'dxdsfluent.blue.dark',
@@ -33,18 +21,6 @@ const themes = [
     baseThemeName: 'dxdsfluent.blue.dark',
     theme: {
       name: 'dxdsfluent.blue.dark.compact',
-    },
-  },
-  {
-    baseThemeName: 'fluent.saas.dark',
-    theme: {
-      name: 'dxdsfluent.saas.dark',
-    },
-  },
-  {
-    baseThemeName: 'dxdsfluent.saas.dark',
-    theme: {
-      name: 'dxdsfluent.saas.dark.compact',
     },
   },
 ];

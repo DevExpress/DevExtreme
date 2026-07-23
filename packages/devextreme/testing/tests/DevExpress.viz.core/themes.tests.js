@@ -363,10 +363,6 @@ QUnit.test('Invalid input data (with color scheme)', function(assert) {
     'dxdsfluent.blue.light.compact',
     'dxdsfluent.blue.dark',
     'dxdsfluent.blue.dark.compact',
-    'dxdsfluent.saas.light',
-    'dxdsfluent.saas.light.compact',
-    'dxdsfluent.saas.dark',
-    'dxdsfluent.saas.dark.compact',
 ].forEach((theme) => {
     QUnit.test(`dxdsfluent theme should be registered: ${theme}`, function(assert) {
         themeModule.currentTheme(theme);
