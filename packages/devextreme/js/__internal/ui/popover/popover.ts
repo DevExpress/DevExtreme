@@ -156,6 +156,8 @@ class Popover<
       hideOnParentScroll: true,
       arrowPosition: '',
       arrowOffset: 0,
+      focusStateEnabled: undefined,
+      tabFocusLoopEnabled: undefined,
       _fixWrapperPosition: true,
       _describeTarget: true,
     };
@@ -265,6 +267,65 @@ class Popover<
   _syncAriaAttributes(): void {
     this.setAria('role', this._getEffectiveAriaRole());
     this._syncTargetAriaDescription();
+    this._syncFocusOptions();
+  }
+
+  // NOTE: If options are explicitly specified, they are not overwritten.
+  // Now Lookup uses focusStateEnabled false and overlayRole dialog.
+  _syncFocusOptions(): void {
+    if (this._getEffectiveAriaRole() === 'dialog') {
+      const { focusStateEnabled, tabFocusLoopEnabled } = this.option();
+
+      if (focusStateEnabled === undefined) {
+        this._setOptionWithoutOptionChange('focusStateEnabled', true);
+      }
+
+      if (tabFocusLoopEnabled === undefined) {
+        this._setOptionWithoutOptionChange('tabFocusLoopEnabled', true);
+      }
+    }
+  }
+
+  _renderFocusTarget(): void {
+    if (this._getEffectiveAriaRole() !== 'dialog') {
+      const { tabIndex } = this.option();
+      // @ts-expect-error
+      this._focusTarget().attr('tabIndex', tabIndex);
+    }
+  }
+
+  _focusTarget(): dxElementWrapper | null | undefined {
+    if (this._getEffectiveAriaRole() === 'dialog') {
+      const $firstFocusableTarget = this._findTabbableBounds().$first;
+      if ($firstFocusableTarget?.length) {
+        return $firstFocusableTarget;
+      }
+
+      const $overlayContent = this.$overlayContent();
+      if ($overlayContent.attr('tabindex') === undefined) {
+        $overlayContent.attr('tabindex', -1);
+      }
+      return $overlayContent;
+    }
+
+    return super._focusTarget();
+  }
+
+  _restoreTargetFocus(): void {
+    const $targets = this._getAriaDescriptionTargets();
+
+    if ($targets.length) {
+      // @ts-expect-error trigger should be typed on type 'EventsEngineType'
+      eventsEngine.trigger($targets.first(), 'focus');
+    }
+  }
+
+  _forceFocusLost(): void {
+    if (this._getEffectiveAriaRole() === 'dialog') {
+      this._restoreTargetFocus();
+    } else {
+      super._forceFocusLost();
+    }
   }
 
   _getAriaRole(): string {
@@ -894,6 +955,10 @@ class Popover<
   }
 
   _dispose(): void {
+    const { visible } = this.option();
+    if (visible && this._getEffectiveAriaRole() === 'dialog') {
+      this._restoreTargetFocus();
+    }
     this._removeTargetAriaDescription();
     this._detachEscapeKeyHandler();
     super._dispose();

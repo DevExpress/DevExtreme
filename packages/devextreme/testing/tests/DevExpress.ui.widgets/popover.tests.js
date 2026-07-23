@@ -2987,4 +2987,135 @@ QUnit.module('accessibility', {
             assert.ok(instance.option('visible'), 'popover remains visible when pointer re-enters overlay before delay expires');
         });
     });
+
+    QUnit.module('dialog mode focus management and accessibility', {
+        beforeEach() {
+            this.clock = sinon.useFakeTimers();
+            this.$element = $('#what');
+            this.$target = $('#where');
+        },
+        afterEach() {
+            this.clock.restore();
+        }
+    }, () => {
+        QUnit.test('Popover in dialog mode should enable focusStateEnabled and tabFocusLoopEnabled on show', function(assert) {
+            const instance = new Popover(this.$element, {
+                target: this.$target,
+                toolbarItems: [{ text: 'OK' }],
+                visible: false,
+            });
+
+            instance.show();
+            this.clock.tick(0);
+
+            assert.strictEqual(instance.option('focusStateEnabled'), true, 'focusStateEnabled is enabled for dialog mode');
+            assert.strictEqual(instance.option('tabFocusLoopEnabled'), true, 'tabFocusLoopEnabled is enabled for dialog mode');
+        });
+
+        QUnit.test('Popover in dialog mode should move focus inside on show and restore focus to target when hidden', function(assert) {
+            this.$target.attr('tabindex', 0).focus();
+            assert.strictEqual(document.activeElement, this.$target.get(0), 'target is focused before show');
+
+            const instance = new Popover(this.$element, {
+                target: this.$target,
+                toolbarItems: [{ text: 'OK' }],
+                visible: false,
+            });
+
+            instance.show();
+            this.clock.tick(500);
+
+            const isFocusInside = $(document.activeElement).closest(wrapper()).length > 0;
+            assert.strictEqual(isFocusInside, true, 'focus moved inside popover wrapper on show');
+
+            instance.hide();
+            this.clock.tick(500);
+
+            assert.strictEqual(document.activeElement, this.$target.get(0), 'focus is restored to target after hide');
+        });
+
+        QUnit.test('Popover in dialog mode should loop focus from last to first element on tab keypress', function(assert) {
+            const instance = new Popover(this.$element, {
+                target: this.$target,
+                toolbarItems: [
+                    { widget: 'dxButton', options: { text: 'OK' } },
+                    { widget: 'dxButton', options: { text: 'Cancel' } }
+                ],
+                visible: false,
+            });
+
+            instance.show();
+            this.clock.tick(500);
+
+            const bounds = instance._findTabbableBounds();
+            const firstFocusable = bounds.$first.get(0);
+            const lastFocusable = bounds.$last.get(0);
+
+            $(lastFocusable).focus();
+
+            const tabEvent = $.Event('keydown', { key: 'Tab' });
+            $(document).trigger(tabEvent);
+
+            assert.strictEqual(document.activeElement, firstFocusable, 'focus looped to the first element');
+        });
+
+        QUnit.test('Popover in dialog mode should loop focus from first to last element on shift+tab keypress', function(assert) {
+            const instance = new Popover(this.$element, {
+                target: this.$target,
+                toolbarItems: [
+                    { widget: 'dxButton', options: { text: 'OK', } },
+                    { widget: 'dxButton', options: { text: 'Cancel', } }
+                ],
+                visible: false,
+            });
+
+            instance.show();
+            this.clock.tick(500);
+
+            const bounds = instance._findTabbableBounds();
+            const firstFocusable = bounds.$first.get(0);
+            const lastFocusable = bounds.$last.get(0);
+
+            $(firstFocusable).focus();
+
+            const shiftTabEvent = $.Event('keydown', { key: 'Tab', shiftKey: true });
+            $(document).trigger(shiftTabEvent);
+
+            assert.strictEqual(document.activeElement, lastFocusable, 'focus looped to the last element');
+        });
+
+        QUnit.test('Popover in dialog mode should focus first tabbable element inside content on show', function(assert) {
+            const instance = new Popover(this.$element, {
+                target: this.$target,
+                contentTemplate: function() {
+                    return $('<div><input id="input1" /><input id="input2" /></div>');
+                },
+                toolbarItems: [{ text: 'OK' }],
+                visible: false,
+            });
+
+            instance.show();
+            this.clock.tick(500);
+
+            const $input1 = $('#input1');
+            assert.strictEqual(document.activeElement, $input1.get(0), 'first tabbable element is focused');
+        });
+
+        QUnit.test('Popover in dialog mode should restore focus to target on dispose when visible', function(assert) {
+            this.$target.attr('tabindex', 0).focus();
+
+            const instance = new Popover(this.$element, {
+                target: this.$target,
+                toolbarItems: [{ text: 'OK' }],
+                visible: false,
+            });
+
+            instance.show();
+
+            instance.dispose();
+
+            assert.strictEqual(document.activeElement, this.$target.get(0), 'focus is restored to target after dispose');
+        });
+    });
 });
+
