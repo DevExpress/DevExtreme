@@ -18,7 +18,7 @@ Always use `--frozen-lockfile`. CI enforces it.
 
 ## Build
 
-The `dev` script is run manually in WebStorm (not by agents). It runs a Gulp watch build with hot reload and starts the QUnit test server on port 20060:
+The `dev` script is run manually in WebStorm (not by agents). It runs an Nx watch build with hot reload and starts the QUnit test server on port 20060:
 
 ```bash
 # From packages/devextreme — run manually, not via agent

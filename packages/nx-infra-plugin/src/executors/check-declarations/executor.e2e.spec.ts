@@ -57,7 +57,7 @@ async function writeBundleArtifact(projectDir: string, content: string): Promise
 }
 
 async function writeModulesMetadata(projectDir: string, modules: unknown[]): Promise<void> {
-  const metadataPath = path.join(projectDir, 'build', 'gulp', 'modules_metadata.json');
+  const metadataPath = path.join(projectDir, 'build', 'modules_metadata.json');
   fs.mkdirSync(path.dirname(metadataPath), { recursive: true });
   await writeFileText(metadataPath, JSON.stringify(modules));
 }

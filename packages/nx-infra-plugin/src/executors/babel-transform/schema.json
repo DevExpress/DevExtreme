@@ -6,7 +6,7 @@
   "properties": {
     "babelConfigPath": {
       "type": "string",
-      "description": "Path to Babel config file relative to project root (e.g., './build/gulp/transpile-config.js')"
+      "description": "Path to Babel config file relative to project root (e.g., './build/transpile-config.js')"
     },
     "configKey": {
       "type": "string",
