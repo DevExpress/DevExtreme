@@ -859,7 +859,10 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   private _createInsertInfo(parentKey?: RowKey): InsertInfo {
-    return { [INSERT_INDEX]: this._getInsertIndex(), parentKey };
+    return {
+      [INSERT_INDEX]: this._getInsertIndex(),
+      parentKey,
+    };
   }
 
   private _addInsertInfo(
