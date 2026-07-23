@@ -337,7 +337,7 @@ $scheduler-month-date-text-padding: 6px;
 .dx-scheduler-group-flex-container-hierarchical {
   flex-direction: column;
 
-  > .dx-scheduler-group-row {
+  .dx-scheduler-group-row {
     @include flex-container(row, nowrap);
 
     flex: 1 1 0;
@@ -376,7 +376,7 @@ $scheduler-month-date-text-padding: 6px;
     }
   }
 
-  > .dx-scheduler-group-row > .dx-scheduler-group-header.dx-scheduler-group-header-leaf:only-child {
+  .dx-scheduler-group-row > .dx-scheduler-group-header.dx-scheduler-group-header-leaf:only-child {
     flex: 0 0 auto;
     width: $scheduler-left-column-width;
     min-width: $scheduler-left-column-width;
