@@ -302,9 +302,9 @@ class Popover<
       }
 
       const $overlayContent = this.$overlayContent();
-      const { tabIndex } = this.option();
-      // @ts-expect-error
-      $overlayContent.attr('tabindex', tabIndex);
+      if ($overlayContent.attr('tabindex') === undefined) {
+        $overlayContent.attr('tabindex', -1);
+      }
       return $overlayContent;
     }
 
