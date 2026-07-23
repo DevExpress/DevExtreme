@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "Vilkite duomenų laukus čia",
         "dxPivotGrid-rowFieldArea": "Vilkite eilučių laukus čia",
         "dxPivotGrid-filterFieldArea": "Vilkite filtrų laukus čia",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "nuo {0} iki {1}",
         "dxScheduler-ariaLabel": "Planuotuvas. {0} vaizdas: {1} su {2} įvykių",
@@ -491,6 +495,8 @@
         "dxFilterBuilder-filterAriaItemOperation": "Elemento operacija",
         "dxFilterBuilder-filterAriaItemValue": "Elemento reikšmė",
 
+        "dxHtmlEditor-editorAriaLabel": "Editor content",
+        "dxHtmlEditor-ariaEscapeInstruction": "Press Ctrl + Shift + Up arrow or Ctrl + Shift + Down arrow to move focus out of the editing area",
         "dxHtmlEditor-dialogColorCaption": "Pakeisti šrifto spalvą",
         "dxHtmlEditor-dialogBackgroundCaption": "Pakeisti fono spalvą",
         "dxHtmlEditor-dialogLinkCaption": "Pridėti nuorodą",

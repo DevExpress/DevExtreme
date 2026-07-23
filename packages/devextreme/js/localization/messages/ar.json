@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "إفلات حقول البيانات هنا",
         "dxPivotGrid-rowFieldArea": "إفلات حقول الصف هنا",
         "dxPivotGrid-filterFieldArea": "إفلات حقول التصفية هنا",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "من {0} إلى {1}",
         "dxScheduler-ariaLabel": "المجدول. عرض {0}: {1} مع {2} مواعيد",
@@ -491,6 +495,8 @@
         "dxFilterBuilder-filterAriaItemOperation": "عملية العنصر",
         "dxFilterBuilder-filterAriaItemValue": "قيمة العنصر",
 
+        "dxHtmlEditor-editorAriaLabel": "Editor content",
+        "dxHtmlEditor-ariaEscapeInstruction": "Press Ctrl + Shift + Up arrow or Ctrl + Shift + Down arrow to move focus out of the editing area",
         "dxHtmlEditor-dialogColorCaption": "تغيير لون الخط",
         "dxHtmlEditor-dialogBackgroundCaption": "تغيير لون الخلفية",
         "dxHtmlEditor-dialogLinkCaption": "إضافة ارتباط",

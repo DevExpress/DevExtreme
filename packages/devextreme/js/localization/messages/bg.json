@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "Пуснете полета с данни тук",
         "dxPivotGrid-rowFieldArea": "Пуснете полета на реда тук",
         "dxPivotGrid-filterFieldArea": "Пуснете полета за филтриране тук",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "от {0} до {1}",
         "dxScheduler-ariaLabel": "Планиращ. Изглед {0}: {1} с {2} срещи",
@@ -491,6 +495,8 @@
         "dxFilterBuilder-filterAriaItemOperation": "Операция на елемент",
         "dxFilterBuilder-filterAriaItemValue": "Стойност на елемент",
 
+        "dxHtmlEditor-editorAriaLabel": "Editor content",
+        "dxHtmlEditor-ariaEscapeInstruction": "Press Ctrl + Shift + Up arrow or Ctrl + Shift + Down arrow to move focus out of the editing area",
         "dxHtmlEditor-dialogColorCaption": "Промяна на цвета на шрифта",
         "dxHtmlEditor-dialogBackgroundCaption": "Промяна на фоновия цвят",
         "dxHtmlEditor-dialogLinkCaption": "Добавяне на връзка",

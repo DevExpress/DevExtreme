@@ -239,7 +239,7 @@ QUnit.module('PivotGrid accessibility markup', {
         assert.equal($outerTable.attr('role'), 'presentation');
     });
 
-    QUnit.test('Field-area tables have role="group" and localized aria-label', function(assert) {
+    QUnit.test('Populated field-area tables are exposed as a labelled menubar', function(assert) {
         if(!windowUtils.hasWindow()) {
             assert.expect(0);
             return;
@@ -261,8 +261,7 @@ QUnit.module('PivotGrid accessibility markup', {
         const expectedLabels = {
             row: 'Row Fields',
             column: 'Column Fields',
-            data: 'Data Fields',
-            filter: 'Filter Fields'
+            data: 'Data Fields'
         };
 
         Object.keys(expectedLabels).forEach((area) => {
@@ -270,9 +269,17 @@ QUnit.module('PivotGrid accessibility markup', {
                 .find(`.dx-area-fields[group="${area}"] > table`);
 
             assert.strictEqual($table.length, 1, `${area} field table exists`);
-            assert.strictEqual($table.attr('role'), 'group');
-            assert.strictEqual($table.attr('aria-label'), expectedLabels[area]);
+            assert.strictEqual($table.attr('role'), 'menubar', `${area} field table is a menubar`);
+            assert.strictEqual($table.attr('aria-label'), expectedLabels[area], `${area} menubar has localized label`);
         });
+
+        // The filter area has no fields in this data source; a menubar without
+        // menu items is invalid ARIA, so its table stays presentational.
+        const $filterTable = pivotGrid.$element()
+            .find('.dx-area-fields[group="filter"] > table');
+
+        assert.strictEqual($filterTable.attr('role'), 'presentation', 'empty filter area table is presentational');
+        assert.strictEqual($filterTable.attr('aria-label'), undefined, 'empty filter area table has no aria-label');
     });
 
     QUnit.test('Scrollable containers have no tabindex', function(assert) {

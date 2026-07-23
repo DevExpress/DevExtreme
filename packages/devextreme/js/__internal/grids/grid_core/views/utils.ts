@@ -11,3 +11,7 @@ export const getCellText = (
     ? gridCoreUtils.formatValue(displayValue, column) as string
     : ''
 );
+
+export const getMaxHorizontalScrollOffset = (container: HTMLElement | undefined): number => (
+  container ? Math.round(container.scrollWidth - container.clientWidth) : 0
+);

@@ -602,6 +602,12 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
 
   }
 
+  .dx-#{$widget-name}-headers.dx-#{$widget-name}-scroller-spacing {
+    > .dx-#{$widget-name}-scroll-container:not(.dx-#{$widget-name}-content-fixed) {
+      box-shadow: 1px 0 0 $datagrid-border-color;
+    }
+  }
+
   .dx-#{$widget-name}-filter-row {
     background-color: $datagrid-filter-row-background-color;
 
@@ -949,6 +955,12 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
             margin: 0 3px;
           }
         }
+      }
+    }
+
+    .dx-#{$widget-name}-headers.dx-#{$widget-name}-scroller-spacing {
+      > .dx-#{$widget-name}-scroll-container:not(.dx-#{$widget-name}-content-fixed) {
+        box-shadow: -1px 0 0 $datagrid-border-color;
       }
     }
 

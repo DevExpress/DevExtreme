@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "Húzza az adatmezőket ide",
         "dxPivotGrid-rowFieldArea": "Húzza a sormezőket ide",
         "dxPivotGrid-filterFieldArea": "Húzza a szűrőmezőket ide",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "{0}-tól {1}-ig",
         "dxScheduler-ariaLabel": "Ütemező. {0} nézet: {1}, {2} eseménnyel",
@@ -491,6 +495,8 @@
         "dxFilterBuilder-filterAriaItemOperation": "Elem művelete",
         "dxFilterBuilder-filterAriaItemValue": "Elem értéke",
 
+        "dxHtmlEditor-editorAriaLabel": "Editor content",
+        "dxHtmlEditor-ariaEscapeInstruction": "Press Ctrl + Shift + Up arrow or Ctrl + Shift + Down arrow to move focus out of the editing area",
         "dxHtmlEditor-dialogColorCaption": "Betűszín választás",
         "dxHtmlEditor-dialogBackgroundCaption": "Háttérszín választás",
         "dxHtmlEditor-dialogLinkCaption": "Link hozzáadása",

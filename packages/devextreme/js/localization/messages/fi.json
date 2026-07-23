@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "Pudota tietokentät tähän",
         "dxPivotGrid-rowFieldArea": "Pudota rivikentät tähän",
         "dxPivotGrid-filterFieldArea": "Pudota suodatinkentät tähän",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "{0}–{1}",
         "dxScheduler-ariaLabel": "Kalenteri. {0} näkymä: {1}, {2} tapaamista",
@@ -491,6 +495,8 @@
         "dxFilterBuilder-filterAriaItemOperation": "Kohteen toiminto",
         "dxFilterBuilder-filterAriaItemValue": "Kohteen arvo",
 
+        "dxHtmlEditor-editorAriaLabel": "Editor content",
+        "dxHtmlEditor-ariaEscapeInstruction": "Press Ctrl + Shift + Up arrow or Ctrl + Shift + Down arrow to move focus out of the editing area",
         "dxHtmlEditor-dialogColorCaption": "Muuta fontin väriä",
         "dxHtmlEditor-dialogBackgroundCaption": "Muuta taustaväriä",
         "dxHtmlEditor-dialogLinkCaption": "Lisää linkki",

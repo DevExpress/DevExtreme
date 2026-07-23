@@ -18,6 +18,7 @@ import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import gridCoreUtils from '../m_utils';
+import type { RowsViewScrollEvent } from '../views/types';
 import { subscribeToExternalScrollers, VirtualScrollController } from './m_virtual_scrolling_core';
 
 const BOTTOM_LOAD_PANEL_CLASS = 'bottom-load-panel';
@@ -1715,7 +1716,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     }
   }
 
-  protected _handleScroll(e) {
+  protected _handleScroll(e: RowsViewScrollEvent): void {
     const legacyScrollingMode = this.option(LEGACY_SCROLLING_MODE) === true;
     const zeroTopPosition = e.scrollOffset.top === 0;
     const isScrollTopChanged = this._scrollTop !== e.scrollOffset.top;

@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "Arraste os campos de dados até aqui",
         "dxPivotGrid-rowFieldArea": "Arraste os campos de linha até aqui",
         "dxPivotGrid-filterFieldArea": "Arraste os campos de filtro até aqui",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "de {0} a {1}",
         "dxScheduler-ariaLabel": "Agendador. Visualização {0}: {1} com {2} compromissos",
@@ -491,6 +495,8 @@
         "dxFilterBuilder-filterAriaItemOperation": "Operação do item",
         "dxFilterBuilder-filterAriaItemValue": "Valor do item",
 
+        "dxHtmlEditor-editorAriaLabel": "Editor content",
+        "dxHtmlEditor-ariaEscapeInstruction": "Press Ctrl + Shift + Up arrow or Ctrl + Shift + Down arrow to move focus out of the editing area",
         "dxHtmlEditor-dialogColorCaption": "Alterar cor da fonte",
         "dxHtmlEditor-dialogBackgroundCaption": "Alterar cor de plano de fundo",
         "dxHtmlEditor-dialogLinkCaption": "Adicionar link",
