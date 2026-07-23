@@ -43,7 +43,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   get verticalGroupTableClass(): string { return GROUP_TABLE_CLASS; }
 
-  readonly override verticalGroupPanelLayout = 'timeline';
+  override readonly verticalGroupPanelLayout = 'timeline';
 
   readonly viewDirection = 'horizontal';
 

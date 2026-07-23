@@ -49,6 +49,7 @@ import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys, WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
+import type { GroupPanelVerticalLayout } from '@ts/scheduler/r1/components/base/group_panel_props';
 import {
   AllDayPanelTitleComponent,
   AllDayTableComponent,
@@ -464,7 +465,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   readonly viewDirection: 'vertical' | 'horizontal' = 'vertical';
 
-  readonly verticalGroupPanelLayout = 'sidebar';
+  readonly verticalGroupPanelLayout: GroupPanelVerticalLayout = 'sidebar';
 
   protected _activeStateUnit(): string {
     return CELL_SELECTOR;
