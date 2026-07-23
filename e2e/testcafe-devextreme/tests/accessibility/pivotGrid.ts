@@ -82,6 +82,10 @@ test('field chooser popup', async (t) => {
 
   await t.click(pivotGrid.getFieldChooserButton());
 
+  // The popup opens with an animation; wait for its content to settle so axe
+  // does not sample a transient mid-animation state.
+  await t.expect(Selector('.dx-fieldchooser-popup .dx-pivotgridfieldchooser').visible).ok();
+
   await a11yCheck(t);
 }).before(async () => createWidget('dxPivotGrid', createConfig()));
 
@@ -94,6 +98,8 @@ test('header filter popup', async (t) => {
 
   await t.click(filterIcon);
 
+  await t.expect(Selector('.dx-header-filter-menu .dx-list-item').visible).ok();
+
   await a11yCheck(t);
 }).before(async () => createWidget('dxPivotGrid', createConfig()));
 
@@ -101,6 +107,10 @@ test('cell context menu', async (t) => {
   const columnHeaderCell = Selector('.dx-pivotgrid-horizontal-headers td[tabindex]');
 
   await t.rightClick(columnHeaderCell);
+
+  // The context menu is an animated overlay; wait for its items to be visible
+  // before running axe to avoid flaky mid-animation samples.
+  await t.expect(Selector('.dx-context-menu .dx-menu-item').visible).ok();
 
   await a11yCheck(t);
 }).before(async () => createWidget('dxPivotGrid', createConfig()));

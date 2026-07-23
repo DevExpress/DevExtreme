@@ -36,7 +36,12 @@ export const getFieldsAreaA11yDescription = (): string => messageLocalization
 // exposed via aria-description: aria-description is an ARIA 1.3 draft attribute
 // that screen readers do not read reliably, whereas the label composition
 // mirrors how DataGrid/TreeList surface such instructions.
-export const getFieldsAreaA11yLabel = (areaLabel: string): string => `${areaLabel}. ${getFieldsAreaA11yDescription()}`;
+export const getFieldsAreaA11yLabel = (areaLabel?: string): string => {
+  const description = getFieldsAreaA11yDescription();
+  // A custom (public, optional) area caption may be empty; fall back to the
+  // description alone rather than composing "null. …"/"undefined. …".
+  return areaLabel ? `${areaLabel}. ${description}` : description;
+};
 
 export const getFieldItemA11yLabel = (
   caption: string,

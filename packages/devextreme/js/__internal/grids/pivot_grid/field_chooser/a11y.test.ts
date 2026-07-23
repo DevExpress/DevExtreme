@@ -56,4 +56,9 @@ describe('getFieldsAreaA11yLabel', () => {
   it('should compose the area name with the interaction description', () => {
     expect(getFieldsAreaA11yLabel('Row Fields')).toBe(`Row Fields. ${AREA_DESCRIPTION}`);
   });
+
+  it('should fall back to the description alone when the area name is empty', () => {
+    expect(getFieldsAreaA11yLabel(undefined)).toBe(AREA_DESCRIPTION);
+    expect(getFieldsAreaA11yLabel('')).toBe(AREA_DESCRIPTION);
+  });
 });
