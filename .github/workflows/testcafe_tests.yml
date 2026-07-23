@@ -298,7 +298,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '149.0.7827.114'
+        chrome-version: '150.0.7871.181'
 
     - name: Use Node.js
       uses: actions/setup-node@v6
@@ -427,7 +427,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '149.0.7827.114'
+        chrome-version: '150.0.7871.181'
 
     - name: Use Node.js
       uses: actions/setup-node@v6
@@ -457,7 +457,7 @@ jobs:
     - name: Download flaky test reports
       uses: actions/download-artifact@v8
       with:
-        pattern: flaky-report-*
+        pattern: flaky-report*
         path: ./e2e/testcafe-devextreme/flaky-reports
 
     - name: Run quarantined tests
@@ -497,9 +497,14 @@ jobs:
         echo "Downloaded flaky test reports:"
         if [ "${#flaky_reports[@]}" -eq 0 ]; then
           echo "   (none)"
+          if [ "${{ github.run_attempt }}" -gt 1 ]; then
+            echo "::warning::Run attempt ${{ github.run_attempt }} found no flaky test reports. If regular jobs forwarded new flaky tests in a previous attempt, their reports may have been lost and those tests will NOT be rerun here."
+          fi
         else
           printf '   %s\n' "${flaky_reports[@]}"
         fi
+
+        declare -A processed_jobs
 
         for report in "${flaky_reports[@]}"; do
           theme=$(jq -r '.theme // empty' "$report")
@@ -519,6 +524,12 @@ jobs:
               [ -n "$platform" ] && job_name="$job_name / $platform"
             fi
           fi
+
+          if [ -n "${processed_jobs[$job_name]:-}" ]; then
+            echo "Skipping duplicate flaky report for job '$job_name': $report"
+            continue
+          fi
+          processed_jobs[$job_name]=1
 
           echo ""
           echo "============================================================"

@@ -144,7 +144,7 @@ export interface dxActionSheetOptions<
      * @action
      * @public
      */
-    onCancelClick?: ((e: CancelClickEvent<TItem, TKey>) => void) | string;
+    onCancelClick?: ((e: CancelClickEvent<TItem, TKey>) => void) | string | null;
     /**
      * @docid
      * @default true
@@ -234,7 +234,6 @@ export interface dxActionSheetItem<TKey = any> extends CollectionWidgetItem {
     icon?: string;
     /**
      * @docid
-     * @default null
      * @type_function_param1 e:NativeEventInfo
      * @type function
      * @public

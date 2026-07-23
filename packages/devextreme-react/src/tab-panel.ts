@@ -27,8 +27,8 @@ type ITabPanelOptionsNarrowedEvents<TItem = any, TKey = any> = {
   onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void);
   onSelectionChanging?: ((e: SelectionChangingEvent<TItem, TKey>) => void);
   onTitleClick?: ((e: TitleClickEvent<TItem, TKey>) => void);
-  onTitleHold?: ((e: TitleHoldEvent<TItem, TKey>) => void);
-  onTitleRendered?: ((e: TitleRenderedEvent<TItem, TKey>) => void);
+  onTitleHold?: ((e: TitleHoldEvent<TItem, TKey>) => void) | undefined;
+  onTitleRendered?: ((e: TitleRenderedEvent<TItem, TKey>) => void) | undefined;
 }
 
 type ITabPanelOptions<TItem = any, TKey = any> = React.PropsWithChildren<ReplaceFieldTypes<Properties<TItem, TKey>, ITabPanelOptionsNarrowedEvents<TItem, TKey>> & IHtmlOptions & {
@@ -39,10 +39,10 @@ type ITabPanelOptions<TItem = any, TKey = any> = React.PropsWithChildren<Replace
   itemTitleComponent?: React.ComponentType<any>;
   defaultItems?: Array<any | dxTabPanelItem | string>;
   defaultSelectedIndex?: number;
-  defaultSelectedItem?: any;
+  defaultSelectedItem?: any | null;
   onItemsChange?: (value: Array<any | dxTabPanelItem | string>) => void;
   onSelectedIndexChange?: (value: number) => void;
-  onSelectedItemChange?: (value: any) => void;
+  onSelectedItemChange?: (value: any | null) => void;
 }>
 
 interface TabPanelRef<TItem = any, TKey = any> {

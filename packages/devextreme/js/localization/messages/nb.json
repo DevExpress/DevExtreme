@@ -496,6 +496,8 @@
         "dxFilterBuilder-filterAriaItemOperation": "Elementoperasjon",
         "dxFilterBuilder-filterAriaItemValue": "Elementverdi",
 
+        "dxHtmlEditor-editorAriaLabel": "Editor content",
+        "dxHtmlEditor-ariaEscapeInstruction": "Press Ctrl + Shift + Up arrow or Ctrl + Shift + Down arrow to move focus out of the editing area",
         "dxHtmlEditor-dialogColorCaption": "Skift fontfarge",
         "dxHtmlEditor-dialogBackgroundCaption": "Skift bakgrunnsfarge",
         "dxHtmlEditor-dialogLinkCaption": "Legg til link",

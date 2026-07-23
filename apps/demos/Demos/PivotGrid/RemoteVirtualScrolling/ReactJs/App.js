@@ -12,7 +12,7 @@ import XmlaStore from 'devextreme/ui/pivot_grid/xmla_store';
 const App = () => (
   <>
     <div className="long-title">
-      <h3>Sales Statistics</h3>
+      <h2>Sales Statistics</h2>
     </div>
     <PivotGrid
       dataSource={dataSource}

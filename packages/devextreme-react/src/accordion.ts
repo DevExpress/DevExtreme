@@ -36,12 +36,12 @@ type IAccordionOptions<TItem = any, TKey = any> = React.PropsWithChildren<Replac
   itemTitleComponent?: React.ComponentType<any>;
   defaultItems?: Array<any | dxAccordionItem | string>;
   defaultSelectedIndex?: number;
-  defaultSelectedItem?: any;
+  defaultSelectedItem?: any | null;
   defaultSelectedItemKeys?: Array<any>;
   defaultSelectedItems?: Array<any>;
   onItemsChange?: (value: Array<any | dxAccordionItem | string>) => void;
   onSelectedIndexChange?: (value: number) => void;
-  onSelectedItemChange?: (value: any) => void;
+  onSelectedItemChange?: (value: any | null) => void;
   onSelectedItemKeysChange?: (value: Array<any>) => void;
   onSelectedItemsChange?: (value: Array<any>) => void;
 }>

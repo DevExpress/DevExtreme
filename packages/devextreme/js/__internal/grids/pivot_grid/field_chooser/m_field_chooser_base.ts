@@ -131,7 +131,7 @@ export class FieldChooserBase extends mixinWidget {
       ...{
         allowFieldDragging: true,
         applyChangesMode: 'instantly',
-        state: null,
+        state: undefined,
         onFieldContextMenuKeyDown: null,
         headerFilter: {
           width: 252,

@@ -117,7 +117,7 @@ class Editor<
       ...super._getDefaultOptions(),
       value: null,
       name: '',
-      onValueChanged: null,
+      onValueChanged: undefined,
       readOnly: false,
       isValid: true,
       validationError: null,
@@ -262,7 +262,7 @@ class Editor<
     this.$element().addClass(stylingModeClass);
   }
 
-  _getValidationErrors(): unknown[] | undefined {
+  _getValidationErrors(): unknown[] | null | undefined {
     let { validationErrors } = this.option();
     const { validationError } = this.option();
 

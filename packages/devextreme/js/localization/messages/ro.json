@@ -496,6 +496,8 @@
         "dxFilterBuilder-filterAriaItemOperation": "Operația elementului",
         "dxFilterBuilder-filterAriaItemValue": "Valoarea elementului",
 
+        "dxHtmlEditor-editorAriaLabel": "Editor content",
+        "dxHtmlEditor-ariaEscapeInstruction": "Press Ctrl + Shift + Up arrow or Ctrl + Shift + Down arrow to move focus out of the editing area",
         "dxHtmlEditor-dialogColorCaption": "Schimbă culoarea fontului",
         "dxHtmlEditor-dialogBackgroundCaption": "Schimbă culoarea de fundal",
         "dxHtmlEditor-dialogLinkCaption": "Adaugă Link",

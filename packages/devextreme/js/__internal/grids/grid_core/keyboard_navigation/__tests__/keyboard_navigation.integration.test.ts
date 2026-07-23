@@ -5,6 +5,7 @@ import {
   afterTest,
   beforeTest,
   createDataGrid,
+  flushAsync,
 } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 
 import type { NAV_KEYS } from './helpers/const';
@@ -187,6 +188,77 @@ describe('Keyboard Navigation', () => {
       const finishGroupRowIndex = visibleGroupRows.length - 1; // Group "C"
 
       expect(keyboardNavController._focusedCellPosition.rowIndex).toBe(finishGroupRowIndex);
+    });
+  });
+
+  describe('editing a new row when allowUpdating is false (T1332312)', () => {
+    type CreatedGrid = Awaited<ReturnType<typeof createDataGrid>>;
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    const createGridWithNewRow = (startEditAction: 'click' | 'dblClick' = 'click') => createDataGrid({
+      dataSource: DATA_SOURCE,
+      columns: ['name'],
+      editing: {
+        mode: 'batch',
+        allowUpdating: false,
+        allowAdding: true,
+        startEditAction,
+      },
+      keyboardNavigation: {
+        enabled: true,
+      },
+    });
+
+    // Adds a new row, leaves editing, then focuses the new row's cell without editing it.
+    const focusNewRowCell = async ({ instance, component }: CreatedGrid): Promise<number> => {
+      await instance.addRow();
+      await flushAsync();
+      instance.closeEditCell();
+      jest.runAllTimers();
+
+      const newRowIndex = instance.getVisibleRows().findIndex((row) => row.isNewRow);
+      const cell = component.getDataCell(newRowIndex, 0).getElement() as HTMLElement;
+
+      triggerPointerDown(cell);
+      jest.runAllTimers();
+
+      return newRowIndex;
+    };
+
+    it('should enter cell edit mode on Enter for a new row', async () => {
+      const grid = await createGridWithNewRow();
+      const newRowIndex = await focusNewRowCell(grid);
+
+      expect(grid.component.getDataCell(newRowIndex, 0).isEditCell).toBe(false);
+
+      triggerKeyDown(grid.instance, 'enter');
+      jest.runAllTimers();
+
+      expect(grid.component.getDataCell(newRowIndex, 0).isEditCell).toBe(true);
+    });
+
+    it('should enter cell edit mode on Enter for a new row even when startEditAction is dblClick', async () => {
+      const grid = await createGridWithNewRow('dblClick');
+      const newRowIndex = await focusNewRowCell(grid);
+
+      triggerKeyDown(grid.instance, 'enter');
+      jest.runAllTimers();
+
+      expect(grid.component.getDataCell(newRowIndex, 0).isEditCell).toBe(true);
+    });
+
+    it('should NOT enter cell edit mode on Enter for an existing row', async () => {
+      const grid = await createGridWithNewRow();
+      jest.runAllTimers();
+
+      const cell = grid.component.getDataCell(0, 0).getElement() as HTMLElement;
+      triggerPointerDown(cell);
+      jest.runAllTimers();
+
+      triggerKeyDown(grid.instance, 'enter');
+      jest.runAllTimers();
+
+      expect(grid.component.getDataCell(0, 0).isEditCell).toBe(false);
     });
   });
 });
