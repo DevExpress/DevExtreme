@@ -62,7 +62,7 @@ describe('ConcatenateFilesExecutor E2E', () => {
   });
 
   it('should handle devextreme-bundler-config use case', async () => {
-    const partsDir = path.join(projectDir, 'build', 'gulp', 'bundler-config');
+    const partsDir = path.join(projectDir, 'build', 'bundler-config');
     fs.mkdirSync(partsDir, { recursive: true });
 
     await writeFileText(
@@ -82,9 +82,9 @@ describe('ConcatenateFilesExecutor E2E', () => {
 
     const options: ConcatenateFilesExecutorSchema = {
       sourceFiles: [
-        './build/gulp/bundler-config/01-header.js',
-        './build/gulp/bundler-config/02-core.js',
-        './build/gulp/bundler-config/03-footer.js',
+        './build/bundler-config/01-header.js',
+        './build/bundler-config/02-core.js',
+        './build/bundler-config/03-footer.js',
       ],
       outputFile: './artifacts/js/bundler-config.js',
       header: '/* DevExtreme Bundler Config */\n/* Generated file - do not edit */\n\n',

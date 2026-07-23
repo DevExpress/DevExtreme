@@ -15,8 +15,7 @@
     ],
     "devextreme-build-config": [
       "{projectRoot}/build/**/*",
-      "{projectRoot}/webpack.config.js",
-      "{projectRoot}/gulpfile.js"
+      "{projectRoot}/webpack.config.js"
     ]
   },
   "targetDefaults": {

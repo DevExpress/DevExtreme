@@ -108,7 +108,7 @@ describe('BundleExecutor E2E', () => {
       version: '7.8.9',
     });
 
-    const buildDir = path.join(projectDir, 'build', 'gulp');
+    const buildDir = path.join(projectDir, 'build');
     fs.mkdirSync(buildDir, { recursive: true });
     await writeFileText(
       path.join(buildDir, 'license-header.txt'),
@@ -122,7 +122,7 @@ describe('BundleExecutor E2E', () => {
       mode: 'production',
       webpackConfigPath: './webpack.config.js',
       applyLicenseHeaders: {
-        licenseTemplateFile: './build/gulp/license-header.txt',
+        licenseTemplateFile: './build/license-header.txt',
         separator: '',
         includePatterns: ['dx.*.js'],
       },
