@@ -55,8 +55,16 @@ describe('GroupPanelHorizontalCell', () => {
     expect(result.props?.title).toBe('Room 1');
   });
 
-  it('should set basic column-header accessibility attributes', () => {
+  it('should set scope="colgroup" when colSpan is greater than 1', () => {
     const component = new GroupPanelHorizontalCell(baseProps);
+    const result = component.render() as VirtualNodeLike;
+
+    expect(result.props?.scope).toBe('colgroup');
+    expect(result.props?.role).toBe('columnheader');
+  });
+
+  it('should set scope="col" when colSpan equals 1', () => {
+    const component = new GroupPanelHorizontalCell({ ...baseProps, colSpan: 1 });
     const result = component.render() as VirtualNodeLike;
 
     expect(result.props?.scope).toBe('col');

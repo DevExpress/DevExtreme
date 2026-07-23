@@ -42,13 +42,15 @@ export class GroupPanelHorizontalCell extends BaseInfernoComponent<GroupPanelHor
       [className ?? '']: Boolean(className),
     });
 
+    const scope = colSpan > 1 ? 'colgroup' : 'col';
+
     return (
       <th
         className={classes}
         colSpan={colSpan}
         rowSpan={rowSpan && rowSpan > 1 ? rowSpan : undefined}
         title={text}
-        scope="col"
+        scope={scope}
         role="columnheader"
       >
         <div className="dx-scheduler-group-header-content">
