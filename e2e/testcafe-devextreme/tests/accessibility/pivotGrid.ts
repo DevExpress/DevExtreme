@@ -77,16 +77,18 @@ test('grid with field panel', async (t) => {
   await a11yCheck(t, {}, PIVOT_GRID_SELECTOR);
 }).before(async () => createWidget('dxPivotGrid', createConfig()));
 
+// The popup/menu widgets are portaled to <body>, outside the harness page
+// landmarks, so the best-practice 'region' rule fires on them regardless of
+// the widget's own accessibility (same convention as dataGrid/cardView a11y
+// tests). It is disabled for the overlay scenarios.
+const overlayA11yOptions = { rules: { region: { enabled: false } } };
+
 test('field chooser popup', async (t) => {
   const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
 
   await t.click(pivotGrid.getFieldChooserButton());
 
-  // The popup opens with an animation; wait for its content to settle so axe
-  // does not sample a transient mid-animation state.
-  await t.expect(Selector('.dx-fieldchooser-popup .dx-pivotgridfieldchooser').visible).ok();
-
-  await a11yCheck(t);
+  await a11yCheck(t, overlayA11yOptions);
 }).before(async () => createWidget('dxPivotGrid', createConfig()));
 
 test('header filter popup', async (t) => {
@@ -98,9 +100,10 @@ test('header filter popup', async (t) => {
 
   await t.click(filterIcon);
 
+  // Wait for the popup list to render so axe audits the fully-open popup.
   await t.expect(Selector('.dx-header-filter-menu .dx-list-item').visible).ok();
 
-  await a11yCheck(t);
+  await a11yCheck(t, overlayA11yOptions);
 }).before(async () => createWidget('dxPivotGrid', createConfig()));
 
 test('cell context menu', async (t) => {
@@ -108,9 +111,8 @@ test('cell context menu', async (t) => {
 
   await t.rightClick(columnHeaderCell);
 
-  // The context menu is an animated overlay; wait for its items to be visible
-  // before running axe to avoid flaky mid-animation samples.
+  // Wait for the menu items so axe audits the fully-open context menu.
   await t.expect(Selector('.dx-context-menu .dx-menu-item').visible).ok();
 
-  await a11yCheck(t);
+  await a11yCheck(t, overlayA11yOptions);
 }).before(async () => createWidget('dxPivotGrid', createConfig()));
