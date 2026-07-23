@@ -1,6 +1,6 @@
 import { BaseInfernoComponent, normalizeStyles } from '@ts/core/r1/runtime/inferno/index';
 
-import { extendGroupItemsForGroupingByDate, flattenGroupPanelTreeToLeafRows, renderUtils } from '../../utils/index';
+import { getTimelineGroupPanelRows, renderUtils } from '../../utils/index';
 import type { GroupPanelProps } from './group_panel';
 import { GroupPanelBaseDefaultProps } from './group_panel_props';
 import { GroupPanelVerticalCell } from './group_panel_vertical_cell';
@@ -9,22 +9,6 @@ import { GroupPanelVerticalRow } from './group_panel_vertical_row';
 
 const HIERARCHICAL_GROUP_FLEX_CONTAINER_CLASS = 'dx-scheduler-group-flex-container-hierarchical';
 const TIMELINE_GROUP_TABLE_CLASS = 'dx-scheduler-group-table';
-
-const getTimelineGroupPanelRows = (
-  groupPanelData: GroupPanelProps['groupPanelData'],
-  groupByDate: boolean,
-): GroupPanelProps['groupPanelData']['groupPanelItems'] => {
-  let rows = flattenGroupPanelTreeToLeafRows(
-    groupPanelData.groupTree,
-    groupPanelData.baseColSpan,
-  );
-
-  if (groupByDate) {
-    rows = extendGroupItemsForGroupingByDate(rows, groupPanelData.columnCountPerGroup);
-  }
-
-  return rows;
-};
 
 const renderGroupPanelContent = (
   groupPanelData: GroupPanelProps['groupPanelData'],

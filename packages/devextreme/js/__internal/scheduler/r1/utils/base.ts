@@ -26,6 +26,7 @@ import timeZoneUtils from '../../utils_time_zone';
 import type { TimeZoneCalculator } from '../timezone_calculator';
 import {
   buildGroupPanelTree,
+  flattenGroupPanelTreeToLeafRows,
   flattenGroupPanelTreeToRows,
   getGroupPanelTreeDepth,
 } from './group_panel_tree';
@@ -474,6 +475,21 @@ export const getGroupPanelData = (
     baseColSpan,
     columnCountPerGroup,
   };
+};
+
+export const getTimelineGroupPanelRows = (
+  groupPanelData: GroupPanelData,
+  groupByDate: boolean,
+): GroupRenderItem[][] => {
+  let rows = groupPanelData.maxDepth > 1
+    ? flattenGroupPanelTreeToLeafRows(groupPanelData.groupTree, groupPanelData.baseColSpan)
+    : groupPanelData.groupPanelItems;
+
+  if (groupByDate) {
+    rows = extendGroupItemsForGroupingByDate(rows, groupPanelData.columnCountPerGroup);
+  }
+
+  return rows;
 };
 
 export const splitNumber = (value: number, splitValue: number): number[] => Array.from(

@@ -13,6 +13,7 @@ import {
   getIsGroupedAllDayPanel,
   getKeyByGroup,
   getSkippedHoursInRange,
+  getTimelineGroupPanelRows,
   isAppointmentTakesAllDay,
   isGroupingByDate,
   isHorizontalGroupingApplied,
@@ -582,6 +583,56 @@ describe('base utils', () => {
         ],
       ]);
       expect(groupPanelData.baseColSpan).toBe(7);
+    });
+  });
+
+  describe('getTimelineGroupPanelRows', () => {
+    it('should keep a single stacked row for flat timeline grouping', () => {
+      const groups: GroupNode[] = [
+        {
+          id: 0, resourceText: 'Group_0', resourceIndex: 'any', grouped: { any: 0 }, children: [],
+        },
+        {
+          id: 1, resourceText: 'Group_1', resourceIndex: 'any', grouped: { any: 1 }, children: [],
+        },
+      ];
+      const groupPanelData = getGroupPanelData(groups, 1, false, 3);
+      const timelineRows = getTimelineGroupPanelRows(groupPanelData, false);
+
+      expect(timelineRows).toEqual(groupPanelData.groupPanelItems);
+      expect(timelineRows).toHaveLength(1);
+    });
+
+    it('should use one row per leaf path for hierarchical timeline grouping', () => {
+      const groups: GroupNode[] = [
+        {
+          id: 'A',
+          resourceText: 'Building A',
+          resourceIndex: 'buildingId',
+          grouped: { buildingId: 'A' },
+          children: [
+            {
+              id: 1, resourceText: 'Room A1', resourceIndex: 'roomId', grouped: { buildingId: 'A', roomId: 1 }, children: [],
+            },
+          ],
+        },
+        {
+          id: 'B', resourceText: 'Building B', resourceIndex: 'buildingId', grouped: { buildingId: 'B' }, children: [],
+        },
+      ];
+      const groupPanelData = getGroupPanelData(groups, 1, false, 1);
+      const timelineRows = getTimelineGroupPanelRows(groupPanelData, false);
+
+      expect(timelineRows).toEqual([
+        [
+          expect.objectContaining({ key: 'buildingId_A', text: 'Building A' }),
+          expect.objectContaining({ key: 'buildingId_A_roomId_1', text: 'Room A1' }),
+        ],
+        [
+          expect.objectContaining({ key: 'buildingId_B', text: 'Building B' }),
+        ],
+      ]);
+      expect(timelineRows).not.toEqual(groupPanelData.groupPanelItems);
     });
   });
 

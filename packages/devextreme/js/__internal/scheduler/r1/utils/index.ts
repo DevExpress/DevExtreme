@@ -57,6 +57,7 @@ export {
   getSkippedHoursInRange,
   getStartViewDateTimeOffset,
   getStartViewDateWithoutDST,
+  getTimelineGroupPanelRows,
   getToday,
   getTotalCellCountByCompleteData,
   getTotalRowCountByCompleteData,
