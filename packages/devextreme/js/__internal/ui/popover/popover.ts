@@ -318,7 +318,7 @@ class Popover<
       _describeTarget,
     } = this.option();
 
-    return Boolean(target) && Boolean(_describeTarget) && this._getActualAriaRole() === 'tooltip';
+    return Boolean(target) && Boolean(_describeTarget) && this._getEffectiveAriaRole() === 'tooltip';
   }
 
   _getAriaDescriptionTargets(): dxElementWrapper {
