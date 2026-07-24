@@ -482,6 +482,15 @@ $scheduler-month-date-text-padding: 6px;
   table-layout: fixed;
   width: 100%;
   font-size: $scheduler-workspace-info-font-size;
+
+  // groupByDate: date header row is above groups — separator on top of group headers
+  .dx-scheduler-group-row:not(:first-child) {
+    .dx-scheduler-group-header {
+      border-top: $scheduler-base-border;
+      border-top-color: $scheduler-base-border-color;
+      border-bottom: none;
+    }
+  }
 }
 
 .dx-scheduler-work-space { // stylelint-disable-line no-duplicate-selectors
@@ -826,6 +835,14 @@ $scheduler-month-date-text-padding: 6px;
   .dx-scheduler-sidebar-scrollable {
     .dx-scheduler-group-row:last-child .dx-scheduler-group-header,
     .dx-scheduler-group-header-leaf {
+      border-right: none;
+      border-left: $scheduler-base-border;
+      border-left-color: $scheduler-base-border-color;
+    }
+  }
+
+  .dx-scheduler-group-flex-container-hierarchical {
+    .dx-scheduler-group-header {
       border-right: none;
       border-left: $scheduler-base-border;
       border-left-color: $scheduler-base-border-color;

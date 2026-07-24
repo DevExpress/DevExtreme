@@ -215,6 +215,30 @@ $scheduler-timeline-min-height: 100px;
 
 .dx-rtl {
   .dx-scheduler-timeline.dx-scheduler-work-space-grouped {
+    .dx-scheduler-group-table > .dx-scheduler-group-flex-container:not(.dx-scheduler-group-flex-container-hierarchical) {
+      .dx-scheduler-group-row .dx-scheduler-group-header {
+        border-right: none;
+        border-left: $scheduler-base-border;
+        border-left-color: $scheduler-base-border-color;
+      }
+    }
+
+    &.dx-scheduler-work-space-group-by-date {
+      .dx-scheduler-group-table > .dx-scheduler-group-flex-container:not(.dx-scheduler-group-flex-container-hierarchical) {
+        .dx-scheduler-group-row .dx-scheduler-group-header {
+          border-right: none;
+          border-left: $scheduler-base-border;
+          border-left-color: $scheduler-base-border-color;
+        }
+      }
+
+      .dx-scheduler-group-row .dx-scheduler-last-group-cell {
+        border-right: none;
+        border-left: $scheduler-accent-border;
+        border-left-color: $scheduler-accent-border-color;
+      }
+    }
+
     .dx-scheduler-date-table-cell {
       &:first-child {
         border-left: $scheduler-base-border;
