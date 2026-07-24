@@ -33,7 +33,7 @@ overrides:
   "http-proxy-middleware@>=0.16.0 <3.0.7": ^3.0.7
   "immutable@>=4.0.0-rc.1 <4.3.8": ^4.3.8
   "ip-address@<=10.1.0": ">=10.1.1"
-  "js-yaml@<=4.1.1": ^4.2.0
+  "js-yaml@<4.3.0": ^4.3.0
   "json5@<1.0.2": ^2.2.3
   "lodash@<4.18.1": 4.18.1
   "micromatch@<4.0.8": ^4.0.8
