@@ -111,6 +111,8 @@ export interface PopoverProperties extends Omit<Properties,
   _overlayContentRole?: string;
 
   _describeTarget?: boolean;
+
+  _preventDialogFocus?: boolean;
 }
 class Popover<
   TProperties extends PopoverProperties = PopoverProperties,
@@ -156,8 +158,6 @@ class Popover<
       hideOnParentScroll: true,
       arrowPosition: '',
       arrowOffset: 0,
-      focusStateEnabled: undefined,
-      tabFocusLoopEnabled: undefined,
       _fixWrapperPosition: true,
       _describeTarget: true,
     };
@@ -270,19 +270,10 @@ class Popover<
     this._syncFocusOptions();
   }
 
-  // NOTE: If options are explicitly specified, they are not overwritten.
-  // Now Lookup uses focusStateEnabled false and overlayRole dialog.
   _syncFocusOptions(): void {
-    if (this._getEffectiveAriaRole() === 'dialog') {
-      const { focusStateEnabled, tabFocusLoopEnabled } = this.option();
-
-      if (focusStateEnabled === undefined) {
-        this._setOptionWithoutOptionChange('focusStateEnabled', true);
-      }
-
-      if (tabFocusLoopEnabled === undefined) {
-        this._setOptionWithoutOptionChange('tabFocusLoopEnabled', true);
-      }
+    if (this._getEffectiveAriaRole() === 'dialog' && !this.option('_preventDialogFocus')) {
+      this._setOptionWithoutOptionChange('focusStateEnabled', true);
+      this._setOptionWithoutOptionChange('tabFocusLoopEnabled', true);
     }
   }
 

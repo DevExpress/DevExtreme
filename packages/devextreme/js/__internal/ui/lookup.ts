@@ -683,6 +683,7 @@ class Lookup extends DropDownList<LookupProperties> {
         hideOnParentScroll: true,
         _fixWrapperPosition: false,
         _overlayContentRole: 'dialog',
+        _preventDialogFocus: true,
         width: this._isInitialOptionValue('dropDownOptions.width')
           ? (): number => getOuterWidth(this.$element()) as number
           : popupConfig.width,
