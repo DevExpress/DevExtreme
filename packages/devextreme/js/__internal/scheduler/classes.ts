@@ -43,9 +43,3 @@ export const GROUP_ROW_CLASS = 'dx-scheduler-group-row';
 export const GROUP_HEADER_CONTENT_CLASS = 'dx-scheduler-group-header-content';
 export const LAST_GROUP_CELL_CLASS = 'dx-scheduler-last-group-cell';
 export const FIRST_GROUP_CELL_CLASS = 'dx-scheduler-first-group-cell';
-
-export const VERTICAL_GROUP_COUNT_CLASSES = [
-  'dx-scheduler-group-column-count-one',
-  'dx-scheduler-group-column-count-two',
-  'dx-scheduler-group-column-count-three',
-];

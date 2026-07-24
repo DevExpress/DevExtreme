@@ -78,7 +78,6 @@ import {
   GROUP_HEADER_CONTENT_CLASS,
   GROUP_ROW_CLASS,
   TIME_PANEL_CLASS,
-  VERTICAL_GROUP_COUNT_CLASSES,
   VIRTUAL_CELL_CLASS,
 } from '../classes';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
@@ -2394,7 +2393,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     };
 
     if (this.option().groups?.length) {
-      this.attachGroupCountClass();
       const $groupHeaderContainer = this.getGroupHeaderContainer();
       if ($groupHeaderContainer) {
         this.renderRenovatedComponent(
@@ -2404,8 +2402,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
           options,
         );
       }
-    } else {
-      this.detachGroupCountClass();
     }
   }
 
@@ -2478,12 +2474,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   renderRHeaderPanel(isRenderDateHeader = true): void {
-    if (this.option().groups?.length) {
-      this.attachGroupCountClass();
-    } else {
-      this.detachGroupCountClass();
-    }
-
     this.renderRenovatedComponent(
       this.$thead,
       this.renovatedHeaderPanelComponent,
@@ -3221,20 +3211,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   protected setIndicationUpdateInterval(): void { return noop(); }
 
-  protected detachGroupCountClass(): void {
-    VERTICAL_GROUP_COUNT_CLASSES.forEach((className) => {
-      this.$element().removeClass(className);
-    });
-  }
-
-  protected attachGroupCountClass(): void {
-    const className = this.groupedStrategy.getGroupCountClass(this.option().groups);
-
-    if (className) {
-      this.$element().addClass(className);
-    }
-  }
-
   protected getDateHeaderTemplate(): TemplateBase | null | undefined {
     return this.option().dateCellTemplate;
   }
@@ -3353,12 +3329,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     let cellTemplates: (() => dxElementWrapper)[] = [];
     if (groupCount && $container) {
       const groupRows = this.makeGroupRows(this.option().groups, this.option().groupByDate);
-      this.attachGroupCountClass();
       const { elements } = groupRows;
       $container.append(Array.isArray(elements) ? elements : elements.toArray());
       cellTemplates = groupRows.cellTemplates;
-    } else {
-      this.detachGroupCountClass();
     }
 
     return cellTemplates;

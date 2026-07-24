@@ -62,7 +62,6 @@ export {
   getTotalCellCountByCompleteData,
   getTotalRowCountByCompleteData,
   getValidCellDateForLocalTimeFormat,
-  getVerticalGroupCountClass,
   getViewStartByOptions,
   isAppointmentTakesAllDay,
   isDateAndTimeView,

@@ -594,6 +594,11 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
       .dx-scheduler-group-header {
         border-bottom: none;
       }
+
+      .dx-scheduler-header-panel .dx-scheduler-group-row:has(+ .dx-scheduler-group-row) .dx-scheduler-group-header {
+        border-bottom: baseScheduler.$scheduler-base-border;
+        border-bottom-color: $scheduler-base-border-color;
+      }
     }
 
     &.dx-scheduler-agenda {
