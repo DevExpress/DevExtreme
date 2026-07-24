@@ -1,7 +1,4 @@
 import registerComponent from '@js/core/component_registrator';
-import Guid from '@js/core/guid';
-import $ from '@js/core/renderer';
-import { isWindow } from '@js/core/utils/type';
 import Popover from '@js/ui/popover/ui.popover';
 import type { PopoverProperties } from '@ts/ui/popover/popover';
 
@@ -15,8 +12,6 @@ const TOOLTIP_WRAPPER_CLASS = 'dx-tooltip-wrapper';
 class Tooltip<
   TProperties extends TooltipProperties = TooltipProperties,
 > extends Popover<TProperties> {
-  _contentId?: string;
-
   _getDefaultOptions(): TProperties {
     return {
       ...super._getDefaultOptions(),
@@ -39,43 +34,12 @@ class Tooltip<
     super._render();
   }
 
-  _renderContent(): void {
-    super._renderContent();
-
-    this._toggleAriaAttributes();
-  }
-
-  // NOTE: Tooltip manages the target relationship itself (_toggleAriaAttributes),
-  // so the inherited Popover sync must stay disabled to avoid a second describedby id.
-  _syncAriaAttributes(): void {}
-
   // NOTE: dxTooltip keeps its legacy role behavior: only toolbarItems make it
   // a dialog; the Popover showTitle/showCloseButton predicate does not apply.
   _getAriaRole(): string {
     const { toolbarItems } = this.option();
 
     return toolbarItems?.length ? 'dialog' : 'tooltip';
-  }
-
-  _toggleAriaDescription(showing: boolean): void {
-    const { target } = this.option();
-    const $target = $(target);
-    const label = showing ? this._contentId : undefined;
-
-    if (!isWindow($target.get(0))) {
-      this.setAria('describedby', label, $target);
-    }
-  }
-
-  _toggleAriaAttributes(): void {
-    this._contentId = `dx-${new Guid()}`;
-
-    // @ts-expect-error dxElementWrapper typings
-    this.$overlayContent().attr({
-      id: this._contentId,
-    });
-
-    this._toggleAriaDescription(true);
   }
 }
 
