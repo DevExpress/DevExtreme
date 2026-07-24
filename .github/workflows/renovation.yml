@@ -94,7 +94,7 @@ jobs:
 
     - name: Build localization
       working-directory: ./packages/devextreme
-      run: pnpm exec gulp localization
+      run: pnpm exec nx build:localization devextreme
 
     - name: Check test types
       run: pnpm exec nx check-types devextreme

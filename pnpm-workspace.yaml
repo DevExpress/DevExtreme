@@ -80,7 +80,6 @@ catalog:
   eslint-plugin-vue: 10.4.0
   vue-eslint-parser: 10.0.0
   globals: 15.14.0
-  gulp-eslint-new: 2.4.0
   jquery: 4.0.0
   stylelint: 16.22.0
   testcafe: 3.7.5

@@ -75,7 +75,8 @@ interface LocalizationTestFixture {
 async function createLocalizationTestFixture(tempDir: string): Promise<LocalizationTestFixture> {
   const projectDir = path.join(tempDir, ...PROJECT_SUBPATH);
   const messagesDir = path.join(projectDir, 'js', 'localization', 'messages');
-  const buildDir = path.join(projectDir, 'build', 'gulp');
+  const buildDir = path.join(projectDir, 'build');
+  const templatesDir = path.join(buildDir, 'localization-templates');
   const artifactsDir = path.join(projectDir, 'artifacts', 'js', 'localization');
   const cldrDataDir = path.join(
     projectDir,
@@ -89,6 +90,7 @@ async function createLocalizationTestFixture(tempDir: string): Promise<Localizat
 
   fs.mkdirSync(messagesDir, { recursive: true });
   fs.mkdirSync(buildDir, { recursive: true });
+  fs.mkdirSync(templatesDir, { recursive: true });
   fs.mkdirSync(artifactsDir, { recursive: true });
   fs.mkdirSync(cldrDataDir, { recursive: true });
   fs.mkdirSync(localizationDir, { recursive: true });
@@ -111,8 +113,8 @@ async function createLocalizationTestFixture(tempDir: string): Promise<Localizat
     },
   });
 
-  await writeFileText(path.join(buildDir, TEMPLATE_FILE.LOCALIZATION), LOCALIZATION_TEMPLATE);
-  await writeFileText(path.join(buildDir, TEMPLATE_FILE.GENERATED_JS), GENERATED_JS_TEMPLATE);
+  await writeFileText(path.join(templatesDir, TEMPLATE_FILE.LOCALIZATION), LOCALIZATION_TEMPLATE);
+  await writeFileText(path.join(templatesDir, TEMPLATE_FILE.GENERATED_JS), GENERATED_JS_TEMPLATE);
 
   await writeJson(path.join(projectDir, 'package.json'), {
     name: 'devextreme',
@@ -150,7 +152,7 @@ describe('LocalizationExecutor E2E', () => {
   it('should generate message files for all locales', async () => {
     const options: LocalizationExecutorSchema = {
       messagesDir: './js/localization/messages',
-      messageTemplate: './build/gulp/localization-template.jst',
+      messageTemplate: './build/localization-templates/localization-template.jst',
       messageOutputDir: './artifacts/js/localization',
       skipCldrGeneration: true,
     };
@@ -179,9 +181,9 @@ describe('LocalizationExecutor E2E', () => {
   it('should generate CLDR TypeScript modules', async () => {
     const options: LocalizationExecutorSchema = {
       messagesDir: './js/localization/messages',
-      messageTemplate: './build/gulp/localization-template.jst',
+      messageTemplate: './build/localization-templates/localization-template.jst',
       messageOutputDir: './artifacts/js/localization',
-      generatedTemplate: './build/gulp/generated_js.jst',
+      generatedTemplate: './build/localization-templates/generated_js.jst',
       cldrDataOutputDir: './js/__internal/core/localization/cldr-data',
       defaultMessagesOutputDir: './js/__internal/core/localization',
     };
@@ -215,11 +217,11 @@ describe('LocalizationExecutor E2E', () => {
 
     const options: LocalizationExecutorSchema = {
       messagesDir: './js/localization/messages',
-      messageTemplate: './build/gulp/localization-template.jst',
+      messageTemplate: './build/localization-templates/localization-template.jst',
       messageOutputDir: './artifacts/js/localization',
       skipCldrGeneration: true,
       applyLicenseHeaders: {
-        licenseTemplateFile: './build/gulp/license-header.txt',
+        licenseTemplateFile: './build/license-header.txt',
         separator: '',
         includePatterns: ['**/*.js'],
       },
@@ -236,9 +238,9 @@ describe('LocalizationExecutor E2E', () => {
   it('should have correct output structure', async () => {
     const options: LocalizationExecutorSchema = {
       messagesDir: './js/localization/messages',
-      messageTemplate: './build/gulp/localization-template.jst',
+      messageTemplate: './build/localization-templates/localization-template.jst',
       messageOutputDir: './artifacts/js/localization',
-      generatedTemplate: './build/gulp/generated_js.jst',
+      generatedTemplate: './build/localization-templates/generated_js.jst',
       cldrDataOutputDir: './js/__internal/core/localization/cldr-data',
       defaultMessagesOutputDir: './js/__internal/core/localization',
     };
