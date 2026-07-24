@@ -336,12 +336,12 @@ $scheduler-month-date-text-padding: 6px;
       border: none;
       border-top: $scheduler-base-border;
       border-top-color: $scheduler-base-border-color;
+      border-right: $scheduler-base-border;
+      border-right-color: $scheduler-base-border-color;
 
       &.dx-scheduler-group-header-leaf {
         flex: 1 1 auto;
         width: auto;
-        border-right: $scheduler-base-border;
-        border-right-color: $scheduler-base-border-color;
       }
     }
 
