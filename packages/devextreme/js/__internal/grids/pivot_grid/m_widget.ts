@@ -30,6 +30,7 @@ import { ChartIntegrationMixin } from './chart_integration/m_chart_integration';
 import DataAreaImport from './data_area/m_data_area';
 import DataControllerImport from './data_controller/m_data_controller';
 import { ExportController } from './export/m_export';
+import { getFieldsHotkeysA11yLabel } from './field_chooser/a11y';
 import { FieldChooser } from './field_chooser/m_field_chooser';
 import { FieldChooserBase } from './field_chooser/m_field_chooser_base';
 import { FieldsArea } from './fields_area/m_fields_area';
@@ -1387,7 +1388,7 @@ class PivotGrid extends Widget {
     that.$element()
       .addClass(PIVOTGRID_CLASS)
       .attr('role', 'group')
-      .attr('aria-label', localizationMessage.format('dxPivotGrid-ariaLabel'));
+      .attr('aria-label', getFieldsHotkeysA11yLabel(localizationMessage.format('dxPivotGrid-ariaLabel')));
   }
 
   _renderContentImpl() {

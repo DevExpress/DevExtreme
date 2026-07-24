@@ -9,7 +9,6 @@ import Popup from '@js/ui/popup/ui.popup';
 import { capitalize } from '@ts/core/utils/capitalize';
 
 import { AreaItem } from '../area_item/m_area_item';
-import { getFieldsAreaA11yLabel } from '../field_chooser/a11y';
 
 const DIV = '<div>';
 
@@ -189,7 +188,7 @@ class FieldsArea extends AreaItem {
       row.attr('role', 'presentation');
       tableElement
         .attr('role', 'menubar')
-        .attr('aria-label', getFieldsAreaA11yLabel(this._getAreaLabel()));
+        .attr('aria-label', this._getAreaLabel());
     } else {
       // A menubar without menu items is invalid ARIA, so an empty area keeps
       // the plain placeholder text and the table stays presentational. The

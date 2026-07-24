@@ -29,12 +29,12 @@ const getSortingLabel = (sortOrder?: SortOrderType): string | null => {
   }
 };
 
-export const getFieldsAreaA11yDescription = (): string => messageLocalization
+export const getFieldsHotkeysA11yDescription = (): string => messageLocalization
   .format(I18N_KEYS.fieldsAreaDescription);
 
-export const getFieldsAreaA11yLabel = (areaLabel?: string): string => {
-  const description = getFieldsAreaA11yDescription();
-  return areaLabel ? `${areaLabel}. ${description}` : description;
+export const getFieldsHotkeysA11yLabel = (baseLabel?: string): string => {
+  const description = getFieldsHotkeysA11yDescription();
+  return baseLabel ? `${baseLabel}. ${description}` : description;
 };
 
 export const getFieldItemA11yLabel = (

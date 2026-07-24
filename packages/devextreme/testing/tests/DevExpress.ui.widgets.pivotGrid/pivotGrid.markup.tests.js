@@ -239,7 +239,8 @@ QUnit.module('PivotGrid accessibility markup', {
         this.clock.tick(10);
 
         const ariaLabel = pivotGrid.$element().attr('aria-label');
-        assert.equal(ariaLabel, 'Pivot grid');
+        assert.strictEqual(ariaLabel.indexOf('Pivot grid'), 0, 'root label starts with the component name');
+        assert.ok(ariaLabel.length > 'Pivot grid'.length, 'root label also carries the field keyboard instructions once for the whole component');
     });
 
     QUnit.test('Outer table has role="presentation"', function(assert) {
@@ -289,13 +290,9 @@ QUnit.module('PivotGrid accessibility markup', {
             const $table = pivotGrid.$element()
                 .find(`.dx-area-fields[group="${area}"] > table`);
 
-            const ariaLabel = $table.attr('aria-label');
-
             assert.strictEqual($table.length, 1, `${area} field table exists`);
             assert.strictEqual($table.attr('role'), 'menubar', `${area} field table is a menubar`);
-            assert.strictEqual(typeof ariaLabel, 'string', `${area} menubar has an aria-label`);
-            assert.strictEqual((ariaLabel || '').indexOf(expectedLabels[area]), 0, `${area} menubar label starts with the area name`);
-            assert.ok((ariaLabel || '').length > expectedLabels[area].length, `${area} menubar label also carries the keyboard instructions`);
+            assert.strictEqual($table.attr('aria-label'), expectedLabels[area], `${area} menubar is labelled with the area name only`);
             assert.strictEqual($table.attr('aria-description'), undefined, `${area} menubar does not use the unsupported aria-description attribute`);
         });
 
