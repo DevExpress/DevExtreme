@@ -375,6 +375,22 @@ testModule('Toolbar module', simpleModuleConfig, () => {
         assert.strictEqual(activeElement, $textBox[0]);
     });
 
+    QUnit.test('roving tabIndex should switch to the clicked item on mousedown', function(assert) {
+        this.options.items = ['bold', 'italic'];
+
+        new Toolbar(this.quillMock, this.options);
+
+        const $bold = this.$element.find(`.${BOLD_FORMAT_CLASS}`);
+        const $italic = this.$element.find(`.${ITALIC_FORMAT_CLASS}`);
+
+        assert.strictEqual($bold.attr('tabIndex'), '0', 'bold item is initially the roving tab stop');
+
+        $italic.trigger('mousedown');
+
+        assert.strictEqual($italic.attr('tabIndex'), '0', 'italic item becomes the roving tab stop after a mouse click');
+        assert.strictEqual($bold.attr('tabIndex'), '-1', 'bold item is no longer the roving tab stop');
+    });
+
     test('handle align formatting', function(assert) {
         this.options.items = ['alignLeft', 'alignCenter', 'alignRight', 'alignJustify'];
 
@@ -674,6 +690,25 @@ testModule('Active formats', simpleModuleConfig, () => {
         toolbar.updateFormatWidgets();
 
         assert.notOk($clearFormat.hasClass(DISABLED_STATE_CLASS), 'Clear formats button is active because long range can contain formats');
+    });
+
+    test('toolbar button should not steal the roving tabIndex just by becoming enabled', function(assert) {
+        this.quillMock.getFormat = () => { return {}; };
+        this.options.items = ['bold', 'clear'];
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+        const $bold = this.$element.find(`.${BOLD_FORMAT_CLASS}`);
+        const $clear = this.$element.find(`.${CLEAR_FORMAT_CLASS}`);
+
+        $bold.trigger('mousedown');
+        assert.strictEqual($bold.attr('tabIndex'), '0', 'bold becomes the roving tab stop after a mouse click');
+
+        this.quillMock.getFormat = () => { return { bold: true }; };
+        toolbar.updateFormatWidgets();
+
+        assert.strictEqual($clear.hasClass(DISABLED_STATE_CLASS), false, 'clear button became enabled');
+        assert.strictEqual($bold.attr('tabIndex'), '0', 'bold remains the roving tab stop');
+        assert.strictEqual($clear.attr('tabIndex'), '-1', 'clear button does not steal the roving tab stop');
     });
 
     test('clear formatting with a selected range 1 character long', function(assert) {
