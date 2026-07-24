@@ -93,31 +93,6 @@ $scheduler-month-date-text-padding: 6px;
   }
 }
 
-.dx-scheduler-group-column-count-one {
-  .dx-scheduler-header-panel-empty-cell {
-    width: $scheduler-left-column-width;
-  }
-}
-
-.dx-scheduler-group-column-count-two {
-  .dx-scheduler-header-panel-empty-cell {
-    width: 1.5 * $scheduler-left-column-width;
-  }
-
-  .dx-scheduler-group-flex-container .dx-scheduler-group-header {
-    width: 0.75 * $scheduler-left-column-width;
-  }
-}
-
-.dx-scheduler-group-column-count-three {
-  .dx-scheduler-header-panel-empty-cell {
-    width: 2 * $scheduler-left-column-width;
-  }
-
-  .dx-scheduler-group-flex-container .dx-scheduler-group-header {
-    width: math.div($scheduler-left-column-width * 2, 3);
-  }
-}
 
 .dx-scheduler-work-space-week,
 .dx-scheduler-work-space-work-week,
@@ -157,6 +132,8 @@ $scheduler-month-date-text-padding: 6px;
 }
 
 .dx-scheduler-work-space {
+  --dx-scheduler-group-header-width: #{$scheduler-left-column-width};
+
   border: $scheduler-base-border;
   border-color: $scheduler-base-border-color;
   background-color: $scheduler-workspace-background-color;
@@ -942,23 +919,15 @@ $scheduler-month-date-text-padding: 6px;
 }
 
 .dx-scheduler-small {
+  .dx-scheduler-work-space {
+    --dx-scheduler-group-header-width: #{$scheduler-small-size-factor * $scheduler-left-column-width};
+  }
+
   .dx-scheduler-work-space-week,
   .dx-scheduler-work-space-work-week,
   .dx-scheduler-work-space-day {
     .dx-scheduler-header-panel-empty-cell {
       width: $scheduler-small-size-factor * $scheduler-left-column-width;
-    }
-
-    &.dx-scheduler-group-column-count-one .dx-scheduler-header-panel-empty-cell {
-      width: (1 + $scheduler-small-size-factor) * $scheduler-left-column-width;
-    }
-
-    &.dx-scheduler-group-column-count-two .dx-scheduler-header-panel-empty-cell {
-      width: (1.5 + $scheduler-small-size-factor) * $scheduler-left-column-width;
-    }
-
-    &.dx-scheduler-group-column-count-three .dx-scheduler-header-panel-empty-cell {
-      width: (2 + $scheduler-small-size-factor) * $scheduler-left-column-width;
     }
   }
 }

@@ -69,6 +69,14 @@ const createConfig = (
 });
 
 describe('VerticalGroupedStrategy', () => {
+  it('should return undefined from getGroupCountClass (no workspace-root class needed for hierarchical width)', () => {
+    const strategy = new VerticalGroupedStrategy(createConfig());
+
+    const result = strategy.getGroupCountClass([]);
+
+    expect(result).toBeUndefined();
+  });
+
   it('should use uniform group heights when group heights are not specified', () => {
     const strategy = new VerticalGroupedStrategy(createConfig());
 

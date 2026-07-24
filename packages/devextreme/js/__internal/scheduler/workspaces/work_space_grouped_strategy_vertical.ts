@@ -1,6 +1,6 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import { getBoundingRect } from '@js/core/utils/position';
-import { calculateDayDuration, getVerticalGroupCountClass } from '@ts/scheduler/r1/utils/index';
+import { calculateDayDuration } from '@ts/scheduler/r1/utils/index';
 import type { CellPositionData, GroupBoundsOffset } from '@ts/scheduler/types';
 import { WORK_SPACE_BORDER_PX } from '@ts/scheduler/workspaces/const';
 
@@ -77,8 +77,9 @@ class VerticalGroupedStrategy {
     return 0;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getGroupCountClass(groups: ResourceLoader[]): string | undefined {
-    return getVerticalGroupCountClass(groups);
+    return undefined;
   }
 
   getLeftOffset(): number {
