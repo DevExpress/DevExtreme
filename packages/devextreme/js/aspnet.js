@@ -42,6 +42,20 @@
         ajax,
     ) {
         var templateCompiler = createTemplateCompiler();
+        var pendingCreateComponentRoutines = [];
+        // csp handling mode marker: detect | once | csp_only | legacy
+        var cspHandlingMode = setCspHandlingMode();
+        var cspRestricted = null;
+
+        // eslint-disable-next-line no-console
+        console.log('csp handling mode: ' + cspHandlingMode);
+
+        function setCspHandlingMode() {
+            const metaCSPMode = window.document.querySelector(
+                'meta[name="dx-csp-handling-mode"]',
+            )?.content;
+            return metaCSPMode || 'legacy';
+        }
 
         function readCspDirective(csp, name) {
             var directives = csp.split(';');
@@ -52,6 +66,19 @@
                 }
             }
             return null;
+        }
+
+        function canUseFunctionConstructor() {
+            var isFunctionConstructorAllowed = false;
+            try {
+                // eslint-disable-next-line no-new-func
+                new Function('return true');
+                isFunctionConstructorAllowed = true;
+            } catch(e) {
+                // Content Security Policy without 'unsafe-eval' blocks the Function constructor.
+                isFunctionConstructorAllowed = false;
+            }
+            return isFunctionConstructorAllowed;
         }
 
         function detectCspRestricted() {
@@ -81,17 +108,29 @@
             return false;
         }
 
-        var cspRestricted = null;
-
         function isCspRestricted() {
-            if(null === cspRestricted) {
-                cspRestricted = detectCspRestricted();
+            if(cspRestricted !== null) {
+                return cspRestricted;
+            }
+            switch(cspHandlingMode) {
+                case 'detect':
+                    cspRestricted = detectCspRestricted();
+                    break;
+                case 'csp_only':
+                    cspRestricted = true;
+                    break;
+                case 'once':
+                    cspRestricted = !canUseFunctionConstructor();
+                    break;
+                case 'legacy':
+                default:
+                    cspRestricted = false;
             }
             return cspRestricted;
         }
 
         function compileViaScript(src, code) {
-            if(!src || 'SCRIPT' !== src.tagName || !src.id) {
+            if(!src || src.tagName !== 'SCRIPT') {
                 return null;
             }
             if(isCspRestricted() && !src.nonce) {
@@ -109,7 +148,6 @@
             return funcName;
         }
 
-        var pendingCreateComponentRoutines = [];
 
         function createTemplateCompiler() {
             var ENCODE_QUALIFIER = '-',
@@ -172,16 +210,20 @@
                 var code = bag.join('');
                 var src = element[0];
 
+                // with csp_only mode, we always compile via script, and if it fails, we fallback to the text template
                 if(isCspRestricted()) {
+                    // might be extracted to a separate function
                     var compiled = compileViaScript(src, code);
-                    return null !== compiled ? compiled : text;
+                    return compiled !== null ? compiled : text;
                 }
+
+                // fallback to old behavior for legacy mode, or if Function constructor is allowed
                 try {
                     // eslint-disable-next-line no-new-func
                     return new Function('obj', 'encodeHtml', code);
                 } catch(e) {
-                    var fallback = compileViaScript(src, code);
-                    return null !== fallback ? fallback : text;
+                    var compiled = compileViaScript(src, code);
+                    return compiled !== null ? compiled : text;
                 }
             };
         }
