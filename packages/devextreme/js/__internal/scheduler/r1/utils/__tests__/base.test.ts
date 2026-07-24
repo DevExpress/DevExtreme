@@ -673,7 +673,7 @@ describe('base utils', () => {
       expect(timelineRows).not.toEqual(groupPanelData.groupPanelItems);
     });
 
-    it('should use one row per flat group when a single resource has multiple groups on timeline', () => {
+    it('should keep a single stacked row when a single resource has multiple flat groups on timeline', () => {
       const groups: GroupNode[] = [
         {
           id: 1, resourceText: 'Group_1', resourceIndex: 'any', grouped: { any: 1 }, children: [],
@@ -688,10 +688,9 @@ describe('base utils', () => {
       const groupPanelData = getGroupPanelData(groups, 1, false, 1, false);
       const timelineRows = getTimelineGroupPanelRows(groupPanelData, false);
 
-      expect(timelineRows).toHaveLength(3);
-      expect(timelineRows[0]).toEqual([expect.objectContaining({ text: 'Group_1' })]);
-      expect(timelineRows[1]).toEqual([expect.objectContaining({ text: 'Group_2' })]);
-      expect(timelineRows[2]).toEqual([expect.objectContaining({ text: 'Group_3' })]);
+      expect(timelineRows).toEqual(groupPanelData.groupPanelItems);
+      expect(timelineRows).toHaveLength(1);
+      expect(timelineRows[0]).toHaveLength(3);
     });
   });
 

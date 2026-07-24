@@ -469,8 +469,9 @@ export const getTimelineGroupPanelRows = (
   groupPanelData: GroupPanelData,
   groupByDate: boolean,
 ): GroupRenderItem[][] => {
-  const shouldUseLeafRows = groupPanelData.hasHierarchy
-    || (groupPanelData.maxDepth === 1 && groupPanelData.groupTree.length > 1);
+  // Flat timeline keeps one stacked group-row (base CSS: column + flex:1 headers).
+  // Leaf rows are only for hierarchical resources rendered via this helper.
+  const shouldUseLeafRows = groupPanelData.hasHierarchy;
 
   let rows = shouldUseLeafRows
     ? flattenGroupPanelTreeToLeafRows(groupPanelData.groupTree, groupPanelData.baseColSpan)

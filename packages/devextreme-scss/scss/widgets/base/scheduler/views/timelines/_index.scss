@@ -175,19 +175,18 @@ $scheduler-timeline-min-height: 100px;
     }
 
     .dx-scheduler-group-table > .dx-scheduler-group-flex-container:not(.dx-scheduler-group-flex-container-hierarchical) {
-      flex-direction: column;
-
       .dx-scheduler-group-row {
-        @include flex-container(row, nowrap);
+        @include flex-container(column, nowrap);
 
-        flex: 1 1 0;
-        width: 100%;
+        flex: 0 0 auto;
         min-width: 0;
 
         .dx-scheduler-group-header {
           border: none;
           border-top: $scheduler-base-border;
           border-top-color: $scheduler-base-border-color;
+          border-right: $scheduler-base-border;
+          border-right-color: $scheduler-base-border-color;
         }
       }
     }
