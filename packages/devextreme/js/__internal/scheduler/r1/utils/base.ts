@@ -469,7 +469,10 @@ export const getTimelineGroupPanelRows = (
   groupPanelData: GroupPanelData,
   groupByDate: boolean,
 ): GroupRenderItem[][] => {
-  let rows = groupPanelData.hasHierarchy
+  const shouldUseLeafRows = groupPanelData.hasHierarchy
+    || (groupPanelData.maxDepth === 1 && groupPanelData.groupTree.length > 1);
+
+  let rows = shouldUseLeafRows
     ? flattenGroupPanelTreeToLeafRows(groupPanelData.groupTree, groupPanelData.baseColSpan)
     : groupPanelData.groupPanelItems;
 

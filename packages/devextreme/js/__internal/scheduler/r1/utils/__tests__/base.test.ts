@@ -672,6 +672,27 @@ describe('base utils', () => {
       ]);
       expect(timelineRows).not.toEqual(groupPanelData.groupPanelItems);
     });
+
+    it('should use one row per flat group when a single resource has multiple groups on timeline', () => {
+      const groups: GroupNode[] = [
+        {
+          id: 1, resourceText: 'Group_1', resourceIndex: 'any', grouped: { any: 1 }, children: [],
+        },
+        {
+          id: 2, resourceText: 'Group_2', resourceIndex: 'any', grouped: { any: 2 }, children: [],
+        },
+        {
+          id: 3, resourceText: 'Group_3', resourceIndex: 'any', grouped: { any: 3 }, children: [],
+        },
+      ];
+      const groupPanelData = getGroupPanelData(groups, 1, false, 1, false);
+      const timelineRows = getTimelineGroupPanelRows(groupPanelData, false);
+
+      expect(timelineRows).toHaveLength(3);
+      expect(timelineRows[0]).toEqual([expect.objectContaining({ text: 'Group_1' })]);
+      expect(timelineRows[1]).toEqual([expect.objectContaining({ text: 'Group_2' })]);
+      expect(timelineRows[2]).toEqual([expect.objectContaining({ text: 'Group_3' })]);
+    });
   });
 
   describe('getKeyByGroup', () => {
