@@ -69,4 +69,34 @@ describe('GroupPanelVerticalNode', () => {
     expect(nestedContainer.className).toBe('dx-scheduler-group-flex-container');
     expect(nestedContainer.children).toHaveLength(2);
   });
+
+  it('should not set inline width on header cells (width is defined in CSS)', () => {
+    const branch2Depth3: GroupPanelTreeNode = {
+      ...leafNode('building2', 'Building 2', 3),
+      children: [
+        {
+          ...leafNode('floor1', 'Floor 1', 2),
+          children: [leafNode('room3', 'Room 3', 1), leafNode('room4', 'Room 4', 1)],
+        },
+        leafNode('room5', 'Room 5', 1),
+      ],
+    };
+
+    const checkHeaderCell = (node: GroupPanelTreeNode) => {
+      const component = new GroupPanelVerticalNode({ node, index: 0 });
+      const result = component.render() as VirtualNodeLike;
+      const children = result.children as VirtualNodeLike[];
+      const headerCell = children[0];
+
+      expect(headerCell.props?.style).toBeUndefined();
+    };
+
+    checkHeaderCell(leafNode('a', 'Room A', 1));
+    checkHeaderCell({
+      ...leafNode('parent', 'Building A', 2),
+      children: [leafNode('child1', 'Room A1', 1), leafNode('child2', 'Room A2', 1)],
+    });
+    checkHeaderCell(branch2Depth3);
+    checkHeaderCell(branch2Depth3.children[0]);
+  });
 });
