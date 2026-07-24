@@ -2383,6 +2383,433 @@ QUnit.module('accessibility', {
         assert.strictEqual($overlay.attr('role'), 'dialog');
     });
 
+    QUnit.test('default popover has role="tooltip" and describes its target by the overlay content id', function(assert) {
+        new Popover($('#what'), { target: '#where' });
+        const $overlay = $(`.${OVERLAY_CONTENT_CLASS}`);
+        const contentId = $overlay.attr('id');
+
+        assert.strictEqual($overlay.attr('role'), 'tooltip', 'overlay content role is tooltip');
+        assert.ok(contentId, 'overlay content has an id');
+        assert.strictEqual($('#where').attr('aria-describedby'), contentId, 'target is described by the overlay content id');
+    });
+
+    QUnit.module('target aria-describedby', () => {
+        const getDescribedBy = ($element) => ($element.attr('aria-describedby') || '').split(/\s+/).filter(Boolean);
+
+        QUnit.test('target should be described by the overlay content id (hidden popover, default deferRendering)', function(assert) {
+            new Popover($('#what'), { target: '#where' });
+
+            const contentId = $(`.${OVERLAY_CONTENT_CLASS}`).attr('id');
+
+            assert.ok(contentId, 'overlay content has an id');
+            assert.deepEqual(getDescribedBy($('#where')), [contentId], 'target is described by the overlay content id');
+        });
+
+        QUnit.test('target should be described when deferRendering is false', function(assert) {
+            new Popover($('#what'), { target: '#where', deferRendering: false });
+
+            const contentId = $(`.${OVERLAY_CONTENT_CLASS}`).attr('id');
+
+            assert.deepEqual(getDescribedBy($('#where')), [contentId], 'target is described by the overlay content id');
+        });
+
+        QUnit.test('target should be described when popover is created visible', function(assert) {
+            new Popover($('#what'), { target: '#where', visible: true });
+
+            const contentId = $(`.${OVERLAY_CONTENT_CLASS}`).attr('id');
+
+            assert.deepEqual(getDescribedBy($('#where')), [contentId], 'target is described by the overlay content id');
+        });
+
+        QUnit.test('no aria-describedby should be added when target is not specified', function(assert) {
+            new Popover($('#what'), {});
+
+            assert.strictEqual($('#where').attr('aria-describedby'), undefined, 'unrelated element is not described');
+        });
+
+        QUnit.test('existing aria-describedby ids on target should be preserved', function(assert) {
+            $('#where').attr('aria-describedby', 'custom-help');
+
+            new Popover($('#what'), { target: '#where' });
+
+            const contentId = $(`.${OVERLAY_CONTENT_CLASS}`).attr('id');
+
+            assert.deepEqual(getDescribedBy($('#where')), ['custom-help', contentId], 'custom id is preserved and popover id is appended');
+        });
+
+        QUnit.test('popover id should not be duplicated on target after repaint', function(assert) {
+            const popover = new Popover($('#what'), { target: '#where' });
+
+            popover.repaint();
+
+            const contentId = popover.$overlayContent().attr('id');
+
+            assert.deepEqual(getDescribedBy($('#where')), [contentId], 'target contains the popover id exactly once');
+        });
+
+        QUnit.test('show/hide/show cycle should keep a single stable id on target', function(assert) {
+            const popover = new Popover($('#what'), { target: '#where', animation: null });
+            const initialId = popover.$overlayContent().attr('id');
+
+            popover.show();
+            popover.hide();
+            popover.show();
+
+            assert.strictEqual(popover.$overlayContent().attr('id'), initialId, 'overlay content id is stable across shows');
+            assert.deepEqual(getDescribedBy($('#where')), [initialId], 'target contains the id exactly once');
+        });
+
+        QUnit.test('dispose should remove only the popover id from target aria-describedby', function(assert) {
+            $('#where').attr('aria-describedby', 'custom-help');
+
+            const popover = new Popover($('#what'), { target: '#where' });
+
+            popover.dispose();
+
+            assert.deepEqual(getDescribedBy($('#where')), ['custom-help'], 'only the popover id is removed');
+        });
+
+        QUnit.test('dispose should remove aria-describedby attribute when no other ids remain', function(assert) {
+            const popover = new Popover($('#what'), { target: '#where' });
+
+            popover.dispose();
+
+            assert.strictEqual($('#where').attr('aria-describedby'), undefined, 'attribute is removed when the id list becomes empty');
+        });
+
+        QUnit.test('two popovers describing the same target should not interfere', function(assert) {
+            const $secondPopover = $('<div id="popover2">').appendTo('body');
+
+            try {
+                const popover1 = new Popover($('#what'), { target: '#where' });
+                const popover2 = new Popover($('#popover2'), { target: '#where' });
+
+                const id1 = popover1.$overlayContent().attr('id');
+                const id2 = popover2.$overlayContent().attr('id');
+
+                assert.deepEqual(getDescribedBy($('#where')), [id1, id2], 'target is described by both popovers');
+
+                popover1.dispose();
+
+                assert.deepEqual(getDescribedBy($('#where')), [id2], 'remaining popover id is kept after the first one is disposed');
+            } finally {
+                $secondPopover.remove();
+            }
+        });
+
+        QUnit.test('changing the target option should move the description to the new target', function(assert) {
+            const $where2 = $('<div id="where2">').appendTo('body');
+
+            try {
+                const popover = new Popover($('#what'), { target: '#where' });
+                const contentId = popover.$overlayContent().attr('id');
+
+                popover.option('target', '#where2');
+
+                assert.deepEqual(getDescribedBy($('#where')), [], 'old target no longer contains the popover id');
+                assert.deepEqual(getDescribedBy($('#where2')), [contentId], 'new target is described by the same stable id');
+            } finally {
+                $where2.remove();
+            }
+        });
+
+        QUnit.test('show(target) should move the description to the new target', function(assert) {
+            const $where2 = $('<div id="where2">').appendTo('body');
+
+            try {
+                const popover = new Popover($('#what'), { target: '#where', animation: null });
+                const contentId = popover.$overlayContent().attr('id');
+
+                popover.show('#where2');
+
+                assert.deepEqual(getDescribedBy($('#where')), [], 'old target no longer contains the popover id');
+                assert.deepEqual(getDescribedBy($('#where2')), [contentId], 'new target is described by the same stable id');
+            } finally {
+                $where2.remove();
+            }
+        });
+
+        QUnit.test('jQuery/renderer wrapper target should be described', function(assert) {
+            const popover = new Popover($('#what'), { target: $('#where') });
+
+            const contentId = popover.$overlayContent().attr('id');
+
+            assert.deepEqual(getDescribedBy($('#where')), [contentId], 'wrapped target is described');
+        });
+
+        QUnit.test('native Element target should be described', function(assert) {
+            const popover = new Popover($('#what'), { target: document.getElementById('where') });
+
+            const contentId = popover.$overlayContent().attr('id');
+
+            assert.deepEqual(getDescribedBy($('#where')), [contentId], 'element target is described');
+        });
+
+        QUnit.test('selector target matching multiple elements should describe all matches', function(assert) {
+            const $sharedTargets = $('<div class="shared-target"></div><div class="shared-target"></div>').appendTo('body');
+
+            try {
+                const popover = new Popover($('#what'), { target: '.shared-target' });
+                const contentId = popover.$overlayContent().attr('id');
+
+                $sharedTargets.each((_, element) => {
+                    assert.deepEqual(getDescribedBy($(element)), [contentId], 'matched element is described');
+                });
+            } finally {
+                $sharedTargets.remove();
+            }
+        });
+
+        QUnit.test('selector target that appears after creation should be described on show', function(assert) {
+            const popover = new Popover($('#what'), { target: '#deferredTarget', animation: null });
+
+            const $deferredTarget = $('<div id="deferredTarget">').appendTo('body');
+
+            try {
+                popover.show();
+
+                const contentId = popover.$overlayContent().attr('id');
+
+                assert.deepEqual(getDescribedBy($deferredTarget), [contentId], 'deferred target is described after show');
+            } finally {
+                $deferredTarget.remove();
+            }
+        });
+
+        QUnit.test('window target should not get aria-describedby and should not raise errors', function(assert) {
+            new Popover($('#what'), { target: window });
+
+            assert.strictEqual($('body').attr('aria-describedby'), undefined, 'body is not described');
+            assert.strictEqual($(document.documentElement).attr('aria-describedby'), undefined, 'documentElement is not described');
+        });
+
+        QUnit.test('dispose with a target removed from the DOM should not raise errors', function(assert) {
+            const $detachedTarget = $('<div id="detachedTarget">').appendTo('body');
+            const popover = new Popover($('#what'), { target: '#detachedTarget' });
+
+            $detachedTarget.remove();
+            popover.dispose();
+
+            assert.ok(true, 'no exception is thrown');
+        });
+
+        QUnit.test('popover with toolbarItems should not describe its target', function(assert) {
+            const popover = new Popover($('#what'), { target: '#where', toolbarItems: [{ text: 'OK' }] });
+
+            assert.strictEqual(popover.$overlayContent().attr('role'), 'dialog', 'overlay content role is dialog');
+            assert.strictEqual($('#where').attr('aria-describedby'), undefined, 'target is not described');
+        });
+
+        QUnit.test('adding toolbarItems at runtime should remove the target description', function(assert) {
+            const popover = new Popover($('#what'), { target: '#where' });
+
+            popover.option('toolbarItems', [{ text: 'OK' }]);
+
+            assert.strictEqual(popover.$overlayContent().attr('role'), 'dialog', 'overlay content role is dialog');
+            assert.strictEqual($('#where').attr('aria-describedby'), undefined, 'target description is removed');
+        });
+
+        QUnit.test('clearing toolbarItems at runtime should restore the target description', function(assert) {
+            const popover = new Popover($('#what'), { target: '#where', toolbarItems: [{ text: 'OK' }] });
+
+            popover.option('toolbarItems', []);
+
+            const contentId = popover.$overlayContent().attr('id');
+
+            assert.strictEqual(popover.$overlayContent().attr('role'), 'tooltip', 'overlay content role is tooltip');
+            assert.deepEqual(getDescribedBy($('#where')), [contentId], 'target description is restored');
+        });
+
+        QUnit.test('popover with showTitle and showCloseButton should be a dialog and should not describe its target', function(assert) {
+            const popover = new Popover($('#what'), {
+                target: '#where',
+                showTitle: true,
+                title: 'Title',
+                showCloseButton: true,
+            });
+
+            assert.strictEqual(popover.$overlayContent().attr('role'), 'dialog', 'overlay content role is dialog');
+            assert.strictEqual($('#where').attr('aria-describedby'), undefined, 'target is not described');
+        });
+
+        QUnit.test('runtime showTitle/showCloseButton transitions should update role and target description', function(assert) {
+            const popover = new Popover($('#what'), { target: '#where' });
+            const contentId = popover.$overlayContent().attr('id');
+
+            popover.option({ showTitle: true, title: 'Title', showCloseButton: true });
+
+            assert.strictEqual(popover.$overlayContent().attr('role'), 'dialog', 'overlay content role is dialog');
+            assert.strictEqual($('#where').attr('aria-describedby'), undefined, 'target description is removed');
+
+            popover.option('showCloseButton', false);
+
+            assert.strictEqual(popover.$overlayContent().attr('role'), 'tooltip', 'overlay content role is tooltip again');
+            assert.deepEqual(getDescribedBy($('#where')), [contentId], 'target description is restored');
+        });
+
+        QUnit.test('tooltip-mode popover with a title should not have aria-labelledby', function(assert) {
+            const popover = new Popover($('#what'), {
+                target: '#where',
+                showTitle: true,
+                title: 'Details',
+                deferRendering: false,
+            });
+
+            const contentId = popover.$overlayContent().attr('id');
+
+            assert.strictEqual(popover.$overlayContent().attr('role'), 'tooltip', 'overlay content role is tooltip');
+            assert.strictEqual(popover.$overlayContent().attr('aria-labelledby'), undefined, 'overlay content is not labelled by the title');
+            assert.deepEqual(getDescribedBy($('#where')), [contentId], 'target is described by the content');
+        });
+
+        QUnit.test('dialog-mode popover with a title should keep aria-labelledby', function(assert) {
+            const popover = new Popover($('#what'), {
+                target: '#where',
+                toolbarItems: [{ text: 'OK' }],
+                showTitle: true,
+                title: 'Details',
+                deferRendering: false,
+            });
+
+            const titleId = popover.$overlayContent().attr('aria-labelledby');
+
+            assert.strictEqual(popover.$overlayContent().attr('role'), 'dialog', 'overlay content role is dialog');
+            assert.ok(titleId, 'overlay content has an aria-labelledby value');
+            // NOTE: the generated title id may start with a digit, so `#${titleId}` is not a valid CSS selector
+            assert.strictEqual(popover.$overlayContent().find(`[id="${titleId}"]`).length, 1, 'the label id references an existing title element');
+            assert.strictEqual($('#where').attr('aria-describedby'), undefined, 'target is not described');
+        });
+
+        QUnit.test('switching from dialog to tooltip mode at runtime should clear aria-labelledby', function(assert) {
+            const popover = new Popover($('#what'), {
+                target: '#where',
+                toolbarItems: [{ text: 'OK' }],
+                showTitle: true,
+                title: 'Details',
+                deferRendering: false,
+            });
+
+            popover.option('toolbarItems', []);
+
+            assert.strictEqual(popover.$overlayContent().attr('role'), 'tooltip', 'overlay content role is tooltip');
+            assert.strictEqual(popover.$overlayContent().attr('aria-labelledby'), undefined, 'aria-labelledby is cleared');
+        });
+
+        QUnit.test('changing contentTemplate should keep the stable id and the target description', function(assert) {
+            const popover = new Popover($('#what'), {
+                target: '#where',
+                contentTemplate: () => 'first',
+            });
+            const contentId = popover.$overlayContent().attr('id');
+
+            popover.option('contentTemplate', () => 'second');
+
+            assert.strictEqual(popover.$overlayContent().attr('id'), contentId, 'overlay content id is stable');
+            assert.deepEqual(getDescribedBy($('#where')), [contentId], 'target description is unchanged');
+        });
+
+        QUnit.test('disabled popover should still describe its target', function(assert) {
+            const popover = new Popover($('#what'), { target: '#where', disabled: true });
+            const contentId = popover.$overlayContent().attr('id');
+
+            assert.deepEqual(getDescribedBy($('#where')), [contentId], 'target is described in tooltip mode');
+        });
+
+        QUnit.test('runtime titleTemplate change in dialog mode should not leave a dangling aria-labelledby', function(assert) {
+            const popover = new Popover($('#what'), {
+                target: '#where',
+                toolbarItems: [{ text: 'OK' }],
+                showTitle: true,
+                title: 'Details',
+                deferRendering: false,
+            });
+
+            popover.option('titleTemplate', () => 'custom title');
+
+            assert.strictEqual(popover.$overlayContent().attr('role'), 'dialog', 'overlay content role is dialog');
+            assert.strictEqual(popover.$overlayContent().attr('aria-labelledby'), undefined, 'aria-labelledby is removed when the custom title renders no label element');
+        });
+
+        QUnit.test('runtime titleTemplate change in tooltip mode should keep aria-labelledby absent', function(assert) {
+            const popover = new Popover($('#what'), {
+                target: '#where',
+                showTitle: true,
+                title: 'Details',
+                deferRendering: false,
+            });
+            const contentId = popover.$overlayContent().attr('id');
+
+            popover.option('titleTemplate', () => 'custom title');
+
+            assert.strictEqual(popover.$overlayContent().attr('role'), 'tooltip', 'overlay content role is tooltip');
+            assert.strictEqual(popover.$overlayContent().attr('aria-labelledby'), undefined, 'aria-labelledby is absent');
+            assert.deepEqual(getDescribedBy($('#where')), [contentId], 'target description is unchanged');
+        });
+
+        QUnit.test('internal _overlayContentRole should force the role and prevent the target description', function(assert) {
+            const popover = new Popover($('#what'), { target: '#where', _overlayContentRole: 'dialog', animation: null });
+
+            assert.strictEqual(popover.$overlayContent().attr('role'), 'dialog', 'forced role is applied at creation');
+            assert.strictEqual($('#where').attr('aria-describedby'), undefined, 'target is not described at creation');
+
+            popover.show();
+            popover.option('toolbarItems', []);
+
+            assert.strictEqual(popover.$overlayContent().attr('role'), 'dialog', 'forced role survives an empty toolbarItems change');
+            assert.strictEqual($('#where').attr('aria-describedby'), undefined, 'target is still not described');
+        });
+
+        QUnit.test('internal _describeTarget=false should prevent the target description in tooltip mode', function(assert) {
+            const popover = new Popover($('#what'), { target: '#where', _describeTarget: false });
+
+            assert.strictEqual(popover.$overlayContent().attr('role'), 'tooltip', 'overlay content role is tooltip');
+            assert.strictEqual($('#where').attr('aria-describedby'), undefined, 'target is not described');
+        });
+
+        QUnit.test('runtime _overlayContentRole change should update the role and the target description', function(assert) {
+            const popover = new Popover($('#what'), { target: '#where' });
+            const contentId = popover.$overlayContent().attr('id');
+
+            popover.option('_overlayContentRole', 'dialog');
+
+            assert.strictEqual(popover.$overlayContent().attr('role'), 'dialog', 'forced role is applied');
+            assert.strictEqual($('#where').attr('aria-describedby'), undefined, 'target description is removed');
+
+            popover.option('_overlayContentRole', null);
+
+            assert.strictEqual(popover.$overlayContent().attr('role'), 'tooltip', 'computed role is restored');
+            assert.deepEqual(getDescribedBy($('#where')), [contentId], 'target description is restored');
+        });
+
+        QUnit.test('runtime _describeTarget change should toggle the target description', function(assert) {
+            const popover = new Popover($('#what'), { target: '#where' });
+            const contentId = popover.$overlayContent().attr('id');
+
+            popover.option('_describeTarget', false);
+
+            assert.strictEqual($('#where').attr('aria-describedby'), undefined, 'target description is removed');
+
+            popover.option('_describeTarget', true);
+
+            assert.deepEqual(getDescribedBy($('#where')), [contentId], 'target description is restored');
+        });
+
+        QUnit.test('a manually wired token equal to an external content id should not be claimed by the popover', function(assert) {
+            $('#where').attr('aria-describedby', 'manual-content-id');
+
+            const popover = new Popover($('#what'), { target: '#where' });
+
+            popover.$overlayContent().attr('id', 'manual-content-id');
+            popover.repaint();
+
+            assert.deepEqual(getDescribedBy($('#where')), ['manual-content-id'], 'no duplicate token is added after the id is adopted');
+
+            popover.dispose();
+
+            assert.deepEqual(getDescribedBy($('#where')), ['manual-content-id'], 'the manual token is preserved after dispose');
+        });
+    });
+
     QUnit.module('WCAG - dismissible', () => {
         QUnit.test('should hide visible popover on esc press', function(assert) {
             const popover = new Popover($('#what'), {

@@ -45,6 +45,18 @@ class Tooltip<
     this._toggleAriaAttributes();
   }
 
+  // NOTE: Tooltip manages the target relationship itself (_toggleAriaAttributes),
+  // so the inherited Popover sync must stay disabled to avoid a second describedby id.
+  _syncAriaAttributes(): void {}
+
+  // NOTE: dxTooltip keeps its legacy role behavior: only toolbarItems make it
+  // a dialog; the Popover showTitle/showCloseButton predicate does not apply.
+  _getAriaRole(): string {
+    const { toolbarItems } = this.option();
+
+    return toolbarItems?.length ? 'dialog' : 'tooltip';
+  }
+
   _toggleAriaDescription(showing: boolean): void {
     const { target } = this.option();
     const $target = $(target);

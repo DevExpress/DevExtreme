@@ -1,6 +1,7 @@
-import Popup from '@js/ui/popup';
+import Popup from '@ts/ui/popup/popup';
 
 const CLASSES = {
+  popup: 'dx-popup',
   popupWrapper: 'dx-popup-wrapper',
   popupTitle: 'dx-popup-title',
   overlayContent: 'dx-overlay-content',
@@ -11,13 +12,29 @@ const SELECTORS = {
 };
 
 export class PopupModel {
+  protected getRootClass(): string {
+    return CLASSES.popup;
+  }
+
+  protected getWrapperClass(): string {
+    return CLASSES.popupWrapper;
+  }
+
+  protected getRoot(): HTMLElement {
+    return document.body.querySelector(`.${this.getRootClass()}`) as HTMLElement;
+  }
+
   protected getPopupWrapper(): HTMLElement {
-    return document.body.querySelector(`.${CLASSES.popupWrapper}`) as HTMLElement;
+    return document.body.querySelector(`.${this.getWrapperClass()}`) as HTMLElement;
   }
 
   public getOverlayContent(): HTMLElement {
     const wrapper = this.getPopupWrapper();
     return wrapper?.querySelector(`.${CLASSES.overlayContent}`) as HTMLElement;
+  }
+
+  public getRole(): string | null {
+    return this.getOverlayContent()?.getAttribute('role') ?? null;
   }
 
   public isVisible(): boolean {
@@ -35,8 +52,7 @@ export class PopupModel {
   }
 
   public getInstance(): Popup {
-    const element = this.getElement();
-    return Popup.getInstance(element) as Popup;
+    return Popup.getInstance<Popup>(this.getRoot());
   }
 
   public getCancelButton(): HTMLElement {

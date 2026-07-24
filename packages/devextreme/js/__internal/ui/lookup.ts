@@ -678,6 +678,7 @@ class Lookup extends DropDownList<LookupProperties> {
         shading: false,
         hideOnParentScroll: true,
         _fixWrapperPosition: false,
+        _overlayContentRole: 'dialog',
         width: this._isInitialOptionValue('dropDownOptions.width')
           ? (): number => getOuterWidth(this.$element()) as number
           : popupConfig.width,
@@ -685,8 +686,6 @@ class Lookup extends DropDownList<LookupProperties> {
     );
     // @ts-expect-error fix on Dom Component level
     this._popup = this._createComponent(this._$popup, Popover, options);
-
-    this._popup.$overlayContent().attr('role', 'dialog');
 
     this._popup.on({
       showing: this._popupShowingHandler.bind(this),
