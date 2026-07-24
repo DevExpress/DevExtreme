@@ -1070,13 +1070,12 @@ class PivotGrid extends Widget {
       return;
     }
 
-    e.preventDefault();
-
     // The internal _show is called instead of the public show() because only
     // _show accepts the initiating event that onPositioning builds items from.
     this._contextMenu._show(e);
 
     if (this._contextMenu.option('visible')) {
+      e.preventDefault();
       this._contextMenuOwnerNavigation = navigation;
     }
   }
@@ -1526,27 +1525,27 @@ class PivotGrid extends Widget {
   }
 
   _reserveRowHeaderColumns(dataArea, rowsArea, columnsArea): number {
+    // The reserved width is the full row-header column count, not the widest
+    // rendered row: virtual scrolling can page in rows whose visible cells do
+    // not reach the rightmost header column, which would otherwise shift the
+    // colindex axis between pages.
+    const rowHeaderColumnCount = rowsArea.getColumnsCount();
+
+    if (!rowHeaderColumnCount) {
+      return 0;
+    }
+
     const rowsBody = rowsArea.tableElement().children('tbody').get(0);
     const matrix = rowsBody ? buildCellMatrix(rowsBody) : [];
-
-    let rowHeaderColumnCount = 0;
     const indexed = new Set<HTMLTableCellElement>();
     matrix.forEach((row) => {
       row.forEach((cell, columnIndex) => {
-        if (!cell || !cell.getAttribute('role')) {
-          return;
-        }
-        rowHeaderColumnCount = Math.max(rowHeaderColumnCount, columnIndex + 1);
-        if (!indexed.has(cell)) {
+        if (cell && cell.getAttribute('role') && !indexed.has(cell)) {
           indexed.add(cell);
           cell.setAttribute('aria-colindex', String(columnIndex + 1));
         }
       });
     });
-
-    if (!rowHeaderColumnCount) {
-      return 0;
-    }
 
     const shifted = new Set<HTMLTableCellElement>();
     [columnsArea, dataArea].forEach((area) => {
