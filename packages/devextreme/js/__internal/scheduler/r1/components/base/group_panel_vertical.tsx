@@ -17,7 +17,7 @@ const renderGroupPanelContent = (
   isHierarchical: boolean,
   groupByDate: boolean,
 ): JSX.Element | JSX.Element[] => {
-  if (isTimelineGroupTable) {
+  if (isTimelineGroupTable && !isHierarchical) {
     return getTimelineGroupPanelRows(groupPanelData, groupByDate)
       .map((group) => <GroupPanelVerticalRow
         key={group[group.length - 1].key}
@@ -66,7 +66,7 @@ export class GroupPanelVertical extends BaseInfernoComponent<GroupPanelProps> {
     } = this.props;
     const style = normalizeStyles(renderUtils.addHeightToStyle(height, styles));
     const isTimelineGroupTable = className === TIMELINE_GROUP_TABLE_CLASS;
-    const isHierarchical = !isTimelineGroupTable && groupPanelData.maxDepth > 1;
+    const isHierarchical = groupPanelData.maxDepth > 1;
     const flexContainerClassName = isHierarchical
       ? `dx-scheduler-group-flex-container ${HIERARCHICAL_GROUP_FLEX_CONTAINER_CLASS}`
       : 'dx-scheduler-group-flex-container';

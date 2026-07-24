@@ -70,33 +70,7 @@ describe('GroupPanelVerticalNode', () => {
     expect(nestedContainer.children).toHaveLength(2);
   });
 
-  it('should apply custom property width to non-leaf header cell', () => {
-    const parent: GroupPanelTreeNode = {
-      ...leafNode('parent', 'Building A', 2),
-      children: [leafNode('child1', 'Room A1', 1), leafNode('child2', 'Room A2', 1)],
-    };
-    const component = new GroupPanelVerticalNode({ node: parent, index: 0 });
-    const result = component.render() as VirtualNodeLike;
-    const children = result.children as VirtualNodeLike[];
-    const headerCell = children[0];
-
-    expect(headerCell.props?.style).toEqual({ width: 'var(--dx-scheduler-group-header-width)' });
-  });
-
-  it('should not apply width style to leaf header cell', () => {
-    const component = new GroupPanelVerticalNode({ node: leafNode('a', 'Room A', 1), index: 0 });
-    const result = component.render() as VirtualNodeLike;
-    const children = result.children as VirtualNodeLike[];
-    const headerCell = children[0];
-
-    expect(headerCell.props?.style).toEqual({});
-  });
-
-  it('should apply custom property width consistently across non-uniform depth branches', () => {
-    const branch1Depth2: GroupPanelTreeNode = {
-      ...leafNode('building1', 'Building 1', 2),
-      children: [leafNode('room1', 'Room 1', 1), leafNode('room2', 'Room 2', 1)],
-    };
+  it('should not set inline width on header cells (width is defined in CSS)', () => {
     const branch2Depth3: GroupPanelTreeNode = {
       ...leafNode('building2', 'Building 2', 3),
       children: [
@@ -108,17 +82,21 @@ describe('GroupPanelVerticalNode', () => {
       ],
     };
 
-    const checkNonLeafWidth = (node: GroupPanelTreeNode) => {
+    const checkHeaderCell = (node: GroupPanelTreeNode) => {
       const component = new GroupPanelVerticalNode({ node, index: 0 });
       const result = component.render() as VirtualNodeLike;
       const children = result.children as VirtualNodeLike[];
       const headerCell = children[0];
 
-      expect(headerCell.className).not.toContain('dx-scheduler-group-header-leaf');
-      expect(headerCell.props?.style).toEqual({ width: 'var(--dx-scheduler-group-header-width)' });
+      expect(headerCell.props?.style).toBeUndefined();
     };
 
-    checkNonLeafWidth(branch1Depth2);
-    checkNonLeafWidth(branch2Depth3);
+    checkHeaderCell(leafNode('a', 'Room A', 1));
+    checkHeaderCell({
+      ...leafNode('parent', 'Building A', 2),
+      children: [leafNode('child1', 'Room A1', 1), leafNode('child2', 'Room A2', 1)],
+    });
+    checkHeaderCell(branch2Depth3);
+    checkHeaderCell(branch2Depth3.children[0]);
   });
 });

@@ -43,8 +43,6 @@ export class GroupPanelVerticalNode extends BaseInfernoComponent<GroupPanelVerti
       'dx-scheduler-group-header-leaf': isLeaf,
     });
 
-    const cellStyle = isLeaf ? {} : { width: 'var(--dx-scheduler-group-header-width)' };
-
     return (
       <div className={rowClasses} style={normalizeStyles({ flexGrow: node.leafCount })}>
         <div
@@ -52,7 +50,6 @@ export class GroupPanelVerticalNode extends BaseInfernoComponent<GroupPanelVerti
           title={node.text}
           role="rowheader"
           aria-label={node.text}
-          style={normalizeStyles(cellStyle)}
         >
           {
             cellTemplate

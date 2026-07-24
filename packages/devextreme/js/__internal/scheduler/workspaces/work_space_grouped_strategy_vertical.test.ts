@@ -3,6 +3,7 @@ import {
 } from '@jest/globals';
 import type { dxElementWrapper } from '@js/core/renderer';
 
+import type { ResourceLoader } from '../utils/loader/resource_loader';
 import type { GroupedStrategyConfig } from './work_space_grouped_strategy_config';
 import VerticalGroupedStrategy from './work_space_grouped_strategy_vertical';
 
@@ -68,13 +69,18 @@ const createConfig = (
   ...options,
 });
 
+const mockGroupLoaders = (count: number): ResourceLoader[] => (
+  Array.from({ length: count }, () => ({} as unknown as ResourceLoader))
+);
+
 describe('VerticalGroupedStrategy', () => {
-  it('should return undefined from getGroupCountClass (no workspace-root class needed for hierarchical width)', () => {
+  it('should return undefined from getGroupCountClass regardless of groups length', () => {
     const strategy = new VerticalGroupedStrategy(createConfig());
 
-    const result = strategy.getGroupCountClass([]);
-
-    expect(result).toBeUndefined();
+    expect(strategy.getGroupCountClass([])).toBeUndefined();
+    expect(strategy.getGroupCountClass(mockGroupLoaders(1))).toBeUndefined();
+    expect(strategy.getGroupCountClass(mockGroupLoaders(2))).toBeUndefined();
+    expect(strategy.getGroupCountClass(mockGroupLoaders(3))).toBeUndefined();
   });
 
   it('should use uniform group heights when group heights are not specified', () => {
