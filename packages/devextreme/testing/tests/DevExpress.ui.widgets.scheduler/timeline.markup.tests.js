@@ -138,26 +138,6 @@ QUnit.module('Timeline markup', moduleConfig, () => {
         assert.equal($firstColumnCells.length, 2, 'Cell count is OK');
         assert.equal($secondColumnCells.length, 4, 'Cell count is OK');
     });
-
-    QUnit.test('Timeline should not use group-count class on workspace (group header width is layout-driven)', async function(assert) {
-        const $element = this.instance.$element();
-
-        await applyWorkspaceGroups(this.instance, [{
-            label: 'one',
-            fieldExpr: 'one',
-            dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-        }, {
-            label: 'two',
-            fieldExpr: 'two',
-            dataSource: [{ id: 1, text: '1' }, { id: 2, text: '2' }]
-        }]);
-
-        assert.notOk($element.hasClass('dx-scheduler-group-column-count-two'), 'group-count class is not applied');
-
-        await applyWorkspaceGroups(this.instance, []);
-
-        assert.notOk($element.hasClass('dx-scheduler-group-column-count-two'), 'group-count class is not applied');
-    });
 });
 
 let timelineDayModuleConfig = {

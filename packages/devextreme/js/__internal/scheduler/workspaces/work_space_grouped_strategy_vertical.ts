@@ -6,7 +6,6 @@ import { WORK_SPACE_BORDER_PX } from '@ts/scheduler/workspaces/const';
 
 import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../classes';
 import { Cache } from '../global_cache';
-import type { ResourceLoader } from '../utils/loader/resource_loader';
 import type { GroupedStrategyConfig } from './work_space_grouped_strategy_config';
 
 class VerticalGroupedStrategy {
@@ -75,11 +74,6 @@ class VerticalGroupedStrategy {
 
   getAllDayOffset(): number {
     return 0;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getGroupCountClass(groups: ResourceLoader[]): string | undefined {
-    return undefined;
   }
 
   getLeftOffset(): number {
