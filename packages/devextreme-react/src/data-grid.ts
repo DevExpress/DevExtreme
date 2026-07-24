@@ -20,7 +20,7 @@ import type { ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as 
 import type { AIIntegration } from "devextreme/common/ai-integration";
 import type { dxPopupOptions, dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
-import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
+import type { Format as LocalizationFormat, FormatLocale } from "devextreme/common/core/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
@@ -1960,6 +1960,7 @@ const Form = Object.assign<typeof _componentForm, NestedComponentMeta>(_componen
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | Date) => string);
+  locale?: FormatLocale;
   parser?: ((value: string) => number | Date);
   precision?: number;
   type?: CommonFormat | string;
@@ -3970,6 +3971,7 @@ const ValidationRule = Object.assign<typeof _componentValidationRule, NestedComp
 type IValueFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | Date) => string);
+  locale?: FormatLocale;
   parser?: ((value: string) => number | Date);
   precision?: number;
   type?: CommonFormat | string;

@@ -43,6 +43,7 @@ define(function(require, exports, module) {
     const dateLocalization = require('common/core/localization/date');
     const messageLocalization = require('common/core/localization/message');
     const config = require('core/config');
+    const coreLocalization = require('common/core/localization/core');
 
     const ExcelJSLocalizationFormatTests = require('../DevExpress.exporter/exceljsParts/exceljs.format.tests.js');
 
@@ -952,6 +953,123 @@ define(function(require, exports, module) {
                 // cleanup
                 delete String.prototype.format;
             });
+        });
+    });
+
+    QUnit.module('Global formatting config - format locale (spec, globalize)', () => {
+        const saveGlobalFormats = () => {
+            const globalConfig = config();
+
+            return {
+                dateFormat: globalConfig.dateFormat,
+                timeFormat: globalConfig.timeFormat,
+                dateTimeFormat: globalConfig.dateTimeFormat,
+                numberFormat: globalConfig.numberFormat,
+                dateTimeFormatPresets: globalConfig.dateTimeFormatPresets,
+            };
+        };
+        const restoreGlobalFormats = (saved) => {
+            const globalConfig = config();
+
+            Object.keys(saved).forEach((key) => {
+                const value = saved[key];
+                if(value === undefined) {
+                    delete globalConfig[key];
+                } else {
+                    globalConfig[key] = value;
+                }
+            });
+        };
+
+        QUnit.test('numberFormat locale overrides message locale for Globalize formatting', function(assert) {
+            const saved = saveGlobalFormats();
+            const savedLocale = coreLocalization.locale();
+            const savedGlobalizeLocale = Globalize.locale().locale;
+
+            try {
+                Globalize.locale('de');
+                coreLocalization.locale('de');
+                config({
+                    ...config(),
+                    numberFormat: {
+                        default: {
+                            locale: 'en-US',
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                        },
+                    },
+                });
+
+                assert.strictEqual(numberLocalization.format(1234.56), '1,234.56');
+            } finally {
+                Globalize.locale(savedGlobalizeLocale);
+                coreLocalization.locale(savedLocale);
+                restoreGlobalFormats(saved);
+            }
+        });
+
+        QUnit.test('dateFormat locale overrides message locale for shortDate preset', function(assert) {
+            const saved = saveGlobalFormats();
+            const savedLocale = coreLocalization.locale();
+            const savedGlobalizeLocale = Globalize.locale().locale;
+
+            try {
+                Globalize.locale('en');
+                coreLocalization.locale('en');
+                config({
+                    ...config(),
+                    dateFormat: {
+                        default: {
+                            locale: 'de-DE',
+                            type: 'shortDate',
+                        },
+                    },
+                });
+
+                assert.strictEqual(
+                    dateLocalization.format(new Date(2020, 0, 2), {
+                        locale: 'de-DE',
+                        type: 'shortDate',
+                    }),
+                    '2.1.2020',
+                );
+            } finally {
+                Globalize.locale(savedGlobalizeLocale);
+                coreLocalization.locale(savedLocale);
+                restoreGlobalFormats(saved);
+            }
+        });
+
+        QUnit.test('locale map selects entry by message locale and applies format locale', function(assert) {
+            const saved = saveGlobalFormats();
+            const savedLocale = coreLocalization.locale();
+            const savedGlobalizeLocale = Globalize.locale().locale;
+
+            try {
+                Globalize.locale('de');
+                coreLocalization.locale('de');
+                config({
+                    ...config(),
+                    numberFormat: {
+                        de: {
+                            locale: 'en-US',
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                        },
+                        default: {
+                            locale: 'de-DE',
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                        },
+                    },
+                });
+
+                assert.strictEqual(numberLocalization.format(1234.56), '1,234.56');
+            } finally {
+                Globalize.locale(savedGlobalizeLocale);
+                coreLocalization.locale(savedLocale);
+                restoreGlobalFormats(saved);
+            }
         });
     });
 });

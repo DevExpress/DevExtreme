@@ -1334,7 +1334,15 @@ declare module DevExpress.common {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  type ExternalFormat = Intl.DateTimeFormatOptions | Intl.NumberFormatOptions;
+  type ExternalFormat = (
+    | Intl.DateTimeFormatOptions
+    | Intl.NumberFormatOptions
+  ) & {
+    /**
+     * [descr:Format.locale]
+     */
+    locale?: FormatLocale;
+  };
   export type FieldChooserLayout = 0 | 1 | 2;
 
   /**
@@ -1371,6 +1379,10 @@ declare module DevExpress.common {
     | 'second'
     | 'shortDateShortTime';
   /**
+   * [descr:FormatLocale]
+   */
+  export type FormatLocale = string | (() => string);
+  /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface FormatObject {
@@ -1398,6 +1410,10 @@ declare module DevExpress.common {
      * [descr:Format.type]
      */
     type?: PredefinedFormat | string;
+    /**
+     * [descr:Format.locale]
+     */
+    locale?: FormatLocale;
   }
   /**
    * [descr:GlobalConfig]

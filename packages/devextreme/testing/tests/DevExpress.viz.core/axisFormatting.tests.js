@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import config from 'core/config';
+import localization from 'localization';
 import translator2DModule from 'viz/translators/translator2d';
 import { Range } from 'viz/translators/range';
 import tickGeneratorModule from 'viz/axes/tick_generator';
@@ -216,6 +217,56 @@ QUnit.test('datetime axis labels use global dateTimeFormat when label.format is 
             visible: true
         }
     }, [new Date(2020, 0, 2)], 'day', ['2020-01-02']);
+});
+
+QUnit.test('value axis labels use global numberFormat locale when label.format is not set', function(assert) {
+    const savedLocale = localization.locale();
+
+    try {
+        localization.locale('de');
+        config({
+            ...config(),
+            numberFormat: {
+                default: {
+                    locale: 'en-US',
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                },
+            },
+        });
+
+        this.testTickLabelFormat(assert, [1500], 100, ['1,500.00']);
+    } finally {
+        localization.locale(savedLocale);
+    }
+});
+
+QUnit.test('datetime axis labels use global dateTimeFormat locale when label.format is not set', function(assert) {
+    const savedLocale = localization.locale();
+
+    try {
+        localization.locale('en');
+        config({
+            ...config(),
+            dateTimeFormat: {
+                default: {
+                    locale: 'de-DE',
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                },
+            },
+        });
+
+        this.testFormat(assert, {
+            argumentType: 'datetime',
+            label: {
+                visible: true,
+            },
+        }, [new Date(2020, 0, 2)], 'day', ['02.01.2020']);
+    } finally {
+        localization.locale(savedLocale);
+    }
 });
 
 QUnit.module('Auto formatting. Tick labels. Numeric.', environment);
