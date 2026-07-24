@@ -44,87 +44,21 @@
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 </head>
 <body class="dx-surface">
-    <div role="main">
-        <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
+<div role="main">
+    <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
 
-        <select id="theme-selector" style="display: block;">
-        </select>
-        <br />
-        <h2>Hierarchical Grouping Demo</h2>
-        <p id="grouping-layout-hint" style="max-width: 720px; margin: 0 0 12px; font-size: 14px; line-height: 1.45; color: #505050;">
-            Hierarchical resource (<code>parentIdExpr</code>): nested group sidebar (Building → Floor → Room) on
-            <strong>Day / Week / Work Week / Month</strong> and <strong>Timeline</strong> views with vertical grouping.
-        </p>
-        <div id="scheduler"></div>
-        <script>
-            const schedulerData = [
-                { text: 'Team Standup', roomId: '101', startDate: new Date(2021, 3, 19, 9, 0), endDate: new Date(2021, 3, 19, 9, 30) },
-                { text: 'Project Review', roomId: '102', startDate: new Date(2021, 3, 19, 10, 0), endDate: new Date(2021, 3, 19, 11, 0) },
-                { text: 'Code Review', roomId: '201', startDate: new Date(2021, 3, 19, 14, 0), endDate: new Date(2021, 3, 19, 15, 0) },
-                { text: 'Design Discussion', roomId: '202', startDate: new Date(2021, 3, 19, 15, 0), endDate: new Date(2021, 3, 19, 16, 0) },
-                { text: 'Sprint Planning', roomId: '103', startDate: new Date(2021, 3, 20, 9, 0), endDate: new Date(2021, 3, 20, 10, 30) },
-                { text: 'Budget Discussion', roomId: '301', startDate: new Date(2021, 3, 20, 11, 0), endDate: new Date(2021, 3, 20, 12, 0) },
-                { text: 'Team Building', roomId: '102', startDate: new Date(2021, 3, 20, 16, 0), endDate: new Date(2021, 3, 20, 17, 0) },
-                { text: 'Technical Workshop', roomId: '201', startDate: new Date(2021, 3, 21, 10, 0), endDate: new Date(2021, 3, 21, 11, 30) },
-                { text: 'Client Presentation', roomId: '302', startDate: new Date(2021, 3, 21, 14, 0), endDate: new Date(2021, 3, 21, 15, 30) },
-            ];
-
-            const roomsData = [
-                // Building A, Floor 1
-                { id: '101', text: 'Meeting Room A1', parentId: 'floor-a-1', color: '#1e90ff' },
-                { id: '102', text: 'Conference Room A1', parentId: 'floor-a-1', color: '#1e90ff' },
-                { id: '103', text: 'Board Room A1', parentId: 'floor-a-1', color: '#1e90ff' },
-                // Building A, Floor 2
-                { id: '201', text: 'Meeting Room A2', parentId: 'floor-a-2', color: '#32cd32' },
-                { id: '202', text: 'Conference Room A2', parentId: 'floor-a-2', color: '#32cd32' },
-                // Building B, Floor 3
-                { id: '301', text: 'Meeting Room B3', parentId: 'floor-b-3', color: '#ff6347' },
-                { id: '302', text: 'Conference Room B3', parentId: 'floor-b-3', color: '#ff6347' },
-                // Floors
-                { id: 'floor-a-1', text: 'Floor 1', parentId: 'building-a' },
-                { id: 'floor-a-2', text: 'Floor 2', parentId: 'building-a' },
-                { id: 'floor-b-3', text: 'Floor 3', parentId: 'building-b' },
-                // Buildings
-                { id: 'building-a', text: 'Building A' },
-                { id: 'building-b', text: 'Building B' },
-            ];
-
-            $(() => {
-                $("#scheduler").dxScheduler({
-                    timeZone: 'America/Los_Angeles',
-                    dataSource: schedulerData,
-                    views: [
-                        { type: 'day', name: 'Day', groupOrientation: 'vertical' },
-                        { type: 'week', name: 'Week', groupOrientation: 'vertical' },
-                        { type: 'workWeek', name: 'Work Week', groupOrientation: 'vertical', cellDuration: 60 },
-                        { type: 'month', name: 'Month', groupOrientation: 'vertical' },
-                        { type: 'timelineDay', name: 'Timeline Day', groupOrientation: 'horizontal' },
-                        { type: 'timelineWeek', name: 'Timeline Week' },
-                        { type: 'timelineWorkWeek', name: 'Timeline Work Week' },
-                        { type: 'timelineMonth', name: 'Timeline Month' },
-                        { type: 'agenda', name: 'Agenda', agendaDuration: 14 },
-                    ],
-                    currentView: 'Work Week',
-                    currentDate: new Date(2021, 3, 19),
-                    startDayHour: 9,
-                    endDayHour: 17,
-                    height: 600,
-                    groups: ['roomId'],
-                    resources: [{
-                        fieldExpr: 'roomId',
-                        allowMultiple: false,
-                        dataSource: roomsData,
-                        label: 'Room',
-                        textExpr: 'text',
-                        colorExpr: 'color',
-                        parentIdExpr: 'parentId',
-                    }],
-                    crossScrollingEnabled: true,
-                    showCurrentTimeIndicator: false,
-                    showAllDayPanel: false,
-                });
+    <select id="theme-selector" style="display: block;">
+    </select>
+    <br />
+    <div id="button"></div>
+    <script>
+        $(() => {
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: () => { alert("clicked"); }
             });
-        </script>
-    </div>
+        });
+    </script>
+</div>
 </body>
 </html>
