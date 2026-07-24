@@ -120,8 +120,6 @@ $scheduler-month-date-text-padding: 6px;
 }
 
 .dx-scheduler-work-space {
-  --dx-scheduler-group-header-width: #{$scheduler-left-column-width};
-
   border: $scheduler-base-border;
   border-color: $scheduler-base-border-color;
   background-color: $scheduler-workspace-background-color;
@@ -315,7 +313,7 @@ $scheduler-month-date-text-padding: 6px;
       flex: 0 0 auto;
       padding: 0 5px;
       height: 100%;
-      width: var(--dx-scheduler-group-header-width);
+      width: $scheduler-left-column-width;
       justify-content: flex-start;
       align-items: flex-start;
       text-align: left;
@@ -326,6 +324,10 @@ $scheduler-month-date-text-padding: 6px;
       border-top-color: $scheduler-base-border-color;
       border-right: $scheduler-base-border;
       border-right-color: $scheduler-base-border-color;
+
+      .dx-scheduler-small & {
+        width: $scheduler-left-column-width * $scheduler-small-size-factor;
+      }
 
       &.dx-scheduler-group-header-leaf {
         flex: 1 1 auto;
@@ -350,6 +352,11 @@ $scheduler-month-date-text-padding: 6px;
     flex: 0 0 auto;
     width: $scheduler-left-column-width;
     min-width: $scheduler-left-column-width;
+
+    .dx-scheduler-small & {
+      width: $scheduler-left-column-width * $scheduler-small-size-factor;
+      min-width: $scheduler-left-column-width * $scheduler-small-size-factor;
+    }
   }
 }
 
@@ -909,10 +916,6 @@ $scheduler-month-date-text-padding: 6px;
 }
 
 .dx-scheduler-small {
-  .dx-scheduler-work-space {
-    --dx-scheduler-group-header-width: #{$scheduler-small-size-factor * $scheduler-left-column-width};
-  }
-
   .dx-scheduler-work-space-week,
   .dx-scheduler-work-space-work-week,
   .dx-scheduler-work-space-day {
