@@ -126,11 +126,12 @@ const TestRestoreTreeComponent = forwardRef((_, ref: React.ForwardedRef<{ restor
   return <div>Context Component</div>;
 });
 
-function fireOptionChange(fullName: string, value: unknown): void {
+function fireOptionChange(fullName: string, value: unknown, previousValue?: unknown): void {
   eventHandlers.optionChanged?.forEach((e) => e({
     name: fullName.split('.')[0],
     fullName,
     value,
+    previousValue,
   }));
 }
 

@@ -39,7 +39,18 @@ class OptionsManager {
 
   private subscribableOptions: Set<string>;
 
+  // @ts-expect-error more args than needed
   private independentEvents: Set<string>;
+
+  private currentWrite: { fullName: string; value: unknown } | null = null;
+
+  private batchChanges: {
+    fullName: string;
+    value: unknown;
+    previousValue: unknown;
+    isEcho: boolean;
+    consumed?: boolean;
+  }[] = [];
 
   constructor() {
     this.onOptionChanged = this.onOptionChanged.bind(this);
@@ -80,7 +91,13 @@ class OptionsManager {
 
   public update(config: IConfigNode, dxtemplates: DXTemplateCollection): void {
     const changedOptions: [string, unknown][] = [];
-    const optionChangedHandler = ({ value, fullName }) => {
+    this.batchChanges = [];
+    const optionChangedHandler = ({ value, previousValue, fullName }) => {
+      const cw = this.currentWrite;
+      const isEcho = !!cw && cw.fullName === fullName && cw.value === value;
+      this.batchChanges.push({
+        fullName, value, previousValue, isEcho,
+      });
       changedOptions.push([fullName, value]);
     };
     this.instance.on('optionChanged', optionChangedHandler);
@@ -108,21 +125,22 @@ class OptionsManager {
     }
 
     Object.keys(changes.options).forEach((key) => {
-      this.setValue(key, changes.options[key]);
+      this.writeControlledOption(key, changes.options[key]);
     });
 
     this.isUpdating = false;
-    this.instance.off('optionChanged', optionChangedHandler);
     this.currentConfig = config;
 
     changedOptions.forEach(([name, value]) => {
       const currentPropValue = config.options[name];
       if (Object.prototype.hasOwnProperty.call(config.options, name)
         && currentPropValue !== value) {
-        this.setValue(name, currentPropValue);
+        this.writeControlledOption(name, currentPropValue);
       }
     });
+    this.instance.off('optionChanged', optionChangedHandler);
     this.instance.endUpdate();
+    this.batchChanges = [];
   }
 
   public onOptionChanged(e: { name: string; fullName: string; value: unknown }): void {
@@ -192,10 +210,6 @@ class OptionsManager {
     return this.subscribableOptions.has(optionName);
   }
 
-  private isIndependentEvent(optionName: string): boolean {
-    return this.independentEvents.has(optionName);
-  }
-
   private callOptionChangeHandler(optionName: string, optionValue: unknown) {
     if (!this.isOptionSubscribable(optionName)) {
       return;
@@ -226,15 +240,37 @@ class OptionsManager {
   }
 
   private wrapOptionValue(name: string, value: unknown) {
-    if (name.substr(0, 2) === 'on' && typeof value === 'function') {
+    if (name.startsWith('on') && typeof value === 'function') {
       return (...args: unknown[]) => {
-        if (!this.isUpdating || this.isIndependentEvent(name)) {
+        const isEcho = this.isEchoAction(args[0]);
+        if (!isEcho) {
           value(...args);
         }
       };
     }
 
     return value;
+  }
+
+  private isEchoAction(eventArgs: unknown): boolean {
+    const e = eventArgs as { value?: unknown; previousValue?: unknown } | undefined;
+    if (!e || typeof e !== 'object' || !('value' in e) || !('previousValue' in e)) {
+      return false;
+    }
+    const index = this.batchChanges.findIndex(
+      (change) => !change.consumed
+        && change.value === e.value
+        && change.previousValue === e.previousValue,
+    );
+    if (index < 0) return false;
+    this.batchChanges[index].consumed = true;
+    return this.batchChanges[index].isEcho;
+  }
+
+  private writeControlledOption(name: string, value: unknown): void {
+    this.currentWrite = { fullName: name, value };
+    this.setValue(name, value);
+    this.currentWrite = null;
   }
 
   private addGuard(optionName: string, initialValue: unknown, latestValue: unknown): void {
