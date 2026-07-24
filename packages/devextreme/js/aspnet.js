@@ -31,6 +31,21 @@
 })(function($, setTemplateEngine, templateRendered, Guid, validationEngine, iteratorUtils, extractTemplateMarkup, encodeHtml, ajax) {
     var templateCompiler = createTemplateCompiler();
     var pendingCreateComponentRoutines = [ ];
+    var isFunctionConstructorAllowed;
+
+    function canUseFunctionConstructor() {
+        if(isFunctionConstructorAllowed === undefined) {
+            try {
+                // eslint-disable-next-line no-new-func
+                new Function('return true');
+                isFunctionConstructorAllowed = true;
+            } catch(e) {
+                // Content Security Policy without 'unsafe-eval' blocks the Function constructor.
+                isFunctionConstructorAllowed = false;
+            }
+        }
+        return isFunctionConstructorAllowed;
+    }
 
     function createTemplateCompiler() {
         var ENCODE_QUALIFIER = '-',
@@ -85,19 +100,23 @@
             bag.push('}', 'return _.join(\'\')');
             var code = bag.join('');
 
-            try {
-                // eslint-disable-next-line no-new-func
-                return new Function('obj', 'encodeHtml', code);
-            } catch(e) {
-                var src = element[0];
-                if(src.tagName === 'SCRIPT') {
-                    var funcName = src.id.replaceAll('-', '');
-                    var func = 'function ' + funcName + '(obj,encodeHtml){\n' + code + '\n}';
-                    $.globalEval(func, src, window.document);
-                    return funcName;
-                } else {
-                    return text;
+            if(canUseFunctionConstructor()) {
+                try {
+                    // eslint-disable-next-line no-new-func
+                    return new Function('obj', 'encodeHtml', code);
+                } catch(e) {
+                    // Fall through to the script-based path on template syntax errors.
                 }
+            }
+
+            var src = element[0];
+            if(src.tagName === 'SCRIPT') {
+                var funcName = src.id.replaceAll('-', '');
+                var func = 'function ' + funcName + '(obj,encodeHtml){\n' + code + '\n}';
+                $.globalEval(func, src, window.document);
+                return funcName;
+            } else {
+                return text;
             }
         };
     }
