@@ -29,6 +29,7 @@ import type { ColumnsView } from '../views/m_columns_view';
 import { normalizeWidth } from '../views/m_columns_view';
 import type { ResizingController } from '../views/m_grid_view';
 import type { RowsView } from '../views/m_rows_view';
+import type { RowsViewScrollEvent } from '../views/types';
 
 const CONTENT_CLASS = 'content';
 const CONTENT_FIXED_CLASS = 'content-fixed';
@@ -1012,7 +1013,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     }
   }
 
-  protected _handleScroll(e) {
+  protected _handleScroll(e: RowsViewScrollEvent): void {
     this._updateFixedTablePosition(e.scrollOffset.top, true);
     this._applyElasticScrolling(e);
     super._handleScroll(e);

@@ -94,7 +94,12 @@ import {
   isEditingOrShowEditorAlwaysDataCell,
 } from './m_editing_utils';
 import type {
-  InsertInfo, InternalEditData, NormalizedEditCellOptions,
+  AllowEditActionValue,
+  EditActionOptions,
+  EditActions,
+  InsertInfo,
+  InternalEditData,
+  NormalizedEditCellOptions,
 } from './types';
 
 class EditingControllerImpl extends modules.ViewController {
@@ -277,7 +282,7 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  private _getInternalData(key: RowKey): InternalEditData | undefined {
+  protected _getInternalData(key: RowKey): InternalEditData | undefined {
     return this._internalState.get(getKeyHash(key));
   }
 
@@ -858,8 +863,11 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  private _createInsertInfo(): InsertInfo {
-    return { [INSERT_INDEX]: this._getInsertIndex() };
+  private _createInsertInfo(parentKey?: RowKey): InsertInfo {
+    return {
+      [INSERT_INDEX]: this._getInsertIndex(),
+      parentKey,
+    };
   }
 
   private _addInsertInfo(
@@ -877,7 +885,7 @@ class EditingControllerImpl extends modules.ViewController {
     if (!isDefined(insertInfo)) {
       const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
 
-      insertInfo = this._createInsertInfo();
+      insertInfo = this._createInsertInfo(parentKey);
 
       if (!isDefined(insertAfterOrBeforeKey)) {
         this._setInsertAfterOrBeforeKey(change, parentKey);
@@ -2267,9 +2275,8 @@ class EditingControllerImpl extends modules.ViewController {
       || (column.setCellValue && (isEditableByRowState || isCellEditing));
 
     if (needsEditorTemplate && isEditableRowType && !column.command) {
-      const allowUpdating = !!this.allowUpdating(options);
-      const canModifyCell = (allowUpdating || isRowEditing || !!row?.isNewRow)
-        && !!column.allowEditing;
+      const allowUpdating = this.allowUpdating(options);
+      const canModifyCell = (allowUpdating || isRowEditing) && !!column.allowEditing;
       const isEditable = (canModifyCell || isCellEditing) && (isRowEditing || !isRowMode);
 
       if (isEditable) {
@@ -2455,24 +2462,32 @@ class EditingControllerImpl extends modules.ViewController {
    */
   protected _beforeCancelEditData(): any {}
 
-  protected _allowEditAction(actionName, options) {
-    let allowEditAction: any = this.option(`editing.${actionName}`);
+  protected _allowEditAction(actionName: EditActions, options: EditActionOptions): boolean {
+    const allowEditAction: AllowEditActionValue | undefined = this.option('editing')?.[actionName];
 
-    if (isFunction(allowEditAction)) {
-      allowEditAction = allowEditAction({ component: this.component, row: options.row });
+    return isFunction(allowEditAction)
+      ? allowEditAction({ component: this.component, row: options.row })
+      : !!allowEditAction;
+  }
+
+  public allowUpdating(
+    options: EditActionOptions,
+    eventName?: string,
+    allowEditingForNewRows = true,
+  ): boolean {
+    if (allowEditingForNewRows && options.row?.isNewRow) {
+      return true;
     }
 
-    return allowEditAction;
-  }
-
-  public allowUpdating(options, eventName?) {
     const startEditAction = this.option('editing.startEditAction') ?? DEFAULT_START_EDIT_ACTION;
-    const needCallback = arguments.length > 1 ? startEditAction === eventName || eventName === 'down' : true;
+    const isStartEditEvent = !isDefined(eventName)
+      || eventName === startEditAction
+      || eventName === 'down';
 
-    return needCallback && this._allowEditAction('allowUpdating', options);
+    return isStartEditEvent && this._allowEditAction('allowUpdating', options);
   }
 
-  protected allowDeleting(options) {
+  protected allowDeleting(options: EditActionOptions): boolean {
     return this._allowEditAction('allowDeleting', options);
   }
 
@@ -2704,7 +2719,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender e
     const $targetElement = $(e.event.target);
     const columnIndex = this._getColumnIndexByElement($targetElement);
     const row: any = this._dataController.items()[e.rowIndex];
-    const allowUpdating = editingController.allowUpdating({ row }, eventName) || row && row.isNewRow;
+    const allowUpdating = editingController.allowUpdating({ row }, eventName);
     const column = this._columnsController.getVisibleColumns()[columnIndex];
     const isEditedCell = editingController.isEditCell(e.rowIndex, columnIndex);
     const allowEditing = allowUpdating && column && (column.allowEditing || isEditedCell);

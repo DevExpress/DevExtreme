@@ -426,6 +426,71 @@ test('Scroll position after grouping when RTL (T388508)', async (t) => {
   });
 });
 
+test('Horizontal scrolling should work correctly in RTL mode with native scrolling (T1318490)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const rowsScrollContainer = dataGrid.getScrollContainer();
+  const headersScrollContainer = dataGrid.getHeadersScrollContainer();
+
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  // assert: the grid must not scroll itself on initialization
+  await t
+    .expect(rowsScrollContainer.scrollLeft)
+    .eql(0)
+    .expect(headersScrollContainer.scrollLeft)
+    .eql(0);
+
+  const initialScrollLeft = await dataGrid.getScrollLeft();
+
+  // act: scroll to the left
+  await dataGrid.scrollTo(t, { x: initialScrollLeft - 120 });
+
+  // assert: the headers are in sync with the content
+  await t
+    .expect(rowsScrollContainer.scrollLeft)
+    .eql(-120)
+    .expect(headersScrollContainer.scrollLeft)
+    .eql(-120);
+
+  // act: scroll back to the right edge
+  await dataGrid.scrollTo(t, { x: initialScrollLeft });
+
+  // assert: the content must not jump to the opposite edge
+  await t
+    .expect(rowsScrollContainer.scrollLeft)
+    .eql(0)
+    .expect(headersScrollContainer.scrollLeft)
+    .eql(0);
+}).before(async () => {
+  await insertStylesheetRulesToPage(`
+    ::-webkit-scrollbar { -webkit-appearance: none; width: 14px; height: 14px; }
+    ::-webkit-scrollbar-thumb { background-color: rgba(0, 0, 0, .5); border-radius: 7px; }
+    ::-webkit-scrollbar-track { background-color: #fafafa; }
+  `);
+
+  return createWidget('dxDataGrid', {
+    rtlEnabled: true,
+    width: 700,
+    height: 300,
+    showBorders: true,
+    dataSource: getData(30, 5),
+    columns: [
+      { dataField: 'field_0', width: 300 },
+      { dataField: 'field_1', width: 300 },
+      { dataField: 'field_2', width: 300 },
+      { dataField: 'field_3', width: 300 },
+      { dataField: 'field_4', width: 300 },
+    ],
+    scrolling: {
+      useNative: true,
+    },
+  });
+}).after(async () => {
+  await removeStylesheetRulesFromPage();
+});
+
 test('Header container should have padding-right after expanding the master row with a detail grid when using native scrolling (T1004507)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

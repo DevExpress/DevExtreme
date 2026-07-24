@@ -16,7 +16,7 @@ overrides:
   "js-yaml@<=4.1.1": "^4.2.0"
   "rollup@<4.59.0": "^4.59.0"
   "json5@<1.0.2": ^2.2.3
-  "axios@<1.15.2": ^1.15.2
+  "axios@<1.18.0": ^1.18.0
   "braces@<3.0.3": ^3.0.3
   "semver@<5.7.2": ^5.7.2
   qs: ">=6.15.2"
@@ -53,6 +53,8 @@ overrides:
   "@sigstore/verify@3.1.0": "^3.1.1"
   "body-parser@<1.20.6": ^1.20.6
   "body-parser@>=2.0.0 <2.3.0": ^2.3.0
+  "engine.io@>=4.1.0 <6.6.7": ^6.6.7
+  "tar@<7.5.19": "^7.5.19"
   "babel-traverse": "npm:@babel/traverse@^7.23.2"
   "systemjs-builder>terser": 5.46.2
 catalog:

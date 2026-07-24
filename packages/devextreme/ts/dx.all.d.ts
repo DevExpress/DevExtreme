@@ -26385,7 +26385,7 @@ declare module DevExpress.ui {
   /**
    * [descr:dxScheduler]
    */
-  export class dxScheduler extends Widget<dxSchedulerOptions> {
+  export class dxScheduler extends Widget<DevExpress.ui.dxScheduler.Properties> {
     /**
      * [descr:dxScheduler.addAppointment(appointment)]
      */
@@ -26724,11 +26724,11 @@ declare module DevExpress.ui {
         /**
          * [descr:_ui_scheduler_AppointmentUpdatingEvent.oldData]
          */
-        readonly oldData: any;
+        readonly oldData: Object;
         /**
          * [descr:_ui_scheduler_AppointmentUpdatingEvent.newData]
          */
-        readonly newData: any;
+        readonly newData: Object;
         /**
          * [descr:_ui_scheduler_AppointmentUpdatingEvent.cancel]
          */
@@ -35220,12 +35220,15 @@ declare module DevExpress.ui.dxScheduler {
   /**
    * [descr:DateNavigatorItemProperties]
    */
-  export type DateNavigatorItemProperties = dxButtonGroupOptions & {
-    /**
-     * [descr:DateNavigatorItemProperties.items]
-     */
-    items: Array<dxButtonGroupItem | SchedulerPredefinedDateNavigatorItem>;
-  };
+  export type DateNavigatorItemProperties =
+    DevExpress.ui.dxButtonGroup.Properties & {
+      /**
+       * [descr:DateNavigatorItemProperties.items]
+       */
+      items: Array<
+        DevExpress.ui.dxButtonGroup.Item | SchedulerPredefinedDateNavigatorItem
+      >;
+    };
   /**
    * [descr:dxSchedulerToolbar]
    */
