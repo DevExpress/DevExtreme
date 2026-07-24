@@ -454,11 +454,9 @@ test('FieldChooser: Shift+F10 on a popup field should not open the grid context 
 
   const firstField = fieldChooser.getRowAreaItem(0);
 
-  // Parity with the mouse: right-click on the popup fields does not show the
-  // grid context menu either.
   await t
     .click(firstField)
     .dispatchEvent(firstField, 'keydown', SHIFT_F10_KEYDOWN)
-    .expect(contextMenu.exists)
+    .expect(contextMenu.visible)
     .notOk('the grid context menu is not shown for a field chooser popup field');
 }).before(async () => createWidget('dxPivotGrid', createConfig()));

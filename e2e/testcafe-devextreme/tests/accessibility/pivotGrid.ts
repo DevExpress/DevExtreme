@@ -100,7 +100,6 @@ test('header filter popup', async (t) => {
 
   await t.click(filterIcon);
 
-  // Wait for the popup list to render so axe audits the fully-open popup.
   await t.expect(Selector('.dx-header-filter-menu .dx-list-item').visible).ok();
 
   await a11yCheck(t, overlayA11yOptions);
@@ -111,7 +110,6 @@ test('cell context menu', async (t) => {
 
   await t.rightClick(columnHeaderCell);
 
-  // Wait for the menu items so axe audits the fully-open context menu.
   await t.expect(Selector('.dx-context-menu .dx-menu-item').visible).ok();
 
   await a11yCheck(t, overlayA11yOptions);

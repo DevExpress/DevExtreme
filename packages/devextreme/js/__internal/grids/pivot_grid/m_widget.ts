@@ -1069,6 +1069,10 @@ class PivotGrid extends Widget {
       return;
     }
 
+    // Suppress the browser's native context menu so it does not compete with
+    // the widget menu opened from the keyboard.
+    e.preventDefault();
+
     // The internal _show is called instead of the public show() because only
     // _show accepts the initiating event that onPositioning builds items from.
     this._contextMenu._show(e);

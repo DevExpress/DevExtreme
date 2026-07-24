@@ -50,6 +50,7 @@ function isFieldNavigationEvent(e): boolean {
 
 function isContextMenuKeyEvent(e): boolean {
   return e.type === 'keydown'
+    && !e.repeat
     && (e.key === 'ContextMenu' || (e.shiftKey && e.key === 'F10'));
 }
 
@@ -194,8 +195,6 @@ export class FieldChooserBase extends mixinWidget {
       case 'applyChangesMode':
       case 'remoteSort':
       case 'onFieldContextMenuKeyDown':
-        // The context menu handler is read from the options on each keydown,
-        // so a runtime change requires no re-render.
         break;
       case 'state':
         if (this._skipStateChange || !this._dataSource) {
