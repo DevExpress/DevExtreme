@@ -169,6 +169,27 @@ QUnit.module('PivotGrid markup tests', () => {
         }
     });
 
+    QUnit.test('Expandable header cell is not announced twice (caption text hidden from AT)', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.ok(true, 'skipped on serverSide');
+            return;
+        }
+        const clock = sinon.useFakeTimers();
+        try {
+            const pivotGrid = createPivotGrid({ dataSource: createExpandableDataSource() });
+            clock.tick(10);
+
+            const $collapsedTd = pivotGrid.$element().find('.dx-pivotgrid-collapsed').first().closest('td');
+            const $control = $collapsedTd.find('.dx-expand-icon-container');
+            const $caption = $collapsedTd.children('span').first();
+
+            assert.strictEqual($control.attr('aria-label'), $collapsedTd.text().trim(), 'the expand control carries the caption as its label');
+            assert.strictEqual($caption.attr('aria-hidden'), 'true', 'the duplicate caption text is hidden from assistive tech');
+        } finally {
+            clock.restore();
+        }
+    });
+
     QUnit.test('Non-expandable cell has no expand control', function(assert) {
         if(!windowUtils.hasWindow()) {
             assert.ok(true, 'skipped on serverSide');
