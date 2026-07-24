@@ -70,6 +70,11 @@ export function isDateType(dataType: string | undefined): boolean {
   return dataType === 'date' || dataType === 'datetime';
 }
 
+export interface SelectionRange {
+  selectionStart: number;
+  selectionEnd: number;
+}
+
 const getIntervalSelector = function () {
   const data = arguments[1];
   const value = this.calculateCellValue(data);
@@ -562,22 +567,25 @@ export default {
 
   isDateType,
 
-  getSelectionRange(focusedElement) {
+  getSelectionRange(focusedElement): SelectionRange {
     try {
       if (focusedElement) {
         return {
-          selectionStart: focusedElement.selectionStart,
-          selectionEnd: focusedElement.selectionEnd,
+          selectionStart: isNumeric(focusedElement.selectionStart) ? focusedElement.selectionStart : -1,
+          selectionEnd: isNumeric(focusedElement.selectionEnd) ? focusedElement.selectionEnd : -1,
         };
       }
     } catch (e) { /* empty */ }
 
-    return {};
+    return {
+      selectionStart: -1,
+      selectionEnd: -1,
+    };
   },
 
-  setSelectionRange(focusedElement, selectionRange) {
+  setSelectionRange(focusedElement, selectionRange: SelectionRange): void {
     try {
-      if (focusedElement && focusedElement.setSelectionRange) {
+      if (focusedElement && focusedElement.setSelectionRange && selectionRange.selectionStart >= 0 && selectionRange.selectionEnd >= 0) {
         focusedElement.setSelectionRange(selectionRange.selectionStart, selectionRange.selectionEnd);
       }
     } catch (e) { /* empty */ }
