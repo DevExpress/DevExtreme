@@ -23,5 +23,6 @@ export default class Field {
   // eslint-disable-next-line class-methods-use-this
   getDateBox(): Selector { return Selector(`.${CLASS.dateBox}`); }
 
-  getTextBox(): TextBox { return new TextBox(`.${CLASS.textBox}`) }
+  // eslint-disable-next-line class-methods-use-this
+  getTextBox(): TextBox { return new TextBox(`.${CLASS.textBox}`); }
 }
