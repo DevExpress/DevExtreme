@@ -378,9 +378,9 @@ QUnit.module('PivotGrid accessibility markup', {
         const $rowArea = pivotGrid.$element().find('.dx-pivotgrid-vertical-headers');
         const $dataArea = pivotGrid.$element().find('.dx-pivotgrid-area-data');
 
-        $rowArea.find('td').each((_, cell) => {
+        $rowArea.find('td[role]').each((_, cell) => {
             assert.ok(parseInt(cell.getAttribute('aria-rowindex'), 10) >= 1, 'row header cell has 1-based aria-rowindex');
-            assert.strictEqual(cell.getAttribute('aria-colindex'), null, 'row header cell has no aria-colindex');
+            assert.ok(parseInt(cell.getAttribute('aria-colindex'), 10) >= 1, 'row header cell occupies a reserved leading column');
         });
 
         $dataArea.find('tr').each((rowIndex, row) => {
@@ -483,6 +483,11 @@ QUnit.module('PivotGrid accessibility markup', {
             const $firstRowHeaderCell = pivotGrid.$element().find('.dx-pivotgrid-vertical-headers tr').first().find('td').first();
             const $lastRowHeaderCell = pivotGrid.$element().find('.dx-pivotgrid-vertical-headers tr').last().find('td').last();
 
+            // The row headers reserve leading columns, so the data/column-header
+            // colindex axis starts after them.
+            const reservedRowHeaderColumns = parseInt(pivotGrid.$element().find('[role="grid"]').attr('aria-colcount'), 10)
+                - dataController.totalColumnCount();
+
             assert.strictEqual(
                 dataController.getColumnIndexOffset(),
                 columnOffset,
@@ -495,12 +500,12 @@ QUnit.module('PivotGrid accessibility markup', {
             );
             assert.strictEqual(
                 $firstDataCell.attr('aria-colindex'),
-                String(columnOffset + 1),
+                String(columnOffset + 1 + reservedRowHeaderColumns),
                 `${messagePrefix}: first data cell aria-colindex`
             );
             assert.strictEqual(
                 $firstColumnHeaderCell.attr('aria-colindex'),
-                String(columnOffset + 1),
+                String(columnOffset + 1 + reservedRowHeaderColumns),
                 `${messagePrefix}: first column header aria-colindex`
             );
             assert.ok(
@@ -654,13 +659,22 @@ QUnit.module('PivotGrid accessibility markup', {
             assert.ok(ariaOwns.includes(id), `aria-owns includes ${id}`);
         });
 
+        // The leading columns reserved for the row headers are counted on top
+        // of the data columns.
+        const firstDataColIndex = parseInt(
+            pivotGrid.$element().find('.dx-pivotgrid-area-data td[aria-colindex]').first().attr('aria-colindex'),
+            10
+        );
+        const reservedRowHeaderColumns = firstDataColIndex - 1;
+
+        assert.ok(reservedRowHeaderColumns > 0, 'row headers reserve leading columns');
         assert.strictEqual(
             $gridElement.attr('aria-rowcount'),
             String(dataController.totalRowCount())
         );
         assert.strictEqual(
             $gridElement.attr('aria-colcount'),
-            String(dataController.totalColumnCount())
+            String(dataController.totalColumnCount() + reservedRowHeaderColumns)
         );
     });
 });
