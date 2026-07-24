@@ -66,7 +66,10 @@ export class GroupPanelVertical extends BaseInfernoComponent<GroupPanelProps> {
     } = this.props;
     const style = normalizeStyles(renderUtils.addHeightToStyle(height, styles));
     const isTimelineGroupTable = className === TIMELINE_GROUP_TABLE_CLASS;
-    const isHierarchical = groupPanelData.maxDepth > 1;
+    const useResourceHierarchyLayout = groupPanelData.hasHierarchy && groupPanelData.maxDepth > 1;
+    const isHierarchical = isTimelineGroupTable
+      ? useResourceHierarchyLayout
+      : groupPanelData.maxDepth > 1;
     const flexContainerClassName = isHierarchical
       ? `dx-scheduler-group-flex-container ${HIERARCHICAL_GROUP_FLEX_CONTAINER_CLASS}`
       : 'dx-scheduler-group-flex-container';
