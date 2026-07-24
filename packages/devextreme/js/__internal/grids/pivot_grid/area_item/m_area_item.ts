@@ -287,6 +287,11 @@ abstract class AreaItem {
             div.setAttribute('aria-expanded', String(cell.expanded));
             div.setAttribute('tabindex', isCellNavigationEnabled ? '-1' : '0');
 
+            // The expand button is already labelled with the caption, so the
+            // caption text is hidden from assistive tech; otherwise the header
+            // cell's name repeats the caption twice (e.g. "Africa Africa").
+            span.setAttribute('aria-hidden', 'true');
+
             // With cell navigation the cell itself is the focus target, so it
             // must expose the expanded state to assistive technologies.
             if (isCellNavigationEnabled) {

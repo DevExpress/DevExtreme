@@ -288,6 +288,7 @@
         "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
         "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
         "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
+        "dxPivotGrid-ariaFieldsAreaDescription": "Press Enter or Space to sort by the field, Alt + Down arrow to open the header filter, Shift + F10 to open the context menu",
 
         "dxScheduler-dateRange": "van {0} tot {1}",
         "dxScheduler-ariaLabel": "Planner. {0} weergave: {1} met {2} afspraken",

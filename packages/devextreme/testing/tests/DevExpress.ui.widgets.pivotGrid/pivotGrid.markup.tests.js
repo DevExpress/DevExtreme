@@ -169,6 +169,27 @@ QUnit.module('PivotGrid markup tests', () => {
         }
     });
 
+    QUnit.test('Expandable header cell is not announced twice (caption text hidden from AT)', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.ok(true, 'skipped on serverSide');
+            return;
+        }
+        const clock = sinon.useFakeTimers();
+        try {
+            const pivotGrid = createPivotGrid({ dataSource: createExpandableDataSource() });
+            clock.tick(10);
+
+            const $collapsedTd = pivotGrid.$element().find('.dx-pivotgrid-collapsed').first().closest('td');
+            const $control = $collapsedTd.find('.dx-expand-icon-container');
+            const $caption = $collapsedTd.children('span').first();
+
+            assert.strictEqual($control.attr('aria-label'), $collapsedTd.text().trim(), 'the expand control carries the caption as its label');
+            assert.strictEqual($caption.attr('aria-hidden'), 'true', 'the duplicate caption text is hidden from assistive tech');
+        } finally {
+            clock.restore();
+        }
+    });
+
     QUnit.test('Non-expandable cell has no expand control', function(assert) {
         if(!windowUtils.hasWindow()) {
             assert.ok(true, 'skipped on serverSide');
@@ -268,9 +289,14 @@ QUnit.module('PivotGrid accessibility markup', {
             const $table = pivotGrid.$element()
                 .find(`.dx-area-fields[group="${area}"] > table`);
 
+            const ariaLabel = $table.attr('aria-label');
+
             assert.strictEqual($table.length, 1, `${area} field table exists`);
             assert.strictEqual($table.attr('role'), 'menubar', `${area} field table is a menubar`);
-            assert.strictEqual($table.attr('aria-label'), expectedLabels[area], `${area} menubar has localized label`);
+            assert.strictEqual(typeof ariaLabel, 'string', `${area} menubar has an aria-label`);
+            assert.strictEqual((ariaLabel || '').indexOf(expectedLabels[area]), 0, `${area} menubar label starts with the area name`);
+            assert.ok((ariaLabel || '').length > expectedLabels[area].length, `${area} menubar label also carries the keyboard instructions`);
+            assert.strictEqual($table.attr('aria-description'), undefined, `${area} menubar does not use the unsupported aria-description attribute`);
         });
 
         // The filter area has no fields in this data source; a menubar without

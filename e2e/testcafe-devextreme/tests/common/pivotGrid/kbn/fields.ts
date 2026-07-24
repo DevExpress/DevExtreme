@@ -127,7 +127,9 @@ const createConfig = () => ({
       .expect(menubar.count)
       .eql(1, 'the area has a single menubar')
       .expect(menubar.getAttribute('aria-label'))
-      .eql('Row Fields', 'the menubar is labelled with the area name');
+      .contains('Row Fields', 'the menubar label starts with the area name')
+      .expect(menubar.getAttribute('aria-label'))
+      .contains('Shift + F10', 'the menubar label also describes the keyboard interactions');
 
     await t
       .expect(firstField.getAttribute('role'))
@@ -404,4 +406,57 @@ test('FieldChooser: Should traverse fields in all areas by tab', async (t) => {
     .pressKey('tab')
     .expect(dataFirstField.focused)
     .ok('first field in data area is focused');
+}).before(async () => createWidget('dxPivotGrid', createConfig()));
+
+// TestCafe's pressKey does not support function keys (F1-F12), so the Shift+F10
+// shortcut is reproduced by dispatching the keydown event on the focused field.
+const SHIFT_F10_KEYDOWN = {
+  key: 'F10', code: 'F10', shiftKey: true, bubbles: true, cancelable: true,
+};
+
+test('PivotGrid: Should open the context menu by Shift+F10 on a field', async (t) => {
+  const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
+  const firstField = pivotGrid.getRowHeaderArea().getField(0);
+  const contextMenuItem = Selector('.dx-context-menu .dx-menu-item-text').withText('Show Field Chooser');
+
+  await t
+    .click(firstField)
+    .expect(firstField.focused)
+    .ok('field is focused after click')
+    .dispatchEvent(firstField, 'keydown', SHIFT_F10_KEYDOWN)
+    .expect(contextMenuItem.visible)
+    .ok('the field context menu is shown after Shift+F10');
+}).before(async () => createWidget('dxPivotGrid', createConfig()));
+
+test('PivotGrid: Field should have focus after the context menu is closed', async (t) => {
+  const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
+  const firstField = pivotGrid.getRowHeaderArea().getField(0);
+  const contextMenuItem = Selector('.dx-context-menu .dx-menu-item-text').withText('Show Field Chooser');
+
+  await t
+    .click(firstField)
+    .dispatchEvent(firstField, 'keydown', SHIFT_F10_KEYDOWN)
+    .expect(contextMenuItem.visible)
+    .ok('the field context menu is shown after Shift+F10');
+
+  await t
+    .pressKey('esc')
+    .expect(firstField.focused)
+    .ok('the field is focused after the context menu is closed');
+}).before(async () => createWidget('dxPivotGrid', createConfig()));
+
+test('FieldChooser: Shift+F10 on a popup field should not open the grid context menu', async (t) => {
+  const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
+  const fieldChooser = pivotGrid.getFieldChooser();
+  const contextMenu = Selector('.dx-context-menu .dx-menu-item-text');
+
+  await t.click(pivotGrid.getFieldChooserButton());
+
+  const firstField = fieldChooser.getRowAreaItem(0);
+
+  await t
+    .click(firstField)
+    .dispatchEvent(firstField, 'keydown', SHIFT_F10_KEYDOWN)
+    .expect(contextMenu.visible)
+    .notOk('the grid context menu is not shown for a field chooser popup field');
 }).before(async () => createWidget('dxPivotGrid', createConfig()));
