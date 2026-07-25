@@ -7,12 +7,13 @@ import { getFormat as getLDMLFormat } from '@js/common/core/localization/ldml/nu
 import number from '@js/common/core/localization/number';
 import devices from '@js/core/devices';
 import { ensureDefined, escapeRegExp } from '@js/core/utils/common';
+import { equals } from '@js/core/utils/comparator';
 import { fitIntoRange, inRange } from '@js/core/utils/math';
 import {
-  isDefined, isFunction, isNumeric, isString,
+  isDefined, isFunction, isNumeric, isPlainObject, isString,
 } from '@js/core/utils/type';
 import type { Properties } from '@js/ui/number_box';
-import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
+import { getEffectiveFormatLocale, getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 
 import NumberBoxBase from './m_number_box.base';
 import {
@@ -62,6 +63,8 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
 
   _currentFormat?: any;
 
+  _intlFormatLocaleCache?: string;
+
   _getDefaultOptions(): NumberBoxMaskProperties {
     return {
       ...super._getDefaultOptions(),
@@ -100,6 +103,60 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
     return isDefined(format)
       ? format
       : getGlobalFormatByDataType('number');
+  }
+
+  _usesIntlFormatOption(formatOption) {
+    const customFormatter = formatOption?.formatter || formatOption;
+
+    return !isFunction(customFormatter)
+      && isPlainObject(formatOption)
+      && !formatOption.type
+      && !formatOption.parser;
+  }
+
+  _getFormatArgumentForNumberLocalization(maskFormat) {
+    const formatOption = this._getEffectiveFormatOption();
+
+    return this._usesIntlFormatOption(formatOption) ? formatOption : maskFormat;
+  }
+
+  _invalidateFormatPatternIfIntlLocaleChanged(): void {
+    const formatOption = this._getEffectiveFormatOption();
+
+    if (!this._usesIntlFormatOption(formatOption)) {
+      return;
+    }
+
+    const locale = getEffectiveFormatLocale(formatOption, 'number');
+
+    if (locale !== this._intlFormatLocaleCache) {
+      this._intlFormatLocaleCache = locale;
+      delete this._currentFormat;
+    }
+  }
+
+  _refreshFormattedValueFromParsedValue(value: NumberBoxMaskProperties['value']): void {
+    this._parsedValue = value;
+    delete this._currentFormat;
+    delete this._intlFormatLocaleCache;
+    this._setTextByParsedValue();
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  option(...args): NumberBoxMaskProperties {
+    if (args.length === 2 && args[0] === 'value' && this._useMaskBehavior()) {
+      const formatOption = this._getEffectiveFormatOption();
+      const previousValue = super.option('value');
+      const result = super.option(...args);
+
+      if (this._usesIntlFormatOption(formatOption) && equals(previousValue, args[1])) {
+        this._refreshFormattedValueFromParsedValue(args[1] as NumberBoxMaskProperties['value']);
+      }
+
+      return result;
+    }
+
+    return super.option(...args);
   }
 
   _getTextSeparatorIndex(text) {
@@ -368,38 +425,43 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
 
   _parse(text, format) {
     const formatOption = this._getEffectiveFormatOption();
-    const isCustomParser = isFunction(formatOption.parser);
+    const isCustomParser = isFunction(formatOption?.parser);
     const parser = isCustomParser ? formatOption.parser : number.parse;
+    const formatArg = this._getFormatArgumentForNumberLocalization(format);
+    const maskPattern = isString(format) ? format : '';
     let integerPartStartIndex = 0;
 
     if (!isCustomParser) {
-      const formatPointIndex = getRealSeparatorIndex(format).index;
+      const formatPointIndex = getRealSeparatorIndex(maskPattern).index;
       const textPointIndex = this._getTextSeparatorIndex(text);
 
-      const formatIntegerPartLength = formatPointIndex !== -1 ? formatPointIndex : format.length;
+      const formatIntegerPartLength = formatPointIndex !== -1 ? formatPointIndex : maskPattern.length;
       const textIntegerPartLength = textPointIndex !== -1 ? textPointIndex : text.length;
 
-      if (textIntegerPartLength > formatIntegerPartLength && format.indexOf('#') === -1) {
+      if (textIntegerPartLength > formatIntegerPartLength && !maskPattern.includes('#')) {
         integerPartStartIndex = textIntegerPartLength - formatIntegerPartLength;
       }
     }
 
     text = text.substr(integerPartStartIndex);
 
-    return parser(text, format);
+    return parser(text, formatArg);
   }
 
   _format(value, format) {
+    const formatArg = this._getFormatArgumentForNumberLocalization(format);
     const formatOption = this._getEffectiveFormatOption();
     const customFormatter = formatOption?.formatter || formatOption;
     const formatter = isFunction(customFormatter) ? customFormatter : number.format;
 
-    const formattedValue = value === null ? '' : formatter(value, format);
+    const formattedValue = value === null ? '' : formatter(value, formatArg);
 
     return formattedValue;
   }
 
   _getFormatPattern() {
+    this._invalidateFormatPatternIfIntlLocaleChanged();
+
     if (!this._currentFormat) {
       this._updateFormat();
     }
@@ -533,7 +595,8 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
   }
 
   _getParsedValue(text, format) {
-    const sign = number.getSign(text, format?.formatter || format);
+    const formatArg = this._getFormatArgumentForNumberLocalization(format);
+    const sign = number.getSign(text, formatArg?.formatter || formatArg);
     const textWithoutStubs = this._removeStubs(text, true);
     const parsedValue = this._parse(textWithoutStubs, format);
     const parsedValueSign = parsedValue < 0 ? -1 : 1;
@@ -716,6 +779,15 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
   }
 
   _getPrecisionLimits(text): { min: number; max: number } {
+    const formatOption = this._getEffectiveFormatOption();
+
+    if (this._usesIntlFormatOption(formatOption)) {
+      const min = formatOption.minimumFractionDigits ?? 0;
+      const max = formatOption.maximumFractionDigits ?? min;
+
+      return { min, max };
+    }
+
     const currentFormat = this._getFormatForSign(text);
     const realSeparatorIndex = getRealSeparatorIndex(currentFormat).index;
     const floatPart = (splitByIndex(currentFormat, realSeparatorIndex)[1] || '').replace(/[^#0]/g, '');
@@ -902,6 +974,8 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
     delete this._lastKeyName;
     delete this._parsedValue;
     delete this._focusOutOccurs;
+    delete this._currentFormat;
+    delete this._intlFormatLocaleCache;
     clearTimeout(this._caretTimeout);
     delete this._caretTimeout;
   }

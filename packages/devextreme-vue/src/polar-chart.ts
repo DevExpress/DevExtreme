@@ -78,6 +78,7 @@ import {
  VerticalEdge,
 } from "devextreme/common";
 import {
+ FormatLocale,
  Format as LocalizationFormat,
 } from "devextreme/common/core/localization";
 import  * as CommonChartTypes from "devextreme/common/charts";
@@ -624,6 +625,7 @@ const DxArgumentFormatConfig = {
     "update:hoveredElement": null,
     "update:currency": null,
     "update:formatter": null,
+    "update:locale": null,
     "update:parser": null,
     "update:precision": null,
     "update:type": null,
@@ -632,6 +634,7 @@ const DxArgumentFormatConfig = {
   props: {
     currency: String,
     formatter: Function as PropType<((value: number | Date) => string)>,
+    locale: [Object, Function, String] as PropType<FormatLocale | ((() => string)) | string>,
     parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
     type: String as PropType<Format | string>,
@@ -1351,6 +1354,7 @@ const DxFormatConfig = {
     "update:hoveredElement": null,
     "update:currency": null,
     "update:formatter": null,
+    "update:locale": null,
     "update:parser": null,
     "update:precision": null,
     "update:type": null,
@@ -1359,6 +1363,7 @@ const DxFormatConfig = {
   props: {
     currency: String,
     formatter: Function as PropType<((value: number | Date) => string)>,
+    locale: [Object, Function, String] as PropType<FormatLocale | ((() => string)) | string>,
     parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
     type: String as PropType<Format | string>,

@@ -3580,4 +3580,33 @@ QUnit.module('Global formatting config (spec)', {
 
         assert.strictEqual($input.val(), '02/01/2020');
     });
+
+    QUnit.test('explicit displayFormat keeps priority over global dateFormat locale', function(assert) {
+        const savedLocale = localization.locale();
+
+        try {
+            localization.locale('en');
+            config({
+                ...config(),
+                dateFormat: {
+                    default: {
+                        locale: 'de-DE',
+                        type: 'shortDate',
+                    },
+                },
+            });
+
+            const $element = $('#dateBox').dxDateBox({
+                type: 'date',
+                value: new Date(2020, 0, 2),
+                displayFormat: 'yyyy-MM-dd',
+                pickerType: 'calendar',
+            });
+            const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+            assert.strictEqual($input.val(), '2020-01-02', 'explicit displayFormat wins over global dateFormat locale');
+        } finally {
+            localization.locale(savedLocale);
+        }
+    });
 });
