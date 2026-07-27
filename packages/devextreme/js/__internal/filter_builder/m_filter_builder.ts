@@ -772,7 +772,7 @@ class FilterBuilder extends Widget<any> {
     const isFocusOnEditor = $(activeElement).closest($editor.children()).length > 0;
     const overlay = $(activeElement).closest(`.${DROPDOWN_EDITOR_OVERLAY_CLASS}`);
     const overlayID = overlay.find(`.${POPUP_CONTENT_CLASS}`).attr('id');
-    const editorOwns = $editor.find('[aria-owns]').attr('aria-owns');
+    const editorOwns = $editor.attr('aria-owns') ?? $editor.find('[aria-owns]').attr('aria-owns');
     const isFocusOnOverlay = overlay.length > 0;
     const overlayOwnedByEditor = isDefined(editorOwns) && editorOwns === overlayID;
     return isFocusOnEditor || (isFocusOnOverlay && overlayOwnedByEditor);
