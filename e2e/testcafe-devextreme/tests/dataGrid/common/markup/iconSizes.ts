@@ -6,7 +6,6 @@ import { testScreenshot } from '../../../../helpers/themeUtils';
 fixture.disablePageReloads`Icon Sizes`
   .page(url(__dirname, '../../../container.html'));
 
-// visual: fluent.blue.light.compact
 test('Correct icon sizes (T1207612)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
