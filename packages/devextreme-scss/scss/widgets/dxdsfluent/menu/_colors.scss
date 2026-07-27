@@ -1,0 +1,19 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$menu-popup-bg: ds.$color-surface-neutral-default-rest !default;
+$menu-item-hover-bg: ds.$color-surface-neutral-default-hovered !default;
+$menu-item-bg-active: ds.$color-surface-neutral-default-active !default;
+
+$menu-color: ds.$color-content-neutral-default-rest !default;
+$menu-item-expanded-color: $menu-color !default;
+
+$menu-item-selected-bg: ds.$color-surface-neutral-default-selected !default;
+$menu-popup-border-color: ds.$color-border-neutral-default-rest !default;
+$menu-separator-bg: ds.$separator-color !default;
+$menu-item-selected-color: ds.$color-content-neutral-default-rest !default;
+$menu-item-link-color: ds.$color-content-primary-default-rest !default;
+$menu-item-focused-selected-bg: ds.$color-surface-neutral-default-selected-hovered !default;
+
+$menu-focused-shadow: ds.$box-shadow-md !default;

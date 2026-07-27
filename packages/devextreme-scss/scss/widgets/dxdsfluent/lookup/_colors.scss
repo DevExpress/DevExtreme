@@ -1,0 +1,9 @@
+@use "../dropDownEditor/colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$lookup-icon-color: $dropdowneditor-icon-color !default;
+$lookup-icon-color-active: $dropdowneditor-icon-active-color !default;
+
+$lookup-shadow: ds.$box-shadow-sm !default;
