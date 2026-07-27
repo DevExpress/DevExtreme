@@ -46,7 +46,7 @@ test('The E0110 should not occur when editing a column with setCellValue in form
   templatesRenderAsynchronously: true,
 }));
 
-test('Checkbox has ink ripple in material theme inside editing popup (T977287)', async (t) => {
+test('Checkbox has ink ripple inside editing popup (T977287)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
   const overlay = new Overlay();
