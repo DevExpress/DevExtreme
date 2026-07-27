@@ -82,6 +82,7 @@ const pages = createPagesRenderer({
   contentWithCacheBuster,
   getCacheBuster,
   jsonString,
+  packageRoot: PACKAGE_ROOT,
   renderTemplate: templates.renderTemplate,
 });
 const suitesService = createSuitesService({
@@ -377,6 +378,7 @@ function assignBaseRunProps(searchParams: URLSearchParams): BaseRunProps {
     ShadowDom: searchParams.has('shadowDom'),
     WorkerInWindow: searchParams.has('workerinwindow'),
     NoCsp: searchParams.has('nocsp'),
+    UseEsm: searchParams.get('loader') === 'esm',
     MaxWorkers: null,
   };
 

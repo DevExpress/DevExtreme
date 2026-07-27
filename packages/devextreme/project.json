@@ -417,6 +417,62 @@
         "{projectRoot}/artifacts/transpiled-esm-npm/esm/__internal"
       ]
     },
+    "build:npm:esm:watch": {
+      "executor": "devextreme-nx-infra-plugin:babel-transform",
+      "cache": false,
+      "options": {
+        "babelConfigPath": "./build/transpile-config.js",
+        "configKey": "esm",
+        "sourcePattern": "./js/**/*.{js,jsx}",
+        "excludePatterns": [
+          "./js/**/*.d.ts",
+          "./js/__internal/**/*"
+        ],
+        "outDir": "./artifacts/transpiled-esm-npm/esm",
+        "removeDebug": true,
+        "watch": true,
+        "copyAssets": [
+          { "from": "./js/localization/messages", "to": "./localization/messages" },
+          { "from": "./js/viz/vector_map.utils/_settings.json", "to": "./viz/vector_map.utils/_settings.json" }
+        ]
+      }
+    },
+    "build:npm:esm:internal:watch": {
+      "executor": "devextreme-nx-infra-plugin:babel-transform",
+      "cache": false,
+      "options": {
+        "babelConfigPath": "./build/transpile-config.js",
+        "configKey": "esm",
+        "sourcePattern": "./artifacts/dist_ts/__internal/**/*.{js,jsx}",
+        "outDir": "./artifacts/transpiled-esm-npm/esm/__internal",
+        "removeDebug": true,
+        "watch": true,
+        "renameExtensions": {
+          ".jsx": ".js"
+        }
+      }
+    },
+    "build:qunit-esm": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "parallel": true,
+        "commands": [
+          "pnpm nx run devextreme:build:npm:esm",
+          "pnpm nx run devextreme:build:npm:esm:internal"
+        ]
+      },
+      "dependsOn": [
+        "build:ts:internal"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/transpiled-esm-npm/esm"
+      ],
+      "cache": true,
+      "metadata": {
+        "description": "ESM artifacts for QUnit native import-map loader (?loader=esm)."
+      }
+    },
     "build:npm:cjs:internal": {
       "executor": "devextreme-nx-infra-plugin:babel-transform",
       "options": {
@@ -532,11 +588,12 @@
             "pnpm nx build:ts:internal devextreme",
             "pnpm nx run-many --targets=build:cjs,build:cjs:internal,build:cjs:bundles --projects=devextreme --parallel",
             "pnpm nx run-many --targets=build:cjs,build:cjs:internal,build:cjs:bundles --projects=devextreme --parallel -c production",
-            "pnpm nx run-many --targets=build:npm:cjs,build:npm:cjs:internal --projects=devextreme --parallel",
+            "pnpm nx run-many --targets=build:npm:esm,build:npm:esm:internal,build:npm:cjs,build:npm:cjs:internal --projects=devextreme --parallel",
             "pnpm nx clean:dist-ts devextreme"
           ],
           "outputs": [
             "{projectRoot}/artifacts/transpiled",
+            "{projectRoot}/artifacts/transpiled-esm-npm",
             "{projectRoot}/artifacts/transpiled-renovation-npm",
             "{projectRoot}/build/bundle-templates/dx.custom.js",
             "{projectRoot}/artifacts/npm/devextreme/bundles/dx.custom.config.js"
@@ -573,7 +630,9 @@
           "pnpm nx build:cjs:watch devextreme",
           "pnpm nx build:cjs:watch devextreme -c production",
           "pnpm nx build:cjs:internal:watch devextreme",
-          "pnpm nx build:cjs:internal:watch devextreme -c production"
+          "pnpm nx build:cjs:internal:watch devextreme -c production",
+          "pnpm nx build:npm:esm:watch devextreme",
+          "pnpm nx build:npm:esm:internal:watch devextreme"
         ],
         "cwd": "{projectRoot}",
         "parallel": true
@@ -1755,7 +1814,7 @@
       ],
       "cache": true,
       "metadata": {
-        "description": "Dev/CI test build. Skips prod bundles, aspnet, declarations, npm, and license checks."
+        "description": "Dev/CI test build. Includes CJS + ESM (QUnit import-map) artifacts; skips prod bundles, aspnet, declarations, npm package packing, and license checks."
       }
     },
     "build:systemjs": {

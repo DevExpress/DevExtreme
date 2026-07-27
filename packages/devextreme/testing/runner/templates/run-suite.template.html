@@ -85,6 +85,15 @@
                 tooltip: "Use nocsp components without CSP checks",
             });
 
+            QUnit.config.urlConfig.push({
+                id: "loader",
+                label: "ESM loader",
+                tooltip: "Use native ESM + import maps instead of SystemJS (pilot)",
+                value: {
+                    esm: true
+                }
+            });
+
             function notifyExtraDoneCall() {
                 var msg = "QUnit.done called several times. Possible causes: extra start() calls, assertion outside test context";
 
@@ -101,7 +110,7 @@
 
     <script src="{{SINON_JS_URL}}"></script>
 
-    <script src="{{SYSTEM_JS_URL}}"></script>
+    {{{SYSTEM_JS_SCRIPT}}}
 
     <script nonce="IpCks6">
         (function() {
@@ -111,19 +120,25 @@
 
             jQuery.noConflict();
 
+            var useEsm = {{{USE_ESM_JSON}}};
             var cacheBuster = {{{CACHE_BUSTER_JSON}}};
-            if(cacheBuster.length) {
-                var systemLocate = SystemJS.locate;
-                SystemJS.locate = function(load) {
-                    return Promise.resolve(systemLocate.call(this, load)).then(function(address) {
-                        return address + ( address.indexOf('?') === -1 ? '?' : '&') + cacheBuster;
-                    });
-                }
-            }
 
-            SystemJS.config({{{SYSTEM_CONFIG_JSON}}});
+            if(!useEsm) {
+                if(cacheBuster.length) {
+                    var systemLocate = SystemJS.locate;
+                    SystemJS.locate = function(load) {
+                        return Promise.resolve(systemLocate.call(this, load)).then(function(address) {
+                            return address + ( address.indexOf('?') === -1 ? '?' : '&') + cacheBuster;
+                        });
+                    }
+                }
+
+                SystemJS.config({{{SYSTEM_CONFIG_JSON}}});
+            }
         })();
     </script>
+
+    {{{IMPORT_MAP_SCRIPT}}}
 </head>
 <a class="up" href="/"></a>
 <div id="qunit"></div>
@@ -131,34 +146,65 @@
 
 <script nonce="Z27qXj">
     (function() {
+        var useEsm = {{{USE_ESM_JSON}}};
         var integrationImportPaths = {{{INTEGRATION_IMPORT_PATHS_JSON}}};
+        var testUrl = {{{TEST_URL_JSON}}};
+        var isServerSideTest = {{{IS_SERVER_SIDE_TEST_JSON}}};
+
+        function startQUnit() {
+            QUnit.start();
+        }
+
+        function failLoad(err) {
+            QUnit.start();
+            QUnit.test("load failed", function(assert) {
+                throw err;
+            });
+        }
+
+        function afterReady(loadTest) {
+            var ready = new Promise(function(resolve) {
+                jQuery(resolve);
+            });
+
+            return ready.then(function() {
+                var isNotWebkitBrowser = window.navigator.userAgent.toLowerCase().indexOf("webkit") < 0;
+
+                if(isServerSideTest && isNotWebkitBrowser) {
+                    return;
+                }
+
+                return loadTest();
+            });
+        }
+
+        if(useEsm) {
+            var imports = integrationImportPaths.map(function(importPath) {
+                return import(importPath);
+            });
+
+            Promise.all(imports)
+                .then(function() {
+                    return afterReady(function() {
+                        return import(testUrl);
+                    });
+                })
+                .then(startQUnit)
+                .catch(failLoad);
+            return;
+        }
 
         var imports = integrationImportPaths.map(function(importPath) {
             return SystemJS.import(importPath);
         });
 
-        imports.push(new Promise(function(resolve) {
-            jQuery(resolve);
-        }));
-
         Promise.all(imports)
         .then(function() {
-            var isNotWebkitBrowser = window.navigator.userAgent.toLowerCase().indexOf("webkit") < 0;
-
-            if({{{IS_SERVER_SIDE_TEST_JSON}}} && isNotWebkitBrowser) {
-                return;
-            }
-
-            return SystemJS.import({{{TEST_URL_JSON}}});
-        })
-        .then(function() {
-            QUnit.start();
-        })
-        .catch(function (err) {
-            QUnit.start();
-            QUnit.test("load failed", function(assert) {
-                throw err;
+            return afterReady(function() {
+                return SystemJS.import(testUrl);
             });
-        });
+        })
+        .then(startQUnit)
+        .catch(failLoad);
     })();
 </script>
