@@ -52,10 +52,7 @@ fixture.disablePageReloads`Validation`
   }));
 });
 
-// visual: generic.light
-// visual: material.blue.light
-// visual: fluent.blue.light
-test('DataGrid - Validation message gets cut off in Fluent and Material themes (T1285387)', async (t) => {
+test('DataGrid - Validation message gets cut off (T1285387)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
   const dataCellEditLink = dataGrid.getDataCell(0, 1).getLinkEdit();

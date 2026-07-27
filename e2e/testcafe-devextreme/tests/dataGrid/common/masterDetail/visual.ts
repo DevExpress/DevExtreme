@@ -8,9 +8,7 @@ import { testScreenshot } from '../../../../helpers/themeUtils';
 fixture.disablePageReloads`Master detail.Visual`
   .page(url(__dirname, '../../../container.html'));
 
-// visual: material.blue.light
-// visual: generic.light
-test('Checkbox align right in masterdetail (T1045321) generic.light', async (t) => {
+test('Checkbox align right in masterdetail (T1045321)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await testScreenshot(t, takeScreenshot, 'T1045321.png');
