@@ -5,6 +5,9 @@ $datagrid-border-color: null !default;
 $datagrid-base-background-color: null !default;
 $datagrid-row-error-color: null !default;
 $datagrid-focused-border-color: null !default;
+$datagrid-group-row-border: null !default;
+$datagrid-sticky-column-border: null !default;
+$datagrid-cell-focus-outline: null !default;
 
 // #region position & z-index
 
@@ -34,8 +37,8 @@ $datagrid-focused-border-color: null !default;
 
 // (0,3,1)
 .dx-datagrid-rowsview .dx-row.dx-group-row td {
-  border-top: 1px solid;
-  border-bottom: 1px solid;
+  border-top: $datagrid-group-row-border;
+  border-bottom: $datagrid-group-row-border;
 }
 
 // (0,3,1)
@@ -50,9 +53,9 @@ $datagrid-focused-border-color: null !default;
 .dx-datagrid .dx-datagrid-rowsview .dx-virtual-row td.dx-pointer-events-none,
 .dx-datagrid .dx-datagrid-rowsview .dx-header-row td.dx-pointer-events-none,
 .dx-datagrid .dx-datagrid-headers .dx-row td.dx-pointer-events-none {
-  border-left: 2px solid;
+  border-left: $datagrid-sticky-column-border;
   border-left-color: $datagrid-border-color;
-  border-right: 2px solid;
+  border-right: $datagrid-sticky-column-border;
   border-right-color: $datagrid-border-color;
 }
 
@@ -87,13 +90,13 @@ $datagrid-focused-border-color: null !default;
 
 // (0,5,1)
 .dx-datagrid .dx-datagrid-sticky-columns .dx-datagrid-table .dx-row td.dx-datagrid-sticky-column-border-right {
-  border-right: 2px solid;
+  border-right: $datagrid-sticky-column-border;
   border-right-color: $datagrid-border-color;
 }
 
 // (0,5,1)
 .dx-datagrid .dx-datagrid-sticky-columns .dx-datagrid-table .dx-row td.dx-datagrid-sticky-column-border-left {
-  border-left: 2px solid;
+  border-left: $datagrid-sticky-column-border;
   border-left-color: $datagrid-border-color;
 }
 
@@ -109,7 +112,7 @@ $datagrid-focused-border-color: null !default;
 
 // (0,7,1)
 .dx-widget:not(.dx-rtl) > .dx-gridbase-container .dx-datagrid-table .dx-row > td.dx-datagrid-first-cell.dx-datagrid-sticky-column-border-left {
-  border-left: 2px solid;
+  border-left: $datagrid-sticky-column-border;
   border-left-color: $datagrid-border-color;
 }
 
@@ -138,9 +141,9 @@ $datagrid-focused-border-color: null !default;
 .dx-rtl .dx-datagrid .dx-datagrid-rowsview .dx-virtual-row td.dx-pointer-events-none,
 .dx-rtl .dx-datagrid .dx-datagrid-rowsview .dx-header-row td.dx-pointer-events-none,
 .dx-rtl .dx-datagrid .dx-datagrid-headers .dx-row td.dx-pointer-events-none {
-  border-left: 2px solid;
+  border-left: $datagrid-sticky-column-border;
   border-left-color: $datagrid-border-color;
-  border-right: 2px solid;
+  border-right: $datagrid-sticky-column-border;
   border-right-color: $datagrid-border-color;
 }
 
@@ -189,13 +192,13 @@ $datagrid-focused-border-color: null !default;
 
 // (0,6,1)
 .dx-rtl .dx-datagrid .dx-datagrid-sticky-columns .dx-datagrid-table .dx-row td.dx-datagrid-sticky-column-border-right {
-  border-right: 2px solid;
+  border-right: $datagrid-sticky-column-border;
   border-right-color: $datagrid-border-color;
 }
 
 // (0,6,1)
 .dx-rtl .dx-datagrid .dx-datagrid-sticky-columns .dx-datagrid-table .dx-row td.dx-datagrid-sticky-column-border-left {
-  border-left: 2px solid;
+  border-left: $datagrid-sticky-column-border;
   border-left-color: $datagrid-border-color;
 }
 
@@ -211,13 +214,13 @@ $datagrid-focused-border-color: null !default;
 
 // (0,7,1)
 .dx-rtl > .dx-gridbase-container .dx-datagrid-content .dx-datagrid-table .dx-row > td.dx-datagrid-first-cell.dx-datagrid-sticky-column-border-left {
-  border-left: 2px solid;
+  border-left: $datagrid-sticky-column-border;
   border-left-color: $datagrid-border-color;
 }
 
 // (0,8,0)
 .dx-rtl .dx-datagrid .dx-datagrid-sticky-columns .dx-datagrid-content .dx-datagrid-table .dx-row .dx-datagrid-column-no-border.dx-datagrid-sticky-column-border-left {
-  border-left: 2px solid;
+  border-left: $datagrid-sticky-column-border;
   border-left-color: $datagrid-border-color;
 }
 
@@ -275,7 +278,7 @@ $datagrid-focused-border-color: null !default;
 
 // (0,5,1)
 .dx-datagrid .dx-datagrid-headers.dx-state-focused .dx-header-row td:focus {
-  outline: 2px solid;
+  outline: $datagrid-cell-focus-outline;
   outline-color: $datagrid-focused-border-color;
   outline-offset: -2px;
 }

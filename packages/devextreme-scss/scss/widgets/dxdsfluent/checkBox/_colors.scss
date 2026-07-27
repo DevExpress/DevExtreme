@@ -1,0 +1,28 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$checkbox-border-color: ds.$checkbox-color-unchecked-default-border-rest !default;
+$checkbox-border-color-hover: ds.$checkbox-color-unchecked-default-border-hovered !default;
+$checkbox-border-color-active: ds.$checkbox-color-unchecked-default-border-active !default;
+
+$checkbox-foreground-color: ds.$checkbox-color-checked-default-icon-rest !default;
+
+$checkbox-accent-color: ds.$checkbox-color-checked-default-bg-rest !default;
+$checkbox-accent-color-hover: ds.$checkbox-color-checked-default-bg-hovered !default;
+$checkbox-accent-color-focused: ds.$checkbox-color-checked-default-bg-active !default;
+
+$checkbox-invalid-border-color: ds.$color-border-danger-compound-rest !default;
+$checkbox-invalid-border-color-hover: ds.$color-border-danger-compound-hovered !default;
+$checkbox-invalid-border-color-focused: ds.$color-border-danger-compound-active !default;
+
+$checkbox-invalid-bg: ds.$color-surface-danger-compound-rest !default;
+$checkbox-invalid-bg-hover: ds.$color-surface-danger-compound-hovered !default;
+$checkbox-invalid-bg-focused: ds.$color-surface-danger-compound-active !default;
+
+$checkbox-invalid-mark-color: ds.$color-content-danger-compound-rest !default;
+$checkbox-invalid-mark-color-hover: ds.$color-content-danger-compound-hovered !default;
+$checkbox-invalid-mark-color-focused: ds.$color-content-danger-compound-active !default;
+
+$checkbox-border-color-disabled: ds.$checkbox-color-unchecked-default-border-disabled !default;
+$checkbox-foreground-disabled-color: ds.$checkbox-color-checked-default-icon-disabled !default;

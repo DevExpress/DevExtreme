@@ -1,0 +1,6 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$splitter-inactive-color: ds.$color-border-neutral-default-rest !default;
+$splitter-bg: ds.$color-surface-primary-alpha-active !default;

@@ -1,0 +1,29 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$switch-accent-color: ds.$switch-color-checked-bg-rest !default;
+$switch-accent-color-hover: ds.$switch-color-checked-bg-hovered !default;
+$switch-accent-color-focused: ds.$switch-color-checked-bg-active !default;
+
+$switch-bg: ds.$switch-color-unchecked-bg-rest !default;
+
+$switch-handle-off-bg: ds.$switch-color-unchecked-trigger-rest !default;
+
+$switch-on-bg: ds.$switch-color-checked-bg-rest !default;
+
+$switch-handle-on-bg: ds.$switch-color-checked-trigger-rest !default;
+$switch-handle-border-radius: 50% !default;
+$switch-on-disabled-bg: ds.$switch-color-checked-bg-disable !default;
+$switch-handle-disabled-bg: ds.$switch-color-unchecked-trigger-disabled !default;
+$switch-border-color-disabled: ds.$switch-color-unchecked-border-disabled !default;
+$switch-off-border-color: ds.$switch-color-unchecked-border-rest !default;
+$switch-off-border-hover-color: ds.$switch-color-unchecked-border-hovered !default;
+$switch-off-border-active-color: ds.$switch-color-unchecked-border-active !default;
+
+$switch-invalid-color: ds.$color-border-danger-default-rest !default;
+$switch-invalid-color-hover: ds.$color-border-danger-default-hovered !default;
+$switch-invalid-color-focused: ds.$color-border-danger-default-hovered !default;
+
+// Subtle ring around the ON handle; no switch shadow role — relative-color bridge over the handle token (see DIVERGENCES.md)
+$switch-handle-on-shadow-color: rgb(from #{ds.$switch-color-checked-trigger-rest} r g b / 0.1) !default;
