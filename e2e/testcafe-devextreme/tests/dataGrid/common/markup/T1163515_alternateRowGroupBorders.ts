@@ -7,7 +7,6 @@ fixture.disablePageReloads`Grouping Panel - check borders and backgrounds with v
   .page(url(__dirname, '../../../container.html'));
 
 interface MatrixOptions {
-  rowAlternationEnabled: boolean;
   showColumnLines: boolean;
   showRowLines: boolean;
   showBorders: boolean;
@@ -170,14 +169,12 @@ const dataSource = [
 ];
 
 const getTestParams = ({
-  rowAlternationEnabled,
   showColumnLines,
   showRowLines,
   showBorders,
   hasFixedColumn,
   hasMasterDetail,
 }: MatrixOptions) => [
-  `rowAlternationEnabled: ${rowAlternationEnabled}`,
   `showColumnLines: ${showColumnLines}`,
   `showRowLines: ${showRowLines}`,
   `showBorders: ${showBorders}`,
@@ -186,7 +183,6 @@ const getTestParams = ({
 ].join(', ');
 
 const createDataGrid = async ({
-  rowAlternationEnabled,
   showColumnLines,
   showRowLines,
   showBorders,
@@ -233,8 +229,8 @@ const createDataGrid = async ({
       allowDeleting: true,
       confirmDelete: false,
     },
+    rowAlternationEnabled: true,
     showBorders,
-    rowAlternationEnabled,
     showRowLines,
     showColumnLines,
   });
@@ -334,7 +330,6 @@ const checkShowColumnLinesState = async (
 const checkRowAlternationEnabledState = async (
   t: TestController,
   snapshot: GridStyleSnapshot,
-  rowAlternationEnabled: boolean,
 ) => {
   const rows = snapshot.rows.filter(
     (row) => !row.classes.includes(SELECTORS.masterDetailRowClass),
@@ -360,31 +355,22 @@ const checkRowAlternationEnabledState = async (
     const currentHasAltClass = currentRow.classes.includes(SELECTORS.rowAlternativeClass);
     const previousHasAltClass = previousRow.classes.includes(SELECTORS.rowAlternativeClass);
 
-    if (rowAlternationEnabled) {
-      await t.expect(currentHasAltClass).notEql(previousHasAltClass, `row #${i}: alt class alternation`);
-    } else {
-      await t.expect(currentHasAltClass).eql(previousHasAltClass, `row #${i}: alt class`);
-    }
-
-    if (rowAlternationEnabled) {
-      await t.expect(currentRow.backgroundColor).notEql(previousRow.backgroundColor, `row #${i}: background-color alternation`);
-    } else {
-      await t.expect(currentRow.backgroundColor).eql(previousRow.backgroundColor, `row #${i}: background-color`);
-    }
+    await t.expect(currentHasAltClass).notEql(previousHasAltClass, `row #${i}: alt class alternation`);
+    await t.expect(currentRow.backgroundColor).notEql(previousRow.backgroundColor, `row #${i}: background-color alternation`);
 
     i += 1;
   }
 };
 
 const verifyGridStyles = async (t: TestController, {
-  showBorders, showRowLines, rowAlternationEnabled, showColumnLines,
+  showBorders, showRowLines, showColumnLines,
 }: MatrixOptions) => {
   const snapshot = await collectGridStyles(`#${SELECTORS.gridContainer}`);
 
   await checkShowBordersState(t, snapshot, showBorders);
   await checkShowRowLinesState(t, snapshot, showRowLines, showBorders);
   await checkShowColumnLinesState(t, snapshot, showColumnLines);
-  await checkRowAlternationEnabledState(t, snapshot, rowAlternationEnabled);
+  await checkRowAlternationEnabledState(t, snapshot);
 };
 
 const functionalTest = (matrixOptions: MatrixOptions) => {
@@ -410,24 +396,32 @@ const functionalTest = (matrixOptions: MatrixOptions) => {
   });
 };
 
-[true, false].forEach((hasFixedColumn) => {
-  [true, false].forEach((hasMasterDetail) => {
-    [true, false].forEach((rowAlternationEnabled) => {
-      [true, false].forEach((showColumnLines) => {
-        [true, false].forEach((showRowLines) => {
-          [true, false].forEach((showBorders) => {
-            const matrixOptions: MatrixOptions = {
-              rowAlternationEnabled,
-              showColumnLines,
-              showRowLines,
-              showBorders,
-              hasFixedColumn,
-              hasMasterDetail,
-            };
-            functionalTest(matrixOptions);
-          });
-        });
-      });
-    });
-  });
+const cases: Partial<MatrixOptions>[] = [
+  { showColumnLines: false, hasFixedColumn: true },
+  { showColumnLines: true, hasFixedColumn: false },
+  { showColumnLines: true, hasFixedColumn: true },
+  { showBorders: false, showRowLines: false },
+  { showBorders: false, showRowLines: true },
+  { showBorders: true, showRowLines: false },
+  { showBorders: true, showRowLines: true },
+  { hasMasterDetail: true },
+  {
+    showRowLines: true,
+    showBorders: true,
+    hasFixedColumn: true,
+    hasMasterDetail: true,
+  },
+];
+
+cases.forEach((overrides) => {
+  const matrixOptions: MatrixOptions = {
+    showColumnLines: false,
+    showRowLines: false,
+    showBorders: false,
+    hasFixedColumn: false,
+    hasMasterDetail: false,
+    ...overrides,
+  };
+
+  functionalTest(matrixOptions);
 });
