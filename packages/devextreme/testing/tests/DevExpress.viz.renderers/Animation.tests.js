@@ -1,7 +1,7 @@
 /* global currentAssert */
 
 import $ from 'jquery';
-import animationFrame from '__internal/common/core/animation/frameModule';
+import { stubAnimationFrame } from '../../helpers/animationFrameStub.js';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import animationModule from 'viz/core/renderers/animation';
@@ -49,10 +49,10 @@ import {
             this.animationController.dispose();
         },
         mockRequestAnimationFrame: function(callback) {
-            this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake(callback);
+            this.requestAnimationFrameStub = stubAnimationFrame({ request: callback });
         },
         mockCancelAnimationFrame: function(callback) {
-            this.cancelAnimationFrameStub = sinon.stub(animationFrame, 'cancelAnimationFrame').callsFake(callback);
+            this.cancelAnimationFrameStub = stubAnimationFrame({ cancel: callback });
         }
     });
 

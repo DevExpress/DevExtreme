@@ -1,13 +1,7 @@
-define(function(require) {
-    if(QUnit.urlParams['nojquery']) {
-        return;
-    }
+import $ from 'jquery';
+import 'ui/button';
 
-    const $ = require('jquery');
-
-    require('bundles/dx.all.js');
-
-
+if(!QUnit.urlParams['nojquery']) {
     QUnit.module('jquery integration');
 
     QUnit.test('renderer uses correct strategy', function(assert) {
@@ -22,4 +16,4 @@ define(function(require) {
 
         assert.equal(typeof $element.dxButton, 'function');
     });
-});
+}

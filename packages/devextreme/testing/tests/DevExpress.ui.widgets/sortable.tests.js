@@ -3,12 +3,18 @@ import pointerMock from '../../helpers/pointerMock.js';
 import 'ui/sortable';
 import 'ui/scroll_view';
 import fx from 'common/core/animation/fx';
-import animationFrame from '__internal/common/core/animation/frameModule';
+import {
+    installAnimationFrameStub,
+    stubAnimationFrameDelayed,
+    useFakeTimersWithoutAnimationFrame,
+} from '../../helpers/animationFrameStub.js';
 import browser from 'core/utils/browser';
 import translator from 'common/core/animation/translator';
 import viewPort from 'core/utils/view_port';
 
 import 'fluent_blue_light.css!';
+
+installAnimationFrameStub();
 
 QUnit.testStart(function() {
     const markup =
@@ -2640,11 +2646,9 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
 function getModuleConfigForTestsWithScroll(elementSelector, scrollSelector) {
     return {
         beforeEach: function() {
-            this.clock = sinon.useFakeTimers();
+            this.clock = useFakeTimersWithoutAnimationFrame();
 
-            this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
-                return window.setTimeout(callback, 10);
-            });
+            this.requestAnimationFrameStub = stubAnimationFrameDelayed(10);
 
             $('#qunit-fixture').addClass('qunit-fixture-visible');
             this.$element = $(elementSelector);
@@ -3367,7 +3371,7 @@ QUnit.module('With both scrolls', getModuleConfigForTestsWithScroll('#itemsWithB
 
 QUnit.module('Dragging between sortables with scroll', {
     beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
+        this.clock = useFakeTimersWithoutAnimationFrame();
 
         $('#qunit-fixture').addClass('qunit-fixture-visible');
 

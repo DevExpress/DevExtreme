@@ -3,7 +3,11 @@ import { noop } from 'core/utils/common';
 import pointerMock from '../../helpers/pointerMock.js';
 import viewPort from 'core/utils/view_port';
 import GestureEmitter from 'common/core/events/gesture/emitter.gesture.js';
-import animationFrame from '__internal/common/core/animation/frameModule';
+import {
+    installAnimationFrameStub,
+    stubAnimationFrameDelayed,
+    useFakeTimersWithoutAnimationFrame,
+} from '../../helpers/animationFrameStub.js';
 import translator from 'common/core/animation/translator';
 import fx from 'common/core/animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -11,6 +15,8 @@ import 'fluent_blue_light.css!';
 import 'ui/draggable';
 import 'ui/scroll_view';
 import 'ui/overlay';
+
+installAnimationFrameStub();
 
 $('body').css({
     minHeight: '800px',
@@ -1661,12 +1667,10 @@ QUnit.module('handle', $.extend({}, moduleConfig, {
 
 QUnit.module('autoScroll', $.extend({}, moduleConfig, {
     beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
+        this.clock = useFakeTimersWithoutAnimationFrame();
         setupDraggable(this, $('#scrollableItem'));
 
-        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
-            return window.setTimeout(callback, 10);
-        });
+        this.requestAnimationFrameStub = stubAnimationFrameDelayed(10);
 
         $('#area').hide();
         $('#items').hide();
