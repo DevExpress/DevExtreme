@@ -2102,9 +2102,6 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
 });
 
 // T1270354
-// visual: generic.light
-// visual: material.blue.light
-// visual: fluent.blue.light
 [
   { useNative: true },
   { useNative: false },
