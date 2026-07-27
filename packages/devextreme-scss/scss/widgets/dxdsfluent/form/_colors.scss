@@ -1,0 +1,10 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$form-field-item-color: ds.$color-content-neutral-default-rest !default;
+$form-item-help-text-color: ds.$color-content-neutral-subdued-rest !default;
+
+$form-group-border-color: ds.$color-border-neutral-default-rest !default;
+$form-field-required-color: $form-field-item-color !default;
+$form-field-mark-color: $form-field-item-color !default;

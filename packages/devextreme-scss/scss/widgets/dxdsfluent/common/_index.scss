@@ -1,0 +1,68 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+
+
+// adduse
+.dx-theme-marker {
+  font-family: "dx.dxdsfluent.#{$fluent-color-accent-modificator}.#{$fluent-color-theme-modificator}#{$fluent-size-postfix}";
+}
+
+// stylelint-disable declaration-no-important
+.dx-theme-accent-as-text-color {
+  color: $common-accent !important;
+}
+
+.dx-theme-text-color {
+  color: $common-text-color !important;
+}
+
+.dx-theme-background-color-as-text-color {
+  color: $common-bg !important;
+}
+
+.dx-theme-border-color-as-text-color {
+  color: $common-border-color !important;
+}
+
+.dx-theme-accent-as-background-color {
+  background-color: $common-accent !important;
+  fill: $common-accent !important;
+}
+
+.dx-theme-text-color-as-background-color {
+  background-color: $common-text-color !important;
+  fill: $common-text-color !important;
+}
+
+.dx-theme-background-color {
+  background-color: $common-bg !important;
+  fill: $common-bg !important;
+}
+
+.dx-theme-typography-background-color {
+  background-color: $common-typography-bg !important;
+}
+
+.dx-theme-border-color-as-background-color {
+  background-color: $common-border-color !important;
+  fill: $common-border-color !important;
+}
+
+.dx-theme-accent-as-border-color {
+  border-color: $common-accent !important;
+}
+
+.dx-theme-text-color-as-border-color {
+  border-color: $common-text-color !important;
+}
+
+.dx-theme-background-color-as-border-color {
+  border-color: $common-bg !important;
+}
+
+.dx-theme-border-color {
+  border-color: $common-border-color !important;
+}

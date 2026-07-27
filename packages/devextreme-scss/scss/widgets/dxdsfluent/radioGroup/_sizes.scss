@@ -1,0 +1,25 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$fluent-radio-button-vertical-margin: null !default;
+$fluent-radio-group-horizontal-gap: null !default;
+
+@if $size == "default" {
+  $fluent-radio-group-horizontal-gap: ds.$spacing-160 !default;
+  $fluent-radio-button-vertical-margin: ds.$spacing-120 !default;
+}
+
+@else if $size == "compact" {
+  $fluent-radio-group-horizontal-gap: ds.$spacing-120 !default;
+  $fluent-radio-button-vertical-margin: ds.$spacing-60 !default;
+}
+
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-radiogroup-collection-column-gap: ds.$spacing-160 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-radiogroup-radio-value-container-padding-inline-end: ds.$spacing-100 !default;
+$fluent-radiogroup-collection-column-gap-2: ds.$spacing-170 !default;

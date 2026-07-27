@@ -1,0 +1,36 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$fluent-accordion-title-horizontal-padding: null !default;
+$fluent-accordion-title-vertical-padding: ds.$spacing-60 !default;
+$fluent-accordion-body-padding: null !default;
+$fluent-accordion-title-height: null !default;
+
+$accordion-title-icon-margin: null !default;
+$accordion-title-icon-size: null !default;
+$accordion-item-border-radius: $fluent-base-border-radius !default;
+
+$fluent-accordion-item-opened-margin: null !default;
+
+@if $size == "default" {
+  $fluent-accordion-title-horizontal-padding: ds.$spacing-120 !default;
+  $fluent-accordion-body-padding: ds.$spacing-120 !default;
+  $fluent-accordion-title-height: ds.$spacing-440 !default;
+  $accordion-title-icon-margin: ds.$spacing-80 !default;
+  $accordion-title-icon-size: ds.$spacing-200 !default;
+  $fluent-accordion-item-opened-margin: 0 !default;
+}
+
+@else if $size == "compact" {
+  $fluent-accordion-title-horizontal-padding: ds.$spacing-80 !default;
+  $fluent-accordion-body-padding: ds.$spacing-80 !default;
+  $fluent-accordion-title-height: ds.$spacing-320 !default;
+  $accordion-title-icon-margin: ds.$spacing-60 !default;
+  $accordion-title-icon-size: ds.$spacing-160 !default;
+  $fluent-accordion-item-opened-margin: 0 !default;
+}
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-accordion-title-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)

@@ -1,0 +1,24 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$lookup-field-height: null !default;
+$lookup-search-padding-vertical: ds.$spacing-40 !default;
+$lookup-search-padding-vertical-top: null !default;
+$lookup-search-padding-horizontal: null !default;
+$lookup-arrow-border-radius: ds.$border-radius-20 !default;
+
+$fluent-lookup-popup-content-top: 49px !default; // dx-offscale: 49px
+
+@if $size == "default" {
+  $lookup-field-height: ds.$spacing-300 !default;
+  $lookup-search-padding-horizontal: ds.$spacing-120 !default;
+  $lookup-search-padding-vertical-top: ds.$spacing-120 !default;
+}
+
+@else if $size == "compact" {
+  $lookup-field-height: ds.$spacing-220 !default;
+  $lookup-search-padding-horizontal: ds.$spacing-80 !default;
+  $lookup-search-padding-vertical-top: ds.$spacing-80 !default;
+}

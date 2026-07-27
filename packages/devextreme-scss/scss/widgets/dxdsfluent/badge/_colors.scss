@@ -1,0 +1,10 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$badge-color: ds.$badge-color-text-rest !default;
+
+$badge-bg: ds.$badge-color-bg-rest !default;
+
+$badge-text-color-disabled: ds.$badge-color-text-disabled !default;
+$badge-background-color-disabled: ds.$badge-color-bg-disabled !default;

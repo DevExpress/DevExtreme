@@ -1,0 +1,11 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$tileview-color: ds.$color-content-neutral-default-rest !default;
+$tileview-bg: ds.$color-surface-neutral-default-rest !default;
+$tileview-border-color: ds.$color-border-neutral-subdued-rest !default;
+$tileview-hover-bg: ds.$color-surface-neutral-default-rest !default;
+$tileview-hover-border-color: ds.$color-border-primary-default-rest !default;
+$tileview-active-bg: ds.$color-surface-neutral-alpha-active !default;
+$tileview-active-color: $tileview-color !default;

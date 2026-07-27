@@ -4,7 +4,8 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  merge_group:
+  push:
+    branches: [26_1]
   workflow_dispatch:
 
 concurrency:
@@ -102,6 +103,23 @@ jobs:
           name: devextreme-npm-packages
           path: |
             artifacts/npm/*.tgz
+          retention-days: 1
+
+      - name: Build SBOMs
+        if: ${{ github.event_name == 'push' || github.event.inputs.SBOM == 'true' }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN";
+          pnpm nx build sbom;
+
+      - name: Upload SBOM artifacts
+        if: ${{ github.event_name == 'push' || github.event.inputs.SBOM == 'true' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: sbom
+          path: |
+            packages/sbom/dist/**/*
           retention-days: 1
 
   custom_bundles:

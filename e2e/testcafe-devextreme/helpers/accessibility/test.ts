@@ -1,7 +1,7 @@
 import { ElementContext } from 'axe-core';
 import type { WidgetName } from 'devextreme-testcafe-models/types';
 import { createWidget } from '../createWidget';
-import { isFluent } from '../themeUtils';
+import { getThemeName } from '../themeUtils';
 import { a11yCheck, A11yCheckOptions } from './utils';
 import { generateOptionMatrix, Options } from '../generateOptionMatrix';
 
@@ -16,7 +16,9 @@ export interface Configuration<TComponentOptions = unknown> {
 export const defaultSelector = '#container';
 const defaultOptions = {};
 const defaultCreated = async () => {};
-const defaultA11yCheckConfig = isFluent() ? {} : {
+// Only the base fluent theme runs the full ruleset; dxdsfluent (re-tokenized fluent)
+// and material re-check color-contrast only — the rest is already covered by fluent.
+const defaultA11yCheckConfig = getThemeName() === 'fluent' ? {} : {
   runOnly: 'color-contrast',
 };
 

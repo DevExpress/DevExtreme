@@ -1,0 +1,49 @@
+@use "../sizes" as *;
+@use '../../base/dataGrid/variables' as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$fluent-datagrid-cell-padding: ds.$spacing-70 !default;
+$fluent-datagrid-grouppanel-item-font-weight: ds.$font-weight-base-default !default;
+
+$area-field-border-radius: null !default;
+$area-field-top-bottom-padding: null !default;
+
+@if $size == "default" {
+  $area-field-border-radius: ds.$border-radius-60 !default;
+  $area-field-top-bottom-padding: ds.$spacing-50 !default;
+}
+
+@else if $size == "compact" {
+  $area-field-border-radius: ds.$border-radius-40 !default;
+  $area-field-top-bottom-padding: ds.$spacing-20 !default;
+}
+
+$datagrid-cell-padding: $fluent-datagrid-cell-padding !default;
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-datagrid-group-row-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)
+$fluent-datagrid-grouppanel-item-border-width: ds.$border-width-10 !default;
+$fluent-datagrid-group-panel-item-padding: $area-field-top-bottom-padding ds.$spacing-100 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-datagrid-header-filter-outline: ds.$spacing-20 solid !default;
+$fluent-datagrid-header-filter-outline-offset: ds.$spacing-20 !default;
+$fluent-datagrid-filter-panel-clear-filter-outline-offset: ds.$spacing-30 !default;
+$fluent-datagrid-button-margin-left: ds.$spacing-100 !default;
+$fluent-datagrid-button-margin-top: ds.$spacing-100 !default;
+$fluent-datagrid-error-message-margin-bottom: ds.$spacing-200 !default;
+$fluent-datagrid-button-margin-right: ds.$spacing-100 !default;
+
+$fluent-datagrid-group-row-border: ds.$border-width-10 solid !default;
+$fluent-datagrid-sticky-column-border: ds.$border-width-20 solid !default;
+$fluent-datagrid-cell-focus-outline: ds.$spacing-20 solid !default;
+
+// Base submodule sizing injected with design tokens (B2 tail)
+$fluent-datagrid-common-group-min-width: ds.$spacing-300 !default;
+$fluent-datagrid-common-addrow-margin-right: ds.$spacing-100 !default;
+$fluent-datagrid-common-addrow-margin-left: ds.$spacing-60 !default;
+$fluent-datagrid-common-form-buttons-border-radius: ds.$border-radius-30 !default;
+$fluent-datagrid-common-form-buttons-margin-left: ds.$spacing-100 !default;
+$fluent-datagrid-common-form-buttons-margin-right: ds.$spacing-60 !default;

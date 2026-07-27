@@ -1,0 +1,114 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$diagram-toolbox-width: null !default;
+$diagram-toolbox-h-padding: null !default;
+$diagram-toolbox-accordion-v-padding: null !default;
+$diagram-toolbox-input-h-padding: null !default;
+$diagram-toolbox-input-v-padding: null !default;
+$diagram-toolbox-input-image-size: null !default;
+$diagram-toolbox-input-image-padding: null !default;
+$diagram-toolbox-mobile-padding: null !default;
+$diagram-properties-panel-padding: null !default;
+$diagram-properties-panel-spacing: null !default;
+$diagram-properties-layout-icon-size: null !default;
+$diagram-touchbar-item-padding: null !default;
+$diagram-floating-toolbar-items-height: null !default;
+$diagram-floating-toolbar-editor-padding: null !default;
+$diagram-floating-toolbar-editor-button-padding: null !default;
+$diagram-small-editor-width: null !default;
+$diagram-medium-editor-width: null !default;
+$diagram-large-editor-width: null !default;
+
+$diagram-toolbox-input-margin: ds.$spacing-20 !default;
+
+@if $size == "default" {
+  $diagram-toolbox-width: 156px !default; // dx-offscale: 156px
+  $diagram-toolbox-h-padding: ds.$spacing-120 !default;
+  $diagram-toolbox-accordion-v-padding: ds.$spacing-80 !default;
+  $diagram-toolbox-input-h-padding: ds.$spacing-90 !default;
+  $diagram-toolbox-input-v-padding: ds.$spacing-120 !default;
+  $diagram-toolbox-input-image-size: ds.$spacing-180 !default;
+  $diagram-toolbox-input-image-padding: ds.$spacing-60 ds.$spacing-40 !default;
+  $diagram-toolbox-mobile-padding: 68px !default; // dx-offscale: 68px
+
+  $diagram-properties-panel-padding: 0 !default;
+  $diagram-properties-panel-spacing: ds.$spacing-160 !default;
+  $diagram-properties-layout-icon-size: ds.$spacing-640 !default;
+
+  $diagram-touchbar-item-padding: ds.$spacing-100 !default;
+
+  $diagram-floating-toolbar-items-height: ds.$spacing-360 !default;
+  $diagram-floating-toolbar-editor-padding: ds.$spacing-80 ds.$spacing-60 !default;
+  $diagram-floating-toolbar-editor-button-padding: ds.$spacing-40 !default;
+
+  $diagram-small-editor-width: ds.$spacing-1000 !default;
+  $diagram-medium-editor-width: 180px !default; // dx-offscale: 180px
+  $diagram-large-editor-width: 280px !default; // dx-offscale: 280px
+}
+
+@else if $size == "compact" {
+  $diagram-toolbox-width: 130px !default; // dx-offscale: 130px
+  $diagram-toolbox-h-padding: ds.$spacing-100 !default;
+  $diagram-toolbox-accordion-v-padding: ds.$spacing-60 !default;
+  $diagram-toolbox-input-h-padding: ds.$spacing-80 !default;
+  $diagram-toolbox-input-v-padding: ds.$spacing-80 !default;
+  $diagram-toolbox-input-image-size: ds.$spacing-140 !default;
+  $diagram-toolbox-input-image-padding: ds.$spacing-30 ds.$spacing-40 !default;
+  $diagram-toolbox-mobile-padding: 58px !default; // dx-offscale: 58px
+
+  $diagram-properties-panel-padding: ds.$spacing-60 !default;
+  $diagram-properties-panel-spacing: ds.$spacing-80 !default;
+  $diagram-properties-layout-icon-size: ds.$spacing-480 !default;
+
+  $diagram-touchbar-item-padding: ds.$spacing-70 !default;
+
+  $diagram-floating-toolbar-items-height: ds.$spacing-280 !default;
+  $diagram-floating-toolbar-editor-padding: ds.$spacing-60 ds.$spacing-40 !default;
+  $diagram-floating-toolbar-editor-button-padding: ds.$spacing-20 !default;
+
+  $diagram-small-editor-width: ds.$spacing-800 !default;
+  $diagram-medium-editor-width: ds.$spacing-1200 !default;
+  $diagram-large-editor-width: 220px !default; // dx-offscale: 220px
+}
+
+// Values hoisted from style-file literals (tokenized)
+$diagram-popup-close-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
+$diagram-popup-close-icon-line-height: ds.$line-height-120 !default; // dx-icon-glyph-size: text roles not applicable
+$diagram-toolbar-colorbutton-border-width: ds.$border-width-30 !default;
+$diagram-floating-toolbar-container-padding: ds.$spacing-40 !default;
+$diagram-button-margin: ds.$spacing-20 !default;
+$diagram-item-padding: 0 ds.$spacing-40 0 0 !default;
+$diagram-closebutton-margin: ds.$spacing-10 0 0 !default;
+$diagram-icon-width: ds.$spacing-140 !default;
+$diagram-icon-height: ds.$spacing-140 !default;
+$diagram-icon-padding: ds.$spacing-20 !default;
+$diagram-title-padding: ds.$spacing-80 ds.$spacing-80 0 0 !default;
+$diagram-icon-margin-left: ds.$spacing-120 !default;
+$diagram-icon-margin-right: ds.$spacing-120 !default;
+$diagram-item-text-padding-left: ds.$spacing-40 !default;
+$diagram-separator-width: ds.$spacing-10 !default;
+$diagram-toolbar-wrapper-border-bottom: ds.$border-width-10 solid !default;
+$diagram-toolbox-input-container-border-bottom: ds.$border-width-10 solid transparent !default;
+$diagram-toolbox-input-container-border-top: ds.$border-width-10 solid transparent !default;
+$diagram-accordion-item-border-bottom: ds.$border-width-10 solid transparent !default;
+$diagram-toolbox-title-size: ds.$spacing-180 !default;
+$diagram-button-min-width: ds.$spacing-240 !default;
+$diagram-button-min-height: ds.$spacing-240 !default;
+$diagram-accordion-item-title-min-height: ds.$spacing-320 !default;
+$diagram-popup-title-toolbar-font-size: 0.8em !default; // dx-relative: scales with the parent font-size
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-diagram-root-height: 600px !default; // dx-offscale: 600px
+$fluent-diagram-root-min-height: 350px !default; // dx-offscale: 350px
+$fluent-diagram-toolbar-wrapper-padding: ds.$spacing-50 !default;
+$fluent-diagram-button-min-height: ds.$spacing-140 !default;
+$fluent-diagram-popup-content-padding: ds.$spacing-80 !default;
+$fluent-diagram-colorview-palette-min-width: 300px !default; // dx-offscale: 300px
+$fluent-diagram-colorview-hue-scale-cell-margin-left: ds.$spacing-120 !default;
+$fluent-diagram-loading-indicator-width: ds.$spacing-640 !default;
+$fluent-diagram-loading-indicator-height: ds.$spacing-640 !default;
+$fluent-diagram-context-toolbox-target-width: ds.$spacing-10 !default;
+$fluent-diagram-context-toolbox-target-height: ds.$spacing-10 !default;

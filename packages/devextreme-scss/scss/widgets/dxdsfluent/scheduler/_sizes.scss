@@ -1,0 +1,327 @@
+@use "../sizes" as *;
+@use "../button/colors" as *;
+@use "../form/sizes" as *;
+@use "../toolbar/sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+
+$fluent-scheduler-workspace-date-table-cell-height: null !default;
+$fluent-scheduler-toolbar-item-offset: null !default;
+$fluent-scheduler-navigator-height: null !default;
+$fluent-scheduler-header-panel-day-font-size: null !default;
+$fluent-scheduler-appointment-tooltip-title-font-size: null !default;
+$fluent-scheduler-appointment-tooltip-date-font-size: null !default;
+$fluent-scheduler-workspace-month-cell-left-offset: null !default;
+$fluent-scheduler-appointment-content-padding: null !default;
+$fluent-scheduler-recurring-appointment-content-padding: null !default;
+$fluent-scheduler-appointment-content-padding-rtl: null !default;
+$fluent-scheduler-recurring-appointment-content-padding-rtl: null !default;
+$fluent-scheduler-dropdown-button-height: null !default;
+$fluent-scheduler-dropdown-button-padding: null !default;
+$fluent-scheduler-dropdown-button-margin: null !default;
+$fluent-scheduler-dropdown-button-vertical-margin: null !default;
+$fluent-scheduler-dropdown-button-adaptive-margin: null !default;
+$fluent-scheduler-dropdown-button-adaptive-vertical-margin: null !default;
+$fluent-scheduler-appointment-tooltip-content-margin-left: null !default;
+$fluent-tooltip-marker-dimension: null !default;
+$fluent-scheduler-appointment-tooltip-title-margin-top: null !default;
+$fluent-scheduler-appointment-tooltip-remove-padding-top: null !default;
+
+$fluent-scheduler-appointment-popup-toolbar-height: null !default;
+$fluent-scheduler-appointment-popup-icon-container-height: null !default;
+$fluent-scheduler-appointment-popup-icon-padding-right: null !default;
+$fluent-scheduler-appointment-popup-icon-margin-top: null !default;
+$fluent-scheduler-appointment-popup-item-padding-horizontal: null !default;
+$fluent-scheduler-appointment-popup-all-day-item-height: null !default;
+$fluent-scheduler-appointment-popup-days-of-week-buttons-gap: null !default;
+$fluent-scheduler-appointment-popup-repeat-end-item-height: null !default;
+
+$fluent-scheduler-appointment-short-content-padding: null !default;
+$fluent-scheduler-appointment-15min-height: null !default;
+$fluent-scheduler-appointment-20min-height: null !default;
+$fluent-scheduler-appointment-25min-height: null !default;
+$fluent-scheduler-appointment-10min-recurrence-padding-right: null !default;
+$fluent-scheduler-appointment-10min-title-font-size: null !default;
+$fluent-scheduler-appointment-10min-title-line-height: null !default;
+$fluent-scheduler-appointment-10min-icon-font-size: null !default;
+$fluent-scheduler-appointment-10min-icon-right: null !default;
+$fluent-scheduler-appointment-15min-recurrence-padding-right: null !default;
+$fluent-scheduler-appointment-15min-title-font-size: null !default;
+$fluent-scheduler-appointment-15min-title-line-height: null !default;
+$fluent-scheduler-appointment-15min-icon-font-size: null !default;
+$fluent-scheduler-appointment-15min-icon-right: null !default;
+$fluent-scheduler-appointment-20min-recurrence-padding-right: null !default;
+$fluent-scheduler-appointment-20min-icon-right: null !default;
+
+$scheduler-left-column-width: 65px !default; // dx-offscale: 65px
+$fluent-scheduler-timeline-date-table-cell-height: 50px !default; // dx-offscale: 50px
+
+$scheduler-border-radius: 0 !default;
+
+$fluent-scheduler-navigator-icon-font-size: $fluent-base-icon-size;
+$fluent-scheduler-appointment-month-text-size: ds.$spacing-120 !default;
+$fluent-scheduler-workspace-info-text-size: ds.$spacing-160 !default;
+$fluent-scheduler-all-day-title-font-size: ds.$font-size-caption-md !default;
+$fluent-scheduler-time-panel-font-size: ds.$font-size-caption-md !default;
+$fluent-scheduler-header-panel-margin: ds.$spacing-140 !default;
+$fluent-scheduler-group-header-font-size: ds.$font-size-title-xs !default;
+$fluent-scheduler-group-header-table-cell-width: ds.$spacing-1000 !default;
+$fluent-scheduler-appointment-transparent-left-border: ds.$spacing-10 solid transparent !default;
+$fluent-scheduler-appointment-transparent-right-border: ds.$spacing-10 solid transparent !default;
+$fluent-scheduler-workspace-month-header-height: ds.$spacing-220 !default;
+$fluent-scheduler-workspace-month-timeline--time-height: ds.$spacing-340 !default;
+
+$agenda-appointment-title-font-size: null !default;
+$fluent-scheduler-header-height: null !default;
+$fluent-scheduler-header-offset: null !default;
+
+$scheduler-timeline-cell-height: 50px !default; // dx-offscale: 50px
+
+$header-day-element-height: null !default;
+
+$fluent-scheduler-collapsed-all-day-table-cell-height: null !default;
+
+$header-panel-time-cell-height: ds.$spacing-320 !default;
+$header-panel-time-cell-padding: null !default;
+
+
+@if $size == "default" {
+  $fluent-scheduler-collapsed-all-day-table-cell-height: ds.$spacing-320 !default;
+  $header-panel-time-cell-padding: ds.$spacing-120 !default;
+
+  $header-day-element-height: ds.$spacing-260;
+  $fluent-scheduler-workspace-date-table-cell-height: 38px !default; // dx-offscale: 38px
+
+  $fluent-scheduler-navigator-height: ds.$spacing-360 !default;
+  $fluent-scheduler-header-panel-day-font-size: ds.$font-size-title-sm !default;
+  $fluent-scheduler-header-height: 46px !default; // dx-offscale: 46px
+  $fluent-scheduler-header-offset: 0 ds.$spacing-120 !default;
+  $fluent-scheduler-toolbar-item-offset: ds.$spacing-40 !default;
+
+  $fluent-scheduler-appointment-tooltip-title-font-size: ds.$font-size-title-sm !default;
+  $fluent-scheduler-appointment-tooltip-date-font-size: ds.$font-size-140 !default; // dx-no-semantic-role: compact branch (110) is off the role scale
+  $fluent-scheduler-workspace-month-cell-left-offset: ds.$spacing-80 !default;
+
+  $fluent-scheduler-appointment-content-padding: ds.$spacing-60 ds.$spacing-80 ds.$spacing-60 ds.$spacing-120 !default;
+  $fluent-scheduler-recurring-appointment-content-padding: ds.$spacing-60 ds.$spacing-200 ds.$spacing-60 ds.$spacing-120 !default;
+  $fluent-scheduler-appointment-content-padding-rtl: ds.$spacing-60 ds.$spacing-120 ds.$spacing-60 ds.$spacing-80 !default;
+  $fluent-scheduler-recurring-appointment-content-padding-rtl: ds.$spacing-60 ds.$spacing-120 ds.$spacing-60 ds.$spacing-200 !default;
+  $fluent-scheduler-dropdown-button-height: ds.$spacing-220 !default;
+  $fluent-scheduler-dropdown-button-padding: ds.$spacing-40 !default;
+  $fluent-scheduler-dropdown-button-margin: ds.$spacing-50 ds.$spacing-10 ds.$spacing-30 ds.$spacing-30 !default;
+  $fluent-scheduler-dropdown-button-vertical-margin: ds.$spacing-50 ds.$spacing-30 ds.$spacing-30 ds.$spacing-30 !default;
+  $fluent-scheduler-dropdown-button-adaptive-margin: 0 ds.$spacing-20 !default;
+  $fluent-scheduler-dropdown-button-adaptive-vertical-margin: 0 ds.$spacing-20 0 ds.$spacing-10 !default;
+
+  $fluent-scheduler-appointment-tooltip-content-margin-left: ds.$spacing-60 !default;
+  $fluent-tooltip-marker-dimension: ds.$spacing-120 !default;
+  $fluent-scheduler-appointment-tooltip-title-margin-top: 0 !default;
+  $fluent-scheduler-appointment-tooltip-remove-padding-top: ds.$spacing-10 !default;
+
+  $fluent-scheduler-appointment-popup-toolbar-height: ds.$spacing-560 !default;
+  $fluent-scheduler-appointment-popup-icon-container-height: ds.$spacing-320 !default;
+  $fluent-scheduler-appointment-popup-icon-padding-right: ds.$spacing-100 !default;
+  $fluent-scheduler-appointment-popup-icon-margin-top: ds.$spacing-240 !default;
+  $fluent-scheduler-appointment-popup-item-padding-horizontal: ds.$spacing-60 !default;
+  $fluent-scheduler-appointment-popup-all-day-item-height: ds.$spacing-400 !default;
+  $fluent-scheduler-appointment-popup-days-of-week-buttons-gap: ds.$spacing-120 !default;
+  $fluent-scheduler-appointment-popup-repeat-end-item-height: ds.$spacing-320 !default;
+
+  $agenda-appointment-title-font-size: ds.$font-size-base-md;
+
+  $fluent-scheduler-appointment-short-content-padding: 0 ds.$spacing-80 0 ds.$spacing-120 !default;
+  $fluent-scheduler-appointment-15min-height: 17px !default; // literal: used in @container conditions where var() is invalid
+  $fluent-scheduler-appointment-20min-height: 24px !default; // literal: used in @container conditions where var() is invalid
+  $fluent-scheduler-appointment-25min-height: 32px !default; // literal: used in @container conditions where var() is invalid
+
+  $fluent-scheduler-appointment-10min-recurrence-padding-right: ds.$spacing-140 !default;
+  $fluent-scheduler-appointment-10min-title-font-size: ds.$spacing-80 !default;
+  $fluent-scheduler-appointment-10min-title-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
+  $fluent-scheduler-appointment-10min-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
+  $fluent-scheduler-appointment-10min-icon-right: ds.$spacing-20 !default;
+
+  $fluent-scheduler-appointment-15min-recurrence-padding-right: ds.$spacing-140 !default;
+  $fluent-scheduler-appointment-15min-title-font-size: ds.$font-size-base-sm !default;
+  $fluent-scheduler-appointment-15min-title-line-height: ds.$line-height-180 !default; // dx-no-semantic-role: 180 is off the line-height-role scale
+  $fluent-scheduler-appointment-15min-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
+  $fluent-scheduler-appointment-15min-icon-right: ds.$spacing-20 !default;
+
+  $fluent-scheduler-appointment-20min-icon-right: ds.$spacing-20 !default;
+  $fluent-scheduler-appointment-20min-recurrence-padding-right: ds.$spacing-180 !default;
+}
+
+@else if $size == "compact" {
+  $fluent-scheduler-collapsed-all-day-table-cell-height: ds.$spacing-240 !default;
+  $header-panel-time-cell-padding: ds.$spacing-80 !default;
+
+  $header-day-element-height: ds.$spacing-240;
+  $fluent-scheduler-workspace-date-table-cell-height: ds.$spacing-280 !default;
+
+  $fluent-scheduler-navigator-height: ds.$spacing-280 !default;
+  $fluent-scheduler-header-panel-day-font-size: ds.$font-size-title-xs !default;
+  $fluent-scheduler-header-height: ds.$spacing-340 !default;
+  $fluent-scheduler-header-offset: ds.$spacing-20 ds.$spacing-80 !default;
+  $fluent-scheduler-toolbar-item-offset: ds.$spacing-40 !default;
+
+  $fluent-scheduler-appointment-tooltip-title-font-size: ds.$font-size-title-xs !default;
+  $fluent-scheduler-appointment-tooltip-date-font-size: ds.$font-size-110 !default; // dx-no-semantic-role: 110 is off the font-size-role scale
+  $fluent-scheduler-workspace-month-cell-left-offset: ds.$spacing-40 !default;
+
+  $fluent-scheduler-appointment-content-padding: ds.$spacing-40 ds.$spacing-60 ds.$spacing-40 ds.$spacing-80 !default;
+  $fluent-scheduler-recurring-appointment-content-padding: ds.$spacing-40 ds.$spacing-160 ds.$spacing-40 ds.$spacing-80 !default;
+  $fluent-scheduler-appointment-content-padding-rtl: ds.$spacing-40 ds.$spacing-80 ds.$spacing-40 ds.$spacing-60 !default;
+  $fluent-scheduler-recurring-appointment-content-padding-rtl: ds.$spacing-40 ds.$spacing-80 ds.$spacing-40 ds.$spacing-160 !default;
+  $fluent-scheduler-dropdown-button-height: ds.$spacing-180 !default;
+  $fluent-scheduler-dropdown-button-padding: ds.$spacing-20 !default;
+  $fluent-scheduler-dropdown-button-margin: ds.$spacing-20 ds.$spacing-10 ds.$spacing-20 ds.$spacing-30 !default;
+  $fluent-scheduler-dropdown-button-vertical-margin: ds.$spacing-20 ds.$spacing-10 ds.$spacing-20 ds.$spacing-10 !default;
+  $fluent-scheduler-dropdown-button-adaptive-margin: 0 ds.$spacing-20 !default;
+  $fluent-scheduler-dropdown-button-adaptive-vertical-margin: 0 ds.$spacing-20 0 ds.$spacing-10 !default;
+
+  $fluent-scheduler-appointment-tooltip-content-margin-left: ds.$spacing-80 !default;
+  $fluent-tooltip-marker-dimension: ds.$spacing-180 !default;
+  $fluent-scheduler-appointment-tooltip-title-margin-top: ds.$spacing-30 !default;
+  $fluent-scheduler-appointment-tooltip-remove-padding-top: ds.$spacing-20 !default;
+
+  $fluent-scheduler-appointment-popup-toolbar-height: ds.$spacing-480 !default;
+  $fluent-scheduler-appointment-popup-icon-container-height: ds.$spacing-240 !default;
+  $fluent-scheduler-appointment-popup-icon-padding-right: ds.$spacing-80 !default;
+  $fluent-scheduler-appointment-popup-icon-margin-top: ds.$spacing-180 !default;
+  $fluent-scheduler-appointment-popup-item-padding-horizontal: ds.$spacing-40 !default;
+  $fluent-scheduler-appointment-popup-all-day-item-height: ds.$spacing-300 !default;
+  $fluent-scheduler-appointment-popup-days-of-week-buttons-gap: ds.$spacing-80 !default;
+  $fluent-scheduler-appointment-popup-repeat-end-item-height: ds.$spacing-240 !default;
+
+  $agenda-appointment-title-font-size: ds.$spacing-130;
+
+  $fluent-scheduler-appointment-short-content-padding: 0 ds.$spacing-80 0 ds.$spacing-120 !default;
+  $fluent-scheduler-appointment-15min-height: 17px !default; // literal: used in @container conditions where var() is invalid
+  $fluent-scheduler-appointment-20min-height: 24px !default; // literal: used in @container conditions where var() is invalid
+  $fluent-scheduler-appointment-25min-height: 32px !default; // literal: used in @container conditions where var() is invalid
+
+  $fluent-scheduler-appointment-10min-recurrence-padding-right: ds.$spacing-140 !default;
+  $fluent-scheduler-appointment-10min-title-font-size: ds.$spacing-80 !default;
+  $fluent-scheduler-appointment-10min-title-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
+  $fluent-scheduler-appointment-10min-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
+  $fluent-scheduler-appointment-10min-icon-right: ds.$spacing-20 !default;
+
+  $fluent-scheduler-appointment-15min-recurrence-padding-right: ds.$spacing-160 !default;
+  $fluent-scheduler-appointment-15min-title-font-size: ds.$font-size-base-sm !default;
+  $fluent-scheduler-appointment-15min-title-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
+  $fluent-scheduler-appointment-15min-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
+  $fluent-scheduler-appointment-15min-icon-right: ds.$spacing-50 !default;
+
+  $fluent-scheduler-appointment-20min-recurrence-padding-right: ds.$spacing-200 !default;
+  $fluent-scheduler-appointment-20min-icon-right: ds.$spacing-50 !default;
+}
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-scheduler-group-header-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)
+$fluent-scheduler-tooltip-subject-font-weight: ds.$font-weight-base-strong !default;
+$fluent-scheduler-appointment-title-font-size: ds.$font-size-base-sm !default;
+$fluent-scheduler-appointment-details-font-size: ds.$font-size-caption-sm !default;
+$fluent-scheduler-header-panel-cell-date-font-size: ds.$font-size-title-xs !default;
+$fluent-scheduler-navigator-button-font-size: ds.$font-size-base-sm !default;
+$fluent-scheduler-appointment-border-radius: ds.$border-radius-40 !default;
+$fluent-scheduler-time-panel-cell-margin-top: -6px !default; // dx-offscale: -6px
+$fluent-scheduler-small-padding-right: ds.$spacing-20 !default;
+$fluent-scheduler-small-padding-left: ds.$spacing-20 !default;
+$fluent-scheduler-date-time-indicator-height: ds.$spacing-20 !default;
+$fluent-scheduler-header-panel-cell-padding-bottom: ds.$spacing-20 !default;
+$fluent-scheduler-header-panel-cell-date-margin-bottom: ds.$spacing-10 !default;
+$fluent-scheduler-small-margin-top: ds.$spacing-40 !default;
+$fluent-scheduler-small-margin-bottom: ds.$spacing-40 !default;
+$fluent-scheduler-small-margin-left: ds.$spacing-80 !default;
+$fluent-scheduler-month-appointment-content-padding-rtl: ds.$spacing-40 ds.$spacing-120 0 ds.$spacing-80 !default;
+$fluent-scheduler-month-recurrence-appointment-content-padding-rtl: ds.$spacing-40 ds.$spacing-120 0 ds.$spacing-200 !default;
+$fluent-scheduler-month-appointment-content-padding: ds.$spacing-40 ds.$spacing-80 0 ds.$spacing-120 !default;
+$fluent-scheduler-month-recurrence-appointment-content-padding: ds.$spacing-40 ds.$spacing-200 0 ds.$spacing-120 !default;
+$fluent-scheduler-date-table-cell-height: ds.$spacing-1000 !default;
+$fluent-scheduler-appointment-collector-margin-left: ds.$spacing-520 !default;
+$fluent-scheduler-appointment-collector-margin-right: ds.$spacing-520 !default;
+$fluent-scheduler-group-header-content-top: ds.$spacing-80 !default;
+$fluent-scheduler-widget-margin-bottom: ds.$spacing-30 !default;
+$fluent-scheduler-appointment-strip-width: ds.$spacing-60 !default;
+$fluent-scheduler-group-header-content-padding-top: ds.$spacing-20 !default;
+$fluent-scheduler-tooltip-appointment-item-marker-body-margin-top: ds.$spacing-120 !default;
+$fluent-scheduler-tooltip-appointment-item-content-date-margin-top: ds.$spacing-40 !default;
+$fluent-scheduler-group-header-width: ds.$spacing-1000 !default;
+$fluent-scheduler-group-header-border-bottom: ds.$border-width-10 solid !default;
+$fluent-scheduler-last-group-cell-border-right: ds.$border-width-10 solid !default;
+$fluent-scheduler-rtl-border-left: ds.$border-width-10 solid !default;
+$fluent-scheduler-list-item-border-bottom: ds.$border-width-10 solid !default;
+$fluent-scheduler-month-date-text-size: ds.$font-size-base-md !default;
+$scheduler-first-of-month-border: ds.$border-width-10 solid !default;
+$fluent-scheduler-agenda-time-panel-cell-padding: ds.$spacing-80 !default;
+$fluent-scheduler-scrollable-content-min-height: 600px !default; // dx-offscale: 600px
+$fluent-scheduler-header-panel-empty-cell-border-bottom-width: ds.$border-width-10 !default;
+$fluent-scheduler-appointment-strip-border-top-right-radius: ds.$border-radius-60 !default;
+$fluent-scheduler-appointment-strip-border-bottom-right-radius: ds.$border-radius-60 !default;
+$fluent-scheduler-appointment-strip-border-top-left-radius: ds.$border-radius-60 !default;
+$fluent-scheduler-appointment-strip-border-bottom-left-radius: ds.$border-radius-60 !default;
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-scheduler-agenda-title-font-weight: ds.$font-weight-base-stronger !default;
+$fluent-scheduler-agenda-details-font-size: ds.$font-size-caption-md !default;
+$fluent-scheduler-appointment-icon-font-size: ds.$font-size-180 !default; // dx-icon-glyph-size: text roles not applicable
+
+// Base-layer sizing injected with design tokens (wave B2 — scheduler/views)
+$fluent-scheduler-views-header-border: ds.$border-width-20 solid !default;
+$fluent-scheduler-views-empty-cell-border-bottom: ds.$border-width-10 solid !default;
+$fluent-scheduler-views-empty-cell-border-right: ds.$border-width-10 solid !default;
+$fluent-scheduler-views-empty-cell-border-left: ds.$border-width-10 solid !default;
+$fluent-scheduler-views-first-child-border-left: ds.$border-width-10 solid transparent !default;
+$fluent-scheduler-views-time-panel-border-bottom: ds.$border-width-10 solid transparent !default;
+$fluent-scheduler-views-group-header-padding: 0 ds.$spacing-50 !default;
+$fluent-scheduler-views-group-header-padding-alt: 0 ds.$spacing-50 0 ds.$spacing-100 !default;
+$fluent-scheduler-views-time-indicator-height: ds.$spacing-10 !default;
+$fluent-scheduler-views-group-header-content-height: ds.$spacing-400 !default;
+$fluent-scheduler-views-vertical-group-min-height: ds.$spacing-1000 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-scheduler-appointment-content-padding-2: 0 ds.$spacing-70 !default;
+$fluent-scheduler-appointment-recurrence-icon-top: ds.$spacing-90 !default;
+$fluent-scheduler-header-panel-current-time-cell-height: ds.$spacing-20 !default;
+$fluent-scheduler-appointment-content-padding-3: 0 25px 0 ds.$spacing-70 !default; // dx-offscale: 25px
+$fluent-scheduler-rtl-padding: 0 ds.$spacing-70 0 25px !default; // dx-offscale: 25px
+$fluent-scheduler-appointment-collector-width: ds.$spacing-240 !default;
+$fluent-scheduler-appointment-content-padding-right: ds.$spacing-50 !default;
+
+// Base submodule sizing injected with design tokens (B2 tail)
+$fluent-scheduler-common-collector-margin: 0 ds.$spacing-30 !default;
+$fluent-scheduler-common-collector-size: ds.$spacing-280 !default;
+
+// Base submodule sizing injected with design tokens (B2 tail)
+$fluent-scheduler-tooltip-width: 360px !default;  // dx-offscale: 360px
+$fluent-scheduler-tooltip-content-padding: ds.$spacing-50 !default;
+$fluent-scheduler-tooltip-title-margin-top: ds.$spacing-70 !default;
+$fluent-scheduler-tooltip-title-margin-left: ds.$spacing-50 !default;
+$fluent-scheduler-tooltip-date-margin: ds.$spacing-50 ds.$spacing-100 !default;
+$fluent-scheduler-tooltip-remove-margin-top: ds.$spacing-100 !default;
+
+// B2 tail: scheduler font-sizes
+$fluent-scheduler-appointment-content-details-font-size: ds.$font-size-110 !default; // dx-no-semantic-role: 11px has no font-size role
+$fluent-scheduler-tooltip-subject-font-size: ds.$font-size-title-sm !default;
+$fluent-scheduler-tooltip-date-font-size: ds.$font-size-caption-md !default;
+
+// B2 tail: deep scheduler submodules (multi-hop)
+$fluent-scheduler-appointment-reduced-icon-top: ds.$spacing-30 !default;
+$fluent-scheduler-appointment-active-marker-border-radius: ds.$border-radius-40 !default;
+$fluent-scheduler-appointment-content-details-margin-top: ds.$spacing-20 !default;
+$fluent-scheduler-appointment-reduced-icon-rtl-left: ds.$spacing-30 !default;
+$fluent-agenda-appointment-item-padding: ds.$spacing-100 !default;
+$fluent-agenda-appointment-item-border-radius: ds.$border-radius-50 !default;
+$fluent-agenda-appointment-right-layout-margin-left: ds.$spacing-100 !default;
+$fluent-agenda-appointment-allday-padding-right: ds.$spacing-50 !default;
+$fluent-agenda-appointment-resource-item-margin-left: ds.$spacing-150 !default;
+$fluent-agenda-appointment-resource-value-margin-left: ds.$spacing-30 !default;
+$fluent-agenda-appointment-rtl-margin-right: ds.$spacing-100 !default;
+$fluent-scheduler-timeline-min-height: ds.$spacing-1000 !default;
+$fluent-scheduler-timeline-group-two-empty-cell-width: ds.$spacing-1600 !default;
+$fluent-scheduler-timeline-group-header-width: ds.$spacing-800 !default;
+$fluent-scheduler-timeline-group-three-empty-cell-width: 240px !default; // dx-offscale: 240px
+$fluent-scheduler-timeline-cell-width: 200px !default; // dx-offscale: 200px
+$fluent-scheduler-agenda-left-column-width: 70px !default; // dx-offscale: 70px
+$fluent-scheduler-group-header-agenda-font-size: ds.$font-size-180 !default; // dx-no-semantic-role: 18px has no font-size role
+$fluent-scheduler-agenda-date-table-padding-top: ds.$spacing-100 !default;
+$fluent-scheduler-renovation-virtual-row-height: 50px !default; // dx-offscale: 50px

@@ -1,6 +1,9 @@
 @use "./mixins" as *;
 @use "../mixins" as *;
 
+// adduse
+
+$lookup-popup-search-list-height: 90% !default; // dx-relative-%
 .dx-lookup {
   margin: 0;
 
@@ -77,7 +80,7 @@
 
 .dx-lookup-popup-search {
   .dx-list {
-    height: 90%;
+    height: $lookup-popup-search-list-height;
   }
 }
 

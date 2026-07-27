@@ -8,7 +8,8 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  merge_group:
+  push:
+    branches: [26_1]
   workflow_dispatch:
 
 env:
@@ -21,10 +22,150 @@ jobs:
     runs-on: ubuntu-slim
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
+      styles-changed: ${{ steps.changes.outputs.styles }}
     steps:
+      - uses: actions/checkout@v6
       - name: Check RUN_TESTS flag
         id: check
         run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
+
+      - uses: dorny/paths-filter@v4
+        id: changes
+        with:
+          filters: |
+            styles:
+              - 'packages/devextreme-scss/scss/**'
+              - 'packages/devextreme-scss/icons/**'
+              - 'packages/devextreme-scss/images/**'
+              - 'packages/devextreme-scss/fonts/**'
+              - 'packages/devextreme/js/**/themes/**'
+
+  get-changes:
+    runs-on: ubuntu-latest
+    needs: check-should-run
+    if: github.event_name == 'pull_request' && needs.check-should-run.outputs.should-run == 'true'
+    name: Get changed demos
+    timeout-minutes: 5
+    outputs:
+      has-changed-demos: ${{ steps.check-changes.outputs.has-changed-demos }}
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v6
+
+      - name: Get changed files
+        uses: DevExpress/github-actions/get-changed-files@get-changed-files
+        with:
+          gh-token: ${{ secrets.GITHUB_TOKEN }}
+          paths: 'apps/demos/Demos/**/*'
+          output: apps/demos/changed-files.json
+
+      - name: Display changed files
+        id: check-changes
+        run: |
+          HAS_CHANGED="false"
+          if [ -f "apps/demos/changed-files.json" ]; then
+            DEMO_COUNT=$(jq length apps/demos/changed-files.json)
+            echo "Found changed-files.json"
+            echo "Content of changed-files.json:"
+            cat apps/demos/changed-files.json
+            echo "Number of changed files: $DEMO_COUNT"
+            if [ "$DEMO_COUNT" -gt 0 ]; then
+              HAS_CHANGED="true"
+            fi
+          else
+            echo "changed-files.json not found"
+          fi
+          echo "has-changed-demos=${HAS_CHANGED}" >> $GITHUB_OUTPUT
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: changed-demos
+          path: apps/demos/changed-files.json
+          retention-days: 1
+
+  determine-framework-tests-scope:
+    runs-on: ubuntu-slim
+    name: Determine scope for framework tests
+    needs: [check-should-run, get-changes]
+    if: |
+      !cancelled() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      (needs.get-changes.result == 'success' || needs.get-changes.result == 'skipped')
+    outputs:
+      framework-tests-scope: ${{ steps.determine.outputs.framework-tests-scope }}
+
+    steps:
+      - name: Determine framework tests scope
+        id: determine
+        run: |
+          if [ "${{ github.event_name }}" != "pull_request" ] || [ "${{ contains(github.event.pull_request.labels.*.name, 'force all tests') }}" = "true" ]; then
+            echo "Framework tests scope: all demos"
+            echo "framework-tests-scope=all" >> $GITHUB_OUTPUT
+          elif [ "${{ needs.get-changes.outputs.has-changed-demos }}" = "true" ]; then
+            echo "Framework tests scope: changed demos"
+            echo "framework-tests-scope=changed" >> $GITHUB_OUTPUT
+          else
+            echo "Framework tests NOT needed"
+            echo "framework-tests-scope=none" >> $GITHUB_OUTPUT
+          fi
+
+  determine-jquery-test-matrix:
+    runs-on: ubuntu-slim
+    name: Determine jQuery test matrix
+    needs: [check-should-run, determine-framework-tests-scope]
+    if: |
+      !cancelled() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success'
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+
+    steps:
+      - name: Build matrix
+        id: matrix
+        run: |
+          # Temporarily disabled screenshot shards:
+          # - material.blue.light: jquery(1/3), jquery(2/3), jquery(3/3)
+          # - fluent.blue.light: jquery(1/3), jquery(2/3), jquery(3/3)
+          base_matrix=$(cat <<'JSON'
+          [
+            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(1/9)" },
+            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(2/9)" },
+            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(3/9)" },
+            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(4/9)" },
+            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(5/9)" },
+            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(6/9)" },
+            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(7/9)" },
+            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(8/9)" },
+            { "STRATEGY": "screenshots", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery(9/9)" },
+            { "STRATEGY": "accessibility", "THEME": "material.blue.light", "CONSTEL": "jquery" },
+            { "STRATEGY": "accessibility", "THEME": "fluent.blue.light", "CONSTEL": "jquery" },
+            { "STRATEGY": "accessibility", "THEME": "dxdsfluent.blue.light", "CONSTEL": "jquery" }
+          ]
+          JSON
+          )
+
+          dark_accessibility_matrix=$(cat <<'JSON'
+          [
+            { "STRATEGY": "accessibility", "THEME": "material.blue.dark", "CONSTEL": "jquery" },
+            { "STRATEGY": "accessibility", "THEME": "fluent.blue.dark", "CONSTEL": "jquery" },
+            { "STRATEGY": "accessibility", "THEME": "dxdsfluent.blue.dark", "CONSTEL": "jquery" }
+          ]
+          JSON
+          )
+
+          # Dark accessibility (color-contrast) runs when framework tests are in scope
+          # OR when styles changed — mirroring the style_dependent_matrix gate in testcafe_tests.yml.
+          matrix=$(jq -c -n \
+            --argjson base "$base_matrix" \
+            --argjson darkAccessibility "$dark_accessibility_matrix" \
+            --arg frameworkTestsScope "${{ needs.determine-framework-tests-scope.outputs.framework-tests-scope }}" \
+            --arg stylesChanged "${{ needs.check-should-run.outputs.styles-changed }}" \
+            '{ include: ($base + (if $frameworkTestsScope != "none" or $stylesChanged == "true" then $darkAccessibility else [] end)) }')
+
+          echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
   build-devextreme:
     runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
@@ -662,7 +803,7 @@ jobs:
           angular(9/10),
           angular(10/10),
         ]
-        THEME: ['fluent.blue.light']
+        THEME: ['fluent.blue.light', 'dxdsfluent.blue.light']
 
     runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     name: ${{ matrix.CONSTEL }}-screenshots-${{ matrix.THEME }}
@@ -818,6 +959,172 @@ jobs:
         name: screenshots-${{ env.JOB_NAME }}
         path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
         if-no-files-found: ignore
+
+  testcafe-frameworks-changed:
+    needs: [check-should-run, determine-framework-tests-scope, build-demos, build-vendor-bundles]
+    if: |
+      !cancelled() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'changed' &&
+      needs.build-demos.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        CONSTEL: [react, vue, angular]
+        THEME: ['fluent.blue.light', 'dxdsfluent.blue.light']
+
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
+    name: ${{ matrix.CONSTEL }}-screenshots-${{ matrix.THEME }}
+    timeout-minutes: 60
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v6
+
+      - name: Setup Chrome
+        uses: ./.github/actions/setup-chrome
+        with:
+          chrome-version: '150.0.7871.181'
+
+      - name: Use Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: '.node-version'
+
+      - name: Download devextreme sources
+        uses: actions/download-artifact@v8
+        with:
+          name: devextreme-sources
+
+      - name: Download changed demos
+        uses: actions/download-artifact@v8
+        with:
+          name: changed-demos
+          path: apps/demos
+        continue-on-error: true
+
+      - uses: pnpm/action-setup@v6
+        with:
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache/restore@v5
+        name: Restore pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-cache
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install tgz
+        working-directory: apps/demos
+        run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
+
+      - name: Download demo bundles (React)
+        if: matrix.CONSTEL == 'react'
+        uses: actions/download-artifact@v8
+        with:
+          name: devextreme-bundles-React
+          path: apps/demos/.demo-bundles/react
+
+      - name: Download demo bundles (Vue)
+        if: matrix.CONSTEL == 'vue'
+        uses: actions/download-artifact@v8
+        with:
+          name: devextreme-bundles-Vue
+          path: apps/demos/.demo-bundles/vue
+
+      # build-demos shards Angular 3 ways regardless of how it's tested here.
+      - name: Download demo bundles (Angular shard 1)
+        if: matrix.CONSTEL == 'angular'
+        uses: actions/download-artifact@v8
+        with:
+          name: devextreme-bundles-Angular-shard1
+          path: apps/demos/.demo-bundles/angular-shard1
+
+      - name: Download demo bundles (Angular shard 2)
+        if: matrix.CONSTEL == 'angular'
+        uses: actions/download-artifact@v8
+        with:
+          name: devextreme-bundles-Angular-shard2
+          path: apps/demos/.demo-bundles/angular-shard2
+
+      - name: Download demo bundles (Angular shard 3)
+        if: matrix.CONSTEL == 'angular'
+        uses: actions/download-artifact@v8
+        with:
+          name: devextreme-bundles-Angular-shard3
+          path: apps/demos/.demo-bundles/angular-shard3
+
+      - name: Download changes artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: changed-demos
+          path: apps/demos
+
+      # No-op for angular demos (no manifest — see build-vendor-bundles.js).
+      - name: Download vendor bundles
+        uses: actions/download-artifact@v8
+        with:
+          name: devextreme-vendor-bundles
+          path: apps/demos/bundles/vendor
+
+      - name: Unpack demo bundles
+        run: |
+          shopt -s nullglob
+          archives=(apps/demos/.demo-bundles/*/demo-bundles.tgz)
+          if [ ${#archives[@]} -eq 0 ]; then
+            echo "No demo bundle archives downloaded for constellation '${{ matrix.CONSTEL }}'" >&2
+            exit 1
+          fi
+          for archive in "${archives[@]}"; do
+            tar -xzf "$archive" -C apps/demos
+          done
+          rm -rf apps/demos/.demo-bundles
+          echo "Unpacked $(find apps/demos/Demos -name 'bundle.js' | wc -l) demo bundle(s)"
+
+      - name: Run Web Server
+        run: |
+          python -m http.server 8080 &
+          python -m http.server 8081 &
+          python -m http.server 8082 &
+          python -m http.server 8083 &
+
+      - name: Run TestCafe tests
+        shell: bash
+        working-directory: apps/demos
+        env:
+          CHANGEDFILEINFOSPATH: changed-files.json
+          BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+          # DEBUG: hammerhead:*,testcafe:*
+          CONCURRENCY: 1
+          CONSTEL: ${{ matrix.CONSTEL }}
+          THEME: ${{ matrix.THEME }}
+          # DISABLE_DEMO_TEST_SETTINGS: all # Uncomment to ignore all the visualtestrc.json settings
+          # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
+          # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
+          CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
+        run: pnpm exec nx test-testcafe
+
+      - name: Sanitize job name
+        if: ${{ failure() }}
+        run: echo "JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
+
+      - name: Copy screenshots artifacts
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: screenshots-${{ env.JOB_NAME }}
+          path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
+          if-no-files-found: ignore
 
   merge-artifacts:
     runs-on: ubuntu-latest

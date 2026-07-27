@@ -1,0 +1,15 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$splitter-resize-handle-color: ds.$color-content-neutral-subdued-rest !default;
+
+$splitter-resize-handle-color-focused: ds.$color-content-neutral-default-static-dark-rest !default;
+
+$splitter-resize-handle-bg: ds.$color-border-neutral-default-rest !default;
+
+$splitter-resize-handle-bg-hover: ds.$color-border-neutral-default-hovered !default;
+
+$splitter-resize-handle-bg-focused: ds.$color-surface-primary-default-rest !default;
+
+$splitter-resize-handle-color-hover: $splitter-resize-handle-color !default;

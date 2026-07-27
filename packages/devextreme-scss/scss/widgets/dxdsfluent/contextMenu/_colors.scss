@@ -1,0 +1,7 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$contextmenu-foreground-disabled: ds.$color-content-neutral-default-disabled !default;
+$contextmenu-icon-color: ds.$color-content-neutral-subdued-rest !default;
+$contextmenu-shadow: ds.$box-shadow-md !default;
