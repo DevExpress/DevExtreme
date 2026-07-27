@@ -1122,18 +1122,30 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     }
   }
 
+  private isViewportScrolledToPage(): boolean {
+    const initialPageScrollPending = isVirtualPaging(this)
+      && this._rowsScrollController?.getViewportItemIndex() === 0
+      && this.pageIndex() > 0;
+
+    return !initialPageScrollPending;
+  }
+
   private updateViewport() {
     const viewportSize = this.viewportSize();
     const itemCount = this.items().length;
     const viewportIsNotFilled = viewportSize > itemCount;
     const currentTake = this._loadViewportParams?.take ?? 0;
-    const rowsScrollController = this._rowsScrollController;
-    const newTake = rowsScrollController?.getViewportParams().take;
+    const newTake = this._rowsScrollController?.getViewportParams().take ?? 0;
 
-    (viewportIsNotFilled || currentTake < newTake!) && !this._isPaging && itemCount && this.loadViewport({
-      checkLoading: true,
-      viewportIsNotFilled,
-    });
+    const needsMoreItems = viewportIsNotFilled || currentTake < newTake;
+    const canLoad = !this._isPaging && this.isViewportScrolledToPage(); // T1326786
+
+    if (needsMoreItems && canLoad && itemCount) {
+      this.loadViewport({
+        checkLoading: true,
+        viewportIsNotFilled,
+      });
+    }
   }
 
   private loadIfNeed() {
