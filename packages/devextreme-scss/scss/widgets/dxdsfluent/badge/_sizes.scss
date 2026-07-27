@@ -1,0 +1,23 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$fluent-badge-padding: null !default;
+$fluent-badge-font-size: null !default;
+$badge-line-height: null !default;
+
+@if $size == "default" {
+  $fluent-badge-padding: 0 ds.$spacing-60 !default;
+  $fluent-badge-font-size: ds.$font-size-caption-md !default;
+  $badge-line-height: ds.$line-height-caption-lg !default;
+}
+
+@else if $size == "compact" {
+  $fluent-badge-padding: 0 ds.$spacing-60 !default;
+  $fluent-badge-font-size: ds.$font-size-caption-sm !default;
+  $badge-line-height: ds.$line-height-caption-md !default;
+}
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-badge-border-radius: ds.$border-radius-full !default; // pill idiom (999em -> radius-full, visually identical)

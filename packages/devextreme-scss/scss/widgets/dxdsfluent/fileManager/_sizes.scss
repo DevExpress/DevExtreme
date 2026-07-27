@@ -1,0 +1,120 @@
+@use "../sizes" as *;
+
+// adduse
+@use "../toolbar/sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$filemanager-toolbar-separator-height: null !default;
+$filemanager-toolbar-viewmode-width: null !default;
+$filemanager-toolbar-viewmode-padding: null !default;
+$filemanager-breadcrumbs-item-padding-top: null !default;
+$filemanager-breadcrumbs-item-padding-bottom: null !default;
+$filemanager-details-view-checkbox-column-width: null !default;
+$filemanager-file-actions-button-size: null !default;
+$filemanager-treeview-item-top-bottom-padding: null !default;
+$filemanager-file-actions-button-top-bottom-padding: null !default;
+$filemanager-contextmenu-text-item-left-margin: null !default;
+$filemanager-large-icon-size: null !default;
+$filemanager-progress-panel-title-padding: null !default;
+$filemanager-progress-box-button-close-margin-top: null !default;
+
+$filemanager-toolbar-height: $fluent-toolbar-height;
+
+@if $size == "default" {
+  $filemanager-toolbar-separator-height: ds.$spacing-360 !default;
+  $filemanager-toolbar-viewmode-width: 190px !default; // dx-offscale: 190px
+  $filemanager-toolbar-viewmode-padding: ds.$spacing-60 !default;
+  $filemanager-breadcrumbs-item-padding-top: ds.$spacing-70 !default;
+  $filemanager-breadcrumbs-item-padding-bottom: ds.$spacing-80 !default;
+  $filemanager-details-view-checkbox-column-width: 49px !default; // dx-offscale: 49px
+  $filemanager-file-actions-button-size: ds.$spacing-280 !default;
+  $filemanager-treeview-item-top-bottom-padding: ds.$spacing-110 !default;
+  $filemanager-file-actions-button-top-bottom-padding: ds.$spacing-20 !default;
+  $filemanager-contextmenu-text-item-left-margin: ds.$spacing-480 !default;
+  $filemanager-large-icon-size: ds.$spacing-220 !default;
+  $filemanager-progress-panel-title-padding: ds.$spacing-160 !default;
+  $filemanager-progress-box-button-close-margin-top: ds.$spacing-60 !default;
+}
+
+@else if $size == "compact" {
+  $filemanager-toolbar-separator-height: ds.$spacing-260 !default;
+  $filemanager-toolbar-viewmode-width: 150px !default; // dx-offscale: 150px
+  $filemanager-toolbar-viewmode-padding: ds.$spacing-50 !default;
+  $filemanager-breadcrumbs-item-padding-top: ds.$spacing-80 !default;
+  $filemanager-breadcrumbs-item-padding-bottom: ds.$spacing-90 !default;
+  $filemanager-details-view-checkbox-column-width: 43px !default; // dx-offscale: 43px
+  $filemanager-file-actions-button-size: ds.$spacing-220 !default;
+  $filemanager-treeview-item-top-bottom-padding: ds.$spacing-80 !default;
+  $filemanager-file-actions-button-top-bottom-padding: ds.$spacing-90 !default;
+  $filemanager-contextmenu-text-item-left-margin: ds.$spacing-300 !default;
+  $filemanager-large-icon-size: ds.$spacing-160 !default;
+  $filemanager-progress-panel-title-padding: ds.$spacing-100 !default;
+  $filemanager-progress-box-button-close-margin-top: ds.$spacing-50 !default;
+}
+
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-filemanager-toolbar-padding: 0 ds.$spacing-100 !default;
+$fluent-filemanager-button-content-padding: $filemanager-file-actions-button-top-bottom-padding ds.$spacing-60 !default;
+$fluent-filemanager-fileuploader-dropzone-placeholder-border: ds.$border-width-20 solid !default;
+$fluent-filemanager-state-focused-border: ds.$border-width-10 solid !default;
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-filemanager-progress-title-font-size: ds.$font-size-180 !default; // dx-no-semantic-role: 180 is off the font-size-role scale
+$fluent-filemanager-progress-title-font-weight: ds.$font-weight-title-default !default;
+$fluent-filemanager-progress-bold-font-weight: ds.$font-weight-base-strong !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-filemanager-root-height: 500px !default; // dx-offscale: 500px
+$fluent-filemanager-root-border: ds.$border-width-10 solid !default;
+$fluent-filemanager-overlay-content-min-width: 240px !default; // dx-offscale: 240px
+$fluent-filemanager-overlay-content-max-width: 400px !default; // dx-offscale: 400px
+$fluent-filemanager-popup-content-padding: ds.$spacing-150 !default;
+$fluent-filemanager-progress-box-padding: ds.$spacing-50 0 0 !default;
+$fluent-filemanager-notification-common-padding-bottom: ds.$spacing-100 !default;
+$fluent-filemanager-notification-common-border-bottom-width: ds.$border-width-10 !default;
+$fluent-filemanager-progress-panel-border-left-width: ds.$border-width-10 !default;
+$fluent-filemanager-progress-panel-width: 340px !default; // dx-offscale: 340px
+$fluent-filemanager-progress-panel-container-padding: ds.$spacing-100 ds.$spacing-200 ds.$spacing-200 ds.$spacing-200 !default;
+$fluent-filemanager-progress-panel-title-padding: 0 0 ds.$spacing-50 ds.$spacing-100 !default;
+$fluent-filemanager-progress-panel-separator-height: ds.$spacing-200 !default;
+$fluent-filemanager-i-cancel-width: ds.$spacing-160 !default;
+$fluent-filemanager-i-cancel-height: ds.$spacing-160 !default;
+$fluent-filemanager-progress-box-margin-bottom: ds.$spacing-80 !default;
+$fluent-filemanager-progress-box-border-radius: ds.$border-radius-20 !default;
+$fluent-filemanager-progress-box-padding-2: ds.$spacing-100 0 ds.$spacing-100 ds.$spacing-100 !default;
+$fluent-filemanager-progress-box-without-close-button-padding-right: ds.$spacing-100 !default;
+$fluent-filemanager-progress-box-image-margin-right: ds.$spacing-100 !default;
+$fluent-filemanager-progress-box-common-padding: ds.$spacing-50 0 !default;
+$fluent-filemanager-progress-box-close-button-margin-top: ds.$spacing-90 !default;
+$fluent-filemanager-progress-box-close-button-margin-left: ds.$spacing-50 !default;
+$fluent-filemanager-progress-box-error-padding: ds.$spacing-20 ds.$spacing-80 ds.$spacing-30 !default;
+$fluent-filemanager-progress-box-error-max-height: 150px !default; // dx-offscale: 150px
+$fluent-filemanager-toolbar-separator-item-width: ds.$spacing-10 !default;
+$fluent-filemanager-toolbar-separator-item-margin-right: ds.$spacing-50 !default;
+$fluent-filemanager-container-border-top: ds.$border-width-10 solid !default;
+$fluent-filemanager-dirs-panel-padding: ds.$spacing-50 ds.$spacing-100 !default;
+$fluent-filemanager-drawer-panel-content-initial-min-width: 250px !default; // dx-offscale: 250px
+$fluent-filemanager-drawer-panel-content-initial-max-width: 300px !default; // dx-offscale: 300px
+$fluent-filemanager-breadcrumbs-padding: ds.$spacing-20 ds.$spacing-110 !default;
+$fluent-filemanager-breadcrumbs-border-bottom: ds.$border-width-10 solid !default;
+$fluent-filemanager-menu-item-content-padding-left: ds.$spacing-20 !default;
+$fluent-filemanager-menu-item-content-padding-right: ds.$spacing-20 !default;
+$fluent-filemanager-menu-item-content-margin: 0 ds.$spacing-100 !default;
+$fluent-filemanager-menu-item-content-padding-left-2: ds.$spacing-10 !default;
+$fluent-filemanager-menu-item-content-padding-right-2: ds.$spacing-10 !default;
+$fluent-filemanager-thumbnails-view-port-padding: ds.$spacing-50 !default;
+$fluent-filemanager-thumbnails-item-width: ds.$spacing-1000 !default;
+$fluent-filemanager-thumbnails-item-height: ds.$spacing-1000 !default;
+$fluent-filemanager-thumbnails-item-border: ds.$border-width-10 dashed transparent !default;
+$fluent-filemanager-thumbnails-item-margin: ds.$spacing-50 !default;
+$fluent-filemanager-thumbnails-item-content-padding: ds.$spacing-130 0 ds.$spacing-100 !default;
+$fluent-filemanager-thumbnails-item-spacer-height: ds.$spacing-100 !default;
+$fluent-filemanager-viewmode-button-content-padding: ds.$spacing-100 ds.$spacing-110 !default;
+$fluent-filemanager-overlay-content-min-width-2: 300px !default; // dx-offscale: 300px
+$fluent-filemanager-overlay-content-min-height: 300px !default; // dx-offscale: 300px
+$fluent-filemanager-overlay-content-max-height: 400px !default; // dx-offscale: 400px
+$fluent-filemanager-overlay-content-max-width-2: 340px !default; // dx-offscale: 340px
+$fluent-filemanager-overlay-content-min-height-2: 180px !default; // dx-offscale: 180px
+$fluent-filemanager-overlay-content-max-height-2: 180px !default; // dx-offscale: 180px
+$fluent-filemanager-progressbox-cancel-button-margin-top: ds.$spacing-50 !default;

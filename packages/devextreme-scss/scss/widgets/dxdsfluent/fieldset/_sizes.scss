@@ -1,0 +1,37 @@
+@use "../sizes" as *;
+@use "../common/sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$fluent-fieldset-vertical-margin: null !default;
+$fluent-fieldset-horizontal-margin: null !default;
+$fluent-fieldset-header-vertical-margin: null !default;
+$fluent-field-vertical-margin: null !default;
+$fluent-field-labelvalue-spacing: null !default;
+
+@if $size == "default" {
+  $fluent-fieldset-vertical-margin: ds.$spacing-300 !default;
+  $fluent-fieldset-horizontal-margin: ds.$spacing-200 !default;
+  $fluent-fieldset-header-vertical-margin: ds.$spacing-200 !default;
+  $fluent-field-vertical-margin: ds.$spacing-300 !default;
+  $fluent-field-labelvalue-spacing: ds.$spacing-150 !default;
+}
+
+@else if $size == "compact" {
+  $fluent-fieldset-vertical-margin: ds.$spacing-200 !default;
+  $fluent-fieldset-horizontal-margin: ds.$spacing-160 !default;
+  $fluent-fieldset-header-vertical-margin: ds.$spacing-160 !default;
+  $fluent-field-vertical-margin: ds.$spacing-200 !default;
+  $fluent-field-labelvalue-spacing: ds.$spacing-120 !default;
+}
+
+$fluent-field-min-height: $fluent-base-inline-widget-height !default;
+$fluent-field-value-top-padding: ds.$spacing-210 !default;
+$fluent-field-value-horizontal-padding: $fluent-base-inline-horizontal-padding !default;
+$fluent-field-value-bottom-padding: ds.$spacing-200 !default;
+$fluent-fieldset-attention-icon-offset: calc(#{$fluent-base-inline-horizontal-padding} + #{$fluent-invalid-badge-size}) !default;
+$fluent-radiogroup-min-height: ds.$spacing-260 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-fieldset-root-margin-bottom: ds.$spacing-200 !default;

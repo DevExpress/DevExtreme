@@ -1,0 +1,6 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$card-bg: ds.$color-surface-neutral-default-rest !default;
+$card-shadow: ds.$box-shadow-sm !default;

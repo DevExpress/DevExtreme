@@ -1,0 +1,33 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$toast-border-radius: $fluent-base-border-radius !default;
+$fluent-toast-height: null !default;
+$fluent-toast-item-gap: null !default;
+$fluent-toast-content-vertical-padding: null !default;
+$fluent-toast-content-horizontal-padding: ds.$spacing-120 !default;
+
+@if $size == "default" {
+  $fluent-toast-content-vertical-padding: ds.$spacing-120 !default;
+  $fluent-toast-height: ds.$spacing-440 !default;
+  $fluent-toast-item-gap: ds.$spacing-120 !default;
+}
+
+@else if $size == "compact" {
+  $fluent-toast-content-vertical-padding: ds.$spacing-80 !default;
+  $fluent-toast-height: ds.$spacing-360 !default;
+  $fluent-toast-item-gap: ds.$spacing-80 !default;
+}
+
+// Values hoisted from style-file literals (tokenized)
+$toast-content-font-weight: ds.$font-weight-base-default !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-toast-content-padding: ds.$spacing-100 !default;
+$fluent-toast-icon-width: 35px !default; // dx-offscale: 35px
+$fluent-toast-icon-height: 35px !default; // dx-offscale: 35px
+$fluent-toast-icon-margin-right: ds.$spacing-100 !default;
+$fluent-toast-icon-margin-left: ds.$spacing-100 !default;
+$fluent-toast-stack-gap: ds.$spacing-30 !default;

@@ -1,0 +1,26 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$progressbar-height: null !default;
+$progressbar-border-radius: $base-border-radius !default;
+$progressbar-status-margin-top: null !default;
+$progressbar-indeterminate-background-width: 90%;
+
+@if $size == "default" {
+  $progressbar-height: ds.$spacing-40 !default;
+  $progressbar-status-margin-top: ds.$spacing-120 !default;
+}
+
+@else if $size == "compact" {
+  $progressbar-height: ds.$spacing-20 !default;
+  $progressbar-status-margin-top: ds.$spacing-80 !default;
+}
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-progressbar-status-font-size: ds.$font-size-caption-md !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-progressbar-status-padding-right: ds.$spacing-80 !default;
+$fluent-progressbar-status-padding-left: ds.$spacing-80 !default;

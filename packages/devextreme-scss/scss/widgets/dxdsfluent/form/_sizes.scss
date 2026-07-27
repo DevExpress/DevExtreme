@@ -1,0 +1,61 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$fluent-form-group-caption-bottom-margin: null !default;
+$fluent-form-group-caption-top-padding: null !default;
+$fluent-form-group-content-bottom-padding: null !default;
+$fluent-form-group-caption-font-size: null !default;
+$fluent-form-top-label-padding: 0 !default;
+$fluent-form-top-label-bottom-margin: null !default;
+$fluent-form-default-top-padding: null !default;
+$fluent-form-help-text-font-size: ds.$font-size-caption-md !default;
+$fluent-form-layout-manager-horizontal-padding: null !default;
+$fluent-form-layout-manager-vertical-padding: null !default;
+$fluent-form-layout-manager-tabpanel-content-padding: null !default;
+
+$fluent-form-label-font-size: $fluent-base-font-size !default;
+$fluent-form-label-icon-size: $fluent-base-icon-size !default;
+$fluent-form-group-custom-caption-icon-margin: null !default;
+
+@if $size == "default" {
+  $fluent-form-group-caption-bottom-margin: ds.$spacing-40 !default;
+  $fluent-form-group-caption-top-padding: ds.$spacing-160 !default;
+  $fluent-form-group-content-bottom-padding: ds.$spacing-160 !default;
+  $fluent-form-group-caption-font-size: ds.$font-size-title-md !default;
+  $fluent-form-group-custom-caption-icon-margin: ds.$spacing-60 !default;
+  $fluent-form-default-top-padding: ds.$spacing-160 !default;
+  $fluent-form-top-label-bottom-margin: ds.$spacing-40 !default;
+  $fluent-form-layout-manager-horizontal-padding: ds.$spacing-120 !default;
+  $fluent-form-layout-manager-vertical-padding: ds.$spacing-80 !default;
+  $fluent-form-layout-manager-tabpanel-content-padding: ds.$spacing-240 !default;
+}
+
+@else if $size == "compact" {
+  $fluent-form-group-caption-bottom-margin: ds.$spacing-40 !default;
+  $fluent-form-group-caption-top-padding: ds.$spacing-120 !default;
+  $fluent-form-group-content-bottom-padding: ds.$spacing-120 !default;
+  $fluent-form-group-caption-font-size: ds.$font-size-title-sm !default;
+  $fluent-form-group-custom-caption-icon-margin: ds.$spacing-40 !default;
+  $fluent-form-default-top-padding: ds.$spacing-80 !default;
+  $fluent-form-top-label-bottom-margin: ds.$spacing-20 !default;
+  $fluent-form-layout-manager-horizontal-padding: ds.$spacing-80 !default;
+  $fluent-form-layout-manager-vertical-padding: ds.$spacing-60 !default;
+  $fluent-form-layout-manager-tabpanel-content-padding: ds.$spacing-160 !default;
+}
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-form-field-item-help-text-padding-top: ds.$spacing-20 !default;
+$fluent-form-group-content-border-top: ds.$border-width-10 solid !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-form-first-row-padding-top: ds.$spacing-100 !default;
+$fluent-form-switch-margin-top: ds.$spacing-70 !default;
+$fluent-form-switch-margin-bottom: ds.$spacing-40 !default;
+$fluent-form-multiview-item-content-padding: ds.$spacing-200 !default;
+$fluent-form-group-content-padding-top: ds.$spacing-190 !default;
+$fluent-form-group-content-padding-bottom: ds.$spacing-200 !default;
+$fluent-form-group-content-margin-top: ds.$spacing-60 !default;
+$fluent-form-field-item-label-location-left-padding-inline-end: ds.$spacing-100 !default;
+$fluent-form-field-item-label-location-right-padding-inline-start: ds.$spacing-100 !default;
