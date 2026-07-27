@@ -73,7 +73,7 @@ test('Editor rendered in DropDownButton dropDownContentTemplate should close aft
   await t
     .click(field.getValueText())
     .typeText(field.getTextBox().getInput(), 'test')
-    .click(await dropDownButton.getPopup());
+    .click(await dropDownButton.getPopup(), { offsetX: -10, offsetY: -10 });
 
   // assert
   await t
