@@ -1,3 +1,4 @@
+import { ClientFunction } from 'testcafe';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
@@ -6,7 +7,6 @@ fixture.disablePageReloads`Grouping Panel - check borders and backgrounds with v
   .page(url(__dirname, '../../../container.html'));
 
 interface MatrixOptions {
-  rowAlternationEnabled: boolean;
   showColumnLines: boolean;
   showRowLines: boolean;
   showBorders: boolean;
@@ -16,6 +16,11 @@ interface MatrixOptions {
 
 const SELECTORS = {
   gridContainer: 'container',
+  dataGridClass: 'dx-datagrid',
+  bordersClass: 'dx-datagrid-borders',
+  headersClass: 'dx-datagrid-headers',
+  rowsViewClass: 'dx-datagrid-rowsview',
+  rowClass: 'dx-row',
   masterDetailRowClass: 'dx-master-detail-row',
   groupRowClass: 'dx-group-row',
   rowLinesClass: 'dx-row-lines',
@@ -29,6 +34,94 @@ const BORDER_WIDTH = {
   normal: 1,
   none: 0,
 };
+
+interface CellInfo {
+  borderLeftWidth: number;
+  borderRightWidth: number;
+  borderBottomWidth: number;
+  isGroupSpace: boolean;
+  hasPointerEventsNoneClass: boolean;
+}
+
+interface RowInfo {
+  classes: string;
+  backgroundColor: string;
+  isLastRowLine: boolean;
+  cells: CellInfo[];
+}
+
+interface GridStyleSnapshot {
+  containerClasses: string;
+  headersBorders: { top: number; left: number; right: number };
+  rowsViewBorders: { left: number; right: number; bottom: number };
+  rows: RowInfo[];
+}
+
+const collectGridStyles = ClientFunction((rootSelector: string): GridStyleSnapshot => {
+  const root = document.querySelector(rootSelector);
+
+  const borderWidth = (element: Element | null, property: string): number => (element
+    ? parseInt(window.getComputedStyle(element).getPropertyValue(property), 10) || 0
+    : 0);
+
+  const container = root?.querySelector(`.${SELECTORS.dataGridClass}`) ?? null;
+  const headers = root?.querySelector(`.${SELECTORS.headersClass}`) ?? null;
+  const rowsView = root?.querySelector(`.${SELECTORS.rowsViewClass}`) ?? null;
+
+  const rowElements = rowsView
+    ? Array.from(rowsView.querySelectorAll(`.${SELECTORS.rowClass}`))
+    : [];
+
+  const rows: RowInfo[] = rowElements.map((row) => {
+    /*
+      There are 2 collections of rows (two tables) when
+      columnFixing.legacyMode = true AND DataGrid has fixed columns.
+      isLastRowLine therefore uses DOM adjacency (nextSibling), not the flat array position.
+    */
+    let isLastRowLine = true;
+    let sibling = row.nextElementSibling;
+
+    while (sibling) {
+      if (sibling.matches(`tr.${SELECTORS.rowLinesClass}`)) {
+        isLastRowLine = false;
+        break;
+      }
+      sibling = sibling.nextElementSibling;
+    }
+
+    const cells: CellInfo[] = Array.from(row.querySelectorAll('td')).map((cell) => ({
+      borderLeftWidth: borderWidth(cell, 'border-left-width'),
+      borderRightWidth: borderWidth(cell, 'border-right-width'),
+      borderBottomWidth: borderWidth(cell, 'border-bottom-width'),
+      isGroupSpace: cell.classList.contains(SELECTORS.groupSpaceClass),
+      hasPointerEventsNoneClass: cell.classList.contains(SELECTORS.pointerEventsNoneClass),
+    }));
+
+    const firstCell = row.querySelector('td');
+
+    return {
+      classes: row.getAttribute('class') ?? '',
+      backgroundColor: firstCell ? window.getComputedStyle(firstCell).backgroundColor : '',
+      isLastRowLine,
+      cells,
+    };
+  });
+
+  return {
+    containerClasses: container?.getAttribute('class') ?? '',
+    headersBorders: {
+      top: borderWidth(headers, 'border-top-width'),
+      left: borderWidth(headers, 'border-left-width'),
+      right: borderWidth(headers, 'border-right-width'),
+    },
+    rowsViewBorders: {
+      left: borderWidth(rowsView, 'border-left-width'),
+      right: borderWidth(rowsView, 'border-right-width'),
+      bottom: borderWidth(rowsView, 'border-bottom-width'),
+    },
+    rows,
+  };
+}, { dependencies: { SELECTORS } });
 
 const dataSource = [
   {
@@ -76,14 +169,12 @@ const dataSource = [
 ];
 
 const getTestParams = ({
-  rowAlternationEnabled,
   showColumnLines,
   showRowLines,
   showBorders,
   hasFixedColumn,
   hasMasterDetail,
 }: MatrixOptions) => [
-  `rowAlternationEnabled: ${rowAlternationEnabled}`,
   `showColumnLines: ${showColumnLines}`,
   `showRowLines: ${showRowLines}`,
   `showBorders: ${showBorders}`,
@@ -92,7 +183,6 @@ const getTestParams = ({
 ].join(', ');
 
 const createDataGrid = async ({
-  rowAlternationEnabled,
   showColumnLines,
   showRowLines,
   showBorders,
@@ -139,8 +229,8 @@ const createDataGrid = async ({
       allowDeleting: true,
       confirmDelete: false,
     },
+    rowAlternationEnabled: true,
     showBorders,
-    rowAlternationEnabled,
     showRowLines,
     showColumnLines,
   });
@@ -148,79 +238,54 @@ const createDataGrid = async ({
 
 const checkShowBordersState = async (
   t: TestController,
-  dataGrid: DataGrid,
+  snapshot: GridStyleSnapshot,
   showBorders: boolean,
 ) => {
   const expectedBorderWidth = showBorders ? BORDER_WIDTH.normal : BORDER_WIDTH.none;
 
-  const gridContainer = dataGrid.getContainer();
-  const containerClasses = await gridContainer.getAttribute('class');
-
   if (showBorders) {
-    await t.expect(containerClasses).contains('dx-datagrid-borders');
+    await t.expect(snapshot.containerClasses).contains(SELECTORS.bordersClass);
   } else {
-    await t.expect(containerClasses).notContains('dx-datagrid-borders');
+    await t.expect(snapshot.containerClasses).notContains(SELECTORS.bordersClass);
   }
 
-  const headersContainer = dataGrid.getHeadersContainer();
+  await t.expect(snapshot.headersBorders.top).eql(expectedBorderWidth, 'headers: border-top-width');
+  await t.expect(snapshot.headersBorders.left).eql(expectedBorderWidth, 'headers: border-left-width');
+  await t.expect(snapshot.headersBorders.right).eql(expectedBorderWidth, 'headers: border-right-width');
 
-  const borderTop = await headersContainer.getStyleProperty('border-top-width');
-  const borderLeft = await headersContainer.getStyleProperty('border-left-width');
-  const borderRight = await headersContainer.getStyleProperty('border-right-width');
-
-  await t.expect(parseInt(borderTop, 10)).eql(expectedBorderWidth);
-  await t.expect(parseInt(borderLeft, 10)).eql(expectedBorderWidth);
-  await t.expect(parseInt(borderRight, 10)).eql(expectedBorderWidth);
-
-  const rowsView = dataGrid.getRowsView();
-
-  const rowsViewBorderLeft = await rowsView.getStyleProperty('border-left-width');
-  const rowsViewBorderRight = await rowsView.getStyleProperty('border-right-width');
-  const rowsViewBorderBottom = await rowsView.getStyleProperty('border-bottom-width');
-
-  await t.expect(parseInt(rowsViewBorderLeft, 10)).eql(expectedBorderWidth);
-  await t.expect(parseInt(rowsViewBorderRight, 10)).eql(expectedBorderWidth);
-  await t.expect(parseInt(rowsViewBorderBottom, 10)).eql(expectedBorderWidth);
+  await t.expect(snapshot.rowsViewBorders.left).eql(expectedBorderWidth, 'rowsView: border-left-width');
+  await t.expect(snapshot.rowsViewBorders.right).eql(expectedBorderWidth, 'rowsView: border-right-width');
+  await t.expect(snapshot.rowsViewBorders.bottom).eql(expectedBorderWidth, 'rowsView: border-bottom-width');
 };
 
 const checkShowRowLinesState = async (
   t: TestController,
-  dataGrid: DataGrid,
+  snapshot: GridStyleSnapshot,
   showRowLines: boolean,
   showBorders: boolean,
 ) => {
   const expectedBorderWidth = showRowLines ? BORDER_WIDTH.normal : BORDER_WIDTH.none;
-  /*
-    getRows() returns double collection of rows (two tables) when
-    columnFixing.legacyMode = true AND DataGrid has fixed columns
-  */
-  const filteredRows = dataGrid.getRows().filter(`.${SELECTORS.rowLinesClass}`);
-  const cells = filteredRows.find('td');
-  const cellsCount = await cells.count;
 
-  for (let i = 0; i < cellsCount; i += 1) {
-    const dataCell = cells.nth(i);
+  const rowLineRows = snapshot.rows.filter((row) => row.classes.includes(SELECTORS.rowLinesClass));
+
+  for (let i = 0; i < rowLineRows.length; i += 1) {
+    const row = rowLineRows[i];
 
     // Skip checking for last lines if showBorders is enabled
-    if (showBorders) {
-      const parentRow = dataCell.parent('tr');
-      const nextRow = parentRow.nextSibling('tr.dx-row-lines');
-      const isLastRow = await nextRow.count === 0;
-
-      if (isLastRow) {
+    if (showBorders && row.isLastRowLine) {
       // eslint-disable-next-line no-continue
-        continue;
-      }
+      continue;
     }
 
-    const borderBottom = await dataCell.getStyleProperty('border-bottom-width');
-    await t.expect(parseInt(borderBottom, 10)).eql(expectedBorderWidth);
+    for (let j = 0; j < row.cells.length; j += 1) {
+      await t.expect(row.cells[j].borderBottomWidth).eql(expectedBorderWidth, `row #${i}, cell #${j}: border-bottom-width`);
+    }
   }
 };
 
 const checkShowColumnLinesState = async (
   t: TestController,
-  dataGrid: DataGrid,
+  snapshot: GridStyleSnapshot,
   showColumnLines: boolean,
 ) => {
   const getExpBorderWith = (
@@ -238,108 +303,74 @@ const checkShowColumnLinesState = async (
     return BORDER_WIDTH.none;
   };
 
-  /*
-    getRows() returns double collection of rows (two tables) when
-    columnFixing.legacyMode = true AND DataGrid has fixed columns
-  */
-  const filteredRows = dataGrid.getRows().filter(`:not(.${SELECTORS.masterDetailRowClass})`);
-  const cells = filteredRows.find(`td:not(.${SELECTORS.groupSpaceClass})`);
+  const dataRows = snapshot.rows.filter(
+    (row) => !row.classes.includes(SELECTORS.masterDetailRowClass),
+  );
 
-  const cellsCount = await cells.count;
+  for (let i = 0; i < dataRows.length; i += 1) {
+    const dataCells = dataRows[i].cells.filter((cell) => !cell.isGroupSpace);
 
-  for (let i = 0; i < cellsCount; i += 1) {
-    const cell = cells.nth(i);
+    for (let j = 0; j < dataCells.length; j += 1) {
+      const cell = dataCells[j];
+      const expectedBorderWidth = getExpBorderWith(showColumnLines, cell.hasPointerEventsNoneClass);
+      const isFirstCellInRow = j === 0;
+      const isLastCellInRow = j === dataCells.length - 1;
 
-    const parentRow = cell.parent('tr');
-    const rowCells = parentRow.find(`td:not(.${SELECTORS.groupSpaceClass})`);
-    const rowCellsCount = await rowCells.count;
-    const indexInRow = await cell.prevSibling(`td:not(.${SELECTORS.groupSpaceClass})`).count;
+      if (!isFirstCellInRow) {
+        await t.expect(cell.borderLeftWidth).eql(expectedBorderWidth, `row #${i}, cell #${j}: border-left-width`);
+      }
 
-    const isFirstCellInRow = indexInRow === 0;
-    const isLastCellInRow = indexInRow === rowCellsCount - 1;
-
-    const cellClasses = await cell.getAttribute('class');
-    const hasPointerEventsNoneClass = cellClasses?.includes(SELECTORS.pointerEventsNoneClass);
-    const expectedBorderWidth = getExpBorderWith(showColumnLines, !!hasPointerEventsNoneClass);
-
-    if (!isFirstCellInRow) {
-      const borderLeftWidth = await cell.getStyleProperty('border-left-width');
-
-      await t.expect(parseInt(borderLeftWidth, 10)).eql(expectedBorderWidth);
-    }
-
-    if (!isLastCellInRow) {
-      const borderRightWidth = await cell.getStyleProperty('border-right-width');
-
-      await t.expect(parseInt(borderRightWidth, 10)).eql(expectedBorderWidth);
+      if (!isLastCellInRow) {
+        await t.expect(cell.borderRightWidth).eql(expectedBorderWidth, `row #${i}, cell #${j}: border-right-width`);
+      }
     }
   }
 };
 
 const checkRowAlternationEnabledState = async (
   t: TestController,
-  dataGrid: DataGrid,
-  rowAlternationEnabled: boolean,
+  snapshot: GridStyleSnapshot,
 ) => {
-  /*
-    getRows() returns double collection of rows (two tables) when
-    columnFixing.legacyMode = true AND DataGrid has fixed columns
-  */
-  const filteredRows = dataGrid.getRows().filter(`:not(.${SELECTORS.masterDetailRowClass})`);
-  const filteredRowsLength = await filteredRows.count;
+  const rows = snapshot.rows.filter(
+    (row) => !row.classes.includes(SELECTORS.masterDetailRowClass),
+  );
 
   let i = 1;
-  while (i < filteredRowsLength) {
-    const currentRow = filteredRows.nth(i);
-    const previousRow = filteredRows.nth(i - 1);
+  while (i < rows.length) {
+    const currentRow = rows[i];
+    const previousRow = rows[i - 1];
 
-    const currentClasses = await currentRow.getAttribute('class');
-    const previousClasses = await previousRow.getAttribute('class');
-
-    if (currentClasses?.includes(SELECTORS.groupRowClass)) {
+    if (currentRow.classes.includes(SELECTORS.groupRowClass)) {
       i += 2;
       // eslint-disable-next-line no-continue
       continue;
     }
 
-    if (previousClasses?.includes(SELECTORS.groupRowClass)) {
+    if (previousRow.classes.includes(SELECTORS.groupRowClass)) {
       i += 1;
       // eslint-disable-next-line no-continue
       continue;
     }
 
-    const currentHasAltClass = currentClasses?.includes(SELECTORS.rowAlternativeClass);
-    const previousHasAltClass = previousClasses?.includes(SELECTORS.rowAlternativeClass);
+    const currentHasAltClass = currentRow.classes.includes(SELECTORS.rowAlternativeClass);
+    const previousHasAltClass = previousRow.classes.includes(SELECTORS.rowAlternativeClass);
 
-    if (rowAlternationEnabled) {
-      await t.expect(currentHasAltClass).notEql(previousHasAltClass);
-    } else {
-      await t.expect(currentHasAltClass).eql(previousHasAltClass);
-    }
-
-    const currentFirstCell = currentRow.find('td').nth(0);
-    const previousFirstCell = previousRow.find('td').nth(0);
-
-    const currentFirstCellBg = await currentFirstCell.getStyleProperty('background-color');
-    const previousFirstCellBg = await previousFirstCell.getStyleProperty('background-color');
-
-    if (rowAlternationEnabled) {
-      await t.expect(currentFirstCellBg).notEql(previousFirstCellBg);
-    } else {
-      await t.expect(currentFirstCellBg).eql(previousFirstCellBg);
-    }
+    await t.expect(currentHasAltClass).notEql(previousHasAltClass, `row #${i}: alt class alternation`);
+    await t.expect(currentRow.backgroundColor).notEql(previousRow.backgroundColor, `row #${i}: background-color alternation`);
 
     i += 1;
   }
 };
 
-const verifyGridStyles = async (t: TestController, dataGrid: DataGrid, {
-  showBorders, showRowLines, rowAlternationEnabled, showColumnLines,
+const verifyGridStyles = async (t: TestController, {
+  showBorders, showRowLines, showColumnLines,
 }: MatrixOptions) => {
-  await checkShowBordersState(t, dataGrid, showBorders);
-  await checkShowRowLinesState(t, dataGrid, showRowLines, showBorders);
-  await checkShowColumnLinesState(t, dataGrid, showColumnLines);
-  await checkRowAlternationEnabledState(t, dataGrid, rowAlternationEnabled);
+  const snapshot = await collectGridStyles(`#${SELECTORS.gridContainer}`);
+
+  await checkShowBordersState(t, snapshot, showBorders);
+  await checkShowRowLinesState(t, snapshot, showRowLines, showBorders);
+  await checkShowColumnLinesState(t, snapshot, showColumnLines);
+  await checkRowAlternationEnabledState(t, snapshot);
 };
 
 const functionalTest = (matrixOptions: MatrixOptions) => {
@@ -349,7 +380,7 @@ const functionalTest = (matrixOptions: MatrixOptions) => {
       .expect(dataGrid.isReady())
       .ok();
 
-    await verifyGridStyles(t, dataGrid, matrixOptions);
+    await verifyGridStyles(t, matrixOptions);
 
     const rowIdx = matrixOptions.hasMasterDetail ? 8 : 5;
     const colIdx = matrixOptions.hasMasterDetail ? 5 : 4;
@@ -359,30 +390,35 @@ const functionalTest = (matrixOptions: MatrixOptions) => {
 
     await t.click(deleteBtn);
 
-    await verifyGridStyles(t, dataGrid, matrixOptions);
+    await verifyGridStyles(t, matrixOptions);
   }).before(async () => {
     await createDataGrid(matrixOptions);
   });
 };
 
-[true, false].forEach((hasFixedColumn) => {
-  [true, false].forEach((hasMasterDetail) => {
-    [true, false].forEach((rowAlternationEnabled) => {
-      [true, false].forEach((showColumnLines) => {
-        [true, false].forEach((showRowLines) => {
-          [true, false].forEach((showBorders) => {
-            const matrixOptions: MatrixOptions = {
-              rowAlternationEnabled,
-              showColumnLines,
-              showRowLines,
-              showBorders,
-              hasFixedColumn,
-              hasMasterDetail,
-            };
-            functionalTest(matrixOptions);
-          });
-        });
-      });
-    });
-  });
+const cases: Partial<MatrixOptions>[] = [
+  {},
+  { hasFixedColumn: true },
+  { showColumnLines: true },
+  { showColumnLines: true, hasFixedColumn: true },
+  { showRowLines: true },
+  { showBorders: true },
+  { showBorders: true, showRowLines: true },
+  { hasMasterDetail: true },
+  {
+    showRowLines: true, showBorders: true, hasFixedColumn: true, hasMasterDetail: true,
+  },
+];
+
+cases.forEach((overrides) => {
+  const matrixOptions: MatrixOptions = {
+    showColumnLines: false,
+    showRowLines: false,
+    showBorders: false,
+    hasFixedColumn: false,
+    hasMasterDetail: false,
+    ...overrides,
+  };
+
+  functionalTest(matrixOptions);
 });
