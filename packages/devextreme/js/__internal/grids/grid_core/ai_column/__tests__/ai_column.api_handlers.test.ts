@@ -385,5 +385,43 @@ describe('API Handlers', () => {
       await Promise.resolve();
       expect(sendRequestDataSpy).toHaveBeenCalledTimes(3);
     });
+
+    it('should throw E1046 and not send the request when the handler removes the key field', async () => {
+      const onDataErrorOccurred = jest.fn();
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: columnAIIntegration,
+              mode: 'manual',
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+        onAIColumnRequestCreating: (e) => {
+          const reduced = e.data.map((item) => ({ name: item.name, value: item.value }));
+          e.data.splice(0, e.data.length, ...reduced);
+        },
+        onDataErrorOccurred,
+      });
+
+      instance.sendAIColumnRequest('myColumn');
+      jest.advanceTimersByTime(10000);
+
+      expect(columnSendRequestStarted).toHaveBeenCalledTimes(0);
+      expect(onDataErrorOccurred).toHaveBeenCalledTimes(1);
+      expect(errors.Error).toHaveBeenCalledWith('E1046', 'id');
+    });
   });
 });
