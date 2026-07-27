@@ -1,10 +1,16 @@
 // adduse
 
+
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$dropdownmenu-list-min-width: 100px !default;
+$dropdownmenu-list-border-radius: 8px !default;
+$dropdownmenu-popup-content-padding: 1px !default;
+
 .dx-dropdownmenu-popup-wrapper {
   .dx-dropdownmenu-list {
     min-height: 0;
-    min-width: 100px;
-    border-radius: 8px;
+    min-width: $dropdownmenu-list-min-width;
+    border-radius: $dropdownmenu-list-border-radius;
 
     .dx-list-item {
       &:last-of-type {
@@ -14,7 +20,7 @@
   }
 
   .dx-popup-content {
-    padding: 1px;
+    padding: $dropdownmenu-popup-content-padding;
   }
 
   .dx-list-item{

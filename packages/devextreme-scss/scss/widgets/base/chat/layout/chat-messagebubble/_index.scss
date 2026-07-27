@@ -2,6 +2,7 @@ $chat-messagebubble-padding-image: 4px !default;
 $chat-messagebubble-border-radius-image: 8px !default;
 $chat-messagebubble-max-width-image: 400px !default;
 $chat-messagebubble-max-height-image: 400px !default;
+$chat-messagebubble-content-max-width: 82.5% !default; // dx-relative-%
 
 .dx-chat-messagegroup-content {
   display: flex;
@@ -47,7 +48,7 @@ $chat-messagebubble-max-height-image: 400px !default;
 .dx-chat-messagegroup-alignment-end {
   .dx-chat-messagegroup-content {
     align-items: flex-end;
-    max-width: 82.5%;
+    max-width: $chat-messagebubble-content-max-width;
   }
 
   .dx-chat-messagebubble {

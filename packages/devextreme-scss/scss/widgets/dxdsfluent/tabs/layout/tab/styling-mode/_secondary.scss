@@ -1,0 +1,117 @@
+@use "sass:color";
+@use "../../../../colors" as *;
+@use "../../../../sizes" as *;
+@use "../../../../button/colors" as *;
+@use "../../../../button/mixins" as *;
+@use "../../../../../base/icon_fonts" as *;
+@use "../../../../../base/tabs";
+@use "../../../variables/colors" as *;
+@use "../../../variables/sizes" as *;
+@use "../../../mixins" as *;
+
+// adduse
+@use "../../../../scrollable";
+@use "../../../../badge";
+
+
+.dx-tabs-styling-mode-secondary {
+  .dx-tab {
+    border-radius: $fluent-tab-item-border-radius-secondary;
+  }
+
+  &.dx-tab-indicator-position-top {
+    .dx-tab .dx-tab-content {
+      @include dx-tabs-indicator-secondary();
+      @include dx-tabs-horizontal-indicator-secondary(top);
+    }
+  }
+
+  &.dx-tab-indicator-position-bottom {
+    .dx-tab .dx-tab-content {
+      @include dx-tabs-indicator-secondary();
+      @include dx-tabs-horizontal-indicator-secondary(bottom);
+    }
+  }
+
+  &.dx-tab-indicator-position-top,
+  &.dx-tab-indicator-position-bottom {
+    .dx-tab {
+      &.dx-state-hover .dx-tab-content {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-hover);
+      }
+
+      &.dx-state-active .dx-tab-content {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-active);
+      }
+
+      &.dx-tab-selected {
+        .dx-tab-content {
+          @include dx-tabs-indicator-background($tabs-tab-border-color-selected-basic);
+        }
+
+        &.dx-state-focused .dx-tab-content {
+          @include dx-tabs-indicator-background($tabs-tab-border-color-selected-focused);
+        }
+
+        &.dx-state-hover .dx-tab-content {
+          @include dx-tabs-indicator-background($tabs-tab-border-color-selected-hover);
+        }
+
+        &.dx-state-active .dx-tab-content {
+          @include dx-tabs-indicator-background($tabs-tab-border-color-selected-active);
+        }
+
+        &.dx-state-disabled .dx-tab-content {
+          @include dx-tabs-indicator-background($tabs-tab-border-color-disabled);
+        }
+      }
+    }
+  }
+
+  &.dx-tab-indicator-position-right {
+    .dx-tab {
+      @include dx-tabs-indicator-secondary();
+      @include dx-tabs-vertical-indicator-secondary(right);
+    }
+  }
+
+  &.dx-tab-indicator-position-left {
+    .dx-tab {
+      @include dx-tabs-indicator-secondary();
+      @include dx-tabs-vertical-indicator-secondary(left);
+    }
+  }
+
+  &.dx-tab-indicator-position-right,
+  &.dx-tab-indicator-position-left {
+    .dx-tab {
+      &.dx-state-hover {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-hover);
+      }
+
+      &.dx-state-active {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-active);
+      }
+    }
+
+    .dx-tab-selected {
+      @include dx-tabs-indicator-background($tabs-tab-border-color-selected-basic);
+
+      &.dx-state-focused {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-selected-focused);
+      }
+
+      &.dx-state-hover {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-selected-hover);
+      }
+
+      &.dx-state-active {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-selected-active);
+      }
+
+      &.dx-state-disabled {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-disabled);
+      }
+    }
+  }
+}

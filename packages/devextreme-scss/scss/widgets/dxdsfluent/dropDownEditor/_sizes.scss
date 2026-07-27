@@ -1,0 +1,18 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$fluent-dropdowneditor-list-font-size: null !default;
+$fluent-dropdowneditor-list-line-height: null !default;
+
+
+@if $size == "default" {
+  $fluent-dropdowneditor-list-font-size: ds.$font-size-base-md !default;
+  $fluent-dropdowneditor-list-line-height: ds.$line-height-base-md !default;
+}
+
+@else if $size == "compact" {
+  $fluent-dropdowneditor-list-font-size: ds.$spacing-130 !default;
+  $fluent-dropdowneditor-list-line-height: ds.$line-height-base-sm !default;
+}

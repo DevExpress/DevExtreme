@@ -1,6 +1,7 @@
 @use "./mixins" as *;
 
 // adduse
+$menubase-expand-arrow-container-width: 2em !default; // dx-relative
 .dx-menu-base {
   @include user-select(none);
 
@@ -65,7 +66,7 @@
         top: 0;
         inset-inline-end: 0;
         bottom: 0;
-        width: 2em;
+        width: $menubase-expand-arrow-container-width;
 
         .dx-menu-item-popout {
           height: 100%;

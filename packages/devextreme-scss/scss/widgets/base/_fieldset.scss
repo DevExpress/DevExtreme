@@ -1,8 +1,15 @@
 @use "./mixins" as *;
 
 // adduse
+
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$fieldset-root-margin-bottom: 20px !default;
+
+$fieldset-field-padding: 0.4em !default; // dx-relative
+$fieldset-label-width: 40% !default; // dx-relative-%
+$fieldset-datebox-value-min-width: 60% !default; // dx-relative-%
 .dx-fieldset {
-  margin-bottom: 20px;
+  margin-bottom: $fieldset-root-margin-bottom;
 
   .dx-field-value {
     margin: 0;
@@ -20,14 +27,14 @@
 
 .dx-field {
   position: relative;
-  padding: 0.4em;
+  padding: $fieldset-field-padding;
 
   @include dx-clearfix-mixin();
 }
 
 .dx-field-label {
   float: left;
-  width: 40%;
+  width: $fieldset-label-width;
 
   @include dx-overflow();
 }
@@ -42,7 +49,7 @@
 }
 
 .dx-field-value.dx-datebox {
-  min-width: 60%;
+  min-width: $fieldset-datebox-value-min-width;
 }
 
 .dx-field-value:not(.dx-widget) > .dx-datebox {

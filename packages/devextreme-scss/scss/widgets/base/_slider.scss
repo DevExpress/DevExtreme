@@ -5,9 +5,15 @@
 $slider-tooltip-content-height: 28px;
 $slider-tooltip-arrow-height: 7px;
 
+
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$slider-label-position-bottom-padding-bottom: 14px !default;
+$slider-label-position-top-padding-top: 14px !default;
+
+$slider-label-font-size: 0.85em !default; // dx-relative
 .dx-slider-label {
   position: absolute;
-  font-size: 0.85em;
+  font-size: $slider-label-font-size;
 
   &:last-child {
     inset-inline-end: 0;
@@ -15,11 +21,11 @@ $slider-tooltip-arrow-height: 7px;
 }
 
 .dx-slider-label-position-bottom {
-  padding-bottom: 14px;
+  padding-bottom: $slider-label-position-bottom-padding-bottom;
 }
 
 .dx-slider-label-position-top {
-  padding-top: 14px;
+  padding-top: $slider-label-position-top-padding-top;
 }
 
 .dx-slider {

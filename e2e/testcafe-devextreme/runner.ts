@@ -114,6 +114,12 @@ function setTestingTheme(args: ParsedArgs): void {
   process.env.theme = args.theme || 'fluent.blue.light';
 }
 
+const normalizeThemeForMatching = (themeName?: string): string | undefined => themeName?.replace(/^dxdsfluent/, 'fluent');
+
+const matchTheme = (actualTheme: string | undefined, expectedTheme: string | undefined): boolean => (
+  normalizeThemeForMatching(actualTheme) === normalizeThemeForMatching(expectedTheme)
+);
+
 function setShadowDom(args: ParsedArgs): void {
   process.env.shadowDom = args.shadowDom.toString();
 }
@@ -287,7 +293,7 @@ async function main() {
         testMeta?: any,
       ) => {
         if (testMeta?.runInTheme) {
-          return testMeta.runInTheme === process.env.theme;
+          return matchTheme(testMeta.runInTheme, process.env.theme);
         }
         return true;
       });
@@ -299,7 +305,7 @@ async function main() {
           _fixturePath: string,
           testMeta?: any,
         ) => {
-          if (testMeta?.runInTheme === process.env.theme) {
+          if (matchTheme(testMeta?.runInTheme, process.env.theme)) {
             return true;
           }
 
@@ -307,7 +313,7 @@ async function main() {
             return false;
           }
 
-          return testMeta.themes.includes(args.theme);
+          return testMeta.themes.some((themeName: string) => matchTheme(themeName, args.theme));
         });
       }
 

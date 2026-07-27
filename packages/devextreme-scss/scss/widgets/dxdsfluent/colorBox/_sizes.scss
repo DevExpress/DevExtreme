@@ -1,0 +1,30 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$fluent-colorbox-overlay-padding: null !default;
+$fluent-colorbox-preview-padding: null !default;
+$fluent-colorbox-preview-icon-size: $fluent-base-icon-size !default;
+
+@if $size == "default" {
+  $fluent-colorbox-overlay-padding: ds.$spacing-200 !default;
+  $fluent-colorbox-preview-padding: ds.$spacing-120 !default;
+}
+
+@else if $size == "compact" {
+  $fluent-colorbox-overlay-padding: ds.$spacing-160 !default;
+  $fluent-colorbox-preview-padding: ds.$spacing-80 !default;
+}
+
+$fluent-colorbox-preview-width: calc(#{$fluent-colorbox-preview-padding} * 2 + #{$fluent-colorbox-preview-icon-size}) !default;
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-colorbox-color-result-preview-border: ds.$border-width-10 solid !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-colorbox-texteditor-input-container-width: ds.$spacing-150 !default;
+$fluent-colorbox-texteditor-input-container-height: ds.$spacing-150 !default;
+$fluent-colorbox-texteditor-input-container-inset-inline-start: ds.$spacing-140 !default;
+$fluent-colorbox-overlay-padding-2: ds.$spacing-200 !default;
+$fluent-colorbox-toolbar-item-padding-right: ds.$spacing-100 !default;
