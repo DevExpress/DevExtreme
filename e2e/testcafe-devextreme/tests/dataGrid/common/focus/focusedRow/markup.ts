@@ -8,10 +8,7 @@ import { testScreenshot } from '../../../../../helpers/themeUtils';
 fixture.disablePageReloads`Focused row - markup`
   .page(url(__dirname, '../../../../container.html'));
 
-// TODO: Enable multi-theming testcafe run in the future.
-// visual: generic.light
-// visual: material.blue.light
-test('markup - generic.light', async (t) => {
+test('markup', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
   await t.expect(dataGrid.isReady()).ok();
@@ -64,10 +61,7 @@ test('markup - generic.light', async (t) => {
   });
 });
 
-// visual: generic.light
-// visual: fluent.light
-// visual: material.blue.light
-test('Invalid cells in a focused row should have the correct background color (T1197268) - generic.light', async (t) => {
+test('Invalid cells in a focused row should have the correct background color (T1197268)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
   await t.expect(dataGrid.isReady()).ok();
@@ -105,10 +99,7 @@ test('Invalid cells in a focused row should have the correct background color (T
   });
 });
 
-// visual: generic.light
-// visual: material.blue.light
-// visual: fluent.blue.light
-test('Link should not have background color in generic.light (T1282624)', async (t) => {
+test('Link should not have background color (T1282624)', async (t) => {
   const dataGrid = new DataGrid('#container');
   await t.expect(dataGrid.isReady()).ok();
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
