@@ -397,19 +397,16 @@ const functionalTest = (matrixOptions: MatrixOptions) => {
 };
 
 const cases: Partial<MatrixOptions>[] = [
-  { showColumnLines: false, hasFixedColumn: true },
-  { showColumnLines: true, hasFixedColumn: false },
+  {},
+  { hasFixedColumn: true },
+  { showColumnLines: true },
   { showColumnLines: true, hasFixedColumn: true },
-  { showBorders: false, showRowLines: false },
-  { showBorders: false, showRowLines: true },
-  { showBorders: true, showRowLines: false },
+  { showRowLines: true },
+  { showBorders: true },
   { showBorders: true, showRowLines: true },
   { hasMasterDetail: true },
   {
-    showRowLines: true,
-    showBorders: true,
-    hasFixedColumn: true,
-    hasMasterDetail: true,
+    showRowLines: true, showBorders: true, hasFixedColumn: true, hasMasterDetail: true,
   },
 ];
 
