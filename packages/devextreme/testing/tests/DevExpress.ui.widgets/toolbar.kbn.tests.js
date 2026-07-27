@@ -29,6 +29,7 @@ import { DROP_DOWN_BUTTON_CLASS } from '__internal/ui/drop_down_button';
 
 import { TEXTEDITOR_CLASS, TEXTEDITOR_INPUT_CLASS } from '__internal/ui/text_box/text_editor.base';
 import { TEXTBOX_CLASS } from '__internal/ui/text_box/text_box';
+import { WIDGET_CLASS as NUMBERBOX_CLASS } from '__internal/ui/number_box/m_number_box.base';
 import { SELECTBOX_CLASS } from '__internal/ui/select_box';
 
 import { SWITCH_CLASS } from '__internal/ui/switch';
@@ -1257,6 +1258,75 @@ QUnit.module('Widget interaction', moduleConfig, function() {
         assert.strictEqual(helpers.findFocusTarget($items.eq(2)).attr('tabindex'), '-1',
             'Next button has tabindex=-1');
     });
+
+    function createNumberBoxToolbar() {
+        return helpers.createToolbarWithEditorBetweenButtons('dxNumberBox', { value: 42 });
+    }
+
+    QUnit.test('arrows on dxNumberBox (toolbar mode) navigates toolbar', function(assert) {
+        const toolbar = createNumberBoxToolbar();
+        const $items = helpers.getAvailableItems(toolbar);
+
+        toolbar.option('focusedElement', $items.eq(1).get(0));
+        helpers.press('ArrowLeft', this.$element.get(0));
+        assert.strictEqual($(toolbar.option('focusedElement')).get(0), $items.eq(0).get(0), 'ArrowLeft navigates to previous item');
+
+        toolbar.option('focusedElement', $items.eq(1).get(0));
+        helpers.press('ArrowRight', this.$element.get(0));
+        assert.strictEqual($(toolbar.option('focusedElement')).get(0), $items.eq(2).get(0), 'ArrowRight navigates to next item');
+    });
+
+    QUnit.test('Esc on dxNumberBox (input focused) returns DOM focus to root div', function(assert) {
+        const toolbar = createNumberBoxToolbar();
+        const $items = helpers.getAvailableItems(toolbar);
+        const $input = $items.eq(1).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const $numberBoxRoot = $items.eq(1).find(`.${NUMBERBOX_CLASS}`);
+
+        toolbar.option('focusedElement', $items.eq(1).get(0));
+        $input.get(0).focus();
+
+        helpers.press('Escape', $input.get(0));
+
+        assert.strictEqual(getActiveElement(), $numberBoxRoot.get(0), 'Esc moves DOM focus off the input onto the NumberBox root');
+    });
+
+    QUnit.test('Esc from NumberBox then ArrowRight: NumberBox input has tabindex=-1', function(assert) {
+        const toolbar = createNumberBoxToolbar();
+        const $items = helpers.getAvailableItems(toolbar);
+        const $input = $items.eq(1).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const $numberBoxRoot = $items.eq(1).find(`.${NUMBERBOX_CLASS}`);
+
+        toolbar.option('focusedElement', $items.eq(1).get(0));
+        helpers.press('Enter', this.$element.get(0));
+
+        helpers.press('Escape', $input.get(0));
+
+        helpers.press('ArrowRight', this.$element.get(0));
+
+        assert.strictEqual($input.attr('tabindex'), '-1',
+            'NumberBox input has tabindex=-1 after navigating away');
+        assert.strictEqual($numberBoxRoot.attr('tabindex'), '-1',
+            'NumberBox container has tabindex=-1 after navigating away');
+        assert.strictEqual(helpers.findFocusTarget($items.eq(2)).attr('tabindex'), '0',
+            'target button has tabindex=0');
+    });
+
+    QUnit.test('NumberBox active item: container has tabindex=0, input has tabindex=-1', function(assert) {
+        const toolbar = createNumberBoxToolbar();
+        const $items = helpers.getAvailableItems(toolbar);
+        const $input = $items.eq(1).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const $numberBoxRoot = $items.eq(1).find(`.${NUMBERBOX_CLASS}`);
+
+        toolbar.option('focusedElement', $items.eq(1).get(0));
+        helpers.press('Enter', this.$element.get(0));
+
+        helpers.press('Escape', $input.get(0));
+
+        assert.strictEqual($numberBoxRoot.attr('tabindex'), '0',
+            'NumberBox container has tabindex=0 while it is the active item');
+        assert.strictEqual($input.attr('tabindex'), '-1',
+            'NumberBox input has tabindex=-1 while NumberBox is the active item');
+    });
 });
 
 QUnit.module('Mouse and keyboard sync', moduleConfig, function() {
@@ -1331,6 +1401,39 @@ QUnit.module('Mouse and keyboard sync', moduleConfig, function() {
 
         helpers.assertFocusedItemAt(assert, toolbar, 0,
             'ArrowLeft navigates toolbar after Esc from click-focused TextBox');
+    });
+
+    QUnit.test('focusin on NumberBox input keeps focusedElement on its item; arrows do not navigate', function(assert) {
+        const toolbar = helpers.createToolbar([
+            buttonItem('Prev'),
+            editorItem('dxNumberBox', { value: 42 }),
+            buttonItem('Next'),
+        ]);
+        const $items = helpers.getAvailableItems(toolbar);
+        const $input = $items.eq(1).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        focusInner($input);
+        helpers.press('ArrowLeft', $input.get(0));
+
+        helpers.assertFocusedItemAt(assert, toolbar, 1,
+            'ArrowLeft does not navigate toolbar after clicking NumberBox input');
+    });
+
+    QUnit.test('focusin on NumberBox - Esc - ArrowLeft navigates toolbar', function(assert) {
+        const toolbar = helpers.createToolbar([
+            buttonItem('Prev'),
+            editorItem('dxNumberBox', { value: 42 }),
+            buttonItem('Next'),
+        ]);
+        const $items = helpers.getAvailableItems(toolbar);
+        const $input = $items.eq(1).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        focusInner($input);
+        helpers.press('Escape', $input.get(0));
+        helpers.press('ArrowLeft');
+
+        helpers.assertFocusedItemAt(assert, toolbar, 0,
+            'ArrowLeft navigates toolbar after Esc from click-focused NumberBox');
     });
 
     QUnit.test('focusin on SelectBox input promotes its item to be focusedElement', function(assert) {

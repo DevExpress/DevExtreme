@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "Sleep gegevensvelden hier",
         "dxPivotGrid-rowFieldArea": "Sleep rijvelden hier",
         "dxPivotGrid-filterFieldArea": "Sleep filtervelden hier",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "van {0} tot {1}",
         "dxScheduler-ariaLabel": "Planner. {0} weergave: {1} met {2} afspraken",
@@ -491,6 +495,8 @@
         "dxFilterBuilder-filterAriaItemOperation": "Itembewerking",
         "dxFilterBuilder-filterAriaItemValue": "Itemwaarde",
 
+        "dxHtmlEditor-editorAriaLabel": "Editor content",
+        "dxHtmlEditor-ariaEscapeInstruction": "Press Ctrl + Shift + Up arrow or Ctrl + Shift + Down arrow to move focus out of the editing area",
         "dxHtmlEditor-dialogColorCaption": "Tekstkleur wijzigen",
         "dxHtmlEditor-dialogBackgroundCaption": "Achtergrondkleur wijzigen",
         "dxHtmlEditor-dialogLinkCaption": "Link toevoegen",

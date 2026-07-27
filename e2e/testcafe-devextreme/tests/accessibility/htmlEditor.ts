@@ -61,7 +61,7 @@ const aiCreated = async (t: TestController): Promise<void> => {
   await t.click(Selector(defaultSelector));
 
   await t
-    .click(htmlEditor.toolbar.getItemByName('ai'))
+    .click(htmlEditor.toolbar.getItemByName('ai').element)
     .click(Selector(`.${SUBMENU_CLASS} .${MENU_ITEM_CLASS}`).nth(4));
 
   await t

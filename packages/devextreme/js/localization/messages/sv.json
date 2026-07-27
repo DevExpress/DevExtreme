@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "Släpp datafält här",
         "dxPivotGrid-rowFieldArea": "Släpp radfält här",
         "dxPivotGrid-filterFieldArea": "Släpp filterfält här",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "från {0} till {1}",
         "dxScheduler-ariaLabel": "Schemaläggare. {0}-vy: {1} med {2} bokningar",
@@ -491,6 +495,8 @@
         "dxFilterBuilder-filterAriaItemOperation": "Åtgärd",
         "dxFilterBuilder-filterAriaItemValue": "Värde",
 
+        "dxHtmlEditor-editorAriaLabel": "Editor content",
+        "dxHtmlEditor-ariaEscapeInstruction": "Press Ctrl + Shift + Up arrow or Ctrl + Shift + Down arrow to move focus out of the editing area",
         "dxHtmlEditor-dialogColorCaption": "Ändra textfärg",
         "dxHtmlEditor-dialogBackgroundCaption": "Ändra bakgrundsfärg",
         "dxHtmlEditor-dialogLinkCaption": "Lägg till länk",

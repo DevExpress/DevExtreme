@@ -21,7 +21,6 @@ import {
   getWidth,
 } from '@js/core/utils/size';
 import { isDeferred, isDefined, isEmptyObject } from '@js/core/utils/type';
-import type { ScrollEvent } from '@js/ui/scroll_view';
 import * as accessibility from '@js/ui/shared/accessibility';
 import { isElementInDom } from '@ts/core/utils/m_dom';
 import { focused } from '@ts/core/utils/m_selectors';
@@ -30,6 +29,7 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { RowsViewScrollEvent } from '@ts/grids/grid_core/views/types';
 import { memoize } from '@ts/utils/memoize';
 
 import {
@@ -1060,8 +1060,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const row = this._dataController.items()[rowIndex];
     const isRowData: boolean = !row || row.rowType === 'data';
 
-    return this._editingController.allowUpdating({ row })
-      ? isRowData : !!(row as any)?.isNewRow;
+    return this._editingController.allowUpdating({ row }) && isRowData;
   }
 
   /**
@@ -1640,11 +1639,11 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
   }
 
-  private _allowRowUpdating() {
+  private _allowRowUpdating(): boolean {
     const rowIndex = this.getVisibleRowIndex();
     const row = this._dataController.items()[rowIndex];
 
-    return this._editingController.allowUpdating({ row }, 'click');
+    return this._editingController.allowUpdating({ row }, 'click', false);
   }
   // #endregion Pointer_Event_Handler
 
@@ -3055,7 +3054,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewKeyboardExtender 
     return gridCoreUtils.getWidgetInstance($editor);
   }
 
-  protected _handleScroll(e: ScrollEvent): void {
+  protected _handleScroll(e: RowsViewScrollEvent): void {
     super._handleScroll(e);
 
     if (this._keyboardNavigationController.needNavigationToCell()) {

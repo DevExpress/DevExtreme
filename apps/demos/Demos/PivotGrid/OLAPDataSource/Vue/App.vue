@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="long-title">
-      <h3>Sales Statistics</h3>
+      <h2>Sales Statistics</h2>
     </div>
     <DxPivotGrid
       :allow-sorting-by-summary="true"
@@ -50,7 +50,7 @@ const dataSource = new PivotGridDataSource({
 });
 </script>
 <style scoped>
-.long-title h3 {
+.long-title h2 {
   font-family:
     "Segoe UI Light",
     "Helvetica Neue Light",
@@ -61,6 +61,7 @@ const dataSource = new PivotGridDataSource({
   font-weight: 200;
   font-size: 28px;
   text-align: center;
-  margin-bottom: 20px;
+  letter-spacing: normal;
+  margin: 28px 0 20px;
 }
 </style>

@@ -123,9 +123,9 @@ export class Component<
 
   _getDefaultOptions(): TProperties {
     return {
-      onInitialized: null,
-      onOptionChanged: null,
-      onDisposing: null,
+      onInitialized: undefined,
+      onOptionChanged: undefined,
+      onDisposing: undefined,
 
       defaultOptionsRules: null,
     } as unknown as TProperties;

@@ -50,7 +50,7 @@ QUnit.module('default', {
         assert.strictEqual(getOptionValue('keyExpr'), 'text', 'keyExpr');
         assert.deepEqual(getOptionValue('items'), [], 'items');
         assert.strictEqual(getOptionValue('buttonTemplate'), 'content', 'buttonTemplate');
-        assert.strictEqual(getOptionValue('onSelectionChanged'), null, 'onSelectionChanged');
+        assert.strictEqual(getOptionValue('onSelectionChanged'), undefined, 'onSelectionChanged');
         assert.strictEqual(getOptionValue('stylingMode'), 'contained', 'stylingMode');
     });
 

@@ -125,7 +125,7 @@ class Widget<
       visible: true,
       hint: undefined,
       activeStateEnabled: false,
-      onContentReady: null,
+      onContentReady: undefined,
       hoverStateEnabled: false,
       focusStateEnabled: false,
       tabIndex: 0,

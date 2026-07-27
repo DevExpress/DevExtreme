@@ -1,6 +1,7 @@
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { Item } from '@js/ui/toolbar';
+import { getFirstFocusableElement } from '@ts/core/utils/focus';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { MultiLineStrategy } from '@ts/ui/toolbar/strategy/toolbar.multiline';
 import { SingleLineStrategy } from '@ts/ui/toolbar/strategy/toolbar.singleline';
@@ -186,6 +187,18 @@ class Toolbar extends ToolbarBase<Properties> {
     if (allowKeyboardNavigation) {
       this._resetRovingTabIndex();
     }
+  }
+
+  focusFirstItem(): boolean {
+    if (this.option('disabled')) {
+      return false;
+    }
+
+    const target = getFirstFocusableElement(this.$element().get(0) as HTMLElement);
+
+    target?.focus();
+
+    return Boolean(target);
   }
 
   _isMenuItem(itemData: Item): boolean {

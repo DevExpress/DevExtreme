@@ -31,7 +31,7 @@ export interface SearchBoxMixinOptions {
      * @default null
      * @public
      */
-    searchExpr?: string | Function | Array<string | Function>;
+    searchExpr?: string | Function | Array<string | Function> | null;
     /**
      * @docid
      * @default 'contains'

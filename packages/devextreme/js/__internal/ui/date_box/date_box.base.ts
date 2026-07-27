@@ -74,6 +74,7 @@ export interface DateBoxBaseProperties extends Omit<Properties, 'onClosed' | 'on
   buttonsLocation?: string;
   emptyDateValue?: Date;
   _showValidationIcon?: boolean;
+  useHiddenSubmitElement?: boolean;
 }
 
 class DateBox extends DropDownEditor<DateBoxBaseProperties> {
@@ -104,10 +105,8 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
       type: 'date',
       showAnalogClock: true,
       value: null,
-      // @ts-expect-error ts-error
       displayFormat: null,
       interval: 30,
-      // @ts-expect-error ts-error
       disabledDates: null,
       pickerType: PICKER_TYPE.calendar,
       invalidDateMessage: messageLocalization.format('dxDateBox-validation-datetime'),

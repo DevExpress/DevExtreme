@@ -142,7 +142,7 @@ type IOptionsProps = React.PropsWithChildren<{
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   icon?: string;
-  onClick?: ((e: ClickEvent) => void);
+  onClick?: ((e: ClickEvent) => void) | undefined;
   onContentReady?: ((e: ButtonContentReadyEvent) => void);
   onDisposing?: ((e: ButtonDisposingEvent) => void);
   onInitialized?: ((e: ButtonInitializedEvent) => void);

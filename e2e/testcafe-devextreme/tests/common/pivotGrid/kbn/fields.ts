@@ -112,6 +112,30 @@ const createConfig = () => ({
     ? Selector(`.dx-pivotgridfieldchooser .dx-area-fields[group="${area}"]`)
     : Selector(`.dx-pivotgrid-fields-area[group="${area}"]`));
 
+  test(`${testTitlePrefix}: Fields should be exposed as menu items of an area menubar`, async (t) => {
+    const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
+
+    if (isFieldChooser) {
+      await t.click(pivotGrid.getFieldChooserButton());
+    }
+
+    const rowAreaContainer = getAreaFieldsContainer('row');
+    const menubar = rowAreaContainer.find('[role="menubar"]');
+    const firstField = getField(pivotGrid, 'row', 0);
+
+    await t
+      .expect(menubar.count)
+      .eql(1, 'the area has a single menubar')
+      .expect(menubar.getAttribute('aria-label'))
+      .eql('Row Fields', 'the menubar is labelled with the area name');
+
+    await t
+      .expect(firstField.getAttribute('role'))
+      .eql('menuitem', 'a field is exposed as a menu item')
+      .expect(firstField.getAttribute('aria-label'))
+      .eql('Field: Region, Sort order: ascending', 'the field label includes the name and the sorting state');
+  }).before(async () => createWidget('dxPivotGrid', createConfig()));
+
   ['filter', 'data', 'column', 'row'].forEach((area) => {
     test(`${testTitlePrefix}: Fields in ${area} area should form a single tab stop`, async (t) => {
       const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);

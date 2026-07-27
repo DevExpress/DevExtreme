@@ -548,6 +548,13 @@ export class FieldChooser extends FieldChooserBase {
         that.renderField(field, true).appendTo($container);
       }
     });
+
+    // A menubar without menu items is invalid ARIA, so an empty area stays
+    // without the role until fields are dropped into it.
+    const hasFields = !!$container.children().length;
+    $container
+      .attr('role', hasFields ? 'menubar' : null)
+      .attr('aria-label', hasFields ? that.option(`texts.${area}Fields`) : null);
   }
 
   _renderArea(container, area) {

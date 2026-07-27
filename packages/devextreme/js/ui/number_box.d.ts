@@ -161,7 +161,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      * @default undefined
      * @public
      */
-    buttons?: Array<NumberBoxPredefinedButton | TextEditorButton>;
+    buttons?: Array<NumberBoxPredefinedButton | TextEditorButton> | undefined;
     /**
      * @docid
      * @default ""
