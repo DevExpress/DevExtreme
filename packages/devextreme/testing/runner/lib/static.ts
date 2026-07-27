@@ -127,6 +127,27 @@ function sendStaticFile(res: ServerResponse, filePath: string, fileSize: number)
   return true;
 }
 
+/** Serve JSON as `export default …` for native ESM (SystemJS `*.json!` replacement). */
+function sendJsonAsEsmModule(res: ServerResponse, filePath: string): boolean {
+  try {
+    const raw = fs.readFileSync(filePath, 'utf8');
+    // Validate JSON before embedding
+    JSON.parse(raw);
+    const body = `export default ${raw};\n`;
+    const buffer = Buffer.from(body, 'utf8');
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+    res.setHeader('Content-Length', String(buffer.length));
+    res.end(buffer);
+    return true;
+  } catch {
+    res.statusCode = 500;
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.end('Failed to export JSON as ESM module');
+    return true;
+  }
+}
+
 function sendDirectoryListing(
   res: ServerResponse,
   requestPath: string,
@@ -217,6 +238,10 @@ export function createStaticFileService({
     }
 
     if (stat.isFile()) {
+      if (searchParams.has('esm-export') && path.extname(resolvedFilePath).toLowerCase() === '.json') {
+        return sendJsonAsEsmModule(res, resolvedFilePath);
+      }
+
       // Native ESM resolves relative imports against the request URL, not the
       // on-disk file. If we silently serve `foo.js` / `foo/index.js` for
       // extensionless `foo`, `../` chains break (SystemJS did not have this).
