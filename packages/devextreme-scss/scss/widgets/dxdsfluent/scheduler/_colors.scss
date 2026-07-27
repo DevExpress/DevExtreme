@@ -1,0 +1,72 @@
+@use "../button/colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$scheduler-base-border-color: ds.$color-border-neutral-default-rest !default;
+$scheduler-cell-active-bg: ds.$color-surface-neutral-default-active !default;
+$scheduler-cell-hover-bg: ds.$color-surface-neutral-default-hovered !default;
+$scheduler-group-separator-border-color: ds.$color-border-neutral-accessible-rest !default;
+
+$scheduler-accent-border-color: ds.$color-border-neutral-default-rest !default;
+
+$scheduler-appointment-text-color: ds.$color-content-neutral-default-rest !default;
+$scheduler-appointment-focus-color: null !default;
+
+$scheduler-appointment-base-color: ds.$color-surface-primary-subdued-rest !default;
+
+$scheduler-appointment-start-color: ds.$color-shadow-key-darker !default;
+$scheduler-appointment-active-color: $button-default-outlined-active-bg;
+
+$scheduler-workspace-focused-cell-color: ds.$color-surface-primary-alpha-rest !default;
+
+$scheduler-first-month-border-color: ds.$color-border-neutral-default-rest !default;
+$scheduler-droppable-cell-background-color: ds.$color-surface-neutral-deep-rest !default;
+$scheduler-panel-text-color: ds.$color-content-neutral-subdued-rest !default;
+$scheduler-workspace-background-color: ds.$color-surface-neutral-default-rest !default;
+$scheduler-workspace-accent-color: ds.$color-content-primary-default-rest !default;
+
+$scheduler-current-time-cell-color: ds.$color-content-primary-default-rest !default;
+$scheduler-time-indicator-color: ds.$color-surface-danger-default-rest !default;
+$scheduler-dd-appointment-hover-text-color: ds.$color-content-neutral-default-inverted-rest !default;
+$scheduler-form-icon-color: ds.$color-content-neutral-subdued-rest !default;
+$scheduler-workspace-month-text-color: ds.$color-content-neutral-default-rest !default;
+$scheduler-workspace-other-month-text-color: ds.$color-content-neutral-subdued-rest !default;
+$scheduler-dropdown-appointment-date-color: ds.$color-content-neutral-subdued-rest !default;
+$scheduler-workspace-active-cell-color: $scheduler-accent-border-color !default;
+$scheduler-workspace-hovered-cell-color: $scheduler-workspace-month-text-color !default;
+$scheduler-header-bg: ds.$color-surface-neutral-default-rest !default;
+$scheduler-alldaypanel-bg: ds.$color-surface-neutral-default-rest !default;
+$scheduler-other-month-cell-opacity: 1 !default;
+$scheduler-fill-focused-appointment: false !default;
+$scheduler-is-shadow-color-for-focused-state: false !default;
+$scheduler-time-indicator-background-color: rgb(from #{ds.$color-content-neutral-default-rest} r g b / 0.03) !default;
+
+$scheduler-tooltip-appointment-text-color: ds.$color-content-neutral-default-rest !default;
+$scheduler-appointment-overlay-bg: ds.$color-surface-neutral-default-rest !default;
+
+// Agenda
+$agenda-appointment-recurrence-icon-color: ds.$color-content-neutral-default-inverted-rest !default;
+$agenda-appointment-hover-bg: ds.$color-surface-neutral-default-hovered !default;
+$agenda-appointment-active-bg: ds.$color-surface-neutral-alpha-active !default;
+$agenda-appointment-text-color: ds.$color-content-neutral-default-rest !default;
+
+$header-panel-cell-date: ds.$color-content-neutral-subdued-rest !default;
+
+$scheduler-first-month-cell-background-color: rgb(from #{$scheduler-appointment-base-color} r g b / 0.15) !default;
+$scheduler-appointment-focus-color: $scheduler-appointment-text-color;
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$scheduler-accent: ds.$color-surface-primary-default-rest !default;
+$scheduler-bg: ds.$color-surface-neutral-default-rest !default;
+$scheduler-border-color: ds.$color-border-neutral-default-rest !default;
+$scheduler-inverted-text-color: ds.$color-content-neutral-default-inverted-rest !default;
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-scheduler-appointment-dragging-shadow: 7px 7px 15px 0 ds.$color-shadow-key !default;
+$fluent-scheduler-tooltip-shadow: ds.$box-shadow-md !default;
+$fluent-scheduler-agenda-details-opacity: ds.$opacity-70 !default;
+$fluent-scheduler-appointment-date-opacity: ds.$opacity-70 !default;
+$fluent-scheduler-appointment-resizing-opacity: ds.$opacity-70 !default;
+$fluent-scheduler-appointment-disabled-opacity: ds.$opacity-60 !default;
+$fluent-scheduler-appointment-drag-source-opacity: ds.$opacity-70 !default;

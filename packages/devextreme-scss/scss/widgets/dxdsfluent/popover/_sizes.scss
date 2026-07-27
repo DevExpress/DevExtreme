@@ -1,0 +1,9 @@
+@use "../../../_design-system/variables/ds" as ds;
+@use "../sizes" as *;
+
+// adduse
+
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-popover-popup-title-border-top-left-radius: ds.$border-radius-60 !default;
+$fluent-popover-popup-title-border-top-right-radius: ds.$border-radius-60 !default;

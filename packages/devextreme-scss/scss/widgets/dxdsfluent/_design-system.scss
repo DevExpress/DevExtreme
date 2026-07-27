@@ -1,0 +1,19 @@
+@use "sass:meta";
+@use "colors";
+
+$accent: colors.$color;
+
+/*
+ * Tier order mirrors the design-tokens package: base scales and palettes, then semantic roles,
+ * then components. The component size tokens (fluent components sizes) are intentionally NOT
+ * emitted: dxdsfluent maps sizes onto the base scales (spacing, font-size, border-radius,
+ * border-width), so the component layout custom properties would never be referenced by any
+ * widget. Only the component color theme is consumed.
+ */
+@include meta.load-css("../../_design-system/base");
+@include meta.load-css("../../_design-system/fluent/base");
+@include meta.load-css("../../_design-system/fluent/accents/#{$accent}");
+@include meta.load-css("../../_design-system/fluent/semantic/typography");
+@include meta.load-css("../../_design-system/fluent/semantic/box-shadow");
+@include meta.load-css("../../_design-system/fluent/semantic/colors/#{colors.$mode}");
+@include meta.load-css("../../_design-system/fluent/components/theme");

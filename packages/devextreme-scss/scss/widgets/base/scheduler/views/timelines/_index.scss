@@ -6,7 +6,12 @@ $scheduler-base-border: null !default;
 $scheduler-base-border-color: null !default;
 $scheduler-accent-border-color: null !default;
 
-$scheduler-timeline-min-height: 100px;
+$scheduler-timeline-min-height: 100px !default;
+
+$scheduler-timeline-group-two-empty-cell-width: null !default;
+$scheduler-timeline-group-header-width: null !default;
+$scheduler-timeline-group-three-empty-cell-width: null !default;
+$scheduler-timeline-cell-width: null !default;
 
 .dx-scheduler-timeline-week,
 .dx-scheduler-timeline-work-week,
@@ -18,21 +23,21 @@ $scheduler-timeline-min-height: 100px;
 
   &.dx-scheduler-group-column-count-two {
     .dx-scheduler-header-panel-empty-cell {
-      width: 160px;
+      width: $scheduler-timeline-group-two-empty-cell-width;
     }
 
     .dx-scheduler-group-flex-container .dx-scheduler-group-header {
-      width: 80px;
+      width: $scheduler-timeline-group-header-width;
     }
   }
 
   &.dx-scheduler-group-column-count-three {
     .dx-scheduler-header-panel-empty-cell {
-      width: 240px;
+      width: $scheduler-timeline-group-three-empty-cell-width;
     }
 
     .dx-scheduler-group-flex-container .dx-scheduler-group-header {
-      width: 80px;
+      width: $scheduler-timeline-group-header-width;
     }
   }
 
@@ -82,7 +87,7 @@ $scheduler-timeline-min-height: 100px;
 .dx-scheduler-timeline {
   .dx-scheduler-header-panel-cell:not(.dx-scheduler-header-panel-week-cell),
   .dx-scheduler-date-table-cell {
-    width: 200px;
+    width: $scheduler-timeline-cell-width;
   }
 
   .dx-scheduler-date-table-cell {
@@ -149,7 +154,7 @@ $scheduler-timeline-min-height: 100px;
 
   &.dx-scheduler-work-space-group-by-date {
     .dx-scheduler-group-header {
-      width: 200px;
+      width: $scheduler-timeline-cell-width;
     }
   }
 
