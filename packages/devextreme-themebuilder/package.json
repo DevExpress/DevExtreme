@@ -30,7 +30,7 @@
   "dependencies": {
     "autoprefixer": "^10.5.0",
     "clean-css": "^5.3.3",
-    "postcss": "^8.5.12",
+    "postcss": "^8.5.23",
     "sass-embedded": "1.66.0"
   },
   "devDependencies": {
