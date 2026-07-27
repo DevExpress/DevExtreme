@@ -1,6 +1,10 @@
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+
 import {
   BaseRunProps, RunAllModel, RunSuiteModel, TemplateVars,
 } from './types';
+import { buildQunitImportMap, getEsmModuleRoot } from './importMap';
 
 interface SystemPackage {
   main?: string;
@@ -11,6 +15,7 @@ interface PagesRendererDeps {
   contentWithCacheBuster: (contentPath: string, cacheBuster: string) => string;
   getCacheBuster: (searchParams: URLSearchParams) => string;
   jsonString: (value: unknown) => string;
+  packageRoot: string;
   renderTemplate: (templateName: string, vars?: TemplateVars) => string;
 }
 
@@ -28,6 +33,7 @@ export function createPagesRenderer({
   contentWithCacheBuster,
   getCacheBuster,
   jsonString,
+  packageRoot,
   renderTemplate,
 }: PagesRendererDeps): PagesRenderer {
   function renderIndexPage(): string {
@@ -70,10 +76,25 @@ export function createPagesRenderer({
     const isSelfSufficientTest = scriptVirtualPath.includes('_bundled')
             || scriptVirtualPath.includes('Bundles')
             || scriptVirtualPath.includes('DevExpress.jquery');
+    const useEsm = runProps.UseEsm;
+    const esmRootPath = path.join(packageRoot, 'artifacts', 'transpiled-esm-npm', 'esm');
+    const esmReady = fs.existsSync(path.join(esmRootPath, 'integration', 'jquery.js'));
 
-    const cspPart = runProps.NoCsp ? '' : '-systemjs';
-    const npmModule = `transpiled${cspPart}`;
-    const testingBasePath = runProps.NoCsp
+    if (useEsm && !esmReady) {
+      return `<!DOCTYPE html><html><head><title>ESM artifacts missing</title></head><body>
+<h1>QUnit ESM loader: artifacts missing</h1>
+<p><code>artifacts/transpiled-esm-npm/esm</code> is not built.</p>
+<p><code>pnpm run dev</code> / <code>build:dev</code> uses transpile <code>-c ci</code>, which skips ESM.</p>
+<p>Build once:</p>
+<pre>pnpm nx run devextreme:"build:npm:esm"
+pnpm nx run devextreme:"build:npm:esm:internal"</pre>
+<p>Then reload <code>?loader=esm</code>.</p>
+</body></html>`;
+    }
+
+    const cspPart = runProps.NoCsp || useEsm ? '' : '-systemjs';
+    const npmModule = useEsm ? 'transpiled-esm-npm/esm' : `transpiled${cspPart}`;
+    const testingBasePath = runProps.NoCsp || useEsm
       ? '/packages/devextreme/testing/'
       : '/packages/devextreme/artifacts/transpiled-testing/';
 
@@ -86,7 +107,7 @@ export function createPagesRenderer({
     }
 
     function getTestUrl(): string {
-      if (runProps.NoCsp) {
+      if (runProps.NoCsp || useEsm) {
         return scriptVirtualPath;
       }
 
@@ -121,12 +142,25 @@ export function createPagesRenderer({
     const qunitExtensionsJs = contentWithCacheBuster('/packages/devextreme/testing/helpers/qunitExtensions.js', cacheBuster);
     const jqueryJs = contentWithCacheBuster('/packages/devextreme/node_modules/jquery/dist/jquery.js', cacheBuster);
     const sinonJs = contentWithCacheBuster('/packages/devextreme/node_modules/sinon/pkg/sinon.js', cacheBuster);
-    const systemJs = contentWithCacheBuster(
-      runProps.NoCsp
-        ? '/packages/devextreme/node_modules/systemjs/dist/system.js'
-        : '/packages/devextreme/node_modules/systemjs/dist/system-csp-production.js',
-      cacheBuster,
-    );
+    const systemJsScript = useEsm
+      ? ''
+      : `<script src="${contentWithCacheBuster(
+        runProps.NoCsp
+          ? '/packages/devextreme/node_modules/systemjs/dist/system.js'
+          : '/packages/devextreme/node_modules/systemjs/dist/system-csp-production.js',
+        cacheBuster,
+      )}"></script>`;
+
+    const importMap = useEsm
+      ? buildQunitImportMap({
+        jqueryUrl: getJQueryUrl(),
+        cacheBuster,
+      })
+      : null;
+
+    const importMapScript = useEsm
+      ? `<script type="importmap" nonce="wIkO6u">\n${JSON.stringify(importMap)}\n</script>`
+      : '';
 
     const cspMap: Record<string, string> = !runProps.NoCsp
       ? {
@@ -237,7 +271,7 @@ export function createPagesRenderer({
     };
 
     const integrationImportPaths = getJQueryIntegrationImports();
-    const cspMetaTag = runProps.NoCsp
+    const cspMetaTag = runProps.NoCsp || useEsm
       ? ''
       : `<meta
             http-equiv="Content-Security-Policy"
@@ -259,7 +293,10 @@ export function createPagesRenderer({
       QUNIT_EXTENSIONS_JS_URL: qunitExtensionsJs,
       JQUERY_JS_URL: jqueryJs,
       SINON_JS_URL: sinonJs,
-      SYSTEM_JS_URL: systemJs,
+      SYSTEM_JS_SCRIPT: systemJsScript,
+      IMPORT_MAP_SCRIPT: importMapScript,
+      USE_ESM_JSON: jsonString(useEsm),
+      ESM_MODULE_ROOT_JSON: jsonString(getEsmModuleRoot()),
       IS_CONTINUOUS_INTEGRATION_JSON: jsonString(runProps.IsContinuousIntegration),
       CACHE_BUSTER_JSON: jsonString(cacheBuster),
       SYSTEM_CONFIG_JSON: jsonString(systemConfig),

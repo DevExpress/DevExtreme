@@ -67,6 +67,45 @@ function getContentType(filePath: string): string {
   }
 }
 
+/**
+ * Native ESM requires resolvable URLs. Our transpiled ESM tree uses
+ * extensionless relative imports (`from './wrapper'`). Resolve those
+ * to `.js` / `/index.js` on disk so import maps can load artifacts.
+ *
+ * Prefer `name.js` over a sibling directory `name/` — otherwise imports like
+ * `../__internal/integration/jquery` resolve to a directory listing (HTML)
+ * and the browser reports "Failed to fetch dynamically imported module".
+ *
+ * Also: files like `ui.collection_widget.edit` have a dotted basename;
+ * `path.extname` returns `.edit`, so we must still try appending `.js`.
+ */
+function resolveStaticFilePath(filePath: string): string | null {
+  if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+    return filePath;
+  }
+
+  const asJs = `${filePath}.js`;
+  if (fs.existsSync(asJs) && fs.statSync(asJs).isFile()) {
+    return asJs;
+  }
+
+  const asModuleJs = `${filePath}.mjs`;
+  if (fs.existsSync(asModuleJs) && fs.statSync(asModuleJs).isFile()) {
+    return asModuleJs;
+  }
+
+  const asIndexJs = path.join(filePath, 'index.js');
+  if (fs.existsSync(asIndexJs) && fs.statSync(asIndexJs).isFile()) {
+    return asIndexJs;
+  }
+
+  if (fs.existsSync(filePath)) {
+    return filePath;
+  }
+
+  return null;
+}
+
 function sendStaticFile(res: ServerResponse, filePath: string, fileSize: number): boolean {
   res.statusCode = 200;
   res.setHeader('Content-Type', getContentType(filePath));
@@ -163,20 +202,37 @@ export function createStaticFileService({
       return true;
     }
 
-    if (!fs.existsSync(filePath)) {
+    const resolvedFilePath = resolveStaticFilePath(filePath);
+
+    if (!resolvedFilePath) {
       return false;
     }
 
     setStaticCacheHeaders(res, searchParams);
 
-    const stat = fs.statSync(filePath);
+    const stat = fs.statSync(resolvedFilePath);
 
     if (stat.isDirectory()) {
-      return sendDirectoryListing(res, pathname, filePath, escapeHtml);
+      return sendDirectoryListing(res, pathname, resolvedFilePath, escapeHtml);
     }
 
     if (stat.isFile()) {
-      return sendStaticFile(res, filePath, stat.size);
+      // Native ESM resolves relative imports against the request URL, not the
+      // on-disk file. If we silently serve `foo.js` / `foo/index.js` for
+      // extensionless `foo`, `../` chains break (SystemJS did not have this).
+      // Redirect to the canonical file URL so the browser base path is correct.
+      const resolvedUrlPath = `/${path.relative(rootDirectory, resolvedFilePath)
+        .split(path.sep)
+        .join('/')}`;
+      if (resolvedUrlPath !== normalizedPath) {
+        const query = searchParams.toString();
+        res.statusCode = 302;
+        res.setHeader('Location', query ? `${resolvedUrlPath}?${query}` : resolvedUrlPath);
+        res.end();
+        return true;
+      }
+
+      return sendStaticFile(res, resolvedFilePath, stat.size);
     }
 
     return false;
