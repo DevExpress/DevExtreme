@@ -5,18 +5,19 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  tar@<7.5.19: ^7.5.19
+  tar@<7.5.22: ^7.5.22
   undici@<7.28.0: ^7.28.0
-  brace-expansion@>=3.0.0 <5.0.7: ^5.0.7
+  brace-expansion@<5.0.8: ^5.0.8
   body-parser@>=2.0.0 <2.3.0: ^2.3.0
+  fast-uri@>=3.0.0 <3.1.4: ^3.1.4
 
 importers:
 
   .:
     devDependencies:
       '@devexpress/sbom-toolkit':
-        specifier: 0.11.1
-        version: 0.11.1
+        specifier: 0.11.2
+        version: 0.11.2
 
 packages:
 
@@ -144,8 +145,8 @@ packages:
     engines: {node: ^20 || ^22 || ^24 || ^25, pnpm: '>=10'}
     hasBin: true
 
-  '@devexpress/sbom-toolkit@0.11.1':
-    resolution: {integrity: sha512-OfTykaea0qop433TxYZB8oh3eW1BBjk9nyyKfMMikntznFsLNQrEIN885+OzTBDPqqWiHCm37N0vsgO+MDZIzA==, tarball: https://npm.pkg.github.com/download/@devexpress/sbom-toolkit/0.11.1/2196468147511fa831d1252bbf4f1cc0c96d1461}
+  '@devexpress/sbom-toolkit@0.11.2':
+    resolution: {integrity: sha512-uIRA+rVgi5R2WRkXrr//wRSvcrlesMogrfLoONVuA743CY4xy5ACJ3sBxa1614PlJHFAHxu1CLzhKKGD81e8BA==, tarball: https://npm.pkg.github.com/download/@devexpress/sbom-toolkit/0.11.2/b79d441cc3c4171ec76b7aba2520bf2ae90baebf}
     hasBin: true
 
   '@gar/promise-retry@1.0.3':
@@ -249,9 +250,9 @@ packages:
   boolbase@1.0.0:
     resolution: {integrity: sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==}
 
-  brace-expansion@5.0.7:
-    resolution: {integrity: sha512-7oFy703dxfY3/NLxC1fh2SUCQ0H9rmAY+5EpDVfXjUTTs+HEwR2nYaqLv+GWcTsumwxPfiz6CzCNkwXwBUwqCA==}
-    engines: {node: 18 || 20 || >=22}
+  brace-expansion@5.0.8:
+    resolution: {integrity: sha512-JZyDyq3D4AUifKTPOB7DELf6XsB3WdPuNxCtob1vFXPsSXhdAiHBWJ/tJ8HAc9aH84BK+5JFZLNkJKx3G9kzQg==}
+    engines: {node: 20 || >=22}
 
   byte-counter@0.1.0:
     resolution: {integrity: sha512-jheRLVMeUKrDBjVw2O5+k4EvR4t9wtxHL+bo/LxfkxsVeuGMy3a5SEGgXdAFA4FSzTrU8rQXQIrsZ3oBq5a0pQ==}
@@ -415,8 +416,8 @@ packages:
   fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
 
-  fast-uri@3.1.2:
-    resolution: {integrity: sha512-rVjf7ArG3LTk+FS6Yw81V1DLuZl1bRbNrev6Tmd/9RaroeeRRJhAt7jg/6YFxbvAQXUCavSoZhPPj6oOx+5KjQ==}
+  fast-uri@3.1.4:
+    resolution: {integrity: sha512-8JnbkQ4juDyvYs4mgFGQqg4yCYtFDtUtmp2QIQq11ZZe5CFQ5wcqm1rqDgAh/QdMySuBnPzMUiJUNZG5N/AiQw==}
 
   finalhandler@1.1.2:
     resolution: {integrity: sha512-aAWcW57uxVNrQZqFXjITpW3sIUQmHGG3qSb9mUah9MgMC4NeWhNOlNjXEYq3HjRAvL6arUviZGGJsBg6z0zsWA==}
@@ -782,8 +783,8 @@ packages:
     resolution: {integrity: sha512-yDPMNjp4WyfYBkHnjIRLfca1i6KMyGCtsVgoKe/z1+6vukgaENdgGBZt+ZmKPc4gavvEZ5OgHfHdrazhgNyG7w==}
     engines: {node: '>=12'}
 
-  tar@7.5.19:
-    resolution: {integrity: sha512-4LeEWl96twnS2Q7Bz4MGqgazLqO+hJN63GZxXoIqh1T3VweYD997gbU1ItNsQafqqXTXd5WFyFdReLtwvRBNiw==}
+  tar@7.5.22:
+    resolution: {integrity: sha512-MFO/QzvtAOmJbkhOaCTvbGcFN9L9b+JunIsDwaKljSOdcLMea3NJ1k9Usz/rjdfSXTq4dfzfeS7W4p4YOAAHeA==}
     engines: {node: '>=18'}
 
   toidentifier@1.0.1:
@@ -1024,7 +1025,7 @@ snapshots:
       read-package-json-fast: 5.0.0
       semver: 7.8.1
       ssri: 13.0.1
-      tar: 7.5.19
+      tar: 7.5.22
       treeverse: 3.0.0
       uuid: 14.0.0
       walk-up-path: 4.0.0
@@ -1056,7 +1057,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@devexpress/sbom-toolkit@0.11.1':
+  '@devexpress/sbom-toolkit@0.11.2':
     dependencies:
       '@cyclonedx/cdxgen': 12.5.1
       spdx-license-ids: 3.0.23
@@ -1146,7 +1147,7 @@ snapshots:
   ajv@8.20.0:
     dependencies:
       fast-deep-equal: 3.1.3
-      fast-uri: 3.1.2
+      fast-uri: 3.1.4
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
@@ -1181,7 +1182,7 @@ snapshots:
 
   boolbase@1.0.0: {}
 
-  brace-expansion@5.0.7:
+  brace-expansion@5.0.8:
     dependencies:
       balanced-match: 4.0.4
 
@@ -1370,7 +1371,7 @@ snapshots:
 
   fast-deep-equal@3.1.3: {}
 
-  fast-uri@3.1.2: {}
+  fast-uri@3.1.4: {}
 
   finalhandler@1.1.2:
     dependencies:
@@ -1546,7 +1547,7 @@ snapshots:
 
   minimatch@10.2.5:
     dependencies:
-      brace-expansion: 5.0.7
+      brace-expansion: 5.0.8
 
   minipass@7.1.3: {}
 
@@ -1755,7 +1756,7 @@ snapshots:
     dependencies:
       ansi-regex: 6.2.2
 
-  tar@7.5.19:
+  tar@7.5.22:
     dependencies:
       '@isaacs/fs-minipass': 4.0.1
       chownr: 3.0.0
