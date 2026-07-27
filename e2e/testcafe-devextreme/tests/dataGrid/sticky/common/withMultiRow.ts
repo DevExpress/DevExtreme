@@ -10,10 +10,7 @@ const DATA_GRID_SELECTOR = '#container';
 fixture.disablePageReloads`Sticky columns - Multi Row Header Columns`
   .page(url(__dirname, '../../../container.html'));
 
-// visual: generic.light
-// visual: material.blue.light
-// visual: fluent.blue.light
-test.meta({ browserSize: [800, 800] })('The multi row header columns should have vertical borders when a column is fixed (generic.light theme) (T1282595)', async (t) => {
+test.meta({ browserSize: [800, 800] })('The multi row header columns should have vertical borders when a column is fixed (T1282595)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
