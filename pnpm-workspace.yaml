@@ -21,7 +21,7 @@ overrides:
   "semver@<5.7.2": ^5.7.2
   qs: ">=6.15.2"
   "vite@>=7.0.0 <=7.3.4": ^7.3.5
-  "dompurify@<=3.4.11": ^3.4.12
+  "dompurify@<3.4.12": ^3.4.12
   "hono@<4.12.27": "^4.12.27"
   "minimatch@>=9.0.0 < 9.0.7": 9.0.9
   "picomatch@>=4.0.0 <4.0.4": 4.0.4
@@ -39,12 +39,10 @@ overrides:
   "launch-editor@<2.14.1": ^2.14.1
   "@babel/core@<7.29.1": ^7.29.1
   "uuid@<14.0.0": ~14.0.0
-  "postcss@<=8.5.17": ^8.5.18
+  "postcss@<8.5.23": ^8.5.23
   "ip-address@<=10.1.0": ">=10.1.1"
-  "webpack-dev-server@<=5.2.5": ^5.2.6
-  "fast-uri@>=3.0.0 <3.1.4": ^3.1.4
+  "webpack-dev-server@<5.2.6": ^5.2.6
   "immutable@>=5.0.0-beta.1 <5.1.8": ^5.1.8
-  "@hono/node-server@<2.0.5": ^2.0.5
   "form-data@<4.0.6": "^4.0.6"
   "undici@>=7.23.0 <7.28.0": ^7.28.0
   "http-proxy-middleware@>=0.16.0 <3.0.7": ^3.0.7
@@ -59,6 +57,8 @@ overrides:
   "shell-quote@<=1.8.4": ^1.9.0
   "babel-traverse": "npm:@babel/traverse@^7.23.2"
   "systemjs-builder>terser": 5.46.2
+  "fast-uri@>=3.0.0 <3.1.4": "^3.1.4"
+  "@hono/node-server@<2.0.12": "^2.0.12"
 catalog:
   axe-core: ^4.11.1
   inferno: ^8.2.3
