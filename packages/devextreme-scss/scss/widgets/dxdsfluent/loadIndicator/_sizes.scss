@@ -1,0 +1,7 @@
+@use "../sizes" as *;
+
+// adduse
+
+
+// Values hoisted from style-file literals (tokenized)
+$load-indicator-segment-border-width: 0.12em !default; // dx-relative: scales with the parent font-size

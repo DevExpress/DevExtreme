@@ -1,0 +1,59 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$texteditor-color: ds.$text-input-color-default-content-rest !default;
+
+$texteditor-placeholder-color: ds.$text-content-color-default-placeholder-rest !default;
+
+$texteditor-outlined-bg: ds.$text-input-color-default-bg-rest !default;
+
+$texteditor-outlined-bg-hover: $texteditor-outlined-bg !default;
+
+$texteditor-outlined-bg-focused: $texteditor-outlined-bg !default;
+
+$texteditor-filled-bg: ds.$color-surface-neutral-deep-rest !default;
+
+$texteditor-underlined-bg: transparent !default;
+
+$texteditor-underlined-bg-hover: $texteditor-underlined-bg !default;
+
+$texteditor-underlined-bg-focused: $texteditor-underlined-bg !default;
+
+$texteditor-border-color: ds.$text-input-color-default-border-rest !default;
+$texteditor-border-color-hover: ds.$text-input-color-default-border-hovered !default;
+$texteditor-border-color-focused: ds.$text-input-color-default-border-active !default;
+
+$texteditor-border-bottom-color: ds.$text-input-color-default-line-rest !default;
+$texteditor-border-bottom-color-hover: ds.$text-input-color-default-line-hovered !default;
+$texteditor-border-bottom-color-focused: ds.$text-input-color-default-line-hovered !default;
+
+$texteditor-indicator-border-color: ds.$text-input-color-default-line-focused !default;
+
+$texteditor-button-clear-icon-color: ds.$color-content-neutral-subdued-rest !default;
+$texteditor-invalid-focused-border-color: ds.$color-border-danger-default-hovered !default;
+$texteditor-invalid-faded-border-color: ds.$text-input-color-invalid-border-rest !default;
+$texteditor-border-color-disabled: ds.$text-input-color-default-border-disabled !default;
+$texteditor-disabled-text-color: ds.$text-input-color-default-content-disabled !default;
+$texteditor-input-border-radius: $base-border-radius !default;
+$texteditor-label-transition:
+  font-size 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
+  transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
+  top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
+
+$texteditor-filled-bg-hover: $texteditor-filled-bg !default;
+
+$texteditor-filled-bg-focused: $texteditor-filled-bg !default;
+
+$texteditor-label-color: $texteditor-placeholder-color;
+$texteditor-label-color-focused: ds.$color-content-primary-default-rest;
+
+:root {
+  --dx-texteditor-color-text: #{$texteditor-color};
+  --dx-texteditor-color-label: #{$texteditor-label-color};
+}
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$texteditor-foreground-disabled: ds.$text-input-color-default-content-disabled !default;
+$texteditor-invalid-color: ds.$text-input-color-invalid-border-rest !default;

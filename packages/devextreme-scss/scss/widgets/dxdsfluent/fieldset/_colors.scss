@@ -1,0 +1,6 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$fieldset-field-label-color: ds.$color-content-neutral-default-rest !default;
+$fieldset-field-value-invalid-color: ds.$color-border-danger-default-rest !default;

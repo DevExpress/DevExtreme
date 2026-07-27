@@ -4,7 +4,8 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  merge_group:
+  push:
+    branches: [26_1]
 
 concurrency:
   group: wf-${{github.event.pull_request.number || github.ref || github.sha}}-${{github.workflow}}

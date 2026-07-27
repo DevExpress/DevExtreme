@@ -1,0 +1,9 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$splitter-resize-handle-icon-size: ds.$spacing-200;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-splitter-resize-handle-gap: ds.$spacing-80 !default;
