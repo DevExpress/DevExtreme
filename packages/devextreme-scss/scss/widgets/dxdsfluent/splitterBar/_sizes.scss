@@ -1,0 +1,8 @@
+@use "../../../_design-system/variables/ds" as ds;
+@use "../sizes" as *;
+
+// adduse
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-splitterbar-splitter-border-width: ds.$spacing-70 !default;
+$fluent-splitterbar-splitter-bar-width: ds.$spacing-10 !default;

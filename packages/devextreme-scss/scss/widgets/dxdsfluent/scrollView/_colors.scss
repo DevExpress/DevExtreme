@@ -1,0 +1,16 @@
+@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$scrollview-shadow-color: ds.$color-shadow-key !default;
+
+$scrollview-pulldown-path: null !default;
+
+@if $mode == "light" {
+  $scrollview-pulldown-path: data-uri('images/widgets/dxdsfluent/color-schemes/light/pulldown.png') !default;
+}
+
+@if $mode == "dark" {
+  $scrollview-pulldown-path: data-uri('images/widgets/dxdsfluent/color-schemes/dark/pulldown.png') !default;
+}

@@ -1,0 +1,37 @@
+@use "sass:math";
+@use "../sizes" as *;
+@use "../../base/treeList/variables" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$treelist-fluent-expand-icon-size: null !default;
+
+@if $size == "default" {
+  $treelist-fluent-expand-icon-size: ds.$spacing-200 !default;
+}
+
+@else if $size == "compact" {
+  $treelist-fluent-expand-icon-size: ds.$spacing-160 !default;
+}
+
+$treelist-expand-icon-size: $treelist-fluent-expand-icon-size !default;
+$treelist-expand-icon-name-expanded: chevrondown !default;
+$treelist-expand-icon-name-collapsed: chevronright !default;
+$treelist-expand-icon-right-gap: ds.$spacing-40 !default;
+$treelist-expand-checkbox-size: ds.$spacing-160 !default;
+$treelist-expand-checkbox-right-gap: ds.$spacing-80 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-treelist-header-filter-outline: ds.$spacing-20 solid !default;
+$fluent-treelist-header-filter-outline-offset: ds.$spacing-20 !default;
+$fluent-treelist-button-margin-left: ds.$spacing-100 !default;
+$fluent-treelist-button-margin-top: ds.$spacing-100 !default;
+$fluent-treelist-error-message-margin-bottom: ds.$spacing-200 !default;
+$fluent-treelist-button-margin-right: ds.$spacing-100 !default;
+
+$fluent-treelist-sticky-column-border: ds.$border-width-20 solid !default;
+$fluent-treelist-cell-focus-outline: ds.$spacing-20 solid !default;
+
+// Base submodule sizing injected with design tokens (B2 tail)
+$fluent-treelist-expandable-node-line-height: ds.$spacing-10 !default;

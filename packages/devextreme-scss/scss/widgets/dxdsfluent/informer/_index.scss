@@ -1,0 +1,18 @@
+@use "../../base/informer";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/informer/mixins" as *;
+
+// adduse
+
+@include informer(
+  $informer-error-color,
+  $informer-error-background-color,
+  $informer-info-color,
+  $informer-info-background-color,
+  $informer-border-radius,
+  $informer-icon-size,
+  $informer-padding-inline,
+  $informer-padding-block,
+  $informer-column-gap,
+);

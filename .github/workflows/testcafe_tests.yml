@@ -8,7 +8,8 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  merge_group:
+  push:
+    branches: [26_1]
   workflow_dispatch:
 
 env:
@@ -248,6 +249,7 @@ jobs:
           style_dependent_matrix=$(cat <<'JSON'
           [
             { "componentFolder": "accessibility", "name": "accessibility - fluent.dark", "theme": "fluent.blue.dark", "concurrency": 6 },
+            { "componentFolder": "accessibility", "name": "accessibility - dxdsfluent.dark", "theme": "dxdsfluent.blue.dark", "concurrency": 6 },
               { "componentFolder": "accessibility", "name": "accessibility - material.light", "theme": "material.blue.light", "concurrency": 6 },
               { "componentFolder": "accessibility", "name": "accessibility - material.dark", "theme": "material.blue.dark", "concurrency": 6 }
             ]
@@ -259,7 +261,15 @@ jobs:
             --argjson baseEnd "$base_matrix_end" \
             --argjson styleDependent "$style_dependent_matrix" \
             --arg stylesChanged "${{ needs.check-should-run.outputs.styles-changed }}" \
-            '{ include: ($baseStart + (if $stylesChanged == "true" then $styleDependent else [] end) + $baseEnd) }')
+            '{ include: (
+              $baseStart
+              + (if $stylesChanged == "true" then $styleDependent else [] end)
+              + $baseEnd
+              + (($baseStart + $baseEnd) | map(
+                select(.theme == null)
+                | . + { name: (.name + " - dxdsfluent"), theme: "dxdsfluent.blue.light" }
+              ))
+            ) }')
 
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
 

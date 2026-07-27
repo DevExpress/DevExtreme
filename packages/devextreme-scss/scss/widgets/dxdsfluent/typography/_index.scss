@@ -1,0 +1,69 @@
+@use "sass:color";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../common/mixins" as *;
+@use "mixins" as *;
+
+// adduse
+
+.dx-theme-dxdsfluent-typography {
+  background-color: $typography-typography-bg;
+
+  @include dx-base-typography();
+
+  h1 {
+    font-weight: $fluent-h1-font-weight;
+    font-size: $fluent-h1-font-size;
+  }
+
+  h2 {
+    font-weight: $fluent-h2-font-weight;
+    font-size: $fluent-h2-font-size;
+  }
+
+  h3 {
+    font-weight: $fluent-h3-font-weight;
+    font-size: $fluent-h3-font-size;
+  }
+
+  h4 {
+    font-weight: $fluent-h4-font-weight;
+    font-size: $fluent-h4-font-size;
+  }
+
+  h5 {
+    font-weight: $fluent-h5-font-weight;
+    font-size: $fluent-h5-font-size;
+  }
+
+  h6 {
+    font-weight: $fluent-h6-font-weight;
+    font-size: $fluent-h6-font-size;
+  }
+
+  .dx-font-xl {
+    font-size: $fluent-xl-font-size;
+  }
+
+  .dx-font-l {
+    font-size: $fluent-l-font-size;
+  }
+
+  .dx-font-m {
+    font-size: $fluent-m-font-size;
+  }
+
+  .dx-font-s {
+    @include dx-s-font-mixin();
+  }
+
+  small,
+  .dx-font-xs {
+    font-size: $fluent-xs-font-size;
+  }
+
+  a {
+    color: $typography-typography-link-color;
+  }
+}
