@@ -378,7 +378,8 @@ function assignBaseRunProps(searchParams: URLSearchParams): BaseRunProps {
     ShadowDom: searchParams.has('shadowDom'),
     WorkerInWindow: searchParams.has('workerinwindow'),
     NoCsp: searchParams.has('nocsp'),
-    UseEsm: searchParams.get('loader') === 'esm',
+    // ESM is default; SystemJS remains available via ?loader=systemjs during migration
+    UseEsm: searchParams.get('loader') !== 'systemjs',
     MaxWorkers: null,
   };
 

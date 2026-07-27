@@ -87,7 +87,7 @@ export function createPagesRenderer({
 <p><code>pnpm run dev</code> / <code>build:dev</code> should build ESM via <code>build:transpile -c ci</code>.</p>
 <p>If artifacts were cleaned manually, rebuild:</p>
 <pre>pnpm nx run devextreme:build:qunit-esm</pre>
-<p>Then reload <code>?loader=esm</code>.</p>
+<p>Then reload the suite (without <code>?loader=systemjs</code>).</p>
 </body></html>`;
     }
 
@@ -154,6 +154,10 @@ export function createPagesRenderer({
       ? buildQunitImportMap({
         jqueryUrl: getJQueryUrl(),
         cacheBuster,
+        suiteFilePath: path.join(
+          packageRoot,
+          scriptVirtualPath.replace(/^\/packages\/devextreme\//, ''),
+        ),
       })
       : null;
 
