@@ -84,10 +84,9 @@ export function createPagesRenderer({
       return `<!DOCTYPE html><html><head><title>ESM artifacts missing</title></head><body>
 <h1>QUnit ESM loader: artifacts missing</h1>
 <p><code>artifacts/transpiled-esm-npm/esm</code> is not built.</p>
-<p><code>pnpm run dev</code> / <code>build:dev</code> uses transpile <code>-c ci</code>, which skips ESM.</p>
-<p>Build once:</p>
-<pre>pnpm nx run devextreme:"build:npm:esm"
-pnpm nx run devextreme:"build:npm:esm:internal"</pre>
+<p><code>pnpm run dev</code> / <code>build:dev</code> should build ESM via <code>build:transpile -c ci</code>.</p>
+<p>If artifacts were cleaned manually, rebuild:</p>
+<pre>pnpm nx run devextreme:build:qunit-esm</pre>
 <p>Then reload <code>?loader=esm</code>.</p>
 </body></html>`;
     }
