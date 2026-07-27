@@ -1,12 +1,6 @@
-(function(root, factory) {
-    if(typeof define === 'function' && define.amd) {
-        define(function(require, exports, module) {
-            root.fixtures = module.exports = factory(require('jquery'));
-        });
-    } else {
-        root.fixtures = factory(root.jQuery);
-    }
-}(window, function($) {
+import $ from 'jquery';
+
+const __moduleExports = (function($) {
 
     const fixtures = {
         simple: {
@@ -258,4 +252,8 @@
     };
 
     return fixtures;
-}));
+})($);
+
+window.fixtures = __moduleExports;
+
+export default __moduleExports;
