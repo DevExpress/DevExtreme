@@ -51,6 +51,7 @@ const FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS = `${FILTER_BUILDER_CLASS}-menu
 const SOURCE = 'filterBuilder';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const TREEVIEW_NODE_CONTAINER = 'dx-treeview-node-container';
 
@@ -769,10 +770,12 @@ class FilterBuilder extends Widget<any> {
   _isFocusOnEditorParts($editor: dxElementWrapper, target?: HTMLElement): boolean {
     const activeElement = target || domAdapter.getActiveElement();
     const isFocusOnEditor = $(activeElement).closest($editor.children()).length > 0;
-    const $overlay = $(activeElement).closest(`.${DROPDOWN_EDITOR_OVERLAY_CLASS}`);
-    const isFocusOnOverlay = $overlay.length > 0;
-    const editorNotInOverlay = $overlay.find($editor).length === 0;
-    return isFocusOnEditor || (isFocusOnOverlay && editorNotInOverlay);
+    const overlay = $(activeElement).closest(`.${DROPDOWN_EDITOR_OVERLAY_CLASS}`);
+    const overlayID = overlay.find(`.${POPUP_CONTENT_CLASS}`).attr('id');
+    const editorOwns = $editor.find('[aria-owns]').attr('aria-owns');
+    const isFocusOnOverlay = overlay.length > 0;
+    const overlayOwnedByEditor = isDefined(editorOwns) && editorOwns === overlayID;
+    return isFocusOnEditor || (isFocusOnOverlay && overlayOwnedByEditor);
   }
 
   _removeEvents() {
