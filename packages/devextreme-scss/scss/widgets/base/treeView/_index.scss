@@ -74,7 +74,7 @@ $treeview-border-visible-border: 1px solid !default;
   }
 
   .dx-treeview-node {
-    padding-inline-start: math.div($node-padding, 2);
+    padding-inline-start: if(meta.type-of($node-padding) == number, math.div($node-padding, 2), calc(#{$node-padding} / 2));
   }
 }
 

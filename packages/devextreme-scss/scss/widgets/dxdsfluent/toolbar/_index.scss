@@ -64,7 +64,7 @@
       height: $fluent-button-icon-size;
       width: $fluent-button-icon-size;
 
-      @include dx-icon-margin(math.div($fluent-button-icon-size, 2));
+      @include dx-icon-margin(calc(#{$fluent-button-icon-size} / 2));
 
       .dx-icon {
         font-size: $fluent-button-icon-size;

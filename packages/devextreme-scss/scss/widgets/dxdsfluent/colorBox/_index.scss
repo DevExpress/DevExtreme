@@ -46,7 +46,7 @@
   z-index: 2;
   width: $fluent-colorbox-preview-icon-size;
   height: $fluent-colorbox-preview-icon-size;
-  margin-top: math.div(-$fluent-colorbox-preview-icon-size, 2);
+  margin-top: calc(#{$fluent-colorbox-preview-icon-size} / -2);
   inset-inline-start: $fluent-colorbox-preview-padding;
   border: $fluent-colorbox-color-result-preview-border;
   border-color: $colorview-border-color;
