@@ -53,7 +53,7 @@
     "express": "4.21.2",
     "filing-cabinet": "4.1.6",
     "fs-extra": "11.2.0",
-    "immutable": "5.1.9",
+    "immutable": "^4.3.8",
     "precinct": "11.0.5",
     "sinon": "18.0.1",
     "ts-jest": "29.1.2",
