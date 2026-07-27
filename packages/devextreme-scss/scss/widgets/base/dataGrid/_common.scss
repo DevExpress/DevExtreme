@@ -4,6 +4,13 @@
 // adduse
 
 
+$datagrid-common-group-min-width: null !default;
+$datagrid-common-addrow-margin-right: null !default;
+$datagrid-common-addrow-margin-left: null !default;
+$datagrid-common-form-buttons-border-radius: null !default;
+$datagrid-common-form-buttons-margin-left: null !default;
+$datagrid-common-form-buttons-margin-right: null !default;
+
 @include grid-base(datagrid);
 
 .dx-datagrid {
@@ -14,12 +21,12 @@
 
 @mixin dx-group-panel-item() {
   display: inline-block;
-  min-width: 30px;
-  margin-right: 10px;
+  min-width: $datagrid-common-group-min-width;
+  margin-right: $datagrid-common-addrow-margin-right;
   white-space: nowrap;
 
   .dx-sort {
-    margin-left: 6px;
+    margin-left: $datagrid-common-addrow-margin-left;
   }
 }
 
@@ -39,7 +46,7 @@
 
   .dx-block-separator {
     position: relative;
-    border-radius: 3px;
+    border-radius: $datagrid-common-form-buttons-border-radius;
   }
 }
 
@@ -79,12 +86,12 @@
     .dx-group-panel-item,
     .dx-block-separator {
       margin-right: 0;
-      margin-left: 10px;
+      margin-left: $datagrid-common-form-buttons-margin-left;
     }
 
     .dx-sort {
       margin-left: 0;
-      margin-right: 6px;
+      margin-right: $datagrid-common-form-buttons-margin-right;
     }
   }
 }

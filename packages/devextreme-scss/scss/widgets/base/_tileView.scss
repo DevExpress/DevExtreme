@@ -1,5 +1,9 @@
 // adduse
 
+
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$tileview-wrapper-height: 1px !default;
+
 .dx-tileview {
   div.dx-scrollable-container {
     overflow-y: hidden; // anyway, tagName added for increase priorities
@@ -24,5 +28,5 @@
 
 .dx-tileview-wrapper {
   position: relative;
-  height: 1px;
+  height: $tileview-wrapper-height;
 }

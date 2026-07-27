@@ -1,0 +1,20 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$fluent-dropdownbutton-action-horizontal-padding: null !default;
+$fluent-dropdownbutton-icon-spindown-size: null !default;
+$fluent-dropdownbutton-icon-spindown-right-size: null !default;
+
+@if $size == "default" {
+  $fluent-dropdownbutton-action-horizontal-padding: ds.$spacing-120 !default;
+  $fluent-dropdownbutton-icon-spindown-size: ds.$spacing-240;
+  $fluent-dropdownbutton-icon-spindown-right-size: ds.$spacing-160 !default;
+}
+
+@else if $size == "compact" {
+  $fluent-dropdownbutton-action-horizontal-padding: ds.$spacing-80 !default;
+  $fluent-dropdownbutton-icon-spindown-size: ds.$spacing-180;
+  $fluent-dropdownbutton-icon-spindown-right-size: ds.$spacing-120 !default;
+}

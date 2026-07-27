@@ -1,9 +1,16 @@
 // adduse
 
+
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$tooltip-overlay-content-min-width: 34px !default;
+$tooltip-overlay-content-min-height: 26px !default;
+$tooltip-popup-content-padding: 12px 17px !default;
+
+$tooltip-content-font-size: 0.85em !default; // dx-relative
 .dx-tooltip-wrapper {
   .dx-overlay-content {
-    min-width: 34px;
-    min-height: 26px;
+    min-width: $tooltip-overlay-content-min-width;
+    min-height: $tooltip-overlay-content-min-height;
     text-align: center;
     line-height: 0;
 
@@ -16,8 +23,8 @@
 
     .dx-popup-content {
       display: inline-block;
-      padding: 12px 17px;
-      font-size: 0.85em;
+      padding: $tooltip-popup-content-padding;
+      font-size: $tooltip-content-font-size;
       line-height: normal;
       white-space: nowrap;
     }
