@@ -8,7 +8,8 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  merge_group:
+  push:
+    branches: [26_1]
 
 env:
   NX_SKIP_NX_CACHE: ${{ contains(github.event.pull_request.labels.*.name, 'skip-cache') && 'true' || 'false' }}

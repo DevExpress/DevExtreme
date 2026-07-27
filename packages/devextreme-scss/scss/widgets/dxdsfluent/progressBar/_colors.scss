@@ -1,0 +1,19 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$progressbar-bg: ds.$progress-bar-progress-line-color-track-rest !default;
+
+$progressbar-range-bg: ds.$progress-bar-progress-line-color-indicator-rest !default;
+$progressbar-container-disabled-bg: ds.$progress-bar-progress-line-color-track-disabled !default;
+$progressbar-range-disabled-bg: ds.$progress-bar-progress-line-color-indicator-disabled !default;
+$progressbar-range-indeterminate-color: ds.$progress-bar-progress-line-color-indicator-indeterminate-gradient-center !default;
+$progressbar-range-invalid-color: ds.$color-surface-danger-default-rest !default;
+
+$progressbar-interdeterminate-state-gradient: -90deg, transparent 5%, $progressbar-range-indeterminate-color, transparent 95%;
+$progressbar-disabled-interdeterminate-state-gradient: -90deg, transparent 5%, $progressbar-range-disabled-bg, transparent 95%;
+$progressbar-invalid-interdeterminate-state-gradient: -90deg, transparent 5%, $progressbar-range-invalid-color, transparent 95%;
+
+$progressbar-label-color: ds.$color-content-neutral-default-rest !default;
+
+$progressbar-foreground-disabled: ds.$color-content-neutral-default-disabled !default;
