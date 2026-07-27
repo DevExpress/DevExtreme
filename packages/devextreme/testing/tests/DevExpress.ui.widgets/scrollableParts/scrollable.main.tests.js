@@ -1,4 +1,7 @@
-import animationFrame from '__internal/common/core/animation/frameModule';
+import {
+    stubAnimationFrameSync,
+    useFakeTimersWithoutAnimationFrame,
+} from '../../../helpers/animationFrameStub.js';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
 import devices from '__internal/core/m_devices';
 import domUtils from '__internal/core/utils/m_dom';
@@ -41,10 +44,8 @@ const moduleConfig = {
             </div>`;
         $('#qunit-fixture').html(markup);
 
-        this.clock = sinon.useFakeTimers();
-        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
-            callback();
-        });
+        this.clock = useFakeTimersWithoutAnimationFrame();
+        this.requestAnimationFrameStub = stubAnimationFrameSync();
     },
     afterEach: function() {
         this.clock.restore();

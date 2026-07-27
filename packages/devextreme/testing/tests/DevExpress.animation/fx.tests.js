@@ -3,7 +3,10 @@ import renderer from 'core/renderer';
 import eventsEngine from 'common/core/events/core/events_engine';
 import fx from 'common/core/animation/fx';
 import translator from 'common/core/animation/translator';
-import animationFrame from '__internal/common/core/animation/frameModule';
+import {
+    stubAnimationFrameDelayed,
+    useFakeTimersWithoutAnimationFrame,
+} from '../../helpers/animationFrameStub.js';
 import positionUtils from 'common/core/animation/position';
 import support from '__internal/core/utils/m_support';
 
@@ -73,11 +76,9 @@ QUnit.module('frame transitions', {
             return fx.animate($element, $.extend({ strategy: 'frame' }, config));
         };
 
-        this.clock = sinon.useFakeTimers();
+        this.clock = useFakeTimersWithoutAnimationFrame();
 
-        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
-            return setTimeout(callback, 1);
-        });
+        this.requestAnimationFrameStub = stubAnimationFrameDelayed(1);
     },
     afterEach: function() {
         this.clock.restore();

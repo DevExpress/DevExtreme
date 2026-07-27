@@ -4,7 +4,11 @@ import { DataSource } from 'common/data/data_source/data_source';
 import visibilityChange from 'common/core/events/visibility_change';
 import ArrayStore from 'common/data/array_store';
 import fx from 'common/core/animation/fx';
-import animationFrame from '__internal/common/core/animation/frameModule';
+import {
+    installAnimationFrameStub,
+    stubAnimationFrameDelayed,
+    useFakeTimersWithoutAnimationFrame,
+} from '../../helpers/animationFrameStub.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
@@ -15,6 +19,8 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import 'ui/gallery';
 import 'ui/button';
 import 'fluent_blue_light.css!';
+
+installAnimationFrameStub();
 
 QUnit.testStart(() => {
     const markup =
@@ -108,7 +114,7 @@ const calculateItemPosition = ($item, $gallery) => {
 
 QUnit.module('behavior', {
     beforeEach() {
-        this.clock = sinon.useFakeTimers();
+        this.clock = useFakeTimersWithoutAnimationFrame();
         fx.off = true;
 
         this.$element = $('#gallerySimple');
@@ -831,7 +837,7 @@ QUnit.module('behavior', {
 
 QUnit.module('render', {
     beforeEach() {
-        this.clock = sinon.useFakeTimers();
+        this.clock = useFakeTimersWithoutAnimationFrame();
         fx.off = true;
     },
 
@@ -1136,7 +1142,7 @@ QUnit.module('render', {
 
 QUnit.module('options changed callbacks', {
     beforeEach() {
-        this.clock = sinon.useFakeTimers();
+        this.clock = useFakeTimersWithoutAnimationFrame();
         fx.off = true;
 
         this.$element = $('#gallerySimple').dxGallery({ items: [0, 1, 2] });
@@ -1263,7 +1269,7 @@ QUnit.module('options changed callbacks', {
 
 QUnit.module('items visibility', {
     beforeEach() {
-        this.clock = sinon.useFakeTimers();
+        this.clock = useFakeTimersWithoutAnimationFrame();
         fx.off = true;
 
         this.$element = $('#gallerySimple').dxGallery({ items: [0, 1, 2, 3, 4], width: 500, showNavButtons: true });
@@ -1359,7 +1365,7 @@ QUnit.module('items visibility', {
 
 QUnit.module('responsiveness', {
     beforeEach() {
-        this.clock = sinon.useFakeTimers();
+        this.clock = useFakeTimersWithoutAnimationFrame();
         fx.off = true;
 
         this.$element = $('#gallerySimple').dxGallery({ items: [0, 1, 2, 3, 4] });
@@ -1942,7 +1948,7 @@ QUnit.module('responsiveness', {
 
 QUnit.module('api', {
     beforeEach() {
-        this.clock = sinon.useFakeTimers();
+        this.clock = useFakeTimersWithoutAnimationFrame();
         fx.off = true;
 
         this.$element = $('#gallerySimple');
@@ -2176,9 +2182,7 @@ QUnit.module('api', {
     QUnit.test('animationDuration', function(assert) {
         fx.off = false;
 
-        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
-            return window.setTimeout(callback, 10);
-        });
+        this.requestAnimationFrameStub = stubAnimationFrameDelayed(10);
 
         try {
             const $element = $('#gallerySimple').dxGallery({ items: [0, 1, 2] });
@@ -2330,7 +2334,7 @@ QUnit.module('keyboard navigation', {
 
 QUnit.module('RTL', {
     beforeEach() {
-        this.clock = sinon.useFakeTimers();
+        this.clock = useFakeTimersWithoutAnimationFrame();
         fx.off = true;
 
         this.$element = $('#gallerySimple');

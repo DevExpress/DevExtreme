@@ -1,7 +1,10 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
-import animationFrame from '__internal/common/core/animation/frameModule';
+import {
+    stubAnimationFrameSync,
+    useFakeTimersWithoutAnimationFrame,
+} from '../../../helpers/animationFrameStub.js';
 import pointerMock from '../../../helpers/pointerMock.js';
 
 import {
@@ -32,10 +35,8 @@ const moduleConfig = {
             <div id="scrollableNeighbour"></div>`;
         $('#qunit-fixture').html(markup);
 
-        this.clock = sinon.useFakeTimers();
-        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
-            callback();
-        });
+        this.clock = useFakeTimersWithoutAnimationFrame();
+        this.requestAnimationFrameStub = stubAnimationFrameSync();
     },
     afterEach: function() {
         this.clock.restore();
