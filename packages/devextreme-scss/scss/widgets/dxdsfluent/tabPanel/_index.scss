@@ -1,0 +1,76 @@
+@use "sass:color";
+@use "sass:selector";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/tabPanel";
+
+// adduse
+
+.dx-tabpanel {
+  .dx-tabpanel-tab {
+    flex-basis: unset;
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+
+  .dx-tabs .dx-tabs-scrollable .dx-tab {
+    flex-basis: auto;
+  }
+
+  .dx-tabs-nav-button {
+    height: auto;
+  }
+}
+
+.dx-tabpanel-tabs-position-top {
+  > .dx-tabpanel-tabs {
+    .dx-tabs {
+      border-bottom: $fluent-tabpanel-tabs-border-bottom;
+      border-bottom-color: $tabpanel-border-color;
+
+      @at-root #{selector.append(".dx-empty-collection", &)} {
+        border-bottom: none;
+      }
+    }
+  }
+}
+
+.dx-tabpanel-tabs-position-bottom {
+  > .dx-tabpanel-tabs {
+    .dx-tabs {
+      border-top: $fluent-tabpanel-tabs-border-top;
+      border-top-color: $tabpanel-border-color;
+
+      @at-root #{selector.append(".dx-empty-collection", &)} {
+        border-top: none;
+      }
+    }
+  }
+}
+
+.dx-tabpanel-tabs-position-left {
+  > .dx-tabpanel-tabs {
+    .dx-tabs {
+      border-right: $fluent-tabpanel-tabs-border-right;
+      border-right-color: $tabpanel-border-color;
+
+      @at-root #{selector.append(".dx-empty-collection", &)} {
+        border-right: none;
+      }
+    }
+  }
+}
+
+.dx-tabpanel-tabs-position-right {
+  > .dx-tabpanel-tabs {
+    .dx-tabs {
+      border-left: $fluent-tabpanel-tabs-border-left;
+      border-left-color: $tabpanel-border-color;
+
+      @at-root #{selector.append(".dx-empty-collection", &)} {
+        border-left: none;
+      }
+    }
+  }
+}

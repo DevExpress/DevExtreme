@@ -52,6 +52,20 @@ export default [
     },
     ...spellCheckConfig,
     {
+        rules: {
+            'spellcheck/spell-checker': [
+                'error',
+                {
+                    ...spellCheckConfig[0].rules['spellcheck/spell-checker'][1],
+                    skipWords: [
+                        ...spellCheckConfig[0].rules['spellcheck/spell-checker'][1].skipWords,
+                        'dxdsfluent', // DevExpress Design System Fluent theme
+                    ],
+                },
+            ],
+        },
+    },
+    {
         plugins: {
             'no-only-tests': noOnlyTests,
             i18n: i18N,

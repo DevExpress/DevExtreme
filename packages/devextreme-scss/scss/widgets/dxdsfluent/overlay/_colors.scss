@@ -1,0 +1,7 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$overlay-content-bg: ds.$color-surface-neutral-default-rest !default;
+
+$overlay-shader-bg: ds.$color-surface-backdrop-default-rest !default;

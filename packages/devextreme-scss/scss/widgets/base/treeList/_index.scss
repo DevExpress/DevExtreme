@@ -12,16 +12,26 @@ $header-filter-color-empty: null !default;
 $base-focus-color: null !default;
 
 @use "sass:color";
+@use "sass:meta";
 @use "../mixins" as *;
 @use "../icon_fonts" as *;
 @use "./common" as *;
-@use "./expandable" as *;
+$treelist-expandable-node-line-height: 1px !default;
+
+@use "./expandable" as * with (
+  $node-line-height: $treelist-expandable-node-line-height,
+);
+$treelist-sticky-column-border: 2px solid !default;
+$treelist-cell-focus-outline: 2px solid !default;
+
 @use 'layout/cell' with (
   $treelist-border: $datagrid-border,
   $treelist-border-color: $datagrid-border-color,
   $treelist-base-background-color: $datagrid-base-background-color,
   $treelist-row-error-color: $datagrid-row-error-color,
   $treelist-focused-border-color: $datagrid-focused-border-color,
+  $treelist-sticky-column-border: $treelist-sticky-column-border,
+  $treelist-cell-focus-outline: $treelist-cell-focus-outline,
 );
 
 $treelist-border: $datagrid-border;
@@ -33,6 +43,15 @@ $treelist-border-color: $datagrid-border-color;
 $treelist-focused-border-color: $datagrid-focused-border-color;
 $treelist-text-stub-background-image-path: $datagrid-text-stub-background-image-path;
 $treelist-row-error-color: $datagrid-row-error-color;
+
+
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$treelist-header-filter-outline: 2px solid !default;
+$treelist-header-filter-outline-offset: 2px !default;
+$treelist-button-margin-left: 10px !default;
+$treelist-button-margin-top: 10px !default;
+$treelist-error-message-margin-bottom: 20px !default;
+$treelist-button-margin-right: 10px !default;
 
 .dx-treelist-borders {
   > .dx-treelist-headers,
@@ -127,9 +146,9 @@ $treelist-row-error-color: $datagrid-row-error-color;
 
     &.dx-state-focused .dx-header-row {
       td .dx-header-filter:focus {
-        outline: 2px solid;
+        outline: $treelist-header-filter-outline;
         outline-color: $treelist-focused-border-color;
-        outline-offset: 2px;
+        outline-offset: $treelist-header-filter-outline-offset;
       }
     }
   }
@@ -161,9 +180,9 @@ $treelist-row-error-color: $datagrid-row-error-color;
 
   .dx-treelist-rowsview.dx-state-focused .dx-data-row {
     & > td.dx-command-edit > a.dx-link:focus {
-      outline: 2px solid;
+      outline: $treelist-header-filter-outline;
       outline-color: $datagrid-focused-border-color;
-      outline-offset: 2px;
+      outline-offset: $treelist-header-filter-outline-offset;
     }
 
     &.dx-row-focused > td.dx-command-edit > a.dx-link:focus {
@@ -218,7 +237,7 @@ $treelist-row-error-color: $datagrid-row-error-color;
     .dx-icon-filter:focus,
     .dx-treelist-filter-panel-text:focus,
     .dx-treelist-filter-panel-clear-filter:focus {
-      outline: 2px solid;
+      outline: $treelist-header-filter-outline;
       outline-color: $treelist-focused-border-color;
     }
   }
@@ -228,8 +247,8 @@ $treelist-row-error-color: $datagrid-row-error-color;
   float: right;
 
   .dx-button {
-    margin-left: 10px;
-    margin-top: 10px;
+    margin-left: $treelist-button-margin-left;
+    margin-top: $treelist-button-margin-top;
   }
 }
 
@@ -250,7 +269,7 @@ $treelist-row-error-color: $datagrid-row-error-color;
   @include dx-treelist-error-message();
 
   color: $treelist-row-error-color;
-  margin-bottom: 20px;
+  margin-bottom: $treelist-error-message-margin-bottom;
 }
 
 .dx-rtl {
@@ -273,7 +292,7 @@ $treelist-row-error-color: $datagrid-row-error-color;
 
     .dx-button {
       margin-left: 0;
-      margin-right: 10px;
+      margin-right: $treelist-button-margin-right;
     }
   }
 }
@@ -284,15 +303,15 @@ $treelist-row-error-color: $datagrid-row-error-color;
 
 @keyframes dx-treelist-highlight-change {
   from {
-    background-color: color.change($treelist-base-color, $alpha: 0.08);
+    background-color: if(meta.type-of($treelist-base-color) == color, color.change($treelist-base-color, $alpha: 0.08), rgb(from #{$treelist-base-color} r g b / 0.08));
   }
 
   50% {
-    background-color: color.change($treelist-base-color, $alpha: 0.08);
+    background-color: if(meta.type-of($treelist-base-color) == color, color.change($treelist-base-color, $alpha: 0.08), rgb(from #{$treelist-base-color} r g b / 0.08));
   }
 }
 
 .dx-command-ai-header-button .dx-button.dx-state-focused {
-  outline: 2px solid;
+  outline: $treelist-header-filter-outline;
   outline-color: $treelist-focused-border-color;
 }

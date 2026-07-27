@@ -8,6 +8,10 @@ fixture`Ai Column.Virtual Scrolling.Functional`
 
 const DATA_GRID_SELECTOR = '#container';
 
+const CLASS = {
+  loadPanelContent: 'dx-loadpanel-content',
+};
+
 const checkAIColumnTexts = async (
   t: TestController,
   component: DataGrid,
@@ -61,7 +65,7 @@ test('DataGrid should send an AI request for rendered rows after scrolling witho
   await t
     .expect(dataGrid.isReady())
     .ok()
-    .expect(dataGrid.getLoadPanel().isVisible())
+    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
     .notOk();
   await checkAIColumnTexts(t, dataGrid, 11);
 
@@ -88,7 +92,7 @@ test('DataGrid should send an AI request for rendered rows after scrolling witho
   await t
     .expect(dataGrid.isReady())
     .ok()
-    .expect(dataGrid.getLoadPanel().isVisible())
+    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
     .notOk();
   await checkAIColumnTexts(t, dataGrid, 12);
 })
@@ -168,7 +172,7 @@ test('DataGrid should send an AI request for rendered rows after scrolling with 
   await t
     .expect(dataGrid.isReady())
     .ok()
-    .expect(dataGrid.getLoadPanel().isVisible())
+    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
     .notOk();
   await checkAIColumnTexts(t, dataGrid, 11);
 
@@ -195,7 +199,7 @@ test('DataGrid should send an AI request for rendered rows after scrolling with 
   await t
     .expect(dataGrid.isReady())
     .ok()
-    .expect(dataGrid.getLoadPanel().isVisible())
+    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
     .notOk();
   await checkAIColumnTexts(t, dataGrid, 12);
 })

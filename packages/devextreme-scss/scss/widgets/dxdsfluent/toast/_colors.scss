@@ -1,0 +1,23 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$toast-default-bg: ds.$toast-color-bg-rest !default;
+
+$toast-info-bg: $toast-default-bg !default;
+
+$toast-info-color: ds.$color-content-neutral-default-rest !default;
+
+$toast-warning-bg: ds.$color-surface-warning-default-rest !default;
+
+$toast-warning-color: ds.$color-content-neutral-default-static-light-rest !default;
+
+$toast-error-bg: ds.$color-surface-danger-default-rest !default;
+
+$toast-error-color: ds.$color-content-neutral-default-static-dark-rest !default;
+
+$toast-success-bg: ds.$color-surface-success-default-rest !default;
+
+$toast-success-color: ds.$color-content-neutral-default-static-dark-rest !default;
+
+$toast-shadow: ds.$box-shadow-lg !default;

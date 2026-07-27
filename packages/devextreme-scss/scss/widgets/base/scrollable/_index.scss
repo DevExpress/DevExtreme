@@ -2,6 +2,12 @@
 @use "./mixins" as *;
 
 // adduse
+
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$scrollable-scroll-width: 5px !default;
+$scrollable-scroll-height: 5px !default;
+$scrollable-scroll-padding: 2px !default;
+
 .dx-scrollable-scrollbar-simulated {
   position: relative;
 }
@@ -151,7 +157,7 @@
   height: 100%;
 
   .dx-scrollable-scroll {
-    width: 5px;
+    width: $scrollable-scroll-width;
   }
 }
 
@@ -161,7 +167,7 @@
   width: 100%;
 
   .dx-scrollable-scroll {
-    height: 5px;
+    height: $scrollable-scroll-height;
   }
 }
 
@@ -173,7 +179,7 @@
   opacity: 1;
   transition: opacity 0s linear, background-color 0s linear;
   overflow: hidden;
-  padding: 2px;
+  padding: $scrollable-scroll-padding;
 
   &.dx-state-invisible {
     display: block !important; // stylelint-disable-line declaration-no-important

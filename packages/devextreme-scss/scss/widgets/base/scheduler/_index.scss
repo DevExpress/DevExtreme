@@ -44,12 +44,39 @@ $agenda-appointment-recurrence-icon-color: null !default;
 @use "./mixins" as *;
 @use "../mixins" as *;
 @use "../icon_fonts" as *;
-@use "./common";
+$scheduler-common-collector-margin: 0 3px !default;
+$scheduler-common-collector-size: 28px !default;
+
+@use "./common" with (
+  $scheduler-common-collector-margin: $scheduler-common-collector-margin,
+  $scheduler-common-collector-size: $scheduler-common-collector-size,
+);
+$scheduler-tooltip-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15) !default;
+
+$scheduler-tooltip-width: 360px !default;
+$scheduler-tooltip-content-padding: 5px !default;
+$scheduler-tooltip-title-margin-top: 7px !default;
+$scheduler-tooltip-title-margin-left: 5px !default;
+$scheduler-tooltip-date-margin: 5px 10px !default;
+$scheduler-tooltip-remove-margin-top: 10px !default;
+$scheduler-tooltip-subject-font-size: 16px !default;
+$scheduler-tooltip-date-font-size: 12px !default;
+$scheduler-appointment-content-details-font-size: 11px !default;
+
 @use "./tooltip" with (
+  $scheduler-tooltip-width: $scheduler-tooltip-width,
+  $scheduler-tooltip-content-padding: $scheduler-tooltip-content-padding,
+  $scheduler-tooltip-title-margin-top: $scheduler-tooltip-title-margin-top,
+  $scheduler-tooltip-title-margin-left: $scheduler-tooltip-title-margin-left,
+  $scheduler-tooltip-date-margin: $scheduler-tooltip-date-margin,
+  $scheduler-tooltip-remove-margin-top: $scheduler-tooltip-remove-margin-top,
+  $scheduler-tooltip-shadow: $scheduler-tooltip-shadow,
   $scheduler-appointment-base-color: $scheduler-appointment-base-color,
   $scheduler-tooltip-appointment-text-color: $scheduler-tooltip-appointment-text-color,
   $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg,
-  $scheduler-tooltip-list-focused-bg: $scheduler-tooltip-list-focused-bg
+  $scheduler-tooltip-list-focused-bg: $scheduler-tooltip-list-focused-bg,
+  $scheduler-tooltip-subject-font-size: $scheduler-tooltip-subject-font-size,
+  $scheduler-tooltip-date-font-size: $scheduler-tooltip-date-font-size
 );
 
 $scheduler-appointment-min-size: 4px;
@@ -64,7 +91,7 @@ $scheduler-vertical-appointment-hovering-shadow: inset 0 $scheduler-hovered-appo
 $scheduler-vertical-appointment-shadow: inset 0 2px 0 0 $scheduler-appointment-start-color;
 $scheduler-vertical-appointment-resizing-shadow: inset 0 -2px 0 0 $scheduler-appointment-start-color, $scheduler-vertical-appointment-shadow;
 
-$scheduler-appointment-dragging-shadow: 7px 7px 15px 0 rgba(50, 50, 50, 0.2);
+$scheduler-appointment-dragging-shadow: 7px 7px 15px 0 rgba(50, 50, 50, 0.2) !default;
 
 $scheduler-horizontal-appointment-resizable-hovering-shadow: inset $scheduler-hovered-appointment-top-shadow-size 0 0 0 $scheduler-appointment-start-color, inset -2px 0 0 0 $scheduler-appointment-start-color;
 $scheduler-horizontal-appointment-resizable-hovering-shadow-rtl: inset (-$scheduler-hovered-appointment-top-shadow-size) 0 0 0 $scheduler-appointment-start-color, inset 2px 0 0 0 $scheduler-appointment-start-color;
@@ -95,11 +122,51 @@ $scheduler-time-indicator-size: 1px;
 $scheduler-time-indicator-top: 14px;
 $scheduler-time-indicator-left: 12px;
 
-$scheduler-time-indicator-shadow-color: rgba(255, 255, 255, 0.1);
+$scheduler-time-indicator-shadow-color: rgba(255, 255, 255, 0.1) !default;
 $scheduler-time-indicator-shadow: 0 1px 0 0 $scheduler-time-indicator-shadow-color;
 $scheduler-time-indicator-text-shadow: $scheduler-time-indicator-shadow-color 1px 0 0;
 
+$scheduler-appointment-icon-font-size: 18px !default;
+$scheduler-appointment-date-opacity: 0.7 !default;
+$scheduler-appointment-resizing-opacity: 0.7 !default;
+$scheduler-appointment-disabled-opacity: 0.6 !default;
+$scheduler-appointment-drag-source-opacity: 0.7 !default;
+$agenda-appointment-title-font-weight: 700 !default;
+$agenda-appointment-details-font-size: 12px !default;
+$agenda-appointment-details-opacity: 0.7 !default;
+
+$scheduler-appointment-reduced-icon-top: 3px !default;
+$scheduler-appointment-active-marker-border-radius: 4px !default;
+$scheduler-appointment-content-details-margin-top: 2px !default;
+$scheduler-appointment-reduced-icon-rtl-left: 3px !default;
+$agenda-appointment-item-padding: 10px !default;
+$agenda-appointment-item-border-radius: 5px !default;
+$agenda-appointment-right-layout-margin-left: 10px !default;
+$agenda-appointment-allday-padding-right: 5px !default;
+$agenda-appointment-resource-item-margin-left: 15px !default;
+$agenda-appointment-resource-value-margin-left: 3px !default;
+$agenda-appointment-rtl-margin-right: 10px !default;
+
 @use "./appointment" with (
+  $scheduler-appointment-reduced-icon-top: $scheduler-appointment-reduced-icon-top,
+  $scheduler-appointment-active-marker-border-radius: $scheduler-appointment-active-marker-border-radius,
+  $scheduler-appointment-content-details-margin-top: $scheduler-appointment-content-details-margin-top,
+  $scheduler-appointment-reduced-icon-rtl-left: $scheduler-appointment-reduced-icon-rtl-left,
+  $agenda-appointment-item-padding: $agenda-appointment-item-padding,
+  $agenda-appointment-item-border-radius: $agenda-appointment-item-border-radius,
+  $agenda-appointment-right-layout-margin-left: $agenda-appointment-right-layout-margin-left,
+  $agenda-appointment-allday-padding-right: $agenda-appointment-allday-padding-right,
+  $agenda-appointment-resource-item-margin-left: $agenda-appointment-resource-item-margin-left,
+  $agenda-appointment-resource-value-margin-left: $agenda-appointment-resource-value-margin-left,
+  $agenda-appointment-rtl-margin-right: $agenda-appointment-rtl-margin-right,
+  $scheduler-appointment-icon-font-size: $scheduler-appointment-icon-font-size,
+  $scheduler-appointment-date-opacity: $scheduler-appointment-date-opacity,
+  $scheduler-appointment-resizing-opacity: $scheduler-appointment-resizing-opacity,
+  $scheduler-appointment-disabled-opacity: $scheduler-appointment-disabled-opacity,
+  $scheduler-appointment-drag-source-opacity: $scheduler-appointment-drag-source-opacity,
+  $agenda-appointment-title-font-weight: $agenda-appointment-title-font-weight,
+  $agenda-appointment-details-font-size: $agenda-appointment-details-font-size,
+  $agenda-appointment-details-opacity: $agenda-appointment-details-opacity,
   $scheduler-transparent-top-border: $scheduler-transparent-top-border,
   $scheduler-appointment-base-color: $scheduler-appointment-base-color,
   $scheduler-appointment-text-color: $scheduler-appointment-text-color,
@@ -122,7 +189,38 @@ $scheduler-time-indicator-text-shadow: $scheduler-time-indicator-shadow-color 1p
   $agenda-appointment-active-bg: $agenda-appointment-active-bg,
   $agenda-appointment-title-font-size: $agenda-appointment-title-font-size
 );
+$scheduler-views-header-border: 2px solid !default;
+$scheduler-views-empty-cell-border-bottom: 1px solid !default;
+$scheduler-views-empty-cell-border-right: 1px solid !default;
+$scheduler-views-empty-cell-border-left: 1px solid !default;
+$scheduler-views-first-child-border-left: 1px solid transparent !default;
+$scheduler-views-time-panel-border-bottom: 1px solid transparent !default;
+$scheduler-views-group-header-padding: 0 5px !default;
+$scheduler-views-group-header-padding-alt: 0 5px 0 10px !default;
+$scheduler-views-time-indicator-height: 1px !default;
+$scheduler-views-group-header-content-height: 40px !default;
+$scheduler-views-vertical-group-min-height: 100px !default;
+
+$scheduler-timeline-min-height: 100px !default;
+$scheduler-timeline-group-two-empty-cell-width: 160px !default;
+$scheduler-timeline-group-header-width: 80px !default;
+$scheduler-timeline-group-three-empty-cell-width: 240px !default;
+$scheduler-timeline-cell-width: 200px !default;
+$scheduler-agenda-left-column-width: 70px !default;
+$scheduler-group-header-agenda-font-size: 18px !default;
+$scheduler-agenda-date-table-padding-top: 10px !default;
+$scheduler-renovation-virtual-row-height: 50px !default;
+
 @use "./views" with (
+  $scheduler-timeline-min-height: $scheduler-timeline-min-height,
+  $scheduler-timeline-group-two-empty-cell-width: $scheduler-timeline-group-two-empty-cell-width,
+  $scheduler-timeline-group-header-width: $scheduler-timeline-group-header-width,
+  $scheduler-timeline-group-three-empty-cell-width: $scheduler-timeline-group-three-empty-cell-width,
+  $scheduler-timeline-cell-width: $scheduler-timeline-cell-width,
+  $scheduler-agenda-left-column-width: $scheduler-agenda-left-column-width,
+  $scheduler-group-header-agenda-font-size: $scheduler-group-header-agenda-font-size,
+  $scheduler-agenda-date-table-padding-top: $scheduler-agenda-date-table-padding-top,
+  $scheduler-renovation-virtual-row-height: $scheduler-renovation-virtual-row-height,
   $scheduler-workspace-background-color: $scheduler-workspace-background-color,
   $scheduler-workspace-accent-color: $scheduler-workspace-accent-color,
   $scheduler-small-size-factor: $scheduler-small-size-factor,
@@ -149,11 +247,32 @@ $scheduler-time-indicator-text-shadow: $scheduler-time-indicator-shadow-color 1p
   $scheduler-first-month-cell-background-color: $scheduler-first-month-cell-background-color,
 
   $scheduler-panel-text-color: $scheduler-panel-text-color,
+  $scheduler-views-header-border: $scheduler-views-header-border,
+  $scheduler-views-empty-cell-border-bottom: $scheduler-views-empty-cell-border-bottom,
+  $scheduler-views-empty-cell-border-right: $scheduler-views-empty-cell-border-right,
+  $scheduler-views-empty-cell-border-left: $scheduler-views-empty-cell-border-left,
+  $scheduler-views-first-child-border-left: $scheduler-views-first-child-border-left,
+  $scheduler-views-time-panel-border-bottom: $scheduler-views-time-panel-border-bottom,
+  $scheduler-views-group-header-padding: $scheduler-views-group-header-padding,
+  $scheduler-views-group-header-padding-alt: $scheduler-views-group-header-padding-alt,
+  $scheduler-views-time-indicator-height: $scheduler-views-time-indicator-height,
+  $scheduler-views-group-header-content-height: $scheduler-views-group-header-content-height,
+  $scheduler-views-vertical-group-min-height: $scheduler-views-vertical-group-min-height,
 );
 
 @function calculate-small-left-column-size($size) {
   @return $size + $scheduler-left-column-width * $scheduler-small-size-factor;
 }
+
+
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$scheduler-appointment-content-padding-2: 0 7px !default;
+$scheduler-appointment-recurrence-icon-top: 9px !default;
+$scheduler-header-panel-current-time-cell-height: 2px !default;
+$scheduler-appointment-content-padding-3: 0 25px 0 7px !default;
+$scheduler-rtl-padding: 0 7px 0 25px !default;
+$scheduler-appointment-collector-width: 24px !default;
+$scheduler-appointment-content-padding-right: 5px !default;
 
 @mixin scheduler-mixin() {
   .dx-scheduler-container {
@@ -206,7 +325,7 @@ $scheduler-time-indicator-text-shadow: $scheduler-time-indicator-shadow-color 1p
   .dx-scheduler-work-space-work-week,
   .dx-scheduler-work-space-day {
     .dx-scheduler-all-day-appointment .dx-scheduler-appointment-content {
-      padding: 0 7px;
+      padding: $scheduler-appointment-content-padding-2;
     }
 
     .dx-scheduler-appointment-reduced {
@@ -218,7 +337,7 @@ $scheduler-time-indicator-text-shadow: $scheduler-time-indicator-shadow-color 1p
     .dx-scheduler-appointment-reduced:not(.dx-scheduler-all-day-appointment) {
       .dx-scheduler-appointment-reduced-icon,
       .dx-scheduler-appointment-recurrence-icon {
-        top: 9px;
+        top: $scheduler-appointment-recurrence-icon-top;
       }
     }
 
@@ -332,7 +451,7 @@ $scheduler-time-indicator-text-shadow: $scheduler-time-indicator-shadow-color 1p
 
         /* NOTE: Cell has 1px table cell (<th>) border, so -1px bottom is ok here. */
         bottom: -1px;
-        height: 2px;
+        height: $scheduler-header-panel-current-time-cell-height;
         background-color: $scheduler-time-indicator-color;
       }
     }
@@ -346,14 +465,14 @@ $scheduler-time-indicator-text-shadow: $scheduler-time-indicator-shadow-color 1p
 
   .dx-scheduler-work-space-month {
     .dx-scheduler-appointment-content {
-      padding: 0 7px;
+      padding: $scheduler-appointment-content-padding-2;
     }
 
     .dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
-      padding: 0 25px 0 7px;
+      padding: $scheduler-appointment-content-padding-3;
 
       .dx-rtl & {
-        padding: 0 7px 0 25px;
+        padding: $scheduler-rtl-padding;
       }
     }
 
@@ -455,7 +574,7 @@ $scheduler-time-indicator-text-shadow: $scheduler-time-indicator-shadow-color 1p
   }
 
   .dx-scheduler-appointment-content-details {
-    font-size: 11px;
+    font-size: $scheduler-appointment-content-details-font-size;
     white-space: pre;
     overflow: hidden;
 
@@ -618,7 +737,7 @@ $scheduler-time-indicator-text-shadow: $scheduler-time-indicator-shadow-color 1p
 
   .dx-scheduler-appointment-collector-compact {
     &.dx-scheduler-appointment-collector {
-      width: 24px;
+      width: $scheduler-appointment-collector-width;
     }
 
     .dx-scheduler-appointment-collector-content,
@@ -665,7 +784,7 @@ $scheduler-time-indicator-text-shadow: $scheduler-time-indicator-shadow-color 1p
     .dx-scheduler-work-space-day {
       .dx-scheduler-appointment-reduced {
         .dx-scheduler-appointment-content {
-          padding-right: 5px;
+          padding-right: $scheduler-appointment-content-padding-right;
           padding-left: $scheduler-appointment-reduced-content-padding;
         }
       }

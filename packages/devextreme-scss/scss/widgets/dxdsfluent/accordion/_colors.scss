@@ -1,0 +1,16 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$accordion-color: ds.$color-content-neutral-default-rest !default;
+
+$accordion-title-color: inherit !default;
+
+$fluent-accordion-title-font-size: $fluent-base-font-size !default;
+
+$accordion-background-color: transparent !default;
+$accordion-title-active-color: $accordion-color !default;
+$accordion-title-bg-hover: ds.$color-surface-neutral-default-hovered !default;
+$accordion-title-bg-active: ds.$color-surface-neutral-default-hovered !default;
+$accordion-disabled-color: ds.$color-content-neutral-default-disabled !default;

@@ -3,6 +3,27 @@
 // adduse
 
 
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$pagination-page-padding-2: 7px 8px 8px !default;
+$pagination-page-horizontal-padding: 13px !default;
+$pagination-page-margin-left: 5px !default;
+$pagination-page-margin-right: 1px !default;
+$pagination-separator-padding-left: 8px !default;
+$pagination-separator-padding-right: 8px !default;
+$pagination-navigate-button-width-2: 10px !default;
+$pagination-navigate-button-height: 20px !default;
+$pagination-first-child-margin-left: 1px !default;
+$pagination-first-child-padding-left: 10px !default;
+$pagination-first-child-padding-right: 9px !default;
+$pagination-first-child-padding-top: 7px !default;
+$pagination-first-child-padding-bottom: 8px !default;
+$pagination-first-child-margin-left-2: 4px !default;
+$pagination-page-index-width: 40px !default;
+$pagination-pages-count-padding-left: 6px !default;
+
+$pagination-info-opacity: 0.7 !default;
+$pagination-nav-disabled-opacity: 0.3 !default;
+
 $pagination-paddings: 8px;
 $pagination-info-paddings: 9px;
 
@@ -27,34 +48,34 @@ $pagination-info-paddings: 9px;
     .dx-page {
       display: inline-block;
       cursor: pointer;
-      padding: 7px 8px 8px;
-      margin-left: 5px;
-      margin-right: 1px;
+      padding: $pagination-page-padding-2;
+      margin-left: $pagination-page-margin-left;
+      margin-right: $pagination-page-margin-right;
     }
 
     .dx-separator {
       display: inline-block;
-      padding-left: 8px;
-      padding-right: 8px;
+      padding-left: $pagination-separator-padding-left;
+      padding-right: $pagination-separator-padding-right;
     }
 
     .dx-info {
       display: inline-block;
       margin-right: $pagination-info-paddings;
-      opacity: 0.7;
+      opacity: $pagination-info-opacity;
     }
 
     .dx-navigate-button {
-      width: 10px;
-      height: 20px;
+      width: $pagination-navigate-button-width-2;
+      height: $pagination-navigate-button-height;
       cursor: pointer;
       display: inline-block;
       vertical-align: top;
-      padding: $pagination-paddings - 1px 13px;
+      padding: $pagination-paddings - 1px $pagination-page-horizontal-padding;
       box-sizing: content-box;
 
       &.dx-button-disable {
-        opacity: 0.3;
+        opacity: $pagination-nav-disabled-opacity;
         cursor: inherit;
       }
     }
@@ -71,17 +92,17 @@ $pagination-info-paddings: 9px;
     .dx-page-size {
       &:first-child,
       &.dx-first-child {
-        margin-left: 1px;
+        margin-left: $pagination-first-child-margin-left;
       }
 
       display: inline-block;
       cursor: pointer;
-      padding-left: 10px;
-      padding-right: 9px;
-      padding-top: 7px;
-      padding-bottom: 8px;
-      margin-left: 4px;
-      margin-right: 1px;
+      padding-left: $pagination-first-child-padding-left;
+      padding-right: $pagination-first-child-padding-right;
+      padding-top: $pagination-first-child-padding-top;
+      padding-bottom: $pagination-first-child-padding-bottom;
+      margin-left: $pagination-first-child-margin-left-2;
+      margin-right: $pagination-page-margin-right;
     }
   }
 
@@ -97,7 +118,7 @@ $pagination-info-paddings: 9px;
     display: inline-block;
 
     .dx-page-index {
-      width: 40px;
+      width: $pagination-page-index-width;
     }
 
     .dx-pages-count {
@@ -106,7 +127,7 @@ $pagination-info-paddings: 9px;
 
     .dx-info-text,
     .dx-pages-count {
-      padding-left: 6px;
+      padding-left: $pagination-pages-count-padding-left;
     }
 
     .dx-page-index,
@@ -129,7 +150,7 @@ $pagination-info-paddings: 9px;
       direction: ltr;
 
       &:first-child {
-        margin-left: 1px;
+        margin-left: $pagination-first-child-margin-left;
       }
     }
 

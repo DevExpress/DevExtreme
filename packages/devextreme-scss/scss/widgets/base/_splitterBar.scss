@@ -2,6 +2,11 @@
 
 // adduse
 
+
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$splitterbar-splitter-border-width: 7px !default;
+$splitterbar-splitter-bar-width: 1px !default;
+
 .dx-splitter-wrapper {
   height: 100%;
   width: 0;
@@ -12,12 +17,12 @@
   .dx-splitter-border {
     z-index: 997;
     height: 100%;
-    width: 7px;
+    width: $splitterbar-splitter-border-width;
     cursor: col-resize;
 
     .dx-splitter-bar {
       height: 100%;
-      width: 1px;
+      width: $splitterbar-splitter-bar-width;
       display: block;
       cursor: col-resize;
       z-index: $overlay-zindex - 1;

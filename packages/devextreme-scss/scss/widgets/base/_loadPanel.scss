@@ -3,16 +3,21 @@
 // adduse
 
 
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$loadpanel-content-padding: 10px !default;
+$loadpanel-content-border: 1px solid #ccc !default;
+$loadpanel-content-border-radius: 5px !default;
+
 .dx-loadpanel-content {
-  padding: 10px;
-  border: 1px solid #ccc;
+  padding: $loadpanel-content-padding;
+  border: $loadpanel-content-border;
   background: #fefefe;
   text-align: center;
 
   @include user-select(none);
 
   -webkit-user-drag: none;
-  border-radius: 5px;
+  border-radius: $loadpanel-content-border-radius;
 
   &::before {
     display: inline-block;

@@ -1,3 +1,5 @@
+$file-name-font-weight: null !default;
+
 @use "../../../mixins" as *;
 
 .dx-chat-file {
@@ -18,7 +20,7 @@
   display: block;
   flex: 1 1 auto;
   min-width: 0;
-  font-weight: 600;
+  font-weight: $file-name-font-weight;
   line-height: 1.2857;
 
   @include dx-overflow();
