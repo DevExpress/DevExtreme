@@ -1,4 +1,4 @@
-import type Scheduler from '../../m_scheduler';
+import type Scheduler from '../../scheduler';
 import type { AppointmentEntity, ListEntity, SortedEntity } from '../types';
 import type { OptionManager } from './options/option_manager';
 import { addCollector } from './steps/add_collector/add_collector';

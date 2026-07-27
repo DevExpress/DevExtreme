@@ -17,12 +17,12 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 }
 
 type IPivotGridOptionsNarrowedEvents = {
-  onCellClick?: ((e: CellClickEvent) => void);
-  onCellPrepared?: ((e: CellPreparedEvent) => void);
+  onCellClick?: ((e: CellClickEvent) => void) | undefined;
+  onCellPrepared?: ((e: CellPreparedEvent) => void) | undefined;
   onContentReady?: ((e: ContentReadyEvent) => void);
-  onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void);
+  onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void) | undefined;
   onDisposing?: ((e: DisposingEvent) => void);
-  onExporting?: ((e: ExportingEvent) => void);
+  onExporting?: ((e: ExportingEvent) => void) | undefined;
   onInitialized?: ((e: InitializedEvent) => void);
 }
 
@@ -358,7 +358,7 @@ type IStateStoringProps = React.PropsWithChildren<{
   customSave?: ((state: any) => void);
   enabled?: boolean;
   savingTimeout?: number;
-  storageKey?: string;
+  storageKey?: string | undefined;
   type?: StateStoreType;
 }>
 const _componentStateStoring = (props: IStateStoringProps) => {

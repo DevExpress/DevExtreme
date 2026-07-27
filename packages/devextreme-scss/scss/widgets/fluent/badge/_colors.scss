@@ -1,4 +1,3 @@
-@use "sass:color";
 @use "../colors" as *;
 @use "../color" as extcolor;
 
@@ -25,6 +24,6 @@ $badge-background-color-disabled: $base-background-disabled !default;
 }
 
 @if $mode == "dark" {
-  $badge-bg: color.adjust($base-accent, $hue: 358.4deg, $saturation: -8.6%, $space: hsl, $lightness: -26.7%) !default;
+  $badge-bg: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 358.4deg, $saturation: -8.6%, $lightness: -26.7%) !default;
   $badge-color: $base-text-color !default;
 }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import type { BookingFormData } from '../app.types';
 
 let modulePrefix = '';
@@ -8,6 +8,7 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'confirmation',
   templateUrl: `.${modulePrefix}/confirmation/confirmation.component.html`,
   styleUrls: [`.${modulePrefix}/confirmation/confirmation.component.css`],

@@ -72,6 +72,8 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
 
   private _totalItemsCount: any;
 
+  private _lastExpandedRowKeys: any;
+
   private _createKeyGetter() {
     const keyExpr = this.getKeyExpr();
 
@@ -262,6 +264,15 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     return gridCoreUtils.combineFilters(parentIdFilters, 'or');
   }
 
+  protected override _calculateOperationTypes(loadOptions, lastLoadOptions, isFullReload?: boolean) {
+    const currentExpandedKeys = this.option('expandedRowKeys');
+
+    return {
+      ...super._calculateOperationTypes(loadOptions, lastLoadOptions, isFullReload),
+      nodeExpanding: !equalByValue(this._lastExpandedRowKeys, currentExpandedKeys),
+    };
+  }
+
   protected _customizeRemoteOperations(options, operationTypes) {
     super._customizeRemoteOperations.apply(this, arguments as any);
 
@@ -404,10 +415,12 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
 
     const concatLoadedData = (loadedData): any => {
       if (isRemoteFiltering) {
-        this._cachedStoreData = applySorting(
+        const updatedData = applySorting(
           this._cachedStoreData.concat(loadedData),
           sort,
         );
+
+        this.setCachedStoreData(updatedData);
       }
 
       return applySorting(
@@ -606,6 +619,10 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     }
     this._updateHasItemsMap(options);
     super._handleDataLoaded(options);
+
+    if (!options.isCustomLoading) {
+      this._lastExpandedRowKeys = this.option('expandedRowKeys')?.slice();
+    }
 
     if (data.isConverted && this._cachedStoreData) {
       this._cachedStoreData.isConverted = true;

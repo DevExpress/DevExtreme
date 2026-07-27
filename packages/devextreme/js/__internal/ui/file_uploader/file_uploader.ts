@@ -206,16 +206,16 @@ class FileUploader extends Editor<FileUploaderProperties> {
         uploadMethod: 'POST',
         uploadHeaders: {},
         uploadCustomData: {},
-        onBeforeSend: null,
-        onUploadStarted: null,
-        onUploaded: null,
-        onFilesUploaded: null,
+        onBeforeSend: undefined,
+        onUploadStarted: undefined,
+        onUploaded: undefined,
+        onFilesUploaded: undefined,
         onFileValidationError: null,
-        onProgress: null,
-        onUploadError: null,
-        onUploadAborted: null,
-        onDropZoneEnter: null,
-        onDropZoneLeave: null,
+        onProgress: undefined,
+        onUploadError: undefined,
+        onUploadAborted: undefined,
+        onDropZoneEnter: undefined,
+        onDropZoneLeave: undefined,
         onCancelButtonClick: null,
         onFileLimitReached: undefined,
         allowedFileExtensions: [],
@@ -1198,7 +1198,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type, consistent-return
-  _dragEnterHandler(isCustomTarget: boolean, e: DragLikeEvent): void | false {
+  _dragEnterHandler(isCustomTarget: boolean, e: DragLikeEvent): false | void {
     const { disabled } = this.option();
     if (disabled) {
       return false;

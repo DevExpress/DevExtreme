@@ -2,7 +2,7 @@ import $ from 'jquery';
 import SchedulerWorkSpaceVerticalStrategy from '__internal/scheduler/workspaces/work_space_grouped_strategy_vertical';
 import dateLocalization from 'common/core/localization/date';
 import devices from '__internal/core/m_devices';
-import '__internal/scheduler/m_scheduler';
+import '__internal/scheduler/scheduler';
 
 import { getEmptyResourceManager, applyWorkspaceGroups, getWorkspaceResourceConfig } from '../../helpers/scheduler/mockResourceManager.js';
 

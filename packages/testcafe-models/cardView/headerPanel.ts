@@ -1,3 +1,4 @@
+import { Selector } from 'testcafe';
 import HeaderItem from './headerItem';
 import Widget from "../internal/widget";
 
@@ -5,6 +6,7 @@ const CLASS = {
     headerItem: 'header-item',
     headerPanelTextEmpty: 'headerpanel-text-empty',
     link: 'link',
+    dropPlaceholder: 'header-item-sort-indicator',
 }
 
 export default class HeaderPanel {
@@ -36,5 +38,9 @@ export default class HeaderPanel {
         const link = this.element.find(`.dx-${CLASS.link}`);
 
         return link;
+    }
+
+    getDropPlaceholder(): Selector {
+        return Selector(`.${Widget.addClassPrefix(this.widgetName, CLASS.dropPlaceholder)}`);
     }
 }

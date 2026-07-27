@@ -17,7 +17,7 @@ export class SearchView {
     SearchController,
   ] as const;
 
-  private readonly searchTextBox: Signal<null | TextBoxInstance> = signal(null);
+  private readonly searchTextBox: Signal<TextBoxInstance | null> = signal(null);
 
   constructor(
     private readonly options: OptionsController,

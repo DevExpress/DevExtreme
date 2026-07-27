@@ -6,7 +6,7 @@ import SchedulerTimelineMonth from '__internal/scheduler/workspaces/timeline_mon
 import dateLocalization from 'common/core/localization/date';
 import SchedulerWorkSpaceVerticalStrategy from '__internal/scheduler/workspaces/work_space_grouped_strategy_vertical';
 import SchedulerWorkSpaceHorizontalStrategy from '__internal/scheduler/workspaces/work_space_grouped_strategy_horizontal';
-import '__internal/scheduler/m_scheduler';
+import '__internal/scheduler/scheduler';
 
 import {
     applyWorkspaceGroups,

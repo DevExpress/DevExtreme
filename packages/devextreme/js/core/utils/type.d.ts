@@ -22,7 +22,7 @@ export declare function isEmptyObject(object: any): boolean;
 
 export declare function isPlainObject(object: any): object is { [key: string]: any };
 
-export declare function isPrimitive(value: any): value is string | number | boolean | undefined | symbol | null;
+export declare function isPrimitive(value: any): value is string | number | boolean | symbol | null | undefined;
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment, @typescript-eslint/prefer-ts-expect-error
 // @ts-ignore: globalThis was introduced in TypeScript 3.4

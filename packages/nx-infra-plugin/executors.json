@@ -100,6 +100,11 @@
       "schema": "./src/executors/dts-bundle/schema.json",
       "description": "Assemble TypeScript declaration bundle files from source"
     },
+    "check-declarations": {
+      "implementation": "./src/executors/check-declarations/executor",
+      "schema": "./src/executors/check-declarations/schema.json",
+      "description": "Type-check DevExtreme .d.ts bundles and modules (gulp validate-ts parity)"
+    },
     "npm-assemble": {
       "implementation": "./src/executors/npm-assemble/executor",
       "schema": "./src/executors/npm-assemble/schema.json",

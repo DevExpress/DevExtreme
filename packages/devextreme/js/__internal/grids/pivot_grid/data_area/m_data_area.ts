@@ -1,5 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import $ from '@js/core/renderer';
+import { setTabIndex } from '@js/ui/shared/accessibility';
 import supportUtils from '@ts/core/utils/m_support';
 
 import { AreaItem } from '../area_item/m_area_item';
@@ -14,6 +15,20 @@ const PIVOTGRID_ROW_TOTAL_CLASS = 'dx-row-total';
 class DataArea extends AreaItem {
   _getAreaName() {
     return 'data';
+  }
+
+  render(rootElement, data) {
+    super.render(rootElement, data);
+
+    this._makeFirstCellFocusable();
+  }
+
+  _makeFirstCellFocusable() {
+    const firstCell = this.tableElement().get(0)?.querySelector('td');
+
+    if (firstCell) {
+      setTabIndex(this.component, $(firstCell));
+    }
   }
 
   _createGroupElement() {

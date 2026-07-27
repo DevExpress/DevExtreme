@@ -17,6 +17,7 @@
     "./Demos/**/React/**/*.tsx",
     "./Demos/**/Vue/**/*.ts",
     "./Demos/**/Angular/**/*.ts",
-    "./testing/**/*.ts"
+    "./testing/**/*.ts",
+    "./shared/anti-forgery/index.d.ts"
   ]
 }

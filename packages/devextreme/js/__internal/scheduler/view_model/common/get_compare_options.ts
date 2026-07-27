@@ -1,4 +1,4 @@
-import type Scheduler from '../../m_scheduler';
+import type Scheduler from '../../scheduler';
 import timeZoneUtils from '../../utils_time_zone';
 import type { CompareOptions } from '../types';
 
@@ -6,7 +6,7 @@ export const getCompareOptions = (
   schedulerStore: Scheduler,
 ): CompareOptions => {
   const workspace = schedulerStore.getWorkSpace();
-  const dateRange = workspace.getDateRange() as Date[];
+  const dateRange = workspace.getDateRange();
   const compareOptions = {
     startDayHour: schedulerStore.getViewOption('startDayHour'),
     endDayHour: schedulerStore.getViewOption('endDayHour'),

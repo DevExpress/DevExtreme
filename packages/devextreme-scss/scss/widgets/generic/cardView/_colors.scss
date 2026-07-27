@@ -1,5 +1,6 @@
 @use 'sass:color';
 @use '../colors' as *;
+@use '../color' as extcolor;
 @use '../../base/cardView/variables' as *;
 @use '../../base/cardView/header_panel/variables' as *;
 @use '../../base/cardView/header_panel/item/variables' as *;
@@ -423,8 +424,8 @@ $cardview-generic-columnchooser--empty__message-color: null !default;
   $cardview-generic-card--focused-outline-color: $base-accent !default;
 
   // Card - selected
-  $cardview-generic-card--selected-bg-color: color.adjust($base-accent, $hue: 2deg, $saturation: -6.41%, $space: hsl, $lightness: 48.63%) !default;
-  $cardview-generic-card--selected-border-color: color.adjust($base-accent, $hue: 2deg, $saturation: -6.88%, $space: hsl, $lightness: 33.14%) !default;
+  $cardview-generic-card--selected-bg-color: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 2deg, $saturation: -6.41%, $lightness: 48.63%) !default;
+  $cardview-generic-card--selected-border-color: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 2deg, $saturation: -6.88%, $lightness: 33.14%) !default;
   $cardview-generic-card--selected-divider-color: $cardview-generic-card--selected-border-color !default;
   $cardview-generic-card--selected-text-color: $cardview-generic-card-text-color !default;
   $cardview-generic-card--selected__cover-bg-color: $cardview-generic-card__cover-bg-color !default;
@@ -466,7 +467,7 @@ $cardview-generic-columnchooser--empty__message-color: null !default;
   $cardview-generic-header-panel__item--dragged-box-shadow-color: rgba(0, 0, 0, 0.2) !default;
 
   // Header panel Drop-zone
-  $cardview-generic-header-panel__dropzone-bg-color: color.adjust($base-accent, $hue: 2deg, $saturation: -6.41%, $space: hsl, $lightness: 48.63%) !default;
+  $cardview-generic-header-panel__dropzone-bg-color: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 2deg, $saturation: -6.41%, $lightness: 48.63%) !default;
   $cardview-generic-header-panel__dropzone-border-color: $base-accent !default;
   $cardview-generic-header-panel__dropzone-text-color: $base-accent !default;
   $cardview-generic-header-panel__dropzone__icon-color: $base-accent !default;
@@ -511,8 +512,8 @@ $cardview-generic-columnchooser--empty__message-color: null !default;
   $cardview-generic-card--focused-outline-color: $base-accent !default;
 
   // Card - selected
-  $cardview-generic-card--selected-bg-color: color.adjust($base-accent, $hue: 1deg, $saturation: -60.34%, $space: hsl, $lightness: -29.41%) !default;
-  $cardview-generic-card--selected-border-color: color.adjust($base-accent, $hue: 1deg, $saturation: -44.18%, $space: hsl, $lightness: -11.76%) !default;
+  $cardview-generic-card--selected-bg-color: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 1deg, $saturation: -60.34%, $lightness: -29.41%) !default;
+  $cardview-generic-card--selected-border-color: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 1deg, $saturation: -44.18%, $lightness: -11.76%) !default;
   $cardview-generic-card--selected-divider-color: $cardview-generic-card--selected-border-color !default;
   $cardview-generic-card--selected-text-color: $cardview-generic-card-text-color !default;
   $cardview-generic-card--selected__cover-bg-color: $cardview-generic-card__cover-bg-color !default;
@@ -554,7 +555,7 @@ $cardview-generic-columnchooser--empty__message-color: null !default;
   $cardview-generic-header-panel__item--dragged-box-shadow-color: rgba(0, 0, 0, 0.2) !default;
 
   // Header panel Drop-zone
-  $cardview-generic-header-panel__dropzone-bg-color: color.adjust($base-accent, $hue: 1deg, $saturation: -60.34%, $space: hsl, $lightness: -29.41%) !default;
+  $cardview-generic-header-panel__dropzone-bg-color: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 1deg, $saturation: -60.34%, $lightness: -29.41%) !default;
   $cardview-generic-header-panel__dropzone-border-color: $base-accent !default;
   $cardview-generic-header-panel__dropzone-text-color: $base-accent !default;
   $cardview-generic-header-panel__dropzone__icon-color: $base-accent !default;

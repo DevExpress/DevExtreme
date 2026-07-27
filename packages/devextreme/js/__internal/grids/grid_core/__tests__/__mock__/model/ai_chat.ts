@@ -2,6 +2,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { MessageStatus } from '@ts/grids/grid_core/ai_assistant/const';
 import { CLASSES } from '@ts/grids/grid_core/ai_chat/const';
+import { OVERLAY_CONTENT_CLASS } from '@ts/ui/overlay/overlay';
 
 export class AIChatModel {
   protected readonly root: dxElementWrapper;
@@ -46,5 +47,17 @@ export class AIChatModel {
     return this.getMessage(messageIndex)
       .find(`.${CLASSES.messageRegenerateButton}`)
       .get(0) as HTMLElement;
+  }
+
+  public getRegenerateButtonTitle(messageIndex: number): string {
+    return this.getRegenerateButton(messageIndex)?.getAttribute('title') ?? '';
+  }
+
+  public getPopupContentElement(): dxElementWrapper {
+    return this.root.find(`.${OVERLAY_CONTENT_CLASS}`);
+  }
+
+  public getPopupHeight(): string {
+    return (this.getPopupContentElement().get(0) as HTMLElement)?.style.height ?? '';
   }
 }

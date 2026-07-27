@@ -860,9 +860,7 @@ class TextEditorBase<
     return this.$element();
   }
 
-  _focusInHandler(event: DxEvent & {
-    relatedTarget: Element | dxElementWrapper;
-  }): void {
+  _focusInHandler(event: DxEvent<FocusEvent>): void {
     this._preventNestedFocusEvent(event);
 
     super._focusInHandler(event);
@@ -1079,7 +1077,7 @@ class TextEditorBase<
     }
   }
 
-  getButton(name: string): dxButton | undefined | null {
+  getButton(name: string): dxButton | null | undefined {
     // @ts-expect-error TextEditorButtonCollection should use generic
     return this._buttonCollection.getButton(name);
   }

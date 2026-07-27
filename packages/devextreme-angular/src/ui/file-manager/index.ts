@@ -240,10 +240,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get fileSystemProvider(): any {
+    get fileSystemProvider(): any | null {
         return this._getOption('fileSystemProvider');
     }
-    set fileSystemProvider(value: any) {
+    set fileSystemProvider(value: any | null) {
         this._setOption('fileSystemProvider', value);
     }
 
@@ -253,10 +253,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get focusedItemKey(): string {
+    get focusedItemKey(): string | undefined {
         return this._getOption('focusedItemKey');
     }
-    set focusedItemKey(value: string) {
+    set focusedItemKey(value: string | undefined) {
         this._setOption('focusedItemKey', value);
     }
 
@@ -743,14 +743,14 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() fileSystemProviderChange: EventEmitter<any>;
+    @Output() fileSystemProviderChange: EventEmitter<any | null>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() focusedItemKeyChange: EventEmitter<string>;
+    @Output() focusedItemKeyChange: EventEmitter<string | undefined>;
 
     /**
     

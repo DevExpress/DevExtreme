@@ -349,14 +349,14 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart, piePoint
     minDiameter?: number;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type function
      * @type_function_param1 e:{viz/pie_chart:LegendClickEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onLegendClick?: ((e: LegendClickEvent) => void) | string;
+    onLegendClick?: ((e: LegendClickEvent) => void) | string | undefined;
     /**
      * @docid
      * @default "Material"

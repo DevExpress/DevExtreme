@@ -1,5 +1,6 @@
 @use "../colors" as *;
 @use "sass:color";
+@use "../color" as extcolor;
 
 // adduse
 
@@ -9,7 +10,7 @@ $informer-info-color: $base-text-color !default;
 $informer-info-background-color: null !default;
 
 @if $mode == "light" {
-  $informer-error-background-color: color.adjust($base-danger, $hue: -358deg, $saturation: 0.58%, $space: hsl, $lightness: 46.67%);
+  $informer-error-background-color: extcolor.adjust-if-not-achromatic($color: $base-danger, $hue: -358deg, $saturation: 0.58%, $lightness: 46.67%);
   $informer-info-background-color: color.adjust($base-text-color, $lightness: 74.90%, $space: hsl);
 }
 

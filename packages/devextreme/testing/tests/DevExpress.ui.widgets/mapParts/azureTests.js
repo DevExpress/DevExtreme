@@ -30,25 +30,24 @@ const prepareTestingAzureProvider = () => {
     atlas.popupOpened = false;
 };
 
+const loadAzureMock = () => $.getScript({
+    url: '../../packages/devextreme/testing/helpers/forMap/azureMock.js',
+    scriptAttrs: { nonce: 'qunit-test' },
+}).done(() => {
+    prepareTestingAzureProvider();
+});
+
 const moduleConfig = {
     beforeEach: function() {
         const fakeURL = '/fakeAzureUrl';
-        let azureMockCreated = false;
 
         AzureProvider.remapConstant(fakeURL);
 
         ajaxMock.setup({
             url: fakeURL,
             callback: () => {
-                if(!azureMockCreated) {
-                    azureMockCreated = true;
-
-                    $.getScript({
-                        url: '../../packages/devextreme/testing/helpers/forMap/azureMock.js',
-                        scriptAttrs: { nonce: 'qunit-test' },
-                    }).done(() => {
-                        prepareTestingAzureProvider();
-                    });
+                if(!window.atlas) {
+                    loadAzureMock();
                 }
             },
             responseText: {
@@ -86,10 +85,7 @@ QUnit.module('map loading', moduleConfig, () => {
     QUnit.test('map initialize with loaded map', function(assert) {
         const done = assert.async();
 
-        $.getScript({
-            url: '../../packages/devextreme/testing/helpers/forMap/azureMock.js',
-            scriptAttrs: { nonce: 'qunit-test' }
-        }).done(function() {
+        loadAzureMock().done(function() {
             window.atlas.Map.customFlag = true;
 
             setTimeout(function() {
@@ -304,7 +300,9 @@ QUnit.module('basic options', moduleConfig, () => {
         });
     });
 
-    QUnit.test('center should be geocoded if adress is passed as a string', function(assert) {
+    QUnit.test('center should be geocoded if adress is passed as a string', async function(assert) {
+        await loadAzureMock();
+
         const done = assert.async();
         const center = 'Cedar Park, Texas';
 
@@ -369,7 +367,9 @@ QUnit.module('basic options', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Bounds option should have more priority than center option', function(assert) {
+    QUnit.test('Bounds option should have more priority than center option', async function(assert) {
+        await loadAzureMock();
+
         const done = assert.async();
 
         $('#map').dxMap({

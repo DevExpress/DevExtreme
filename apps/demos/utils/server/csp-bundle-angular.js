@@ -845,7 +845,9 @@ async function main() {
 }
 
 if (require.main === module) {
-  main().catch((err) => {
+  main().then(() => {
+    process.exit(process.exitCode || 0);
+  }).catch((err) => {
     console.error('csp-bundle-angular failed:', err);
     process.exit(1);
   });

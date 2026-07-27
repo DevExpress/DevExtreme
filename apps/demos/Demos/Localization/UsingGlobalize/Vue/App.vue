@@ -67,18 +67,12 @@ import 'devextreme/common/core/localization/globalize/number';
 import 'devextreme/common/core/localization/globalize/date';
 import 'devextreme/common/core/localization/globalize/currency';
 import 'devextreme/common/core/localization/globalize/message';
-// @ts-ignore
-import * as deMessages from 'npm:devextreme/localization/messages/de.json!json';
-// @ts-ignore
-import * as ruMessages from 'npm:devextreme/localization/messages/ru.json!json';
-// @ts-ignore
-import * as deCldrData from 'npm:devextreme-cldr-data/de.json!json';
-// @ts-ignore
-import * as ruCldrData from 'npm:devextreme-cldr-data/ru.json!json';
-// @ts-ignore
-import * as supplementalCldrData from 'npm:devextreme-cldr-data/supplemental.json!json';
-// @ts-ignore
-import * as Globalize from 'globalize';
+import deMessages from 'npm:devextreme/localization/messages/de.json!json';
+import ruMessages from 'npm:devextreme/localization/messages/ru.json!json';
+import deCldrData from 'npm:devextreme-cldr-data/de.json!json';
+import ruCldrData from 'npm:devextreme-cldr-data/ru.json!json';
+import supplementalCldrData from 'npm:devextreme-cldr-data/supplemental.json!json';
+import Globalize from 'globalize';
 import service from './data.ts';
 
 type Locale = string;

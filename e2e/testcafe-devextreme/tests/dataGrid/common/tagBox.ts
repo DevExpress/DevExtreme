@@ -8,9 +8,6 @@ fixture.disablePageReloads`Tagbox Columns`.page(
   url(__dirname, '../../container.html'),
 );
 // T1228720
-// visual: generic.light
-// visual: material.blue.light
-// visual: fluent.blue.light
 test('Datagrid tagbox column should not look broken', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

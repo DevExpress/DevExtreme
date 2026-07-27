@@ -426,10 +426,10 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get stateStoring(): { customLoad?: Function, customSave?: ((state: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType } {
+    get stateStoring(): { customLoad?: Function, customSave?: ((state: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string | undefined, type?: StateStoreType } {
         return this._getOption('stateStoring');
     }
-    set stateStoring(value: { customLoad?: Function, customSave?: ((state: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType }) {
+    set stateStoring(value: { customLoad?: Function, customSave?: ((state: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string | undefined, type?: StateStoreType }) {
         this._setOption('stateStoring', value);
     }
 
@@ -749,7 +749,7 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stateStoringChange: EventEmitter<{ customLoad?: Function, customSave?: ((state: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType }>;
+    @Output() stateStoringChange: EventEmitter<{ customLoad?: Function, customSave?: ((state: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string | undefined, type?: StateStoreType }>;
 
     /**
     

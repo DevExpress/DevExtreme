@@ -7,8 +7,10 @@ import {
   it,
   jest,
 } from '@jest/globals';
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import Chat from '@js/ui/chat';
+import { AIChatModel } from '@ts/grids/grid_core/__tests__/__mock__/model/ai_chat';
 import { AI_ASSISTANT_AUTHOR_ID } from '@ts/grids/grid_core/ai_assistant/const';
 import ProgressBar from '@ts/ui/m_progress_bar';
 import Popup from '@ts/ui/popup/popup';
@@ -85,6 +87,7 @@ const createComponentMock = jest.fn((
 const createAIChat = (optionsOverride: Partial<AIChatOptions> = {}): {
   $container: ReturnType<typeof $>;
   aiChat: AIChat;
+  model: AIChatModel;
 } => {
   const $container = $('<div>').appendTo(document.body);
 
@@ -95,8 +98,9 @@ const createAIChat = (optionsOverride: Partial<AIChatOptions> = {}): {
   };
 
   const aiChat = new AIChat(options);
+  const model = new AIChatModel();
 
-  return { $container, aiChat };
+  return { $container, aiChat, model };
 };
 
 const getPopupConfig = (): any => {
@@ -619,6 +623,25 @@ describe('AIChat', () => {
 
         expect(regenerateButton).not.toBeNull();
         expect(regenerateButton?.classList.contains(`dx-icon-${REGENERATE_ICON}`)).toBe(true);
+      });
+
+      it('should render regenerate button with localized title attribute (shown on hover)', () => {
+        const onRegenerate = jest.fn();
+        const { $container, model } = createAIChat({ onRegenerate });
+        triggerContentTemplate();
+
+        const chatConfig = getChatConfig();
+        const container = document.createElement('div');
+        $container.append(container);
+
+        renderMessageTemplate(chatConfig, {
+          author: { id: AI_ASSISTANT_AUTHOR_ID, name: 'AI Assistant' },
+          text: 'Error occurred',
+          status: 'failure',
+        }, container);
+
+        expect(model.getRegenerateButtonTitle(0))
+          .toBe(messageLocalization.format('dxDataGrid-aiAssistantRegenerateButtonText'));
       });
 
       it('should not render regenerate button when onRegenerate is not provided', () => {

@@ -3,7 +3,7 @@ import devices from '__internal/core/m_devices';
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import 'fluent_blue_light.css!';
 import $ from 'jquery';
-import '__internal/scheduler/m_scheduler';
+import '__internal/scheduler/scheduler';
 
 import { getEmptyResourceManager, getWorkspaceResourceConfig } from '../../helpers/scheduler/mockResourceManager.js';
 

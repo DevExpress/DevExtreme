@@ -1,6 +1,9 @@
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import CardView from 'devextreme-testcafe-models/cardView';
 import TreeView from 'devextreme-testcafe-models/treeView';
+import { MouseUpEvents, MouseAction } from '../../../helpers/mouseUpEvents';
+
+const HEADER_DROP_OFFSET_Y = 5;
 
 export const SELECTORS = {
   dragging: '.dx-sortable-dragging',
@@ -70,29 +73,58 @@ export const dragToHeaderPanel = async (
   cardView: CardView,
   columnElement: Selector,
   gapIndex: number,
+  isNoOp = false,
 ): Promise<void> => {
   const headers = cardView.getHeaders();
   const columnsNum = await headers.getHeaderItemsElements().count;
 
+  await MouseUpEvents.disable(MouseAction.dragToElement);
+
   if (gapIndex < columnsNum) {
     const insertBeforeColumn = headers.getHeaderItemNth(gapIndex).element;
+    const { width } = await insertBeforeColumn.boundingClientRect;
 
     await t.dragToElement(
       columnElement,
       insertBeforeColumn,
-      { destinationOffsetX: +5, destinationOffsetY: -20, speed: 0.5 },
+      {
+        offsetX: 5,
+        offsetY: 5,
+        destinationOffsetX: -(Math.floor(width) + 3), // 3px left of the left edge
+        destinationOffsetY: HEADER_DROP_OFFSET_Y,
+        speed: 0.5,
+      },
     );
   } else {
     const insertAfterColumn = headers.getHeaderItemNth(columnsNum - 1).element;
+    const { width } = await insertAfterColumn.boundingClientRect;
 
     await t.dragToElement(
       columnElement,
       insertAfterColumn,
-      { destinationOffsetX: -5, destinationOffsetY: -20, speed: 0.5 },
+      {
+        offsetX: 5,
+        offsetY: 5,
+        destinationOffsetX: (Math.floor(width) + 3), // 3px right of the right edge
+        destinationOffsetY: HEADER_DROP_OFFSET_Y,
+        speed: 0.5,
+      },
     );
   }
 
-  await t.wait(300);
+  if (!isNoOp) {
+    await t
+      .expect(cardView.getHeaderPanel().getDropPlaceholder().exists)
+      .ok();
+  }
+
+  await MouseUpEvents.enable(MouseAction.dragToElement);
+
+  await t.dispatchEvent(columnElement, 'mouseup');
+
+  await t
+    .expect(Selector(SELECTORS.dragging).exists)
+    .notOk();
 };
 
 export const dragToColumnChooser = async (
@@ -104,6 +136,10 @@ export const dragToColumnChooser = async (
   const treeView = columnChooser.element.find(SELECTORS.treeView);
 
   await t.dragToElement(columnElement, treeView);
+
+  await t
+    .expect(Selector(SELECTORS.dragging).exists)
+    .notOk();
 };
 
 export const arrayMoveToGap = (arr: number[], index: number, gapIndex: number): number[] => {
@@ -125,24 +161,19 @@ export const expectColumns = async (
   source: 'headerPanel' | 'columnChooser' = 'headerPanel',
 ): Promise<void> => {
   const actualColumns: string[] = [];
-
-  for (let i = 0; i < expectedColumns.length; i += 1) {
-    // eslint-disable-next-line @typescript-eslint/init-declarations
-    let column: Selector;
-
-    if (source === 'headerPanel') {
-      column = cardView.getHeaders().getHeaderItemNth(i)?.element;
-    } else {
-      const treeView = new TreeView(cardView.getColumnChooser().element.find(SELECTORS.treeView));
-      column = treeView.getNodeItem(i);
-    }
-
-    if (await column?.exists) {
-      actualColumns.push(await column.innerText);
-    }
-  }
-
   const adjustedExpectedColumns = expectedColumns.map((columnIndex) => `Column ${columnIndex}`);
 
-  await t.expect(actualColumns).eql(adjustedExpectedColumns);
+  const actualColumnsCount = source === 'headerPanel'
+    ? await cardView.getHeaders().getHeaderItemsElements().count
+    : await cardView.getColumnChooser().getColumns().count;
+
+  for (let i = 0; i < actualColumnsCount; i += 1) {
+    const column = source === 'headerPanel'
+      ? cardView.getHeaders().getHeaderItemNth(i).element
+      : cardView.getColumnChooser().getColumn(i);
+
+    actualColumns.push(await column.innerText);
+  }
+
+  await t.expect(actualColumns).eql(adjustedExpectedColumns, 'Columns order should match');
 };

@@ -62,8 +62,8 @@ class DateBoxStrategy extends (Class.inherit({}) as new() => {}) {
     return { mode: 'text' };
   }
 
-  getDisplayFormat(displayFormat: Format): Format {
-    return displayFormat;
+  getDisplayFormat(displayFormat?: Format | null): Format {
+    return displayFormat || 'shortdate';
   }
 
   supportedKeys(): Record<string, (e: KeyboardEvent) => void> {
@@ -76,7 +76,7 @@ class DateBoxStrategy extends (Class.inherit({}) as new() => {}) {
 
   customizeButtons(): void {}
 
-  getParsedText(text = '', format?: string): Date | undefined | null {
+  getParsedText(text = '', format?: string): Date | null | undefined {
     const value = dateLocalization.parse(text, format);
     return value ?? dateLocalization.parse(text);
   }

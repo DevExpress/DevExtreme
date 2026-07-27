@@ -1,6 +1,6 @@
 import { getOuterHeight, getOuterWidth } from 'core/utils/size';
 import 'fluent_blue_light.css!';
-import '__internal/scheduler/m_scheduler';
+import '__internal/scheduler/scheduler';
 
 import $ from 'jquery';
 import translator from 'common/core/animation/translator';

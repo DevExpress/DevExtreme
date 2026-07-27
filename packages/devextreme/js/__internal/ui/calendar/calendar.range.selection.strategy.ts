@@ -15,7 +15,7 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
 
   dateOption(optionName: 'value'): (Date | null)[];
   dateOption(optionName: 'min' | 'max'): Date | null;
-  dateOption(optionName: 'min' | 'max' | 'value'): Date | null | (Date | null)[] {
+  dateOption(optionName: 'min' | 'max' | 'value'): Date | (Date | null)[] | null {
     if (optionName === 'value') {
       return this.calendar._getDateOption('value') as (Date | null)[] || null;
     }

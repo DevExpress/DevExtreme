@@ -287,10 +287,10 @@ export const stateStoringModule = {
     return {
       stateStoring: {
         enabled: false,
-        storageKey: null,
+        storageKey: undefined,
         type: 'localStorage',
-        customLoad: null,
-        customSave: null,
+        customLoad: undefined,
+        customSave: undefined,
         savingTimeout: 2000,
       },
     };

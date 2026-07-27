@@ -169,10 +169,10 @@ export class DxoListItemDraggingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get onAdd(): ((e: AddEvent) => void) {
+    get onAdd(): ((e: AddEvent) => void) | undefined {
         return this._getOption('onAdd');
     }
-    set onAdd(value: ((e: AddEvent) => void)) {
+    set onAdd(value: ((e: AddEvent) => void) | undefined) {
         this._setOption('onAdd', value);
     }
 
@@ -185,34 +185,34 @@ export class DxoListItemDraggingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get onDragChange(): ((e: DragChangeEvent) => void) {
+    get onDragChange(): ((e: DragChangeEvent) => void) | undefined {
         return this._getOption('onDragChange');
     }
-    set onDragChange(value: ((e: DragChangeEvent) => void)) {
+    set onDragChange(value: ((e: DragChangeEvent) => void) | undefined) {
         this._setOption('onDragChange', value);
     }
 
     @Input()
-    get onDragEnd(): ((e: DragEndEvent) => void) {
+    get onDragEnd(): ((e: DragEndEvent) => void) | undefined {
         return this._getOption('onDragEnd');
     }
-    set onDragEnd(value: ((e: DragEndEvent) => void)) {
+    set onDragEnd(value: ((e: DragEndEvent) => void) | undefined) {
         this._setOption('onDragEnd', value);
     }
 
     @Input()
-    get onDragMove(): ((e: DragMoveEvent) => void) {
+    get onDragMove(): ((e: DragMoveEvent) => void) | undefined {
         return this._getOption('onDragMove');
     }
-    set onDragMove(value: ((e: DragMoveEvent) => void)) {
+    set onDragMove(value: ((e: DragMoveEvent) => void) | undefined) {
         this._setOption('onDragMove', value);
     }
 
     @Input()
-    get onDragStart(): ((e: DragStartEvent) => void) {
+    get onDragStart(): ((e: DragStartEvent) => void) | undefined {
         return this._getOption('onDragStart');
     }
-    set onDragStart(value: ((e: DragStartEvent) => void)) {
+    set onDragStart(value: ((e: DragStartEvent) => void) | undefined) {
         this._setOption('onDragStart', value);
     }
 
@@ -233,18 +233,18 @@ export class DxoListItemDraggingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get onRemove(): ((e: RemoveEvent) => void) {
+    get onRemove(): ((e: RemoveEvent) => void) | undefined {
         return this._getOption('onRemove');
     }
-    set onRemove(value: ((e: RemoveEvent) => void)) {
+    set onRemove(value: ((e: RemoveEvent) => void) | undefined) {
         this._setOption('onRemove', value);
     }
 
     @Input()
-    get onReorder(): ((e: ReorderEvent) => void) {
+    get onReorder(): ((e: ReorderEvent) => void) | undefined {
         return this._getOption('onReorder');
     }
-    set onReorder(value: ((e: ReorderEvent) => void)) {
+    set onReorder(value: ((e: ReorderEvent) => void) | undefined) {
         this._setOption('onReorder', value);
     }
 

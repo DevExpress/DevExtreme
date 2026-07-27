@@ -5,7 +5,7 @@ const keyboardMock = require('../../helpers/keyboardMock.js');
 const { createWrapper } = require('../../helpers/scheduler/helpers.js');
 const { waitAsync } = require('../../helpers/scheduler/waitForAsync.js');
 
-require('__internal/scheduler/m_scheduler');
+require('__internal/scheduler/scheduler');
 require('ui/drop_down_button');
 
 QUnit.testStart(function() {

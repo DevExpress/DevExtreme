@@ -61,7 +61,7 @@ export interface WidgetProps extends BaseWidgetProps {
   activeStateUnit?: string;
   cssText?: string;
   aria?: Record<string, string>;
-  children?: JSX.Element | (JSX.Element | undefined | false | null)[];
+  children?: JSX.Element | (JSX.Element | false | null | undefined)[];
   classes?: string | undefined;
   name?: string;
   addWidgetClass?: boolean;
@@ -601,7 +601,7 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
     return combineClasses(classesMap);
   }
 
-  getTabIndex(): undefined | number {
+  getTabIndex(): number | undefined {
     const { focusStateEnabled, disabled, tabIndex } = this.props;
     const isFocusable = focusStateEnabled && !disabled;
 

@@ -6,11 +6,11 @@
 /* eslint-disable spellcheck/spell-checker */
 export const ERROR_MSG = 'a runtime error occured! Use Inferno in development environment to find the error.';
 
-export function isNullOrUndef(o: any): o is undefined | null {
+export function isNullOrUndef(o: any): o is null | undefined {
   return o === void 0 || o === null;
 }
 
-export function isInvalid(o: any): o is null | boolean | undefined {
+export function isInvalid(o: any): o is boolean | null | undefined {
   return o === null || o === false || o === true || o === void 0;
 }
 

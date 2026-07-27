@@ -1,5 +1,6 @@
 @use 'sass:color';
 @use '../colors' as *;
+@use '../color' as extcolor;
 @use '../../base/cardView/variables' as *;
 @use '../../base/cardView/header_panel/variables' as *;
 @use '../../base/cardView/header_panel/item/variables' as *;
@@ -462,7 +463,7 @@ $cardview-material-columnchooser--empty__message-color: null !default;
   $cardview-material-header-panel__item--dragged-border-color: $cardview-material-header-panel__item--dragged-bg-color !default;
   $cardview-material-header-panel__item--dragged-text-color: $cardview-material-header-panel__item-text-color !default;
   $cardview-material-header-panel__item--dragged__allowance-icon-color: $cardview-material-common-text-color !default;
-  $cardview-material-header-panel__item--dragged__prohibition-icon-color: color.adjust($base-danger, $hue: -4deg, $saturation: 22.8%, $space: hsl, $lightness: -9.61%) !default;
+  $cardview-material-header-panel__item--dragged__prohibition-icon-color: extcolor.adjust-if-not-achromatic($color: $base-danger, $hue: -4deg, $saturation: 22.8%, $lightness: -9.61%) !default;
   $cardview-material-header-panel__item--dragged-box-shadow-color: rgba(0, 0, 0, 0.2) !default;
 
   // Header panel Drop-zone

@@ -1,4 +1,4 @@
-import type Scheduler from '../../m_scheduler';
+import type Scheduler from '../../scheduler';
 import { getCompareOptions } from '../common/get_compare_options';
 import type {
   Duration, ListEntity, MinimalAppointmentEntity, UTCDates,

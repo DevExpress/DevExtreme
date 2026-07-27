@@ -2015,6 +2015,39 @@ QUnit.test('Validate Axis on update', function(assert) {
     assert.strictEqual(chart.getArgumentAxis().getOptions().type, 'continuous');
 });
 
+QUnit.test('Constant lines dynamic update with automatically created value axis (T891599)', function(assert) {
+    const chart = this.createChart({
+        dataSource: [
+            { t: new Date(2026, 5, 16), val1: 14.13, val2: 0, val3: 12 }
+        ],
+        commonSeriesSettings: {
+            argumentField: 't'
+        },
+        panes: [
+            { name: 'pane1' },
+            { name: 'pane2' },
+            { name: 'pane3' }
+        ],
+        series: [
+            { axis: 'ax_1', pane: 'pane1', type: 'line', valueField: 'val1' },
+            { axis: 'ax_2', pane: 'pane2', type: 'line', valueField: 'val2' },
+            { axis: 'ax_3', pane: 'pane3', type: 'line', valueField: 'val3' }
+        ],
+        valueAxis: [
+            { name: 'ax_1' },
+            { name: 'ax_2' }
+        ],
+        argumentAxis: {
+            argumentType: 'datetime',
+            constantLines: [{ value: new Date(2026, 5, 16) }]
+        }
+    });
+
+    chart.option('argumentAxis.constantLines', [{ value: new Date(2026, 5, 16) }]);
+    assert.ok(true, 'dynamic update argumentAxis.constantLines do not throw error');
+});
+
+
 // T951843
 QUnit.test('Chart can hide series on done event', function(assert) {
     const drawn = sinon.spy();

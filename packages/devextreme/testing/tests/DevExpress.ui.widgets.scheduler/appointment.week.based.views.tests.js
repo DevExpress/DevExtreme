@@ -19,7 +19,7 @@ import {
 } from '../../helpers/scheduler/helpers.js';
 import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
-import '__internal/scheduler/m_scheduler';
+import '__internal/scheduler/scheduler';
 import 'ui/switch';
 import 'fluent_blue_light.css!';
 

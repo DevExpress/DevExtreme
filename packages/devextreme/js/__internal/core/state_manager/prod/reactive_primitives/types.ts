@@ -6,7 +6,7 @@ export type ReadonlySignal<T> = SignalsCore.ReadonlySignal<T>;
 export type EffectCleanup = () => void;
 
 // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-export type EffectFn = () => void | EffectCleanup;
+export type EffectFn = () => EffectCleanup | void;
 
 export type ComputedFunction<T> = () => T;
 

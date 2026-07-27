@@ -2,6 +2,7 @@ import { ClientFunction, Selector } from 'testcafe';
 import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { addFocusableElementBefore } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`DateRangeBox focus state`
   .page(url(__dirname, '../../container.html'));
@@ -183,6 +184,9 @@ test('onFocusIn should be called only after first click on drop down button', as
 
 test('onFocusIn should be called only on focus of startDate input', async (t) => {
   const dateRangeBox = new DateRangeBox('#container');
+  const focusableElementBeforeDateRangeBox = Selector('#focusable-start');
+
+  await addFocusableElementBefore('#container');
 
   await t
     .click(dateRangeBox.getStartDateBox().input);
@@ -222,6 +226,8 @@ test('onFocusIn should be called only on focus of startDate input', async (t) =>
     .click(dateRangeBox.getCalendarCell(20))
     .expect(dateRangeBox.option('value'))
     .eql([new Date(2021, 8, 8), new Date(2021, 8, 18)])
+    .expect(dateRangeBox.option('opened'))
+    .notOk()
     .expect(ClientFunction(() => (window as any).onFocusInCounter)())
     .eql(1)
     .expect(ClientFunction(() => (window as any).onFocusOutCounter)())
@@ -250,6 +256,8 @@ test('onFocusIn should be called only on focus of startDate input', async (t) =>
     .notOk()
     .expect(dateRangeBox.getEndDateBox().isFocused)
     .notOk()
+    .expect(focusableElementBeforeDateRangeBox.focused)
+    .ok()
     .expect(ClientFunction(() => (window as any).onFocusInCounter)())
     .eql(1)
     .expect(ClientFunction(() => (window as any).onFocusOutCounter)())

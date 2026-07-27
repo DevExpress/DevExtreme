@@ -206,6 +206,28 @@ describe('GridAppointment', () => {
     });
   });
 
+  describe('Resize', () => {
+    it('should render resize handles when allowResize is true', async () => {
+      const instance = await createGridAppointment({
+        ...getProperties(defaultAppointmentData),
+        allowResize: true,
+        resizableConfig: { handles: 'top bottom' },
+      });
+
+      expect(instance.$element().find('.dx-resizable-handle').length).toBeGreaterThan(0);
+    });
+
+    it('should not render resize handles when allowResize is false', async () => {
+      const instance = await createGridAppointment({
+        ...getProperties(defaultAppointmentData),
+        allowResize: false,
+        resizableConfig: { handles: 'top bottom' },
+      });
+
+      expect(instance.$element().find('.dx-resizable-handle').length).toBe(0);
+    });
+  });
+
   describe('Resources', () => {
     it('should apply resource color', async () => {
       const instance = await createGridAppointment({

@@ -11,6 +11,7 @@ import {
   expectColumns,
   getColumnItem,
   triggerDragStart,
+  triggerDragEnd,
   SELECTORS,
 } from './utils';
 
@@ -29,12 +30,16 @@ fixture.disablePageReloads`CardView - ColumnSortable.Functional`
 
     await triggerDragStart(columnElement);
 
-    const draggingElement = Selector(SELECTORS.dragging);
+    try {
+      const draggingElement = Selector(SELECTORS.dragging);
 
-    if (result) {
-      await t.expect(draggingElement.exists).ok();
-    } else {
-      await t.expect(draggingElement.exists).notOk();
+      if (result) {
+        await t.expect(draggingElement.exists).ok();
+      } else {
+        await t.expect(draggingElement.exists).notOk();
+      }
+    } finally {
+      await triggerDragEnd(columnElement);
     }
   }).before(async () => createWidget('dxCardView', {
     allowColumnReordering,
@@ -59,12 +64,16 @@ fixture.disablePageReloads`CardView - ColumnSortable.Functional`
 
     await triggerDragStart(columnElement);
 
-    const draggingElement = Selector(SELECTORS.dragging);
+    try {
+      const draggingElement = Selector(SELECTORS.dragging);
 
-    if (result) {
-      await t.expect(draggingElement.exists).ok();
-    } else {
-      await t.expect(draggingElement.exists).notOk();
+      if (result) {
+        await t.expect(draggingElement.exists).ok();
+      } else {
+        await t.expect(draggingElement.exists).notOk();
+      }
+    } finally {
+      await triggerDragEnd(columnElement);
     }
   }).before(async () => createWidget('dxCardView', {
     allowColumnReordering: true,
@@ -90,7 +99,10 @@ fixture.disablePageReloads`CardView - ColumnSortable.Functional`
 
       const columnElement = getColumnItem(cardView, columnIndex);
 
-      await dragToHeaderPanel(t, cardView, columnElement, gapIndex);
+      // dropping next to the dragged column is a no-op, so no placeholder appears
+      const isNoOp = gapIndex === columnIndex || gapIndex === columnIndex + 1;
+
+      await dragToHeaderPanel(t, cardView, columnElement, gapIndex, isNoOp);
 
       await expectColumns(t, cardView, expectedColumns);
     }).before(async () => createWidget('dxCardView', {
@@ -110,10 +122,10 @@ fixture.disablePageReloads`CardView - ColumnSortable.Functional`
 
       await dragToHeaderPanel(t, cardView, columnElement, gapIndex);
 
-      const headerPanelColumns = [2, 3, 4];
+      const headerPanelColumns = [2, 3];
       headerPanelColumns.splice(gapIndex, 0, columnIndex);
 
-      const chooserColumns = [0, 1, 2, 3, 4].filter((c) => !headerPanelColumns.includes(c));
+      const chooserColumns = [0, 1].filter((c) => c !== columnIndex);
 
       await expectColumns(t, cardView, headerPanelColumns);
       await expectColumns(t, cardView, chooserColumns, 'columnChooser');
@@ -124,7 +136,6 @@ fixture.disablePageReloads`CardView - ColumnSortable.Functional`
         { dataField: 'Column 1', visible: false },
         { dataField: 'Column 2' },
         { dataField: 'Column 3' },
-        { dataField: 'Column 4' },
       ],
     }));
   });
@@ -178,7 +189,10 @@ fixture.disablePageReloads`CardView - ColumnSortable.Functional`
     const cardView = new CardView('#container');
     const columnElement = getColumnItem(cardView, draggingColumnIndex);
 
-    await dragToHeaderPanel(t, cardView, columnElement, gapIndex);
+    // dropping next to the dragged column is a no-op, so no placeholder appears
+    const isNoOp = gapIndex === draggingColumnIndex || gapIndex === draggingColumnIndex + 1;
+
+    await dragToHeaderPanel(t, cardView, columnElement, gapIndex, isNoOp);
 
     await expectColumns(t, cardView, expectedColumns);
   }).before(async () => createWidget('dxCardView', {
@@ -315,16 +329,12 @@ test('cards should update when columns are reordered (T1324855)', async (t) => {
 
   const headerPanel = cardView.getHeaderPanel();
   const firstHeader = headerPanel.getHeaderItem(0).element;
-  const secondHeader = headerPanel.getHeaderItem(1).element;
 
-  await t.dragToElement(firstHeader, secondHeader, {
-    destinationOffsetX: -5,
-    destinationOffsetY: -20,
-    speed: 0.5,
-  });
+  await dragToHeaderPanel(t, cardView, firstHeader, 2);
 
-  // Wait for headers to update after drag
-  await t.expect(cardView.getHeaders().getHeaderItemNth(0).element.innerText).notEql('A');
+  await t
+    .expect(cardView.getHeaders().getHeaderItemNth(0).element.innerText)
+    .notEql('A', { timeout: 1000 });
 
   const headerCaptions: string[] = [];
   const headersCount = await cardView.getHeaders().getHeaderItemsElements().count;

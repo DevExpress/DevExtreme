@@ -1,5 +1,5 @@
 import {
-  Component, Pipe, PipeTransform, enableProdMode, ViewChild, provideZoneChangeDetection,
+  Component, Pipe, PipeTransform, enableProdMode, ViewChild, provideZoneChangeDetection, ChangeDetectionStrategy,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxListModule, DxCheckBoxModule } from 'devextreme-angular';
@@ -29,6 +29,7 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
+  changeDetection: ChangeDetectionStrategy.Eager,
   preserveWhitespaces: true,
   imports: [
     DxTreeViewModule,

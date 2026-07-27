@@ -319,10 +319,10 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     
     @Input()
-    get dataSource(): Array<any> | DataSource | DataSourceOptions | Store | string {
+    get dataSource(): Array<any> | DataSource | DataSourceOptions | Store | string | undefined {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Array<any> | DataSource | DataSourceOptions | Store | string) {
+    set dataSource(value: Array<any> | DataSource | DataSourceOptions | Store | string | undefined) {
         this._setOption('dataSource', value);
     }
 
@@ -479,10 +479,10 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     
     @Input()
-    get keyExpr(): Array<string> | string {
+    get keyExpr(): Array<string> | string | undefined {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: Array<string> | string) {
+    set keyExpr(value: Array<string> | string | undefined) {
         this._setOption('keyExpr', value);
     }
 
@@ -992,7 +992,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | Store | string>;
+    @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | Store | string | undefined>;
 
     /**
     
@@ -1104,7 +1104,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() keyExprChange: EventEmitter<Array<string> | string>;
+    @Output() keyExprChange: EventEmitter<Array<string> | string | undefined>;
 
     /**
     

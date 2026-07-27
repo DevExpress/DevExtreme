@@ -11,6 +11,7 @@ export interface GroupPanelBaseProps extends
   groupPanelData: GroupPanelData;
   groupByDate: boolean;
   height?: number;
+  rowHeights?: number[];
   resourceCellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
 }
 
@@ -43,6 +44,7 @@ export const GroupPanelCellDefaultProps = {
 
 export interface GroupPanelRowProps extends PropsWithClassName {
   groupItems: GroupRenderItem[];
+  height?: number;
   cellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
 }
 

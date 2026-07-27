@@ -1,12 +1,18 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
+import { ClientFunction } from 'testcafe';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../../helpers/themeUtils';
 import { OLAPApiMock } from '../apiMocks/OLAP_api.mock';
 
+const blurActiveElement = ClientFunction(() => {
+  (document.activeElement as HTMLElement | null)?.blur();
+});
+
 fixture.disablePageReloads`pivotGrid_olap_drag-n-drop`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'))
+  .requestHooks(OLAPApiMock);
 
 const PIVOT_GRID_SELECTOR = '#container';
 
@@ -28,6 +34,8 @@ const PIVOT_GRID_SELECTOR = '#container';
     );
     await t.expect(loadPanel.isInvisible()).ok();
 
+    await blurActiveElement();
+
     await testScreenshot(
       t,
       takeScreenshot,
@@ -37,8 +45,7 @@ const PIVOT_GRID_SELECTOR = '#container';
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t) => {
-    await t.addRequestHooks(OLAPApiMock);
+  }).before(async () => {
     await createWidget('dxPivotGrid', {
       height: 500,
       fieldPanel: { visible: true },

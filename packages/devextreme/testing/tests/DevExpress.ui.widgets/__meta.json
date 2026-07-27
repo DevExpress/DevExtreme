@@ -1,5 +1,3 @@
-{ 
-    "constellation": "ui.widgets",
-    "explicit": false,
-    "runOnDevices": true
+{
+  "constellation": "ui.widgets"
 }

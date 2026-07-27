@@ -372,7 +372,9 @@ async function main() {
 
 const entrypoint = IS_ANGULAR ? require('./csp-bundle-angular').main : main;
 
-entrypoint().catch((err) => {
+entrypoint().then(() => {
+  process.exit(process.exitCode || 0);
+}).catch((err) => {
   console.error('csp-bundle failed:', err);
   process.exit(1);
 });

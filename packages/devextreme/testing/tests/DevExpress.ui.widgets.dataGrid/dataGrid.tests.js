@@ -4310,7 +4310,7 @@ QUnit.module('templates', baseModuleConfig, () => {
         const container = $('<div />');
 
         // act
-        (DataGrid.IS_RENOVATED_WIDGET ? dataGrid.getComponentInstance() : dataGrid)._getTemplate($('#scriptTestTemplate2')).render({ container: container });
+        dataGrid._getTemplate($('#scriptTestTemplate2')).render({ container: container });
 
         // assert
         assert.equal(container.html().trim().toLowerCase(), '<span>Template2</span>'.toLowerCase());
@@ -5197,7 +5197,7 @@ QUnit.module('Modules', {
         });
         const dataGrid = createDataGrid({});
 
-        assert.ok((DataGrid.IS_RENOVATED_WIDGET ? dataGrid.getComponentInstance() : dataGrid).option('test.enabled'), 'registered default option');
+        assert.ok(dataGrid.option('test.enabled'), 'registered default option');
     });
 
     // T109256
@@ -5220,7 +5220,7 @@ QUnit.module('Modules', {
 
         const dataGrid = createDataGrid({});
 
-        assert.ok((DataGrid.IS_RENOVATED_WIDGET ? dataGrid.getComponentInstance() : dataGrid).option('test.text'), 'LOCALIZED');
+        assert.ok(dataGrid.option('test.text'), 'LOCALIZED');
     });
 
     QUnit.test('register controller', function(assert) {
@@ -5388,7 +5388,7 @@ QUnit.module('Modules', {
         });
         const dataGrid = createDataGrid({});
 
-        assert.equal((DataGrid.IS_RENOVATED_WIDGET ? dataGrid.getComponentInstance() : dataGrid).testMethod(), 'test');
+        assert.equal(dataGrid.testMethod(), 'test');
     });
 
     QUnit.test('controller public methods does not exist', function(assert) {
@@ -5445,7 +5445,7 @@ QUnit.module('Modules', {
         });
         const dataGrid = createDataGrid({});
 
-        assert.equal((DataGrid.IS_RENOVATED_WIDGET ? dataGrid.getComponentInstance() : dataGrid).testMethod(), 'test');
+        assert.equal(dataGrid.testMethod(), 'test');
     });
 
     QUnit.test('callbacks registration', function(assert) {

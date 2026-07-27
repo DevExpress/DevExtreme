@@ -5707,7 +5707,7 @@ function getStubComponent(options) {
     options = options || {};
     return {
         option: function() {
-            return options[arguments[0]];
+            return arguments.length === 0 ? options : options[arguments[0]];
         },
         _defaultActionArgs: function() {
             return {};

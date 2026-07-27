@@ -57,6 +57,14 @@ const LEGACY_KEY_CODES = {
   18: 'alt',
 };
 
+const MOUSE_BUTTON_MAP = {
+  left: 1,
+  middle: 2,
+  right: 3,
+  back: 4,
+  forward: 5,
+};
+
 const EVENT_SOURCES_REGEX = {
   dx: /^dx/i,
   mouse: /(mouse|wheel)/i,
@@ -141,7 +149,6 @@ export const hasTouches = (e) => {
 let skipEvents = false;
 export const forceSkipEvents = () => { skipEvents = true; };
 export const stopEventsSkipping = () => { skipEvents = false; };
-// eslint-disable-next-line consistent-return
 export const needSkipEvent = (e) => {
   // TODO: for tests
   if (skipEvents) {
@@ -151,7 +158,7 @@ export const needSkipEvent = (e) => {
   // TODO: this checking used in swipeable first move handler. is it correct?
   const { target } = e;
   const $target = $(target);
-  const isContentEditable = target?.isContentEditable || target?.hasAttribute('contenteditable');
+  const isContentEditable: boolean = target?.isContentEditable || target?.hasAttribute('contenteditable');
   const touchInEditable = $target.is('input, textarea, select') || isContentEditable;
 
   if (isDxMouseWheelEvent(e)) {
@@ -167,12 +174,16 @@ export const needSkipEvent = (e) => {
   }
 
   if (isMouseEvent(e)) {
-    return touchInEditable || e.which > 1; // only left mouse button
+    const isNotLeftMouseButton = e.which > MOUSE_BUTTON_MAP.left;
+
+    return touchInEditable || isNotLeftMouseButton;
   }
 
   if (isTouchEvent(e)) {
     return touchInEditable && focused($target);
   }
+
+  return false;
 };
 
 export const setEventFixMethod = (func) => { fixMethod = func; };

@@ -8,7 +8,8 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  merge_group:
+  push:
+    branches: [26_1]
 
 env:
   NX_SKIP_NX_CACHE: ${{ contains(github.event.pull_request.labels.*.name, 'skip-cache') && 'true' || 'false' }}
@@ -57,10 +58,10 @@ jobs:
           .nx/workspace-data/*.db
           .nx/workspace-data/*.db-wal
           .nx/workspace-data/*.db-shm
-        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
         restore-keys: |
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
           ${{ runner.os }}-nx-v2-
 
         lookup-only: true
@@ -91,10 +92,10 @@ jobs:
           .nx/workspace-data/*.db
           .nx/workspace-data/*.db-wal
           .nx/workspace-data/*.db-shm
-        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
         restore-keys: |
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
           ${{ runner.os }}-nx-v2-
 
     - name: Build
@@ -133,7 +134,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '149.0.7827.114'
+        chrome-version: '150.0.7871.181'
 
     - name: Use Node.js
       uses: actions/setup-node@v6
@@ -176,11 +177,11 @@ jobs:
           .nx/workspace-data/*.db
           .nx/workspace-data/*.db-wal
           .nx/workspace-data/*.db-shm
-        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ matrix.ARGS.platform }}-${{ github.run_attempt }}
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.ARGS.platform }}-${{ github.sha }}
         restore-keys: |
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ matrix.ARGS.platform }}-
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.ARGS.platform }}-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.ARGS.platform }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
           ${{ runner.os }}-nx-v2-
 
         lookup-only: true
@@ -211,11 +212,11 @@ jobs:
           .nx/workspace-data/*.db
           .nx/workspace-data/*.db-wal
           .nx/workspace-data/*.db-shm
-        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ matrix.ARGS.platform }}-${{ github.run_attempt }}
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.ARGS.platform }}-${{ github.sha }}
         restore-keys: |
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ matrix.ARGS.platform }}-
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.ARGS.platform }}-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.ARGS.platform }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
           ${{ runner.os }}-nx-v2-
 
     - name: Build

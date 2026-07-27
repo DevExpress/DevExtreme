@@ -1,5 +1,6 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import Resizable, { type ResizableProperties } from '@ts/ui/resizable/resizable';
 
 import {
   ALL_DAY_TEXT, APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES, RECURRING_LABEL,
@@ -17,14 +18,26 @@ export interface GridAppointmentViewProperties extends BaseAppointmentViewProper
   modifiers: {
     empty: boolean;
   };
+  allowResize?: boolean;
+  resizableConfig?: ResizableProperties;
 }
 
 export class GridAppointmentView extends BaseAppointmentView<GridAppointmentViewProperties> {
   override _initMarkup(): void {
     super._initMarkup();
 
+    this.renderResizable();
+
     // eslint-disable-next-line no-void
     void this.applyElementColor();
+  }
+
+  private renderResizable(): void {
+    if (!this.option().allowResize) {
+      return;
+    }
+
+    this._createComponent(this.$element(), Resizable, this.option().resizableConfig ?? {});
   }
 
   public override resize(

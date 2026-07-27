@@ -167,6 +167,8 @@ const checkCellFocused = async (
   }
 
   await t
+    .expect(editor?.element.exists)
+    .ok()
     .expect(editor?.element.focused)
     .eql(true);
 };
@@ -409,6 +411,7 @@ editingModes.forEach((mode) => {
 
           await clickCellEditor(t, mode, columnInfo, form, cell, editor);
           await setEditorValue(t, mode, columnInfo, editor, false, useMask);
+          await t.expect(dataGrid.isReady()).ok();
         }
 
         const saveButton = getSaveButton(mode, form);
@@ -441,6 +444,8 @@ editingModes.forEach((mode) => {
         const form = getEditForm(mode);
         const cell = dataGrid.getDataCell(0, columnInfo.columnIndex);
         const editor = form ? new CellEditor(form.getItem(columnInfo.dataField)) : cell.getEditor();
+
+        await t.expect(dataGrid.isReady()).ok();
 
         await clickCellEditor(t, mode, columnInfo, form, cell, editor);
         await setEditorValue(t, mode, columnInfo, editor);
@@ -579,6 +584,8 @@ editingModes.forEach((mode) => {
       async (t) => {
         const form = getEditForm(mode);
         let modifiedCellCount = mode === 'batch' ? 1 : 0;
+
+        await t.expect(dataGrid.isReady()).ok();
 
         // eslint-disable-next-line no-restricted-syntax
         for (const columnInfo of textColumnInfos) {

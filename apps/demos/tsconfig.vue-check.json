@@ -2,9 +2,11 @@
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "compilerOptions": {
     "lib": ["es2023", "DOM", "DOM.Iterable"],
+    "ignoreDeprecations": "6.0",
     "strict": true
   },
   "include": [
-    "Demos/**/Vue/**/*.vue"
+    "Demos/**/Vue/**/*.vue",
+    "Demos/**/Vue/**/*.d.ts"
   ]
 }

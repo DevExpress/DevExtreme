@@ -48,10 +48,10 @@ export class DxoFunnelLegendTitleSubtitleComponent extends NestedOption implemen
     }
 
     @Input()
-    get text(): string {
+    get text(): string | undefined {
         return this._getOption('text');
     }
-    set text(value: string) {
+    set text(value: string | undefined) {
         this._setOption('text', value);
     }
 

@@ -798,7 +798,11 @@ test('Item should appear in a correct spot when dragging to a different page wit
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
-  await t.drag(dataGrid.getDataRow(2).getDragCommand(), 0, 32, { speed: 0.95 });
+
+  await t.dragToElement(
+    dataGrid.getDataRow(2).getDragCommand(),
+    dataGrid.getDataRow(4).element,
+  );
 
   const visibleRows = await dataGrid.apiGetVisibleRows();
   const visibleRowKeys = visibleRows.map((row) => row.key);

@@ -3,7 +3,7 @@ import { createWrapper, initTestMarkup, isDesktopEnvironment } from '../../helpe
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 import translator from 'common/core/animation/translator';
 
-import '__internal/scheduler/m_scheduler';
+import '__internal/scheduler/scheduler';
 import 'fluent_blue_light.css!';
 
 const { test, module, testStart } = QUnit;

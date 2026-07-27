@@ -16,7 +16,7 @@ const noop = require('core/utils/common').noop;
 const errors = require('ui/widget/ui.errors');
 const config = require('core/config');
 
-require('__internal/scheduler/m_scheduler');
+require('__internal/scheduler/scheduler');
 require('ui/drop_down_button');
 
 QUnit.module('Integration: Base', {

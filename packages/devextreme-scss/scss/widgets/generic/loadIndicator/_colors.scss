@@ -1,6 +1,7 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+@use "../color" as extcolor;
 
 // adduse
 
@@ -19,7 +20,7 @@ $load-indicator-animation-sparkle-bg-color3: null !default;
   $loadindicator-segment-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $load-indicator-animation-sparkle-bg-color1: $base-accent !default;
   $load-indicator-animation-sparkle-bg-color2: color.adjust($base-accent, $saturation: -8.58%, $space: hsl, $lightness: 27.06%) !default;
-  $load-indicator-animation-sparkle-bg-color3: color.adjust($base-accent, $hue: 2deg, $saturation: -6.88%, $space: hsl, $lightness: 33.14%) !default;
+  $load-indicator-animation-sparkle-bg-color3: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 2deg, $saturation: -6.88%, $lightness: 33.14%) !default;
 }
 
 @if $color == "contrast" {
@@ -27,7 +28,7 @@ $load-indicator-animation-sparkle-bg-color3: null !default;
   $loadindicator-segment-shadow-color: $base-shadow-color !default;
   $load-indicator-animation-sparkle-bg-color1: $base-accent !default;
   $load-indicator-animation-sparkle-bg-color2: color.adjust($base-accent, $saturation: -25.83%, $space: hsl, $lightness: -19.61%) !default;
-  $load-indicator-animation-sparkle-bg-color3: color.adjust($base-accent, $hue: 1deg, $saturation: -44.18%, $space: hsl, $lightness: -11.76%) !default;
+  $load-indicator-animation-sparkle-bg-color3: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 1deg, $saturation: -44.18%, $lightness: -11.76%) !default;
 }
 
 @if $color == "dark" {
@@ -35,7 +36,7 @@ $load-indicator-animation-sparkle-bg-color3: null !default;
   $loadindicator-segment-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $load-indicator-animation-sparkle-bg-color1: $base-accent !default;
   $load-indicator-animation-sparkle-bg-color2: color.adjust($base-accent, $saturation: -25.83%, $space: hsl, $lightness: -19.61%) !default;
-  $load-indicator-animation-sparkle-bg-color3: color.adjust($base-accent, $hue: 1deg, $saturation: -44.18%, $space: hsl, $lightness: -11.76%) !default;
+  $load-indicator-animation-sparkle-bg-color3: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 1deg, $saturation: -44.18%, $lightness: -11.76%) !default;
 }
 
 @if $color == "darkmoon" {
@@ -43,7 +44,7 @@ $load-indicator-animation-sparkle-bg-color3: null !default;
   $loadindicator-segment-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $load-indicator-animation-sparkle-bg-color1: $base-accent !default;
   $load-indicator-animation-sparkle-bg-color2: color.adjust($base-accent, $saturation: -25.83%, $space: hsl, $lightness: -19.61%) !default;
-  $load-indicator-animation-sparkle-bg-color3: color.adjust($base-accent, $hue: 1deg, $saturation: -44.18%, $space: hsl, $lightness: -11.76%) !default;
+  $load-indicator-animation-sparkle-bg-color3: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 1deg, $saturation: -44.18%, $lightness: -11.76%) !default;
 }
 
 @if $color == "darkviolet" {
@@ -51,7 +52,7 @@ $load-indicator-animation-sparkle-bg-color3: null !default;
   $loadindicator-segment-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $load-indicator-animation-sparkle-bg-color1: $base-accent !default;
   $load-indicator-animation-sparkle-bg-color2: color.adjust($base-accent, $saturation: -25.83%, $space: hsl, $lightness: -19.61%) !default;
-  $load-indicator-animation-sparkle-bg-color3: color.adjust($base-accent, $hue: 1deg, $saturation: -44.18%, $space: hsl, $lightness: -11.76%) !default;
+  $load-indicator-animation-sparkle-bg-color3: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 1deg, $saturation: -44.18%, $lightness: -11.76%) !default;
 }
 
 @if $color == "greenmist" {
@@ -59,7 +60,7 @@ $load-indicator-animation-sparkle-bg-color3: null !default;
   $loadindicator-segment-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $load-indicator-animation-sparkle-bg-color1: $base-accent !default;
   $load-indicator-animation-sparkle-bg-color2: color.adjust($base-accent, $saturation: -8.58%, $space: hsl, $lightness: 27.06%) !default;
-  $load-indicator-animation-sparkle-bg-color3: color.adjust($base-accent, $hue: 2deg, $saturation: -6.88%, $space: hsl, $lightness: 33.14%) !default;
+  $load-indicator-animation-sparkle-bg-color3: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 2deg, $saturation: -6.88%, $lightness: 33.14%) !default;
 }
 
 @if $color == "light" {
@@ -67,7 +68,7 @@ $load-indicator-animation-sparkle-bg-color3: null !default;
   $loadindicator-segment-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $load-indicator-animation-sparkle-bg-color1: $base-accent !default;
   $load-indicator-animation-sparkle-bg-color2: color.adjust($base-accent, $saturation: -8.58%, $space: hsl, $lightness: 27.06%) !default;
-  $load-indicator-animation-sparkle-bg-color3: color.adjust($base-accent, $hue: 2deg, $saturation: -6.88%, $space: hsl, $lightness: 33.14%) !default;
+  $load-indicator-animation-sparkle-bg-color3: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 2deg, $saturation: -6.88%, $lightness: 33.14%) !default;
 }
 
 @if $color == "softblue" {
@@ -75,6 +76,6 @@ $load-indicator-animation-sparkle-bg-color3: null !default;
   $loadindicator-segment-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $load-indicator-animation-sparkle-bg-color1: $base-accent !default;
   $load-indicator-animation-sparkle-bg-color2: color.adjust($base-accent, $saturation: -8.58%, $space: hsl, $lightness: 27.06%) !default;
-  $load-indicator-animation-sparkle-bg-color3: color.adjust($base-accent, $hue: 2deg, $saturation: -6.88%, $space: hsl, $lightness: 33.14%) !default;
+  $load-indicator-animation-sparkle-bg-color3: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 2deg, $saturation: -6.88%, $lightness: 33.14%) !default;
 }
 

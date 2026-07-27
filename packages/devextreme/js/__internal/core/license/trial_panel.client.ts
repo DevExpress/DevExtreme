@@ -339,7 +339,7 @@ export function renderTrialPanel(
   buyNowUrl: string,
   licensingDocUrl: string,
   version: string,
-  subscriptions: string | undefined | null,
+  subscriptions: string | null | undefined,
   customStyles?: CustomTrialPanelStyles,
 ): void {
   registerCustomComponents(customStyles);

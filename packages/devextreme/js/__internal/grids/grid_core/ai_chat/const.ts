@@ -4,6 +4,7 @@ import { TEXTAREA_CLASS } from '@ts/ui/text_area';
 export const DEFAULT_POPUP_OPTIONS = {
   width: 400,
   minWidth: 400,
+  height: 560,
   minHeight: 480,
   visible: false,
   shading: false,

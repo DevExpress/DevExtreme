@@ -239,7 +239,7 @@ class SpeedDialItem extends Overlay<SpeedDialItemProperties> {
     this._inkRipple = render();
   }
 
-  _getInkRippleContainer(): dxElementWrapper | undefined | null {
+  _getInkRippleContainer(): dxElementWrapper | null | undefined {
     return this._$icon;
   }
 

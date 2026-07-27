@@ -35,6 +35,7 @@ import ArrayStore from 'common/data/array_store';
 import {
     CHAT_EDITING_PREVIEW_CLASS,
     CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS,
+    CHAT_EDITING_PREVIEW_HIDING_CLASS,
 } from '__internal/ui/chat/message_box/editing_preview';
 import { CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS } from '__internal/ui/chat/confirmationpopup';
 import { POPUP_CLASS } from '__internal/ui/popup/popup';
@@ -69,6 +70,28 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 const RTL_CLASS = 'dx-rtl';
 const ANIMATION_TIMEOUT = 250;
+
+const waitForCondition = (condition, timeout = ANIMATION_TIMEOUT * 8, interval = 15) => new Promise((resolve) => {
+    const startTime = Date.now();
+    const timer = setInterval(() => {
+        if(condition() || Date.now() - startTime >= timeout) {
+            clearInterval(timer);
+            resolve();
+        }
+    }, interval);
+});
+
+const waitForEditingPreviewToHide = async(getEditingPreview) => {
+    await waitForCondition(() => getEditingPreview().length === 0
+        || getEditingPreview().hasClass(CHAT_EDITING_PREVIEW_HIDING_CLASS));
+
+    const editingPreview = getEditingPreview().get(0);
+    if(editingPreview) {
+        editingPreview.dispatchEvent(new Event('animationend'));
+    }
+
+    await waitForCondition(() => getEditingPreview().length === 0);
+};
 
 export const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
 export const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
@@ -1004,9 +1027,7 @@ QUnit.module('Chat', () => {
     QUnit.module('Message editing preview integration', moduleConfig, () => {
         [true, false].forEach((isPromise) => {
             [true, false].forEach((cancel) => {
-                QUnit.test(`editing preview should appear based on onMessageEditingStart cancel (isPromise=${isPromise}, cancel=${cancel})`, function(assert) {
-                    const done = assert.async();
-
+                QUnit.test(`editing preview should appear based on onMessageEditingStart cancel (isPromise=${isPromise}, cancel=${cancel})`, async function(assert) {
                     const items = [
                         { text: 'a', author: userFirst },
                         { text: 'b', author: userSecond },
@@ -1029,15 +1050,12 @@ QUnit.module('Chat', () => {
                     const $editButton = this.getContextMenuItems().eq(0);
                     $editButton.trigger('dxclick');
 
-                    setTimeout(() => {
-                        assert.strictEqual(this.getEditingPreview().length, cancel ? 0 : 1);
-                        done();
-                    });
+                    await waitForCondition(() => this.getEditingPreview().length === 1, cancel ? ANIMATION_TIMEOUT : undefined);
+
+                    assert.strictEqual(this.getEditingPreview().length, cancel ? 0 : 1);
                 });
 
-                QUnit.test(`Editing preview should remain visible depending on onMessageUpdating cancellation (isPromise=${isPromise}, cancel=${cancel})`, function(assert) {
-                    const done = assert.async();
-
+                QUnit.test(`Editing preview should remain visible depending on onMessageUpdating cancellation (isPromise=${isPromise}, cancel=${cancel})`, async function(assert) {
                     const items = [
                         { text: 'a', author: userFirst },
                         { text: 'b', author: userSecond },
@@ -1060,23 +1078,24 @@ QUnit.module('Chat', () => {
                     const $editButton = this.getContextMenuItems().eq(0);
                     $editButton.trigger('dxclick');
 
+                    await waitForCondition(() => this.getEditingPreview().length === 1);
+
                     this.$sendButton.trigger('dxclick');
 
-                    setTimeout(() => {
-                        assert.strictEqual(
-                            this.getEditingPreview().length,
-                            cancel ? 1 : 0,
-                            `Editing preview ${cancel ? 'remains' : 'is hidden'} when cancel=${cancel}`
-                        );
-                        done();
-                    }, ANIMATION_TIMEOUT);
+                    if(cancel) {
+                        await waitForCondition(() => this.getEditingPreview().hasClass(CHAT_EDITING_PREVIEW_HIDING_CLASS), ANIMATION_TIMEOUT);
+
+                        assert.strictEqual(this.getEditingPreview().length, 1, `Editing preview remains when cancel=${cancel}`);
+                    } else {
+                        await waitForEditingPreviewToHide(() => this.getEditingPreview());
+
+                        assert.strictEqual(this.getEditingPreview().length, 0, `Editing preview is hidden when cancel=${cancel}`);
+                    }
                 });
             });
         });
 
-        QUnit.testInActiveWindow('editing preview should be shown after the Edit button is clicked if cancel promise rejected', function(assert) {
-            const done = assert.async();
-
+        QUnit.testInActiveWindow('editing preview should be shown after the Edit button is clicked if cancel promise rejected', async function(assert) {
             const items = [
                 { text: 'a', author: userFirst },
                 { text: 'b', author: userSecond },
@@ -1099,18 +1118,16 @@ QUnit.module('Chat', () => {
             const $editButton = this.getContextMenuItems().eq(0);
             $editButton.trigger('dxclick');
 
+            await waitForCondition(() => this.getEditingPreview().length === 1
+                && this.textArea.option('text') === items[1].text
+                && this.$textArea.hasClass(FOCUSED_STATE_CLASS));
 
-            setTimeout(() => {
-                assert.strictEqual(this.getEditingPreview().length, 1);
-                assert.strictEqual(this.textArea.option('text'), items[1].text, 'input contains edited text');
-                assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
-                done();
-            });
+            assert.strictEqual(this.getEditingPreview().length, 1);
+            assert.strictEqual(this.textArea.option('text'), items[1].text, 'input contains edited text');
+            assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
         });
 
-        QUnit.test('editing preview should be hidden after the message is deleted', function(assert) {
-            const done = assert.async();
-
+        QUnit.testInActiveWindow('editing preview should be hidden after the message is deleted', async function(assert) {
             const items = [
                 { text: 'a', author: userFirst },
                 { text: 'b', author: userSecond },
@@ -1131,6 +1148,8 @@ QUnit.module('Chat', () => {
             const $editButton = this.getContextMenuItems().eq(0);
             $editButton.trigger('dxclick');
 
+            await waitForCondition(() => this.getEditingPreview().length === 1);
+
             $bubbles.eq(1).trigger('dxcontextmenu');
 
             const $deleteButton = this.getContextMenuItems().eq(1);
@@ -1141,15 +1160,17 @@ QUnit.module('Chat', () => {
 
             $applyButton.trigger('dxclick');
 
-            setTimeout(() => {
-                assert.strictEqual(this.getEditingPreview().length, 0);
-                assert.strictEqual(this.textArea.option('value'), '', 'input is empty');
-                assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
-                done();
-            }, ANIMATION_TIMEOUT);
+            await waitForEditingPreviewToHide(() => this.getEditingPreview());
+
+            await waitForCondition(() => this.textArea.option('value') === ''
+                && this.$textArea.hasClass(FOCUSED_STATE_CLASS));
+
+            assert.strictEqual(this.getEditingPreview().length, 0);
+            assert.strictEqual(this.textArea.option('value'), '', 'input is empty');
+            assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
         });
 
-        QUnit.test('send button should change its active state with update input value during editing', function(assert) {
+        QUnit.test('send button should change its active state with update input value during editing', async function(assert) {
             const items = [
                 { text: 'a', author: userFirst },
                 { text: 'b', author: userSecond },
@@ -1174,16 +1195,18 @@ QUnit.module('Chat', () => {
             const $editButton = this.getContextMenuItems().eq(0);
             $editButton.trigger('dxclick');
 
+            await waitForCondition(() => sendButton.option('disabled') === false);
+
             assert.strictEqual(sendButton.option('disabled'), false, 'send button is active after edit started');
 
             this.getCancelEditingButton().trigger('dxclick');
 
+            await waitForCondition(() => sendButton.option('disabled') === true);
+
             assert.strictEqual(sendButton.option('disabled'), true, 'send button is disabled after edit cancelled');
         });
 
-        QUnit.test('editing preview should be enabled after the send button is clicked if cancel promise rejected', function(assert) {
-            const done = assert.async();
-
+        QUnit.testInActiveWindow('editing preview should be enabled after the send button is clicked if cancel promise rejected', async function(assert) {
             const items = [
                 { text: 'a', author: userFirst },
                 { text: 'b', author: userSecond },
@@ -1206,17 +1229,21 @@ QUnit.module('Chat', () => {
             const $editButton = this.getContextMenuItems().eq(0);
             $editButton.trigger('dxclick');
 
+            await waitForCondition(() => this.getEditingPreview().length === 1);
+
             this.$sendButton.trigger('dxclick');
 
-            setTimeout(() => {
-                assert.strictEqual(this.getEditingPreview().length, 0);
-                assert.strictEqual(this.textArea.option('value'), '', 'input is empty');
-                assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
-                done();
-            }, ANIMATION_TIMEOUT);
+            await waitForEditingPreviewToHide(() => this.getEditingPreview());
+
+            await waitForCondition(() => this.textArea.option('value') === ''
+                && this.$textArea.hasClass(FOCUSED_STATE_CLASS));
+
+            assert.strictEqual(this.getEditingPreview().length, 0);
+            assert.strictEqual(this.textArea.option('value'), '', 'input is empty');
+            assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
         });
 
-        QUnit.testInActiveWindow('message box should have editing message text and focus after the Edit button is clicked and not cancelled', function(assert) {
+        QUnit.testInActiveWindow('message box should have editing message text and focus after the Edit button is clicked and not cancelled', async function(assert) {
             const items = [
                 { text: 'a', author: userFirst },
                 { text: 'b', author: userSecond },
@@ -1237,11 +1264,14 @@ QUnit.module('Chat', () => {
             const $editButton = this.getContextMenuItems().eq(0);
             $editButton.trigger('dxclick');
 
+            await waitForCondition(() => this.textArea.option('value') === 'b'
+                && this.$textArea.hasClass(FOCUSED_STATE_CLASS));
+
             assert.strictEqual(this.textArea.option('value'), 'b', 'input contains editing message text');
             assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
         });
 
-        QUnit.testInActiveWindow('message box should have editing message text and focus after the Edit was triggered from keyboard', function(assert) {
+        QUnit.testInActiveWindow('message box should have editing message text and focus after the Edit was triggered from keyboard', async function(assert) {
             const items = [
                 { text: 'a', author: userFirst },
                 { text: 'b', author: userSecond },
@@ -1263,11 +1293,14 @@ QUnit.module('Chat', () => {
                 .press('down')
                 .press('enter');
 
+            await waitForCondition(() => this.textArea.option('value') === 'b'
+                && this.$textArea.hasClass(FOCUSED_STATE_CLASS));
+
             assert.strictEqual(this.textArea.option('value'), 'b', 'input contains editing message text');
             assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
         });
 
-        QUnit.testInActiveWindow('attach button should be hidden after editing is started', function(assert) {
+        QUnit.testInActiveWindow('attach button should be hidden after editing is started', async function(assert) {
             this.reinit({
                 items: [{ text: 'f', author: userSecond }],
                 focusStateEnabled: true,
@@ -1285,11 +1318,13 @@ QUnit.module('Chat', () => {
 
             const $editButton = this.getContextMenuItems().eq(0);
             $editButton.trigger('dxclick');
+
+            await waitForCondition(() => attachButton.option('visible') === false);
 
             assert.strictEqual(attachButton.option('visible'), false, 'attach button is hidden');
         });
 
-        QUnit.testInActiveWindow('attach button should be visible after editing is done', function(assert) {
+        QUnit.testInActiveWindow('attach button should be visible after editing is done', async function(assert) {
             this.reinit({
                 items: [{ text: 'f', author: userSecond }],
                 focusStateEnabled: true,
@@ -1304,14 +1339,17 @@ QUnit.module('Chat', () => {
 
             const $editButton = this.getContextMenuItems().eq(0);
             $editButton.trigger('dxclick');
+
+            await waitForCondition(() => this.getEditingPreview().length === 1);
+
             this.$sendButton.trigger('dxclick');
 
-            const attachButton = this.getAttachButton();
+            await waitForCondition(() => this.getAttachButton().option('visible') === true);
 
-            assert.strictEqual(attachButton.option('visible'), true, 'attach button is visible');
+            assert.strictEqual(this.getAttachButton().option('visible'), true, 'attach button is visible');
         });
 
-        QUnit.testInActiveWindow('attach button should be visible after editing is canceled', function(assert) {
+        QUnit.testInActiveWindow('attach button should be visible after editing is canceled', async function(assert) {
             this.reinit({
                 items: [{ text: 'f', author: userSecond }],
                 focusStateEnabled: true,
@@ -1326,7 +1364,12 @@ QUnit.module('Chat', () => {
 
             const $editButton = this.getContextMenuItems().eq(0);
             $editButton.trigger('dxclick');
+
+            await waitForCondition(() => this.getEditingPreview().length === 1);
+
             this.getCancelEditingButton().trigger('dxclick');
+
+            await waitForCondition(() => this.getAttachButton().option('visible') === true);
 
             const attachButton = this.getAttachButton();
 

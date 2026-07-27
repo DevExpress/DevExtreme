@@ -59,7 +59,7 @@ class ListStrategy extends DateBoxStrategy {
     };
   }
 
-  getDisplayFormat(displayFormat?: Format): Format {
+  getDisplayFormat(displayFormat?: Format | null): Format {
     const globalTimeFormat = getGlobalFormatByDataType('time');
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return displayFormat || globalTimeFormat || 'shorttime';
@@ -337,7 +337,7 @@ class ListStrategy extends DateBoxStrategy {
     }
   }
 
-  getParsedText(text?: string, format?: string): Date | undefined | null {
+  getParsedText(text?: string, format?: string): Date | null | undefined {
     let value = super.getParsedText(text, format);
 
     if (value) {

@@ -29,7 +29,7 @@ export class ColumnsController {
   private readonly columnsSettings: Signal<PreNormalizedColumn[]>;
 
   private readonly columnsConfiguration: ReadonlySignal<
-    OptionWithChanges<ColumnProperties[] | undefined | null>
+    OptionWithChanges<ColumnProperties[] | null | undefined>
   >;
 
   private readonly columnsConfigurationFromData: Signal<ColumnsConfigurationFromData | null>;

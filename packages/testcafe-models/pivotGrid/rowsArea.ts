@@ -12,4 +12,8 @@ export default class RowsArea {
   getCell(idx = 0): Selector {
     return this.element.find('td').nth(idx);
   }
+
+  getCellByPosition(rowIdx = 0, cellIdx = 0): Selector {
+    return this.element.find('tr').nth(rowIdx).find('td').nth(cellIdx);
+  }
 }

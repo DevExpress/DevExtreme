@@ -1,5 +1,3 @@
 {
-    "constellation": "export",
-    "explicit": false,
-    "runOnDevices": true
+  "constellation": "ui.grid"
 }

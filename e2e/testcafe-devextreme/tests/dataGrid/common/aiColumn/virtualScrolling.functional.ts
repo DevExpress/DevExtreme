@@ -8,6 +8,10 @@ fixture`Ai Column.Virtual Scrolling.Functional`
 
 const DATA_GRID_SELECTOR = '#container';
 
+const CLASS = {
+  loadPanelContent: 'dx-loadpanel-content',
+};
+
 const checkAIColumnTexts = async (
   t: TestController,
   component: DataGrid,
@@ -17,13 +21,14 @@ const checkAIColumnTexts = async (
 
   await t.expect(visibleRows.length).eql(expectedRowCount);
 
-  // eslint-disable-next-line no-restricted-syntax
   for (const row of visibleRows) {
     await t
       .expect(component.getDataCell(row.dataIndex, 3).element.textContent)
       .eql(`Response ${row.data.name}`);
   }
 };
+
+const isAIRequestPending = ClientFunction(() => !!(window as any).aiResolve);
 
 const resolveAIRequest = ClientFunction((): void => {
   const { aiResponseData } = (window as any);
@@ -48,6 +53,8 @@ test('DataGrid should send an AI request for rendered rows after scrolling witho
 
   // assert
   await t
+    .expect(isAIRequestPending())
+    .ok()
     .expect(dataGrid.getLoadPanel().isVisible())
     .ok();
 
@@ -58,7 +65,7 @@ test('DataGrid should send an AI request for rendered rows after scrolling witho
   await t
     .expect(dataGrid.isReady())
     .ok()
-    .expect(dataGrid.getLoadPanel().isVisible())
+    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
     .notOk();
   await checkAIColumnTexts(t, dataGrid, 11);
 
@@ -73,6 +80,8 @@ test('DataGrid should send an AI request for rendered rows after scrolling witho
     .eql(0)
     .expect(dataGrid.getDataCell(20, 0).element.textContent)
     .eql('21')
+    .expect(isAIRequestPending())
+    .ok()
     .expect(dataGrid.getLoadPanel().isVisible())
     .ok();
 
@@ -83,7 +92,7 @@ test('DataGrid should send an AI request for rendered rows after scrolling witho
   await t
     .expect(dataGrid.isReady())
     .ok()
-    .expect(dataGrid.getLoadPanel().isVisible())
+    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
     .notOk();
   await checkAIColumnTexts(t, dataGrid, 12);
 })
@@ -118,7 +127,7 @@ test('DataGrid should send an AI request for rendered rows after scrolling witho
           name: 'myColumn',
           ai: {
             prompt: 'Initial prompt',
-            // eslint-disable-next-line new-cap
+
             aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
               sendRequest(prompt) {
                 return {
@@ -151,6 +160,8 @@ test('DataGrid should send an AI request for rendered rows after scrolling with 
 
   // assert
   await t
+    .expect(isAIRequestPending())
+    .ok()
     .expect(dataGrid.getLoadPanel().isVisible())
     .ok();
 
@@ -161,7 +172,7 @@ test('DataGrid should send an AI request for rendered rows after scrolling with 
   await t
     .expect(dataGrid.isReady())
     .ok()
-    .expect(dataGrid.getLoadPanel().isVisible())
+    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
     .notOk();
   await checkAIColumnTexts(t, dataGrid, 11);
 
@@ -176,6 +187,8 @@ test('DataGrid should send an AI request for rendered rows after scrolling with 
     .eql(1)
     .expect(dataGrid.getDataCell(20, 0).element.textContent)
     .eql('21')
+    .expect(isAIRequestPending())
+    .ok()
     .expect(dataGrid.getLoadPanel().isVisible())
     .ok();
 
@@ -186,7 +199,7 @@ test('DataGrid should send an AI request for rendered rows after scrolling with 
   await t
     .expect(dataGrid.isReady())
     .ok()
-    .expect(dataGrid.getLoadPanel().isVisible())
+    .expect(dataGrid.element.find(`.${CLASS.loadPanelContent}`).visible)
     .notOk();
   await checkAIColumnTexts(t, dataGrid, 12);
 })
@@ -221,7 +234,7 @@ test('DataGrid should send an AI request for rendered rows after scrolling with 
           name: 'myColumn',
           ai: {
             prompt: 'Initial prompt',
-            // eslint-disable-next-line new-cap
+
             aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
               sendRequest(prompt) {
                 return {

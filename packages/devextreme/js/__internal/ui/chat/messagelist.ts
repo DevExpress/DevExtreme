@@ -111,7 +111,7 @@ export interface Properties extends WidgetOptions<MessageList> {
 }
 
 class MessageList extends Widget<Properties> {
-  private _lastMessageDate?: null | string | number | Date;
+  private _lastMessageDate?: string | number | Date | null;
 
   private _containerClientHeight!: number;
 
@@ -414,7 +414,7 @@ class MessageList extends Widget<Properties> {
     });
   }
 
-  _shouldAddDayHeader(timestamp: undefined | string | number | Date): boolean {
+  _shouldAddDayHeader(timestamp: string | number | Date | undefined): boolean {
     const { showDayHeaders } = this.option();
 
     if (!showDayHeaders) {

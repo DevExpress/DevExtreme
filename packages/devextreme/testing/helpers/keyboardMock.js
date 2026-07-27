@@ -149,7 +149,7 @@ let focused;
 
     const isEditableElement = function() {
         const editableInputTypesRE = /^(date|datetime|datetime-local|email|month|number|password|search|tel|text|time|url|week)$/;
-        return $element.is('input') && editableInputTypesRE.test($element.prop('type')) || $element.is('textarea') || ($element.prop('tabindex') >= 0);
+        return $element.is('input') && editableInputTypesRE.test($element.prop('type')) || $element.is('textarea') || ($element.prop('tabindex') >= 0) || $element.attr('tabindex') !== undefined;
     };
 
     const deleteSelection = function() {

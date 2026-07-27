@@ -19,7 +19,11 @@ import { createPromise } from '@ts/core/utils/promise';
 import List from '@ts/ui/list/list.edit';
 import type Tooltip from '@ts/ui/tooltip';
 
-import type { AppointmentTooltipItem, TargetedAppointment } from '../types';
+import type {
+  AppointmentTooltipContextMenuEventArgs,
+  AppointmentTooltipItem,
+  TargetedAppointment,
+} from '../types';
 
 const TOOLTIP_APPOINTMENT_ITEM = 'dx-tooltip-appointment-item';
 const TOOLTIP_APPOINTMENT_ITEM_CONTENT = `${TOOLTIP_APPOINTMENT_ITEM}-content`;
@@ -33,7 +37,7 @@ const TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON = `${TOOLTIP_APPOINTMENT_ITEM}-dele
 
 const APPOINTMENT_TOOLTIP_TEMPLATE = 'appointmentTooltipTemplate';
 
-interface AppointmentTooltipOptions {
+export interface AppointmentTooltipOptions {
   createComponent: (
     element: dxElementWrapper,
     component: unknown,
@@ -63,7 +67,8 @@ interface AppointmentTooltipOptions {
   };
   getAppointmentDisabled: (appointment: Appointment) => boolean | undefined;
   onItemContextMenu: (eventArgs: unknown) => void;
-  createEventArgs: (e: ItemContextMenuEvent<AppointmentTooltipItem>) => unknown;
+  createEventArgs: (e: ItemContextMenuEvent<AppointmentTooltipItem>) =>
+  AppointmentTooltipContextMenuEventArgs;
   newAppointments?: boolean; // TODO<Appointments>
   onAppointmentClick: (e: AppointmentClickEvent) => void;
   onListInitialized: (e: InitializedEvent) => void;
@@ -86,7 +91,7 @@ export abstract class TooltipStrategyBase {
 
   protected tooltip: Tooltip | dxOverlay<OverlayProperties> | null = null;
 
-  // TODO: make private once external usages in m_scheduler.ts are removed
+  // TODO: make private once external usages in scheduler.ts are removed
   _options: AppointmentTooltipOptions;
 
   protected extraOptions: AppointmentTooltipExtraOptions | null = null;

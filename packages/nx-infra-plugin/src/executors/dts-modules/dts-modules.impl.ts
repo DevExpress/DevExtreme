@@ -12,6 +12,9 @@ import type { PackageJson } from '../../utils/types';
 import { DtsModulesExecutorSchema } from './schema';
 
 const BUNDLES_PREFIX = 'bundles/';
+const DIST_PREFIX = 'dist/';
+const LICENSE_PREFIX = 'license/';
+const LICENSE_EXCLUDED_PREFIXES = [BUNDLES_PREFIX, DIST_PREFIX, LICENSE_PREFIX] as const;
 const BACKSLASH_REGEX = /\\/g;
 const FORWARD_SLASH = '/';
 
@@ -29,6 +32,10 @@ interface ResolvedDtsModules {
 
 function toRelativePosix(baseDir: string, filePath: string): string {
   return path.relative(baseDir, filePath).replace(BACKSLASH_REGEX, FORWARD_SLASH);
+}
+
+function isExcludedFromModuleLicense(relativePath: string): boolean {
+  return LICENSE_EXCLUDED_PREFIXES.some((prefix) => relativePath.startsWith(prefix));
 }
 
 export default createExecutor<DtsModulesExecutorSchema, ResolvedDtsModules>({
@@ -70,6 +77,10 @@ export default createExecutor<DtsModulesExecutorSchema, ResolvedDtsModules>({
       path.resolve(resolved.outputDir, relative),
     );
 
+    const dtsFilesForLicense = dtsFiles.filter(
+      (filePath) => !isExcludedFromModuleLicense(toRelativePosix(resolved.outputDir, filePath)),
+    );
+
     const bannerInputs = {
       pkg: resolved.pkg,
       templatePath: resolved.templatePath,
@@ -80,7 +91,7 @@ export default createExecutor<DtsModulesExecutorSchema, ResolvedDtsModules>({
     await Promise.all([
       applyLicenseHeadersToFiles({
         ...bannerInputs,
-        files: dtsFiles,
+        files: dtsFilesForLicense,
         baseDir: resolved.outputDir,
         filenameMode: 'relative',
       }),

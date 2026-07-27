@@ -1,5 +1,6 @@
 @use 'sass:color';
 @use '../colors' as *;
+@use '../color' as extcolor;
 @use '../../base/cardView/variables' as *;
 @use '../../base/cardView/header_panel/variables' as *;
 @use '../../base/cardView/header_panel/item/variables' as *;
@@ -423,8 +424,8 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
   $cardview-fluent-card--focused-outline-color: $base-accent !default;
 
   // Card - selected
-  $cardview-fluent-card--selected-bg-color: color.adjust($base-accent, $hue: 4deg, $saturation: -11.38%, $space: hsl, $lightness: 55.49%) !default;
-  $cardview-fluent-card--selected-border-color: color.adjust($base-accent, $hue: 3deg, $saturation: 2.21%, $space: hsl, $lightness: 44.31%) !default;
+  $cardview-fluent-card--selected-bg-color: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 4deg, $saturation: -11.38%, $lightness: 55.49%) !default;
+  $cardview-fluent-card--selected-border-color: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 3deg, $saturation: 2.21%, $lightness: 44.31%) !default;
   $cardview-fluent-card--selected-divider-color: $cardview-fluent-card--selected-border-color !default;
   $cardview-fluent-card--selected-text-color: $cardview-fluent-card-text-color !default;
   $cardview-fluent-card--selected__cover-bg-color: $cardview-fluent-card__cover-bg-color !default;
@@ -462,11 +463,11 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
   $cardview-fluent-header-panel__item--dragged-border-color: $cardview-fluent-header-panel__item-border-color !default;
   $cardview-fluent-header-panel__item--dragged-text-color: $cardview-fluent-header-panel__item-text-color !default;
   $cardview-fluent-header-panel__item--dragged__allowance-icon-color: $cardview-fluent-common-text-color !default;
-  $cardview-fluent-header-panel__item--dragged__prohibition-icon-color: color.adjust($base-danger, $hue: -4deg, $saturation: 22.80%, $space: hsl, $lightness: -9.61%) !default;
+  $cardview-fluent-header-panel__item--dragged__prohibition-icon-color: extcolor.adjust-if-not-achromatic($color: $base-danger, $hue: -4deg, $saturation: 22.80%, $lightness: -9.61%) !default;
   $cardview-fluent-header-panel__item--dragged-box-shadow-color: rgba(0, 0, 0, 0.2) !default;
 
   // Header panel Drop-zone
-  $cardview-fluent-header-panel__dropzone-bg-color: color.adjust($base-accent, $hue: 4deg, $saturation: -11.38%, $space: hsl, $lightness: 55.49%) !default;
+  $cardview-fluent-header-panel__dropzone-bg-color: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 4deg, $saturation: -11.38%, $lightness: 55.49%) !default;
   $cardview-fluent-header-panel__dropzone-border-color: $base-accent !default;
   $cardview-fluent-header-panel__dropzone-text-color: $base-accent !default;
   $cardview-fluent-header-panel__dropzone__icon-color: $base-accent !default;
@@ -511,8 +512,8 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
   $cardview-fluent-card--focused-outline-color: $base-accent !default;
 
   // Card - selected
-  $cardview-fluent-card--selected-bg-color: color.adjust($base-accent, $hue: -4deg, $saturation: -14.69%, $space: hsl, $lightness: -49.41%) !default;
-  $cardview-fluent-card--selected-border-color: color.adjust($base-accent, $hue: -3deg, $saturation: -11.06%, $space: hsl, $lightness: -36.27%) !default;
+  $cardview-fluent-card--selected-bg-color: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: -4deg, $saturation: -14.69%, $lightness: -49.41%) !default;
+  $cardview-fluent-card--selected-border-color: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: -3deg, $saturation: -11.06%, $lightness: -36.27%) !default;
   $cardview-fluent-card--selected-divider-color: $cardview-fluent-card--selected-border-color !default;
   $cardview-fluent-card--selected-text-color: $cardview-fluent-card-text-color !default;
   $cardview-fluent-card--selected__cover-bg-color: $cardview-fluent-card__cover-bg-color !default;
@@ -554,7 +555,7 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
   $cardview-fluent-header-panel__item--dragged-box-shadow-color: rgba(0, 0, 0, 0.2) !default;
 
   // Header panel Drop-zone
-  $cardview-fluent-header-panel__dropzone-bg-color: color.adjust($base-accent, $hue: -4deg, $saturation: -14.69%, $space: hsl, $lightness: -49.41%) !default;
+  $cardview-fluent-header-panel__dropzone-bg-color: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: -4deg, $saturation: -14.69%, $lightness: -49.41%) !default;
   $cardview-fluent-header-panel__dropzone-border-color: $base-accent !default;
   $cardview-fluent-header-panel__dropzone-text-color: $base-accent !default;
   $cardview-fluent-header-panel__dropzone__icon-color: $base-accent !default;

@@ -11,7 +11,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import devices from '__internal/core/m_devices';
 import 'ui/switch';
 
-import '__internal/scheduler/m_scheduler';
+import '__internal/scheduler/scheduler';
 
 const { testStart, test, module } = QUnit;
 

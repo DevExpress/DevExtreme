@@ -1,0 +1,22 @@
+name: Repository Check
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'
+  push:
+    branches:
+      - 26_1
+
+jobs:
+  invoke:
+    name: Invoke
+    uses: DevExpress/github-actions/.github/workflows/repository-check.yml@repository-check
+    with:
+      config: |
+        {
+          ignoredAdvisories: [
+            'GHSA-2gmp-34j9-fqjm', // replicator
+            'GHSA-848j-6mx2-7j84', // elliptic
+          ]
+        }

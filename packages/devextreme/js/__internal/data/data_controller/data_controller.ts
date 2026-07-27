@@ -184,7 +184,7 @@ class DataController {
     }
   }
 
-  updateDataSource(items?: unknown[] | DataSourceType, key?: string): void {
+  updateDataSource(items?: unknown[] | DataSourceType | null, key?: string): void {
     const dataSourceOptions = items ?? this.items();
 
     if (key) {

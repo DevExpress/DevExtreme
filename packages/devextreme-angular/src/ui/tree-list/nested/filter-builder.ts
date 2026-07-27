@@ -187,18 +187,18 @@ export class DxoTreeListFilterBuilderComponent extends NestedOption implements O
     }
 
     @Input()
-    get onEditorPrepared(): ((e: EditorPreparedEvent) => void) {
+    get onEditorPrepared(): ((e: EditorPreparedEvent) => void) | undefined {
         return this._getOption('onEditorPrepared');
     }
-    set onEditorPrepared(value: ((e: EditorPreparedEvent) => void)) {
+    set onEditorPrepared(value: ((e: EditorPreparedEvent) => void) | undefined) {
         this._setOption('onEditorPrepared', value);
     }
 
     @Input()
-    get onEditorPreparing(): ((e: EditorPreparingEvent) => void) {
+    get onEditorPreparing(): ((e: EditorPreparingEvent) => void) | undefined {
         return this._getOption('onEditorPreparing');
     }
-    set onEditorPreparing(value: ((e: EditorPreparingEvent) => void)) {
+    set onEditorPreparing(value: ((e: EditorPreparingEvent) => void) | undefined) {
         this._setOption('onEditorPreparing', value);
     }
 
@@ -219,10 +219,10 @@ export class DxoTreeListFilterBuilderComponent extends NestedOption implements O
     }
 
     @Input()
-    get onValueChanged(): ((e: ValueChangedEvent) => void) {
+    get onValueChanged(): ((e: ValueChangedEvent) => void) | undefined {
         return this._getOption('onValueChanged');
     }
-    set onValueChanged(value: ((e: ValueChangedEvent) => void)) {
+    set onValueChanged(value: ((e: ValueChangedEvent) => void) | undefined) {
         this._setOption('onValueChanged', value);
     }
 

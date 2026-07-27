@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import consoleUtils from 'core/utils/console';
 
-import '__internal/scheduler/m_scheduler';
+import '__internal/scheduler/scheduler';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
 import { waitGlobalFailure } from '../../helpers/scheduler/waitForAsync.js';
 

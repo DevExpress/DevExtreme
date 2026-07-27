@@ -1,6 +1,7 @@
 @forward "./variables";
 @use "./variables" as *;
 @use "sass:color";
+@use "./color" as extcolor;
 
 $color: null !default;
 $mode: null !default;
@@ -169,7 +170,7 @@ $scrollview-pulldown-path: null !default;
   }
 
   $base-accent-hover: color.adjust($base-accent, $saturation: -4.18%, $space: hsl, $lightness: -4.71%) !default;
-  $base-accent-active: color.adjust($base-accent, $hue: -1deg, $saturation: -4.65%, $space: hsl, $lightness: -9.61%) !default;
+  $base-accent-active: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: -1deg, $saturation: -4.65%, $lightness: -9.61%) !default;
   $base-accent-selected: color.adjust($base-accent-active, $saturation: -2.02%, $space: hsl, $lightness: -4.71%) !default;
 
   $base-foreground-disabled: color.adjust($base-text-color, $lightness: 60%, $space: hsl) !default;
@@ -222,8 +223,8 @@ $scrollview-pulldown-path: null !default;
   }
 
   $base-accent-hover: color.adjust($base-accent, $saturation: -1.67%, $space: hsl, $lightness: 5.29%) !default;
-  $base-accent-active: color.adjust($base-accent, $hue: -1deg, $saturation: -16.30%, $space: hsl, $lightness: -10.59%) !default;
-  $base-accent-selected: color.adjust($base-accent, $hue: -3deg, $saturation: -9.05%, $space: hsl, $lightness: -31.57%) !default;
+  $base-accent-active: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: -1deg, $saturation: -16.30%, $lightness: -10.59%) !default;
+  $base-accent-selected: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: -3deg, $saturation: -9.05%, $lightness: -31.57%) !default;
 
   $base-text-color: rgba(255, 255, 255, 1) !default;
   $base-label-color: color.adjust($base-text-color, $lightness: -40.00%, $space: hsl) !default;
@@ -249,8 +250,8 @@ $scrollview-pulldown-path: null !default;
   $base-inverted-text-color: #000 !default;
 
   $base-danger-hover: color.adjust($base-danger, $saturation: 0.44%, $space: hsl, $lightness: 7.45%) !default;
-  $base-danger-active: color.adjust($base-danger, $hue: 1.8deg, $saturation: -0.9%, $space: hsl, $lightness: 28.8%) !default;
-  $base-danger-selected: color.adjust($base-danger, $hue: 0.7deg, $saturation: 1.3%, $space: hsl, $lightness: 14.9%);
+  $base-danger-active: extcolor.adjust-if-not-achromatic($color: $base-danger, $hue: 1.8deg, $saturation: -0.9%, $lightness: 28.8%) !default;
+  $base-danger-selected: extcolor.adjust-if-not-achromatic($color: $base-danger, $hue: 0.7deg, $saturation: 1.3%, $lightness: 14.9%);
 
   $scrollview-pulldown-path: data-uri('images/widgets/fluent/color-schemes/dark/pulldown.png') !default;
 }

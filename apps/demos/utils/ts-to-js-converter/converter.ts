@@ -1,6 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import cps from 'child_process';
 import path from 'path';
+import fs from 'fs';
 import { glob } from 'glob';
 // @ts-ignore
 import { readFile, writeFile } from 'fs/promises';
@@ -58,14 +59,16 @@ const makeConfig = (
   exclude: string[],
   types: string[],
   module = 'ES2015',
+  extraIncludes: string[] = [],
 ) => ({
-  include: makePathArrayPosix(include),
+  include: makePathArrayPosix([...include, ...extraIncludes]),
   exclude: makePathArrayPosix(exclude),
   compilerOptions: {
     outDir: resolve.out('./'),
     rootDir: resolve.source('./'),
     module,
     moduleResolution: 'node',
+    ignoreDeprecations: '6.0',
     esModuleInterop: true,
     sourceMap: false,
     jsx: 'react-native',
@@ -121,10 +124,12 @@ const execTsc = async (directory: string, args: string[]): Promise<string> => {
   }
 };
 
-const compile = async (resolve: PathResolvers, log: Logger) => {
+const compile = async (resolve: PathResolvers, log: Logger, demosAppRoot: string) => {
   log.debug('compiling sources and unit tests');
 
   const tsconfigFile = resolve.out(tsConfigFileName);
+  const antiForgeryTypes = path.join(demosAppRoot, 'shared/anti-forgery/index.d.ts');
+  const extraIncludes = fs.existsSync(antiForgeryTypes) ? [antiForgeryTypes] : [];
 
   log.debug(`writing ${tsconfigFile}`);
 
@@ -136,6 +141,8 @@ const compile = async (resolve: PathResolvers, log: Logger) => {
         [resolve.source('./**/*')],
         [resolve.source('./test/e2e*'), resolve.source('./jest.config.ts')],
         ['node', 'jest'],
+        'ES2015',
+        extraIncludes,
       ),
       null,
       2,
@@ -315,6 +322,7 @@ export const converter = async (
 
   await copyEverything({ source: sourceDirResolver, out: tempDirResolver }, log);
 
+  const demosAppRoot = path.resolve(sourceDir, '..', '..', '..', '..');
   const resolve = {
     source: tempDirResolver,
     out: _.partial(path.resolve, outDir),
@@ -322,7 +330,7 @@ export const converter = async (
 
   try {
     await patchImportsPreCompile(resolve, log);
-    await compile(resolve, log);
+    await compile(resolve, log, demosAppRoot);
     await copyAssets(resolve, log);
     await patchImports(resolve, log);
     await strip(resolve, log);

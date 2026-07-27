@@ -601,7 +601,6 @@ export interface ColumnBase<TRowData = any> {
   falseText?: string;
   /**
    * @docid GridBaseColumn.filterOperations
-   * @default undefined
    * @public
    */
   filterOperations?: Array<FilterOperation | string>;
@@ -620,7 +619,6 @@ export interface ColumnBase<TRowData = any> {
   filterValue?: any | undefined;
   /**
    * @docid GridBaseColumn.filterValues
-   * @default undefined
    * @fires GridBaseOptions.onOptionChanged
    * @public
    */
@@ -713,7 +711,7 @@ export interface ColumnBase<TRowData = any> {
    * @type_function_return void|Promise<void>
    * @public
    */
-  setCellValue?: ((this: ColumnBase, newData: DeepPartial<TRowData>, value: any, currentRowData: TRowData) => void | PromiseLike<void>);
+  setCellValue?: ((this: ColumnBase, newData: DeepPartial<TRowData>, value: any, currentRowData: TRowData) => PromiseLike<void> | void);
   /**
    * @public
    */
@@ -1261,18 +1259,18 @@ export interface EditingBase<TRowData = any, TKey = any> {
   changes?: Array<DataChange<TRowData, TKey>>;
   /**
    * @docid GridBaseOptions.editing.editColumnName
-   * @default null
+   * @default undefined
    * @fires GridBaseOptions.onOptionChanged
    * @public
    */
-  editColumnName?: string;
+  editColumnName?: string | undefined;
   /**
    * @docid GridBaseOptions.editing.editRowKey
-   * @default null
+   * @default undefined
    * @fires GridBaseOptions.onOptionChanged
    * @public
    */
-  editRowKey?: TKey;
+  editRowKey?: TKey | undefined;
   /**
    * @docid GridBaseOptions.editing.form
    * @public
@@ -2274,11 +2272,11 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
   columns?: Array<ColumnBase<TRowData> | string> | undefined;
   /**
    * @docid
-   * @default null
+   * @default undefined
    * @public
-   * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
+   * @type Store|DataSource|DataSourceOptions|string|Array<any>|undefined
    */
-  dataSource?: DataSourceLike<TRowData, TKey> | null;
+  dataSource?: DataSourceLike<TRowData, TKey> | undefined;
   /**
    * @docid
    * @public
@@ -2335,7 +2333,7 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @fires GridBase.onOptionChanged
    * @public
    */
-  filterValue?: string | Array<any> | Function;
+  filterValue?: string | Array<any> | Function | null;
   /**
    * @docid
    * @default -1
@@ -2394,7 +2392,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
   noDataText?: string;
   /**
    * @docid
-   * @default null
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @action
@@ -2403,7 +2400,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
   onAIAssistantRequestCreating?: ((e: EventInfo<TComponent> & Cancelable & AIAssistantRequestCreatingInfo) => void);
   /**
    * @docid
-   * @default null
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field formOptions:object
@@ -2413,7 +2409,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
   onAdaptiveDetailRowPreparing?: ((e: EventInfo<TComponent> & AdaptiveDetailRowPreparingInfo) => void);
   /**
    * @docid
-   * @default null
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @action
@@ -2425,7 +2420,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field changes:Array<DataChange>
-   * @default null
    * @action
    * @public
    */
@@ -2435,7 +2429,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field changes:Array<DataChange>
-   * @default null
    * @action
    * @public
    */
@@ -2446,7 +2439,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @type_function_param1_field component:this
    * @type_function_param1_field data:object
    * @type_function_param1_field promise:Promise<void>
-   * @default null
    * @action
    * @public
    */
@@ -2456,7 +2448,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field event:event
-   * @default null
    * @action
    * @public
    */
@@ -2466,7 +2457,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field key:any
-   * @default null
    * @action
    * @public
    */
@@ -2476,7 +2466,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field key:any
-   * @default null
    * @action
    * @public
    */
@@ -2486,7 +2475,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field key:any
-   * @default null
    * @action
    * @public
    */
@@ -2496,7 +2484,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field key:any
-   * @default null
    * @action
    * @public
    */
@@ -2507,7 +2494,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @type_function_param1_field component:this
    * @type_function_param1_field data:object
    * @type_function_param1_field key:any
-   * @default null
    * @action
    * @public
    */
@@ -2518,7 +2504,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @type_function_param1_field component:this
    * @type_function_param1_field data:object
    * @type_function_param1_field cancel:boolean|Promise<void>
-   * @default null
    * @action
    * @public
    */
@@ -2529,7 +2514,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @type_function_param1_field component:this
    * @type_function_param1_field data:object
    * @type_function_param1_field key:any
-   * @default null
    * @action
    * @public
    */
@@ -2541,7 +2525,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @type_function_param1_field data:object
    * @type_function_param1_field key:any
    * @type_function_param1_field cancel:boolean|Promise<void>
-   * @default null
    * @action
    * @public
    */
@@ -2552,7 +2535,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @type_function_param1_field component:this
    * @type_function_param1_field data:object
    * @type_function_param1_field key:any
-   * @default null
    * @action
    * @public
    */
@@ -2565,7 +2547,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @type_function_param1_field newData:object
    * @type_function_param1_field key:any
    * @type_function_param1_field cancel:boolean|Promise<void>
-   * @default null
    * @action
    * @public
    */
@@ -2579,7 +2560,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @type_function_param1_field oldData:object
    * @type_function_param1_field promise:Promise<void>
    * @type_function_param1_field brokenRules:Array<RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule|AsyncRule>
-   * @default null
    * @action
    * @public
    */
@@ -2589,7 +2569,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field changes:Array<DataChange>
-   * @default null
    * @action
    * @public
    */
@@ -2600,7 +2579,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @type_function_param1_field component:this
    * @type_function_param1_field changes:Array<DataChange>
    * @type_function_param1_field promise:Promise<void>
-   * @default null
    * @action
    * @public
    */
@@ -2613,7 +2591,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @type_function_param1_field currentDeselectedRowKeys:Array<any>
    * @type_function_param1_field selectedRowKeys:Array<any>
    * @type_function_param1_field selectedRowsData:Array<Object>
-   * @default null
    * @action
    * @public
    */
@@ -2623,7 +2600,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field toolbarOptions:dxToolbarOptions
-   * @default null
    * @action
    * @public
    */
@@ -3561,9 +3537,9 @@ export type StateStoring = {
   savingTimeout?: number;
   /**
    * @docid GridBaseOptions.stateStoring.storageKey
-   * @default null
+   * @default undefined
    */
-  storageKey?: string;
+  storageKey?: string | undefined;
   /**
    * @docid GridBaseOptions.stateStoring.type
    * @default "localStorage"

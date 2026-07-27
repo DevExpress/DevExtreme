@@ -2,6 +2,7 @@
 @use "../sizes" as *;
 @use "../colors" as *;
 @use "../button/colors" as *;
+@use "../color" as extcolor;
 
 // adduse
 
@@ -55,7 +56,7 @@ $calendar-week-number-border-radius: 0 !default;
 }
 
 @if $mode == "dark" {
-  $calendar-hover-bg: color.adjust($base-accent, $hue: 358.4deg, $saturation: -8.6%, $space: hsl, $lightness: -26.7%) !default;
+  $calendar-hover-bg: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 358.4deg, $saturation: -8.6%, $lightness: -26.7%) !default;
   $calendar-cell-hover-border-color: $calendar-hover-bg !default;
   $calendar-cell-active-bg: $base-accent-selected !default;
   $calendar-cell-other-color: color.adjust($calendar-color, $lightness: -32.16%, $space: hsl) !default;

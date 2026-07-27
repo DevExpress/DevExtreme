@@ -1,5 +1,3 @@
 {
-    "constellation": "ui.grid",
-    "explicit": false,
-    "runOnDevices": true
+  "constellation": "ui.grid"
 }

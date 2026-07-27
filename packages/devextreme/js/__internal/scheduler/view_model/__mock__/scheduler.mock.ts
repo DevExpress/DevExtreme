@@ -1,6 +1,6 @@
 import { mockAppointmentDataAccessor } from '../../__mock__/appointment_data_accessor.mock';
 import { mockTimeZoneCalculator } from '../../__mock__/timezone_calculator.mock';
-import type Scheduler from '../../m_scheduler';
+import type Scheduler from '../../scheduler';
 import { ResourceManager } from '../../utils/resource_manager/resource_manager';
 
 export const getSchedulerMock = ({

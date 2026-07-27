@@ -1,13 +1,11 @@
 import type { PositionConfig } from '@js/common/core/animation';
 import type { ArrayStore } from '@js/common/data';
 import type { Callback } from '@js/core/utils/callbacks';
-import { getHeight } from '@js/core/utils/size';
 import type { Message, Properties as ChatProperties } from '@js/ui/chat';
 import type { HidingEvent, Properties as PopupProperties } from '@js/ui/popup';
 import { fromPromise } from '@ts/core/utils/m_deferred';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { OptionChanged } from '@ts/grids/grid_core/m_types';
-import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import type { DataChange } from '@ts/ui/collection/collection_widget.base';
 
 import { AIChat } from '../ai_chat/ai_chat';
@@ -34,8 +32,6 @@ export class AIAssistantView extends View {
 
   private columnHeadersView!: ColumnHeadersView;
 
-  private rowsView!: RowsView;
-
   private handleMessageStorePushContext!: (changes: DataChange<Message, string>[]) => void;
 
   private isHidingAfterConfirm = false;
@@ -44,7 +40,6 @@ export class AIAssistantView extends View {
 
   public init(): void {
     this.columnHeadersView = this.getView('columnHeadersView');
-    this.rowsView = this.getView('rowsView');
     this.aiAssistantController = this.getController('aiAssistant');
     this.messageStore = this.aiAssistantController.getMessageStore();
     this.handleMessageStorePushContext = this.handleMessageStorePush.bind(this);
@@ -68,13 +63,6 @@ export class AIAssistantView extends View {
     };
   }
 
-  private getPopupHeight(): number {
-    const headersHeight = this.columnHeadersView.getHeight();
-    const rowsViewHeight = getHeight(this.rowsView.element());
-
-    return headersHeight + rowsViewHeight - AI_ASSISTANT_POPUP_OFFSET * 2;
-  }
-
   private getAIChatPopupOptions(): PopupProperties {
     const position: PositionConfig = {
       my: 'right top',
@@ -85,15 +73,9 @@ export class AIAssistantView extends View {
       boundaryOffset: `${AI_ASSISTANT_POPUP_OFFSET} ${AI_ASSISTANT_POPUP_OFFSET}`,
     };
 
-    // @ts-ignore
     return {
       title: this.option('aiAssistant.title') ?? '',
       position,
-      // NOTE: DevExtreme Popup supports function-valued height at runtime
-      // (re-evaluated automatically on show and window resize).
-      // @ts-expect-error type declaration
-      height: () => this.getPopupHeight(),
-      _ignoreFunctionValueDeprecation: true,
       onShowing: (): void => {
         this.visibilityChanged?.fire(true);
       },

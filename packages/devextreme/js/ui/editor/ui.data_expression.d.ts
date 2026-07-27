@@ -52,7 +52,7 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
      * @default null
      * @public
      */
-    value?: any;
+    value?: any | null;
     /**
      * @docid
      * @default "this"

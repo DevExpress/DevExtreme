@@ -42,7 +42,7 @@ const DEBUG_SUFFIX = '.debug';
 const DEFAULT_PRECISION = 4;
 
 function toArrayBuffer(buffer: Buffer): ArrayBuffer {
-  return buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength);
+  return new Uint8Array(buffer).buffer;
 }
 
 async function buildUtilsVariant(

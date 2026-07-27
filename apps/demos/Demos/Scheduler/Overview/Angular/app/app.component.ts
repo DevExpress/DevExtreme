@@ -1,5 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, Pipe, PipeTransform, provideZoneChangeDetection } from '@angular/core';
+import { NgClass } from '@angular/common';
 import { DxSchedulerModule } from 'devextreme-angular';
 import { DataSource } from 'devextreme-angular/common/data';
 import { Service, Employee, Data } from './app.service';
@@ -27,6 +28,7 @@ if (window && window.config?.packageConfigPaths) {
   imports: [
     DxSchedulerModule,
     ApplyPipe,
+    NgClass,
   ],
 })
 export class AppComponent {

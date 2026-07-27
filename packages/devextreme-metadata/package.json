@@ -1,6 +1,6 @@
 {
   "name": "devextreme-metadata",
-  "version": "26.1.3",
+  "version": "26.1.4",
   "private": true,
   "scripts": {
     "format:check": "prettier --check .",
@@ -11,7 +11,8 @@
     "@types/node": "catalog:tools",
     "devextreme-internal-tools": "catalog:tools",
     "prettier": "catalog:tools",
-    "ts-node": "catalog:tools"
+    "ts-node": "catalog:tools",
+    "typescript": "catalog:tools"
   },
   "files": [
     "dist"

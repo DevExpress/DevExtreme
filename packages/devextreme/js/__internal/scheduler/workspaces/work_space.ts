@@ -275,9 +275,9 @@ interface WorkspaceOptionActionMap {
   onCellContextMenu: Pick<CellContextMenuEvent, 'event' | 'cellElement' | 'cellData'>;
 }
 
-type WorkspaceCoordinates = Coordinates & { groupIndex?: number };
+export type WorkspaceCoordinates = Coordinates & { groupIndex?: number };
 
-type DroppableCellData = Pick<ViewCellData, 'startDate' | 'endDate' | 'allDay' | 'groups'>;
+export type DroppableCellData = Pick<ViewCellData, 'startDate' | 'endDate' | 'allDay' | 'groups'>;
 
 export interface WorkspaceOptionsInternal extends WidgetProperties<SchedulerWorkSpace> {
   newAppointments: boolean;
@@ -330,6 +330,7 @@ export interface WorkspaceOptionsInternal extends WidgetProperties<SchedulerWork
   onCellClick: ((e: CellClickEvent) => void) | undefined;
   onCellContextMenu: ((e: CellContextMenuEvent) => void) | undefined;
   currentDate: Date;
+  cellDuration: number;
   hoursInterval: number;
   allDayExpanded: boolean;
 
@@ -798,6 +799,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   _focusTarget(): dxElementWrapper {
     return this.$element();
+  }
+
+  _renderFocusTarget(): void {
+    this._focusTarget().attr('tabIndex', -1);
   }
 
   protected isVerticalGroupedWorkSpace(): boolean { // TODO move to the Model
@@ -2506,8 +2511,12 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     }
 
     const point = this.getPointFromDragTarget($dragTarget);
+    return this.getCellFromPoint(point.x, point.y);
+  }
+
+  public getCellFromPoint(x: number, y: number): dxElementWrapper | null {
     // @ts-expect-error
-    const elements = domAdapter.elementsFromPoint(point.x, point.y) as Element[];
+    const elements = domAdapter.elementsFromPoint(x, y) as Element[];
 
     const cell = elements.find((element) => element.classList.contains('dx-scheduler-date-table-cell')
       || element.classList.contains('dx-scheduler-all-day-table-cell'));
@@ -2657,6 +2666,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       endDayHour: 24,
       viewOffset: 0,
       hoursInterval: 0.5,
+      cellDuration: 30,
       activeStateEnabled: true,
       hoverStateEnabled: true,
       groups: [],

@@ -66,7 +66,7 @@ import PriceCell from './PriceCell.vue';
 import ChangeCell from './ChangeCell.vue';
 
 const connectionStarted = ref(false);
-const dataSource = ref<CustomStore | null>(null);
+const dataSource = ref<CustomStore | undefined>(undefined);
 
 onMounted(() => {
   const hubConnection = new HubConnectionBuilder()

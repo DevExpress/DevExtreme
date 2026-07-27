@@ -433,7 +433,7 @@ type IButtonOptionsProps = React.PropsWithChildren<{
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   icon?: string;
-  onClick?: ((e: ClickEvent) => void);
+  onClick?: ((e: ClickEvent) => void) | undefined;
   onContentReady?: ((e: ButtonContentReadyEvent) => void);
   onDisposing?: ((e: ButtonDisposingEvent) => void);
   onInitialized?: ((e: ButtonInitializedEvent) => void);
@@ -1037,8 +1037,8 @@ type IEditingProps = React.PropsWithChildren<{
   allowUpdating?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean);
   changes?: Array<DataChange>;
   confirmDelete?: boolean;
-  editColumnName?: string;
-  editRowKey?: any;
+  editColumnName?: string | undefined;
+  editRowKey?: any | undefined;
   form?: dxFormOptions;
   mode?: GridsEditMode;
   popup?: dxPopupOptions<any>;
@@ -1062,10 +1062,10 @@ type IEditingProps = React.PropsWithChildren<{
   useIcons?: boolean;
   defaultChanges?: Array<DataChange>;
   onChangesChange?: (value: Array<DataChange>) => void;
-  defaultEditColumnName?: string;
-  onEditColumnNameChange?: (value: string) => void;
-  defaultEditRowKey?: any;
-  onEditRowKeyChange?: (value: any) => void;
+  defaultEditColumnName?: string | undefined;
+  onEditColumnNameChange?: (value: string | undefined) => void;
+  defaultEditRowKey?: any | undefined;
+  onEditRowKeyChange?: (value: any | undefined) => void;
 }>
 const _componentEditing = (props: IEditingProps) => {
   return React.createElement(NestedOption<IEditingProps>, {
@@ -1126,7 +1126,7 @@ const EditingTexts = Object.assign<typeof _componentEditingTexts, NestedComponen
 type IEditorOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  buttons?: Array<string | TextBoxPredefinedButton | TextEditorButton>;
+  buttons?: Array<string | TextBoxPredefinedButton | TextEditorButton> | undefined;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
@@ -1142,7 +1142,7 @@ type IEditorOptionsProps = React.PropsWithChildren<{
   maskChar?: string;
   maskInvalidMessage?: string;
   maskRules?: any;
-  maxLength?: number | string;
+  maxLength?: null | number | string;
   mode?: TextBoxType;
   name?: string;
   onChange?: ((e: ChangeEvent) => void);
@@ -1170,8 +1170,8 @@ type IEditorOptionsProps = React.PropsWithChildren<{
   tabIndex?: number;
   text?: string;
   useMaskedValue?: boolean;
-  validationError?: any;
-  validationErrors?: Array<any>;
+  validationError?: any | null;
+  validationErrors?: Array<any> | null;
   validationMessageMode?: ValidationMessageMode;
   validationMessagePosition?: CommonPosition;
   validationStatus?: ValidationStatus;
@@ -1387,11 +1387,11 @@ type IFilterBuilderProps = React.PropsWithChildren<{
   maxGroupLevel?: number | undefined;
   onContentReady?: ((e: FilterBuilderContentReadyEvent) => void);
   onDisposing?: ((e: FilterBuilderDisposingEvent) => void);
-  onEditorPrepared?: ((e: FilterBuilderEditorPreparedEvent) => void);
-  onEditorPreparing?: ((e: FilterBuilderEditorPreparingEvent) => void);
+  onEditorPrepared?: ((e: FilterBuilderEditorPreparedEvent) => void) | undefined;
+  onEditorPreparing?: ((e: FilterBuilderEditorPreparingEvent) => void) | undefined;
   onInitialized?: ((e: FilterBuilderInitializedEvent) => void);
   onOptionChanged?: ((e: FilterBuilderOptionChangedEvent) => void);
-  onValueChanged?: ((e: FilterBuilderValueChangedEvent) => void);
+  onValueChanged?: ((e: FilterBuilderValueChangedEvent) => void) | undefined;
   rtlEnabled?: boolean;
   tabIndex?: number;
   value?: Array<any> | (() => any) | string;
@@ -1449,18 +1449,18 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   maxWidth?: number | string;
   minHeight?: number | string;
   minWidth?: number | string;
-  onContentReady?: ((e: EventInfo<any>) => void);
-  onDisposing?: ((e: EventInfo<any>) => void);
+  onContentReady?: ((e: EventInfo<any>) => void) | undefined;
+  onDisposing?: ((e: EventInfo<any>) => void) | undefined;
   onHidden?: ((e: EventInfo<any>) => void);
   onHiding?: ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void);
-  onInitialized?: ((e: { component: Component<any>, element: any }) => void);
-  onOptionChanged?: ((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void);
-  onResize?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void);
-  onResizeEnd?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void);
-  onResizeStart?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void);
+  onInitialized?: ((e: { component: Component<any>, element: any }) => void) | undefined;
+  onOptionChanged?: ((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void) | undefined;
+  onResize?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | undefined;
+  onResizeEnd?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | undefined;
+  onResizeStart?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | undefined;
   onShowing?: ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void);
   onShown?: ((e: EventInfo<any>) => void);
-  onTitleRendered?: ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void);
+  onTitleRendered?: ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void) | undefined;
   position?: (() => void) | PositionAlignment | PositionConfig;
   resizeEnabled?: boolean;
   restorePosition?: boolean;
@@ -1674,12 +1674,12 @@ type IFormProps = React.PropsWithChildren<{
   minColWidth?: number;
   onContentReady?: ((e: FormContentReadyEvent) => void);
   onDisposing?: ((e: FormDisposingEvent) => void);
-  onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void);
-  onFieldDataChanged?: ((e: FieldDataChangedEvent) => void);
+  onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void) | undefined;
+  onFieldDataChanged?: ((e: FieldDataChangedEvent) => void) | undefined;
   onInitialized?: ((e: FormInitializedEvent) => void);
   onOptionChanged?: ((e: FormOptionChangedEvent) => void);
-  onSmartPasted?: ((e: SmartPastedEvent) => void);
-  onSmartPasting?: ((e: SmartPastingEvent) => void);
+  onSmartPasted?: ((e: SmartPastedEvent) => void) | undefined;
+  onSmartPasting?: ((e: SmartPastingEvent) => void) | undefined;
   optionalMark?: string;
   readOnly?: boolean;
   requiredMark?: string;
@@ -2362,7 +2362,7 @@ type IOptionsProps = React.PropsWithChildren<{
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   icon?: string;
-  onClick?: ((e: ClickEvent) => void);
+  onClick?: ((e: ClickEvent) => void) | undefined;
   onContentReady?: ((e: ContentReadyEvent) => void);
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
@@ -2506,18 +2506,18 @@ type IPopupProps = React.PropsWithChildren<{
   maxWidth?: number | string;
   minHeight?: number | string;
   minWidth?: number | string;
-  onContentReady?: ((e: EventInfo<any>) => void);
-  onDisposing?: ((e: EventInfo<any>) => void);
+  onContentReady?: ((e: EventInfo<any>) => void) | undefined;
+  onDisposing?: ((e: EventInfo<any>) => void) | undefined;
   onHidden?: ((e: EventInfo<any>) => void);
   onHiding?: ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void);
-  onInitialized?: ((e: { component: Component<any>, element: any }) => void);
-  onOptionChanged?: ((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void);
-  onResize?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void);
-  onResizeEnd?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void);
-  onResizeStart?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void);
+  onInitialized?: ((e: { component: Component<any>, element: any }) => void) | undefined;
+  onOptionChanged?: ((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void) | undefined;
+  onResize?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | undefined;
+  onResizeEnd?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | undefined;
+  onResizeStart?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void) | undefined;
   onShowing?: ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void);
   onShown?: ((e: EventInfo<any>) => void);
-  onTitleRendered?: ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void);
+  onTitleRendered?: ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void) | undefined;
   position?: (() => void) | PositionAlignment | PositionConfig;
   resizeEnabled?: boolean;
   restorePosition?: boolean;
@@ -2986,7 +2986,7 @@ type IStateStoringProps = React.PropsWithChildren<{
   customSave?: ((gridState: any) => void);
   enabled?: boolean;
   savingTimeout?: number;
-  storageKey?: string;
+  storageKey?: string | undefined;
   type?: StateStoreType;
 }>
 const _componentStateStoring = (props: IStateStoringProps) => {
@@ -3162,14 +3162,14 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   onSelectionChanged?: ((e: SelectionChangedEvent) => void);
   onSelectionChanging?: ((e: SelectionChangingEvent) => void);
   onTitleClick?: ((e: TitleClickEvent) => void);
-  onTitleHold?: ((e: TitleHoldEvent) => void);
-  onTitleRendered?: ((e: TitleRenderedEvent) => void);
+  onTitleHold?: ((e: TitleHoldEvent) => void) | undefined;
+  onTitleRendered?: ((e: TitleRenderedEvent) => void) | undefined;
   repaintChangesOnly?: boolean;
   rtlEnabled?: boolean;
   scrollByContent?: boolean;
   scrollingEnabled?: boolean;
   selectedIndex?: number;
-  selectedItem?: any;
+  selectedItem?: any | null;
   showNavButtons?: boolean;
   stylingMode?: TabsStyle;
   swipeEnabled?: boolean;
@@ -3181,8 +3181,8 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   onItemsChange?: (value: Array<any | dxTabPanelItem | string>) => void;
   defaultSelectedIndex?: number;
   onSelectedIndexChange?: (value: number) => void;
-  defaultSelectedItem?: any;
-  onSelectedItemChange?: (value: any) => void;
+  defaultSelectedItem?: any | null;
+  onSelectedItemChange?: (value: any | null) => void;
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
   itemTitleRender?: (...params: any) => React.ReactNode;

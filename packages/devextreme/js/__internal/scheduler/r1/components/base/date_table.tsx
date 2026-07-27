@@ -35,6 +35,7 @@ export class DateTable extends InfernoWrapperComponent<DateTableProps> {
       dataCellTemplate,
       groupOrientation,
       addVerticalSizesClassToRows,
+      rowHeights,
       ...restProps
     } = this.props;
     const classes = addDateTableClass ? 'dx-scheduler-date-table' : undefined;
@@ -67,6 +68,7 @@ export class DateTable extends InfernoWrapperComponent<DateTableProps> {
           rightVirtualCellWidth={rightVirtualCellWidth}
           groupOrientation={groupOrientation}
           addVerticalSizesClassToRows={addVerticalSizesClassToRows}
+          rowHeights={rowHeights}
           topVirtualRowHeight={DateTableBodyDefaultProps.topVirtualRowHeight}
           bottomVirtualRowHeight={DateTableBodyDefaultProps.bottomVirtualRowHeight}
           addDateTableClass={DateTableBodyDefaultProps.addDateTableClass}

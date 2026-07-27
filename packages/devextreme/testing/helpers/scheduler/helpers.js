@@ -5,7 +5,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import dataUtils from 'core/element_data';
 import Color from 'color';
 
-import '__internal/scheduler/m_scheduler';
+import '__internal/scheduler/scheduler';
 import 'ui/drop_down_button';
 
 import { waitAsync, waitForAsync } from './waitForAsync.js';

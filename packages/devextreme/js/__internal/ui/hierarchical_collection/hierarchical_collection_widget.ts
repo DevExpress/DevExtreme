@@ -118,7 +118,7 @@ class HierarchicalCollectionWidget<
   }
 
   _getLinkContainer(
-    iconContainer: dxElementWrapper | undefined | null,
+    iconContainer: dxElementWrapper | null | undefined,
     textContainer: dxElementWrapper,
     itemData: TItem,
   ): dxElementWrapper {
@@ -143,7 +143,7 @@ class HierarchicalCollectionWidget<
     link.click();
   }
 
-  _getIconContainer(itemData: TItem): dxElementWrapper | undefined | null {
+  _getIconContainer(itemData: TItem): dxElementWrapper | null | undefined {
     // @ts-expect-error ts-error
     if (!itemData.icon) {
       return undefined;

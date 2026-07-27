@@ -20,3 +20,8 @@ When helping me write code or reviewing my existing code, please follow these sp
    - Note: This is correct only when the type is the same in both TS annotation and JSDoc comment.
 
 Consistently apply these conventions to all code you review, suggest, complete.
+
+## Related instructions
+
+- Optional field typing (`?`, `| undefined`, `| null`, `@default`) for public `.d.ts`:
+  see [optional-fields-typing.instructions.md](./optional-fields-typing.instructions.md).

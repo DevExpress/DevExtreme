@@ -179,44 +179,44 @@ export interface dxContextMenuOptions<
     items?: Array<TItem>;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/context_menu:HiddenEvent}
      * @action
      * @public
      */
-    onHidden?: ((e: HiddenEvent<TItem, TKey>) => void);
+    onHidden?: ((e: HiddenEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/context_menu:HidingEvent}
      * @action
      * @public
      */
-    onHiding?: ((e: HidingEvent<TItem, TKey>) => void);
+    onHiding?: ((e: HidingEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/context_menu:PositioningEvent}
      * @action
      * @public
      */
-    onPositioning?: ((e: PositioningEvent<TItem, TKey>) => void);
+    onPositioning?: ((e: PositioningEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/context_menu:ShowingEvent}
      * @action
      * @public
      */
-    onShowing?: ((e: ShowingEvent<TItem, TKey>) => void);
+    onShowing?: ((e: ShowingEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/context_menu:ShownEvent}
      * @action
      * @public
      */
-    onShown?: ((e: ShownEvent<TItem, TKey>) => void);
+    onShown?: ((e: ShownEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
      * @default { my: 'top left', at: 'top left' }

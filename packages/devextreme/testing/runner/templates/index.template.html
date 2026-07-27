@@ -22,11 +22,6 @@
         float: left;
     }
 
-    #cat_block li .explicit
-    {
-        color: gray;
-    }
-
 </style>
 
 <body>
@@ -70,12 +65,9 @@
         <ul data-bind="foreach: cats">
             <li>
                 <input type=checkbox data-bind="checked: selected">
-                <span class="link" data-bind="text: name, css: { explicit: explicit }, click: handleChoose"></span>
+                <span class="link" data-bind="text: name, click: handleChoose"></span>
             </li>
         </ul>
-        <div>
-            <small>Greyed are explicit tests</small>
-        </div>
     </div>
 
     <div id="suite_block" data-bind="visible: chosenCat">
@@ -104,12 +96,7 @@
 
         var CatModel = function(data) {
             this.name = data.Name;
-            this.explicit = data.Explicit;
-            this.selected = ko.observable(CatModel.shouldSelectByDefault(this));
-        };
-
-        CatModel.shouldSelectByDefault = function(cat) {
-            return !cat.explicit;
+            this.selected = ko.observable(true);
         };
 
         CatModel.prototype = {
@@ -187,7 +174,7 @@
             },
 
             handleSelectAll: function(s, e) {
-                s._selectAllCore(CatModel.shouldSelectByDefault);
+                s._selectAllCore(function() { return true });
             },
 
             handleUnselectAll: function(s, e) {
@@ -199,10 +186,6 @@
                     $.grep(this.cats(), function(c) { return c.selected() }),
                     function(c) { return c.name }
                 );
-            },
-
-            implicitCategoriesCount: function() {
-                return $.grep(this.cats(), function(c) { return !c.explicit }).length;
             },
 
             _runUrlExtraParams: function() {
@@ -224,7 +207,7 @@
             _formatRunAllUrl: function(include) {
                 var qs = { };
                 if(include && include.length) {
-                    if(include.length !== this.implicitCategoriesCount())
+                    if(include.length !== this.cats().length)
                         qs.include = include.join();
                 }
                 $.extend(qs, this._runUrlExtraParams());

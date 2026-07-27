@@ -1,6 +1,7 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+@use "../color" as extcolor;
 
 // adduse
 
@@ -233,7 +234,7 @@ $button-success-outlined-selected-bg: null !default;
 $button-accent-foreground-color: null !default;
 
 @if $mode == "light" {
-  $button-accent-foreground-color: color.adjust($base-accent, $hue: -2deg, $saturation: -9.10%, $space: hsl, $lightness: -23.53%) !default;
+  $button-accent-foreground-color: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: -2deg, $saturation: -9.10%, $lightness: -23.53%) !default;
 
   $button-default-hover-bg: $base-accent-hover !default;
   $button-default-focused-bg: $base-accent-hover !default;
@@ -246,14 +247,14 @@ $button-accent-foreground-color: null !default;
   $button-success-selected-bg: color.adjust($base-success, $saturation: -0.22%, $space: hsl, $lightness: -12.16%) !default;
 
   @if $color == "blue" {
-    $button-default-outlined-hover-bg: color.adjust($base-accent, $hue: 3.8deg, $saturation: -11.4%, $space: hsl, $lightness: 55.5%) !default;
-    $button-default-outlined-selected-bg: color.adjust($button-default-outlined-hover-bg, $hue: -1deg, $saturation: 10.40%, $space: hsl, $lightness: -5.49%) !default;
-    $button-default-outlined-active-bg: color.adjust($button-default-outlined-hover-bg, $hue: -1deg, $saturation: 17.00%, $space: hsl, $lightness: -17.06%) !default;
+    $button-default-outlined-hover-bg: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 3.8deg, $saturation: -11.4%, $lightness: 55.5%) !default;
+    $button-default-outlined-selected-bg: extcolor.adjust-if-not-achromatic($color: $button-default-outlined-hover-bg, $hue: -1deg, $saturation: 10.40%, $lightness: -5.49%) !default;
+    $button-default-outlined-active-bg: extcolor.adjust-if-not-achromatic($color: $button-default-outlined-hover-bg, $hue: -1deg, $saturation: 17.00%, $lightness: -17.06%) !default;
 
-    $button-danger-outlined-hover-bg: color.adjust($base-danger, $hue: 1.5deg, $saturation: 0.6%, $space: hsl, $lightness: 46.7%) !default;
+    $button-danger-outlined-hover-bg: extcolor.adjust-if-not-achromatic($color: $base-danger, $hue: 1.5deg, $saturation: 0.6%, $lightness: 46.7%) !default;
     $button-danger-outlined-focused-bg: $button-danger-outlined-hover-bg !default;
-    $button-danger-outlined-active-bg: color.adjust($button-danger-outlined-hover-bg, $hue: 358.9deg, $saturation: 2.2%, $space: hsl, $lightness: -13.9%) !default;
-    $button-danger-outlined-selected-bg: color.adjust($button-danger-outlined-active-bg, $hue: 359.1deg, $saturation: -0.6%, $space: hsl, $lightness: 7.1%) !default;
+    $button-danger-outlined-active-bg: extcolor.adjust-if-not-achromatic($color: $button-danger-outlined-hover-bg, $hue: 358.9deg, $saturation: 2.2%, $lightness: -13.9%) !default;
+    $button-danger-outlined-selected-bg: extcolor.adjust-if-not-achromatic($color: $button-danger-outlined-active-bg, $hue: 359.1deg, $saturation: -0.6%, $lightness: 7.1%) !default;
 
     $button-success-outlined-hover-bg: color.adjust($base-success, $saturation: -29.8%, $space: hsl, $lightness: 68.8%) !default;
     $button-success-outlined-focused-bg: $button-success-outlined-hover-bg !default;
@@ -297,7 +298,7 @@ $button-accent-foreground-color: null !default;
 }
 
 @if $mode == "dark" {
-  $button-accent-foreground-color: color.adjust($base-accent, $hue: 0.9deg, $saturation: -2.2%, $space: hsl, $lightness: 22.4%) !default;
+  $button-accent-foreground-color: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 0.9deg, $saturation: -2.2%, $lightness: 22.4%) !default;
 
   $button-default-hover-bg: $base-accent-hover !default;
   $button-default-focused-bg: $base-accent-hover !default;
@@ -309,10 +310,10 @@ $button-accent-foreground-color: null !default;
   $button-success-active-bg: color.adjust($base-success, $saturation: 10.6%, $space: hsl, $lightness: 45.3%) !default;
   $button-success-selected-bg: color.adjust($base-success, $saturation: 5.3%, $space: hsl, $lightness: 34.1%) !default;
 
-  $button-default-outlined-hover-bg: color.adjust($base-accent, $hue: 356.3deg, $saturation: -14.7%, $space: hsl, $lightness: -49.4%) !default;
+  $button-default-outlined-hover-bg: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 356.3deg, $saturation: -14.7%, $lightness: -49.4%) !default;
   $button-default-outlined-focused-bg: $button-default-outlined-hover-bg !default;
   $button-default-outlined-active-bg: $base-accent-selected !default;
-  $button-default-outlined-selected-bg: color.adjust($base-accent, $hue: -4deg, $saturation: -12.33%, $space: hsl, $lightness: -41.18%) !default;
+  $button-default-outlined-selected-bg: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: -4deg, $saturation: -12.33%, $lightness: -41.18%) !default;
 
   $button-danger-outlined-color-hover: $base-danger-active !default;
   $button-danger-outlined-color-active: $base-danger-active !default;

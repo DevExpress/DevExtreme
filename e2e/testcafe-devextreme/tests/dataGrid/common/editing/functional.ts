@@ -25,6 +25,8 @@ test('Focused cell should be switched to the editing mode after onSaving\'s prom
   const dataGrid = new DataGrid('#container');
   const resolveOnSavingDeferred = ClientFunction(() => (window as any).deferred.resolve());
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await t
     .click(dataGrid.getDataCell(0, 0).element)
     .typeText(dataGrid.getDataCell(0, 0).element, 'new_value')
@@ -61,12 +63,23 @@ test('DataGrid - The "Cannot read properties of undefined error" occurs when usi
   const dataGrid = new DataGrid('#container');
   const resolveOnSavingDeferred = ClientFunction(() => (window as any).deferred.resolve());
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await t
     .click(dataGrid.getDataCell(0, 0).element)
     .typeText(dataGrid.getDataCell(0, 0).element, 'new_value')
-    .pressKey('enter tab tab');
+    .pressKey('enter')
+    .expect(dataGrid.isReady())
+    .ok()
+    .pressKey('tab tab')
+    .expect(dataGrid.getDataCell(2, 0).isFocused)
+    .ok();
+
   await resolveOnSavingDeferred();
-  await t.expect(dataGrid.getDataCell(2, 0).isFocused).ok();
+
+  await t
+    .expect(dataGrid.isReady()).ok()
+    .expect(dataGrid.getDataCell(2, 0).isFocused).ok();
 }).before(async () => {
   await ClientFunction(() => {
     (window as any).deferred = $.Deferred();
@@ -90,10 +103,15 @@ test('DataGrid - The "Cannot read properties of undefined error" occurs when usi
       e.promise = (window as any).deferred;
     },
   });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).deferred;
+  })();
 });
 
 test('Tab key on editor should focus next cell if editing mode is cell', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   await t
     .click(dataGrid.getDataCell(0, 1).element)
@@ -141,6 +159,8 @@ test('Value change on dataGrid row should be fired after clicking on editor (T82
   const dataGrid = new DataGrid('#container');
   const selectBox = new SelectBox('#otherContainer');
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await t
     .click(dataGrid.getDataCell(0, 0).element)
     .typeText(dataGrid.getDataCell(0, 0).element, 'new_value')
@@ -162,6 +182,7 @@ test('Value change on dataGrid row should be fired after clicking on editor (T82
 
 test('Async Validation(Row) - Only valid data is saved in a new row', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   const rowIndex = 0;
   const columnIndex = 0;
@@ -216,6 +237,7 @@ test('Async Validation(Row) - Only valid data is saved in a new row', async (t) 
 
 test('Async Validation(Row) - Only valid data is saved in a modified row', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   const rowIndex = 0;
   const columnIndex = 0;
@@ -268,6 +290,7 @@ test('Async Validation(Row) - Only valid data is saved in a modified row', async
 
 test('Async Validation(Row) - Data is not saved when a dependant cell value becomes invalid', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   const rowIndex = 0;
   const dataRow = dataGrid.getDataRow(rowIndex);
@@ -339,6 +362,10 @@ test('Async Validation(Row) - Data is not saved when a dependant cell value beco
 
 test('Async Validation(Cell) - Only the last cell should be switched to edit mode', async (t) => {
   const dataGrid = new DataGrid('#container');
+  const resolveValidation = ClientFunction(() => (window as any).deferred.resolve(true));
+
+  await t.expect(dataGrid.isReady()).ok();
+
   const cell0 = dataGrid.getDataCell(0, 0);
   const cell1 = dataGrid.getDataCell(0, 1);
   const cell2 = dataGrid.getDataCell(0, 2);
@@ -349,36 +376,47 @@ test('Async Validation(Cell) - Only the last cell should be switched to edit mod
     .click(cell1.element)
     .expect(cell1.isFocused)
     .notOk('the second cell should not be focused')
-    .click(cell2.element)
+    .click(cell2.element);
+
+  await resolveValidation();
+
+  await t
     .expect(cell0.isValidationPending)
     .notOk('validating is completed')
     .expect(cell2.hasHiddenFocusState)
     .notOk()
     .expect(cell2.isFocused)
     .ok('the third cell should be focused');
-}).before(async () => createWidget('dxDataGrid', getGridConfig({
-  editing: {
-    mode: 'cell',
-    allowUpdating: true,
-    allowAdding: true,
-  },
-  columns: [{
-    dataField: 'age',
-    validationRules: [{
-      type: 'async',
-      validationCallback(): JQueryPromise<unknown> {
-        const d = $.Deferred();
-        setTimeout(() => {
-          d.resolve(true);
-        }, 1000);
-        return d.promise();
-      },
-    }],
-  }, 'name', 'lastName'],
-})));
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).deferred = $.Deferred();
+  })();
+
+  return createWidget('dxDataGrid', getGridConfig({
+    editing: {
+      mode: 'cell',
+      allowUpdating: true,
+      allowAdding: true,
+    },
+    columns: [{
+      dataField: 'age',
+      validationRules: [{
+        type: 'async',
+        validationCallback(): JQueryPromise<unknown> {
+          return (window as any).deferred.promise();
+        },
+      }],
+    }, 'name', 'lastName'],
+  }));
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).deferred;
+  })();
+});
 
 test('Async Validation(Cell) - Only valid data is saved in a new row', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   const rowIndex = 0;
   const columnIndex = 0;
@@ -432,6 +470,7 @@ test('Async Validation(Cell) - Only valid data is saved in a new row', async (t)
 
 test('Async Validation(Cell) - Only valid data is saved in a modified cell', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   const rowIndex = 0;
   const columnIndex = 0;
@@ -489,6 +528,7 @@ test('Async Validation(Cell) - Only valid data is saved in a modified cell', asy
 
 test('Async Validation(Cell) - Data is not saved when a dependant cell value becomes invalid', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   const cell0 = dataGrid.getDataCell(0, 0);
   const cell1 = dataGrid.getDataCell(0, 1);
@@ -568,6 +608,7 @@ test('Async Validation(Cell) - Data is not saved when a dependant cell value bec
 
 test('Cell mode(setCellValue) with async validation - The value of an invalid dependent cell should be updated in a new row(T872751)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   await dataGrid.apiAddRow();
 
@@ -648,6 +689,7 @@ test('Cell mode(setCellValue) with async validation - The value of an invalid de
 
 test('Cell mode(calculateCellValue) with async validation - The value of an invalid dependent cell should be updated in a new row(T872751)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   await dataGrid.apiAddRow();
 
@@ -722,6 +764,7 @@ test('Cell mode(calculateCellValue) with async validation - The value of an inva
 
 test('Async Validation(Batch) - Only valid data is saved in a new row', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   const rowIndex = 0;
   const columnIndex = 0;
@@ -785,6 +828,7 @@ test('Async Validation(Batch) - Only valid data is saved in a new row', async (t
 
 test('Async Validation(Batch) - Only valid data is saved in a modified cell', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   const rowIndex = 0;
   const columnIndex = 0;
@@ -850,6 +894,7 @@ test('Async Validation(Batch) - Only valid data is saved in a modified cell', as
 
 test('Async Validation(Batch) - Data is not saved when a dependant cell value becomes invalid', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   const rowIndex = 0;
   const headerPanel = dataGrid.getHeaderPanel();
@@ -944,6 +989,7 @@ test('Async Validation(Batch) - Data is not saved when a dependant cell value be
 
 test('Async Validation(Batch) - Data is not saved when a cell with async setCellValue is invalid', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   const rowIndex = 0;
   const columnIndex = 0;
@@ -1005,6 +1051,7 @@ test('Async Validation(Batch) - Data is not saved when a cell with async setCell
 
 test('Validation(Row) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=false) (T880238)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   const dataRow = dataGrid.getDataRow(0);
   const cell0 = dataRow.getDataCell(0);
@@ -1064,6 +1111,7 @@ test('Validation(Row) - Unmodified data cell should be marked as invalid when a 
 
 test('Validation(Row) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=true) (T880238)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   const dataRow = dataGrid.getDataRow(0);
   const cell0 = dataRow.getDataCell(0);
@@ -1119,6 +1167,7 @@ test('Validation(Row) - Unmodified data cell should be marked as invalid when a 
 
 test('Validation(Cell) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=false) (T880238)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   const dataRow = dataGrid.getDataRow(0);
   const cell0 = dataRow.getDataCell(0);
@@ -1168,6 +1217,7 @@ test('Validation(Cell) - Unmodified data cell should be marked as invalid when a
 
 test('Validation(Cell) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=true) (T880238)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   const dataRow = dataGrid.getDataRow(0);
   const cell0 = dataRow.getDataCell(0);
@@ -1219,6 +1269,7 @@ test('Validation(Cell) - Unmodified data cell should be marked as invalid when a
 [false, true].forEach((reevaluate) => {
   test(`Validation(Batch) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=${reevaluate}) (T880238)`, async (t) => {
     const dataGrid = new DataGrid('#container');
+    await t.expect(dataGrid.isReady()).ok();
 
     const saveButton = dataGrid.getHeaderPanel().getSaveButton();
     const dataRow = dataGrid.getDataRow(0);
@@ -1292,6 +1343,7 @@ test('Validation(Cell) - Unmodified data cell should be marked as invalid when a
 
 test('Validation(Batch) - Unmodified data cell with enabled showEditorAlways should be marked as invalid when a neighboring cell is modified (T878218)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   const dataRow0 = dataGrid.getDataRow(0);
   const dataRow1 = dataGrid.getDataRow(1);
@@ -1369,6 +1421,7 @@ test('Validation(Batch) - Unmodified data cell with enabled showEditorAlways sho
 
 test('Async Validation(Batch) - Validation frame should be rendered when a neighboring cell is modified with showEditorAlways and repaintChangesOnly enabled (T906094)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   const headerPanel = dataGrid.getHeaderPanel();
   const cancelButton = headerPanel.getCancelButton();
@@ -1473,6 +1526,8 @@ test('Async Validation(Batch) - Validation frame should be rendered when a neigh
 // T905677
 test('Rollback changes on a click on a revert button  when startEditAction is dblclick', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
+
   const dataRow = dataGrid.getDataRow(0);
   const cell0 = dataRow.getDataCell(1);
   const $revertButton = dataGrid.getRevertButton();
@@ -1511,6 +1566,8 @@ test('Row - Redundant validation messages should not be rendered in a detail gri
   const dataGrid = new DataGrid('#container');
   const detailGrid = new DataGrid('#detailContainer');
   const overlay = dataGrid.getOverlay();
+
+  await t.expect(dataGrid.isReady()).ok();
 
   // act
   await t
@@ -1577,6 +1634,8 @@ test('Cell - Redundant validation messages should not be rendered in a detail gr
   const dataGrid = new DataGrid('#container');
   const detailGrid = new DataGrid('#detailContainer');
   const overlay = dataGrid.getOverlay();
+
+  await t.expect(dataGrid.isReady()).ok();
 
   // act
   await t
@@ -1646,6 +1705,8 @@ test('Batch - Redundant validation messages should not be rendered in a detail g
   const detailGrid = new DataGrid('#detailContainer');
   const overlay = dataGrid.getOverlay();
 
+  await t.expect(dataGrid.isReady()).ok();
+
   // act
   await t
     .click(dataGrid.getDataRow(0).getCommandCell(0).element)
@@ -1709,6 +1770,8 @@ test('Batch - Redundant validation messages should not be rendered in a detail g
 
 test('The "Cannot read property "brokenRules" of undefined" error occurs T978286', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
+
   const lastName0 = dataGrid.getDataCell(0, 1);
   const active1 = dataGrid.getDataCell(1, 2);
   await t
@@ -1736,6 +1799,7 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
 ['Cell', 'Batch'].forEach((editMode) => {
   test(`${editMode} - Edit cell should be focused correclty when showEditorAlways is enabled (T976141)`, async (t) => {
     const dataGrid = new DataGrid('#container');
+    await t.expect(dataGrid.isReady()).ok();
 
     // direct order
     for (let rowIndex = 0; rowIndex < 3; rowIndex += 1) {
@@ -1790,6 +1854,8 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
 ['Batch', 'Cell'].forEach((editMode) => {
   test(`${editMode} - Cell value should not be reset when a checkbox in a neigboring cell is clicked (T1023809)`, async (t) => {
     const dataGrid = new DataGrid('#container');
+    await t.expect(dataGrid.isReady()).ok();
+
     const firstCell = dataGrid.getDataCell(0, 0);
     const secondCell = dataGrid.getDataCell(0, 1);
 
@@ -1827,6 +1893,7 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
 
 test('Component sends unexpected filtering request after inserting a new row if focusedRowEnabled is true and key set in data source (T1181477)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   await t
     .click(dataGrid.getHeaderPanel().getAddRowButton())
@@ -1905,6 +1972,7 @@ test('Component sends unexpected filtering request after inserting a new row if 
 
 test('Component sends unexpected filtering request after inserting a new row if focusedRowEnabled is true and key set on event (T1181477)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   await t
     .click(dataGrid.getHeaderPanel().getAddRowButton())
@@ -1965,6 +2033,7 @@ test('Component sends unexpected filtering request after inserting a new row if 
 // T1194439
 test('Focus behavior should be correct when editing cells', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   for (let i = 0; i < 10; i += 1) {
     const cell = dataGrid.getDataCell(i, 0);
@@ -2003,6 +2072,8 @@ test('Focus behavior should be correct when editing cells', async (t) => {
 test('The editCellTemplate template should not be called after clicking on a cell in another row and column', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
+
   const firstCellOfFirstRow = dataGrid.getDataCell(0, 0);
   const secondCellOfSecondRow = dataGrid.getDataCell(1, 1);
   const checkEditCellTemplateCallArgs = async () => {
@@ -2080,6 +2151,8 @@ test('The editCellTemplate template should not be called after clicking on a cel
 test('The onEditorPreparing event should be called once after clicking on a cell in another row and column', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
+
   const firstCellOfFirstRow = dataGrid.getDataCell(0, 0);
   const secondCellOfSecondRow = dataGrid.getDataCell(1, 1);
   const checkOnEditorPreparingCallArgs = async (expectedCallCount, expectedArgs) => {
@@ -2270,7 +2343,9 @@ test('Cells should be focused correctly on click when cell editing mode is used 
     .typeText(dataGrid.getDataCell(0, 0).getEditor().element, '1')
     .click(dataGrid.getDataCell(1, 0).getEditor().element);
 
-  await t.expect(getStoredName(1)).eql('Name 11');
+  await t
+    .expect(dataGrid.isReady()).ok()
+    .expect(getStoredName(1)).eql('Name 11');
 
   // assert
   await t
@@ -2286,7 +2361,9 @@ test('Cells should be focused correctly on click when cell editing mode is used 
     .typeText(dataGrid.getDataCell(1, 0).getEditor().element, '2')
     .click(dataGrid.getDataCell(2, 0).getEditor().element);
 
-  await t.expect(getStoredName(2)).eql('Name 22');
+  await t
+    .expect(dataGrid.isReady()).ok()
+    .expect(getStoredName(2)).eql('Name 22');
 
   // assert
   await t
@@ -2295,6 +2372,8 @@ test('Cells should be focused correctly on click when cell editing mode is used 
     .expect(dataGrid.getDataCell(2, 0).isFocused)
     .ok()
     .expect(dataGrid.getDataCell(2, 0).getEditor().element.focused)
+    .ok()
+    .expect(dataGrid.isReady())
     .ok();
 
   // act
@@ -2302,7 +2381,9 @@ test('Cells should be focused correctly on click when cell editing mode is used 
     .typeText(dataGrid.getDataCell(2, 0).getEditor().element, '3')
     .click(dataGrid.getDataCell(1, 0).getEditor().element);
 
-  await t.expect(getStoredName(3)).eql('Name 33');
+  await t
+    .expect(dataGrid.isReady()).ok()
+    .expect(getStoredName(3)).eql('Name 33');
 
   // assert
   await t
@@ -2318,7 +2399,9 @@ test('Cells should be focused correctly on click when cell editing mode is used 
     .typeText(dataGrid.getDataCell(1, 0).getEditor().element, '2')
     .click(dataGrid.getDataCell(0, 0).getEditor().element);
 
-  await t.expect(getStoredName(2)).eql('Name 222');
+  await t
+    .expect(dataGrid.isReady()).ok()
+    .expect(getStoredName(2)).eql('Name 222');
 
   // assert
   await t
@@ -2384,6 +2467,46 @@ test('Cells should be focused correctly on click when cell editing mode is used 
 ].forEach((remoteOperations) => {
   test(`Empty rows should not appear after rows are updated in batch editing mode when paging and validation are enabled and remoteOperations=${remoteOperations}`, async (t) => {
     const dataGrid = new DataGrid('#container');
+    await t.expect(dataGrid.isReady()).ok();
+
+    /**
+     * Inject the changes only after the grid has finished its initial load.
+     * Setting editing.changes for off-page rows before the store data is
+     * cached leaves their oldData unresolved, so their validators are never
+     * created (T1165529) and the invalid row is skipped - the grid then
+     * renders one row fewer (this made the test unstable).
+     */
+    const data = getData(10, 4);
+    await ClientFunction(() => {
+      const keys = data.map((e) => e.field_0);
+      const columnToModify = 'field_1';
+      const gridName = 'dxDataGrid';
+
+      const grid = $('#container')[gridName]('instance');
+      const changes = grid.option('editing.changes');
+      keys.forEach((key) => {
+        const editData = changes.find(
+          (change) => change.type === 'update' && change.key === key,
+        );
+        if (editData) {
+          editData.data[columnToModify] = 'EEEEEE';
+        } else {
+          const changingData = {};
+          changingData[columnToModify] = 'EEEEEE';
+
+          changes.push({
+            type: 'update',
+            key,
+            data: changingData,
+          });
+        }
+      });
+      grid.option('editing.changes', changes);
+    }, {
+      dependencies: {
+        data,
+      },
+    })();
 
     await t
       // act
@@ -2424,36 +2547,5 @@ test('Cells should be focused correctly on click when cell editing mode is used 
         'field_3',
       ],
     });
-
-    await ClientFunction(() => {
-      const keys = data.map((e) => e.field_0);
-      const columnToModify = 'field_1';
-      const gridName = 'dxDataGrid';
-
-      const grid = $('#container')[gridName]('instance');
-      const changes = grid.option('editing.changes');
-      keys.forEach((key) => {
-        const editData = changes.find(
-          (change) => change.type === 'update' && change.key === key,
-        );
-        if (editData) {
-          editData.data[columnToModify] = 'EEEEEE';
-        } else {
-          const changingData = {};
-          changingData[columnToModify] = 'EEEEEE';
-
-          changes.push({
-            type: 'update',
-            key,
-            data: changingData,
-          });
-        }
-      });
-      grid.option('editing.changes', changes);
-    }, {
-      dependencies: {
-        data,
-      },
-    })();
   });
 });

@@ -129,9 +129,7 @@ export class ContextMenuView extends modules.View {
 
 export const contextMenuModule = {
   defaultOptions() {
-    return {
-      onContextMenuPreparing: null,
-    };
+    return {};
   },
   controllers: {
     contextMenu: ContextMenuController,

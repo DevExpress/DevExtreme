@@ -4,7 +4,8 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  merge_group:
+  push:
+    branches: [26_1]
 
 concurrency:
   group: wf-${{github.event.pull_request.number || github.ref || github.sha}}-${{github.workflow}}
@@ -53,10 +54,10 @@ jobs:
             .nx/workspace-data/*.db
             .nx/workspace-data/*.db-wal
             .nx/workspace-data/*.db-shm
-          key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+          key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-            ${{ runner.os }}-nx-v2-${{ github.sha }}-
+            ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
+            ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
             ${{ runner.os }}-nx-v2-
 
           lookup-only: true
@@ -87,10 +88,10 @@ jobs:
             .nx/workspace-data/*.db
             .nx/workspace-data/*.db-wal
             .nx/workspace-data/*.db-shm
-          key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+          key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-            ${{ runner.os }}-nx-v2-${{ github.sha }}-
+            ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
+            ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
             ${{ runner.os }}-nx-v2-
 
       - name: Build devextreme package
@@ -187,12 +188,12 @@ jobs:
             .nx/workspace-data/*.db
             .nx/workspace-data/*.db-wal
             .nx/workspace-data/*.db-shm
-          key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ matrix.framework }}-${{ github.run_attempt }}
+          key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.framework }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ matrix.framework }}-
-            ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-            ${{ runner.os }}-nx-v2-${{ github.sha }}-
-            ${{ runner.os }}-nx-v2-
+            ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.framework }}-${{ github.sha }}-
+            ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.framework }}-
+            ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
+            ${{ runner.os }}-nx-v2-${{ github.workflow }}-build-
 
           lookup-only: true
 
@@ -222,17 +223,17 @@ jobs:
             .nx/workspace-data/*.db
             .nx/workspace-data/*.db-wal
             .nx/workspace-data/*.db-shm
-          key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ matrix.framework }}-${{ github.run_attempt }}
+          key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.framework }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ matrix.framework }}-
-            ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-            ${{ runner.os }}-nx-v2-${{ github.sha }}-
-            ${{ runner.os }}-nx-v2-
+            ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.framework }}-${{ github.sha }}-
+            ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.framework }}-
+            ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
+            ${{ runner.os }}-nx-v2-${{ github.workflow }}-build-
 
       - name: Download Browser
         if: matrix.framework == 'angular'
         run: |
-          PUPPETEER_CMD="browsers install chrome@130.0.6723.69"
+          PUPPETEER_CMD="browsers install chrome@150.0.7871.124"
           pnpm --filter devextreme-angular exec puppeteer $PUPPETEER_CMD
 
       - name: Test ${{ matrix.framework }}

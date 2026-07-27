@@ -8,14 +8,15 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  merge_group:
+  push:
+    branches: [26_1]
 
 env:
   NX_SKIP_NX_CACHE: ${{ contains(github.event.pull_request.labels.*.name, 'skip-cache') && 'true' || 'false' }}
 
 jobs:
   jest-tests:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -52,10 +53,10 @@ jobs:
           .nx/workspace-data/*.db
           .nx/workspace-data/*.db-wal
           .nx/workspace-data/*.db-shm
-        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
         restore-keys: |
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
           ${{ runner.os }}-nx-v2-
 
         lookup-only: true
@@ -86,10 +87,10 @@ jobs:
           .nx/workspace-data/*.db
           .nx/workspace-data/*.db-wal
           .nx/workspace-data/*.db-shm
-        key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
         restore-keys: |
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-          ${{ runner.os }}-nx-v2-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
           ${{ runner.os }}-nx-v2-
 
     - name: Build localization

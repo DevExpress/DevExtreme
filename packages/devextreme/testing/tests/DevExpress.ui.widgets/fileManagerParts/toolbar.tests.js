@@ -747,42 +747,6 @@ QUnit.module('Toolbar', moduleConfig, () => {
         implementationsMap.getWidth = originalWidth;
     });
 
-    test.skip('toolbar separators must support custom items in menu', function(assert) {
-        createFileManager(false);
-        this.clock.tick(400);
-
-        const fileManager = this.wrapper.getInstance();
-        fileManager.option({
-            toolbar: {
-                fileSelectionItems: [
-                    'download', 'move', 'copy', 'rename', 'separator', 'refresh', 'clearSelection',
-                    {
-                        widget: 'dxButton',
-                        options: {
-                            text: 'some item 1 with text'
-                        },
-                        locateInMenu: 'auto'
-                    }
-                ]
-            }
-        });
-        this.clock.tick(400);
-
-        const originalWidth = implementationsMap.getWidth;
-        implementationsMap.getWidth = () => 360;
-        $('#fileManager').css('width', '100%');
-        fileManager.repaint();
-        this.clock.tick(800);
-
-        const $item = this.wrapper.findDetailsItem('File 1.txt');
-        $item.trigger('dxclick');
-        this.clock.tick(400);
-        const $separators = this.wrapper.getToolbarSeparators();
-        assert.equal($separators.length, 0, 'file toolbar has no separators');
-
-        implementationsMap.getWidth = originalWidth;
-    });
-
     test('items can render in menu after first load', function(assert) {
         createFileManager(false);
         this.clock.tick(400);

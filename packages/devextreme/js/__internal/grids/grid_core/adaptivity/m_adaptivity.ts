@@ -1430,8 +1430,6 @@ export const adaptivityModule: Module = {
   defaultOptions() {
     return {
       columnHidingEnabled: false,
-      // @ts-expect-error
-      onAdaptiveDetailRowPreparing: null as undefined,
     };
   },
   controllers: {

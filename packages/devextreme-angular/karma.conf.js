@@ -1,11 +1,12 @@
 /* global process */
-process.env.CHROME_BIN = require('puppeteer').executablePath();
-
 const path = require('path');
 
 const webpackConfig = require(path.resolve(__dirname, './webpack.test'));
 
-module.exports = function (config) {
+module.exports = async function (config) {
+  // puppeteer >= 24: executablePath() is async
+  process.env.CHROME_BIN = await require('puppeteer').executablePath();
+
   config.set({
 
     basePath: './',

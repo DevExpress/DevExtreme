@@ -13,7 +13,6 @@ gulp.task('clean', shell.task('pnpm nx clean:artifacts devextreme'));
 require('./build/gulp/bundler-config');
 require('./build/gulp/transpile');
 require('./build/gulp/js-bundles');
-require('./build/gulp/ts');
 require('./build/gulp/localization');
 require('./build/gulp/systemjs');
 
@@ -30,6 +29,12 @@ function getTranspileConfig() {
 }
 
 const transpileConfig = getTranspileConfig();
+
+function getDeclarationsConfiguration() {
+    return env.BUILD_INTERNAL_PACKAGE ? 'internal' : '';
+}
+
+const declarationsConfig = getDeclarationsConfiguration();
 
 gulp.task('transpile', shell.task(
     transpileConfig
@@ -50,6 +55,12 @@ gulp.task('aspnet', shell.task(
 ));
 
 gulp.task('vendor', shell.task('pnpm nx run devextreme:copy:vendor'));
+
+gulp.task('ts', shell.task(
+    declarationsConfig
+        ? `pnpm nx run devextreme:build:declarations -c ${declarationsConfig}`
+        : 'pnpm nx run devextreme:build:declarations'
+));
 
 gulp.task('check-license-notices', shell.task('pnpm nx run devextreme:verify:licenses'));
 

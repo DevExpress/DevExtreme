@@ -328,10 +328,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get mediaResizing(): dxHtmlEditorMediaResizing {
+    get mediaResizing(): dxHtmlEditorMediaResizing | null {
         return this._getOption('mediaResizing');
     }
-    set mediaResizing(value: dxHtmlEditorMediaResizing) {
+    set mediaResizing(value: dxHtmlEditorMediaResizing | null) {
         this._setOption('mediaResizing', value);
     }
 
@@ -341,10 +341,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get mentions(): Array<dxHtmlEditorMention> {
+    get mentions(): Array<dxHtmlEditorMention> | null {
         return this._getOption('mentions');
     }
-    set mentions(value: Array<dxHtmlEditorMention>) {
+    set mentions(value: Array<dxHtmlEditorMention> | null) {
         this._setOption('mentions', value);
     }
 
@@ -432,10 +432,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get tableContextMenu(): dxHtmlEditorTableContextMenu {
+    get tableContextMenu(): dxHtmlEditorTableContextMenu | null {
         return this._getOption('tableContextMenu');
     }
-    set tableContextMenu(value: dxHtmlEditorTableContextMenu) {
+    set tableContextMenu(value: dxHtmlEditorTableContextMenu | null) {
         this._setOption('tableContextMenu', value);
     }
 
@@ -445,10 +445,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get tableResizing(): dxHtmlEditorTableResizing {
+    get tableResizing(): dxHtmlEditorTableResizing | null {
         return this._getOption('tableResizing');
     }
-    set tableResizing(value: dxHtmlEditorTableResizing) {
+    set tableResizing(value: dxHtmlEditorTableResizing | null) {
         this._setOption('tableResizing', value);
     }
 
@@ -458,10 +458,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get toolbar(): dxHtmlEditorToolbar {
+    get toolbar(): dxHtmlEditorToolbar | null {
         return this._getOption('toolbar');
     }
-    set toolbar(value: dxHtmlEditorToolbar) {
+    set toolbar(value: dxHtmlEditorToolbar | null) {
         this._setOption('toolbar', value);
     }
 
@@ -471,10 +471,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get validationError(): any {
+    get validationError(): any | null {
         return this._getOption('validationError');
     }
-    set validationError(value: any) {
+    set validationError(value: any | null) {
         this._setOption('validationError', value);
     }
 
@@ -484,10 +484,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get validationErrors(): Array<any> {
+    get validationErrors(): Array<any> | null {
         return this._getOption('validationErrors');
     }
-    set validationErrors(value: Array<any>) {
+    set validationErrors(value: Array<any> | null) {
         this._setOption('validationErrors', value);
     }
 
@@ -536,10 +536,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get value(): any {
+    get value(): any | null {
         return this._getOption('value');
     }
-    set value(value: any) {
+    set value(value: any | null) {
         this._setOption('value', value);
     }
 
@@ -549,10 +549,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get variables(): dxHtmlEditorVariables {
+    get variables(): dxHtmlEditorVariables | null {
         return this._getOption('variables');
     }
-    set variables(value: dxHtmlEditorVariables) {
+    set variables(value: dxHtmlEditorVariables | null) {
         this._setOption('variables', value);
     }
 
@@ -748,14 +748,14 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() mediaResizingChange: EventEmitter<dxHtmlEditorMediaResizing>;
+    @Output() mediaResizingChange: EventEmitter<dxHtmlEditorMediaResizing | null>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() mentionsChange: EventEmitter<Array<dxHtmlEditorMention>>;
+    @Output() mentionsChange: EventEmitter<Array<dxHtmlEditorMention> | null>;
 
     /**
     
@@ -804,35 +804,35 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tableContextMenuChange: EventEmitter<dxHtmlEditorTableContextMenu>;
+    @Output() tableContextMenuChange: EventEmitter<dxHtmlEditorTableContextMenu | null>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tableResizingChange: EventEmitter<dxHtmlEditorTableResizing>;
+    @Output() tableResizingChange: EventEmitter<dxHtmlEditorTableResizing | null>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() toolbarChange: EventEmitter<dxHtmlEditorToolbar>;
+    @Output() toolbarChange: EventEmitter<dxHtmlEditorToolbar | null>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationErrorChange: EventEmitter<any>;
+    @Output() validationErrorChange: EventEmitter<any | null>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationErrorsChange: EventEmitter<Array<any>>;
+    @Output() validationErrorsChange: EventEmitter<Array<any> | null>;
 
     /**
     
@@ -860,14 +860,14 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChange: EventEmitter<any>;
+    @Output() valueChange: EventEmitter<any | null>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() variablesChange: EventEmitter<dxHtmlEditorVariables>;
+    @Output() variablesChange: EventEmitter<dxHtmlEditorVariables | null>;
 
     /**
     

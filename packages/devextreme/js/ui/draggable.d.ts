@@ -219,28 +219,28 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
     dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: DxElement) => string | UserDefinedElement) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/draggable:DragEndEvent}
      * @action
      * @public
      */
-    onDragEnd?: ((e: DragEndEvent) => void);
+    onDragEnd?: ((e: DragEndEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/draggable:DragMoveEvent}
      * @action
      * @public
      */
-    onDragMove?: ((e: DragMoveEvent) => void);
+    onDragMove?: ((e: DragMoveEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/draggable:DragStartEvent}
      * @action
      * @public
      */
-    onDragStart?: ((e: DragStartEvent) => void);
+    onDragStart?: ((e: DragStartEvent) => void) | undefined;
 }
 /**
  * @docid

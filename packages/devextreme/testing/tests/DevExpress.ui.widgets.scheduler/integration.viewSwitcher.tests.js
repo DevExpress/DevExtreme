@@ -15,7 +15,7 @@ const DataSource = require('common/data/data_source/data_source').DataSource;
 const { createWrapper } = require('../../helpers/scheduler/helpers.js');
 const { waitAsync } = require('../../helpers/scheduler/waitForAsync.js');
 
-require('__internal/scheduler/m_scheduler');
+require('__internal/scheduler/scheduler');
 
 QUnit.module('Integration: View switcher', () => {
     QUnit.test('dataSource should be filtered if \'currentView\' option is changed', async function(assert) {

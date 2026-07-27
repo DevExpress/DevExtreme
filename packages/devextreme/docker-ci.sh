@@ -28,7 +28,7 @@ function run_test {
     local i
     local status
 
-    for i in {1..3}; do
+    for i in {1..1}; do
         set +e
         (set -e; run_test_impl); status=$?
         set -e
@@ -237,14 +237,18 @@ function start_runner_watchdog {
                 fi
             else
                 local current_time=$(cat $last_suite_time_file)
-                
+                local now_epoch=$(date +%s)
+                local current_epoch=$(date -d "$current_time" +%s 2>/dev/null || echo $now_epoch)
+                local idle_seconds=$((now_epoch - current_epoch))
+
                 if [ -z "$last_suite_time" ]; then
+                    echo "Watchdog [check #$check_count]: monitoring started - LastSuiteTime: $current_time (idle ${idle_seconds}s)"
                     last_suite_time=$current_time
                     stall_count=0
                 elif [ "$current_time" == "$last_suite_time" ]; then
                     stall_count=$((stall_count + 1))
-                    echo "Watchdog [check #$check_count]: STALL DETECTED (attempt $stall_count/3) - LastSuiteTime unchanged: $last_suite_time"
-                    
+                    echo "Watchdog [check #$check_count]: STALL DETECTED (attempt $stall_count/3) - LastSuiteTime unchanged: $last_suite_time (idle ${idle_seconds}s)"
+
                     if [ $stall_count -ge 3 ]; then
                         echo "========================================="
                         echo "WATCHDOG TIMEOUT: Runner stalled for 9 minutes (3 checks × 3 min)"
@@ -270,7 +274,7 @@ function start_runner_watchdog {
                         exit 1
                     fi
                 else
-                    echo "Watchdog [check #$check_count]: Progress detected - LastSuiteTime: $last_suite_time → $current_time"
+                    echo "Watchdog [check #$check_count]: Progress detected - LastSuiteTime: $last_suite_time → $current_time (idle ${idle_seconds}s)"
                     last_suite_time=$current_time
                     stall_count=0
                 fi

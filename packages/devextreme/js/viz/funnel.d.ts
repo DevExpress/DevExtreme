@@ -518,42 +518,42 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     neckWidth?: number;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/funnel:HoverChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onHoverChanged?: ((e: HoverChangedEvent) => void);
+    onHoverChanged?: ((e: HoverChangedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type function
      * @type_function_param1 e:{viz/funnel:ItemClickEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onItemClick?: ((e: ItemClickEvent) => void) | string;
+    onItemClick?: ((e: ItemClickEvent) => void) | string | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type function
      * @type_function_param1 e:{viz/funnel:LegendClickEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onLegendClick?: ((e: LegendClickEvent) => void) | string;
+    onLegendClick?: ((e: LegendClickEvent) => void) | string | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/funnel:SelectionChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void) | undefined;
     /**
      * @docid
      * @default "Material"

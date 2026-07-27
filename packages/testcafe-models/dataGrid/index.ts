@@ -177,6 +177,19 @@ export default class DataGrid extends GridCore {
     return this.getHeadersContainer().find(`.${CLASS.scrollContainer}`);
   }
 
+  async getHeaderCellWidths(): Promise<number[]> {
+    const cells = this.getHeaders().getHeaderRow(0).getHeaderCells();
+    const count = await cells.count;
+    const widths: number[] = [];
+
+    for (let i = 0; i < count; i += 1) {
+      const { width } = await cells.nth(i).boundingClientRect;
+      widths.push(Math.round(width));
+    }
+
+    return widths;
+  }
+
   getRowsView(): Selector {
     return this.element.find(`.${this.addWidgetPrefix(CLASS.rowsView)}`);
   }
@@ -434,6 +447,32 @@ export default class DataGrid extends GridCore {
     )();
   }
 
+  isScrolledToBottom(): Promise<boolean> {
+    const { getInstance } = this;
+    return ClientFunction(() => {
+      const scrollable = (getInstance() as any).getScrollable();
+
+      if (!scrollable) {
+        return false;
+      }
+
+      return scrollable.scrollHeight() - scrollable.clientHeight() - scrollable.scrollTop() <= 1;
+    }, { dependencies: { getInstance } })();
+  }
+
+  isScrolledToRight(): Promise<boolean> {
+    const { getInstance } = this;
+    return ClientFunction(() => {
+      const scrollable = (getInstance() as any).getScrollable();
+
+      if (!scrollable) {
+        return false;
+      }
+
+      return scrollable.scrollWidth() - scrollable.clientWidth() - scrollable.scrollLeft() <= 1;
+    }, { dependencies: { getInstance } })();
+  }
+
   getScrollbarWidth(isHorizontal: boolean): Promise<number> {
     const { getInstance } = this;
 
@@ -614,9 +653,25 @@ export default class DataGrid extends GridCore {
   apiGetTopVisibleRowData(): Promise<any> {
     const { getInstance } = this;
     return ClientFunction(() => {
-      const dataGrid = getInstance() as any;
-      return dataGrid.getTopVisibleRowData();
+      return (getInstance() as any).getTopVisibleRowData();
     }, { dependencies: { getInstance } })();
+  }
+
+  apiGetTopVisibleRowKey(): Promise<any> {
+    const { getInstance } = this;
+    return ClientFunction(() => {
+      const dataGrid = getInstance() as any;
+
+      return dataGrid.keyOf(dataGrid.getTopVisibleRowData());
+    }, { dependencies: { getInstance } })();
+  }
+
+  apiTotalCount(): Promise<number> {
+    const { getInstance } = this;
+    return ClientFunction(
+      () => (getInstance() as DataGridInstance).totalCount(),
+      { dependencies: { getInstance } },
+    )();
   }
 
   apiUpdateDimensions(): Promise<void> {

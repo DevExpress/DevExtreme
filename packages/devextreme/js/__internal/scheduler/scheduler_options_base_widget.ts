@@ -1,5 +1,6 @@
 import Widget from '@js/ui/widget/ui.widget';
 import { extend } from '@ts/core/utils/m_extend';
+import type { OptionChanged } from '@ts/core/widget/types';
 
 import {
   DEFAULT_SCHEDULER_INTEGRATION_OPTIONS,
@@ -17,6 +18,8 @@ import { SchedulerOptionsValidator, SchedulerOptionsValidatorErrorsHandler } fro
 import timeZoneUtils from './utils_time_zone';
 
 export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
+  declare _disposed?: boolean;
+
   protected views: NormalizedView[] = [];
 
   public currentView!: NormalizedView;
@@ -66,10 +69,7 @@ export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
     this.validateOptions();
   }
 
-  protected schedulerOptionChanged<K extends keyof SafeSchedulerOptions>(args: {
-    name: K;
-    value: SafeSchedulerOptions[K];
-  }): void {
+  protected schedulerOptionChanged(args: OptionChanged<SafeSchedulerOptions>): void {
     switch (args.name) {
       case 'currentView':
       case 'views':

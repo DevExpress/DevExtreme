@@ -19,7 +19,7 @@ import {
 import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 import 'fluent_blue_light.css!';
-import '__internal/scheduler/m_scheduler';
+import '__internal/scheduler/scheduler';
 
 const {
     testStart,

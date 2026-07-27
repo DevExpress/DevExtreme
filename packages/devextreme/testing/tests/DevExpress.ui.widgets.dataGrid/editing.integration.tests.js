@@ -7203,7 +7203,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
 
         // assert
         assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
-        assert.deepEqual(dataGrid.option('editing.editRowKey'), null, 'editRowKey is empty');
+        assert.deepEqual(dataGrid.option('editing.editRowKey'), undefined, 'editRowKey is empty');
     });
 
 

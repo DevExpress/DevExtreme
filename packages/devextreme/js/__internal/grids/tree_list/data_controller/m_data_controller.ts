@@ -95,6 +95,12 @@ export class TreeListDataController extends DataController {
     return super.publicMethods().concat(['expandRow', 'collapseRow', 'isRowExpanded', 'getRootNode', 'getNodeByKey', 'loadDescendants', 'forEachNode']);
   }
 
+  protected override needUpdateDimensions(operationTypes) {
+    return super.needUpdateDimensions(operationTypes) || (
+      operationTypes && operationTypes.nodeExpanding
+    );
+  }
+
   private changeRowExpand(key) {
     if (this._dataSource) {
       const args: any = {
@@ -221,8 +227,6 @@ treeListCore.registerModule('data', {
       filterMode: 'withAncestors',
       expandNodesOnFiltering: true,
       autoExpandAll: false,
-
-      onNodesInitialized: null,
       maxFilterLengthInRequest: 1500,
       paging: {
         enabled: false,

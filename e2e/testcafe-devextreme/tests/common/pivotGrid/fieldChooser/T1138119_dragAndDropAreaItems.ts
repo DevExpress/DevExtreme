@@ -6,7 +6,7 @@ import { MouseAction, MouseUpEvents } from '../../../../helpers/mouseUpEvents';
 import { testScreenshot } from '../../../../helpers/themeUtils';
 import { DRAG_MOUSE_OPTIONS } from '../const';
 
-fixture.disablePageReloads`pivotGrid_fieldChooser_drag-and-drop_T1138119 `
+fixture`pivotGrid_fieldChooser_drag-and-drop_T1138119 `
   .page(url(__dirname, '../../../container.html'));
 
 test('Drag-n-drop the tree view item in all directions', async (t) => {

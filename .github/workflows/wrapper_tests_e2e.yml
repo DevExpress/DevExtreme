@@ -9,8 +9,7 @@ on:
     paths-ignore:
       - 'apps/**/*.md'
   push:
-    branches: [24_2, 25_*]
-  merge_group:
+    branches: [24_2, 25_*, 26_*]
   workflow_dispatch:
 
 env:
@@ -57,10 +56,10 @@ jobs:
             .nx/workspace-data/*.db
             .nx/workspace-data/*.db-wal
             .nx/workspace-data/*.db-shm
-          key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+          key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-            ${{ runner.os }}-nx-v2-${{ github.sha }}-
+            ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
+            ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
             ${{ runner.os }}-nx-v2-
 
           lookup-only: true
@@ -91,10 +90,10 @@ jobs:
             .nx/workspace-data/*.db
             .nx/workspace-data/*.db-wal
             .nx/workspace-data/*.db-shm
-          key: ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-${{ github.run_attempt }}
+          key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-nx-v2-${{ github.sha }}-${{ github.workflow }}-${{ github.job }}-
-            ${{ runner.os }}-nx-v2-${{ github.sha }}-
+            ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
+            ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
             ${{ runner.os }}-nx-v2-
 
       - name: Build all DevExtreme packages
@@ -143,7 +142,7 @@ jobs:
       - name: Setup Chrome
         uses: ./.github/actions/setup-chrome
         with:
-          chrome-version: '149.0.7827.114'
+          chrome-version: '150.0.7871.181'
 
       - name: Use Node.js
         uses: actions/setup-node@v6

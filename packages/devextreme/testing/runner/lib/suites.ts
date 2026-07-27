@@ -12,7 +12,6 @@ import {
 } from './types';
 
 export interface GetAllSuitesOptions {
-  deviceMode: boolean;
   constellation: ConstellationFilter;
   includeCategories: ReadonlySet<string> | null;
   excludeCategories: ReadonlySet<string> | null;
@@ -35,8 +34,6 @@ interface SuitesServiceOptions {
 
 interface CategoryMetaPayload {
   constellation?: string | number | boolean;
-  explicit?: unknown;
-  runOnDevices?: unknown;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -77,8 +74,6 @@ function readCategoryMeta(metaPath: string): CategoryMetaPayload {
 
   return {
     constellation: constellationValue,
-    explicit: parsed.explicit,
-    runOnDevices: parsed.runOnDevices,
   };
 }
 
@@ -133,7 +128,6 @@ export function createSuitesService({
   }
 
   function getAllSuites({
-    deviceMode,
     constellation,
     includeCategories,
     excludeCategories,
@@ -146,19 +140,11 @@ export function createSuitesService({
     const result: SuiteInfo[] = [];
 
     readCategories().forEach((category) => {
-      if (deviceMode && !category.RunOnDevices) {
-        return;
-      }
-
       if (constellation !== '' && category.Constellation !== constellation) {
         return;
       }
 
       if (includeSpecified && !includeCategories?.has(category.Name)) {
-        return;
-      }
-
-      if (category.Explicit && !includeCategories?.has(category.Name)) {
         return;
       }
 
@@ -205,8 +191,6 @@ export function createSuitesService({
     return {
       Name: name,
       Constellation: parseConstellation(meta.constellation, metaPath, knownConstellations),
-      Explicit: Boolean(meta.explicit),
-      RunOnDevices: Boolean(meta.runOnDevices),
     };
   }
 
