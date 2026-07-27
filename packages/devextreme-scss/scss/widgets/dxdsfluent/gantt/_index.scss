@@ -10,12 +10,13 @@
 @use "../../base/gantt/mixins" as *;
 @use "../gridBase/colors" as *;
 @use "../form/sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 @use "../splitterBar";
 
 
-$gantt-successor-background-color: white;
+$gantt-successor-background-color: ds.$color-surface-neutral-default-static-light-rest;
 
 .dx-gantt {
   border: $gantt-root-border;

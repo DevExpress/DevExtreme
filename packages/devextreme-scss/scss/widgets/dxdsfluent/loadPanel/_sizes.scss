@@ -11,5 +11,5 @@ $load-panel-box-shadow: 0 ds.$spacing-80 ds.$spacing-160 0 color.change($base-sh
 
 // Base-layer sizing injected with design tokens (wave B2)
 $fluent-loadpanel-content-padding: ds.$spacing-100 !default;
-$fluent-loadpanel-content-border: ds.$border-width-10 solid #ccc !default;
+$fluent-loadpanel-content-border: ds.$border-width-10 solid ds.$color-border-neutral-default-rest !default;
 $fluent-loadpanel-content-border-radius: ds.$border-radius-50 !default;

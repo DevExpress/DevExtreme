@@ -242,7 +242,9 @@ Object.values(FRAMEWORKS).forEach((approach) => {
           // dxdsfluent shares fluent's structure/ARIA (already covered by the fluent run),
           // so only color-contrast is re-checked for it across the demos.
           const isDesignSystemFluent = process.env.THEME?.startsWith('dxdsfluent');
-          const options = isDesignSystemFluent ? { runOnly: 'color-contrast', rules: {} } : { rules: {} };
+          const options = isDesignSystemFluent
+            ? { runOnly: { type: 'rule' as const, values: ['color-contrast'] }, rules: {} }
+            : { rules: {} };
 
           ignoredRules.forEach((ruleName) => {
             options.rules[ruleName] = { enabled: false };

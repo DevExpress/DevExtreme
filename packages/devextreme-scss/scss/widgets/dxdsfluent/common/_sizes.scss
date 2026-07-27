@@ -18,12 +18,12 @@ $fluent-valid-badge-font-size: calc(#{$fluent-base-font-size} + 6px) !default;
 $fluent-base-dropdown-widgets-shadow: null !default;
 
 @if $size == "default" {
-  $fluent-line-height: 1.428571 !default;
+  $fluent-line-height: 1.428571 !default; // dx-relative: unitless ratio, no line-height-ratio scale in package
   $fluent-base-dropdown-widgets-shadow: 0 0 ds.$spacing-20 0 $base-dropdown-shadow-color1, 0 ds.$spacing-80 ds.$spacing-160 0 $base-dropdown-shadow-color2 !default;
 }
 
 @else if $size == "compact" {
-  $fluent-line-height: 1.3333 !default;
+  $fluent-line-height: 1.3333 !default; // dx-relative
   $fluent-base-dropdown-widgets-shadow: 0 0 ds.$spacing-20 0 $base-dropdown-shadow-color1, 0 ds.$spacing-40 ds.$spacing-80 0 $base-dropdown-shadow-color2 !default;
 }
 

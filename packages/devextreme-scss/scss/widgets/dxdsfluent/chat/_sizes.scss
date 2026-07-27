@@ -76,13 +76,13 @@ $chat-confirmation-popup-toolbar-padding-block: $fluent-popup-content-withtitle-
 $chat-confirmation-popup-toolbar-padding-inline: $fluent-popup-content-withtitle-top-padding !default;
 $chat-confirmation-popup-toolbar-gap: null !default;
 
-$chat-file-container-width: 17.14em !default;
+$chat-file-container-width: 17.14em !default; // dx-relative: proportional to chat font-size, no em scale in package
 $chat-file-container-padding: ds.$spacing-70 ds.$spacing-80 !default;
 $chat-file-container-border-radius: $fluent-base-border-radius !default;
 $chat-file-button-size: $fluent-button-height !default;
 $chat-file-secondary-font-size: ds.$font-size-caption-sm !default;
 $chat-file-base-section-gap: ds.$spacing-40 !default;
-$chat-file-size-max-width: 4em !default;
+$chat-file-size-max-width: 4em !default; // dx-relative
 $chat-file-icon-font-size: null !default;
 $chat-file-view-items-gap: ds.$spacing-80 !default;
 $chat-bubble-gap: ds.$spacing-80 !default;

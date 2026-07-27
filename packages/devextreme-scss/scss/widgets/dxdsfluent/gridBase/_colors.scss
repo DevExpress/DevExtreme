@@ -11,7 +11,7 @@ $datagrid-border-color: ds.$color-border-neutral-default-rest !default;
 
 $datagrid-columnchooser-item-color: $datagrid-base-color !default;
 
-$datagrid-columnchooser-font-weight: 600 !default;
+$datagrid-columnchooser-font-weight: ds.$font-weight-base-strong !default;
 
 $datagrid-drag-header-border-color: rgb(from #{ds.$color-border-primary-default-rest} r g b / 0.5) !default;
 $datagrid-drag-header-shadow-color: ds.$color-shadow-ambient !default;

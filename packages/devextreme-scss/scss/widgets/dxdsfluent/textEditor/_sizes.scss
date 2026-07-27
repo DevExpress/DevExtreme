@@ -24,7 +24,7 @@ $fluent-filled-texteditor-input-with-label-bottom-padding: null !default;
 $texteditor-icon-container-size: $fluent-base-icon-size !default;
 
 @if $size == "default" {
-  $fluent-texteditor-line-height: 1.428571 !default;
+  $fluent-texteditor-line-height: 1.428571 !default; // dx-relative: unitless ratio, no line-height-ratio scale in package
   $fluent-texteditor-font-size: ds.$font-size-base-md !default;
   $fluent-texteditor-input-height: ds.$spacing-320 !default;
   $fluent-texteditor-label-outside-height: ds.$spacing-200 !default;
@@ -44,7 +44,7 @@ $texteditor-icon-container-size: $fluent-base-icon-size !default;
 }
 
 @else if $size == "compact" {
-  $fluent-texteditor-line-height: 1.3333 !default;
+  $fluent-texteditor-line-height: 1.3333 !default; // dx-relative
   $fluent-texteditor-font-size: ds.$font-size-base-sm !default;
   $fluent-texteditor-input-height: ds.$spacing-240 !default;
   $fluent-texteditor-label-outside-height: ds.$spacing-160 !default;
