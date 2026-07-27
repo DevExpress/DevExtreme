@@ -1,0 +1,31 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$fluent-main-fa-button-label-padding: null !default;
+$fluent-main-fa-button-horizontal-padding: null !default;
+$fluent-main-fa-button-size: null !default;
+$fluent-fa-button-size: null !default;
+
+@if $size == "default" {
+  $fluent-main-fa-button-size: ds.$spacing-440 !default;
+  $fluent-fa-button-size: ds.$spacing-440 !default;
+  $fluent-main-fa-button-horizontal-padding: ds.$spacing-160;
+  $fluent-main-fa-button-label-padding: 0 $fluent-main-fa-button-horizontal-padding 0 ds.$spacing-80;
+}
+
+@else if $size == "compact" {
+  $fluent-main-fa-button-size: ds.$spacing-320 !default;
+  $fluent-fa-button-size: ds.$spacing-320 !default;
+  $fluent-main-fa-button-horizontal-padding: ds.$spacing-120;
+  $fluent-main-fa-button-label-padding: 0 $fluent-main-fa-button-horizontal-padding 0 ds.$spacing-40;
+}
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-fa-button-label-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)
+$fluent-fa-button-label-offset: ds.$spacing-160 !default;
+$fluent-fa-button-label-padding: ds.$spacing-40 ds.$spacing-80 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-speeddialaction-fa-button-label-border-radius: ds.$border-radius-40 !default;

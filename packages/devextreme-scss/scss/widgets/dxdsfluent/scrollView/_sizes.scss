@@ -1,0 +1,28 @@
+@use "../../../_design-system/variables/ds" as ds;
+@use "../sizes" as *;
+
+// adduse
+
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-scrollview-load-indicator-font-size: ds.$font-size-240 !default; // dx-icon-glyph-size: text roles not applicable
+$fluent-scrollview-pull-down-text-margin-left: ds.$spacing-100 !default;
+$fluent-scrollview-rtl-margin-right: ds.$spacing-100 !default;
+$fluent-scrollview-scrollbottom-image-width: ds.$spacing-240 !default;
+$fluent-scrollview-scrollbottom-image-height: ds.$spacing-240 !default;
+$scrollview-loading-indicator-size: 42px !default; // dx-offscale: 42px
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-scrollview-pulldown-icon-font-size: ds.$font-size-240 !default; // dx-icon-glyph-size: text roles not applicable
+
+// Base-layer sizing injected with design tokens (wave B2)
+$fluent-scrollview-top-pocket-width: ds.$spacing-400 !default;
+$fluent-scrollview-top-pocket-height: ds.$spacing-400 !default;
+$fluent-scrollview-pull-down-indicator-padding: ds.$spacing-40 !default;
+$fluent-scrollview-icon-pulldown-padding: ds.$spacing-80 !default;
+$fluent-scrollview-pull-down-indicator-width: ds.$spacing-200 !default;
+$fluent-scrollview-pull-down-image-margin: 0 ds.$spacing-200 !default;
+$fluent-scrollview-pull-down-image-height: 50px !default; // dx-offscale: 50px
+$fluent-scrollview-scrollbottom-padding: ds.$spacing-100 0 !default;
+$fluent-scrollview-scrollbottom-indicator-margin: 0 ds.$spacing-100 0 0 !default;
+$fluent-scrollview-scrollbottom-indicator-margin-2: 0 0 0 ds.$spacing-100 !default;
