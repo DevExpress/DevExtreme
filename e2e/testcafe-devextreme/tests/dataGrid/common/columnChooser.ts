@@ -8,10 +8,6 @@ import { testScreenshot } from '../../../helpers/themeUtils';
 fixture.disablePageReloads`Column chooser`
   .page(url(__dirname, '../../container.html'));
 
-// visual: generic.light
-// visual: material.blue.light
-// visual: fluent.blue.light
-// visual: fluent.blue.dark
 ['dragAndDrop', 'select'].forEach((mode: any) => {
   test(`Column chooser screenshot in mode=${mode}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -49,8 +45,6 @@ fixture.disablePageReloads`Column chooser`
   }));
 });
 
-// visual: fluent.blue.light
-// visual: fluent.blue.dark
 test('Empty column chooser', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   // arrange
