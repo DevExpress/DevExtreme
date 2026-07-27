@@ -26,7 +26,12 @@ $speeddialaction-fa-button-label-border-radius: 4px !default;
   $speed-dial-action-active-bg,
   $speed-dial-action-label-shadow,
   $button-default-bg,
-  $button-default-color
+  $button-default-color,
+  // Optional overrides for the main-button hover/active backgrounds. When null (all
+  // legacy callers), they are derived from $button-default-bg via color.adjust() as
+  // before; themes whose bg is a var() token pass ready state values instead.
+  $button-default-hover-bg: null,
+  $button-default-active-bg: null
 ) {
   $fa-main-radius: if(meta.type-of($main-action-button-size) == number, math.div($main-action-button-size, 2), calc(#{$main-action-button-size} / 2));
   $fa-action-radius: if(meta.type-of($action-button-size) == number, math.div($action-button-size, 2), calc(#{$action-button-size} / 2));
@@ -49,7 +54,7 @@ $speeddialaction-fa-button-label-border-radius: 4px !default;
         box-shadow: $speed-dial-action-shadow;
 
         &.dx-state-hover {
-          background-color: color.adjust($button-default-bg, $lightness: -10%, $space: hsl);
+          background-color: if($button-default-hover-bg != null, $button-default-hover-bg, color.adjust($button-default-bg, $lightness: -10%, $space: hsl));
 
           .dx-fa-button-icon {
             background-color: transparent;
@@ -57,7 +62,7 @@ $speeddialaction-fa-button-label-border-radius: 4px !default;
         }
 
         &.dx-state-active {
-          background-color: color.adjust($button-default-bg, $lightness: -15%, $space: hsl);
+          background-color: if($button-default-active-bg != null, $button-default-active-bg, color.adjust($button-default-bg, $lightness: -15%, $space: hsl));
 
           .dx-fa-button-icon {
             background-color: transparent;

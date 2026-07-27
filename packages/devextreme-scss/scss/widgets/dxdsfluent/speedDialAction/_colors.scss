@@ -1,4 +1,3 @@
-@use "../colors" as *;
 @use "../overlay/colors" as *;
 @use "../button/colors" as *;
 @use "../../../_design-system/variables/ds" as ds;
@@ -14,5 +13,6 @@ $speed-dial-action-bg: $button-normal-bg !default;
 $speed-dial-action-hover-bg: $button-normal-hover-bg !default;
 $speed-dial-action-active-bg: $button-normal-active-bg !default;
 
-// Stays a Sass color: the shared base mixin derives hover/active from it via color.adjust() — see TOKENS_MIGRATION.md
-$speed-dial-action-main-bg: $base-accent !default;
+$speed-dial-action-main-bg: ds.$color-surface-primary-default-rest !default;
+$speed-dial-action-main-hover-bg: ds.$color-surface-primary-default-hovered !default;
+$speed-dial-action-main-active-bg: ds.$color-surface-primary-default-active !default;

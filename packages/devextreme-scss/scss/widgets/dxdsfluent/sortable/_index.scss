@@ -1,5 +1,3 @@
-@use "../colors" as *;
-@use "sass:color";
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
@@ -10,7 +8,7 @@
   $sortable-clone-shadow-color-second: $fluent-sortable-clone-shadow-color-second,
   $sortable-clone-opacity: $fluent-sortable-clone-opacity,
   $sortable-source-opacity: $fluent-sortable-source-opacity,
-    $base-accent: $base-accent,
+  $base-accent: $fluent-sortable-accent-border-color,
 );
 
 // adduse
