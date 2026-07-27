@@ -1,0 +1,149 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$datagrid-border-radius: 0 !default;
+
+$fluent-grid-base-cell-height: null !default;
+$fluent-grid-base-header-height: null !default;
+$fluent-grid-base-cell-line-height: null !default;
+$fluent-grid-base-cell-font-size: null !default;
+$fluent-grid-base-checkbox-size: null !default;
+$fluent-grid-base-cell-horizontal-padding: null !default;
+$fluent-grid-base-texteditor-input-padding: null !default;
+$fluent-grid-base-menu-item-padding: null !default;
+$fluent-grid-base-column-chooser-horizontal-padding: null !default;
+$fluent-grid-base-column-chooser-paddings: null !default;
+$fluent-grid-base-header-panel-padding: null !default;
+$fluent-grid-base-grouppanel-item-margin: null !default;
+$fluent-grid-base-command-edit-column-width: null !default;
+$fluent-grid-base-command-edit-column-with-icons-width: null !default;
+$fluent-grid-base-adaptive-column-height: null !default;
+$fluent-grid-base-treeview-search-margin: null !default;
+$fluent-grid-base-nodata-font-size: null !default;
+$fluent-filter-row-between-editor-padding: null !default;
+$fluent-command-column-additional-right-margin: null !default;
+$fluent-grid-base-treeview-select-all-item-offset: null !default;
+
+$fluent-grid-base-header-line-height: ds.$line-height-180 !default; // dx-no-semantic-role: 180 is off the line-height-role scale
+$fluent-grid-base-header-icon-size: null !default;
+$fluent-grid-base-header-icon-container-size: ds.$spacing-200 !default;
+$fluent-grid-base-column-chooser-item-margin: ds.$spacing-80 !default;
+$fluent-command-edit-icon-margin: ds.$spacing-40 !default;
+$fluent-command-edit-text-margin: ds.$spacing-20 !default;
+
+$fluent-command-edit-icon-size: null !default;
+$fluent-filter-panel-icon-size: null !default;
+
+$fluent-grid-base-filter-icon-size: $fluent-button-icon-size !default;
+$fluent-grid-base-command-ai-chatsparkleoutline-icon-size: null !default;
+$fluent-grid-base-command-ai-text-content-padding: null !default;
+$fluent-grid-base-command-ai-header-button-offset: null !default;
+$fluent-grid-base-ai-prompt-editor-progressbar-height: ds.$spacing-40 !default;
+
+@if $size == "default" {
+  $fluent-grid-base-cell-height: ds.$spacing-480 !default;
+  $fluent-grid-base-header-height: ds.$spacing-480 !default;
+  $fluent-grid-base-cell-line-height: ds.$line-height-base-md !default;
+  $fluent-grid-base-cell-font-size: ds.$font-size-base-md !default;
+
+  $fluent-grid-base-checkbox-size: ds.$spacing-180 !default;
+  $fluent-grid-base-cell-horizontal-padding: ds.$spacing-160 !default;
+
+  $fluent-grid-base-texteditor-input-padding: ds.$spacing-400 !default;
+  $fluent-grid-base-menu-item-padding: ds.$spacing-110 ds.$spacing-40 !default;
+  $fluent-grid-base-column-chooser-horizontal-padding: ds.$spacing-240 !default;
+  $fluent-grid-base-column-chooser-paddings: ds.$spacing-160 $fluent-grid-base-column-chooser-horizontal-padding ds.$spacing-90 !default;
+  $fluent-grid-base-header-panel-padding: ds.$spacing-80 0 !default;
+  $fluent-grid-base-grouppanel-item-margin: ds.$spacing-60 !default;
+
+  $fluent-grid-base-command-edit-column-width: 115px !default; // dx-offscale: 115px
+  $fluent-grid-base-command-edit-column-with-icons-width: 93px !default; // dx-offscale: 93px
+  $fluent-grid-base-adaptive-column-height: ds.$spacing-400 !default;
+  $fluent-grid-base-treeview-search-margin: ds.$spacing-100 !default;
+  $fluent-grid-base-nodata-font-size: ds.$spacing-170 !default;
+
+  $fluent-filter-row-between-editor-padding: ds.$spacing-120 !default;
+  $fluent-command-column-additional-right-margin: 0 !default;
+
+  $fluent-grid-base-treeview-select-all-item-offset: ds.$spacing-340 !default;
+
+  $fluent-grid-base-header-icon-size: ds.$spacing-200 !default;
+  $fluent-command-edit-icon-size: ds.$spacing-200 !default;
+  $fluent-filter-panel-icon-size: ds.$spacing-200 !default;
+  $fluent-grid-base-command-ai-chatsparkleoutline-icon-size: ds.$spacing-200 !default;
+  $fluent-grid-base-command-ai-text-content-padding: calc(#{$fluent-grid-base-command-ai-chatsparkleoutline-icon-size} + 8px) !default;
+  $fluent-grid-base-command-ai-header-button-offset: ds.$spacing-80 !default;
+}
+
+@else if $size == "compact" {
+  $fluent-grid-base-cell-height: ds.$spacing-360 !default;
+  $fluent-grid-base-header-height: ds.$spacing-360 !default;
+  $fluent-grid-base-cell-line-height: ds.$line-height-base-sm !default;
+  $fluent-grid-base-cell-font-size: ds.$font-size-base-sm !default;
+
+  $fluent-grid-base-checkbox-size: ds.$spacing-160 !default;
+  $fluent-grid-base-cell-horizontal-padding: ds.$spacing-110 !default;
+
+  $fluent-grid-base-texteditor-input-padding: ds.$spacing-360 !default;
+  $fluent-grid-base-menu-item-padding: ds.$spacing-80 ds.$spacing-40 !default;
+  $fluent-grid-base-column-chooser-horizontal-padding: ds.$spacing-80 !default;
+  $fluent-grid-base-column-chooser-paddings: ds.$spacing-80 $fluent-grid-base-column-chooser-horizontal-padding ds.$spacing-80 !default;
+  $fluent-grid-base-header-panel-padding: ds.$spacing-60 0 !default;
+  $fluent-grid-base-grouppanel-item-margin: ds.$spacing-60 !default;
+
+  $fluent-grid-base-command-edit-column-width: 105px !default; // dx-offscale: 105px
+  $fluent-grid-base-command-edit-column-with-icons-width: ds.$spacing-800 !default;
+  $fluent-grid-base-adaptive-column-height: ds.$spacing-260 !default;
+  $fluent-grid-base-treeview-search-margin: ds.$spacing-100 !default;
+  $fluent-grid-base-nodata-font-size: ds.$font-size-base-md !default;
+
+  $fluent-filter-row-between-editor-padding: ds.$spacing-80 !default;
+  $fluent-command-column-additional-right-margin: ds.$spacing-20 !default;
+
+  $fluent-grid-base-treeview-select-all-item-offset: ds.$spacing-280 !default;
+
+  $fluent-grid-base-header-icon-size: ds.$spacing-160 !default;
+  $fluent-command-edit-icon-size: ds.$spacing-160 !default;
+  $fluent-filter-panel-icon-size: ds.$spacing-160 !default;
+  $fluent-grid-base-command-ai-chatsparkleoutline-icon-size: ds.$spacing-160 !default;
+  $fluent-grid-base-command-ai-text-content-padding: calc(#{$fluent-grid-base-command-ai-chatsparkleoutline-icon-size} + 6px) !default;
+  $fluent-grid-base-command-ai-header-button-offset: ds.$spacing-60 !default;
+}
+
+$fluent-grid-base-header-cell-font-size: $fluent-grid-base-cell-font-size !default;
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-grid-base-icon-button-border-radius: ds.$border-radius-20 !default;
+$fluent-grid-base-root-margin-left: ds.$spacing-50 !important !default;
+$fluent-grid-base-icon-margin: 0 ds.$spacing-30 !default;
+$fluent-grid-base-icon-filter-operation-default-margin-top: ds.$spacing-20 !default;
+$fluent-grid-base-sort-index-icon-padding-right: ds.$spacing-40 !default;
+$fluent-grid-base-sort-index-icon-margin-left: -1px !default; // dx-offscale: -1px
+$fluent-grid-base-sort-index-icon-bottom: ds.$spacing-10 !default;
+$fluent-grid-base-sort-index-icon-margin-left-219: ds.$spacing-40 !default;
+$fluent-grid-base-error-message-padding-right: 35px !default; // dx-offscale: 35px
+$fluent-grid-base-treeview-node-padding-left: ds.$spacing-200 !default;
+$fluent-grid-base-column-chooser-list-item-margin: ds.$spacing-20 ds.$spacing-20 $fluent-grid-base-column-chooser-item-margin ds.$spacing-20 !default;
+$fluent-grid-base-column-chooser-item-height: ds.$spacing-20 !default;
+$fluent-grid-base-after-right: ds.$spacing-10 !default;
+$fluent-grid-base-overlay-content-padding: ds.$spacing-90 ds.$spacing-170 ds.$spacing-90 !default;
+$fluent-grid-base-revert-button-margin: 0 0 0 ds.$spacing-10 !default;
+$fluent-grid-base-content-padding: ds.$spacing-80 ds.$spacing-80 0 ds.$spacing-80 !default;
+$fluent-grid-base-content-padding-993: ds.$spacing-180 $fluent-grid-base-cell-horizontal-padding !default;
+$fluent-grid-base-header-row-padding-top: ds.$spacing-120 !default;
+$fluent-grid-base-header-row-padding-bottom: ds.$spacing-120 !default;
+$fluent-grid-base-validation-pending-padding: 0 ds.$spacing-40 0 ds.$spacing-80 !default;
+$fluent-grid-base-row-removed-border-top: ds.$border-width-10 solid !default;
+$fluent-grid-base-row-removed-border-bottom: ds.$border-width-10 solid !default;
+$fluent-grid-base-popup-title-border-bottom: ds.$border-width-10 solid !default;
+$fluent-grid-base-row-focused-border-top: ds.$border-width-10 solid !default;
+$fluent-grid-base-row-lines-border-top: ds.$border-width-10 solid !default;
+$fluent-grid-base-row-lines-border-bottom: ds.$border-width-10 solid !default;
+$fluent-grid-base-row-lines-border-left: ds.$border-width-10 solid !default;
+$fluent-grid-base-pointer-events-none-border-right: ds.$border-width-10 solid !default;
+$fluent-grid-base-border-hidden: ds.$border-width-10 solid transparent !default;
+$fluent-grid-base-row-border: ds.$border-width-10 solid transparent !default;
+$fluent-grid-base-link-icon-min-width: ds.$spacing-200 !default;
+$fluent-grid-base-texteditor-input-border-bottom-width: ds.$border-width-10 !default;

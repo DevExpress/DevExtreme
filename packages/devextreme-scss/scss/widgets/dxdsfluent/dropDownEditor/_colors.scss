@@ -1,0 +1,10 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$dropdowneditor-icon-color: ds.$color-content-neutral-subdued-rest !default;
+
+$dropdowneditor-icon-active-color: ds.$color-content-neutral-subdued-rest !default;
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-dropdowneditor-icon-idle-opacity: ds.$opacity-35 !default;

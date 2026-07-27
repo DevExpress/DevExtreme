@@ -1,4 +1,4 @@
-
+@use "sass:meta";
 @use './item';
 @use './variables' as *;
 
@@ -76,7 +76,7 @@ $sortable-side-offset: 6px;
     Please note, that header-item-container paddings taken into account here
  */
   &--with-header-items {
-    margin: 0 ($sortable-side-offset - $cardview-header-item__right-padding) 0 ($sortable-side-offset - $cardview-header-item__left-padding);
+    margin: 0 if(meta.type-of($sortable-side-offset) == number and meta.type-of($cardview-header-item__right-padding) == number, ($sortable-side-offset - $cardview-header-item__right-padding), calc(#{$sortable-side-offset} - #{$cardview-header-item__right-padding})) 0 if(meta.type-of($sortable-side-offset) == number and meta.type-of($cardview-header-item__left-padding) == number, ($sortable-side-offset - $cardview-header-item__left-padding), calc(#{$sortable-side-offset} - #{$cardview-header-item__left-padding}));
   }
 
   &--empty {

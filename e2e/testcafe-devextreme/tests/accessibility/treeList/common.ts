@@ -2,7 +2,7 @@ import TreeList from 'devextreme-testcafe-models/treeList';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { isFluent } from '../../../helpers/themeUtils';
+import { getThemeName } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`TreeList - a11y`
   .page(url(__dirname, '../../container.html'));
@@ -27,7 +27,7 @@ function getData(rowCount: number): Record<string, any>[] {
   return data;
 }
 
-const a11yCheckConfig = isFluent() ? {} : { runOnly: 'color-contrast' };
+const a11yCheckConfig = getThemeName() === 'fluent' ? {} : { runOnly: 'color-contrast' };
 
 test('Search panel, filter panel, pager and selection', async (t) => {
   const treeList = new TreeList(TREE_LIST_SELECTOR);

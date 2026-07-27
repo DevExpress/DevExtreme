@@ -1,0 +1,141 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/mixins" as *;
+@use "../../base/dateView";
+
+// adduse
+@use "../scrollable";
+
+$fluent-dateview-roller-padding: calc((#{$fluent-dateview-roller-height} - #{$fluent-dateview-roller-item-height}) / 2);
+
+.dx-dateview-rollers {
+  width: auto;
+  text-align: center;
+  display: block;
+}
+
+.dx-dateviewroller-current {
+  .dx-dateview-item {
+    transition: font-size 0.2s ease-out;
+  }
+}
+
+.dx-dateviewroller {
+  min-width: $fluent-dateview-roller-min-width;
+  text-align: center;
+  display: inline-block;
+
+  .dx-button {
+    display: none;
+  }
+
+  .dx-scrollable-content::before,
+  .dx-scrollable-content::after {
+    content: "";
+    height: $fluent-dateview-roller-padding;
+    display: block;
+  }
+
+  .dx-scrollable-container {
+    height: $fluent-dateview-roller-height;
+  }
+
+  &.dx-dateviewroller-year {
+    min-width: $fluent-dateview-roller-year-min-width;
+  }
+
+  &.dx-state-active {
+    .dx-button {
+      display: none;
+    }
+  }
+}
+
+.dx-dateviewroller-month {
+  min-width: $fluent-dateview-roller-month-min-width;
+}
+
+.dx-dateviewroller-hours {
+  &::after {
+    content: ":";
+    font-size: $fluent-dateview-hours-colon-font-size;
+    position: absolute;
+    inset-inline-end: -9%;
+    font-weight: bold;
+    top: 37%;
+    color: $dateview-color;
+  }
+
+  .dx-dateview-item-selected-frame {
+    padding-left: 20%;
+  }
+}
+
+.dx-dateviewroller-minutes {
+  .dx-dateview-item-selected-frame {
+    width: 80%;
+  }
+}
+
+.dx-dateview-item {
+  height: $fluent-dateview-roller-item-height;
+  line-height: $fluent-dateview-roller-item-height;
+  text-align: center;
+  font-size: $fluent-dateview-item-font-size;
+  color: $dateview-color;
+}
+
+.dx-dateview-item-selected {
+  font-size: $fluent-dateview-item-selected-font-size;
+  color: $dateview-accent;
+}
+
+.dx-dateview-item-selected-frame {
+  position: absolute;
+  top: $fluent-dateview-roller-padding;
+  width: 100%;
+
+  &::before,
+  &::after {
+    backface-visibility: hidden;
+    content: "";
+    display: block;
+    width: 100%;
+    position: absolute;
+    height: $fluent-dateview-roller-padding;
+  }
+
+  &::before {
+    top: calc(-1 * #{$fluent-dateview-roller-padding});
+
+    @include gradient-linear($dateview-shadow-up);
+  }
+
+  &::after {
+    top: $fluent-dateview-roller-item-height;
+
+    @include gradient-linear($dateview-shadow-down);
+  }
+}
+
+.dx-device-tablet,
+.dx-device-phone {
+  .dx-dateview-rollers {
+    @include flex-container(row, nowrap);
+  }
+
+  .dx-dateviewroller-month {
+    min-width: $fluent-dateview-phone-roller-month-min-width;
+  }
+
+  .dx-dateview-item {
+    font-size: $fluent-dateview-phone-item-font-size;
+  }
+
+  .dx-dateview-item-selected {
+    font-size: $fluent-dateview-phone-item-selected-font-size;
+  }
+}

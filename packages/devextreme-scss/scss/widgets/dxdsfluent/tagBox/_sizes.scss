@@ -1,0 +1,52 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$fluent-tagbox-tag-content-padding-left: null !default;
+$fluent-tagbox-tag-content-padding-right: null !default;
+$fluent-tagbox-tag-content-vertical-padding: null !default;
+$fluent-tagbox-tag-content-font-size: null !default;
+$fluent-tagbox-tag-container-padding-left: null !default;
+$fluent-tagbox-tag-container-vertical-padding: null !default;
+$fluent-tagbox-tag-height: null !default;
+$fluent-tagbox-select-all-padding-bottom: ds.$spacing-120 !default;
+$fluent-tagbox-select-all-margin-bottom: ds.$spacing-30 !default;
+$tagbox-tag-border-radius: 999em !default;
+$fluent-tagbox-filled-with-label-top-padding: null !default;
+$fluent-tagbox-filled-with-label-bottom-padding: null !default;
+$fluent-tagbox-tag-content-line-height: null !default;
+$fluent-tagbox-tag-container-gap: null !default;
+
+@if $size == "default" {
+  $fluent-tagbox-tag-content-padding-left: ds.$spacing-60 !default;
+  $fluent-tagbox-tag-content-padding-right: ds.$spacing-200 !default;
+  $fluent-tagbox-tag-content-vertical-padding: ds.$spacing-20 !default;
+  $fluent-tagbox-tag-content-font-size: ds.$font-size-caption-md !default;
+  $fluent-tagbox-tag-container-padding-left: ds.$spacing-120 !default;
+  $fluent-tagbox-tag-container-vertical-padding: ds.$spacing-50 !default;
+  $fluent-tagbox-tag-container-gap: ds.$spacing-40 !default;
+  $fluent-tagbox-tag-height: ds.$spacing-200 !default;
+  $fluent-tagbox-tag-content-line-height: 1.1666em !default;
+  $fluent-tagbox-filled-with-label-top-padding: ds.$spacing-90 !default;
+  $fluent-tagbox-filled-with-label-bottom-padding: ds.$spacing-10 !default;
+}
+
+@else if $size == "compact" {
+  $fluent-tagbox-tag-content-padding-left: ds.$spacing-40 !default;
+  $fluent-tagbox-tag-content-padding-right: ds.$spacing-200 !default;
+  $fluent-tagbox-tag-content-vertical-padding: 0 !default;
+  $fluent-tagbox-tag-content-font-size: ds.$font-size-caption-sm !default;
+  $fluent-tagbox-tag-container-padding-left: ds.$spacing-80 !default;
+  $fluent-tagbox-tag-container-vertical-padding: ds.$spacing-30 !default;
+  $fluent-tagbox-tag-container-gap: ds.$spacing-20 !default;
+  $fluent-tagbox-tag-height: ds.$spacing-160 !default;
+  $fluent-tagbox-tag-content-line-height: 1.3333em !default;
+  $fluent-tagbox-filled-with-label-top-padding: ds.$spacing-60 !default;
+  $fluent-tagbox-filled-with-label-bottom-padding: 0 !default;
+}
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-tagbox-tag-border-width: ds.$border-width-10 !default;
+$fluent-tagbox-list-select-all-border-bottom: ds.$border-width-10 solid !default;
+$fluent-tagbox-tag-content-min-width: ds.$spacing-400 !default;

@@ -1,3 +1,4 @@
+@use "sass:meta";
 @use "../icon_fonts" as *;
 
 @mixin dx-switch(
@@ -20,10 +21,10 @@
       position: relative;
       padding-top:  $switch-padding,;
       padding-bottom:  $switch-padding,;
-      padding-inline-start: $switch-padding - $switch-container-horizontal-padding;
-      padding-inline-end: $switch-padding + $switch-container-horizontal-padding;
-      inset-inline-start: -$switch-padding;
-      top: -$switch-padding;
+      padding-inline-start: if(meta.type-of($switch-padding) == number and meta.type-of($switch-container-horizontal-padding) == number, $switch-padding - $switch-container-horizontal-padding, calc(#{$switch-padding} - #{$switch-container-horizontal-padding}));
+      padding-inline-end: if(meta.type-of($switch-padding) == number and meta.type-of($switch-container-horizontal-padding) == number, $switch-padding + $switch-container-horizontal-padding, calc(#{$switch-padding} + #{$switch-container-horizontal-padding}));
+      inset-inline-start: if(meta.type-of($switch-padding) == number, -$switch-padding, calc(-1 * #{$switch-padding}));
+      top: if(meta.type-of($switch-padding) == number, -$switch-padding, calc(-1 * #{$switch-padding}));
       overflow: hidden;
       vertical-align: middle;
       box-sizing: content-box;
@@ -353,11 +354,11 @@
     .dx-switch-handle {
       float: right;
       margin-left: 0;
-      margin-right: -$switch-height;
+      margin-right: if(meta.type-of($switch-height) == number, -$switch-height, calc(-1 * #{$switch-height}));
     }
 
     .dx-switch-container {
-      margin: 0 0 0 (-$switch-container-adjustment);
+      margin: 0 0 0 if(meta.type-of($switch-container-adjustment) == number, (-$switch-container-adjustment), calc(-1 * #{$switch-container-adjustment}));
     }
   }
 }

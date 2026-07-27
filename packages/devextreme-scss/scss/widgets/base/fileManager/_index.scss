@@ -3,9 +3,70 @@
 // adduse
 
 
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$filemanager-root-height: 500px !default;
+$filemanager-root-border: 1px solid !default;
+$filemanager-overlay-content-min-width: 240px !default;
+$filemanager-overlay-content-max-width: 400px !default;
+$filemanager-popup-content-padding: 15px !default;
+$filemanager-progress-box-padding: 5px 0 0 !default;
+$filemanager-notification-common-padding-bottom: 10px !default;
+$filemanager-notification-common-border-bottom-width: 1px !default;
+$filemanager-progress-panel-border-left-width: 1px !default;
+$filemanager-progress-panel-width: 340px !default;
+$filemanager-progress-panel-container-padding: 10px 20px 20px 20px !default;
+$filemanager-progress-panel-title-padding: 0 0 5px 10px !default;
+$filemanager-progress-panel-separator-height: 20px !default;
+$filemanager-i-cancel-width: 16px !default;
+$filemanager-i-cancel-height: 16px !default;
+$filemanager-progress-box-margin-bottom: 8px !default;
+$filemanager-progress-box-border-radius: 2px !default;
+$filemanager-progress-box-padding-2: 10px 0 10px 10px !default;
+$filemanager-progress-box-without-close-button-padding-right: 10px !default;
+$filemanager-progress-box-image-margin-right: 10px !default;
+$filemanager-progress-box-common-padding: 5px 0 !default;
+$filemanager-progress-box-close-button-margin-top: 9px !default;
+$filemanager-progress-box-close-button-margin-left: 5px !default;
+$filemanager-progress-box-error-padding: 2px 8px 3px !default;
+$filemanager-progress-box-error-max-height: 150px !default;
+$filemanager-toolbar-separator-item-width: 1px !default;
+$filemanager-toolbar-separator-item-margin-right: 5px !default;
+$filemanager-container-border-top: 1px solid !default;
+$filemanager-dirs-panel-padding: 5px 10px !default;
+$filemanager-drawer-panel-content-initial-min-width: 250px !default;
+$filemanager-drawer-panel-content-initial-max-width: 300px !default;
+$filemanager-breadcrumbs-padding: 2px 11px !default;
+$filemanager-breadcrumbs-border-bottom: 1px solid !default;
+$filemanager-menu-item-content-padding-left: 2px !default;
+$filemanager-menu-item-content-padding-right: 2px !default;
+$filemanager-menu-item-content-margin: 0 10px !default;
+$filemanager-menu-item-content-padding-left-2: 1px !default;
+$filemanager-menu-item-content-padding-right-2: 1px !default;
+$filemanager-thumbnails-view-port-padding: 5px !default;
+$filemanager-thumbnails-item-width: 100px !default;
+$filemanager-thumbnails-item-height: 100px !default;
+$filemanager-thumbnails-item-border: 1px dashed transparent !default;
+$filemanager-thumbnails-item-margin: 5px !default;
+$filemanager-thumbnails-item-content-padding: 13px 0 10px !default;
+$filemanager-thumbnails-item-spacer-height: 10px !default;
+$filemanager-button-content-padding: 10px 11px !default;
+$filemanager-overlay-content-min-width-2: 300px !default;
+$filemanager-overlay-content-min-height: 300px !default;
+$filemanager-overlay-content-max-height: 400px !default;
+$filemanager-overlay-content-max-width-2: 340px !default;
+$filemanager-overlay-content-min-height-2: 180px !default;
+$filemanager-overlay-content-max-height-2: 180px !default;
+$filemanager-progressbox-cancel-button-margin-top: 5px !default;
+
+$filemanager-progress-title-font-size: 18px !default;
+$filemanager-progress-title-font-weight: 600 !default;
+$filemanager-progress-bold-font-weight: 600 !default;
+
+$filemanager-error-message-font-size: 0.85em !default; // dx-relative
+$filemanager-drawer-panel-content-width: 30% !default; // dx-relative-%
 .dx-filemanager {
-  height: 500px;
-  border: 1px solid;
+  height: $filemanager-root-height;
+  border: $filemanager-root-border;
 
   .dx-filemanager-wrapper {
     height: 100%;
@@ -20,25 +81,25 @@
 
   .dx-filemanager-notification-popup {
     & .dx-overlay-content {
-      min-width: 240px;
+      min-width: $filemanager-overlay-content-min-width;
       max-width: 93vw;
 
       @media (min-width: 431px) {
-        max-width: 400px;
+        max-width: $filemanager-overlay-content-max-width;
       }
     }
 
     .dx-popup-content {
-      padding: 15px;
+      padding: $filemanager-popup-content-padding;
 
       .dx-filemanager-progress-box {
-        padding: 5px 0 0;
+        padding: $filemanager-progress-box-padding;
       }
     }
 
     .dx-filemanager-notification-common {
-      padding-bottom: 10px;
-      border-bottom-width: 1px;
+      padding-bottom: $filemanager-notification-common-padding-bottom;
+      border-bottom-width: $filemanager-notification-common-border-bottom-width;
       border-bottom-style: solid;
     }
 
@@ -48,61 +109,61 @@
   }
 
   .dx-drawer-shrink .dx-filemanager-progress-panel {
-    border-left-width: 1px;
+    border-left-width: $filemanager-progress-panel-border-left-width;
     border-left-style: solid;
   }
 
   .dx-filemanager-progress-panel {
-    width: 340px;
+    width: $filemanager-progress-panel-width;
     height: 100%;
 
     .dx-filemanager-progress-panel-container {
-      padding: 10px 20px 20px 20px;
+      padding: $filemanager-progress-panel-container-padding;
     }
 
     .dx-filemanager-progress-panel-title {
       display: flex;
       align-items: flex-start;
-      padding: 0 0 5px 10px;
+      padding: $filemanager-progress-panel-title-padding;
 
       .dx-filemanager-progress-panel-title-text {
         flex: 1 1 auto;
         align-self: center;
-        font-size: 18px;
-        font-weight: 600;
+        font-size: $filemanager-progress-title-font-size;
+        font-weight: $filemanager-progress-title-font-weight;
       }
     }
 
     .dx-filemanager-progress-panel-common .dx-filemanager-progress-box-common {
-      font-weight: 600;
+      font-weight: $filemanager-progress-bold-font-weight;
     }
 
     .dx-filemanager-progress-panel-separator {
-      height: 20px;
+      height: $filemanager-progress-panel-separator-height;
     }
 
     .dx-filemanager-i.dx-filemanager-i-cancel {
-      width: 16px;
-      height: 16px;
+      width: $filemanager-i-cancel-width;
+      height: $filemanager-i-cancel-height;
     }
 
     .dx-filemanager-progress-panel-details > .dx-filemanager-progress-box {
-      margin-bottom: 8px;
-      border-radius: 2px;
+      margin-bottom: $filemanager-progress-box-margin-bottom;
+      border-radius: $filemanager-progress-box-border-radius;
     }
   }
 
   .dx-filemanager-progress-box {
-    padding: 10px 0 10px 10px;
+    padding: $filemanager-progress-box-padding-2;
     display: flex;
     align-items: center;
 
     &.dx-filemanager-progress-box-without-close-button {
-      padding-right: 10px;
+      padding-right: $filemanager-progress-box-without-close-button-padding-right;
     }
 
     .dx-filemanager-progress-box-image {
-      margin-right: 10px;
+      margin-right: $filemanager-progress-box-image-margin-right;
     }
 
     .dx-filemanager-progress-box-wrapper {
@@ -111,42 +172,42 @@
     }
 
     .dx-filemanager-progress-box-common {
-      padding: 5px 0;
+      padding: $filemanager-progress-box-common-padding;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
     .dx-filemanager-progress-box-progress-bar {
-      padding: 5px 0;
+      padding: $filemanager-progress-box-common-padding;
     }
 
     .dx-filemanager-progress-box-status {
-      padding: 5px 0;
+      padding: $filemanager-progress-box-common-padding;
     }
 
     .dx-filemanager-progress-box-close-button {
-      margin-top: 9px;
-      margin-left: 5px;
+      margin-top: $filemanager-progress-box-close-button-margin-top;
+      margin-left: $filemanager-progress-box-close-button-margin-left;
     }
   }
 
   .dx-filemanager-progress-box-error {
-    border-radius: 2px;
+    border-radius: $filemanager-progress-box-border-radius;
     display: inline-block;
     border-width: 0;
-    padding: 2px 8px 3px;
-    font-size: 0.85em;
+    padding: $filemanager-progress-box-error-padding;
+    font-size: $filemanager-error-message-font-size;
     line-height: normal;
     word-wrap: break-word;
     overflow-y: auto;
-    max-height: 150px;
+    max-height: $filemanager-progress-box-error-max-height;
   }
 
   .dx-filemanager-toolbar {
     .dx-filemanager-toolbar-separator-item {
-      width: 1px;
-      margin-right: 5px;
+      width: $filemanager-toolbar-separator-item-width;
+      margin-right: $filemanager-toolbar-separator-item-margin-right;
     }
   }
 
@@ -158,7 +219,7 @@
   .dx-filemanager-container {
     display: flex;
     height: 100%;
-    border-top: 1px solid;
+    border-top: $filemanager-container-border-top;
     box-sizing: border-box;
     overflow: hidden;
 
@@ -167,7 +228,7 @@
     }
 
     .dx-filemanager-dirs-panel {
-      padding: 5px 10px;
+      padding: $filemanager-dirs-panel-padding;
       height: 100%;
       width: 100%;
       display: block;
@@ -175,7 +236,7 @@
 
     .dx-drawer-opened {
       .dx-splitter-bar.dx-state-disabled {
-        width: 1px;
+        width: $filemanager-toolbar-separator-item-width;
       }
     }
 
@@ -185,11 +246,11 @@
 
     .dx-drawer-panel-content {
       display: block;
-      width: 30%;
+      width: $filemanager-drawer-panel-content-width;
 
       &.dx-drawer-panel-content-initial {
-        min-width: 250px;
-        max-width: 300px;
+        min-width: $filemanager-drawer-panel-content-initial-min-width;
+        max-width: $filemanager-drawer-panel-content-initial-max-width;
       }
 
       &.dx-drawer-panel-content-adaptive {
@@ -203,8 +264,8 @@
   }
 
   .dx-filemanager-breadcrumbs {
-    padding: 2px 11px;
-    border-bottom: 1px solid;
+    padding: $filemanager-breadcrumbs-padding;
+    border-bottom: $filemanager-breadcrumbs-border-bottom;
 
     .dx-menu-item-content {
       padding-left: 0;
@@ -212,20 +273,20 @@
     }
 
     .dx-filemanager-breadcrumbs-parent-folder-item .dx-menu-item-content {
-      padding-left: 2px;
-      padding-right: 2px;
+      padding-left: $filemanager-menu-item-content-padding-left;
+      padding-right: $filemanager-menu-item-content-padding-right;
     }
 
     .dx-filemanager-breadcrumbs-separator-item .dx-menu-item-content {
-      width: 1px;
+      width: $filemanager-toolbar-separator-item-width;
       padding-left: 0;
       padding-right: 0;
-      margin: 0 10px;
+      margin: $filemanager-menu-item-content-margin;
     }
 
     .dx-filemanager-breadcrumbs-path-separator-item .dx-menu-item-content {
-      padding-left: 1px;
-      padding-right: 1px;
+      padding-left: $filemanager-menu-item-content-padding-left-2;
+      padding-right: $filemanager-menu-item-content-padding-right-2;
     }
 
     .dx-filemanager-breadcrumbs-separator-item,
@@ -291,7 +352,7 @@
       overflow-x: hidden;
       overflow-y: auto;
       box-sizing: border-box;
-      padding: 5px;
+      padding: $filemanager-thumbnails-view-port-padding;
 
       .dx-filemanager-thumbnails-container {
         user-select: none;
@@ -302,15 +363,15 @@
         text-align: center;
         cursor: pointer;
         white-space: nowrap;
-        width: 100px;
-        height: 100px;
-        border: 1px dashed transparent;
-        margin: 5px;
+        width: $filemanager-thumbnails-item-width;
+        height: $filemanager-thumbnails-item-height;
+        border: $filemanager-thumbnails-item-border;
+        margin: $filemanager-thumbnails-item-margin;
         box-sizing: border-box;
 
         .dx-filemanager-thumbnails-item-content {
           overflow: hidden;
-          padding: 13px 0 10px;
+          padding: $filemanager-thumbnails-item-content-padding;
 
           .dx-filemanager-thumbnails-item-thumbnail {
             border: 0;
@@ -320,7 +381,7 @@
             border: 0;
             padding: 0;
             margin: 0;
-            height: 10px;
+            height: $filemanager-thumbnails-item-spacer-height;
             visibility: hidden;
           }
 
@@ -394,7 +455,7 @@
     box-shadow: none;
 
     .dx-button-content {
-      padding: 10px 11px;
+      padding: $filemanager-button-content-padding;
     }
 
     i {
@@ -444,21 +505,21 @@
 }
 
 .dx-filemanager-dialog-popup > .dx-overlay-content {
-  min-width: 300px;
-  max-width: 400px;
-  min-height: 300px;
-  max-height: 400px;
+  min-width: $filemanager-overlay-content-min-width-2;
+  max-width: $filemanager-overlay-content-max-width;
+  min-height: $filemanager-overlay-content-min-height;
+  max-height: $filemanager-overlay-content-max-height;
 }
 
 .dx-filemanager-dialog-name-editor-popup > .dx-overlay-content {
-  max-width: 340px;
-  min-height: 180px;
-  max-height: 180px;
+  max-width: $filemanager-overlay-content-max-width-2;
+  min-height: $filemanager-overlay-content-min-height-2;
+  max-height: $filemanager-overlay-content-max-height-2;
 }
 
 .dx-filemanager-dialog-delete-item-popup > .dx-overlay-content {
-  max-width: 340px;
-  min-height: 180px;
+  max-width: $filemanager-overlay-content-max-width-2;
+  min-height: $filemanager-overlay-content-min-height-2;
 
   .dx-popup-content .dx-filemanager-dialog-delete-item {
     overflow-wrap: break-word;
@@ -467,16 +528,16 @@
 
 .dx-filemanager-progresspanel {
   box-sizing: border-box;
-  padding: 5px;
+  padding: $filemanager-thumbnails-view-port-padding;
 
   .dx-filemanager-progressbox {
     float: left;
     width: 100%;
-    padding-bottom: 10px;
+    padding-bottom: $filemanager-notification-common-padding-bottom;
   }
 
   .dx-filemanager-progressbox-cancel-button {
-    margin-top: 5px;
+    margin-top: $filemanager-progressbox-cancel-button-margin-top;
     float: right;
   }
 }

@@ -1,0 +1,20 @@
+@use "../../colors" as *;
+@use '../../../../base/gridBase/layout/aiChat/mixins' as *;
+@use '../../../colors' as *;
+@use '../../../button/colors' as *;
+@use './sizes' as *;
+@use "../../../../base/widget" as *;
+@include ai-chat-messagelist-empty(
+  $button-default-bg,
+  $button-default-outlined-hover-bg,
+);
+@include ai-chat-message-pending($gridbase-accent);
+@include ai-chat-message-success($gridbase-success);
+@include ai-chat-message-error($gridbase-danger);
+@include ai-chat-messagebubble-border($gridbase-border-color);
+@include ai-chat-message-regenerate-button($button-normal-active-bg);
+@include ai-chat-message-icon($ai-chat-message-icon-size);
+
+.dx-ai-chat--disabled .dx-ai-chat__message-regenerate-button {
+  @include disabled-widget();
+}

@@ -3,17 +3,33 @@
 // adduse
 
 
+// Design sizing values (parametrizable; dxdsfluent injects tokens)
+$diagram-root-height: 600px !default;
+$diagram-root-min-height: 350px !default;
+$diagram-toolbar-wrapper-padding: 5px !default;
+$diagram-button-min-height: 14px !default;
+$diagram-popup-content-padding: 8px !default;
+$diagram-colorview-palette-min-width: 300px !default;
+$diagram-colorview-hue-scale-cell-margin-left: 12px !default;
+$diagram-loading-indicator-width: 64px !default;
+$diagram-loading-indicator-height: 64px !default;
+$diagram-context-toolbox-target-width: 1px !default;
+$diagram-context-toolbox-target-height: 1px !default;
+
+$diagram-popup-title-toolbar-bg: rgba(0, 0, 0, 0.05) !default;
+
 $transparent-border: 1px solid transparent;
 
+$diagram-toolbox-input-font-size: 0.9em !default; // dx-relative
 .dx-diagram {
   border: $transparent-border;
   display: flex;
   flex-flow: column;
-  height: 600px;
-  min-height: 350px;
+  height: $diagram-root-height;
+  min-height: $diagram-root-min-height;
 
   .dx-diagram-toolbar-wrapper {
-    padding: 5px;
+    padding: $diagram-toolbar-wrapper-padding;
     flex-grow: 0;
 
     .dx-diagram-toolbar {
@@ -61,7 +77,7 @@ $transparent-border: 1px solid transparent;
 
   .dx-popup-title.dx-toolbar {
     padding: 0;
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: $diagram-popup-title-toolbar-bg;
   }
 
   .dx-popup-title .dx-button.dx-button-has-icon:not(.dx-button-has-text),
@@ -88,13 +104,13 @@ $transparent-border: 1px solid transparent;
     .dx-diagram-toolbox-input input,
     .dx-diagram-toolbox-input .dx-placeholder::before {
       min-height: 0;
-      font-size: 0.9em;
+      font-size: $diagram-toolbox-input-font-size;
     }
 
     .dx-diagram-toolbox-input .dx-button {
       border: 0;
       border-radius: 0;
-      min-height: 14px;
+      min-height: $diagram-button-min-height;
     }
 
     .dx-diagram-toolbox-panel {
@@ -269,7 +285,7 @@ $transparent-border: 1px solid transparent;
       bottom: 0 !important; // stylelint-disable-line declaration-no-important
 
       .dx-popup-content {
-        padding: 8px;
+        padding: $diagram-popup-content-padding;
       }
 
       .dx-colorview-container {
@@ -283,16 +299,16 @@ $transparent-border: 1px solid transparent;
 
             .dx-colorview-palette {
               width: 100%;
-              min-width: 300px;
+              min-width: $diagram-colorview-palette-min-width;
             }
           }
 
           .dx-colorview-hue-scale-cell {
-            margin-left: 12px;
+            margin-left: $diagram-colorview-hue-scale-cell-margin-left;
           }
 
           .dx-colorview-controls-container {
-            margin-left: 12px;
+            margin-left: $diagram-colorview-hue-scale-cell-margin-left;
           }
         }
       }
@@ -310,8 +326,8 @@ $transparent-border: 1px solid transparent;
   position: absolute;
   top: calc(50% - 32px);
   left: calc(50% - 32px);
-  width: 64px;
-  height: 64px;
+  width: $diagram-loading-indicator-width;
+  height: $diagram-loading-indicator-height;
 }
 
 .dx-diagram-touchbar-overlay,
@@ -354,10 +370,10 @@ $transparent-border: 1px solid transparent;
 }
 
 .dx-diagram-context-toolbox-target {
-  width: 1px;
-  height: 1px;
+  width: $diagram-context-toolbox-target-width;
+  height: $diagram-context-toolbox-target-height;
 }
 
 .dx-diagram-context-toolbox .dx-popup-content {
-  padding: 8px;
+  padding: $diagram-popup-content-padding;
 }

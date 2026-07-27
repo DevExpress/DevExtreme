@@ -4,8 +4,10 @@ import { changeTheme } from './changeTheme';
 
 const defaultThemeName = 'fluent.blue.light';
 
+const getEtalonThemeName = (themeName: string): string => themeName.replace(/^dxdsfluent/, 'fluent');
+
 export const getThemePostfix = (theme?: string): string => {
-  const themeName = (theme ?? process.env.theme) ?? defaultThemeName;
+  const themeName = getEtalonThemeName((theme ?? process.env.theme) ?? defaultThemeName);
   return ` (${themeName})`;
 };
 
@@ -18,7 +20,7 @@ export const getCurrentTheme = async (t: TestController): Promise<string> => {
 
 export const isMaterial = (): boolean => (process.env.theme ?? defaultThemeName).startsWith('material');
 
-export const isFluent = (): boolean => (process.env.theme ?? defaultThemeName).startsWith('fluent');
+export const isFluent = (): boolean => /^(dxds)?fluent/.test(process.env.theme ?? defaultThemeName);
 
 export const isMaterialBased = (): boolean => isMaterial() || isFluent();
 
