@@ -1,0 +1,56 @@
+@use "../sizes" as *;
+@use "../toolbar/sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$fluent-toolbar-size-editor-width: null !default;
+$fluent-html-editor-vertical-padding: null !default;
+$fluent-html-editor-horizontal-padding: null !default;
+$fluent-html-editor-add-image-dialog-fileuploader-padding: null !default;
+$fluent-html-editor-toolbar-menu-separator-margin: ds.$spacing-40 !default;
+$fluent-html-editor-fileuploader-input-wrapper-border-radius: ds.$border-radius-80 !default;
+$fluent-html-editor-fileuploader-input-wrapper-border-size: 1.5px !default; // dx-offscale: 1.5px
+$fluent-html-editor-add-image-dialog-tabs-padding: null !default;
+$fluent-aidialog-selects-gap: null !default;
+$fluent-aidialog-content-gap: null !default;
+$fluent-aidialog-content-padding: null !default;
+$fluent-aidialog-border-radius: null !default;
+
+@if $size == "default" {
+  $fluent-toolbar-size-editor-width: ds.$spacing-1200 !default;
+  $fluent-html-editor-vertical-padding: ds.$spacing-160 !default;
+  $fluent-html-editor-horizontal-padding: ds.$spacing-160 !default;
+  $fluent-html-editor-add-image-dialog-fileuploader-padding: ds.$spacing-480 0 ds.$spacing-240 !default;
+  $fluent-html-editor-add-image-dialog-tabs-padding: ds.$spacing-140 !default;
+  $fluent-aidialog-selects-gap: ds.$spacing-80 !default;
+  $fluent-aidialog-content-gap: ds.$spacing-160 !default;
+  $fluent-aidialog-content-padding: ds.$spacing-160 ds.$spacing-240 !default;
+  $fluent-aidialog-border-radius: calc(#{$base-border-radius} * 2) !default;
+}
+
+@else if $size == "compact" {
+  $fluent-toolbar-size-editor-width: 90px !default; // dx-offscale: 90px
+  $fluent-html-editor-vertical-padding: ds.$spacing-120 !default;
+  $fluent-html-editor-horizontal-padding: ds.$spacing-120 !default;
+  $fluent-html-editor-add-image-dialog-fileuploader-padding: ds.$spacing-400 0 ds.$spacing-180 !default;
+  $fluent-html-editor-add-image-dialog-tabs-padding: ds.$spacing-80 !default;
+  $fluent-aidialog-selects-gap: ds.$spacing-40 !default;
+  $fluent-aidialog-content-gap: ds.$spacing-120 !default;
+  $fluent-aidialog-content-padding: ds.$spacing-120 ds.$spacing-160 !default;
+  $fluent-aidialog-border-radius: $base-border-radius !default;
+}
+
+$fluent-htmleditor-toolbar-padding: $fluent-html-editor-horizontal-padding !default;
+
+// Values hoisted from style-file literals (tokenized)
+$fluent-htmleditor-toolbar-wrapper-top: ds.$spacing-10 !default;
+$fluent-htmleditor-toolbar-wrapper-bottom: ds.$spacing-10 !default;
+$fluent-htmleditor-toolbar-wrapper-left: ds.$spacing-10 !default;
+$fluent-htmleditor-toolbar-wrapper-right: ds.$spacing-10 !default;
+$fluent-htmleditor-content-margin: ds.$spacing-10 !default;
+$fluent-htmleditor-input-wrapper-gap: ds.$spacing-80 !default;
+$fluent-htmleditor-state-active-border-bottom: ds.$border-width-20 solid !default;
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-htmleditor-aidialog-title-font-weight: ds.$font-weight-title-default !default;

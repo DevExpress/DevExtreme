@@ -16,15 +16,37 @@
         "targetDirectory": "./scss/bundles"
       }
     },
+    "clean:tokens": {
+      "executor": "devextreme-nx-infra-plugin:clean",
+      "options": {
+        "targetDirectory": "./scss/_design-system"
+      }
+    },
     "clean": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
           "pnpm nx clean:artifacts devextreme-scss",
-          "pnpm nx clean:bundles devextreme-scss"
+          "pnpm nx clean:bundles devextreme-scss",
+          "pnpm nx clean:tokens devextreme-scss"
         ],
         "parallel": false
       }
+    },
+    "build:tokens": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node build/tokens/build-tokens.mjs",
+        "cwd": "packages/devextreme-scss"
+      },
+      "inputs": [
+        "{projectRoot}/build/tokens/**/*",
+        "{workspaceRoot}/pnpm-lock.yaml"
+      ],
+      "outputs": [
+        "{projectRoot}/scss/_design-system"
+      ],
+      "cache": true
     },
     "copy:assets": {
       "executor": "devextreme-nx-infra-plugin:copy-files",
@@ -50,12 +72,14 @@
       "options": {
         "mode": "all"
       },
+      "dependsOn": ["build:tokens"],
       "inputs": [
         "{projectRoot}/build/**/*",
         "{projectRoot}/fonts/**/*",
         "{projectRoot}/icons/**/*",
         "{projectRoot}/images/**/*",
         "{projectRoot}/scss/**/*",
+        "!{projectRoot}/scss/_design-system/**/*",
         "{workspaceRoot}/packages/devextreme/package.json",
         "{workspaceRoot}/pnpm-lock.yaml"
       ],
@@ -70,12 +94,14 @@
       "options": {
         "mode": "ci"
       },
+      "dependsOn": ["build:tokens"],
       "inputs": [
         "{projectRoot}/build/**/*",
         "{projectRoot}/fonts/**/*",
         "{projectRoot}/icons/**/*",
         "{projectRoot}/images/**/*",
         "{projectRoot}/scss/**/*",
+        "!{projectRoot}/scss/_design-system/**/*",
         "{workspaceRoot}/packages/devextreme/package.json",
         "{workspaceRoot}/pnpm-lock.yaml",
         "{workspaceRoot}/packages/devextreme-themebuilder/src/data/clean-css-options.json"
@@ -101,6 +127,7 @@
         "{projectRoot}/icons/**/*",
         "{projectRoot}/images/**/*",
         "{projectRoot}/scss/**/*",
+        "!{projectRoot}/scss/_design-system/**/*",
         "{workspaceRoot}/packages/devextreme/package.json",
         "{workspaceRoot}/pnpm-lock.yaml"
       ],
@@ -127,6 +154,7 @@
         "{projectRoot}/icons/**/*",
         "{projectRoot}/images/**/*",
         "{projectRoot}/scss/**/*",
+        "!{projectRoot}/scss/_design-system/**/*",
         "{workspaceRoot}/packages/devextreme/package.json",
         "{workspaceRoot}/pnpm-lock.yaml",
         "{workspaceRoot}/packages/devextreme-themebuilder/src/data/clean-css-options.json"
@@ -145,12 +173,14 @@
         "mode": "all",
         "watch": true
       },
+      "dependsOn": ["build:tokens"],
       "inputs": [
         "{projectRoot}/build/**/*",
         "{projectRoot}/fonts/**/*",
         "{projectRoot}/icons/**/*",
         "{projectRoot}/images/**/*",
-        "{projectRoot}/scss/**/*"
+        "{projectRoot}/scss/**/*",
+        "!{projectRoot}/scss/_design-system/**/*"
       ],
       "cache": false
     },

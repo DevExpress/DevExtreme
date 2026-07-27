@@ -1,0 +1,33 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$fluent-calendar-legacy-width: null !default;
+$fluent-calendar-legacy-height: null !default;
+
+$fluent-calendar-footer-button-height: null !default;
+$fluent-calendar-cell-font-size: null !default;
+
+$fluent-calendar-element-padding: ds.$spacing-80 !default;
+
+@if $size == "default" {
+  $fluent-calendar-legacy-width: 272px !default; // dx-offscale: 272px
+  $fluent-calendar-legacy-height: 264px !default; // dx-offscale: 264px
+
+  $fluent-calendar-cell-font-size: ds.$font-size-base-md !default;
+
+  $fluent-calendar-footer-button-height: ds.$spacing-360 !default;
+}
+
+@else if $size == "compact" {
+  $fluent-calendar-legacy-width: 252px !default; // dx-offscale: 252px
+  $fluent-calendar-legacy-height: 260px !default; // dx-offscale: 260px
+
+  $fluent-calendar-cell-font-size: ds.$font-size-base-sm !default;
+  $fluent-calendar-footer-button-height: ds.$spacing-280 !default;
+}
+
+// Base-layer values injected with design tokens (wave B1)
+$fluent-calendar-week-day-header-font-size: ds.$font-size-caption-sm !default;
+$fluent-calendar-week-day-header-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)

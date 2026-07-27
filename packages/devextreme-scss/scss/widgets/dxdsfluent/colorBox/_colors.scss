@@ -1,0 +1,7 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$colorbox-preview-icon-color: ds.$color-content-neutral-subdued-rest !default;
+
+$colorbox-foreground-disabled: ds.$color-content-neutral-default-disabled !default;

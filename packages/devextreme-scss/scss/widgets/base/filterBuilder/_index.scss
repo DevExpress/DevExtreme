@@ -22,7 +22,38 @@ $filterbuilder-remove-icon-focus-color: null !default;
 $filterbuilder-menu-icon-color: null !default;
 
 @use "../icon_fonts" as *;
-@use "./common";
+$filterbuilder-range-separator-opacity: 0.3 !default;
+
+$filterbuilder-action-icon-margin-left: 5px !default;
+$filterbuilder-action-icon-margin-right: 5px !default;
+$filterbuilder-group-content-padding-right: 26px !default;
+$filterbuilder-range-separator-margin: 0 7px !default;
+$filterbuilder-item-value-text-min-width: 20px !default;
+$filterbuilder-item-value-text-padding: 2px 7px 3px 7px !default;
+$filterbuilder-action-icon-padding: 5px 8px !default;
+$filterbuilder-group-content-padding-left: 26px !default;
+$filterbuilder-treeview-item-padding-left: 5px !default;
+$filterbuilder-treeview-item-padding-right: 5px !default;
+$filterbuilder-treeview-node-margin-left: 15px !default;
+$filterbuilder-treeview-node-margin-right: 15px !default;
+$filterbuilder-scrollable-max-height: 360px !default;
+
+@use "./common" with (
+  $filterbuilder-range-separator-opacity: $filterbuilder-range-separator-opacity,
+  $filterbuilder-action-icon-margin-left: $filterbuilder-action-icon-margin-left,
+  $filterbuilder-action-icon-margin-right: $filterbuilder-action-icon-margin-right,
+  $filterbuilder-group-content-padding-right: $filterbuilder-group-content-padding-right,
+  $filterbuilder-range-separator-margin: $filterbuilder-range-separator-margin,
+  $filterbuilder-item-value-text-min-width: $filterbuilder-item-value-text-min-width,
+  $filterbuilder-item-value-text-padding: $filterbuilder-item-value-text-padding,
+  $filterbuilder-action-icon-padding: $filterbuilder-action-icon-padding,
+  $filterbuilder-group-content-padding-left: $filterbuilder-group-content-padding-left,
+  $filterbuilder-treeview-item-padding-left: $filterbuilder-treeview-item-padding-left,
+  $filterbuilder-treeview-item-padding-right: $filterbuilder-treeview-item-padding-right,
+  $filterbuilder-treeview-node-margin-left: $filterbuilder-treeview-node-margin-left,
+  $filterbuilder-treeview-node-margin-right: $filterbuilder-treeview-node-margin-right,
+  $filterbuilder-scrollable-max-height: $filterbuilder-scrollable-max-height,
+);
 
 .dx-filterbuilder {
   background-color: $filterbuilder-bg;

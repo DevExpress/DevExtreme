@@ -1,0 +1,16 @@
+@use "sass:color";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../common/mixins" as *;
+@use "../../base/dropDownList" with (
+  $dropdownlist-list-min-height: $fluent-dropdownlist-list-min-height,
+);
+
+// adduse
+@use "../dropDownEditor";
+
+
+.dx-dropdownlist-popup-wrapper {
+  @include dx-dropdownlist-list-appearance();
+}

@@ -1,0 +1,23 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// adduse
+
+$fluent-slider-bar-bg: ds.$color-border-neutral-accessible-rest !default;
+
+$slider-accent-color: ds.$color-surface-primary-default-rest !default;
+$slider-accent-color-hover: ds.$color-surface-primary-default-hovered !default;
+$slider-accent-color-focused: ds.$color-surface-primary-default-active !default;
+
+$slider-invalid-color: ds.$color-border-danger-default-rest !default;
+$slider-invalid-color-hover: ds.$color-border-danger-default-hovered !default;
+$slider-invalid-color-focused: ds.$color-border-danger-default-hovered !default;
+
+$fluent-slider-disabled-bg: ds.$color-content-neutral-default-disabled !default;
+$fluent-slider-bar-disabled-bg: ds.$color-surface-neutral-default-disabled !default;
+
+$fluent-slider-tooltip-color: ds.$color-content-neutral-default-rest !default;
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$slider-border-color: ds.$color-border-neutral-default-rest !default;
+$slider-element-bg: ds.$color-surface-neutral-default-rest !default;
+$slider-theme-invalid-color: ds.$color-border-danger-default-rest !default;
