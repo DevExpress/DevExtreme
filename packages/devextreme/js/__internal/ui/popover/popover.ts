@@ -277,29 +277,21 @@ class Popover<
     }
   }
 
-  _renderFocusTarget(): void {
-    if (this._getEffectiveAriaRole() !== 'dialog') {
-      const { tabIndex } = this.option();
-      // @ts-expect-error
-      this._focusTarget().attr('tabIndex', tabIndex);
+  // Intentional no-op: Focus target logic is inherited from Widget,
+  // uses in Popup and do not need here.
+  _renderFocusTarget(): void {}
+
+  _getFocusTarget(): dxElementWrapper | null | undefined {
+    const $firstFocusableTarget = this._findTabbableBounds().$first;
+    if ($firstFocusableTarget?.length) {
+      return $firstFocusableTarget;
     }
+
+    return null;
   }
 
   _focusTarget(): dxElementWrapper | null | undefined {
-    if (this._getEffectiveAriaRole() === 'dialog') {
-      const $firstFocusableTarget = this._findTabbableBounds().$first;
-      if ($firstFocusableTarget?.length) {
-        return $firstFocusableTarget;
-      }
-
-      const $overlayContent = this.$overlayContent();
-      if ($overlayContent.attr('tabindex') === undefined) {
-        $overlayContent.attr('tabindex', -1);
-      }
-      return $overlayContent;
-    }
-
-    return super._focusTarget();
+    return this._getFocusTarget();
   }
 
   _restoreTargetFocus(): void {
@@ -312,11 +304,7 @@ class Popover<
   }
 
   _forceFocusLost(): void {
-    if (this._getEffectiveAriaRole() === 'dialog') {
-      this._restoreTargetFocus();
-    } else {
-      super._forceFocusLost();
-    }
+    this._restoreTargetFocus();
   }
 
   _getAriaRole(): string {
