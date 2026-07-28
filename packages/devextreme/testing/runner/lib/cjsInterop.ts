@@ -43,8 +43,8 @@ function normalizeRequireSpecifierForEsm(specWithQuotes: string, sourcePath?: st
   return specWithQuotes;
 }
 
-function rewriteRemainingBundleRequires(source: string, sourcePath?: string): string {
-  if (!isBundleTemplatePath(sourcePath) || !/\brequire\s*\(/.test(source)) {
+function rewriteRemainingRequires(source: string, sourcePath?: string): string {
+  if (!/\brequire\s*\(/.test(source)) {
     return source;
   }
 
@@ -169,8 +169,10 @@ export function rewriteCjsStyleDefaultImports(source: string): string {
 }
 
 /**
- * Rewrite common top-level require() patterns used by legacy QUnit suites.
- * Does not rewrite require() inside functions (rare; e.g. aspnet.tests.js).
+ * Rewrite require() in legacy QUnit suites/helpers to ESM.
+ * Common top-level forms become import + binding; any leftover
+ * `require('…')` (including nested member access / in-function calls)
+ * is rewritten via a shared import alias.
  */
 export function rewriteRequiresToEsm(source: string, sourcePath?: string): string {
   if (!/\brequire\s*\(/.test(source)) {
@@ -191,17 +193,18 @@ export function rewriteRequiresToEsm(source: string, sourcePath?: string): strin
     },
   );
 
-  // const name = require('spec').prop;
+  // const name = require('spec').prop... (one or more members)
   next = next.replace(
     new RegExp(
-      `^(const|let|var)\\s+(${IDENT})\\s*=\\s*require\\s*\\(\\s*${SPEC}\\s*\\)\\s*\\.\\s*(${IDENT})\\s*;?\\s*$`,
+      `^(const|let|var)\\s+(${IDENT})\\s*=\\s*require\\s*\\(\\s*${SPEC}\\s*\\)((?:\\s*\\.\\s*${IDENT})+)\\s*;?\\s*$`,
       'gm',
     ),
-    (_m, kind: string, name: string, spec: string, prop: string) => {
+    (_m, kind: string, name: string, spec: string, members: string) => {
       const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
       const ns = nextRequireId();
+      const path = members.replace(/\s+/g, '');
       return `import * as ${ns} from ${normalizedSpec};`
-        + `\n${kind} ${name} = (${ns}.default ?? { ...${ns} }).${prop};`;
+        + `\n${kind} ${name} = (${ns}.default ?? { ...${ns} })${path};`;
     },
   );
 
@@ -220,17 +223,18 @@ export function rewriteRequiresToEsm(source: string, sourcePath?: string): strin
     },
   );
 
-  // const name = obj.path = require('spec').prop;
+  // const name = obj.path = require('spec').prop...
   next = next.replace(
     new RegExp(
-      `^(const|let|var)\\s+(${IDENT})\\s*=\\s*((?:${IDENT}|\\[['"][^\\]]+['"]\\])(?:\\.(?:${IDENT})|\\[['"][^\\]]+['"]\\])*)\\s*=\\s*require\\s*\\(\\s*${SPEC}\\s*\\)\\s*\\.\\s*(${IDENT})\\s*;?\\s*$`,
+      `^(const|let|var)\\s+(${IDENT})\\s*=\\s*((?:${IDENT}|\\[['"][^\\]]+['"]\\])(?:\\.(?:${IDENT})|\\[['"][^\\]]+['"]\\])*)\\s*=\\s*require\\s*\\(\\s*${SPEC}\\s*\\)((?:\\s*\\.\\s*${IDENT})+)\\s*;?\\s*$`,
       'gm',
     ),
-    (_m, kind: string, name: string, left: string, spec: string, prop: string) => {
+    (_m, kind: string, name: string, left: string, spec: string, members: string) => {
       const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
       const ns = nextRequireId();
+      const path = members.replace(/\s+/g, '');
       return `import * as ${ns} from ${normalizedSpec};`
-        + `\n${kind} ${name} = (${ns}.default ?? { ...${ns} }).${prop};`
+        + `\n${kind} ${name} = (${ns}.default ?? { ...${ns} })${path};`
         + `\n${left} = ${name};`;
     },
   );
@@ -263,17 +267,18 @@ export function rewriteRequiresToEsm(source: string, sourcePath?: string): strin
     },
   );
 
-  // obj.path = require('spec').prop;
+  // obj.path = require('spec').prop...
   next = next.replace(
     new RegExp(
-      `^((?:${IDENT}|\\[['"][^\\]]+['"]\\])(?:\\.(?:${IDENT})|\\[['"][^\\]]+['"]\\])*)\\s*=\\s*require\\s*\\(\\s*${SPEC}\\s*\\)\\s*\\.\\s*(${IDENT})\\s*;?\\s*$`,
+      `^((?:${IDENT}|\\[['"][^\\]]+['"]\\])(?:\\.(?:${IDENT})|\\[['"][^\\]]+['"]\\])*)\\s*=\\s*require\\s*\\(\\s*${SPEC}\\s*\\)((?:\\s*\\.\\s*${IDENT})+)\\s*;?\\s*$`,
       'gm',
     ),
-    (_m, left: string, spec: string, prop: string) => {
+    (_m, left: string, spec: string, members: string) => {
       const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
       const ns = nextRequireId();
+      const path = members.replace(/\s+/g, '');
       return `import * as ${ns} from ${normalizedSpec};`
-        + `\n${left} = (${ns}.default ?? { ...${ns} }).${prop};`;
+        + `\n${left} = (${ns}.default ?? { ...${ns} })${path};`;
     },
   );
 
@@ -297,7 +302,9 @@ export function rewriteRequiresToEsm(source: string, sourcePath?: string): strin
     (_m, spec: string) => `import ${normalizeRequireSpecifierForEsm(spec, sourcePath)};`,
   );
 
-  next = rewriteRemainingBundleRequires(next, sourcePath);
+  // Catch-all for any remaining static require('…') / require("…")
+  // (nested access, in-function calls, unusual LHS forms).
+  next = rewriteRemainingRequires(next, sourcePath);
 
   return next;
 }
@@ -316,12 +323,13 @@ function rewriteRequiresToEsmInAmdBody(source: string): string {
 
   next = next.replace(
     new RegExp(
-      `^\\s*(const|let|var)\\s+(${IDENT})\\s*=\\s*require\\s*\\(\\s*${SPEC}\\s*\\)\\s*\\.\\s*(${IDENT})\\s*;?\\s*$`,
+      `^\\s*(const|let|var)\\s+(${IDENT})\\s*=\\s*require\\s*\\(\\s*${SPEC}\\s*\\)((?:\\s*\\.\\s*${IDENT})+)\\s*;?\\s*$`,
       'gm',
     ),
-    (_m, kind: string, name: string, spec: string, prop: string) => {
+    (_m, kind: string, name: string, spec: string, members: string) => {
       const ns = nextRequireId();
-      return `import * as ${ns} from ${spec};\n${kind} ${name} = (${ns}.default ?? { ...${ns} }).${prop};`;
+      const path = members.replace(/\s+/g, '');
+      return `import * as ${ns} from ${spec};\n${kind} ${name} = (${ns}.default ?? { ...${ns} })${path};`;
     },
   );
 
@@ -340,6 +348,8 @@ function rewriteRequiresToEsmInAmdBody(source: string): string {
     new RegExp(`^\\s*require\\s*\\(\\s*${SPEC}\\s*\\)\\s*;?\\s*$`, 'gm'),
     (_m, spec: string) => `import ${spec};`,
   );
+
+  next = rewriteRemainingRequires(next);
 
   return next;
 }
