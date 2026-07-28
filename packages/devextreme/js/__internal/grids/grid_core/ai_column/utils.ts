@@ -35,8 +35,12 @@ export const reduceDataCachedKeys = (
 
 export const isKeyMissingInData = (
   data: UserData[],
-  keyField: string | string[],
+  keyField: string | string[] | ((data: UserData) => unknown),
 ): boolean => {
+  if (typeof keyField === 'function') {
+    return data.some((item) => !isDefined(keyField(item)));
+  }
+
   const keyFields = Array.isArray(keyField) ? keyField : [keyField];
 
   return data.some(

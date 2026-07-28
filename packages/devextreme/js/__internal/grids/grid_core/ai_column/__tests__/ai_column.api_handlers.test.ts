@@ -9,6 +9,7 @@ import {
   afterTest,
   beforeTest as baseBeforeTest,
   createDataGrid,
+  flushAsync,
   GRID_CONTAINER_ID,
 } from '../../__tests__/__mock__/helpers/utils';
 
@@ -410,14 +411,13 @@ describe('API Handlers', () => {
           },
         ],
         onAIColumnRequestCreating: (e) => {
-          const reduced = e.data.map((item) => ({ name: item.name, value: item.value }));
-          e.data.splice(0, e.data.length, ...reduced);
+          e.data = e.data.map((item) => ({ name: item.name, value: item.value }));
         },
         onDataErrorOccurred,
       });
 
       instance.sendAIColumnRequest('myColumn');
-      jest.advanceTimersByTime(10000);
+      await flushAsync();
 
       expect(columnSendRequestStarted).toHaveBeenCalledTimes(0);
       expect(onDataErrorOccurred).toHaveBeenCalledTimes(1);
@@ -448,14 +448,13 @@ describe('API Handlers', () => {
           },
         ],
         onAIColumnRequestCreating: (e) => {
-          const reduced = e.data.map((item) => ({ id1: item.id1, value: item.value }));
-          e.data.splice(0, e.data.length, ...reduced);
+          e.data = e.data.map((item) => ({ id1: item.id1, value: item.value }));
         },
         onDataErrorOccurred,
       });
 
       instance.sendAIColumnRequest('myColumn');
-      jest.advanceTimersByTime(10000);
+      await flushAsync();
 
       expect(columnSendRequestStarted).toHaveBeenCalledTimes(0);
       expect(onDataErrorOccurred).toHaveBeenCalledTimes(1);

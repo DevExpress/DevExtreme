@@ -368,6 +368,78 @@ describe('Cache', () => {
     });
   });
 
+  describe('when a handler replaces the data array', () => {
+    it('should look up the cache using the reassigned e.data, not the original page data', async () => {
+      let replaceData = false;
+      const aiIntegration = new AIIntegration({
+        sendRequest(prompt): RequestResult {
+          sendRequestSpy(prompt.data?.data);
+          return {
+            promise: new Promise<string>((resolve) => {
+              const result = {};
+              Object.entries(prompt.data?.data).forEach(([key, value]) => {
+                result[key] = `Response ${(value as any).name}`;
+              });
+              resolve(JSON.stringify(result));
+            }),
+            abort: (): void => {},
+          };
+        },
+      });
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        keyExpr: 'id',
+        paging: {
+          pageSize: 1,
+        },
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration,
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+        onAIColumnRequestCreating: (e) => {
+          if (replaceData) {
+            // Handlers may replace e.data with a brand-new array, not only mutate it.
+            e.data = [
+              { id: 1, name: 'Name 1', value: 10 },
+              { id: 2, name: 'Name 2', value: 20 },
+            ];
+          }
+        },
+      });
+
+      // Each page populates the cache for its single visible row.
+      await Promise.resolve();
+      expect(sendRequestSpy).toHaveBeenCalledTimes(1);
+
+      instance.option('paging.pageIndex', 1);
+      jest.runAllTimers();
+      await Promise.resolve();
+      expect(sendRequestSpy).toHaveBeenCalledTimes(2);
+
+      // The page now shows a single row, but the handler replaces e.data with the
+      // full dataset whose keys are all cached. The lookup must key off e.data, so
+      // no new request is sent.
+      replaceData = true;
+      instance.option('paging.pageIndex', 0);
+      jest.runAllTimers();
+      await Promise.resolve();
+      expect(sendRequestSpy).toHaveBeenCalledTimes(2);
+    });
+  });
+
   describe('common behavior', () => {
     it('should not cache empty responses', async () => {
       const aiIntegrationResult = (prompt): RequestResult => ({

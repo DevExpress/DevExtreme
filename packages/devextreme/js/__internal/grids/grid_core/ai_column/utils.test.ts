@@ -120,6 +120,22 @@ describe('isKeyMissingInData', () => {
     expect(isKeyMissingInData(data, ['id1', 'id2'])).toBe(true);
   });
 
+  it('should return false when a function key expression resolves for all rows', () => {
+    const data: UserData[] = [
+      { id: 1, name: 'A' },
+      { id: 2, name: 'B' },
+    ];
+    expect(isKeyMissingInData(data, (row) => row.id)).toBe(false);
+  });
+
+  it('should return true when a function key expression cannot resolve a row', () => {
+    const data: UserData[] = [
+      { id: 1, name: 'A' },
+      { name: 'B' },
+    ];
+    expect(isKeyMissingInData(data, (row) => row.id)).toBe(true);
+  });
+
   it('should return false for empty data', () => {
     expect(isKeyMissingInData([], 'id')).toBe(false);
   });

@@ -143,7 +143,7 @@ export class AIColumnIntegrationController extends Controller {
 
     let cachedResponse: Record<PropertyKey, string> = {};
     if (args.useCache) {
-      const keys = data.map((item) => this.getRowKeyHash(item));
+      const keys = args.data.map((item) => this.getRowKeyHash(item));
       cachedResponse = this.aiColumnCacheController.getCachedResponse(columnName, keys);
     }
 
