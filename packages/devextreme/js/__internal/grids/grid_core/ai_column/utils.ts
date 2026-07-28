@@ -33,6 +33,19 @@ export const reduceDataCachedKeys = (
   return newData;
 };
 
+export const isKeyMissingInData = (
+  data: UserData[],
+  keyField: string | string[],
+): boolean => {
+  if (typeof keyField !== 'string') {
+    // The key field should be a string for AI Column functionality.
+    // Return false to avoid unnecessary errors for compound keys.
+    return false;
+  }
+
+  return data.some((item) => !(keyField in item));
+};
+
 export const isAIColumnAutoMode = (column: Column): boolean => column.type === 'ai' && (!column.ai?.mode || column.ai.mode === 'auto');
 
 export const isPopupOptions = (optionName: string, value: unknown): boolean => optionName.startsWith('ai.popup')
