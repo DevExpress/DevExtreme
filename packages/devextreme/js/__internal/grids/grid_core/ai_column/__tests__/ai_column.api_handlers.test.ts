@@ -423,5 +423,43 @@ describe('API Handlers', () => {
       expect(onDataErrorOccurred).toHaveBeenCalledTimes(1);
       expect(errors.Error).toHaveBeenCalledWith('E1046', 'id');
     });
+
+    it('should throw E1046 and not send the request when the handler removes a compound key subfield', async () => {
+      const onDataErrorOccurred = jest.fn();
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id1: 1, id2: 'a', value: 10 },
+          { id1: 2, id2: 'b', value: 20 },
+        ],
+        keyExpr: ['id1', 'id2'],
+        columns: [
+          { dataField: 'id1' },
+          { dataField: 'id2' },
+          { dataField: 'value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: columnAIIntegration,
+              mode: 'manual',
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+        onAIColumnRequestCreating: (e) => {
+          const reduced = e.data.map((item) => ({ id1: item.id1, value: item.value }));
+          e.data.splice(0, e.data.length, ...reduced);
+        },
+        onDataErrorOccurred,
+      });
+
+      instance.sendAIColumnRequest('myColumn');
+      jest.advanceTimersByTime(10000);
+
+      expect(columnSendRequestStarted).toHaveBeenCalledTimes(0);
+      expect(onDataErrorOccurred).toHaveBeenCalledTimes(1);
+      expect(errors.Error).toHaveBeenCalledWith('E1046', ['id1', 'id2']);
+    });
   });
 });

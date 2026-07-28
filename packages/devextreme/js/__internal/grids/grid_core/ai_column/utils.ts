@@ -37,13 +37,11 @@ export const isKeyMissingInData = (
   data: UserData[],
   keyField: string | string[],
 ): boolean => {
-  if (typeof keyField !== 'string') {
-    // The key field should be a string for AI Column functionality.
-    // Return false to avoid unnecessary errors for compound keys.
-    return false;
-  }
+  const keyFields = Array.isArray(keyField) ? keyField : [keyField];
 
-  return data.some((item) => !(keyField in item));
+  return data.some(
+    (item) => keyFields.some((field) => !(field in item)),
+  );
 };
 
 export const isAIColumnAutoMode = (column: Column): boolean => column.type === 'ai' && (!column.ai?.mode || column.ai.mode === 'auto');
