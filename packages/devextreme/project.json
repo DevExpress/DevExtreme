@@ -322,6 +322,11 @@
           { "from": "./js/viz/vector_map.utils/_settings.json", "to": "./viz/vector_map.utils/_settings.json" }
         ]
       },
+      "configurations": {
+        "qunit": {
+          "removeDebug": false
+        }
+      },
       "inputs": [
         "jsSourcesProduction",
         "jsAssetsProduction"
@@ -410,6 +415,11 @@
           ".jsx": ".js"
         }
       },
+      "configurations": {
+        "qunit": {
+          "removeDebug": false
+        }
+      },
       "inputs": [
         "internalTsArtifacts"
       ],
@@ -435,6 +445,11 @@
           { "from": "./js/localization/messages", "to": "./localization/messages" },
           { "from": "./js/viz/vector_map.utils/_settings.json", "to": "./viz/vector_map.utils/_settings.json" }
         ]
+      },
+      "configurations": {
+        "qunit": {
+          "removeDebug": false
+        }
       }
     },
     "build:npm:esm:internal:watch": {
@@ -450,6 +465,11 @@
         "renameExtensions": {
           ".jsx": ".js"
         }
+      },
+      "configurations": {
+        "qunit": {
+          "removeDebug": false
+        }
       }
     },
     "build:qunit-esm": {
@@ -458,8 +478,8 @@
         "cwd": "{projectRoot}",
         "parallel": true,
         "commands": [
-          "pnpm nx run devextreme:build:npm:esm",
-          "pnpm nx run devextreme:build:npm:esm:internal"
+          "pnpm nx run devextreme:build:npm:esm -c qunit",
+          "pnpm nx run devextreme:build:npm:esm:internal -c qunit"
         ]
       },
       "dependsOn": [
@@ -588,7 +608,8 @@
             "pnpm nx build:ts:internal devextreme",
             "pnpm nx run-many --targets=build:cjs,build:cjs:internal,build:cjs:bundles --projects=devextreme --parallel",
             "pnpm nx run-many --targets=build:cjs,build:cjs:internal,build:cjs:bundles --projects=devextreme --parallel -c production",
-            "pnpm nx run-many --targets=build:npm:esm,build:npm:esm:internal,build:npm:cjs,build:npm:cjs:internal --projects=devextreme --parallel",
+            "pnpm nx run-many --targets=build:npm:cjs,build:npm:cjs:internal --projects=devextreme --parallel",
+            "pnpm nx run-many --targets=build:npm:esm,build:npm:esm:internal --projects=devextreme --parallel -c qunit",
             "pnpm nx clean:dist-ts devextreme"
           ],
           "outputs": [
@@ -631,8 +652,8 @@
           "pnpm nx build:cjs:watch devextreme -c production",
           "pnpm nx build:cjs:internal:watch devextreme",
           "pnpm nx build:cjs:internal:watch devextreme -c production",
-          "pnpm nx build:npm:esm:watch devextreme",
-          "pnpm nx build:npm:esm:internal:watch devextreme"
+          "pnpm nx build:npm:esm:watch devextreme -c qunit",
+          "pnpm nx build:npm:esm:internal:watch devextreme -c qunit"
         ],
         "cwd": "{projectRoot}",
         "parallel": true

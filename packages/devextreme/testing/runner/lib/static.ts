@@ -188,6 +188,56 @@ function sendMutableFacadeModule(res: ServerResponse, shimUrl: string): boolean 
   return true;
 }
 
+/**
+ * ESM npm artifacts are built with removeDebug:true, which strips QUnit-only
+ * hooks. Re-attach the ones still present as locals in the compiled module.
+ */
+function restoreEsmDebugTestHooks(relativeUrlPath: string, source: string): string {
+  const normalized = relativeUrlPath.split(path.sep).join('/');
+  if (!normalized.includes('/artifacts/transpiled-esm-npm/esm/')) {
+    return source;
+  }
+
+  if (normalized.endsWith('/__internal/events/core/m_events_engine.js')) {
+    if (source.includes('eventsEngine.detectPassiveEventHandlersSupport')) {
+      return source;
+    }
+    return source.replace(
+      /eventsEngine\.passiveEventHandlersSupported\s*=\s*passiveEventHandlersSupported;/,
+      'eventsEngine.passiveEventHandlersSupported = passiveEventHandlersSupported;\n'
+      + 'eventsEngine.elementDataMap = elementDataMap;\n'
+      + 'eventsEngine.detectPassiveEventHandlersSupport = detectPassiveEventHandlersSupport;',
+    );
+  }
+
+  return source;
+}
+
+function sendEsmArtifactJs(
+  res: ServerResponse,
+  filePath: string,
+  relativeUrlPath: string,
+): boolean {
+  try {
+    const raw = fs.readFileSync(filePath, 'utf8');
+    const body = restoreEsmDebugTestHooks(relativeUrlPath, raw);
+    if (body === raw) {
+      return sendStaticFile(res, filePath, fs.statSync(filePath).size);
+    }
+    const buffer = Buffer.from(body, 'utf8');
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+    res.setHeader('Content-Length', String(buffer.length));
+    res.end(buffer);
+    return true;
+  } catch {
+    res.statusCode = 500;
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.end('Failed to serve ESM artifact');
+    return true;
+  }
+}
+
 /** Rewrite CJS require/exports and default imports for QUnit tests/helpers. */
 function sendTestHelperJs(res: ServerResponse, filePath: string): boolean {
   try {
@@ -331,6 +381,13 @@ export function createStaticFileService({
         if (shimUrl) {
           return sendMutableFacadeModule(res, shimUrl);
         }
+      }
+
+      if (
+        path.extname(resolvedFilePath).toLowerCase() === '.js'
+        && relativeUrlPath.split(path.sep).join('/').includes('/artifacts/transpiled-esm-npm/esm/')
+      ) {
+        return sendEsmArtifactJs(res, resolvedFilePath, relativeUrlPath);
       }
 
       return sendStaticFile(res, resolvedFilePath, stat.size);

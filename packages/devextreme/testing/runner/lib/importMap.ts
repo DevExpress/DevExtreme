@@ -161,7 +161,7 @@ export function buildQunitImportMap({
 
     // eslint-disable-next-line spellcheck/spell-checker
     fflate: `${NODE_MODULES}/fflate/esm/browser.js`,
-    knockout: `${NODE_MODULES}/knockout/build/output/knockout-latest.debug.js`,
+    knockout: `${SHIMS}/knockout.js`,
     globalize: `${NODE_MODULES}/globalize/dist/globalize.js`,
     'globalize/': `${NODE_MODULES}/globalize/dist/`,
     cldr: `${NODE_MODULES}/cldrjs/dist/cldr.js`,
