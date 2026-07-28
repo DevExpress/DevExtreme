@@ -60,7 +60,7 @@ overrides:
   "fast-uri@>=3.0.0 <3.1.4": "^3.1.4"
   "@hono/node-server@<2.0.12": "^2.0.12"
 catalog:
-  axe-core: ^4.11.1
+  axe-core: 4.11.3
   inferno: ^8.2.3
   inferno-hydrate: ^8.2.3
   inferno-create-element: ^8.2.3
