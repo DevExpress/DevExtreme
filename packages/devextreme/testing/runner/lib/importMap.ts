@@ -212,7 +212,8 @@ export function buildQunitImportMap({
     'cldr/': `${NODE_MODULES}/cldrjs/dist/cldr/`,
     'devextreme-cldr-data/': `${NODE_MODULES}/devextreme-cldr-data/`,
     'cldr-core/': `${NODE_MODULES}/cldr-core/`,
-    intl: `${NODE_MODULES}/intl/index.js`,
+    // Browser UMD build (Node `intl/index.js` uses `global` / `require`)
+    intl: `${NODE_MODULES}/intl/dist/Intl.complete.js`,
     jszip: '/packages/devextreme/artifacts/js/jszip.js',
     'devextreme-exceljs-fork': '/packages/devextreme/artifacts/js/dx-exceljs-fork.js',
     'devextreme-quill': `${NODE_MODULES}/devextreme-quill/dist/dx-quill.js`,

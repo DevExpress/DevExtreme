@@ -134,8 +134,8 @@ function sendStaticFile(res: ServerResponse, filePath: string, fileSize: number)
 
 /**
  * Webpack/UMD vendor bundles mapped in the QUnit import map
- * (quill / diagram / gantt / jszip / exceljs). Loaded as native ESM they
- * have no exports — wrap so `import X from '…'` works.
+ * (quill / diagram / gantt / jszip / exceljs / intl). Loaded as native ESM
+ * they have no exports — wrap so `import X from '…'` works.
  */
 function isWebpackVendorBundlePath(relativeUrlPath: string): boolean {
   const normalized = relativeUrlPath.split(path.sep).join('/');
@@ -143,7 +143,30 @@ function isWebpackVendorBundlePath(relativeUrlPath: string): boolean {
     || normalized.endsWith('/artifacts/js/dx-diagram.js')
     || normalized.endsWith('/artifacts/js/dx-gantt.js')
     || normalized.endsWith('/artifacts/js/dx-exceljs-fork.js')
-    || normalized.endsWith('/artifacts/js/jszip.js');
+    || normalized.endsWith('/artifacts/js/jszip.js')
+    || normalized.endsWith('/intl/dist/Intl.complete.js')
+    || normalized.endsWith('/intl/dist/Intl.js');
+}
+
+function isIntlVendorBundlePath(relativeUrlPath: string): boolean {
+  const normalized = relativeUrlPath.split(path.sep).join('/');
+  return normalized.endsWith('/intl/dist/Intl.complete.js')
+    || normalized.endsWith('/intl/dist/Intl.js');
+}
+
+/**
+ * `intl/dist/Intl.complete.js` appends locale data that expects a free
+ * `IntlPolyfill` binding from the UMD *browser* branch. Forcing CJS breaks
+ * that, so keep the global branch and re-export the polyfill.
+ */
+function wrapIntlVendorAsEsm(source: string): string {
+  return 'var define;\n'
+    // Locale-data IIFE at file end references bare `IntlPolyfill`.
+    + 'var IntlPolyfill;\n'
+    + `${source
+      .replace(/}\(this,/g, '}(globalThis,')
+      .replace(/e\.IntlPolyfill=r\(\)/g, 'e.IntlPolyfill=IntlPolyfill=r()')}\n`
+    + 'export default IntlPolyfill;\n';
 }
 
 /**
@@ -162,10 +185,16 @@ function wrapWebpackVendorAsEsm(source: string): string {
     + 'export default __dxVendorExport;\n';
 }
 
-function sendWebpackVendorAsEsm(res: ServerResponse, filePath: string): boolean {
+function sendWebpackVendorAsEsm(
+  res: ServerResponse,
+  filePath: string,
+  relativeUrlPath: string,
+): boolean {
   try {
     const raw = fs.readFileSync(filePath, 'utf8');
-    const body = wrapWebpackVendorAsEsm(raw);
+    const body = isIntlVendorBundlePath(relativeUrlPath)
+      ? wrapIntlVendorAsEsm(raw)
+      : wrapWebpackVendorAsEsm(raw);
     const buffer = Buffer.from(body, 'utf8');
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
@@ -476,7 +505,7 @@ export function createStaticFileService({
         path.extname(resolvedFilePath).toLowerCase() === '.js'
         && isWebpackVendorBundlePath(relativeUrlPath)
       ) {
-        return sendWebpackVendorAsEsm(res, resolvedFilePath);
+        return sendWebpackVendorAsEsm(res, resolvedFilePath, relativeUrlPath);
       }
 
       if (
