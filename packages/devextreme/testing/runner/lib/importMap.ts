@@ -18,6 +18,47 @@ function resolveEsmRootPath(): string {
 
 const ESM_FS_ROOT = resolveEsmRootPath();
 
+function resolveWorkspaceRoot(): string {
+  const cwd = process.cwd();
+  if (fs.existsSync(path.join(cwd, 'packages', 'devextreme'))) {
+    return cwd;
+  }
+  return path.resolve(cwd, '../..');
+}
+
+/**
+ * Resolve a file from the workspace virtual store to a browser URL
+ * (packages that are not always hoisted into package node_modules).
+ */
+function resolveVirtualStorePackageUrl(packageName: string, fileName: string): string | null {
+  const workspaceRoot = resolveWorkspaceRoot();
+  const storeDirs = [
+    path.join(workspaceRoot, 'node_modules', '.pnpm'),
+    path.join(workspaceRoot, 'packages', 'devextreme', 'node_modules', '.pnpm'),
+  ];
+
+  for (const storeDir of storeDirs) {
+    if (!fs.existsSync(storeDir)) {
+      // skip missing store roots
+    } else {
+      const matches = fs.readdirSync(storeDir)
+        .filter((name) => name.startsWith(`${packageName}@`))
+        .sort()
+        .reverse();
+
+      for (const match of matches) {
+        const filePath = path.join(storeDir, match, 'node_modules', packageName, fileName);
+        if (fs.existsSync(filePath)) {
+          const relative = path.relative(workspaceRoot, filePath).split(path.sep).join('/');
+          return `/${relative}`;
+        }
+      }
+    }
+  }
+
+  return null;
+}
+
 export interface ImportMapOptions {
   jqueryUrl: string;
   cacheBuster: string;
@@ -162,6 +203,9 @@ export function buildQunitImportMap({
     // eslint-disable-next-line spellcheck/spell-checker
     fflate: `${NODE_MODULES}/fflate/esm/browser.js`,
     knockout: `${SHIMS}/knockout.js`,
+    rrule: `${NODE_MODULES}/rrule/dist/esm/index.js`,
+    // eslint-disable-next-line spellcheck/spell-checker
+    tslib: resolveVirtualStorePackageUrl('tslib', 'tslib.es6.mjs') ?? `${SHIMS}/tslib.js`,
     globalize: `${NODE_MODULES}/globalize/dist/globalize.js`,
     'globalize/': `${NODE_MODULES}/globalize/dist/`,
     cldr: `${NODE_MODULES}/cldrjs/dist/cldr.js`,

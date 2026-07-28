@@ -189,8 +189,45 @@ function sendMutableFacadeModule(res: ServerResponse, shimUrl: string): boolean 
 }
 
 /**
+ * Convert leftover `exports.foo = …` (from #DEBUG / dual CJS-ESM sources)
+ * into native ESM exports so the browser does not throw "exports is not defined".
+ */
+function rewriteLegacyCjsExportsInEsmArtifact(source: string): string {
+  if (!/\bexports\./.test(source)) {
+    return source;
+  }
+
+  let next = source;
+
+  // exports.name = name;  /  exports.alias = name;
+  next = next.replace(
+    /^exports\.([A-Za-z_$][\w$]*)\s*=\s*([A-Za-z_$][\w$]*);?\s*$/gm,
+    (_match, exportName: string, valueName: string) => (exportName === valueName
+      ? `export { ${exportName} };`
+      : `export { ${valueName} as ${exportName} };`),
+  );
+
+  // exports.name = function (
+  next = next.replace(
+    /^exports\.([A-Za-z_$][\w$]*)\s*=\s*function\s*\(/gm,
+    'export function $1(',
+  );
+
+  // exports.name = async function (
+  next = next.replace(
+    /^exports\.([A-Za-z_$][\w$]*)\s*=\s*async\s+function\s*\(/gm,
+    'export async function $1(',
+  );
+
+  return next;
+}
+
+/**
  * ESM npm artifacts are built with removeDebug:true, which strips QUnit-only
  * hooks. Re-attach the ones still present as locals in the compiled module.
+ *
+ * When debug is kept (`-c qunit`), some sources still emit CJS `exports.*`
+ * assignments that throw under native ESM — rewrite those to ESM exports.
  */
 function restoreEsmDebugTestHooks(relativeUrlPath: string, source: string): string {
   const normalized = relativeUrlPath.split(path.sep).join('/');
@@ -198,11 +235,11 @@ function restoreEsmDebugTestHooks(relativeUrlPath: string, source: string): stri
     return source;
   }
 
-  if (normalized.endsWith('/__internal/events/core/m_events_engine.js')) {
-    if (source.includes('eventsEngine.detectPassiveEventHandlersSupport')) {
-      return source;
-    }
-    return source.replace(
+  let next = source;
+
+  if (normalized.endsWith('/__internal/events/core/m_events_engine.js')
+    && !next.includes('eventsEngine.detectPassiveEventHandlersSupport')) {
+    next = next.replace(
       /eventsEngine\.passiveEventHandlersSupported\s*=\s*passiveEventHandlersSupported;/,
       'eventsEngine.passiveEventHandlersSupported = passiveEventHandlersSupported;\n'
       + 'eventsEngine.elementDataMap = elementDataMap;\n'
@@ -210,7 +247,7 @@ function restoreEsmDebugTestHooks(relativeUrlPath: string, source: string): stri
     );
   }
 
-  return source;
+  return rewriteLegacyCjsExportsInEsmArtifact(next);
 }
 
 function sendEsmArtifactJs(
