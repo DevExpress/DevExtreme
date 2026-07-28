@@ -213,6 +213,10 @@ const MUTABLE_ARTIFACT_FACADES: readonly { suffix: string; shimUrl: string }[] =
     suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/axes/base_axis.js',
     shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_base_axis.js',
   },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/translators/translator2d.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_translator2d.js',
+  },
 ];
 
 function findMutableArtifactFacade(relativeUrlPath: string): string | null {

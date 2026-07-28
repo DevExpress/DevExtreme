@@ -227,11 +227,13 @@ export function buildQunitImportMap({
     // Debug-export shims
     '__internal/viz/gauges/base_indicators': `${SHIMS}/base_indicators.js`,
 
-    // Mutable facades so QUnit can stub Renderer / Axis under native ESM
+    // Mutable facades so QUnit can stub Renderer / Axis / Translator2D under native ESM
     'viz/core/renderers/renderer_default': `${SHIMS}/viz_renderer.js`,
     'viz/axes/base_axis': `${SHIMS}/viz_base_axis.js`,
+    'viz/translators/translator2d': `${SHIMS}/viz_translator2d.js`,
     '__internal/viz/core/renderers/renderer': `${SHIMS}/viz_renderer.js`,
     '__internal/viz/axes/base_axis': `${SHIMS}/viz_base_axis.js`,
+    '__internal/viz/translators/translator2d': `${SHIMS}/viz_translator2d.js`,
 
     // Stubs
     zod: `${SHIMS}/zod.js`,
