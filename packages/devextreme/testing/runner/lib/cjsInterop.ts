@@ -32,6 +32,29 @@ function isBareSpecifier(specWithQuotes: string): boolean {
   return !spec.startsWith('.') && !spec.startsWith('/');
 }
 
+/**
+ * Convert an ESM named-import clause `{ a as b, c }` into an object
+ * destructuring pattern `{ a: b, c }` (import `as` is not valid there).
+ */
+function importClauseToDestructuring(namedClause: string): string {
+  const trimmedClause = namedClause.trim();
+  if (!trimmedClause.startsWith('{') || !trimmedClause.endsWith('}')) {
+    return namedClause;
+  }
+
+  const inner = trimmedClause.slice(1, -1);
+  const parts = inner.split(',').map((part) => part.trim()).filter(Boolean);
+  const converted = parts.map((part) => {
+    const asMatch = /^([A-Za-z_$][\w$]*)\s+as\s+([A-Za-z_$][\w$]*)$/.exec(part);
+    if (asMatch) {
+      return `${asMatch[1]}: ${asMatch[2]}`;
+    }
+    return part;
+  });
+
+  return `{ ${converted.join(', ')} }`;
+}
+
 export function rewriteCjsStyleDefaultImports(source: string): string {
   importCounter = 0;
   let next = source.replace(
@@ -42,9 +65,10 @@ export function rewriteCjsStyleDefaultImports(source: string): string {
       }
       const ns = `__dxCjs_${name}`;
       const merged = `({ ...${ns}, ...(typeof ${ns}.default === 'object' && ${ns}.default ? ${ns}.default : {}) })`;
+      const bindingPattern = importClauseToDestructuring(named);
       return `import * as ${ns} from ${spec};`
         + ` const ${name} = ${ns}.default ?? { ...${ns} };`
-        + ` const ${named} = ${merged}`;
+        + ` const ${bindingPattern} = ${merged}`;
     },
   );
 
@@ -62,8 +86,9 @@ export function rewriteCjsStyleDefaultImports(source: string): string {
     }
     const ns = nextImportId();
     const merged = `({ ...${ns}, ...(typeof ${ns}.default === 'object' && ${ns}.default ? ${ns}.default : {}) })`;
+    const bindingPattern = importClauseToDestructuring(named);
     return `import * as ${ns} from ${spec};`
-      + ` const ${named} = ${merged}`;
+      + ` const ${bindingPattern} = ${merged}`;
   });
 
   return next;
