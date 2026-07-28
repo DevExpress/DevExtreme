@@ -302,7 +302,7 @@ export class AIColumnController extends Controller {
   }
 
   public getAIColumnText(columnName: string, key: unknown): string | undefined {
-    return this.aiColumnIntegrationController.getAIColumnText(columnName, key as PropertyKey);
+    return this.aiColumnIntegrationController.getAIColumnText(columnName, key);
   }
 
   public aiColumnOptionChanged(

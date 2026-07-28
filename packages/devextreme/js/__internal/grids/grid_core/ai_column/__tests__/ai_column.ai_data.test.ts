@@ -1,7 +1,7 @@
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
-import type { GenerateGridColumnCommandResponse } from '@js/common/ai-integration';
+import type { GenerateGridColumnCommandResponse, RequestParams } from '@js/common/ai-integration';
 import type { LoadOptions } from '@js/data';
 import DataSource from '@js/data/data_source';
 import errors from '@js/ui/widget/ui.errors';
@@ -12,6 +12,7 @@ import {
   afterTest,
   beforeTest as baseBeforeTest,
   createDataGrid,
+  flushAsync,
 } from '../../__tests__/__mock__/helpers/utils';
 import { CLASSES } from '../const';
 
@@ -347,6 +348,51 @@ describe('AI data', () => {
           component.getDataCell(1, 3).getElement(),
         ],
       );
+    });
+  });
+
+  describe('when the key is compound', () => {
+    it('should render each row\'s own AI value', async () => {
+      let sentKeys: string[] = [];
+      const aiIntegration = new AIIntegration({
+        sendRequest(params: RequestParams): RequestResult {
+          const dataset = params.data?.data as Record<string, { name: string }>;
+          sentKeys = Object.keys(dataset);
+          const result: Record<string, string> = {};
+          Object.entries(dataset).forEach(([key, value]) => {
+            result[key] = `AI ${value.name}`;
+          });
+          return {
+            promise: Promise.resolve(JSON.stringify(result)),
+            abort: (): void => {},
+          };
+        },
+      });
+
+      const { component } = await createDataGrid({
+        keyExpr: ['id1', 'id2'],
+        dataSource: [
+          { id1: 1, id2: 'a', name: 'Name 1' },
+          { id1: 1, id2: 'b', name: 'Name 2' },
+        ],
+        columns: [
+          { dataField: 'id1' },
+          { dataField: 'id2' },
+          { dataField: 'name' },
+          {
+            type: 'ai',
+            name: 'aiColumn',
+            caption: 'AI Column',
+            ai: { aiIntegration, prompt: 'Test prompt' },
+          },
+        ],
+      });
+
+      await flushAsync();
+
+      expect(sentKeys).toHaveLength(2);
+      expect(component.getDataCell(0, 3).getText()).toBe('AI Name 1');
+      expect(component.getDataCell(1, 3).getText()).toBe('AI Name 2');
     });
   });
 });

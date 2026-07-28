@@ -25,7 +25,7 @@ describe('reduceDataCachedKeys', () => {
       b: 'test b',
       c: 'test c',
     };
-    const result = reduceDataCachedKeys(data, cachedData, 'key');
+    const result = reduceDataCachedKeys(data, cachedData, (item) => item.key as PropertyKey);
     expect(result).toEqual(
       { a: { key: 'a', value: '1' } },
     );
@@ -38,7 +38,7 @@ describe('reduceDataCachedKeys', () => {
       { key: 'c', value: '3' },
     ];
     const cachedKeys = {};
-    const result = reduceDataCachedKeys(data, cachedKeys, 'key');
+    const result = reduceDataCachedKeys(data, cachedKeys, (item) => item.key as PropertyKey);
     expect(result).toEqual({
       a: { key: 'a', value: '1' },
       b: { key: 'b', value: '2' },
@@ -57,7 +57,7 @@ describe('reduceDataCachedKeys', () => {
       b: 'test b',
       c: 'test c',
     };
-    const result = reduceDataCachedKeys(data, cachedData, 'key');
+    const result = reduceDataCachedKeys(data, cachedData, (item) => item.key as PropertyKey);
     expect(result).toEqual({ });
   });
 
@@ -71,7 +71,7 @@ describe('reduceDataCachedKeys', () => {
       2: 'two',
       3: 'three',
     };
-    const result = reduceDataCachedKeys(data, cachedKeys, 'key');
+    const result = reduceDataCachedKeys(data, cachedKeys, (item) => item.key as PropertyKey);
     expect(result).toEqual({
       1: { key: 1, value: '1' },
     });

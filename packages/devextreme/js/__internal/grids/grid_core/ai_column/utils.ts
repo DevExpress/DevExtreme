@@ -20,11 +20,11 @@ export const getDataFromRowItems = (items: Item[]): UserData[] => items
 export const reduceDataCachedKeys = (
   data: UserData[],
   cachedData: Record<PropertyKey, string>,
-  keyField: string,
+  getKey: (item: UserData) => PropertyKey,
 ): Record<PropertyKey, unknown> => {
   const newData: Record<PropertyKey, unknown> = { };
   for (const item of data) {
-    const key = item[keyField] as PropertyKey;
+    const key = getKey(item);
     if (!(key in cachedData)) {
       newData[key] = item;
     }
