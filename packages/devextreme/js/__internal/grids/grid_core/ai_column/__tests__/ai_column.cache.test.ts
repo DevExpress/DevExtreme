@@ -651,4 +651,66 @@ describe('Cache', () => {
       expect(instance.getAIColumnText('myAIColumn', 1)).toEqual('Response with value=20');
     });
   });
+
+  describe('when a compound-key row is updated via Push API', () => {
+    it('should clear cached data for the correct row and send a prompt request', async () => {
+      const aiIntegration = new AIIntegration({
+        sendRequest(prompt: RequestParams): RequestResult {
+          sendRequestSpy(prompt.data?.data);
+
+          return {
+            promise: new Promise((resolve) => {
+              const result = {};
+              Object.entries(prompt.data?.data).forEach(([key, value]) => {
+                result[key] = `Response with value=${(value as any).value}`;
+              });
+              resolve(JSON.stringify(result));
+            }),
+            abort: (): void => {},
+          };
+        },
+      });
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id1: 1, id2: 'a', value: 10 },
+          { id1: 2, id2: 'b', value: 20 },
+        ],
+        keyExpr: ['id1', 'id2'],
+        columns: [
+          { dataField: 'id1' },
+          { dataField: 'id2' },
+          { dataField: 'value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myAIColumn',
+            ai: {
+              aiIntegration,
+              prompt: 'Initial prompt',
+            },
+          },
+        ],
+      });
+
+      expect(sendRequestSpy).toHaveBeenCalledTimes(1);
+      expect(instance.getAIColumnText('myAIColumn', { id1: 1, id2: 'a' })).toEqual('Response with value=10');
+      expect(instance.getAIColumnText('myAIColumn', { id1: 2, id2: 'b' })).toEqual('Response with value=20');
+
+      instance.getDataSource().store().push([{
+        type: 'update',
+        key: { id1: 1, id2: 'a' },
+        data: { value: 30 },
+      }]);
+      jest.runAllTimers();
+      await Promise.resolve();
+
+      // only the pushed row is re-requested; the other row stays cached
+      expect(sendRequestSpy).toHaveBeenCalledTimes(2);
+      expect(sendRequestSpy).toHaveBeenLastCalledWith({
+        '{"id1":1,"id2":"a"}': { id1: 1, id2: 'a', value: 30 },
+      });
+      expect(instance.getAIColumnText('myAIColumn', { id1: 1, id2: 'a' })).toEqual('Response with value=30');
+      expect(instance.getAIColumnText('myAIColumn', { id1: 2, id2: 'b' })).toEqual('Response with value=20');
+    });
+  });
 });

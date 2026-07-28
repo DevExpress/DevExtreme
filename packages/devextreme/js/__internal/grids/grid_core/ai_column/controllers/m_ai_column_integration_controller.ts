@@ -10,6 +10,7 @@ import type { ColumnsController } from '../../columns_controller/m_columns_contr
 import type { DataController, UserData } from '../../data_controller/m_data_controller';
 import type { ErrorHandlingController } from '../../error_handling/m_error_handling';
 import { Controller } from '../../m_modules';
+import type { RowKey } from '../../m_types';
 import type { InternalRequestCallbacks } from '../types';
 import { getDataFromRowItems, isKeyMissingInData, reduceDataCachedKeys } from '../utils';
 import { AIColumnCacheController } from './m_ai_column_cache_controller';
@@ -187,7 +188,7 @@ export class AIColumnIntegrationController extends Controller {
     this.errorHandlingController?.showToastError(message);
   }
 
-  public getAIColumnText(columnName: string, key: unknown): string | undefined {
+  public getAIColumnText(columnName: string, key: RowKey): string | undefined {
     return this.aiColumnCacheController.getCachedString(columnName, getKeyHash(key) as PropertyKey);
   }
 
@@ -195,7 +196,7 @@ export class AIColumnIntegrationController extends Controller {
     this.aiColumnCacheController.clearCache(columnName);
   }
 
-  public clearAIColumnByKey(columnName: string, key: unknown): void {
+  public clearAIColumnByKey(columnName: string, key: RowKey): void {
     this.aiColumnCacheController.clearCacheByKey(columnName, getKeyHash(key) as PropertyKey);
   }
 
