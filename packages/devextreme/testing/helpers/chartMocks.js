@@ -16,7 +16,7 @@ import {
 } from './vizMocks.js';
 import { Range } from 'viz/translators/range';
 
-const mutableSeriesFamilyModule = seriesFamilyModule.default ?? { ...seriesFamilyModule };
+const mutableSeriesFamilyModule = seriesFamilyModule.default ?? seriesFamilyModule;
 
 const LoadingIndicatorOrig = loadingIndicatorModule.LoadingIndicator;
 

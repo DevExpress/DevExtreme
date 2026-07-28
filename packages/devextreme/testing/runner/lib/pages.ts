@@ -124,6 +124,7 @@ export function createPagesRenderer({
     const qunitJs = contentWithCacheBuster('/packages/devextreme/node_modules/qunit/qunit/qunit.js', cacheBuster);
     const qunitExtensionsJs = contentWithCacheBuster('/packages/devextreme/testing/helpers/qunitExtensions.js', cacheBuster);
     const jqueryJs = contentWithCacheBuster('/packages/devextreme/node_modules/jquery/dist/jquery.js', cacheBuster);
+    const knockoutJs = contentWithCacheBuster('/packages/devextreme/node_modules/knockout/build/output/knockout-latest.debug.js', cacheBuster);
     const sinonJs = contentWithCacheBuster('/packages/devextreme/node_modules/sinon/pkg/sinon.js', cacheBuster);
 
     const importMap = buildQunitImportMap({
@@ -148,6 +149,7 @@ export function createPagesRenderer({
       QUNIT_JS_URL: qunitJs,
       QUNIT_EXTENSIONS_JS_URL: qunitExtensionsJs,
       JQUERY_JS_URL: jqueryJs,
+      KNOCKOUT_JS_URL: knockoutJs,
       SINON_JS_URL: sinonJs,
       IMPORT_MAP_SCRIPT: importMapScript,
       ESM_MODULE_ROOT_JSON: jsonString(getEsmModuleRoot()),

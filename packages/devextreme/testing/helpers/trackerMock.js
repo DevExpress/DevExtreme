@@ -1,13 +1,13 @@
-const mock = require('./mockModule.js').mock;
 const vizMocks = require('./vizMocks.js');
-const { ChartTracker, PieTracker } = require('viz/chart_components/tracker');
-const ChartTrackerStub = vizMocks.stubClass(ChartTracker);
-const PieTrackerStub = vizMocks.stubClass(PieTracker);
+// Mutable ESM facade (see esm-shims/viz_chart_tracker.js). Under SystemJS this
+// used mockModule/System.set; native ESM has no module registry to replace.
+const trackerModule = require('viz/chart_components/tracker');
 
-const trackerModule = mock('viz/chart_components/tracker', {
-    ChartTracker: sinon.spy((parameters) => new ChartTrackerStub(parameters)),
-    PieTracker: sinon.spy((parameters) => new PieTrackerStub(parameters))
-});
+const ChartTrackerStub = vizMocks.stubClass(trackerModule.ChartTracker);
+const PieTrackerStub = vizMocks.stubClass(trackerModule.PieTracker);
+
+trackerModule.ChartTracker = sinon.spy((parameters) => new ChartTrackerStub(parameters));
+trackerModule.PieTracker = sinon.spy((parameters) => new PieTrackerStub(parameters));
 
 exports.default = trackerModule;
 exports.__esModule = true;

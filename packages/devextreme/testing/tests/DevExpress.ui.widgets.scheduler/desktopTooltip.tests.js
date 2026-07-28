@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { DesktopTooltipStrategy } from '__internal/scheduler/tooltip_strategies/desktop_tooltip_strategy';
 import { FunctionTemplate } from 'core/templates/function_template';
 import { extend } from 'core/utils/extend';

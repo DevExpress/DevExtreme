@@ -1,7 +1,9 @@
 /* global currentAssert */
 
 import $ from 'jquery';
-import { stubAnimationFrame } from '../../helpers/animationFrameStub.js';
+import {
+    stubAnimationFrame,
+} from '../../helpers/animationFrameStub.js';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import animationModule from 'viz/core/renderers/animation';
@@ -13,6 +15,14 @@ import {
 (function() {
     QUnit.module('AnimationController', {
         beforeEach: function() {
+            // Some tests call stub handle.restore(), which switches RAF to noop.
+            // Re-apply a working default per test so async chains can finish.
+            // Also ensures frame.ts callOnce captures stubbed window methods.
+            stubAnimationFrame({
+                request: (callback) => window.setTimeout(() => callback(Date.now()), 0),
+                cancel: (timerId) => window.clearTimeout(timerId),
+            });
+
             this.AnimationController = animationModule.AnimationController;
 
             this.Animation = function(ticks, complete, options) {

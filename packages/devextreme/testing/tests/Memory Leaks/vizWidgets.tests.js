@@ -1,4 +1,4 @@
-window.DevExpress = { viz: { map: { sources: {} } } };
+window.DevExpress = window.DevExpress || { viz: { map: { sources: {} } } };
 
 import $ from 'core/renderer';
 import { getWidth, getHeight, setWidth, setHeight } from 'core/utils/size';
@@ -17,6 +17,8 @@ import 'viz/tree_map';
 
 import '/packages/devextreme/artifacts/js/vectormap-data/world.js';
 import '/packages/devextreme/artifacts/js/vectormap-data/usa.js';
+
+const DevExpress = window.DevExpress;
 
 const chartTestsSignature = {
     getInitOptions() {

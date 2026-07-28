@@ -524,7 +524,7 @@ define(function(require, exports, module) {
     });
 
     QUnit.module('Exceljs format', () => {
-        ExcelJSLocalizationFormatTests.default.runCurrencyTests([
+        ExcelJSLocalizationFormatTests.runCurrencyTests([
             { value: 'USD', expected: '$#,##0_);\\($#,##0\\)' },
             { value: 'RUB', expected: '\\R\\U\\B#,##0_);\\(\\R\\U\\B#,##0\\)' },
             { value: 'JPY', expected: '\\¥#,##0_);\\(\\¥#,##0\\)' },
@@ -533,7 +533,7 @@ define(function(require, exports, module) {
             { value: 'SEK', expected: '\\S\\E\\K#,##0_);\\(\\S\\E\\K#,##0\\)' }
         ]);
 
-        ExcelJSLocalizationFormatTests.default.runPivotGridCurrencyTests([
+        ExcelJSLocalizationFormatTests.runPivotGridCurrencyTests([
             { value: 'USD', expected: '$#,##0_);\\($#,##0\\)' },
             { value: 'RUB', expected: '\\R\\U\\B#,##0_);\\(\\R\\U\\B#,##0\\)' },
             { value: 'JPY', expected: '\\¥#,##0_);\\(\\¥#,##0\\)' },
