@@ -6,7 +6,7 @@ import { sales } from './data.js';
 const App = () => (
   <>
     <div className="long-title">
-      <h3>Sales Amount by Region</h3>
+      <h2>Sales Amount by Region</h2>
     </div>
     <PivotGrid
       id="sales"

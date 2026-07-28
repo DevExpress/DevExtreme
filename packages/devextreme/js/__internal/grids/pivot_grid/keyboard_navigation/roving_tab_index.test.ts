@@ -43,11 +43,13 @@ describe('RovingTabIndex', () => {
     options: Partial<{
       tabindex: number;
       scrollToItem: (item: HTMLElement) => void;
+      getItemId: (item: HTMLElement) => string | undefined;
     }> = {},
   ): RovingTabIndex => new RovingTabIndex({
     component: createComponent(container, options.tabindex),
     getItems: () => items,
     scrollToItem: options.scrollToItem,
+    getItemId: options.getItemId,
   });
 
   beforeEach(() => {
@@ -215,6 +217,78 @@ describe('RovingTabIndex', () => {
       helper.refocusFocusedItem();
 
       expect(document.activeElement).toBe(items[1]);
+    });
+  });
+
+  describe('item identity', () => {
+    const getItemId = (item: HTMLElement): string | undefined => item.dataset.id;
+
+    const createIdentifiedItems = (ids: string[]): HTMLElement[] => {
+      const created = createItems(ids.length);
+      created.forEach((item, index) => {
+        item.dataset.id = ids[index];
+      });
+
+      return created;
+    };
+
+    it('should keep the tab stop on the same logical item when items shift', () => {
+      items = createIdentifiedItems(['a', 'b', 'c']);
+      const helper = createHelper({ getItemId });
+      helper.focusItem(1);
+
+      // Simulates a virtual scrolling re-render that re-slices the pages.
+      items = createIdentifiedItems(['b', 'c', 'd']);
+      helper.updateTabIndexes();
+
+      expect(items.map((item) => item.getAttribute('tabindex'))).toEqual(['0', '-1', '-1']);
+      expect(helper.getFocusedItem()).toBe(items[0]);
+    });
+
+    it('should refocus the same logical item after items shift', () => {
+      items = createIdentifiedItems(['a', 'b', 'c']);
+      const helper = createHelper({ getItemId });
+      helper.focusItem(1);
+
+      items = createIdentifiedItems(['c', 'a', 'b']);
+      helper.updateTabIndexes();
+      helper.refocusFocusedItem();
+
+      expect(document.activeElement).toBe(items[2]);
+    });
+
+    it('should track identity of an item focused from outside', () => {
+      items = createIdentifiedItems(['a', 'b', 'c']);
+      const helper = createHelper({ getItemId });
+      helper.handleFocusIn(items[2]);
+
+      items = createIdentifiedItems(['c', 'a', 'b']);
+      helper.updateTabIndexes();
+
+      expect(items.map((item) => item.getAttribute('tabindex'))).toEqual(['0', '-1', '-1']);
+    });
+
+    it('should fall back to the stored index when the focused item is gone', () => {
+      items = createIdentifiedItems(['a', 'b', 'c']);
+      const helper = createHelper({ getItemId });
+      helper.focusItem(1);
+
+      items = createIdentifiedItems(['x', 'y', 'z']);
+      helper.updateTabIndexes();
+
+      expect(items.map((item) => item.getAttribute('tabindex'))).toEqual(['-1', '0', '-1']);
+    });
+
+    it('should forget the identity on reset', () => {
+      items = createIdentifiedItems(['a', 'b', 'c']);
+      const helper = createHelper({ getItemId });
+      helper.focusItem(2);
+
+      helper.reset();
+      items = createIdentifiedItems(['c', 'a', 'b']);
+      helper.updateTabIndexes();
+
+      expect(items.map((item) => item.getAttribute('tabindex'))).toEqual(['0', '-1', '-1']);
     });
   });
 });

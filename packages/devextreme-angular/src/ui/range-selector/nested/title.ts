@@ -65,18 +65,18 @@ export class DxoRangeSelectorTitleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get subtitle(): string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap } {
+    get subtitle(): string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap } {
         return this._getOption('subtitle');
     }
-    set subtitle(value: string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }) {
+    set subtitle(value: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }) {
         this._setOption('subtitle', value);
     }
 
     @Input()
-    get text(): string {
+    get text(): string | undefined {
         return this._getOption('text');
     }
-    set text(value: string) {
+    set text(value: string | undefined) {
         this._setOption('text', value);
     }
 

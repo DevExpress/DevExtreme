@@ -2,6 +2,7 @@ import $ from 'jquery';
 
 import 'ui/html_editor';
 import config from 'core/config';
+import messageLocalization from 'localization/message';
 
 const HTML_EDITOR_CLASS = 'dx-htmleditor';
 const QUILL_CONTAINER_CLASS = 'dx-quill-container';
@@ -154,7 +155,12 @@ export default function() {
             assert.expect(isQuillRendered ? 1 : 0);
 
             if(isQuillRendered) {
-                assert.strictEqual($editorContent.attr('aria-label'), 'Editor content');
+                const expectedAriaLabel = [
+                    messageLocalization.format('dxHtmlEditor-editorAriaLabel'),
+                    messageLocalization.format('dxHtmlEditor-ariaEscapeInstruction'),
+                ].join('. ');
+
+                assert.strictEqual($editorContent.attr('aria-label'), expectedAriaLabel);
             }
         });
 

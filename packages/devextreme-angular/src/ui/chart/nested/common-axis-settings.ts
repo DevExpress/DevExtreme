@@ -154,10 +154,10 @@ export class DxoChartCommonAxisSettingsComponent extends NestedOption implements
     }
 
     @Input()
-    get placeholderSize(): number {
+    get placeholderSize(): null | number {
         return this._getOption('placeholderSize');
     }
-    set placeholderSize(value: number) {
+    set placeholderSize(value: null | number) {
         this._setOption('placeholderSize', value);
     }
 

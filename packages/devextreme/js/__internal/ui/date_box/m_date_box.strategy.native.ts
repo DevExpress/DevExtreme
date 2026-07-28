@@ -71,7 +71,7 @@ class NativeStrategy extends DateBoxStrategy {
     };
   }
 
-  getDisplayFormat(displayFormat?: Format): Format {
+  getDisplayFormat(displayFormat?: Format | null): Format {
     const type = this._getDateBoxType();
     const globalFormat = type === 'date' || type === 'datetime' || type === 'datetime-local'
       ? getGlobalFormatByDataType(type === 'datetime-local' ? 'datetime' : type)

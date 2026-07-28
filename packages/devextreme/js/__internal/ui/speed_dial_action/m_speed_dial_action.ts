@@ -20,7 +20,7 @@ class SpeedDialAction extends Widget<Properties> {
       label: '',
       visible: true,
       index: 0,
-      onContentReady: null,
+      onContentReady: undefined,
       activeStateEnabled: true,
       hoverStateEnabled: true,
       animation: {

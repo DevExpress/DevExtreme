@@ -71,6 +71,7 @@ test('Drop down button should lost hover and active state', async (t) => {
   });
 
   return createWidget('dxToolbar', {
+    allowKeyboardNavigation: false,
     items: [
       { text: 'item1', locateInMenu: 'always' },
       { text: 'item2', locateInMenu: 'always' },
@@ -214,6 +215,7 @@ test('Toolbar buttons in menu appearance', async (t) => {
   await createWidget('dxToolbar', {
     width: 50,
     multiline: false,
+    allowKeyboardNavigation: false,
     items,
   });
 });
@@ -260,6 +262,7 @@ test('Toolbar buttons as custom template appearance', async (t) => {
   }));
 
   await createWidget('dxToolbar', {
+    allowKeyboardNavigation: false,
     width: 50,
     multiline: false,
     items,
@@ -311,6 +314,7 @@ test('Toolbar button group appearance', async (t) => {
   });
 
   await createWidget('dxToolbar', {
+    allowKeyboardNavigation: false,
     width: 50,
     items,
   });
@@ -363,6 +367,7 @@ test('Toolbar button group as custom template appearance', async (t) => {
   });
 
   await createWidget('dxToolbar', {
+    allowKeyboardNavigation: false,
     width: 50,
     items,
   });

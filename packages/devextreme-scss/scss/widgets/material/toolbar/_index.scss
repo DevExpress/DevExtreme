@@ -12,6 +12,7 @@
 @use "../checkBox/sizes" as *;
 @use "mixins" as *;
 @use "../../base/toolbar";
+@use "../../base/toolbar/mixins" as *;
 
 // adduse
 @use "../dropDownMenu";
@@ -207,3 +208,4 @@
   padding: 4px;
 }
 
+@include dx-toolbar-focus-outline($base-accent, $material-base-border-radius);

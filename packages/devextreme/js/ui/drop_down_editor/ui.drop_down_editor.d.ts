@@ -92,7 +92,7 @@ export interface dxDropDownEditorOptions<TComponent> extends Omit<dxTextBoxOptio
      * @default undefined
      * @public
      */
-    buttons?: Array<DropDownPredefinedButton | TextEditorButton>;
+    buttons?: Array<DropDownPredefinedButton | TextEditorButton> | undefined;
     /**
      * @docid
      * @default true
@@ -119,14 +119,14 @@ export interface dxDropDownEditorOptions<TComponent> extends Omit<dxTextBoxOptio
      * @action
      * @public
      */
-    onClosed?: ((e: EventInfo<TComponent>) => void);
+    onClosed?: ((e: EventInfo<TComponent>) => void) | null;
     /**
      * @docid
      * @default null
      * @action
      * @public
      */
-    onOpened?: ((e: EventInfo<TComponent>) => void);
+    onOpened?: ((e: EventInfo<TComponent>) => void) | null;
     /**
      * @docid
      * @default false
@@ -158,7 +158,7 @@ export interface dxDropDownEditorOptions<TComponent> extends Omit<dxTextBoxOptio
      * @default null
      * @public
      */
-    value?: any;
+    value?: any | null;
 }
 /**
  * @docid

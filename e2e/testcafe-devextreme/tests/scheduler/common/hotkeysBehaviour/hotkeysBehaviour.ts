@@ -125,6 +125,9 @@ test('Navigate between toolbar items', async (t) => {
 }).before(async () => createScheduler({
   views: ['day', 'week'],
   currentView: 'day',
+  toolbar: {
+    allowKeyboardNavigation: false,
+  },
 }));
 
 test('Navigate between custom toolbar items', async (t) => {
@@ -188,5 +191,6 @@ test('Navigate between custom toolbar items', async (t) => {
         name: 'dateNavigator',
       },
     ],
+    allowKeyboardNavigation: false,
   },
 }));

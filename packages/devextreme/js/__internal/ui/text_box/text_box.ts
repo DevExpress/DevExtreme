@@ -13,7 +13,7 @@ export interface TextBoxProperties extends TextEditorBaseProperties {
   maxLength?: string | number | null;
 }
 
-const TEXTBOX_CLASS = 'dx-textbox';
+export const TEXTBOX_CLASS = 'dx-textbox';
 const SEARCHBOX_CLASS = 'dx-searchbox';
 const ICON_CLASS = 'dx-icon';
 const SEARCH_ICON_CLASS = 'dx-icon-search';

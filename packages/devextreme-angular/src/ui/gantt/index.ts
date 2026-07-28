@@ -251,10 +251,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get endDateRange(): Date {
+    get endDateRange(): Date | undefined {
         return this._getOption('endDateRange');
     }
-    set endDateRange(value: Date) {
+    set endDateRange(value: Date | undefined) {
         this._setOption('endDateRange', value);
     }
 
@@ -485,10 +485,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get startDateRange(): Date {
+    get startDateRange(): Date | undefined {
         return this._getOption('startDateRange');
     }
-    set startDateRange(value: Date) {
+    set startDateRange(value: Date | undefined) {
         this._setOption('startDateRange', value);
     }
 
@@ -977,7 +977,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() endDateRangeChange: EventEmitter<Date>;
+    @Output() endDateRangeChange: EventEmitter<Date | undefined>;
 
     /**
     
@@ -1103,7 +1103,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() startDateRangeChange: EventEmitter<Date>;
+    @Output() startDateRangeChange: EventEmitter<Date | undefined>;
 
     /**
     

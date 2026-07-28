@@ -122,7 +122,7 @@ class DateRangeBox extends Editor<Properties> {
       onKeyUp: null,
       onOpened: null,
       onPaste: null,
-      onValueChanged: null,
+      onValueChanged: undefined,
       openOnFieldClick: true,
       opened: false,
       pickerType: 'calendar',

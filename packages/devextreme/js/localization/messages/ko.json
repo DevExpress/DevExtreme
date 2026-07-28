@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "여기에 데이터 필드를 놓으세요",
         "dxPivotGrid-rowFieldArea": "여기에 행 필드를 놓으세요",
         "dxPivotGrid-filterFieldArea": "여기에 필터 필드를 놓으세요",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "{0}부터 {1}까지",
         "dxScheduler-ariaLabel": "스케줄러. {0} 보기: {1}, 일정 {2}개",
@@ -491,6 +495,8 @@
         "dxFilterBuilder-filterAriaItemOperation": "항목 연산",
         "dxFilterBuilder-filterAriaItemValue": "항목 값",
 
+        "dxHtmlEditor-editorAriaLabel": "Editor content",
+        "dxHtmlEditor-ariaEscapeInstruction": "Press Ctrl + Shift + Up arrow or Ctrl + Shift + Down arrow to move focus out of the editing area",
         "dxHtmlEditor-dialogColorCaption": "글꼴 색 변경",
         "dxHtmlEditor-dialogBackgroundCaption": "배경색 변경",
         "dxHtmlEditor-dialogLinkCaption": "링크 추가",

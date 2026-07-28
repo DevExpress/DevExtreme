@@ -255,7 +255,7 @@ export type VisualRange = {
     * @default undefined
     * @public
     */
-    length?: TimeIntervalConfig;
+    length?: TimeIntervalConfig | undefined;
     /**
     * @docid
     * @default undefined
