@@ -769,13 +769,21 @@ class FilterBuilder extends Widget<any> {
 
   _isFocusOnEditorParts($editor: dxElementWrapper, target?: HTMLElement): boolean {
     const activeElement = target || domAdapter.getActiveElement();
-    const isFocusOnEditor = $(activeElement).closest($editor.children()).length > 0;
+    const isFocusOnEditor = $(activeElement).closest($editor).length > 0;
+    if (isFocusOnEditor) {
+      return true;
+    }
+
     const overlay = $(activeElement).closest(`.${DROPDOWN_EDITOR_OVERLAY_CLASS}`);
-    const overlayID = overlay.find(`.${POPUP_CONTENT_CLASS}`).attr('id');
-    const editorOwns = $editor.attr('aria-owns') ?? $editor.find('[aria-owns]').attr('aria-owns');
     const isFocusOnOverlay = overlay.length > 0;
-    const overlayOwnedByEditor = isDefined(editorOwns) && editorOwns === overlayID;
-    return isFocusOnEditor || (isFocusOnOverlay && overlayOwnedByEditor);
+    if (isFocusOnOverlay) {
+      const overlayID = overlay.find(`.${POPUP_CONTENT_CLASS}`).attr('id');
+      const editorOwns = $editor.attr('aria-owns') ?? $editor.find('[aria-owns]').attr('aria-owns');
+      const overlayOwnedByEditor = isDefined(editorOwns) && editorOwns === overlayID;
+      return overlayOwnedByEditor;
+    }
+
+    return false;
   }
 
   _removeEvents() {
