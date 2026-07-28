@@ -181,6 +181,7 @@ export function buildQunitImportMap({
     'localization/': `${ESM_ROOT}/localization/`,
     'file_management/': `${ESM_ROOT}/file_management/`,
     'integration/': `${ESM_ROOT}/integration/`,
+    'mobile/': `${ESM_ROOT}/mobile/`,
     'viz/': `${ESM_ROOT}/viz/`,
     '__internal/': `${ESM_ROOT}/__internal/`,
     'renovation/': `${ESM_ROOT}/renovation/`,
@@ -206,8 +207,9 @@ export function buildQunitImportMap({
     rrule: `${NODE_MODULES}/rrule/dist/esm/index.js`,
     // eslint-disable-next-line spellcheck/spell-checker
     tslib: resolveVirtualStorePackageUrl('tslib', 'tslib.es6.mjs') ?? `${SHIMS}/tslib.js`,
+    // Plugins live under dist/globalize/*.js (not dist/*.js)
     globalize: `${NODE_MODULES}/globalize/dist/globalize.js`,
-    'globalize/': `${NODE_MODULES}/globalize/dist/`,
+    'globalize/': `${NODE_MODULES}/globalize/dist/globalize/`,
     cldr: `${NODE_MODULES}/cldrjs/dist/cldr.js`,
     'cldr/': `${NODE_MODULES}/cldrjs/dist/cldr/`,
     'devextreme-cldr-data/': `${NODE_MODULES}/devextreme-cldr-data/`,

@@ -36,8 +36,8 @@ function normalizeRequireSpecifierForEsm(specWithQuotes: string, sourcePath?: st
 
   // Bundle template CJS requires are authored relative to bundler sources.
   // For browser ESM loader they must be bare package-style aliases.
-  if (spec.startsWith('../../../')) {
-    return `${quote}${spec.slice('../../../'.length)}${quote}`;
+  if (spec.startsWith('../')) {
+    return `${quote}${spec.replace(/^(\.\.\/)+/, '')}${quote}`;
   }
 
   return specWithQuotes;
@@ -72,6 +72,23 @@ function rewriteRemainingBundleRequires(source: string, sourcePath?: string): st
     .join('\n');
 
   return `${importBlock}\n${next}`;
+}
+
+function normalizeBundleTemplateRelativeEsmSpecifiers(source: string, sourcePath?: string): string {
+  if (!isBundleTemplatePath(sourcePath)) {
+    return source;
+  }
+
+  return source.replace(
+    /((?:import|export)\s[^'"]*?\sfrom\s*|import\s*)(['"])([^'"]+)\2/g,
+    (_match, prefix: string, quote: string, spec: string) => {
+      if (!spec.startsWith('../')) {
+        return `${prefix}${quote}${spec}${quote}`;
+      }
+      const normalized = spec.replace(/^(\.\.\/)+/, '');
+      return `${prefix}${quote}${normalized}${quote}`;
+    },
+  );
 }
 
 function nextRequireId(): string {
@@ -419,6 +436,7 @@ ${namedExports ? `${namedExports}\n` : ''}`;
 
 export function rewriteQunitTestHelperSource(source: string, sourcePath?: string): string {
   let next = rewriteAmdDefineFactory(source);
+  next = normalizeBundleTemplateRelativeEsmSpecifiers(next, sourcePath);
   next = rewriteRequiresToEsm(next, sourcePath);
   next = wrapCjsModuleExports(next, sourcePath);
   next = rewriteCjsStyleDefaultImports(next);
