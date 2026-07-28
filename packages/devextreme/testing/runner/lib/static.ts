@@ -232,7 +232,8 @@ function sendJsonAsEsmModule(res: ServerResponse, filePath: string): boolean {
 
 /**
  * Artifact modules whose relative imports must share a mutable facade with
- * bare import-map entries (Renderer / Axis / tickGenerator stubbing under native ESM).
+ * bare import-map entries (Renderer / Axis / tickGenerator / Tooltip
+ * / paletteModule / palette stubbing under native ESM).
  */
 const MUTABLE_ARTIFACT_FACADES: readonly { suffix: string; shimUrl: string }[] = [
   {
@@ -250,6 +251,18 @@ const MUTABLE_ARTIFACT_FACADES: readonly { suffix: string; shimUrl: string }[] =
   {
     suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/axes/tick_generator.js',
     shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_tick_generator.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/core/tooltip.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_tooltip.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/paletteModule.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_paletteModule.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/palette.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_paletteModule.js',
   },
 ];
 
