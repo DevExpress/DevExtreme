@@ -3,7 +3,7 @@
  *
  * 1) `import x from 'mod'` → namespace + `.default ?? ns` (CJS default interop)
  * 2) top-level `require(...)` → equivalent ESM imports
- * 3) CJS `module.exports` / `exports.*` helpers → `export default`
+ * 3) CJS `module.exports` / `exports.*` helpers → `export default` + named exports
  */
 
 const MIXED_DEFAULT_NAMED_RE = /import\s+([A-Za-z_$][\w$]*)\s*,\s*(\{[^}]*\})\s*from\s*('[^']+'|"[^"]+")/g;
@@ -244,6 +244,31 @@ function rewriteAmdDefineFactory(source: string): string {
   });
 }
 
+/** Collect `exports.foo` / `module.exports.foo` assignment names for ESM named re-exports. */
+function collectCjsExportNames(source: string): string[] {
+  const names = new Set<string>();
+  const patterns = [
+    /(?:^|[^\w$.])exports\.([A-Za-z_$][\w$]*)\s*=/g,
+    /(?:^|[^\w$.])module\.exports\.([A-Za-z_$][\w$]*)\s*=/g,
+    /(?:^|[^\w$.])exports\[['"]([A-Za-z_$][\w$]*)['"]\]\s*=/g,
+    /(?:^|[^\w$.])module\.exports\[['"]([A-Za-z_$][\w$]*)['"]\]\s*=/g,
+  ];
+
+  patterns.forEach((pattern) => {
+    let match = pattern.exec(source);
+    while (match) {
+      const name = match[1];
+      // `default` / `__esModule` are not valid/useful as `export const` names
+      if (name !== 'default' && name !== '__esModule') {
+        names.add(name);
+      }
+      match = pattern.exec(source);
+    }
+  });
+
+  return [...names].sort();
+}
+
 export function wrapCjsModuleExports(source: string): string {
   if (/\bexport\b/.test(source)) {
     return source;
@@ -262,11 +287,15 @@ export function wrapCjsModuleExports(source: string): string {
     return source;
   }
 
+  const namedExports = collectCjsExportNames(source)
+    .map((name) => `export const ${name} = module.exports.${name};`)
+    .join('\n');
+
   return `const module = { exports: {} };
 let exports = module.exports;
 ${source}
 export default module.exports;
-`;
+${namedExports ? `${namedExports}\n` : ''}`;
 }
 
 export function rewriteQunitTestHelperSource(source: string): string {

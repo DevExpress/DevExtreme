@@ -606,16 +606,11 @@
             "pnpm nx build:devextreme-bundler-config devextreme",
             "pnpm nx build:devextreme-bundler-config devextreme -c prod",
             "pnpm nx build:ts:internal devextreme",
-            "pnpm nx run-many --targets=build:cjs,build:cjs:internal,build:cjs:bundles --projects=devextreme --parallel",
-            "pnpm nx run-many --targets=build:cjs,build:cjs:internal,build:cjs:bundles --projects=devextreme --parallel -c production",
-            "pnpm nx run-many --targets=build:npm:cjs,build:npm:cjs:internal --projects=devextreme --parallel",
             "pnpm nx run-many --targets=build:npm:esm,build:npm:esm:internal --projects=devextreme --parallel -c qunit",
             "pnpm nx clean:dist-ts devextreme"
           ],
           "outputs": [
-            "{projectRoot}/artifacts/transpiled",
             "{projectRoot}/artifacts/transpiled-esm-npm",
-            "{projectRoot}/artifacts/transpiled-renovation-npm",
             "{projectRoot}/build/bundle-templates/dx.custom.js",
             "{projectRoot}/artifacts/npm/devextreme/bundles/dx.custom.config.js"
           ]
@@ -648,10 +643,6 @@
       "options": {
         "commands": [
           "pnpm nx build:ts:internal:watch devextreme",
-          "pnpm nx build:cjs:watch devextreme",
-          "pnpm nx build:cjs:watch devextreme -c production",
-          "pnpm nx build:cjs:internal:watch devextreme",
-          "pnpm nx build:cjs:internal:watch devextreme -c production",
           "pnpm nx build:npm:esm:watch devextreme -c qunit",
           "pnpm nx build:npm:esm:internal:watch devextreme -c qunit"
         ],
@@ -1809,7 +1800,7 @@
           "pnpm nx clean:artifacts devextreme",
           "pnpm nx build:localization devextreme",
           "pnpm nx build:transpile devextreme -c ci",
-          "pnpm nx run-many --targets=bundle:debug,build:vectormap,copy:vendor --projects=devextreme --parallel"
+          "pnpm nx run-many --targets=build:vectormap,copy:vendor --projects=devextreme --parallel"
         ],
         "parallel": false
       },
@@ -1835,7 +1826,7 @@
       ],
       "cache": true,
       "metadata": {
-        "description": "Dev/CI test build. Includes CJS + ESM (QUnit import-map) artifacts; skips prod bundles, aspnet, declarations, npm package packing, and license checks."
+        "description": "Dev/CI QUnit build (native ESM import-map). Skips all CJS transpile/bundle steps, npm CJS dual-mode, prod bundles, aspnet, declarations, npm packing, and license checks."
       }
     },
     "dev": {
@@ -1858,7 +1849,6 @@
         "commands": [
           "pnpm nx build:transpile:watch devextreme",
           "pnpm nx build:devextreme-bundler-config:watch devextreme",
-          "pnpm nx bundle:watch devextreme",
           "pnpm nx test-env devextreme"
         ]
       }

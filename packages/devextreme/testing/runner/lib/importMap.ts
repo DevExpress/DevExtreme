@@ -214,6 +214,7 @@ export function buildQunitImportMap({
     'cldr-core/': `${NODE_MODULES}/cldr-core/`,
     intl: `${NODE_MODULES}/intl/index.js`,
     jszip: '/packages/devextreme/artifacts/js/jszip.js',
+    'devextreme-exceljs-fork': '/packages/devextreme/artifacts/js/dx-exceljs-fork.js',
     'devextreme-quill': `${NODE_MODULES}/devextreme-quill/dist/dx-quill.js`,
     'devexpress-diagram': '/packages/devextreme/artifacts/js/dx-diagram.js',
     'devexpress-gantt': '/packages/devextreme/artifacts/js/dx-gantt.js',
