@@ -774,7 +774,7 @@ class Popup<
     });
   }
 
-  _getAriaRole(): string {
+  protected _getAriaRole(): string {
     return 'dialog';
   }
 

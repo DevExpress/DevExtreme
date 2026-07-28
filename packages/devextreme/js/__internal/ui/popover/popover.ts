@@ -268,7 +268,7 @@ class Popover<
     this._syncTargetAriaDescription();
   }
 
-  _getAriaRole(): string {
+  protected _getAriaRole(): string {
     const { toolbarItems, showTitle, showCloseButton } = this.option();
 
     const isDialog = Boolean(toolbarItems?.length) || Boolean(showTitle && showCloseButton);
@@ -277,17 +277,16 @@ class Popover<
   }
 
   _getEffectiveAriaRole(): string {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const { _overlayContentRole } = this.option();
+    const { _overlayContentRole: overlayContentRole } = this.option();
 
-    return _overlayContentRole ?? this._getAriaRole();
+    return overlayContentRole ?? this._getAriaRole();
   }
 
   // NOTE: An accessible name on a tooltip can mask its content for assistive
   // technologies, so the title labels the overlay only in dialog mode.
   _toggleAriaLabel(): void {
     if (this._getEffectiveAriaRole() === 'tooltip') {
-      this.$overlayContent().attr('aria-labelledby', null);
+      this.setAria('labelledby', null, this.$overlayContent());
       return;
     }
 
@@ -296,14 +295,10 @@ class Popover<
 
   _ensurePopoverContentId(): string {
     const $overlayContent = this.$overlayContent();
-    const existingId = $overlayContent.attr('id');
-
-    if (existingId) {
-      return existingId;
-    }
-
-    this._popoverContentId = this._popoverContentId ?? `dx-${new Guid()}`;
-    $overlayContent.attr('id', this._popoverContentId);
+    this._popoverContentId = this._popoverContentId
+      ?? $overlayContent.attr('id')
+      ?? `dx-${new Guid()}`;
+    this.setAria('id', this._popoverContentId, $overlayContent);
 
     return this._popoverContentId;
   }
