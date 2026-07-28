@@ -140,11 +140,7 @@ test('Resize without navigation buttons', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => createDataGridWithPager());
 
-// visual: generic.light
-// visual: generic.light.compact
-// visual: material.blue.light
-// visual: material.blue.light.compact
-test.meta({ browserSize: [700, 600] })('Compact pager in the generic.light theme (T1057735)', async (t) => {
+test.meta({ browserSize: [700, 600] })('Compact pager (T1057735)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const pagerElement = dataGrid.getPager().element;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

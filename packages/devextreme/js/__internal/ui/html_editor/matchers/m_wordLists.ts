@@ -1,8 +1,7 @@
 import { isString } from '@js/core/utils/type';
 
-function getListType(matches) {
-  const prefix = matches[1];
-  return prefix.match(/\S+\./) ? 'ordered' : 'bullet';
+function getListType(marker) {
+  return marker.match(/\S+\./) ? 'ordered' : 'bullet';
 }
 
 function getIndent(node, msStyleAttributeName) {
@@ -16,6 +15,17 @@ function getIndent(node, msStyleAttributeName) {
     return level ? level[1] - 1 : 0;
   }
   return false;
+}
+
+function getListMarker(node: Element, msStyleAttributeName: string): string {
+  const markerNode = Array
+    .from(node.querySelectorAll('*'))
+    .find((element) => {
+      const style = element.getAttribute(msStyleAttributeName);
+      return style ? /mso-list\s*:\s*ignore/i.test(style) : false;
+    });
+
+  return markerNode ? (markerNode.textContent ?? '').replace(/\s+/g, '') : '';
 }
 
 function removeNewLineChar(operations) {
@@ -36,19 +46,38 @@ const getMatcher = (quill) => {
       return delta;
     }
 
-    insertOperation.insert = insertOperation.insert.replace(/^\s+/, '');
-    const listDecoratorMatches = insertOperation.insert.match(/^(\S+)\s+/);
-    const indent = listDecoratorMatches && getIndent(node, msStyleAttributeName);
+    const indent = getIndent(node, msStyleAttributeName);
 
-    if (!listDecoratorMatches || indent === false) {
+    if (indent === false) {
       return delta;
     }
 
-    insertOperation.insert = insertOperation.insert.substring(listDecoratorMatches[0].length, insertOperation.insert.length);
+    const marker = getListMarker(node, msStyleAttributeName);
+    let listType = getListType(marker);
+
+    if (marker) {
+      const content = insertOperation.insert.replace(/^\s+/, '');
+
+      if (content.indexOf(marker) !== 0) {
+        return delta;
+      }
+
+      insertOperation.insert = content.substring(marker.length).replace(/^\s+/, '');
+    } else {
+      insertOperation.insert = insertOperation.insert.replace(/^\s+/, '');
+      const listDecoratorMatches = insertOperation.insert.match(/^(\S+)\s+/);
+
+      if (!listDecoratorMatches) {
+        return delta;
+      }
+
+      insertOperation.insert = insertOperation.insert.substring(listDecoratorMatches[0].length);
+      listType = getListType(listDecoratorMatches[1]);
+    }
 
     removeNewLineChar(ops);
 
-    ops.push({ insert: '\n', attributes: { list: getListType(listDecoratorMatches), indent } });
+    ops.push({ insert: '\n', attributes: { list: listType, indent } });
     return new Delta(ops);
   };
 };

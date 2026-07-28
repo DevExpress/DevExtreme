@@ -30,6 +30,7 @@ import { ChartIntegrationMixin } from './chart_integration/m_chart_integration';
 import DataAreaImport from './data_area/m_data_area';
 import DataControllerImport from './data_controller/m_data_controller';
 import { ExportController } from './export/m_export';
+import { getFieldsHotkeysA11yLabel } from './field_chooser/a11y';
 import { FieldChooser } from './field_chooser/m_field_chooser';
 import { FieldChooserBase } from './field_chooser/m_field_chooser_base';
 import { FieldsArea } from './fields_area/m_fields_area';
@@ -37,7 +38,7 @@ import HeadersArea from './headers_area/m_headers_area';
 import { FAKE_TABLE_CLASS, HORIZONTAL_HEADERS_AREA_CLASS, VERTICAL_HEADERS_AREA_CLASS } from './keyboard_navigation/const';
 import { RovingTabIndex } from './keyboard_navigation/roving_tab_index';
 import type { CellNavigationDirection } from './keyboard_navigation/table_cell_navigation';
-import { getAdjacentCell } from './keyboard_navigation/table_cell_navigation';
+import { buildCellMatrix, getAdjacentCell } from './keyboard_navigation/table_cell_navigation';
 import { findField, mergeArraysByMaxValue, setFieldProperty } from './m_widget_utils';
 
 const window = getWindow();
@@ -1053,7 +1054,19 @@ class PivotGrid extends Widget {
     const cell = e.currentTarget;
     const navigation = this._getCellAreaNavigation(cell);
 
-    if (!navigation || !this._contextMenu) {
+    if (!navigation) {
+      return;
+    }
+
+    this._showContextMenuFromKeyboard(e, navigation);
+  }
+
+  _handleFieldContextMenuKeyDown(e, navigation: RovingTabIndex) {
+    this._showContextMenuFromKeyboard(e, navigation);
+  }
+
+  _showContextMenuFromKeyboard(e, navigation: RovingTabIndex) {
+    if (!this._contextMenu) {
       return;
     }
 
@@ -1062,6 +1075,7 @@ class PivotGrid extends Widget {
     this._contextMenu._show(e);
 
     if (this._contextMenu.option('visible')) {
+      e.preventDefault();
       this._contextMenuOwnerNavigation = navigation;
     }
   }
@@ -1373,7 +1387,7 @@ class PivotGrid extends Widget {
     that.$element()
       .addClass(PIVOTGRID_CLASS)
       .attr('role', 'group')
-      .attr('aria-label', localizationMessage.format('dxPivotGrid-ariaLabel'));
+      .attr('aria-label', getFieldsHotkeysA11yLabel(localizationMessage.format('dxPivotGrid-ariaLabel')));
   }
 
   _renderContentImpl() {
@@ -1449,6 +1463,7 @@ class PivotGrid extends Widget {
       visible: that.option('visible'),
       // @ts-expect-error ts-error
       remoteSort: that.option('scrolling.mode') === 'virtual',
+      onFieldContextMenuKeyDown: that._handleFieldContextMenuKeyDown.bind(that),
     };
 
     if (that._fieldChooserBase) {
@@ -1500,11 +1515,55 @@ class PivotGrid extends Widget {
       dataArea.tableElement().attr('id'),
     ].filter(isDefined).join(' ');
 
+    const rowHeaderColumnCount = this._reserveRowHeaderColumns(dataArea, rowsArea, columnsArea);
+
     $gridElement
       .attr('role', 'grid')
       .attr('aria-owns', tableIds)
       .attr('aria-rowcount', this._dataController.totalRowCount())
-      .attr('aria-colcount', this._dataController.totalColumnCount());
+      .attr('aria-colcount', this._dataController.totalColumnCount() + rowHeaderColumnCount);
+  }
+
+  _reserveRowHeaderColumns(dataArea, rowsArea, columnsArea): number {
+    // The reserved width is the full row-header column count, not the widest
+    // rendered row: virtual scrolling can page in rows whose visible cells do
+    // not reach the rightmost header column, which would otherwise shift the
+    // colindex axis between pages.
+    const rowHeaderColumnCount = rowsArea.getColumnsCount();
+
+    if (!rowHeaderColumnCount) {
+      return 0;
+    }
+
+    const rowsBody = rowsArea.tableElement().children('tbody').get(0);
+    const matrix = rowsBody ? buildCellMatrix(rowsBody) : [];
+    const indexed = new Set<HTMLTableCellElement>();
+    matrix.forEach((row) => {
+      row.forEach((cell, columnIndex) => {
+        if (cell && cell.getAttribute('role') && !indexed.has(cell)) {
+          indexed.add(cell);
+          cell.setAttribute('aria-colindex', String(columnIndex + 1));
+        }
+      });
+    });
+
+    const shifted = new Set<HTMLTableCellElement>();
+    [columnsArea, dataArea].forEach((area) => {
+      area.tableElement().find('td[aria-colindex]').each((_, td) => {
+        if (shifted.has(td)) {
+          return;
+        }
+        shifted.add(td);
+        let base = td.getAttribute('data-dx-base-colindex');
+        if (base === null) {
+          base = td.getAttribute('aria-colindex');
+          td.setAttribute('data-dx-base-colindex', base);
+        }
+        td.setAttribute('aria-colindex', String(Number(base) + rowHeaderColumnCount));
+      });
+    });
+
+    return rowHeaderColumnCount;
   }
 
   _update(isFirstDrawing) {
