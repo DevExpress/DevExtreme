@@ -375,6 +375,14 @@ const MUTABLE_ARTIFACT_FACADES: readonly { suffix: string; shimUrl: string }[] =
     suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/palette.js',
     shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_paletteModule.js',
   },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/ui/themes.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/themes.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/ui/themes.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/themes.js',
+  },
 ];
 
 function findMutableArtifactFacade(relativeUrlPath: string): string | null {
