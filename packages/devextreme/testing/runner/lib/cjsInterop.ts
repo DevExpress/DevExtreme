@@ -17,6 +17,63 @@ const SPEC = "('[^']+'|\"[^\"]+\")";
 let requireCounter = 0;
 let importCounter = 0;
 
+function isBundleTemplatePath(sourcePath?: string): boolean {
+  if (!sourcePath) {
+    return false;
+  }
+  const normalized = sourcePath.replace(/\\/g, '/');
+  return normalized.includes('/packages/devextreme/build/bundle-templates/')
+    || normalized.startsWith('packages/devextreme/build/bundle-templates/');
+}
+
+function normalizeRequireSpecifierForEsm(specWithQuotes: string, sourcePath?: string): string {
+  if (!isBundleTemplatePath(sourcePath)) {
+    return specWithQuotes;
+  }
+
+  const quote = specWithQuotes[0];
+  const spec = specWithQuotes.slice(1, -1);
+
+  // Bundle template CJS requires are authored relative to bundler sources.
+  // For browser ESM loader they must be bare package-style aliases.
+  if (spec.startsWith('../../../')) {
+    return `${quote}${spec.slice('../../../'.length)}${quote}`;
+  }
+
+  return specWithQuotes;
+}
+
+function rewriteRemainingBundleRequires(source: string, sourcePath?: string): string {
+  if (!isBundleTemplatePath(sourcePath) || !/\brequire\s*\(/.test(source)) {
+    return source;
+  }
+
+  const specToAlias = new Map<string, string>();
+  const next = source.replace(
+    new RegExp(`require\\s*\\(\\s*(${SPEC})\\s*\\)`, 'g'),
+    (_m, spec: string) => {
+      const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
+      let alias = specToAlias.get(normalizedSpec);
+      if (!alias) {
+        requireCounter += 1;
+        alias = `__dxReq_${requireCounter}`;
+        specToAlias.set(normalizedSpec, alias);
+      }
+      return `(${alias}.default ?? { ...${alias} })`;
+    },
+  );
+
+  if (!specToAlias.size) {
+    return next;
+  }
+
+  const importBlock = [...specToAlias.entries()]
+    .map(([spec, alias]) => `import * as ${alias} from ${spec};`)
+    .join('\n');
+
+  return `${importBlock}\n${next}`;
+}
+
 function nextRequireId(): string {
   requireCounter += 1;
   return `__dxReq_${requireCounter}`;
@@ -98,7 +155,7 @@ export function rewriteCjsStyleDefaultImports(source: string): string {
  * Rewrite common top-level require() patterns used by legacy QUnit suites.
  * Does not rewrite require() inside functions (rare; e.g. aspnet.tests.js).
  */
-export function rewriteRequiresToEsm(source: string): string {
+export function rewriteRequiresToEsm(source: string, sourcePath?: string): string {
   if (!/\brequire\s*\(/.test(source)) {
     return source;
   }
@@ -110,8 +167,9 @@ export function rewriteRequiresToEsm(source: string): string {
   next = next.replace(
     new RegExp(`^(const|let|var)\\s+(\\{[^}]+\\})\\s*=\\s*require\\s*\\(\\s*${SPEC}\\s*\\)\\s*;?\\s*$`, 'gm'),
     (_m, kind: string, pattern: string, spec: string) => {
+      const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
       const ns = nextRequireId();
-      return `import * as ${ns} from ${spec};`
+      return `import * as ${ns} from ${normalizedSpec};`
         + `\n${kind} ${pattern} = ${ns}.default ?? { ...${ns} };`;
     },
   );
@@ -123,9 +181,40 @@ export function rewriteRequiresToEsm(source: string): string {
       'gm',
     ),
     (_m, kind: string, name: string, spec: string, prop: string) => {
+      const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
       const ns = nextRequireId();
-      return `import * as ${ns} from ${spec};`
+      return `import * as ${ns} from ${normalizedSpec};`
         + `\n${kind} ${name} = (${ns}.default ?? { ...${ns} }).${prop};`;
+    },
+  );
+
+  // const name = obj.path = require('spec');
+  next = next.replace(
+    new RegExp(
+      `^(const|let|var)\\s+(${IDENT})\\s*=\\s*((?:${IDENT}|\\[['"][^\\]]+['"]\\])(?:\\.(?:${IDENT})|\\[['"][^\\]]+['"]\\])*)\\s*=\\s*require\\s*\\(\\s*${SPEC}\\s*\\)\\s*;?\\s*$`,
+      'gm',
+    ),
+    (_m, kind: string, name: string, left: string, spec: string) => {
+      const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
+      const ns = nextRequireId();
+      return `import * as ${ns} from ${normalizedSpec};`
+        + `\n${kind} ${name} = ${ns}.default ?? { ...${ns} };`
+        + `\n${left} = ${name};`;
+    },
+  );
+
+  // const name = obj.path = require('spec').prop;
+  next = next.replace(
+    new RegExp(
+      `^(const|let|var)\\s+(${IDENT})\\s*=\\s*((?:${IDENT}|\\[['"][^\\]]+['"]\\])(?:\\.(?:${IDENT})|\\[['"][^\\]]+['"]\\])*)\\s*=\\s*require\\s*\\(\\s*${SPEC}\\s*\\)\\s*\\.\\s*(${IDENT})\\s*;?\\s*$`,
+      'gm',
+    ),
+    (_m, kind: string, name: string, left: string, spec: string, prop: string) => {
+      const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
+      const ns = nextRequireId();
+      return `import * as ${ns} from ${normalizedSpec};`
+        + `\n${kind} ${name} = (${ns}.default ?? { ...${ns} }).${prop};`
+        + `\n${left} = ${name};`;
     },
   );
 
@@ -136,8 +225,9 @@ export function rewriteRequiresToEsm(source: string): string {
       'gm',
     ),
     (_m, kind: string, name: string, spec: string) => {
+      const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
       const ns = nextRequireId();
-      return `import * as ${ns} from ${spec};`
+      return `import * as ${ns} from ${normalizedSpec};`
         + `\n${kind} ${name} = ${ns}.default ?? { ...${ns} };`;
     },
   );
@@ -149,9 +239,24 @@ export function rewriteRequiresToEsm(source: string): string {
       'gm',
     ),
     (_m, left: string, spec: string) => {
+      const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
       const ns = nextRequireId();
-      return `import * as ${ns} from ${spec};`
+      return `import * as ${ns} from ${normalizedSpec};`
         + `\n${left} = ${ns}.default ?? { ...${ns} };`;
+    },
+  );
+
+  // obj.path = require('spec').prop;
+  next = next.replace(
+    new RegExp(
+      `^((?:${IDENT}|\\[['"][^\\]]+['"]\\])(?:\\.(?:${IDENT})|\\[['"][^\\]]+['"]\\])*)\\s*=\\s*require\\s*\\(\\s*${SPEC}\\s*\\)\\s*\\.\\s*(${IDENT})\\s*;?\\s*$`,
+      'gm',
+    ),
+    (_m, left: string, spec: string, prop: string) => {
+      const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
+      const ns = nextRequireId();
+      return `import * as ${ns} from ${normalizedSpec};`
+        + `\n${left} = (${ns}.default ?? { ...${ns} }).${prop};`;
     },
   );
 
@@ -162,8 +267,9 @@ export function rewriteRequiresToEsm(source: string): string {
       'gm',
     ),
     (_m, left: string, spec: string) => {
+      const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
       const ns = nextRequireId();
-      return `import * as ${ns} from ${spec};`
+      return `import * as ${ns} from ${normalizedSpec};`
         + `\n${left} = ${ns}.default ?? { ...${ns} };`;
     },
   );
@@ -171,8 +277,10 @@ export function rewriteRequiresToEsm(source: string): string {
   // require('spec');
   next = next.replace(
     new RegExp(`^require\\s*\\(\\s*${SPEC}\\s*\\)\\s*;?\\s*$`, 'gm'),
-    (_m, spec: string) => `import ${spec};`,
+    (_m, spec: string) => `import ${normalizeRequireSpecifierForEsm(spec, sourcePath)};`,
   );
+
+  next = rewriteRemainingBundleRequires(next, sourcePath);
 
   return next;
 }
@@ -269,8 +377,15 @@ function collectCjsExportNames(source: string): string[] {
   return [...names].sort();
 }
 
-export function wrapCjsModuleExports(source: string): string {
-  if (/\bexport\b/.test(source)) {
+function rewriteBundleTemplateModuleExports(source: string): string {
+  return source.replace(
+    /^\s*module\.exports\s*=\s*([\s\S]*?);\s*$/gm,
+    'export default $1;',
+  );
+}
+
+export function wrapCjsModuleExports(source: string, sourcePath?: string): string {
+  if (/^\s*export\s/m.test(source)) {
     return source;
   }
 
@@ -280,6 +395,10 @@ export function wrapCjsModuleExports(source: string): string {
 
   if (!usesExports) {
     return source;
+  }
+
+  if (isBundleTemplatePath(sourcePath)) {
+    return rewriteBundleTemplateModuleExports(source);
   }
 
   // AMD / legacy DevExpress.require helpers — leave untouched for now
@@ -298,10 +417,10 @@ export default module.exports;
 ${namedExports ? `${namedExports}\n` : ''}`;
 }
 
-export function rewriteQunitTestHelperSource(source: string): string {
+export function rewriteQunitTestHelperSource(source: string, sourcePath?: string): string {
   let next = rewriteAmdDefineFactory(source);
-  next = rewriteRequiresToEsm(next);
-  next = wrapCjsModuleExports(next);
+  next = rewriteRequiresToEsm(next, sourcePath);
+  next = wrapCjsModuleExports(next, sourcePath);
   next = rewriteCjsStyleDefaultImports(next);
   return next;
 }
@@ -311,7 +430,9 @@ export function isQunitTestOrHelperPath(relativePath: string): boolean {
   return (
     normalized.includes('/packages/devextreme/testing/tests/')
     || normalized.includes('/packages/devextreme/testing/helpers/')
+    || normalized.includes('/packages/devextreme/build/bundle-templates/')
     || normalized.startsWith('packages/devextreme/testing/tests/')
     || normalized.startsWith('packages/devextreme/testing/helpers/')
+    || normalized.startsWith('packages/devextreme/build/bundle-templates/')
   );
 }

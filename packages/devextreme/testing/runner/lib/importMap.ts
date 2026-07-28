@@ -268,7 +268,10 @@ export function buildQunitImportMap({
 
   const imports: Record<string, string> = {};
   Object.entries(rawImports).forEach(([key, url]) => {
-    imports[key] = withCacheBuster(url, cacheBuster);
+    // Import-map package-prefix entries (`foo/`) must map to a URL ending
+    // with `/` per spec. Appending `?cache` breaks that shape and browsers
+    // treat such entries as blocked (`null`), causing CI-only resolution fails.
+    imports[key] = key.endsWith('/') ? url : withCacheBuster(url, cacheBuster);
   });
 
   return { imports };

@@ -374,10 +374,10 @@ function sendEsmArtifactJs(
 }
 
 /** Rewrite CJS require/exports and default imports for QUnit tests/helpers. */
-function sendTestHelperJs(res: ServerResponse, filePath: string): boolean {
+function sendTestHelperJs(res: ServerResponse, filePath: string, relativeUrlPath: string): boolean {
   try {
     const raw = fs.readFileSync(filePath, 'utf8');
-    const body = rewriteQunitTestHelperSource(raw);
+    const body = rewriteQunitTestHelperSource(raw, relativeUrlPath);
     const buffer = Buffer.from(body, 'utf8');
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
@@ -506,7 +506,7 @@ export function createStaticFileService({
         path.extname(resolvedFilePath).toLowerCase() === '.js'
         && isQunitTestOrHelperPath(relativeUrlPath)
       ) {
-        return sendTestHelperJs(res, resolvedFilePath);
+        return sendTestHelperJs(res, resolvedFilePath, relativeUrlPath);
       }
 
       // Relative library imports bypass import maps — serve mutable facades
