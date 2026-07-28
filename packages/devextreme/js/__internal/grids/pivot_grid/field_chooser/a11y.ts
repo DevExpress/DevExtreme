@@ -8,6 +8,7 @@ const I18N_KEYS = {
   hasHeaderFilter: 'dxPivotGrid-ariaFieldHeaderFilterLabel',
   sortingAsc: 'dxPivotGrid-ariaFieldSortAscLabel',
   sortingDesc: 'dxPivotGrid-ariaFieldSortDescLabel',
+  description: 'dxPivotGrid-ariaDescription',
 };
 
 const I18N_MESSAGE_SEPARATOR = ', ';
@@ -26,6 +27,14 @@ const getSortingLabel = (sortOrder?: SortOrderType): string | null => {
     default:
       return null;
   }
+};
+
+export const getFieldsHotkeysA11yDescription = (): string => messageLocalization
+  .format(I18N_KEYS.description);
+
+export const getFieldsHotkeysA11yLabel = (baseLabel?: string): string => {
+  const description = getFieldsHotkeysA11yDescription();
+  return baseLabel ? `${baseLabel}. ${description}` : description;
 };
 
 export const getFieldItemA11yLabel = (

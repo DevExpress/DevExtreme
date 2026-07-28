@@ -169,6 +169,27 @@ QUnit.module('PivotGrid markup tests', () => {
         }
     });
 
+    QUnit.test('Expandable header cell is not announced twice (caption text hidden from AT)', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.ok(true, 'skipped on serverSide');
+            return;
+        }
+        const clock = sinon.useFakeTimers();
+        try {
+            const pivotGrid = createPivotGrid({ dataSource: createExpandableDataSource() });
+            clock.tick(10);
+
+            const $collapsedTd = pivotGrid.$element().find('.dx-pivotgrid-collapsed').first().closest('td');
+            const $control = $collapsedTd.find('.dx-expand-icon-container');
+            const $caption = $collapsedTd.children('span').first();
+
+            assert.strictEqual($control.attr('aria-label'), $collapsedTd.text().trim(), 'the expand control carries the caption as its label');
+            assert.strictEqual($caption.attr('aria-hidden'), 'true', 'the duplicate caption text is hidden from assistive tech');
+        } finally {
+            clock.restore();
+        }
+    });
+
     QUnit.test('Non-expandable cell has no expand control', function(assert) {
         if(!windowUtils.hasWindow()) {
             assert.ok(true, 'skipped on serverSide');
@@ -218,7 +239,8 @@ QUnit.module('PivotGrid accessibility markup', {
         this.clock.tick(10);
 
         const ariaLabel = pivotGrid.$element().attr('aria-label');
-        assert.equal(ariaLabel, 'Pivot grid');
+        assert.strictEqual(ariaLabel.indexOf('Pivot grid'), 0, 'root label starts with the component name');
+        assert.ok(ariaLabel.length > 'Pivot grid'.length, 'root label also carries the field keyboard instructions once for the whole component');
     });
 
     QUnit.test('Outer table has role="presentation"', function(assert) {
@@ -270,7 +292,8 @@ QUnit.module('PivotGrid accessibility markup', {
 
             assert.strictEqual($table.length, 1, `${area} field table exists`);
             assert.strictEqual($table.attr('role'), 'menubar', `${area} field table is a menubar`);
-            assert.strictEqual($table.attr('aria-label'), expectedLabels[area], `${area} menubar has localized label`);
+            assert.strictEqual($table.attr('aria-label'), expectedLabels[area], `${area} menubar is labelled with the area name only`);
+            assert.strictEqual($table.attr('aria-description'), undefined, `${area} menubar does not use the unsupported aria-description attribute`);
         });
 
         // The filter area has no fields in this data source; a menubar without
@@ -352,9 +375,9 @@ QUnit.module('PivotGrid accessibility markup', {
         const $rowArea = pivotGrid.$element().find('.dx-pivotgrid-vertical-headers');
         const $dataArea = pivotGrid.$element().find('.dx-pivotgrid-area-data');
 
-        $rowArea.find('td').each((_, cell) => {
+        $rowArea.find('td[role]').each((_, cell) => {
             assert.ok(parseInt(cell.getAttribute('aria-rowindex'), 10) >= 1, 'row header cell has 1-based aria-rowindex');
-            assert.strictEqual(cell.getAttribute('aria-colindex'), null, 'row header cell has no aria-colindex');
+            assert.ok(parseInt(cell.getAttribute('aria-colindex'), 10) >= 1, 'row header cell occupies a reserved leading column');
         });
 
         $dataArea.find('tr').each((rowIndex, row) => {
@@ -457,6 +480,11 @@ QUnit.module('PivotGrid accessibility markup', {
             const $firstRowHeaderCell = pivotGrid.$element().find('.dx-pivotgrid-vertical-headers tr').first().find('td').first();
             const $lastRowHeaderCell = pivotGrid.$element().find('.dx-pivotgrid-vertical-headers tr').last().find('td').last();
 
+            // The row headers reserve leading columns, so the data/column-header
+            // colindex axis starts after them.
+            const reservedRowHeaderColumns = parseInt(pivotGrid.$element().find('[role="grid"]').attr('aria-colcount'), 10)
+                - dataController.totalColumnCount();
+
             assert.strictEqual(
                 dataController.getColumnIndexOffset(),
                 columnOffset,
@@ -469,12 +497,12 @@ QUnit.module('PivotGrid accessibility markup', {
             );
             assert.strictEqual(
                 $firstDataCell.attr('aria-colindex'),
-                String(columnOffset + 1),
+                String(columnOffset + 1 + reservedRowHeaderColumns),
                 `${messagePrefix}: first data cell aria-colindex`
             );
             assert.strictEqual(
                 $firstColumnHeaderCell.attr('aria-colindex'),
-                String(columnOffset + 1),
+                String(columnOffset + 1 + reservedRowHeaderColumns),
                 `${messagePrefix}: first column header aria-colindex`
             );
             assert.ok(
@@ -628,13 +656,22 @@ QUnit.module('PivotGrid accessibility markup', {
             assert.ok(ariaOwns.includes(id), `aria-owns includes ${id}`);
         });
 
+        // The leading columns reserved for the row headers are counted on top
+        // of the data columns.
+        const firstDataColIndex = parseInt(
+            pivotGrid.$element().find('.dx-pivotgrid-area-data td[aria-colindex]').first().attr('aria-colindex'),
+            10
+        );
+        const reservedRowHeaderColumns = firstDataColIndex - 1;
+
+        assert.ok(reservedRowHeaderColumns > 0, 'row headers reserve leading columns');
         assert.strictEqual(
             $gridElement.attr('aria-rowcount'),
             String(dataController.totalRowCount())
         );
         assert.strictEqual(
             $gridElement.attr('aria-colcount'),
-            String(dataController.totalColumnCount())
+            String(dataController.totalColumnCount() + reservedRowHeaderColumns)
         );
     });
 });
