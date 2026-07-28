@@ -151,15 +151,15 @@ const cardView = ref<DxCardView>();
 }
 
 .status--salaried {
-  color: var(--dx-color-success);
+  color: var(--dxds-color-content-utility-green-default-rest);
 }
 
 .status--commission {
-  color: var(--dx-color-warning);
+  color: var(--dxds-color-content-utility-yellow-default-rest);
 }
 
 .status--terminated {
-  color: var(--dx-color-danger);
+  color: var(--dxds-color-content-utility-red-default-rest);
 }
 
 .indicator {
