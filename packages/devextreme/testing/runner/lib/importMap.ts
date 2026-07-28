@@ -1,8 +1,22 @@
 import * as fs from 'node:fs';
+import * as path from 'node:path';
 
 const ESM_ROOT = '/packages/devextreme/artifacts/transpiled-esm-npm/esm';
 const SHIMS = '/packages/devextreme/testing/helpers/esm-shims';
 const NODE_MODULES = '/packages/devextreme/node_modules';
+
+function resolveEsmRootPath(): string {
+  const cwd = process.cwd();
+  const candidates = [
+    path.join(cwd, 'artifacts/transpiled-esm-npm/esm'),
+    path.join(cwd, 'packages/devextreme/artifacts/transpiled-esm-npm/esm'),
+  ];
+
+  const resolved = candidates.find((candidate) => fs.existsSync(candidate));
+  return resolved ?? candidates[0];
+}
+
+const ESM_FS_ROOT = resolveEsmRootPath();
 
 export interface ImportMapOptions {
   jqueryUrl: string;
@@ -48,6 +62,36 @@ function resolveJsonBangToUrl(specifier: string): string | null {
 }
 
 /**
+ * SystemJS used artifacts baseURL, so bare `exporter` → exporter.js.
+ * Import maps need exact keys for those package-root entry files.
+ */
+function collectPackageRootEntries(): Record<string, string> {
+  const entries: Record<string, string> = {};
+
+  if (!fs.existsSync(ESM_FS_ROOT)) {
+    return entries;
+  }
+
+  fs.readdirSync(ESM_FS_ROOT, { withFileTypes: true }).forEach((entry) => {
+    if (entry.isFile() && entry.name.endsWith('.js')) {
+      const name = entry.name.slice(0, -3);
+      entries[name] = `${ESM_ROOT}/${entry.name}`;
+      return;
+    }
+
+    // Package folders with index.js (e.g. events → events/index.js)
+    if (entry.isDirectory()) {
+      const indexPath = path.join(ESM_FS_ROOT, entry.name, 'index.js');
+      if (fs.existsSync(indexPath)) {
+        entries[entry.name] = `${ESM_ROOT}/${entry.name}/index.js`;
+      }
+    }
+  });
+
+  return entries;
+}
+
+/**
  * Builds a browser import map for QUnit ESM loader.
  * Bare prefixes mirror SystemJS map + Vite playground aliases.
  */
@@ -69,13 +113,10 @@ export function buildQunitImportMap({
     'viz/': `${ESM_ROOT}/viz/`,
     '__internal/': `${ESM_ROOT}/__internal/`,
     'renovation/': `${ESM_ROOT}/renovation/`,
+    'bundles/': '/packages/devextreme/build/bundle-templates/',
 
-    // Exact package entry points used as bare imports
-    // CJS-interop: tests use `import localization from 'localization'`
-    localization: `${SHIMS}/localization.js`,
-    events: `${ESM_ROOT}/events.js`,
-    data: `${ESM_ROOT}/data.js`,
-    animation: `${ESM_ROOT}/animation.js`,
+    // Exact package-root entries (exporter, color, localization, events, …)
+    ...collectPackageRootEntries(),
 
     jquery: `${SHIMS}/jquery.js`,
 
@@ -90,12 +131,16 @@ export function buildQunitImportMap({
 
     // eslint-disable-next-line spellcheck/spell-checker
     fflate: `${NODE_MODULES}/fflate/esm/browser.js`,
+    knockout: `${NODE_MODULES}/knockout/build/output/knockout-latest.debug.js`,
 
     // SystemJS css! plugin replacements
     'fluent_blue_light.css!': `${SHIMS}/fluent_blue_light.css.js`,
     'generic_light.css!': `${SHIMS}/generic_light.css.js`,
     'material_blue_light.css!': `${SHIMS}/material_blue_light.css.js`,
     'gantt.css!': `${SHIMS}/gantt.css.js`,
+
+    // Debug-export shims
+    '__internal/viz/gauges/base_indicators': `${SHIMS}/base_indicators.js`,
 
     // Stubs
     zod: `${SHIMS}/zod.js`,

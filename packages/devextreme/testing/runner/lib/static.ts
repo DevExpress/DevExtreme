@@ -2,6 +2,11 @@ import * as fs from 'node:fs';
 import { IncomingMessage, ServerResponse } from 'node:http';
 import * as path from 'node:path';
 
+import {
+  isQunitTestOrHelperPath,
+  rewriteQunitTestHelperSource,
+} from './cjsInterop';
+
 interface StaticFileServiceDeps {
   escapeHtml: (value: string) => string;
   rootDirectory: string;
@@ -148,6 +153,25 @@ function sendJsonAsEsmModule(res: ServerResponse, filePath: string): boolean {
   }
 }
 
+/** Rewrite CJS require/exports and default imports for QUnit tests/helpers. */
+function sendTestHelperJs(res: ServerResponse, filePath: string): boolean {
+  try {
+    const raw = fs.readFileSync(filePath, 'utf8');
+    const body = rewriteQunitTestHelperSource(raw);
+    const buffer = Buffer.from(body, 'utf8');
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+    res.setHeader('Content-Length', String(buffer.length));
+    res.end(buffer);
+    return true;
+  } catch {
+    res.statusCode = 500;
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.end('Failed to rewrite CJS-style test/helper module');
+    return true;
+  }
+}
+
 function sendDirectoryListing(
   res: ServerResponse,
   requestPath: string,
@@ -255,6 +279,14 @@ export function createStaticFileService({
         res.setHeader('Location', query ? `${resolvedUrlPath}?${query}` : resolvedUrlPath);
         res.end();
         return true;
+      }
+
+      const relativeUrlPath = relativeToRoot.split(path.sep).join('/');
+      if (
+        path.extname(resolvedFilePath).toLowerCase() === '.js'
+        && isQunitTestOrHelperPath(relativeUrlPath)
+      ) {
+        return sendTestHelperJs(res, resolvedFilePath);
       }
 
       return sendStaticFile(res, resolvedFilePath, stat.size);
