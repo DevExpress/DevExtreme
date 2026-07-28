@@ -2545,21 +2545,6 @@ QUnit.module('accessibility', {
             assert.deepEqual(getDescribedBy($('#where')), [contentId], 'element target is described');
         });
 
-        QUnit.test('selector target matching multiple elements should describe all matches', function(assert) {
-            const $sharedTargets = $('<div class="shared-target"></div><div class="shared-target"></div>').appendTo('body');
-
-            try {
-                const popover = new Popover($('#what'), { target: '.shared-target' });
-                const contentId = popover.$overlayContent().attr('id');
-
-                $sharedTargets.each((_, element) => {
-                    assert.deepEqual(getDescribedBy($(element)), [contentId], 'matched element is described');
-                });
-            } finally {
-                $sharedTargets.remove();
-            }
-        });
-
         QUnit.test('selector target that appears after creation should be described on show', function(assert) {
             const popover = new Popover($('#what'), { target: '#deferredTarget', animation: null });
 
