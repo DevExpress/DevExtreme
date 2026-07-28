@@ -1,9 +1,3 @@
-SystemJS.config({
-    map: {
-        'jqueryify': SystemJS.map.jquery
-    }
-});
-
 define(function(require) {
     const $ = require('jquery');
     const Template = require('core/templates/template').Template;

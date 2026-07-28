@@ -1817,55 +1817,6 @@
         "description": "Dev/CI test build. Includes CJS + ESM (QUnit import-map) artifacts; skips prod bundles, aspnet, declarations, npm package packing, and license checks."
       }
     },
-    "build:systemjs": {
-      "executor": "nx:run-commands",
-      "options": {
-        "cwd": "{projectRoot}",
-        "parallel": true,
-        "commands": [
-          "node testing/systemjs-builder.js --transpile=modules",
-          "node testing/systemjs-builder.js --transpile=testing",
-          "node testing/systemjs-builder.js --transpile=css",
-          "node testing/systemjs-builder.js --transpile=js-vendors"
-        ]
-      },
-      "dependsOn": [
-        "build:dev"
-      ],
-      "inputs": [
-        "internalPackageEnv",
-        {
-          "env": "DEVEXTREME_TEST_CI"
-        },
-        {
-          "dependentTasksOutputFiles": "{projectRoot}/artifacts/transpiled/**/*"
-        },
-        {
-          "dependentTasksOutputFiles": "{projectRoot}/artifacts/css/dx.light.css"
-        },
-        {
-          "dependentTasksOutputFiles": "{projectRoot}/artifacts/css/dx.material.blue.light.css"
-        },
-        {
-          "dependentTasksOutputFiles": "{projectRoot}/artifacts/css/dx.fluent.blue.light.css"
-        },
-        {
-          "dependentTasksOutputFiles": "{projectRoot}/artifacts/css/dx-gantt.css"
-        },
-        "{projectRoot}/testing/content/**/*",
-        "{projectRoot}/testing/helpers/**/*",
-        "{projectRoot}/testing/tests/**/*",
-        "{projectRoot}/testing/systemjs-builder.js",
-        "{workspaceRoot}/pnpm-lock.yaml"
-      ],
-      "outputs": [
-        "{projectRoot}/artifacts/transpiled-systemjs",
-        "{projectRoot}/artifacts/transpiled-testing",
-        "{projectRoot}/artifacts/css-systemjs",
-        "{projectRoot}/artifacts/js-systemjs"
-      ],
-      "cache": true
-    },
     "dev": {
       "executor": "nx:run-commands",
       "cache": false,

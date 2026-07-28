@@ -37,8 +37,6 @@ export interface BaseRunProps {
   ShadowDom: boolean;
   WorkerInWindow: boolean;
   NoCsp: boolean;
-  /** Native ESM + import maps (default). Set false via ?loader=systemjs. */
-  UseEsm: boolean;
   MaxWorkers: number | null;
 }
 

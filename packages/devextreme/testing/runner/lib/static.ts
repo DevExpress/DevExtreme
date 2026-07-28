@@ -132,7 +132,7 @@ function sendStaticFile(res: ServerResponse, filePath: string, fileSize: number)
   return true;
 }
 
-/** Serve JSON as `export default …` for native ESM (SystemJS `*.json!` replacement). */
+/** Serve JSON as `export default …` for native ESM (`*.json!` replacement). */
 function sendJsonAsEsmModule(res: ServerResponse, filePath: string): boolean {
   try {
     const raw = fs.readFileSync(filePath, 'utf8');
@@ -151,6 +151,41 @@ function sendJsonAsEsmModule(res: ServerResponse, filePath: string): boolean {
     res.end('Failed to export JSON as ESM module');
     return true;
   }
+}
+
+/**
+ * Artifact modules whose relative imports must share a mutable facade with
+ * bare import-map entries (Renderer / Axis stubbing under native ESM).
+ */
+const MUTABLE_ARTIFACT_FACADES: readonly { suffix: string; shimUrl: string }[] = [
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/core/renderers/renderer.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_renderer.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/axes/base_axis.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_base_axis.js',
+  },
+];
+
+function findMutableArtifactFacade(relativeUrlPath: string): string | null {
+  const normalized = relativeUrlPath.split(path.sep).join('/');
+  const withLeadingSlash = normalized.startsWith('/') ? normalized : `/${normalized}`;
+  const match = MUTABLE_ARTIFACT_FACADES.find((entry) => withLeadingSlash.endsWith(entry.suffix)
+    || normalized.endsWith(entry.suffix.replace(/^\//, '')));
+  return match?.shimUrl ?? null;
+}
+
+function sendMutableFacadeModule(res: ServerResponse, shimUrl: string): boolean {
+  // Serve a re-export at the artifact URL so relative library imports and
+  // bare import-map entries share the same shim module graph.
+  const body = `export * from '${shimUrl}';\nexport { default } from '${shimUrl}';\n`;
+  const buffer = Buffer.from(body, 'utf8');
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+  res.setHeader('Content-Length', String(buffer.length));
+  res.end(buffer);
+  return true;
 }
 
 /** Rewrite CJS require/exports and default imports for QUnit tests/helpers. */
@@ -268,7 +303,7 @@ export function createStaticFileService({
 
       // Native ESM resolves relative imports against the request URL, not the
       // on-disk file. If we silently serve `foo.js` / `foo/index.js` for
-      // extensionless `foo`, `../` chains break (SystemJS did not have this).
+      // extensionless `foo`, `../` chains break without a redirect to the real file URL.
       // Redirect to the canonical file URL so the browser base path is correct.
       const resolvedUrlPath = `/${path.relative(rootDirectory, resolvedFilePath)
         .split(path.sep)
@@ -287,6 +322,15 @@ export function createStaticFileService({
         && isQunitTestOrHelperPath(relativeUrlPath)
       ) {
         return sendTestHelperJs(res, resolvedFilePath);
+      }
+
+      // Relative library imports bypass import maps — serve mutable facades
+      // at the artifact URL unless ?dx-original=1 (used by the shim itself).
+      if (!searchParams.has('dx-original')) {
+        const shimUrl = findMutableArtifactFacade(relativeUrlPath);
+        if (shimUrl) {
+          return sendMutableFacadeModule(res, shimUrl);
+        }
       }
 
       return sendStaticFile(res, resolvedFilePath, stat.size);

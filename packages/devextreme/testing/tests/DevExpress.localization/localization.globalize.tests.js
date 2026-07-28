@@ -1,26 +1,3 @@
-SystemJS.config({
-    meta: {
-        './localization.base.tests.js': {
-            deps: [
-                'common/core/localization/globalize/core',
-                'common/core/localization/globalize/number',
-                'common/core/localization/globalize/currency',
-                'common/core/localization/globalize/date',
-                'common/core/localization/globalize/message'
-            ]
-        }
-    },
-    packages: {
-        'globalize': {
-            meta: {
-                '../globalize.js': {
-                    deps: ['cldr/unresolved']
-                }
-            }
-        }
-    }
-});
-
 define(function(require, exports, module) {
     const cldrData = [
         require('devextreme-cldr-data/ar.json!json'),

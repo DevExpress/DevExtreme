@@ -514,7 +514,7 @@
         if(timerType === 'timeouts') {
             if(
                 callback.indexOf('.Deferred.exceptionHook') > -1 || // NOTE: jQuery.Deferred are now asynchronous
-                callback.indexOf('e._drain()') > -1 // NOTE: SystemJS Promise polyfill
+                callback.indexOf('e._drain()') > -1 // NOTE: legacy Promise polyfill
             ) {
                 return true;
             }

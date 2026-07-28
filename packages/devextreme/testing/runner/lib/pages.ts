@@ -6,11 +6,6 @@ import {
 } from './types';
 import { buildQunitImportMap, getEsmModuleRoot } from './importMap';
 
-interface SystemPackage {
-  main?: string;
-  defaultExtension?: string;
-}
-
 interface PagesRendererDeps {
   contentWithCacheBuster: (contentPath: string, cacheBuster: string) => string;
   getCacheBuster: (searchParams: URLSearchParams) => string;
@@ -28,6 +23,9 @@ export interface PagesRenderer {
     searchParams: URLSearchParams,
   ) => string;
 }
+
+const ESM_NPM = 'transpiled-esm-npm/esm';
+const TESTING_BASE = '/packages/devextreme/testing/';
 
 export function createPagesRenderer({
   contentWithCacheBuster,
@@ -76,41 +74,27 @@ export function createPagesRenderer({
     const isSelfSufficientTest = scriptVirtualPath.includes('_bundled')
             || scriptVirtualPath.includes('Bundles')
             || scriptVirtualPath.includes('DevExpress.jquery');
-    const useEsm = runProps.UseEsm;
+
     const esmRootPath = path.join(packageRoot, 'artifacts', 'transpiled-esm-npm', 'esm');
     const esmReady = fs.existsSync(path.join(esmRootPath, 'integration', 'jquery.js'));
 
-    if (useEsm && !esmReady) {
+    if (!esmReady) {
       return `<!DOCTYPE html><html><head><title>ESM artifacts missing</title></head><body>
 <h1>QUnit ESM loader: artifacts missing</h1>
 <p><code>artifacts/transpiled-esm-npm/esm</code> is not built.</p>
 <p><code>pnpm run dev</code> / <code>build:dev</code> should build ESM via <code>build:transpile -c ci</code>.</p>
 <p>If artifacts were cleaned manually, rebuild:</p>
 <pre>pnpm nx run devextreme:build:qunit-esm</pre>
-<p>Then reload the suite (without <code>?loader=systemjs</code>).</p>
+<p>Then reload the suite.</p>
 </body></html>`;
     }
 
-    const cspPart = runProps.NoCsp || useEsm ? '' : '-systemjs';
-    const npmModule = useEsm ? 'transpiled-esm-npm/esm' : `transpiled${cspPart}`;
-    const testingBasePath = runProps.NoCsp || useEsm
-      ? '/packages/devextreme/testing/'
-      : '/packages/devextreme/artifacts/transpiled-testing/';
-
     function getJQueryUrl(): string {
       if (isNoJQueryTest) {
-        return `${testingBasePath}helpers/noJQuery.js`;
+        return `${TESTING_BASE}helpers/noJQuery.js`;
       }
 
       return '/packages/devextreme/artifacts/js/jquery.js';
-    }
-
-    function getTestUrl(): string {
-      if (runProps.NoCsp || useEsm) {
-        return scriptVirtualPath;
-      }
-
-      return scriptVirtualPath.replace('/testing/', '/artifacts/transpiled-testing/');
     }
 
     function getJQueryIntegrationImports(): string[] {
@@ -118,17 +102,17 @@ export function createPagesRenderer({
 
       if (!isSelfSufficientTest) {
         if (runProps.NoJQuery || isNoJQueryTest || isServerSideTest) {
-          result.push(`${testingBasePath}helpers/jQueryEventsPatch.js`);
-          result.push(`${testingBasePath}helpers/argumentsValidator.js`);
-          result.push(`${testingBasePath}helpers/dataPatch.js`);
-          result.push(`/packages/devextreme/artifacts/${npmModule}/__internal/integration/jquery/component_registrator.js`);
+          result.push(`${TESTING_BASE}helpers/jQueryEventsPatch.js`);
+          result.push(`${TESTING_BASE}helpers/argumentsValidator.js`);
+          result.push(`${TESTING_BASE}helpers/dataPatch.js`);
+          result.push(`/packages/devextreme/artifacts/${ESM_NPM}/__internal/integration/jquery/component_registrator.js`);
         } else {
-          result.push(`/packages/devextreme/artifacts/${npmModule}/integration/jquery.js`);
+          result.push(`/packages/devextreme/artifacts/${ESM_NPM}/integration/jquery.js`);
         }
       }
 
       if (isServerSideTest) {
-        result.push(`${testingBasePath}helpers/ssrEmulator.js`);
+        result.push(`${TESTING_BASE}helpers/ssrEmulator.js`);
       }
 
       return result;
@@ -141,152 +125,21 @@ export function createPagesRenderer({
     const qunitExtensionsJs = contentWithCacheBuster('/packages/devextreme/testing/helpers/qunitExtensions.js', cacheBuster);
     const jqueryJs = contentWithCacheBuster('/packages/devextreme/node_modules/jquery/dist/jquery.js', cacheBuster);
     const sinonJs = contentWithCacheBuster('/packages/devextreme/node_modules/sinon/pkg/sinon.js', cacheBuster);
-    const systemJsScript = useEsm
-      ? ''
-      : `<script src="${contentWithCacheBuster(
-        runProps.NoCsp
-          ? '/packages/devextreme/node_modules/systemjs/dist/system.js'
-          : '/packages/devextreme/node_modules/systemjs/dist/system-csp-production.js',
-        cacheBuster,
-      )}"></script>`;
 
-    const importMap = useEsm
-      ? buildQunitImportMap({
-        jqueryUrl: getJQueryUrl(),
-        cacheBuster,
-        suiteFilePath: path.join(
-          packageRoot,
-          scriptVirtualPath.replace(/^\/packages\/devextreme\//, ''),
-        ),
-      })
-      : null;
+    const importMap = buildQunitImportMap({
+      jqueryUrl: getJQueryUrl(),
+      cacheBuster,
+      suiteFilePath: path.join(
+        packageRoot,
+        scriptVirtualPath.replace(/^\/packages\/devextreme\//, ''),
+      ),
+    });
 
-    const importMapScript = useEsm
-      ? `<script type="importmap" nonce="wIkO6u">\n${JSON.stringify(importMap)}\n</script>`
-      : '';
+    const importMapScript = `<script type="importmap" nonce="wIkO6u">\n${JSON.stringify(importMap)}\n</script>`;
 
-    const cspMap: Record<string, string> = !runProps.NoCsp
-      ? {
-        'inferno-create-element': '/packages/devextreme/node_modules/inferno-create-element/dist/inferno-create-element.js',
-        intl: '/packages/devextreme/artifacts/js-systemjs/intl/index.js',
-        knockout: '/packages/devextreme/artifacts/js-systemjs/knockout.js',
-        css: '/packages/devextreme/artifacts/js-systemjs/css.js',
-        'generic_light.css': '/packages/devextreme/artifacts/css-systemjs/dx.light.css',
-        'material_blue_light.css': '/packages/devextreme/artifacts/css-systemjs/dx.material.blue.light.css',
-        'fluent_blue_light.css': '/packages/devextreme/artifacts/css-systemjs/dx.fluent.blue.light.css',
-        'gantt.css': '/packages/devextreme/artifacts/css-systemjs/dx-gantt.css',
-        'devextreme-cldr-data': '/packages/devextreme/artifacts/js-systemjs/devextreme-cldr-data',
-        'cldr-core': '/packages/devextreme/artifacts/js-systemjs/cldr-core',
-        json: '/packages/devextreme/artifacts/js-systemjs/json.js',
-        '@preact/signals-core': '/packages/devextreme/artifacts/js-systemjs/preact-signals.js',
-      }
-      : {
-        'devextreme-cldr-data': '/packages/devextreme/node_modules/devextreme-cldr-data',
-        'cldr-core': '/packages/devextreme/node_modules/cldr-core',
-        '@preact/signals-core': '/packages/devextreme/node_modules/@preact/signals-core/dist/signals-core.js',
-      };
-
-    const systemMap: Record<string, string> = {
-      globalize: '/packages/devextreme/node_modules/globalize/dist/globalize',
-      intl: '/packages/devextreme/node_modules/intl/index.js',
-      cldr: '/packages/devextreme/node_modules/cldrjs/dist/cldr',
-      jquery: getJQueryUrl(),
-      knockout: '/packages/devextreme/node_modules/knockout/build/output/knockout-latest.debug.js',
-      jszip: '/packages/devextreme/artifacts/js/jszip.js',
-      underscore: '/packages/devextreme/node_modules/underscore/underscore-min.js',
-      '@@devextreme/vdom': '/packages/devextreme/node_modules/@devextreme/vdom',
-      'devextreme-quill': '/packages/devextreme/node_modules/devextreme-quill/dist/dx-quill.js',
-      'devexpress-diagram': '/packages/devextreme/artifacts/js/dx-diagram.js',
-      'devexpress-gantt': '/packages/devextreme/artifacts/js/dx-gantt.js',
-      'devextreme-exceljs-fork': '/packages/devextreme/node_modules/devextreme-exceljs-fork/dist/dx-exceljs-fork.js',
-      // eslint-disable-next-line @stylistic/quote-props
-      'fflate': '/packages/devextreme/node_modules/fflate/esm/browser.js',
-      jspdf: '/packages/devextreme/node_modules/jspdf/dist/jspdf.umd.js',
-      'jspdf-autotable': '/packages/devextreme/node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js',
-      rrule: '/packages/devextreme/node_modules/rrule/dist/es5/rrule.js',
-      inferno: '/packages/devextreme/node_modules/inferno/dist/inferno.js',
-      'inferno-hydrate': '/packages/devextreme/node_modules/inferno-hydrate/dist/inferno-hydrate.js',
-      'inferno-compat': '/packages/devextreme/node_modules/inferno-compat/dist/inferno-compat.js',
-      'inferno-clone-vnode': '/packages/devextreme/node_modules/inferno-clone-vnode/dist/index.cjs.js',
-      'inferno-create-element': '/packages/devextreme/node_modules/inferno-create-element/dist/index.cjs.js',
-      'inferno-create-class': '/packages/devextreme/node_modules/inferno-create-class/dist/index.cjs.js',
-      'inferno-extras': '/packages/devextreme/node_modules/inferno-extras/dist/index.cjs.js',
-      'generic_light.css': '/packages/devextreme/artifacts/css/dx.light.css',
-      'material_blue_light.css': '/packages/devextreme/artifacts/css/dx.material.blue.light.css',
-      'fluent_blue_light.css': '/packages/devextreme/artifacts/css/dx.fluent.blue.light.css',
-      'gantt.css': '/packages/devextreme/artifacts/css/dx-gantt.css',
-      css: '/packages/devextreme/node_modules/systemjs-plugin-css/css.js',
-      text: '/packages/devextreme/node_modules/systemjs-plugin-text/text.js',
-      json: '/packages/devextreme/node_modules/systemjs-plugin-json/json.js',
-      'plugin-babel': '/packages/devextreme/node_modules/systemjs-plugin-babel/plugin-babel.js',
-      'systemjs-babel-build': '/packages/devextreme/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js',
-      // Provide minimal stubs as those packages aren't used in QUnit tests
-      zod: '/packages/devextreme/testing/helpers/stubs/zodStub.js',
-      'zod-to-json-schema': '/packages/devextreme/testing/helpers/stubs/zodToJsonSchemaStub.js',
-      ...cspMap,
-    };
-
-    const systemPackages: Record<string, SystemPackage> = {
-      '': {
-        defaultExtension: 'js',
-      },
-      globalize: {
-        main: '../globalize.js',
-        defaultExtension: 'js',
-      },
-      cldr: {
-        main: '../cldr.js',
-        defaultExtension: 'js',
-      },
-      'common/core/events/utils': {
-        main: 'index',
-      },
-      'events/utils': {
-        main: 'index',
-      },
-      events: {
-        main: 'index',
-      },
-    };
-
-    const knockoutPath = '/packages/devextreme/node_modules/knockout/build/output/knockout-latest.debug.js';
-
-    const systemConfig = {
-      baseURL: `/packages/devextreme/artifacts/${npmModule}`,
-      transpiler: 'plugin-babel',
-      map: systemMap,
-      packages: systemPackages,
-      packageConfigPaths: [
-        '@@devextreme/*/package.json',
-      ],
-      meta: {
-        [knockoutPath]: {
-          format: 'global',
-          deps: ['jquery'],
-          exports: 'ko',
-        },
-        '*.js': {
-          babelOptions: {
-            es2015: false,
-          },
-        },
-      },
-    };
-
-    const integrationImportPaths = getJQueryIntegrationImports();
-    const cspMetaTag = runProps.NoCsp || useEsm
-      ? ''
-      : `<meta
-            http-equiv="Content-Security-Policy"
-            content="
-                default-src 'self';
-                script-src 'self' 'nonce-M5H5tE' 'nonce-TEiwcJ' 'nonce-IpCks6' 'nonce-Z27qXj' 'nonce-wIkO6u';
-                style-src 'self' about: https://fonts.googleapis.com 'nonce-tYGMxb' 'nonce-qunit-test' 'nonce-qunit-extension';
-                img-src 'self' data:;
-                font-src 'self' https://fonts.gstatic.com;
-                connect-src 'self' https://js.devexpress.com;
-            "
-        />`;
+    // Native ESM + import maps: keep CSP off (same as the previous ESM path).
+    // `nocsp` remains a QUnit URL flag for suites that branch on it.
+    const cspMetaTag = '';
 
     return renderTemplate('run-suite.template.html', {
       CSP_META_TAG: cspMetaTag,
@@ -296,16 +149,13 @@ export function createPagesRenderer({
       QUNIT_EXTENSIONS_JS_URL: qunitExtensionsJs,
       JQUERY_JS_URL: jqueryJs,
       SINON_JS_URL: sinonJs,
-      SYSTEM_JS_SCRIPT: systemJsScript,
       IMPORT_MAP_SCRIPT: importMapScript,
-      USE_ESM_JSON: jsonString(useEsm),
       ESM_MODULE_ROOT_JSON: jsonString(getEsmModuleRoot()),
       IS_CONTINUOUS_INTEGRATION_JSON: jsonString(runProps.IsContinuousIntegration),
       CACHE_BUSTER_JSON: jsonString(cacheBuster),
-      SYSTEM_CONFIG_JSON: jsonString(systemConfig),
-      INTEGRATION_IMPORT_PATHS_JSON: jsonString(integrationImportPaths),
+      INTEGRATION_IMPORT_PATHS_JSON: jsonString(getJQueryIntegrationImports()),
       IS_SERVER_SIDE_TEST_JSON: jsonString(isServerSideTest),
-      TEST_URL_JSON: jsonString(getTestUrl()),
+      TEST_URL_JSON: jsonString(scriptVirtualPath),
     });
   }
 

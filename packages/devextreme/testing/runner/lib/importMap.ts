@@ -38,7 +38,7 @@ function withCacheBuster(url: string, cacheBuster: string): string {
 }
 
 /**
- * Collect SystemJS plugin-style bare imports (`*.json!`, etc.) from suite source.
+ * Collect legacy plugin-style bare imports (`*.json!`, etc.) from suite source.
  */
 export function collectPluginSpecifiers(suiteSource: string): string[] {
   const found = new Set<string>();
@@ -58,12 +58,42 @@ function resolveJsonBangToUrl(specifier: string): string | null {
   }
 
   const withoutBang = specifier.slice(0, -1); // keep .json
+
+  // Vendor CLDR JSON (localization.globalize suites)
+  if (withoutBang.startsWith('devextreme-cldr-data/')) {
+    return `${NODE_MODULES}/${withoutBang}?esm-export=1`;
+  }
+
   return `${ESM_ROOT}/${withoutBang}?esm-export=1`;
 }
 
 /**
- * SystemJS used artifacts baseURL, so bare `exporter` → exporter.js.
- * Import maps need exact keys for those package-root entry files.
+ * Suites that remap optional vendor packages to null stubs
+ * (missing-dependency error coverage).
+ */
+function collectSuiteImportOverrides(suiteFilePath?: string): Record<string, string> {
+  if (!suiteFilePath) {
+    return {};
+  }
+
+  const normalized = suiteFilePath.replace(/\\/g, '/');
+  const helpers = '/packages/devextreme/testing/helpers';
+
+  if (normalized.includes('/importGantt.tests.js')) {
+    return { 'devexpress-gantt': `${helpers}/noGantt.js` };
+  }
+  if (normalized.includes('/importQuill.tests.js')) {
+    return { 'devextreme-quill': `${helpers}/quillDependencies/noQuill.js` };
+  }
+  if (normalized.includes('/importDiagram.tests.js')) {
+    return { 'devexpress-diagram': `${helpers}/noDiagram.js` };
+  }
+
+  return {};
+}
+
+/**
+ * Exact bare entries for package-root files (exporter, color, …).
  */
 function collectPackageRootEntries(): Record<string, string> {
   const entries: Record<string, string> = {};
@@ -92,11 +122,11 @@ function collectPackageRootEntries(): Record<string, string> {
 }
 
 /**
- * Builds a browser import map for QUnit ESM loader.
- * Bare prefixes mirror SystemJS map + Vite playground aliases.
+ * Builds a browser import map for QUnit native ESM.
  */
 export function buildQunitImportMap({
   cacheBuster,
+  jqueryUrl,
   suiteFilePath,
 }: ImportMapOptions): BrowserImportMap {
   const rawImports: Record<string, string> = {
@@ -118,7 +148,7 @@ export function buildQunitImportMap({
     // Exact package-root entries (exporter, color, localization, events, …)
     ...collectPackageRootEntries(),
 
-    jquery: `${SHIMS}/jquery.js`,
+    jquery: jqueryUrl.includes('noJQuery') ? jqueryUrl : `${SHIMS}/jquery.js`,
 
     // Injected by babel transform-runtime (esm transpile)
     '@babel/runtime/': `${NODE_MODULES}/@babel/runtime/`,
@@ -132,8 +162,19 @@ export function buildQunitImportMap({
     // eslint-disable-next-line spellcheck/spell-checker
     fflate: `${NODE_MODULES}/fflate/esm/browser.js`,
     knockout: `${NODE_MODULES}/knockout/build/output/knockout-latest.debug.js`,
+    globalize: `${NODE_MODULES}/globalize/dist/globalize.js`,
+    'globalize/': `${NODE_MODULES}/globalize/dist/`,
+    cldr: `${NODE_MODULES}/cldrjs/dist/cldr.js`,
+    'cldr/': `${NODE_MODULES}/cldrjs/dist/cldr/`,
+    'devextreme-cldr-data/': `${NODE_MODULES}/devextreme-cldr-data/`,
+    'cldr-core/': `${NODE_MODULES}/cldr-core/`,
+    intl: `${NODE_MODULES}/intl/index.js`,
+    jszip: '/packages/devextreme/artifacts/js/jszip.js',
+    'devextreme-quill': `${NODE_MODULES}/devextreme-quill/dist/dx-quill.js`,
+    'devexpress-diagram': '/packages/devextreme/artifacts/js/dx-diagram.js',
+    'devexpress-gantt': '/packages/devextreme/artifacts/js/dx-gantt.js',
 
-    // SystemJS css! plugin replacements
+    // css! plugin replacements
     'fluent_blue_light.css!': `${SHIMS}/fluent_blue_light.css.js`,
     'generic_light.css!': `${SHIMS}/generic_light.css.js`,
     'material_blue_light.css!': `${SHIMS}/material_blue_light.css.js`,
@@ -142,9 +183,18 @@ export function buildQunitImportMap({
     // Debug-export shims
     '__internal/viz/gauges/base_indicators': `${SHIMS}/base_indicators.js`,
 
+    // Mutable facades so QUnit can stub Renderer / Axis under native ESM
+    'viz/core/renderers/renderer_default': `${SHIMS}/viz_renderer.js`,
+    'viz/axes/base_axis': `${SHIMS}/viz_base_axis.js`,
+    '__internal/viz/core/renderers/renderer': `${SHIMS}/viz_renderer.js`,
+    '__internal/viz/axes/base_axis': `${SHIMS}/viz_base_axis.js`,
+
     // Stubs
     zod: `${SHIMS}/zod.js`,
     'zod-to-json-schema': `${SHIMS}/zod-to-json-schema.js`,
+
+    // Suite-specific missing-dependency overrides
+    ...collectSuiteImportOverrides(suiteFilePath),
   };
 
   if (suiteFilePath && fs.existsSync(suiteFilePath)) {
