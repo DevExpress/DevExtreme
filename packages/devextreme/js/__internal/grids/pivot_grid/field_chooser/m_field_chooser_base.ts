@@ -48,6 +48,12 @@ function isFieldNavigationEvent(e): boolean {
     && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey;
 }
 
+function isContextMenuKeyEvent(e): boolean {
+  return e.type === 'keydown'
+    && !e.repeat
+    && (e.key === 'ContextMenu' || (e.shiftKey && e.key === 'F10'));
+}
+
 class HeaderFilterView extends HeaderFilterViewBase {
   _getSearchExpr(options, headerFilterOptions) {
     options.useDefaultSearchExpr = true;
@@ -127,6 +133,7 @@ export class FieldChooserBase extends mixinWidget {
         allowFieldDragging: true,
         applyChangesMode: 'instantly',
         state: undefined,
+        onFieldContextMenuKeyDown: null,
         headerFilter: {
           width: 252,
           height: 325,
@@ -187,6 +194,7 @@ export class FieldChooserBase extends mixinWidget {
         break;
       case 'applyChangesMode':
       case 'remoteSort':
+      case 'onFieldContextMenuKeyDown':
         break;
       case 'state':
         if (this._skipStateChange || !this._dataSource) {
@@ -424,6 +432,11 @@ export class FieldChooserBase extends mixinWidget {
         return;
       }
 
+      if (isContextMenuKeyEvent(e)) {
+        this._handleFieldContextMenuKey(e, field);
+        return;
+      }
+
       if (!isClick) {
         return;
       }
@@ -553,6 +566,24 @@ export class FieldChooserBase extends mixinWidget {
     }
 
     return FIELD_NAVIGATION_DELTAS[key];
+  }
+
+  private _handleFieldContextMenuKey(e, field): void {
+    const onContextMenuKey = this.option('onFieldContextMenuKeyDown');
+
+    if (!field.area || !onContextMenuKey) {
+      return;
+    }
+
+    const navigation = this._getFieldNavigation(field.area);
+
+    // The event can bubble to another instance subscribed to an ancestor
+    // element; the field then does not belong to this instance's items.
+    if (!navigation.getItems().includes(e.currentTarget)) {
+      return;
+    }
+
+    onContextMenuKey(e, navigation);
   }
 
   private _handleFieldNavigation(e, field): void {
