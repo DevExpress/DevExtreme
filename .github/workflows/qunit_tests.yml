@@ -111,7 +111,7 @@ jobs:
       shell: bash
       env:
         DEVEXTREME_TEST_CI: "true"
-      run: pnpm exec nx build:systemjs
+      run: pnpm exec nx build:dev
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme

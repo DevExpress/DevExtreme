@@ -1,12 +1,13 @@
 import $ from 'jquery';
-import 'ui/button';
+import 'integration/jquery';
+import dxButton from 'ui/button';
 
 if(!QUnit.urlParams['nojquery']) {
     QUnit.module('jquery integration');
 
     QUnit.test('renderer uses correct strategy', function(assert) {
         const node = document.createElement('div');
-        const element = new DevExpress.ui.dxButton(node).element();
+        const element = new dxButton(node).element();
 
         assert.ok(element instanceof window.jQuery);
     });

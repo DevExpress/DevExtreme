@@ -367,7 +367,17 @@ const Point = stubClass(pointModule.Point);
 const Legend = stubClass(legendModule.Legend);
 const Title = stubClass(titleModule.Title);
 const Tooltip = stubClass(tooltipModule.Tooltip);
-const Axis = stubClass(axisModule.Axis);
+// ESM npm artifacts strip /// #DEBUG methods (removeDebug: true).
+// Restore the ones gauges/charts call on mocks (kept in legacy CJS transpile).
+const Axis = stubClass(axisModule.Axis, null, {
+    $extraFunctions: [
+        'shift',
+        '_getTickMarkPoints',
+        '_validateOverlappingMode',
+        '_getStep',
+        '_validateDisplayMode',
+    ],
+});
 const SeriesStub = stubClass(Series);
 
 export {

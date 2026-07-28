@@ -1,6 +1,6 @@
 /**
  * Injects a stylesheet once for ESM import-map QUnit mode
- * (replaces SystemJS `*.css!` plugin imports).
+ * (replaces legacy `*.css!` plugin imports).
  *
  * Returns a Promise so importers can `await` load — otherwise tests that
  * assert computed styles race the async <link> fetch.
