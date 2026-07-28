@@ -14,19 +14,21 @@ test('The AI column should not hidden when columnHidingEnabled is true', async (
   await t.expect(dataGrid.isReady()).ok();
 
   const thirdHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(2);
+  const fourthHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(3);
 
   // assert: the AI column is hidden
   await t
-    .expect(dataGrid.getHeaders().getHeaderRow(0).getDataHeaderCells().count)
-    .eql(3)
-    .expect(thirdHeaderCell.element.textContent)
+    .expect(fourthHeaderCell.element.textContent)
     .eql('AI Column')
-    .expect(thirdHeaderCell.isHidden)
+    .expect(fourthHeaderCell.isHidden)
     .notOk();
 
   // assert: the adaptive button is visible
   await t
-    .expect(dataGrid.getDataRow(0).getCommandCell(3).getAdaptiveButton().visible).ok();
+    .expect(thirdHeaderCell.isHidden)
+    .ok()
+    .expect(dataGrid.getDataRow(0).getCommandCell(4).getAdaptiveButton().visible)
+    .ok();
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     { id: 1, name: 'Name 1', value: 10 },
