@@ -290,8 +290,8 @@ class Popover<
     return null;
   }
 
-  _focusTarget(): dxElementWrapper | null | undefined {
-    return this._getFocusTarget();
+  _focusTarget(): dxElementWrapper {
+    return this._getFocusTarget() ?? this.$overlayContent();
   }
 
   _restoreTargetFocus(): void {

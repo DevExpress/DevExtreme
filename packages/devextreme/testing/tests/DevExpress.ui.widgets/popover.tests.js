@@ -3018,7 +3018,7 @@ QUnit.module('accessibility', {
 
             const instance = new Popover(this.$element, {
                 target: this.$target,
-                toolbarItems: [{ text: 'OK' }],
+                toolbarItems: [{ widget: 'dxButton', options: { text: 'OK' } }],
                 visible: false,
             });
 
