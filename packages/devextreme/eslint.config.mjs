@@ -598,7 +598,7 @@ export default [
             'devextreme-custom/prefer-switch-true': ['error', { minBranches: 3 }],
         },
     },
-    // Temporarily allow underscore members in appointments/ (pending refactoring)
+    // Allow underscore members in appointments/
     {
         files: ['js/__internal/scheduler/appointments/**/*.ts?(x)'],
         rules: {
