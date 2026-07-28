@@ -260,6 +260,63 @@ describe('Cache', () => {
       expect(sendRequestSpy).toHaveBeenCalledTimes(2);
     });
 
+    it('should use cache with pagination in auto mode (compound key)', async () => {
+      const aiIntegration = new AIIntegration({
+        sendRequest(prompt): RequestResult {
+          sendRequestSpy(prompt.data?.data);
+          return {
+            promise: new Promise<string>((resolve) => {
+              const result = {};
+              Object.entries(prompt.data?.data).forEach(([key, value]) => {
+                result[key] = `Response ${(value as any).name}`;
+              });
+              resolve(JSON.stringify(result));
+            }),
+            abort: (): void => {},
+          };
+        },
+      });
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id1: 1, id2: 'a', name: 'Name 1' },
+          { id1: 2, id2: 'b', name: 'Name 2' },
+        ],
+        keyExpr: ['id1', 'id2'],
+        paging: {
+          pageSize: 1,
+        },
+        columns: [
+          { dataField: 'id1', caption: 'ID1' },
+          { dataField: 'id2', caption: 'ID2' },
+          { dataField: 'name', caption: 'Name' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration,
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+      });
+
+      await Promise.resolve();
+      expect(sendRequestSpy).toHaveBeenCalledTimes(1);
+      expect(sendRequestSpy).toHaveBeenCalledWith({ '{"id1":1,"id2":"a"}': { id1: 1, id2: 'a', name: 'Name 1' } });
+
+      instance.option('paging.pageIndex', 1);
+      jest.runAllTimers();
+      await Promise.resolve();
+      expect(sendRequestSpy).toHaveBeenCalledTimes(2);
+      expect(sendRequestSpy).toHaveBeenCalledWith({ '{"id1":2,"id2":"b"}': { id1: 2, id2: 'b', name: 'Name 2' } });
+
+      instance.option('paging.pageIndex', 0);
+      jest.runAllTimers();
+      await Promise.resolve();
+      expect(sendRequestSpy).toHaveBeenCalledTimes(2);
+    });
+
     it('should use cache with filtering in auto mode', async () => {
       const aiIntegration = new AIIntegration({
         sendRequest(prompt): RequestResult {
