@@ -10,7 +10,7 @@ import type { DataController } from '../../data_controller/m_data_controller';
 import type { ErrorHandlingController } from '../../error_handling/m_error_handling';
 import { Controller } from '../../m_modules';
 import type { InternalRequestCallbacks } from '../types';
-import { getDataFromRowItems, reduceDataCachedKeys } from '../utils';
+import { getDataFromRowItems, isKeyMissingInData, reduceDataCachedKeys } from '../utils';
 import { AIColumnCacheController } from './m_ai_column_cache_controller';
 
 export class AIColumnIntegrationController extends Controller {
@@ -130,6 +130,11 @@ export class AIColumnIntegrationController extends Controller {
     }
 
     const keyField = this.dataController.key();
+    if (isKeyMissingInData(args.data, keyField)) {
+      this.dataController.fireError('E1046', keyField);
+      return;
+    }
+
     let cachedResponse: Record<PropertyKey, string> = {};
     if (args.useCache) {
       const keys = data.map((item) => item[keyField] as PropertyKey);
