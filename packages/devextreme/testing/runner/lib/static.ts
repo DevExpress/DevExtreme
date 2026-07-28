@@ -132,6 +132,53 @@ function sendStaticFile(res: ServerResponse, filePath: string, fileSize: number)
   return true;
 }
 
+/**
+ * Webpack/UMD vendor bundles mapped in the QUnit import map
+ * (quill / diagram / gantt / jszip). Loaded as native ESM they have no
+ * exports — wrap so `import X from '…'` works.
+ */
+function isWebpackVendorBundlePath(relativeUrlPath: string): boolean {
+  const normalized = relativeUrlPath.split(path.sep).join('/');
+  return normalized.endsWith('/devextreme-quill/dist/dx-quill.js')
+    || normalized.endsWith('/artifacts/js/dx-diagram.js')
+    || normalized.endsWith('/artifacts/js/dx-gantt.js')
+    || normalized.endsWith('/artifacts/js/jszip.js');
+}
+
+/**
+ * Force the CJS branch of a UMD wrapper and re-export `module.exports` as default.
+ */
+function wrapWebpackVendorAsEsm(source: string): string {
+  return 'const module = { exports: {} };\n'
+    + 'const exports = module.exports;\n'
+    // Prevent AMD branch when a global `define` exists on the page.
+    + 'var define;\n'
+    + `${source}\n`
+    + 'const __dxVendorExport = module.exports && module.exports.__esModule\n'
+    + '  && Object.prototype.hasOwnProperty.call(module.exports, \'default\')\n'
+    + '  ? module.exports.default\n'
+    + '  : module.exports;\n'
+    + 'export default __dxVendorExport;\n';
+}
+
+function sendWebpackVendorAsEsm(res: ServerResponse, filePath: string): boolean {
+  try {
+    const raw = fs.readFileSync(filePath, 'utf8');
+    const body = wrapWebpackVendorAsEsm(raw);
+    const buffer = Buffer.from(body, 'utf8');
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+    res.setHeader('Content-Length', String(buffer.length));
+    res.end(buffer);
+    return true;
+  } catch {
+    res.statusCode = 500;
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.end('Failed to wrap vendor bundle as ESM');
+    return true;
+  }
+}
+
 /** Serve JSON as `export default …` for native ESM (`*.json!` replacement). */
 function sendJsonAsEsmModule(res: ServerResponse, filePath: string): boolean {
   try {
@@ -418,6 +465,13 @@ export function createStaticFileService({
         if (shimUrl) {
           return sendMutableFacadeModule(res, shimUrl);
         }
+      }
+
+      if (
+        path.extname(resolvedFilePath).toLowerCase() === '.js'
+        && isWebpackVendorBundlePath(relativeUrlPath)
+      ) {
+        return sendWebpackVendorAsEsm(res, resolvedFilePath);
       }
 
       if (
