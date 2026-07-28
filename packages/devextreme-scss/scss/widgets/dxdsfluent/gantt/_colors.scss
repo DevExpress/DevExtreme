@@ -13,13 +13,16 @@ $gantt-collapsable-row-bg: ds.$color-surface-neutral-deep-rest !default;
  * marker. See DIVERGENCES.md.
  */
 $gantt-icon-color: null !default;
+$gantt-accent: null !default;
 
 @if $mode == "light" {
   $gantt-icon-color: #161616 !default; // dx-data-uri-static: ds.$color-content-neutral-default-rest
+  $gantt-accent: ds.$color-surface-primary-default-rest !default;
 }
 
 @if $mode == "dark" {
   $gantt-icon-color: #fff !default; // dx-data-uri-static: ds.$color-content-neutral-default-rest
+  $gantt-accent: #3c92e9 !default; // dx-data-uri-static: ds.$color-surface-primary-default-rest
 }
 $gantt-parent-task-background-color: ds.$color-surface-success-default-rest !default;
 $gantt-task-color: ds.$color-content-neutral-default-inverted-rest !default;
@@ -27,7 +30,6 @@ $gantt-task-background-color: ds.$color-surface-neutral-default-inverted-rest !d
 $gantt-task-progress-background-color: rgb(from #{ds.$color-surface-neutral-default-inverted-rest} r g b / 0.2) !default;
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$gantt-accent: ds.$color-surface-primary-default-rest !default;
 $gantt-bg: ds.$color-surface-neutral-default-rest !default;
 $gantt-border-color: ds.$color-border-neutral-default-rest !default;
 $gantt-text-color: ds.$color-content-neutral-default-rest !default;
