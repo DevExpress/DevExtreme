@@ -424,47 +424,30 @@ export function rewriteRequiresToEsm(source: string, sourcePath?: string): strin
 }
 
 function rewriteRequiresToEsmInAmdBody(source: string): string {
-  let next = source;
+  // One pass only: every `require('…')` → shared alias + hoisted import.
+  // Do not mix line-pattern rewrites (they insert `import` mid-body and, with
+  // a reset counter / second pass, duplicate `__dxReq_*` bindings).
+  return rewriteRemainingRequires(source);
+}
 
-  next = next.replace(
-    new RegExp(`^\\s*(const|let|var)\\s+(\\{[^}]+\\})\\s*=\\s*require\\s*\\(\\s*${SPEC}\\s*\\)\\s*;?\\s*$`, 'gm'),
-    (_m, kind: string, pattern: string, spec: string) => {
-      const ns = nextRequireId();
-      return `import * as ${ns} from ${spec};\n${kind} ${pattern} = ${ns}.default ?? { ...${ns} };`;
-    },
-  );
+function hoistImportsFromSource(source: string): { imports: string[]; body: string } {
+  // Line-pattern / catch-all rewrites may leave `…;import …` on one line.
+  const normalized = source.replace(/;(?=\s*import\s)/g, ';\n');
+  const imports: string[] = [];
+  const bodyLines: string[] = [];
 
-  next = next.replace(
-    new RegExp(
-      `^\\s*(const|let|var)\\s+(${IDENT})\\s*=\\s*require\\s*\\(\\s*${SPEC}\\s*\\)((?:\\s*\\.\\s*${IDENT})+)\\s*;?\\s*$`,
-      'gm',
-    ),
-    (_m, kind: string, name: string, spec: string, members: string) => {
-      const ns = nextRequireId();
-      const path = members.replace(/\s+/g, '');
-      return `import * as ${ns} from ${spec};\n${kind} ${name} = (${ns}.default ?? { ...${ns} })${path};`;
-    },
-  );
+  normalized.split('\n').forEach((line) => {
+    if (/^\s*import\s/.test(line)) {
+      imports.push(line.trim());
+    } else {
+      bodyLines.push(line);
+    }
+  });
 
-  next = next.replace(
-    new RegExp(
-      `^\\s*(const|let|var)\\s+(${IDENT})\\s*=\\s*require\\s*\\(\\s*${SPEC}\\s*\\)\\s*;?\\s*$`,
-      'gm',
-    ),
-    (_m, kind: string, name: string, spec: string) => {
-      const ns = nextRequireId();
-      return `import * as ${ns} from ${spec};\n${kind} ${name} = ${ns}.default ?? { ...${ns} };`;
-    },
-  );
-
-  next = next.replace(
-    new RegExp(`^\\s*require\\s*\\(\\s*${SPEC}\\s*\\)\\s*;?\\s*$`, 'gm'),
-    (_m, spec: string) => `import ${spec};`,
-  );
-
-  next = rewriteRemainingRequires(next);
-
-  return next;
+  return {
+    imports,
+    body: bodyLines.join('\n').trim(),
+  };
 }
 
 function rewriteAmdDefineFactory(source: string): string {
@@ -492,18 +475,8 @@ function rewriteAmdDefineFactory(source: string): string {
     next += source.slice(lastIndex, match.index);
     const body = source.slice(openBrace + 1, closeBrace);
     const rewrittenBody = rewriteRequiresToEsmInAmdBody(body);
-    const lines = rewrittenBody.split('\n');
-    const bodyLines: string[] = [];
-
-    lines.forEach((line) => {
-      if (/^\s*import\s/.test(line)) {
-        hoistedImports.push(line.trim());
-      } else {
-        bodyLines.push(line);
-      }
-    });
-
-    const bodyScript = bodyLines.join('\n').trim();
+    const { imports, body: bodyScript } = hoistImportsFromSource(rewrittenBody);
+    hoistedImports.push(...imports);
     next += `(function() {\n${bodyScript}\n})();`;
     lastIndex = end;
     defineStartRe.lastIndex = end;

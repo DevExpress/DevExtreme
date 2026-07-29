@@ -208,7 +208,11 @@ function collectPackageRootEntries(): Record<string, string> {
   fs.readdirSync(ESM_FS_ROOT, { withFileTypes: true }).forEach((entry) => {
     if (entry.isFile() && entry.name.endsWith('.js')) {
       const name = entry.name.slice(0, -3);
-      entries[name] = `${ESM_ROOT}/${entry.name}`;
+      const url = `${ESM_ROOT}/${entry.name}`;
+      entries[name] = url;
+      // SystemJS used defaultExtension: 'js' + baseURL, so suites often
+      // `require('aspnet.js')` / `require('color.js')` with the extension.
+      entries[entry.name] = url;
       return;
     }
 
