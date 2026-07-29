@@ -409,27 +409,32 @@ function rewriteRequiresToEsmInAmdBody(source: string): string {
 
 function rewriteAmdDefineFactory(source: string): string {
   const amdFactoryRe = /define\s*\(\s*function\s*\([^)]*\)\s*\{([\s\S]*?)\}\s*\)\s*;?/g;
+  const hoistedImports: string[] = [];
 
-  return source.replace(amdFactoryRe, (_match, body: string) => {
+  // Replace define(...) factories with an IIFE body; hoist imports to file top
+  // (imports inside `if (define.amd)` are a SyntaxError under native ESM).
+  const next = source.replace(amdFactoryRe, (_match, body: string) => {
     const rewrittenBody = rewriteRequiresToEsmInAmdBody(body);
     const lines = rewrittenBody.split('\n');
-    const importLines: string[] = [];
     const bodyLines: string[] = [];
 
     lines.forEach((line) => {
       if (/^\s*import\s/.test(line)) {
-        importLines.push(line.trim());
+        hoistedImports.push(line.trim());
       } else {
         bodyLines.push(line);
       }
     });
 
-    const uniqueImports = [...new Set(importLines)];
     const bodyScript = bodyLines.join('\n').trim();
-    const bodyWrapper = `(function() {\n${bodyScript}\n})();`;
-
-    return `${uniqueImports.join('\n')}\n\n${bodyWrapper}`;
+    return `(function() {\n${bodyScript}\n})();`;
   });
+
+  if (!hoistedImports.length) {
+    return next;
+  }
+
+  return `${[...new Set(hoistedImports)].join('\n')}\n${next}`;
 }
 
 /** Collect `exports.foo` / `module.exports.foo` assignment names for ESM named re-exports. */
@@ -530,6 +535,62 @@ export function rewriteQunitTestHelperSource(source: string, sourcePath?: string
   next = wrapCjsModuleExports(next, sourcePath);
   next = rewriteCjsStyleDefaultImports(next);
   return next;
+}
+
+/**
+ * Convert the UMD `aspnet.js` artifact into a native ESM module.
+ * Non-AMD branch expects a global `DevExpress`; under import maps that throws.
+ */
+export function rewriteAspnetArtifactToEsm(source: string, sourcePath?: string): string {
+  const normalized = (sourcePath || '').replace(/\\/g, '/');
+  if (normalized && !normalized.endsWith('/aspnet.js')) {
+    return source;
+  }
+  if (!/\bDevExpress\.aspnet\s*=/.test(source) || !/\bdefine\s*\(/.test(source)) {
+    return source;
+  }
+  if (/^\s*import\s/m.test(source)) {
+    return source;
+  }
+
+  const factoryCall = /\)\s*\(\s*function\s*\(([^)]*)\)\s*\{/;
+  const match = factoryCall.exec(source);
+  if (!match) {
+    return source;
+  }
+
+  const params = match[1];
+  let body = source.slice(match.index + match[0].length);
+  body = body.replace(/\}\)\s*;?\s*$/, '');
+
+  return `import * as __dxAspnetJquery from 'jquery';
+import * as __dxAspnetTemplateEngineRegistry from './core/templates/template_engine_registry';
+import * as __dxAspnetTemplateBase from './core/templates/template_base';
+import * as __dxAspnetGuid from './core/guid';
+import * as __dxAspnetValidationEngine from './ui/validation_engine';
+import * as __dxAspnetIterator from './core/utils/iterator';
+import * as __dxAspnetDom from './core/utils/dom';
+import * as __dxAspnetString from './core/utils/string';
+import * as __dxAspnetAjax from './core/utils/ajax';
+
+const __dxAspnetFactory = function(${params}) {
+${body}
+};
+
+const __dxAspnet = __dxAspnetFactory(
+  __dxAspnetJquery.default ?? { ...__dxAspnetJquery },
+  __dxAspnetTemplateEngineRegistry.setTemplateEngine,
+  __dxAspnetTemplateBase.renderedCallbacks,
+  __dxAspnetGuid.default ?? { ...__dxAspnetGuid },
+  __dxAspnetValidationEngine.default ?? { ...__dxAspnetValidationEngine },
+  __dxAspnetIterator,
+  __dxAspnetDom.extractTemplateMarkup,
+  __dxAspnetString.encodeHtml,
+  __dxAspnetAjax.default ?? { ...__dxAspnetAjax },
+);
+
+export default __dxAspnet;
+`;
 }
 
 export function isQunitTestOrHelperPath(relativePath: string): boolean {

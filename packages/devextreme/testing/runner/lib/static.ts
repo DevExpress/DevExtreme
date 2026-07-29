@@ -4,6 +4,7 @@ import * as path from 'node:path';
 
 import {
   isQunitTestOrHelperPath,
+  rewriteAspnetArtifactToEsm,
   rewriteQunitTestHelperSource,
 } from './cjsInterop';
 
@@ -727,7 +728,8 @@ function sendEsmArtifactJs(
 ): boolean {
   try {
     const raw = fs.readFileSync(filePath, 'utf8');
-    const body = restoreEsmDebugTestHooks(relativeUrlPath, raw);
+    let body = restoreEsmDebugTestHooks(relativeUrlPath, raw);
+    body = rewriteAspnetArtifactToEsm(body, relativeUrlPath);
     if (body === raw) {
       return sendStaticFile(res, filePath, fs.statSync(filePath).size);
     }
