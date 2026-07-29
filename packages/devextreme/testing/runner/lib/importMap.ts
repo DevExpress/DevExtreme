@@ -175,26 +175,54 @@ function resolveJsonBangToUrl(specifier: string): string | null {
 /**
  * Suites that remap optional vendor packages to null stubs
  * (missing-dependency error coverage).
+ *
+ * The stub suites are often wrappers (`*.missingModules.tests.js`) that
+ * `require()` / `import` `importQuill.tests.js` etc. — match against the
+ * whole local import tree, not only the entry suite path.
  */
 function collectSuiteImportOverrides(suiteFilePath?: string): Record<string, string> {
   if (!suiteFilePath) {
     return {};
   }
 
-  const normalized = suiteFilePath.replace(/\\/g, '/');
   const helpers = '/packages/devextreme/testing/helpers';
+  const overrides: Record<string, string> = {};
 
-  if (normalized.includes('/importGantt.tests.js')) {
-    return { 'devexpress-gantt': `${helpers}/noGantt.js` };
-  }
-  if (normalized.includes('/importQuill.tests.js')) {
-    return { 'devextreme-quill': `${helpers}/quillDependencies/noQuill.js` };
-  }
-  if (normalized.includes('/importDiagram.tests.js')) {
-    return { 'devexpress-diagram': `${helpers}/noDiagram.js` };
+  const queue = [suiteFilePath];
+  const seen = new Set<string>();
+
+  while (queue.length) {
+    const filePath = queue.shift();
+    if (filePath === undefined) {
+      break;
+    }
+
+    const normalizedPath = path.resolve(filePath);
+    if (!seen.has(normalizedPath) && fs.existsSync(normalizedPath)) {
+      seen.add(normalizedPath);
+
+      const normalized = normalizedPath.replace(/\\/g, '/');
+      if (normalized.includes('/importGantt.tests.js')) {
+        overrides['devexpress-gantt'] = `${helpers}/noGantt.js`;
+      }
+      if (normalized.includes('/importQuill.tests.js')) {
+        overrides['devextreme-quill'] = `${helpers}/quillDependencies/noQuill.js`;
+      }
+      if (normalized.includes('/importDiagram.tests.js')) {
+        overrides['devexpress-diagram'] = `${helpers}/noDiagram.js`;
+      }
+
+      const source = fs.readFileSync(normalizedPath, 'utf8');
+      collectRelativeImportPaths(source).forEach((relativeSpec) => {
+        const nextPath = resolveLocalSuiteModulePath(normalizedPath, relativeSpec);
+        if (nextPath) {
+          queue.push(nextPath);
+        }
+      });
+    }
   }
 
-  return {};
+  return overrides;
 }
 
 /**
