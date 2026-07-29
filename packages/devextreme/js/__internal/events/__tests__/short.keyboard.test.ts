@@ -4,7 +4,7 @@ import {
 
 import { keyboard } from '../m_short';
 
-describe('keyboard processor registry disposal (T1332393)', () => {
+describe('keyboard processor registry disposal (T1332943)', () => {
   const registered: string[] = [];
 
   const on = (element: Element, focusTarget: Element | null = null): string => {
