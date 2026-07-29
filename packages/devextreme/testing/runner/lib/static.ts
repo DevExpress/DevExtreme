@@ -548,6 +548,18 @@ const MUTABLE_ARTIFACT_FACADES: readonly { suffix: string; shimUrl: string }[] =
     suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/core/loading_indicator.js',
     shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_loading_indicator.js',
   },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/core/localization/ldml/date.parser.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/date_parser.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/core/localization/ldml/dateParserModule.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/date_parser.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/common/core/localization/ldml/date.parser.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/date_parser.js',
+  },
 
   {
     suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/vector_map/projection.main.js',
