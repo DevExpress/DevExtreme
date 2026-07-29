@@ -153,6 +153,65 @@ function nextImportId(): string {
   return `__dxImp_${importCounter}`;
 }
 
+function resetRewriteCounters(): void {
+  requireCounter = 0;
+  importCounter = 0;
+}
+
+/**
+ * Index of the matching `}` for `{` at `openIndex`, skipping strings,
+ * template literals, and comments (so CSS/`}` inside markup do not truncate AMD bodies).
+ */
+function findMatchingBrace(source: string, openIndex: number): number {
+  if (source[openIndex] !== '{') {
+    return -1;
+  }
+
+  let depth = 0;
+  let i = openIndex;
+  while (i < source.length) {
+    if (source.startsWith('/*', i)) {
+      const end = source.indexOf('*/', i + 2);
+      i = end < 0 ? source.length : end + 2;
+    } else if (source.startsWith('//', i)) {
+      const end = source.indexOf('\n', i);
+      i = end < 0 ? source.length : end + 1;
+    } else {
+      const ch = source[i];
+      if (ch === '"' || ch === '\'') {
+        i = skipQuotedString(source, i);
+      } else if (ch === '`') {
+        i += 1;
+        while (i < source.length) {
+          if (source[i] === '\\') {
+            i += 2;
+          } else if (source[i] === '`') {
+            i += 1;
+            break;
+          } else if (source[i] === '$' && source[i + 1] === '{') {
+            // ${ ... } — recurse into expression braces
+            const innerClose = findMatchingBrace(source, i + 1);
+            i = innerClose < 0 ? source.length : innerClose + 1;
+          } else {
+            i += 1;
+          }
+        }
+      } else {
+        if (ch === '{') {
+          depth += 1;
+        } else if (ch === '}') {
+          depth -= 1;
+          if (depth === 0) {
+            return i;
+          }
+        }
+        i += 1;
+      }
+    }
+  }
+  return -1;
+}
+
 function isBareSpecifier(specWithQuotes: string): boolean {
   const spec = specWithQuotes.slice(1, -1);
   return !spec.startsWith('.') && !spec.startsWith('/');
@@ -182,7 +241,6 @@ function importClauseToDestructuring(namedClause: string): string {
 }
 
 export function rewriteCjsStyleDefaultImports(source: string): string {
-  importCounter = 0;
   let next = source.replace(
     MIXED_DEFAULT_NAMED_RE,
     (match, name: string, named: string, spec: string) => {
@@ -232,7 +290,6 @@ export function rewriteRequiresToEsm(source: string, sourcePath?: string): strin
     return source;
   }
 
-  requireCounter = 0;
   let next = source;
 
   // const { a, b } = require('spec');
@@ -363,7 +420,6 @@ export function rewriteRequiresToEsm(source: string, sourcePath?: string): strin
 }
 
 function rewriteRequiresToEsmInAmdBody(source: string): string {
-  requireCounter = 0;
   let next = source;
 
   next = next.replace(
@@ -408,12 +464,29 @@ function rewriteRequiresToEsmInAmdBody(source: string): string {
 }
 
 function rewriteAmdDefineFactory(source: string): string {
-  const amdFactoryRe = /define\s*\(\s*function\s*\([^)]*\)\s*\{([\s\S]*?)\}\s*\)\s*;?/g;
+  const defineStartRe = /define\s*\(\s*function\s*\([^)]*\)\s*\{/g;
   const hoistedImports: string[] = [];
+  let next = '';
+  let lastIndex = 0;
+  let match = defineStartRe.exec(source);
 
-  // Replace define(...) factories with an IIFE body; hoist imports to file top
+  // Replace define(function () { ... }) with an IIFE; hoist imports to file top
   // (imports inside `if (define.amd)` are a SyntaxError under native ESM).
-  const next = source.replace(amdFactoryRe, (_match, body: string) => {
+  while (match) {
+    const openBrace = match.index + match[0].length - 1;
+    const closeBrace = findMatchingBrace(source, openBrace);
+    if (closeBrace < 0) {
+      break;
+    }
+
+    let end = closeBrace + 1;
+    const after = /^\s*\)\s*;?/.exec(source.slice(end));
+    if (after) {
+      end += after[0].length;
+    }
+
+    next += source.slice(lastIndex, match.index);
+    const body = source.slice(openBrace + 1, closeBrace);
     const rewrittenBody = rewriteRequiresToEsmInAmdBody(body);
     const lines = rewrittenBody.split('\n');
     const bodyLines: string[] = [];
@@ -427,8 +500,13 @@ function rewriteAmdDefineFactory(source: string): string {
     });
 
     const bodyScript = bodyLines.join('\n').trim();
-    return `(function() {\n${bodyScript}\n})();`;
-  });
+    next += `(function() {\n${bodyScript}\n})();`;
+    lastIndex = end;
+    defineStartRe.lastIndex = end;
+    match = defineStartRe.exec(source);
+  }
+
+  next += source.slice(lastIndex);
 
   if (!hoistedImports.length) {
     return next;
@@ -529,6 +607,7 @@ ${namedExports ? `${namedExports}\n` : ''}`;
 }
 
 export function rewriteQunitTestHelperSource(source: string, sourcePath?: string): string {
+  resetRewriteCounters();
   let next = rewriteAmdDefineFactory(source);
   next = normalizeBundleTemplateRelativeEsmSpecifiers(next, sourcePath);
   next = rewriteRequiresToEsm(next, sourcePath);
