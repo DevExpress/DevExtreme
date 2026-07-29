@@ -3,10 +3,10 @@ import Popup from '../popup';
 import Chat from '../chat';
 import TextArea from '../textArea';
 import { AIMessage } from './aiMessage';
+import { AIAssistantConfirmDialog } from './aiAssistantConfirmDialog';
 
 const CLASS = {
   aiChatContent: 'dx-ai-chat__content',
-  abortConfirmDialog: 'dx-datagrid-ai-assistant-confirm-dialog',
   message: 'dx-ai-chat__message',
   messagePending: 'dx-ai-chat__message--pending',
   messageSuccess: 'dx-ai-chat__message--success',
@@ -17,6 +17,14 @@ const CLASS = {
 };
 
 export class AIAssistantChat extends Popup {
+  private readonly confirmDialogClass: string;
+
+  constructor(element: Selector, confirmDialogClass: string) {
+    super(element);
+
+    this.confirmDialogClass = confirmDialogClass;
+  }
+
   getWrapper(): Selector {
     return this.element;
   }
@@ -41,14 +49,8 @@ export class AIAssistantChat extends Popup {
     return this.element.find(`.${CLASS.clearChatButton}`);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  getAbortConfirmDialog(): Selector {
-    return Selector(`.${CLASS.abortConfirmDialog}`);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  getAbortConfirmYesButton(): Selector {
-    return Selector(`.${CLASS.abortConfirmDialog} .dx-button`).nth(1);
+  getAbortConfirmDialog(): AIAssistantConfirmDialog {
+    return new AIAssistantConfirmDialog(Selector(`.${this.confirmDialogClass}`));
   }
 
   getMessages(): Selector {

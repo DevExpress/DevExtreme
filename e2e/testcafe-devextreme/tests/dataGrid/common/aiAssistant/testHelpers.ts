@@ -289,8 +289,10 @@ export const closeChatAndConfirmAbort = async (
 ): Promise<void> => {
   await t.click(aiChat.getCloseButton().element);
 
-  await t.expect(aiChat.getAbortConfirmDialog().exists).ok();
-  await t.click(aiChat.getAbortConfirmYesButton());
+  const abortConfirmDialog = aiChat.getAbortConfirmDialog();
+
+  await t.expect(abortConfirmDialog.element.exists).ok();
+  await t.click(abortConfirmDialog.getConfirmButton().element);
 };
 
 export const getLoggedErrorIds = async (t: TestController): Promise<string[]> => {
