@@ -304,8 +304,9 @@ class Popover<
 
   _restoreTargetFocus(): void {
     const $target = this._getAriaDescriptionTargets();
+    const targetElement = $target.first().get(0);
 
-    if ($target.length) {
+    if (targetElement && domAdapter.getBody().contains(targetElement)) {
       // @ts-expect-error trigger should be typed on type 'EventsEngineType'
       eventsEngine.trigger($target.first(), 'focus');
     }
@@ -535,7 +536,7 @@ class Popover<
   _detachHoverableOverlay(): void {
     const $overlayContent = this.$overlayContent();
 
-    if (!$overlayContent.length) {
+    if (!$overlayContent?.length) {
       return;
     }
 
@@ -945,11 +946,14 @@ class Popover<
     super._clean();
   }
 
+  _shouldResetActiveElement(): boolean {
+    const activeElement = domAdapter.getActiveElement();
+    return domAdapter.isNode(activeElement) && !!this._$content?.get(0)?.contains(activeElement);
+  }
+
   _dispose(): void {
     const { visible } = this.option();
-    const activeElement = domAdapter.getActiveElement();
-    const shouldResetActiveElement = this._$content?.get(0)?.contains(activeElement);
-    if (visible && shouldResetActiveElement && this._getEffectiveAriaRole() === 'dialog') {
+    if (visible && this._shouldResetActiveElement() && this._getEffectiveAriaRole() === 'dialog') {
       this._restoreTargetFocus();
     }
     this._removeTargetAriaDescription();
