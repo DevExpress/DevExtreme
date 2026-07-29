@@ -92,6 +92,65 @@ export function collectPluginSpecifiers(suiteSource: string): string[] {
   return [...found];
 }
 
+function collectRelativeImportPaths(source: string): string[] {
+  const found: string[] = [];
+  const re = /(?:import|export)\s+(?:[^'"\n;]+?\s+from\s+)?['"](\.[^'"]+)['"]|require\s*\(\s*['"](\.[^'"]+)['"]\s*\)/g;
+  let match = re.exec(source);
+  while (match) {
+    found.push(match[1] || match[2]);
+    match = re.exec(source);
+  }
+  return found;
+}
+
+function resolveLocalSuiteModulePath(fromFile: string, relativeSpec: string): string | null {
+  const withoutQuery = relativeSpec.split('?')[0];
+  const resolved = path.resolve(path.dirname(fromFile), withoutQuery);
+  const candidates = [
+    resolved,
+    `${resolved}.js`,
+    path.join(resolved, 'index.js'),
+  ];
+  const isExistingFile = (candidate: string): boolean => (
+    fs.existsSync(candidate) && fs.statSync(candidate).isFile()
+  );
+  return candidates.find(isExistingFile) ?? null;
+}
+
+/**
+ * Suites often pull `*.json!` only through nested helpers (e.g. loadPanel tests).
+ * Walk relative local imports so those plugin specs land in the import map.
+ */
+export function collectPluginSpecifiersFromSuiteTree(suiteFilePath: string): string[] {
+  const found = new Set<string>();
+  const queue = [suiteFilePath];
+  const seen = new Set<string>();
+
+  while (queue.length) {
+    const filePath = queue.shift();
+    if (filePath === undefined) {
+      break;
+    }
+
+    const normalized = path.resolve(filePath);
+    if (!seen.has(normalized) && fs.existsSync(normalized)) {
+      seen.add(normalized);
+
+      const source = fs.readFileSync(normalized, 'utf8');
+      collectPluginSpecifiers(source).forEach((specifier) => found.add(specifier));
+
+      collectRelativeImportPaths(source).forEach((relativeSpec) => {
+        const nextPath = resolveLocalSuiteModulePath(normalized, relativeSpec);
+        if (nextPath) {
+          queue.push(nextPath);
+        }
+      });
+    }
+  }
+
+  return [...found];
+}
+
 function resolveJsonBangToUrl(specifier: string): string | null {
   // e.g. localization/messages/ja.json! → ESM messages file as module
   if (!specifier.endsWith('.json!')) {
@@ -101,7 +160,10 @@ function resolveJsonBangToUrl(specifier: string): string | null {
   const withoutBang = specifier.slice(0, -1); // keep .json
 
   // Vendor CLDR JSON (localization.globalize suites)
-  if (withoutBang.startsWith('devextreme-cldr-data/')) {
+  if (
+    withoutBang.startsWith('devextreme-cldr-data/')
+    || withoutBang.startsWith('cldr-core/')
+  ) {
     return `${NODE_MODULES}/${withoutBang}?esm-export=1`;
   }
 
@@ -192,7 +254,12 @@ export function buildQunitImportMap({
 
     jquery: jqueryUrl.includes('noJQuery') ? jqueryUrl : `${SHIMS}/jquery.js`,
 
-    // Injected by babel transform-runtime (esm transpile)
+    // Injected by babel transform-runtime (esm transpile).
+    // jspdf imports `@babel/runtime/helpers/<name>` (CJS); our artifacts use
+    // `helpers/esm/<name>`. Remap non-esm helper paths to the ESM builds, but
+    // keep an exact `helpers/esm/` prefix so existing imports stay correct.
+    '@babel/runtime/helpers/esm/': `${NODE_MODULES}/@babel/runtime/helpers/esm/`,
+    '@babel/runtime/helpers/': `${NODE_MODULES}/@babel/runtime/helpers/esm/`,
     '@babel/runtime/': `${NODE_MODULES}/@babel/runtime/`,
 
     // Vendors (prefer ESM builds where available)
@@ -202,11 +269,19 @@ export function buildQunitImportMap({
     '@preact/signals-core': `${NODE_MODULES}/@preact/signals-core/dist/signals-core.module.js`,
 
     // eslint-disable-next-line spellcheck/spell-checker
-    fflate: `${NODE_MODULES}/fflate/esm/browser.js`,
+    fflate: resolveVirtualStorePackageUrl('fflate', 'esm/browser.js')
+      ?? `${NODE_MODULES}/fflate/esm/browser.js`,
     knockout: `${SHIMS}/knockout.js`,
     rrule: `${NODE_MODULES}/rrule/dist/esm/index.js`,
     // eslint-disable-next-line spellcheck/spell-checker
     tslib: resolveVirtualStorePackageUrl('tslib', 'tslib.es6.mjs') ?? `${SHIMS}/tslib.js`,
+    jspdf: `${NODE_MODULES}/jspdf/dist/jspdf.es.min.js`,
+    'jspdf-autotable': `${SHIMS}/jspdf_autotable.js`,
+    'fast-png': resolveVirtualStorePackageUrl('fast-png', 'lib-esm/index.js') ?? `${NODE_MODULES}/fast-png/lib-esm/index.js`,
+    // eslint-disable-next-line spellcheck/spell-checker
+    iobuffer: resolveVirtualStorePackageUrl('iobuffer', 'lib-esm/IOBuffer.js') ?? `${NODE_MODULES}/iobuffer/lib-esm/IOBuffer.js`,
+    // eslint-disable-next-line spellcheck/spell-checker
+    pako: resolveVirtualStorePackageUrl('pako', 'dist/pako.esm.mjs') ?? `${NODE_MODULES}/pako/dist/pako.esm.mjs`,
     // Plugins live under dist/globalize/*.js (not dist/*.js)
     globalize: `${NODE_MODULES}/globalize/dist/globalize.js`,
     'globalize/': `${NODE_MODULES}/globalize/dist/globalize/`,
@@ -259,8 +334,7 @@ export function buildQunitImportMap({
   };
 
   if (suiteFilePath && fs.existsSync(suiteFilePath)) {
-    const source = fs.readFileSync(suiteFilePath, 'utf8');
-    collectPluginSpecifiers(source).forEach((specifier) => {
+    collectPluginSpecifiersFromSuiteTree(suiteFilePath).forEach((specifier) => {
       if (specifier.endsWith('.json!')) {
         const url = resolveJsonBangToUrl(specifier);
         if (url) {
