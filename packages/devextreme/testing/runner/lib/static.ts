@@ -352,6 +352,26 @@ const MUTABLE_ARTIFACT_FACADES: readonly { suffix: string; shimUrl: string }[] =
     shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_renderer.js',
   },
   {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/core/renderers/animation.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_animation.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/core/utils.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_utils.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/core/utils.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_utils.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/core/utils_default.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_utils.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/core/renderers/animation.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_animation.js',
+  },
+  {
     suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/axes/base_axis.js',
     shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_base_axis.js',
   },

@@ -307,9 +307,12 @@ export function buildQunitImportMap({
     '__internal/viz/gauges/base_indicators': `${SHIMS}/base_indicators.js`,
 
     // Mutable facades so QUnit can stub Renderer / Axis / Translator2D
-    // / tickGenerator / Tooltip / themes under native ESM
+    // / tickGenerator / Tooltip / themes / utils / animation under native ESM
     'viz/core/renderers/renderer': `${SHIMS}/viz_renderer.js`,
     'viz/core/renderers/renderer_default': `${SHIMS}/viz_renderer.js`,
+    'viz/core/renderers/animation': `${SHIMS}/viz_animation.js`,
+    'viz/core/utils': `${SHIMS}/viz_utils.js`,
+    'viz/core/utils_default': `${SHIMS}/viz_utils.js`,
     'viz/palette': `${SHIMS}/viz_paletteModule.js`,
     '__internal/viz/paletteModule': `${SHIMS}/viz_paletteModule.js`,
     '__internal/viz/palette': `${SHIMS}/viz_paletteModule.js`,
@@ -318,6 +321,8 @@ export function buildQunitImportMap({
     'viz/axes/tick_generator': `${SHIMS}/viz_tick_generator.js`,
     'viz/translators/translator2d': `${SHIMS}/viz_translator2d.js`,
     '__internal/viz/core/renderers/renderer': `${SHIMS}/viz_renderer.js`,
+    '__internal/viz/core/renderers/animation': `${SHIMS}/viz_animation.js`,
+    '__internal/viz/core/utils': `${SHIMS}/viz_utils.js`,
     '__internal/viz/core/tooltip': `${SHIMS}/viz_tooltip.js`,
     '__internal/viz/axes/base_axis': `${SHIMS}/viz_base_axis.js`,
     '__internal/viz/axes/tick_generator': `${SHIMS}/viz_tick_generator.js`,
