@@ -124,7 +124,7 @@ test('N distinct prompts back-to-back should each execute once, in order, and ap
       .pressKey('enter');
 
     await t.expect(aiChat.getSuccessMessages().count).eql(i + 1);
-    await t.expect(aiChat.getSuccessActionItems(i).count).eql(1);
+    await t.expect(aiChat.getAIMessage(i).getSuccessActionItems().count).eql(1);
     await t.expect(aiChat.getTextArea().isDisabled).notOk();
 
     await steps[i].verify();
@@ -188,7 +188,7 @@ test('Input should be re-enabled after fulfillment', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
   await t.expect(aiChat.getTextArea().isDisabled).notOk();
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAIAssistant(baseGrid(twoRows), [sortByName]));

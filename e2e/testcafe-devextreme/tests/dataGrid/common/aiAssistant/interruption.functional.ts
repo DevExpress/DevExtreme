@@ -111,7 +111,7 @@ test('Closing the popup mid-request aborts, leaves the grid unchanged, and shows
 
   await t.expect(aiChat.getMessages().count).eql(2);
   await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getMessageErrorText(0).innerText).eql(await abortMessage());
+  await t.expect(aiChat.getAIMessage(0).getErrorText().innerText).eql(await abortMessage());
   await t.expect(aiChat.getTextArea().isDisabled).notOk();
 }).before(async () => createGridWithAI({ options: gridOptions, mode: 'never' }));
 
@@ -172,15 +172,15 @@ test('Closing the popup mid-execution aborts the remaining commands and keeps th
 
   // An aborted command makes the whole message a failure: 2 successes + 1 aborted entry.
   await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getActionItems(0).count).eql(3);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(2);
-  await t.expect(aiChat.getAbortedActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getActionItems().count).eql(3);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(2);
+  await t.expect(aiChat.getAIMessage(0).getAbortedActionItems().count).eql(1);
 
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
   await t.expect(dataGrid.apiColumnOption('value', 'sortOrder')).notOk();
   await t.expect((await dataGrid.apiGetSelectedRowKeys()).length).eql(50);
 
-  await t.expect(aiChat.getMessageRegenerateButton(0).count).eql(0);
+  await t.expect(aiChat.getAIMessage(0).hasRegenerateButton()).notOk();
 
   await t.expect(aiChat.getTextArea().isDisabled).notOk();
 }).before(async () => createWidget('dxDataGrid', () => {
@@ -263,7 +263,7 @@ test('Customized response title is applied to the partial (aborted) result', asy
   await t.click(dataGrid.getAIAssistantButton());
 
   await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getMessageHeader(0).innerText).eql('Stopped before finishing');
+  await t.expect(aiChat.getAIMessage(0).getHeader().innerText).eql('Stopped before finishing');
 }).before(async () => createWidget('dxDataGrid', () => {
   const w = window as any;
 
@@ -456,6 +456,6 @@ test('Re-creating the grid after a dispose-during-flight yields a usable instanc
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAI({ options: gridOptions, mode: 'never' }));

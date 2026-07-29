@@ -34,7 +34,7 @@ test('Regenerate should be visible after AI integration failure', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getMessageRegenerateButton(0).exists).ok();
+  await t.expect(aiChat.getAIMessage(0).hasRegenerateButton()).ok();
 
   // Pre-execution failure: nothing was applied to the grid.
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
@@ -57,7 +57,7 @@ test('Regenerate should be visible after response format failure', async (t) => 
     .pressKey('enter');
 
   await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getMessageRegenerateButton(0).exists).ok();
+  await t.expect(aiChat.getAIMessage(0).hasRegenerateButton()).ok();
 
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createGridWithAIAssistant(
@@ -79,7 +79,7 @@ test('Regenerate should be visible after validation failure', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getMessageRegenerateButton(0).exists).ok();
+  await t.expect(aiChat.getAIMessage(0).hasRegenerateButton()).ok();
 
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createGridWithAIAssistant(
@@ -102,7 +102,7 @@ test('Regenerate should be visible after empty actions', async (t) => {
 
   // Empty actions are rejected as an invalid response → failure message.
   await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getMessageRegenerateButton(0).exists).ok();
+  await t.expect(aiChat.getAIMessage(0).hasRegenerateButton()).ok();
 
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createGridWithAIAssistant(
@@ -124,7 +124,7 @@ test('Regenerate should NOT be visible after full success', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getMessageRegenerateButton(0).exists).notOk();
+  await t.expect(aiChat.getAIMessage(0).hasRegenerateButton()).notOk();
 
   // The successful command actually changed the grid state.
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
@@ -147,10 +147,10 @@ test('Regenerate should NOT be visible after partial-execution failure', async (
     .pressKey('enter');
 
   await t.expect(aiChat.getAIMessages().count).eql(1);
-  await t.expect(aiChat.getActionItems(0).count).eql(2);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
-  await t.expect(aiChat.getErrorActionItems(0).count).eql(1);
-  await t.expect(aiChat.getMessageRegenerateButton(0).exists).notOk();
+  await t.expect(aiChat.getAIMessage(0).getActionItems().count).eql(2);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getErrorActionItems().count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).hasRegenerateButton()).notOk();
 
   // No Regenerate because action #1 already mutated the grid.
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
@@ -178,8 +178,8 @@ test('Regenerate should NOT be visible after all-execution failure', async (t) =
     .pressKey('enter');
 
   await t.expect(aiChat.getAIMessages().count).eql(1);
-  await t.expect(aiChat.getErrorActionItems(0).count).eql(2);
-  await t.expect(aiChat.getMessageRegenerateButton(0).exists).notOk();
+  await t.expect(aiChat.getAIMessage(0).getErrorActionItems().count).eql(2);
+  await t.expect(aiChat.getAIMessage(0).hasRegenerateButton()).notOk();
 
   // Both commands targeted non-existent columns, so real columns stay unsorted.
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
@@ -207,9 +207,9 @@ test('Regenerate should resend the same prompt and replace the previous response
     .pressKey('enter');
 
   await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getMessageRegenerateButton(0).exists).ok();
+  await t.expect(aiChat.getAIMessage(0).hasRegenerateButton()).ok();
 
-  await t.click(aiChat.getMessageRegenerateButton(0));
+  await t.click(aiChat.getAIMessage(0).getRegenerateButton());
 
   // The failed response is replaced, not accumulated: still a single AI response.
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
@@ -247,10 +247,10 @@ test('Regenerate should be disabled while request is in flight', async (t) => {
 
   await t.expect(aiChat.getErrorMessages().count).eql(1);
 
-  await t.click(aiChat.getMessageRegenerateButton(0));
+  await t.click(aiChat.getAIMessage(0).getRegenerateButton());
 
   await t.expect(aiChat.getPendingMessages().count).eql(1);
-  await t.expect(aiChat.getMessageRegenerateButton(0).exists).notOk();
+  await t.expect(aiChat.getAIMessage(0).hasRegenerateButton()).notOk();
 
   // Nothing was applied while the regenerate request is still pending.
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
@@ -288,7 +288,7 @@ test('Regenerate is visible after a popup-close-driven abort', async (t) => {
   // The aborted response is rendered as a failure with no executed commands,
   // so it currently offers Regenerate (pins current behavior; see doc §1.12.11).
   await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getMessageRegenerateButton(0).exists).ok();
+  await t.expect(aiChat.getAIMessage(0).hasRegenerateButton()).ok();
 
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createGridWithAIAssistant(
@@ -310,11 +310,11 @@ test('Regenerate after a column is removed should resend with the actual context
     .pressKey('enter');
 
   await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getMessageRegenerateButton(0).exists).ok();
+  await t.expect(aiChat.getAIMessage(0).hasRegenerateButton()).ok();
 
   await dataGrid.apiOption('columns', ['id', 'name']);
 
-  await t.click(aiChat.getMessageRegenerateButton(0));
+  await t.click(aiChat.getAIMessage(0).getRegenerateButton());
 
   await t.expect(aiChat.getAIMessages().count).eql(1);
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
@@ -347,19 +347,19 @@ test('Sequential regenerate after pre-execution failures keeps exactly one respo
 
   await t.expect(aiChat.getMessages().count).eql(2);
   await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getMessageRegenerateButton(0).exists).ok();
+  await t.expect(aiChat.getAIMessage(0).hasRegenerateButton()).ok();
 
-  await t.click(aiChat.getMessageRegenerateButton(0));
-
-  await t.expect(aiChat.getMessages().count).eql(2);
-  await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getMessageRegenerateButton(0).exists).ok();
-
-  await t.click(aiChat.getMessageRegenerateButton(0));
+  await t.click(aiChat.getAIMessage(0).getRegenerateButton());
 
   await t.expect(aiChat.getMessages().count).eql(2);
   await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getMessageRegenerateButton(0).exists).ok();
+  await t.expect(aiChat.getAIMessage(0).hasRegenerateButton()).ok();
+
+  await t.click(aiChat.getAIMessage(0).getRegenerateButton());
+
+  await t.expect(aiChat.getMessages().count).eql(2);
+  await t.expect(aiChat.getErrorMessages().count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).hasRegenerateButton()).ok();
 
   // Every retry failed before execution, so the grid was never mutated.
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
@@ -387,7 +387,7 @@ test('cancel-aborted message currently shows a Regenerate button', async (t) => 
     .pressKey('enter');
 
   await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getMessageRegenerateButton(0).exists).ok();
+  await t.expect(aiChat.getAIMessage(0).hasRegenerateButton()).ok();
 }).before(async () => createGridWithAIAssistant(
   {
     dataSource: threeRows,

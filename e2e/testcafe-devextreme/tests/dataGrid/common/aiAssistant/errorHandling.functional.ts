@@ -78,10 +78,10 @@ const expectInvalidResponse = async (
 ): Promise<void> => {
   await t.expect(aiChat.getMessages().count).eql(2);
   await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getMessageHeader(0).innerText).eql(await errorHeader());
-  await t.expect(aiChat.getMessageErrorText(0).innerText).eql(await invalidResponse());
+  await t.expect(aiChat.getAIMessage(0).getHeader().innerText).eql(await errorHeader());
+  await t.expect(aiChat.getAIMessage(0).getErrorText().innerText).eql(await invalidResponse());
   await t.expect(aiChat.getSuccessMessages().count).eql(0);
-  await t.expect(aiChat.getActionItems(0).count).eql(0);
+  await t.expect(aiChat.getAIMessage(0).getActionItems().count).eql(0);
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 };
 
@@ -103,7 +103,7 @@ test('Sorting by a non-existent column should fail: schema is valid but incompat
   await t.expect(aiChat.getMessages().count).eql(2);
   await t.expect(aiChat.getSuccessMessages().count).eql(0);
   await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getErrorActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getErrorActionItems().count).eql(1);
   await t.expect(dataGrid.apiGetDataSourceSortParams()).notOk();
 }).before(async () => createGridWithAIAssistant(
   baseGrid,
@@ -116,7 +116,7 @@ test('Selecting non-existent keys should succeed: schema is valid and the missin
   await t.expect(aiChat.getMessages().count).eql(2);
   await t.expect(aiChat.getErrorMessages().count).eql(0);
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
   await t.expect(getSelectedRowsCount()).eql(0);
 }).before(async () => createGridWithAIAssistant(
   { ...baseGrid, selection: { mode: 'multiple' } },
@@ -312,11 +312,11 @@ test('Partial failure should report each action status and apply successes', asy
 
   await t.expect(aiChat.getMessages().count).eql(2);
   await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getActionItems(0).count).eql(3);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(2);
-  await t.expect(aiChat.getErrorActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getActionItems().count).eql(3);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(2);
+  await t.expect(aiChat.getAIMessage(0).getErrorActionItems().count).eql(1);
   // The failed grouping action carries its predefined per-command message.
-  await t.expect(aiChat.getActionItemText(0, 1).innerText).contains('Group data against');
+  await t.expect(aiChat.getAIMessage(0).getActionItemText(1).innerText).contains('Group data against');
   // Successful actions (#1 sorting, #3 searching) took effect; failed grouping did not.
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
   await t.expect(dataGrid.apiColumnOption('name', 'groupIndex')).eql(undefined);
@@ -334,12 +334,12 @@ test('All-commands failure should report failures and leave grid unchanged', asy
 
   await t.expect(aiChat.getMessages().count).eql(2);
   await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getActionItems(0).count).eql(3);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(0);
-  await t.expect(aiChat.getErrorActionItems(0).count).eql(3);
+  await t.expect(aiChat.getAIMessage(0).getActionItems().count).eql(3);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(0);
+  await t.expect(aiChat.getAIMessage(0).getErrorActionItems().count).eql(3);
   // Each failed action keeps its own predefined per-command message.
-  await t.expect(aiChat.getActionItemText(0, 0).innerText).contains('Sort data against');
-  await t.expect(aiChat.getActionItemText(0, 2).innerText).contains('Group data against');
+  await t.expect(aiChat.getAIMessage(0).getActionItemText(0).innerText).contains('Sort data against');
+  await t.expect(aiChat.getAIMessage(0).getActionItemText(2).innerText).contains('Group data against');
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
   await t.expect(dataGrid.apiColumnOption('name', 'groupIndex')).eql(undefined);
 }).before(async () => createGridWithAIAssistant({ ...baseGrid, columns: groupingLockedColumns }, [{

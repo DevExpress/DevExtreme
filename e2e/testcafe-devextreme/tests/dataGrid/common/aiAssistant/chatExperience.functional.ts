@@ -26,7 +26,7 @@ test('Chat history should accumulate across multiple prompts', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 
   await t
@@ -36,7 +36,7 @@ test('Chat history should accumulate across multiple prompts', async (t) => {
   await t.expect(aiChat.getUserMessages().count).eql(2);
   await t.expect(aiChat.getAIMessages().count).eql(2);
   await t.expect(aiChat.getSuccessMessages().count).eql(2);
-  await t.expect(aiChat.getSuccessActionItems(1).count).eql(1);
+  await t.expect(aiChat.getAIMessage(1).getSuccessActionItems().count).eql(1);
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql(undefined);
 }).before(async () => createGridWithAIAssistant({
   ...baseGrid,
@@ -198,11 +198,11 @@ test('customizeResponseText at init should override success and failure messages
     .pressKey('enter');
 
   await t.expect(aiChat.getAIMessages().count).eql(1);
-  await t.expect(aiChat.getActionItems(0).count).eql(2);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
-  await t.expect(aiChat.getErrorActionItems(0).count).eql(1);
-  await t.expect(aiChat.getActionItemText(0, 0).textContent).eql('Custom success for sorting');
-  await t.expect(aiChat.getActionItemText(0, 1).textContent).eql('Custom failure for sorting');
+  await t.expect(aiChat.getAIMessage(0).getActionItems().count).eql(2);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getErrorActionItems().count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getActionItemText(0).textContent).eql('Custom success for sorting');
+  await t.expect(aiChat.getAIMessage(0).getActionItemText(1).textContent).eql('Custom failure for sorting');
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAIAssistant({
   ...baseGrid,
@@ -236,11 +236,11 @@ test('customizeResponseText partial override should keep failure message default
     .typeText(aiChat.getInput(), 'Sort by name and invalid')
     .pressKey('enter');
 
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
-  await t.expect(aiChat.getErrorActionItems(0).count).eql(1);
-  await t.expect(aiChat.getActionItemText(0, 0).textContent).eql('Custom success for sorting');
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getErrorActionItems().count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getActionItemText(0).textContent).eql('Custom success for sorting');
   await t
-    .expect(aiChat.getActionItemText(0, 1).textContent)
+    .expect(aiChat.getAIMessage(0).getActionItemText(1).textContent)
     .eql('Sort data against "nonExistent" in ascending order.');
 }).before(async () => createGridWithAIAssistant({
   ...baseGrid,
@@ -276,7 +276,7 @@ test('customizeResponseText returning undefined should use default message', asy
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
   await t
-    .expect(aiChat.getActionItemText(0, 0).textContent)
+    .expect(aiChat.getAIMessage(0).getActionItemText(0).textContent)
     .eql('Sort data against "Name" in ascending order.');
 }).before(async () => createGridWithAIAssistant({
   ...baseGrid,
@@ -303,7 +303,7 @@ test('customizeResponseTitle at init should override message header', async (t) 
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getMessageHeader(0).textContent).eql('success: sorting');
+  await t.expect(aiChat.getAIMessage(0).getHeader().textContent).eql('success: sorting');
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 
   await t
@@ -311,7 +311,7 @@ test('customizeResponseTitle at init should override message header', async (t) 
     .pressKey('enter');
 
   await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getMessageHeader(1).textContent).eql('failure: sorting');
+  await t.expect(aiChat.getAIMessage(1).getHeader().textContent).eql('failure: sorting');
 }).before(async () => createGridWithAIAssistant({
   ...baseGrid,
   dataSource: threeRows,
@@ -338,7 +338,7 @@ test('customizeResponseText changed at runtime should apply to subsequent messag
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getActionItemText(0, 0).textContent).eql('Original message');
+  await t.expect(aiChat.getAIMessage(0).getActionItemText(0).textContent).eql('Original message');
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 
   await dataGrid.apiOption('aiAssistant.customizeResponseText', () => ({ success: 'Updated message' }));
@@ -348,8 +348,8 @@ test('customizeResponseText changed at runtime should apply to subsequent messag
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(2);
-  await t.expect(aiChat.getActionItemText(1, 0).textContent).eql('Updated message');
-  await t.expect(aiChat.getActionItemText(0, 0).textContent).eql('Original message');
+  await t.expect(aiChat.getAIMessage(1).getActionItemText(0).textContent).eql('Updated message');
+  await t.expect(aiChat.getAIMessage(0).getActionItemText(0).textContent).eql('Original message');
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql(undefined);
 }).before(async () => createGridWithAIAssistant({
   ...baseGrid,
@@ -377,7 +377,7 @@ test('customizeResponseTitle changed at runtime should apply to subsequent messa
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getMessageHeader(0).textContent).eql('Original Title');
+  await t.expect(aiChat.getAIMessage(0).getHeader().textContent).eql('Original Title');
 
   await dataGrid.apiOption('aiAssistant.customizeResponseTitle', () => 'Updated Title');
 
@@ -386,8 +386,8 @@ test('customizeResponseTitle changed at runtime should apply to subsequent messa
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(2);
-  await t.expect(aiChat.getMessageHeader(1).textContent).eql('Updated Title');
-  await t.expect(aiChat.getMessageHeader(0).textContent).eql('Original Title');
+  await t.expect(aiChat.getAIMessage(1).getHeader().textContent).eql('Updated Title');
+  await t.expect(aiChat.getAIMessage(0).getHeader().textContent).eql('Original Title');
 }).before(async () => createGridWithAIAssistant({
   ...baseGrid,
   dataSource: threeRows,
