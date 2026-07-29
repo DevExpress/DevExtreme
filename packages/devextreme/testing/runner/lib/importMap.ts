@@ -260,6 +260,9 @@ export function buildQunitImportMap({
 
     // Exact package-root entries (exporter, color, localization, events, …)
     ...collectPackageRootEntries(),
+    // Override package-root exporter with a stubbable facade (named `export` + default api).
+    exporter: `${SHIMS}/exporter.js`,
+    'exporter.js': `${SHIMS}/exporter.js`,
 
     jquery: jqueryUrl.includes('noJQuery') ? jqueryUrl : `${SHIMS}/jquery.js`,
 
