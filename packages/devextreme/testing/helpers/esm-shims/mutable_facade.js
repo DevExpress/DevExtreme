@@ -12,9 +12,14 @@ export function wrapCtor(api, name) {
     Object.defineProperty(ExportWrapper, 'name', { value: name, configurable: true });
     // Point at the live implementation prototype so stubClass(import { X })
     // sees real methods (e.g. vizMocks Tooltip/Title/ExportMenu).
+    // Also inherit statics (Class.inherit / redefine / parent / …) so
+    // `BaseThemeManager.inherit(...)` keeps working under the facade.
     const Impl = api[name];
-    if(typeof Impl === 'function' && Impl.prototype) {
-        ExportWrapper.prototype = Impl.prototype;
+    if(typeof Impl === 'function') {
+        Object.setPrototypeOf(ExportWrapper, Impl);
+        if(Impl.prototype) {
+            ExportWrapper.prototype = Impl.prototype;
+        }
     }
     return ExportWrapper;
 }

@@ -412,6 +412,14 @@ function rewriteBundleTemplateModuleExports(source: string): string {
   );
 }
 
+function isLocallyDeclaredBinding(source: string, name: string): boolean {
+  const escaped = name.replace(/\$/g, '\\$');
+  const declarationRe = new RegExp(
+    `(?:^|[\\s;{}])(?:(?:const|let|var)\\s+${escaped}\\b|function\\s+${escaped}\\b|class\\s+${escaped}\\b)`,
+  );
+  return declarationRe.test(source);
+}
+
 export function wrapCjsModuleExports(source: string, sourcePath?: string): string {
   if (/^\s*export\s/m.test(source)) {
     return source;
@@ -434,8 +442,15 @@ export function wrapCjsModuleExports(source: string, sourcePath?: string): strin
     return source;
   }
 
+  // Prefer `export { name }` when the file already has `const/let/var name`
+  // (common `exports.name = name` helpers). `export const name = …` would
+  // collide with that local binding under native ESM.
   const namedExports = collectCjsExportNames(source)
-    .map((name) => `export const ${name} = module.exports.${name};`)
+    .map((name) => (
+      isLocallyDeclaredBinding(source, name)
+        ? `export { ${name} };`
+        : `export const ${name} = module.exports.${name};`
+    ))
     .join('\n');
 
   return `const module = { exports: {} };
