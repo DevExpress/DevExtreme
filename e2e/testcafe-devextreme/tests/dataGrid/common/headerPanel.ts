@@ -80,14 +80,7 @@ test('Drop-down window should be positioned correctly after resizing the toolbar
   },
 }));
 
-// visual: generic.light
-// visual: generic.dark
-// visual: material.blue.light
-// visual: material.blue.dark
-// visual: fluent.blue.light
-// visual: fluent.blue.dark
-
-test('Disabled toolbar buttons should be grayed out in Material themes (T1217416)', async (t) => {
+test('Disabled toolbar buttons should be grayed out (T1217416)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
@@ -177,10 +170,6 @@ test('Toolbar should not reset its widget values when changing the disabled prop
     }],
   },
 }));
-
-// visual: generic.light
-// visual: material.blue.light
-// visual: fluent.blue.light
 
 test('Invisible toolbar doesn\'t have additional paddings (T1261773)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

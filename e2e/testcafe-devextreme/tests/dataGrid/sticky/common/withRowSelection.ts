@@ -10,10 +10,7 @@ const DATA_GRID_SELECTOR = '#container';
 fixture.disablePageReloads`Sticky columns - Row Selection`
   .page(url(__dirname, '../../../container.html'));
 
-// visual: generic.light
-// visual: material.blue.light
-// visual: fluent.blue.light
-test.meta({ browserSize: [800, 800] })('The selected row should be displayed correctly when there are sticky columns (generic.light theme)', async (t) => {
+test.meta({ browserSize: [800, 800] })('The selected row should be displayed correctly when there are sticky columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
