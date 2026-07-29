@@ -1,4 +1,4 @@
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import $ from 'jquery';
 import dataUtils from 'core/element_data';
@@ -1375,7 +1375,7 @@ QUnit.module('Headers', {
 
     QUnit.test('render headers with correct text width when sorting', function(assert) {
         // arrange
-        const $testElement = $('#container').width(50);
+        const $testElement = $('#container').width(100);
 
         $.extend(this.columns, [
             { alignment: 'left', sortOrder: 'asc', allowSorting: true, caption: 'testtesttesttesttesttest1' },
@@ -1949,8 +1949,8 @@ QUnit.module('Headers', {
 
         // assert
         assert.ok($cellElements.eq(0).hasClass('dx-command-edit-with-icons'), 'command column has with-icons class');
-        assert.roughEqual(parseFloat($cellElements.eq(0).css('line-height')), 19, 0.1, 'command column line-height');
-        assert.roughEqual(parseFloat($cellElements.eq(1).css('line-height')), 19, 0.1, 'data column line-height');
+        assert.roughEqual(parseFloat($cellElements.eq(0).css('line-height')), 18, 0.1, 'command column line-height');
+        assert.roughEqual(parseFloat($cellElements.eq(1).css('line-height')), 18, 0.1, 'data column line-height');
     });
 });
 
@@ -3095,7 +3095,7 @@ QUnit.module('Multiple sorting', {
                 dataField: 'aaaaaaaaaaaaaaa',
                 sortOrder: 'asc',
                 sortIndex: 0,
-                width: 100,
+                width: 200,
                 alignment: 'center'
             }, {
                 dataField: 'aaaaaaaaaaaaaaa',
