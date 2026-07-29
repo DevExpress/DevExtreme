@@ -12,7 +12,12 @@ const esbuild = require('esbuild');
 const DEMOS_APP_ROOT = path.resolve(__dirname, '..', '..');
 const REPO_ROOT = path.resolve(DEMOS_APP_ROOT, '..', '..');
 const SRC_DEMOS_DIR = path.join(DEMOS_APP_ROOT, 'Demos');
-const OUT_ROOT = path.join(DEMOS_APP_ROOT, 'csp-bundled-demos');
+
+// Write bundle.js next to each demo's own source (the real, only demo tree)
+// instead of into the csp-bundled-demos/ side directory used by the CSP-only
+// check. This is what CI's demo-build step uses in production.
+const IN_PLACE = process.env.BUNDLE_IN_PLACE === '1';
+const OUT_ROOT = IN_PLACE ? SRC_DEMOS_DIR : path.join(DEMOS_APP_ROOT, 'csp-bundled-demos');
 const NODE_MODULES = path.join(DEMOS_APP_ROOT, 'node_modules');
 const FRAMEWORK = 'Angular';
 
@@ -629,9 +634,9 @@ function makeBuildOptions({
   };
 }
 
-async function bundleDemo(demo, createCompilerPlugin) {
+async function bundleDemo(demo, createCompilerPlugin, destDirOverride) {
   const prepared = demo.effectiveEntry ? demo : prepareDemo(demo);
-  const destDir = path.join(OUT_ROOT, prepared.widget, prepared.name, FRAMEWORK);
+  const destDir = destDirOverride || path.join(OUT_ROOT, prepared.widget, prepared.name, FRAMEWORK);
   fs.mkdirSync(destDir, { recursive: true });
 
   const effectiveEntry = prepared.effectiveEntry;
@@ -650,7 +655,11 @@ async function bundleDemo(demo, createCompilerPlugin) {
     return { ok: false, reason: (err && err.message) || String(err) };
   }
 
-  const outputs = Object.keys((result.metafile && result.metafile.outputs) || {});
+  // The Angular AOT compiler plugin can list a component style output in the
+  // metafile that it ends up inlining instead of actually emitting (no file on
+  // disk) — filter to outputs that are really there before linking them.
+  const outputs = Object.keys((result.metafile && result.metafile.outputs) || {})
+    .filter((o) => fs.existsSync(path.resolve(DEMOS_APP_ROOT, o)));
   const localJsFiles = sortJsFiles(outputs.filter((o) => o.endsWith('.js')).map((o) => path.basename(o)));
   if (localJsFiles.length === 0) return { ok: false, reason: 'no JS output produced' };
 
@@ -729,8 +738,10 @@ async function main() {
   if (FILTER) console.log(`Filter: ${FILTER}`);
   console.log('');
 
-  // Wipe previous Angular output; leave React/Vue subtrees alone.
-  if (fs.existsSync(OUT_ROOT)) {
+  // Wipe previous Angular output; leave React/Vue subtrees alone. In-place
+  // mode writes into the demo's own source folder, which must NOT be wiped
+  // (that would delete the demo's actual source, not just old output).
+  if (!IN_PLACE && fs.existsSync(OUT_ROOT)) {
     const existingWidgets = fs.readdirSync(OUT_ROOT, { withFileTypes: true }).filter((w) => w.isDirectory());
     for (const widget of existingWidgets) {
       const widgetPath = path.join(OUT_ROOT, widget.name);
@@ -853,4 +864,22 @@ if (require.main === module) {
   });
 }
 
-module.exports = { main };
+// The exports below (beyond `main`) exist so utils/build/build-angular-demo.js
+// can drive a single, in-place demo build (e.g. for the dev server's
+// lazy-build-on-request path) without duplicating this file's AOT/asset-shim
+// logic — they're the same internals `main()` uses, just with `destDir`
+// overridable per call instead of hardcoded to OUT_ROOT.
+module.exports = {
+  main,
+  resolveAngularBuildPrivate,
+  findAngularEntry,
+  prepareDemo,
+  discoverComponentStyleFiles,
+  computeGlobalShims,
+  installShims,
+  removeShims,
+  cleanupPatchedTsFiles,
+  bundleDemo,
+  buildHtml,
+  ANGULAR_ZONE_SCRIPT,
+};
