@@ -991,9 +991,12 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     if (e.scrollOffset.top < 0) {
       elasticScrollTop = -e.scrollOffset.top;
     } else if (e.reachedBottom) {
-      const $scrollableContent = $(e.component.content());
       const $scrollableContainer = $(e.component.container());
-      const maxScrollTop = Math.max($scrollableContent.get(0).clientHeight - $scrollableContainer.get(0).clientHeight, 0);
+      // Use the container's live scrollTop as the max, not (scrollHeight - clientHeight):
+      // e.scrollOffset.top is derived from that same scrollTop, so they cancel to 0 at the
+      // bottom (browsers can report the two ~1px apart). Correct only because the scroll
+      // handler is synchronous — this scrollTop matches the one e.scrollOffset.top came from.
+      const maxScrollTop = Math.max($scrollableContainer.get(0).scrollTop, 0);
 
       elasticScrollTop = Math.min(maxScrollTop - e.scrollOffset.top, 0);
     }
