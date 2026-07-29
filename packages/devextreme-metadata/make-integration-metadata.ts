@@ -113,6 +113,10 @@ Imd.makeMetadata({
       forcedName: 'treeListToolbarItem',
     }),
 
+    addMetadata('ui/pivot_grid:dxPivotGridOptions.fieldChooser.texts', {
+      forcedName: 'embeddedFieldChooserTexts',
+    }),
+
     replaceTypes(/.+/, ['core/element:UserDefinedElement'], ['any']),
 
     removeMembers(['core/element:DxElement', 'core/element:UserDefinedElement'], 'any'),

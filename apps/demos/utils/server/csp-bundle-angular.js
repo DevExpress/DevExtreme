@@ -71,14 +71,6 @@ const SHARED_TSCONFIG_TEMPLATE = path.join(__dirname, 'tsconfig.csp-bundle-angul
 const GENERATED_TSCONFIG_DIR = path.join(__dirname, '.csp-bundle-angular-tsconfigs');
 const ANGULAR_ZONE_SCRIPT = '../../../../node_modules/zone.js/bundles/zone.umd.js';
 
-// Skipped from the bundled Angular CSP check. NG0300: devextreme-angular's
-// fesm2022 build duplicates DxoPivotGridFieldChooserTextsComponent across the
-// pivot-grid and field-chooser entries, so this demo (using both) registers two
-// components for one selector. A library packaging defect, not a demo-source bug.
-const KNOWN_BROKEN_DEMOS = new Set([
-  'PivotGrid/StandaloneFieldChooser',
-]);
-
 // @angular/build is transitive via @angular-devkit/build-angular; resolve through it for pnpm.
 function resolveAngularBuildPrivate() {
   const buildAngularPkg = require.resolve('@angular-devkit/build-angular/package.json', {
@@ -155,8 +147,7 @@ function findAngularEntry(srcDir) {
 
 function findDemos() {
   const out = [];
-  const skipped = [];
-  if (!fs.existsSync(SRC_DEMOS_DIR)) return { out, skipped };
+  if (!fs.existsSync(SRC_DEMOS_DIR)) return out;
 
   const widgets = fs.readdirSync(SRC_DEMOS_DIR, { withFileTypes: true }).filter((w) => w.isDirectory());
   for (const widget of widgets) {
@@ -169,16 +160,12 @@ function findDemos() {
       if (matchesFilter && fs.existsSync(path.join(fwDir, 'index.html'))) {
         const entry = findAngularEntry(fwDir);
         if (entry) {
-          if (KNOWN_BROKEN_DEMOS.has(key)) {
-            skipped.push({ widget: widget.name, name: demo.name });
-          } else {
-            out.push({ widget: widget.name, name: demo.name, srcDir: fwDir, entry });
-          }
+          out.push({ widget: widget.name, name: demo.name, srcDir: fwDir, entry });
         }
       }
     }
   }
-  return { out, skipped };
+  return out;
 }
 
 // ---- CSS asset shim infrastructure ----
@@ -760,14 +747,10 @@ async function main() {
 
   const { createCompilerPlugin } = resolveAngularBuildPrivate();
 
-  const { out: allDemos, skipped } = findDemos();
+  const allDemos = findDemos();
   const demos = applyShard(allDemos);
-  const shardNote = SHARD_TOTAL > 1 ? ` — shard ${SHARD_INDEX}/${SHARD_TOTAL}: ${demos.length} of ${allDemos.length} bundleable` : '';
-  console.log(`Discovered ${allDemos.length + skipped.length} ${FRAMEWORK} demo(s) — ${allDemos.length} bundleable, ${skipped.length} skipped (KNOWN_BROKEN_DEMOS)${shardNote}\n`);
-  if (skipped.length > 0) {
-    for (const s of skipped) console.log(`  • skipping ${s.widget}/${s.name}`);
-    console.log('');
-  }
+  const shardNote = SHARD_TOTAL > 1 ? ` — shard ${SHARD_INDEX}/${SHARD_TOTAL}: ${demos.length} of ${allDemos.length}` : '';
+  console.log(`Discovered ${allDemos.length} ${FRAMEWORK} demo(s)${shardNote}\n`);
   if (demos.length === 0) {
     console.log('Nothing to bundle.');
     return;
