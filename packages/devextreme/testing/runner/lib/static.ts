@@ -388,6 +388,110 @@ const MUTABLE_ARTIFACT_FACADES: readonly { suffix: string; shimUrl: string }[] =
     shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_tooltip.js',
   },
   {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/core/tooltip.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_tooltip.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/core/title.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_title.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/core/title.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_title.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/core/export.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_export.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/core/exportModule.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_export.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/core/export.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_export.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/core/base_theme_manager.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_base_theme_manager.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/core/base_theme_manager.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_base_theme_manager.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/vector_map/projection.main.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_projection_main.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/vector_map/projection.main.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_projection_main.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/vector_map/control_bar/control_bar.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_control_bar.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/vector_map/control_bar/control_bar.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_control_bar.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/vector_map/gesture_handler.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_gesture_handler.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/vector_map/gesture_handler.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_gesture_handler.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/vector_map/tracker.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_tracker.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/vector_map/tracker.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_tracker.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/vector_map/data_exchanger.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_data_exchanger.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/vector_map/data_exchanger.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_data_exchanger.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/vector_map/legend.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_legend.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/vector_map/legend.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_legend.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/vector_map/layout.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_layout.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/vector_map/layout.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_layout.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/vector_map/map_layer.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_map_layer.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/vector_map/map_layer.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_map_layer.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/vector_map/tooltip_viewer.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_tooltip_viewer.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/vector_map/tooltip_viewer.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_tooltip_viewer.js',
+  },
+  {
     suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/paletteModule.js',
     shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_paletteModule.js',
   },

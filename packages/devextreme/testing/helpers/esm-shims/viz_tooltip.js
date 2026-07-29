@@ -6,19 +6,13 @@
  * (cache-buster differences) still share one stubbable object.
  */
 import * as original from '../../../artifacts/transpiled-esm-npm/esm/__internal/viz/core/tooltip.js?dx-original=1';
+import { createMutableApi, wrapCtor } from './mutable_facade.js';
 
-const GLOBAL_KEY = '__dxMutableVizTooltip';
+const api = createMutableApi(original, '__dxMutableVizTooltip', {
+    DEBUG_set_tooltip: 'Tooltip',
+});
 
-const api = globalThis[GLOBAL_KEY] ?? (globalThis[GLOBAL_KEY] = { ...original });
-
-export const Tooltip = function(...args) {
-    const Impl = api.Tooltip;
-    if(new.target) {
-        return new Impl(...args);
-    }
-    return Impl.apply(this, args);
-};
-
-export const plugin = api.plugin;
-
+export const Tooltip = wrapCtor(api, 'Tooltip');
+export const plugin = original.plugin;
+export const DEBUG_set_tooltip = api.DEBUG_set_tooltip;
 export default api;
