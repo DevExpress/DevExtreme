@@ -1,7 +1,4 @@
-/* eslint-disable no-underscore-dangle */
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { ClientFunction } from 'testcafe';
-import { createWidget } from '../../../../helpers/createWidget';
 import {
   AI_INTEGRATION_PAGE,
   FAIL,
@@ -9,85 +6,17 @@ import {
   HANG,
   baseGrid as gridDefaults,
   createGridWithAIAssistant,
-  resetAIState,
-  setupAIState,
+  createGridWithDeferredSelectAll,
+  closeChatAndConfirmAbort,
+  getAICallCount,
   threeRows,
   twoRows,
 } from './testHelpers';
-
-const getAICallCount = ClientFunction(
-  () => (window as any).__aiState.callCount as number,
-);
 
 const baseGrid = (rows: unknown[]): Record<string, unknown> => ({
   ...gridDefaults,
   dataSource: rows,
 });
-
-const hangingCommandGridOptions = (): any => {
-  const data = Array.from({ length: 50 }, (_, i) => ({
-    id: i + 1,
-    name: `Name ${i + 1}`,
-    value: (i + 1) * 10,
-  }));
-
-  const store = new (window as any).DevExpress.data.CustomStore({
-    key: 'id',
-    load(loadOptions: any) {
-      if (loadOptions.take !== undefined) {
-        const skip = loadOptions.skip ?? 0;
-
-        return Promise.resolve({
-          data: data.slice(skip, skip + loadOptions.take),
-          totalCount: data.length,
-        });
-      }
-
-      return new Promise(() => {});
-    },
-    totalCount: () => data.length,
-  });
-
-  return {
-    dataSource: store,
-    remoteOperations: true,
-    columns: ['id', 'name', 'value'],
-    showBorders: true,
-    selection: { mode: 'multiple' },
-    aiAssistant: {
-      enabled: true,
-      aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-        sendRequest() {
-          const state = (window as any).__aiState;
-          const count = state.callCount;
-          const response = state.responses[count];
-
-          state.callCount = count + 1;
-
-          if (response === undefined) {
-            return {
-              promise: Promise.reject(new Error(`Unexpected AI call #${count}`)),
-              abort: (): void => {},
-            };
-          }
-
-          return { promise: Promise.resolve(response), abort: (): void => {} };
-        },
-      }),
-      ...(window as any).__aiState.assistantExtra,
-    },
-  };
-};
-
-const createGridWithHangingCommand = async (
-  responses: unknown[],
-  assistantExtra: Record<string, unknown> = {},
-): Promise<void> => {
-  await resetAIState();
-  await setupAIState({ responses, assistantExtra });
-
-  return createWidget('dxDataGrid', hangingCommandGridOptions);
-};
 
 const sortByName = { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] };
 const selectAll = { actions: [{ name: 'selectAll', args: {} }] };
@@ -166,7 +95,7 @@ test('Input should be disabled during command execution phase', async (t) => {
   await t.expect(aiChat.getTextArea().isDisabled).ok();
   await t.expect(aiChat.getAIMessages().count).eql(1);
   await t.expect(aiChat.getPendingMessages().count).eql(1);
-}).before(async () => createGridWithHangingCommand([selectAll]));
+}).before(async () => createGridWithDeferredSelectAll([selectAll]));
 
 test('Input should be re-enabled after fulfillment', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
@@ -221,11 +150,8 @@ test('Input should be re-enabled after abort via popup close', async (t) => {
   await t.expect(aiChat.getPendingMessages().count).eql(1);
   await t.expect(aiChat.getTextArea().isDisabled).ok();
 
-  await t.click(aiChat.getCloseButton().element);
+  await closeChatAndConfirmAbort(t, aiChat);
 
-  await t.expect(aiChat.getAbortConfirmDialog().exists).ok();
-
-  await t.click(aiChat.getAbortConfirmYesButton());
   await t.click(dataGrid.getAIAssistantButton());
 
   await t.expect(aiChat.getErrorMessages().count).eql(1);
@@ -265,7 +191,7 @@ test('Clear-chat button should be disabled during command execution phase', asyn
   await t.expect(aiChat.isClearChatDisabled()).ok();
   await t.expect(aiChat.getAIMessages().count).eql(1);
   await t.expect(aiChat.getPendingMessages().count).eql(1);
-}).before(async () => createGridWithHangingCommand([selectAll]));
+}).before(async () => createGridWithDeferredSelectAll([selectAll]));
 
 test('Clear-chat button should be re-enabled after fulfillment', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
@@ -317,9 +243,8 @@ test('Clear-chat button should be re-enabled after abort via popup close', async
   await t.expect(aiChat.getPendingMessages().count).eql(1);
   await t.expect(aiChat.isClearChatDisabled()).ok();
 
-  await t.click(aiChat.getCloseButton().element);
-  await t.expect(aiChat.getAbortConfirmDialog().exists).ok();
-  await t.click(aiChat.getAbortConfirmYesButton());
+  await closeChatAndConfirmAbort(t, aiChat);
+
   await t.click(dataGrid.getAIAssistantButton());
 
   await t.expect(aiChat.getErrorMessages().count).eql(1);
@@ -383,7 +308,7 @@ test('Suggestions should be disabled during command execution phase and dispatch
   await t.expect(aiChat.getAIMessages().count).eql(1);
   await t.expect(aiChat.getPendingMessages().count).eql(1);
   await t.expect(getAICallCount()).eql(1);
-}).before(async () => createGridWithHangingCommand([selectAll], suggestionConfig));
+}).before(async () => createGridWithDeferredSelectAll([selectAll], suggestionConfig));
 
 test('Suggestions should be re-enabled after resolution', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);

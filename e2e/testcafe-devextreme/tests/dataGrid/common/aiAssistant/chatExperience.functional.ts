@@ -4,7 +4,8 @@ import {
   GRID_SELECTOR,
   baseGrid,
   createGridWithAIAssistant,
-  getRequests,
+  getRequestCount,
+  getRequestText,
   threeRows,
   twoRows,
 } from './testHelpers';
@@ -67,14 +68,12 @@ test('Request payload should contain only the latest message', async (t) => {
 
   await t.expect(aiChat.getSuccessMessages().count).eql(2);
 
-  const requests = await getRequests();
-
   await t
-    .expect((requests as any[]).length)
+    .expect(getRequestCount())
     .eql(2)
-    .expect((requests as any[])[0].data.text)
+    .expect(getRequestText(0))
     .eql('Sort by name')
-    .expect((requests as any[])[1].data.text)
+    .expect(getRequestText(1))
     .eql('Clear sorting');
 }).before(async () => createGridWithAIAssistant({
   ...baseGrid,

@@ -1,13 +1,15 @@
 /* eslint-disable no-underscore-dangle */
-import { ClientFunction } from 'testcafe';
 import TreeList from 'devextreme-testcafe-models/treeList';
 import { createWidget } from '../../../../helpers/createWidget';
-import url from '../../../../helpers/getPageUrl';
-import { resetAIState, setupAIState } from '../../../dataGrid/common/aiAssistant/testHelpers';
+import {
+  AI_INTEGRATION_PAGE,
+  GRID_SELECTOR,
+  HANG,
+  getRequestSchemaCommandNames,
+  resetAIState,
+  setupAIState,
+} from '../../../dataGrid/common/aiAssistant/testHelpers';
 
-const GRID_SELECTOR = '#container';
-const AI_INTEGRATION_PAGE = url(__dirname, '../../../container-ai-integration.html');
-const PENDING = '__pending__';
 const hierarchyRows = [
   {
     id: 1, parentId: 0, name: 'Alice', value: 30,
@@ -23,41 +25,7 @@ const hierarchyRows = [
   },
 ];
 
-const getSchemaCommandNames = ClientFunction(() => ((window as any).__aiState.requests[0]
-  .data.responseSchema.properties.actions.items.anyOf as any[])
-  .map((branch) => branch.properties.name.enum[0]));
-
-const aiTreeListOptions = (): any => {
-  const state = (window as any).__aiState;
-
-  return {
-    ...state.base,
-    aiAssistant: {
-      enabled: true,
-      aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-        sendRequest(params: any) {
-          const response = state.responses[state.callCount];
-
-          state.callCount += 1;
-          state.requests.push(params);
-
-          if (response === '__pending__') {
-            return { promise: new Promise(() => {}), abort: (): void => {} };
-          }
-
-          if (response === undefined) {
-            return {
-              promise: Promise.reject(new Error('Unexpected AI call')),
-              abort: (): void => {},
-            };
-          }
-
-          return { promise: Promise.resolve(response), abort: (): void => {} };
-        },
-      }),
-    },
-  };
-};
+const aiTreeListOptions = (): any => (window as any).__aiState.gridOptions();
 
 const treeListBase = (
   overrides: Record<string, unknown> = {},
@@ -318,7 +286,7 @@ test('In-flight lock behaves like DataGrid', async (t) => {
   await t.expect(aiChat.getPendingMessages().count).eql(1);
   await t.expect(aiChat.getTextArea().isDisabled).ok();
   await t.expect(aiChat.isClearChatDisabled()).ok();
-}).before(async () => createTreeListWithAIAssistant(treeListBase(), [PENDING]));
+}).before(async () => createTreeListWithAIAssistant(treeListBase(), [HANG]));
 
 test('grouping command is absent from the TreeList response schema', async (t) => {
   const treeList = new TreeList(GRID_SELECTOR);
@@ -335,7 +303,7 @@ test('grouping command is absent from the TreeList response schema', async (t) =
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
 
-  const commandNames = await getSchemaCommandNames();
+  const commandNames = await getRequestSchemaCommandNames(0);
 
   await t.expect(commandNames).contains('sorting');
   await t.expect(commandNames).notContains('grouping');
@@ -359,7 +327,7 @@ test('summary commands are absent from the TreeList response schema', async (t) 
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
 
-  const commandNames = await getSchemaCommandNames();
+  const commandNames = await getRequestSchemaCommandNames(0);
 
   await t.expect(commandNames).contains('sorting');
   await t.expect(commandNames).notContains('summary');

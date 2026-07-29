@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { ClientFunction } from 'testcafe';
+import type { AIAssistantChat } from 'devextreme-testcafe-models/dataGrid/aiAssistantChat';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
@@ -28,11 +29,17 @@ export const HANG = '__HANG__';
 
 export const FAIL = '__FAIL__';
 
-// Every piece of test state lives under this single window key, so it is always
-// replaced as a whole and no stale key can leak into the next test.
+const DEFERRED_KEY = '__deferredResponse';
+
+// Wraps a response that must stay in flight until resolveAIRequest() is called.
+export const deferred = (response: unknown): unknown => ({ [DEFERRED_KEY]: response });
+
+// The whole test state lives under a single window key: resetAIState replaces it
+// as a whole, so no stale key can leak from one test into the next one.
 export const resetAIState = (): Promise<void> => ClientFunction(
   () => {
-    (window as any).__aiState = {
+    const w = window as any;
+    const state: any = {
       base: {},
       gridExtra: {},
       assistantExtra: {},
@@ -42,11 +49,59 @@ export const resetAIState = (): Promise<void> => ClientFunction(
       abortCalled: false,
       requestResolved: false,
       selectAllStarted: false,
-      hangMarker: HANG,
-      failMarker: FAIL,
     };
+
+    state.sendRequest = (params: any): any => {
+      const count = state.callCount;
+      const response = state.responses[count];
+
+      state.callCount = count + 1;
+      state.requests.push(params);
+
+      const abort = (): void => { state.abortCalled = true; };
+
+      if (response === undefined) {
+        return { promise: Promise.reject(new Error(`Unexpected AI call #${count}`)), abort };
+      }
+
+      if (response === HANG) {
+        return { promise: new Promise(() => {}), abort };
+      }
+
+      if (response === FAIL) {
+        return { promise: Promise.reject(new Error('AI error')), abort };
+      }
+
+      if (response?.[DEFERRED_KEY] !== undefined) {
+        return {
+          promise: new Promise((resolve) => {
+            state.resolveRequest = (): void => {
+              state.requestResolved = true;
+              resolve(response[DEFERRED_KEY]);
+            };
+          }),
+          abort,
+        };
+      }
+
+      return { promise: Promise.resolve(response), abort };
+    };
+
+    state.gridOptions = (): any => ({
+      ...state.base,
+      ...state.gridExtra,
+      aiAssistant: {
+        enabled: true,
+        aiIntegration: new w.DevExpress.aiIntegration.AIIntegration({
+          sendRequest: state.sendRequest,
+        }),
+        ...state.assistantExtra,
+      },
+    });
+
+    w.__aiState = state;
   },
-  { dependencies: { HANG, FAIL } },
+  { dependencies: { HANG, FAIL, DEFERRED_KEY } },
 )();
 
 export const setupAIState = (
@@ -56,41 +111,62 @@ export const setupAIState = (
   { dependencies: { state } },
 )();
 
-const aiGridOptions = (): any => {
-  const state = (window as any).__aiState;
+const aiGridOptions = (): any => (window as any).__aiState.gridOptions();
+
+const remoteGridOptions = (): any => {
+  const w = window as any;
+  const arrayStore = new w.DevExpress.data.ArrayStore({ key: 'id', data: w.__aiState.remoteData });
+  const store = new w.DevExpress.data.CustomStore({
+    key: 'id',
+    load: (loadOptions: any) => Promise.all([
+      arrayStore.load(loadOptions),
+      arrayStore.totalCount(loadOptions),
+    ]).then(([data, totalCount]: any[]) => ({ data, totalCount })),
+  });
+
+  return { ...w.__aiState.gridOptions(), dataSource: store, remoteOperations: true };
+};
+
+const noIntegrationGridOptions = (): any => ({
+  ...(window as any).__aiState.base,
+  aiAssistant: { enabled: true },
+});
+
+const deferredSelectAllGridOptions = (): any => {
+  const w = window as any;
+  const data = Array.from({ length: 50 }, (_, i) => ({
+    id: i + 1,
+    name: `Name ${i + 1}`,
+    value: (i + 1) * 10,
+  }));
+
+  const store = new w.DevExpress.data.CustomStore({
+    key: 'id',
+    load(loadOptions: any) {
+      // Paged render load carries `take`; selectAll's all-pages key-load does not.
+      if (loadOptions.take !== undefined) {
+        const skip = loadOptions.skip ?? 0;
+
+        return Promise.resolve({
+          data: data.slice(skip, skip + loadOptions.take),
+          totalCount: data.length,
+        });
+      }
+
+      w.__aiState.selectAllStarted = true;
+
+      return new Promise((resolve) => {
+        w.__aiState.resolveSelectAll = resolve.bind(resolve, data);
+      });
+    },
+    totalCount: () => data.length,
+  });
 
   return {
-    ...state.base,
-    ...state.gridExtra,
-    aiAssistant: {
-      enabled: true,
-      aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-        sendRequest(params: any) {
-          const count = state.callCount;
-          const response = state.responses[count];
-
-          state.callCount = count + 1;
-          state.requests.push(params);
-
-          const abort = (): void => { state.abortCalled = true; };
-
-          if (response === undefined) {
-            return { promise: Promise.reject(new Error(`Unexpected AI call #${count}`)), abort };
-          }
-
-          if (response === state.hangMarker) {
-            return { promise: new Promise(() => {}), abort };
-          }
-
-          if (response === state.failMarker) {
-            return { promise: Promise.reject(new Error('AI error')), abort };
-          }
-
-          return { promise: Promise.resolve(response), abort };
-        },
-      }),
-      ...state.assistantExtra,
-    },
+    ...w.__aiState.gridOptions(),
+    dataSource: store,
+    remoteOperations: true,
+    selection: { mode: 'multiple' },
   };
 };
 
@@ -108,7 +184,114 @@ export const createGridWithAIAssistant = async (
   return createWidget('dxDataGrid', aiGridOptions);
 };
 
-export const getRequests = ClientFunction(() => (window as any).__aiState.requests);
+// Server-side data source: the same AI plumbing over remoteOperations.
+export const createRemoteGridWithAIAssistant = async (
+  remoteData: unknown[],
+  base: Record<string, unknown>,
+  responses: unknown[],
+): Promise<void> => {
+  await resetAIState();
+  await setupAIState({ base, responses, remoteData });
+
+  return createWidget('dxDataGrid', remoteGridOptions);
+};
+
+export const createGridWithoutAIIntegration = async (
+  base: Record<string, unknown>,
+): Promise<void> => {
+  await resetAIState();
+  await setupAIState({ base });
+
+  return createWidget('dxDataGrid', noIntegrationGridOptions);
+};
+
+// The all-pages key load that selectAll relies on stays pending until
+// resolveSelectAll() is called, which keeps a command in the execution phase.
+export const createGridWithDeferredSelectAll = async (
+  responses: unknown[],
+  assistantExtra: Record<string, unknown> = {},
+): Promise<void> => {
+  await resetAIState();
+  await setupAIState({
+    base: { columns: ['id', 'name', 'value'], showBorders: true },
+    responses,
+    assistantExtra,
+  });
+
+  return createWidget('dxDataGrid', deferredSelectAllGridOptions);
+};
+
+export const getAICallCount = ClientFunction(
+  () => (window as any).__aiState.callCount as number,
+);
+
+export const getRequestCount = ClientFunction(
+  () => (window as any).__aiState.requests.length as number,
+);
+
+export const getRequestPayload = ClientFunction(
+  (index: number) => (window as any).__aiState.requests[index].data,
+);
+
+export const getRequestText = ClientFunction(
+  (index: number) => (window as any).__aiState.requests[index].data.text as string,
+);
+
+export const getRequestColumnNames = ClientFunction(
+  (index: number) => ((window as any).__aiState.requests[index].data.context.columns ?? [])
+    .map((column: any) => column.dataField as string),
+);
+
+export const getRequestSchemaCommandNames = ClientFunction(
+  (index: number) => ((window as any).__aiState.requests[index]
+    .data.responseSchema.properties.actions.items.anyOf as any[])
+    .map((branch) => branch.properties.name.enum[0] as string),
+);
+
+// Filled in by an onAIAssistantRequestCreating handler passed through gridExtra.
+export const getRequestCreatingArgs = ClientFunction(
+  () => (window as any).__aiState.requestCreatingArgs,
+);
+
+export const wasAbortCalled = ClientFunction(
+  () => (window as any).__aiState.abortCalled === true,
+);
+
+export const wasAIRequestResolved = ClientFunction(
+  () => (window as any).__aiState.requestResolved === true,
+);
+
+export const resolveAIRequest = ClientFunction(
+  () => { (window as any).__aiState.resolveRequest(); },
+);
+
+export const wasSelectAllStarted = ClientFunction(
+  () => (window as any).__aiState.selectAllStarted === true,
+);
+
+export const resolveSelectAll = ClientFunction(
+  () => { (window as any).__aiState.resolveSelectAll(); },
+);
+
+export const disposeGrid = ClientFunction(() => { (window as any).widget.dispose(); });
+
+export const getSelectedRowsCount = ClientFunction(
+  () => (window as any).widget.getSelectedRowsData().length as number,
+);
+
+export const formatMessage = ClientFunction(
+  (key: string) => (window as any).DevExpress.localization.formatMessage(key) as string,
+);
+
+export const closeChatAndConfirmAbort = async (
+  t: TestController,
+  aiChat: AIAssistantChat,
+): Promise<void> => {
+  await t.click(aiChat.getCloseButton().element);
+
+  await t.expect(aiChat.getAbortConfirmDialog().exists).ok();
+  await t.click(aiChat.getAbortConfirmYesButton());
+};
 
 export const getLoggedErrorIds = async (t: TestController): Promise<string[]> => {
   const consoleMessages = await t.getBrowserConsoleMessages();

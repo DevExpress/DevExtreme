@@ -1,70 +1,12 @@
-/* eslint-disable no-underscore-dangle */
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { createWidget } from '../../../../helpers/createWidget';
 import {
   AI_INTEGRATION_PAGE,
   GRID_SELECTOR,
   createGridWithAIAssistant,
-  resetAIState,
-  setupAIState,
+  createRemoteGridWithAIAssistant,
   threeRows,
   twoRows,
 } from './testHelpers';
-
-const remoteAIGridOptions = (): any => {
-  const { data, options } = (window as any).__aiState.base;
-  const arrayStore = new (window as any).DevExpress.data.ArrayStore({ key: 'id', data });
-  const store = new (window as any).DevExpress.data.CustomStore({
-    key: 'id',
-    load(loadOptions: any) {
-      return Promise.all([
-        arrayStore.load(loadOptions),
-        arrayStore.totalCount(loadOptions),
-      ]).then((res: any[]) => ({ data: res[0], totalCount: res[1] }));
-    },
-  });
-
-  return {
-    ...options,
-    dataSource: store,
-    remoteOperations: true,
-    aiAssistant: {
-      enabled: true,
-      aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-        sendRequest() {
-          const state = (window as any).__aiState;
-          const count = state.callCount;
-          const response = state.responses[count];
-
-          state.callCount = count + 1;
-
-          if (response === undefined) {
-            return {
-              promise: Promise.reject(new Error(`Unexpected AI call #${count}`)),
-              abort: (): void => {},
-            };
-          }
-
-          return {
-            promise: Promise.resolve(response),
-            abort: (): void => {},
-          };
-        },
-      }),
-    },
-  };
-};
-
-const createRemoteGridWithAIAssistant = async (
-  data: unknown[],
-  options: Record<string, unknown>,
-  responses: unknown[],
-): Promise<void> => {
-  await resetAIState();
-  await setupAIState({ base: { data, options }, responses });
-
-  return createWidget('dxDataGrid', remoteAIGridOptions);
-};
 
 fixture`AI Assistant - Commands`
   .page(AI_INTEGRATION_PAGE);

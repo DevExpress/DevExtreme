@@ -1,16 +1,14 @@
-/* eslint-disable no-underscore-dangle */
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { ClientFunction } from 'testcafe';
-import { createWidget } from '../../../../helpers/createWidget';
 import {
   AI_INTEGRATION_PAGE,
   FAIL,
   GRID_SELECTOR,
   baseGrid as gridDefaults,
   createGridWithAIAssistant,
+  createGridWithoutAIIntegration,
+  formatMessage,
   getLoggedErrorIds,
-  resetAIState,
-  setupAIState,
+  getSelectedRowsCount,
   threeRows,
 } from './testHelpers';
 
@@ -24,10 +22,6 @@ const groupingLockedColumns = [
   { dataField: 'value' },
 ];
 
-const formatMessage = ClientFunction(
-  (key: string) => (window as any).DevExpress.localization.formatMessage(key),
-);
-
 const invalidResponse = (): Promise<string> => formatMessage(
   'dxDataGrid-aiAssistantInvalidResponseMessage',
 );
@@ -35,24 +29,6 @@ const invalidResponse = (): Promise<string> => formatMessage(
 const errorHeader = (): Promise<string> => formatMessage(
   'dxDataGrid-aiAssistantErrorMessageHeader',
 );
-
-const getSelectedRowsCount = ClientFunction(
-  () => (window as any).widget.getSelectedRowsData().length,
-);
-
-const noIntegrationOptions = (): any => ({
-  ...(window as any).__aiState.base,
-  aiAssistant: { enabled: true },
-});
-
-const createGridWithoutIntegration = async (
-  base: Record<string, unknown>,
-): Promise<void> => {
-  await resetAIState();
-  await setupAIState({ base });
-
-  return createWidget('dxDataGrid', noIntegrationOptions);
-};
 
 const openChatAndSubmit = async (
   t: TestController,
@@ -78,12 +54,14 @@ const expectInvalidResponse = async (
   aiChat: AIChat,
   dataGrid: DataGrid,
 ): Promise<void> => {
+  const aiMessage = aiChat.getAIMessage(0);
+
   await t.expect(aiChat.getMessages().count).eql(2);
   await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getAIMessage(0).getHeader().innerText).eql(await errorHeader());
-  await t.expect(aiChat.getAIMessage(0).getErrorText().innerText).eql(await invalidResponse());
+  await t.expect(aiMessage.getHeader().innerText).eql(await errorHeader());
+  await t.expect(aiMessage.getErrorText().innerText).eql(await invalidResponse());
   await t.expect(aiChat.getSuccessMessages().count).eql(0);
-  await t.expect(aiChat.getAIMessage(0).getActionItems().count).eql(0);
+  await t.expect(aiMessage.getActionItems().count).eql(0);
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 };
 
@@ -139,7 +117,7 @@ test('Missing aiIntegration should show an error and leave grid unchanged', asyn
 
   await expectInvalidResponse(t, aiChat, dataGrid);
   await t.expect(await getLoggedErrorIds(t)).contains('E1068');
-}).before(async () => createGridWithoutIntegration(baseGrid));
+}).before(async () => createGridWithoutAIIntegration(baseGrid));
 
 test('Non-JSON string response should show invalid-response error', async (t) => {
   const { dataGrid, aiChat } = await openChatAndSubmit(t, 'Sort by name');

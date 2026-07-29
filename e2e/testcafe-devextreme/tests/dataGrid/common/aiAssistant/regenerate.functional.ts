@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-import { ClientFunction } from 'testcafe';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import {
   AI_INTEGRATION_PAGE,
@@ -7,17 +5,14 @@ import {
   GRID_SELECTOR,
   HANG,
   baseGrid,
+  closeChatAndConfirmAbort,
   createGridWithAIAssistant,
+  getRequestColumnNames,
+  getRequestCount,
+  getRequestText,
   threeRows,
   twoRows,
 } from './testHelpers';
-
-const getAIRequests = ClientFunction(
-  () => ((window as any).__aiState.requests as any[]).map((r) => ({
-    text: r.data.text,
-    columns: (r.data.context.columns ?? []).map((c: any) => c.dataField),
-  })),
-);
 
 fixture`AI Assistant - Regenerate`
   .page(AI_INTEGRATION_PAGE);
@@ -41,7 +36,7 @@ test('Regenerate should be visible after AI integration failure', async (t) => {
   // Pre-execution failure: nothing was applied to the grid.
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createGridWithAIAssistant(
-  { dataSource: threeRows, ...baseGrid },
+  { ...baseGrid, dataSource: threeRows },
   [FAIL],
 ));
 
@@ -63,7 +58,7 @@ test('Regenerate should be visible after response format failure', async (t) => 
 
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createGridWithAIAssistant(
-  { dataSource: threeRows, ...baseGrid },
+  { ...baseGrid, dataSource: threeRows },
   [{}],
 ));
 
@@ -85,7 +80,7 @@ test('Regenerate should be visible after validation failure', async (t) => {
 
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createGridWithAIAssistant(
-  { dataSource: threeRows, ...baseGrid },
+  { ...baseGrid, dataSource: threeRows },
   [{ actions: [{ name: 'unknownCommand', args: { foo: 'bar' } }] }],
 ));
 
@@ -108,7 +103,7 @@ test('Regenerate should be visible after empty actions', async (t) => {
 
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createGridWithAIAssistant(
-  { dataSource: threeRows, ...baseGrid },
+  { ...baseGrid, dataSource: threeRows },
   [{ actions: [] }],
 ));
 
@@ -131,7 +126,7 @@ test('Regenerate should NOT be visible after full success', async (t) => {
   // The successful command actually changed the grid state.
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAIAssistant(
-  { dataSource: threeRows, ...baseGrid },
+  { ...baseGrid, dataSource: threeRows },
   [{ actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] }],
 ));
 
@@ -157,7 +152,7 @@ test('Regenerate should NOT be visible after partial-execution failure', async (
   // No Regenerate because action #1 already mutated the grid.
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAIAssistant(
-  { dataSource: threeRows, ...baseGrid },
+  { ...baseGrid, dataSource: threeRows },
   [{
     actions: [
       { name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } },
@@ -186,7 +181,7 @@ test('Regenerate should NOT be visible after all-execution failure', async (t) =
   // Both commands targeted non-existent columns, so real columns stay unsorted.
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createGridWithAIAssistant(
-  { dataSource: threeRows, ...baseGrid },
+  { ...baseGrid, dataSource: threeRows },
   [{
     actions: [
       { name: 'sorting', args: { dataField: 'nonExistent1', sortOrder: 'asc' } },
@@ -221,13 +216,12 @@ test('Regenerate should resend the same prompt and replace the previous response
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 
   // The same prompt was resent with a freshly-built (current) grid context.
-  const requests = await getAIRequests();
-  await t.expect(requests.length).eql(2);
-  await t.expect(requests[1].text).eql(requests[0].text);
-  await t.expect(requests[1].text).eql('Sort by name');
-  await t.expect(requests[1].columns).eql(['id', 'name', 'value']);
+  await t.expect(getRequestCount()).eql(2);
+  await t.expect(getRequestText(1)).eql(await getRequestText(0));
+  await t.expect(getRequestText(1)).eql('Sort by name');
+  await t.expect(getRequestColumnNames(1)).eql(['id', 'name', 'value']);
 }).before(async () => createGridWithAIAssistant(
-  { dataSource: threeRows, ...baseGrid },
+  { ...baseGrid, dataSource: threeRows },
   [
     FAIL,
     { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
@@ -257,7 +251,7 @@ test('Regenerate should be disabled while request is in flight', async (t) => {
   // Nothing was applied while the regenerate request is still pending.
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createGridWithAIAssistant(
-  { dataSource: threeRows, ...baseGrid },
+  { ...baseGrid, dataSource: threeRows },
   [
     FAIL,
     HANG,
@@ -280,11 +274,8 @@ test('Regenerate is visible after a popup-close-driven abort', async (t) => {
   // The request never resolves — it is in flight when the popup is closed.
   await t.expect(aiChat.getPendingMessages().count).eql(1);
 
-  await t.click(aiChat.getCloseButton().element);
+  await closeChatAndConfirmAbort(t, aiChat);
 
-  await t.expect(aiChat.getAbortConfirmDialog().exists).ok();
-
-  await t.click(aiChat.getAbortConfirmYesButton());
   await t.click(dataGrid.getAIAssistantButton());
 
   // The aborted response is rendered as a failure with no executed commands,
@@ -294,7 +285,7 @@ test('Regenerate is visible after a popup-close-driven abort', async (t) => {
 
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createGridWithAIAssistant(
-  { dataSource: threeRows, ...baseGrid },
+  { ...baseGrid, dataSource: threeRows },
   [HANG],
 ));
 
@@ -322,12 +313,11 @@ test('Regenerate after a column is removed should resend with the actual context
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 
-  const requests = await getAIRequests();
-  await t.expect(requests.length).eql(2);
-  await t.expect(requests[0].columns).eql(['id', 'name', 'value']);
-  await t.expect(requests[1].columns).eql(['id', 'name']);
+  await t.expect(getRequestCount()).eql(2);
+  await t.expect(getRequestColumnNames(0)).eql(['id', 'name', 'value']);
+  await t.expect(getRequestColumnNames(1)).eql(['id', 'name']);
 }).before(async () => createGridWithAIAssistant(
-  { dataSource: threeRows, ...baseGrid },
+  { ...baseGrid, dataSource: threeRows },
   [
     FAIL,
     { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
@@ -367,11 +357,10 @@ test('Sequential regenerate after pre-execution failures keeps exactly one respo
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
 
   // Each Regenerate dispatched a fresh request with the same prompt.
-  const requests = await getAIRequests();
-  await t.expect(requests.length).eql(3);
-  await t.expect(requests[2].text).eql('Sort by name');
+  await t.expect(getRequestCount()).eql(3);
+  await t.expect(getRequestText(2)).eql('Sort by name');
 }).before(async () => createGridWithAIAssistant(
-  { dataSource: twoRows, ...baseGrid },
+  { ...baseGrid, dataSource: twoRows },
   [FAIL, FAIL, FAIL],
 ));
 
@@ -391,12 +380,7 @@ test('cancel-aborted message currently shows a Regenerate button', async (t) => 
   await t.expect(aiChat.getErrorMessages().count).eql(1);
   await t.expect(aiChat.getAIMessage(0).hasRegenerateButton()).ok();
 }).before(async () => createGridWithAIAssistant(
-  {
-    dataSource: threeRows,
-    keyExpr: 'id',
-    columns: ['id', 'name', 'value'],
-    showBorders: true,
-  },
+  { ...baseGrid, dataSource: threeRows },
   [{ actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] }],
   {},
   { onAIAssistantRequestCreating: (e: any) => { e.cancel = true; } },
