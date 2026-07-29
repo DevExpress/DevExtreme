@@ -184,9 +184,13 @@ function classifyExportNames(
     }
 
     const isPascalCase = /^[A-Z]/.test(name);
-    const isTestHook = name.startsWith('_TESTS_');
+    // `_TESTS_Engine` / `_TESTS_Legend` — ctor aliases; wrapCtor.
+    // `_TESTS_dataKey` — mutable scalar; must stay a live value (not a wrapper).
+    const isTestCtorAlias = /^_TESTS_[A-Z]/.test(name);
+    const isTestStubHelper = /_TESTS_.*stub|_stub_/i.test(name);
     const wrap = isPascalCase
-      || isTestHook
+      || isTestCtorAlias
+      || isTestStubHelper
       || isFunctionLikeExport(name, internalSource);
 
     if (wrap) {
@@ -204,6 +208,8 @@ export function generateAutoMutableFacadeSource(entry: AutoMutableFacadeEntry): 
   const debugSets = buildDebugSets(entry.wrapExportNames, entry.forwardExportNames);
   const debugSetsLiteral = JSON.stringify(debugSets);
 
+  const liveValueNames = entry.forwardExportNames.filter((name) => !name.startsWith('DEBUG_set_'));
+
   const exportLines = [
     ...entry.wrapExportNames.map(
       (name) => `export const ${name} = wrapCtor(api, '${name}');`,
@@ -212,11 +218,20 @@ export function generateAutoMutableFacadeSource(entry: AutoMutableFacadeEntry): 
       if (name.startsWith('DEBUG_set_')) {
         return `export const ${name} = (...args) => api.${name}(...args);`;
       }
-      // Non-ctor values (e.g. plugin objects): keep the original binding.
-      // Stubbing goes through the mutable default export (`api`).
-      return `export const ${name} = original.${name};`;
+      // Live re-export: mutable DEBUG values (e.g. _TESTS_dataKey) change after init.
+      return `export { ${name} } from '${originalUrl}';`;
     }),
   ];
+
+  const liveApiBindings = liveValueNames.map(
+    (name) => [
+      `Object.defineProperty(api, '${name}', {`,
+      '  configurable: true,',
+      '  enumerable: true,',
+      `  get: () => original.${name},`,
+      '});',
+    ].join('\n'),
+  );
 
   return [
     '/* auto-generated mutable facade for QUnit (namespace-default reexport) */',
@@ -224,6 +239,7 @@ export function generateAutoMutableFacadeSource(entry: AutoMutableFacadeEntry): 
     `import { createMutableApi, wrapCtor } from '${MUTABLE_FACADE_HELPER_URL}';`,
     '',
     `const api = createMutableApi(original, '${entry.globalKey}', ${debugSetsLiteral});`,
+    ...liveApiBindings,
     '',
     ...exportLines,
     'export default api;',
