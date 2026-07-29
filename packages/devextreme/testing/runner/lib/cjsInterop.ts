@@ -291,7 +291,9 @@ export function rewriteCjsStyleDefaultImports(source: string): string {
         return match;
       }
       const ns = `__dxCjs_${name}`;
-      const merged = `({ ...${ns}, ...(typeof ${ns}.default === 'object' && ${ns}.default ? ${ns}.default : {}) })`;
+      // Include function defaults: gauge/widget ctors hang `_TESTS_*` statics
+      // on the default export (not real ESM named exports).
+      const merged = `({ ...${ns}, ...((typeof ${ns}.default === 'object' || typeof ${ns}.default === 'function') && ${ns}.default ? ${ns}.default : {}) })`;
       const bindingPattern = importClauseToDestructuring(named);
       // `let` — some QUnit suites reassign default imports (e.g. `$ = coreRenderer`).
       return `import * as ${ns} from ${spec};`
@@ -313,7 +315,7 @@ export function rewriteCjsStyleDefaultImports(source: string): string {
       return match;
     }
     const ns = nextImportId();
-    const merged = `({ ...${ns}, ...(typeof ${ns}.default === 'object' && ${ns}.default ? ${ns}.default : {}) })`;
+    const merged = `({ ...${ns}, ...((typeof ${ns}.default === 'object' || typeof ${ns}.default === 'function') && ${ns}.default ? ${ns}.default : {}) })`;
     const bindingPattern = importClauseToDestructuring(named);
     return `import * as ${ns} from ${spec};`
       + ` const ${bindingPattern} = ${merged}`;
