@@ -546,6 +546,22 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
       box-shadow: inset 0 -1px 0 0 $scheduler-accent-border-color;
     }
   }
+
+  &.dx-scheduler-work-space-grouped {
+    .dx-scheduler-group-header {
+      border-bottom: none;
+    }
+
+    .dx-scheduler-date-table-row.dx-scheduler-date-table-last-row,
+    .dx-scheduler-time-panel-row.dx-scheduler-date-table-last-row,
+    .dx-scheduler-group-table .dx-scheduler-group-row {
+      border-bottom: none;
+
+      &:not(:last-child) {
+        box-shadow: inset 0 -1px 0 0 $scheduler-group-separator-border-color;
+      }
+    }
+  }
 }
 
 .dx-scheduler-agenda-nodata {
