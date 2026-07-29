@@ -40,7 +40,7 @@ const getSelectedRowsCount = ClientFunction(
 );
 
 const noIntegrationOptions = (): any => ({
-  ...(window as any).__aiBase,
+  ...(window as any).__aiState.base,
   aiAssistant: { enabled: true },
 });
 

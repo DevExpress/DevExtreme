@@ -26,23 +26,29 @@ const abortMessage = (): Promise<string> => formatMessage('dxDataGrid-aiAssistan
 
 const disposeGrid = ClientFunction(() => { (window as any).widget.dispose(); });
 
-const wasAbortCalled = ClientFunction(() => (window as any).__aiAbortCalled === true);
+const wasAbortCalled = ClientFunction(() => (window as any).__aiState.abortCalled === true);
 
-const wasAIRequestResolved = ClientFunction(() => (window as any).__aiRequestResolved === true);
+const wasAIRequestResolved = ClientFunction(
+  () => (window as any).__aiState.requestResolved === true,
+);
 
-const resolveAIRequest = ClientFunction(() => { (window as any).__resolveAIRequest(); });
+const resolveAIRequest = ClientFunction(() => { (window as any).__aiState.resolveRequest(); });
 
 const setupAIState = ClientFunction((config: any) => {
-  (window as any).__aiConfig = config;
-  (window as any).__aiAbortCalled = false;
-  (window as any).__aiRequestResolved = false;
+  (window as any).__aiState = {
+    config,
+    abortCalled: false,
+    requestResolved: false,
+    selectAllStarted: false,
+  };
 });
 
 const aiGridOptions = (): any => {
-  const { options, mode, actions } = (window as any).__aiConfig;
+  const state = (window as any).__aiState;
+  const { options, mode, actions } = state.config;
 
   const sendRequest = (): any => {
-    const abort = (): void => { (window as any).__aiAbortCalled = true; };
+    const abort = (): void => { state.abortCalled = true; };
 
     if (mode === 'never') {
       return { promise: new Promise(() => {}), abort };
@@ -51,8 +57,8 @@ const aiGridOptions = (): any => {
     if (mode === 'delayed') {
       return {
         promise: new Promise((resolve) => {
-          (window as any).__resolveAIRequest = (): void => {
-            (window as any).__aiRequestResolved = true;
+          state.resolveRequest = (): void => {
+            state.requestResolved = true;
             resolve({ actions });
           };
         }),
@@ -141,8 +147,8 @@ test('Late LLM resolution after abort should be ignored', async (t) => {
   options: gridOptions, mode: 'delayed', actions: sortNameAsc,
 }));
 
-const resolveSelectAll = ClientFunction(() => { (window as any).__resolveSelectAll(); });
-const selectAllStarted = ClientFunction(() => (window as any).__selectAllStarted === true);
+const resolveSelectAll = ClientFunction(() => { (window as any).__aiState.resolveSelectAll(); });
+const selectAllStarted = ClientFunction(() => (window as any).__aiState.selectAllStarted === true);
 
 test('Closing the popup mid-execution aborts the remaining commands and keeps the completed ones', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
@@ -186,7 +192,7 @@ test('Closing the popup mid-execution aborts the remaining commands and keeps th
 }).before(async () => createWidget('dxDataGrid', () => {
   const w = window as any;
 
-  w.__selectAllStarted = false;
+  w.__aiState = { selectAllStarted: false };
 
   const data = Array.from({ length: 50 }, (_, i) => ({
     id: i + 1,
@@ -206,10 +212,10 @@ test('Closing the popup mid-execution aborts the remaining commands and keeps th
         });
       }
 
-      w.__selectAllStarted = true;
+      w.__aiState.selectAllStarted = true;
 
       return new Promise((resolve) => {
-        w.__resolveSelectAll = resolve.bind(resolve, data);
+        w.__aiState.resolveSelectAll = resolve.bind(resolve, data);
       });
     },
     totalCount: () => data.length,
@@ -267,7 +273,7 @@ test('Customized response title is applied to the partial (aborted) result', asy
 }).before(async () => createWidget('dxDataGrid', () => {
   const w = window as any;
 
-  w.__selectAllStarted = false;
+  w.__aiState = { selectAllStarted: false };
 
   const data = Array.from({ length: 50 }, (_, i) => ({
     id: i + 1,
@@ -287,10 +293,10 @@ test('Customized response title is applied to the partial (aborted) result', asy
         });
       }
 
-      w.__selectAllStarted = true;
+      w.__aiState.selectAllStarted = true;
 
       return new Promise((resolve) => {
-        w.__resolveSelectAll = resolve.bind(resolve, data);
+        w.__aiState.resolveSelectAll = resolve.bind(resolve, data);
       });
     },
     totalCount: () => data.length,

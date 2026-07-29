@@ -11,7 +11,7 @@ import {
 } from './testHelpers';
 
 const remoteAIGridOptions = (): any => {
-  const { data, options } = (window as any).__aiBase;
+  const { data, options } = (window as any).__aiState.base;
   const arrayStore = new (window as any).DevExpress.data.ArrayStore({ key: 'id', data });
   const store = new (window as any).DevExpress.data.CustomStore({
     key: 'id',
@@ -31,11 +31,11 @@ const remoteAIGridOptions = (): any => {
       enabled: true,
       aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
         sendRequest() {
-          const responses = (window as any).__aiResponses;
-          const count = (window as any).__aiCallCount;
-          const response = responses[count];
+          const state = (window as any).__aiState;
+          const count = state.callCount;
+          const response = state.responses[count];
 
-          (window as any).__aiCallCount = count + 1;
+          state.callCount = count + 1;
 
           if (response === undefined) {
             return {

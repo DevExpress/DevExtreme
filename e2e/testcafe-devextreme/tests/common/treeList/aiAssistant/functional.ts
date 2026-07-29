@@ -22,47 +22,50 @@ const hierarchyRows = [
   },
 ];
 
-const getSchemaCommandNames = ClientFunction(() => ((window as any).__aiRequests[0]
+const getSchemaCommandNames = ClientFunction(() => ((window as any).__aiState.requests[0]
   .data.responseSchema.properties.actions.items.anyOf as any[])
   .map((branch) => branch.properties.name.enum[0]));
 
 const setupAIState = ClientFunction((base: Record<string, unknown>, responses: unknown[]) => {
-  (window as any).__aiBase = base;
-  (window as any).__aiResponses = responses;
-  (window as any).__aiCallCount = 0;
-  (window as any).__aiRequests = [];
+  (window as any).__aiState = {
+    base,
+    responses,
+    callCount: 0,
+    requests: [],
+  };
 });
 
-const aiTreeListOptions = (): any => ({
-  ...(window as any).__aiBase,
-  aiAssistant: {
-    enabled: true,
-    aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-      sendRequest(params: any) {
-        const w = window as any;
+const aiTreeListOptions = (): any => {
+  const state = (window as any).__aiState;
 
-        w.__aiRequests.push(params);
+  return {
+    ...state.base,
+    aiAssistant: {
+      enabled: true,
+      aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
+        sendRequest(params: any) {
+          const response = state.responses[state.callCount];
 
-        const response = w.__aiResponses[w.__aiCallCount];
+          state.callCount += 1;
+          state.requests.push(params);
 
-        w.__aiCallCount += 1;
+          if (response === '__pending__') {
+            return { promise: new Promise(() => {}), abort: (): void => {} };
+          }
 
-        if (response === '__pending__') {
-          return { promise: new Promise(() => {}), abort: (): void => {} };
-        }
+          if (response === undefined) {
+            return {
+              promise: Promise.reject(new Error('Unexpected AI call')),
+              abort: (): void => {},
+            };
+          }
 
-        if (response === undefined) {
-          return {
-            promise: Promise.reject(new Error('Unexpected AI call')),
-            abort: (): void => {},
-          };
-        }
-
-        return { promise: Promise.resolve(response), abort: (): void => {} };
-      },
-    }),
-  },
-});
+          return { promise: Promise.resolve(response), abort: (): void => {} };
+        },
+      }),
+    },
+  };
+};
 
 const treeListBase = (
   overrides: Record<string, unknown> = {},

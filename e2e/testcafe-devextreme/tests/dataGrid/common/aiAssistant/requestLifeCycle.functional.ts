@@ -8,18 +8,18 @@ import {
   threeRows,
 } from './testHelpers';
 
-const getRequestCount = ClientFunction(() => (window as any).__aiRequests.length);
+const getRequestCount = ClientFunction(() => (window as any).__aiState.requests.length);
 
 const getRequestPayload = ClientFunction(
-  (index: number) => (window as any).__aiRequests[index].data,
+  (index: number) => (window as any).__aiState.requests[index].data,
 );
 
 const getRequestColumnNames = ClientFunction(
-  (index: number) => (window as any).__aiRequests[index].data.context.columns
+  (index: number) => (window as any).__aiState.requests[index].data.context.columns
     .map((c: any) => c.dataField),
 );
 
-const getRequestCreatingArgs = ClientFunction(() => (window as any).__requestCreatingArgs);
+const getRequestCreatingArgs = ClientFunction(() => (window as any).__aiState.requestCreatingArgs);
 
 fixture`AI Assistant - Request Customization`
   .page(AI_INTEGRATION_PAGE);
@@ -109,7 +109,7 @@ test('onAIAssistantRequestCreating handler should receive grid component and ele
     onAIAssistantRequestCreating: (e: any) => {
       const element = e.element?.nodeType ? e.element : e.element?.get?.(0);
 
-      (window as any).__requestCreatingArgs = {
+      (window as any).__aiState.requestCreatingArgs = {
         componentName: e.component?.NAME,
         elementId: element?.id,
       };

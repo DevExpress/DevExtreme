@@ -28,64 +28,72 @@ export const HANG = '__HANG__';
 
 export const FAIL = '__FAIL__';
 
+// Every piece of test state lives under this single window key, so it is always
+// replaced as a whole and no stale key can leak into the next test.
 export const setupAIState = ClientFunction((
   base: Record<string, unknown>,
   responses: unknown[],
   hangMarker?: string,
   failMarker?: string,
 ) => {
-  (window as any).__aiBase = base;
-  (window as any).__aiResponses = responses;
-  (window as any).__aiCallCount = 0;
-  (window as any).__aiRequests = [];
-  (window as any).__aiAbortCalled = false;
-  (window as any).__aiAssistantExtra = {};
-  (window as any).__aiGridExtra = {};
-  (window as any).__aiHangMarker = hangMarker;
-  (window as any).__aiFailMarker = failMarker;
+  (window as any).__aiState = {
+    base,
+    responses,
+    hangMarker,
+    failMarker,
+    callCount: 0,
+    requests: [],
+    abortCalled: false,
+    assistantExtra: {},
+    gridExtra: {},
+  };
 });
 
-const aiGridOptions = (): any => ({
-  ...(window as any).__aiBase,
-  ...((window as any).__aiGridExtra ?? {}),
-  aiAssistant: {
-    enabled: true,
-    aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-      sendRequest(params: any) {
-        const count = (window as any).__aiCallCount;
-        const response = (window as any).__aiResponses[count];
+const aiGridOptions = (): any => {
+  const state = (window as any).__aiState;
 
-        (window as any).__aiCallCount = count + 1;
-        (window as any).__aiRequests.push(params);
+  return {
+    ...state.base,
+    ...state.gridExtra,
+    aiAssistant: {
+      enabled: true,
+      aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
+        sendRequest(params: any) {
+          const count = state.callCount;
+          const response = state.responses[count];
 
-        const abort = (): void => { (window as any).__aiAbortCalled = true; };
+          state.callCount = count + 1;
+          state.requests.push(params);
 
-        if (response === (window as any).__aiHangMarker) {
-          return { promise: new Promise(() => {}), abort };
-        }
+          const abort = (): void => { state.abortCalled = true; };
 
-        if (response === (window as any).__aiFailMarker) {
-          return { promise: Promise.reject(new Error('AI error')), abort };
-        }
+          if (response === state.hangMarker) {
+            return { promise: new Promise(() => {}), abort };
+          }
 
-        if (response === undefined) {
-          return { promise: Promise.reject(new Error(`Unexpected AI call #${count}`)), abort };
-        }
+          if (response === state.failMarker) {
+            return { promise: Promise.reject(new Error('AI error')), abort };
+          }
 
-        return { promise: Promise.resolve(response), abort };
-      },
-    }),
-    ...((window as any).__aiAssistantExtra ?? {}),
-  },
-});
+          if (response === undefined) {
+            return { promise: Promise.reject(new Error(`Unexpected AI call #${count}`)), abort };
+          }
+
+          return { promise: Promise.resolve(response), abort };
+        },
+      }),
+      ...state.assistantExtra,
+    },
+  };
+};
 
 const setAIExtras = (
   assistantExtra: Record<string, unknown>,
   gridExtra: Record<string, unknown>,
 ): Promise<void> => ClientFunction(
   () => {
-    (window as any).__aiAssistantExtra = assistantExtra;
-    (window as any).__aiGridExtra = gridExtra;
+    (window as any).__aiState.assistantExtra = assistantExtra;
+    (window as any).__aiState.gridExtra = gridExtra;
   },
   { dependencies: { assistantExtra, gridExtra } },
 )();
@@ -102,7 +110,7 @@ export const createGridWithAIAssistant = async (
   return createWidget('dxDataGrid', aiGridOptions);
 };
 
-export const getRequests = ClientFunction(() => (window as any).__aiRequests);
+export const getRequests = ClientFunction(() => (window as any).__aiState.requests);
 
 export const getLoggedErrorIds = async (t: TestController): Promise<string[]> => {
   const consoleMessages = await t.getBrowserConsoleMessages();

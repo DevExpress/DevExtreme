@@ -12,10 +12,12 @@ import {
   twoRows,
 } from './testHelpers';
 
-const getAIRequests = ClientFunction(() => ((window as any).__aiRequests ?? []).map((r: any) => ({
-  text: r.data.text,
-  columns: (r.data.context.columns ?? []).map((c: any) => c.dataField),
-})));
+const getAIRequests = ClientFunction(
+  () => ((window as any).__aiState.requests as any[]).map((r) => ({
+    text: r.data.text,
+    columns: (r.data.context.columns ?? []).map((c: any) => c.dataField),
+  })),
+);
 
 fixture`AI Assistant - Regenerate`
   .page(AI_INTEGRATION_PAGE);

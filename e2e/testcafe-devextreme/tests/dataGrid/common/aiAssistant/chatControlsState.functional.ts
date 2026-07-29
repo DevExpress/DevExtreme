@@ -15,7 +15,7 @@ import {
 } from './testHelpers';
 
 const getAICallCount = ClientFunction(
-  () => (window as any).__aiCallCount as number,
+  () => (window as any).__aiState.callCount as number,
 );
 
 const baseGrid = (rows: unknown[]): Record<string, unknown> => ({
@@ -26,7 +26,7 @@ const baseGrid = (rows: unknown[]): Record<string, unknown> => ({
 const setAssistantExtra = (
   assistant: Record<string, unknown>,
 ): Promise<void> => ClientFunction(
-  () => { (window as any).__aiAssistantExtra = assistant; },
+  () => { (window as any).__aiState.assistantExtra = assistant; },
   { dependencies: { assistant } },
 )();
 
@@ -64,11 +64,11 @@ const hangingCommandGridOptions = (): any => {
       enabled: true,
       aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
         sendRequest() {
-          const responses = (window as any).__aiResponses;
-          const count = (window as any).__aiCallCount;
-          const response = responses[count];
+          const state = (window as any).__aiState;
+          const count = state.callCount;
+          const response = state.responses[count];
 
-          (window as any).__aiCallCount = count + 1;
+          state.callCount = count + 1;
 
           if (response === undefined) {
             return {
@@ -80,7 +80,7 @@ const hangingCommandGridOptions = (): any => {
           return { promise: Promise.resolve(response), abort: (): void => {} };
         },
       }),
-      ...((window as any).__aiAssistantExtra ?? {}),
+      ...(window as any).__aiState.assistantExtra,
     },
   };
 };
