@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "將資料拖動到此處",
         "dxPivotGrid-rowFieldArea": "將列欄位拖曳至此",
         "dxPivotGrid-filterFieldArea": "拖動篩選欄位到此處",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "從 {0} 到 {1}",
         "dxScheduler-ariaLabel": "日程表。{0} 視圖：{1}，共 {2} 個日程",
@@ -491,6 +495,8 @@
         "dxFilterBuilder-filterAriaItemOperation": "項目操作",
         "dxFilterBuilder-filterAriaItemValue": "項目值",
 
+        "dxHtmlEditor-editorAriaLabel": "Editor content",
+        "dxHtmlEditor-ariaEscapeInstruction": "Press Ctrl + Shift + Up arrow or Ctrl + Shift + Down arrow to move focus out of the editing area",
         "dxHtmlEditor-dialogColorCaption": "更改字體顏色",
         "dxHtmlEditor-dialogBackgroundCaption": "更改背景顏色",
         "dxHtmlEditor-dialogLinkCaption": "新增連結",

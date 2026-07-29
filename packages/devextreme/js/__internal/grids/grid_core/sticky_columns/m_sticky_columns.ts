@@ -27,6 +27,7 @@ import { isDetailRow } from '../master_detail/utils';
 import type { ColumnsView } from '../views/m_columns_view';
 import type { RowsView } from '../views/m_rows_view';
 import { isGroupRow } from '../views/m_rows_view';
+import type { RowsViewScrollEvent } from '../views/types';
 import { CLASSES, StickyPosition } from './const';
 import { GridCoreStickyColumnsDom } from './dom';
 import {
@@ -484,7 +485,7 @@ const rowsView = (
     }
   }
 
-  protected _handleScroll(e): void {
+  protected _handleScroll(e: RowsViewScrollEvent): void {
     const hasStickyColumns = this.hasStickyColumns();
 
     super._handleScroll(e);

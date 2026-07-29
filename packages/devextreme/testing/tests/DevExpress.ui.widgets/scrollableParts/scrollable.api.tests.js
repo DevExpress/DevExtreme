@@ -7,7 +7,6 @@ import config from 'core/config';
 import pointerMock from '../../../helpers/pointerMock.js';
 import { isRenderer } from 'core/utils/type';
 import browser from 'core/utils/browser';
-import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 import {
     SCROLLABLE_CONTAINER_CLASS,
@@ -64,8 +63,6 @@ const getScrollOffset = function($scrollable) {
         left: location.left - $container.scrollLeft()
     };
 };
-
-const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
 QUnit.module('api', moduleConfig);
 

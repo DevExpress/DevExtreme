@@ -10,6 +10,8 @@ import { isDefined } from '@js/core/utils/type';
 import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
 import { foreachColumnInfo } from '@ts/grids/grid_core/virtual_columns/m_virtual_columns_core';
 
+import { FAKE_TABLE_CLASS } from '../keyboard_navigation/const';
+
 const PIVOTGRID_EXPAND_CLASS = 'dx-expand';
 
 const getRealElementWidth = function (element) {
@@ -141,6 +143,10 @@ abstract class AreaItem {
     return tbody;
   }
 
+  _isCellNavigationEnabled() {
+    return false;
+  }
+
   _getCloseMainElementMarkup() {
     return '</tbody>';
   }
@@ -202,6 +208,7 @@ abstract class AreaItem {
     const rowsCount = data.length;
     const rtlEnabled = this.option('rtlEnabled');
     const encodeHtml = this.option('encodeHtml');
+    const isCellNavigationEnabled = this._isCellNavigationEnabled();
 
     tableElement.data('area', this._getAreaName());
     tableElement.data('data', data);
@@ -240,6 +247,10 @@ abstract class AreaItem {
           cell.rowspan && td.setAttribute('rowspan', cell.rowspan || 1);
           cell.colspan && td.setAttribute('colspan', cell.colspan || 1);
 
+          if (isCellNavigationEnabled && !cell.isWhiteSpace) {
+            td.setAttribute('tabindex', '-1');
+          }
+
           const styleOptions = {
             cellElement: undefined,
             cell,
@@ -274,7 +285,13 @@ abstract class AreaItem {
             div.setAttribute('role', 'button');
             div.setAttribute('aria-label', encodeHtml ? ariaLabel : $('<div>').html(ariaLabel).text());
             div.setAttribute('aria-expanded', String(cell.expanded));
-            div.setAttribute('tabindex', '0');
+            div.setAttribute('tabindex', isCellNavigationEnabled ? '-1' : '0');
+
+            // With cell navigation the cell itself is the focus target, so it
+            // must expose the expanded state to assistive technologies.
+            if (isCellNavigationEnabled) {
+              td.setAttribute('aria-expanded', String(cell.expanded));
+            }
           }
 
           cellText = this._getCellText(cell, encodeHtml);
@@ -632,8 +649,9 @@ abstract class AreaItem {
         .clone()
         .removeAttr('id')
         .attr('aria-hidden', 'true')
-        .addClass('dx-pivot-grid-fake-table')
-        .appendTo(that._virtualContent);
+        .addClass(FAKE_TABLE_CLASS);
+      that._fakeTable.find('[tabindex]').removeAttr('tabindex');
+      that._fakeTable.appendTo(that._virtualContent);
     }
   }
 

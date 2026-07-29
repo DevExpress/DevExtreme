@@ -69,7 +69,7 @@ import { getElementMargin } from '@ts/ui/scroll_view/utils/get_element_style';
 
 const LIST_CLASS = 'dx-list';
 const LIST_ITEMS_CLASS = 'dx-list-items';
-const LIST_ITEM_CLASS = 'dx-list-item';
+export const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_SELECTOR = `.${LIST_ITEM_CLASS}`;
 const LIST_ITEM_ICON_CONTAINER_CLASS = 'dx-list-item-icon-container';
 const LIST_ITEM_ICON_CLASS = 'dx-list-item-icon';
@@ -275,19 +275,14 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       pulledDownText: messageLocalization.format('dxList-pulledDownText'),
       refreshingText: messageLocalization.format('dxList-refreshingText'),
       pageLoadingText: messageLocalization.format('dxList-pageLoadingText'),
-      // @ts-expect-error ts-error
-      onScroll: null,
-      // @ts-expect-error ts-error
-      onPullRefresh: null,
-      // @ts-expect-error ts-error
-      onPageLoading: null,
+      onScroll: undefined,
+      onPullRefresh: undefined,
+      onPageLoading: undefined,
       pageLoadMode: 'scrollBottom',
       nextButtonText: messageLocalization.format('dxList-nextButtonText'),
-      // @ts-expect-error ts-error
-      onItemSwipe: null,
+      onItemSwipe: undefined,
       grouped: false,
-      // @ts-expect-error ts-error
-      onGroupRendered: null,
+      onGroupRendered: undefined,
       collapsibleGroups: false,
       groupTemplate: 'group',
       indicateLoading: true,
@@ -550,7 +545,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     | null
     | undefined {
     const { grouped } = this.option();
-    const dataSource = this.option('dataSource');
+    const dataSource = this.option('dataSource') as DataSourceLike<Item> | undefined;
 
     if (dataSource && grouped) {
       return getDataSourceOptions<Item>(dataSource);
@@ -598,10 +593,9 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       onScroll: (e: ScrollEvent): void => {
         this._scrollHandler(e);
       },
+      onPullDown: isPullRefreshEnabled ? this._pullDownHandler.bind(this) : undefined,
       // @ts-expect-error ts-error
-      onPullDown: isPullRefreshEnabled ? this._pullDownHandler.bind(this) : null,
-      // @ts-expect-error ts-error
-      onReachBottom: autoPagingEnabled ? this._scrollBottomHandler.bind(this) : null,
+      onReachBottom: autoPagingEnabled ? this._scrollBottomHandler.bind(this) : undefined,
       showScrollbar,
       useNative: useNativeScrolling,
       bounceEnabled,
@@ -1531,7 +1525,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     this._scrollView.scrollTo(location);
   }
 
-  scrollToItem(itemElement: number | Element | dxElementWrapper | Item | undefined): void {
+  scrollToItem(itemElement: number | Element | dxElementWrapper | Item | null | undefined): void {
     if (!isDefined(itemElement)) {
       return;
     }

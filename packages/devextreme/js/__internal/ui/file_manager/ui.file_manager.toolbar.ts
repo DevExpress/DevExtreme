@@ -166,7 +166,6 @@ class FileManagerToolbar extends Widget<FileManagerToolbarOptions> {
 
   _isRefreshVisibleInFileToolbar?: boolean;
 
-  // eslint-disable-next-line no-restricted-globals
   _refreshItemTextTimeout?: ReturnType<typeof setTimeout>;
 
   _init(): void {
@@ -732,7 +731,7 @@ class FileManagerToolbar extends Widget<FileManagerToolbarOptions> {
     isDeferredUpdate,
     text,
     showText,
-    // eslint-disable-next-line no-restricted-globals
+
   ): ReturnType<typeof setTimeout> | undefined {
     const options = {
       showText,

@@ -46,8 +46,7 @@ test('The E0110 should not occur when editing a column with setCellValue in form
   templatesRenderAsynchronously: true,
 }));
 
-// visual: material.blue.light
-test('Checkbox has ink ripple in material theme inside editing popup (T977287)', async (t) => {
+test('Checkbox has ink ripple inside editing popup (T977287)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
   const overlay = new Overlay();
@@ -82,7 +81,6 @@ test('Checkbox has ink ripple in material theme inside editing popup (T977287)',
   columns: ['LastName'],
 }));
 
-// visual: material.blue.light
 test('DataGrid inside editing popup should have synchronized columns (T1059401)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
@@ -141,7 +139,6 @@ test('DataGrid inside editing popup should have synchronized columns (T1059401)'
   },
 }));
 
-// visual: material.blue.light
 test('DataGrid adaptive text should have correct paddings (T1062084)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -203,7 +200,6 @@ test('DataGrid adaptive text should have correct paddings (T1062084)', async (t)
   }],
 }));
 
-// visual: material.blue.light
 test('DataGrid checkboxes should have correct outline in adaptive row', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -385,8 +381,6 @@ test('Popup EditForm screenshot when editRowKey is initially specified', async (
   },
 }));
 
-// visual: generic.light
-// visual: material.blue.light
 [true, false].forEach((useIcons) => {
   // T1179114
   test('The disabled state should be correct for a custom button when given as a SVG image', async (t) => {
@@ -533,9 +527,6 @@ test('DataGrid - A new row is added above the existing row if the data source is
   ],
 }));
 
-// visual: generic.light
-// visual: fluent.blue.light
-// visual: material.blue.light
 test('DataGrid - ColorBox in DataGrid causes input value to appear behind color preview (T1280023)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');

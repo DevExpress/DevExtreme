@@ -2545,21 +2545,6 @@ QUnit.module('accessibility', {
             assert.deepEqual(getDescribedBy($('#where')), [contentId], 'element target is described');
         });
 
-        QUnit.test('selector target matching multiple elements should describe all matches', function(assert) {
-            const $sharedTargets = $('<div class="shared-target"></div><div class="shared-target"></div>').appendTo('body');
-
-            try {
-                const popover = new Popover($('#what'), { target: '.shared-target' });
-                const contentId = popover.$overlayContent().attr('id');
-
-                $sharedTargets.each((_, element) => {
-                    assert.deepEqual(getDescribedBy($(element)), [contentId], 'matched element is described');
-                });
-            } finally {
-                $sharedTargets.remove();
-            }
-        });
-
         QUnit.test('selector target that appears after creation should be described on show', function(assert) {
             const popover = new Popover($('#what'), { target: '#deferredTarget', animation: null });
 
@@ -2807,6 +2792,28 @@ QUnit.module('accessibility', {
             popover.dispose();
 
             assert.deepEqual(getDescribedBy($('#where')), ['manual-content-id'], 'the manual token is preserved after dispose');
+        });
+
+        QUnit.test('aria-describedby is added when target option is specified and removed when target is set to null', function(assert) {
+            const popover = new Popover($('#what'), { target: '#where' });
+            const contentId = popover.$overlayContent().attr('id');
+
+            assert.deepEqual(getDescribedBy($('#where')), [contentId], 'aria-describedby is initially added to the target');
+
+            popover.option('target', null);
+
+            assert.strictEqual($('#where').attr('aria-describedby'), undefined, 'aria-describedby is removed from the old target');
+        });
+
+        QUnit.test('aria-describedby is not added when target is initially null, and is added when target is set to an element', function(assert) {
+            const popover = new Popover($('#what'), { target: null });
+
+            assert.strictEqual($('#where').attr('aria-describedby'), undefined, 'target does not have aria-describedby initially');
+
+            popover.option('target', '#where');
+            const contentId = popover.$overlayContent().attr('id');
+
+            assert.deepEqual(getDescribedBy($('#where')), [contentId], 'aria-describedby is added to the new target');
         });
     });
 

@@ -9,7 +9,9 @@ fixture`Ai Assistant.Visual`
 
 const DATA_GRID_SELECTOR = '#container';
 
-test('AI Assistant popup - empty state', async (t) => {
+test.meta({
+  themes: ['generic.light', 'material.blue.light', 'material.blue.light.compact'],
+})('AI Assistant popup - empty state', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 

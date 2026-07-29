@@ -273,10 +273,10 @@ export abstract class DxoTabPanelOptions extends NestedOption {
         this._setOption('selectedIndex', value);
     }
 
-    get selectedItem(): any {
+    get selectedItem(): any | null {
         return this._getOption('selectedItem');
     }
-    set selectedItem(value: any) {
+    set selectedItem(value: any | null) {
         this._setOption('selectedItem', value);
     }
 

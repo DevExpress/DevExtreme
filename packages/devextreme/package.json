@@ -152,7 +152,7 @@
     "jquery": "catalog:",
     "jspdf": "4.2.1",
     "jspdf-autotable": "3.8.4",
-    "knockout": "3.5.2",
+    "knockout": "3.5.3",
     "lazypipe": "1.0.2",
     "merge-stream": "2.0.0",
     "minimist": "1.2.8",

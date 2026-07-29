@@ -255,14 +255,14 @@ class Popup<
       title: '',
       showTitle: true,
       titleTemplate: 'title',
-      onTitleRendered: null,
+      onTitleRendered: undefined,
       dragOutsideBoundary: false,
       dragEnabled: false,
       enableBodyScroll: true,
       outsideDragFactor: 0,
-      onResizeStart: null,
-      onResize: null,
-      onResizeEnd: null,
+      onResizeStart: undefined,
+      onResize: undefined,
+      onResizeEnd: undefined,
       resizeEnabled: false,
       toolbarItems: [],
       showCloseButton: false,
@@ -721,6 +721,7 @@ class Popup<
       disabled,
       rtlEnabled,
       items,
+      allowKeyboardNavigation: false,
       useDefaultButtons: useDefaultToolbarButtons,
       useFlatButtons: useFlatToolbarButtons,
       integrationOptions,
@@ -773,7 +774,7 @@ class Popup<
     });
   }
 
-  _getAriaRole(): string {
+  protected _getAriaRole(): string {
     return 'dialog';
   }
 

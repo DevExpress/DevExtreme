@@ -203,12 +203,9 @@ class Form extends Widget<FormProperties> {
       screenByWidth: defaultScreenFactorFunc,
       labelLocation: 'left',
       readOnly: false,
-      // @ts-expect-error ts-error
-      onFieldDataChanged: null,
-      // @ts-expect-error ts-error
-      customizeItem: null,
-      // @ts-expect-error ts-error
-      onEditorEnterKey: null,
+      onFieldDataChanged: undefined,
+      customizeItem: undefined,
+      onEditorEnterKey: undefined,
       minColWidth: 200,
       alignItemLabels: true,
       alignItemLabelsInAllGroups: true,
@@ -225,10 +222,8 @@ class Form extends Widget<FormProperties> {
       stylingMode: config().editorStylingMode,
       labelMode: 'outside',
       isDirty: false,
-      // @ts-expect-error ts-error
-      onSmartPasting: null,
-      // @ts-expect-error ts-error
-      onSmartPasted: null,
+      onSmartPasting: undefined,
+      onSmartPasted: undefined,
     };
   }
 

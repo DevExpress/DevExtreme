@@ -17,12 +17,18 @@ export function getMaxExpiration(info: LicenseInfo): number {
   return Math.max(...expirationDates);
 }
 
-export function findLatestDevExtremeVersion(info: LicenseInfo): number | undefined {
+export function findLatestDevExtremeVersion(
+  info: LicenseInfo,
+  acceptAspNetEntitlement = false,
+): number | undefined {
   if (!isLicenseValid(info)) {
     return undefined;
   }
 
+  const productKinds = acceptAspNetEntitlement
+    ? [ProductKind.DevExtremeHtmlJs, ProductKind.DevExtremeAspNet]
+    : [ProductKind.DevExtremeHtmlJs];
   const sorted = [...info.products].sort((a, b) => b.version - a.version);
 
-  return sorted.find((p) => isProduct(p, ProductKind.DevExtremeHtmlJs))?.version;
+  return sorted.find((p) => isProduct(p, ...productKinds))?.version;
 }

@@ -437,70 +437,70 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart, pola
     negativesAsZeroes?: boolean;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type function
      * @type_function_param1 e:{viz/polar_chart:ArgumentAxisClickEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onArgumentAxisClick?: ((e: ArgumentAxisClickEvent) => void) | string;
+    onArgumentAxisClick?: ((e: ArgumentAxisClickEvent) => void) | string | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type function
      * @type_function_param1 e:{viz/polar_chart:LegendClickEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onLegendClick?: ((e: LegendClickEvent) => void) | string;
+    onLegendClick?: ((e: LegendClickEvent) => void) | string | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type function
      * @type_function_param1 e:{viz/polar_chart:SeriesClickEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onSeriesClick?: ((e: SeriesClickEvent) => void) | string;
+    onSeriesClick?: ((e: SeriesClickEvent) => void) | string | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/polar_chart:SeriesHoverChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onSeriesHoverChanged?: ((e: SeriesHoverChangedEvent) => void);
+    onSeriesHoverChanged?: ((e: SeriesHoverChangedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/polar_chart:SeriesSelectionChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onSeriesSelectionChanged?: ((e: SeriesSelectionChangedEvent) => void);
+    onSeriesSelectionChanged?: ((e: SeriesSelectionChangedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/polar_chart:ZoomEndEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onZoomEnd?: ((e: ZoomEndEvent) => void);
+    onZoomEnd?: ((e: ZoomEndEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/polar_chart:ZoomStartEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onZoomStart?: ((e: ZoomStartEvent) => void);
+    onZoomStart?: ((e: ZoomStartEvent) => void) | undefined;
     /**
      * @docid
      * @default "none"
@@ -1324,7 +1324,7 @@ export type ValueAxis = CommonAxisSettings & {
      * @notUsedInTheme
      * @public
      */
-    minVisualRangeLength?: TimeIntervalConfig;
+    minVisualRangeLength?: TimeIntervalConfig | undefined;
     /**
      * @docid dxPolarChartOptions.valueAxis.minorTickCount
      * @default undefined
@@ -1758,7 +1758,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
         color?: string | undefined;
         /**
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.dashStyle
-         * @default 'solid'
+         * @default undefined
          */
         dashStyle?: DashStyle | undefined;
         /**
@@ -1885,7 +1885,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
         color?: string | undefined;
         /**
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.dashStyle
-         * @default 'solid'
+         * @default undefined
          */
         dashStyle?: DashStyle | undefined;
         /**

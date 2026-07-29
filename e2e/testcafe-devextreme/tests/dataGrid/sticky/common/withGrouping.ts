@@ -5,6 +5,8 @@ import url from '../../../../helpers/getPageUrl';
 import { defaultConfig } from '../helpers/data';
 import { MouseAction, MouseUpEvents } from '../../../../helpers/mouseUpEvents';
 import { testScreenshot } from '../../../../helpers/themeUtils';
+import { removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
+import { insertStylesToSuppressGroupPanelFocusOutline } from '../../helpers/domUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -178,25 +180,24 @@ test.meta({ browserSize: [900, 800] })('Sticky columns with grouping - overflow 
   },
 }));
 
-// visual: generic.light
-// visual: material.blue.light
-// visual: fluent.blue.light
-test.meta({ browserSize: [900, 800] })('The header row should be highlighted correctly when dragging column when there are fixed columns and allowColumnReordering=false (generic.light theme)', async (t) => {
+test.meta({ browserSize: [900, 800] })('The header row should be highlighted correctly when dragging column when there are fixed columns and allowColumnReordering=false', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
-  await t.wait(300);
 
   await t.drag(dataGrid.getGroupPanel().getHeader(0).element, 200, 35);
-  await t.wait(200);
+
+  await t.expect(dataGrid.getHeaders().getHeaderRow(0).isHighlighted()).ok();
 
   await testScreenshot(t, takeScreenshot, 'header_row_highlight_with_fixed_columns.png', { element: dataGrid.element });
+
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await MouseUpEvents.disable(MouseAction.dragToOffset);
+  await insertStylesToSuppressGroupPanelFocusOutline();
 
   return createWidget('dxDataGrid', {
     ...defaultConfig,
@@ -210,6 +211,7 @@ test.meta({ browserSize: [900, 800] })('The header row should be highlighted cor
   });
 }).after(async () => {
   await MouseUpEvents.enable(MouseAction.dragToOffset);
+  await removeStylesheetRulesFromPage();
 });
 
 test.meta({ browserSize: [900, 800] })('The group separator should be visible when dragging a fixed column into the group panel', async (t) => {
@@ -283,6 +285,37 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
   repaintChangesOnly: true,
   grouping: {
     autoExpandAll: false,
+  },
+  scrolling: {
+    showScrollbar: 'never',
+  },
+}));
+
+test.meta({
+  browserSize: [900, 800],
+  themes: ['generic.light', 'material.blue.light'],
+})('Focused group row keeps focused background and centered expand icon with fixed columns (T1303478)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await t.click(dataGrid.getGroupRow(0).element);
+
+  await testScreenshot(t, takeScreenshot, 'grouping-focused-group-row.png', { element: dataGrid.element });
+
+  await dataGrid.scrollTo(t, { x: 100 });
+  await testScreenshot(t, takeScreenshot, 'grouping-focused-group-row-scroll.png', { element: dataGrid.element });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  ...defaultConfig,
+  focusedRowEnabled: true,
+  customizeColumns(columns) {
+    columns[2].groupIndex = 0;
   },
   scrolling: {
     showScrollbar: 'never',

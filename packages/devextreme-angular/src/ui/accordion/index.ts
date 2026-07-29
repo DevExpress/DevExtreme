@@ -287,10 +287,10 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get keyExpr(): ((item: any) => any) | string {
+    get keyExpr(): ((item: any) => any) | null | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: ((item: any) => any) | string) {
+    set keyExpr(value: ((item: any) => any) | null | string) {
         this._setOption('keyExpr', value);
     }
 
@@ -365,10 +365,10 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get selectedItem(): any {
+    get selectedItem(): any | null {
         return this._getOption('selectedItem');
     }
-    set selectedItem(value: any) {
+    set selectedItem(value: any | null) {
         this._setOption('selectedItem', value);
     }
 
@@ -634,7 +634,7 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() keyExprChange: EventEmitter<((item: any) => any) | string>;
+    @Output() keyExprChange: EventEmitter<((item: any) => any) | null | string>;
 
     /**
     
@@ -676,7 +676,7 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectedItemChange: EventEmitter<any>;
+    @Output() selectedItemChange: EventEmitter<any | null>;
 
     /**
     

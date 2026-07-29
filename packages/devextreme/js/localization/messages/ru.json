@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "Перетащите поля данных cюда",
         "dxPivotGrid-rowFieldArea": "Перетащите поля строк cюда",
         "dxPivotGrid-filterFieldArea": "Перетащите поля фильтров cюда",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "с {0} по {1}",
         "dxScheduler-ariaLabel": "Планировщик. Вид {0}: {1}, записей: {2}",
@@ -491,6 +495,8 @@
         "dxFilterBuilder-filterAriaItemOperation": "Операция элемента",
         "dxFilterBuilder-filterAriaItemValue": "Значение элемента",
 
+        "dxHtmlEditor-editorAriaLabel": "Editor content",
+        "dxHtmlEditor-ariaEscapeInstruction": "Press Ctrl + Shift + Up arrow or Ctrl + Shift + Down arrow to move focus out of the editing area",
         "dxHtmlEditor-dialogColorCaption": "Изменить цвет текста",
         "dxHtmlEditor-dialogBackgroundCaption": "Изменить цвет фона",
         "dxHtmlEditor-dialogLinkCaption": "Добавить ссылку",

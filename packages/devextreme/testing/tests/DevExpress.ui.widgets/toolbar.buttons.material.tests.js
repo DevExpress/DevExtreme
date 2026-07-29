@@ -9,6 +9,8 @@ const DROP_DOWN_MENU_LIST_CLASS = 'dx-dropdownmenu-list';
 
 import 'material_blue_light.css!';
 
+const BUTTON_MARGIN = 4 * 2;
+
 QUnit.module('Buttons rendering', {
     beforeEach: function() {
         $('#qunit-fixture').html('<div id="toolbar"></div>');
@@ -60,7 +62,7 @@ QUnit.module('Buttons rendering', {
                 const dropDownMenuRect = dropDownMenuListElement.getBoundingClientRect();
                 const menuButtonElement = dropDownMenuListElement.querySelector(`.${BUTTON_CLASS}`);
 
-                const expectedItemWidth = dropDownMenuRect.width - 2;
+                const expectedItemWidth = dropDownMenuRect.width - 2 - BUTTON_MARGIN;
 
                 const buttonRect = menuButtonElement.getBoundingClientRect();
                 assert.strictEqual(buttonRect.width, expectedItemWidth, `button.width ${expectedItemWidth}`);
