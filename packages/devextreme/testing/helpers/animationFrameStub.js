@@ -26,9 +26,12 @@ const syncRequest = (callback) => {
     return 0;
 };
 
+/** Idle RAF: do not invoke the callback (sync would recurse forever in frame animations). */
+const noopRequest = () => 0;
+
 const noopCancel = () => {};
 
-let lastRequestFake = syncRequest;
+let lastRequestFake = noopRequest;
 let lastCancelFake = noopCancel;
 
 function isSinonStub(value) {
@@ -84,7 +87,9 @@ function applyFakes(requestStub, cancelStub, requestFake, cancelFake) {
 
 function softRestore() {
     const { requestStub, cancelStub } = ensureStubbed();
-    applyFakes(requestStub, cancelStub, syncRequest, noopCancel);
+    // Must not use syncRequest here: frame animations re-schedule RAF from the
+    // callback → immediate re-entry → Maximum call stack size exceeded.
+    applyFakes(requestStub, cancelStub, noopRequest, noopCancel);
     requestStub.resetHistory();
     cancelStub.resetHistory();
 }
