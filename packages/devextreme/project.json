@@ -152,6 +152,20 @@
         "{projectRoot}/artifacts/npm/devextreme-internal/bundles/dx.custom.config.js"
       ]
     },
+    "copy:qunit:dx-custom": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "options": {
+        "files": [
+          {
+            "from": "./build/bundle-templates/dx.custom.js",
+            "to": "./artifacts/transpiled-esm-npm/bundles/dx.custom.js"
+          }
+        ]
+      },
+      "dependsOn": ["build:devextreme-bundler-config"],
+      "inputs": ["{projectRoot}/build/bundle-templates/dx.custom.js"],
+      "outputs": ["{projectRoot}/artifacts/transpiled-esm-npm/bundles/dx.custom.js"]
+    },
     "build:devextreme-bundler-config:watch": {
       "executor": "devextreme-nx-infra-plugin:concatenate-files",
       "cache": false,
@@ -607,6 +621,7 @@
             "pnpm nx build:devextreme-bundler-config devextreme -c prod",
             "pnpm nx build:ts:internal devextreme",
             "pnpm nx run-many --targets=build:npm:esm,build:npm:esm:internal --projects=devextreme --parallel -c qunit",
+            "pnpm nx copy:qunit:dx-custom devextreme",
             "pnpm nx clean:dist-ts devextreme"
           ],
           "outputs": [

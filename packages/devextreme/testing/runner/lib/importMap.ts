@@ -230,24 +230,7 @@ function collectPackageRootEntries(): Record<string, string> {
   return entries;
 }
 
-/**
- * Prefer CI/layout SystemJS path `artifacts/transpiled/bundles` (includes
- * generated dx.custom.js). Fall back to source templates for local runs
- * that have not executed `build:cjs:bundles` yet.
- */
-function getBundlesImportPrefix(): string {
-  const workspaceRoot = resolveWorkspaceRoot();
-  const candidates = [
-    path.join(process.cwd(), 'artifacts/transpiled/bundles'),
-    path.join(workspaceRoot, 'packages/devextreme/artifacts/transpiled/bundles'),
-  ];
-
-  if (candidates.some((dir) => fs.existsSync(dir))) {
-    return '/packages/devextreme/artifacts/transpiled/bundles/';
-  }
-
-  return '/packages/devextreme/build/bundle-templates/';
-}
+const BUNDLE_TEMPLATES_ROOT = '/packages/devextreme/build/bundle-templates/';
 
 /**
  * Builds a browser import map for QUnit native ESM.
@@ -272,7 +255,8 @@ export function buildQunitImportMap({
     'viz/': `${ESM_ROOT}/viz/`,
     '__internal/': `${ESM_ROOT}/__internal/`,
     'renovation/': `${ESM_ROOT}/renovation/`,
-    'bundles/': getBundlesImportPrefix(),
+    'bundles/': BUNDLE_TEMPLATES_ROOT,
+    'bundles/dx.custom.js': '/packages/devextreme/artifacts/transpiled-esm-npm/bundles/dx.custom.js',
 
     // Exact package-root entries (exporter, color, localization, events, …)
     ...collectPackageRootEntries(),
