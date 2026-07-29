@@ -408,6 +408,10 @@ const MUTABLE_ARTIFACT_FACADES: readonly { suffix: string; shimUrl: string }[] =
     shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_utils.js',
   },
   {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/core/renderers/renderer_default.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_renderer.js',
+  },
+  {
     suffix: '/artifacts/transpiled-esm-npm/esm/viz/core/renderers/animation.js',
     shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_animation.js',
   },
@@ -559,6 +563,82 @@ const MUTABLE_ARTIFACT_FACADES: readonly { suffix: string; shimUrl: string }[] =
   {
     suffix: '/artifacts/transpiled-esm-npm/esm/common/core/localization/ldml/date.parser.js',
     shimUrl: '/packages/devextreme/testing/helpers/esm-shims/date_parser.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/series/points/label.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_series_label.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/series/points/label.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_series_label.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/common/core/events/visibility_change.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/visibility_change.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/events/m_visibility_change.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/visibility_change.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/core/errors.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/core_errors.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/ui/widget/ui.errors.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/ui_errors.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/translators/range.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_range.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/translators/range.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_range.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/translators/translator1d.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_translator1d.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/translators/translator1d.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_translator1d.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/core/plaque.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_plaque.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/core/plaque.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_plaque.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/range_selector/tracker.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_rs_tracker.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/range_selector/tracker.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_rs_tracker.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/range_selector/series_data_source.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_rs_series_data_source.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/range_selector/series_data_source.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_rs_series_data_source.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/range_selector/sliders_controller.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_rs_sliders_controller.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/range_selector/sliders_controller.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_rs_sliders_controller.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/core/m_template_manager.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/template_manager.js',
   },
 
   {
