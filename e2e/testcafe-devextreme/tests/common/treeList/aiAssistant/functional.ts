@@ -3,6 +3,7 @@ import { ClientFunction } from 'testcafe';
 import TreeList from 'devextreme-testcafe-models/treeList';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { resetAIState, setupAIState } from '../../../dataGrid/common/aiAssistant/testHelpers';
 
 const GRID_SELECTOR = '#container';
 const AI_INTEGRATION_PAGE = url(__dirname, '../../../container-ai-integration.html');
@@ -25,15 +26,6 @@ const hierarchyRows = [
 const getSchemaCommandNames = ClientFunction(() => ((window as any).__aiState.requests[0]
   .data.responseSchema.properties.actions.items.anyOf as any[])
   .map((branch) => branch.properties.name.enum[0]));
-
-const setupAIState = ClientFunction((base: Record<string, unknown>, responses: unknown[]) => {
-  (window as any).__aiState = {
-    base,
-    responses,
-    callCount: 0,
-    requests: [],
-  };
-});
 
 const aiTreeListOptions = (): any => {
   const state = (window as any).__aiState;
@@ -83,7 +75,8 @@ const createTreeListWithAIAssistant = async (
   base: Record<string, unknown>,
   responses: unknown[],
 ): Promise<void> => {
-  await setupAIState(base, responses);
+  await resetAIState();
+  await setupAIState({ base, responses });
 
   return createWidget('dxTreeList', aiTreeListOptions);
 };

@@ -5,6 +5,7 @@ import {
   AI_INTEGRATION_PAGE,
   GRID_SELECTOR,
   createGridWithAIAssistant,
+  resetAIState,
   setupAIState,
   threeRows,
   twoRows,
@@ -59,7 +60,8 @@ const createRemoteGridWithAIAssistant = async (
   options: Record<string, unknown>,
   responses: unknown[],
 ): Promise<void> => {
-  await setupAIState({ data, options }, responses);
+  await resetAIState();
+  await setupAIState({ base: { data, options }, responses });
 
   return createWidget('dxDataGrid', remoteAIGridOptions);
 };

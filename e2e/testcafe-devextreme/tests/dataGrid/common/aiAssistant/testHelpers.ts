@@ -30,24 +30,31 @@ export const FAIL = '__FAIL__';
 
 // Every piece of test state lives under this single window key, so it is always
 // replaced as a whole and no stale key can leak into the next test.
-export const setupAIState = ClientFunction((
-  base: Record<string, unknown>,
-  responses: unknown[],
-  hangMarker?: string,
-  failMarker?: string,
-) => {
-  (window as any).__aiState = {
-    base,
-    responses,
-    hangMarker,
-    failMarker,
-    callCount: 0,
-    requests: [],
-    abortCalled: false,
-    assistantExtra: {},
-    gridExtra: {},
-  };
-});
+export const resetAIState = (): Promise<void> => ClientFunction(
+  () => {
+    (window as any).__aiState = {
+      base: {},
+      gridExtra: {},
+      assistantExtra: {},
+      responses: [],
+      callCount: 0,
+      requests: [],
+      abortCalled: false,
+      requestResolved: false,
+      selectAllStarted: false,
+      hangMarker: HANG,
+      failMarker: FAIL,
+    };
+  },
+  { dependencies: { HANG, FAIL } },
+)();
+
+export const setupAIState = (
+  state: Record<string, unknown>,
+): Promise<void> => ClientFunction(
+  () => { Object.assign((window as any).__aiState, state); },
+  { dependencies: { state } },
+)();
 
 const aiGridOptions = (): any => {
   const state = (window as any).__aiState;
@@ -67,16 +74,16 @@ const aiGridOptions = (): any => {
 
           const abort = (): void => { state.abortCalled = true; };
 
+          if (response === undefined) {
+            return { promise: Promise.reject(new Error(`Unexpected AI call #${count}`)), abort };
+          }
+
           if (response === state.hangMarker) {
             return { promise: new Promise(() => {}), abort };
           }
 
           if (response === state.failMarker) {
             return { promise: Promise.reject(new Error('AI error')), abort };
-          }
-
-          if (response === undefined) {
-            return { promise: Promise.reject(new Error(`Unexpected AI call #${count}`)), abort };
           }
 
           return { promise: Promise.resolve(response), abort };
@@ -87,25 +94,16 @@ const aiGridOptions = (): any => {
   };
 };
 
-const setAIExtras = (
-  assistantExtra: Record<string, unknown>,
-  gridExtra: Record<string, unknown>,
-): Promise<void> => ClientFunction(
-  () => {
-    (window as any).__aiState.assistantExtra = assistantExtra;
-    (window as any).__aiState.gridExtra = gridExtra;
-  },
-  { dependencies: { assistantExtra, gridExtra } },
-)();
-
 export const createGridWithAIAssistant = async (
   base: Record<string, unknown>,
   responses: unknown[],
   assistantExtra: Record<string, unknown> = {},
   gridExtra: Record<string, unknown> = {},
 ): Promise<void> => {
-  await setupAIState(base, responses, HANG, FAIL);
-  await setAIExtras(assistantExtra, gridExtra);
+  await resetAIState();
+  await setupAIState({
+    base, responses, assistantExtra, gridExtra,
+  });
 
   return createWidget('dxDataGrid', aiGridOptions);
 };

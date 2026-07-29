@@ -3,7 +3,12 @@ import { ClientFunction, Selector } from 'testcafe';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { AIAssistantChat } from 'devextreme-testcafe-models/dataGrid/aiAssistantChat';
 import { createWidget } from '../../../../helpers/createWidget';
-import { AI_INTEGRATION_PAGE, GRID_SELECTOR } from './testHelpers';
+import {
+  AI_INTEGRATION_PAGE,
+  GRID_SELECTOR,
+  resetAIState,
+  setupAIState,
+} from './testHelpers';
 
 const gridOptions = {
   dataSource: [
@@ -33,15 +38,6 @@ const wasAIRequestResolved = ClientFunction(
 );
 
 const resolveAIRequest = ClientFunction(() => { (window as any).__aiState.resolveRequest(); });
-
-const setupAIState = ClientFunction((config: any) => {
-  (window as any).__aiState = {
-    config,
-    abortCalled: false,
-    requestResolved: false,
-    selectAllStarted: false,
-  };
-});
 
 const aiGridOptions = (): any => {
   const state = (window as any).__aiState;
@@ -79,7 +75,8 @@ const aiGridOptions = (): any => {
 };
 
 const createGridWithAI = async (config: Record<string, unknown>): Promise<void> => {
-  await setupAIState(config);
+  await resetAIState();
+  await setupAIState({ config });
 
   return createWidget('dxDataGrid', aiGridOptions);
 };
@@ -189,63 +186,65 @@ test('Closing the popup mid-execution aborts the remaining commands and keeps th
   await t.expect(aiChat.getAIMessage(0).hasRegenerateButton()).notOk();
 
   await t.expect(aiChat.getTextArea().isDisabled).notOk();
-}).before(async () => createWidget('dxDataGrid', () => {
-  const w = window as any;
+}).before(async () => {
+  await resetAIState();
 
-  w.__aiState = { selectAllStarted: false };
+  return createWidget('dxDataGrid', () => {
+    const w = window as any;
 
-  const data = Array.from({ length: 50 }, (_, i) => ({
-    id: i + 1,
-    name: `Name ${i + 1}`,
-    value: (i + 1) * 10,
-  }));
+    const data = Array.from({ length: 50 }, (_, i) => ({
+      id: i + 1,
+      name: `Name ${i + 1}`,
+      value: (i + 1) * 10,
+    }));
 
-  const store = new w.DevExpress.data.CustomStore({
-    key: 'id',
-    load(opts: any) {
-      if (opts.take !== undefined) {
-        const skip = opts.skip ?? 0;
+    const store = new w.DevExpress.data.CustomStore({
+      key: 'id',
+      load(opts: any) {
+        if (opts.take !== undefined) {
+          const skip = opts.skip ?? 0;
 
-        return Promise.resolve({
-          data: data.slice(skip, skip + opts.take),
-          totalCount: data.length,
+          return Promise.resolve({
+            data: data.slice(skip, skip + opts.take),
+            totalCount: data.length,
+          });
+        }
+
+        w.__aiState.selectAllStarted = true;
+
+        return new Promise((resolve) => {
+          w.__aiState.resolveSelectAll = resolve.bind(resolve, data);
         });
-      }
+      },
+      totalCount: () => data.length,
+    });
 
-      w.__aiState.selectAllStarted = true;
-
-      return new Promise((resolve) => {
-        w.__aiState.resolveSelectAll = resolve.bind(resolve, data);
-      });
-    },
-    totalCount: () => data.length,
+    return {
+      dataSource: store,
+      remoteOperations: true,
+      columns: ['id', 'name', 'value'],
+      showBorders: true,
+      selection: { mode: 'multiple' },
+      aiAssistant: {
+        enabled: true,
+        aiIntegration: new w.DevExpress.aiIntegration.AIIntegration({
+          sendRequest() {
+            return {
+              promise: Promise.resolve({
+                actions: [
+                  { name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } },
+                  { name: 'selectAll', args: {} },
+                  { name: 'sorting', args: { dataField: 'value', sortOrder: 'desc' } },
+                ],
+              }),
+              abort: (): void => {},
+            };
+          },
+        }),
+      },
+    };
   });
-
-  return {
-    dataSource: store,
-    remoteOperations: true,
-    columns: ['id', 'name', 'value'],
-    showBorders: true,
-    selection: { mode: 'multiple' },
-    aiAssistant: {
-      enabled: true,
-      aiIntegration: new w.DevExpress.aiIntegration.AIIntegration({
-        sendRequest() {
-          return {
-            promise: Promise.resolve({
-              actions: [
-                { name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } },
-                { name: 'selectAll', args: {} },
-                { name: 'sorting', args: { dataField: 'value', sortOrder: 'desc' } },
-              ],
-            }),
-            abort: (): void => {},
-          };
-        },
-      }),
-    },
-  };
-}));
+});
 
 test('Customized response title is applied to the partial (aborted) result', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
@@ -270,66 +269,68 @@ test('Customized response title is applied to the partial (aborted) result', asy
 
   await t.expect(aiChat.getErrorMessages().count).eql(1);
   await t.expect(aiChat.getAIMessage(0).getHeader().innerText).eql('Stopped before finishing');
-}).before(async () => createWidget('dxDataGrid', () => {
-  const w = window as any;
+}).before(async () => {
+  await resetAIState();
 
-  w.__aiState = { selectAllStarted: false };
+  return createWidget('dxDataGrid', () => {
+    const w = window as any;
 
-  const data = Array.from({ length: 50 }, (_, i) => ({
-    id: i + 1,
-    name: `Name ${i + 1}`,
-    value: (i + 1) * 10,
-  }));
+    const data = Array.from({ length: 50 }, (_, i) => ({
+      id: i + 1,
+      name: `Name ${i + 1}`,
+      value: (i + 1) * 10,
+    }));
 
-  const store = new w.DevExpress.data.CustomStore({
-    key: 'id',
-    load(opts: any) {
-      if (opts.take !== undefined) {
-        const skip = opts.skip ?? 0;
+    const store = new w.DevExpress.data.CustomStore({
+      key: 'id',
+      load(opts: any) {
+        if (opts.take !== undefined) {
+          const skip = opts.skip ?? 0;
 
-        return Promise.resolve({
-          data: data.slice(skip, skip + opts.take),
-          totalCount: data.length,
+          return Promise.resolve({
+            data: data.slice(skip, skip + opts.take),
+            totalCount: data.length,
+          });
+        }
+
+        w.__aiState.selectAllStarted = true;
+
+        return new Promise((resolve) => {
+          w.__aiState.resolveSelectAll = resolve.bind(resolve, data);
         });
-      }
+      },
+      totalCount: () => data.length,
+    });
 
-      w.__aiState.selectAllStarted = true;
-
-      return new Promise((resolve) => {
-        w.__aiState.resolveSelectAll = resolve.bind(resolve, data);
-      });
-    },
-    totalCount: () => data.length,
+    return {
+      dataSource: store,
+      remoteOperations: true,
+      columns: ['id', 'name', 'value'],
+      showBorders: true,
+      selection: { mode: 'multiple' },
+      aiAssistant: {
+        enabled: true,
+        customizeResponseTitle: (status: string) => (status === 'failure'
+          ? 'Stopped before finishing'
+          : 'All done'),
+        aiIntegration: new w.DevExpress.aiIntegration.AIIntegration({
+          sendRequest() {
+            return {
+              promise: Promise.resolve({
+                actions: [
+                  { name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } },
+                  { name: 'selectAll', args: {} },
+                  { name: 'sorting', args: { dataField: 'value', sortOrder: 'desc' } },
+                ],
+              }),
+              abort: (): void => {},
+            };
+          },
+        }),
+      },
+    };
   });
-
-  return {
-    dataSource: store,
-    remoteOperations: true,
-    columns: ['id', 'name', 'value'],
-    showBorders: true,
-    selection: { mode: 'multiple' },
-    aiAssistant: {
-      enabled: true,
-      customizeResponseTitle: (status: string) => (status === 'failure'
-        ? 'Stopped before finishing'
-        : 'All done'),
-      aiIntegration: new w.DevExpress.aiIntegration.AIIntegration({
-        sendRequest() {
-          return {
-            promise: Promise.resolve({
-              actions: [
-                { name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } },
-                { name: 'selectAll', args: {} },
-                { name: 'sorting', args: { dataField: 'value', sortOrder: 'desc' } },
-              ],
-            }),
-            abort: (): void => {},
-          };
-        },
-      }),
-    },
-  };
-}));
+});
 
 test('Disposing the grid mid-request should not throw and ignore the late resolution', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);

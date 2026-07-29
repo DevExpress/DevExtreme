@@ -9,6 +9,7 @@ import {
   HANG,
   baseGrid as gridDefaults,
   createGridWithAIAssistant,
+  resetAIState,
   setupAIState,
   threeRows,
   twoRows,
@@ -22,13 +23,6 @@ const baseGrid = (rows: unknown[]): Record<string, unknown> => ({
   ...gridDefaults,
   dataSource: rows,
 });
-
-const setAssistantExtra = (
-  assistant: Record<string, unknown>,
-): Promise<void> => ClientFunction(
-  () => { (window as any).__aiState.assistantExtra = assistant; },
-  { dependencies: { assistant } },
-)();
 
 const hangingCommandGridOptions = (): any => {
   const data = Array.from({ length: 50 }, (_, i) => ({
@@ -87,10 +81,10 @@ const hangingCommandGridOptions = (): any => {
 
 const createGridWithHangingCommand = async (
   responses: unknown[],
-  assistant: Record<string, unknown> = {},
+  assistantExtra: Record<string, unknown> = {},
 ): Promise<void> => {
-  await setupAIState({}, responses);
-  await setAssistantExtra(assistant);
+  await resetAIState();
+  await setupAIState({ responses, assistantExtra });
 
   return createWidget('dxDataGrid', hangingCommandGridOptions);
 };

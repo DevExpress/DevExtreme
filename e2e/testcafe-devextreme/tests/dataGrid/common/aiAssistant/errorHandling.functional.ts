@@ -9,6 +9,7 @@ import {
   baseGrid as gridDefaults,
   createGridWithAIAssistant,
   getLoggedErrorIds,
+  resetAIState,
   setupAIState,
   threeRows,
 } from './testHelpers';
@@ -47,7 +48,8 @@ const noIntegrationOptions = (): any => ({
 const createGridWithoutIntegration = async (
   base: Record<string, unknown>,
 ): Promise<void> => {
-  await setupAIState(base, []);
+  await resetAIState();
+  await setupAIState({ base });
 
   return createWidget('dxDataGrid', noIntegrationOptions);
 };
