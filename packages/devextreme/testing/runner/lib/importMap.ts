@@ -79,11 +79,12 @@ function withCacheBuster(url: string, cacheBuster: string): string {
 }
 
 /**
- * Collect legacy plugin-style bare imports (`*.json!`, etc.) from suite source.
+ * Collect legacy plugin-style bare imports (`*.json!`, `*.json!json`, etc.) from suite source.
  */
 export function collectPluginSpecifiers(suiteSource: string): string[] {
   const found = new Set<string>();
-  const re = /['"]([^'"]+\.(?:json|css)!)['"]/g;
+  // SystemJS: `file.json!` / `file.json!json` (and css equivalents)
+  const re = /['"]([^'"]+\.(?:json|css)!(?:json|css)?)['"]/g;
   let match = re.exec(suiteSource);
   while (match) {
     found.add(match[1]);
@@ -152,12 +153,13 @@ export function collectPluginSpecifiersFromSuiteTree(suiteFilePath: string): str
 }
 
 function resolveJsonBangToUrl(specifier: string): string | null {
-  // e.g. localization/messages/ja.json! → ESM messages file as module
-  if (!specifier.endsWith('.json!')) {
+  // e.g. localization/messages/ja.json! or cldr fr.json!json → JSON as ESM module
+  const jsonBang = /^(.*\.json)!(?:json)?$/.exec(specifier);
+  if (!jsonBang) {
     return null;
   }
 
-  const withoutBang = specifier.slice(0, -1); // keep .json
+  const withoutBang = jsonBang[1]; // keep .json
 
   // Vendor CLDR JSON (localization.globalize suites)
   if (
@@ -229,6 +231,25 @@ function collectPackageRootEntries(): Record<string, string> {
 }
 
 /**
+ * Prefer CI/layout SystemJS path `artifacts/transpiled/bundles` (includes
+ * generated dx.custom.js). Fall back to source templates for local runs
+ * that have not executed `build:cjs:bundles` yet.
+ */
+function getBundlesImportPrefix(): string {
+  const workspaceRoot = resolveWorkspaceRoot();
+  const candidates = [
+    path.join(process.cwd(), 'artifacts/transpiled/bundles'),
+    path.join(workspaceRoot, 'packages/devextreme/artifacts/transpiled/bundles'),
+  ];
+
+  if (candidates.some((dir) => fs.existsSync(dir))) {
+    return '/packages/devextreme/artifacts/transpiled/bundles/';
+  }
+
+  return '/packages/devextreme/build/bundle-templates/';
+}
+
+/**
  * Builds a browser import map for QUnit native ESM.
  */
 export function buildQunitImportMap({
@@ -251,7 +272,7 @@ export function buildQunitImportMap({
     'viz/': `${ESM_ROOT}/viz/`,
     '__internal/': `${ESM_ROOT}/__internal/`,
     'renovation/': `${ESM_ROOT}/renovation/`,
-    'bundles/': '/packages/devextreme/artifacts/transpiled/bundles/',
+    'bundles/': getBundlesImportPrefix(),
 
     // Exact package-root entries (exporter, color, localization, events, …)
     ...collectPackageRootEntries(),
@@ -413,7 +434,7 @@ export function buildQunitImportMap({
 
   if (suiteFilePath && fs.existsSync(suiteFilePath)) {
     collectPluginSpecifiersFromSuiteTree(suiteFilePath).forEach((specifier) => {
-      if (specifier.endsWith('.json!')) {
+      if (/\.json!(?:json)?$/.test(specifier)) {
         const url = resolveJsonBangToUrl(specifier);
         if (url) {
           rawImports[specifier] = url;

@@ -30,13 +30,43 @@ function isBundleTemplatePath(sourcePath?: string): boolean {
     || normalized.startsWith('packages/devextreme/artifacts/transpiled-esm-npm/bundles/');
 }
 
+const ESM_ARTIFACT_ROOT = '/packages/devextreme/artifacts/transpiled-esm-npm/esm';
+const DX_NODE_MODULES = '/packages/devextreme/node_modules';
+
+/**
+ * SystemJS json plugin specs (`file.json!` / `file.json!json`) must not stay as
+ * bare specifiers under a package prefix map — browsers resolve
+ * `devextreme-cldr-data/fr.json!json` to a literal path with `!json` → 404.
+ * Rewrite to an absolute URL the static server already serves as ESM.
+ */
+function normalizeJsonPluginSpecifier(spec: string): string | null {
+  const jsonBang = /^(.*\.json)!(?:json)?$/.exec(spec);
+  if (!jsonBang) {
+    return null;
+  }
+
+  const jsonPath = jsonBang[1];
+  if (jsonPath.startsWith('devextreme-cldr-data/') || jsonPath.startsWith('cldr-core/')) {
+    return `${DX_NODE_MODULES}/${jsonPath}?esm-export=1`;
+  }
+  if (jsonPath.startsWith('.') || jsonPath.startsWith('/')) {
+    return `${jsonPath}?esm-export=1`;
+  }
+  return `${ESM_ARTIFACT_ROOT}/${jsonPath}?esm-export=1`;
+}
+
 function normalizeRequireSpecifierForEsm(specWithQuotes: string, sourcePath?: string): string {
+  const quote = specWithQuotes[0];
+  const spec = specWithQuotes.slice(1, -1);
+
+  const jsonUrl = normalizeJsonPluginSpecifier(spec);
+  if (jsonUrl) {
+    return `${quote}${jsonUrl}${quote}`;
+  }
+
   if (!isBundleTemplatePath(sourcePath)) {
     return specWithQuotes;
   }
-
-  const quote = specWithQuotes[0];
-  const spec = specWithQuotes.slice(1, -1);
 
   // Bundle template CJS requires are authored relative to bundler sources.
   // For browser ESM loader they must be bare package-style aliases.
@@ -101,7 +131,7 @@ function rewriteRemainingRequires(source: string, sourcePath?: string): string {
   const next = source.replace(
     // SPEC already includes a capturing group — do not wrap it again or
     // the replace callback's `offset` argument shifts.
-    new RegExp(`require\\s*\\(\\s*${SPEC}\\s*\\)`, 'g'),
+    new RegExp(`require\\s*\\(\\s*${SPEC}\\s*\\)(?:\\s*\\.\\s*default\\b)?`, 'g'),
     (match, spec: string, offset: number) => {
       // Bundle templates keep optional widgets commented out, e.g.
       // `/* DevExpress.aspnet = require('../aspnet'); */` — do not hoist those.
@@ -115,6 +145,8 @@ function rewriteRemainingRequires(source: string, sourcePath?: string): string {
         alias = `__dxReq_${requireCounter}`;
         specToAlias.set(normalizedSpec, alias);
       }
+      // `require(x).default` — do not append another `.default` (real ESM defaults
+      // are already on `ns.default`; a second `.default` is undefined).
       return `(${alias}.default ?? { ...${alias} })`;
     },
   );
@@ -160,6 +192,11 @@ function nextImportId(): string {
 function resetRewriteCounters(): void {
   requireCounter = 0;
   importCounter = 0;
+}
+
+/** Drop a leading `.default` — CJS interop already uses `ns.default ?? ns`. */
+function stripLeadingDefaultMember(members: string): string {
+  return members.replace(/^\s*\.\s*default\b/, '').replace(/\s+/g, '');
 }
 
 /**
@@ -316,7 +353,7 @@ export function rewriteRequiresToEsm(source: string, sourcePath?: string): strin
     (_m, kind: string, name: string, spec: string, members: string) => {
       const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
       const ns = nextRequireId();
-      const path = members.replace(/\s+/g, '');
+      const path = stripLeadingDefaultMember(members);
       return `import * as ${ns} from ${normalizedSpec};`
         + `\n${kind} ${name} = (${ns}.default ?? { ...${ns} })${path};`;
     },
@@ -346,7 +383,7 @@ export function rewriteRequiresToEsm(source: string, sourcePath?: string): strin
     (_m, kind: string, name: string, left: string, spec: string, members: string) => {
       const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
       const ns = nextRequireId();
-      const path = members.replace(/\s+/g, '');
+      const path = stripLeadingDefaultMember(members);
       return `import * as ${ns} from ${normalizedSpec};`
         + `\n${kind} ${name} = (${ns}.default ?? { ...${ns} })${path};`
         + `\n${left} = ${name};`;
@@ -390,7 +427,7 @@ export function rewriteRequiresToEsm(source: string, sourcePath?: string): strin
     (_m, left: string, spec: string, members: string) => {
       const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
       const ns = nextRequireId();
-      const path = members.replace(/\s+/g, '');
+      const path = stripLeadingDefaultMember(members);
       return `import * as ${ns} from ${normalizedSpec};`
         + `\n${left} = (${ns}.default ?? { ...${ns} })${path};`;
     },
@@ -590,7 +627,13 @@ export function rewriteQunitTestHelperSource(source: string, sourcePath?: string
   next = rewriteRequiresToEsm(next, sourcePath);
   next = wrapCjsModuleExports(next, sourcePath);
   next = rewriteCjsStyleDefaultImports(next);
-  return next;
+  // Line-based require rewrites can leave `import` after statements; native ESM
+  // is happier (and some browsers fail the module fetch) with imports at top.
+  const { imports, body } = hoistImportsFromSource(next);
+  if (!imports.length) {
+    return next;
+  }
+  return `${[...new Set(imports)].join('\n')}\n${body}\n`;
 }
 
 /**
