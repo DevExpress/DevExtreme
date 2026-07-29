@@ -112,7 +112,7 @@ export interface PopoverProperties extends Omit<Properties,
 
   _describeTarget?: boolean;
 
-  _preventDialogFocus?: boolean;
+  _preventDialogContainerFocus?: boolean;
 }
 class Popover<
   TProperties extends PopoverProperties = PopoverProperties,
@@ -287,6 +287,14 @@ class Popover<
       return $firstFocusableTarget;
     }
 
+    const $overlay = this.$overlayContent();
+    if ($overlay?.length) {
+      if ($overlay.attr('tabindex') !== '-1') {
+        this.setAria('tabindex', '-1', $overlay);
+      }
+      return $overlay;
+    }
+
     return null;
   }
 
@@ -295,11 +303,11 @@ class Popover<
   }
 
   _restoreTargetFocus(): void {
-    const $targets = this._getAriaDescriptionTargets();
+    const $target = this._getAriaDescriptionTargets();
 
-    if ($targets.length) {
+    if ($target.length) {
       // @ts-expect-error trigger should be typed on type 'EventsEngineType'
-      eventsEngine.trigger($targets.first(), 'focus');
+      eventsEngine.trigger($target.first(), 'focus');
     }
   }
 
@@ -939,7 +947,9 @@ class Popover<
 
   _dispose(): void {
     const { visible } = this.option();
-    if (visible && this._getEffectiveAriaRole() === 'dialog') {
+    const activeElement = domAdapter.getActiveElement();
+    const shouldResetActiveElement = this._$content?.get(0)?.contains(activeElement);
+    if (visible && shouldResetActiveElement && this._getEffectiveAriaRole() === 'dialog') {
       this._restoreTargetFocus();
     }
     this._removeTargetAriaDescription();
