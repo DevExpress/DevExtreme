@@ -145,9 +145,7 @@ function rewriteRemainingRequires(source: string, sourcePath?: string): string {
         alias = `__dxReq_${requireCounter}`;
         specToAlias.set(normalizedSpec, alias);
       }
-      // `require(x).default` — do not append another `.default` (real ESM defaults
-      // are already on `ns.default`; a second `.default` is undefined).
-      return `(${alias}.default ?? { ...${alias} })`;
+      return `(${alias}.default ?? ${alias})`;
     },
   );
 
@@ -293,7 +291,7 @@ export function rewriteCjsStyleDefaultImports(source: string): string {
       const bindingPattern = importClauseToDestructuring(named);
       // `let` — some QUnit suites reassign default imports (e.g. `$ = coreRenderer`).
       return `import * as ${ns} from ${spec};`
-        + ` let ${name} = ${ns}.default ?? { ...${ns} };`
+        + ` let ${name} = ${ns}.default ?? ${ns};`
         + ` const ${bindingPattern} = ${merged}`;
     },
   );
@@ -303,7 +301,7 @@ export function rewriteCjsStyleDefaultImports(source: string): string {
       return match;
     }
     const ns = `__dxCjs_${name}`;
-    return `import * as ${ns} from ${spec}; let ${name} = ${ns}.default ?? { ...${ns} }`;
+    return `import * as ${ns} from ${spec}; let ${name} = ${ns}.default ?? ${ns}`;
   });
 
   next = next.replace(NAMED_ONLY_RE, (match, named: string, spec: string) => {
@@ -340,7 +338,7 @@ export function rewriteRequiresToEsm(source: string, sourcePath?: string): strin
       const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
       const ns = nextRequireId();
       return `import * as ${ns} from ${normalizedSpec};`
-        + `\n${kind} ${pattern} = ${ns}.default ?? { ...${ns} };`;
+        + `\n${kind} ${pattern} = ${ns}.default ?? ${ns};`;
     },
   );
 
@@ -355,7 +353,7 @@ export function rewriteRequiresToEsm(source: string, sourcePath?: string): strin
       const ns = nextRequireId();
       const path = stripLeadingDefaultMember(members);
       return `import * as ${ns} from ${normalizedSpec};`
-        + `\n${kind} ${name} = (${ns}.default ?? { ...${ns} })${path};`;
+        + `\n${kind} ${name} = (${ns}.default ?? ${ns})${path};`;
     },
   );
 
@@ -369,7 +367,7 @@ export function rewriteRequiresToEsm(source: string, sourcePath?: string): strin
       const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
       const ns = nextRequireId();
       return `import * as ${ns} from ${normalizedSpec};`
-        + `\n${kind} ${name} = ${ns}.default ?? { ...${ns} };`
+        + `\n${kind} ${name} = ${ns}.default ?? ${ns};`
         + `\n${left} = ${name};`;
     },
   );
@@ -385,7 +383,7 @@ export function rewriteRequiresToEsm(source: string, sourcePath?: string): strin
       const ns = nextRequireId();
       const path = stripLeadingDefaultMember(members);
       return `import * as ${ns} from ${normalizedSpec};`
-        + `\n${kind} ${name} = (${ns}.default ?? { ...${ns} })${path};`
+        + `\n${kind} ${name} = (${ns}.default ?? ${ns})${path};`
         + `\n${left} = ${name};`;
     },
   );
@@ -400,7 +398,7 @@ export function rewriteRequiresToEsm(source: string, sourcePath?: string): strin
       const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
       const ns = nextRequireId();
       return `import * as ${ns} from ${normalizedSpec};`
-        + `\n${kind} ${name} = ${ns}.default ?? { ...${ns} };`;
+        + `\n${kind} ${name} = ${ns}.default ?? ${ns};`;
     },
   );
 
@@ -414,7 +412,7 @@ export function rewriteRequiresToEsm(source: string, sourcePath?: string): strin
       const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
       const ns = nextRequireId();
       return `import * as ${ns} from ${normalizedSpec};`
-        + `\n${left} = ${ns}.default ?? { ...${ns} };`;
+        + `\n${left} = ${ns}.default ?? ${ns};`;
     },
   );
 
@@ -429,7 +427,7 @@ export function rewriteRequiresToEsm(source: string, sourcePath?: string): strin
       const ns = nextRequireId();
       const path = stripLeadingDefaultMember(members);
       return `import * as ${ns} from ${normalizedSpec};`
-        + `\n${left} = (${ns}.default ?? { ...${ns} })${path};`;
+        + `\n${left} = (${ns}.default ?? ${ns})${path};`;
     },
   );
 
@@ -443,7 +441,7 @@ export function rewriteRequiresToEsm(source: string, sourcePath?: string): strin
       const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
       const ns = nextRequireId();
       return `import * as ${ns} from ${normalizedSpec};`
-        + `\n${left} = ${ns}.default ?? { ...${ns} };`;
+        + `\n${left} = ${ns}.default ?? ${ns};`;
     },
   );
 
@@ -695,15 +693,15 @@ ${body}
 };
 
 const __dxAspnet = __dxAspnetFactory(
-  __dxAspnetJquery.default ?? { ...__dxAspnetJquery },
+  __dxAspnetJquery.default ?? __dxAspnetJquery,
   __dxAspnetTemplateEngineRegistry.setTemplateEngine,
   __dxAspnetTemplateBase.renderedCallbacks,
-  __dxAspnetGuid.default ?? { ...__dxAspnetGuid },
-  __dxAspnetValidationEngine.default ?? { ...__dxAspnetValidationEngine },
+__dxAspnetGuid.default ?? __dxAspnetGuid,
+      __dxAspnetValidationEngine.default ?? __dxAspnetValidationEngine,
   __dxAspnetIterator,
   __dxAspnetDom.extractTemplateMarkup,
   __dxAspnetString.encodeHtml,
-  __dxAspnetAjax.default ?? { ...__dxAspnetAjax },
+  __dxAspnetAjax.default ?? __dxAspnetAjax,
 );
 
 export default __dxAspnet;
