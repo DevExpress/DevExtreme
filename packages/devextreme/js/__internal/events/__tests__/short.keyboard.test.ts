@@ -68,11 +68,6 @@ describe('keyboard processor registry disposal (T1332393)', () => {
     expect(keyboard._getProcessor(outsideId)).toBeDefined();
   });
 
-  // Regression guard for the O(N^2) teardown freeze (T1332393): disposing one
-  // subtree must not scale with the number of unrelated processors registered
-  // globally. The old implementation called root.contains() once per registry
-  // entry, so `many` would dwarf `few`; the node-indexed registry makes the
-  // work depend only on the disposed subtree.
   it('does not scan the whole registry when disposing a subtree', () => {
     const disposeOneSubtreeAmong = (unrelatedCount: number): number => {
       for (let i = 0; i < unrelatedCount; i += 1) {
