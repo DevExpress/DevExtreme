@@ -274,8 +274,8 @@ jobs:
           retention-days: 1
 
   build-demos:
+    name: ${{ matrix.SHARD_TOTAL == 1 && format('Build demos ({0})', matrix.FRAMEWORK) || format('Build demos ({0} {1}/{2})', matrix.FRAMEWORK, matrix.SHARD_INDEX, matrix.SHARD_TOTAL) }}
     runs-on: devextreme-shr2
-    name: Build Demos Bundles
     timeout-minutes: 30
     needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
     if: |
@@ -286,6 +286,20 @@ jobs:
       needs.build-devextreme.result == 'success'
     env:
       NODE_OPTIONS: --max-old-space-size=8192
+    strategy:
+      fail-fast: false
+      # Demos now bundle with esbuild, in place, one demo at a time — no more
+      # SystemJS vendor bundle to build. Angular's AOT compile is the slow
+      # part, so it's split into parallel shards (same round-robin scheme
+      # csp-bundle-angular.js already uses for the CSP check below);
+      # React/Vue stay light enough for a single shard.
+      matrix:
+        include:
+          - { FRAMEWORK: React,   SHARD_INDEX: 1, SHARD_TOTAL: 1 }
+          - { FRAMEWORK: Vue,     SHARD_INDEX: 1, SHARD_TOTAL: 1 }
+          - { FRAMEWORK: Angular, SHARD_INDEX: 1, SHARD_TOTAL: 3 }
+          - { FRAMEWORK: Angular, SHARD_INDEX: 2, SHARD_TOTAL: 3 }
+          - { FRAMEWORK: Angular, SHARD_INDEX: 3, SHARD_TOTAL: 3 }
 
     steps:
       - name: Get sources
@@ -331,20 +345,26 @@ jobs:
 #    - name: Link wrappers packages
 #      run: pnpm install --frozen-lockfile
 
-      - name: Prepare bundles
+      - name: Build demo bundles
         working-directory: apps/demos
-        run: pnpm exec nx prepare-bundles
+        env:
+          BUNDLE_IN_PLACE: '1'
+          CSP_SHARD_INDEX: ${{ matrix.SHARD_INDEX }}
+          CSP_SHARD_TOTAL: ${{ matrix.SHARD_TOTAL }}
+        run: node utils/server/csp-bundle.js --framework=${{ matrix.FRAMEWORK }}
 
       - name: Demos - Run tsc
+        if: matrix.FRAMEWORK == 'React' && matrix.SHARD_INDEX == 1 # global check, only needs to run once
         working-directory: apps/demos
         run: pnpm exec tsc --noEmit
 
       - name: Copy build artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: devextreme-bundles
+          name: devextreme-bundles-${{ matrix.FRAMEWORK }}${{ matrix.SHARD_TOTAL != 1 && format('-shard{0}', matrix.SHARD_INDEX) || '' }}
           path: |
-            apps/demos/bundles/
+            apps/demos/Demos/**/bundle.js
+            apps/demos/Demos/**/bundle.css
           retention-days: 1
 
   lint:
@@ -913,18 +933,47 @@ jobs:
       working-directory: apps/demos
       run: pnpm run prepare-js
 
-    - name: Update bundles config
-      working-directory: apps/demos
-      run: pnpm run update-config
-
-    - name: Create bundles dir
-      run: mkdir -p apps/demos/bundles
-
-    - name: Download bundles artifacts
+    # Demo bundles are built once per framework/shard in build-demos and
+    # downloaded here to overlay onto this job's own checkout (same commit),
+    # landing back at Demos/<Widget>/<Demo>/<Framework>/bundle.{js,css} —
+    # exactly where each demo's own index.html already expects them.
+    - name: Download demo bundles (React)
+      if: startsWith(matrix.CONSTEL, 'react')
       uses: actions/download-artifact@v8
       with:
-        name: devextreme-bundles
-        path: apps/demos/bundles
+        name: devextreme-bundles-React
+        path: apps/demos
+
+    - name: Download demo bundles (Vue)
+      if: startsWith(matrix.CONSTEL, 'vue')
+      uses: actions/download-artifact@v8
+      with:
+        name: devextreme-bundles-Vue
+        path: apps/demos
+
+    # Angular is built in 3 shards (see build-demos) but tested in 10 — every
+    # Angular test shard needs all 3 build shards since the two shard schemes
+    # don't line up demo-for-demo.
+    - name: Download demo bundles (Angular shard 1)
+      if: startsWith(matrix.CONSTEL, 'angular')
+      uses: actions/download-artifact@v8
+      with:
+        name: devextreme-bundles-Angular-shard1
+        path: apps/demos
+
+    - name: Download demo bundles (Angular shard 2)
+      if: startsWith(matrix.CONSTEL, 'angular')
+      uses: actions/download-artifact@v8
+      with:
+        name: devextreme-bundles-Angular-shard2
+        path: apps/demos
+
+    - name: Download demo bundles (Angular shard 3)
+      if: startsWith(matrix.CONSTEL, 'angular')
+      uses: actions/download-artifact@v8
+      with:
+        name: devextreme-bundles-Angular-shard3
+        path: apps/demos
 
     - name: Run Web Server
       run: |
@@ -1049,18 +1098,45 @@ jobs:
         working-directory: apps/demos
         run: pnpm run prepare-js
 
-      - name: Update bundles config
-        working-directory: apps/demos
-        run: pnpm run update-config
-
-      - name: Create bundles dir
-        run: mkdir -p apps/demos/bundles
-
-      - name: Download bundles artifacts
+      # Demo bundles are built once per framework/shard in build-demos and
+      # downloaded here to overlay onto this job's own checkout (same commit),
+      # landing back at Demos/<Widget>/<Demo>/<Framework>/bundle.{js,css} —
+      # exactly where each demo's own index.html already expects them.
+      - name: Download demo bundles (React)
+        if: matrix.CONSTEL == 'react'
         uses: actions/download-artifact@v8
         with:
-          name: devextreme-bundles
-          path: apps/demos/bundles
+          name: devextreme-bundles-React
+          path: apps/demos
+
+      - name: Download demo bundles (Vue)
+        if: matrix.CONSTEL == 'vue'
+        uses: actions/download-artifact@v8
+        with:
+          name: devextreme-bundles-Vue
+          path: apps/demos
+
+      # build-demos shards Angular 3 ways regardless of how it's tested here.
+      - name: Download demo bundles (Angular shard 1)
+        if: matrix.CONSTEL == 'angular'
+        uses: actions/download-artifact@v8
+        with:
+          name: devextreme-bundles-Angular-shard1
+          path: apps/demos
+
+      - name: Download demo bundles (Angular shard 2)
+        if: matrix.CONSTEL == 'angular'
+        uses: actions/download-artifact@v8
+        with:
+          name: devextreme-bundles-Angular-shard2
+          path: apps/demos
+
+      - name: Download demo bundles (Angular shard 3)
+        if: matrix.CONSTEL == 'angular'
+        uses: actions/download-artifact@v8
+        with:
+          name: devextreme-bundles-Angular-shard3
+          path: apps/demos
 
       - name: Download changes artifacts
         uses: actions/download-artifact@v8
@@ -1163,8 +1239,6 @@ jobs:
       needs.build-devextreme.result == 'success'
     runs-on: devextreme-shr2
     timeout-minutes: 60
-    env:
-      CSP_USE_BUNDLED: '0'
 
     steps:
     - name: Get sources
@@ -1251,8 +1325,6 @@ jobs:
           - { FRAMEWORK: Angular, SHARD_INDEX: 3, SHARD_TOTAL: 3 }
     runs-on: devextreme-shr2
     timeout-minutes: 60
-    env:
-      CSP_USE_BUNDLED: '1'
 
     steps:
     - name: Get sources
@@ -1296,12 +1368,14 @@ jobs:
       working-directory: apps/demos
       run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
-    # Bundle production-style pages only when the CSP check is configured to
-    # read csp-bundled-demos; otherwise the checker uses SystemJS dev demos.
+    # Every demo is a plain esbuild bundle now, so this is the same build
+    # step build-demos runs — done again here (independently, in parallel)
+    # rather than depending on that job, to keep this check's timing
+    # decoupled from the rest of the pipeline.
     - name: Bundle demos for CSP check
-      if: env.CSP_USE_BUNDLED == '1' || env.CSP_USE_BUNDLED == 'true'
       working-directory: apps/demos
       env:
+        BUNDLE_IN_PLACE: '1'
         CSP_SHARD_INDEX: ${{ matrix.SHARD_INDEX }}
         CSP_SHARD_TOTAL: ${{ matrix.SHARD_TOTAL }}
       run: node utils/server/csp-bundle.js --framework=${{ matrix.FRAMEWORK }}
