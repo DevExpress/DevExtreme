@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { ERROR_MESSAGES as dxErrors } from 'viz/core/errors_warnings';
+import errorsWarnings from 'viz/core/errors_warnings';
 import translator2DModule from 'viz/translators/translator2d';
 import { Range } from 'viz/translators/range';
 import tickGeneratorModule from 'viz/axes/tick_generator';
@@ -8,6 +8,8 @@ import {
     Renderer,
     stubClass,
 } from '../../helpers/vizMocks.js';
+
+const dxErrors = errorsWarnings.ERROR_MESSAGES;
 
 const StubTranslator = stubClass(translator2DModule.Translator2D, {
     updateBusinessRange: function(range) {

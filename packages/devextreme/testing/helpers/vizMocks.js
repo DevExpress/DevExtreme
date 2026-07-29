@@ -10,7 +10,7 @@ import { Series } from 'viz/series/base_series';
 import * as loadingIndicatorModule from 'viz/core/loading_indicator';
 import * as exportMenuModule from 'viz/core/export';
 import rendererModule from 'viz/core/renderers/renderer_default';
-import * as errors from 'viz/core/errors_warnings';
+import errors from 'viz/core/errors_warnings';
 import * as baseWidgetUtils from '__internal/viz/core/base_widget.utils';
 import * as typeUtils from 'core/utils/type';
 
