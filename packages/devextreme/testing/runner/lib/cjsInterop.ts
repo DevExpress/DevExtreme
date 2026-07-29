@@ -467,6 +467,24 @@ function rewriteRequiresToEsmInAmdBody(source: string): string {
   return rewriteRemainingRequires(source);
 }
 
+/**
+ * True for a single-line static import we can safely hoist.
+ * Incomplete multi-line openers (`import {`) must stay with their body lines —
+ * hoisting only the first line yields `import {\nimport …` → Unexpected reserved word.
+ */
+function isCompleteImportLine(line: string): boolean {
+  const trimmed = line.trim();
+  if (!/^import\b/.test(trimmed) || /^import\s*\(/.test(trimmed)) {
+    return false;
+  }
+  // Side-effect: import 'x'; / import "x";
+  if (/^import\s*['"][^'"]+['"]/.test(trimmed)) {
+    return true;
+  }
+  // Complete: … from 'x' (optionally followed by `; let/const …` from CJS interop).
+  return /\bfrom\s*['"][^'"]+['"]/.test(trimmed);
+}
+
 function hoistImportsFromSource(source: string): { imports: string[]; body: string } {
   // Line-pattern / catch-all rewrites may leave `…;import …` on one line.
   const normalized = source.replace(/;(?=\s*import\s)/g, ';\n');
@@ -474,7 +492,7 @@ function hoistImportsFromSource(source: string): { imports: string[]; body: stri
   const bodyLines: string[] = [];
 
   normalized.split('\n').forEach((line) => {
-    if (/^\s*import\s/.test(line)) {
+    if (isCompleteImportLine(line)) {
       imports.push(line.trim());
     } else {
       bodyLines.push(line);
