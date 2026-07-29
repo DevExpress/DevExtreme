@@ -247,7 +247,7 @@ export function buildQunitImportMap({
     'viz/': `${ESM_ROOT}/viz/`,
     '__internal/': `${ESM_ROOT}/__internal/`,
     'renovation/': `${ESM_ROOT}/renovation/`,
-    'bundles/': '/packages/devextreme/build/bundle-templates/',
+    'bundles/': '/packages/devextreme/artifacts/transpiled/bundles/',
 
     // Exact package-root entries (exporter, color, localization, events, …)
     ...collectPackageRootEntries(),

@@ -23,7 +23,11 @@ function isBundleTemplatePath(sourcePath?: string): boolean {
   }
   const normalized = sourcePath.replace(/\\/g, '/');
   return normalized.includes('/packages/devextreme/build/bundle-templates/')
-    || normalized.startsWith('packages/devextreme/build/bundle-templates/');
+    || normalized.startsWith('packages/devextreme/build/bundle-templates/')
+    || normalized.includes('/packages/devextreme/artifacts/transpiled/bundles/')
+    || normalized.startsWith('packages/devextreme/artifacts/transpiled/bundles/')
+    || normalized.includes('/packages/devextreme/artifacts/transpiled-esm-npm/bundles/')
+    || normalized.startsWith('packages/devextreme/artifacts/transpiled-esm-npm/bundles/');
 }
 
 function normalizeRequireSpecifierForEsm(specWithQuotes: string, sourcePath?: string): string {
@@ -678,8 +682,12 @@ export function isQunitTestOrHelperPath(relativePath: string): boolean {
     normalized.includes('/packages/devextreme/testing/tests/')
     || normalized.includes('/packages/devextreme/testing/helpers/')
     || normalized.includes('/packages/devextreme/build/bundle-templates/')
+    || normalized.includes('/packages/devextreme/artifacts/transpiled/bundles/')
+    || normalized.includes('/packages/devextreme/artifacts/transpiled-esm-npm/bundles/')
     || normalized.startsWith('packages/devextreme/testing/tests/')
     || normalized.startsWith('packages/devextreme/testing/helpers/')
     || normalized.startsWith('packages/devextreme/build/bundle-templates/')
+    || normalized.startsWith('packages/devextreme/artifacts/transpiled/bundles/')
+    || normalized.startsWith('packages/devextreme/artifacts/transpiled-esm-npm/bundles/')
   );
 }
