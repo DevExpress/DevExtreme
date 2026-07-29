@@ -221,105 +221,43 @@ const CSP_FRAMEWORK_ALLOWLIST = {
     },
   },
   Angular: {
-    FilterBuilder: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
     // globalize/message.js uses new Function() internally
     'Localization/UsingGlobalize': { 'script-src': ["'unsafe-eval'"] },
   },
   React: {
-    'Slider/Overview': {
-      'font-src': ['https://maxcdn.bootstrapcdn.com'],
-    },
-    'Sortable/Customization': {
-      'font-src': ['https://maxcdn.bootstrapcdn.com'],
-    },
-    'TagBox/Grouping': {
-      'font-src': ['https://maxcdn.bootstrapcdn.com'],
-    },
-    'SelectBox/Grouping': {
-      'font-src': ['https://maxcdn.bootstrapcdn.com'],
-    },
-    'SelectBox/SearchAndEditing': {
-      'font-src': ['https://maxcdn.bootstrapcdn.com'],
-    },
-    Calendar: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
-    CheckBox: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
-    'DateRangeBox/Overview': { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
-    Form: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
-    'Lookup/Templates': { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
     // globalize/message.js uses new Function() internally
     'Localization/UsingGlobalize': { 'script-src': ["'unsafe-eval'"] },
   },
   Vue: {
-    'SelectBox/Grouping': {
-      'font-src': ['https://maxcdn.bootstrapcdn.com'],
-    },
-    Calendar: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
-    CheckBox: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
-    Form: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
-    'Lookup/Templates': { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
     // globalize/message.js uses new Function() internally
     'Localization/UsingGlobalize': { 'script-src': ["'unsafe-eval'"] },
   },
-};
-
-// Vue's SFC loader injects component CSS as inline <style> with no nonce, so the
-// SystemJS dev demos need 'unsafe-inline'. Dropped for bundled demos.
-const CSP_FRAMEWORK_DEFAULTS = {
-  Vue: { 'style-src': ["'unsafe-inline'"] },
-};
-
-// Framework allowlist entries needed only by the SystemJS dev loader (Font Awesome
-// via inline component CSS); dropped when serving bundled demos.
-const SYSTEMJS_ONLY_FRAMEWORK_KEYS = {
-  React: ['Slider/Overview', 'Sortable/Customization', 'TagBox/Grouping',
-    'SelectBox/Grouping', 'SelectBox/SearchAndEditing', 'Calendar', 'CheckBox',
-    'DateRangeBox/Overview', 'Form', 'Lookup/Templates'],
-  Vue: ['SelectBox/Grouping', 'Calendar', 'CheckBox', 'Form', 'Lookup/Templates'],
-  Angular: ['FilterBuilder'],
 };
 
 function generateNonce() {
   return crypto.randomBytes(16).toString('base64');
 }
 
-function isSystemJsOnlyEntry(framework, key) {
-  const list = SYSTEMJS_ONLY_FRAMEWORK_KEYS[framework];
-  return !!(list && list.includes(key));
-}
-
-function buildCspHeader(demoKey, nonce, framework, isBundled) {
+function buildCspHeader(demoKey, nonce, framework) {
   const directives = {};
   for (const [key, values] of Object.entries(CSP_BASE_DIRECTIVES)) {
     directives[key] = [...values];
   }
 
-  if (nonce) {
-    // Only SystemJS dev demos need script-src nonce + strict-dynamic + eval;
-    // bundled demos load external scripts under 'self'.
-    if (!isBundled) {
-      directives['script-src'].push(`'nonce-${nonce}'`);
-      directives['script-src'].push("'strict-dynamic'");
-      directives['script-src'].push("'unsafe-eval'");
-    }
-
-    // Angular stamps this nonce (via ngCspNonce) on the <style> elements it
-    // injects for component styles — needed in dev and bundled mode.
-    if (framework === 'Angular') {
-      directives['style-src'].push(`'nonce-${nonce}'`);
-    }
+  // Angular stamps this nonce (via ngCspNonce) on the <style> elements it
+  // injects for component styles.
+  if (nonce && framework === 'Angular') {
+    directives['style-src'].push(`'nonce-${nonce}'`);
   }
 
   const widgetKey = demoKey && demoKey.split('/')[0];
   const frameworkList = framework && CSP_FRAMEWORK_ALLOWLIST[framework];
 
-  const allowFrameworkEntry = (key) => !(isBundled && isSystemJsOnlyEntry(framework, key));
-
   const allowlists = [
-    !isBundled && framework && CSP_FRAMEWORK_DEFAULTS[framework],
     demoKey && CSP_DEMO_ALLOWLIST[demoKey],
     widgetKey && CSP_DEMO_ALLOWLIST[widgetKey],
-    frameworkList && demoKey && allowFrameworkEntry(demoKey) && frameworkList[demoKey],
-    frameworkList && widgetKey && allowFrameworkEntry(widgetKey) && frameworkList[widgetKey],
+    frameworkList && demoKey && frameworkList[demoKey],
+    frameworkList && widgetKey && frameworkList[widgetKey],
   ].filter(Boolean);
 
   for (const allowlist of allowlists) {
@@ -338,32 +276,28 @@ function buildCspHeader(demoKey, nonce, framework, isBundled) {
   return parts.join('; ');
 }
 
-const DEMO_PATH_RE = /\/(?:Demos|csp-bundled-demos)\/([^/]+)\/([^/]+)\/([^/]+)/;
+const DEMO_PATH_RE = /\/Demos\/([^/]+)\/([^/]+)\/([^/]+)/;
 
 function parseDemoPath(url) {
   const match = url.match(DEMO_PATH_RE);
-  if (!match) return { demoKey: null, framework: null, isBundled: false };
+  if (!match) return { demoKey: null, framework: null };
   return {
     demoKey: `${match[1]}/${match[2]}`,
     framework: match[3],
-    isBundled: url.includes('/csp-bundled-demos/'),
   };
 }
 
 function cspMiddleware(req, res, next) {
-  const { demoKey, framework, isBundled } = parseDemoPath(req.path);
+  const { demoKey, framework } = parseDemoPath(req.path);
 
-  // Dev demos need a nonce for inline scripts; bundled Angular needs one for its
-  // injected component <style> elements.
-  const needsNonce = (!isBundled
-    && (framework === 'Angular' || framework === 'React' || framework === 'Vue'))
-    || (isBundled && framework === 'Angular');
-  const nonce = needsNonce ? generateNonce() : null;
+  // Angular needs a nonce for the component <style> elements it injects.
+  // React/Vue/jQuery demos are plain esbuild bundles with no inline scripts.
+  const nonce = framework === 'Angular' ? generateNonce() : null;
   if (nonce) {
     res.locals.cspNonce = nonce;
   }
 
-  res.setHeader('Content-Security-Policy-Report-Only', buildCspHeader(demoKey, nonce, framework, isBundled));
+  res.setHeader('Content-Security-Policy-Report-Only', buildCspHeader(demoKey, nonce, framework));
   next();
 }
 
@@ -412,13 +346,12 @@ function cspViolationsClearHandler(_req, res) {
 }
 
 const demosBaseDir = resolve(root, 'apps', 'demos', 'Demos');
-const bundledDemosBaseDir = resolve(root, 'apps', 'demos', 'csp-bundled-demos');
 
-const makeIndexHandler = (baseDir) => (request, response) => {
+const demoIndexHandler = (request, response) => {
   const { widget, name, approach } = request.params;
-  const fileSystemPath = resolve(baseDir, widget, name, approach, indexFileName);
+  const fileSystemPath = resolve(demosBaseDir, widget, name, approach, indexFileName);
 
-  if (!fileSystemPath.startsWith(baseDir)) {
+  if (!fileSystemPath.startsWith(demosBaseDir)) {
     response.status(403).send('Forbidden');
     return;
   }
@@ -430,24 +363,16 @@ const makeIndexHandler = (baseDir) => (request, response) => {
     return;
   }
 
-  // Inject nonce into all <script> tags for Angular/React/Vue demos.
-  // 'strict-dynamic' in CSP ignores 'self', so <script src> tags also need the nonce.
-  // 'strict-dynamic' propagates trust to scripts dynamically created by SystemJS.
+  // Angular stamps ngCspNonce on <demo-app> so its injected component <style>
+  // elements carry the nonce the CSP header's style-src requires.
   const { cspNonce } = response.locals;
-  if (cspNonce) {
-    fileContent = fileContent.replace(/<script(?=\s|>)/g, `<script nonce="${cspNonce}"`);
-
-    if (approach === 'Angular') {
-      fileContent = fileContent.replace(/<demo-app(?=[\s>])/, `<demo-app ngCspNonce="${cspNonce}"`);
-    }
+  if (cspNonce && approach === 'Angular') {
+    fileContent = fileContent.replace(/<demo-app(?=[\s>])/, `<demo-app ngCspNonce="${cspNonce}"`);
   }
 
   response.set('Content-Type', 'text/html');
   response.send(fileContent);
 };
-
-const demoIndexHandler = makeIndexHandler(demosBaseDir);
-const bundledIndexHandler = makeIndexHandler(bundledDemosBaseDir);
 
 const app = express();
 app.use(cspMiddleware);
@@ -463,10 +388,6 @@ app.delete('/csp-violations', cspViolationsClearHandler);
 
 app.get('/apps/demos/Demos/:widget/:name/:approach', demoIndexLimiter, demoIndexHandler);
 app.get(`/apps/demos/Demos/:widget/:name/:approach/${indexFileName}`, demoIndexLimiter, demoIndexHandler);
-
-// Route bundled index.html through the handler so Angular gets ngCspNonce stamped.
-app.get('/apps/demos/csp-bundled-demos/:widget/:name/:approach', demoIndexLimiter, bundledIndexHandler);
-app.get(`/apps/demos/csp-bundled-demos/:widget/:name/:approach/${indexFileName}`, demoIndexLimiter, bundledIndexHandler);
 
 app.use(express.static(root, { index: [indexFileName] }));
 
