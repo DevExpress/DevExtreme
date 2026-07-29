@@ -726,10 +726,15 @@ const isVisibleWidthChangePendingForColumn = (that: ColumnsController, columnInd
     || !!columnChanges.columnIndices?.includes(columnIndex);
 };
 
-const invalidateStaleVisibleWidth = (that: ColumnsController, column): void => {
-  if (isDefined(column.visibleWidth) && !isVisibleWidthChangePendingForColumn(that, column.index)) {
-    column.visibleWidth = null;
-  }
+const invalidateStaleVisibleWidths = (that: ColumnsController): void => {
+  that._columns.forEach((column) => {
+    const shouldInvalidateVisibleWidth = isDefined(column.visibleWidth)
+      && !isVisibleWidthChangePendingForColumn(that, column.index);
+
+    if (shouldInvalidateVisibleWidth) {
+      column.visibleWidth = null;
+    }
+  });
 };
 
 export const columnOptionCore = function (that: ColumnsController, column, optionName, value?, notFireEvent?) {
@@ -758,7 +763,7 @@ export const columnOptionCore = function (that: ColumnsController, column, optio
     }
 
     if (optionName === 'width') {
-      invalidateStaleVisibleWidth(that, column);
+      invalidateStaleVisibleWidths(that);
     }
 
     const optionSetter = compileSetter(optionName);

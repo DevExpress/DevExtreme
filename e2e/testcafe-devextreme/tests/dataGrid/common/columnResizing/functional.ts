@@ -88,6 +88,39 @@ test('DataGrid - column width changed via columnOption should be applied immedia
   });
 });
 
+// T1329677
+test('DataGrid - other column width should be updated immediately when another column width is changed via columnOption (T1329677)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  const firstColumnOldWidth = await dataGrid.getDataCell(0, 0).element.clientWidth;
+
+  await dataGrid.apiColumnOption('Col2', 'width', 200);
+
+  const firstColumnNewWidth = await dataGrid.getDataCell(0, 0).element.clientWidth;
+
+  await t
+    .expect(firstColumnOldWidth).notEql(firstColumnNewWidth, 'first column width should be changed');
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      Col1: 'Test 1',
+      Col2: 'Test 2',
+      Col3: 'Test 3',
+      Col4: 'Test 4',
+    }],
+    width: 400,
+    columnAutoWidth: true,
+    columns: [
+      { dataField: 'Col1' },
+      { dataField: 'Col2' },
+      { dataField: 'Col3' },
+      { dataField: 'Col4' },
+    ],
+  });
+});
+
 const tryResizeHeaderInBandArea = (
   dataGrid: DataGrid,
   columnIndex: number,
