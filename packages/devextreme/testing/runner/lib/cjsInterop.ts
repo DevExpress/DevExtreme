@@ -43,6 +43,51 @@ function normalizeRequireSpecifierForEsm(specWithQuotes: string, sourcePath?: st
   return specWithQuotes;
 }
 
+function skipQuotedString(source: string, start: number): number {
+  const quote = source[start];
+  let i = start + 1;
+  while (i < source.length) {
+    const ch = source[i];
+    if (ch === '\\') {
+      i += 2;
+    } else if (ch === quote) {
+      return i + 1;
+    } else {
+      i += 1;
+    }
+  }
+  return source.length;
+}
+
+/** True when `offset` lies inside a block or line comment (strings are skipped). */
+function isOffsetInsideComment(source: string, offset: number): boolean {
+  let i = 0;
+  while (i < offset) {
+    if (source.startsWith('/*', i)) {
+      const end = source.indexOf('*/', i + 2);
+      if (end < 0 || offset < end + 2) {
+        return true;
+      }
+      i = end + 2;
+    } else if (source.startsWith('//', i)) {
+      const end = source.indexOf('\n', i);
+      const lineEnd = end < 0 ? source.length : end;
+      if (offset < lineEnd) {
+        return true;
+      }
+      i = lineEnd;
+    } else {
+      const ch = source[i];
+      if (ch === '"' || ch === '\'' || ch === '`') {
+        i = skipQuotedString(source, i);
+      } else {
+        i += 1;
+      }
+    }
+  }
+  return false;
+}
+
 function rewriteRemainingRequires(source: string, sourcePath?: string): string {
   if (!/\brequire\s*\(/.test(source)) {
     return source;
@@ -50,8 +95,15 @@ function rewriteRemainingRequires(source: string, sourcePath?: string): string {
 
   const specToAlias = new Map<string, string>();
   const next = source.replace(
-    new RegExp(`require\\s*\\(\\s*(${SPEC})\\s*\\)`, 'g'),
-    (_m, spec: string) => {
+    // SPEC already includes a capturing group — do not wrap it again or
+    // the replace callback's `offset` argument shifts.
+    new RegExp(`require\\s*\\(\\s*${SPEC}\\s*\\)`, 'g'),
+    (match, spec: string, offset: number) => {
+      // Bundle templates keep optional widgets commented out, e.g.
+      // `/* DevExpress.aspnet = require('../aspnet'); */` — do not hoist those.
+      if (isOffsetInsideComment(source, offset)) {
+        return match;
+      }
       const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
       let alias = specToAlias.get(normalizedSpec);
       if (!alias) {
