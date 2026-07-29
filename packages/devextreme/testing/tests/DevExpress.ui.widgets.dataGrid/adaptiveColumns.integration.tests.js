@@ -398,7 +398,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         // assert
         // tab
         assert.ok($commandCell.hasClass('dx-command-adaptive-hidden'), 'command cell has appropriate class');
-        assert.notOk($commandCell.hasClass('dx-focused', 'command cell should not be focused'));
+        assert.notOk($commandCell.hasClass('dx-focused'), 'command cell should not be focused');
 
         // act
         dataGrid.focus($firstNextRow);
@@ -408,7 +408,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         // assert
         // shift tab
         assert.ok($lastDataCell.hasClass('dx-focused', 'last cell in row should be focused'));
-        assert.notOk($commandCell.hasClass('dx-focused', 'command cell should not be focused'));
+        assert.notOk($commandCell.hasClass('dx-focused'), 'command cell should not be focused');
 
         // act
         dataGrid.focus($lastDataCell);
@@ -417,7 +417,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
 
         // assert
         // right arrow
-        assert.notOk($commandCell.hasClass('dx-focused', 'command cell should not be focused'));
+        assert.notOk($commandCell.hasClass('dx-focused'), 'command cell should not be focused');
 
         // act
         dataGrid.option('width', 500);
