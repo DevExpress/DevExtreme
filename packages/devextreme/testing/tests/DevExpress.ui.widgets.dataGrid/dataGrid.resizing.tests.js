@@ -475,7 +475,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         dataGrid.updateDimensions();
 
         // assert
-        assert.roughEqual($('#dataGrid').find('.dx-datagrid').height(), 1, 298);
+        assert.roughEqual($('#dataGrid').find('.dx-datagrid').height(), 298, 1);
     });
 
     QUnit.test('update column widths when rendering to invisible container', function(assert) {
@@ -495,7 +495,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $container.trigger('dxshown');
 
         // assert
-        assert.roughEqual(dataGrid.getVisibleColumns()[0].visibleWidth, 0.001, 50);
+        assert.roughEqual(dataGrid.getVisibleColumns()[0].visibleWidth, 50, 0.001);
     });
 
     QUnit.test('height from extern styles', function(assert) {
@@ -750,7 +750,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.equal($dataGrid.width(), 200);
-        assert.roughEqual($dataGrid.find('.dx-row').first().find('td').last()[0].getBoundingClientRect().width, 0.001, 50);
+        assert.roughEqual($dataGrid.find('.dx-row').first().find('td').last()[0].getBoundingClientRect().width, 50, 0.001);
 
         // act
         $('#container').width(100);
