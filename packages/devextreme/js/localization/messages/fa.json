@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "فیلدهای داده ای را به اینجا انتقال دهید (درگ نمایید)",
         "dxPivotGrid-rowFieldArea": "فیلدهای مربوط به سطر را به اینجا انتقال دهید (درگ نمایید)",
         "dxPivotGrid-filterFieldArea": "فیلدهای مربوط به فیلتر را به اینجا انتقال دهید (درگ نمایید)",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "از {0} تا {1}",
         "dxScheduler-ariaLabel": "زمانبندی. نمای {0}: {1} با {2} قرار ملاقات",
@@ -491,6 +495,8 @@
         "dxFilterBuilder-filterAriaItemOperation": "عملیات مورد",
         "dxFilterBuilder-filterAriaItemValue": "مقدار مورد",
 
+        "dxHtmlEditor-editorAriaLabel": "Editor content",
+        "dxHtmlEditor-ariaEscapeInstruction": "Press Ctrl + Shift + Up arrow or Ctrl + Shift + Down arrow to move focus out of the editing area",
         "dxHtmlEditor-dialogColorCaption": "تغییر رنگ قلم",
         "dxHtmlEditor-dialogBackgroundCaption": "تغییر رنگ پس زمینه",
         "dxHtmlEditor-dialogLinkCaption": "افزودن پیوند",

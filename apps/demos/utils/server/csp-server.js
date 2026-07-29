@@ -91,6 +91,9 @@ const CSP_DEMO_ALLOWLIST = {
   'DataGrid/RemoteVirtualScrolling': {
     'img-src': ['data:'],
   },
+  'DataGrid/SemanticSearch': {
+    'img-src': ['data:'],
+  },
   'DataGrid/VirtualScrolling': {
     'img-src': ['data:'],
   },

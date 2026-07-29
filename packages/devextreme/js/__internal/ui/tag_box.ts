@@ -426,13 +426,13 @@ class TagBox<
 
       selectAllMode: 'page',
 
-      onSelectAllValueChanged: null,
+      onSelectAllValueChanged: undefined,
 
       maxDisplayedTags: undefined,
 
       showMultiTagOnly: true,
 
-      onMultiTagPreparing: null,
+      onMultiTagPreparing: undefined,
 
       multiline: true,
 

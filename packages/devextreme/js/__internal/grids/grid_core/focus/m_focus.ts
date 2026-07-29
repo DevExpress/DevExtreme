@@ -677,30 +677,37 @@ const data = (Base: ModuleType<DataController>) => class FocusDataControllerExte
   }
 
   protected _calculateGlobalRowIndexByFlatData(key, groupFilter, useGroup) {
-    const that = this;
     // @ts-expect-error
     const deferred = new Deferred();
-    const dataSource = that._dataSource;
+    const dataSource = this._dataSource;
 
     if (Array.isArray(key) || isNewRowTempKey(key)) {
       return deferred.resolve(-1).promise();
     }
 
-    let filter = that._generateFilterByKey(key);
+    let filter = this._generateFilterByKey(key);
 
     dataSource.load({
-      filter: that._concatWithCombinedFilter(filter),
+      filter: this._concatWithCombinedFilter(filter),
       skip: 0,
       take: 1,
     }).done((data) => {
+      if (this._dataSource !== dataSource) {
+        deferred.resolve(-1);
+        return;
+      }
       if (data.length > 0) {
-        filter = that._generateOperationFilterByKey(key, data[0], useGroup);
+        filter = this._generateOperationFilterByKey(key, data[0], useGroup);
         dataSource.load({
-          filter: that._concatWithCombinedFilter(filter, groupFilter),
+          filter: this._concatWithCombinedFilter(filter, groupFilter),
           skip: 0,
           take: 1,
           requireTotalCount: true,
         }).done((_, extra) => {
+          if (this._dataSource !== dataSource) {
+            deferred.resolve(-1);
+            return;
+          }
           deferred.resolve(extra.totalCount);
         });
       } else {

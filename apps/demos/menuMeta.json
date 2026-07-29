@@ -37,6 +37,35 @@
                 "Modules": "openai"
               }
             ]
+          },
+          {
+            "Name": "Semantic Search",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Semantic Search",
+                "Name": "SemanticSearch",
+                "Widget": "DataGrid",
+                "Badge": "AI",
+                "DemoType": "Web",
+                "Modules": "devextreme-aspnet-data-nojquery",
+                "MvcAdditionalFiles": [
+                  "/DataProviders/SmartFilterProvider.cs",
+                  "/Controllers/ApiControllers/DataGridSemanticSearchController.cs",
+                  "/Services/EmbeddingsInitializerService.cs",
+                  "/Models/DataGrid/DictionaryItem.cs",
+                  "/Models/SampleData/DictionaryItems.cs"
+                ],
+                "BackendFiles": [
+                  "SmartFilterProvider.cs",
+                  "DataGridSemanticSearchController.cs",
+                  "EmbeddingsInitializerService.cs",
+                  "DictionaryItem.cs"
+                ],
+                "TopLevel": true,
+                "Equivalents": "AI-Powered Search, Smart Search, Context-Aware Search, Natural Language Search, AI Search, Semantic Retrieval, Similarity Search"
+              }
+            ]
           }
         ]
       },
@@ -312,6 +341,28 @@
                   "/Models/SampleData/DataGridEmployees.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "Semantic Search",
+                "Name": "SemanticSearch",
+                "Widget": "DataGrid",
+                "Badge": "AI",
+                "DemoType": "Web",
+                "Modules": "devextreme-aspnet-data-nojquery",
+                "MvcAdditionalFiles": [
+                  "/DataProviders/SmartFilterProvider.cs",
+                  "/Controllers/ApiControllers/DataGridSemanticSearchController.cs",
+                  "/Services/EmbeddingsInitializerService.cs",
+                  "/Models/DataGrid/DictionaryItem.cs",
+                  "/Models/SampleData/DictionaryItems.cs"
+                ],
+                "BackendFiles": [
+                  "SmartFilterProvider.cs",
+                  "DataGridSemanticSearchController.cs",
+                  "EmbeddingsInitializerService.cs",
+                  "DictionaryItem.cs"
+                ],
+                "Equivalents": "AI-Powered Search, Smart Search, Context-Aware Search, Natural Language Search, AI Search, Semantic Retrieval, Similarity Search"
               }
             ]
           },

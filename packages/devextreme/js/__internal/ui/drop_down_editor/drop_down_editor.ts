@@ -33,9 +33,10 @@ import type { Properties } from '@js/ui/drop_down_editor/ui.drop_down_editor';
 import type { InitializedEvent as PopupInitializedEvent, Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import errors from '@js/ui/widget/ui.errors';
-import Widget from '@js/ui/widget/ui.widget';
+import { getComponentInstance } from '@ts/core/utils/m_public_component';
 import { focused } from '@ts/core/utils/m_selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
+import Widget from '@ts/core/widget/widget';
 import type { PositioningEvent } from '@ts/ui/overlay/overlay';
 import TextBox from '@ts/ui/text_box/text_box';
 
@@ -176,10 +177,12 @@ class DropDownEditor<
           : this._getFirstPopupElement();
 
         if ($focusableElement) {
-          // @ts-expect-error should be added on EventsEngine level
-          eventsEngine.trigger($focusableElement, 'focus');
-          // @ts-expect-error should be added on dxElementWrapper level
-          $focusableElement.select();
+          const $target = getComponentInstance<Widget>($focusableElement)?._focusTarget?.();
+          const $focusTarget = $target?.length ? $target : $focusableElement;
+          // @ts-expect-error ts-error should be added on EventsEngine level
+          eventsEngine.trigger($focusTarget, 'focus');
+          // @ts-expect-error ts-error should be added on dxElementWrapper level
+          $focusTarget.select();
         }
         e.preventDefault();
       },
@@ -1039,7 +1042,7 @@ class DropDownEditor<
     super._clean();
   }
 
-  _setPopupOption(...args: [string, unknown?]): void {
+  _setPopupOption(...args: [string, unknown?] | [Record<string, unknown>]): void {
     this._setWidgetOption('_popup', args);
   }
 
@@ -1125,7 +1128,6 @@ class DropDownEditor<
   }
 
   _popupOptionChanged(args: OptionChanged<TProperties>): void {
-    // @ts-expect-error Add getOptionsFromContainer static method to Widget
     const options = Widget.getOptionsFromContainer(args);
 
     this._setPopupOption(options);

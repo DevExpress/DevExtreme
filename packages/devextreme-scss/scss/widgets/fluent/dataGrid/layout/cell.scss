@@ -87,11 +87,11 @@
   background-color: $datagrid-summary-bg;
 }
 
-// (0,4,1)
+// (0,4,1) T1303478
 .dx-datagrid-rowsview .dx-row.dx-group-row td.dx-datagrid-sticky-column,
 .dx-datagrid-rowsview .dx-row.dx-group-row td.dx-datagrid-sticky-column-left,
 .dx-datagrid-rowsview .dx-row.dx-group-row td.dx-datagrid-sticky-column-right {
-  background-color: $datagrid-group-row-bg;
+  background-color: inherit;
 }
 
 // (0,5,0)

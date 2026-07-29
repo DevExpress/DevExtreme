@@ -284,6 +284,10 @@
         "dxPivotGrid-dataFieldArea": "Veri Alanlarını Buraya Bırak",
         "dxPivotGrid-rowFieldArea": "Satır Alanlarını Buraya Bırak",
         "dxPivotGrid-filterFieldArea": "Filtre Alanlarını Buraya Bırak",
+        "dxPivotGrid-ariaFieldLabel": "Field: {0}",
+        "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
+        "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
+        "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
 
         "dxScheduler-dateRange": "{0} - {1}",
         "dxScheduler-ariaLabel": "Zamanlayıcı. {0} görünümü: {1}, {2} randevu",
@@ -491,6 +495,8 @@
         "dxFilterBuilder-filterAriaItemOperation": "Öğe işlemi",
         "dxFilterBuilder-filterAriaItemValue": "Öğe değeri",
 
+        "dxHtmlEditor-editorAriaLabel": "Editor content",
+        "dxHtmlEditor-ariaEscapeInstruction": "Press Ctrl + Shift + Up arrow or Ctrl + Shift + Down arrow to move focus out of the editing area",
         "dxHtmlEditor-dialogColorCaption": "Yazı Tipi Rengini Değiştir",
         "dxHtmlEditor-dialogBackgroundCaption": "Arka Plan Rengini Değiştir",
         "dxHtmlEditor-dialogLinkCaption": "Link Ekle",

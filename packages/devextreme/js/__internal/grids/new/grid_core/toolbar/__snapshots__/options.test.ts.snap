@@ -3,7 +3,7 @@
 exports[`Options disabled when it is 'false' Toolbar should not be disabled 1`] = `
 <div>
   <div
-    class="dx-toolbar dx-widget dx-visibility-change-handler dx-collection dx-toolbar-mini"
+    class="dx-toolbar dx-toolbar-focus-mode dx-widget dx-visibility-change-handler dx-collection dx-toolbar-mini"
     role="toolbar"
   >
     <div
@@ -30,7 +30,7 @@ exports[`Options disabled when it is 'true' Toolbar should be disabled 1`] = `
 <div>
   <div
     aria-disabled="true"
-    class="dx-toolbar dx-widget dx-state-disabled dx-visibility-change-handler dx-collection dx-toolbar-mini"
+    class="dx-toolbar dx-toolbar-focus-mode dx-widget dx-state-disabled dx-visibility-change-handler dx-collection dx-toolbar-mini"
     role="toolbar"
   >
     <div
@@ -62,7 +62,7 @@ exports[`Options items when these are not set Toolbar should be hidden 1`] = `
 exports[`Options items when these are set Toolbar should be visible 1`] = `
 <div>
   <div
-    class="dx-toolbar dx-widget dx-visibility-change-handler dx-collection"
+    class="dx-toolbar dx-toolbar-focus-mode dx-widget dx-visibility-change-handler dx-collection"
     role="toolbar"
   >
     <div
@@ -82,7 +82,7 @@ exports[`Options items when these are set Toolbar should be visible 1`] = `
               aria-label="button1"
               class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-text"
               role="button"
-              tabindex="0"
+              tabindex="-1"
             >
               <div
                 class="dx-button-content"
@@ -115,7 +115,7 @@ exports[`Options items when these are set Toolbar should be visible 1`] = `
               aria-label="button2"
               class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-text"
               role="button"
-              tabindex="0"
+              tabindex="-1"
             >
               <div
                 class="dx-button-content"
@@ -144,7 +144,7 @@ exports[`Options visilbe when changing it to 'false' at runtime Toolbar should b
 exports[`Options visilbe when changing it to 'true' at runtime Toolbar should be visible 1`] = `
 <div>
   <div
-    class="dx-toolbar dx-widget dx-visibility-change-handler dx-collection dx-toolbar-mini"
+    class="dx-toolbar dx-toolbar-focus-mode dx-widget dx-visibility-change-handler dx-collection dx-toolbar-mini"
     role="toolbar"
   >
     <div
@@ -176,7 +176,7 @@ exports[`Options visilbe when it is 'false' Toolbar should be hidden 1`] = `
 exports[`Options visilbe when it is 'true' Toolbar should be visible 1`] = `
 <div>
   <div
-    class="dx-toolbar dx-widget dx-visibility-change-handler dx-collection dx-toolbar-mini"
+    class="dx-toolbar dx-toolbar-focus-mode dx-widget dx-visibility-change-handler dx-collection dx-toolbar-mini"
     role="toolbar"
   >
     <div

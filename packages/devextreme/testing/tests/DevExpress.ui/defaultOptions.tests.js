@@ -69,6 +69,7 @@ import TileView from '__internal/ui/tile_view';
 import FileUploader from 'ui/file_uploader';
 import Form from 'ui/form';
 import ValidationMessage from 'ui/validation_message';
+import Toolbar from '__internal/ui/toolbar/toolbar';
 
 const DEFAULT_MARGIN = 20;
 
@@ -1897,5 +1898,21 @@ testComponentDefaults(Scheduler,
     },
     function() {
         themes.isMaterial = this.origIsMaterial;
+    }
+);
+
+testComponentDefaults(Toolbar,
+    {},
+    {
+        renderAs: 'topToolbar',
+        grouped: false,
+        useFlatButtons: false,
+        useDefaultButtons: false,
+        focusStateEnabled: true,
+        allowKeyboardNavigation: true,
+        loopItemFocus: true,
+        menuItemTemplate: 'menuItem',
+        overflowMenuVisible: false,
+        multiline: false,
     }
 );

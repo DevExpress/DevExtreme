@@ -133,10 +133,10 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get colorizer(): { colorCodeField?: string | undefined, colorizeGroups?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, range?: Array<number>, type?: TreeMapColorizerType | undefined } {
+    get colorizer(): { colorCodeField?: string | undefined, colorizeGroups?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, range?: Array<number> | undefined, type?: TreeMapColorizerType | undefined } {
         return this._getOption('colorizer');
     }
-    set colorizer(value: { colorCodeField?: string | undefined, colorizeGroups?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, range?: Array<number>, type?: TreeMapColorizerType | undefined }) {
+    set colorizer(value: { colorCodeField?: string | undefined, colorizeGroups?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, range?: Array<number> | undefined, type?: TreeMapColorizerType | undefined }) {
         this._setOption('colorizer', value);
     }
 
@@ -419,10 +419,10 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get title(): string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap } {
+    get title(): string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string | undefined, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap } {
         return this._getOption('title');
     }
-    set title(value: string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }) {
+    set title(value: string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string | undefined, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }) {
         this._setOption('title', value);
     }
 
@@ -583,7 +583,7 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() colorizerChange: EventEmitter<{ colorCodeField?: string | undefined, colorizeGroups?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, range?: Array<number>, type?: TreeMapColorizerType | undefined }>;
+    @Output() colorizerChange: EventEmitter<{ colorCodeField?: string | undefined, colorizeGroups?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, range?: Array<number> | undefined, type?: TreeMapColorizerType | undefined }>;
 
     /**
     
@@ -737,7 +737,7 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() titleChange: EventEmitter<string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }>;
+    @Output() titleChange: EventEmitter<string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string | undefined, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }>;
 
     /**
     

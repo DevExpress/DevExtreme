@@ -112,6 +112,12 @@ export interface dxToolbarOptions<
 > extends CollectionWidgetOptions<dxToolbar<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
+     * @default true
+     * @public
+     */
+    allowKeyboardNavigation?: boolean;
+    /**
+     * @docid
      * @type string | Array<string | dxToolbarItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public

@@ -176,10 +176,10 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get maxSize(): number {
+    get maxSize(): null | number {
         return this._getOption('maxSize');
     }
-    set maxSize(value: number) {
+    set maxSize(value: null | number) {
         this._setOption('maxSize', value);
     }
 
@@ -189,10 +189,10 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get minSize(): number {
+    get minSize(): null | number {
         return this._getOption('minSize');
     }
-    set minSize(value: number) {
+    set minSize(value: null | number) {
         this._setOption('minSize', value);
     }
 
@@ -405,14 +405,14 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxSizeChange: EventEmitter<number>;
+    @Output() maxSizeChange: EventEmitter<null | number>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minSizeChange: EventEmitter<number>;
+    @Output() minSizeChange: EventEmitter<null | number>;
 
     /**
     

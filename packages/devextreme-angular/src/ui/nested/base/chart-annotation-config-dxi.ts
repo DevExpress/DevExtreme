@@ -257,10 +257,10 @@ export abstract class DxiChartAnnotationConfig extends CollectionNestedOption {
         this._setOption('radius', value);
     }
 
-    get coordinates(): Array<number> {
+    get coordinates(): undefined | Array<number> {
         return this._getOption('coordinates');
     }
-    set coordinates(value: Array<number>) {
+    set coordinates(value: undefined | Array<number>) {
         this._setOption('coordinates', value);
     }
 }

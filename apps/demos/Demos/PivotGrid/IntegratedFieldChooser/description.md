@@ -1,11 +1,11 @@
 The field chooser allows users to manage pivot grid fields. You can configure the field chooser integrated into the PivotGrid or [use it as a standalone component](https://js.devexpress.com/Demos/WidgetsGallery/Demo/PivotGrid/StandaloneFieldChooser/). This example demonstrates the integrated field chooser. To open the field chooser window, click the icon in the top-left corner or right-click a row or column header and select Show Field Chooser from the context menu.
 <!--split-->
 
-### Enable the Integrated Field Chooser
+## Enable the Integrated Field Chooser
 
 The integrated field chooser is configured in the [fieldChooser](/Documentation/ApiReference/UI_Components/dxPivotGrid/Configuration/fieldChooser/) object. To enable the field chooser, set the object's [enabled](/Documentation/ApiReference/UI_Components/dxPivotGrid/Configuration/fieldChooser/#enabled) property to **true**. This setting adds the Field Chooser icon to the PivotGrid and the Show Field Chooser command to the context menu.
 
-### Organize Fields
+## Organize Fields
 
 The field chooser window displays five field sections:
 
@@ -25,6 +25,6 @@ Users can drag and drop fields between the sections. When users move a field to 
 
 After a user finishes moving fields between sections, the changes can either be applied immediately or after the user clicks OK. Use the **fieldChooser**.[applyChangesMode](/Documentation/ApiReference/UI_Components/dxPivotGrid/Configuration/fieldChooser/#applyChangesMode) property to set the desired mode. In this demo, you can change this property at runtime.
 
-### Enable Search
+## Enable Search
 
 Users can search in the All Fields section if you enable the **fieldChooser**.[allowSearch](/Documentation/ApiReference/UI_Components/dxPivotGrid/Configuration/fieldChooser/#allowSearch) property as shown in this demo. In addition, you can specify the [searchTimeout](/Documentation/ApiReference/UI_Components/dxPivotGrid/Configuration/fieldChooser/#searchTimeout) property to delay the search.

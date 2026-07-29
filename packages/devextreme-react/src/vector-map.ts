@@ -29,8 +29,8 @@ type IVectorMapOptionsNarrowedEvents = {
   onFileSaving?: ((e: FileSavingEvent) => void);
   onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
-  onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
-  onTooltipShown?: ((e: TooltipShownEvent) => void);
+  onTooltipHidden?: ((e: TooltipHiddenEvent) => void) | undefined;
+  onTooltipShown?: ((e: TooltipShownEvent) => void) | undefined;
 }
 
 type IVectorMapOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IVectorMapOptionsNarrowedEvents> & IHtmlOptions & {
@@ -109,7 +109,7 @@ type IAnnotationProps = React.PropsWithChildren<{
     width?: number;
   };
   color?: string;
-  coordinates?: Array<number>;
+  coordinates?: Array<number> | undefined;
   customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => Record<string, any>) | undefined;
   data?: any;
   description?: string | undefined;
@@ -263,7 +263,7 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
     width?: number;
   };
   color?: string;
-  coordinates?: Array<number>;
+  coordinates?: Array<number> | undefined;
   customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => Record<string, any>) | undefined;
   data?: any;
   description?: string | undefined;
@@ -462,7 +462,7 @@ type ILayerProps = React.PropsWithChildren<{
   borderWidth?: number;
   color?: string;
   colorGroupingField?: string | undefined;
-  colorGroups?: Array<number>;
+  colorGroups?: Array<number> | undefined;
   customize?: ((elements: Array<MapLayerElement>) => void);
   dataField?: string | undefined;
   dataSource?: Array<any> | DataSource | DataSourceOptions | null | Record<string, any> | Store | string;
@@ -489,7 +489,7 @@ type ILayerProps = React.PropsWithChildren<{
   selectionMode?: SingleMultipleOrNone;
   size?: number;
   sizeGroupingField?: string | undefined;
-  sizeGroups?: Array<number>;
+  sizeGroups?: Array<number> | undefined;
   type?: VectorMapLayerType;
 }>
 const _componentLayer = (props: ILayerProps) => {
@@ -562,9 +562,9 @@ type ILegendProps = React.PropsWithChildren<{
     subtitle?: Record<string, any> | string | {
       font?: ChartsFont;
       offset?: number;
-      text?: string;
+      text?: string | undefined;
     };
-    text?: string;
+    text?: string | undefined;
     verticalAlignment?: VerticalEdge;
   };
   verticalAlignment?: VerticalEdge;
@@ -615,9 +615,9 @@ type ILegendTitleProps = React.PropsWithChildren<{
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
-    text?: string;
+    text?: string | undefined;
   };
-  text?: string;
+  text?: string | undefined;
   verticalAlignment?: VerticalEdge;
 }>
 const _componentLegendTitle = (props: ILegendTitleProps) => {
@@ -644,7 +644,7 @@ const LegendTitle = Object.assign<typeof _componentLegendTitle, NestedComponentM
 type ILegendTitleSubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
-  text?: string;
+  text?: string | undefined;
 }>
 const _componentLegendTitleSubtitle = (props: ILegendTitleSubtitleProps) => {
   return React.createElement(NestedOption<ILegendTitleSubtitleProps>, {
@@ -803,7 +803,7 @@ const Source = Object.assign<typeof _componentSource, NestedComponentMeta>(_comp
 type ISubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
-  text?: string;
+  text?: string | undefined;
   textOverflow?: TextOverflow;
   wordWrap?: WordWrap;
 }>
@@ -839,11 +839,11 @@ type ITitleProps = React.PropsWithChildren<{
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
-    text?: string;
+    text?: string | undefined;
     textOverflow?: TextOverflow;
     wordWrap?: WordWrap;
   };
-  text?: string;
+  text?: string | undefined;
   verticalAlignment?: VerticalEdge;
   textOverflow?: TextOverflow;
   wordWrap?: WordWrap;
@@ -960,11 +960,11 @@ type IVectorMapTitleProps = React.PropsWithChildren<{
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
-    text?: string;
+    text?: string | undefined;
     textOverflow?: TextOverflow;
     wordWrap?: WordWrap;
   };
-  text?: string;
+  text?: string | undefined;
   textOverflow?: TextOverflow;
   verticalAlignment?: VerticalEdge;
   wordWrap?: WordWrap;
@@ -993,7 +993,7 @@ const VectorMapTitle = Object.assign<typeof _componentVectorMapTitle, NestedComp
 type IVectorMapTitleSubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
-  text?: string;
+  text?: string | undefined;
   textOverflow?: TextOverflow;
   wordWrap?: WordWrap;
 }>

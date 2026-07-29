@@ -114,39 +114,38 @@ export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComp
     margin?: BaseWidgetMargin;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @notUsedInTheme
      * @action
      * @public
      */
-    onDrawn?: ((e: EventInfo<TComponent>) => void);
+    onDrawn?: ((e: EventInfo<TComponent>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onExported?: ((e: EventInfo<TComponent>) => void);
+    onExported?: ((e: EventInfo<TComponent>) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field component:this
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onExporting?: ((e: EventInfo<TComponent> & ExportInfo) => void);
+    onExporting?: ((e: EventInfo<TComponent> & ExportInfo) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{viz/core/base_widget:FileSavingEventInfo}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onFileSaving?: ((e: FileSavingEventInfo<TComponent>) => void);
+    onFileSaving?: ((e: FileSavingEventInfo<TComponent>) => void) | undefined;
     /**
      * @docid
-     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field component:this
      * @action
@@ -420,9 +419,9 @@ export interface BaseWidgetTitle {
       offset?: number;
       /**
        * @docid BaseWidgetOptions.title.subtitle.text
-       * @default null
+       * @default undefined
        */
-      text?: string;
+      text?: string | undefined;
       /**
        * @docid BaseWidgetOptions.title.subtitle.textOverflow
        * @default "ellipsis"
@@ -436,10 +435,10 @@ export interface BaseWidgetTitle {
     } | string;
     /**
      * @docid BaseWidgetOptions.title.text
-     * @default null
+     * @default undefined
      * @public
      */
-    text?: string;
+    text?: string | undefined;
     /**
      * @docid BaseWidgetOptions.title.textOverflow
      * @default "ellipsis"

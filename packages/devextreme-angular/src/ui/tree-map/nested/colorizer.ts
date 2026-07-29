@@ -65,10 +65,10 @@ export class DxoTreeMapColorizerComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get range(): Array<number> {
+    get range(): Array<number> | undefined {
         return this._getOption('range');
     }
-    set range(value: Array<number>) {
+    set range(value: Array<number> | undefined) {
         this._setOption('range', value);
     }
 

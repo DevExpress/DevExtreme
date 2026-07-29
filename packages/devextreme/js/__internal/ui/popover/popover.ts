@@ -225,6 +225,7 @@ class Popover<
       const { visible } = this.option();
 
       const overlayStack = this._overlayStack();
+      // @ts-ignore expected: types Overlay<OverlayProperties> and this have no overlap
       const isTopOverlay = overlayStack[overlayStack.length - 1] === this;
 
       if (normalizeKeyName(e) === ESC_KEY_NAME && visible && isTopOverlay) {
@@ -320,7 +321,7 @@ class Popover<
     }
   }
 
-  _getAriaRole(): string {
+  protected _getAriaRole(): string {
     const { toolbarItems, showTitle, showCloseButton } = this.option();
 
     const isDialog = Boolean(toolbarItems?.length) || Boolean(showTitle && showCloseButton);
@@ -329,17 +330,16 @@ class Popover<
   }
 
   _getEffectiveAriaRole(): string {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const { _overlayContentRole } = this.option();
+    const { _overlayContentRole: overlayContentRole } = this.option();
 
-    return _overlayContentRole ?? this._getAriaRole();
+    return overlayContentRole ?? this._getAriaRole();
   }
 
   // NOTE: An accessible name on a tooltip can mask its content for assistive
   // technologies, so the title labels the overlay only in dialog mode.
   _toggleAriaLabel(): void {
     if (this._getEffectiveAriaRole() === 'tooltip') {
-      this.$overlayContent().attr('aria-labelledby', null);
+      this.setAria('labelledby', null, this.$overlayContent());
       return;
     }
 
@@ -372,7 +372,7 @@ class Popover<
       _describeTarget,
     } = this.option();
 
-    return Boolean(target) && Boolean(_describeTarget) && this._getActualAriaRole() === 'tooltip';
+    return Boolean(target) && Boolean(_describeTarget) && this._getEffectiveAriaRole() === 'tooltip';
   }
 
   _getAriaDescriptionTargets(): dxElementWrapper {

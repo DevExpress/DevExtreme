@@ -56,7 +56,7 @@ class CalendarWithTimeStrategy extends CalendarStrategy {
     return dateUtils.sameDate(this._getContouredValue(), this.widgetOption('value'));
   }
 
-  getDisplayFormat(displayFormat?: Format): Format {
+  getDisplayFormat(displayFormat?: Format | null): Format {
     const globalDateTimeFormat = getGlobalFormatByDataType('datetime');
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return displayFormat || globalDateTimeFormat || 'shortdateshorttime';

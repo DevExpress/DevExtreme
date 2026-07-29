@@ -60,7 +60,7 @@ const ready = readyCallbacks.add;
 const window = windowUtils.getWindow();
 const viewPortChanged = changeCallback;
 
-const OVERLAY_STACK: Overlay[] = [];
+export const OVERLAY_STACK: Overlay[] = [];
 const ANONYMOUS_TEMPLATE_NAME = 'content';
 const TAB_KEY = 'tab';
 

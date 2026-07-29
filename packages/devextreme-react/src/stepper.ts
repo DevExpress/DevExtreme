@@ -32,10 +32,10 @@ type IStepperOptions<TItem = any, TKey = any> = React.PropsWithChildren<ReplaceF
   itemComponent?: React.ComponentType<any>;
   defaultItems?: Array<dxStepperItem>;
   defaultSelectedIndex?: number;
-  defaultSelectedItem?: any;
+  defaultSelectedItem?: any | null;
   onItemsChange?: (value: Array<dxStepperItem>) => void;
   onSelectedIndexChange?: (value: number) => void;
-  onSelectedItemChange?: (value: any) => void;
+  onSelectedItemChange?: (value: any | null) => void;
 }>
 
 interface StepperRef<TItem = any, TKey = any> {

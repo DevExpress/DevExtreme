@@ -282,10 +282,10 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     
      */
     @Input()
-    get state(): any {
+    get state(): any | undefined {
         return this._getOption('state');
     }
-    set state(value: any) {
+    set state(value: any | undefined) {
         this._setOption('state', value);
     }
 
@@ -498,7 +498,7 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stateChange: EventEmitter<any>;
+    @Output() stateChange: EventEmitter<any | undefined>;
 
     /**
     
