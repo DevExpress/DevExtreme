@@ -186,18 +186,57 @@ function wrapIntlVendorAsEsm(source: string): string {
 
 /**
  * Force the CJS branch of a UMD wrapper and re-export `module.exports` as default.
+ * Also emit synthetic named exports from the webpack entry module so
+ * `import Def, * as Ns from 'pkg'` mirrors SystemJS/CJS interop
+ * (needed by diagram.importer → `Ns.DiagramControl`).
  */
+function collectWebpackEntryExportNames(source: string): string[] {
+  const entryMatch = /var __webpack_exports__ = __webpack_require__\((\d+)\);/.exec(source);
+  if (!entryMatch) {
+    return [];
+  }
+
+  const entryId = entryMatch[1];
+  const moduleStart = source.indexOf(`/***/ ${entryId}`);
+  if (moduleStart < 0) {
+    return [];
+  }
+
+  const nextModule = source.indexOf('\n/***/ ', moduleStart + 1);
+  const moduleSource = nextModule < 0
+    ? source.slice(moduleStart)
+    : source.slice(moduleStart, nextModule);
+
+  const names = new Set<string>();
+  const definePropertyRe = /Object\.defineProperty\(\s*exports\s*,\s*["']([^"']+)["']/g;
+  let match = definePropertyRe.exec(moduleSource);
+  while (match) {
+    const name = match[1];
+    if (name !== '__esModule' && name !== 'default' && /^[A-Za-z_$][\w$]*$/.test(name)) {
+      names.add(name);
+    }
+    match = definePropertyRe.exec(moduleSource);
+  }
+
+  return [...names].sort();
+}
+
 function wrapWebpackVendorAsEsm(source: string): string {
-  return 'const module = { exports: {} };\n'
-    + 'const exports = module.exports;\n'
-    // Prevent AMD branch when a global `define` exists on the page.
-    + 'var define;\n'
-    + `${source}\n`
-    + 'const __dxVendorExport = module.exports && module.exports.__esModule\n'
-    + '  && Object.prototype.hasOwnProperty.call(module.exports, \'default\')\n'
-    + '  ? module.exports.default\n'
-    + '  : module.exports;\n'
-    + 'export default __dxVendorExport;\n';
+  const namedExports = collectWebpackEntryExportNames(source)
+    .map((name) => `export const ${name} = module.exports.${name};`)
+    .join('\n');
+
+  return `const module = { exports: {} };
+const exports = module.exports;
+// Prevent AMD branch when a global \`define\` exists on the page.
+var define;
+${source}
+const __dxVendorExport = module.exports && module.exports.__esModule
+  && Object.prototype.hasOwnProperty.call(module.exports, 'default')
+  ? module.exports.default
+  : module.exports;
+export default __dxVendorExport;
+${namedExports ? `${namedExports}\n` : ''}`;
 }
 
 /**
