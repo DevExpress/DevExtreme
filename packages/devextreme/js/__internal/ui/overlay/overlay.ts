@@ -994,7 +994,7 @@ class Overlay<
 
       if (!$first && $currentElement) {
         // @ts-expect-error is should can get function as callback
-        const isTabbableAndNotOverlay = $currentElement?.is(selectors.tabbable).not(overlayId);
+        const isTabbableAndNotOverlay = $currentElement?.not(`.${OVERLAY_CONTENT_CLASS}`).is(selectors.tabbable);
         if (isTabbableAndNotOverlay) {
           $first = $currentElement;
         }
@@ -1002,7 +1002,7 @@ class Overlay<
 
       if (!$last && $reverseElement) {
         // @ts-expect-error is should can get function as callback
-        const isTabbableAndNotOverlay = $reverseElement?.is(selectors.tabbable).not(overlayId);
+        const isTabbableAndNotOverlay = $reverseElement?.not(`.${OVERLAY_CONTENT_CLASS}`).is(selectors.tabbable);
         if (isTabbableAndNotOverlay) {
           $last = $reverseElement;
         }
