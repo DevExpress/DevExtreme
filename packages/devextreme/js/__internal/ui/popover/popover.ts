@@ -111,6 +111,8 @@ export interface PopoverProperties extends Omit<Properties,
   _overlayContentRole?: string;
 
   _describeTarget?: boolean;
+
+  _preventDialogContainerFocus?: boolean;
 }
 class Popover<
   TProperties extends PopoverProperties = PopoverProperties,
@@ -266,6 +268,57 @@ class Popover<
   _syncAriaAttributes(): void {
     this.setAria('role', this._getEffectiveAriaRole());
     this._syncTargetAriaDescription();
+    this._syncFocusOptions();
+  }
+
+  _syncFocusOptions(): void {
+    if (this._getEffectiveAriaRole() === 'dialog' && !this.option('_preventDialogContainerFocus')) {
+      this._setOptionWithoutOptionChange('focusStateEnabled', true);
+      this._setOptionWithoutOptionChange('tabFocusLoopEnabled', true);
+    }
+  }
+
+  // Intentional no-op: Focus target logic is inherited from Widget,
+  // uses in Popup and do not need here.
+  _renderFocusTarget(): void {}
+
+  _getFocusTarget(): dxElementWrapper | null | undefined {
+    const $firstFocusableTarget = this._findTabbableBounds().$first;
+    if ($firstFocusableTarget?.length) {
+      return $firstFocusableTarget;
+    }
+
+    const $overlay = this.$overlayContent();
+    if ($overlay?.length) {
+      if ($overlay.attr('tabindex') !== '-1') {
+        $overlay.attr('tabindex', '-1');
+      }
+      return $overlay;
+    }
+
+    return null;
+  }
+
+  _focusTarget(): dxElementWrapper {
+    return this._getFocusTarget() ?? this.$overlayContent();
+  }
+
+  _restoreTargetFocus(): void {
+    const $target = this._getAriaDescriptionTargets();
+    const targetElement = $target.first().get(0);
+
+    if (targetElement && domAdapter.getBody().contains(targetElement)) {
+      // @ts-expect-error trigger should be typed on type 'EventsEngineType'
+      eventsEngine.trigger($target.first(), 'focus');
+    }
+  }
+
+  _forceFocusLost(): void {
+    if (this._getEffectiveAriaRole() === 'dialog') {
+      this._restoreTargetFocus();
+    } else {
+      super._forceFocusLost();
+    }
   }
 
   protected _getAriaRole(): string {
@@ -295,10 +348,15 @@ class Popover<
 
   _ensurePopoverContentId(): string {
     const $overlayContent = this.$overlayContent();
-    this._popoverContentId = this._popoverContentId
-      ?? $overlayContent.attr('id')
-      ?? `dx-${new Guid()}`;
-    this.setAria('id', this._popoverContentId, $overlayContent);
+    const existingId = $overlayContent.attr('id');
+
+    if (existingId) {
+      this._popoverContentId = existingId;
+      return existingId;
+    }
+
+    this._popoverContentId = this._popoverContentId ?? `dx-${new Guid()}`;
+    $overlayContent.attr('id', this._popoverContentId);
 
     return this._popoverContentId;
   }
@@ -479,7 +537,7 @@ class Popover<
   _detachHoverableOverlay(): void {
     const $overlayContent = this.$overlayContent();
 
-    if (!$overlayContent.length) {
+    if (!$overlayContent?.length) {
       return;
     }
 
@@ -882,6 +940,14 @@ class Popover<
   _clean(): void {
     const { target } = this.option();
 
+    const $overlayContent = this.$overlayContent();
+    if ($overlayContent?.length) {
+      const existingId = $overlayContent.attr('id');
+      if (existingId) {
+        this._popoverContentId = existingId;
+      }
+    }
+
     this._detachEscapeKeyHandler();
     this._detachEvents(target);
     this._detachHoverableOverlay();
@@ -889,7 +955,16 @@ class Popover<
     super._clean();
   }
 
+  _shouldResetActiveElement(): boolean {
+    const activeElement = domAdapter.getActiveElement();
+    return domAdapter.isNode(activeElement) && !!this._$content?.get(0)?.contains(activeElement);
+  }
+
   _dispose(): void {
+    const { visible } = this.option();
+    if (visible && this._shouldResetActiveElement() && this._getEffectiveAriaRole() === 'dialog') {
+      this._restoreTargetFocus();
+    }
     this._removeTargetAriaDescription();
     this._detachEscapeKeyHandler();
     super._dispose();
