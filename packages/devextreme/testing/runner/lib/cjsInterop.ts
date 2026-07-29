@@ -140,8 +140,9 @@ export function rewriteCjsStyleDefaultImports(source: string): string {
       const ns = `__dxCjs_${name}`;
       const merged = `({ ...${ns}, ...(typeof ${ns}.default === 'object' && ${ns}.default ? ${ns}.default : {}) })`;
       const bindingPattern = importClauseToDestructuring(named);
+      // `let` — some QUnit suites reassign default imports (e.g. `$ = coreRenderer`).
       return `import * as ${ns} from ${spec};`
-        + ` const ${name} = ${ns}.default ?? { ...${ns} };`
+        + ` let ${name} = ${ns}.default ?? { ...${ns} };`
         + ` const ${bindingPattern} = ${merged}`;
     },
   );
@@ -151,7 +152,7 @@ export function rewriteCjsStyleDefaultImports(source: string): string {
       return match;
     }
     const ns = `__dxCjs_${name}`;
-    return `import * as ${ns} from ${spec}; const ${name} = ${ns}.default ?? { ...${ns} }`;
+    return `import * as ${ns} from ${spec}; let ${name} = ${ns}.default ?? { ...${ns} }`;
   });
 
   next = next.replace(NAMED_ONLY_RE, (match, named: string, spec: string) => {
