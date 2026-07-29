@@ -414,10 +414,18 @@ function rewriteBundleTemplateModuleExports(source: string): string {
 
 function isLocallyDeclaredBinding(source: string, name: string): boolean {
   const escaped = name.replace(/\$/g, '\\$');
-  const declarationRe = new RegExp(
+  // const/let/var name = … | function/class name
+  const directRe = new RegExp(
     `(?:^|[\\s;{}])(?:(?:const|let|var)\\s+${escaped}\\b|function\\s+${escaped}\\b|class\\s+${escaped}\\b)`,
   );
-  return declarationRe.test(source);
+  if (directRe.test(source)) {
+    return true;
+  }
+  // const { ChartTracker, PieTracker } = … (shorthand / default; not `name: alias`)
+  const destructuringRe = new RegExp(
+    `(?:const|let|var)\\s*\\{[^}]*\\b${escaped}\\b(?!\\s*:)[^}]*\\}`,
+  );
+  return destructuringRe.test(source);
 }
 
 export function wrapCjsModuleExports(source: string, sourcePath?: string): string {
@@ -442,15 +450,18 @@ export function wrapCjsModuleExports(source: string, sourcePath?: string): strin
     return source;
   }
 
-  // Prefer `export { name }` when the file already has `const/let/var name`
-  // (common `exports.name = name` helpers). `export const name = …` would
-  // collide with that local binding under native ESM.
+  // Named ESM exports must reflect `module.exports.name`. When a local
+  // binding already uses that name (`const name` or `const { name }`),
+  // `export const name = …` / `export { name }` would either collide or
+  // re-export the wrong value (e.g. trackerMock spies vs originals).
   const namedExports = collectCjsExportNames(source)
-    .map((name) => (
-      isLocallyDeclaredBinding(source, name)
-        ? `export { ${name} };`
-        : `export const ${name} = module.exports.${name};`
-    ))
+    .map((name) => {
+      if (isLocallyDeclaredBinding(source, name)) {
+        const alias = `__dxExp_${name}`;
+        return `const ${alias} = module.exports.${name};\nexport { ${alias} as ${name} };`;
+      }
+      return `export const ${name} = module.exports.${name};`;
+    })
     .join('\n');
 
   return `const module = { exports: {} };

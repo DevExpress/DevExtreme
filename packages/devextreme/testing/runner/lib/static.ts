@@ -459,6 +459,96 @@ const MUTABLE_ARTIFACT_FACADES: readonly { suffix: string; shimUrl: string }[] =
     shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_base_theme_manager.js',
   },
   {
+    // m_base_chart imports this via relative path; charts QUnit stubs mutate it.
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/chart_components/tracker.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_chart_tracker.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/chart_components/tracker.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_chart_tracker.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/components/legend.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_components_legend.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/components/legend.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_components_legend.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/components/chart_theme_manager.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_chart_theme_manager.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/components/chart_theme_manager.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_chart_theme_manager.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/components/data_validator.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_data_validator.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/components/data_validator.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_data_validator.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/chart_components/layout_manager.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_layout_manager.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/chart_components/layout_manager.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_layout_manager.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/chart_components/scroll_bar.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_scroll_bar.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/chart_components/scroll_bar.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_scroll_bar.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/chart_components/crosshair.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_crosshair.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/chart_components/crosshair.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_crosshair.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/series/points/base_point.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_base_point.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/series/points/base_point.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_base_point.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/series/base_series.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_base_series.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/series/base_series.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_base_series.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/core/series_family.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_series_family.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/core/series_family.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_series_family.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/viz/core/loading_indicator.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_loading_indicator.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/core/loading_indicator.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_loading_indicator.js',
+  },
+
+  {
     suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/vector_map/projection.main.js',
     shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_projection_main.js',
   },
