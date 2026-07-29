@@ -11,16 +11,12 @@ const REPORT_DIR = join(DEMO_ROOT, 'csp-reports');
 const SERVER_URL = process.env.CSP_SERVER_URL || 'http://localhost:8080';
 const FRAMEWORK = (process.env.CSP_FRAMEWORKS || 'jQuery').trim();
 
-// Use pre-built bundles from csp-bundle.js instead of the SystemJS dev demos.
-const USE_BUNDLED = process.env.CSP_USE_BUNDLED === '1' || process.env.CSP_USE_BUNDLED === 'true';
-
 const CORES = (typeof os.availableParallelism === 'function'
   ? os.availableParallelism()
   : (os.cpus() || []).length) || 1;
 function defaultConcurrency() {
   if (FRAMEWORK === 'jQuery') return Math.max(6, Math.min(8, CORES));
-  if (USE_BUNDLED) return Math.max(2, Math.min(8, CORES));
-  return 2;
+  return Math.max(2, Math.min(8, CORES));
 }
 const DEFAULT_CONCURRENCY = defaultConcurrency();
 const parsedConcurrency = parseInt(process.env.CSP_CONCURRENCY, 10);
@@ -171,7 +167,7 @@ async function waitForDebugger(port, maxWaitMs = 15000) {
 }
 
 function findDemos() {
-  const demosDirName = USE_BUNDLED ? 'csp-bundled-demos' : 'Demos';
+  const demosDirName = 'Demos';
   const demosDir = join(DEMO_ROOT, demosDirName);
   const result = [];
 
@@ -374,7 +370,7 @@ async function main() {
   console.log(`Chrome: ${CHROME_PATH}`);
   console.log(`Server: ${SERVER_URL}`);
   console.log(`Framework: ${FRAMEWORK}`);
-  console.log(`Source: ${USE_BUNDLED ? 'csp-bundled-demos (production-style)' : 'Demos (SystemJS dev)'}`);
+  console.log('Source: Demos (esbuild-bundled)');
   console.log(`Concurrency: ${CONCURRENCY}\n`);
 
   const demos = findDemos();
