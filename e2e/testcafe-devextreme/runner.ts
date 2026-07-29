@@ -116,7 +116,10 @@ function setTestingTheme(args: ParsedArgs): void {
 
 const normalizeThemeForMatching = (themeName?: string): string | undefined => themeName?.replace(/^dxdsfluent/, 'fluent');
 
-const matchTheme = (actualTheme: string | undefined, expectedTheme: string | undefined): boolean => (
+const matchTheme = (
+  actualTheme: string | undefined,
+  expectedTheme: string | undefined,
+): boolean => (
   normalizeThemeForMatching(actualTheme) === normalizeThemeForMatching(expectedTheme)
 );
 
