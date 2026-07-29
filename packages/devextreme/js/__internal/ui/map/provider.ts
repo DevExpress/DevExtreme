@@ -10,6 +10,8 @@ import type Map from './map';
 import type { MapProperties } from './map';
 import type { LocationOption, MarkerOptions, RouteOptions } from './provider.dynamic';
 
+type KeyedMapProvider = Exclude<MapProvider, 'osm'>;
+
 class Provider {
   _mapWidget!: Map;
 
@@ -167,7 +169,7 @@ class Provider {
     return undefined;
   }
 
-  _keyOption(providerName: MapProvider): string {
+  _keyOption(providerName: KeyedMapProvider): string {
     const key = this._option('apiKey') ?? '';
     if (typeof key === 'string') {
       return key;

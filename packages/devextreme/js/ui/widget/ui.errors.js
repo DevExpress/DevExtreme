@@ -282,6 +282,11 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     E1068: '\'aiIntegration\' is not configured for the AI Assistant.',
 
     /**
+    * @name ErrorsUIWidgets.E1069
+    */
+    E1069: 'The OSM map provider requires Leaflet. Configure "providerConfig.mapEngine" or load Leaflet as "window.L".',
+
+    /**
     * @name ErrorsUIWidgets.W1001
     */
     W1001: 'The "key" option cannot be modified after initialization',
@@ -406,4 +411,20 @@ export default errorUtils(errors.ERROR_MESSAGES, {
      * @name ErrorsUIWidgets.W1029
      */
     W1029: '\'hiddenWeekDays\' must leave at least one weekday visible.',
+    /**
+     * @name ErrorsUIWidgets.W1030
+     */
+    W1030: 'No tile server is configured for the OSM map provider. Specify the "providerConfig.tileServer" option.',
+    /**
+     * @name ErrorsUIWidgets.W1031
+     */
+    W1031: 'No geocoding service is configured for the OSM map provider. Specify the "providerConfig.geocodeLocation" option.',
+    /**
+     * @name ErrorsUIWidgets.W1032
+     */
+    W1032: 'The OSM map provider tile server is configured without an "attribution". Attribution is required when displaying OpenStreetMap data; set the "attribution" field of the "providerConfig.tileServer" option (for example, "© OpenStreetMap contributors").',
+    /**
+     * @name ErrorsUIWidgets.W1033
+     */
+    W1033: 'No routing service is configured for the OSM map provider. Configure "providerConfig.getRoute" to draw routed paths.',
 });

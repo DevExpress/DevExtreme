@@ -1,6 +1,13 @@
 export {
   MapProvider,
   RouteMode,
+  OsmGeocodeFunction,
+  OsmGetRouteParams,
+  OsmGeoJsonLineString,
+  OsmRouteResult,
+  OsmGetRouteFunction,
+  OsmTileServerConfig,
+  OsmTileServer,
   MapType,
   ClickEvent,
   DisposingEvent,

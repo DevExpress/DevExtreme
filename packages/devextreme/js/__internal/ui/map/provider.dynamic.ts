@@ -20,6 +20,11 @@ export interface LocationCoords {
   lng: number;
 }
 
+export interface PlainLocation {
+  lat: number;
+  lng: number;
+}
+
 export interface MarkerOptions {
   iconSrc?: string;
   location?: LocationCoords;
@@ -64,7 +69,7 @@ class DynamicProvider extends Provider {
 
   _routes!: (RouteObject & { options: RouteOptions })[];
 
-  _geocodedLocations: Record<string, GoogleLocation | BingLocation | AzureLocation>;
+  _geocodedLocations: Record<string, GoogleLocation | BingLocation | AzureLocation | PlainLocation>;
 
   _mapsLoader?: Promise<void>;
 
@@ -76,7 +81,7 @@ class DynamicProvider extends Provider {
 
   _geocodeLocation(
     location: string,
-  ): Promise<GoogleLocation | BingLocation | AzureLocation> {
+  ): Promise<GoogleLocation | BingLocation | AzureLocation | PlainLocation> {
     return new Promise((resolve) => {
       const cache = this._geocodedLocations;
       const cachedLocation = cache[location];
@@ -282,7 +287,7 @@ class DynamicProvider extends Provider {
   _geocodeLocationImpl(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     location: string,
-  ): Promise<GoogleLocation | BingLocation | AzureLocation> {
+  ): Promise<GoogleLocation | BingLocation | AzureLocation | PlainLocation> {
     return Promise.resolve([0, 0]);
   }
 
