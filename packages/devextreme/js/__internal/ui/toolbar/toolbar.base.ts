@@ -732,6 +732,10 @@ class ToolbarBase<
     clearTimeout(this._waitParentAnimationTimeout);
   }
 
+  getLabels(): dxElementWrapper {
+    return this.$element().find(`.${TOOLBAR_LABEL_CLASS}`);
+  }
+
   _updateDimensionsInMaterial(): void {
     if (isMaterial(current())) {
       // eslint-disable-next-line @typescript-eslint/naming-convention

@@ -108,7 +108,7 @@ export interface PopoverProperties extends Omit<Properties,
 
   preventScrollEvents?: boolean;
 
-  _overlayContentRole?: string;
+  _popoverContentRole?: string;
 
   _describeTarget?: boolean;
 
@@ -330,9 +330,9 @@ class Popover<
   }
 
   _getEffectiveAriaRole(): string {
-    const { _overlayContentRole: overlayContentRole } = this.option();
+    const { _popoverContentRole: popoverContentRole } = this.option();
 
-    return overlayContentRole ?? this._getAriaRole();
+    return popoverContentRole ?? this._getAriaRole();
   }
 
   // NOTE: An accessible name on a tooltip can mask its content for assistive
@@ -359,10 +359,6 @@ class Popover<
     $overlayContent.attr('id', this._popoverContentId);
 
     return this._popoverContentId;
-  }
-
-  _getActualAriaRole(): string | undefined {
-    return this.$overlayContent().attr('role') ?? undefined;
   }
 
   _shouldDescribeTarget(): boolean {
@@ -988,6 +984,7 @@ class Popover<
         }
         this._positionController.updateTarget(value as TProperties['target']);
         this._invalidate();
+        this._syncAriaAttributes();
         break;
       case 'showEvent':
       case 'hideEvent': {
@@ -1033,7 +1030,7 @@ class Popover<
         super._optionChanged(args);
         this._syncAriaAttributes();
         break;
-      case '_overlayContentRole':
+      case '_popoverContentRole':
       case '_describeTarget':
         this._syncAriaAttributes();
         this._toggleAriaLabel();

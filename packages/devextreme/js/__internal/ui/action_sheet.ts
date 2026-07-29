@@ -179,7 +179,7 @@ class ActionSheet extends CollectionWidget<Properties> {
       width: this.option('width') || 200,
       height: this.option('height') || 'auto',
       target: this.option('target'),
-      _overlayContentRole: 'dialog',
+      _popoverContentRole: 'dialog',
     }));
 
     this._popup.$wrapper()?.addClass(ACTION_SHEET_POPOVER_WRAPPER_CLASS);

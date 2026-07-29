@@ -59,9 +59,9 @@ describe('Popover overlay content aria role', () => {
     });
   });
 
-  describe('forced through _overlayContentRole', () => {
+  describe('forced through _popoverContentRole', () => {
     it('uses the forced role regardless of the configuration predicate', async () => {
-      const model = await createPopover({ _overlayContentRole: 'dialog' });
+      const model = await createPopover({ _popoverContentRole: 'dialog' });
 
       expect(model.getRole()).toBe('dialog');
     });

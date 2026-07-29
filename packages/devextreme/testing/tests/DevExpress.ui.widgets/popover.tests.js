@@ -2731,8 +2731,8 @@ QUnit.module('accessibility', {
             assert.deepEqual(getDescribedBy($('#where')), [contentId], 'target description is unchanged');
         });
 
-        QUnit.test('internal _overlayContentRole should force the role and prevent the target description', function(assert) {
-            const popover = new Popover($('#what'), { target: '#where', _overlayContentRole: 'dialog', animation: null });
+        QUnit.test('internal _popoverContentRole should force the role and prevent the target description', function(assert) {
+            const popover = new Popover($('#what'), { target: '#where', _popoverContentRole: 'dialog', animation: null });
 
             assert.strictEqual(popover.$overlayContent().attr('role'), 'dialog', 'forced role is applied at creation');
             assert.strictEqual($('#where').attr('aria-describedby'), undefined, 'target is not described at creation');
@@ -2751,16 +2751,16 @@ QUnit.module('accessibility', {
             assert.strictEqual($('#where').attr('aria-describedby'), undefined, 'target is not described');
         });
 
-        QUnit.test('runtime _overlayContentRole change should update the role and the target description', function(assert) {
+        QUnit.test('runtime _popoverContentRole change should update the role and the target description', function(assert) {
             const popover = new Popover($('#what'), { target: '#where' });
             const contentId = popover.$overlayContent().attr('id');
 
-            popover.option('_overlayContentRole', 'dialog');
+            popover.option('_popoverContentRole', 'dialog');
 
             assert.strictEqual(popover.$overlayContent().attr('role'), 'dialog', 'forced role is applied');
             assert.strictEqual($('#where').attr('aria-describedby'), undefined, 'target description is removed');
 
-            popover.option('_overlayContentRole', null);
+            popover.option('_popoverContentRole', null);
 
             assert.strictEqual(popover.$overlayContent().attr('role'), 'tooltip', 'computed role is restored');
             assert.deepEqual(getDescribedBy($('#where')), [contentId], 'target description is restored');

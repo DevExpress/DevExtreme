@@ -63,6 +63,7 @@ import type {
   PopupPositionControllerConstructor,
 } from '@ts/ui/popup/popup_position_controller';
 import { PopupPositionController } from '@ts/ui/popup/popup_position_controller';
+import type ToolbarBase from '@ts/ui/toolbar/toolbar.base';
 import type { ToolbarBaseProperties } from '@ts/ui/toolbar/toolbar.base';
 
 // STYLE popup
@@ -85,7 +86,6 @@ const POPUP_HAS_CLOSE_BUTTON_CLASS = 'dx-has-close-button';
 const POPUP_CONTENT_FLEX_HEIGHT_CLASS = 'dx-popup-flex-height';
 const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
 
-const TOOLBAR_LABEL_CLASS = 'dx-toolbar-label';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 export const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
@@ -780,7 +780,7 @@ class Popup<
 
   _toggleAriaLabel(): void {
     const { title, showTitle } = this.option();
-    const $label = this._$topToolbar?.find(`.${TOOLBAR_LABEL_CLASS}`).eq(0);
+    const $label = (this._topToolbar as unknown as ToolbarBase | undefined)?.getLabels().eq(0);
     // NOTE: A custom titleTemplate can render no label element; aria-labelledby
     // must not reference a missing id then.
     const shouldSetAriaLabel = Boolean(showTitle) && Boolean(title) && Boolean($label?.length);
