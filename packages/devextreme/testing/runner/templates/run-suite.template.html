@@ -132,7 +132,12 @@
         function failLoad(err) {
             QUnit.start();
             QUnit.test("load failed", function(assert) {
-                throw err;
+                var detail = err;
+                if(err && err.cause) {
+                    detail = err.message + "\nCaused by: " + err.cause
+                        + (err.cause.stack ? "\n" + err.cause.stack : "");
+                }
+                throw detail;
             });
         }
 
