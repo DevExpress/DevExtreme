@@ -49,6 +49,12 @@ const FIXED_COLUMN_RIGHT_ICON_CLASS = 'fix-column-right';
 const STICKY_COLUMN_ICON_CLASS = 'stick-column';
 const UNFIXED_COLUMN_ICON_CLASS = 'unfix-column';
 
+// The browser can report the scroll maximum up to ~1px away from the integer
+// (content.clientHeight - container.clientHeight), so at the bottom scrollOffset.top
+// can be 1px past the computed max. An elastic offset within this range is that
+// rounding noise, not a real elastic scroll (always larger), so it is ignored.
+const ELASTIC_SCROLL_TOLERANCE = 1;
+
 const getTransparentColumnIndex = function (fixedColumns: any[]) {
   let transparentColumnIndex = -1;
 
@@ -1005,7 +1011,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     if (this._fixedTableElement) {
       const elasticScrollTop = this._getElasticScrollTop(e);
 
-      if (Math.ceil(elasticScrollTop) !== 0) {
+      if (Math.abs(elasticScrollTop) > ELASTIC_SCROLL_TOLERANCE) {
         move(this._fixedTableElement, { top: elasticScrollTop });
       } else {
         this._fixedTableElement.css('transform', '');
