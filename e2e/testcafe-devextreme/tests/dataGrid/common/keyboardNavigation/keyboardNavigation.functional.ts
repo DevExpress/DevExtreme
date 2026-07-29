@@ -4926,7 +4926,7 @@ test('Grids a11y: Fix the header filter and the column chooser focus issue and u
     .ok()
     .click(columnChooserButton)
     .pressKey('tab tab tab')
-    .expect(columnChooser.content.focused)
+    .expect(Selector('.dx-closebutton').focused)
     .ok();
 })
   .before(async () => {

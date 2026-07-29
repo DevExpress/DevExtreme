@@ -271,7 +271,7 @@ class Popover<
   }
 
   _syncFocusOptions(): void {
-    if (this._getEffectiveAriaRole() === 'dialog' && !this.option('_preventDialogFocus')) {
+    if (this._getEffectiveAriaRole() === 'dialog' && !this.option('_preventDialogContainerFocus')) {
       this._setOptionWithoutOptionChange('focusStateEnabled', true);
       this._setOptionWithoutOptionChange('tabFocusLoopEnabled', true);
     }
@@ -290,7 +290,7 @@ class Popover<
     const $overlay = this.$overlayContent();
     if ($overlay?.length) {
       if ($overlay.attr('tabindex') !== '-1') {
-        this.setAria('tabindex', '-1', $overlay);
+        $overlay.attr('tabindex', '-1');
       }
       return $overlay;
     }
@@ -351,6 +351,7 @@ class Popover<
     const existingId = $overlayContent.attr('id');
 
     if (existingId) {
+      this._popoverContentId = existingId;
       return existingId;
     }
 
@@ -938,6 +939,14 @@ class Popover<
 
   _clean(): void {
     const { target } = this.option();
+
+    const $overlayContent = this.$overlayContent();
+    if ($overlayContent?.length) {
+      const existingId = $overlayContent.attr('id');
+      if (existingId) {
+        this._popoverContentId = existingId;
+      }
+    }
 
     this._detachEscapeKeyHandler();
     this._detachEvents(target);
