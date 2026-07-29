@@ -712,6 +712,10 @@ export default __dxAspnet;
 
 export function isQunitTestOrHelperPath(relativePath: string): boolean {
   const normalized = relativePath.replace(/\\/g, '/');
+  // Real ESM facades under esm-shims must not go through CJS rewrite.
+  if (normalized.includes('/testing/helpers/esm-shims/')) {
+    return false;
+  }
   return (
     normalized.includes('/packages/devextreme/testing/tests/')
     || normalized.includes('/packages/devextreme/testing/helpers/')
