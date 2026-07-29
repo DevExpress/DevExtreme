@@ -3,7 +3,6 @@ import dateUtils from '@js/core/utils/date';
 import { isDefined } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
-import { VERTICAL_GROUP_COUNT_CLASSES } from '../../classes';
 import {
   HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION,
 } from '../../constants';
@@ -98,19 +97,6 @@ export const getOverflowIndicatorColor = (color: string, colors: string[]): stri
     ? color
     : undefined
 );
-
-export const getVerticalGroupCountClass = (groups: unknown[]): string | undefined => {
-  switch (groups?.length) {
-    case 1:
-      return VERTICAL_GROUP_COUNT_CLASSES[0];
-    case 2:
-      return VERTICAL_GROUP_COUNT_CLASSES[1];
-    case 3:
-      return VERTICAL_GROUP_COUNT_CLASSES[2];
-    default:
-      return undefined;
-  }
-};
 
 export const setOptionHour = (date: Date, optionHour: number): Date => {
   const nextDate = new Date(date);
