@@ -195,7 +195,7 @@ $scheduler-timeline-min-height: 100px;
     }
 
     .dx-scheduler-group-row .dx-scheduler-group-header {
-      border: none;
+      border-bottom: none;
       border-top: $scheduler-base-border;
       border-top-color: $scheduler-base-border-color;
     }
