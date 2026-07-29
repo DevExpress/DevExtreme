@@ -64,6 +64,21 @@ export async function loadAxeCore(t: TestController): Promise<void> {
   })).with({ boundTestRun: t })();
 }
 
+// Accessibility checks must run in a real-app-like page: body carries dx-viewport,
+// and the runtime attaches dx-theme-<name>/-typography/dx-color-scheme-* classes to it
+// (they define the page background that color-contrast is measured against).
+// Plain dx-surface (the default container.html state) never receives these classes.
+export async function applyViewportEnvironment(t: TestController): Promise<void> {
+  await ClientFunction(() => {
+    const { body } = document;
+    body.classList.remove('dx-surface');
+    body.classList.add('dx-viewport');
+
+    // re-evaluates the viewport -> fires viewPortChanged -> themes attach their classes
+    (window as any).DevExpress.viewPort('.dx-viewport');
+  }).with({ boundTestRun: t })();
+}
+
 export async function loadShadowDomExtension(t: TestController): Promise<void> {
   await ClientFunction(() => new Promise<void>((resolve, reject) => {
     if (document.getElementById('shadow-dom-extension-script')) {

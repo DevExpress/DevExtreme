@@ -7,6 +7,7 @@ import parseArgs from 'minimist';
 import { DEFAULT_BROWSER_SIZE } from './helpers/const';
 import {
   addShadowRootTree,
+  applyViewportEnvironment,
   clearTestPage,
   loadAxeCore,
   loadShadowDomExtension,
@@ -372,6 +373,7 @@ async function main() {
               await t.resizeWindow(width, height);
             } else {
               await loadAxeCore(t);
+              await applyViewportEnvironment(t);
             }
 
             const currentTheme = await getCurrentTheme(t) || 'fluent.blue.light';
