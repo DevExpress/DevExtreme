@@ -304,8 +304,8 @@ class Popover<
   }
 
   _restoreTargetFocus(): void {
-    const $target = this._getAriaDescriptionTargets();
-    const targetElement = $target.first().get(0);
+    const $targets = this._getAriaDescriptionTargets();
+    const targetElement = $targets.first().get(0);
 
     if (targetElement && domAdapter.getBody().contains(targetElement)) {
       // @ts-expect-error trigger should be typed on type 'EventsEngineType'
@@ -416,22 +416,16 @@ class Popover<
       }
     });
 
-    const describedElements: Element[] = [];
-
-    $targets.each((_, element) => {
+    const describedElements = $targets.toArray().filter((element) => {
       const ids = getAriaDescriptionIds(element);
 
       if (!ids.includes(id)) {
         ids.push(id);
         setAriaDescriptionIds(element, ids);
-        describedElements.push(element);
-      } else if (previousElements.has(element)) {
-        // NOTE: A pre-existing token this instance did not add is foreign,
-        // so it is never claimed and cleanup cannot strip a manual description.
-        describedElements.push(element);
+        return true;
       }
 
-      return true;
+      return previousElements.has(element);
     });
 
     this._ariaDescriptionId = describedElements.length ? id : undefined;
