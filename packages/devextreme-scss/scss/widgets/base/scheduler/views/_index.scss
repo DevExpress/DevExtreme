@@ -342,11 +342,6 @@ $scheduler-month-date-text-padding: 6px;
     border-right-color: $scheduler-base-border-color;
   }
 
-  .dx-scheduler-group-flex-container .dx-scheduler-group-row:last-child > .dx-scheduler-group-header {
-    border-right: $scheduler-base-border;
-    border-right-color: $scheduler-base-border-color;
-  }
-
   .dx-scheduler-group-row {
     @include flex-container(row, nowrap);
 
