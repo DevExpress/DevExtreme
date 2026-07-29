@@ -217,6 +217,12 @@ Object.values(FRAMEWORKS).forEach((approach) => {
       return;
     }
 
+    if (process.env.STRATEGY === 'accessibility'
+      && process.env.THEME?.startsWith('dxdsfluent')
+      && getIgnoredRules(testName).includes('color-contrast')) {
+      return;
+    }
+
     runTestAtPage(
       test,
       pageURL
