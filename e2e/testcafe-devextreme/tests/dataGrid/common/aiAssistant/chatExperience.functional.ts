@@ -491,7 +491,7 @@ test('Clear-chat after re-open should remove all history', async (t) => {
 
   await t.expect(aiChat.getMessages().count).eql(2);
 
-  await t.click(aiChat.getClearChatButton());
+  await t.click(aiChat.getClearChatButton().element);
 
   await t.expect(aiChat.getMessages().count).eql(0);
 }).before(async () => createGridWithAIAssistant({

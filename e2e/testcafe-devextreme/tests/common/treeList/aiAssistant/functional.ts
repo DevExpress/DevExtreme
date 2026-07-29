@@ -285,7 +285,7 @@ test('In-flight lock behaves like DataGrid', async (t) => {
 
   await t.expect(aiChat.getPendingMessages().count).eql(1);
   await t.expect(aiChat.getTextArea().isDisabled).ok();
-  await t.expect(aiChat.isClearChatDisabled()).ok();
+  await t.expect(aiChat.getClearChatButton().isDisabled).ok();
 }).before(async () => createTreeListWithAIAssistant(treeListBase(), [HANG]));
 
 test('grouping command is absent from the TreeList response schema', async (t) => {

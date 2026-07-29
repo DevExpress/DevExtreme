@@ -1,5 +1,6 @@
 import { Selector } from 'testcafe';
 import Popup from '../popup';
+import Button from '../button';
 import Chat from '../chat';
 import TextArea from '../textArea';
 import { AIMessage } from './aiMessage';
@@ -13,7 +14,7 @@ const CLASS = {
   messageError: 'dx-ai-chat__message--error',
   clearChatButton: 'dx-ai-chat__clear-button',
   suggestion: 'dx-chat-suggestions',
-  suggestionButton: 'dx-button',
+  button: 'dx-button',
 };
 
 export class AIAssistantChat extends Popup {
@@ -45,8 +46,8 @@ export class AIAssistantChat extends Popup {
     return this.topToolbar;
   }
 
-  getClearChatButton(): Selector {
-    return this.element.find(`.${CLASS.clearChatButton}`);
+  getClearChatButton(): Button {
+    return new Button(this.element.find(`.${CLASS.clearChatButton} .${CLASS.button}`));
   }
 
   getAbortConfirmDialog(): AIAssistantConfirmDialog {
@@ -87,16 +88,10 @@ export class AIAssistantChat extends Popup {
   }
 
   getSuggestions(): Selector {
-    return this.element.find(`.${CLASS.suggestion} .${CLASS.suggestionButton}`);
+    return this.element.find(`.${CLASS.suggestion} .${CLASS.button}`);
   }
 
-  isClearChatDisabled(): Promise<boolean> {
-    return this.getClearChatButton()
-      .find('.dx-button')
-      .hasClass('dx-state-disabled');
-  }
-
-  isSuggestionDisabled(index: number): Promise<boolean> {
-    return this.getSuggestions().nth(index).hasClass('dx-state-disabled');
+  getSuggestion(index: number): Button {
+    return new Button(this.getSuggestions().nth(index));
   }
 }
