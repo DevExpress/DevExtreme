@@ -49,6 +49,12 @@ const FIXED_COLUMN_RIGHT_ICON_CLASS = 'fix-column-right';
 const STICKY_COLUMN_ICON_CLASS = 'stick-column';
 const UNFIXED_COLUMN_ICON_CLASS = 'unfix-column';
 
+// The browser can report the scroll maximum up to ~1px away from the integer
+// (content.clientHeight - container.clientHeight), so at the bottom scrollOffset.top
+// can be 1px past the computed max. An elastic offset within this range is that
+// rounding noise, not a real elastic scroll (always larger), so it is ignored.
+const ELASTIC_SCROLL_TOLERANCE = 1;
+
 const getTransparentColumnIndex = function (fixedColumns: any[]) {
   let transparentColumnIndex = -1;
 
@@ -991,12 +997,9 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     if (e.scrollOffset.top < 0) {
       elasticScrollTop = -e.scrollOffset.top;
     } else if (e.reachedBottom) {
+      const $scrollableContent = $(e.component.content());
       const $scrollableContainer = $(e.component.container());
-      // Use the container's live scrollTop as the max, not (scrollHeight - clientHeight):
-      // e.scrollOffset.top is derived from that same scrollTop, so they cancel to 0 at the
-      // bottom (browsers can report the two ~1px apart). Correct only because the scroll
-      // handler is synchronous — this scrollTop matches the one e.scrollOffset.top came from.
-      const maxScrollTop = Math.max($scrollableContainer.get(0).scrollTop, 0);
+      const maxScrollTop = Math.max($scrollableContent.get(0).clientHeight - $scrollableContainer.get(0).clientHeight, 0);
 
       elasticScrollTop = Math.min(maxScrollTop - e.scrollOffset.top, 0);
     }
@@ -1008,7 +1011,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     if (this._fixedTableElement) {
       const elasticScrollTop = this._getElasticScrollTop(e);
 
-      if (Math.ceil(elasticScrollTop) !== 0) {
+      if (Math.abs(elasticScrollTop) > ELASTIC_SCROLL_TOLERANCE) {
         move(this._fixedTableElement, { top: elasticScrollTop });
       } else {
         this._fixedTableElement.css('transform', '');
