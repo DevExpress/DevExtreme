@@ -215,7 +215,7 @@ test('cancel = true should abort before any request is dispatched', async (t) =>
   await t.expect(aiChat.getSuccessMessages().count).eql(0);
   await t.expect(getRequestCount()).eql(0);
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).notOk();
-  await t.expect(aiChat.isInputDisabled()).notOk();
+  await t.expect(aiChat.getTextArea().isDisabled).notOk();
 }).before(async () => createGridWithAIAssistant(
   {
     dataSource: threeRows,

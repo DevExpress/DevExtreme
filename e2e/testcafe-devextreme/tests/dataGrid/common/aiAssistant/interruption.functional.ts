@@ -112,7 +112,7 @@ test('Closing the popup mid-request aborts, leaves the grid unchanged, and shows
   await t.expect(aiChat.getMessages().count).eql(2);
   await t.expect(aiChat.getErrorMessages().count).eql(1);
   await t.expect(aiChat.getMessageErrorText(0).innerText).eql(await abortMessage());
-  await t.expect(aiChat.isInputDisabled()).notOk();
+  await t.expect(aiChat.getTextArea().isDisabled).notOk();
 }).before(async () => createGridWithAI({ options: gridOptions, mode: 'never' }));
 
 test('Late LLM resolution after abort should be ignored', async (t) => {
@@ -159,7 +159,7 @@ test('Closing the popup mid-execution aborts the remaining commands and keeps th
 
   // Command #1 (sort by name) has applied; command #2 (selectAll) is now in flight and delayed.
   await t.expect(selectAllStarted()).ok();
-  await t.expect(aiChat.isInputDisabled()).ok();
+  await t.expect(aiChat.getTextArea().isDisabled).ok();
 
   // Close the popup mid-execution → confirm dialog → abort.
   await closeAndConfirmAbort(t, aiChat);
@@ -182,7 +182,7 @@ test('Closing the popup mid-execution aborts the remaining commands and keeps th
 
   await t.expect(aiChat.getMessageRegenerateButton(0).count).eql(0);
 
-  await t.expect(aiChat.isInputDisabled()).notOk();
+  await t.expect(aiChat.getTextArea().isDisabled).notOk();
 }).before(async () => createWidget('dxDataGrid', () => {
   const w = window as any;
 
@@ -368,7 +368,7 @@ test('Disposing the grid mid-execution should not throw', async (t) => {
     .typeText(aiChat.getInput(), 'Select all rows')
     .pressKey('enter');
 
-  await t.expect(aiChat.isInputDisabled()).ok();
+  await t.expect(aiChat.getTextArea().isDisabled).ok();
 
   await disposeGrid();
 

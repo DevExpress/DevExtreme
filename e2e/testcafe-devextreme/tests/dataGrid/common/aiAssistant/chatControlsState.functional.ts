@@ -125,7 +125,7 @@ test('N distinct prompts back-to-back should each execute once, in order, and ap
 
     await t.expect(aiChat.getSuccessMessages().count).eql(i + 1);
     await t.expect(aiChat.getSuccessActionItems(i).count).eql(1);
-    await t.expect(aiChat.isInputDisabled()).notOk();
+    await t.expect(aiChat.getTextArea().isDisabled).notOk();
 
     await steps[i].verify();
   }
@@ -153,7 +153,7 @@ test('Input should be disabled during LLM phase', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getPendingMessages().count).eql(1);
-  await t.expect(aiChat.isInputDisabled()).ok();
+  await t.expect(aiChat.getTextArea().isDisabled).ok();
 }).before(async () => createGridWithAIAssistant(baseGrid(twoRows), [HANG]));
 
 test('Input should be disabled during command execution phase', async (t) => {
@@ -169,7 +169,7 @@ test('Input should be disabled during command execution phase', async (t) => {
     .typeText(aiChat.getInput(), 'Select all rows')
     .pressKey('enter');
 
-  await t.expect(aiChat.isInputDisabled()).ok();
+  await t.expect(aiChat.getTextArea().isDisabled).ok();
   await t.expect(aiChat.getAIMessages().count).eql(1);
   await t.expect(aiChat.getPendingMessages().count).eql(1);
 }).before(async () => createGridWithHangingCommand([selectAll]));
@@ -189,7 +189,7 @@ test('Input should be re-enabled after fulfillment', async (t) => {
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
   await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
-  await t.expect(aiChat.isInputDisabled()).notOk();
+  await t.expect(aiChat.getTextArea().isDisabled).notOk();
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAIAssistant(baseGrid(twoRows), [sortByName]));
 
@@ -207,7 +207,7 @@ test('Input should be re-enabled after failure', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.isInputDisabled()).notOk();
+  await t.expect(aiChat.getTextArea().isDisabled).notOk();
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql(undefined);
 }).before(async () => createGridWithAIAssistant(baseGrid(twoRows), [FAIL]));
 
@@ -225,7 +225,7 @@ test('Input should be re-enabled after abort via popup close', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getPendingMessages().count).eql(1);
-  await t.expect(aiChat.isInputDisabled()).ok();
+  await t.expect(aiChat.getTextArea().isDisabled).ok();
 
   await t.click(aiChat.getCloseButton().element);
 
@@ -235,7 +235,7 @@ test('Input should be re-enabled after abort via popup close', async (t) => {
   await t.click(dataGrid.getAIAssistantButton());
 
   await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.isInputDisabled()).notOk();
+  await t.expect(aiChat.getTextArea().isDisabled).notOk();
 }).before(async () => createGridWithAIAssistant(baseGrid(twoRows), [HANG]));
 
 test('Clear-chat button should be disabled during LLM phase', async (t) => {

@@ -320,7 +320,7 @@ test('In-flight lock behaves like DataGrid', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getPendingMessages().count).eql(1);
-  await t.expect(aiChat.isInputDisabled()).ok();
+  await t.expect(aiChat.getTextArea().isDisabled).ok();
   await t.expect(aiChat.isClearChatDisabled()).ok();
 }).before(async () => createTreeListWithAIAssistant(treeListBase(), [PENDING]));
 
