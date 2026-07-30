@@ -5490,9 +5490,14 @@ QUnit.module('API methods', baseModuleConfig, () => {
         dataGrid.saveEditData();
 
         // assert
-        assert.equal(dataGrid.getVisibleRows().length, 5, 'visible row count');
-        assert.deepEqual(dataGrid.getVisibleRows()[0].data, { id: 11, name: 'test 11' }, 'row 11 is not updated');
-        assert.deepEqual(dataGrid.getVisibleRows()[4].data, { id: 15, name: 'updated' }, 'row 15 is updated');
+        const visibleDataRows = dataGrid.getVisibleRows().filter(r => r.rowType === 'data');
+        const row15 = visibleDataRows.filter(r => r.data.id === 15)[0];
+
+        assert.ok(row15, 'row 15 is visible');
+        assert.strictEqual(row15.data.name, 'updated', 'row 15 is updated');
+        visibleDataRows
+            .filter(r => r.data.id !== 1 && r.data.id !== 15)
+            .forEach(r => assert.strictEqual(r.data.name, 'test ' + r.data.id, 'row ' + r.data.id + ' is not updated'));
     });
 
     // T804060

@@ -14083,7 +14083,7 @@ QUnit.module('Editing with validation', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        rowsView.render(testElement.children('.dx-datagrid'));
+        rowsView.render(this.gridContainer);
 
         that.applyOptions({
             editing: {
