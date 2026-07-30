@@ -3373,8 +3373,8 @@ QUnit.module('With both scrolls', getModuleConfigForTestsWithScroll('#itemsWithB
 QUnit.module('Dragging between sortables with scroll', {
     beforeEach: function() {
         this.clock = useFakeTimersWithoutAnimationFrame();
-        // SystemJS used native RAF here (module export was not stubbed). Suite-level
-        // installAnimationFrameStub() is noop — restore real frames for autoscroll.
+        // Same as SystemJS for this module: real RAF while assert.async waits.
+        // Suite-level installAnimationFrameStub() is noop — restore native frames.
         this.requestAnimationFrameStub = stubAnimationFrameNative();
 
         $('#qunit-fixture').addClass('qunit-fixture-visible');
@@ -3398,14 +3398,15 @@ QUnit.module('Dragging between sortables with scroll', {
         };
     },
     afterEach: function() {
-        this.clock.restore();
-        this.clock.reset();
-        this.requestAnimationFrameStub.restore();
-
-        $('#qunit-fixture').removeClass('qunit-fixture-visible');
         this.instances.forEach((instance) => {
             instance.dispose();
         });
+        this.instances = [];
+        this.requestAnimationFrameStub.restore();
+        this.clock.restore();
+        this.clock.reset();
+
+        $('#qunit-fixture').removeClass('qunit-fixture-visible');
     }
 }, () => {
     function dragBetweenSortableTest(that, assert, scroll, dragPos) {
@@ -3486,13 +3487,15 @@ QUnit.module('Dragging between sortables with scroll', {
             } else if(scrollTimes === 1) {
                 // second scroll event, itemPoints must be the same
                 assert.equal(itemPoints[1].top, 49);
+
+                this.requestAnimationFrameStub.restore();
                 done();
             }
 
             scrollTimes++;
         });
 
-        // act
+        // act — wait for native ScrollAnimator frames (SystemJS behavior for this module)
         pointerMock(this.$elements[0].children().eq(0)).start().down().move(300, 200).move(0, 50);
     });
 

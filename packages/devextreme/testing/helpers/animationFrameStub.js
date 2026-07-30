@@ -24,6 +24,7 @@ const NATIVE_KEY = '__dxQUnitAnimationFrameNatives';
 
 function getNatives() {
     if(!window[NATIVE_KEY]) {
+        // Capture after qunitExtensions may have wrapped RAF (needed for notimers cleanup).
         window[NATIVE_KEY] = {
             request: window.requestAnimationFrame.bind(window),
             cancel: window.cancelAnimationFrame.bind(window),
@@ -32,7 +33,6 @@ function getNatives() {
     return window[NATIVE_KEY];
 }
 
-// Capture natives before any stubbing in this module.
 getNatives();
 
 const syncRequest = (callback) => {
@@ -147,16 +147,34 @@ export function stubAnimationFrameDelayed(delayMs = 10) {
 }
 
 /**
- * Use the real browser RAF/CAF (saved before suite stubs).
- * Needed when a suite-level noop stub would otherwise freeze ScrollAnimator
- * and the test relies on wall-clock frames (SystemJS-era behavior).
+ * Real browser RAF (saved at helper load). Use when the test waits on assert.async()
+ * for ScrollAnimator frames and does not drive them with clock.tick.
+ * restore() cancels pending ids so qunit notimers stays clean.
  */
 export function stubAnimationFrameNative() {
     const natives = getNatives();
-    return stubAnimationFrame({
-        request: (callback) => natives.request(callback),
-        cancel: (requestID) => natives.cancel(requestID),
+    const pending = new Set();
+    const handle = stubAnimationFrame({
+        request: (callback) => {
+            const id = natives.request((...args) => {
+                pending.delete(id);
+                callback(...args);
+            });
+            pending.add(id);
+            return id;
+        },
+        cancel: (requestID) => {
+            pending.delete(requestID);
+            natives.cancel(requestID);
+        },
     });
+    const softRestoreHandle = handle.restore;
+    handle.restore = function() {
+        pending.forEach((id) => natives.cancel(id));
+        pending.clear();
+        softRestoreHandle();
+    };
+    return handle;
 }
 
 /** No-op requestAnimationFrame (suppress requested frames). */
