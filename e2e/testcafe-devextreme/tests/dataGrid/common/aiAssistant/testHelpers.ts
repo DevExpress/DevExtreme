@@ -25,11 +25,15 @@ export const baseGrid = {
   showBorders: true,
 };
 
-export const HANG = '__HANG__';
-
-export const FAIL = '__FAIL__';
-
+// Module-local: TypeScript compiles a reference to an exported const into
+// `exports.X`, which is not defined inside a ClientFunction in the browser.
+const HANG_MARKER = '__HANG__';
+const FAIL_MARKER = '__FAIL__';
 const DEFERRED_KEY = '__deferredResponse';
+
+export const HANG = HANG_MARKER;
+
+export const FAIL = FAIL_MARKER;
 
 // Wraps a response that must stay in flight until resolveAIRequest() is called.
 export const deferred = (response: unknown): unknown => ({ [DEFERRED_KEY]: response });
@@ -64,11 +68,11 @@ export const resetAIState = (): Promise<void> => ClientFunction(
         return { promise: Promise.reject(new Error(`Unexpected AI call #${count}`)), abort };
       }
 
-      if (response === HANG) {
+      if (response === HANG_MARKER) {
         return { promise: new Promise(() => {}), abort };
       }
 
-      if (response === FAIL) {
+      if (response === FAIL_MARKER) {
         return { promise: Promise.reject(new Error('AI error')), abort };
       }
 
@@ -101,7 +105,7 @@ export const resetAIState = (): Promise<void> => ClientFunction(
 
     w.__aiState = state;
   },
-  { dependencies: { HANG, FAIL, DEFERRED_KEY } },
+  { dependencies: { HANG_MARKER, FAIL_MARKER, DEFERRED_KEY } },
 )();
 
 export const setupAIState = (
