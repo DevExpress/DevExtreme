@@ -5,11 +5,12 @@ export interface BabelTransformAsset {
 
 export interface BabelTransformExecutorSchema {
   babelConfigPath: string;
-  configKey: string;
+  configKey?: string;
   sourcePattern: string;
   excludePatterns?: string[];
   outDir: string;
   removeDebug?: boolean;
   renameExtensions?: Record<string, string>;
   copyAssets?: BabelTransformAsset[];
+  watch?: boolean;
 }

@@ -37,7 +37,7 @@ const OPTIONS: DtsBundleExecutorSchema = {
   bundleSources: ['./ts/dx.all.d.ts', './ts/aliases.d.ts'],
   artifactPath: './artifacts/ts/dx.all.d.ts',
   packagePath: './artifacts/npm/devextreme/bundles/dx.all.d.ts',
-  licenseTemplateFile: './build/gulp/license-header.txt',
+  licenseTemplateFile: './build/license-header.txt',
   eulaUrl: 'https://js.devexpress.com/Licensing/',
 };
 
@@ -52,17 +52,14 @@ describe('DtsBundleExecutor E2E', () => {
     projectDir = path.join(tempDir, 'packages', 'test-lib');
 
     fs.mkdirSync(path.join(projectDir, 'ts'), { recursive: true });
-    fs.mkdirSync(path.join(projectDir, 'build', 'gulp'), { recursive: true });
+    fs.mkdirSync(path.join(projectDir, 'build'), { recursive: true });
 
     await writeJson(path.join(projectDir, 'package.json'), {
       name: 'devextreme',
       version: '26.1.0',
     });
 
-    await writeFileText(
-      path.join(projectDir, 'build', 'gulp', 'license-header.txt'),
-      LICENSE_TEMPLATE,
-    );
+    await writeFileText(path.join(projectDir, 'build', 'license-header.txt'), LICENSE_TEMPLATE);
     await writeFileText(path.join(projectDir, 'ts', 'dx.all.d.ts'), DX_ALL_CONTENT);
     await writeFileText(path.join(projectDir, 'ts', 'aliases.d.ts'), ALIASES_CONTENT);
   });
