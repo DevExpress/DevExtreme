@@ -5,6 +5,7 @@ import fx from '@js/common/core/animation/fx';
 import $ from '@js/core/renderer';
 import type { Appointment, Properties } from '@js/ui/scheduler';
 import { hierarchicalRoomsConfigMock } from '@ts/scheduler/__mock__/resource_manager.mock';
+import type { ResourceCellTemplateData } from '@ts/scheduler/r1/components/types';
 import type Scheduler from '@ts/scheduler/scheduler';
 import type ViewDataProvider from '@ts/scheduler/workspaces/view_model/view_data_provider';
 
@@ -144,5 +145,106 @@ describe('Hierarchical grouping', () => {
 
     expect(POM.getAppointments().map((appointment) => appointment.getGeometry().top))
       .toEqual([GROUP_HEIGHT, GROUP_HEIGHT * 3]);
+  });
+
+  describe('resourceCellTemplate', () => {
+    const createSchedulerWithTemplate = async (
+      groupOrientation: 'vertical' | 'horizontal',
+    ): Promise<ResourceCellTemplateData[]> => {
+      const templateData: ResourceCellTemplateData[] = [];
+
+      await createScheduler({
+        currentView: 'day',
+        views: [{ type: 'day', groupOrientation }],
+        currentDate: new Date(2015, 1, 9),
+        startDayHour: 9,
+        endDayHour: 12,
+        cellDuration: 60,
+        showAllDayPanel: false,
+        groups: ['roomId'],
+        resources: [{ ...hierarchicalRoomsConfigMock }] as unknown as Properties['resources'],
+        height: 1200,
+        resourceCellTemplate: (itemData: ResourceCellTemplateData, _: number, element: Element) => {
+          templateData.push(itemData);
+          element.textContent = `custom ${itemData.text ?? ''}`;
+        },
+      });
+
+      return templateData;
+    };
+
+    const describeCell = (
+      data: ResourceCellTemplateData,
+    ): Record<string, unknown> => ({
+      text: data.text,
+      level: data.level,
+      isLeaf: data.isLeaf,
+      resourceIndex: data.resourceIndex,
+      path: data.path.map((item) => item.text),
+    });
+
+    const boardRooms = {
+      text: 'Board rooms', level: 0, isLeaf: false, resourceIndex: 'roomId', path: ['Board rooms'],
+    };
+    const room11 = {
+      text: 'Room 11', level: 1, isLeaf: true, resourceIndex: 'roomId', path: ['Board rooms', 'Room 11'],
+    };
+    const room12 = {
+      text: 'Room 12', level: 1, isLeaf: true, resourceIndex: 'roomId', path: ['Board rooms', 'Room 12'],
+    };
+    const openSpaces = {
+      text: 'Open spaces', level: 0, isLeaf: false, resourceIndex: 'roomId', path: ['Open spaces'],
+    };
+    const room21 = {
+      text: 'Room 21', level: 1, isLeaf: true, resourceIndex: 'roomId', path: ['Open spaces', 'Room 21'],
+    };
+    const soloRoom = {
+      text: 'Solo room', level: 0, isLeaf: true, resourceIndex: 'roomId', path: ['Solo room'],
+    };
+
+    it('should pass hierarchy-aware data to every header cell template for vertical grouping', async () => {
+      const templateData = await createSchedulerWithTemplate('vertical');
+
+      expect(templateData.map(describeCell)).toEqual([
+        boardRooms, room11, room12, openSpaces, room21, soloRoom,
+      ]);
+    });
+
+    it('should pass hierarchy-aware data to every header cell template for horizontal grouping', async () => {
+      const templateData = await createSchedulerWithTemplate('horizontal');
+
+      expect(templateData.map(describeCell)).toEqual([
+        boardRooms, openSpaces, soloRoom, room11, room12, room21,
+      ]);
+    });
+
+    it('should pass the resource data of the cell and of every path item', async () => {
+      const templateData = await createSchedulerWithTemplate('vertical');
+      const room11Data = templateData
+        .find((data) => data.text === 'Room 11') as ResourceCellTemplateData;
+
+      expect(room11Data.data).toEqual({ id: 11, text: 'Room 11', parentId: 'board' });
+      expect(room11Data.id).toBe(11);
+      expect(room11Data.path.map((item) => item.data)).toEqual([
+        { id: 'board', text: 'Board rooms', parentId: null },
+        { id: 11, text: 'Room 11', parentId: 'board' },
+      ]);
+    });
+
+    it('should render custom template content in parent and leaf header cells', async () => {
+      await createSchedulerWithTemplate('vertical');
+
+      const headerTexts = [...document.querySelectorAll('.dx-scheduler-group-header')]
+        .map((cell) => cell.textContent);
+
+      expect(headerTexts).toEqual([
+        'custom Board rooms',
+        'custom Room 11',
+        'custom Room 12',
+        'custom Open spaces',
+        'custom Room 21',
+        'custom Solo room',
+      ]);
+    });
   });
 });

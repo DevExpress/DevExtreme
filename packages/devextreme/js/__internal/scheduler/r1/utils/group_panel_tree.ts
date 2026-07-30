@@ -1,8 +1,11 @@
 import { getKeyHash } from '@js/core/utils/common';
 
-import type { GroupItem, GroupPanelTreeNode, GroupRenderItem } from '../../types';
+import type {
+  GroupHeaderHierarchy, GroupHeaderPathItem, GroupItem, GroupPanelTreeNode, GroupRenderItem,
+} from '../../types';
 import type { ResourceId } from '../../utils/loader/types';
 import type { GroupNode } from '../../utils/resource_manager/types';
+import type { ResourceCellTemplateData } from '../components/types';
 
 export const stringifyId = (id: ResourceId): string => String(getKeyHash(id));
 
@@ -23,10 +26,19 @@ const buildGroupPanelData = (node: GroupNode): GroupItem => {
 const buildGroupPanelNode = (
   node: GroupNode,
   parentKey: string,
+  parentPath: GroupHeaderPathItem[],
 ): GroupPanelTreeNode => {
   const key = `${parentKey}${node.resourceIndex}_${stringifyId(node.id)}`;
+  const cell: GroupHeaderPathItem = {
+    id: node.id,
+    text: node.resourceText,
+    color: node.color,
+    resourceIndex: node.resourceIndex,
+    data: buildGroupPanelData(node),
+  };
+  const path = [...parentPath, cell];
   const children = node.children.map(
-    (child) => buildGroupPanelNode(child, `${key}_`),
+    (child) => buildGroupPanelNode(child, `${key}_`, path),
   );
   const leafCount = children.length === 0
     ? 1
@@ -34,11 +46,8 @@ const buildGroupPanelNode = (
 
   return {
     key,
-    id: node.id,
-    text: node.resourceText,
-    color: node.color,
-    data: buildGroupPanelData(node),
-    resourceIndex: node.resourceIndex,
+    ...cell,
+    path,
     leafCount,
     children,
   };
@@ -47,7 +56,7 @@ const buildGroupPanelNode = (
 export const buildGroupPanelTree = (
   groupsTree: GroupNode[],
 ): GroupPanelTreeNode[] => groupsTree.map(
-  (node) => buildGroupPanelNode(node, ''),
+  (node) => buildGroupPanelNode(node, '', []),
 );
 
 export const getGroupPanelTreeDepth = (tree: GroupPanelTreeNode[]): number => {
@@ -65,8 +74,9 @@ export const flattenGroupPanelTreeToRows = (
 ): GroupRenderItem[][] => {
   const rows: GroupRenderItem[][] = Array.from({ length: maxDepth }, () => []);
 
-  const walk = (node: GroupPanelTreeNode, depth: number): void => {
-    const isShallowLeaf = node.children.length === 0 && depth < maxDepth - 1;
+  const walk = (node: GroupPanelTreeNode, depth: number, isLastColumn: boolean): void => {
+    const isLeaf = node.children.length === 0;
+    const isShallowLeaf = isLeaf && depth < maxDepth - 1;
 
     rows[depth].push({
       id: node.id,
@@ -75,14 +85,21 @@ export const flattenGroupPanelTreeToRows = (
       key: node.key,
       resourceIndex: node.resourceIndex,
       data: node.data,
+      isLeaf,
+      isLastColumn,
+      path: node.path,
       colSpan: node.leafCount * baseColSpan,
       ...(isShallowLeaf ? { rowSpan: maxDepth - depth } : {}),
     });
 
-    node.children.forEach((child) => walk(child, depth + 1));
+    node.children.forEach((child, index) => walk(
+      child,
+      depth + 1,
+      isLastColumn && index === node.children.length - 1,
+    ));
   };
 
-  tree.forEach((node) => walk(node, 0));
+  tree.forEach((node, index) => walk(node, 0, index === tree.length - 1));
 
   return rows;
 };
@@ -97,6 +114,8 @@ const toGroupRenderItem = (
   key: node.key,
   resourceIndex: node.resourceIndex,
   data: node.data,
+  isLeaf: node.children.length === 0,
+  path: node.path,
   colSpan: baseColSpan,
 });
 
@@ -120,4 +139,31 @@ export const flattenGroupPanelTreeToLeafRows = (
   tree.forEach((node) => walk(node, []));
 
   return rows;
+};
+
+interface GroupHeaderCellInfo extends Partial<GroupHeaderHierarchy> {
+  id: ResourceId;
+  text?: string;
+  color?: string;
+  resourceIndex?: string;
+  data: GroupItem;
+}
+
+export const getResourceCellTemplateData = ({
+  id, text, color, data, resourceIndex = '', isLeaf = true, path,
+}: GroupHeaderCellInfo): ResourceCellTemplateData => {
+  const cellPath = path ?? [{
+    id, text, color, resourceIndex, data,
+  }];
+
+  return {
+    data,
+    id,
+    text,
+    color,
+    resourceIndex,
+    isLeaf,
+    path: cellPath,
+    level: cellPath.length - 1,
+  };
 };

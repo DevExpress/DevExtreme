@@ -46,6 +46,9 @@ const renderGroupPanelContent = (
           data={node.data}
           index={index}
           color={node.color}
+          resourceIndex={node.resourceIndex}
+          isLeaf={node.children.length === 0}
+          path={node.path}
           cellTemplate={resourceCellTemplate}
         />)
       }
