@@ -60,6 +60,11 @@
       "schema": "./src/executors/localization/schema.json",
       "description": "Generate localization message files and TypeScript CLDR data modules"
     },
+    "generate-community-locales": {
+      "implementation": "./src/executors/generate-community-locales/executor",
+      "schema": "./src/executors/generate-community-locales/schema.json",
+      "description": "Normalize community locale message files against the default locale dictionary"
+    },
     "concatenate-files": {
       "implementation": "./src/executors/concatenate-files/executor",
       "schema": "./src/executors/concatenate-files/schema.json",
