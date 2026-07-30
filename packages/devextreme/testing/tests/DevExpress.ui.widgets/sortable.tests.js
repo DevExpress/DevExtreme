@@ -3463,6 +3463,7 @@ QUnit.module('Dragging between sortables with scroll', {
             filter: '.draggable',
             group: 'shared',
             moveItemOnDrop: true,
+            scrollSpeed: 1,
         });
 
         $('.draggable').width(280);
