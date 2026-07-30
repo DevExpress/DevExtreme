@@ -18,9 +18,14 @@ import type { AICommandName, AICustomCommand, AIToolbarItem } from '@js/ui/html_
 import type { ContentReadyEvent, ItemClickEvent } from '@js/ui/menu';
 import type { Item } from '@js/ui/toolbar';
 import errors from '@js/ui/widget/ui.errors';
+import { getPublicElement } from '@ts/core/m_element';
 import { capitalize } from '@ts/core/utils/capitalize';
 import { DX_MENU_ITEM_CLASS } from '@ts/ui/menu/menu';
+import { DROP_DOWN_MENU_BUTTON_CLASS } from '@ts/ui/toolbar/constants';
+import { applyItemTabIndex } from '@ts/ui/toolbar/internal/roving.utils';
 import Toolbar from '@ts/ui/toolbar/toolbar';
+import { TOOLBAR_ITEM_CLASS } from '@ts/ui/toolbar/toolbar.base';
+import { getItemFocusTarget } from '@ts/ui/toolbar/toolbar.utils';
 import Quill from 'devextreme-quill';
 
 import type { CommandsMap } from '../utils/ai';
@@ -70,7 +75,7 @@ if (Quill) {
 
   const TOOLBAR_AI_ITEM_NAME = 'ai';
 
-  const localize = (name) => localizationMessage.format(`dxHtmlEditor-${camelize(name)}`);
+  const localize = (name): string => localizationMessage.format(`dxHtmlEditor-${camelize(name)}`);
 
   const localizeValue = (value, name) => {
     if (name === 'header') {
@@ -149,19 +154,19 @@ if (Quill) {
       }
     }
 
-    _addCallbacks() {
+    _addCallbacks(): void {
       // @ts-expect-error
       this.addCleanCallback(this.clean.bind(this));
       this.editorInstance.addContentInitializedCallback(this.updateHistoryWidgets.bind(this));
     }
 
-    _updateToolbar(isSelectionChanged) {
+    _updateToolbar(isSelectionChanged): void {
       this.updateFormatWidgets(isSelectionChanged);
       this.updateHistoryWidgets();
       this.updateTableWidgets();
     }
 
-    _updateFormatWidget(name, isApplied, formats) {
+    _updateFormatWidget(name, isApplied, formats): void {
       const widget = this._toolbarWidgets.getByName(name);
 
       if (!widget) {
@@ -182,7 +187,7 @@ if (Quill) {
       this._toggleClearFormatting(isApplied || !isEmptyObject(formats));
     }
 
-    _renderToolbar() {
+    _renderToolbar(): void {
       const container = this.options.container || this._getContainer();
 
       this._$toolbar = $('<div>')
@@ -193,6 +198,11 @@ if (Quill) {
       eventsEngine.on(this._$toolbarContainer, addNamespace('mousedown', this.editorInstance.NAME), (e) => {
         e.target.focus();
         e.preventDefault();
+
+        const $item = $(e.target).closest(`.${TOOLBAR_ITEM_CLASS}, .${DROP_DOWN_MENU_BUTTON_CLASS}`);
+        if ($item.length && getItemFocusTarget($item)?.length) {
+          this.toolbarInstance.option('focusedElement', getPublicElement($item));
+        }
       });
 
       this._subscribeFormatHotKeys();
@@ -223,7 +233,7 @@ if (Quill) {
       return this.options.multiline ?? true;
     }
 
-    clean() {
+    clean(): void {
       this._toolbarWidgets.clear();
 
       if (this._$toolbarContainer) {
@@ -233,7 +243,7 @@ if (Quill) {
       }
     }
 
-    repaint() {
+    repaint(): void {
       this.toolbarInstance && this.toolbarInstance.repaint();
     }
 
@@ -249,7 +259,7 @@ if (Quill) {
       return $container;
     }
 
-    _subscribeFormatHotKeys() {
+    _subscribeFormatHotKeys(): void {
       this.quill.keyboard.addBinding({
         which: KEY_CODES.b,
         shortKey: true,
@@ -266,13 +276,13 @@ if (Quill) {
       }, this._handleFormatHotKey.bind(this));
     }
 
-    _handleFormatHotKey(range, context, { which }) {
+    _handleFormatHotKey(range, context, { which }): void {
       const formatName = FORMAT_HOTKEYS[which];
 
       this._updateButtonState(formatName);
     }
 
-    _updateButtonState(formatName) {
+    _updateButtonState(formatName): void {
       const formatWidget = this._toolbarWidgets.getByName(formatName);
       const currentFormat = this.quill.getFormat();
       const formatValue = currentFormat[formatName];
@@ -326,7 +336,7 @@ if (Quill) {
       return this._getToolbarItem(item);
     }
 
-    _isAcceptableItem(widget, acceptableWidgetName) {
+    _isAcceptableItem(widget, acceptableWidgetName): boolean {
       return !widget || widget === acceptableWidgetName;
     }
 
@@ -502,7 +512,7 @@ if (Quill) {
       }, typeof item === 'string' ? {} : item);
     }
 
-    _hideAdaptiveMenu() {
+    _hideAdaptiveMenu(): void {
       if (this.toolbarInstance.option('overflowMenuVisible')) {
         this.toolbarInstance.option('overflowMenuVisible', false);
       }
@@ -610,7 +620,7 @@ if (Quill) {
       return this._getDefaultItemsConfig()[name];
     }
 
-    updateHistoryWidgets() {
+    updateHistoryWidgets(): void {
       const historyModule = this.quill.history;
 
       if (!historyModule) {
@@ -626,7 +636,7 @@ if (Quill) {
       this._updateManipulationWidget(this._toolbarWidgets.getByName('redo'), Boolean(redoOps.length));
     }
 
-    updateTableWidgets() {
+    updateTableWidgets(): void {
       const table = this.quill.getModule('table');
       if (!table) {
         return;
@@ -643,15 +653,30 @@ if (Quill) {
       });
     }
 
-    _updateManipulationWidget(widget, isOperationEnabled) {
+    _updateManipulationWidget(widget, isOperationEnabled): void {
       if (!widget) {
         return;
       }
 
       widget.option('disabled', !isOperationEnabled);
+      if (isOperationEnabled) {
+        this._syncItemTabIndex(widget);
+      }
     }
 
-    updateFormatWidgets(isResetRequired) {
+    _syncItemTabIndex(widget): void {
+      const $item = widget?.$element().closest(`.${TOOLBAR_ITEM_CLASS}`);
+      if (!$item?.length) {
+        return;
+      }
+
+      const { focusedElement } = this.toolbarInstance.option();
+      const isFocused = $item.get(0) === $(focusedElement).get(0);
+
+      applyItemTabIndex($item, isFocused ? 0 : -1);
+    }
+
+    updateFormatWidgets(isResetRequired): void {
       const selection = this.quill.getSelection();
       if (!selection) {
         return;
@@ -679,7 +704,7 @@ if (Quill) {
       this._toggleClearFormatting(hasFormats || selection.length > 1);
     }
 
-    _updateHeaderFormatWidget() {
+    _updateHeaderFormatWidget(): void {
       const selection = this.quill.getSelection();
       const formatName = 'header';
       const formatWidget = this._toolbarWidgets.getByName(formatName);
@@ -691,7 +716,7 @@ if (Quill) {
       this._markActiveFormatWidget(formatName, formatWidget, formats);
     }
 
-    _markActiveFormatWidget(name, widget, formats) {
+    _markActiveFormatWidget(name, widget, formats): void {
       if (this._isColorFormat(name)) {
         this._updateColorWidget(name, formats[name]);
       }
@@ -705,19 +730,22 @@ if (Quill) {
       }
     }
 
-    _toggleClearFormatting(hasFormats) {
+    _toggleClearFormatting(hasFormats): void {
       const clearWidget = this._toolbarWidgets.getByName('clear');
       if (clearWidget) {
         // @ts-expect-error
         clearWidget.option('disabled', !hasFormats);
+        if (hasFormats) {
+          this._syncItemTabIndex(clearWidget);
+        }
       }
     }
 
-    _isColorFormat(name) {
+    _isColorFormat(name): boolean {
       return name === 'color' || name === 'background';
     }
 
-    _updateColorWidget(name?: any, color?: any) {
+    _updateColorWidget(name?: any, color?: any): void {
       const formatWidget = this._toolbarWidgets.getByName(name);
       if (!formatWidget) {
         return;
@@ -755,19 +783,19 @@ if (Quill) {
       return widgetName;
     }
 
-    _setValueSilent(widget, value) {
+    _setValueSilent(widget, value): void {
       this._isReset = true;
       widget.option('value', value);
       this._isReset = false;
     }
 
-    _resetFormatWidgets() {
+    _resetFormatWidgets(): void {
       this._toolbarWidgets.each((name, widget) => {
         this._resetFormatWidget(name, widget);
       });
     }
 
-    _resetFormatWidget(name, widget) {
+    _resetFormatWidget(name, widget): void {
       widget.$element().removeClass(ACTIVE_FORMAT_CLASS);
       widget.$element().removeClass(SELECTED_STATE_CLASS);
       widget.$element().removeAttr('aria-pressed');
@@ -783,7 +811,7 @@ if (Quill) {
       }
     }
 
-    addClickHandler(name, handler) {
+    addClickHandler(name, handler): void {
       this._formatHandlers[name] = handler;
       const formatWidget = this._toolbarWidgets.getByName(name);
       // @ts-expect-error
