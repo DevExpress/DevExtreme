@@ -577,7 +577,16 @@ const data = (Base: ModuleType<DataController>) => class FocusDataControllerExte
         this._updatePageIndexes();
       } else if (isPartialUpdate) {
         this._updateFocusedRowIfNeeded(e, forceUpdateFocusedRow);
+        this._reapplyFocusedRowAfterPartialUpdate();
       }
+    }
+  }
+
+  private _reapplyFocusedRowAfterPartialUpdate() {
+    const focusedRowKey = this.option('focusedRowKey');
+
+    if (isDefined(focusedRowKey) && this.getRowIndexByKey(focusedRowKey) >= 0) {
+      this._focusController.updateFocusedRow({ focusedRowKey, preventScroll: true });
     }
   }
 
