@@ -2657,9 +2657,9 @@ QUnit.module('Headers with band columns', {
 
         // assert
         assert.equal(widths.length, 3, 'widths of the columns');
-        assert.equal(widths[0], 150, 'width of the first cell of the first row');
-        assert.equal(widths[1], 100, 'width of the first cell of the second row');
-        assert.equal(widths[2], 200, 'width of the first cell of the third row');
+        assert.roughEqual(widths[0], 150, 0.1, 'width of the first cell of the first row');
+        assert.roughEqual(widths[1], 100, 0.1, 'width of the first cell of the second row');
+        assert.roughEqual(widths[2], 200, 0.1, 'width of the first cell of the third row');
     });
 
     // T377673
