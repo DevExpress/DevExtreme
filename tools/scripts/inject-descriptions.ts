@@ -2,7 +2,7 @@ import sh from 'shelljs';
 import path from 'node:path';
 import { INTERNAL_TOOLS_ARTIFACTS, ROOT_DIR } from './common/paths';
 
-const DEFAULT_BRANCH_NAME = 'main';
+const DEFAULT_BRANCH_NAME = '26_1';
 
 sh.set('-e');
 sh.cd(ROOT_DIR);
