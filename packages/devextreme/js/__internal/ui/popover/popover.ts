@@ -348,12 +348,6 @@ class Popover<
 
   _ensurePopoverContentId(): string {
     const $overlayContent = this.$overlayContent();
-    const existingId = $overlayContent.attr('id');
-
-    if (existingId) {
-      this._popoverContentId = existingId;
-      return existingId;
-    }
 
     this._popoverContentId = this._popoverContentId ?? `dx-${new Guid()}`;
     $overlayContent.attr('id', this._popoverContentId);
