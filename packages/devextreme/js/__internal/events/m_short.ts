@@ -119,6 +119,10 @@ const toElements = (value: unknown): Element[] => {
     return [];
   }
 
+  if (typeof Element === 'undefined') {
+    return [];
+  }
+
   if (value instanceof Element) {
     return [value];
   }
