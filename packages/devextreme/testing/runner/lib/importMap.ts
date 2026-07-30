@@ -288,6 +288,9 @@ export function buildQunitImportMap({
 
     // Exact package-root entries (exporter, color, localization, events, …)
     ...collectPackageRootEntries(),
+    // Keep a single stubbable instance for tests that patch formatHelper.format.
+    format_helper: `${SHIMS}/format_helper.js`,
+    'format_helper.js': `${SHIMS}/format_helper.js`,
     // Override package-root exporter with a stubbable facade (named `export` + default api).
     exporter: `${SHIMS}/exporter.js`,
     'exporter.js': `${SHIMS}/exporter.js`,

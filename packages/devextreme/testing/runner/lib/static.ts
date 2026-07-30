@@ -445,6 +445,10 @@ const MUTABLE_ARTIFACT_FACADES: readonly { suffix: string; shimUrl: string }[] =
     shimUrl: '/packages/devextreme/testing/helpers/esm-shims/exporter.js',
   },
   {
+    suffix: '/artifacts/transpiled-esm-npm/esm/format_helper.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/format_helper.js',
+  },
+  {
     suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/translators/translator2d.js',
     shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_translator2d.js',
   },
