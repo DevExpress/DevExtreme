@@ -4,7 +4,11 @@ import * as path from 'node:path';
 import {
   BaseRunProps, RunAllModel, RunSuiteModel, TemplateVars,
 } from './types';
-import { buildQunitImportMap, getEsmModuleRoot } from './importMap';
+import {
+  buildQunitImportMap,
+  collectPluginSpecifiersFromSuiteTree,
+  getEsmModuleRoot,
+} from './importMap';
 
 interface PagesRendererDeps {
   contentWithCacheBuster: (contentPath: string, cacheBuster: string) => string;
@@ -127,14 +131,25 @@ export function createPagesRenderer({
     const knockoutJs = contentWithCacheBuster('/packages/devextreme/node_modules/knockout/build/output/knockout-latest.debug.js', cacheBuster);
     const sinonJs = contentWithCacheBuster('/packages/devextreme/node_modules/sinon/pkg/sinon.js', cacheBuster);
 
+    const suiteFilePath = path.join(
+      packageRoot,
+      scriptVirtualPath.replace(/^\/packages\/devextreme\//, ''),
+    );
+
     const importMap = buildQunitImportMap({
       jqueryUrl: getJQueryUrl(),
       cacheBuster,
-      suiteFilePath: path.join(
-        packageRoot,
-        scriptVirtualPath.replace(/^\/packages\/devextreme\//, ''),
-      ),
+      suiteFilePath,
     });
+
+    // Preload theme CSS before the suite graph evaluates. Scheduler (and others)
+    // call getThemeType() at module scope; under native ESM sibling imports run in
+    // parallel, so without this CSS may not be in the DOM yet and isMaterialBased
+    // freezes as false (SystemJS loaded css! sequentially first).
+    const themeCssImportPaths = fs.existsSync(suiteFilePath)
+      ? collectPluginSpecifiersFromSuiteTree(suiteFilePath)
+        .filter((specifier) => /\.css!(?:css)?$/.test(specifier))
+      : [];
 
     const importMapScript = `<script type="importmap" nonce="wIkO6u">\n${JSON.stringify(importMap)}\n</script>`;
 
@@ -156,6 +171,7 @@ export function createPagesRenderer({
       IS_CONTINUOUS_INTEGRATION_JSON: jsonString(runProps.IsContinuousIntegration),
       CACHE_BUSTER_JSON: jsonString(cacheBuster),
       INTEGRATION_IMPORT_PATHS_JSON: jsonString(getJQueryIntegrationImports()),
+      THEME_CSS_IMPORT_PATHS_JSON: jsonString(themeCssImportPaths),
       IS_SERVER_SIDE_TEST_JSON: jsonString(isServerSideTest),
       TEST_URL_JSON: jsonString(scriptVirtualPath),
     });

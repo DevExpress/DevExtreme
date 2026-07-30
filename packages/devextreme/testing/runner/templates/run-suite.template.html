@@ -123,6 +123,7 @@
 <script type="module" nonce="Z27qXj">
     (function() {
         var integrationImportPaths = {{{INTEGRATION_IMPORT_PATHS_JSON}}};
+        var themeCssImportPaths = {{{THEME_CSS_IMPORT_PATHS_JSON}}};
         var testUrl = {{{TEST_URL_JSON}}};
         var isServerSideTest = {{{IS_SERVER_SIDE_TEST_JSON}}};
 
@@ -168,6 +169,35 @@
             });
         }
 
+        // SystemJS evaluated `*.css!` before the suite graph. Native ESM loads
+        // siblings in parallel, so theme CSS must be applied before modules that
+        // snapshot themes.current() / isMaterialBased() at import time.
+        function preloadThemeCss() {
+            if(!themeCssImportPaths || !themeCssImportPaths.length) {
+                return Promise.resolve();
+            }
+
+            return Promise.all(themeCssImportPaths.map(function(specifier) {
+                return import(specifier);
+            })).then(function() {
+                return new Promise(function(resolve) {
+                    var started = Date.now();
+                    (function check() {
+                        var el = document.createElement('div');
+                        el.className = 'dx-theme-marker';
+                        document.documentElement.appendChild(el);
+                        var family = window.getComputedStyle(el).fontFamily || '';
+                        el.remove();
+                        if(family.indexOf('dx.') !== -1 || Date.now() - started > 2000) {
+                            resolve();
+                            return;
+                        }
+                        setTimeout(check, 10);
+                    })();
+                });
+            });
+        }
+
         var imports = integrationImportPaths.map(function(importPath) {
             return import(importPath);
         });
@@ -175,7 +205,9 @@
         Promise.all(imports)
             .then(function() {
                 return afterReady(function() {
-                    return import(testUrl);
+                    return preloadThemeCss().then(function() {
+                        return import(testUrl);
+                    });
                 });
             })
             .then(startQUnit)
