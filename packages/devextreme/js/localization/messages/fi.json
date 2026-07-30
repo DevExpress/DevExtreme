@@ -243,7 +243,7 @@
         "dxTreeList-editingAddRowToNode": "Lisää",
 
         "dxPager-infoText": "Sivu {0}/{1} ({2} kohdetta)",
-        "dxPager-pagesCountText": " / ",
+        "dxPager-pagesCountText": "/",
         "dxPager-pageSize": "Kohteet sivulla: {0}",
         "dxPager-pageSizesAllText": "Kaikki",
         "dxPager-page": "Sivu {0}",
@@ -254,7 +254,7 @@
         "dxPager-ariaPageNumber": "Sivunumero",
 
         "dxPagination-infoText": "Sivu {0}/{1} ({2} kohdetta)",
-        "dxPagination-pagesCountText": " / ",
+        "dxPagination-pagesCountText": "/",
         "dxPagination-pageSize": "Kohteet sivulla: {0}",
         "dxPagination-pageSizesAllText": "Kaikki",
         "dxPagination-page": "Sivu {0}",
