@@ -33,7 +33,7 @@ const prepareTestingAzureProvider = () => {
 const moduleConfig = {
     beforeEach: function() {
         this.fakeURL = '/fakeAzureUrl';
-        this.savedAtlas;
+        this.savedAtlas = window.atlas;
         this.loadAzureMock = () => {
             if(this.savedAtlas) {
                 window.atlas = this.savedAtlas;
