@@ -9,6 +9,7 @@ import {
   flattenGroupPanelTreeToLeafRows,
   flattenGroupPanelTreeToRows,
   getGroupPanelTreeDepth,
+  getResourceCellTemplateData,
 } from '../group_panel_tree';
 
 const node = (
@@ -44,6 +45,13 @@ describe('group_panel_tree', () => {
           color: '#aaa',
           data: { id: '1', text: 'Room 1', color: '#aaa' },
           resourceIndex: 'roomId',
+          path: [{
+            id: '1',
+            text: 'Room 1',
+            color: '#aaa',
+            resourceIndex: 'roomId',
+            data: { id: '1', text: 'Room 1', color: '#aaa' },
+          }],
           leafCount: 1,
           children: [],
         },
@@ -54,6 +62,13 @@ describe('group_panel_tree', () => {
           color: '#ccc',
           data: { id: '2', text: 'Room 2', color: '#ccc' },
           resourceIndex: 'roomId',
+          path: [{
+            id: '2',
+            text: 'Room 2',
+            color: '#ccc',
+            resourceIndex: 'roomId',
+            data: { id: '2', text: 'Room 2', color: '#ccc' },
+          }],
           leafCount: 1,
           children: [],
         },
@@ -157,6 +172,40 @@ describe('group_panel_tree', () => {
       expect(result[0].leafCount).toBe(2);
       expect(result[1].leafCount).toBe(1);
     });
+
+    it('should annotate the root-to-cell path for every node', () => {
+      const tree = [
+        node('A', 'Building A', 'buildingId', [
+          node('1', 'Room A1', 'roomId', [
+            node('x', 'Desk x', 'deskId'),
+          ]),
+        ]),
+      ];
+
+      const [building] = buildGroupPanelTree(tree);
+      const [room] = building.children;
+      const [desk] = room.children;
+
+      expect(building.path).toEqual([
+        {
+          id: 'A', text: 'Building A', color: undefined, resourceIndex: 'buildingId', data: { id: 'A', text: 'Building A' },
+        },
+      ]);
+      expect(desk.path.map((item) => item.text)).toEqual(['Building A', 'Room A1', 'Desk x']);
+      expect(desk.path[desk.path.length - 1].id).toBe('x');
+    });
+
+    it('should not share path items between branches with equal ids', () => {
+      const tree = [
+        node('A', 'Building A', 'buildingId', [node('1', 'Room 1', 'roomId')]),
+        node('B', 'Building B', 'buildingId', [node('1', 'Room 1', 'roomId')]),
+      ];
+
+      const result = buildGroupPanelTree(tree);
+
+      expect(result[0].children[0].path.map((item) => item.text)).toEqual(['Building A', 'Room 1']);
+      expect(result[1].children[0].path.map((item) => item.text)).toEqual(['Building B', 'Room 1']);
+    });
   });
 
   describe('getGroupPanelTreeDepth', () => {
@@ -208,6 +257,28 @@ describe('group_panel_tree', () => {
         expect.objectContaining({ id: '1', colSpan: 1 * 3 }),
         expect.objectContaining({ id: '2', colSpan: 1 * 3 }),
       ]);
+    });
+
+    it('should keep isLeaf and path on the flattened header rows', () => {
+      const tree = buildGroupPanelTree([
+        node('A', 'Building A', 'buildingId', [
+          node('1', 'Room A1', 'roomId'),
+        ]),
+      ]);
+
+      const rows = flattenGroupPanelTreeToRows(tree, 2, 1);
+
+      expect(rows[0][0]).toEqual(expect.objectContaining({
+        isLeaf: false,
+        path: [expect.objectContaining({ text: 'Building A' })],
+      }));
+      expect(rows[1][0]).toEqual(expect.objectContaining({
+        isLeaf: true,
+        path: [
+          expect.objectContaining({ text: 'Building A' }),
+          expect.objectContaining({ text: 'Room A1' }),
+        ],
+      }));
     });
 
     it('should handle 3-level non-uniform depth (shallow leaf spans the remaining 2 rows)', () => {
@@ -274,6 +345,66 @@ describe('group_panel_tree', () => {
         [expect.objectContaining({ key: 'roomId_1', text: 'Room 1', colSpan: 3 })],
         [expect.objectContaining({ key: 'roomId_2', text: 'Room 2', colSpan: 3 })],
       ]);
+    });
+
+    it('should keep isLeaf and path on every cell of a leaf row', () => {
+      const tree = buildGroupPanelTree([
+        node('A', 'Building A', 'buildingId', [
+          node('1', 'Room A1', 'roomId'),
+        ]),
+      ]);
+
+      const [row] = flattenGroupPanelTreeToLeafRows(tree, 1);
+
+      expect(row.map(({ isLeaf }) => isLeaf)).toEqual([false, true]);
+      expect(row[1].path.map((item) => item.text)).toEqual(['Building A', 'Room A1']);
+    });
+  });
+
+  describe('getResourceCellTemplateData', () => {
+    it('should build the template model from a group panel tree node', () => {
+      const tree = buildGroupPanelTree([
+        node('A', 'Building A', 'buildingId', [
+          node('1', 'Room A1', 'roomId', [], '#aaa'),
+        ]),
+      ]);
+      const [room] = tree[0].children;
+
+      expect(getResourceCellTemplateData(room)).toEqual({
+        data: { id: '1', text: 'Room A1', color: '#aaa' },
+        id: '1',
+        text: 'Room A1',
+        color: '#aaa',
+        resourceIndex: 'roomId',
+        level: 1,
+        isLeaf: true,
+        path: room.path,
+      });
+    });
+
+    it('should fall back to a single-level model when hierarchy info is not provided', () => {
+      expect(getResourceCellTemplateData({
+        id: 1,
+        text: 'Room 1',
+        color: '#aaa',
+        data: { id: 1, text: 'Room 1' },
+        resourceIndex: 'roomId',
+      })).toEqual({
+        data: { id: 1, text: 'Room 1' },
+        id: 1,
+        text: 'Room 1',
+        color: '#aaa',
+        resourceIndex: 'roomId',
+        level: 0,
+        isLeaf: true,
+        path: [{
+          id: 1,
+          text: 'Room 1',
+          color: '#aaa',
+          resourceIndex: 'roomId',
+          data: { id: 1, text: 'Room 1' },
+        }],
+      });
     });
   });
 });

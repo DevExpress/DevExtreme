@@ -2,6 +2,8 @@ import {
   describe, expect, it,
 } from '@jest/globals';
 
+import type { ResourceCellTemplateData } from '../types';
+import type { GroupPanelHorizontalCellProps } from './group_panel_horizontal_cell';
 import { GroupPanelHorizontalCell } from './group_panel_horizontal_cell';
 
 interface VirtualNodeLike {
@@ -12,7 +14,9 @@ interface VirtualNodeLike {
     scope?: string;
     role?: string;
     className?: string;
+    templateProps?: { data: ResourceCellTemplateData };
   };
+  children?: VirtualNodeLike | VirtualNodeLike[];
 }
 
 const baseProps = {
@@ -69,5 +73,48 @@ describe('GroupPanelHorizontalCell', () => {
 
     expect(result.props?.scope).toBe('col');
     expect(result.props?.role).toBe('columnheader');
+  });
+
+  describe('resourceCellTemplate', () => {
+    const cellTemplate = (): JSX.Element => <div />;
+
+    const renderTemplateData = (
+      props: Partial<GroupPanelHorizontalCellProps>,
+    ): ResourceCellTemplateData => {
+      const result = new GroupPanelHorizontalCell({
+        ...baseProps, ...props, cellTemplate,
+      }).render() as VirtualNodeLike;
+      const content = result.children as VirtualNodeLike;
+      const templateNode = (Array.isArray(content.children)
+        ? content.children[0]
+        : content.children) as VirtualNodeLike;
+
+      return templateNode.props?.templateProps?.data as ResourceCellTemplateData;
+    };
+
+    it('should pass hierarchy-aware data to a parent header cell template', () => {
+      const buildingPathItem = {
+        id: 'A', text: 'Building A', resourceIndex: 'buildingId', data: { id: 'A', text: 'Building A' },
+      };
+      const templateData = renderTemplateData({
+        id: 'A',
+        text: 'Building A',
+        data: { id: 'A', text: 'Building A' },
+        resourceIndex: 'buildingId',
+        isLeaf: false,
+        path: [buildingPathItem],
+      });
+
+      expect(templateData).toEqual({
+        data: { id: 'A', text: 'Building A' },
+        id: 'A',
+        text: 'Building A',
+        color: undefined,
+        resourceIndex: 'buildingId',
+        level: 0,
+        isLeaf: false,
+        path: [buildingPathItem],
+      });
+    });
   });
 });

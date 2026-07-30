@@ -6,6 +6,7 @@ import type { ResourceCellTemplateProps } from '@ts/scheduler/r1/components/type
 
 import { combineClasses } from '../../../../core/r1/utils/render_utils';
 import type { GroupPanelTreeNode } from '../../../types';
+import { getResourceCellTemplateData } from '../../utils/group_panel_tree';
 
 export interface GroupPanelVerticalNodeProps extends Partial<PropsWithClassName> {
   node: GroupPanelTreeNode;
@@ -20,6 +21,7 @@ export const GroupPanelVerticalNodeDefaultProps: GroupPanelVerticalNodeProps = {
     text: '',
     data: { id: 0 },
     resourceIndex: '',
+    path: [],
     leafCount: 1,
     children: [],
   },
@@ -56,12 +58,7 @@ export class GroupPanelVerticalNode extends BaseInfernoComponent<GroupPanelVerti
               ? <PublicTemplate
                 template={cellTemplate}
                 templateProps={{
-                  data: {
-                    data: node.data,
-                    id: node.id,
-                    color: node.color,
-                    text: node.text,
-                  },
+                  data: getResourceCellTemplateData({ ...node, isLeaf }),
                   index,
                 } as ResourceCellTemplateProps}
                 />

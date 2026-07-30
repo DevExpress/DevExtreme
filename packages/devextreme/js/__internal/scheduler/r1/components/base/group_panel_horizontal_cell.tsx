@@ -3,6 +3,7 @@ import { PublicTemplate } from '@ts/scheduler/r1/components/templates/index';
 import type { ResourceCellTemplateProps } from '@ts/scheduler/r1/components/types';
 
 import { combineClasses } from '../../../../core/r1/utils/render_utils';
+import { getResourceCellTemplateData } from '../../utils/group_panel_tree';
 import type { GroupPanelCellProps } from './group_panel_props';
 import { GroupPanelCellDefaultProps } from './group_panel_props';
 
@@ -34,6 +35,9 @@ export class GroupPanelHorizontalCell extends BaseInfernoComponent<GroupPanelHor
       className,
       isFirstGroupCell,
       isLastGroupCell,
+      resourceIndex,
+      isLeaf,
+      path,
     } = this.props;
     const classes = combineClasses({
       'dx-scheduler-group-header': true,
@@ -59,12 +63,9 @@ export class GroupPanelHorizontalCell extends BaseInfernoComponent<GroupPanelHor
               ? <PublicTemplate
                 template={cellTemplate}
                 templateProps={{
-                  data: {
-                    data,
-                    id,
-                    color,
-                    text,
-                  },
+                  data: getResourceCellTemplateData({
+                    id, text, color, data, resourceIndex, isLeaf, path,
+                  }),
                   index,
                 } as ResourceCellTemplateProps}
                 />

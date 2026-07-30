@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '@ts/scheduler/constants';
 
-import type { GroupRenderItem, ViewType } from '../../../types';
+import type { GroupHeaderPathItem, GroupRenderItem, ViewType } from '../../../types';
 import type { GroupNode } from '../../../utils/resource_manager/types';
 import {
   getAppointmentKey,
@@ -470,6 +470,23 @@ describe('base utils', () => {
       },
     ];
 
+    type AncestorArgs = [
+      id: number | string,
+      text: string,
+      color: string | undefined,
+      resourceIndex: string,
+    ];
+
+    const pathItem = (
+      [id, text, color, resourceIndex]: AncestorArgs,
+    ): GroupHeaderPathItem => ({
+      id,
+      text,
+      color,
+      resourceIndex,
+      data: { id, text, color },
+    });
+
     const renderItem = (
       id: number | string,
       text: string,
@@ -478,6 +495,7 @@ describe('base utils', () => {
       resourceIndex: string,
       colSpan: number,
       extra: Partial<GroupRenderItem> = {},
+      ancestors: AncestorArgs[] = [],
     ): GroupRenderItem => ({
       id,
       text,
@@ -486,8 +504,13 @@ describe('base utils', () => {
       resourceIndex,
       data: { id, text, color },
       colSpan,
+      isLeaf: true,
+      path: [...ancestors, [id, text, color, resourceIndex] as AncestorArgs].map(pathItem),
       ...extra,
     });
+
+    const group1Item1: AncestorArgs = [1, 'item 1', 'color 1', 'group1'];
+    const group1Item2: AncestorArgs = [2, 'item 2', 'color 2', 'group1'];
 
     it('should transform a uniform-depth tree into per-depth rows with real colSpan', () => {
       const groupPanelData = getGroupPanelData(groupsTreeBase, 1, false, 3);
@@ -498,14 +521,14 @@ describe('base utils', () => {
       expect(groupPanelData.groupTree[0].children[0].leafCount).toBe(1);
       expect(groupPanelData.groupPanelItems).toEqual([
         [
-          renderItem(1, 'item 1', 'color 1', 'group1_1', 'group1', 6),
-          renderItem(2, 'item 2', 'color 2', 'group1_2', 'group1', 6),
+          renderItem(1, 'item 1', 'color 1', 'group1_1', 'group1', 6, { isLeaf: false }),
+          renderItem(2, 'item 2', 'color 2', 'group1_2', 'group1', 6, { isLeaf: false }),
         ],
         [
-          renderItem(1, 'item 3', 'color 3', 'group1_1_group2_1', 'group2', 3),
-          renderItem(2, 'item 4', 'color 4', 'group1_1_group2_2', 'group2', 3),
-          renderItem(1, 'item 3', 'color 3', 'group1_2_group2_1', 'group2', 3),
-          renderItem(2, 'item 4', 'color 4', 'group1_2_group2_2', 'group2', 3),
+          renderItem(1, 'item 3', 'color 3', 'group1_1_group2_1', 'group2', 3, {}, [group1Item1]),
+          renderItem(2, 'item 4', 'color 4', 'group1_1_group2_2', 'group2', 3, {}, [group1Item1]),
+          renderItem(1, 'item 3', 'color 3', 'group1_2_group2_1', 'group2', 3, {}, [group1Item2]),
+          renderItem(2, 'item 4', 'color 4', 'group1_2_group2_2', 'group2', 3, {}, [group1Item2]),
         ],
       ]);
     });
@@ -552,11 +575,11 @@ describe('base utils', () => {
       expect(groupPanelData.maxDepth).toBe(2);
       expect(groupPanelData.groupPanelItems).toEqual([
         [
-          renderItem('A', 'Building A', undefined, 'buildingId_A', 'buildingId', 1),
+          renderItem('A', 'Building A', undefined, 'buildingId_A', 'buildingId', 1, { isLeaf: false }),
           renderItem('B', 'Building B', undefined, 'buildingId_B', 'buildingId', 1, { rowSpan: 2 }),
         ],
         [
-          renderItem(1, 'Room A1', undefined, 'buildingId_A_roomId_1', 'roomId', 1),
+          renderItem(1, 'Room A1', undefined, 'buildingId_A_roomId_1', 'roomId', 1, {}, [['A', 'Building A', undefined, 'buildingId']]),
         ],
       ]);
     });
@@ -566,20 +589,20 @@ describe('base utils', () => {
 
       expect(groupPanelData.groupPanelItems).toEqual([
         [
-          renderItem(1, 'item 1', 'color 1', 'group1_1_group_by_date_0', 'group1', 14, { isFirstGroupCell: true, isLastGroupCell: false }),
-          renderItem(2, 'item 2', 'color 2', 'group1_2_group_by_date_0', 'group1', 14, { isFirstGroupCell: false, isLastGroupCell: true }),
-          renderItem(1, 'item 1', 'color 1', 'group1_1_group_by_date_1', 'group1', 14, { isFirstGroupCell: true, isLastGroupCell: false }),
-          renderItem(2, 'item 2', 'color 2', 'group1_2_group_by_date_1', 'group1', 14, { isFirstGroupCell: false, isLastGroupCell: true }),
+          renderItem(1, 'item 1', 'color 1', 'group1_1_group_by_date_0', 'group1', 14, { isLeaf: false, isFirstGroupCell: true, isLastGroupCell: false }),
+          renderItem(2, 'item 2', 'color 2', 'group1_2_group_by_date_0', 'group1', 14, { isLeaf: false, isFirstGroupCell: false, isLastGroupCell: true }),
+          renderItem(1, 'item 1', 'color 1', 'group1_1_group_by_date_1', 'group1', 14, { isLeaf: false, isFirstGroupCell: true, isLastGroupCell: false }),
+          renderItem(2, 'item 2', 'color 2', 'group1_2_group_by_date_1', 'group1', 14, { isLeaf: false, isFirstGroupCell: false, isLastGroupCell: true }),
         ],
         [
-          renderItem(1, 'item 3', 'color 3', 'group1_1_group2_1_group_by_date_0', 'group2', 7, { isFirstGroupCell: true, isLastGroupCell: false }),
-          renderItem(2, 'item 4', 'color 4', 'group1_1_group2_2_group_by_date_0', 'group2', 7, { isFirstGroupCell: false, isLastGroupCell: false }),
-          renderItem(1, 'item 3', 'color 3', 'group1_2_group2_1_group_by_date_0', 'group2', 7, { isFirstGroupCell: false, isLastGroupCell: false }),
-          renderItem(2, 'item 4', 'color 4', 'group1_2_group2_2_group_by_date_0', 'group2', 7, { isFirstGroupCell: false, isLastGroupCell: true }),
-          renderItem(1, 'item 3', 'color 3', 'group1_1_group2_1_group_by_date_1', 'group2', 7, { isFirstGroupCell: true, isLastGroupCell: false }),
-          renderItem(2, 'item 4', 'color 4', 'group1_1_group2_2_group_by_date_1', 'group2', 7, { isFirstGroupCell: false, isLastGroupCell: false }),
-          renderItem(1, 'item 3', 'color 3', 'group1_2_group2_1_group_by_date_1', 'group2', 7, { isFirstGroupCell: false, isLastGroupCell: false }),
-          renderItem(2, 'item 4', 'color 4', 'group1_2_group2_2_group_by_date_1', 'group2', 7, { isFirstGroupCell: false, isLastGroupCell: true }),
+          renderItem(1, 'item 3', 'color 3', 'group1_1_group2_1_group_by_date_0', 'group2', 7, { isFirstGroupCell: true, isLastGroupCell: false }, [group1Item1]),
+          renderItem(2, 'item 4', 'color 4', 'group1_1_group2_2_group_by_date_0', 'group2', 7, { isFirstGroupCell: false, isLastGroupCell: false }, [group1Item1]),
+          renderItem(1, 'item 3', 'color 3', 'group1_2_group2_1_group_by_date_0', 'group2', 7, { isFirstGroupCell: false, isLastGroupCell: false }, [group1Item2]),
+          renderItem(2, 'item 4', 'color 4', 'group1_2_group2_2_group_by_date_0', 'group2', 7, { isFirstGroupCell: false, isLastGroupCell: true }, [group1Item2]),
+          renderItem(1, 'item 3', 'color 3', 'group1_1_group2_1_group_by_date_1', 'group2', 7, { isFirstGroupCell: true, isLastGroupCell: false }, [group1Item1]),
+          renderItem(2, 'item 4', 'color 4', 'group1_1_group2_2_group_by_date_1', 'group2', 7, { isFirstGroupCell: false, isLastGroupCell: false }, [group1Item1]),
+          renderItem(1, 'item 3', 'color 3', 'group1_2_group2_1_group_by_date_1', 'group2', 7, { isFirstGroupCell: false, isLastGroupCell: false }, [group1Item2]),
+          renderItem(2, 'item 4', 'color 4', 'group1_2_group2_2_group_by_date_1', 'group2', 7, { isFirstGroupCell: false, isLastGroupCell: true }, [group1Item2]),
         ],
       ]);
       expect(groupPanelData.baseColSpan).toBe(7);

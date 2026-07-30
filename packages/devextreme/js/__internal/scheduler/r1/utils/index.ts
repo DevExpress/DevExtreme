@@ -87,6 +87,7 @@ export {
   flattenGroupPanelTreeToLeafRows,
   flattenGroupPanelTreeToRows,
   getGroupPanelTreeDepth,
+  getResourceCellTemplateData,
   stringifyId,
 } from './group_panel_tree';
 
