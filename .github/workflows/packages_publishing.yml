@@ -48,9 +48,7 @@ jobs:
         run: pnpm run all:set-timestamp-version
 
       - name: Build npm packages
-        env:
-          BUILD_INTERNAL_PACKAGE: true
-        run: pnpm run all:build
+        run: pnpm run all:build:internal
 
       - name: Set GitHub Packages auth
         run: pnpm set //npm.pkg.github.com/:_authToken='${NODE_AUTH_TOKEN}'
