@@ -21,7 +21,7 @@ import { createDataGrid, baseModuleConfig, findShadowHostOrDocument } from '../.
 import { getOuterWidth } from 'core/utils/size';
 import { generateItems } from '../../helpers/dataGridMocks.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const CELL_UPDATED_CLASS = 'dx-datagrid-cell-updated-animation';
@@ -585,7 +585,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             { team: 'public', name: 'Zeb', age: 18 }
         ];
         const dataGrid = $('#dataGrid').dxDataGrid({
-            height: 80,
+            height: 100,
             dataSource: data,
             keyExpr: 'name',
             paging: { pageSize: 2 },
@@ -1005,7 +1005,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const toolbarItemOffset = $(dataGrid.$element()).find('.dx-toolbar .dx-button').offset().top;
 
         // assert
-        assert.equal(toolbarItemOffset, $(dataGrid.$element()).find('.dx-datagrid-search-panel').offset().top, 'toolbar search panel is aligned');
+        assert.roughEqual(toolbarItemOffset, $(dataGrid.$element()).find('.dx-datagrid-search-panel').offset().top, 1, 'toolbar search panel is aligned');
         // NOTE: Changed during Chrome133 update from 0.51 -> 1.51
         assert.roughEqual(toolbarItemOffset, $(dataGrid.$element()).find('.dx-toolbar .dx-datebox').offset().top, 1.51, 'toolbar custom item is aligned');
     });
@@ -1015,8 +1015,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const dataGrid = createDataGrid({
             sorting: { mode: 'none' },
             columns: [
-                { caption: 'my field', dataField: 'field1', width: 50 }
-            ]
+                { caption: 'my field', dataField: 'field1', width: 80 }
+            ],
         });
 
         // act
@@ -1024,14 +1024,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const $cellContent = $cellElements.eq(0).find('.dx-datagrid-text-content');
 
         // assert
-        assert.roughEqual($cellContent.width(), 35.5, 1, 'correct width');
+        assert.roughEqual($cellContent.width(), 48, 0.1, 'correct width');
     });
 
     QUnit.test('Column caption should have correct width when column is sorted (T1009923)', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
             columns: [
-                { caption: 'my field', dataField: 'field1', width: 50, sortIndex: 0, sortOrder: 'asc' }
+                { caption: 'my field', dataField: 'field1', width: 80, sortIndex: 0, sortOrder: 'asc' }
             ]
         });
 
@@ -1041,7 +1041,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.ok($cellContent.hasClass('dx-sort-indicator'), 'sorted');
-        assert.roughEqual($cellContent.width(), 18.5, 1, 'correct width');
+        assert.roughEqual($cellContent.width(), 31, 0.1, 'correct width');
     });
 
     QUnit.test('Column caption should have correct width when header filter is visible (T1009923)', function(assert) {
@@ -1051,7 +1051,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 visible: true
             },
             columns: [
-                { caption: 'my field', dataField: 'field1', width: 50 }
+                { caption: 'my field', dataField: 'field1', width: 80 }
             ]
         });
 
@@ -1061,7 +1061,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.ok($cellContent.hasClass('dx-header-filter-indicator'), 'header filter');
-        assert.roughEqual($cellContent.width(), 18.5, 1, 'correct width');
+        assert.roughEqual($cellContent.width(), 31, 0.1, 'correct width');
     });
 
     QUnit.test('Column caption should have correct width when header filter and sorting are enabled (T1009923)', function(assert) {
@@ -1071,7 +1071,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 visible: true
             },
             columns: [
-                { caption: 'my field', dataField: 'field1', width: 50, sortIndex: 0, sortOrder: 'asc' }
+                { caption: 'my field', dataField: 'field1', width: 80, sortIndex: 0, sortOrder: 'asc' }
             ]
         });
 
@@ -1082,7 +1082,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         assert.ok($cellContent.hasClass('dx-header-filter-indicator'), 'header filter');
         assert.ok($cellContent.hasClass('dx-sort-indicator'), 'sorted');
-        assert.roughEqual($cellContent.width(), 4.5, 1, 'correct width');
+        assert.roughEqual($cellContent.width(), 17, 0.1, 'correct width');
     });
 
     ['Row', 'Cell', 'Batch'].forEach(editMode => {
@@ -2456,7 +2456,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     QUnit.test('Height rows view = height content', function(assert) {
         // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
-            height: 200,
+            height: 250,
             columns: ['field1', 'field2'],
             dataSource: {
                 store: [{ field1: '1', field2: '2' }, { field1: '3', field2: '4' }, { field1: '5', field2: '6' }],
@@ -2469,8 +2469,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         // assert
         const rowsViewElement = $dataGrid.find('.dx-datagrid-rowsview');
         assert.equal(rowsViewElement.find('.dx-datagrid-content').length, 1, 'has content');
-        const heightDiff = Math.round(rowsViewElement.height()) - rowsViewElement.find('tbody')[0].offsetHeight;
-        assert.ok(heightDiff === 0 || heightDiff === 1/* chrome */, 'height rows view = height content');
+        assert.roughEqual(rowsViewElement.height(), rowsViewElement.find('tbody')[0].offsetHeight, 1.5, 'height rows view = height content');
     });
 
     QUnit.test('Height rows view auto when no height option', function(assert) {

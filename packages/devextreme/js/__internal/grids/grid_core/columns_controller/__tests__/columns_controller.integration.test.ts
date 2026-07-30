@@ -9,6 +9,45 @@ import {
   createDataGrid,
 } from '../../__tests__/__mock__/helpers/utils';
 
+describe('getFilteringColumns', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('should include data columns that allow filtering', async () => {
+    const { instance } = await createDataGrid({
+      dataSource: [{ id: 1, name: 'a' }],
+      keyExpr: 'id',
+      columns: [
+        { dataField: 'id', allowFiltering: true },
+        { dataField: 'name', allowHeaderFiltering: true },
+      ],
+    });
+
+    const filteringColumns = instance.getController('columns').getFilteringColumns();
+
+    expect(filteringColumns.map((column) => column.dataField)).toEqual(['id', 'name']);
+  });
+
+  it('should exclude command columns even when filtering is enabled', async () => {
+    const { instance } = await createDataGrid({
+      dataSource: [{ id: 1, name: 'a' }],
+      keyExpr: 'id',
+      columns: [
+        { dataField: 'id', allowFiltering: true },
+        { dataField: 'name', allowHeaderFiltering: true },
+        {
+          type: 'buttons', name: 'buttons', allowFiltering: true, allowHeaderFiltering: true,
+        },
+      ],
+    });
+
+    const filteringColumns = instance.getController('columns').getFilteringColumns();
+
+    expect(filteringColumns.map((column) => column.dataField)).toEqual(['id', 'name']);
+    expect(filteringColumns.some((column) => column.type)).toBe(false);
+  });
+});
+
 describe('Bugs', () => {
   beforeEach(() => {
     beforeTest();
