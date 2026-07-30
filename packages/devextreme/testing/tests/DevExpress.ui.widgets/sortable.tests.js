@@ -3372,6 +3372,7 @@ QUnit.module('With both scrolls', getModuleConfigForTestsWithScroll('#itemsWithB
 QUnit.module('Dragging between sortables with scroll', {
     beforeEach: function() {
         this.clock = useFakeTimersWithoutAnimationFrame();
+        this.requestAnimationFrameStub = stubAnimationFrameDelayed(10);
 
         $('#qunit-fixture').addClass('qunit-fixture-visible');
 
@@ -3396,6 +3397,7 @@ QUnit.module('Dragging between sortables with scroll', {
     afterEach: function() {
         this.clock.restore();
         this.clock.reset();
+        this.requestAnimationFrameStub.restore();
 
         $('#qunit-fixture').removeClass('qunit-fixture-visible');
         this.instances.forEach((instance) => {
@@ -3489,6 +3491,8 @@ QUnit.module('Dragging between sortables with scroll', {
 
         // act
         pointerMock(this.$elements[0].children().eq(0)).start().down().move(300, 200).move(0, 50);
+        this.clock.tick(10);
+        this.clock.tick(10);
     });
 
     // T872379
