@@ -171,6 +171,12 @@ function isVectorMapDataPath(relativeUrlPath: string): boolean {
   return /\/artifacts\/js\/vectormap-data\/[^/]+\.js$/i.test(normalized);
 }
 
+/** `dx.vectormaputils.js` is UMD (`exports.parse = …`); tests do `import { parse }`. */
+function isVectorMapUtilsPath(relativeUrlPath: string): boolean {
+  const normalized = relativeUrlPath.split(path.sep).join('/');
+  return /\/artifacts\/js\/vectormap-utils\/dx\.vectormaputils\.js$/i.test(normalized);
+}
+
 /**
  * `intl/dist/Intl.complete.js` appends locale data that expects a free
  * `IntlPolyfill` binding from the UMD *browser* branch. Forcing CJS breaks
@@ -326,6 +332,17 @@ function wrapVectorMapDataAsEsm(source: string): string {
   ].join('');
 }
 
+function wrapVectorMapUtilsAsEsm(source: string): string {
+  return [
+    'const module = { exports: {} };\n',
+    'const exports = module.exports;\n',
+    'var define;\n',
+    `${source}\n`,
+    'export default module.exports;\n',
+    'export const parse = module.exports.parse;\n',
+  ].join('');
+}
+
 function wrapVendorBundleSource(source: string, relativeUrlPath: string): string {
   if (isIntlVendorBundlePath(relativeUrlPath)) {
     return wrapIntlVendorAsEsm(source);
@@ -335,6 +352,9 @@ function wrapVendorBundleSource(source: string, relativeUrlPath: string): string
   }
   if (isVectorMapDataPath(relativeUrlPath)) {
     return wrapVectorMapDataAsEsm(source);
+  }
+  if (isVectorMapUtilsPath(relativeUrlPath)) {
+    return wrapVectorMapUtilsAsEsm(source);
   }
   return wrapWebpackVendorAsEsm(source);
 }
@@ -807,6 +827,7 @@ export function createStaticFileService({
           isWebpackVendorBundlePath(relativeUrlPath)
           || isGlobalizeOrCldrVendorPath(relativeUrlPath)
           || isVectorMapDataPath(relativeUrlPath)
+          || isVectorMapUtilsPath(relativeUrlPath)
         )
       ) {
         return sendWebpackVendorAsEsm(res, resolvedFilePath, relativeUrlPath);
