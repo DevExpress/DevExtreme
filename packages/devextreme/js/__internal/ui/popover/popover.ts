@@ -309,7 +309,7 @@ class Popover<
 
     if (targetElement && domAdapter.getBody().contains(targetElement)) {
       // @ts-expect-error trigger should be typed on type 'EventsEngineType'
-      eventsEngine.trigger($target.first(), 'focus');
+      eventsEngine.trigger($targets.first(), 'focus');
     }
   }
 
