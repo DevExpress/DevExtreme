@@ -4778,6 +4778,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         }
 
         const dataGrid = $('#dataGrid').dxDataGrid({
+            height: 600,
             dataSource: array,
             keyExpr: 'id',
             scrolling: {
