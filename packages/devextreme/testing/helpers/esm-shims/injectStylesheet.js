@@ -1,6 +1,10 @@
 /**
  * Injects a stylesheet once for ESM import-map QUnit mode
- * (replaces legacy `*.css!` plugin imports).
+ * (replaces legacy `*.css!` plugin imports / css-systemjs modules).
+ *
+ * Parity with SystemJS css-systemjs: only append `<link rel=stylesheet data-theme=…>`.
+ * Do not add dx-theme-* classes on body — that belongs to themes.attachCssClasses
+ * on `.dx-viewport` and changes typography/layout vs the old runner.
  *
  * Returns a Promise so importers can `await` load — otherwise tests that
  * assert computed styles race the async <link> fetch.
@@ -8,17 +12,12 @@
  * @param {string} href
  * @param {{ themeName?: string }} [options]
  *   themeName — set data-theme like SystemJS css-systemjs modules did
- *   (fluent.blue.light / generic.light / …) and attach theme classes on body
- *   without adding dx-viewport (tests use that class on #qunit-fixture only).
+ *   (fluent.blue.light / generic.light / …)
  */
 export function injectStylesheet(href, options = {}) {
     const existing = document.querySelector(`link[data-dx-esm-css="${href}"]`);
     if(existing) {
-        return waitForStylesheet(existing, href).then(() => {
-            if(options.themeName) {
-                applyThemeClasses(options.themeName);
-            }
-        });
+        return waitForStylesheet(existing, href);
     }
 
     const link = document.createElement('link');
@@ -29,38 +28,7 @@ export function injectStylesheet(href, options = {}) {
         link.setAttribute('data-theme', options.themeName);
     }
     document.head.appendChild(link);
-    return waitForStylesheet(link, href).then(() => {
-        if(options.themeName) {
-            applyThemeClasses(options.themeName);
-        }
-    });
-}
-
-/**
- * Mirrors themes.getCssClasses — typography/color without claiming dx-viewport.
- * @param {string} themeName
- */
-function applyThemeClasses(themeName) {
-    const parts = themeName.split('.');
-    if(!parts[0] || !document.body) {
-        return;
-    }
-
-    const classes = [
-        `dx-theme-${parts[0]}`,
-        `dx-theme-${parts[0]}-typography`,
-    ];
-
-    if(parts.length > 1) {
-        const isMaterialBased = parts[0] === 'material' || parts[0] === 'fluent';
-        classes.push(
-            isMaterialBased && parts[2]
-                ? `dx-color-scheme-${parts[1]}-${parts[2]}`
-                : `dx-color-scheme-${parts[1]}`,
-        );
-    }
-
-    document.body.classList.add(...classes);
+    return waitForStylesheet(link, href);
 }
 
 function waitForStylesheet(link, href) {
