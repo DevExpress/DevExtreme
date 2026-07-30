@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "title": "Generate Community Locales Executor Schema",
+  "description": "Normalize community locale message files against the default locale dictionary",
+  "type": "object",
+  "properties": {
+    "messagesDir": {
+      "type": "string",
+      "description": "Directory containing locale message JSON files (e.g., en.json, de.json)",
+      "default": "./js/localization/messages"
+    },
+    "defaultLocale": {
+      "type": "string",
+      "description": "Locale used as the canonical source of keys, ordering and formatting",
+      "default": "en"
+    }
+  }
+}

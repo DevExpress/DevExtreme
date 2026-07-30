@@ -28,7 +28,7 @@ const OPTIONS: DtsModulesExecutorSchema = {
   sourceDir: './js',
   outputDir: './artifacts/npm/devextreme',
   templatesDir: './build/npm-templates',
-  licenseTemplateFile: './build/gulp/license-header.txt',
+  licenseTemplateFile: './build/license-header.txt',
   eulaUrl: 'https://js.devexpress.com/Licensing/',
 };
 
@@ -43,7 +43,7 @@ describe('DtsModulesExecutor E2E', () => {
     projectDir = path.join(tempDir, 'packages', 'test-lib');
 
     fs.mkdirSync(path.join(projectDir, 'js', 'ui'), { recursive: true });
-    fs.mkdirSync(path.join(projectDir, 'build', 'gulp'), { recursive: true });
+    fs.mkdirSync(path.join(projectDir, 'build'), { recursive: true });
     fs.mkdirSync(path.join(projectDir, 'build', 'npm-templates', 'events'), { recursive: true });
     fs.mkdirSync(path.join(projectDir, 'build', 'npm-templates', 'bundles'), { recursive: true });
     fs.mkdirSync(path.join(projectDir, 'build', 'npm-templates', 'integration'), {
@@ -55,10 +55,7 @@ describe('DtsModulesExecutor E2E', () => {
       version: '26.1.0',
     });
 
-    await writeFileText(
-      path.join(projectDir, 'build', 'gulp', 'license-header.txt'),
-      LICENSE_TEMPLATE,
-    );
+    await writeFileText(path.join(projectDir, 'build', 'license-header.txt'), LICENSE_TEMPLATE);
 
     await writeFileText(path.join(projectDir, 'js', 'accordion.d.ts'), DEBUG_CONTENT);
     await writeFileText(

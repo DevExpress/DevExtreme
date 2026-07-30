@@ -11,7 +11,7 @@ describe('AddLicenseHeadersExecutor E2E', () => {
 
   async function setupLicenseHeaderTemplate(): Promise<void> {
     const projectDir = path.join(tempDir, 'packages', 'test-lib');
-    const buildDir = path.join(projectDir, 'build', 'gulp');
+    const buildDir = path.join(projectDir, 'build');
     fs.mkdirSync(buildDir, { recursive: true });
     await writeFileText(
       path.join(buildDir, 'license-header.txt'),
@@ -132,7 +132,7 @@ describe('AddLicenseHeadersExecutor E2E', () => {
 
   it('should support custom license template', async () => {
     const projectDir = path.join(tempDir, 'packages', 'test-lib');
-    const buildDir = path.join(projectDir, 'build', 'gulp');
+    const buildDir = path.join(projectDir, 'build');
     fs.mkdirSync(buildDir, { recursive: true });
 
     await writeFileText(
@@ -151,7 +151,7 @@ describe('AddLicenseHeadersExecutor E2E', () => {
     const options: AddLicenseHeadersExecutorSchema = {
       targetDirectory: './npm',
       packageJsonPath: './package.json',
-      licenseTemplateFile: './build/gulp/license-header.txt',
+      licenseTemplateFile: './build/license-header.txt',
       eulaUrl: 'https://js.devexpress.com/Licensing/',
       prependAfterLicense: '"use strict";\n\n',
       includePatterns: ['**/*.js'],
@@ -293,7 +293,7 @@ export const value = 42;
     const options: AddLicenseHeadersExecutorSchema = {
       targetDirectory: './npm',
       packageJsonPath: './package.json',
-      licenseTemplateFile: './build/gulp/license-header.txt',
+      licenseTemplateFile: './build/license-header.txt',
       eulaUrl: 'https://js.devexpress.com/Licensing/',
       includePatterns: ['**/*.js'],
       commentType: '*',
@@ -316,7 +316,7 @@ export const value = 42;
     const options: AddLicenseHeadersExecutorSchema = {
       targetDirectory: './npm',
       packageJsonPath: './package.json',
-      licenseTemplateFile: './build/gulp/license-header.txt',
+      licenseTemplateFile: './build/license-header.txt',
       eulaUrl: 'https://js.devexpress.com/Licensing/',
       includePatterns: ['**/*.js'],
     };

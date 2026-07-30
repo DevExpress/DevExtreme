@@ -113,6 +113,34 @@ describe('Unsupported filtering properties', () => {
       expect(idColumnHeaderFilter).toHaveLength(1);
     });
 
+    it('should exclude AI columns from the filter panel field list', async () => {
+      const { instance } = await createDataGrid({
+        dataSource,
+        keyExpr: 'id',
+        filterPanel: { visible: true },
+        columns: [
+          { dataField: 'id', caption: 'ID', allowFiltering: true },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'aiColumn',
+            ai: getAIColumnOptions(100),
+            allowFiltering: true,
+            allowHeaderFiltering: true,
+          },
+        ],
+      });
+
+      await flushAsync();
+
+      const filteringColumns = (instance as any).getController('columns').getFilteringColumns();
+
+      expect(filteringColumns.some((column) => column.type === 'ai')).toBe(false);
+      expect(filteringColumns.map((column) => column.dataField)).toContain('id');
+    });
+
     it('should keep filtering tools hidden after enabling options dynamically', async () => {
       const { component, instance } = await createDataGrid({
         dataSource,

@@ -4,7 +4,7 @@ export interface TransformRule {
   flags?: string;
 }
 
-export interface ConcatenateFilesExecutorSchema {
+export interface ConcatenatePass {
   sourceFiles: string[];
   outputFile: string;
   extractPattern?: string;
@@ -14,4 +14,10 @@ export interface ConcatenateFilesExecutorSchema {
   transforms?: TransformRule[];
   normalizeLineEndings?: boolean;
   separator?: string;
+}
+
+export interface ConcatenateFilesExecutorSchema extends ConcatenatePass {
+  additionalPasses?: ConcatenatePass[];
+  watch?: boolean;
+  watchPaths?: string[];
 }
