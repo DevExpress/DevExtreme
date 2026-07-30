@@ -12,17 +12,17 @@ import {
     stubClass
 } from '../../helpers/vizMocks.js';
 
-// frame.ts callOnce-captures window.rAF / cancel on first use. Install the
-// sinon stubs before any AnimationController.dispose() → cancelAnimationFrame
-// so later mockCancelAnimationFrame({ cancel: spy }) updates the live stub.
-stubAnimationFrame({
-    request: (callback) => window.setTimeout(() => callback(Date.now()), 0),
-    cancel: (timerId) => window.clearTimeout(timerId),
-});
-
 (function() {
     QUnit.module('AnimationController', {
         beforeEach: function() {
+            // Some tests call stub handle.restore(), which switches RAF to noop.
+            // Re-apply a working default per test so async chains can finish.
+            // Also ensures frame.ts callOnce captures stubbed window methods.
+            stubAnimationFrame({
+                request: (callback) => window.setTimeout(() => callback(Date.now()), 0),
+                cancel: (timerId) => window.clearTimeout(timerId),
+            });
+
             this.AnimationController = animationModule.AnimationController;
 
             this.Animation = function(ticks, complete, options) {
