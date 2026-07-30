@@ -7,12 +7,12 @@ import {
   provideZoneChangeDetection,
 } from '@angular/core';
 import {
-  DxSelectBoxModule,
-  DxTextAreaModule,
   DxFormModule,
   DxFormComponent,
   DxTooltipModule,
 } from 'devextreme-angular';
+import 'devextreme/ui/select_box';
+import 'devextreme/ui/text_area';
 
 import { Employee, Service } from './app.service';
 
@@ -32,8 +32,6 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   imports: [
-    DxSelectBoxModule,
-    DxTextAreaModule,
     DxFormModule,
     DxTooltipModule,
   ],
