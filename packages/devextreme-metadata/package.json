@@ -3,6 +3,7 @@
   "version": "26.2.0",
   "private": true,
   "author": "Developer Express Inc.",
+  "license": "SEE LICENSE IN LICENSE.md",
   "scripts": {
     "format:check": "prettier --check .",
     "format": "prettier --write .",

@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "author": "Developer Express Inc.",
+  "license": "SEE LICENSE IN LICENSE.md",
   "main": "src/index.mjs",
   "devDependencies": {
     "@eslint-stylistic/metadata": "catalog:"
