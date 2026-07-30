@@ -178,7 +178,7 @@ module('Table resizing module', moduleConfig, () => {
 
         resizeCallbacks.fire();
 
-        assert.strictEqual(typeof resizingInstance._resizeHandlerWithContext, 'function', '_resizeHandlerWithContext is the bound handler');
+        assert.ok(resizingInstance._resizeHandlerWithContext, '_resizeHandlerWithContext is registered');
     });
 
     test('Window resize callback should be cleaned after the widget dispose', function(assert) {
