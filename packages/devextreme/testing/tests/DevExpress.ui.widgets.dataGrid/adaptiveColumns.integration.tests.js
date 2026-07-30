@@ -168,7 +168,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
             assert.equal(parseInt($hiddenColumn.css('border-left-width')), 0, 'no left border');
         }
 
-        $('#container').width(450);
+        $('#container').width(550);
         instance.updateDimensions();
         this.clock.tick(10);
         $visibleColumns = $(instance.$element().find('.dx-header-row td'));

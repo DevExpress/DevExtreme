@@ -183,7 +183,8 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
             allowColumnResizing: true,
             loadingTimeout: null,
             dataSource: [{}],
-            columns: [{ dataField: 'firstName', width: 100 }, { dataField: 'lastName', width: 100 }]
+            width: 300,
+            columns: [{ dataField: 'firstName', width: 150 }, { dataField: 'lastName', width: 150 }]
         });
         const instance = $dataGrid.dxDataGrid('instance');
 
@@ -193,7 +194,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         const resizeController = instance.getController('columnsResizer');
         resizeController._isResizing = true;
         resizeController._targetPoint = { columnIndex: 0 };
-        resizeController._setupResizingInfo(-9900);
+        resizeController._setupResizingInfo(-9850);
         resizeController._moveSeparator({
             event: {
                 data: resizeController,
@@ -207,7 +208,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         assert.ok(instance.getView('columnHeadersView').getHeight() > columnHeadersViewHeight, 'column headers height is changed');
         assert.equal($dataGrid.children().height(), 300, 'widget\'s height is not changed');
         assert.equal(instance.columnOption(0, 'width'), 30, 'column 0 width');
-        assert.equal(instance.columnOption(1, 'width'), 170, 'column 1 width');
+        assert.equal(instance.columnOption(1, 'width'), 270, 'column 1 width');
     });
 
     // T356865
