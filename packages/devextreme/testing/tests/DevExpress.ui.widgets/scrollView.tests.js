@@ -2,10 +2,8 @@ import $ from 'jquery';
 import renderer from 'core/renderer';
 import { noop } from 'core/utils/common';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
-import {
-    stubAnimationFrameSync,
-    useFakeTimersWithoutAnimationFrame,
-} from '../../helpers/animationFrameStub.js';
+import animationFrame from '__internal/common/core/animation/frameModule';
+import { useFakeTimersWithoutAnimationFrame } from '../../helpers/animationFrameStub.js';
 import devices from '__internal/core/m_devices';
 import eventsEngine from 'common/core/events/core/events_engine';
 import themes from 'ui/themes';
@@ -58,7 +56,9 @@ devices.current('iPhone');
 const moduleConfig = {
     beforeEach: function() {
         this.clock = useFakeTimersWithoutAnimationFrame();
-        this.requestAnimationFrameStub = stubAnimationFrameSync();
+        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
+            callback();
+        });
         return new Promise((resolve) => themes.initialized(resolve));
     },
     afterEach: function() {

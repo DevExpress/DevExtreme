@@ -1,25 +1,19 @@
 import Animator from '__internal/ui/scroll_view/animator';
-import {
-    stubAnimationFrameDelayed,
-    useFakeTimersWithoutAnimationFrame,
-} from '../../helpers/animationFrameStub.js';
+import animationFrame from '__internal/common/core/animation/frameModule';
+import { useFakeTimersWithoutAnimationFrame } from '../../helpers/animationFrameStub.js';
 
 const REQUEST_ANIMATION_FRAME_TIMEOUT = 10;
 
 QUnit.module('Animator', {
-    before: function() {
-        this.requestAnimationFrameStub = stubAnimationFrameDelayed(REQUEST_ANIMATION_FRAME_TIMEOUT);
-    },
-
     beforeEach: function() {
         this.clock = useFakeTimersWithoutAnimationFrame();
+        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
+            return window.setTimeout(callback, REQUEST_ANIMATION_FRAME_TIMEOUT);
+        });
     },
 
     afterEach: function() {
         this.clock.restore();
-    },
-
-    after: function() {
         this.requestAnimationFrameStub.restore();
     }
 }, () => {

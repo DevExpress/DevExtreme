@@ -3,9 +3,8 @@ import pointerMock from '../../helpers/pointerMock.js';
 import 'ui/sortable';
 import 'ui/scroll_view';
 import fx from 'common/core/animation/fx';
+import animationFrame from '__internal/common/core/animation/frameModule';
 import {
-    installAnimationFrameStub,
-    stubAnimationFrameDelayed,
     stubAnimationFrameNative,
     useFakeTimersWithoutAnimationFrame,
 } from '../../helpers/animationFrameStub.js';
@@ -14,8 +13,6 @@ import translator from 'common/core/animation/translator';
 import viewPort from 'core/utils/view_port';
 
 import 'fluent_blue_light.css!';
-
-installAnimationFrameStub();
 
 QUnit.testStart(function() {
     const markup =
@@ -2649,7 +2646,9 @@ function getModuleConfigForTestsWithScroll(elementSelector, scrollSelector) {
         beforeEach: function() {
             this.clock = useFakeTimersWithoutAnimationFrame();
 
-            this.requestAnimationFrameStub = stubAnimationFrameDelayed(10);
+            this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
+                return window.setTimeout(callback, 10);
+            });
 
             $('#qunit-fixture').addClass('qunit-fixture-visible');
             this.$element = $(elementSelector);
@@ -3374,7 +3373,6 @@ QUnit.module('Dragging between sortables with scroll', {
     beforeEach: function() {
         this.clock = useFakeTimersWithoutAnimationFrame();
         // Same as SystemJS for this module: real RAF while assert.async waits.
-        // Suite-level installAnimationFrameStub() is noop — restore native frames.
         this.requestAnimationFrameStub = stubAnimationFrameNative();
 
         $('#qunit-fixture').addClass('qunit-fixture-visible');

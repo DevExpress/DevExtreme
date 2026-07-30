@@ -1,9 +1,7 @@
 /* global currentAssert */
 
 import $ from 'jquery';
-import {
-    stubAnimationFrame,
-} from '../../helpers/animationFrameStub.js';
+import animationFrame from '__internal/common/core/animation/frameModule';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import animationModule from 'viz/core/renderers/animation';
@@ -15,12 +13,11 @@ import {
 (function() {
     QUnit.module('AnimationController', {
         beforeEach: function() {
-            // Some tests call stub handle.restore(), which switches RAF to noop.
-            // Re-apply a working default per test so async chains can finish.
-            // Also ensures frame.ts callOnce captures stubbed window methods.
-            stubAnimationFrame({
-                request: (callback) => window.setTimeout(() => callback(Date.now()), 0),
-                cancel: (timerId) => window.clearTimeout(timerId),
+            this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
+                return window.setTimeout(() => callback(Date.now()), 0);
+            });
+            this.cancelAnimationFrameStub = sinon.stub(animationFrame, 'cancelAnimationFrame').callsFake((timerId) => {
+                window.clearTimeout(timerId);
             });
 
             this.AnimationController = animationModule.AnimationController;
@@ -59,10 +56,12 @@ import {
             this.animationController.dispose();
         },
         mockRequestAnimationFrame: function(callback) {
-            this.requestAnimationFrameStub = stubAnimationFrame({ request: callback });
+            this.requestAnimationFrameStub.restore();
+            this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake(callback);
         },
         mockCancelAnimationFrame: function(callback) {
-            this.cancelAnimationFrameStub = stubAnimationFrame({ cancel: callback });
+            this.cancelAnimationFrameStub.restore();
+            this.cancelAnimationFrameStub = sinon.stub(animationFrame, 'cancelAnimationFrame').callsFake(callback);
         }
     });
 

@@ -1,9 +1,6 @@
 import $ from 'jquery';
 import devices from '__internal/core/m_devices';
 import { value as viewPort } from 'core/utils/view_port';
-import { installAnimationFrameStub } from '../../helpers/animationFrameStub.js';
-
-installAnimationFrameStub();
 
 viewPort($('#qunit-fixture').addClass('dx-viewport'));
 devices.current('iPhone');

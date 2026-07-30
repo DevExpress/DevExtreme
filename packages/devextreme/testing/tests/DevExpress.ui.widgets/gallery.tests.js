@@ -4,11 +4,8 @@ import { DataSource } from 'common/data/data_source/data_source';
 import visibilityChange from 'common/core/events/visibility_change';
 import ArrayStore from 'common/data/array_store';
 import fx from 'common/core/animation/fx';
-import {
-    installAnimationFrameStub,
-    stubAnimationFrameDelayed,
-    useFakeTimersWithoutAnimationFrame,
-} from '../../helpers/animationFrameStub.js';
+import animationFrame from '__internal/common/core/animation/frameModule';
+import { useFakeTimersWithoutAnimationFrame } from '../../helpers/animationFrameStub.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
@@ -19,8 +16,6 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import 'ui/gallery';
 import 'ui/button';
 import 'fluent_blue_light.css!';
-
-installAnimationFrameStub();
 
 QUnit.testStart(() => {
     const markup =
@@ -2182,7 +2177,9 @@ QUnit.module('api', {
     QUnit.test('animationDuration', function(assert) {
         fx.off = false;
 
-        this.requestAnimationFrameStub = stubAnimationFrameDelayed(10);
+        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
+            return window.setTimeout(callback, 10);
+        });
 
         try {
             const $element = $('#gallerySimple').dxGallery({ items: [0, 1, 2] });

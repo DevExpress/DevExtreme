@@ -1,10 +1,7 @@
 import $ from 'jquery';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
-import {
-    stubAnimationFrameDelayed,
-    stubAnimationFrameSync,
-    useFakeTimersWithoutAnimationFrame,
-} from '../../../helpers/animationFrameStub.js';
+import animationFrame from '__internal/common/core/animation/frameModule';
+import { useFakeTimersWithoutAnimationFrame } from '../../../helpers/animationFrameStub.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import pointerMock from '../../../helpers/pointerMock.js';
 
@@ -37,7 +34,9 @@ const moduleConfig = {
         $('#qunit-fixture').html(markup);
 
         this.clock = useFakeTimersWithoutAnimationFrame();
-        this.requestAnimationFrameStub = stubAnimationFrameSync();
+        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
+            callback();
+        });
     },
     afterEach: function() {
         this.clock.restore();
@@ -178,7 +177,9 @@ QUnit.test('gesture prevent when scrollable is full and bounce enabled false', f
 QUnit.test('stop inertia on click', function(assert) {
     assert.expect(1);
 
-    stubAnimationFrameDelayed(0);
+    this.requestAnimationFrameStub.callsFake((callback) => {
+        setTimeout(callback, 0);
+    });
 
     const moveDistance = -10;
     const moveDuration = 10;
@@ -209,7 +210,9 @@ QUnit.test('stop inertia on click', function(assert) {
 QUnit.test('scrollbar is hidden on stop', function(assert) {
     assert.expect(1);
 
-    stubAnimationFrameDelayed(0);
+    this.requestAnimationFrameStub.callsFake((callback) => {
+        setTimeout(callback, 0);
+    });
 
     const $scrollable = $('#scrollable').dxScrollable({
         showScrollbar: 'onScroll',
@@ -283,7 +286,9 @@ QUnit.test('bounce up', function(assert) {
 
     let scroll = 0;
 
-    stubAnimationFrameDelayed(0);
+    this.requestAnimationFrameStub.callsFake((callback) => {
+        setTimeout(callback, 0);
+    });
 
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
@@ -309,7 +314,9 @@ QUnit.test('bounce up', function(assert) {
 QUnit.test('stop bounce on click', function(assert) {
     assert.expect(1);
 
-    stubAnimationFrameDelayed(0);
+    this.requestAnimationFrameStub.callsFake((callback) => {
+        setTimeout(callback, 0);
+    });
 
     const moveDistance = -10;
     const moveDuration = 10;
@@ -340,7 +347,9 @@ QUnit.test('stop bounce on click', function(assert) {
 QUnit.test('stop inertia bounce on after mouse up', function(assert) {
     assert.expect(1);
 
-    stubAnimationFrameDelayed(0);
+    this.requestAnimationFrameStub.callsFake((callback) => {
+        setTimeout(callback, 0);
+    });
 
     const moveDistance = -10;
     const moveDuration = 10;

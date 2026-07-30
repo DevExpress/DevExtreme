@@ -1,7 +1,5 @@
-import {
-    stubAnimationFrameSync,
-    useFakeTimersWithoutAnimationFrame,
-} from '../../../helpers/animationFrameStub.js';
+import animationFrame from '__internal/common/core/animation/frameModule';
+import { useFakeTimersWithoutAnimationFrame } from '../../../helpers/animationFrameStub.js';
 import { triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
@@ -35,7 +33,9 @@ const moduleConfig = {
         $('#qunit-fixture').html(markup);
 
         this.clock = useFakeTimersWithoutAnimationFrame();
-        this.requestAnimationFrameStub = stubAnimationFrameSync();
+        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
+            callback();
+        });
     },
     afterEach: function() {
         this.clock.restore();

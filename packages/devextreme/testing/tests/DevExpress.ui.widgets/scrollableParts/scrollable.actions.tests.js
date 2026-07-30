@@ -1,10 +1,8 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
-import {
-    stubAnimationFrameSync,
-    useFakeTimersWithoutAnimationFrame,
-} from '../../../helpers/animationFrameStub.js';
+import animationFrame from '__internal/common/core/animation/frameModule';
+import { useFakeTimersWithoutAnimationFrame } from '../../../helpers/animationFrameStub.js';
 import pointerMock from '../../../helpers/pointerMock.js';
 
 import {
@@ -36,7 +34,9 @@ const moduleConfig = {
         $('#qunit-fixture').html(markup);
 
         this.clock = useFakeTimersWithoutAnimationFrame();
-        this.requestAnimationFrameStub = stubAnimationFrameSync();
+        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
+            callback();
+        });
     },
     afterEach: function() {
         this.clock.restore();

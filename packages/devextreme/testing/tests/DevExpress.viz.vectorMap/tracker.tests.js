@@ -11,10 +11,9 @@ import {
 } from '../../helpers/vizMocks.js';
 import trackerModule from 'viz/vector_map/tracker';
 import { _TESTS_eventEmitterMethods } from '__internal/viz/vector_map/event_emitter';
-import {
-    stubAnimationFrameNoop,
-    useFakeTimersWithoutAnimationFrame,
-} from '../../helpers/animationFrameStub.js';
+import animationFrame from '__internal/common/core/animation/frameModule';
+import { useFakeTimersWithoutAnimationFrame } from '../../helpers/animationFrameStub.js';
+import { noop } from 'core/utils/common';
 
 const FOCUS_OFF_DELAY = 100;
 
@@ -57,8 +56,8 @@ const environment = {
         $.each(this.stubbedCallbacks || [], $.proxy(function(_, name) {
             this[name] = sinon.stub();
         }, this));
-        this.requestAnimationFrameStub = stubAnimationFrameNoop();
-        this.cancelAnimationFrameStub = this.requestAnimationFrameStub;
+        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake(noop);
+        this.cancelAnimationFrameStub = sinon.stub(animationFrame, 'cancelAnimationFrame').callsFake(noop);
         this.clock = useFakeTimersWithoutAnimationFrame();
     },
     afterEach: function() {
