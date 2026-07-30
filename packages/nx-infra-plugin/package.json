@@ -3,6 +3,7 @@
   "version": "26.2.0",
   "type": "commonjs",
   "private": true,
+  "author": "Developer Express Inc.",
   "executors": "./dist/executors.json",
   "exports": {
     ".": {

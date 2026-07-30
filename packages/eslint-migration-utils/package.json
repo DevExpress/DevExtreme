@@ -1,7 +1,9 @@
 {
   "name": "eslint-migration-utils",
   "version": "26.2.0",
+  "private": true,
   "type": "module",
+  "author": "Developer Express Inc.",
   "main": "src/index.mjs",
   "devDependencies": {
     "@eslint-stylistic/metadata": "catalog:"
