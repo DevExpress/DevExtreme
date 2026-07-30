@@ -5,6 +5,7 @@ import fx from '@js/common/core/animation/fx';
 import $ from '@js/core/renderer';
 import type { Properties } from '@js/ui/scheduler';
 import eventsEngine from '@ts/events/core/m_events_engine';
+import { hierarchicalRoomsConfigMock } from '@ts/scheduler/__mock__/resource_manager.mock';
 
 import { createScheduler as baseCreateScheduler } from './__mock__/create_scheduler';
 import { setupSchedulerTestEnvironment } from './__mock__/mock_scheduler';
@@ -570,6 +571,81 @@ describe('Appointments Dragging', () => {
           appointmentData: expect.objectContaining(expectedNewData),
         }),
       );
+    });
+
+    describe('hierarchical resource', () => {
+      const createHierarchicalScheduler = (
+        groupOrientation: 'vertical' | 'horizontal',
+        onAppointmentUpdating: unknown,
+      ): ReturnType<typeof createScheduler> => createScheduler({
+        dataSource: [{
+          text: 'Appointment 1',
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+          roomId: 11,
+        }],
+        currentView: 'day',
+        views: [{ type: 'day', groupOrientation }],
+        currentDate: new Date(2015, 1, 9),
+        startDayHour: 8,
+        endDayHour: 10,
+        showAllDayPanel: false,
+        editing: true,
+        groups: ['roomId'],
+        resources: [{ ...hierarchicalRoomsConfigMock }] as unknown as Properties['resources'],
+        height: 1200,
+        onAppointmentUpdating,
+      } as Properties);
+
+      // Leaf group order: 11 → 0, 12 → 1, 21 → 2, solo → 3
+      it('should update resource on drop into the next leaf group (vertical)', async () => {
+        const onAppointmentUpdating = jest.fn();
+        const { POM, scheduler } = await createHierarchicalScheduler(
+          'vertical',
+          onAppointmentUpdating,
+        );
+        const { viewDataProvider } = (
+          scheduler as unknown as {
+            _workSpace: { viewDataProvider: { getRowCountInGroup: (i: number) => number } };
+          }
+        )._workSpace;
+        const appointment = POM.getAppointments()[0].element;
+        const targetCell = POM.getDateTableCell(viewDataProvider.getRowCountInGroup(0), 0);
+
+        dragStart(POM, appointment);
+        dragMove(POM, appointment, targetCell);
+        dragEnd(POM, appointment);
+
+        expect(onAppointmentUpdating).toHaveBeenCalledTimes(1);
+        expect(onAppointmentUpdating).toHaveBeenCalledWith(
+          expect.objectContaining({
+            oldData: expect.objectContaining({ roomId: 11 }),
+            newData: expect.objectContaining({ roomId: 12 }),
+          }),
+        );
+      });
+
+      it('should update resource on drop into a distant leaf group (horizontal)', async () => {
+        const onAppointmentUpdating = jest.fn();
+        const { POM } = await createHierarchicalScheduler(
+          'horizontal',
+          onAppointmentUpdating,
+        );
+        const appointment = POM.getAppointments()[0].element;
+        const targetCell = POM.getDateTableCell(0, 3);
+
+        dragStart(POM, appointment);
+        dragMove(POM, appointment, targetCell);
+        dragEnd(POM, appointment);
+
+        expect(onAppointmentUpdating).toHaveBeenCalledTimes(1);
+        expect(onAppointmentUpdating).toHaveBeenCalledWith(
+          expect.objectContaining({
+            oldData: expect.objectContaining({ roomId: 11 }),
+            newData: expect.objectContaining({ roomId: 'solo' }),
+          }),
+        );
+      });
     });
 
     it('should not update appointment if it was dropped in the same cell', async () => {

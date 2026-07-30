@@ -87,17 +87,21 @@ export const setAppointmentGroupValues = <T extends Record<string, unknown>>(
   });
 };
 
+// Note: ids can be non-primitive (see valueExpr), so they need a by-value comparison
+const isGroupLeafMatched = (
+  leaf: GroupLeaf,
+  appointmentGroupValues: GroupValues,
+): boolean => Object
+  .entries(leaf.grouped)
+  .every(([resourceIndex, resourceId]) => appointmentGroupValues[resourceIndex]
+    ?.some((id) => equalByValue(id, resourceId)));
+
 export const getAppointmentGroupIndex = (
   appointmentGroupValues: GroupValues,
   groupLeafs: GroupLeaf[],
 ): GroupLeaf['groupIndex'][] => groupLeafs
-  .filter(
-    (leaf) => Object
-      .entries(leaf.grouped)
-      .every((
-        [resourceIndex, resourceId],
-      ) => appointmentGroupValues[resourceIndex]?.includes(resourceId)),
-  ).map((leaf) => leaf.groupIndex);
+  .filter((leaf) => isGroupLeafMatched(leaf, appointmentGroupValues))
+  .map((leaf) => leaf.groupIndex);
 
 export const groupAppointmentsByGroupLeafs = (
   resourceById: Record<string, ResourceLoader>,
@@ -108,15 +112,11 @@ export const groupAppointmentsByGroupLeafs = (
     return [appointments];
   }
 
-  return groupLeafs.map(
-    (leaf) => appointments.filter((item) => {
-      const appointmentGroupValues = getAppointmentGroupValues(item, Object.values(resourceById));
+  const resources = Object.values(resourceById);
 
-      return Object
-        .entries(leaf.grouped)
-        .every((
-          [resourceIndex, resourceId],
-        ) => appointmentGroupValues[resourceIndex]?.includes(resourceId));
-    }),
+  return groupLeafs.map(
+    (leaf) => appointments.filter(
+      (item) => isGroupLeafMatched(leaf, getAppointmentGroupValues(item, resources)),
+    ),
   );
 };
