@@ -164,6 +164,11 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v6
 
+    - name: Setup Chrome
+      uses: ./.github/actions/setup-chrome
+      with:
+        chrome-version: '150.0.7871.181'
+
     - name: Run QUnit tests
       uses: ./.github/actions/run-qunit-tests
       with:
@@ -194,6 +199,11 @@ jobs:
     steps:
       - name: Get sources
         uses: actions/checkout@v6
+
+      - name: Setup Chrome
+        uses: ./.github/actions/setup-chrome
+        with:
+          chrome-version: '150.0.7871.181'
 
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
