@@ -387,51 +387,19 @@ describe('API Handlers', () => {
       expect(sendRequestDataSpy).toHaveBeenCalledTimes(3);
     });
 
-    it('should throw E1046 and not send the request when the handler removes the key field', async () => {
-      const onDataErrorOccurred = jest.fn();
-      const { instance } = await createDataGrid({
-        dataSource: [
-          { id: 1, name: 'Name 1', value: 10 },
-          { id: 2, name: 'Name 2', value: 20 },
-        ],
-        keyExpr: 'id',
-        columns: [
-          { dataField: 'id', caption: 'ID' },
-          { dataField: 'name', caption: 'Name' },
-          { dataField: 'value', caption: 'Value' },
-          {
-            type: 'ai',
-            caption: 'AI Column',
-            name: 'myColumn',
-            ai: {
-              aiIntegration: columnAIIntegration,
-              mode: 'manual',
-              prompt: 'Test prompt',
-            },
-          },
-        ],
-        onAIColumnRequestCreating: (e) => {
-          e.data = e.data.map((item) => ({ name: item.name, value: item.value }));
-        },
-        onDataErrorOccurred,
-      });
-
-      instance.sendAIColumnRequest('myColumn');
-      await flushAsync();
-
-      expect(columnSendRequestStarted).toHaveBeenCalledTimes(0);
-      expect(onDataErrorOccurred).toHaveBeenCalledTimes(1);
-      expect(errors.Error).toHaveBeenCalledWith('E1046', 'id');
-    });
-
-    it('should throw E1046 and not send the request when the handler removes a compound key subfield', async () => {
+    it.each([
+      { keyType: 'the key field', keyExpr: 'id1' },
+      { keyType: 'a compound key subfield', keyExpr: ['id1', 'id2'] },
+    ])('should throw E1046 and not send the request when the handler removes $keyType', async ({
+      keyExpr,
+    }) => {
       const onDataErrorOccurred = jest.fn();
       const { instance } = await createDataGrid({
         dataSource: [
           { id1: 1, id2: 'a', value: 10 },
           { id1: 2, id2: 'b', value: 20 },
         ],
-        keyExpr: ['id1', 'id2'],
+        keyExpr,
         columns: [
           { dataField: 'id1' },
           { dataField: 'id2' },
@@ -448,7 +416,7 @@ describe('API Handlers', () => {
           },
         ],
         onAIColumnRequestCreating: (e) => {
-          e.data = e.data.map((item) => ({ id1: item.id1, value: item.value }));
+          e.data = e.data.map((item) => ({ id2: item.id2, value: item.value }));
         },
         onDataErrorOccurred,
       });
@@ -458,7 +426,7 @@ describe('API Handlers', () => {
 
       expect(columnSendRequestStarted).toHaveBeenCalledTimes(0);
       expect(onDataErrorOccurred).toHaveBeenCalledTimes(1);
-      expect(errors.Error).toHaveBeenCalledWith('E1046', ['id1', 'id2']);
+      expect(errors.Error).toHaveBeenCalledWith('E1046', keyExpr);
     });
   });
 });

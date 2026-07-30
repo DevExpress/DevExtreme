@@ -202,65 +202,22 @@ describe('Cache', () => {
       expect(instance.getAIColumnText('myColumn', 2)).toEqual('Response Name 2');
     });
 
-    it('should use cache with pagination in auto mode', async () => {
-      const aiIntegration = new AIIntegration({
-        sendRequest(prompt): RequestResult {
-          sendRequestSpy(prompt.data?.data);
-
-          return {
-            promise: new Promise<string>((resolve) => {
-              const result = {};
-              Object.entries(prompt.data?.data).forEach(([key, value]) => {
-                result[key] = `Response ${(value as any).name}`;
-              });
-              resolve(JSON.stringify(result));
-            }),
-            abort: (): void => {},
-          };
-        },
-      });
-      const { instance } = await createDataGrid({
-        dataSource: [
-          { id: 1, name: 'Name 1', value: 10 },
-          { id: 2, name: 'Name 2', value: 20 },
-        ],
-        keyExpr: 'id',
-        paging: {
-          pageSize: 1,
-        },
-        columns: [
-          { dataField: 'id', caption: 'ID' },
-          { dataField: 'name', caption: 'Name' },
-          { dataField: 'value', caption: 'Value' },
-          {
-            type: 'ai',
-            caption: 'AI Column',
-            name: 'myColumn',
-            ai: {
-              aiIntegration,
-              prompt: 'Test prompt',
-            },
-          },
-        ],
-      });
-
-      await Promise.resolve();
-      expect(sendRequestSpy).toHaveBeenCalledTimes(1);
-      expect(sendRequestSpy).toHaveBeenCalledWith({ 1: { id: 1, name: 'Name 1', value: 10 } });
-
-      instance.option('paging.pageIndex', 1);
-      jest.runAllTimers();
-      await Promise.resolve();
-      expect(sendRequestSpy).toHaveBeenCalledTimes(2);
-      expect(sendRequestSpy).toHaveBeenCalledWith({ 2: { id: 2, name: 'Name 2', value: 20 } });
-
-      instance.option('paging.pageIndex', 0);
-      jest.runAllTimers();
-      await Promise.resolve();
-      expect(sendRequestSpy).toHaveBeenCalledTimes(2);
-    });
-
-    it('should use cache with pagination in auto mode (compound key)', async () => {
+    it.each([
+      {
+        keyType: 'single key',
+        keyExpr: 'id1',
+        firstRequest: { 1: { id1: 1, id2: 'a', name: 'Name 1' } },
+        secondRequest: { 2: { id1: 2, id2: 'b', name: 'Name 2' } },
+      },
+      {
+        keyType: 'compound key',
+        keyExpr: ['id1', 'id2'],
+        firstRequest: { '{"id1":1,"id2":"a"}': { id1: 1, id2: 'a', name: 'Name 1' } },
+        secondRequest: { '{"id1":2,"id2":"b"}': { id1: 2, id2: 'b', name: 'Name 2' } },
+      },
+    ])('should use cache with pagination in auto mode ($keyType)', async ({
+      keyExpr, firstRequest, secondRequest,
+    }) => {
       const aiIntegration = new AIIntegration({
         sendRequest(prompt): RequestResult {
           sendRequestSpy(prompt.data?.data);
@@ -281,12 +238,12 @@ describe('Cache', () => {
           { id1: 1, id2: 'a', name: 'Name 1' },
           { id1: 2, id2: 'b', name: 'Name 2' },
         ],
-        keyExpr: ['id1', 'id2'],
+        keyExpr,
         paging: {
           pageSize: 1,
         },
         columns: [
-          { dataField: 'id1', caption: 'ID1' },
+          { dataField: 'id1', caption: 'ID' },
           { dataField: 'id2', caption: 'ID2' },
           { dataField: 'name', caption: 'Name' },
           {
@@ -303,13 +260,13 @@ describe('Cache', () => {
 
       await Promise.resolve();
       expect(sendRequestSpy).toHaveBeenCalledTimes(1);
-      expect(sendRequestSpy).toHaveBeenCalledWith({ '{"id1":1,"id2":"a"}': { id1: 1, id2: 'a', name: 'Name 1' } });
+      expect(sendRequestSpy).toHaveBeenCalledWith(firstRequest);
 
       instance.option('paging.pageIndex', 1);
       jest.runAllTimers();
       await Promise.resolve();
       expect(sendRequestSpy).toHaveBeenCalledTimes(2);
-      expect(sendRequestSpy).toHaveBeenCalledWith({ '{"id1":2,"id2":"b"}': { id1: 2, id2: 'b', name: 'Name 2' } });
+      expect(sendRequestSpy).toHaveBeenCalledWith(secondRequest);
 
       instance.option('paging.pageIndex', 0);
       jest.runAllTimers();
@@ -669,63 +626,25 @@ describe('Cache', () => {
     });
   });
 
-  describe('when data is updated via Push API', () => {
-    it('should clear cached data and send a prompt request', async () => {
-      const aiIntegration = new AIIntegration({
-        sendRequest(prompt: RequestParams): RequestResult {
-          sendRequestSpy(prompt.data?.data);
-
-          return {
-            promise: new Promise((resolve) => {
-              resolve(`{"1":"Response with value=${prompt.data?.data[1].value}"}`);
-            }),
-            abort: (): void => {},
-          };
-        },
-      });
-      const { instance } = await createDataGrid({
-        dataSource: [
-          { id: 1, name: 'Name 1', value: 10 },
-        ],
-        editing: {
-          mode: 'batch',
-          allowUpdating: true,
-        },
-        columns: [
-          { dataField: 'id', caption: 'ID' },
-          { dataField: 'name', caption: 'Name' },
-          { dataField: 'value', caption: 'Value' },
-          {
-            type: 'ai',
-            caption: 'AI Column',
-            name: 'myAIColumn',
-            ai: {
-              aiIntegration,
-              prompt: 'Initial prompt',
-            },
-          },
-        ],
-      });
-
-      expect(sendRequestSpy).toHaveBeenCalledTimes(1);
-      expect(instance.getAIColumnText('myAIColumn', 1)).toEqual('Response with value=10');
-
-      instance.getDataSource().store().push([{
-        type: 'update',
-        key: 1,
-        data: { value: 20 },
-      }]);
-      jest.runAllTimers();
-      await Promise.resolve();
-
-      expect(sendRequestSpy).toHaveBeenCalledTimes(2);
-      expect(sendRequestSpy).toHaveBeenLastCalledWith({ 1: { id: 1, name: 'Name 1', value: 20 } });
-      expect(instance.getAIColumnText('myAIColumn', 1)).toEqual('Response with value=20');
-    });
-  });
-
-  describe('when a compound-key row is updated via Push API', () => {
-    it('should clear cached data for the correct row and send a prompt request', async () => {
+  describe('when a row is updated via Push API', () => {
+    it.each([
+      {
+        keyType: 'single key',
+        keyExpr: 'id1',
+        row1Key: 1,
+        row2Key: 2,
+        expectedRequestKey: 1,
+      },
+      {
+        keyType: 'compound key',
+        keyExpr: ['id1', 'id2'],
+        row1Key: { id1: 1, id2: 'a' },
+        row2Key: { id1: 2, id2: 'b' },
+        expectedRequestKey: '{"id1":1,"id2":"a"}',
+      },
+    ])('should clear cached data for the pushed row only and send a prompt request ($keyType)', async ({
+      keyExpr, row1Key, row2Key, expectedRequestKey,
+    }) => {
       const aiIntegration = new AIIntegration({
         sendRequest(prompt: RequestParams): RequestResult {
           sendRequestSpy(prompt.data?.data);
@@ -747,7 +666,7 @@ describe('Cache', () => {
           { id1: 1, id2: 'a', value: 10 },
           { id1: 2, id2: 'b', value: 20 },
         ],
-        keyExpr: ['id1', 'id2'],
+        keyExpr,
         columns: [
           { dataField: 'id1' },
           { dataField: 'id2' },
@@ -765,12 +684,12 @@ describe('Cache', () => {
       });
 
       expect(sendRequestSpy).toHaveBeenCalledTimes(1);
-      expect(instance.getAIColumnText('myAIColumn', { id1: 1, id2: 'a' })).toEqual('Response with value=10');
-      expect(instance.getAIColumnText('myAIColumn', { id1: 2, id2: 'b' })).toEqual('Response with value=20');
+      expect(instance.getAIColumnText('myAIColumn', row1Key)).toEqual('Response with value=10');
+      expect(instance.getAIColumnText('myAIColumn', row2Key)).toEqual('Response with value=20');
 
       instance.getDataSource().store().push([{
         type: 'update',
-        key: { id1: 1, id2: 'a' },
+        key: row1Key,
         data: { value: 30 },
       }]);
       jest.runAllTimers();
@@ -779,10 +698,10 @@ describe('Cache', () => {
       // only the pushed row is re-requested; the other row stays cached
       expect(sendRequestSpy).toHaveBeenCalledTimes(2);
       expect(sendRequestSpy).toHaveBeenLastCalledWith({
-        '{"id1":1,"id2":"a"}': { id1: 1, id2: 'a', value: 30 },
+        [expectedRequestKey]: { id1: 1, id2: 'a', value: 30 },
       });
-      expect(instance.getAIColumnText('myAIColumn', { id1: 1, id2: 'a' })).toEqual('Response with value=30');
-      expect(instance.getAIColumnText('myAIColumn', { id1: 2, id2: 'b' })).toEqual('Response with value=20');
+      expect(instance.getAIColumnText('myAIColumn', row1Key)).toEqual('Response with value=30');
+      expect(instance.getAIColumnText('myAIColumn', row2Key)).toEqual('Response with value=20');
     });
   });
 });
