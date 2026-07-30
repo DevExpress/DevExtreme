@@ -564,6 +564,10 @@ const MUTABLE_ARTIFACT_FACADES: readonly { suffix: string; shimUrl: string }[] =
     suffix: '/artifacts/transpiled-esm-npm/esm/__internal/common/core/animation/frame.js',
     shimUrl: '/packages/devextreme/testing/helpers/esm-shims/animation_frame.js',
   },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/common/core/animation/frameModule.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/animation_frame.js',
+  },
 ];
 
 function findMutableArtifactFacade(relativeUrlPath: string): string | null {

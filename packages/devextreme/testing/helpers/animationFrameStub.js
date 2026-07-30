@@ -1,15 +1,15 @@
 /**
- * Stub window.requestAnimationFrame / cancelAnimationFrame for QUnit under native ESM.
+ * Stub animation frame via the QUnit mutable facade (animation_frame.js),
+ * which re-exports a stubbable default object as frameModule / frame.
  *
- * Sinon cannot stub ESM named exports. Production code imports those named exports from
- * frame.ts, which callOnce-captures window.requestAnimationFrame on first use — so stubs must:
- * 1) target window (not frameModule),
- * 2) be installed before the first requestAnimationFrame call,
- * 3) not be hard-restored while frame.ts still holds the captured reference,
- * 4) not be overwritten by sinon.useFakeTimers() (exclude requestAnimationFrame from toFake).
+ * Library packages/devextreme/js is unchanged. Under native ESM, Sinon cannot
+ * patch named-export bindings; the facade named exports forward to api.*.
  *
- * Stubs are kept on window so repeated helper-module evaluations still share one wrap.
+ * Soft restore keeps sinon stubs installed (reassigns callsFake) so repeated
+ * beforeEach/afterEach across suites that share the module stay stable.
  */
+
+import animationFrame from '__internal/common/core/animation/frameModule';
 
 const FAKE_TIMERS_WITHOUT_ANIMATION_FRAME = Object.freeze([
     'setTimeout',
@@ -24,7 +24,7 @@ const NATIVE_KEY = '__dxQUnitAnimationFrameNatives';
 
 function getNatives() {
     if(!window[NATIVE_KEY]) {
-        // Capture after qunitExtensions may have wrapped RAF (needed for notimers cleanup).
+        // Capture real browser RAF (after qunitExtensions may have wrapped it).
         window[NATIVE_KEY] = {
             request: window.requestAnimationFrame.bind(window),
             cancel: window.cancelAnimationFrame.bind(window),
@@ -34,6 +34,31 @@ function getNatives() {
 }
 
 getNatives();
+
+function isSinonStub(value) {
+    return !!(value && value.restore && value.restore.sinon);
+}
+
+function getDefaultImplementations() {
+    // After sinon.stub, original methods live on stub.wrappedMethod.
+    // Before first stub, methods on animationFrame are the facade defaults.
+    const requestImpl = isSinonStub(animationFrame.requestAnimationFrame)
+        ? animationFrame.requestAnimationFrame.wrappedMethod.bind(animationFrame)
+        : animationFrame.requestAnimationFrame.bind(animationFrame);
+    const cancelImpl = isSinonStub(animationFrame.cancelAnimationFrame)
+        ? animationFrame.cancelAnimationFrame.wrappedMethod.bind(animationFrame)
+        : animationFrame.cancelAnimationFrame.bind(animationFrame);
+    return { requestImpl, cancelImpl };
+}
+
+let defaults = null;
+
+function ensureDefaults() {
+    if(!defaults) {
+        defaults = getDefaultImplementations();
+    }
+    return defaults;
+}
 
 const syncRequest = (callback) => {
     callback();
@@ -48,10 +73,6 @@ const noopCancel = () => {};
 let lastRequestFake = noopRequest;
 let lastCancelFake = noopCancel;
 
-function isSinonStub(value) {
-    return !!(value && value.restore && value.restore.sinon);
-}
-
 function getStore() {
     if(!window[STORE_KEY]) {
         window[STORE_KEY] = { request: null, cancel: null };
@@ -60,6 +81,7 @@ function getStore() {
 }
 
 function stubOnce(object, methodName, storeKey) {
+    ensureDefaults();
     const store = getStore();
     const current = object[methodName];
 
@@ -87,8 +109,8 @@ function stubOnce(object, methodName, storeKey) {
 
 function ensureStubbed() {
     return {
-        requestStub: stubOnce(window, 'requestAnimationFrame', 'request'),
-        cancelStub: stubOnce(window, 'cancelAnimationFrame', 'cancel'),
+        requestStub: stubOnce(animationFrame, 'requestAnimationFrame', 'request'),
+        cancelStub: stubOnce(animationFrame, 'cancelAnimationFrame', 'cancel'),
     };
 }
 
@@ -118,8 +140,8 @@ function createHandle(requestStub) {
 }
 
 /**
- * Install (or refresh) window animation-frame stubs. Safe to call repeatedly; restore() is soft.
- * Omitting request/cancel keeps the previous fake (needed when tests stub them separately).
+ * Install (or refresh) frameModule animation-frame stubs.
+ * Omitting request/cancel keeps the previous fake.
  * @param {object} [options]
  * @param {Function} [options.request]
  * @param {Function} [options.cancel]
@@ -147,8 +169,8 @@ export function stubAnimationFrameDelayed(delayMs = 10) {
 }
 
 /**
- * Real browser RAF (saved at helper load). Use when the test waits on assert.async()
- * for ScrollAnimator frames and does not drive them with clock.tick.
+ * Real browser RAF. Use when the test waits on assert.async() for ScrollAnimator
+ * frames and does not drive them with clock.tick.
  * restore() cancels pending ids so qunit notimers stays clean.
  */
 export function stubAnimationFrameNative() {
@@ -186,13 +208,25 @@ export function stubAnimationFrameNoop() {
 }
 
 /**
- * Early install so frame.ts callOnce captures the sinon window stubs.
+ * Early install so the first library RAF goes through sinon stubs on the facade.
  * Default is noop (not sync): sync immediately re-enters ScrollAnimator/frame
  * loops and blows the stack (draggable + dxScrollView, etc.).
  * Suites that need sync must call stubAnimationFrameSync() in beforeEach.
  */
 export function installAnimationFrameStub() {
     return stubAnimationFrameNoop();
+}
+
+/**
+ * Restore facade defaults on the mutable api (still via stubs / callsFake).
+ */
+export function restoreAnimationFrameDefaults() {
+    const { requestImpl, cancelImpl } = ensureDefaults();
+    const { requestStub, cancelStub } = ensureStubbed();
+    applyFakes(requestStub, cancelStub, requestImpl, cancelImpl);
+    requestStub.resetHistory();
+    cancelStub.resetHistory();
+    return createHandle(requestStub);
 }
 
 export function useFakeTimersWithoutAnimationFrame(config = {}) {
@@ -202,4 +236,4 @@ export function useFakeTimersWithoutAnimationFrame(config = {}) {
     });
 }
 
-export { FAKE_TIMERS_WITHOUT_ANIMATION_FRAME };
+export { FAKE_TIMERS_WITHOUT_ANIMATION_FRAME, animationFrame };

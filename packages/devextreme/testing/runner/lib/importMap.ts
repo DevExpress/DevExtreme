@@ -444,6 +444,7 @@ export function buildQunitImportMap({
     'common/core/animation/frame': `${SHIMS}/animation_frame.js`,
     '__internal/common/core/animation/frame': `${SHIMS}/animation_frame.js`,
     'animation/frame': `${SHIMS}/animation_frame.js`,
+    '__internal/common/core/animation/frameModule': `${SHIMS}/animation_frame.js`,
 
     // Stubs
     zod: `${SHIMS}/zod.js`,
