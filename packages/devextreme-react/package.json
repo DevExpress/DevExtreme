@@ -72,7 +72,6 @@
     "@types/react": "18.3.28",
     "@types/react-dom": "18.3.7",
     "devextreme-metadata": "workspace:*",
-    "devextreme-nx-infra-plugin": "workspace:*",
     "jest-environment-jsdom": "29.7.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
