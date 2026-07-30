@@ -732,8 +732,20 @@ class ToolbarBase<
     clearTimeout(this._waitParentAnimationTimeout);
   }
 
-  getLabels(): dxElementWrapper {
-    return this.$element().find(`.${TOOLBAR_LABEL_CLASS}`);
+  setLabelAttribute(
+    name: string,
+    value: string | number | boolean | null = null,
+    elementOrder = 0,
+  ): boolean {
+    const $label = this.$element().find(`.${TOOLBAR_LABEL_CLASS}`).eq(elementOrder);
+
+    if (!$label.length) {
+      return false;
+    }
+
+    $label.attr(name, value);
+
+    return true;
   }
 
   _updateDimensionsInMaterial(): void {

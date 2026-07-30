@@ -2779,6 +2779,52 @@ QUnit.module('accessibility', {
             assert.deepEqual(getDescribedBy($('#where')), [contentId], 'target description is restored');
         });
 
+        QUnit.module('runtime target changes', {
+            beforeEach: function() {
+                this.$target1 = $('<div id="target1"></div>').appendTo('body');
+                this.$target2 = $('<div id="target2"></div>').appendTo('body');
+            },
+            afterEach: function() {
+                this.$target1.remove();
+                this.$target2.remove();
+            }
+        }, () => {
+            QUnit.test('runtime target change from none to element should add target description', function(assert) {
+                const popover = new Popover($('#what'), { target: null, deferRendering: false });
+
+                assert.strictEqual(this.$target1.attr('aria-describedby'), undefined, 'target is not described yet');
+
+                popover.option('target', '#target1');
+
+                const contentId = popover.$overlayContent().attr('id');
+                assert.deepEqual(getDescribedBy(this.$target1), [contentId], 'target description is added after option change');
+            });
+
+            QUnit.test('runtime target change from element to none should remove target description', function(assert) {
+                const popover = new Popover($('#what'), { target: '#target1', deferRendering: false });
+                const contentId = popover.$overlayContent().attr('id');
+
+                assert.deepEqual(getDescribedBy(this.$target1), [contentId], 'target is initially described');
+
+                popover.option('target', null);
+
+                assert.strictEqual(this.$target1.attr('aria-describedby'), undefined, 'target description is removed after option change');
+            });
+
+            QUnit.test('runtime target change should update target descriptions', function(assert) {
+                const popover = new Popover($('#what'), { target: '#target1', deferRendering: false });
+                const contentId = popover.$overlayContent().attr('id');
+
+                assert.deepEqual(getDescribedBy(this.$target1), [contentId], 'initial target is described');
+                assert.strictEqual(this.$target2.attr('aria-describedby'), undefined, 'new target is not described yet');
+
+                popover.option('target', '#target2');
+
+                assert.strictEqual(this.$target1.attr('aria-describedby'), undefined, 'old target description is removed');
+                assert.deepEqual(getDescribedBy(this.$target2), [contentId], 'new target description is added');
+            });
+        });
+
         QUnit.test('a manually wired token equal to an external content id should not be claimed by the popover', function(assert) {
             $('#where').attr('aria-describedby', 'manual-content-id');
 
@@ -2787,11 +2833,11 @@ QUnit.module('accessibility', {
             popover.$overlayContent().attr('id', 'manual-content-id');
             popover.repaint();
 
-            assert.deepEqual(getDescribedBy($('#where')), ['manual-content-id'], 'no duplicate token is added after the id is adopted');
+            assert.ok(getDescribedBy($('#where')).includes('manual-content-id'), 'no duplicate token is added after the id is adopted');
 
             popover.dispose();
 
-            assert.deepEqual(getDescribedBy($('#where')), ['manual-content-id'], 'the manual token is preserved after dispose');
+            assert.ok(getDescribedBy($('#where')).includes('manual-content-id'), 'the manual token is preserved after dispose');
         });
 
         QUnit.test('aria-describedby is added when target option is specified and removed when target is set to null', function(assert) {

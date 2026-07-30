@@ -24,6 +24,7 @@ import type { DxEvent, PointerInteractionEvent } from '@js/events';
 import type { Properties } from '@js/ui/popover';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
+import { addAriaDescriptionId, removeAriaDescriptionId } from '@ts/core/utils/m_dom';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type {
   DisplaySide,
@@ -69,20 +70,6 @@ const HOVER_HIDE_DELAY = 50;
 
 const ESC_KEY_NAME = 'escape';
 
-const ARIA_DESCRIBEDBY_ATTRIBUTE = 'aria-describedby';
-
-const getAriaDescriptionIds = (element: Element): string[] => (element.getAttribute(ARIA_DESCRIBEDBY_ATTRIBUTE) ?? '').split(/\s+/).filter(Boolean);
-
-const setAriaDescriptionIds = (element: Element, ids: string[]): void => {
-  const value = ids.join(' ');
-
-  if (!value) {
-    element.removeAttribute(ARIA_DESCRIBEDBY_ATTRIBUTE);
-  } else if (element.getAttribute(ARIA_DESCRIBEDBY_ATTRIBUTE) !== value) {
-    element.setAttribute(ARIA_DESCRIBEDBY_ATTRIBUTE, value);
-  }
-};
-
 type PopoverTarget = string | dxElementWrapper | Element | undefined;
 type PopoverEventOption = 'showEvent' | 'hideEvent';
 
@@ -126,8 +113,6 @@ class Popover<
   _timeouts!: Record<string, ReturnType<typeof setTimeout>>;
 
   _popoverContentId?: string;
-
-  _ariaDescriptionId?: string;
 
   _$describedTargets?: dxElementWrapper;
 
@@ -317,7 +302,7 @@ class Popover<
     if (this._getEffectiveAriaRole() === 'dialog') {
       this._restoreTargetFocus();
     } else {
-      // super._forceFocusLost();
+      super._forceFocusLost();
     }
   }
 
@@ -346,12 +331,8 @@ class Popover<
     super._toggleAriaLabel();
   }
 
-  _ensurePopoverContentId(): string {
-    const $overlayContent = this.$overlayContent();
-
+  _getPopoverContentId(): string {
     this._popoverContentId = this._popoverContentId ?? `dx-${new Guid()}`;
-    $overlayContent.attr('id', this._popoverContentId);
-
     return this._popoverContentId;
   }
 
@@ -386,11 +367,9 @@ class Popover<
       return;
     }
 
-    const id = this._ensurePopoverContentId();
-
-    if (this._ariaDescriptionId && this._ariaDescriptionId !== id) {
-      this._removeTargetAriaDescription();
-    }
+    const id = this._getPopoverContentId();
+    const $overlayContent = this.$overlayContent();
+    $overlayContent.attr('id', id);
 
     const $targets = this._getAriaDescriptionTargets();
 
@@ -404,44 +383,30 @@ class Popover<
 
     previousElements.forEach((element) => {
       if (!targetElements.has(element)) {
-        const restIds = getAriaDescriptionIds(element).filter((token) => token !== id);
-
-        setAriaDescriptionIds(element, restIds);
+        removeAriaDescriptionId(element, id);
       }
     });
 
-    const describedElements = $targets.toArray().filter((element) => {
-      const ids = getAriaDescriptionIds(element);
+    const describedElements = $targets.toArray().filter(
+      (element) => addAriaDescriptionId(element, id) || previousElements.has(element),
+    );
 
-      if (!ids.includes(id)) {
-        ids.push(id);
-        setAriaDescriptionIds(element, ids);
-        return true;
-      }
-
-      return previousElements.has(element);
-    });
-
-    this._ariaDescriptionId = describedElements.length ? id : undefined;
     this._$describedTargets = describedElements.length ? $(describedElements) : undefined;
   }
 
   _removeTargetAriaDescription(): void {
-    const id = this._ariaDescriptionId;
+    const id = this._getPopoverContentId();
 
-    if (!id || !this._$describedTargets) {
+    if (!this._$describedTargets) {
       return;
     }
 
     this._$describedTargets.each((_, element) => {
-      const restIds = getAriaDescriptionIds(element).filter((token) => token !== id);
-
-      setAriaDescriptionIds(element, restIds);
+      removeAriaDescriptionId(element, id);
 
       return true;
     });
 
-    this._ariaDescriptionId = undefined;
     this._$describedTargets = undefined;
   }
 
@@ -923,14 +888,6 @@ class Popover<
 
   _clean(): void {
     const { target } = this.option();
-
-    const $overlayContent = this.$overlayContent();
-    if ($overlayContent?.length) {
-      const existingId = $overlayContent.attr('id');
-      if (existingId) {
-        this._popoverContentId = existingId;
-      }
-    }
 
     this._detachEscapeKeyHandler();
     this._detachEvents(target);

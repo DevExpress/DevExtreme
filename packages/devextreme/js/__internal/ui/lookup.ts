@@ -678,6 +678,8 @@ class Lookup extends DropDownList<LookupProperties> {
         shading: false,
         hideOnParentScroll: true,
         _fixWrapperPosition: false,
+        // NOTE: popover set role based on toolbarOptions, but
+        // Lookup with showCancelButton: false, do not have toolbar, so we use option.
         _popoverContentRole: 'dialog',
         _preventDialogContainerFocus: true,
         width: this._isInitialOptionValue('dropDownOptions.width')

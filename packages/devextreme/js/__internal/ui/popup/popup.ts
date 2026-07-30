@@ -42,7 +42,6 @@ import {
   isMaterialBased,
 } from '@js/ui/themes';
 import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
-import type Toolbar from '@js/ui/toolbar';
 import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
@@ -198,11 +197,11 @@ class Popup<
 
   _$topToolbar?: dxElementWrapper | null;
 
-  _topToolbar?: Toolbar;
+  _topToolbar?: ToolbarBase;
 
   _$bottomToolbar?: dxElementWrapper | null;
 
-  _bottomToolbar?: Toolbar;
+  _bottomToolbar?: ToolbarBase;
 
   _$popupContent?: dxElementWrapper | null;
 
@@ -609,7 +608,7 @@ class Popup<
       $toolbarContainer,
       {
         onInitialized: (e): void => {
-          this._topToolbar = e.component;
+          this._topToolbar = e.component as unknown as ToolbarBase;
         },
       },
     );
@@ -659,7 +658,7 @@ class Popup<
       {
         compactMode: true,
         onInitialized: (e): void => {
-          this._bottomToolbar = e.component;
+          this._bottomToolbar = e.component as unknown as ToolbarBase;
         },
       },
     );
@@ -767,7 +766,6 @@ class Popup<
 
     const integrationOptions = this._getIntegrationOptions();
 
-    // @ts-expect-error integrationOptions
     instance.option({
       ...options,
       integrationOptions,
@@ -780,14 +778,15 @@ class Popup<
 
   _toggleAriaLabel(): void {
     const { title, showTitle } = this.option();
-    const $label = (this._topToolbar as unknown as ToolbarBase | undefined)?.getLabels().eq(0);
-    // NOTE: A custom titleTemplate can render no label element; aria-labelledby
-    // must not reference a missing id then.
-    const shouldSetAriaLabel = Boolean(showTitle) && Boolean(title) && Boolean($label?.length);
-    const titleId = shouldSetAriaLabel ? new Guid().toString() : null;
+    const isLabelRequired = Boolean(showTitle) && Boolean(title);
 
-    $label?.attr('id', titleId);
-    this.$overlayContent().attr('aria-labelledby', titleId);
+    const titleId = isLabelRequired ? new Guid().toString() : null;
+    const isLabelAttributeSet = this._topToolbar?.setLabelAttribute('id', titleId);
+
+    this.$overlayContent().attr(
+      'aria-labelledby',
+      isLabelRequired && isLabelAttributeSet ? titleId : null,
+    );
   }
 
   _animateShowing(): void {
