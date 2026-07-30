@@ -441,6 +441,9 @@ export function buildQunitImportMap({
     '__internal/viz/vector_map/tooltip_viewer': `${ESM_ROOT}/__internal/viz/vector_map/tooltip_viewer.js`,
     'ui/themes': `${SHIMS}/themes.js`,
     '__internal/ui/themes': `${SHIMS}/themes.js`,
+    'common/core/animation/frame': `${SHIMS}/animation_frame.js`,
+    '__internal/common/core/animation/frame': `${SHIMS}/animation_frame.js`,
+    'animation/frame': `${SHIMS}/animation_frame.js`,
 
     // Stubs
     zod: `${SHIMS}/zod.js`,

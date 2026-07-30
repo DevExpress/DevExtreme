@@ -8,12 +8,17 @@
  * @param {string} href
  * @param {{ themeName?: string }} [options]
  *   themeName — set data-theme like SystemJS css-systemjs modules did
- *   (fluent.blue.light / generic.light / …)
+ *   (fluent.blue.light / generic.light / …) and attach theme classes on body
+ *   without adding dx-viewport (tests use that class on #qunit-fixture only).
  */
 export function injectStylesheet(href, options = {}) {
     const existing = document.querySelector(`link[data-dx-esm-css="${href}"]`);
     if(existing) {
-        return waitForStylesheet(existing, href);
+        return waitForStylesheet(existing, href).then(() => {
+            if(options.themeName) {
+                applyThemeClasses(options.themeName);
+            }
+        });
     }
 
     const link = document.createElement('link');
@@ -24,7 +29,38 @@ export function injectStylesheet(href, options = {}) {
         link.setAttribute('data-theme', options.themeName);
     }
     document.head.appendChild(link);
-    return waitForStylesheet(link, href);
+    return waitForStylesheet(link, href).then(() => {
+        if(options.themeName) {
+            applyThemeClasses(options.themeName);
+        }
+    });
+}
+
+/**
+ * Mirrors themes.getCssClasses — typography/color without claiming dx-viewport.
+ * @param {string} themeName
+ */
+function applyThemeClasses(themeName) {
+    const parts = themeName.split('.');
+    if(!parts[0] || !document.body) {
+        return;
+    }
+
+    const classes = [
+        `dx-theme-${parts[0]}`,
+        `dx-theme-${parts[0]}-typography`,
+    ];
+
+    if(parts.length > 1) {
+        const isMaterialBased = parts[0] === 'material' || parts[0] === 'fluent';
+        classes.push(
+            isMaterialBased && parts[2]
+                ? `dx-color-scheme-${parts[1]}-${parts[2]}`
+                : `dx-color-scheme-${parts[1]}`,
+        );
+    }
+
+    document.body.classList.add(...classes);
 }
 
 function waitForStylesheet(link, href) {
