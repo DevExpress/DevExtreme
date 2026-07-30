@@ -49,9 +49,7 @@ jobs:
         run: pnpm run all:set-timestamp-version
 
       - name: Build npm packages
-        env:
-          BUILD_INTERNAL_PACKAGE: true
-        run: pnpm run all:build
+        run: pnpm run all:build:internal
 
       # Builds the dx-make-sbom package argument list from known package names and the tgz files produced in artifacts/npm.
       # Produces SBOM_PACKAGES for the SBOM build step.
