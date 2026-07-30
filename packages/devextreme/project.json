@@ -1098,6 +1098,23 @@
         "{projectRoot}/artifacts/npm/devextreme-internal/package.json"
       ]
     },
+    "build:npm:exports-map": {
+      "executor": "devextreme-nx-infra-plugin:generate-exports-map",
+      "options": {
+        "npmDir": "./artifacts/npm/devextreme",
+        "assetWildcards": [
+          "./dist/*",
+          "./localization/messages/*.json",
+          "./scss/*"
+        ]
+      },
+      "inputs": [
+        "{projectRoot}/artifacts/npm/devextreme/**/package.json"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/npm/devextreme/package.json"
+      ]
+    },
     "compress:npm-sources": {
       "executor": "devextreme-nx-infra-plugin:compress",
       "options": {
@@ -1362,6 +1379,7 @@
           "pnpm nx run devextreme:build:npm:dist:package-json",
           "pnpm nx run devextreme:build:npm:assemble",
           "pnpm nx run devextreme:build:npm:root-package-json",
+          "pnpm nx run devextreme:build:npm:exports-map",
           "pnpm nx run devextreme:compress:npm-sources",
           "pnpm nx run devextreme:verify:public-modules",
           "pnpm nx run devextreme:build:npm:scss"
