@@ -1,7 +1,9 @@
 /* global currentAssert */
 
 import $ from 'jquery';
-import { stubAnimationFrame } from '../../helpers/animationFrameStub.js';
+import {
+    stubAnimationFrame,
+} from '../../helpers/animationFrameStub.js';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import animationModule from 'viz/core/renderers/animation';
@@ -9,6 +11,14 @@ import rendererModule from 'viz/core/renderers/renderer';
 import {
     stubClass
 } from '../../helpers/vizMocks.js';
+
+// frame.ts callOnce-captures window.rAF / cancel on first use. Install the
+// sinon stubs before any AnimationController.dispose() → cancelAnimationFrame
+// so later mockCancelAnimationFrame({ cancel: spy }) updates the live stub.
+stubAnimationFrame({
+    request: (callback) => window.setTimeout(() => callback(Date.now()), 0),
+    cancel: (timerId) => window.clearTimeout(timerId),
+});
 
 (function() {
     QUnit.module('AnimationController', {
