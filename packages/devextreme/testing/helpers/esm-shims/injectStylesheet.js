@@ -4,8 +4,13 @@
  *
  * Returns a Promise so importers can `await` load — otherwise tests that
  * assert computed styles race the async <link> fetch.
+ *
+ * @param {string} href
+ * @param {{ themeName?: string }} [options]
+ *   themeName — set data-theme like SystemJS css-systemjs modules did
+ *   (fluent.blue.light / generic.light / …)
  */
-export function injectStylesheet(href) {
+export function injectStylesheet(href, options = {}) {
     const existing = document.querySelector(`link[data-dx-esm-css="${href}"]`);
     if(existing) {
         return waitForStylesheet(existing, href);
@@ -15,6 +20,9 @@ export function injectStylesheet(href) {
     link.rel = 'stylesheet';
     link.href = href;
     link.setAttribute('data-dx-esm-css', href);
+    if(options.themeName) {
+        link.setAttribute('data-theme', options.themeName);
+    }
     document.head.appendChild(link);
     return waitForStylesheet(link, href);
 }
