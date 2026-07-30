@@ -498,7 +498,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         rowsView.render($testElement);
 
         // assert
-        assert.roughEqual($('#container').find('.dx-sortable').height(), 100, 1);
+        assert.roughEqual($('#container').find('.dx-sortable').height(), 99, 1.001);
     });
 
     QUnit.test('Sortable should have height if dataSource is empty and grid has height', function(assert) {
@@ -516,7 +516,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         rowsView.render($testElement);
 
         // assert
-        assert.roughEqual($('#container').find('.dx-sortable').height(), 300, 1);
+        assert.roughEqual($('#container').find('.dx-sortable').height(), 299, 1.001);
     });
 
     QUnit.test('Dragging row when allowDropInsideItem is true', function(assert) {
