@@ -317,7 +317,7 @@ class Popover<
     if (this._getEffectiveAriaRole() === 'dialog') {
       this._restoreTargetFocus();
     } else {
-      super._forceFocusLost();
+      // super._forceFocusLost();
     }
   }
 

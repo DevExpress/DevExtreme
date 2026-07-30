@@ -840,12 +840,12 @@ class Overlay<
   }
 
   _forceFocusLost(): void {
-    const activeElement = domAdapter.getActiveElement();
-    const shouldResetActiveElement = !!this._$content?.find(activeElement).length;
+    // const activeElement = domAdapter.getActiveElement();
+    // const shouldResetActiveElement = !!this._$content?.find(activeElement).length;
 
-    if (shouldResetActiveElement) {
-      domUtils.resetActiveElement();
-    }
+    // if (shouldResetActiveElement) {
+    //   domUtils.resetActiveElement();
+    // }
   }
 
   _animate(
