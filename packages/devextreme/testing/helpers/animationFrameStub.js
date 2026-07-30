@@ -140,9 +140,14 @@ export function stubAnimationFrameNoop() {
     });
 }
 
-/** Early install with sync default — call at suite load before any widget animation frame. */
+/**
+ * Early install so frame.ts callOnce captures the sinon window stubs.
+ * Default is noop (not sync): sync immediately re-enters ScrollAnimator/frame
+ * loops and blows the stack (draggable + dxScrollView, etc.).
+ * Suites that need sync must call stubAnimationFrameSync() in beforeEach.
+ */
 export function installAnimationFrameStub() {
-    return stubAnimationFrameSync();
+    return stubAnimationFrameNoop();
 }
 
 export function useFakeTimersWithoutAnimationFrame(config = {}) {
