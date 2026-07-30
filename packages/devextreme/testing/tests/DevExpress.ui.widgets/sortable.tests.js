@@ -6,6 +6,7 @@ import fx from 'common/core/animation/fx';
 import {
     installAnimationFrameStub,
     stubAnimationFrameDelayed,
+    stubAnimationFrameNative,
     useFakeTimersWithoutAnimationFrame,
 } from '../../helpers/animationFrameStub.js';
 import browser from 'core/utils/browser';
@@ -3372,7 +3373,9 @@ QUnit.module('With both scrolls', getModuleConfigForTestsWithScroll('#itemsWithB
 QUnit.module('Dragging between sortables with scroll', {
     beforeEach: function() {
         this.clock = useFakeTimersWithoutAnimationFrame();
-        this.requestAnimationFrameStub = stubAnimationFrameDelayed(10);
+        // SystemJS used native RAF here (module export was not stubbed). Suite-level
+        // installAnimationFrameStub() is noop — restore real frames for autoscroll.
+        this.requestAnimationFrameStub = stubAnimationFrameNative();
 
         $('#qunit-fixture').addClass('qunit-fixture-visible');
 
@@ -3463,7 +3466,6 @@ QUnit.module('Dragging between sortables with scroll', {
             filter: '.draggable',
             group: 'shared',
             moveItemOnDrop: true,
-            scrollSpeed: 1,
         });
 
         $('.draggable').width(280);
@@ -3492,8 +3494,6 @@ QUnit.module('Dragging between sortables with scroll', {
 
         // act
         pointerMock(this.$elements[0].children().eq(0)).start().down().move(300, 200).move(0, 50);
-        this.clock.tick(10);
-        this.clock.tick(10);
     });
 
     // T872379

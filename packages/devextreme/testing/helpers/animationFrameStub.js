@@ -20,6 +20,20 @@ const FAKE_TIMERS_WITHOUT_ANIMATION_FRAME = Object.freeze([
 ]);
 
 const STORE_KEY = '__dxQUnitAnimationFrameStubs';
+const NATIVE_KEY = '__dxQUnitAnimationFrameNatives';
+
+function getNatives() {
+    if(!window[NATIVE_KEY]) {
+        window[NATIVE_KEY] = {
+            request: window.requestAnimationFrame.bind(window),
+            cancel: window.cancelAnimationFrame.bind(window),
+        };
+    }
+    return window[NATIVE_KEY];
+}
+
+// Capture natives before any stubbing in this module.
+getNatives();
 
 const syncRequest = (callback) => {
     callback();
@@ -129,6 +143,19 @@ export function stubAnimationFrameDelayed(delayMs = 10) {
     return stubAnimationFrame({
         request: (callback) => window.setTimeout(callback, delayMs),
         cancel: (requestID) => window.clearTimeout(requestID),
+    });
+}
+
+/**
+ * Use the real browser RAF/CAF (saved before suite stubs).
+ * Needed when a suite-level noop stub would otherwise freeze ScrollAnimator
+ * and the test relies on wall-clock frames (SystemJS-era behavior).
+ */
+export function stubAnimationFrameNative() {
+    const natives = getNatives();
+    return stubAnimationFrame({
+        request: (callback) => natives.request(callback),
+        cancel: (requestID) => natives.cancel(requestID),
     });
 }
 
