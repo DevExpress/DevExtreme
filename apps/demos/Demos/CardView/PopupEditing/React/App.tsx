@@ -1,7 +1,7 @@
 import React from 'react';
 
 import CardView, { Column, CardCover, Editing, SearchPanel, Form, Item } from 'devextreme-react/card-view';
-import 'devextreme-react/text-area';
+import 'devextreme/ui/text_area';
 
 import { employees } from './data.ts';
 import type { Employee } from './data.ts';
