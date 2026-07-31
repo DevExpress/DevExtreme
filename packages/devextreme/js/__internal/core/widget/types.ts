@@ -33,13 +33,14 @@ type DotNestedKeys<T, RLIMIT extends number = 10> = (
 export type ComponentPropertyType<
   T, TProp extends string,
 > = PropertyType<T, TProp> extends never ? never : PropertyType<T, TProp> | undefined;
-interface OptionChangedArgs<TProperties, TKey extends string = string> {
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+type OptionChangedArgs<TProperties, TKey extends string = string> = {
   name: TKey extends `${infer TName}.${string}` ? TName : TKey;
   fullName: TKey;
   previousValue: ComponentPropertyType<TProperties, TKey>;
   value: ComponentPropertyType<TProperties, TKey>;
   handled: boolean;
-}
+};
 
 type OptionNames<TProperties> = DotNestedKeys<Required<TProperties>>;
 

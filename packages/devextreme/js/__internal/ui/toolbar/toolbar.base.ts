@@ -69,7 +69,7 @@ class ToolbarBase<
 
   _waitParentAnimationTimeout?: ReturnType<typeof setTimeout>;
 
-  _getSynchronizableOptionsForCreateComponent(): (keyof TProperties)[] {
+  _getSynchronizableOptionsForCreateComponent(): string[] {
     return super._getSynchronizableOptionsForCreateComponent().filter((item) => item !== 'disabled');
   }
 

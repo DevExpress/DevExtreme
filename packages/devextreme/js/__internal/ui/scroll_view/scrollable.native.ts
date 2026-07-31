@@ -47,7 +47,7 @@ class NativeStrategy<
   _hideScrollbarTimeout?: ReturnType<typeof setTimeout> | number;
 
   _createActionByOption!: (
-    optionName: keyof TProperties,
+    optionName: string,
     config?: ActionConfig,
   ) => (event?: ScrollEventArgs) => void;
 

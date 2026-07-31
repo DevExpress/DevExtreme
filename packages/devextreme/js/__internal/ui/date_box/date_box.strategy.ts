@@ -62,7 +62,7 @@ class DateBoxStrategy<TValue = Date | null> {
     return displayFormat || 'shortdate';
   }
 
-  supportedKeys(): Record<string, (e: KeyboardEvent) => void> {
+  supportedKeys(): Record<string, (e: DxEvent<KeyboardEvent>) => void> {
     return {};
   }
 
