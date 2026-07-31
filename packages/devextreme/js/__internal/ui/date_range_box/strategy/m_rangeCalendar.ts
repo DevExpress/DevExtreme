@@ -4,7 +4,7 @@ import { isFunction } from '@js/core/utils/type';
 import type DateBox from '@js/ui/date_box';
 import type Calendar from '@ts/ui/calendar/calendar';
 
-import CalendarStrategy from '../../date_box/m_date_box.strategy.calendar';
+import CalendarStrategy from '../../date_box/date_box.strategy.calendar';
 import { getDeserializedDate, isSameDateArrays, isSameDates } from '../m_date_range.utils';
 import type DateRangeBox from '../m_date_range_box';
 import type MultiselectDateBox from '../m_multiselect_date_box';

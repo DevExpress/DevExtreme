@@ -400,8 +400,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
 
   _format(value, format) {
     const formatOption = this._getEffectiveFormatOption();
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    const customFormatter = asFormatObject(formatOption)?.formatter || formatOption;
+    const customFormatter = asFormatObject(formatOption)?.formatter ?? formatOption;
     const formatter = isFunction(customFormatter) ? customFormatter : number.format;
 
     const formattedValue = value === null ? '' : formatter(value, format);
