@@ -401,7 +401,7 @@ export class Component<
   }
 
   _createActionByOption(
-    optionName: keyof TProperties,
+    optionName: keyof TProperties | (string & {}),
     config?: ActionConfig,
   ): (event?: unknown) => void {
     // eslint-disable-next-line @typescript-eslint/init-declarations

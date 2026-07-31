@@ -42,7 +42,7 @@ class ListStrategy extends DateBoxStrategy {
     return this._widget as List;
   }
 
-  supportedKeys(): Record<string, (e: KeyboardEvent) => void> {
+  supportedKeys(): Record<string, (e: DxEvent<KeyboardEvent>) => void> {
     return {
       space: noop,
       home: noop,
