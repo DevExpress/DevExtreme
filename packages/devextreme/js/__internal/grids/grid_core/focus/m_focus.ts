@@ -586,13 +586,16 @@ const data = (Base: ModuleType<DataController>) => class FocusDataControllerExte
 
   private _reapplyFocusedRowAfterPartialUpdate(e: { rowIndices?: number[] }): void {
     const focusedRowKey = this.option('focusedRowKey');
-    const focusedRowIndex = this.getRowIndexByKey(focusedRowKey);
 
-    const hasFocusedRowKey = isDefined(focusedRowKey);
+    if (!isDefined(focusedRowKey)) {
+      return;
+    }
+
+    const focusedRowIndex = this.getRowIndexByKey(focusedRowKey);
     const isFocusedRowVisible = focusedRowIndex >= 0;
     const isFocusedRowInChange = !!e.rowIndices?.includes(focusedRowIndex);
 
-    if (hasFocusedRowKey && isFocusedRowVisible && isFocusedRowInChange) {
+    if (isFocusedRowVisible && isFocusedRowInChange) {
       this._focusController.updateFocusedRow({ focusedRowKey, preventScroll: true });
     }
   }

@@ -261,7 +261,7 @@ describe('GridCore focus', () => {
     };
 
     const countFocusedRows = (): number => document
-      .querySelectorAll('.dx-data-row.dx-row-focused').length;
+      .querySelectorAll(`#${GRID_CONTAINER_ID} .dx-row.dx-row-focused`).length;
 
     it('should keep a single focused row indicator (T1332912)', async () => {
       const { instance } = await createDataGrid({
