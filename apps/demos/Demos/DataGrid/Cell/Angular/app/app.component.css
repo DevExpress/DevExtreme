@@ -17,7 +17,7 @@
 }
 
 ::ng-deep #gridContainer .inc .diff {
-  color: var(--dx-color-success);
+  color: var(--dxds-color-content-utility-green-default-rest);
 }
 
 ::ng-deep #gridContainer .inc .diff::before {
@@ -29,7 +29,7 @@
 }
 
 ::ng-deep #gridContainer .dec .diff {
-  color: var(--dx-color-danger);
+  color: var(--dxds-color-content-utility-red-default-rest);
 }
 
 ::ng-deep #gridContainer .inc .diff::after,
