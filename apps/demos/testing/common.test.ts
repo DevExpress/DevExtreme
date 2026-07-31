@@ -220,6 +220,12 @@ Object.values(FRAMEWORKS).forEach((approach) => {
       return;
     }
 
+    if (process.env.STRATEGY === 'accessibility'
+      && process.env.THEME?.startsWith('dxdsfluent')
+      && getIgnoredRules(testName).includes('color-contrast')) {
+      return;
+    }
+
     runTestAtPage(
       test,
       pageURL
@@ -247,11 +253,15 @@ Object.values(FRAMEWORKS).forEach((approach) => {
           // dxdsfluent shares fluent's structure/ARIA (already covered by the fluent run),
           // so only color-contrast is re-checked for it across the demos.
           const isDesignSystemFluent = process.env.THEME?.startsWith('dxdsfluent');
+          const colorContrastIgnored = ignoredRules.includes('color-contrast');
           const options = isDesignSystemFluent
-            ? { runOnly: { type: 'rule' as const, values: ['color-contrast'] }, rules: {} }
+            ? { runOnly: { type: 'rule' as const, values: colorContrastIgnored ? [] : ['color-contrast'] }, rules: {} }
             : { rules: {} };
 
+          // axe-core ignores options.rules[...] when runOnly.type === 'rule',
+          // so ignored rules must be excluded from runOnly.values above instead.
           ignoredRules.forEach((ruleName) => {
+            if (isDesignSystemFluent && ruleName === 'color-contrast') return;
             options.rules[ruleName] = { enabled: false };
           });
 
