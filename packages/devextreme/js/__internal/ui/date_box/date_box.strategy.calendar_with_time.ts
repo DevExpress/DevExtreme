@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import dateLocalization from '@js/common/core/localization/date';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
@@ -10,13 +9,12 @@ import type { Format } from '@js/localization';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import type { BoxItemData } from '@ts/ui/box';
 import Box from '@ts/ui/box';
+import type DateBox from '@ts/ui/date_box/date_box.base';
+import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
+import CalendarStrategy from '@ts/ui/date_box/date_box.strategy.calendar';
+import uiDateUtils from '@ts/ui/date_box/date_utils';
 import TimeView from '@ts/ui/date_box/time_view';
 import type { PopupProperties } from '@ts/ui/popup/popup';
-
-import type DateBox from './date_box.base';
-import type { DateBoxBaseProperties } from './date_box.base';
-import uiDateUtils from './date_utils';
-import CalendarStrategy from './m_date_box.strategy.calendar';
 
 const window = getWindow();
 
@@ -57,7 +55,7 @@ class CalendarWithTimeStrategy extends CalendarStrategy {
   }
 
   getDisplayFormat(displayFormat?: Format | null): Format {
-    const globalDateTimeFormat = getGlobalFormatByDataType('datetime');
+    const globalDateTimeFormat: Format = getGlobalFormatByDataType('datetime');
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return displayFormat || globalDateTimeFormat || 'shortdateshorttime';
   }
