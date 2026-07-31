@@ -12,6 +12,7 @@ export interface GroupPanelHorizontalCellProps extends GroupPanelCellProps {
   isLastGroupCell: boolean;
   colSpan: number;
   rowSpan?: number;
+  isLastColumn?: boolean;
 }
 
 export const GroupPanelHorizontalCellDefaultProps = {
@@ -35,6 +36,7 @@ export class GroupPanelHorizontalCell extends BaseInfernoComponent<GroupPanelHor
       className,
       isFirstGroupCell,
       isLastGroupCell,
+      isLastColumn,
       resourceIndex,
       isLeaf,
       path,
@@ -43,6 +45,7 @@ export class GroupPanelHorizontalCell extends BaseInfernoComponent<GroupPanelHor
       'dx-scheduler-group-header': true,
       'dx-scheduler-first-group-cell': isFirstGroupCell,
       'dx-scheduler-last-group-cell': isLastGroupCell,
+      'dx-scheduler-group-header-inner-column': isLastColumn === false,
       [className ?? '']: Boolean(className),
     });
 

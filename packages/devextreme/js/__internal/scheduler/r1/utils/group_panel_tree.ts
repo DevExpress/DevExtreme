@@ -74,7 +74,7 @@ export const flattenGroupPanelTreeToRows = (
 ): GroupRenderItem[][] => {
   const rows: GroupRenderItem[][] = Array.from({ length: maxDepth }, () => []);
 
-  const walk = (node: GroupPanelTreeNode, depth: number): void => {
+  const walk = (node: GroupPanelTreeNode, depth: number, isLastColumn: boolean): void => {
     const isLeaf = node.children.length === 0;
     const isShallowLeaf = isLeaf && depth < maxDepth - 1;
 
@@ -86,15 +86,20 @@ export const flattenGroupPanelTreeToRows = (
       resourceIndex: node.resourceIndex,
       data: node.data,
       isLeaf,
+      isLastColumn,
       path: node.path,
       colSpan: node.leafCount * baseColSpan,
       ...(isShallowLeaf ? { rowSpan: maxDepth - depth } : {}),
     });
 
-    node.children.forEach((child) => walk(child, depth + 1));
+    node.children.forEach((child, index) => walk(
+      child,
+      depth + 1,
+      isLastColumn && index === node.children.length - 1,
+    ));
   };
 
-  tree.forEach((node) => walk(node, 0));
+  tree.forEach((node, index) => walk(node, 0, index === tree.length - 1));
 
   return rows;
 };

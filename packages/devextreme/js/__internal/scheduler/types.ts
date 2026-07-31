@@ -149,6 +149,7 @@ export interface GroupRenderItem extends GroupHeaderPathItem, GroupHeaderHierarc
   rowSpan?: number;
   isFirstGroupCell?: boolean;
   isLastGroupCell?: boolean;
+  isLastColumn?: boolean;
 }
 
 export interface GroupPanelTreeNode extends GroupHeaderPathItem {

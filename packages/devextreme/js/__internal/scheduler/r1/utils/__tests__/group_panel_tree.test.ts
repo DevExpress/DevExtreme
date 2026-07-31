@@ -259,6 +259,33 @@ describe('group_panel_tree', () => {
       ]);
     });
 
+    it('should mark cells that do not reach the last column of the table', () => {
+      const tree = buildGroupPanelTree([
+        node('A', 'Building A', 'buildingId', [
+          node('1', 'Room A1', 'roomId'),
+          node('2', 'Room A2', 'roomId'),
+        ]),
+        node('B', 'Building B', 'buildingId', [
+          node('3', 'Room B1', 'roomId'),
+        ]),
+        node('lobby', 'Lobby', 'buildingId'),
+      ]);
+
+      const rows = flattenGroupPanelTreeToRows(tree, 2, 1);
+
+      expect(rows[0].map(({ text, isLastColumn }) => [text, isLastColumn])).toEqual([
+        ['Building A', false],
+        ['Building B', false],
+        ['Lobby', true],
+      ]);
+      // Room B1 ends the last row, but the Lobby cell spans the columns to its right
+      expect(rows[1].map(({ text, isLastColumn }) => [text, isLastColumn])).toEqual([
+        ['Room A1', false],
+        ['Room A2', false],
+        ['Room B1', false],
+      ]);
+    });
+
     it('should keep isLeaf and path on the flattened header rows', () => {
       const tree = buildGroupPanelTree([
         node('A', 'Building A', 'buildingId', [

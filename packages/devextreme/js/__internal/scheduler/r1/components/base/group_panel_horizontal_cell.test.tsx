@@ -7,13 +7,13 @@ import type { GroupPanelHorizontalCellProps } from './group_panel_horizontal_cel
 import { GroupPanelHorizontalCell } from './group_panel_horizontal_cell';
 
 interface VirtualNodeLike {
+  className?: string;
   props?: {
     colspan?: number;
     rowspan?: number;
     title?: string;
     scope?: string;
     role?: string;
-    className?: string;
     templateProps?: { data: ResourceCellTemplateData };
   };
   children?: VirtualNodeLike | VirtualNodeLike[];
@@ -73,6 +73,20 @@ describe('GroupPanelHorizontalCell', () => {
 
     expect(result.props?.scope).toBe('col');
     expect(result.props?.role).toBe('columnheader');
+  });
+
+  it('should keep the group separator border on a cell that does not reach the last column', () => {
+    const component = new GroupPanelHorizontalCell({ ...baseProps, isLastColumn: false });
+    const result = component.render() as VirtualNodeLike;
+
+    expect(result.className).toContain('dx-scheduler-group-header-inner-column');
+  });
+
+  it('should not mark a cell that reaches the last column', () => {
+    const component = new GroupPanelHorizontalCell({ ...baseProps, isLastColumn: true });
+    const result = component.render() as VirtualNodeLike;
+
+    expect(result.className).not.toContain('dx-scheduler-group-header-inner-column');
   });
 
   describe('resourceCellTemplate', () => {

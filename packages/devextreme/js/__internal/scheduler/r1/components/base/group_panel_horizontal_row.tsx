@@ -23,6 +23,7 @@ export class GroupPanelHorizontalRow extends BaseInfernoComponent<GroupPanelRowP
             id,
             isFirstGroupCell,
             isLastGroupCell,
+            isLastColumn,
             key,
             text,
             resourceIndex,
@@ -42,6 +43,7 @@ export class GroupPanelHorizontalRow extends BaseInfernoComponent<GroupPanelRowP
             rowSpan={rowSpan}
             isFirstGroupCell={Boolean(isFirstGroupCell)}
             isLastGroupCell={Boolean(isLastGroupCell)}
+            isLastColumn={isLastColumn}
             cellTemplate={cellTemplate}
           />)
         }

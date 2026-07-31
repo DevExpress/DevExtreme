@@ -383,7 +383,7 @@ $scheduler-month-date-text-padding: 6px;
 
   .dx-scheduler-group-row > .dx-scheduler-group-header.dx-scheduler-group-header-leaf:only-child {
     flex: 0 0 auto;
-    width: $scheduler-left-column-width;
+    width: 100%;
     min-width: $scheduler-left-column-width;
   }
 }

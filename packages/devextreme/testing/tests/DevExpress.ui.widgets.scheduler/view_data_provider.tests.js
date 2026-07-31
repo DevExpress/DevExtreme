@@ -1995,12 +1995,14 @@ module('View Data Provider', {
                         ...firstGroupCell,
                         key: 'groupId_1',
                         isLeaf: true,
+                        isLastColumn: false,
                         path: [firstGroupCell],
                         colSpan: 2
                     }, {
                         ...secondGroupCell,
                         key: 'groupId_2',
                         isLeaf: true,
+                        isLastColumn: true,
                         path: [secondGroupCell],
                         colSpan: 2
                     }]]
