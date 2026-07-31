@@ -28,19 +28,19 @@ const priorityClassName = computed(() =>
 }
 
 .task__priority--low {
-  color: var(--dxds-color-content-utility-green-default-rest);
+  color: var(--dxds-color-content-utility-green-default-rest, var(--dx-color-success));
 }
 
 .task__priority--normal {
-  color: var(--dxds-color-content-utility-blue-default-rest);
+  color: var(--dxds-color-content-utility-blue-default-rest, var(--dx-color-primary));
 }
 
 .task__priority--urgent {
-  color: var(--dxds-color-content-utility-yellow-default-rest);
+  color: var(--dxds-color-content-utility-yellow-default-rest, var(--dx-color-warning));
 }
 
 .task__priority--high {
-  color: var(--dxds-color-content-utility-red-default-rest);
+  color: var(--dxds-color-content-utility-red-default-rest, var(--dx-color-danger));
 }
 
 .task__indicator {
