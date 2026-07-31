@@ -9,7 +9,7 @@ import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { format } from '@js/core/utils/string';
 import { isDefined } from '@js/core/utils/type';
-import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
+import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import { getGanttViewCore } from '@ts/ui/gantt/gantt_importer';
