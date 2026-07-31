@@ -708,6 +708,22 @@ export function findHandWrittenMutableFacade(relativeUrlPath: string): string | 
   return match?.shimUrl ?? null;
 }
 
+function artifactPathMatches(normalizedUrl: string, registeredKey: string): boolean {
+  if (normalizedUrl === registeredKey) {
+    return true;
+  }
+
+  const strip = (value: string): string => {
+    const idx = value.indexOf(ESM_ARTIFACT_PREFIX);
+    return idx >= 0 ? value.slice(idx + ESM_ARTIFACT_PREFIX.length) : value.replace(/^\/+/, '');
+  };
+
+  const urlRel = strip(normalizedUrl);
+  const keyRel = strip(registeredKey);
+  // Require a path boundary so `excel_exporter.js` does not match `exporter.js`.
+  return urlRel === keyRel;
+}
+
 /**
  * Returns generated facade source for a forced mutable module or a
  * namespace-default public entry, or null when not applicable.
@@ -723,14 +739,8 @@ export function tryBuildAutoMutableFacade(
   let entry = facadeIndex.get(normalized);
 
   if (!entry) {
-    // Match by suffix (cache-busters / alternate prefixes)
     for (const [key, value] of facadeIndex.entries()) {
-      if (normalized.endsWith(key) || key.endsWith(normalized)) {
-        entry = value;
-        break;
-      }
-      if (normalized.endsWith(key.replace(ESM_ARTIFACT_PREFIX, ''))
-        || normalized.endsWith(`/${key.replace(ESM_ARTIFACT_PREFIX, '')}`)) {
+      if (artifactPathMatches(normalized, key)) {
         entry = value;
         break;
       }
