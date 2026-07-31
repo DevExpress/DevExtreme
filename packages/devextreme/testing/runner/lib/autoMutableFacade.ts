@@ -414,9 +414,19 @@ function isFunctionLikeExport(name: string, internalSource: string): boolean {
   const cjsAssigned = new RegExp(
     `exports\\.${name}\\s*=\\s*(?:async\\s+)?function\\b`,
   );
+  // e.g. `export const triggerResizeEvent = triggerVisibilityChangeEvent('dxresize')`
+  // — RHS is a call/identifier producing a function, not a data literal.
+  const constNonData = new RegExp(
+    `export\\s+(?:const|let|var)\\s+${name}\\s*=\\s*(?![{[\\d'"\`\\-]|null\\b|undefined\\b|true\\b|false\\b)`,
+  );
+  const cjsNonData = new RegExp(
+    `exports\\.${name}\\s*=\\s*(?![{[\\d'"\`\\-]|null\\b|undefined\\b|true\\b|false\\b)`,
+  );
   return functionOrClassPattern.test(internalSource)
     || assigned.test(internalSource)
-    || cjsAssigned.test(internalSource);
+    || cjsAssigned.test(internalSource)
+    || constNonData.test(internalSource)
+    || cjsNonData.test(internalSource);
 }
 
 function classifyExportNames(
