@@ -1491,7 +1491,7 @@ class CollectionWidget<
     actionArgs: ActionArgs<TItem>,
     actionConfig?: ActionConfig,
   ): void {
-    const action = this._createActionByOption(handlerOptionName, {
+    const action = this._createActionByOption(String(handlerOptionName), {
       validatingTargetName: 'itemElement',
       ...actionConfig,
     });

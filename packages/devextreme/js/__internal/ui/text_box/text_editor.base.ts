@@ -733,7 +733,7 @@ class TextEditorBase<
       const hasActionSubscription = this.hasActionSubscription(actionName as keyof TProperties);
 
       if (hasActionSubscription) {
-        const action = this._createActionByOption(actionName as keyof TProperties, {
+        const action = this._createActionByOption(actionName, {
           excludeValidators: ['readOnly'],
         });
 

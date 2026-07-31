@@ -413,13 +413,11 @@ class DiagramToolbox extends DiagramFloatingPanel {
 
   _createOnShapeCategoryRenderedAction(): void {
     this._onShapeCategoryRenderedAction = this._createActionByOption(
-      // @ts-expect-error ts-error
       'onShapeCategoryRendered',
     );
   }
 
   _createOnFilterChangedAction(): void {
-    // @ts-expect-error ts-error
     this._onFilterChangedAction = this._createActionByOption('onFilterChanged');
   }
 

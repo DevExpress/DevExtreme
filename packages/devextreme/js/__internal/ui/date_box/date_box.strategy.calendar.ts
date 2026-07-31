@@ -43,8 +43,8 @@ class CalendarStrategy<
     };
   }
 
-  supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | undefined> {
-    const homeEndHandler = (e: KeyboardEvent): boolean | undefined => {
+  supportedKeys(): Record<string, (e: DxEvent<KeyboardEvent>) => boolean | undefined> {
+    const homeEndHandler = (e: DxEvent<KeyboardEvent>): boolean | undefined => {
       if (this.dateBox.option('opened')) {
         e.preventDefault();
         return true;

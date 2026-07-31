@@ -736,7 +736,7 @@ export class SimulatedStrategy<
   _scrollOffset?: ScrollOffset;
 
   _createActionByOption!: (
-    optionName: keyof TProperties,
+    optionName: string,
     config?: ActionConfig,
   ) => (event?: Record<string, unknown>) => void;
 
@@ -1092,7 +1092,7 @@ export class SimulatedStrategy<
   }
 
   _createActionHandler(optionName: keyof TProperties): () => void {
-    const actionHandler = this._createActionByOption(optionName);
+    const actionHandler = this._createActionByOption(String(optionName));
 
     return (...args: unknown[]) => {
       try {
