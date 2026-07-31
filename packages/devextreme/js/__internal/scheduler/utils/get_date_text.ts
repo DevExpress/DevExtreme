@@ -2,7 +2,7 @@ import dateLocalization from '@js/common/core/localization/date';
 import dateUtils from '@js/core/utils/date';
 import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 
-import type { TargetedAppointment, ViewType } from '../../types';
+import type { ViewType } from '../types';
 
 const formatTooltipDatePart = (date: Date): string => {
   const globalFormat = getGlobalFormatByDataType('date');
@@ -64,15 +64,4 @@ export const getDateText = (startDate: Date, endDate: Date, formatType: DateForm
     default:
       return '';
   }
-};
-
-export const getDateTextFromTargetAppointment = (
-  targetedAppointmentData: TargetedAppointment,
-  format?: DateFormatType,
-  viewType?: ViewType,
-): string => {
-  const { displayStartDate: startDate, displayEndDate: endDate, allDay } = targetedAppointmentData;
-  const formatType = format ?? getDateFormatType(startDate, endDate, allDay, viewType);
-
-  return getDateText(startDate, endDate, formatType);
 };

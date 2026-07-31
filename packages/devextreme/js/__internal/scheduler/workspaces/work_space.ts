@@ -280,7 +280,6 @@ export type WorkspaceCoordinates = Coordinates & { groupIndex?: number };
 export type DroppableCellData = Pick<ViewCellData, 'startDate' | 'endDate' | 'allDay' | 'groups'>;
 
 export interface WorkspaceOptionsInternal extends WidgetProperties<SchedulerWorkSpace> {
-  newAppointments: boolean;
   resources: ResourceLoader[];
   getResourceManager: () => ResourceManager;
   getFilteredItems: () => ListEntity[];
@@ -1379,10 +1378,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private attachDragEvents(element: dxElementWrapper): void {
-    if (this.option().newAppointments) {
-      return;
-    }
-
     this.detachDragEvents(element);
 
     const onDragEnter = (e: { target: Element }): void => {
@@ -2558,7 +2553,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   // DnD should be removed from work-space
   // ------------
 
-  // TODO<Appointments>: dragBehavior when old impl is removed
   initDragBehavior(scheduler: { element: () => Element }): void {
     if (!this.dragBehavior && scheduler) {
       this.dragBehavior = new AppointmentDragBehavior(scheduler);
@@ -3452,7 +3446,6 @@ interface DragBehaviorOptions {
   filter?: string;
 }
 
-// TODO<Appointments>: remove dragBehavior when old impl is removed
 const createDragBehaviorConfig = (
   container: dxElementWrapper,
   rootElement: dxElementWrapper,
