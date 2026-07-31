@@ -1,6 +1,6 @@
 import dateLocalization from '@js/common/core/localization/date';
 import dateUtils from '@js/core/utils/date';
-import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
+import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 
 import type { ViewType } from '../types';
 

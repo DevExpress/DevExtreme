@@ -1,9 +1,9 @@
 import dxConfig from '@js/core/config';
+import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import accountingFormats from '@ts/core/localization/cldr-data/accounting_formats';
 import localizationCoreUtils from '@ts/core/localization/core';
 import type { FormatConfig as BaseFormatConfig, LocalizationFormat } from '@ts/core/localization/number';
 import openXmlCurrencyFormat from '@ts/core/localization/open_xml_currency_format';
-import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 
 interface CurrencySymbolInfo {
   position: 'before' | 'after';
