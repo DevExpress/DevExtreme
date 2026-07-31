@@ -31,9 +31,11 @@ $fluent-color-theme-modificator: null !default;
   --dx-component-color-bg: #{ds.$color-surface-neutral-default-rest};
   --dx-color-main-bg: #{ds.$color-surface-neutral-subdued-rest};
   --dx-color-primary: #{ds.$color-content-primary-default-rest};
-  --dx-color-danger: #{ds.$color-surface-danger-default-rest};
-  --dx-color-success: #{ds.$color-surface-success-default-rest};
-  --dx-color-warning: #{ds.$color-surface-warning-default-rest};
+
+  // Content-role, not surface: consumers use these as text/icon colors (fluent's semantic $base-*), and the two roles diverge in dark mode
+  --dx-color-danger: #{ds.$color-content-danger-default-rest};
+  --dx-color-success: #{ds.$color-content-success-default-rest};
+  --dx-color-warning: #{ds.$color-content-warning-default-rest};
   --dx-color-border: #{ds.$color-border-neutral-default-rest};
   --dx-color-text: #{ds.$color-content-neutral-default-rest};
   --dx-color-icon: #{ds.$color-content-neutral-subdued-rest};

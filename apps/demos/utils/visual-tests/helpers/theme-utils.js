@@ -9,7 +9,6 @@ export const DEFAULT_THEME_NAME = THEME.fluent;
 
 export const isMaterial = (theme = process.env.THEME) => theme?.startsWith('material');
 export const isFluent = (theme = process.env.THEME) => /^(dxds)?fluent/.test(theme ?? DEFAULT_THEME_NAME);
-export const getEtalonThemeName = (theme = DEFAULT_THEME_NAME) => theme.replace(/^dxdsfluent/, 'fluent');
 export const getThemePostfix = (theme = DEFAULT_THEME_NAME) => ` (${theme})`;
 
 export const getScreenshotName = (baseName, theme) => {
@@ -26,15 +25,15 @@ export async function testScreenshot(
   element,
   comparisonOptions,
 ) {
-  const testTheme = getEtalonThemeName(process.env.THEME);
+  const testTheme = process.env.THEME;
 
-  const themeOptions = {
-    // looksSameComparisonOptions: {
-    //   tolerance: 20,
-    //   antialiasingTolerance: 20,
-    // },
-    textDiffTreshold: 0.2,
-  };
+  // const themeOptions = {
+  //   // looksSameComparisonOptions: {
+  //   //   tolerance: 20,
+  //   //   antialiasingTolerance: 20,
+  //   // },
+  //   textDiffTreshold: 0.2,
+  // };
 
   const finalOptions = {
     ...comparisonOptions,

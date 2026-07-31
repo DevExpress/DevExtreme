@@ -4,19 +4,19 @@
 }
 
 .priority--low {
-  color: var(--dx-color-success);
+  color: var(--dxds-color-content-utility-green-default-rest);
 }
 
 .priority--normal {
-  color: var(--dx-color-primary);
+  color: var(--dxds-color-content-utility-blue-default-rest);
 }
 
 .priority--urgent {
-  color: var(--dx-color-warning);
+  color: var(--dxds-color-content-utility-yellow-default-rest);
 }
 
 .priority--high {
-  color: var(--dx-color-danger);
+  color: var(--dxds-color-content-utility-red-default-rest);
 }
 
 .indicator {
