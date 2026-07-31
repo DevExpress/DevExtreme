@@ -4,10 +4,8 @@ import { changeTheme } from './changeTheme';
 
 const defaultThemeName = 'fluent.blue.light';
 
-const getEtalonThemeName = (themeName: string): string => themeName.replace(/^dxdsfluent/, 'fluent');
-
 export const getThemePostfix = (theme?: string): string => {
-  const themeName = getEtalonThemeName((theme ?? process.env.theme) ?? defaultThemeName);
+  const themeName = (theme ?? process.env.theme) ?? defaultThemeName;
   return ` (${themeName})`;
 };
 
