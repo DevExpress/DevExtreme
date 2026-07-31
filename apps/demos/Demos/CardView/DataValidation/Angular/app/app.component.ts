@@ -1,7 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import { DxCardViewModule, DxTextAreaModule } from 'devextreme-angular';
+import { DxCardViewModule } from 'devextreme-angular';
+import 'devextreme/ui/text_area';
 import { lastValueFrom } from 'rxjs';
 import { Employee, Service } from './app.service';
 import 'anti-forgery';
@@ -22,7 +23,6 @@ if (window && window.config?.packageConfigPaths) {
   providers: [Service],
   imports: [
     DxCardViewModule,
-    DxTextAreaModule,
   ],
 })
 export class AppComponent {
