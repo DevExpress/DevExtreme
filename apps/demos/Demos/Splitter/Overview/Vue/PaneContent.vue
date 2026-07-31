@@ -63,7 +63,7 @@ const filteredData = computed(() => Object.fromEntries(
 }
 
 .pane-option {
-  color: var(--dx-texteditor-color-label);
+  color: var(--dxds-color-content-neutral-subdued-rest);
   font-size: 10px;
 }
 </style>
