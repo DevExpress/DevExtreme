@@ -336,7 +336,7 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
   border-right: 1px solid;
   border-right-color: $scheduler-group-separator-border-color;
 
-  &:last-child:not(.dx-scheduler-group-header-inner-column) {
+  &:last-child:not(:where(.dx-scheduler-group-header-inner-column)) {
     border-right: none;
   }
 
@@ -346,7 +346,7 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
     border-right: baseScheduler.$scheduler-base-border;
     border-right-color: $scheduler-base-border-color;
 
-    &:last-child:not(.dx-scheduler-group-header-inner-column) {
+    &:last-child:not(:where(.dx-scheduler-group-header-inner-column)) {
       border-left: none;
     }
   }
@@ -377,7 +377,7 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
     border-right: 1px solid;
     border-right-color: $scheduler-group-separator-border-color;
 
-    &:last-child:not(.dx-scheduler-group-header-inner-column) {
+    &:last-child:not(:where(.dx-scheduler-group-header-inner-column)) {
       border-right: none;
     }
 
@@ -387,7 +387,7 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
       border-right: baseScheduler.$scheduler-base-border;
       border-right-color: $scheduler-base-border-color;
 
-      &:last-child:not(.dx-scheduler-group-header-inner-column) {
+      &:last-child:not(:where(.dx-scheduler-group-header-inner-column)) {
         border-left: none;
       }
     }
