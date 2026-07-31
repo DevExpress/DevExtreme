@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import '@ts/ui/list/modules/selection';
 
 import dateLocalization from '@js/common/core/localization/date';
@@ -11,14 +10,13 @@ import type { DxEvent } from '@js/events';
 import type { Format } from '@js/localization';
 import type { ItemClickEvent } from '@js/ui/list';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
+import type DateBox from '@ts/ui/date_box/date_box.base';
+import DateBoxStrategy from '@ts/ui/date_box/date_box.strategy';
+import dateUtils from '@ts/ui/date_box/date_utils';
 import { getSizeValue } from '@ts/ui/drop_down_editor/utils';
 import List from '@ts/ui/list/list.edit.search';
-
-import type { PopupProperties } from '../popup/popup';
-import type { DateBoxBaseProperties } from './date_box.base';
-import type DateBox from './date_box.base';
-import dateUtils from './date_utils';
-import DateBoxStrategy from './m_date_box.strategy';
+import type { PopupProperties } from '@ts/ui/popup/popup';
 
 const window = getWindow();
 
@@ -60,7 +58,7 @@ class ListStrategy extends DateBoxStrategy {
   }
 
   getDisplayFormat(displayFormat?: Format | null): Format {
-    const globalTimeFormat = getGlobalFormatByDataType('time');
+    const globalTimeFormat: Format = getGlobalFormatByDataType('time');
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return displayFormat || globalTimeFormat || 'shorttime';
   }

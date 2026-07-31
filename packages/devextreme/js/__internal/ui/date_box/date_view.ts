@@ -6,11 +6,10 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import type { OptionChanged } from '@ts/core/widget/types';
+import uiDateUtils from '@ts/ui/date_box/date_utils';
+import DateViewRoller from '@ts/ui/date_box/date_view_roller';
+import type { EditorProperties } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
-
-import type { EditorProperties } from '../editor/editor';
-import uiDateUtils from './date_utils';
-import DateViewRoller from './date_view_roller';
 
 const DATEVIEW_CLASS = 'dx-dateview';
 const DATEVIEW_COMPACT_CLASS = 'dx-dateview-compact';
