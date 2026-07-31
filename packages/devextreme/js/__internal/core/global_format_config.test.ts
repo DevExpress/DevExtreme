@@ -3,13 +3,13 @@ import {
 } from '@jest/globals';
 import config from '@js/core/config';
 
-import { getGlobalFormatByDataType, resolvePresetOverride } from './m_global_format_config';
+import { getGlobalFormatByDataType, resolvePresetOverride } from './global_format_config';
 
 const GLOBAL_FORMAT_KEYS = ['dateFormat', 'timeFormat', 'dateTimeFormat', 'numberFormat', 'dateTimeFormatPresets'] as const;
 type GlobalFormatKey = typeof GLOBAL_FORMAT_KEYS[number];
 
-describe('m_global_format_config', () => {
-  let savedValues: Partial<Record<GlobalFormatKey, unknown>>;
+describe('global_format_config', () => {
+  let savedValues: Partial<Record<GlobalFormatKey, unknown>> = {};
 
   beforeEach(() => {
     const currentConfig = config();
