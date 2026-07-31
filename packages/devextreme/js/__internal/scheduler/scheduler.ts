@@ -61,24 +61,15 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 import { tabbable } from '@ts/core/utils/m_selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { focus } from '@ts/events/m_short';
-import type { ResizableProperties } from '@ts/ui/resizable/resizable';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
 import { getA11yStatusText } from './a11y_status/a11y_status_text';
-import { AppointmentDragController, type WorkSpaceDraggableOptions } from './appointment_drag_controller';
 import type { AppointmentFormConfig } from './appointment_popup/form';
 import { AppointmentForm } from './appointment_popup/form';
 import { AppointmentPopup } from './appointment_popup/popup';
 import AppointmentCollection, { type AppointmentCollectionOptions } from './appointments/m_appointment_collection';
-import type { AppointmentsProperties } from './appointments_new/appointments';
-import { Appointments } from './appointments_new/appointments';
-import { getAppointmentDateRange } from './appointments_new/resizing/get_appointment_date_range';
-import { getDeltaTime } from './appointments_new/resizing/get_delta_time';
-import { getResizableConfig } from './appointments_new/resizing/get_resizable_config';
-import { getResizedDates, isStartDateResized } from './appointments_new/resizing/get_resized_dates';
 import NotifyScheduler from './base/widget_notify_scheduler';
-import { VERTICAL_VIEW_TYPES } from './constants';
 import { SchedulerHeader } from './header/header';
 import type { HeaderOptions } from './header/types';
 import { hide as hideLoading, show as showLoading } from './loading';
@@ -110,7 +101,6 @@ import type {
   SafeAppointment,
   ScrollToGroupValuesOrOptions, ScrollToOptions, TargetedAppointment,
   ViewCellData,
-  ViewDataProviderType,
   ViewType,
 } from './types';
 import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
@@ -366,18 +356,6 @@ type AppointmentsEditingOptions = Partial<{
   allowAllDayResize: boolean;
 }>;
 
-interface AppointmentResizeEvent {
-  element: Element;
-  handles: {
-    top: boolean;
-    bottom: boolean;
-    left: boolean;
-    right: boolean;
-  };
-  width: number;
-  height: number;
-}
-
 class Scheduler extends SchedulerOptionsBaseWidget {
   // NOTE: Do not initialize variables here, because `_initMarkup` function runs before constructor,
   // and initialization in constructor will erase the data
@@ -400,10 +378,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   // TODO: used externally in m_appointment_drag_behavior.ts,
   // m_subscribes.ts, workspaces/work_space.ts
   _appointments!: AppointmentCollection;
-
-  private appointmentDragController!: AppointmentDragController;
-
-  private appointmentResizeInitialSize: { width: number; height: number } | null = null;
 
   appointmentDataSource!: AppointmentDataSource;
 
@@ -565,30 +539,19 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         break;
       case 'currentView':
 
-        if (this.option('_newAppointments')) {
-          this._appointments.option({
-            currentView: value,
-            viewModel: [],
-            appointmentTemplate: this.getViewOption('appointmentTemplate'),
-            appointmentCollectorTemplate: this.getViewOption('appointmentCollectorTemplate'),
-          });
-        } else {
-          this._appointments.option({
-            items: [],
-            allowDrag: this.allowDragging(),
-            allowResize: this.allowResizing(),
-            itemTemplate: this.getAppointmentTemplate('appointmentTemplate'),
-          });
-        }
+        this._appointments.option({
+          items: [],
+          allowDrag: this.allowDragging(),
+          allowResize: this.allowResizing(),
+          itemTemplate: this.getAppointmentTemplate('appointmentTemplate'),
+        });
 
         this.postponeResourceLoading().done(() => {
           this.refreshWorkSpace();
           this.header?.option(this.headerConfig());
           this.setRemoteFilterIfNeeded();
 
-          if (!this.option('_newAppointments')) {
-            this._appointments.option('allowAllDayResize', value !== 'day');
-          }
+          this._appointments.option('allowAllDayResize', value !== 'day');
         });
         // NOTE:
         // Calling postponed operations (promises) here, because when we update options with
@@ -597,11 +560,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.postponedOperations.callPostponedOperations();
         break;
       case 'appointmentTemplate':
-        if (this.option('_newAppointments')) {
-          this._appointments.option('appointmentTemplate', this.getViewOption('appointmentTemplate'));
-        } else {
-          this._appointments.option('itemTemplate', value);
-        }
+        this._appointments.option('itemTemplate', value);
         break;
       case 'dateCellTemplate':
       case 'resourceCellTemplate':
@@ -633,10 +592,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
         this._appointments.option('items', []);
         this.updateOption('workSpace', name, value);
-        if (!this.option('_newAppointments')) {
-          // TODO<Appointments>: no need to call repaint on new appointments
-          this._appointments.repaint();
-        }
+        this._appointments.repaint();
         this.setRemoteFilterIfNeeded();
 
         this.postponeDataSourceLoading();
@@ -649,10 +605,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
         this._appointments.option('items', []);
         this.updateOption('workSpace', 'viewOffset', this.normalizeViewOffsetValue(value));
-        if (!this.option('_newAppointments')) {
-          // TODO<Appointments>: no need to call repaint on new appointments
-          this._appointments.repaint();
-        }
+        this._appointments.repaint();
         this.setRemoteFilterIfNeeded();
 
         this.postponeDataSourceLoading();
@@ -671,32 +624,16 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         break;
       }
       case 'onAppointmentRendered':
-        if (this.option('_newAppointments')) {
-          this.actions.onAppointmentRendered = this.createSchedulerAction('onAppointmentRendered');
-        } else {
-          this._appointments.option('onItemRendered', this.getAppointmentRenderedAction());
-        }
+        this._appointments.option('onItemRendered', this.getAppointmentRenderedAction());
         break;
       case 'onAppointmentClick':
-        if (this.option('_newAppointments')) {
-          this.actions.onAppointmentClick = this.createSchedulerAction('onAppointmentClick');
-        } else {
-          this._appointments.option('onItemClick', this._createActionByOption('onAppointmentClick'));
-        }
+        this._appointments.option('onItemClick', this._createActionByOption('onAppointmentClick'));
         break;
       case 'onAppointmentDblClick':
-        if (this.option('_newAppointments')) {
-          this.actions.onAppointmentDblClick = this.createSchedulerAction('onAppointmentDblClick');
-        } else {
-          this._appointments.option('onAppointmentDblClick', this._createActionByOption('onAppointmentDblClick'));
-        }
+        this._appointments.option('onAppointmentDblClick', this._createActionByOption('onAppointmentDblClick'));
         break;
       case 'onAppointmentContextMenu':
-        if (this.option('_newAppointments')) {
-          this.actions.onAppointmentContextMenu = this.createSchedulerAction('onAppointmentContextMenu');
-        } else {
-          this._appointments.option('onItemContextMenu', this._createActionByOption('onAppointmentContextMenu'));
-        }
+        this._appointments.option('onItemContextMenu', this._createActionByOption('onAppointmentContextMenu'));
         this.appointmentTooltip._options.onItemContextMenu = this._createActionByOption('onAppointmentContextMenu');
         break;
       case 'noDataText':
@@ -761,11 +698,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.initEditing();
         const { editing } = this;
 
-        if (this.option('_newAppointments')) {
-          this._appointments.option('allowDelete', this.editing.allowDeleting);
-        } else {
-          this.bringEditingModeToAppointments(editing);
-        }
+        this.bringEditingModeToAppointments(editing);
 
         this.hideAppointmentTooltip();
         this.createAppointmentPopupForm();
@@ -799,11 +732,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.repaint();
         break;
       case 'appointmentCollectorTemplate':
-        if (this.option('_newAppointments')) {
-          this._appointments.option('appointmentCollectorTemplate', this.getViewOption('appointmentCollectorTemplate'));
-        } else {
-          this.repaint();
-        }
+        this.repaint();
         break;
       case '_appointmentTooltipOffset':
         this.repaint();
@@ -1084,30 +1013,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.resourceManager = new ResourceManager(this.option('resources'));
 
     this.notifyScheduler = new NotifyScheduler({ scheduler: this });
-
-    this.appointmentDragController = new AppointmentDragController({
-      component: this,
-      $draggableContainer: (): dxElementWrapper => this.$draggableContainer ?? this.$element(),
-      canDragAppointment: this.canDragAppointment.bind(this),
-      getCellFromDragTarget: ($dragTarget: dxElementWrapper): dxElementWrapper | null => (
-        this._workSpace.getCellFromDragTarget($dragTarget)
-      ),
-      getCellFromPoint: (x: number, y: number): dxElementWrapper | null => (
-        this._workSpace.getCellFromPoint(x, y)
-      ),
-      getDroppableCell: (): dxElementWrapper => this._workSpace.getDroppableCell(),
-
-      // @ts-expect-error _createComponent is not defined in ts
-      createComponent: this._createComponent.bind(this),
-      hideAppointmentTooltip: this.hideAppointmentTooltip.bind(this),
-
-      getAppointmentDraggingConfig: (): NonNullable<SchedulerProperties['appointmentDragging']> => (
-        this.option('appointmentDragging') ?? {}
-      ),
-      getUpdatedItemData: this.getUpdatedData.bind(this),
-
-      updateAppointmentOnDrop: this.updateAppointmentOnDrop.bind(this),
-    });
   }
 
   createAppointmentDataSource(): void {
@@ -1145,7 +1050,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     super._initTemplates();
   }
 
-  // TODO<Appointments>: delete this method when old impl is removed
   private initAppointmentTemplate(): void {
     const { expr } = this._dataAccessors;
     const createGetter = (property: string): ((data: unknown) => unknown) => (
@@ -1320,7 +1224,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     };
   }
 
-  // TODO<Appointments>: delete this method when old impl is removed
   private getAppointmentRenderedAction(): (args: AppointmentRenderedEvent) => void {
     return this.createSchedulerAction('onAppointmentRendered', {
       excludeValidators: ['disabled', 'readOnly'],
@@ -1375,53 +1278,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       ? MobileTooltipStrategy
       : DesktopTooltipStrategy)(this.getAppointmentTooltipOptions());
 
-    if (this.option('_newAppointments')) {
-      const appointmentsConfig: Partial<AppointmentsProperties> = {
-        tabIndex: this.option('tabIndex'),
-        currentView: this.option('currentView') as ViewType,
-        allowDelete: this.editing.allowDeleting,
-        appointmentTemplate: this.getViewOption('appointmentTemplate'),
-        appointmentCollectorTemplate: this.getViewOption('appointmentCollectorTemplate'),
-
-        onAppointmentRendered: (...args) => this.actions.onAppointmentRendered(...args),
-        onAppointmentClick: (args: AppointmentClickEvent) => this.actions.onAppointmentClick(args),
-        onAppointmentDblClick: (...args) => this.actions.onAppointmentDblClick(...args),
-        onAppointmentContextMenu: (...args) => this.actions.onAppointmentContextMenu(...args),
-        onDeleteKeyPress: (e) => {
-          this.checkAndDeleteAppointment(e.appointmentData, e.targetedAppointmentData);
-        },
-        focusFallbackAfterDelete: () => this.focusFallbackAfterDelete(),
-        getResizableConfig: (viewModel) => this.createAppointmentResizableConfig(viewModel),
-
-        getResourceManager: () => this.resourceManager,
-        getAppointmentDataSource: () => this.appointmentDataSource,
-        getDataAccessor: () => this._dataAccessors,
-        getStartViewDate: () => this.getStartViewDate() as Date,
-        getSortedItems: () => this._layoutManager.sortedItems,
-
-        isVirtualScrolling: () => this.isVirtualScrolling(),
-
-        scrollTo: this.scrollTo.bind(this),
-        showAppointmentTooltip: this.showAppointmentTooltipCore.bind(this),
-        isTooltipShownForTarget: (target) => this.appointmentTooltip.isShownForTarget(target),
-        updateAppointmentTooltip: (target, data) => {
-          this.appointmentTooltip.setTarget(target);
-          this.appointmentTooltip.setListItems(data);
-        },
-        hideAppointmentTooltip: () => this.hideAppointmentTooltip(),
-        showEditAppointmentPopup: (
-          appointmentData: SafeAppointment,
-          targetedAppointmentData: TargetedAppointment,
-        ) => {
-          this.showAppointmentPopup(appointmentData, false, targetedAppointmentData);
-        },
-      };
-      // @ts-expect-error
-      this._appointments = this._createComponent('<div>', Appointments, appointmentsConfig);
-    } else {
-      this._appointments = this._createComponent('<div>', AppointmentCollection, this.appointmentsConfig());
-      this._appointments.option('itemTemplate', this.getAppointmentTemplate('appointmentTemplate'));
-    }
+    this._appointments = this._createComponent('<div>', AppointmentCollection, this.appointmentsConfig());
+    this._appointments.option('itemTemplate', this.getAppointmentTemplate('appointmentTemplate'));
 
     this.createAppointmentPopupForm();
 
@@ -1560,27 +1418,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       getAppointmentDisabled: (appointment) => this._dataAccessors.get('disabled', appointment),
       onItemContextMenu: this._createActionByOption('onAppointmentContextMenu'),
       createEventArgs: this._createEventArgs.bind(this),
-
-      newAppointments: Boolean(this.option('_newAppointments')),
-      onAppointmentClick: (args: AppointmentClickEvent) => this.actions.onAppointmentClick(args),
-      onListInitialized: (e): void => {
-        if (this.option('_newAppointments') && e.element) {
-          this.appointmentDragController.createTooltipDraggable(
-            $(e.element),
-            {
-              // @ts-expect-error
-              dragTemplate: this._appointments.renderDragClone.bind(this._appointments),
-            },
-          );
-        }
-      },
-      onListDisposing: (): void => {
-        this.appointmentDragController.disposeTooltipDraggable();
-      },
     } satisfies AppointmentTooltipOptions;
   }
 
-  // TODO<Appointments>: delete this method when old impl is removed
   _createEventArgs(
     e: ItemContextMenuEvent<AppointmentTooltipItem>,
   ): AppointmentTooltipContextMenuEventArgs {
@@ -1669,14 +1509,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
 
     this.renderWorkSpace();
-    if (this.option('_newAppointments')) {
-      this._appointments.option('$allDayContainer', this._workSpace.getAllDayContainer());
-    } else {
-      this._appointments.option({
-        fixedContainer: this._workSpace.getFixedContainer(),
-        allDayContainer: this._workSpace.getAllDayContainer(),
-      });
-    }
+    this._appointments.option({
+      fixedContainer: this._workSpace.getFixedContainer(),
+      allDayContainer: this._workSpace.getAllDayContainer(),
+    });
     this.waitAsyncTemplate((): void => { this.workSpaceRecalculation?.resolve(); });
 
     this.createAppointmentDataSource();
@@ -1820,10 +1656,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       workSpaceConfig,
     ) as SchedulerWorkSpaceLike;
 
-    if (!this.option('_newAppointments')) {
-      if (this.allowDragging()) {
-        this._workSpace.initDragBehavior(this);
-      }
+    if (this.allowDragging()) {
+      this._workSpace.initDragBehavior(this);
     }
     this._workSpace.attachTablesEvents();
     this._workSpace.getWorkArea().append(this._appointments.$element());
@@ -1864,7 +1698,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       || isTimelineView(currentViewOptions.type);
 
     const workSpaceOptions = extend({
-      newAppointments: Boolean(this.option('_newAppointments')),
       resources: this.option('resources'),
       getResourceManager: () => this.resourceManager,
       getFilteredItems: () => this._layoutManager.filteredItems, // NOTE: used only in agenda
@@ -1910,27 +1743,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       onShowAllDayPanel: (value: boolean) => this.option('showAllDayPanel', value),
       getHeaderHeight: (): number => (this.header?.getHeight() ?? 0),
       onScrollEnd: (): void => {
-        if (!this.option('_newAppointments')) {
-          this._appointments.updateResizableArea();
-        }
-      },
-      onInitialized: (e) => {
-        if (this.option('_newAppointments')) {
-          this.appointmentDragController.createWorkSpaceDraggable(
-            $(e.element),
-            {
-              // @ts-expect-error
-              getAppointmentData: this._appointments.getAppointmentData.bind(
-                this._appointments,
-              ) as WorkSpaceDraggableOptions['getAppointmentData'],
-            },
-          );
-        }
-      },
-      onDisposing: (): void => {
-        if (this.option('_newAppointments')) {
-          this.appointmentDragController.disposeWorkSpaceDraggable();
-        }
+        this._appointments.updateResizableArea();
       },
       rtlEnabled: Boolean(this.option('rtlEnabled')),
       cellDuration: this.option('cellDuration'),
@@ -2003,14 +1816,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.renderWorkSpace();
 
     if (this.readyToRenderAppointments) {
-      if (this.option('_newAppointments')) {
-        this._appointments.option('$allDayContainer', this._workSpace.getAllDayContainer());
-      } else {
-        this._appointments.option({
-          fixedContainer: this._workSpace.getFixedContainer(),
-          allDayContainer: this._workSpace.getAllDayContainer(),
-        });
-      }
+      this._appointments.option({
+        fixedContainer: this._workSpace.getFixedContainer(),
+        allDayContainer: this._workSpace.getAllDayContainer(),
+      });
 
       this.waitAsyncTemplate((): void => { this.workSpaceRecalculation.resolve(); });
     }
@@ -2044,271 +1853,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.appointmentPopup?.dispose();
   }
 
-  private updateAppointmentOnDrop(
-    appointmentData: Appointment,
-    targetedAppointmentData: TargetedAppointment,
-    $cell: dxElementWrapper,
-  ): Promise<void> {
-    const updatedData = this.getUpdatedData(appointmentData, $cell);
-    const newAppointmentData = extend({}, appointmentData, updatedData);
-    const startDate = this._dataAccessors.get('startDate', targetedAppointmentData);
-
-    return new Promise((resolve) => {
-      this.checkRecurringAppointment(
-        appointmentData,
-        newAppointmentData,
-        startDate,
-        () => {
-          when(fromPromise(this.updateAppointmentCore(
-            appointmentData,
-            newAppointmentData,
-          ))).always(resolve);
-        },
-        false,
-        undefined,
-        undefined,
-        undefined,
-        (): void => { resolve(); },
-      );
-    });
-  }
-
-  private createAppointmentResizableConfig(
-    viewModel: AppointmentItemViewModel,
-  ): ResizableProperties | undefined {
-    const isResizeAllowed = viewModel.allDay
-      ? this.allowAllDayResizing()
-      : this.allowResizing();
-
-    if (!isResizeAllowed || viewModel.skipResizing) {
-      return undefined;
-    }
-
-    const rule = getResizableConfig({
-      direction: viewModel.allDay || viewModel.direction === 'horizontal' ? 'horizontal' : 'vertical',
-      cellWidth: this._workSpace.getCellWidth(),
-      cellHeight: this._workSpace.getCellHeight(),
-      resizableStep: this._workSpace.positionHelper.getResizableStep(),
-      reduced: viewModel.reduced,
-      isGroupedByDate: this._workSpace.isGroupedByDate(),
-      rtlEnabled: Boolean(this.option('rtlEnabled')),
-    });
-
-    return {
-      ...rule,
-      area: this.getAppointmentResizableArea(viewModel),
-      cancelOnEscape: true,
-      onResizeStart: (e): void => this.onAppointmentResizeStart(
-        e as unknown as AppointmentResizeEvent,
-      ),
-      onResizeEnd: (e): void => this.onAppointmentResizeEnd(
-        e as unknown as AppointmentResizeEvent,
-      ),
-    };
-  }
-
-  private getAppointmentResizableArea(
-    viewModel: AppointmentItemViewModel,
-  ): ResizableProperties['area'] {
-    const groupBounds = this.getResizableGroupBounds(viewModel);
-    const area = groupBounds ?? this._workSpace.getScrollableContainer();
-
-    return area as unknown as ResizableProperties['area'];
-  }
-
-  private getResizableGroupBounds(
-    viewModel: AppointmentItemViewModel,
-  ): { left: number; right: number; top: number; bottom: number } | undefined {
-    const groups = this.getViewOption('groups');
-
-    if (!groups?.length) {
-      return undefined;
-    }
-
-    const coordinates = { left: viewModel.left, top: 0, groupIndex: viewModel.groupIndex };
-
-    if (viewModel.allDay || this.currentView.type === 'month') {
-      const bounds = this._workSpace.getGroupBounds(coordinates);
-      return bounds
-        ? {
-          left: bounds.left, right: bounds.right, top: 0, bottom: 0,
-        }
-        : undefined;
-    }
-
-    if (
-      VERTICAL_VIEW_TYPES.includes(this.currentView.type)
-      && this._workSpace.isVerticalGroupedWorkSpace()
-    ) {
-      const bounds = this._workSpace.getGroupBounds(coordinates);
-      return bounds
-        ? {
-          left: 0, right: 0, top: bounds.top, bottom: bounds.bottom,
-        }
-        : undefined;
-    }
-
-    return undefined;
-  }
-
-  private onAppointmentResizeStart(e: AppointmentResizeEvent): void {
-    this.appointmentResizeInitialSize = { width: e.width, height: e.height };
-    (this._appointments as unknown as Appointments).focusResizingAppointment($(e.element));
-  }
-
-  private getResizeDeltaTime(e: AppointmentResizeEvent): number {
-    const initialSize = this.appointmentResizeInitialSize ?? { width: e.width, height: e.height };
-
-    return getDeltaTime(
-      { width: e.width, height: e.height },
-      initialSize,
-      {
-        viewType: this.currentView.type,
-        cellSize: {
-          width: this._workSpace.getCellWidth(),
-          height: this._workSpace.getCellHeight(),
-        },
-        cellDurationInMinutes: this._workSpace.option('cellDuration') as number,
-        resizableStep: this._workSpace.positionHelper.getResizableStep(),
-        isAllDayPanel: false,
-      },
-    );
-  }
-
-  private getEndResizeStartDate(
-    e: AppointmentResizeEvent,
-    rawAppointment: SafeAppointment,
-    appointmentStartDate: Date,
-  ): Date {
-    const adapter = new AppointmentAdapter(rawAppointment, this._dataAccessors);
-    const { startDateTimeZone, isRecurrent } = adapter;
-
-    if (!e.handles.top && !isRecurrent) {
-      return this.timeZoneCalculator.createDate(adapter.startDate, 'toGrid', startDateTimeZone);
-    }
-
-    return appointmentStartDate;
-  }
-
-  private onAppointmentResizeEnd(e: AppointmentResizeEvent): void {
-    const $element = $(e.element);
-    const settings = this._appointments
-      .getAppointmentSettings($element) as AppointmentItemViewModel;
-
-    if (!settings) {
-      return;
-    }
-
-    const appointmentData = settings.itemData;
-
-    const dateRange = settings.allDay
-      ? this.getResizedAllDayDateRange(e, settings)
-      : this.getResizedTimedDateRange(e, appointmentData, settings.info);
-
-    this.updateResizedAppointment(
-      appointmentData,
-      dateRange,
-      settings.info.sourceAppointment.startDate,
-      () => (this._appointments as unknown as Appointments).resetAppointmentResize($element),
-    );
-  }
-
-  private getResizedTimedDateRange(
-    e: AppointmentResizeEvent,
-    rawAppointment: SafeAppointment,
-    info: AppointmentItemViewModel['info'],
-  ): { startDate: Date; endDate: Date } {
-    const viewOffset = this.getViewOffsetMs();
-    const startDate = this.getEndResizeStartDate(e, rawAppointment, info.appointment.startDate);
-    const { endDate } = info.appointment;
-
-    const dateRange = getResizedDates({
-      startDate: dateUtilsTs.addOffsets(startDate, -viewOffset),
-      endDate: dateUtilsTs.addOffsets(endDate, -viewOffset),
-      deltaTime: this.getResizeDeltaTime(e),
-      isStartDateChanged: isStartDateResized({
-        handles: e.handles,
-        isVerticalDirection: VERTICAL_VIEW_TYPES.includes(this.currentView.type),
-        isAllDay: false,
-        rtlEnabled: Boolean(this.option('rtlEnabled')),
-      }),
-      needCorrectDates: !['month', 'timelineMonth'].includes(this.currentView.type),
-      startDayHour: this.option('startDayHour'),
-      endDayHour: this.option('endDayHour'),
-    });
-
-    return {
-      startDate: dateUtilsTs.addOffsets(dateRange.startDate, viewOffset),
-      endDate: dateUtilsTs.addOffsets(dateRange.endDate, viewOffset),
-    };
-  }
-
-  private getResizedAllDayDateRange(
-    e: AppointmentResizeEvent,
-    settings: AppointmentItemViewModel,
-  ): { startDate: Date; endDate: Date } {
-    const $element = $(e.element);
-
-    return getAppointmentDateRange({
-      handles: e.handles,
-      appointmentSettings: settings,
-      isVerticalGroupedWorkSpace: this._workSpace.isVerticalGroupedWorkSpace(),
-      appointmentRect: getBoundingRect($element.get(0)),
-      parentAppointmentRect: getBoundingRect($element.parent().get(0)),
-      viewDataProvider: this._workSpace.viewDataProvider as unknown as ViewDataProviderType,
-      isDateAndTimeView: isDateAndTimeView(this._workSpace.type),
-      startDayHour: this.option('startDayHour'),
-      endDayHour: this.option('endDayHour'),
-      timeZoneCalculator: this.timeZoneCalculator,
-      dataAccessors: this._dataAccessors,
-      rtlEnabled: Boolean(this.option('rtlEnabled')),
-      DOMMetaData: this._workSpace.getDOMElementsMetaData(),
-      viewOffset: this.getViewOffsetMs(),
-    });
-  }
-
-  private updateResizedAppointment(
-    sourceAppointment: SafeAppointment,
-    dateRange: { startDate: Date; endDate: Date },
-    exceptionStartDate: Date,
-    onRollback: () => void,
-  ): void {
-    const tz = this.timeZoneCalculator;
-    const gridAdapter = new AppointmentAdapter(sourceAppointment, this._dataAccessors).clone();
-
-    gridAdapter.startDate = new Date(dateRange.startDate);
-    gridAdapter.endDate = new Date(dateRange.endDate);
-
-    const convertedBackAdapter = gridAdapter
-      .clone()
-      .calculateDates(tz, 'fromGrid')
-      .calculateDates(tz, 'toGrid');
-
-    const startDateDelta = gridAdapter.startDate.getTime()
-      - convertedBackAdapter.startDate.getTime();
-    const endDateDelta = gridAdapter.endDate.getTime()
-      - convertedBackAdapter.endDate.getTime();
-
-    gridAdapter.startDate = dateUtilsTs.addOffsets(gridAdapter.startDate, startDateDelta);
-    gridAdapter.endDate = dateUtilsTs.addOffsets(gridAdapter.endDate, endDateDelta);
-
-    const data = gridAdapter.calculateDates(tz, 'fromGrid').source;
-
-    this.checkRecurringAppointment(
-      sourceAppointment,
-      data,
-      exceptionStartDate,
-      () => {
-        this.updateAppointmentCore(sourceAppointment, data, onRollback).catch(noop);
-      },
-      false,
-      undefined,
-      undefined,
-      undefined,
-      onRollback,
-    );
-  }
-
   checkRecurringAppointment(
     rawAppointment: SafeAppointment,
     singleAppointment: SafeAppointment,
@@ -2318,7 +1862,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     isPopupEditing?: boolean,
     dragEvent?: SchedulerDragEvent | null,
     recurrenceEditMode?: RecurrenceEditMode,
-    onCancel?: () => void,
   ): void {
     const recurrenceRule = this._dataAccessors.get('recurrenceRule', rawAppointment);
 
@@ -2365,11 +1908,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
             }
           })
           .fail(() => {
-            if (this.option('_newAppointments')) {
-              onCancel?.();
-            } else {
-              this._appointments.moveAppointmentBack(dragEvent);
-            }
+            this._appointments.moveAppointmentBack(dragEvent);
           });
     }
   }
@@ -2572,7 +2111,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return rawResult;
   }
 
-  // TODO<Appointments>: delete this method when old impl is removed
   getTargetedAppointment(
     appointment: SafeAppointment,
     element: dxElementWrapper,
@@ -2644,7 +2182,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       dragEvent.cancel = Deferred<boolean>();
     }
 
-    if (isPromise(updatingOptions.cancel) && (dragEvent || this.option('_newAppointments'))) {
+    if (isPromise(updatingOptions.cancel) && dragEvent) {
       this.updatingAppointments.add(target);
     }
 
@@ -2734,8 +2272,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._fireContentReadyAction();
   }
 
-  getAppointmentsInstance(): Appointments | AppointmentCollection {
-    return this._appointments as unknown as Appointments | AppointmentCollection;
+  getAppointmentsInstance(): AppointmentCollection {
+    return this._appointments;
   }
 
   getLayoutManager(): AppointmentLayoutManager {
