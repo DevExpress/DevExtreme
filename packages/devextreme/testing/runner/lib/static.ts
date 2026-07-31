@@ -25,52 +25,70 @@ export interface StaticFileService {
   ) => boolean;
 }
 
-function getContentType(filePath: string): string {
-  const ext = path.extname(filePath).toLowerCase();
+const CONTENT_TYPES: Readonly<Record<string, string>> = {
+  '.html': 'text/html; charset=utf-8',
+  '.htm': 'text/html; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.js': 'application/javascript; charset=utf-8',
+  '.mjs': 'application/javascript; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
+  '.xml': 'text/xml; charset=utf-8',
+  '.xsl': 'text/xml; charset=utf-8',
+  '.txt': 'text/plain; charset=utf-8',
+  '.md': 'text/plain; charset=utf-8',
+  '.log': 'text/plain; charset=utf-8',
+  '.svg': 'image/svg+xml',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.gif': 'image/gif',
+  '.ico': 'image/x-icon',
+  '.woff': 'font/woff',
+  '.woff2': 'font/woff2',
+  '.ttf': 'font/ttf',
+  '.eot': 'application/vnd.ms-fontobject',
+  '.map': 'application/json; charset=utf-8',
+  '.wasm': 'application/wasm',
+};
 
-  switch (ext) {
-    case '.html':
-    case '.htm':
-      return 'text/html; charset=utf-8';
-    case '.css':
-      return 'text/css; charset=utf-8';
-    case '.js':
-    case '.mjs':
-      return 'application/javascript; charset=utf-8';
-    case '.json':
-      return 'application/json; charset=utf-8';
-    case '.xml':
-    case '.xsl':
-      return 'text/xml; charset=utf-8';
-    case '.txt':
-    case '.md':
-    case '.log':
-      return 'text/plain; charset=utf-8';
-    case '.svg':
-      return 'image/svg+xml';
-    case '.png':
-      return 'image/png';
-    case '.jpg':
-    case '.jpeg':
-      return 'image/jpeg';
-    case '.gif':
-      return 'image/gif';
-    case '.ico':
-      return 'image/x-icon';
-    case '.woff':
-      return 'font/woff';
-    case '.woff2':
-      return 'font/woff2';
-    case '.ttf':
-      return 'font/ttf';
-    case '.eot':
-      return 'application/vnd.ms-fontobject';
-    case '.map':
-      return 'application/json; charset=utf-8';
-    case '.wasm':
-      return 'application/wasm';
-    default:
-      return 'application/octet-stream';
+const JS_CONTENT_TYPE = 'application/javascript; charset=utf-8';
+const ESM_ARTIFACT_MARKER = '/artifacts/transpiled-esm-npm/esm/';
+const ESM_SHIMS = '/packages/devextreme/testing/helpers/esm-shims';
+
+function normalizeUrlPath(filePath: string): string {
+  return filePath.split(path.sep).join('/');
+}
+
+function getContentType(filePath: string): string {
+  return CONTENT_TYPES[path.extname(filePath).toLowerCase()] ?? 'application/octet-stream';
+}
+
+function sendError(res: ServerResponse, statusCode: number, message: string): boolean {
+  res.statusCode = statusCode;
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.end(message);
+  return true;
+}
+
+function sendJsModuleBody(res: ServerResponse, body: string): boolean {
+  const buffer = Buffer.from(body, 'utf8');
+  res.statusCode = 200;
+  res.setHeader('Content-Type', JS_CONTENT_TYPE);
+  res.setHeader('Content-Length', String(buffer.length));
+  res.end(buffer);
+  return true;
+}
+
+function sendTransformedJs(
+  res: ServerResponse,
+  filePath: string,
+  transform: (raw: string) => string,
+  errorMessage: string,
+): boolean {
+  try {
+    return sendJsModuleBody(res, transform(fs.readFileSync(filePath, 'utf8')));
+  } catch {
+    return sendError(res, 500, errorMessage);
   }
 }
 
@@ -91,26 +109,13 @@ function resolveStaticFilePath(filePath: string): string | null {
     return filePath;
   }
 
-  const asJs = `${filePath}.js`;
-  if (fs.existsSync(asJs) && fs.statSync(asJs).isFile()) {
-    return asJs;
+  for (const candidate of [`${filePath}.js`, `${filePath}.mjs`, path.join(filePath, 'index.js')]) {
+    if (fs.existsSync(candidate) && fs.statSync(candidate).isFile()) {
+      return candidate;
+    }
   }
 
-  const asModuleJs = `${filePath}.mjs`;
-  if (fs.existsSync(asModuleJs) && fs.statSync(asModuleJs).isFile()) {
-    return asModuleJs;
-  }
-
-  const asIndexJs = path.join(filePath, 'index.js');
-  if (fs.existsSync(asIndexJs) && fs.statSync(asIndexJs).isFile()) {
-    return asIndexJs;
-  }
-
-  if (fs.existsSync(filePath)) {
-    return filePath;
-  }
-
-  return null;
+  return fs.existsSync(filePath) ? filePath : null;
 }
 
 function sendStaticFile(res: ServerResponse, filePath: string, fileSize: number): boolean {
@@ -134,47 +139,50 @@ function sendStaticFile(res: ServerResponse, filePath: string, fileSize: number)
   return true;
 }
 
-/**
- * Webpack/UMD vendor bundles mapped in the QUnit import map
- * (quill / diagram / gantt / jszip / exceljs / intl). Loaded as native ESM
- * they have no exports — wrap so `import X from '…'` works.
- */
-function isWebpackVendorBundlePath(relativeUrlPath: string): boolean {
-  const normalized = relativeUrlPath.split(path.sep).join('/');
-  return normalized.endsWith('/devextreme-quill/dist/dx-quill.js')
-    || normalized.endsWith('/artifacts/js/dx-diagram.js')
-    || normalized.endsWith('/artifacts/js/dx-gantt.js')
-    || normalized.endsWith('/artifacts/js/dx-exceljs-fork.js')
-    || normalized.endsWith('/artifacts/js/jszip.js')
-    || normalized.endsWith('/intl/dist/Intl.complete.js')
-    || normalized.endsWith('/intl/dist/Intl.js');
+// --- Vendor / UMD → ESM wrappers ------------------------------------------------
+
+const ESM_DEFAULT_FROM_CJS = `const __dxVendorExport = module.exports && module.exports.__esModule
+  && Object.prototype.hasOwnProperty.call(module.exports, 'default')
+  ? module.exports.default
+  : module.exports;
+export default __dxVendorExport;
+`;
+
+function forceVendorGlobalThis(source: string): string {
+  return source.replace(/}\(\s*this\s*,/g, '}(globalThis,');
 }
 
-function isIntlVendorBundlePath(relativeUrlPath: string): boolean {
-  const normalized = relativeUrlPath.split(path.sep).join('/');
-  return normalized.endsWith('/intl/dist/Intl.complete.js')
-    || normalized.endsWith('/intl/dist/Intl.js');
-}
+function wrapVendorCjsBranch(
+  source: string,
+  options: {
+    preamble?: string;
+    requireShim?: string;
+    exportsInit?: string;
+    trailing?: string;
+    rewriteThis?: boolean;
+  } = {},
+): string {
+  const {
+    preamble = '',
+    requireShim = '',
+    exportsInit = '{}',
+    trailing = ESM_DEFAULT_FROM_CJS,
+    rewriteThis = true,
+  } = options;
 
-/** globalize / cldrjs ship as UMD; native ESM needs a CJS-branch + require shim. */
-function isGlobalizeOrCldrVendorPath(relativeUrlPath: string): boolean {
-  const normalized = relativeUrlPath.split(path.sep).join('/');
-  return normalized.endsWith('/globalize/dist/globalize.js')
-    || normalized.includes('/globalize/dist/globalize/')
-    || normalized.endsWith('/cldrjs/dist/cldr.js')
-    || /\/cldrjs\/dist\/cldr\/[^/]+\.js$/i.test(normalized);
-}
+  const vendorSource = rewriteThis ? forceVendorGlobalThis(source) : source;
 
-/** Vector map geo JSON UMD writes into `DevExpress.viz.map.sources`. */
-function isVectorMapDataPath(relativeUrlPath: string): boolean {
-  const normalized = relativeUrlPath.split(path.sep).join('/');
-  return /\/artifacts\/js\/vectormap-data\/[^/]+\.js$/i.test(normalized);
-}
-
-/** `dx.vectormaputils.js` is UMD (`exports.parse = …`); tests do `import { parse }`. */
-function isVectorMapUtilsPath(relativeUrlPath: string): boolean {
-  const normalized = relativeUrlPath.split(path.sep).join('/');
-  return /\/artifacts\/js\/vectormap-utils\/dx\.vectormaputils\.js$/i.test(normalized);
+  return [
+    preamble,
+    preamble ? '\n' : '',
+    `const module = { exports: ${exportsInit} };\n`,
+    'const exports = module.exports;\n',
+    'var define;\n',
+    requireShim,
+    vendorSource,
+    '\n',
+    trailing,
+  ].join('');
 }
 
 /**
@@ -184,7 +192,6 @@ function isVectorMapUtilsPath(relativeUrlPath: string): boolean {
  */
 function wrapIntlVendorAsEsm(source: string): string {
   return 'var define;\n'
-    // Locale-data IIFE at file end references bare `IntlPolyfill`.
     + 'var IntlPolyfill;\n'
     + `${source
       .replace(/}\(this,/g, '}(globalThis,')
@@ -234,25 +241,15 @@ function wrapWebpackVendorAsEsm(source: string): string {
     .map((name) => `export const ${name} = module.exports.${name};`)
     .join('\n');
 
-  return `const module = { exports: {} };
-const exports = module.exports;
-// Prevent AMD branch when a global \`define\` exists on the page.
-var define;
-${source}
-const __dxVendorExport = module.exports && module.exports.__esModule
-  && Object.prototype.hasOwnProperty.call(module.exports, 'default')
-  ? module.exports.default
-  : module.exports;
-export default __dxVendorExport;
-${namedExports ? `${namedExports}\n` : ''}`;
+  return wrapVendorCjsBranch(source, {
+    rewriteThis: false,
+    trailing: `${ESM_DEFAULT_FROM_CJS}${namedExports ? `${namedExports}\n` : ''}`,
+  });
 }
 
-/**
- * Wrap globalize / cldrjs UMD so `import 'globalize/number'` works under native ESM.
- * Forces the CJS branch and shims `require()` for the few ids these packages use.
- */
+/** globalize / cldrjs ship as UMD; native ESM needs a CJS-branch + require shim. */
 function wrapGlobalizeOrCldrAsEsm(source: string, relativeUrlPath: string): string {
-  const normalized = relativeUrlPath.split(path.sep).join('/');
+  const normalized = normalizeUrlPath(relativeUrlPath);
   const isCldrMain = normalized.endsWith('/cldrjs/dist/cldr.js');
   const isCldrPlugin = /\/cldrjs\/dist\/cldr\/[^/]+\.js$/i.test(normalized);
   const isGlobalizeMain = normalized.endsWith('/globalize/dist/globalize.js');
@@ -263,17 +260,16 @@ function wrapGlobalizeOrCldrAsEsm(source: string, relativeUrlPath: string): stri
   const preamble: string[] = [];
   if (isCldrPlugin) {
     preamble.push('import __dxCldr from \'cldr\';');
-  } else if (isGlobalizeMain) {
+  } else if (isGlobalizeMain || isGlobalizePlugin) {
     preamble.push('import __dxCldr from \'cldr\';');
     preamble.push('import \'cldr/event\';');
-  } else if (isGlobalizePlugin) {
-    preamble.push('import __dxCldr from \'cldr\';');
-    preamble.push('import \'cldr/event\';');
-    preamble.push('import \'cldr/supplemental\';');
-    preamble.push('import __dxGlobalize from \'globalize\';');
-    if (needsNumber) {
-      // CJS factory skips `./number`; AMD/DevExtreme always load it first.
-      preamble.push('import \'./number.js\';');
+    if (isGlobalizePlugin) {
+      preamble.push('import \'cldr/supplemental\';');
+      preamble.push('import __dxGlobalize from \'globalize\';');
+      if (needsNumber) {
+        // CJS factory skips `./number`; AMD/DevExtreme always load it first.
+        preamble.push('import \'./number.js\';');
+      }
     }
   }
 
@@ -291,23 +287,10 @@ function wrapGlobalizeOrCldrAsEsm(source: string, relativeUrlPath: string): stri
       '}\n',
     ].join('');
 
-  const vendorSource = source.replace(/}\(\s*this\s*,/g, '}(globalThis,');
-
-  return [
-    preamble.join('\n'),
-    preamble.length ? '\n' : '',
-    'const module = { exports: {} };\n',
-    'const exports = module.exports;\n',
-    'var define;\n',
+  return wrapVendorCjsBranch(source, {
+    preamble: preamble.join('\n'),
     requireShim,
-    vendorSource,
-    '\n',
-    'const __dxVendorExport = module.exports && module.exports.__esModule\n',
-    '  && Object.prototype.hasOwnProperty.call(module.exports, \'default\')\n',
-    '  ? module.exports.default\n',
-    '  : module.exports;\n',
-    'export default __dxVendorExport;\n',
-  ].join('');
+  });
 }
 
 /**
@@ -316,283 +299,250 @@ function wrapGlobalizeOrCldrAsEsm(source: string, relativeUrlPath: string): stri
  * global sources bag and point `module.exports` at the same object.
  */
 function wrapVectorMapDataAsEsm(source: string): string {
-  const vendorSource = source.replace(/}\(\s*this\s*,/g, '}(globalThis,');
-
-  return [
-    'globalThis.DevExpress = globalThis.DevExpress || {};\n',
-    'globalThis.DevExpress.viz = globalThis.DevExpress.viz || {};\n',
-    'globalThis.DevExpress.viz.map = globalThis.DevExpress.viz.map || {};\n',
-    'globalThis.DevExpress.viz.map.sources = globalThis.DevExpress.viz.map.sources || {};\n',
-    'const module = { exports: globalThis.DevExpress.viz.map.sources };\n',
-    'const exports = module.exports;\n',
-    'var define;\n',
-    vendorSource,
-    '\n',
-    'export default module.exports;\n',
-  ].join('');
+  return wrapVendorCjsBranch(source, {
+    preamble: [
+      'globalThis.DevExpress = globalThis.DevExpress || {};',
+      'globalThis.DevExpress.viz = globalThis.DevExpress.viz || {};',
+      'globalThis.DevExpress.viz.map = globalThis.DevExpress.viz.map || {};',
+      'globalThis.DevExpress.viz.map.sources = globalThis.DevExpress.viz.map.sources || {};',
+    ].join('\n'),
+    exportsInit: 'globalThis.DevExpress.viz.map.sources',
+    trailing: 'export default module.exports;\n',
+  });
 }
 
+/** `dx.vectormaputils.js` is UMD (`exports.parse = …`); tests do `import { parse }`. */
 function wrapVectorMapUtilsAsEsm(source: string): string {
-  return [
-    'const module = { exports: {} };\n',
-    'const exports = module.exports;\n',
-    'var define;\n',
-    `${source}\n`,
-    'export default module.exports;\n',
-    'export const parse = module.exports.parse;\n',
-  ].join('');
+  return wrapVendorCjsBranch(source, {
+    rewriteThis: false,
+    trailing: 'export default module.exports;\nexport const parse = module.exports.parse;\n',
+  });
 }
 
-function wrapVendorBundleSource(source: string, relativeUrlPath: string): string {
-  if (isIntlVendorBundlePath(relativeUrlPath)) {
-    return wrapIntlVendorAsEsm(source);
-  }
-  if (isGlobalizeOrCldrVendorPath(relativeUrlPath)) {
-    return wrapGlobalizeOrCldrAsEsm(source, relativeUrlPath);
-  }
-  if (isVectorMapDataPath(relativeUrlPath)) {
-    return wrapVectorMapDataAsEsm(source);
-  }
-  if (isVectorMapUtilsPath(relativeUrlPath)) {
-    return wrapVectorMapUtilsAsEsm(source);
-  }
-  return wrapWebpackVendorAsEsm(source);
-}
+type VendorWrapper = (source: string, relativeUrlPath: string) => string;
 
-function sendWebpackVendorAsEsm(
-  res: ServerResponse,
-  filePath: string,
-  relativeUrlPath: string,
-): boolean {
-  try {
-    const raw = fs.readFileSync(filePath, 'utf8');
-    const body = wrapVendorBundleSource(raw, relativeUrlPath);
-    const buffer = Buffer.from(body, 'utf8');
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
-    res.setHeader('Content-Length', String(buffer.length));
-    res.end(buffer);
-    return true;
-  } catch {
-    res.statusCode = 500;
-    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-    res.end('Failed to wrap vendor bundle as ESM');
-    return true;
+function resolveVendorEsmWrapper(relativeUrlPath: string): VendorWrapper | null {
+  const normalized = normalizeUrlPath(relativeUrlPath);
+
+  if (
+    normalized.endsWith('/intl/dist/Intl.complete.js')
+    || normalized.endsWith('/intl/dist/Intl.js')
+  ) {
+    return (source) => wrapIntlVendorAsEsm(source);
   }
+
+  if (
+    normalized.endsWith('/globalize/dist/globalize.js')
+    || normalized.includes('/globalize/dist/globalize/')
+    || normalized.endsWith('/cldrjs/dist/cldr.js')
+    || /\/cldrjs\/dist\/cldr\/[^/]+\.js$/i.test(normalized)
+  ) {
+    return wrapGlobalizeOrCldrAsEsm;
+  }
+
+  if (/\/artifacts\/js\/vectormap-data\/[^/]+\.js$/i.test(normalized)) {
+    return (source) => wrapVectorMapDataAsEsm(source);
+  }
+
+  if (/\/artifacts\/js\/vectormap-utils\/dx\.vectormaputils\.js$/i.test(normalized)) {
+    return (source) => wrapVectorMapUtilsAsEsm(source);
+  }
+
+  if (
+    normalized.endsWith('/devextreme-quill/dist/dx-quill.js')
+    || normalized.endsWith('/artifacts/js/dx-diagram.js')
+    || normalized.endsWith('/artifacts/js/dx-gantt.js')
+    || normalized.endsWith('/artifacts/js/dx-exceljs-fork.js')
+    || normalized.endsWith('/artifacts/js/jszip.js')
+  ) {
+    return (source) => wrapWebpackVendorAsEsm(source);
+  }
+
+  return null;
 }
 
 /** Serve JSON as `export default …` for native ESM (`*.json!` replacement). */
 function sendJsonAsEsmModule(res: ServerResponse, filePath: string): boolean {
-  try {
-    const raw = fs.readFileSync(filePath, 'utf8');
-    // Validate JSON before embedding
-    JSON.parse(raw);
-    const body = `export default ${raw};\n`;
-    const buffer = Buffer.from(body, 'utf8');
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
-    res.setHeader('Content-Length', String(buffer.length));
-    res.end(buffer);
-    return true;
-  } catch {
-    res.statusCode = 500;
-    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-    res.end('Failed to export JSON as ESM module');
-    return true;
-  }
+  return sendTransformedJs(
+    res,
+    filePath,
+    (raw) => {
+      JSON.parse(raw);
+      return `export default ${raw};\n`;
+    },
+    'Failed to export JSON as ESM module',
+  );
 }
+
+// --- Mutable artifact facades ---------------------------------------------------
 
 /**
  * Hand-written mutable facades (DEBUG_set bridges, custom composition, live
- * named bindings). Pure viz `import * as X; export default X` reexports are
- * handled by autoMutableFacade.ts instead — do not list them here.
+ * named bindings). Paths are relative to `…/artifacts/transpiled-esm-npm/esm/`.
+ * Pure viz `import * as X; export default X` reexports use autoMutableFacade.ts.
  */
-const MUTABLE_ARTIFACT_FACADES: readonly { suffix: string; shimUrl: string }[] = [
+const MUTABLE_FACADE_GROUPS: readonly { shim: string; artifacts: readonly string[] }[] = [
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/core/renderers/renderer.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_renderer.js',
+    shim: 'viz_renderer.js',
+    artifacts: [
+      '__internal/viz/core/renderers/renderer.js',
+      'viz/core/renderers/renderer_default.js',
+    ],
   },
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/viz/core/renderers/renderer_default.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_renderer.js',
+    shim: 'viz_animation.js',
+    artifacts: [
+      '__internal/viz/core/renderers/animation.js',
+      'viz/core/renderers/animation.js',
+    ],
   },
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/core/renderers/animation.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_animation.js',
+    shim: 'viz_utils.js',
+    artifacts: [
+      '__internal/viz/core/utils.js',
+      'viz/core/utils.js',
+      'viz/core/utils_default.js',
+    ],
   },
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/viz/core/renderers/animation.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_animation.js',
+    shim: 'viz_base_axis.js',
+    artifacts: ['__internal/viz/axes/base_axis.js'],
   },
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/core/utils.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_utils.js',
+    shim: 'exporter.js',
+    artifacts: ['exporter.js'],
   },
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/viz/core/utils.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_utils.js',
+    shim: 'format_helper.js',
+    artifacts: ['format_helper.js'],
   },
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/viz/core/utils_default.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_utils.js',
+    shim: 'viz_translator2d.js',
+    artifacts: ['__internal/viz/translators/translator2d.js'],
   },
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/axes/base_axis.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_base_axis.js',
+    shim: 'viz_tick_generator.js',
+    artifacts: ['__internal/viz/axes/tick_generator.js'],
   },
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/exporter.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/exporter.js',
+    shim: 'viz_tooltip.js',
+    artifacts: [
+      '__internal/viz/core/tooltip.js',
+      'viz/core/tooltip.js',
+    ],
   },
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/format_helper.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/format_helper.js',
+    shim: 'viz_title.js',
+    artifacts: [
+      '__internal/viz/core/title.js',
+      'viz/core/title.js',
+    ],
   },
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/translators/translator2d.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_translator2d.js',
+    shim: 'viz_export.js',
+    artifacts: [
+      '__internal/viz/core/export.js',
+      '__internal/viz/core/exportModule.js',
+      'viz/core/export.js',
+    ],
   },
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/axes/tick_generator.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_tick_generator.js',
+    shim: 'viz_chart_tracker.js',
+    artifacts: [
+      'viz/chart_components/tracker.js',
+      '__internal/viz/chart_components/tracker.js',
+    ],
   },
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/core/tooltip.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_tooltip.js',
+    shim: 'viz_components_legend.js',
+    artifacts: [
+      'viz/components/legend.js',
+      '__internal/viz/components/legend.js',
+    ],
   },
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/viz/core/tooltip.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_tooltip.js',
+    shim: 'viz_loading_indicator.js',
+    artifacts: [
+      'viz/core/loading_indicator.js',
+      '__internal/viz/core/loading_indicator.js',
+    ],
   },
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/core/title.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_title.js',
+    shim: 'date_parser.js',
+    artifacts: [
+      '__internal/core/localization/ldml/date.parser.js',
+      '__internal/core/localization/ldml/dateParserModule.js',
+      'common/core/localization/ldml/date.parser.js',
+    ],
   },
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/viz/core/title.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_title.js',
+    shim: 'visibility_change.js',
+    artifacts: [
+      'common/core/events/visibility_change.js',
+      '__internal/events/m_visibility_change.js',
+    ],
   },
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/core/export.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_export.js',
+    shim: 'core_errors.js',
+    artifacts: ['core/errors.js'],
   },
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/core/exportModule.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_export.js',
+    shim: 'ui_errors.js',
+    artifacts: ['ui/widget/ui.errors.js'],
   },
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/viz/core/export.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_export.js',
+    shim: 'template_manager.js',
+    artifacts: ['__internal/core/m_template_manager.js'],
   },
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/viz/chart_components/tracker.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_chart_tracker.js',
+    shim: 'viz_paletteModule.js',
+    artifacts: [
+      '__internal/viz/paletteModule.js',
+      '__internal/viz/palette.js',
+    ],
   },
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/chart_components/tracker.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_chart_tracker.js',
+    shim: 'themes.js',
+    artifacts: [
+      '__internal/ui/themes.js',
+      'ui/themes.js',
+    ],
   },
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/viz/components/legend.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_components_legend.js',
-  },
-  {
-    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/components/legend.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_components_legend.js',
-  },
-  {
-    suffix: '/artifacts/transpiled-esm-npm/esm/viz/core/loading_indicator.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_loading_indicator.js',
-  },
-  {
-    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/core/loading_indicator.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_loading_indicator.js',
-  },
-  {
-    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/core/localization/ldml/date.parser.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/date_parser.js',
-  },
-  {
-    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/core/localization/ldml/dateParserModule.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/date_parser.js',
-  },
-  {
-    suffix: '/artifacts/transpiled-esm-npm/esm/common/core/localization/ldml/date.parser.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/date_parser.js',
-  },
-  {
-    suffix: '/artifacts/transpiled-esm-npm/esm/common/core/events/visibility_change.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/visibility_change.js',
-  },
-  {
-    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/events/m_visibility_change.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/visibility_change.js',
-  },
-  {
-    suffix: '/artifacts/transpiled-esm-npm/esm/core/errors.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/core_errors.js',
-  },
-  {
-    suffix: '/artifacts/transpiled-esm-npm/esm/ui/widget/ui.errors.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/ui_errors.js',
-  },
-  {
-    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/core/m_template_manager.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/template_manager.js',
-  },
-  {
-    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/paletteModule.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_paletteModule.js',
-  },
-  {
-    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/viz/palette.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/viz_paletteModule.js',
-  },
-  {
-    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/ui/themes.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/themes.js',
-  },
-  {
-    suffix: '/artifacts/transpiled-esm-npm/esm/ui/themes.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/themes.js',
-  },
-  {
-    suffix: '/artifacts/transpiled-esm-npm/esm/common/core/animation/frame.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/animation_frame.js',
-  },
-  {
-    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/common/core/animation/frame.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/animation_frame.js',
-  },
-  {
-    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/common/core/animation/frameModule.js',
-    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/animation_frame.js',
+    shim: 'animation_frame.js',
+    artifacts: [
+      'common/core/animation/frame.js',
+      '__internal/common/core/animation/frame.js',
+      '__internal/common/core/animation/frameModule.js',
+    ],
   },
 ];
 
+const MUTABLE_ARTIFACT_FACADES: readonly { suffix: string; shimUrl: string }[] = (
+  MUTABLE_FACADE_GROUPS.flatMap(({ shim, artifacts }) => artifacts.map((artifact) => ({
+    suffix: `${ESM_ARTIFACT_MARKER}${artifact}`,
+    shimUrl: `${ESM_SHIMS}/${shim}`,
+  })))
+);
+
 function findMutableArtifactFacade(relativeUrlPath: string): string | null {
-  const normalized = relativeUrlPath.split(path.sep).join('/');
+  const normalized = normalizeUrlPath(relativeUrlPath);
   const withLeadingSlash = normalized.startsWith('/') ? normalized : `/${normalized}`;
   const match = MUTABLE_ARTIFACT_FACADES.find((entry) => withLeadingSlash.endsWith(entry.suffix)
     || normalized.endsWith(entry.suffix.replace(/^\//, '')));
   return match?.shimUrl ?? null;
 }
 
-function sendJsModuleBody(res: ServerResponse, body: string): boolean {
-  const buffer = Buffer.from(body, 'utf8');
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
-  res.setHeader('Content-Length', String(buffer.length));
-  res.end(buffer);
-  return true;
-}
-
 function sendMutableFacadeModule(res: ServerResponse, shimUrl: string): boolean {
   // Serve a re-export at the artifact URL so relative library imports and
   // bare import-map entries share the same shim module graph.
-  const body = `export * from '${shimUrl}';\nexport { default } from '${shimUrl}';\n`;
-  return sendJsModuleBody(res, body);
+  return sendJsModuleBody(
+    res,
+    `export * from '${shimUrl}';\nexport { default } from '${shimUrl}';\n`,
+  );
 }
+
+// --- ESM artifact tweaks --------------------------------------------------------
 
 /**
  * Convert leftover `exports.foo = …` (from #DEBUG / dual CJS-ESM sources)
@@ -603,29 +553,21 @@ function rewriteLegacyCjsExportsInEsmArtifact(source: string): string {
     return source;
   }
 
-  let next = source;
-
-  // exports.name = name;  /  exports.alias = name;
-  next = next.replace(
-    /^exports\.([A-Za-z_$][\w$]*)\s*=\s*([A-Za-z_$][\w$]*);?\s*$/gm,
-    (_match, exportName: string, valueName: string) => (exportName === valueName
-      ? `export { ${exportName} };`
-      : `export { ${valueName} as ${exportName} };`),
-  );
-
-  // exports.name = function (
-  next = next.replace(
-    /^exports\.([A-Za-z_$][\w$]*)\s*=\s*function\s*\(/gm,
-    'export function $1(',
-  );
-
-  // exports.name = async function (
-  next = next.replace(
-    /^exports\.([A-Za-z_$][\w$]*)\s*=\s*async\s+function\s*\(/gm,
-    'export async function $1(',
-  );
-
-  return next;
+  return source
+    .replace(
+      /^exports\.([A-Za-z_$][\w$]*)\s*=\s*([A-Za-z_$][\w$]*);?\s*$/gm,
+      (_match, exportName: string, valueName: string) => (exportName === valueName
+        ? `export { ${exportName} };`
+        : `export { ${valueName} as ${exportName} };`),
+    )
+    .replace(
+      /^exports\.([A-Za-z_$][\w$]*)\s*=\s*function\s*\(/gm,
+      'export function $1(',
+    )
+    .replace(
+      /^exports\.([A-Za-z_$][\w$]*)\s*=\s*async\s+function\s*\(/gm,
+      'export async function $1(',
+    );
 }
 
 /**
@@ -636,8 +578,8 @@ function rewriteLegacyCjsExportsInEsmArtifact(source: string): string {
  * assignments that throw under native ESM — rewrite those to ESM exports.
  */
 function restoreEsmDebugTestHooks(relativeUrlPath: string, source: string): string {
-  const normalized = relativeUrlPath.split(path.sep).join('/');
-  if (!normalized.includes('/artifacts/transpiled-esm-npm/esm/')) {
+  const normalized = normalizeUrlPath(relativeUrlPath);
+  if (!normalized.includes(ESM_ARTIFACT_MARKER)) {
     return source;
   }
 
@@ -668,36 +610,9 @@ function sendEsmArtifactJs(
     if (body === raw) {
       return sendStaticFile(res, filePath, fs.statSync(filePath).size);
     }
-    const buffer = Buffer.from(body, 'utf8');
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
-    res.setHeader('Content-Length', String(buffer.length));
-    res.end(buffer);
-    return true;
+    return sendJsModuleBody(res, body);
   } catch {
-    res.statusCode = 500;
-    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-    res.end('Failed to serve ESM artifact');
-    return true;
-  }
-}
-
-/** Rewrite CJS require/exports and default imports for QUnit tests/helpers. */
-function sendTestHelperJs(res: ServerResponse, filePath: string, relativeUrlPath: string): boolean {
-  try {
-    const raw = fs.readFileSync(filePath, 'utf8');
-    const body = rewriteQunitTestHelperSource(raw, relativeUrlPath);
-    const buffer = Buffer.from(body, 'utf8');
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
-    res.setHeader('Content-Length', String(buffer.length));
-    res.end(buffer);
-    return true;
-  } catch {
-    res.statusCode = 500;
-    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-    res.end('Failed to rewrite CJS-style test/helper module');
-    return true;
+    return sendError(res, 500, 'Failed to serve ESM artifact');
   }
 }
 
@@ -770,14 +685,10 @@ export function createStaticFileService({
 
     if (relativeToRoot.startsWith('..') || path.isAbsolute(relativeToRoot)) {
       setNoCacheHeaders(res);
-      res.statusCode = 403;
-      res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-      res.end('Forbidden');
-      return true;
+      return sendError(res, 403, 'Forbidden');
     }
 
     const resolvedFilePath = resolveStaticFilePath(filePath);
-
     if (!resolvedFilePath) {
       return false;
     }
@@ -790,76 +701,71 @@ export function createStaticFileService({
       return sendDirectoryListing(res, pathname, resolvedFilePath, escapeHtml);
     }
 
-    if (stat.isFile()) {
-      if (searchParams.has('esm-export') && path.extname(resolvedFilePath).toLowerCase() === '.json') {
-        return sendJsonAsEsmModule(res, resolvedFilePath);
-      }
-
-      // Native ESM resolves relative imports against the request URL, not the
-      // on-disk file. If we silently serve `foo.js` / `foo/index.js` for
-      // extensionless `foo`, `../` chains break without a redirect to the real file URL.
-      // Redirect to the canonical file URL so the browser base path is correct.
-      const resolvedUrlPath = `/${path.relative(rootDirectory, resolvedFilePath)
-        .split(path.sep)
-        .join('/')}`;
-      if (resolvedUrlPath !== normalizedPath) {
-        const query = searchParams.toString();
-        res.statusCode = 302;
-        res.setHeader('Location', query ? `${resolvedUrlPath}?${query}` : resolvedUrlPath);
-        res.end();
-        return true;
-      }
-
-      const relativeUrlPath = relativeToRoot.split(path.sep).join('/');
-      if (
-        path.extname(resolvedFilePath).toLowerCase() === '.js'
-        && isQunitTestOrHelperPath(relativeUrlPath)
-      ) {
-        return sendTestHelperJs(res, resolvedFilePath, relativeUrlPath);
-      }
-
-      // Relative library imports bypass import maps — serve mutable facades
-      // at the artifact URL unless ?dx-original=1 (used by the shim itself).
-      // Manual shims win (DEBUG_set bridges, themes, …); otherwise auto-generate
-      // for viz `import * as X; export default X` public entries.
-      if (!searchParams.has('dx-original')) {
-        const shimUrl = findMutableArtifactFacade(relativeUrlPath);
-        if (shimUrl) {
-          return sendMutableFacadeModule(res, shimUrl);
-        }
-        const autoFacade = tryBuildAutoMutableFacade(
-          relativeUrlPath,
-          resolvedFilePath,
-          rootDirectory,
-        );
-        if (autoFacade) {
-          return sendJsModuleBody(res, autoFacade);
-        }
-      }
-
-      if (
-        path.extname(resolvedFilePath).toLowerCase() === '.js'
-        && (
-          isWebpackVendorBundlePath(relativeUrlPath)
-          || isGlobalizeOrCldrVendorPath(relativeUrlPath)
-          || isVectorMapDataPath(relativeUrlPath)
-          || isVectorMapUtilsPath(relativeUrlPath)
-        )
-      ) {
-        return sendWebpackVendorAsEsm(res, resolvedFilePath, relativeUrlPath);
-      }
-
-      if (
-        path.extname(resolvedFilePath).toLowerCase() === '.js'
-        && relativeUrlPath.split(path.sep).join('/').includes('/artifacts/transpiled-esm-npm/esm/')
-      ) {
-        return sendEsmArtifactJs(res, resolvedFilePath, relativeUrlPath);
-      }
-
-      return sendStaticFile(res, resolvedFilePath, stat.size);
+    if (!stat.isFile()) {
+      return false;
     }
 
-    return false;
+    if (searchParams.has('esm-export') && path.extname(resolvedFilePath).toLowerCase() === '.json') {
+      return sendJsonAsEsmModule(res, resolvedFilePath);
+    }
+
+    // Native ESM resolves relative imports against the request URL, not the
+    // on-disk file. Redirect extensionless URLs to the canonical file URL.
+    const resolvedUrlPath = `/${normalizeUrlPath(path.relative(rootDirectory, resolvedFilePath))}`;
+    if (resolvedUrlPath !== normalizedPath) {
+      const query = searchParams.toString();
+      res.statusCode = 302;
+      res.setHeader('Location', query ? `${resolvedUrlPath}?${query}` : resolvedUrlPath);
+      res.end();
+      return true;
+    }
+
+    const relativeUrlPath = normalizeUrlPath(relativeToRoot);
+    const isJs = path.extname(resolvedFilePath).toLowerCase() === '.js';
+
+    if (isJs && isQunitTestOrHelperPath(relativeUrlPath)) {
+      return sendTransformedJs(
+        res,
+        resolvedFilePath,
+        (raw) => rewriteQunitTestHelperSource(raw, relativeUrlPath),
+        'Failed to rewrite CJS-style test/helper module',
+      );
+    }
+
+    // Relative library imports bypass import maps — serve mutable facades
+    // at the artifact URL unless ?dx-original=1 (used by the shim itself).
+    if (!searchParams.has('dx-original')) {
+      const shimUrl = findMutableArtifactFacade(relativeUrlPath);
+      if (shimUrl) {
+        return sendMutableFacadeModule(res, shimUrl);
+      }
+      const autoFacade = tryBuildAutoMutableFacade(
+        relativeUrlPath,
+        resolvedFilePath,
+        rootDirectory,
+      );
+      if (autoFacade) {
+        return sendJsModuleBody(res, autoFacade);
+      }
+    }
+
+    if (isJs) {
+      const vendorWrapper = resolveVendorEsmWrapper(relativeUrlPath);
+      if (vendorWrapper) {
+        return sendTransformedJs(
+          res,
+          resolvedFilePath,
+          (raw) => vendorWrapper(raw, relativeUrlPath),
+          'Failed to wrap vendor bundle as ESM',
+        );
+      }
+
+      if (relativeUrlPath.includes(ESM_ARTIFACT_MARKER)) {
+        return sendEsmArtifactJs(res, resolvedFilePath, relativeUrlPath);
+      }
+    }
+
+    return sendStaticFile(res, resolvedFilePath, stat.size);
   }
 
   return {
