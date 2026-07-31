@@ -15,7 +15,7 @@ import formatHelper from '@js/format_helper';
 import type { CustomOperation, DataType, Field } from '@js/ui/filter_builder';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
-import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
+import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 
 import { getConfig } from './m_between';
 import filterOperationsDictionary from './m_filter_operations_dictionary';

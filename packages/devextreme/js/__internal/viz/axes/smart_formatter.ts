@@ -21,7 +21,7 @@ import {
   isDefined, isExponential, isFunction, isObject,
 } from '@js/core/utils/type';
 import formatHelper from '@js/format_helper';
-import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
+import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import { getAdjustedLog10 as log10 } from '@ts/viz/core/utils';
 
 const _format = formatHelper.format;
