@@ -7,6 +7,7 @@ import parseArgs from 'minimist';
 import { DEFAULT_BROWSER_SIZE } from './helpers/const';
 import {
   addShadowRootTree,
+  applyViewportEnvironment,
   clearTestPage,
   loadAxeCore,
   loadShadowDomExtension,
@@ -116,7 +117,10 @@ function setTestingTheme(args: ParsedArgs): void {
 
 const normalizeThemeForMatching = (themeName?: string): string | undefined => themeName?.replace(/^dxdsfluent/, 'fluent');
 
-const matchTheme = (actualTheme: string | undefined, expectedTheme: string | undefined): boolean => (
+const matchTheme = (
+  actualTheme: string | undefined,
+  expectedTheme: string | undefined,
+): boolean => (
   normalizeThemeForMatching(actualTheme) === normalizeThemeForMatching(expectedTheme)
 );
 
@@ -369,6 +373,7 @@ async function main() {
               await t.resizeWindow(width, height);
             } else {
               await loadAxeCore(t);
+              await applyViewportEnvironment(t);
             }
 
             const currentTheme = await getCurrentTheme(t) || 'fluent.blue.light';
