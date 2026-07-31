@@ -9,7 +9,7 @@ import {
 import dateUtils from './core/utils/date';
 import numberLocalization from './common/core/localization/number';
 import dateLocalization from './common/core/localization/date';
-import { getGlobalFormatByDataType } from './__internal/core/m_global_format_config';
+import { getGlobalFormatByDataType } from './__internal/core/global_format_config';
 import dependencyInjector from './core/utils/dependency_injector';
 
 import './common/core/localization/currency';

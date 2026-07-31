@@ -4,9 +4,9 @@ import '@ts/core/localization/globalize/number';
 import 'globalize/date';
 
 import type { Format as LocalizationFormat, FormatObject } from '@js/localization';
+import { resolvePresetOverride } from '@ts/core/global_format_config';
 import type { DateFormatter, DateParser, Format } from '@ts/core/localization/date';
 import dateLocalization from '@ts/core/localization/date';
-import { resolvePresetOverride } from '@ts/core/m_global_format_config';
 import * as iteratorUtils from '@ts/core/utils/m_iterator';
 import { isObject } from '@ts/core/utils/m_type';
 // eslint-disable-next-line import/no-extraneous-dependencies
