@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import messageLocalization from '@js/common/core/localization/message';
 import type { Device } from '@js/core/devices';
 import $ from '@js/core/renderer';
@@ -6,13 +5,12 @@ import { inputType } from '@js/core/utils/support';
 import { getWindow } from '@js/core/utils/window';
 import type { Format } from '@js/localization';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import type DateBox from '@ts/ui/date_box/date_box.base';
+import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
+import DateBoxStrategy from '@ts/ui/date_box/date_box.strategy';
+import dateUtils from '@ts/ui/date_box/date_utils';
+import DateView from '@ts/ui/date_box/date_view';
 import type { PopupProperties } from '@ts/ui/popup/popup';
-
-import type DateBox from './date_box.base';
-import type { DateBoxBaseProperties } from './date_box.base';
-import dateUtils from './date_utils';
-import DateView from './date_view';
-import DateBoxStrategy from './m_date_box.strategy';
 
 const window = getWindow();
 
@@ -40,7 +38,7 @@ class DateViewStrategy extends DateBoxStrategy {
 
   getDisplayFormat(displayFormat: Format | null): Format {
     const { type = 'date' } = this.dateBox.option();
-    const globalFormat = type === 'date' || type === 'datetime'
+    const globalFormat: Format = type === 'date' || type === 'datetime'
       ? getGlobalFormatByDataType(type)
       : undefined;
 
