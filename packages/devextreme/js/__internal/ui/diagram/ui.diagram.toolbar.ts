@@ -711,12 +711,10 @@ class DiagramToolbar extends DiagramPanel {
   }
 
   _createOnInternalCommand(): void {
-    // @ts-expect-error ts-error
     this._onInternalCommandAction = this._createActionByOption('onInternalCommand');
   }
 
   _createOnCustomCommand(): void {
-    // @ts-expect-error ts-error
     this._onCustomCommandAction = this._createActionByOption('onCustomCommand');
   }
 
@@ -780,7 +778,6 @@ class DiagramToolbar extends DiagramPanel {
 
   _createOnSubMenuVisibilityChangingAction(): void {
     this._onSubMenuVisibilityChangingAction = this._createActionByOption(
-      // @ts-expect-error ts-error
       'onSubMenuVisibilityChanging',
     );
   }

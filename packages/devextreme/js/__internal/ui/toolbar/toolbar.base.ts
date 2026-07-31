@@ -96,7 +96,7 @@ class ToolbarBase<
 
   _pendingFocusTarget?: FocusRestoreTarget;
 
-  _getSynchronizableOptionsForCreateComponent(): (keyof TProperties)[] {
+  _getSynchronizableOptionsForCreateComponent(): string[] {
     return super._getSynchronizableOptionsForCreateComponent().filter((item) => item !== 'disabled');
   }
 
