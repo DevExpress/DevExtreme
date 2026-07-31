@@ -1,6 +1,8 @@
 {
   "name": "devextreme-scss",
   "type": "module",
+  "author": "Developer Express Inc.",
+  "license": "SEE LICENSE IN LICENSE.md",
   "devDependencies": {
     "autoprefixer": "10.5.0",
     "clean-css": "5.3.3",
