@@ -2,79 +2,76 @@
  * Serve-time CJS → ESM helpers for QUnit tests/helpers under native ESM.
  *
  * 1) `import x from 'mod'` → namespace + `.default ?? ns` (CJS default interop)
- * 2) top-level `require(...)` → equivalent ESM imports
- * 3) CJS `module.exports` / `exports.*` helpers → `export default` + named exports
+ * 2) `require(...)` → equivalent ESM imports
+ * 3) CJS `module.exports` / `exports.*` → `export default` + named exports
  */
 
 const MIXED_DEFAULT_NAMED_RE = /import\s+([A-Za-z_$][\w$]*)\s*,\s*(\{[^}]*\})\s*from\s*('[^']+'|"[^"]+")/g;
-
 const DEFAULT_ONLY_RE = /import\s+([A-Za-z_$][\w$]*)\s+from\s*('[^']+'|"[^"]+")/g;
 const NAMED_ONLY_RE = /import\s*(\{[^}]*\})\s*from\s*('[^']+'|"[^"]+")/g;
 
-const IDENT = '[A-Za-z_$][\\w$]*';
 const SPEC = "('[^']+'|\"[^\"]+\")";
-
-let requireCounter = 0;
-let importCounter = 0;
-
-function isBundleTemplatePath(sourcePath?: string): boolean {
-  if (!sourcePath) {
-    return false;
-  }
-  const normalized = sourcePath.replace(/\\/g, '/');
-  return normalized.includes('/packages/devextreme/build/bundle-templates/')
-    || normalized.startsWith('packages/devextreme/build/bundle-templates/')
-    || normalized.includes('/packages/devextreme/artifacts/transpiled/bundles/')
-    || normalized.startsWith('packages/devextreme/artifacts/transpiled/bundles/')
-    || normalized.includes('/packages/devextreme/artifacts/transpiled-esm-npm/bundles/')
-    || normalized.startsWith('packages/devextreme/artifacts/transpiled-esm-npm/bundles/');
-}
 
 const ESM_ARTIFACT_ROOT = '/packages/devextreme/artifacts/transpiled-esm-npm/esm';
 const DX_NODE_MODULES = '/packages/devextreme/node_modules';
 
-/**
- * Plugin-style json specs (`file.json!` / `file.json!json`) must not stay as
- * bare specifiers under a package prefix map — browsers resolve
- * `devextreme-cldr-data/fr.json!json` to a literal path with `!json` → 404.
- * Rewrite to an absolute URL the static server already serves as ESM.
- */
-function normalizeJsonPluginSpecifier(spec: string): string | null {
-  const jsonBang = /^(.*\.json)!(?:json)?$/.exec(spec);
-  if (!jsonBang) {
-    return null;
-  }
+const BUNDLE_TEMPLATE_ROOTS = [
+  'packages/devextreme/build/bundle-templates/',
+  'packages/devextreme/artifacts/transpiled/bundles/',
+  'packages/devextreme/artifacts/transpiled-esm-npm/bundles/',
+];
 
-  const jsonPath = jsonBang[1];
-  if (jsonPath.startsWith('devextreme-cldr-data/') || jsonPath.startsWith('cldr-core/')) {
-    return `${DX_NODE_MODULES}/${jsonPath}?esm-export=1`;
-  }
-  if (jsonPath.startsWith('.') || jsonPath.startsWith('/')) {
-    return `${jsonPath}?esm-export=1`;
-  }
-  return `${ESM_ARTIFACT_ROOT}/${jsonPath}?esm-export=1`;
+const QUNIT_REWRITE_ROOTS = [
+  'packages/devextreme/testing/tests/',
+  'packages/devextreme/testing/helpers/',
+  ...BUNDLE_TEMPLATE_ROOTS,
+];
+
+let requireCounter = 0;
+let importCounter = 0;
+
+function normalizePath(filePath: string): string {
+  return filePath.replace(/\\/g, '/');
 }
 
-function normalizeRequireSpecifierForEsm(specWithQuotes: string, sourcePath?: string): string {
-  const quote = specWithQuotes[0];
-  const spec = specWithQuotes.slice(1, -1);
-
-  const jsonUrl = normalizeJsonPluginSpecifier(spec);
-  if (jsonUrl) {
-    return `${quote}${jsonUrl}${quote}`;
+function pathMatchesRoots(filePath: string | undefined, roots: string[]): boolean {
+  if (!filePath) {
+    return false;
   }
+  const normalized = normalizePath(filePath);
+  return roots.some((root) => normalized.includes(`/${root}`) || normalized.startsWith(root));
+}
 
-  if (!isBundleTemplatePath(sourcePath)) {
-    return specWithQuotes;
-  }
+function isBundleTemplatePath(sourcePath?: string): boolean {
+  return pathMatchesRoots(sourcePath, BUNDLE_TEMPLATE_ROOTS);
+}
 
-  // Bundle template CJS requires are authored relative to bundler sources.
-  // For browser ESM loader they must be bare package-style aliases.
-  if (spec.startsWith('../')) {
-    return `${quote}${spec.replace(/^(\.\.\/)+/, '')}${quote}`;
-  }
+/** `ns.default ?? { ...ns }` — mutable shallow copy when there is no default. */
+function cjsDefaultExpr(ns: string): string {
+  return `${ns}.default ?? { ...${ns} }`;
+}
 
-  return specWithQuotes;
+/**
+ * Merge namespace named exports with a default object/function export
+ * (gauge/widget ctors hang `_TESTS_*` statics on the default).
+ */
+function cjsMergedNamespaceExpr(ns: string): string {
+  return `({ ...${ns}, ...((typeof ${ns}.default === 'object' || typeof ${ns}.default === 'function') && ${ns}.default ? ${ns}.default : {}) })`;
+}
+
+function nextRequireId(): string {
+  requireCounter += 1;
+  return `__dxReq_${requireCounter}`;
+}
+
+function nextImportId(): string {
+  importCounter += 1;
+  return `__dxImp_${importCounter}`;
+}
+
+function resetRewriteCounters(): void {
+  requireCounter = 0;
+  importCounter = 0;
 }
 
 function skipQuotedString(source: string, start: number): number {
@@ -122,88 +119,9 @@ function isOffsetInsideComment(source: string, offset: number): boolean {
   return false;
 }
 
-function rewriteRemainingRequires(source: string, sourcePath?: string): string {
-  if (!/\brequire\s*\(/.test(source)) {
-    return source;
-  }
-
-  const specToAlias = new Map<string, string>();
-  const next = source.replace(
-    // SPEC already includes a capturing group — do not wrap it again or
-    // the replace callback's `offset` argument shifts.
-    new RegExp(`require\\s*\\(\\s*${SPEC}\\s*\\)(?:\\s*\\.\\s*default\\b)?`, 'g'),
-    (match, spec: string, offset: number) => {
-      // Bundle templates keep optional widgets commented out, e.g.
-      // `/* DevExpress.aspnet = require('../aspnet'); */` — do not hoist those.
-      if (isOffsetInsideComment(source, offset)) {
-        return match;
-      }
-      const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
-      let alias = specToAlias.get(normalizedSpec);
-      if (!alias) {
-        requireCounter += 1;
-        alias = `__dxReq_${requireCounter}`;
-        specToAlias.set(normalizedSpec, alias);
-      }
-      // Prefer CJS/ESM default; otherwise a mutable shallow copy of the
-      // namespace. Bare `?? ns` is an immutable Module Namespace and breaks
-      // `DevExpress.events = require(…); events.click = …`.
-      // `require(x).default` — do not append another `.default`.
-      return `(${alias}.default ?? { ...${alias} })`;
-    },
-  );
-
-  if (!specToAlias.size) {
-    return next;
-  }
-
-  const importBlock = [...specToAlias.entries()]
-    .map(([spec, alias]) => `import * as ${alias} from ${spec};`)
-    .join('\n');
-
-  return `${importBlock}\n${next}`;
-}
-
-function normalizeBundleTemplateRelativeEsmSpecifiers(source: string, sourcePath?: string): string {
-  if (!isBundleTemplatePath(sourcePath)) {
-    return source;
-  }
-
-  return source.replace(
-    /((?:import|export)\s[^'"]*?\sfrom\s*|import\s*)(['"])([^'"]+)\2/g,
-    (_match, prefix: string, quote: string, spec: string) => {
-      if (!spec.startsWith('../')) {
-        return `${prefix}${quote}${spec}${quote}`;
-      }
-      const normalized = spec.replace(/^(\.\.\/)+/, '');
-      return `${prefix}${quote}${normalized}${quote}`;
-    },
-  );
-}
-
-function nextRequireId(): string {
-  requireCounter += 1;
-  return `__dxReq_${requireCounter}`;
-}
-
-function nextImportId(): string {
-  importCounter += 1;
-  return `__dxImp_${importCounter}`;
-}
-
-function resetRewriteCounters(): void {
-  requireCounter = 0;
-  importCounter = 0;
-}
-
-/** Drop a leading `.default` — CJS interop already uses `ns.default ?? ns`. */
-function stripLeadingDefaultMember(members: string): string {
-  return members.replace(/^\s*\.\s*default\b/, '').replace(/\s+/g, '');
-}
-
 /**
  * Index of the matching `}` for `{` at `openIndex`, skipping strings,
- * template literals, and comments (so CSS/`}` inside markup do not truncate AMD bodies).
+ * template literals, and comments.
  */
 function findMatchingBrace(source: string, openIndex: number): number {
   if (source[openIndex] !== '{') {
@@ -232,7 +150,6 @@ function findMatchingBrace(source: string, openIndex: number): number {
             i += 1;
             break;
           } else if (source[i] === '$' && source[i + 1] === '{') {
-            // ${ ... } — recurse into expression braces
             const innerClose = findMatchingBrace(source, i + 1);
             i = innerClose < 0 ? source.length : innerClose + 1;
           } else {
@@ -253,6 +170,108 @@ function findMatchingBrace(source: string, openIndex: number): number {
     }
   }
   return -1;
+}
+
+/**
+ * Plugin-style json specs (`file.json!` / `file.json!json`) must not stay as
+ * bare specifiers under a package prefix map — browsers resolve
+ * `devextreme-cldr-data/fr.json!json` to a literal path with `!json` → 404.
+ */
+function normalizeJsonPluginSpecifier(spec: string): string | null {
+  const jsonBang = /^(.*\.json)!(?:json)?$/.exec(spec);
+  if (!jsonBang) {
+    return null;
+  }
+
+  const jsonPath = jsonBang[1];
+  if (jsonPath.startsWith('devextreme-cldr-data/') || jsonPath.startsWith('cldr-core/')) {
+    return `${DX_NODE_MODULES}/${jsonPath}?esm-export=1`;
+  }
+  if (jsonPath.startsWith('.') || jsonPath.startsWith('/')) {
+    return `${jsonPath}?esm-export=1`;
+  }
+  return `${ESM_ARTIFACT_ROOT}/${jsonPath}?esm-export=1`;
+}
+
+function normalizeRequireSpecifierForEsm(specWithQuotes: string, sourcePath?: string): string {
+  const quote = specWithQuotes[0];
+  const spec = specWithQuotes.slice(1, -1);
+
+  const jsonUrl = normalizeJsonPluginSpecifier(spec);
+  if (jsonUrl) {
+    return `${quote}${jsonUrl}${quote}`;
+  }
+
+  if (!isBundleTemplatePath(sourcePath)) {
+    return specWithQuotes;
+  }
+
+  // Bundle template CJS requires are relative to bundler sources; browser ESM
+  // needs bare package-style aliases.
+  if (spec.startsWith('../')) {
+    return `${quote}${spec.replace(/^(\.\.\/)+/, '')}${quote}`;
+  }
+
+  return specWithQuotes;
+}
+
+function normalizeBundleTemplateRelativeEsmSpecifiers(source: string, sourcePath?: string): string {
+  if (!isBundleTemplatePath(sourcePath)) {
+    return source;
+  }
+
+  return source.replace(
+    /((?:import|export)\s[^'"]*?\sfrom\s*|import\s*)(['"])([^'"]+)\2/g,
+    (_match, prefix: string, quote: string, spec: string) => {
+      if (!spec.startsWith('../')) {
+        return `${prefix}${quote}${spec}${quote}`;
+      }
+      return `${prefix}${quote}${spec.replace(/^(\.\.\/)+/, '')}${quote}`;
+    },
+  );
+}
+
+/**
+ * Replace every static `require('…')` with a shared namespace alias and hoist
+ * `import * as` declarations. Skips requires inside comments (bundle templates
+ * keep optional widgets commented out).
+ */
+function rewriteRequiresToEsm(source: string, sourcePath?: string): string {
+  if (!/\brequire\s*\(/.test(source)) {
+    return source;
+  }
+
+  const specToAlias = new Map<string, string>();
+  const next = source.replace(
+    // SPEC already includes a capturing group — do not wrap it again or
+    // the replace callback's `offset` argument shifts.
+    new RegExp(`require\\s*\\(\\s*${SPEC}\\s*\\)(?:\\s*\\.\\s*default\\b)?`, 'g'),
+    (match, spec: string, offset: number) => {
+      if (isOffsetInsideComment(source, offset)) {
+        return match;
+      }
+      const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
+      let alias = specToAlias.get(normalizedSpec);
+      if (!alias) {
+        alias = nextRequireId();
+        specToAlias.set(normalizedSpec, alias);
+      }
+      // Prefer CJS/ESM default; otherwise a mutable shallow copy of the
+      // namespace. Bare `?? ns` is an immutable Module Namespace and breaks
+      // `DevExpress.events = require(…); events.click = …`.
+      return `(${cjsDefaultExpr(alias)})`;
+    },
+  );
+
+  if (!specToAlias.size) {
+    return next;
+  }
+
+  const importBlock = [...specToAlias.entries()]
+    .map(([spec, alias]) => `import * as ${alias} from ${spec};`)
+    .join('\n');
+
+  return `${importBlock}\n${next}`;
 }
 
 function isBareSpecifier(specWithQuotes: string): boolean {
@@ -283,7 +302,7 @@ function importClauseToDestructuring(namedClause: string): string {
   return `{ ${converted.join(', ')} }`;
 }
 
-export function rewriteCjsStyleDefaultImports(source: string): string {
+function rewriteCjsStyleDefaultImports(source: string): string {
   let next = source.replace(
     MIXED_DEFAULT_NAMED_RE,
     (match, name: string, named: string, spec: string) => {
@@ -291,14 +310,11 @@ export function rewriteCjsStyleDefaultImports(source: string): string {
         return match;
       }
       const ns = `__dxCjs_${name}`;
-      // Include function defaults: gauge/widget ctors hang `_TESTS_*` statics
-      // on the default export (not real ESM named exports).
-      const merged = `({ ...${ns}, ...((typeof ${ns}.default === 'object' || typeof ${ns}.default === 'function') && ${ns}.default ? ${ns}.default : {}) })`;
       const bindingPattern = importClauseToDestructuring(named);
       // `let` — some QUnit suites reassign default imports (e.g. `$ = coreRenderer`).
       return `import * as ${ns} from ${spec};`
-        + ` let ${name} = ${ns}.default ?? { ...${ns} };`
-        + ` const ${bindingPattern} = ${merged}`;
+        + ` let ${name} = ${cjsDefaultExpr(ns)};`
+        + ` const ${bindingPattern} = ${cjsMergedNamespaceExpr(ns)}`;
     },
   );
 
@@ -307,7 +323,7 @@ export function rewriteCjsStyleDefaultImports(source: string): string {
       return match;
     }
     const ns = `__dxCjs_${name}`;
-    return `import * as ${ns} from ${spec}; let ${name} = ${ns}.default ?? { ...${ns} }`;
+    return `import * as ${ns} from ${spec}; let ${name} = ${cjsDefaultExpr(ns)}`;
   });
 
   next = next.replace(NAMED_ONLY_RE, (match, named: string, spec: string) => {
@@ -315,182 +331,30 @@ export function rewriteCjsStyleDefaultImports(source: string): string {
       return match;
     }
     const ns = nextImportId();
-    const merged = `({ ...${ns}, ...((typeof ${ns}.default === 'object' || typeof ${ns}.default === 'function') && ${ns}.default ? ${ns}.default : {}) })`;
     const bindingPattern = importClauseToDestructuring(named);
     return `import * as ${ns} from ${spec};`
-      + ` const ${bindingPattern} = ${merged}`;
+      + ` const ${bindingPattern} = ${cjsMergedNamespaceExpr(ns)}`;
   });
 
   return next;
 }
 
 /**
- * Rewrite require() in legacy QUnit suites/helpers to ESM.
- * Common top-level forms become import + binding; any leftover
- * `require('…')` (including nested member access / in-function calls)
- * is rewritten via a shared import alias.
- */
-export function rewriteRequiresToEsm(source: string, sourcePath?: string): string {
-  if (!/\brequire\s*\(/.test(source)) {
-    return source;
-  }
-
-  let next = source;
-
-  // const { a, b } = require('spec');
-  next = next.replace(
-    new RegExp(`^(const|let|var)\\s+(\\{[^}]+\\})\\s*=\\s*require\\s*\\(\\s*${SPEC}\\s*\\)\\s*;?\\s*$`, 'gm'),
-    (_m, kind: string, pattern: string, spec: string) => {
-      const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
-      const ns = nextRequireId();
-      return `import * as ${ns} from ${normalizedSpec};`
-        + `\n${kind} ${pattern} = ${ns}.default ?? { ...${ns} };`;
-    },
-  );
-
-  // const name = require('spec').prop... (one or more members)
-  next = next.replace(
-    new RegExp(
-      `^(const|let|var)\\s+(${IDENT})\\s*=\\s*require\\s*\\(\\s*${SPEC}\\s*\\)((?:\\s*\\.\\s*${IDENT})+)\\s*;?\\s*$`,
-      'gm',
-    ),
-    (_m, kind: string, name: string, spec: string, members: string) => {
-      const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
-      const ns = nextRequireId();
-      const path = stripLeadingDefaultMember(members);
-      return `import * as ${ns} from ${normalizedSpec};`
-        + `\n${kind} ${name} = (${ns}.default ?? { ...${ns} })${path};`;
-    },
-  );
-
-  // const name = obj.path = require('spec');
-  next = next.replace(
-    new RegExp(
-      `^(const|let|var)\\s+(${IDENT})\\s*=\\s*((?:${IDENT}|\\[['"][^\\]]+['"]\\])(?:\\.(?:${IDENT})|\\[['"][^\\]]+['"]\\])*)\\s*=\\s*require\\s*\\(\\s*${SPEC}\\s*\\)\\s*;?\\s*$`,
-      'gm',
-    ),
-    (_m, kind: string, name: string, left: string, spec: string) => {
-      const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
-      const ns = nextRequireId();
-      return `import * as ${ns} from ${normalizedSpec};`
-        + `\n${kind} ${name} = ${ns}.default ?? { ...${ns} };`
-        + `\n${left} = ${name};`;
-    },
-  );
-
-  // const name = obj.path = require('spec').prop...
-  next = next.replace(
-    new RegExp(
-      `^(const|let|var)\\s+(${IDENT})\\s*=\\s*((?:${IDENT}|\\[['"][^\\]]+['"]\\])(?:\\.(?:${IDENT})|\\[['"][^\\]]+['"]\\])*)\\s*=\\s*require\\s*\\(\\s*${SPEC}\\s*\\)((?:\\s*\\.\\s*${IDENT})+)\\s*;?\\s*$`,
-      'gm',
-    ),
-    (_m, kind: string, name: string, left: string, spec: string, members: string) => {
-      const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
-      const ns = nextRequireId();
-      const path = stripLeadingDefaultMember(members);
-      return `import * as ${ns} from ${normalizedSpec};`
-        + `\n${kind} ${name} = (${ns}.default ?? { ...${ns} })${path};`
-        + `\n${left} = ${name};`;
-    },
-  );
-
-  // const name = require('spec');
-  next = next.replace(
-    new RegExp(
-      `^(const|let|var)\\s+(${IDENT})\\s*=\\s*require\\s*\\(\\s*${SPEC}\\s*\\)\\s*;?\\s*$`,
-      'gm',
-    ),
-    (_m, kind: string, name: string, spec: string) => {
-      const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
-      const ns = nextRequireId();
-      return `import * as ${ns} from ${normalizedSpec};`
-        + `\n${kind} ${name} = ${ns}.default ?? { ...${ns} };`;
-    },
-  );
-
-  // window.name = require('spec');  OR  name = require('spec');
-  next = next.replace(
-    new RegExp(
-      `^((?:window\\.)?${IDENT})\\s*=\\s*require\\s*\\(\\s*${SPEC}\\s*\\)\\s*;?\\s*$`,
-      'gm',
-    ),
-    (_m, left: string, spec: string) => {
-      const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
-      const ns = nextRequireId();
-      return `import * as ${ns} from ${normalizedSpec};`
-        + `\n${left} = ${ns}.default ?? { ...${ns} };`;
-    },
-  );
-
-  // obj.path = require('spec').prop...
-  next = next.replace(
-    new RegExp(
-      `^((?:${IDENT}|\\[['"][^\\]]+['"]\\])(?:\\.(?:${IDENT})|\\[['"][^\\]]+['"]\\])*)\\s*=\\s*require\\s*\\(\\s*${SPEC}\\s*\\)((?:\\s*\\.\\s*${IDENT})+)\\s*;?\\s*$`,
-      'gm',
-    ),
-    (_m, left: string, spec: string, members: string) => {
-      const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
-      const ns = nextRequireId();
-      const path = stripLeadingDefaultMember(members);
-      return `import * as ${ns} from ${normalizedSpec};`
-        + `\n${left} = (${ns}.default ?? { ...${ns} })${path};`;
-    },
-  );
-
-  // dictionaries['zh-tw'] = require('...');
-  next = next.replace(
-    new RegExp(
-      `^((?:${IDENT}|\\[['"][^\\]]+['"]\\])(?:\\.(?:${IDENT})|\\[['"][^\\]]+['"]\\])*)\\s*=\\s*require\\s*\\(\\s*${SPEC}\\s*\\)\\s*;?\\s*$`,
-      'gm',
-    ),
-    (_m, left: string, spec: string) => {
-      const normalizedSpec = normalizeRequireSpecifierForEsm(spec, sourcePath);
-      const ns = nextRequireId();
-      return `import * as ${ns} from ${normalizedSpec};`
-        + `\n${left} = ${ns}.default ?? { ...${ns} };`;
-    },
-  );
-
-  // require('spec');
-  next = next.replace(
-    new RegExp(`^require\\s*\\(\\s*${SPEC}\\s*\\)\\s*;?\\s*$`, 'gm'),
-    (_m, spec: string) => `import ${normalizeRequireSpecifierForEsm(spec, sourcePath)};`,
-  );
-
-  // Catch-all for any remaining static require('…') / require("…")
-  // (nested access, in-function calls, unusual LHS forms).
-  next = rewriteRemainingRequires(next, sourcePath);
-
-  return next;
-}
-
-function rewriteRequiresToEsmInAmdBody(source: string): string {
-  // One pass only: every `require('…')` → shared alias + hoisted import.
-  // Do not mix line-pattern rewrites (they insert `import` mid-body and, with
-  // a reset counter / second pass, duplicate `__dxReq_*` bindings).
-  return rewriteRemainingRequires(source);
-}
-
-/**
  * True for a single-line static import we can safely hoist.
- * Incomplete multi-line openers (`import {`) must stay with their body lines —
- * hoisting only the first line yields `import {\nimport …` → Unexpected reserved word.
+ * Incomplete multi-line openers (`import {`) must stay with their body lines.
  */
 function isCompleteImportLine(line: string): boolean {
   const trimmed = line.trim();
   if (!/^import\b/.test(trimmed) || /^import\s*\(/.test(trimmed)) {
     return false;
   }
-  // Side-effect: import 'x'; / import "x";
   if (/^import\s*['"][^'"]+['"]/.test(trimmed)) {
     return true;
   }
-  // Complete: … from 'x' (optionally followed by `; let/const …` from CJS interop).
   return /\bfrom\s*['"][^'"]+['"]/.test(trimmed);
 }
 
 function hoistImportsFromSource(source: string): { imports: string[]; body: string } {
-  // Line-pattern / catch-all rewrites may leave `…;import …` on one line.
   const normalized = source.replace(/;(?=\s*import\s)/g, ';\n');
   const imports: string[] = [];
   const bodyLines: string[] = [];
@@ -533,7 +397,8 @@ function rewriteAmdDefineFactory(source: string): string {
 
     next += source.slice(lastIndex, match.index);
     const body = source.slice(openBrace + 1, closeBrace);
-    const rewrittenBody = rewriteRequiresToEsmInAmdBody(body);
+    // One pass only — do not mix mid-body `import` insertion (duplicates bindings).
+    const rewrittenBody = rewriteRequiresToEsm(body);
     const { imports, body: bodyScript } = hoistImportsFromSource(rewrittenBody);
     hoistedImports.push(...imports);
     next += `(function() {\n${bodyScript}\n})();`;
@@ -565,7 +430,6 @@ function collectCjsExportNames(source: string): string[] {
     let match = pattern.exec(source);
     while (match) {
       const name = match[1];
-      // `default` / `__esModule` are not valid/useful as `export const` names
       if (name !== 'default' && name !== '__esModule') {
         names.add(name);
       }
@@ -585,21 +449,19 @@ function rewriteBundleTemplateModuleExports(source: string): string {
 
 function isLocallyDeclaredBinding(source: string, name: string): boolean {
   const escaped = name.replace(/\$/g, '\\$');
-  // const/let/var name = … | function/class name
   const directRe = new RegExp(
     `(?:^|[\\s;{}])(?:(?:const|let|var)\\s+${escaped}\\b|function\\s+${escaped}\\b|class\\s+${escaped}\\b)`,
   );
   if (directRe.test(source)) {
     return true;
   }
-  // const { ChartTracker, PieTracker } = … (shorthand / default; not `name: alias`)
   const destructuringRe = new RegExp(
     `(?:const|let|var)\\s*\\{[^}]*\\b${escaped}\\b(?!\\s*:)[^}]*\\}`,
   );
   return destructuringRe.test(source);
 }
 
-export function wrapCjsModuleExports(source: string, sourcePath?: string): string {
+function wrapCjsModuleExports(source: string, sourcePath?: string): string {
   if (/^\s*export\s/m.test(source)) {
     return source;
   }
@@ -616,15 +478,13 @@ export function wrapCjsModuleExports(source: string, sourcePath?: string): strin
     return rewriteBundleTemplateModuleExports(source);
   }
 
-  // AMD / legacy DevExpress.require helpers — leave untouched for now
+  // AMD / DevExpress.require helpers — leave untouched
   if (/\bdefine\.amd\b/.test(source) || /\bDevExpress\.require\b/.test(source)) {
     return source;
   }
 
-  // Named ESM exports must reflect `module.exports.name`. When a local
-  // binding already uses that name (`const name` or `const { name }`),
-  // `export const name = …` / `export { name }` would either collide or
-  // re-export the wrong value (e.g. trackerMock spies vs originals).
+  // Named ESM exports must reflect `module.exports.name`. When a local binding
+  // already uses that name, alias to avoid collisions / wrong re-exports.
   const namedExports = collectCjsExportNames(source)
     .map((name) => {
       if (isLocallyDeclaredBinding(source, name)) {
@@ -649,8 +509,6 @@ export function rewriteQunitTestHelperSource(source: string, sourcePath?: string
   next = rewriteRequiresToEsm(next, sourcePath);
   next = wrapCjsModuleExports(next, sourcePath);
   next = rewriteCjsStyleDefaultImports(next);
-  // Line-based require rewrites can leave `import` after statements; native ESM
-  // is happier (and some browsers fail the module fetch) with imports at top.
   const { imports, body } = hoistImportsFromSource(next);
   if (!imports.length) {
     return next;
@@ -663,7 +521,7 @@ export function rewriteQunitTestHelperSource(source: string, sourcePath?: string
  * Non-AMD branch expects a global `DevExpress`; under import maps that throws.
  */
 export function rewriteAspnetArtifactToEsm(source: string, sourcePath?: string): string {
-  const normalized = (sourcePath || '').replace(/\\/g, '/');
+  const normalized = normalizePath(sourcePath || '');
   if (normalized && !normalized.endsWith('/aspnet.js')) {
     return source;
   }
@@ -699,15 +557,15 @@ ${body}
 };
 
 const __dxAspnet = __dxAspnetFactory(
-  __dxAspnetJquery.default ?? { ...__dxAspnetJquery },
+  ${cjsDefaultExpr('__dxAspnetJquery')},
   __dxAspnetTemplateEngineRegistry.setTemplateEngine,
   __dxAspnetTemplateBase.renderedCallbacks,
-  __dxAspnetGuid.default ?? { ...__dxAspnetGuid },
-  __dxAspnetValidationEngine.default ?? { ...__dxAspnetValidationEngine },
+  ${cjsDefaultExpr('__dxAspnetGuid')},
+  ${cjsDefaultExpr('__dxAspnetValidationEngine')},
   __dxAspnetIterator,
   __dxAspnetDom.extractTemplateMarkup,
   __dxAspnetString.encodeHtml,
-  __dxAspnetAjax.default ?? { ...__dxAspnetAjax },
+  ${cjsDefaultExpr('__dxAspnetAjax')},
 );
 
 export default __dxAspnet;
@@ -715,21 +573,9 @@ export default __dxAspnet;
 }
 
 export function isQunitTestOrHelperPath(relativePath: string): boolean {
-  const normalized = relativePath.replace(/\\/g, '/');
-  // Real ESM facades under esm-shims must not go through CJS rewrite.
+  const normalized = normalizePath(relativePath);
   if (normalized.includes('/testing/helpers/esm-shims/')) {
     return false;
   }
-  return (
-    normalized.includes('/packages/devextreme/testing/tests/')
-    || normalized.includes('/packages/devextreme/testing/helpers/')
-    || normalized.includes('/packages/devextreme/build/bundle-templates/')
-    || normalized.includes('/packages/devextreme/artifacts/transpiled/bundles/')
-    || normalized.includes('/packages/devextreme/artifacts/transpiled-esm-npm/bundles/')
-    || normalized.startsWith('packages/devextreme/testing/tests/')
-    || normalized.startsWith('packages/devextreme/testing/helpers/')
-    || normalized.startsWith('packages/devextreme/build/bundle-templates/')
-    || normalized.startsWith('packages/devextreme/artifacts/transpiled/bundles/')
-    || normalized.startsWith('packages/devextreme/artifacts/transpiled-esm-npm/bundles/')
-  );
+  return pathMatchesRoots(normalized, QUNIT_REWRITE_ROOTS);
 }
