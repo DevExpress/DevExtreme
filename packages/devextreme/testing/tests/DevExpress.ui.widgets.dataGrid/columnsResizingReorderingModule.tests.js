@@ -1,6 +1,6 @@
 import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import 'ui/data_grid';
 
@@ -1148,10 +1148,13 @@ QUnit.module('Columns resizing', {
         assert.equal(resizeController._pointsByColumns.length, 3, 'count point');
         assert.deepEqual(resizeController._pointsByColumns[0], { x: -9875, y: -10000, columnIndex: 0, index: 1 });
         assert.equal(resizeController._pointsByColumns[1].x, -9750, 'x-coordinate of the second point');
-        assert.ok(resizeController._pointsByColumns[1].y > -9970 && resizeController._pointsByColumns[1].y < -9960, 'y-coordinate of the second point');
+        assert.ok(resizeController._pointsByColumns[1].y > -9970 && resizeController._pointsByColumns[1].y < -9950, 'y-coordinate of the second point');
         assert.equal(resizeController._pointsByColumns[1].columnIndex, 1, 'columnIndex of the second point');
         assert.equal(resizeController._pointsByColumns[1].index, 2, 'index of the second point');
-        assert.deepEqual(resizeController._pointsByColumns[2], { x: -9625, y: -10000, columnIndex: 2, index: 3 });
+        assert.equal(resizeController._pointsByColumns[2].x, -9625, 'x-coordinate of the third point');
+        assert.equal(resizeController._pointsByColumns[2].y, -10000, 'y-coordinate of the third point');
+        assert.equal(resizeController._pointsByColumns[2].columnIndex, 2, 'columnIndex of the third point');
+        assert.equal(resizeController._pointsByColumns[2].index, 3, 'index of the third point');
     });
 
     QUnit.test('Get points by columns when column contains column is not allowResizing', function(assert) {
@@ -1744,7 +1747,7 @@ QUnit.module('Columns resizing', {
             data: resizeController,
             type: 'mousemove',
             pageX: -9750,
-            pageY: -9960
+            pageY: -9945
         }));
 
         // assert
@@ -4839,7 +4842,7 @@ QUnit.module('Headers reordering', {
 
         // assert
         assert.ok(draggingHeader._isDragging, 'is dragging');
-        assert.strictEqual($dragHeader.outerWidth(), 102, 'width');
+        assert.strictEqual($dragHeader.outerWidth(), 116, 'width');
         assert.strictEqual($dragHeader.text(), '', 'text');
     });
 });
