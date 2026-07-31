@@ -25,7 +25,7 @@ HTTP static file server for the QUnit runner.
   - `aspnet.js` UMD artifact → `cjsInterop.rewriteAspnetArtifactToEsm`
   - Vendor / Globalize / Intl / VectorMap bundles → wrap as ESM modules
   - JSON (`?esm-export=1`) → `export default …`
-- Redirect selected ESM artifact URLs to **hand-written** mutable facades under `testing/helpers/esm-shims/` (see `MUTABLE_FACADE_GROUPS`).
+- Serve **generated** mutable facades for modules in `MUTABLE_MODULE_GROUPS` / viz namespace-reexports; redirect only special hand-written cases (e.g. themes).
 - For pure `import * as X; export default X` viz reexports, generate facades on the fly via `autoMutableFacade.tryBuildAutoMutableFacade`.
 - Support `?dx-original=1` so a shim can import the **real** artifact without being redirected back to itself.
 
@@ -54,24 +54,27 @@ Legacy suites still use `require()`, `module.exports` / `exports.*`, AMD `define
 
 ## `lib/autoMutableFacade.ts`
 
-Generates **mutable ESM facades** at request time for modules that are pure namespace reexports:
+Generates **mutable ESM facades** at request time so QUnit can `sinon.stub` module APIs without editing `packages/devextreme/js`.
+
+**Two sources of facades:**
+
+1. **`MUTABLE_MODULE_GROUPS`** — explicit list of stub-able modules (animation frame, viz renderer, exporter, …). All aliases share one `globalThis` api; named exports use `wrapCtor` / live forwards. Import map points at the ESM artifact URL; `static.ts` serves the generated facade unless `?dx-original=1`.
+2. **Namespace-default reexports** (`import * as X; export default X`) under `viz/` — discovered automatically.
+
+Hand-written files under `esm-shims/` remain only for **non-generic** cases (themes composition, CSS inject, jquery/knockout globals, `base_indicators` debug export, vendor stubs).
+
+Typical generated shape:
 
 ```js
-import * as X from './internal/…';
-export default X;
+import * as original from '.../module.js?dx-original=1';
+import { createMutableApi, wrapCtor } from '.../mutable_facade.js';
+
+const api = createMutableApi(original, '__dxAutoMutable_…');
+export const Foo = wrapCtor(api, 'Foo');
+export default api;
 ```
 
-ESM named exports are live bindings but the **export binding itself** is not assignable, and a frozen namespace object cannot be stubbed the way QUnit historically stubbed CJS `module.exports`. Tests need a single mutable `api` object (and wrapable constructors) shared across import-map and artifact URLs.
-
-**Flow:**
-
-1. Detect a pure namespace-default reexport.
-2. Resolve the internal module, classify exports (`wrapCtor` for classes/functions vs live value forwards / `DEBUG_set_*`).
-3. Emit a facade that uses `testing/helpers/esm-shims/mutable_facade.js` (`createMutableApi`, `wrapCtor`) and imports the real module with `?dx-original=1`.
-4. `static.ts` serves that generated source instead of the original reexport file.
-
-Hand-written shims in `esm-shims/` cover cases that need custom composition (animation frame, themes, CSS injectors, etc.). Prefer auto-generation for simple reexports; add a hand-written shim only when the auto facade is not enough.
-
+To stub a new module: add an entry to `MUTABLE_MODULE_GROUPS` (and optional `importMapKeys`). Prefer that over a new hand-written shim.
 ---
 
 ## `testing/helpers/esm-shims/`
@@ -80,16 +83,10 @@ Browser modules that the import map (and/or `static.ts` artifact redirects) subs
 
 **Why they exist:**
 
-- **Stubbing / mutation** — provide a mutable default `api` (and wrapped constructors) so sinon/`stubClass` can replace implementations without editing `packages/devextreme/js`.
+- **Stubbing / mutation** — prefer `MUTABLE_MODULE_GROUPS` in `autoMutableFacade.ts` (serve-time generated facades). Keep a hand-written shim only for custom composition (e.g. themes).
 - **Globals bridge** — e.g. `jquery.js` / `knockout.js` re-export the classic `<script>` globals after `noConflict()`.
 - **CSS plugin imports** — suites still write `import 'fluent_blue_light.css!'`; `*.css.js` shims call `injectStylesheet.js` to append `<link>` tags.
 - **Vendor / interop quirks** — thin adapters (`jspdf_autotable.js`, `tslib.js`, `zod.js`, …) when the stock ESM build is awkward for the runner.
-- **Shared helpers** — `mutable_facade.js` (`createMutableApi`, `wrapCtor`) used by both hand-written and auto-generated facades; `injectStylesheet.js` for theme CSS.
+- **Shared helpers** — `mutable_facade.js` (`createMutableApi`, `wrapCtor`) used by generated and hand-written facades; `injectStylesheet.js` for theme CSS.
 
-Typical mutable-shim pattern:
-
-1. `import * as original from '…/artifact.js?dx-original=1'`
-2. Put a mutable `api` on `globalThis` (one instance for all URL aliases)
-3. `export default api` and forward / wrap named exports
-
-Do **not** put product fixes in these shims — they are test-runner adapters only. Prefer extending `autoMutableFacade` for simple reexport cases before adding a new hand-written file.
+Do **not** put product fixes in these shims — they are test-runner adapters only. To stub a new module, add it to `MUTABLE_MODULE_GROUPS` first.

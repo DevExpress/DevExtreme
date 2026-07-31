@@ -3,18 +3,268 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 
 const MUTABLE_FACADE_HELPER_URL = '/packages/devextreme/testing/helpers/esm-shims/mutable_facade.js';
+const ESM_ARTIFACT_PREFIX = 'packages/devextreme/artifacts/transpiled-esm-npm/esm/';
 
 const NAMESPACE_DEFAULT_RE = /import\s+\*\s+as\s+([A-Za-z_$][\w$]*)\s+from\s+['"]([^'"]+)['"]\s*;?\s*export\s+default\s+\1\s*;?/;
+
+/** JS keywords / reserved that cannot be a bare `export const name`. */
+const RESERVED_EXPORT_NAMES = new Set([
+  'break', 'case', 'catch', 'class', 'const', 'continue', 'debugger', 'default',
+  'delete', 'do', 'else', 'enum', 'export', 'extends', 'false', 'finally',
+  'for', 'function', 'if', 'import', 'in', 'instanceof', 'new', 'null',
+  'return', 'super', 'switch', 'this', 'throw', 'true', 'try', 'typeof',
+  'var', 'void', 'while', 'with', 'yield', 'await', 'let', 'static',
+  'implements', 'interface', 'package', 'private', 'protected', 'public',
+]);
 
 export interface AutoMutableFacadeEntry {
   /** Workspace-relative path to the real implementation module (no leading slash). */
   internalRelativePath: string;
   /** Named exports forwarded with wrapCtor (ctors / replaceable functions). */
   wrapExportNames: string[];
-  /** Named exports re-exported as call/value forwards (DEBUG_set_*, plugin, …). */
+  /** Named exports re-exported as call/value forwards (DEBUG_set_*, scalars, …). */
   forwardExportNames: string[];
   globalKey: string;
+  /**
+   * Build `api` from `namespace.default ?? namespace` (default export is the
+   * stub target object — errors, format_helper, visibility_change, …).
+   */
+  apiFromDefault?: boolean;
 }
+
+/**
+ * Modules that always get a generated mutable facade (sinon.stub targets).
+ * `internal` is wrapped via `?dx-original=1`; all `artifacts` / import-map keys
+ * share one globalThis api.
+ *
+ * Keep hand-written shims only for non-generic cases (themes composition,
+ * CSS inject, jquery globals, base_indicators debug export, …).
+ */
+export interface MutableModuleGroup {
+  /** Path under `artifacts/transpiled-esm-npm/esm/`. */
+  internal: string;
+  /** Artifact paths (under esm/) that should serve this facade. */
+  artifacts: readonly string[];
+  /** Extra import-map bare keys (default: artifacts without `.js`). */
+  importMapKeys?: readonly string[];
+  apiFromDefault?: boolean;
+}
+
+export const MUTABLE_MODULE_GROUPS: readonly MutableModuleGroup[] = [
+  {
+    internal: '__internal/viz/core/renderers/renderer.js',
+    artifacts: [
+      '__internal/viz/core/renderers/renderer.js',
+      'viz/core/renderers/renderer_default.js',
+    ],
+    importMapKeys: [
+      'viz/core/renderers/renderer',
+      'viz/core/renderers/renderer_default',
+      '__internal/viz/core/renderers/renderer',
+    ],
+  },
+  {
+    internal: '__internal/viz/core/renderers/animation.js',
+    artifacts: [
+      '__internal/viz/core/renderers/animation.js',
+      'viz/core/renderers/animation.js',
+    ],
+    importMapKeys: [
+      'viz/core/renderers/animation',
+      '__internal/viz/core/renderers/animation',
+    ],
+  },
+  {
+    internal: '__internal/viz/core/utils.js',
+    artifacts: [
+      '__internal/viz/core/utils.js',
+      'viz/core/utils.js',
+      'viz/core/utils_default.js',
+    ],
+    importMapKeys: [
+      'viz/core/utils',
+      'viz/core/utils_default',
+      '__internal/viz/core/utils',
+    ],
+  },
+  {
+    internal: '__internal/viz/axes/base_axis.js',
+    artifacts: ['__internal/viz/axes/base_axis.js'],
+    importMapKeys: ['viz/axes/base_axis', '__internal/viz/axes/base_axis'],
+  },
+  {
+    internal: 'exporter.js',
+    artifacts: ['exporter.js'],
+    importMapKeys: ['exporter', 'exporter.js'],
+  },
+  {
+    internal: 'format_helper.js',
+    artifacts: ['format_helper.js'],
+    importMapKeys: ['format_helper', 'format_helper.js'],
+    apiFromDefault: true,
+  },
+  {
+    internal: '__internal/viz/translators/translator2d.js',
+    artifacts: ['__internal/viz/translators/translator2d.js'],
+    importMapKeys: [
+      'viz/translators/translator2d',
+      '__internal/viz/translators/translator2d',
+    ],
+  },
+  {
+    internal: '__internal/viz/axes/tick_generator.js',
+    artifacts: ['__internal/viz/axes/tick_generator.js'],
+    importMapKeys: [
+      'viz/axes/tick_generator',
+      '__internal/viz/axes/tick_generator',
+    ],
+  },
+  {
+    internal: '__internal/viz/core/tooltip.js',
+    artifacts: [
+      '__internal/viz/core/tooltip.js',
+      'viz/core/tooltip.js',
+    ],
+    importMapKeys: ['viz/core/tooltip', '__internal/viz/core/tooltip'],
+  },
+  {
+    internal: '__internal/viz/core/title.js',
+    artifacts: [
+      '__internal/viz/core/title.js',
+      'viz/core/title.js',
+    ],
+    importMapKeys: ['viz/core/title', '__internal/viz/core/title'],
+  },
+  {
+    internal: '__internal/viz/core/export.js',
+    artifacts: [
+      '__internal/viz/core/export.js',
+      '__internal/viz/core/exportModule.js',
+      'viz/core/export.js',
+    ],
+    importMapKeys: [
+      'viz/core/export',
+      '__internal/viz/core/export',
+      '__internal/viz/core/exportModule',
+    ],
+  },
+  {
+    internal: '__internal/viz/chart_components/tracker.js',
+    artifacts: [
+      'viz/chart_components/tracker.js',
+      '__internal/viz/chart_components/tracker.js',
+    ],
+    importMapKeys: [
+      'viz/chart_components/tracker',
+      '__internal/viz/chart_components/tracker',
+    ],
+  },
+  {
+    internal: '__internal/viz/components/legend.js',
+    artifacts: [
+      'viz/components/legend.js',
+      '__internal/viz/components/legend.js',
+    ],
+    importMapKeys: [
+      'viz/components/legend',
+      '__internal/viz/components/legend',
+    ],
+  },
+  {
+    internal: '__internal/viz/core/loading_indicator.js',
+    artifacts: [
+      'viz/core/loading_indicator.js',
+      '__internal/viz/core/loading_indicator.js',
+    ],
+    importMapKeys: [
+      'viz/core/loading_indicator',
+      '__internal/viz/core/loading_indicator',
+    ],
+  },
+  {
+    internal: '__internal/core/localization/ldml/date.parser.js',
+    artifacts: [
+      '__internal/core/localization/ldml/date.parser.js',
+      '__internal/core/localization/ldml/dateParserModule.js',
+      'common/core/localization/ldml/date.parser.js',
+    ],
+    importMapKeys: [
+      '__internal/core/localization/ldml/date.parser',
+      '__internal/core/localization/ldml/dateParserModule',
+      'common/core/localization/ldml/date.parser',
+    ],
+  },
+  {
+    internal: '__internal/events/m_visibility_change.js',
+    artifacts: [
+      'common/core/events/visibility_change.js',
+      '__internal/events/m_visibility_change.js',
+    ],
+    importMapKeys: [
+      'common/core/events/visibility_change',
+      '__internal/events/m_visibility_change',
+    ],
+    apiFromDefault: true,
+  },
+  {
+    internal: 'core/errors.js',
+    artifacts: ['core/errors.js'],
+    importMapKeys: ['core/errors'],
+    apiFromDefault: true,
+  },
+  {
+    internal: 'ui/widget/ui.errors.js',
+    artifacts: ['ui/widget/ui.errors.js'],
+    importMapKeys: ['ui/widget/ui.errors'],
+    apiFromDefault: true,
+  },
+  {
+    internal: '__internal/core/m_template_manager.js',
+    artifacts: ['__internal/core/m_template_manager.js'],
+    importMapKeys: ['__internal/core/m_template_manager'],
+    apiFromDefault: true,
+  },
+  {
+    // Real named exports live in palette.js; paletteModule.js is only
+    // `import * as PaletteModule from './palette'; export default PaletteModule`.
+    internal: '__internal/viz/palette.js',
+    artifacts: [
+      '__internal/viz/palette.js',
+      '__internal/viz/paletteModule.js',
+    ],
+    importMapKeys: [
+      'viz/palette',
+      '__internal/viz/paletteModule',
+      '__internal/viz/palette',
+    ],
+  },
+  {
+    internal: '__internal/common/core/animation/frame.js',
+    artifacts: [
+      'common/core/animation/frame.js',
+      '__internal/common/core/animation/frame.js',
+      '__internal/common/core/animation/frameModule.js',
+    ],
+    importMapKeys: [
+      'common/core/animation/frame',
+      '__internal/common/core/animation/frame',
+      'animation/frame',
+      '__internal/common/core/animation/frameModule',
+    ],
+  },
+];
+
+/** Hand-written shims that stay (custom composition / non-generic). */
+const HAND_WRITTEN_ARTIFACT_FACADES: readonly { suffix: string; shimUrl: string }[] = [
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/ui/themes.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/themes.js',
+  },
+  {
+    suffix: '/artifacts/transpiled-esm-npm/esm/ui/themes.js',
+    shimUrl: '/packages/devextreme/testing/helpers/esm-shims/themes.js',
+  },
+];
 
 const facadeIndex = new Map<string, AutoMutableFacadeEntry>();
 let indexBuiltForRoot: string | null = null;
@@ -85,7 +335,6 @@ export function collectEsmExportNames(source: string): string[] {
     });
   }
 
-  // Pre-rewrite DEBUG / dual CJS leftovers still present on disk
   for (const match of source.matchAll(/\bexports\.([A-Za-z_$][\w$]*)\s*=/g)) {
     names.add(match[1]);
   }
@@ -184,13 +433,12 @@ function classifyExportNames(
     }
 
     const isPascalCase = /^[A-Z]/.test(name);
-    // `_TESTS_Engine` / `_TESTS_Legend` — ctor aliases; wrapCtor.
-    // `_TESTS_dataKey` — mutable scalar; must stay a live value (not a wrapper).
     const isTestCtorAlias = /^_TESTS_[A-Z]/.test(name);
     const isTestStubHelper = /_TESTS_.*stub|_stub_/i.test(name);
     const wrap = isPascalCase
       || isTestCtorAlias
       || isTestStubHelper
+      || RESERVED_EXPORT_NAMES.has(name)
       || isFunctionLikeExport(name, internalSource);
 
     if (wrap) {
@@ -203,23 +451,32 @@ function classifyExportNames(
   return { wrapExportNames, forwardExportNames };
 }
 
+function emitNamedExport(name: string, expression: string): string {
+  if (RESERVED_EXPORT_NAMES.has(name)) {
+    const alias = `__dxExport_${name}`;
+    return `const ${alias} = ${expression};\nexport { ${alias} as ${name} };`;
+  }
+  return `export const ${name} = ${expression};`;
+}
+
 export function generateAutoMutableFacadeSource(entry: AutoMutableFacadeEntry): string {
   const originalUrl = `/${entry.internalRelativePath}?dx-original=1`;
   const debugSets = buildDebugSets(entry.wrapExportNames, entry.forwardExportNames);
   const debugSetsLiteral = JSON.stringify(debugSets);
-
-  const liveValueNames = entry.forwardExportNames.filter((name) => !name.startsWith('DEBUG_set_'));
+  const liveValueNames = entry.forwardExportNames.filter((name) => name.startsWith('_TESTS_'));
 
   const exportLines = [
     ...entry.wrapExportNames.map(
-      (name) => `export const ${name} = wrapCtor(api, '${name}');`,
+      (name) => emitNamedExport(name, `wrapCtor(api, '${name}')`),
     ),
     ...entry.forwardExportNames.map((name) => {
       if (name.startsWith('DEBUG_set_')) {
-        return `export const ${name} = (...args) => api.${name}(...args);`;
+        return emitNamedExport(name, `(...args) => api.${name}(...args)`);
       }
-      // Live re-export: mutable DEBUG values (e.g. _TESTS_dataKey) change after init.
-      return `export { ${name} } from '${originalUrl}';`;
+      if (name.startsWith('_TESTS_')) {
+        return `export { ${name} } from '${originalUrl}';`;
+      }
+      return emitNamedExport(name, `api.${name}`);
     }),
   ];
 
@@ -233,8 +490,27 @@ export function generateAutoMutableFacadeSource(entry: AutoMutableFacadeEntry): 
     ].join('\n'),
   );
 
+  if (entry.apiFromDefault) {
+    return [
+      '/* auto-generated mutable facade for QUnit (default-export api) */',
+      `import * as originalNs from '${originalUrl}';`,
+      `import { createMutableApi, wrapCtor } from '${MUTABLE_FACADE_HELPER_URL}';`,
+      '',
+      'const original = originalNs.default ?? originalNs;',
+      'const api = createMutableApi(',
+      '  original && typeof original === \'object\' ? { ...original } : { value: original },',
+      `  '${entry.globalKey}',`,
+      `  ${debugSetsLiteral}`,
+      ');',
+      '',
+      ...exportLines,
+      'export default api;',
+      '',
+    ].join('\n');
+  }
+
   return [
-    '/* auto-generated mutable facade for QUnit (namespace-default reexport) */',
+    '/* auto-generated mutable facade for QUnit */',
     `import * as original from '${originalUrl}';`,
     `import { createMutableApi, wrapCtor } from '${MUTABLE_FACADE_HELPER_URL}';`,
     '',
@@ -263,6 +539,32 @@ function readTextFileOrNull(filePath: string): string | null {
   }
 }
 
+function buildEntryForInternalFile(
+  workspaceRoot: string,
+  internalAbsolute: string,
+  options: { apiFromDefault?: boolean } = {},
+): AutoMutableFacadeEntry | null {
+  const internalSource = readTextFileOrNull(internalAbsolute);
+  if (internalSource === null) {
+    return null;
+  }
+
+  const exportNames = collectEsmExportNames(internalSource);
+  const { wrapExportNames, forwardExportNames } = classifyExportNames(
+    exportNames,
+    internalSource,
+  );
+  const internalRelativePath = toWorkspaceRelativePath(workspaceRoot, internalAbsolute);
+
+  return {
+    internalRelativePath,
+    wrapExportNames,
+    forwardExportNames,
+    globalKey: buildGlobalKey(internalRelativePath),
+    apiFromDefault: options.apiFromDefault,
+  };
+}
+
 function tryRegisterNamespaceDefaultFile(
   workspaceRoot: string,
   absoluteFilePath: string,
@@ -286,25 +588,12 @@ function tryRegisterNamespaceDefaultFile(
     return null;
   }
 
-  const internalSource = readTextFileOrNull(internalAbsolute);
-  if (internalSource === null) {
+  const entry = buildEntryForInternalFile(workspaceRoot, internalAbsolute);
+  if (!entry) {
     return null;
   }
 
-  const exportNames = collectEsmExportNames(internalSource);
-  const { wrapExportNames, forwardExportNames } = classifyExportNames(
-    exportNames,
-    internalSource,
-  );
-  const internalRelativePath = toWorkspaceRelativePath(workspaceRoot, internalAbsolute);
   const publicRelativePath = toWorkspaceRelativePath(workspaceRoot, absoluteFilePath);
-  const entry: AutoMutableFacadeEntry = {
-    internalRelativePath,
-    wrapExportNames,
-    forwardExportNames,
-    globalKey: buildGlobalKey(internalRelativePath),
-  };
-
   registerFacadePaths(publicRelativePath, entry);
   return entry;
 }
@@ -332,12 +621,36 @@ function isSmallPublicReexportCandidate(filePath: string): boolean {
   }
 }
 
+function registerForcedMutableGroups(workspaceRoot: string): void {
+  const esmRoot = path.join(
+    workspaceRoot,
+    'packages/devextreme/artifacts/transpiled-esm-npm/esm',
+  );
+
+  MUTABLE_MODULE_GROUPS.forEach((group) => {
+    const internalAbsolute = path.join(esmRoot, group.internal);
+    const entry = buildEntryForInternalFile(workspaceRoot, internalAbsolute, {
+      apiFromDefault: group.apiFromDefault,
+    });
+    if (!entry) {
+      return;
+    }
+
+    const paths = new Set<string>([group.internal, ...group.artifacts]);
+    paths.forEach((artifact) => {
+      registerFacadePaths(`${ESM_ARTIFACT_PREFIX}${artifact}`, entry);
+    });
+  });
+}
+
 export function ensureAutoMutableFacadeIndex(workspaceRoot: string): void {
   if (indexBuiltForRoot === workspaceRoot) {
     return;
   }
 
   facadeIndex.clear();
+  registerForcedMutableGroups(workspaceRoot);
+
   const vizRoot = path.join(
     workspaceRoot,
     'packages/devextreme/artifacts/transpiled-esm-npm/esm/viz',
@@ -353,8 +666,41 @@ export function ensureAutoMutableFacadeIndex(workspaceRoot: string): void {
 }
 
 /**
- * Returns generated facade source for a namespace-default public entry
- * (and its resolved __internal target), or null when not applicable.
+ * Import-map entries for forced mutable modules → ESM artifact URLs
+ * (served as generated facades by static.ts).
+ */
+export function buildMutableModuleImportMapEntries(esmRootUrl: string): Record<string, string> {
+  const entries: Record<string, string> = {};
+
+  MUTABLE_MODULE_GROUPS.forEach((group) => {
+    const keys = group.importMapKeys
+      ?? group.artifacts.map((artifact) => artifact.replace(/\.js$/, ''));
+
+    keys.forEach((key) => {
+      const artifact = group.artifacts.find(
+        (item) => item === key || item === `${key}.js` || item.replace(/\.js$/, '') === key,
+      ) ?? group.internal;
+      const urlPath = artifact.endsWith('.js') ? artifact : `${artifact}.js`;
+      entries[key] = `${esmRootUrl}/${urlPath}`;
+    });
+  });
+
+  return entries;
+}
+
+export function findHandWrittenMutableFacade(relativeUrlPath: string): string | null {
+  const normalized = normalizeUrlPath(relativeUrlPath);
+  const withLeadingSlash = normalized.startsWith('/') ? normalized : `/${normalized}`;
+  const match = HAND_WRITTEN_ARTIFACT_FACADES.find((entry) => (
+    withLeadingSlash.endsWith(entry.suffix)
+    || normalized.endsWith(entry.suffix.replace(/^\//, ''))
+  ));
+  return match?.shimUrl ?? null;
+}
+
+/**
+ * Returns generated facade source for a forced mutable module or a
+ * namespace-default public entry, or null when not applicable.
  */
 export function tryBuildAutoMutableFacade(
   relativeUrlPath: string,
@@ -367,7 +713,21 @@ export function tryBuildAutoMutableFacade(
   let entry = facadeIndex.get(normalized);
 
   if (!entry) {
-    // On-demand for files outside the viz scan / newly written artifacts
+    // Match by suffix (cache-busters / alternate prefixes)
+    for (const [key, value] of facadeIndex.entries()) {
+      if (normalized.endsWith(key) || key.endsWith(normalized)) {
+        entry = value;
+        break;
+      }
+      if (normalized.endsWith(key.replace(ESM_ARTIFACT_PREFIX, ''))
+        || normalized.endsWith(`/${key.replace(ESM_ARTIFACT_PREFIX, '')}`)) {
+        entry = value;
+        break;
+      }
+    }
+  }
+
+  if (!entry) {
     const registered = tryRegisterNamespaceDefaultFile(workspaceRoot, absoluteFilePath);
     if (!registered) {
       return null;

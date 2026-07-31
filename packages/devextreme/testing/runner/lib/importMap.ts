@@ -1,6 +1,8 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 
+import { buildMutableModuleImportMapEntries } from './autoMutableFacade';
+
 const ESM_ROOT = '/packages/devextreme/artifacts/transpiled-esm-npm/esm';
 const SHIMS = '/packages/devextreme/testing/helpers/esm-shims';
 const NODE_MODULES = '/packages/devextreme/node_modules';
@@ -287,12 +289,8 @@ export function buildQunitImportMap({
 
     // Exact package-root entries (exporter, color, localization, events, …)
     ...collectPackageRootEntries(),
-    // Keep a single stubbable instance for tests that patch formatHelper.format.
-    format_helper: `${SHIMS}/format_helper.js`,
-    'format_helper.js': `${SHIMS}/format_helper.js`,
-    // Override package-root exporter with a stubbable facade (named `export` + default api).
-    exporter: `${SHIMS}/exporter.js`,
-    'exporter.js': `${SHIMS}/exporter.js`,
+    // Forced mutable facades → ESM artifacts (generated at serve-time).
+    ...buildMutableModuleImportMapEntries(ESM_ROOT),
 
     jquery: jqueryUrl.includes('noJQuery') ? jqueryUrl : `${SHIMS}/jquery.js`,
 
@@ -345,51 +343,27 @@ export function buildQunitImportMap({
     'material_blue_light.css!': `${SHIMS}/material_blue_light.css.js`,
     'gantt.css!': `${SHIMS}/gantt.css.js`,
 
-    // Debug-export shims
+    // Debug-export shim (not present on the ESM artifact).
     '__internal/viz/gauges/base_indicators': `${SHIMS}/base_indicators.js`,
 
-    // Mutable facades: hand shims only for special cases (DEBUG_set / custom).
-    // Pure namespace-default viz reexports → artifact URLs (autoMutableFacade).
-    'viz/core/renderers/renderer': `${SHIMS}/viz_renderer.js`,
-    'viz/core/renderers/renderer_default': `${SHIMS}/viz_renderer.js`,
-    'viz/core/renderers/animation': `${SHIMS}/viz_animation.js`,
-    'viz/core/utils': `${SHIMS}/viz_utils.js`,
-    'viz/core/utils_default': `${SHIMS}/viz_utils.js`,
-    'viz/palette': `${SHIMS}/viz_paletteModule.js`,
-    '__internal/viz/paletteModule': `${SHIMS}/viz_paletteModule.js`,
-    '__internal/viz/palette': `${SHIMS}/viz_paletteModule.js`,
-    'viz/core/tooltip': `${SHIMS}/viz_tooltip.js`,
-    'viz/core/title': `${SHIMS}/viz_title.js`,
-    'viz/core/export': `${SHIMS}/viz_export.js`,
+    // Auto-mutable modules are provided by buildMutableModuleImportMapEntries above.
+    // Hand-written only where composition is custom (themes).
     'viz/core/base_theme_manager': `${ESM_ROOT}/viz/core/base_theme_manager.js`,
-    'viz/chart_components/tracker': `${SHIMS}/viz_chart_tracker.js`,
     'viz/chart_components/layout_manager': `${ESM_ROOT}/viz/chart_components/layout_manager.js`,
     'viz/chart_components/scroll_bar': `${ESM_ROOT}/viz/chart_components/scroll_bar.js`,
     'viz/chart_components/crosshair': `${ESM_ROOT}/viz/chart_components/crosshair.js`,
-    'viz/components/legend': `${SHIMS}/viz_components_legend.js`,
     'viz/components/chart_theme_manager': `${ESM_ROOT}/viz/components/chart_theme_manager.js`,
     'viz/components/data_validator': `${ESM_ROOT}/viz/components/data_validator.js`,
     'viz/series/points/base_point': `${ESM_ROOT}/viz/series/points/base_point.js`,
     'viz/series/base_series': `${ESM_ROOT}/viz/series/base_series.js`,
     'viz/core/series_family': `${ESM_ROOT}/viz/core/series_family.js`,
-    'viz/core/loading_indicator': `${SHIMS}/viz_loading_indicator.js`,
-    'viz/axes/base_axis': `${SHIMS}/viz_base_axis.js`,
-    '__internal/core/localization/ldml/date.parser': `${SHIMS}/date_parser.js`,
-    '__internal/core/localization/ldml/dateParserModule': `${SHIMS}/date_parser.js`,
-    'common/core/localization/ldml/date.parser': `${SHIMS}/date_parser.js`,
     'viz/series/points/label': `${ESM_ROOT}/viz/series/points/label.js`,
-    'common/core/events/visibility_change': `${SHIMS}/visibility_change.js`,
-    'core/errors': `${SHIMS}/core_errors.js`,
-    'ui/widget/ui.errors': `${SHIMS}/ui_errors.js`,
-    'viz/axes/tick_generator': `${SHIMS}/viz_tick_generator.js`,
-    'viz/translators/translator2d': `${SHIMS}/viz_translator2d.js`,
     'viz/translators/range': `${ESM_ROOT}/viz/translators/range.js`,
     'viz/translators/translator1d': `${ESM_ROOT}/viz/translators/translator1d.js`,
     'viz/core/plaque': `${ESM_ROOT}/viz/core/plaque.js`,
     'viz/range_selector/tracker': `${ESM_ROOT}/viz/range_selector/tracker.js`,
     'viz/range_selector/series_data_source': `${ESM_ROOT}/viz/range_selector/series_data_source.js`,
     'viz/range_selector/sliders_controller': `${ESM_ROOT}/viz/range_selector/sliders_controller.js`,
-    '__internal/core/m_template_manager': `${SHIMS}/template_manager.js`,
     'viz/vector_map/projection.main': `${ESM_ROOT}/viz/vector_map/projection.main.js`,
     'viz/vector_map/control_bar/control_bar': `${ESM_ROOT}/viz/vector_map/control_bar/control_bar.js`,
     'viz/vector_map/gesture_handler': `${ESM_ROOT}/viz/vector_map/gesture_handler.js`,
@@ -399,30 +373,16 @@ export function buildQunitImportMap({
     'viz/vector_map/layout': `${ESM_ROOT}/viz/vector_map/layout.js`,
     'viz/vector_map/map_layer': `${ESM_ROOT}/viz/vector_map/map_layer.js`,
     'viz/vector_map/tooltip_viewer': `${ESM_ROOT}/viz/vector_map/tooltip_viewer.js`,
-    '__internal/viz/core/renderers/renderer': `${SHIMS}/viz_renderer.js`,
-    '__internal/viz/core/renderers/animation': `${SHIMS}/viz_animation.js`,
-    '__internal/viz/core/utils': `${SHIMS}/viz_utils.js`,
-    '__internal/viz/core/tooltip': `${SHIMS}/viz_tooltip.js`,
-    '__internal/viz/core/title': `${SHIMS}/viz_title.js`,
-    '__internal/viz/core/export': `${SHIMS}/viz_export.js`,
-    '__internal/viz/core/exportModule': `${SHIMS}/viz_export.js`,
     '__internal/viz/core/base_theme_manager': `${ESM_ROOT}/__internal/viz/core/base_theme_manager.js`,
-    '__internal/viz/chart_components/tracker': `${SHIMS}/viz_chart_tracker.js`,
     '__internal/viz/chart_components/layout_manager': `${ESM_ROOT}/__internal/viz/chart_components/layout_manager.js`,
     '__internal/viz/chart_components/scroll_bar': `${ESM_ROOT}/__internal/viz/chart_components/scroll_bar.js`,
     '__internal/viz/chart_components/crosshair': `${ESM_ROOT}/__internal/viz/chart_components/crosshair.js`,
-    '__internal/viz/components/legend': `${SHIMS}/viz_components_legend.js`,
     '__internal/viz/components/chart_theme_manager': `${ESM_ROOT}/__internal/viz/components/chart_theme_manager.js`,
     '__internal/viz/components/data_validator': `${ESM_ROOT}/__internal/viz/components/data_validator.js`,
     '__internal/viz/series/points/base_point': `${ESM_ROOT}/__internal/viz/series/points/base_point.js`,
     '__internal/viz/series/base_series': `${ESM_ROOT}/__internal/viz/series/base_series.js`,
     '__internal/viz/core/series_family': `${ESM_ROOT}/__internal/viz/core/series_family.js`,
-    '__internal/viz/core/loading_indicator': `${SHIMS}/viz_loading_indicator.js`,
     '__internal/viz/series/points/label': `${ESM_ROOT}/__internal/viz/series/points/label.js`,
-    '__internal/events/m_visibility_change': `${SHIMS}/visibility_change.js`,
-    '__internal/viz/axes/base_axis': `${SHIMS}/viz_base_axis.js`,
-    '__internal/viz/axes/tick_generator': `${SHIMS}/viz_tick_generator.js`,
-    '__internal/viz/translators/translator2d': `${SHIMS}/viz_translator2d.js`,
     '__internal/viz/translators/range': `${ESM_ROOT}/__internal/viz/translators/range.js`,
     '__internal/viz/translators/translator1d': `${ESM_ROOT}/__internal/viz/translators/translator1d.js`,
     '__internal/viz/core/plaque': `${ESM_ROOT}/__internal/viz/core/plaque.js`,
@@ -440,10 +400,6 @@ export function buildQunitImportMap({
     '__internal/viz/vector_map/tooltip_viewer': `${ESM_ROOT}/__internal/viz/vector_map/tooltip_viewer.js`,
     'ui/themes': `${SHIMS}/themes.js`,
     '__internal/ui/themes': `${SHIMS}/themes.js`,
-    'common/core/animation/frame': `${SHIMS}/animation_frame.js`,
-    '__internal/common/core/animation/frame': `${SHIMS}/animation_frame.js`,
-    'animation/frame': `${SHIMS}/animation_frame.js`,
-    '__internal/common/core/animation/frameModule': `${SHIMS}/animation_frame.js`,
 
     // Stubs
     zod: `${SHIMS}/zod.js`,

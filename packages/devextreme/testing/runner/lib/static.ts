@@ -2,7 +2,7 @@ import * as fs from 'node:fs';
 import { IncomingMessage, ServerResponse } from 'node:http';
 import * as path from 'node:path';
 
-import { tryBuildAutoMutableFacade } from './autoMutableFacade';
+import { findHandWrittenMutableFacade, tryBuildAutoMutableFacade } from './autoMutableFacade';
 import {
   isQunitTestOrHelperPath,
   rewriteAspnetArtifactToEsm,
@@ -53,7 +53,6 @@ const CONTENT_TYPES: Readonly<Record<string, string>> = {
 
 const JS_CONTENT_TYPE = 'application/javascript; charset=utf-8';
 const ESM_ARTIFACT_MARKER = '/artifacts/transpiled-esm-npm/esm/';
-const ESM_SHIMS = '/packages/devextreme/testing/helpers/esm-shims';
 
 function normalizeUrlPath(filePath: string): string {
   return filePath.split(path.sep).join('/');
@@ -376,163 +375,6 @@ function sendJsonAsEsmModule(res: ServerResponse, filePath: string): boolean {
 
 // --- Mutable artifact facades ---------------------------------------------------
 
-/**
- * Hand-written mutable facades (DEBUG_set bridges, custom composition, live
- * named bindings). Paths are relative to `…/artifacts/transpiled-esm-npm/esm/`.
- * Pure viz `import * as X; export default X` reexports use autoMutableFacade.ts.
- */
-const MUTABLE_FACADE_GROUPS: readonly { shim: string; artifacts: readonly string[] }[] = [
-  {
-    shim: 'viz_renderer.js',
-    artifacts: [
-      '__internal/viz/core/renderers/renderer.js',
-      'viz/core/renderers/renderer_default.js',
-    ],
-  },
-  {
-    shim: 'viz_animation.js',
-    artifacts: [
-      '__internal/viz/core/renderers/animation.js',
-      'viz/core/renderers/animation.js',
-    ],
-  },
-  {
-    shim: 'viz_utils.js',
-    artifacts: [
-      '__internal/viz/core/utils.js',
-      'viz/core/utils.js',
-      'viz/core/utils_default.js',
-    ],
-  },
-  {
-    shim: 'viz_base_axis.js',
-    artifacts: ['__internal/viz/axes/base_axis.js'],
-  },
-  {
-    shim: 'exporter.js',
-    artifacts: ['exporter.js'],
-  },
-  {
-    shim: 'format_helper.js',
-    artifacts: ['format_helper.js'],
-  },
-  {
-    shim: 'viz_translator2d.js',
-    artifacts: ['__internal/viz/translators/translator2d.js'],
-  },
-  {
-    shim: 'viz_tick_generator.js',
-    artifacts: ['__internal/viz/axes/tick_generator.js'],
-  },
-  {
-    shim: 'viz_tooltip.js',
-    artifacts: [
-      '__internal/viz/core/tooltip.js',
-      'viz/core/tooltip.js',
-    ],
-  },
-  {
-    shim: 'viz_title.js',
-    artifacts: [
-      '__internal/viz/core/title.js',
-      'viz/core/title.js',
-    ],
-  },
-  {
-    shim: 'viz_export.js',
-    artifacts: [
-      '__internal/viz/core/export.js',
-      '__internal/viz/core/exportModule.js',
-      'viz/core/export.js',
-    ],
-  },
-  {
-    shim: 'viz_chart_tracker.js',
-    artifacts: [
-      'viz/chart_components/tracker.js',
-      '__internal/viz/chart_components/tracker.js',
-    ],
-  },
-  {
-    shim: 'viz_components_legend.js',
-    artifacts: [
-      'viz/components/legend.js',
-      '__internal/viz/components/legend.js',
-    ],
-  },
-  {
-    shim: 'viz_loading_indicator.js',
-    artifacts: [
-      'viz/core/loading_indicator.js',
-      '__internal/viz/core/loading_indicator.js',
-    ],
-  },
-  {
-    shim: 'date_parser.js',
-    artifacts: [
-      '__internal/core/localization/ldml/date.parser.js',
-      '__internal/core/localization/ldml/dateParserModule.js',
-      'common/core/localization/ldml/date.parser.js',
-    ],
-  },
-  {
-    shim: 'visibility_change.js',
-    artifacts: [
-      'common/core/events/visibility_change.js',
-      '__internal/events/m_visibility_change.js',
-    ],
-  },
-  {
-    shim: 'core_errors.js',
-    artifacts: ['core/errors.js'],
-  },
-  {
-    shim: 'ui_errors.js',
-    artifacts: ['ui/widget/ui.errors.js'],
-  },
-  {
-    shim: 'template_manager.js',
-    artifacts: ['__internal/core/m_template_manager.js'],
-  },
-  {
-    shim: 'viz_paletteModule.js',
-    artifacts: [
-      '__internal/viz/paletteModule.js',
-      '__internal/viz/palette.js',
-    ],
-  },
-  {
-    shim: 'themes.js',
-    artifacts: [
-      '__internal/ui/themes.js',
-      'ui/themes.js',
-    ],
-  },
-  {
-    shim: 'animation_frame.js',
-    artifacts: [
-      'common/core/animation/frame.js',
-      '__internal/common/core/animation/frame.js',
-      '__internal/common/core/animation/frameModule.js',
-    ],
-  },
-];
-
-const MUTABLE_ARTIFACT_FACADES: readonly { suffix: string; shimUrl: string }[] = (
-  MUTABLE_FACADE_GROUPS.flatMap(({ shim, artifacts }) => artifacts.map((artifact) => ({
-    suffix: `${ESM_ARTIFACT_MARKER}${artifact}`,
-    shimUrl: `${ESM_SHIMS}/${shim}`,
-  })))
-);
-
-function findMutableArtifactFacade(relativeUrlPath: string): string | null {
-  const normalized = normalizeUrlPath(relativeUrlPath);
-  const withLeadingSlash = normalized.startsWith('/') ? normalized : `/${normalized}`;
-  const match = MUTABLE_ARTIFACT_FACADES.find((entry) => withLeadingSlash.endsWith(entry.suffix)
-    || normalized.endsWith(entry.suffix.replace(/^\//, '')));
-  return match?.shimUrl ?? null;
-}
-
 function sendMutableFacadeModule(res: ServerResponse, shimUrl: string): boolean {
   // Serve a re-export at the artifact URL so relative library imports and
   // bare import-map entries share the same shim module graph.
@@ -733,9 +575,10 @@ export function createStaticFileService({
     }
 
     // Relative library imports bypass import maps — serve mutable facades
-    // at the artifact URL unless ?dx-original=1 (used by the shim itself).
+    // at the artifact URL unless ?dx-original=1 (used by the facade itself).
+    // Hand-written shims (themes, …) win; otherwise auto-generate.
     if (!searchParams.has('dx-original')) {
-      const shimUrl = findMutableArtifactFacade(relativeUrlPath);
+      const shimUrl = findHandWrittenMutableFacade(relativeUrlPath);
       if (shimUrl) {
         return sendMutableFacadeModule(res, shimUrl);
       }
