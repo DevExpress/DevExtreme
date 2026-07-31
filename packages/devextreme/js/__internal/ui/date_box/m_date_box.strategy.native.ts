@@ -5,7 +5,7 @@ import dateSerialization from '@js/core/utils/date_serialization';
 import { inputType } from '@js/core/utils/support';
 import type { Format } from '@js/localization';
 import type { TextBoxType } from '@js/ui/text_box';
-import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
+import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 
 import type { PopupProperties } from '../popup/popup';
 import type { DateBoxBaseProperties } from './date_box.base';

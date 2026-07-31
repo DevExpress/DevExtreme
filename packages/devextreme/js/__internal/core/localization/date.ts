@@ -1,5 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { Format as LocalizationFormat, FormatObject } from '@js/localization';
+import { resolvePresetOverride } from '@ts/core/global_format_config';
 import firstDayOfWeekData from '@ts/core/localization/cldr-data/first_day_of_week_data';
 import localizationCore from '@ts/core/localization/core';
 import defaultDateNames from '@ts/core/localization/default_date_names';
@@ -9,7 +10,6 @@ import { getFormatter as getLDMLDateFormatter } from '@ts/core/localization/ldml
 import { getParser as getLDMLDateParser } from '@ts/core/localization/ldml/date.parser';
 import numberLocalization from '@ts/core/localization/number';
 import errors from '@ts/core/m_errors';
-import { resolvePresetOverride } from '@ts/core/m_global_format_config';
 import { injector as dependencyInjector } from '@ts/core/utils/m_dependency_injector';
 import { each } from '@ts/core/utils/m_iterator';
 import { isString } from '@ts/core/utils/m_type';

@@ -1,5 +1,5 @@
 import dateLocalization from '@js/common/core/localization/date';
-import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
+import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 
 export const formatImplicitSchedulerDate = (date: Date): string => {
   const globalDateFormat = getGlobalFormatByDataType('date');
