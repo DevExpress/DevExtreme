@@ -4,7 +4,6 @@ import pointerMock from '../../helpers/pointerMock.js';
 import viewPort from 'core/utils/view_port';
 import GestureEmitter from 'common/core/events/gesture/emitter.gesture.js';
 import animationFrame from '__internal/common/core/animation/frameModule';
-import { useFakeTimersWithoutAnimationFrame } from '../../helpers/animationFrameStub.js';
 import translator from 'common/core/animation/translator';
 import fx from 'common/core/animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -1662,7 +1661,7 @@ QUnit.module('handle', $.extend({}, moduleConfig, {
 
 QUnit.module('autoScroll', $.extend({}, moduleConfig, {
     beforeEach: function() {
-        this.clock = useFakeTimersWithoutAnimationFrame();
+        this.clock = sinon.useFakeTimers();
         setupDraggable(this, $('#scrollableItem'));
 
         this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {

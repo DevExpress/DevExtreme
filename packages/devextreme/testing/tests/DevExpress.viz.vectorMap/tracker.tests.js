@@ -5,6 +5,7 @@
 // It is done by widgets event system ("dxwheel")
 // It is not used in map and requesting frame is just suppressed
 import $ from 'jquery';
+import { noop } from 'core/utils/common';
 import {
     Renderer,
     stubClass
@@ -12,8 +13,6 @@ import {
 import trackerModule from 'viz/vector_map/tracker';
 import { _TESTS_eventEmitterMethods } from '__internal/viz/vector_map/event_emitter';
 import animationFrame from '__internal/common/core/animation/frameModule';
-import { useFakeTimersWithoutAnimationFrame } from '../../helpers/animationFrameStub.js';
-import { noop } from 'core/utils/common';
 
 const FOCUS_OFF_DELAY = 100;
 
@@ -58,7 +57,7 @@ const environment = {
         }, this));
         this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake(noop);
         this.cancelAnimationFrameStub = sinon.stub(animationFrame, 'cancelAnimationFrame').callsFake(noop);
-        this.clock = useFakeTimersWithoutAnimationFrame();
+        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         this.tracker.dispose();

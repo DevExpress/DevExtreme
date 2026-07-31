@@ -13,13 +13,6 @@ import {
 (function() {
     QUnit.module('AnimationController', {
         beforeEach: function() {
-            this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
-                return window.setTimeout(() => callback(Date.now()), 0);
-            });
-            this.cancelAnimationFrameStub = sinon.stub(animationFrame, 'cancelAnimationFrame').callsFake((timerId) => {
-                window.clearTimeout(timerId);
-            });
-
             this.AnimationController = animationModule.AnimationController;
 
             this.Animation = function(ticks, complete, options) {
@@ -56,11 +49,9 @@ import {
             this.animationController.dispose();
         },
         mockRequestAnimationFrame: function(callback) {
-            this.requestAnimationFrameStub.restore();
             this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake(callback);
         },
         mockCancelAnimationFrame: function(callback) {
-            this.cancelAnimationFrameStub.restore();
             this.cancelAnimationFrameStub = sinon.stub(animationFrame, 'cancelAnimationFrame').callsFake(callback);
         }
     });

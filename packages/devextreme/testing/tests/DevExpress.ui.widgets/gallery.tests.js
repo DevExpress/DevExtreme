@@ -5,7 +5,6 @@ import visibilityChange from 'common/core/events/visibility_change';
 import ArrayStore from 'common/data/array_store';
 import fx from 'common/core/animation/fx';
 import animationFrame from '__internal/common/core/animation/frameModule';
-import { useFakeTimersWithoutAnimationFrame } from '../../helpers/animationFrameStub.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
@@ -109,7 +108,7 @@ const calculateItemPosition = ($item, $gallery) => {
 
 QUnit.module('behavior', {
     beforeEach() {
-        this.clock = useFakeTimersWithoutAnimationFrame();
+        this.clock = sinon.useFakeTimers();
         fx.off = true;
 
         this.$element = $('#gallerySimple');
@@ -832,7 +831,7 @@ QUnit.module('behavior', {
 
 QUnit.module('render', {
     beforeEach() {
-        this.clock = useFakeTimersWithoutAnimationFrame();
+        this.clock = sinon.useFakeTimers();
         fx.off = true;
     },
 
@@ -1137,7 +1136,7 @@ QUnit.module('render', {
 
 QUnit.module('options changed callbacks', {
     beforeEach() {
-        this.clock = useFakeTimersWithoutAnimationFrame();
+        this.clock = sinon.useFakeTimers();
         fx.off = true;
 
         this.$element = $('#gallerySimple').dxGallery({ items: [0, 1, 2] });
@@ -1264,7 +1263,7 @@ QUnit.module('options changed callbacks', {
 
 QUnit.module('items visibility', {
     beforeEach() {
-        this.clock = useFakeTimersWithoutAnimationFrame();
+        this.clock = sinon.useFakeTimers();
         fx.off = true;
 
         this.$element = $('#gallerySimple').dxGallery({ items: [0, 1, 2, 3, 4], width: 500, showNavButtons: true });
@@ -1360,7 +1359,7 @@ QUnit.module('items visibility', {
 
 QUnit.module('responsiveness', {
     beforeEach() {
-        this.clock = useFakeTimersWithoutAnimationFrame();
+        this.clock = sinon.useFakeTimers();
         fx.off = true;
 
         this.$element = $('#gallerySimple').dxGallery({ items: [0, 1, 2, 3, 4] });
@@ -1943,7 +1942,7 @@ QUnit.module('responsiveness', {
 
 QUnit.module('api', {
     beforeEach() {
-        this.clock = useFakeTimersWithoutAnimationFrame();
+        this.clock = sinon.useFakeTimers();
         fx.off = true;
 
         this.$element = $('#gallerySimple');
@@ -2331,7 +2330,7 @@ QUnit.module('keyboard navigation', {
 
 QUnit.module('RTL', {
     beforeEach() {
-        this.clock = useFakeTimersWithoutAnimationFrame();
+        this.clock = sinon.useFakeTimers();
         fx.off = true;
 
         this.$element = $('#gallerySimple');

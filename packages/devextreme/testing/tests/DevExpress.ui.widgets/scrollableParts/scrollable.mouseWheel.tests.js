@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import animationFrame from '__internal/common/core/animation/frameModule';
-import { useFakeTimersWithoutAnimationFrame } from '../../../helpers/animationFrameStub.js';
 import devices from '__internal/core/m_devices';
 import pointerMock from '../../../helpers/pointerMock.js';
 
@@ -33,7 +32,7 @@ const moduleConfig = {
             </div>`;
         $('#qunit-fixture').html(markup);
 
-        this.clock = useFakeTimersWithoutAnimationFrame();
+        this.clock = sinon.useFakeTimers();
         this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
             callback();
         });

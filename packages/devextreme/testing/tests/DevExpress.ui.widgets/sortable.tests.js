@@ -4,10 +4,6 @@ import 'ui/sortable';
 import 'ui/scroll_view';
 import fx from 'common/core/animation/fx';
 import animationFrame from '__internal/common/core/animation/frameModule';
-import {
-    stubAnimationFrameNative,
-    useFakeTimersWithoutAnimationFrame,
-} from '../../helpers/animationFrameStub.js';
 import browser from 'core/utils/browser';
 import translator from 'common/core/animation/translator';
 import viewPort from 'core/utils/view_port';
@@ -2644,7 +2640,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
 function getModuleConfigForTestsWithScroll(elementSelector, scrollSelector) {
     return {
         beforeEach: function() {
-            this.clock = useFakeTimersWithoutAnimationFrame();
+            this.clock = sinon.useFakeTimers();
 
             this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
                 return window.setTimeout(callback, 10);
@@ -3371,9 +3367,7 @@ QUnit.module('With both scrolls', getModuleConfigForTestsWithScroll('#itemsWithB
 
 QUnit.module('Dragging between sortables with scroll', {
     beforeEach: function() {
-        this.clock = useFakeTimersWithoutAnimationFrame();
-        // Same as SystemJS for this module: real RAF while assert.async waits.
-        this.requestAnimationFrameStub = stubAnimationFrameNative();
+        this.clock = sinon.useFakeTimers();
 
         $('#qunit-fixture').addClass('qunit-fixture-visible');
 
@@ -3396,15 +3390,13 @@ QUnit.module('Dragging between sortables with scroll', {
         };
     },
     afterEach: function() {
-        this.instances.forEach((instance) => {
-            instance.dispose();
-        });
-        this.instances = [];
-        this.requestAnimationFrameStub.restore();
         this.clock.restore();
         this.clock.reset();
 
         $('#qunit-fixture').removeClass('qunit-fixture-visible');
+        this.instances.forEach((instance) => {
+            instance.dispose();
+        });
     }
 }, () => {
     function dragBetweenSortableTest(that, assert, scroll, dragPos) {
@@ -3485,15 +3477,13 @@ QUnit.module('Dragging between sortables with scroll', {
             } else if(scrollTimes === 1) {
                 // second scroll event, itemPoints must be the same
                 assert.equal(itemPoints[1].top, 49);
-
-                this.requestAnimationFrameStub.restore();
                 done();
             }
 
             scrollTimes++;
         });
 
-        // act — wait for native ScrollAnimator frames (SystemJS behavior for this module)
+        // act
         pointerMock(this.$elements[0].children().eq(0)).start().down().move(300, 200).move(0, 50);
     });
 
