@@ -15,15 +15,15 @@
 }
 
 .status--salaried {
-  color: var(--dxds-color-content-utility-green-default-rest);
+  color: var(--dxds-color-content-utility-green-default-rest, var(--dx-color-success));
 }
 
 .status--commission {
-  color: var(--dxds-color-content-utility-yellow-default-rest);
+  color: var(--dxds-color-content-utility-yellow-default-rest, var(--dx-color-warning));
 }
 
 .status--terminated {
-  color: var(--dxds-color-content-utility-red-default-rest);
+  color: var(--dxds-color-content-utility-red-default-rest, var(--dx-color-danger));
 }
 
 .indicator {
