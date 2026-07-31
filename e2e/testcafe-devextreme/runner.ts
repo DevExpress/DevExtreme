@@ -100,8 +100,15 @@ const getTestCafeConfig = (cache: boolean): Partial<TestCafeConfigurationOptions
 
 const changeTheme = async (t: TestController, themeName: string): Promise<void> => {
   const changeThemeClientFn = ClientFunction(() => new Promise<void>((resolve) => {
-    (window as any).DevExpress.ui.themes.ready(resolve);
-    (window as any).DevExpress.ui.themes.current(themeName);
+    const dxUi = (window as any).DevExpress?.ui;
+
+    if (!dxUi) {
+      resolve();
+      return;
+    }
+
+    dxUi.themes.ready(resolve);
+    dxUi.themes.current(themeName);
   }), { dependencies: { themeName } });
 
   return changeThemeClientFn.with({ boundTestRun: t })();
