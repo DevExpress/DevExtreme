@@ -13,8 +13,6 @@ export interface Chokidar {
   watch: (paths: string | string[], options?: Record<string, unknown>) => ChokidarWatcher;
 }
 
-// chokidar is a root devDependency, not a dependency of this plugin (and not the same
-// chokidar gulp-watch bundles internally) — resolve it from the project root at runtime.
 export function loadChokidar(projectRoot: string): Chokidar {
   const projectRequire = createRequire(path.join(projectRoot, 'package.json'));
   try {

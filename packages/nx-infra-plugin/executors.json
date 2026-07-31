@@ -108,7 +108,7 @@
     "check-declarations": {
       "implementation": "./src/executors/check-declarations/executor",
       "schema": "./src/executors/check-declarations/schema.json",
-      "description": "Type-check DevExtreme .d.ts bundles and modules (gulp validate-ts parity)"
+      "description": "Type-check DevExtreme .d.ts bundles and modules"
     },
     "npm-assemble": {
       "implementation": "./src/executors/npm-assemble/executor",
