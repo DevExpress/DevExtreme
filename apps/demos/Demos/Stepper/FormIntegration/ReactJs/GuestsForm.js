@@ -1,6 +1,5 @@
 import React, { memo } from 'react';
 import { Form, RangeRule, SimpleItem } from 'devextreme-react/form';
-import 'devextreme-react/number-box';
 
 const GuestsForm = memo(({ formData, validationGroup }) => (
   <>

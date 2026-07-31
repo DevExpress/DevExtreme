@@ -3,7 +3,6 @@ import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from
 import {
   DxDataGridModule,
   DxDataGridComponent,
-  DxButtonModule,
 } from 'devextreme-angular';
 import { DxButtonTypes } from 'devextreme-angular/ui/button';
 import { query } from 'devextreme-angular/common/data';
@@ -28,7 +27,6 @@ if (window && window.config?.packageConfigPaths) {
   imports: [
     DxDataGridModule,
     DxSelectBoxModule,
-    DxButtonModule,
   ],
 })
 export class AppComponent {

@@ -7,7 +7,7 @@ import DataGrid, {
   Lookup,
   Form,
 } from 'devextreme-react/data-grid';
-import 'devextreme-react/text-area';
+import 'devextreme/ui/text_area';
 import { Item } from 'devextreme-react/form';
 import { employees, states } from './data.ts';
 
