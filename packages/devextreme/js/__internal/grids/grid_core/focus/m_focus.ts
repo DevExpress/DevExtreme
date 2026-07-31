@@ -566,26 +566,33 @@ const data = (Base: ModuleType<DataController>) => class FocusDataControllerExte
 
     if (this.option('focusedRowEnabled') && this._dataSource) {
       const isPartialUpdate = e.changeType === 'update' && e.repaintChangesOnly;
-      const isPartialUpdateWithDeleting = isPartialUpdate && e.changeTypes && e.changeTypes.indexOf('remove') >= 0;
+      const isPartialUpdateWithDeleting = isPartialUpdate && !!e.changeTypes && e.changeTypes.indexOf('remove') >= 0;
+      const isRefreshWithItems = e.changeType === 'refresh' && !!e.items.length;
+      const isAppendOrPrepend = e.changeType === 'append' || e.changeType === 'prepend';
 
       if (forceUpdateFocusedRow && this.isEmpty()) {
         this._focusController._resetFocusedRow();
-      } else if (e.changeType === 'refresh' && e.items.length || isPartialUpdateWithDeleting) {
+      } else if (isRefreshWithItems || isPartialUpdateWithDeleting) {
         this._updatePageIndexes();
         this._updateFocusedRowIfNeeded(e, forceUpdateFocusedRow);
-      } else if (e.changeType === 'append' || e.changeType === 'prepend') {
+      } else if (isAppendOrPrepend) {
         this._updatePageIndexes();
       } else if (isPartialUpdate) {
         this._updateFocusedRowIfNeeded(e, forceUpdateFocusedRow);
-        this._reapplyFocusedRowAfterPartialUpdate();
+        this._reapplyFocusedRowAfterPartialUpdate(e);
       }
     }
   }
 
-  private _reapplyFocusedRowAfterPartialUpdate() {
+  private _reapplyFocusedRowAfterPartialUpdate(e: { rowIndices?: number[] }): void {
     const focusedRowKey = this.option('focusedRowKey');
+    const focusedRowIndex = this.getRowIndexByKey(focusedRowKey);
 
-    if (isDefined(focusedRowKey) && this.getRowIndexByKey(focusedRowKey) >= 0) {
+    const hasFocusedRowKey = isDefined(focusedRowKey);
+    const isFocusedRowVisible = focusedRowIndex >= 0;
+    const isFocusedRowInChange = !!e.rowIndices?.includes(focusedRowIndex);
+
+    if (hasFocusedRowKey && isFocusedRowVisible && isFocusedRowInChange) {
       this._focusController.updateFocusedRow({ focusedRowKey, preventScroll: true });
     }
   }
