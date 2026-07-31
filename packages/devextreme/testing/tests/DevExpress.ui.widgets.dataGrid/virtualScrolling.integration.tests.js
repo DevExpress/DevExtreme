@@ -1670,9 +1670,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.equal(contentReadyCount, 1, 'contentReady is called with timeout');
     });
 
-    // TODO Chrome133: skipped during chrome update
-    // Failed only on CI, locally everything is ok
-    QUnit.test.skip('scroll position should not be changed after change sorting if row count is large and virtual scrolling is enabled', function(assert) {
+    QUnit.test('scroll position should not be changed after change sorting if row count is large and virtual scrolling is enabled', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
             dataSource: createLargeDataSource(1000000),
