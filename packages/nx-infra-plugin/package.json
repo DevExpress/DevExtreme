@@ -3,6 +3,8 @@
   "version": "26.2.0",
   "type": "commonjs",
   "private": true,
+  "author": "Developer Express Inc.",
+  "license": "SEE LICENSE IN LICENSE.md",
   "executors": "./dist/executors.json",
   "exports": {
     ".": {

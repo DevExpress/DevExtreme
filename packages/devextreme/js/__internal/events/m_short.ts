@@ -114,20 +114,93 @@ let index = 0;
 const keyboardProcessors = {};
 const generateListenerId = () => `keyboardProcessorId${index++}`;
 
+const toElements = (value: unknown): Element[] => {
+  if (!value) {
+    return [];
+  }
+
+  if (value instanceof Element) {
+    return [value];
+  }
+
+  if (Array.isArray(value)) {
+    return value.filter((item): item is Element => item instanceof Element);
+  }
+
+  const v = value as { toArray?: () => unknown[]; 0?: unknown };
+
+  if (typeof v.toArray === 'function') {
+    const arr = v.toArray();
+
+    if (Array.isArray(arr)) {
+      return arr.filter((item): item is Element => item instanceof Element);
+    }
+  }
+
+  const first = v[0];
+
+  return first instanceof Element ? [first] : [];
+};
+
+const processorIdsByNode = new WeakMap<Element, Set<string>>();
+
+const getProcessorNodes = (
+  processor: { _element?: unknown; _focusTarget?: unknown } | undefined,
+): Element[] => [
+  ...toElements(processor?._element),
+  ...toElements(processor?._focusTarget),
+];
+
+const addProcessorToIndex = (id: string, nodes: Element[]): void => {
+  nodes.forEach((el) => {
+    let ids = processorIdsByNode.get(el);
+
+    if (!ids) {
+      ids = new Set();
+      processorIdsByNode.set(el, ids);
+    }
+
+    ids.add(id);
+  });
+};
+
+const removeProcessorFromIndex = (id: string, nodes: Element[]): void => {
+  nodes.forEach((el) => {
+    const ids = processorIdsByNode.get(el);
+
+    if (ids) {
+      ids.delete(id);
+
+      if (ids.size === 0) {
+        processorIdsByNode.delete(el);
+      }
+    }
+  });
+};
+
 export const keyboard = {
   on: (element, focusTarget, handler) => {
     const listenerId = generateListenerId();
 
-    keyboardProcessors[listenerId] = new KeyboardProcessor({ element, focusTarget, handler });
+    const keyboardProcessor = new KeyboardProcessor({ element, focusTarget, handler });
+    keyboardProcessors[listenerId] = keyboardProcessor;
+
+    addProcessorToIndex(listenerId, getProcessorNodes(keyboardProcessor));
 
     return listenerId;
   },
 
   off: (listenerId) => {
-    if (listenerId && keyboardProcessors[listenerId]) {
-      keyboardProcessors[listenerId].dispose();
+    const keyboardProcessor = keyboardProcessors[listenerId];
+
+    if (listenerId && keyboardProcessor) {
+      const nodes = getProcessorNodes(keyboardProcessor);
+
+      keyboardProcessor.dispose();
+
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete keyboardProcessors[listenerId];
+      removeProcessorFromIndex(listenerId, nodes);
     }
   },
 
@@ -136,50 +209,19 @@ export const keyboard = {
       return;
     }
 
-    const toElements = (value: unknown): Element[] => {
-      if (!value) {
-        return [];
-      }
+    const nodes: Element[] = [root];
 
-      if (value instanceof Element) {
-        return [value];
-      }
+    if (typeof root.querySelectorAll === 'function') {
+      nodes.push(...Array.from(root.querySelectorAll('*')));
+    }
 
-      if (Array.isArray(value)) {
-        return value.filter((item): item is Element => item instanceof Element);
-      }
+    const idsToDispose = new Set<string>();
 
-      const v = value as { toArray?: () => unknown[]; 0?: unknown };
-
-      if (typeof v.toArray === 'function') {
-        const arr = v.toArray();
-
-        if (Array.isArray(arr)) {
-          return arr.filter((item): item is Element => item instanceof Element);
-        }
-      }
-
-      const first = v[0];
-
-      return first instanceof Element ? [first] : [];
-    };
-
-    const touchesRoot = (value: unknown): boolean => {
-      const elements = toElements(value);
-      return elements.some((el) => el === root || root.contains(el));
-    };
-
-    Object.keys(keyboardProcessors).forEach((id) => {
-      const keyboardProcessor = keyboardProcessors[id];
-
-      if (!keyboardProcessor) {
-        return;
-      }
-
-      if (touchesRoot(keyboardProcessor._element) || touchesRoot(keyboardProcessor._focusTarget)) {
-        keyboard.off(id);
-      }
+    nodes.forEach((node) => {
+      processorIdsByNode.get(node)?.forEach((id) => idsToDispose.add(id));
     });
+
+    idsToDispose.forEach((id) => keyboard.off(id));
   },
 
   // NOTE: For tests

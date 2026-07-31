@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import 'ui/data_grid';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => {
     const markup = '<div id="dataGrid"></div>';

@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import DxForm, { DxSimpleItem } from 'devextreme-vue/form';
-import 'devextreme-vue/date-range-box';
+import 'devextreme/ui/date_range_box';
 import { ref, watch } from 'vue';
 import type { BookingFormData } from './types.ts';
 import { getInitialFormData } from './data.ts';

@@ -12,7 +12,7 @@ import {
 } from './declaration-check-content';
 import { CheckDeclarationsExecutorSchema } from './schema';
 
-const DEFAULT_MODULES_METADATA = './build/gulp/modules_metadata.json';
+const DEFAULT_MODULES_METADATA = './build/modules_metadata.json';
 const DEFAULT_TS_BUNDLE = './artifacts/ts/dx.all.d.ts';
 const DEFAULT_BUNDLE_ARTIFACT = './artifacts/ts/dx.all.d.ts';
 const DEFAULT_MODULES_PATTERN = './js/**/*.d.ts';

@@ -5,7 +5,7 @@ import { getWindow } from 'core/utils/window';
 import { getWidth, getHeight } from 'core/utils/size';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(function() {
     const markup = `
@@ -114,7 +114,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         }).dxDataGrid('instance');
 
         // assert
-        assert.strictEqual($(dataGrid.getCellElement(0, 1))[0].getBoundingClientRect().width, 800, 'second column width is correct');
+        assert.roughEqual($(dataGrid.getCellElement(0, 1))[0].getBoundingClientRect().width, 800, 0.01, 'second column width is correct');
         assert.strictEqual(dataGrid.columnOption(0, 'visibleWidth'), 200, 'visibleWidth for first column is number');
     });
 
@@ -475,7 +475,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         dataGrid.updateDimensions();
 
         // assert
-        assert.equal($('#dataGrid').find('.dx-datagrid').height(), 298);
+        assert.roughEqual($('#dataGrid').find('.dx-datagrid').height(), 298, 1);
     });
 
     QUnit.test('update column widths when rendering to invisible container', function(assert) {
@@ -495,7 +495,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $container.trigger('dxshown');
 
         // assert
-        assert.equal(dataGrid.getVisibleColumns()[0].visibleWidth, 70);
+        assert.roughEqual(dataGrid.getVisibleColumns()[0].visibleWidth, 50, 0.001);
     });
 
     QUnit.test('height from extern styles', function(assert) {
@@ -742,12 +742,15 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 { dataField: 'field2', width: 50 },
                 { dataField: 'field3', width: 50 },
                 { dataField: 'field4', width: 50 }
-            ]
+            ],
+            scrolling: {
+                useNative: false
+            }
         });
 
         // assert
         assert.equal($dataGrid.width(), 200);
-        assert.equal($dataGrid.find('.dx-row').first().find('td').last()[0].getBoundingClientRect().width, 50);
+        assert.roughEqual($dataGrid.find('.dx-row').first().find('td').last()[0].getBoundingClientRect().width, 50, 0.001);
 
         // act
         $('#container').width(100);
@@ -772,8 +775,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
 
         // assert
-        assert.equal($dataGrid.find('.dx-row').first().find('td').last()[0].getBoundingClientRect().width, 50, 'last column have correct width');
-        assert.equal($dataGrid.find('.dx-row').first().find('td').last().prev()[0].getBoundingClientRect().width, 250, 'previuos last column have correct width');
+        assert.roughEqual($dataGrid.find('.dx-row').first().find('td').last()[0].getBoundingClientRect().width, 50, 0.001, 'last column have correct width');
+        assert.roughEqual($dataGrid.find('.dx-row').first().find('td').last().prev()[0].getBoundingClientRect().width, 250, 0.001, 'previuos last column have correct width');
     });
 
     // T387828
@@ -817,12 +820,15 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 { dataField: 'field2', width: 50 },
                 { dataField: 'field3', width: 50 },
                 { dataField: 'field4', width: 50 }
-            ]
+            ],
+            scrolling: {
+                useNative: false
+            }
         });
 
         // assert
-        assert.equal($dataGrid.width(), 202);
-        assert.equal($dataGrid.find('.dx-row').first().find('td').last()[0].getBoundingClientRect().width, 50);
+        assert.roughEqual($dataGrid.width(), 202, 1);
+        assert.roughEqual($dataGrid.find('.dx-row').first().find('td').last()[0].getBoundingClientRect().width, 50, 1);
     });
 
     // T154611
@@ -842,14 +848,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.equal($dataGrid.width(), 200);
-        assert.equal($dataGrid.find('.dx-row').first().find('td').last()[0].getBoundingClientRect().width, 50);
+        assert.roughEqual($dataGrid.find('.dx-row').first().find('td').last()[0].getBoundingClientRect().width, 50, 0.001);
 
         // act
         $('#container').width(100);
 
         // assert
         assert.equal($dataGrid.width(), 100);
-        assert.equal($dataGrid.find('.dx-row').first().find('td')[0].getBoundingClientRect().width, 25);
+        assert.roughEqual($dataGrid.find('.dx-row').first().find('td')[0].getBoundingClientRect().width, 25, 0.001);
     });
 
     // T144297
@@ -869,19 +875,22 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 { dataField: 'field2', width: '25%' },
                 { dataField: 'field3', width: 50 },
                 { dataField: 'field4', width: 50 }
-            ]
+            ],
+            scrolling: {
+                useNative: false
+            }
         });
 
         // assert
         assert.equal($dataGrid.width(), 400);
-        assert.equal($dataGrid.find('.dx-row').first().find('td').last()[0].getBoundingClientRect().width, 200);
+        assert.roughEqual($dataGrid.find('.dx-row').first().find('td').last()[0].getBoundingClientRect().width, 200, 0.001);
 
         // act
         $('#container').width(200);
 
         // assert
         assert.equal($dataGrid.width(), 200);
-        assert.equal($dataGrid.find('.dx-row').first().find('td').last()[0].getBoundingClientRect().width, 50);
+        assert.roughEqual($dataGrid.find('.dx-row').first().find('td').last()[0].getBoundingClientRect().width, 50, 0.001);
     });
 
     // T958665
@@ -901,13 +910,16 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 { dataField: 'field2', width: '60%' },
                 { dataField: 'field3', width: 50 },
                 { dataField: 'field4', width: 50 }
-            ]
+            ],
+            scrolling: {
+                useNative: false
+            }
         });
         const dataGrid = $dataGrid.dxDataGrid('instance');
 
         // assert
         assert.equal($dataGrid.width(), 400);
-        assert.equal($dataGrid.find('.dx-row').first().find('td').first()[0].getBoundingClientRect().width, 120);
+        assert.roughEqual($dataGrid.find('.dx-row').first().find('td').first()[0].getBoundingClientRect().width, 120, 0.001);
 
         // act
         $('#container').width(350);
@@ -915,7 +927,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.equal($dataGrid.width(), 350);
-        assert.equal($dataGrid.find('.dx-row').first().find('td').first()[0].getBoundingClientRect().width, 100);
+        assert.roughEqual($dataGrid.find('.dx-row').first().find('td').first()[0].getBoundingClientRect().width, 100, 0.001);
 
         // act
         $('#container').width(200);
@@ -923,7 +935,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.equal($dataGrid.width(), 200);
-        assert.equal($dataGrid.find('.dx-row').first().find('td').first()[0].getBoundingClientRect().width, 50);
+        assert.roughEqual($dataGrid.find('.dx-row').first().find('td').first()[0].getBoundingClientRect().width, 50, 0.001);
     });
 
     // T983067
@@ -1124,7 +1136,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     QUnit.test('command column widths calculated from styles', function(assert) {
         // arrange
-        // act
         const $dataGrid = $('#dataGridWithStyle').dxDataGrid({
             loadingTimeout: null,
             dataSource: {
@@ -1132,15 +1143,15 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
             selection: { mode: 'multiple' },
             editing: { allowUpdating: true },
-            columns: ['field1', 'field2', { dataField: 'field3', groupIndex: 0 }]
+            columns: ['field1', 'field2', { dataField: 'field3', groupIndex: 0 }],
         });
 
         // assert
         const cols = $dataGrid.find('colgroup').first().children();
 
-        assert.ok(Math.abs(70 - cols.eq(0).width()) <= 1, 'select column width');
-        assert.ok(Math.abs(30 - cols.eq(1).width()) <= 1, 'grouped column width');
-        assert.ok(Math.abs(100 - cols.eq(cols.length - 1).width()) <= 1, 'edit column width');
+        assert.equal(cols.eq(0).width(), 50, 'select column width');
+        assert.equal(cols.eq(1).width(), 30, 'grouped column width');
+        assert.roughEqual(cols.eq(cols.length - 1).width(), 93, 1, 'edit column width');
     });
 });
 
@@ -1159,7 +1170,7 @@ QUnit.module('API Methods', baseModuleConfig, () => {
         dataGrid.option('columns[0].width', 1);
 
         // assert
-        assert.strictEqual(getWidth(dataGrid.$element()), 101);
+        assert.roughEqual(getWidth(dataGrid.$element()), 101, 0.1);
         assert.strictEqual(dataGrid.columnOption(0, 'visibleWidth'), 1);
         assert.strictEqual(dataGrid.columnOption(1, 'visibleWidth'), 'auto');
     });
@@ -1178,7 +1189,7 @@ QUnit.module('API Methods', baseModuleConfig, () => {
         dataGrid.endUpdate();
 
         // assert
-        assert.strictEqual(getWidth(dataGrid.$element()), 101);
+        assert.roughEqual(getWidth(dataGrid.$element()), 101, 0.1);
         assert.strictEqual(dataGrid.columnOption(0, 'visibleWidth'), 1);
         assert.strictEqual(dataGrid.columnOption(1, 'visibleWidth'), 'auto');
     });
@@ -1282,7 +1293,7 @@ QUnit.module('API Methods', baseModuleConfig, () => {
 
         // assert
         const $commandColumnCells = $($(dataGrid.$element()).find('.dx-command-expand'));
-        assert.equal($commandColumnCells.eq(0).width(), 15, 'expand command column width');
+        assert.equal($commandColumnCells.eq(0).outerWidth(), 15, 'expand command column width');
     });
 
 
@@ -1338,8 +1349,8 @@ QUnit.module('columnWidth auto option', {
 
         const cells = $('#dataGrid').find('.dx-datagrid-headers').find('td');
 
-        assert.strictEqual(cells[0].getBoundingClientRect().width, 175, 'valid cell width');
-        assert.strictEqual(cells[1].getBoundingClientRect().width, 175, 'valid cell width');
+        assert.roughEqual(cells[0].getBoundingClientRect().width, 175, 0.001, 'valid cell width');
+        assert.roughEqual(cells[1].getBoundingClientRect().width, 175, 0.001, 'valid cell width');
     });
 
     QUnit.test('Check table params with columnWidth auto', function(assert) {
@@ -1390,8 +1401,8 @@ QUnit.module('columnWidth auto option', {
             columnAutoWidth: true
         });
 
-        assert.strictEqual($('#dataGrid').find('.dx-datagrid-headers').find('td')[0].getBoundingClientRect().width, 120, 'valid cell width');
-        assert.strictEqual($('#dataGrid').find('.dx-datagrid-headers').find('td')[1].getBoundingClientRect().width, 230, 'valid cell width');
+        assert.roughEqual($('#dataGrid').find('.dx-datagrid-headers').find('td')[0].getBoundingClientRect().width, 120, 0.01, 'cell width');
+        assert.roughEqual($('#dataGrid').find('.dx-datagrid-headers').find('td')[1].getBoundingClientRect().width, 232, 0.01, 'cell width');
     });
 
     // T113233
@@ -1410,10 +1421,10 @@ QUnit.module('columnWidth auto option', {
             columnAutoWidth: true
         });
         const $cells = $('#dataGrid').find('.dx-datagrid-headers').find('td');
-        assert.strictEqual($cells[0].getBoundingClientRect().width, 400, 'valid cell width');
+        assert.roughEqual($cells[0].getBoundingClientRect().width, 400, 0.001, 'cell width');
 
         const emptyCellWidth = $cells.eq(1).outerWidth();
-        assert.ok(emptyCellWidth >= 7 && emptyCellWidth < 20, 'empty cell width with paddings');
+        assert.roughEqual(emptyCellWidth, 32, 0.01, 'empty cell width with paddings');
     });
 
     // T198380

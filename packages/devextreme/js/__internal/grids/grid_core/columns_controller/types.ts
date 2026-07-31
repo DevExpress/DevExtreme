@@ -11,11 +11,14 @@ export type ColumnIndex = number | {
   columnIndex: number;
 };
 
+export type FilterField = Omit<Column, 'filterOperations'> & { filterOperations?: string[] | null };
+
 export interface Column extends ColumnBase {
   parseValue?: (text: string) => unknown;
   index?: number;
   groupIndex?: number;
   type?: string;
+  defaultFilterOperations?: string[];
   visibleWidth?: string | number;
   hidingPriority?: number;
   ai?: ColumnAIOptions;
