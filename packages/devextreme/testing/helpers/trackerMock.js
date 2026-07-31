@@ -1,6 +1,5 @@
 const vizMocks = require('./vizMocks.js');
-// Mutable ESM facade (see esm-shims/viz_chart_tracker.js). Under SystemJS this
-// used mockModule/System.set; native ESM has no module registry to replace.
+// Mutate the import-map facade (see esm-shims/viz_chart_tracker.js).
 const trackerModule = require('viz/chart_components/tracker');
 
 const ChartTrackerStub = vizMocks.stubClass(trackerModule.ChartTracker);

@@ -34,7 +34,7 @@ const ESM_ARTIFACT_ROOT = '/packages/devextreme/artifacts/transpiled-esm-npm/esm
 const DX_NODE_MODULES = '/packages/devextreme/node_modules';
 
 /**
- * SystemJS json plugin specs (`file.json!` / `file.json!json`) must not stay as
+ * Plugin-style json specs (`file.json!` / `file.json!json`) must not stay as
  * bare specifiers under a package prefix map — browsers resolve
  * `devextreme-cldr-data/fr.json!json` to a literal path with `!json` → 404.
  * Rewrite to an absolute URL the static server already serves as ESM.

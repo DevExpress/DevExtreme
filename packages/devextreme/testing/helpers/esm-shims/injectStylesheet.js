@@ -1,18 +1,17 @@
 /**
  * Injects a stylesheet once for ESM import-map QUnit mode
- * (replaces legacy `*.css!` plugin imports / css-systemjs modules).
+ * (`*.css!` suite imports resolve here).
  *
- * Parity with SystemJS css-systemjs: only append `<link rel=stylesheet data-theme=…>`.
+ * Only appends `<link rel=stylesheet data-theme=…>`.
  * Do not add dx-theme-* classes on body — that belongs to themes.attachCssClasses
- * on `.dx-viewport` and changes typography/layout vs the old runner.
+ * on `.dx-viewport` and would change typography/layout.
  *
  * Returns a Promise so importers can `await` load — otherwise tests that
  * assert computed styles race the async <link> fetch.
  *
  * @param {string} href
  * @param {{ themeName?: string }} [options]
- *   themeName — set data-theme like SystemJS css-systemjs modules did
- *   (fluent.blue.light / generic.light / …)
+ *   themeName — optional `data-theme` (fluent.blue.light / generic.light / …)
  */
 export function injectStylesheet(href, options = {}) {
     const existing = document.querySelector(`link[data-dx-esm-css="${href}"]`);

@@ -169,9 +169,9 @@
             });
         }
 
-        // SystemJS evaluated `*.css!` before the suite graph. Native ESM loads
-        // siblings in parallel, so theme CSS must be applied before modules that
-        // snapshot themes.current() / isMaterialBased() at import time.
+        // Sibling ESM imports load in parallel, so theme CSS must be applied
+        // before modules that snapshot themes.current() / isMaterialBased()
+        // at import time.
         function preloadThemeCss() {
             if(!themeCssImportPaths || !themeCssImportPaths.length) {
                 return Promise.resolve();

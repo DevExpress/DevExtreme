@@ -195,7 +195,7 @@ function wrapIntlVendorAsEsm(source: string): string {
 /**
  * Force the CJS branch of a UMD wrapper and re-export `module.exports` as default.
  * Also emit synthetic named exports from the webpack entry module so
- * `import Def, * as Ns from 'pkg'` mirrors SystemJS/CJS interop
+ * `import Def, * as Ns from 'pkg'` gets CJS-style interop
  * (needed by diagram.importer → `Ns.DiagramControl`).
  */
 function collectWebpackEntryExportNames(source: string): string[] {

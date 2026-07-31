@@ -79,11 +79,11 @@ function withCacheBuster(url: string, cacheBuster: string): string {
 }
 
 /**
- * Collect legacy plugin-style bare imports (`*.json!`, `*.json!json`, etc.) from suite source.
+ * Collect plugin-style bare imports (`*.json!`, `*.json!json`, `*.css!`, …) from suite source.
  */
 export function collectPluginSpecifiers(suiteSource: string): string[] {
   const found = new Set<string>();
-  // SystemJS: `file.json!` / `file.json!json` (and css equivalents)
+  // `file.json!` / `file.json!json` (and css equivalents)
   const re = /['"]([^'"]+\.(?:json|css)!(?:json|css)?)['"]/g;
   let match = re.exec(suiteSource);
   while (match) {
@@ -240,8 +240,7 @@ function collectPackageRootEntries(): Record<string, string> {
       const name = entry.name.slice(0, -3);
       const url = `${ESM_ROOT}/${entry.name}`;
       entries[name] = url;
-      // SystemJS used defaultExtension: 'js' + baseURL, so suites often
-      // `require('aspnet.js')` / `require('color.js')` with the extension.
+      // Suites often `require('aspnet.js')` / `require('color.js')` with the extension.
       entries[entry.name] = url;
       return;
     }

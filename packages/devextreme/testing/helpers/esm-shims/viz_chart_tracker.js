@@ -4,8 +4,7 @@ import { createMutableApi } from './mutable_facade.js';
 const api = createMutableApi(original, '__dxMutableVizChartTracker');
 
 // Live bindings so `import { ChartTracker }` tracks facade mutations
-// (trackerMock replaces these with sinon spies; SystemJS used to expose the
-// same object as both default props and named exports).
+// (trackerMock replaces these with sinon spies).
 export let ChartTracker = api.ChartTracker;
 export let PieTracker = api.PieTracker;
 

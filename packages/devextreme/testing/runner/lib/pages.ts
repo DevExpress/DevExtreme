@@ -143,9 +143,9 @@ export function createPagesRenderer({
     });
 
     // Preload theme CSS before the suite graph evaluates. Scheduler (and others)
-    // call getThemeType() at module scope; under native ESM sibling imports run in
-    // parallel, so without this CSS may not be in the DOM yet and isMaterialBased
-    // freezes as false (SystemJS loaded css! sequentially first).
+    // call getThemeType() at module scope; sibling ESM imports run in parallel,
+    // so without this CSS may not be in the DOM yet and isMaterialBased freezes
+    // as false.
     const themeCssImportPaths = fs.existsSync(suiteFilePath)
       ? collectPluginSpecifiersFromSuiteTree(suiteFilePath)
         .filter((specifier) => /\.css!(?:css)?$/.test(specifier))
@@ -153,7 +153,7 @@ export function createPagesRenderer({
 
     const importMapScript = `<script type="importmap" nonce="wIkO6u">\n${JSON.stringify(importMap)}\n</script>`;
 
-    // Native ESM + import maps: keep CSP off (same as the previous ESM path).
+    // Native ESM + import maps: keep CSP off.
     // `nocsp` remains a QUnit URL flag for suites that branch on it.
     const cspMetaTag = '';
 
