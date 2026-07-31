@@ -1,4 +1,4 @@
-import type { Format } from '@js/common/core/localization';
+import type { Format } from '@js/common';
 import dateLocalization from '@js/common/core/localization/date';
 import {
   isDefined, isNumeric, isString,
