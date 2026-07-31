@@ -15,7 +15,7 @@ import pointerEvents from 'common/core/events/pointer';
 import { name as clickEventName } from 'common/core/events/click';
 import { name as dblClickEventName } from 'common/core/events/dblclick';
 import { triggerResizeEvent } from 'common/core/events/visibility_change';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import 'ui/autocomplete';
 import 'ui/color_box';
@@ -2513,7 +2513,7 @@ QUnit.module('Editing', {
     // T620297
     QUnit.test('The text of the colorBox should not be overlaps in a grid cell', function(assert) {
         // arrange
-        const DEFAULT_COLORBOX_INPUT_PADDING_LEFT = '40px';
+        const DEFAULT_COLORBOX_INPUT_PADDING_LEFT = '44px';
 
         const rowsView = this.rowsView;
         const $testElement = $('#container');
@@ -14083,7 +14083,7 @@ QUnit.module('Editing with validation', {
         const rowsView = this.rowsView;
         const testElement = $('#container');
 
-        rowsView.render(testElement);
+        rowsView.render(this.gridContainer);
 
         that.applyOptions({
             editing: {

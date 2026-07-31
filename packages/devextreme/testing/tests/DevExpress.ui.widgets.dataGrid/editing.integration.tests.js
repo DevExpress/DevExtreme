@@ -21,7 +21,7 @@ import { getOuterHeight } from 'core/utils/size';
 import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
 import messageLocalization from 'common/core/localization/message';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
@@ -1330,7 +1330,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(300);
 
         // act
-        dataGrid.getScrollable().scrollTo({ y: 1500 });
+        dataGrid.getScrollable().scrollTo({ y: 3000 });
         $(dataGrid.getScrollable().content()).trigger('scroll');
 
         dataGrid.editCell(dataGrid.getRowIndexByKey(38), 0);
@@ -1386,7 +1386,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         const startValue = parseInt($rows.eq(0).text());
 
-        assert.equal(startValue, 29, 'visible row #1 is correct');
+        assert.equal(startValue, 20, 'visible row #1 is correct');
 
         for(let i = 1; i < $rows.length; i++) {
             if(i !== 5) {
@@ -1438,7 +1438,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.ok($editorCell.length, 'row has editor');
-        assert.equal($editorCell.find('input').val(), '89', 'input value');
+        assert.equal($editorCell.find('input').val(), '62', 'input value');
         assert.notOk(visibleRows[-1], 'no visible row with index -1');
     });
 
@@ -1537,7 +1537,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         $tableElements = dataGrid.$element().find('.dx-datagrid-rowsview').find('table');
-        assert.roughEqual(getOuterHeight($tableElements.eq(0)), 35, 3, 'height main table');
+        assert.roughEqual(getOuterHeight($tableElements.eq(0)), 49, 3, 'height main table');
 
         // act
         dataGrid.editCell(0, 0);
@@ -1545,14 +1545,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         $tableElements = dataGrid.$element().find('.dx-datagrid-rowsview').find('table');
-        assert.roughEqual(getOuterHeight($tableElements.eq(0)), 68, 3.01, 'height main table');
+        assert.roughEqual(getOuterHeight($tableElements.eq(0)), 82.5, 3.01, 'height main table');
 
         dataGrid.closeEditCell();
         this.clock.tick(10);
 
         // assert
         $tableElements = dataGrid.$element().find('.dx-datagrid-rowsview').find('table');
-        assert.roughEqual(getOuterHeight($tableElements.eq(0)), 35, 3, 'height main table');
+        assert.roughEqual(getOuterHeight($tableElements.eq(0)), 49, 3, 'height main table');
     });
 
     QUnit.test('Error row is not hidden when rowKey is undefined by mode is cell', function(assert) {
@@ -1721,7 +1721,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         assert.equal($dataCells.length, 4, 'cells count');
         $dataCells.each((_, cell) => {
-            assert.strictEqual($(cell).css('overflow'), 'hidden', 'overflow hidden');
+            const expectedOverflow = $(cell).hasClass('dx-command-select') ? 'visible' : 'hidden';
+            assert.strictEqual($(cell).css('overflow'), expectedOverflow, `overflow ${expectedOverflow}`);
         });
     });
 
@@ -4777,6 +4778,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         }
 
         const dataGrid = $('#dataGrid').dxDataGrid({
+            height: 600,
             dataSource: array,
             keyExpr: 'id',
             scrolling: {
@@ -5484,13 +5486,18 @@ QUnit.module('API methods', baseModuleConfig, () => {
         dataGrid.saveEditData();
         dataGrid.getScrollable().scrollTo({ top: 10000 });
         dataGrid.getScrollable().scrollTo({ top: 10000 });
-        dataGrid.cellValue(dataGrid.getRowIndexByKey(10), 'name', 'updated');
+        dataGrid.cellValue(dataGrid.getRowIndexByKey(15), 'name', 'updated');
         dataGrid.saveEditData();
 
         // assert
-        assert.equal(dataGrid.getVisibleRows().length, 10, 'visible row count');
-        assert.deepEqual(dataGrid.getVisibleRows()[0].data, { id: 6, name: 'test 6' }, 'row 6 is not updated');
-        assert.deepEqual(dataGrid.getVisibleRows()[4].data, { id: 10, name: 'updated' }, 'row 10 is updated');
+        const visibleDataRows = dataGrid.getVisibleRows().filter(r => r.rowType === 'data');
+        const row15 = visibleDataRows.filter(r => r.data.id === 15)[0];
+
+        assert.ok(row15, 'row 15 is visible');
+        assert.strictEqual(row15.data.name, 'updated', 'row 15 is updated');
+        visibleDataRows
+            .filter(r => r.data.id !== 1 && r.data.id !== 15)
+            .forEach(r => assert.strictEqual(r.data.name, 'test ' + r.data.id, 'row ' + r.data.id + ' is not updated'));
     });
 
     // T804060
@@ -6998,7 +7005,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                     const dataGrid = $('#dataGrid').dxDataGrid({
                         dataSource: data,
                         keyExpr: 'id',
-                        height: 50,
+                        height: editMode === 'batch' ? 120 : 60,
                         paging: {
                             pageSize: 1
                         },
@@ -7668,7 +7675,7 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
         this.clock.tick(300);
 
         // act
-        dataGrid.getScrollable().scrollTo(3500);
+        dataGrid.getScrollable().scrollTo(5500);
         this.clock.tick(300);
 
         const visibleRows = dataGrid.getVisibleRows();
@@ -7726,7 +7733,7 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
         this.clock.tick(300);
 
         // act
-        dataGrid.getScrollable().scrollTo({ top: 4100 });
+        dataGrid.getScrollable().scrollTo({ top: 7000 });
         let visibleRows = dataGrid.getVisibleRows();
         const lastRowIndex = visibleRows.length - 1;
 
@@ -7782,11 +7789,11 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
                     break;
                 }
                 case 'viewportTop': {
-                    newRowVisibleIndex = 1;
+                    newRowVisibleIndex = 2;
                     break;
                 }
                 case 'viewportBottom': {
-                    newRowVisibleIndex = 8;
+                    newRowVisibleIndex = 5;
                     break;
                 }
             }
@@ -7800,7 +7807,7 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
                 this.clock.tick(300);
 
                 // assert
-                assert.strictEqual(dataGrid.getTopVisibleRowData().id, 2, 'first visible row data after scroll');
+                assert.strictEqual(dataGrid.getTopVisibleRowData().id, 3, 'first visible row data after scroll');
             }
 
             // act
@@ -7946,10 +7953,10 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
                     assert.strictEqual(dataGrid.getVisibleRows()[newRowInfo.visibleIndex + 1].key, 1, 'data row after the first new row');
                 }
                 if(newRowPosition === 'viewportTop') {
-                    assert.ok(dataGrid.getVisibleRows()[newRowInfo.visibleIndex - 1].key >= 44, 'data row before a new row at the viewport top');
+                    assert.ok(dataGrid.getVisibleRows()[newRowInfo.visibleIndex - 1].key >= 31, 'data row before a new row at the viewport top');
                 }
                 if(newRowPosition === 'viewportBottom') {
-                    assert.ok(dataGrid.getVisibleRows()[newRowInfo.visibleIndex - 1].key >= 54, 'data row before a new row at the viewport bottom');
+                    assert.ok(dataGrid.getVisibleRows()[newRowInfo.visibleIndex - 1].key >= 37, 'data row before a new row at the viewport bottom');
                 }
                 if(newRowPosition === 'last') {
                     assert.strictEqual(dataGrid.getVisibleRows()[newRowInfo.visibleIndex - 1].key, 100, 'data row before the last new row');
@@ -7964,7 +7971,7 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
                 this.clock.tick(400);
 
                 // assert
-                assert.strictEqual(dataGrid.getTopVisibleRowData().id, 45, 'first visible row data after scroll');
+                assert.strictEqual(dataGrid.getTopVisibleRowData().id, 32, 'first visible row data after scroll');
             }
 
             // act
