@@ -42,6 +42,21 @@ export const complexIdResourceMock = [{
   ],
 }];
 
+export const hierarchicalRoomsMock = [
+  { id: 'board', text: 'Board rooms', parentId: null },
+  { id: 'open', text: 'Open spaces', parentId: null },
+  { id: 11, text: 'Room 11', parentId: 'board' },
+  { id: 12, text: 'Room 12', parentId: 'board' },
+  { id: 21, text: 'Room 21', parentId: 'open' },
+  { id: 'solo', text: 'Solo room', parentId: null },
+];
+
+export const hierarchicalRoomsConfigMock = {
+  fieldExpr: 'roomId',
+  dataSource: hierarchicalRoomsMock,
+  parentIdExpr: 'parentId',
+};
+
 export const resourceIndexesMock = Object.keys(resourceItemsByIdMock);
 
 export const resourceConfigMock = [{
