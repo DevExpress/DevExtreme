@@ -6,7 +6,7 @@ import '@ts/ui/list/modules/deleting';
 
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
-import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
+import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import Form from '@ts/ui/form/form';
 import Popup from '@ts/ui/popup/popup';
 

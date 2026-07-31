@@ -18,7 +18,7 @@ import {
 import { Deferred } from '@js/core/utils/deferred';
 import { fitIntoRange, inRange } from '@js/core/utils/math';
 import { isDefined } from '@js/core/utils/type';
-import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
+import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import TextEditor from '@ts/ui/text_box/text_editor';
 
 import type { TextEditorBaseProperties } from '../text_box/text_editor.base';

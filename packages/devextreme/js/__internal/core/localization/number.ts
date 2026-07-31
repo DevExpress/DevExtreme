@@ -2,11 +2,11 @@
 import type { Format, FormatObject as PublicFormatConfig } from '@js/common/core/localization';
 import config from '@js/core/config';
 import errors from '@js/core/errors';
+import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import currencyLocalization from '@ts/core/localization/currency';
 import intlNumberLocalization from '@ts/core/localization/intl/number';
 import { getFormatter } from '@ts/core/localization/ldml/number';
 import { toFixed } from '@ts/core/localization/utils';
-import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 import { escapeRegExp } from '@ts/core/utils/m_common';
 import { injector as dependencyInjector } from '@ts/core/utils/m_dependency_injector';
 import { each } from '@ts/core/utils/m_iterator';
