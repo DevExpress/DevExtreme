@@ -74,7 +74,18 @@ export const Foo = wrapCtor(api, 'Foo');
 export default api;
 ```
 
-To stub a new module: add an entry to `MUTABLE_MODULE_GROUPS` (and optional `importMapKeys`). Prefer that over a new hand-written shim.
+To stub a new module, add a group entry:
+
+```ts
+{
+  internal: '__internal/viz/core/title.js', // real module under esm/
+  also: ['viz/core/title.js'],            // extra artifact URLs → same facade
+  extraKeys: ['animation/frame'],         // optional bare import-map keys
+  apiFromDefault: true,                   // when default export is the stub target
+}
+```
+
+Import-map keys are derived as `strip(.js)` of `internal`/`also`, plus `extraKeys`. Prefer this over a new hand-written shim.
 ---
 
 ## `testing/helpers/esm-shims/`
@@ -89,4 +100,4 @@ Browser modules that the import map (and/or `static.ts` artifact redirects) subs
 - **Vendor / interop quirks** — thin adapters (`jspdf_autotable.js`, `tslib.js`, `zod.js`, …) when the stock ESM build is awkward for the runner.
 - **Shared helpers** — `mutable_facade.js` (`createMutableApi`, `wrapCtor`) used by generated and hand-written facades; `injectStylesheet.js` for theme CSS.
 
-Do **not** put product fixes in these shims — they are test-runner adapters only. To stub a new module, add it to `MUTABLE_MODULE_GROUPS` first.
+Do **not** put product fixes in these shims — they are test-runner adapters only. To stub a new module, add it to `MUTABLE_MODULE_GROUPS` first (`internal` / `also` / `extraKeys`).

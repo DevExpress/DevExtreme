@@ -17,12 +17,12 @@ const RESERVED_EXPORT_NAMES = new Set([
   'implements', 'interface', 'package', 'private', 'protected', 'public',
 ]);
 
-export interface AutoMutableFacadeEntry {
+interface AutoMutableFacadeEntry {
   /** Workspace-relative path to the real implementation module (no leading slash). */
   internalRelativePath: string;
   /** Named exports forwarded with wrapCtor (ctors / replaceable functions). */
   wrapExportNames: string[];
-  /** Named exports re-exported as call/value forwards (DEBUG_set_*, scalars, …). */
+  /** Named exports re-exported as call/value forwards (setters, scalars, …). */
   forwardExportNames: string[];
   globalKey: string;
   /**
@@ -34,8 +34,7 @@ export interface AutoMutableFacadeEntry {
 
 /**
  * Modules that always get a generated mutable facade (sinon.stub targets).
- * `internal` is wrapped via `?dx-original=1`; all `artifacts` / import-map keys
- * share one globalThis api.
+ * `internal` is wrapped via `?dx-original=1`; `also` aliases share one globalThis api.
  *
  * Keep hand-written shims only for non-generic cases (themes composition,
  * CSS inject, jquery globals, base_indicators debug export, …).
@@ -43,234 +42,170 @@ export interface AutoMutableFacadeEntry {
 export interface MutableModuleGroup {
   /** Path under `artifacts/transpiled-esm-npm/esm/`. */
   internal: string;
-  /** Artifact paths (under esm/) that should serve this facade. */
-  artifacts: readonly string[];
-  /** Extra import-map bare keys (default: artifacts without `.js`). */
-  importMapKeys?: readonly string[];
+  /** Extra ESM artifact paths that share the same facade/api. */
+  also?: readonly string[];
+  /** Import-map bare keys beyond those derived from internal/also (strip `.js`). */
+  extraKeys?: readonly string[];
   apiFromDefault?: boolean;
 }
 
 export const MUTABLE_MODULE_GROUPS: readonly MutableModuleGroup[] = [
   {
     internal: '__internal/viz/core/renderers/renderer.js',
-    artifacts: [
-      '__internal/viz/core/renderers/renderer.js',
-      'viz/core/renderers/renderer_default.js',
-    ],
-    importMapKeys: [
-      'viz/core/renderers/renderer',
-      'viz/core/renderers/renderer_default',
-      '__internal/viz/core/renderers/renderer',
-    ],
+    also: ['viz/core/renderers/renderer_default.js'],
+    extraKeys: ['viz/core/renderers/renderer'],
   },
   {
     internal: '__internal/viz/core/renderers/animation.js',
-    artifacts: [
-      '__internal/viz/core/renderers/animation.js',
-      'viz/core/renderers/animation.js',
-    ],
-    importMapKeys: [
-      'viz/core/renderers/animation',
-      '__internal/viz/core/renderers/animation',
-    ],
+    also: ['viz/core/renderers/animation.js'],
   },
   {
     internal: '__internal/viz/core/utils.js',
-    artifacts: [
-      '__internal/viz/core/utils.js',
-      'viz/core/utils.js',
-      'viz/core/utils_default.js',
-    ],
-    importMapKeys: [
-      'viz/core/utils',
-      'viz/core/utils_default',
-      '__internal/viz/core/utils',
-    ],
+    also: ['viz/core/utils.js', 'viz/core/utils_default.js'],
   },
   {
     internal: '__internal/viz/axes/base_axis.js',
-    artifacts: ['__internal/viz/axes/base_axis.js'],
-    importMapKeys: ['viz/axes/base_axis', '__internal/viz/axes/base_axis'],
+    extraKeys: ['viz/axes/base_axis'],
   },
   {
     internal: 'exporter.js',
-    artifacts: ['exporter.js'],
-    importMapKeys: ['exporter', 'exporter.js'],
+    extraKeys: ['exporter.js'],
   },
   {
     internal: 'format_helper.js',
-    artifacts: ['format_helper.js'],
-    importMapKeys: ['format_helper', 'format_helper.js'],
+    extraKeys: ['format_helper.js'],
     apiFromDefault: true,
   },
   {
     internal: '__internal/viz/translators/translator2d.js',
-    artifacts: ['__internal/viz/translators/translator2d.js'],
-    importMapKeys: [
-      'viz/translators/translator2d',
-      '__internal/viz/translators/translator2d',
-    ],
+    extraKeys: ['viz/translators/translator2d'],
   },
   {
     internal: '__internal/viz/axes/tick_generator.js',
-    artifacts: ['__internal/viz/axes/tick_generator.js'],
-    importMapKeys: [
-      'viz/axes/tick_generator',
-      '__internal/viz/axes/tick_generator',
-    ],
+    extraKeys: ['viz/axes/tick_generator'],
   },
   {
     internal: '__internal/viz/core/tooltip.js',
-    artifacts: [
-      '__internal/viz/core/tooltip.js',
-      'viz/core/tooltip.js',
-    ],
-    importMapKeys: ['viz/core/tooltip', '__internal/viz/core/tooltip'],
+    also: ['viz/core/tooltip.js'],
   },
   {
     internal: '__internal/viz/core/title.js',
-    artifacts: [
-      '__internal/viz/core/title.js',
-      'viz/core/title.js',
-    ],
-    importMapKeys: ['viz/core/title', '__internal/viz/core/title'],
+    also: ['viz/core/title.js'],
   },
   {
     internal: '__internal/viz/core/export.js',
-    artifacts: [
-      '__internal/viz/core/export.js',
+    also: [
       '__internal/viz/core/exportModule.js',
       'viz/core/export.js',
-    ],
-    importMapKeys: [
-      'viz/core/export',
-      '__internal/viz/core/export',
-      '__internal/viz/core/exportModule',
     ],
   },
   {
     internal: '__internal/viz/chart_components/tracker.js',
-    artifacts: [
-      'viz/chart_components/tracker.js',
-      '__internal/viz/chart_components/tracker.js',
-    ],
-    importMapKeys: [
-      'viz/chart_components/tracker',
-      '__internal/viz/chart_components/tracker',
-    ],
+    also: ['viz/chart_components/tracker.js'],
   },
   {
     internal: '__internal/viz/components/legend.js',
-    artifacts: [
-      'viz/components/legend.js',
-      '__internal/viz/components/legend.js',
-    ],
-    importMapKeys: [
-      'viz/components/legend',
-      '__internal/viz/components/legend',
-    ],
+    also: ['viz/components/legend.js'],
   },
   {
     internal: '__internal/viz/core/loading_indicator.js',
-    artifacts: [
-      'viz/core/loading_indicator.js',
-      '__internal/viz/core/loading_indicator.js',
-    ],
-    importMapKeys: [
-      'viz/core/loading_indicator',
-      '__internal/viz/core/loading_indicator',
-    ],
+    also: ['viz/core/loading_indicator.js'],
   },
   {
     internal: '__internal/core/localization/ldml/date.parser.js',
-    artifacts: [
-      '__internal/core/localization/ldml/date.parser.js',
+    also: [
       '__internal/core/localization/ldml/dateParserModule.js',
       'common/core/localization/ldml/date.parser.js',
-    ],
-    importMapKeys: [
-      '__internal/core/localization/ldml/date.parser',
-      '__internal/core/localization/ldml/dateParserModule',
-      'common/core/localization/ldml/date.parser',
     ],
   },
   {
     internal: '__internal/events/m_visibility_change.js',
-    artifacts: [
-      'common/core/events/visibility_change.js',
-      '__internal/events/m_visibility_change.js',
-    ],
-    importMapKeys: [
-      'common/core/events/visibility_change',
-      '__internal/events/m_visibility_change',
-    ],
+    also: ['common/core/events/visibility_change.js'],
     apiFromDefault: true,
   },
   {
     internal: 'core/errors.js',
-    artifacts: ['core/errors.js'],
-    importMapKeys: ['core/errors'],
     apiFromDefault: true,
   },
   {
     internal: 'ui/widget/ui.errors.js',
-    artifacts: ['ui/widget/ui.errors.js'],
-    importMapKeys: ['ui/widget/ui.errors'],
     apiFromDefault: true,
   },
   {
     internal: '__internal/core/m_template_manager.js',
-    artifacts: ['__internal/core/m_template_manager.js'],
-    importMapKeys: ['__internal/core/m_template_manager'],
     apiFromDefault: true,
   },
   {
     // Real named exports live in palette.js; paletteModule.js is only
     // `import * as PaletteModule from './palette'; export default PaletteModule`.
     internal: '__internal/viz/palette.js',
-    artifacts: [
-      '__internal/viz/palette.js',
-      '__internal/viz/paletteModule.js',
-    ],
-    importMapKeys: [
-      'viz/palette',
-      '__internal/viz/paletteModule',
-      '__internal/viz/palette',
-    ],
+    also: ['__internal/viz/paletteModule.js'],
+    extraKeys: ['viz/palette'],
   },
   {
     internal: '__internal/common/core/animation/frame.js',
-    artifacts: [
+    also: [
       'common/core/animation/frame.js',
-      '__internal/common/core/animation/frame.js',
       '__internal/common/core/animation/frameModule.js',
     ],
-    importMapKeys: [
-      'common/core/animation/frame',
-      '__internal/common/core/animation/frame',
-      'animation/frame',
-      '__internal/common/core/animation/frameModule',
-    ],
+    extraKeys: ['animation/frame'],
   },
 ];
 
 /** Hand-written shims that stay (custom composition / non-generic). */
-const HAND_WRITTEN_ARTIFACT_FACADES: readonly { suffix: string; shimUrl: string }[] = [
+const HAND_WRITTEN_ESM_FACADES: readonly { esmPath: string; shimUrl: string }[] = [
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/__internal/ui/themes.js',
+    esmPath: '__internal/ui/themes.js',
     shimUrl: '/packages/devextreme/testing/helpers/esm-shims/themes.js',
   },
   {
-    suffix: '/artifacts/transpiled-esm-npm/esm/ui/themes.js',
+    esmPath: 'ui/themes.js',
     shimUrl: '/packages/devextreme/testing/helpers/esm-shims/themes.js',
   },
 ];
 
+/** Index keys are ESM-relative (`__internal/viz/…`, `exporter.js`, …). */
 const facadeIndex = new Map<string, AutoMutableFacadeEntry>();
 let indexBuiltForRoot: string | null = null;
 
 function normalizeUrlPath(relativeUrlPath: string): string {
   return relativeUrlPath.replace(/\\/g, '/').replace(/^\/+/, '');
+}
+
+function stripJs(filePath: string): string {
+  return filePath.endsWith('.js') ? filePath.slice(0, -3) : filePath;
+}
+
+function groupArtifacts(group: MutableModuleGroup): readonly string[] {
+  return group.also ? [group.internal, ...group.also] : [group.internal];
+}
+
+function groupImportMapKeys(group: MutableModuleGroup): string[] {
+  const keys = new Set<string>();
+  for (const artifact of groupArtifacts(group)) {
+    keys.add(stripJs(artifact));
+  }
+  for (const key of group.extraKeys ?? []) {
+    keys.add(key);
+  }
+  return [...keys];
+}
+
+function artifactForImportMapKey(group: MutableModuleGroup, key: string): string {
+  const match = groupArtifacts(group).find(
+    (item) => item === key || item === `${key}.js` || stripJs(item) === key,
+  ) ?? group.internal;
+  return match.endsWith('.js') ? match : `${match}.js`;
+}
+
+/** Strip workspace / URL prefixes down to a path under `…/esm/`. */
+function toEsmRelativePath(urlOrPath: string): string {
+  const normalized = normalizeUrlPath(urlOrPath);
+  const idx = normalized.indexOf(ESM_ARTIFACT_PREFIX);
+  if (idx >= 0) {
+    return normalized.slice(idx + ESM_ARTIFACT_PREFIX.length);
+  }
+  return normalized;
 }
 
 function stripComments(source: string): string {
@@ -284,7 +219,7 @@ function stripComments(source: string): string {
  *   import * as X from '...';
  *   export default X;
  */
-export function parseNamespaceDefaultReexport(
+function parseNamespaceDefaultReexport(
   source: string,
 ): { binding: string; from: string } | null {
   const cleaned = stripComments(source).trim();
@@ -320,7 +255,7 @@ function addNamedExportFromClause(names: Set<string>, part: string): void {
   }
 }
 
-export function collectEsmExportNames(source: string): string[] {
+function collectEsmExportNames(source: string): string[] {
   const names = new Set<string>();
 
   for (const match of source.matchAll(
@@ -389,35 +324,29 @@ function buildGlobalKey(internalRelativePath: string): string {
   return `__dxAutoMutable_${hint}_${digest}`;
 }
 
-function resolveDebugSetTarget(
+function findExportBySuffix(
   suffix: string,
   exportNames: string[],
-  debugSetName: string,
-): string {
-  // Prefer exact export match; fall back to case-insensitive
-  // (`DEBUG_set_title` → `Title`, `DEBUG_set_tooltip` → `Tooltip`).
-  const exact = exportNames.find((n) => n === suffix);
-  if (exact) {
-    return exact;
-  }
-  const ci = exportNames.find(
-    (n) => n !== debugSetName && n.toLowerCase() === suffix.toLowerCase(),
-  );
-  return ci ?? suffix;
+  excludeName: string,
+): string | undefined {
+  return exportNames.find((n) => n === suffix)
+    ?? exportNames.find(
+      (n) => n !== excludeName && n.toLowerCase() === suffix.toLowerCase(),
+    );
 }
 
 /**
  * Map test-only setters onto the export they replace on the mutable api.
  * - `DEBUG_set_title` → `Title`
- * - `_setLegend` → `Legend` (funnel/sankey legend stubs)
+ * - `_setLegend` → `Legend`
  */
-function resolveMutableSetterTarget(
+function resolveSetterTarget(
   setterName: string,
   exportNames: string[],
 ): string | null {
   const debugMatch = /^DEBUG_set_(.+)$/.exec(setterName);
   if (debugMatch) {
-    return resolveDebugSetTarget(debugMatch[1], exportNames, setterName);
+    return findExportBySuffix(debugMatch[1], exportNames, setterName) ?? debugMatch[1];
   }
 
   const setMatch = /^_set([A-Z].*)$/.exec(setterName);
@@ -425,14 +354,7 @@ function resolveMutableSetterTarget(
     return null;
   }
 
-  const suffix = setMatch[1];
-  const exact = exportNames.find((n) => n === suffix);
-  if (exact) {
-    return exact;
-  }
-  return exportNames.find(
-    (n) => n !== setterName && n.toLowerCase() === suffix.toLowerCase(),
-  ) ?? null;
+  return findExportBySuffix(setMatch[1], exportNames, setterName) ?? null;
 }
 
 function buildDebugSets(
@@ -442,7 +364,7 @@ function buildDebugSets(
   const exportNames = [...wrapExportNames, ...forwardExportNames];
   const debugSets: Record<string, string> = {};
   for (const name of exportNames) {
-    const target = resolveMutableSetterTarget(name, exportNames);
+    const target = resolveSetterTarget(name, exportNames);
     if (target) {
       debugSets[name] = target;
     }
@@ -460,8 +382,6 @@ function isFunctionLikeExport(name: string, internalSource: string): boolean {
   const cjsAssigned = new RegExp(
     `exports\\.${name}\\s*=\\s*(?:async\\s+)?function\\b`,
   );
-  // e.g. `export const triggerResizeEvent = triggerVisibilityChangeEvent('dxresize')`
-  // — RHS is a call/identifier producing a function, not a data literal.
   // Put optional whitespace inside the negative lookahead so `\s*` cannot
   // backtrack past a space and then accept `export const plugin = { ... }`.
   const constNonData = new RegExp(
@@ -477,6 +397,19 @@ function isFunctionLikeExport(name: string, internalSource: string): boolean {
     || cjsNonData.test(internalSource);
 }
 
+function shouldWrapExport(name: string, internalSource: string): boolean {
+  // SCREAMING_SNAKE constants (PANE_PADDING) must stay value forwards.
+  const isScreamingSnake = /^[A-Z][A-Z0-9_]*$/.test(name);
+  const isPascalCase = /^[A-Z]/.test(name) && !isScreamingSnake;
+  const isTestCtorAlias = /^_TESTS_[A-Z]/.test(name);
+  const isTestStubHelper = /_TESTS_.*stub|_stub_/i.test(name);
+  return isPascalCase
+    || isTestCtorAlias
+    || isTestStubHelper
+    || RESERVED_EXPORT_NAMES.has(name)
+    || isFunctionLikeExport(name, internalSource);
+}
+
 function classifyExportNames(
   exportNames: string[],
   internalSource: string,
@@ -485,26 +418,13 @@ function classifyExportNames(
   const forwardExportNames: string[] = [];
 
   exportNames.forEach((name) => {
-    // Test setters that replace another export on the mutable api must not
-    // go through wrapCtor — they need createMutableApi's DEBUG/_set wiring.
-    if (name.startsWith('DEBUG_set_') || resolveMutableSetterTarget(name, exportNames)) {
+    // Setters that replace another export must use createMutableApi wiring.
+    if (resolveSetterTarget(name, exportNames)) {
       forwardExportNames.push(name);
       return;
     }
 
-    // PascalCase ctors (Title, Renderer) — but not SCREAMING_SNAKE
-    // constants like PANE_PADDING (number); wrapCtor turns those into NaN in math.
-    const isScreamingSnake = /^[A-Z][A-Z0-9_]*$/.test(name);
-    const isPascalCase = /^[A-Z]/.test(name) && !isScreamingSnake;
-    const isTestCtorAlias = /^_TESTS_[A-Z]/.test(name);
-    const isTestStubHelper = /_TESTS_.*stub|_stub_/i.test(name);
-    const wrap = isPascalCase
-      || isTestCtorAlias
-      || isTestStubHelper
-      || RESERVED_EXPORT_NAMES.has(name)
-      || isFunctionLikeExport(name, internalSource);
-
-    if (wrap) {
+    if (shouldWrapExport(name, internalSource)) {
       wrapExportNames.push(name);
     } else {
       forwardExportNames.push(name);
@@ -522,7 +442,7 @@ function emitNamedExport(name: string, expression: string): string {
   return `export const ${name} = ${expression};`;
 }
 
-export function generateAutoMutableFacadeSource(entry: AutoMutableFacadeEntry): string {
+function generateAutoMutableFacadeSource(entry: AutoMutableFacadeEntry): string {
   const originalUrl = `/${entry.internalRelativePath}?dx-original=1`;
   const debugSets = buildDebugSets(entry.wrapExportNames, entry.forwardExportNames);
   const debugSetsLiteral = JSON.stringify(debugSets);
@@ -533,7 +453,7 @@ export function generateAutoMutableFacadeSource(entry: AutoMutableFacadeEntry): 
       (name) => emitNamedExport(name, `wrapCtor(api, '${name}')`),
     ),
     ...entry.forwardExportNames.map((name) => {
-      if (name.startsWith('DEBUG_set_') || /^_set[A-Z]/.test(name)) {
+      if (debugSets[name]) {
         return emitNamedExport(name, `(...args) => api.${name}(...args)`);
       }
       if (name.startsWith('_TESTS_')) {
@@ -553,11 +473,13 @@ export function generateAutoMutableFacadeSource(entry: AutoMutableFacadeEntry): 
     ].join('\n'),
   );
 
+  const helperImport = `import { createMutableApi, wrapCtor } from '${MUTABLE_FACADE_HELPER_URL}';`;
+
   if (entry.apiFromDefault) {
     return [
       '/* auto-generated mutable facade for QUnit (default-export api) */',
       `import * as originalNs from '${originalUrl}';`,
-      `import { createMutableApi, wrapCtor } from '${MUTABLE_FACADE_HELPER_URL}';`,
+      helperImport,
       '',
       'const original = originalNs.default ?? originalNs;',
       'const api = createMutableApi(',
@@ -575,7 +497,7 @@ export function generateAutoMutableFacadeSource(entry: AutoMutableFacadeEntry): 
   return [
     '/* auto-generated mutable facade for QUnit */',
     `import * as original from '${originalUrl}';`,
-    `import { createMutableApi, wrapCtor } from '${MUTABLE_FACADE_HELPER_URL}';`,
+    helperImport,
     '',
     `const api = createMutableApi(original, '${entry.globalKey}', ${debugSetsLiteral});`,
     ...liveApiBindings,
@@ -586,12 +508,8 @@ export function generateAutoMutableFacadeSource(entry: AutoMutableFacadeEntry): 
   ].join('\n');
 }
 
-function registerFacadePaths(
-  publicRelativePath: string,
-  entry: AutoMutableFacadeEntry,
-): void {
-  facadeIndex.set(normalizeUrlPath(publicRelativePath), entry);
-  facadeIndex.set(normalizeUrlPath(entry.internalRelativePath), entry);
+function registerEsmArtifact(esmRelativePath: string, entry: AutoMutableFacadeEntry): void {
+  facadeIndex.set(toEsmRelativePath(esmRelativePath), entry);
 }
 
 function readTextFileOrNull(filePath: string): string | null {
@@ -656,8 +574,8 @@ function tryRegisterNamespaceDefaultFile(
     return null;
   }
 
-  const publicRelativePath = toWorkspaceRelativePath(workspaceRoot, absoluteFilePath);
-  registerFacadePaths(publicRelativePath, entry);
+  registerEsmArtifact(toWorkspaceRelativePath(workspaceRoot, absoluteFilePath), entry);
+  registerEsmArtifact(entry.internalRelativePath, entry);
   return entry;
 }
 
@@ -699,9 +617,8 @@ function registerForcedMutableGroups(workspaceRoot: string): void {
       return;
     }
 
-    const paths = new Set<string>([group.internal, ...group.artifacts]);
-    paths.forEach((artifact) => {
-      registerFacadePaths(`${ESM_ARTIFACT_PREFIX}${artifact}`, entry);
+    groupArtifacts(group).forEach((artifact) => {
+      registerEsmArtifact(artifact, entry);
     });
   });
 }
@@ -736,15 +653,8 @@ export function buildMutableModuleImportMapEntries(esmRootUrl: string): Record<s
   const entries: Record<string, string> = {};
 
   MUTABLE_MODULE_GROUPS.forEach((group) => {
-    const keys = group.importMapKeys
-      ?? group.artifacts.map((artifact) => artifact.replace(/\.js$/, ''));
-
-    keys.forEach((key) => {
-      const artifact = group.artifacts.find(
-        (item) => item === key || item === `${key}.js` || item.replace(/\.js$/, '') === key,
-      ) ?? group.internal;
-      const urlPath = artifact.endsWith('.js') ? artifact : `${artifact}.js`;
-      entries[key] = `${esmRootUrl}/${urlPath}`;
+    groupImportMapKeys(group).forEach((key) => {
+      entries[key] = `${esmRootUrl}/${artifactForImportMapKey(group, key)}`;
     });
   });
 
@@ -752,29 +662,9 @@ export function buildMutableModuleImportMapEntries(esmRootUrl: string): Record<s
 }
 
 export function findHandWrittenMutableFacade(relativeUrlPath: string): string | null {
-  const normalized = normalizeUrlPath(relativeUrlPath);
-  const withLeadingSlash = normalized.startsWith('/') ? normalized : `/${normalized}`;
-  const match = HAND_WRITTEN_ARTIFACT_FACADES.find((entry) => (
-    withLeadingSlash.endsWith(entry.suffix)
-    || normalized.endsWith(entry.suffix.replace(/^\//, ''))
-  ));
+  const esmPath = toEsmRelativePath(relativeUrlPath);
+  const match = HAND_WRITTEN_ESM_FACADES.find((entry) => entry.esmPath === esmPath);
   return match?.shimUrl ?? null;
-}
-
-function artifactPathMatches(normalizedUrl: string, registeredKey: string): boolean {
-  if (normalizedUrl === registeredKey) {
-    return true;
-  }
-
-  const strip = (value: string): string => {
-    const idx = value.indexOf(ESM_ARTIFACT_PREFIX);
-    return idx >= 0 ? value.slice(idx + ESM_ARTIFACT_PREFIX.length) : value.replace(/^\/+/, '');
-  };
-
-  const urlRel = strip(normalizedUrl);
-  const keyRel = strip(registeredKey);
-  // Require a path boundary so `excel_exporter.js` does not match `exporter.js`.
-  return urlRel === keyRel;
 }
 
 /**
@@ -788,17 +678,8 @@ export function tryBuildAutoMutableFacade(
 ): string | null {
   ensureAutoMutableFacadeIndex(workspaceRoot);
 
-  const normalized = normalizeUrlPath(relativeUrlPath);
-  let entry = facadeIndex.get(normalized);
-
-  if (!entry) {
-    for (const [key, value] of facadeIndex.entries()) {
-      if (artifactPathMatches(normalized, key)) {
-        entry = value;
-        break;
-      }
-    }
-  }
+  const esmKey = toEsmRelativePath(relativeUrlPath);
+  let entry = facadeIndex.get(esmKey);
 
   if (!entry) {
     const registered = tryRegisterNamespaceDefaultFile(workspaceRoot, absoluteFilePath);
