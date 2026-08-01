@@ -406,6 +406,35 @@ function resolveDebugSetTarget(
   return ci ?? suffix;
 }
 
+/**
+ * Map test-only setters onto the export they replace on the mutable api.
+ * - `DEBUG_set_title` → `Title`
+ * - `_setLegend` → `Legend` (funnel/sankey legend stubs)
+ */
+function resolveMutableSetterTarget(
+  setterName: string,
+  exportNames: string[],
+): string | null {
+  const debugMatch = /^DEBUG_set_(.+)$/.exec(setterName);
+  if (debugMatch) {
+    return resolveDebugSetTarget(debugMatch[1], exportNames, setterName);
+  }
+
+  const setMatch = /^_set([A-Z].*)$/.exec(setterName);
+  if (!setMatch) {
+    return null;
+  }
+
+  const suffix = setMatch[1];
+  const exact = exportNames.find((n) => n === suffix);
+  if (exact) {
+    return exact;
+  }
+  return exportNames.find(
+    (n) => n !== setterName && n.toLowerCase() === suffix.toLowerCase(),
+  ) ?? null;
+}
+
 function buildDebugSets(
   wrapExportNames: string[],
   forwardExportNames: string[],
@@ -413,10 +442,9 @@ function buildDebugSets(
   const exportNames = [...wrapExportNames, ...forwardExportNames];
   const debugSets: Record<string, string> = {};
   for (const name of exportNames) {
-    const match = /^DEBUG_set_(.+)$/.exec(name);
-    if (match) {
-      const [, suffix] = match;
-      debugSets[name] = resolveDebugSetTarget(suffix, exportNames, name);
+    const target = resolveMutableSetterTarget(name, exportNames);
+    if (target) {
+      debugSets[name] = target;
     }
   }
   return debugSets;
@@ -457,7 +485,9 @@ function classifyExportNames(
   const forwardExportNames: string[] = [];
 
   exportNames.forEach((name) => {
-    if (name.startsWith('DEBUG_set_')) {
+    // Test setters that replace another export on the mutable api must not
+    // go through wrapCtor — they need createMutableApi's DEBUG/_set wiring.
+    if (name.startsWith('DEBUG_set_') || resolveMutableSetterTarget(name, exportNames)) {
       forwardExportNames.push(name);
       return;
     }
@@ -503,7 +533,7 @@ export function generateAutoMutableFacadeSource(entry: AutoMutableFacadeEntry): 
       (name) => emitNamedExport(name, `wrapCtor(api, '${name}')`),
     ),
     ...entry.forwardExportNames.map((name) => {
-      if (name.startsWith('DEBUG_set_')) {
+      if (name.startsWith('DEBUG_set_') || /^_set[A-Z]/.test(name)) {
         return emitNamedExport(name, `(...args) => api.${name}(...args)`);
       }
       if (name.startsWith('_TESTS_')) {
