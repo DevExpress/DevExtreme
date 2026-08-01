@@ -389,16 +389,34 @@ function buildGlobalKey(internalRelativePath: string): string {
   return `__dxAutoMutable_${hint}_${digest}`;
 }
 
+function resolveDebugSetTarget(
+  suffix: string,
+  exportNames: string[],
+  debugSetName: string,
+): string {
+  // Prefer exact export match; fall back to case-insensitive
+  // (`DEBUG_set_title` → `Title`, `DEBUG_set_tooltip` → `Tooltip`).
+  const exact = exportNames.find((n) => n === suffix);
+  if (exact) {
+    return exact;
+  }
+  const ci = exportNames.find(
+    (n) => n !== debugSetName && n.toLowerCase() === suffix.toLowerCase(),
+  );
+  return ci ?? suffix;
+}
+
 function buildDebugSets(
   wrapExportNames: string[],
   forwardExportNames: string[],
 ): Record<string, string> {
+  const exportNames = [...wrapExportNames, ...forwardExportNames];
   const debugSets: Record<string, string> = {};
-  for (const name of [...wrapExportNames, ...forwardExportNames]) {
+  for (const name of exportNames) {
     const match = /^DEBUG_set_(.+)$/.exec(name);
     if (match) {
-      const [, propName] = match;
-      debugSets[name] = propName;
+      const [, suffix] = match;
+      debugSets[name] = resolveDebugSetTarget(suffix, exportNames, name);
     }
   }
   return debugSets;
@@ -416,11 +434,13 @@ function isFunctionLikeExport(name: string, internalSource: string): boolean {
   );
   // e.g. `export const triggerResizeEvent = triggerVisibilityChangeEvent('dxresize')`
   // — RHS is a call/identifier producing a function, not a data literal.
+  // Put optional whitespace inside the negative lookahead so `\s*` cannot
+  // backtrack past a space and then accept `export const plugin = { ... }`.
   const constNonData = new RegExp(
-    `export\\s+(?:const|let|var)\\s+${name}\\s*=\\s*(?![{[\\d'"\`\\-]|null\\b|undefined\\b|true\\b|false\\b)`,
+    `export\\s+(?:const|let|var)\\s+${name}\\s*=(?!\\s*(?:[{[\\d'"\`\\-]|null\\b|undefined\\b|true\\b|false\\b))`,
   );
   const cjsNonData = new RegExp(
-    `exports\\.${name}\\s*=\\s*(?![{[\\d'"\`\\-]|null\\b|undefined\\b|true\\b|false\\b)`,
+    `exports\\.${name}\\s*=(?!\\s*(?:[{[\\d'"\`\\-]|null\\b|undefined\\b|true\\b|false\\b))`,
   );
   return functionOrClassPattern.test(internalSource)
     || assigned.test(internalSource)
@@ -442,7 +462,10 @@ function classifyExportNames(
       return;
     }
 
-    const isPascalCase = /^[A-Z]/.test(name);
+    // PascalCase ctors (Title, Renderer) — but not SCREAMING_SNAKE
+    // constants like PANE_PADDING (number); wrapCtor turns those into NaN in math.
+    const isScreamingSnake = /^[A-Z][A-Z0-9_]*$/.test(name);
+    const isPascalCase = /^[A-Z]/.test(name) && !isScreamingSnake;
     const isTestCtorAlias = /^_TESTS_[A-Z]/.test(name);
     const isTestStubHelper = /_TESTS_.*stub|_stub_/i.test(name);
     const wrap = isPascalCase
