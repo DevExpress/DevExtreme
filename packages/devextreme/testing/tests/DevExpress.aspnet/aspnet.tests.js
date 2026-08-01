@@ -18,7 +18,8 @@ import ajaxMock from '../../helpers/ajaxMock.js';
 
 // Templates call DevExpress.aspnet.createComponent / renderComponent.
 // MVC-style templates also expect global `$` (runner calls jQuery.noConflict()).
-window.DevExpress = { aspnet: aspnetModule };
+window.DevExpress = window.DevExpress || {};
+window.DevExpress.aspnet = aspnetModule;
 window.$ = $;
 
 (function($, setTemplateEngine, aspnet, errorsAccessor, ajaxMockAccessor) {
