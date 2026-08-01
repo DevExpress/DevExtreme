@@ -58,7 +58,7 @@ Generates **mutable ESM facades** at request time so QUnit can `sinon.stub` modu
 
 **Two sources of facades:**
 
-1. **`MUTABLE_MODULE_GROUPS`** — explicit list of stub-able modules (animation frame, viz renderer, exporter, …). All aliases share one `globalThis` api; named exports use `wrapCtor` / live forwards. Import map points at the ESM artifact URL; `static.ts` serves the generated facade unless `?dx-original=1`.
+1. **`MUTABLE_MODULE_GROUPS`** ([`mutableModuleGroups.ts`](./lib/mutableModuleGroups.ts)) — explicit list of stub-able modules (animation frame, viz renderer, exporter, …). All aliases share one `globalThis` api; named exports use `wrapCtor` / live forwards. Import map points at the ESM artifact URL; `static.ts` serves the generated facade unless `?dx-original=1`. Codegen lives in `autoMutableFacade.ts`.
 2. **Namespace-default reexports** (`import * as X; export default X`) under `viz/` — discovered automatically.
 
 Hand-written files under `esm-shims/` remain only for **non-generic** cases (themes composition, CSS inject, jquery/knockout globals, vendor stubs).
@@ -74,7 +74,7 @@ export const Foo = wrapCtor(api, 'Foo');
 export default api;
 ```
 
-To stub a new module, add a group entry:
+To stub a new module, add a group entry in [`mutableModuleGroups.ts`](./lib/mutableModuleGroups.ts):
 
 ```ts
 {
@@ -94,7 +94,7 @@ Browser modules that the import map (and/or `static.ts` artifact redirects) subs
 
 **Why they exist:**
 
-- **Stubbing / mutation** — prefer `MUTABLE_MODULE_GROUPS` in `autoMutableFacade.ts` (serve-time generated facades). Keep a hand-written shim only for custom composition (e.g. themes).
+- **Stubbing / mutation** — prefer `MUTABLE_MODULE_GROUPS` in `mutableModuleGroups.ts` (serve-time generated facades via `autoMutableFacade.ts`). Keep a hand-written shim only for custom composition (e.g. themes).
 - **Globals bridge** — e.g. `jquery.js` / `knockout.js` re-export the classic `<script>` globals after `noConflict()`.
 - **CSS plugin imports** — suites still write `import 'fluent_blue_light.css!'`; `*.css.js` shims call `injectStylesheet.js` to append `<link>` tags.
 - **Vendor / interop quirks** — thin adapters (`jspdf_autotable.js`, `tslib.js`, `zod.js`, …) when the stock ESM build is awkward for the runner.
