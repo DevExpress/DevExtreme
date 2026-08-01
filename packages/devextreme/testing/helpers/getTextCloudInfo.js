@@ -1,9 +1,7 @@
 /**
- * Debug-export shim for gauges tests.
- * transpiled-esm-npm base_indicators.js keeps getTextCloudInfo internal.
+ * Geometry helper for gauge text-cloud marker QUnit tests.
+ * Kept out of product ESM (DEBUG-only in source); tests import this directly.
  */
-import * as baseIndicators from '../../../artifacts/transpiled-esm-npm/esm/__internal/viz/gauges/base_indicators.js';
-
 const COEFFICIENTS_MAP = {};
 COEFFICIENTS_MAP['right-bottom'] = COEFFICIENTS_MAP.rb = [0, -1, -1, 0, 0, 1, 1, 0];
 COEFFICIENTS_MAP['bottom-right'] = COEFFICIENTS_MAP.br = [-1, 0, 0, -1, 1, 0, 0, 1];
@@ -52,11 +50,3 @@ export function getTextCloudInfo(options) {
         ],
     };
 }
-
-export const {
-    BaseElement,
-    BaseIndicator,
-    BaseTextCloudMarker,
-} = baseIndicators;
-
-export default baseIndicators;

@@ -1,6 +1,6 @@
 import { Renderer as VizMocksRenderer } from '../../helpers/vizMocks.js';
 import * as linearIndicatorsModule from '__internal/viz/gauges/linear_indicators';
-import { getTextCloudInfo } from '__internal/viz/gauges/base_indicators';
+import { getTextCloudInfo } from '../../helpers/getTextCloudInfo.js';
 import { Translator1D } from '__internal/viz/translators/translator1d';
 
 QUnit.module('TriangleMarker', {

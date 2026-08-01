@@ -343,9 +343,6 @@ export function buildQunitImportMap({
     'material_blue_light.css!': `${SHIMS}/material_blue_light.css.js`,
     'gantt.css!': `${SHIMS}/gantt.css.js`,
 
-    // Debug-export shim (not present on the ESM artifact).
-    '__internal/viz/gauges/base_indicators': `${SHIMS}/base_indicators.js`,
-
     // Auto-mutable modules are provided by buildMutableModuleImportMapEntries above.
     // Hand-written only where composition is custom (themes).
     'viz/core/base_theme_manager': `${ESM_ROOT}/viz/core/base_theme_manager.js`,

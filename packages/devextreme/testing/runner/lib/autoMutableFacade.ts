@@ -37,7 +37,7 @@ interface AutoMutableFacadeEntry {
  * `internal` is wrapped via `?dx-original=1`; `also` aliases share one globalThis api.
  *
  * Keep hand-written shims only for non-generic cases (themes composition,
- * CSS inject, jquery globals, base_indicators debug export, …).
+ * CSS inject, jquery globals, …).
  */
 export interface MutableModuleGroup {
   /** Path under `artifacts/transpiled-esm-npm/esm/`. */

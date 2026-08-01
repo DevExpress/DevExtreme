@@ -61,7 +61,7 @@ Generates **mutable ESM facades** at request time so QUnit can `sinon.stub` modu
 1. **`MUTABLE_MODULE_GROUPS`** — explicit list of stub-able modules (animation frame, viz renderer, exporter, …). All aliases share one `globalThis` api; named exports use `wrapCtor` / live forwards. Import map points at the ESM artifact URL; `static.ts` serves the generated facade unless `?dx-original=1`.
 2. **Namespace-default reexports** (`import * as X; export default X`) under `viz/` — discovered automatically.
 
-Hand-written files under `esm-shims/` remain only for **non-generic** cases (themes composition, CSS inject, jquery/knockout globals, `base_indicators` debug export, vendor stubs).
+Hand-written files under `esm-shims/` remain only for **non-generic** cases (themes composition, CSS inject, jquery/knockout globals, vendor stubs).
 
 Typical generated shape:
 

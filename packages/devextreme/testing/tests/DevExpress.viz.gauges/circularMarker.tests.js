@@ -3,7 +3,7 @@ import {
     Renderer,
 } from '../../helpers/vizMocks.js';
 import * as circularIndicatorsModule from '__internal/viz/gauges/circular_indicators';
-import { getTextCloudInfo } from '__internal/viz/gauges/base_indicators';
+import { getTextCloudInfo } from '../../helpers/getTextCloudInfo.js';
 import { Translator1D } from '__internal/viz/translators/translator1d';
 
 QUnit.module('TriangleMarker', {
