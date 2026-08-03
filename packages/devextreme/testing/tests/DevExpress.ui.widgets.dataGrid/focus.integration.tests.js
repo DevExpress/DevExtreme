@@ -727,7 +727,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(500);
 
         // act
-        dataGrid.getScrollable().scrollTo({ y: 2000 });
+        dataGrid.getScrollable().scrollTo({ y: 2020 });
         this.clock.tick(500);
 
         // assert
