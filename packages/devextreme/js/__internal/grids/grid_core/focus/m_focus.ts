@@ -579,12 +579,14 @@ const data = (Base: ModuleType<DataController>) => class FocusDataControllerExte
         this._updatePageIndexes();
       } else if (isPartialUpdate) {
         this._updateFocusedRowIfNeeded(e, forceUpdateFocusedRow);
-        this._reapplyFocusedRowAfterPartialUpdate(e);
+        // on a partial render the previously focused row may not be re-rendered, so its
+        // focused class survives and two rows look focused; reset the focused row to drop it
+        this._resetStaleFocusedRowAfterPartialUpdate(e);
       }
     }
   }
 
-  private _reapplyFocusedRowAfterPartialUpdate(e: { rowIndices?: number[] }): void {
+  private _resetStaleFocusedRowAfterPartialUpdate(e: { rowIndices?: number[] }): void {
     const focusedRowKey = this.option('focusedRowKey');
 
     if (!isDefined(focusedRowKey)) {
