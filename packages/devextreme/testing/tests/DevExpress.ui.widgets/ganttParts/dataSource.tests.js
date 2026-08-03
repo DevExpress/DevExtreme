@@ -58,10 +58,15 @@ QUnit.module('DataSources', moduleConfig, () => {
         assert.equal(updatedTask.end, dataToUpdate.end, 'new task end is updated');
     });
     test('removing', function(assert) {
-        // explicit height: the treeList is virtual, so all tasks must fit the render window
-        this.createInstance({ ...options.allSourcesOptions, height: 700 });
-        this.instance.option('editing.enabled', true);
-        this.instance.option('selectedRowKey', 3);
+        this.createInstance({
+            ...options.allSourcesOptions,
+            // explicit height: the treeList is virtual, so the inserted task must fit the render window
+            height: 700,
+            selectedRowKey: 3,
+            editing: {
+                enabled: true,
+            },
+        });
         this.clock.tick(10);
 
         const removedTaskId = 3;
@@ -117,10 +122,15 @@ QUnit.module('DataSources', moduleConfig, () => {
             { dataField: 'progress', caption: 'progress' },
             { dataField: 'end', caption: 'End Date' }
         ];
-        // explicit height: the treeList is virtual, so the inserted task must fit the render window
-        this.createInstance({ ...options.allSourcesOptions, height: 700 });
-        this.instance.option('columns', columns);
-        this.instance.option('editing.enabled', true);
+        this.createInstance({
+            ...options.allSourcesOptions,
+            // explicit height: the treeList is virtual, so the inserted task must fit the render window
+            height: 700,
+            columns,
+            editing: {
+                enabled: true,
+            },
+        });
         this.clock.tick(10);
         const taskData = {
             start: new Date('2019-02-21'),
