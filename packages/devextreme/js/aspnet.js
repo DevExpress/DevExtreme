@@ -43,103 +43,15 @@
     ) {
         var templateCompiler = createTemplateCompiler();
         var pendingCreateComponentRoutines = [];
-        // csp handling mode marker: detect | once | csp_only | legacy
-        var cspHandlingMode = setCspHandlingMode();
-        var cspRestricted = null;
-
-        // eslint-disable-next-line no-console
-        console.log('csp handling mode: ' + cspHandlingMode);
-
-        function setCspHandlingMode() {
-            const metaCSPMode = window.document.querySelector(
-                'meta[name="dx-csp-handling-mode"]',
-            )?.content;
-            return metaCSPMode || 'legacy';
-        }
-
-        function readCspDirective(csp, name) {
-            var directives = csp.split(';');
-            for(var i = 0; i < directives.length; i++) {
-                var parts = directives[i].trim().split(/\s+/);
-                if(parts.length && parts[0].toLowerCase() === name) {
-                    return parts.slice(1).join(' ').toLowerCase();
-                }
-            }
-            return null;
-        }
-
-        function canUseFunctionConstructor() {
-            var isFunctionConstructorAllowed = false;
-            try {
-                // eslint-disable-next-line no-new-func
-                new Function('return true');
-                isFunctionConstructorAllowed = true;
-            } catch(e) {
-                // Content Security Policy without 'unsafe-eval' blocks the Function constructor.
-                isFunctionConstructorAllowed = false;
-            }
-            return isFunctionConstructorAllowed;
-        }
-
-        function detectCspRestricted() {
-            var doc = window.document;
-            var scripts = doc.getElementsByTagName('script');
-            for(var i = 0; i < scripts.length; i++) {
-                if(scripts[i].nonce || scripts[i].getAttribute('nonce')) {
-                    return true;
-                }
-            }
-            var meta = doc.querySelectorAll(
-                'meta[http-equiv=\'Content-Security-Policy\' i]',
-            );
-            for(var j = 0; j < meta.length; j++) {
-                var content = meta[j].getAttribute('content') || '';
-                var directive = readCspDirective(content, 'script-src');
-                if(null === directive) {
-                    directive = readCspDirective(content, 'default-src');
-                }
-                if(
-                    null !== directive &&
-                    -1 === directive.indexOf('\'unsafe-eval\'')
-                ) {
-                    return true;
-                }
-            }
-            return false;
-        }
+        var cspNonce = null;
 
         function isCspRestricted() {
-            if(cspRestricted !== null) {
-                return cspRestricted;
-            }
-            switch(cspHandlingMode) {
-                case 'detect':
-                    cspRestricted = detectCspRestricted();
-                    break;
-                case 'csp_only':
-                    cspRestricted = true;
-                    break;
-                case 'once':
-                    cspRestricted = !canUseFunctionConstructor();
-                    break;
-                case 'legacy':
-                default:
-                    cspRestricted = false;
-            }
-            return cspRestricted;
+            return cspNonce !== null;
         }
 
         function compileViaScript(src, code) {
             if(!src || src.tagName !== 'SCRIPT') {
                 return null;
-            }
-            if(isCspRestricted() && !src.nonce) {
-                // eslint-disable-next-line no-console
-                console.warn(
-                    'DevExtreme: template <script> #' +
-                        src.id +
-                        ' has no nonce; the compiled script may be blocked by CSP.',
-                );
             }
             var funcName = src.id.replaceAll('-', '');
             var func =
@@ -210,18 +122,18 @@
                 var code = bag.join('');
                 var src = element[0];
 
-                // with csp_only mode, we always compile via script, and if it fails, we fallback to the text template
                 if(isCspRestricted()) {
                     // might be extracted to a separate function
                     var compiled = compileViaScript(src, code);
                     return compiled !== null ? compiled : text;
                 }
 
-                // fallback to old behavior for legacy mode, or if Function constructor is allowed
+                // fallback to old behavior for legacy mode
                 try {
                     // eslint-disable-next-line no-new-func
                     return new Function('obj', 'encodeHtml', code);
                 } catch(e) {
+                    // might be extracted to a separate function
                     var compiled = compileViaScript(src, code);
                     return compiled !== null ? compiled : text;
                 }
@@ -349,7 +261,9 @@
                 }
             },
 
-            setTemplateEngine: function() {
+            setTemplateEngine: function(nonce) {
+                cspNonce = nonce;
+
                 if(setTemplateEngine) {
                     setTemplateEngine(createTemplateEngine());
                 }
