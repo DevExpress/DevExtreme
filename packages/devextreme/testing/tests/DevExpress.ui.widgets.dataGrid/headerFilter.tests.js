@@ -1678,7 +1678,7 @@ QUnit.module('Header Filter', {
         const $headerFilter = that.headerPanel.element().find('.dx-group-panel-item').first().find('.dx-header-filter');
         assert.equal($headerFilter.length, 1, 'have header filter');
         assert.ok($headerFilter.hasClass('dx-header-filter-empty'), 'has no class dx-header-filter-empty');
-        assert.equal($headerFilter.css('color'), 'rgb(36, 36, 36)', 'color of the header filter should not be accented');
+        assert.equal($headerFilter.css('color'), $headerFilter.parent().css('color'), 'color of the header filter should not be accented');
     });
 
     // T260241
