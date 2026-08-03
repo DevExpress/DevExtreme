@@ -25,8 +25,6 @@ export const baseGrid = {
   showBorders: true,
 };
 
-// Module-local: TypeScript compiles a reference to an exported const into
-// `exports.X`, which is not defined inside a ClientFunction in the browser.
 const HANG_MARKER = '__HANG__';
 const FAIL_MARKER = '__FAIL__';
 const DEFERRED_KEY = '__deferredResponse';
@@ -35,11 +33,8 @@ export const HANG = HANG_MARKER;
 
 export const FAIL = FAIL_MARKER;
 
-// Wraps a response that must stay in flight until resolveAIRequest() is called.
 export const deferred = (response: unknown): unknown => ({ [DEFERRED_KEY]: response });
 
-// The whole test state lives under a single window key: resetAIState replaces it
-// as a whole, so no stale key can leak from one test into the next one.
 export const resetAIState = (): Promise<void> => ClientFunction(
   () => {
     const w = window as any;
@@ -147,7 +142,6 @@ const deferredSelectAllGridOptions = (): any => {
   const store = new w.DevExpress.data.CustomStore({
     key: 'id',
     load(loadOptions: any) {
-      // Paged render load carries `take`; selectAll's all-pages key-load does not.
       if (loadOptions.take !== undefined) {
         const skip = loadOptions.skip ?? 0;
 
@@ -188,7 +182,6 @@ export const createGridWithAIAssistant = async (
   return createWidget('dxDataGrid', aiGridOptions);
 };
 
-// Server-side data source: the same AI plumbing over remoteOperations.
 export const createRemoteGridWithAIAssistant = async (
   remoteData: unknown[],
   base: Record<string, unknown>,
@@ -209,8 +202,6 @@ export const createGridWithoutAIIntegration = async (
   return createWidget('dxDataGrid', noIntegrationGridOptions);
 };
 
-// The all-pages key load that selectAll relies on stays pending until
-// resolveSelectAll() is called, which keeps a command in the execution phase.
 export const createGridWithDeferredSelectAll = async (
   responses: unknown[],
   assistantExtra: Record<string, unknown> = {},
@@ -252,7 +243,6 @@ export const getRequestSchemaCommandNames = ClientFunction(
     .map((branch) => branch.properties.name.enum[0] as string),
 );
 
-// Filled in by an onAIAssistantRequestCreating handler passed through gridExtra.
 export const getRequestCreatingArgs = ClientFunction(
   () => (window as any).__aiState.requestCreatingArgs,
 );

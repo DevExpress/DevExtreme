@@ -4,9 +4,9 @@ const CLASS = {
   button: 'dx-dialog-button',
 };
 
-const BUTTON_INDEX = {
-  decline: 0,
-  confirm: 1,
+const BUTTON_ARIA_LABEL = {
+  decline: 'No',
+  confirm: 'Yes',
 };
 
 export class AIAssistantConfirmDialog {
@@ -21,10 +21,10 @@ export class AIAssistantConfirmDialog {
   }
 
   getConfirmButton(): Button {
-    return new Button(this.getButtons().nth(BUTTON_INDEX.confirm));
+    return new Button(this.getButtons().withAttribute('aria-label', BUTTON_ARIA_LABEL.confirm));
   }
 
   getDeclineButton(): Button {
-    return new Button(this.getButtons().nth(BUTTON_INDEX.decline));
+    return new Button(this.getButtons().withAttribute('aria-label', BUTTON_ARIA_LABEL.decline));
   }
 }
