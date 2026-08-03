@@ -196,7 +196,6 @@ async function runFullTransform(
   await copyResolvedAssets(resolved, options.outDir);
 }
 
-// Deletions are ignored on purpose — gulp-watch left stale output in place too.
 const WATCHED_EVENTS = new Set(['add', 'change']);
 
 function isRelevantSource(
