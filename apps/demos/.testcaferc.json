@@ -10,10 +10,7 @@
   "testExecutionTimeout": 180000,
   "compilerOptions": {
     "typescript": {
-      "options": {
-        "resolveJsonModule": true,
-        "esModuleInterop": true
-      }
+      "configPath": "./tsconfig.json"
     }
   }
 }

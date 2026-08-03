@@ -10,13 +10,24 @@ import temperatures from '../fixtures/temperatureData.json';
 const PADDING_DAYS = 7;
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
+// The demos build these params as M/D/YYYY, which `new Date` parses in an
+// implementation-defined way, so read that shape explicitly. Local midnight
+// matches how the fixture's `2025-04-01T00:00:00` values are parsed.
+const US_DATE = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+
+const parseDate = (raw: string): Date | null => {
+  const usDate = raw.match(US_DATE);
+  const parsed = usDate
+    ? new Date(Number(usDate[3]), Number(usDate[1]) - 1, Number(usDate[2]))
+    : new Date(raw);
+
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+};
+
 const dateParam = (url: string, name: string): Date | null => {
   const match = url.match(new RegExp(`[?&]${name}=([^&]*)`));
-  if (!match) {
-    return null;
-  }
-  const parsed = new Date(decodeURIComponent(match[1]));
-  return Number.isNaN(parsed.getTime()) ? null : parsed;
+
+  return match ? parseDate(decodeURIComponent(match[1])) : null;
 };
 
 const shiftDays = (date: Date, days: number): Date => new Date(date.getTime() + days * MS_PER_DAY);
