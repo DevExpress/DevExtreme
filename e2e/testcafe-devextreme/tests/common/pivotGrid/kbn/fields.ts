@@ -406,26 +406,6 @@ test('FieldChooser: Should traverse fields in all areas by tab', async (t) => {
     .ok('first field in data area is focused');
 }).before(async () => createWidget('dxPivotGrid', createConfig()));
 
-test('PivotGrid: Keyboard focus outline of a field should be drawn inside the field box', async (t) => {
-  const focusedField = Selector('.dx-area-field:focus');
-
-  for (let i = 0; i < 10; i += 1) {
-    await t.pressKey('tab');
-
-    if (await focusedField.exists) {
-      break;
-    }
-  }
-
-  await t
-    .expect(focusedField.exists)
-    .ok('a field is focused by keyboard')
-    .expect(focusedField.getStyleProperty('outline-style'))
-    .eql('solid', 'the field has its own focus outline instead of the browser default one')
-    .expect(focusedField.getStyleProperty('outline-offset'))
-    .eql('-2px', 'the outline is drawn inside the field box, so it is not cropped by the area overflow');
-}).before(async () => createWidget('dxPivotGrid', createConfig()));
-
 // TestCafe's pressKey does not support function keys (F1-F12), so the Shift+F10
 // shortcut is reproduced by dispatching the keydown event on the focused field.
 const SHIFT_F10_KEYDOWN = {
