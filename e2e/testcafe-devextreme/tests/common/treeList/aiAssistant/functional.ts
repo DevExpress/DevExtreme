@@ -1,12 +1,15 @@
 /* eslint-disable no-underscore-dangle */
-import { ClientFunction } from 'testcafe';
 import TreeList from 'devextreme-testcafe-models/treeList';
 import { createWidget } from '../../../../helpers/createWidget';
-import url from '../../../../helpers/getPageUrl';
+import {
+  AI_INTEGRATION_PAGE,
+  GRID_SELECTOR,
+  HANG,
+  getRequestSchemaCommandNames,
+  resetAIState,
+  setupAIState,
+} from '../../../dataGrid/common/aiAssistant/testHelpers';
 
-const GRID_SELECTOR = '#container';
-const AI_INTEGRATION_PAGE = url(__dirname, '../../../container-ai-integration.html');
-const PENDING = '__pending__';
 const hierarchyRows = [
   {
     id: 1, parentId: 0, name: 'Alice', value: 30,
@@ -22,47 +25,7 @@ const hierarchyRows = [
   },
 ];
 
-const getSchemaCommandNames = ClientFunction(() => ((window as any).__aiRequests[0]
-  .data.responseSchema.properties.actions.items.anyOf as any[])
-  .map((branch) => branch.properties.name.enum[0]));
-
-const setupAIState = ClientFunction((base: Record<string, unknown>, responses: unknown[]) => {
-  (window as any).__aiBase = base;
-  (window as any).__aiResponses = responses;
-  (window as any).__aiCallCount = 0;
-  (window as any).__aiRequests = [];
-});
-
-const aiTreeListOptions = (): any => ({
-  ...(window as any).__aiBase,
-  aiAssistant: {
-    enabled: true,
-    aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-      sendRequest(params: any) {
-        const w = window as any;
-
-        w.__aiRequests.push(params);
-
-        const response = w.__aiResponses[w.__aiCallCount];
-
-        w.__aiCallCount += 1;
-
-        if (response === '__pending__') {
-          return { promise: new Promise(() => {}), abort: (): void => {} };
-        }
-
-        if (response === undefined) {
-          return {
-            promise: Promise.reject(new Error('Unexpected AI call')),
-            abort: (): void => {},
-          };
-        }
-
-        return { promise: Promise.resolve(response), abort: (): void => {} };
-      },
-    }),
-  },
-});
+const aiTreeListOptions = (): any => (window as any).__aiState.gridOptions();
 
 const treeListBase = (
   overrides: Record<string, unknown> = {},
@@ -80,7 +43,8 @@ const createTreeListWithAIAssistant = async (
   base: Record<string, unknown>,
   responses: unknown[],
 ): Promise<void> => {
-  await setupAIState(base, responses);
+  await resetAIState();
+  await setupAIState({ base, responses });
 
   return createWidget('dxTreeList', aiTreeListOptions);
 };
@@ -105,7 +69,7 @@ test('Toolbar button, popup and chat behave like DataGrid (sorting)', async (t) 
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
   await t.expect(treeList.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createTreeListWithAIAssistant(treeListBase(), [
   { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
@@ -125,7 +89,7 @@ test('Searching behaves like DataGrid', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
   await t.expect(treeList.apiOption('searchPanel.text')).eql('Bob');
 }).before(async () => createTreeListWithAIAssistant(treeListBase(), [
   { actions: [{ name: 'searching', args: { text: 'Bob' } }] },
@@ -145,7 +109,7 @@ test('Paging (pageSize) behaves like DataGrid', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
   await t.expect(treeList.apiOption('paging.pageSize')).eql(50);
 }).before(async () => createTreeListWithAIAssistant(
   treeListBase({ paging: { enabled: true, pageSize: 10 } }),
@@ -166,7 +130,7 @@ test('Column visibility behaves like DataGrid', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
   await t.expect(treeList.apiColumnOption('value', 'visible')).eql(false);
 }).before(async () => createTreeListWithAIAssistant(
   treeListBase({ columnChooser: { enabled: true } }),
@@ -187,7 +151,7 @@ test('Column reorder behaves like DataGrid', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
   await t.expect(treeList.apiColumnOption('value', 'visibleIndex')).eql(0);
   await t.expect(treeList.apiColumnOption('name', 'visibleIndex')).eql(1);
 }).before(async () => createTreeListWithAIAssistant(
@@ -209,7 +173,7 @@ test('Column pinning behaves like DataGrid', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
   await t.expect(treeList.apiColumnOption('value', 'fixed')).eql(true);
   await t.expect(treeList.apiColumnOption('value', 'fixedPosition')).eql('left');
 }).before(async () => createTreeListWithAIAssistant(
@@ -236,7 +200,7 @@ test('Column resize behaves like DataGrid', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
   await t.expect(treeList.apiColumnOption('value', 'width')).eql(250);
 }).before(async () => createTreeListWithAIAssistant(
   treeListBase({ allowColumnResizing: true }),
@@ -257,7 +221,7 @@ test('Selection (selectByKeys) behaves like DataGrid', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
   await t.expect(treeList.apiOption('selectedRowKeys')).eql([2]);
 }).before(async () => createTreeListWithAIAssistant(
   treeListBase({ selection: { mode: 'multiple', recursive: false } }),
@@ -278,7 +242,7 @@ test('Row focusing (focusRowByKey) behaves like DataGrid', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
   await t.expect(treeList.apiOption('focusedRowKey')).eql(2);
 }).before(async () => createTreeListWithAIAssistant(
   treeListBase({ focusedRowEnabled: true }),
@@ -300,7 +264,7 @@ test('Error paths behave like DataGrid (invalid response)', async (t) => {
 
   await t.expect(aiChat.getErrorMessages().count).eql(1);
   await t.expect(aiChat.getSuccessMessages().count).eql(0);
-  await t.expect(aiChat.getActionItems(0).count).eql(0);
+  await t.expect(aiChat.getAIMessage(0).getActionItems().count).eql(0);
   await t.expect(treeList.apiColumnOption('name', 'sortOrder')).notOk();
 }).before(async () => createTreeListWithAIAssistant(treeListBase(), [
   { actions: null },
@@ -320,9 +284,9 @@ test('In-flight lock behaves like DataGrid', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getPendingMessages().count).eql(1);
-  await t.expect(aiChat.isInputDisabled()).ok();
-  await t.expect(aiChat.isClearChatDisabled()).ok();
-}).before(async () => createTreeListWithAIAssistant(treeListBase(), [PENDING]));
+  await t.expect(aiChat.getTextArea().isDisabled).ok();
+  await t.expect(aiChat.getClearChatButton().isDisabled).ok();
+}).before(async () => createTreeListWithAIAssistant(treeListBase(), [HANG]));
 
 test('grouping command is absent from the TreeList response schema', async (t) => {
   const treeList = new TreeList(GRID_SELECTOR);
@@ -339,7 +303,7 @@ test('grouping command is absent from the TreeList response schema', async (t) =
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
 
-  const commandNames = await getSchemaCommandNames();
+  const commandNames = await getRequestSchemaCommandNames(0);
 
   await t.expect(commandNames).contains('sorting');
   await t.expect(commandNames).notContains('grouping');
@@ -363,7 +327,7 @@ test('summary commands are absent from the TreeList response schema', async (t) 
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
 
-  const commandNames = await getSchemaCommandNames();
+  const commandNames = await getRequestSchemaCommandNames(0);
 
   await t.expect(commandNames).contains('sorting');
   await t.expect(commandNames).notContains('summary');
@@ -386,7 +350,7 @@ test('Filtering applies on hierarchical data', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
   await t.expect(treeList.apiOption('filterValue')).eql(['value', '>', 15]);
 }).before(async () => createTreeListWithAIAssistant(treeListBase(), [
   {
@@ -421,7 +385,7 @@ test('Sorting keeps nested children grouped under their parent', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
   await t.expect(treeList.apiColumnOption('value', 'sortOrder')).eql('desc');
   await t.expect(treeList.getDataCell(0, 1).element.textContent).eql('10');
   await t.expect(treeList.getDataCell(1, 1).element.textContent).eql('5');
@@ -461,7 +425,7 @@ test('Selecting a parent row applies per TreeList selection rules', async (t) =>
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
   await t.expect(treeList.apiOption('selectedRowKeys')).eql([1]);
 }).before(async () => createTreeListWithAIAssistant(
   treeListBase({ selection: { mode: 'multiple', recursive: false } }),
