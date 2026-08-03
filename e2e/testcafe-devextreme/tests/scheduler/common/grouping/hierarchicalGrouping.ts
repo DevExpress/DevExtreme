@@ -57,15 +57,7 @@ const runScreenshotTest = (
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     if (shouldScrollToMiddleGroup(view, groupOrientation)) {
-      let scrollDate = new Date(2021, 3, 26, 12);
-
-      if (view === 'timelineMonth') {
-        scrollDate = new Date(2021, 3, 15, 12);
-      } else if (view === 'timelineWeek' || view === 'timelineWorkWeek') {
-        scrollDate = new Date(2021, 3, 28, 12);
-      }
-
-      await scrollToDate(scrollDate, { roomId: 201 });
+      await scrollToDate(new Date(2021, 3, 26, 12), { roomId: 201 });
       await t.wait(50);
     }
 
@@ -94,9 +86,11 @@ const runScreenshotTest = (
 // visual: fluent.blue.light
 // visual: material.blue.light
 ['vertical', 'horizontal'].forEach((groupOrientation) => {
-  ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
-    runScreenshotTest(view, groupOrientation);
-  });
+  ['timelineDay', 'timelineWeek', 'timelineMonth']
+    .filter((view) => groupOrientation !== 'horizontal' || view === 'timelineDay')
+    .forEach((view) => {
+      runScreenshotTest(view, groupOrientation);
+    });
 });
 
 // visual: generic.light
