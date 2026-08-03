@@ -102,6 +102,7 @@ export default [
           'dxo',
           'jsx',
           'luxon',
+          'onopen',
           'sanitizer',
           'rehype',
           'timestamps',
