@@ -59,9 +59,11 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
       onShown: this.onShown.bind(this),
       contentTemplate: this.getContentTemplate(dataList),
       wrapperAttr: { class: APPOINTMENT_TOOLTIP_WRAPPER_CLASS },
+      tabFocusLoopEnabled: this.extraOptions?.tabFocusLoopEnabled,
       // eslint-disable-next-line @typescript-eslint/naming-convention
       _popoverContentRole: 'dialog',
-      tabFocusLoopEnabled: this.extraOptions?.tabFocusLoopEnabled,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      _preventDialogContainerFocus: true,
     }) as Tooltip;
 
     tooltip.setAria({
