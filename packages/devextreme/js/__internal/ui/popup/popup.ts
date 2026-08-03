@@ -783,9 +783,10 @@ class Popup<
     const titleId = isLabelRequired ? new Guid().toString() : null;
     const isLabelAttributeSet = this._topToolbar?.setLabelAttribute('id', titleId);
 
-    this.$overlayContent().attr(
-      'aria-labelledby',
+    this.setAria(
+      'labelledby',
       isLabelRequired && isLabelAttributeSet ? titleId : null,
+      this.$overlayContent(),
     );
   }
 

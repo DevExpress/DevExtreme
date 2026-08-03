@@ -735,9 +735,8 @@ class ToolbarBase<
   setLabelAttribute(
     name: string,
     value: string | number | boolean | null = null,
-    elementOrder = 0,
   ): boolean {
-    const $label = this.$element().find(`.${TOOLBAR_LABEL_CLASS}`).eq(elementOrder);
+    const $label = this.$element().find(`.${TOOLBAR_LABEL_CLASS}`).eq(0);
 
     if (!$label.length) {
       return false;
