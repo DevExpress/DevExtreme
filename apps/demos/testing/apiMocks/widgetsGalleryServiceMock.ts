@@ -7,6 +7,11 @@ import { diagramEmployeesHandler } from './handlers/diagramEmployees';
 import { temperatureDataHandler } from './handlers/temperatureData';
 import { listDataHandler } from './handlers/listData';
 import { treeViewPlainDataHandler } from './handlers/treeViewPlainData';
+import {
+  fileManagerImagesHandler,
+  fileManagerDbHandler,
+  fileManagerFileSystemHandler,
+} from './handlers/fileManager';
 
 // The AI-column endpoint is a cross-origin POST with non-simple headers
 // (api-key, content-type), so the browser issues a CORS preflight. Advertise
@@ -43,6 +48,12 @@ const handlers: MockHandler[] = [
   listDataHandler,
   // GET /api/TreeViewPlainData
   treeViewPlainDataHandler,
+  // GET /api/file-manager-file-system-images?command=GetDirContents
+  fileManagerImagesHandler,
+  // GET /api/file-manager-db?command=GetDirContents
+  fileManagerDbHandler,
+  // GET /api/file-manager-file-system?command=GetDirContents
+  fileManagerFileSystemHandler,
 ];
 
 export const widgetsGalleryServiceMock = handlers.reduce(
