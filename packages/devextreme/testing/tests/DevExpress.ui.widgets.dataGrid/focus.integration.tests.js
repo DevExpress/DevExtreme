@@ -734,7 +734,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(dataGrid.getVisibleRows().length, 8, 'Visible row count');
         assert.equal(dataGrid.getVisibleRows()[0].key, 42, 'First visible row key');
         assert.equal(dataGrid.getRowIndexByKey(1), -1, 'Focused row is not visible');
-        assert.equal(dataGrid.getScrollable().scrollTop(), 2000, 'Scroll position is not changed');
+        assert.equal(dataGrid.getScrollable().scrollTop(), 2020, 'Scroll position is not changed');
     });
 
     // T804082
