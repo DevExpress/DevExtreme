@@ -3169,6 +3169,52 @@ QUnit.module('accessibility', {
 
             assert.strictEqual(document.activeElement, this.$target.get(0), 'focus is restored to target after dispose');
         });
+
+        QUnit.test('Popover should toggle focusStateEnabled and tabFocusLoopEnabled when changing toolbarItems at runtime', function(assert) {
+            const instance = new Popover(this.$element, {
+                target: this.$target,
+                toolbarItems: [],
+                visible: false,
+            });
+
+            instance.show();
+            this.clock.tick(0);
+
+            assert.strictEqual(instance.option('focusStateEnabled'), false, 'initially focusStateEnabled is false');
+            assert.strictEqual(instance.option('tabFocusLoopEnabled'), false, 'initially tabFocusLoopEnabled is false');
+
+            instance.option('toolbarItems', [{ text: 'OK' }]);
+            this.clock.tick(0);
+
+            assert.strictEqual(instance.option('focusStateEnabled'), true, 'focusStateEnabled becomes true when toolbarItems is added');
+            assert.strictEqual(instance.option('tabFocusLoopEnabled'), true, 'tabFocusLoopEnabled becomes true when toolbarItems is added');
+
+            instance.option('toolbarItems', []);
+            this.clock.tick(0);
+
+            assert.strictEqual(instance.option('focusStateEnabled'), false, 'focusStateEnabled becomes false when toolbarItems is removed');
+            assert.strictEqual(instance.option('tabFocusLoopEnabled'), false, 'tabFocusLoopEnabled becomes false when toolbarItems is removed');
+        });
+
+        QUnit.test('Popover should not change focusStateEnabled and tabFocusLoopEnabled when _preventDialogContainerFocus is true', function(assert) {
+            const instance = new Popover(this.$element, {
+                target: this.$target,
+                _preventDialogContainerFocus: true,
+                focusStateEnabled: false,
+                tabFocusLoopEnabled: false,
+                toolbarItems: [],
+                visible: false,
+            });
+
+            instance.show();
+            this.clock.tick(0);
+
+            instance.option('toolbarItems', [{ text: 'OK' }]);
+            this.clock.tick(0);
+
+            assert.strictEqual(instance.option('focusStateEnabled'), false, 'focusStateEnabled remains false due to _preventDialogContainerFocus');
+            assert.strictEqual(instance.option('tabFocusLoopEnabled'), false, 'tabFocusLoopEnabled remains false due to _preventDialogContainerFocus');
+        });
     });
 });
 

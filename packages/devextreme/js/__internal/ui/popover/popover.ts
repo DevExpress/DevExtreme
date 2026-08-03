@@ -257,10 +257,13 @@ class Popover<
   }
 
   _syncFocusOptions(): void {
-    if (this._getEffectiveAriaRole() === 'dialog' && !this.option('_preventDialogContainerFocus')) {
-      this._setOptionWithoutOptionChange('focusStateEnabled', true);
-      this._setOptionWithoutOptionChange('tabFocusLoopEnabled', true);
+    if (this.option('_preventDialogContainerFocus')) {
+      return;
     }
+
+    const isDialog = this._getEffectiveAriaRole() === 'dialog';
+    this._setOptionWithoutOptionChange('focusStateEnabled', isDialog);
+    this._setOptionWithoutOptionChange('tabFocusLoopEnabled', isDialog);
   }
 
   // Intentional no-op: Focus target logic is inherited from Widget,
