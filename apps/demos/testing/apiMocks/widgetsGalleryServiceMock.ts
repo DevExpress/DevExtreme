@@ -7,6 +7,7 @@ import { diagramEmployeesHandler } from './handlers/diagramEmployees';
 import { temperatureDataHandler } from './handlers/temperatureData';
 import { listDataHandler } from './handlers/listData';
 import { treeViewPlainDataHandler } from './handlers/treeViewPlainData';
+import { treeViewDataHandler } from './handlers/treeViewData';
 import {
   fileManagerImagesHandler,
   fileManagerDbHandler,
@@ -48,6 +49,8 @@ const handlers: MockHandler[] = [
   listDataHandler,
   // GET /api/TreeViewPlainData
   treeViewPlainDataHandler,
+  // GET /api/TreeViewData
+  treeViewDataHandler,
   // GET /api/file-manager-file-system-images?command=GetDirContents
   fileManagerImagesHandler,
   // GET /api/file-manager-db?command=GetDirContents
