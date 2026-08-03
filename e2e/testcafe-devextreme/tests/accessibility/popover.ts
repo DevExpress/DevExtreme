@@ -20,7 +20,7 @@ const toolbarItems: ToolbarItem[] = [
 
 // NOTE: dialog-mode popovers (toolbarItems or showTitle + showCloseButton) have no
 // accessible name unless a title is set. Providing a default dialog name is a separate
-// dialog-labeling task, so the best-practice rule is disabled for the combinations where.
+// dialog-labeling task.
 const a11yCheckConfig = isFluent() ? {
   rules: { 'aria-dialog-name': { enabled: false } },
 } : {
