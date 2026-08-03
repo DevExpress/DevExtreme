@@ -7,7 +7,7 @@ import type { StoreChange } from '@js/data/store';
 import DataGrid from '@js/ui/data_grid';
 
 import {
-  afterTest, beforeTest, createDataGrid, flushAsync, GRID_CONTAINER_ID,
+  afterTest, beforeTest, createDataGrid, type DataGridInstance, flushAsync, GRID_CONTAINER_ID,
 } from '../__tests__/__mock__/helpers/utils';
 
 describe('GridCore focus', () => {
@@ -253,8 +253,8 @@ describe('GridCore focus', () => {
   });
 
   describe('when focusedRowKey is set to a row inside a collapsed group with repaintChangesOnly', () => {
-    const settle = async (): Promise<void> => {
-      for (let i = 0; i < 20; i += 1) {
+    const flushUntil = async (predicate: () => boolean): Promise<void> => {
+      for (let attempt = 0; attempt < 20 && !predicate(); attempt += 1) {
         // eslint-disable-next-line no-await-in-loop
         await flushAsync();
       }
@@ -262,6 +262,9 @@ describe('GridCore focus', () => {
 
     const countFocusedRows = (): number => document
       .querySelectorAll(`#${GRID_CONTAINER_ID} .dx-row.dx-row-focused`).length;
+
+    const isRowVisible = (instance: DataGridInstance, key: number): boolean => instance
+      .getVisibleRows().some((row) => row.key === key);
 
     it('should keep a single focused row indicator (T1332912)', async () => {
       const { instance } = await createDataGrid({
@@ -289,12 +292,12 @@ describe('GridCore focus', () => {
         ],
       });
 
-      await settle();
+      await flushUntil(() => isRowVisible(instance, 1) && countFocusedRows() === 1);
 
       expect(countFocusedRows()).toBe(1);
 
       instance.option('focusedRowKey', 9);
-      await settle();
+      await flushUntil(() => isRowVisible(instance, 9) && countFocusedRows() === 1);
 
       expect(instance.option('focusedRowKey')).toBe(9);
       expect(countFocusedRows()).toBe(1);
