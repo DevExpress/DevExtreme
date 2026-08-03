@@ -24,10 +24,10 @@ describe('GroupPanelVerticalRow', () => {
     const component = new GroupPanelVerticalRow({
       groupItems: [
         {
-          id: 1, text: 'a', key: 'one_1', resourceIndex: 'one', data: { id: 1, text: 'a' }, colSpan: 2,
+          id: 1, text: 'a', key: 'one_1', resourceIndex: 'one', data: { id: 1, text: 'a' }, colSpan: 2, isLeaf: true, path: [],
         },
         {
-          id: 2, text: 'b', key: 'one_2', resourceIndex: 'one', data: { id: 2, text: 'b' }, colSpan: 2,
+          id: 2, text: 'b', key: 'one_2', resourceIndex: 'one', data: { id: 2, text: 'b' }, colSpan: 2, isLeaf: true, path: [],
         },
       ],
     });

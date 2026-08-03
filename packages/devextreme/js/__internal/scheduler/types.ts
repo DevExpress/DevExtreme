@@ -130,20 +130,31 @@ export interface ViewOptions {
   endDayHour: number;
 }
 
-export interface GroupRenderItem extends GroupItem {
-  key: string;
+export interface GroupHeaderPathItem {
+  id: ResourceId;
+  text?: string;
+  color?: string;
   resourceIndex: string;
   data: GroupItem;
+}
+
+export interface GroupHeaderHierarchy {
+  isLeaf: boolean;
+  path: GroupHeaderPathItem[];
+}
+
+export interface GroupRenderItem extends GroupHeaderPathItem, GroupHeaderHierarchy {
+  key: string;
   colSpan?: number;
   rowSpan?: number;
   isFirstGroupCell?: boolean;
   isLastGroupCell?: boolean;
+  isLastColumn?: boolean;
 }
 
-export interface GroupPanelTreeNode extends GroupItem {
+export interface GroupPanelTreeNode extends GroupHeaderPathItem {
   key: string;
-  resourceIndex: string;
-  data: GroupItem;
+  path: GroupHeaderPathItem[];
   leafCount: number;
   children: GroupPanelTreeNode[];
 }

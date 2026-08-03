@@ -1,7 +1,9 @@
 import type { PropsWithClassName, PropsWithStyles } from '@ts/core/r1/index';
 import type { JSXTemplate, RefObject } from '@ts/core/r1/types';
 
-import type { GroupItem, GroupPanelData, GroupRenderItem } from '../../../types';
+import type {
+  GroupHeaderHierarchy, GroupItem, GroupPanelData, GroupRenderItem,
+} from '../../../types';
 import type { ResourceId } from '../../../utils/loader/types';
 import type { DefaultProps, PropsWithViewContext, ResourceCellTemplateProps } from '../types';
 
@@ -29,11 +31,12 @@ export const GroupPanelBaseDefaultProps: DefaultProps<GroupPanelBaseProps> = {
   styles: {},
 };
 
-export interface GroupPanelCellProps extends PropsWithClassName {
+export interface GroupPanelCellProps extends PropsWithClassName, Partial<GroupHeaderHierarchy> {
   id: ResourceId;
   text?: string;
   color?: string;
   data: GroupItem;
+  resourceIndex?: string;
   index: number;
   cellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
 }

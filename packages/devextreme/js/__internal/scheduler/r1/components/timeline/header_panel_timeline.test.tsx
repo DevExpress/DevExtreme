@@ -3,6 +3,8 @@ import {
 } from '@jest/globals';
 
 import type { GroupPanelData } from '../../../types';
+import type { GroupNode } from '../../../utils/resource_manager/types';
+import { getGroupPanelData } from '../../utils/base';
 import { HeaderPanel } from '../base/header_panel';
 import { HeaderPanelTimeline } from './header_panel_timeline';
 
@@ -11,55 +13,38 @@ interface VirtualNodeLike {
   props?: Record<string, unknown>;
 }
 
-const hierarchicalGroupPanelData: GroupPanelData = {
-  groupTree: [
-    {
-      key: 'buildingId_A',
-      id: 'A',
-      text: 'Building A',
-      data: { id: 'A', text: 'Building A' },
-      resourceIndex: 'buildingId',
-      leafCount: 2,
-      children: [
-        {
-          key: 'buildingId_A_roomId_1',
-          id: 1,
-          text: 'Room A1',
-          data: { id: 1, text: 'Room A1' },
-          resourceIndex: 'roomId',
-          leafCount: 1,
-          children: [],
-        },
-        {
-          key: 'buildingId_A_roomId_2',
-          id: 2,
-          text: 'Room A2',
-          data: { id: 2, text: 'Room A2' },
-          resourceIndex: 'roomId',
-          leafCount: 1,
-          children: [],
-        },
-      ],
-    },
-  ],
-  groupPanelItems: [
-    [{
-      key: 'buildingId_A', id: 'A', text: 'Building A', data: { id: 'A', text: 'Building A' }, resourceIndex: 'buildingId', colSpan: 2,
-    }],
-    [
+const hierarchicalGroupsTree: GroupNode[] = [
+  {
+    id: 'A',
+    resourceText: 'Building A',
+    resourceIndex: 'buildingId',
+    grouped: { buildingId: 'A' },
+    children: [
       {
-        key: 'buildingId_A_roomId_1', id: 1, text: 'Room A1', data: { id: 1, text: 'Room A1' }, resourceIndex: 'roomId', colSpan: 1,
+        id: 1,
+        resourceText: 'Room A1',
+        resourceIndex: 'roomId',
+        grouped: { buildingId: 'A', roomId: 1 },
+        children: [],
       },
       {
-        key: 'buildingId_A_roomId_2', id: 2, text: 'Room A2', data: { id: 2, text: 'Room A2' }, resourceIndex: 'roomId', colSpan: 1,
+        id: 2,
+        resourceText: 'Room A2',
+        resourceIndex: 'roomId',
+        grouped: { buildingId: 'A', roomId: 2 },
+        children: [],
       },
     ],
-  ],
-  maxDepth: 2,
-  baseColSpan: 1,
-  columnCountPerGroup: 1,
-  hasHierarchy: true,
-};
+  },
+];
+
+const hierarchicalGroupPanelData: GroupPanelData = getGroupPanelData(
+  hierarchicalGroupsTree,
+  1,
+  false,
+  1,
+  true,
+);
 
 const baseProps = {
   groupPanelData: hierarchicalGroupPanelData,
