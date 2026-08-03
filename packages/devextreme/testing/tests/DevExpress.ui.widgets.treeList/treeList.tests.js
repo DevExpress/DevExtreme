@@ -1,17 +1,4 @@
-QUnit.testStart(function() {
-    const markup =
-        '<!--qunit-fixture-->\
-    <div id="container">\
-        <div id="treeList">\
-        </div>\
-    </div>\
-';
-
-    $('#qunit-fixture').html(markup);
-    // $('body').append(markup);
-});
-
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import devices from '__internal/core/m_devices';
@@ -24,6 +11,18 @@ import TreeList from '__internal/grids/tree_list/m_widget';
 import pointerMock from '../../helpers/pointerMock.js';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 import { createEvent } from 'common/core/events/utils/index';
+
+QUnit.testStart(function() {
+    const markup =
+        '<!--qunit-fixture-->\
+    <div id="container">\
+        <div id="treeList">\
+        </div>\
+    </div>\
+';
+
+    $('#qunit-fixture').html(markup);
+});
 
 fx.off = true;
 
@@ -937,7 +936,7 @@ QUnit.module('Option Changed', defaultModuleConfig, () => {
     // T576806
     QUnit.test('Pages should be correctly loaded after change dataSource and selectedRowKeys options', function(assert) {
         const treeList = createTreeList({
-            height: 1500,
+            height: 2160,
             autoExpandAll: true
         });
 
@@ -1454,7 +1453,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
     QUnit.test('TreeList with focusedRowKey', function(assert) {
         // arrange, act
         const treeList = createTreeList({
-            height: 105,
+            height: 170,
             keyExpr: 'id',
             dataSource: generateData(10),
             paging: {
@@ -1478,7 +1477,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
     QUnit.test('TreeList with remoteOperations and focusedRowKey', function(assert) {
         // arrange, act
         const treeList = createTreeList({
-            height: 105,
+            height: 170,
             keyExpr: 'id',
             dataSource: generateData(10),
             remoteOperations: true,
