@@ -11,7 +11,11 @@ import {
 fixture.disablePageReloads`Scheduler: Hierarchical grouping layout`
   .page(url(__dirname, '../../../container.html'));
 
-const createScheduler = async (view: string, groupOrientation: string): Promise<void> => {
+const createScheduler = async (
+  view: string,
+  groupOrientation: string,
+  rtlEnabled = false,
+): Promise<void> => {
   await createWidget('dxScheduler', {
     dataSource: hierarchicalAppointments,
     currentDate: new Date(2021, 3, 26),
@@ -19,6 +23,7 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
     endDayHour: 18,
     height: 780,
     crossScrollingEnabled: true,
+    rtlEnabled,
     groups: ['roomId'],
     resources: [{
       fieldExpr: 'roomId',
@@ -52,8 +57,9 @@ const shouldScrollToMiddleGroup = (view: string, groupOrientation: string): bool
 const runScreenshotTest = (
   view: string,
   groupOrientation: string,
+  rtlEnabled = false,
 ): void => {
-  test(`Hierarchical grouping layout test (view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
+  test(`Hierarchical grouping layout test (view='${view}', groupOrientation=${groupOrientation}${rtlEnabled ? ', rtl=true' : ''})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     if (shouldScrollToMiddleGroup(view, groupOrientation)) {
@@ -64,13 +70,13 @@ const runScreenshotTest = (
     await testScreenshot(
       t,
       takeScreenshot,
-      `hierarchical-grouping(view=${view}-orientation=${groupOrientation}).png`,
+      `hierarchical-grouping(view=${view}-orientation=${groupOrientation}${rtlEnabled ? '-rtl' : ''}).png`,
     );
 
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => createScheduler(view, groupOrientation));
+  }).before(async () => createScheduler(view, groupOrientation, rtlEnabled));
 };
 
 // visual: generic.light
@@ -97,3 +103,10 @@ const runScreenshotTest = (
 // visual: fluent.blue.light
 // visual: material.blue.light
 runScreenshotTest('agenda', 'vertical');
+
+// visual: generic.light
+// visual: fluent.blue.light
+// visual: material.blue.light
+runScreenshotTest('day', 'horizontal', true);
+runScreenshotTest('day', 'vertical', true);
+runScreenshotTest('timelineWeek', 'vertical', true);
