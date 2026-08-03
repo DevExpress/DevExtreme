@@ -5,15 +5,14 @@
         define(function(require, exports, module) {
             module.exports = factory(
                 require('jquery'),
-                require('./core/templates/template_engine_registry')
-                    .setTemplateEngine,
+                require('./core/templates/template_engine_registry').setTemplateEngine,
                 require('./core/templates/template_base').renderedCallbacks,
                 require('./core/guid'),
                 require('./ui/validation_engine'),
                 require('./core/utils/iterator'),
                 require('./core/utils/dom').extractTemplateMarkup,
                 require('./core/utils/string').encodeHtml,
-                require('./core/utils/ajax'),
+                require('./core/utils/ajax')
             );
         });
     } else {
@@ -26,312 +25,255 @@
             DevExpress.utils.iterator,
             DevExpress.utils.dom.extractTemplateMarkup,
             DevExpress.utils.string.encodeHtml,
-            DevExpress.utils.ajax,
+            DevExpress.utils.ajax
         );
     }
-})(
-    function(
-        $,
-        setTemplateEngine,
-        templateRendered,
-        Guid,
-        validationEngine,
-        iteratorUtils,
-        extractTemplateMarkup,
-        encodeHtml,
-        ajax,
-    ) {
-        var templateCompiler = createTemplateCompiler();
-        var pendingCreateComponentRoutines = [];
-        var cspNonce = null;
+})(function($, setTemplateEngine, templateRendered, Guid, validationEngine, iteratorUtils, extractTemplateMarkup, encodeHtml, ajax) {
+    var templateCompiler = createTemplateCompiler();
+    var pendingCreateComponentRoutines = [ ];
+    var cspNonce = null;
 
-        function isCspRestricted() {
-            return cspNonce !== null;
+    function isCspRestricted() {
+        return cspNonce !== null;
+    }
+
+    function compileViaScript(src, code) {
+        if(!src || src.tagName !== 'SCRIPT') {
+            return null;
+        }
+        var funcName = src.id.replaceAll('-', '');
+        var func =
+            'function ' + funcName + '(obj,encodeHtml){\n' + code + '\n}';
+        $.globalEval(func, src, window.document);
+        return funcName;
+    }
+
+    function createTemplateCompiler() {
+        var ENCODE_QUALIFIER = '-',
+            INTERPOLATE_QUALIFIER = '=';
+
+        var EXTENDED_OPEN_TAG = /[<[]%/g,
+            EXTENDED_CLOSE_TAG = /%[>\]]/g;
+
+        function acceptText(bag, text) {
+            if(text) {
+                bag.push('_.push(', JSON.stringify(text), ');');
+            }
         }
 
-        function compileViaScript(src, code) {
-            if(!src || src.tagName !== 'SCRIPT') {
-                return null;
-            }
-            var funcName = src.id.replaceAll('-', '');
-            var func =
-                'function ' + funcName + '(obj,encodeHtml){\n' + code + '\n}';
-            $.globalEval(func, src, window.document);
-            return funcName;
-        }
+        function acceptCode(bag, code) {
+            var encode = code.charAt(0) === ENCODE_QUALIFIER,
+                value = code.substr(1),
+                interpolate = code.charAt(0) === INTERPOLATE_QUALIFIER;
 
-
-        function createTemplateCompiler() {
-            var ENCODE_QUALIFIER = '-',
-                INTERPOLATE_QUALIFIER = '=';
-
-            var EXTENDED_OPEN_TAG = /[<[]%/g,
-                EXTENDED_CLOSE_TAG = /%[>\]]/g;
-
-            function acceptText(bag, text) {
-                if(text) {
-                    bag.push('_.push(', JSON.stringify(text), ');');
-                }
-            }
-
-            function acceptCode(bag, code) {
-                var encode = code.charAt(0) === ENCODE_QUALIFIER,
-                    value = code.substr(1),
-                    interpolate = code.charAt(0) === INTERPOLATE_QUALIFIER;
-
-                if(encode || interpolate) {
-                    bag.push('_.push(');
-                    var expression = value;
-                    if(encode) {
-                        expression =
-                            'encodeHtml((' +
-                            value +
-                            ' !== null && ' +
-                            value +
-                            ' !== undefined) ? ' +
-                            value +
-                            ' : "")';
-                        if(/^\s*$/.test(value)) {
-                            expression = 'encodeHtml(' + value + ')';
-                        }
+            if(encode || interpolate) {
+                bag.push('_.push(');
+                var expression = value;
+                if(encode) {
+                    expression = 'encodeHtml((' + value + ' !== null && ' + value + ' !== undefined) ? ' + value + ' : "")';
+                    if(/^\s*$/.test(value)) {
+                        expression = 'encodeHtml(' + value + ')';
                     }
-                    bag.push(expression);
-                    bag.push(');');
+                }
+                bag.push(expression);
+                bag.push(');');
+            } else {
+                bag.push(code + '\n');
+            }
+        }
+
+        return function(element) {
+            var text = extractTemplateMarkup(element);
+            var bag = ['var _ = [];', 'with(obj||{}) {'],
+                chunks = text.split(EXTENDED_OPEN_TAG);
+
+            acceptText(bag, chunks.shift());
+
+            for(var i = 0; i < chunks.length; i++) {
+                var tmp = chunks[i].split(EXTENDED_CLOSE_TAG);
+                if(tmp.length !== 2) {
+                    throw 'Template syntax error';
+                }
+                acceptCode(bag, tmp[0]);
+                acceptText(bag, tmp[1]);
+            }
+
+            bag.push('}', 'return _.join(\'\')');
+            var code = bag.join('');
+
+            if(isCspRestricted()) {
+                var compiled = compileViaScript(element[0], code);
+                return compiled !== null ? compiled : text;
+            }
+
+            // fallback to old behavior for legacy mode
+            try {
+                // eslint-disable-next-line no-new-func
+                return new Function('obj', 'encodeHtml', code);
+            } catch(e) {
+                var compiled = compileViaScript(element[0], code);
+                return compiled !== null ? compiled : text;
+            }
+        };
+    }
+
+    function createTemplateEngine() {
+        return {
+            compile: function(element) {
+                return templateCompiler(element);
+            },
+            render: function(template, data) {
+                if(template instanceof Function) {
+                    var html = template(data, encodeHtml);
+
+                    var dxMvcExtensionsObj = window['MVCx'];
+                    if(dxMvcExtensionsObj && !dxMvcExtensionsObj.isDXScriptInitializedOnLoad) {
+                        html = html.replace(/(<script[^>]+)id="dxss_.+?"/g, '$1');
+                    }
+
+                    return html;
+                } else if(window[template] instanceof Function) {
+                    return window[template](data, encodeHtml);
+                } else if(typeof template === 'string') {
+                    return template;
                 } else {
-                    bag.push(code + '\n');
+                    throw 'Unknown template type';
                 }
             }
+        };
+    }
 
-            return function(element) {
-                var text = extractTemplateMarkup(element);
-                var bag = ['var _ = [];', 'with(obj||{}) {'],
-                    chunks = text.split(EXTENDED_OPEN_TAG);
-
-                acceptText(bag, chunks.shift());
-
-                for(var i = 0; i < chunks.length; i++) {
-                    var tmp = chunks[i].split(EXTENDED_CLOSE_TAG);
-                    if(tmp.length !== 2) {
-                        throw 'Template syntax error';
-                    }
-                    acceptCode(bag, tmp[0]);
-                    acceptText(bag, tmp[1]);
-                }
-
-                bag.push('}', 'return _.join(\'\')');
-                var code = bag.join('');
-                var src = element[0];
-
-                if(isCspRestricted()) {
-                    // might be extracted to a separate function
-                    var compiled = compileViaScript(src, code);
-                    return compiled !== null ? compiled : text;
-                }
-
-                // fallback to old behavior for legacy mode
-                try {
-                    // eslint-disable-next-line no-new-func
-                    return new Function('obj', 'encodeHtml', code);
-                } catch(e) {
-                    // might be extracted to a separate function
-                    var compiled = compileViaScript(src, code);
-                    return compiled !== null ? compiled : text;
-                }
-            };
-        }
-
-        function createTemplateEngine() {
-            return {
-                compile: function(element) {
-                    return templateCompiler(element);
-                },
-                render: function(template, data) {
-                    if(template instanceof Function) {
-                        var html = template(data, encodeHtml);
-
-                        var dxMvcExtensionsObj = window['MVCx'];
-                        if(
-                            dxMvcExtensionsObj &&
-                            !dxMvcExtensionsObj.isDXScriptInitializedOnLoad
-                        ) {
-                            html = html.replace(
-                                /(<script[^>]+)id="dxss_.+?"/g,
-                                '$1',
-                            );
-                        }
-
-                        return html;
-                    } else if(window[template] instanceof Function) {
-                        return window[template](data, encodeHtml);
-                    } else if(typeof template === 'string') {
-                        return template;
-                    } else {
-                        throw 'Unknown template type';
-                    }
-                },
-            };
-        }
-
-        function getValidationSummary(validationGroup) {
-            var result;
-            $('.dx-validationsummary').each(function(_, element) {
-                var summary = $(element).data('dxValidationSummary');
-                if(
-                    summary &&
-                    summary.option('validationGroup') === validationGroup
-                ) {
-                    result = summary;
-                    return false;
-                }
-            });
-            return result;
-        }
-
-        function createValidationSummaryItemsFromValidators(
-            validators,
-            editorNames,
-        ) {
-            var items = [];
-
-            iteratorUtils.each(validators, function(_, validator) {
-                var widget = validator.$element().data('dx-validation-target');
-                if(
-                    widget &&
-                    $.inArray(widget.option('name'), editorNames) > -1
-                ) {
-                    items.push({
-                        text: widget.option('validationError.message'),
-                        validator: validator,
-                    });
-                }
-            });
-
-            return items;
-        }
-
-        function createComponent(name, options, id, validatorOptions) {
-            var selector = '#' + String(id).replace(/[^\w-]/g, '\\$&');
-            pendingCreateComponentRoutines.push(function() {
-                var $element = $(selector);
-                if($element.length) {
-                    var $component = $(selector)[name](options);
-                    if($.isPlainObject(validatorOptions)) {
-                        $component.dxValidator(validatorOptions);
-                    }
-                    return true;
-                }
+    function getValidationSummary(validationGroup) {
+        var result;
+        $('.dx-validationsummary').each(function(_, element) {
+            var summary = $(element).data('dxValidationSummary');
+            if(summary && summary.option('validationGroup') === validationGroup) {
+                result = summary;
                 return false;
-            });
-        }
+            }
+        });
+        return result;
+    }
 
-        templateRendered.add(function() {
-            var snapshot = pendingCreateComponentRoutines.slice();
-            var leftover = [];
+    function createValidationSummaryItemsFromValidators(validators, editorNames) {
+        var items = [];
 
-            pendingCreateComponentRoutines = [];
-            snapshot.forEach(function(func) {
-                if(!func()) {
-                    leftover.push(func);
-                }
-            });
-            pendingCreateComponentRoutines =
-                pendingCreateComponentRoutines.concat(leftover);
+        iteratorUtils.each(validators, function(_, validator) {
+            var widget = validator.$element().data('dx-validation-target');
+            if(widget && $.inArray(widget.option('name'), editorNames) > -1) {
+                items.push({
+                    text: widget.option('validationError.message'),
+                    validator: validator
+                });
+            }
         });
 
-        return {
-            createComponent: createComponent,
+        return items;
+    }
 
-            renderComponent: function(name, options, id, validatorOptions) {
-                id = id || 'dx-' + new Guid();
-                createComponent(name, options, id, validatorOptions);
-                return '<div id="' + id + '"></div>';
-            },
-
-            getEditorValue: function(inputName) {
-                var $widget = $('input[name=\'' + inputName + '\']').closest(
-                    '.dx-widget',
-                );
-                if($widget.length) {
-                    var dxComponents = $widget.data('dxComponents'),
-                        widget = $widget.data(dxComponents[0]);
-
-                    if(widget) {
-                        return widget.option('value');
-                    }
+    function createComponent(name, options, id, validatorOptions) {
+        var selector = '#' + String(id).replace(/[^\w-]/g, '\\$&');
+        pendingCreateComponentRoutines.push(function() {
+            var $element = $(selector);
+            if($element.length) {
+                var $component = $(selector)[name](options);
+                if($.isPlainObject(validatorOptions)) {
+                    $component.dxValidator(validatorOptions);
                 }
-            },
+                return true;
+            }
+            return false;
+        });
+    }
 
-            setTemplateEngine: function(nonce) {
-                cspNonce = nonce;
+    templateRendered.add(function() {
+        var snapshot = pendingCreateComponentRoutines.slice();
+        var leftover = [ ];
 
-                if(setTemplateEngine) {
-                    setTemplateEngine(createTemplateEngine());
+        pendingCreateComponentRoutines = [ ];
+        snapshot.forEach(function(func) {
+            if(!func()) {
+                leftover.push(func);
+            }
+        });
+        pendingCreateComponentRoutines = pendingCreateComponentRoutines.concat(leftover);
+    });
+
+    return {
+        createComponent: createComponent,
+
+        renderComponent: function(name, options, id, validatorOptions) {
+            id = id || ('dx-' + new Guid());
+            createComponent(name, options, id, validatorOptions);
+            return '<div id="' + id + '"></div>';
+        },
+
+        getEditorValue: function(inputName) {
+            var $widget = $('input[name=\'' + inputName + '\']').closest('.dx-widget');
+            if($widget.length) {
+                var dxComponents = $widget.data('dxComponents'),
+                    widget = $widget.data(dxComponents[0]);
+
+                if(widget) {
+                    return widget.option('value');
                 }
-            },
+            }
+        },
 
-            createValidationSummaryItems: function(
-                validationGroup,
-                editorNames,
-            ) {
-                var summary = getValidationSummary(validationGroup),
-                    groupConfig,
-                    items;
+        setTemplateEngine: function(nonce) {
+            cspNonce = nonce;
 
-                if(summary) {
-                    groupConfig =
-                        validationEngine.getGroupConfig(validationGroup);
-                    if(groupConfig) {
-                        items = createValidationSummaryItemsFromValidators(
-                            groupConfig.validators,
-                            editorNames,
-                        );
-                        items.length && summary.option('items', items);
-                    }
+            if(setTemplateEngine) {
+                setTemplateEngine(createTemplateEngine());
+            }
+        },
+
+        createValidationSummaryItems: function(validationGroup, editorNames) {
+            var summary = getValidationSummary(validationGroup),
+                groupConfig,
+                items;
+
+            if(summary) {
+                groupConfig = validationEngine.getGroupConfig(validationGroup);
+                if(groupConfig) {
+                    items = createValidationSummaryItemsFromValidators(groupConfig.validators, editorNames);
+                    items.length && summary.option('items', items);
                 }
-            },
+            }
+        },
 
-            sendValidationRequest: function(
-                propertyName,
-                params,
-                url,
-                method,
-                additionalFields,
-            ) {
-                var d = $.Deferred();
-                var data = {};
-                data[propertyName] = params.value;
-                if(additionalFields.length && params.data) {
-                    additionalFields.forEach(function(field) {
-                        data[field] = params.data[field];
+        sendValidationRequest: function(propertyName, params, url, method, additionalFields) {
+            var d = $.Deferred();
+            var data = { };
+            data[propertyName] = params.value;
+            if(additionalFields.length && params.data) {
+                additionalFields.forEach(function(field) {
+                    data[field] = params.data[field];
+                });
+            }
+
+            ajax.sendRequest({
+                url: url,
+                dataType: 'json',
+                method: method || 'GET',
+                data: data
+            }).then(function(response) {
+                if(typeof response === 'string') {
+                    d.resolve({
+                        isValid: false,
+                        message: response
                     });
+                } else {
+                    d.resolve(response);
                 }
+            }, function(xhr) {
+                d.reject({
+                    isValid: false,
+                    message: xhr.responseText
+                });
+            });
 
-                ajax.sendRequest({
-                    url: url,
-                    dataType: 'json',
-                    method: method || 'GET',
-                    data: data,
-                }).then(
-                    function(response) {
-                        if(typeof response === 'string') {
-                            d.resolve({
-                                isValid: false,
-                                message: response,
-                            });
-                        } else {
-                            d.resolve(response);
-                        }
-                    },
-                    function(xhr) {
-                        d.reject({
-                            isValid: false,
-                            message: xhr.responseText,
-                        });
-                    },
-                );
-
-                return d.promise();
-            },
-        };
-    },
-);
+            return d.promise();
+        }
+    };
+});
