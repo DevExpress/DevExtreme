@@ -300,7 +300,7 @@ class Popover<
   }
 
   _forceFocusLost(): void {
-    if (this._getEffectiveAriaRole() === 'dialog') {
+    if (this._getEffectiveAriaRole() === 'dialog' && !this.option('_preventDialogContainerFocus')) {
       this._restoreTargetFocus();
     } else {
       super._forceFocusLost();
