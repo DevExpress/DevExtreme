@@ -4931,6 +4931,7 @@ test('Grids a11y: Fix the header filter and the column chooser focus issue and u
   const filterIconElement = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).getFilterIcon();
   const headerFilter = new HeaderFilter();
   const columnChooserButton = dataGrid.getColumnChooserButton();
+  const columnChooserCloseButton = dataGrid.getColumnChooser().getCloseButton();
 
   await t
     .expect(dataGrid.isReady())
@@ -4941,7 +4942,7 @@ test('Grids a11y: Fix the header filter and the column chooser focus issue and u
     .ok()
     .click(columnChooserButton)
     .pressKey('tab tab tab')
-    .expect(Selector('.dx-closebutton').focused)
+    .expect(columnChooserCloseButton.focused)
     .ok();
 })
   .before(async () => {
