@@ -275,9 +275,7 @@ class Popover<
 
     const $overlay = this.$overlayContent();
     if ($overlay?.length) {
-      if ($overlay.attr('tabindex') !== '-1') {
-        $overlay.attr('tabindex', '-1');
-      }
+      $overlay.attr('tabindex', '-1');
       return $overlay;
     }
 
