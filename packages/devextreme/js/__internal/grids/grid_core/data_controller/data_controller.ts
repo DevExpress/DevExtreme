@@ -132,7 +132,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _changes!: any[];
 
-  private readonly _skipProcessingPagingChange: boolean | undefined;
+  private _skipProcessingPagingChange: boolean | undefined;
 
   private _useSortingGroupingFromColumns: boolean | undefined;
 
@@ -1328,6 +1328,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     if (dataSource) {
       dataSource.pageIndex(0);
+      if (this.option('paging.pageIndex')) {
+        this.resetPageIndexOption();
+      }
       this._isFilterApplying = true;
 
       return this.reload().done(() => {
@@ -1339,6 +1342,12 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     // @ts-expect-error
     return new Deferred().resolve();
+  }
+
+  private resetPageIndexOption(): void {
+    this._skipProcessingPagingChange = true;
+    this.option('paging.pageIndex', 0);
+    this._skipProcessingPagingChange = false;
   }
 
   public resetFilterApplying() {
