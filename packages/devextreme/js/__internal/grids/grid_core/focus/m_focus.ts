@@ -566,18 +566,39 @@ const data = (Base: ModuleType<DataController>) => class FocusDataControllerExte
 
     if (this.option('focusedRowEnabled') && this._dataSource) {
       const isPartialUpdate = e.changeType === 'update' && e.repaintChangesOnly;
-      const isPartialUpdateWithDeleting = isPartialUpdate && e.changeTypes && e.changeTypes.indexOf('remove') >= 0;
+      const isPartialUpdateWithDeleting = isPartialUpdate && !!e.changeTypes && e.changeTypes.indexOf('remove') >= 0;
+      const isRefreshWithItems = e.changeType === 'refresh' && !!e.items.length;
+      const isAppendOrPrepend = e.changeType === 'append' || e.changeType === 'prepend';
 
       if (forceUpdateFocusedRow && this.isEmpty()) {
         this._focusController._resetFocusedRow();
-      } else if (e.changeType === 'refresh' && e.items.length || isPartialUpdateWithDeleting) {
+      } else if (isRefreshWithItems || isPartialUpdateWithDeleting) {
         this._updatePageIndexes();
         this._updateFocusedRowIfNeeded(e, forceUpdateFocusedRow);
-      } else if (e.changeType === 'append' || e.changeType === 'prepend') {
+      } else if (isAppendOrPrepend) {
         this._updatePageIndexes();
       } else if (isPartialUpdate) {
         this._updateFocusedRowIfNeeded(e, forceUpdateFocusedRow);
+        // on a partial render the previously focused row may not be re-rendered, so its
+        // focused class survives and two rows look focused; reset the focused row to drop it
+        this._resetStaleFocusedRowAfterPartialUpdate(e);
       }
+    }
+  }
+
+  private _resetStaleFocusedRowAfterPartialUpdate(e: { rowIndices?: number[] }): void {
+    const focusedRowKey = this.option('focusedRowKey');
+
+    if (!isDefined(focusedRowKey)) {
+      return;
+    }
+
+    const focusedRowIndex = this.getRowIndexByKey(focusedRowKey);
+    const isFocusedRowVisible = focusedRowIndex >= 0;
+    const isFocusedRowInChange = !!e.rowIndices?.includes(focusedRowIndex);
+
+    if (isFocusedRowVisible && isFocusedRowInChange) {
+      this._focusController.updateFocusedRow({ focusedRowKey, preventScroll: true });
     }
   }
 
