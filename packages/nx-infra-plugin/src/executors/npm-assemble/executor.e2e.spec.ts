@@ -95,7 +95,7 @@ describe('NpmAssembleExecutor E2E', () => {
     expect(fs.existsSync(path.join(outDir, 'bin', 'install.js'))).toBe(true);
   });
 
-  it('should normalize CRLF to LF in copied license/ and bin/ files (gulp-eol parity)', async () => {
+  it('should normalize CRLF to LF in copied license/ and bin/ files', async () => {
     await writeFileText(
       path.join(projectDir, 'license', 'LICENSE.txt'),
       'DevExtreme License\r\nLine 2\r\nLine 3\r\n',
@@ -118,7 +118,7 @@ describe('NpmAssembleExecutor E2E', () => {
     expect(binContent.endsWith('\n')).toBe(true);
   });
 
-  it('should copy dist files into outputDir/dist with the gulp-equivalent excludes', async () => {
+  it('should copy dist files into outputDir/dist', async () => {
     const artifactsDir = path.join(projectDir, 'artifacts');
     fs.mkdirSync(path.join(artifactsDir, 'js'), { recursive: true });
 

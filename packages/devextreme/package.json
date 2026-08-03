@@ -167,7 +167,6 @@
     "validate-ts": "pnpm nx run devextreme:validate:ts",
     "check-types": "tsc --noEmit -p js/__internal/tsconfig.json",
     "validate-declarations": "dx-tools validate-declarations --sources ./js --exclude \"js/(renovation|__internal|.eslintrc.js)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
-    "testcafe-in-docker": "docker build -f ./testing/testcafe/docker/Dockerfile -t testcafe-testing . && docker run -it testcafe-testing",
     "test-jest": "cross-env NODE_OPTIONS='--expose-gc' jest --no-coverage --runInBand --selectProjects jsdom-tests",
     "test-jest:watch": "jest --watch",
     "test-jest:node": "jest --no-coverage --runInBand --selectProjects node-tests",
