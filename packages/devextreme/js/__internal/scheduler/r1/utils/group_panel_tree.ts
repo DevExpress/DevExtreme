@@ -152,7 +152,7 @@ interface GroupHeaderCellInfo extends Partial<GroupHeaderHierarchy> {
 export const getResourceCellTemplateData = ({
   id, text, color, data, resourceIndex = '', isLeaf = true, path,
 }: GroupHeaderCellInfo): ResourceCellTemplateData => {
-  const cellPath = path ?? [{
+  const cellPath = path?.length ? path : [{
     id, text, color, resourceIndex, data,
   }];
 

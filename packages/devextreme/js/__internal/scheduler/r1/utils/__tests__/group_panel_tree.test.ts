@@ -409,13 +409,17 @@ describe('group_panel_tree', () => {
       });
     });
 
-    it('should fall back to a single-level model when hierarchy info is not provided', () => {
+    it.each([
+      ['is not provided', undefined],
+      ['is empty', []],
+    ])('should fall back to a single-level model when the path %s', (_, path) => {
       expect(getResourceCellTemplateData({
         id: 1,
         text: 'Room 1',
         color: '#aaa',
         data: { id: 1, text: 'Room 1' },
         resourceIndex: 'roomId',
+        path,
       })).toEqual({
         data: { id: 1, text: 'Room 1' },
         id: 1,
