@@ -757,8 +757,8 @@ class SchedulerAppointments extends CollectionWidget<any> {
       allowDrag,
       allowDelete,
       allDay,
-      // NOTE: hide reduced icon for grouped by date workspace
-      reduced: isGroupByDate ? undefined : settings.reduced,
+      reduced: settings.reduced,
+      hideReducedIcon: isGroupByDate,
       startDate: new Date(settings.info?.appointment.startDate),
       cellWidth: this.invoke('getCellWidth'),
       cellHeight: this.invoke('getCellHeight'),
