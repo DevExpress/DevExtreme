@@ -92,7 +92,12 @@ const holidays = [
   new Date(2021, 5, 6),
 ];
 
-const ariaDescription = () => {
+const formatHour = (hours) => new Date(2021, 0, 1, hours).toLocaleTimeString('en-US', {
+  hour: 'numeric',
+  minute: '2-digit',
+});
+
+const disabledDatesDescription = () => {
   const disabledDates = holidays
     .filter((date) => !isWeekend(date))
     .map((date) => new Date(date).toLocaleDateString('en-US', {
@@ -110,6 +115,12 @@ const ariaDescription = () => {
   }
   return '';
 };
+
+const disabledTimeDescription = () => `The time range from ${formatHour(dinnerTime.from)} to ${formatHour(dinnerTime.to)} is disabled on all days`;
+
+const ariaDescription = () => [disabledDatesDescription(), disabledTimeDescription()]
+  .filter(Boolean)
+  .join('. ');
 
 function notifyDisableDate() {
   DevExpress.ui.notify('Cannot create or move an appointment/event to disabled time/date regions.', 'warning', 1000);
