@@ -6,7 +6,7 @@ $(() => {
   $('#file-manager').dxFileManager({
     name: 'fileManager',
     fileSystemProvider: provider,
-    currentPath: 'Widescreen',
+    currentPath: 'Places',
     permissions: {
       create: true,
       copy: true,
