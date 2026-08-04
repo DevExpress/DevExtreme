@@ -1409,7 +1409,7 @@ QUnit.module('columnWidth auto option', {
             loadingTimeout: null,
             dataSource: [{ value0: 0, value1: 1, value2: 2 }],
             columnAutoWidth: true,
-            width: 400,
+            width: 380,
             selection: {
                 mode: 'multiple',
                 showCheckBoxesMode: 'always',
@@ -1443,7 +1443,7 @@ QUnit.module('columnWidth auto option', {
             '', // select column, no width
             '', // expand column, no width
             '', // group column, no width
-            '', // summary column, no width
+            '100px', // summary column, has width
         ]);
     });
 });
