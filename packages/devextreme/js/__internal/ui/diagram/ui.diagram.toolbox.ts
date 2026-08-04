@@ -202,7 +202,7 @@ class DiagramToolbox extends DiagramFloatingPanel {
     const $input = $('<div>')
       .addClass(DIAGRAM_TOOLBOX_INPUT_CLASS)
       .appendTo($parent);
-    this._searchInput = this._createComponent($input, TextBox, {
+    this._searchInput = this._createComponent<TextBox>($input, TextBox, {
       stylingMode: 'outlined',
       placeholder: messageLocalization.format('dxDiagram-uiSearch'),
       onValueChanged: (data) => {

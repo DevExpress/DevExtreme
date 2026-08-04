@@ -11,7 +11,6 @@ import type { Format } from '@js/localization';
 import type { ItemClickEvent } from '@js/ui/list';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
-import type DateBox from '@ts/ui/date_box/date_box.base';
 import DateBoxStrategy from '@ts/ui/date_box/date_box.strategy';
 import dateUtils from '@ts/ui/date_box/date_utils';
 import { getSizeValue } from '@ts/ui/drop_down_editor/utils';
@@ -28,15 +27,11 @@ const BOUNDARY_VALUES = {
 };
 
 class ListStrategy extends DateBoxStrategy {
+  NAME = 'List';
+
   _asyncScrollTimeout?: ReturnType<typeof setTimeout>;
 
   _widgetItems!: Date[];
-
-  constructor(dateBox: DateBox) {
-    super(dateBox);
-
-    this.NAME = 'List';
-  }
 
   getWidget(): List {
     return this._widget as List;
