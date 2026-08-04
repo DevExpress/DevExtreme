@@ -30,6 +30,7 @@ import type {
 import type { Properties } from '@js/ui/lookup';
 import Popover from '@js/ui/popover/ui.popover';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
+import type { TextBoxType } from '@js/ui/text_box';
 import { current, isMaterial } from '@js/ui/themes';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -921,7 +922,7 @@ class Lookup extends DropDownList<LookupProperties> {
       const $searchBox = this._$searchBox;
 
       const currentDevice = devices.current();
-      const searchMode = currentDevice.android ? 'text' : 'search';
+      const searchMode: TextBoxType = currentDevice.android ? 'text' : 'search';
 
       let isKeyboardListeningEnabled = false;
 
@@ -942,7 +943,7 @@ class Lookup extends DropDownList<LookupProperties> {
         onValueChanged: (): void => { this._searchHandler(); },
       };
 
-      this._searchBox = this._createComponent($searchBox, TextBox, textBoxOptions);
+      this._searchBox = this._createComponent<TextBox>($searchBox, TextBox, textBoxOptions);
 
       this._registerSearchKeyHandlers();
       // @ts-expect-error _$list is a List component; insertBefore expects a dxElementWrapper

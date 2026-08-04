@@ -26,7 +26,6 @@ import type { MultiselectDateBoxProperties } from '@ts/ui/date_range_box/multise
 import MultiselectDateBox from '@ts/ui/date_range_box/multiselect_date_box';
 import DropDownButton from '@ts/ui/drop_down_editor/drop_down_button';
 import Editor from '@ts/ui/editor/editor';
-import type TextEditorBase from '@ts/ui/text_box/text_editor.base';
 import ClearButton from '@ts/ui/text_box/text_editor.clear';
 import { isButtonInstance } from '@ts/ui/text_box/texteditor_button_collection/button';
 import type { TextEditorButtonInfo } from '@ts/ui/text_box/texteditor_button_collection/index';
@@ -97,7 +96,7 @@ class DateRangeBox extends Editor<DateRangeBoxProperties> {
 
   private _popupContentId?: string;
 
-  private _buttonCollection!: TextEditorButtonCollection;
+  private _buttonCollection!: TextEditorButtonCollection<DateRangeBox>;
 
   private _shouldSkipIsValidChange?: boolean;
 
@@ -294,10 +293,9 @@ class DateRangeBox extends Editor<DateRangeBoxProperties> {
     super._initTemplates();
   }
 
-  _getDefaultButtons(): TextEditorButtonInfo[] {
+  _getDefaultButtons(): TextEditorButtonInfo<DateRangeBox>[] {
     return [
       { name: 'clear', Ctor: ClearButton },
-      // @ts-expect-error DropDownButton narrows the editor type to DropDownEditor
       { name: 'dropDown', Ctor: DropDownButton },
     ];
   }
@@ -435,10 +433,7 @@ class DateRangeBox extends Editor<DateRangeBoxProperties> {
   }
 
   _renderButtonsContainer(): void {
-    this._buttonCollection = new TextEditorButtonCollection(
-      this as unknown as TextEditorBase,
-      this._getDefaultButtons(),
-    );
+    this._buttonCollection = new TextEditorButtonCollection(this, this._getDefaultButtons());
 
     this._$beforeButtonsContainer = undefined;
     this._$afterButtonsContainer = undefined;
@@ -493,8 +488,10 @@ class DateRangeBox extends Editor<DateRangeBoxProperties> {
     eventsEngine.trigger($(this.startDateField()), 'input');
   }
 
-  _isClearButtonVisible(): boolean | undefined {
-    return this.option('showClearButton') && !this.option('readOnly');
+  _isClearButtonVisible(): boolean {
+    const { showClearButton, readOnly } = this.option();
+
+    return !!showClearButton && !readOnly;
   }
 
   _focusInHandler(event: DxEvent<FocusEvent>): void {
@@ -580,22 +577,6 @@ class DateRangeBox extends Editor<DateRangeBoxProperties> {
       validationMessageMode: options.validationMessageMode,
       validationMessagePosition: options.validationMessagePosition,
       valueChangeEvent: options.valueChangeEvent,
-      // @ts-expect-error the event types of dateBox and dateRangeBox are incompatible
-      onKeyDown: options.onKeyDown,
-      // @ts-expect-error the event types of dateBox and dateRangeBox are incompatible
-      onKeyUp: options.onKeyUp,
-      // @ts-expect-error the event types of dateBox and dateRangeBox are incompatible
-      onChange: options.onChange,
-      // @ts-expect-error the event types of dateBox and dateRangeBox are incompatible
-      onInput: options.onInput,
-      // @ts-expect-error the event types of dateBox and dateRangeBox are incompatible
-      onCut: options.onCut,
-      // @ts-expect-error the event types of dateBox and dateRangeBox are incompatible
-      onCopy: options.onCopy,
-      // @ts-expect-error the event types of dateBox and dateRangeBox are incompatible
-      onPaste: options.onPaste,
-      // @ts-expect-error the event types of dateBox and dateRangeBox are incompatible
-      onEnterKey: options.onEnterKey,
       _dateRangeBoxInstance: this,
       _showValidationMessage: false,
     };
@@ -638,14 +619,14 @@ class DateRangeBox extends Editor<DateRangeBoxProperties> {
       cancelButtonText: options.cancelButtonText,
       dateOutOfRangeMessage: options.startDateOutOfRangeMessage,
       deferRendering: options.deferRendering,
-      // @ts-expect-error disabledDates is not declared in the dropDownOptions type
+      // TODO: should probably read the top level `disabledDates`; changing it alters behavior.
+      // @ts-expect-error disabledDates is not a dropDownOptions member
       disabledDates: options.dropDownOptions?.disabledDates,
       dropDownOptions: {
         showTitle: false,
         title: '',
         hideOnOutsideClick: (e) => this._hideOnOutsideClickHandler(e),
         hideOnParentScroll: false,
-        // @ts-expect-error preventScrollEvents is not declared in the dropDownOptions type
         preventScrollEvents: false,
         ...options.dropDownOptions,
       },

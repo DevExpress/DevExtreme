@@ -5,7 +5,6 @@ import { getWidth } from '@js/core/utils/size';
 import type { DxEvent, InteractionEvent } from '@js/events';
 import type { OptionChanged } from '@ts/core/widget/types';
 import DateBox from '@ts/ui/date_box/date_box';
-import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
 import type { DateBoxMaskProperties } from '@ts/ui/date_box/date_box.mask';
 import { getDeserializedDate, monthDifference } from '@ts/ui/date_range_box/date_range.utils';
 import type DateRangeBox from '@ts/ui/date_range_box/date_range_box';
@@ -17,7 +16,7 @@ export interface MultiselectDateBoxProperties extends DateBoxMaskProperties {
   _dateRangeBoxInstance?: DateRangeBox;
 }
 
-class MultiselectDateBox extends DateBox {
+class MultiselectDateBox extends DateBox<MultiselectDateBoxProperties> {
   // Temporary solution. Move to component level
   public NAME!: string;
 
@@ -59,13 +58,12 @@ class MultiselectDateBox extends DateBox {
     }
   }
 
-  _openHandler(e?: unknown): void {
+  _openHandler(): void {
     if (this.getStrategy().getDateRangeBox().option('opened')) {
       return;
     }
 
-    // @ts-expect-error the base method has no arguments
-    super._openHandler(e);
+    super._openHandler();
   }
 
   _renderOpenedState(): void {
@@ -225,7 +223,7 @@ class MultiselectDateBox extends DateBox {
     super._updateLabelWidth();
   }
 
-  _optionChanged(args: OptionChanged<DateBoxBaseProperties>): void {
+  _optionChanged(args: OptionChanged<MultiselectDateBoxProperties>): void {
     switch (args.name) {
       case 'isValid': {
         const { isValid } = this._getDateRangeBox().option();
