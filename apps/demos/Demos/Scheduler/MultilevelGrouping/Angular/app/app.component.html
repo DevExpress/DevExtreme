@@ -1,0 +1,36 @@
+<dx-scheduler
+  [dataSource]="appointments"
+  [groups]="groups"
+  currentView="Vertical Grouping"
+  [currentDate]="currentDate"
+  [startDayHour]="9"
+  [endDayHour]="16"
+  [crossScrollingEnabled]="false"
+  [showAllDayPanel]="false"
+  [showCurrentTimeIndicator]="false"
+  [height]="700"
+  (onOptionChanged)="onOptionChanged($event)"
+  (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
+>
+  <dxi-scheduler-view
+    type="workWeek"
+    name="Vertical Grouping"
+    groupOrientation="vertical"
+    [cellDuration]="60"
+  >
+  </dxi-scheduler-view>
+  <dxi-scheduler-view
+    type="workWeek"
+    name="Horizontal Grouping"
+    groupOrientation="horizontal"
+  >
+  </dxi-scheduler-view>
+  <dxi-scheduler-resource
+    [dataSource]="assignees"
+    fieldExpr="assigneeId"
+    parentIdExpr="parentId"
+    label="Employee"
+    [allowMultiple]="true"
+    icon="user"
+  ></dxi-scheduler-resource>
+</dx-scheduler>
