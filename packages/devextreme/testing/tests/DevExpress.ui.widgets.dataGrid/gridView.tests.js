@@ -1,6 +1,6 @@
 import devices from '__internal/core/m_devices';
 import visibilityChange from 'common/core/events/visibility_change';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import 'ui/data_grid';
 import gridCore from '__internal/grids/data_grid/m_core';
@@ -668,7 +668,7 @@ QUnit.module('Grid view', {
             })
         });
 
-        $('#container').height(100).width(1000);
+        $('#container').height(200).width(1000);
 
         gridView.render($('#container'), $.extend(this.options, {
             scrolling: true,
@@ -685,7 +685,7 @@ QUnit.module('Grid view', {
         const pagerView = gridView.getView('pagerView');
 
         // B232626
-        assert.roughEqual(columnsHeaderViewContainer[0].offsetHeight + rowsViewViewContainer[0].offsetHeight + pagerView.getHeight(), 1.01, 100);
+        assert.roughEqual(columnsHeaderViewContainer[0].offsetHeight + rowsViewViewContainer[0].offsetHeight + pagerView.getHeight(), 200, 1.01);
         assert.notStrictEqual(columnsHeaderViewContainer[0].offsetHeight, 0);
         assert.notStrictEqual(rowsViewViewContainer[0].offsetHeight, 0);
         assert.notStrictEqual(pagerView.getHeight(), 0);
@@ -1968,7 +1968,7 @@ QUnit.module('Synchronize columns', {
         // assert
         const $colElements = $testElement.find('.dx-datagrid-headers').find('col');
         assert.strictEqual($colElements.length, 5, 'column count');
-        assert.strictEqual($colElements.get(1).style.width, '100px', 'width of a first command column');
+        assert.strictEqual($colElements.get(1).style.width, '115px', 'width of a first command column');
         assert.strictEqual($colElements.get(2).style.width, '250px', 'width of a second command column');
     });
 
@@ -2090,7 +2090,7 @@ QUnit.module('Synchronize columns', {
 
         // assert
         const $colElements = $testElement.find('.dx-datagrid-rowsview').find('col');
-        assert.strictEqual($colElements.get(0).style.width, '70px', 'width of the select column');
+        assert.strictEqual($colElements.get(0).style.width, '50px', 'width of the select column');
         assert.strictEqual($colElements.get(1).style.width, '30px', 'width of the expand column');
         assert.strictEqual($colElements.get(2).style.width, '30px', 'width of the expand column');
         assert.strictEqual($colElements.get(3).style.width, '45px', 'width of the button column');
@@ -2292,7 +2292,7 @@ QUnit.module('Fixed columns', {
                 { dataField: 'field2', width: 250 },
                 { dataField: 'field3', width: 250 },
                 { dataField: 'field4' }
-            ]
+            ],
         });
 
         // act
@@ -2306,7 +2306,7 @@ QUnit.module('Fixed columns', {
         assert.strictEqual($colElements.get(1).style.width, '', 'width of the second cell');
         assert.strictEqual($colElements.get(2).style.width, '', 'width of the third cell');
         assert.strictEqual($colElements.get(3).style.width, '', 'width of the fourth cell');
-        assert.strictEqual($colElements.get(4).style.width, '111px', 'width of the fifth cell');
+        assert.roughEqual(parseFloat($colElements.get(4).style.width), 128, 1.01, 'width of the fifth cell');
     });
 
     // T800761
@@ -2335,7 +2335,7 @@ QUnit.module('Fixed columns', {
 
         // assert
         const $headerElement = $(gridView.getView('columnHeadersView').getCellElement(0, 0));
-        assert.strictEqual($headerElement.outerWidth(), 215, 'width of the first header'); // width = 200(content width) + 14(padding) + 1(border)
+        assert.roughEqual($headerElement.outerWidth(), 234, 2, 'width of the first header'); // width = 200(content width) + 32(padding) + 2(border)
     });
 });
 
