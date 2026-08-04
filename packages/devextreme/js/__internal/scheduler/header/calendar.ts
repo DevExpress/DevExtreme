@@ -54,6 +54,10 @@ export default class SchedulerCalendar extends Widget<HeaderCalendarOptions> {
 
     const overlayConfig = {
       contentTemplate: (): dxElementWrapper => this.createOverlayContent(),
+      // NOTE: The calendar is interactive content, not a text hint: describing
+      // the navigator button with the whole month grid would be noise for AT.
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      _describeTarget: false,
       onShown: (): void => {
         this.calendar?.focus();
       },

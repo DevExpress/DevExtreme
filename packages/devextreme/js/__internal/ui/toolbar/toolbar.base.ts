@@ -732,6 +732,21 @@ class ToolbarBase<
     clearTimeout(this._waitParentAnimationTimeout);
   }
 
+  setLabelAttribute(
+    name: string,
+    value: string | number | boolean | null = null,
+  ): boolean {
+    const $label = this.$element().find(`.${TOOLBAR_LABEL_CLASS}`).eq(0);
+
+    if (!$label.length) {
+      return false;
+    }
+
+    $label.attr(name, value);
+
+    return true;
+  }
+
   _updateDimensionsInMaterial(): void {
     if (isMaterial(current())) {
       // eslint-disable-next-line @typescript-eslint/naming-convention

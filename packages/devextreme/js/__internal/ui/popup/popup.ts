@@ -42,7 +42,6 @@ import {
   isMaterialBased,
 } from '@js/ui/themes';
 import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
-import type Toolbar from '@js/ui/toolbar';
 import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
@@ -63,6 +62,7 @@ import type {
   PopupPositionControllerConstructor,
 } from '@ts/ui/popup/popup_position_controller';
 import { PopupPositionController } from '@ts/ui/popup/popup_position_controller';
+import type ToolbarBase from '@ts/ui/toolbar/toolbar.base';
 import type { ToolbarBaseProperties } from '@ts/ui/toolbar/toolbar.base';
 
 // STYLE popup
@@ -85,7 +85,6 @@ const POPUP_HAS_CLOSE_BUTTON_CLASS = 'dx-has-close-button';
 const POPUP_CONTENT_FLEX_HEIGHT_CLASS = 'dx-popup-flex-height';
 const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
 
-const TOOLBAR_LABEL_CLASS = 'dx-toolbar-label';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 export const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
@@ -198,11 +197,11 @@ class Popup<
 
   _$topToolbar?: dxElementWrapper | null;
 
-  _topToolbar?: Toolbar;
+  _topToolbar?: ToolbarBase;
 
   _$bottomToolbar?: dxElementWrapper | null;
 
-  _bottomToolbar?: Toolbar;
+  _bottomToolbar?: ToolbarBase;
 
   _$popupContent?: dxElementWrapper | null;
 
@@ -438,7 +437,7 @@ class Popup<
 
     this._toggleContentScrollClass();
 
-    this.$overlayContent().attr('role', 'dialog');
+    this.setAria('role', this._getAriaRole());
   }
 
   _render(): void {
@@ -609,7 +608,7 @@ class Popup<
       $toolbarContainer,
       {
         onInitialized: (e): void => {
-          this._topToolbar = e.component;
+          this._topToolbar = e.component as unknown as ToolbarBase;
         },
       },
     );
@@ -659,7 +658,7 @@ class Popup<
       {
         compactMode: true,
         onInitialized: (e): void => {
-          this._bottomToolbar = e.component;
+          this._bottomToolbar = e.component as unknown as ToolbarBase;
         },
       },
     );
@@ -767,20 +766,28 @@ class Popup<
 
     const integrationOptions = this._getIntegrationOptions();
 
-    // @ts-expect-error integrationOptions
     instance.option({
       ...options,
       integrationOptions,
     });
   }
 
+  protected _getAriaRole(): string {
+    return 'dialog';
+  }
+
   _toggleAriaLabel(): void {
     const { title, showTitle } = this.option();
-    const shouldSetAriaLabel = showTitle && Boolean(title);
-    const titleId = shouldSetAriaLabel ? new Guid().toString() : null;
+    const isLabelRequired = Boolean(showTitle) && Boolean(title);
 
-    this._$topToolbar?.find(`.${TOOLBAR_LABEL_CLASS}`).eq(0).attr('id', titleId);
-    this.$overlayContent().attr('aria-labelledby', titleId);
+    const titleId = isLabelRequired ? new Guid().toString() : null;
+    const isLabelAttributeSet = this._topToolbar?.setLabelAttribute('id', titleId);
+
+    this.setAria(
+      'labelledby',
+      isLabelRequired && isLabelAttributeSet ? titleId : null,
+      this.$overlayContent(),
+    );
   }
 
   _animateShowing(): void {
@@ -1409,6 +1416,7 @@ class Popup<
         break;
       case 'titleTemplate': {
         this._renderTopToolbarImpl();
+        this._toggleAriaLabel();
         this._renderGeometry();
         triggerResizeEvent(this.$overlayContent());
         break;

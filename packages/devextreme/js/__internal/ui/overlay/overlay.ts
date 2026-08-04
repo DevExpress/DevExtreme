@@ -838,6 +838,7 @@ class Overlay<
     return this._hidingDeferred.promise();
   }
 
+  // Note: method helps Scheduler Appointments to avoid Focus Race Condition
   _forceFocusLost(): void {
     const activeElement = domAdapter.getActiveElement();
     const shouldResetActiveElement = !!this._$content?.find(activeElement).length;
@@ -989,14 +990,20 @@ class Overlay<
       const $currentElement = $elements?.eq(i) ?? null;
       const $reverseElement = $elements?.eq(elementsCount - i) ?? null;
 
-      // @ts-expect-error is should can get function as callback
-      if (!$first && $currentElement.is(selectors.tabbable)) {
-        $first = $currentElement;
+      if (!$first && $currentElement) {
+        // @ts-expect-error is should can get function as callback
+        const isTabbableAndNotOverlay = $currentElement?.not(`.${OVERLAY_CONTENT_CLASS}`).is(selectors.tabbable);
+        if (isTabbableAndNotOverlay) {
+          $first = $currentElement;
+        }
       }
 
-      // @ts-expect-error is should can get function as callback
-      if (!$last && $reverseElement.is(selectors.tabbable)) {
-        $last = $reverseElement;
+      if (!$last && $reverseElement) {
+        // @ts-expect-error is should can get function as callback
+        const isTabbableAndNotOverlay = $reverseElement?.not(`.${OVERLAY_CONTENT_CLASS}`).is(selectors.tabbable);
+        if (isTabbableAndNotOverlay) {
+          $last = $reverseElement;
+        }
       }
 
       if ($first && $last) {
