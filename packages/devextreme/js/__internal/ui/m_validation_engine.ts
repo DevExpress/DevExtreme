@@ -80,14 +80,14 @@ type RuleValidationResult = boolean | Promise<AsyncRuleResult> | undefined;
 export interface ValidationResultInternal {
   name?: string;
   value?: unknown;
-  brokenRule?: ValidationRuleInternal;
-  brokenRules?: ValidationRuleInternal[];
+  brokenRule?: ValidationRuleInternal | null;
+  brokenRules?: ValidationRuleInternal[] | null;
   isValid?: boolean;
   validationRules?: ValidationRuleInternal[];
   pendingRules?: ValidationRuleInternal[] | null;
   status?: ValidationStatus;
   complete?: Promise<ValidationResultInternal> | null;
-  id?: string;
+  id?: string | null;
   validator?: Validator;
 }
 
@@ -755,13 +755,13 @@ const ValidationEngine = {
     let result: ValidationResultInternal = {
       name,
       value,
-      brokenRule: undefined,
-      brokenRules: undefined,
+      brokenRule: null,
+      brokenRules: null,
       isValid: true,
       validationRules: rules,
-      pendingRules: undefined,
+      pendingRules: null,
       status: STATUS.valid,
-      complete: undefined,
+      complete: null,
     };
     const validator = rules?.[0]?.validator;
 

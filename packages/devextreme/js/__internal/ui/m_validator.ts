@@ -287,13 +287,13 @@ class Validator extends DOMComponent<Validator, ValidatorProperties> {
   reset(): void {
     const { adapter } = this.option();
     const result: ValidationResultInternal = {
-      id: undefined,
+      id: null,
       isValid: true,
-      brokenRule: undefined,
-      brokenRules: undefined,
-      pendingRules: undefined,
+      brokenRule: null,
+      brokenRules: null,
+      pendingRules: null,
       status: VALIDATION_STATUS_VALID,
-      complete: undefined,
+      complete: null,
     };
 
     this._validationInfo.skipValidation = true;
