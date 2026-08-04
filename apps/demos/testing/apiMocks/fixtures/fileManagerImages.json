@@ -1,0 +1,985 @@
+{
+  "": [
+    {
+      "key": "Cities",
+      "name": "Cities",
+      "dateModified": "2026-07-03T11:20:35.4522759Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": true
+    },
+    {
+      "key": "Contacts",
+      "name": "Contacts",
+      "dateModified": "2026-07-23T07:13:15.5195929Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Landscapes",
+      "name": "Landscapes",
+      "dateModified": "2026-07-23T07:13:15.6308132Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Portraits",
+      "name": "Portraits",
+      "dateModified": "2026-07-23T07:13:16.3865833Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Widescreen",
+      "name": "Widescreen",
+      "dateModified": "2026-07-23T07:13:16.417134Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "Cities": [
+    {
+      "key": "Cities\\Athens",
+      "name": "Athens",
+      "dateModified": "2026-07-23T07:13:13.2570657Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Cities\\Barcelona",
+      "name": "Barcelona",
+      "dateModified": "2026-07-23T07:13:13.2712046Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Cities\\Berlin",
+      "name": "Berlin",
+      "dateModified": "2026-07-23T07:13:13.2955134Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Cities\\Cairo",
+      "name": "Cairo",
+      "dateModified": "2026-07-23T07:13:13.3114354Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Cities\\Las-Vegas",
+      "name": "Las-Vegas",
+      "dateModified": "2026-07-23T07:13:13.3327625Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Cities\\London",
+      "name": "London",
+      "dateModified": "2026-07-23T07:13:13.3727637Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Cities\\Los-Angeles",
+      "name": "Los-Angeles",
+      "dateModified": "2026-07-23T07:13:13.3937725Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Cities\\Moscow",
+      "name": "Moscow",
+      "dateModified": "2026-07-23T07:13:14.4094756Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Cities\\New-York",
+      "name": "New-York",
+      "dateModified": "2026-07-23T07:13:14.437449Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Cities\\Paris",
+      "name": "Paris",
+      "dateModified": "2026-07-23T07:13:14.461281Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Cities\\Prague",
+      "name": "Prague",
+      "dateModified": "2026-07-23T07:13:14.4904832Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Cities\\Sydney",
+      "name": "Sydney",
+      "dateModified": "2026-07-23T07:13:14.5060384Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Cities\\Tokyo",
+      "name": "Tokyo",
+      "dateModified": "2026-07-23T07:13:14.5282989Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "Cities/Athens": [
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Athens/(Athens)-Academy-of-Athens.jpg",
+      "key": "Cities\\Athens\\(Athens)-Academy-of-Athens.jpg",
+      "name": "(Athens)-Academy-of-Athens.jpg",
+      "dateModified": "2026-07-23T06:09:04.7131088Z",
+      "isDirectory": false,
+      "size": 43119,
+      "hasSubDirectories": false
+    }
+  ],
+  "Cities/Barcelona": [
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Barcelona/(Barcelona)-Arc-de-Triomf.jpg",
+      "key": "Cities\\Barcelona\\(Barcelona)-Arc-de-Triomf.jpg",
+      "name": "(Barcelona)-Arc-de-Triomf.jpg",
+      "dateModified": "2026-07-23T06:09:04.7376127Z",
+      "isDirectory": false,
+      "size": 47685,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Barcelona/(Barcelona)-Camp-Nou.jpg",
+      "key": "Cities\\Barcelona\\(Barcelona)-Camp-Nou.jpg",
+      "name": "(Barcelona)-Camp-Nou.jpg",
+      "dateModified": "2026-07-23T06:09:04.7556517Z",
+      "isDirectory": false,
+      "size": 52134,
+      "hasSubDirectories": false
+    }
+  ],
+  "Cities/Berlin": [
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Berlin/(Berlin)-Brandenburg-Gate.jpg",
+      "key": "Cities\\Berlin\\(Berlin)-Brandenburg-Gate.jpg",
+      "name": "(Berlin)-Brandenburg-Gate.jpg",
+      "dateModified": "2026-07-23T06:09:04.7835516Z",
+      "isDirectory": false,
+      "size": 33506,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Berlin/(Berlin)-Red-City-Hall.jpg",
+      "key": "Cities\\Berlin\\(Berlin)-Red-City-Hall.jpg",
+      "name": "(Berlin)-Red-City-Hall.jpg",
+      "dateModified": "2026-07-23T06:09:04.8091732Z",
+      "isDirectory": false,
+      "size": 24965,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Berlin/(Berlin)-Reichstag.jpg",
+      "key": "Cities\\Berlin\\(Berlin)-Reichstag.jpg",
+      "name": "(Berlin)-Reichstag.jpg",
+      "dateModified": "2026-07-23T06:09:04.8407998Z",
+      "isDirectory": false,
+      "size": 33840,
+      "hasSubDirectories": false
+    }
+  ],
+  "Cities/Cairo": [
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Cairo/(Cairo)-Cairo-Citadel.jpg",
+      "key": "Cities\\Cairo\\(Cairo)-Cairo-Citadel.jpg",
+      "name": "(Cairo)-Cairo-Citadel.jpg",
+      "dateModified": "2026-07-23T06:09:04.8902378Z",
+      "isDirectory": false,
+      "size": 35863,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Cairo/(Cairo)-Mosque-of-Ibn-Tulun.jpg",
+      "key": "Cities\\Cairo\\(Cairo)-Mosque-of-Ibn-Tulun.jpg",
+      "name": "(Cairo)-Mosque-of-Ibn-Tulun.jpg",
+      "dateModified": "2026-07-23T06:09:04.9258966Z",
+      "isDirectory": false,
+      "size": 32620,
+      "hasSubDirectories": false
+    }
+  ],
+  "Cities/Las-Vegas": [
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Las-Vegas/(Las-Vegas)-Bally's-Hotel-and-Casino.jpg",
+      "key": "Cities\\Las-Vegas\\(Las-Vegas)-Bally's-Hotel-and-Casino.jpg",
+      "name": "(Las-Vegas)-Bally's-Hotel-and-Casino.jpg",
+      "dateModified": "2026-07-23T06:09:04.9535223Z",
+      "isDirectory": false,
+      "size": 44242,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Las-Vegas/(Las-Vegas)-Bellagio-Hotel-and-Casino.jpg",
+      "key": "Cities\\Las-Vegas\\(Las-Vegas)-Bellagio-Hotel-and-Casino.jpg",
+      "name": "(Las-Vegas)-Bellagio-Hotel-and-Casino.jpg",
+      "dateModified": "2026-07-23T06:09:04.9693713Z",
+      "isDirectory": false,
+      "size": 47245,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Las-Vegas/(Las-Vegas)-Luxor-Hotel-and-Casino.jpg",
+      "key": "Cities\\Las-Vegas\\(Las-Vegas)-Luxor-Hotel-and-Casino.jpg",
+      "name": "(Las-Vegas)-Luxor-Hotel-and-Casino.jpg",
+      "dateModified": "2026-07-23T06:09:04.9872132Z",
+      "isDirectory": false,
+      "size": 29983,
+      "hasSubDirectories": false
+    }
+  ],
+  "Cities/London": [
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/London/(London)-St-Paul's-Cathedral.jpg",
+      "key": "Cities\\London\\(London)-St-Paul's-Cathedral.jpg",
+      "name": "(London)-St-Paul's-Cathedral.jpg",
+      "dateModified": "2026-07-23T06:09:05.0067957Z",
+      "isDirectory": false,
+      "size": 45323,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/London/(London)-Tower-Bridge.jpg",
+      "key": "Cities\\London\\(London)-Tower-Bridge.jpg",
+      "name": "(London)-Tower-Bridge.jpg",
+      "dateModified": "2026-07-23T06:09:05.0246224Z",
+      "isDirectory": false,
+      "size": 37337,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/London/(London)-Tower-of-London.jpg",
+      "key": "Cities\\London\\(London)-Tower-of-London.jpg",
+      "name": "(London)-Tower-of-London.jpg",
+      "dateModified": "2026-07-23T06:09:05.0444623Z",
+      "isDirectory": false,
+      "size": 41645,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/London/(London)-Trafalgar-Square.jpg",
+      "key": "Cities\\London\\(London)-Trafalgar-Square.jpg",
+      "name": "(London)-Trafalgar-Square.jpg",
+      "dateModified": "2026-07-23T06:09:05.0622781Z",
+      "isDirectory": false,
+      "size": 44226,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/London/(London)-Westminster-Abbey.jpg",
+      "key": "Cities\\London\\(London)-Westminster-Abbey.jpg",
+      "name": "(London)-Westminster-Abbey.jpg",
+      "dateModified": "2026-07-23T06:09:05.0821545Z",
+      "isDirectory": false,
+      "size": 50535,
+      "hasSubDirectories": false
+    }
+  ],
+  "Cities/Los-Angeles": [
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Los-Angeles/(Los-Angeles)-Downtown.jpg",
+      "key": "Cities\\Los-Angeles\\(Los-Angeles)-Downtown.jpg",
+      "name": "(Los-Angeles)-Downtown.jpg",
+      "dateModified": "2026-07-23T06:09:05.1100469Z",
+      "isDirectory": false,
+      "size": 42954,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Los-Angeles/(Los-Angeles)-International-Airport.jpg",
+      "key": "Cities\\Los-Angeles\\(Los-Angeles)-International-Airport.jpg",
+      "name": "(Los-Angeles)-International-Airport.jpg",
+      "dateModified": "2026-07-23T06:09:05.1356963Z",
+      "isDirectory": false,
+      "size": 39502,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Los-Angeles/(Los-Angeles)-Music-Center.jpg",
+      "key": "Cities\\Los-Angeles\\(Los-Angeles)-Music-Center.jpg",
+      "name": "(Los-Angeles)-Music-Center.jpg",
+      "dateModified": "2026-07-23T06:09:05.1653375Z",
+      "isDirectory": false,
+      "size": 27627,
+      "hasSubDirectories": false
+    }
+  ],
+  "Cities/Moscow": [
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Moscow/(Moscow)-Bolshoi-Theatre.jpg",
+      "key": "Cities\\Moscow\\(Moscow)-Bolshoi-Theatre.jpg",
+      "name": "(Moscow)-Bolshoi-Theatre.jpg",
+      "dateModified": "2026-07-23T06:09:05.1932154Z",
+      "isDirectory": false,
+      "size": 44125,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Moscow/(Moscow)-Cathedral-of-Christ-the-Saviour.jpg",
+      "key": "Cities\\Moscow\\(Moscow)-Cathedral-of-Christ-the-Saviour.jpg",
+      "name": "(Moscow)-Cathedral-of-Christ-the-Saviour.jpg",
+      "dateModified": "2026-07-23T06:09:05.2168262Z",
+      "isDirectory": false,
+      "size": 40493,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Moscow/(Moscow)-Saint-Basil's-Cathedral.jpg",
+      "key": "Cities\\Moscow\\(Moscow)-Saint-Basil's-Cathedral.jpg",
+      "name": "(Moscow)-Saint-Basil's-Cathedral.jpg",
+      "dateModified": "2026-07-23T06:09:05.2406888Z",
+      "isDirectory": false,
+      "size": 43446,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Moscow/(Moscow)-Spasskaya-Tower.jpg",
+      "key": "Cities\\Moscow\\(Moscow)-Spasskaya-Tower.jpg",
+      "name": "(Moscow)-Spasskaya-Tower.jpg",
+      "dateModified": "2026-07-23T06:09:05.2821226Z",
+      "isDirectory": false,
+      "size": 30030,
+      "hasSubDirectories": false
+    }
+  ],
+  "Cities/New-York": [
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/New-York/(New-York)-Brooklyn-Bridge.jpg",
+      "key": "Cities\\New-York\\(New-York)-Brooklyn-Bridge.jpg",
+      "name": "(New-York)-Brooklyn-Bridge.jpg",
+      "dateModified": "2026-07-23T06:09:05.3393511Z",
+      "isDirectory": false,
+      "size": 54163,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/New-York/(New-York)-Empire-State-Building.jpg",
+      "key": "Cities\\New-York\\(New-York)-Empire-State-Building.jpg",
+      "name": "(New-York)-Empire-State-Building.jpg",
+      "dateModified": "2026-07-23T06:09:05.3810206Z",
+      "isDirectory": false,
+      "size": 41423,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/New-York/(New-York)-Rockefeller-Center.jpg",
+      "key": "Cities\\New-York\\(New-York)-Rockefeller-Center.jpg",
+      "name": "(New-York)-Rockefeller-Center.jpg",
+      "dateModified": "2026-07-23T06:09:05.4146932Z",
+      "isDirectory": false,
+      "size": 23166,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/New-York/(New-York)-Times-Square.jpg",
+      "key": "Cities\\New-York\\(New-York)-Times-Square.jpg",
+      "name": "(New-York)-Times-Square.jpg",
+      "dateModified": "2026-07-23T06:09:05.4362878Z",
+      "isDirectory": false,
+      "size": 56540,
+      "hasSubDirectories": false
+    }
+  ],
+  "Cities/Paris": [
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Paris/(Paris)-Arc-de-Triomphe.jpg",
+      "key": "Cities\\Paris\\(Paris)-Arc-de-Triomphe.jpg",
+      "name": "(Paris)-Arc-de-Triomphe.jpg",
+      "dateModified": "2026-07-23T06:09:05.4641778Z",
+      "isDirectory": false,
+      "size": 39557,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Paris/(Paris)-Eiffel-Tower.jpg",
+      "key": "Cities\\Paris\\(Paris)-Eiffel-Tower.jpg",
+      "name": "(Paris)-Eiffel-Tower.jpg",
+      "dateModified": "2026-07-23T06:09:05.4877955Z",
+      "isDirectory": false,
+      "size": 39862,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Paris/(Paris)-Montmartre.jpg",
+      "key": "Cities\\Paris\\(Paris)-Montmartre.jpg",
+      "name": "(Paris)-Montmartre.jpg",
+      "dateModified": "2026-07-23T06:09:05.5116867Z",
+      "isDirectory": false,
+      "size": 47310,
+      "hasSubDirectories": false
+    }
+  ],
+  "Cities/Prague": [
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Prague/(Prague)-Charles-Bridge.jpg",
+      "key": "Cities\\Prague\\(Prague)-Charles-Bridge.jpg",
+      "name": "(Prague)-Charles-Bridge.jpg",
+      "dateModified": "2026-07-23T06:09:05.5312802Z",
+      "isDirectory": false,
+      "size": 49944,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Prague/(Prague)-Prague-Orloj.jpg",
+      "key": "Cities\\Prague\\(Prague)-Prague-Orloj.jpg",
+      "name": "(Prague)-Prague-Orloj.jpg",
+      "dateModified": "2026-07-23T06:09:05.5471287Z",
+      "isDirectory": false,
+      "size": 61522,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Prague/(Prague)-Prague-Zoo.jpg",
+      "key": "Cities\\Prague\\(Prague)-Prague-Zoo.jpg",
+      "name": "(Prague)-Prague-Zoo.jpg",
+      "dateModified": "2026-07-23T06:09:05.5649768Z",
+      "isDirectory": false,
+      "size": 37849,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Prague/(Prague)-St.-Vitus-Cathedral.jpg",
+      "key": "Cities\\Prague\\(Prague)-St.-Vitus-Cathedral.jpg",
+      "name": "(Prague)-St.-Vitus-Cathedral.jpg",
+      "dateModified": "2026-07-23T06:09:05.5808024Z",
+      "isDirectory": false,
+      "size": 48621,
+      "hasSubDirectories": false
+    }
+  ],
+  "Cities/Sydney": [
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Sydney/(Sydney)-Sydney-Central-Business-District.jpg",
+      "key": "Cities\\Sydney\\(Sydney)-Sydney-Central-Business-District.jpg",
+      "name": "(Sydney)-Sydney-Central-Business-District.jpg",
+      "dateModified": "2026-07-23T06:09:05.602641Z",
+      "isDirectory": false,
+      "size": 36915,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Sydney/(Sydney)-Sydney-Opera-House.jpg",
+      "key": "Cities\\Sydney\\(Sydney)-Sydney-Opera-House.jpg",
+      "name": "(Sydney)-Sydney-Opera-House.jpg",
+      "dateModified": "2026-07-23T06:09:05.6282383Z",
+      "isDirectory": false,
+      "size": 39404,
+      "hasSubDirectories": false
+    }
+  ],
+  "Cities/Tokyo": [
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Tokyo/(Tokyo)-Rainbow-Bridge.jpg",
+      "key": "Cities\\Tokyo\\(Tokyo)-Rainbow-Bridge.jpg",
+      "name": "(Tokyo)-Rainbow-Bridge.jpg",
+      "dateModified": "2026-07-23T06:09:05.6578497Z",
+      "isDirectory": false,
+      "size": 36849,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Tokyo/(Tokyo)-Tokyo-Imperial-Palace.jpg",
+      "key": "Cities\\Tokyo\\(Tokyo)-Tokyo-Imperial-Palace.jpg",
+      "name": "(Tokyo)-Tokyo-Imperial-Palace.jpg",
+      "dateModified": "2026-07-23T06:09:05.6817135Z",
+      "isDirectory": false,
+      "size": 60785,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Cities/Tokyo/(Tokyo)-Tokyo-Tower.jpg",
+      "key": "Cities\\Tokyo\\(Tokyo)-Tokyo-Tower.jpg",
+      "name": "(Tokyo)-Tokyo-Tower.jpg",
+      "dateModified": "2026-07-23T06:09:05.7133599Z",
+      "isDirectory": false,
+      "size": 45568,
+      "hasSubDirectories": false
+    }
+  ],
+  "Contacts": [
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Alberto_Alonso.jpg",
+      "key": "Contacts\\Alberto_Alonso.jpg",
+      "name": "Alberto_Alonso.jpg",
+      "dateModified": "2026-07-23T06:09:05.7628044Z",
+      "isDirectory": false,
+      "size": 7032,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Alfredo_Gomez.jpg",
+      "key": "Contacts\\Alfredo_Gomez.jpg",
+      "name": "Alfredo_Gomez.jpg",
+      "dateModified": "2026-07-23T06:09:05.8002046Z",
+      "isDirectory": false,
+      "size": 7682,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Andrew_Lee.jpg",
+      "key": "Contacts\\Andrew_Lee.jpg",
+      "name": "Andrew_Lee.jpg",
+      "dateModified": "2026-07-23T06:09:05.8260836Z",
+      "isDirectory": false,
+      "size": 8477,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Angela_Murphy.jpg",
+      "key": "Contacts\\Angela_Murphy.jpg",
+      "name": "Angela_Murphy.jpg",
+      "dateModified": "2026-07-23T06:09:05.8496912Z",
+      "isDirectory": false,
+      "size": 9188,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Clarence_Nath.jpg",
+      "key": "Contacts\\Clarence_Nath.jpg",
+      "name": "Clarence_Nath.jpg",
+      "dateModified": "2026-07-23T06:09:05.873551Z",
+      "isDirectory": false,
+      "size": 8550,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Colin_He.jpg",
+      "key": "Contacts\\Colin_He.jpg",
+      "name": "Colin_He.jpg",
+      "dateModified": "2026-07-23T06:09:05.9011971Z",
+      "isDirectory": false,
+      "size": 8039,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Connor_Jenkins.jpg",
+      "key": "Contacts\\Connor_Jenkins.jpg",
+      "name": "Connor_Jenkins.jpg",
+      "dateModified": "2026-07-23T06:09:05.905219Z",
+      "isDirectory": false,
+      "size": 7373,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Connor_Lopez.jpg",
+      "key": "Contacts\\Connor_Lopez.jpg",
+      "name": "Connor_Lopez.jpg",
+      "dateModified": "2026-07-23T06:09:05.9230457Z",
+      "isDirectory": false,
+      "size": 7079,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Destiny_Clark.jpg",
+      "key": "Contacts\\Destiny_Clark.jpg",
+      "name": "Destiny_Clark.jpg",
+      "dateModified": "2026-07-23T06:09:05.9406393Z",
+      "isDirectory": false,
+      "size": 10596,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Diana_Martin.jpg",
+      "key": "Contacts\\Diana_Martin.jpg",
+      "name": "Diana_Martin.jpg",
+      "dateModified": "2026-07-23T06:09:05.9564637Z",
+      "isDirectory": false,
+      "size": 8760,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Gary_Rubio.jpg",
+      "key": "Contacts\\Gary_Rubio.jpg",
+      "name": "Gary_Rubio.jpg",
+      "dateModified": "2026-07-23T06:09:05.9723Z",
+      "isDirectory": false,
+      "size": 8180,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Heidi_Lopez.jpg",
+      "key": "Contacts\\Heidi_Lopez.jpg",
+      "name": "Heidi_Lopez.jpg",
+      "dateModified": "2026-07-23T06:09:05.988179Z",
+      "isDirectory": false,
+      "size": 7931,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Jesse_Gonzalez.jpg",
+      "key": "Contacts\\Jesse_Gonzalez.jpg",
+      "name": "Jesse_Gonzalez.jpg",
+      "dateModified": "2026-07-23T06:09:05.988179Z",
+      "isDirectory": false,
+      "size": 8028,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Jessie_She.jpg",
+      "key": "Contacts\\Jessie_She.jpg",
+      "name": "Jessie_She.jpg",
+      "dateModified": "2026-07-23T06:09:05.998904Z",
+      "isDirectory": false,
+      "size": 7674,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Julia_Bell.jpg",
+      "key": "Contacts\\Julia_Bell.jpg",
+      "name": "Julia_Bell.jpg",
+      "dateModified": "2026-07-23T06:09:06.0147641Z",
+      "isDirectory": false,
+      "size": 8893,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Julia_Evans.jpg",
+      "key": "Contacts\\Julia_Evans.jpg",
+      "name": "Julia_Evans.jpg",
+      "dateModified": "2026-07-23T06:09:06.0356907Z",
+      "isDirectory": false,
+      "size": 9786,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Katelyn_Lopez.jpg",
+      "key": "Contacts\\Katelyn_Lopez.jpg",
+      "name": "Katelyn_Lopez.jpg",
+      "dateModified": "2026-07-23T06:09:06.0597403Z",
+      "isDirectory": false,
+      "size": 9958,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Kevin_Collins.jpg",
+      "key": "Contacts\\Kevin_Collins.jpg",
+      "name": "Kevin_Collins.jpg",
+      "dateModified": "2026-07-23T06:09:06.0833504Z",
+      "isDirectory": false,
+      "size": 7093,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Logan_Hernandez.jpg",
+      "key": "Contacts\\Logan_Hernandez.jpg",
+      "name": "Logan_Hernandez.jpg",
+      "dateModified": "2026-07-23T06:09:06.0873676Z",
+      "isDirectory": false,
+      "size": 8643,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Maria_Hernandez.jpg",
+      "key": "Contacts\\Maria_Hernandez.jpg",
+      "name": "Maria_Hernandez.jpg",
+      "dateModified": "2026-07-23T06:09:06.1230208Z",
+      "isDirectory": false,
+      "size": 12898,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Martha_Gao.jpg",
+      "key": "Contacts\\Martha_Gao.jpg",
+      "name": "Martha_Gao.jpg",
+      "dateModified": "2026-07-23T06:09:06.1586575Z",
+      "isDirectory": false,
+      "size": 9730,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Megan_Sanchez.jpg",
+      "key": "Contacts\\Megan_Sanchez.jpg",
+      "name": "Megan_Sanchez.jpg",
+      "dateModified": "2026-07-23T06:09:06.1923119Z",
+      "isDirectory": false,
+      "size": 7145,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Miguel_Jones.jpg",
+      "key": "Contacts\\Miguel_Jones.jpg",
+      "name": "Miguel_Jones.jpg",
+      "dateModified": "2026-07-23T06:09:06.2199159Z",
+      "isDirectory": false,
+      "size": 7667,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Naomi_Moreno.jpg",
+      "key": "Contacts\\Naomi_Moreno.jpg",
+      "name": "Naomi_Moreno.jpg",
+      "dateModified": "2026-07-23T06:09:06.2397396Z",
+      "isDirectory": false,
+      "size": 10322,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Nathan_Bryant.jpg",
+      "key": "Contacts\\Nathan_Bryant.jpg",
+      "name": "Nathan_Bryant.jpg",
+      "dateModified": "2026-07-23T06:09:06.2889288Z",
+      "isDirectory": false,
+      "size": 7709,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Rafael_Raje.jpg",
+      "key": "Contacts\\Rafael_Raje.jpg",
+      "name": "Rafael_Raje.jpg",
+      "dateModified": "2026-07-23T06:09:06.3047527Z",
+      "isDirectory": false,
+      "size": 9314,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Rebekah_Raman.jpg",
+      "key": "Contacts\\Rebekah_Raman.jpg",
+      "name": "Rebekah_Raman.jpg",
+      "dateModified": "2026-07-23T06:09:06.3364084Z",
+      "isDirectory": false,
+      "size": 8848,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Shannon_Sanz.jpg",
+      "key": "Contacts\\Shannon_Sanz.jpg",
+      "name": "Shannon_Sanz.jpg",
+      "dateModified": "2026-07-23T06:09:06.3602814Z",
+      "isDirectory": false,
+      "size": 8285,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Contacts/Xavier_Richardson.jpg",
+      "key": "Contacts\\Xavier_Richardson.jpg",
+      "name": "Xavier_Richardson.jpg",
+      "dateModified": "2026-07-23T06:09:06.387915Z",
+      "isDirectory": false,
+      "size": 8256,
+      "hasSubDirectories": false
+    }
+  ],
+  "Landscapes": [
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Landscapes/01.jpg",
+      "key": "Landscapes\\01.jpg",
+      "name": "01.jpg",
+      "dateModified": "2026-07-23T06:09:06.4155396Z",
+      "isDirectory": false,
+      "size": 81879,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Landscapes/02.jpg",
+      "key": "Landscapes\\02.jpg",
+      "name": "02.jpg",
+      "dateModified": "2026-07-23T06:09:06.4434181Z",
+      "isDirectory": false,
+      "size": 68436,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Landscapes/03.jpg",
+      "key": "Landscapes\\03.jpg",
+      "name": "03.jpg",
+      "dateModified": "2026-07-23T06:09:06.4690388Z",
+      "isDirectory": false,
+      "size": 64138,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Landscapes/04.jpg",
+      "key": "Landscapes\\04.jpg",
+      "name": "04.jpg",
+      "dateModified": "2026-07-23T06:09:06.4946588Z",
+      "isDirectory": false,
+      "size": 58057,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Landscapes/05.jpg",
+      "key": "Landscapes\\05.jpg",
+      "name": "05.jpg",
+      "dateModified": "2026-07-23T06:09:06.5205141Z",
+      "isDirectory": false,
+      "size": 70505,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Landscapes/06.jpg",
+      "key": "Landscapes\\06.jpg",
+      "name": "06.jpg",
+      "dateModified": "2026-07-23T06:09:06.5481478Z",
+      "isDirectory": false,
+      "size": 39285,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Landscapes/07.jpg",
+      "key": "Landscapes\\07.jpg",
+      "name": "07.jpg",
+      "dateModified": "2026-07-23T06:09:06.5757696Z",
+      "isDirectory": false,
+      "size": 55967,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Landscapes/08.jpg",
+      "key": "Landscapes\\08.jpg",
+      "name": "08.jpg",
+      "dateModified": "2026-07-23T06:09:06.6016427Z",
+      "isDirectory": false,
+      "size": 48109,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Landscapes/09.jpg",
+      "key": "Landscapes\\09.jpg",
+      "name": "09.jpg",
+      "dateModified": "2026-07-23T06:09:06.6212223Z",
+      "isDirectory": false,
+      "size": 28391,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Landscapes/10.jpg",
+      "key": "Landscapes\\10.jpg",
+      "name": "10.jpg",
+      "dateModified": "2026-07-23T06:09:06.6390584Z",
+      "isDirectory": false,
+      "size": 101467,
+      "hasSubDirectories": false
+    }
+  ],
+  "Portraits": [
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Portraits/01.jpg",
+      "key": "Portraits\\01.jpg",
+      "name": "01.jpg",
+      "dateModified": "2026-07-23T06:09:06.6588958Z",
+      "isDirectory": false,
+      "size": 89418,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Portraits/02.jpg",
+      "key": "Portraits\\02.jpg",
+      "name": "02.jpg",
+      "dateModified": "2026-07-23T06:09:06.6827453Z",
+      "isDirectory": false,
+      "size": 54383,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Portraits/03.jpg",
+      "key": "Portraits\\03.jpg",
+      "name": "03.jpg",
+      "dateModified": "2026-07-23T06:09:06.7003403Z",
+      "isDirectory": false,
+      "size": 130933,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Portraits/04.jpg",
+      "key": "Portraits\\04.jpg",
+      "name": "04.jpg",
+      "dateModified": "2026-07-23T06:09:06.72017Z",
+      "isDirectory": false,
+      "size": 117903,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Portraits/05.jpg",
+      "key": "Portraits\\05.jpg",
+      "name": "05.jpg",
+      "dateModified": "2026-07-23T06:09:06.7440297Z",
+      "isDirectory": false,
+      "size": 51291,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Portraits/06.jpg",
+      "key": "Portraits\\06.jpg",
+      "name": "06.jpg",
+      "dateModified": "2026-07-23T06:09:06.7696374Z",
+      "isDirectory": false,
+      "size": 113250,
+      "hasSubDirectories": false
+    }
+  ],
+  "Widescreen": [
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Widescreen/man-climbing-on-limestone-wall.jpg",
+      "key": "Widescreen\\man-climbing-on-limestone-wall.jpg",
+      "name": "man-climbing-on-limestone-wall.jpg",
+      "dateModified": "2026-07-23T06:09:06.7972726Z",
+      "isDirectory": false,
+      "size": 35141,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Widescreen/swimmer-underwater.jpg",
+      "key": "Widescreen\\swimmer-underwater.jpg",
+      "name": "swimmer-underwater.jpg",
+      "dateModified": "2026-07-23T06:09:06.8171198Z",
+      "isDirectory": false,
+      "size": 53030,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Widescreen/typing-male-hands.jpg",
+      "key": "Widescreen\\typing-male-hands.jpg",
+      "name": "typing-male-hands.jpg",
+      "dateModified": "2026-07-23T06:09:06.8349497Z",
+      "isDirectory": false,
+      "size": 31965,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Widescreen/woman-using-laptop.jpg",
+      "key": "Widescreen\\woman-using-laptop.jpg",
+      "name": "woman-using-laptop.jpg",
+      "dateModified": "2026-07-23T06:09:06.8605622Z",
+      "isDirectory": false,
+      "size": 24375,
+      "hasSubDirectories": false
+    },
+    {
+      "url": "https://js.devexpress.com/Demos/NetCore/SampleData/SampleImages/Widescreen/woman-using-notebook.jpg",
+      "key": "Widescreen\\woman-using-notebook.jpg",
+      "name": "woman-using-notebook.jpg",
+      "dateModified": "2026-07-23T06:09:06.888438Z",
+      "isDirectory": false,
+      "size": 46242,
+      "hasSubDirectories": false
+    }
+  ]
+}
