@@ -218,10 +218,10 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get fieldChooser(): { allowSearch?: boolean, applyChangesMode?: ApplyChangesMode, enabled?: boolean, height?: number, layout?: FieldChooserLayout, searchTimeout?: number, texts?: { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string }, title?: string, width?: number } {
+    get fieldChooser(): { allowSearch?: boolean, applyChangesMode?: ApplyChangesMode, enabled?: boolean, height?: number | string, layout?: FieldChooserLayout, searchTimeout?: number, texts?: { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string }, title?: string, width?: number | string } {
         return this._getOption('fieldChooser');
     }
-    set fieldChooser(value: { allowSearch?: boolean, applyChangesMode?: ApplyChangesMode, enabled?: boolean, height?: number, layout?: FieldChooserLayout, searchTimeout?: number, texts?: { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string }, title?: string, width?: number }) {
+    set fieldChooser(value: { allowSearch?: boolean, applyChangesMode?: ApplyChangesMode, enabled?: boolean, height?: number | string, layout?: FieldChooserLayout, searchTimeout?: number, texts?: { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string }, title?: string, width?: number | string }) {
         this._setOption('fieldChooser', value);
     }
 
@@ -637,7 +637,7 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() fieldChooserChange: EventEmitter<{ allowSearch?: boolean, applyChangesMode?: ApplyChangesMode, enabled?: boolean, height?: number, layout?: FieldChooserLayout, searchTimeout?: number, texts?: { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string }, title?: string, width?: number }>;
+    @Output() fieldChooserChange: EventEmitter<{ allowSearch?: boolean, applyChangesMode?: ApplyChangesMode, enabled?: boolean, height?: number | string, layout?: FieldChooserLayout, searchTimeout?: number, texts?: { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string }, title?: string, width?: number | string }>;
 
     /**
     
