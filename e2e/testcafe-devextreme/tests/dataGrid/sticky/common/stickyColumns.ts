@@ -89,44 +89,48 @@ test.meta({ browserSize: [900, 800] })('Header hover should display correctly wh
     await t.hover(Selector('body'));
   });
 
-test.meta({ browserSize: [900, 800] })('Row hover should display correctly when there are fixed columns', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const dataRow = dataGrid.getDataRow(1);
+for (let i = 0; i < 50; i++) {
+  test.only.meta({
+    browserSize: [900, 800],
+  })(`${i}: ` + 'Row hover should display correctly when there are fixed columns', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const dataRow = dataGrid.getDataRow(1);
 
-  await t.expect(dataGrid.isReady()).ok();
+    await t.expect(dataGrid.isReady()).ok();
 
-  await t.hover(dataRow.element);
+    await t.hover(dataRow.getDataCell(1).element);
 
-  await t.expect(dataRow.isHovered).ok();
+    await t.expect(dataRow.isHovered).ok();
 
-  await testScreenshot(t, takeScreenshot, 'datagrid_row_hover_with_fixed_columns.png', { element: dataGrid.element });
+    await testScreenshot(t, takeScreenshot, 'datagrid_row_hover_with_fixed_columns.png', { element: dataGrid.element });
 
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await createWidget('dxDataGrid', {
-    dataSource: getData(20, 15),
-    columnWidth: 100,
-    columnAutoWidth: true,
-    hoverStateEnabled: true,
-    customizeColumns: (columns) => {
-      columns[5].fixed = true;
-      columns[5].fixedPosition = 'left';
-      columns[6].fixed = true;
-      columns[6].fixedPosition = 'left';
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await createWidget('dxDataGrid', {
+      dataSource: getData(20, 15),
+      columnWidth: 100,
+      columnAutoWidth: true,
+      hoverStateEnabled: true,
+      customizeColumns: (columns) => {
+        columns[5].fixed = true;
+        columns[5].fixedPosition = 'left';
+        columns[6].fixed = true;
+        columns[6].fixedPosition = 'left';
 
-      columns[8].fixed = true;
-      columns[8].fixedPosition = 'right';
-      columns[9].fixed = true;
-      columns[9].fixedPosition = 'right';
-    },
-  });
-})
-  .after(async (t) => {
-    await t.hover(Selector('body'));
-  });
+        columns[8].fixed = true;
+        columns[8].fixedPosition = 'right';
+        columns[9].fixed = true;
+        columns[9].fixedPosition = 'right';
+      },
+    });
+  })
+    .after(async (t) => {
+      await t.hover(Selector('body'));
+    });
+}
 
 test.meta({ browserSize: [900, 800] })('Alternating rows should display correctly when there are fixed columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
