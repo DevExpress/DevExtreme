@@ -20,7 +20,7 @@ import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
 import inflector from '@ts/core/utils/m_inflector';
 import type { Column, FilterField } from '@ts/grids/grid_core/columns_controller/types';
-import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
 

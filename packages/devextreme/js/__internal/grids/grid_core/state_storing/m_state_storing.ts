@@ -5,7 +5,7 @@ import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
-import type { DataController } from '../data_controller/m_data_controller';
+import type { DataController } from '../data_controller/data_controller';
 import type { ModuleType } from '../m_types';
 import type { SelectionController } from '../selection/m_selection';
 import type { RowsView } from '../views/m_rows_view';

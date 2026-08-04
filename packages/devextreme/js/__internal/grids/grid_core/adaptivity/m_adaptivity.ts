@@ -23,7 +23,7 @@ import type { ExportController } from '../../data_grid/export/m_export';
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { ColumnsResizerViewController, DraggingHeaderViewController } from '../columns_resizing_reordering/m_columns_resizing_reordering';
-import type { DataController } from '../data_controller/m_data_controller';
+import type { DataController } from '../data_controller/data_controller';
 import type { EditingController } from '../editing/m_editing';
 import type { EditorFactory } from '../editor_factory/m_editor_factory';
 import type { Direction } from '../keyboard_navigation/const';

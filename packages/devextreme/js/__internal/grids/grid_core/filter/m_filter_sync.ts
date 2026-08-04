@@ -11,7 +11,7 @@ import {
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
-import type { DataController } from '../data_controller/m_data_controller';
+import type { DataController } from '../data_controller/data_controller';
 import modules from '../m_modules';
 import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';

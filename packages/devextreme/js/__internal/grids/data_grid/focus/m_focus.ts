@@ -2,7 +2,7 @@ import { equalByValue } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
 import { Deferred } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
-import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import { focusModule } from '@ts/grids/grid_core/focus/m_focus';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
