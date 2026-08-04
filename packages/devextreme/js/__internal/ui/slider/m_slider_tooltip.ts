@@ -37,7 +37,7 @@ class SliderTooltip extends Tooltip<SliderTooltipProperties> {
       templatesRenderAsynchronously: false,
       _fixWrapperPosition: false,
       useResizeObserver: false,
-
+      _describeTarget: false,
       showMode: 'onHover',
       format: (value) => value,
       value: 0,

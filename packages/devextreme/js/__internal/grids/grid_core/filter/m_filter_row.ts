@@ -20,7 +20,7 @@ import type MenuInternal from '@ts/ui/menu/menu';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { Column } from '../columns_controller/types';
 import type { ColumnsResizerViewController } from '../columns_resizing_reordering/m_columns_resizing_reordering';
-import type { DataController } from '../data_controller/m_data_controller';
+import type { DataController } from '../data_controller/data_controller';
 import type { EditingController } from '../editing/m_editing';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';

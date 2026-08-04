@@ -232,14 +232,12 @@ class DiagramFloatingPanel extends DiagramPanel {
 
   _createOnVisibilityChangingAction(): void {
     this._onVisibilityChangingAction = this._createActionByOption(
-      // @ts-expect-error ts-error
       'onVisibilityChanging',
     );
   }
 
   _createOnVisibilityChangedAction(): void {
     this._onVisibilityChangedAction = this._createActionByOption(
-      // @ts-expect-error ts-error
       'onVisibilityChanged',
     );
   }

@@ -24,7 +24,7 @@ import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import Selection from '@ts/ui/selection/selection';
 
-import type { DataController } from '../data_controller/m_data_controller';
+import type { DataController } from '../data_controller/data_controller';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
 

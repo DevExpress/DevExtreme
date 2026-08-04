@@ -1,7 +1,7 @@
 import { isDefined } from '@ts/core/utils/m_type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import type { Item, UserData } from '../data_controller/m_data_controller';
+import type { Item, UserData } from '../data_controller/data_controller';
 import { AI_COLUMN_NAME, CLASSES } from './const';
 
 export const getAICommandColumnDefaultOptions = (): object => ({
@@ -20,11 +20,11 @@ export const getDataFromRowItems = (items: Item[]): UserData[] => items
 export const reduceDataCachedKeys = (
   data: UserData[],
   cachedData: Record<PropertyKey, string>,
-  keyField: string,
+  getKey: (item: UserData) => PropertyKey,
 ): Record<PropertyKey, unknown> => {
   const newData: Record<PropertyKey, unknown> = { };
   for (const item of data) {
-    const key = item[keyField] as PropertyKey;
+    const key = getKey(item);
     if (!(key in cachedData)) {
       newData[key] = item;
     }
@@ -35,15 +35,17 @@ export const reduceDataCachedKeys = (
 
 export const isKeyMissingInData = (
   data: UserData[],
-  keyField: string | string[],
+  keyField: string | string[] | ((data: UserData) => unknown),
 ): boolean => {
-  if (typeof keyField !== 'string') {
-    // The key field should be a string for AI Column functionality.
-    // Return false to avoid unnecessary errors for compound keys.
-    return false;
+  if (typeof keyField === 'function') {
+    return data.some((item) => !isDefined(keyField(item)));
   }
 
-  return data.some((item) => !(keyField in item));
+  const keyFields = Array.isArray(keyField) ? keyField : [keyField];
+
+  return data.some(
+    (item) => keyFields.some((field) => !(field in item)),
+  );
 };
 
 export const isAIColumnAutoMode = (column: Column): boolean => column.type === 'ai' && (!column.ai?.mode || column.ai.mode === 'auto');

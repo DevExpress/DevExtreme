@@ -288,7 +288,7 @@
         "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
         "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
         "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
-        "dxPivotGrid-ariaDescription": "Press Enter or Space to sort by fields, Alt + Down arrow to open a header filter, Shift + F10 to open the context menu",
+        "dxPivotGrid-ariaDescription": "Press Alt + Down arrow to open a header filter",
 
         "dxScheduler-dateRange": "nuo {0} iki {1}",
         "dxScheduler-ariaLabel": "Planuotuvas. {0} vaizdas: {1} su {2} įvykių",

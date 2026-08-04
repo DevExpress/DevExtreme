@@ -92,8 +92,8 @@
         "dxFileUploader-removeFileButtonLabel": "Retirer le fichier {0}",
         "dxFileUploader-uploadFileButtonLabel": "Téléverser le fichier {0}",
 
-        "dxRangeSlider-ariaFrom": "De {0}",
-        "dxRangeSlider-ariaTill": "à {0}",
+        "dxRangeSlider-ariaFrom": "Valeur minimale",
+        "dxRangeSlider-ariaTill": "Valeur maximale",
         "dxSwitch-switchedOnText": "ON",
         "dxSwitch-switchedOffText": "OFF",
 
@@ -222,7 +222,7 @@
         "dxDataGrid-ariaExpand": "Étendre",
         "dxDataGrid-ariaCollapsedRow": "Ligne réduite",
         "dxDataGrid-ariaExpandedRow": "Ligne développée",
-        "dxDataGrid-ariaDataGrid": "Grille",
+        "dxDataGrid-ariaDataGrid": "Grille de données avec {0} lignes et {1} colonnes",
         "dxDataGrid-ariaSearchInGrid": "Rechercher dans la grille",
         "dxDataGrid-ariaSelectAll": "Sélectionner tout",
         "dxDataGrid-ariaSelectRow": "Sélectionner ligne",
@@ -288,7 +288,7 @@
         "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
         "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
         "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
-        "dxPivotGrid-ariaDescription": "Press Enter or Space to sort by fields, Alt + Down arrow to open a header filter, Shift + F10 to open the context menu",
+        "dxPivotGrid-ariaDescription": "Press Alt + Down arrow to open a header filter",
 
         "dxScheduler-dateRange": "de {0} à {1}",
         "dxScheduler-ariaLabel": "Agenda. {0} vue : {1} avec {2} rendez-vous",
@@ -300,7 +300,7 @@
         "dxScheduler-hotkeysAriaDescription-delete": "Appuyez sur Suppr pour supprimer ce rendez-vous",
         "dxScheduler-hotkeysAriaDescription-homeEnd": "Appuyez sur Début ou Fin pour naviguer rapidement vers le premier ou le dernier rendez-vous",
 
-        "dxScheduler-appointmentListAriaLabel": "Liste des rendez-vous ",
+        "dxScheduler-appointmentListAriaLabel": "Liste des rendez-vous",
         "dxScheduler-newPopupTitle": "Nouveau rendez-vous",
         "dxScheduler-editPopupTitle": "Modifier le rendez-vous",
         "dxScheduler-editPopupSaveButtonText": "Enregistrer",

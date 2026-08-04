@@ -4,8 +4,9 @@ import { isDefined } from '@ts/core/utils/m_type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import type { ColumnsController } from '../../columns_controller/m_columns_controller';
-import type { DataController, HandleDataChangedArguments, UserData } from '../../data_controller/m_data_controller';
+import type { DataController, HandleDataChangedArguments, UserData } from '../../data_controller/data_controller';
 import { Controller } from '../../m_modules';
+import type { RowKey } from '../../m_types';
 import gridCoreUtils from '../../m_utils';
 import type { InternalRequestCallbacks } from '../types';
 import { getAICommandColumnDefaultOptions, isAIColumnAutoMode, isPromptOption } from '../utils';
@@ -20,9 +21,9 @@ export class AIColumnController extends Controller {
 
   private dataSourceChangedHandler!: (e?: HandleDataChangedArguments) => void;
 
-  private storeUpdatedHandler!: (key: PropertyKey) => void;
+  private storeUpdatedHandler!: (key: RowKey) => void;
 
-  private storeRemovedHandler!: (key: PropertyKey) => void;
+  private storeRemovedHandler!: (key: RowKey) => void;
 
   private storeBeforePushHandler!: ({ changes }: { changes: DataChange[] }) => void;
 
@@ -130,11 +131,11 @@ export class AIColumnController extends Controller {
     store.on('beforePush', this.storeBeforePushHandler);
   }
 
-  private handleStoreUpdated(key: PropertyKey): void {
+  private handleStoreUpdated(key: RowKey): void {
     this.clearAIColumnsByKey(key);
   }
 
-  private handleStoreRemoved(key: PropertyKey): void {
+  private handleStoreRemoved(key: RowKey): void {
     this.clearAIColumnsByKey(key);
   }
 
@@ -164,7 +165,7 @@ export class AIColumnController extends Controller {
     return true;
   }
 
-  private clearAIColumnsByKey(key: PropertyKey): void {
+  private clearAIColumnsByKey(key: RowKey): void {
     const aiColumns = this.getAIColumns();
 
     aiColumns.forEach((col) => {
@@ -301,8 +302,8 @@ export class AIColumnController extends Controller {
     this.updateAICells();
   }
 
-  public getAIColumnText(columnName: string, key: unknown): string | undefined {
-    return this.aiColumnIntegrationController.getAIColumnText(columnName, key as PropertyKey);
+  public getAIColumnText(columnName: string, key: RowKey): string | undefined {
+    return this.aiColumnIntegrationController.getAIColumnText(columnName, key);
   }
 
   public aiColumnOptionChanged(

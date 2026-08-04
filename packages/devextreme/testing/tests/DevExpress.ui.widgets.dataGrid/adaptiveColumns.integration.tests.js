@@ -6,7 +6,7 @@ import config from 'core/config';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 
@@ -94,7 +94,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
             // arrange
             const columnWidth = usingCssStringInWidth ? '100px' : 100;
 
-            $('#container').width(250);
+            $('#container').width(255);
 
             const dataGrid = $('#dataGrid').dxDataGrid({
                 loadingTimeout: null,
@@ -168,7 +168,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
             assert.equal(parseInt($hiddenColumn.css('border-left-width')), 0, 'no left border');
         }
 
-        $('#container').width(450);
+        $('#container').width(550);
         instance.updateDimensions();
         this.clock.tick(10);
         $visibleColumns = $(instance.$element().find('.dx-header-row td'));
@@ -213,7 +213,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         assert.equal(adaptiveColumnsController.getHiddenColumns()[1].dataField, 'lastName', '\'lastName\' column is hidden');
         assert.equal(adaptiveColumnsController.getHidingColumnsQueue().length, 2, 'There is no columns in hiding queue');
 
-        $('#container').width(900);
+        $('#container').width(1000);
         instance.updateDimensions();
 
         this.clock.tick(10);
@@ -347,7 +347,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
                     ]
                 }
             ],
-            width: 200,
+            width: 250,
             columnAutoWidth: true,
             columnHidingEnabled: true,
             masterDetail: null
@@ -398,7 +398,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         // assert
         // tab
         assert.ok($commandCell.hasClass('dx-command-adaptive-hidden'), 'command cell has appropriate class');
-        assert.notOk($commandCell.hasClass('dx-focused', 'command cell should not be focused'));
+        assert.notOk($commandCell.hasClass('dx-focused'), 'command cell should not be focused');
 
         // act
         dataGrid.focus($firstNextRow);
@@ -408,7 +408,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         // assert
         // shift tab
         assert.ok($lastDataCell.hasClass('dx-focused', 'last cell in row should be focused'));
-        assert.notOk($commandCell.hasClass('dx-focused', 'command cell should not be focused'));
+        assert.notOk($commandCell.hasClass('dx-focused'), 'command cell should not be focused');
 
         // act
         dataGrid.focus($lastDataCell);
@@ -417,10 +417,10 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
 
         // assert
         // right arrow
-        assert.notOk($commandCell.hasClass('dx-focused', 'command cell should not be focused'));
+        assert.notOk($commandCell.hasClass('dx-focused'), 'command cell should not be focused');
 
         // act
-        dataGrid.option('width', 400);
+        dataGrid.option('width', 500);
         $lastDataCell = $(dataGrid.getCellElement(0, 4));
         dataGrid.focus($lastDataCell);
         fireKeyDown($lastDataCell, 'Tab');
@@ -432,7 +432,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         assert.ok($commandCell.hasClass('dx-focused'), 'command cell is focused');
 
         // act
-        dataGrid.option('width', 600);
+        dataGrid.option('width', 650);
         this.clock.tick(10);
 
         // assert

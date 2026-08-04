@@ -96,7 +96,7 @@ class ToolbarBase<
 
   _pendingFocusTarget?: FocusRestoreTarget;
 
-  _getSynchronizableOptionsForCreateComponent(): (keyof TProperties)[] {
+  _getSynchronizableOptionsForCreateComponent(): string[] {
     return super._getSynchronizableOptionsForCreateComponent().filter((item) => item !== 'disabled');
   }
 
@@ -730,6 +730,21 @@ class ToolbarBase<
   _dispose(): void {
     super._dispose();
     clearTimeout(this._waitParentAnimationTimeout);
+  }
+
+  setLabelAttribute(
+    name: string,
+    value: string | number | boolean | null = null,
+  ): boolean {
+    const $label = this.$element().find(`.${TOOLBAR_LABEL_CLASS}`).eq(0);
+
+    if (!$label.length) {
+      return false;
+    }
+
+    $label.attr(name, value);
+
+    return true;
   }
 
   _updateDimensionsInMaterial(): void {

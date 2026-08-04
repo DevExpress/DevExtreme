@@ -9,7 +9,7 @@ import { getWindow } from '@js/core/utils/window';
 import errors from '@js/ui/widget/ui.errors';
 import type { ExportController } from '@ts/grids/data_grid/export/m_export';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
-import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 
 import modules from '../m_modules';
 

@@ -36,7 +36,7 @@ import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
-import type { DataController } from '../data_controller/m_data_controller';
+import type { DataController } from '../data_controller/data_controller';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
 import { CLASSES } from './const';

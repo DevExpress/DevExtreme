@@ -3,12 +3,14 @@ import type {
   GenerateGridColumnCommandResult,
   RequestCallbacks,
 } from '@js/common/ai-integration';
+import { getKeyHash } from '@js/core/utils/common';
 import errors from '@js/ui/widget/ui.errors';
 
 import type { ColumnsController } from '../../columns_controller/m_columns_controller';
-import type { DataController } from '../../data_controller/m_data_controller';
+import type { DataController, UserData } from '../../data_controller/data_controller';
 import type { ErrorHandlingController } from '../../error_handling/m_error_handling';
 import { Controller } from '../../m_modules';
+import type { RowKey } from '../../m_types';
 import type { InternalRequestCallbacks } from '../types';
 import { getDataFromRowItems, isKeyMissingInData, reduceDataCachedKeys } from '../utils';
 import { AIColumnCacheController } from './m_ai_column_cache_controller';
@@ -74,6 +76,10 @@ export class AIColumnIntegrationController extends Controller {
     return callbacks;
   }
 
+  private getRowKeyHash(item: UserData): PropertyKey {
+    return getKeyHash(this.dataController.keyOf(item)) as PropertyKey;
+  }
+
   public init(): void {
     this.columnsController = this.getController('columns');
     this.dataController = this.getController('data');
@@ -137,11 +143,15 @@ export class AIColumnIntegrationController extends Controller {
 
     let cachedResponse: Record<PropertyKey, string> = {};
     if (args.useCache) {
-      const keys = data.map((item) => item[keyField] as PropertyKey);
+      const keys = args.data.map((item) => this.getRowKeyHash(item));
       cachedResponse = this.aiColumnCacheController.getCachedResponse(columnName, keys);
     }
 
-    const reducedData = reduceDataCachedKeys(args.data, cachedResponse, keyField);
+    const reducedData = reduceDataCachedKeys(
+      args.data,
+      cachedResponse,
+      (item) => this.getRowKeyHash(item),
+    );
     const areAllDataCached = Object.keys(reducedData).length === 0;
 
     if (areAllDataCached) {
@@ -178,16 +188,16 @@ export class AIColumnIntegrationController extends Controller {
     this.errorHandlingController?.showToastError(message);
   }
 
-  public getAIColumnText(columnName: string, key: PropertyKey): string | undefined {
-    return this.aiColumnCacheController.getCachedString(columnName, key);
+  public getAIColumnText(columnName: string, key: RowKey): string | undefined {
+    return this.aiColumnCacheController.getCachedString(columnName, getKeyHash(key) as PropertyKey);
   }
 
   public clearAIColumn(columnName: string): void {
     this.aiColumnCacheController.clearCache(columnName);
   }
 
-  public clearAIColumnByKey(columnName: string, key: PropertyKey): void {
-    this.aiColumnCacheController.clearCacheByKey(columnName, key);
+  public clearAIColumnByKey(columnName: string, key: RowKey): void {
+    this.aiColumnCacheController.clearCacheByKey(columnName, getKeyHash(key) as PropertyKey);
   }
 
   public dispose(): void {

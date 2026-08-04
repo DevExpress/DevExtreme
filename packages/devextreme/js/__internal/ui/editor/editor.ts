@@ -1,4 +1,4 @@
-import type { Position } from '@js/common';
+import type { Mode, Position } from '@js/common';
 import type { NativeEventInfo } from '@js/common/core/events';
 import EventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
@@ -17,10 +17,9 @@ import type {
 } from '@js/ui/editor/editor';
 import ValidationEngine from '@js/ui/validation_engine';
 import ValidationMessage from '@js/ui/validation_message';
+import domUtils from '@ts/core/utils/m_dom';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
-
-import domUtils from '../../core/utils/m_dom';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const READONLY_STATE_CLASS = 'dx-state-readonly';
@@ -56,9 +55,15 @@ export interface EditorProperties<
   _onMarkupRendered?: () => void;
 }
 
+// NOTE: editors that resolve the position themselves (dropDownEditor, dateRangeBox)
+// also accept the 'auto' mode, so the constraint is wider than EditorProperties itself.
+export type EditorPropertiesConstraint = Omit<
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  EditorProperties<any>, 'validationMessagePosition'
+> & { validationMessagePosition?: Position | Mode };
+
 class Editor<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TProperties extends EditorProperties<any> = EditorProperties,
+  TProperties extends EditorPropertiesConstraint = EditorProperties,
 > extends Widget<TProperties> {
   _initialValue: unknown;
 
@@ -341,7 +346,7 @@ class Editor<
     }
   }
 
-  _getValidationMessagePosition(): Position | undefined {
+  _getValidationMessagePosition(): Position | Mode | undefined {
     const { validationMessagePosition } = this.option();
     return validationMessagePosition;
   }

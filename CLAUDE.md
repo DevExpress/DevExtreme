@@ -18,7 +18,7 @@ Always use `--frozen-lockfile`. CI enforces it.
 
 ## Build
 
-The `dev` script is run manually in WebStorm (not by agents). It runs a Gulp watch build with hot reload and starts the QUnit test server on port 20060:
+The `dev` script is run manually in WebStorm (not by agents). It runs an Nx watch build with hot reload and starts the QUnit test server on port 20060:
 
 ```bash
 # From packages/devextreme — run manually, not via agent
@@ -58,14 +58,25 @@ Jest tests for grid components live under `js/__internal/grids/` — typically i
 QUnit tests are browser-based. New QUnit tests are still written for most components. The exception is grid-based components (DataGrid, TreeList, etc.) and the Scheduler: 
 do not write new QUnit tests for those — cover new code with Jest instead, and use the existing QUnit tests only to verify behavior after refactoring. 
 
-To run QUnit tests:
+The QUnit pages are served by the dev watch build (`pnpm run dev`, port 20060), which the developer runs and keeps running (it hot-reloads; not rerun between changes). 
+**Ask the developer to start it and to tell you when the build is ready, then open the page and start investigating.**
 
-1. Ensure `pnpm run dev` is running (started manually in WebStorm)
-2. Open `http://localhost:20060/` in browser
-3. Navigate to the relevant module (e.g., `DevExpress.ui.widgets.dataGrid`)
-4. Run the tests — errors appear on the page
+**If you have a browser tool that can reach the dev server, open and run the pages yourself** — read results/console, inspect the DOM, and `evaluate` live values, 
+to verify tests and to check runtime behavior directly instead of inferring it. Otherwise, have the developer open and run the page and report results 
+(including any live values you need them to `evaluate`).
 
-**Agents should not run QUnit tests.** Ask the developer to run the relevant module and report results.
+Construct the run URL yourself:
+
+`http://localhost:20060/run/<test-file path under testing/tests/>?notimers=true&nojquery=true&nocsp=true&filter=<test name>`
+
+- After `run/` is the test file's path relative to `testing/tests/` (e.g. `DevExpress.ui.widgets.dataGrid/columnFixing.tests.js`).
+- `notimers=true&nojquery=true&nocsp=true` is the default config; `filter` narrows to one test by title text.
+- Other toggles exist (`noglobals`, `notrycatch`, `shadowDom`, `workerinwindow`, …) — the developer may ask you to enable/disable some; see `testing/runner` (`assignBaseRunProps`) for the full list.
+
+Reloading the run page after a change:
+
+- **After a source change (`js/…`):** reload only once the developer confirms the new build is ready.
+- **After a test-only change:** reload immediately — no rebuild.
 
 ## Lint Commands
 

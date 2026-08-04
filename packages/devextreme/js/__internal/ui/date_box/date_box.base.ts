@@ -21,16 +21,15 @@ import type {
 } from '@js/ui/date_box';
 import type { ToolbarItem } from '@js/ui/popup';
 import type { OptionChanged } from '@ts/core/widget/types';
+import Calendar from '@ts/ui/date_box/date_box.strategy.calendar';
+import CalendarWithTime from '@ts/ui/date_box/date_box.strategy.calendar_with_time';
+import DateView from '@ts/ui/date_box/date_box.strategy.date_view';
+import List from '@ts/ui/date_box/date_box.strategy.list';
+import Native from '@ts/ui/date_box/date_box.strategy.native';
+import uiDateUtils from '@ts/ui/date_box/date_utils';
 import DropDownEditor from '@ts/ui/drop_down_editor/drop_down_editor';
 import type { ValueChangedEvent } from '@ts/ui/editor/editor';
 import type { PopupProperties } from '@ts/ui/popup/popup';
-
-import uiDateUtils from './date_utils';
-import Calendar from './m_date_box.strategy.calendar';
-import CalendarWithTime from './m_date_box.strategy.calendar_with_time';
-import DateView from './m_date_box.strategy.date_view';
-import List from './m_date_box.strategy.list';
-import Native from './m_date_box.strategy.native';
 
 const window = getWindow();
 
@@ -78,7 +77,7 @@ export interface DateBoxBaseProperties extends Omit<Properties, 'onClosed' | 'on
 }
 
 class DateBox extends DropDownEditor<DateBoxBaseProperties> {
-  _strategy!: Calendar | DateView | Native | CalendarWithTime | List;
+  _strategy!: Calendar<unknown, unknown> | DateView | Native | CalendarWithTime | List;
 
   _pickerType?: DatePickerType;
 
@@ -711,7 +710,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
   }
 
   _applyButtonHandler(e: { event: InteractionEvent }): void {
-    const value = this._strategy.getValue();
+    const value = this._strategy.getValue() as Date | null;
     this.dateValue(value, e.event);
 
     super._applyButtonHandler();

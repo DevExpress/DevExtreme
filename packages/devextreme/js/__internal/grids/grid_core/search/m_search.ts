@@ -11,7 +11,7 @@ import type TextBox from '@js/ui/text_box';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 
-import type { DataController, Filter } from '../data_controller/m_data_controller';
+import type { DataController, Filter } from '../data_controller/data_controller';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';
 import type { ModuleType, OptionChanged } from '../m_types';

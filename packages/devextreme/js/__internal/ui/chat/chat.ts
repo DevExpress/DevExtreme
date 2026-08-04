@@ -23,7 +23,7 @@ import type {
   TypingEndEvent,
   TypingStartEvent,
 } from '@js/ui/chat';
-import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
+import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import { invokeConditionally } from '@ts/core/utils/conditional_invoke';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';

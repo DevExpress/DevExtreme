@@ -5,7 +5,7 @@ import messageLocalization from '@js/common/core/localization/message';
 
 import { getFieldItemA11yLabel, getFieldsHotkeysA11yDescription, getFieldsHotkeysA11yLabel } from './a11y';
 
-const AREA_DESCRIPTION = 'Press Enter or Space to sort by fields, Alt + Down arrow to open a header filter, Shift + F10 to open the context menu';
+const AREA_DESCRIPTION = 'Press Alt + Down arrow to open a header filter';
 
 beforeAll(() => {
   // @ts-expect-error load is not declared on the localization typing

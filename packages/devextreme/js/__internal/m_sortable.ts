@@ -667,7 +667,6 @@ class Sortable extends Draggable {
       case 'onAdd':
       case 'onRemove':
       case 'onReorder':
-        // @ts-expect-error ts-error
         this[`_${name}Action`] = this._createActionByOption(name);
         break;
       case 'fromIndex':

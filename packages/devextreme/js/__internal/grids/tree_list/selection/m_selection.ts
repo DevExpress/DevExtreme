@@ -6,7 +6,7 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
-import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 import {

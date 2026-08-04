@@ -26,7 +26,7 @@ import { isElementInDom } from '@ts/core/utils/m_dom';
 import { focused } from '@ts/core/utils/m_selectors';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import type { RowsViewScrollEvent } from '@ts/grids/grid_core/views/types';

@@ -3,7 +3,7 @@ import windowUtils from 'core/utils/window';
 
 import 'ui/data_grid';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(function() {
     const markup =
@@ -152,7 +152,15 @@ QUnit.module('DataGrid markup', {
         const $editCell = $element.find('.dx-data-row .dx-command-edit');
         assert.equal($editCell.length, 1, 'one command edit column in data rows');
         assert.equal($editCell.get(0).style.textAlign, 'center', 'text-align style for edit column');
-        assert.equal($element.find('colgroup col').last().get(0).style.width, windowUtils.hasWindow() ? '100px' : 'auto', 'width style for edit command column');
+
+        const editCommandColWidth = $element.find('colgroup col').last().get(0).style.width;
+
+        if(windowUtils.hasWindow()) {
+            const convertedWidth = parseFloat(editCommandColWidth, 10);
+            assert.roughEqual(convertedWidth, 93, 0.5, 'width style for edit command column');
+        } else {
+            assert.equal(editCommandColWidth, 'auto', 'width style for edit command column');
+        }
     });
 
     QUnit.test('markup with grouping', function(assert) {

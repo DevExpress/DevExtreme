@@ -9,6 +9,7 @@ import {
   afterTest,
   beforeTest as baseBeforeTest,
   createDataGrid,
+  flushAsync,
   GRID_CONTAINER_ID,
 } from '../../__tests__/__mock__/helpers/utils';
 
@@ -386,18 +387,23 @@ describe('API Handlers', () => {
       expect(sendRequestDataSpy).toHaveBeenCalledTimes(3);
     });
 
-    it('should throw E1046 and not send the request when the handler removes the key field', async () => {
+    it.each([
+      { keyType: 'the key field', keyExpr: 'id1' },
+      { keyType: 'a compound key subfield', keyExpr: ['id1', 'id2'] },
+    ])('should throw E1046 and not send the request when the handler removes $keyType', async ({
+      keyExpr,
+    }) => {
       const onDataErrorOccurred = jest.fn();
       const { instance } = await createDataGrid({
         dataSource: [
-          { id: 1, name: 'Name 1', value: 10 },
-          { id: 2, name: 'Name 2', value: 20 },
+          { id1: 1, id2: 'a', value: 10 },
+          { id1: 2, id2: 'b', value: 20 },
         ],
-        keyExpr: 'id',
+        keyExpr,
         columns: [
-          { dataField: 'id', caption: 'ID' },
-          { dataField: 'name', caption: 'Name' },
-          { dataField: 'value', caption: 'Value' },
+          { dataField: 'id1' },
+          { dataField: 'id2' },
+          { dataField: 'value' },
           {
             type: 'ai',
             caption: 'AI Column',
@@ -410,18 +416,17 @@ describe('API Handlers', () => {
           },
         ],
         onAIColumnRequestCreating: (e) => {
-          const reduced = e.data.map((item) => ({ name: item.name, value: item.value }));
-          e.data.splice(0, e.data.length, ...reduced);
+          e.data = e.data.map((item) => ({ id2: item.id2, value: item.value }));
         },
         onDataErrorOccurred,
       });
 
       instance.sendAIColumnRequest('myColumn');
-      jest.advanceTimersByTime(10000);
+      await flushAsync();
 
       expect(columnSendRequestStarted).toHaveBeenCalledTimes(0);
       expect(onDataErrorOccurred).toHaveBeenCalledTimes(1);
-      expect(errors.Error).toHaveBeenCalledWith('E1046', 'id');
+      expect(errors.Error).toHaveBeenCalledWith('E1046', keyExpr);
     });
   });
 });

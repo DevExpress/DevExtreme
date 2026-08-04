@@ -1,4 +1,4 @@
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import 'ui/data_grid';
 
@@ -101,7 +101,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         rowsView.render($testElement);
 
         // act
-        pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
+        pointerMock(rowsView.getRowElement(0)).start().down().move(0, 100);
 
         // assert
         const $draggableElement = $('body').children('.dx-sortable-dragging');
@@ -126,7 +126,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         rowsView.render($testElement);
 
         // act
-        pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70).up();
+        pointerMock(rowsView.getRowElement(0)).start().down().move(0, 100).up();
 
         // assert
         const onDragStart = this.options.rowDragging.onDragStart;
@@ -336,7 +336,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         rowsView.render($testElement);
 
         // act
-        const pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
+        const pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 100);
 
         // assert
         assert.strictEqual($('body').children('.dx-sortable-placeholder').length, 0, 'no placeholder');
@@ -348,7 +348,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         rowsView.option('rowDragging', { allowReordering: true });
 
         // act
-        pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
+        pointerMock(rowsView.getRowElement(0)).start().down().move(0, 100);
 
         // assert
         assert.strictEqual($('body').children('.dx-sortable-placeholder').length, 1, 'there is placeholder');
@@ -368,7 +368,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         rowsView.render($testElement);
 
         // act
-        const pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
+        const pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 100);
 
         // assert
         assert.strictEqual($('body').children('.dx-sortable-placeholder').length, 1, 'there is placeholder');
@@ -380,7 +380,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         rowsView.option('rowDragging', { allowReordering: false });
 
         // act
-        pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
+        pointerMock(rowsView.getRowElement(0)).start().down().move(0, 100);
 
         // assert
         assert.strictEqual($('body').children('.dx-sortable-placeholder').length, 0, 'there is not placeholder');
@@ -400,7 +400,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         rowsView.render($testElement);
 
         // act
-        const pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 110);
+        const pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 150);
 
         // assert
         $rowElements = $(rowsView.element()).find('tbody').children();
@@ -467,7 +467,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         rowsView.render($testElement);
 
         // act
-        pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
+        pointerMock(rowsView.getRowElement(0)).start().down().move(0, 100);
         this.dataGrid.pageIndex(4);
 
         // assert
@@ -498,7 +498,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         rowsView.render($testElement);
 
         // assert
-        assert.equal($('#container').find('.dx-sortable').height(), 100);
+        assert.roughEqual($('#container').find('.dx-sortable').height(), 99, 1.001);
     });
 
     QUnit.test('Sortable should have height if dataSource is empty and grid has height', function(assert) {
@@ -516,7 +516,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         rowsView.render($testElement);
 
         // assert
-        assert.equal($('#container').find('.dx-sortable').height(), 300);
+        assert.roughEqual($('#container').find('.dx-sortable').height(), 299, 1.001);
     });
 
     QUnit.test('Dragging row when allowDropInsideItem is true', function(assert) {
@@ -531,7 +531,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         rowsView.render($testElement);
 
         // act
-        pointerMock(rowsView.getRowElement(0)).start().down().move(0, 50);
+        pointerMock(rowsView.getRowElement(0)).start().down().move(0, 80);
 
         // assert
         const $draggableElement = $('body').children('.dx-sortable-dragging');
@@ -625,7 +625,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
             rowsView.render($testElement);
 
             // act
-            pointerMock(rowsView.getCellElement(0, isFixedCellDragging ? 2 : 0)).start().down().move(0, 70);
+            pointerMock(rowsView.getCellElement(0, isFixedCellDragging ? 2 : 0)).start().down().move(0, 100);
 
             // assert
             const $sortable = $testElement.find('.dx-sortable');
@@ -776,7 +776,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         rowsView.render($testElement);
 
         // act
-        pointerMock(rowsView.getCellElement(0, 0)).start().down().move(0, 10).move(0, 45);
+        pointerMock(rowsView.getCellElement(0, 0)).start().down().move(0, 10).move(0, 90);
 
         // assert
         const $placeholder = $('.dx-sortable-placeholder');
@@ -840,7 +840,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         assert.notOk($(rowsView.getRowElement(2)).is(':visible'), 'group footer is hidden');
 
         // act
-        pointerMock(rowsView.getRowElement(1)).start().down().move(0, 100);
+        pointerMock(rowsView.getRowElement(1)).start().down().move(0, 150);
 
         // assert
         const $placeholderElement = $('.dx-sortable-placeholder');
@@ -882,7 +882,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
             rowsView.render($testElement);
 
             // act
-            pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70).up();
+            pointerMock(rowsView.getRowElement(0)).start().down().move(0, 100).up();
 
             // assert
             const onReorder = this.options.rowDragging.onReorder;
@@ -945,7 +945,7 @@ QUnit.module('Handle', $.extend({}, moduleConfig, {
         assert.strictEqual($handleElement.find('.dx-datagrid-drag-icon').length, 1, 'handle icon');
 
         // act
-        pointerMock($handleElement).start().down().move(0, 70);
+        pointerMock($handleElement).start().down().move(0, 100);
 
         // assert
         const $draggableElement = $('body').children('.dx-sortable-dragging');

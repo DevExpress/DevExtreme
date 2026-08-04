@@ -24999,7 +24999,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxPivotGridOptions.fieldChooser.height]
        */
-      height?: number;
+      height?: number | string;
       /**
        * [descr:dxPivotGridOptions.fieldChooser.layout]
        */
@@ -25040,7 +25040,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxPivotGridOptions.fieldChooser.width]
        */
-      width?: number;
+      width?: number | string;
     };
     /**
      * [descr:dxPivotGridOptions.fieldPanel]

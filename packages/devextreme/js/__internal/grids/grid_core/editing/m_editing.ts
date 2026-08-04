@@ -27,7 +27,7 @@ import {
 import { confirm } from '@js/ui/dialog';
 import { current, isFluent } from '@js/ui/themes';
 import domUtils from '@ts/core/utils/m_dom';
-import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 

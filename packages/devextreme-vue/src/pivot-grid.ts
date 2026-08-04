@@ -228,12 +228,12 @@ const DxFieldChooserConfig = {
     allowSearch: Boolean,
     applyChangesMode: String as PropType<ApplyChangesMode>,
     enabled: Boolean,
-    height: Number,
+    height: [Number, String],
     layout: Number as PropType<FieldChooserLayout>,
     searchTimeout: Number,
     texts: Object as PropType<Record<string, any>>,
     title: String,
-    width: Number
+    width: [Number, String]
   }
 };
 

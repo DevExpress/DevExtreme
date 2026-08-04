@@ -288,7 +288,7 @@
         "dxPivotGrid-ariaFieldHeaderFilterLabel": "Header filter applied",
         "dxPivotGrid-ariaFieldSortAscLabel": "Sort order: ascending",
         "dxPivotGrid-ariaFieldSortDescLabel": "Sort order: descending",
-        "dxPivotGrid-ariaDescription": "Press Enter or Space to sort by fields, Alt + Down arrow to open a header filter, Shift + F10 to open the context menu",
+        "dxPivotGrid-ariaDescription": "Press Alt + Down arrow to open a header filter",
 
         "dxScheduler-dateRange": "od {0} do {1}",
         "dxScheduler-ariaLabel": "Plánovač. Zobrazení {0}: {1} s {2} schůzkami",

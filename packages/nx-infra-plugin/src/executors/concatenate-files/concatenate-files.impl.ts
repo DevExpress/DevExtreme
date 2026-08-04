@@ -5,7 +5,8 @@ import { createExecutor } from '../../utils/create-executor';
 import { toPosixPath } from '../../utils/path-resolver';
 import { containsGlobPattern } from '../../utils/common';
 import { exists, normalizeEol, readFileText, writeFileText } from '../../utils/file-operations';
-import { ConcatenateFilesExecutorSchema } from './schema';
+import { watchWithChokidar } from '../../utils/watch';
+import { ConcatenateFilesExecutorSchema, ConcatenatePass } from './schema';
 
 const ERROR_SOURCE_FILES_EMPTY = 'sourceFiles must contain at least one file';
 const ERROR_NO_FILES_RESOLVED = 'No source files found after resolving patterns';
@@ -133,44 +134,84 @@ async function resolveSourceFiles(sourceFiles: string[], projectRoot: string): P
   return resolved;
 }
 
+// Sources are resolved per pass at run time (not once in `resolve`) so that an
+// additional pass can consume a file produced by an earlier pass, and so rebuilds
+// re-resolve any glob patterns on each run.
+async function runPass(projectRoot: string, pass: ConcatenatePass): Promise<void> {
+  if (!pass.sourceFiles?.length) {
+    throw new Error(ERROR_SOURCE_FILES_EMPTY);
+  }
+
+  const resolvedFiles = await resolveSourceFiles(pass.sourceFiles, projectRoot);
+  if (resolvedFiles.length === 0) {
+    throw new Error(ERROR_NO_FILES_RESOLVED);
+  }
+
+  const outputPath = path.resolve(projectRoot, pass.outputFile);
+  logger.verbose(`Concatenating ${resolvedFiles.length} files...`);
+  await concatToFile(outputPath, {
+    sourceFiles: resolvedFiles,
+    header: pass.header,
+    footer: pass.footer,
+    extractPattern: pass.extractPattern,
+    extractPatternFlags: pass.extractPatternFlags,
+    transforms: pass.transforms,
+    normalizeLineEndings: pass.normalizeLineEndings,
+    separator: pass.separator,
+  });
+  logger.verbose(`Created: ${path.relative(projectRoot, outputPath)}`);
+}
+
+async function runAllPasses(
+  projectRoot: string,
+  options: ConcatenateFilesExecutorSchema,
+): Promise<void> {
+  await runPass(projectRoot, options);
+  for (const pass of options.additionalPasses ?? []) {
+    await runPass(projectRoot, pass);
+  }
+}
+
+async function runWatchBuild(
+  projectRoot: string,
+  options: ConcatenateFilesExecutorSchema,
+): Promise<void> {
+  // chokidar v4+ dropped glob support, so expand watch patterns to concrete files upfront.
+  const watchTargets = options.watchPaths?.length ? options.watchPaths : options.sourceFiles;
+  const watchFiles = await resolveSourceFiles(watchTargets, projectRoot);
+  if (watchFiles.length === 0) {
+    throw new Error('No watch files found after resolving watchPaths');
+  }
+  await runAllPasses(projectRoot, options);
+
+  await watchWithChokidar({
+    projectRoot,
+    watchTargets: watchFiles,
+    label: 'concatenate-files watch',
+    onRebuild: () => runAllPasses(projectRoot, options),
+  });
+}
+
 interface ResolvedConcatenate {
   projectRoot: string;
-  resolvedFiles: string[];
-  outputPath: string;
   options: ConcatenateFilesExecutorSchema;
 }
 
 export default createExecutor<ConcatenateFilesExecutorSchema, ResolvedConcatenate>({
   name: 'ConcatenateFiles',
-  resolve: async (options, { projectRoot }) => {
+  resolve: (options, { projectRoot }) => {
     if (!options.sourceFiles?.length) {
       throw new Error(ERROR_SOURCE_FILES_EMPTY);
     }
 
-    const resolvedFiles = await resolveSourceFiles(options.sourceFiles, projectRoot);
-    if (resolvedFiles.length === 0) {
-      throw new Error(ERROR_NO_FILES_RESOLVED);
+    return { projectRoot, options };
+  },
+  run: async ({ projectRoot, options }) => {
+    if (options.watch) {
+      await runWatchBuild(projectRoot, options);
+      return;
     }
 
-    return {
-      projectRoot,
-      resolvedFiles,
-      outputPath: path.resolve(projectRoot, options.outputFile),
-      options,
-    };
-  },
-  run: async ({ projectRoot, resolvedFiles, outputPath, options }) => {
-    logger.verbose(`Concatenating ${resolvedFiles.length} files...`);
-    await concatToFile(outputPath, {
-      sourceFiles: resolvedFiles,
-      header: options.header,
-      footer: options.footer,
-      extractPattern: options.extractPattern,
-      extractPatternFlags: options.extractPatternFlags,
-      transforms: options.transforms,
-      normalizeLineEndings: options.normalizeLineEndings,
-      separator: options.separator,
-    });
-    logger.verbose(`Created: ${path.relative(projectRoot, outputPath)}`);
+    await runAllPasses(projectRoot, options);
   },
 });

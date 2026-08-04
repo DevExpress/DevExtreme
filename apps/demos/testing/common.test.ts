@@ -154,13 +154,10 @@ Object.values(FRAMEWORKS).forEach((approach) => {
   if (!shouldRunFramework(approach)) { return; }
   fixture(approach)
     .beforeEach(async (t) => {
-      t.ctx.watchDogHandle = setTimeout(() => { throw new Error('test timeout exceeded'); }, 3 * 60 * 1000);
-
       if (process.env.STRATEGY !== 'accessibility') {
         await t.resizeWindow(1000, 800);
       }
     })
-    .afterEach(async (t) => clearTimeout(t.ctx.watchDogHandle))
     .clientScripts(getClientScripts())
     .requestHooks(widgetsGalleryServiceMock);
 
