@@ -58,6 +58,8 @@ overrides:
   "systemjs-builder>terser": 5.46.2
   "fast-uri@>=3.0.0 <3.1.5": "^3.1.5"
   "@hono/node-server@<2.0.12": "^2.0.12"
+  "stylelint-config-recommended-vue>stylelint-config-html": "1.1.0"
+  "stylelint-config-recommended-vue>stylelint-config-recommended": "16.0.0"
 catalog:
   axe-core: 4.11.3
   inferno: ^8.2.3
