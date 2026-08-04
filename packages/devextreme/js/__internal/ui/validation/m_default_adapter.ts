@@ -1,18 +1,57 @@
-import Class from '@js/core/class';
+import type {
+  ValidationResultInternal,
+  ValidationRuleInternal,
+} from '@ts/ui/m_validation_engine';
+import type Validator from '@ts/ui/m_validator';
 
-// @ts-expect-error dxClass inheritance issue
-class DefaultAdapter extends (Class.inherit({}) as new() => {}) {
-  editor?: any;
+export interface ValidationRequestArgs {
+  value?: unknown;
+}
 
-  validator?: any;
+export type ValidationRequestHandler = (args?: ValidationRequestArgs) => void;
 
-  validationRequestsCallbacks!: any[];
+export interface ValidationTargetEditorOptions {
+  value?: unknown;
+  validationError?: ValidationRuleInternal | null;
+  disabled?: boolean;
+  rtlEnabled?: boolean;
+}
 
-  ctor(editor, validator) {
+interface ValidationTargetEditorOption {
+  (): ValidationTargetEditorOptions;
+  (name: string, value: unknown): void;
+  (options: Record<string, unknown>): void;
+}
+
+/**
+ * Structural description of a validation target: it is either an Editor or an R1
+ * wrapper around one (see check_box/editor_base/wrapper.ts).
+ */
+export interface ValidationTargetEditor {
+  validationRequest: {
+    add: (handler: ValidationRequestHandler) => void;
+    remove: (handler: ValidationRequestHandler) => void;
+  };
+  option: ValidationTargetEditorOption;
+  on: (eventName: 'disposing', handler: () => void) => void;
+  clear: () => void;
+  focus: () => void;
+  isInitialized: () => boolean;
+  setAria: (name: string, value: unknown) => void;
+}
+
+class DefaultAdapter {
+  editor: ValidationTargetEditor;
+
+  validator: Validator;
+
+  validationRequestsCallbacks: ValidationRequestHandler[];
+
+  constructor(editor: ValidationTargetEditor, validator: Validator) {
     this.editor = editor;
     this.validator = validator;
     this.validationRequestsCallbacks = [];
-    const handler = (args) => {
+    const handler = (args?: ValidationRequestArgs): void => {
       this.validationRequestsCallbacks.forEach((item) => item(args));
     };
     editor.validationRequest.add(handler);
@@ -21,19 +60,22 @@ class DefaultAdapter extends (Class.inherit({}) as new() => {}) {
     });
   }
 
-  getValue() {
-    return this.editor.option('value');
+  getValue(): unknown {
+    const { value } = this.editor.option();
+    return value;
   }
 
-  getCurrentValidationError() {
-    return this.editor.option('validationError');
+  getCurrentValidationError(): ValidationRuleInternal | null | undefined {
+    const { validationError } = this.editor.option();
+    return validationError;
   }
 
   bypass(): boolean | undefined {
-    return this.editor.option('disabled');
+    const { disabled } = this.editor.option();
+    return disabled;
   }
 
-  applyValidationResults(params): void {
+  applyValidationResults(params: ValidationResultInternal): void {
     this.editor.option({
       validationErrors: params.brokenRules,
       validationStatus: params.status,

@@ -2,44 +2,62 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-// @ts-expect-error ts-error
-import { grep } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
-import { each, map } from '@js/core/utils/iterator';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
 import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
-
-import ValidationEngine from './m_validation_engine';
-import type ValidationGroup from './m_validation_group';
+import type {
+  GroupConfig,
+  GroupValidatedHandler,
+  GroupValidationResult,
+  ValidationGroupKey,
+  ValidationResultInternal,
+} from '@ts/ui/m_validation_engine';
+import ValidationEngine from '@ts/ui/m_validation_engine';
+import type Validator from '@ts/ui/m_validator';
 
 const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary';
 const SCREEN_READER_ONLY_CLASS = 'dx-screen-reader-only';
 const ITEM_CLASS = `${VALIDATION_SUMMARY_CLASS}-item`;
 const ITEM_DATA_KEY = `${VALIDATION_SUMMARY_CLASS}-item-data`;
 
-export interface ValidationSummaryProperties extends CollectionWidgetEditProperties<ValidationSummary> {
-  validationGroup?: string;
+export interface ValidationSummaryItem {
+  text?: string;
+  validator?: Validator;
+  index?: number;
 }
 
-class ValidationSummary extends CollectionWidget<ValidationSummaryProperties> {
+export interface ValidationSummaryProperties extends CollectionWidgetEditProperties<
+  ValidationSummary,
+  ValidationSummaryItem
+> {
+  validationGroup?: ValidationGroupKey;
+  validator?: Validator;
+}
+
+type ItemValidationHandler = (result: ValidationResultInternal) => void;
+
+class ValidationSummary extends CollectionWidget<
+  ValidationSummaryProperties,
+  ValidationSummaryItem
+> {
   _groupWasInit?: boolean;
 
-  _validationGroup?: ValidationGroup;
+  _validationGroup?: ValidationGroupKey;
 
-  validators?: any[];
+  validators?: Validator[];
 
   _$announceContainer?: dxElementWrapper;
 
   _lastAnnouncedText?: string;
 
-  groupSubscription?: (params) => void;
+  groupSubscription?: GroupValidatedHandler;
 
   _getDefaultOptions(): ValidationSummaryProperties {
     return {
       ...super._getDefaultOptions(),
       focusStateEnabled: false,
-      // @ts-expect-error ts-error
+      // @ts-expect-error CollectionWidget declares noDataText as string; null disables the "no data" text
       noDataText: null,
     };
   }
@@ -47,7 +65,7 @@ class ValidationSummary extends CollectionWidget<ValidationSummaryProperties> {
   _setOptionsByReference(): void {
     super._setOptionsByReference();
 
-    extend(this._optionsByReference, {
+    Object.assign(this._optionsByReference, {
       validationGroup: true,
     });
   }
@@ -71,57 +89,60 @@ class ValidationSummary extends CollectionWidget<ValidationSummaryProperties> {
     this._groupWasInit = true;
     this._validationGroup = group;
 
-    this.groupSubscription = this._groupValidationHandler.bind(this);
-    groupConfig.on('validated', this.groupSubscription);
+    const groupSubscription: GroupValidatedHandler = this._groupValidationHandler.bind(this);
+    this.groupSubscription = groupSubscription;
+    groupConfig.on('validated', groupSubscription);
   }
 
   _unsubscribeGroup(): void {
-    const groupConfig = ValidationEngine.getGroupConfig(this._validationGroup);
+    const groupConfig: GroupConfig | undefined = ValidationEngine
+      .getGroupConfig(this._validationGroup);
     groupConfig?.off('validated', this.groupSubscription);
   }
 
-  _getOrderedItems(validators, items) {
-    let orderedItems = [];
+  // eslint-disable-next-line class-methods-use-this
+  _getOrderedItems(
+    validators: Validator[],
+    items: ValidationSummaryItem[],
+  ): ValidationSummaryItem[] {
+    const orderedItems: ValidationSummaryItem[] = [];
 
-    each(validators, (_, validator) => {
-      // @ts-expect-error ts-error
-      const foundItems = grep(items, (item) => {
-        if (item.validator === validator) {
-          return true;
-        }
-      });
+    for (const validator of validators) {
+      const foundItems = items.filter((item): boolean => item.validator === validator);
 
       if (foundItems.length) {
-        orderedItems = orderedItems.concat(foundItems);
+        orderedItems.push(...foundItems);
       }
-    });
+    }
 
     return orderedItems;
   }
 
-  _groupValidationHandler(params): void {
-    const items = this._getOrderedItems(params.validators, map(params.brokenRules, (rule) => ({
-      text: rule.message,
-      validator: rule.validator,
-      index: rule.index,
-    })));
+  _groupValidationHandler(params: GroupValidationResult): void {
+    const items = this._getOrderedItems(
+      params.validators,
+      (params.brokenRules ?? []).map((rule): ValidationSummaryItem => ({
+        text: rule.message,
+        validator: rule.validator,
+        index: rule.index,
+      })),
+    );
 
     this.validators = params.validators;
 
-    each(this.validators, (_, validator) => {
+    for (const validator of this.validators ?? []) {
       if (validator._validationSummary !== this) {
-        let handler = this._itemValidationHandler.bind(this);
-        const disposingHandler = function () {
+        let handler: ItemValidationHandler | null = this._itemValidationHandler.bind(this);
+        const disposingHandler = (): void => {
           validator.off('validated', handler);
           validator._validationSummary = null;
-          // @ts-expect-error ts-error
           handler = null;
         };
         validator.on('validated', handler);
         validator.on('disposing', disposingHandler);
         validator._validationSummary = this;
       }
-    });
+    }
 
     this.option('items', items);
 
@@ -165,45 +186,48 @@ class ValidationSummary extends CollectionWidget<ValidationSummaryProperties> {
     this._$announceContainer?.text(text);
   }
 
-  _itemValidationHandler({ isValid, validator, brokenRules }): void {
+  _itemValidationHandler({ isValid, validator, brokenRules }: ValidationResultInternal): void {
     let { items } = this.option();
     let itemsChanged = false;
 
     let itemIndex = 0;
-    // @ts-expect-error ts-error
-    while (itemIndex < items.length) {
-      // @ts-expect-error ts-error
-      const item = items[itemIndex];
-      if (item.validator === validator) {
-        const foundRule = grep(brokenRules || [], (rule) => rule.index === item.index)[0];
-        if (isValid || !foundRule) {
-          // @ts-expect-error ts-error
-          items.splice(itemIndex, 1);
-          itemsChanged = true;
-          continue;
-        }
-        if (foundRule.message !== item.text) {
-          item.text = foundRule.message;
-          itemsChanged = true;
+    if (items) {
+      while (itemIndex < items.length) {
+        const item = items[itemIndex];
+        if (item.validator === validator) {
+          const foundRule = (brokenRules ?? []).find((rule): boolean => rule.index === item.index);
+          if (isValid || !foundRule) {
+            items.splice(itemIndex, 1);
+            itemsChanged = true;
+          } else {
+            if (foundRule.message !== item.text) {
+              item.text = foundRule.message;
+              itemsChanged = true;
+            }
+            itemIndex += 1;
+          }
+        } else {
+          itemIndex += 1;
         }
       }
-      itemIndex++;
     }
-    each(brokenRules, (_, rule) => {
-      const foundItem = grep(items, (item) => item.validator === validator && item.index === rule.index)[0];
+
+    for (const rule of brokenRules ?? []) {
+      const foundItem = items?.find(
+        (item): boolean => item.validator === validator && item.index === rule.index,
+      );
       if (!foundItem) {
-        // @ts-expect-error ts-error
-        items.push({
+        items?.push({
           text: rule.message,
           validator,
           index: rule.index,
         });
         itemsChanged = true;
       }
-    });
+    }
 
-    if (itemsChanged) {
-      items = this._getOrderedItems(this.validators, items);
+    if (itemsChanged && this.validators) {
+      items = this._getOrderedItems(this.validators, items ?? []);
       this.option('items', items);
     }
   }
@@ -224,16 +248,19 @@ class ValidationSummary extends CollectionWidget<ValidationSummaryProperties> {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _itemClass(): string {
     return ITEM_CLASS;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _itemDataKey(): string {
     return ITEM_DATA_KEY;
   }
 
-  _postprocessRenderItem(params): void {
-    eventsEngine.on(params.itemElement, 'click', () => {
+  // eslint-disable-next-line class-methods-use-this
+  _postprocessRenderItem(params: PostprocessRenderItemInfo<ValidationSummaryItem>): void {
+    eventsEngine.on(params.itemElement, 'click', (): void => {
       params.itemData.validator?.focus?.();
     });
   }

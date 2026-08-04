@@ -1,6 +1,8 @@
 import registerComponent from '@js/core/component_registrator';
-import DOMComponent from '@js/core/dom_component';
 import $ from '@js/core/renderer';
+import type { ValidationResult } from '@js/ui/validation_group';
+import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
+import DOMComponent from '@ts/core/widget/dom_component';
 
 import ValidationEngine from './m_validation_engine';
 import ValidationSummary from './m_validation_summary';
@@ -10,14 +12,12 @@ const VALIDATION_ENGINE_CLASS = 'dx-validationgroup';
 const VALIDATOR_CLASS = 'dx-validator';
 const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary';
 
-class ValidationGroup extends DOMComponent {
-  _getDefaultOptions() {
-    // @ts-expect-error
+class ValidationGroup extends DOMComponent<ValidationGroup> {
+  _getDefaultOptions(): DOMComponentProperties<ValidationGroup> {
     return super._getDefaultOptions();
   }
 
   _init(): void {
-    // @ts-expect-error ts-error
     super._init();
     ValidationEngine.addGroup(this, false);
   }
@@ -26,30 +26,29 @@ class ValidationGroup extends DOMComponent {
     const $element = this.$element();
 
     $element.addClass(VALIDATION_ENGINE_CLASS);
-    // @ts-expect-error ts-error
-    $element.find(`.${VALIDATOR_CLASS}`).each((_, validatorContainer) => {
-      Validator.getInstance($(validatorContainer))._initGroupRegistration();
+    $element.find(`.${VALIDATOR_CLASS}`).each((_, validatorContainer): boolean => {
+      Validator.getInstance<Validator>($(validatorContainer))._initGroupRegistration();
+      return true;
     });
-    // @ts-expect-error ts-error
-    $element.find(`.${VALIDATION_SUMMARY_CLASS}`).each((_, summaryContainer) => {
-      ValidationSummary.getInstance($(summaryContainer)).refreshValidationGroup();
+    $element.find(`.${VALIDATION_SUMMARY_CLASS}`).each((_, summaryContainer): boolean => {
+      ValidationSummary.getInstance<ValidationSummary>($(summaryContainer))
+        .refreshValidationGroup();
+      return true;
     });
-    // @ts-expect-error ts-error
     super._initMarkup();
   }
 
-  validate() {
+  validate(): ValidationResult {
     return ValidationEngine.validateGroup(this);
   }
 
-  reset() {
-    return ValidationEngine.resetGroup(this);
+  reset(): void {
+    ValidationEngine.resetGroup(this);
   }
 
   _dispose(): void {
     ValidationEngine.removeGroup(this);
     this.$element().removeClass(VALIDATION_ENGINE_CLASS);
-    // @ts-expect-error ts-error
     super._dispose();
   }
 

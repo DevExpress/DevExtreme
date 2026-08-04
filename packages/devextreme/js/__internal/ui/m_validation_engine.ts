@@ -1,19 +1,29 @@
 /* eslint-disable max-classes-per-file */
+import type {
+  AsyncRule,
+  CompareRule,
+  ComparisonOperator,
+  CustomRule,
+  EmailRule,
+  NumericRule,
+  PatternRule,
+  RangeRule,
+  RequiredRule,
+  StringLengthRule,
+  ValidationCallbackData,
+  ValidationRule,
+  ValidationStatus,
+} from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import numberLocalization from '@js/common/core/localization/number';
-import Class from '@js/core/class';
 import errors from '@js/core/errors';
 import { EventsStrategy } from '@js/core/events_strategy';
-// @ts-expect-error ts-error
-import { grep } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import {
   Deferred,
-  // @ts-expect-error ts-error
+  // @ts-expect-error fromPromise is not typed in @js/core/utils/deferred
   fromPromise,
 } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
 import {
   isBoolean,
   isDate,
@@ -24,83 +34,207 @@ import {
   isString,
 } from '@js/core/utils/type';
 import type { ValidationResult } from '@js/ui/validation_group';
+import type Validator from '@ts/ui/m_validator';
 
-import type Validator from './m_validator';
+/**
+ * A validation group is identified by reference only: it can be a ValidationGroup
+ * instance, a string, a Form, a Knockout view model or a grid row object.
+ */
+export type ValidationGroupKey = unknown;
+
+interface InternalRuleFields {
+  // holds whatever a user's validationCallback returned, so it is not necessarily boolean
+  isValid?: unknown;
+  value?: unknown;
+  reevaluate?: boolean;
+  validator?: Validator;
+  index?: number;
+  // set by editors themselves (date_box, number_box, masked text editors)
+  editorSpecific?: boolean;
+  // undocumented option of the numeric rule
+  useCultureSettings?: boolean;
+  // email rule delegates to the pattern rule
+  pattern?: RegExp | string;
+}
+
+export type ValidationRuleInternal = ValidationRule & InternalRuleFields;
+
+type RequiredRuleInternal = RequiredRule & InternalRuleFields;
+type NumericRuleInternal = NumericRule & InternalRuleFields;
+type RangeRuleInternal = RangeRule & InternalRuleFields;
+type StringLengthRuleInternal = StringLengthRule & InternalRuleFields;
+type CustomRuleInternal = CustomRule & InternalRuleFields;
+type AsyncRuleInternal = AsyncRule & InternalRuleFields;
+type CompareRuleInternal = CompareRule & InternalRuleFields;
+type PatternRuleInternal = PatternRule & InternalRuleFields;
+type EmailRuleInternal = EmailRule & InternalRuleFields;
+
+export interface AsyncRuleResult {
+  isValid?: boolean;
+  message?: string;
+}
+
+// a user's validationCallback may return nothing at all
+type RuleValidationResult = boolean | Promise<AsyncRuleResult> | undefined;
+
+export interface ValidationResultInternal {
+  name?: string;
+  value?: unknown;
+  brokenRule?: ValidationRuleInternal;
+  brokenRules?: ValidationRuleInternal[];
+  isValid?: boolean;
+  validationRules?: ValidationRuleInternal[];
+  pendingRules?: ValidationRuleInternal[] | null;
+  status?: ValidationStatus;
+  complete?: Promise<ValidationResultInternal> | null;
+  id?: string;
+  validator?: Validator;
+}
+
+export interface GroupValidationResult {
+  isValid?: boolean;
+  brokenRules: ValidationRuleInternal[];
+  validators: Validator[];
+  status: ValidationStatus;
+  complete: Promise<GroupValidationResult> | null;
+}
+
+export type GroupValidatedHandler = (result: GroupValidationResult) => void;
+
+/**
+ * Validation options shared by editors and the validator. `validationError(s)` are
+ * intentionally opaque here: this code only passes them through and compares them
+ * by reference.
+ */
+export interface ValidationOptions {
+  isValid?: boolean;
+  validationStatus?: ValidationStatus;
+  validationError?: unknown;
+  validationErrors?: unknown[] | null;
+}
 
 const EMAIL_VALIDATION_REGEX = /^[\d\w.+_-]+@[\d\w._-]+\.[\w]+$/i;
 
-const STATUS = {
+/**
+ * Relational operators coerce their operands with ToNumber unless both of them are
+ * strings. This helper reproduces that coercion in a form the compiler accepts.
+ */
+function toComparableValue(value: unknown): number | string {
+  const primitive: unknown = isDefined(value) ? value.valueOf() : value;
+
+  if (isNumeric(primitive) || isString(primitive)) {
+    return primitive;
+  }
+
+  return Number(primitive);
+}
+
+type DataGetter = () => Record<string, unknown> | undefined;
+
+function isDataGetter(value: unknown): value is DataGetter {
+  return isFunction(value);
+}
+
+function getValidationCallbackParams(
+  value: unknown,
+  rule: CustomRuleInternal | AsyncRuleInternal,
+): ValidationCallbackData {
+  const { validator } = rule;
+  // NOTE: a Knockout validator has no `option` method
+  const dataGetter: unknown = validator && isFunction(validator.option)
+    ? validator.option('dataGetter')
+    : undefined;
+  const extraParams = isDataGetter(dataGetter) ? dataGetter() : undefined;
+  const params: ValidationCallbackData = {
+    value,
+    validator,
+    rule,
+  };
+  if (extraParams) {
+    Object.assign(params, extraParams);
+  }
+  return params;
+}
+
+const STATUS: Record<string, ValidationStatus> = {
   valid: 'valid',
   invalid: 'invalid',
   pending: 'pending',
 };
 
-class BaseRuleValidator {
+abstract class BaseRuleValidator {
   public NAME!: string;
 
   constructor() {
     this.NAME = 'base';
   }
 
-  defaultMessage(value): string {
-    // @ts-expect-error ts-error
+  defaultMessage(value?: string): string {
+    // @ts-expect-error messageLocalization.getFormatter is declared as () => string
     return messageLocalization.getFormatter(`validation-${this.NAME}`)(value);
   }
 
-  defaultFormattedMessage(value): string {
-    // @ts-expect-error ts-error
+  defaultFormattedMessage(value?: string): string {
+    // @ts-expect-error messageLocalization.getFormatter is declared as () => string
     return messageLocalization.getFormatter(`validation-${this.NAME}-formatted`)(value);
   }
 
-  _isValueEmpty(value) {
-    return !rulesValidators.required.validate(value, {});
+  // eslint-disable-next-line class-methods-use-this
+  _isValueEmpty(value: unknown): boolean {
+    return !rulesValidators.required.validate(value, { type: 'required' });
   }
 
-  validate(value, rule) {
+  abstract validate(value: unknown, rule: ValidationRuleInternal): RuleValidationResult;
+}
+
+abstract class SyncRuleValidator extends BaseRuleValidator {
+  validate(value: unknown, rule: ValidationRuleInternal): boolean {
     const valueArray = Array.isArray(value) ? value : [value];
     let result = true;
 
     if (valueArray.length) {
-      valueArray.every((itemValue) => {
-        // @ts-expect-error ts-error
+      valueArray.every((itemValue: unknown): boolean => {
         result = this._validate(itemValue, rule);
         return result;
       });
     } else {
-      // @ts-expect-error ts-error
       result = this._validate(null, rule);
     }
 
     return result;
   }
+
+  abstract _validate(value: unknown, rule: ValidationRuleInternal): boolean;
 }
 
-class RequiredRuleValidator extends BaseRuleValidator {
+class RequiredRuleValidator extends SyncRuleValidator {
   constructor() {
     super();
     this.NAME = 'required';
   }
 
-  _validate(value, rule) {
+  // eslint-disable-next-line class-methods-use-this
+  _validate(value: unknown, rule: RequiredRuleInternal): boolean {
     if (!isDefined(value)) return false;
     if (value === false) {
       return false;
     }
-    value = String(value);
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
+    const stringValue = String(value);
     if (rule.trim || !isDefined(rule.trim)) {
-      value = value.trim();
+      return stringValue.trim() !== '';
     }
-    return value !== '';
+    return stringValue !== '';
   }
 }
 
-class NumericRuleValidator extends BaseRuleValidator {
+class NumericRuleValidator extends SyncRuleValidator {
   constructor() {
     super();
     this.NAME = 'numeric';
   }
 
-  _validate(value, rule) {
+  _validate(value: unknown, rule: NumericRuleInternal): boolean {
     if (rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
       return true;
     }
@@ -111,24 +245,26 @@ class NumericRuleValidator extends BaseRuleValidator {
   }
 }
 
-class RangeRuleValidator extends BaseRuleValidator {
+class RangeRuleValidator extends SyncRuleValidator {
   constructor() {
     super();
     this.NAME = 'range';
   }
 
-  _validate(value, rule) {
+  _validate(value: unknown, rule: RangeRuleInternal): boolean {
     if (rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
       return true;
     }
     const validNumber = rulesValidators.numeric.validate(value, rule);
     const validValue = isDefined(value) && value !== '';
-    const number = validNumber ? parseFloat(value) : validValue && value.valueOf();
-    const { min } = rule;
-    const { max } = rule;
     if (!(validNumber || isDate(value)) && !validValue) {
       return false;
     }
+    const number = validNumber || !isDefined(value)
+      ? parseFloat(String(value))
+      : toComparableValue(value);
+    const { min } = rule;
+    const { max } = rule;
     if (isDefined(min)) {
       if (isDefined(max)) {
         return number >= min && number <= max;
@@ -142,23 +278,24 @@ class RangeRuleValidator extends BaseRuleValidator {
   }
 }
 
-class StringLengthRuleValidator extends BaseRuleValidator {
+class StringLengthRuleValidator extends SyncRuleValidator {
   constructor() {
     super();
     this.NAME = 'stringLength';
   }
 
-  _validate(value, rule) {
-    value = String(value ?? '');
-    if (rule.trim || !isDefined(rule.trim)) {
-      value = value.trim();
-    }
-    if (rule.ignoreEmptyValue && this._isValueEmpty(value)) {
+  _validate(value: unknown, rule: StringLengthRuleInternal): boolean {
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
+    const stringValue = String(value ?? '');
+    const trimmedValue = rule.trim || !isDefined(rule.trim)
+      ? stringValue.trim()
+      : stringValue;
+    if (rule.ignoreEmptyValue && this._isValueEmpty(trimmedValue)) {
       return true;
     }
     return rulesValidators.range.validate(
-      value.length,
-      extend({}, rule),
+      trimmedValue.length,
+      { ...rule },
     );
   }
 }
@@ -169,71 +306,49 @@ class CustomRuleValidator extends BaseRuleValidator {
     this.NAME = 'custom';
   }
 
-  validate(value, rule) {
+  validate(value: unknown, rule: CustomRuleInternal): boolean | undefined {
     if (rule.ignoreEmptyValue && this._isValueEmpty(value)) {
       return true;
     }
-    const { validator } = rule;
-    const dataGetter = validator && isFunction(validator.option) && validator.option('dataGetter');
-    const extraParams = isFunction(dataGetter) && dataGetter();
-    const params = {
-      value,
-      validator,
-      rule,
-    };
-    if (extraParams) {
-      extend(params, extraParams);
-    }
-    return rule.validationCallback(params);
+    const params = getValidationCallbackParams(value, rule);
+    return rule.validationCallback?.(params);
   }
 }
 
-class AsyncRuleValidator extends CustomRuleValidator {
+class AsyncRuleValidator extends BaseRuleValidator {
   constructor() {
     super();
     this.NAME = 'async';
   }
 
-  validate(value, rule) {
+  validate(value: unknown, rule: AsyncRuleInternal): RuleValidationResult {
     if (!isDefined(rule.reevaluate)) {
-      extend(rule, { reevaluate: true });
+      rule.reevaluate = true;
     }
     if (rule.ignoreEmptyValue && this._isValueEmpty(value)) {
       return true;
     }
-    const { validator } = rule;
-    const dataGetter = validator && isFunction(validator.option) && validator.option('dataGetter');
-    const extraParams = isFunction(dataGetter) && dataGetter();
-    const params = {
-      value,
-      validator,
-      rule,
-    };
-    if (extraParams) {
-      extend(params, extraParams);
-    }
-    const callbackResult = rule.validationCallback(params);
+    const params = getValidationCallbackParams(value, rule);
+    const callbackResult = rule.validationCallback?.(params);
     if (!isPromise(callbackResult)) {
       throw errors.Error('E0103');
     }
     return this._getWrappedPromise(fromPromise(callbackResult).promise());
   }
 
-  _getWrappedPromise(promise) {
-    const deferred = Deferred();
-    promise.then((res) => {
-      deferred.resolve(res);
-    }, (err) => {
-      const res = {
+  // eslint-disable-next-line class-methods-use-this
+  _getWrappedPromise(promise: Promise<AsyncRuleResult>): Promise<AsyncRuleResult> {
+    const deferred = Deferred<AsyncRuleResult>();
+    promise.then((result): void => {
+      deferred.resolve(result);
+    }, (err: string | Record<string, unknown>): void => {
+      const res: AsyncRuleResult = {
         isValid: false,
       };
       if (isDefined(err)) {
         if (isString(err)) {
-          // @ts-expect-error
           res.message = err;
-          // @ts-expect-error
         } else if (isObject(err) && isDefined(err.message) && isString(err.message)) {
-          // @ts-expect-error
           res.message = err.message;
         }
       }
@@ -243,24 +358,24 @@ class AsyncRuleValidator extends CustomRuleValidator {
   }
 }
 
-class CompareRuleValidator extends BaseRuleValidator {
+class CompareRuleValidator extends SyncRuleValidator {
   constructor() {
     super();
     this.NAME = 'compare';
   }
 
-  // @ts-expect-error
   // eslint-disable-next-line consistent-return
-  _validate(value, rule) {
+  _validate(value: unknown, rule: CompareRuleInternal): boolean {
     if (!rule.comparisonTarget) {
       throw errors.Error('E0102');
     }
     if (rule.ignoreEmptyValue && this._isValueEmpty(value)) {
       return true;
     }
-    extend(rule, { reevaluate: true });
-    const otherValue = rule.comparisonTarget();
-    const type = rule.comparisonType || '==';
+    rule.reevaluate = true;
+    const otherValue: unknown = rule.comparisonTarget();
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const type: ComparisonOperator = rule.comparisonType || '==';
     // eslint-disable-next-line default-case
     switch (type) {
       case '==':
@@ -272,54 +387,49 @@ class CompareRuleValidator extends BaseRuleValidator {
       case '!==':
         return value !== otherValue;
       case '>':
-        return value > otherValue;
+        return toComparableValue(value) > toComparableValue(otherValue);
       case '>=':
-        return value >= otherValue;
+        return toComparableValue(value) >= toComparableValue(otherValue);
       case '<':
-        return value < otherValue;
+        return toComparableValue(value) < toComparableValue(otherValue);
       case '<=':
-        return value <= otherValue;
+        return toComparableValue(value) <= toComparableValue(otherValue);
     }
   }
 }
 
-class PatternRuleValidator extends BaseRuleValidator {
+class PatternRuleValidator extends SyncRuleValidator {
   constructor() {
     super();
     this.NAME = 'pattern';
   }
 
-  _validate(value, rule) {
+  _validate(value: unknown, rule: PatternRuleInternal): boolean {
     if (rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
       return true;
     }
-    let { pattern } = rule;
-    if (isString(pattern)) {
-      pattern = new RegExp(pattern);
-    }
-    return pattern.test(value);
+    const { pattern } = rule;
+    const regExp = isString(pattern) ? new RegExp(pattern) : pattern;
+    return Boolean(regExp?.test(String(value)));
   }
 }
 
-class EmailRuleValidator extends BaseRuleValidator {
+class EmailRuleValidator extends SyncRuleValidator {
   constructor() {
     super();
     this.NAME = 'email';
   }
 
-  _validate(value, rule) {
+  _validate(value: unknown, rule: EmailRuleInternal): boolean {
     if (rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
       return true;
     }
     return rulesValidators.pattern.validate(
       value,
-      extend(
-        {},
-        rule,
-        {
-          pattern: EMAIL_VALIDATION_REGEX,
-        },
-      ),
+      {
+        ...rule,
+        pattern: EMAIL_VALIDATION_REGEX,
+      },
     );
   }
 }
@@ -344,9 +454,8 @@ const rulesValidators = {
   email: new EmailRuleValidator(),
 };
 
-// @ts-expect-error dxClass inheritance issue
-class GroupConfig extends (Class.inherit({}) as new() => {}) {
-  group?: GroupConfig;
+export class GroupConfig {
+  group?: ValidationGroupKey;
 
   validators!: Validator[];
 
@@ -357,12 +466,11 @@ class GroupConfig extends (Class.inherit({}) as new() => {}) {
   _pendingValidators!: Validator[];
 
   _validationInfo!: {
-    result: ValidationResult;
-    deferred: DeferredObj<ValidationResult> | null;
-    skipValidation: boolean;
+    result: GroupValidationResult | null;
+    deferred: DeferredObj<GroupValidationResult> | null;
   };
 
-  ctor(group, isRemovable): void {
+  constructor(group: ValidationGroupKey, isRemovable: boolean) {
     this.group = group;
     this.validators = [];
     this._isRemovable = isRemovable;
@@ -372,8 +480,8 @@ class GroupConfig extends (Class.inherit({}) as new() => {}) {
     this._eventsStrategy = new EventsStrategy(this);
   }
 
-  validate(): void {
-    const result = {
+  validate(): GroupValidationResult {
+    const result: GroupValidationResult = {
       isValid: true,
       brokenRules: [],
       validators: [],
@@ -383,19 +491,18 @@ class GroupConfig extends (Class.inherit({}) as new() => {}) {
     this._unsubscribeFromAllChangeEvents();
     this._pendingValidators = [];
     this._resetValidationInfo();
-    each(this.validators, (_, validator) => {
+    for (const validator of this.validators) {
       const validatorResult = validator.validate();
       result.isValid = result.isValid && validatorResult.isValid;
       if (validatorResult.brokenRules) {
         result.brokenRules = result.brokenRules.concat(validatorResult.brokenRules);
       }
-      // @ts-expect-error ts-error
       result.validators.push(validator);
       if (validatorResult.status === STATUS.pending) {
         this._addPendingValidator(validator);
       }
       this._subscribeToChangeEvents(validator);
-    });
+    }
     if (this._pendingValidators.length) {
       result.status = STATUS.pending;
     } else {
@@ -404,109 +511,114 @@ class GroupConfig extends (Class.inherit({}) as new() => {}) {
       this._raiseValidatedEvent(result);
     }
     this._updateValidationInfo(result);
-    return extend({}, this._validationInfo.result);
+    return { ...result };
   }
 
-  _subscribeToChangeEvents(validator) {
+  _subscribeToChangeEvents(validator: Validator): void {
     validator.on('validating', this._onValidatorStatusChanged);
     validator.on('validated', this._onValidatorStatusChanged);
   }
 
-  _unsubscribeFromChangeEvents(validator) {
+  _unsubscribeFromChangeEvents(validator: Validator): void {
     validator.off('validating', this._onValidatorStatusChanged);
     validator.off('validated', this._onValidatorStatusChanged);
   }
 
-  _unsubscribeFromAllChangeEvents() {
-    each(this.validators, (_, validator) => {
+  _unsubscribeFromAllChangeEvents(): void {
+    for (const validator of this.validators) {
       this._unsubscribeFromChangeEvents(validator);
-    });
+    }
   }
 
-  _updateValidationInfo(result) {
+  _updateValidationInfo(result: GroupValidationResult): void {
     this._validationInfo.result = result;
     if (result.status !== STATUS.pending) {
       return;
     }
     if (!this._validationInfo.deferred) {
-      this._validationInfo.deferred = Deferred();
+      this._validationInfo.deferred = Deferred<GroupValidationResult>();
       this._validationInfo.result.complete = this._validationInfo.deferred.promise();
     }
   }
 
-  _addPendingValidator(validator) {
-    const foundValidator = grep(this._pendingValidators, (val) => val === validator)[0];
-    if (!foundValidator) {
+  _addPendingValidator(validator: Validator): void {
+    if (!this._pendingValidators.includes(validator)) {
       this._pendingValidators.push(validator);
     }
   }
 
-  _removePendingValidator(validator) {
+  _removePendingValidator(validator: Validator): void {
     const index = this._pendingValidators.indexOf(validator);
     if (index >= 0) {
       this._pendingValidators.splice(index, 1);
     }
   }
 
-  _orderBrokenRules(brokenRules) {
-    let orderedRules = [];
-    each(this.validators, (_, validator) => {
-      const foundRules = grep(brokenRules, (rule) => rule.validator === validator);
+  _orderBrokenRules(brokenRules: ValidationRuleInternal[]): ValidationRuleInternal[] {
+    const orderedRules: ValidationRuleInternal[] = [];
+    for (const validator of this.validators) {
+      const foundRules = brokenRules.filter((rule): boolean => rule.validator === validator);
       if (foundRules.length) {
-        orderedRules = orderedRules.concat(foundRules);
+        orderedRules.push(...foundRules);
       }
-    });
+    }
     return orderedRules;
   }
 
-  _updateBrokenRules(result) {
+  _updateBrokenRules(result: ValidationResultInternal): void {
     if (!this._validationInfo.result) {
       return;
     }
     let { brokenRules } = this._validationInfo.result;
-    const rules = grep(brokenRules, (rule) => rule.validator !== result.validator);
+    const rules = brokenRules.filter((rule): boolean => rule.validator !== result.validator);
     if (result.brokenRules) {
       brokenRules = rules.concat(result.brokenRules);
     }
     this._validationInfo.result.brokenRules = this._orderBrokenRules(brokenRules);
   }
 
-  _onValidatorStatusChanged(result) {
+  _onValidatorStatusChanged(result: ValidationResultInternal): void {
     if (result.status === STATUS.pending) {
-      this._addPendingValidator(result.validator);
+      if (result.validator) {
+        this._addPendingValidator(result.validator);
+      }
       return;
     }
     this._resolveIfComplete(result);
   }
 
-  _resolveIfComplete(result): void {
-    this._removePendingValidator(result.validator);
+  _resolveIfComplete(result: ValidationResultInternal): void {
+    if (result.validator) {
+      this._removePendingValidator(result.validator);
+    }
     this._updateBrokenRules(result);
     if (!this._pendingValidators.length) {
       this._unsubscribeFromAllChangeEvents();
       if (!this._validationInfo.result) {
         return;
       }
-      // @ts-expect-error ts-error
-      this._validationInfo.result.status = this._validationInfo.result.brokenRules.length === 0 ? STATUS.valid : STATUS.invalid;
+      this._validationInfo.result.status = this._validationInfo.result.brokenRules.length === 0
+        ? STATUS.valid
+        : STATUS.invalid;
       this._validationInfo.result.isValid = this._validationInfo.result.status === STATUS.valid;
-      const res = extend({}, this._validationInfo.result, { complete: null });
+      const res: GroupValidationResult = { ...this._validationInfo.result, complete: null };
       const { deferred } = this._validationInfo;
       this._validationInfo.deferred = null;
       this._raiseValidatedEvent(res);
-      deferred && setTimeout(() => {
-        deferred.resolve(res);
-      });
+      if (deferred) {
+        setTimeout((): void => {
+          deferred.resolve(res);
+        });
+      }
     }
   }
 
-  _raiseValidatedEvent(result): void {
+  _raiseValidatedEvent(result: GroupValidationResult): void {
     this._eventsStrategy.fireEvent('validated', [result]);
   }
 
-  _resetValidationInfo() {
+  _resetValidationInfo(): void {
     this._validationInfo = {
-      // @ts-expect-error ts-error
       result: null,
       deferred: null,
     };
@@ -518,7 +630,7 @@ class GroupConfig extends (Class.inherit({}) as new() => {}) {
     }
   }
 
-  removeRegisteredValidator(validator): void {
+  removeRegisteredValidator(validator: Validator): void {
     const index = this.validators.indexOf(validator);
     if (index > -1) {
       this.validators.splice(index, 1);
@@ -527,7 +639,7 @@ class GroupConfig extends (Class.inherit({}) as new() => {}) {
     }
   }
 
-  registerValidator(validator): void {
+  registerValidator(validator: Validator): void {
     if (!this.validators.includes(validator)) {
       this.validators.push(validator);
       this._synchronizeValidationInfo();
@@ -535,35 +647,41 @@ class GroupConfig extends (Class.inherit({}) as new() => {}) {
   }
 
   reset(): void {
-    each(this.validators, (_, validator) => {
+    for (const validator of this.validators) {
       validator.reset();
-    });
+    }
     this._pendingValidators = [];
     this._resetValidationInfo();
   }
 
-  on(eventName, eventHandler) {
+  on(eventName: string, eventHandler: GroupValidatedHandler): this {
     this._eventsStrategy.on(eventName, eventHandler);
     return this;
   }
 
-  off(eventName, eventHandler) {
+  off(eventName: string, eventHandler?: GroupValidatedHandler): this {
     this._eventsStrategy.off(eventName, eventHandler);
     return this;
   }
 }
 
+interface AsyncRuleItem {
+  rule: ValidationRuleInternal;
+  ruleValidator: BaseRuleValidator;
+}
+
 const ValidationEngine = {
   groups: [],
 
-  getGroupConfig(group) {
-    const result = grep(this.groups, (config) => config.group === group);
+  getGroupConfig(group: ValidationGroupKey) {
+    const result = this.groups.filter((config): boolean => config.group === group);
     if (result.length) {
       return result[0];
     }
+    return undefined;
   },
 
-  findGroup($element, model) {
+  findGroup($element, model: ValidationGroupKey): ValidationGroupKey {
     const hasValidationGroup = $element.data()?.dxComponents?.includes('dxValidationGroup');
     const validationGroup = hasValidationGroup && $element.dxValidationGroup('instance');
 
@@ -581,23 +699,22 @@ const ValidationEngine = {
     return model;
   },
 
-  initGroups() {
+  initGroups(): void {
     this.groups = [];
     this.addGroup(undefined, false);
   },
 
-  addGroup(group, isRemovable = true) {
-    let config = this.getGroupConfig(group);
+  addGroup(group: ValidationGroupKey, isRemovable = true): GroupConfig {
+    let config: GroupConfig | undefined = this.getGroupConfig(group);
     if (!config) {
-      // @ts-expect-error ts-error
       config = new GroupConfig(group, isRemovable);
       this.groups.push(config);
     }
     return config;
   },
 
-  removeGroup(group) {
-    const config = this.getGroupConfig(group);
+  removeGroup(group: ValidationGroupKey): GroupConfig | undefined {
+    const config: GroupConfig | undefined = this.getGroupConfig(group);
     const index = this.groups.indexOf(config);
     if (index > -1) {
       this.groups.splice(index, 1);
@@ -605,7 +722,11 @@ const ValidationEngine = {
     return config;
   },
 
-  _setDefaultMessage(info) {
+  _setDefaultMessage(info: {
+    rule: ValidationRuleInternal;
+    validator: BaseRuleValidator;
+    name?: string;
+  }): void {
     const { rule, validator, name } = info;
     if (!isDefined(rule.message)) {
       if (validator.defaultFormattedMessage && isDefined(name)) {
@@ -616,78 +737,74 @@ const ValidationEngine = {
     }
   },
 
-  _addBrokenRule(info) {
+  _addBrokenRule(info: {
+    result: ValidationResultInternal;
+    rule: ValidationRuleInternal;
+  }): void {
     const { result, rule } = info;
-    if (!result.brokenRule) {
-      result.brokenRule = rule;
-    }
-    if (!result.brokenRules) {
-      result.brokenRules = [];
-    }
+    result.brokenRule ??= rule;
+    result.brokenRules ??= [];
     result.brokenRules.push(rule);
   },
 
-  validate(value, rules, name) {
-    let result = {
+  validate(
+    value: unknown,
+    rules: ValidationRuleInternal[] | undefined,
+    name?: string,
+  ): ValidationResultInternal {
+    let result: ValidationResultInternal = {
       name,
       value,
-      brokenRule: null,
-      brokenRules: null,
+      brokenRule: undefined,
+      brokenRules: undefined,
       isValid: true,
       validationRules: rules,
-      pendingRules: null,
+      pendingRules: undefined,
       status: STATUS.valid,
-      complete: null,
+      complete: undefined,
     };
     const validator = rules?.[0]?.validator;
 
-    const asyncRuleItems = [];
-    // @ts-expect-error
-    each(rules || [], (_, rule) => {
-      const ruleValidator = rulesValidators[rule.type];
-      let ruleValidationResult;
-      if (ruleValidator) {
-        if (isDefined(rule.isValid) && rule.value === value && !rule.reevaluate) {
-          if (!rule.isValid) {
-            result.isValid = false;
-            this._addBrokenRule({
-              result,
-              rule,
-            });
-            return false;
-          }
-          return true;
-        }
-        rule.value = value;
-        if (rule.type === 'async') {
-          // @ts-expect-error
-          asyncRuleItems.push({
-            rule,
-            ruleValidator,
-          });
-          return true;
-        }
-        ruleValidationResult = ruleValidator.validate(value, rule);
-        rule.isValid = ruleValidationResult;
-        if (!ruleValidationResult) {
-          result.isValid = false;
-          this._setDefaultMessage({
-            rule,
-            validator: ruleValidator,
-            name,
-          });
-          this._addBrokenRule({
-            result,
-            rule,
-          });
-        }
-        if (!rule.isValid) {
-          return false;
-        }
-      } else {
+    const asyncRuleItems: AsyncRuleItem[] = [];
+
+    (rules ?? []).some((rule): boolean => {
+      const ruleValidator: BaseRuleValidator | undefined = rulesValidators[rule.type];
+
+      if (!ruleValidator) {
         throw errors.Error('E0100');
       }
+
+      if (isDefined(rule.isValid) && rule.value === value && !rule.reevaluate) {
+        if (!rule.isValid) {
+          result.isValid = false;
+          this._addBrokenRule({ result, rule });
+          return true;
+        }
+        return false;
+      }
+
+      rule.value = value;
+      if (rule.type === 'async') {
+        asyncRuleItems.push({ rule, ruleValidator });
+        return false;
+      }
+
+      const ruleValidationResult = ruleValidator.validate(value, rule);
+      rule.isValid = ruleValidationResult;
+
+      if (!ruleValidationResult) {
+        result.isValid = false;
+        this._setDefaultMessage({ rule, validator: ruleValidator, name });
+        this._addBrokenRule({ result, rule });
+      }
+
+      if (!rule.isValid) {
+        return true;
+      }
+
+      return false;
     });
+
     if (result.isValid && !result.brokenRules && asyncRuleItems.length) {
       result = this._validateAsyncRules({
         value,
@@ -699,24 +816,42 @@ const ValidationEngine = {
 
     this._synchronizeGroupValidationInfo(validator, result);
 
-    result.status = result.pendingRules ? STATUS.pending : result.isValid ? STATUS.valid : STATUS.invalid;
+    if (result.pendingRules) {
+      result.status = STATUS.pending;
+    } else if (result.isValid) {
+      result.status = STATUS.valid;
+    } else {
+      result.status = STATUS.invalid;
+    }
+
     return result;
   },
 
-  _synchronizeGroupValidationInfo(validator, result) {
+  _synchronizeGroupValidationInfo(
+    validator: Validator | undefined,
+    result: ValidationResultInternal,
+  ): void {
     if (!validator) {
       return;
     }
-    const groupConfig = ValidationEngine.getGroupConfig(validator._validationGroup);
-    groupConfig._updateBrokenRules.call(groupConfig, { validator, brokenRules: result.brokenRules ?? [] });
+    const groupConfig: GroupConfig | undefined = ValidationEngine
+      .getGroupConfig(validator._validationGroup);
+    groupConfig?._updateBrokenRules({ validator, brokenRules: result.brokenRules ?? [] });
   },
 
   _validateAsyncRules({
     result, value, items, name,
-  }) {
-    const asyncResults = [];
-    each(items, (_, item) => {
+  }: {
+    result: ValidationResultInternal;
+    value: unknown;
+    items: AsyncRuleItem[];
+    name?: string;
+  }): ValidationResultInternal {
+    const asyncResults: Promise<AsyncRuleResult>[] = [];
+
+    for (const item of items) {
       const validateResult = item.ruleValidator.validate(value, item.rule);
+
       if (!isPromise(validateResult)) {
         this._updateRuleConfig({
           rule: item.rule,
@@ -725,11 +860,10 @@ const ValidationEngine = {
           name,
         });
       } else {
-        if (!result.pendingRules) {
-          result.pendingRules = [];
-        }
+        result.pendingRules ??= [];
         result.pendingRules.push(item.rule);
-        const asyncResult = validateResult.then((res) => {
+
+        const asyncResult = validateResult.then((res: AsyncRuleResult): AsyncRuleResult => {
           const ruleResult = this._getPatchedRuleResult(res);
           this._updateRuleConfig({
             rule: item.rule,
@@ -739,10 +873,11 @@ const ValidationEngine = {
           });
           return ruleResult;
         });
-        // @ts-expect-error
+
         asyncResults.push(asyncResult);
       }
-    });
+    }
+
     if (asyncResults.length) {
       result.complete = Promise.all(asyncResults).then((values) => this._getAsyncRulesResult({
         result,
@@ -754,10 +889,19 @@ const ValidationEngine = {
 
   _updateRuleConfig({
     rule, ruleResult, validator, name,
-  }) {
+  }: {
+    rule: ValidationRuleInternal;
+    ruleResult: AsyncRuleResult;
+    validator: BaseRuleValidator;
+    name?: string;
+  }): void {
     rule.isValid = ruleResult.isValid;
     if (!ruleResult.isValid) {
-      if (isDefined(ruleResult.message) && isString(ruleResult.message) && ruleResult.message.length) {
+      if (
+        isDefined(ruleResult.message)
+        && isString(ruleResult.message)
+        && ruleResult.message.length
+      ) {
         rule.message = ruleResult.message;
       } else {
         this._setDefaultMessage({
@@ -769,31 +913,36 @@ const ValidationEngine = {
     }
   },
 
-  _getPatchedRuleResult(ruleResult) {
-    let result;
-    const isValid = true;
+  _getPatchedRuleResult(ruleResult: AsyncRuleResult | boolean): AsyncRuleResult {
+    const defaultIsValid = true;
     if (isObject(ruleResult)) {
-      result = extend({}, ruleResult);
+      const result: AsyncRuleResult = { ...ruleResult };
       if (!isDefined(result.isValid)) {
-        result.isValid = isValid;
+        result.isValid = defaultIsValid;
       }
-    } else {
-      result = {
-        isValid: isBoolean(ruleResult) ? ruleResult : isValid,
-      };
+      return result;
     }
-    return result;
+    return {
+      isValid: isBoolean(ruleResult) ? ruleResult : defaultIsValid,
+    };
   },
 
-  _getAsyncRulesResult({ values, result }) {
-    each(values, (index, val) => {
+  _getAsyncRulesResult({ values, result }: {
+    values: AsyncRuleResult[];
+    result: ValidationResultInternal;
+  }): ValidationResultInternal {
+    const { pendingRules } = result;
+
+    values.forEach((val, index): void => {
       if (val.isValid === false) {
         result.isValid = val.isValid;
-        const rule = result.pendingRules[index];
-        this._addBrokenRule({
-          result,
-          rule,
-        });
+        const rule = pendingRules?.[index];
+        if (rule) {
+          this._addBrokenRule({
+            result,
+            rule,
+          });
+        }
       }
     });
     result.pendingRules = null;
@@ -802,13 +951,13 @@ const ValidationEngine = {
     return result;
   },
 
-  registerValidatorInGroup(group, validator) {
+  registerValidatorInGroup(group: ValidationGroupKey, validator: Validator): void {
     const groupConfig = ValidationEngine.addGroup(group);
     groupConfig.registerValidator.call(groupConfig, validator);
   },
 
-  removeRegisteredValidator(group, validator) {
-    const config = ValidationEngine.getGroupConfig(group);
+  removeRegisteredValidator(group: ValidationGroupKey, validator: Validator): void {
+    const config: GroupConfig | undefined = ValidationEngine.getGroupConfig(group);
     if (config) {
       config.removeRegisteredValidator.call(config, validator);
       const validatorsInGroup = config.validators;
@@ -821,15 +970,15 @@ const ValidationEngine = {
     }
   },
 
-  initValidationOptions(options) {
-    const initedOptions = {};
+  initValidationOptions(options?: ValidationOptions): ValidationOptions {
+    const initedOptions: ValidationOptions = {};
 
     if (options) {
-      const syncOptions = ['isValid', 'validationStatus', 'validationError', 'validationErrors'];
+      const syncOptions: (keyof ValidationOptions)[] = ['isValid', 'validationStatus', 'validationError', 'validationErrors'];
 
       syncOptions.forEach((prop) => {
         if (prop in options) {
-          extend(
+          Object.assign(
             initedOptions,
             this.synchronizeValidationOptions({ name: prop, value: options[prop] }, options),
           );
@@ -840,7 +989,10 @@ const ValidationEngine = {
     return initedOptions;
   },
 
-  synchronizeValidationOptions({ name, value }, options) {
+  synchronizeValidationOptions(
+    { name, value }: { name: string; value: unknown },
+    options: ValidationOptions,
+  ): ValidationOptions {
     // eslint-disable-next-line default-case
     switch (name) {
       case 'validationStatus': {
@@ -861,7 +1013,8 @@ const ValidationEngine = {
         return newStatus !== validationStatus ? { validationStatus: newStatus } : {};
       }
       case 'validationErrors': {
-        const validationError = !value?.length ? null : value[0];
+        const errorList = Array.isArray(value) ? value : undefined;
+        const validationError = !errorList?.length ? null : errorList[0];
 
         return options.validationError !== validationError ? { validationError } : {};
       }
@@ -882,7 +1035,7 @@ const ValidationEngine = {
     return {};
   },
 
-  validateGroup(group): ValidationResult {
+  validateGroup(group: ValidationGroupKey): ValidationResult {
     const groupConfig = ValidationEngine.getGroupConfig(group);
     if (!groupConfig) {
       throw errors.Error('E0110');
@@ -890,12 +1043,12 @@ const ValidationEngine = {
     return groupConfig.validate();
   },
 
-  resetGroup(group) {
-    const groupConfig = ValidationEngine.getGroupConfig(group);
+  resetGroup(group: ValidationGroupKey): void {
+    const groupConfig: GroupConfig | undefined = ValidationEngine.getGroupConfig(group);
     if (!groupConfig) {
       throw errors.Error('E0110');
     }
-    return groupConfig.reset();
+    groupConfig.reset();
   },
 };
 

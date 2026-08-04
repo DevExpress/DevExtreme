@@ -553,7 +553,7 @@ QUnit.module('Events', {
         // assert.equal(params.name, name, "Name of Validator should be passed");
         assert.strictEqual(params.validator, validator, 'Validator reference should be passed');
         assert.strictEqual(params.isValid, true, 'isValid was passed');
-        assert.strictEqual(params.brokenRule, null, 'Null should be passed as brokenRule ');
+        assert.strictEqual(params.brokenRule, undefined, 'Undefined should be passed as brokenRule');
     });
 
     QUnit.test('optionChange raising', function(assert) {
