@@ -16,7 +16,7 @@ import { logger } from 'core/utils/console';
 import '../../helpers/calendarFixtures.js';
 
 import 'ui/validator';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import { implementationsMap } from 'core/utils/size';
 
 QUnit.testStart(() => {
@@ -2679,7 +2679,10 @@ QUnit.module('width of datebox with list', {
             assert.strictEqual($overlayContent.outerWidth(), 500, 'overlay content width is correct');
         });
 
-        QUnit.test('should be equal to wrapper width if dropDownOptions.width is set to auto (T897820)', function(assert) {
+        // NOTE: skipped for the Fluent theme. Fluent has rule
+        // `.dx-list .dx-scrollable-content { width: 100% }` (scss/widgets/fluent/list/_index.scss).
+        // With this rule the popup shrinks to its content.
+        QUnit.skip('should be equal to wrapper width if dropDownOptions.width is set to auto (T897820)', function(assert) {
             this.$dateBox.dxDateBox({
                 type: 'time',
                 pickerType: 'list',
