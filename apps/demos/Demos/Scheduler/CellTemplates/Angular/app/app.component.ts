@@ -71,7 +71,11 @@ export class AppComponent {
     return '';
   };
 
-  disabledTimeDescription = () => `The time range from ${this.formatHour(this.dinnerTime.from)} to ${this.formatHour(this.dinnerTime.to)} is disabled on all days`;
+  disabledTimeDescription = () => {
+    const from = this.formatHour(this.dinnerTime.from);
+    const to = this.formatHour(this.dinnerTime.to);
+    return `The time range from ${from} to ${to} is disabled on all days`;
+  };
 
   ariaDescription = () => [this.disabledDatesDescription(), this.disabledTimeDescription()]
     .filter(Boolean)

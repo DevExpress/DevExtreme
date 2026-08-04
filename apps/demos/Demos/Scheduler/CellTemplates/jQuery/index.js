@@ -116,7 +116,11 @@ const disabledDatesDescription = () => {
   return '';
 };
 
-const disabledTimeDescription = () => `The time range from ${formatHour(dinnerTime.from)} to ${formatHour(dinnerTime.to)} is disabled on all days`;
+const disabledTimeDescription = () => {
+  const from = formatHour(dinnerTime.from);
+  const to = formatHour(dinnerTime.to);
+  return `The time range from ${from} to ${to} is disabled on all days`;
+};
 
 const ariaDescription = () => [disabledDatesDescription(), disabledTimeDescription()]
   .filter(Boolean)
