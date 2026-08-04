@@ -1,0 +1,2342 @@
+{
+  "": [
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources",
+      "parentId": null,
+      "text": "Sources",
+      "hasItems": true
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot",
+      "parentId": null,
+      "text": "wwwroot",
+      "hasItems": true
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\appsettings.Daily.json",
+      "parentId": null,
+      "text": "appsettings.Daily.json",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\appsettings.json",
+      "parentId": null,
+      "text": "appsettings.json",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\appsettings.Publish.json",
+      "parentId": null,
+      "text": "appsettings.Publish.json",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\aspnetcorev2_inprocess.dll",
+      "parentId": null,
+      "text": "aspnetcorev2_inprocess.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Azure.AI.OpenAI.dll",
+      "parentId": null,
+      "text": "Azure.AI.OpenAI.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Azure.Core.dll",
+      "parentId": null,
+      "text": "Azure.Core.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\bundleconfig.json",
+      "parentId": null,
+      "text": "bundleconfig.json",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\clretwrc.dll",
+      "parentId": null,
+      "text": "clretwrc.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\clrgc.dll",
+      "parentId": null,
+      "text": "clrgc.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\clrjit.dll",
+      "parentId": null,
+      "text": "clrjit.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\CommonMark.dll",
+      "parentId": null,
+      "text": "CommonMark.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\coreclr.dll",
+      "parentId": null,
+      "text": "coreclr.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\createdump.exe",
+      "parentId": null,
+      "text": "createdump.exe",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\DevExpress.Data.v26.1.dll",
+      "parentId": null,
+      "text": "DevExpress.Data.v26.1.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\DevExtreme.AspNet.Core.dll",
+      "parentId": null,
+      "text": "DevExtreme.AspNet.Core.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\DevExtreme.AspNet.Data.dll",
+      "parentId": null,
+      "text": "DevExtreme.AspNet.Data.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\DevExtreme.NETCore.Demos.deps.json",
+      "parentId": null,
+      "text": "DevExtreme.NETCore.Demos.deps.json",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\DevExtreme.NETCore.Demos.dll",
+      "parentId": null,
+      "text": "DevExtreme.NETCore.Demos.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\DevExtreme.NETCore.Demos.exe",
+      "parentId": null,
+      "text": "DevExtreme.NETCore.Demos.exe",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\DevExtreme.NETCore.Demos.pdb",
+      "parentId": null,
+      "text": "DevExtreme.NETCore.Demos.pdb",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\DevExtreme.NETCore.Demos.runtimeconfig.json",
+      "parentId": null,
+      "text": "DevExtreme.NETCore.Demos.runtimeconfig.json",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\DevExtreme.NETCore.Demos.staticwebassets.endpoints.json",
+      "parentId": null,
+      "text": "DevExtreme.NETCore.Demos.staticwebassets.endpoints.json",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\e_sqlite3.dll",
+      "parentId": null,
+      "text": "e_sqlite3.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\FileManagement.db",
+      "parentId": null,
+      "text": "FileManagement.db",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\hostfxr.dll",
+      "parentId": null,
+      "text": "hostfxr.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\hostpolicy.dll",
+      "parentId": null,
+      "text": "hostpolicy.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\menuMeta.json",
+      "parentId": null,
+      "text": "menuMeta.json",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Antiforgery.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Antiforgery.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Authentication.Abstractions.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Authentication.Abstractions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Authentication.BearerToken.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Authentication.BearerToken.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Authentication.Cookies.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Authentication.Cookies.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Authentication.Core.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Authentication.Core.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Authentication.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Authentication.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Authentication.OAuth.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Authentication.OAuth.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Authorization.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Authorization.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Authorization.Policy.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Authorization.Policy.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Components.Authorization.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Components.Authorization.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Components.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Components.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Components.Endpoints.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Components.Endpoints.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Components.Forms.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Components.Forms.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Components.Server.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Components.Server.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Components.Web.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Components.Web.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Connections.Abstractions.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Connections.Abstractions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.CookiePolicy.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.CookiePolicy.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Cors.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Cors.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Cryptography.Internal.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Cryptography.Internal.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Cryptography.KeyDerivation.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.DataProtection.Abstractions.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.DataProtection.Abstractions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.DataProtection.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.DataProtection.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.DataProtection.Extensions.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.DataProtection.Extensions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Diagnostics.Abstractions.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Diagnostics.Abstractions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Diagnostics.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Diagnostics.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Diagnostics.HealthChecks.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Diagnostics.HealthChecks.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.HostFiltering.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.HostFiltering.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Hosting.Abstractions.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Hosting.Abstractions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Hosting.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Hosting.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Hosting.Server.Abstractions.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Hosting.Server.Abstractions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Html.Abstractions.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Html.Abstractions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Http.Abstractions.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Http.Abstractions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Http.Connections.Common.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Http.Connections.Common.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Http.Connections.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Http.Connections.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Http.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Http.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Http.Extensions.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Http.Extensions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Http.Features.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Http.Features.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Http.Results.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Http.Results.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.HttpLogging.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.HttpLogging.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.HttpOverrides.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.HttpOverrides.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.HttpsPolicy.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.HttpsPolicy.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Identity.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Identity.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Localization.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Localization.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Localization.Routing.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Localization.Routing.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Metadata.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Metadata.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Mvc.Abstractions.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Mvc.Abstractions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Mvc.ApiExplorer.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Mvc.ApiExplorer.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Mvc.Core.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Mvc.Core.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Mvc.Cors.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Mvc.Cors.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Mvc.DataAnnotations.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Mvc.DataAnnotations.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Mvc.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Mvc.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Mvc.Formatters.Json.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Mvc.Formatters.Json.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Mvc.Formatters.Xml.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Mvc.Formatters.Xml.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Mvc.Localization.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Mvc.Localization.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Mvc.Razor.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Mvc.Razor.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Mvc.RazorPages.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Mvc.RazorPages.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Mvc.TagHelpers.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Mvc.TagHelpers.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Mvc.ViewFeatures.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Mvc.ViewFeatures.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.OutputCaching.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.OutputCaching.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.RateLimiting.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.RateLimiting.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Razor.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Razor.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Razor.Runtime.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Razor.Runtime.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.RequestDecompression.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.RequestDecompression.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.ResponseCaching.Abstractions.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.ResponseCaching.Abstractions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.ResponseCaching.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.ResponseCaching.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.ResponseCompression.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.ResponseCompression.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Rewrite.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Rewrite.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Routing.Abstractions.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Routing.Abstractions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Routing.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Routing.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Server.HttpSys.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Server.HttpSys.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Server.IIS.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Server.IIS.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Server.IISIntegration.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Server.IISIntegration.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Server.Kestrel.Core.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Server.Kestrel.Core.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Server.Kestrel.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Server.Kestrel.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Server.Kestrel.Transport.NamedPipes.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Server.Kestrel.Transport.NamedPipes.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Server.Kestrel.Transport.Quic.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Server.Kestrel.Transport.Quic.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.Session.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.Session.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.SignalR.Common.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.SignalR.Common.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.SignalR.Core.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.SignalR.Core.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.SignalR.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.SignalR.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.SignalR.Protocols.Json.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.SignalR.Protocols.Json.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.StaticFiles.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.StaticFiles.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.WebSockets.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.WebSockets.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.AspNetCore.WebUtilities.dll",
+      "parentId": null,
+      "text": "Microsoft.AspNetCore.WebUtilities.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Bcl.AsyncInterfaces.dll",
+      "parentId": null,
+      "text": "Microsoft.Bcl.AsyncInterfaces.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.CSharp.dll",
+      "parentId": null,
+      "text": "Microsoft.CSharp.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Data.Sqlite.dll",
+      "parentId": null,
+      "text": "Microsoft.Data.Sqlite.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.DiaSymReader.Native.amd64.dll",
+      "parentId": null,
+      "text": "Microsoft.DiaSymReader.Native.amd64.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.EntityFrameworkCore.Abstractions.dll",
+      "parentId": null,
+      "text": "Microsoft.EntityFrameworkCore.Abstractions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.EntityFrameworkCore.dll",
+      "parentId": null,
+      "text": "Microsoft.EntityFrameworkCore.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.EntityFrameworkCore.Relational.dll",
+      "parentId": null,
+      "text": "Microsoft.EntityFrameworkCore.Relational.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.EntityFrameworkCore.Sqlite.dll",
+      "parentId": null,
+      "text": "Microsoft.EntityFrameworkCore.Sqlite.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.AI.Abstractions.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.AI.Abstractions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.AI.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.AI.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.AI.OpenAI.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.AI.OpenAI.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Caching.Abstractions.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Caching.Abstractions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Caching.Memory.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Caching.Memory.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Configuration.Abstractions.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Configuration.Abstractions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Configuration.Binder.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Configuration.Binder.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Configuration.CommandLine.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Configuration.CommandLine.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Configuration.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Configuration.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Configuration.EnvironmentVariables.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Configuration.EnvironmentVariables.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Configuration.FileExtensions.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Configuration.FileExtensions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Configuration.Ini.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Configuration.Ini.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Configuration.Json.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Configuration.Json.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Configuration.KeyPerFile.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Configuration.KeyPerFile.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Configuration.UserSecrets.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Configuration.UserSecrets.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Configuration.Xml.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Configuration.Xml.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.DependencyInjection.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.DependencyInjection.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.DependencyModel.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.DependencyModel.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Diagnostics.Abstractions.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Diagnostics.Abstractions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Diagnostics.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Diagnostics.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Diagnostics.HealthChecks.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Diagnostics.HealthChecks.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Features.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Features.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.FileProviders.Abstractions.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.FileProviders.Abstractions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.FileProviders.Composite.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.FileProviders.Composite.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.FileProviders.Embedded.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.FileProviders.Embedded.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.FileProviders.Physical.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.FileProviders.Physical.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.FileSystemGlobbing.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.FileSystemGlobbing.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Hosting.Abstractions.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Hosting.Abstractions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Hosting.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Hosting.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Http.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Http.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Identity.Core.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Identity.Core.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Identity.Stores.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Identity.Stores.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Localization.Abstractions.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Localization.Abstractions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Localization.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Localization.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Logging.Abstractions.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Logging.Abstractions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Logging.Configuration.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Logging.Configuration.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Logging.Console.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Logging.Console.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Logging.Debug.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Logging.Debug.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Logging.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Logging.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Logging.EventLog.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Logging.EventLog.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Logging.EventSource.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Logging.EventSource.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Logging.TraceSource.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Logging.TraceSource.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.ObjectPool.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.ObjectPool.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Options.ConfigurationExtensions.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Options.ConfigurationExtensions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Options.DataAnnotations.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Options.DataAnnotations.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Options.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Options.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.Primitives.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.Primitives.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Extensions.WebEncoders.dll",
+      "parentId": null,
+      "text": "Microsoft.Extensions.WebEncoders.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.JSInterop.dll",
+      "parentId": null,
+      "text": "Microsoft.JSInterop.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Net.Http.Headers.dll",
+      "parentId": null,
+      "text": "Microsoft.Net.Http.Headers.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.VisualBasic.Core.dll",
+      "parentId": null,
+      "text": "Microsoft.VisualBasic.Core.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.VisualBasic.dll",
+      "parentId": null,
+      "text": "Microsoft.VisualBasic.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Win32.Primitives.dll",
+      "parentId": null,
+      "text": "Microsoft.Win32.Primitives.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Win32.Registry.dll",
+      "parentId": null,
+      "text": "Microsoft.Win32.Registry.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Microsoft.Win32.SystemEvents.dll",
+      "parentId": null,
+      "text": "Microsoft.Win32.SystemEvents.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\mscordaccore_amd64_amd64_8.0.2926.32403.dll",
+      "parentId": null,
+      "text": "mscordaccore_amd64_amd64_8.0.2926.32403.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\mscordaccore.dll",
+      "parentId": null,
+      "text": "mscordaccore.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\mscordbi.dll",
+      "parentId": null,
+      "text": "mscordbi.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\mscorlib.dll",
+      "parentId": null,
+      "text": "mscorlib.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\mscorrc.dll",
+      "parentId": null,
+      "text": "mscorrc.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\msquic.dll",
+      "parentId": null,
+      "text": "msquic.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\netstandard.dll",
+      "parentId": null,
+      "text": "netstandard.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Northwind.sqlite",
+      "parentId": null,
+      "text": "Northwind.sqlite",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\OpenAI.dll",
+      "parentId": null,
+      "text": "OpenAI.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\SQLitePCLRaw.batteries_v2.dll",
+      "parentId": null,
+      "text": "SQLitePCLRaw.batteries_v2.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\SQLitePCLRaw.core.dll",
+      "parentId": null,
+      "text": "SQLitePCLRaw.core.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\SQLitePCLRaw.provider.e_sqlite3.dll",
+      "parentId": null,
+      "text": "SQLitePCLRaw.provider.e_sqlite3.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.AppContext.dll",
+      "parentId": null,
+      "text": "System.AppContext.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Buffers.dll",
+      "parentId": null,
+      "text": "System.Buffers.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.ClientModel.dll",
+      "parentId": null,
+      "text": "System.ClientModel.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Collections.Concurrent.dll",
+      "parentId": null,
+      "text": "System.Collections.Concurrent.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Collections.dll",
+      "parentId": null,
+      "text": "System.Collections.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Collections.Immutable.dll",
+      "parentId": null,
+      "text": "System.Collections.Immutable.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Collections.NonGeneric.dll",
+      "parentId": null,
+      "text": "System.Collections.NonGeneric.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Collections.Specialized.dll",
+      "parentId": null,
+      "text": "System.Collections.Specialized.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.ComponentModel.Annotations.dll",
+      "parentId": null,
+      "text": "System.ComponentModel.Annotations.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.ComponentModel.DataAnnotations.dll",
+      "parentId": null,
+      "text": "System.ComponentModel.DataAnnotations.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.ComponentModel.dll",
+      "parentId": null,
+      "text": "System.ComponentModel.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.ComponentModel.EventBasedAsync.dll",
+      "parentId": null,
+      "text": "System.ComponentModel.EventBasedAsync.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.ComponentModel.Primitives.dll",
+      "parentId": null,
+      "text": "System.ComponentModel.Primitives.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.ComponentModel.TypeConverter.dll",
+      "parentId": null,
+      "text": "System.ComponentModel.TypeConverter.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Configuration.dll",
+      "parentId": null,
+      "text": "System.Configuration.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Console.dll",
+      "parentId": null,
+      "text": "System.Console.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Core.dll",
+      "parentId": null,
+      "text": "System.Core.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Data.Common.dll",
+      "parentId": null,
+      "text": "System.Data.Common.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Data.DataSetExtensions.dll",
+      "parentId": null,
+      "text": "System.Data.DataSetExtensions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Data.dll",
+      "parentId": null,
+      "text": "System.Data.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Diagnostics.Contracts.dll",
+      "parentId": null,
+      "text": "System.Diagnostics.Contracts.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Diagnostics.Debug.dll",
+      "parentId": null,
+      "text": "System.Diagnostics.Debug.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Diagnostics.DiagnosticSource.dll",
+      "parentId": null,
+      "text": "System.Diagnostics.DiagnosticSource.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Diagnostics.EventLog.dll",
+      "parentId": null,
+      "text": "System.Diagnostics.EventLog.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Diagnostics.EventLog.Messages.dll",
+      "parentId": null,
+      "text": "System.Diagnostics.EventLog.Messages.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Diagnostics.FileVersionInfo.dll",
+      "parentId": null,
+      "text": "System.Diagnostics.FileVersionInfo.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Diagnostics.Process.dll",
+      "parentId": null,
+      "text": "System.Diagnostics.Process.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Diagnostics.StackTrace.dll",
+      "parentId": null,
+      "text": "System.Diagnostics.StackTrace.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Diagnostics.TextWriterTraceListener.dll",
+      "parentId": null,
+      "text": "System.Diagnostics.TextWriterTraceListener.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Diagnostics.Tools.dll",
+      "parentId": null,
+      "text": "System.Diagnostics.Tools.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Diagnostics.TraceSource.dll",
+      "parentId": null,
+      "text": "System.Diagnostics.TraceSource.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Diagnostics.Tracing.dll",
+      "parentId": null,
+      "text": "System.Diagnostics.Tracing.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.dll",
+      "parentId": null,
+      "text": "System.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Drawing.Common.dll",
+      "parentId": null,
+      "text": "System.Drawing.Common.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Drawing.dll",
+      "parentId": null,
+      "text": "System.Drawing.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Drawing.Primitives.dll",
+      "parentId": null,
+      "text": "System.Drawing.Primitives.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Dynamic.Runtime.dll",
+      "parentId": null,
+      "text": "System.Dynamic.Runtime.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Formats.Asn1.dll",
+      "parentId": null,
+      "text": "System.Formats.Asn1.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Formats.Tar.dll",
+      "parentId": null,
+      "text": "System.Formats.Tar.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Globalization.Calendars.dll",
+      "parentId": null,
+      "text": "System.Globalization.Calendars.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Globalization.dll",
+      "parentId": null,
+      "text": "System.Globalization.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Globalization.Extensions.dll",
+      "parentId": null,
+      "text": "System.Globalization.Extensions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.IO.Compression.Brotli.dll",
+      "parentId": null,
+      "text": "System.IO.Compression.Brotli.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.IO.Compression.dll",
+      "parentId": null,
+      "text": "System.IO.Compression.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.IO.Compression.FileSystem.dll",
+      "parentId": null,
+      "text": "System.IO.Compression.FileSystem.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.IO.Compression.Native.dll",
+      "parentId": null,
+      "text": "System.IO.Compression.Native.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.IO.Compression.ZipFile.dll",
+      "parentId": null,
+      "text": "System.IO.Compression.ZipFile.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.IO.dll",
+      "parentId": null,
+      "text": "System.IO.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.IO.FileSystem.AccessControl.dll",
+      "parentId": null,
+      "text": "System.IO.FileSystem.AccessControl.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.IO.FileSystem.dll",
+      "parentId": null,
+      "text": "System.IO.FileSystem.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.IO.FileSystem.DriveInfo.dll",
+      "parentId": null,
+      "text": "System.IO.FileSystem.DriveInfo.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.IO.FileSystem.Primitives.dll",
+      "parentId": null,
+      "text": "System.IO.FileSystem.Primitives.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.IO.FileSystem.Watcher.dll",
+      "parentId": null,
+      "text": "System.IO.FileSystem.Watcher.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.IO.IsolatedStorage.dll",
+      "parentId": null,
+      "text": "System.IO.IsolatedStorage.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.IO.MemoryMappedFiles.dll",
+      "parentId": null,
+      "text": "System.IO.MemoryMappedFiles.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.IO.Pipelines.dll",
+      "parentId": null,
+      "text": "System.IO.Pipelines.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.IO.Pipes.AccessControl.dll",
+      "parentId": null,
+      "text": "System.IO.Pipes.AccessControl.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.IO.Pipes.dll",
+      "parentId": null,
+      "text": "System.IO.Pipes.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.IO.UnmanagedMemoryStream.dll",
+      "parentId": null,
+      "text": "System.IO.UnmanagedMemoryStream.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Linq.dll",
+      "parentId": null,
+      "text": "System.Linq.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Linq.Expressions.dll",
+      "parentId": null,
+      "text": "System.Linq.Expressions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Linq.Parallel.dll",
+      "parentId": null,
+      "text": "System.Linq.Parallel.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Linq.Queryable.dll",
+      "parentId": null,
+      "text": "System.Linq.Queryable.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Memory.Data.dll",
+      "parentId": null,
+      "text": "System.Memory.Data.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Memory.dll",
+      "parentId": null,
+      "text": "System.Memory.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Net.dll",
+      "parentId": null,
+      "text": "System.Net.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Net.Http.dll",
+      "parentId": null,
+      "text": "System.Net.Http.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Net.Http.Json.dll",
+      "parentId": null,
+      "text": "System.Net.Http.Json.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Net.HttpListener.dll",
+      "parentId": null,
+      "text": "System.Net.HttpListener.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Net.Mail.dll",
+      "parentId": null,
+      "text": "System.Net.Mail.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Net.NameResolution.dll",
+      "parentId": null,
+      "text": "System.Net.NameResolution.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Net.NetworkInformation.dll",
+      "parentId": null,
+      "text": "System.Net.NetworkInformation.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Net.Ping.dll",
+      "parentId": null,
+      "text": "System.Net.Ping.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Net.Primitives.dll",
+      "parentId": null,
+      "text": "System.Net.Primitives.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Net.Quic.dll",
+      "parentId": null,
+      "text": "System.Net.Quic.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Net.Requests.dll",
+      "parentId": null,
+      "text": "System.Net.Requests.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Net.Security.dll",
+      "parentId": null,
+      "text": "System.Net.Security.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Net.ServerSentEvents.dll",
+      "parentId": null,
+      "text": "System.Net.ServerSentEvents.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Net.ServicePoint.dll",
+      "parentId": null,
+      "text": "System.Net.ServicePoint.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Net.Sockets.dll",
+      "parentId": null,
+      "text": "System.Net.Sockets.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Net.WebClient.dll",
+      "parentId": null,
+      "text": "System.Net.WebClient.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Net.WebHeaderCollection.dll",
+      "parentId": null,
+      "text": "System.Net.WebHeaderCollection.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Net.WebProxy.dll",
+      "parentId": null,
+      "text": "System.Net.WebProxy.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Net.WebSockets.Client.dll",
+      "parentId": null,
+      "text": "System.Net.WebSockets.Client.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Net.WebSockets.dll",
+      "parentId": null,
+      "text": "System.Net.WebSockets.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Numerics.dll",
+      "parentId": null,
+      "text": "System.Numerics.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Numerics.Tensors.dll",
+      "parentId": null,
+      "text": "System.Numerics.Tensors.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Numerics.Vectors.dll",
+      "parentId": null,
+      "text": "System.Numerics.Vectors.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.ObjectModel.dll",
+      "parentId": null,
+      "text": "System.ObjectModel.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Private.CoreLib.dll",
+      "parentId": null,
+      "text": "System.Private.CoreLib.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Private.DataContractSerialization.dll",
+      "parentId": null,
+      "text": "System.Private.DataContractSerialization.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Private.Uri.dll",
+      "parentId": null,
+      "text": "System.Private.Uri.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Private.Xml.dll",
+      "parentId": null,
+      "text": "System.Private.Xml.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Private.Xml.Linq.dll",
+      "parentId": null,
+      "text": "System.Private.Xml.Linq.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Reflection.DispatchProxy.dll",
+      "parentId": null,
+      "text": "System.Reflection.DispatchProxy.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Reflection.dll",
+      "parentId": null,
+      "text": "System.Reflection.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Reflection.Emit.dll",
+      "parentId": null,
+      "text": "System.Reflection.Emit.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Reflection.Emit.ILGeneration.dll",
+      "parentId": null,
+      "text": "System.Reflection.Emit.ILGeneration.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Reflection.Emit.Lightweight.dll",
+      "parentId": null,
+      "text": "System.Reflection.Emit.Lightweight.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Reflection.Extensions.dll",
+      "parentId": null,
+      "text": "System.Reflection.Extensions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Reflection.Metadata.dll",
+      "parentId": null,
+      "text": "System.Reflection.Metadata.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Reflection.Primitives.dll",
+      "parentId": null,
+      "text": "System.Reflection.Primitives.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Reflection.TypeExtensions.dll",
+      "parentId": null,
+      "text": "System.Reflection.TypeExtensions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Resources.Reader.dll",
+      "parentId": null,
+      "text": "System.Resources.Reader.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Resources.ResourceManager.dll",
+      "parentId": null,
+      "text": "System.Resources.ResourceManager.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Resources.Writer.dll",
+      "parentId": null,
+      "text": "System.Resources.Writer.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Runtime.CompilerServices.Unsafe.dll",
+      "parentId": null,
+      "text": "System.Runtime.CompilerServices.Unsafe.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Runtime.CompilerServices.VisualC.dll",
+      "parentId": null,
+      "text": "System.Runtime.CompilerServices.VisualC.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Runtime.dll",
+      "parentId": null,
+      "text": "System.Runtime.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Runtime.Extensions.dll",
+      "parentId": null,
+      "text": "System.Runtime.Extensions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Runtime.Handles.dll",
+      "parentId": null,
+      "text": "System.Runtime.Handles.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Runtime.InteropServices.dll",
+      "parentId": null,
+      "text": "System.Runtime.InteropServices.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Runtime.InteropServices.JavaScript.dll",
+      "parentId": null,
+      "text": "System.Runtime.InteropServices.JavaScript.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Runtime.InteropServices.RuntimeInformation.dll",
+      "parentId": null,
+      "text": "System.Runtime.InteropServices.RuntimeInformation.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Runtime.Intrinsics.dll",
+      "parentId": null,
+      "text": "System.Runtime.Intrinsics.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Runtime.Loader.dll",
+      "parentId": null,
+      "text": "System.Runtime.Loader.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Runtime.Numerics.dll",
+      "parentId": null,
+      "text": "System.Runtime.Numerics.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Runtime.Serialization.dll",
+      "parentId": null,
+      "text": "System.Runtime.Serialization.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Runtime.Serialization.Formatters.dll",
+      "parentId": null,
+      "text": "System.Runtime.Serialization.Formatters.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Runtime.Serialization.Json.dll",
+      "parentId": null,
+      "text": "System.Runtime.Serialization.Json.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Runtime.Serialization.Primitives.dll",
+      "parentId": null,
+      "text": "System.Runtime.Serialization.Primitives.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Runtime.Serialization.Xml.dll",
+      "parentId": null,
+      "text": "System.Runtime.Serialization.Xml.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Security.AccessControl.dll",
+      "parentId": null,
+      "text": "System.Security.AccessControl.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Security.Claims.dll",
+      "parentId": null,
+      "text": "System.Security.Claims.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Security.Cryptography.Algorithms.dll",
+      "parentId": null,
+      "text": "System.Security.Cryptography.Algorithms.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Security.Cryptography.Cng.dll",
+      "parentId": null,
+      "text": "System.Security.Cryptography.Cng.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Security.Cryptography.Csp.dll",
+      "parentId": null,
+      "text": "System.Security.Cryptography.Csp.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Security.Cryptography.dll",
+      "parentId": null,
+      "text": "System.Security.Cryptography.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Security.Cryptography.Encoding.dll",
+      "parentId": null,
+      "text": "System.Security.Cryptography.Encoding.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Security.Cryptography.OpenSsl.dll",
+      "parentId": null,
+      "text": "System.Security.Cryptography.OpenSsl.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Security.Cryptography.Pkcs.dll",
+      "parentId": null,
+      "text": "System.Security.Cryptography.Pkcs.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Security.Cryptography.Primitives.dll",
+      "parentId": null,
+      "text": "System.Security.Cryptography.Primitives.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Security.Cryptography.X509Certificates.dll",
+      "parentId": null,
+      "text": "System.Security.Cryptography.X509Certificates.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Security.Cryptography.Xml.dll",
+      "parentId": null,
+      "text": "System.Security.Cryptography.Xml.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Security.dll",
+      "parentId": null,
+      "text": "System.Security.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Security.Principal.dll",
+      "parentId": null,
+      "text": "System.Security.Principal.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Security.Principal.Windows.dll",
+      "parentId": null,
+      "text": "System.Security.Principal.Windows.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Security.SecureString.dll",
+      "parentId": null,
+      "text": "System.Security.SecureString.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.ServiceModel.Web.dll",
+      "parentId": null,
+      "text": "System.ServiceModel.Web.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.ServiceProcess.dll",
+      "parentId": null,
+      "text": "System.ServiceProcess.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Text.Encoding.CodePages.dll",
+      "parentId": null,
+      "text": "System.Text.Encoding.CodePages.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Text.Encoding.dll",
+      "parentId": null,
+      "text": "System.Text.Encoding.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Text.Encoding.Extensions.dll",
+      "parentId": null,
+      "text": "System.Text.Encoding.Extensions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Text.Encodings.Web.dll",
+      "parentId": null,
+      "text": "System.Text.Encodings.Web.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Text.Json.dll",
+      "parentId": null,
+      "text": "System.Text.Json.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Text.RegularExpressions.dll",
+      "parentId": null,
+      "text": "System.Text.RegularExpressions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Threading.Channels.dll",
+      "parentId": null,
+      "text": "System.Threading.Channels.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Threading.dll",
+      "parentId": null,
+      "text": "System.Threading.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Threading.Overlapped.dll",
+      "parentId": null,
+      "text": "System.Threading.Overlapped.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Threading.RateLimiting.dll",
+      "parentId": null,
+      "text": "System.Threading.RateLimiting.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Threading.Tasks.Dataflow.dll",
+      "parentId": null,
+      "text": "System.Threading.Tasks.Dataflow.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Threading.Tasks.dll",
+      "parentId": null,
+      "text": "System.Threading.Tasks.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Threading.Tasks.Extensions.dll",
+      "parentId": null,
+      "text": "System.Threading.Tasks.Extensions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Threading.Tasks.Parallel.dll",
+      "parentId": null,
+      "text": "System.Threading.Tasks.Parallel.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Threading.Thread.dll",
+      "parentId": null,
+      "text": "System.Threading.Thread.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Threading.ThreadPool.dll",
+      "parentId": null,
+      "text": "System.Threading.ThreadPool.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Threading.Timer.dll",
+      "parentId": null,
+      "text": "System.Threading.Timer.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Transactions.dll",
+      "parentId": null,
+      "text": "System.Transactions.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Transactions.Local.dll",
+      "parentId": null,
+      "text": "System.Transactions.Local.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.ValueTuple.dll",
+      "parentId": null,
+      "text": "System.ValueTuple.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Web.dll",
+      "parentId": null,
+      "text": "System.Web.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Web.HttpUtility.dll",
+      "parentId": null,
+      "text": "System.Web.HttpUtility.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Windows.dll",
+      "parentId": null,
+      "text": "System.Windows.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Xml.dll",
+      "parentId": null,
+      "text": "System.Xml.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Xml.Linq.dll",
+      "parentId": null,
+      "text": "System.Xml.Linq.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Xml.ReaderWriter.dll",
+      "parentId": null,
+      "text": "System.Xml.ReaderWriter.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Xml.Serialization.dll",
+      "parentId": null,
+      "text": "System.Xml.Serialization.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Xml.XDocument.dll",
+      "parentId": null,
+      "text": "System.Xml.XDocument.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Xml.XmlDocument.dll",
+      "parentId": null,
+      "text": "System.Xml.XmlDocument.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Xml.XmlSerializer.dll",
+      "parentId": null,
+      "text": "System.Xml.XmlSerializer.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Xml.XPath.dll",
+      "parentId": null,
+      "text": "System.Xml.XPath.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\System.Xml.XPath.XDocument.dll",
+      "parentId": null,
+      "text": "System.Xml.XPath.XDocument.dll",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\web.config",
+      "parentId": null,
+      "text": "web.config",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\WindowsBase.dll",
+      "parentId": null,
+      "text": "WindowsBase.dll",
+      "hasItems": false
+    }
+  ],
+  "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources": [
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources\\Configuration",
+      "parentId": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources",
+      "text": "Configuration",
+      "hasItems": true
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources\\Controllers",
+      "parentId": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources",
+      "text": "Controllers",
+      "hasItems": true
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources\\DataProviders",
+      "parentId": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources",
+      "text": "DataProviders",
+      "hasItems": true
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources\\DemoShell",
+      "parentId": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources",
+      "text": "DemoShell",
+      "hasItems": true
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources\\Hubs",
+      "parentId": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources",
+      "text": "Hubs",
+      "hasItems": true
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources\\Models",
+      "parentId": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources",
+      "text": "Models",
+      "hasItems": true
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources\\Services",
+      "parentId": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources",
+      "text": "Services",
+      "hasItems": true
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources\\ViewModels",
+      "parentId": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources",
+      "text": "ViewModels",
+      "hasItems": true
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources\\Views",
+      "parentId": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources",
+      "text": "Views",
+      "hasItems": true
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources\\wwwroot",
+      "parentId": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources",
+      "text": "wwwroot",
+      "hasItems": true
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources\\Extensions.cs.txt",
+      "parentId": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources",
+      "text": "Extensions.cs.txt",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources\\Program.cs.txt",
+      "parentId": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\Sources",
+      "text": "Program.cs.txt",
+      "hasItems": false
+    }
+  ],
+  "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot": [
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot\\cldr-data",
+      "parentId": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot",
+      "text": "cldr-data",
+      "hasItems": true
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot\\css",
+      "parentId": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot",
+      "text": "css",
+      "hasItems": true
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot\\data",
+      "parentId": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot",
+      "text": "data",
+      "hasItems": true
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot\\DemoShell",
+      "parentId": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot",
+      "text": "DemoShell",
+      "hasItems": true
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot\\Descr",
+      "parentId": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot",
+      "text": "Descr",
+      "hasItems": true
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot\\images",
+      "parentId": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot",
+      "text": "images",
+      "hasItems": true
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot\\js",
+      "parentId": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot",
+      "text": "js",
+      "hasItems": true
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot\\SampleData",
+      "parentId": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot",
+      "text": "SampleData",
+      "hasItems": true
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot\\signalr",
+      "parentId": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot",
+      "text": "signalr",
+      "hasItems": true
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot\\bundle.min.css",
+      "parentId": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot",
+      "text": "bundle.min.css",
+      "hasItems": false
+    },
+    {
+      "id": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot\\bundle.min.js",
+      "parentId": "C:\\WebSites\\js.devexpress.com.demos\\Stage2\\NetCore\\wwwroot",
+      "text": "bundle.min.js",
+      "hasItems": false
+    }
+  ]
+}
