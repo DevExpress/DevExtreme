@@ -1,75 +1,105 @@
-import { fileSaver } from './__internal/exporter/file_saver';
+import type { DeferredObj } from '@js/core/utils/deferred';
+import { Deferred } from '@js/core/utils/deferred';
+import { isBoolean, isFunction } from '@js/core/utils/type';
+
+import { fileSaver } from './file_saver';
 import {
-    imageCreator, testFormats, getData as getImageData,
-    /// #DEBUG
-    asyncEach
-    /// #ENDDEBUG
-} from './__internal/exporter/image_creator';
-import { svgCreator, getData as getSvgData } from './__internal/exporter/svg_creator';
-import { isFunction as _isFunction, isBoolean } from './core/utils/type';
-import { Deferred } from './core/utils/deferred';
-import { getData } from './__internal/exporter/pdf_creator';
+  /// #DEBUG
+  asyncEach,
+  /// #ENDDEBUG
+  getData as getImageData,
+  imageCreator,
+  testFormats,
+} from './image_creator';
+import { getData } from './pdf_creator';
+import { getData as getSvgData, svgCreator } from './svg_creator';
 
-function _export(data, options, getData) {
-    if(!data) {
-        return new Deferred().resolve();
-    }
+interface ExportEventArgs {
+  fileName: string;
+  format: string;
+  cancel: boolean;
+  selectedRowsOnly?: boolean;
+  data?: unknown;
+}
 
-    // TODO: Can the following actions be not defined? (since they are provided by a widget not by a user)
-    const exportingAction = options.exportingAction;
-    const exportedAction = options.exportedAction;
-    const fileSavingAction = options.fileSavingAction;
+interface ExportOptions {
+  fileName: string;
+  format: string;
+  selectedRowsOnly?: boolean;
+  // TODO: Can the following actions be not defined?
+  // (since they are provided by a widget not by a user)
+  exportingAction?: (args: ExportEventArgs) => void;
+  exportedAction?: () => void;
+  fileSavingAction?: (args: ExportEventArgs) => void;
+}
 
-    const eventArgs = {
-        fileName: options.fileName,
-        format: options.format,
-        cancel: false
-    };
+type GetBlob = (data: unknown, options: ExportOptions) => DeferredObj<unknown>;
 
-    if(isBoolean(options.selectedRowsOnly)) {
-        eventArgs.selectedRowsOnly = options.selectedRowsOnly;
-    }
+function performExport(
+  data: unknown,
+  options: ExportOptions,
+  getBlob: GetBlob,
+): DeferredObj<unknown> {
+  if (!data) {
+    return Deferred<unknown>().resolve();
+  }
 
-    _isFunction(exportingAction) && exportingAction(eventArgs);
+  const { exportingAction, exportedAction, fileSavingAction } = options;
 
-    if(!eventArgs.cancel) {
-        return getData(data, options).then(blob => {
-            _isFunction(exportedAction) && exportedAction();
+  const eventArgs: ExportEventArgs = {
+    fileName: options.fileName,
+    format: options.format,
+    cancel: false,
+  };
 
-            if(_isFunction(fileSavingAction)) {
-                eventArgs.data = blob;
-                fileSavingAction(eventArgs);
-            }
+  if (isBoolean(options.selectedRowsOnly)) {
+    eventArgs.selectedRowsOnly = options.selectedRowsOnly;
+  }
 
-            if(!eventArgs.cancel) {
-                const format = options.format === 'xlsx' ? 'EXCEL' : options.format;
-                fileSaver.saveAs(eventArgs.fileName, format, blob);
-            }
-        });
-    }
+  if (isFunction(exportingAction)) {
+    exportingAction(eventArgs);
+  }
 
-    return new Deferred().resolve();
+  if (!eventArgs.cancel) {
+    return getBlob(data, options).then((blob) => {
+      if (isFunction(exportedAction)) {
+        exportedAction();
+      }
+
+      if (isFunction(fileSavingAction)) {
+        eventArgs.data = blob;
+        fileSavingAction(eventArgs);
+      }
+
+      if (!eventArgs.cancel) {
+        const format = options.format === 'xlsx' ? 'EXCEL' : options.format;
+        fileSaver.saveAs(eventArgs.fileName, format, blob);
+      }
+    });
+  }
+
+  return Deferred<unknown>().resolve();
 }
 
 export {
-    _export as export,
-    fileSaver
+  performExport as export,
+  fileSaver,
 };
 
 export const image = {
-    /// #DEBUG
-    asyncEach,
-    /// #ENDDEBUG
-    creator: imageCreator,
-    getData: getImageData,
-    testFormats: testFormats
+  /// #DEBUG
+  asyncEach,
+  /// #ENDDEBUG
+  creator: imageCreator,
+  getData: getImageData,
+  testFormats,
 };
 
 export const pdf = {
-    getData: getData
+  getData,
 };
 
 export const svg = {
-    creator: svgCreator,
-    getData: getSvgData
+  creator: svgCreator,
+  getData: getSvgData,
 };
