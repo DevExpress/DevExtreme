@@ -248,13 +248,11 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
   }
 
   _createOnCreateToolbar(): void {
-    // @ts-expect-error ts-error
     this._onCreateToolbarAction = this._createActionByOption('onCreateToolbar');
   }
 
   _createOnSelectedGroupChanged(): void {
     this._onSelectedGroupChangedAction = this._createActionByOption(
-      // @ts-expect-error ts-error
       'onSelectedGroupChanged',
     );
   }

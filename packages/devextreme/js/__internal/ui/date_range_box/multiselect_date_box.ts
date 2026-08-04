@@ -1,49 +1,34 @@
-// eslint-disable-next-line max-classes-per-file
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
 import { getWidth } from '@js/core/utils/size';
-import type { DateBoxBase, Properties } from '@js/ui/date_box';
-import DateBox from '@js/ui/date_box';
-import type { DateLike } from '@js/ui/date_range_box_types';
-import type Popup from '@js/ui/popup';
-
-import { getDeserializedDate, monthDifference } from './m_date_range.utils';
-import type DateRangeBox from './m_date_range_box';
-import RangeCalendarStrategy from './strategy/m_rangeCalendar';
+import type { DxEvent, InteractionEvent } from '@js/events';
+import type { OptionChanged } from '@ts/core/widget/types';
+import DateBox from '@ts/ui/date_box/date_box';
+import type { DateBoxMaskProperties } from '@ts/ui/date_box/date_box.mask';
+import { getDeserializedDate, monthDifference } from '@ts/ui/date_range_box/date_range.utils';
+import type DateRangeBox from '@ts/ui/date_range_box/date_range_box';
+import RangeCalendarStrategy from '@ts/ui/date_range_box/strategy/rangeCalendar';
 
 const START_DATEBOX_CLASS = 'dx-start-datebox';
 
-export interface MultiselectDateBoxProperties extends Properties {
-  _dateRangeBoxInstance: DateRangeBox;
-  _showValidationMessage?: boolean;
+export interface MultiselectDateBoxProperties extends DateBoxMaskProperties {
+  _dateRangeBoxInstance?: DateRangeBox;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-declare class ExtendedDateBox extends DateBoxBase<MultiselectDateBoxProperties> {
-  reset(value?: DateLike): void;
-}
-
-const TypedDateBox: typeof ExtendedDateBox = DateBox as any;
-
-class MultiselectDateBox extends TypedDateBox {
+class MultiselectDateBox extends DateBox<MultiselectDateBoxProperties> {
   // Temporary solution. Move to component level
   public NAME!: string;
 
   private _skipIsValidOptionChange?: boolean;
 
-  private _strategy!: RangeCalendarStrategy;
-
-  private readonly _popup?: Popup;
-
-  private readonly _label: any;
+  _strategy!: RangeCalendarStrategy;
 
   _initStrategy(): void {
     this._strategy = new RangeCalendarStrategy(this);
   }
 
   _initMarkup(): void {
-    // @ts-expect-error
     super._initMarkup();
 
     this._renderInputClickEvent();
@@ -51,48 +36,48 @@ class MultiselectDateBox extends TypedDateBox {
 
   _renderInputClickEvent(): void {
     const clickEventName = addNamespace('dxclick', this.NAME);
-    // @ts-expect-error
+
     eventsEngine.off(this._input(), clickEventName);
-    // @ts-expect-error
-    eventsEngine.on(this._input(), clickEventName, (e) => {
+    eventsEngine.on(this._input(), clickEventName, (e: DxEvent) => {
       this._processValueChange(e);
     });
   }
 
-  _applyButtonHandler({ event }): void {
+  _applyButtonHandler({ event }: { event: InteractionEvent }): void {
     const strategy = this.getStrategy();
     const value = strategy.getValue();
 
     strategy.getDateRangeBox().updateValue(value, event);
 
     this.close();
-    this.option('focusStateEnabled') && this.focus();
+
+    const { focusStateEnabled } = this.option();
+
+    if (focusStateEnabled) {
+      this.focus();
+    }
   }
 
-  _openHandler(e): void {
+  _openHandler(): void {
     if (this.getStrategy().getDateRangeBox().option('opened')) {
       return;
     }
 
-    // @ts-expect-error
-    super._openHandler(e);
+    super._openHandler();
   }
 
-  _renderOpenedState() {
+  _renderOpenedState(): void {
     const { opened } = this.option();
 
     this._getDateRangeBox().option('opened', opened);
 
     if (this._isStartDateBox()) {
       if (opened) {
-        // @ts-expect-error
         this._createPopup();
       }
 
-      // @ts-expect-error
       this._getDateRangeBox()._popupContentIdentifier(this._getControlsAria());
 
-      // @ts-expect-error
       this._setPopupOption('visible', opened);
 
       this._getDateRangeBox()._setAriaAttributes();
@@ -108,56 +93,49 @@ class MultiselectDateBox extends TypedDateBox {
   }
 
   _renderPopup(): void {
-    // @ts-expect-error
     super._renderPopup();
 
     if (this._isStartDateBox()) {
-      // @ts-expect-error
       this._getDateRangeBox()._bindInnerWidgetOptions(this._popup, 'dropDownOptions');
     }
   }
 
   _popupShownHandler(): void {
-    // @ts-expect-error
     super._popupShownHandler();
-    // @ts-expect-error
+
     this._getDateRangeBox()._validationMessage?.option('positionSide', this._getValidationMessagePositionSide());
   }
 
   _popupHiddenHandler(): void {
-    // @ts-expect-error
     super._popupHiddenHandler();
 
-    // @ts-expect-error
     this._getDateRangeBox()._validationMessage?.option('positionSide', this._getValidationMessagePositionSide());
   }
 
-  _focusInHandler(e) {
-    // @ts-expect-error
+  _focusInHandler(e: DxEvent<FocusEvent>): void {
     super._focusInHandler(e);
     this._processValueChange(e);
   }
 
-  _popupTabHandler(e): void {
+  _popupTabHandler(e: DxEvent<KeyboardEvent>): void {
     const $element = $(e.target);
 
-    // @ts-expect-error
     if (e.shiftKey && $element.is(this._getFirstPopupElement())) {
       this._getDateRangeBox().getEndDateBox().focus();
       e.preventDefault();
     }
 
-    // @ts-expect-error
     if (!e.shiftKey && $element.is(this._getLastPopupElement())) {
       this._getDateRangeBox().getStartDateBox().focus();
       e.preventDefault();
     }
   }
 
-  _processValueChange(e): void {
+  _processValueChange(e: DxEvent): void {
     const { target } = e;
     const dateRangeBox = this._getDateRangeBox();
     const [startDateInput, endDateInput] = dateRangeBox.field();
+
     if ($(target).is($(startDateInput))) {
       dateRangeBox.option('currentSelection', 'startDate');
     }
@@ -190,8 +168,7 @@ class MultiselectDateBox extends TypedDateBox {
     if ($(target).is($(endDateInput))) {
       if (endDate) {
         if (startDate && monthDifference(startDate, endDate) > 1) {
-          // @ts-expect-error
-          calendar.option('currentDate', calendar._getDateByOffset(null, endDate));
+          calendar.option('currentDate', calendar._getDateByOffset(0, endDate));
           calendar.option('currentDate', calendar._getDateByOffset(-1, endDate));
         }
 
@@ -210,11 +187,10 @@ class MultiselectDateBox extends TypedDateBox {
   _invalidate(): void {
     super._invalidate();
 
-    // @ts-expect-error
     this._refreshStrategy();
   }
 
-  _updateInternalValidationState(isValid, validationMessage): void {
+  _updateInternalValidationState(isValid: boolean, validationMessage?: string): void {
     this.option({
       isValid,
       validationError: isValid ? null : {
@@ -223,16 +199,15 @@ class MultiselectDateBox extends TypedDateBox {
     });
   }
 
-  _recallInternalValidation(value): void {
-    // @ts-expect-error
-    this._applyInternalValidation(value);
+  _recallInternalValidation(value: unknown): void {
+    this._applyInternalValidation(value as Date);
   }
 
-  _isTargetOutOfComponent(target) {
+  _isTargetOutOfComponent(target: EventTarget | null): boolean {
     const $dateRangeBox = $(this._getDateRangeBox().element());
+    // @ts-expect-error Should be fixed on core/renderer level
     const isTargetOutOfDateRangeBox = $(target).closest($dateRangeBox).length === 0;
 
-    // @ts-expect-error
     return super._isTargetOutOfComponent(target) && isTargetOutOfDateRangeBox;
   }
 
@@ -245,17 +220,15 @@ class MultiselectDateBox extends TypedDateBox {
       return;
     }
 
-    // @ts-expect-error
     super._updateLabelWidth();
   }
 
-  _optionChanged(args): void {
+  _optionChanged(args: OptionChanged<MultiselectDateBoxProperties>): void {
     switch (args.name) {
       case 'isValid': {
-        const isValid = this._getDateRangeBox().option('isValid');
+        const { isValid } = this._getDateRangeBox().option();
 
         if (this._skipIsValidOptionChange || isValid === args.value) {
-          // @ts-expect-error
           super._optionChanged(args);
           return;
         }
@@ -266,7 +239,6 @@ class MultiselectDateBox extends TypedDateBox {
         break;
       }
       default:
-        // @ts-expect-error
         super._optionChanged(args);
         break;
     }

@@ -1,31 +1,30 @@
-/* eslint-disable class-methods-use-this */
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import dateLocalization from '@js/common/core/localization/date';
-import Class from '@js/core/class';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DxEvent, InteractionEvent } from '@js/events';
 import type { Format } from '@js/localization';
 import type { ToolbarItem } from '@js/ui/popup';
 import type Calendar from '@ts/ui/calendar/calendar';
+import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
+import type DateBox from '@ts/ui/date_box/date_box.base';
+import type DateView from '@ts/ui/date_box/date_view';
 import type List from '@ts/ui/list/list.edit.search';
+import type { PopupProperties } from '@ts/ui/popup/popup';
+import type Popup from '@ts/ui/popup/popup';
 
-import type { PopupProperties } from '../popup/popup';
-import type Popup from '../popup/popup';
-import type { DateBoxBaseProperties } from './date_box.base';
-import type DateBox from './date_box.base';
-import type DateView from './date_view';
-
-// @ts-expect-error dxClass inheritance issue
-class DateBoxStrategy extends (Class.inherit({}) as new() => {}) {
+class DateBoxStrategy<
+  TValue = Date | null,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TDateBox extends DateBox<any> = DateBox,
+> {
   public NAME!: string;
 
-  dateBox!: DateBox;
+  dateBox!: TDateBox;
 
   _widget!: Calendar | DateView | List | null;
 
-  constructor(dateBox: DateBox) {
-    super();
+  constructor(dateBox: TDateBox) {
     this.dateBox = dateBox;
   }
 
@@ -63,10 +62,11 @@ class DateBoxStrategy extends (Class.inherit({}) as new() => {}) {
   }
 
   getDisplayFormat(displayFormat?: Format | null): Format {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return displayFormat || 'shortdate';
   }
 
-  supportedKeys(): Record<string, (e: KeyboardEvent) => void> {
+  supportedKeys(): Record<string, (e: DxEvent<KeyboardEvent>) => void> {
     return {};
   }
 
@@ -154,8 +154,8 @@ class DateBoxStrategy extends (Class.inherit({}) as new() => {}) {
     }
   }
 
-  getValue(): Date {
-    return this._widget?.option('value') as Date;
+  getValue(): TValue {
+    return this._widget?.option('value') as TValue;
   }
 
   isAdaptivityChanged(): boolean {

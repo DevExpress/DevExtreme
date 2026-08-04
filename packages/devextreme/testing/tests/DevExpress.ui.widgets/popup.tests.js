@@ -223,6 +223,33 @@ QUnit.module('basic', {
         assert.strictEqual($overlayContent.attr('aria-labelledby'), undefined);
     });
 
+    QUnit.test('aria-labelledby should not be set when a custom titleTemplate renders no label element', function(assert) {
+        const instance = $('#popup').dxPopup({
+            title: 'title',
+            titleTemplate: () => $('<div>').text('custom title'),
+            visible: true,
+        }).dxPopup('instance');
+
+        const $overlayContent = instance.$content().parent();
+
+        assert.strictEqual($overlayContent.attr('aria-labelledby'), undefined);
+    });
+
+    QUnit.test('aria-labelledby should not reference a missing element after a runtime titleTemplate change', function(assert) {
+        const instance = $('#popup').dxPopup({
+            title: 'title',
+            visible: true,
+        }).dxPopup('instance');
+
+        const $overlayContent = instance.$content().parent();
+
+        assert.ok($overlayContent.attr('aria-labelledby'), 'aria-labelledby is set for the default title');
+
+        instance.option('titleTemplate', () => $('<div>').text('custom title'));
+
+        assert.strictEqual($overlayContent.attr('aria-labelledby'), undefined);
+    });
+
     QUnit.test('popup wrapper should have fixed or absolute position in fullscreen', function(assert) {
         $('#popup').dxPopup({ fullScreen: true, visible: true });
 

@@ -15,6 +15,7 @@ const CLASS = {
   itemContent: 'dx-item-content',
   itemContentToolbar: 'dx-toolbar-item-content',
   emptyMessage: 'dx-empty-message',
+  closeButton: 'dx-closebutton',
 };
 
 export default class ColumnChooser extends FocusableElement {
@@ -92,5 +93,9 @@ export default class ColumnChooser extends FocusableElement {
 
   getEmptyMessage(): Selector {
     return this.content.find(`.${CLASS.emptyMessage}`);
+  }
+
+  getCloseButton(): Selector {
+    return this.element.find(`.${CLASS.closeButton}`);
   }
 }

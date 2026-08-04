@@ -30,24 +30,33 @@ const prepareTestingAzureProvider = () => {
     atlas.popupOpened = false;
 };
 
-const loadAzureMock = () => $.getScript({
-    url: '../../packages/devextreme/testing/helpers/forMap/azureMock.js',
-    scriptAttrs: { nonce: 'qunit-test' },
-}).done(() => {
-    prepareTestingAzureProvider();
-});
-
 const moduleConfig = {
     beforeEach: function() {
-        const fakeURL = '/fakeAzureUrl';
+        this.fakeURL = '/fakeAzureUrl';
+        this.savedAtlas = window.atlas;
+        this.loadAzureMock = () => {
+            if(this.savedAtlas) {
+                window.atlas = this.savedAtlas;
+                prepareTestingAzureProvider();
+                return $.Deferred().resolve().promise();
+            }
 
-        AzureProvider.remapConstant(fakeURL);
+            return $.getScript({
+                url: '../../packages/devextreme/testing/helpers/forMap/azureMock.js',
+                scriptAttrs: { nonce: 'qunit-test' },
+            }).done(() => {
+                this.savedAtlas = window.atlas;
+                prepareTestingAzureProvider();
+            });
+        };
+
+        AzureProvider.remapConstant(this.fakeURL);
 
         ajaxMock.setup({
-            url: fakeURL,
+            url: this.fakeURL,
             callback: () => {
                 if(!window.atlas) {
-                    loadAzureMock();
+                    this.loadAzureMock();
                 }
             },
             responseText: {
@@ -75,9 +84,14 @@ const moduleConfig = {
 
         this.geocodedCoordinates = [77, 77];
         this.routeCoordinates = [[10, 10], [20, 20], [30, 30]];
+
+        return this.loadAzureMock();
     },
     afterEach: function() {
         ajaxMock.clear();
+        this.savedAtlas = null;
+        this.fakeURL = null;
+        this.loadAzureMock = null;
     }
 };
 
@@ -85,7 +99,7 @@ QUnit.module('map loading', moduleConfig, () => {
     QUnit.test('map initialize with loaded map', function(assert) {
         const done = assert.async();
 
-        loadAzureMock().done(function() {
+        this.loadAzureMock().done(function() {
             window.atlas.Map.customFlag = true;
 
             setTimeout(function() {
@@ -301,7 +315,7 @@ QUnit.module('basic options', moduleConfig, () => {
     });
 
     QUnit.test('center should be geocoded if adress is passed as a string', async function(assert) {
-        await loadAzureMock();
+        await this.loadAzureMock();
 
         const done = assert.async();
         const center = 'Cedar Park, Texas';
@@ -368,7 +382,7 @@ QUnit.module('basic options', moduleConfig, () => {
     });
 
     QUnit.test('Bounds option should have more priority than center option', async function(assert) {
-        await loadAzureMock();
+        await this.loadAzureMock();
 
         const done = assert.async();
 

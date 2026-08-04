@@ -11,25 +11,29 @@ import {
   isDate, isDefined, isFunction, isString,
 } from '@js/core/utils/type';
 import type { DxEvent, InteractionEvent } from '@js/events';
-import type { DateLike, Properties } from '@js/ui/date_box';
+import type dxDateBox from '@js/ui/date_box';
+import type { DateLike } from '@js/ui/date_box';
 import dateLocalization from '@ts/core/localization/date';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
-
-import type { DxMouseWheelEvent } from '../scroll_view/types';
-import type { DateBoxBaseProperties } from './date_box.base';
-import DateBoxBase from './date_box.base';
-import { getDatePartIndexByPosition, renderDateParts } from './date_box.mask.parts';
+import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
+import DateBoxBase from '@ts/ui/date_box/date_box.base';
+import { getDatePartIndexByPosition, renderDateParts } from '@ts/ui/date_box/date_box.mask.parts';
+import type { DxMouseWheelEvent } from '@ts/ui/scroll_view/types';
 
 const MASK_EVENT_NAMESPACE = 'dateBoxMask';
 const FORWARD = 1;
 const BACKWARD = -1;
 const IME_DIGIT_CODE_REGEXP = /^(?:Digit|Numpad)(\d)$/;
 
-export interface DateBoxMaskProperties extends Properties {
-  emptyDateValue?: Date;
-}
-class DateBoxMask extends DateBoxBase {
+export interface DateBoxMaskProperties<
+  TComponent = dxDateBox,
+> extends DateBoxBaseProperties<TComponent> {}
+
+class DateBoxMask<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TProperties extends DateBoxMaskProperties<any> = DateBoxMaskProperties,
+> extends DateBoxBase<TProperties> {
   _activePartIndex?: number | null;
 
   _maskValue?: Date | null;
@@ -169,7 +173,7 @@ class DateBoxMask extends DateBoxBase {
     this._setActivePartValue(newValue);
   }
 
-  _getDefaultOptions(): DateBoxMaskProperties {
+  _getDefaultOptions(): TProperties {
     return {
       ...super._getDefaultOptions(),
       useMaskBehavior: false,
@@ -843,7 +847,7 @@ class DateBoxMask extends DateBoxBase {
     }
   }
 
-  _optionChanged(args: OptionChanged<DateBoxBaseProperties>): void {
+  _optionChanged(args: OptionChanged<TProperties>): void {
     switch (args.name) {
       case 'useMaskBehavior':
         this._renderMask();

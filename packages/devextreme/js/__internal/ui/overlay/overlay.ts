@@ -60,7 +60,9 @@ const ready = readyCallbacks.add;
 const window = windowUtils.getWindow();
 const viewPortChanged = changeCallback;
 
-export const OVERLAY_STACK: Overlay[] = [];
+export // NOTE: the stack is global and holds overlays of every properties flavor.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const OVERLAY_STACK: Overlay<any>[] = [];
 const ANONYMOUS_TEMPLATE_NAME = 'content';
 const TAB_KEY = 'tab';
 
@@ -506,7 +508,6 @@ class Overlay<
 
     const overlayStack = this._overlayStack();
     const innerOverlayElement = $closestInnerOverlay.get(0);
-    // @ts-expect-error this and Overlay have no overlap
     const thisIndex = overlayStack.indexOf(this);
 
     for (let i = 0; i < overlayStack.length; i += 1) {
@@ -545,7 +546,8 @@ class Overlay<
     return false;
   }
 
-  _overlayStack(): Overlay[] {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _overlayStack(): Overlay<any>[] {
     return OVERLAY_STACK;
   }
 
@@ -839,6 +841,7 @@ class Overlay<
     return this._hidingDeferred.promise();
   }
 
+  // Note: method helps Scheduler Appointments to avoid Focus Race Condition
   _forceFocusLost(): void {
     const activeElement = domAdapter.getActiveElement();
     const shouldResetActiveElement = !!this._$content?.find(activeElement).length;
@@ -918,7 +921,6 @@ class Overlay<
 
   _updateZIndexStackPosition(pushToStack: boolean): void {
     const overlayStack = this._overlayStack();
-    // @ts-expect-error this and Overlay have no overlap
     const index = overlayStack.indexOf(this);
     const isInStack = index !== -1;
     const { zIndex } = this.option();
@@ -934,7 +936,6 @@ class Overlay<
 
     if (!isInStack) {
       this._zIndex = zIndex ?? zIndexPool.create(this._zIndexInitValue());
-      // @ts-expect-error this and Overlay have no overlap
       overlayStack.push(this);
     }
 
@@ -992,14 +993,20 @@ class Overlay<
       const $currentElement = $elements?.eq(i) ?? null;
       const $reverseElement = $elements?.eq(elementsCount - i) ?? null;
 
-      // @ts-expect-error is should can get function as callback
-      if (!$first && $currentElement.is(selectors.tabbable)) {
-        $first = $currentElement;
+      if (!$first && $currentElement) {
+        // @ts-expect-error is should can get function as callback
+        const isTabbableAndNotOverlay = $currentElement?.not(`.${OVERLAY_CONTENT_CLASS}`).is(selectors.tabbable);
+        if (isTabbableAndNotOverlay) {
+          $first = $currentElement;
+        }
       }
 
-      // @ts-expect-error is should can get function as callback
-      if (!$last && $reverseElement.is(selectors.tabbable)) {
-        $last = $reverseElement;
+      if (!$last && $reverseElement) {
+        // @ts-expect-error is should can get function as callback
+        const isTabbableAndNotOverlay = $reverseElement?.not(`.${OVERLAY_CONTENT_CLASS}`).is(selectors.tabbable);
+        if (isTabbableAndNotOverlay) {
+          $last = $reverseElement;
+        }
       }
 
       if ($first && $last) {

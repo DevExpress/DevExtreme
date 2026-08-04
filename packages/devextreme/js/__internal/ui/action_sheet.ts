@@ -179,9 +179,10 @@ class ActionSheet extends CollectionWidget<Properties> {
       width: this.option('width') || 200,
       height: this.option('height') || 'auto',
       target: this.option('target'),
+      // NOTE: popover set role based on toolbarOptions, but
+      // ActionSheet rendered buttons not in a toolbar, so we use option.
+      _popoverContentRole: 'dialog',
     }));
-
-    this._popup.$overlayContent().attr('role', 'dialog');
 
     this._popup.$wrapper()?.addClass(ACTION_SHEET_POPOVER_WRAPPER_CLASS);
   }

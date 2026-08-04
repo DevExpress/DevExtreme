@@ -9,10 +9,11 @@ import devices from '@js/core/devices';
 import { ensureDefined, escapeRegExp } from '@js/core/utils/common';
 import { fitIntoRange, inRange } from '@js/core/utils/math';
 import {
-  isDefined, isFunction, isNumeric, isString,
+  isDefined, isFunction, isNumeric, isPlainObject, isString,
 } from '@js/core/utils/type';
+import type { Format, FormatObject } from '@js/localization';
 import type { Properties } from '@js/ui/number_box';
-import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
+import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 
 import NumberBoxBase from './m_number_box.base';
 import {
@@ -36,6 +37,12 @@ const NUMPAD_DOT_KEY_CODE = 110;
 const CARET_TIMEOUT_DURATION = 0;
 
 type CaretMoveDirection = typeof MOVE_FORWARD | typeof MOVE_BACKWARD;
+
+// NOTE: Intl options objects are plain objects too. Reading FormatObject members
+// off them yields undefined, which is exactly how such formats were treated before.
+const asFormatObject = (format: Format | undefined): FormatObject | undefined => (
+  isPlainObject(format) ? format as FormatObject : undefined
+);
 
 export interface NumberBoxMaskProperties extends Omit<Properties, 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput'
 | 'onKeyDown' | 'onKeyUp' | 'onPaste' | 'onValueChanged' | 'onContentReady' | 'onDisposing'
@@ -95,8 +102,9 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
     };
   }
 
-  _getEffectiveFormatOption() {
-    const format = this.option('format');
+  _getEffectiveFormatOption(): Format | undefined {
+    const { format } = this.option();
+
     return isDefined(format)
       ? format
       : getGlobalFormatByDataType('number');
@@ -368,8 +376,9 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
 
   _parse(text, format) {
     const formatOption = this._getEffectiveFormatOption();
-    const isCustomParser = isFunction(formatOption.parser);
-    const parser = isCustomParser ? formatOption.parser : number.parse;
+    const customParser = asFormatObject(formatOption)?.parser;
+    const isCustomParser = isFunction(customParser);
+    const parser = isCustomParser ? customParser : number.parse;
     let integerPartStartIndex = 0;
 
     if (!isCustomParser) {
@@ -391,7 +400,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
 
   _format(value, format) {
     const formatOption = this._getEffectiveFormatOption();
-    const customFormatter = formatOption?.formatter || formatOption;
+    const customFormatter = asFormatObject(formatOption)?.formatter ?? formatOption;
     const formatter = isFunction(customFormatter) ? customFormatter : number.format;
 
     const formattedValue = value === null ? '' : formatter(value, format);
@@ -409,9 +418,10 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
 
   _updateFormat(): void {
     const format = this._getEffectiveFormatOption();
-    const isCustomParser = isFunction(format?.parser);
+    const formatObject = asFormatObject(format);
+    const isCustomParser = isFunction(formatObject?.parser);
     const isLDMLPattern = isString(format) && (format.includes('0') || format.includes('#'));
-    const isExponentialFormat = format === 'exponential' || format?.type === 'exponential';
+    const isExponentialFormat = format === 'exponential' || formatObject?.type === 'exponential';
     const shouldUseFormatAsIs = isCustomParser || isLDMLPattern || isExponentialFormat;
 
     this._currentFormat = shouldUseFormatAsIs

@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import messageLocalization from '@js/common/core/localization/message';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
@@ -9,26 +8,26 @@ import type { ClickEvent } from '@js/ui/button';
 import type { ValueChangedEvent } from '@js/ui/calendar';
 import type { ToolbarItem } from '@js/ui/popup';
 import { current, isMaterial } from '@js/ui/themes';
-import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
+import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import { splitPair } from '@ts/core/utils/m_common';
 import Calendar from '@ts/ui/calendar/calendar';
+import type { CellEvent } from '@ts/ui/calendar/calendar.base_view';
+import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
+import type DateBox from '@ts/ui/date_box/date_box.base';
+import DateBoxStrategy from '@ts/ui/date_box/date_box.strategy';
 import type { PopupProperties } from '@ts/ui/popup/popup';
-
-import type { CellEvent } from '../calendar/calendar.base_view';
-import type { DateBoxBaseProperties } from './date_box.base';
-import type DateBox from './date_box.base';
-import DateBoxStrategy from './m_date_box.strategy';
 
 const TODAY_BUTTON_CLASS = 'dx-button-today';
 
-class CalendarStrategy extends DateBoxStrategy {
+class CalendarStrategy<
+  TValue = Date | null,
+  TComponent = DateBox,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TDateBox extends DateBox<any> = DateBox,
+> extends DateBoxStrategy<TValue, TDateBox> {
+  NAME = 'Calendar';
+
   _lastActionElement?: string;
-
-  constructor(dateBox: DateBox) {
-    super(dateBox);
-
-    this.NAME = 'Calendar';
-  }
 
   getWidget(): Calendar {
     return this._widget as Calendar;
@@ -42,8 +41,8 @@ class CalendarStrategy extends DateBoxStrategy {
     };
   }
 
-  supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | undefined> {
-    const homeEndHandler = (e: KeyboardEvent): boolean | undefined => {
+  supportedKeys(): Record<string, (e: DxEvent<KeyboardEvent>) => boolean | undefined> {
+    const homeEndHandler = (e: DxEvent<KeyboardEvent>): boolean | undefined => {
       if (this.dateBox.option('opened')) {
         e.preventDefault();
         return true;
@@ -95,7 +94,7 @@ class CalendarStrategy extends DateBoxStrategy {
   }
 
   getDisplayFormat(displayFormat?: Format | null): Format {
-    const globalDateFormat = getGlobalFormatByDataType('date');
+    const globalDateFormat: Format = getGlobalFormatByDataType('date');
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return displayFormat || globalDateFormat || 'shortdate';
   }
@@ -140,9 +139,16 @@ class CalendarStrategy extends DateBoxStrategy {
   }
 
   _injectComponent<T>(
-    func: (params: T & { component: DateBox }) => boolean,
+    func: (params: T & { component: TComponent }) => boolean,
   ): (params: T) => boolean {
-    return (params: T): boolean => func({ ...params, component: this.dateBox });
+    return (params: T): boolean => func({
+      ...params,
+      component: this._getInjectedComponent(),
+    });
+  }
+
+  _getInjectedComponent(): TComponent {
+    return this.dateBox as unknown as TComponent;
   }
 
   _refreshActiveDescendant(e: DxEvent & { actionValue: string }): void {
@@ -212,7 +218,7 @@ class CalendarStrategy extends DateBoxStrategy {
     const { applyValueMode } = this.dateBox.option();
 
     if (applyValueMode === 'instantly') {
-      this.dateBoxValue(this.getValue(), e.event);
+      this.dateBoxValue(this.getValue() as Date | null, e.event);
     }
   }
 
@@ -240,7 +246,7 @@ class CalendarStrategy extends DateBoxStrategy {
 
     if (applyValueMode === 'instantly') {
       dateBox.option('opened', false);
-      this.dateBoxValue(this.getValue(), e.event);
+      this.dateBoxValue(this.getValue() as Date | null, e.event);
     }
   }
 }

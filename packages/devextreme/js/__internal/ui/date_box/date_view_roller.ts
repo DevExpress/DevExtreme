@@ -10,11 +10,10 @@ import $ from '@js/core/renderer';
 import { getHeight } from '@js/core/utils/size';
 import type { ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { ScrollableProperties } from '@ts/ui/scroll_view/scrollable';
+import Scrollable from '@ts/ui/scroll_view/scrollable';
+import type { DxMouseEvent } from '@ts/ui/scroll_view/types';
 import { convertToLocation } from '@ts/ui/scroll_view/utils/convert_location';
-
-import type { ScrollableProperties } from '../scroll_view/scrollable';
-import Scrollable from '../scroll_view/scrollable';
-import type { DxMouseEvent } from '../scroll_view/types';
 
 const DATEVIEW_ROLLER_CLASS = 'dx-dateviewroller';
 const DATEVIEW_ROLLER_ACTIVE_CLASS = 'dx-state-active';
@@ -44,7 +43,6 @@ export interface DateViewRollerProperties extends ScrollableProperties {
 }
 
 class DateViewRoller extends Scrollable<DateViewRollerProperties> {
-  // eslint-disable-next-line no-restricted-globals
   _visibilityTimer?: ReturnType<typeof setTimeout>;
 
   _selectedIndexChanged?: (e?: Record<string, unknown>) => void;

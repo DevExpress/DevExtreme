@@ -1,4 +1,4 @@
-import type { Position } from '@js/common';
+import type { Mode, Position } from '@js/common';
 import type { NativeEventInfo } from '@js/common/core/events';
 import EventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
@@ -17,10 +17,9 @@ import type {
 } from '@js/ui/editor/editor';
 import ValidationEngine from '@js/ui/validation_engine';
 import ValidationMessage from '@js/ui/validation_message';
+import domUtils from '@ts/core/utils/m_dom';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
-
-import domUtils from '../../core/utils/m_dom';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const READONLY_STATE_CLASS = 'dx-state-readonly';
@@ -44,21 +43,34 @@ export type UnresolvedEvents = 'onContentReady' | 'onDisposing' | 'onInitialized
 export type ValueChangedEvent<TNativeEvent = Event> = NativeEventInfo<Editor, TNativeEvent>
   & ValueChangedInfo;
 
-export interface EditorProperties<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TComponent extends PublicEditor<any> = PublicEditor,
-> extends EditorOptions<TComponent> {
+// NOTE: internal (not present in the public options) members of an editor.
+// Every internal editor properties interface inherits this bundle, while the public
+// members always come from the component-parametrized public options interface.
+export interface EditorInternalProperties {
   validationMessageOffset?: { h: number; v: number };
   validationBoundary?: dxElementWrapper;
   validationTooltipOptions?: Record<string, unknown>;
   _showValidationMessage?: boolean;
-  name?: string;
   _onMarkupRendered?: () => void;
 }
 
+export interface EditorProperties<
+  TComponent = PublicEditor,
+> extends EditorOptions<TComponent>, EditorInternalProperties {
+  name?: string;
+}
+
+// NOTE: EditorOptions declares validationMessagePosition as Position, while the public
+// options of dropDownEditor and its descendants widen it to Position | Mode. The class
+// constraints have to tolerate that union, unlike the properties interfaces themselves.
+export type WithValidationMessageMode<TProperties> = Omit<TProperties, 'validationMessagePosition'>
+  & { validationMessagePosition?: Position | Mode };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type EditorPropertiesConstraint = WithValidationMessageMode<EditorProperties<any>>;
+
 class Editor<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TProperties extends EditorProperties<any> = EditorProperties,
+  TProperties extends EditorPropertiesConstraint = EditorProperties,
 > extends Widget<TProperties> {
   _initialValue: unknown;
 
@@ -341,7 +353,7 @@ class Editor<
     }
   }
 
-  _getValidationMessagePosition(): Position | undefined {
+  _getValidationMessagePosition(): Position | Mode | undefined {
     const { validationMessagePosition } = this.option();
     return validationMessagePosition;
   }

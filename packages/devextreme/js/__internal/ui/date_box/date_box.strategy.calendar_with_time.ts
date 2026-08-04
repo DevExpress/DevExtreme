@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import dateLocalization from '@js/common/core/localization/date';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
@@ -7,16 +6,14 @@ import { getWidth } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type { Format } from '@js/localization';
-import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
+import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import type { BoxItemData } from '@ts/ui/box';
 import Box from '@ts/ui/box';
+import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
+import CalendarStrategy from '@ts/ui/date_box/date_box.strategy.calendar';
+import uiDateUtils from '@ts/ui/date_box/date_utils';
 import TimeView from '@ts/ui/date_box/time_view';
 import type { PopupProperties } from '@ts/ui/popup/popup';
-
-import type DateBox from './date_box.base';
-import type { DateBoxBaseProperties } from './date_box.base';
-import uiDateUtils from './date_utils';
-import CalendarStrategy from './m_date_box.strategy.calendar';
 
 const window = getWindow();
 
@@ -25,6 +22,8 @@ const DATEBOX_ADAPTIVITY_MODE_CLASS = 'dx-datebox-adaptivity-mode';
 const DATEBOX_TIMEVIEW_SIDE_CLASS = 'dx-datebox-datetime-time-side';
 
 class CalendarWithTimeStrategy extends CalendarStrategy {
+  NAME = 'CalendarWithTime';
+
   _timeView!: TimeView;
 
   _repaintTimer?: ReturnType<typeof setTimeout>;
@@ -34,12 +33,6 @@ class CalendarWithTimeStrategy extends CalendarStrategy {
   _currentAdaptiveMode?: boolean;
 
   _box?: Box;
-
-  constructor(dateBox: DateBox) {
-    super(dateBox);
-
-    this.NAME = 'CalendarWithTime';
-  }
 
   getDefaultOptions(): DateBoxBaseProperties {
     return {
@@ -57,7 +50,7 @@ class CalendarWithTimeStrategy extends CalendarStrategy {
   }
 
   getDisplayFormat(displayFormat?: Format | null): Format {
-    const globalDateTimeFormat = getGlobalFormatByDataType('datetime');
+    const globalDateTimeFormat: Format = getGlobalFormatByDataType('datetime');
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return displayFormat || globalDateTimeFormat || 'shortdateshorttime';
   }

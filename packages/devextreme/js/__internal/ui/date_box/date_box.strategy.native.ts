@@ -1,24 +1,17 @@
-/* eslint-disable class-methods-use-this */
 import devices from '@js/core/devices';
 import type { dxElementWrapper } from '@js/core/renderer';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { inputType } from '@js/core/utils/support';
 import type { Format } from '@js/localization';
 import type { TextBoxType } from '@js/ui/text_box';
-import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
-
-import type { PopupProperties } from '../popup/popup';
-import type { DateBoxBaseProperties } from './date_box.base';
-import type DateBox from './date_box.base';
-import dateUtils from './date_utils';
-import DateBoxStrategy from './m_date_box.strategy';
+import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
+import DateBoxStrategy from '@ts/ui/date_box/date_box.strategy';
+import dateUtils from '@ts/ui/date_box/date_utils';
+import type { PopupProperties } from '@ts/ui/popup/popup';
 
 class NativeStrategy extends DateBoxStrategy {
-  constructor(dateBox: DateBox) {
-    super(dateBox);
-
-    this.NAME = 'Native';
-  }
+  NAME = 'Native';
 
   popupConfig(popupConfig: PopupProperties): PopupProperties {
     return {
@@ -73,7 +66,7 @@ class NativeStrategy extends DateBoxStrategy {
 
   getDisplayFormat(displayFormat?: Format | null): Format {
     const type = this._getDateBoxType();
-    const globalFormat = type === 'date' || type === 'datetime' || type === 'datetime-local'
+    const globalFormat: Format = type === 'date' || type === 'datetime' || type === 'datetime-local'
       ? getGlobalFormatByDataType(type === 'datetime-local' ? 'datetime' : type)
       : undefined;
 
