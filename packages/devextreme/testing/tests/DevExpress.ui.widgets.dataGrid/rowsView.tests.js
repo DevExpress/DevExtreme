@@ -1,4 +1,4 @@
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import 'ui/data_grid';
 
@@ -6972,7 +6972,7 @@ QUnit.module('Scrollbar', {
             done();
         });
 
-        rowsView.element().dxScrollable('instance').scrollTo(20);
+        rowsView.element().dxScrollable('instance').scrollTo(50);
     });
 
     QUnit.test('getTopVisibleRowData when virtual scrolling enabled after append next page', function(assert) {

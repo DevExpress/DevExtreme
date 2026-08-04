@@ -1,4 +1,4 @@
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import $ from 'jquery';
 
@@ -18,7 +18,6 @@ import {
     fireKeyDown,
     triggerKeyDown,
     focusCell,
-    callViewsRenderCompleted,
     dataGridWrapper
 } from '../../helpers/grid/keyboardNavigationHelper.js';
 
@@ -664,7 +663,7 @@ QUnit.module('Keyboard keys', {
     QUnit.testInActiveWindow('Page down should scroll page down when paging disabled and vertial scroll exists', function(assert) {
         // arrange
         const that = this;
-        const rowsViewHeight = 180;
+        const rowsViewHeight = 230;
 
         this.options = {
             height: 200
@@ -3892,7 +3891,7 @@ QUnit.module('Keyboard keys', {
         this.options.scrolling = { mode: 'virtual' };
 
         this.gridView.render($('#container'));
-        this.rowsView.height(70);
+        this.rowsView.height(100);
         this.rowsView.resize();
         const scrollable = this.rowsView.getScrollable();
         const $scrollContainer = $(scrollable.container());
@@ -4019,7 +4018,7 @@ QUnit.module('Keyboard keys', {
         setupModules(this, { initViews: true });
 
         this.gridView.render($('#container'));
-        this.rowsView.height(70);
+        this.rowsView.height(100);
         this.rowsView.resize();
         const scrollable = this.rowsView.getScrollable();
         const $scrollContainer = $(scrollable.container());
