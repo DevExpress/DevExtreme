@@ -44,53 +44,59 @@ test('selectAll state should be correct after unselect item if refresh(true) is 
 }));
 
 // T1141405
-test.meta({ unstable: true })('The Select All checkbox should be visible when a column headerCellTemplate is specified (React)', async (t) => {
+for (let i = 0; i < 50; i++) {
+  test(`${i}: ` + 'The Select All checkbox should be visible when a column headerCellTemplate is specified (React)', async (t) => {
   // arrange, act
-  const dataGrid = new DataGrid('#container');
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid('#container');
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  // assert
-  await testScreenshot(t, takeScreenshot, 'T1141405-grid-select-all.png', { element: dataGrid.element });
+    await t.expect(dataGrid.isReady()).ok();
+    await t.expect(
+      dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1).element
+        .withText('header template').exists,
+    ).ok();
 
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async (t) => {
-  await createWidget('dxDataGrid', {
-    dataSource: [...new Array(2)].map((_, index) => ({ id: index, text: `item ${index}` })),
-    renderAsync: false,
-    // @ts-expect-error private option
-    templatesRenderAsynchronously: true,
-    loadingTimeout: 200,
-    columns: [
-      { dataField: 'id', headerCellTemplate: '#test' },
-      { dataField: 'text' },
-    ],
-    selection: {
-      mode: 'multiple',
-    },
-  });
+    // assert
+    await testScreenshot(t, takeScreenshot, `T1141405-grid-select-all${i}.png`, { element: dataGrid.element });
 
-  // simulating async rendering in React
-  await ClientFunction(() => {
-    const dataGrid = ($('#container') as any).dxDataGrid('instance');
-
-    // eslint-disable-next-line no-underscore-dangle
-    dataGrid.getView('columnHeadersView')._templatesCache = {};
-
-    // eslint-disable-next-line no-underscore-dangle
-    dataGrid._getTemplate = () => ({
-      render(options) {
-        setTimeout(() => {
-          $(options.container).html('<div>Custom  header template</div>');
-          options.deferred?.resolve();
-        }, 100);
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await createWidget('dxDataGrid', {
+      dataSource: [...new Array(2)].map((_, index) => ({ id: index, text: `item ${index}` })),
+      renderAsync: false,
+      // @ts-expect-error private option
+      templatesRenderAsynchronously: true,
+      loadingTimeout: 200,
+      columns: [
+        { dataField: 'id', headerCellTemplate: '#test' },
+        { dataField: 'text' },
+      ],
+      selection: {
+        mode: 'multiple',
       },
     });
-  })();
 
-  await t.wait(300);
-});
+    // simulating async rendering in React
+    await ClientFunction(() => {
+      const dataGrid = ($('#container') as any).dxDataGrid('instance');
+
+      // eslint-disable-next-line no-underscore-dangle
+      dataGrid.getView('columnHeadersView')._templatesCache = {};
+
+      // eslint-disable-next-line no-underscore-dangle
+      dataGrid._getTemplate = () => ({
+        render(options) {
+          setTimeout(() => {
+            $(options.container).html('<div>Custom  header template</div>');
+            options.deferred?.resolve();
+          }, 100);
+        },
+      });
+    })();
+  });
+}
 
 // T1214734
 test('Select rows by shift should work when grid has real time updates', async (t) => {
