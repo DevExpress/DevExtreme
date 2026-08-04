@@ -1,13 +1,33 @@
+// TODO: fix the rules disabled below
+/* eslint-disable @stylistic/max-len */
+/* eslint-disable @stylistic/no-mixed-operators */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/init-declarations */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-floating-promises */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable @typescript-eslint/no-this-alias */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable @typescript-eslint/prefer-for-of */
+/* eslint-disable consistent-return */
+/* eslint-disable max-depth */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-plusplus */
+/* eslint-disable prefer-rest-params */
+/* eslint-disable prefer-spread */
 import ArrayStore from '@js/common/data/array_store';
 import { CustomStore } from '@js/common/data/custom_store';
 import $ from '@js/core/renderer';
-import { findChanges } from '@js/core/utils/array_compare';
 import { deferRender, equalByValue } from '@js/core/utils/common';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isObject } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
+import { findChanges } from '@ts/core/utils/m_array_compare';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { ErrorHandlingController } from '@ts/grids/grid_core/error_handling/m_error_handling';
@@ -27,7 +47,7 @@ import type {
 } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import type { VirtualScrollController } from '../virtual_scrolling/m_virtual_scrolling_core';
-import { DataHelperMixin } from './m_data_helper_mixin';
+import { DataHelperMixin } from './data_helper_mixin';
 
 const changePaging = function (that, optionName, value) {
   const dataSource = that._dataSource;
