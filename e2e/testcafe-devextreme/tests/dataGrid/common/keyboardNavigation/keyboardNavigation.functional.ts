@@ -1789,7 +1789,7 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
   }));
 
   for (let i = 0; i < 100; i++) {
-    test.only(`${i}: ${editMode} mode - Cells in a modified row should be updated on Tab (T898356)`, async (t) => {
+    test(`${i}: ${editMode} mode - Cells in a modified row should be updated on Tab (T898356)`, async (t) => {
       const dataGrid = new DataGrid('#container') as any;
       const cell00 = dataGrid.getDataCell(0, 0);
       const editor00 = cell00.getEditor();
