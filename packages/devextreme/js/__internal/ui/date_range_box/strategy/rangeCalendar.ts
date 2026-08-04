@@ -8,7 +8,6 @@ import type Calendar from '@ts/ui/calendar/calendar';
 import CalendarStrategy from '@ts/ui/date_box/date_box.strategy.calendar';
 import { getDeserializedDate, isSameDateArrays, isSameDates } from '@ts/ui/date_range_box/date_range.utils';
 import type DateRangeBox from '@ts/ui/date_range_box/date_range_box';
-import type { MultiselectDateBoxProperties } from '@ts/ui/date_range_box/multiselect_date_box';
 import type MultiselectDateBox from '@ts/ui/date_range_box/multiselect_date_box';
 import type { PopupProperties } from '@ts/ui/popup/popup';
 import type Popup from '@ts/ui/popup/popup';
@@ -18,9 +17,11 @@ interface RangeValueChangedEvent extends Omit<ValueChangedEvent, 'value' | 'prev
   previousValue: (DateLike | undefined)[];
 }
 
-class RangeCalendarStrategy extends CalendarStrategy<(DateLike | undefined)[], DateRangeBox> {
-  dateBox!: MultiselectDateBox;
-
+class RangeCalendarStrategy extends CalendarStrategy<
+  (DateLike | undefined)[],
+  DateRangeBox,
+  MultiselectDateBox
+> {
   private readonly dateRangeBox: DateRangeBox;
 
   private _shouldPreventFocusChange?: boolean;
@@ -31,9 +32,8 @@ class RangeCalendarStrategy extends CalendarStrategy<(DateLike | undefined)[], D
 
   constructor(dateBox: MultiselectDateBox) {
     super(dateBox);
-    this.dateBox = dateBox;
 
-    const multiselectDateBoxOptions = dateBox.option() as MultiselectDateBoxProperties;
+    const multiselectDateBoxOptions = dateBox.option();
     this.dateRangeBox = multiselectDateBoxOptions._dateRangeBoxInstance as DateRangeBox;
   }
 

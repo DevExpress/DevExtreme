@@ -43,24 +43,31 @@ export type UnresolvedEvents = 'onContentReady' | 'onDisposing' | 'onInitialized
 export type ValueChangedEvent<TNativeEvent = Event> = NativeEventInfo<Editor, TNativeEvent>
   & ValueChangedInfo;
 
-export interface EditorProperties<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TComponent extends PublicEditor<any> = PublicEditor,
-> extends EditorOptions<TComponent> {
+// NOTE: internal (not present in the public options) members of an editor.
+// Every internal editor properties interface inherits this bundle, while the public
+// members always come from the component-parametrized public options interface.
+export interface EditorInternalProperties {
   validationMessageOffset?: { h: number; v: number };
   validationBoundary?: dxElementWrapper;
   validationTooltipOptions?: Record<string, unknown>;
   _showValidationMessage?: boolean;
-  name?: string;
   _onMarkupRendered?: () => void;
 }
 
-// NOTE: editors that resolve the position themselves (dropDownEditor, dateRangeBox)
-// also accept the 'auto' mode, so the constraint is wider than EditorProperties itself.
-export type EditorPropertiesConstraint = Omit<
+export interface EditorProperties<
+  TComponent = PublicEditor,
+> extends EditorOptions<TComponent>, EditorInternalProperties {
+  name?: string;
+}
+
+// NOTE: EditorOptions declares validationMessagePosition as Position, while the public
+// options of dropDownEditor and its descendants widen it to Position | Mode. The class
+// constraints have to tolerate that union, unlike the properties interfaces themselves.
+export type WithValidationMessageMode<TProperties> = Omit<TProperties, 'validationMessagePosition'>
+  & { validationMessagePosition?: Position | Mode };
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  EditorProperties<any>, 'validationMessagePosition'
-> & { validationMessagePosition?: Position | Mode };
+export type EditorPropertiesConstraint = WithValidationMessageMode<EditorProperties<any>>;
 
 class Editor<
   TProperties extends EditorPropertiesConstraint = EditorProperties,
