@@ -9,7 +9,7 @@ import { getHeight, getWidth } from 'core/utils/size';
 import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 
@@ -249,6 +249,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         scrollable.scrollTo({ x: 100 });
         const scrollRight = getRightScrollOffset(scrollable);
 
+
         setTimeout(function() {
             // act
             dataGrid.columnOption('field1', 'groupIndex', 0);
@@ -346,7 +347,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
     QUnit.test('Horizontal scrollbar should not be shown if container height is not integer', function(assert) {
         // act
         const dataGrid = createDataGrid({
-            width: 300.8,
+            width: 400.8,
             dataSource: [{}],
             loadingTimeout: null,
             columnAutoWidth: true,
@@ -440,7 +441,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             { team: 'public', name: 'Zeb', age: 18 }
         ];
         const dataGrid = $('#dataGrid').dxDataGrid({
-            height: 80,
+            height: 115,
             width: 200,
             dataSource: data,
             keyExpr: 'name',
@@ -1230,7 +1231,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             paging: {
                 pageSize: 20,
             },
-            height: 400,
+            height: 580,
             pager: {
                 visible: true
             },
@@ -1245,7 +1246,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         assert.equal(visibleRows[15].key, 16, 'last visible row key on the first page');
 
         // act
-        dataGrid.getScrollable().scrollTo({ top: 375 });
+        dataGrid.getScrollable().scrollTo({ top: 540 });
         this.clock.tick(10);
         visibleRows = dataGrid.getVisibleRows();
 
@@ -1265,7 +1266,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         assert.equal(visibleRows[9].key, 30, 'last visible row key on the second page');
 
         // act
-        dataGrid.getScrollable().scrollTo({ top: 375 });
+        dataGrid.getScrollable().scrollTo({ top: 540 });
         this.clock.tick(10);
         visibleRows = dataGrid.getVisibleRows();
 
@@ -1298,7 +1299,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             paging: {
                 pageSize: 0,
             },
-            height: 400,
+            height: 580,
             pager: {
                 visible: true
             },
@@ -1313,7 +1314,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         assert.equal(visibleRows[15].key, 16, 'last visible row key on the first page');
 
         // act (scroll down to the middle)
-        dataGrid.getScrollable().scrollTo({ top: 1500 });
+        dataGrid.getScrollable().scrollTo({ top: 2160 });
         this.clock.tick(10);
         visibleRows = dataGrid.getVisibleRows();
 
@@ -1323,7 +1324,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         assert.equal(visibleRows[12].key, 57, 'last visible row key on the first page after srolling down to middle');
 
         // act (scroll down to the bottom)
-        dataGrid.getScrollable().scrollTo({ top: 3050 });
+        dataGrid.getScrollable().scrollTo({ top: 4900 });
         this.clock.tick(10);
         visibleRows = dataGrid.getVisibleRows();
 
@@ -1333,7 +1334,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         assert.equal(visibleRows[10].key, 100, 'last visible row key on the second page after srolling down to bottom');
 
         // act (scroll up to the middle)
-        dataGrid.getScrollable().scrollTo({ top: 1500 });
+        dataGrid.getScrollable().scrollTo({ top: 2160 });
         this.clock.tick(10);
         visibleRows = dataGrid.getVisibleRows();
 
@@ -1366,7 +1367,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             return items;
         };
 
-        $('#dataGrid').css('max-height', '600px');
+        $('#dataGrid').css('max-height', '860px');
         const dataGrid = createDataGrid({
             dataSource: getData(),
             keyExpr: 'id',
@@ -1402,7 +1403,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         assert.notOk(dataGridWrapper.rowsView.isElementIntersectViewport($virtualRowElement), 'virtual row is rendered outside viewport');
 
         // act (scroll down)
-        dataGrid.getScrollable().scrollTo({ top: 2000 });
+        dataGrid.getScrollable().scrollTo({ top: 2880 });
         this.clock.tick(300);
         visibleRows = dataGrid.getVisibleRows();
         $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
@@ -1633,7 +1634,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             return data;
         };
 
-        $('#dataGrid').css('max-height', '150px');
+        $('#dataGrid').css('max-height', '200px');
 
         const dataGrid = createDataGrid({
             width: 400,
@@ -1651,6 +1652,6 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         dataGrid.pageIndex(1);
         this.clock.tick(10);
 
-        assert.ok($('#dataGrid').height() < 150, 'second page should not have scrollbar');
+        assert.ok($('#dataGrid').height() < 200, 'second page should not have scrollbar');
     });
 });
