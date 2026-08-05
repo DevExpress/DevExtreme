@@ -4,8 +4,8 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
-@use "../textEditor/colors" as *;
-@use "../textEditor/sizes" as *;
+@use "../textEditor/colors" as textEditorColors;
+@use "../textEditor/sizes" as textEditorSizes;
 @use "../../base/textBox";
 
 // adduse
@@ -20,7 +20,7 @@
   height: 100%;
 
   &::before {
-    font-size: $texteditor-icon-container-size;
+    font-size: textEditorSizes.$text-editor-icon-container-size;
   }
 }
 
@@ -28,41 +28,41 @@
   .dx-icon-search {
     @include dx-icon(search);
 
-    color: $texteditor-placeholder-color;
+    color: textEditorColors.$text-editor-placeholder-rest;
   }
 
   &.dx-editor-underlined {
     .dx-icon-search {
-      @include dx-texteditor-search-icon($textbox-search-icon-size);
+      @include dx-texteditor-search-icon($text-box-search-icon-size);
     }
 
     .dx-texteditor-input,
     .dx-placeholder::before {
-      padding-inline-start: $textbox-search-icon-size;
+      padding-inline-start: $text-box-search-icon-size;
     }
   }
 
   &.dx-editor-filled,
   &.dx-editor-outlined {
     .dx-icon-search {
-      @include dx-texteditor-search-icon($textbox-search-icon-size);
+      @include dx-texteditor-search-icon($text-box-search-icon-size);
     }
 
     .dx-texteditor-input,
     .dx-placeholder::before {
-      padding-inline-start: $textbox-search-icon-size;
+      padding-inline-start: $text-box-search-icon-size;
     }
   }
 
   &.dx-state-disabled {
     .dx-icon-search {
-      color: $textbox-foreground-disabled;
+      color: $text-box-content-disabled;
     }
   }
 }
 
 .dx-searchbar {
-  padding-bottom: $fluent-textbox-searchbar-padding-bottom;
+  padding-bottom: $text-box-search-bar-padding-block-end;
 
   .dx-texteditor {
     margin: 0;

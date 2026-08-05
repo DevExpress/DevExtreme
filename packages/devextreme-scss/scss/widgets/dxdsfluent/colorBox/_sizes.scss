@@ -3,28 +3,28 @@
 
 // adduse
 
-$fluent-colorbox-overlay-padding: null !default;
-$fluent-colorbox-preview-padding: null !default;
-$fluent-colorbox-preview-icon-size: $fluent-base-icon-size !default;
+$color-box-overlay-content-padding: null !default;
+$color-box-preview-inset-inline-start: null !default;
+$color-box-preview-icon-size: $global-icon-size !default;
 
 @if $size == "default" {
-  $fluent-colorbox-overlay-padding: ds.$spacing-200 !default;
-  $fluent-colorbox-preview-padding: ds.$spacing-120 !default;
+  $color-box-overlay-content-padding: ds.$spacing-200 !default;
+  $color-box-preview-inset-inline-start: ds.$spacing-120 !default;
 }
 
 @else if $size == "compact" {
-  $fluent-colorbox-overlay-padding: ds.$spacing-160 !default;
-  $fluent-colorbox-preview-padding: ds.$spacing-80 !default;
+  $color-box-overlay-content-padding: ds.$spacing-160 !default;
+  $color-box-preview-inset-inline-start: ds.$spacing-80 !default;
 }
 
-$fluent-colorbox-preview-width: calc(#{$fluent-colorbox-preview-padding} * 2 + #{$fluent-colorbox-preview-icon-size}) !default;
+$color-box-preview-min-width: calc(#{$color-box-preview-inset-inline-start} * 2 + #{$color-box-preview-icon-size}) !default;
 
 // Values hoisted from style-file literals (tokenized)
-$fluent-colorbox-color-result-preview-border: ds.$border-width-10 solid !default;
+$color-box-preview-border: ds.$border-width-10 solid !default;
 
 // Base-layer sizing injected with design tokens (wave B2)
-$fluent-colorbox-texteditor-input-container-width: ds.$spacing-150 !default;
-$fluent-colorbox-texteditor-input-container-height: ds.$spacing-150 !default;
-$fluent-colorbox-texteditor-input-container-inset-inline-start: ds.$spacing-140 !default;
-$fluent-colorbox-overlay-padding-2: ds.$spacing-200 !default;
-$fluent-colorbox-toolbar-item-padding-right: ds.$spacing-100 !default;
+$color-box-input-container-width: ds.$spacing-150 !default;
+$color-box-input-container-height: ds.$spacing-150 !default;
+$color-box-input-container-inset-inline-start: ds.$spacing-140 !default;
+$color-box-overlay-padding: ds.$spacing-200 !default;
+$color-box-toolbar-item-padding-inline-end: ds.$spacing-100 !default;

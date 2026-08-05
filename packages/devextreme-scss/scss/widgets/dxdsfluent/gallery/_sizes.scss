@@ -3,20 +3,20 @@
 
 // adduse
 
-$fluent-gallery-indicator-size: ds.$spacing-80 !default;
-$fluent-gallery-indicator-selected-size: ds.$spacing-120 !default;
-$fluent-gallery-button-padding: ds.$spacing-80 !default;
+$gallery-indicator-size: ds.$spacing-80 !default;
+$gallery-indicator-size-selected: ds.$spacing-120 !default;
+$gallery-nav-button-inset-inline: ds.$spacing-80 !default;
 
 // Values hoisted from style-file literals (tokenized)
-$fluent-gallery-nav-icon-font-size: ds.$font-size-320 !default; // dx-icon-glyph-size: text roles not applicable
-$fluent-gallery-state-active-width: ds.$spacing-320 !default;
-$fluent-gallery-state-active-height: ds.$spacing-320 !default;
-$fluent-gallery-state-active-margin-top: -16px !default; // dx-offscale: -16px
-$fluent-gallery-indicator-item-border: ds.$border-width-10 solid !default;
-$fluent-gallery-indicator-item-selected-border: ds.$border-width-20 solid !default;
+$gallery-nav-icon-font-size: ds.$font-size-320 !default; // dx-icon-glyph-size: text roles not applicable
+$gallery-nav-button-width: ds.$spacing-320 !default;
+$gallery-nav-button-height: ds.$spacing-320 !default;
+$gallery-nav-button-margin-block-start: -16px !default; // dx-offscale: -16px
+$gallery-indicator-item-border: ds.$border-width-10 solid !default;
+$gallery-indicator-item-border-selected: ds.$border-width-20 solid !default;
 
 // Base-layer sizing injected with design tokens (wave B2)
-$fluent-gallery-root-border-width: ds.$border-width-10 !default;
-$fluent-gallery-indicator-bottom: ds.$spacing-100 !default;
-$fluent-gallery-indicator-height: ds.$spacing-100 !default;
-$fluent-gallery-indicator-item-margin: 0 ds.$spacing-20 !default;
+$gallery-border-width: ds.$border-width-10 !default;
+$gallery-indicator-inset-block-end: ds.$spacing-100 !default;
+$gallery-indicator-height: ds.$spacing-100 !default;
+$gallery-indicator-item-margin: 0 ds.$spacing-20 !default;

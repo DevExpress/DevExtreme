@@ -3,23 +3,41 @@
 
 // adduse
 
-$fluent-menu-vertical-padding: null !default;
+// Moved from menuBase/ so the component has a single declaration home (NAMING.md, O2)
+$menu-item-line-height: null !default;
+$menu-item-with-icon-padding-inline: null !default;
+$menu-padding-inline: null !default;
+$menu-item-icon-gap: ds.$spacing-40;
 
 @if $size == "default" {
-  $fluent-menu-vertical-padding: ds.$spacing-60 !default;
+  $menu-item-line-height: ds.$line-height-base-md !default;
+  $menu-padding-inline: ds.$spacing-120 !default;
+  $menu-item-with-icon-padding-inline: ds.$spacing-400 !default;
+}
+
+@else if $size == "compact" {
+  $menu-item-line-height: ds.$line-height-base-sm !default;
+  $menu-padding-inline: ds.$spacing-80 !default;
+  $menu-item-with-icon-padding-inline: ds.$spacing-320 !default;
+}
+
+$menu-padding-block: null !default;
+
+@if $size == "default" {
+  $menu-padding-block: ds.$spacing-60 !default;
 }
 
 @if $size == "compact" {
-  $fluent-menu-vertical-padding: ds.$spacing-40 !default;
+  $menu-padding-block: ds.$spacing-40 !default;
 }
 
 
 // Values hoisted from style-file literals (tokenized)
-$fluent-menu-treeview-border: ds.$border-width-10 solid !default;
-$fluent-menu-treeview-node-border-bottom: ds.$border-width-10 solid !default;
+$menu-tree-view-border: ds.$border-width-10 solid !default;
+$menu-tree-view-node-border-block-end: ds.$border-width-10 solid !default;
 
 // Base-layer sizing injected with design tokens (wave B2)
-$fluent-menu-separator-margin-inline-end: ds.$spacing-150 !default;
-$fluent-menu-separator-margin-bottom: ds.$spacing-150 !default;
-$fluent-menu-treeview-node-padding: ds.$spacing-10 !default;
-$fluent-menu-item-content-padding-inline-start: ds.$spacing-150 !default;
+$menu-separator-margin-inline-end: ds.$spacing-150 !default;
+$menu-separator-margin-block-end: ds.$spacing-150 !default;
+$menu-tree-view-node-padding: ds.$spacing-10 !default;
+$menu-item-content-padding-inline-start: ds.$spacing-150 !default;

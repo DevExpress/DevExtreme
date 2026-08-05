@@ -11,7 +11,7 @@
 
 .dx-selectbox-popup-wrapper {
   .dx-overlay-content {
-    box-shadow: $fluent-base-dropdown-widgets-shadow;
+    box-shadow: $global-dropdown-box-shadow;
   }
 
   .dx-popup-content {
@@ -19,6 +19,6 @@
   }
 
   .dx-list {
-    background-color: $selectbox-list-bg;
+    background-color: $select-box-list-bg-rest;
   }
 }

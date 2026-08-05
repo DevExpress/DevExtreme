@@ -2,18 +2,18 @@
 
 // adduse
 
-$progressbar-bg: ds.$progress-bar-progress-line-color-track-rest !default;
+$progress-bar-bg-rest: ds.$progress-bar-progress-line-color-track-rest !default;
 
-$progressbar-range-bg: ds.$progress-bar-progress-line-color-indicator-rest !default;
-$progressbar-container-disabled-bg: ds.$progress-bar-progress-line-color-track-disabled !default;
-$progressbar-range-disabled-bg: ds.$progress-bar-progress-line-color-indicator-disabled !default;
-$progressbar-range-indeterminate-color: ds.$progress-bar-progress-line-color-indicator-indeterminate-gradient-center !default;
-$progressbar-range-invalid-color: ds.$color-surface-danger-default-rest !default;
+$progress-bar-range-bg-rest: ds.$progress-bar-progress-line-color-indicator-rest !default;
+$progress-bar-container-bg-disabled: ds.$progress-bar-progress-line-color-track-disabled !default;
+$progress-bar-range-bg-disabled: ds.$progress-bar-progress-line-color-indicator-disabled !default;
+$progress-bar-range-indeterminate-bg-rest: ds.$progress-bar-progress-line-color-indicator-indeterminate-gradient-center !default;
+$progress-bar-range-invalid-bg-rest: ds.$color-surface-danger-default-rest !default;
 
-$progressbar-interdeterminate-state-gradient: -90deg, transparent 5%, $progressbar-range-indeterminate-color, transparent 95%;
-$progressbar-disabled-interdeterminate-state-gradient: -90deg, transparent 5%, $progressbar-range-disabled-bg, transparent 95%;
-$progressbar-invalid-interdeterminate-state-gradient: -90deg, transparent 5%, $progressbar-range-invalid-color, transparent 95%;
+$progress-bar-indeterminate-bg-rest: -90deg, transparent 5%, $progress-bar-range-indeterminate-bg-rest, transparent 95%;
+$progress-bar-indeterminate-bg-disabled: -90deg, transparent 5%, $progress-bar-range-bg-disabled, transparent 95%;
+$progress-bar-indeterminate-invalid-bg-rest: -90deg, transparent 5%, $progress-bar-range-invalid-bg-rest, transparent 95%;
 
-$progressbar-label-color: ds.$color-content-neutral-default-rest !default;
+$progress-bar-label-content-rest: ds.$color-content-neutral-default-rest !default;
 
-$progressbar-foreground-disabled: ds.$color-content-neutral-default-disabled !default;
+$progress-bar-content-disabled: ds.$color-content-neutral-default-disabled !default;

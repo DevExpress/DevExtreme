@@ -4,25 +4,28 @@
 
 // adduse
 
-$fluent-tooltip-padding: null !default;
-$fluent-tooltip-font-size: null !default;
-$fluent-tooltip-arrow-border-radius: ds.$border-radius-20 !default;
-$fluent-tooltip-shadow: 0 0 ds.$spacing-20 0 $base-dropdown-shadow-color1 !default;
+// Not a colour: a radius that used to sit in _colors.scss (NAMING.md, O7)
+$tooltip-border-radius: $global-border-radius !default;
+
+$tooltip-padding: null !default;
+$tooltip-font-size: null !default;
+$tooltip-arrow-border-radius: ds.$border-radius-20 !default;
+$tooltip-box-shadow: 0 0 ds.$spacing-20 0 $global-dropdown-shadow-ambient !default;
 
 @if $size == "default" {
-  $fluent-tooltip-padding: ds.$spacing-70 ds.$spacing-110 !default;
-  $fluent-tooltip-font-size: ds.$font-size-caption-md;
+  $tooltip-padding: ds.$spacing-70 ds.$spacing-110 !default;
+  $tooltip-font-size: ds.$font-size-caption-md;
 }
 
 @else if $size == "compact" {
-  $fluent-tooltip-padding: ds.$spacing-30 ds.$spacing-50 !default;
-  $fluent-tooltip-font-size: ds.$font-size-caption-md;
+  $tooltip-padding: ds.$spacing-30 ds.$spacing-50 !default;
+  $tooltip-font-size: ds.$font-size-caption-md;
 }
 
 // Values hoisted from style-file literals (tokenized)
-$fluent-tooltip-overlay-content-border: ds.$border-width-10 solid transparent !default;
+$tooltip-overlay-content-border: ds.$border-width-10 solid transparent !default;
 
 // Base-layer sizing injected with design tokens (wave B2)
-$fluent-tooltip-overlay-content-min-width: ds.$spacing-340 !default;
-$fluent-tooltip-overlay-content-min-height: ds.$spacing-260 !default;
-$fluent-tooltip-popup-content-padding: ds.$spacing-120 ds.$spacing-170 !default;
+$tooltip-overlay-content-min-width: ds.$spacing-340 !default;
+$tooltip-overlay-content-min-height: ds.$spacing-260 !default;
+$tooltip-popup-content-padding: ds.$spacing-120 ds.$spacing-170 !default;
