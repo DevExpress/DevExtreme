@@ -1807,8 +1807,10 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
       .ok()
 
       .typeText(editor00.element, '1')
-      .pressKey('tab')
+      .expect(editor00.element.value)
+      .eql('11')
 
+      .pressKey('tab')
       .expect(cell00.isFocused)
       .notOk()
       .expect(dataGrid.apiGetCellValue(0, 0))
