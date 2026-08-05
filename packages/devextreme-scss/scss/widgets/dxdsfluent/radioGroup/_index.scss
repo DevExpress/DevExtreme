@@ -4,14 +4,14 @@
 @use "../sizes" as *;
 @use "../../base/radioGroup/mixins" as *;
 @use "../../base/radioGroup" with (
-  $radiogroup-radio-value-container-padding-inline-end: $fluent-radiogroup-radio-value-container-padding-inline-end,
-  $radiogroup-collection-column-gap-2: $fluent-radiogroup-collection-column-gap-2,
+  $radiogroup-radio-value-container-padding-inline-end: $radio-group-value-container-padding-inline-end,
+  $radiogroup-collection-column-gap-2: $radio-group-collection-horizontal-column-gap,
 );
 
 // adduse
 @use "../radioButton";
 @include dx-radiogroup-mixin(
-  $fluent-radio-button-vertical-margin,
+  $radio-group-radio-button-margin-block,
   0,
 );
 
@@ -23,6 +23,6 @@
 
 .dx-radiogroup-horizontal {
   .dx-collection {
-    column-gap: $fluent-radiogroup-collection-column-gap;
+    column-gap: $radio-group-collection-column-gap;
   }
 }

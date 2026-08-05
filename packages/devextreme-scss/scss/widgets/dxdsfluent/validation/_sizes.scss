@@ -3,27 +3,24 @@
 
 // adduse
 
-$fluent-validation-message-padding: null !default;
-$fluent-validationsummary-item-margin: null !default;
-$fluent-validation-message-line-height: null !default;
-$fluent-validation-message-horizontal-padding: null !default;
+$validation-summary-item-margin: null !default;
+$validation-message-line-height: null !default;
+$validation-message-padding-inline: null !default;
 
-$fluent-validation-overlay-border-radius: ds.$border-radius-40 !default;
-$fluent-validation-message-vertical-padding: ds.$spacing-40 !default;
-$fluent-validation-message-font-size: ds.$font-size-caption-md !default;
+$validation-overlay-border-radius: ds.$border-radius-40 !default;
+$validation-message-padding-block: ds.$spacing-40 !default;
+$validation-message-font-size: ds.$font-size-caption-md !default;
 
 @if $size == "default" {
-  $fluent-validation-message-padding: ds.$spacing-60 !default;
-  $fluent-validationsummary-item-margin: ds.$spacing-60 !default;
+  $validation-summary-item-margin: ds.$spacing-60 !default;
 
-  $fluent-validation-message-horizontal-padding: ds.$spacing-80 !default;
-  $fluent-validation-message-line-height: ds.$line-height-160 !default; // dx-no-semantic-role: compact branch (120) is off the role scale
+  $validation-message-padding-inline: ds.$spacing-80 !default;
+  $validation-message-line-height: ds.$line-height-160 !default; // dx-no-semantic-role: compact branch (120) is off the role scale
 }
 
 @else if $size == "compact" {
-  $fluent-validation-message-padding: ds.$spacing-40 !default;
-  $fluent-validationsummary-item-margin: ds.$spacing-40 !default;
+  $validation-summary-item-margin: ds.$spacing-40 !default;
 
-  $fluent-validation-message-horizontal-padding: ds.$spacing-60 !default;
-  $fluent-validation-message-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
+  $validation-message-padding-inline: ds.$spacing-60 !default;
+  $validation-message-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
 }
