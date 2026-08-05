@@ -28,7 +28,7 @@ describe('resolvePaginate', () => {
   );
 });
 
-const createDataSource = (
+const createDataSourceMock = (
   state: { paginate: boolean; pageSize: number; pageIndex: number },
 ): PagingDataSource & { state: typeof state; calls: string[] } => {
   const calls: string[] = [];
@@ -37,31 +37,45 @@ const createDataSource = (
     state,
     calls,
     paginate(value?: boolean): boolean | undefined {
-      if (value === undefined) return state.paginate;
+      if (value === undefined) {
+        return state.paginate;
+      }
+
       calls.push(`paginate(${value})`);
       state.paginate = value;
       // Mirrors DataSource.paginate, which resets pageIndex on change.
       state.pageIndex = 0;
+
       return undefined;
     },
     pageSize(value?: number): number | undefined {
       // Mirrors the adapter, which reports 0 while paginate is off.
-      if (value === undefined) return state.paginate ? state.pageSize : 0;
+      if (value === undefined) {
+        return state.paginate ? state.pageSize : 0;
+      }
+
       calls.push(`pageSize(${value})`);
       state.pageSize = value;
+
       return undefined;
     },
     pageIndex(value?: number): number | undefined {
-      if (value === undefined) return state.pageIndex;
+      if (value === undefined) {
+        return state.pageIndex;
+      }
+
       calls.push(`pageIndex(${value})`);
       state.pageIndex = value;
+
       return undefined;
     },
-    // Recorded but never expected: the `calls` assertions below double as a
-    // guard that syncPaging does not touch this flag.
     requireTotalCount(value?: boolean): boolean | undefined {
-      if (value === undefined) return true;
+      if (value === undefined) {
+        return true;
+      }
+
       calls.push(`requireTotalCount(${value})`);
+
       return undefined;
     },
   };
@@ -69,7 +83,7 @@ const createDataSource = (
 
 describe('syncPaging', () => {
   it('should report no changes and write nothing when the data source already matches', () => {
-    const dataSource = createDataSource({ paginate: true, pageSize: 10, pageIndex: 2 });
+    const dataSource = createDataSourceMock({ paginate: true, pageSize: 10, pageIndex: 2 });
 
     const changes = syncPaging(dataSource, {
       paginate: true, pageSize: 10, pageIndex: 2,
@@ -85,7 +99,7 @@ describe('syncPaging', () => {
   });
 
   it('should skip members the target leaves undefined', () => {
-    const dataSource = createDataSource({ paginate: true, pageSize: 10, pageIndex: 2 });
+    const dataSource = createDataSourceMock({ paginate: true, pageSize: 10, pageIndex: 2 });
 
     const changes = syncPaging(dataSource, { pageSize: 5 });
 
@@ -96,12 +110,8 @@ describe('syncPaging', () => {
     expect(dataSource.state).toEqual({ paginate: true, pageSize: 5, pageIndex: 2 });
   });
 
-  // The ordering guarantee: because paginate() resets pageIndex to 0, the
-  // pageIndex comparison sees 0 and restores the target value. Comparing all
-  // three flags up front would report isPageIndexChanged: false and leave the
-  // data source on page 0.
   it('should restore pageIndex after a paginate change resets it', () => {
-    const dataSource = createDataSource({ paginate: false, pageSize: 10, pageIndex: 3 });
+    const dataSource = createDataSourceMock({ paginate: false, pageSize: 10, pageIndex: 3 });
 
     const changes = syncPaging(dataSource, {
       paginate: true, pageSize: 10, pageIndex: 3,
@@ -120,12 +130,8 @@ describe('syncPaging', () => {
     ]);
   });
 
-  // The other half of the ordering guarantee: the adapter reports pageSize 0
-  // while paginate is off, so comparing pageSize before the paginate write
-  // would report a change that did not happen and write the size back
-  // redundantly.
   it('should not report a pageSize change when only paginate turns on', () => {
-    const dataSource = createDataSource({ paginate: false, pageSize: 10, pageIndex: 0 });
+    const dataSource = createDataSourceMock({ paginate: false, pageSize: 10, pageIndex: 0 });
 
     const changes = syncPaging(dataSource, {
       paginate: true, pageSize: 10, pageIndex: 0,

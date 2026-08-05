@@ -27,7 +27,6 @@ const getVisibleKeys = (instance: DataGridInstance): unknown[] => instance
   .getVisibleRows()
   .map((row) => row.key as unknown);
 
-// `_isPaging` is protected and has no public observer.
 const getIsPaging = (instance: DataGridInstance): unknown => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const dataController = instance.getController('data') as any;
@@ -43,13 +42,11 @@ const getAdapter = (instance: DataGridInstance): PagingAdapter => {
   return dataController.dataSource() as PagingAdapter;
 };
 
-describe('_applyPagingOptions', () => {
+describe('applyPagingOptions', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
 
-  // The "nothing changed" branch is what suppresses the reload.
-  // Mirrors QUnit T677650.
-  describe('when no paging option actually changed', () => {
+  describe('when no paging option actually changed (T677650)', () => {
     it('should not reload and should not fire pageChanged', async () => {
       const { instance } = await createDataGrid({
         dataSource: DATA,
@@ -60,6 +57,9 @@ describe('_applyPagingOptions', () => {
       const pageChangedSpy = jest.fn();
       instance.getController('data').pageChanged.add(pageChangedSpy);
 
+      const changedSpy = jest.fn();
+      instance.getDataSource().on('changed', changedSpy);
+
       const loadingSpy = jest.fn();
       instance.getDataSource().store().on('loading', loadingSpy);
 
@@ -67,12 +67,11 @@ describe('_applyPagingOptions', () => {
       await flushAsync();
 
       expect(pageChangedSpy).not.toHaveBeenCalled();
+      expect(changedSpy).not.toHaveBeenCalled();
       expect(loadingSpy).not.toHaveBeenCalled();
     });
 
-    // `requireTotalCount` is applied unconditionally and has no change flag,
-    // so gating the apply step on "something changed" would silently drop it.
-    it('should still apply requireTotalCount', async () => {
+    it('should apply requireTotalCount', async () => {
       const { instance } = await createDataGrid({
         dataSource: DATA,
         keyExpr: 'id',
@@ -92,18 +91,8 @@ describe('_applyPagingOptions', () => {
     });
   });
 
-  // `DataSource.paginate(value)` calls `pageIndex(0)` internally, so the
-  // pageIndex comparison below it reads an already-reset value. These two pin
-  // that ordering. Expected values are recorded from a run, not derived.
-  describe('paginate / pageIndex ordering', () => {
-    // Recorded behavior: `paging.pageIndex` keeps the page the user was on,
-    // but the dataSource lands on 0. `_applyPagingOptions` does restore the raw
-    // pageIndex (paginate() resets it to 0, then the comparison against the
-    // option pushes 1 back down), and the following load then normalizes it:
-    // with paginate false the adapter's pageSize() returns 0, so pageCount()
-    // is 1 and m_data_source_adapter.ts:650 clamps pageIndex to 0.
-    // The option stays the source of truth — see the next test for the
-    // round trip back.
+  // The paginate/pageIndex ordering itself is guarded in utils/__tests__/paging.test.ts.
+  describe('paging.enabled toggling', () => {
     it('should keep paging.pageIndex but reset the dataSource when paging is disabled on a non-zero page', async () => {
       const { instance } = await createDataGrid({
         dataSource: DATA,
@@ -119,8 +108,6 @@ describe('_applyPagingOptions', () => {
       instance.option('paging.enabled', false);
       await flushAsync();
 
-      // Asserted as one object so a failure reports every actual value at once
-      // (ts-jest misreports line numbers for this suite).
       expect({
         pagingPageIndex: instance.option('paging.pageIndex'),
         dataSourcePageIndex: instance.getDataSource().pageIndex(),
@@ -148,8 +135,6 @@ describe('_applyPagingOptions', () => {
     });
   });
 
-  // The `pageChanged` tests in QUnit dataController.tests.js cover the
-  // `changePaging` API path (`pageIndex()` / `pageSize()`), not this one.
   describe('pageChanged and _isPaging on the option path', () => {
     it('should fire pageChanged once with the new index when paging.pageIndex changes', async () => {
       const { instance } = await createDataGrid({
@@ -168,8 +153,6 @@ describe('_applyPagingOptions', () => {
       expect(pageChangedSpy).toHaveBeenCalledWith(1);
     });
 
-    // Surprising but intentional: this path fires pageChanged whenever ANY
-    // flag changed, not only on a pageIndex change.
     it('should fire pageChanged once when only paging.pageSize changes', async () => {
       const { instance } = await createDataGrid({
         dataSource: DATA,
@@ -203,17 +186,12 @@ describe('_applyPagingOptions', () => {
       expect(getIsPaging(instance)).toBe(false);
     });
 
-    // The only runtime observer of the removed `false | { flags }` return
-    // union: on the no-change branch `_initDataSource` used to assign
-    // `undefined` via `changedPagingOptions?.isPageIndexChanged`.
     it('should set _isPaging to false, not undefined, when re-init changes no paging option', async () => {
       const { instance } = await createDataGrid({
         dataSource: DATA,
         keyExpr: 'id',
       });
 
-      // Object form, so `_handleDataSourceChange` takes the reset path
-      // (`_initDataSource`) rather than the in-place refresh path.
       instance.option('dataSource', {
         store: { type: 'array', key: 'id', data: [{ id: 9, value: 'z' }] },
       });
@@ -237,9 +215,6 @@ describe('_applyPagingOptions', () => {
       expect(getAdapter(instance).requireTotalCount()).toBe(false);
     });
 
-    // The second assertion probes whether the `pagingEnabled !== undefined`
-    // guard is reachable: if `paging.enabled` always resolves to a defined
-    // value, the guard never short-circuits and can be dropped.
     it('should enable requireTotalCount in regular paging mode', async () => {
       const { instance } = await createDataGrid({
         dataSource: DATA,
@@ -251,7 +226,6 @@ describe('_applyPagingOptions', () => {
       expect(instance.option('paging.enabled')).toBe(true);
     });
 
-    // paginate = enabled || virtualMode || appendMode
     it('should paginate the dataSource in virtual mode even when paging is disabled', async () => {
       const { instance } = await createDataGrid({
         dataSource: DATA,
@@ -266,7 +240,6 @@ describe('_applyPagingOptions', () => {
     });
   });
 
-  // The `_initDataSource` caller passes the raw DataSource, not the adapter.
   describe('initial application', () => {
     it('should push initial paging options down to the dataSource on first render', async () => {
       const { instance } = await createDataGrid({

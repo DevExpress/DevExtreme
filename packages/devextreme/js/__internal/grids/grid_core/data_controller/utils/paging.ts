@@ -11,9 +11,6 @@ export function resolvePaginate(
   return enabled || scrollingMode === 'virtual' || scrollingMode === 'infinite';
 }
 
-/**
- * Brings `dataSource` to `target` and reports what changed.
- */
 export function syncPaging(
   dataSource: PagingDataSource,
   options: SyncPagingOptions,
