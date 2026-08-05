@@ -1,4 +1,4 @@
-import DateRangeBox from '../__internal/ui/date_range_box/m_date_range_box';
+import DateRangeBox from '../__internal/ui/date_range_box/date_range_box';
 export default DateRangeBox;
 
 // STYLE dateRangeBox

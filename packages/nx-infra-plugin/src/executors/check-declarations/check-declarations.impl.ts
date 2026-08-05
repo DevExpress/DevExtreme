@@ -98,7 +98,6 @@ export function buildDefaultCompilerOptions(
     strict: true,
     noImplicitAny: false,
     types: ['jquery'],
-    // gulp-typescript accepted legacy names; TS API expects standard lib entries (4.9).
     lib: ['ES2017', 'DOM'],
     moduleResolution: ts.ModuleResolutionKind.NodeJs,
     typeRoots: [path.join(projectRoot, 'node_modules', '@types')],

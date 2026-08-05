@@ -8,8 +8,8 @@ DevExtreme is an enterprise-ready suite of UI components for Angular, React, Vue
 - **Type:** Monorepo (pnpm workspaces + Nx)
 - **Size:** Large (1000+ files across multiple packages)
 - **Languages:** TypeScript, JavaScript, SCSS
-- **Package Manager:** pnpm 11.7.0 (specified in package.json)
-- **Node Version:** 24.15.0 (required by CI)
+- **Package Manager:** pnpm 11.9.0 (`packageManager` field in package.json)
+- **Node Version:** 24.16.0 (`.node-version`; `engines.node` is `^24.16.0`)
 - **Build System:** Nx + custom build scripts + custom Nx executors (via `devextreme-nx-infra-plugin`)
 - **Test Frameworks:** QUnit, Jest, TestCafe, Karma (Angular)
 
@@ -22,8 +22,8 @@ DevExtreme is an enterprise-ready suite of UI components for Angular, React, Vue
 pnpm install --frozen-lockfile
 ```
 
-**Node.js:** Version 24.15.0 is required (CI uses Node 24)
-**pnpm:** Version 11.7.0 (managed via packageManager field)
+**Node.js:** Version 24.16.0 is required (`engines.node`: `^24.16.0`; CI reads `.node-version`)
+**pnpm:** Version 11.9.0 (managed via `packageManager` field)
 **.NET SDK:** Version 8.0.x required for running devextreme-internal-tools (uses .NET tool for code generation)
 
 ### First-Time Setup
@@ -59,7 +59,7 @@ pnpm install --frozen-lockfile
       viz/                 # Visualization components
       core/                # Core utilities
       data/                # Data layer
-      renovation/          # Renovation components (new architecture)
+      __internal/          # Implementation code (public folders above are entry points only)
     testing/               # QUnit tests
     build/                 # Build config consumed by Nx executors (transpile config, module metadata, templates)
     artifacts/             # Build output (generated)
@@ -182,7 +182,7 @@ pnpm nx clean:artifacts devextreme        # build artifacts only
 
 ```
 packages/
-  devextreme/                       # core library: ui/, viz/, core/, data/, renovation/
+  devextreme/                       # core library: ui/, viz/, core/, data/, __internal/
   devextreme-{angular,react,vue}/   # framework wrappers (generated)
   devextreme-scss/                  # SCSS themes
   devextreme-themebuilder/          # theme builder
@@ -201,7 +201,7 @@ For the full executor catalogue, conventions, and refactoring guidance, see @pac
 
 ## Build Pipeline
 
-clean (`devextreme-nx-infra-plugin:clean` preserving CSS and npm metadata) → localization → component generation (Renovation) → transpile (`babel-transform` for JS, `build-typescript` for TS) → bundle (Webpack via `devextreme-nx-infra-plugin:bundle`, debug + prod targets) → TypeScript declarations → SCSS compile (`devextreme-scss`) → npm package preparation. Task orchestration goes through Nx; cross-package builds (`all:build-dev`, `all:build`) live in the `workflows` package. There is no gulpfile — `clean` runs directly via `pnpm nx clean:artifacts devextreme`. Pre-commit hook runs `lint-staged` (stylelint + eslint --quiet). The developer watch workflow (`pnpm run dev` / `dev:watch`) is native composite Nx targets (`dev`, `dev-watch`) — see the "Former gulp tasks" table in @packages/nx-infra-plugin/AGENTS.md.
+clean (`devextreme-nx-infra-plugin:clean` preserving CSS and npm metadata) → localization → transpile (`babel-transform` for JS, `build-typescript` for TS) → bundle (Webpack via `devextreme-nx-infra-plugin:bundle`, debug + prod targets) → TypeScript declarations → SCSS compile (`devextreme-scss`) → npm package preparation. Task orchestration goes through Nx; cross-package builds (`all:build-dev`, `all:build`) live in the `workflows` package. Pre-commit hook runs `lint-staged` (stylelint + eslint --quiet). The developer watch workflow (`pnpm run dev` / `dev:watch`) is composite Nx targets (`dev`, `dev-watch`) — see @packages/nx-infra-plugin/AGENTS.md for the executors they compose.
 
 ## Conventions
 
@@ -217,7 +217,7 @@ clean (`devextreme-nx-infra-plugin:clean` preserving CSS and npm metadata) → l
 ## Constraints
 
 - NEVER edit generated wrappers under `packages/devextreme-{angular,react,vue}/src/` (templates excepted); update the generators and run `pnpm run regenerate-all` instead.
-- NEVER hand-edit `packages/devextreme/js/renovation/**/*.j.tsx` or `packages/devextreme/js/__internal/core/localization/{default_messages.ts,cldr-data/**}`; regenerate via the localization / component executors.
+- NEVER hand-edit `packages/devextreme/js/__internal/core/localization/{default_messages.ts,cldr-data/**}`; regenerate via the localization executor.
 - NEVER run `pnpm install` without `--frozen-lockfile`; use `pnpm install --frozen-lockfile` to match CI.
 
 ## Compact Instructions

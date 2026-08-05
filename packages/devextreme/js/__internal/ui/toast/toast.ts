@@ -287,8 +287,6 @@ class Toast<
     return promise;
   }
 
-  // @ts-expect-error Violation of the Principle of Liskov Substitutability
-
   _overlayStack(): Toast[] {
     return TOAST_STACK;
   }
@@ -309,8 +307,8 @@ class Toast<
       case 'type':
         this.$content()?.removeClass(`${TOAST_CLASS}-${previousValue}`);
 
-        if (value) {
-          this.$content()?.addClass(`${TOAST_CLASS}-${String(value).toLowerCase()}`);
+        if (typeof value === 'string') {
+          this.$content()?.addClass(`${TOAST_CLASS}-${value.toLowerCase()}`);
         }
         break;
       case 'message':

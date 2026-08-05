@@ -1,18 +1,27 @@
+import type { DateLike } from '@js/common';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { extend } from '@js/core/utils/extend';
 import { isFunction } from '@js/core/utils/type';
-import type DateBox from '@js/ui/date_box';
+import type { DxEvent } from '@js/events';
+import type { ValueChangedEvent } from '@js/ui/calendar';
 import type Calendar from '@ts/ui/calendar/calendar';
+import CalendarStrategy from '@ts/ui/date_box/date_box.strategy.calendar';
+import { getDeserializedDate, isSameDateArrays, isSameDates } from '@ts/ui/date_range_box/date_range.utils';
+import type DateRangeBox from '@ts/ui/date_range_box/date_range_box';
+import type MultiselectDateBox from '@ts/ui/date_range_box/multiselect_date_box';
+import type { PopupProperties } from '@ts/ui/popup/popup';
+import type Popup from '@ts/ui/popup/popup';
 
-import CalendarStrategy from '../../date_box/date_box.strategy.calendar';
-import { getDeserializedDate, isSameDateArrays, isSameDates } from '../m_date_range.utils';
-import type DateRangeBox from '../m_date_range_box';
-import type MultiselectDateBox from '../m_multiselect_date_box';
+interface RangeValueChangedEvent extends Omit<ValueChangedEvent, 'value' | 'previousValue'> {
+  value: (DateLike | undefined)[];
+  previousValue: (DateLike | undefined)[];
+}
 
-class RangeCalendarStrategy extends CalendarStrategy {
-  // @ts-expect-error should be refactored after the dateBox refactoring
-  dateBox: DateBox;
-
+class RangeCalendarStrategy extends CalendarStrategy<
+  (DateLike | undefined)[],
+  DateRangeBox,
+  MultiselectDateBox
+> {
   private readonly dateRangeBox: DateRangeBox;
 
   private _shouldPreventFocusChange?: boolean;
@@ -22,16 +31,16 @@ class RangeCalendarStrategy extends CalendarStrategy {
   public _widget!: Calendar;
 
   constructor(dateBox: MultiselectDateBox) {
-    // @ts-expect-error should be refactored after the dateBox refactoring
     super(dateBox);
-    this.dateBox = dateBox;
-    this.dateRangeBox = dateBox.option('_dateRangeBoxInstance');
+
+    const multiselectDateBoxOptions = dateBox.option();
+    this.dateRangeBox = multiselectDateBoxOptions._dateRangeBoxInstance as DateRangeBox;
   }
 
-  popupConfig(popupConfig) {
+  popupConfig(popupConfig: PopupProperties): PopupProperties {
     return extend(true, super.popupConfig(popupConfig), {
       position: { of: this.getDateRangeBox().$element() },
-    });
+    }) as PopupProperties;
   }
 
   popupShowingHandler(): void {
@@ -39,44 +48,39 @@ class RangeCalendarStrategy extends CalendarStrategy {
     this._dateSelectedCounter = 0;
   }
 
-  _getPopup() {
-    // @ts-expect-error
+  _getPopup(): Popup {
     return super._getPopup() || this.getDateRangeBox().getStartDateBox()._popup;
   }
 
-  supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | undefined> {
+  supportedKeys(): Record<string, (e: DxEvent<KeyboardEvent>) => boolean | undefined> {
     const dateRangeBox = this.getDateRangeBox();
 
     return {
       ...super.supportedKeys(),
-      rightArrow: () => {
+      rightArrow: (): boolean | undefined => {
         if (dateRangeBox.option('opened')) {
           return true;
         }
 
         return undefined;
       },
-      leftArrow: () => {
+      leftArrow: (): boolean | undefined => {
         if (dateRangeBox.option('opened')) {
           return true;
         }
 
         return undefined;
       },
-      enter: (e) => {
+      enter: (e: DxEvent<KeyboardEvent>): boolean | undefined => {
         if (dateRangeBox.option('opened')) {
-          // @ts-expect-error
           const dateBoxValue = this.dateBox.getDateOption('value');
-          // @ts-expect-error
           this.dateBox._valueChangeEventHandler(e);
-          // @ts-expect-error
           const newDateBoxValue = this.dateBox.getDateOption('value');
           const dateBoxValueChanged = !isSameDates(dateBoxValue, newDateBoxValue);
 
           if (dateBoxValueChanged) {
             dateRangeBox.getStartDateBox().getStrategy().getWidget().option('value', dateRangeBox.option('value'));
           } else {
-            // @ts-expect-error
             dateRangeBox.getStartDateBox().getStrategy().getWidget()._enterKeyHandler(e);
           }
 
@@ -85,7 +89,7 @@ class RangeCalendarStrategy extends CalendarStrategy {
 
         return undefined;
       },
-      tab: (e) => {
+      tab: (e: DxEvent<KeyboardEvent>): boolean | undefined => {
         if (!dateRangeBox.option('opened')) {
           return undefined;
         }
@@ -104,14 +108,13 @@ class RangeCalendarStrategy extends CalendarStrategy {
         }
 
         const $focusableElement = e.shiftKey
-        // @ts-expect-error
           ? dateRangeBox.getStartDateBox()._getLastPopupElement()
-        // @ts-expect-error
           : dateRangeBox.getStartDateBox()._getFirstPopupElement();
 
         if ($focusableElement) {
-          // @ts-expect-error
+          // @ts-expect-error the trigger method is not declared on EventsEngineType
           eventsEngine.trigger($focusableElement, 'focus');
+          // @ts-expect-error the select method is not declared on dxElementWrapper
           $focusableElement.select();
         }
 
@@ -121,8 +124,7 @@ class RangeCalendarStrategy extends CalendarStrategy {
     };
   }
 
-  _getWidgetOptions() {
-    // @ts-expect-error
+  _getWidgetOptions(): Record<string, unknown> {
     const { disabledDates: disabledDatesValue, value, multiView } = this.dateRangeBox.option();
 
     const disabledDates = isFunction(disabledDatesValue)
@@ -136,16 +138,15 @@ class RangeCalendarStrategy extends CalendarStrategy {
       viewsCount: multiView ? 2 : 1,
       allowChangeSelectionOrder: true,
       currentSelection: this.getCurrentSelection(),
-    });
+    }) as Record<string, unknown>;
   }
 
-  _refreshActiveDescendant(e): void {
-    // @ts-expect-error
+  _refreshActiveDescendant(e: DxEvent & { actionValue: string }): void {
     this.getDateRangeBox().setAria('activedescendant', e.actionValue);
   }
 
-  _injectComponent(func) {
-    return (params) => func(extend(params, { component: this.getDateRangeBox() }));
+  _getInjectedComponent(): DateRangeBox {
+    return this.getDateRangeBox();
   }
 
   getKeyboardListener(): Calendar {
@@ -156,9 +157,10 @@ class RangeCalendarStrategy extends CalendarStrategy {
       : this.getWidget();
   }
 
-  getValue(): Date {
+  getValue(): (DateLike | undefined)[] {
     const { value } = this.getWidget().option();
-    return value as Date;
+
+    return value as (DateLike | undefined)[];
   }
 
   _updateValue(): void {
@@ -173,11 +175,27 @@ class RangeCalendarStrategy extends CalendarStrategy {
   }
 
   _isInstantlyMode(): boolean {
-    return this.getDateRangeBox().option('applyValueMode') === 'instantly';
+    const { applyValueMode } = this.getDateRangeBox().option();
+
+    return applyValueMode === 'instantly';
   }
 
-  // @ts-expect-error should be refactored after the dateBox refactoring
-  _valueChangedHandler({ value, previousValue, event }) {
+  _getDateSelectedCounter(
+    currentSelection: 'startDate' | 'endDate' | undefined,
+    value: RangeValueChangedEvent['value'],
+  ): number {
+    if (currentSelection === 'startDate') {
+      return 0;
+    }
+
+    if (!value[0]) {
+      return -1;
+    }
+
+    return 1;
+  }
+
+  _valueChangedHandler({ value, previousValue, event }: RangeValueChangedEvent): void {
     if (isSameDateArrays(value, previousValue) && !this.getWidget()._valueSelected) {
       this._shouldPreventFocusChange = false;
       return;
@@ -189,17 +207,15 @@ class RangeCalendarStrategy extends CalendarStrategy {
 
     if (this._isInstantlyMode()) {
       if (!dateRangeBox.option('disableOutOfRangeSelection')) {
-        if (this._getCalendarCurrentSelection() === 'startDate') {
-          this._dateSelectedCounter = 0;
-        } else {
-          this._dateSelectedCounter = 1;
+        const currentSelection = this._getCalendarCurrentSelection();
 
-          if (!value[0]) {
-            this._dateSelectedCounter = -1;
-          } else if (getDeserializedDate(value[0]) > getDeserializedDate(value[1])) {
-            dateRangeBox.updateValue([value[0], null], event);
-            return;
-          }
+        this._dateSelectedCounter = this._getDateSelectedCounter(currentSelection, value);
+
+        if (currentSelection !== 'startDate'
+          && value[0]
+          && getDeserializedDate(value[0]) > getDeserializedDate(value[1])) {
+          dateRangeBox.updateValue([value[0], null], event);
+          return;
         }
       }
 
@@ -230,16 +246,19 @@ class RangeCalendarStrategy extends CalendarStrategy {
       : this.getDateRangeBox().getStartDateBox();
 
     targetDateBox.focus();
-    // @ts-expect-error
+    // @ts-expect-error the trigger method should support HTMLElement
     eventsEngine.trigger(targetDateBox.field(), 'dxclick');
   }
 
-  getCurrentSelection() {
-    return this.getDateRangeBox().option('currentSelection');
+  getCurrentSelection(): 'startDate' | 'endDate' {
+    const { currentSelection } = this.getDateRangeBox().option();
+
+    return currentSelection;
   }
 
-  _getCalendarCurrentSelection() {
+  _getCalendarCurrentSelection(): 'startDate' | 'endDate' | undefined {
     const { currentSelection } = this.getWidget().option();
+
     return currentSelection;
   }
 
@@ -248,17 +267,6 @@ class RangeCalendarStrategy extends CalendarStrategy {
       return false;
     }
     return true;
-  }
-
-  dateBoxValue() {
-    const { dateBox } = this;
-
-    if (arguments.length) {
-      // @ts-expect-error
-      return dateBox.setDateOption.apply(dateBox, arguments);
-    }
-    // @ts-expect-error
-    return dateBox.getDateOption.apply(dateBox, ['value']);
   }
 
   _cellClickHandler(): void { }

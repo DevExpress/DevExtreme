@@ -281,7 +281,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @docid
        * @default 600
        */
-      height?: number;
+      height?: number | string;
       /**
        * @docid
        * @default 0
@@ -331,7 +331,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @docid
        * @default 600
        */
-      width?: number;
+      width?: number | string;
     };
     /**
      * @docid

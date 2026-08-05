@@ -1,75 +1,13 @@
-import { fileSaver } from './__internal/exporter/file_saver';
-import {
-    imageCreator, testFormats, getData as getImageData,
-    /// #DEBUG
-    asyncEach
-    /// #ENDDEBUG
-} from './__internal/exporter/image_creator';
-import { svgCreator, getData as getSvgData } from './__internal/exporter/svg_creator';
-import { isFunction as _isFunction, isBoolean } from './core/utils/type';
-import { Deferred } from './core/utils/deferred';
-import { getData } from './__internal/exporter/pdf_creator';
+import * as clientExporter from './__internal/exporter/exporter';
 
-function _export(data, options, getData) {
-    if(!data) {
-        return new Deferred().resolve();
-    }
+// Re-exported through local bindings on purpose: `export { … } from './…'` compiles to
+// getter-only, non-configurable properties, while tests stub these members
+// (see testing/tests/DevExpress.viz.core/export.tests.js).
+const _export = clientExporter.export;
 
-    // TODO: Can the following actions be not defined? (since they are provided by a widget not by a user)
-    const exportingAction = options.exportingAction;
-    const exportedAction = options.exportedAction;
-    const fileSavingAction = options.fileSavingAction;
+export const fileSaver = clientExporter.fileSaver;
+export const image = clientExporter.image;
+export const pdf = clientExporter.pdf;
+export const svg = clientExporter.svg;
 
-    const eventArgs = {
-        fileName: options.fileName,
-        format: options.format,
-        cancel: false
-    };
-
-    if(isBoolean(options.selectedRowsOnly)) {
-        eventArgs.selectedRowsOnly = options.selectedRowsOnly;
-    }
-
-    _isFunction(exportingAction) && exportingAction(eventArgs);
-
-    if(!eventArgs.cancel) {
-        return getData(data, options).then(blob => {
-            _isFunction(exportedAction) && exportedAction();
-
-            if(_isFunction(fileSavingAction)) {
-                eventArgs.data = blob;
-                fileSavingAction(eventArgs);
-            }
-
-            if(!eventArgs.cancel) {
-                const format = options.format === 'xlsx' ? 'EXCEL' : options.format;
-                fileSaver.saveAs(eventArgs.fileName, format, blob);
-            }
-        });
-    }
-
-    return new Deferred().resolve();
-}
-
-export {
-    _export as export,
-    fileSaver
-};
-
-export const image = {
-    /// #DEBUG
-    asyncEach,
-    /// #ENDDEBUG
-    creator: imageCreator,
-    getData: getImageData,
-    testFormats: testFormats
-};
-
-export const pdf = {
-    getData: getData
-};
-
-export const svg = {
-    creator: svgCreator,
-    getData: getSvgData
-};
+export { _export as export };

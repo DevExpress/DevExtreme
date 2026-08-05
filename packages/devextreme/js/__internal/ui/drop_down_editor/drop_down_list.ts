@@ -215,7 +215,6 @@ class DropDownList<
   }
 
   _initContentReadyAction(): void {
-    // @ts-expect-error _contentReadyAction not typed on base class
     this._contentReadyAction = this._createActionByOption('onContentReady', {
       excludeValidators: ['disabled', 'readOnly'],
     });
