@@ -2,9 +2,9 @@
 
 // adduse
 
-$badge-content-rest: ds.$badge-color-text-rest !default;
+$badge-content-rest: ds.$color-content-neutral-default-static-dark-rest !default;
 
-$badge-bg-rest: ds.$badge-color-bg-rest !default;
+$badge-bg-rest: ds.$color-surface-primary-default-rest !default;
 
-$badge-content-disabled: ds.$badge-color-text-disabled !default;
-$badge-bg-disabled: ds.$badge-color-bg-disabled !default;
+$badge-content-disabled: ds.$color-content-neutral-subdued-disabled !default;
+$badge-bg-disabled: ds.$color-surface-neutral-subdued-disabled !default;
