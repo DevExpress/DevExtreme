@@ -34,7 +34,7 @@ import {
   isString,
 } from '@js/core/utils/type';
 import type { ValidationResult } from '@js/ui/validation_group';
-import type Validator from '@ts/ui/m_validator';
+import type Validator from '@ts/ui/validator';
 
 /**
  * A validation group is identified by reference only: it can be a ValidationGroup

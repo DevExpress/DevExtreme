@@ -7,7 +7,7 @@ import { getOuterWidth } from '@js/core/utils/size';
 import { encodeHtml } from '@js/core/utils/string';
 import type { Properties } from '@js/ui/validation_message';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { ValidationRuleInternal } from '@ts/ui/m_validation_engine';
+import type { ValidationRuleInternal } from '@ts/ui/validation_engine';
 import Overlay from '@ts/ui/overlay/overlay';
 
 const INVALID_MESSAGE = 'dx-invalid-message';

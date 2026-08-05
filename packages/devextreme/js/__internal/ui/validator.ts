@@ -16,16 +16,16 @@ import type {
   ValidationGroupKey,
   ValidationResultInternal,
   ValidationRuleInternal,
-} from '@ts/ui/m_validation_engine';
-import ValidationEngine from '@ts/ui/m_validation_engine';
-import type ValidationSummary from '@ts/ui/m_validation_summary';
+} from '@ts/ui/validation_engine';
+import ValidationEngine from '@ts/ui/validation_engine';
+import type ValidationSummary from '@ts/ui/validation_summary';
 import type {
   ValidationRequestArgs,
   ValidationRequestHandler,
   ValidationTargetEditor,
   ValidationTargetEditorOptions,
-} from '@ts/ui/validation/m_default_adapter';
-import DefaultAdapter from '@ts/ui/validation/m_default_adapter';
+} from '@ts/ui/validation/default_adapter';
+import DefaultAdapter from '@ts/ui/validation/default_adapter';
 
 const VALIDATOR_CLASS = 'dx-validator';
 const VALIDATION_STATUS_VALID: ValidationStatus = 'valid';

@@ -4,7 +4,7 @@ import { Guid } from '@ts/core/m_guid';
 import { Deferred } from '@ts/core/utils/m_deferred';
 import { extend } from '@ts/core/utils/m_extend';
 import { each, map } from '@ts/core/utils/m_iterator';
-import ValidationEngine from '@ts/ui/m_validation_engine';
+import ValidationEngine from '@ts/ui/validation_engine';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import ko from 'knockout';
 

@@ -12,9 +12,9 @@ import type {
   GroupValidationResult,
   ValidationGroupKey,
   ValidationResultInternal,
-} from '@ts/ui/m_validation_engine';
-import ValidationEngine from '@ts/ui/m_validation_engine';
-import type Validator from '@ts/ui/m_validator';
+} from '@ts/ui/validation_engine';
+import ValidationEngine from '@ts/ui/validation_engine';
+import type Validator from '@ts/ui/validator';
 
 const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary';
 const SCREEN_READER_ONLY_CLASS = 'dx-screen-reader-only';

@@ -1,4 +1,4 @@
-import ValidationSummary from '../__internal/ui/m_validation_summary';
+import ValidationSummary from '@ts/ui/validation_summary';
 
 export default ValidationSummary;
 

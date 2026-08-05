@@ -1,8 +1,8 @@
 import type {
   ValidationResultInternal,
   ValidationRuleInternal,
-} from '@ts/ui/m_validation_engine';
-import type Validator from '@ts/ui/m_validator';
+} from '@ts/ui/validation_engine';
+import type Validator from '@ts/ui/validator';
 
 export interface ValidationRequestArgs {
   value?: unknown;

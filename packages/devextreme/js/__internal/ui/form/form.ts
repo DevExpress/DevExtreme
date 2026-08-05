@@ -103,8 +103,8 @@ import {
 } from '@ts/ui/form/form.utils';
 import type { LoadPanelProperties } from '@ts/ui/load_panel';
 import LoadPanel from '@ts/ui/load_panel';
-import ValidationEngine from '@ts/ui/m_validation_engine';
-import ValidationSummary from '@ts/ui/m_validation_summary';
+import ValidationEngine from '@ts/ui/validation_engine';
+import ValidationSummary from '@ts/ui/validation_summary';
 import type { ScreenSizeQualifier } from '@ts/ui/responsive_box';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 import type { TabPanelProperties } from '@ts/ui/tab_panel/tab_panel';

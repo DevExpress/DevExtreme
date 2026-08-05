@@ -4,9 +4,9 @@ import type { ValidationResult } from '@js/ui/validation_group';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 
-import ValidationEngine from './m_validation_engine';
-import ValidationSummary from './m_validation_summary';
-import Validator from './m_validator';
+import ValidationEngine from './validation_engine';
+import ValidationSummary from './validation_summary';
+import Validator from './validator';
 
 const VALIDATION_ENGINE_CLASS = 'dx-validationgroup';
 const VALIDATOR_CLASS = 'dx-validator';
