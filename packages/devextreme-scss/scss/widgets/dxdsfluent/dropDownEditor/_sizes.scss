@@ -1,18 +1,31 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
+@use "../common/sizes" as *;
 
 // adduse
 
-$fluent-dropdowneditor-list-font-size: null !default;
-$fluent-dropdowneditor-list-line-height: null !default;
+// Not a colour: an opacity / a composite box-shadow belongs here (NAMING.md O7)
+$drop-down-editor-icon-opacity-rest: ds.$opacity-35 !default;
+
+$drop-down-editor-list-font-size: null !default;
+$drop-down-editor-list-line-height: null !default;
 
 
 @if $size == "default" {
-  $fluent-dropdowneditor-list-font-size: ds.$font-size-base-md !default;
-  $fluent-dropdowneditor-list-line-height: ds.$line-height-base-md !default;
+  $drop-down-editor-list-font-size: ds.$font-size-base-md !default;
+  $drop-down-editor-list-line-height: ds.$line-height-base-md !default;
 }
 
 @else if $size == "compact" {
-  $fluent-dropdowneditor-list-font-size: ds.$spacing-130 !default;
-  $fluent-dropdowneditor-list-line-height: ds.$line-height-base-sm !default;
+  $drop-down-editor-list-font-size: ds.$spacing-130 !default;
+  $drop-down-editor-list-line-height: ds.$line-height-base-sm !default;
 }
+
+/*
+ * Derived values, moved out of _index.scss: a file that emits rules must not declare
+ * variables (NAMING.md, O7).
+ */
+$drop-down-editor-button-size: $global-icon-size;
+$drop-down-editor-invalid-badge-inset-inline-end: calc(#{$drop-down-editor-button-size} + #{$invalid-badge-offset});
+$drop-down-editor-invalid-badge-with-clear-inset-inline-end: calc(#{$drop-down-editor-button-size} * 2 + #{$invalid-badge-offset});
+$drop-down-editor-invalid-badge-size: calc(#{$invalid-badge-size} + #{$invalid-badge-padding-inline});

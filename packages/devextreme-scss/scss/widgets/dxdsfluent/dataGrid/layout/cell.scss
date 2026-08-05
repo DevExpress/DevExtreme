@@ -2,9 +2,9 @@
 @use "../colors" as *;
 @use "../sizes" as *;
 @use "../../sizes" as *;
-@use "../../gridBase/colors" as *;
-@use "../../gridBase/sizes" as *;
-@use "../../gridBase/variables" as *;
+@use "../../gridBase/colors" as gridBaseColors;
+@use "../../gridBase/sizes" as gridBaseSizes;
+@use "../../gridBase/variables" as gridBaseVariables;
 
 // #region overflow
 
@@ -22,22 +22,22 @@
 
 // (0,2,1)
 .dx-row.dx-datagrid-group-footer > td {
-  border-top: $datagrid-border;
-  border-top-color: $datagrid-border-color;
+  border-top: gridBaseSizes.$grid-border;
+  border-top-color: gridBaseColors.$grid-border-rest;
   border-left-width: 0;
   border-right-width: 0;
 }
 
 // (0,3,1)
 .dx-datagrid-rowsview .dx-row.dx-group-row td {
-  border-top-color: $fluent-grid-base-border-color;
-  border-bottom-color: $fluent-grid-base-border-color;
+  border-top-color: gridBaseColors.$grid-border-rest;
+  border-bottom-color: gridBaseColors.$grid-border-rest;
 }
 
 // (0,3,1)
 .dx-datagrid-sticky-columns .dx-row.dx-datagrid-group-footer > td {
-  border-bottom: $datagrid-border;
-  border-bottom-color: $datagrid-border-color;
+  border-bottom: gridBaseSizes.$grid-border;
+  border-bottom-color: gridBaseColors.$grid-border-rest;
 }
 
 // (0,3,1) - (0,4,1)
@@ -66,7 +66,7 @@
 
 // (0,4,1)
 .dx-datagrid-sticky-columns .dx-row.dx-group-row:first-child td {
-  padding-top: $fluent-grid-base-cell-vertical-padding;
+  padding-top: gridBaseVariables.$grid-cell-padding-block;
 }
 
 // (0,5,0)
@@ -83,7 +83,7 @@
 
 // (0,2,1)
 .dx-row.dx-datagrid-group-footer > td {
-  background-color: $datagrid-summary-bg;
+  background-color: gridBaseColors.$grid-summary-bg-rest;
 }
 
 // (0,4,1) T1303478

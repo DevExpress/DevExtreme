@@ -3,14 +3,12 @@
 
 // adduse
 
-$accordion-color: ds.$color-content-neutral-default-rest !default;
+$accordion-content-rest: ds.$color-content-neutral-default-rest !default;
 
-$accordion-title-color: inherit !default;
+$accordion-title-content-rest: inherit !default;
 
-$fluent-accordion-title-font-size: $fluent-base-font-size !default;
-
-$accordion-background-color: transparent !default;
-$accordion-title-active-color: $accordion-color !default;
-$accordion-title-bg-hover: ds.$color-surface-neutral-default-hovered !default;
+$accordion-bg-rest: transparent !default;
+$accordion-title-content-active: $accordion-content-rest !default;
+$accordion-title-bg-hovered: ds.$color-surface-neutral-default-hovered !default;
 $accordion-title-bg-active: ds.$color-surface-neutral-default-hovered !default;
-$accordion-disabled-color: ds.$color-content-neutral-default-disabled !default;
+$accordion-content-disabled: ds.$color-content-neutral-default-disabled !default;

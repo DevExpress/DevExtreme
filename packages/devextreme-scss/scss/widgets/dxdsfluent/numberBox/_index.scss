@@ -3,10 +3,8 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
-@use "../textEditor/sizes" as *;
-@use "../textEditor/colors" as *;
 @use "../../base/numberBox" with (
-  $numberbox-spin-idle-opacity: $fluent-numberbox-spin-idle-opacity,
+  $numberbox-spin-idle-opacity: $number-box-spin-opacity-rest,
 );
 
 // adduse
@@ -16,18 +14,18 @@
   &.dx-editor-outlined,
   &.dx-editor-filled {
     .dx-numberbox-spin-up {
-      border-start-end-radius: $base-border-radius;
+      border-start-end-radius: $global-border-radius;
     }
 
     .dx-numberbox-spin-down {
-      border-end-end-radius: $base-border-radius;
+      border-end-end-radius: $global-border-radius;
     }
   }
 }
 
 .dx-numberbox-spin-container {
   overflow: hidden;
-  width: $fluent-numberbox-spin-container-width;
+  width: $number-box-spin-container-width;
 
   .dx-state-disabled & {
     opacity: 1;
@@ -37,35 +35,35 @@
 .dx-numberbox-spin-up-icon {
   @include dx-icon(spinup);
 
-  color: $numberbox-spin-icon-color;
+  color: $number-box-spin-icon-rest;
 }
 
 .dx-numberbox-spin-down-icon {
   @include dx-icon(spindown);
 
-  color: $numberbox-spin-icon-color;
+  color: $number-box-spin-icon-rest;
 }
 
 .dx-numberbox-spin-up-icon,
 .dx-numberbox-spin-down-icon {
-  @include dx-icon-font-centered-sizing($fluent-base-icon-size);
+  @include dx-icon-font-centered-sizing($global-icon-size);
 }
 
 .dx-numberbox-spin-button {
   height: 50%;
 
   &.dx-state-hover {
-    background-color: $numberbox-spin-icon-background-hover;
+    background-color: $number-box-spin-bg-hovered;
   }
 
   &.dx-state-active {
-    background-color: $numberbox-spin-icon-background-active;
+    background-color: $number-box-spin-bg-active;
   }
 
   &.dx-state-disabled {
     .dx-numberbox-spin-up-icon,
     .dx-numberbox-spin-down-icon {
-      color: $numberbox-foreground-disabled;
+      color: $number-box-content-disabled;
     }
   }
 }
@@ -78,7 +76,7 @@
   @include validation-icon-position();
 
   .dx-numberbox-spin-container {
-    width: $fluent-numberbox-touch-friendly-spin-container-width;
+    width: $number-box-spin-container-touch-friendly-width;
     border-inline-start: none;
   }
 

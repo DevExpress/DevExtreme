@@ -1,6 +1,6 @@
 @use "sass:math";
-@use "../textEditor/sizes" as *;
-@use "../textEditor/colors" as *;
+@use "../textEditor/sizes" as textEditorSizes;
+@use "../textEditor/colors" as textEditorColors;
 @use "../dateBox/mixins" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
@@ -27,8 +27,8 @@
     &.dx-datebox {
       &::before {
         border-radius: 0;
-        width: calc(100% - 2 * $fluent-daterangebox-active-bar-horizontal-margin);
-        margin: 0 $fluent-daterangebox-active-bar-horizontal-margin;
+        width: calc(100% - 2 * $date-range-box-active-bar-margin-inline);
+        margin: 0 $date-range-box-active-bar-margin-inline;
       }
     }
   }
@@ -36,13 +36,13 @@
   &.dx-editor-underlined,
   &.dx-editor-filled {
     &::before {
-      border-bottom-width: $fluent-daterangebox-editor-filled-border-bottom-width;
+      border-bottom-width: $date-range-box-input-filled-border-block-end-width;
       transition: none;
     }
 
     &.dx-state-hover {
       &::after {
-        border-bottom-width: $fluent-daterangebox-state-hover-border-bottom-width;
+        border-bottom-width: $date-range-box-border-block-end-width-hovered;
         transition: none;
       }
     }
@@ -50,7 +50,7 @@
     &.dx-state-focused {
       &.dx-invalid {
         &::before {
-          border-bottom-width: $fluent-daterangebox-invalid-border-bottom-width;
+          border-bottom-width: $date-range-box-invalid-border-block-end-width;
           transition: none;
         }
       }
@@ -59,7 +59,7 @@
 
   &.dx-editor-underlined {
     .dx-daterangebox-separator {
-      padding-right: $fluent-filled-texteditor-input-horizontal-padding;
+      padding-right: textEditorSizes.$text-editor-input-filled-padding-inline;
     }
   }
 
@@ -67,25 +67,25 @@
     > .dx-texteditor-buttons-container {
       > .dx-button,
       > .dx-clear-button-area {
-        margin-inline-start: $fluent-daterangebox-custom-button-margin;
-        margin-inline-end: $fluent-daterangebox-custom-button-margin;
+        margin-inline-start: $date-range-box-custom-button-margin;
+        margin-inline-end: $date-range-box-custom-button-margin;
 
         &:first-child {
           margin-inline-start: 0;
         }
 
         &:last-child {
-          margin-inline-end: $fluent-daterangebox-custom-button-margin;
+          margin-inline-end: $date-range-box-custom-button-margin;
         }
       }
 
       > .dx-dropdowneditor-button:last-child {
-        margin-inline-end: $texteditor-spin-button-horizontal-padding;
+        margin-inline-end: textEditorSizes.$text-editor-spin-button-padding-inline;
       }
 
       > .dx-clear-button-area:last-child,
       > .dx-clear-button-area + div:empty:last-child {
-        margin-inline-end: $fluent-filled-texteditor-input-button-horizontal-padding;
+        margin-inline-end: textEditorSizes.$text-editor-button-filled-inset-inline-end;
       }
     }
   }
@@ -95,7 +95,7 @@
       &.dx-texteditor {
         &.dx-invalid {
           .dx-texteditor-input {
-            padding-inline-end: $fluent-texteditor-invalid-badge-size;
+            padding-inline-end: textEditorSizes.$text-editor-invalid-badge-size;
           }
         }
       }
@@ -104,10 +104,10 @@
 }
 
 .dx-daterangebox-separator {
-  padding-left: $fluent-filled-texteditor-input-horizontal-padding;
-  color: $texteditor-disabled-text-color;
+  padding-left: textEditorSizes.$text-editor-input-filled-padding-inline;
+  color: textEditorColors.$text-editor-content-disabled;
 
   .dx-icon {
-    @include dx-icon-sizing($fluent-base-icon-size);
+    @include dx-icon-sizing($global-icon-size);
   }
 }

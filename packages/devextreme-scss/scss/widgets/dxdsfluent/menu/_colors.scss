@@ -2,18 +2,21 @@
 
 // adduse
 
-$menu-popup-bg: ds.$color-surface-neutral-default-rest !default;
-$menu-item-hover-bg: ds.$color-surface-neutral-default-hovered !default;
+$menu-popup-bg-rest: ds.$color-surface-neutral-default-rest !default;
+$menu-item-bg-hovered: ds.$color-surface-neutral-default-hovered !default;
 $menu-item-bg-active: ds.$color-surface-neutral-default-active !default;
 
-$menu-color: ds.$color-content-neutral-default-rest !default;
-$menu-item-expanded-color: $menu-color !default;
+$menu-content-rest: ds.$color-content-neutral-default-rest !default;
+$menu-item-expanded-content-rest: $menu-content-rest !default;
 
-$menu-item-selected-bg: ds.$color-surface-neutral-default-selected !default;
-$menu-popup-border-color: ds.$color-border-neutral-default-rest !default;
-$menu-separator-bg: ds.$separator-color !default;
-$menu-item-selected-color: ds.$color-content-neutral-default-rest !default;
-$menu-item-link-color: ds.$color-content-primary-default-rest !default;
-$menu-item-focused-selected-bg: ds.$color-surface-neutral-default-selected-hovered !default;
+$menu-item-bg-selected: ds.$color-surface-neutral-default-selected !default;
+$menu-popup-border-rest: ds.$color-border-neutral-default-rest !default;
+$menu-separator-bg-rest: ds.$separator-color !default;
+$menu-item-content-selected: ds.$color-content-neutral-default-rest !default;
+$menu-item-link-content-rest: ds.$color-content-primary-default-rest !default;
+$menu-item-bg-selected-focused: ds.$color-surface-neutral-default-selected-hovered !default;
 
-$menu-focused-shadow: ds.$box-shadow-md !default;
+$menu-shadow-focused: ds.$box-shadow-md !default;
+
+// Moved here from menuBase/: menu/ is the declaration home of the menu component (O2)
+$menu-item-content-disabled: ds.$color-content-neutral-default-disabled;

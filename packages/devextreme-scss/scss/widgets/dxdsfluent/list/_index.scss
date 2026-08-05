@@ -4,25 +4,22 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
-@use "../button/sizes" as *;
 @use "../button/mixins" as *;
-@use "../checkBox/colors" as *;
-@use "../textEditor/sizes" as *;
-@use "../../base/list" as * with (
-  $list-item-badge-container-width: $fluent-list-item-badge-container-width,
-  $list-slide-menu-button-padding: $fluent-list-slide-menu-button-padding,
-  $list-static-delete-button-padding: $fluent-list-static-delete-button-padding,
-  $list-next-button-padding: $fluent-list-next-button-padding,
-  $list-response-wait-opacity: $fluent-list-response-wait-opacity,
+@use "../checkBox/colors" as checkBoxColors;
+@use "../textEditor/sizes" as textEditorSizes;
+@use "../button/sizes" as buttonSizes;
+@use "../../base/list" as baseList with (
+  $list-item-badge-container-width: $list-item-badge-container-width,
+  $list-slide-menu-button-padding: $list-slide-menu-button-padding,
+  $list-static-delete-button-padding: $list-delete-button-static-padding,
+  $list-next-button-padding: $list-next-button-padding,
+  $list-response-wait-opacity: $list-response-wait-opacity,
 );
 @use "../../base/list/mixins" as *;
-@use "../radioGroup/colors" as *;
+@use "../radioButton/colors" as radioButtonColors;
 
 // adduse
 @use "../badge";
-
-$fluent-list-border: $fluent-list-border-width solid;
-$fluent-list-item-border: $fluent-list-item-border-width solid;
 
 .dx-state-disabled {
   &.dx-list {
@@ -30,49 +27,49 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
 
     .dx-list-item {
       opacity: 1;
-      color: $list-foreground-disabled;
+      color: $list-content-disabled;
     }
   }
 
   .dx-list-select-all-label {
-    color: $list-foreground-disabled;
+    color: $list-content-disabled;
 
     &::after {
-      color: $list-border-color-disabled;
+      color: $list-border-disabled;
     }
   }
 
   .dx-list-item-chevron {
-    color: $list-foreground-disabled;
+    color: $list-content-disabled;
   }
 
   .dx-list-reorder-handle {
     &::before {
-      color: $list-foreground-disabled;
+      color: $list-content-disabled;
     }
   }
 }
 
 .dx-list-item-chevron-container {
-  padding-inline: $fluent-list-item-vertical-padding;
+  padding-inline: $list-item-padding-block;
 }
 
 .dx-list-item-chevron {
   @include dx-icon(chevronnext);
-  @include dx-icon-sizing($fluent-base-icon-size);
+  @include dx-icon-sizing($global-icon-size);
 
   display: flex;
   align-items: center;
-  color: $list-icon-color;
+  color: $list-icon-rest;
 }
 
 .dx-list-item-badge-container {
-  padding-inline-end: $fluent-list-item-horizontal-padding;
+  padding-inline-end: $list-item-padding-inline;
 }
 
 .dx-list-item-icon-container {
-  width: calc(#{$fluent-base-icon-size} + #{$fluent-list-item-horizontal-padding});
-  height: $fluent-base-icon-size;
+  width: calc(#{$global-icon-size} + #{$list-item-padding-inline});
+  height: $global-icon-size;
   vertical-align: bottom;
 }
 
@@ -83,7 +80,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
 }
 
 .dx-list-item-icon {
-  @include dx-icon-sizing($fluent-base-icon-size);
+  @include dx-icon-sizing($global-icon-size);
 }
 
 .dx-list-select-all,
@@ -95,7 +92,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
 .dx-list-group-body {
   display: flex;
   flex-direction: column;
-  row-gap: $fluent-list-item-gap;
+  row-gap: $list-item-gap;
 }
 
 .dx-list {
@@ -114,30 +111,30 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
 
 @mixin item-states() {
   &.dx-list-item-selected {
-    background-color: $list-item-selected-bg;
-    color: $list-item-selected-color;
+    background-color: $list-item-bg-selected;
+    color: $list-item-content-selected;
 
     &.dx-state-hover:not(.dx-state-focused) {
-      background-color: $list-item-selected-hover-bg;
-      color: $list-item-selected-color;
+      background-color: $list-item-bg-selected-hovered;
+      color: $list-item-content-selected;
     }
   }
 
   &.dx-state-focused {
-    background-color: $list-item-hover-bg;
-    color: $list-item-hover-color;
+    background-color: $list-item-bg-hovered;
+    color: $list-item-content-hovered;
   }
 
   &.dx-state-focused.dx-list-item-selected {
-    background-color: $list-item-focused-selected-bg;
-    color: $list-item-selected-color;
+    background-color: $list-item-bg-selected-focused;
+    color: $list-item-content-selected;
   }
 
   &.dx-state-active {
-    background-color: $list-item-active-bg;
+    background-color: $list-item-bg-active;
 
     .dx-list-slide-item-content {
-      background-color: $list-item-active-bg;
+      background-color: $list-item-bg-active;
     }
   }
 }
@@ -151,11 +148,11 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
     }
 
     &.dx-list-with-search .dx-scrollable-wrapper {
-      height: calc(100% - (#{$fluent-texteditor-input-height} + #{$fluent-list-searchbox-margin-bottom}));
+      height: calc(100% - (#{textEditorSizes.$text-editor-input-min-height} + #{$list-search-box-margin-block-end}));
     }
 
     .dx-empty-message {
-      min-height: $fluent-list-empty-message-min-height;
+      min-height: $list-empty-message-min-height;
     }
 
     &.dx-list-select-decorator-enabled {
@@ -163,34 +160,34 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
       .dx-list-item {
         .dx-list-select-all-label,
         .dx-list-item-content {
-          padding-inline-start: $fluent-list-vertical-padding;
+          padding-inline-start: $list-padding-block;
         }
 
         &.dx-state-hover {
           .dx-radiobutton-icon {
-            border-color: $radiogroup-accent-color-hover;
+            border-color: radioButtonColors.$radio-button-checked-bg-hovered;
           }
 
           .dx-checkbox-icon {
-            border-color: $checkbox-accent-color-hover;
+            border-color: checkBoxColors.$check-box-icon-checked-bg-hovered;
           }
 
           .dx-radiobutton-checked {
             .dx-radiobutton-icon-dot {
-              background-color: $radiogroup-accent-color-hover;
+              background-color: radioButtonColors.$radio-button-checked-bg-hovered;
             }
           }
 
           .dx-checkbox-checked {
             .dx-checkbox-icon {
-              background-color: $checkbox-accent-color-hover;
+              background-color: checkBoxColors.$check-box-icon-checked-bg-hovered;
             }
           }
 
           .dx-checkbox-indeterminate {
             .dx-checkbox-icon {
               &::before {
-                background-color: $checkbox-accent-color-hover;
+                background-color: checkBoxColors.$check-box-icon-checked-bg-hovered;
               }
             }
           }
@@ -198,29 +195,29 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
 
         &.dx-state-focused {
           .dx-radiobutton-icon {
-            border-color: $radiogroup-accent-color-active;
+            border-color: radioButtonColors.$radio-button-checked-bg-active;
           }
 
           .dx-checkbox-icon {
-            border-color: $checkbox-accent-color-focused;
+            border-color: checkBoxColors.$check-box-icon-checked-bg-focused;
           }
 
           .dx-radiobutton-checked {
             .dx-radiobutton-icon-dot {
-              background-color: $radiogroup-accent-color-active;
+              background-color: radioButtonColors.$radio-button-checked-bg-active;
             }
           }
 
           .dx-checkbox-checked {
             .dx-checkbox-icon {
-              background-color: $checkbox-accent-color-focused;
+              background-color: checkBoxColors.$check-box-icon-checked-bg-focused;
             }
           }
 
           .dx-checkbox-indeterminate {
             .dx-checkbox-icon {
               &::before {
-                background-color: $checkbox-accent-color-focused;
+                background-color: checkBoxColors.$check-box-icon-checked-bg-focused;
               }
             }
           }
@@ -237,8 +234,8 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
         @include item-states();
 
         &.dx-state-hover {
-          background-color: $list-item-hover-bg;
-          color: $list-item-hover-color;
+          background-color: $list-item-bg-hovered;
+          color: $list-item-content-hovered;
         }
       }
     }
@@ -247,9 +244,9 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
   .dx-list-group {
     &:not(.dx-list-group-collapsed) {
       &:not(:last-child) {
-        padding-bottom: $fluent-list-vertical-padding;
-        border-bottom: $fluent-list-item-border;
-        border-bottom-color: $list-border-color;
+        padding-bottom: $list-padding-block;
+        border-bottom: $list-item-border;
+        border-bottom-color: $list-border-rest;
       }
     }
 
@@ -263,19 +260,19 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
       .dx-list-group-header-indicator {
         .dx-list-collapsible-groups & {
           @include dx-icon(chevronright);
-          @include dx-icon-sizing($fluent-base-icon-size);
+          @include dx-icon-sizing($global-icon-size);
         }
       }
 
       .dx-list-group-header {
-        color: $list-group-color;
+        color: $list-group-content-rest;
       }
     }
 
     &:last-of-type {
       .dx-list-item {
         &:last-of-type {
-          margin-bottom: $fluent-list-bottom-padding;
+          margin-bottom: $list-bottom-padding;
         }
       }
     }
@@ -292,25 +289,25 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
   }
 
   .dx-list-group-header {
-    font-weight: $fluent-list-group-header-font-weight;
-    padding: $fluent-list-group-header-vertical-padding $item-horizontal-padding;
-    background: $list-group-header-bg;
-    color: $list-expanded-group-color;
-    border-top: $fluent-list-item-border;
+    font-weight: $list-group-header-font-weight;
+    padding: $list-group-header-padding-block $item-horizontal-padding;
+    background: $list-group-header-bg-rest;
+    color: $list-expanded-group-content-rest;
+    border-top: $list-item-border;
     border-top-color: transparent;
     display: flex;
     align-items: center;
-    column-gap: $fluent-list-item-horizontal-padding;
+    column-gap: $list-item-padding-inline;
 
     .dx-list-group-header-indicator {
-      color: $list-header-indicator-color;
+      color: $list-header-indicator-content-rest;
 
       .dx-list-collapsible-groups & {
         display: flex;
         align-items: center;
 
         @include dx-icon(chevrondown);
-        @include dx-icon-sizing($fluent-base-icon-size);
+        @include dx-icon-sizing($global-icon-size);
       }
     }
 
@@ -322,7 +319,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
   .dx-list-items {
     display: flex;
     flex-direction: column;
-    row-gap: $fluent-list-items-row-gap;
+    row-gap: $list-items-row-gap;
 
     &:not(:first-of-type) {
       .dx-list-item {
@@ -332,32 +329,32 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
   }
 
   .dx-list-item {
-    border-radius: $base-border-radius;
+    border-radius: $global-border-radius;
 
-    @include toggle-delete-icon($list-toggle-delete-icon-color);
+    @include toggle-delete-icon($list-toggle-delete-icon-rest);
 
     &.dx-state-hover,
     &.dx-state-active {
-      background-color: $list-item-hover-bg;
-      color: $list-item-hover-color;
+      background-color: $list-item-bg-hovered;
+      color: $list-item-content-hovered;
 
       .dx-list-switchable-delete-button-inner-wrapper {
-        background-color: $list-item-hover-bg;
+        background-color: $list-item-bg-hovered;
       }
     }
 
     &:first-of-type {
       border-top: none;
-      margin-top: $fluent-list-vertical-padding;
+      margin-top: $list-padding-block;
     }
 
     &:last-of-type {
       border-bottom: none;
-      margin-bottom: $fluent-list-vertical-padding;
+      margin-bottom: $list-padding-block;
     }
 
     .dx-icon {
-      color: $list-icon-color;
+      color: $list-icon-rest;
     }
 
     .dx-icon-toggle-delete {
@@ -367,10 +364,10 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
     &.dx-list-item-ghost-reordering {
       &.dx-state-focused {
         &.dx-state-hover {
-          color: $list-item-ghost-color;
-          background: $list-item-ghost-bg;
-          border: $fluent-list-state-hover-border;
-          border-color: $list-item-ghost-border-color;
+          color: $list-item-ghost-content-rest;
+          background: $list-item-ghost-bg-rest;
+          border: $list-item-ghost-border;
+          border-color: $list-item-ghost-border-rest;
         }
       }
     }
@@ -378,7 +375,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
 
   .dx-list-item,
   .dx-list .dx-empty-message {
-    color: $list-normal-color;
+    color: $list-normal-content-rest;
 
     .dx-list-item-separator-hidden & {
       border-top: none;
@@ -387,25 +384,25 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
   }
 
   .dx-list-item-content {
-    padding: $fluent-list-item-vertical-padding $item-horizontal-padding $fluent-list-item-vertical-padding;
+    padding: $list-item-padding-block $item-horizontal-padding $list-item-padding-block;
   }
 
   .dx-list .dx-empty-message { // stylelint-disable-line no-duplicate-selectors
-    padding: $fluent-list-item-vertical-padding $fluent-list-item-horizontal-padding;
+    padding: $list-item-padding-block $list-item-padding-inline;
   }
 
   .dx-list-next-button .dx-button {
     @include dx-button-withtext-sizing();
 
     .dx-button-content {
-      padding-left: $fluent-list-next-button-horizontal-padding;
-      padding-right: $fluent-list-next-button-horizontal-padding;
+      padding-left: $list-next-button-padding-inline;
+      padding-right: $list-next-button-padding-inline;
     }
   }
 
   .dx-list-border-visible {
-    border: $fluent-list-border;
-    border-color: $list-border-color;
+    border: $list-border;
+    border-color: $list-border-rest;
   }
 
   .dx-list-item-before-bag {
@@ -413,7 +410,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
     &.dx-list-select-radiobutton-container {
       display: flex;
       flex-shrink: 0;
-      width: $fluent-list-item-height;
+      width: $list-item-height;
       justify-content: center;
       align-items: center;
     }
@@ -431,7 +428,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
   }
 
   .dx-list-select-all {
-    padding: $fluent-list-item-vertical-padding 0;
+    padding: $list-item-padding-block 0;
     position: relative;
     display: flex;
 
@@ -441,8 +438,8 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
       bottom: 0;
       left: 0;
       right: 0;
-      height: $fluent-list-select-all-height;
-      background-color: $base-select-all-separator-color;
+      height: $list-select-all-height;
+      background-color: $list-base-select-all-separator-bg-rest;
     }
   }
 
@@ -451,14 +448,14 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
   }
 
   .dx-list-select-all-label {
-    padding: 0 $fluent-list-item-horizontal-padding;
+    padding: 0 $list-item-padding-inline;
   }
 
   .dx-list-item-after-bag {
-    padding-inline: $fluent-list-item-vertical-padding;
+    padding-inline: $list-item-padding-block;
 
     &.dx-list-static-delete-button-container {
-      width: calc(#{$item-horizontal-padding} + #{$fluent-button-icon-size});
+      width: calc(#{$item-horizontal-padding} + #{buttonSizes.$button-icon-size});
       padding: 0;
     }
 
@@ -469,32 +466,32 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
 
       @include dx-icon(dragvertical);
 
-      color: $list-icon-color;
+      color: $list-icon-rest;
 
-      @include dx-icon-sizing($fluent-base-icon-size);
+      @include dx-icon-sizing($global-icon-size);
     }
   }
 
   .dx-list-slide-menu-button {
-    bottom: $fluent-list-slide-menu-button-bottom;
+    bottom: $list-slide-menu-button-inset-block-end;
   }
 
   .dx-list-slide-menu-button-delete {
     @include dx-icon(trash);
 
-    color: $list-inverted-text-color;
-    background-color: $list-menu-button-delete-bg;
-    font-size: $fluent-base-icon-size;
+    color: $list-inverted-content-rest;
+    background-color: $list-menu-button-delete-bg-rest;
+    font-size: $global-icon-size;
     display: table-cell;
     vertical-align: middle;
     padding: 0 $item-horizontal-padding;
-    width: calc(#{$item-horizontal-padding} * 2 + #{$fluent-base-icon-size});
+    width: calc(#{$item-horizontal-padding} * 2 + #{$global-icon-size});
   }
 
   .dx-list-slide-menu-button-menu {
-    border: $fluent-list-slide-menu-button-menu-border;
-    color: $list-menu-button-default-color;
-    background-color: $list-menu-button-default-bg;
+    border: $list-slide-menu-button-menu-border;
+    color: $list-menu-button-default-content-rest;
+    background-color: $list-menu-button-default-bg-rest;
   }
 
   .dx-list-static-delete-button {
@@ -511,15 +508,15 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
   }
 
   .dx-list-context-menucontent {
-    background-color: $list-holdmenu-bg;
-    border: $fluent-list-context-menucontent-border;
-    border-color: $list-holdmenu-border-color;
-    border-radius: $base-border-radius;
-    box-shadow: $list-holdmenu-shadow-color 0 2px 7.2px 0;
+    background-color: $list-hold-menu-bg-rest;
+    border: $list-context-menu-content-border;
+    border-color: $list-hold-menu-border-rest;
+    border-radius: $global-border-radius;
+    box-shadow: $list-hold-menu-shadow-rest 0 2px 7.2px 0;
 
     .dx-list-items {
-      margin-left: $fluent-list-vertical-padding;
-      margin-right: $fluent-list-vertical-padding;
+      margin-left: $list-padding-block;
+      margin-right: $list-padding-block;
     }
   }
 
@@ -527,9 +524,9 @@ $fluent-list-item-border: $fluent-list-item-border-width solid;
     &.dx-list-item,
     .dx-list-item {
       background-color: transparent;
-      opacity: $list-item-disabled-opacity;
+      opacity: $list-item-opacity-disabled;
     }
   }
 }
 
-@include dx-list-sizing($fluent-list-item-horizontal-padding);
+@include dx-list-sizing($list-item-padding-inline);

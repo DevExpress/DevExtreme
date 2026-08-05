@@ -4,24 +4,24 @@
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
 @use "../../../_design-system/variables/ds" as ds;
-@use "../../base/validation" as * with (
+@use "../../base/validation" as baseValidation with (
   $validation-summary-margin-top: ds.$spacing-200,
   $validation-message-content-padding: ds.$spacing-100,
 );
-@use "../list/sizes" as *;
+@use "../list/sizes" as listSizes;
 
-$badge-invalid-bg: ds.$color-content-danger-compound-rest !default;
+$invalid-badge-bg-rest: ds.$color-content-danger-compound-rest !default;
 
 @mixin dx-base-typography() {
   @include dx-base-typography-mixin(
-      $common-typography-color,
-      $fluent-base-font-size,
-      $common-font-family,
-      $fluent-line-height
+      $global-content-rest,
+      $global-font-size,
+      $global-font-family,
+      $global-line-height
     );
 }
 
-@mixin disabled-widget($opacity: $common-disabled-opacity) {
+@mixin disabled-widget($opacity: $global-disabled-opacity) {
   @include disabled-widget-mixin($opacity);
 }
 
@@ -32,20 +32,20 @@ $badge-invalid-bg: ds.$color-content-danger-compound-rest !default;
   justify-content: center;
   align-items: center;
   top: 50%;
-  margin-top: calc(#{$fluent-invalid-badge-size} / -2);
-  width: $fluent-invalid-badge-size;
-  height: $fluent-invalid-badge-size;
-  line-height: calc(#{$fluent-invalid-badge-size} + 1px);
-  font-size: $fluent-base-font-size;
+  margin-top: calc(#{$invalid-badge-size} / -2);
+  width: $invalid-badge-size;
+  height: $invalid-badge-size;
+  line-height: calc(#{$invalid-badge-size} + 1px);
+  font-size: $global-font-size;
 }
 
 @mixin dx-invalid-fluent-badge() {
   @include badge-settings();
 
-  font-size: $fluent-base-font-size;
-  font-weight: $common-invalid-badge-font-weight;
-  background-color: $badge-invalid-bg;
-  color: $common-inverted-text-color;
+  font-size: $global-font-size;
+  font-weight: $invalid-badge-font-weight;
+  background-color: $invalid-badge-bg-rest;
+  color: $invalid-badge-content-rest;
   content: '!';
   border-radius: 50%;
 }
@@ -53,50 +53,50 @@ $badge-invalid-bg: ds.$color-content-danger-compound-rest !default;
 @mixin dx-valid-fluent-badge() {
   @include badge-settings();
 
-  font-size: $fluent-valid-badge-font-size;
+  font-size: $valid-badge-font-size;
   font-weight: bold;
   font-family: 'DXIcons', sans-serif;
-  color: $common-success;
+  color: $valid-badge-content-rest;
   content: '\f005';
 
-  @include validation-badge-animation();
+  @include baseValidation.validation-badge-animation();
 }
 
 @mixin dx-pending-indicator-fluent() {
-  @include dx-pending-indicator($fluent-invalid-badge-size);
+  @include dx-pending-indicator($invalid-badge-size);
 }
 
 @mixin dx-dropdownlist-list-appearance() {
   height: 100%;
 
   &.dx-popup-wrapper .dx-overlay-content {
-    box-shadow: $fluent-base-dropdown-widgets-shadow;
+    box-shadow: $global-dropdown-box-shadow;
     border-top-width: 0;
-    border-bottom-width: $common-overlay-content-border-bottom-width;
+    border-bottom-width: $global-dropdown-border-block-end-width;
 
     &.dx-dropdowneditor-overlay-flipped {
-      border-top-width: $common-dropdowneditor-overlay-flipped-border-top-width;
+      border-top-width: $global-dropdown-flipped-border-block-start-width;
       border-bottom-width: 0;
     }
   }
 
   .dx-popup-content {
     height: 100%;
-    padding: $common-content-padding;
+    padding: $global-dropdown-content-padding;
   }
 
   .dx-list {
     height: 100%;
-    min-height: $fluent-list-item-height;
+    min-height: listSizes.$list-item-height;
   }
 
   .dx-list-select-all {
-    margin-inline: $fluent-list-item-margin-inline;
-    padding: calc(#{$fluent-list-item-vertical-padding} + 2px) 0 calc(#{$fluent-list-item-vertical-padding} - 2px);
+    margin-inline: listSizes.$list-item-margin-inline;
+    padding: calc(#{listSizes.$list-item-padding-block} + 2px) 0 calc(#{listSizes.$list-item-padding-block} - 2px);
   }
 
   .dx-list-items {
-    margin-inline: $fluent-list-item-margin-inline;
+    margin-inline: listSizes.$list-item-margin-inline;
   }
 
   .dx-list-item,
