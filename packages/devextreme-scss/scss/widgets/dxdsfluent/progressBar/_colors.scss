@@ -2,12 +2,12 @@
 
 // adduse
 
-$progress-bar-bg-rest: ds.$progress-bar-progress-line-color-track-rest !default;
+$progress-bar-bg-rest: ds.$color-border-neutral-default-rest !default;
 
-$progress-bar-range-bg-rest: ds.$progress-bar-progress-line-color-indicator-rest !default;
-$progress-bar-container-bg-disabled: ds.$progress-bar-progress-line-color-track-disabled !default;
-$progress-bar-range-bg-disabled: ds.$progress-bar-progress-line-color-indicator-disabled !default;
-$progress-bar-range-indeterminate-bg-rest: ds.$progress-bar-progress-line-color-indicator-indeterminate-gradient-center !default;
+$progress-bar-range-bg-rest: ds.$color-content-primary-default-rest !default;
+$progress-bar-container-bg-disabled: ds.$color-border-neutral-default-disabled !default;
+$progress-bar-range-bg-disabled: ds.$color-content-neutral-default-disabled !default;
+$progress-bar-range-indeterminate-bg-rest: ds.$color-content-primary-default-rest !default;
 $progress-bar-range-invalid-bg-rest: ds.$color-surface-danger-default-rest !default;
 
 $progress-bar-indeterminate-bg-rest: -90deg, transparent 5%, $progress-bar-range-indeterminate-bg-rest, transparent 95%;

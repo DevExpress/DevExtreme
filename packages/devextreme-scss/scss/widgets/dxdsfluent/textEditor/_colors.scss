@@ -3,11 +3,11 @@
 
 // adduse
 
-$text-editor-content-rest: ds.$text-input-color-default-content-rest !default;
+$text-editor-content-rest: ds.$color-content-neutral-default-rest !default;
 
 $text-editor-placeholder-rest: ds.$color-content-neutral-subdued-rest !default;
 
-$text-editor-outlined-bg-rest: ds.$text-input-color-default-bg-rest !default;
+$text-editor-outlined-bg-rest: ds.$color-surface-neutral-default-rest !default;
 
 $text-editor-outlined-bg-hovered: $text-editor-outlined-bg-rest !default;
 
@@ -21,21 +21,21 @@ $text-editor-underlined-bg-hovered: $text-editor-underlined-bg-rest !default;
 
 $text-editor-underlined-bg-focused: $text-editor-underlined-bg-rest !default;
 
-$text-editor-border-rest: ds.$text-input-color-default-border-rest !default;
-$text-editor-border-hovered: ds.$text-input-color-default-border-hovered !default;
-$text-editor-border-focused: ds.$text-input-color-default-border-active !default;
+$text-editor-border-rest: ds.$color-border-neutral-default-rest !default;
+$text-editor-border-hovered: ds.$color-border-neutral-default-hovered !default;
+$text-editor-border-focused: ds.$color-border-neutral-default-active !default;
 
-$text-editor-line-rest: ds.$text-input-color-default-line-rest !default;
-$text-editor-line-hovered: ds.$text-input-color-default-line-hovered !default;
-$text-editor-line-focused: ds.$text-input-color-default-line-hovered !default;
+$text-editor-line-rest: ds.$color-content-neutral-subdued-rest !default;
+$text-editor-line-hovered: ds.$color-content-neutral-subdued-hovered !default;
+$text-editor-line-focused: ds.$color-content-neutral-subdued-hovered !default;
 
-$text-editor-indicator-rest: ds.$text-input-color-default-line-focused !default;
+$text-editor-indicator-rest: ds.$color-content-primary-default-rest !default;
 
 $text-editor-clear-button-icon-rest: ds.$color-content-neutral-subdued-rest !default;
 $text-editor-invalid-border-focused: ds.$color-border-danger-default-hovered !default;
-$text-editor-invalid-border-rest: ds.$text-input-color-invalid-border-rest !default;
-$text-editor-border-disabled: ds.$text-input-color-default-border-disabled !default;
-$text-editor-content-disabled: ds.$text-input-color-default-content-disabled !default;
+$text-editor-invalid-border-rest: ds.$color-border-danger-compound-rest !default;
+$text-editor-border-disabled: ds.$color-border-neutral-default-disabled !default;
+$text-editor-content-disabled: ds.$color-content-neutral-default-disabled !default;
 
 $text-editor-filled-bg-hovered: $text-editor-filled-bg-rest !default;
 
@@ -50,4 +50,4 @@ $text-editor-label-content-focused: ds.$color-content-primary-default-rest;
 }
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$text-editor-invalid-content-rest: ds.$text-input-color-invalid-border-rest !default;
+$text-editor-invalid-content-rest: ds.$color-border-danger-compound-rest !default;
