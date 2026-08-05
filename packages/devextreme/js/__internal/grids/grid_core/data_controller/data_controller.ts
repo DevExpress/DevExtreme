@@ -1294,7 +1294,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     if (dataSource) {
       dataSource.pageIndex(0);
       if (this.option('paging.pageIndex')) {
-        this.resetPageIndexOption();
+        this._silentOption('paging.pageIndex', 0);
       }
       this._isFilterApplying = true;
 
@@ -1307,12 +1307,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     // @ts-expect-error
     return new Deferred().resolve();
-  }
-
-  private resetPageIndexOption(): void {
-    this._skipProcessingPagingChange = true;
-    this.option('paging.pageIndex', 0);
-    this._skipProcessingPagingChange = false;
   }
 
   public resetFilterApplying() {
