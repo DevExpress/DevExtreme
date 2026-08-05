@@ -6,11 +6,11 @@
 /*
  * O4: diagram used to read Button's contained backgrounds for these. They are not buttons —
  * they are SVG strokes and fills on connector marks and the geometry mark — so the coupling
- * moves to the token. `ds.$button-contained-color-bg-rest` is a BUTTON component token used
+ * moves to the token. `ds.$color-surface-primary-default-rest` is a BUTTON component token used
  * outside button; keeping it preserves the value, and the mapping question is recorded in
  * DIVERGENCES.md.
  */
-$diagram-connector-border-rest: ds.$button-contained-color-bg-rest !default;
+$diagram-connector-border-rest: ds.$color-surface-primary-default-rest !default;
 $diagram-connection-border-rest: ds.$color-surface-success-default-rest !default;
 $diagram-geometry-mark-border-rest: ds.$color-surface-danger-default-rest !default;
 
@@ -32,8 +32,8 @@ $diagram-toolbox-shape-text-opacity-rest: null !default;
 
 $diagram-border-rest: ds.$color-border-neutral-default-rest !default;
 $diagram-toolbar-border-rest: ds.$color-border-neutral-default-rest !default;
-$diagram-normal-format-bg-active: ds.$button-outline-color-bg-active !default;
-$diagram-default-format-bg-active: ds.$button-contained-color-bg-active !default;
+$diagram-normal-format-bg-active: ds.$color-surface-neutral-alpha-active !default;
+$diagram-default-format-bg-active: ds.$color-surface-primary-default-active !default;
 $diagram-danger-format-bg-active: ds.$color-surface-danger-default-active !default;
 $diagram-success-format-bg-active: ds.$color-surface-success-default-active !default;
 $diagram-image-icon-base-content-rest: ds.$color-content-neutral-subdued-rest !default;

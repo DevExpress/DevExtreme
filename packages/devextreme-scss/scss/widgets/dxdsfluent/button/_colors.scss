@@ -3,7 +3,7 @@
 
 // adduse
 
-$button-contained-bg-disabled: ds.$button-contained-color-bg-disabled !default;
+$button-contained-bg-disabled: ds.$color-surface-neutral-default-disabled !default;
 
 /*
  * The outlined mode paints its disabled BORDER with the same value. Kept as a separate,
@@ -13,35 +13,35 @@ $button-contained-bg-disabled: ds.$button-contained-color-bg-disabled !default;
 $button-outlined-border-disabled: $button-contained-bg-disabled !default;
 $button-normal-shadow-rest: ds.$color-shadow-key !default;
 
-$button-normal-contained-content-rest: ds.$button-outline-color-content-rest !default;
+$button-normal-contained-content-rest: ds.$color-content-neutral-default-rest !default;
 
-$button-normal-contained-bg-rest: ds.$button-outline-color-bg-rest !default;
+$button-normal-contained-bg-rest: ds.$color-surface-neutral-alpha-rest !default;
 
 $button-normal-outlined-bg-rest: transparent !default;
 
 $button-normal-text-bg-rest: transparent !default;
 
-$button-normal-contained-content-selected: ds.$button-outline-color-content-rest !default;
+$button-normal-contained-content-selected: ds.$color-content-neutral-default-rest !default;
 
-$button-normal-contained-bg-hovered: ds.$button-outline-color-bg-hovered !default;
+$button-normal-contained-bg-hovered: ds.$color-surface-neutral-alpha-hovered !default;
 
-$button-normal-contained-bg-focused: ds.$button-outline-color-bg-hovered !default;
+$button-normal-contained-bg-focused: ds.$color-surface-neutral-alpha-hovered !default;
 
-$button-normal-contained-bg-active: ds.$button-outline-color-bg-active !default;
+$button-normal-contained-bg-active: ds.$color-surface-neutral-alpha-active !default;
 
 $button-normal-contained-bg-selected: ds.$color-surface-neutral-alpha-selected !default;
 
-$button-default-contained-content-rest: ds.$button-contained-color-content-rest !default;
+$button-default-contained-content-rest: ds.$color-content-neutral-default-static-dark-rest !default;
 
-$button-default-contained-bg-rest: ds.$button-contained-color-bg-rest !default;
+$button-default-contained-bg-rest: ds.$color-surface-primary-default-rest !default;
 
-$button-default-contained-content-selected: ds.$button-contained-color-content-rest !default;
+$button-default-contained-content-selected: ds.$color-content-neutral-default-static-dark-rest !default;
 
-$button-default-contained-bg-hovered: ds.$button-contained-color-bg-hovered !default;
+$button-default-contained-bg-hovered: ds.$color-surface-primary-default-hovered !default;
 
-$button-default-contained-bg-focused: ds.$button-contained-color-bg-hovered !default;
+$button-default-contained-bg-focused: ds.$color-surface-primary-default-hovered !default;
 
-$button-default-contained-bg-active: ds.$button-contained-color-bg-active !default;
+$button-default-contained-bg-active: ds.$color-surface-primary-default-active !default;
 
 $button-default-contained-bg-selected: ds.$color-surface-primary-default-selected !default;
 
@@ -56,11 +56,11 @@ $button-default-outlined-bg-selected: ds.$color-surface-primary-deep-selected !d
 
 $button-default-text-content-rest: ds.$color-content-primary-default-rest !default;
 
-$button-danger-contained-content-rest: ds.$button-contained-color-content-rest !default;
+$button-danger-contained-content-rest: ds.$color-content-neutral-default-static-dark-rest !default;
 
 $button-danger-contained-bg-rest: ds.$color-surface-danger-default-rest !default;
 
-$button-danger-contained-content-selected: ds.$button-contained-color-content-rest !default;
+$button-danger-contained-content-selected: ds.$color-content-neutral-default-static-dark-rest !default;
 
 $button-danger-contained-bg-hovered: ds.$color-surface-danger-default-hovered !default;
 
@@ -81,11 +81,11 @@ $button-danger-outlined-bg-focused: ds.$color-surface-danger-deep-hovered !defau
 $button-danger-outlined-bg-active: ds.$color-surface-danger-deep-active !default;
 $button-danger-outlined-bg-selected: ds.$color-surface-danger-deep-selected !default;
 
-$button-success-contained-content-rest: ds.$button-contained-color-content-rest !default;
+$button-success-contained-content-rest: ds.$color-content-neutral-default-static-dark-rest !default;
 
 $button-success-contained-bg-rest: ds.$color-surface-success-default-rest !default;
 
-$button-success-contained-content-selected: ds.$button-contained-color-content-rest !default;
+$button-success-contained-content-selected: ds.$color-content-neutral-default-static-dark-rest !default;
 
 $button-success-contained-bg-hovered: ds.$color-surface-success-default-hovered !default;
 
@@ -111,7 +111,7 @@ $button-normal-contained-icon-rest: $button-normal-contained-content-rest !defau
 $button-danger-contained-icon-rest: $button-danger-contained-content-rest !default;
 $button-success-contained-icon-rest: $button-success-contained-content-rest !default;
 
-$button-content-disabled: ds.$button-contained-color-content-disabled !default;
+$button-content-disabled: ds.$color-content-neutral-default-disabled !default;
 
 $button-normal-outlined-bg-hovered: $button-normal-contained-bg-hovered !default;
 $button-normal-outlined-bg-focused: $button-normal-contained-bg-focused !default;
@@ -164,4 +164,4 @@ $button-success-text-bg-active: $button-success-outlined-bg-active !default;
 $button-success-text-bg-selected: $button-success-outlined-bg-selected !default;
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$button-normal-outlined-border-rest: ds.$button-outline-color-border-rest !default;
+$button-normal-outlined-border-rest: ds.$color-border-neutral-default-rest !default;
