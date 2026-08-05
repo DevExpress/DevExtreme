@@ -3,7 +3,7 @@ import {
   afterEach, describe, expect, it,
 } from '@jest/globals';
 import $ from '@js/core/renderer';
-import type { Filter } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { Filter } from '@ts/grids/grid_core/data_controller/data_controller';
 import CardView from '@ts/grids/new/card_view/widget';
 import type {
   HeaderFilterSearchColumnOptions,
