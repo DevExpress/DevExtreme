@@ -11,7 +11,10 @@ const esbuild = require('esbuild');
 const FRAMEWORK_ARG = (process.argv.find((a) => a.startsWith('--framework=')) || '').split('=')[1];
 const FRAMEWORK = FRAMEWORK_ARG || process.env.CSP_FRAMEWORKS || 'React';
 
-const SUPPORTED = ['React', 'Vue', 'Angular'];
+// ReactJs is the generated JavaScript twin of each React demo (see
+// utils/ts-to-js-converter) — same JSX sources with .js extensions, which the
+// shared '.js': 'jsx' loader already covers, so it needs no separate handling.
+const SUPPORTED = ['React', 'ReactJs', 'Vue', 'Angular'];
 if (!SUPPORTED.includes(FRAMEWORK)) {
   console.log(`csp-bundle: framework ${FRAMEWORK} is not supported (only ${SUPPORTED.join(', ')}). Nothing to do.`);
   process.exit(0);
