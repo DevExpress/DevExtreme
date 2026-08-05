@@ -2,15 +2,15 @@
 
 // adduse
 
-$fileuploader-filename-color: ds.$color-content-neutral-default-rest !default;
-$fileuploader-file-icon-color: ds.$color-content-neutral-subdued-rest !default;
-$fileuploader-progressbar-status-color: ds.$color-content-neutral-default-rest !default;
-$fluent-fileuploader-files-container-bg-color: ds.$color-surface-neutral-default-rest !default;
+$file-uploader-file-name-content-rest: ds.$color-content-neutral-default-rest !default;
+$file-uploader-file-icon-rest: ds.$color-content-neutral-subdued-rest !default;
+$file-uploader-progress-bar-status-content-rest: ds.$color-content-neutral-default-rest !default;
+$file-uploader-files-container-bg-rest: ds.$color-surface-neutral-default-rest !default;
 
-$fileuploader-falename-status-color: ds.$color-content-neutral-subdued-rest !default;
+$file-uploader-file-name-status-content-rest: ds.$color-content-neutral-subdued-rest !default;
 
-$fileuploader-border-color: ds.$color-border-neutral-default-rest !default;
+$file-uploader-border-rest: ds.$color-border-neutral-default-rest !default;
 
-$fileuploader-danger: ds.$color-surface-danger-default-rest !default;
-$fileuploader-label-color: ds.$color-content-neutral-subdued-rest !default;
-$fluent-fileuploader-file-container-boxshadow: ds.$box-shadow-sm !default;
+$file-uploader-file-status-message-invalid-content-rest: ds.$color-surface-danger-default-rest !default;
+$file-uploader-label-content-rest: ds.$color-content-neutral-subdued-rest !default;
+$file-uploader-file-container-shadow-rest: ds.$box-shadow-sm !default;

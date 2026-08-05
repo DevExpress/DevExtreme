@@ -8,7 +8,7 @@
 @use "../dropDownList";
 
 @mixin autocomplete-editor-container-offset() {
-  inset-inline-end: $fluent-invalid-badge-horizontal-padding;
+  inset-inline-end: $invalid-badge-padding-inline;
 }
 
 .dx-autocomplete.dx-invalid,

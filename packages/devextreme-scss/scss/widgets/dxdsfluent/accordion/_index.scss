@@ -9,8 +9,8 @@
 // adduse
 
 .dx-accordion {
-  background-color: $accordion-background-color;
-  color: $accordion-color;
+  background-color: $accordion-bg-rest;
+  color: $accordion-content-rest;
 }
 
 .dx-accordion-item {
@@ -19,21 +19,21 @@
 
   &.dx-state-hover {
     & > .dx-accordion-item-title {
-      background-color: $accordion-title-bg-hover;
+      background-color: $accordion-title-bg-hovered;
     }
   }
 
   &.dx-state-active,
   &.dx-state-focused {
     > .dx-accordion-item-title {
-      color: $accordion-title-active-color;
+      color: $accordion-title-content-active;
       background-color: $accordion-title-bg-active;
     }
   }
 }
 
 .dx-accordion-item-opened {
-  margin-block: $fluent-accordion-item-opened-margin;
+  margin-block: $accordion-item-opened-margin;
 
   & > .dx-accordion-item-title {
     &::before {
@@ -44,8 +44,8 @@
 
 .dx-accordion-item-title {
   border-radius: $accordion-item-border-radius;
-  min-height: $fluent-accordion-title-height;
-  padding: $fluent-accordion-title-vertical-padding $fluent-accordion-title-horizontal-padding;
+  min-height: $accordion-title-height;
+  padding: $accordion-title-padding-block $accordion-title-padding-inline;
 
   &::before {
     content: "\f016";
@@ -62,9 +62,9 @@
 }
 
 .dx-accordion-item-title-caption {
-  color: $accordion-title-color;
-  font-size: $fluent-accordion-title-font-size;
-  font-weight: $fluent-accordion-title-font-weight;
+  color: $accordion-title-content-rest;
+  font-size: $accordion-title-font-size;
+  font-weight: $accordion-title-font-weight;
 
   .dx-icon {
     @include dx-icon-margin($accordion-title-icon-margin);
@@ -74,10 +74,10 @@
 .dx-state-disabled {
   &.dx-accordion {
     opacity: 1;
-    color: $accordion-disabled-color;
+    color: $accordion-content-disabled;
   }
 }
 
 .dx-accordion-item-body {
-  padding: $fluent-accordion-body-padding;
+  padding: $accordion-body-padding;
 }

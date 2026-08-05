@@ -5,40 +5,40 @@
 @use "../../base/icon_fonts" as *;
 @use "../../base/pagination" with (
   $pagination-page-padding-2: $fluent-pagination-page-padding-2,
-  $pagination-page-margin-left: $fluent-pagination-page-margin-left,
-  $pagination-page-margin-right: $fluent-pagination-page-margin-right,
-  $pagination-separator-padding-left: $fluent-pagination-separator-padding-left,
-  $pagination-separator-padding-right: $fluent-pagination-separator-padding-right,
+  $pagination-page-margin-left: $pagination-page-margin-inline-start,
+  $pagination-page-margin-right: $pagination-page-margin-inline-end,
+  $pagination-separator-padding-left: $pagination-separator-padding-inline-start,
+  $pagination-separator-padding-right: $pagination-separator-padding-inline-end,
   $pagination-navigate-button-width-2: $fluent-pagination-navigate-button-width-2,
-  $pagination-navigate-button-height: $fluent-pagination-navigate-button-height,
-  $pagination-first-child-margin-left: $fluent-pagination-first-child-margin-left,
-  $pagination-first-child-padding-left: $fluent-pagination-first-child-padding-left,
-  $pagination-first-child-padding-right: $fluent-pagination-first-child-padding-right,
-  $pagination-first-child-padding-top: $fluent-pagination-first-child-padding-top,
-  $pagination-first-child-padding-bottom: $fluent-pagination-first-child-padding-bottom,
+  $pagination-navigate-button-height: $pagination-navigate-button-height,
+  $pagination-first-child-margin-left: $pagination-first-child-margin-inline-start,
+  $pagination-first-child-padding-left: $pagination-first-child-padding-inline-start,
+  $pagination-first-child-padding-right: $pagination-first-child-padding-inline-end,
+  $pagination-first-child-padding-top: $pagination-first-child-padding-block-start,
+  $pagination-first-child-padding-bottom: $pagination-first-child-padding-block-end,
   $pagination-first-child-margin-left-2: $fluent-pagination-first-child-margin-left-2,
-  $pagination-page-index-width: $fluent-pagination-page-index-width,
-  $pagination-pages-count-padding-left: $fluent-pagination-pages-count-padding-left,
-  $pagination-info-opacity: $fluent-pagination-info-opacity,
-  $pagination-nav-disabled-opacity: $fluent-pagination-nav-disabled-opacity,
-  $pagination-page-horizontal-padding: $fluent-pagination-page-horizontal-padding,
+  $pagination-page-index-width: $pagination-page-index-width,
+  $pagination-pages-count-padding-left: $pagination-pages-count-padding-inline-start,
+  $pagination-info-opacity: $pagination-info-opacity,
+  $pagination-nav-disabled-opacity: $pagination-nav-opacity-disabled,
+  $pagination-page-horizontal-padding: $pagination-page-padding-inline,
 );
-@use "../gridBase/sizes" as *;
+@use "../gridBase/sizes" as gridBaseSizes;
 
 // adduse
 
 
 .dx-pager,
 .dx-pagination {
-  padding: $fluent-pagination-paddings $fluent-grid-base-cell-horizontal-padding;
+  padding: $pagination-padding gridBaseSizes.$grid-cell-padding-inline;
 
   &.dx-light-mode {
     .dx-page-sizes {
-      min-width: $fluent-pagination-light-pagesizes-min-width;
+      min-width: $pagination-page-sizes-compact-min-width;
     }
 
     .dx-page-index {
-      min-width: $fluent-pagination-light-pageindex-min-width;
+      min-width: $pagination-page-index-compact-min-width;
     }
 
     .dx-pages {
@@ -55,19 +55,19 @@
 
   .dx-pages {
     .dx-page {
-      padding: $fluent-pagination-page-padding;
-      line-height: $fluent-pagination-page-line-height;
+      padding: $pagination-page-padding;
+      line-height: $pagination-page-line-height;
     }
 
     .dx-separator {
-      padding-left: $fluent-pagination-separator-paddings;
-      padding-right: $fluent-pagination-separator-paddings;
+      padding-left: $pagination-separator-padding;
+      padding-right: $pagination-separator-padding;
     }
 
     .dx-navigate-button {
-      width: $fluent-pagination-navigate-button-width;
-      height: $fluent-pagination-navbutton-height;
-      padding: $fluent-pagination-navbutton-paddings;
+      width: $pagination-navigate-button-width;
+      height: $pagination-nav-button-height;
+      padding: $pagination-nav-button-padding;
     }
 
     .dx-prev-button {
@@ -80,19 +80,19 @@
 
     .dx-prev-button,
     .dx-next-button {
-      @include dx-icon-font-centered-sizing($fluent-pagination-navbutton-icon-size);
+      @include dx-icon-font-centered-sizing($pagination-nav-button-icon-size);
     }
   }
 
   .dx-page,
   .dx-page-size {
-    font-size: $fluent-pagination-page-font-size;
+    font-size: $pagination-page-font-size;
 
     &:hover {
-      background-color: $pagination-page-hovered-bg;
+      background-color: $pagination-page-bg-hovered;
     }
 
-    border-radius: $fluent-pagination-page-border-radius;
+    border-radius: $pagination-page-border-radius;
   }
 
   .dx-page-sizes .dx-page-size {
@@ -101,16 +101,16 @@
       margin-left: 0;
     }
 
-    padding: $fluent-pagination-page-padding;
-    line-height: $fluent-pagination-page-line-height;
+    padding: $pagination-page-padding;
+    line-height: $pagination-page-line-height;
   }
 
   .dx-pages,
   .dx-page-sizes {
     .dx-selection {
-      font-weight: $fluent-pagination-selected-font-weight;
-      background-color: $pagination-page-selected-bg;
-      color: $pagination-page-selected-color;
+      font-weight: $pagination-font-weight-selected;
+      background-color: $pagination-page-bg-selected;
+      color: $pagination-page-content-selected;
     }
   }
 }
