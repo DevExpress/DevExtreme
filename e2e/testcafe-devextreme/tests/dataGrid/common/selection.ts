@@ -49,13 +49,19 @@ test('The Select All checkbox should be visible when a column headerCellTemplate
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.expect(dataGrid.isReady()).ok();
+  await t.expect(
+    dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1).element
+      .withText('header template').exists,
+  ).ok();
+
   // assert
   await testScreenshot(t, takeScreenshot, 'T1141405-grid-select-all.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (t) => {
+}).before(async () => {
   await createWidget('dxDataGrid', {
     dataSource: [...new Array(2)].map((_, index) => ({ id: index, text: `item ${index}` })),
     renderAsync: false,
@@ -88,8 +94,6 @@ test('The Select All checkbox should be visible when a column headerCellTemplate
       },
     });
   })();
-
-  await t.wait(300);
 });
 
 // T1214734
