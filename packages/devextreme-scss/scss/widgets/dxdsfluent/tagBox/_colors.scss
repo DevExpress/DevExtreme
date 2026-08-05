@@ -4,7 +4,7 @@
 
 $tag-box-tag-content-rest: ds.$color-content-neutral-default-rest !default;
 
-$tag-box-tag-bg-rest: ds.$tag-color-bg-rest !default;
+$tag-box-tag-bg-rest: ds.$color-surface-neutral-deep-rest !default;
 $tag-box-tag-bg-hovered: ds.$color-surface-neutral-default-hovered !default;
 
 $tag-box-tag-content-active: ds.$color-content-neutral-default-rest !default;
@@ -13,6 +13,6 @@ $tag-box-tag-remove-button-content-rest: ds.$color-content-neutral-subdued-rest 
 $tag-box-tag-border-focused: ds.$color-border-primary-default-rest !default;
 $tag-box-select-all-line-rest: ds.$color-border-neutral-default-rest !default;
 $tag-box-tag-content-disabled: ds.$color-content-neutral-default-disabled !default;
-$tag-box-tag-bg-disabled: ds.$tag-color-bg-disabled !default;
+$tag-box-tag-bg-disabled: ds.$color-surface-neutral-subdued-disabled !default;
 
 $tag-box-border-disabled: ds.$color-border-neutral-default-disabled !default;
