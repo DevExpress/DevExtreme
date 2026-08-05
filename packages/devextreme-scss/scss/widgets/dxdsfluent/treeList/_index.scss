@@ -8,29 +8,29 @@
 @use "../../base/mixins" as *;
 @use "../../base/icon_fonts" as *;
 @use "../gridBase" as *;
-@use "../gridBase/colors" as *;
-@use "../gridBase/sizes" as *;
+@use "../gridBase/colors" as gridBaseColors;
+@use "../gridBase/sizes" as gridBaseSizes;
 @use "../../base/treeList" as baseTreeList with (
-  $treelist-expandable-node-line-height: $fluent-treelist-expandable-node-line-height,
-  $treelist-sticky-column-border: $fluent-treelist-sticky-column-border,
-  $treelist-cell-focus-outline: $fluent-treelist-cell-focus-outline,
-  $treelist-header-filter-outline: $fluent-treelist-header-filter-outline,
-  $treelist-header-filter-outline-offset: $fluent-treelist-header-filter-outline-offset,
-  $treelist-button-margin-left: $fluent-treelist-button-margin-left,
-  $treelist-button-margin-top: $fluent-treelist-button-margin-top,
-  $treelist-error-message-margin-bottom: $fluent-treelist-error-message-margin-bottom,
-  $treelist-button-margin-right: $fluent-treelist-button-margin-right,
-  $datagrid-border: $datagrid-border,
-  $datagrid-drag-header-border-color: $datagrid-drag-header-border-color,
-  $datagrid-row-error-bg: $datagrid-row-error-bg,
-  $datagrid-base-color: $datagrid-base-color,
-  $datagrid-base-background-color: $datagrid-base-background-color,
-  $datagrid-border-color: $datagrid-border-color,
-  $datagrid-focused-border-color: $datagrid-focused-border-color,
-  $datagrid-text-stub-background-image-path: $datagrid-text-stub-background-image-path,
-  $datagrid-row-error-color: $datagrid-row-error-color,
-  $header-filter-color: $header-filter-color,
-  $header-filter-color-empty: $header-filter-color-empty,
+  $treelist-expandable-node-line-height: $tree-list-empty-space-height,
+  $treelist-sticky-column-border: $tree-list-sticky-column-border,
+  $treelist-cell-focus-outline: $tree-list-cell-outline-focused,
+  $treelist-header-filter-outline: $tree-list-outline-focused,
+  $treelist-header-filter-outline-offset: $tree-list-outline-offset-focused,
+  $treelist-button-margin-left: $tree-list-form-buttons-margin-inline-start,
+  $treelist-button-margin-top: $tree-list-form-buttons-margin-block-start,
+  $treelist-error-message-margin-bottom: $tree-list-error-message-margin-block-end,
+  $treelist-button-margin-right: $tree-list-form-buttons-rtl-margin-inline-start,
+  $datagrid-border: gridBaseSizes.$grid-border,
+  $datagrid-drag-header-border-color: gridBaseColors.$grid-drag-header-border-rest,
+  $datagrid-row-error-bg: gridBaseColors.$grid-row-error-bg-rest,
+  $datagrid-base-color: gridBaseColors.$grid-content-rest,
+  $datagrid-base-background-color: gridBaseColors.$grid-bg-rest,
+  $datagrid-border-color: gridBaseColors.$grid-border-rest,
+  $datagrid-focused-border-color: gridBaseColors.$grid-border-focused,
+  $datagrid-text-stub-background-image-path: gridBaseColors.$grid-text-stub-bg-rest,
+  $datagrid-row-error-color: gridBaseColors.$grid-row-error-content-rest,
+  $header-filter-color: gridBaseColors.$grid-header-filter-icon-rest,
+  $header-filter-color-empty: gridBaseColors.$grid-header-filter-empty-icon-rest,
   $base-focus-color: ds.$color-content-neutral-default-inverted-rest,
 );
 @use 'layout/cell';
@@ -38,7 +38,7 @@
 
 .dx-treelist-rowsview {
   tr:not(.dx-row-focused) .dx-treelist-empty-space {
-    color: $treelist-chevron-icon-color;
+    color: $tree-list-chevron-icon-rest;
   }
 
   .dx-sort-up,
@@ -49,7 +49,7 @@
 
   tr:not(.dx-row-focused).dx-selection {
     .dx-treelist-empty-space {
-      color: $treelist-selection-chevron-icon-color;
+      color: $tree-list-chevron-icon-selected;
     }
   }
 

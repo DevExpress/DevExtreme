@@ -8,50 +8,50 @@
 // adduse
 
 .dx-theme-dxdsfluent-typography {
-  background-color: $typography-typography-bg;
+  background-color: $typography-bg-rest;
 
   @include dx-base-typography();
 
   h1 {
-    font-weight: $fluent-h1-font-weight;
-    font-size: $fluent-h1-font-size;
+    font-weight: $typography-heading-1-font-weight;
+    font-size: $typography-heading-1-font-size;
   }
 
   h2 {
-    font-weight: $fluent-h2-font-weight;
-    font-size: $fluent-h2-font-size;
+    font-weight: $typography-heading-2-font-weight;
+    font-size: $typography-heading-2-font-size;
   }
 
   h3 {
-    font-weight: $fluent-h3-font-weight;
-    font-size: $fluent-h3-font-size;
+    font-weight: $typography-heading-3-font-weight;
+    font-size: $typography-heading-3-font-size;
   }
 
   h4 {
-    font-weight: $fluent-h4-font-weight;
-    font-size: $fluent-h4-font-size;
+    font-weight: $typography-heading-4-font-weight;
+    font-size: $typography-heading-4-font-size;
   }
 
   h5 {
-    font-weight: $fluent-h5-font-weight;
-    font-size: $fluent-h5-font-size;
+    font-weight: $typography-heading-5-font-weight;
+    font-size: $typography-heading-5-font-size;
   }
 
   h6 {
-    font-weight: $fluent-h6-font-weight;
-    font-size: $fluent-h6-font-size;
+    font-weight: $typography-heading-6-font-weight;
+    font-size: $typography-heading-6-font-size;
   }
 
   .dx-font-xl {
-    font-size: $fluent-xl-font-size;
+    font-size: $typography-xl-font-size;
   }
 
   .dx-font-l {
-    font-size: $fluent-l-font-size;
+    font-size: $typography-l-font-size;
   }
 
   .dx-font-m {
-    font-size: $fluent-m-font-size;
+    font-size: $typography-m-font-size;
   }
 
   .dx-font-s {
@@ -60,10 +60,10 @@
 
   small,
   .dx-font-xs {
-    font-size: $fluent-xs-font-size;
+    font-size: $typography-xs-font-size;
   }
 
   a {
-    color: $typography-typography-link-color;
+    color: $typography-link-content-rest;
   }
 }

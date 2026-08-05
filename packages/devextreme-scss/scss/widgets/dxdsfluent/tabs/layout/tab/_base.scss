@@ -2,8 +2,6 @@
 @use "sass:string" as string;
 @use "../../../colors" as *;
 @use "../../../sizes" as *;
-@use "../../../button/colors" as *;
-@use "../../../button/mixins" as *;
 @use "../../../../base/icon_fonts" as *;
 @use "../../../../base/tabs";
 @use "../../variables/colors" as *;
@@ -19,20 +17,20 @@
 
 
 .dx-tab {
-  gap: $fluent-tabs-item-gap;
-  padding: $fluent-tabs-item-padding;
-  background-color: $tabs-tab-background;
-  color: $tabs-tab-color;
+  gap: $tabs-item-gap;
+  padding: $tabs-item-padding;
+  background-color: $tabs-tab-bg-rest;
+  color: $tabs-tab-content-rest;
 
   &.dx-state-hover {
-    background-color: $tabs-hovered-tab-bg-color;
+    background-color: $tabs-tab-bg-hovered;
   }
 
   &.dx-tab-selected {
-    color: $tabs-tab-selected-color;
+    color: $tabs-tab-content-selected;
 
     .dx-icon {
-      color: $tabs-tab-icon-selected-color;
+      color: $tabs-tab-icon-content-selected;
     }
 
     .dx-tab-text .dx-tab-text-span {
@@ -45,30 +43,30 @@
   }
 
   &.dx-state-disabled {
-    color: $tabs-tab-disabled-color;
+    color: $tabs-tab-content-disabled;
 
     .dx-tab-text .dx-tab-text-span-pseudo {
-      color: $tabs-tab-disabled-color;
+      color: $tabs-tab-content-disabled;
     }
 
     .dx-icon {
-      color: $tabs-tab-icon-disabled-color;
+      color: $tabs-tab-icon-content-disabled;
     }
   }
 
   &.dx-state-active {
-    background-color: $tabs-active-tab-bg-color;
+    background-color: $tabs-tab-bg-active;
   }
 
   .dx-tab-text {
-    column-gap: $fluent-base-icon-margin;
-    row-gap: $fluent-tabs-item-gap;
-    line-height: $fluent-line-height;
+    column-gap: $tabs-text-column-gap;
+    row-gap: $tabs-item-gap;
+    line-height: $global-line-height;
 
     .dx-tab-text-span {
       position: relative;
       display: block;
-      font-weight: $fluent-tab-font-weight-accent;
+      font-weight: $tabs-tab-accent-font-weight;
       visibility: hidden;
     }
 
@@ -79,17 +77,17 @@
       bottom: 0;
       left: 0;
       pointer-events: none;
-      color: $tabs-tab-color;
-      font-weight: $fluent-tab-font-weight-basic;
+      color: $tabs-tab-content-rest;
+      font-weight: $tabs-tab-basic-font-weight;
       visibility: visible;
     }
   }
 
   .dx-icon {
-    color: $tabs-tab-icon-color;
+    color: $tabs-tab-icon-rest;
     visibility: visible;
 
-    @include dx-icon-sizing($fluent-tabs-icon-size);
+    @include dx-icon-sizing($tabs-icon-size);
 
     width: 1em;
     height: 1em;
@@ -98,14 +96,14 @@
 
   .dx-tabs-item-badge {
     align-self: center;
-    min-width: $fluent-badge-min-size;
-    min-height: $fluent-badge-min-size;
+    min-width: $tabs-badge-min-size;
+    min-height: $tabs-badge-min-size;
   }
 }
 
 .dx-tabs.dx-state-focused {
   .dx-tab.dx-state-focused {
-    background-color: $tabs-focused-tab-bg-color;
+    background-color: $tabs-tab-bg-focused;
   }
 }
 

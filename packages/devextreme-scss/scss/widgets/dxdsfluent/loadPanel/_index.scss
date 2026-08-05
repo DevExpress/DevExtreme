@@ -3,9 +3,9 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/loadPanel" with (
-  $loadpanel-content-padding: $fluent-loadpanel-content-padding,
-  $loadpanel-content-border: $fluent-loadpanel-content-border,
-  $loadpanel-content-border-radius: $fluent-loadpanel-content-border-radius,
+  $loadpanel-content-padding: $load-panel-content-padding,
+  $loadpanel-content-border: $load-panel-content-border,
+  $loadpanel-content-border-radius: $load-panel-content-border-radius,
 );
 
 // adduse
@@ -14,7 +14,7 @@
 
 .dx-loadpanel-content {
   border: none;
-  background: $loadpanel-content-bg;
+  background: $load-panel-content-bg-rest;
   padding: $load-panel-padding;
   border-radius: $load-panel-border-radius;
   box-shadow: $load-panel-box-shadow;

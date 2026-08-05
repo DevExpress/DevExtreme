@@ -2,36 +2,35 @@
 
 // adduse
 
-$tabs-tab-color: ds.$color-content-neutral-default-rest !default;
+$tabs-tab-content-rest: ds.$color-content-neutral-default-rest !default;
 
-$tabs-tab-selected-color: ds.$color-content-neutral-default-rest !default;
+$tabs-tab-content-selected: ds.$color-content-neutral-default-rest !default;
 
-$tabs-tab-disabled-color: ds.$color-content-neutral-default-disabled !default;
+$tabs-tab-content-disabled: ds.$color-content-neutral-default-disabled !default;
 
-$tabs-tab-border-color-selected-basic: ds.$color-content-primary-default-rest !default;
-$tabs-tab-border-color-selected-active: ds.$color-content-primary-default-active !default;
-$tabs-tab-border-color-selected-hover: ds.$color-content-primary-default-hovered !default;
-$tabs-tab-border-color-selected-focused: ds.$color-content-primary-default-rest !default;
-$tabs-tab-border-color-active: ds.$color-border-neutral-default-active !default;
-$tabs-tab-border-color-hover: ds.$color-border-neutral-default-hovered !default;
+$tabs-tab-basic-border-selected: ds.$color-content-primary-default-rest !default;
+$tabs-tab-border-selected-active: ds.$color-content-primary-default-active !default;
+$tabs-tab-border-selected-hovered: ds.$color-content-primary-default-hovered !default;
+$tabs-tab-border-selected-focused: ds.$color-content-primary-default-rest !default;
+$tabs-tab-border-active: ds.$color-border-neutral-default-active !default;
+$tabs-tab-border-hovered: ds.$color-border-neutral-default-hovered !default;
 
-$tabs-tab-border-color-disabled: ds.$color-border-neutral-default-disabled !default;
+$tabs-tab-border-disabled: ds.$color-border-neutral-default-disabled !default;
 
-$tabs-tab-background: transparent !default;
+$tabs-tab-bg-rest: transparent !default;
 
-$tabs-tab-icon-color: $tabs-tab-color !default;
+$tabs-tab-icon-rest: $tabs-tab-content-rest !default;
 
-$tabs-tab-icon-selected-color: ds.$color-content-primary-default-rest !default;
+$tabs-tab-icon-content-selected: ds.$color-content-primary-default-rest !default;
 
-$tabs-tab-icon-disabled-color: ds.$color-content-neutral-default-disabled !default;
-$tabs-tab-button-disabled-opacity: 0 !default;
+$tabs-tab-icon-content-disabled: ds.$color-content-neutral-default-disabled !default;
 
-$tabs-hovered-tab-bg-color: transparent !default;
+$tabs-tab-bg-hovered: transparent !default;
 
-$tabs-focused-tab-bg-color: ds.$color-surface-neutral-default-hovered !default;
-$tabs-tab-bg-color-hover-primary: ds.$color-surface-neutral-default-hovered !default;
-$tabs-tab-bg-color-focus-primary: ds.$color-surface-neutral-default-hovered !default;
-$tabs-tab-bg-color-active-primary: ds.$color-surface-neutral-default-active !default;
+$tabs-tab-bg-focused: ds.$color-surface-neutral-default-hovered !default;
+$tabs-tab-primary-bg-hovered: ds.$color-surface-neutral-default-hovered !default;
+$tabs-tab-primary-bg-focused: ds.$color-surface-neutral-default-hovered !default;
+$tabs-tab-primary-bg-active: ds.$color-surface-neutral-default-active !default;
 
-$tabs-active-tab-bg-color: ds.$color-surface-neutral-default-rest !default;
-$tabs-nav-button-bg-color: transparent !default;
+$tabs-tab-bg-active: ds.$color-surface-neutral-default-rest !default;
+$tabs-nav-button-bg-rest: transparent !default;
