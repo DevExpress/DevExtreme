@@ -153,9 +153,21 @@ export function createPagesRenderer({
 
     const importMapScript = `<script type="importmap" nonce="wIkO6u">\n${JSON.stringify(importMap)}\n</script>`;
 
-    // Native ESM + import maps: keep CSP off.
-    // `nocsp` remains a QUnit URL flag for suites that branch on it.
-    const cspMetaTag = '';
+    // Restore CSP for default runs; `?nocsp` keeps the meta off for suites
+    // that branch on QUnit.urlParams['nocsp'] (Knockout, aspnet, …).
+    const cspMetaTag = runProps.NoCsp
+      ? ''
+      : `<meta
+            http-equiv="Content-Security-Policy"
+            content="
+                default-src 'self';
+                script-src 'self' 'nonce-M5H5tE' 'nonce-TEiwcJ' 'nonce-IpCks6' 'nonce-Z27qXj' 'nonce-wIkO6u';
+                style-src 'self' about: https://fonts.googleapis.com 'nonce-tYGMxb' 'nonce-qunit-test' 'nonce-qunit-extension';
+                img-src 'self' data:;
+                font-src 'self' https://fonts.gstatic.com;
+                connect-src 'self' https://js.devexpress.com;
+            "
+        />`;
 
     return renderTemplate('run-suite.template.html', {
       CSP_META_TAG: cspMetaTag,
