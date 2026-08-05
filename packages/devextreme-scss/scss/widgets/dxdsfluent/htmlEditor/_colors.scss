@@ -2,7 +2,7 @@
 
 // adduse
 
-$html-editor-toolbar-border-rest: ds.$separator-color !default;
+$html-editor-toolbar-border-rest: ds.$color-border-neutral-subdued-rest !default;
 $html-editor-variable-bg-rest: ds.$color-surface-primary-alpha-hovered !default;
 $html-editor-resize-frame-border-rest: ds.$color-border-primary-default-rest !default;
 $html-editor-resize-trigger-rest: ds.$color-surface-primary-default-rest !default;
@@ -19,4 +19,4 @@ $html-editor-highlighted-row-bg-rest: ds.$color-surface-primary-alpha-active !de
 
 // Base-layer values injected with design tokens (wave B1)
 $html-editor-code-block-bg-rest: rgb(from #{ds.$color-content-neutral-subdued-rest} r g b / 0.15) !default;
-$html-editor-placeholder-content-rest: ds.$text-content-color-default-placeholder-rest !default;
+$html-editor-placeholder-content-rest: ds.$color-content-neutral-deep-rest !default;
