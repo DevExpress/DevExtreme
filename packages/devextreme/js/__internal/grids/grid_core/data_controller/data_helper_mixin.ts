@@ -193,7 +193,8 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
     }
   }
 
-  protected getDataSource(): unknown {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  protected getDataSource(): any | null {
     return this._dataSource ?? null;
   }
 };
