@@ -7,7 +7,7 @@ import { isBoolean, isDefined } from '@js/core/utils/type';
 import type { Key } from '@ts/grids/new/grid_core/data_controller/types';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
-import type { DataController } from '../data_controller/m_data_controller';
+import type { DataController } from '../data_controller/data_controller';
 import type { EditingController } from '../editing/m_editing';
 import { isNewRowTempKey } from '../editing/m_editing_utils';
 import type { EditorFactory } from '../editor_factory/m_editor_factory';
