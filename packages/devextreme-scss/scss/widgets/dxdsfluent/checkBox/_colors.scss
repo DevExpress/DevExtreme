@@ -2,15 +2,15 @@
 
 // adduse
 
-$check-box-border-rest: ds.$checkbox-color-unchecked-default-border-rest !default;
-$check-box-border-hovered: ds.$checkbox-color-unchecked-default-border-hovered !default;
-$check-box-border-active: ds.$checkbox-color-unchecked-default-border-active !default;
+$check-box-border-rest: ds.$color-border-neutral-accessible-rest !default;
+$check-box-border-hovered: ds.$color-border-neutral-accessible-hovered !default;
+$check-box-border-active: ds.$color-border-neutral-accessible-active !default;
 
-$check-box-icon-bg-rest: ds.$checkbox-color-checked-default-icon-rest !default;
+$check-box-icon-bg-rest: ds.$color-content-neutral-default-inverted-rest !default;
 
-$check-box-icon-checked-bg-rest: ds.$checkbox-color-checked-default-bg-rest !default;
-$check-box-icon-checked-bg-hovered: ds.$checkbox-color-checked-default-bg-hovered !default;
-$check-box-icon-checked-bg-focused: ds.$checkbox-color-checked-default-bg-active !default;
+$check-box-icon-checked-bg-rest: ds.$color-surface-primary-default-rest !default;
+$check-box-icon-checked-bg-hovered: ds.$color-surface-primary-default-hovered !default;
+$check-box-icon-checked-bg-focused: ds.$color-surface-primary-default-active !default;
 
 $check-box-invalid-border-rest: ds.$color-border-danger-compound-rest !default;
 $check-box-invalid-border-hovered: ds.$color-border-danger-compound-hovered !default;
@@ -24,5 +24,5 @@ $check-box-invalid-mark-bg-rest: ds.$color-content-danger-compound-rest !default
 $check-box-invalid-mark-bg-hovered: ds.$color-content-danger-compound-hovered !default;
 $check-box-invalid-mark-bg-focused: ds.$color-content-danger-compound-active !default;
 
-$check-box-border-disabled: ds.$checkbox-color-unchecked-default-border-disabled !default;
-$check-box-icon-bg-disabled: ds.$checkbox-color-checked-default-icon-disabled !default;
+$check-box-border-disabled: ds.$color-border-neutral-accessible-disabled !default;
+$check-box-icon-bg-disabled: ds.$color-content-neutral-default-disabled !default;

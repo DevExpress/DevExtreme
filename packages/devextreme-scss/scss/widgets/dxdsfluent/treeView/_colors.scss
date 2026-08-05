@@ -13,7 +13,7 @@ $tree-view-border-rest: ds.$color-border-neutral-default-rest !default;
 $tree-view-item-content-selected: $tree-view-content-rest !default;
 $tree-view-item-bg-selected: ds.$color-surface-neutral-default-selected !default;
 $tree-view-spin-icon-rest: ds.$color-content-neutral-subdued-rest !default;
-$checkbox-border-color-focused: ds.$checkbox-color-checked-default-border-active !default;
+$checkbox-border-color-focused: ds.$color-border-primary-compound-active !default;
 
 /*
  * Три роли, вышедшие из одного значения (правило 5): граница невыбранного бокса, глиф чекнутого
@@ -21,13 +21,13 @@ $checkbox-border-color-focused: ds.$checkbox-color-checked-default-border-active
  * вопрос «должны ли они совпадать» теперь виден в коде, а не спрятан в одном имени —
  * см. DIVERGENCES.md.
  */
-$tree-view-checkbox-border-disabled: ds.$checkbox-color-checked-default-icon-disabled !default;
-$tree-view-checkbox-icon-disabled: ds.$checkbox-color-checked-default-icon-disabled !default;
-$tree-view-checkbox-indeterminate-bg-disabled: ds.$checkbox-color-checked-default-icon-disabled !default;
+$tree-view-checkbox-border-disabled: ds.$color-content-neutral-default-disabled !default;
+$tree-view-checkbox-icon-disabled: ds.$color-content-neutral-default-disabled !default;
+$tree-view-checkbox-indeterminate-bg-disabled: ds.$color-content-neutral-default-disabled !default;
 $tree-view-checkbox-bg-disabled: ds.$color-surface-neutral-default-disabled !default;
 $tree-view-item-content-disabled: ds.$color-content-neutral-default-disabled !default;
-$tree-view-checkbox-border-focused: ds.$checkbox-color-unchecked-default-border-disabled !default;
+$tree-view-checkbox-border-focused: ds.$color-border-neutral-accessible-disabled !default;
 $tree-view-checkbox-bg-focused: ds.$color-surface-neutral-default-disabled !default;
-$tree-view-checkbox-accent-content-focused: ds.$checkbox-color-checked-default-bg-hovered !default;
+$tree-view-checkbox-accent-content-focused: ds.$color-surface-primary-default-hovered !default;
 
 // Base-layer values injected with design tokens (wave B1)
