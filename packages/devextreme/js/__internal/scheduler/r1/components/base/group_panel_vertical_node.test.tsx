@@ -47,14 +47,13 @@ describe('GroupPanelVerticalNode', () => {
     expect(children[0].className).toContain('dx-scheduler-group-header-leaf');
   });
 
-  it('should set title/role/aria-label for the accessible label and overflow tooltip', () => {
+  it('should set title/aria-label for the accessible label and overflow tooltip', () => {
     const component = new GroupPanelVerticalNode({ node: leafNode('a', 'Room A', 1), index: 0 });
     const result = component.render() as VirtualNodeLike;
     const children = result.children as VirtualNodeLike[];
     const cell = children[0];
 
     expect(cell.props?.title).toBe('Room A');
-    expect(cell.props?.role).toBe('rowheader');
     expect(cell.props?.['aria-label']).toBe('Room A');
   });
 

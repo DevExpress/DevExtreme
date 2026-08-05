@@ -50,7 +50,6 @@ export class GroupPanelVerticalNode extends BaseInfernoComponent<GroupPanelVerti
         <div
           className={cellClasses}
           title={node.text}
-          role="rowheader"
           aria-label={node.text}
         >
           {
