@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { getTextCloudInfo } from '../../helpers/getTextCloudInfo.js';
+import { getTextCloudInfo } from '__internal/viz/gauges/base_indicators';
 
 const data = {
     'right-bottom': {
