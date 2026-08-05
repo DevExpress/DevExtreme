@@ -2,17 +2,16 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../button/sizes" as *;
-@use "../menuBase/sizes" as *;
 @use "../../base/icon_fonts" as *;
 
 // adduse
 @use "../menuBase" as *;
+@use "../button/sizes" as buttonSizes;
 @use "../../base/menu" with (
-  $menu-separator-margin-inline-end: $fluent-menu-separator-margin-inline-end,
-  $menu-separator-margin-bottom: $fluent-menu-separator-margin-bottom,
-  $menu-treeview-node-padding: $fluent-menu-treeview-node-padding,
-  $menu-item-content-padding-inline-start: $fluent-menu-item-content-padding-inline-start,
+  $menu-separator-margin-inline-end: $menu-separator-margin-inline-end,
+  $menu-separator-margin-bottom: $menu-separator-margin-block-end,
+  $menu-treeview-node-padding: $menu-tree-view-node-padding,
+  $menu-item-content-padding-inline-start: $menu-item-content-padding-inline-start,
 );
 
 .dx-context-menu-container-border {
@@ -24,38 +23,38 @@
 }
 
 .dx-menu {
-  color: $menu-color;
+  color: $menu-content-rest;
 
   .dx-menu-horizontal {
     .dx-menu-item-popout {
-      margin-inline-start: $fluent-menu-icon-to-text-offset;
+      margin-inline-start: $menu-item-icon-gap;
       display: flex;
       align-items: center;
       justify-content: center;
 
       @include dx-icon(spindown);
-      @include dx-icon-sizing($fluent-button-icon-size);
+      @include dx-icon-sizing(buttonSizes.$button-icon-size);
     }
   }
 
   .dx-menu-vertical {
     .dx-menu-item-popout {
-      margin-inline-start: $fluent-menu-icon-to-text-offset;
+      margin-inline-start: $menu-item-icon-gap;
       display: flex;
       align-items: center;
       justify-content: center;
 
       @include dx-icon(spinright);
-      @include dx-icon-sizing($fluent-button-icon-size);
+      @include dx-icon-sizing(buttonSizes.$button-icon-size);
     }
   }
 
   .dx-menu-item {
-    border-radius: $base-border-radius;
+    border-radius: $global-border-radius;
 
     .dx-menu-item-content {
       display: flex;
-      padding: $fluent-menu-vertical-padding $fluent-menu-horizontal-padding;
+      padding: $menu-padding-block $menu-padding-inline;
 
       .dx-menu-item-popout-container {
         display: flex;
@@ -73,7 +72,7 @@
 
       &.dx-menu-item-has-icon {
         .dx-icon {
-          margin-inline-end: $fluent-menu-icon-to-text-offset;
+          margin-inline-end: $menu-item-icon-gap;
         }
       }
     }
@@ -81,16 +80,16 @@
 }
 
 .dx-menu-adaptive-mode {
-  background-color: $menu-popup-bg;
+  background-color: $menu-popup-bg-rest;
 
   .dx-treeview {
-    border: $fluent-menu-treeview-border;
-    border-color: $menu-popup-border-color;
-    border-radius: $base-border-radius;
+    border: $menu-tree-view-border;
+    border-color: $menu-popup-border-rest;
+    border-radius: $global-border-radius;
 
     &,
     &.dx-state-focused {
-      box-shadow: $menu-focused-shadow;
+      box-shadow: $menu-shadow-focused;
     }
   }
 
@@ -101,13 +100,13 @@
       }
 
       .dx-treeview-toggle-item-visibility {
-        color: $menu-popup-bg;
+        color: $menu-popup-bg-rest;
       }
     }
   }
 
   .dx-treeview-node-container:first-child > .dx-treeview-node {
-    border-bottom: $fluent-menu-treeview-node-border-bottom;
-    border-bottom-color: $menu-popup-border-color
+    border-bottom: $menu-tree-view-node-border-block-end;
+    border-bottom-color: $menu-popup-border-rest
   }
 }

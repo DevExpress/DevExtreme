@@ -1,34 +1,34 @@
 @use "../colors" as *;
-@use "../button/colors" as *;
+@use "../button/colors" as buttonColors;
 @use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$list-normal-color: ds.$color-content-neutral-default-rest !default;
+$list-normal-content-rest: ds.$color-content-neutral-default-rest !default;
 
-$list-border-color: ds.$color-border-neutral-default-rest !default;
+$list-border-rest: ds.$color-border-neutral-default-rest !default;
 
-$list-group-header-bg: transparent !default;
+$list-group-header-bg-rest: transparent !default;
 
-$list-item-hover-bg: ds.$color-surface-neutral-default-hovered !default;
+$list-item-bg-hovered: ds.$color-surface-neutral-default-hovered !default;
 
-$list-item-selected-bg: ds.$color-surface-neutral-default-selected !default;
-$list-item-selected-hover-bg: ds.$color-surface-neutral-default-selected-hovered !default;
-$list-item-focused-selected-bg: ds.$color-surface-neutral-default-active !default;
-$list-item-hover-color: ds.$color-content-neutral-default-rest !default;
-$list-header-indicator-color: ds.$color-content-neutral-subdued-rest !default;
+$list-item-bg-selected: ds.$color-surface-neutral-default-selected !default;
+$list-item-bg-selected-hovered: ds.$color-surface-neutral-default-selected-hovered !default;
+$list-item-bg-selected-focused: ds.$color-surface-neutral-default-active !default;
+$list-item-content-hovered: ds.$color-content-neutral-default-rest !default;
+$list-header-indicator-content-rest: ds.$color-content-neutral-subdued-rest !default;
 
-$list-item-active-bg: ds.$color-surface-neutral-default-active !default;
-$list-holdmenu-bg: ds.$color-surface-neutral-default-rest !default;
-$list-holdmenu-border-color: $list-border-color !default;
-$list-holdmenu-shadow-color: ds.$color-shadow-ambient !default;
-$list-menu-button-default-color: $button-default-color !default;
-$list-menu-button-default-bg: $button-default-bg !default;
-$list-menu-button-delete-bg: ds.$color-surface-danger-default-rest !default;
-$list-item-ghost-bg: ds.$color-surface-neutral-default-rest !default;
-$list-item-ghost-color: ds.$color-content-neutral-subdued-rest !default;
-$list-item-ghost-border-color: ds.$color-border-primary-default-rest !default;
-$list-icon-color: ds.$color-content-neutral-subdued-rest !default;
+$list-item-bg-active: ds.$color-surface-neutral-default-active !default;
+$list-hold-menu-bg-rest: ds.$color-surface-neutral-default-rest !default;
+$list-hold-menu-border-rest: $list-border-rest !default;
+$list-hold-menu-shadow-rest: ds.$color-shadow-ambient !default;
+$list-menu-button-default-content-rest: buttonColors.$button-default-contained-content-rest !default;
+$list-menu-button-default-bg-rest: buttonColors.$button-default-contained-bg-rest !default;
+$list-menu-button-delete-bg-rest: ds.$color-surface-danger-default-rest !default;
+$list-item-ghost-bg-rest: ds.$color-surface-neutral-default-rest !default;
+$list-item-ghost-content-rest: ds.$color-content-neutral-subdued-rest !default;
+$list-item-ghost-border-rest: ds.$color-border-primary-default-rest !default;
+$list-icon-rest: ds.$color-content-neutral-subdued-rest !default;
 
 /*
  * toggle-delete is an SVG data-uri image: the color is baked into the background-image at
@@ -36,29 +36,27 @@ $list-icon-color: ds.$color-content-neutral-subdued-rest !default;
  * value below is the static per-mode equivalent of the ds.$ token named in the marker.
  * See DIVERGENCES.md.
  */
-$list-toggle-delete-icon-color: null !default;
+$list-toggle-delete-icon-rest: null !default;
 
 @if $mode == "light" {
-  $list-toggle-delete-icon-color: #3f3f3f !default; // dx-data-uri-static: ds.$color-content-neutral-subdued-rest
+  $list-toggle-delete-icon-rest: #444 !default; // dx-data-uri-static: ds.$color-content-neutral-subdued-rest
 }
 
 @if $mode == "dark" {
-  $list-toggle-delete-icon-color: #cdcdcd !default; // dx-data-uri-static: ds.$color-content-neutral-subdued-rest
+  $list-toggle-delete-icon-rest: #cbcbcb !default; // dx-data-uri-static: ds.$color-content-neutral-subdued-rest
 }
 
-$base-select-all-separator-color: ds.$separator-color !default;
+$list-base-select-all-separator-bg-rest: ds.$separator-color !default;
 
-$list-group-color: ds.$color-content-neutral-default-rest !default;
+$list-group-content-rest: ds.$color-content-neutral-default-rest !default;
 
-$list-expanded-group-color: $list-group-color !default;
-$list-item-selected-color: $list-normal-color !default;
+$list-expanded-group-content-rest: $list-group-content-rest !default;
+$list-item-content-selected: $list-normal-content-rest !default;
 
-$list-border-color-disabled: ds.$color-border-neutral-default-disabled !default;
-$list-foreground-disabled: ds.$color-content-neutral-default-disabled !default;
-$list-inverted-text-color: ds.$color-content-neutral-default-static-dark-rest !default;
+$list-border-disabled: ds.$color-border-neutral-default-disabled !default;
+$list-content-disabled: ds.$color-content-neutral-default-disabled !default;
+$list-inverted-content-rest: ds.$color-content-neutral-default-static-dark-rest !default;
 
 // Values hoisted from style-file literals (tokenized)
-$list-item-disabled-opacity: ds.$opacity-60 !default;
 
 // Base-layer values injected with design tokens (wave B1)
-$fluent-list-response-wait-opacity: ds.$opacity-50 !default;

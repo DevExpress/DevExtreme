@@ -1,8 +1,9 @@
 @use "colors" as *;
 @use "../colors" as *;
 @use "../sizes" as *;
-@use "../typography/sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
+@use "../button/sizes" as buttonSizes;
+@use "../typography/sizes" as typographySizes;
 
 // adduse
 
@@ -11,10 +12,10 @@ $stepper-step-min-size: null !default;
 $stepper-step-indicator-size: null !default;
 $stepper-step-content-row-gap: null !default;
 $stepper-step-content-column-gap: null !default;
-$stepper-step-optional-mark-font-size: $fluent-xs-font-size !default;
-$stepper-step-icon-size: $fluent-button-icon-size !default;
+$stepper-step-optional-mark-font-size: typographySizes.$typography-xs-font-size !default;
+$stepper-step-icon-size: buttonSizes.$button-icon-size !default;
 
-$stepper-step-selected-font-weight: ds.$font-weight-base-strong !default;
+$stepper-step-font-weight-selected: ds.$font-weight-base-strong !default;
 $stepper-step-transition-duration: .4s !default;
 
 @if $size == "default" {

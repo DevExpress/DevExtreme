@@ -1,16 +1,15 @@
 @use "sizes" as *;
-@use "../typography/sizes" as *;
 
 @mixin dx-toolbar-sizing($height, $padding, $label-font-size, $item-spacing) {
   padding: $padding;
   overflow: visible;
 
   .dx-toolbar-before {
-    padding-inline-end: $fluent-toolbar-section-padding;
+    padding-inline-end: $toolbar-section-padding;
   }
 
   .dx-toolbar-after {
-    padding-inline-start: $fluent-toolbar-section-padding;
+    padding-inline-start: $toolbar-section-padding;
   }
 
   .dx-toolbar-before:empty,
@@ -33,7 +32,7 @@
     padding-inline-end: $item-spacing;
 
     &.dx-toolbar-first-in-group {
-      padding-left: calc(#{$fluent-toolbar-item-spacing} * 4);
+      padding-left: calc(#{$toolbar-item-spacing} * 4);
     }
 
     &:last-child {
@@ -43,7 +42,7 @@
 
   .dx-toolbar-label {
     font-size: $label-font-size;
-    font-weight: $fluent-toolbar-label-font-weight;
+    font-weight: $toolbar-label-font-weight;
   }
 }
 

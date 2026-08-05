@@ -3,12 +3,12 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/toast" with (
-  $toast-content-padding: $fluent-toast-content-padding,
-  $toast-icon-width: $fluent-toast-icon-width,
-  $toast-icon-height: $fluent-toast-icon-height,
-  $toast-icon-margin-right: $fluent-toast-icon-margin-right,
-  $toast-icon-margin-left: $fluent-toast-icon-margin-left,
-  $toast-stack-gap: $fluent-toast-stack-gap,
+  $toast-content-padding: $toast-content-padding,
+  $toast-icon-width: $toast-icon-width,
+  $toast-icon-height: $toast-icon-height,
+  $toast-icon-margin-right: $toast-icon-margin-inline-end,
+  $toast-icon-margin-left: $toast-icon-rtl-margin-inline-end,
+  $toast-stack-gap: $toast-stack-gap,
 );
 
 // adduse
@@ -16,16 +16,16 @@
 
 
 .dx-toast-stack {
-  gap: $fluent-toast-item-gap;
+  gap: $toast-item-gap;
 }
 
 .dx-toast-content {
-  font-size: $fluent-base-font-size;
+  font-size: $global-font-size;
   font-weight: $toast-content-font-weight;
-  padding: $fluent-toast-content-vertical-padding $fluent-toast-content-horizontal-padding;
+  padding: $toast-content-padding-block $toast-content-padding-inline;
   border-radius: $toast-border-radius;
-  box-shadow: $toast-shadow;
-  min-height: $fluent-toast-height;
+  box-shadow: $toast-box-shadow;
+  min-height: $toast-height;
   display: flex;
   align-items: center;
 }
@@ -39,21 +39,21 @@
 }
 
 .dx-toast-info {
-  background-color: $toast-info-bg;
-  color: $toast-info-color;
+  background-color: $toast-info-bg-rest;
+  color: $toast-info-content-rest;
 }
 
 .dx-toast-warning {
-  background-color: $toast-warning-bg;
-  color: $toast-warning-color;
+  background-color: $toast-warning-bg-rest;
+  color: $toast-warning-content-rest;
 }
 
 .dx-toast-error {
-  background-color: $toast-error-bg;
-  color: $toast-error-color;
+  background-color: $toast-error-bg-rest;
+  color: $toast-error-content-rest;
 }
 
 .dx-toast-success {
-  background-color: $toast-success-bg;
-  color: $toast-success-color;
+  background-color: $toast-success-bg-rest;
+  color: $toast-success-content-rest;
 }

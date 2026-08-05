@@ -2,24 +2,23 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../scheduler/sizes" as *;
-@use "../../base/recurrenceEditor" as *;
+@use "../../base/recurrenceEditor" ;
 
 // adduse
 
 
 .dx-recurrence-numberbox-interval {
-  margin-right: $fluent-recurrence-number-box-margin;
+  margin-right: $recurrence-editor-number-box-margin;
 }
 
 .dx-recurrence-numberbox-interval-label {
-  font-size: $fluent-base-font-size;
-  margin-top: $fluent-recurrence-interval-number-box-margin-top;
+  font-size: $global-font-size;
+  margin-top: $recurrence-editor-interval-number-box-margin-block-start;
 }
 
 .dx-recurrence-button-group {
   .dx-button-content {
-    padding: $fluent-recurrence-button-group-padding;
+    padding: $recurrence-editor-button-group-padding;
   }
 
   .dx-buttongroup-wrapper > div {
@@ -28,13 +27,13 @@
 }
 
 .dx-recurrence-radiogroup-repeat-type {
-  margin: $fluent-recurrence-radio-group-margin 0;
+  margin: $recurrence-editor-radio-group-margin 0;
 }
 
 .dx-recurrence-datebox-until-date {
-  margin-top: $fluent-recurrence-until-date-box-top-margin;
+  margin-top: $recurrence-editor-until-date-box-margin-block-start;
 }
 
 .dx-recurrence-numberbox-repeat-count {
-  margin-top: $fluent-recurrence-count-number-box-top-margin;
+  margin-top: $recurrence-editor-count-number-box-margin-block-start;
 }

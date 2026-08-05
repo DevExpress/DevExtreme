@@ -1,36 +1,50 @@
 @use "../sizes" as *;
+@use "colors" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$fluent-switch-width: null !default;
+// Moved out of _index.scss (O7): a transition and a shadow are values, not rules
+$switch-transition: all 0.2s cubic-bezier(0.33,0,0.67,1);
+$switch-box-shadow: none;
+
+// Not a colour: a radius that used to sit in _colors.scss (NAMING.md, O7)
+$switch-handle-border-radius: 50% !default;
+
+$switch-width: null !default;
 $switch-handle-margin: null !default;
 $switch-padding: ds.$spacing-80 !default;
-$switch-container-vertical-margin: null !default;
-$switch-container-horizontal-padding: null !default;
-$fluent-switch-height: null !default;
+$switch-container-margin-block: null !default;
+$switch-container-padding-inline: null !default;
+$switch-height: null !default;
 $switch-handle-height: null !default;
 $switch-container-height: null !default;
 
-$fluent-switch-shadow-blur-radius: 0 !default;
-$fluent-switch-container-adjustment: ds.$spacing-60 !default;
+$switch-handle-on-box-shadow-blur: 0 !default;
+
+/*
+ * Composite box-shadow (geometry + a colour reference), so it belongs here rather than in
+ * _colors.scss — same rule as $toast-box-shadow. Moved out of _index.scss (O7).
+ */
+$switch-handle-on-box-shadow: 0 0 0 $switch-handle-on-box-shadow-blur $switch-handle-on-shadow-rest;
+$switch-container-rtl-offset: ds.$spacing-60 !default;
 
 @if $size == "default" {
-  $fluent-switch-width: ds.$spacing-400 !default;
+  $switch-width: ds.$spacing-400 !default;
   $switch-handle-height: ds.$spacing-140 !default;
   $switch-handle-margin: ds.$spacing-30 !default;
-  $switch-container-vertical-margin: 0 !default;
-  $switch-container-horizontal-padding: $switch-handle-margin !default;
-  $fluent-switch-height: ds.$spacing-200 !default;
-  $switch-container-height: $fluent-switch-height !default;
+  $switch-container-margin-block: 0 !default;
+  $switch-container-padding-inline: $switch-handle-margin !default;
+  $switch-height: ds.$spacing-200 !default;
+  $switch-container-height: $switch-height !default;
 }
 
 @else if $size == "compact" {
-  $fluent-switch-width: ds.$spacing-320 !default;
+  $switch-width: ds.$spacing-320 !default;
   $switch-handle-height: ds.$spacing-120 !default;
   $switch-handle-margin: ds.$spacing-20 !default;
-  $switch-container-vertical-margin: 0 !default;
-  $switch-container-horizontal-padding: $switch-handle-margin !default;
-  $fluent-switch-height: ds.$spacing-160 !default;
-  $switch-container-height: $fluent-switch-height !default;
+  $switch-container-margin-block: 0 !default;
+  $switch-container-padding-inline: $switch-handle-margin !default;
+  $switch-height: ds.$spacing-160 !default;
+  $switch-container-height: $switch-height !default;
 }

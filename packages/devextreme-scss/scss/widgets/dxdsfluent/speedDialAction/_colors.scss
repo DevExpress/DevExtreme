@@ -1,18 +1,18 @@
-@use "../overlay/colors" as *;
-@use "../button/colors" as *;
+@use "../button/colors" as buttonColors;
 @use "../../../_design-system/variables/ds" as ds;
+@use "../common/colors" as *;
 
 // adduse
 
-$speed-dial-action-color: ds.$color-content-neutral-default-rest !default;
-$speed-dial-action-shadow: ds.$box-shadow-md !default;
-$speed-dial-action-label-shadow: ds.$box-shadow-sm !default;
-$speed-dial-action-shading-color: $overlay-shader-bg !default;
+$speed-dial-action-content-rest: ds.$color-content-neutral-default-rest !default;
+$speed-dial-action-shadow-rest: ds.$box-shadow-md !default;
+$speed-dial-action-label-shadow-rest: ds.$box-shadow-sm !default;
+$speed-dial-action-backdrop-rest: $backdrop-rest !default;
 
-$speed-dial-action-bg: $button-normal-bg !default;
-$speed-dial-action-hover-bg: $button-normal-hover-bg !default;
-$speed-dial-action-active-bg: $button-normal-active-bg !default;
+$speed-dial-action-bg-rest: buttonColors.$button-normal-contained-bg-rest !default;
+$speed-dial-action-bg-hovered: buttonColors.$button-normal-contained-bg-hovered !default;
+$speed-dial-action-bg-active: buttonColors.$button-normal-contained-bg-active !default;
 
-$speed-dial-action-main-bg: ds.$color-surface-primary-default-rest !default;
-$speed-dial-action-main-hover-bg: ds.$color-surface-primary-default-hovered !default;
-$speed-dial-action-main-active-bg: ds.$color-surface-primary-default-active !default;
+$speed-dial-action-main-bg-rest: ds.$color-surface-primary-default-rest !default;
+$speed-dial-action-main-bg-hovered: ds.$color-surface-primary-default-hovered !default;
+$speed-dial-action-main-bg-active: ds.$color-surface-primary-default-active !default;

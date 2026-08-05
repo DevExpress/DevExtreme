@@ -2,22 +2,22 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/validation" as *;
-@use "../textEditor/sizes" as *;
+@use "../../base/validation" as baseValidation;
+@use "../textEditor/sizes" as textEditorSizes;
 
 // adduse
 @use "../overlay";
-@include dx-base-validation(
-  $validation-summary-color,
-  $validation-message-color,
-  $validation-message-background-color,
-  $fluent-validation-overlay-border-radius
+@include baseValidation.dx-base-validation(
+  $validation-summary-content-rest,
+  $validation-message-content-rest,
+  $validation-message-bg-rest,
+  $validation-overlay-border-radius
 );
-@include dx-modern-styles-validation(
-  $fluent-validation-message-font-size,
-  $fluent-validation-message-line-height,
-  $fluent-filled-texteditor-input-horizontal-padding,
-  $fluent-validationsummary-item-margin,
-  $fluent-validation-message-vertical-padding,
-  $fluent-validation-message-horizontal-padding,
+@include baseValidation.dx-modern-styles-validation(
+  $validation-message-font-size,
+  $validation-message-line-height,
+  textEditorSizes.$text-editor-input-filled-padding-inline,
+  $validation-summary-item-margin,
+  $validation-message-padding-block,
+  $validation-message-padding-inline,
 );

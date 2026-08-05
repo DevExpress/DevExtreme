@@ -1,8 +1,6 @@
 @use "sass:color";
 @use "../../../colors" as *;
 @use "../../../sizes" as *;
-@use "../../../button/colors" as *;
-@use "../../../button/mixins" as *;
 @use "../../../../base/icon_fonts" as *;
 @use "../../../../base/tabs";
 @use "../../variables/colors" as *;
@@ -16,7 +14,7 @@
 
 .dx-tabs {
   padding: 0;
-  background-color: $tabs-tab-background;
+  background-color: $tabs-tab-bg-rest;
 
   .dx-scrollable {
     flex-basis: 100%;

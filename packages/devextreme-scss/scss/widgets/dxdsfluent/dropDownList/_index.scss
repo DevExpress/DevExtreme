@@ -4,7 +4,7 @@
 @use "../sizes" as *;
 @use "../common/mixins" as *;
 @use "../../base/dropDownList" with (
-  $dropdownlist-list-min-height: $fluent-dropdownlist-list-min-height,
+  $dropdownlist-list-min-height: $drop-down-list-min-height,
 );
 
 // adduse

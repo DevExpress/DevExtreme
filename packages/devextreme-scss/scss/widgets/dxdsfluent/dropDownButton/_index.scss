@@ -4,8 +4,6 @@
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../button/mixins" as *;
-@use "../button/sizes" as *;
-@use "../button/colors" as *;
 @use "../common/mixins" as *;
 @use "../../base/dropDownButton";
 @use "../../base/dropDownButton/mixins" as *;
@@ -13,8 +11,8 @@
 // adduse
 
 @include dx-dropdownbutton(
-  $fluent-dropdownbutton-icon-spindown-size,
-  $fluent-dropdownbutton-action-horizontal-padding,
+  $drop-down-button-toggle-spindown-icon-size,
+  $drop-down-button-action-padding-inline,
 );
 
 .dx-dropdownbutton-popup-wrapper {
@@ -37,8 +35,8 @@
   &.dx-button-has-icon,
   &.dx-button-has-text {
     .dx-icon-spindown.dx-icon-right {
-      width: $fluent-dropdownbutton-icon-spindown-right-size;
-      height: $fluent-dropdownbutton-icon-spindown-right-size;
+      width: $drop-down-button-action-spindown-icon-size;
+      height: $drop-down-button-action-spindown-icon-size;
     }
   }
 }

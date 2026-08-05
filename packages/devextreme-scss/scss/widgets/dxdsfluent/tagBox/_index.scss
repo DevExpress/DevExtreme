@@ -13,9 +13,9 @@
 .dx-tagbox {
   .dx-tag-container {
     height: 100%;
-    padding-top: $fluent-tagbox-tag-container-vertical-padding;
-    padding-bottom: $fluent-tagbox-tag-container-vertical-padding;
-    gap: $fluent-tagbox-tag-container-gap;
+    padding-top: $tag-box-tag-container-padding-block;
+    padding-bottom: $tag-box-tag-container-padding-block;
+    gap: $tag-box-tag-container-gap;
 
     .dx-texteditor-input {
       padding: 0;
@@ -25,8 +25,8 @@
 
   &.dx-editor-underlined {
     .dx-tag-container {
-      padding-top: calc(#{$fluent-tagbox-tag-container-vertical-padding} + 1px);
-      padding-bottom: calc(#{$fluent-tagbox-tag-container-vertical-padding} + 1px);
+      padding-top: calc(#{$tag-box-tag-container-padding-block} + 1px);
+      padding-bottom: calc(#{$tag-box-tag-container-padding-block} + 1px);
     }
   }
 
@@ -34,14 +34,14 @@
   &.dx-editor-filled,
   &.dx-editor-underlined {
     .dx-texteditor-input {
-      height: $fluent-tagbox-tag-height;
+      height: $tag-box-tag-size;
     }
   }
 
   &.dx-editor-outlined,
   &.dx-editor-filled {
     .dx-tag-container {
-      padding-inline-start: $fluent-tagbox-tag-container-padding-left;
+      padding-inline-start: $tag-box-tag-container-padding-inline-start;
     }
   }
 
@@ -61,29 +61,29 @@
     &.dx-editor-filled {
       .dx-tag-container,
       .dx-placeholder::before {
-        padding-top: $fluent-tagbox-filled-with-label-top-padding;
-        padding-bottom: $fluent-tagbox-filled-with-label-bottom-padding;
+        padding-top: $tag-box-filled-with-label-padding-block-start;
+        padding-bottom: $tag-box-filled-with-label-padding-block-end;
       }
     }
 
     &.dx-editor-underlined {
       .dx-tag-container,
       .dx-placeholder::before {
-        padding-top: calc(#{$fluent-tagbox-filled-with-label-top-padding} + 1px);
-        padding-bottom: calc(#{$fluent-tagbox-filled-with-label-bottom-padding} + 1px);
+        padding-top: calc(#{$tag-box-filled-with-label-padding-block-start} + 1px);
+        padding-bottom: calc(#{$tag-box-filled-with-label-padding-block-end} + 1px);
       }
     }
   }
 
   &.dx-state-disabled {
     .dx-tag-content {
-      color: $tagbox-tag-foreground-disabled;
-      background-color: $tagbox-tag-disabled;
+      color: $tag-box-tag-content-disabled;
+      background-color: $tag-box-tag-bg-disabled;
     }
 
     .dx-tag-remove-button {
       &::before {
-        color: $tagbox-tag-foreground-disabled;
+        color: $tag-box-tag-content-disabled;
       }
     }
   }
@@ -98,60 +98,60 @@
 .dx-tag-content {
   display: inline-flex;
   align-items: center;
-  font-size: $fluent-tagbox-tag-content-font-size;
-  line-height: $fluent-tagbox-tag-content-line-height;
+  font-size: $tag-box-tag-content-font-size;
+  line-height: $tag-box-tag-content-line-height;
   margin: 0;
-  padding-top: $fluent-tagbox-tag-content-vertical-padding;
-  padding-bottom: $fluent-tagbox-tag-content-vertical-padding;
-  padding-inline-start: $fluent-tagbox-tag-content-padding-left;
-  padding-inline-end: $fluent-tagbox-tag-content-padding-right;
-  min-width: $fluent-tagbox-tag-content-min-width;
-  background-color: $tagbox-tag-bg;
-  color: $tagbox-tag-color;
-  border-radius: $tagbox-tag-border-radius;
-  border-width: $fluent-tagbox-tag-border-width;
+  padding-top: $tag-box-tag-content-padding-block;
+  padding-bottom: $tag-box-tag-content-padding-block;
+  padding-inline-start: $tag-box-tag-content-padding-inline-start;
+  padding-inline-end: $tag-box-tag-content-padding-inline-end;
+  min-width: $tag-box-tag-content-min-width;
+  background-color: $tag-box-tag-bg-rest;
+  color: $tag-box-tag-content-rest;
+  border-radius: $tag-box-tag-border-radius;
+  border-width: $tag-box-tag-border-width;
   border-style: solid;
-  border-color: $tagbox-border-color-disabled;
+  border-color: $tag-box-border-disabled;
 }
 
 .dx-tag-remove-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: $fluent-tagbox-tag-height;
+  width: $tag-box-tag-size;
   height: 100%;
 
   @include dx-icon(clear);
 
-  font-size: calc(#{$fluent-tagbox-tag-content-font-size} + 2px);
+  font-size: calc(#{$tag-box-tag-content-font-size} + 2px);
 
   &::before {
     content: "\f15f";
     display: flex;
     align-items: center;
     justify-content: center;
-    color: $tagbox-tag-button-remove-bg;
+    color: $tag-box-tag-remove-button-content-rest;
   }
 }
 
 .dx-tag {
   &:hover {
     .dx-tag-content {
-      background-color: $tagbox-tag-hover-bg;
-      color: $tagbox-tag-active-color;
+      background-color: $tag-box-tag-bg-hovered;
+      color: $tag-box-tag-content-active;
     }
   }
 
   &.dx-state-focused {
     .dx-tag-content {
-      color: $tagbox-tag-active-color;
-      border-color: $tagbox-tag-border-color-focused;
+      color: $tag-box-tag-content-active;
+      border-color: $tag-box-tag-border-focused;
     }
   }
 }
 
 @mixin tagbox-editor-container-offset() {
-  inset-inline-end: $fluent-invalid-badge-horizontal-padding;
+  inset-inline-end: $invalid-badge-padding-inline;
 }
 
 .dx-tagbox.dx-invalid,
@@ -173,10 +173,10 @@
 
 .dx-tagbox-popup-wrapper {
   .dx-list-select-all {
-    border-bottom: $fluent-tagbox-list-select-all-border-bottom;
-    border-bottom-color: $tagbox-select-all-border-color;
-    padding-bottom: $fluent-tagbox-select-all-padding-bottom;
-    margin-bottom: $fluent-tagbox-select-all-margin-bottom;
+    border-bottom: $tag-box-list-select-all-border-block-end;
+    border-bottom-color: $tag-box-select-all-line-rest;
+    padding-bottom: $tag-box-select-all-padding-block-end;
+    margin-bottom: $tag-box-select-all-margin-block-end;
 
     &::after {
       background-color: transparent;

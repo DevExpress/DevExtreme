@@ -3,50 +3,53 @@
 
 // adduse
 
-$fluent-filterbuilder-icon-padding: null !default;
-$fluent-filterbuilder-filled-editor-padding: null !default;
-$fluent-filterbuilder-treeview-item-left-padding: null !default;
-$fluent-filterbuilder-treeview-item-padding: null !default;
-$fluent-filterbuilder-treeview-toggle-left: null !default;
-$fluent-filterbuilder-treeview-item-min-heigth: null !default;
+// Not colours: opacities that used to sit in _colors.scss (NAMING.md, O7)
+$filter-builder-range-separator-opacity: ds.$opacity-30 !default;
+
+$filter-builder-icon-padding: null !default;
+$filter-builder-filled-editor-padding: null !default;
+$filter-builder-tree-view-item-left-padding: null !default;
+$filter-builder-tree-view-item-padding: null !default;
+$filter-builder-tree-view-toggle-inset-inline-start: null !default;
+$filter-builder-tree-view-item-min-height: null !default;
 
 @if $size == "default" {
-  $fluent-filterbuilder-icon-padding: ds.$spacing-80 !default;
-  $fluent-filterbuilder-filled-editor-padding: ds.$spacing-130 ds.$spacing-120 !default;
+  $filter-builder-icon-padding: ds.$spacing-80 !default;
+  $filter-builder-filled-editor-padding: ds.$spacing-130 ds.$spacing-120 !default;
 
-  $fluent-filterbuilder-treeview-item-left-padding: ds.$spacing-120 !default;
-  $fluent-filterbuilder-treeview-item-padding: ds.$spacing-60 ds.$spacing-120 ds.$spacing-60 $fluent-filterbuilder-treeview-item-left-padding !default;
-  $fluent-filterbuilder-treeview-toggle-left: ds.$spacing-160 !default;
-  $fluent-filterbuilder-treeview-item-min-heigth: ds.$spacing-320 !default;
+  $filter-builder-tree-view-item-left-padding: ds.$spacing-120 !default;
+  $filter-builder-tree-view-item-padding: ds.$spacing-60 ds.$spacing-120 ds.$spacing-60 $filter-builder-tree-view-item-left-padding !default;
+  $filter-builder-tree-view-toggle-inset-inline-start: ds.$spacing-160 !default;
+  $filter-builder-tree-view-item-min-height: ds.$spacing-320 !default;
 }
 
 @else if $size == "compact" {
-  $fluent-filterbuilder-icon-padding: ds.$spacing-40 !default;
-  $fluent-filterbuilder-filled-editor-padding: ds.$spacing-80 ds.$spacing-80 !default;
-  $fluent-filterbuilder-treeview-item-left-padding: ds.$spacing-40 !default;
-  $fluent-filterbuilder-treeview-item-padding: ds.$spacing-40 ds.$spacing-120 ds.$spacing-40 $fluent-filterbuilder-treeview-item-left-padding !default;
-  $fluent-filterbuilder-treeview-toggle-left: 0 !default;
-  $fluent-filterbuilder-treeview-item-min-heigth: ds.$spacing-240 !default;
+  $filter-builder-icon-padding: ds.$spacing-40 !default;
+  $filter-builder-filled-editor-padding: ds.$spacing-80 ds.$spacing-80 !default;
+  $filter-builder-tree-view-item-left-padding: ds.$spacing-40 !default;
+  $filter-builder-tree-view-item-padding: ds.$spacing-40 ds.$spacing-120 ds.$spacing-40 $filter-builder-tree-view-item-left-padding !default;
+  $filter-builder-tree-view-toggle-inset-inline-start: 0 !default;
+  $filter-builder-tree-view-item-min-height: ds.$spacing-240 !default;
 }
 
 // Values hoisted from style-file literals (tokenized)
-$fluent-filterbuilder-action-icon-font-size: 21px !default; // dx-offscale: 21px
-$fluent-filterbuilder-text-border-radius: ds.$border-radius-50 !default;
-$fluent-filterbuilder-icon-margin-right: ds.$spacing-100 !default;
-$fluent-filterbuilder-icon-margin-left: ds.$spacing-100 !default;
-$fluent-filterbuilder-treeview-toggle-item-visibility-right: ds.$spacing-160 !default;
+$filter-builder-action-icon-font-size: 21px !default; // dx-offscale: 21px
+$filter-builder-text-border-radius: ds.$border-radius-50 !default;
+$filter-builder-icon-margin-inline-end: ds.$spacing-100 !default;
+$filter-builder-icon-margin-inline-start: ds.$spacing-100 !default;
+$filter-builder-tree-view-toggle-item-visibility-inset-inline-end: ds.$spacing-160 !default;
 
 // Base-layer sizing injected with design tokens (wave B2 — filterBuilder/common)
-$fluent-filterbuilder-action-icon-margin-left: ds.$spacing-50 !default;
-$fluent-filterbuilder-action-icon-margin-right: ds.$spacing-50 !default;
-$fluent-filterbuilder-group-content-padding-right: ds.$spacing-260 !default;
-$fluent-filterbuilder-range-separator-margin: 0 ds.$spacing-70 !default;
-$fluent-filterbuilder-item-value-text-min-width: ds.$spacing-200 !default;
-$fluent-filterbuilder-item-value-text-padding: ds.$spacing-20 ds.$spacing-70 ds.$spacing-30 ds.$spacing-70 !default;
-$fluent-filterbuilder-action-icon-padding: ds.$spacing-50 ds.$spacing-80 !default;
-$fluent-filterbuilder-group-content-padding-left: ds.$spacing-260 !default;
-$fluent-filterbuilder-treeview-item-padding-left: ds.$spacing-50 !default;
-$fluent-filterbuilder-treeview-item-padding-right: ds.$spacing-50 !default;
-$fluent-filterbuilder-treeview-node-margin-left: ds.$spacing-150 !default;
-$fluent-filterbuilder-treeview-node-margin-right: ds.$spacing-150 !default;
-$fluent-filterbuilder-scrollable-max-height: 360px !default; // dx-offscale: 360px
+$filter-builder-action-icon-margin-inline-start: ds.$spacing-50 !default;
+$filter-builder-action-icon-margin-inline-end: ds.$spacing-50 !default;
+$filter-builder-group-content-padding-inline-end: ds.$spacing-260 !default;
+$filter-builder-range-separator-margin: 0 ds.$spacing-70 !default;
+$filter-builder-item-value-text-min-width: ds.$spacing-200 !default;
+$filter-builder-item-value-text-padding: ds.$spacing-20 ds.$spacing-70 ds.$spacing-30 ds.$spacing-70 !default;
+$filter-builder-action-icon-padding: ds.$spacing-50 ds.$spacing-80 !default;
+$filter-builder-group-content-padding-inline-start: ds.$spacing-260 !default;
+$filter-builder-tree-view-item-padding-inline-start: ds.$spacing-50 !default;
+$filter-builder-tree-view-item-padding-inline-end: ds.$spacing-50 !default;
+$filter-builder-tree-view-node-margin-inline-start: ds.$spacing-150 !default;
+$filter-builder-tree-view-node-margin-inline-end: ds.$spacing-150 !default;
+$filter-builder-scrollable-max-height: 360px !default; // dx-offscale: 360px

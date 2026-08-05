@@ -2,9 +2,9 @@
 
 // adduse
 
-$form-field-item-color: ds.$color-content-neutral-default-rest !default;
-$form-item-help-text-color: ds.$color-content-neutral-subdued-rest !default;
+$form-field-item-content-rest: ds.$color-content-neutral-default-rest !default;
+$form-item-help-content-rest: ds.$color-content-neutral-subdued-rest !default;
 
-$form-group-border-color: ds.$color-border-neutral-default-rest !default;
-$form-field-required-color: $form-field-item-color !default;
-$form-field-mark-color: $form-field-item-color !default;
+$form-group-border-rest: ds.$color-border-neutral-default-rest !default;
+$form-field-required-content-rest: $form-field-item-content-rest !default;
+$form-field-mark-content-rest: $form-field-item-content-rest !default;

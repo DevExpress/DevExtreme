@@ -216,7 +216,7 @@ $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !defau
   $cardview-fluent-header-item__right-padding: ds.$spacing-20 !default;
   $cardview-fluent-header-panel__item-text-weight: $cardview-fluent-common-text-weight !default;
   $cardview-fluent-header-panel__item__sort-index-text-weight: ds.$font-weight-base-default !default;
-  $cardview-fluent-header-panel__item__icon-size: $fluent-base-icon-size !default;
+  $cardview-fluent-header-panel__item__icon-size: $global-icon-size !default;
 
   // Header panel item - hovered
   $cardview-fluent-header-panel__item--hovered-text-weight: $cardview-fluent-header-panel__item-text-weight !default;
@@ -298,7 +298,7 @@ $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !defau
   $cardview-fluent-header-item__right-padding: ds.$spacing-10 !default;
   $cardview-fluent-header-panel__item-text-weight: $cardview-fluent-common-text-weight !default;
   $cardview-fluent-header-panel__item__sort-index-text-weight: ds.$font-weight-base-default !default;
-  $cardview-fluent-header-panel__item__icon-size: $fluent-base-icon-size !default;
+  $cardview-fluent-header-panel__item__icon-size: $global-icon-size !default;
 
   // Header panel item - hovered
   $cardview-fluent-header-panel__item--hovered-text-weight: $cardview-fluent-header-panel__item-text-weight !default;

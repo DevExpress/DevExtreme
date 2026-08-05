@@ -3,21 +3,21 @@
 
 // adduse
 
-$filemanager-border-color: ds.$color-border-neutral-default-rest !default;
-$filemanager-file-toolbar-bg: ds.$color-surface-neutral-subdued-rest !default;
-$filemanager-editor-active-bg: rgb(from #{ds.$color-content-neutral-default-rest} r g b / 0.1) !default;
-$filemanager-dirs-tree-item-focus-color: ds.$color-content-neutral-default-rest !default;
-$filemanager-breadcrumbs-item-focus-bg: ds.$color-surface-neutral-default-active !default;
-$filemanager-breadcrumbs-item-focus-color: ds.$color-content-neutral-default-rest !default;
-$filemanager-custom-thumbnail-color: ds.$color-content-neutral-default-disabled !default;
-$filemanager-file-item-select-color: ds.$color-content-neutral-default-inverted-rest !default;
-$filemanager-file-item-select-bg: rgb(from #{ds.$color-surface-primary-default-rest} r g b / 0.8) !default;
-$filemanager-file-item-select-focus-color: ds.$color-content-neutral-default-inverted-rest !default;
-$filemanager-file-item-select-focus-bg: rgb(from #{ds.$color-surface-primary-default-rest} r g b / 0.7) !default;
-$filemanager-file-item-hover-bg: ds.$color-surface-neutral-default-hovered !default;
-$filemanager-file-item-focused-border: ds.$color-border-primary-default-rest !default;
-$filemanager-item-focused-color: ds.$color-content-neutral-default-inverted-rest !default;
-$filemanager-dirs-tree-item-focus-bg: ds.$color-surface-neutral-default-active !default;
+$file-manager-border-rest: ds.$color-border-neutral-default-rest !default;
+$file-manager-file-toolbar-bg-rest: ds.$color-surface-neutral-subdued-rest !default;
+$file-manager-editor-bg-active: rgb(from #{ds.$color-content-neutral-default-rest} r g b / 0.1) !default;
+$file-manager-dirs-tree-item-content-focused: ds.$color-content-neutral-default-rest !default;
+$file-manager-breadcrumbs-item-bg-focused: ds.$color-surface-neutral-default-active !default;
+$file-manager-breadcrumbs-item-content-focused: ds.$color-content-neutral-default-rest !default;
+$file-manager-custom-thumbnail-content-rest: ds.$color-content-neutral-default-disabled !default;
+$file-manager-file-item-select-content-rest: ds.$color-content-neutral-default-inverted-rest !default;
+$file-manager-file-item-select-bg-rest: rgb(from #{ds.$color-surface-primary-default-rest} r g b / 0.8) !default;
+$file-manager-file-item-select-content-focused: ds.$color-content-neutral-default-inverted-rest !default;
+$file-manager-file-item-select-bg-focused: rgb(from #{ds.$color-surface-primary-default-rest} r g b / 0.7) !default;
+$file-manager-file-item-bg-hovered: ds.$color-surface-neutral-default-hovered !default;
+$file-manager-file-item-border-focused: ds.$color-border-primary-default-rest !default;
+$file-manager-item-content-focused: ds.$color-content-neutral-default-inverted-rest !default;
+$file-manager-dirs-tree-item-bg-focused: ds.$color-surface-neutral-default-active !default;
 
 /*
  * The status icons (refresh/progress/done/error overlays) are SVG data-uri images: colors are
@@ -25,23 +25,23 @@ $filemanager-dirs-tree-item-focus-bg: ds.$color-surface-neutral-default-active !
  * resolve inside a data-uri (they render black), so the values below are the static per-mode
  * equivalents of the ds.$ tokens named in the markers. See DIVERGENCES.md.
  */
-$filemanager-icon-success-color: #107c10 !default; // dx-data-uri-static: ds.$color-surface-success-default-rest (mode-invariant)
-$filemanager-icon-danger-color: #c50f1f !default; // dx-data-uri-static: ds.$color-surface-danger-default-rest (mode-invariant)
-$filemanager-icon-color: null !default;
-$filemanager-icon-inverted-color: null !default;
+$file-manager-icon-success-content-rest: #107c10 !default; // dx-data-uri-static: ds.$color-surface-success-default-rest (mode-invariant)
+$file-manager-icon-danger-content-rest: #c50f1f !default; // dx-data-uri-static: ds.$color-surface-danger-default-rest (mode-invariant)
+$file-manager-icon-rest: null !default;
+$file-manager-icon-inverted-content-rest: null !default;
 
 @if $mode == "light" {
-  $filemanager-icon-color: #161616 !default; // dx-data-uri-static: ds.$color-content-neutral-default-rest
-  $filemanager-icon-inverted-color: #fff !default; // dx-data-uri-static: ds.$color-content-neutral-default-inverted-rest
+  $file-manager-icon-rest: #161616 !default; // dx-data-uri-static: ds.$color-content-neutral-default-rest
+  $file-manager-icon-inverted-content-rest: #fff !default; // dx-data-uri-static: ds.$color-content-neutral-default-inverted-rest
 }
 
 @if $mode == "dark" {
-  $filemanager-icon-color: #fff !default; // dx-data-uri-static: ds.$color-content-neutral-default-rest
-  $filemanager-icon-inverted-color: #161616 !default; // dx-data-uri-static: ds.$color-content-neutral-default-inverted-rest
+  $file-manager-icon-rest: #fff !default; // dx-data-uri-static: ds.$color-content-neutral-default-rest
+  $file-manager-icon-inverted-content-rest: #161616 !default; // dx-data-uri-static: ds.$color-content-neutral-default-inverted-rest
 }
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$filemanager-accent: ds.$color-border-primary-default-rest !default;
-$filemanager-bg: ds.$color-surface-neutral-default-rest !default;
-$filemanager-danger: ds.$color-surface-danger-default-rest !default;
-$filemanager-inverted-text-color: ds.$color-content-neutral-default-static-dark-rest !default;
+$file-manager-drop-zone-placeholder-border-rest: ds.$color-border-primary-default-rest !default;
+$file-manager-bg-rest: ds.$color-surface-neutral-default-rest !default;
+$file-manager-danger-bg-rest: ds.$color-surface-danger-default-rest !default;
+$file-manager-inverted-content-rest: ds.$color-content-neutral-default-static-dark-rest !default;
