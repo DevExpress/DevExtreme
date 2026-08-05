@@ -3,53 +3,53 @@
 
 // adduse
 
-$fluent-treeview-toggle-item-width: null !default;
-$fluent-treeview-item-height: null !default;
-$fluent-checkbox-container-size: null !default;
-$fluent-treeview-container-with-border-offset: ds.$spacing-80;
-$fluent-treeview-item-element-gap: ds.$spacing-80 !default;
-$fluent-treeview-item-margin: ds.$spacing-10 0;
-$fluent-treeview-item-border-radius: ds.$border-radius-40;
-$fluent-treeview-border-padding: ds.$spacing-10;
-$fluent-treeview-container-padding:
-  $fluent-treeview-border-padding
-  $fluent-treeview-border-padding
-  $fluent-treeview-border-padding
-  $fluent-treeview-container-with-border-offset;
+// Not colours: opacities that used to sit in _colors.scss (NAMING.md, O7)
+$tree-view-opacity-disabled: ds.$opacity-50 !default;
 
-$fluent-treeview-checkbox-offset: null !default;
-$fluent-select-all-item-padding: null !default;
-$fluent-treeview-item-padding: null !default;
-$fluent-treeview-load-indicator-size: null !default;
-$fluent-treeview-searchbox-margin-bottom: null !default;
-$fluent-treeview-search-editor-height: null !default;
-$fluent-treeview-item-side-padding: ds.$spacing-120 !default;
-$fluent-select-all-item-border-visible-padding: ds.$spacing-260 !default;
+$tree-view-toggle-item-width: null !default;
+$tree-view-checkbox-container-size: null !default;
+$tree-view-container-with-border-offset: ds.$spacing-80;
+$tree-view-item-element-gap: ds.$spacing-80 !default;
+$tree-view-item-margin: ds.$spacing-10 0;
+$tree-view-item-border-radius: ds.$border-radius-40;
+$tree-view-border-padding: ds.$spacing-10;
+$tree-view-container-padding:
+  $tree-view-border-padding
+  $tree-view-border-padding
+  $tree-view-border-padding
+  $tree-view-container-with-border-offset;
+
+$tree-view-checkbox-offset: null !default;
+$tree-view-select-all-item-padding: null !default;
+$tree-view-item-padding: null !default;
+$tree-view-load-indicator-size: null !default;
+$tree-view-search-box-margin-block-end: null !default;
+$tree-view-search-editor-height: null !default;
+$tree-view-item-padding-inline: ds.$spacing-120 !default;
+$tree-view-select-all-item-border-visible-padding: ds.$spacing-260 !default;
 
 @if $size == "default" {
-  $fluent-treeview-item-height: ds.$spacing-440 !default;
-  $fluent-treeview-toggle-item-width: ds.$spacing-200 !default;
-  $fluent-checkbox-container-size: ds.$spacing-200 !default;
-  $fluent-treeview-checkbox-offset: 42px !default; // dx-offscale: 42px
-  $fluent-select-all-item-padding: ds.$spacing-150 42px !default; // dx-offscale: 42px
-  $fluent-treeview-item-padding: ds.$spacing-120 $fluent-treeview-item-side-padding !default;
-  $fluent-treeview-load-indicator-size: ds.$spacing-200 !default;
-  $fluent-treeview-searchbox-margin-bottom: ds.$spacing-80 !default;
-  $fluent-treeview-search-editor-height: ds.$spacing-480;
+  $tree-view-toggle-item-width: ds.$spacing-200 !default;
+  $tree-view-checkbox-container-size: ds.$spacing-200 !default;
+  $tree-view-checkbox-offset: 42px !default; // dx-offscale: 42px
+  $tree-view-select-all-item-padding: ds.$spacing-150 42px !default; // dx-offscale: 42px
+  $tree-view-item-padding: ds.$spacing-120 $tree-view-item-padding-inline !default;
+  $tree-view-load-indicator-size: ds.$spacing-200 !default;
+  $tree-view-search-box-margin-block-end: ds.$spacing-80 !default;
+  $tree-view-search-editor-height: ds.$spacing-480;
 }
 
 @else if $size == "compact" {
-  $fluent-treeview-item-height: ds.$spacing-320 !default;
-  $fluent-treeview-toggle-item-width: ds.$spacing-160 !default;
-  $fluent-treeview-checkbox-offset: ds.$spacing-360 !default;
-  $fluent-checkbox-container-size: ds.$spacing-160 !default;
-  $fluent-select-all-item-padding: ds.$spacing-100 $fluent-treeview-checkbox-offset !default;
-  $fluent-treeview-item-padding: ds.$spacing-100 $fluent-treeview-item-side-padding !default;
-  $fluent-treeview-load-indicator-size: ds.$spacing-160 !default;
-  $fluent-treeview-searchbox-margin-bottom: ds.$spacing-40 !default;
-  $fluent-treeview-search-editor-height: ds.$spacing-320;
+  $tree-view-toggle-item-width: ds.$spacing-160 !default;
+  $tree-view-checkbox-offset: ds.$spacing-360 !default;
+  $tree-view-checkbox-container-size: ds.$spacing-160 !default;
+  $tree-view-select-all-item-padding: ds.$spacing-100 $tree-view-checkbox-offset !default;
+  $tree-view-item-padding: ds.$spacing-100 $tree-view-item-padding-inline !default;
+  $tree-view-load-indicator-size: ds.$spacing-160 !default;
+  $tree-view-search-box-margin-block-end: ds.$spacing-40 !default;
+  $tree-view-search-editor-height: ds.$spacing-320;
 }
 
 // Base-layer sizing injected with design tokens (wave B2)
-$fluent-treeview-select-all-item-border-bottom: ds.$border-width-10 solid !default;
-$fluent-treeview-border-visible-border: ds.$border-width-10 solid !default;
+$tree-view-select-all-item-border-block-end: ds.$border-width-10 solid !default;
+$tree-view-border-visible-border: ds.$border-width-10 solid !default;

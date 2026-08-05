@@ -5,7 +5,7 @@
 
 
 // Values hoisted from style-file literals (tokenized)
-$fluent-tabpanel-tabs-border-bottom: ds.$border-width-10 solid !default;
-$fluent-tabpanel-tabs-border-top: ds.$border-width-10 solid !default;
-$fluent-tabpanel-tabs-border-right: ds.$border-width-10 solid !default;
-$fluent-tabpanel-tabs-border-left: ds.$border-width-10 solid !default;
+$tab-panel-tabs-top-border: ds.$border-width-10 solid !default;
+$tab-panel-tabs-bottom-border: ds.$border-width-10 solid !default;
+$tab-panel-tabs-left-border: ds.$border-width-10 solid !default;
+$tab-panel-tabs-right-border: ds.$border-width-10 solid !default;

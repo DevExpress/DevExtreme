@@ -5,45 +5,45 @@
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
 @use "../../base/progressBar" with (
-  $progressbar-status-padding-right: $fluent-progressbar-status-padding-right,
-  $progressbar-status-padding-left: $fluent-progressbar-status-padding-left,
-  $progressbar-status-font-size: $fluent-progressbar-status-font-size,
+  $progressbar-status-padding-right: $progress-bar-status-padding-inline-end,
+  $progressbar-status-padding-left: $progress-bar-status-padding-inline-start,
+  $progressbar-status-font-size: $progress-bar-status-font-size,
 );
 
 // adduse
 
 .dx-progressbar-container {
-  height: $progressbar-height;
-  background-color: $progressbar-bg;
-  border-radius: $progressbar-border-radius;
+  height: $progress-bar-height;
+  background-color: $progress-bar-bg-rest;
+  border-radius: $progress-bar-border-radius;
 }
 
 .dx-progressbar-range {
   position: relative;
-  background-color: $progressbar-range-bg;
-  border-radius: $progressbar-border-radius;
+  background-color: $progress-bar-range-bg-rest;
+  border-radius: $progress-bar-border-radius;
   box-sizing: content-box;
 }
 
 .dx-progressbar-animating-container {
-  height: $progressbar-height;
-  background-color: $progressbar-bg;
-  background-size: $progressbar-indeterminate-background-width 5px;
+  height: $progress-bar-height;
+  background-color: $progress-bar-bg-rest;
+  background-size: $progress-bar-indeterminate-width 5px;
   animation: dx-loader 2s linear infinite;
-  border-radius: $progressbar-border-radius;
+  border-radius: $progress-bar-border-radius;
 
-  @include gradient-linear($progressbar-interdeterminate-state-gradient);
+  @include gradient-linear($progress-bar-indeterminate-bg-rest);
 
   background-repeat: repeat;
 }
 
 .dx-invalid {
   .dx-progressbar-range {
-    background-color: $progressbar-range-invalid-color;
+    background-color: $progress-bar-range-invalid-bg-rest;
   }
 
   .dx-progressbar-animating-container {
-    @include gradient-linear($progressbar-invalid-interdeterminate-state-gradient);
+    @include gradient-linear($progress-bar-indeterminate-invalid-bg-rest);
 
     background-repeat: repeat;
   }
@@ -55,29 +55,29 @@
   }
 
   .dx-progressbar-container {
-    background-color: $progressbar-container-disabled-bg;
+    background-color: $progress-bar-container-bg-disabled;
   }
 
   .dx-progressbar-range {
-    background-color: $progressbar-range-disabled-bg;
+    background-color: $progress-bar-range-bg-disabled;
   }
 
   .dx-progressbar-status {
-    color: $progressbar-foreground-disabled;
+    color: $progress-bar-content-disabled;
   }
 
   .dx-progressbar-animating-container {
     animation: none;
 
-    @include gradient-linear($progressbar-disabled-interdeterminate-state-gradient);
+    @include gradient-linear($progress-bar-indeterminate-bg-disabled);
 
-    background-position-x: math.div($progressbar-indeterminate-background-width, 2);
+    background-position-x: math.div($progress-bar-indeterminate-width, 2);
   }
 }
 
 .dx-progressbar-status {
-  padding-top: $progressbar-status-margin-top;
-  color: $progressbar-label-color;
+  padding-top: $progress-bar-status-margin-block-start;
+  color: $progress-bar-label-content-rest;
 
   .dx-progressbar .dx-position-right & {
     padding-top: 0;
@@ -90,7 +90,7 @@
     .dx-progressbar-animating-container {
       animation: dx-loader-rtl 2s linear infinite;
 
-      @include gradient-linear($progressbar-interdeterminate-state-gradient);
+      @include gradient-linear($progress-bar-indeterminate-bg-rest);
 
       background-repeat: repeat;
     }
@@ -99,9 +99,9 @@
       .dx-progressbar-animating-container {
         animation: none;
 
-        @include gradient-linear($progressbar-disabled-interdeterminate-state-gradient);
+        @include gradient-linear($progress-bar-indeterminate-bg-disabled);
 
-        background-position-x: math.div($progressbar-indeterminate-background-width, 2);
+        background-position-x: math.div($progress-bar-indeterminate-width, 2);
       }
     }
   }

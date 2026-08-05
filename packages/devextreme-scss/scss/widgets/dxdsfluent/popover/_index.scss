@@ -2,8 +2,6 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../overlay/colors" as *;
-@use "../textEditor/colors" as *;
 @use "../../base/popover";
 
 // adduse
@@ -11,7 +9,7 @@
 .dx-popover-wrapper {
   .dx-popup-title {
     margin: 0;
-    border-top-left-radius: $fluent-popover-popup-title-border-top-left-radius;
-    border-top-right-radius: $fluent-popover-popup-title-border-top-right-radius;
+    border-top-left-radius: $popover-popup-title-border-start-start-radius;
+    border-top-right-radius: $popover-popup-title-border-start-end-radius;
   }
 }

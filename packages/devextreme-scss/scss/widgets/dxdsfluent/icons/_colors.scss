@@ -1,6 +1,6 @@
-@use "../scrollView/colors" as *;
+@use "../scrollView/colors" as scrollViewColors;
 
 // adduse
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$icons-scrollview-pulldown-path: $scrollview-pulldown-path !default;
+$icon-pulldown-bg-rest: scrollViewColors.$scroll-view-pull-down-bg-rest !default;

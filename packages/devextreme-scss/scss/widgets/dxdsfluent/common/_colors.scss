@@ -3,19 +3,27 @@
 
 // adduse
 
-// Dropdown/overlay shadow layer colors (mode-aware via the shadow roles).
-$base-dropdown-shadow-color1: ds.$color-shadow-ambient !default;
-$base-dropdown-shadow-color2: ds.$color-shadow-key !default;
+/*
+ * The surface every overlay-based widget draws on, and the backdrop behind it. They came from
+ * overlay/, where five widgets were reading them across the folder boundary; neither describes
+ * one widget's anatomy, and both map to a non-component token family, which is exactly the
+ * admission criterion for the system tier (NAMING.md, common/).
+ */
+$surface-overlay-rest: ds.$color-surface-neutral-default-rest !default;
+$backdrop-rest: ds.$color-surface-backdrop-default-rest !default;
 
-$common-accent: ds.$color-surface-primary-default-rest !default;
-$common-bg: ds.$color-surface-neutral-default-rest !default;
-$common-border-color: ds.$color-border-neutral-default-rest !default;
+// Dropdown/overlay shadow layer colors (mode-aware via the shadow roles).
+$global-dropdown-shadow-ambient: ds.$color-shadow-ambient !default;
+$global-dropdown-shadow-key: ds.$color-shadow-key !default;
+
+$palette-accent: ds.$color-surface-primary-default-rest !default;
+$palette-bg: ds.$color-surface-neutral-default-rest !default;
+$palette-border: ds.$color-border-neutral-default-rest !default;
 
 // Non-color theme-level values (opacity/font family) — kept referencing the theme layer.
-$common-disabled-opacity: ds.$opacity-35 !default;
-$common-font-family: ds.$font-family-sans-serif !default;
-$common-inverted-text-color: ds.$color-content-neutral-default-static-dark-rest !default;
-$common-success: ds.$color-surface-success-default-rest !default;
-$common-text-color: ds.$color-content-neutral-default-rest !default;
-$common-typography-bg: ds.$color-surface-neutral-default-rest !default;
-$common-typography-color: ds.$color-content-neutral-default-rest !default;
+$global-font-family: ds.$font-family-sans-serif !default;
+$invalid-badge-content-rest: ds.$color-content-neutral-default-static-dark-rest !default;
+$valid-badge-content-rest: ds.$color-surface-success-default-rest !default;
+$palette-text: ds.$color-content-neutral-default-rest !default;
+$global-bg-rest: ds.$color-surface-neutral-default-rest !default;
+$global-content-rest: ds.$color-content-neutral-default-rest !default;

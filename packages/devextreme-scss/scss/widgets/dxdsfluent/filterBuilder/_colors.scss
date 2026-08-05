@@ -2,36 +2,35 @@
 
 // adduse
 
-$filterbuilder-bg: ds.$color-surface-neutral-default-rest !default;
+$filter-builder-bg-rest: ds.$color-surface-neutral-default-rest !default;
 
-$filterbuilder-text-color: ds.$color-content-neutral-default-rest !default;
+$filter-builder-content-rest: ds.$color-content-neutral-default-rest !default;
 
-$filterbuilder-text-focus-color: ds.$color-content-neutral-default-static-dark-rest !default;
+$filter-builder-text-content-focused: ds.$color-content-neutral-default-static-dark-rest !default;
 
-$filterbuilder-plus-icon-color: ds.$color-content-success-default-rest !default;
-$filterbuilder-plus-icon-hover-color: ds.$color-content-success-default-hovered !default;
-$filterbuilder-plus-icon-focus-color: ds.$color-content-success-default-active !default;
+$filter-builder-plus-icon-rest: ds.$color-content-success-default-rest !default;
+$filter-builder-plus-icon-content-hovered: ds.$color-content-success-default-hovered !default;
+$filter-builder-plus-icon-content-focused: ds.$color-content-success-default-active !default;
 
-$filterbuilder-remove-icon-color: ds.$color-content-danger-default-rest !default;
-$filterbuilder-remove-icon-hover-color: ds.$color-content-danger-default-hovered !default;
-$filterbuilder-remove-icon-focus-color: ds.$color-content-danger-default-active !default;
+$filter-builder-remove-icon-rest: ds.$color-content-danger-default-rest !default;
+$filter-builder-remove-icon-content-hovered: ds.$color-content-danger-default-hovered !default;
+$filter-builder-remove-icon-content-focused: ds.$color-content-danger-default-active !default;
 
-$filterbuilder-group-operation-color: ds.$color-surface-danger-subdued-rest !default;
-$filterbuilder-group-operation-hover-color: ds.$color-surface-danger-subdued-hovered !default;
-$filterbuilder-group-operation-focus-color: ds.$color-surface-danger-default-rest !default;
+$filter-builder-group-operation-content-rest: ds.$color-surface-danger-subdued-rest !default;
+$filter-builder-group-operation-content-hovered: ds.$color-surface-danger-subdued-hovered !default;
+$filter-builder-group-operation-content-focused: ds.$color-surface-danger-default-rest !default;
 
-$filterbuilder-item-field-color: ds.$color-surface-primary-subdued-rest !default;
-$filterbuilder-item-field-hover-color: ds.$color-surface-primary-subdued-hovered !default;
-$filterbuilder-item-field-focus-color: ds.$color-surface-primary-default-rest !default;
+$filter-builder-item-field-content-rest: ds.$color-surface-primary-subdued-rest !default;
+$filter-builder-item-field-content-hovered: ds.$color-surface-primary-subdued-hovered !default;
+$filter-builder-item-field-content-focused: ds.$color-surface-primary-default-rest !default;
 
-$filterbuilder-item-operator-color: ds.$color-surface-success-subdued-rest !default;
-$filterbuilder-item-operator-hover-color: ds.$color-surface-success-subdued-hovered !default;
-$filterbuilder-item-operator-focus-color: ds.$color-surface-success-default-rest !default;
+$filter-builder-item-operator-content-rest: ds.$color-surface-success-subdued-rest !default;
+$filter-builder-item-operator-content-hovered: ds.$color-surface-success-subdued-hovered !default;
+$filter-builder-item-operator-content-focused: ds.$color-surface-success-default-rest !default;
 
-$filterbuilder-item-value-color: ds.$color-surface-secondary-default-selected !default;
-$filterbuilder-item-value-hover-color: ds.$color-surface-neutral-alpha-hovered !default;
-$filterbuilder-item-value-focus-color: ds.$color-surface-neutral-alpha-active !default;
-$filterbuilder-menu-icon-color: ds.$color-content-neutral-default-rest !default;
+$filter-builder-item-value-content-rest: ds.$color-surface-secondary-default-selected !default;
+$filter-builder-item-value-content-hovered: ds.$color-surface-neutral-alpha-hovered !default;
+$filter-builder-item-value-content-focused: ds.$color-surface-neutral-alpha-active !default;
+$filter-builder-menu-icon-rest: ds.$color-content-neutral-default-rest !default;
 
 // Base-layer values injected with design tokens (wave B1)
-$fluent-filterbuilder-range-separator-opacity: ds.$opacity-30 !default;

@@ -2,26 +2,32 @@
 
 // adduse
 
-$treeview-color: ds.$color-content-neutral-default-rest !default;
-
-$treeview-focused-bg: ds.$color-surface-neutral-default-hovered !default;
-$treeview-focus-color: ds.$color-content-neutral-default-rest !default;
-$treeview-hover-bg: ds.$color-surface-neutral-default-hovered !default;
-$treeview-item-hover-color: ds.$color-content-neutral-default-rest !default;
-$treeview-border-color: ds.$color-border-neutral-default-rest !default;
-$treeview-item-selected-color: $treeview-color !default;
-$treeview-item-selected-bg: ds.$color-surface-neutral-default-selected !default;
-$treeview-spin-icon-color: ds.$color-content-neutral-subdued-rest !default;
-$checkbox-border-color-focused: ds.$checkbox-color-checked-default-border-active !default;
-$treeview-checkbox-disabled-control-color-focused: ds.$checkbox-color-checked-default-icon-disabled !default;
-$treeview-checkbox-disabled-background-focused: ds.$color-surface-neutral-default-disabled !default;
-$treeview-item-content-disabled: ds.$color-content-neutral-default-disabled !default;
-$treeview-checkbox-border-color-focused: ds.$checkbox-color-unchecked-default-border-disabled !default;
-$treeview-checkbox-background-color-focused: ds.$color-surface-neutral-default-disabled !default;
-$treeview-checkbox-accent-color-focused: ds.$checkbox-color-checked-default-bg-hovered !default;
-
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$treeview-text-color: ds.$color-content-neutral-default-rest !default;
+$tree-view-content-rest: ds.$color-content-neutral-default-rest !default;
+
+$tree-view-bg-focused: ds.$color-surface-neutral-default-hovered !default;
+$tree-view-content-focused: ds.$color-content-neutral-default-rest !default;
+$tree-view-bg-hovered: ds.$color-surface-neutral-default-hovered !default;
+$tree-view-item-content-hovered: ds.$color-content-neutral-default-rest !default;
+$tree-view-border-rest: ds.$color-border-neutral-default-rest !default;
+$tree-view-item-content-selected: $tree-view-content-rest !default;
+$tree-view-item-bg-selected: ds.$color-surface-neutral-default-selected !default;
+$tree-view-spin-icon-rest: ds.$color-content-neutral-subdued-rest !default;
+$checkbox-border-color-focused: ds.$checkbox-color-checked-default-border-active !default;
+
+/*
+ * Три роли, вышедшие из одного значения (правило 5): граница невыбранного бокса, глиф чекнутого
+ * и заливка indeterminate. Значение у всех трёх одно и то же, поэтому разделение байт-нейтрально;
+ * вопрос «должны ли они совпадать» теперь виден в коде, а не спрятан в одном имени —
+ * см. DIVERGENCES.md.
+ */
+$tree-view-checkbox-border-disabled: ds.$checkbox-color-checked-default-icon-disabled !default;
+$tree-view-checkbox-icon-disabled: ds.$checkbox-color-checked-default-icon-disabled !default;
+$tree-view-checkbox-indeterminate-bg-disabled: ds.$checkbox-color-checked-default-icon-disabled !default;
+$tree-view-checkbox-bg-disabled: ds.$color-surface-neutral-default-disabled !default;
+$tree-view-item-content-disabled: ds.$color-content-neutral-default-disabled !default;
+$tree-view-checkbox-border-focused: ds.$checkbox-color-unchecked-default-border-disabled !default;
+$tree-view-checkbox-bg-focused: ds.$color-surface-neutral-default-disabled !default;
+$tree-view-checkbox-accent-content-focused: ds.$checkbox-color-checked-default-bg-hovered !default;
 
 // Base-layer values injected with design tokens (wave B1)
-$fluent-treeview-disabled-opacity: ds.$opacity-50 !default;

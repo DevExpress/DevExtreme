@@ -2,20 +2,20 @@
 
 // adduse
 
-$gallery-indicator-bg: ds.$color-surface-neutral-default-rest !default;
+$gallery-indicator-bg-rest: ds.$color-surface-neutral-default-rest !default;
 
-$gallery-indicator-item-selected-bg: ds.$color-surface-primary-default-rest !default;
+$gallery-indicator-item-bg-selected: ds.$color-surface-primary-default-rest !default;
 
-$gallery-indicator-focused-bg: ds.$color-surface-primary-default-rest !default;
-$gallery-indicator-item-border-color: ds.$color-border-neutral-subdued-rest !default;
+$gallery-indicator-bg-focused: ds.$color-surface-primary-default-rest !default;
+$gallery-indicator-item-border-rest: ds.$color-border-neutral-subdued-rest !default;
 
 // Semi-transparent surface over the indicator — relative-color bridge.
-$gallery-indicator-selected-border-color: rgb(from #{ds.$color-surface-neutral-default-rest} r g b / 0.8) !default;
-$gallery-navbutton-color: ds.$color-content-neutral-subdued-rest !default;
-$gallery-nav-arrow-color: ds.$color-content-neutral-default-static-dark-rest !default;
+$gallery-indicator-border-selected: rgb(from #{ds.$color-surface-neutral-default-rest} r g b / 0.8) !default;
+$gallery-nav-button-bg-rest: ds.$color-content-neutral-subdued-rest !default;
+$gallery-nav-arrow-content-rest: ds.$color-content-neutral-default-static-dark-rest !default;
 
-$gallery-navbutton-hover-color: ds.$color-surface-primary-default-rest !default;
+$gallery-nav-button-bg-hovered: ds.$color-surface-primary-default-rest !default;
 
-$gallery-navbutton-active-color: ds.$color-surface-primary-default-active !default;
+$gallery-nav-button-bg-active: ds.$color-surface-primary-default-active !default;
 
-$gallery-accent: ds.$color-surface-primary-default-rest !default;
+$gallery-border-focused: ds.$color-surface-primary-default-rest !default;

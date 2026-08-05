@@ -5,12 +5,9 @@
 
 // adduse
 
-
 // Base-layer values injected with design tokens (wave B1)
-$fluent-sortable-clone-shadow-color-first: ds.$color-shadow-ambient !default;
-$fluent-sortable-clone-shadow-color-second: ds.$color-shadow-key !default;
-$fluent-sortable-clone-opacity: ds.$opacity-90 !default;
-$fluent-sortable-source-opacity: ds.$opacity-50 !default;
+$sortable-clone-shadow-ambient-rest: ds.$color-shadow-ambient !default;
+$sortable-clone-shadow-key-rest: ds.$color-shadow-key !default;
 
 // Drop-position indicator / dragged-clone border — same accent-border family as the gridBase drag-header decision (DIVERGENCES: border-primary + alpha bridge in base)
-$fluent-sortable-accent-border-color: ds.$color-border-primary-default-rest !default;
+$sortable-placeholder-border-rest: ds.$color-border-primary-default-rest !default;

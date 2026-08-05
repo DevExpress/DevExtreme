@@ -1,19 +1,18 @@
-@use "../textEditor/colors" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 
-$tagbox-tag-color: ds.$color-content-neutral-default-rest !default;
+$tag-box-tag-content-rest: ds.$color-content-neutral-default-rest !default;
 
-$tagbox-tag-bg: ds.$tag-color-bg-rest !default;
-$tagbox-tag-hover-bg: ds.$color-surface-neutral-default-hovered !default;
+$tag-box-tag-bg-rest: ds.$tag-color-bg-rest !default;
+$tag-box-tag-bg-hovered: ds.$color-surface-neutral-default-hovered !default;
 
-$tagbox-tag-active-color: ds.$color-content-neutral-default-rest !default;
+$tag-box-tag-content-active: ds.$color-content-neutral-default-rest !default;
 
-$tagbox-tag-button-remove-bg: ds.$color-content-neutral-subdued-rest !default;
-$tagbox-tag-border-color-focused: ds.$color-border-primary-default-rest !default;
-$tagbox-select-all-border-color: ds.$color-border-neutral-default-rest !default;
-$tagbox-tag-foreground-disabled: ds.$color-content-neutral-default-disabled !default;
-$tagbox-tag-disabled: ds.$tag-color-bg-disabled !default;
+$tag-box-tag-remove-button-content-rest: ds.$color-content-neutral-subdued-rest !default;
+$tag-box-tag-border-focused: ds.$color-border-primary-default-rest !default;
+$tag-box-select-all-line-rest: ds.$color-border-neutral-default-rest !default;
+$tag-box-tag-content-disabled: ds.$color-content-neutral-default-disabled !default;
+$tag-box-tag-bg-disabled: ds.$tag-color-bg-disabled !default;
 
-$tagbox-border-color-disabled: ds.$color-border-neutral-default-disabled !default;
+$tag-box-border-disabled: ds.$color-border-neutral-default-disabled !default;

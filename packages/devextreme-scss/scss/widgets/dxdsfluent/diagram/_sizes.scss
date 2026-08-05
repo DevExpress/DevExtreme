@@ -3,11 +3,33 @@
 
 // adduse
 
+/*
+ * O4: these used to be read from popup/, speedDialAction/ and fieldset/. Diagram's floating
+ * toolbar and its toolbar text are diagram's own anatomy, so the values live here; the
+ * `@if $size` branches are copied because the providers had them.
+ */
+$diagram-floating-toolbar-container-border-radius: calc(#{$global-border-radius} * 2) !default;
+$diagram-floating-toolbar-button-size: null !default;
+$diagram-toolbar-text-padding-inline-start: null !default;
+$diagram-toolbar-text-padding-block-start: ds.$spacing-210 !default;
+$diagram-toolbar-text-padding-block-end: ds.$spacing-200 !default;
+
+@if $size == "default" {
+  $diagram-floating-toolbar-button-size: ds.$spacing-440 !default;
+  $diagram-toolbar-text-padding-inline-start: ds.$spacing-150 !default;
+}
+
+@else if $size == "compact" {
+  $diagram-floating-toolbar-button-size: ds.$spacing-320 !default;
+  $diagram-toolbar-text-padding-inline-start: ds.$spacing-120 !default;
+}
+
+// Not colours: opacities that used to sit in _colors.scss (NAMING.md, O7)
+$diagram-image-icon-muted-opacity: ds.$opacity-50 !default;
+
 $diagram-toolbox-width: null !default;
 $diagram-toolbox-h-padding: null !default;
 $diagram-toolbox-accordion-v-padding: null !default;
-$diagram-toolbox-input-h-padding: null !default;
-$diagram-toolbox-input-v-padding: null !default;
 $diagram-toolbox-input-image-size: null !default;
 $diagram-toolbox-input-image-padding: null !default;
 $diagram-toolbox-mobile-padding: null !default;
@@ -28,8 +50,6 @@ $diagram-toolbox-input-margin: ds.$spacing-20 !default;
   $diagram-toolbox-width: 156px !default; // dx-offscale: 156px
   $diagram-toolbox-h-padding: ds.$spacing-120 !default;
   $diagram-toolbox-accordion-v-padding: ds.$spacing-80 !default;
-  $diagram-toolbox-input-h-padding: ds.$spacing-90 !default;
-  $diagram-toolbox-input-v-padding: ds.$spacing-120 !default;
   $diagram-toolbox-input-image-size: ds.$spacing-180 !default;
   $diagram-toolbox-input-image-padding: ds.$spacing-60 ds.$spacing-40 !default;
   $diagram-toolbox-mobile-padding: 68px !default; // dx-offscale: 68px
@@ -53,8 +73,6 @@ $diagram-toolbox-input-margin: ds.$spacing-20 !default;
   $diagram-toolbox-width: 130px !default; // dx-offscale: 130px
   $diagram-toolbox-h-padding: ds.$spacing-100 !default;
   $diagram-toolbox-accordion-v-padding: ds.$spacing-60 !default;
-  $diagram-toolbox-input-h-padding: ds.$spacing-80 !default;
-  $diagram-toolbox-input-v-padding: ds.$spacing-80 !default;
   $diagram-toolbox-input-image-size: ds.$spacing-140 !default;
   $diagram-toolbox-input-image-padding: ds.$spacing-30 ds.$spacing-40 !default;
   $diagram-toolbox-mobile-padding: 58px !default; // dx-offscale: 58px
@@ -86,14 +104,14 @@ $diagram-icon-width: ds.$spacing-140 !default;
 $diagram-icon-height: ds.$spacing-140 !default;
 $diagram-icon-padding: ds.$spacing-20 !default;
 $diagram-title-padding: ds.$spacing-80 ds.$spacing-80 0 0 !default;
-$diagram-icon-margin-left: ds.$spacing-120 !default;
-$diagram-icon-margin-right: ds.$spacing-120 !default;
-$diagram-item-text-padding-left: ds.$spacing-40 !default;
+$diagram-icon-margin-inline-start: ds.$spacing-120 !default;
+$diagram-icon-margin-inline-end: ds.$spacing-120 !default;
+$diagram-item-text-padding-inline-start: ds.$spacing-40 !default;
 $diagram-separator-width: ds.$spacing-10 !default;
-$diagram-toolbar-wrapper-border-bottom: ds.$border-width-10 solid !default;
-$diagram-toolbox-input-container-border-bottom: ds.$border-width-10 solid transparent !default;
-$diagram-toolbox-input-container-border-top: ds.$border-width-10 solid transparent !default;
-$diagram-accordion-item-border-bottom: ds.$border-width-10 solid transparent !default;
+$diagram-toolbar-wrapper-border-block-end: ds.$border-width-10 solid !default;
+$diagram-toolbox-input-container-border-block-end: ds.$border-width-10 solid transparent !default;
+$diagram-toolbox-input-container-border-block-start: ds.$border-width-10 solid transparent !default;
+$diagram-accordion-item-border-block-end: ds.$border-width-10 solid transparent !default;
 $diagram-toolbox-title-size: ds.$spacing-180 !default;
 $diagram-button-min-width: ds.$spacing-240 !default;
 $diagram-button-min-height: ds.$spacing-240 !default;
@@ -101,14 +119,20 @@ $diagram-accordion-item-title-min-height: ds.$spacing-320 !default;
 $diagram-popup-title-toolbar-font-size: 0.8em !default; // dx-relative: scales with the parent font-size
 
 // Base-layer sizing injected with design tokens (wave B2)
-$fluent-diagram-root-height: 600px !default; // dx-offscale: 600px
-$fluent-diagram-root-min-height: 350px !default; // dx-offscale: 350px
-$fluent-diagram-toolbar-wrapper-padding: ds.$spacing-50 !default;
+$diagram-height: 600px !default; // dx-offscale: 600px
+$diagram-min-height: 350px !default; // dx-offscale: 350px
+$diagram-toolbar-wrapper-padding: ds.$spacing-50 !default;
 $fluent-diagram-button-min-height: ds.$spacing-140 !default;
-$fluent-diagram-popup-content-padding: ds.$spacing-80 !default;
-$fluent-diagram-colorview-palette-min-width: 300px !default; // dx-offscale: 300px
-$fluent-diagram-colorview-hue-scale-cell-margin-left: ds.$spacing-120 !default;
-$fluent-diagram-loading-indicator-width: ds.$spacing-640 !default;
-$fluent-diagram-loading-indicator-height: ds.$spacing-640 !default;
-$fluent-diagram-context-toolbox-target-width: ds.$spacing-10 !default;
-$fluent-diagram-context-toolbox-target-height: ds.$spacing-10 !default;
+$diagram-popup-content-padding: ds.$spacing-80 !default;
+$diagram-color-view-palette-min-width: 300px !default; // dx-offscale: 300px
+$diagram-color-view-hue-scale-cell-margin-inline-start: ds.$spacing-120 !default;
+$diagram-loading-indicator-width: ds.$spacing-640 !default;
+$diagram-loading-indicator-height: ds.$spacing-640 !default;
+$diagram-context-toolbox-target-width: ds.$spacing-10 !default;
+$diagram-context-toolbox-target-height: ds.$spacing-10 !default;
+
+/*
+ * Derived values, moved out of _index.scss: a file that emits rules must not declare
+ * variables (NAMING.md, O7).
+ */
+$diagram-toolbar-icon-size: $global-icon-size;

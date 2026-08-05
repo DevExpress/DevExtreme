@@ -3,32 +3,29 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/gantt" with (
-  $gantt-toolbar-separator-border-left: $fluent-gantt-toolbar-separator-border-left,
-  $gantt-splitter-bar-width: $fluent-gantt-splitter-bar-width,
-  $gantt-view-min-width: $fluent-gantt-view-min-width,
+  $gantt-toolbar-separator-border-left: $gantt-toolbar-separator-border-inline-start,
+  $gantt-splitter-bar-width: $gantt-splitter-bar-width,
+  $gantt-view-min-width: $gantt-view-min-width,
 );
 @use "../../base/gantt/mixins" as *;
-@use "../gridBase/colors" as *;
-@use "../form/sizes" as *;
+@use "../gridBase/colors" as gridBaseColors;
+@use "../form/sizes" as formSizes;
 @use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 @use "../splitterBar";
 
-
-$gantt-successor-background-color: ds.$color-surface-neutral-default-static-light-rest;
-
 .dx-gantt {
-  border: $gantt-root-border;
-  border-color: $gantt-border-color;
+  border: $gantt-border;
+  border-color: $gantt-border-rest;
 
   .dx-gantt-toolbar-wrapper {
     padding: $gantt-toolbar-wrapper-padding;
-    border-bottom: $gantt-toolbar-wrapper-border-bottom;
-    border-bottom-color: $gantt-border-color;
+    border-bottom: $gantt-toolbar-wrapper-border-block-end;
+    border-bottom-color: $gantt-border-rest;
 
     .dx-gantt-toolbar-separator {
-      border-left-color: $gantt-border-color;
+      border-left-color: $gantt-border-rest;
     }
 
     .dx-toolbar .dx-toolbar-items-container {
@@ -37,7 +34,7 @@ $gantt-successor-background-color: ds.$color-surface-neutral-default-static-ligh
   }
 
   .dx-gantt-view {
-    background-color: $gantt-bg;
+    background-color: $gantt-bg-rest;
   }
 
   .dx-header-row,
@@ -46,41 +43,41 @@ $gantt-successor-background-color: ds.$color-surface-neutral-default-static-ligh
   }
 
   .dx-gantt-header {
-    color: $datagrid-columnchooser-item-color;
-    font-size: $fluent-form-label-font-size;
+    color: gridBaseColors.$grid-column-chooser-item-content-rest;
+    font-size: formSizes.$form-label-font-size;
 
     .dx-gantt-tsac,
     .dx-gantt-tsa,
     .dx-gantt-hb,
     .dx-gantt-vb {
-      border-color: $gantt-border-color;
-      background-color: $gantt-bg;
+      border-color: $gantt-border-rest;
+      background-color: $gantt-bg-rest;
     }
   }
 
   .dx-gantt-si {
-    padding-left: $gantt-si-padding-left;
-    padding-right: $gantt-si-padding-right;
+    padding-left: $gantt-si-padding-inline-start;
+    padding-right: $gantt-si-padding-inline-end;
   }
 
   .dx-gantt-tsac,
   .dx-gantt-tsa {
-    border-bottom: $gantt-toolbar-wrapper-border-bottom;
-    border-bottom-color: $gantt-border-color;
+    border-bottom: $gantt-toolbar-wrapper-border-block-end;
+    border-bottom-color: $gantt-border-rest;
   }
 
   .dx-gantt-hb {
-    border-top: $gantt-hb-border-top;
-    border-top-color: $gantt-border-color;
+    border-top: $gantt-hb-border-block-start;
+    border-top-color: $gantt-border-rest;
   }
 
   .dx-gantt-vb {
-    border-left: $gantt-vb-border-left;
-    border-left-color: $gantt-border-color;
+    border-left: $gantt-vb-border-inline-start;
+    border-left-color: $gantt-border-rest;
   }
 
   .dx-gantt-taskWrapper {
-    padding-top: $gantt-task-wrapper-padding-top;
+    padding-top: $gantt-task-wrapper-padding-block-start;
 
     .dx-gantt-task,
     .dx-gantt-titleOut {
@@ -89,16 +86,16 @@ $gantt-successor-background-color: ds.$color-surface-neutral-default-static-ligh
     }
 
     .dx-gantt-task {
-      background-color: $gantt-accent;
-      border-radius: $base-border-radius;
+      background-color: $gantt-task-bg-rest;
+      border-radius: $global-border-radius;
 
       .dx-gantt-tPrg {
-        border-radius: $base-border-radius;
-        background-color: $gantt-task-progress-background-color;
+        border-radius: $global-border-radius;
+        background-color: $gantt-task-progress-bg-rest;
       }
 
       &.dx-gantt-smallTask {
-        border-radius: $base-border-radius;
+        border-radius: $global-border-radius;
 
         .dx-gantt-titleIn {
           padding: $gantt-title-padding;
@@ -108,15 +105,15 @@ $gantt-successor-background-color: ds.$color-surface-neutral-default-static-ligh
       &.dx-gantt-parent {
         height: calc(#{$gantt-task-height} - 2px);
         line-height: calc(#{$gantt-task-height} - 2px);
-        background-color: $gantt-parent-task-background-color;
-        border-left-color: $gantt-parent-task-background-color;
-        border-right-color: $gantt-parent-task-background-color;
-        border-top-color: $gantt-parent-task-background-color;
+        background-color: $gantt-parent-task-bg-rest;
+        border-left-color: $gantt-parent-task-bg-rest;
+        border-right-color: $gantt-parent-task-bg-rest;
+        border-top-color: $gantt-parent-task-bg-rest;
         border-bottom-right-radius: 0;
         border-bottom-left-radius: 0;
 
         &:not(.dx-gantt-noPrg) .dx-gantt-tPrg {
-          background-color: $gantt-task-progress-background-color;
+          background-color: $gantt-task-progress-bg-rest;
         }
 
         &:not(.dx-gantt-smallTask)::before,
@@ -125,7 +122,7 @@ $gantt-successor-background-color: ds.$color-surface-neutral-default-static-ligh
         &:not(.dx-gantt-smallTask).dx-gantt-cmpl .dx-gantt-tPrg::after {
           content: '';
           position: absolute;
-          bottom: $gantt-t-bottom;
+          bottom: $gantt-task-progress-inset-block-end;
           border-width: $gantt-task-progress-notch-border-width;
           border-style: solid;
         }
@@ -138,8 +135,8 @@ $gantt-successor-background-color: ds.$color-surface-neutral-default-static-ligh
         }
 
         &:not(.dx-gantt-noPrg) .dx-gantt-tPrg::before {
-          border-left-color: $gantt-task-progress-background-color;
-          border-top-color: $gantt-task-progress-background-color;
+          border-left-color: $gantt-task-progress-bg-rest;
+          border-top-color: $gantt-task-progress-bg-rest;
         }
 
         &::after,
@@ -150,13 +147,13 @@ $gantt-successor-background-color: ds.$color-surface-neutral-default-static-ligh
         }
 
         &.dx-gantt-cmpl::after {
-          border-right-color: $gantt-task-progress-background-color;
-          border-top-color: $gantt-task-progress-background-color;
+          border-right-color: $gantt-task-progress-bg-rest;
+          border-top-color: $gantt-task-progress-bg-rest;
         }
 
         &.dx-gantt-cmpl .dx-gantt-tPrg::after {
-          border-right-color: $gantt-parent-task-background-color;
-          border-top-color: $gantt-parent-task-background-color;
+          border-right-color: $gantt-parent-task-bg-rest;
+          border-top-color: $gantt-parent-task-bg-rest;
         }
 
         .dx-gantt-task-edit-frame {
@@ -166,62 +163,62 @@ $gantt-successor-background-color: ds.$color-surface-neutral-default-static-ligh
     }
 
     .dx-gantt-titleIn {
-      color: $gantt-task-color;
-      padding: 0 $gantt-task-title-padding-left;
+      color: $gantt-task-res-content-rest;
+      padding: 0 $gantt-task-title-padding-inline-start;
     }
   }
 
   .dx-gantt-taskRes {
     height: $gantt-task-height;
     line-height: $gantt-task-height;
-    color: $gantt-task-color;
-    background-color: $gantt-task-background-color;
-    border-radius: $base-border-radius;
-    margin-left: $gantt-task-margin-left;
-    padding-left: $gantt-task-padding-left;
-    padding-right: $gantt-task-padding-right;
+    color: $gantt-task-res-content-rest;
+    background-color: $gantt-task-res-bg-rest;
+    border-radius: $global-border-radius;
+    margin-left: $gantt-task-margin-inline-start;
+    padding-left: $gantt-task-padding-inline-start;
+    padding-right: $gantt-task-padding-inline-end;
   }
 
   .dx-gantt-titleOut {
-    padding-right: $gantt-title-padding-right;
+    padding-right: $gantt-title-padding-inline-end;
   }
 
   .dx-gantt-milestone {
-    background-color: $gantt-text-color;
+    background-color: $gantt-content-rest;
     width: $gantt-milestone-size;
     height: $gantt-milestone-size;
   }
 
   .dx-gantt-task-edit-wrapper {
-    padding-top: $gantt-task-wrapper-padding-top;
-    padding-left: $gantt-task-edit-wrapper-padding-left;
+    padding-top: $gantt-task-wrapper-padding-block-start;
+    padding-left: $gantt-task-edit-wrapper-padding-inline-start;
 
     .dx-gantt-task-edit-frame {
       height: 100%;
       border: $gantt-task-edit-frame-border;
-      border-color: $gantt-accent-border-color;
-      border-radius: $base-border-radius;
+      border-color: $gantt-accent-border-rest;
+      border-radius: $global-border-radius;
 
       .dx-gantt-task-edit-progress {
-        border-color: transparent transparent $gantt-accent-border-color transparent;
+        border-color: transparent transparent $gantt-accent-border-rest transparent;
 
         &::before {
           width: $gantt-task-edit-progress-width;
           height: $gantt-task-edit-progress-height;
-          bottom: $gantt-task-edit-progress-bottom;
+          bottom: $gantt-edit-progress-inset-block-end;
           border: $gantt-task-edit-progress-border;
-          border-color: $gantt-accent-border-color;
+          border-color: $gantt-accent-border-rest;
         }
       }
 
       .dx-gantt-task-edit-progress-status {
-        border-radius: $base-border-radius;
+        border-radius: $global-border-radius;
       }
     }
   }
 
   .dx-gantt-task-edit-wrapper-successor {
-    padding-top: $gantt-task-wrapper-padding-top;
+    padding-top: $gantt-task-wrapper-padding-block-start;
 
     .dx-gantt-task-edit-frame-successor {
       height: $gantt-task-height;
@@ -234,7 +231,7 @@ $gantt-successor-background-color: ds.$color-surface-neutral-default-static-ligh
   .dx-gantt-task-edit-successor-dependency-l {
     background: $gantt-successor-background-color;
     border: $gantt-task-edit-successor-dependency-l-border;
-    border-color: $gantt-accent-border-color;
+    border-color: $gantt-accent-border-rest;
     width: $gantt-dependency-successor-size;
     height: $gantt-dependency-successor-size;
     margin: auto;
@@ -253,7 +250,7 @@ $gantt-successor-background-color: ds.$color-surface-neutral-default-static-ligh
   }
 
   .dx-gantt-task-edit-dependency-line {
-    background-color: $gantt-text-color;
+    background-color: $gantt-content-rest;
   }
 
   .dx-gantt-sel {
@@ -261,35 +258,35 @@ $gantt-successor-background-color: ds.$color-surface-neutral-default-static-ligh
   }
 
   .dx-gantt-conn-v {
-    border-left-color: $gantt-text-color;
+    border-left-color: $gantt-content-rest;
   }
 
   .dx-gantt-conn-h {
-    border-top-color: $gantt-text-color;
+    border-top-color: $gantt-content-rest;
   }
 
   .dx-gantt-arrow {
     border: $gantt-arrow-border;
-    border-color: $gantt-text-color;
+    border-color: $gantt-content-rest;
   }
 
   .dx-gantt-tm {
-    border-left: $gantt-tm-border-left;
-    border-left-color: $gantt-accent;
+    border-left: $gantt-tm-border-inline-start;
+    border-left-color: $gantt-task-bg-rest;
   }
 
   .dx-gantt-ti {
-    border-left: $gantt-tm-border-left;
-    border-left-color: $gantt-accent;
-    border-right: $gantt-ti-border-right;
-    border-right-color: $gantt-accent;
-    background-color: $gantt-accent-light-bg;
+    border-left: $gantt-tm-border-inline-start;
+    border-left-color: $gantt-task-bg-rest;
+    border-right: $gantt-ti-border-inline-end;
+    border-right-color: $gantt-task-bg-rest;
+    background-color: $gantt-ti-bg-rest;
   }
 
   .dx-gantt-altRow,
   .dx-gantt-collapsable-row {
-    background-color: $gantt-collapsable-row-bg;
+    background-color: $gantt-collapsable-row-bg-rest;
   }
 }
 
-@include gantt-icons-mixin($gantt-icon-color);
+@include gantt-icons-mixin($gantt-icon-rest);

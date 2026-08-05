@@ -4,10 +4,10 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/rangeSlider";
-@use "../slider/sizes" as *;
+@use "../slider/sizes" as sliderSizes;
 
 // adduse
 
 .dx-rangeslider-start-handle {
-  margin-inline-start: calc(#{$fluent-slider-handle-size} / -2);
+  margin-inline-start: calc(#{sliderSizes.$slider-handle-size} / -2);
 }

@@ -2,10 +2,10 @@
 
 // adduse
 
-$tileview-color: ds.$color-content-neutral-default-rest !default;
-$tileview-bg: ds.$color-surface-neutral-default-rest !default;
-$tileview-border-color: ds.$color-border-neutral-subdued-rest !default;
-$tileview-hover-bg: ds.$color-surface-neutral-default-rest !default;
-$tileview-hover-border-color: ds.$color-border-primary-default-rest !default;
-$tileview-active-bg: ds.$color-surface-neutral-alpha-active !default;
-$tileview-active-color: $tileview-color !default;
+$tile-view-content-rest: ds.$color-content-neutral-default-rest !default;
+$tile-view-bg-rest: ds.$color-surface-neutral-default-rest !default;
+$tile-view-border-rest: ds.$color-border-neutral-subdued-rest !default;
+$tile-view-bg-hovered: ds.$color-surface-neutral-default-rest !default;
+$tile-view-border-hovered: ds.$color-border-primary-default-rest !default;
+$tile-view-bg-active: ds.$color-surface-neutral-alpha-active !default;
+$tile-view-content-active: $tile-view-content-rest !default;

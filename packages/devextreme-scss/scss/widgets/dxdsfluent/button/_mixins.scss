@@ -6,10 +6,10 @@
 @use "../../base/icon_fonts" as *;
 @use "../../base/button/mixins" as *;
 
-@mixin dx-button-onlyicon-sizing($icon-size: $fluent-button-icon-size) {
-  min-width: $fluent-button-height;
+@mixin dx-button-onlyicon-sizing($icon-size: $button-icon-size) {
+  min-width: $button-height;
 
-  $button-content-padding: calc((#{$fluent-button-height} - #{$icon-size} - #{$fluent-base-border-width} * 2) / 2);
+  $button-content-padding: calc((#{$button-height} - #{$icon-size} - #{$global-border-width} * 2) / 2);
 
   @include dx-button-sizing(
     $button-content-padding,
@@ -22,21 +22,21 @@
 
 @mixin dx-button-withtext-sizing() {
   @include dx-button-sizing(
-    $fluent-button-vertical-padding,
-    $fluent-button-horizontal-padding,
-    $fluent-button-horizontal-padding,
-    $fluent-button-icon-size,
-    calc(#{$fluent-button-icon-size} / 2)
+    $button-padding-block,
+    $button-padding-inline,
+    $button-padding-inline,
+    $button-icon-size,
+    calc(#{$button-icon-size} / 2)
   );
 }
 
 @mixin dx-button-text-and-icon-sizing() {
   @include dx-button-sizing(
-    $fluent-button-vertical-padding,
-    $fluent-button-icon-text-padding,
-    $fluent-button-horizontal-padding,
-    $fluent-button-icon-size,
-    $fluent-button-icon-margin,
+    $button-padding-block,
+    $button-icon-text-padding-inline-start,
+    $button-padding-inline,
+    $button-icon-size,
+    $button-icon-margin,
   );
 }
 
@@ -127,19 +127,19 @@
     box-shadow: none;
 
     .dx-icon {
-      color: $button-disabled-text-color;
+      color: $button-content-disabled;
     }
 
     .dx-button-text {
-      color: $button-disabled-text-color;
+      color: $button-content-disabled;
     }
 
     &.dx-button-mode-contained {
-      background-color: $button-disabled-background;
+      background-color: $button-contained-bg-disabled;
     }
 
     &.dx-button-mode-outlined {
-      border-color: $button-disabled-background;
+      border-color: $button-outlined-border-disabled;
     }
   }
 }
@@ -181,7 +181,7 @@
   $button-selected-bg,
   $button-selected-color: $button-color-active,
 ) {
-  border-width: $fluent-button-border-width;
+  border-width: $button-border-width;
   border-style: solid;
   border-color: $border-color;
 
