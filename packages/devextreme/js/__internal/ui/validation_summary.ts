@@ -57,7 +57,7 @@ class ValidationSummary extends CollectionWidget<
     return {
       ...super._getDefaultOptions(),
       focusStateEnabled: false,
-      // @ts-expect-error CollectionWidget declares noDataText as string; null disables the "no data" text
+      // @ts-expect-error ts-error
       noDataText: null,
     };
   }
@@ -100,7 +100,6 @@ class ValidationSummary extends CollectionWidget<
     groupConfig?.off('validated', this.groupSubscription);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getOrderedItems(
     validators: Validator[],
     items: ValidationSummaryItem[],
@@ -188,27 +187,31 @@ class ValidationSummary extends CollectionWidget<
 
   _itemValidationHandler({ isValid, validator, brokenRules }: ValidationResultInternal): void {
     let { items } = this.option();
+
+    if (!items) {
+      return;
+    }
+
     let itemsChanged = false;
 
     let itemIndex = 0;
-    if (items) {
-      while (itemIndex < items.length) {
-        const item = items[itemIndex];
-        if (item.validator === validator) {
-          const foundRule = (brokenRules ?? []).find((rule): boolean => rule.index === item.index);
-          if (isValid || !foundRule) {
-            items.splice(itemIndex, 1);
-            itemsChanged = true;
-          } else {
-            if (foundRule.message !== item.text) {
-              item.text = foundRule.message;
-              itemsChanged = true;
-            }
-            itemIndex += 1;
-          }
+    while (itemIndex < items.length) {
+      const item = items[itemIndex];
+      if (item.validator === validator) {
+        const foundRule = (brokenRules ?? []).find((rule): boolean => rule.index === item.index);
+        if (isValid || !foundRule) {
+          items.splice(itemIndex, 1);
+          itemsChanged = true;
         } else {
+          // eslint-disable-next-line max-depth
+          if (foundRule.message !== item.text) {
+            item.text = foundRule.message;
+            itemsChanged = true;
+          }
           itemIndex += 1;
         }
+      } else {
+        itemIndex += 1;
       }
     }
 
@@ -248,17 +251,14 @@ class ValidationSummary extends CollectionWidget<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemClass(): string {
     return ITEM_CLASS;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemDataKey(): string {
     return ITEM_DATA_KEY;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _postprocessRenderItem(params: PostprocessRenderItemInfo<ValidationSummaryItem>): void {
     eventsEngine.on(params.itemElement, 'click', (): void => {
       params.itemData.validator?.focus?.();

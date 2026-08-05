@@ -52,7 +52,6 @@ class ValidationGroup extends DOMComponent<ValidationGroup> {
     super._dispose();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _useTemplates(): boolean {
     return false;
   }

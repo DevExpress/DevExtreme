@@ -179,8 +179,8 @@ abstract class BaseRuleValidator {
     return messageLocalization.getFormatter(`validation-${this.NAME}-formatted`)(value);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isValueEmpty(value: unknown): boolean {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     return !rulesValidators.required.validate(value, { type: 'required' });
   }
 
@@ -213,7 +213,6 @@ class RequiredRuleValidator extends SyncRuleValidator {
     this.NAME = 'required';
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _validate(value: unknown, rule: RequiredRuleInternal): boolean {
     if (!isDefined(value)) return false;
     if (value === false) {
@@ -255,6 +254,7 @@ class RangeRuleValidator extends SyncRuleValidator {
     if (rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
       return true;
     }
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     const validNumber = rulesValidators.numeric.validate(value, rule);
     const validValue = isDefined(value) && value !== '';
     if (!(validNumber || isDate(value)) && !validValue) {
@@ -293,6 +293,7 @@ class StringLengthRuleValidator extends SyncRuleValidator {
     if (rule.ignoreEmptyValue && this._isValueEmpty(trimmedValue)) {
       return true;
     }
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     return rulesValidators.range.validate(
       trimmedValue.length,
       { ...rule },
@@ -336,7 +337,6 @@ class AsyncRuleValidator extends BaseRuleValidator {
     return this._getWrappedPromise(fromPromise(callbackResult).promise());
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getWrappedPromise(promise: Promise<AsyncRuleResult>): Promise<AsyncRuleResult> {
     const deferred = Deferred<AsyncRuleResult>();
     promise.then((result): void => {
@@ -424,6 +424,7 @@ class EmailRuleValidator extends SyncRuleValidator {
     if (rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
       return true;
     }
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     return rulesValidators.pattern.validate(
       value,
       {
@@ -606,6 +607,7 @@ export class GroupConfig {
       this._validationInfo.deferred = null;
       this._raiseValidatedEvent(res);
       if (deferred) {
+        // eslint-disable-next-line no-restricted-globals
         setTimeout((): void => {
           deferred.resolve(res);
         });
@@ -673,14 +675,18 @@ interface AsyncRuleItem {
 const ValidationEngine = {
   groups: [],
 
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type,@typescript-eslint/explicit-module-boundary-types
   getGroupConfig(group: ValidationGroupKey) {
     const result = this.groups.filter((config): boolean => config.group === group);
     if (result.length) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return result[0];
     }
     return undefined;
   },
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   findGroup($element, model: ValidationGroupKey): ValidationGroupKey {
     const hasValidationGroup = $element.data()?.dxComponents?.includes('dxValidationGroup');
     const validationGroup = hasValidationGroup && $element.dxValidationGroup('instance');
@@ -871,6 +877,7 @@ const ValidationEngine = {
             validator: item.ruleValidator,
             name,
           });
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           return ruleResult;
         });
 
@@ -879,6 +886,7 @@ const ValidationEngine = {
     }
 
     if (asyncResults.length) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       result.complete = Promise.all(asyncResults).then((values) => this._getAsyncRulesResult({
         result,
         values,
@@ -1040,6 +1048,7 @@ const ValidationEngine = {
     if (!groupConfig) {
       throw errors.Error('E0110');
     }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return groupConfig.validate();
   },
 

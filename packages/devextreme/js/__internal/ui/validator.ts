@@ -13,19 +13,19 @@ import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type {
-  ValidationGroupKey,
-  ValidationResultInternal,
-  ValidationRuleInternal,
-} from '@ts/ui/validation_engine';
-import ValidationEngine from '@ts/ui/validation_engine';
-import type ValidationSummary from '@ts/ui/validation_summary';
-import type {
   ValidationRequestArgs,
   ValidationRequestHandler,
   ValidationTargetEditor,
   ValidationTargetEditorOptions,
 } from '@ts/ui/validation/default_adapter';
 import DefaultAdapter from '@ts/ui/validation/default_adapter';
+import type {
+  ValidationGroupKey,
+  ValidationResultInternal,
+  ValidationRuleInternal,
+} from '@ts/ui/validation_engine';
+import ValidationEngine from '@ts/ui/validation_engine';
+import type ValidationSummary from '@ts/ui/validation_summary';
 
 const VALIDATOR_CLASS = 'dx-validator';
 const VALIDATION_STATUS_VALID: ValidationStatus = 'valid';
@@ -355,7 +355,6 @@ class Validator extends DOMComponent<Validator, ValidatorProperties> {
     adapter?.focus?.();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _useTemplates(): boolean {
     return false;
   }

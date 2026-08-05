@@ -7,8 +7,8 @@ import { getOuterWidth } from '@js/core/utils/size';
 import { encodeHtml } from '@js/core/utils/string';
 import type { Properties } from '@js/ui/validation_message';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { ValidationRuleInternal } from '@ts/ui/validation_engine';
 import Overlay from '@ts/ui/overlay/overlay';
+import type { ValidationRuleInternal } from '@ts/ui/validation_engine';
 
 const INVALID_MESSAGE = 'dx-invalid-message';
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
@@ -147,7 +147,6 @@ class ValidationMessage extends Overlay<ValidationMessageProperties> {
     this.option({ maxWidth });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getPositionsArray(
     positionSide: ValidationMessageProperties['positionSide'],
     rtlSide: string,
