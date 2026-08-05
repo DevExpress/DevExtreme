@@ -12,7 +12,7 @@ import seriesFamilyModule from 'viz/core/series_family';
 import { setupSeriesFamily } from '../../helpers/chartMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
 
-const mutableRendererModule = rendererModule.default ?? { ...rendererModule };
+const mutableRendererModule = rendererModule.default ?? rendererModule;
 const mutableSeriesFamilyModule = seriesFamilyModule.default ?? seriesFamilyModule;
 const seriesFamilyNativeConstructor = mutableSeriesFamilyModule.SeriesFamily;
 setupSeriesFamily();
