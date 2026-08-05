@@ -17,9 +17,11 @@ const NORMALIZE_DATA_SOURCE = '_normalizeDataSource';
 type ProxiedDataSourceHandler = (...args: unknown[]) => void;
 
 // TODO Get rid of this mixin
-// eslint-disable-next-line
+// eslint-disable-next-line @stylistic/max-len
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type
 export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => class extends Base {
-  public _dataSource?: unknown;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public _dataSource?: any;
 
   protected _dataController?: DataController;
 
@@ -38,7 +40,7 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
 
   private readonly _dataSourceType?: () => typeof DataSource;
 
-  public postCtor(): void {
+  public postInit(): void {
     this.on('disposing', () => {
       this._disposeDataSource();
     });
@@ -126,43 +128,36 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
     this.readyWatcher = (isLoading: boolean): void => {
       this._ready?.(!isLoading);
     };
-    // @ts-expect-error _dataSource is loosely typed
     this._dataSource.on('loadingChanged', this.readyWatcher);
   }
 
   private _addDataSourceChangeHandler(): void {
     const dataSource = this._dataSource;
-    this._proxiedDataSourceChangedHandler = function dataSourceChangedHandler(e): void {
-      // @ts-expect-error _dataSource is loosely typed
+    this._proxiedDataSourceChangedHandler = (e): void => {
       this[DATA_SOURCE_CHANGED_METHOD](dataSource.items(), e);
-    }.bind(this);
-    // @ts-expect-error _dataSource is loosely typed
+    };
     dataSource.on('changed', this._proxiedDataSourceChangedHandler);
   }
 
   private _addDataSourceLoadErrorHandler(): void {
     this._proxiedDataSourceLoadErrorHandler = this[DATA_SOURCE_LOAD_ERROR_METHOD].bind(this);
-    // @ts-expect-error _dataSource is loosely typed
     this._dataSource.on('loadError', this._proxiedDataSourceLoadErrorHandler);
   }
 
   private _addDataSourceLoadingChangedHandler(): void {
     this._proxiedDataSourceLoadingChangedHandler = this[DATA_SOURCE_LOADING_CHANGED_METHOD]
       .bind(this);
-    // @ts-expect-error _dataSource is loosely typed
     this._dataSource.on('loadingChanged', this._proxiedDataSourceLoadingChangedHandler);
   }
 
   protected _loadDataSource(): void {
     const dataSource = this._dataSource;
     if (dataSource) {
-      // @ts-expect-error _dataSource is loosely typed
       if (dataSource.isLoaded()) {
         if (this._proxiedDataSourceChangedHandler) {
           this._proxiedDataSourceChangedHandler();
         }
       } else {
-        // @ts-expect-error _dataSource is loosely typed
         dataSource.load();
       }
     }
@@ -174,25 +169,19 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
         delete this._isSharedDataSource;
 
         if (this._proxiedDataSourceChangedHandler) {
-          // @ts-expect-error _dataSource is loosely typed
           this._dataSource.off('changed', this._proxiedDataSourceChangedHandler);
         }
         if (this._proxiedDataSourceLoadErrorHandler) {
-          // @ts-expect-error _dataSource is loosely typed
           this._dataSource.off('loadError', this._proxiedDataSourceLoadErrorHandler);
         }
         if (this._proxiedDataSourceLoadingChangedHandler) {
-          // @ts-expect-error _dataSource is loosely typed
           this._dataSource.off('loadingChanged', this._proxiedDataSourceLoadingChangedHandler);
         }
 
-        // @ts-expect-error _dataSource is loosely typed
         if (this._dataSource._eventsStrategy) {
-          // @ts-expect-error _dataSource is loosely typed
           this._dataSource._eventsStrategy.off('loadingChanged', this.readyWatcher);
         }
       } else {
-        // @ts-expect-error _dataSource is loosely typed
         this._dataSource.dispose();
       }
 
