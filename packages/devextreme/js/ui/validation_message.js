@@ -1,3 +1,3 @@
-import ValidationMessage from '../__internal/ui/m_validation_message';
+import ValidationMessage from '../__internal/ui/validation_message';
 
 export default ValidationMessage;

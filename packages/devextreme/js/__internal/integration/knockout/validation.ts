@@ -4,7 +4,7 @@ import { Guid } from '@ts/core/m_guid';
 import { Deferred } from '@ts/core/utils/m_deferred';
 import { extend } from '@ts/core/utils/m_extend';
 import { each, map } from '@ts/core/utils/m_iterator';
-import ValidationEngine from '@ts/ui/m_validation_engine';
+import ValidationEngine from '@ts/ui/validation_engine';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import ko from 'knockout';
 
@@ -50,19 +50,17 @@ if (ko) {
     validate() {
       const currentResult = this._validationInfo?.result;
       const value = this.target();
-      if (currentResult
-        && currentResult.status === VALIDATION_STATUS_PENDING
+      if (currentResult?.status === VALIDATION_STATUS_PENDING
         && currentResult.value === value
       ) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return extend({}, currentResult);
       }
       const result = ValidationEngine.validate(value, this.validationRules, this.name);
-      // @ts-expect-error
       result.id = new Guid().toString();
       this._applyValidationResult(result);
-      // @ts-expect-error
-      result.complete?.then((res) => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      result?.complete?.then((res) => {
         if (res.id === this._validationInfo.result.id) {
           this._applyValidationResult(res);
         }
