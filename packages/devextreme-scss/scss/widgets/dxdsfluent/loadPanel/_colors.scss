@@ -1,8 +1,8 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
-@use "../overlay/colors" as *;
+@use "../common/colors" as *;
 
 // adduse
 
-$loadpanel-content-bg: $overlay-content-bg !default;
+$load-panel-content-bg-rest: $surface-overlay-rest !default;

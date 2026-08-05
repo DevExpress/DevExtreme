@@ -5,40 +5,37 @@
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../common/sizes" as *;
-@use "../button/sizes" as *;
+@use "../button/sizes" as buttonSizes;
 @use "../common/mixins" as *;
 @use "../common/sizes" as *;
 @use "../../base/textEditor" with (
-  $texteditor-clear-button-area-width: $fluent-texteditor-clear-button-area-width,
+  $texteditor-clear-button-area-width: $text-editor-clear-button-width,
 );
 @use "../../base/textEditor/mixins" as *;
-@use "../colorBox/sizes" as *;
 
 // adduse
 
-$fluent-base-standard-texteditor-input-horizontal-padding: 0;
-$fluent-texteditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 2 * #{$fluent-invalid-badge-horizontal-padding});
 
 @mixin texteditor-outlined-styling() {
-  background-color: $texteditor-outlined-bg;
-  border-radius: $texteditor-input-border-radius;
-  border-width: $fluent-editor-border-width;
+  background-color: $text-editor-outlined-bg-rest;
+  border-radius: $text-editor-input-border-radius;
+  border-width: $text-editor-border-width;
   border-style: solid;
-  border-color: $texteditor-border-color;
-  border-bottom-color: $texteditor-border-bottom-color;
+  border-color: $text-editor-border-rest;
+  border-bottom-color: $text-editor-line-rest;
 
   &::before {
     box-sizing: border-box;
     content: "";
     position: absolute;
-    left: $fluent-texteditor-before-left;
-    bottom: $fluent-texteditor-before-bottom;
-    right: $fluent-texteditor-before-right;
-    height: $texteditor-input-border-radius;
-    width: calc(100% + 2 * $fluent-editor-border-width);
-    border-bottom-left-radius: $texteditor-input-border-radius;
-    border-bottom-right-radius: $texteditor-input-border-radius;
-    border-bottom-color: $texteditor-indicator-border-color;
+    left: $text-editor-line-inset-inline-start;
+    bottom: $text-editor-line-inset-block-end;
+    right: $text-editor-line-inset-inline-end;
+    height: $text-editor-input-border-radius;
+    width: calc(100% + 2 * $text-editor-border-width);
+    border-bottom-left-radius: $text-editor-input-border-radius;
+    border-bottom-right-radius: $text-editor-input-border-radius;
+    border-bottom-color: $text-editor-indicator-rest;
     clip-path: inset(calc(100% - 2px) 0 0);
     transform: scaleX(0);
     transition-property: transform;
@@ -49,8 +46,8 @@ $fluent-texteditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 2 * 
   &.dx-texteditor-with-label,
   &.dx-texteditor-with-floating-label {
     .dx-texteditor-label {
-      width: calc(100% + 2 * $fluent-editor-border-width);
-      inset: $fluent-texteditor-label-inset;
+      width: calc(100% + 2 * $text-editor-border-width);
+      inset: $text-editor-label-inset;
     }
 
     .dx-datebox {
@@ -61,37 +58,37 @@ $fluent-texteditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 2 * 
   &.dx-state-disabled,
   &.dx-state-readonly {
     background-color: transparent;
-    border-color: $texteditor-border-color-disabled;
+    border-color: $text-editor-border-disabled;
   }
 
   &.dx-invalid {
-    border-color: $texteditor-invalid-faded-border-color;
+    border-color: $text-editor-invalid-border-rest;
 
     &.dx-state-hover,
     &.dx-state-focused {
-      border-color: $texteditor-invalid-focused-border-color;
+      border-color: $text-editor-invalid-border-focused;
     }
 
     &::before {
-      border-color: $texteditor-invalid-faded-border-color;
+      border-color: $text-editor-invalid-border-rest;
     }
   }
 
   &.dx-state-hover {
-    background-color: $texteditor-outlined-bg-hover;
-    border-left-color: $texteditor-border-color-hover;
-    border-right-color: $texteditor-border-color-hover;
-    border-top-color: $texteditor-border-color-hover;
-    border-bottom-color: $texteditor-border-bottom-color-hover;
+    background-color: $text-editor-outlined-bg-hovered;
+    border-left-color: $text-editor-border-hovered;
+    border-right-color: $text-editor-border-hovered;
+    border-top-color: $text-editor-border-hovered;
+    border-bottom-color: $text-editor-line-hovered;
   }
 
   &.dx-state-focused,
   &.dx-state-active {
-    background-color: $texteditor-outlined-bg-focused;
-    border-left-color: $texteditor-border-color-focused;
-    border-right-color: $texteditor-border-color-focused;
-    border-top-color: $texteditor-border-color-focused;
-    border-bottom-color: $texteditor-border-bottom-color-focused;
+    background-color: $text-editor-outlined-bg-focused;
+    border-left-color: $text-editor-border-focused;
+    border-right-color: $text-editor-border-focused;
+    border-top-color: $text-editor-border-focused;
+    border-bottom-color: $text-editor-line-focused;
 
     &::before {
       transform: scaleX(1);
@@ -103,106 +100,106 @@ $fluent-texteditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 2 * 
 }
 
 @mixin texteditor-filled-styling() {
-  background-color: $texteditor-filled-bg;
-  border-radius: $texteditor-input-border-radius;
-  border-width: $fluent-editor-border-width;
+  background-color: $text-editor-filled-bg-rest;
+  border-radius: $text-editor-input-border-radius;
+  border-width: $text-editor-border-width;
   border-style: solid;
   border-color: transparent;
 
   .dx-placeholder::before,
   .dx-texteditor-input {
-    padding-top: $fluent-filled-texteditor-input-top-padding;
-    padding-bottom: $fluent-filled-texteditor-input-bottom-padding;
+    padding-top: $text-editor-input-filled-padding-block-start;
+    padding-bottom: $text-editor-input-filled-padding-block-end;
   }
 
   &::before {
-    left: $fluent-texteditor-before-left;
-    bottom: $fluent-texteditor-before-bottom;
-    right: $fluent-texteditor-before-right;
-    height: $texteditor-input-border-radius;
-    width: calc(100% + 2 * $fluent-editor-border-width);
-    border-bottom-left-radius: $texteditor-input-border-radius;
-    border-bottom-right-radius: $texteditor-input-border-radius;
-    border-bottom-color: $texteditor-indicator-border-color;
+    left: $text-editor-line-inset-inline-start;
+    bottom: $text-editor-line-inset-block-end;
+    right: $text-editor-line-inset-inline-end;
+    height: $text-editor-input-border-radius;
+    width: calc(100% + 2 * $text-editor-border-width);
+    border-bottom-left-radius: $text-editor-input-border-radius;
+    border-bottom-right-radius: $text-editor-input-border-radius;
+    border-bottom-color: $text-editor-indicator-rest;
     clip-path: inset(calc(100% - 2px) 0 0);
   }
 
   &.dx-state-hover {
-    background-color: $texteditor-filled-bg-hover;
+    background-color: $text-editor-filled-bg-hovered;
   }
 
   &.dx-state-focused,
   &.dx-state-active {
-    background-color: $texteditor-filled-bg-focused;
+    background-color: $text-editor-filled-bg-focused;
   }
 
   &.dx-state-disabled,
   &.dx-state-readonly {
     background-color: transparent;
-    border-color: $texteditor-border-color-disabled;
+    border-color: $text-editor-border-disabled;
   }
 
   &.dx-invalid {
-    border-color: $texteditor-invalid-faded-border-color;
+    border-color: $text-editor-invalid-border-rest;
 
     &.dx-state-hover,
     &.dx-state-focused {
-      border-color: $texteditor-invalid-focused-border-color;
+      border-color: $text-editor-invalid-border-focused;
     }
   }
 }
 
 @mixin texteditor-underlined-styling() {
-  background-color: $texteditor-underlined-bg;
+  background-color: $text-editor-underlined-bg-rest;
   border-radius: 0;
 
   &::after {
-    border-bottom-width: $fluent-texteditor-state-focused-border-bottom-width;
+    border-bottom-width: $text-editor-line-border-block-end-width-focused;
     border-bottom-style: solid;
-    border-bottom-color: $texteditor-border-bottom-color;
+    border-bottom-color: $text-editor-line-rest;
   }
 
   &.dx-state-hover {
-    background-color: $texteditor-underlined-bg-hover;
+    background-color: $text-editor-underlined-bg-hovered;
 
     &::after {
-      border-bottom-color: $texteditor-border-bottom-color-hover;
+      border-bottom-color: $text-editor-line-hovered;
     }
   }
 
   &.dx-state-focused,
   &.dx-state-active {
-    background-color: $texteditor-underlined-bg-focused;
+    background-color: $text-editor-underlined-bg-focused;
   }
 
   .dx-texteditor-input,
   .dx-lookup-field {
-    min-height: $fluent-texteditor-input-height;
+    min-height: $text-editor-input-min-height;
   }
 
   .dx-texteditor-input,
   .dx-placeholder::before {
-    padding-top: $fluent-standard-texteditor-input-top-padding;
-    padding-bottom: $fluent-standard-texteditor-input-bottom-padding;
-    padding-left: $fluent-base-standard-texteditor-input-horizontal-padding;
-    padding-right: $fluent-base-standard-texteditor-input-horizontal-padding;
+    padding-top: $text-editor-input-underlined-padding-block-start;
+    padding-bottom: $text-editor-input-underlined-padding-block-end;
+    padding-left: $text-editor-input-underlined-padding-inline;
+    padding-right: $text-editor-input-underlined-padding-inline;
   }
 
   &.dx-state-disabled,
   &.dx-state-readonly {
     &::after {
-      border-bottom-color: $texteditor-border-color-disabled;
+      border-bottom-color: $text-editor-border-disabled;
     }
   }
 
   &.dx-invalid {
     &::after {
-      border-bottom-color: $texteditor-invalid-faded-border-color;
+      border-bottom-color: $text-editor-invalid-border-rest;
     }
 
     &.dx-state-hover {
       &::after {
-        border-bottom-color: $texteditor-invalid-focused-border-color;
+        border-bottom-color: $text-editor-invalid-border-focused;
       }
     }
   }
@@ -210,16 +207,16 @@ $fluent-texteditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 2 * 
 
 @mixin texteditor-input-padding-filled() {
   .dx-texteditor-input {
-    padding-inline-end: calc(#{$fluent-texteditor-invalid-badge-size} + #{$fluent-filled-texteditor-input-horizontal-padding});
+    padding-inline-end: calc(#{$text-editor-invalid-badge-size} + #{$text-editor-input-filled-padding-inline});
   }
 }
 
 @mixin texteditor-validation-icon-offset() {
-  inset-inline-end: $fluent-invalid-badge-halfhorizontal-padding;
+  inset-inline-end: $invalid-badge-offset;
 }
 
 @mixin texteditor-validation-icon-offset-filled() {
-  inset-inline-end: $fluent-filled-texteditor-input-button-horizontal-padding;
+  inset-inline-end: $text-editor-button-filled-inset-inline-end;
 }
 
 @mixin validation-icon-position() {
@@ -227,7 +224,7 @@ $fluent-texteditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 2 * 
   &.dx-valid {
     &.dx-editor-underlined {
       .dx-texteditor-input {
-        padding-inline-end: calc(#{$fluent-texteditor-invalid-badge-size} + #{$fluent-base-standard-texteditor-input-horizontal-padding});
+        padding-inline-end: calc(#{$text-editor-invalid-badge-size} + #{$text-editor-input-underlined-padding-inline});
       }
     }
 
@@ -254,7 +251,7 @@ $fluent-texteditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 2 * 
   &.dx-validation-pending {
     &.dx-editor-underlined {
       .dx-texteditor-input {
-        padding-inline-end: calc(#{$fluent-texteditor-invalid-badge-size} + #{$fluent-base-standard-texteditor-input-horizontal-padding});
+        padding-inline-end: calc(#{$text-editor-invalid-badge-size} + #{$text-editor-input-underlined-padding-inline});
       }
     }
 
@@ -278,7 +275,7 @@ $fluent-texteditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 2 * 
 }
 
 .dx-texteditor {
-  border-radius: $texteditor-input-border-radius;
+  border-radius: $text-editor-input-border-radius;
   position: relative;
 
   @mixin dx-texteditor-borders-position() {
@@ -304,25 +301,25 @@ $fluent-texteditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 2 * 
 
   &.dx-state-focused {
     .dx-texteditor-label {
-      color: $texteditor-label-color-focused;
-      font-size: $fluent-texteditor-label-font-size;
+      color: $text-editor-label-content-focused;
+      font-size: $text-editor-label-font-size;
     }
 
     &.dx-invalid {
       .dx-texteditor-label {
-        color: $texteditor-invalid-color;
+        color: $text-editor-invalid-content-rest;
       }
     }
   }
 
   &.dx-texteditor-label-outside {
     .dx-texteditor-label {
-      color: $texteditor-color;
+      color: $text-editor-content-rest;
     }
 
     &.dx-invalid {
       .dx-texteditor-label {
-        color: $texteditor-invalid-color;
+        color: $text-editor-invalid-content-rest;
       }
     }
   }
@@ -330,9 +327,9 @@ $fluent-texteditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 2 * 
   &.dx-state-focused,
   &.dx-state-active {
     &::before {
-      border-bottom-width: $fluent-texteditor-state-active-border-bottom-width;
+      border-bottom-width: $text-editor-line-border-block-end-width-active;
       border-bottom-style: solid;
-      border-bottom-color: $texteditor-indicator-border-color;
+      border-bottom-color: $text-editor-indicator-rest;
       transform: scale(1);
       transition-property: transform;
       transition-duration: 0.2s;
@@ -348,12 +345,12 @@ $fluent-texteditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 2 * 
     .dx-placeholder::before,
     .dx-texteditor-input,
     .dx-lookup-field {
-      color: $texteditor-disabled-text-color;
+      color: $text-editor-content-disabled;
     }
 
     .dx-lookup-arrow,
     .dx-dropdowneditor-icon {
-      color: $texteditor-disabled-text-color;
+      color: $text-editor-content-disabled;
     }
   }
 
@@ -364,7 +361,7 @@ $fluent-texteditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 2 * 
   }
 
   .dx-texteditor-input {
-    min-height: calc(#{$fluent-texteditor-input-height} - 2px);
+    min-height: calc(#{$text-editor-input-min-height} - 2px);
   }
 
   @include validation-icon-position();
@@ -374,7 +371,7 @@ $fluent-texteditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 2 * 
   &.dx-editor-outlined {
     .dx-placeholder::before,
     .dx-texteditor-input {
-      padding: $fluent-filled-texteditor-input-padding;
+      padding: $text-editor-input-filled-padding;
     }
   }
 
@@ -393,8 +390,8 @@ $fluent-texteditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 2 * 
 
 .dx-show-clear-button {
   .dx-clear-button-area {
-    width: $texteditor-icon-container-size;
-    min-width: $texteditor-icon-container-size;
+    width: $text-editor-icon-container-size;
+    min-width: $text-editor-icon-container-size;
     right: 0;
     display: flex;
     align-items: center;
@@ -411,12 +408,12 @@ $fluent-texteditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 2 * 
       content: '\f15f';
     }
 
-    color: $texteditor-button-clear-icon-color;
+    color: $text-editor-clear-button-icon-rest;
   }
 
   &.dx-state-disabled {
     .dx-icon-clear {
-      color: $texteditor-foreground-disabled;
+      color: $text-editor-content-disabled;
     }
   }
 
@@ -428,31 +425,31 @@ $fluent-texteditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 2 * 
 
 /* B231111 */
 .dx-placeholder {
-  color: $texteditor-placeholder-color;
-  font-size: $fluent-texteditor-font-size;
+  color: $text-editor-placeholder-rest;
+  font-size: $text-editor-font-size;
   line-height: normal;
 }
 
 .dx-texteditor-input {
   margin: 0;
   background-color: transparent;
-  color: $texteditor-color;
-  font-size: $fluent-texteditor-font-size;
-  line-height: $fluent-texteditor-line-height;
+  color: $text-editor-content-rest;
+  font-size: $text-editor-font-size;
+  line-height: $text-editor-line-height;
 }
 
 .dx-invalid.dx-texteditor {
   &.dx-state-hover {
     &::after {
-      border-bottom-color: $texteditor-invalid-faded-border-color;
+      border-bottom-color: $text-editor-invalid-border-rest;
     }
   }
 
   &.dx-state-focused,
   &.dx-state-active {
     &::before {
-      border-bottom: $fluent-texteditor-state-active-border-bottom;
-      border-bottom-color: $texteditor-invalid-focused-border-color;
+      border-bottom: $text-editor-line-border-block-end-active;
+      border-bottom-color: $text-editor-invalid-border-focused;
     }
   }
 
@@ -465,8 +462,8 @@ $fluent-texteditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 2 * 
 
 .dx-texteditor-label {
   position: absolute;
-  font-size: $fluent-texteditor-label-font-size;
-  color: $texteditor-label-color;
+  font-size: $text-editor-label-font-size;
+  color: $text-editor-label-content-rest;
   white-space: nowrap;
   user-select: none;
   pointer-events: none;
@@ -486,77 +483,77 @@ $fluent-texteditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 2 * 
       width: auto;
       max-width: 100%;
       display: block;
-      margin-bottom: $fluent-texteditor-label-margin-bottom;
+      margin-bottom: $text-editor-label-margin-block-end;
     }
   }
 
   .dx-invalid & {
-    color: $texteditor-invalid-color;
+    color: $text-editor-invalid-content-rest;
   }
 }
 
 @include dx-editor-outlined(
-  $texteditor-input-border-radius,
-  $fluent-texteditor-label-font-size,
-  $fluent-base-border-width,
-  $fluent-base-border-width,
+  $text-editor-input-border-radius,
+  $text-editor-label-font-size,
+  $global-border-width,
+  $global-border-width,
   solid,
-  $fluent-base-inline-block-height,
-  $fluent-base-inline-block-height,
-  calc((1px + #{$fluent-texteditor-font-size}) / 2),
-  $fluent-texteditor-label-outside-top-offset,
+  $text-editor-label-height,
+  $text-editor-label-height,
+  calc((1px + #{$text-editor-font-size}) / 2),
+  $text-editor-label-outside-offset,
   0.5px,
-  $fluent-filled-texteditor-input-horizontal-padding,
-  $fluent-filled-texteditor-input-horizontal-padding,
-  $texteditor-outlined-bg,
+  $text-editor-input-filled-padding-inline,
+  $text-editor-input-filled-padding-inline,
+  $text-editor-outlined-bg-rest,
   1px solid transparent,
-  $texteditor-border-color,
-  $texteditor-border-bottom-color,
-  $texteditor-border-color-disabled,
-  $texteditor-border-color-disabled,
-  $texteditor-border-color-hover,
-  $texteditor-border-bottom-color-hover,
-  $texteditor-border-color-focused,
-  $texteditor-border-bottom-color-focused,
-  $texteditor-invalid-faded-border-color,
-  $texteditor-invalid-focused-border-color,
-  $texteditor-label-transition,
-  $fluent-texteditor-font-size,
-  $fluent-filled-texteditor-input-top-padding,
+  $text-editor-border-rest,
+  $text-editor-line-rest,
+  $text-editor-border-disabled,
+  $text-editor-border-disabled,
+  $text-editor-border-hovered,
+  $text-editor-line-hovered,
+  $text-editor-border-focused,
+  $text-editor-line-focused,
+  $text-editor-invalid-border-rest,
+  $text-editor-invalid-border-focused,
+  $text-editor-label-transition,
+  $text-editor-font-size,
+  $text-editor-input-filled-padding-block-start,
   1px,
-  $fluent-texteditor-font-size,
-  $fluent-texteditor-label-outside-height,
+  $text-editor-font-size,
+  $text-editor-label-outside-height,
 );
 @include dx-editor-filled(
-  $texteditor-label-transition,
-  $fluent-texteditor-label-font-size,
-  $fluent-texteditor-label-font-size,
-  $fluent-texteditor-label-font-size,
-  $fluent-texteditor-label-top-offset,
-  $fluent-texteditor-label-outside-top-offset,
-  $fluent-texteditor-font-size,
-  $fluent-texteditor-font-size,
-  $fluent-texteditor-font-size,
-  $fluent-filled-texteditor-input-horizontal-padding,
-  $fluent-filled-texteditor-input-with-label-top-padding,
-  $fluent-filled-texteditor-input-with-label-bottom-padding,
-  $fluent-texteditor-font-size,
-  $fluent-texteditor-label-outside-height,
+  $text-editor-label-transition,
+  $text-editor-label-font-size,
+  $text-editor-label-font-size,
+  $text-editor-label-font-size,
+  $text-editor-label-offset,
+  $text-editor-label-outside-offset,
+  $text-editor-font-size,
+  $text-editor-font-size,
+  $text-editor-font-size,
+  $text-editor-input-filled-padding-inline,
+  $text-editor-input-filled-with-label-padding-block-start,
+  $text-editor-input-filled-with-label-padding-block-end,
+  $text-editor-font-size,
+  $text-editor-label-outside-height,
 );
 @include dx-editor-underlined(
-  $texteditor-label-transition,
-  $fluent-texteditor-label-font-size,
-  $fluent-texteditor-label-font-size,
-  $fluent-texteditor-label-font-size,
-  $fluent-texteditor-label-top-offset,
-  $fluent-texteditor-label-outside-top-offset,
-  $fluent-texteditor-font-size,
-  $fluent-texteditor-font-size,
-  $fluent-texteditor-font-size,
-  $fluent-standard-texteditor-with-label-input-top-padding,
-  $fluent-standard-texteditor-with-label-input-bottom-padding,
-  $fluent-texteditor-font-size,
-  $fluent-texteditor-label-outside-height,
+  $text-editor-label-transition,
+  $text-editor-label-font-size,
+  $text-editor-label-font-size,
+  $text-editor-label-font-size,
+  $text-editor-label-offset,
+  $text-editor-label-outside-offset,
+  $text-editor-font-size,
+  $text-editor-font-size,
+  $text-editor-font-size,
+  $text-editor-input-underlined-with-label-padding-block-start,
+  $text-editor-input-underlined-with-label-padding-block-end,
+  $text-editor-font-size,
+  $text-editor-label-outside-height,
 );
 
 .dx-valid.dx-texteditor {
@@ -576,10 +573,10 @@ $fluent-texteditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 2 * 
 }
 
 @include dx-editor-buttons-container-material(
-  $fluent-underlined-editor-button-height,
-  $fluent-editor-custom-button-margin,
-  $fluent-editor-custom-button-margin,
+  $text-editor-button-underlined-height,
+  $text-editor-custom-button-margin,
+  $text-editor-custom-button-margin,
   0,
-  $texteditor-spin-button-horizontal-padding,
-  $fluent-button-vertical-padding,
+  $text-editor-spin-button-padding-inline,
+  buttonSizes.$button-padding-block,
 );

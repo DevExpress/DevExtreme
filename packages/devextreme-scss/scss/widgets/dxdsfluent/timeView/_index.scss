@@ -3,16 +3,15 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../textEditor/sizes" as *;
 @use "../../base/timeView/mixins" as *;
 @use "../../base/timeView" with (
-  $timeview-numberbox-width: $fluent-timeview-numberbox-width,
-  $timeview-numberbox-spin-touch-friendly-width-2: $fluent-timeview-numberbox-spin-touch-friendly-width-2,
+  $timeview-numberbox-width: $time-view-field-number-box-width,
+  $timeview-numberbox-spin-touch-friendly-width-2: $time-view-field-number-box-spin-touch-friendly-width,
 );
 
 // adduse
 
-@include clock-action-icons-mixin($timeview-inverted-bg, $timeview-typography-bg, $clock-digits-color);
+@include clock-action-icons-mixin($time-view-clock-accent-bg-rest, $time-view-clock-bg-rest, $time-view-clock-digits-content-rest);
 
 .dx-timeview {
   height: auto;
@@ -21,7 +20,7 @@
   .dx-texteditor {
     .dx-texteditor-input {
       padding-inline-end: 0;
-      padding-inline-start: $fluent-timeview-input-padding-inline-start;
+      padding-inline-start: $time-view-input-padding-inline-start;
     }
 
     .dx-texteditor-container {
@@ -33,26 +32,26 @@
 }
 
 .dx-timeview-clock {
-  margin-bottom: $fluent-timeview-timeview-clock-margin-bottom;
+  margin-bottom: $time-view-clock-margin-block-end;
 }
 
 .dx-timeview-format12 {
-  width: $fluent-timeview-format12-width;
-  margin-inline-start: $fluent-timeview-time-separator-margin;
+  width: $time-view-format12-width;
+  margin-inline-start: $time-view-time-separator-margin;
 }
 
 .dx-timeview-time-separator {
-  margin: 0 $fluent-timeview-time-separator-margin;
+  margin: 0 $time-view-time-separator-margin;
 }
 
 .dx-timeview-field {
-  min-height: $fluent-timeview-field-min-height;
+  min-height: $time-view-field-min-height;
 }
 
 .dx-timeview-field .dx-numberbox {
-  width: $fluent-timeview-format12-width;
+  width: $time-view-format12-width;
 
   &.dx-numberbox-spin-touch-friendly {
-    width: $fluent-timeview-numberbox-spin-touch-friendly-width;
+    width: $time-view-number-box-spin-touch-friendly-width;
   }
 }

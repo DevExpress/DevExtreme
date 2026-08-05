@@ -1,20 +1,20 @@
 @use "../../colors" as *;
 @use '../../../../base/gridBase/layout/aiChat/mixins' as *;
 @use '../../../colors' as *;
-@use '../../../button/colors' as *;
+@use '../../../button/colors' as buttonColors;
 @use './sizes' as *;
-@use "../../../../base/widget" as *;
+@use "../../../../base/widget" as baseWidget;
 @include ai-chat-messagelist-empty(
-  $button-default-bg,
-  $button-default-outlined-hover-bg,
+  buttonColors.$button-default-contained-bg-rest,
+  buttonColors.$button-default-outlined-bg-hovered,
 );
-@include ai-chat-message-pending($gridbase-accent);
-@include ai-chat-message-success($gridbase-success);
-@include ai-chat-message-error($gridbase-danger);
-@include ai-chat-messagebubble-border($gridbase-border-color);
-@include ai-chat-message-regenerate-button($button-normal-active-bg);
-@include ai-chat-message-icon($ai-chat-message-icon-size);
+@include ai-chat-message-pending($grid-ai-chat-message-pending-content-rest);
+@include ai-chat-message-success($grid-ai-chat-message-success-content-rest);
+@include ai-chat-message-error($grid-ai-chat-message-error-content-rest);
+@include ai-chat-messagebubble-border($grid-ai-chat-message-border-rest);
+@include ai-chat-message-regenerate-button(buttonColors.$button-normal-contained-bg-active);
+@include ai-chat-message-icon($grid-ai-chat-message-icon-size);
 
 .dx-ai-chat--disabled .dx-ai-chat__message-regenerate-button {
-  @include disabled-widget();
+  @include baseWidget.disabled-widget();
 }

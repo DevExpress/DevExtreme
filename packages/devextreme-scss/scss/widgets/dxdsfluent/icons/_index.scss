@@ -10,7 +10,7 @@
 @include dx-font-icons("dxiconsfluent", "DevExtreme Fluent Icons", "devextreme_fluent_icons", optimizeLegibility);
 
 .dx-icon {
-  font-size: $fluent-base-icon-size;
+  font-size: $global-icon-size;
   line-height: 1;
   white-space: nowrap;
   font-feature-settings: 'liga';
@@ -25,7 +25,7 @@
 }
 
 .dx-scrollview-pulldown {
-  background-image: $icons-scrollview-pulldown-path;
+  background-image: $icon-pulldown-bg-rest;
   background-position: 0 0;
   background-repeat: no-repeat;
 }
