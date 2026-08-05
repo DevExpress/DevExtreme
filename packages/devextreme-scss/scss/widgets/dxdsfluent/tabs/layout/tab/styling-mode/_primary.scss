@@ -1,8 +1,6 @@
 @use "sass:color";
 @use "../../../../colors" as *;
 @use "../../../../sizes" as *;
-@use "../../../../button/colors" as *;
-@use "../../../../button/mixins" as *;
 @use "../../../../../base/icon_fonts" as *;
 @use "../../../../../base/tabs";
 @use "../../../variables/colors" as *;
@@ -17,15 +15,15 @@
 .dx-tabs-styling-mode-primary {
   .dx-tab {
     &.dx-state-hover {
-      background-color: $tabs-tab-bg-color-hover-primary;
+      background-color: $tabs-tab-primary-bg-hovered;
     }
 
     &.dx-state-focused {
-      background-color: $tabs-tab-bg-color-focus-primary;
+      background-color: $tabs-tab-primary-bg-focused;
     }
 
     &.dx-state-active {
-      background-color: $tabs-tab-bg-color-active-primary;
+      background-color: $tabs-tab-primary-bg-active;
     }
   }
 
@@ -45,31 +43,31 @@
   &.dx-tab-indicator-position-bottom {
     .dx-tab {
       &.dx-state-hover {
-        @include dx-tabs-indicator-background($tabs-tab-border-color-hover);
+        @include dx-tabs-indicator-background($tabs-tab-border-hovered);
       }
 
       &.dx-state-active {
-        @include dx-tabs-indicator-background($tabs-tab-border-color-active);
+        @include dx-tabs-indicator-background($tabs-tab-border-active);
       }
     }
 
     .dx-tab-selected {
-      @include dx-tabs-indicator-background($tabs-tab-border-color-selected-basic);
+      @include dx-tabs-indicator-background($tabs-tab-basic-border-selected);
 
       &.dx-state-focused {
-        @include dx-tabs-indicator-background($tabs-tab-border-color-selected-focused);
+        @include dx-tabs-indicator-background($tabs-tab-border-selected-focused);
       }
 
       &.dx-state-hover {
-        @include dx-tabs-indicator-background($tabs-tab-border-color-selected-hover);
+        @include dx-tabs-indicator-background($tabs-tab-border-selected-hovered);
       }
 
       &.dx-state-active {
-        @include dx-tabs-indicator-background($tabs-tab-border-color-selected-active);
+        @include dx-tabs-indicator-background($tabs-tab-border-selected-active);
       }
 
       &.dx-state-disabled {
-        @include dx-tabs-indicator-background($tabs-tab-border-color-disabled);
+        @include dx-tabs-indicator-background($tabs-tab-border-disabled);
       }
     }
   }
@@ -90,31 +88,31 @@
   &.dx-tab-indicator-position-left {
     .dx-tab {
       &.dx-state-hover {
-        @include dx-tabs-indicator-background($tabs-tab-border-color-hover);
+        @include dx-tabs-indicator-background($tabs-tab-border-hovered);
       }
 
       &.dx-state-active {
-        @include dx-tabs-indicator-background($tabs-tab-border-color-active);
+        @include dx-tabs-indicator-background($tabs-tab-border-active);
       }
     }
 
     .dx-tab-selected {
-      @include dx-tabs-indicator-background($tabs-tab-border-color-selected-basic);
+      @include dx-tabs-indicator-background($tabs-tab-basic-border-selected);
 
       &.dx-state-focused {
-        @include dx-tabs-indicator-background($tabs-tab-border-color-selected-focused);
+        @include dx-tabs-indicator-background($tabs-tab-border-selected-focused);
       }
 
       &.dx-state-hover {
-        @include dx-tabs-indicator-background($tabs-tab-border-color-selected-hover);
+        @include dx-tabs-indicator-background($tabs-tab-border-selected-hovered);
       }
 
       &.dx-state-active {
-        @include dx-tabs-indicator-background($tabs-tab-border-color-selected-active);
+        @include dx-tabs-indicator-background($tabs-tab-border-selected-active);
       }
 
       &.dx-state-disabled {
-        @include dx-tabs-indicator-background($tabs-tab-border-color-disabled);
+        @include dx-tabs-indicator-background($tabs-tab-border-disabled);
       }
     }
   }

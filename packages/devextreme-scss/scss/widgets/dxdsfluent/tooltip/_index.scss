@@ -3,9 +3,9 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/tooltip" with (
-  $tooltip-overlay-content-min-width: $fluent-tooltip-overlay-content-min-width,
-  $tooltip-overlay-content-min-height: $fluent-tooltip-overlay-content-min-height,
-  $tooltip-popup-content-padding: $fluent-tooltip-popup-content-padding,
+  $tooltip-overlay-content-min-width: $tooltip-overlay-content-min-width,
+  $tooltip-overlay-content-min-height: $tooltip-overlay-content-min-height,
+  $tooltip-popup-content-padding: $tooltip-popup-content-padding,
 );
 
 // adduse
@@ -13,30 +13,30 @@
 
 .dx-tooltip-wrapper {
   .dx-overlay-content {
-    background-color: $tooltip-bg;
-    color: $tooltip-color;
-    border: $fluent-tooltip-overlay-content-border;
+    background-color: $tooltip-bg-rest;
+    color: $tooltip-content-rest;
+    border: $tooltip-overlay-content-border;
     border-radius: $tooltip-border-radius;
     min-height: auto;
 
     .dx-popup-content {
-      padding: $fluent-tooltip-padding;
-      font-size: $fluent-tooltip-font-size;
+      padding: $tooltip-padding;
+      font-size: $tooltip-font-size;
     }
   }
 
   &.dx-popover-wrapper .dx-popover-arrow {
     &::after {
-      box-shadow: $fluent-tooltip-shadow;
-      background: $tooltip-bg;
-      border-top-right-radius: $fluent-tooltip-arrow-border-radius;
+      box-shadow: $tooltip-box-shadow;
+      background: $tooltip-bg-rest;
+      border-top-right-radius: $tooltip-arrow-border-radius;
     }
   }
 
   &.dx-popover-wrapper.dx-position-top {
     .dx-popover-arrow {
       &::after {
-        border-bottom-left-radius: $fluent-tooltip-arrow-border-radius;
+        border-bottom-left-radius: $tooltip-arrow-border-radius;
       }
     }
   }

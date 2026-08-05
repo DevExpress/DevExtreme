@@ -1,60 +1,70 @@
 @use "../sizes" as *;
 @use "colors" as *;
 @use "../../../_design-system/variables/ds" as ds;
+@use "../typography/sizes" as typographySizes;
 
 // adduse
 
-$fluent-popup-content-padding: null !default;
-$fluent-popup-content-vertical-padding: null !default;
-$fluent-popup-content-withtitle-top-padding: null !default;
-$fluent-popup-content-withtitle-bottom-padding: null !default;
-$fluent-popup-toolbar-horizontal-padding: null !default;
-$fluent-popup-bottom-toolbar-height: null !default;
-$fluent-popup-toolbar-height: null !default;
+// Not a colour: a radius that used to sit in _colors.scss (NAMING.md, O7)
+$popup-border-radius: calc(#{$global-border-radius} * 2) !default;
 
-$fluent-popup-button-margin: 0 ds.$spacing-80 !default;
-$fluent-popup-toolbar-item-spacing: ds.$spacing-80 !default;
+$popup-content-padding: null !default;
+$popup-content-padding-block: null !default;
+$popup-content-with-title-top-padding: null !default;
+$popup-content-with-title-bottom-padding: null !default;
+$popup-toolbar-padding-inline: null !default;
+$popup-bottom-toolbar-height: null !default;
+$popup-toolbar-height: null !default;
 
-$fluent-popup-content-shadow: null !default;
-$fluent-popup-focused-content-shadow: null !default;
+$popup-button-margin: 0 ds.$spacing-80 !default;
+$popup-toolbar-item-spacing: ds.$spacing-80 !default;
+
+$popup-content-box-shadow: null !default;
+$popup-content-box-shadow-focused: null !default;
 
 @if $size == "default" {
-  $fluent-popup-content-padding: ds.$spacing-240 !default;
-  $fluent-popup-content-vertical-padding: ds.$spacing-160 !default;
-  $fluent-popup-content-withtitle-top-padding: ds.$spacing-240 !default;
-  $fluent-popup-content-withtitle-bottom-padding: ds.$spacing-160 !default;
+  $popup-content-padding: ds.$spacing-240 !default;
+  $popup-content-padding-block: ds.$spacing-160 !default;
+  $popup-content-with-title-top-padding: ds.$spacing-240 !default;
+  $popup-content-with-title-bottom-padding: ds.$spacing-160 !default;
 
-  $fluent-popup-toolbar-horizontal-padding: ds.$spacing-240 !default;
-  $fluent-popup-bottom-toolbar-height: ds.$spacing-480 !default;
-  $fluent-popup-toolbar-height: ds.$spacing-480 !default;
+  $popup-toolbar-padding-inline: ds.$spacing-240 !default;
+  $popup-bottom-toolbar-height: ds.$spacing-480 !default;
+  $popup-toolbar-height: ds.$spacing-480 !default;
 
-  $fluent-popup-content-shadow: 0 0 ds.$spacing-80 0 $popup-content-shadow-color1, 0 ds.$spacing-320 ds.$spacing-640 0 $popup-content-shadow-color2 !default;
-  $fluent-popup-focused-content-shadow: 0 0 ds.$spacing-120 0 $popup-focused-content-shadow-color, 0 ds.$spacing-320 ds.$spacing-640 0 $popup-focused-content-shadow-color !default;
+  $popup-content-box-shadow: 0 0 ds.$spacing-80 0 $popup-content-shadow-ambient-rest, 0 ds.$spacing-320 ds.$spacing-640 0 $popup-content-shadow-key-rest !default;
+  $popup-content-box-shadow-focused: 0 0 ds.$spacing-120 0 $popup-content-shadow-focused, 0 ds.$spacing-320 ds.$spacing-640 0 $popup-content-shadow-focused !default;
 }
 
 @else if $size == "compact" {
-  $fluent-popup-content-padding: ds.$spacing-160 !default;
-  $fluent-popup-content-vertical-padding: ds.$spacing-120 !default;
-  $fluent-popup-content-withtitle-top-padding: ds.$spacing-160 !default;
-  $fluent-popup-content-withtitle-bottom-padding: ds.$spacing-120 !default;
+  $popup-content-padding: ds.$spacing-160 !default;
+  $popup-content-padding-block: ds.$spacing-120 !default;
+  $popup-content-with-title-top-padding: ds.$spacing-160 !default;
+  $popup-content-with-title-bottom-padding: ds.$spacing-120 !default;
 
-  $fluent-popup-toolbar-horizontal-padding: ds.$spacing-160 !default;
-  $fluent-popup-bottom-toolbar-height: ds.$spacing-360 !default;
-  $fluent-popup-toolbar-height: ds.$spacing-360 !default;
+  $popup-toolbar-padding-inline: ds.$spacing-160 !default;
+  $popup-bottom-toolbar-height: ds.$spacing-360 !default;
+  $popup-toolbar-height: ds.$spacing-360 !default;
 
-  $fluent-popup-content-shadow: 0 0 ds.$spacing-80 0 $popup-content-shadow-color1, 0 ds.$spacing-320 ds.$spacing-640 0 $popup-content-shadow-color2 !default;
-  $fluent-popup-focused-content-shadow: 0 0 ds.$spacing-120 0 $popup-focused-content-shadow-color, 0 ds.$spacing-320 ds.$spacing-640 0 $popup-focused-content-shadow-color !default;
+  $popup-content-box-shadow: 0 0 ds.$spacing-80 0 $popup-content-shadow-ambient-rest, 0 ds.$spacing-320 ds.$spacing-640 0 $popup-content-shadow-key-rest !default;
+  $popup-content-box-shadow-focused: 0 0 ds.$spacing-120 0 $popup-content-shadow-focused, 0 ds.$spacing-320 ds.$spacing-640 0 $popup-content-shadow-focused !default;
 }
 
 :root {
-  --dx-popup-toolbar-item-padding-inline: #{$fluent-popup-toolbar-item-spacing};
+  --dx-popup-toolbar-item-padding-inline: #{$popup-toolbar-item-spacing};
 }
 
 // Values hoisted from style-file literals (tokenized)
-$fluent-popup-title-border-bottom: ds.$border-width-10 solid !default;
-$fluent-popup-title-min-height: ds.$spacing-280 !default;
+$popup-title-border-block-end: ds.$border-width-10 solid !default;
+$popup-title-min-height: ds.$spacing-280 !default;
 
 // Base-layer sizing injected with design tokens (wave B2)
-$fluent-popup-title-padding: ds.$spacing-100 !default;
+$popup-title-padding: ds.$spacing-100 !default;
 $fluent-popup-title-min-height-2: ds.$spacing-190 !default;
-$fluent-popup-dialog-message-padding: ds.$spacing-100 ds.$spacing-100 ds.$spacing-50 ds.$spacing-100 !default;
+$popup-dialog-message-padding: ds.$spacing-100 ds.$spacing-100 ds.$spacing-50 ds.$spacing-100 !default;
+
+/*
+ * Derived values, moved out of _index.scss: a file that emits rules must not declare
+ * variables (NAMING.md, O7).
+ */
+$popup-toolbar-label-font-size: typographySizes.$typography-m-font-size;

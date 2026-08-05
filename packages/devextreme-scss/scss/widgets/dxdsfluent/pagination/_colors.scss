@@ -2,11 +2,9 @@
 
 // adduse
 
-$pagination-page-selected-color: ds.$color-content-neutral-default-static-dark-rest !default;
-$pagination-page-hovered-bg: ds.$color-surface-neutral-default-hovered !default;
+$pagination-page-content-selected: ds.$color-content-neutral-default-static-dark-rest !default;
+$pagination-page-bg-hovered: ds.$color-surface-neutral-default-hovered !default;
 
-$pagination-page-selected-bg: ds.$color-surface-primary-default-rest !default;
+$pagination-page-bg-selected: ds.$color-surface-primary-default-rest !default;
 
 // Base-layer values injected with design tokens (wave B1)
-$fluent-pagination-info-opacity: ds.$opacity-70 !default;
-$fluent-pagination-nav-disabled-opacity: ds.$opacity-30 !default;
