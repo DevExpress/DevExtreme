@@ -3,35 +3,25 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../common/sizes" as *;
-@use "../textEditor/sizes" as *;
-@use "../button/colors" as *;
+@use "../textEditor/sizes" as textEditorSizes;
 @use "../../base/icon_fonts" as *;
 @use "../../base/dropDownEditor" with (
-  $dropdowneditor-icon-idle-opacity: $fluent-dropdowneditor-icon-idle-opacity,
+  $dropdowneditor-icon-idle-opacity: $drop-down-editor-icon-opacity-rest,
 );
 @use "../../base/dropDownEditor/mixins" as *;
 
 // adduse
 
-
-$fluent-dropdowneditor-container-button-size: $fluent-base-icon-size;
-
-$fluent-dropdowneditor-invalid-badge-offset: calc(#{$fluent-dropdowneditor-container-button-size} + #{$fluent-invalid-badge-halfhorizontal-padding});
-
-$fluent-dropdowneditor-invalid-badge-with-clear-offset: calc(#{$fluent-dropdowneditor-container-button-size} * 2 + #{$fluent-invalid-badge-halfhorizontal-padding});
-
-$fluent-dropdowneditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + #{$fluent-invalid-badge-horizontal-padding});
-
 @mixin dx-dropdowneditor-button-icon() {
-  width: $fluent-dropdowneditor-container-button-size;
+  width: $drop-down-editor-button-size;
   height: 100%;
 
-  @include dx-icon-font-centered-sizing($fluent-dropdowneditor-container-button-size);
+  @include dx-icon-font-centered-sizing($drop-down-editor-button-size);
 }
 
 .dx-dropdowneditor-button {
-  width: $fluent-dropdowneditor-container-button-size;
-  min-width: $fluent-dropdowneditor-container-button-size;
+  width: $drop-down-editor-button-size;
+  min-width: $drop-down-editor-button-size;
 
   .dx-state-readonly & {
     .dx-dropdowneditor-icon {
@@ -41,7 +31,7 @@ $fluent-dropdowneditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 
 }
 
 .dx-dropdowneditor-icon {
-  color: $dropdowneditor-icon-color;
+  color: $drop-down-editor-icon-rest;
 
   @include dx-icon(spindown);
   @include dx-dropdowneditor-button-icon();
@@ -82,16 +72,16 @@ $fluent-dropdowneditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 
 .dx-valid,
 .dx-validation-pending {
   @include invalid-dropdowneditor-input-padding(
-    $fluent-dropdowneditor-invalid-badge-size,
-    $fluent-base-standard-texteditor-input-horizontal-padding,
-    $fluent-filled-texteditor-input-horizontal-padding
+    $drop-down-editor-invalid-badge-size,
+    textEditorSizes.$text-editor-input-underlined-padding-inline,
+    textEditorSizes.$text-editor-input-filled-padding-inline
   );
 }
 
 .dx-dropdowneditor.dx-dropdowneditor-active,
 .dx-dropdowneditor-button.dx-state-active {
   .dx-dropdowneditor-icon {
-    color: $dropdowneditor-icon-active-color;
+    color: $drop-down-editor-icon-active;
     opacity: 1;
 
     @include dx-icon(spinup);
@@ -103,14 +93,14 @@ $fluent-dropdowneditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 
 .dx-valid.dx-dropdowneditor {
   .dx-texteditor-buttons-container {
     &::after {
-      inset-inline-end: $fluent-dropdowneditor-invalid-badge-offset;
+      inset-inline-end: $drop-down-editor-invalid-badge-inset-inline-end;
     }
   }
 
   &.dx-show-clear-button:not(.dx-texteditor-empty) {
     .dx-texteditor-buttons-container {
       &::after {
-        inset-inline-end: $fluent-dropdowneditor-invalid-badge-with-clear-offset;
+        inset-inline-end: $drop-down-editor-invalid-badge-with-clear-inset-inline-end;
       }
     }
   }
@@ -119,7 +109,7 @@ $fluent-dropdowneditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 
 .dx-dropdowneditor-overlay {
   &.dx-popup-wrapper {
     .dx-overlay-content {
-      box-shadow: $fluent-base-dropdown-widgets-shadow;
+      box-shadow: $global-dropdown-box-shadow;
       overflow: hidden;
     }
   }
@@ -127,7 +117,7 @@ $fluent-dropdowneditor-invalid-badge-size: calc(#{$fluent-invalid-badge-size} + 
   .dx-list-group-header,
   .dx-list-item-content,
   .dx-list-select-all-label {
-    font-size: $fluent-dropdowneditor-list-font-size;
-    line-height: $fluent-dropdowneditor-list-line-height;
+    font-size: $drop-down-editor-list-font-size;
+    line-height: $drop-down-editor-list-line-height;
   }
 }

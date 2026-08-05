@@ -12,57 +12,57 @@
 
 // stylelint-disable declaration-no-important
 .dx-theme-accent-as-text-color {
-  color: $common-accent !important;
+  color: $palette-accent !important;
 }
 
 .dx-theme-text-color {
-  color: $common-text-color !important;
+  color: $palette-text !important;
 }
 
 .dx-theme-background-color-as-text-color {
-  color: $common-bg !important;
+  color: $palette-bg !important;
 }
 
 .dx-theme-border-color-as-text-color {
-  color: $common-border-color !important;
+  color: $palette-border !important;
 }
 
 .dx-theme-accent-as-background-color {
-  background-color: $common-accent !important;
-  fill: $common-accent !important;
+  background-color: $palette-accent !important;
+  fill: $palette-accent !important;
 }
 
 .dx-theme-text-color-as-background-color {
-  background-color: $common-text-color !important;
-  fill: $common-text-color !important;
+  background-color: $palette-text !important;
+  fill: $palette-text !important;
 }
 
 .dx-theme-background-color {
-  background-color: $common-bg !important;
-  fill: $common-bg !important;
+  background-color: $palette-bg !important;
+  fill: $palette-bg !important;
 }
 
 .dx-theme-typography-background-color {
-  background-color: $common-typography-bg !important;
+  background-color: $global-bg-rest !important;
 }
 
 .dx-theme-border-color-as-background-color {
-  background-color: $common-border-color !important;
-  fill: $common-border-color !important;
+  background-color: $palette-border !important;
+  fill: $palette-border !important;
 }
 
 .dx-theme-accent-as-border-color {
-  border-color: $common-accent !important;
+  border-color: $palette-accent !important;
 }
 
 .dx-theme-text-color-as-border-color {
-  border-color: $common-text-color !important;
+  border-color: $palette-text !important;
 }
 
 .dx-theme-background-color-as-border-color {
-  border-color: $common-bg !important;
+  border-color: $palette-bg !important;
 }
 
 .dx-theme-border-color {
-  border-color: $common-border-color !important;
+  border-color: $palette-border !important;
 }

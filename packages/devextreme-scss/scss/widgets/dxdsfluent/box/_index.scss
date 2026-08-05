@@ -3,11 +3,11 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/box" with (
-  $box-item-content-font-size: $fluent-box-item-content-font-size,
+  $box-item-content-font-size: $box-item-content-font-size,
 );
 
 // adduse
 
 .dx-box-item-content {
-  font-size: $fluent-base-font-size;
+  font-size: $global-font-size;
 }

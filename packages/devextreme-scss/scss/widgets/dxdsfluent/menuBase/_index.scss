@@ -1,37 +1,36 @@
 @use "sass:color";
 @use "colors" as *;
-@use "sizes" as *;
 @use "../sizes" as *;
-@use "../menu/colors" as *;
-@use "../button/sizes" as *;
-@use "../common/mixins" as *;
+@use "../menu/colors" as menuColors;
+@use "../menu/sizes" as menuSizes;
 @use "../../base/icon_fonts" as *;
 @use "../../base/mixins" as *;
 @use "../../base/menuBase";
+@use "../button/sizes" as buttonSizes;
 
 // adduse
 
 .dx-menu-item {
-  color: $menu-color;
+  color: menuColors.$menu-content-rest;
 
   a {
-    color: $menu-item-link-color;
+    color: menuColors.$menu-item-link-content-rest;
   }
 
   &.dx-state-disabled {
-    color: $menu-item-color-disabled;
+    color: menuColors.$menu-item-content-disabled;
   }
 
   &.dx-state-hover {
-    background-color: $menu-item-hover-bg;
+    background-color: menuColors.$menu-item-bg-hovered;
   }
 
   &.dx-state-focused {
-    background-color: $menu-item-hover-bg;
+    background-color: menuColors.$menu-item-bg-hovered;
   }
 
   &.dx-state-active {
-    background-color: $menu-item-bg-active;
+    background-color: menuColors.$menu-item-bg-active;
   }
 
   .dx-item-url {
@@ -47,19 +46,19 @@
 }
 
 .dx-menu-item-selected {
-  background-color: $menu-item-selected-bg;
-  color: $menu-item-selected-color;
+  background-color: menuColors.$menu-item-bg-selected;
+  color: menuColors.$menu-item-content-selected;
 
   &.dx-state-focused {
-    background-color: $menu-item-focused-selected-bg;
+    background-color: menuColors.$menu-item-bg-selected-focused;
   }
 }
 
 .dx-menu-item-expanded,
 .dx-menu-item-expanded.dx-state-hover,
 .dx-menu-item-expanded.dx-state-focused {
-  color: $menu-item-expanded-color;
-  background-color: $menu-item-selected-bg;
+  color: menuColors.$menu-item-expanded-content-rest;
+  background-color: menuColors.$menu-item-bg-selected;
 }
 
 .dx-menu-base {
@@ -68,12 +67,12 @@
   }
 
   .dx-icon {
-    @include dx-icon-sizing($fluent-button-icon-size);
+    @include dx-icon-sizing(buttonSizes.$button-icon-size);
   }
 
   .dx-menu-item {
     .dx-menu-item-content {
-      line-height: $fluent-menu-item-line-height;
+      line-height: menuSizes.$menu-item-line-height;
     }
   }
 }

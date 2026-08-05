@@ -4,30 +4,30 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/scrollable" with (
-  $scrollable-scroll-width: $fluent-scrollable-scroll-width,
-  $scrollable-scroll-height: $fluent-scrollable-scroll-height,
-  $scrollable-scroll-padding: $fluent-scrollable-scroll-padding,
+  $scrollable-scroll-width: $scrollable-scroll-width,
+  $scrollable-scroll-height: $scrollable-scroll-height,
+  $scrollable-scroll-padding: $scrollable-scroll-padding,
 );
 @use "../../base/scrollable/mixins" as *;
 
 // adduse
 
 @include dx-scrollable-scroll-content(
-  $scrollable-scroll-bg,
+  $scrollable-scroll-bg-rest,
 );
 @include dx-scrollable-scrollbar-hoverable(
-  $scrollable-scrollbar-bg,
+  $scrollable-scrollbar-bg-rest,
   transparent,
-  $scrollable-scroll-bg,
+  $scrollable-scroll-bg-rest,
 );
 @include dx-scrollable-scrollbar-vertical(
-  $fluent-scrollbar-size-thin,
-  $fluent-scrollbar-size,
+  $scrollable-scrollbar-thin-size,
+  $scrollable-scrollbar-size,
   0,
 );
 @include dx-scrollable-scrollbar-horizontal(
-  $fluent-scrollbar-size-thin,
-  $fluent-scrollbar-size,
+  $scrollable-scrollbar-thin-size,
+  $scrollable-scrollbar-size,
   0,
 );
-@include dx-scrollable-scrollbars-alwaysvisible($fluent-scrollbar-size-thin);
+@include dx-scrollable-scrollbars-alwaysvisible($scrollable-scrollbar-thin-size);

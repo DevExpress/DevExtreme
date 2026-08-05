@@ -3,12 +3,12 @@
 
 // adduse
 
-$textarea-content-line-height: null !default;
+$text-area-content-line-height: null !default;
 
 @if $size == "default" {
-  $textarea-content-line-height: ds.$line-height-base-md !default;
+  $text-area-content-line-height: ds.$line-height-base-md !default;
 }
 
 @else if $size == "compact" {
-  $textarea-content-line-height: ds.$line-height-base-sm !default;
+  $text-area-content-line-height: ds.$line-height-base-sm !default;
 }

@@ -3,15 +3,15 @@
 
 // adduse
 
-$textbox-search-icon-size: null !default;
+$text-box-search-icon-size: null !default;
 
 @if $size == "default" {
-  $textbox-search-icon-size: ds.$spacing-320 !default;
+  $text-box-search-icon-size: ds.$spacing-320 !default;
 }
 
 @else if $size == "compact" {
-  $textbox-search-icon-size: ds.$spacing-240 !default;
+  $text-box-search-icon-size: ds.$spacing-240 !default;
 }
 
 // Values hoisted from style-file literals (tokenized)
-$fluent-textbox-searchbar-padding-bottom: ds.$spacing-50 !default;
+$text-box-search-bar-padding-block-end: ds.$spacing-50 !default;
