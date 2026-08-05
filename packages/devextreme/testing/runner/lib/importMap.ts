@@ -339,7 +339,6 @@ export function buildQunitImportMap({
 
     // css! plugin replacements
     'fluent_blue_light.css!': `${SHIMS}/fluent_blue_light.css.js`,
-    'generic_light.css!': `${SHIMS}/generic_light.css.js`,
     'material_blue_light.css!': `${SHIMS}/material_blue_light.css.js`,
     'gantt.css!': `${SHIMS}/gantt.css.js`,
 
