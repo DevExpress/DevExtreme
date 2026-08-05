@@ -4,28 +4,27 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/radioButton/mixins" as *;
-@use "../radioGroup/colors" as *;
 @use "../../base/radioButton";
 
 // adduse
 
 @include dx-radiobutton-icon-mixin(
-  $fluent-radiobutton-size,
-  $fluent-radiobutton-border-width,
-  $fluent-radiobutton-dot-size,
+  $radio-button-size,
+  $radio-button-border-width,
+  $radio-button-dot-size,
   true,
 );
 @include dx-radiobutton-states-mixin(
-  $radiogroup-bg,
-  $radiogroup-border-color,
-  $radiogroup-readonly-border-color,
+  $radio-button-icon-bg-rest,
+  $radio-button-icon-border-rest,
+  $radio-button-icon-border-read-only,
   null,
   null,
-  $radiobutton-focused-bg,
-  $radiogroup-accent-color,
-  $radiobutton-invalid-color,
-  $radiobutton-invalid-color-hover,
-  $radiobutton-invalid-color-focused,
+  $radio-button-icon-bg-focused,
+  $radio-button-checked-bg-rest,
+  $radio-button-invalid-bg-rest,
+  $radio-button-invalid-bg-hovered,
+  $radio-button-invalid-bg-focused,
   1,
   true,
 );
@@ -37,16 +36,16 @@
 }
 
 .dx-radio-value-container {
-  padding-inline-end: $fluent-radio-value-container-padding;
+  padding-inline-end: $radio-button-value-container-padding-inline-end;
 }
 
 .dx-state-readonly {
   .dx-radiobutton-icon-dot {
-    background-color: $radiobutton-foreground-disabled;
+    background-color: $radio-button-content-disabled;
   }
 
   .dx-radiobutton-icon {
-    border-color: $radiobutton-foreground-disabled;
+    border-color: $radio-button-content-disabled;
   }
 
   .dx-radiobutton-checked {
@@ -54,7 +53,7 @@
     &.dx-state-focused,
     &.dx-state-active {
       .dx-radiobutton-icon-dot {
-        background-color: $radiobutton-foreground-disabled;
+        background-color: $radio-button-content-disabled;
       }
     }
   }
@@ -63,19 +62,19 @@
 .dx-radiobutton {
   &.dx-state-hover {
     .dx-radiobutton-icon {
-      border-color: $radiogroup-border-color-hover;
+      border-color: $radio-button-icon-border-hovered;
     }
   }
 
   &.dx-state-active {
     .dx-radiobutton-icon {
-      border-color: $radiogroup-border-color-active;
+      border-color: $radio-button-icon-border-active;
     }
   }
 
   &.dx-state-focused {
     .dx-radiobutton-icon {
-      border-color: $radiogroup-accent-color-active;
+      border-color: $radio-button-checked-bg-active;
     }
   }
 }
@@ -83,22 +82,22 @@
 .dx-radiobutton-checked {
   &.dx-state-hover {
     .dx-radiobutton-icon {
-      border-color: $radiogroup-accent-color-hover;
+      border-color: $radio-button-checked-bg-hovered;
     }
 
     .dx-radiobutton-icon-dot {
-      background-color: $radiogroup-accent-color-hover;
+      background-color: $radio-button-checked-bg-hovered;
     }
   }
 
   &.dx-state-active,
   &.dx-state-focused {
     .dx-radiobutton-icon {
-      border-color: $radiogroup-accent-color-active;
+      border-color: $radio-button-checked-bg-active;
     }
 
     .dx-radiobutton-icon-dot {
-      background-color: $radiogroup-accent-color-active;
+      background-color: $radio-button-checked-bg-active;
     }
   }
 }
@@ -107,11 +106,11 @@
   .dx-state-hover {
     &.dx-radiobutton {
       .dx-radiobutton-icon {
-        border-color: $radiobutton-invalid-color-hover;
+        border-color: $radio-button-invalid-bg-hovered;
       }
 
       .dx-radiobutton-icon-dot {
-        background-color: $radiobutton-invalid-color-hover;
+        background-color: $radio-button-invalid-bg-hovered;
       }
     }
   }
@@ -120,11 +119,11 @@
   .dx-state-focused {
     &.dx-radiobutton {
       .dx-radiobutton-icon {
-        border-color: $radiobutton-invalid-color-focused;
+        border-color: $radio-button-invalid-bg-focused;
       }
 
       .dx-radiobutton-icon-dot {
-        background-color: $radiobutton-invalid-color-focused;
+        background-color: $radio-button-invalid-bg-focused;
       }
     }
   }
@@ -132,7 +131,7 @@
   &.dx-state-readonly {
     .dx-radiobutton {
       .dx-radiobutton-icon-dot {
-        background-color: $radiobutton-foreground-disabled;
+        background-color: $radio-button-content-disabled;
       }
     }
   }
@@ -140,14 +139,14 @@
 
 .dx-state-disabled {
   .dx-radiobutton {
-    color: $radiobutton-foreground-disabled;
+    color: $radio-button-content-disabled;
 
     .dx-radiobutton-icon {
-      border-color: $radiobutton-foreground-disabled;
+      border-color: $radio-button-content-disabled;
     }
 
     .dx-radiobutton-icon-dot {
-      background-color: $radiobutton-foreground-disabled;
+      background-color: $radio-button-content-disabled;
     }
   }
 }
