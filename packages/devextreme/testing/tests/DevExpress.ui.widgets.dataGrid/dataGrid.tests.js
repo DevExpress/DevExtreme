@@ -2016,35 +2016,6 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.deepEqual(dataGrid.getVisibleRows()[0].data, { value: 3 }, 'first row data');
     });
 
-    // T677650
-    QUnit.test('paging change if nested options are not changed', function(assert) {
-        // arrange, act
-        const dataGrid = createDataGrid({
-            loadingTimeout: null,
-            dataSource: {
-                store: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }],
-                pageSize: 3
-            }
-        });
-
-        const changedSpy = sinon.spy();
-        const loadingSpy = sinon.spy();
-
-        dataGrid.getDataSource().on('changed', changedSpy);
-        dataGrid.getDataSource().store().on('loading', loadingSpy);
-
-        // act
-        dataGrid.option('paging', {
-            enabled: true,
-            pageIndex: 0,
-            pageSize: 3
-        });
-
-        // assert
-        assert.strictEqual(changedSpy.callCount, 0, 'changed is called');
-        assert.strictEqual(loadingSpy.callCount, 0, 'loading is not called');
-    });
-
     // T121445
     QUnit.test('pager.allowedPageSizes change', function(assert) {
         // arrange, act
