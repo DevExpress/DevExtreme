@@ -97,7 +97,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _changes!: any[];
 
-  private _skipProcessingPagingChange: boolean | undefined;
+  private _skipProcessingPagingChange?: boolean;
 
   private _useSortingGroupingFromColumns: boolean | undefined;
 
@@ -1615,7 +1615,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return result;
   }
 
-  private _changePaging(optionName: 'pageIndex' | 'pageSize', value?: number): any {
+  private changePaging(optionName: 'pageIndex' | 'pageSize', value?: number): any {
     const dataSource = this._dataSource;
 
     if (!dataSource) {
@@ -1655,11 +1655,11 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    * @extended: virtual_scrolling
    */
   public pageIndex(value?: number): any {
-    return this._changePaging('pageIndex', value);
+    return this.changePaging('pageIndex', value);
   }
 
   public pageSize(value?: number): any {
-    return this._changePaging('pageSize', value);
+    return this.changePaging('pageSize', value);
   }
 
   public isCustomLoading() {
