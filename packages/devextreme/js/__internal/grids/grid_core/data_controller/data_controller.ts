@@ -49,41 +49,6 @@ import gridCoreUtils from '../m_utils';
 import type { VirtualScrollController } from '../virtual_scrolling/m_virtual_scrolling_core';
 import { DataHelperMixin } from './data_helper_mixin';
 
-const changePaging = function (that, optionName, value) {
-  const dataSource = that._dataSource;
-
-  if (dataSource) {
-    if (value !== undefined) {
-      const oldValue = that._getPagingOptionValue(optionName);
-      if (oldValue !== value) {
-        that._skipProcessingPagingChange = true;
-        if (optionName === 'pageSize' && value === 0) {
-          dataSource.pageIndex(0);
-          that.option('paging.pageIndex', 0);
-        }
-        dataSource[optionName](value);
-        that.option(`paging.${optionName}`, value);
-        that._skipProcessingPagingChange = false;
-        const pageIndex = dataSource.pageIndex();
-        that._isPaging = optionName === 'pageIndex';
-        return dataSource[optionName === 'pageIndex' ? 'load' : 'reload']()
-          .done(() => {
-            that._isPaging = false;
-            that.pageChanged.fire(pageIndex);
-          });
-      }
-      return Deferred().resolve().promise();
-    }
-    return dataSource[optionName]();
-  }
-
-  if (optionName === 'pageIndex' && value !== undefined) {
-    return Deferred().resolve().promise();
-  }
-
-  return 0;
-};
-
 export interface HandleDataChangedArguments {
   changeType?: 'refresh' | 'update' | 'loadError';
   isDelayed?: boolean;
@@ -132,7 +97,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _changes!: any[];
 
-  private readonly _skipProcessingPagingChange: boolean | undefined;
+  private _skipProcessingPagingChange?: boolean;
 
   private _useSortingGroupingFromColumns: boolean | undefined;
 
@@ -253,7 +218,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this.dataErrorOccurred.add((error) => this.executeAction('onDataErrorOccurred', { error }));
 
     this._refreshDataSource();
-    this.postCtor();
+    this.postInit();
   }
 
   /**
@@ -1328,6 +1293,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     if (dataSource) {
       dataSource.pageIndex(0);
+      if (this.option('paging.pageIndex')) {
+        this._silentOption('paging.pageIndex', 0);
+      }
       this._isFilterApplying = true;
 
       return this.reload().done(() => {
@@ -1648,15 +1616,51 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return result;
   }
 
+  private changePaging(optionName: 'pageIndex' | 'pageSize', value?: number): any {
+    const dataSource = this._dataSource;
+
+    if (!dataSource) {
+      return optionName === 'pageIndex' && value !== undefined
+        ? Deferred().resolve().promise()
+        : 0;
+    }
+
+    if (value === undefined) {
+      return dataSource[optionName]();
+    }
+
+    const oldValue = this._getPagingOptionValue(optionName);
+    if (oldValue === value) {
+      return Deferred().resolve().promise();
+    }
+
+    this._skipProcessingPagingChange = true;
+    if (optionName === 'pageSize' && value === 0) {
+      dataSource.pageIndex(0);
+      this.option('paging.pageIndex', 0);
+    }
+    dataSource[optionName](value);
+    this.option(`paging.${optionName}`, value);
+    this._skipProcessingPagingChange = false;
+
+    const pageIndex = dataSource.pageIndex();
+    this._isPaging = optionName === 'pageIndex';
+    return dataSource[optionName === 'pageIndex' ? 'load' : 'reload']()
+      .done(() => {
+        this._isPaging = false;
+        this.pageChanged.fire(pageIndex);
+      });
+  }
+
   /**
    * @extended: virtual_scrolling
    */
-  public pageIndex(value?) {
-    return changePaging(this, 'pageIndex', value);
+  public pageIndex(value?: number): any {
+    return this.changePaging('pageIndex', value);
   }
 
-  public pageSize(value?) {
-    return changePaging(this, 'pageSize', value);
+  public pageSize(value?: number): any {
+    return this.changePaging('pageSize', value);
   }
 
   public isCustomLoading() {
