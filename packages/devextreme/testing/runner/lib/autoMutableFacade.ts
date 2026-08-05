@@ -337,9 +337,10 @@ function generateAutoMutableFacadeSource(entry: AutoMutableFacadeEntry): string 
   const liveValueNames = entry.forwardExportNames.filter((name) => name.startsWith('_TESTS_'));
 
   const exportLines = [
-    ...entry.wrapExportNames.map(
-      (name) => emitNamedExport(name, `wrapCtor(api, '${name}')`),
-    ),
+    ...entry.wrapExportNames.map((name) => emitNamedExport(
+      name,
+      `(typeof api.${name} === 'function' ? wrapCtor(api, '${name}') : api.${name})`,
+    )),
     ...entry.forwardExportNames.map((name) => {
       if (debugSets[name]) {
         return emitNamedExport(name, `(...args) => api.${name}(...args)`);
