@@ -1,4 +1,4 @@
-import Validator from '@ts/ui/validator';
+import Validator from '../__internal/ui/validator';
 
 export default Validator;
 

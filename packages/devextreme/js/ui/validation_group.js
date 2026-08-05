@@ -1,4 +1,4 @@
-import ValidationGroup from '@ts/ui/validation_group';
+import ValidationGroup from '../__internal/ui/validation_group';
 
 export default ValidationGroup;
 
