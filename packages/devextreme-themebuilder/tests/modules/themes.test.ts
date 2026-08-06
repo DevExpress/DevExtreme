@@ -5,8 +5,8 @@ import themes from '../../src/modules/themes';
 describe('Themes', () => {
   test('check components and theme builder themes', () => {
     const knownThemes: string[] = getThemes()
-        // dxdsfluent is an internal design-tokens theme, not exposed in ThemeBuilder
-        .filter(([theme]: [string]) => theme !== 'dxdsfluent')
+        // fluent-next is an internal design-tokens theme, not exposed in ThemeBuilder
+        .filter(([theme]: [string]) => theme !== 'fluent-next')
         .map(
             ([theme, size, color, mode = null]: [string, string, string, string | null]): string =>
             `${theme}.${color}${mode ? `-${mode}` : ''}${size === 'default' ? '' : '-compact'}`
