@@ -138,5 +138,3 @@ allowBuilds:
 
 patchedDependencies:
   testcafe-hammerhead@31.7.8: patches/testcafe-hammerhead@31.7.8.patch
-  systemjs-builder@0.16.15: patches/systemjs-builder@0.16.15.patch
-  babel-core@6.26.3: patches/babel-core@6.26.3.patch
