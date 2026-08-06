@@ -8,11 +8,11 @@ import {
   rewriteAspnetArtifactToEsm,
   rewriteQunitTestHelperSource,
 } from './cjsInterop';
+import { setNoCacheHeaders as applyNoCacheHeaders } from './http';
 
 interface StaticFileServiceDeps {
   escapeHtml: (value: string) => string;
   rootDirectory: string;
-  setNoCacheHeaders: (res: ServerResponse) => void;
   setStaticCacheHeaders: (res: ServerResponse, searchParams: URLSearchParams) => void;
 }
 
@@ -63,6 +63,9 @@ function getContentType(filePath: string): string {
 }
 
 function sendError(res: ServerResponse, statusCode: number, message: string): boolean {
+  // Always override any prior Cache-Control (e.g. DX_HTTP_CACHE year-long
+  // headers set before a transform/read failure).
+  applyNoCacheHeaders(res);
   res.statusCode = statusCode;
   res.setHeader('Content-Type', 'text/plain; charset=utf-8');
   res.end(message);
@@ -511,7 +514,6 @@ ${items.join('\n')}
 export function createStaticFileService({
   escapeHtml,
   rootDirectory,
-  setNoCacheHeaders,
   setStaticCacheHeaders,
 }: StaticFileServiceDeps): StaticFileService {
   function tryServeStatic(
@@ -526,7 +528,6 @@ export function createStaticFileService({
     const relativeToRoot = path.relative(rootDirectory, filePath);
 
     if (relativeToRoot.startsWith('..') || path.isAbsolute(relativeToRoot)) {
-      setNoCacheHeaders(res);
       return sendError(res, 403, 'Forbidden');
     }
 

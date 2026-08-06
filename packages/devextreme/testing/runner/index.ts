@@ -101,7 +101,6 @@ const vectorMapService = createVectorMapService({
 const staticFiles = createStaticFileService({
   escapeHtml,
   rootDirectory: WORKSPACE_ROOT,
-  setNoCacheHeaders,
   setStaticCacheHeaders,
 });
 
