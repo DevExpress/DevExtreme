@@ -18,8 +18,8 @@
 import { extend } from '@js/core/utils/extend';
 import { isEmptyObject } from '@js/core/utils/type';
 import { current as getCurrentTheme } from '@js/ui/themes';
-import dxdsfluentThemes from '@ts/viz/core/themes/dxdsfluent/index';
 import fluentThemes from '@ts/viz/core/themes/fluent/index';
+import fluentNextThemes from '@ts/viz/core/themes/fluent-next/index';
 import carmineThemes from '@ts/viz/core/themes/generic/carmine';
 import contrastThemes from '@ts/viz/core/themes/generic/contrast';
 import darkThemes from '@ts/viz/core/themes/generic/dark';
@@ -243,7 +243,7 @@ if (isEmptyObject(themes) && isEmptyObject(themesMapping) && !defaultTheme) {
     softBlueThemes,
     materialThemes,
     fluentThemes,
-    dxdsfluentThemes,
+    fluentNextThemes,
   ).forEach((t) => {
     // @ts-expect-error
     registerTheme(t.theme, t.baseThemeName);
