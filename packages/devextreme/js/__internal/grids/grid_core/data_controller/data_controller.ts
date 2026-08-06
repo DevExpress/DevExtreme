@@ -48,6 +48,8 @@ import type {
 import gridCoreUtils from '../m_utils';
 import type { VirtualScrollController } from '../virtual_scrolling/m_virtual_scrolling_core';
 import { DataHelperMixin } from './data_helper_mixin';
+import type { PagingChanges, PagingDataSource } from './types';
+import { resolvePaginate, syncPaging } from './utils/paging';
 
 export interface HandleDataChangedArguments {
   changeType?: 'refresh' | 'update' | 'loadError';
@@ -308,18 +310,11 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   public optionChanged(args) {
-    const that = this;
-    let dataSource;
-    let changedPagingOptions;
-
-    function handled() {
-      args.handled = true;
-    }
-
     if (args.name === 'dataSource'
-                    && args.name === args.fullName
-                    && this._handleDataSourceChange(args)) {
-      handled();
+        && args.name === args.fullName
+        && this._handleDataSourceChange(args)
+    ) {
+      args.handled = true;
       return;
     }
 
@@ -328,43 +323,46 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       case 'repaintChangesOnly':
       case 'highlightChanges':
       case 'loadingTimeout':
-        handled();
+        args.handled = true;
         break;
       case 'remoteOperations':
       case 'keyExpr':
       case 'dataSource':
       case 'scrolling':
-        handled();
-        that.reset();
+        args.handled = true;
+        this.reset();
         break;
-      case 'paging':
-        dataSource = that.dataSource();
+      case 'paging': {
+        const dataSource = this.dataSource();
 
         if (dataSource) {
-          changedPagingOptions = that._setPagingOptions(dataSource);
-          if (changedPagingOptions) {
+          const changedPagingOptions = this.applyPagingOptions(dataSource);
+          if (changedPagingOptions.hasChanges) {
             const pageIndex = dataSource.pageIndex();
 
             this._isPaging = changedPagingOptions.isPageIndexChanged;
 
             dataSource.load().done(() => {
               this._isPaging = false;
-              that.pageChanged.fire(pageIndex);
+              this.pageChanged.fire(pageIndex);
             });
           }
         }
-        handled();
+        args.handled = true;
         break;
+      }
       case 'rtlEnabled':
-        that.reset();
+        this.reset();
         break;
-      case 'columns':
-        dataSource = that.dataSource();
+      case 'columns': {
+        const dataSource = this.dataSource();
+
         if (dataSource && dataSource.isLoading() && args.name === args.fullName) {
           this._useSortingGroupingFromColumns = true;
           dataSource.load();
         }
         break;
+      }
       default:
         super.optionChanged(args);
     }
@@ -605,42 +603,18 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this.dataErrorOccurred.fire(errors.Error.apply(errors, args));
   }
 
-  private _setPagingOptions(dataSource): any {
-    const pageIndex = this.option('paging.pageIndex');
-    const pageSize = this.option('paging.pageSize');
-    const pagingEnabled = this.option('paging.enabled');
-    const scrollingMode = this.option('scrolling.mode');
-    const appendMode = scrollingMode === 'infinite';
-    const virtualMode = scrollingMode === 'virtual';
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    const paginate = pagingEnabled || virtualMode || appendMode;
-    let isPaginateChanged = false;
-    let isPageSizeChanged = false;
-    let isPageIndexChanged = false;
+  private applyPagingOptions(dataSource: PagingDataSource): PagingChanges {
+    const { scrolling, paging } = this.option();
 
-    dataSource.requireTotalCount(!appendMode);
-    if (pagingEnabled !== undefined && dataSource.paginate() !== paginate) {
-      dataSource.paginate(paginate);
-      isPaginateChanged = true;
-    }
-    if (pageSize !== undefined && dataSource.pageSize() !== pageSize) {
-      dataSource.pageSize(pageSize);
-      isPageSizeChanged = true;
-    }
-    if (pageIndex !== undefined && dataSource.pageIndex() !== pageIndex) {
-      dataSource.pageIndex(pageIndex);
-      isPageIndexChanged = true;
-    }
+    // Not paging state to reconcile, but a per-load request flag: infinite
+    // scrolling detects the last page locally and needs no grand total.
+    dataSource.requireTotalCount(scrolling?.mode !== 'infinite');
 
-    if (isPaginateChanged || isPageSizeChanged || isPageIndexChanged) {
-      return {
-        isPaginateChanged,
-        isPageSizeChanged,
-        isPageIndexChanged,
-      };
-    }
-
-    return false;
+    return syncPaging(dataSource, {
+      paginate: resolvePaginate(paging?.enabled, scrolling?.mode),
+      pageSize: paging?.pageSize,
+      pageIndex: paging?.pageIndex,
+    });
   }
 
   protected _getSpecificDataSourceOption() {
@@ -660,20 +634,23 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   protected _initDataSource() {
-    const that = this;
-    const oldDataSource = this._dataSource;
+    const hadDataSource = !!this._dataSource;
 
     super._initDataSource();
-    const dataSource = that._dataSource;
-    that._useSortingGroupingFromColumns = true;
-    that._cachedProcessedItems = null;
-    if (dataSource) {
-      const changedPagingOptions = that._setPagingOptions(dataSource);
 
-      this._isPaging = changedPagingOptions?.isPageIndexChanged;
-      that.setDataSource(dataSource);
-    } else if (oldDataSource) {
-      that.updateItems();
+    // The raw DataSource for the new options, or null when there is no
+    // dataSource option. `setDataSource` below wraps it in the adapter.
+    const dataSource = this._dataSource;
+    this._useSortingGroupingFromColumns = true;
+    this._cachedProcessedItems = null;
+
+    if (dataSource) {
+      const { isPageIndexChanged } = this.applyPagingOptions(dataSource);
+
+      this._isPaging = isPageIndexChanged;
+      this.setDataSource(dataSource);
+    } else if (hadDataSource) {
+      this.updateItems();
     }
   }
 
