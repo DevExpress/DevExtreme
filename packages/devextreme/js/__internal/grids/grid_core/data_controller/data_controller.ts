@@ -60,7 +60,6 @@ import type {
   PagingDataSource,
   PagingOptionName,
   PagingResult,
-  UserData,
 } from './types';
 import { resolvePaginate, syncPaging } from './utils/paging';
 import { generateRowValues } from './utils/row_values';
@@ -686,7 +685,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   /**
-   * @extended: adaptivity, master_detail, virtual_scrolling
+   * @extended: adaptivity, editing, master_detail, virtual_scrolling
    */
   protected _processItems(items, change: DataChange | { changeType: 'loadingAll' }) {
     const that = this;
@@ -714,7 +713,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   /**
-   * @extended: editing
+   * @extended: editing, grouping (DataGrid)
    */
   protected _processItem(item, options) {
     item = this._generateDataItem(item, options);
@@ -723,6 +722,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return item;
   }
 
+  /**
+   * @extended: treelist
+   */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _generateDataItem(data, options?) {
     return {
