@@ -250,7 +250,7 @@ jobs:
           style_dependent_matrix=$(cat <<'JSON'
           [
             { "componentFolder": "accessibility", "name": "accessibility - fluent.dark", "theme": "fluent.blue.dark", "concurrency": 6 },
-            { "componentFolder": "accessibility", "name": "accessibility - dxdsfluent.dark", "theme": "dxdsfluent.blue.dark", "concurrency": 6 },
+            { "componentFolder": "accessibility", "name": "accessibility - fluent-next.dark", "theme": "fluent-next.blue.dark", "concurrency": 6 },
               { "componentFolder": "accessibility", "name": "accessibility - material.light", "theme": "material.blue.light", "concurrency": 6 },
               { "componentFolder": "accessibility", "name": "accessibility - material.dark", "theme": "material.blue.dark", "concurrency": 6 }
             ]
@@ -268,7 +268,7 @@ jobs:
               + $baseEnd
               + (($baseStart + $baseEnd) | map(
                 select(.theme == null)
-                | . + { name: (.name + " - dxdsfluent"), theme: "dxdsfluent.blue.light" }
+                | . + { name: (.name + " - fluent-next"), theme: "fluent-next.blue.light" }
               ))
             ) }')
 

@@ -8,9 +8,9 @@ $scroll-view-shadow-rest: ds.$color-shadow-key !default;
 $scroll-view-pull-down-bg-rest: null !default;
 
 @if $mode == "light" {
-  $scroll-view-pull-down-bg-rest: data-uri('images/widgets/dxdsfluent/color-schemes/light/pulldown.png') !default;
+  $scroll-view-pull-down-bg-rest: data-uri('images/widgets/fluent-next/color-schemes/light/pulldown.png') !default;
 }
 
 @if $mode == "dark" {
-  $scroll-view-pull-down-bg-rest: data-uri('images/widgets/dxdsfluent/color-schemes/dark/pulldown.png') !default;
+  $scroll-view-pull-down-bg-rest: data-uri('images/widgets/fluent-next/color-schemes/dark/pulldown.png') !default;
 }
