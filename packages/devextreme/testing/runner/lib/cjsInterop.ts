@@ -1,7 +1,7 @@
 /**
  * Serve-time CJS → ESM helpers for QUnit tests/helpers under native ESM.
  *
- * 1) `import x from 'mod'` → namespace + `.default ?? ns` (CJS default interop)
+ * 1) `import x from 'mod'` → namespace + `'default' in ns ? ns.default : {…ns}`
  * 2) `require(...)` → equivalent ESM imports
  * 3) CJS `module.exports` / `exports.*` → `export default` + named exports
  */
@@ -46,9 +46,8 @@ function isBundleTemplatePath(sourcePath?: string): boolean {
   return pathMatchesRoots(sourcePath, BUNDLE_TEMPLATE_ROOTS);
 }
 
-/** `ns.default ?? { ...ns }` — mutable shallow copy when there is no default. */
 function cjsDefaultExpr(ns: string): string {
-  return `${ns}.default ?? { ...${ns} }`;
+  return `('default' in ${ns} ? ${ns}.default : { ...${ns} })`;
 }
 
 /**
@@ -256,9 +255,9 @@ function rewriteRequiresToEsm(source: string, sourcePath?: string): string {
         alias = nextRequireId();
         specToAlias.set(normalizedSpec, alias);
       }
-      // Prefer CJS/ESM default; otherwise a mutable shallow copy of the
-      // namespace. Bare `?? ns` is an immutable Module Namespace and breaks
-      // `DevExpress.events = require(…); events.click = …`.
+      // Prefer an explicit default (including null); otherwise a mutable
+      // shallow copy of the namespace. Bare `ns` is an immutable Module
+      // Namespace and breaks `DevExpress.events = require(…); events.click = …`.
       return `(${cjsDefaultExpr(alias)})`;
     },
   );

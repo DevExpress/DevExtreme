@@ -41,9 +41,9 @@ Legacy suites still use `require()`, `module.exports` / `exports.*`, AMD `define
 
 **What it does:**
 
-1. **`require('…')`** → hoisted `import * as __dxReq_N` plus `(ns.default ?? { …ns })` at the call site (mutable shallow copy when there is no default — needed when tests assign onto the module object).
+1. **`require('…')`** → hoisted `import * as __dxReq_N` plus `('default' in ns ? ns.default : { …ns })` at the call site (keeps explicit `default: null` for noJQuery/…; mutable shallow copy only when there is no default — needed when tests assign onto the module object).
 2. **`module.exports` / `exports.*`** → wrap the file with a synthetic `module`/`exports` object and emit `export default` + named exports.
-3. **Bare default / named imports** → namespace import + CJS default interop (`ns.default ?? …`, merge default object/function into named bindings when needed).
+3. **Bare default / named imports** → namespace import + CJS default interop (`'default' in ns ? ns.default : …`, merge default object/function into named bindings when needed).
 4. **AMD `define(function () { … })`** → IIFE, with imports hoisted to file top (imports inside `if (define.amd)` are illegal in ESM).
 5. **Plugin-style JSON** (`file.json!` / `file.json!json`) → absolute URLs with `?esm-export=1`.
 6. **`aspnet.js`** → dedicated UMD → ESM conversion (`rewriteAspnetArtifactToEsm`).
