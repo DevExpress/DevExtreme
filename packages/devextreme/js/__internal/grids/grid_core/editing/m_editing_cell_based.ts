@@ -664,14 +664,14 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return super._applyChangeCore(options, forceUpdateRow);
   }
 
-  protected _processDataItemCore(item, change, key, columns, generateDataValues) {
+  protected _processDataItemCore(item, change, key, columns) {
     const { data, type } = change;
 
     if (this.isBatchEditMode() && type === DATA_EDIT_DATA_REMOVE_TYPE) {
       item.data = createObjectWithChanges(item.data, data);
     }
 
-    super._processDataItemCore(item, change, key, columns, generateDataValues);
+    super._processDataItemCore(item, change, key, columns);
   }
 
   protected _processRemoveCore(changes, editIndex, processIfBatch): any {
