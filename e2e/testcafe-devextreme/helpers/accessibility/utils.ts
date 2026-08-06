@@ -37,9 +37,9 @@ export const a11yCheck = async (
   configuration = {},
 ):
 Promise<void> => {
-  // dxdsfluent shares fluent's structure/ARIA (already covered by the fluent run),
+  // fluent-next shares fluent's structure/ARIA (already covered by the fluent run),
   // so only color-contrast is re-checked for it — regardless of the caller's config.
-  const isColorContrastOnly = getThemeName() === 'dxdsfluent';
+  const isColorContrastOnly = getThemeName() === 'fluent-next';
 
   // Nothing is left to check: the caller excluded the only rule this theme runs.
   if (isColorContrastOnly && !isColorContrastChecked(options)) {

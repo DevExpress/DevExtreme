@@ -301,10 +301,10 @@ const createComponentThemeConfig = () => createConfig('components-theme', getCom
 ]);
 
 // All token names for the SCSS bridge file: the common + light-mode + component
-// *theme* (color) set. Component *size* tokens are intentionally excluded — dxdsfluent
+// *theme* (color) set. Component *size* tokens are intentionally excluded — fluent-next
 // maps sizes onto the base scales (spacing/font-size/border-radius/…), so no widget
 // references the component `*-layout-*` tokens and they are not emitted (see
-// widgets/dxdsfluent/_design-system.scss).
+// widgets/fluent-next/_design-system.scss).
 const createDsConfig = () => createConfig('ds', getComponentThemeFiles(), [
   {
     destination: 'variables/_ds.scss',
