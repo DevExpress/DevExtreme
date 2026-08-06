@@ -1,5 +1,5 @@
 /*
- * Wave D of the naming standard (scss/widgets/dxdsfluent/NAMING.md, rule O4): removes a cross-folder
+ * Wave D of the naming standard (scss/widgets/fluent-next/NAMING.md, rule O4): removes a cross-folder
  * read by giving the reader its own value instead of the other folder's variable.
  *
  *   node tools/naming/inline-foreign.mjs           # report
@@ -28,9 +28,9 @@ import { fileURLToPath } from 'url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const packageRoot = join(here, '..', '..');
-const themeRoot = join(packageRoot, 'scss', 'widgets', 'dxdsfluent');
+const themeRoot = join(packageRoot, 'scss', 'widgets', 'fluent-next');
 const baseline = JSON.parse(
-  readFileSync(join(packageRoot, 'tests', 'dxdsfluent-naming.baseline.json'), 'utf8'),
+  readFileSync(join(packageRoot, 'tests', 'fluent-next-naming.baseline.json'), 'utf8'),
 );
 
 const apply = process.argv.includes('--apply');
