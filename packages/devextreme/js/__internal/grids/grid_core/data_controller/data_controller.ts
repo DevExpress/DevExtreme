@@ -24,7 +24,8 @@ import { CustomStore } from '@js/common/data/custom_store';
 import $ from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
 import { deferRender, equalByValue } from '@js/core/utils/common';
-import { Deferred, type DeferredObj, when } from '@js/core/utils/deferred';
+import type { DeferredObj } from '@js/core/utils/deferred';
+import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isObject } from '@js/core/utils/type';
@@ -43,6 +44,7 @@ import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
+import type { OperationTypes } from '../data_source_adapter/types';
 import modules from '../m_modules';
 import type {
   Controllers, Module, OptionChanged, RowKey,
@@ -51,9 +53,16 @@ import gridCoreUtils from '../m_utils';
 import type { VirtualScrollController } from '../virtual_scrolling/m_virtual_scrolling_core';
 import { DataHelperMixin } from './data_helper_mixin';
 import type {
-  CallbackFlags, DataChange, DataSourceAdapterLike, Filter, HandleDataChangedArguments, Item,
-  PagingChanges, PagingDataSource,
-  PagingOptionName, PagingResult,
+  CallbackFlags,
+  DataChange,
+  DataSourceAdapterLike,
+  Filter,
+  HandleDataChangedArguments,
+  Item,
+  PagingChanges,
+  PagingDataSource,
+  PagingOptionName,
+  PagingResult,
 } from './types';
 import { resolvePaginate, syncPaging } from './utils/paging';
 
@@ -64,7 +73,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _isPaging!: boolean;
 
-  private _currentOperationTypes: unknown;
+  private _currentOperationTypes!: OperationTypes | null;
 
   protected _isLoading!: boolean;
 
@@ -76,25 +85,25 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   private _skipProcessingPagingChange?: boolean;
 
-  private _useSortingGroupingFromColumns: boolean | undefined;
+  private _useSortingGroupingFromColumns?: boolean;
 
-  private _columnsUpdating: boolean | undefined;
+  private _columnsUpdating?: boolean;
 
-  private _needApplyFilter: boolean | undefined;
+  private _needApplyFilter?: boolean;
 
-  private _isDataSourceApplying: boolean | undefined;
+  private _isDataSourceApplying?: boolean;
 
-  private _isAllDataTypesDefined: boolean | undefined;
+  private _isAllDataTypesDefined?: boolean;
 
-  protected _needUpdateDimensions: boolean | undefined;
+  protected _needUpdateDimensions?: boolean;
 
-  private _isFilterApplying: boolean | undefined;
+  private _isFilterApplying?: boolean;
 
-  private _readyDeferred: DeferredObj<void> | undefined;
+  private _readyDeferred?: DeferredObj<void>;
 
   private _rowIndexOffset!: number;
 
-  private _loadingText: string | undefined;
+  private _loadingText?: string;
 
   public dataErrorOccurred!: Callback;
 
@@ -108,9 +117,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   public dataSourceChanged!: Callback<[]>;
 
-  protected _lastRenderingPageIndex: number | undefined;
+  protected _lastRenderingPageIndex?: number;
 
-  protected _isPagingByRendering: boolean | undefined;
+  protected _isPagingByRendering?: boolean;
 
   // TODO public controller
   public _columnsController!: Controllers['columns'];
@@ -682,7 +691,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended: adaptivity, master_detail, virtual_scrolling
    */
-  protected _processItems(items, change) {
+  protected _processItems(items, change: DataChange | { changeType: 'loadingAll' }) {
     const that = this;
     const rowIndexDelta = that.getRowIndexDelta();
     const { changeType } = change;
@@ -756,15 +765,21 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extende: virtual_scrolling, focus, selection
    */
-  protected _applyChange(change) {
+  protected _applyChange(change: DataChange) {
     const that = this;
+
+    if (!('changeType' in change)) {
+      return;
+    }
 
     if (change.changeType === 'update') {
       that._applyChangeUpdate(change);
-    } else if (that.items().length && change.repaintChangesOnly && change.changeType === 'refresh') {
-      that._applyChangesOnly(change);
     } else if (change.changeType === 'refresh') {
-      that._applyChangeFull(change);
+      if (that.items().length && change.repaintChangesOnly) {
+        that._applyChangesOnly(change);
+      } else {
+        that._applyChangeFull(change);
+      }
     }
   }
 
@@ -1094,25 +1109,26 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    * @extend: virtual_scrolling
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _afterProcessItems(items, change?) {
+  protected _afterProcessItems(items, change?: DataChange) {
     return items;
   }
 
   /**
    * @extende: virtual_scrolling, editing
    */
-  protected _updateItemsCore(change) {
+  protected _updateItemsCore(change: DataChange) {
     let items;
     const dataSource = this._dataSource;
-    const changeType = change.changeType || 'refresh';
 
-    change.changeType = changeType;
+    change.changeType ??= 'refresh';
     change.operationTypes ??= this._currentOperationTypes;
     this._currentOperationTypes = null;
 
     if (dataSource) {
       const cachedProcessedItems = this._cachedProcessedItems;
-      if (change.useProcessedItemsCache && cachedProcessedItems) {
+      const useProcessedItemsCache = 'useProcessedItemsCache' in change && change.useProcessedItemsCache;
+
+      if (useProcessedItemsCache && cachedProcessedItems) {
         items = cachedProcessedItems;
       } else {
         items = change.items || dataSource.items();
@@ -1170,7 +1186,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
   }
 
-  public updateItems(change: any = {}, isDataChanged?: boolean) {
+  public updateItems(change: DataChange = {}, isDataChanged?: boolean) {
     change.isFirstRender = !this.changed.fired();
 
     if (this._repaintChangesOnly !== undefined) {
@@ -1201,7 +1217,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._fireChanged(change);
   }
 
-  protected needUpdateDimensions(operationTypes) {
+  protected needUpdateDimensions(operationTypes: OperationTypes) {
     return operationTypes && (
       operationTypes.reload || operationTypes.paging || operationTypes.groupExpanding
     );
