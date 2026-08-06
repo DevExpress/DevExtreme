@@ -28,6 +28,11 @@ shared/empty-file.js
 Demos/**/config.js
 Demos/**/tsconfig.json
 
+# esbuild in-place demo build output (see utils/build/) — generated next to
+# each demo's own source, same convention as Demos/**/config.js above.
+Demos/**/bundle.js
+Demos/**/bundle.css
+
 .DS_Store
 **/.DS_Store
 publish-demos

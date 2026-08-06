@@ -265,8 +265,7 @@
                 ],
                 "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400704/concepts/data-binding",
                 "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/400575/concepts/devextreme-based-controls/data-binding",
-                "DemoType": "Web",
-                "DisableExternalEditor": true
+                "DemoType": "Web"
               },
               {
                 "Title": "SignalR Service",
@@ -469,8 +468,7 @@
                   "/Models/SampleData/CustomEditorsTasks.cs",
                   "/Scripts/data/statuses.js"
                 ],
-                "DemoType": "Web",
-                "DisableExternalEditor": true
+                "DemoType": "Web"
               },
               {
                 "Title": "Data Validation",
@@ -486,8 +484,7 @@
                 "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400705/concepts/client-side-data-validation#overview",
                 "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/400576/concepts/devextreme-based-controls/client-side-data-validation#overview",
                 "DemoType": "Web",
-                "Modules": "devextreme-aspnet-data-nojquery",
-                "DisableExternalEditor": true
+                "Modules": "devextreme-aspnet-data-nojquery"
               },
               {
                 "Title": "Cascading Lookups",
@@ -524,8 +521,7 @@
                 "BackendFiles": [
                   "DataGridCollaborativeEditingController.cs",
                   "DataGridCollaborativeEditingHub.cs"
-                ],
-                "DisableExternalEditor": true
+                ]
               },
               {
                 "Title": "Remote CRUD Operations",
@@ -560,8 +556,7 @@
                 "BackendFiles": [
                   "DataGridBatchUpdateWebApiController.cs",
                   "InMemoryNorthwindContext.cs"
-                ],
-                "DisableExternalEditor": true
+                ]
               },
               {
                 "Title": "Edit State Management",
@@ -585,8 +580,7 @@
                 "NetCoreDescription": "",
                 "MvcAdditionalFiles": [],
                 "Modules": "devextreme-aspnet-data-nojquery",
-                "DemoType": "Web",
-                "DisableExternalEditor": true
+                "DemoType": "Web"
               }
             ]
           },
@@ -1338,8 +1332,7 @@
                 ],
                 "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400704/concepts/data-binding",
                 "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/400575/concepts/devextreme-based-controls/data-binding",
-                "DemoType": "Web",
-                "DisableExternalEditor": true
+                "DemoType": "Web"
               }
             ]
           },
@@ -1714,8 +1707,7 @@
                 "MvcDescription": "",
                 "NetCoreDescription": "",
                 "MvcAdditionalFiles": [],
-                "DemoType": "Web",
-                "DisableExternalEditor": true
+                "DemoType": "Web"
               }
             ]
           },
@@ -1789,8 +1781,7 @@
                 "MvcDescription": "",
                 "NetCoreDescription": "",
                 "MvcAdditionalFiles": [],
-                "DemoType": "Web",
-                "DisableExternalEditor": true
+                "DemoType": "Web"
               }
             ]
           },
@@ -3564,8 +3555,7 @@
                 "BackendFiles": [
                   "DiagramEmployeesController.cs",
                   "InMemoryEmployeesDataContext.cs"
-                ],
-                "DisableExternalEditor": true
+                ]
               }
             ]
           },
@@ -3768,8 +3758,7 @@
                   "SchedulerDataController.cs",
                   "InMemoryAppointmentsDataContext"
                 ],
-                "DemoType": "Web",
-                "DisableExternalEditor": true
+                "DemoType": "Web"
               },
               {
                 "Title": "SignalR Service",
@@ -3787,8 +3776,7 @@
                 "BackendFiles": [
                   "SchedulerSignalRController.cs",
                   "SchedulerSignalRHub.cs"
-                ],
-                "DisableExternalEditor": true
+                ]
               },
               {
                 "Title": "Google Calendar Integration",
@@ -5507,8 +5495,7 @@
             "Widget": "FileUploader",
             "BackendFiles": [
               "FileUploaderController.cs"
-            ],
-            "DisableExternalEditor": true
+            ]
           },
           {
             "Title": "Validation",
@@ -5517,8 +5504,7 @@
             "Widget": "FileUploader",
             "BackendFiles": [
               "FileUploaderController.cs"
-            ],
-            "DisableExternalEditor": true
+            ]
           },
           {
             "Title": "Chunk Upload",
@@ -5536,8 +5522,7 @@
             "Title": "Custom Drop Zone",
             "Name": "CustomDropzone",
             "DocUrl": "",
-            "Widget": "FileUploader",
-            "DisableExternalEditor": true
+            "Widget": "FileUploader"
           }
         ]
       }
@@ -6754,8 +6739,7 @@
             ],
             "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400706/concepts/localization#globalize",
             "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/400577/concepts/devextreme-based-controls/localization#globalize",
-            "DemoType": "Web",
-            "DisableExternalEditor": true
+            "DemoType": "Web"
           }
         ]
       }
