@@ -373,6 +373,6 @@
     "--dx-texteditor-label-color"
   ],
   "publicSurfaceDifferences": [
-    "--dx-line-height: only in fluent, dxdsfluent"
+    "--dx-line-height: only in fluent, fluent-next"
   ]
 }
