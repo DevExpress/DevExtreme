@@ -8,6 +8,7 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const esbuild = require('esbuild');
+const { extractDemoHeadExtras, extractDemoBodyInner } = require('./demo-html');
 
 const DEMOS_APP_ROOT = path.resolve(__dirname, '..', '..');
 const REPO_ROOT = path.resolve(DEMOS_APP_ROOT, '..', '..');
@@ -103,11 +104,19 @@ function writeDemoTsconfig(entryPath) {
   return writeTsconfig(path.relative(REPO_ROOT, entryPath), [entryPath]);
 }
 
-function buildHtml({ jsFiles, cssFiles }) {
+// A couple of demos add their own markup next to <demo-app> (Charts/AxisLabelCustomization
+// keeps its SVG filter <defs> there), so the body is carried over rather than fixed.
+const DEFAULT_BODY_INNER = `<div class="demo-container">
+      <demo-app>Loading...</demo-app>
+    </div>`;
+
+function buildHtml({ jsFiles, cssFiles, srcDir }) {
   const cssLinks = [
     '<link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme-dist/css/dx.light.css" />',
+    ...extractDemoHeadExtras(srcDir),
     ...cssFiles.map((f) => `<link rel="stylesheet" type="text/css" href="./${f}" />`),
   ].join('\n    ');
+  const bodyInner = extractDemoBodyInner(srcDir) || DEFAULT_BODY_INNER;
   const scripts = jsFiles
     .map((f) => {
       const src = f.startsWith('.') ? f : `./${f}`;
@@ -125,9 +134,7 @@ function buildHtml({ jsFiles, cssFiles }) {
     ${cssLinks}
   </head>
   <body class="dx-viewport">
-    <div class="demo-container">
-      <demo-app>Loading...</demo-app>
-    </div>
+    ${bodyInner}
     ${scripts}
   </body>
 </html>
@@ -656,7 +663,7 @@ async function bundleDemo(demo, createCompilerPlugin, destDirOverride) {
   ];
   const cssFiles = outputs.filter((o) => o.endsWith('.css')).map((o) => path.basename(o));
 
-  fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({ jsFiles, cssFiles }));
+  fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({ jsFiles, cssFiles, srcDir: prepared.srcDir }));
   return { ok: true };
 }
 
@@ -694,7 +701,7 @@ async function bundleDemoBatch(batch, createCompilerPlugin) {
       ANGULAR_ZONE_SCRIPT,
       ...localJsFiles,
     ];
-    fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({ jsFiles, cssFiles }));
+    fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({ jsFiles, cssFiles, srcDir: demo.srcDir }));
   }
 
   return { ok: true };

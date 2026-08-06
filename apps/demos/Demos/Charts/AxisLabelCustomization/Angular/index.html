@@ -10,6 +10,17 @@
   <body class="dx-viewport">
     <div class="demo-container">
       <demo-app>Loading...</demo-app>
+      <svg width="0" height="0">
+        <defs>
+          <filter id="DevExpress_shadow_filter" x="-50%" y="-50%" width="200%" height="200%" transform="translate(0,0)">
+            <fegaussianblur in="SourceGraphic" result="gaussianBlurResult" stdDeviation="3"></fegaussianblur>
+            <feoffset in="gaussianBlurResult" result="offsetResult" dx="0" dy="1"></feoffset>
+            <feflood result="floodResult" flood-color="#000000" flood-opacity="0.3"></feflood>
+            <fecomposite in="floodResult" in2="offsetResult" operator="in" result="compositeResult"></fecomposite>
+            <fecomposite in="SourceGraphic" in2="compositeResult" operator="over"></fecomposite>
+          </filter>
+        </defs>
+      </svg>
     </div>
     <script src="../../../../node_modules/zone.js/bundles/zone.umd.js"></script>
     <script src="./bundle.js" type="module"></script>

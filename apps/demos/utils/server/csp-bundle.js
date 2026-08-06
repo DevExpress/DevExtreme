@@ -7,6 +7,7 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const esbuild = require('esbuild');
+const { extractDemoHeadExtras, extractDemoBodyInner } = require('./demo-html');
 
 const FRAMEWORK_ARG = (process.argv.find((a) => a.startsWith('--framework=')) || '').split('=')[1];
 const FRAMEWORK = FRAMEWORK_ARG || process.env.CSP_FRAMEWORKS || 'React';
@@ -234,31 +235,16 @@ const DEFAULT_BODY_INNER = `<div class="demo-container">
       <div id="app"></div>
     </div>`;
 
-function extractDemoBodyInner(srcDir) {
-  try {
-    const html = fs.readFileSync(path.join(srcDir, 'index.html'), 'utf8');
-    const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
-    if (!bodyMatch) return null;
-    let withoutScripts = bodyMatch[1];
-    let previous;
-    do {
-      previous = withoutScripts;
-      withoutScripts = withoutScripts.replace(/<script\b[\s\S]*?<\/script\b[^>]*>/gi, '');
-    } while (withoutScripts !== previous);
-    const trimmed = withoutScripts.trim();
-    return trimmed || null;
-  } catch {
-    return null;
-  }
-}
-
 function buildHtml({ jsFile, cssFiles, srcDir }) {
-  const cssLinks = [
+  // Theme first, then whatever the demo declared (dx-gantt.css, font-awesome, …),
+  // then the demo's own styles last — the cascade order the dev page had.
+  const headLinks = [
     '<link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme-dist/css/dx.light.css" />',
+    ...extractDemoHeadExtras(srcDir),
     ...cssFiles.map((f) => `<link rel="stylesheet" type="text/css" href="./${f}" />`),
   ].join('\n    ');
 
-  const bodyInner = (srcDir && extractDemoBodyInner(srcDir)) || DEFAULT_BODY_INNER;
+  const bodyInner = extractDemoBodyInner(srcDir) || DEFAULT_BODY_INNER;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -267,7 +253,7 @@ function buildHtml({ jsFile, cssFiles, srcDir }) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-    ${cssLinks}
+    ${headLinks}
   </head>
   <body class="dx-viewport">
     ${bodyInner}
