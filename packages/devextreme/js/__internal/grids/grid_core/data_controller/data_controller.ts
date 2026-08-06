@@ -358,9 +358,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   public getDataSource(): DataSource | null | undefined {
     const adapter: DataSourceAdapterLike | null | undefined = this._dataSource;
-
-    // the falsy adapter is returned as is: the public API returns null when there is no data source
-    return adapter?._dataSource;
+    return adapter ? adapter._dataSource : null;
   }
 
   public getCombinedFilter(returnDataField?) {
