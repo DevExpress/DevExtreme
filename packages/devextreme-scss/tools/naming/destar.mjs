@@ -1,5 +1,5 @@
 /*
- * Wave A of the naming standard (scss/widgets/dxdsfluent/NAMING.md, rule O3/O8): converts
+ * Wave A of the naming standard (scss/widgets/fluent-next/NAMING.md, rule O3/O8): converts
  * cross-widget `@use "../<widget>/<module>" as *` imports into namespaced ones and prefixes every
  * reference accordingly.
  *
@@ -24,7 +24,7 @@ import { fileURLToPath } from 'url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const packageRoot = join(here, '..', '..');
-const themeRoot = join(packageRoot, 'scss', 'widgets', 'dxdsfluent');
+const themeRoot = join(packageRoot, 'scss', 'widgets', 'fluent-next');
 const registries = JSON.parse(readFileSync(join(here, 'registries.json'), 'utf8'));
 
 const VARIABLE_MODULES = ['colors', 'sizes', 'variables'];
