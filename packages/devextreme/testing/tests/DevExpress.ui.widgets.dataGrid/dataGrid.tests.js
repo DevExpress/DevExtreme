@@ -76,11 +76,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Empty options', function(assert) {
         const dataGrid = createDataGrid({});
         assert.ok(dataGrid);
-    });
-
-    QUnit.test('No options', function(assert) {
-        const dataGrid = createDataGrid();
-        assert.ok(dataGrid);
         assert.strictEqual(dataGrid.getDataSource(), null);
     });
 

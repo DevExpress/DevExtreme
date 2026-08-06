@@ -106,6 +106,8 @@ type TemporarlyOptionsTakenFromDataGrid = Pick<DataGridOptions,
 | 'onEditingStart'
 | 'toolbar'
 | 'summary'
+| 'remoteOperations'
+| 'keyExpr'
 >;
 
 type TemporarlyOptionsTakenFromTreeList = Pick<TreeListdOptions,
