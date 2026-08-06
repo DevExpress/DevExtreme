@@ -353,13 +353,23 @@ jobs:
         working-directory: apps/demos
         run: pnpm exec tsc --noEmit
 
+      # Packed into one tarball rather than uploaded as ~950 loose files: with a
+      # glob path, upload-artifact roots the archive at the least common ancestor
+      # of the matched files, so the Demos/ prefix the consumers extract into
+      # would silently disappear. A single explicit file has no such ambiguity
+      # (and uploads far faster).
+      - name: Pack demo bundles
+        working-directory: apps/demos
+        run: |
+          find Demos \( -name 'bundle.js' -o -name 'bundle.css' \) -print0 \
+            | tar -czf demo-bundles.tgz --null --files-from -
+          tar -tzf demo-bundles.tgz | head -3
+
       - name: Copy build artifacts
         uses: actions/upload-artifact@v7
         with:
           name: devextreme-bundles-${{ matrix.FRAMEWORK }}${{ matrix.SHARD_TOTAL != 1 && format('-shard{0}', matrix.SHARD_INDEX) || '' }}
-          path: |
-            apps/demos/Demos/**/bundle.js
-            apps/demos/Demos/**/bundle.css
+          path: apps/demos/demo-bundles.tgz
           retention-days: 1
 
   lint:
@@ -929,22 +939,24 @@ jobs:
       run: pnpm run prepare-js
 
     # Demo bundles are built once per framework/shard in build-demos and
-    # downloaded here to overlay onto this job's own checkout (same commit),
-    # landing back at Demos/<Widget>/<Demo>/<Framework>/bundle.{js,css} —
-    # exactly where each demo's own index.html already expects them.
+    # downloaded here to overlay onto this job's own checkout (same commit).
+    # Every artifact holds a file named demo-bundles.tgz, so each lands in its
+    # own directory and the unpack step below extracts them all into apps/demos,
+    # restoring Demos/<Widget>/<Demo>/<Framework>/bundle.{js,css} — exactly
+    # where each demo's own index.html expects them.
     - name: Download demo bundles (React)
       if: startsWith(matrix.CONSTEL, 'react')
       uses: actions/download-artifact@v8
       with:
         name: devextreme-bundles-React
-        path: apps/demos
+        path: apps/demos/.demo-bundles/react
 
     - name: Download demo bundles (Vue)
       if: startsWith(matrix.CONSTEL, 'vue')
       uses: actions/download-artifact@v8
       with:
         name: devextreme-bundles-Vue
-        path: apps/demos
+        path: apps/demos/.demo-bundles/vue
 
     # Angular is built in 3 shards (see build-demos) but tested in 10 — every
     # Angular test shard needs all 3 build shards since the two shard schemes
@@ -954,21 +966,35 @@ jobs:
       uses: actions/download-artifact@v8
       with:
         name: devextreme-bundles-Angular-shard1
-        path: apps/demos
+        path: apps/demos/.demo-bundles/angular-shard1
 
     - name: Download demo bundles (Angular shard 2)
       if: startsWith(matrix.CONSTEL, 'angular')
       uses: actions/download-artifact@v8
       with:
         name: devextreme-bundles-Angular-shard2
-        path: apps/demos
+        path: apps/demos/.demo-bundles/angular-shard2
 
     - name: Download demo bundles (Angular shard 3)
       if: startsWith(matrix.CONSTEL, 'angular')
       uses: actions/download-artifact@v8
       with:
         name: devextreme-bundles-Angular-shard3
-        path: apps/demos
+        path: apps/demos/.demo-bundles/angular-shard3
+
+    - name: Unpack demo bundles
+      run: |
+        shopt -s nullglob
+        archives=(apps/demos/.demo-bundles/*/demo-bundles.tgz)
+        if [ ${#archives[@]} -eq 0 ]; then
+          echo "No demo bundle archives downloaded for constellation '${{ matrix.CONSTEL }}'" >&2
+          exit 1
+        fi
+        for archive in "${archives[@]}"; do
+          tar -xzf "$archive" -C apps/demos
+        done
+        rm -rf apps/demos/.demo-bundles
+        echo "Unpacked $(find apps/demos/Demos -name 'bundle.js' | wc -l) demo bundle(s)"
 
     - name: Run Web Server
       run: |
@@ -1094,22 +1120,23 @@ jobs:
         run: pnpm run prepare-js
 
       # Demo bundles are built once per framework/shard in build-demos and
-      # downloaded here to overlay onto this job's own checkout (same commit),
-      # landing back at Demos/<Widget>/<Demo>/<Framework>/bundle.{js,css} —
-      # exactly where each demo's own index.html already expects them.
+      # downloaded here to overlay onto this job's own checkout (same commit).
+      # Every artifact holds a file named demo-bundles.tgz, so each lands in its
+      # own directory and the unpack step below extracts them all into
+      # apps/demos, restoring Demos/<Widget>/<Demo>/<Framework>/bundle.{js,css}.
       - name: Download demo bundles (React)
         if: matrix.CONSTEL == 'react'
         uses: actions/download-artifact@v8
         with:
           name: devextreme-bundles-React
-          path: apps/demos
+          path: apps/demos/.demo-bundles/react
 
       - name: Download demo bundles (Vue)
         if: matrix.CONSTEL == 'vue'
         uses: actions/download-artifact@v8
         with:
           name: devextreme-bundles-Vue
-          path: apps/demos
+          path: apps/demos/.demo-bundles/vue
 
       # build-demos shards Angular 3 ways regardless of how it's tested here.
       - name: Download demo bundles (Angular shard 1)
@@ -1117,27 +1144,41 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: devextreme-bundles-Angular-shard1
-          path: apps/demos
+          path: apps/demos/.demo-bundles/angular-shard1
 
       - name: Download demo bundles (Angular shard 2)
         if: matrix.CONSTEL == 'angular'
         uses: actions/download-artifact@v8
         with:
           name: devextreme-bundles-Angular-shard2
-          path: apps/demos
+          path: apps/demos/.demo-bundles/angular-shard2
 
       - name: Download demo bundles (Angular shard 3)
         if: matrix.CONSTEL == 'angular'
         uses: actions/download-artifact@v8
         with:
           name: devextreme-bundles-Angular-shard3
-          path: apps/demos
+          path: apps/demos/.demo-bundles/angular-shard3
 
       - name: Download changes artifacts
         uses: actions/download-artifact@v8
         with:
           name: changed-demos
           path: apps/demos
+
+      - name: Unpack demo bundles
+        run: |
+          shopt -s nullglob
+          archives=(apps/demos/.demo-bundles/*/demo-bundles.tgz)
+          if [ ${#archives[@]} -eq 0 ]; then
+            echo "No demo bundle archives downloaded for constellation '${{ matrix.CONSTEL }}'" >&2
+            exit 1
+          fi
+          for archive in "${archives[@]}"; do
+            tar -xzf "$archive" -C apps/demos
+          done
+          rm -rf apps/demos/.demo-bundles
+          echo "Unpacked $(find apps/demos/Demos -name 'bundle.js' | wc -l) demo bundle(s)"
 
       - name: Run Web Server
         run: |
