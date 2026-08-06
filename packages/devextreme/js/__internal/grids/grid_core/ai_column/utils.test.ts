@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import type { Item, UserData } from '../data_controller/data_controller';
+import type { Item, UserData } from '../data_controller/types';
 import {
   getDataFromRowItems,
   isAIColumnAutoMode,

@@ -4,7 +4,8 @@ import { isDefined } from '@ts/core/utils/m_type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import type { ColumnsController } from '../../columns_controller/m_columns_controller';
-import type { DataController, HandleDataChangedArguments, UserData } from '../../data_controller/data_controller';
+import type { DataController } from '../../data_controller/data_controller';
+import type { HandleDataChangedArguments, UserData } from '../../data_controller/types';
 import { Controller } from '../../m_modules';
 import type { RowKey } from '../../m_types';
 import gridCoreUtils from '../../m_utils';

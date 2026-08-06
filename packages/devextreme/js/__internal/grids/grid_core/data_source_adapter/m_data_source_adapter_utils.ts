@@ -3,6 +3,7 @@ import { isDefined } from '@js/core/utils/type';
 import commonUtils from '@ts/core/utils/m_common';
 
 import gridCoreUtils from '../m_utils';
+import type { OperationTypes } from './types';
 
 export const cloneItems = function (items, groupCount) {
   if (items) {
@@ -17,26 +18,46 @@ export const cloneItems = function (items, groupCount) {
   return items;
 };
 
-export const calculateOperationTypes = function (loadOptions, lastLoadOptions, isFullReload?) {
-  let operationTypes: any = { reload: true, fullReload: true };
+export const calculateOperationTypes = (
+  loadOptions,
+  lastLoadOptions,
+  isFullReload?: boolean,
+): OperationTypes => {
+  let operationTypes: OperationTypes = { reload: true, fullReload: true };
 
   if (lastLoadOptions) {
     operationTypes = {
       sorting: !gridCoreUtils.equalSortParameters(loadOptions.sort, lastLoadOptions.sort),
       grouping: !gridCoreUtils.equalSortParameters(loadOptions.group, lastLoadOptions.group, true),
-      groupExpanding: !gridCoreUtils.equalSortParameters(loadOptions.group, lastLoadOptions.group) || lastLoadOptions.groupExpand,
-      filtering: !gridCoreUtils.equalFilterParameters(loadOptions.filter, lastLoadOptions.filter, loadOptions.langParams),
+      groupExpanding: !gridCoreUtils.equalSortParameters(
+        loadOptions.group,
+        lastLoadOptions.group,
+      ) || lastLoadOptions.groupExpand,
+      filtering: !gridCoreUtils.equalFilterParameters(
+        loadOptions.filter,
+        lastLoadOptions.filter,
+        loadOptions.langParams,
+      ),
       pageIndex: loadOptions.pageIndex !== lastLoadOptions.pageIndex,
       skip: loadOptions.skip !== lastLoadOptions.skip,
       take: loadOptions.take !== lastLoadOptions.take,
       pageSize: loadOptions.pageSize !== lastLoadOptions.pageSize,
-      fullReload: isFullReload,
+      fullReload: Boolean(isFullReload),
       reload: false,
       paging: false,
     };
 
-    operationTypes.reload = isFullReload || operationTypes.sorting || operationTypes.grouping || operationTypes.filtering;
-    operationTypes.paging = operationTypes.pageIndex || operationTypes.pageSize || operationTypes.take;
+    operationTypes.reload = Boolean(
+      isFullReload
+      || operationTypes.sorting
+      || operationTypes.grouping
+      || operationTypes.filtering,
+    );
+    operationTypes.paging = Boolean(
+      operationTypes.pageIndex
+      || operationTypes.pageSize
+      || operationTypes.take,
+    );
   }
 
   return operationTypes;

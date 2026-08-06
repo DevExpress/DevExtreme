@@ -703,7 +703,9 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
     const changes = this._changes;
     const isUpdateSelection = changes.length > 1 && changes.every((change) => change.changeType === 'updateSelection');
     if (isUpdateSelection) {
-      const itemIndexes = changes.map((change) => change.itemIndexes || []).reduce((a, b) => a.concat(b));
+      const itemIndexes = changes
+        .map((change): number[] => ('itemIndexes' in change ? change.itemIndexes : []))
+        .reduce((a, b) => a.concat(b));
       this._changes = [{ changeType: 'updateSelection', itemIndexes }];
     }
     super._endUpdateCore.apply(this, arguments as any);
