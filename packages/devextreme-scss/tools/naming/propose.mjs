@@ -26,7 +26,7 @@ import { fileURLToPath } from 'url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const packageRoot = join(here, '..', '..');
-const themeRoot = join(packageRoot, 'scss', 'widgets', 'dxdsfluent');
+const themeRoot = join(packageRoot, 'scss', 'widgets', 'fluent-next');
 const baseRoot = join(packageRoot, 'scss', 'widgets', 'base');
 const registries = JSON.parse(readFileSync(join(here, 'registries.json'), 'utf8'));
 const mapping = JSON.parse(readFileSync(join(here, 'mapping.json'), 'utf8'));
@@ -92,7 +92,7 @@ const declaredIn = (file) => {
 };
 
 // ---------------------------------------------------------------------------------------------
-// grammar (a conservative twin of tests/dxdsfluent-naming.test.ts — see the header)
+// grammar (a conservative twin of tests/fluent-next-naming.test.ts — see the header)
 // ---------------------------------------------------------------------------------------------
 
 const modifiers = Object.values(registries.modifiers).flat();
