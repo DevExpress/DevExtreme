@@ -74,11 +74,11 @@ $grid-draggable-column-content-rest: ds.$color-content-neutral-subdued-rest !def
 
 
 @if $mode == "light" {
-  $grid-text-stub-bg-rest: data-uri('images/widgets/dxdsfluent/color-schemes/light/grid/text-stub.png') !default;
+  $grid-text-stub-bg-rest: data-uri('images/widgets/fluent-next/color-schemes/light/grid/text-stub.png') !default;
 }
 
 @if $mode == "dark" {
-  $grid-text-stub-bg-rest: data-uri('images/widgets/dxdsfluent/color-schemes/dark/grid/text-stub.png') !default;
+  $grid-text-stub-bg-rest: data-uri('images/widgets/fluent-next/color-schemes/dark/grid/text-stub.png') !default;
 }
 
 $grid-header-filter-empty-icon-rest: $grid-header-filter-icon-rest !default;

@@ -102,7 +102,7 @@ test('There are no unused images in repository', () => {
   expect(fullImagesFileList).toEqual(usedImagesFileList);
 });
 
-const themes = ['generic', 'material', 'fluent', 'dxdsfluent'];
+const themes = ['generic', 'material', 'fluent', 'fluent-next'];
 const readAnywhere = variableUsageOf(['base', ...themes]).read;
 
 themes.forEach((themeName) => {

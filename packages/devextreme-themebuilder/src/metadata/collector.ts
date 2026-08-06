@@ -36,8 +36,8 @@ export default class MetadataCollector {
     handler: (content: string) => string,
   ): Promise<FileInfo[]> {
     const fileList = (await this.getFileList(dirName))
-      // dxdsfluent is an internal design-tokens theme, not exposed in ThemeBuilder
-      .filter((filePath) => !filePath.includes('dxdsfluent'));
+      // fluent-next is an internal design-tokens theme, not exposed in ThemeBuilder
+      .filter((filePath) => !filePath.includes('fluent-next'));
 
     return Promise.all(fileList.map(async (filePath) => {
       const relativePath = relative(dirName, filePath);

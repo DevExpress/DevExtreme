@@ -16,7 +16,7 @@ const options: Options<Properties> = {
 
 const a11yCheckConfig = {};
 
-// The ON/OFF captions are decorative in the fluent, dxdsfluent and material themes:
+// The ON/OFF captions are decorative in the fluent, fluent-next and material themes:
 // they are hidden with `color: transparent`, and the caption of the inactive state is
 // translated outside the switch, where axe flattens its transparent text against the
 // page canvas instead of the page background and reports a bogus contrast violation.

@@ -16,7 +16,7 @@ export interface Configuration<TComponentOptions = unknown> {
 export const defaultSelector = '#container';
 const defaultOptions = {};
 const defaultCreated = async () => {};
-// Only the base fluent theme runs the full ruleset; dxdsfluent (re-tokenized fluent)
+// Only the base fluent theme runs the full ruleset; fluent-next (re-tokenized fluent)
 // and material re-check color-contrast only — the rest is already covered by fluent.
 const defaultA11yCheckConfig = getThemeName() === 'fluent' ? {} : {
   runOnly: 'color-contrast',

@@ -1,6 +1,6 @@
 /*
- * Before/after evidence for the design review of dxdsfluent
- * (scss/widgets/dxdsfluent/DIVERGENCES.md, section "Агенда для дизайн-ревью").
+ * Before/after evidence for the design review of fluent-next
+ * (scss/widgets/fluent-next/DIVERGENCES.md, section "Агенда для дизайн-ревью").
  *
  *   node tools/review/evidence.mjs                 # all decisions, summary
  *   node tools/review/evidence.mjs --decision=1    # one decision, every place
@@ -8,7 +8,7 @@
  *
  * The journal describes each divergence in prose ("немного отличаются оттенки"). A design review
  * needs the actual pixels, so this compares the two BUILT bundles instead of the sources: for every
- * selector+property that exists in both themes it resolves the dxdsfluent value through the bundle's
+ * selector+property that exists in both themes it resolves the fluent-next value through the bundle's
  * own `:root` map down to a literal, and reports the pairs that really differ.
  *
  * Two things make the naive diff lie, and both are handled here:
@@ -16,7 +16,7 @@
  *   - Formatting is not a difference. `#0F6CBD`, `rgb(15 108 189)` and `rgba(15,108,189,1)` are the
  *     same colour; the minifier and the token pipeline disagree about spelling constantly. Values are
  *     normalised to an rgba tuple before comparison, so only real colour changes survive.
- *   - Absence is not a difference. dxdsfluent emits `var()` where fluent emitted a literal, which
+ *   - Absence is not a difference. fluent-next emits `var()` where fluent emitted a literal, which
  *     stops the minifier from collapsing longhands into shorthands (GOTCHAS §8). A property present
  *     on one side only is therefore reported separately as `shape`, never as a colour delta.
  *
@@ -263,8 +263,8 @@ const COLOUR_TOKEN = /(#[0-9a-f]{3,8}|(?:rgba?|hsla?)\([^()]*(?:\([^()]*\))?[^()
 
 /**
  * The legacy side often carries the colour inside a shorthand (`border: 1px solid rgba(...)`), while
- * dxdsfluent has to split it out because the value is a `var()`. Without this the two sides look
- * incomparable and a real colour change would be filed as "present only in dxdsfluent".
+ * fluent-next has to split it out because the value is a `var()`. Without this the two sides look
+ * incomparable and a real colour change would be filed as "present only in fluent-next".
  */
 const fromShorthand = (map, selectorAndProp) => {
   const [selector, prop] = selectorAndProp.split(' | ');
@@ -284,7 +284,7 @@ const fromShorthand = (map, selectorAndProp) => {
 
 const themes = ['light', 'dark'].map((mode) => {
   const legacyAst = load(`fluent.blue.${mode}`);
-  const themedAst = load(`dxdsfluent.blue.${mode}`);
+  const themedAst = load(`fluent-next.blue.${mode}`);
   return {
     mode,
     legacy: declarations(legacyAst, rootMap(legacyAst)),
@@ -338,24 +338,24 @@ if (asMarkdown) {
     counts: perMode.map(({ mode, rows }) => `${mode} ${rows.length}`).join(', '),
   }));
   out('<!-- Сгенерировано: node tools/review/evidence.mjs --md > REVIEW_EVIDENCE.md. Не править руками. -->');
-  out('# Доказательства к агенде дизайн-ревью dxdsfluent\n');
+  out('# Доказательства к агенде дизайн-ревью fluent-next\n');
   out('Что именно меняется на экране по каждому решению из таблицы «Агенда для дизайн-ревью» в');
   out('[DIVERGENCES.md](DIVERGENCES.md). Не пересказ журнала, а сравнение **собранных бандлов**');
-  out('`dx.fluent.blue.{light,dark}.css` и `dx.dxdsfluent.blue.{light,dark}.css`: для каждого');
-  out('селектора и свойства, которые есть в обеих темах, значение dxdsfluent прогоняется по');
+  out('`dx.fluent.blue.{light,dark}.css` и `dx.fluent-next.blue.{light,dark}.css`: для каждого');
+  out('селектора и свойства, которые есть в обеих темах, значение fluent-next прогоняется по');
   out('`:root`-карте своего бандла до литерала, и сравниваются уже литералы.\n');
   out('Что учтено, чтобы таблицы не врали:\n');
   out('- **написание — не отличие**: `#0F6CBD`, `rgb(15 108 189)` и `rgba(15,108,189,1)` сводятся');
   out('  к одному кортежу, поэтому строка появляется только при настоящей смене цвета;');
   out('- **мосты ③ разворачиваются**: `rgb(from var(--dxds-…) r g b / .15)` считается цветом с альфой;');
-  out('- **цвет из shorthand достаётся**: fluent часто пишет `border: 1px solid <цвет>`, а dxdsfluent');
+  out('- **цвет из shorthand достаётся**: fluent часто пишет `border: 1px solid <цвет>`, а fluent-next');
   out('  обязан вынести `border-color` отдельно (значение — `var()`); без этого настоящая смена цвета');
-  out('  выглядела бы как «свойство есть только в dxdsfluent»;');
+  out('  выглядела бы как «свойство есть только в fluent-next»;');
   out('- **каналы клампятся как в браузере** — legacy fluent в тёмном режиме содержит внегамутное');
   out('  `hsla(0,0%,-46.42%,.2)`, и буквальное сравнение показало бы отличие там, где его не видно.\n');
   out('Пересобрать бандлы перед регенерацией:\n');
   out('```bash');
-  out('pnpm nx build:themes-dev devextreme-scss --devBundles=fluent.blue.light,fluent.blue.dark,dxdsfluent.blue.light,dxdsfluent.blue.dark');
+  out('pnpm nx build:themes-dev devextreme-scss --devBundles=fluent.blue.light,fluent.blue.dark,fluent-next.blue.light,fluent-next.blue.dark');
   out('```\n');
   out('| Решение | Отличий |');
   out('|---|---|');
@@ -369,7 +369,7 @@ if (asMarkdown) {
     perMode.forEach(({ mode, rows }) => {
       if (!rows.length) return;
       out(`**${mode}**\n`);
-      out('| Место | fluent | dxdsfluent |');
+      out('| Место | fluent | fluent-next |');
       out('|---|---|---|');
       rows.forEach((row) => out(`| \`${row.key.replace(/\|/g, '\\|')}\` | ${row.before} | ${row.after} |`));
       out('');
@@ -383,7 +383,7 @@ if (asMarkdown) {
     perMode.forEach(({ mode, rows, shape }) => {
       const colours = rows.filter((row) => row.kind === 'colour');
       const texts = rows.filter((row) => row.kind === 'text');
-      out(`  [${mode}] отличий цвета: ${colours.length}, отличий текста значения: ${texts.length}, только в dxdsfluent: ${shape.length}`);
+      out(`  [${mode}] отличий цвета: ${colours.length}, отличий текста значения: ${texts.length}, только в fluent-next: ${shape.length}`);
       [...colours, ...texts].slice(0, onlyDecision ? 500 : 6).forEach((row) => {
         out(`      ${row.before}  ->  ${row.after}   ${row.key}`);
       });
