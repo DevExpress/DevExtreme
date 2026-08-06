@@ -21,10 +21,10 @@ const themeList = [
     {
         group: 'Fluent (Design System)',
         list: [
-            { theme: 'dxdsfluent.blue.light' },
-            { theme: 'dxdsfluent.blue.light.compact' },
-            { theme: 'dxdsfluent.blue.dark' },
-            { theme: 'dxdsfluent.blue.dark.compact' },
+            { theme: 'fluent-next.blue.light' },
+            { theme: 'fluent-next.blue.light.compact' },
+            { theme: 'fluent-next.blue.dark' },
+            { theme: 'fluent-next.blue.dark.compact' },
         ]
     },
 
