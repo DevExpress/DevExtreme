@@ -3,7 +3,7 @@
     "Hand-authored old->new variable names for wave C of the naming standard (see NAMING.md).",
     "Reviewed as a diff: the new name depends on which CSS property the variable feeds, which cannot",
     "be derived from the old name. Validated by `node tools/naming/rename.mjs --check` and kept",
-    "enforced by tests/dxdsfluent-naming.test.ts (mapping is collision-free, no old name survives).",
+    "enforced by tests/fluent-next-naming.test.ts (mapping is collision-free, no old name survives).",
     "Notes on the toast pilot:",
     "  - `default` is not a Toast.type value (custom|error|info|success|warning), so the base surface",
     "    drops the modifier and becomes $toast-bg-rest; the typed ones keep info/warning/error/success.",

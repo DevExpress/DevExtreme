@@ -123,7 +123,7 @@ function setTestingTheme(args: ParsedArgs): void {
   process.env.theme = args.theme || 'fluent.blue.light';
 }
 
-const normalizeThemeForMatching = (themeName?: string): string | undefined => themeName?.replace(/^dxdsfluent/, 'fluent');
+const normalizeThemeForMatching = (themeName?: string): string | undefined => themeName?.replace(/^fluent-next/, 'fluent');
 
 const matchTheme = (
   actualTheme: string | undefined,

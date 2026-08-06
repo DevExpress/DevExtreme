@@ -53,22 +53,19 @@ const createTextBox = async (options?: Properties, state?: string): Promise<stri
   {
     labelMode: 'static',
     expectedWidths: {
-      // eslint-disable-next-line spellcheck/spell-checker
-      generic: 82, material: 68, fluent: 74, dxdsfluent: 74,
+      generic: 82, material: 68, fluent: 74, 'fluent-next': 74,
     },
   },
   {
     labelMode: 'floating',
     expectedWidths: {
-      // eslint-disable-next-line spellcheck/spell-checker
-      generic: 82, material: 68, fluent: 74, dxdsfluent: 74,
+      generic: 82, material: 68, fluent: 74, 'fluent-next': 74,
     },
   },
   {
     labelMode: 'outside',
     expectedWidths: {
-      // eslint-disable-next-line spellcheck/spell-checker
-      generic: 'none', material: 'none', fluent: 'none', dxdsfluent: 'none',
+      generic: 'none', material: 'none', fluent: 'none', 'fluent-next': 'none',
     },
   },
 ].forEach(({ labelMode, expectedWidths }) => {

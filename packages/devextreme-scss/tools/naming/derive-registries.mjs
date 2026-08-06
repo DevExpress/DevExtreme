@@ -1,6 +1,6 @@
 /*
- * Regenerates tools/naming/registries.json — the single source of truth for the dxdsfluent
- * SCSS naming standard (scss/widgets/dxdsfluent/NAMING.md).
+ * Regenerates tools/naming/registries.json — the single source of truth for the fluent-next
+ * SCSS naming standard (scss/widgets/fluent-next/NAMING.md).
  *
  *   node tools/naming/derive-registries.mjs        # writes registries.json
  *   node tools/naming/derive-registries.mjs --check # fails if the committed file is stale
@@ -17,7 +17,7 @@ import { fileURLToPath } from 'url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const packageRoot = join(here, '..', '..');
-const themeDir = join(packageRoot, 'scss', 'widgets', 'dxdsfluent');
+const themeDir = join(packageRoot, 'scss', 'widgets', 'fluent-next');
 const componentTokens = join(packageRoot, 'scss', '_design-system', 'fluent', 'components', 'theme.scss');
 const output = join(here, 'registries.json');
 
@@ -203,7 +203,7 @@ const OVERRIDES = {
 
   // Bundle configuration and theme identity: exempt from the component-prefix rule.
   // They are string-concatenated into .dx-theme-marker, which themes.current() parses at runtime,
-  // and named by build/bundle-template.dxdsfluent.scss (see GOTCHAS.md §5).
+  // and named by build/bundle-template.fluent-next.scss (see GOTCHAS.md §5).
   themeIdentity: [
     '$color', '$mode', '$size', '$accent',
     '$fluent-color-accent-modificator', '$fluent-color-theme-modificator', '$fluent-size-postfix',
