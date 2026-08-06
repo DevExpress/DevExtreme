@@ -8,7 +8,7 @@ $treeview-disabled-opacity: 0.5 !default;
 @use "../../base/icon_fonts" as *;
 
 
-// Design sizing values (parametrizable; dxdsfluent injects tokens)
+// Design sizing values (parametrizable; fluent-next injects tokens)
 $treeview-select-all-item-border-bottom: 1px solid !default;
 $treeview-border-visible-border: 1px solid !default;
 
