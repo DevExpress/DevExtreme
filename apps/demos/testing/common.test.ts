@@ -221,7 +221,7 @@ Object.values(FRAMEWORKS).forEach((approach) => {
     }
 
     if (process.env.STRATEGY === 'accessibility'
-      && process.env.THEME?.startsWith('dxdsfluent')
+      && process.env.THEME?.startsWith('fluent-next')
       && getIgnoredRules(testName).includes('color-contrast')) {
       return;
     }
@@ -250,9 +250,9 @@ Object.values(FRAMEWORKS).forEach((approach) => {
 
         if (process.env.STRATEGY === 'accessibility') {
           const ignoredRules = getIgnoredRules(testName);
-          // dxdsfluent shares fluent's structure/ARIA (already covered by the fluent run),
+          // fluent-next shares fluent's structure/ARIA (already covered by the fluent run),
           // so only color-contrast is re-checked for it across the demos.
-          const isDesignSystemFluent = process.env.THEME?.startsWith('dxdsfluent');
+          const isDesignSystemFluent = process.env.THEME?.startsWith('fluent-next');
           const colorContrastIgnored = ignoredRules.includes('color-contrast');
           const options = isDesignSystemFluent
             ? { runOnly: { type: 'rule' as const, values: colorContrastIgnored ? [] : ['color-contrast'] }, rules: {} }

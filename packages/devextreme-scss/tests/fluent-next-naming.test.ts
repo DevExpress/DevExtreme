@@ -1,8 +1,8 @@
 /*
- * Enforces the dxdsfluent SCSS naming standard — scss/widgets/dxdsfluent/NAMING.md.
+ * Enforces the fluent-next SCSS naming standard — scss/widgets/fluent-next/NAMING.md.
  *
  * The standard is being rolled out wave by wave, so most checks are RATCHETS: the current set of
- * violations is compared against tests/dxdsfluent-naming.baseline.json, which must only ever shrink.
+ * violations is compared against tests/fluent-next-naming.baseline.json, which must only ever shrink.
  * Regenerate it deliberately, as part of a wave, with:
  *
  *   UPDATE_NAMING_BASELINE=1 pnpm test
@@ -21,14 +21,14 @@ import {
 import { join, resolve, sep } from 'path';
 
 const packageRoot = process.cwd();
-const themeRoot = join(packageRoot, 'scss', 'widgets', 'dxdsfluent');
+const themeRoot = join(packageRoot, 'scss', 'widgets', 'fluent-next');
 const registries = JSON.parse(
   readFileSync(join(packageRoot, 'tools', 'naming', 'registries.json'), 'utf8'),
 );
-const baselinePath = join(__dirname, 'dxdsfluent-naming.baseline.json');
+const baselinePath = join(__dirname, 'fluent-next-naming.baseline.json');
 const updatingBaseline = process.env.UPDATE_NAMING_BASELINE === '1';
 
-const THEMES = ['generic', 'material', 'fluent', 'dxdsfluent'];
+const THEMES = ['generic', 'material', 'fluent', 'fluent-next'];
 const DECLARATION_FILES = ['_colors.scss', '_sizes.scss', '_variables.scss'];
 const CONTROL_DIRECTIVES = /@(if|else|each|for|while)\b[^{]*$/;
 
