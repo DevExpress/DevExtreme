@@ -288,11 +288,6 @@ jobs:
       NODE_OPTIONS: --max-old-space-size=8192
     strategy:
       fail-fast: false
-      # Demos now bundle with esbuild, in place, one demo at a time — no more
-      # SystemJS vendor bundle to build. Angular's AOT compile is the slow
-      # part, so it's split into parallel shards (same round-robin scheme
-      # csp-bundle-angular.js already uses for the CSP check below);
-      # React/Vue stay light enough for a single shard.
       matrix:
         include:
           - { FRAMEWORK: React,   SHARD_INDEX: 1, SHARD_TOTAL: 1 }
