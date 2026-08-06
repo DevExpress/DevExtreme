@@ -1,4 +1,4 @@
-import type { ValidationRule } from '@js/common';
+import type { ValidationStatus } from '@js/common';
 import registerComponent from '@js/core/component_registrator';
 import { data as elementData } from '@js/core/element_data';
 import Guid from '@js/core/guid';
@@ -7,42 +7,79 @@ import Callbacks from '@js/core/utils/callbacks';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { map } from '@js/core/utils/iterator';
-import type { Properties, ValidationResult } from '@js/ui/validator';
+import type { Properties } from '@js/ui/validator';
 import errors from '@js/ui/widget/ui.errors';
+import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
-
-import ValidationEngine from './m_validation_engine';
-import type ValidationGroup from './m_validation_group';
-import DefaultAdapter from './validation/m_default_adapter';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type {
+  ValidationRequestArgs,
+  ValidationRequestHandler,
+  ValidationTargetEditor,
+  ValidationTargetEditorOptions,
+} from '@ts/ui/validation/default_adapter';
+import DefaultAdapter from '@ts/ui/validation/default_adapter';
+import type {
+  ValidationGroupKey,
+  ValidationResultInternal,
+  ValidationRuleInternal,
+} from '@ts/ui/validation_engine';
+import ValidationEngine from '@ts/ui/validation_engine';
+import type ValidationSummary from '@ts/ui/validation_summary';
 
 const VALIDATOR_CLASS = 'dx-validator';
-const VALIDATION_STATUS_VALID = 'valid';
-const VALIDATION_STATUS_INVALID = 'invalid';
-const VALIDATION_STATUS_PENDING = 'pending';
+const VALIDATION_STATUS_VALID: ValidationStatus = 'valid';
+const VALIDATION_STATUS_INVALID: ValidationStatus = 'invalid';
+const VALIDATION_STATUS_PENDING: ValidationStatus = 'pending';
 
-class Validator extends DOMComponent<Validator, Properties> {
+export interface ValidationAdapter {
+  editor?: ValidationTargetEditor;
+  validationRequestsCallbacks?: ValidationRequestHandler[];
+  getValue?: () => unknown;
+  getCurrentValidationError?: () => ValidationRuleInternal | null | undefined;
+  bypass?: () => boolean | undefined;
+  applyValidationResults?: (result: ValidationResultInternal) => void;
+  reset?: () => void;
+  focus?: () => void;
+}
+
+// The public `Properties` type declares these events in terms of the public dxValidator
+// class; the internal class has to declare them in terms of itself.
+type ComponentEvents = 'onDisposing' | 'onInitialized' | 'onOptionChanged';
+
+export interface ValidatorProperties extends
+  Omit<Properties, 'adapter' | ComponentEvents>,
+  Pick<DOMComponentProperties<Validator>, ComponentEvents> {
+  adapter?: ValidationAdapter;
+  isValid?: boolean;
+  validationStatus?: ValidationStatus;
+  // set by the grid and the form to pass the editing context to custom rules
+  dataGetter?: () => Record<string, unknown>;
+}
+
+class Validator extends DOMComponent<Validator, ValidatorProperties> {
   _groupWasInit?: boolean;
 
   focused?: Callback;
 
   _validationInfo!: {
-    result: ValidationResult;
-    deferred: DeferredObj<ValidationResult> | null;
+    result: ValidationResultInternal | null;
+    deferred: DeferredObj<ValidationResultInternal> | null;
     skipValidation: boolean;
   };
 
-  _validationRules?: ValidationRule[];
+  _validationRules?: ValidationRuleInternal[];
 
-  _validationGroup?: ValidationGroup;
+  _validationGroup?: ValidationGroupKey;
 
-  _initOptions(options): void {
-    // @ts-expect-error ts-error
-    super._initOptions.apply(this, arguments);
+  _validationSummary?: ValidationSummary | null;
+
+  _initOptions(options: ValidatorProperties): void {
+    super._initOptions(options);
     this.option(ValidationEngine.initValidationOptions(options));
   }
 
-  _getDefaultOptions(): Properties {
+  _getDefaultOptions(): ValidatorProperties {
     return {
       ...super._getDefaultOptions(),
       validationRules: [],
@@ -55,7 +92,6 @@ class Validator extends DOMComponent<Validator, Properties> {
     this.focused = Callbacks();
     this._initAdapter();
     this._validationInfo = {
-      // @ts-expect-error ts-error
       result: null,
       deferred: null,
       skipValidation: false,
@@ -65,7 +101,7 @@ class Validator extends DOMComponent<Validator, Properties> {
   _initGroupRegistration(): void {
     const group = this._findGroup();
     if (!this._groupWasInit) {
-      this.on('disposing', (args) => {
+      this.on('disposing', (args): void => {
         ValidationEngine.removeRegisteredValidator(args.component._validationGroup, args.component);
       });
     }
@@ -79,13 +115,14 @@ class Validator extends DOMComponent<Validator, Properties> {
 
   _setOptionsByReference(): void {
     super._setOptionsByReference();
-    extend(this._optionsByReference, {
+    Object.assign(this._optionsByReference, {
       validationGroup: true,
     });
   }
 
-  _getEditor() {
+  _getEditor(): ValidationTargetEditor | undefined {
     const element = this.$element()[0];
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return elementData(element, 'dx-validation-target');
   }
 
@@ -94,9 +131,8 @@ class Validator extends DOMComponent<Validator, Properties> {
     let { adapter } = this.option();
     if (!adapter) {
       if (dxStandardEditor) {
-        // @ts-expect-error ts-error
         adapter = new DefaultAdapter(dxStandardEditor, this);
-        adapter?.validationRequestsCallbacks?.push((args) => {
+        adapter?.validationRequestsCallbacks?.push((args): void => {
           if (this._validationInfo?.skipValidation) {
             return;
           }
@@ -109,7 +145,7 @@ class Validator extends DOMComponent<Validator, Properties> {
     }
     const callbacks = adapter.validationRequestsCallbacks;
     if (callbacks) {
-      callbacks.push((args) => {
+      callbacks.push((args): void => {
         this.validate(args);
       });
     }
@@ -117,8 +153,8 @@ class Validator extends DOMComponent<Validator, Properties> {
 
   _toggleRTLDirection(isRtl: boolean): void {
     const { adapter } = this.option();
-    // @ts-expect-error ts-error
-    const rtlEnabled = adapter?.editor?.option('rtlEnabled') ?? isRtl;
+    const editorOptions: ValidationTargetEditorOptions = adapter?.editor?.option() ?? {};
+    const rtlEnabled: boolean = editorOptions.rtlEnabled ?? isRtl;
 
     super._toggleRTLDirection(rtlEnabled);
   }
@@ -136,9 +172,9 @@ class Validator extends DOMComponent<Validator, Properties> {
   _toggleAccessibilityAttributes(): void {
     const dxStandardEditor = this._getEditor();
     if (dxStandardEditor) {
-      const rules = this.option('validationRules') || [];
-      // @ts-expect-error ts-error
-      const isRequired = rules.some(({ type }) => type === 'required') || null;
+      const { validationRules } = this.option() ?? {};
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      const isRequired = validationRules?.some(({ type }): boolean => type === 'required') || null;
 
       if (dxStandardEditor.isInitialized()) {
         dxStandardEditor.setAria('required', isRequired);
@@ -155,16 +191,20 @@ class Validator extends DOMComponent<Validator, Properties> {
     }
   }
 
-  _optionChanged(args): void {
+  _optionChanged(args: OptionChanged<ValidatorProperties>): void {
     switch (args.name) {
       case 'validationGroup':
         this._initGroupRegistration();
         return;
-      case 'validationRules':
+      case 'validationRules': {
         this._resetValidationRules();
         this._toggleAccessibilityAttributes();
-        this.option('isValid') !== undefined && this.validate();
+        const { isValid } = this.option();
+        if (isValid !== undefined) {
+          this.validate();
+        }
         return;
+      }
       case 'adapter':
         this._initAdapter();
         break;
@@ -177,17 +217,19 @@ class Validator extends DOMComponent<Validator, Properties> {
     }
   }
 
-  _getValidationRules() {
-    if (!this._validationRules) {
-      this._validationRules = map(this.option('validationRules'), (rule, index) => extend({}, rule, {
+  _getValidationRules(): ValidationRuleInternal[] {
+    const { validationRules } = this.option();
+    this._validationRules ??= validationRules?.map(
+      (rule, index: number) => ({
+        ...rule,
         validator: this,
         index,
-      }));
-    }
-    return this._validationRules;
+      }),
+    );
+    return this._validationRules ?? [];
   }
 
-  _findGroup(): ValidationGroup {
+  _findGroup(): ValidationGroupKey {
     const $element = this.$element();
 
     const { validationGroup } = this.option();
@@ -201,42 +243,50 @@ class Validator extends DOMComponent<Validator, Properties> {
     delete this._validationRules;
   }
 
-  validate(args?) {
+  validate(args?: ValidationRequestArgs): ValidationResultInternal {
     const { adapter, name } = this.option();
     const bypass = adapter?.bypass?.();
-    const value = args && args.value !== undefined ? args.value : adapter?.getValue?.();
-    // @ts-expect-error ts-error
+    const value = args?.value ?? adapter?.getValue?.();
     const currentError = adapter?.getCurrentValidationError?.();
     const rules = this._getValidationRules();
     const currentResult = this._validationInfo?.result;
-    if (currentResult && currentResult.status === VALIDATION_STATUS_PENDING && currentResult.value === value) {
+    if (currentResult?.status === VALIDATION_STATUS_PENDING && currentResult.value === value) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return extend({}, currentResult);
     }
-    let result;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let result: ValidationResultInternal;
     if (bypass) {
-      result = { isValid: true, status: VALIDATION_STATUS_VALID };
+      result = {
+        isValid: true,
+        status: VALIDATION_STATUS_VALID,
+      };
     } else if (currentError?.editorSpecific) {
       currentError.validator = this;
       result = {
-        isValid: false, status: VALIDATION_STATUS_INVALID, brokenRule: currentError, brokenRules: [currentError],
+        isValid: false,
+        status: VALIDATION_STATUS_INVALID,
+        brokenRule: currentError,
+        brokenRules: [currentError],
       };
     } else {
       result = ValidationEngine.validate(value, rules, name);
     }
     result.id = new Guid().toString();
     this._applyValidationResult(result, adapter);
-    result.complete?.then((res) => {
-      // @ts-expect-error ts-error
-      if (res.id === this._validationInfo.result.id) {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    result?.complete?.then((res) => {
+      if (res.id === this._validationInfo.result?.id) {
         this._applyValidationResult(res, adapter);
       }
     });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend({}, this._validationInfo.result);
   }
 
   reset(): void {
     const { adapter } = this.option();
-    const result = {
+    const result: ValidationResultInternal = {
       id: null,
       isValid: true,
       brokenRule: null,
@@ -247,61 +297,62 @@ class Validator extends DOMComponent<Validator, Properties> {
     };
 
     this._validationInfo.skipValidation = true;
-    // @ts-expect-error ts-error
-    adapter.reset();
+    adapter?.reset?.();
     this._validationInfo.skipValidation = false;
     this._resetValidationRules();
     this._applyValidationResult(result, adapter);
   }
 
-  _updateValidationResult(result): void {
-    // @ts-expect-error ts-error
-    if (!this._validationInfo.result || this._validationInfo.result.id !== result.id) {
-      const complete = this._validationInfo.deferred && this._validationInfo.result.complete;
+  _updateValidationResult(result: ValidationResultInternal): void {
+    const { result: currentResult } = this._validationInfo;
+
+    if (!currentResult || currentResult.id !== result.id) {
+      const complete = this._validationInfo.deferred && currentResult?.complete;
       this._validationInfo.result = extend({}, result, { complete });
     } else {
-      // eslint-disable-next-line no-restricted-syntax
-      for (const prop in result) {
-        if (prop !== 'id' && prop !== 'complete') {
-          this._validationInfo.result[prop] = result[prop];
-        }
-      }
+      const { id, complete, ...restResultProperties } = result;
+      Object.assign(currentResult, restResultProperties);
     }
   }
 
-  _applyValidationResult(result, adapter): void {
+  _applyValidationResult(
+    result: ValidationResultInternal,
+    adapter: ValidationAdapter | undefined,
+  ): void {
     const validatedAction = this._createActionByOption('onValidated', {
       excludeValidators: ['readOnly'],
     });
+
     result.validator = this;
     this._updateValidationResult(result);
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-    adapter.applyValidationResults && adapter.applyValidationResults(this._validationInfo.result);
+    const { result: currentResult } = this._validationInfo;
+    if (currentResult && typeof adapter?.applyValidationResults === 'function') {
+      adapter.applyValidationResults(currentResult);
+    }
+
     this.option({
-      validationStatus: this._validationInfo.result.status,
+      validationStatus: currentResult?.status,
     });
-    if (this._validationInfo.result.status === VALIDATION_STATUS_PENDING) {
+
+    if (currentResult?.status === VALIDATION_STATUS_PENDING) {
       if (!this._validationInfo.deferred) {
-        this._validationInfo.deferred = Deferred();
-        this._validationInfo.result.complete = this._validationInfo.deferred.promise();
+        this._validationInfo.deferred = Deferred<ValidationResultInternal>();
+        currentResult.complete = this._validationInfo.deferred.promise();
       }
-      this._eventsStrategy.fireEvent('validating', [this._validationInfo.result]);
+      this._eventsStrategy.fireEvent('validating', [currentResult]);
       return;
     }
-    // @ts-expect-error ts-error
-    if (this._validationInfo.result.status !== VALIDATION_STATUS_PENDING) {
-      validatedAction(result);
-      if (this._validationInfo.deferred) {
-        this._validationInfo.deferred.resolve(result);
-        this._validationInfo.deferred = null;
-      }
+
+    validatedAction(result);
+    if (this._validationInfo.deferred) {
+      this._validationInfo.deferred.resolve(result);
+      this._validationInfo.deferred = null;
     }
   }
 
   focus(): void {
     const { adapter } = this.option();
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions, @typescript-eslint/prefer-optional-chain
-    adapter && adapter.focus && adapter.focus();
+    adapter?.focus?.();
   }
 
   _useTemplates(): boolean {
