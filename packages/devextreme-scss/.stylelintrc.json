@@ -78,9 +78,9 @@
     },
     "overrides": [
         {
-            "comment": "dxdsfluent follows the naming standard in scss/widgets/dxdsfluent/NAMING.md: strict kebab-case, no underscores and no BEM separators, so a variable name maps 1:1 onto a public --dx-* custom property. cardView is excluded because its own cross-theme BEM system is a documented exemption.",
-            "files": ["scss/widgets/dxdsfluent/**/*.scss"],
-            "ignoreFiles": ["scss/widgets/dxdsfluent/cardView/**/*.scss"],
+            "comment": "fluent-next follows the naming standard in scss/widgets/fluent-next/NAMING.md: strict kebab-case, no underscores and no BEM separators, so a variable name maps 1:1 onto a public --dx-* custom property. cardView is excluded because its own cross-theme BEM system is a documented exemption.",
+            "files": ["scss/widgets/fluent-next/**/*.scss"],
+            "ignoreFiles": ["scss/widgets/fluent-next/cardView/**/*.scss"],
             "rules": {
                 "scss/dollar-variable-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$"
             }
