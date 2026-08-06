@@ -10,8 +10,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-
-/* eslint-disable @typescript-eslint/prefer-for-of */
 /* eslint-disable consistent-return */
 /* eslint-disable max-depth */
 /* eslint-disable no-param-reassign */
@@ -43,7 +41,6 @@ import type { SelectionController } from '@ts/grids/grid_core/selection/m_select
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
 
-import { AI_COLUMN_NAME } from '../ai_column/const';
 import type { OperationTypes } from '../data_source_adapter/types';
 import modules from '../m_modules';
 import type {
@@ -63,8 +60,10 @@ import type {
   PagingDataSource,
   PagingOptionName,
   PagingResult,
+  UserData,
 } from './types';
 import { resolvePaginate, syncPaging } from './utils/paging';
+import { generateRowValues } from './utils/row_values';
 
 export class DataController extends DataHelperMixin(modules.Controller) {
   protected _items!: Item[];
@@ -737,27 +736,8 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    * @extended: selection, editing, master_detail, TreeList's master_detail
    */
   protected _processDataItem(dataItem, options) {
-    dataItem.values = this.generateDataValues(dataItem.data, options.visibleColumns);
+    dataItem.values = generateRowValues(dataItem.data, options.visibleColumns);
     return dataItem;
-  }
-
-  public generateDataValues(data, columns, isModified?) {
-    const values: any[] = [];
-    let value;
-
-    for (let i = 0; i < columns.length; i++) {
-      const column = columns[i];
-      value = isModified ? undefined : null;
-      if (!column.command || column.type === AI_COLUMN_NAME) {
-        if (column.calculateCellValue) {
-          value = column.calculateCellValue(data);
-        } else if (column.dataField) {
-          value = data[column.dataField];
-        }
-      }
-      values.push(value);
-    }
-    return values;
   }
 
   /**

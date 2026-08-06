@@ -21,6 +21,7 @@ import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_col
 import type {
   ColumnsResizerViewController,
 } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
+import { generateRowValues } from '@ts/grids/grid_core/data_controller/utils/row_values';
 import type { ErrorHandlingController } from '@ts/grids/grid_core/error_handling/m_error_handling';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
@@ -334,7 +335,7 @@ export class RowsView extends ColumnsView {
     if (!arg.data || arg.rowType !== 'data' || arg.isNewRow || !this.option('twoWayBindingEnabled') || !watch || !row) return;
 
     const dispose = watch(
-      () => dataController.generateDataValues(arg.data, arg.columns),
+      () => generateRowValues(arg.data, arg.columns),
       () => {
         dataController.repaintRows([row.rowIndex], this.option('repaintChangesOnly'));
       },
