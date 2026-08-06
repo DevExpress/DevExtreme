@@ -71,11 +71,21 @@ function findChrome() {
 
 const CHROME_PATH = findChrome();
 
+// The CI job that runs this script bundles only its own shard (csp-bundle.js
+// applies the same round-robin split), so checking must use the identical
+// partition. Checking a demo another shard bundled means no bundle.js on disk,
+// which costs a 30s render deadline plus a retry each — enough to blow the
+// job's timeout rather than fail.
+const SHARD_TOTAL = Math.max(1, parseInt(process.env.CSP_SHARD_TOTAL, 10) || 1);
+const SHARD_INDEX = (() => {
+  const n = parseInt(process.env.CSP_SHARD_INDEX, 10);
+  return n >= 1 && n <= SHARD_TOTAL ? n : 1;
+})();
+
 const DEBUG_PORT = (() => {
   const fromEnv = parseInt(process.env.CSP_DEBUG_PORT, 10);
   if (fromEnv > 0) return fromEnv;
-  const shardIndex = parseInt(process.env.CSP_SHARD_INDEX, 10) || 1;
-  return 20222 + ((shardIndex - 1) % 20);
+  return 20222 + ((SHARD_INDEX - 1) % 20);
 })();
 const CHROME_USER_DATA_DIR = process.env.CSP_CHROME_USER_DATA_DIR
   || join(os.tmpdir(), 'csp-chrome-shared');
@@ -166,6 +176,16 @@ async function waitForDebugger(port, maxWaitMs = 15000) {
   throw new Error(`Chrome debugger did not start on port ${port}`);
 }
 
+// Same round-robin split as csp-bundle.js's applyShard(), on the same sort key,
+// so shard k checks exactly the demos shard k bundled.
+function applyShard(demos) {
+  if (SHARD_TOTAL <= 1) return demos;
+  const sorted = [...demos].sort(
+    (a, b) => `${a.widget}/${a.demo}`.localeCompare(`${b.widget}/${b.demo}`),
+  );
+  return sorted.filter((_, i) => i % SHARD_TOTAL === SHARD_INDEX - 1);
+}
+
 function findDemos() {
   const demosDirName = 'Demos';
   const demosDir = join(DEMO_ROOT, demosDirName);
@@ -199,7 +219,7 @@ function findDemos() {
     }
   }
 
-  return result;
+  return applyShard(result);
 }
 
 // Wait until the DOM is quiet after load so late-rendered resources fire their
@@ -374,7 +394,8 @@ async function main() {
   console.log(`Concurrency: ${CONCURRENCY}\n`);
 
   const demos = findDemos();
-  console.log(`Found ${demos.length} demo page(s) to check\n`);
+  const shardNote = SHARD_TOTAL > 1 ? ` — shard ${SHARD_INDEX}/${SHARD_TOTAL}` : '';
+  console.log(`Found ${demos.length} demo page(s) to check${shardNote}\n`);
 
   if (demos.length === 0) {
     console.log('No demos found. Exiting.');
@@ -439,9 +460,7 @@ async function main() {
   }
 
   // Suffix the report filename per shard so parallel jobs don't overwrite it.
-  const shardTotal = Math.max(1, parseInt(process.env.CSP_SHARD_TOTAL, 10) || 1);
-  const shardIndex = parseInt(process.env.CSP_SHARD_INDEX, 10) || 1;
-  const reportSuffix = shardTotal > 1 ? `-shard${shardIndex}` : '';
+  const reportSuffix = SHARD_TOTAL > 1 ? `-shard${SHARD_INDEX}` : '';
   const reportFile = join(REPORT_DIR, `csp-violations-${FRAMEWORK.toLowerCase()}${reportSuffix}.jsonl`);
 
   if (allViolations.length > 0) {
