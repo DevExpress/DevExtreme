@@ -11,7 +11,10 @@ const esbuild = require('esbuild');
 const FRAMEWORK_ARG = (process.argv.find((a) => a.startsWith('--framework=')) || '').split('=')[1];
 const FRAMEWORK = FRAMEWORK_ARG || process.env.CSP_FRAMEWORKS || 'React';
 
-const SUPPORTED = ['React', 'Vue', 'Angular'];
+// ReactJs is the generated JavaScript twin of each React demo (see
+// utils/ts-to-js-converter) — same JSX sources with .js extensions, which the
+// shared '.js': 'jsx' loader already covers, so it needs no separate handling.
+const SUPPORTED = ['React', 'ReactJs', 'Vue', 'Angular'];
 if (!SUPPORTED.includes(FRAMEWORK)) {
   console.log(`csp-bundle: framework ${FRAMEWORK} is not supported (only ${SUPPORTED.join(', ')}). Nothing to do.`);
   process.exit(0);
@@ -19,9 +22,14 @@ if (!SUPPORTED.includes(FRAMEWORK)) {
 
 const IS_ANGULAR = FRAMEWORK === 'Angular';
 
+// Write bundle.js/bundle.css next to each demo's own source (the real, only
+// demo tree) instead of into the csp-bundled-demos/ side directory used by the
+// CSP-only check. This is what CI's demo-build step uses in production.
+const IN_PLACE = process.env.BUNDLE_IN_PLACE === '1';
+
 const DEMOS_APP_ROOT = path.join(__dirname, '..', '..');
 const SRC_DEMOS_DIR = path.join(DEMOS_APP_ROOT, 'Demos');
-const OUT_ROOT = path.join(DEMOS_APP_ROOT, 'csp-bundled-demos');
+const OUT_ROOT = IN_PLACE ? SRC_DEMOS_DIR : path.join(DEMOS_APP_ROOT, 'csp-bundled-demos');
 const NODE_MODULES = path.join(DEMOS_APP_ROOT, 'node_modules');
 
 const CONCURRENCY = (() => {
@@ -170,40 +178,55 @@ const devextremeDedupePlugin = {
   },
 };
 
-let vuePlugin = null;
-if (FRAMEWORK === 'Vue') {
-  // eslint-disable-next-line global-require
-  const mod = require('esbuild-plugin-vue3');
-  const factory = typeof mod === 'function' ? mod : (mod.default || mod);
-  vuePlugin = factory();
+// Vue's esbuild plugin is safe to reuse across builds, so it's memoized per
+// process rather than tied to the CLI's single module-level FRAMEWORK — lets
+// getSharedOptions() be called for either framework from a long-lived process
+// (e.g. the dev server's lazy build-on-request path), not just this CLI's
+// single-framework-per-run invocation.
+let vuePluginInstance = null;
+function getVuePlugin() {
+  if (!vuePluginInstance) {
+    // eslint-disable-next-line global-require
+    const mod = require('esbuild-plugin-vue3');
+    const factory = typeof mod === 'function' ? mod : (mod.default || mod);
+    vuePluginInstance = factory();
+  }
+  return vuePluginInstance;
 }
 
-const SHARED_OPTIONS = {
-  bundle: true,
-  minify: false,
-  format: 'iife',
-  loader: {
-    '.js': 'jsx',
-    '.png': 'dataurl',
-    '.jpg': 'dataurl',
-    '.jpeg': 'dataurl',
-    '.gif': 'dataurl',
-    '.svg': 'dataurl',
-  },
-  alias: {
-    react: path.join(NODE_MODULES, 'react'),
-    'react-dom': path.join(NODE_MODULES, 'react-dom'),
-    // Alias bare 'globalize' to the browser build, as the SystemJS configs do.
-    globalize: path.join(NODE_MODULES, 'globalize', 'dist', 'globalize.js'),
-  },
-  define: {
-    'process.env.NODE_ENV': '"production"',
-    __VUE_OPTIONS_API__: 'true',
-    __VUE_PROD_DEVTOOLS__: 'false',
-  },
-  logLevel: 'silent',
-  plugins: [devextremeDedupePlugin, systemJsQuirksPlugin, ignoreMissingCssPlugin, ...(vuePlugin ? [vuePlugin] : [])],
-};
+function getSharedOptions(framework) {
+  return {
+    bundle: true,
+    minify: false,
+    format: 'iife',
+    loader: {
+      '.js': 'jsx',
+      '.png': 'dataurl',
+      '.jpg': 'dataurl',
+      '.jpeg': 'dataurl',
+      '.gif': 'dataurl',
+      '.svg': 'dataurl',
+    },
+    alias: {
+      react: path.join(NODE_MODULES, 'react'),
+      'react-dom': path.join(NODE_MODULES, 'react-dom'),
+      // Alias bare 'globalize' to the browser build, as the SystemJS configs do.
+      globalize: path.join(NODE_MODULES, 'globalize', 'dist', 'globalize.js'),
+    },
+    define: {
+      'process.env.NODE_ENV': '"production"',
+      __VUE_OPTIONS_API__: 'true',
+      __VUE_PROD_DEVTOOLS__: 'false',
+    },
+    logLevel: 'silent',
+    plugins: [
+      devextremeDedupePlugin,
+      systemJsQuirksPlugin,
+      ignoreMissingCssPlugin,
+      ...(framework === 'Vue' ? [getVuePlugin()] : []),
+    ],
+  };
+}
 
 // Reuse the dev <body> markup (minus its SystemJS <script> tags) so the bundle
 // renders into the same mount node — a few demos don't use `#app`.
@@ -254,17 +277,19 @@ function buildHtml({ jsFile, cssFiles, srcDir }) {
 `;
 }
 
-async function bundleDemo(demo) {
-  const entry = findEntry(demo.srcDir);
+// Core esbuild step, parameterized by destination + framework so it can be
+// reused both for the CSP-check output (below) and for an in-place build that
+// writes bundle.js next to the demo's own source (see utils/build/).
+async function bundleDemoTo({ srcDir, destDir, framework }) {
+  const entry = findEntry(srcDir);
   if (!entry) return { ok: false, reason: 'no entry point (index.tsx|ts|jsx|js)' };
 
-  const destDir = path.join(OUT_ROOT, demo.widget, demo.name, FRAMEWORK);
   fs.mkdirSync(destDir, { recursive: true });
 
   let result;
   try {
     result = await esbuild.build({
-      ...SHARED_OPTIONS,
+      ...getSharedOptions(framework),
       entryPoints: [entry],
       outdir: destDir,
       entryNames: 'bundle',
@@ -281,17 +306,26 @@ async function bundleDemo(demo) {
 
   if (jsFiles.length === 0) return { ok: false, reason: 'no JS output produced' };
 
-  // Standalone styles.css that the dev demo references separately (React).
-  const stylesSrc = path.join(demo.srcDir, 'styles.css');
+  // Standalone styles.css that the dev demo references separately (React) —
+  // normalized to bundle.css too, so callers only ever deal with one CSS name.
+  const stylesSrc = path.join(srcDir, 'styles.css');
   if (cssFiles.length === 0 && fs.existsSync(stylesSrc)) {
-    const dest = path.join(destDir, 'styles.css');
+    const dest = path.join(destDir, 'bundle.css');
     fs.copyFileSync(stylesSrc, dest);
-    cssFiles.push('styles.css');
+    cssFiles.push('bundle.css');
   }
+
+  return { ok: true, jsFiles, cssFiles };
+}
+
+async function bundleDemo(demo, { destDir: destDirOverride, framework = FRAMEWORK } = {}) {
+  const destDir = destDirOverride || path.join(OUT_ROOT, demo.widget, demo.name, FRAMEWORK);
+  const result = await bundleDemoTo({ srcDir: demo.srcDir, destDir, framework });
+  if (!result.ok) return result;
 
   fs.writeFileSync(
     path.join(destDir, 'index.html'),
-    buildHtml({ jsFile: jsFiles[0], cssFiles, srcDir: demo.srcDir }),
+    buildHtml({ jsFile: result.jsFiles[0], cssFiles: result.cssFiles, srcDir: demo.srcDir }),
   );
 
   return { ok: true };
@@ -317,7 +351,9 @@ async function main() {
   console.log(`Output: ${OUT_ROOT}\n`);
 
   // Wipe only this framework's previous output so per-framework runs don't clash.
-  if (fs.existsSync(OUT_ROOT)) {
+  // In-place mode writes into the demo's own source folder, which must NOT be
+  // wiped (that would delete the demo's actual source, not just old output).
+  if (!IN_PLACE && fs.existsSync(OUT_ROOT)) {
     const existingWidgets = fs.readdirSync(OUT_ROOT, { withFileTypes: true })
       .filter((w) => w.isDirectory());
     for (const widget of existingWidgets) {
@@ -370,11 +406,18 @@ async function main() {
   }
 }
 
-const entrypoint = IS_ANGULAR ? require('./csp-bundle-angular').main : main;
+if (require.main === module) {
+  // eslint-disable-next-line global-require
+  const entrypoint = IS_ANGULAR ? require('./csp-bundle-angular').main : main;
 
-entrypoint().then(() => {
-  process.exit(process.exitCode || 0);
-}).catch((err) => {
-  console.error('csp-bundle failed:', err);
-  process.exit(1);
-});
+  entrypoint().then(() => {
+    process.exit(process.exitCode || 0);
+  }).catch((err) => {
+    console.error('csp-bundle failed:', err);
+    process.exit(1);
+  });
+}
+
+module.exports = {
+  bundleDemo, bundleDemoTo, findEntry, buildHtml, extractDemoBodyInner,
+};
