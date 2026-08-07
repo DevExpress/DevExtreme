@@ -137,7 +137,7 @@ function getPriorityClass(task: Task) {
   left: 5px;
   width: 5px;
   border-radius: 2px;
-  background: #86c285;
+  background: var(--dxds-color-surface-utility-green-default-rest, #86c285);
 }
 
 .priority-1 {
@@ -145,15 +145,15 @@ function getPriorityClass(task: Task) {
 }
 
 .priority-2 {
-  background: #86c285;
+  background: var(--dxds-color-surface-utility-green-default-rest, #86c285);
 }
 
 .priority-3 {
-  background: #edc578;
+  background: var(--dxds-color-surface-utility-yellow-default-rest, #edc578);
 }
 
 .priority-4 {
-  background: #ef7d59;
+  background: var(--dxds-color-surface-utility-red-default-rest, #ef7d59);
 }
 
 .dx-sortable {
