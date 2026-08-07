@@ -136,6 +136,9 @@ jobs:
     name: Remove storybook
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    environment:
+      name: storybook
+      url: https://devexpress.github.io/DevExtreme/storybook/pr-${{ github.event.pull_request.number }}
     if: >-
       github.event.pull_request.head.repo.full_name == github.repository &&
       (
