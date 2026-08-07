@@ -5,7 +5,7 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import type { ColumnsController } from '../../columns_controller/m_columns_controller';
 import type { DataController } from '../../data_controller/data_controller';
-import type { HandleDataChangedArguments, UserData } from '../../data_controller/types';
+import type { HandleDataChangedEvent, UserData } from '../../data_controller/types';
 import { Controller } from '../../m_modules';
 import type { RowKey } from '../../m_types';
 import gridCoreUtils from '../../m_utils';
@@ -20,7 +20,7 @@ export class AIColumnController extends Controller {
 
   private aiColumnIntegrationController!: AIColumnIntegrationController;
 
-  private dataSourceChangedHandler!: (e?: HandleDataChangedArguments) => void;
+  private dataSourceChangedHandler!: (e?: HandleDataChangedEvent) => void;
 
   private storeUpdatedHandler!: (key: RowKey) => void;
 
@@ -188,8 +188,8 @@ export class AIColumnController extends Controller {
     }
   }
 
-  private handleDataSourceChanged(args?: HandleDataChangedArguments): void {
-    if (args?.changeType === 'loadError') {
+  private handleDataSourceChanged(e?: HandleDataChangedEvent): void {
+    if (e?.changeType === 'loadError') {
       return;
     }
 

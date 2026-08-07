@@ -39,7 +39,8 @@ import type { SelectionController } from '@ts/grids/grid_core/selection/m_select
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
 
-import type { OperationTypes } from '../data_source_adapter/types';
+import type { ColumnsChanges } from '../columns_controller/types';
+import type { LoadOperation, OperationTypes } from '../data_source_adapter/types';
 import modules from '../m_modules';
 import type {
   Controllers, Module, OptionChanged, RowKey,
@@ -52,7 +53,7 @@ import type {
   DataChange,
   DataSourceAdapterLike,
   Filter,
-  HandleDataChangedArguments,
+  HandleDataChangedEvent,
   Item,
   PagingChanges,
   PagingDataSource,
@@ -148,19 +149,15 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _validatingController!: ValidatingController;
 
-  private _columnsChangedHandler!: (e: unknown) => void;
-
   private _loadingChangedHandler!: (isLoading: boolean) => void;
 
   private _loadErrorHandler!: (e: unknown) => void;
-
-  private _customizeStoreLoadOptionsHandler!: (e: unknown) => void;
 
   private _changingHandler!: (e: unknown) => void;
 
   private _dataPushedHandler!: (changes: unknown) => void;
 
-  private _dataChangedHandler!: (e: HandleDataChangedArguments) => void;
+  private _dataChangedHandler!: (e: HandleDataChangedEvent) => void;
 
   public init(): void {
     this._items = [];
@@ -182,14 +179,12 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._isPaging = false;
     this._currentOperationTypes = null;
     this._dataChangedHandler = this._handleDataChanged.bind(this);
-    this._columnsChangedHandler = this._handleColumnsChanged.bind(this);
     this._loadingChangedHandler = this._handleLoadingChanged.bind(this);
     this._loadErrorHandler = this._handleLoadError.bind(this);
-    this._customizeStoreLoadOptionsHandler = this._handleCustomizeStoreLoadOptions.bind(this);
     this._changingHandler = this._handleChanging.bind(this);
     this._dataPushedHandler = this._handleDataPushed.bind(this);
 
-    this._columnsController.columnsChanged.add(this._columnsChangedHandler);
+    this._columnsController.columnsChanged.add(this._columnsChangedHandler.bind(this));
 
     this._isLoading = false;
     this._isCustomLoading = false;
@@ -358,18 +353,19 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return adapter ? adapter._dataSource : null;
   }
 
-  public getCombinedFilter(returnDataField?) {
+  public getCombinedFilter(returnDataField?: boolean): Filter {
     return this.combinedFilter(undefined, returnDataField);
   }
 
-  private combinedFilter(filter, returnDataField?) {
+  private combinedFilter(filter: Filter, returnDataField?: boolean): Filter {
     if (!this._dataSource) {
       return filter;
     }
 
-    let combined = filter ?? this._dataSource.filter();
+    let combined: Filter = filter ?? this._dataSource.filter();
 
-    const isColumnsTypesDefined = this._columnsController.isDataSourceApplied() || this._columnsController.isAllDataTypesDefined();
+    const isColumnsTypesDefined = this._columnsController.isDataSourceApplied()
+      || this._columnsController.isAllDataTypesDefined();
 
     if (isColumnsTypesDefined) {
       const additionalFilter = this._calculateAdditionalFilter();
@@ -386,11 +382,11 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return combined;
   }
 
-  public waitReady() {
+  public waitReady(): DeferredObj<void> {
     if (this._updateLockCount) {
       // @ts-expect-error
       this._readyDeferred = new Deferred();
-      return this._readyDeferred;
+      return this._readyDeferred as DeferredObj<void>;
     }
     return when();
   }
@@ -399,7 +395,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    * @extended: selection
    * @protected
    */
-  protected _endUpdateCore() {
+  protected _endUpdateCore(): void {
     const changes = this._changes;
 
     if (changes.length) {
@@ -415,7 +411,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   // Handlers
-  private _handleCustomizeStoreLoadOptions(e) {
+  private readonly _customizeStoreLoadOptionsHandler = (e: LoadOperation): void => {
     const columnsController = this._columnsController;
     const dataSource = this._dataSource;
     const { storeLoadOptions } = e;
@@ -426,9 +422,11 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     storeLoadOptions.filter = this.combinedFilter(storeLoadOptions.filter);
 
-    if (storeLoadOptions.filter?.length === 1 && storeLoadOptions.filter[0] === '!') {
+    if (Array.isArray(storeLoadOptions.filter)
+      && storeLoadOptions.filter.length === 1
+      && storeLoadOptions.filter[0] === '!') {
       e.data = [];
-      e.extra = e.extra || {};
+      e.extra = e.extra ?? {};
       e.extra.totalCount = 0;
     }
 
@@ -444,21 +442,20 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     dataSource.sort(storeLoadOptions.sort);
     dataSource.group(storeLoadOptions.group);
 
-    storeLoadOptions.sort = columnsController.getSortDataSourceParameters(!dataSource.remoteOperations().sorting);
+    storeLoadOptions.sort = columnsController
+      .getSortDataSourceParameters(!dataSource.remoteOperations().sorting);
 
-    e.group = columnsController.getGroupDataSourceParameters(!dataSource.remoteOperations().grouping);
-  }
+    e.group = columnsController
+      .getGroupDataSourceParameters(!dataSource.remoteOperations().grouping);
+  };
 
-  private _handleColumnsChanged(e) {
+  private _columnsChangedHandler(e: ColumnsChanges): void {
     const that = this;
-    const { changeTypes } = e;
-    const { optionNames } = e;
-    let filterValue;
-    let filterValues;
-    let filterApplied;
+    const { changeTypes, optionNames } = e;
+    let filterApplied = false;
 
     // B255430
-    const updateItemsHandler = function (change) {
+    const updateItemsHandler = (change: ColumnsChanges): void => {
       that._columnsController.columnsChanged.remove(updateItemsHandler);
 
       that.updateItems({
@@ -475,11 +472,22 @@ export class DataController extends DataHelperMixin(modules.Controller) {
         that.reload();
       }
     } else if (changeTypes.columns) {
-      filterValues = that._columnsController.columnOption(e.columnIndex, 'filterValues');
-      if (optionNames.filterValues || optionNames.filterType && Array.isArray(filterValues) || optionNames.filterValue || optionNames.selectedFilterOperation || optionNames.allowFiltering) {
-        filterValue = that._columnsController.columnOption(e.columnIndex, 'filterValue');
+      const filterValues = that._columnsController.columnOption(e.columnIndex, 'filterValues');
 
-        if (Array.isArray(filterValues) || e.columnIndex === undefined || isDefined(filterValue) || !optionNames.selectedFilterOperation || optionNames.filterValue) {
+      if (optionNames.filterValues
+        || (optionNames.filterType && Array.isArray(filterValues))
+        || optionNames.filterValue
+        || optionNames.selectedFilterOperation
+        || optionNames.allowFiltering
+      ) {
+        const filterValue = that._columnsController.columnOption(e.columnIndex, 'filterValue');
+
+        if (Array.isArray(filterValues)
+          || e.columnIndex === undefined
+          || isDefined(filterValue)
+          || !optionNames.selectedFilterOperation
+          || optionNames.filterValue
+        ) {
           that._applyFilter();
           filterApplied = true;
         }
@@ -494,6 +502,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
         'filterValues',
         'filterType',
       ];
+
       if (!that._needApplyFilter && !gridCoreUtils.checkChanges(optionNames, excludedOptionNames)) {
         // TODO remove resubscribing
         that._columnsController.columnsChanged.add(updateItemsHandler);
@@ -501,12 +510,15 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
       if (isDefined(optionNames.visible)) {
         const column = that._columnsController.columnOption(e.columnIndex);
-        if (column && (isDefined(column.filterValue) || isDefined(column.filterValues))) {
+        const hasFilterValue = isDefined(column?.filterValue) || isDefined(column?.filterValues);
+
+        if (hasFilterValue) {
           that._applyFilter();
           filterApplied = true;
         }
       }
     }
+
     if (!filterApplied && changeTypes.filtering && !this._needApplyFilter) {
       that.reload();
     }
@@ -515,7 +527,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended: selection
    */
-  protected _handleDataChanged(e: HandleDataChangedArguments) {
+  protected _handleDataChanged(e: HandleDataChangedEvent): void {
     const that = this;
     const dataSource = that._dataSource;
     const columnsController = that._columnsController;
@@ -537,12 +549,12 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
         that._isDataSourceApplying = false;
 
-        const hasAdditionalFilter = () => {
+        const hasAdditionalFilter = (): boolean => {
           const additionalFilter = that._calculateAdditionalFilter();
-          return additionalFilter?.length;
+          return Boolean(additionalFilter?.length);
         };
-        const needApplyFilter = that._needApplyFilter;
 
+        const needApplyFilter = that._needApplyFilter;
         that._needApplyFilter = false;
 
         if (needApplyFilter && !that._isAllDataTypesDefined && hasAdditionalFilter()) {
@@ -615,7 +627,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return dataSource;
   }
 
-  protected _initDataSource() {
+  protected _initDataSource(): void {
     const hadDataSource = !!this._dataSource;
 
     super._initDataSource();
@@ -639,23 +651,26 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended: selection, virtual_scrolling
    */
-  protected _loadDataSource() {
+  // The mixin base types this as `void`, but the override returns a Deferred
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  protected _loadDataSource(): DeferredObj<unknown> {
     const that = this;
     const dataSource = that._dataSource;
-    // @ts-expect-error
-    const result = new Deferred();
+    // @ts-expect-error Deferred lacks a construct signature in its typings
+    const result: DeferredObj<unknown> = new Deferred();
 
     when(this._columnsController.refresh(true)).always(() => {
       if (dataSource) {
-        dataSource.load().done(function () {
+        dataSource.load().done((...args: unknown[]) => {
           that._isPaging = false;
-          result.resolve.apply(result, arguments);
+          result.resolve(...args);
         }).fail(result.reject);
       } else {
         result.resolve();
       }
     });
 
+    // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
     return result.promise();
   }
 
