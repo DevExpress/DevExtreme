@@ -83,27 +83,27 @@ function getImagePath(taskId: number) {
 }
 
 .custom-task-color-0 {
-  background-color: #512DA8;
+  background-color: var(--dxds-color-surface-utility-purple-default-rest, #512DA8);
 }
 
 .custom-task-color-1 {
-  background-color: #2E7D32;
+  background-color: var(--dxds-color-surface-utility-green-default-rest, #2E7D32);
 }
 
 .custom-task-color-2 {
-  background-color: #1564C0;
+  background-color: var(--dxds-color-surface-utility-blue-default-rest, #1564C0);
 }
 
 .custom-task-color-3 {
-  background-color: #C2185B;
+  background-color: var(--dxds-color-surface-utility-pink-default-rest, #C2185B);
 }
 
 .custom-task-color-4 {
-  background-color: #C62828;
+  background-color: var(--dxds-color-surface-utility-red-default-rest, #C62828);
 }
 
 .custom-task-color-5 {
-  background-color: #DD2C00;
+  background-color: var(--dxds-color-surface-utility-orange-default-rest, #DD2C00);
 }
 
 .custom-task-color-6 {
@@ -119,7 +119,7 @@ function getImagePath(taskId: number) {
 
 .custom-task-wrapper {
   padding: 8px;
-  color: #fff;
+  color: var(--dxds-color-content-neutral-default-on-surface-rest, #fff);
 }
 
 .custom-task-wrapper > * {
@@ -134,7 +134,7 @@ function getImagePath(taskId: number) {
   height: 32px;
   border-radius: 50%;
   margin: 8px;
-  background-color: #fff;
+  background-color: var(--dxds-color-content-neutral-default-on-surface-rest, #fff);
   overflow: hidden;
 }
 
