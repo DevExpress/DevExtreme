@@ -19,7 +19,7 @@ import {
   getPageDataFromCache,
   setPageDataToCache,
 } from './m_data_source_adapter_utils';
-import type { LoadOperation, OperationTypes } from './types';
+import type { ChangedEvent, LoadOperation, OperationTypes } from './types';
 
 export default class DataSourceAdapter extends modules.Controller {
   protected _dataSource: any;
@@ -66,7 +66,7 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private _isCustomLoading: any;
 
-  protected changed: any;
+  protected changed!: Callback<[ChangedEvent?]>;
 
   protected loadingChanged: any;
 
@@ -78,7 +78,7 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private pushed: any;
 
-  private _dataChangedHandler!: (e: any) => any;
+  private _dataChangedHandlerProxy!: (e: ChangedEvent) => void;
 
   private _customizeStoreLoadOptionsHandlerProxy!: (e: LoadOperation) => void;
 
@@ -118,7 +118,7 @@ export default class DataSourceAdapter extends modules.Controller {
     that.changing = Callbacks();
     that.pushed = Callbacks();
 
-    that._dataChangedHandler = that._handleDataChanged.bind(that);
+    that._dataChangedHandlerProxy = that._dataChangedHandler.bind(that);
     that._customizeStoreLoadOptionsHandlerProxy = that._customizeStoreLoadOptionsHandler.bind(that);
     that._dataLoadedHandler = that._handleDataLoaded.bind(that);
     that._loadingChangedHandler = that._handleLoadingChanged.bind(that);
@@ -126,7 +126,7 @@ export default class DataSourceAdapter extends modules.Controller {
     that._pushHandler = that._handlePush.bind(that);
     that._changingHandler = that._handleChanging.bind(that);
 
-    dataSource.on('changed', that._dataChangedHandler);
+    dataSource.on('changed', that._dataChangedHandlerProxy);
     dataSource.on('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandlerProxy);
     dataSource.on('customizeLoadResult', that._dataLoadedHandler);
     dataSource.on('loadingChanged', that._loadingChangedHandler);
@@ -148,7 +148,7 @@ export default class DataSourceAdapter extends modules.Controller {
     const dataSource = that._dataSource;
     const store = dataSource.store();
 
-    dataSource.off('changed', that._dataChangedHandler);
+    dataSource.off('changed', that._dataChangedHandlerProxy);
     dataSource.off('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandlerProxy);
     dataSource.off('customizeLoadResult', that._dataLoadedHandler);
     dataSource.off('loadingChanged', that._loadingChangedHandler);
@@ -638,11 +638,14 @@ export default class DataSourceAdapter extends modules.Controller {
   /**
    * @extended: virtual_scrolling
    */
-  protected _handleDataChanged(args) {
+  // ChangedEvent
+  protected _dataChangedHandler(e?: ChangedEvent) {
     let currentTotalCount;
     const dataSource = this._dataSource;
     let isLoading = false;
-    const isDataLoading = !args || isDefined(args.changeType);
+
+    // At this stage e.changeType can be defined only if virtual scrolling and scrolling.legacyMode is true
+    const isDataLoading = !e || isDefined(e.changeType);
 
     const itemsCount = this.itemsCount();
 
@@ -684,7 +687,7 @@ export default class DataSourceAdapter extends modules.Controller {
       this._lastOperationTypes = {};
 
       this.component._optionCache = {};
-      this.changed.fire(args);
+      this.changed.fire(e);
       this.component._optionCache = undefined;
     }
   }

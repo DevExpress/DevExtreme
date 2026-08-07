@@ -22,7 +22,7 @@ import {
 } from '@js/core/utils/type';
 import commonUtils from '@ts/core/utils/m_common';
 
-import type { LoadOperation } from './types';
+import type { ChangedEvent, DataChange, LoadOperation } from './types';
 
 export const DataSource = Class.inherit({
   ctor(options) {
@@ -334,9 +334,9 @@ export const DataSource = Class.inherit({
     });
   },
 
-  _fireChanged(args) {
+  _fireChanged(e?: ChangedEvent) {
     const date = new Date();
-    this._eventsStrategy.fireEvent('changed', args);
+    this._eventsStrategy.fireEvent('changed', [e]);
     // @ts-expect-error
     this._changedTime = new Date() - date;
   },
@@ -432,7 +432,7 @@ export const DataSource = Class.inherit({
     });
   },
 
-  _onPush(changes) {
+  _onPush(changes: DataChange[]) {
     if (this._reshapeOnPush) {
       this.load();
     } else {
@@ -468,7 +468,7 @@ export const DataSource = Class.inherit({
         groupCount: groupLevel,
         useInsertIndex: true,
       });
-      this._fireChanged([{ changes }]);
+      this._fireChanged({ changes });
     }
   },
 
