@@ -7476,17 +7476,17 @@ QUnit.module('New virtual scrolling mode', {
         const dataSource = this.createDataSource({
             pageSize: 3
         });
-        const dataLoadingHandler = dataSource._customizeStoreLoadOptionsHandler;
+        const originalDataLoadingHandler = dataSource._customizeStoreLoadOptionsHandlerProxy;
         const takeValues = [];
         const skipValues = [];
 
-        dataSource._customizeStoreLoadOptionsHandler = function(options) {
-            dataLoadingHandler.apply(dataSource, arguments);
+        dataSource._customizeStoreLoadOptionsHandlerProxy = function(options) {
+            originalDataLoadingHandler.apply(dataSource, arguments);
             skipValues.push(options.storeLoadOptions.skip);
             takeValues.push(options.storeLoadOptions.take);
         };
-        dataSource._dataSource.off('customizeStoreLoadOptions', dataLoadingHandler);
-        dataSource._dataSource.on('customizeStoreLoadOptions', dataSource._customizeStoreLoadOptionsHandler);
+        dataSource._dataSource.off('customizeStoreLoadOptions', originalDataLoadingHandler);
+        dataSource._dataSource.on('customizeStoreLoadOptions', dataSource._customizeStoreLoadOptionsHandlerProxy);
 
         try {
             // act
@@ -7508,7 +7508,7 @@ QUnit.module('New virtual scrolling mode', {
             assert.deepEqual(dataSource.items(), TEN_NUMBERS.slice(0, 9), 'second load items');
         } finally {
             dataSource._dataSource.off('customizeStoreLoadOptions', dataSource._dataLoadingHandler);
-            dataSource._dataSource.on('customizeStoreLoadOptions', dataLoadingHandler);
+            dataSource._dataSource.on('customizeStoreLoadOptions', originalDataLoadingHandler);
         }
     });
 
