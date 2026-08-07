@@ -569,13 +569,13 @@ export class DataController extends DataHelperMixin(modules.Controller) {
         } else {
           this._currentOperationTypes = dataSource.operationTypes();
 
-          const change: DataChange = e?.changeType === 'loadError'
-            ? e
-            : {
-              // use e?.changeType, because it is passed from virtual scrolling with scrolling.legacyMode
+          const change: DataChange = isDefined(e)
+            ? {
+              ...e,
               changeType: e?.changeType ?? 'refresh',
-              changes: e?.changes,
-            };
+            // need to cast, because in virtual scrolling with scrolling.legacyMode, e has more fields
+            } as DataChange
+            : { changeType: 'refresh' };
 
           that.updateItems(change, true);
         }
