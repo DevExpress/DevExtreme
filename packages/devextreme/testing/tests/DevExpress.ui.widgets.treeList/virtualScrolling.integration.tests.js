@@ -4,7 +4,7 @@ import $ from 'jquery';
 import { TreeListWrapper } from '../../helpers/wrappers/dataGridWrappers.js';
 import { generateNestedData } from '../../helpers/treeListMocks.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const treeListWrapper = new TreeListWrapper('#treeList');
 
@@ -58,7 +58,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         const treeList = $('#treeList').dxTreeList({
             dataSource: data,
-            height: 500,
+            height: 720,
             autoExpandAll: true,
             wordWrapEnabled: true,
             columns: [{

@@ -261,4 +261,50 @@ describe('DataGrid editing', () => {
       expect(editingController.getInternalStateSize()).toBe(1);
     });
   });
+
+  describe('allowUpdating for a new row (T1332312)', () => {
+    it('should allow updating a new row regardless of the allowUpdating option', async () => {
+      const { instance } = await createDataGrid({
+        keyExpr: 'ID',
+        dataSource,
+        editing: {
+          mode: 'batch',
+          allowUpdating: false,
+          allowAdding: true,
+        },
+      });
+
+      await instance.addRow();
+      await flushAsync();
+
+      const editingController = instance.getController('editing');
+      const dataController = instance.getController('data');
+      const newRow = dataController.items().find((row) => row.isNewRow);
+      const existingRow = dataController.items().find((row) => !row.isNewRow);
+
+      expect(editingController.allowUpdating({ row: newRow })).toBe(true);
+      expect(editingController.allowUpdating({ row: existingRow })).toBe(false);
+    });
+
+    it('should respect the allowUpdating option for a new row when allowEditingForNewRows is false', async () => {
+      const { instance } = await createDataGrid({
+        keyExpr: 'ID',
+        dataSource,
+        editing: {
+          mode: 'batch',
+          allowUpdating: false,
+          allowAdding: true,
+        },
+      });
+
+      await instance.addRow();
+      await flushAsync();
+
+      const editingController = instance.getController('editing');
+      const dataController = instance.getController('data');
+      const newRow = dataController.items().find((row) => row.isNewRow);
+
+      expect(editingController.allowUpdating({ row: newRow }, 'click', false)).toBe(false);
+    });
+  });
 });

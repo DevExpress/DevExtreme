@@ -18,6 +18,7 @@ import {
   getPageDataFromCache,
   setPageDataToCache,
 } from './m_data_source_adapter_utils';
+import type { OperationTypes } from './types';
 
 export default class DataSourceAdapter extends modules.Controller {
   protected _dataSource: any;
@@ -38,7 +39,7 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private _cachedPagingData: any;
 
-  private _lastOperationTypes: any;
+  private _lastOperationTypes!: OperationTypes;
 
   private _eventsStrategy: any;
 
@@ -54,13 +55,13 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private _isRefreshing: any;
 
-  private _loadingOperationTypes: any;
+  private _loadingOperationTypes?: OperationTypes;
 
   private _isRefreshed: any;
 
   protected _lastOperationId: any;
 
-  private _operationTypes: any;
+  private _operationTypes?: OperationTypes;
 
   private _isCustomLoading: any;
 
@@ -342,7 +343,11 @@ export default class DataSourceAdapter extends modules.Controller {
     return currentOperationTypes.some((operationType) => remoteOperations[operationType]);
   }
 
-  protected _calculateOperationTypes(loadOptions, lastLoadOptions, isFullReload?: boolean) {
+  protected _calculateOperationTypes(
+    loadOptions,
+    lastLoadOptions,
+    isFullReload?: boolean,
+  ): OperationTypes {
     return calculateOperationTypes(loadOptions, lastLoadOptions, isFullReload);
   }
 
@@ -580,8 +585,10 @@ export default class DataSourceAdapter extends modules.Controller {
     when(options.data).done(() => {
       if (options.lastLoadOptions) {
         this._lastLoadOptions = options.lastLoadOptions;
+
         Object.keys(options.operationTypes).forEach((operationType) => {
-          this._lastOperationTypes[operationType] = this._lastOperationTypes[operationType] || options.operationTypes[operationType];
+          // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+          this._lastOperationTypes[operationType] ||= options.operationTypes[operationType];
         });
       }
     });
@@ -694,7 +701,7 @@ export default class DataSourceAdapter extends modules.Controller {
     return this._loadingOperationTypes;
   }
 
-  private operationTypes() {
+  public operationTypes(): OperationTypes | undefined {
     return this._operationTypes;
   }
 

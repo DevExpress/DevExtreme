@@ -251,4 +251,44 @@ describe('GridCore focus', () => {
       expect(instance.option('focusedRowIndex')).toBe(9);
     });
   });
+
+  describe('when focusedRowKey is set to a row inside a collapsed group with repaintChangesOnly', () => {
+    const countFocusedRows = (): number => document
+      .querySelectorAll(`#${GRID_CONTAINER_ID} .dx-row.dx-row-focused`).length;
+
+    it('should keep a single focused row indicator (T1332912)', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: {
+          store: {
+            type: 'array',
+            key: 'id',
+            data: [
+              { id: 1, name: 'Alice', department: 'Engineering' },
+              { id: 2, name: 'Bob', department: 'Engineering' },
+              { id: 3, name: 'Carol', department: 'Engineering' },
+              { id: 9, name: 'Ivy', department: 'Finance' },
+              { id: 10, name: 'Jack', department: 'Finance' },
+            ],
+          },
+        },
+        focusedRowEnabled: true,
+        focusedRowKey: 1,
+        repaintChangesOnly: true,
+        grouping: { autoExpandAll: false },
+        columns: [
+          'id',
+          'name',
+          { dataField: 'department', groupIndex: 0 },
+        ],
+      });
+
+      expect(countFocusedRows()).toBe(1);
+
+      instance.option('focusedRowKey', 9);
+      await flushAsync();
+
+      expect(instance.option('focusedRowKey')).toBe(9);
+      expect(countFocusedRows()).toBe(1);
+    });
+  });
 });

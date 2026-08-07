@@ -51,11 +51,7 @@ test.meta({ browserSize: [1000, 800] })('The simulated scrollbar should display 
   },
 }));
 
-// visual: generic.light
-// visual: material.blue.light
-// visual: fluent.blue.light
-// visual: generic.greenMist.light
-test.meta({ browserSize: [900, 800] })('Header hover should display correctly when there are fixed columns (generic.light theme)', async (t) => {
+test.meta({ browserSize: [900, 800] })('Header hover should display correctly when there are fixed columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const headerCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(13);
@@ -93,18 +89,16 @@ test.meta({ browserSize: [900, 800] })('Header hover should display correctly wh
     await t.hover(Selector('body'));
   });
 
-// visual: generic.light
-// visual: material.blue.light
-// visual: fluent.blue.light
-// visual: generic.greenMist.light
-test.meta({ browserSize: [900, 800] })('Row hover should display correctly when there are fixed columns (generic.light theme)', async (t) => {
+test.meta({
+  browserSize: [900, 800],
+})('Row hover should display correctly when there are fixed columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const dataRow = dataGrid.getDataRow(1);
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await t.hover(dataRow.element);
+  await t.hover(dataRow.getDataCell(1).element);
 
   await t.expect(dataRow.isHovered).ok();
 
@@ -136,11 +130,7 @@ test.meta({ browserSize: [900, 800] })('Row hover should display correctly when 
     await t.hover(Selector('body'));
   });
 
-// visual: generic.light
-// visual: material.blue.light
-// visual: fluent.blue.light
-// visual: generic.greenMist.light
-test.meta({ browserSize: [900, 800] })('Alternating rows should display correctly when there are fixed columns (generic.light theme)', async (t) => {
+test.meta({ browserSize: [900, 800] })('Alternating rows should display correctly when there are fixed columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -171,11 +161,8 @@ test.meta({ browserSize: [900, 800] })('Alternating rows should display correctl
   });
 });
 
-// visual: generic.light
-// visual: material.blue.light
-// visual: fluent.blue.light
 [0.9, 1.25, 1.5].forEach((zoom) => {
-  test.meta({ browserSize: [900, 800] })(`Fixed columns should display correctly at ${zoom * 100}% zoom (generic.light theme)`, async (t) => {
+  test.meta({ browserSize: [900, 800] })(`Fixed columns should display correctly at ${zoom * 100}% zoom`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 

@@ -34,7 +34,7 @@ export class IterableDifferHelper {
     if (value && Array.isArray(value)) {
       if (!this._propertyDiffers[prop]) {
         try {
-          this._propertyDiffers[prop] = this._differs.find(value).create(null);
+          this._propertyDiffers[prop] = this._differs.find(value).create(undefined);
           return true;
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) { }

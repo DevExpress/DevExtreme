@@ -24,7 +24,7 @@ import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import Selection from '@ts/ui/selection/selection';
 
-import type { DataController } from '../data_controller/m_data_controller';
+import type { DataController } from '../data_controller/data_controller';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
 
@@ -703,7 +703,9 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
     const changes = this._changes;
     const isUpdateSelection = changes.length > 1 && changes.every((change) => change.changeType === 'updateSelection');
     if (isUpdateSelection) {
-      const itemIndexes = changes.map((change) => change.itemIndexes || []).reduce((a, b) => a.concat(b));
+      const itemIndexes = changes
+        .map((change): number[] => ('itemIndexes' in change ? change.itemIndexes : []))
+        .reduce((a, b) => a.concat(b));
       this._changes = [{ changeType: 'updateSelection', itemIndexes }];
     }
     super._endUpdateCore.apply(this, arguments as any);

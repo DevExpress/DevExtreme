@@ -15,7 +15,7 @@ import Button from '@js/ui/button';
 import Form from '@js/ui/form';
 import Popup from '@js/ui/popup/ui.popup';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
-import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type { ModuleType } from '../m_types';
@@ -474,14 +474,14 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  protected _processDataItemCore(item, change, key, columns, generateDataValues) {
+  protected _processDataItemCore(item, change, key, columns) {
     const { type } = change;
 
     if (this.isPopupEditMode() && type === DATA_EDIT_DATA_INSERT_TYPE) {
       item.visible = false;
     }
 
-    super._processDataItemCore(item, change, key, columns, generateDataValues);
+    super._processDataItemCore(item, change, key, columns);
   }
 
   protected _editRowFromOptionChangedCore(rowIndices, rowIndex) {

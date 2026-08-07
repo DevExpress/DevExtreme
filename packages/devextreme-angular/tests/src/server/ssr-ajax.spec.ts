@@ -62,10 +62,10 @@ describe('Universal', () => {
   });
   // spec
   it('should set state and remove data from the state when the request is repeated', () => {
-    const platformId = TestBed.get(PLATFORM_ID);
+    const platformId = TestBed.inject(PLATFORM_ID);
     if (isPlatformServer(platformId)) {
       sendRequest.apply(mockSendRequest, [{ url: 'someurl' }]);
-      const transferState: TransferState = TestBed.get(TransferState);
+      const transferState: TransferState = TestBed.inject(TransferState);
       const key = makeStateKey('0urlsomeurl');
 
       expect(transferState.hasKey(key)).toBe(true);
@@ -74,11 +74,11 @@ describe('Universal', () => {
   });
 
   it('should generate complex key', () => {
-    const platformId = TestBed.get(PLATFORM_ID);
+    const platformId = TestBed.inject(PLATFORM_ID);
     if (isPlatformServer(platformId)) {
       sendRequest.apply(mockSendRequest, [{ url: 'someurl', data: { filter: { name: 'test' }, select: ['name'] } }]);
       const key = makeStateKey('0urlsomeurldatafilternametestselect0name');
-      const transferState: TransferState = TestBed.get(TransferState);
+      const transferState: TransferState = TestBed.inject(TransferState);
 
       expect(transferState.hasKey(key)).toBe(true);
     }

@@ -63,8 +63,7 @@
     "inferno-create-element": "catalog:",
     "inferno-hydrate": "catalog:",
     "jszip": "^3.10.1",
-    "rrule": "^2.8.1",
-    "unplugin": "^3.0.0"
+    "rrule": "^2.8.1"
   },
   "devDependencies": {
     "@babel/core": "7.29.7",

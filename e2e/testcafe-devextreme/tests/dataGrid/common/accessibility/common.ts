@@ -11,8 +11,6 @@ fixture.disablePageReloads`Common tests`
 
 const DATA_GRID_SELECTOR = '#container';
 
-// visual: fluent.blue.light
-// visual: fluent.blue.dark
 const screenshotCheck = async (
   t: TestController,
   screenshotName: string,

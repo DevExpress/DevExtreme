@@ -1807,8 +1807,10 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
       .ok()
 
       .typeText(editor00.element, '1')
-      .pressKey('tab')
+      .expect(editor00.element.value)
+      .eql('11')
 
+      .pressKey('tab')
       .expect(cell00.isFocused)
       .notOk()
       .expect(dataGrid.apiGetCellValue(0, 0))
@@ -6795,7 +6797,11 @@ test('Focus should be set to the grid to allow keyboard navigation when the focu
     // act
     await t
       .click(searchPanel.input)
-      .pressKey('tab tab tab tab tab');
+      .pressKey('tab')
+      .pressKey('tab')
+      .pressKey('tab')
+      .pressKey('tab')
+      .pressKey('tab');
 
     // assert
     await t.expect(secondIDCell.isFocused).ok();
@@ -6811,13 +6817,18 @@ test('Focus should be set to the grid to allow keyboard navigation when the focu
       .notOk('focus should be on the search panel');
 
     // act
-    await t.pressKey('tab tab tab');
+    await t
+      .pressKey('tab')
+      .pressKey('tab')
+      .pressKey('tab');
 
     // assert
     await t.expect(secondIDCell.isFocused).ok();
 
     // act
-    await t.pressKey('tab tab');
+    await t
+      .pressKey('tab')
+      .pressKey('tab');
 
     // assert
     await t.expect(button.isFocused).ok();

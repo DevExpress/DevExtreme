@@ -16,10 +16,6 @@ jobs:
       config: |
         {
           ignoredAdvisories: [
-            'GHSA-rgjc-h3x7-9mwg', // @angular/core
-            'GHSA-48r7-hpm6-gfxm', // @angular/common
-            'GHSA-39pv-4j6c-2g6v', // @angular/common
-            'GHSA-58w9-8g37-x9v5', // @angular/compiler
             'GHSA-2gmp-34j9-fqjm', // replicator
             'GHSA-848j-6mx2-7j84', // elliptic
           ]

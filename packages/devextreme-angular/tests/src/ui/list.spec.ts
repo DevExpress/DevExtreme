@@ -81,7 +81,7 @@ describe('DxList', () => {
     testComponent.items.push(2);
     fixture.detectChanges();
 
-    expect(instance.option).toHaveBeenCalledWith('items', [1, 2]);
+    expect(optionSpy as jasmine.Spy).toHaveBeenCalledWith('items', [1, 2]);
     optionSpy.calls.reset();
   });
 

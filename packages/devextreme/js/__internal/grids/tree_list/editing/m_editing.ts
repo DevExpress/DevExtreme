@@ -7,7 +7,7 @@ import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
-import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import { dataControllerEditingExtenderMixin, editingModule } from '@ts/grids/grid_core/editing/m_editing';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
@@ -50,21 +50,22 @@ class EditingController extends editingModule.controllers.editing {
     }
   }
 
-  protected _getLoadedRowIndex(items, change) {
+  protected _getLoadedRowIndex(items, change, isProcessedItems?) {
     const dataSourceAdapter = this._dataController.dataSource();
-    const parentKey = dataSourceAdapter?.parentKeyOf(change.data);
+    const insertParentKey = this._getInternalData(change.key)?.insertInfo?.parentKey;
+    const parentKey = insertParentKey !== undefined
+      ? insertParentKey
+      : dataSourceAdapter?.parentKeyOf(change.data);
 
     if (parentKey !== undefined && parentKey !== this.option('rootValue')) {
       const rowIndex = gridCoreUtils.getIndexByKey(parentKey, items);
       // @ts-expect-error
-      if (rowIndex >= 0 && this._dataController.isRowExpanded(parentKey)) {
-        // @ts-expect-error
-        return super._getLoadedRowIndex.apply(this, arguments);
+      if (!(rowIndex >= 0 && this._dataController.isRowExpanded(parentKey))) {
+        return -1;
       }
-      return -1;
     }
-    // @ts-expect-error
-    return super._getLoadedRowIndex.apply(this, arguments);
+
+    return super._getLoadedRowIndex(items, change, isProcessedItems);
   }
 
   protected _isEditColumnVisible() {

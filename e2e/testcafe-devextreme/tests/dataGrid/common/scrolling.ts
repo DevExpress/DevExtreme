@@ -39,6 +39,12 @@ async function getTestLoadCount(): Promise<number> {
   return ClientFunction(() => (window as any).testLoadCount as number)();
 }
 
+async function getTestLoadOptions(): Promise<{ skip: number; take: number }[]> {
+  return ClientFunction(
+    () => (window as any).testLoadOptions as { skip: number; take: number }[],
+  )();
+}
+
 fixture.disablePageReloads`Scrolling`
   .page(url(__dirname, '../../container.html'));
 
@@ -424,6 +430,71 @@ test('Scroll position after grouping when RTL (T388508)', async (t) => {
   }).after(async () => {
     await removeStylesheetRulesFromPage();
   });
+});
+
+test('Horizontal scrolling should work correctly in RTL mode with native scrolling (T1318490)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const rowsScrollContainer = dataGrid.getScrollContainer();
+  const headersScrollContainer = dataGrid.getHeadersScrollContainer();
+
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  // assert: the grid must not scroll itself on initialization
+  await t
+    .expect(rowsScrollContainer.scrollLeft)
+    .eql(0)
+    .expect(headersScrollContainer.scrollLeft)
+    .eql(0);
+
+  const initialScrollLeft = await dataGrid.getScrollLeft();
+
+  // act: scroll to the left
+  await dataGrid.scrollTo(t, { x: initialScrollLeft - 120 });
+
+  // assert: the headers are in sync with the content
+  await t
+    .expect(rowsScrollContainer.scrollLeft)
+    .eql(-120)
+    .expect(headersScrollContainer.scrollLeft)
+    .eql(-120);
+
+  // act: scroll back to the right edge
+  await dataGrid.scrollTo(t, { x: initialScrollLeft });
+
+  // assert: the content must not jump to the opposite edge
+  await t
+    .expect(rowsScrollContainer.scrollLeft)
+    .eql(0)
+    .expect(headersScrollContainer.scrollLeft)
+    .eql(0);
+}).before(async () => {
+  await insertStylesheetRulesToPage(`
+    ::-webkit-scrollbar { -webkit-appearance: none; width: 14px; height: 14px; }
+    ::-webkit-scrollbar-thumb { background-color: rgba(0, 0, 0, .5); border-radius: 7px; }
+    ::-webkit-scrollbar-track { background-color: #fafafa; }
+  `);
+
+  return createWidget('dxDataGrid', {
+    rtlEnabled: true,
+    width: 700,
+    height: 300,
+    showBorders: true,
+    dataSource: getData(30, 5),
+    columns: [
+      { dataField: 'field_0', width: 300 },
+      { dataField: 'field_1', width: 300 },
+      { dataField: 'field_2', width: 300 },
+      { dataField: 'field_3', width: 300 },
+      { dataField: 'field_4', width: 300 },
+    ],
+    scrolling: {
+      useNative: true,
+    },
+  });
+}).after(async () => {
+  await removeStylesheetRulesFromPage();
 });
 
 test('Header container should have padding-right after expanding the master row with a detail grid when using native scrolling (T1004507)', async (t) => {
@@ -2037,9 +2108,6 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
 });
 
 // T1270354
-// visual: generic.light
-// visual: material.blue.light
-// visual: fluent.blue.light
 [
   { useNative: true },
   { useNative: false },
@@ -2098,6 +2166,74 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
       });
     });
 });
+
+test('Remote virtual scrolling should send one request on init when starting on a non-first page with async templates (T1326786)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
+  await t.expect(dataGrid.getScrollTop()).gt(0);
+  await t.expect(dataGrid.apiPageIndex()).eql(10);
+
+  const loadOptions = await getTestLoadOptions();
+
+  await t.expect(loadOptions).eql([{ skip: 1000, take: 100 }]);
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).testLoadOptions = [];
+  })();
+
+  return createWidget('dxDataGrid', () => ({
+    height: 1000,
+    remoteOperations: true,
+    renderAsync: false,
+    templatesRenderAsynchronously: true,
+    dataSource: new (window as any).DevExpress.data.CustomStore({
+      key: 'id',
+      load(loadOptions: any) {
+        (window as any).testLoadOptions.push({
+          skip: loadOptions.skip,
+          take: loadOptions.take,
+        });
+
+        const skip = loadOptions.skip ?? 0;
+        const take = loadOptions.take ?? 20;
+        const data: Record<string, unknown>[] = [];
+
+        for (let i = skip; i < skip + take; i += 1) {
+          data.push({ id: i, text: `item ${i}` });
+        }
+
+        return Promise.resolve({ data, totalCount: 5000 });
+      },
+    }),
+    scrolling: {
+      mode: 'virtual',
+      useNative: false,
+    },
+    paging: {
+      pageSize: 100,
+      pageIndex: 10,
+    },
+    columns: [
+      { dataField: 'id', cellTemplate: 'cell' },
+      'text',
+    ],
+    integrationOptions: {
+      templates: {
+        cell: {
+          render(e: any) {
+            setTimeout(() => {
+              ($(e.container) as any).text(e.model.value);
+              e.onRendered?.();
+            });
+          },
+        },
+      },
+    },
+  }));
+}).after(async () => ClientFunction(() => {
+  delete (window as any).testLoadOptions;
+})());
 
 fixture`Scrolling - warnings`
   .page(url(__dirname, '../../container.html'));
