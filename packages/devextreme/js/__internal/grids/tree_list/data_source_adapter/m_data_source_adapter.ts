@@ -745,9 +745,8 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     super._handlePush.apply(this, arguments as any);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public init(dataSource, remoteOperations) {
-    super.init.apply(this, arguments as any);
+  public init(dataSource) {
+    super.init(dataSource);
 
     const dataStructure = this.option('dataStructure');
 

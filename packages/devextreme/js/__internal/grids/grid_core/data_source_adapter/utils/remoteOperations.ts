@@ -1,13 +1,13 @@
 import { isObject } from '@js/core/utils/type';
 import type { Store } from '@js/data';
 
-import type { RemoteOperations, RemoteOperationsOptions } from '../../data_source_adapter/types';
+import type { RemoteOperations, RemoteOperationsOptions } from '../types';
 import { isCustomStore, isLocalStore } from './store';
 
 export function normalizeRemoteOperations(
   remoteOperations: RemoteOperations,
   store: Store,
-): RemoteOperationsOptions | false | undefined {
+): RemoteOperationsOptions {
   const allExceptGroupPagingEnabled: RemoteOperationsOptions = {
     filtering: true,
     sorting: true,
@@ -31,6 +31,10 @@ export function normalizeRemoteOperations(
   }
   if (remoteOperations === true) {
     return allExceptGroupPagingEnabled;
+  }
+
+  if (!remoteOperations) {
+    return {};
   }
 
   return remoteOperations;

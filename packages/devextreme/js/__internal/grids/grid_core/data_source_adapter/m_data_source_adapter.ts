@@ -19,12 +19,15 @@ import {
   getPageDataFromCache,
   setPageDataToCache,
 } from './m_data_source_adapter_utils';
-import type { ChangedEvent, LoadOperation, OperationTypes } from './types';
+import type {
+  ChangedEvent, LoadOperation, OperationTypes, RemoteOperationsOptions,
+} from './types';
+import { normalizeRemoteOperations } from './utils/remoteOperations';
 
 export default class DataSourceAdapter extends modules.Controller {
   protected _dataSource: any;
 
-  private _remoteOperations: any;
+  private _remoteOperations!: RemoteOperationsOptions;
 
   private _isLastPage!: boolean;
 
@@ -96,11 +99,14 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private readonly group!: (args?: any) => any;
 
-  public init(dataSource?, remoteOperations?) {
+  public init(dataSource?) {
     const that = this;
 
     that._dataSource = dataSource;
-    that._remoteOperations = remoteOperations || {};
+    that._remoteOperations = normalizeRemoteOperations(
+      this.option('remoteOperations'),
+      dataSource.store(),
+    );
 
     that._isLastPage = !dataSource.isLastPage();
     that._hasLastPage = false;
@@ -164,7 +170,7 @@ export default class DataSourceAdapter extends modules.Controller {
   /**
    * @extended: TreeLists's data_source_adapter
    */
-  protected remoteOperations() {
+  public remoteOperations(): RemoteOperationsOptions {
     return this._remoteOperations;
   }
 
