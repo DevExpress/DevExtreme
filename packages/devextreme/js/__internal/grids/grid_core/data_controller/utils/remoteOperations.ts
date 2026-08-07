@@ -1,7 +1,7 @@
 import { isObject } from '@js/core/utils/type';
 import type { Store } from '@js/data';
 
-import type { RemoteOperations, RemoteOperationsOptions } from '../types';
+import type { RemoteOperations, RemoteOperationsOptions } from '../../data_source_adapter/types';
 import { isCustomStore, isLocalStore } from './store';
 
 export function normalizeRemoteOperations(
