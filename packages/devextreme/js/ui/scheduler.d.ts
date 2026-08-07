@@ -973,6 +973,11 @@ export interface dxSchedulerOptions extends Omit<
       label?: string;
       /**
        * @docid
+       * @default undefined
+       */
+      parentIdExpr?: string;
+      /**
+       * @docid
        * @default false
        */
       useColorAsDefault?: boolean;
