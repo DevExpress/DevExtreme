@@ -23,7 +23,6 @@ export interface OperationTypes {
 export interface LoadOperation extends BaseLoadOperation {
   data?: unknown[];
   cachedStoreData?: unknown[];
-  delay?: number;
   storeLoadOptions: StoreLoadOptions & {
     isLoadingAll?: boolean;
   };

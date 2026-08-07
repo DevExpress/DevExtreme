@@ -18,4 +18,5 @@ export interface StoreLoadOptions {
 export interface LoadOperation {
   operationId: number;
   storeLoadOptions: StoreLoadOptions;
+  delay?: number;
 }

@@ -414,7 +414,7 @@ export const DataSource = Class.inherit({
     this._scheduleFailCallbacks(d);
     this._scheduleChangedCallbacks(d);
 
-    const loadOperation = this._createLoadOperation(d);
+    const loadOperation: LoadOperation = this._createLoadOperation(d);
 
     this._eventsStrategy.fireEvent('customizeStoreLoadOptions', [loadOperation]);
 
