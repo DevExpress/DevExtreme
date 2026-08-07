@@ -19,8 +19,8 @@
   --text-color-1: rgba(0, 0, 0, .6);
   --text-color-2: rgba(255, 255, 255, 1);
   --disabled-color: rgba(0, 0, 0, 0.38);
-  --background-color-1: rgba(50, 134, 56, 1);
-  --background-color-2: rgba(194, 81, 0, 1);
+  --background-color-1: var(--dxds-color-surface-utility-green-default-rest, rgba(50, 134, 56, 1));
+  --background-color-2: var(--dxds-color-surface-utility-orange-default-rest, rgba(194, 81, 0, 1));
 }
 
 ::ng-deep .dx-color-scheme-dark,
@@ -35,8 +35,8 @@
   --text-color-1: rgba(255, 255, 255, 1);
   --text-color-2: rgba(54, 54, 64, 1);
   --disabled-color: rgba(255, 255, 255, 0.38);
-  --background-color-1: rgba(159, 213, 161, 1);
-  --background-color-2: rgba(255, 181, 127, 1);
+  --background-color-1: var(--dxds-color-surface-utility-orange-default-rest, rgba(159, 213, 161, 1));
+  --background-color-2: var(--dxds-color-surface-utility-green-default-rest, rgba(255, 181, 127, 1));
 
 }
 
