@@ -25,6 +25,7 @@ import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import Selection from '@ts/ui/selection/selection';
 
 import type { DataController } from '../data_controller/data_controller';
+import type { ChangedEvent } from '../data_source_adapter/types';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
 
@@ -675,9 +676,9 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
   }
 
   // eslint-disable-next-line
-  protected _handleDataChanged(e?) {
+  protected _dataChangedHandler(e?: ChangedEvent) {
     const hasLoadOperation = this.hasLoadOperation();
-    super._handleDataChanged.apply(this, arguments as any);
+    super._dataChangedHandler(e);
 
     if (hasLoadOperation && !this._repaintChangesOnly) {
       this._selectionController.focusedItemIndex(-1);
