@@ -1154,7 +1154,7 @@ export const data = [{
   }, {
     FileName: 'Bedroom-2-9.jpg',
   }, {
-    FileName: 'Restaurant-21.jpgng',
+    FileName: 'Restaurant-21.jpg',
   },
   ],
 }, {
