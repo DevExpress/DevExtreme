@@ -977,6 +977,7 @@ type IResourceProps = React.PropsWithChildren<{
   fieldExpr?: string;
   icon?: string;
   label?: string;
+  parentIdExpr?: string;
   useColorAsDefault?: boolean;
   valueExpr?: (() => void) | string;
 }>

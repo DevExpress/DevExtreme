@@ -685,10 +685,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get resources(): { allowMultiple?: boolean, colorExpr?: string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, displayExpr?: ((resource: any) => string) | string, fieldExpr?: string, icon?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: Function | string }[] {
+    get resources(): { allowMultiple?: boolean, colorExpr?: string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, displayExpr?: ((resource: any) => string) | string, fieldExpr?: string, icon?: string, label?: string, parentIdExpr?: string, useColorAsDefault?: boolean, valueExpr?: Function | string }[] {
         return this._getOption('resources');
     }
-    set resources(value: { allowMultiple?: boolean, colorExpr?: string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, displayExpr?: ((resource: any) => string) | string, fieldExpr?: string, icon?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: Function | string }[]) {
+    set resources(value: { allowMultiple?: boolean, colorExpr?: string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, displayExpr?: ((resource: any) => string) | string, fieldExpr?: string, icon?: string, label?: string, parentIdExpr?: string, useColorAsDefault?: boolean, valueExpr?: Function | string }[]) {
         this._setOption('resources', value);
     }
 
@@ -1387,7 +1387,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() resourcesChange: EventEmitter<{ allowMultiple?: boolean, colorExpr?: string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, displayExpr?: ((resource: any) => string) | string, fieldExpr?: string, icon?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: Function | string }[]>;
+    @Output() resourcesChange: EventEmitter<{ allowMultiple?: boolean, colorExpr?: string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, displayExpr?: ((resource: any) => string) | string, fieldExpr?: string, icon?: string, label?: string, parentIdExpr?: string, useColorAsDefault?: boolean, valueExpr?: Function | string }[]>;
 
     /**
     
