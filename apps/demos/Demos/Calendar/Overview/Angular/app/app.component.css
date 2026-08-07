@@ -17,7 +17,7 @@
 }
 
 ::ng-deep .dx-calendar-cell:not(.dx-calendar-other-month) .weekend {
-  color: #3030ff;
+  color: var(--dxds-color-content-utility-indigo-default-rest, #3030ff);
 }
 
 ::ng-deep .dx-state-disabled.dx-calendar .dx-calendar-cell:not(.dx-calendar-other-month) .weekend {

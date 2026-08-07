@@ -152,7 +152,7 @@ function getCellCssClass({ date, view }: { date: Date, view: string }) {
 }
 
 .dx-calendar-cell:not(.dx-calendar-other-month) .weekend {
-  color: #3030ff;
+  color: var(--dxds-color-content-utility-indigo-default-rest, #3030ff);
 }
 
 .dx-state-disabled.dx-calendar .dx-calendar-cell:not(.dx-calendar-other-month) .weekend {

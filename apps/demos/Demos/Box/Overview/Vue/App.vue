@@ -167,7 +167,7 @@ import { DxBox, DxItem } from 'devextreme-vue/box';
 
 .small {
   height: 50px;
-  border: 1px solid lightgray;
+  border: 1px solid var(--dxds-color-border-neutral-default-rest, lightgray);
 }
 
 </style>
