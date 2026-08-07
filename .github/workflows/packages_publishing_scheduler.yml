@@ -5,24 +5,29 @@ on:
     - cron: '00 18 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
-  publish:
+  approve-manual-scheduler:
+    name: Approve manual publishing scheduler run
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    environment: packages-publishing
+    steps:
+      - name: Approve scheduler run
+        run: echo "Manual package publishing scheduler run approved"
+
+  publish:
+    needs: approve-manual-scheduler
+    if: ${{ always() && !cancelled() && (github.event_name != 'workflow_dispatch' || needs.approve-manual-scheduler.result == 'success') }}
     strategy:
       matrix:
         branch: ['24_2', '25_1', '25_2', '26_1', 'main']
-
     name: Run Packages Publishing workflow
-    steps:
-      - name: Get sources
-        uses: actions/checkout@v6
-        with:
-          sparse-checkout: |
-            README.md
-          sparse-checkout-cone-mode: false
-
-      - name: Publish Packages (${{ matrix.branch }})
-        run: |
-          gh workflow run packages_publishing.yml -f tag=daily --ref ${{ matrix.branch }}          
+    uses: ./.github/workflows/packages_publishing.yml
+    with:
+      tag: daily
+      branch: ${{ matrix.branch }}
+    secrets: inherit

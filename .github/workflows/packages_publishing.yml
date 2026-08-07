@@ -15,14 +15,42 @@ on:
         type: string
         description: Package file filter pattern
         required: false
+  workflow_call:
+    inputs:
+      tag:
+        type: string
+        default: daily
+        required: false
+      filter:
+        type: string
+        default: ''
+        required: false
+      branch:
+        type: string
+        default: ''
+        required: false
+
+permissions:
+  contents: read
+  packages: write
 
 env:
   NX_SKIP_NX_CACHE: true
-  FILTER: ${{ github.event_name == 'workflow_dispatch' && inputs.filter || '' }}
+  FILTER: ${{ inputs.filter || '' }}
   SET_TIMESTAMP_VERSION:  ${{ inputs.tag == 'daily' }}
   SBOM_PACKAGE_NAMES: devextreme,devextreme-angular,devextreme-react,devextreme-vue,devextreme-themebuilder
 
 jobs:
+  approve-package-publishing:
+    name: Approve package publishing
+    needs: build
+    if: ${{ inputs.tag == 'stable' || (github.event_name == 'workflow_dispatch' && !contains(github.workflow_ref, '/.github/workflows/packages_publishing_scheduler.yml@')) }}
+    runs-on: ubuntu-latest
+    environment: packages-publishing
+    steps:
+      - name: Approve publishing
+        run: echo "Package publishing approved"
+
   build:
     name: Build packages
     runs-on: ubuntu-latest
@@ -31,6 +59,8 @@ jobs:
     steps:
       - name: Get sources
         uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.branch || github.ref }}
 
       - name: Set up nodejs
         uses: actions/setup-node@v6
@@ -145,7 +175,8 @@ jobs:
   publish:
     name: Publish package
     runs-on: ubuntu-slim
-    needs: build
+    needs: [build, approve-package-publishing]
+    if: ${{ always() && !cancelled() && needs.build.result == 'success' && (needs.approve-package-publishing.result == 'success' || needs.approve-package-publishing.result == 'skipped') }}
     strategy:
       fail-fast: false
       matrix:
@@ -153,6 +184,8 @@ jobs:
     steps:
       - name: Get sources
         uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.branch || github.ref }}
 
       - name: Download packages
         uses: actions/download-artifact@v8
