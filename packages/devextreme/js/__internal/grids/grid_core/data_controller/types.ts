@@ -1,5 +1,7 @@
+import type { Mode } from '@js/common';
 import type { DataSource } from '@js/common/data';
 import type { DeferredObj } from '@js/core/utils/deferred';
+import type { Properties } from '@js/ui/data_grid';
 
 import type { OperationTypes } from '../data_source_adapter/types';
 
@@ -108,3 +110,7 @@ export type PagingResult = number | DeferredObj<unknown> | Promise<unknown>;
 export interface CallbackFlags {
   stopOnFalse: boolean;
 }
+
+export type RemoteOperations = Properties['remoteOperations'];
+
+export type RemoteOperationsOptions = Exclude<RemoteOperations, boolean | Mode | undefined>;
