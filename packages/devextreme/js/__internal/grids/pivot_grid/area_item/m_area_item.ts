@@ -471,8 +471,10 @@ abstract class AreaItem {
       columnWidth.push(values[i] || 0);
     }
 
-    for (let i = columnsCount; i < values.length && values; i += 1) {
-      columnWidth[columnsCount - 1] += values[i];
+    if (columnsCount) {
+      for (let i = columnsCount; i < values.length; i += 1) {
+        columnWidth[columnsCount - 1] += values[i];
+      }
     }
 
     this._colgroupElement.html('');
@@ -483,7 +485,8 @@ abstract class AreaItem {
       this._colgroupElement.append(col);
     }
 
-    this._tableWidth = columnWidth.reduce((sum, width) => sum + width, 0);
+    this._tableWidth = (columnsCount ? columnWidth : values)
+      .reduce((sum, width) => sum + width, 0);
     tableElement.style.width = `${this._tableWidth}px`;
     tableElement.style.tableLayout = 'fixed';
   }
