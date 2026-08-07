@@ -236,7 +236,6 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
       return;
     }
 
-    // MYTODO
     const callBase = super._dataChangedHandler.bind(this);
 
     this._virtualScrollController.handleDataChanged(callBase, e);
