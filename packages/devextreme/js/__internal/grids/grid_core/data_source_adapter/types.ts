@@ -1,6 +1,10 @@
 import type { Mode } from '@js/common';
 import type { Properties } from '@js/ui/data_grid';
-import type { LoadOperation as BaseLoadOperation, StoreLoadOptions } from '@ts/data/data_source/types';
+import type {
+  ChangedEvent as BaseChangedEvent,
+  LoadOperation as BaseLoadOperation,
+  StoreLoadOptions,
+} from '@ts/data/data_source/types';
 
 export type RemoteOperations = Properties['remoteOperations'];
 
@@ -39,4 +43,11 @@ export interface LoadOperation extends BaseLoadOperation {
   extra?: {
     totalCount?: number;
   }
+}
+
+export interface ChangedEvent extends BaseChangedEvent {
+  // When  virtual scrolling with scrolling.legacyMode, changeType
+  // also can be 'append', 'prepend', 'pageIndex' in case of
+  changeType?: 'loadError';
+  error?: unknown;
 }

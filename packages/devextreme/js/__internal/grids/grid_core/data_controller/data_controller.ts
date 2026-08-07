@@ -40,7 +40,7 @@ import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
 
 import type { ColumnsChanges } from '../columns_controller/types';
-import type { LoadOperation, OperationTypes } from '../data_source_adapter/types';
+import type { ChangedEvent, LoadOperation, OperationTypes } from '../data_source_adapter/types';
 import modules from '../m_modules';
 import type {
   Controllers, Module, OptionChanged,
@@ -53,7 +53,6 @@ import type {
   DataChange,
   DataSourceAdapterLike,
   Filter,
-  HandleDataChangedEvent,
   Item,
   PagingChanges,
   PagingDataSource,
@@ -157,7 +156,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   private _dataPushedHandler!: (changes: unknown) => void;
 
-  private _dataChangedHandler!: (e: HandleDataChangedEvent) => void;
+  private _dataChangedHandlerProxy!: (e: ChangedEvent) => void;
 
   public init(): void {
     this._items = [];
@@ -178,7 +177,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     this._isPaging = false;
     this._currentOperationTypes = null;
-    this._dataChangedHandler = this._handleDataChanged.bind(this);
+    this._dataChangedHandlerProxy = this._dataChangedHandler.bind(this);
     this._loadingChangedHandler = this._handleLoadingChanged.bind(this);
     this._loadErrorHandler = this._handleLoadError.bind(this);
     this._changingHandler = this._handleChanging.bind(this);
@@ -401,7 +400,11 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     if (changes.length) {
       this._changes = [];
       const repaintChangesOnly = changes.every((change) => change.repaintChangesOnly);
-      this.updateItems(changes.length === 1 ? changes[0] : { repaintChangesOnly });
+      const change: DataChange = changes.length === 1
+        ? changes[0]
+        : { changeType: 'refresh', repaintChangesOnly };
+
+      this.updateItems(change);
     }
 
     if (this._readyDeferred) {
@@ -459,6 +462,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       that._columnsController.columnsChanged.remove(updateItemsHandler);
 
       that.updateItems({
+        changeType: 'refresh',
         repaintChangesOnly: false,
         event: change?.changeTypes?.event,
         virtualColumnsScrolling: change?.changeTypes?.virtualColumnsScrolling,
@@ -527,7 +531,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended: selection
    */
-  protected _handleDataChanged(e: HandleDataChangedEvent): void {
+  protected _dataChangedHandler(e?: ChangedEvent): void {
     const that = this;
     const dataSource = that._dataSource;
     const columnsController = that._columnsController;
@@ -543,7 +547,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
           that._handleLoadingChanged(false);
         }
 
+        // @ts-expect-error e.isDelayed is set for virtual scrolling with scrolling.legacyMode
         if (isAsyncDataSourceApplying && e?.isDelayed) {
+          // @ts-expect-error e.isDelayed is set for virtual scrolling with scrolling.legacyMode
           e.isDelayed = false;
         }
 
@@ -562,7 +568,16 @@ export class DataController extends DataHelperMixin(modules.Controller) {
           that._applyFilter();
         } else {
           this._currentOperationTypes = dataSource.operationTypes();
-          that.updateItems(e, true);
+
+          const change: DataChange = e?.changeType === 'loadError'
+            ? e
+            : {
+              // use e?.changeType, because it is passed from virtual scrolling with scrolling.legacyMode
+              changeType: e?.changeType ?? 'refresh',
+              changes: e?.changes,
+            };
+
+          that.updateItems(change, true);
         }
       }).fail(() => {
         that._isDataSourceApplying = false;
@@ -1114,7 +1129,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     let items;
     const dataSource = this._dataSource;
 
-    change.changeType ??= 'refresh';
     change.operationTypes ??= this._currentOperationTypes;
     this._currentOperationTypes = null;
 
@@ -1180,7 +1194,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
   }
 
-  public updateItems(change: DataChange = {}, isDataChanged?: boolean) {
+  public updateItems(
+    change: DataChange = { changeType: 'refresh' },
+    isDataChanged?: boolean,
+  ) {
     change.isFirstRender = !this.changed.fired();
 
     if (this._repaintChangesOnly !== undefined) {
@@ -1383,7 +1400,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     if (!dataSource && oldDataSource) {
       oldDataSource.cancelAll();
-      oldDataSource.changed.remove(that._dataChangedHandler);
+      oldDataSource.changed.remove(that._dataChangedHandlerProxy);
       oldDataSource.loadingChanged.remove(that._loadingChangedHandler);
       oldDataSource.loadError.remove(that._loadErrorHandler);
       oldDataSource.customizeStoreLoadOptions.remove(that._customizeStoreLoadOptionsHandler);
@@ -1403,7 +1420,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       that._isLoading = !dataSource.isLoaded();
       that._needApplyFilter = true;
       that._isAllDataTypesDefined = that._columnsController.isAllDataTypesDefined();
-      dataSource.changed.add(that._dataChangedHandler);
+      dataSource.changed.add(that._dataChangedHandlerProxy);
       dataSource.loadingChanged.add(that._loadingChangedHandler);
       dataSource.loadError.add(that._loadErrorHandler);
       dataSource.customizeStoreLoadOptions.add(that._customizeStoreLoadOptionsHandler);
@@ -1652,7 +1669,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
           that._repaintChangesOnly = undefined;
         }).done(d.resolve).fail(d.reject);
       } else {
-        that.updateItems({ repaintChangesOnly: options.changesOnly });
+        that.updateItems({
+          changeType: 'refresh',
+          repaintChangesOnly: options.changesOnly,
+        });
         d.resolve();
       }
     });
@@ -1683,7 +1703,11 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     rowIndexes = Array.isArray(rowIndexes) ? rowIndexes : [rowIndexes];
 
     if (rowIndexes.length > 1 || isDefined(rowIndexes[0])) {
-      this.updateItems({ changeType: 'update', rowIndices: rowIndexes, isFullUpdate: !changesOnly });
+      this.updateItems({
+        changeType: 'update',
+        rowIndices: rowIndexes,
+        isFullUpdate: !changesOnly,
+      });
     }
   }
 

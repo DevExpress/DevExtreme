@@ -615,6 +615,7 @@ class EditingControllerImpl extends modules.ViewController {
     });
 
     dataController.updateItems({
+      changeType: 'refresh',
       repaintChangesOnly: true,
       isLiveUpdate: false,
       isOptionChanged: true,
@@ -1983,6 +1984,7 @@ class EditingControllerImpl extends modules.ViewController {
     const dataController = this._dataController;
 
     dataController.updateItems({
+      changeType: 'refresh',
       repaintChangesOnly: this.option('repaintChangesOnly'),
     });
   }
