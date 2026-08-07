@@ -58,7 +58,7 @@ export type FilterExpression = ((data: UserData) => boolean) | unknown[];
 
 export type Filter = FilterExpression | null | undefined;
 
-export interface HandleDataChangedArguments {
+export interface HandleDataChangedEvent {
   changeType?: 'refresh' | 'update' | 'loadError';
   isDelayed?: boolean;
   isLiveUpdate?: boolean;
@@ -97,7 +97,7 @@ interface UpdateChange extends DataChangeBase {
 export type DataChange = | UpdateChange
   | SelectionChange
   | FocusedRowChange
-  | (DataChangeBase & HandleDataChangedArguments)
+  | (DataChangeBase & HandleDataChangedEvent)
   | (DataChangeBase & { changeType: 'pageIndex' })
   | (DataChangeBase & { changeType?: 'refresh', isLiveUpdate: boolean; isOptionChanged: boolean })
   | (DataChangeBase & { changeType?: 'refresh', event: unknown; virtualColumnsScrolling: boolean })

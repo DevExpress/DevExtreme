@@ -22,6 +22,8 @@ import {
 } from '@js/core/utils/type';
 import commonUtils from '@ts/core/utils/m_common';
 
+import type { LoadOperation } from './types';
+
 export const DataSource = Class.inherit({
   ctor(options) {
     // @ts-expect-error
@@ -470,7 +472,7 @@ export const DataSource = Class.inherit({
     }
   },
 
-  _createLoadOperation(deferred) {
+  _createLoadOperation(deferred): LoadOperation {
     const operationId = this._operationManager.add(deferred);
     const storeLoadOptions = this._createStoreLoadOptions();
 

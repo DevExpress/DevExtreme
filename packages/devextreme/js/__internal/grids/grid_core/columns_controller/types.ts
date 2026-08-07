@@ -26,3 +26,24 @@ export interface Column extends ColumnBase {
   rowspan?: number;
   colspan?: number;
 }
+
+export interface ColumnsChanges {
+  changeTypes: {
+    sorting?: boolean;
+    grouping?: boolean;
+    groupExpanding?: boolean;
+    columns?: boolean;
+    filtering?: boolean;
+    event?: unknown;
+    virtualColumnsScrolling?: boolean;
+    length: number;
+  };
+  optionNames: {
+    [name in keyof Column]?: boolean;
+  } & {
+    all?: boolean;
+    length: number;
+  };
+  columnIndex?: number;
+  columnIndices?: number[];
+}

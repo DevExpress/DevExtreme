@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-dynamic-delete */
 import ArrayStore from '@js/common/data/array_store';
 import { applyBatch } from '@js/common/data/array_utils';
+import type { Callback } from '@js/core/utils/callbacks';
 import Callbacks from '@js/core/utils/callbacks';
 import { getKeyHash } from '@js/core/utils/common';
 import { Deferred, when } from '@js/core/utils/deferred';
@@ -18,7 +19,7 @@ import {
   getPageDataFromCache,
   setPageDataToCache,
 } from './m_data_source_adapter_utils';
-import type { OperationTypes } from './types';
+import type { LoadOperation, OperationTypes } from './types';
 
 export default class DataSourceAdapter extends modules.Controller {
   protected _dataSource: any;
@@ -71,7 +72,7 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private loadError: any;
 
-  private customizeStoreLoadOptions: any;
+  private customizeStoreLoadOptions!: Callback<[LoadOperation]>;
 
   private changing: any;
 
@@ -79,7 +80,7 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private _dataChangedHandler!: (e: any) => any;
 
-  private _customizeStoreLoadOptionsHandler!: (e: any) => any;
+  private _customizeStoreLoadOptionsHandlerProxy!: (e: LoadOperation) => void;
 
   private _dataLoadedHandler!: (e: any) => any;
 
@@ -118,7 +119,7 @@ export default class DataSourceAdapter extends modules.Controller {
     that.pushed = Callbacks();
 
     that._dataChangedHandler = that._handleDataChanged.bind(that);
-    that._customizeStoreLoadOptionsHandler = that._handleCustomizeStoreLoadOptions.bind(that);
+    that._customizeStoreLoadOptionsHandlerProxy = that._customizeStoreLoadOptionsHandler.bind(that);
     that._dataLoadedHandler = that._handleDataLoaded.bind(that);
     that._loadingChangedHandler = that._handleLoadingChanged.bind(that);
     that._loadErrorHandler = that._handleLoadError.bind(that);
@@ -126,7 +127,7 @@ export default class DataSourceAdapter extends modules.Controller {
     that._changingHandler = that._handleChanging.bind(that);
 
     dataSource.on('changed', that._dataChangedHandler);
-    dataSource.on('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandler);
+    dataSource.on('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandlerProxy);
     dataSource.on('customizeLoadResult', that._dataLoadedHandler);
     dataSource.on('loadingChanged', that._loadingChangedHandler);
     dataSource.on('loadError', that._loadErrorHandler);
@@ -148,7 +149,7 @@ export default class DataSourceAdapter extends modules.Controller {
     const store = dataSource.store();
 
     dataSource.off('changed', that._dataChangedHandler);
-    dataSource.off('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandler);
+    dataSource.off('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandlerProxy);
     dataSource.off('customizeLoadResult', that._dataLoadedHandler);
     dataSource.off('loadingChanged', that._loadingChangedHandler);
     dataSource.off('loadError', that._loadErrorHandler);
@@ -401,7 +402,7 @@ export default class DataSourceAdapter extends modules.Controller {
     }
   }
 
-  protected _handleCustomizeStoreLoadOptions(options) {
+  protected _customizeStoreLoadOptionsHandler(options: LoadOperation): void {
     this._handleDataLoading(options);
     if (!(options.data?.length === 0)) {
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
@@ -412,7 +413,7 @@ export default class DataSourceAdapter extends modules.Controller {
   /**
    * @extended: virtual_scrolling
    */
-  protected _handleDataLoading(options) {
+  protected _handleDataLoading(options: LoadOperation): void {
     const dataSource = this._dataSource;
     const lastLoadOptions = this._lastLoadOptions;
 
@@ -837,7 +838,7 @@ export default class DataSourceAdapter extends modules.Controller {
       that._scheduleCustomLoadCallbacks(d);
       dataSource._scheduleLoadCallbacks(d);
 
-      that._handleCustomizeStoreLoadOptions(loadResult);
+      that._customizeStoreLoadOptionsHandler(loadResult);
       executeTask(() => {
         if (!dataSource.store()) {
           return d.reject('canceled');

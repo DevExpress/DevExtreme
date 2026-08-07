@@ -328,7 +328,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
   /**
    * @extended: TreeLists's data_source_adapter
    */
-  protected _handleCustomizeStoreLoadOptions(options) {
+  protected _customizeStoreLoadOptionsHandler(options): void {
     const rootValue: any = this.option('rootValue');
     const parentIdExpr = this.option('parentIdExpr');
     let { parentIds } = options.storeLoadOptions;
@@ -337,7 +337,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
       options.isCustomLoading = false;
     }
 
-    super._handleCustomizeStoreLoadOptions.apply(this, arguments as any);
+    super._customizeStoreLoadOptionsHandler.apply(this, arguments as any);
 
     if (options.remoteOperations.filtering && !options.isCustomLoading) {
       if (isFullBranchFilterMode(this) && options.cachedStoreData || !options.storeLoadOptions.filter) {
