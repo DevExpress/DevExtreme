@@ -1,32 +1,11 @@
 import type { DataSource } from '@js/common/data';
+import type { SearchOperation } from '@js/common/data.types';
+import type { ScalarFilterValue } from '@js/common/grids';
 import type { DeferredObj } from '@js/core/utils/deferred';
 
 import type { ChangedEvent, OperationTypes } from '../data_source_adapter/types';
 
-export interface SyncPagingOptions {
-  paginate?: boolean;
-  pageSize?: number;
-  pageIndex?: number;
-}
-
-export interface PagingChanges {
-  hasChanges: boolean;
-  isPaginateChanged: boolean;
-  isPageSizeChanged: boolean;
-  isPageIndexChanged: boolean;
-}
-
-/**
- * Either a raw DataSource or a DataSourceAdapter — the two are not
- * interchangeable: the adapter's `pageSize()` returns 0 while paginate is off,
- * and its `pageIndex()` is routed through virtual scrolling.
- */
-export interface PagingDataSource {
-  paginate: (value?: boolean) => boolean | undefined;
-  pageSize: (value?: number) => number | undefined;
-  pageIndex: (value?: number) => number | undefined;
-  requireTotalCount: (value?: boolean) => boolean | undefined;
-}
+/** data */
 
 export interface DataSourceAdapterLike {
   _dataSource: DataSource;
@@ -51,10 +30,6 @@ export interface Item {
   isSelected?: boolean;
   removed?: boolean;
 }
-
-export type FilterExpression = ((data: UserData) => boolean) | unknown[];
-
-export type Filter = FilterExpression | null | undefined;
 
 interface DataChangeBase {
   isFirstRender?: boolean;
@@ -95,10 +70,73 @@ export type DataChange = | UpdateChange
   | (DataChangeBase & { changeType: 'refresh', event: unknown; virtualColumnsScrolling: boolean })
   | (DataChangeBase & { changeType: 'refresh', useProcessedItemsCache: boolean; cancelEmptyChanges: boolean });
 
-export type PagingOptionName = 'pageIndex' | 'pageSize';
-
-export type PagingResult = number | DeferredObj<unknown> | Promise<unknown>;
+/** callbacks */
 
 export interface CallbackFlags {
   stopOnFalse: boolean;
 }
+
+/** paging */
+
+export interface SyncPagingOptions {
+  paginate?: boolean;
+  pageSize?: number;
+  pageIndex?: number;
+}
+
+export interface PagingChanges {
+  hasChanges: boolean;
+  isPaginateChanged: boolean;
+  isPageSizeChanged: boolean;
+  isPageIndexChanged: boolean;
+}
+
+/**
+ * Either a raw DataSource or a DataSourceAdapter — the two are not
+ * interchangeable: the adapter's `pageSize()` returns 0 while paginate is off,
+ * and its `pageIndex()` is routed through virtual scrolling.
+ */
+export interface PagingDataSource {
+  paginate: (value?: boolean) => boolean | undefined;
+  pageSize: (value?: number) => number | undefined;
+  pageIndex: (value?: number) => number | undefined;
+  requireTotalCount: (value?: boolean) => boolean | undefined;
+}
+
+export type PagingOptionName = 'pageIndex' | 'pageSize';
+
+export type PagingResult = number | DeferredObj<unknown> | Promise<unknown>;
+
+/** filter */
+
+export type FilterCombiner = 'and' | 'or';
+
+/**
+ * The operator may be omitted — `=` is implied. Only data layer operations
+ * are allowed here: column operations such as `between` or `anyof` belong to
+ * `filterValue` and are expanded into these before they reach the store.
+ */
+export type BinaryDataFilterExpression = [string, ScalarFilterValue]
+  | [string, SearchOperation, ScalarFilterValue];
+
+/**
+ * A binary expression, a negation, or a group of expressions.
+ * The combiner between neighbors may be omitted — `and` is implied.
+ */
+export type DataFilterExpression = BinaryDataFilterExpression
+  | ['!', DataFilterExpression]
+  | [DataFilterExpression, ...(FilterCombiner | DataFilterExpression)[]];
+
+export type DataFilterPredicate = (data: UserData) => boolean;
+
+/**
+ * The grid-internal "match nothing" filter. Not a data layer filter expression:
+ * the data controller intercepts it and resolves the load with an empty result.
+ */
+export type MatchNothingFilter = ['!'];
+
+export type DataFilter = DataFilterExpression
+  | DataFilterPredicate
+  | MatchNothingFilter
+  | null
+  | undefined;

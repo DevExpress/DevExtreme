@@ -14,8 +14,6 @@
 /* eslint-disable max-depth */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-plusplus */
-/* eslint-disable prefer-rest-params */
-/* eslint-disable prefer-spread */
 import type { DataSource } from '@js/common/data';
 import $ from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
@@ -49,10 +47,11 @@ import gridCoreUtils from '../m_utils';
 import type { VirtualScrollController } from '../virtual_scrolling/m_virtual_scrolling_core';
 import { DataHelperMixin } from './data_helper_mixin';
 import type {
+  BinaryDataFilterExpression,
   CallbackFlags,
   DataChange,
+  DataFilter,
   DataSourceAdapterLike,
-  Filter,
   Item,
   PagingChanges,
   PagingDataSource,
@@ -351,16 +350,16 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return adapter ? adapter._dataSource : null;
   }
 
-  public getCombinedFilter(returnDataField?: boolean): Filter {
+  public getCombinedFilter(returnDataField?: boolean): DataFilter {
     return this.combinedFilter(undefined, returnDataField);
   }
 
-  private combinedFilter(filter: Filter, returnDataField?: boolean): Filter {
+  private combinedFilter(filter: DataFilter, returnDataField?: boolean): DataFilter {
     if (!this._dataSource) {
       return filter;
     }
 
-    let combined: Filter = filter ?? this._dataSource.filter();
+    let combined: DataFilter = filter ?? this._dataSource.filter();
 
     const isColumnsTypesDefined = this._columnsController.isDataSourceApplied()
       || this._columnsController.isAllDataTypesDefined();
@@ -607,8 +606,8 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this.pushed.fire(changes);
   }
 
-  public fireError(...args: any[]) {
-    this.dataErrorOccurred.fire(errors.Error.apply(errors, args));
+  public fireError(...args: unknown[]) {
+    this.dataErrorOccurred.fire(errors.Error(...args));
   }
 
   private applyPagingOptions(dataSource: PagingDataSource): PagingChanges {
@@ -1262,7 +1261,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended: filter_row, filter_sync, header_filter, search
    */
-  protected _calculateAdditionalFilter(): Filter {
+  protected _calculateAdditionalFilter(): DataFilter {
     return null;
   }
 
@@ -1294,23 +1293,24 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._isFilterApplying = false;
   }
 
-  private filter(filterExpr) {
-    const dataSource = this._dataSource;
-    const filter = dataSource?.filter();
-    const langParams = dataSource?.loadOptions?.()?.langParams;
+  private filter(): DataFilter;
+  private filter(filterExpr: DataFilter): void;
+  private filter(...binaryFilterExpr: BinaryDataFilterExpression): void;
+  private filter(...filterArgs: [] | [DataFilter] | BinaryDataFilterExpression): DataFilter | void {
+    const filter: DataFilter = this._dataSource?.filter();
+    const langParams = this._dataSource?.loadOptions?.()?.langParams;
 
-    if (arguments.length === 0) {
+    if (filterArgs.length === 0) {
       return filter;
     }
 
-    filterExpr = arguments.length > 1 ? Array.prototype.slice.call(arguments, 0) : filterExpr;
+    const filterExpr: DataFilter = filterArgs.length === 1 ? filterArgs[0] : filterArgs;
 
     if (gridCoreUtils.equalFilterParameters(filter, filterExpr, langParams)) {
       return;
     }
-    if (dataSource) {
-      dataSource.filter(filterExpr);
-    }
+
+    this._dataSource?.filter(filterExpr);
     this._applyFilter();
   }
 
