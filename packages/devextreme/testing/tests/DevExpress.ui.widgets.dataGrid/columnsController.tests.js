@@ -42,10 +42,10 @@ const createMockDataSource = function(items, loadOptions) {
     };
 };
 
-const createDataSource = function(context, config, remoteOperations) {
+const createDataSource = function(context, config) {
     const dataSource = new DataSource(config);
     const dataAdapter = dataSourceAdapter.create(context);
-    dataAdapter.init(dataSource, remoteOperations);
+    dataAdapter.init(dataSource);
     return dataAdapter;
 };
 
@@ -3102,9 +3102,11 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
         const items = [{ Column1: 'Test1', Column2: '2012/01/01' }, { Column1: 'Test1', Column2: '2013/05/04' }, { Column1: 'Test2', Column2: '2014/03/05' }];
 
         this.applyOptions({
-            columns: ['Column1', { dataField: 'Column2', dataType: 'date' }]
+            columns: ['Column1', { dataField: 'Column2', dataType: 'date' }],
+            remoteOperations: { filtering: true, sorting: true, paging: true }
         });
 
+        // mytodo
         const dataSource = createDataSource(this, {
             group: 'Column1',
             load: function(options) {
@@ -3113,7 +3115,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
             totalCount: function() {
                 return 3;
             }
-        }, { filtering: true, sorting: true, paging: true });
+        });
 
         dataSource.load();
 
