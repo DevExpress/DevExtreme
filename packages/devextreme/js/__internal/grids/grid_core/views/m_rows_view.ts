@@ -29,6 +29,7 @@ import type { ValidatingController } from '@ts/grids/grid_core/validating/m_vali
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/const';
+import { isLocalStore } from '../data_controller/utils/store';
 import type { EditingController } from '../editing/m_editing';
 import gridCoreUtils from '../m_utils';
 import { CLASSES } from '../sticky_columns/const';
@@ -356,7 +357,7 @@ export class RowsView extends ColumnsView {
       $element.append('<div>');
     }
     if (force || !that._loadPanel) {
-      that._renderLoadPanel($element, $element.parent(), that._dataController.isLocalStore());
+      that._renderLoadPanel($element, $element.parent(), isLocalStore(that._dataController.store()));
     }
 
     if ((force || !that.getScrollable()) && that._dataController.isLoaded()) {
@@ -1239,7 +1240,7 @@ export class RowsView extends ColumnsView {
       return;
     }
 
-    if (!loadPanel && messageText !== undefined && dataController.isLocalStore() && loadPanelOptions.enabled === 'auto' && $element) {
+    if (!loadPanel && messageText !== undefined && isLocalStore(dataController.store()) && loadPanelOptions.enabled === 'auto' && $element) {
       that._renderLoadPanel($element, $element.parent());
       loadPanel = that._loadPanel;
     }
