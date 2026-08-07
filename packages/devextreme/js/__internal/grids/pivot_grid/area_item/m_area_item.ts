@@ -485,8 +485,6 @@ abstract class AreaItem {
       this._colgroupElement.append(col);
     }
 
-    // T1333383: a cell-less table still has to span the requested width,
-    // otherwise the area cannot be scrolled in sync with the other areas
     this._tableWidth = (columnsCount ? columnWidth : values)
       .reduce((sum, width) => sum + width, 0);
     tableElement.style.width = `${this._tableWidth}px`;
