@@ -60,7 +60,6 @@ import type {
   PagingResult,
 } from './types';
 import { resolvePaginate, syncPaging } from './utils/paging';
-import { normalizeRemoteOperations } from './utils/remoteOperations';
 import { generateRowValues } from './utils/row_values';
 
 export class DataController extends DataHelperMixin(modules.Controller) {
@@ -1374,24 +1373,12 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _getDataSourceAdapter(): any {}
 
-  /**
-   * @extended: DataGrid's summary
-   */
-  protected _createDataSourceAdapterCore(dataSource, remoteOperations) {
+  protected _createDataSourceAdapter(dataSource) {
     const dataSourceAdapterProvider = this._getDataSourceAdapter();
     const dataSourceAdapter = dataSourceAdapterProvider.create(this.component);
 
-    dataSourceAdapter.init(dataSource, remoteOperations);
+    dataSourceAdapter.init(dataSource);
     return dataSourceAdapter;
-  }
-
-  private _createDataSourceAdapter(dataSource) {
-    const remoteOperations = normalizeRemoteOperations(
-      this.option('remoteOperations'),
-      dataSource.store(),
-    );
-
-    return this._createDataSourceAdapterCore(dataSource, remoteOperations);
   }
 
   private setDataSource(dataSource) {
