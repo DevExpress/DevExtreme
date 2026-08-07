@@ -17,8 +17,6 @@
 /* eslint-disable prefer-rest-params */
 /* eslint-disable prefer-spread */
 import type { DataSource } from '@js/common/data';
-import ArrayStore from '@js/common/data/array_store';
-import { CustomStore } from '@js/common/data/custom_store';
 import $ from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
 import { deferRender, equalByValue } from '@js/core/utils/common';
@@ -26,7 +24,7 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import { isDefined, isObject } from '@js/core/utils/type';
+import { isDefined } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
 import { findChanges } from '@ts/core/utils/m_array_compare';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
@@ -62,6 +60,7 @@ import type {
   PagingResult,
 } from './types';
 import { resolvePaginate, syncPaging } from './utils/paging';
+import { normalizeRemoteOperations } from './utils/remoteOperations';
 import { generateRowValues } from './utils/row_values';
 
 export class DataController extends DataHelperMixin(modules.Controller) {
@@ -1354,33 +1353,11 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return dataSourceAdapter;
   }
 
-  public isLocalStore(store = this.store()) {
-    return store instanceof ArrayStore;
-  }
-
-  private isCustomStore(store) {
-    store = store || this.store();
-    return store instanceof CustomStore;
-  }
-
   private _createDataSourceAdapter(dataSource) {
-    let remoteOperations: any = this.option('remoteOperations');
-    const store = dataSource.store();
-    const enabledRemoteOperations = {
-      filtering: true, sorting: true, paging: true, grouping: true, summary: true,
-    };
-
-    // @ts-expect-error
-    if (isObject(remoteOperations) && remoteOperations.groupPaging) {
-      remoteOperations = extend({}, enabledRemoteOperations, remoteOperations);
-    }
-
-    if (remoteOperations === 'auto') {
-      remoteOperations = this.isLocalStore(store) || this.isCustomStore(store) ? {} : { filtering: true, sorting: true, paging: true };
-    }
-    if (remoteOperations === true) {
-      remoteOperations = enabledRemoteOperations;
-    }
+    const remoteOperations = normalizeRemoteOperations(
+      this.option('remoteOperations'),
+      dataSource.store(),
+    );
 
     return this._createDataSourceAdapterCore(dataSource, remoteOperations);
   }
