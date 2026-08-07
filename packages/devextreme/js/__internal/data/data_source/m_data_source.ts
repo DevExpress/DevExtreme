@@ -20,9 +20,10 @@ import { create } from '@js/core/utils/queue';
 import {
   isBoolean, isDefined, isEmptyObject, isNumeric, isObject, isString,
 } from '@js/core/utils/type';
+import type { StoreChange } from '@js/data/store';
 import commonUtils from '@ts/core/utils/m_common';
 
-import type { ChangedEvent, DataChange, LoadOperation } from './types';
+import type { ChangedEvent, LoadOperation } from './types';
 
 export const DataSource = Class.inherit({
   ctor(options) {
@@ -432,7 +433,7 @@ export const DataSource = Class.inherit({
     });
   },
 
-  _onPush(changes: DataChange[]) {
+  _onPush(changes: StoreChange[]) {
     if (this._reshapeOnPush) {
       this.load();
     } else {

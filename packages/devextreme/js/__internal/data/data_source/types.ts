@@ -17,8 +17,6 @@ export interface LoadOperation {
   delay?: number;
 }
 
-export type DataChange<TItem = unknown, TKey = unknown> = StoreChange<TItem, TKey>;
-
 export interface ChangedEvent {
-  changes?: DataChange[];
+  changes?: StoreChange[];
 }
