@@ -123,6 +123,13 @@
             "matchPackageNames": [
                 "*"
             ]
+        },
+        {
+            "matchPackageNames": [
+                "@devexpress/design-tokens-internal"
+            ],
+            "automerge": false,
+            "minimumReleaseAge": null
         }
     ],
     "lockFileMaintenance": {
