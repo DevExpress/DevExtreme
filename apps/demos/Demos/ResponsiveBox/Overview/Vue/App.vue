@@ -114,24 +114,24 @@ const screen = ((width: number) => ((width < 700) ? 'sm' : 'lg')) as unknown as 
 }
 
 .header {
-  background-color: #C6B1DE;
+  background-color: var(--dxds-color-surface-utility-purple-default-rest, #C6B1DE);
   text-align: center;
 }
 
 .content {
-  background-color: #EDBBE7;
+  background-color: var(--dxds-color-surface-utility-pink-default-rest, #EDBBE7);
 }
 
 .left-side-bar {
-  background-color: #F9E2AE;
+  background-color: var(--dxds-color-surface-utility-yellow-default-rest, #F9E2AE);
 }
 
 .right-side-bar {
-  background-color: #9FD89F;
+  background-color: var(--dxds-color-surface-utility-green-default-rest, #9FD89F);
 }
 
 .footer {
-  background-color: #B4D6FA;
+  background-color: var(--dxds-color-surface-utility-blue-default-rest, #B4D6FA);
 }
 
 .item {
@@ -142,6 +142,6 @@ const screen = ((width: number) => ((width < 700) ? 'sm' : 'lg')) as unknown as 
   font-size: 20px;
   padding-top: 10px;
   text-align: center;
-  color: #000;
+  color: var(--dxds-color-content-neutral-default-on-surface-rest, #000);
 }
 </style>
