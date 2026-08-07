@@ -98,7 +98,7 @@ const formatDate = new Intl.DateTimeFormat('en-US').format;
 
 #gridContainer tr.notes-row td {
   height: 70px;
-  color: #999;
+  color: var(--dxds-color-content-neutral-deep-rest, #999);
 }
 
 .dark #gridContainer tr.notes-row td {
@@ -106,7 +106,7 @@ const formatDate = new Intl.DateTimeFormat('en-US').format;
 }
 
 #gridContainer tbody.dx-state-hover {
-  background-color: #ebebeb;
+  background-color: var(--dxds-color-surface-neutral-default-hovered, #ebebeb);
 }
 
 .dark #gridContainer tbody.dx-state-hover {
@@ -118,10 +118,10 @@ const formatDate = new Intl.DateTimeFormat('en-US').format;
 }
 
 .dark #gridContainer tbody.dx-state-hover tr.main-row td {
-  color: #ccc;
+  color: var(--dxds-color-surface-neutral-default-hovered, #ccc);
 }
 
 #gridContainer tbody.dx-state-hover tr.notes-row td {
-  color: #888;
+  color: var(--dxds-color-content-neutral-deep-rest, #888);
 }
 </style>
