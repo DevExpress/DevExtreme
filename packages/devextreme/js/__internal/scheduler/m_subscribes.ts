@@ -32,9 +32,9 @@ const isAllDay = (
   return adapter.allDay;
 };
 
-// NOTE: The all day panel exists in vertical views only. In the other views
-// an all day appointment is rendered in the date table, so it is resized
-// by the cell duration and not by whole days.
+// NOTE: Only in vertical views an all day appointment lives in the all day panel
+// and is resized by whole days. In timeline views it is rendered in the date table
+// and resized by the cell duration; month and timelineMonth are day-based anyway.
 const isAllDayPanelAppointment = (
   scheduler: Scheduler,
   appointmentData: SafeAppointment,
