@@ -1224,6 +1224,12 @@
     },
     "build:npm:scss": {
       "executor": "devextreme-nx-infra-plugin:scss-assemble",
+      "dependsOn": [
+        {
+          "projects": ["devextreme-scss"],
+          "target": "build:tokens"
+        }
+      ],
       "options": {
         "scssPackagePath": "../devextreme-scss",
         "outputDir": "./artifacts/npm/devextreme/scss"
