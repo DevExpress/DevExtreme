@@ -12,6 +12,10 @@
         "color-function-notation": "legacy",
         "declaration-block-no-redundant-longhand-properties": null,
         "declaration-no-important": true,
+        "declaration-property-value-disallowed-list": [
+            { "/.*/": ["/var\\(\\s*--dxds-/"] },
+            { "message": "Read a design token through the ds bridge (ds.$name), not var(--dxds-…): the bridge fails the build on an unknown name, a raw custom property compiles and degrades silently. The public --dx-* properties are unaffected." }
+        ],
         "font-family-name-quotes": "always-unless-keyword",
         "@stylistic/indentation": [2, { "ignore": ["inside-parens"] }],
         "keyframes-name-pattern": "dx-[a-z0-9-]+",
