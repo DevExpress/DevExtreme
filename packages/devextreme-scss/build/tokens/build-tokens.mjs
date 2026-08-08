@@ -4,6 +4,11 @@ import { createRequire } from 'node:module';
 import { readdir, readFile, rm } from 'node:fs/promises';
 import StyleDictionary from 'style-dictionary';
 import { registerTransforms } from './transforms.mjs';
+import {
+  buildAvailableNames,
+  collectCustomPropertyReferences,
+  collectTokenReferences,
+} from './consumed-tokens.ts';
 
 // Suppress ONE known noisy sd-transforms warning about unresolvable
 // {font-weight…} references inside math expressions. Scoped to console.warn
@@ -123,6 +128,9 @@ const tokensDir = path.dirname(require.resolve('@devexpress/design-tokens-intern
 const buildPath = `${path.resolve(dirname, '../../scss/_design-system')}/`;
 
 const THEME_NAME = 'fluent';
+const THEME_FOLDER = 'fluent-next';
+
+const themePath = path.resolve(dirname, `../../scss/widgets/${THEME_FOLDER}`);
 
 const FLUENT_PALETTES = [
   'blue',
@@ -359,6 +367,64 @@ async function validateReferences() {
   return files.length;
 }
 
+async function collectThemeStyleSheets() {
+  const entries = await readdir(themePath, { withFileTypes: true, recursive: true });
+
+  return entries
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.scss'))
+    .map((entry) => path.join(entry.parentPath, entry.name));
+}
+
+/*
+ * Every `ds.$…` a widget reads must still exist in the token package. validateReferences() above
+ * only checks the generated output against itself, so a release that deletes a token surfaces much
+ * later, as a Sass "Undefined variable" on the first bundle that touches it — one name per rebuild,
+ * with nothing pointing at the bump as the cause.
+ *
+ * The check reads the package's flat index instead of the generated bridge: the two carry the same
+ * 1578 names, but the index also carries the version for the message and needs no generated output.
+ * Reusing getComponentThemeFiles() is what keeps the scope from drifting away from the generator.
+ */
+async function validateConsumedTokens() {
+  const { version, tokens } = JSON.parse(
+    await readFile(path.join(tokensDir, 'tokens.flat.json'), 'utf-8'),
+  );
+  const availableNames = buildAvailableNames(
+    Object.keys(tokens),
+    new Set(getComponentThemeFiles()),
+  );
+
+  const referenced = new Map();
+
+  for (const file of await collectThemeStyleSheets()) {
+    const content = await readFile(file, 'utf-8');
+    const found = [
+      ...collectTokenReferences(content).map((name) => [name, `ds.$${name}`]),
+      ...collectCustomPropertyReferences(content).map((name) => [name, `var(--dxds-${name})`]),
+    ];
+
+    for (const [name, reference] of found) {
+      if (!referenced.has(name)) {
+        referenced.set(name, { file, reference });
+      }
+    }
+  }
+
+  const missing = [...referenced].filter(([name]) => !availableNames.has(name));
+
+  if (missing.length > 0) {
+    const details = missing
+      .map(([, { file, reference }]) => `  ${reference} (first used in ${path.relative(themePath, file)})`)
+      .join('\n');
+
+    throw new Error(
+      `Tokens used by ${THEME_FOLDER} but absent from @devexpress/design-tokens-internal ${version}:\n${details}`,
+    );
+  }
+
+  return referenced.size;
+}
+
 async function build() {
   await rm(buildPath, { recursive: true, force: true });
 
@@ -372,8 +438,10 @@ async function build() {
   }
 
   const fileCount = await validateReferences();
+  const consumedCount = await validateConsumedTokens();
 
   console.log(`Design tokens generated: ${fileCount} files in ${buildPath}`);
+  console.log(`Design tokens consumed by ${THEME_FOLDER}: ${consumedCount} verified against the package`);
 }
 
 await build();
