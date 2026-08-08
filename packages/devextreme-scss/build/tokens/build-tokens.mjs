@@ -181,10 +181,13 @@ const getModeFiles = (mode) => [
   `semantic/colors/${THEME_NAME}/${mode}`,
 ];
 
-const getComponentThemeFiles = () => [
-  ...getModeFiles('light'),
-  `components/core/theme/${THEME_NAME}`,
-];
+/*
+ * Source files behind the SCSS bridge. The component tier is deliberately absent: its 601 tokens
+ * are aliases onto the semantic roles, the theme reads the roles directly, and emitting the tier
+ * put 601 unreferenced custom properties into every theme stylesheet. Leaving it out of the bridge
+ * also turns `ds.$button-color-bg-rest` into a Sass error rather than a dangling var().
+ */
+const getBridgeFiles = () => getModeFiles('light');
 
 StyleDictionary.registerFormat({
   name: 'scssToCss',
@@ -299,21 +302,10 @@ const createModeConfig = (mode) => createConfig(mode, getModeFiles(mode), [
   },
 ]);
 
-const createComponentThemeConfig = () => createConfig('components-theme', getComponentThemeFiles(), [
-  {
-    destination: `${THEME_NAME}/components/theme.scss`,
-    format: 'css/variables',
-    filter: (token) => normalizeFilePath(token).includes(`components/core/theme/${THEME_NAME}.json`),
-    options: FILE_OPTIONS,
-  },
-]);
-
-// All token names for the SCSS bridge file: the common + light-mode + component
-// *theme* (color) set. Component *size* tokens are intentionally excluded — fluent-next
-// maps sizes onto the base scales (spacing/font-size/border-radius/…), so no widget
-// references the component `*-layout-*` tokens and they are not emitted (see
-// widgets/fluent-next/_design-system.scss).
-const createDsConfig = () => createConfig('ds', getComponentThemeFiles(), [
+// Component *size* tokens are excluded for the same reason as the component theme: fluent-next
+// maps sizes onto the base scales (spacing/font-size/border-radius/…), so no widget would read the
+// `*-layout-*` names (see widgets/fluent-next/_design-system.scss).
+const createDsConfig = () => createConfig('ds', getBridgeFiles(), [
   {
     destination: 'variables/_ds.scss',
     format: 'scssToCss',
@@ -323,7 +315,6 @@ const createDsConfig = () => createConfig('ds', getComponentThemeFiles(), [
 const configs = [
   ...FLUENT_PALETTES.map(createPaletteConfig),
   ...FLUENT_MODES.map(createModeConfig),
-  createComponentThemeConfig(),
   createDsConfig(),
 ];
 
@@ -382,8 +373,8 @@ async function collectThemeStyleSheets() {
  * with nothing pointing at the bump as the cause.
  *
  * The check reads the package's flat index instead of the generated bridge: the two carry the same
- * 1578 names, but the index also carries the version for the message and needs no generated output.
- * Reusing getComponentThemeFiles() is what keeps the scope from drifting away from the generator.
+ * names, but the index also carries the version for the message and needs no generated output.
+ * Reusing getBridgeFiles() is what keeps the scope from drifting away from the generator.
  */
 async function validateConsumedTokens() {
   const { version, tokens } = JSON.parse(
@@ -391,7 +382,7 @@ async function validateConsumedTokens() {
   );
   const availableNames = buildAvailableNames(
     Object.keys(tokens),
-    new Set(getComponentThemeFiles()),
+    new Set(getBridgeFiles()),
   );
 
   const referenced = new Map();

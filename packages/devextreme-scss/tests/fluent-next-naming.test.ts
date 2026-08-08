@@ -634,13 +634,19 @@ test('registries: the grammar stays decidable', () => {
   });
 });
 
-test('registries are in sync with the generated design tokens', () => {
-  // Guards against editing registries.json by hand or letting it drift from the token package.
-  const generatedComponentTokens = readFileSync(
-    join(packageRoot, 'scss', '_design-system', 'fluent', 'components', 'theme.scss'),
+test('registries are in sync with the design token package', () => {
+  /*
+   * Guards against editing registries.json by hand or letting it drift from the package. Counted
+   * from the package's flat index, the same source derive-registries.mjs reads — the component tier
+   * is no longer emitted as SCSS, so there is no generated file left to count.
+   */
+  const flatTokens = JSON.parse(readFileSync(
+    require.resolve('@devexpress/design-tokens-internal/tokens.flat.json'),
     'utf8',
-  );
-  const tokenCount = [...generatedComponentTokens.matchAll(/--dxds-[a-z0-9-]+:/g)].length;
+  ));
+  const tokenCount = Object.keys(flatTokens.tokens)
+    .filter((key) => key.startsWith('components/core/theme/fluent:')).length;
+
   expect(tokenCount).toBe(registries.derivedFrom.componentTokenCount);
 });
 
