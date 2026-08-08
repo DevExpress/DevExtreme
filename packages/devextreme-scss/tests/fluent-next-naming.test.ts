@@ -730,6 +730,22 @@ test('migrated components follow the grammar strictly', () => {
   expect(offenders).toEqual([]);
 });
 
+test('design tokens are read only where variables are declared', () => {
+  /*
+   * A file that emits rules must consume the widget's own variables, so the token a value comes
+   * from is stated once, next to the other variables of that widget. Read straight from the file
+   * because a token can also arrive as an `@use … with ()` argument, which stylelint cannot see —
+   * it lints declarations, and those arguments are at-rule parameters.
+   */
+  const offenders = walk(themeRoot, '.scss')
+    .filter((file) => !DECLARATION_FILES.some((name) => file.endsWith(name)))
+    .flatMap((file) => [...stripComments(readFileSync(file, 'utf8')).matchAll(/\bds\.\$([\w-]+)/g)]
+      .map(([, token]) => `${file.slice(themeRoot.length + 1)}: ds.$${token}`))
+    .sort();
+
+  expect(offenders).toEqual([]);
+});
+
 test('the rename mapping stays collision-free and fully applied', () => {
   // Mirrors `node tools/naming/rename.mjs --check --residue` so CI enforces it too: a batch that is
   // half-applied, or two batches mapping onto one name, must not survive a green test run.
