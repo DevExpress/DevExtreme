@@ -32,6 +32,15 @@ const isAllDay = (
   return adapter.allDay;
 };
 
+// NOTE: The all day panel exists in vertical views only. In the other views
+// an all day appointment is rendered in the date table, so it is resized
+// by the cell duration and not by whole days.
+const isAllDayPanelAppointment = (
+  scheduler: Scheduler,
+  appointmentData: SafeAppointment,
+): boolean => VERTICAL_VIEW_TYPES.includes(scheduler.currentView.type)
+  && isAllDay(scheduler, appointmentData);
+
 const subscribes = {
   isCurrentViewAgenda() {
     return this.currentView.type === 'agenda';
@@ -188,7 +197,7 @@ const subscribes = {
       },
       cellDurationInMinutes: this.getWorkSpace().option('cellDuration'),
       resizableStep: this.getWorkSpace().positionHelper.getResizableStep(),
-      isAllDayPanel: isAllDay(this, itemData),
+      isAllDayPanel: isAllDayPanelAppointment(this, itemData),
     });
   },
 

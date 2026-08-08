@@ -138,10 +138,15 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
   }
 
   _getVerticalResizingRule() {
+    const reducedHandles = {
+      head: 'top',
+      body: '',
+      tail: 'bottom',
+    };
     const height = Math.round(this.invoke('getCellHeight'));
 
     return {
-      handles: DEFAULT_VERTICAL_HANDLES,
+      handles: this.option('reduced') ? reducedHandles[this.option('reduced') as any] : DEFAULT_VERTICAL_HANDLES,
       minWidth: 0,
       minHeight: height,
       step: height,
