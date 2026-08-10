@@ -14,25 +14,33 @@ const DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD = '_dataSourceFromUrlLoadMode';
 const SPECIFIC_DATA_SOURCE_OPTION = '_getSpecificDataSourceOption';
 const NORMALIZE_DATA_SOURCE = '_normalizeDataSource';
 
+type ProxiedDataSourceHandler = (...args: unknown[]) => void;
+
 // TODO Get rid of this mixin
-export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => class DataHelperMixin extends Base {
-  public _dataSource: any;
+// eslint-disable-next-line @stylistic/max-len
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type
+export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => class extends Base {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public _dataSource?: any;
 
-  protected _dataController: any;
+  protected _dataController?: DataController;
 
-  protected readyWatcher: any;
+  protected readyWatcher?: (isLoading: boolean) => void;
 
-  private _proxiedDataSourceChangedHandler: any;
+  // Optional hook implemented by Widget-based consumers (see Widget#_ready).
+  protected _ready?: (value?: boolean) => void;
 
-  private _proxiedDataSourceLoadErrorHandler: any;
+  private _proxiedDataSourceChangedHandler?: ProxiedDataSourceHandler;
 
-  private _proxiedDataSourceLoadingChangedHandler: any;
+  private _proxiedDataSourceLoadErrorHandler?: ProxiedDataSourceHandler;
 
-  protected _isSharedDataSource: any;
+  private _proxiedDataSourceLoadingChangedHandler?: ProxiedDataSourceHandler;
 
-  private readonly _dataSourceType: any;
+  protected _isSharedDataSource?: boolean;
 
-  public postCtor() {
+  private readonly _dataSourceType?: () => typeof DataSource;
+
+  public postInit(): void {
     this.on('disposing', () => {
       this._disposeDataSource();
     });
@@ -41,18 +49,16 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
   /**
    * @extended: state_storing, virtual_scrolling
    */
-  protected _refreshDataSource() {
+  protected _refreshDataSource(): void {
     this._initDataSource();
     this._loadDataSource();
   }
 
-  protected _initDataSource() {
+  protected _initDataSource(): void {
     let dataSourceOptions = SPECIFIC_DATA_SOURCE_OPTION in this
-      ? (this[SPECIFIC_DATA_SOURCE_OPTION] as any)()
+      // @ts-expect-error dynamic mixin method
+      ? this[SPECIFIC_DATA_SOURCE_OPTION]()
       : this.option('dataSource');
-
-    let widgetDataSourceOptions;
-    let dataSourceType;
 
     this._disposeDataSource();
 
@@ -61,22 +67,29 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
         this._isSharedDataSource = true;
         this._dataSource = dataSourceOptions;
       } else {
-        widgetDataSourceOptions = DATA_SOURCE_OPTIONS_METHOD in this
-          ? (this[DATA_SOURCE_OPTIONS_METHOD] as any)()
+        const widgetDataSourceOptions = DATA_SOURCE_OPTIONS_METHOD in this
+          // @ts-expect-error dynamic mixin method
+          ? this[DATA_SOURCE_OPTIONS_METHOD]()
           : {};
 
-        dataSourceType = this._dataSourceType ? this._dataSourceType() : DataSource;
+        const DataSourceType = this._dataSourceType
+          ? this._dataSourceType()
+          : DataSource;
 
         dataSourceOptions = normalizeDataSourceOptions(dataSourceOptions, {
-          fromUrlLoadMode: (DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD in this) && (this[DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD] as any)(),
+          fromUrlLoadMode: (DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD in this)
+            // @ts-expect-error dynamic mixin method
+            && this[DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD](),
         });
 
-        // eslint-disable-next-line new-cap
-        this._dataSource = new dataSourceType(extend(true, {}, widgetDataSourceOptions, dataSourceOptions));
+        this._dataSource = new DataSourceType(
+          extend(true, {}, widgetDataSourceOptions, dataSourceOptions),
+        );
       }
 
       if (NORMALIZE_DATA_SOURCE in this) {
-        this._dataSource = (this[NORMALIZE_DATA_SOURCE] as any)(this._dataSource);
+        // @ts-expect-error dynamic mixin method
+        this._dataSource = this[NORMALIZE_DATA_SOURCE](this._dataSource);
       }
 
       this._addDataSourceHandlers();
@@ -84,7 +97,7 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
     }
   }
 
-  private _initDataController() {
+  private _initDataController(): void {
     const dataController = this.option?.('_dataController');
     const dataSource = this._dataSource;
 
@@ -95,7 +108,7 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
     }
   }
 
-  private _addDataSourceHandlers() {
+  private _addDataSourceHandlers(): void {
     if (DATA_SOURCE_CHANGED_METHOD in this) {
       this._addDataSourceChangeHandler();
     }
@@ -111,63 +124,59 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
     this._addReadyWatcher();
   }
 
-  private _addReadyWatcher() {
-    this.readyWatcher = function (isLoading) {
-      this._ready && this._ready(!isLoading);
-    }.bind(this);
+  private _addReadyWatcher(): void {
+    this.readyWatcher = (isLoading: boolean): void => {
+      this._ready?.(!isLoading);
+    };
     this._dataSource.on('loadingChanged', this.readyWatcher);
   }
 
-  private _addDataSourceChangeHandler() {
+  private _addDataSourceChangeHandler(): void {
     const dataSource = this._dataSource;
-    this._proxiedDataSourceChangedHandler = function (e) {
+    this._proxiedDataSourceChangedHandler = (e): void => {
       this[DATA_SOURCE_CHANGED_METHOD](dataSource.items(), e);
-    }.bind(this);
+    };
     dataSource.on('changed', this._proxiedDataSourceChangedHandler);
   }
 
-  private _addDataSourceLoadErrorHandler() {
+  private _addDataSourceLoadErrorHandler(): void {
     this._proxiedDataSourceLoadErrorHandler = this[DATA_SOURCE_LOAD_ERROR_METHOD].bind(this);
     this._dataSource.on('loadError', this._proxiedDataSourceLoadErrorHandler);
   }
 
-  private _addDataSourceLoadingChangedHandler() {
-    this._proxiedDataSourceLoadingChangedHandler = this[DATA_SOURCE_LOADING_CHANGED_METHOD].bind(this);
+  private _addDataSourceLoadingChangedHandler(): void {
+    this._proxiedDataSourceLoadingChangedHandler = this[DATA_SOURCE_LOADING_CHANGED_METHOD]
+      .bind(this);
     this._dataSource.on('loadingChanged', this._proxiedDataSourceLoadingChangedHandler);
   }
 
-  protected _loadDataSource() {
+  protected _loadDataSource(): void {
     const dataSource = this._dataSource;
     if (dataSource) {
       if (dataSource.isLoaded()) {
-        this._proxiedDataSourceChangedHandler && this._proxiedDataSourceChangedHandler();
+        if (this._proxiedDataSourceChangedHandler) {
+          this._proxiedDataSourceChangedHandler();
+        }
       } else {
         dataSource.load();
       }
     }
   }
 
-  private _loadSingle(key, value) {
-    key = key === 'this' ? this._dataSource.key() || 'this' : key;
-    return this._dataSource.loadSingle(key, value);
-  }
-
-  private _isLastPage() {
-    return !this._dataSource || this._dataSource.isLastPage() || !this._dataSource._pageSize;
-  }
-
-  private _isDataSourceLoading() {
-    return this._dataSource && this._dataSource.isLoading();
-  }
-
-  protected _disposeDataSource() {
+  protected _disposeDataSource(): void {
     if (this._dataSource) {
       if (this._isSharedDataSource) {
         delete this._isSharedDataSource;
 
-        this._proxiedDataSourceChangedHandler && this._dataSource.off('changed', this._proxiedDataSourceChangedHandler);
-        this._proxiedDataSourceLoadErrorHandler && this._dataSource.off('loadError', this._proxiedDataSourceLoadErrorHandler);
-        this._proxiedDataSourceLoadingChangedHandler && this._dataSource.off('loadingChanged', this._proxiedDataSourceLoadingChangedHandler);
+        if (this._proxiedDataSourceChangedHandler) {
+          this._dataSource.off('changed', this._proxiedDataSourceChangedHandler);
+        }
+        if (this._proxiedDataSourceLoadErrorHandler) {
+          this._dataSource.off('loadError', this._proxiedDataSourceLoadErrorHandler);
+        }
+        if (this._proxiedDataSourceLoadingChangedHandler) {
+          this._dataSource.off('loadingChanged', this._proxiedDataSourceLoadingChangedHandler);
+        }
 
         if (this._dataSource._eventsStrategy) {
           this._dataSource._eventsStrategy.off('loadingChanged', this.readyWatcher);
@@ -184,7 +193,8 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
     }
   }
 
-  protected getDataSource() {
-    return this._dataSource || null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  protected getDataSource(): any | null {
+    return this._dataSource ?? null;
   }
 };

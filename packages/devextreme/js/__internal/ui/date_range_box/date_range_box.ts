@@ -1,4 +1,4 @@
-import type { Position } from '@js/common';
+import type { DateLike, Position } from '@js/common';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
@@ -7,25 +7,29 @@ import config from '@js/core/config';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
 import type { DxElement } from '@js/core/element';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
-import { extend } from '@js/core/utils/extend';
 import { getImageContainer } from '@js/core/utils/icon';
 import { camelize } from '@js/core/utils/inflector';
-import { each } from '@js/core/utils/iterator';
+import type { DxEvent } from '@js/events';
+import type dxButton from '@js/ui/button';
+import type { DatePickerType, DisabledDate } from '@js/ui/date_box';
 import type { Properties } from '@js/ui/date_range_box';
-import Editor from '@js/ui/editor/editor';
 import { current, isFluent, isMaterial } from '@js/ui/themes';
-import DropDownButton from '@ts/ui/drop_down_editor/drop_down_button';
-import ClearButton from '@ts/ui/text_box/text_editor.clear';
-import TextEditorButtonCollection from '@ts/ui/text_box/texteditor_button_collection/index';
-
+import type { OptionChanged } from '@ts/core/widget/types';
 import {
   getDeserializedDate, isSameDateArrays, isSameDates, sortDatesArray,
-} from './m_date_range.utils';
-import type { MultiselectDateBoxProperties } from './m_multiselect_date_box';
-import MultiselectDateBox from './m_multiselect_date_box';
+} from '@ts/ui/date_range_box/date_range.utils';
+import type { MultiselectDateBoxProperties } from '@ts/ui/date_range_box/multiselect_date_box';
+import MultiselectDateBox from '@ts/ui/date_range_box/multiselect_date_box';
+import DropDownButton from '@ts/ui/drop_down_editor/drop_down_button';
+import Editor from '@ts/ui/editor/editor';
+import ClearButton from '@ts/ui/text_box/text_editor.clear';
+import { isButtonInstance } from '@ts/ui/text_box/texteditor_button_collection/button';
+import type { TextEditorButtonInfo } from '@ts/ui/text_box/texteditor_button_collection/index';
+import TextEditorButtonCollection from '@ts/ui/text_box/texteditor_button_collection/index';
 
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
 const TEXTEDITOR_LABEL_STATIC_CLASS = 'dx-texteditor-with-label';
@@ -54,10 +58,31 @@ const EVENTS_LIST = [
   'EnterKey',
 ];
 
-class DateRangeBox extends Editor<Properties> {
-  private _openAction?: any;
+interface ValidationErrorEntry {
+  message?: string;
+}
 
-  private _closeAction?: any;
+export interface DateRangeBoxProperties extends Omit<Properties, 'value'> {
+  value: (DateLike | undefined)[];
+
+  pickerType?: DatePickerType;
+
+  disabledDates?: Date[] | ((data: DisabledDate) => boolean) | null;
+
+  useHiddenSubmitElement?: boolean;
+
+  _internalValidationErrors: ValidationErrorEntry[];
+
+  currentSelection: 'startDate' | 'endDate';
+}
+
+class DateRangeBox extends Editor<DateRangeBoxProperties> {
+  // Temporary solution. Move to component level
+  public NAME!: string;
+
+  private _openAction!: (e?: Record<string, unknown>) => void;
+
+  private _closeAction!: (e?: Record<string, unknown>) => void;
 
   private _startDateBox!: MultiselectDateBox;
 
@@ -71,17 +96,17 @@ class DateRangeBox extends Editor<Properties> {
 
   private _popupContentId?: string;
 
-  private _buttonCollection: any;
+  private _buttonCollection!: TextEditorButtonCollection<DateRangeBox>;
 
   private _shouldSkipIsValidChange?: boolean;
 
-  public _$beforeButtonsContainer?: dxElementWrapper;
+  public _$beforeButtonsContainer?: dxElementWrapper | null;
 
-  public _$afterButtonsContainer?: dxElementWrapper;
+  public _$afterButtonsContainer?: dxElementWrapper | null;
 
-  _getDefaultOptions(): Properties {
-    // @ts-expect-error
-    return extend(super._getDefaultOptions(), {
+  _getDefaultOptions(): DateRangeBoxProperties {
+    return {
+      ...super._getDefaultOptions(),
       acceptCustomValue: true,
       activeStateEnabled: true,
       applyButtonText: messageLocalization.format('OK'),
@@ -150,14 +175,13 @@ class DateRangeBox extends Editor<Properties> {
       valueChangeEvent: 'change',
       _internalValidationErrors: [],
       currentSelection: 'startDate',
-    });
+    };
   }
 
-  _defaultOptionsRules() {
-    // @ts-expect-error
+  _defaultOptionsRules(): DefaultOptionsRule<DateRangeBoxProperties>[] {
     return super._defaultOptionsRules().concat([
       {
-        device() {
+        device(): boolean {
           const themeName = current();
           return isMaterial(themeName);
         },
@@ -167,7 +191,7 @@ class DateRangeBox extends Editor<Properties> {
         },
       },
       {
-        device() {
+        device(): boolean {
           const themeName = current();
           return isFluent(themeName);
         },
@@ -176,7 +200,7 @@ class DateRangeBox extends Editor<Properties> {
         },
       },
       {
-        device() {
+        device(): boolean {
           const realDevice = devices.real();
           const { platform } = realDevice;
           return platform === 'ios' || platform === 'android';
@@ -188,12 +212,10 @@ class DateRangeBox extends Editor<Properties> {
     ]);
   }
 
-  _initOptions(options): void {
-    // @ts-expect-error
+  _initOptions(options: DateRangeBoxProperties): void {
     super._initOptions(options);
 
-    // @ts-expect-error
-    const { value: initialValue } = this.initialOption();
+    const initialValue = this.initialOption('value') as unknown as DateLike[];
     let { value, startDate, endDate } = this.option();
 
     if (value[0] && value[1] && getDeserializedDate(value[0]) > getDeserializedDate(value[1])) {
@@ -217,7 +239,6 @@ class DateRangeBox extends Editor<Properties> {
   }
 
   _createOpenAction(): void {
-    // @ts-expect-error
     this._openAction = this._createActionByOption('onOpened', {
       excludeValidators: ['disabled', 'readOnly'],
     });
@@ -231,7 +252,6 @@ class DateRangeBox extends Editor<Properties> {
   }
 
   _createCloseAction(): void {
-    // @ts-expect-error
     this._closeAction = this._createActionByOption('onClosed', {
       excludeValidators: ['disabled', 'readOnly'],
     });
@@ -244,14 +264,16 @@ class DateRangeBox extends Editor<Properties> {
     this._closeAction();
   }
 
-  _createEventAction(eventName): void {
-    // @ts-expect-error
-    this[`_${camelize(eventName)}Action`] = this._createActionByOption(`on${eventName}`, {
-      excludeValidators: ['readOnly'],
-    });
+  _createEventAction(eventName: string): void {
+    this[`_${camelize(eventName)}Action`] = this._createActionByOption(
+      `on${eventName}` as keyof DateRangeBoxProperties,
+      {
+        excludeValidators: ['readOnly'],
+      },
+    );
   }
 
-  _raiseAction(eventName, event): void {
+  _raiseAction(eventName: string, event: DxEvent | undefined): void {
     const action = this[`_${camelize(eventName)}Action`];
     if (!action) {
       this._createEventAction(eventName);
@@ -259,27 +281,26 @@ class DateRangeBox extends Editor<Properties> {
     this[`_${camelize(eventName)}Action`]({ event });
   }
 
-  _initTemplates() {
+  _initTemplates(): void {
     this._templateManager.addDefaultTemplates({
-      // @ts-expect-error
+      // @ts-expect-error should be fixed in FunctionTemplate definition
       dropDownButton: new FunctionTemplate((options) => {
         const $icon = $('<div>').addClass(DROP_DOWN_EDITOR_BUTTON_ICON);
         $(options.container).append($icon);
       }),
     });
 
-    // @ts-expect-error
     super._initTemplates();
   }
 
-  _getDefaultButtons() {
+  _getDefaultButtons(): TextEditorButtonInfo<DateRangeBox>[] {
     return [
       { name: 'clear', Ctor: ClearButton },
       { name: 'dropDown', Ctor: DropDownButton },
     ];
   }
 
-  _initMarkup() {
+  _initMarkup(): void {
     $(this.element())
       .addClass(DATERANGEBOX_CLASS)
       .addClass(TEXTEDITOR_CLASS)
@@ -289,7 +310,6 @@ class DateRangeBox extends Editor<Properties> {
     this._toggleEditorLabelClass();
 
     this._toggleReadOnlyState();
-    // @ts-expect-error
     this._renderStylingMode();
 
     this._renderEndDateBox();
@@ -300,14 +320,12 @@ class DateRangeBox extends Editor<Properties> {
     this._renderEmptinessEvent();
     this._renderButtonsContainer();
 
-    // @ts-expect-error
     super._initMarkup();
 
     $(this.element()).removeClass(INVALID_BADGE_CLASS);
   }
 
   _renderEmptinessEvent(): void {
-    // @ts-expect-error
     const eventName = addNamespace('input blur', this.NAME);
 
     eventsEngine.off(this._focusTarget(), eventName);
@@ -322,8 +340,9 @@ class DateRangeBox extends Editor<Properties> {
   }
 
   _attachKeyboardEvents(): void {
-    if (!this.option('readOnly')) {
-      // @ts-expect-error
+    const { readOnly } = this.option();
+
+    if (!readOnly) {
       super._attachKeyboardEvents();
     }
   }
@@ -368,21 +387,28 @@ class DateRangeBox extends Editor<Properties> {
       .addClass(START_DATEBOX_CLASS)
       .prependTo(this.$element());
 
-    // @ts-expect-error
-    this._startDateBox = this._createComponent(this._$startDateBox, MultiselectDateBox, this._getStartDateBoxConfig());
+    this._startDateBox = this._createComponent(
+      this._$startDateBox,
+      MultiselectDateBox,
+      this._getStartDateBoxConfig(),
+    );
     this._startDateBox.NAME = '_StartDateBox';
   }
 
-  _renderEndDateBox() {
+  _renderEndDateBox(): void {
     this._$endDateBox = $('<div>')
       .addClass(END_DATEBOX_CLASS)
       .appendTo(this.$element());
-    // @ts-expect-error
-    this._endDateBox = this._createComponent(this._$endDateBox, MultiselectDateBox, this._getEndDateBoxConfig());
+
+    this._endDateBox = this._createComponent(
+      this._$endDateBox,
+      MultiselectDateBox,
+      this._getEndDateBoxConfig(),
+    );
     this._endDateBox.NAME = '_EndDateBox';
   }
 
-  _renderSeparator() {
+  _renderSeparator(): void {
     const $icon = getImageContainer(SEPARATOR_ICON_NAME);
     this._$separator = $('<div>')
       .addClass(DATERANGEBOX_SEPARATOR_CLASS)
@@ -394,7 +420,6 @@ class DateRangeBox extends Editor<Properties> {
   }
 
   _renderPreventBlurOnSeparatorClick(): void {
-    // @ts-expect-error
     const eventName = addNamespace('mousedown', this.NAME);
 
     eventsEngine.off(this._$separator, eventName);
@@ -408,7 +433,6 @@ class DateRangeBox extends Editor<Properties> {
   }
 
   _renderButtonsContainer(): void {
-    // @ts-expect-error
     this._buttonCollection = new TextEditorButtonCollection(this, this._getDefaultButtons());
 
     this._$beforeButtonsContainer = undefined;
@@ -442,7 +466,6 @@ class DateRangeBox extends Editor<Properties> {
     const { opened } = this.option();
 
     if (!opened) {
-      // @ts-expect-error
       this.getStartDateBox()._focusInput();
     }
 
@@ -451,62 +474,77 @@ class DateRangeBox extends Editor<Properties> {
     }
   }
 
-  _clearValueHandler(e) {
+  _clearValueHandler(e: DxEvent): void {
     e.stopPropagation();
-    // @ts-expect-error
     this._saveValueChangeEvent(e);
 
     this.clear();
 
-    !this._isStartDateActiveElement() && this.focus();
-    // @ts-expect-error
+    if (!this._isStartDateActiveElement()) {
+      this.focus();
+    }
+
+    // @ts-expect-error the trigger method is not declared on EventsEngineType
     eventsEngine.trigger($(this.startDateField()), 'input');
   }
 
-  _isClearButtonVisible(): boolean | undefined {
-    return this.option('showClearButton') && !this.option('readOnly');
+  _isClearButtonVisible(): boolean {
+    const { showClearButton, readOnly } = this.option();
+
+    return !!showClearButton && !readOnly;
   }
 
-  _focusInHandler(event): void {
+  _focusInHandler(event: DxEvent<FocusEvent>): void {
     if (this._shouldSkipFocusEvent(event)) {
       return;
     }
-    // @ts-expect-error
+
     super._focusInHandler(event);
   }
 
-  _focusOutHandler(event): void {
+  _focusOutHandler(event: DxEvent<FocusEvent>): void {
     if (this._shouldSkipFocusEvent(event)) {
       return;
     }
-    // @ts-expect-error
+
     super._focusOutHandler(event);
   }
 
-  _shouldSkipFocusEvent(event) {
-    const { target, relatedTarget } = event;
+  _shouldSkipFocusEvent(event: DxEvent<FocusEvent>): boolean {
+    const target = event.target as Element | null;
+    const relatedTarget = event.relatedTarget as Element | null;
+
     return ($(target).is($(this.startDateField())) && $(relatedTarget).is($(this.endDateField())))
     || ($(target).is($(this.endDateField())) && $(relatedTarget).is($(this.startDateField())));
   }
 
-  _getPickerType() {
-    // @ts-expect-error
+  _getPickerType(): DatePickerType {
     const { pickerType } = this.option();
-    return ['calendar', 'native'].includes(pickerType) ? pickerType : 'calendar';
+
+    return pickerType && ['calendar', 'native'].includes(pickerType) ? pickerType : 'calendar';
   }
 
-  _getRestErrors(allErrors, partialErrors) {
-    return allErrors.filter((error) => !partialErrors.some((prevError) => error.message === prevError.message));
+  _getRestErrors(
+    allErrors: ValidationErrorEntry[],
+    partialErrors: ValidationErrorEntry[],
+  ): ValidationErrorEntry[] {
+    return allErrors.filter(
+      (error) => !partialErrors.some((prevError) => error.message === prevError.message),
+    );
   }
 
-  _syncValidationErrors(optionName, newPartialErrors, previousPartialErrors): void {
-    newPartialErrors ||= [];
-    previousPartialErrors ||= [];
+  _syncValidationErrors(
+    optionName: 'validationErrors' | '_internalValidationErrors',
+    newPartialErrors: ValidationErrorEntry[] | null | undefined,
+    previousPartialErrors: ValidationErrorEntry[] | null | undefined,
+  ): void {
+    const newErrors = newPartialErrors ?? [];
+    const previousErrors = previousPartialErrors ?? [];
 
-    const allErrors = this.option(optionName) || [];
-    const otherErrors = this._getRestErrors(allErrors, previousPartialErrors);
+    const allErrors = (this.option(optionName) as unknown as ValidationErrorEntry[] | null) ?? [];
+    const otherErrors = this._getRestErrors(allErrors, previousErrors);
 
-    this.option(optionName, [...otherErrors, ...newPartialErrors]);
+    this.option(optionName, [...otherErrors, ...newErrors]);
   }
 
   _getDateBoxConfig(): MultiselectDateBoxProperties {
@@ -539,32 +577,15 @@ class DateRangeBox extends Editor<Properties> {
       validationMessageMode: options.validationMessageMode,
       validationMessagePosition: options.validationMessagePosition,
       valueChangeEvent: options.valueChangeEvent,
-      // @ts-expect-error
-      onKeyDown: options.onKeyDown,
-      // @ts-expect-error
-      onKeyUp: options.onKeyUp,
-      // @ts-expect-error
-      onChange: options.onChange,
-      // @ts-expect-error
-      onInput: options.onInput,
-      // @ts-expect-error
-      onCut: options.onCut,
-      // @ts-expect-error
-      onCopy: options.onCopy,
-      // @ts-expect-error
-      onPaste: options.onPaste,
-      // @ts-expect-error
-      onEnterKey: options.onEnterKey,
       _dateRangeBoxInstance: this,
       _showValidationMessage: false,
     };
 
-    each(EVENTS_LIST, (_, eventName) => {
+    EVENTS_LIST.forEach((eventName) => {
       const optionName = `on${eventName}`;
 
-      // @ts-expect-error
-      if (this.hasActionSubscription(optionName)) {
-        dateBoxConfig[optionName] = (e) => {
+      if (this.hasActionSubscription(optionName as keyof DateRangeBoxProperties)) {
+        dateBoxConfig[optionName] = (e: { event?: DxEvent }): void => {
           this._raiseAction(eventName, e.event);
         };
       }
@@ -573,13 +594,16 @@ class DateRangeBox extends Editor<Properties> {
     return dateBoxConfig;
   }
 
-  _hideOnOutsideClickHandler({ target }): boolean {
+  _hideOnOutsideClickHandler({ target }: DxEvent): boolean {
     // TODO: extract this common code part with ddeditor to avoid duplication
     const $target = $(target);
     const dropDownButton = this.getButton('dropDown');
-    const $dropDownButton = dropDownButton?.$element();
+    const $dropDownButton = isButtonInstance(dropDownButton)
+      ? dropDownButton.$element()
+      : dropDownButton;
     const isInputClicked = !!$target.closest($(this.element())).length;
-    const isDropDownButtonClicked = !!$target.closest($dropDownButton).length;
+    const isDropDownButtonClicked = !!$dropDownButton
+      && !!$target.closest($dropDownButton).length;
     const isOutsideClick = !isInputClicked && !isDropDownButtonClicked;
 
     return isOutsideClick;
@@ -595,31 +619,32 @@ class DateRangeBox extends Editor<Properties> {
       cancelButtonText: options.cancelButtonText,
       dateOutOfRangeMessage: options.startDateOutOfRangeMessage,
       deferRendering: options.deferRendering,
-      // @ts-expect-error
+      // TODO: should probably read the top level `disabledDates`; changing it alters behavior.
+      // @ts-expect-error disabledDates is not a dropDownOptions member
       disabledDates: options.dropDownOptions?.disabledDates,
       dropDownOptions: {
         showTitle: false,
         title: '',
         hideOnOutsideClick: (e) => this._hideOnOutsideClickHandler(e),
         hideOnParentScroll: false,
-        // @ts-expect-error
         preventScrollEvents: false,
         ...options.dropDownOptions,
       },
       invalidDateMessage: options.invalidStartDateMessage,
-      onValueChanged: ({ value, event }) => {
-        const newValue = [value, this.option('value')[1]];
+      onValueChanged: ({ value, event }): void => {
+        const { value: currentValue } = this.option();
+        const newValue = [value, currentValue[1]];
 
         this.updateValue(newValue, event);
       },
       opened: options.opened,
-      onOpened: () => {
+      onOpened: (): void => {
         this._raiseOpenAction();
       },
-      onClosed: () => {
+      onClosed: (): void => {
         this._raiseCloseAction();
       },
-      onOptionChanged: (args) => {
+      onOptionChanged: (args): void => {
         const { name, value, previousValue } = args;
         if (name === 'text') {
           this.option('startDateText', value);
@@ -631,7 +656,7 @@ class DateRangeBox extends Editor<Properties> {
       todayButtonText: options.todayButtonText,
       showClearButton: false,
       showDropDownButton: false,
-      value: this.option('value')[0],
+      value: options.value[0],
       label: options.startDateLabel,
       placeholder: options.startDatePlaceholder,
       inputAttr: options.startDateInputAttr,
@@ -647,12 +672,13 @@ class DateRangeBox extends Editor<Properties> {
       ...this._getDateBoxConfig(),
       invalidDateMessage: options.invalidEndDateMessage,
       dateOutOfRangeMessage: options.endDateOutOfRangeMessage,
-      onValueChanged: ({ value, event }) => {
-        const newValue = [this.option('value')[0], value];
+      onValueChanged: ({ value, event }): void => {
+        const { value: currentValue } = this.option();
+        const newValue = [currentValue[0], value];
 
         this.updateValue(newValue, event);
       },
-      onOptionChanged: (args) => {
+      onOptionChanged: (args): void => {
         const { name, value, previousValue } = args;
         if (name === 'text') {
           this.option('endDateText', value);
@@ -664,7 +690,7 @@ class DateRangeBox extends Editor<Properties> {
       opened: options.opened,
       showClearButton: false,
       showDropDownButton: false,
-      value: this.option('value')[1],
+      value: options.value[1],
       label: options.endDateLabel,
       placeholder: options.endDatePlaceholder,
       deferRendering: true,
@@ -674,28 +700,27 @@ class DateRangeBox extends Editor<Properties> {
   }
 
   _getValidationMessagePosition(): Position | undefined {
-    const { validationMessagePosition } = this.option();
+    const { validationMessagePosition, opened } = this.option();
 
     if (validationMessagePosition === 'auto') {
-      return this.option('opened') ? 'top' : 'bottom';
+      return opened ? 'top' : 'bottom';
     }
 
     return validationMessagePosition;
   }
 
-  _getSerializedDates([startDate, endDate]) {
+  _getSerializedDates([startDate, endDate]: (DateLike | undefined)[]): DateLike[] {
     return [
-      // @ts-expect-error
       this.getStartDateBox()._serializeDate(getDeserializedDate(startDate)),
-      // @ts-expect-error
       this.getStartDateBox()._serializeDate(getDeserializedDate(endDate)),
     ];
   }
 
-  updateValue(newValue, event): void {
-    if (!isSameDateArrays(newValue, this.option('value'))) {
+  updateValue(newValue: (DateLike | undefined)[], event?: unknown): void {
+    const { value } = this.option();
+
+    if (!isSameDateArrays(newValue, value)) {
       if (event) {
-        // @ts-expect-error
         this._saveValueChangeEvent(event);
       }
 
@@ -703,12 +728,12 @@ class DateRangeBox extends Editor<Properties> {
     }
   }
 
-  _updateDateBoxesValue(newValue): void {
+  _updateDateBoxesValue(newValue: DateLike[]): void {
     const startDateBox = this.getStartDateBox();
     const endDateBox = this.getEndDateBox();
     const [newStartDate, newEndDate] = newValue;
-    const oldStartDate = startDateBox.option('value');
-    const oldEndDate = endDateBox.option('value');
+    const { value: oldStartDate } = startDateBox.option();
+    const { value: oldEndDate } = endDateBox.option();
 
     if (!isSameDates(newStartDate, oldStartDate)) {
       startDateBox.option('value', newStartDate);
@@ -723,7 +748,7 @@ class DateRangeBox extends Editor<Properties> {
     const $startDateInput = $(this.field()[0]);
     const { accessKey } = this.option();
 
-    // @ts-expect-error
+    // @ts-expect-error the attr method should support undefined values
     $startDateInput.attr('accesskey', accessKey);
   }
 
@@ -731,8 +756,8 @@ class DateRangeBox extends Editor<Properties> {
     return $(this.element()).find(`.${TEXTEDITOR_INPUT_CLASS}`);
   }
 
-  _focusEventTarget(): HTMLElement {
-    return this.element();
+  _focusEventTarget(): dxElementWrapper {
+    return this.$element();
   }
 
   _focusClassTarget(): dxElementWrapper {
@@ -740,7 +765,6 @@ class DateRangeBox extends Editor<Properties> {
   }
 
   _toggleFocusClass(isFocused: boolean): void {
-    // @ts-expect-error
     super._toggleFocusClass(isFocused, this._focusClassTarget());
   }
 
@@ -756,7 +780,7 @@ class DateRangeBox extends Editor<Properties> {
     return this._isActiveElement(this.endDateField());
   }
 
-  _isActiveElement(input): boolean {
+  _isActiveElement(input: HTMLElement): boolean {
     return $(input).is($(domAdapter.getActiveElement(input)));
   }
 
@@ -778,9 +802,7 @@ class DateRangeBox extends Editor<Properties> {
 
     const ariaOwns = opened ? this._popupContentIdentifier() : undefined;
 
-    // @ts-expect-error
     this.setAria(arias);
-    // @ts-expect-error
     this.setAria('owns', ariaOwns, this.$element());
   }
 
@@ -792,8 +814,7 @@ class DateRangeBox extends Editor<Properties> {
     this._$afterButtonsContainer = undefined;
   }
 
-  _applyCustomValidation(value): void {
-    // @ts-expect-error
+  _applyCustomValidation(value: (DateLike | undefined)[]): void {
     this.validationRequest.fire({
       editor: this,
       value,
@@ -807,11 +828,10 @@ class DateRangeBox extends Editor<Properties> {
     this._$endDateBox?.remove();
     this._$separator?.remove();
 
-    // @ts-expect-error
     super._clean();
   }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<DateRangeBoxProperties>): void {
     const {
       name, fullName, value, previousValue,
     } = args;
@@ -830,7 +850,6 @@ class DateRangeBox extends Editor<Properties> {
         this.getEndDateBox().option(name, value);
         break;
       case 'rtlEnabled':
-      // @ts-expect-error
         super._optionChanged(args);
         break;
       case 'labelMode':
@@ -849,7 +868,6 @@ class DateRangeBox extends Editor<Properties> {
       case 'opened':
         this._toggleDropDownEditorActiveClass();
         this.getStartDateBox().option(name, value);
-        // @ts-expect-error
         this.getEndDateBox()._setOptionWithoutOptionChange(name, value);
         break;
       case 'buttons':
@@ -869,7 +887,6 @@ class DateRangeBox extends Editor<Properties> {
       case 'height':
         this.getStartDateBox().option(name, value);
         this.getEndDateBox().option(name, value);
-        // @ts-expect-error
         super._optionChanged(args);
         break;
       case 'dropDownButtonTemplate':
@@ -879,10 +896,11 @@ class DateRangeBox extends Editor<Properties> {
       case 'showClearButton':
         this._updateButtons(['clear']);
         break;
-      case 'endDate':
-      // @ts-expect-error
-        this.updateValue([this.option('value')[0], value]);
+      case 'endDate': {
+        const { value: currentValue } = this.option();
+        this.updateValue([currentValue[0], value]);
         break;
+      }
       case 'startDateLabel':
         this._toggleEditorLabelClass();
         this.getStartDateBox().option('label', value);
@@ -916,14 +934,12 @@ class DateRangeBox extends Editor<Properties> {
       case 'activeStateEnabled':
       case 'focusStateEnabled':
       case 'hoverStateEnabled':
-      // @ts-expect-error
         super._optionChanged(args);
 
         this.getStartDateBox().option(name, value);
         this.getEndDateBox().option(name, value);
         break;
       case 'onValueChanged':
-      // @ts-expect-error
         this._createValueChangeAction();
         break;
       case 'onOpened':
@@ -945,7 +961,6 @@ class DateRangeBox extends Editor<Properties> {
       case 'readOnly':
         this._updateButtons();
 
-        // @ts-expect-error
         super._optionChanged(args);
 
         this.getStartDateBox().option(name, value);
@@ -954,7 +969,6 @@ class DateRangeBox extends Editor<Properties> {
       case 'disabled':
         this._updateButtons();
 
-        // @ts-expect-error
         super._optionChanged(args);
 
         this.getStartDateBox().option(name, value);
@@ -962,12 +976,12 @@ class DateRangeBox extends Editor<Properties> {
         break;
       case 'disableOutOfRangeSelection':
         break;
-      case 'startDate':
-      // @ts-expect-error
-        this.updateValue([value, this.option('value')[1]]);
+      case 'startDate': {
+        const { value: currentValue } = this.option();
+        this.updateValue([value, currentValue[1]]);
         break;
+      }
       case 'stylingMode':
-      // @ts-expect-error
         this._renderStylingMode();
 
         this.getStartDateBox().option(name, value);
@@ -991,13 +1005,12 @@ class DateRangeBox extends Editor<Properties> {
         break;
       case 'validationMessagePosition':
         this.getStartDateBox().option(name, value);
-        // @ts-expect-error
         super._optionChanged(args);
         break;
       case '_internalValidationErrors': {
         this._syncValidationErrors('validationErrors', value, previousValue);
 
-        const validationErrors = this.option('validationErrors');
+        const { validationErrors } = this.option();
         this.option('isValid', !validationErrors?.length);
         break;
       }
@@ -1005,11 +1018,10 @@ class DateRangeBox extends Editor<Properties> {
         this.getStartDateBox().option(name, value);
         this.getEndDateBox().option(name, value);
 
-        // @ts-expect-error
-        const isValid = value && !this.option('_internalValidationErrors').length;
+        const { _internalValidationErrors: internalValidationErrors } = this.option();
+        const isValid = value && !internalValidationErrors.length;
 
         if (this._shouldSkipIsValidChange || isValid === value) {
-          // @ts-expect-error
           super._optionChanged(args);
           return;
         }
@@ -1020,42 +1032,34 @@ class DateRangeBox extends Editor<Properties> {
         break;
       }
       case 'validationErrors': {
-        const internalValidationErrors = this.option('_internalValidationErrors') || [];
-        const allErrors = value || [];
+        const { _internalValidationErrors: internalValidationErrors = [] } = this.option();
+        const allErrors = value ?? [];
         const externalErrors = this._getRestErrors(allErrors, internalValidationErrors);
-        // @ts-expect-error
         const errors = [...externalErrors, ...internalValidationErrors];
         const newValue = errors.length ? errors : null;
-        // @ts-expect-error
+
         this._options.silent('validationErrors', newValue);
-        // @ts-expect-error
         super._optionChanged({ ...args, value: newValue });
         break;
       }
       case 'value': {
-        const newValue = sortDatesArray(value);
+        const newValue = sortDatesArray(value as DateLike[]);
 
-        if (!isSameDateArrays(newValue, previousValue)) {
-          // @ts-expect-error
-          const isDirty = !isSameDateArrays(newValue, this._initialValue);
+        if (!isSameDateArrays(newValue, previousValue as DateLike[])) {
+          const isDirty = !isSameDateArrays(newValue, this._initialValue as DateLike[]);
           this.option('isDirty', isDirty);
 
-          // @ts-expect-error
           this._setOptionWithoutOptionChange('value', newValue);
-          // @ts-expect-error
           this._setOptionWithoutOptionChange('startDate', newValue[0]);
-          // @ts-expect-error
           this._setOptionWithoutOptionChange('endDate', newValue[1]);
 
           this._applyCustomValidation(newValue);
 
-          this._updateDateBoxesValue(newValue);
+          this._updateDateBoxesValue(newValue as DateLike[]);
           this.getStartDateBox().getStrategy().renderValue();
           this._toggleEmptinessState();
 
-          // @ts-expect-error
           this._raiseValueChangeAction(newValue, previousValue);
-          // @ts-expect-error
           this._saveValueChangeEvent(undefined);
         }
 
@@ -1064,7 +1068,6 @@ class DateRangeBox extends Editor<Properties> {
       case 'currentSelection':
         break;
       default:
-      // @ts-expect-error
         super._optionChanged(args);
     }
   }
@@ -1077,7 +1080,7 @@ class DateRangeBox extends Editor<Properties> {
     return this._endDateBox;
   }
 
-  getButton(name) {
+  getButton(name: string): dxElementWrapper | dxButton | null | undefined {
     return this._buttonCollection.getButton(name);
   }
 
@@ -1090,7 +1093,7 @@ class DateRangeBox extends Editor<Properties> {
   }
 
   content(): HTMLElement {
-    return this.getStartDateBox().content();
+    return this.getStartDateBox().content() as HTMLElement;
   }
 
   field(): [HTMLElement, HTMLElement] {
@@ -1098,11 +1101,11 @@ class DateRangeBox extends Editor<Properties> {
   }
 
   startDateField(): HTMLElement {
-    return this.getStartDateBox().field();
+    return this.getStartDateBox().field() as HTMLElement;
   }
 
   endDateField(): DxElement {
-    return this.getEndDateBox().field();
+    return this.getEndDateBox().field() as HTMLElement;
   }
 
   focus(): void {
@@ -1117,9 +1120,7 @@ class DateRangeBox extends Editor<Properties> {
 
     startDateBox.reset();
     endDateBox.reset();
-    // @ts-expect-error
     startDateBox._updateInternalValidationState(true);
-    // @ts-expect-error
     endDateBox._updateInternalValidationState(true);
   }
 
@@ -1131,7 +1132,6 @@ class DateRangeBox extends Editor<Properties> {
   }
 }
 
-// @ts-expect-error
 registerComponent('dxDateRangeBox', DateRangeBox);
 
 export default DateRangeBox;

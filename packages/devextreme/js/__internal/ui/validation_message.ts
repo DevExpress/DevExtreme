@@ -1,3 +1,4 @@
+import type { Position } from '@js/common';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -7,6 +8,7 @@ import { encodeHtml } from '@js/core/utils/string';
 import type { Properties } from '@js/ui/validation_message';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Overlay from '@ts/ui/overlay/overlay';
+import type { ValidationRuleInternal } from '@ts/ui/validation_engine';
 
 const INVALID_MESSAGE = 'dx-invalid-message';
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
@@ -14,12 +16,22 @@ const INVALID_MESSAGE_ALWAYS = 'dx-invalid-message-always';
 const INVALID_MESSAGE_CONTENT = 'dx-invalid-message-content';
 const VALIDATION_MESSAGE_MIN_WIDTH = 100;
 
-export interface ValidationMessageProperties extends Properties {
+type NarrowedProperty = 'mode' | 'positionSide' | 'offset' | 'validationErrors';
+
+export interface ValidationMessageProperties extends Omit<Properties, NarrowedProperty> {
   target?: string | Element | null;
 
   container?: dxElementWrapper;
 
   contentId: string;
+
+  mode?: 'auto' | 'always';
+
+  positionSide?: Position;
+
+  offset?: { h: number; v: number };
+
+  validationErrors?: ValidationRuleInternal[] | null;
 }
 
 class ValidationMessage extends Overlay<ValidationMessageProperties> {
@@ -34,7 +46,8 @@ class ValidationMessage extends Overlay<ValidationMessageProperties> {
       width: 'auto',
       height: 'auto',
       hideOnOutsideClick: false,
-      // @ts-expect-error ts-error
+      // @ts-expect-error Overlay declares animation as dxOverlayAnimation; null disables
+      // animations. Widening the base property is out of the current scope.
       animation: null,
       visible: true,
       propagateOutsideClick: true,
@@ -74,11 +87,12 @@ class ValidationMessage extends Overlay<ValidationMessageProperties> {
   _ensureMessageNotEmpty(): void {
     this._textMarkup = this._getTextMarkup();
 
-    const shouldShowMessage = this.option('visible') && this._textMarkup;
+    const { visible } = this.option();
+    const shouldShowMessage = Boolean(visible) && Boolean(this._textMarkup);
     this._toggleVisibilityClasses(shouldShowMessage);
   }
 
-  _toggleVisibilityClasses(visible): void {
+  _toggleVisibilityClasses(visible: boolean): void {
     if (visible) {
       this.$element().addClass(INVALID_MESSAGE);
       this.$wrapper()?.addClass(INVALID_MESSAGE);
@@ -97,17 +111,17 @@ class ValidationMessage extends Overlay<ValidationMessageProperties> {
       .attr('id', id);
   }
 
-  _renderInnerHtml(element): void {
+  _renderInnerHtml(element?: dxElementWrapper | Element | null): void {
     const $element = element && $(element);
 
     $element?.html(this._textMarkup);
   }
 
   _getTextMarkup(): string {
-    const validationErrors = this.option('validationErrors') ?? [];
+    const { validationErrors } = this.option() ?? {};
     let validationErrorMessage = '';
-    // @ts-expect-error ts-error
-    validationErrors.forEach((err) => {
+
+    (validationErrors ?? []).forEach((err): void => {
       const separator = validationErrorMessage ? '<br />' : '';
       validationErrorMessage += separator + encodeHtml(err?.message ?? '');
     });
@@ -125,16 +139,18 @@ class ValidationMessage extends Overlay<ValidationMessageProperties> {
   updateMaxWidth(): void {
     const target = this.option('target');
     const targetWidth = getOuterWidth(target);
-    let maxWidth = '100%';
+    let maxWidth: string | number = '100%';
     if (targetWidth) {
-      // @ts-expect-error ts-error
       maxWidth = Math.max(targetWidth, VALIDATION_MESSAGE_MIN_WIDTH);
     }
 
     this.option({ maxWidth });
   }
 
-  _getPositionsArray(positionSide, rtlSide): string[] {
+  _getPositionsArray(
+    positionSide: ValidationMessageProperties['positionSide'],
+    rtlSide: string,
+  ): string[] {
     switch (positionSide) {
       case 'top':
         return [`${rtlSide} bottom`, `${rtlSide} top`];
@@ -156,15 +172,12 @@ class ValidationMessage extends Overlay<ValidationMessageProperties> {
     } = this.option();
     const rtlSide = getDefaultAlignment(rtlEnabled);
     const positions = this._getPositionsArray(positionSide, rtlSide);
-    const offset = { ...componentOffset };
+    const offset = { h: 0, v: 0, ...componentOffset };
 
     this.$element().addClass(`dx-invalid-message-${positionSide}`);
 
-    // @ts-expect-error ts-error
     if (rtlEnabled && positionSide !== 'left' && positionSide !== 'right') offset.h = -offset.h;
-    // @ts-expect-error ts-error
     if (positionSide === 'top') offset.v = -offset.v;
-    // @ts-expect-error ts-error
     if (positionSide === 'left') offset.h = -offset.h;
 
     this.option('position', {

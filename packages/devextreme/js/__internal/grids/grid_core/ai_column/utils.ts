@@ -1,7 +1,7 @@
 import { isDefined } from '@ts/core/utils/m_type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import type { Item, UserData } from '../data_controller/m_data_controller';
+import type { Item, UserData } from '../data_controller/types';
 import { AI_COLUMN_NAME, CLASSES } from './const';
 
 export const getAICommandColumnDefaultOptions = (): object => ({

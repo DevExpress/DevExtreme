@@ -161,7 +161,6 @@ export class PagerView extends modules.View {
     const scrolling = this.option('scrolling');
 
     if (pagerVisible === 'auto') {
-      // @ts-expect-error
       if (scrolling && (scrolling.mode === 'virtual' || scrolling.mode === 'infinite')) {
         pagerVisible = false;
       } else {

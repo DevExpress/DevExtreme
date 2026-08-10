@@ -75,7 +75,7 @@ test('AI Assistant-applied sorting should persist after popup close', async (t) 
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getActionItems().count).eql(1);
 
   await t.click(aiChat.getCloseButton().element);
 

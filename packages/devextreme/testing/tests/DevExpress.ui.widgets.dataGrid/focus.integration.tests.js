@@ -11,7 +11,7 @@ import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.j
 import ArrayStore from 'common/data/array_store';
 import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
@@ -66,7 +66,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         const cellBackgroundColor = 'rgba(0, 0, 0, 0)';
         const $groupedRow = $(dataGrid.getRowElement(0)[0]);
-        assert.equal(window.getComputedStyle($groupedRow[0]).backgroundColor, 'rgb(214, 228, 241)', 'focused grouped row has correct background color in rtl mode');
+        assert.equal(window.getComputedStyle($groupedRow[0]).backgroundColor, 'rgb(208, 229, 251)', 'focused grouped row has correct background color in rtl mode');
         assert.equal(window.getComputedStyle($groupedRow.find('td')[0]).backgroundColor, cellBackgroundColor, 'cell in focused row has no background color');
         assert.equal(window.getComputedStyle($groupedRow.find('td')[1]).backgroundColor, cellBackgroundColor, 'cell in focused row has no background color');
     });
@@ -620,7 +620,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(10);
 
         // act
-        $(dataGrid.getCellElement(7, 0))
+        $(dataGrid.getCellElement(5, 0))
             .trigger('dxpointerdown');
 
         this.clock.tick(10);
@@ -654,7 +654,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok($(dataGrid.getCellElement(0, 1)).hasClass('dx-focused'));
     });
 
-    QUnit.test('onFocusedCellChanged event should contains correct row object if scrolling, rowRenderingMode are virtual', function(assert) {
+    QUnit.test('onFocusedCellChanged event should contain correct row object when scrolling and rowRenderingMode are virtual', function(assert) {
         // arrange
         const data = [];
         let focusedCellChangedCount = 0;
@@ -688,7 +688,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         const scrollable = dataGrid.getScrollable();
-        scrollable.scrollTo({ y: 600 });
+        scrollable.scrollTo({ y: 850 });
         $(scrollable.container()).trigger('scroll');
         this.clock.tick(10);
         $(dataGrid.getCellElement(0, 0)).trigger(CLICK_EVENT);
@@ -727,14 +727,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(500);
 
         // act
-        dataGrid.getScrollable().scrollTo({ y: 2000 });
+        dataGrid.getScrollable().scrollTo({ y: 2020 });
         this.clock.tick(500);
 
         // assert
-        assert.equal(dataGrid.getVisibleRows().length, 10, 'Visible row count');
-        assert.equal(dataGrid.getVisibleRows()[0].key, 59, 'First visible row key');
+        assert.equal(dataGrid.getVisibleRows().length, 8, 'Visible row count');
+        assert.equal(dataGrid.getVisibleRows()[0].key, 42, 'First visible row key');
         assert.equal(dataGrid.getRowIndexByKey(1), -1, 'Focused row is not visible');
-        assert.equal(dataGrid.getScrollable().scrollTop(), 2000, 'Scroll position is not changed');
+        assert.equal(dataGrid.getScrollable().scrollTop(), 2020, 'Scroll position is not changed');
     });
 
     // T804082
@@ -1806,7 +1806,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
         // act
         const scrollable = dataGrid.getScrollable();
-        scrollable.scrollBy(400);
+        scrollable.scrollBy(540);
         this.clock.tick(10);
 
         const firstVisibleRowKey = dataGrid.getVisibleRows()[0].key;
@@ -4461,7 +4461,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         this.clock.tick(10);
 
         // assert
-        assert.equal(Math.floor(rowData.index / 20), 2, 'scroll position is on third page');
+        assert.equal(Math.floor(rowData.index / 20), 1, 'scroll position is on second page');
         assert.equal(dataGrid.getTopVisibleRowData().index, rowData.index, 'scroll position is not changed');
         assert.equal($(dataGrid.$element()).find('input').val(), (rowData.index + 1).toString(), 'editor in second column with correct row index is opened');
         assert.ok($(dataGrid.$element()).find('input').closest('td').hasClass('dx-focused'), 'cell with editor is focused');

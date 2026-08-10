@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { extend } from '@js/core/utils/extend';
-import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';

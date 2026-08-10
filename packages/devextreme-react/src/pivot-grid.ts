@@ -97,7 +97,7 @@ type IFieldChooserProps = React.PropsWithChildren<{
   allowSearch?: boolean;
   applyChangesMode?: ApplyChangesMode;
   enabled?: boolean;
-  height?: number;
+  height?: number | string;
   layout?: FieldChooserLayout;
   searchTimeout?: number;
   texts?: Record<string, any> | {
@@ -108,7 +108,7 @@ type IFieldChooserProps = React.PropsWithChildren<{
     rowFields?: string;
   };
   title?: string;
-  width?: number;
+  width?: number | string;
 }>
 const _componentFieldChooser = (props: IFieldChooserProps) => {
   return React.createElement(NestedOption<IFieldChooserProps>, {

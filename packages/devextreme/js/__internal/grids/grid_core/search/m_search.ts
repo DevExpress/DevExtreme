@@ -11,7 +11,8 @@ import type TextBox from '@js/ui/text_box';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 
-import type { DataController, Filter } from '../data_controller/m_data_controller';
+import type { DataController } from '../data_controller/data_controller';
+import type { Filter } from '../data_controller/types';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';
 import type { ModuleType, OptionChanged } from '../m_types';
@@ -269,6 +270,7 @@ const rowsView = (
   private _getStringNormalizer() {
     const isCaseSensitive = this.option('searchPanel.highlightCaseSensitive');
     const dataSource = this._dataController?.getDataSource?.();
+    // @ts-expect-error `langParams` is missing in the public load options typings
     const langParams = dataSource?.loadOptions?.()?.langParams;
 
     return (str: string): string => toComparable(str, isCaseSensitive, langParams);

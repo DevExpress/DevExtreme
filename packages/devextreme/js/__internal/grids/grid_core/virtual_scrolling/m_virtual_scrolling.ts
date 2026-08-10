@@ -11,15 +11,18 @@ import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import LoadIndicator from '@js/ui/load_indicator';
 import errors from '@js/ui/widget/ui.errors';
-import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { PagingResult } from '@ts/grids/grid_core/data_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
+import type { ChangedEvent } from '../data_source_adapter/types';
 import gridCoreUtils from '../m_utils';
 import type { RowsViewScrollEvent } from '../views/types';
 import { subscribeToExternalScrollers, VirtualScrollController } from './m_virtual_scrolling_core';
+import type { ChangedLoadParams } from './types';
 
 const BOTTOM_LOAD_PANEL_CLASS = 'bottom-load-panel';
 const GROUP_SPACE_CLASS = 'group-space';
@@ -225,15 +228,15 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     super._handleLoadError.apply(this, arguments as any);
   }
 
-  protected _handleDataChanged(e) {
+  protected _dataChangedHandler(e?: ChangedEvent) {
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
       this._items = this._dataSource.items().slice();
       this._totalCount = this._dataSourceTotalCount(true);
-      super._handleDataChanged.apply(this, arguments as any);
+      super._dataChangedHandler(e);
       return;
     }
 
-    const callBase = super._handleDataChanged.bind(this);
+    const callBase = super._dataChangedHandler.bind(this);
 
     this._virtualScrollController.handleDataChanged(callBase, e);
   }
@@ -1027,11 +1030,11 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     }
   }
 
-  private _getChangedLoadParams() {
+  private _getChangedLoadParams(): ChangedLoadParams | null {
     const loadedPageParams = this.getLoadPageParams(true);
     const { pageIndex, loadPageCount } = this.getLoadPageParams();
     const pageIndexIsValid = this._pageIndexIsValid(pageIndex);
-    let result: any = null;
+    let result: ChangedLoadParams | null = null;
 
     if (!this._isLoading && pageIndexIsValid && (pageIndex !== loadedPageParams.pageIndex || loadPageCount !== loadedPageParams.loadPageCount)) {
       result = {
@@ -1052,48 +1055,102 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     return result;
   }
 
-  private _loadItems(checkLoading, viewportIsFilled) {
-    const virtualPaging = isVirtualPaging(this);
-    const dataSourceAdapter = this._dataSource;
-    const changedParams = this._getChangedLoadParams();
-    const currentLoadPageCount = dataSourceAdapter?.loadPageCount() ?? 0;
-    const lastRequiredItemCount = this.pageSize() * currentLoadPageCount;
-    const currentPageIndex = dataSourceAdapter?.pageIndex() ?? 0;
-    const pageIndexNotChanged = changedParams?.pageIndex === currentPageIndex;
-    const allLoadedInAppendMode = isAppendMode(this) && this.totalItemsCount() < lastRequiredItemCount;
-    const isRepaintMode = this.option('editing.refreshMode') === 'repaint';
-    const pageIndexIncreased = changedParams?.pageIndex > currentPageIndex;
-    let result = false;
+  private isAllLoadedInAppendMode(): boolean {
+    const loadedItemCount = this.pageSize() * (this._dataSource?.loadPageCount() ?? 0);
 
-    if (!dataSourceAdapter || (virtualPaging && checkLoading && ((isRepaintMode && viewportIsFilled) || (pageIndexIncreased || pageIndexNotChanged && allLoadedInAppendMode)))) {
-      return result;
+    return isAppendMode(this) && this.totalItemsCount() < loadedItemCount;
+  }
+
+  // T1326786: the grid is scrolled to paging.pageIndex on the first resize only,
+  // until then the viewport is at the top and the loaded page is below it
+  private isScrollToPagePending(changedParams: ChangedLoadParams): boolean {
+    const loadedPageIndex = this._dataSource?.pageIndex() ?? 0;
+    const viewportIsAtTop = this._rowsScrollController?.getViewportItemIndex() === 0;
+    const pageIndexAfterViewport = changedParams.pageIndex + changedParams.loadPageCount;
+
+    return viewportIsAtTop && loadedPageIndex >= pageIndexAfterViewport;
+  }
+
+  private needToSkipViewportLoad(
+    changedParams: ChangedLoadParams | null,
+    viewportIsFilled: boolean,
+  ): boolean {
+    const isRepaintMode = this.option('editing.refreshMode') === 'repaint';
+
+    if (isRepaintMode && viewportIsFilled) { // T1082889
+      return true;
+    }
+
+    if (!changedParams) {
+      return false;
+    }
+
+    const loadedPageIndex = this._dataSource?.pageIndex() ?? 0;
+
+    if (changedParams.pageIndex > loadedPageIndex) { // T1049853
+      return true;
+    }
+
+    if (changedParams.pageIndex === loadedPageIndex) {
+      return this.isAllLoadedInAppendMode();
+    }
+
+    return this.isScrollToPagePending(changedParams);
+  }
+
+  private _loadItems(checkLoading: boolean, viewportIsFilled: boolean): boolean {
+    if (!this._dataSource) {
+      return false;
+    }
+
+    const virtualPaging = isVirtualPaging(this);
+    const changedParams = this._getChangedLoadParams();
+
+    if (virtualPaging && checkLoading
+      && this.needToSkipViewportLoad(changedParams, viewportIsFilled)) {
+      return false;
     }
 
     if (virtualPaging && this._isLoading) {
       this._needUpdateViewportAfterLoading = true;
     }
 
-    if (virtualPaging && changedParams) {
-      result = true;
-      dataSourceAdapter.pageIndex(changedParams.pageIndex);
-      dataSourceAdapter.loadPageCount(changedParams.loadPageCount);
-      this._repaintChangesOnly = true;
-      this._needUpdateDimensions = true;
-      const viewportChanging = this._viewportChanging;
-      this.load().always(() => {
-        this._repaintChangesOnly = undefined;
-        this._needUpdateDimensions = undefined;
-      }).done(() => {
-        const isLastPage = this.pageCount() > 0 && this.pageIndex() === this.pageCount() - 1;
-        (viewportChanging || isLastPage) && this._updateVisiblePageIndex();
-        if (this._needUpdateViewportAfterLoading) {
-          this._needUpdateViewportAfterLoading = false;
-          this.loadViewport({ checkLoadedParamsOnly: true });
-        }
-      });
+    if (!virtualPaging || !changedParams) {
+      return false;
     }
 
-    return result;
+    this.loadPages(changedParams);
+
+    return true;
+  }
+
+  private loadPages(changedParams: ChangedLoadParams): void {
+    this._dataSource.pageIndex(changedParams.pageIndex);
+    this._dataSource.loadPageCount(changedParams.loadPageCount);
+    this._repaintChangesOnly = true;
+    this._needUpdateDimensions = true;
+
+    const viewportChanging = this._viewportChanging;
+
+    this.load().always(() => {
+      this._repaintChangesOnly = undefined;
+      this._needUpdateDimensions = undefined;
+    }).done(() => {
+      this.handlePagesLoaded(viewportChanging);
+    });
+  }
+
+  private handlePagesLoaded(viewportChanging: boolean): void {
+    const isLastPage = this.pageCount() > 0 && this.pageIndex() === this.pageCount() - 1;
+
+    if (viewportChanging || isLastPage) {
+      this._updateVisiblePageIndex();
+    }
+
+    if (this._needUpdateViewportAfterLoading) {
+      this._needUpdateViewportAfterLoading = false;
+      this.loadViewport({ checkLoadedParamsOnly: true });
+    }
   }
 
   private loadViewport(params?) {
@@ -1113,6 +1170,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
       if (needToUpdateItems) {
         const noPendingChangesInEditing = !this._editingController?.getChanges()?.length;
         this.updateItems({
+          changeType: 'refresh',
           repaintChangesOnly: true,
           needUpdateDimensions: true,
           useProcessedItemsCache: noPendingChangesInEditing,
@@ -1127,13 +1185,16 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     const itemCount = this.items().length;
     const viewportIsNotFilled = viewportSize > itemCount;
     const currentTake = this._loadViewportParams?.take ?? 0;
-    const rowsScrollController = this._rowsScrollController;
-    const newTake = rowsScrollController?.getViewportParams().take;
+    const newTake = this._rowsScrollController?.getViewportParams().take ?? 0;
 
-    (viewportIsNotFilled || currentTake < newTake!) && !this._isPaging && itemCount && this.loadViewport({
-      checkLoading: true,
-      viewportIsNotFilled,
-    });
+    const needsMoreItems = viewportIsNotFilled || currentTake < newTake;
+
+    if (needsMoreItems && !this._isPaging && itemCount) {
+      this.loadViewport({
+        checkLoading: true,
+        viewportIsNotFilled,
+      });
+    }
   }
 
   private loadIfNeed() {
@@ -1215,7 +1276,9 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     return dataSource?.virtualItemsCount.apply(dataSource, arguments);
   }
 
-  public pageIndex(pageIndex?) {
+  public pageIndex(): number;
+  public pageIndex(value: number): DeferredObj<unknown>;
+  public pageIndex(pageIndex?): PagingResult {
     const virtualPaging = isVirtualPaging(this);
     const rowsScrollController = this._rowsScrollController;
     if (this.option(LEGACY_SCROLLING_MODE) === false && virtualPaging && rowsScrollController) {

@@ -1807,8 +1807,10 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
       .ok()
 
       .typeText(editor00.element, '1')
-      .pressKey('tab')
+      .expect(editor00.element.value)
+      .eql('11')
 
+      .pressKey('tab')
       .expect(cell00.isFocused)
       .notOk()
       .expect(dataGrid.apiGetCellValue(0, 0))
@@ -4930,8 +4932,8 @@ test('Grids a11y: Fix the header filter and the column chooser focus issue and u
   const dataGrid = new DataGrid('#container');
   const filterIconElement = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).getFilterIcon();
   const headerFilter = new HeaderFilter();
-  const columnChooser = dataGrid.getColumnChooser();
   const columnChooserButton = dataGrid.getColumnChooserButton();
+  const columnChooserCloseButton = dataGrid.getColumnChooser().getCloseButton();
 
   await t
     .expect(dataGrid.isReady())
@@ -4942,7 +4944,7 @@ test('Grids a11y: Fix the header filter and the column chooser focus issue and u
     .ok()
     .click(columnChooserButton)
     .pressKey('tab tab tab')
-    .expect(columnChooser.content.focused)
+    .expect(columnChooserCloseButton.focused)
     .ok();
 })
   .before(async () => {

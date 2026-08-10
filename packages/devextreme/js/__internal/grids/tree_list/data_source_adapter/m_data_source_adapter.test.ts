@@ -70,7 +70,7 @@ describe('TreeList DataSourceAdapter - T1311885 Race Condition', () => {
     } as any;
 
     dataSourceAdapter = new DataSourceAdapterTreeList(mockComponent);
-    dataSourceAdapter.init(dataSource, { remoteOperations: { filtering: true } });
+    dataSourceAdapter.init(dataSource);
 
     (dataSourceAdapter as any)._loadDataSource = jest.fn((options: any) => {
       // @ts-expect-error

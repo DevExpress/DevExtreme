@@ -91,7 +91,6 @@ test.meta({ browserSize: [900, 800] })('Header hover should display correctly wh
 
 test.meta({
   browserSize: [900, 800],
-  unstable: true,
 })('Row hover should display correctly when there are fixed columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -99,7 +98,7 @@ test.meta({
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await t.hover(dataRow.element);
+  await t.hover(dataRow.getDataCell(1).element);
 
   await t.expect(dataRow.isHovered).ok();
 

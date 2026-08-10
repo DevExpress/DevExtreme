@@ -5,7 +5,6 @@ import { inputType } from '@js/core/utils/support';
 import { getWindow } from '@js/core/utils/window';
 import type { Format } from '@js/localization';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
-import type DateBox from '@ts/ui/date_box/date_box.base';
 import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
 import DateBoxStrategy from '@ts/ui/date_box/date_box.strategy';
 import dateUtils from '@ts/ui/date_box/date_utils';
@@ -15,11 +14,7 @@ import type { PopupProperties } from '@ts/ui/popup/popup';
 const window = getWindow();
 
 class DateViewStrategy extends DateBoxStrategy {
-  constructor(dateBox: DateBox) {
-    super(dateBox);
-
-    this.NAME = 'DateView';
-  }
+  NAME = 'DateView';
 
   getWidget(): DateView {
     return this._widget as DateView;

@@ -7,7 +7,8 @@ import { getKeyHash } from '@js/core/utils/common';
 import errors from '@js/ui/widget/ui.errors';
 
 import type { ColumnsController } from '../../columns_controller/m_columns_controller';
-import type { DataController, UserData } from '../../data_controller/m_data_controller';
+import type { DataController } from '../../data_controller/data_controller';
+import type { UserData } from '../../data_controller/types';
 import type { ErrorHandlingController } from '../../error_handling/m_error_handling';
 import { Controller } from '../../m_modules';
 import type { RowKey } from '../../m_types';

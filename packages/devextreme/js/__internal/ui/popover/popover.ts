@@ -8,6 +8,7 @@ import type { DeepPartial } from '@js/core';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
+import Guid from '@js/core/guid';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -23,6 +24,7 @@ import type { DxEvent, PointerInteractionEvent } from '@js/events';
 import type { Properties } from '@js/ui/popover';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
+import { addAriaDescriptionId, removeAriaDescriptionId } from '@ts/core/utils/m_dom';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type {
   DisplaySide,
@@ -92,6 +94,12 @@ export interface PopoverProperties extends Omit<Properties,
   arrowPosition?: string;
 
   preventScrollEvents?: boolean;
+
+  _popoverContentRole?: string;
+
+  _describeTarget?: boolean;
+
+  _preventDialogContainerFocus?: boolean;
 }
 class Popover<
   TProperties extends PopoverProperties = PopoverProperties,
@@ -103,6 +111,10 @@ class Popover<
   _documentEscapeKeyHandler!: (e: KeyboardEvent) => void;
 
   _timeouts!: Record<string, ReturnType<typeof setTimeout>>;
+
+  _popoverContentId?: string;
+
+  _$describedTargets?: dxElementWrapper;
 
   _getDefaultOptions(): TProperties {
     return {
@@ -132,6 +144,7 @@ class Popover<
       arrowPosition: '',
       arrowOffset: 0,
       _fixWrapperPosition: true,
+      _describeTarget: true,
     };
   }
 
@@ -185,10 +198,7 @@ class Popover<
     this.$element().addClass(POPOVER_CLASS);
     this.$wrapper()?.addClass(POPOVER_WRAPPER_CLASS);
 
-    const { toolbarItems, visible } = this.option();
-
-    const isInteractive = toolbarItems?.length;
-    this.setAria('role', isInteractive ? 'dialog' : 'tooltip');
+    const { visible } = this.option();
 
     if (visible) {
       this._attachEscapeKeyHandler();
@@ -232,6 +242,173 @@ class Popover<
     this._attachEvents();
     this._detachHoverableOverlay();
     this._attachHoverableOverlay();
+  }
+
+  _renderContent(): void {
+    super._renderContent();
+
+    this._syncAriaAttributes();
+  }
+
+  _syncAriaAttributes(): void {
+    this.setAria('role', this._getEffectiveAriaRole());
+    this._syncTargetAriaDescription();
+    this._syncFocusOptions();
+  }
+
+  _syncFocusOptions(): void {
+    if (this.option('_preventDialogContainerFocus')) {
+      return;
+    }
+
+    const isDialog = this._getEffectiveAriaRole() === 'dialog';
+    this._setOptionWithoutOptionChange('focusStateEnabled', isDialog);
+    this._setOptionWithoutOptionChange('tabFocusLoopEnabled', isDialog);
+  }
+
+  // Intentional no-op: Focus target logic is inherited from Widget,
+  // uses in Popup and do not need here.
+  _renderFocusTarget(): void {}
+
+  _getFocusTarget(): dxElementWrapper | null | undefined {
+    const $firstFocusableTarget = this._findTabbableBounds().$first;
+    if ($firstFocusableTarget?.length) {
+      return $firstFocusableTarget;
+    }
+
+    const $overlay = this.$overlayContent();
+    if ($overlay?.length) {
+      $overlay.attr('tabindex', '-1');
+      return $overlay;
+    }
+
+    return null;
+  }
+
+  _focusTarget(): dxElementWrapper {
+    return this._getFocusTarget() ?? this.$overlayContent();
+  }
+
+  _restoreTargetFocus(): void {
+    const $targets = this._getAriaDescriptionTargets();
+    const targetElement = $targets.first().get(0);
+
+    if (targetElement && domAdapter.getBody().contains(targetElement)) {
+      // @ts-expect-error trigger should be typed on type 'EventsEngineType'
+      eventsEngine.trigger($targets.first(), 'focus');
+    }
+  }
+
+  _forceFocusLost(): void {
+    if (this._getEffectiveAriaRole() === 'dialog' && !this.option('_preventDialogContainerFocus')) {
+      this._restoreTargetFocus();
+    } else {
+      super._forceFocusLost();
+    }
+  }
+
+  protected _getAriaRole(): string {
+    const { toolbarItems, showTitle, showCloseButton } = this.option();
+
+    const isDialog = Boolean(toolbarItems?.length) || Boolean(showTitle && showCloseButton);
+
+    return isDialog ? 'dialog' : 'tooltip';
+  }
+
+  _getEffectiveAriaRole(): string {
+    const { _popoverContentRole: popoverContentRole } = this.option();
+
+    return popoverContentRole ?? this._getAriaRole();
+  }
+
+  // NOTE: An accessible name on a tooltip can mask its content for assistive
+  // technologies, so the title labels the overlay only in dialog mode.
+  _toggleAriaLabel(): void {
+    if (this._getEffectiveAriaRole() === 'tooltip') {
+      this.setAria('labelledby', null, this.$overlayContent());
+      return;
+    }
+
+    super._toggleAriaLabel();
+  }
+
+  _getPopoverContentId(): string {
+    this._popoverContentId = this._popoverContentId ?? `dx-${new Guid()}`;
+    return this._popoverContentId;
+  }
+
+  _shouldDescribeTarget(): boolean {
+    const {
+      target,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      _describeTarget,
+    } = this.option();
+
+    return Boolean(target) && Boolean(_describeTarget) && this._getEffectiveAriaRole() === 'tooltip';
+  }
+
+  _getAriaDescriptionTargets(): dxElementWrapper {
+    const { target } = this.option();
+    const elements: Element[] = [];
+
+    $(target).each((_, node) => {
+      if (domAdapter.isElementNode(node)) {
+        elements.push(node);
+      }
+
+      return true;
+    });
+
+    return $(elements);
+  }
+
+  _syncTargetAriaDescription(): void {
+    if (!this._shouldDescribeTarget()) {
+      this._removeTargetAriaDescription();
+      return;
+    }
+
+    const id = this._getPopoverContentId();
+    const $overlayContent = this.$overlayContent();
+    $overlayContent.attr('id', id);
+
+    const $targets = this._getAriaDescriptionTargets();
+
+    if (!$targets.length) {
+      this._removeTargetAriaDescription();
+      return;
+    }
+
+    const targetElements = new Set($targets.toArray());
+    const previousElements = new Set(this._$describedTargets?.toArray() ?? []);
+
+    previousElements.forEach((element) => {
+      if (!targetElements.has(element)) {
+        removeAriaDescriptionId(element, id);
+      }
+    });
+
+    const describedElements = $targets.toArray().filter(
+      (element) => addAriaDescriptionId(element, id) || previousElements.has(element),
+    );
+
+    this._$describedTargets = describedElements.length ? $(describedElements) : undefined;
+  }
+
+  _removeTargetAriaDescription(): void {
+    const id = this._getPopoverContentId();
+
+    if (!this._$describedTargets) {
+      return;
+    }
+
+    this._$describedTargets.each((_, element) => {
+      removeAriaDescriptionId(element, id);
+
+      return true;
+    });
+
+    this._$describedTargets = undefined;
   }
 
   _detachEvents(target: PopoverTarget): void {
@@ -310,7 +487,7 @@ class Popover<
   _detachHoverableOverlay(): void {
     const $overlayContent = this.$overlayContent();
 
-    if (!$overlayContent.length) {
+    if (!$overlayContent?.length) {
       return;
     }
 
@@ -720,7 +897,17 @@ class Popover<
     super._clean();
   }
 
+  _shouldResetActiveElement(): boolean {
+    const activeElement = domAdapter.getActiveElement();
+    return domAdapter.isNode(activeElement) && !!this._$content?.get(0)?.contains(activeElement);
+  }
+
   _dispose(): void {
+    const { visible } = this.option();
+    if (visible && this._shouldResetActiveElement() && this._getEffectiveAriaRole() === 'dialog') {
+      this._restoreTargetFocus();
+    }
+    this._removeTargetAriaDescription();
     this._detachEscapeKeyHandler();
     super._dispose();
   }
@@ -743,6 +930,7 @@ class Popover<
         }
         this._positionController.updateTarget(value as TProperties['target']);
         this._invalidate();
+        this._syncAriaAttributes();
         break;
       case 'showEvent':
       case 'hideEvent': {
@@ -782,6 +970,17 @@ class Popover<
         super._optionChanged(args);
         break;
       }
+      case 'toolbarItems':
+      case 'showTitle':
+      case 'showCloseButton':
+        super._optionChanged(args);
+        this._syncAriaAttributes();
+        break;
+      case '_popoverContentRole':
+      case '_describeTarget':
+        this._syncAriaAttributes();
+        this._toggleAriaLabel();
+        break;
       default:
         super._optionChanged(args);
     }

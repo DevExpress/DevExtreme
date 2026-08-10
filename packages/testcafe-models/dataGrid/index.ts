@@ -86,6 +86,7 @@ export const CLASS = {
   aiPromptEditor: 'dx-ai-prompt-editor',
   aiAssistantChat: 'dx-ai-chat',
   aiAssistantButton: 'ai-assistant-button',
+  aiAssistantConfirmDialog: 'ai-assistant-confirm-dialog',
   sortableDragging: 'dx-sortable-dragging',
 };
 
@@ -1125,7 +1126,10 @@ export default class DataGrid extends GridCore {
   }
 
   getAIAssistantChat(): AIAssistantChat {
-    return new AIAssistantChat(this.body.find(`.${CLASS.overlayWrapper}.${CLASS.aiAssistantChat}`));
+    return new AIAssistantChat(
+      this.body.find(`.${CLASS.overlayWrapper}.${CLASS.aiAssistantChat}`),
+      this.addWidgetPrefix(CLASS.aiAssistantConfirmDialog),
+    );
   }
 
   getAIAssistantButton(): Selector {

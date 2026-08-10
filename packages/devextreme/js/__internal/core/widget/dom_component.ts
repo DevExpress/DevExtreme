@@ -104,7 +104,7 @@ class DOMComponent<
     this._$element = $(element);
   }
 
-  _getSynchronizableOptionsForCreateComponent(): (keyof TProperties)[] {
+  _getSynchronizableOptionsForCreateComponent(): string[] {
     return ['rtlEnabled', 'disabled', 'templatesRenderAsynchronously'];
   }
 
@@ -344,7 +344,7 @@ class DOMComponent<
     const configuration = componentConfiguration ?? {};
 
     const synchronizableOptions = this._getSynchronizableOptionsForCreateComponent()
-      .filter((value) => !(value in configuration));
+      .filter((value) => !(value in configuration)) as (keyof TProperties)[];
 
     const { integrationOptions } = this.option();
     let { nestedComponentOptions } = this.option();

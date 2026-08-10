@@ -15,7 +15,7 @@ import {
 import type { FilterSyncController } from '@ts/grids/grid_core/filter/m_filter_sync';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
-import type { DataController } from '../data_controller/m_data_controller';
+import type { DataController } from '../data_controller/data_controller';
 import { registerKeyboardAction } from '../m_accessibility';
 import modules from '../m_modules';
 import type { ModuleType } from '../m_types';

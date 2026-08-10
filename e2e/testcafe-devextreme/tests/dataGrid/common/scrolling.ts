@@ -39,6 +39,12 @@ async function getTestLoadCount(): Promise<number> {
   return ClientFunction(() => (window as any).testLoadCount as number)();
 }
 
+async function getTestLoadOptions(): Promise<{ skip: number; take: number }[]> {
+  return ClientFunction(
+    () => (window as any).testLoadOptions as { skip: number; take: number }[],
+  )();
+}
+
 fixture.disablePageReloads`Scrolling`
   .page(url(__dirname, '../../container.html'));
 
@@ -2160,6 +2166,74 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
       });
     });
 });
+
+test('Remote virtual scrolling should send one request on init when starting on a non-first page with async templates (T1326786)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
+  await t.expect(dataGrid.getScrollTop()).gt(0);
+  await t.expect(dataGrid.apiPageIndex()).eql(10);
+
+  const loadOptions = await getTestLoadOptions();
+
+  await t.expect(loadOptions).eql([{ skip: 1000, take: 100 }]);
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).testLoadOptions = [];
+  })();
+
+  return createWidget('dxDataGrid', () => ({
+    height: 1000,
+    remoteOperations: true,
+    renderAsync: false,
+    templatesRenderAsynchronously: true,
+    dataSource: new (window as any).DevExpress.data.CustomStore({
+      key: 'id',
+      load(loadOptions: any) {
+        (window as any).testLoadOptions.push({
+          skip: loadOptions.skip,
+          take: loadOptions.take,
+        });
+
+        const skip = loadOptions.skip ?? 0;
+        const take = loadOptions.take ?? 20;
+        const data: Record<string, unknown>[] = [];
+
+        for (let i = skip; i < skip + take; i += 1) {
+          data.push({ id: i, text: `item ${i}` });
+        }
+
+        return Promise.resolve({ data, totalCount: 5000 });
+      },
+    }),
+    scrolling: {
+      mode: 'virtual',
+      useNative: false,
+    },
+    paging: {
+      pageSize: 100,
+      pageIndex: 10,
+    },
+    columns: [
+      { dataField: 'id', cellTemplate: 'cell' },
+      'text',
+    ],
+    integrationOptions: {
+      templates: {
+        cell: {
+          render(e: any) {
+            setTimeout(() => {
+              ($(e.container) as any).text(e.model.value);
+              e.onRendered?.();
+            });
+          },
+        },
+      },
+    },
+  }));
+}).after(async () => ClientFunction(() => {
+  delete (window as any).testLoadOptions;
+})());
 
 fixture`Scrolling - warnings`
   .page(url(__dirname, '../../container.html'));

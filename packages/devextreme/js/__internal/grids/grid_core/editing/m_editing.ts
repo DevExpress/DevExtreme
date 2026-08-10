@@ -27,7 +27,8 @@ import {
 import { confirm } from '@js/ui/dialog';
 import { current, isFluent } from '@js/ui/themes';
 import domUtils from '@ts/core/utils/m_dom';
-import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import { generateRowValues } from '@ts/grids/grid_core/data_controller/utils/row_values';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
@@ -614,6 +615,7 @@ class EditingControllerImpl extends modules.ViewController {
     });
 
     dataController.updateItems({
+      changeType: 'refresh',
       repaintChangesOnly: true,
       isLiveUpdate: false,
       isOptionChanged: true,
@@ -809,7 +811,7 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: validating
    */
-  public processDataItem(item, options, generateDataValues) {
+  public processDataItem(item, options) {
     const columns = options.visibleColumns;
     const key = item.data[INSERT_INDEX] ? item.data.key : item.key;
     const changes = this.getChanges();
@@ -818,11 +820,11 @@ class EditingControllerImpl extends modules.ViewController {
     item.isEditing = false;
 
     if (editIndex >= 0) {
-      this._processDataItemCore(item, changes[editIndex], key, columns, generateDataValues);
+      this._processDataItemCore(item, changes[editIndex], key, columns);
     }
   }
 
-  protected _processDataItemCore(item, change, key, columns, generateDataValues) {
+  protected _processDataItemCore(item, change, key, columns) {
     const { data, type } = change;
 
     // eslint-disable-next-line default-case
@@ -836,7 +838,7 @@ class EditingControllerImpl extends modules.ViewController {
         item.modified = true;
         item.oldData = item.data;
         item.data = createObjectWithChanges(item.data, data);
-        item.modifiedValues = generateDataValues(data, columns, true);
+        item.modifiedValues = generateRowValues(data, columns, true);
         break;
       case DATA_EDIT_DATA_REMOVE_TYPE:
         item.removed = true;
@@ -1982,6 +1984,7 @@ class EditingControllerImpl extends modules.ViewController {
     const dataController = this._dataController;
 
     dataController.updateItems({
+      changeType: 'refresh',
       repaintChangesOnly: this.option('repaintChangesOnly'),
     });
   }
@@ -2581,7 +2584,7 @@ export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataControll
   }
 
   protected _processDataItem(dataItem, options) {
-    this._editingController.processDataItem(dataItem, options, this.generateDataValues);
+    this._editingController.processDataItem(dataItem, options);
     return super._processDataItem(dataItem, options);
   }
 

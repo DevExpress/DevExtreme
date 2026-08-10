@@ -9,7 +9,6 @@ import type { Format } from '@js/localization';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import type { BoxItemData } from '@ts/ui/box';
 import Box from '@ts/ui/box';
-import type DateBox from '@ts/ui/date_box/date_box.base';
 import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
 import CalendarStrategy from '@ts/ui/date_box/date_box.strategy.calendar';
 import uiDateUtils from '@ts/ui/date_box/date_utils';
@@ -23,6 +22,8 @@ const DATEBOX_ADAPTIVITY_MODE_CLASS = 'dx-datebox-adaptivity-mode';
 const DATEBOX_TIMEVIEW_SIDE_CLASS = 'dx-datebox-datetime-time-side';
 
 class CalendarWithTimeStrategy extends CalendarStrategy {
+  NAME = 'CalendarWithTime';
+
   _timeView!: TimeView;
 
   _repaintTimer?: ReturnType<typeof setTimeout>;
@@ -32,12 +33,6 @@ class CalendarWithTimeStrategy extends CalendarStrategy {
   _currentAdaptiveMode?: boolean;
 
   _box?: Box;
-
-  constructor(dateBox: DateBox) {
-    super(dateBox);
-
-    this.NAME = 'CalendarWithTime';
-  }
 
   getDefaultOptions(): DateBoxBaseProperties {
     return {

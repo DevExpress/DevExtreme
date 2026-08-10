@@ -1,4 +1,4 @@
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import 'ui/data_grid';
 
@@ -1193,7 +1193,7 @@ QUnit.module('Footer with virtual scroll', {
 
         // act
         that.rowsView.render($testElement);
-        that.rowsView.height(205);
+        that.rowsView.height(400);
         that.rowsView.resize();
 
         // assert

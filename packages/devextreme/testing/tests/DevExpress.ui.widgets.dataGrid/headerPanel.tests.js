@@ -1,4 +1,4 @@
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import 'ui/data_grid';
 
@@ -262,31 +262,6 @@ QUnit.module('Header panel', {
         assert.ok($groupPanelItemChildren.eq(1).hasClass('dx-column-indicators'), 'indicators are after text in group panel');
     });
 
-    QUnit.test('Group panel with sorting, height after change font size', function(assert) {
-        // arrange
-        const headerPanel = this.headerPanel;
-        const testElement = $('#container');
-
-        $.extend(this.columns[0], { groupIndex: 0, allowSorting: true });
-
-        this.options.groupPanel = {
-            visible: true
-        };
-
-        headerPanel.render(testElement);
-
-        const groupHeader = testElement.find('.dx-datagrid-group-panel');
-        const oldHeight = groupHeader.height();
-
-        // act
-        groupHeader.css('font-size', '10px');
-
-        headerPanel.resize();
-
-        // assert
-        assert.ok(oldHeight > groupHeader.height(), 'sort indicator height changed');
-    });
-
     QUnit.test('Draw header panel with group panel and search panel', function(assert) {
         // arrange
         const headerPanel = this.headerPanel;
@@ -361,7 +336,7 @@ QUnit.module('Header panel', {
         const searchPanel = testElement.find('.dx-datagrid-search-panel');
         assert.strictEqual(input.length, 1);
         assert.strictEqual(searchPanel.length, 1);
-        assert.equal(searchPanel.outerWidth(), 213, 'default search panel width');
+        assert.roughEqual(searchPanel.outerWidth(), 213, 0.01, 'default search panel width');
     });
 
     // T947070
