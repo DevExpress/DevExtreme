@@ -1,6 +1,5 @@
 import type { DataSource } from '@js/common/data';
 import type { SearchOperation } from '@js/common/data.types';
-import type { ScalarFilterValue } from '@js/common/grids';
 import type { DeferredObj } from '@js/core/utils/deferred';
 
 import type { ChangedEvent, OperationTypes } from '../data_source_adapter/types';
@@ -110,6 +109,7 @@ export type PagingResult = number | DeferredObj<unknown> | Promise<unknown>;
 /** filter */
 
 export type FilterCombiner = 'and' | 'or';
+export type ScalarFilterValue = string | number | boolean | Date | null;
 
 /**
  * The operator may be omitted — `=` is implied. Only data layer operations
