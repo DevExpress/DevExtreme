@@ -8,7 +8,6 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable consistent-return */
 /* eslint-disable max-depth */
@@ -181,7 +180,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._dataChangedHandlerProxy = this._dataChangedHandler.bind(this);
     this._loadingChangedHandler = this._handleLoadingChanged.bind(this);
     this._loadErrorHandler = this._handleLoadError.bind(this);
-    this._changingHandler = this._handleChanging.bind(this);
+    this._changingHandler = this.handleChanging.bind(this);
     this._dataPushedHandler = this._handleDataPushed.bind(this);
 
     this._columnsController.columnsChanged.add(this.columnsChangedHandler.bind(this));
@@ -1195,10 +1194,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
   }
 
-  private _handleChanging(e) {
-    const that = this;
-    const rows = that.getVisibleRows();
-    const dataSource = that.dataSource();
+  private handleChanging(e) {
+    const rows = this.getVisibleRows();
+    const dataSource = this.dataSource();
 
     if (dataSource) {
       e.changes.forEach((change) => {
@@ -1343,8 +1341,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    * @extended: filter_sync
    */
   protected clearFilter(filterName?: string): void {
-    const that = this;
-    const columnsController = that._columnsController;
+    const columnsController = this._columnsController;
     const clearColumnOption = (optionName: string): void => {
       const columnCount = columnsController.columnCount();
 
@@ -1353,16 +1350,16 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       }
     };
 
-    that.component.beginUpdate();
+    this.component.beginUpdate();
 
     if (arguments.length > 0) {
       switch (filterName) {
         case 'dataSource':
-          that.filter(null);
+          this.filter(null);
           break;
         case 'search':
           // @ts-expect-error
-          that.searchByText('');
+          this.searchByText('');
           break;
         case 'header':
           clearColumnOption('filterValues');
@@ -1374,26 +1371,24 @@ export class DataController extends DataHelperMixin(modules.Controller) {
           break;
       }
     } else {
-      that.filter(null);
+      this.filter(null);
       // @ts-expect-error
-      that.searchByText('');
+      this.searchByText('');
       clearColumnOption('filterValue');
       clearColumnOption('bufferedFilterValue');
       clearColumnOption('filterValues');
     }
 
-    that.component.endUpdate();
+    this.component.endUpdate();
   }
 
-  private _fireDataSourceChanged() {
-    const that = this;
+  private readonly dataSourceChangedHandler = (): void => {
+    this.changed.remove(this.dataSourceChangedHandler);
+    this.dataSourceChanged.fire();
+  };
 
-    const changedHandler = function () {
-      that.changed.remove(changedHandler);
-      that.dataSourceChanged.fire();
-    };
-
-    that.changed.add(changedHandler);
+  private fireDataSourceChanged(): void {
+    this.changed.add(this.dataSourceChangedHandler);
   }
 
   protected _getDataSourceAdapter(): any {}
@@ -1407,37 +1402,36 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   private setDataSource(dataSource) {
-    const that = this;
-    const oldDataSource = that._dataSource;
+    const oldDataSource = this._dataSource;
 
     if (!dataSource && oldDataSource) {
       oldDataSource.cancelAll();
-      oldDataSource.changed.remove(that._dataChangedHandlerProxy);
-      oldDataSource.loadingChanged.remove(that._loadingChangedHandler);
-      oldDataSource.loadError.remove(that._loadErrorHandler);
-      oldDataSource.customizeStoreLoadOptions.remove(that._customizeStoreLoadOptionsHandler);
-      oldDataSource.changing.remove(that._changingHandler);
-      oldDataSource.pushed.remove(that._dataPushedHandler);
-      oldDataSource.dispose(that._isSharedDataSource);
+      oldDataSource.changed.remove(this._dataChangedHandlerProxy);
+      oldDataSource.loadingChanged.remove(this._loadingChangedHandler);
+      oldDataSource.loadError.remove(this._loadErrorHandler);
+      oldDataSource.customizeStoreLoadOptions.remove(this._customizeStoreLoadOptionsHandler);
+      oldDataSource.changing.remove(this._changingHandler);
+      oldDataSource.pushed.remove(this._dataPushedHandler);
+      oldDataSource.dispose(this._isSharedDataSource);
     }
 
     if (dataSource) {
-      dataSource = that._createDataSourceAdapter(dataSource);
+      dataSource = this._createDataSourceAdapter(dataSource);
     }
 
-    that._dataSource = dataSource;
+    this._dataSource = dataSource;
 
     if (dataSource) {
-      that._fireDataSourceChanged();
-      that._isLoading = !dataSource.isLoaded();
-      that._needApplyFilter = true;
-      that._isAllDataTypesDefined = that._columnsController.isAllDataTypesDefined();
-      dataSource.changed.add(that._dataChangedHandlerProxy);
-      dataSource.loadingChanged.add(that._loadingChangedHandler);
-      dataSource.loadError.add(that._loadErrorHandler);
-      dataSource.customizeStoreLoadOptions.add(that._customizeStoreLoadOptionsHandler);
-      dataSource.changing.add(that._changingHandler);
-      dataSource.pushed.add(that._dataPushedHandler);
+      this.fireDataSourceChanged();
+      this._isLoading = !dataSource.isLoaded();
+      this._needApplyFilter = true;
+      this._isAllDataTypesDefined = this._columnsController.isAllDataTypesDefined();
+      dataSource.changed.add(this._dataChangedHandlerProxy);
+      dataSource.loadingChanged.add(this._loadingChangedHandler);
+      dataSource.loadError.add(this._loadErrorHandler);
+      dataSource.customizeStoreLoadOptions.add(this._customizeStoreLoadOptionsHandler);
+      dataSource.changing.add(this._changingHandler);
+      dataSource.pushed.add(this._dataPushedHandler);
     }
   }
 
@@ -1470,10 +1464,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   public loadAll(data, skipFilter = false) {
-    const that = this;
     // @ts-expect-error
     const d = new Deferred();
-    const dataSource = that._dataSource;
+    const dataSource = this._dataSource;
 
     if (dataSource) {
       if (data) {
@@ -1482,21 +1475,21 @@ export class DataController extends DataHelperMixin(modules.Controller) {
           isCustomLoading: true,
           storeLoadOptions: { isLoadingAll: true },
           loadOptions: {
-            filter: skipFilter ? null : that.getCombinedFilter(),
+            filter: skipFilter ? null : this.getCombinedFilter(),
             group: dataSource.group(),
             sort: dataSource.sort(),
           },
         };
         dataSource._handleDataLoaded(options);
         when(options.data).done((data) => {
-          data = that._beforeProcessItems(data);
-          d.resolve(that._processItems(data, { changeType: 'loadingAll' }), options.extra?.summary);
+          data = this._beforeProcessItems(data);
+          d.resolve(this._processItems(data, { changeType: 'loadingAll' }), options.extra?.summary);
         }).fail(d.reject);
       } else if (!dataSource.isLoading()) {
         const loadOptions = extend({}, dataSource.loadOptions(), { isLoadingAll: true, requireTotalCount: false });
         dataSource.load(loadOptions).done((items, extra) => {
-          items = that._beforeProcessItems(items);
-          items = that._processItems(items, { changeType: 'loadingAll' });
+          items = this._beforeProcessItems(items);
+          items = this._processItems(items, { changeType: 'loadingAll' });
           d.resolve(items, extra?.summary);
         }).fail(d.reject);
       } else {
@@ -1569,14 +1562,13 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   private getDataByKeys(rowKeys) {
-    const that = this;
     // @ts-expect-error
     const result = new Deferred();
     const deferreds: any[] = [];
     const data: any[] = [];
 
     each(rowKeys, (index, key) => {
-      deferreds.push(that.byKey(key).done((keyData) => {
+      deferreds.push(this.byKey(key).done((keyData) => {
         data[index] = keyData;
       }));
     });
@@ -1670,28 +1662,27 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       options = { reload: true, lookup: true };
     }
 
-    const that = this;
-    const dataSource = that.getDataSource();
+    const dataSource = this.getDataSource();
     const { changesOnly } = options;
     // @ts-expect-error
     const d = new Deferred();
 
-    const customizeLoadResult = function () {
-      that._repaintChangesOnly = !!changesOnly;
+    const customizeLoadResult = (): void => {
+      this._repaintChangesOnly = !!changesOnly;
     };
 
-    when(!options.lookup || that._columnsController.refresh()).always(() => {
+    when(!options.lookup || this._columnsController.refresh()).always(() => {
       if (options.load || options.reload) {
         // @ts-expect-error `customizeLoadResult` is an internal DataSource event
         dataSource?.on('customizeLoadResult', customizeLoadResult);
 
-        when(that.reload(options.reload, changesOnly)).always(() => {
+        when(this.reload(options.reload, changesOnly)).always(() => {
           // @ts-expect-error `customizeLoadResult` is an internal DataSource event
           dataSource?.off('customizeLoadResult', customizeLoadResult);
-          that._repaintChangesOnly = undefined;
+          this._repaintChangesOnly = undefined;
         }).done(d.resolve).fail(d.reject);
       } else {
-        that.updateItems({
+        this.updateItems({
           changeType: 'refresh',
           repaintChangesOnly: options.changesOnly,
         });
