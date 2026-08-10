@@ -922,7 +922,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
       ? this._items.at(-1)
       : null;
 
-    return isDefined(lastVisibleItem?.dataIndex) ? lastVisibleItem.dataIndex + 1 : 0;
+    return isDefined(lastVisibleItem?.dataIndex) ? lastVisibleItem!.dataIndex + 1 : 0;
   }
 
   private viewportSize() {
