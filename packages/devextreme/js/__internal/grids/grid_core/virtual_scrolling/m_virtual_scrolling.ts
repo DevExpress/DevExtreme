@@ -912,12 +912,17 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     return offset;
   }
 
-  protected getDataIndex() {
+  protected getDataIndex(change: DataChange): number {
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
       return this.getRowIndexOffset(true, true);
     }
 
-    return super.getDataIndex.apply(this, arguments as any);
+    // @ts-expect-error changeType can be 'append' only when virtual scrolling with scrolling.legacyMode are enabled
+    const lastVisibleItem = change.changeType === 'append' && this._items.length > 0
+      ? this._items.at(-1)
+      : null;
+
+    return isDefined(lastVisibleItem?.dataIndex) ? lastVisibleItem.dataIndex + 1 : 0;
   }
 
   private viewportSize() {
