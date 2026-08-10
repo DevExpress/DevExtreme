@@ -69,7 +69,7 @@ export default class CompileManager {
         css = removeExternalResources(css);
       }
 
-      css = addInfoHeader(css, version, true);
+      css = addInfoHeader(css, version);
 
       return {
         compiledMetadata: compileData.changedVariables,
