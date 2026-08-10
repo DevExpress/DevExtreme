@@ -1,6 +1,6 @@
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import type { ProcessedItem, UserData } from '../data_controller/types';
+import type { ProcessedItem, RawItemData } from '../data_controller/types';
 import type { InternalGrid, RowKey } from '../m_types';
 import type { INSERT_INDEX } from './const';
 
@@ -20,7 +20,7 @@ export interface InsertInfo {
 
 export interface InternalEditData {
   key: RowKey;
-  oldData?: UserData;
+  oldData?: RawItemData;
   insertInfo?: InsertInfo;
   error?: Error;
 }

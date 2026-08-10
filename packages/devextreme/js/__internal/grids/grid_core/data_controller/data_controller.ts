@@ -59,7 +59,7 @@ import type {
   PagingOptionName,
   PagingResult,
   ProcessedItem,
-  UserData,
+  RawItemData,
 } from './types';
 import { resolvePaginate, syncPaging } from './utils/paging';
 import { generateRowValues } from './utils/row_values';
@@ -693,7 +693,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended: DataGrid's grouping
    */
-  protected _beforeProcessItems(items: UserData[]): UserData[] {
+  protected _beforeProcessItems(items: RawItemData[]): RawItemData[] {
     return items.slice(0);
   }
 
@@ -707,10 +707,12 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended: virtual_scrolling
    */
-  protected getDataIndex(change: DataChange | { changeType: 'loadingAll' }): number {
+  protected getDataIndex(change: DataChange): number {
     const visibleItems = this._items;
     // @ts-expect-error changeType can be 'append' only when virtual scrolling with scrolling.legacyMode are enabled
-    const lastVisibleItem = change.changeType === 'append' && visibleItems.length > 0 ? visibleItems[visibleItems.length - 1] : null;
+    const lastVisibleItem = change.changeType === 'append' && visibleItems.length > 0
+      ? visibleItems[visibleItems.length - 1]
+      : null;
 
     return isDefined(lastVisibleItem?.dataIndex) ? lastVisibleItem!.dataIndex + 1 : 0;
   }
@@ -718,10 +720,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended: adaptivity, editing, master_detail, virtual_scrolling
    */
-  protected _processItems(
-    items: UserData[],
-    change: DataChange | { changeType: 'loadingAll' },
-  ): ProcessedItem[] {
+  protected _processItems(items: RawItemData[], change: DataChange): ProcessedItem[] {
     const rowIndexDelta = this.getRowIndexDelta();
     const { changeType } = change;
     const visibleColumns = this._columnsController.getVisibleColumns(null, changeType === 'loadingAll');
@@ -746,7 +745,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended: editing, grouping (DataGrid)
    */
-  protected _processItem(dataItem: UserData, options: ItemProcessingOptions): ProcessedItem {
+  protected _processItem(dataItem: RawItemData, options: ItemProcessingOptions): ProcessedItem {
     const generatedItem = this._generateDataItem(dataItem, options);
     const processedItem = this._processDataItem(generatedItem, options);
 
@@ -759,7 +758,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    * @extended: treelist
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _generateDataItem(data: UserData, options?: ItemProcessingOptions): GeneratedItem {
+  protected _generateDataItem(data: RawItemData, options?: ItemProcessingOptions): GeneratedItem {
     return {
       rowType: 'data',
       data,
@@ -1141,7 +1140,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._currentOperationTypes = null;
 
     if (dataSource) {
-      const getDataItems = (): ProcessedItem[] => {
+      const getProcessedItems = (): ProcessedItem[] => {
         const cachedProcessedItems = this._cachedProcessedItems;
         const useProcessedItemsCache = 'useProcessedItemsCache' in change && change.useProcessedItemsCache;
 
@@ -1150,19 +1149,18 @@ export class DataController extends DataHelperMixin(modules.Controller) {
         }
 
         // change.items at this stage is defined only if virtualScrolling + legacyScrollingMode enabled
-        let dataItems = change.items ?? dataSource.items();
-        dataItems = this._beforeProcessItems(dataItems);
-
+        const dataItems = this._beforeProcessItems(change.items ?? dataSource.items());
         const processedItems = this._processItems(dataItems, change);
+
         this._cachedProcessedItems = processedItems;
 
         return processedItems;
       };
 
-      const dataItems = this._afterProcessItems(getDataItems());
-      const oldDataItems = this._items.length === dataItems.length ? this._items : null;
+      const items = this._afterProcessItems(getProcessedItems());
+      const oldItems = this._items.length === items.length ? this._items : null;
 
-      change.items = dataItems;
+      change.items = items;
 
       this._applyChange(change);
 
@@ -1170,11 +1168,11 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
       this._items.forEach((item, index) => {
         item.rowIndex = index - rowIndexDelta;
-        if (oldDataItems) {
-          item.cells = oldDataItems[index].cells ?? [];
+        if (oldItems) {
+          item.cells = oldItems[index].cells ?? [];
         }
 
-        const newItem = dataItems[index];
+        const newItem = items[index];
         if (newItem) {
           item.loadIndex = newItem.loadIndex;
         }
@@ -1436,7 +1434,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    * @extended: virtual_scrolling
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public items(byLoaded?): ProcessedItem[] {
+  public items(byLoaded?: boolean): ProcessedItem[] {
     return this._items;
   }
 

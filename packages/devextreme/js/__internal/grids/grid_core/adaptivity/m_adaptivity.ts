@@ -24,7 +24,7 @@ import { AI_COLUMN_NAME } from '../ai_column/const';
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { ColumnsResizerViewController, DraggingHeaderViewController } from '../columns_resizing_reordering/m_columns_resizing_reordering';
 import type { DataController } from '../data_controller/data_controller';
-import type { DataChange, ProcessedItem, UserData } from '../data_controller/types';
+import type { DataChange, ProcessedItem, RawItemData } from '../data_controller/types';
 import type { EditingController } from '../editing/m_editing';
 import type { EditorFactory } from '../editor_factory/m_editor_factory';
 import type { Direction } from '../keyboard_navigation/const';
@@ -1194,10 +1194,7 @@ const data = (
     this._adaptiveExpandedKey = undefined;
   }
 
-  protected _processItems(
-    items: UserData[],
-    change: DataChange | { changeType: 'loadingAll' },
-  ): ProcessedItem[] {
+  protected _processItems(items: RawItemData[], change: DataChange): ProcessedItem[] {
     const processedItems = super._processItems(items, change);
     const { changeType } = change;
 
