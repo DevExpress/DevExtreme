@@ -9,7 +9,7 @@ import { compileGetter, toComparable } from '@js/core/utils/data';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import type { DataController } from '../data_controller/data_controller';
-import type { Filter } from '../data_controller/types';
+import type { DataFilter } from '../data_controller/types';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
 import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
@@ -57,7 +57,7 @@ const dataController = (
     return super.publicMethods().concat(['searchByText']);
   }
 
-  protected _calculateAdditionalFilter(): Filter {
+  protected _calculateAdditionalFilter(): DataFilter {
     const dataSource = this._dataController?.getDataSource?.();
     const langParams = dataSource?.loadOptions?.()?.langParams;
 
@@ -71,7 +71,7 @@ const dataController = (
     this.option('searchPanel.text', text);
   }
 
-  private calculateSearchFilter(text: string | undefined, langParams?: LangParams): Filter {
+  private calculateSearchFilter(text: string | undefined, langParams?: LangParams): DataFilter {
     let column;
     const columns = this._columnsController.getColumns();
     const searchVisibleColumnsOnly = this.option('searchPanel.searchVisibleColumnsOnly');
