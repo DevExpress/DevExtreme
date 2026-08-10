@@ -31,6 +31,7 @@ import type { TimeZoneCalculator } from '../r1/timezone_calculator/calculator';
 import type { CreateComponentFn, SafeAppointment } from '../types';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
+import type { RawResourceData } from '../utils/loader/types';
 import { DEFAULT_ICONS_SHOW_MODE } from '../utils/options/constants';
 import { getAppointmentGroupIndex, getRawAppointmentGroupValues, getSafeGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
@@ -96,6 +97,12 @@ const CLASSES = {
   recurrenceGroup: 'dx-scheduler-form-recurrence-group',
   recurrenceHidden: 'dx-scheduler-form-recurrence-group-hidden',
 };
+
+const getResourceEditorDataSource = (
+  resourceLoader: ResourceLoader,
+): ResourceLoader['dataSource'] | RawResourceData[] => (resourceLoader.hasHierarchy
+  ? resourceLoader.leafData
+  : resourceLoader.dataSource);
 
 const createTimeZoneDataSource = (): DataSource => new DataSource({
   store: timeZoneUtils.getTimeZonesCache(),
@@ -247,6 +254,7 @@ export class AppointmentForm {
     const customizedItems = customizeFormItems(items, this.getEditingForm()?.items);
 
     this.createForm(customizedItems);
+    this.refreshUnloadedHierarchicalResources();
   }
 
   private getEditingForm(): SchedulerEditingObject['form'] {
@@ -749,12 +757,25 @@ export class AppointmentForm {
     } as GroupItem;
   }
 
+  private refreshUnloadedHierarchicalResources(): void {
+    this.resourceManager.resources
+      .filter((resource) => resource.hasHierarchy && !resource.isLoaded())
+      .forEach((resource) => {
+        resource.load()
+          .then(() => {
+            this.dxFormInstance
+              ?.getEditor(resource.resourceIndex)
+              ?.option('dataSource', resource.leafData);
+          })
+          .catch(noop);
+      });
+  }
+
   private createResourcesGroup(): GroupItem {
-    const resourceById = Object.values(this.config.resourceManager.resourceById);
-    const resourcesLoaders: ResourceLoader[] = resourceById;
+    const resourcesLoaders = this.resourceManager.resources;
 
     let resourcesItems: FormItem[] = resourcesLoaders.map((resourceLoader) => {
-      const { dataSource, dataAccessor } = resourceLoader;
+      const { dataAccessor } = resourceLoader;
       const dataField = resourceLoader.resourceIndex;
       const name = `${dataField}Editor`;
       const label = resourceLoader.resourceName ?? dataField;
@@ -768,7 +789,7 @@ export class AppointmentForm {
         colSpan: 1,
         editorType,
         editorOptions: {
-          dataSource,
+          dataSource: getResourceEditorDataSource(resourceLoader),
           displayExpr: dataAccessor.textExpr,
           valueExpr: dataAccessor.idExpr,
         },

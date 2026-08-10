@@ -39,6 +39,8 @@ export class ResourceLoader extends Loader<RawResourceData, ResourceData> {
 
   public leafItems: ResourceData[] = [];
 
+  public leafData: RawResourceData[] = [];
+
   constructor(config: ResourceConfig) {
     super(config, { pageSize: 0 });
     const accessor = getAppointmentResourceAccessor(config);
@@ -85,11 +87,16 @@ export class ResourceLoader extends Loader<RawResourceData, ResourceData> {
     if (!this.hasHierarchy) {
       this.hierarchyTree = [];
       this.leafItems = this.items;
+      this.leafData = this.data;
       return;
     }
 
     this.hierarchyTree = buildHierarchyTree(this.items);
     this.leafItems = collectHierarchyLeaves(this.hierarchyTree);
+
+    const leaves = new Set(this.leafItems);
+
+    this.leafData = this.data.filter((_, index) => leaves.has(this.items[index]));
   }
 
   protected onLoadError(): void {}
@@ -100,5 +107,6 @@ export class ResourceLoader extends Loader<RawResourceData, ResourceData> {
     super.dispose();
     this.hierarchyTree = [];
     this.leafItems = [];
+    this.leafData = [];
   }
 }
