@@ -19,6 +19,19 @@ export interface ItemProcessingOptions {
   isDeferredSelection?: boolean;
 }
 
+export type RowUpdate = (row?: ProcessedItem, keepRow?: boolean) => void;
+
+export type RowWatch = (
+  getter: (data: RawItemData) => unknown,
+  updateValue: (value: unknown) => void,
+  updateRow?: (row: ProcessedItem) => void,
+) => () => void;
+
+export interface Cell {
+  column?: Column;
+  update?: RowUpdate;
+}
+
 export interface GeneratedItem {
   rowType: 'data' | 'group' | 'groupFooter' | 'detailAdaptive' | 'detail';
   data: RawItemData;
@@ -33,14 +46,17 @@ export interface GeneratedItem {
 
 export interface ProcessedItem extends GeneratedItem {
   values: unknown[];
+  oldValues?: unknown[];
   dataIndex?: number;
   isSelected?: boolean;
   visible?: boolean;
   isExpanded?: boolean;
   loadIndex?: number;
   rowIndex?: number;
-  cells?: unknown[];
+  cells?: Cell[];
   summaryCells?: unknown[];
+  update?: RowUpdate;
+  watch?: RowWatch;
 }
 
 interface DataChangeBase {
@@ -49,11 +65,13 @@ interface DataChangeBase {
   needUpdateDimensions?: boolean;
   isDataChanged?: boolean;
   operationTypes?: OperationTypes | null;
-  items?: unknown[];
+  items?: ProcessedItem[];
   changes?: unknown[];
   cancel?: boolean;
   isLiveUpdate?: boolean;
 }
+
+export type RowChangeType = 'update' | 'insert' | 'remove';
 
 interface SelectionChange extends DataChangeBase {
   changeType: 'updateSelection';
@@ -65,9 +83,11 @@ interface FocusedRowChange extends DataChangeBase {
   focusedRowKey: unknown | null;
 }
 
-interface UpdateChange extends DataChangeBase {
+export interface UpdateChange extends DataChangeBase {
   changeType: 'update';
   rowIndices: number[];
+  changeTypes?: RowChangeType[];
+  columnIndices?: (number[] | undefined)[];
   isFullUpdate?: boolean;
   allowInvisibleRowIndices?: boolean;
 }
