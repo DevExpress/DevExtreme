@@ -16,6 +16,16 @@ import type {
   ResourceData,
 } from './types';
 
+const filterLeafData = (
+  data: RawResourceData[],
+  items: ResourceData[],
+  leafItems: ResourceData[],
+): RawResourceData[] => {
+  const leaves = new Set(leafItems);
+
+  return data.filter((_, index) => leaves.has(items[index]));
+};
+
 export class ResourceLoader extends Loader<RawResourceData, ResourceData> {
   public idsGetter: ResourceIdAccessor['idsGetter'];
 
@@ -38,6 +48,8 @@ export class ResourceLoader extends Loader<RawResourceData, ResourceData> {
   public hierarchyTree: ResourceHierarchyNode[] = [];
 
   public leafItems: ResourceData[] = [];
+
+  public leafData: RawResourceData[] = [];
 
   constructor(config: ResourceConfig) {
     super(config, { pageSize: 0 });
@@ -85,11 +97,20 @@ export class ResourceLoader extends Loader<RawResourceData, ResourceData> {
     if (!this.hasHierarchy) {
       this.hierarchyTree = [];
       this.leafItems = this.items;
+      this.leafData = this.data;
       return;
     }
 
     this.hierarchyTree = buildHierarchyTree(this.items);
     this.leafItems = collectHierarchyLeaves(this.hierarchyTree);
+    this.leafData = filterLeafData(this.data, this.items, this.leafItems);
+  }
+
+  public collectLeafData(data: RawResourceData[]): RawResourceData[] {
+    const items = this.onLoadTransform(data);
+    const leafItems = collectHierarchyLeaves(buildHierarchyTree(items));
+
+    return filterLeafData(data, items, leafItems);
   }
 
   protected onLoadError(): void {}
@@ -100,5 +121,6 @@ export class ResourceLoader extends Loader<RawResourceData, ResourceData> {
     super.dispose();
     this.hierarchyTree = [];
     this.leafItems = [];
+    this.leafData = [];
   }
 }

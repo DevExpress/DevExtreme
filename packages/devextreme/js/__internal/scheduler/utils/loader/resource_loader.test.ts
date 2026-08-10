@@ -104,6 +104,43 @@ describe('resource loader', () => {
       expect(loader.hasHierarchy).toBe(false);
       expect(loader.hierarchyTree).toEqual([]);
       expect(loader.leafItems).toEqual(loader.items);
+      expect(loader.leafData).toEqual(loader.data);
+    });
+
+    it('should collect raw leaf items into leafData', async () => {
+      const loader = new ResourceLoader(getHierarchyConfig(roomData));
+
+      await loader.load();
+
+      expect(loader.leafData).toEqual([roomData[2], roomData[3], roomData[4]]);
+    });
+
+    it('should collect raw leaf items from a given array', () => {
+      const loader = new ResourceLoader(getHierarchyConfig(roomData));
+
+      const leafData = loader.collectLeafData(roomData);
+
+      expect(leafData).toEqual([roomData[2], roomData[3], roomData[4]]);
+    });
+
+    it('should keep the user fields and expressions usable in leafData', async () => {
+      const rawData = [
+        { key: 'board', name: 'Board rooms', floor: 1 },
+        {
+          key: 11, name: 'Room 11', parent: 'board', floor: 2,
+        },
+      ];
+      const loader = new ResourceLoader({
+        fieldExpr: 'roomId',
+        parentIdExpr: 'parent',
+        valueExpr: 'key',
+        displayExpr: 'name',
+        dataSource: rawData,
+      });
+
+      await loader.load();
+
+      expect(loader.leafData).toEqual([rawData[1]]);
     });
 
     it('should clear hierarchy tree and leaf items on dispose', async () => {
@@ -114,6 +151,7 @@ describe('resource loader', () => {
 
       expect(loader.hierarchyTree).toEqual([]);
       expect(loader.leafItems).toEqual([]);
+      expect(loader.leafData).toEqual([]);
     });
   });
 });
