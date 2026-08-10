@@ -344,6 +344,14 @@ $scheduler-month-date-text-padding: 6px;
   }
 }
 
+// without hierarchy every grouping level is a column of its own, so the top cell of each column lies on the panel edge
+.dx-scheduler-work-space-vertical-group-table,
+.dx-scheduler-group-table {
+  > .dx-scheduler-group-flex-container:not(.dx-scheduler-group-flex-container-hierarchical) > .dx-scheduler-group-row > .dx-scheduler-group-header:first-child {
+    border-top: none;
+  }
+}
+
 .dx-scheduler-group-flex-container-hierarchical {
   flex-direction: column;
 
