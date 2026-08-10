@@ -34,7 +34,7 @@ import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type {
   DataChange,
-  GeneratedDataItem, ProcessedDataItem, RowGenerationOptions, UserData,
+  GeneratedItem, ProcessedItem, RowGenerationOptions, UserData,
 } from '../data_controller/types';
 import modules from '../m_modules';
 import type {
@@ -815,7 +815,7 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: validating
    */
-  public processDataItem(generatedItem: GeneratedDataItem, options: RowGenerationOptions): void {
+  public processDataItem(generatedItem: GeneratedItem, options: RowGenerationOptions): void {
     const columns = options.visibleColumns;
     const key = generatedItem.data[INSERT_INDEX] ? generatedItem.data.key : generatedItem.key;
     const changes = this.getChanges();
@@ -828,7 +828,7 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  protected _processDataItemCore(item: GeneratedDataItem, change, key, columns) {
+  protected _processDataItemCore(item: GeneratedItem, change, key, columns) {
     const { data, type } = change;
 
     // eslint-disable-next-line default-case
@@ -2585,15 +2585,15 @@ export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataControll
   protected _processItems(
     items: UserData[],
     change: DataChange | { changeType: 'loadingAll' },
-  ): ProcessedDataItem[] {
+  ): ProcessedItem[] {
     items = this._editingController.processItems(items, change);
     return super._processItems(items, change);
   }
 
   protected _processDataItem(
-    generatedItem: GeneratedDataItem,
+    generatedItem: GeneratedItem,
     options: RowGenerationOptions,
-  ): ProcessedDataItem {
+  ): ProcessedItem {
     this._editingController.processDataItem(generatedItem, options);
     return super._processDataItem(generatedItem, options);
   }
