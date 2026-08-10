@@ -14,6 +14,10 @@ import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
+import type {
+  DataChange,
+  GeneratedDataItem, ProcessedDataItem, RowGenerationOptions, UserData,
+} from '../data_controller/types';
 import gridCoreUtils from '../m_utils';
 import { CLASSES } from './const';
 import { isDetailRow } from './utils';
@@ -131,11 +135,14 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
     return super._processDataItem.apply(this, arguments as any);
   }
 
-  protected _processDataItem(data, options) {
+  protected _processDataItem(
+    generatedItem: GeneratedDataItem,
+    options: RowGenerationOptions,
+  ): ProcessedDataItem {
     const that = this;
-    const dataItem = super._processDataItem.apply(that, arguments as any);
+    const processedItem = super._processDataItem(generatedItem, options);
 
-    dataItem.isExpanded = that.isRowExpanded(dataItem.key);
+    processedItem.isExpanded = that.isRowExpanded(processedItem.key);
 
     if (options.detailColumnIndex === undefined) {
       options.detailColumnIndex = -1;
@@ -149,31 +156,34 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
       });
     }
     if (options.detailColumnIndex >= 0) {
-      dataItem.values[options.detailColumnIndex] = dataItem.isExpanded;
+      processedItem.values[options.detailColumnIndex] = processedItem.isExpanded;
     }
-    return dataItem;
+    return processedItem;
   }
 
   protected _processItemsHack() {
     return super._processItems.apply(this, arguments as any);
   }
 
-  protected _processItems(items, change) {
+  protected _processItems(
+    items: UserData[],
+    change: DataChange | { changeType: 'loadingAll' },
+  ): ProcessedDataItem[] {
     const that = this;
     const { changeType } = change;
     const result: any[] = [];
 
-    items = super._processItems.apply(that, arguments as any);
+    const processedItems = super._processItems(items, change);
 
     if (changeType === 'loadingAll') {
-      return items;
+      return processedItems;
     }
 
     if (changeType === 'refresh') {
       that._expandedItems = grep(that._expandedItems, (item) => item.visible);
     }
 
-    each(items, (index, item) => {
+    each(processedItems, (index, item) => {
       result.push(item);
       const expandIndex = gridCoreUtils.getIndexByKey(item.key, that._expandedItems);
 

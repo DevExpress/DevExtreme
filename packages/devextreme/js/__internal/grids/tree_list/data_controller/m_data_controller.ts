@@ -23,6 +23,7 @@ export class TreeListDataController extends DataController {
     return level;
   }
 
+  // @ts-expect-error need to define treelist specific types for params
   protected _generateDataItem(node, options) {
     return {
       rowType: 'data',

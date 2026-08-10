@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import type { Item, UserData } from '../data_controller/types';
+import type { ProcessedDataItem, UserData } from '../data_controller/types';
 import {
   getDataFromRowItems,
   isAIColumnAutoMode,
@@ -159,7 +159,7 @@ describe('getDataFromRowItems', () => {
         key: 'id',
         rowType: 'data',
       },
-    ] as unknown as Item[];
+    ] as unknown as ProcessedDataItem[];
     const result = getDataFromRowItems(items);
     expect(result).toEqual([
       { id: 1, value: 'one' },
@@ -179,7 +179,7 @@ describe('getDataFromRowItems', () => {
         key: 'id',
         rowType: 'group',
       },
-    ] as unknown as Item[];
+    ] as unknown as ProcessedDataItem[];
     const result = getDataFromRowItems(items);
     expect(result).toEqual([
       { id: 1, value: 'one' },

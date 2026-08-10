@@ -1,7 +1,7 @@
 import { isDefined } from '@ts/core/utils/m_type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import type { Item, UserData } from '../data_controller/types';
+import type { ProcessedDataItem, UserData } from '../data_controller/types';
 import { AI_COLUMN_NAME, CLASSES } from './const';
 
 export const getAICommandColumnDefaultOptions = (): object => ({
@@ -13,7 +13,7 @@ export const getAICommandColumnDefaultOptions = (): object => ({
   minWidth: 120,
 });
 
-export const getDataFromRowItems = (items: Item[]): UserData[] => items
+export const getDataFromRowItems = (items: ProcessedDataItem[]): UserData[] => items
   .filter((row) => row.rowType === 'data')
   .map((row) => row.data);
 
