@@ -23,7 +23,7 @@ export interface RowGenerationOptions {
 }
 
 export interface GeneratedDataItem {
-  rowType: 'data' | 'group' | 'groupFooter' | 'detailAdaptive';
+  rowType: 'data' | 'group' | 'groupFooter' | 'detailAdaptive' | 'detail';
   data: UserData;
   key: unknown;
   isEditing?: boolean;

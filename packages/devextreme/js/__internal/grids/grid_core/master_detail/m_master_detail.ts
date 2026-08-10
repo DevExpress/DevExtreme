@@ -171,7 +171,7 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
   ): ProcessedDataItem[] {
     const that = this;
     const { changeType } = change;
-    const result: any[] = [];
+    const result: ProcessedDataItem[] = [];
 
     const processedItems = super._processItems(items, change);
 
