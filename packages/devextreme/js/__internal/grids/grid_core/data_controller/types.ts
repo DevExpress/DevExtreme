@@ -2,6 +2,7 @@ import type { DataSource } from '@js/common/data';
 import type { SearchOperation } from '@js/common/data.types';
 import type { DeferredObj } from '@js/core/utils/deferred';
 
+import type { Column } from '../columns_controller/types';
 import type { ChangedEvent, OperationTypes } from '../data_source_adapter/types';
 
 /** data */
@@ -12,22 +13,36 @@ export interface DataSourceAdapterLike {
 
 export type UserData = Record<string, unknown>;
 
-export interface Item {
+export interface RowGenerationOptions {
+  visibleColumns: Column[];
+  dataIndex: number;
+  rowIndex?: number;
+  detailColumnIndex?: number;
+  isDeferredSelection?: boolean;
+}
+
+export interface GeneratedDataItem {
   rowType: 'data' | 'group' | 'groupFooter' | 'detailAdaptive';
   data: UserData;
   key: unknown;
+  isEditing?: boolean;
+  isNewRow?: boolean;
+  modified?: boolean;
   oldData?: UserData;
+  modifiedValues?: unknown[];
+  removed?: boolean;
+}
+
+export interface ProcessedDataItem extends GeneratedDataItem {
+  values: unknown[];
   dataIndex?: number;
-  values?: unknown[];
+  isSelected?: boolean;
   visible?: boolean;
   isExpanded?: boolean;
-  isNewRow?: boolean;
-  summaryCells?: unknown[];
+  loadIndex?: number;
   rowIndex?: number;
   cells?: unknown[];
-  loadIndex?: number;
-  isSelected?: boolean;
-  removed?: boolean;
+  summaryCells?: unknown[];
 }
 
 interface DataChangeBase {
