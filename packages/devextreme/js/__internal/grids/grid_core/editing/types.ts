@@ -1,11 +1,11 @@
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import type { Item, UserData } from '../data_controller/types';
+import type { ProcessedDataItem, UserData } from '../data_controller/types';
 import type { InternalGrid, RowKey } from '../m_types';
 import type { INSERT_INDEX } from './const';
 
 export interface NormalizedEditCellOptions {
-  item: Item;
+  item: ProcessedDataItem;
   oldColumn: Column;
   column: Column;
   columnIndex: number;
@@ -26,10 +26,12 @@ export interface InternalEditData {
 }
 
 export interface EditActionOptions {
-  row?: Item;
+  row?: ProcessedDataItem;
 }
 
-export type AllowEditActionCallback = (options: { component: InternalGrid; row?: Item }) => boolean;
+export type AllowEditActionCallback = (
+  options: { component: InternalGrid; row?: ProcessedDataItem },
+) => boolean;
 
 export type AllowEditActionValue = boolean | AllowEditActionCallback;
 
