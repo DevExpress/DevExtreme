@@ -31,17 +31,6 @@ export interface Item {
   removed?: boolean;
 }
 
-export type FilterExpression = ((data: UserData) => boolean) | unknown[];
-
-export type Filter = FilterExpression | null | undefined;
-
-export interface HandleDataChangedArguments {
-  changeType?: 'refresh' | 'update' | 'loadError';
-  isDelayed?: boolean;
-  isLiveUpdate?: boolean;
-  error?: unknown;
-}
-
 interface DataChangeBase {
   isFirstRender?: boolean;
   repaintChangesOnly?: boolean;

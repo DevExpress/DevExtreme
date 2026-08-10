@@ -52,8 +52,6 @@ import type {
   DataChange,
   DataFilter,
   DataSourceAdapterLike,
-  HandleDataChangedArguments,
-  Filter,
   Item,
   PagingChanges,
   PagingDataSource,
@@ -352,16 +350,16 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return adapter ? adapter._dataSource : null;
   }
 
-  public getCombinedFilter(returnDataField?: boolean): Filter {
+  public getCombinedFilter(returnDataField?: boolean): DataFilter {
     return this.combinedFilter(undefined, returnDataField);
   }
 
-  private combinedFilter(filter: Filter, returnDataField?: boolean): Filter {
+  private combinedFilter(filter: DataFilter, returnDataField?: boolean): DataFilter {
     if (!this._dataSource) {
       return filter;
     }
 
-    let combined: Filter = filter ?? this._dataSource.filter();
+    let combined: DataFilter = filter ?? this._dataSource.filter();
 
     const isColumnsTypesDefined = this._columnsController.isDataSourceApplied()
       || this._columnsController.isAllDataTypesDefined();
