@@ -39,7 +39,8 @@ import type { SelectionController } from '@ts/grids/grid_core/selection/m_select
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
 
-import type { OperationTypes } from '../data_source_adapter/types';
+import type { ColumnsChanges } from '../columns_controller/types';
+import type { ChangedEvent, LoadOperation, OperationTypes } from '../data_source_adapter/types';
 import modules from '../m_modules';
 import type {
   Controllers, Module, OptionChanged, RowKey,
@@ -52,7 +53,6 @@ import type {
   DataChange,
   DataSourceAdapterLike,
   Filter,
-  HandleDataChangedArguments,
   Item,
   PagingChanges,
   PagingDataSource,
@@ -60,7 +60,6 @@ import type {
   PagingResult,
 } from './types';
 import { resolvePaginate, syncPaging } from './utils/paging';
-import { normalizeRemoteOperations } from './utils/remoteOperations';
 import { generateRowValues } from './utils/row_values';
 
 export class DataController extends DataHelperMixin(modules.Controller) {
@@ -148,19 +147,15 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _validatingController!: ValidatingController;
 
-  private _columnsChangedHandler!: (e: unknown) => void;
-
   private _loadingChangedHandler!: (isLoading: boolean) => void;
 
   private _loadErrorHandler!: (e: unknown) => void;
-
-  private _customizeStoreLoadOptionsHandler!: (e: unknown) => void;
 
   private _changingHandler!: (e: unknown) => void;
 
   private _dataPushedHandler!: (changes: unknown) => void;
 
-  private _dataChangedHandler!: (e: HandleDataChangedArguments) => void;
+  private _dataChangedHandlerProxy!: (e: ChangedEvent) => void;
 
   public init(): void {
     this._items = [];
@@ -181,15 +176,13 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     this._isPaging = false;
     this._currentOperationTypes = null;
-    this._dataChangedHandler = this._handleDataChanged.bind(this);
-    this._columnsChangedHandler = this._handleColumnsChanged.bind(this);
+    this._dataChangedHandlerProxy = this._dataChangedHandler.bind(this);
     this._loadingChangedHandler = this._handleLoadingChanged.bind(this);
     this._loadErrorHandler = this._handleLoadError.bind(this);
-    this._customizeStoreLoadOptionsHandler = this._handleCustomizeStoreLoadOptions.bind(this);
     this._changingHandler = this._handleChanging.bind(this);
     this._dataPushedHandler = this._handleDataPushed.bind(this);
 
-    this._columnsController.columnsChanged.add(this._columnsChangedHandler);
+    this._columnsController.columnsChanged.add(this._columnsChangedHandler.bind(this));
 
     this._isLoading = false;
     this._isCustomLoading = false;
@@ -358,18 +351,19 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return adapter ? adapter._dataSource : null;
   }
 
-  public getCombinedFilter(returnDataField?) {
+  public getCombinedFilter(returnDataField?: boolean): Filter {
     return this.combinedFilter(undefined, returnDataField);
   }
 
-  private combinedFilter(filter, returnDataField?) {
+  private combinedFilter(filter: Filter, returnDataField?: boolean): Filter {
     if (!this._dataSource) {
       return filter;
     }
 
-    let combined = filter ?? this._dataSource.filter();
+    let combined: Filter = filter ?? this._dataSource.filter();
 
-    const isColumnsTypesDefined = this._columnsController.isDataSourceApplied() || this._columnsController.isAllDataTypesDefined();
+    const isColumnsTypesDefined = this._columnsController.isDataSourceApplied()
+      || this._columnsController.isAllDataTypesDefined();
 
     if (isColumnsTypesDefined) {
       const additionalFilter = this._calculateAdditionalFilter();
@@ -386,11 +380,11 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return combined;
   }
 
-  public waitReady() {
+  public waitReady(): DeferredObj<void> {
     if (this._updateLockCount) {
       // @ts-expect-error
       this._readyDeferred = new Deferred();
-      return this._readyDeferred;
+      return this._readyDeferred as DeferredObj<void>;
     }
     return when();
   }
@@ -399,13 +393,17 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    * @extended: selection
    * @protected
    */
-  protected _endUpdateCore() {
+  protected _endUpdateCore(): void {
     const changes = this._changes;
 
     if (changes.length) {
       this._changes = [];
       const repaintChangesOnly = changes.every((change) => change.repaintChangesOnly);
-      this.updateItems(changes.length === 1 ? changes[0] : { repaintChangesOnly });
+      const change: DataChange = changes.length === 1
+        ? changes[0]
+        : { changeType: 'refresh', repaintChangesOnly };
+
+      this.updateItems(change);
     }
 
     if (this._readyDeferred) {
@@ -415,7 +413,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   // Handlers
-  private _handleCustomizeStoreLoadOptions(e) {
+  private readonly _customizeStoreLoadOptionsHandler = (e: LoadOperation): void => {
     const columnsController = this._columnsController;
     const dataSource = this._dataSource;
     const { storeLoadOptions } = e;
@@ -426,9 +424,11 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     storeLoadOptions.filter = this.combinedFilter(storeLoadOptions.filter);
 
-    if (storeLoadOptions.filter?.length === 1 && storeLoadOptions.filter[0] === '!') {
+    if (Array.isArray(storeLoadOptions.filter)
+      && storeLoadOptions.filter.length === 1
+      && storeLoadOptions.filter[0] === '!') {
       e.data = [];
-      e.extra = e.extra || {};
+      e.extra = e.extra ?? {};
       e.extra.totalCount = 0;
     }
 
@@ -444,24 +444,24 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     dataSource.sort(storeLoadOptions.sort);
     dataSource.group(storeLoadOptions.group);
 
-    storeLoadOptions.sort = columnsController.getSortDataSourceParameters(!dataSource.remoteOperations().sorting);
+    storeLoadOptions.sort = columnsController
+      .getSortDataSourceParameters(!dataSource.remoteOperations().sorting);
 
-    e.group = columnsController.getGroupDataSourceParameters(!dataSource.remoteOperations().grouping);
-  }
+    e.group = columnsController
+      .getGroupDataSourceParameters(!dataSource.remoteOperations().grouping);
+  };
 
-  private _handleColumnsChanged(e) {
+  private _columnsChangedHandler(e: ColumnsChanges): void {
     const that = this;
-    const { changeTypes } = e;
-    const { optionNames } = e;
-    let filterValue;
-    let filterValues;
-    let filterApplied;
+    const { changeTypes, optionNames } = e;
+    let filterApplied = false;
 
     // B255430
-    const updateItemsHandler = function (change) {
+    const updateItemsHandler = (change: ColumnsChanges): void => {
       that._columnsController.columnsChanged.remove(updateItemsHandler);
 
       that.updateItems({
+        changeType: 'refresh',
         repaintChangesOnly: false,
         event: change?.changeTypes?.event,
         virtualColumnsScrolling: change?.changeTypes?.virtualColumnsScrolling,
@@ -475,11 +475,22 @@ export class DataController extends DataHelperMixin(modules.Controller) {
         that.reload();
       }
     } else if (changeTypes.columns) {
-      filterValues = that._columnsController.columnOption(e.columnIndex, 'filterValues');
-      if (optionNames.filterValues || optionNames.filterType && Array.isArray(filterValues) || optionNames.filterValue || optionNames.selectedFilterOperation || optionNames.allowFiltering) {
-        filterValue = that._columnsController.columnOption(e.columnIndex, 'filterValue');
+      const filterValues = that._columnsController.columnOption(e.columnIndex, 'filterValues');
 
-        if (Array.isArray(filterValues) || e.columnIndex === undefined || isDefined(filterValue) || !optionNames.selectedFilterOperation || optionNames.filterValue) {
+      if (optionNames.filterValues
+        || (optionNames.filterType && Array.isArray(filterValues))
+        || optionNames.filterValue
+        || optionNames.selectedFilterOperation
+        || optionNames.allowFiltering
+      ) {
+        const filterValue = that._columnsController.columnOption(e.columnIndex, 'filterValue');
+
+        if (Array.isArray(filterValues)
+          || e.columnIndex === undefined
+          || isDefined(filterValue)
+          || !optionNames.selectedFilterOperation
+          || optionNames.filterValue
+        ) {
           that._applyFilter();
           filterApplied = true;
         }
@@ -494,6 +505,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
         'filterValues',
         'filterType',
       ];
+
       if (!that._needApplyFilter && !gridCoreUtils.checkChanges(optionNames, excludedOptionNames)) {
         // TODO remove resubscribing
         that._columnsController.columnsChanged.add(updateItemsHandler);
@@ -501,12 +513,15 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
       if (isDefined(optionNames.visible)) {
         const column = that._columnsController.columnOption(e.columnIndex);
-        if (column && (isDefined(column.filterValue) || isDefined(column.filterValues))) {
+        const hasFilterValue = isDefined(column?.filterValue) || isDefined(column?.filterValues);
+
+        if (hasFilterValue) {
           that._applyFilter();
           filterApplied = true;
         }
       }
     }
+
     if (!filterApplied && changeTypes.filtering && !this._needApplyFilter) {
       that.reload();
     }
@@ -515,7 +530,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended: selection
    */
-  protected _handleDataChanged(e: HandleDataChangedArguments) {
+  protected _dataChangedHandler(e?: ChangedEvent): void {
     const that = this;
     const dataSource = that._dataSource;
     const columnsController = that._columnsController;
@@ -531,18 +546,20 @@ export class DataController extends DataHelperMixin(modules.Controller) {
           that._handleLoadingChanged(false);
         }
 
+        // @ts-expect-error e.isDelayed is set for virtual scrolling with scrolling.legacyMode
         if (isAsyncDataSourceApplying && e?.isDelayed) {
+          // @ts-expect-error e.isDelayed is set for virtual scrolling with scrolling.legacyMode
           e.isDelayed = false;
         }
 
         that._isDataSourceApplying = false;
 
-        const hasAdditionalFilter = () => {
+        const hasAdditionalFilter = (): boolean => {
           const additionalFilter = that._calculateAdditionalFilter();
-          return additionalFilter?.length;
+          return Boolean(additionalFilter?.length);
         };
-        const needApplyFilter = that._needApplyFilter;
 
+        const needApplyFilter = that._needApplyFilter;
         that._needApplyFilter = false;
 
         if (needApplyFilter && !that._isAllDataTypesDefined && hasAdditionalFilter()) {
@@ -550,7 +567,16 @@ export class DataController extends DataHelperMixin(modules.Controller) {
           that._applyFilter();
         } else {
           this._currentOperationTypes = dataSource.operationTypes();
-          that.updateItems(e, true);
+
+          const change: DataChange = isDefined(e)
+            ? {
+              ...e,
+              changeType: e?.changeType ?? 'refresh',
+            // need to cast, because in virtual scrolling with scrolling.legacyMode, e has more fields
+            } as DataChange
+            : { changeType: 'refresh' };
+
+          that.updateItems(change, true);
         }
       }).fail(() => {
         that._isDataSourceApplying = false;
@@ -615,7 +641,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return dataSource;
   }
 
-  protected _initDataSource() {
+  protected _initDataSource(): void {
     const hadDataSource = !!this._dataSource;
 
     super._initDataSource();
@@ -639,23 +665,26 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended: selection, virtual_scrolling
    */
-  protected _loadDataSource() {
+  // The mixin base types this as `void`, but the override returns a Deferred
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  protected _loadDataSource(): DeferredObj<unknown> {
     const that = this;
     const dataSource = that._dataSource;
-    // @ts-expect-error
-    const result = new Deferred();
+    // @ts-expect-error Deferred lacks a construct signature in its typings
+    const result: DeferredObj<unknown> = new Deferred();
 
     when(this._columnsController.refresh(true)).always(() => {
       if (dataSource) {
-        dataSource.load().done(function () {
+        dataSource.load().done((...args: unknown[]) => {
           that._isPaging = false;
-          result.resolve.apply(result, arguments);
+          result.resolve(...args);
         }).fail(result.reject);
       } else {
         result.resolve();
       }
     });
 
+    // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
     return result.promise();
   }
 
@@ -1099,7 +1128,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     let items;
     const dataSource = this._dataSource;
 
-    change.changeType ??= 'refresh';
     change.operationTypes ??= this._currentOperationTypes;
     this._currentOperationTypes = null;
 
@@ -1165,7 +1193,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
   }
 
-  public updateItems(change: DataChange = {}, isDataChanged?: boolean) {
+  public updateItems(
+    change: DataChange = { changeType: 'refresh' },
+    isDataChanged?: boolean,
+  ) {
     change.isFirstRender = !this.changed.fired();
 
     if (this._repaintChangesOnly !== undefined) {
@@ -1342,24 +1373,12 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _getDataSourceAdapter(): any {}
 
-  /**
-   * @extended: DataGrid's summary
-   */
-  protected _createDataSourceAdapterCore(dataSource, remoteOperations) {
+  protected _createDataSourceAdapter(dataSource) {
     const dataSourceAdapterProvider = this._getDataSourceAdapter();
     const dataSourceAdapter = dataSourceAdapterProvider.create(this.component);
 
-    dataSourceAdapter.init(dataSource, remoteOperations);
+    dataSourceAdapter.init(dataSource);
     return dataSourceAdapter;
-  }
-
-  private _createDataSourceAdapter(dataSource) {
-    const remoteOperations = normalizeRemoteOperations(
-      this.option('remoteOperations'),
-      dataSource.store(),
-    );
-
-    return this._createDataSourceAdapterCore(dataSource, remoteOperations);
   }
 
   private setDataSource(dataSource) {
@@ -1368,7 +1387,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     if (!dataSource && oldDataSource) {
       oldDataSource.cancelAll();
-      oldDataSource.changed.remove(that._dataChangedHandler);
+      oldDataSource.changed.remove(that._dataChangedHandlerProxy);
       oldDataSource.loadingChanged.remove(that._loadingChangedHandler);
       oldDataSource.loadError.remove(that._loadErrorHandler);
       oldDataSource.customizeStoreLoadOptions.remove(that._customizeStoreLoadOptionsHandler);
@@ -1388,7 +1407,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       that._isLoading = !dataSource.isLoaded();
       that._needApplyFilter = true;
       that._isAllDataTypesDefined = that._columnsController.isAllDataTypesDefined();
-      dataSource.changed.add(that._dataChangedHandler);
+      dataSource.changed.add(that._dataChangedHandlerProxy);
       dataSource.loadingChanged.add(that._loadingChangedHandler);
       dataSource.loadError.add(that._loadErrorHandler);
       dataSource.customizeStoreLoadOptions.add(that._customizeStoreLoadOptionsHandler);
@@ -1644,7 +1663,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
           that._repaintChangesOnly = undefined;
         }).done(d.resolve).fail(d.reject);
       } else {
-        that.updateItems({ repaintChangesOnly: options.changesOnly });
+        that.updateItems({
+          changeType: 'refresh',
+          repaintChangesOnly: options.changesOnly,
+        });
         d.resolve();
       }
     });
@@ -1675,7 +1697,11 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     rowIndexes = Array.isArray(rowIndexes) ? rowIndexes : [rowIndexes];
 
     if (rowIndexes.length > 1 || isDefined(rowIndexes[0])) {
-      this.updateItems({ changeType: 'update', rowIndices: rowIndexes, isFullUpdate: !changesOnly });
+      this.updateItems({
+        changeType: 'update',
+        rowIndices: rowIndexes,
+        isFullUpdate: !changesOnly,
+      });
     }
   }
 
