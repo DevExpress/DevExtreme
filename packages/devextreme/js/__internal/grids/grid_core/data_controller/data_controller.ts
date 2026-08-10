@@ -184,7 +184,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._changingHandler = this._handleChanging.bind(this);
     this._dataPushedHandler = this._handleDataPushed.bind(this);
 
-    this._columnsController.columnsChanged.add(this._columnsChangedHandler.bind(this));
+    this._columnsController.columnsChanged.add(this.columnsChangedHandler.bind(this));
 
     this._isLoading = false;
     this._isCustomLoading = false;
@@ -456,79 +456,97 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       .getGroupDataSourceParameters(!dataSource.remoteOperations().grouping);
   };
 
-  private _columnsChangedHandler(e: ColumnsChanges): void {
-    const that = this;
+  // An arrow field: it unsubscribes itself, so `add` and `remove` need the same reference.
+  private readonly updateItemsHandler = (change: ColumnsChanges): void => {
+    this._columnsController.columnsChanged.remove(this.updateItemsHandler);
+
+    this.updateItems({
+      changeType: 'refresh',
+      repaintChangesOnly: false,
+      event: change?.changeTypes?.event,
+      virtualColumnsScrolling: change?.changeTypes?.virtualColumnsScrolling,
+    });
+  };
+
+  private subscribeToUpdateItems(optionNames: ColumnsChanges['optionNames']): void {
+    const excludedOptionNames = [
+      'width',
+      'visibleWidth',
+      'filterValue',
+      'bufferedFilterValue',
+      'selectedFilterOperation',
+      'filterValues',
+      'filterType',
+    ];
+
+    if (!this._needApplyFilter && !gridCoreUtils.checkChanges(optionNames, excludedOptionNames)) {
+      // TODO remove resubscribing
+      this._columnsController.columnsChanged.add(this.updateItemsHandler);
+    }
+  }
+
+  private shouldApplyFilter(e: ColumnsChanges): boolean {
+    const { optionNames, columnIndex } = e;
+    const filterValues = this._columnsController.columnOption(columnIndex, 'filterValues');
+
+    const isFilterOptionChanged = Boolean(optionNames.filterValues)
+      || Boolean(optionNames.filterValue)
+      || Boolean(optionNames.selectedFilterOperation)
+      || Boolean(optionNames.allowFiltering)
+      || Boolean(optionNames.filterType && Array.isArray(filterValues));
+
+    if (!isFilterOptionChanged) {
+      return false;
+    }
+
+    const isImmediateFilterChange = !optionNames.selectedFilterOperation
+      || optionNames.filterValue;
+
+    if (isImmediateFilterChange) {
+      return true;
+    }
+
+    if (columnIndex === undefined) {
+      return true;
+    }
+
+    const filterValue = this._columnsController.columnOption(columnIndex, 'filterValue');
+    const hasFilterValue = isDefined(filterValue) || Array.isArray(filterValues);
+
+    return hasFilterValue;
+  }
+
+  private columnsChangedHandler(e: ColumnsChanges): void {
     const { changeTypes, optionNames } = e;
     let filterApplied = false;
 
-    // B255430
-    const updateItemsHandler = (change: ColumnsChanges): void => {
-      that._columnsController.columnsChanged.remove(updateItemsHandler);
-
-      that.updateItems({
-        changeType: 'refresh',
-        repaintChangesOnly: false,
-        event: change?.changeTypes?.event,
-        virtualColumnsScrolling: change?.changeTypes?.virtualColumnsScrolling,
-      });
-    };
-
     if (changeTypes.sorting || changeTypes.grouping) {
-      if (that._dataSource && !that._columnsUpdating) {
-        that._dataSource.group(that._columnsController.getGroupDataSourceParameters());
-        that._dataSource.sort(that._columnsController.getSortDataSourceParameters());
-        that.reload();
+      if (this._dataSource && !this._columnsUpdating) {
+        this._dataSource.group(this._columnsController.getGroupDataSourceParameters());
+        this._dataSource.sort(this._columnsController.getSortDataSourceParameters());
+        this.reload();
       }
     } else if (changeTypes.columns) {
-      const filterValues = that._columnsController.columnOption(e.columnIndex, 'filterValues');
-
-      if (optionNames.filterValues
-        || (optionNames.filterType && Array.isArray(filterValues))
-        || optionNames.filterValue
-        || optionNames.selectedFilterOperation
-        || optionNames.allowFiltering
-      ) {
-        const filterValue = that._columnsController.columnOption(e.columnIndex, 'filterValue');
-
-        if (Array.isArray(filterValues)
-          || e.columnIndex === undefined
-          || isDefined(filterValue)
-          || !optionNames.selectedFilterOperation
-          || optionNames.filterValue
-        ) {
-          that._applyFilter();
-          filterApplied = true;
-        }
+      if (this.shouldApplyFilter(e)) {
+        this._applyFilter();
+        filterApplied = true;
       }
 
-      const excludedOptionNames = [
-        'width',
-        'visibleWidth',
-        'filterValue',
-        'bufferedFilterValue',
-        'selectedFilterOperation',
-        'filterValues',
-        'filterType',
-      ];
-
-      if (!that._needApplyFilter && !gridCoreUtils.checkChanges(optionNames, excludedOptionNames)) {
-        // TODO remove resubscribing
-        that._columnsController.columnsChanged.add(updateItemsHandler);
-      }
+      this.subscribeToUpdateItems(optionNames);
 
       if (isDefined(optionNames.visible)) {
-        const column = that._columnsController.columnOption(e.columnIndex);
+        const column = this._columnsController.columnOption(e.columnIndex);
         const hasFilterValue = isDefined(column?.filterValue) || isDefined(column?.filterValues);
 
         if (hasFilterValue) {
-          that._applyFilter();
+          this._applyFilter();
           filterApplied = true;
         }
       }
     }
 
     if (!filterApplied && changeTypes.filtering && !this._needApplyFilter) {
-      that.reload();
+      this.reload();
     }
   }
 
