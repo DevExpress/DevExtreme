@@ -12,7 +12,7 @@ export interface DataSourceAdapterLike {
   _dataSource: DataSource;
 }
 
-export type UserData = Record<string, unknown>;
+export type RawItemData = Record<string, unknown>;
 
 export interface ItemProcessingOptions {
   visibleColumns: Column[];
@@ -24,12 +24,12 @@ export interface ItemProcessingOptions {
 
 export interface GeneratedItem {
   rowType: 'data' | 'group' | 'groupFooter' | 'detailAdaptive' | 'detail';
-  data: UserData;
+  data: RawItemData;
   key: unknown;
   isEditing?: boolean;
   isNewRow?: boolean;
   modified?: boolean;
-  oldData?: UserData;
+  oldData?: RawItemData;
   modifiedValues?: unknown[];
   removed?: boolean;
 }
@@ -81,6 +81,7 @@ export type DataChange = | UpdateChange
   | (DataChangeBase & ChangedEvent)
   | (DataChangeBase & { changeType: 'refresh' })
   | (DataChangeBase & { changeType: 'pageIndex' })
+  | (DataChangeBase & { changeType: 'loadingAll' })
   | (DataChangeBase & { changeType: 'refresh', isLiveUpdate: boolean; isOptionChanged: boolean })
   | (DataChangeBase & { changeType: 'refresh', event: unknown; virtualColumnsScrolling: boolean })
   | (DataChangeBase & { changeType: 'refresh', useProcessedItemsCache: boolean; cancelEmptyChanges: boolean });
@@ -142,7 +143,7 @@ export type DataFilterExpression = BinaryDataFilterExpression
   | ['!', DataFilterExpression]
   | [DataFilterExpression, ...(FilterCombiner | DataFilterExpression)[]];
 
-export type DataFilterPredicate = (data: UserData) => boolean;
+export type DataFilterPredicate = (data: RawItemData) => boolean;
 
 /**
  * The grid-internal "match nothing" filter. Not a data layer filter expression:

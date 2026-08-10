@@ -16,7 +16,10 @@ import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type {
   DataChange,
-  GeneratedItem, ItemProcessingOptions, ProcessedItem, UserData,
+  GeneratedItem,
+  ItemProcessingOptions,
+  ProcessedItem,
+  RawItemData,
 } from '../data_controller/types';
 import gridCoreUtils from '../m_utils';
 import { CLASSES } from './const';
@@ -165,11 +168,7 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
     return super._processItems.apply(this, arguments as any);
   }
 
-  protected _processItems(
-    items: UserData[],
-    change: DataChange | { changeType: 'loadingAll' },
-  ): ProcessedItem[] {
-    const that = this;
+  protected _processItems(items: RawItemData[], change: DataChange): ProcessedItem[] {
     const { changeType } = change;
     const result: ProcessedItem[] = [];
 
@@ -180,12 +179,12 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
     }
 
     if (changeType === 'refresh') {
-      that._expandedItems = grep(that._expandedItems, (item) => item.visible);
+      this._expandedItems = grep(this._expandedItems, (item) => item.visible);
     }
 
-    each(processedItems, (index, item) => {
+    processedItems.forEach((item) => {
       result.push(item);
-      const expandIndex = gridCoreUtils.getIndexByKey(item.key, that._expandedItems);
+      const expandIndex = gridCoreUtils.getIndexByKey(item.key, this._expandedItems);
 
       if (item.rowType === 'data' && (item.isExpanded || expandIndex >= 0) && !item.isNewRow) {
         result.push({
