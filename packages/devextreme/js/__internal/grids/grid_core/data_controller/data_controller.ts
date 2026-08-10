@@ -52,12 +52,12 @@ import type {
   DataChange,
   DataFilter,
   DataSourceAdapterLike,
-  GeneratedDataItem,
+  GeneratedItem,
   PagingChanges,
   PagingDataSource,
   PagingOptionName,
   PagingResult,
-  ProcessedDataItem,
+  ProcessedItem,
   RowGenerationOptions,
   UserData,
 } from './types';
@@ -65,9 +65,9 @@ import { resolvePaginate, syncPaging } from './utils/paging';
 import { generateRowValues } from './utils/row_values';
 
 export class DataController extends DataHelperMixin(modules.Controller) {
-  protected _items!: ProcessedDataItem[];
+  protected _items!: ProcessedItem[];
 
-  private _cachedProcessedItems!: ProcessedDataItem[] | null;
+  private _cachedProcessedItems!: ProcessedItem[] | null;
 
   protected _isPaging!: boolean;
 
@@ -721,7 +721,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   protected _processItems(
     items: UserData[],
     change: DataChange | { changeType: 'loadingAll' },
-  ): ProcessedDataItem[] {
+  ): ProcessedItem[] {
     const rowIndexDelta = this.getRowIndexDelta();
     const { changeType } = change;
     const visibleColumns = this._columnsController.getVisibleColumns(null, changeType === 'loadingAll');
@@ -731,7 +731,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       visibleColumns,
       dataIndex,
     };
-    const result: ProcessedDataItem[] = [];
+    const result: ProcessedItem[] = [];
 
     items.forEach((item, index) => {
       if (isDefined(item)) {
@@ -746,7 +746,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended: editing, grouping (DataGrid)
    */
-  protected _processItem(item: UserData, options: RowGenerationOptions): ProcessedDataItem {
+  protected _processItem(item: UserData, options: RowGenerationOptions): ProcessedItem {
     const dataItem = this._generateDataItem(item, options);
     const processedItem = this._processDataItem(dataItem, options);
 
@@ -759,7 +759,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    * @extended: treelist
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _generateDataItem(data: UserData, options?: RowGenerationOptions): GeneratedDataItem {
+  protected _generateDataItem(data: UserData, options?: RowGenerationOptions): GeneratedItem {
     return {
       rowType: 'data',
       data,
@@ -771,9 +771,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    * @extended: selection, editing, master_detail, TreeList's master_detail
    */
   protected _processDataItem(
-    dataItem: GeneratedDataItem,
+    dataItem: GeneratedItem,
     options: RowGenerationOptions,
-  ): ProcessedDataItem {
+  ): ProcessedItem {
     return {
       ...dataItem,
       values: generateRowValues(dataItem.data, options.visibleColumns),
@@ -1127,7 +1127,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extend: virtual_scrolling
    */
-  protected _afterProcessItems(items: ProcessedDataItem[]): ProcessedDataItem[] {
+  protected _afterProcessItems(items: ProcessedItem[]): ProcessedItem[] {
     return items;
   }
 
@@ -1141,7 +1141,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._currentOperationTypes = null;
 
     if (dataSource) {
-      const getItems = (): ProcessedDataItem[] => {
+      const getItems = (): ProcessedItem[] => {
         const cachedProcessedItems = this._cachedProcessedItems;
         const useProcessedItemsCache = 'useProcessedItemsCache' in change && change.useProcessedItemsCache;
 
@@ -1436,7 +1436,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    * @extended: virtual_scrolling
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public items(byLoaded?): ProcessedDataItem[] {
+  public items(byLoaded?): ProcessedItem[] {
     return this._items;
   }
 
@@ -1510,7 +1510,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return gridCoreUtils.getIndexByKey(key, this.items(byLoaded));
   }
 
-  public getRowByKey(key: unknown): ProcessedDataItem | undefined {
+  public getRowByKey(key: unknown): ProcessedItem | undefined {
     return this.items()?.[this.getRowIndexByKey(key)];
   }
 

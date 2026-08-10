@@ -13,7 +13,7 @@ import LoadIndicator from '@js/ui/load_indicator';
 import errors from '@js/ui/widget/ui.errors';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type {
-  DataChange, PagingResult, ProcessedDataItem, UserData,
+  DataChange, PagingResult, ProcessedItem, UserData,
 } from '@ts/grids/grid_core/data_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
@@ -756,7 +756,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
   protected _processItems(
     items: UserData[],
     change: DataChange | { changeType: 'loadingAll' },
-  ): ProcessedDataItem[] {
+  ): ProcessedItem[] {
     const processedItems = super._processItems(items, change);
 
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
@@ -803,7 +803,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     return processedItems;
   }
 
-  protected _afterProcessItems(processedItems: ProcessedDataItem[]): ProcessedDataItem[] {
+  protected _afterProcessItems(processedItems: ProcessedItem[]): ProcessedItem[] {
     this._itemCount = processedItems.filter((item) => isItemCountableByDataSource(item, this._dataSource)).length;
 
     if (isDefined(this._loadViewportParams)) {

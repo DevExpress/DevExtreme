@@ -21,7 +21,7 @@ export interface RowGenerationOptions {
   isDeferredSelection?: boolean;
 }
 
-export interface GeneratedDataItem {
+export interface GeneratedItem {
   rowType: 'data' | 'group' | 'groupFooter' | 'detailAdaptive' | 'detail';
   data: UserData;
   key: unknown;
@@ -33,7 +33,7 @@ export interface GeneratedDataItem {
   removed?: boolean;
 }
 
-export interface ProcessedDataItem extends GeneratedDataItem {
+export interface ProcessedItem extends GeneratedItem {
   values: unknown[];
   dataIndex?: number;
   isSelected?: boolean;

@@ -16,7 +16,7 @@ import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type {
   DataChange,
-  GeneratedDataItem, ProcessedDataItem, RowGenerationOptions, UserData,
+  GeneratedItem, ProcessedItem, RowGenerationOptions, UserData,
 } from '../data_controller/types';
 import gridCoreUtils from '../m_utils';
 import { CLASSES } from './const';
@@ -136,9 +136,9 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
   }
 
   protected _processDataItem(
-    generatedItem: GeneratedDataItem,
+    generatedItem: GeneratedItem,
     options: RowGenerationOptions,
-  ): ProcessedDataItem {
+  ): ProcessedItem {
     const that = this;
     const processedItem = super._processDataItem(generatedItem, options);
 
@@ -168,10 +168,10 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
   protected _processItems(
     items: UserData[],
     change: DataChange | { changeType: 'loadingAll' },
-  ): ProcessedDataItem[] {
+  ): ProcessedItem[] {
     const that = this;
     const { changeType } = change;
-    const result: ProcessedDataItem[] = [];
+    const result: ProcessedItem[] = [];
 
     const processedItems = super._processItems(items, change);
 
