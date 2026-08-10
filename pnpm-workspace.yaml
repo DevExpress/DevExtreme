@@ -34,6 +34,7 @@ overrides:
   "brace-expansion@>=3.0.0 <5.0.9": "^5.0.9"
   "yaml@>=2.0.0 <2.8.3": ^2.8.3
   "follow-redirects@<=1.15.11": ">=1.16.0"
+  "less@<4.8.0": ^4.8.0
   "ws@>=8.0.0 <8.21.0": ^8.21.0
   "ws@>=7.0.0 <7.5.11": ^7.5.11
   "launch-editor@<2.14.1": ^2.14.1
@@ -60,6 +61,7 @@ overrides:
   "@hono/node-server@<2.0.12": "^2.0.12"
   "stylelint-config-recommended-vue>stylelint-config-html": "1.1.0"
   "stylelint-config-recommended-vue>stylelint-config-recommended": "16.0.0"
+  "dompurify@<=3.4.12": "^3.4.13"
 catalog:
   axe-core: 4.11.3
   inferno: ^8.2.3
