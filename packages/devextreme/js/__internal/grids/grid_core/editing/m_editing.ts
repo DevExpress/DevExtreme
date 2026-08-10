@@ -34,7 +34,10 @@ import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type {
   DataChange,
-  GeneratedItem, ItemProcessingOptions, ProcessedItem, UserData,
+  GeneratedItem,
+  ItemProcessingOptions,
+  ProcessedItem,
+  RawItemData,
 } from '../data_controller/types';
 import modules from '../m_modules';
 import type {
@@ -779,7 +782,7 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: validatiing
    */
-  public processItems(items: UserData[], change: DataChange | { changeType: 'loadingAll' }): UserData[] {
+  public processItems(items: RawItemData[], change: DataChange): RawItemData[] {
     const { changeType } = change;
 
     this.update(changeType);
@@ -2582,10 +2585,7 @@ export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataControll
     super._applyChangesOnly(change);
   }
 
-  protected _processItems(
-    items: UserData[],
-    change: DataChange | { changeType: 'loadingAll' },
-  ): ProcessedItem[] {
+  protected _processItems(items: RawItemData[], change: DataChange): ProcessedItem[] {
     items = this._editingController.processItems(items, change);
     return super._processItems(items, change);
   }
@@ -2598,7 +2598,7 @@ export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataControll
     return super._processDataItem(generatedItem, options);
   }
 
-  protected _processItem(dataItem: UserData, options: ItemProcessingOptions) {
+  protected _processItem(dataItem: RawItemData, options: ItemProcessingOptions) {
     const processedItem = super._processItem(dataItem, options);
 
     if (processedItem.isNewRow) {
