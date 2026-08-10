@@ -707,15 +707,8 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended: virtual_scrolling
    */
-  protected getDataIndex(change: DataChange): number {
-    const visibleItems = this._items;
-    // @ts-expect-error changeType can be 'append' only when virtual scrolling with scrolling.legacyMode are enabled
-    const lastVisibleItem = change.changeType === 'append' && visibleItems.length > 0
-      ? visibleItems[visibleItems.length - 1]
-      : null;
-
-    return isDefined(lastVisibleItem?.dataIndex) ? lastVisibleItem!.dataIndex + 1 : 0;
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected getDataIndex(change: DataChange): number { return 0; }
 
   /**
    * @extended: adaptivity, editing, master_detail, virtual_scrolling
