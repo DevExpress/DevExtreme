@@ -797,20 +797,18 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extende: virtual_scrolling, focus, selection
    */
-  protected _applyChange(change: DataChange) {
-    const that = this;
-
+  protected _applyChange(change: DataChange): void {
     if (!('changeType' in change)) {
       return;
     }
 
     if (change.changeType === 'update') {
-      that._applyChangeUpdate(change);
+      this._applyChangeUpdate(change);
     } else if (change.changeType === 'refresh') {
-      if (that.items().length && change.repaintChangesOnly) {
-        that._applyChangesOnly(change);
+      if (this.items().length && change.repaintChangesOnly) {
+        this._applyChangesOnly(change);
       } else {
-        that._applyChangeFull(change);
+        this._applyChangeFull(change);
       }
     }
   }
@@ -844,12 +842,11 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended: editing
    */
-  protected _applyChangeUpdate(change) {
-    const that = this;
+  protected _applyChangeUpdate(change): void {
     const { items } = change;
-    const rowIndices = that._getRowIndices(change);
-    const rowIndexDelta = that.getRowIndexDelta();
-    const repaintChangesOnly = that.option('repaintChangesOnly');
+    const rowIndices = this._getRowIndices(change);
+    const rowIndexDelta = this.getRowIndexDelta();
+    const repaintChangesOnly = this.option('repaintChangesOnly');
     let prevIndex = -1;
     let rowIndexCorrection = 0;
     let changeType;
@@ -875,8 +872,8 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       if (prevIndex === rowIndex) return;
 
       prevIndex = rowIndex;
-      const oldItem = that._items[rowIndex];
-      const oldNextItem = that._items[rowIndex + 1];
+      const oldItem = this._items[rowIndex];
+      const oldNextItem = this._items[rowIndex + 1];
       const newItem = items[rowIndex];
       const newNextItem = items[rowIndex + 1];
 
@@ -889,24 +886,24 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
       if (oldItem && newItem && equalItems(oldItem, newItem, strict)) {
         changeType = 'update';
-        that._items[rowIndex] = newItem;
+        this._items[rowIndex] = newItem;
         if (oldItem.visible !== newItem.visible) {
           change.items.splice(-1, 1, { visible: newItem.visible });
         } else if (repaintChangesOnly && !change.isFullUpdate) {
-          columnIndices = that._partialUpdateRow(oldItem, newItem, rowIndex - rowIndexDelta);
+          columnIndices = this._partialUpdateRow(oldItem, newItem, rowIndex - rowIndexDelta);
         }
       } else if (newItem && !oldItem || (newNextItem && equalItems(oldItem, newNextItem, strict))) {
         changeType = 'insert';
-        that._items.splice(rowIndex, 0, newItem);
+        this._items.splice(rowIndex, 0, newItem);
         rowIndexCorrection++;
       } else if (oldItem && !newItem || (oldNextItem && equalItems(newItem, oldNextItem, strict))) {
         changeType = 'remove';
-        that._items.splice(rowIndex, 1);
+        this._items.splice(rowIndex, 1);
         rowIndexCorrection--;
         prevIndex = -1;
       } else if (newItem) {
         changeType = 'update';
-        that._items[rowIndex] = newItem;
+        this._items[rowIndex] = newItem;
       } else {
         return;
       }

@@ -497,7 +497,7 @@ export class ColumnsController extends modules.Controller {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public getVisibleColumns(rowIndex?, isBase?: boolean): Column[] {
+  public getVisibleColumns(rowIndex?, isBase?: boolean) {
     if (!this._shouldReturnVisibleColumns()) {
       return [];
     }
