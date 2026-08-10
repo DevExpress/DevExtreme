@@ -20,7 +20,10 @@ import { create } from '@js/core/utils/queue';
 import {
   isBoolean, isDefined, isEmptyObject, isNumeric, isObject, isString,
 } from '@js/core/utils/type';
+import type { StoreChange } from '@js/data/store';
 import commonUtils from '@ts/core/utils/m_common';
+
+import type { ChangedEvent, LoadOperation } from './types';
 
 export const DataSource = Class.inherit({
   ctor(options) {
@@ -332,9 +335,9 @@ export const DataSource = Class.inherit({
     });
   },
 
-  _fireChanged(args) {
+  _fireChanged(e?: ChangedEvent) {
     const date = new Date();
-    this._eventsStrategy.fireEvent('changed', args);
+    this._eventsStrategy.fireEvent('changed', [e]);
     // @ts-expect-error
     this._changedTime = new Date() - date;
   },
@@ -412,7 +415,7 @@ export const DataSource = Class.inherit({
     this._scheduleFailCallbacks(d);
     this._scheduleChangedCallbacks(d);
 
-    const loadOperation = this._createLoadOperation(d);
+    const loadOperation: LoadOperation = this._createLoadOperation(d);
 
     this._eventsStrategy.fireEvent('customizeStoreLoadOptions', [loadOperation]);
 
@@ -430,7 +433,7 @@ export const DataSource = Class.inherit({
     });
   },
 
-  _onPush(changes) {
+  _onPush(changes: StoreChange[]) {
     if (this._reshapeOnPush) {
       this.load();
     } else {
@@ -466,11 +469,11 @@ export const DataSource = Class.inherit({
         groupCount: groupLevel,
         useInsertIndex: true,
       });
-      this._fireChanged([{ changes }]);
+      this._fireChanged({ changes });
     }
   },
 
-  _createLoadOperation(deferred) {
+  _createLoadOperation(deferred): LoadOperation {
     const operationId = this._operationManager.add(deferred);
     const storeLoadOptions = this._createStoreLoadOptions();
 

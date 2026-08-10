@@ -30,8 +30,12 @@ describe('normalizeRemoteOperations', () => {
     });
   });
 
-  it('false is returned as is', () => {
-    expect(normalizeRemoteOperations(false, remoteStore)).toBe(false);
+  it('an object is returned on false', () => {
+    expect(normalizeRemoteOperations(false, remoteStore)).toEqual({});
+  });
+
+  it('an object is returned on undefined', () => {
+    expect(normalizeRemoteOperations(undefined, remoteStore)).toEqual({});
   });
 
   it('an object without groupPaging is returned unchanged', () => {

@@ -18,6 +18,7 @@ import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
+import type { ChangedEvent } from '../data_source_adapter/types';
 import gridCoreUtils from '../m_utils';
 import type { RowsViewScrollEvent } from '../views/types';
 import { subscribeToExternalScrollers, VirtualScrollController } from './m_virtual_scrolling_core';
@@ -227,15 +228,15 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     super._handleLoadError.apply(this, arguments as any);
   }
 
-  protected _handleDataChanged(e) {
+  protected _dataChangedHandler(e?: ChangedEvent) {
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
       this._items = this._dataSource.items().slice();
       this._totalCount = this._dataSourceTotalCount(true);
-      super._handleDataChanged.apply(this, arguments as any);
+      super._dataChangedHandler(e);
       return;
     }
 
-    const callBase = super._handleDataChanged.bind(this);
+    const callBase = super._dataChangedHandler.bind(this);
 
     this._virtualScrollController.handleDataChanged(callBase, e);
   }
@@ -1169,6 +1170,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
       if (needToUpdateItems) {
         const noPendingChangesInEditing = !this._editingController?.getChanges()?.length;
         this.updateItems({
+          changeType: 'refresh',
           repaintChangesOnly: true,
           needUpdateDimensions: true,
           useProcessedItemsCache: noPendingChangesInEditing,

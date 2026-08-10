@@ -7,7 +7,7 @@ import { isCustomStore, isLocalStore } from './store';
 export function normalizeRemoteOperations(
   remoteOperations: RemoteOperations,
   store: Store,
-): RemoteOperationsOptions | false | undefined {
+): RemoteOperationsOptions {
   const allExceptGroupPagingEnabled: RemoteOperationsOptions = {
     filtering: true,
     sorting: true,
@@ -31,6 +31,10 @@ export function normalizeRemoteOperations(
   }
   if (remoteOperations === true) {
     return allExceptGroupPagingEnabled;
+  }
+
+  if (!remoteOperations) {
+    return {};
   }
 
   return remoteOperations;

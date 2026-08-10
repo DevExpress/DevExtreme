@@ -29,7 +29,7 @@ import type { ValidatingController } from '@ts/grids/grid_core/validating/m_vali
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/const';
-import { isLocalStore } from '../data_controller/utils/store';
+import { isLocalStore } from '../data_source_adapter/utils/store';
 import type { EditingController } from '../editing/m_editing';
 import gridCoreUtils from '../m_utils';
 import { CLASSES } from '../sticky_columns/const';

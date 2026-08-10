@@ -817,11 +817,15 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     return sortByGroups;
   }
 
-  protected _createDataSourceAdapterCore(dataSource, remoteOperations) {
-    const that = this;
-    const dataSourceAdapter = super._createDataSourceAdapterCore(dataSource, remoteOperations);
+  protected _createDataSourceAdapter(dataSource) {
+    const dataSourceAdapter = super._createDataSourceAdapter(dataSource);
 
-    dataSourceAdapter.summaryGetter((currentRemoteOperations) => that._getSummaryOptions(currentRemoteOperations || remoteOperations));
+    dataSourceAdapter.summaryGetter((currentRemoteOperations) => {
+      const result = this._getSummaryOptions(
+        currentRemoteOperations ?? dataSourceAdapter.remoteOperations(),
+      );
+      return result;
+    });
 
     return dataSourceAdapter;
   }
