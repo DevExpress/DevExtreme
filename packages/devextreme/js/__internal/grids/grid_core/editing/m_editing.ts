@@ -34,7 +34,7 @@ import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type {
   DataChange,
-  GeneratedItem, ProcessedItem, RowGenerationOptions, UserData,
+  GeneratedItem, ItemProcessingOptions, ProcessedItem, UserData,
 } from '../data_controller/types';
 import modules from '../m_modules';
 import type {
@@ -815,7 +815,7 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: validating
    */
-  public processDataItem(generatedItem: GeneratedItem, options: RowGenerationOptions): void {
+  public processDataItem(generatedItem: GeneratedItem, options: ItemProcessingOptions): void {
     const columns = options.visibleColumns;
     const key = generatedItem.data[INSERT_INDEX] ? generatedItem.data.key : generatedItem.key;
     const changes = this.getChanges();
@@ -2592,13 +2592,13 @@ export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataControll
 
   protected _processDataItem(
     generatedItem: GeneratedItem,
-    options: RowGenerationOptions,
+    options: ItemProcessingOptions,
   ): ProcessedItem {
     this._editingController.processDataItem(generatedItem, options);
     return super._processDataItem(generatedItem, options);
   }
 
-  protected _processItem(dataItem: UserData, options: RowGenerationOptions) {
+  protected _processItem(dataItem: UserData, options: ItemProcessingOptions) {
     const processedItem = super._processItem(dataItem, options);
 
     if (processedItem.isNewRow) {
