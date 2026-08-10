@@ -14,7 +14,7 @@ export interface DataSourceAdapterLike {
 
 export type UserData = Record<string, unknown>;
 
-export interface RowGenerationOptions {
+export interface ItemProcessingOptions {
   visibleColumns: Column[];
   dataIndex: number;
   rowIndex?: number;

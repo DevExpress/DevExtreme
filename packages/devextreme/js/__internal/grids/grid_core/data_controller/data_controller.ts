@@ -53,12 +53,12 @@ import type {
   DataFilter,
   DataSourceAdapterLike,
   GeneratedItem,
+  ItemProcessingOptions,
   PagingChanges,
   PagingDataSource,
   PagingOptionName,
   PagingResult,
   ProcessedItem,
-  RowGenerationOptions,
   UserData,
 } from './types';
 import { resolvePaginate, syncPaging } from './utils/paging';
@@ -727,7 +727,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     const visibleColumns = this._columnsController.getVisibleColumns(null, changeType === 'loadingAll');
     const dataIndex = this.getDataIndex(change);
 
-    const options: RowGenerationOptions = {
+    const options: ItemProcessingOptions = {
       visibleColumns,
       dataIndex,
     };
@@ -746,9 +746,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended: editing, grouping (DataGrid)
    */
-  protected _processItem(item: UserData, options: RowGenerationOptions): ProcessedItem {
-    const dataItem = this._generateDataItem(item, options);
-    const processedItem = this._processDataItem(dataItem, options);
+  protected _processItem(dataItem: UserData, options: ItemProcessingOptions): ProcessedItem {
+    const generatedItem = this._generateDataItem(dataItem, options);
+    const processedItem = this._processDataItem(generatedItem, options);
 
     options.dataIndex += 1;
 
@@ -759,7 +759,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    * @extended: treelist
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _generateDataItem(data: UserData, options?: RowGenerationOptions): GeneratedItem {
+  protected _generateDataItem(data: UserData, options?: ItemProcessingOptions): GeneratedItem {
     return {
       rowType: 'data',
       data,
@@ -771,12 +771,12 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    * @extended: selection, editing, master_detail, TreeList's master_detail
    */
   protected _processDataItem(
-    dataItem: GeneratedItem,
-    options: RowGenerationOptions,
+    generatedItem: GeneratedItem,
+    options: ItemProcessingOptions,
   ): ProcessedItem {
     return {
-      ...dataItem,
-      values: generateRowValues(dataItem.data, options.visibleColumns),
+      ...generatedItem,
+      values: generateRowValues(generatedItem.data, options.visibleColumns),
       dataIndex: options.dataIndex,
     };
   }
@@ -1141,7 +1141,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._currentOperationTypes = null;
 
     if (dataSource) {
-      const getItems = (): ProcessedItem[] => {
+      const getDataItems = (): ProcessedItem[] => {
         const cachedProcessedItems = this._cachedProcessedItems;
         const useProcessedItemsCache = 'useProcessedItemsCache' in change && change.useProcessedItemsCache;
 
@@ -1159,10 +1159,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
         return processedItems;
       };
 
-      const items = this._afterProcessItems(getItems());
-      const oldItems = this._items.length === items.length ? this._items : null;
+      const dataItems = this._afterProcessItems(getDataItems());
+      const oldDataItems = this._items.length === dataItems.length ? this._items : null;
 
-      change.items = items;
+      change.items = dataItems;
 
       this._applyChange(change);
 
@@ -1170,11 +1170,11 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
       this._items.forEach((item, index) => {
         item.rowIndex = index - rowIndexDelta;
-        if (oldItems) {
-          item.cells = oldItems[index].cells ?? [];
+        if (oldDataItems) {
+          item.cells = oldDataItems[index].cells ?? [];
         }
 
-        const newItem = items[index];
+        const newItem = dataItems[index];
         if (newItem) {
           item.loadIndex = newItem.loadIndex;
         }

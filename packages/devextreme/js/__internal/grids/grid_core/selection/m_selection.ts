@@ -25,7 +25,7 @@ import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import Selection from '@ts/ui/selection/selection';
 
 import type { DataController } from '../data_controller/data_controller';
-import type { GeneratedItem, ProcessedItem, RowGenerationOptions } from '../data_controller/types';
+import type { GeneratedItem, ItemProcessingOptions, ProcessedItem } from '../data_controller/types';
 import type { ChangedEvent } from '../data_source_adapter/types';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
@@ -642,7 +642,7 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
 
   protected _processDataItem(
     generatedItem: GeneratedItem,
-    options: RowGenerationOptions,
+    options: ItemProcessingOptions,
   ): ProcessedItem {
     const processedItem = super._processDataItem(generatedItem, options);
     const hasSelectColumn = this._selectionController.isSelectColumnVisible();
