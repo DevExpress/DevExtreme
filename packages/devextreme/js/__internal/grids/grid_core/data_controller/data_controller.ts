@@ -554,19 +554,17 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    * @extended: selection
    */
   protected _dataChangedHandler(e?: ChangedEvent): void {
-    const that = this;
-    const dataSource = that._dataSource;
-    const columnsController = that._columnsController;
+    const dataSource = this._dataSource;
     let isAsyncDataSourceApplying = false;
 
     this._useSortingGroupingFromColumns = false;
 
-    if (dataSource && !that._isDataSourceApplying) {
-      that._isDataSourceApplying = true;
+    if (dataSource && !this._isDataSourceApplying) {
+      this._isDataSourceApplying = true;
 
-      when(that._columnsController.applyDataSource(dataSource)).done(() => {
-        if (that._isLoading) {
-          that._handleLoadingChanged(false);
+      when(this._columnsController.applyDataSource(dataSource)).done(() => {
+        if (this._isLoading) {
+          this._handleLoadingChanged(false);
         }
 
         // @ts-expect-error e.isDelayed is set for virtual scrolling with scrolling.legacyMode
@@ -575,19 +573,19 @@ export class DataController extends DataHelperMixin(modules.Controller) {
           e.isDelayed = false;
         }
 
-        that._isDataSourceApplying = false;
+        this._isDataSourceApplying = false;
 
         const hasAdditionalFilter = (): boolean => {
-          const additionalFilter = that._calculateAdditionalFilter();
+          const additionalFilter = this._calculateAdditionalFilter();
           return Boolean(additionalFilter?.length);
         };
 
-        const needApplyFilter = that._needApplyFilter;
-        that._needApplyFilter = false;
+        const needApplyFilter = this._needApplyFilter;
+        this._needApplyFilter = false;
 
-        if (needApplyFilter && !that._isAllDataTypesDefined && hasAdditionalFilter()) {
-          errors.log('W1005', that.component.NAME);
-          that._applyFilter();
+        if (needApplyFilter && !this._isAllDataTypesDefined && hasAdditionalFilter()) {
+          errors.log('W1005', this.component.NAME);
+          this._applyFilter();
         } else {
           this._currentOperationTypes = dataSource.operationTypes();
 
@@ -599,18 +597,19 @@ export class DataController extends DataHelperMixin(modules.Controller) {
             } as DataChange
             : { changeType: 'refresh' };
 
-          that.updateItems(change, true);
+          this.updateItems(change, true);
         }
       }).fail(() => {
-        that._isDataSourceApplying = false;
+        this._isDataSourceApplying = false;
       });
-      if (that._isDataSourceApplying) {
+
+      if (this._isDataSourceApplying) {
         isAsyncDataSourceApplying = true;
-        that._handleLoadingChanged(true);
+        this._handleLoadingChanged(true);
       }
 
-      that._needApplyFilter = !that._columnsController.isDataSourceApplied();
-      that._isAllDataTypesDefined = columnsController.isAllDataTypesDefined();
+      this._needApplyFilter = !this._columnsController.isDataSourceApplied();
+      this._isAllDataTypesDefined = this._columnsController.isAllDataTypesDefined();
     }
   }
 
@@ -691,15 +690,13 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   // The mixin base types this as `void`, but the override returns a Deferred
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   protected _loadDataSource(): DeferredObj<unknown> {
-    const that = this;
-    const dataSource = that._dataSource;
-    // @ts-expect-error Deferred lacks a construct signature in its typings
-    const result: DeferredObj<unknown> = new Deferred();
+    const dataSource = this._dataSource;
+    const result: DeferredObj<unknown> = Deferred();
 
     when(this._columnsController.refresh(true)).always(() => {
       if (dataSource) {
         dataSource.load().done((...args: unknown[]) => {
-          that._isPaging = false;
+          this._isPaging = false;
           result.resolve(...args);
         }).fail(result.reject);
       } else {
@@ -735,10 +732,11 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    * @extended: adaptivity, editing, master_detail, virtual_scrolling
    */
   protected _processItems(items: RawItemData[], change: DataChange): ProcessedItem[] {
-    const rowIndexDelta = this.getRowIndexDelta();
     const { changeType } = change;
+
     const visibleColumns = this._columnsController.getVisibleColumns(null, changeType === 'loadingAll');
     const dataIndex = this.getDataIndex(change);
+    const rowIndexDelta = this.getRowIndexDelta();
 
     const options: ItemProcessingOptions = {
       visibleColumns,
@@ -746,11 +744,13 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     };
     const result: ProcessedItem[] = [];
 
-    items.forEach((item, index) => {
-      if (isDefined(item)) {
-        options.rowIndex = index - rowIndexDelta;
-        result.push(this._processItem(item, options));
+    items.forEach((item, index: number) => {
+      if (!isDefined(item)) {
+        return;
       }
+
+      options.rowIndex = index - rowIndexDelta;
+      result.push(this._processItem(item, options));
     });
 
     return result;

@@ -5,7 +5,6 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 
 import type { Column } from '../columns_controller/types';
 import type { ChangedEvent, OperationTypes } from '../data_source_adapter/types';
-
 /** data */
 
 export interface DataSourceAdapterLike {
