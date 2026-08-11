@@ -1479,7 +1479,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     if (dataSource) {
       if (data) {
-        const loadOperation: LoadOperation = {
+        const loadOperation: Omit<LoadOperation, 'data'> & Required<Pick<LoadOperation, 'data'>> = {
           data,
           isCustomLoading: true,
           storeLoadOptions: { isLoadingAll: true },
@@ -1491,7 +1491,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
         };
         dataSource._handleDataLoaded(loadOperation);
 
-        when<RawItemData[]>(loadOperation.data as RawItemData[] | DeferredObj<RawItemData[]>)
+        when<RawItemData[]>(loadOperation.data)
           .done((loadedData: RawItemData[]): void => {
             const items = this._processItems(
               this._beforeProcessItems(loadedData),
@@ -1500,9 +1500,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
             // @ts-expect-error DataGrid-only summary leaks into grid_core
             d.resolve(items, loadOperation.extra?.summary);
           })
-          .fail(() => {
-            d.reject();
-          });
+          .fail(d.reject as (...args: unknown[]) => void);
       } else if (!dataSource.isLoading()) {
         const loadOptions: StoreLoadOptions & { isLoadingAll: boolean } = {
           ...dataSource.loadOptions(),

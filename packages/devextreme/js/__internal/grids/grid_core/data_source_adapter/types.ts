@@ -1,4 +1,5 @@
 import type { Mode } from '@js/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import type { Properties } from '@js/ui/data_grid';
 import type {
   ChangedEvent as BaseChangedEvent,
@@ -28,7 +29,7 @@ export interface OperationTypes {
 
 export interface LoadOperation extends Omit<BaseLoadOperation, 'operationId'> {
   operationId?: number;
-  data?: RawItemData[];
+  data?: RawItemData[] | DeferredObj<RawItemData[]>;
   cachedStoreData?: RawItemData[];
   storeLoadOptions: StoreLoadOptions & {
     isLoadingAll?: boolean;
