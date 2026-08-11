@@ -5,8 +5,7 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import type { ColumnsController } from '../../columns_controller/m_columns_controller';
 import type { DataController } from '../../data_controller/data_controller';
-import type { RawItemData } from '../../data_controller/types';
-import type { ChangedEvent } from '../../data_source_adapter/types';
+import type { ChangedEvent, RawItemData } from '../../data_source_adapter/types';
 import { Controller } from '../../m_modules';
 import type { RowKey } from '../../m_types';
 import gridCoreUtils from '../../m_utils';

@@ -37,8 +37,8 @@ import type {
   GeneratedItem,
   ItemProcessingOptions,
   ProcessedItem,
-  RawItemData,
 } from '../data_controller/types';
+import type { RawItemData } from '../data_source_adapter/types';
 import modules from '../m_modules';
 import type {
   Controllers, ModuleType, RowKey, Views,
