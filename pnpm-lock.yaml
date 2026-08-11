@@ -1586,21 +1586,6 @@ importers:
       sinon:
         specifier: 18.0.1
         version: 18.0.1
-      systemjs:
-        specifier: 0.19.41
-        version: 0.19.41
-      systemjs-plugin-babel:
-        specifier: 0.0.25
-        version: 0.0.25
-      systemjs-plugin-css:
-        specifier: 0.1.37
-        version: 0.1.37
-      systemjs-plugin-json:
-        specifier: 0.3.0
-        version: 0.3.0
-      systemjs-plugin-text:
-        specifier: 0.0.11
-        version: 0.0.11
       terser-webpack-plugin:
         specifier: 5.3.17
         version: 5.3.17(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.1)(webpack@5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.1))
@@ -16194,17 +16179,8 @@ packages:
   systemjs-builder@0.16.15:
     resolution: {integrity: sha512-C18G//KWWwQpstAVBUDt0YbbqvSFVVtr0MFqtf2zB4U/cePOA00Btcja++mzlFLMnepVpDv0GdtfE/6A8lrxeA==}
 
-  systemjs-plugin-babel@0.0.25:
-    resolution: {integrity: sha512-RMKSizWWlw4+IpDB385ugxn7Owd9W+HEtjYDQ6yO1FpsnER/vk6FbXRweUF+mvRi6EHgk8vDdUdtui7ReDwX3w==}
-
-  systemjs-plugin-css@0.1.37:
-    resolution: {integrity: sha512-wCGG62zYXuOlNji5FlBjeMFAnLeAO/HQmFg+8UBX/mlHoAKLHlGFYRstlhGKibRU2oxk/BH9DaihOuhhNLi7Kg==}
-
   systemjs-plugin-json@0.3.0:
     resolution: {integrity: sha512-GPHZgc6bGIDIQsoNAkhthddApy4ErFhy30rMBrEepkoDidhs0JeSk821htUOSrtqJjnUPBf2gge325B5GfsW0w==}
-
-  systemjs-plugin-text@0.0.11:
-    resolution: {integrity: sha512-buWE27P6iM3WZYXcsiy6+fiulQ/x+Puux4ni5ejTlcUgqUg3/sUvoAUZ4GGPACC0acjxmnaCt3kHb0+uNs1ekw==}
 
   systemjs@0.19.41:
     resolution: {integrity: sha512-8E9CmZ01dIr52po2LNhc3QuKyeSTyvQfshHMi3lekSbEOdR9OAUOX2X+wPKunZX3CpudM6w3r8eTCjGQrK79Wg==}
@@ -37695,13 +37671,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  systemjs-plugin-babel@0.0.25: {}
-
-  systemjs-plugin-css@0.1.37: {}
-
   systemjs-plugin-json@0.3.0: {}
-
-  systemjs-plugin-text@0.0.11: {}
 
   systemjs@0.19.41:
     dependencies:
