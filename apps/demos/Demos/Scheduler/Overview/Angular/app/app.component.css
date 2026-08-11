@@ -123,7 +123,6 @@
   line-height: 20px;
   font-weight: normal;
   padding: 25px 20px 25px 40px;
-  color: #707070;
 }
 
 ::ng-deep .dx-color-scheme-contrast .info {
@@ -138,7 +137,7 @@
 }
 
 ::ng-deep .dx-scheduler-appointment {
-  color: rgba(255, 255, 255, 1);
+  color: var(--dxds-color-content-neutral-default-on-surface-rest, #fff);
 }
 
 ::ng-deep .employee-1 {
