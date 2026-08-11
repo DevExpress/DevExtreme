@@ -1,10 +1,10 @@
 import { AI_COLUMN_NAME } from '@ts/grids/grid_core/ai_column/const';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import type { UserData } from '../types';
+import type { RawItemData } from '../types';
 
 export function generateRowValues(
-  data: UserData,
+  data: RawItemData,
   columns: Column[],
   isModified = false,
 ): unknown[] {
