@@ -438,8 +438,11 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       columnsController.updateColumnDataTypes(dataSource);
     }
     this._columnsUpdating = true;
-    columnsController.updateSortingGrouping(dataSource, !this._useSortingGroupingFromColumns);
-    this._columnsUpdating = false;
+    try {
+      columnsController.updateSortingGrouping(dataSource, !this._useSortingGroupingFromColumns);
+    } finally {
+      this._columnsUpdating = false;
+    }
 
     storeLoadOptions.sort = columnsController.getSortDataSourceParameters();
     storeLoadOptions.group = columnsController.getGroupDataSourceParameters();
@@ -1589,13 +1592,16 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
 
     this._skipProcessingPagingChange = true;
-    if (optionName === 'pageSize' && value === 0) {
-      dataSource.pageIndex(0);
-      this.option('paging.pageIndex', 0);
+    try {
+      if (optionName === 'pageSize' && value === 0) {
+        dataSource.pageIndex(0);
+        this.option('paging.pageIndex', 0);
+      }
+      dataSource[optionName](value);
+      this.option(`paging.${optionName}`, value);
+    } finally {
+      this._skipProcessingPagingChange = false;
     }
-    dataSource[optionName](value);
-    this.option(`paging.${optionName}`, value);
-    this._skipProcessingPagingChange = false;
 
     const pageIndex = dataSource.pageIndex();
     this._isPaging = optionName === 'pageIndex';
