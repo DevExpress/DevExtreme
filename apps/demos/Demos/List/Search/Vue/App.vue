@@ -46,7 +46,7 @@ const searchMode = ref<SearchMode>('contains');
 .options {
   margin-top: 20px;
   padding: 20px;
-  background: rgba(191, 191, 191, 0.15);
+  background-color: color-mix(in srgb, var(--dxds-color-surface-neutral-default-inverted-rest, #bfbfbf) calc(var(--dxds-opacity-5, 0.15) * 100%), transparent);
 }
 
 .options .caption {

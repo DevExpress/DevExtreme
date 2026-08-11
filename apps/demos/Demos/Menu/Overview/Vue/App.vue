@@ -128,7 +128,7 @@ function itemClick(e: DxMenuTypes.ItemClickEvent<ProductType>) {
   right: 0;
   width: 260px;
   top: 0;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: color-mix(in srgb, var(--dxds-color-surface-neutral-default-inverted-rest, #bfbfbf) calc(var(--dxds-opacity-5, 0.15) * 100%), transparent);
 }
 
 .caption {

@@ -161,7 +161,7 @@ function selectionModeValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
 .selected-container {
   padding: 20px;
   margin-left: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: color-mix(in srgb, var(--dxds-color-surface-neutral-default-inverted-rest, #bfbfbf) calc(var(--dxds-opacity-5, 0.15) * 100%), transparent);
   font-size: 115%;
   font-weight: bold;
 }
@@ -176,7 +176,7 @@ function selectionModeValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
 
 .options {
   padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: color-mix(in srgb, var(--dxds-color-surface-neutral-default-inverted-rest, #bfbfbf) calc(var(--dxds-opacity-5, 0.15) * 100%), transparent);
   margin-top: 20px;
   box-sizing: border-box;
 }
