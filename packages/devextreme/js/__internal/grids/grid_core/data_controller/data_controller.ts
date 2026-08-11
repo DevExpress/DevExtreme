@@ -152,7 +152,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   private _loadErrorHandler!: (e: unknown) => void;
 
-  private _changingHandler!: (e: unknown) => void;
+  private changingHandlerProxy!: (e: unknown) => void;
 
   private _dataPushedHandler!: (changes: unknown) => void;
 
@@ -180,7 +180,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._dataChangedHandlerProxy = this._dataChangedHandler.bind(this);
     this._loadingChangedHandler = this._handleLoadingChanged.bind(this);
     this._loadErrorHandler = this._handleLoadError.bind(this);
-    this._changingHandler = this.handleChanging.bind(this);
+    this.changingHandlerProxy = this.changingHandler.bind(this);
     this._dataPushedHandler = this._handleDataPushed.bind(this);
 
     this._columnsController.columnsChanged.add(this.columnsChangedHandler.bind(this));
@@ -455,19 +455,23 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       .getGroupDataSourceParameters(!dataSource.remoteOperations().grouping);
   };
 
-  // An arrow field: it unsubscribes itself, so `add` and `remove` need the same reference.
-  private readonly updateItemsHandler = (change: ColumnsChanges): void => {
-    this._columnsController.columnsChanged.remove(this.updateItemsHandler);
+  private updateItemsAfterColumnsChanged(): void {
+    const updateItemsHandler = (change: ColumnsChanges): void => {
+      this._columnsController.columnsChanged.remove(updateItemsHandler);
 
-    this.updateItems({
-      changeType: 'refresh',
-      repaintChangesOnly: false,
-      event: change?.changeTypes?.event,
-      virtualColumnsScrolling: change?.changeTypes?.virtualColumnsScrolling,
-    });
-  };
+      this.updateItems({
+        changeType: 'refresh',
+        repaintChangesOnly: false,
+        event: change?.changeTypes?.event,
+        virtualColumnsScrolling: change?.changeTypes?.virtualColumnsScrolling,
+      });
+    };
 
-  private subscribeToUpdateItems(optionNames: ColumnsChanges['optionNames']): void {
+    // TODO remove resubscribing
+    this._columnsController.columnsChanged.add(updateItemsHandler);
+  }
+
+  private shouldUpdateItemsAfterColumnsChange(optionNames: ColumnsChanges['optionNames']): boolean {
     const excludedOptionNames = [
       'width',
       'visibleWidth',
@@ -478,10 +482,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       'filterType',
     ];
 
-    if (!this._needApplyFilter && !gridCoreUtils.checkChanges(optionNames, excludedOptionNames)) {
-      // TODO remove resubscribing
-      this._columnsController.columnsChanged.add(this.updateItemsHandler);
-    }
+    return !this._needApplyFilter && !gridCoreUtils.checkChanges(optionNames, excludedOptionNames);
   }
 
   private shouldApplyFilter(e: ColumnsChanges): boolean {
@@ -531,7 +532,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
         filterApplied = true;
       }
 
-      this.subscribeToUpdateItems(optionNames);
+      if (this.shouldUpdateItemsAfterColumnsChange(optionNames)) {
+        this.updateItemsAfterColumnsChanged();
+      }
 
       if (isDefined(optionNames.visible)) {
         const column = this._columnsController.columnOption(e.columnIndex);
@@ -1194,7 +1197,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
   }
 
-  private handleChanging(e) {
+  private changingHandler(e) {
     const rows = this.getVisibleRows();
     const dataSource = this.dataSource();
 
@@ -1382,14 +1385,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this.component.endUpdate();
   }
 
-  private readonly dataSourceChangedHandler = (): void => {
-    this.changed.remove(this.dataSourceChangedHandler);
+  private readonly fireDataSourceChanged = (): void => {
+    this.changed.remove(this.fireDataSourceChanged);
     this.dataSourceChanged.fire();
   };
-
-  private fireDataSourceChanged(): void {
-    this.changed.add(this.dataSourceChangedHandler);
-  }
 
   protected _getDataSourceAdapter(): any {}
 
@@ -1401,17 +1400,30 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return dataSourceAdapter;
   }
 
+  private subscribeToDataSource(dataSource): void {
+    dataSource.changed.add(this._dataChangedHandlerProxy);
+    dataSource.loadingChanged.add(this._loadingChangedHandler);
+    dataSource.loadError.add(this._loadErrorHandler);
+    dataSource.customizeStoreLoadOptions.add(this._customizeStoreLoadOptionsHandler);
+    dataSource.changing.add(this.changingHandlerProxy);
+    dataSource.pushed.add(this._dataPushedHandler);
+  }
+
+  private unsubscribeFromDataSource(dataSource): void {
+    dataSource.changed.remove(this._dataChangedHandlerProxy);
+    dataSource.loadingChanged.remove(this._loadingChangedHandler);
+    dataSource.loadError.remove(this._loadErrorHandler);
+    dataSource.customizeStoreLoadOptions.remove(this._customizeStoreLoadOptionsHandler);
+    dataSource.changing.remove(this.changingHandlerProxy);
+    dataSource.pushed.remove(this._dataPushedHandler);
+  }
+
   private setDataSource(dataSource) {
     const oldDataSource = this._dataSource;
 
     if (!dataSource && oldDataSource) {
       oldDataSource.cancelAll();
-      oldDataSource.changed.remove(this._dataChangedHandlerProxy);
-      oldDataSource.loadingChanged.remove(this._loadingChangedHandler);
-      oldDataSource.loadError.remove(this._loadErrorHandler);
-      oldDataSource.customizeStoreLoadOptions.remove(this._customizeStoreLoadOptionsHandler);
-      oldDataSource.changing.remove(this._changingHandler);
-      oldDataSource.pushed.remove(this._dataPushedHandler);
+      this.unsubscribeFromDataSource(oldDataSource);
       oldDataSource.dispose(this._isSharedDataSource);
     }
 
@@ -1422,16 +1434,12 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._dataSource = dataSource;
 
     if (dataSource) {
-      this.fireDataSourceChanged();
       this._isLoading = !dataSource.isLoaded();
       this._needApplyFilter = true;
       this._isAllDataTypesDefined = this._columnsController.isAllDataTypesDefined();
-      dataSource.changed.add(this._dataChangedHandlerProxy);
-      dataSource.loadingChanged.add(this._loadingChangedHandler);
-      dataSource.loadError.add(this._loadErrorHandler);
-      dataSource.customizeStoreLoadOptions.add(this._customizeStoreLoadOptionsHandler);
-      dataSource.changing.add(this._changingHandler);
-      dataSource.pushed.add(this._dataPushedHandler);
+
+      this.changed.add(this.fireDataSourceChanged);
+      this.subscribeToDataSource(dataSource);
     }
   }
 
