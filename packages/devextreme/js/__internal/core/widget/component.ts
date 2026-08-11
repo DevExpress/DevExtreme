@@ -372,9 +372,9 @@ export class Component<
     };
   }
 
-  _defaultActionArgs(): DefaultActionArgs<TComponent> {
+  _defaultActionArgs(): DefaultActionArgs<unknown> {
     return {
-      component: this as unknown as TComponent,
+      component: this,
     };
   }
 

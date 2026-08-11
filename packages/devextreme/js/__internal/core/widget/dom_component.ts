@@ -423,7 +423,7 @@ class DOMComponent<
     return defaultConfig;
   }
 
-  _defaultActionArgs(): DefaultActionArgs<TComponent> {
+  _defaultActionArgs(): DefaultActionArgs<unknown> {
     const args = super._defaultActionArgs();
 
     const $element = this.$element();
