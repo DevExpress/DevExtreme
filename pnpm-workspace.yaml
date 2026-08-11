@@ -20,7 +20,6 @@ overrides:
   "semver@<5.7.2": ^5.7.2
   qs: ">=6.15.2"
   "vite@>=7.0.0 <=7.3.4": ^7.3.5
-  "dompurify@<3.4.12": ^3.4.12
   "hono@<4.12.34": "^4.12.34"
   "minimatch@>=9.0.0 < 9.0.7": 9.0.9
   "picomatch@>=4.0.0 <4.0.4": 4.0.4
@@ -34,6 +33,7 @@ overrides:
   "brace-expansion@>=3.0.0 <5.0.9": "^5.0.9"
   "yaml@>=2.0.0 <2.8.3": ^2.8.3
   "follow-redirects@<=1.15.11": ">=1.16.0"
+  "less@<4.8.0": ^4.8.0
   "ws@>=8.0.0 <8.21.0": ^8.21.0
   "ws@>=7.0.0 <7.5.11": ^7.5.11
   "launch-editor@<2.14.1": ^2.14.1
@@ -60,6 +60,7 @@ overrides:
   "@hono/node-server@<2.0.12": "^2.0.12"
   "stylelint-config-recommended-vue>stylelint-config-html": "1.1.0"
   "stylelint-config-recommended-vue>stylelint-config-recommended": "16.0.0"
+  "dompurify@<=3.4.12": "^3.4.13"
 catalog:
   axe-core: 4.11.3
   inferno: ^8.2.3
