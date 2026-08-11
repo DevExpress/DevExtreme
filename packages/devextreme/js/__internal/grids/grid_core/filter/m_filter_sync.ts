@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import filterUtils from '@js/ui/shared/filtering';
@@ -354,14 +355,12 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterSyn
     this.component.endUpdate();
   }
 
-  protected _applyFilter(): Promise<void> {
+  protected _applyFilter(): DeferredObj<unknown> {
     if (this._filterSyncController._skipSyncColumnOptions) {
-      // @ts-expect-error
-      return new Deferred().resolve();
+      return Deferred().resolve();
     }
 
-    // @ts-expect-error
-    return super._applyFilter.apply(this, arguments);
+    return super._applyFilter();
   }
 };
 

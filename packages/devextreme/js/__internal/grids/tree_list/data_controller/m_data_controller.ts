@@ -22,7 +22,7 @@ export class TreeListDataController extends DataController {
     return level;
   }
 
-  protected _generateDataItem(node, options) {
+  protected _generateDataItem(node?: any, options?: any): any {
     return {
       rowType: 'data',
       node,

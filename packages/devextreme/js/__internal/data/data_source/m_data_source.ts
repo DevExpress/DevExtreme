@@ -20,7 +20,7 @@ import { create } from '@js/core/utils/queue';
 import {
   isBoolean, isDefined, isEmptyObject, isNumeric, isObject, isString,
 } from '@js/core/utils/type';
-import type { StoreChange } from '@js/data/store';
+import type { Store, StoreChange } from '@js/data/store';
 import commonUtils from '@ts/core/utils/m_common';
 
 import type { ChangedEvent, LoadOperation } from './types';
@@ -274,7 +274,7 @@ export const DataSource = Class.inherit({
     this.pageIndex(0);
   },
 
-  store() {
+  store(): Store {
     return this._store;
   },
 
@@ -594,8 +594,7 @@ export const DataSource = Class.inherit({
     };
 
     if (loadOptions.data) {
-      // @ts-expect-error
-      return new Deferred().resolve(loadOptions.data).done(handleSuccess);
+      return Deferred().resolve(loadOptions.data).done(handleSuccess);
     }
 
     return this.store().load(loadOptions.storeLoadOptions)

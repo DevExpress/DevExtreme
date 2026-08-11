@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import type { Item, UserData } from '../data_controller/types';
+import type { ProcessedItem, RawItemData } from '../data_controller/types';
 import {
   getDataFromRowItems,
   isAIColumnAutoMode,
@@ -81,7 +81,7 @@ describe('reduceDataCachedKeys', () => {
 
 describe('isKeyMissingInData', () => {
   it('should return false when a primitive key is present in all rows', () => {
-    const data: UserData[] = [
+    const data: RawItemData[] = [
       { id: 1, name: 'A' },
       { id: 2, name: 'B' },
     ];
@@ -89,7 +89,7 @@ describe('isKeyMissingInData', () => {
   });
 
   it('should return true when a primitive key is missing from a row', () => {
-    const data: UserData[] = [
+    const data: RawItemData[] = [
       { id: 1, name: 'A' },
       { name: 'B' },
     ];
@@ -97,7 +97,7 @@ describe('isKeyMissingInData', () => {
   });
 
   it('should return false when a primitive key is present but null or undefined', () => {
-    const data: UserData[] = [
+    const data: RawItemData[] = [
       { id: null, name: 'A' },
       { id: undefined, name: 'B' },
     ];
@@ -105,7 +105,7 @@ describe('isKeyMissingInData', () => {
   });
 
   it('should return false when all compound key fields are present in all rows', () => {
-    const data: UserData[] = [
+    const data: RawItemData[] = [
       { id1: 1, id2: 'a' },
       { id1: 2, id2: 'b' },
     ];
@@ -113,7 +113,7 @@ describe('isKeyMissingInData', () => {
   });
 
   it('should return true when a compound key subfield is missing from a row', () => {
-    const data: UserData[] = [
+    const data: RawItemData[] = [
       { id1: 1, id2: 'a' },
       { id1: 2 },
     ];
@@ -121,7 +121,7 @@ describe('isKeyMissingInData', () => {
   });
 
   it('should return false when a function key expression resolves for all rows', () => {
-    const data: UserData[] = [
+    const data: RawItemData[] = [
       { id: 1, name: 'A' },
       { id: 2, name: 'B' },
     ];
@@ -129,7 +129,7 @@ describe('isKeyMissingInData', () => {
   });
 
   it('should return true when a function key expression cannot resolve a row', () => {
-    const data: UserData[] = [
+    const data: RawItemData[] = [
       { id: 1, name: 'A' },
       { name: 'B' },
     ];
@@ -159,7 +159,7 @@ describe('getDataFromRowItems', () => {
         key: 'id',
         rowType: 'data',
       },
-    ] as unknown as Item[];
+    ] as unknown as ProcessedItem[];
     const result = getDataFromRowItems(items);
     expect(result).toEqual([
       { id: 1, value: 'one' },
@@ -179,7 +179,7 @@ describe('getDataFromRowItems', () => {
         key: 'id',
         rowType: 'group',
       },
-    ] as unknown as Item[];
+    ] as unknown as ProcessedItem[];
     const result = getDataFromRowItems(items);
     expect(result).toEqual([
       { id: 1, value: 'one' },
