@@ -28,6 +28,7 @@ import type { ColumnsChanges } from '@ts/grids/grid_core/columns_controller/type
 import type {
   ChangedEvent, LoadOperation, OperationTypes, RawItemData,
 } from '@ts/grids/grid_core/data_source_adapter/types';
+import { isLocalStore } from '@ts/grids/grid_core/data_source_adapter/utils/store';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { ErrorHandlingController } from '@ts/grids/grid_core/error_handling/m_error_handling';
@@ -263,7 +264,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       const isValueChanged = args.value !== args.previousValue;
       if (isValueChanged) {
         const store = this.store();
-        if (store) {
+        if (isLocalStore(store)) {
           store._array = args.value;
         }
       }
@@ -1577,7 +1578,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    * @extended: virtual_scrolling
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public getRowIndexOffset(byLoadedRows?: boolean) {
+  public getRowIndexOffset(byLoadedRows?: boolean): number {
     return 0;
   }
 
