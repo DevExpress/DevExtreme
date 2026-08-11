@@ -85,6 +85,7 @@
             }
         },
         {
+            "comment": "Turning a token into a widget variable is what these files are for, so only the raw custom-property form stays banned here.",
             "files": [
                 "scss/widgets/fluent-next/**/_colors.scss",
                 "scss/widgets/fluent-next/**/_sizes.scss",
@@ -93,7 +94,7 @@
             "rules": {
                 "declaration-property-value-disallowed-list": [
                     { "/.*/": ["/var\\(\\s*--dxds-/"] },
-                    { "message": "Read a design token through the ds bridge (ds.$name), not var(--dxds-…): the bridge fails the build on an unknown name, a raw custom property compiles and degrades silently" }
+                    { "message": "Read a design token through the ds bridge (ds.$name), not var(--dxds-…): the bridge fails the build on an unknown name, a raw custom property compiles and degrades silently. The public --dx-* properties are unaffected." }
                 ]
             }
         }

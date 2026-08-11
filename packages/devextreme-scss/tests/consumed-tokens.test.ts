@@ -9,17 +9,18 @@ describe('collectTokenReferences', () => {
   it('collects every distinct ds.$ reference a stylesheet makes', () => {
     const references = collectTokenReferences(
       '$a: ds.$spacing-40;\n$b: ds.$color-content-neutral-default-rest;',
+      'probe.scss',
     );
 
     expect(references).toEqual(['spacing-40', 'color-content-neutral-default-rest']);
   });
 
   it('ignores references parked in line comments', () => {
-    expect(collectTokenReferences('// $a: ds.$spacing-40 !default;')).toEqual([]);
+    expect(collectTokenReferences('// $a: ds.$spacing-40 !default;', 'probe.scss')).toEqual([]);
   });
 
   it('ignores references parked in block comments', () => {
-    expect(collectTokenReferences('/* see ds.$spacing-40 */\n$a: ds.$spacing-80;')).toEqual([
+    expect(collectTokenReferences('/* see ds.$spacing-40 */\n$a: ds.$spacing-80;', 'probe.scss')).toEqual([
       'spacing-80',
     ]);
   });
@@ -33,7 +34,7 @@ describe('collectTokenReferences', () => {
       '$a: ds.$spacing-40;',
     ].join('\n');
 
-    expect(collectTokenReferences(content)).toEqual(['spacing-40']);
+    expect(collectTokenReferences(content, 'probe.scss')).toEqual(['spacing-40']);
   });
 
   it('keeps the declarations between several block comments', () => {
@@ -44,56 +45,83 @@ describe('collectTokenReferences', () => {
       '$b: ds.$spacing-80;',
     ].join('\n');
 
-    expect(collectTokenReferences(content)).toEqual(['spacing-40', 'spacing-80']);
+    expect(collectTokenReferences(content, 'probe.scss')).toEqual(['spacing-40', 'spacing-80']);
   });
 
   it('ignores a line comment nested inside a block comment', () => {
     const content = '/*\n// $dead: ds.$color-surface-danger-default-rest !default;\n*/\n$a: ds.$spacing-40;';
 
-    expect(collectTokenReferences(content)).toEqual(['spacing-40']);
+    expect(collectTokenReferences(content, 'probe.scss')).toEqual(['spacing-40']);
   });
 
   it('captures a malformed name whole instead of truncating it to a valid prefix', () => {
-    expect(collectTokenReferences('$a: ds.$spacing-40_typo;')).toEqual(['spacing-40_typo']);
-    expect(collectTokenReferences('$a: ds.$spacingTypo;')).toEqual(['spacingTypo']);
+    expect(collectTokenReferences('$a: ds.$spacing-40_typo;', 'probe.scss')).toEqual(['spacing-40_typo']);
+    expect(collectTokenReferences('$a: ds.$spacingTypo;', 'probe.scss')).toEqual(['spacingTypo']);
   });
 
   it('does not treat a variable that merely ends in ds as a namespace', () => {
-    expect(collectTokenReferences('$a: $borders.$spacing-40;')).toEqual([]);
+    expect(collectTokenReferences('$a: $borders.$spacing-40;', 'probe.scss')).toEqual([]);
   });
 });
 
 describe('collectCustomPropertyReferences', () => {
   it('collects a custom property written without going through the bridge', () => {
-    expect(collectCustomPropertyReferences('.x { color: var(--dxds-color-content-neutral-default-rest); }')).toEqual([
+    expect(collectCustomPropertyReferences('.x { color: var(--dxds-color-content-neutral-default-rest); }', 'probe.scss')).toEqual([
       'color-content-neutral-default-rest',
     ]);
   });
 
   it('collects a reference nested in a relative colour', () => {
-    expect(collectCustomPropertyReferences('.x { color: rgb(from var(--dxds-neutral-10) r g b / 40%); }')).toEqual([
+    expect(collectCustomPropertyReferences('.x { color: rgb(from var(--dxds-neutral-10) r g b / 40%); }', 'probe.scss')).toEqual([
       'neutral-10',
     ]);
   });
 
   it('tolerates whitespace after the opening parenthesis', () => {
-    expect(collectCustomPropertyReferences('.x { color: var( --dxds-spacing-40 ); }')).toEqual([
+    expect(collectCustomPropertyReferences('.x { color: var( --dxds-spacing-40 ); }', 'probe.scss')).toEqual([
       'spacing-40',
     ]);
   });
 
   it('ignores custom properties of other namespaces', () => {
-    expect(collectCustomPropertyReferences('.x { color: var(--dx-color-text); }')).toEqual([]);
+    expect(collectCustomPropertyReferences('.x { color: var(--dx-color-text); }', 'probe.scss')).toEqual([]);
   });
 
   it('ignores a reference parked in a comment', () => {
-    expect(collectCustomPropertyReferences('// color: var(--dxds-spacing-40);')).toEqual([]);
+    expect(collectCustomPropertyReferences('// color: var(--dxds-spacing-40);', 'probe.scss')).toEqual([]);
+  });
+});
+
+describe('stripScssComments delimiter check', () => {
+  it('accepts paired delimiters', () => {
+    expect(() => stripScssComments('/* note */\n$a: 1;\n/* another */', 'probe.scss')).not.toThrow();
+  });
+
+  it('throws on a block comment that is never closed', () => {
+    expect(() => stripScssComments('/* note\n$a: ds.$spacing-40;', 'probe.scss')).toThrow('Unpaired block comment');
+  });
+
+  it('throws on an unpaired closing delimiter', () => {
+    expect(() => stripScssComments('$a: 1;\n*/\n$b: 2;', 'probe.scss')).toThrow('Unpaired block comment');
+  });
+
+  it('throws when delimiters pair up in the wrong order', () => {
+    // Even count, so only the ordering check can catch this one.
+    expect(() => stripScssComments('$a: 1;\n*/\n$b: 2;\n/* note', 'probe.scss')).toThrow('Unpaired block comment');
+  });
+
+  it('names the stylesheet it was given', () => {
+    expect(() => stripScssComments('/* note', 'gantt/_colors.scss')).toThrow('gantt/_colors.scss');
+  });
+
+  it('ignores delimiters that a line comment already removed', () => {
+    expect(() => stripScssComments('// /* not opened here\n$a: 1;', 'probe.scss')).not.toThrow();
   });
 });
 
 describe('stripScssComments', () => {
   it('keeps declarations that follow a closed block comment', () => {
-    expect(stripScssComments('/* note */ $a: 1;')).toBe(' $a: 1;');
+    expect(stripScssComments('/* note */ $a: 1;', 'probe.scss')).toBe(' $a: 1;');
   });
 });
 

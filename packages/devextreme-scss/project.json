@@ -41,6 +41,7 @@
       },
       "inputs": [
         "{projectRoot}/build/tokens/**/*",
+        "{projectRoot}/scss/widgets/fluent-next/**/*",
         "{workspaceRoot}/pnpm-lock.yaml"
       ],
       "outputs": [

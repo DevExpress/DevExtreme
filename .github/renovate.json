@@ -129,6 +129,7 @@
                 "@devexpress/design-tokens-internal"
             ],
             "automerge": false,
+            "dependencyDashboardApproval": true,
             "minimumReleaseAge": null
         }
     ],

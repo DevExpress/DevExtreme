@@ -1,9 +1,6 @@
-@use "../colors" as *;
-@use "../sizes" as *;
-@use "sizes" as *;
+@use "sizes" as mapSizes;
 @use "../../base/map" with (
-  $map-marker-tooltip-margin: $map-marker-tooltip-margin,
+  $map-marker-tooltip-margin: mapSizes.$map-marker-tooltip-margin,
 );
 
 // adduse
-

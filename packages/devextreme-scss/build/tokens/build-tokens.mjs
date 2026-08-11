@@ -181,12 +181,9 @@ const getModeFiles = (mode) => [
   `semantic/colors/${THEME_NAME}/${mode}`,
 ];
 
-/*
- * Source files behind the SCSS bridge. The component tier is deliberately absent: its 601 tokens
- * are aliases onto the semantic roles, the theme reads the roles directly, and emitting the tier
- * put 601 unreferenced custom properties into every theme stylesheet. Leaving it out of the bridge
- * also turns `ds.$button-color-bg-rest` into a Sass error rather than a dangling var().
- */
+// Source files behind the SCSS bridge. The component tier is absent on purpose: its tokens only
+// alias the semantic roles the theme already reads, so emitting them added unreferenced custom
+// properties. Absent from the bridge, `ds.$button-color-bg-rest` is now a Sass error.
 const getBridgeFiles = () => getModeFiles('light');
 
 StyleDictionary.registerFormat({
@@ -366,16 +363,9 @@ async function collectThemeStyleSheets() {
     .map((entry) => path.join(entry.parentPath, entry.name));
 }
 
-/*
- * Every `ds.$…` a widget reads must still exist in the token package. validateReferences() above
- * only checks the generated output against itself, so a release that deletes a token surfaces much
- * later, as a Sass "Undefined variable" on the first bundle that touches it — one name per rebuild,
- * with nothing pointing at the bump as the cause.
- *
- * The check reads the package's flat index instead of the generated bridge: the two carry the same
- * names, but the index also carries the version for the message and needs no generated output.
- * Reusing getBridgeFiles() is what keeps the scope from drifting away from the generator.
- */
+// Every token a widget reads must still exist in the package. Without this a deleted token surfaces
+// much later as a Sass "Undefined variable", one name per rebuild, with no hint that a bump caused
+// it. Read from the flat index, not the bridge: it carries the version for the message.
 async function validateConsumedTokens() {
   const { version, tokens } = JSON.parse(
     await readFile(path.join(tokensDir, 'tokens.flat.json'), 'utf-8'),
@@ -389,9 +379,10 @@ async function validateConsumedTokens() {
 
   for (const file of await collectThemeStyleSheets()) {
     const content = await readFile(file, 'utf-8');
+    const source = path.relative(themePath, file);
     const found = [
-      ...collectTokenReferences(content).map((name) => [name, `ds.$${name}`]),
-      ...collectCustomPropertyReferences(content).map((name) => [name, `var(--dxds-${name})`]),
+      ...collectTokenReferences(content, source).map((name) => [name, `ds.$${name}`]),
+      ...collectCustomPropertyReferences(content, source).map((name) => [name, `var(--dxds-${name})`]),
     ];
 
     for (const [name, reference] of found) {

@@ -583,7 +583,7 @@ const OVERRIDES = {
     'button-group': ['item'],
     'load-panel': ['content'],
     'tile-view': ['tile', 'wrapper'],
-    validation: ['message', 'summary', 'summary-item', 'overlay'],
+    validation: ['message', 'summary', 'summary-item', 'overlay', 'content'],
     tooltip: ['overlay', 'content', 'popup', 'arrow'],
     popover: ['popup', 'title'],
     splitter: ['resize-handle', 'icon'],
