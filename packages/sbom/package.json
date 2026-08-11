@@ -1,6 +1,6 @@
 {
   "name": "sbom",
-  "version": "26.1.4",
+  "version": "26.1.999",
   "private": true,
   "devDependencies": {
     "@devexpress/sbom-toolkit": "0.11.2"
