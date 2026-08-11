@@ -1,20 +1,48 @@
+import type { FloatingActionButtonDirection } from '@js/common';
 import registerComponent from '@js/core/component_registrator';
 import Guid from '@js/core/guid';
-import { extend } from '@js/core/utils/extend';
 import readyCallbacks from '@js/core/utils/ready_callbacks';
+import type { dxOverlayAnimation } from '@js/ui/overlay';
 import type { Properties } from '@js/ui/speed_dial_action';
 import swatchContainer from '@ts/core/utils/swatch_container';
+import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
-import { disposeAction, initAction } from './m_speed_dial_main_item';
+import type { FloatingActionButtonPosition } from './speed_dial_item';
+import { disposeAction, initAction } from './speed_dial_main_item';
 
 const { getSwatchContainer } = swatchContainer;
 
 const ready = readyCallbacks.add;
 
-class SpeedDialAction extends Widget<Properties> {
-  _getDefaultOptions() {
-    return extend(super._getDefaultOptions(), {
+export interface SpeedDialActionProperties extends Omit<Properties, 'onClick'> {
+  onClick?: Properties['onClick'] | null;
+
+  onInitializing?: (e: unknown) => void;
+
+  animation?: dxOverlayAnimation;
+
+  id?: Guid;
+
+  actions?: SpeedDialAction[];
+
+  actionComponent?: SpeedDialAction;
+
+  actionVisible?: boolean;
+
+  direction?: FloatingActionButtonDirection;
+
+  position?: FloatingActionButtonPosition;
+
+  parentPosition?: FloatingActionButtonPosition;
+
+  zIndex?: number;
+}
+
+class SpeedDialAction extends Widget<SpeedDialActionProperties> {
+  _getDefaultOptions(): SpeedDialActionProperties {
+    return {
+      ...super._getDefaultOptions(),
       icon: '',
       onClick: null,
       label: '',
@@ -52,10 +80,10 @@ class SpeedDialAction extends Widget<Properties> {
         },
       },
       id: new Guid(),
-    });
+    };
   }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<SpeedDialActionProperties>): void {
     switch (args.name) {
       case 'onClick':
       case 'icon':
@@ -83,7 +111,7 @@ class SpeedDialAction extends Widget<Properties> {
     }
   }
 
-  _dispose() {
+  _dispose(): void {
     disposeAction(this._options.silent('id'));
     super._dispose();
   }

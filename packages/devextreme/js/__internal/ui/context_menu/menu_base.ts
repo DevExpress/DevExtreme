@@ -17,7 +17,7 @@ import type {
   SubmenuShowMode,
 } from '@js/ui/menu';
 import type { ActionArguments } from '@ts/core/m_action';
-import { render } from '@ts/core/utils/m_ink_ripple';
+import { render } from '@ts/core/utils/ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import type { InkRippleEvent, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
