@@ -3,25 +3,13 @@ name: Publishing to GitHub Packages (scheduler)
 on:
   schedule:
     - cron: '00 18 * * *'
-  workflow_dispatch:
 
 permissions:
   contents: read
   packages: write
 
 jobs:
-  approve-manual-scheduler:
-    name: Approve manual publishing scheduler run
-    if: ${{ github.event_name == 'workflow_dispatch' }}
-    runs-on: ubuntu-latest
-    environment: packages-publishing
-    steps:
-      - name: Approve scheduler run
-        run: echo "Manual package publishing scheduler run approved"
-
   publish:
-    needs: approve-manual-scheduler
-    if: ${{ always() && !cancelled() && (github.event_name != 'workflow_dispatch' || needs.approve-manual-scheduler.result == 'success') }}
     strategy:
       matrix:
         branch: ['24_2', '25_1', '25_2', '26_1', 'main']
