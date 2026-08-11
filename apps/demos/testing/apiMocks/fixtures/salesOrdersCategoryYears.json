@@ -1,0 +1,264 @@
+{
+  "data": [
+    {
+      "key": "Audio",
+      "items": [
+        {
+          "key": 2023,
+          "items": null,
+          "count": 10270,
+          "summary": [
+            8668454.4331
+          ]
+        },
+        {
+          "key": 2024,
+          "items": null,
+          "count": 11046,
+          "summary": [
+            15481541.7842
+          ]
+        },
+        {
+          "key": 2025,
+          "items": null,
+          "count": 11017,
+          "summary": [
+            20088013.0011
+          ]
+        }
+      ],
+      "summary": [
+        44238009.2184
+      ]
+    },
+    {
+      "key": "Cameras and camcorders ",
+      "items": [
+        {
+          "key": 2023,
+          "items": null,
+          "count": 72966,
+          "summary": [
+            324574612.869
+          ]
+        },
+        {
+          "key": 2024,
+          "items": null,
+          "count": 47962,
+          "summary": [
+            240322298.3622
+          ]
+        },
+        {
+          "key": 2025,
+          "items": null,
+          "count": 37137,
+          "summary": [
+            187213930.331
+          ]
+        }
+      ],
+      "summary": [
+        752110841.5622
+      ]
+    },
+    {
+      "key": "Cell phones",
+      "items": [
+        {
+          "key": 2023,
+          "items": null,
+          "count": 54299,
+          "summary": [
+            106186584.4346
+          ]
+        },
+        {
+          "key": 2024,
+          "items": null,
+          "count": 33429,
+          "summary": [
+            74813317.2388
+          ]
+        },
+        {
+          "key": 2025,
+          "items": null,
+          "count": 28470,
+          "summary": [
+            80145798.7561
+          ]
+        }
+      ],
+      "summary": [
+        261145700.4295
+      ]
+    },
+    {
+      "key": "Computers",
+      "items": [
+        {
+          "key": 2023,
+          "items": null,
+          "count": 97136,
+          "summary": [
+            331869085.0737
+          ]
+        },
+        {
+          "key": 2024,
+          "items": null,
+          "count": 73262,
+          "summary": [
+            290096839.5517
+          ]
+        },
+        {
+          "key": 2025,
+          "items": null,
+          "count": 69956,
+          "summary": [
+            316545810.5886
+          ]
+        }
+      ],
+      "summary": [
+        938511735.214
+      ]
+    },
+    {
+      "key": "Games and Toys",
+      "items": [
+        {
+          "key": 2023,
+          "items": null,
+          "count": 26989,
+          "summary": [
+            12474571.133
+          ]
+        },
+        {
+          "key": 2024,
+          "items": null,
+          "count": 17783,
+          "summary": [
+            12110596.5202
+          ]
+        },
+        {
+          "key": 2025,
+          "items": null,
+          "count": 15614,
+          "summary": [
+            19425750.8466
+          ]
+        }
+      ],
+      "summary": [
+        44010918.4998
+      ]
+    },
+    {
+      "key": "Home Appliances",
+      "items": [
+        {
+          "key": 2023,
+          "items": null,
+          "count": 116847,
+          "summary": [
+            401107575.2074
+          ]
+        },
+        {
+          "key": 2024,
+          "items": null,
+          "count": 86084,
+          "summary": [
+            419443234.5159
+          ]
+        },
+        {
+          "key": 2025,
+          "items": null,
+          "count": 66918,
+          "summary": [
+            329694020.1092
+          ]
+        }
+      ],
+      "summary": [
+        1150244829.8325
+      ]
+    },
+    {
+      "key": "Music, Movies and Audio Books",
+      "items": [
+        {
+          "key": 2023,
+          "items": null,
+          "count": 17890,
+          "summary": [
+            22150082.7221
+          ]
+        },
+        {
+          "key": 2024,
+          "items": null,
+          "count": 11145,
+          "summary": [
+            15814334.0851
+          ]
+        },
+        {
+          "key": 2025,
+          "items": null,
+          "count": 9015,
+          "summary": [
+            10872130.3334
+          ]
+        }
+      ],
+      "summary": [
+        48836547.1406
+      ]
+    },
+    {
+      "key": "TV and Video",
+      "items": [
+        {
+          "key": 2023,
+          "items": null,
+          "count": 34997,
+          "summary": [
+            124596885.2716
+          ]
+        },
+        {
+          "key": 2024,
+          "items": null,
+          "count": 27603,
+          "summary": [
+            138675964.7034
+          ]
+        },
+        {
+          "key": 2025,
+          "items": null,
+          "count": 22165,
+          "summary": [
+            135884642.6383
+          ]
+        }
+      ],
+      "summary": [
+        399157492.6133
+      ]
+    }
+  ],
+  "totalCount": 1000000,
+  "summary": [
+    3638256074.5103
+  ]
+}

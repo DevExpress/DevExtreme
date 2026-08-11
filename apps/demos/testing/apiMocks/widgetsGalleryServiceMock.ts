@@ -1,6 +1,7 @@
 import { RequestMock } from 'testcafe';
 import type { MockHandler } from './types';
 import { salesHandler } from './handlers/sales';
+import { salesOrdersHandler } from './handlers/salesOrders';
 import { ordersHandler } from './handlers/orders';
 import { openAIHandler } from './handlers/openai';
 import { diagramEmployeesHandler } from './handlers/diagramEmployees';
@@ -37,6 +38,8 @@ const getCrossOriginHeaders = (req: { headers?: Record<string, string> }) => {
 const handlers: MockHandler[] = [
   // GET /api/Sales, excluding /api/Sales/Orders
   salesHandler,
+  // GET /api/Sales/Orders (PivotGrid WebAPIService)
+  salesOrdersHandler,
   // GET /api/orders
   ordersHandler,
   // POST demo-openai chat completions (AI column)

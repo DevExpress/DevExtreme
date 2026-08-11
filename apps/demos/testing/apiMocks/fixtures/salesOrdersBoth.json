@@ -1,0 +1,1096 @@
+{
+  "data": [
+    {
+      "key": "Audio",
+      "items": [
+        {
+          "key": "Bluetooth Headphones",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 4216,
+              "summary": [
+                1105701.0062
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 4474,
+              "summary": [
+                4290836.8262
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 4792,
+              "summary": [
+                6702963.1575
+              ]
+            }
+          ],
+          "summary": [
+            12099500.9899
+          ]
+        },
+        {
+          "key": "MP4&MP3",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 4300,
+              "summary": [
+                4597679.8174
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 4709,
+              "summary": [
+                6779676.509
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 4257,
+              "summary": [
+                7757959.5721
+              ]
+            }
+          ],
+          "summary": [
+            19135315.8985
+          ]
+        },
+        {
+          "key": "Recording Pen",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 1754,
+              "summary": [
+                2965073.6095
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 1863,
+              "summary": [
+                4411028.449
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 1968,
+              "summary": [
+                5627090.2715
+              ]
+            }
+          ],
+          "summary": [
+            13003192.33
+          ]
+        }
+      ],
+      "summary": [
+        44238009.2184
+      ]
+    },
+    {
+      "key": "Cameras and camcorders ",
+      "items": [
+        {
+          "key": "Camcorders",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 19537,
+              "summary": [
+                167683453.59
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 14865,
+              "summary": [
+                134587682.32
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 10390,
+              "summary": [
+                90499546.51
+              ]
+            }
+          ],
+          "summary": [
+            392770682.42
+          ]
+        },
+        {
+          "key": "Cameras & Camcorders Accessories",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 10608,
+              "summary": [
+                3347410.927
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 6984,
+              "summary": [
+                3777517.8882
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 6633,
+              "summary": [
+                7800245.269
+              ]
+            }
+          ],
+          "summary": [
+            14925174.0842
+          ]
+        },
+        {
+          "key": "Digital Cameras",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 21389,
+              "summary": [
+                48295203.004
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 13067,
+              "summary": [
+                32306889.969
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 9958,
+              "summary": [
+                27249231.934
+              ]
+            }
+          ],
+          "summary": [
+            107851324.907
+          ]
+        },
+        {
+          "key": "Digital SLR Cameras",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 21432,
+              "summary": [
+                105248545.348
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 13046,
+              "summary": [
+                69650208.185
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 10156,
+              "summary": [
+                61664906.618
+              ]
+            }
+          ],
+          "summary": [
+            236563660.151
+          ]
+        }
+      ],
+      "summary": [
+        752110841.5622
+      ]
+    },
+    {
+      "key": "Cell phones",
+      "items": [
+        {
+          "key": "Cell phones Accessories",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 4724,
+              "summary": [
+                5671697.0669
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 3145,
+              "summary": [
+                7777295.3357
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 2914,
+              "summary": [
+                21054237.2338
+              ]
+            }
+          ],
+          "summary": [
+            34503229.6364
+          ]
+        },
+        {
+          "key": "Home & Office Phones",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 19496,
+              "summary": [
+                6460484.9377
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 11830,
+              "summary": [
+                4242787.6831
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 9377,
+              "summary": [
+                3524786.8823
+              ]
+            }
+          ],
+          "summary": [
+            14228059.5031
+          ]
+        },
+        {
+          "key": "Smart phones & PDAs ",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 17419,
+              "summary": [
+                56946122.86
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 10599,
+              "summary": [
+                35431001.68
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 9820,
+              "summary": [
+                31166551.79
+              ]
+            }
+          ],
+          "summary": [
+            123543676.33
+          ]
+        },
+        {
+          "key": "Touch Screen Phones ",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 12660,
+              "summary": [
+                37108279.57
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 7855,
+              "summary": [
+                27362232.54
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 6359,
+              "summary": [
+                24400222.85
+              ]
+            }
+          ],
+          "summary": [
+            88870734.96
+          ]
+        }
+      ],
+      "summary": [
+        261145700.4295
+      ]
+    },
+    {
+      "key": "Computers",
+      "items": [
+        {
+          "key": "Computers Accessories",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 31427,
+              "summary": [
+                7421410.1922
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 22503,
+              "summary": [
+                10672193.9102
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 19796,
+              "summary": [
+                14663124.5991
+              ]
+            }
+          ],
+          "summary": [
+            32756728.7015
+          ]
+        },
+        {
+          "key": "Desktops",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 7786,
+              "summary": [
+                68066573.2775
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 5539,
+              "summary": [
+                51160790.2375
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 4425,
+              "summary": [
+                28567467.1445
+              ]
+            }
+          ],
+          "summary": [
+            147794830.6595
+          ]
+        },
+        {
+          "key": "Laptops",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 7917,
+              "summary": [
+                60488986.224
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 10208,
+              "summary": [
+                77348054.544
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 17518,
+              "summary": [
+                136578089.695
+              ]
+            }
+          ],
+          "summary": [
+            274415130.463
+          ]
+        },
+        {
+          "key": "Monitors",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 11272,
+              "summary": [
+                18150789.2
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 9559,
+              "summary": [
+                29221584.23
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 7611,
+              "summary": [
+                31082571.95
+              ]
+            }
+          ],
+          "summary": [
+            78454945.38
+          ]
+        },
+        {
+          "key": "Printers, Scanners & Fax",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 20966,
+              "summary": [
+                37601402.14
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 12624,
+              "summary": [
+                24336604.82
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 10222,
+              "summary": [
+                20475184.52
+              ]
+            }
+          ],
+          "summary": [
+            82413191.48
+          ]
+        },
+        {
+          "key": "Projectors & Screens",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 17768,
+              "summary": [
+                140139924.04
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 12829,
+              "summary": [
+                97357611.81
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 10384,
+              "summary": [
+                85179372.68
+              ]
+            }
+          ],
+          "summary": [
+            322676908.53
+          ]
+        }
+      ],
+      "summary": [
+        938511735.214
+      ]
+    },
+    {
+      "key": "Games and Toys",
+      "items": [
+        {
+          "key": "Boxed Games",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 8875,
+              "summary": [
+                3998189.7489
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 5473,
+              "summary": [
+                2873399.8647
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 4637,
+              "summary": [
+                2638165.0827
+              ]
+            }
+          ],
+          "summary": [
+            9509754.6963
+          ]
+        },
+        {
+          "key": "Download Games",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 18114,
+              "summary": [
+                8476381.3841
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 12310,
+              "summary": [
+                9237196.6555
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 10977,
+              "summary": [
+                16787585.7639
+              ]
+            }
+          ],
+          "summary": [
+            34501163.8035
+          ]
+        }
+      ],
+      "summary": [
+        44010918.4998
+      ]
+    },
+    {
+      "key": "Home Appliances",
+      "items": [
+        {
+          "key": "Air Conditioners",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 10443,
+              "summary": [
+                31601211.7156
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 8438,
+              "summary": [
+                34814399.2931
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 6204,
+              "summary": [
+                28745404.1585
+              ]
+            }
+          ],
+          "summary": [
+            95161015.1672
+          ]
+        },
+        {
+          "key": "Coffee Machines",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 13597,
+              "summary": [
+                27007625.526
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 9532,
+              "summary": [
+                45347038.3465
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 7521,
+              "summary": [
+                50247061.7982
+              ]
+            }
+          ],
+          "summary": [
+            122601725.6707
+          ]
+        },
+        {
+          "key": "Fans",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 10081,
+              "summary": [
+                3280668.4328
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 8003,
+              "summary": [
+                5436382.4838
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 7820,
+              "summary": [
+                9055044.7194
+              ]
+            }
+          ],
+          "summary": [
+            17772095.636
+          ]
+        },
+        {
+          "key": "Lamps",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 28333,
+              "summary": [
+                44467097.3035
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 22666,
+              "summary": [
+                59282696.0645
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 16161,
+              "summary": [
+                48654987.9226
+              ]
+            }
+          ],
+          "summary": [
+            152404781.2906
+          ]
+        },
+        {
+          "key": "Microwaves",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 20311,
+              "summary": [
+                36582245.6892
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 13402,
+              "summary": [
+                28665861.0757
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 10407,
+              "summary": [
+                29432218.6269
+              ]
+            }
+          ],
+          "summary": [
+            94680325.3918
+          ]
+        },
+        {
+          "key": "Refrigerators",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 15650,
+              "summary": [
+                74406261.5203
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 10999,
+              "summary": [
+                83544398.1333
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 8530,
+              "summary": [
+                76593928.7586
+              ]
+            }
+          ],
+          "summary": [
+            234544588.4122
+          ]
+        },
+        {
+          "key": "Washers & Dryers",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 12433,
+              "summary": [
+                136748433.285
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 8488,
+              "summary": [
+                119784613.974
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 7091,
+              "summary": [
+                57978531.81
+              ]
+            }
+          ],
+          "summary": [
+            314511579.069
+          ]
+        },
+        {
+          "key": "Water Heaters",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 5999,
+              "summary": [
+                47014031.735
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 4556,
+              "summary": [
+                42567845.145
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 3184,
+              "summary": [
+                28986842.315
+              ]
+            }
+          ],
+          "summary": [
+            118568719.195
+          ]
+        }
+      ],
+      "summary": [
+        1150244829.8325
+      ]
+    },
+    {
+      "key": "Music, Movies and Audio Books",
+      "items": [
+        {
+          "key": "Movie DVD",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 17890,
+              "summary": [
+                22150082.7221
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 11145,
+              "summary": [
+                15814334.0851
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 9015,
+              "summary": [
+                10872130.3334
+              ]
+            }
+          ],
+          "summary": [
+            48836547.1406
+          ]
+        }
+      ],
+      "summary": [
+        48836547.1406
+      ]
+    },
+    {
+      "key": "TV and Video",
+      "items": [
+        {
+          "key": "Car Video",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 10080,
+              "summary": [
+                34663318.2
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 6287,
+              "summary": [
+                29072021.04
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 4569,
+              "summary": [
+                25764830.08
+              ]
+            }
+          ],
+          "summary": [
+            89500169.32
+          ]
+        },
+        {
+          "key": "Home Theater System",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 14600,
+              "summary": [
+                68425445.307
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 12691,
+              "summary": [
+                73645169.887
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 10131,
+              "summary": [
+                66413191.946
+              ]
+            }
+          ],
+          "summary": [
+            208483807.14
+          ]
+        },
+        {
+          "key": "Televisions",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 6600,
+              "summary": [
+                18212374.0016
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 5703,
+              "summary": [
+                32530611.3304
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 4976,
+              "summary": [
+                39635561.9583
+              ]
+            }
+          ],
+          "summary": [
+            90378547.2903
+          ]
+        },
+        {
+          "key": "VCD & DVD",
+          "items": [
+            {
+              "key": 2023,
+              "items": null,
+              "count": 3717,
+              "summary": [
+                3295747.763
+              ]
+            },
+            {
+              "key": 2024,
+              "items": null,
+              "count": 2922,
+              "summary": [
+                3428162.446
+              ]
+            },
+            {
+              "key": 2025,
+              "items": null,
+              "count": 2489,
+              "summary": [
+                4071058.654
+              ]
+            }
+          ],
+          "summary": [
+            10794968.863
+          ]
+        }
+      ],
+      "summary": [
+        399157492.6133
+      ]
+    }
+  ],
+  "totalCount": 1000000,
+  "summary": [
+    3638256074.5103
+  ]
+}
