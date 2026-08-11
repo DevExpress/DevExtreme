@@ -14,7 +14,7 @@
 import type { DataSource, Store } from '@js/common/data';
 import $ from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
-import { deferRender, equalByValue } from '@js/core/utils/common';
+import { deferRender } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
@@ -50,6 +50,7 @@ import { DataHelperMixin } from './data_helper_mixin';
 import type {
   BinaryDataFilterExpression,
   CallbackFlags,
+  ChangedRow,
   DataChange,
   DataFilter,
   DataSourceAdapterLike,
@@ -60,10 +61,12 @@ import type {
   PagingOptionName,
   PagingResult,
   ProcessedItem,
-  RowChangeType,
   UpdateChange,
 } from './types';
 import { resolvePaginate, syncPaging } from './utils/paging';
+import {
+  getChangedRowIndices, getRowOperation, pushChangedRow, resetChangedRows,
+} from './utils/row_changes';
 import { generateRowValues } from './utils/row_values';
 
 export class DataController extends DataHelperMixin(modules.Controller) {
@@ -808,7 +811,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
 
     if (change.changeType === 'update') {
-      this._applyChangeUpdate(change);
+      this.applyChangeUpdate(change);
     } else if (change.changeType === 'refresh') {
       if (this.items().length && change.repaintChangesOnly) {
         this._applyChangesOnly(change);
@@ -822,105 +825,103 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._items = (change.items ?? []).slice(0);
   }
 
-  private _getRowIndices(change: UpdateChange): number[] {
-    const rowIndices = change.rowIndices.slice(0);
-    const rowIndexDelta = this.getRowIndexDelta();
+  private updateRow(
+    newItem: ProcessedItem,
+    rowIndex: number,
+    visibleRowIndex: number,
+    isPartialUpdate: boolean,
+  ): ChangedRow {
+    const oldItem = this._items[rowIndex];
 
-    rowIndices.sort((a, b) => a - b);
+    this._items[rowIndex] = newItem;
 
-    for (let i = 0; i < rowIndices.length; i += 1) {
-      let correctedRowIndex = rowIndices[i];
-
-      if (change.allowInvisibleRowIndices) {
-        correctedRowIndex += rowIndexDelta;
-      }
-
-      if (correctedRowIndex < 0) {
-        rowIndices.splice(i, 1);
-        i -= 1;
-      }
+    if (oldItem.visible !== newItem.visible) {
+      return {
+        changeType: 'update',
+        rowIndex: visibleRowIndex,
+        item: { visible: newItem.visible } as ProcessedItem,
+      };
     }
 
-    return rowIndices;
+    return {
+      changeType: 'update',
+      rowIndex: visibleRowIndex,
+      item: newItem,
+      columnIndices: isPartialUpdate
+        ? this._partialUpdateRow(oldItem, newItem, visibleRowIndex)
+        : undefined,
+    };
+  }
+
+  private applyRowOperation(
+    newItems: ProcessedItem[],
+    rowIndex: number,
+    rowIndexDelta: number,
+    isPartialUpdate: boolean,
+  ): ChangedRow | undefined {
+    const visibleRowIndex = rowIndex - rowIndexDelta;
+    const item = newItems[rowIndex];
+
+    if (item) {
+      item.rowIndex = rowIndex;
+    }
+
+    switch (getRowOperation(this._items, newItems, rowIndex)) {
+      case 'update':
+        return this.updateRow(item, rowIndex, visibleRowIndex, isPartialUpdate);
+      case 'insert':
+        this._items.splice(rowIndex, 0, item);
+        return { changeType: 'insert', rowIndex: visibleRowIndex, item };
+      case 'remove':
+        this._items.splice(rowIndex, 1);
+        return { changeType: 'remove', rowIndex: visibleRowIndex, item };
+      case 'replace':
+        this._items[rowIndex] = item;
+        return { changeType: 'update', rowIndex: visibleRowIndex, item };
+      default:
+        return undefined;
+    }
   }
 
   /**
    * @extended: editing
    */
-  protected _applyChangeUpdate(change: UpdateChange): void {
-    const items = change.items ?? [];
-    const rowIndices = this._getRowIndices(change);
+  protected applyChangeUpdate(change: UpdateChange): void {
+    const newItems = change.items ?? [];
     const rowIndexDelta = this.getRowIndexDelta();
-    const repaintChangesOnly = this.option('repaintChangesOnly');
-    const changedItems: ProcessedItem[] = [];
-    const changedRowIndices: number[] = [];
-    const changedTypes: RowChangeType[] = [];
-    const changedColumnIndices: (number[] | undefined)[] = [];
-    let prevIndex = -1;
+    const isPartialUpdate = Boolean(this.option('repaintChangesOnly')) && !change.isFullUpdate;
+    const rowIndices = getChangedRowIndices(
+      change.rowIndices,
+      rowIndexDelta,
+      change.allowInvisibleRowIndices,
+    );
+    const changedRows = resetChangedRows(change);
+    let prevRowIndex = -1;
     let rowIndexCorrection = 0;
 
-    change.items = changedItems;
-    change.rowIndices = changedRowIndices;
-    change.columnIndices = changedColumnIndices;
-    change.changeTypes = changedTypes;
-
-    const equalItems = (item1?: ProcessedItem, item2?: ProcessedItem, strict?: boolean): boolean => {
-      if (!item1 || !item2 || !equalByValue(item1.key, item2.key)) {
-        return false;
-      }
-
-      return !strict || (item1.rowType === item2.rowType
-        && (item2.rowType !== 'detail' || item1.isEditing === item2.isEditing));
-    };
-
     each(rowIndices, (index: number, changedRowIndex: number) => {
-      let columnIndices: number[] | undefined;
-      let changeType: RowChangeType = 'update';
-
       const rowIndex = changedRowIndex + rowIndexCorrection + rowIndexDelta;
 
-      if (prevIndex === rowIndex) return;
-
-      prevIndex = rowIndex;
-      const oldItem = this._items[rowIndex];
-      const oldNextItem = this._items[rowIndex + 1];
-      const newItem = items[rowIndex];
-      const newNextItem = items[rowIndex + 1];
-
-      const strict = equalItems(oldItem, oldNextItem) || equalItems(newItem, newNextItem);
-
-      if (newItem) {
-        newItem.rowIndex = rowIndex;
-        changedItems.push(newItem);
-      }
-
-      if (oldItem && newItem && equalItems(oldItem, newItem, strict)) {
-        this._items[rowIndex] = newItem;
-        if (oldItem.visible !== newItem.visible) {
-          changedItems.splice(-1, 1, { visible: newItem.visible } as ProcessedItem);
-        } else if (repaintChangesOnly && !change.isFullUpdate) {
-          columnIndices = this._partialUpdateRow(oldItem, newItem, rowIndex - rowIndexDelta);
-        }
-      } else if ((newItem && !oldItem)
-        || (newNextItem && equalItems(oldItem, newNextItem, strict))) {
-        changeType = 'insert';
-        this._items.splice(rowIndex, 0, newItem);
-        rowIndexCorrection += 1;
-      } else if ((oldItem && !newItem)
-        || (oldNextItem && equalItems(newItem, oldNextItem, strict))) {
-        changeType = 'remove';
-        this._items.splice(rowIndex, 1);
-        rowIndexCorrection -= 1;
-        prevIndex = -1;
-      } else if (newItem) {
-        this._items[rowIndex] = newItem;
-      } else {
+      if (prevRowIndex === rowIndex) {
         return;
       }
 
-      changedRowIndices.push(rowIndex - rowIndexDelta);
-      changedTypes.push(changeType);
-      changedColumnIndices.push(columnIndices);
+      prevRowIndex = rowIndex;
+
+      const changedRow = this.applyRowOperation(newItems, rowIndex, rowIndexDelta, isPartialUpdate);
+
+      if (!changedRow) {
+        return;
+      }
+
+      pushChangedRow(changedRows, changedRow);
+
+      if (changedRow.changeType === 'insert') {
+        rowIndexCorrection += 1;
+      } else if (changedRow.changeType === 'remove') {
+        rowIndexCorrection -= 1;
+        prevRowIndex = -1;
+      }
     });
   }
 
