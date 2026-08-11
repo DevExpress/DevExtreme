@@ -11,7 +11,7 @@
   display: inline-block;
   width: 180px;
   padding: 0 10px 10px;
-  background-color: var(--dxds-color-surface-neutral-deep-rest, rgba(191, 191, 191, 0.15));
+  background-color: color-mix(in srgb, var(--dxds-color-surface-neutral-default-inverted-rest, #bfbfbf) calc(var(--dxds-opacity-5, 0.15) * 100%), transparent);
 }
 
 .right-content {
