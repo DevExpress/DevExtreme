@@ -3,6 +3,7 @@ import type { SearchOperation } from '@js/common/data.types';
 import type { ScalarFilterValue } from '@js/common/grids';
 import type { DeferredObj } from '@js/core/utils/deferred';
 
+import type { Column } from '../columns_controller/types';
 import type { ChangedEvent, OperationTypes } from '../data_source_adapter/types';
 
 /** data */
@@ -11,24 +12,38 @@ export interface DataSourceAdapterLike {
   _dataSource: DataSource;
 }
 
-export type UserData = Record<string, unknown>;
+export type RawItemData = Record<string, unknown>;
 
-export interface Item {
-  rowType: 'data' | 'group' | 'groupFooter' | 'detailAdaptive';
-  data: UserData;
+export interface ItemProcessingOptions {
+  visibleColumns: Column[];
+  dataIndex: number;
+  rowIndex?: number;
+  detailColumnIndex?: number;
+  isDeferredSelection?: boolean;
+}
+
+export interface GeneratedItem {
+  rowType: 'data' | 'group' | 'groupFooter' | 'detailAdaptive' | 'detail';
+  data: RawItemData;
   key: unknown;
-  oldData?: UserData;
+  isEditing?: boolean;
+  isNewRow?: boolean;
+  modified?: boolean;
+  oldData?: RawItemData;
+  modifiedValues?: unknown[];
+  removed?: boolean;
+}
+
+export interface ProcessedItem extends GeneratedItem {
+  values: unknown[];
   dataIndex?: number;
-  values?: unknown[];
+  isSelected?: boolean;
   visible?: boolean;
   isExpanded?: boolean;
-  isNewRow?: boolean;
-  summaryCells?: unknown[];
+  loadIndex?: number;
   rowIndex?: number;
   cells?: unknown[];
-  loadIndex?: number;
-  isSelected?: boolean;
-  removed?: boolean;
+  summaryCells?: unknown[];
 }
 
 interface DataChangeBase {
@@ -66,6 +81,7 @@ export type DataChange = | UpdateChange
   | (DataChangeBase & ChangedEvent)
   | (DataChangeBase & { changeType: 'refresh' })
   | (DataChangeBase & { changeType: 'pageIndex' })
+  | (DataChangeBase & { changeType: 'loadingAll' })
   | (DataChangeBase & { changeType: 'refresh', isLiveUpdate: boolean; isOptionChanged: boolean })
   | (DataChangeBase & { changeType: 'refresh', event: unknown; virtualColumnsScrolling: boolean })
   | (DataChangeBase & { changeType: 'refresh', useProcessedItemsCache: boolean; cancelEmptyChanges: boolean });
@@ -127,7 +143,7 @@ export type DataFilterExpression = BinaryDataFilterExpression
   | ['!', DataFilterExpression]
   | [DataFilterExpression, ...(FilterCombiner | DataFilterExpression)[]];
 
-export type DataFilterPredicate = (data: UserData) => boolean;
+export type DataFilterPredicate = (data: RawItemData) => boolean;
 
 /**
  * The grid-internal "match nothing" filter. Not a data layer filter expression:
