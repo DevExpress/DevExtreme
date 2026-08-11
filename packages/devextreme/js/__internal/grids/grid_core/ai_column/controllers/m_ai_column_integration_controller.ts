@@ -137,7 +137,7 @@ export class AIColumnIntegrationController extends Controller {
     }
 
     const keyField = this.dataController.key();
-    if (isKeyMissingInData(args.data, keyField)) {
+    if (keyField === undefined || isKeyMissingInData(args.data, keyField)) {
       this.dataController.fireError('E1046', keyField);
       return;
     }

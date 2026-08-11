@@ -23,6 +23,7 @@ import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
 import { findChanges } from '@ts/core/utils/m_array_compare';
+import { fromPromise } from '@ts/core/utils/m_deferred';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
 import type { ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
 import type {
@@ -1567,7 +1568,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       return Deferred<RawItemData>().resolve(this.items()[rowIndex].data);
     }
 
-    return when<RawItemData>(store.byKey(key) as unknown as DeferredObj<RawItemData>);
+    return fromPromise(store.byKey(key));
   }
 
   public key(): string | string[] | undefined {

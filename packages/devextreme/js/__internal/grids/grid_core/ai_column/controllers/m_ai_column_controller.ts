@@ -1,5 +1,5 @@
-import type { DataChange } from '@js/common/grids';
 import type { Callback } from '@js/core/utils/callbacks';
+import type { StoreChange } from '@js/data/store';
 import { isDefined } from '@ts/core/utils/m_type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
@@ -26,7 +26,7 @@ export class AIColumnController extends Controller {
 
   private storeRemovedHandler!: (key: RowKey) => void;
 
-  private storeBeforePushHandler!: ({ changes }: { changes: DataChange[] }) => void;
+  private storeBeforePushHandler!: ({ changes }: { changes: StoreChange[] }) => void;
 
   private dataControllerChangedHandler!: () => void;
 
@@ -140,7 +140,7 @@ export class AIColumnController extends Controller {
     this.clearAIColumnsByKey(key);
   }
 
-  private handleStoreBeforePush({ changes }: { changes: DataChange[] }): void {
+  private handleStoreBeforePush({ changes }: { changes: StoreChange[] }): void {
     changes.forEach(({ key }) => {
       if (isDefined(key)) {
         this.clearAIColumnsByKey(key);
