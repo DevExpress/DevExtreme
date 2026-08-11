@@ -13,17 +13,23 @@
 /* eslint-disable max-depth */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-plusplus */
-import type { DataSource } from '@js/common/data';
+import type { DataSource, Store } from '@js/common/data';
 import $ from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
 import { deferRender, equalByValue } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
 import { findChanges } from '@ts/core/utils/m_array_compare';
+import { fromPromise } from '@ts/core/utils/m_deferred';
+import type { StoreLoadOptions } from '@ts/data/data_source/types';
+import type { ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
+import type {
+  ChangedEvent, LoadOperation, OperationTypes, RawItemData,
+} from '@ts/grids/grid_core/data_source_adapter/types';
+import { isLocalStore } from '@ts/grids/grid_core/data_source_adapter/utils/store';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { ErrorHandlingController } from '@ts/grids/grid_core/error_handling/m_error_handling';
@@ -32,18 +38,16 @@ import type { FilterSyncController } from '@ts/grids/grid_core/filter/m_filter_s
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
+import modules from '@ts/grids/grid_core/m_modules';
+import type {
+  Controllers, Module, OptionChanged, RowKey,
+} from '@ts/grids/grid_core/m_types';
+import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
+import type { VirtualScrollController } from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
 
-import type { ColumnsChanges } from '../columns_controller/types';
-import type { ChangedEvent, LoadOperation, OperationTypes } from '../data_source_adapter/types';
-import modules from '../m_modules';
-import type {
-  Controllers, Module, OptionChanged, RowKey,
-} from '../m_types';
-import gridCoreUtils from '../m_utils';
-import type { VirtualScrollController } from '../virtual_scrolling/m_virtual_scrolling_core';
 import { DataHelperMixin } from './data_helper_mixin';
 import type {
   BinaryDataFilterExpression,
@@ -58,7 +62,6 @@ import type {
   PagingOptionName,
   PagingResult,
   ProcessedItem,
-  RawItemData,
 } from './types';
 import { resolvePaginate, syncPaging } from './utils/paging';
 import { generateRowValues } from './utils/row_values';
@@ -262,7 +265,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       const isValueChanged = args.value !== args.previousValue;
       if (isValueChanged) {
         const store = this.store();
-        if (store) {
+        if (isLocalStore(store)) {
           store._array = args.value;
         }
       }
@@ -1454,11 +1457,11 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended: virtual_scrolling
    */
-  public isEmpty() {
+  public isEmpty(): boolean {
     return !this.items().length;
   }
 
-  public pageCount() {
+  public pageCount(): number {
     return this._dataSource ? this._dataSource.pageCount() : 1;
   }
 
@@ -1466,19 +1469,17 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return this._dataSource;
   }
 
-  public store() {
-    const dataSource = this._dataSource;
-    return dataSource?.store();
+  public store(): Store | undefined {
+    return this._dataSource?.store();
   }
 
-  public loadAll(data, skipFilter = false) {
-    // @ts-expect-error
-    const d = new Deferred();
+  public loadAll(data?: RawItemData[], skipFilter = false): DeferredObj<ProcessedItem[]> {
+    const d = Deferred<ProcessedItem[]>();
     const dataSource = this._dataSource;
 
     if (dataSource) {
       if (data) {
-        const options: Record<string, any> = {
+        const loadOperation: Omit<LoadOperation, 'data'> & Required<Pick<LoadOperation, 'data'>> = {
           data,
           isCustomLoading: true,
           storeLoadOptions: { isLoadingAll: true },
@@ -1488,94 +1489,104 @@ export class DataController extends DataHelperMixin(modules.Controller) {
             sort: dataSource.sort(),
           },
         };
-        dataSource._handleDataLoaded(options);
-        when(options.data).done((data) => {
-          data = this._beforeProcessItems(data);
-          d.resolve(this._processItems(data, { changeType: 'loadingAll' }), options.extra?.summary);
-        }).fail(d.reject);
+        dataSource._handleDataLoaded(loadOperation);
+
+        when<RawItemData[]>(loadOperation.data)
+          .done((loadedData: RawItemData[]): void => {
+            const items = this._processItems(
+              this._beforeProcessItems(loadedData),
+              { changeType: 'loadingAll' },
+            );
+            // @ts-expect-error DataGrid-only summary leaks into grid_core
+            d.resolve(items, loadOperation.extra?.summary);
+          })
+          .fail(d.reject as (...args: unknown[]) => void);
       } else if (!dataSource.isLoading()) {
-        const loadOptions = extend({}, dataSource.loadOptions(), { isLoadingAll: true, requireTotalCount: false });
-        dataSource.load(loadOptions).done((items, extra) => {
-          items = this._beforeProcessItems(items);
-          items = this._processItems(items, { changeType: 'loadingAll' });
-          d.resolve(items, extra?.summary);
-        }).fail(d.reject);
+        const loadOptions: StoreLoadOptions & { isLoadingAll: boolean } = {
+          ...dataSource.loadOptions(),
+          isLoadingAll: true,
+          requireTotalCount: false,
+        };
+        dataSource.load(loadOptions)
+          .done((loadedItems: RawItemData[], extra: LoadOperation['extra']): void => {
+            const items = this._processItems(
+              this._beforeProcessItems(loadedItems),
+              { changeType: 'loadingAll' },
+            );
+            // @ts-expect-error DataGrid-only summary leaks into grid_core
+            d.resolve(items, extra?.summary);
+          })
+          .fail(d.reject);
       } else {
         d.reject();
       }
     } else {
       d.resolve([]);
     }
+
     return d;
   }
 
-  public getAllDataRowKeys(): Promise<RowKey[]> {
-    return Promise.resolve(this.loadAll(undefined) as unknown as Promise<ProcessedItem[]>)
-      .then((items) => items
-        .filter((item) => item.rowType === 'data')
-        .map((item) => item.key));
+  public async getAllDataRowKeys(): Promise<RowKey[]> {
+    const items = await Promise.resolve(this.loadAll(undefined));
+
+    return items
+      .filter((item) => item.rowType === 'data')
+      .map((item): RowKey => item.key);
   }
 
-  public getKeyByRowIndex(rowIndex, byLoaded?) {
+  public getKeyByRowIndex(rowIndex: number, byLoaded?: boolean): RowKey | undefined {
     const item = this.items(byLoaded)[rowIndex];
-    if (item) {
-      return item.key;
-    }
+
+    return item?.key;
   }
 
-  public getRowIndexByKey(key, byLoaded?) {
+  public getRowIndexByKey(key: RowKey, byLoaded?: boolean): number {
     return gridCoreUtils.getIndexByKey(key, this.items(byLoaded));
   }
 
-  public getRowByKey(key: unknown): ProcessedItem | undefined {
+  public getRowByKey(key: RowKey): ProcessedItem | undefined {
     return this.items()?.[this.getRowIndexByKey(key)];
   }
 
-  public keyOf(data) {
-    const store = this.store();
-    if (store) {
-      return store.keyOf(data);
-    }
+  public keyOf(data: RawItemData): RowKey | undefined {
+    return this.store()?.keyOf(data);
   }
 
-  private byKey(key) {
+  private byKey(key: RowKey): DeferredObj<RawItemData> {
     const store = this.store();
-    const rowIndex = this.getRowIndexByKey(key);
-    let result;
 
-    if (!store) return;
+    if (!store) {
+      return Deferred<RawItemData>().reject();
+    }
+
+    const rowIndex = this.getRowIndexByKey(key);
 
     if (rowIndex >= 0) {
-      // @ts-expect-error
-      result = new Deferred().resolve(this.items()[rowIndex].data);
+      return Deferred<RawItemData>().resolve(this.items()[rowIndex].data);
     }
 
-    return result || store.byKey(key);
+    return fromPromise(store.byKey(key));
   }
 
-  public key() {
-    const store = this.store();
-
-    if (store) {
-      return store.key();
-    }
+  public key(): string | string[] | undefined {
+    return this.store()?.key();
   }
 
   /**
    * @extended: virtual_scrolling
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public getRowIndexOffset(byLoadedRows?: boolean) {
+  public getRowIndexOffset(byLoadedRows?: boolean): number {
     return 0;
   }
 
-  private getDataByKeys(rowKeys) {
-    // @ts-expect-error
-    const result = new Deferred();
-    const deferreds: any[] = [];
-    const data: any[] = [];
+  private getDataByKeys(rowKeys: RowKey[]): DeferredObj<RawItemData[]> {
+    const result = Deferred<RawItemData[]>();
+    const deferreds: DeferredObj<RawItemData>[] = [];
+    const data: RawItemData[] = [];
 
-    each(rowKeys, (index, key) => {
+    each(rowKeys, (index: number, key: RowKey) => {
       deferreds.push(this.byKey(key).done((keyData) => {
         data[index] = keyData;
       }));

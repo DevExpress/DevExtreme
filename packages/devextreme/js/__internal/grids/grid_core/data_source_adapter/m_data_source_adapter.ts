@@ -410,7 +410,7 @@ export default class DataSourceAdapter extends modules.Controller {
 
   protected _customizeStoreLoadOptionsHandler(options: LoadOperation): void {
     this._handleDataLoading(options);
-    if (!(options.data?.length === 0)) {
+    if (!(Array.isArray(options.data) && options.data.length === 0)) {
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       options.data = getPageDataFromCache(options, true) || options.cachedStoreData;
     }
