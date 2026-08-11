@@ -1,22 +1,19 @@
-@use "sass:color";
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/pagination" with (
-  $pagination-page-padding-2: $fluent-pagination-page-padding-2,
   $pagination-page-margin-left: $pagination-page-margin-inline-start,
   $pagination-page-margin-right: $pagination-page-margin-inline-end,
   $pagination-separator-padding-left: $pagination-separator-padding-inline-start,
   $pagination-separator-padding-right: $pagination-separator-padding-inline-end,
-  $pagination-navigate-button-width-2: $fluent-pagination-navigate-button-width-2,
   $pagination-navigate-button-height: $pagination-navigate-button-height,
   $pagination-first-child-margin-left: $pagination-first-child-margin-inline-start,
   $pagination-first-child-padding-left: $pagination-first-child-padding-inline-start,
   $pagination-first-child-padding-right: $pagination-first-child-padding-inline-end,
   $pagination-first-child-padding-top: $pagination-first-child-padding-block-start,
   $pagination-first-child-padding-bottom: $pagination-first-child-padding-block-end,
-  $pagination-first-child-margin-left-2: $fluent-pagination-first-child-margin-left-2,
+  $pagination-page-size-margin-left: $pagination-page-size-margin-left,
   $pagination-page-index-width: $pagination-page-index-width,
   $pagination-pages-count-padding-left: $pagination-pages-count-padding-inline-start,
   $pagination-info-opacity: $pagination-info-opacity,

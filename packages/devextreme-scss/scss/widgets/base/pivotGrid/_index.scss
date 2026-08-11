@@ -12,8 +12,8 @@ $pivotgrid-icon-sorted-margin-left: 5px !default;
 $pivotgrid-fields-area-head-padding: 0 2px !default;
 $pivotgrid-treeview-search-margin: 5px !default;
 $pivotgrid-area-padding: 5px !default;
-$pivotgrid-area-fields-margin-top-2: 3px !default;
-$pivotgrid-position-indicator-last-margin-left-2: 1px !default;
+$pivotgrid-area-fields-margin-top: 3px !default;
+$pivotgrid-position-indicator-last-margin-left-rtl: 1px !default;
 $pivotgrid-toolbar-margin-left: 10px !default;
 $pivotgrid-field-chooser-button-margin-left: 4px !default;
 $pivotgrid-fields-area-head-padding-left: 2px !default;
@@ -572,7 +572,7 @@ $pivotgrid-expand-icon-text-offset: 0;
     @include flexible-scrollable();
 
     .dx-area-fields {
-      margin-top: $pivotgrid-area-fields-margin-top-2;
+      margin-top: $pivotgrid-area-fields-margin-top;
       border: $pivotgrid-border;
       border-color: $pivotgrid-border-color;
       display: flex;
@@ -604,7 +604,7 @@ $pivotgrid-expand-icon-text-offset: 0;
         margin-left: -3px;
 
         &.dx-position-indicator-last {
-          margin-left: $pivotgrid-position-indicator-last-margin-left-2;
+          margin-left: $pivotgrid-position-indicator-last-margin-left-rtl;
         }
       }
     }
