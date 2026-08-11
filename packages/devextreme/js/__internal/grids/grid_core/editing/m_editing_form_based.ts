@@ -474,14 +474,14 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  protected _processDataItemCore(item, change, key, columns, generateDataValues) {
+  protected _processDataItemCore(item, change, key, columns) {
     const { type } = change;
 
     if (this.isPopupEditMode() && type === DATA_EDIT_DATA_INSERT_TYPE) {
       item.visible = false;
     }
 
-    super._processDataItemCore(item, change, key, columns, generateDataValues);
+    super._processDataItemCore(item, change, key, columns);
   }
 
   protected _editRowFromOptionChangedCore(rowIndices, rowIndex) {
