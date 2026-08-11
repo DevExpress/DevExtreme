@@ -1,21 +1,27 @@
+import type { FloatingActionButtonDirection, GlobalConfig } from '@js/common';
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
+import type { DeepPartial } from '@js/core';
+import type Guid from '@js/core/guid';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getImageContainer } from '@js/core/utils/icon';
-import { isPlainObject } from '@js/core/utils/type';
 import type {
   DxEvent,
   PointerInteractionEvent,
 } from '@js/events';
 import type { Properties } from '@js/ui/speed_dial_action';
-import { isMaterial } from '@js/ui/themes';
-import { render } from '@ts/core/utils/m_ink_ripple';
+import { current, isMaterial } from '@js/ui/themes';
+import type { InkRipple, InkRippleWaveConfig } from '@ts/core/utils/ink_ripple';
+import { render } from '@ts/core/utils/ink_ripple';
 import type { DefaultActionArgs } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { OverlayProperties } from '@ts/ui/overlay/overlay';
 import Overlay from '@ts/ui/overlay/overlay';
+
+import type SpeedDialAction from './speed_dial_action';
 
 const FAB_CLASS = 'dx-fa-button';
 const FAB_ICON_CLASS = 'dx-fa-button-icon';
@@ -24,43 +30,54 @@ const FAB_LABEL_WRAPPER_CLASS = 'dx-fa-button-label-wrapper';
 const FAB_CONTENT_REVERSE_CLASS = 'dx-fa-button-content-reverse';
 const OVERLAY_CONTENT_SELECTOR = '.dx-overlay-content';
 
-export interface SpeedDialItemProperties extends Omit<Properties,
-'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'
-> {
+export type FloatingActionButtonPosition = NonNullable<
+  GlobalConfig['floatingActionButtonConfig']
+>['position'];
+
+export interface SpeedDialItemProperties extends
+  Omit<OverlayProperties, 'onInitialized' | 'onDisposing' | 'onContentReady' | 'position' | 'elementAttr'>,
+  Omit<Properties, 'onInitialized' | 'onDisposing' | 'onOptionChanged' | 'onContentReady'> {
+  position?: FloatingActionButtonPosition;
+
+  parentPosition?: FloatingActionButtonPosition;
+
+  direction?: FloatingActionButtonDirection;
+
   zIndex: number;
 
-  actions?: any[];
+  id?: Guid;
+
+  actions?: SpeedDialAction[];
+
+  actionComponent?: SpeedDialAction;
+
+  actionVisible?: boolean;
 
   useInkRipple?: boolean;
-
-  shading?: boolean;
 
   callOverlayRenderShading?: boolean;
 
   _observeContentResize?: boolean;
 }
 
-class SpeedDialItem extends Overlay<SpeedDialItemProperties> {
-  // Temporary solution. Move to component level
+class SpeedDialItem<
+  TProperties extends SpeedDialItemProperties = SpeedDialItemProperties,
+> extends Overlay<TProperties> {
   public NAME!: string;
 
-  _$label?: dxElementWrapper;
-
-  _currentVisible?: boolean;
+  _$label?: dxElementWrapper | null;
 
   _$wrapper!: dxElementWrapper;
 
   _$content!: dxElementWrapper;
 
-  _inkRipple?: any;
+  _inkRipple?: InkRipple;
 
   _$icon?: dxElementWrapper;
 
-  _contentReadyAction?: any;
+  _clickAction!: (event?: unknown) => void;
 
-  _clickAction?: any;
-
-  _getDefaultOptions(): SpeedDialItemProperties {
+  _getDefaultOptions(): TProperties {
     return {
       ...super._getDefaultOptions(),
       shading: false,
@@ -72,16 +89,15 @@ class SpeedDialItem extends Overlay<SpeedDialItemProperties> {
     };
   }
 
-  _defaultOptionsRules(): DefaultOptionsRule<SpeedDialItemProperties>[] {
+  _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
     return super._defaultOptionsRules().concat([
       {
         device(): boolean {
-          // @ts-expect-error ts-error
-          return isMaterial();
+          return isMaterial(current());
         },
         options: {
           useInkRipple: true,
-        },
+        } as DeepPartial<TProperties>,
       },
     ]);
   }
@@ -97,7 +113,9 @@ class SpeedDialItem extends Overlay<SpeedDialItemProperties> {
     this._renderLabel();
     super._render();
 
-    if (this.option('useInkRipple')) {
+    const { useInkRipple } = this.option();
+
+    if (useInkRipple) {
       this._renderInkRipple();
     }
     this._renderClick();
@@ -111,7 +129,6 @@ class SpeedDialItem extends Overlay<SpeedDialItemProperties> {
     const { label } = this.option();
 
     if (!label) {
-      // @ts-expect-error ts-error
       this._$label = null;
       return;
     }
@@ -126,39 +143,53 @@ class SpeedDialItem extends Overlay<SpeedDialItemProperties> {
         .prependTo($content)
         .append($element.text(label));
 
-      $content.toggleClass(FAB_CONTENT_REVERSE_CLASS, this._isPositionLeft(this.option('parentPosition')));
+      const { parentPosition } = this.option();
+
+      $content.toggleClass(FAB_CONTENT_REVERSE_CLASS, this._isPositionLeft(parentPosition));
     }
   }
 
-  _isPositionLeft(position) {
+  _isPositionLeft(position: FloatingActionButtonPosition | undefined): boolean {
     let currentLocation = '';
 
     if (position) {
-      if (isPlainObject(position) && position.at) {
-        if (position.at.x) {
-          currentLocation = position.at.x;
-        } else {
-          currentLocation = position.at;
-        }
-      } else if (typeof position === 'string') {
+      if (typeof position === 'string') {
         currentLocation = position;
+      } else if (typeof position !== 'function' && position.at) {
+        const { at } = position;
+
+        if (typeof at !== 'string' && at.x) {
+          currentLocation = at.x;
+        } else if (typeof at === 'string') {
+          currentLocation = at;
+        }
       }
     }
 
     return currentLocation.split(' ')[0] === 'left';
   }
 
-  _renderButtonIcon($element, icon, iconClass): dxElementWrapper {
-    !!$element && $element.remove();
+  _renderButtonIcon(
+    $element: dxElementWrapper | undefined,
+    icon: string | undefined,
+    iconClass: string,
+  ): dxElementWrapper {
+    $element?.remove();
 
-    $element = $('<div>').addClass(iconClass);
+    const $updatedElement = $('<div>').addClass(iconClass);
     const $iconElement = getImageContainer(icon);
 
-    $element
-      .append($iconElement)
-      .appendTo(this.$content());
+    if ($iconElement) {
+      $updatedElement.append($iconElement);
+    }
 
-    return $element;
+    const $content = this.$content();
+
+    if ($content) {
+      $updatedElement.appendTo($content);
+    }
+
+    return $updatedElement;
   }
 
   _renderIcon(): void {
@@ -175,29 +206,37 @@ class SpeedDialItem extends Overlay<SpeedDialItemProperties> {
     }
   }
 
-  _getVisibleActions(actions) {
-    const currentActions = actions || this.option('actions') || [];
+  _getVisibleActions(actions?: SpeedDialAction[]): SpeedDialAction[] {
+    const { actions: ownActions } = this.option();
+    const currentActions = actions ?? ownActions ?? [];
 
-    return currentActions.filter((action) => action.option('visible'));
+    return currentActions.filter((action) => {
+      const { visible = false } = action.option();
+
+      return visible;
+    });
   }
 
-  _getActionComponent() {
-    // @ts-expect-error
-    if (this._getVisibleActions().length === 1) {
-      // @ts-expect-error
-      return this._getVisibleActions()[0];
+  _getActionComponent(): SpeedDialAction {
+    const visibleActions = this._getVisibleActions();
+
+    if (visibleActions.length === 1) {
+      return visibleActions[0];
     }
-    return this.option('actionComponent') || this.option('actions')[0];
+
+    const { actionComponent, actions = [] } = this.option();
+
+    return actionComponent ?? actions[0];
   }
 
   _initContentReadyAction(): void {
     this._contentReadyAction = this._getActionComponent()._createActionByOption('onContentReady', {
       excludeValidators: ['disabled', 'readOnly'],
-    }, true);
+    });
   }
 
   _fireContentReadyAction(): void {
-    this._contentReadyAction({ actionElement: this.$element() });
+    this._contentReadyAction?.({ actionElement: this.$element() });
   }
 
   _updateZIndexStackPosition(): void {
@@ -223,8 +262,7 @@ class SpeedDialItem extends Overlay<SpeedDialItemProperties> {
     });
   }
 
-  // @ts-expect-error
-  _defaultActionArgs(): DefaultActionArgs<SpeedDialItem> {
+  _defaultActionArgs(): DefaultActionArgs<SpeedDialAction> {
     return {
       component: this._getActionComponent(),
     };
@@ -246,7 +284,6 @@ class SpeedDialItem extends Overlay<SpeedDialItemProperties> {
   _toggleActiveState(
     $element: dxElementWrapper,
     value: boolean,
-
     event?: DxEvent<PointerInteractionEvent>,
   ): void {
     super._toggleActiveState($element, value, event);
@@ -255,7 +292,7 @@ class SpeedDialItem extends Overlay<SpeedDialItemProperties> {
       return;
     }
 
-    const config = {
+    const config: InkRippleWaveConfig = {
       element: this._getInkRippleContainer(),
       event,
     };
@@ -267,7 +304,7 @@ class SpeedDialItem extends Overlay<SpeedDialItemProperties> {
     }
   }
 
-  _optionChanged(args: OptionChanged<SpeedDialItemProperties>): void {
+  _optionChanged(args: OptionChanged<TProperties>): void {
     const { name, value, previousValue } = args;
 
     switch (name) {
@@ -281,10 +318,12 @@ class SpeedDialItem extends Overlay<SpeedDialItemProperties> {
         this._renderLabel();
         break;
       case 'visible':
-        this._currentVisible = previousValue;
+        this._currentVisible = previousValue as boolean | undefined;
         if (value) {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this._show();
         } else {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this._hide();
         }
         break;

@@ -1,5 +1,7 @@
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
+import type { DxEvent, PointerInteractionEvent } from '@js/events';
 
 const INKRIPPLE_CLASS = 'dx-inkripple';
 const INKRIPPLE_WAVE_CLASS = 'dx-inkripple-wave';
@@ -12,29 +14,72 @@ const ANIMATION_DURATION = 300;
 const HOLD_ANIMATION_DURATION = 1000;
 const DEFAULT_WAVE_INDEX = 0;
 
-export const initConfig = (config = {}) => {
+export interface InkRippleDurations {
+  showingScale: number;
+  hidingScale: number;
+  hidingOpacity: number;
+}
+
+export interface InkRippleInitConfig {
+  useHoldAnimation?: boolean;
+  waveSizeCoefficient?: number;
+  isCentered?: boolean;
+  wavesNumber?: number;
+}
+
+export interface InkRippleConfig {
+  waveSizeCoefficient: number;
+  isCentered: boolean;
+  wavesNumber: number;
+  durations: InkRippleDurations;
+  showingTimeout?: ReturnType<typeof setTimeout>;
+  hidingTimeout?: ReturnType<typeof setTimeout>;
+}
+
+export type InkRippleWaveEvent = DxEvent<PointerInteractionEvent> & {
+  pageX?: number;
+  pageY?: number;
+};
+
+export interface InkRippleWaveConfig {
+  element?: dxElementWrapper | Element | null;
+  event?: InkRippleWaveEvent;
+  wave?: number;
+  wavesNumber?: number;
+}
+
+export interface InkRipple {
+  showWave: (config: InkRippleWaveConfig) => void;
+  hideWave: (config: InkRippleWaveConfig) => void;
+}
+
+interface WaveStyleConfig {
+  left: number;
+  top: number;
+  height: number;
+  width: number;
+}
+
+const getDurations = (useHoldAnimation: boolean): InkRippleDurations => ({
+  showingScale: useHoldAnimation ? HOLD_ANIMATION_DURATION : ANIMATION_DURATION,
+  hidingScale: ANIMATION_DURATION,
+  hidingOpacity: ANIMATION_DURATION,
+});
+
+export const initConfig = (config: InkRippleInitConfig = {}): InkRippleConfig => {
   const {
-    // @ts-expect-error
     useHoldAnimation, waveSizeCoefficient, isCentered, wavesNumber,
   } = config;
+
   return {
-    waveSizeCoefficient: waveSizeCoefficient || DEFAULT_WAVE_SIZE_COEFFICIENT,
-    isCentered: isCentered || false,
-    wavesNumber: wavesNumber || 1,
+    waveSizeCoefficient: waveSizeCoefficient ?? DEFAULT_WAVE_SIZE_COEFFICIENT,
+    isCentered: isCentered ?? false,
+    wavesNumber: wavesNumber ?? 1,
     durations: getDurations(useHoldAnimation ?? true),
   };
 };
 
-export const render = function (args?) {
-  const config = initConfig(args);
-
-  return {
-    showWave: showWave.bind(this, config),
-    hideWave: hideWave.bind(this, config),
-  };
-};
-
-const getInkRipple = function (element) {
+const getInkRipple = (element: dxElementWrapper): dxElementWrapper => {
   let result = element.children(`.${INKRIPPLE_CLASS}`);
 
   if (result.length === 0) {
@@ -46,11 +91,14 @@ const getInkRipple = function (element) {
   return result;
 };
 
-const getWaves = function (element, wavesNumber) {
+const getWaves = (
+  element: InkRippleWaveConfig['element'],
+  wavesNumber: number | undefined,
+): dxElementWrapper => {
   const inkRipple = getInkRipple($(element));
   const result = inkRipple.children(`.${INKRIPPLE_WAVE_CLASS}`).toArray();
 
-  for (let i = result.length; i < wavesNumber; i++) {
+  for (let i = result.length; i < (wavesNumber ?? 0); i += 1) {
     const $currentWave = $('<div>')
       .appendTo(inkRipple)
       .addClass(INKRIPPLE_WAVE_CLASS);
@@ -61,16 +109,19 @@ const getWaves = function (element, wavesNumber) {
   return $(result);
 };
 
-const getWaveStyleConfig = function (args, config) {
+const getWaveStyleConfig = (
+  args: InkRippleConfig,
+  config: InkRippleWaveConfig,
+): WaveStyleConfig => {
   const element = $(config.element);
   const elementWidth = getOuterWidth(element);
   const elementHeight = getOuterHeight(element);
-  // @ts-expect-error
-  const elementDiagonal = parseInt(Math.sqrt(elementWidth * elementWidth + elementHeight * elementHeight));
-  // @ts-expect-error
-  const waveSize = Math.min(MAX_WAVE_SIZE, parseInt(elementDiagonal * args.waveSizeCoefficient));
-  let left;
-  let top;
+  const elementDiagonal = Math.trunc(
+    Math.sqrt(elementWidth * elementWidth + elementHeight * elementHeight),
+  );
+  const waveSize = Math.min(MAX_WAVE_SIZE, Math.trunc(elementDiagonal * args.waveSizeCoefficient));
+  let left = 0;
+  let top = 0;
 
   if (args.isCentered) {
     left = (elementWidth - waveSize) / 2;
@@ -78,10 +129,8 @@ const getWaveStyleConfig = function (args, config) {
   } else {
     const { event } = config;
     const position = element.offset();
-    // @ts-expect-error
-    const x = event.pageX - position.left;
-    // @ts-expect-error
-    const y = event.pageY - position.top;
+    const x = (event?.pageX ?? 0) - (position?.left ?? 0);
+    const y = (event?.pageY ?? 0) - (position?.top ?? 0);
 
     left = x - waveSize / 2;
     top = y - waveSize / 2;
@@ -95,41 +144,35 @@ const getWaveStyleConfig = function (args, config) {
   };
 };
 
-export function showWave(args, config) {
-  const $wave = getWaves(config.element, args.wavesNumber).eq(config.wave || DEFAULT_WAVE_INDEX);
+const hideSelectedWave = ($wave: dxElementWrapper): void => {
+  $wave
+    .removeClass(INKRIPPLE_HIDING_CLASS)
+    .css('transitionDuration', '');
+};
 
-  args.hidingTimeout && clearTimeout(args.hidingTimeout);
-  hideSelectedWave($wave);
-  $wave.css(getWaveStyleConfig(args, config));
-  args.showingTimeout = setTimeout(showingWaveHandler.bind(this, args, $wave), 0);
-}
-
-function showingWaveHandler(args, $wave) {
+const showingWaveHandler = (args: InkRippleConfig, $wave: dxElementWrapper): void => {
   const durationCss = `${args.durations.showingScale}ms`;
 
   $wave
     .addClass(INKRIPPLE_SHOWING_CLASS)
     .css('transitionDuration', durationCss);
-}
+};
 
-function getDurations(useHoldAnimation) {
-  return {
-    showingScale: useHoldAnimation ? HOLD_ANIMATION_DURATION : ANIMATION_DURATION,
-    hidingScale: ANIMATION_DURATION,
-    hidingOpacity: ANIMATION_DURATION,
-  };
-}
+export const showWave = (args: InkRippleConfig, config: InkRippleWaveConfig): void => {
+  const $wave = getWaves(config.element, args.wavesNumber).eq(config.wave ?? DEFAULT_WAVE_INDEX);
 
-function hideSelectedWave($wave) {
-  $wave
-    .removeClass(INKRIPPLE_HIDING_CLASS)
-    .css('transitionDuration', '');
-}
+  clearTimeout(args.hidingTimeout);
+  hideSelectedWave($wave);
+  $wave.css(getWaveStyleConfig(args, config));
+  // NOTE: setTimeout is used to trigger the CSS transition of the applied wave styles.
+  // eslint-disable-next-line no-restricted-globals
+  args.showingTimeout = setTimeout(() => showingWaveHandler(args, $wave), 0);
+};
 
-export function hideWave(args, config) {
-  args.showingTimeout && clearTimeout(args.showingTimeout);
+export const hideWave = (args: InkRippleConfig, config: InkRippleWaveConfig): void => {
+  clearTimeout(args.showingTimeout);
 
-  const $wave = getWaves(config.element, config.wavesNumber).eq(config.wave || DEFAULT_WAVE_INDEX);
+  const $wave = getWaves(config.element, config.wavesNumber).eq(config.wave ?? DEFAULT_WAVE_INDEX);
   const { durations } = args;
   const durationCss = `${durations.hidingScale}ms, ${durations.hidingOpacity}ms`;
 
@@ -139,5 +182,17 @@ export function hideWave(args, config) {
     .css('transitionDuration', durationCss);
 
   const animationDuration = Math.max(durations.hidingScale, durations.hidingOpacity);
-  args.hidingTimeout = setTimeout(hideSelectedWave.bind(this, $wave), animationDuration);
-}
+
+  // NOTE: setTimeout is used to clean the wave up after the hiding animation is finished.
+  // eslint-disable-next-line no-restricted-globals
+  args.hidingTimeout = setTimeout(() => hideSelectedWave($wave), animationDuration);
+};
+
+export const render = (config?: InkRippleInitConfig): InkRipple => {
+  const inkRippleConfig = initConfig(config);
+
+  return {
+    showWave: (waveConfig: InkRippleWaveConfig): void => showWave(inkRippleConfig, waveConfig),
+    hideWave: (waveConfig: InkRippleWaveConfig): void => hideWave(inkRippleConfig, waveConfig),
+  };
+};
