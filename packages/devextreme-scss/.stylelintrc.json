@@ -14,7 +14,7 @@
         "declaration-no-important": true,
         "declaration-property-value-disallowed-list": [
             { "/.*/": ["/var\\(\\s*--dxds-/"] },
-            { "message": "Read a design token through the ds bridge (ds.$name), not var(--dxds-…): the bridge fails the build on an unknown name, a raw custom property compiles and degrades silently. The public --dx-* properties are unaffected." }
+            { "message": "Read a design token through the ds bridge (ds.$name), not var(--dxds-…): the bridge fails the build on an unknown name, a raw custom property compiles and degrades silently." }
         ],
         "font-family-name-quotes": "always-unless-keyword",
         "@stylistic/indentation": [2, { "ignore": ["inside-parens"] }],
@@ -79,8 +79,8 @@
             "files": ["scss/widgets/fluent-next/**/*.scss"],
             "rules": {
                 "declaration-property-value-disallowed-list": [
-                    { "/.*/": ["/var\\(\\s*--dxds-/", "/\\bds\\.\\$/"] },
-                    { "message": "Resolve the design token into a variable in _colors.scss or _sizes.scss, then use that variable here" }
+                    { "/.*/": ["/var\\(\\s*--dxds-/", "/var\\(\\s*--dx-/", "/\\bds\\.\\$/"] },
+                    { "message": "Use the widget's own variable here: resolve the design token in _colors.scss or _sizes.scss. A custom property compiles even when its name is wrong." }
                 ]
             }
         },
@@ -93,8 +93,8 @@
             ],
             "rules": {
                 "declaration-property-value-disallowed-list": [
-                    { "/.*/": ["/var\\(\\s*--dxds-/"] },
-                    { "message": "Read a design token through the ds bridge (ds.$name), not var(--dxds-…): the bridge fails the build on an unknown name, a raw custom property compiles and degrades silently. The public --dx-* properties are unaffected." }
+                    { "/.*/": ["/var\\(\\s*--dxds-/", "/var\\(\\s*--dx-/"] },
+                    { "message": "Read a design token through the ds bridge (ds.$name), not as a custom property: the bridge fails the build on an unknown name, a custom property compiles and degrades silently." }
                 ]
             }
         }
