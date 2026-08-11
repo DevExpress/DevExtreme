@@ -156,15 +156,15 @@ function getCellCssClass({ date, view }: { date: Date, view: string }) {
 }
 
 .dx-state-disabled.dx-calendar .dx-calendar-cell:not(.dx-calendar-other-month) .weekend {
-  color: #8080ff;
+  color: color-mix(in srgb, var(--dxds-color-content-utility-indigo-default-rest, #8080ff) calc(var(--dxds-opacity-80, 1) * 100%), transparent);
 }
 
 .dx-calendar-cell:not(.dx-calendar-other-month) .holiday {
-  color: #ff3030;
+  color: var(--dxds-color-content-utility-red-default-rest, #ff3030);
 }
 
 .dx-state-disabled.dx-calendar .dx-calendar-cell:not(.dx-calendar-other-month) .holiday {
-  color: #ff8080;
+  color: color-mix(in srgb, var(--dxds-color-content-utility-red-default-rest, #ff8080) calc(var(--dxds-opacity-80, 1) * 100%), transparent);
 }
 
 .dx-calendar-week-number-cell .week-number {
@@ -178,7 +178,7 @@ function getCellCssClass({ date, view }: { date: Date, view: string }) {
 
 .options {
   padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: color-mix(in srgb, var(--dxds-color-surface-neutral-default-inverted-rest, #bfbfbf) calc(var(--dxds-opacity-5, 0.05) * 100%), transparent);
 }
 
 .option {

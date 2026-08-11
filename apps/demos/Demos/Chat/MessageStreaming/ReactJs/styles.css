@@ -78,7 +78,7 @@
 .chat-suggestion-card:hover {
   border: 1px solid var(--dxds-color-border-neutral-subdued-rest, #E0E0E0);
   background: var(--dxds-color-surface-neutral-deep-rest, #F5F5F5);
-  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.04), 0 4px 24px 0 rgba(0, 0, 0, 0.02);
+  box-shadow: var(--dxds-box-shadow-xs, 0 4px 12px 0 rgba(0, 0, 0, 0.04), 0 4px 24px 0 rgba(0, 0, 0, 0.02));
 }
 
 .chat-suggestion-card-title {

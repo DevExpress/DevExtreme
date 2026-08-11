@@ -96,7 +96,7 @@ const clearEvents = () => {
 </script>
 <style>
 #events {
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dxds-color-surface-neutral-deep-rest, rgba(191, 191, 191, 0.15));
   padding: 20px;
   margin-top: 20px;
 }
@@ -132,7 +132,7 @@ const clearEvents = () => {
 
 #events ul li {
   padding: 7px 0;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--dxds-color-border-neutral-default-rest, #ddd);
 }
 
 #events ul li:last-child {

@@ -86,7 +86,7 @@ function getPriorityClass(task: Task) {
 .list {
   border-radius: 8px;
   margin: 5px;
-  background-color: rgba(192, 192, 192, 0.4);
+  background-color: var(--dxds-color-surface-neutral-deep-rest, rgba(192, 192, 192, 0.4));
   display: inline-block;
   vertical-align: top;
   white-space: normal;
@@ -95,8 +95,7 @@ function getPriorityClass(task: Task) {
 .list-title {
   color: var(--dx-color-text);
   font-size: 16px;
-  padding: 10px;
-  padding-left: 30px;
+  padding: 10px 10px 10px 30px;
   margin-bottom: -10px;
   font-weight: bold;
   cursor: pointer;
@@ -141,7 +140,7 @@ function getPriorityClass(task: Task) {
 }
 
 .priority-1 {
-  background: #adadad;
+  background: var(--dxds-color-surface-utility-gray-default-rest, #adadad);
 }
 
 .priority-2 {

@@ -121,10 +121,6 @@ function itemClick(e: DxMenuTypes.ItemClickEvent<ProductType>) {
   font-size: 24px;
 }
 
-.dark #product-details > div {
-  color: #f0f0f0;
-}
-
 .options {
   padding: 20px;
   position: absolute;

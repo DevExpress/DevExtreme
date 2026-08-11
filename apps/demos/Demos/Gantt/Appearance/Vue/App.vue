@@ -211,20 +211,11 @@ function getTimeLeft(task: Task) {
   }
 
   .custom-task-edit-tooltip {
-    background-color: white;
-    color: black;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background-color: var(--dxds-color-surface-neutral-default-rest, #fff);
+    color: var(--dxds-color-content-neutral-default-rest, #000);
+    box-shadow: var(--dxds-box-shadow-md, 0 4px 8px 0 rgba(0, 0, 0, 0.2));
     padding: 10px 12px 12px;
     border-radius: 3px;
-  }
-
-  .custom-task-edit-tooltip::before {
-    border-top-color: white;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  }
-
-  .custom-task-edit-tooltip::after {
-    border-bottom-color: white;
   }
 
   .custom-tooltip-title {

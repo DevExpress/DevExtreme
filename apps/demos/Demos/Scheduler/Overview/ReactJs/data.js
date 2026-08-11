@@ -82,7 +82,7 @@ export const employees = [
   {
     text: 'John Heart',
     id: 1,
-    color: 'var(--background-color-1)',
+    color: 'var(--person-color-1)',
     avatar: '../../../../images/employees/19.png',
     age: 27,
     discipline: 'ABS, Fitball, StepFit',
@@ -90,7 +90,7 @@ export const employees = [
   {
     text: 'Greta Sims',
     id: 2,
-    color: 'var(--background-color-2)',
+    color: 'var(--person-color-2)',
     avatar: '../../../../images/employees/31.png',
     age: 25,
     discipline: 'ABS, Fitball, StepFit',

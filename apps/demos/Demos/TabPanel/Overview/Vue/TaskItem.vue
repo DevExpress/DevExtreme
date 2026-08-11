@@ -30,7 +30,7 @@ withDefaults(defineProps<{
   height: 50px;
   padding: 8px 12px 8px 8px;
   border-radius: 4px;
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: var(--dxds-box-shadow-xs, 0 1px 4px 0 rgba(0, 0, 0, 0.15));
 }
 
 .task-item::before {
@@ -80,7 +80,7 @@ withDefaults(defineProps<{
 }
 
 .dx-color-scheme-contrast .task-item {
-  border: 1px solid #fff;
+  border: 1px solid var(--dxds-color-border-neutral-compound-on-surface-rest, #fff);
 }
 
 .dx-theme-fluent.dx-color-scheme-blue-dark .task-item {

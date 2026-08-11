@@ -6,7 +6,7 @@
   border: none;
   border-radius: 50px;
   background-color: var(--dxds-color-surface-neutral-default-rest, #fff);
-  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.24);
+  box-shadow: var(--dxds-box-shadow-sm, 0 2px 6px 0 rgba(0, 0, 0, 0.24));
 }
 
 .dx-resizable-handle-right::after {
@@ -34,7 +34,7 @@
 .options-container {
   margin-top: 20px;
   padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: color-mix(in srgb, var(--dxds-color-surface-neutral-default-inverted-rest, #bfbfbf) calc(var(--dxds-opacity-5, 0.05) * 100%), transparent);
   position: relative;
 }
 

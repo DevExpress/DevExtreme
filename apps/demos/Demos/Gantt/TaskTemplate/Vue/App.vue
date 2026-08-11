@@ -107,7 +107,7 @@ function getImagePath(taskId: number) {
 }
 
 .custom-task-color-6 {
-  background-color: #7B1FA2;
+  background-color: var(--dxds-color-surface-utility-indigo-default-rest, #7B1FA2);
 }
 
 .custom-task {
@@ -157,7 +157,7 @@ function getImagePath(taskId: number) {
   bottom: 0;
   width: 0%;
   height: 4px;
-  background: rgba(0, 0, 0, 0.3);
+  background: color-mix(in srgb, var(--dxds-color-surface-neutral-default-static-dark-rest, #000) calc(var(--dxds-opacity-30, 0.3) * 100%), transparent);
 }
 
 .dx-gantt .dx-row {

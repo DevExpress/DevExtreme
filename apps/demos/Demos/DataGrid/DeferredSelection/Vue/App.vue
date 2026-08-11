@@ -144,7 +144,7 @@ const onInitialized = (e: DxDataGridTypes.InitializedEvent) => {
 }
 
 .selection-summary {
-  border: 1px solid rgba(161, 161, 161, 0.2);
+  border: 1px solid var(--dxds-color-border-neutral-subdued-rest, rgba(161, 161, 161, 0.2));
   padding: 25px;
 }
 
