@@ -13,7 +13,7 @@ $scrollview-pull-down-image-margin: 0 20px !default;
 $scrollview-pull-down-image-height: 50px !default;
 $scrollview-scrollbottom-padding: 10px 0 !default;
 $scrollview-scrollbottom-indicator-margin: 0 10px 0 0 !default;
-$scrollview-scrollbottom-indicator-margin-2: 0 0 0 10px !default;
+$scrollview-scrollbottom-indicator-margin-rtl: 0 0 0 10px !default;
 
 $scrollview-pulldown-icon-font-size: 24px !default;
 
@@ -259,5 +259,5 @@ $pulldown-padding: 15px;
 }
 
 .dx-rtl .dx-scrollview-scrollbottom-indicator {
-  margin: $scrollview-scrollbottom-indicator-margin-2;
+  margin: $scrollview-scrollbottom-indicator-margin-rtl;
 }
