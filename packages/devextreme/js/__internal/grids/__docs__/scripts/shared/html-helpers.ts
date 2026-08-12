@@ -271,8 +271,9 @@ var infoPanel = document.getElementById('info-content');
 var defaultInfoHtml = '<p style="color:#888;">Click a node or edge to see details.</p>';
 
 cy.on('tap', 'node, edge', function(e) {
-  cy.nodes().removeClass('search-match');
   var t = e.target;
+  if (t.hasClass('no-select')) return;
+  cy.nodes().removeClass('search-match');
   var infoTarget = typeof normalizeClickTarget === 'function' ? normalizeClickTarget(t) : t;
   var checkId = infoTarget.id();
   if (selectedTarget && selectedTarget.id() === checkId) {

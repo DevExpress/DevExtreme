@@ -1,22 +1,32 @@
 /* eslint-disable spellcheck/spell-checker, max-depth */
+import * as fs from 'fs';
+import * as path from 'path';
+
 import { parseMixinCall, stripAllMixins } from '../shared/ast-helpers';
+import { getRelativePath } from '../shared/file-discovery';
 import type { BuildChainOptions } from '../shared/inheritance';
 import { buildInheritanceChainCore } from '../shared/inheritance';
 import type { HeritageInfo } from '../shared/types';
 import {
   BARE_MODULE_BASES,
   getFeatureAreaFromPath,
+  GRID_CORE_ROOT,
   M_MODULES_PATH,
   MODULES_PREFIX,
+  TS_ALIAS_PREFIX,
 } from './constants';
 import type {
   ClassRegistrationInfo,
+  ExtenderKind,
+  ExtenderRef,
   GlobalClassInfo,
   InheritanceEntry,
   ModuleInfo,
   ParsedFile,
   RuntimeDependency,
 } from './types';
+
+const EXTENDER_KINDS: ExtenderKind[] = ['controllers', 'views'];
 
 // ─── Global Class Registry ───────────────────────────────────────────────────
 
@@ -395,11 +405,99 @@ export function buildInheritanceChains(
   return entries.sort((a, b) => a.className.localeCompare(b.className));
 }
 
+// ─── Extender Definition Resolution ──────────────────────────────────────────
+
+function resolveSpecifierToRelPath(spec: string, fromFileAbs: string): string | null {
+  let base: string | null = null;
+
+  if (spec.startsWith('.')) {
+    base = path.resolve(path.dirname(fromFileAbs), spec);
+  } else if (spec.startsWith(TS_ALIAS_PREFIX)) {
+    base = path.join(GRID_CORE_ROOT, spec.slice(TS_ALIAS_PREFIX.length));
+  }
+
+  if (!base) {
+    return null;
+  }
+
+  const candidates = [`${base}.ts`, path.join(base, 'index.ts')];
+  const found = candidates.find((candidate) => fs.existsSync(candidate));
+
+  return found ? getRelativePath(found, GRID_CORE_ROOT) : null;
+}
+
+function findExtenderDefinition(
+  extenderName: string,
+  moduleFile: ParsedFile,
+  fileByRelPath: Map<string, ParsedFile>,
+): { relPath: string; varName: string; className: string } | null {
+  const local = moduleFile.extenderDefs.get(extenderName);
+  if (local) {
+    return { relPath: moduleFile.relPath, varName: extenderName, className: local.className };
+  }
+
+  const spec = moduleFile.importSources.get(extenderName);
+  if (!spec) {
+    return null;
+  }
+
+  const relPath = resolveSpecifierToRelPath(spec, moduleFile.filePath);
+  if (!relPath) {
+    return null;
+  }
+
+  const varName = moduleFile.importedNames.get(extenderName) ?? extenderName;
+  const def = fileByRelPath.get(relPath)?.extenderDefs.get(varName);
+
+  return def ? { relPath, varName, className: def.className } : null;
+}
+
+export function resolveExtenderDefinitions(
+  modules: ModuleInfo[],
+  fileByRelPath: Map<string, ParsedFile>,
+): Map<string, ExtenderRef[]> {
+  const refToEntries = new Map<string, ExtenderRef[]>();
+
+  for (const mod of modules) {
+    const moduleFile = fileByRelPath.get(mod.sourceFile);
+    if (!moduleFile) {
+      // eslint-disable-next-line no-continue
+      continue;
+    }
+
+    for (const kind of EXTENDER_KINDS) {
+      for (const [target, ext] of Object.entries(mod.extenders[kind])) {
+        const def = findExtenderDefinition(ext.extenderName, moduleFile, fileByRelPath);
+        if (!def) {
+          console.warn(`WARN: Could not resolve extender "${ext.extenderName}" registered by "${mod.moduleName}" for ${kind.slice(0, -1)} "${target}"`);
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+
+        ext.extenderClass = def.className || undefined;
+        ext.sourceFile = def.relPath;
+
+        const ref = `ext:${def.relPath}#${def.varName}`;
+        const entries = refToEntries.get(ref);
+        const entry: ExtenderRef = { module: mod.moduleName, kind, target };
+        if (entries) {
+          entries.push(entry);
+        } else {
+          refToEntries.set(ref, [entry]);
+        }
+      }
+    }
+  }
+
+  return refToEntries;
+}
+
 // ─── Runtime Dependency Resolution ───────────────────────────────────────────
 
 export function resolveRuntimeDeps(
   allParsedFiles: ParsedFile[],
   modules: ModuleInfo[],
+  extenderRefs: Map<string, ExtenderRef[]>,
 ): RuntimeDependency[] {
   const allDeps: RuntimeDependency[] = [];
 
@@ -414,17 +512,6 @@ export function resolveRuntimeDeps(
     }
   }
 
-  // Build a map: extenderName → moduleName
-  const extenderToModule = new Map<string, string>();
-  for (const mod of modules) {
-    for (const ext of Object.values(mod.extenders.controllers)) {
-      extenderToModule.set(ext.extenderName, mod.moduleName);
-    }
-    for (const ext of Object.values(mod.extenders.views)) {
-      extenderToModule.set(ext.extenderName, mod.moduleName);
-    }
-  }
-
   // Build a map: sourceFile → moduleName (for fallback lookup)
   const sourceFileToModule = new Map<string, string>();
   for (const mod of modules) {
@@ -433,20 +520,31 @@ export function resolveRuntimeDeps(
 
   for (const pf of allParsedFiles) {
     for (const dep of pf.runtimeDeps) {
-      const fromModule = classToModule.get(dep.from)
-        ?? extenderToModule.get(dep.from)
-        ?? sourceFileToModule.get(pf.relPath)
-        ?? '';
+      const owningEntries = extenderRefs.get(dep.fromRef);
 
-      allDeps.push({ ...dep, fromModule });
+      if (owningEntries?.length) {
+        // The same extender function can be registered by more than one module;
+        // the dependency belongs to each of those extender nodes.
+        for (const ref of owningEntries) {
+          allDeps.push({ ...dep, fromModule: ref.module, fromExtender: ref });
+        }
+      } else {
+        const fromModule = classToModule.get(dep.from)
+          ?? sourceFileToModule.get(pf.relPath)
+          ?? '';
+
+        allDeps.push({ ...dep, fromModule });
+      }
     }
   }
 
-  // Deduplicate
+  // Deduplicate on the resolved owner, not the bare name
   const seen = new Set<string>();
   const unique: RuntimeDependency[] = [];
   for (const dep of allDeps) {
-    const key = `${dep.from}|${dep.to}|${dep.via}`;
+    const ext = dep.fromExtender;
+    const owner = ext ? `${dep.fromRef}@${ext.module}/${ext.kind}/${ext.target}` : dep.fromRef;
+    const key = `${owner}|${dep.to}|${dep.via}`;
     if (!seen.has(key)) {
       seen.add(key);
       unique.push(dep);

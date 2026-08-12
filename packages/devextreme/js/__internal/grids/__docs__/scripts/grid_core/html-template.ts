@@ -38,6 +38,7 @@ ${BASE_CSS}
 .tag-ctrl{background:#1e1e3a;color:#bae6fd;border:1px solid #7dd3fc33}
 .tag-view{background:#1e1e3a;color:#d8b4fe;border:1px solid #c084fc33}
 .tag-ext{background:#3a2a00;color:#f5c040;border:1px solid #f5c04033}
+.hint{margin:4px 0 0;font-size:10px;color:#888;line-height:1.4}
 </style>
 </head>
 <body>
@@ -45,6 +46,14 @@ ${BASE_CSS}
   <div>
     <h2>Search</h2>
     <input type="text" id="search" placeholder="Type to search..." />
+  </div>
+  <div>
+    <h2>View</h2>
+    <div class="radio-group">
+      <label><input type="radio" name="view-mode" value="dense" checked> Dense (collapse all)</label>
+      <label><input type="radio" name="view-mode" value="detailed"> Detailed (expand all)</label>
+    </div>
+    <p class="hint">Use <b>+</b> / <b>&minus;</b> inside a module to expand it on its own.</p>
   </div>
   <div>
     <h2>Edge Types</h2>
@@ -62,8 +71,8 @@ ${BASE_CSS}
   <div>
     <h2>Edge Routing</h2>
     <div class="radio-group">
-      <label><input type="radio" name="edge-routing" value="taxi" checked> Orthogonal</label>
-      <label><input type="radio" name="edge-routing" value="unbundled-bezier"> Bezier</label>
+      <label><input type="radio" name="edge-routing" value="bezier" checked> Bezier</label>
+      <label><input type="radio" name="edge-routing" value="taxi"> Orthogonal</label>
     </div>
   </div>
   <div>
@@ -75,6 +84,8 @@ ${BASE_CSS}
     <div class="leg-item"><div class="leg-sw" style="background:#1e1e3a;border:2px solid #7dd3fc;clip-path:polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%);width:20px;height:16px"></div> Controller</div>
     <div class="leg-item"><div class="leg-sw" style="background:#1e1e3a;border:2px solid #c084fc;border-radius:50%"></div> View</div>
     <div class="leg-item"><div class="leg-sw" style="background:#1a1a2e;border:2px dashed #f59e0b"></div> Module (compound)</div>
+    <div class="leg-item"><div class="leg-sw" style="background:#2a2410;border:2px solid #f5c040;clip-path:polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%);width:20px;height:16px"></div> Extender of controller</div>
+    <div class="leg-item"><div class="leg-sw" style="background:#2a2410;border:2px solid #f5c040;border-radius:50%"></div> Extender of view</div>
     <div class="leg-item"><div class="leg-ln" style="border-top:2px dashed #0ea5e9"></div> Inheritance (ctrl)</div>
     <div class="leg-item"><div class="leg-ln" style="border-top:2px dashed #a855f7"></div> Inheritance (view)</div>
     <div class="leg-item"><div class="leg-ln" style="border-top:2.5px solid #0ea5e9"></div> Extender (ctrl)</div>
@@ -136,6 +147,52 @@ const cy = cytoscape({
     { selector: 'node.gc-target-view',
       style: { 'width': labelWidth(9), 'height': 26 }
     },
+    // Extender nodes — same shape as the target they extend, amber accent
+    { selector: 'node.gc-ext',
+      style: {
+        'background-color': '#2a2410',
+        'background-opacity': 0.75,
+        'border-width': 2,
+        'border-style': 'solid',
+        'border-color': '#f5c040',
+        'color': '#f5c040',
+        'font-size': 8,
+        'text-valign': 'center',
+        'text-halign': 'center',
+        'text-wrap': 'wrap',
+        'text-max-width': '110px',
+        'padding': '10px',
+        'label': 'data(label)',
+      }
+    },
+    { selector: 'node.gc-ext-controller',
+      style: { 'shape': 'hexagon', 'width': labelWidth(8), 'height': 26 }
+    },
+    { selector: 'node.gc-ext-view',
+      style: { 'shape': 'ellipse', 'width': labelWidth(8), 'height': 24 }
+    },
+    // Per-module expand/collapse button
+    { selector: 'node.mod-toggle',
+      style: {
+        'shape': 'round-rectangle',
+        'width': 16,
+        'height': 16,
+        'background-color': '#3a2a00',
+        'background-opacity': 1,
+        'border-width': 1,
+        'border-color': '#f59e0b',
+        'label': 'data(label)',
+        'color': '#f5c040',
+        'font-size': 12,
+        'font-weight': 'bold',
+        'text-valign': 'center',
+        'text-halign': 'center',
+        'z-index': 900,
+      }
+    },
+    { selector: 'node.mod-toggle.expanded',
+      style: { 'background-color': '#f59e0b', 'color': '#1a1a2e' }
+    },
     // Inheritance edges (ctrl) — dashed, same color as extension ctrl
     { selector: 'edge.edge-inherit-ctrl',
       style: {
@@ -191,6 +248,35 @@ const cy = cytoscape({
     },
     // Highlighted state
     ${HIGHLIGHT_CYTOSCAPE_STYLES}
+    { selector: 'node.gc-target, node.gc-ext, node.mod-toggle',
+      style: {
+        'z-compound-depth': 'top',
+        'background-opacity': 1,
+        'text-outline-width': 2,
+        'text-outline-opacity': 1,
+      }
+    },
+    { selector: 'node.gc-target',
+      style: { 'text-outline-color': '#1e1e3a' }
+    },
+    { selector: 'node.gc-ext',
+      style: { 'text-outline-color': '#2a2410' }
+    },
+    { selector: 'node.mod-toggle',
+      style: { 'text-outline-color': '#3a2a00' }
+    },
+    { selector: 'edge',
+      style: { 'control-point-step-size': 34 }
+    },
+    { selector: 'edge[label]',
+      style: {
+        'text-background-opacity': 1,
+        'text-background-padding': '3px',
+        'text-border-width': 1,
+        'text-border-color': '#2f2f4a',
+        'text-border-opacity': 1,
+      }
+    },
     // Cross-compound edges must use bezier to avoid "invalid endpoints" warnings with taxi routing
     { selector: 'edge.cross-compound',
       style: { 'curve-style': 'bezier' }
@@ -201,6 +287,25 @@ const cy = cytoscape({
 
 // ── Edge Routing Helper ─────────────────────────
 // Note: getEdgeRouting() and hasOverlappingBounds() are provided by SHARED_INTERACTIVE_JS
+
+/** Give each edge in a same-pair bundle its own taxi turn so they stay distinct. */
+function separateParallelTaxiEdges() {
+  var groups = {};
+  cy.edges().not('.cross-compound').forEach(function(edge) {
+    if (edge.style('curve-style') !== 'taxi') return;
+    var key = edge.data('source') + '|' + edge.data('target');
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(edge);
+  });
+  Object.keys(groups).forEach(function(key) {
+    var group = groups[key];
+    if (group.length < 2) return;
+    group.sort(function(a, b) { return a.id().localeCompare(b.id()); });
+    for (var i = 0; i < group.length; i++) {
+      group[i].style('taxi-turn', (35 + i * 18) + '%');
+    }
+  });
+}
 
 function updateEdgeStyles() {
   const curveStyle = getEdgeRouting();
@@ -226,6 +331,9 @@ function updateEdgeStyles() {
         edge.style({ 'curve-style': 'bezier', 'taxi-direction': null, 'taxi-turn': null });
       }
     });
+    // Taxi routing has no equivalent of bezier's parallel-edge bundling, so
+    // edges sharing a node pair would trace one path. Stagger their turns.
+    separateParallelTaxiEdges();
   } else {
     cy.edges().not('.cross-compound').style({
       'curve-style': curveStyle,
@@ -247,15 +355,42 @@ function updateEdgeStyles() {
   }
 }
 
+// ── Expansion state: which modules show their extenders ──
+// Collapsed (dense) is the default. The View radios expand/collapse every
+// module at once; the +/- button on a module toggles just that one.
+
+var expandedModules = new Set();
+
+function isExpanded(modId) {
+  return expandedModules.has(modId);
+}
+
+/** The controller/view node an extender node binds to. */
+function extenderTargetId(n) {
+  var prefix = n.data('extenderKind') === 'controller' ? 'ctrl-' : 'view-';
+  return prefix + n.data('extendsTarget');
+}
+
+/** Children that take part in the current layout (toggles are placed by hand). */
+function visibleChildren(mod) {
+  var expanded = isExpanded(mod.id());
+  return mod.children().filter(function(c) {
+    if (c.hasClass('mod-toggle')) return false;
+    return expanded || !c.hasClass('gc-ext');
+  });
+}
+
 // ── Dependency-levels custom layout ──────────────
 
 function runDepLevelsLayout() {
   // 1. Collect targets (leaf nodes: controllers & views)
   var targets = cy.nodes('.gc-target-controller, .gc-target-view');
+  var extenders = cy.nodes('.gc-ext');
   var modules = cy.nodes('.module');
 
-  // 2. Build dependency map: target → set of target ids it depends on
-  //    via inheritance edges and extension edges (module extends target → module's children depend on that target)
+  // 2. Build dependency map: target → set of target ids it depends on.
+  //    Only inheritance contributes: an extender binds to a target but nothing
+  //    inherits from an extender, so extenders are levelled separately in 4.
   var deps = {};
   targets.forEach(function(n) { deps[n.id()] = new Set(); });
 
@@ -264,17 +399,6 @@ function runDepLevelsLayout() {
     var src = e.source().id();
     var tgt = e.target().id();
     if (deps[src]) deps[src].add(tgt);
-  });
-
-  // Extension: module → target. All children of that module depend on the extended target.
-  cy.edges('.edge-ext-ctrl, .edge-ext-view').forEach(function(e) {
-    var modNode = e.source();
-    var extTarget = e.target().id();
-    modNode.children().forEach(function(child) {
-      if (deps[child.id()] && child.id() !== extTarget) {
-        deps[child.id()].add(extTarget);
-      }
-    });
   });
 
   // 3. Compute global levels via recursive topological sort
@@ -295,27 +419,24 @@ function runDepLevelsLayout() {
   }
   targets.forEach(function(n) { getLevel(n.id()); });
 
-  // 4. Determine module level = max level of its children; ext-only modules = max level of targets they extend + 1
+  // 4. An extender sits one level above the target it binds.
+  var extLevel = {};
+  extenders.forEach(function(n) {
+    var tgtId = extenderTargetId(n);
+    var tgtLv = level[tgtId];
+    extLevel[n.id()] = (tgtLv === undefined ? 0 : tgtLv) + 1;
+  });
+
+  // 5. Module level = highest level among its own targets and its extenders.
+  //    Extension-only modules land above everything they extend, as before.
   var moduleLevel = {};
   modules.forEach(function(mod) {
-    var children = mod.children();
-    if (children.length > 0) {
-      var maxLv = 0;
-      children.forEach(function(c) {
-        var lv = level[c.id()] || 0;
-        if (lv > maxLv) maxLv = lv;
-      });
-      moduleLevel[mod.id()] = maxLv;
-    } else {
-      var maxExt = -1;
-      mod.connectedEdges('.edge-ext-ctrl, .edge-ext-view').forEach(function(e) {
-        if (e.source().id() === mod.id()) {
-          var tgtLv = level[e.target().id()] || 0;
-          if (tgtLv > maxExt) maxExt = tgtLv;
-        }
-      });
-      moduleLevel[mod.id()] = maxExt >= 0 ? maxExt + 1 : 0;
-    }
+    var maxLv = -1;
+    mod.children().forEach(function(c) {
+      var lv = c.hasClass('gc-ext') ? extLevel[c.id()] : level[c.id()];
+      if (lv !== undefined && lv > maxLv) maxLv = lv;
+    });
+    moduleLevel[mod.id()] = maxLv >= 0 ? maxLv : 0;
   });
 
   targets.forEach(function(n) {
@@ -324,22 +445,21 @@ function runDepLevelsLayout() {
     }
   });
 
-  // 5. Compute inner levels for children within each module.
-  //    Inner level is based only on inheritance edges between siblings in the same module.
-  //    Children that don't inherit from any sibling are at inner level 0 (bottom).
+  // 6. Compute inner levels for children within each module.
+  //    Own controllers/views are ordered by inheritance between siblings;
+  //    extenders occupy the row above them.
   var innerLevel = {}; // childId → inner level within its module
   modules.forEach(function(mod) {
-    var children = mod.children();
-    if (children.length <= 1) {
-      children.forEach(function(c) { innerLevel[c.id()] = 0; });
-      return;
-    }
+    var children = visibleChildren(mod);
+    var ownChildren = children.filter(function(c) { return !c.hasClass('gc-ext'); });
+    var extChildren = children.filter(function(c) { return c.hasClass('gc-ext'); });
+
     var childIds = new Set();
-    children.forEach(function(c) { childIds.add(c.id()); });
+    ownChildren.forEach(function(c) { childIds.add(c.id()); });
 
     // Build sibling inheritance deps (only edges between children of this module)
     var sibDeps = {};
-    children.forEach(function(c) { sibDeps[c.id()] = new Set(); });
+    ownChildren.forEach(function(c) { sibDeps[c.id()] = new Set(); });
     cy.edges('.edge-inherit-ctrl, .edge-inherit-view').forEach(function(e) {
       var src = e.source().id();
       var tgt = e.target().id();
@@ -364,11 +484,18 @@ function runDepLevelsLayout() {
       delete vis[id];
       return innerLv[id];
     }
-    children.forEach(function(c) { getInnerLevel(c.id()); });
-    children.forEach(function(c) { innerLevel[c.id()] = innerLv[c.id()] || 0; });
+    ownChildren.forEach(function(c) { getInnerLevel(c.id()); });
+
+    var maxOwnInner = -1;
+    ownChildren.forEach(function(c) {
+      var lv = innerLv[c.id()] || 0;
+      innerLevel[c.id()] = lv;
+      if (lv > maxOwnInner) maxOwnInner = lv;
+    });
+    extChildren.forEach(function(c) { innerLevel[c.id()] = maxOwnInner + 1; });
   });
 
-  // 6. Group top-level items by level
+  // 7. Group top-level items by level
   var byLevel = {};
   modules.forEach(function(mod) {
     var lv = moduleLevel[mod.id()] || 0;
@@ -392,7 +519,7 @@ function runDepLevelsLayout() {
   // childLayout[modId] = { width, height, childPositions: { childId: {dx, dy} } }
   var childLayout = {};
   modules.forEach(function(mod) {
-    var children = mod.children();
+    var children = visibleChildren(mod);
     if (children.length === 0) {
       childLayout[mod.id()] = { width: mod.outerWidth() || 100, height: mod.outerHeight() || 50, childPositions: {} };
       return;
@@ -526,6 +653,15 @@ function runDepLevelsLayout() {
         });
       }
 
+      // The expand/collapse button rides in the module's top-right corner,
+      // outside the child flow.
+      if (isModule) {
+        var toggle = node.children('.mod-toggle');
+        if (toggle.nonempty()) {
+          positions[toggle.id()] = { x: xAccum + w - 14, y: rowCenterY - h / 2 + 14 };
+        }
+      }
+
       xAccum += w + COL_GAP;
     }
     yAccum += rowHeight + ROW_GAP;
@@ -594,19 +730,95 @@ function staggerEdgeLabels() {
   for (var tgt in byTarget) {
     var edges = byTarget[tgt];
     edges.sort(function(a, b) { return (a.data('label') || '').localeCompare(b.data('label') || ''); });
-    var step = 16;
+    // Expanding a module adds edges around the same targets, so labels need a
+    // wider spread than a single alternating pair to stay apart.
+    var step = 18;
     var baseOffset = 80;
-    var maxOffset = 200;
+    var maxOffset = 340;
+    var MARGINS = [-18, 0, 18, -36, 36];
     for (var i = 0; i < edges.length; i++) {
       var offset = Math.min(baseOffset + i * step, maxOffset);
       edges[i].style('target-text-offset', offset);
-      var marginY = (i % 2 === 0) ? -16 : 16;
-      edges[i].style('target-text-margin-y', marginY);
+      edges[i].style('target-text-margin-y', MARGINS[i % MARGINS.length]);
     }
   }
 }
 
+/** Show/hide elements according to per-module expansion, without re-laying out. */
+function applyViewMode() {
+  cy.nodes('.gc-ext').forEach(function(n) {
+    n.style('display', isExpanded(n.data('ownerModule')) ? 'element' : 'none');
+  });
+  cy.edges('.view-detailed').forEach(function(e) {
+    e.style('display', isExpanded(e.data('ownerModule')) ? 'element' : 'none');
+  });
+  cy.edges('.view-dense').forEach(function(e) {
+    e.style('display', isExpanded(e.data('ownerModule')) ? 'none' : 'element');
+  });
+  cy.nodes('.mod-toggle').forEach(function(n) {
+    var expanded = isExpanded(n.data('ownerModule'));
+    n.data('label', expanded ? '\\u2212' : '+');
+    n.toggleClass('expanded', expanded);
+  });
+
+  // Feature-area and edge-type filters win over expansion state
+  document.querySelectorAll('.area-toggle').forEach(function(cb) {
+    if (cb.checked) return;
+    var area = cb.getAttribute('data-area');
+    cy.nodes('[featureArea="' + area + '"]').forEach(function(n) {
+      n.style('display', 'none');
+      n.children().style('display', 'none');
+      n.connectedEdges().style('display', 'none');
+      n.children().connectedEdges().style('display', 'none');
+    });
+  });
+  document.querySelectorAll('.edge-toggle').forEach(function(cb) {
+    if (!cb.checked) cy.edges('.' + cb.getAttribute('data-cls')).style('display', 'none');
+  });
+
+  syncViewRadios();
+}
+
+/** Reflect a mixed expansion state by leaving both radios unchecked. */
+function syncViewRadios() {
+  var toggles = cy.nodes('.mod-toggle');
+  var total = toggles.length;
+  var expanded = toggles.filter(function(n) { return isExpanded(n.data('ownerModule')); }).length;
+  var dense = document.querySelector('input[name="view-mode"][value="dense"]');
+  var detailed = document.querySelector('input[name="view-mode"][value="detailed"]');
+  dense.checked = expanded === 0;
+  detailed.checked = total > 0 && expanded === total;
+}
+
+function setAllExpanded(expand) {
+  expandedModules.clear();
+  if (expand) {
+    cy.nodes('.mod-toggle').forEach(function(n) { expandedModules.add(n.data('ownerModule')); });
+  }
+}
+
+document.querySelectorAll('input[name="view-mode"]').forEach(function(r) {
+  r.addEventListener('change', function() {
+    setAllExpanded(this.value === 'detailed');
+    applyViewMode();
+    runDepLevelsLayout();
+  });
+});
+
+/* Per-module expand/collapse button */
+cy.on('tap', 'node.mod-toggle', function(e) {
+  var modId = e.target.data('ownerModule');
+  if (expandedModules.has(modId)) {
+    expandedModules.delete(modId);
+  } else {
+    expandedModules.add(modId);
+  }
+  applyViewMode();
+  runDepLevelsLayout();
+});
+
 // Run initial layout
+applyViewMode();
 runDepLevelsLayout();
 
 // ── Interactivity: hover / click-to-pin / edge highlight ──
@@ -659,7 +871,16 @@ function showInfo(target) {
     html = '<h3>Edge: ' + d.edgeType + '</h3>'
       + '<p><span class="lbl">From:</span> ' + d.source + '</p>'
       + '<p><span class="lbl">To:</span> ' + d.target + '</p>'
-      + (d.extenderName ? '<p><span class="lbl">Extender:</span> ' + d.extenderName + '</p>' : '');
+      + (d.extenderName ? '<p><span class="lbl">Extender:</span> ' + d.extenderName + '</p>' : '')
+      + (d.extenderClass ? '<p><span class="lbl">Class:</span> ' + d.extenderClass + '</p>' : '')
+      + (d.location ? '<p><span class="lbl">Called in:</span> ' + d.location + '()</p>' : '');
+  } else if (d.nodeType === 'extender') {
+    html = '<h3>' + (d.moduleName || '') + ' &rarr; ' + (d.extendsTarget || '') + '</h3>';
+    html += '<p><span class="lbl">Type:</span> extender of ' + (d.extenderKind || '') + '</p>';
+    html += '<p><span class="lbl">Extends:</span> ' + (d.extendsTarget || '') + '</p>';
+    html += '<p><span class="lbl">Export:</span> ' + (d.extenderName || '') + '</p>';
+    if (d.extenderClass) html += '<p><span class="lbl">Class:</span> ' + d.extenderClass + '</p>';
+    html += '<p><span class="lbl">Source:</span> ' + pathWrap(d.sourceFile || '') + '</p>';
   } else if (d.nodeType === 'module') {
     html += '<p><span class="lbl">Source:</span> ' + pathWrap(d.sourceFile || '') + '</p>';
     html += '<p><span class="lbl">Area:</span> ' + (d.featureArea || '') + '</p>';
@@ -704,11 +925,8 @@ document.querySelectorAll('.area-toggle').forEach(cb => {
         else e.style('display', 'element');
       });
     });
-    // Re-apply edge type visibility after area filter changes
-    document.querySelectorAll('.edge-toggle').forEach(function(ecb) {
-      var cls = ecb.getAttribute('data-cls');
-      if (!ecb.checked) cy.edges('.' + cls).style('display', 'none');
-    });
+    // Re-apply view mode and edge type visibility after area filter changes
+    applyViewMode();
     if (selectedTarget) {
       const set = computeHighlightSet(selectedTarget);
       cy.elements().removeClass('highlighted').addClass('faded');
@@ -734,7 +952,9 @@ document.getElementById('btn-reset').addEventListener('click', () => {
   document.querySelectorAll('.area-toggle').forEach(cb => { cb.checked = true; });
   cy.elements().style('display', 'element');
   document.querySelectorAll('.edge-toggle').forEach(function(cb) { cb.checked = true; });
-  document.querySelector('input[name="edge-routing"][value="taxi"]').checked = true;
+  document.querySelector('input[name="edge-routing"][value="bezier"]').checked = true;
+  setAllExpanded(false);
+  applyViewMode();
   runDepLevelsLayout();
 });
 </script>

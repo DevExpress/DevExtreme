@@ -19,11 +19,20 @@ import type {
   ClassRegistrationInfo, ExtenderInfo, ModuleInfo, ParsedFile, RuntimeDependency,
 } from './types';
 
+function unwrapClassExpression(node: ts.Node): ts.ClassExpression | null {
+  let current = node;
+  while (ts.isParenthesizedExpression(current)) {
+    current = current.expression;
+  }
+  return ts.isClassExpression(current) ? current : null;
+}
+
 // ─── Runtime Dependency Collection ───────────────────────────────────────────
 function collectRuntimeDeps(
   node: ts.Node,
   sourceFile: ts.SourceFile,
   ownerName: string,
+  ownerRef: string,
   deps: RuntimeDependency[],
 ): void {
   function visit(n: ts.Node): void {
@@ -55,6 +64,7 @@ function collectRuntimeDeps(
 
         deps.push({
           from: ownerName,
+          fromRef: ownerRef,
           fromModule: '', // will be resolved later
           to: depName,
           toType: isController ? 'controller' : 'view',
@@ -241,6 +251,8 @@ export function parseFile(filePath: string): ParsedFile {
     localVars: new Map(),
     importAliases: new Map(),
     importedNames: new Map(),
+    extenderDefs: new Map(),
+    importSources: new Map(),
   };
 
   // Collect import aliases (import { X as Y } from '...')
@@ -250,6 +262,7 @@ export function parseFile(filePath: string): ParsedFile {
         spec.localName,
         spec.isDefault ? spec.localName : spec.originalName,
       );
+      result.importSources.set(spec.localName, spec.fromPath);
     }
     if (spec.isRenamed) {
       result.importAliases.set(spec.localName, {
@@ -288,7 +301,7 @@ export function parseFile(filePath: string): ParsedFile {
       });
 
       // Collect getController/getView calls within the class
-      collectRuntimeDeps(node, sourceFile, className, result.runtimeDeps);
+      collectRuntimeDeps(node, sourceFile, className, `class:${className}`, result.runtimeDeps);
     }
 
     // Exported variable statements (module definitions & extender consts)
@@ -318,11 +331,21 @@ export function parseFile(filePath: string): ParsedFile {
         }
 
         // Extender mixin: const foo = (Base: ...) => class ... extends Base { ... }
-        // Collect runtime deps from arrow function class bodies
+        // Collect runtime deps from arrow function class bodies.
         if (decl.initializer && ts.isArrowFunction(decl.initializer)) {
-          const arrowBody = decl.initializer.body;
-          if (ts.isClassExpression(arrowBody)) {
-            collectRuntimeDeps(arrowBody, sourceFile, varName, result.runtimeDeps);
+          const arrowBody = unwrapClassExpression(decl.initializer.body);
+          if (arrowBody) {
+            result.extenderDefs.set(varName, {
+              varName,
+              className: arrowBody.name?.text ?? '',
+            });
+            collectRuntimeDeps(
+              arrowBody,
+              sourceFile,
+              varName,
+              `ext:${relPath}#${varName}`,
+              result.runtimeDeps,
+            );
           }
         }
       }

@@ -14,6 +14,7 @@ import {
   buildInheritanceChains,
   findStandaloneRegistrations,
   resolveAliasesInClasses,
+  resolveExtenderDefinitions,
   resolveModuleClassRefs,
   resolveRuntimeDeps,
   validateData,
@@ -87,8 +88,12 @@ function main(): void {
     );
     console.log(`Built ${inheritanceChains.length} inheritance chains`);
 
+    // 5a. Resolve extender definitions (defining file + returned class name)
+    const extenderRefs = resolveExtenderDefinitions(modules, fileByRelPath);
+    console.log(`Resolved ${extenderRefs.size} distinct extender functions`);
+
     // 6. Resolve runtime dependencies
-    const runtimeDependencies = resolveRuntimeDeps(allParsedFiles, modules);
+    const runtimeDependencies = resolveRuntimeDeps(allParsedFiles, modules, extenderRefs);
     console.log(`Found ${runtimeDependencies.length} runtime dependencies`);
 
     // 7. Validate

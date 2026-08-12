@@ -4,6 +4,7 @@ export const GRID_CORE_ROOT = path.resolve(__dirname, '..', '..', '..', 'grid_co
 export const OUTPUT_DIR = path.resolve(__dirname, '..', '..', 'artifacts');
 
 export const MODULE_SUFFIX = 'Module';
+export const TS_ALIAS_PREFIX = '@ts/grids/grid_core/';
 export const MODULES_PREFIX = 'modules.';
 export const MODULE_ITEM_CLASS = 'ModuleItem';
 export const M_MODULES_PATH = 'm_modules';
