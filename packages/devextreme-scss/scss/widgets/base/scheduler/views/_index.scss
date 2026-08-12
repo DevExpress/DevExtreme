@@ -332,6 +332,21 @@ $scheduler-month-date-text-padding: 6px;
     border-right: $scheduler-base-border;
     border-right-color: $scheduler-base-border-color;
   }
+
+  > .dx-scheduler-group-row:first-child > .dx-scheduler-group-header:first-child {
+    border-top-color: transparent;
+  }
+
+  .dx-scheduler-group-row:not(:first-child) .dx-scheduler-group-row:first-child > .dx-scheduler-group-header:first-child {
+    border-top-color: $scheduler-base-border-color;
+  }
+}
+
+.dx-scheduler-work-space-vertical-group-table,
+.dx-scheduler-group-table {
+  > .dx-scheduler-group-flex-container:not(.dx-scheduler-group-flex-container-hierarchical) > .dx-scheduler-group-row > .dx-scheduler-group-header:first-child {
+    border-top-color: transparent;
+  }
 }
 
 .dx-scheduler-group-flex-container-hierarchical {
