@@ -4,6 +4,11 @@ import { createRequire } from 'node:module';
 import { readdir, readFile, rm } from 'node:fs/promises';
 import StyleDictionary from 'style-dictionary';
 import { registerTransforms } from './transforms.mjs';
+import {
+  buildAvailableNames,
+  collectCustomPropertyReferences,
+  collectTokenReferences,
+} from './consumed-tokens.ts';
 
 // Suppress ONE known noisy sd-transforms warning about unresolvable
 // {font-weight…} references inside math expressions. Scoped to console.warn
@@ -123,6 +128,9 @@ const tokensDir = path.dirname(require.resolve('@devexpress/design-tokens-intern
 const buildPath = `${path.resolve(dirname, '../../scss/_design-system')}/`;
 
 const THEME_NAME = 'fluent';
+const THEME_FOLDER = 'fluent-next';
+
+const themePath = path.resolve(dirname, `../../scss/widgets/${THEME_FOLDER}`);
 
 const FLUENT_PALETTES = [
   'blue',
@@ -173,10 +181,10 @@ const getModeFiles = (mode) => [
   `semantic/colors/${THEME_NAME}/${mode}`,
 ];
 
-const getComponentThemeFiles = () => [
-  ...getModeFiles('light'),
-  `components/core/theme/${THEME_NAME}`,
-];
+// Source files behind the SCSS bridge. The component tier is absent on purpose: its tokens only
+// alias the semantic roles the theme already reads, so emitting them added unreferenced custom
+// properties. Absent from the bridge, `ds.$button-color-bg-rest` is now a Sass error.
+const getBridgeFiles = () => getModeFiles('light');
 
 StyleDictionary.registerFormat({
   name: 'scssToCss',
@@ -291,21 +299,10 @@ const createModeConfig = (mode) => createConfig(mode, getModeFiles(mode), [
   },
 ]);
 
-const createComponentThemeConfig = () => createConfig('components-theme', getComponentThemeFiles(), [
-  {
-    destination: `${THEME_NAME}/components/theme.scss`,
-    format: 'css/variables',
-    filter: (token) => normalizeFilePath(token).includes(`components/core/theme/${THEME_NAME}.json`),
-    options: FILE_OPTIONS,
-  },
-]);
-
-// All token names for the SCSS bridge file: the common + light-mode + component
-// *theme* (color) set. Component *size* tokens are intentionally excluded — fluent-next
-// maps sizes onto the base scales (spacing/font-size/border-radius/…), so no widget
-// references the component `*-layout-*` tokens and they are not emitted (see
-// widgets/fluent-next/_design-system.scss).
-const createDsConfig = () => createConfig('ds', getComponentThemeFiles(), [
+// Component *size* tokens are excluded for the same reason as the component theme: fluent-next
+// maps sizes onto the base scales (spacing/font-size/border-radius/…), so no widget would read the
+// `*-layout-*` names (see widgets/fluent-next/_design-system.scss).
+const createDsConfig = () => createConfig('ds', getBridgeFiles(), [
   {
     destination: 'variables/_ds.scss',
     format: 'scssToCss',
@@ -315,7 +312,6 @@ const createDsConfig = () => createConfig('ds', getComponentThemeFiles(), [
 const configs = [
   ...FLUENT_PALETTES.map(createPaletteConfig),
   ...FLUENT_MODES.map(createModeConfig),
-  createComponentThemeConfig(),
   createDsConfig(),
 ];
 
@@ -359,6 +355,58 @@ async function validateReferences() {
   return files.length;
 }
 
+async function collectThemeStyleSheets() {
+  const entries = await readdir(themePath, { withFileTypes: true, recursive: true });
+
+  return entries
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.scss'))
+    .map((entry) => path.join(entry.parentPath, entry.name));
+}
+
+// Every token a widget reads must still exist in the package. Without this a deleted token surfaces
+// much later as a Sass "Undefined variable", one name per rebuild, with no hint that a bump caused
+// it. Read from the flat index, not the bridge: it carries the version for the message.
+async function validateConsumedTokens() {
+  const { version, tokens } = JSON.parse(
+    await readFile(path.join(tokensDir, 'tokens.flat.json'), 'utf-8'),
+  );
+  const availableNames = buildAvailableNames(
+    Object.keys(tokens),
+    new Set(getBridgeFiles()),
+  );
+
+  const referenced = new Map();
+
+  for (const file of await collectThemeStyleSheets()) {
+    const content = await readFile(file, 'utf-8');
+    const source = path.relative(themePath, file);
+    const found = [
+      ...collectTokenReferences(content, source).map((name) => [name, `ds.$${name}`]),
+      ...collectCustomPropertyReferences(content, source).map((name) => [name, `var(--dxds-${name})`]),
+    ];
+
+    for (const [name, reference] of found) {
+      if (!referenced.has(name)) {
+        referenced.set(name, { file, reference });
+      }
+    }
+  }
+
+  const missing = [...referenced].filter(([name]) => !availableNames.has(name));
+
+  if (missing.length > 0) {
+    const details = missing
+      .map(([, { file, reference }]) => `  ${reference} (first used in ${path.relative(themePath, file)})`)
+      .join('\n');
+
+    throw new Error(
+      `Tokens used by ${THEME_FOLDER} but absent from @devexpress/design-tokens-internal ${version}:\n${details}`,
+    );
+  }
+
+  return referenced.size;
+}
+
 async function build() {
   await rm(buildPath, { recursive: true, force: true });
 
@@ -372,8 +420,10 @@ async function build() {
   }
 
   const fileCount = await validateReferences();
+  const consumedCount = await validateConsumedTokens();
 
   console.log(`Design tokens generated: ${fileCount} files in ${buildPath}`);
+  console.log(`Design tokens consumed by ${THEME_FOLDER}: ${consumedCount} verified against the package`);
 }
 
 await build();
