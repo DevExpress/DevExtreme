@@ -114,6 +114,7 @@ export default [
           'yargs',
           'treshold', // should be updated to 'threshold' in the codebase
           'callstack',
+          'reseller',
         ];
 
         return spellcheckRule;
@@ -489,6 +490,14 @@ export default [
       globals: {
         testUtils: true,
       },
+    },
+  },
+
+  {
+    files: ['testing/apiMocks/xmla/**/*.ts'],
+    rules: {
+      '@stylistic/quotes': 'off',
+      'spellcheck/spell-checker': 'off',
     },
   },
 
