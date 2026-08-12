@@ -744,7 +744,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     if (isNeedReshape) {
       this._isReload = true;
     }
-    e.changes?.forEach((change) => { change.index ??= -1; });
+    e.changes.forEach((change) => { change.index ??= -1; });
     super.pushHandler(e);
   }
 
