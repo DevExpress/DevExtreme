@@ -1,5 +1,4 @@
 @use "sass:math";
-@use "sass:color";
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
@@ -38,10 +37,10 @@
   $scheduler-tooltip-remove-margin-top: $scheduler-tooltip-remove-margin-block-start,
   $scheduler-common-collector-margin: $scheduler-common-collector-margin,
   $scheduler-common-collector-size: $scheduler-common-collector-size,
-  $scheduler-appointment-content-padding-2: $scheduler-all-day-appointment-content-padding,
+  $scheduler-appointment-content-horizontal-padding: $scheduler-all-day-appointment-content-padding,
   $scheduler-appointment-recurrence-icon-top: $scheduler-appointment-recurrence-icon-inset-block-start,
   $scheduler-header-panel-current-time-cell-height: $scheduler-header-panel-current-time-cell-height,
-  $scheduler-appointment-content-padding-3: $scheduler-recurrence-appointment-content-padding,
+  $scheduler-appointment-content-recurrence-padding: $scheduler-recurrence-appointment-content-padding,
   $scheduler-rtl-padding: $scheduler-rtl-padding,
   $scheduler-appointment-collector-width: $scheduler-appointment-collector-width,
   $scheduler-appointment-content-padding-right: $scheduler-appointment-content-padding-inline-end,
@@ -400,7 +399,7 @@
 
     .dx-scheduler-header-panel-cell-date:last-child {
       color: $scheduler-inverted-content-rest;
-      background-color: $scheduler-current-time-cell-content-rest;
+      background-color: $scheduler-current-time-cell-date-bg-rest;
       display: inline-flex;
       align-items: center;
       justify-content: center;

@@ -1,5 +1,4 @@
 @use "sass:math";
-@use "sass:color";
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
@@ -127,12 +126,12 @@
 @include baseTreeView.treeview-checkbox(
   $tree-view-checkbox-container-size,
   $tree-view-content-rest,
-  $checkbox-border-color-focused,
-  $tree-view-item-content-selected,
-  $tree-view-item-bg-selected,
-  $tree-view-bg-focused,
-  $tree-view-content-focused,
-  $tree-view-item-border-radius
+  $checkbox-border-color-focused: $tree-view-checkbox-checked-border-focused,
+  $treeview-item-selected-color: $tree-view-item-content-selected,
+  $treeview-item-selected-bg: $tree-view-item-bg-selected,
+  $treeview-focused-bg: $tree-view-bg-focused,
+  $treeview-focus-color: $tree-view-content-focused,
+  $border-radius: $tree-view-item-border-radius
 );
 @include baseTreeView.treeview-aux-items(
   $tree-view-search-box-margin-block-end,
