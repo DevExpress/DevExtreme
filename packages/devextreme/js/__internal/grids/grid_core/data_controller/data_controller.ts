@@ -62,8 +62,11 @@ import type {
   PagingOptionName,
   PagingResult,
   ProcessedItem,
+  RefreshOptions,
+  UserState,
 } from './types';
 import { resolvePaginate, syncPaging } from './utils/paging';
+import { getRefreshOptions } from './utils/refresh';
 import { generateRowValues } from './utils/row_values';
 
 export class DataController extends DataHelperMixin(modules.Controller) {
@@ -1647,17 +1650,17 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return this.changePaging('pageSize', value);
   }
 
-  public isCustomLoading() {
-    return this._isCustomLoading || this._dataSource?.isCustomLoading();
+  public isCustomLoading(): boolean {
+    return this._isCustomLoading || !!this._dataSource?.isCustomLoading();
   }
 
-  public beginCustomLoading(messageText?: string) {
+  public beginCustomLoading(messageText?: string): void {
     this._isCustomLoading = true;
     this._loadingText = messageText ?? '';
     this._fireLoadingChanged();
   }
 
-  public endCustomLoading() {
+  public endCustomLoading(): void {
     this._isCustomLoading = false;
     this._loadingText = undefined;
     this._fireLoadingChanged();
@@ -1666,56 +1669,54 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended: virtual_scrolling, selection
    */
-  public refresh(options) {
-    if (options === true) {
-      options = { reload: true, changesOnly: true };
-    } else if (!options) {
-      options = { reload: true, lookup: true };
-    }
+  public refresh(options?: boolean | RefreshOptions): DeferredObj<unknown> {
+    const refreshOptions = getRefreshOptions(options);
 
     const dataSource = this.getDataSource();
-    const { changesOnly } = options;
-    // @ts-expect-error
-    const d = new Deferred();
+    const { changesOnly } = refreshOptions;
+    const d = Deferred();
 
     const customizeLoadResult = (): void => {
       this._repaintChangesOnly = !!changesOnly;
     };
 
-    when(!options.lookup || this._columnsController.refresh()).always(() => {
-      if (options.load || options.reload) {
+    const columnsRefreshResult = refreshOptions.lookup ? this._columnsController.refresh() : true;
+    when(columnsRefreshResult).always(() => {
+      if (refreshOptions.load || refreshOptions.reload) {
         // @ts-expect-error `customizeLoadResult` is an internal DataSource event
         dataSource?.on('customizeLoadResult', customizeLoadResult);
 
-        when(this.reload(options.reload, changesOnly)).always(() => {
+        when(this.reload(refreshOptions.reload, changesOnly)).always(() => {
           // @ts-expect-error `customizeLoadResult` is an internal DataSource event
           dataSource?.off('customizeLoadResult', customizeLoadResult);
           this._repaintChangesOnly = undefined;
-        }).done(d.resolve).fail(d.reject);
+        }).done(d.resolve as (...args: unknown[]) => void)
+          .fail(d.reject as (...args: unknown[]) => void);
       } else {
         this.updateItems({
           changeType: 'refresh',
-          repaintChangesOnly: options.changesOnly,
+          repaintChangesOnly: refreshOptions.changesOnly,
         });
         d.resolve();
       }
     });
 
+    // @ts-expect-error
     return d.promise();
   }
 
-  public getVisibleRows() {
+  public getVisibleRows(): ProcessedItem[] {
     return this.items();
   }
 
-  protected _disposeDataSource() {
+  protected _disposeDataSource(): void {
     if (this._dataSource?._eventsStrategy) {
       this._dataSource._eventsStrategy.off('loadingChanged', this.readyWatcher);
     }
     this.setDataSource(null);
   }
 
-  public dispose() {
+  public dispose(): void {
     this._disposeDataSource();
     super.dispose();
   }
@@ -1723,26 +1724,26 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended editing
    */
-  public repaintRows(rowIndexes, changesOnly) {
-    rowIndexes = Array.isArray(rowIndexes) ? rowIndexes : [rowIndexes];
+  public repaintRows(rowIndexes: number | (number | undefined)[] | undefined, changesOnly?: boolean): void {
+    const rowIndices = Array.isArray(rowIndexes) ? rowIndexes : [rowIndexes];
 
-    if (rowIndexes.length > 1 || isDefined(rowIndexes[0])) {
+    if (rowIndices.length > 1 || isDefined(rowIndices[0])) {
       this.updateItems({
         changeType: 'update',
-        rowIndices: rowIndexes,
+        rowIndices: rowIndices as number[],
         isFullUpdate: !changesOnly,
       });
     }
   }
 
-  public skipProcessingPagingChange(fullName) {
-    return this._skipProcessingPagingChange && (fullName === 'paging.pageIndex' || fullName === 'paging.pageSize');
+  public skipProcessingPagingChange(fullName: string): boolean {
+    return !!this._skipProcessingPagingChange && (fullName === 'paging.pageIndex' || fullName === 'paging.pageSize');
   }
 
   /**
    * @extended: TreeList's state_storing
    */
-  public getUserState(): any {
+  public getUserState(): UserState {
     return {
       searchText: this.option('searchPanel.text'),
       pageIndex: this.pageIndex(),
@@ -1750,56 +1751,56 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     };
   }
 
-  public getCachedStoreData() {
-    return this._dataSource?.getCachedStoreData();
+  public getCachedStoreData(): RawItemData[] | undefined {
+    return this._dataSource?.getCachedStoreData() as RawItemData[] | undefined;
   }
 
   /**
    * @extended: virtual_scrolling
    */
-  public isLastPageLoaded() {
+  public isLastPageLoaded(): boolean {
     const pageIndex = this.pageIndex();
     const pageCount = this.pageCount();
     return pageIndex === (pageCount - 1);
   }
 
-  public load(): any {
-    return this._dataSource?.load();
+  public load(): DeferredObj<unknown> {
+    return this._dataSource?.load() as DeferredObj<unknown>;
   }
 
   /**
    * @extended: editing, virtual_scrolling
    */
 
-  public reload(reload?, changesOnly?): any {
-    return this._dataSource?.reload(reload, changesOnly);
+  public reload(reload?: boolean, changesOnly?: boolean): DeferredObj<unknown> {
+    return this._dataSource?.reload(reload, changesOnly) as DeferredObj<unknown>;
   }
 
-  public push(...args) {
+  public push(...args: unknown[]): unknown {
     return this._dataSource?.push(...args);
   }
 
-  private itemsCount() {
-    return this._dataSource ? this._dataSource?.itemsCount() : 0;
+  private itemsCount(): number {
+    return (this._dataSource ? this._dataSource.itemsCount() : 0) as number;
   }
 
-  public totalItemsCount() {
-    return this._dataSource ? this._dataSource?.totalItemsCount() : 0;
+  public totalItemsCount(): number {
+    return (this._dataSource ? this._dataSource.totalItemsCount() : 0) as number;
   }
 
-  public hasKnownLastPage() {
-    return this._dataSource ? this._dataSource?.hasKnownLastPage() : true;
+  public hasKnownLastPage(): boolean {
+    return (this._dataSource ? this._dataSource.hasKnownLastPage() : true) as boolean;
   }
 
   /**
    * @extended: state_storing
    */
-  public isLoaded() {
-    return this._dataSource ? this._dataSource?.isLoaded() : true;
+  public isLoaded(): boolean {
+    return (this._dataSource ? this._dataSource.isLoaded() : true) as boolean;
   }
 
-  public totalCount() {
-    return this._dataSource ? this._dataSource?.totalCount() : 0;
+  public totalCount(): number {
+    return (this._dataSource ? this._dataSource.totalCount() : 0) as number;
   }
 
   public hasLoadOperation(): boolean {
