@@ -12,7 +12,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-plusplus */
 import type { DataSource, Store } from '@js/common/data';
-import $ from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
 import { deferRender } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
@@ -232,7 +231,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       'endCustomLoading',
       'filter',
       'getCombinedFilter',
-      'getDataByKeys',
       'getDataSource',
       'getKeyByRowIndex',
       'getRowIndexByKey',
@@ -1609,24 +1607,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public getRowIndexOffset(byLoadedRows?: boolean): number {
     return 0;
-  }
-
-  private getDataByKeys(rowKeys: RowKey[]): DeferredObj<RawItemData[]> {
-    const result = Deferred<RawItemData[]>();
-    const deferreds: DeferredObj<RawItemData>[] = [];
-    const data: RawItemData[] = [];
-
-    each(rowKeys, (index: number, key: RowKey) => {
-      deferreds.push(this.byKey(key).done((keyData) => {
-        data[index] = keyData;
-      }));
-    });
-
-    when.apply($, deferreds).always(() => {
-      result.resolve(data);
-    });
-
-    return result;
   }
 
   private changePaging(optionName: PagingOptionName, value?: number): PagingResult {
