@@ -20,8 +20,18 @@ import {
 } from 'fs';
 import { join, resolve, sep } from 'path';
 
+import {
+  collectCustomPropertyReferences,
+  collectTokenReferences,
+  stripScssComments,
+} from '../build/tokens/consumed-tokens';
+
 const packageRoot = process.cwd();
-const themeRoot = join(packageRoot, 'scss', 'widgets', 'fluent-next');
+const widgetsRoot = join(packageRoot, 'scss', 'widgets');
+const themeRoot = join(widgetsRoot, 'fluent-next');
+
+// Labels a stylesheet for error messages: `fluent-next/common/_mixins.scss`.
+const sourceLabel = (file: string): string => file.slice(widgetsRoot.length + 1);
 const registries = JSON.parse(
   readFileSync(join(packageRoot, 'tools', 'naming', 'registries.json'), 'utf8'),
 );
@@ -61,12 +71,6 @@ const walk = (dir: string, extension: string): string[] => {
   });
   return result;
 };
-
-const stripComments = (content: string): string => content
-  .replace(/\/\/[^\n\r]*/g, '')
-  .split(/\/\*|\*\//)
-  .filter((_, index) => index % 2 === 0)
-  .join('');
 
 /**
  * Ranges of `@use … with ( … )` argument lists. Their left-hand sides are the *base module's*
@@ -152,7 +156,7 @@ const findIncludeRanges = (content: string): [number, number][] => {
  * variables from the 14 function locals in color.scss and button/_mixins.scss.
  */
 const parseFile = (file: string): Parsed => {
-  const content = stripComments(readFileSync(file, 'utf8'));
+  const content = stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file));
   const withRanges = [
     ...findWithRanges(content),
     ...findSignatureRanges(content),
@@ -452,7 +456,7 @@ const findings = {
      * parameter's first segment happens to be a component name.
      */
     const parameters = new Set(files.flatMap(({ file }) => {
-      const content = stripComments(readFileSync(join(themeRoot, file), 'utf8'));
+      const content = stripScssComments(readFileSync(join(themeRoot, file), 'utf8'), sourceLabel(join(themeRoot, file)));
       return findSignatureRanges(content)
         .flatMap(([from, to]) => [...content.slice(from, to).matchAll(/\$[a-z0-9_-]+/gi)]
           .map((match) => match[0]));
@@ -571,7 +575,7 @@ const findings = {
   publicSurfaceUnused: (() => {
     const declared = new Set<string>();
     THEMES.forEach((theme) => walk(join(packageRoot, 'scss', 'widgets', theme), '.scss')
-      .forEach((file) => [...stripComments(readFileSync(file, 'utf8'))
+      .forEach((file) => [...stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file))
         .matchAll(/(--dx-[a-z0-9-]+)\s*:/g)]
         .forEach((match) => declared.add(match[1]))));
     const consumers = publicNameConsumers();
@@ -582,7 +586,7 @@ const findings = {
   publicSurfaceUndeclared: (() => {
     const declared = new Set<string>();
     THEMES.forEach((theme) => walk(join(packageRoot, 'scss', 'widgets', theme), '.scss')
-      .forEach((file) => [...stripComments(readFileSync(file, 'utf8'))
+      .forEach((file) => [...stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file))
         .matchAll(/(--dx-[a-z0-9-]+)\s*:/g)]
         .forEach((match) => declared.add(match[1]))));
     const consumers = publicNameConsumers();
@@ -596,7 +600,7 @@ const findings = {
     const perTheme = THEMES.map((theme) => {
       const names = new Set<string>();
       walk(join(packageRoot, 'scss', 'widgets', theme), '.scss').forEach((file) => {
-        [...stripComments(readFileSync(file, 'utf8')).matchAll(/(--dx-[a-z0-9-]+)\s*:/g)]
+        [...stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file)).matchAll(/(--dx-[a-z0-9-]+)\s*:/g)]
           .forEach((match) => names.add(match[1]));
       });
       return { theme, names };
@@ -634,19 +638,27 @@ test('registries: the grammar stays decidable', () => {
   });
 });
 
-test('registries are in sync with the generated design tokens', () => {
-  // Guards against editing registries.json by hand or letting it drift from the token package.
-  const generatedComponentTokens = readFileSync(
-    join(packageRoot, 'scss', '_design-system', 'fluent', 'components', 'theme.scss'),
+test('registries are in sync with the design token package', () => {
+  /*
+   * Guards against editing registries.json by hand or letting it drift from the package. Counted
+   * from the package's flat index, the same source derive-registries.mjs reads — the component tier
+   * is no longer emitted as SCSS, so there is no generated file left to count.
+   */
+  const flatTokens = JSON.parse(readFileSync(
+    require.resolve('@devexpress/design-tokens-internal/tokens.flat.json'),
     'utf8',
-  );
-  const tokenCount = [...generatedComponentTokens.matchAll(/--dxds-[a-z0-9-]+:/g)].length;
+  ));
+  const tokenCount = Object.keys(flatTokens.tokens)
+    .filter((key) => key.startsWith('components/core/theme/fluent:')).length;
+
   expect(tokenCount).toBe(registries.derivedFrom.componentTokenCount);
 });
 
 test('no name carries the theme prefix', () => {
   const offenders = walk(themeRoot, '.scss').flatMap((file) => {
-    const found = [...stripComments(readFileSync(file, 'utf8')).matchAll(/\$fluent-[\w-]+/g)];
+    const found = [
+      ...stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file)).matchAll(/\$fluent-[\w-]+/g),
+    ];
     return [...new Set(found.map((match) => match[0]))]
       .map((name) => `${resolve(file).slice(resolve(themeRoot).length + 1)}: ${name}`);
   });
@@ -726,6 +738,29 @@ test('migrated components follow the grammar strictly', () => {
       if (violation) offenders.push(`${file} ${variable}: ${violation}`);
     });
   });
+
+  expect(offenders).toEqual([]);
+});
+
+test('design tokens are read only where variables are declared', () => {
+  // Covers `@use … with ()` arguments too, which stylelint cannot reach — it lints declarations.
+  const offenders = walk(themeRoot, '.scss')
+    .filter((file) => !DECLARATION_FILES.some((name) => file.endsWith(name)))
+    .flatMap((file) => collectTokenReferences(readFileSync(file, 'utf8'), sourceLabel(file))
+      .map((token) => `${sourceLabel(file)}: ds.$${token}`))
+    .sort();
+
+  expect(offenders).toEqual([]);
+});
+
+test('design tokens are never read as a raw custom property', () => {
+  // Banned everywhere, declaration files included: `var(--dxds-…)` compiles even when the name is
+  // wrong, while the bridge fails the build. stylelint covers declaration values, not at-rule
+  // parameters, and that is where these would appear.
+  const offenders = walk(themeRoot, '.scss')
+    .flatMap((file) => collectCustomPropertyReferences(readFileSync(file, 'utf8'), sourceLabel(file))
+      .map((token) => `${sourceLabel(file)}: var(--dxds-${token})`))
+    .sort();
 
   expect(offenders).toEqual([]);
 });
