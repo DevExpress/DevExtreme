@@ -266,10 +266,10 @@ $scheduler-renovation-virtual-row-height: 50px !default;
 
 
 // Design sizing values (parametrizable; fluent-next injects tokens)
-$scheduler-appointment-content-padding-2: 0 7px !default;
+$scheduler-appointment-content-horizontal-padding: 0 7px !default;
 $scheduler-appointment-recurrence-icon-top: 9px !default;
 $scheduler-header-panel-current-time-cell-height: 2px !default;
-$scheduler-appointment-content-padding-3: 0 25px 0 7px !default;
+$scheduler-appointment-content-recurrence-padding: 0 25px 0 7px !default;
 $scheduler-rtl-padding: 0 7px 0 25px !default;
 $scheduler-appointment-collector-width: 24px !default;
 $scheduler-appointment-content-padding-right: 5px !default;
@@ -325,7 +325,7 @@ $scheduler-appointment-content-padding-right: 5px !default;
   .dx-scheduler-work-space-work-week,
   .dx-scheduler-work-space-day {
     .dx-scheduler-all-day-appointment .dx-scheduler-appointment-content {
-      padding: $scheduler-appointment-content-padding-2;
+      padding: $scheduler-appointment-content-horizontal-padding;
     }
 
     .dx-scheduler-appointment-reduced {
@@ -465,11 +465,11 @@ $scheduler-appointment-content-padding-right: 5px !default;
 
   .dx-scheduler-work-space-month {
     .dx-scheduler-appointment-content {
-      padding: $scheduler-appointment-content-padding-2;
+      padding: $scheduler-appointment-content-horizontal-padding;
     }
 
     .dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
-      padding: $scheduler-appointment-content-padding-3;
+      padding: $scheduler-appointment-content-recurrence-padding;
 
       .dx-rtl & {
         padding: $scheduler-rtl-padding;

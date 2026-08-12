@@ -1,6 +1,5 @@
 @use "sass:math";
 @use "../common/colors" as *;
-@use "sass:color";
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
@@ -8,7 +7,7 @@
   $diagram-root-height: $diagram-height,
   $diagram-root-min-height: $diagram-min-height,
   $diagram-toolbar-wrapper-padding: $diagram-toolbar-wrapper-padding,
-  $diagram-button-min-height: $fluent-diagram-button-min-height,
+  $diagram-button-min-height: $diagram-toolbox-input-button-min-height,
   $diagram-popup-content-padding: $diagram-popup-content-padding,
   $diagram-colorview-palette-min-width: $diagram-color-view-palette-min-width,
   $diagram-colorview-hue-scale-cell-margin-left: $diagram-color-view-hue-scale-cell-margin-inline-start,

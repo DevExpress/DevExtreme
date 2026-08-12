@@ -3,15 +3,14 @@ $size: null !default;
 @use "colors" as *;
 @use "../../_design-system/variables/ds" as ds;
 
-$fluent-size-postfix: null !default;
+$theme-marker-size-postfix: null !default;
 $global-font-size: null !default;
 $global-inline-widget-height: null !default;
 $global-icon-size: null !default;
 $global-border-radius: null !default;
 
-
 @if $size == "default" {
-  $fluent-size-postfix: "" !default;
+  $theme-marker-size-postfix: "" !default;
 
   // Font sizes
   $global-font-size: ds.$font-size-base-md !default;
@@ -23,7 +22,7 @@ $global-border-radius: null !default;
 }
 
 @if $size == "compact" {
-  $fluent-size-postfix: ".compact" !default;
+  $theme-marker-size-postfix: ".compact" !default;
 
   // Font sizes
   $global-font-size: ds.$font-size-base-sm !default;
@@ -36,7 +35,6 @@ $global-border-radius: null !default;
 
 // Base bordered inline widgets sizes
 $global-border-width: ds.$border-width-10 !default;
-
 
 :root {
   --dx-component-height: #{$global-inline-widget-height};

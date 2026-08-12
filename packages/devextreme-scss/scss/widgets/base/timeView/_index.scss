@@ -5,7 +5,7 @@
 
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $timeview-numberbox-width: 70px !default;
-$timeview-numberbox-spin-touch-friendly-width-2: 110px !default;
+$timeview-numberbox-spin-touch-friendly-width: 110px !default;
 
 .dx-timeview {
   &.dx-state-disabled,
@@ -25,6 +25,6 @@ $timeview-numberbox-spin-touch-friendly-width-2: 110px !default;
   width: $timeview-numberbox-width;
 
   &.dx-numberbox-spin-touch-friendly {
-    width: $timeview-numberbox-spin-touch-friendly-width-2;
+    width: $timeview-numberbox-spin-touch-friendly-width;
   }
 }

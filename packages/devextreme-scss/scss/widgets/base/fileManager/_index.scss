@@ -21,7 +21,7 @@ $filemanager-i-cancel-width: 16px !default;
 $filemanager-i-cancel-height: 16px !default;
 $filemanager-progress-box-margin-bottom: 8px !default;
 $filemanager-progress-box-border-radius: 2px !default;
-$filemanager-progress-box-padding-2: 10px 0 10px 10px !default;
+$filemanager-progress-panel-box-padding: 10px 0 10px 10px !default;
 $filemanager-progress-box-without-close-button-padding-right: 10px !default;
 $filemanager-progress-box-image-margin-right: 10px !default;
 $filemanager-progress-box-common-padding: 5px 0 !default;
@@ -40,8 +40,8 @@ $filemanager-breadcrumbs-border-bottom: 1px solid !default;
 $filemanager-menu-item-content-padding-left: 2px !default;
 $filemanager-menu-item-content-padding-right: 2px !default;
 $filemanager-menu-item-content-margin: 0 10px !default;
-$filemanager-menu-item-content-padding-left-2: 1px !default;
-$filemanager-menu-item-content-padding-right-2: 1px !default;
+$filemanager-breadcrumbs-path-separator-padding-left: 1px !default;
+$filemanager-breadcrumbs-path-separator-padding-right: 1px !default;
 $filemanager-thumbnails-view-port-padding: 5px !default;
 $filemanager-thumbnails-item-width: 100px !default;
 $filemanager-thumbnails-item-height: 100px !default;
@@ -50,12 +50,12 @@ $filemanager-thumbnails-item-margin: 5px !default;
 $filemanager-thumbnails-item-content-padding: 13px 0 10px !default;
 $filemanager-thumbnails-item-spacer-height: 10px !default;
 $filemanager-button-content-padding: 10px 11px !default;
-$filemanager-overlay-content-min-width-2: 300px !default;
+$filemanager-dialog-min-width: 300px !default;
 $filemanager-overlay-content-min-height: 300px !default;
 $filemanager-overlay-content-max-height: 400px !default;
-$filemanager-overlay-content-max-width-2: 340px !default;
-$filemanager-overlay-content-min-height-2: 180px !default;
-$filemanager-overlay-content-max-height-2: 180px !default;
+$filemanager-dialog-name-editor-max-width: 340px !default;
+$filemanager-dialog-name-editor-min-height: 180px !default;
+$filemanager-dialog-name-editor-max-height: 180px !default;
 $filemanager-progressbox-cancel-button-margin-top: 5px !default;
 
 $filemanager-progress-title-font-size: 18px !default;
@@ -154,7 +154,7 @@ $filemanager-drawer-panel-content-width: 30% !default; // dx-relative-%
   }
 
   .dx-filemanager-progress-box {
-    padding: $filemanager-progress-box-padding-2;
+    padding: $filemanager-progress-panel-box-padding;
     display: flex;
     align-items: center;
 
@@ -285,8 +285,8 @@ $filemanager-drawer-panel-content-width: 30% !default; // dx-relative-%
     }
 
     .dx-filemanager-breadcrumbs-path-separator-item .dx-menu-item-content {
-      padding-left: $filemanager-menu-item-content-padding-left-2;
-      padding-right: $filemanager-menu-item-content-padding-right-2;
+      padding-left: $filemanager-breadcrumbs-path-separator-padding-left;
+      padding-right: $filemanager-breadcrumbs-path-separator-padding-right;
     }
 
     .dx-filemanager-breadcrumbs-separator-item,
@@ -505,21 +505,21 @@ $filemanager-drawer-panel-content-width: 30% !default; // dx-relative-%
 }
 
 .dx-filemanager-dialog-popup > .dx-overlay-content {
-  min-width: $filemanager-overlay-content-min-width-2;
+  min-width: $filemanager-dialog-min-width;
   max-width: $filemanager-overlay-content-max-width;
   min-height: $filemanager-overlay-content-min-height;
   max-height: $filemanager-overlay-content-max-height;
 }
 
 .dx-filemanager-dialog-name-editor-popup > .dx-overlay-content {
-  max-width: $filemanager-overlay-content-max-width-2;
-  min-height: $filemanager-overlay-content-min-height-2;
-  max-height: $filemanager-overlay-content-max-height-2;
+  max-width: $filemanager-dialog-name-editor-max-width;
+  min-height: $filemanager-dialog-name-editor-min-height;
+  max-height: $filemanager-dialog-name-editor-max-height;
 }
 
 .dx-filemanager-dialog-delete-item-popup > .dx-overlay-content {
-  max-width: $filemanager-overlay-content-max-width-2;
-  min-height: $filemanager-overlay-content-min-height-2;
+  max-width: $filemanager-dialog-name-editor-max-width;
+  min-height: $filemanager-dialog-name-editor-min-height;
 
   .dx-popup-content .dx-filemanager-dialog-delete-item {
     overflow-wrap: break-word;

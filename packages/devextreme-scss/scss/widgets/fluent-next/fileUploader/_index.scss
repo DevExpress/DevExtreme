@@ -1,5 +1,4 @@
 @use "sass:math";
-@use "sass:color";
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
@@ -8,7 +7,6 @@
   $fileuploader-button-margin-left: $file-uploader-button-margin-inline-start,
   $fileuploader-upload-button-margin-top: $file-uploader-upload-button-margin-block-start,
   $fileuploader-show-file-list-padding-top: $file-uploader-show-file-list-padding-block-start,
-  $fileuploader-file-container-padding-2: $fluent-fileuploader-file-container-padding-2,
   $fileuploader-button-width: $file-uploader-button-width,
   $fileuploader-button-height: $file-uploader-button-height,
   $fileuploader-button-margin-right: $file-uploader-button-margin-inline-end,
@@ -17,10 +15,10 @@
   $fileuploader-progressbar-height: $file-uploader-progress-bar-height,
   $fileuploader-file-size-padding-left: $file-uploader-file-size-padding-inline-start,
   $fileuploader-file-icon-padding-right: $file-uploader-file-icon-padding-inline-end,
-  $fileuploader-button-margin-left-2: $fluent-fileuploader-button-margin-left-2,
+  $fileuploader-file-container-button-margin-left: $file-uploader-file-container-button-margin-left,
   $fileuploader-cancel-button-position-end-margin-right: $file-uploader-cancel-button-position-end-margin-inline-end,
   $fileuploader-file-size-padding-right: $file-uploader-file-size-padding-inline-end,
-  $fileuploader-file-status-message-margin-bottom-2: $fluent-fileuploader-file-status-message-margin-bottom-2,
+  $fileuploader-file-status-message-line-margin-bottom: $file-uploader-file-status-message-line-margin-block-end,
   $fileuploader-cancel-button-margin-top: $file-uploader-cancel-button-margin-block-start,
   $fileuploader-status-message-font-size: $file-uploader-status-message-font-size,
   $fileuploader-file-size-font-size: $file-uploader-file-size-font-size,

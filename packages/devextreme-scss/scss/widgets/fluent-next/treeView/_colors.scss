@@ -13,14 +13,8 @@ $tree-view-border-rest: ds.$color-border-neutral-default-rest !default;
 $tree-view-item-content-selected: $tree-view-content-rest !default;
 $tree-view-item-bg-selected: ds.$color-surface-neutral-default-selected !default;
 $tree-view-spin-icon-rest: ds.$color-content-neutral-subdued-rest !default;
-$checkbox-border-color-focused: ds.$color-border-primary-compound-active !default;
+$tree-view-checkbox-checked-border-focused: ds.$color-border-primary-compound-active !default;
 
-/*
- * Три роли, вышедшие из одного значения (правило 5): граница невыбранного бокса, глиф чекнутого
- * и заливка indeterminate. Значение у всех трёх одно и то же, поэтому разделение байт-нейтрально;
- * вопрос «должны ли они совпадать» теперь виден в коде, а не спрятан в одном имени —
- * см. DIVERGENCES.md.
- */
 $tree-view-checkbox-border-disabled: ds.$color-content-neutral-default-disabled !default;
 $tree-view-checkbox-icon-disabled: ds.$color-content-neutral-default-disabled !default;
 $tree-view-checkbox-indeterminate-bg-disabled: ds.$color-content-neutral-default-disabled !default;
