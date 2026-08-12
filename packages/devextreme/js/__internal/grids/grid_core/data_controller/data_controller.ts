@@ -50,7 +50,6 @@ import { DataHelperMixin } from './data_helper_mixin';
 import type {
   BinaryDataFilterExpression,
   CallbackFlags,
-  ChangedRow,
   DataChange,
   DataFilter,
   DataSourceAdapterLike,
@@ -62,10 +61,11 @@ import type {
   PagingResult,
   ProcessedItem,
   UpdateChange,
+  UpdateRowChange,
 } from './types';
 import { resolvePaginate, syncPaging } from './utils/paging';
 import {
-  getChangedRowIndices, getRowOperation, pushChangedRow, resetChangedRows,
+  getChangedRowIndices, getRowOperation, isSameGroupRowState, pushChangedRow, resetChangedRows,
 } from './utils/row_changes';
 import { generateRowValues } from './utils/row_values';
 
@@ -830,7 +830,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     rowIndex: number,
     visibleRowIndex: number,
     isPartialUpdate: boolean,
-  ): ChangedRow {
+  ): UpdateRowChange {
     const oldItem = this._items[rowIndex];
 
     this._items[rowIndex] = newItem;
@@ -858,7 +858,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     rowIndex: number,
     rowIndexDelta: number,
     isPartialUpdate: boolean,
-  ): ChangedRow | undefined {
+  ): UpdateRowChange | undefined {
     const visibleRowIndex = rowIndex - rowIndexDelta;
     const item = newItems[rowIndex];
 
@@ -899,7 +899,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     let prevRowIndex = -1;
     let rowIndexCorrection = 0;
 
-    each(rowIndices, (index: number, changedRowIndex: number) => {
+    rowIndices.forEach((changedRowIndex: number) => {
       const rowIndex = changedRowIndex + rowIndexCorrection + rowIndexDelta;
 
       if (prevRowIndex === rowIndex) {
@@ -943,9 +943,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       return true;
     }
 
-    const isCellModified = (row: ProcessedItem): boolean => (
-      row.modifiedValues ? row.modifiedValues[columnIndex] !== undefined : false
-    );
+    const isCellModified = (row: ProcessedItem): boolean => row.modifiedValues?.[columnIndex] !== undefined;
 
     return isCellModified(oldRow) !== isCellModified(newRow);
   }
@@ -964,15 +962,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
 
     if (newItem.rowType === 'group') {
-      if (!oldItem.cells) {
-        return undefined;
-      }
-
-      const isRowStateEquals = newItem.isExpanded === oldItem.isExpanded
-        && newItem.data.isContinuation === oldItem.data.isContinuation
-        && newItem.data.isContinuationOnNextPage === oldItem.data.isContinuationOnNextPage;
-
-      if (!isRowStateEquals) {
+      if (!oldItem.cells || !isSameGroupRowState(oldItem, newItem)) {
         return undefined;
       }
 
@@ -1007,7 +997,12 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     isLiveUpdate?: boolean,
   ): number[] | undefined {
     const changedColumnIndices = this
-      ._getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate);
+      ._getChangedColumnIndices(
+        oldItem,
+        newItem,
+        visibleRowIndex,
+        isLiveUpdate,
+      );
     const columnIndices = changedColumnIndices?.length && this.option('dataRowTemplate')
       ? undefined
       : changedColumnIndices;
@@ -1045,13 +1040,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
 
     if (item1.rowType === 'group' || item1.rowType === 'groupFooter') {
-      const expandedMatch = item1.isExpanded === item2.isExpanded;
       const summaryCellsMatch = JSON.stringify(item1.summaryCells)
         === JSON.stringify(item2.summaryCells);
-      const continuationMatch = item1.data?.isContinuation === item2.data?.isContinuation
-        && item1.data?.isContinuationOnNextPage === item2.data?.isContinuationOnNextPage;
 
-      if (!expandedMatch || !summaryCellsMatch || !continuationMatch) {
+      if (!summaryCellsMatch || !isSameGroupRowState(item1, item2)) {
         return false;
       }
     }

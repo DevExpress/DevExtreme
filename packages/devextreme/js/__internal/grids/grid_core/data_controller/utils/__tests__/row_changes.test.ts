@@ -2,7 +2,8 @@ import { describe, expect, it } from '@jest/globals';
 
 import type { ChangedRows, ProcessedItem, UpdateChange } from '../../types';
 import {
-  equalItems, getChangedRowIndices, getRowOperation, pushChangedRow, resetChangedRows,
+  getChangedRowIndices, getRowOperation, isSameGroupRowState,
+  isSameItem, pushChangedRow, resetChangedRows,
 } from '../row_changes';
 
 const row = (partial: Partial<ProcessedItem>): ProcessedItem => ({
@@ -19,37 +20,37 @@ const emptyChangedRows = (): ChangedRows => ({
   columnIndices: [],
 });
 
-describe('equalItems', () => {
+describe('isSameItem', () => {
   it('should return false when one of the rows is missing', () => {
     const item = row({ key: 1 });
 
-    expect(equalItems(undefined, item)).toBe(false);
-    expect(equalItems(item, undefined)).toBe(false);
-    expect(equalItems(undefined, undefined)).toBe(false);
+    expect(isSameItem(undefined, item)).toBe(false);
+    expect(isSameItem(item, undefined)).toBe(false);
+    expect(isSameItem(undefined, undefined)).toBe(false);
   });
 
   it('should compare keys', () => {
-    expect(equalItems(row({ key: 1 }), row({ key: 1 }))).toBe(true);
-    expect(equalItems(row({ key: 1 }), row({ key: 2 }))).toBe(false);
+    expect(isSameItem(row({ key: 1 }), row({ key: 1 }))).toBe(true);
+    expect(isSameItem(row({ key: 1 }), row({ key: 2 }))).toBe(false);
   });
 
   it('should compare composite keys by value', () => {
     const key = { id: 1, room: 2 };
 
-    expect(equalItems(row({ key }), row({ key: { ...key } }))).toBe(true);
-    expect(equalItems(row({ key }), row({ key: { ...key, room: 3 } }))).toBe(false);
+    expect(isSameItem(row({ key }), row({ key: { ...key } }))).toBe(true);
+    expect(isSameItem(row({ key }), row({ key: { ...key, room: 3 } }))).toBe(false);
   });
 
   it('should ignore the row type unless strict', () => {
     const oldItem = row({ key: 1, rowType: 'data' });
     const newItem = row({ key: 1, rowType: 'detail' });
 
-    expect(equalItems(oldItem, newItem)).toBe(true);
-    expect(equalItems(oldItem, newItem, true)).toBe(false);
+    expect(isSameItem(oldItem, newItem)).toBe(true);
+    expect(isSameItem(oldItem, newItem, true)).toBe(false);
   });
 
   it('should allow the same row type when strict', () => {
-    expect(equalItems(
+    expect(isSameItem(
       row({ key: 1, rowType: 'group' }),
       row({ key: 1, rowType: 'group' }),
       true,
@@ -59,17 +60,53 @@ describe('equalItems', () => {
   it('should compare the editing state of detail rows when strict', () => {
     const detail = row({ key: 1, rowType: 'detail', isEditing: false });
 
-    expect(equalItems(detail, row({ key: 1, rowType: 'detail', isEditing: false }), true))
+    expect(isSameItem(detail, row({ key: 1, rowType: 'detail', isEditing: false }), true))
       .toBe(true);
-    expect(equalItems(detail, row({ key: 1, rowType: 'detail', isEditing: true }), true))
+    expect(isSameItem(detail, row({ key: 1, rowType: 'detail', isEditing: true }), true))
       .toBe(false);
   });
 
   it('should not compare the editing state of non-detail rows', () => {
-    expect(equalItems(
+    expect(isSameItem(
       row({ key: 1, rowType: 'data', isEditing: false }),
       row({ key: 1, rowType: 'data', isEditing: true }),
       true,
+    )).toBe(true);
+  });
+});
+
+describe('isSameGroupRowState', () => {
+  const groupRow = (partial: Partial<ProcessedItem>): ProcessedItem => row({
+    rowType: 'group',
+    isExpanded: true,
+    data: { isContinuation: false, isContinuationOnNextPage: false },
+    ...partial,
+  });
+
+  it('should return true for the same state', () => {
+    expect(isSameGroupRowState(groupRow({}), groupRow({}))).toBe(true);
+  });
+
+  it('should compare the expanded state', () => {
+    expect(isSameGroupRowState(groupRow({}), groupRow({ isExpanded: false }))).toBe(false);
+  });
+
+  it('should compare the continuation flags', () => {
+    expect(isSameGroupRowState(
+      groupRow({}),
+      groupRow({ data: { isContinuation: true, isContinuationOnNextPage: false } }),
+    )).toBe(false);
+
+    expect(isSameGroupRowState(
+      groupRow({}),
+      groupRow({ data: { isContinuation: false, isContinuationOnNextPage: true } }),
+    )).toBe(false);
+  });
+
+  it('should not compare the data beyond the continuation flags', () => {
+    expect(isSameGroupRowState(
+      groupRow({ data: { key: 1, isContinuation: false, isContinuationOnNextPage: false } }),
+      groupRow({ data: { key: 2, isContinuation: false, isContinuationOnNextPage: false } }),
     )).toBe(true);
   });
 });

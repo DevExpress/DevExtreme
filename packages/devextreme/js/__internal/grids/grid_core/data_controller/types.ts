@@ -108,7 +108,7 @@ export type ChangedRows = Required<
   Pick<UpdateChange, 'items' | 'rowIndices' | 'changeTypes' | 'columnIndices'>
 >;
 
-export interface ChangedRow {
+export interface UpdateRowChange {
   changeType: RowChangeType;
   rowIndex: number;
   item?: ProcessedItem;

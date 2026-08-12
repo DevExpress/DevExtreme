@@ -1,10 +1,11 @@
 import { equalByValue } from '@js/core/utils/common';
 
 import type {
-  ChangedRow, ChangedRows, ProcessedItem, RowOperation, UpdateChange,
+  ChangedRows, ProcessedItem, RowOperation, UpdateChange,
+  UpdateRowChange,
 } from '../types';
 
-export function equalItems(
+export function isSameItem(
   item1?: ProcessedItem,
   item2?: ProcessedItem,
   strict?: boolean,
@@ -17,8 +18,17 @@ export function equalItems(
     return true;
   }
 
-  return item1.rowType === item2.rowType
-    && (item2.rowType !== 'detail' || item1.isEditing === item2.isEditing);
+  const isSameRowType = item1.rowType === item2.rowType;
+  const isDetailRow = item2.rowType === 'detail';
+  const isSameEditingState = item1.isEditing === item2.isEditing;
+
+  return isSameRowType && (!isDetailRow || isSameEditingState);
+}
+
+export function isSameGroupRowState(item1: ProcessedItem, item2: ProcessedItem): boolean {
+  return item1.isExpanded === item2.isExpanded
+    && item1.data?.isContinuation === item2.data?.isContinuation
+    && item1.data?.isContinuationOnNextPage === item2.data?.isContinuationOnNextPage;
 }
 
 export function getChangedRowIndices(
@@ -43,17 +53,23 @@ export function getRowOperation(
   const oldNextItem = oldItems[rowIndex + 1];
   const newItem = newItems[rowIndex];
   const newNextItem = newItems[rowIndex + 1];
-  const strict = equalItems(oldItem, oldNextItem) || equalItems(newItem, newNextItem);
+  const strict = isSameItem(oldItem, oldNextItem) || isSameItem(newItem, newNextItem);
 
-  if (oldItem && newItem && equalItems(oldItem, newItem, strict)) {
+  const isSameRow = isSameItem(oldItem, newItem, strict);
+  const isRowAdded = !oldItem && !!newItem;
+  const isRowDeleted = !!oldItem && !newItem;
+  const isOldRowMovedDown = isSameItem(oldItem, newNextItem, strict);
+  const isNewRowMovedUp = isSameItem(newItem, oldNextItem, strict);
+
+  if (isSameRow) {
     return 'update';
   }
 
-  if ((newItem && !oldItem) || (newNextItem && equalItems(oldItem, newNextItem, strict))) {
+  if (isRowAdded || isOldRowMovedDown) {
     return 'insert';
   }
 
-  if ((oldItem && !newItem) || (oldNextItem && equalItems(newItem, oldNextItem, strict))) {
+  if (isRowDeleted || isNewRowMovedUp) {
     return 'remove';
   }
 
@@ -76,7 +92,7 @@ export function resetChangedRows(change: UpdateChange): ChangedRows {
   return changedRows;
 }
 
-export function pushChangedRow(changedRows: ChangedRows, changedRow: ChangedRow): void {
+export function pushChangedRow(changedRows: ChangedRows, changedRow: UpdateRowChange): void {
   const {
     item, rowIndex, changeType, columnIndices,
   } = changedRow;
