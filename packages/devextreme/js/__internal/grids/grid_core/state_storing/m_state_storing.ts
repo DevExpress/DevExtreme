@@ -247,7 +247,7 @@ const data = (Base: ModuleType<DataController>) => class StateStoringDataExtende
         }).fail((error) => {
           // @ts-expect-error
           this.stateLoaded.fire();
-          this._handleLoadError(error || 'Unknown error');
+          this.loadErrorHandler(error || 'Unknown error');
           deferred.reject();
         });
       });
