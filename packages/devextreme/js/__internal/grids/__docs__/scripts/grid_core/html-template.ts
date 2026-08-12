@@ -62,6 +62,7 @@ ${BASE_CSS}
     <label><input type="checkbox" class="edge-toggle" data-cls="edge-ext-ctrl" checked> Extender Chain (ctrl)</label>
     <label><input type="checkbox" class="edge-toggle" data-cls="edge-ext-view" checked> Extender Chain (view)</label>
     <label><input type="checkbox" class="edge-toggle" data-cls="edge-runtime" checked> Runtime Dependencies</label>
+    <label><input type="checkbox" class="edge-toggle" data-cls="edge-owns" checked> Ownership</label>
   </div>
   <div>
     <h2>Feature Areas</h2>
@@ -86,11 +87,13 @@ ${BASE_CSS}
     <div class="leg-item"><div class="leg-sw" style="background:#1a1a2e;border:2px dashed #f59e0b"></div> Module (compound)</div>
     <div class="leg-item"><div class="leg-sw" style="background:#2a2410;border:2px solid #f5c040;clip-path:polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%);width:20px;height:16px"></div> Extender of controller</div>
     <div class="leg-item"><div class="leg-sw" style="background:#2a2410;border:2px solid #f5c040;border-radius:50%"></div> Extender of view</div>
+    <div class="leg-item"><div class="leg-sw" style="background:#10312e;border:2px dotted #5eead4;clip-path:polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%);width:20px;height:16px"></div> Owned (not registered)</div>
     <div class="leg-item"><div class="leg-ln" style="border-top:2px dashed #0ea5e9"></div> Inheritance (ctrl)</div>
     <div class="leg-item"><div class="leg-ln" style="border-top:2px dashed #a855f7"></div> Inheritance (view)</div>
     <div class="leg-item"><div class="leg-ln" style="border-top:2.5px solid #0ea5e9"></div> Extender (ctrl)</div>
     <div class="leg-item"><div class="leg-ln" style="border-top:2.5px solid #a855f7"></div> Extender (view)</div>
     <div class="leg-item"><div class="leg-ln" style="border-top:2px dotted #f6e05e;opacity:0.5"></div> Runtime Dependency</div>
+    <div class="leg-item"><div class="leg-ln" style="border-top:2px solid #5eead4"></div> Ownership</div>
   </div>
 </div>
 <div id="main">
@@ -246,6 +249,23 @@ const cy = cytoscape({
         'curve-style': 'bezier', 'width': 1, 'arrow-scale': 0.6, 'opacity': 0.5,
       }
     },
+    // Owned classes — created with 'new', never reachable through the registry
+    { selector: 'node.gc-owned',
+      style: {
+        'border-style': 'dotted',
+        'border-color': '#5eead4',
+        'color': '#99f6e4',
+        'background-color': '#10312e',
+      }
+    },
+    // Ownership edges — solid, arrow from the owner to what it creates
+    { selector: 'edge.edge-owns',
+      style: {
+        'line-color': '#5eead4', 'target-arrow-color': '#5eead4',
+        'target-arrow-shape': 'triangle',
+        'curve-style': 'bezier', 'width': 1.5, 'arrow-scale': 0.7, 'opacity': 0.75,
+      }
+    },
     // Highlighted state
     ${HIGHLIGHT_CYTOSCAPE_STYLES}
     { selector: 'node.gc-target, node.gc-ext, node.mod-toggle',
@@ -258,6 +278,9 @@ const cy = cytoscape({
     },
     { selector: 'node.gc-target',
       style: { 'text-outline-color': '#1e1e3a' }
+    },
+    { selector: 'node.gc-owned',
+      style: { 'text-outline-color': '#10312e' }
     },
     { selector: 'node.gc-ext',
       style: { 'text-outline-color': '#2a2410' }
@@ -883,11 +906,18 @@ function showInfo(target) {
     html += '<p><span class="lbl">Source:</span> ' + pathWrap(d.sourceFile || '') + '</p>';
   } else if (d.nodeType === 'module') {
     html += '<p><span class="lbl">Source:</span> ' + pathWrap(d.sourceFile || '') + '</p>';
+    if (d.registeredBy) html += '<p><span class="lbl">Registered by:</span> ' + pathWrap(d.registeredBy) + '</p>';
     html += '<p><span class="lbl">Area:</span> ' + (d.featureArea || '') + '</p>';
     if (d.definesControllers) html += '<p><span class="lbl">Controllers:</span> ' + d.definesControllers + '</p>';
     if (d.definesViews) html += '<p><span class="lbl">Views:</span> ' + d.definesViews + '</p>';
     if (d.extendsControllers) html += '<p><span class="lbl">Extends (ctrl):</span> ' + d.extendsControllers + '</p>';
     if (d.extendsViews) html += '<p><span class="lbl">Extends (view):</span> ' + d.extendsViews + '</p>';
+  } else if (d.nodeType === 'owned') {
+    html += '<p><span class="lbl">Type:</span> owned, not registered &mdash; created with <code>new</code></p>';
+    html += '<p><span class="lbl">Class:</span> ' + (d.className || '') + '</p>';
+    html += '<p><span class="lbl">Base:</span> ' + (d.baseClass || '') + '</p>';
+    if (d.mixins) html += '<p><span class="lbl">Mixins:</span> ' + d.mixins + '</p>';
+    html += '<p><span class="lbl">Source:</span> ' + pathWrap(d.sourceFile || '') + '</p>';
   } else if (d.nodeType === 'controller' || d.nodeType === 'view') {
     html += '<p><span class="lbl">Type:</span> ' + d.nodeType + '</p>';
     html += '<p><span class="lbl">Class:</span> ' + (d.className || '') + '</p>';

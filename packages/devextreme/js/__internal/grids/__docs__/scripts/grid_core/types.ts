@@ -28,6 +28,11 @@ export interface ModuleInfo {
   moduleName: string;
   registeredAs: string | null;
   sourceFile: string;
+  /**
+   * Files that call `registerModule` for this module, set only for modules
+   * registered outside grid_core. Both DataGrid and TreeList may register one.
+   */
+  registrationFiles?: string[];
   featureArea: string;
   controllers: Record<string, ClassRegistrationInfo>;
   views: Record<string, ClassRegistrationInfo>;
@@ -35,7 +40,25 @@ export interface ModuleInfo {
     controllers: Record<string, ExtenderInfo>;
     views: Record<string, ExtenderInfo>;
   };
+  /** Classes the module creates with `new` instead of registering. */
+  owned: Record<string, ClassRegistrationInfo>;
   hasDefaultOptions: boolean;
+}
+
+/** A `new X(...)` inside a controller, view or extender body. */
+export interface Instantiation {
+  owner: string;
+  ownerRef: string;
+  className: string;
+  location: string;
+}
+
+export interface OwnershipLink {
+  from: string;
+  fromRef: string;
+  fromModule: string;
+  to: string;
+  location: string;
 }
 
 export interface RuntimeDependency {
@@ -58,6 +81,7 @@ export interface ArchitectureData {
   standaloneControllers: Record<string, ClassRegistrationInfo>;
   standaloneViews: Record<string, ClassRegistrationInfo>;
   runtimeDependencies: RuntimeDependency[];
+  ownershipLinks: OwnershipLink[];
   inheritanceChains: InheritanceEntry[];
 }
 
@@ -80,6 +104,7 @@ export interface ParsedFile {
   modules: ModuleInfo[];
   classes: Map<string, HeritageInfo & { isExported: boolean }>;
   runtimeDeps: RuntimeDependency[];
+  instances: Instantiation[];
   localVars: Map<string, string>;
   importAliases: Map<string, ImportAlias>;
   importedNames: Map<string, string>;

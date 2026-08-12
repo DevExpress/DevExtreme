@@ -16,7 +16,7 @@ import {
   MODULE_SUFFIX,
 } from './constants';
 import type {
-  ClassRegistrationInfo, ExtenderInfo, ModuleInfo, ParsedFile, RuntimeDependency,
+  ClassRegistrationInfo, ExtenderInfo, Instantiation, ModuleInfo, ParsedFile, RuntimeDependency,
 } from './types';
 
 function unwrapClassExpression(node: ts.Node): ts.ClassExpression | null {
@@ -28,12 +28,34 @@ function unwrapClassExpression(node: ts.Node): ts.ClassExpression | null {
 }
 
 // ─── Runtime Dependency Collection ───────────────────────────────────────────
-function collectRuntimeDeps(
+
+/** Name of the method or constructor the node sits in. */
+function enclosingMember(node: ts.Node): string {
+  let { parent } = node;
+
+  while (parent) {
+    if (ts.isMethodDeclaration(parent) && parent.name && ts.isIdentifier(parent.name)) {
+      return parent.name.text;
+    }
+    if (ts.isConstructorDeclaration(parent)) {
+      return 'constructor';
+    }
+    parent = parent.parent;
+  }
+
+  return 'other';
+}
+
+/**
+ * Collect how a class or extender body reaches other parts: `getController`/`getView`
+ * lookups through the module registry, and classes it creates itself with `new`.
+ */
+function collectUsages(
   node: ts.Node,
   sourceFile: ts.SourceFile,
   ownerName: string,
   ownerRef: string,
-  deps: RuntimeDependency[],
+  out: { runtimeDeps: RuntimeDependency[]; instances: Instantiation[] },
 ): void {
   function visit(n: ts.Node): void {
     if (ts.isCallExpression(n)) {
@@ -45,33 +67,26 @@ function collectRuntimeDeps(
         && ts.isStringLiteral(n.arguments[0])
       ) {
         const isController = callText.includes('getController');
-        const depName = n.arguments[0].text;
 
-        // Determine method location
-        let location = 'other';
-        let { parent } = n;
-        while (parent) {
-          if (ts.isMethodDeclaration(parent) && parent.name && ts.isIdentifier(parent.name)) {
-            location = parent.name.text;
-            break;
-          }
-          if (ts.isConstructorDeclaration(parent)) {
-            location = 'constructor';
-            break;
-          }
-          parent = parent.parent;
-        }
-
-        deps.push({
+        out.runtimeDeps.push({
           from: ownerName,
           fromRef: ownerRef,
           fromModule: '', // will be resolved later
-          to: depName,
+          to: n.arguments[0].text,
           toType: isController ? 'controller' : 'view',
           via: isController ? 'getController' : 'getView',
-          location,
+          location: enclosingMember(n),
         });
       }
+    }
+
+    if (ts.isNewExpression(n) && ts.isIdentifier(n.expression)) {
+      out.instances.push({
+        owner: ownerName,
+        ownerRef,
+        className: n.expression.text,
+        location: enclosingMember(n),
+      });
     }
 
     ts.forEachChild(n, visit);
@@ -182,15 +197,17 @@ function parseModuleDefinition(
   sourceFile: ts.SourceFile,
   relPath: string,
   parsedFile: ParsedFile,
+  registeredAs?: string,
 ): ModuleInfo {
   const moduleInfo: ModuleInfo = {
     moduleName,
-    registeredAs: guessRegisteredName(moduleName),
+    registeredAs: registeredAs ?? guessRegisteredName(moduleName),
     sourceFile: relPath,
     featureArea: getFeatureAreaFromPath(relPath),
     controllers: {},
     views: {},
     extenders: { controllers: {}, views: {} },
+    owned: {},
     hasDefaultOptions: false,
   };
 
@@ -231,6 +248,42 @@ function parseModuleDefinition(
   return moduleInfo;
 }
 
+/**
+ * Collect `gridCore.registerModule('name', { ... })` calls. grid_core itself only
+ * exports module objects; the matching registration lives in data_grid / tree_list,
+ * and some modules are declared entirely inline there.
+ */
+function collectRegisteredModules(
+  sourceFile: ts.SourceFile,
+  relPath: string,
+  parsedFile: ParsedFile,
+): void {
+  ts.forEachChild(sourceFile, (node) => {
+    if (!ts.isExpressionStatement(node) || !ts.isCallExpression(node.expression)) {
+      return;
+    }
+
+    const call = node.expression;
+    const [nameArg, moduleArg] = call.arguments;
+
+    if (!getNodeText(call.expression, sourceFile).endsWith('.registerModule')
+      || !nameArg || !ts.isStringLiteral(nameArg)
+      || !moduleArg || !ts.isObjectLiteralExpression(moduleArg)
+    ) {
+      return;
+    }
+
+    parsedFile.modules.push(parseModuleDefinition(
+      nameArg.text,
+      moduleArg,
+      sourceFile,
+      relPath,
+      parsedFile,
+      nameArg.text,
+    ));
+  });
+}
+
 export function parseFile(filePath: string): ParsedFile {
   const content = fs.readFileSync(filePath, 'utf-8');
   const sourceFile = ts.createSourceFile(
@@ -248,6 +301,7 @@ export function parseFile(filePath: string): ParsedFile {
     modules: [],
     classes: new Map(),
     runtimeDeps: [],
+    instances: [],
     localVars: new Map(),
     importAliases: new Map(),
     importedNames: new Map(),
@@ -270,6 +324,21 @@ export function parseFile(filePath: string): ParsedFile {
         originalName: spec.originalName,
         fromPath: spec.fromPath,
       });
+    }
+  });
+
+  // Re-exports resolve like imports, so barrel files forward to the defining file
+  ts.forEachChild(sourceFile, (node) => {
+    if (!ts.isExportDeclaration(node)
+      || !node.moduleSpecifier || !ts.isStringLiteral(node.moduleSpecifier)
+      || !node.exportClause || !ts.isNamedExports(node.exportClause)
+    ) {
+      return;
+    }
+
+    for (const spec of node.exportClause.elements) {
+      result.importedNames.set(spec.name.text, spec.propertyName?.text ?? spec.name.text);
+      result.importSources.set(spec.name.text, node.moduleSpecifier.text);
     }
   });
 
@@ -301,7 +370,7 @@ export function parseFile(filePath: string): ParsedFile {
       });
 
       // Collect getController/getView calls within the class
-      collectRuntimeDeps(node, sourceFile, className, `class:${className}`, result.runtimeDeps);
+      collectUsages(node, sourceFile, className, `class:${className}`, result);
     }
 
     // Exported variable statements (module definitions & extender consts)
@@ -339,18 +408,14 @@ export function parseFile(filePath: string): ParsedFile {
               varName,
               className: arrowBody.name?.text ?? '',
             });
-            collectRuntimeDeps(
-              arrowBody,
-              sourceFile,
-              varName,
-              `ext:${relPath}#${varName}`,
-              result.runtimeDeps,
-            );
+            collectUsages(arrowBody, sourceFile, varName, `ext:${relPath}#${varName}`, result);
           }
         }
       }
     }
   });
+
+  collectRegisteredModules(sourceFile, relPath, result);
 
   return result;
 }

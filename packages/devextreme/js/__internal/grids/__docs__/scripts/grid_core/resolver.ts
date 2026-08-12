@@ -22,6 +22,7 @@ import type {
   GlobalClassInfo,
   InheritanceEntry,
   ModuleInfo,
+  OwnershipLink,
   ParsedFile,
   RuntimeDependency,
 } from './types';
@@ -407,7 +408,11 @@ export function buildInheritanceChains(
 
 // ─── Extender Definition Resolution ──────────────────────────────────────────
 
-function resolveSpecifierToRelPath(spec: string, fromFileAbs: string): string | null {
+/**
+ * Resolve an import specifier to a grid_core-relative path.
+ * Paths outside grid_core come back prefixed with `../`.
+ */
+export function resolveSpecifierToRelPath(spec: string, fromFileAbs: string): string | null {
   let base: string | null = null;
 
   if (spec.startsWith('.')) {
@@ -426,30 +431,53 @@ function resolveSpecifierToRelPath(spec: string, fromFileAbs: string): string | 
   return found ? getRelativePath(found, GRID_CORE_ROOT) : null;
 }
 
+interface ExtenderDefinitionSite { relPath: string; varName: string; className: string }
+
+/** Follow imports and re-exports from `moduleFile` until the defining file is reached. */
 function findExtenderDefinition(
   extenderName: string,
   moduleFile: ParsedFile,
   fileByRelPath: Map<string, ParsedFile>,
-): { relPath: string; varName: string; className: string } | null {
-  const local = moduleFile.extenderDefs.get(extenderName);
-  if (local) {
-    return { relPath: moduleFile.relPath, varName: extenderName, className: local.className };
+): ExtenderDefinitionSite | null {
+  let file = moduleFile;
+  let varName = extenderName;
+  const visited = new Set<string>();
+
+  while (!visited.has(`${file.relPath}#${varName}`)) {
+    visited.add(`${file.relPath}#${varName}`);
+
+    const def = file.extenderDefs.get(varName);
+    if (def) {
+      return { relPath: file.relPath, varName, className: def.className };
+    }
+
+    const spec = file.importSources.get(varName);
+    const relPath = spec ? resolveSpecifierToRelPath(spec, file.filePath) : null;
+    const next = relPath ? fileByRelPath.get(relPath) : undefined;
+    if (!next) {
+      return null;
+    }
+
+    varName = file.importedNames.get(varName) ?? varName;
+    file = next;
   }
 
-  const spec = moduleFile.importSources.get(extenderName);
-  if (!spec) {
-    return null;
+  return null;
+}
+
+function findExtenderDefinitionIn(
+  extenderName: string,
+  moduleFiles: ParsedFile[],
+  fileByRelPath: Map<string, ParsedFile>,
+): ExtenderDefinitionSite | null {
+  for (const file of moduleFiles) {
+    const def = findExtenderDefinition(extenderName, file, fileByRelPath);
+    if (def) {
+      return def;
+    }
   }
 
-  const relPath = resolveSpecifierToRelPath(spec, moduleFile.filePath);
-  if (!relPath) {
-    return null;
-  }
-
-  const varName = moduleFile.importedNames.get(extenderName) ?? extenderName;
-  const def = fileByRelPath.get(relPath)?.extenderDefs.get(varName);
-
-  return def ? { relPath, varName, className: def.className } : null;
+  return null;
 }
 
 export function resolveExtenderDefinitions(
@@ -459,15 +487,18 @@ export function resolveExtenderDefinitions(
   const refToEntries = new Map<string, ExtenderRef[]>();
 
   for (const mod of modules) {
-    const moduleFile = fileByRelPath.get(mod.sourceFile);
-    if (!moduleFile) {
+    const moduleFiles = (mod.registrationFiles ?? [mod.sourceFile])
+      .map((relPath) => fileByRelPath.get(relPath))
+      .filter((pf): pf is ParsedFile => !!pf);
+
+    if (!moduleFiles.length) {
       // eslint-disable-next-line no-continue
       continue;
     }
 
     for (const kind of EXTENDER_KINDS) {
       for (const [target, ext] of Object.entries(mod.extenders[kind])) {
-        const def = findExtenderDefinition(ext.extenderName, moduleFile, fileByRelPath);
+        const def = findExtenderDefinitionIn(ext.extenderName, moduleFiles, fileByRelPath);
         if (!def) {
           console.warn(`WARN: Could not resolve extender "${ext.extenderName}" registered by "${mod.moduleName}" for ${kind.slice(0, -1)} "${target}"`);
           // eslint-disable-next-line no-continue
@@ -554,6 +585,85 @@ export function resolveRuntimeDeps(
   return unique.sort((a, b) => a.from.localeCompare(b.from) || a.to.localeCompare(b.to));
 }
 
+// ─── Ownership Resolution ────────────────────────────────────────────────────
+
+/** Module each call site belongs to, keyed the same way as `RuntimeDependency.fromRef`. */
+function buildModuleOfRef(
+  modules: ModuleInfo[],
+  extenderRefs: Map<string, ExtenderRef[]>,
+): Map<string, string> {
+  const moduleOfRef = new Map<string, string>();
+
+  for (const mod of modules) {
+    for (const entry of [...Object.values(mod.controllers), ...Object.values(mod.views)]) {
+      moduleOfRef.set(`class:${entry.className}`, mod.moduleName);
+    }
+  }
+
+  for (const [ref, entries] of extenderRefs) {
+    const owners = new Set(entries.map((e) => e.module));
+    if (owners.size === 1) {
+      moduleOfRef.set(ref, entries[0].module);
+    }
+  }
+
+  return moduleOfRef;
+}
+
+/**
+ * Attach classes that no module registers but a module's own code creates with `new`
+ * They are moved out of the standalone lists into the owning module
+ */
+export function resolveOwnership(
+  allParsedFiles: ParsedFile[],
+  modules: ModuleInfo[],
+  extenderRefs: Map<string, ExtenderRef[]>,
+  standaloneControllers: Record<string, ClassRegistrationInfo>,
+  standaloneViews: Record<string, ClassRegistrationInfo>,
+): OwnershipLink[] {
+  const moduleOfRef = buildModuleOfRef(modules, extenderRefs);
+  const moduleByName = new Map(modules.map((mod) => [mod.moduleName, mod]));
+  const instances = allParsedFiles.flatMap((pf) => pf.instances);
+
+  // className → where it currently sits in the standalone lists
+  const unowned = new Map<string, { key: string; list: Record<string, ClassRegistrationInfo> }>();
+  for (const list of [standaloneControllers, standaloneViews]) {
+    for (const [key, info] of Object.entries(list)) {
+      unowned.set(info.className, { key, list });
+    }
+  }
+
+  const candidates = new Set(unowned.keys());
+
+  let moved = true;
+  while (moved) {
+    moved = false;
+
+    for (const inst of instances) {
+      const slot = unowned.get(inst.className);
+      const mod = moduleByName.get(moduleOfRef.get(inst.ownerRef) ?? '');
+
+      if (slot && mod) {
+        mod.owned[slot.key] = slot.list[slot.key];
+        Reflect.deleteProperty(slot.list, slot.key);
+        unowned.delete(inst.className);
+        moduleOfRef.set(`class:${inst.className}`, mod.moduleName);
+        moved = true;
+      }
+    }
+  }
+
+  return instances
+    .filter((inst) => candidates.has(inst.className) && moduleOfRef.has(inst.ownerRef))
+    .map((inst) => ({
+      from: inst.owner,
+      fromRef: inst.ownerRef,
+      fromModule: moduleOfRef.get(inst.ownerRef) ?? '',
+      to: inst.className,
+      location: inst.location,
+    }));
+}
+
 // ─── Module Class Reference Resolution ───────────────────────────────────────
 
 /**
@@ -623,6 +733,22 @@ export function validateData(
   standaloneViews: Record<string, ClassRegistrationInfo>,
   runtimeDependencies: RuntimeDependency[],
 ): void {
+  // Same-named modules collapse into one diagram node, hiding one of them
+  const moduleFiles = new Map<string, string[]>();
+  for (const mod of modules) {
+    const files = moduleFiles.get(mod.moduleName);
+    if (files) {
+      files.push(mod.sourceFile);
+    } else {
+      moduleFiles.set(mod.moduleName, [mod.sourceFile]);
+    }
+  }
+  for (const [moduleName, files] of moduleFiles) {
+    if (files.length > 1) {
+      console.warn(`WARN: Module "${moduleName}" is declared in ${files.join(' and ')}; only the first is drawn`);
+    }
+  }
+
   const knownControllers = new Set<string>();
   const knownViews = new Set<string>();
   for (const mod of modules) {

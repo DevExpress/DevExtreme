@@ -18,6 +18,11 @@ function targetNodeId(kind: ExtenderKind, target: string): string {
   return kind === 'controllers' ? `ctrl-${target}` : `view-${target}`;
 }
 
+/** Owned classes have no registration name, so the class name identifies them. */
+function ownedNodeId(className: string): string {
+  return `owned-${className}`;
+}
+
 function buildNodeIdMap(data: ArchitectureData): Map<string, string> {
   const map = new Map<string, string>();
 
@@ -31,6 +36,9 @@ function buildNodeIdMap(data: ArchitectureData): Map<string, string> {
       const nodeId = `view-${regName}`;
       map.set(view.className, nodeId);
       map.set(regName, nodeId);
+    }
+    for (const owned of Object.values(mod.owned)) {
+      map.set(owned.className, ownedNodeId(owned.className));
     }
   }
 
@@ -100,6 +108,7 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
       label: mod.registeredAs ?? mod.moduleName,
       nodeType: 'module',
       sourceFile: mod.sourceFile,
+      registeredBy: nonEmpty((mod.registrationFiles ?? []).join(', ')),
       featureArea: mod.featureArea,
       definesControllers: nonEmpty(Object.keys(mod.controllers).join(', ')),
       definesViews: nonEmpty(Object.keys(mod.views).join(', ')),
@@ -135,6 +144,22 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
         sourceFile: view.sourceFile,
         featureArea: mod.featureArea,
       }, 'gc-target gc-target-view');
+    }
+
+    // Add children the module creates itself, without going through the registry
+    for (const [name, owned] of Object.entries(mod.owned)) {
+      const roleClass = owned.className.endsWith('View') ? 'gc-target-view' : 'gc-target-controller';
+
+      addNode(ownedNodeId(owned.className), {
+        label: name,
+        parent: moduleId,
+        nodeType: 'owned',
+        className: owned.className,
+        baseClass: owned.baseClass,
+        mixins: nonEmpty(owned.mixins.join(', ')),
+        sourceFile: owned.sourceFile,
+        featureArea: mod.featureArea,
+      }, `gc-target ${roleClass} gc-owned`);
     }
 
     // Add one extender child per extended target (shown when the module is expanded)
@@ -307,7 +332,11 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
         ownerModule,
         extenderName: dep.from,
       }, 'edge-runtime view-detailed');
-      addEdge(ownerModule, targetId, { ...edgeData, ownerModule }, 'edge-runtime view-dense');
+
+      // A module reaching its own child is internal wiring, visible once expanded
+      if (nodeParent.get(targetId) !== ownerModule) {
+        addEdge(ownerModule, targetId, { ...edgeData, ownerModule }, 'edge-runtime view-dense');
+      }
       // eslint-disable-next-line no-continue
       continue;
     }
@@ -328,6 +357,16 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
     } else {
       addEdge(sourceId, targetId, edgeData, 'edge-runtime');
     }
+  }
+
+  // 6. Add ownership edges: who calls `new` on a class the registry never sees
+  for (const link of data.ownershipLinks) {
+    const sourceId = nodeIdMap.get(link.from) ?? `mod-${link.fromModule}`;
+
+    addEdge(sourceId, ownedNodeId(link.to), {
+      edgeType: 'ownership',
+      location: link.location,
+    }, 'edge-owns');
   }
 
   return elements;

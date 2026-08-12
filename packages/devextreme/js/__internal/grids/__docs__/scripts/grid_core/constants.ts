@@ -1,7 +1,11 @@
 import * as path from 'path';
 
 export const GRID_CORE_ROOT = path.resolve(__dirname, '..', '..', '..', 'grid_core');
+export const GRIDS_ROOT = path.resolve(GRID_CORE_ROOT, '..');
 export const OUTPUT_DIR = path.resolve(__dirname, '..', '..', 'artifacts');
+
+/** Sibling roots that call `registerModule` for parts defined in grid_core. */
+export const EXTERNAL_MODULE_ROOTS = ['data_grid', 'tree_list'];
 
 export const MODULE_SUFFIX = 'Module';
 export const TS_ALIAS_PREFIX = '@ts/grids/grid_core/';
@@ -19,6 +23,7 @@ const CORE_DIRECTORY_FEATURE_MAP: Record<string, string> = {
   views: 'Core',
   editor_factory: 'Core',
   error_handling: 'Core',
+  toast: 'Core',
 
   editing: 'Editing',
   validating: 'Editing',
@@ -47,7 +52,10 @@ const CORE_DIRECTORY_FEATURE_MAP: Record<string, string> = {
 
   ai_column: 'AI',
   ai_prompt_editor: 'AI',
+  ai_assistant: 'AI',
 };
+
+export const DEFAULT_FEATURE_AREA = 'Other';
 
 /**
  * Derive the feature area from a file path relative to grid_core root.
@@ -55,5 +63,5 @@ const CORE_DIRECTORY_FEATURE_MAP: Record<string, string> = {
  */
 export function getFeatureAreaFromPath(relPath: string): string {
   const firstSegment = relPath.split('/')[0];
-  return CORE_DIRECTORY_FEATURE_MAP[firstSegment] ?? 'Other';
+  return CORE_DIRECTORY_FEATURE_MAP[firstSegment] ?? DEFAULT_FEATURE_AREA;
 }
