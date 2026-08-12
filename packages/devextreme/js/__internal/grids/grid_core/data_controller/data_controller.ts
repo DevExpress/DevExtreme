@@ -66,6 +66,7 @@ import type {
   UserState,
 } from './types';
 import { resolvePaginate, syncPaging } from './utils/paging';
+import { getRefreshOptions } from './utils/refresh';
 import { generateRowValues } from './utils/row_values';
 
 export class DataController extends DataHelperMixin(modules.Controller) {
@@ -1650,7 +1651,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   public isCustomLoading(): boolean {
-    return !!(this._isCustomLoading || this._dataSource?.isCustomLoading());
+    return this._isCustomLoading || !!this._dataSource?.isCustomLoading();
   }
 
   public beginCustomLoading(messageText?: string): void {
@@ -1669,12 +1670,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    * @extended: virtual_scrolling, selection
    */
   public refresh(options?: boolean | RefreshOptions): DeferredObj<unknown> {
-    let refreshOptions: RefreshOptions = { reload: true, lookup: true };
-    if (options === true) {
-      refreshOptions = { reload: true, changesOnly: true };
-    } else if (options) {
-      refreshOptions = options;
-    }
+    const refreshOptions = getRefreshOptions(options);
 
     const dataSource = this.getDataSource();
     const { changesOnly } = refreshOptions;
@@ -1728,7 +1724,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended editing
    */
-  public repaintRows(rowIndexes: number | (number | undefined)[], changesOnly?: boolean): void {
+  public repaintRows(rowIndexes: number | (number | undefined)[] | undefined, changesOnly?: boolean): void {
     const rowIndices = Array.isArray(rowIndexes) ? rowIndexes : [rowIndexes];
 
     if (rowIndices.length > 1 || isDefined(rowIndices[0])) {
@@ -1755,8 +1751,8 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     };
   }
 
-  public getCachedStoreData(): unknown {
-    return this._dataSource?.getCachedStoreData();
+  public getCachedStoreData(): RawItemData[] | undefined {
+    return this._dataSource?.getCachedStoreData() as RawItemData[] | undefined;
   }
 
   /**
@@ -1769,7 +1765,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   public load(): DeferredObj<unknown> {
-    return this._dataSource?.load();
+    return this._dataSource?.load() as DeferredObj<unknown>;
   }
 
   /**
@@ -1777,7 +1773,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    */
 
   public reload(reload?: boolean, changesOnly?: boolean): DeferredObj<unknown> {
-    return this._dataSource?.reload(reload, changesOnly);
+    return this._dataSource?.reload(reload, changesOnly) as DeferredObj<unknown>;
   }
 
   public push(...args: unknown[]): unknown {
@@ -1785,26 +1781,26 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   private itemsCount(): number {
-    return this._dataSource ? this._dataSource.itemsCount() : 0;
+    return (this._dataSource ? this._dataSource.itemsCount() : 0) as number;
   }
 
   public totalItemsCount(): number {
-    return this._dataSource ? this._dataSource.totalItemsCount() : 0;
+    return (this._dataSource ? this._dataSource.totalItemsCount() : 0) as number;
   }
 
   public hasKnownLastPage(): boolean {
-    return this._dataSource ? this._dataSource.hasKnownLastPage() : true;
+    return (this._dataSource ? this._dataSource.hasKnownLastPage() : true) as boolean;
   }
 
   /**
    * @extended: state_storing
    */
   public isLoaded(): boolean {
-    return this._dataSource ? this._dataSource.isLoaded() : true;
+    return (this._dataSource ? this._dataSource.isLoaded() : true) as boolean;
   }
 
   public totalCount(): number {
-    return this._dataSource ? this._dataSource.totalCount() : 0;
+    return (this._dataSource ? this._dataSource.totalCount() : 0) as number;
   }
 
   public hasLoadOperation(): boolean {

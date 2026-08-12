@@ -21,7 +21,7 @@ export interface RefreshOptions {
 }
 
 export interface UserState {
-  searchText: unknown;
+  searchText: string | undefined;
   pageIndex: number;
   pageSize: number;
   expandedRowKeys?: unknown;
