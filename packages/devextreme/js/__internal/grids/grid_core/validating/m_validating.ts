@@ -36,8 +36,13 @@ import type { NormalizedEditCellOptions } from '../editing/types';
 import modules from '../m_modules';
 import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import {
+  INVALIDATE_CLASS,
+  VALIDATION_CANCELLED,
+  VALIDATION_STATUS,
+  validationResultIsValid,
+} from './const';
 
-export const INVALIDATE_CLASS = 'invalid';
 const REVERT_TOOLTIP_CLASS = 'revert-tooltip';
 const INVALID_MESSAGE_CLASS = 'dx-invalid-message';
 const INVALID_MESSAGE_ID = 'dxInvalidMessage';
@@ -63,19 +68,8 @@ const FORM_BASED_MODES = [EDIT_MODE_POPUP, EDIT_MODE_FORM];
 
 const COMMAND_TRANSPARENT = 'transparent';
 
-export const VALIDATION_STATUS = {
-  valid: 'valid',
-  invalid: 'invalid',
-  pending: 'pending',
-};
-
 const EDIT_DATA_INSERT_TYPE = 'insert';
 const EDIT_DATA_REMOVE_TYPE = 'remove';
-const VALIDATION_CANCELLED = 'cancel';
-
-export const validationResultIsValid = function (result) {
-  return isDefined(result) && result !== VALIDATION_CANCELLED;
-};
 
 const cellValueShouldBeValidated = function (value, rowOptions) {
   return value !== undefined || (value === undefined && rowOptions && !rowOptions.isNewRow);
