@@ -87,7 +87,7 @@ test('There are no unused images in repository', () => {
   expect(fullImagesFileList).toEqual(usedImagesFileList);
 });
 
-['generic', 'material', 'fluent', 'fluent-next'].forEach((themeName) => {
+(['generic', 'material', 'fluent', 'fluent-next'] as const).forEach((themeName) => {
   test(`There are no unused variables in ${themeName} SCSS files`, () => {
     const baseScssFiles = getFilesFromDirectory(join('scss', 'widgets', 'base'), ['.scss'])
       .map((fileName) => resolve(fileName));
