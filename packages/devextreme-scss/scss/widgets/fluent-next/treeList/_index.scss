@@ -1,5 +1,4 @@
 @use "../colors" as *;
-@use "../../../_design-system/variables/ds" as ds;
 @use "sass:math";
 @use "colors" as *;
 @use "sizes" as *;
@@ -30,7 +29,7 @@
   $datagrid-row-error-color: gridBaseColors.$grid-row-error-content-rest,
   $header-filter-color: gridBaseColors.$grid-header-filter-icon-rest,
   $header-filter-color-empty: gridBaseColors.$grid-header-filter-empty-icon-rest,
-  $base-focus-color: ds.$color-content-neutral-default-inverted-rest,
+  $base-focus-color: gridBaseColors.$grid-content-focused,
 );
 @use 'layout/cell';
 @include grid-base(treelist);

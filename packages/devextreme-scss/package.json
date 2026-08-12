@@ -29,6 +29,7 @@
     "naming:residue": "node tools/naming/rename.mjs --residue",
     "review:evidence": "node tools/review/evidence.mjs",
     "test": "jest --no-coverage --runInBand --config=./tests/jest.config.json",
+    "typecheck": "tsc -p tsconfig.json",
     "watch": "pnpm --workspace-root nx run devextreme-scss --target=watch"
   },
   "version": "26.2.0"

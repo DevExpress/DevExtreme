@@ -349,9 +349,7 @@
       "scrollViewColors.$scroll-view-pull-down-bg-rest"
     ]
   },
-  "declarationsOutsideVariableFiles": [
-    "common/_mixins.scss: 1"
-  ],
+  "declarationsOutsideVariableFiles": [],
   "starImportsOfBase": [
     "dataGrid/_sizes.scss: ../../base/dataGrid/variables",
     "treeList/_sizes.scss: ../../base/treeList/variables"
