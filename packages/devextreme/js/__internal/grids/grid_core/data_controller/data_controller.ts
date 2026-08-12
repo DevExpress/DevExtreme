@@ -24,7 +24,7 @@ import type { ChangingEvent, DataSource, StoreLoadOptions } from '@ts/data/data_
 import type { ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type {
-  ChangedEvent, LoadOperation, OperationTypes, RawItemData,
+  ChangedEvent, DataSourceAdapterProvider, LoadOperation, OperationTypes, RawItemData,
 } from '@ts/grids/grid_core/data_source_adapter/types';
 import { isLocalStore } from '@ts/grids/grid_core/data_source_adapter/utils/store';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
@@ -52,7 +52,6 @@ import type {
   DataChange,
   DataFilter,
   DataSourceAdapterLike,
-  DataSourceAdapterProvider,
   GeneratedItem,
   ItemProcessingOptions,
   PagingChanges,

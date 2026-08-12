@@ -4,9 +4,7 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import type { DataSource } from '@ts/data/data_source/types';
 
 import type { Column } from '../columns_controller/types';
-import type DataSourceAdapter from '../data_source_adapter/m_data_source_adapter';
 import type { ChangedEvent, OperationTypes, RawItemData } from '../data_source_adapter/types';
-import type { InternalGrid } from '../m_types';
 
 /** rows */
 
@@ -25,10 +23,6 @@ export interface UserState {
   pageIndex: number;
   pageSize: number;
   expandedRowKeys?: unknown;
-}
-
-export interface DataSourceAdapterProvider {
-  create: (component: InternalGrid) => DataSourceAdapter;
 }
 
 export interface ItemProcessingOptions {

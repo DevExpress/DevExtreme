@@ -10,8 +10,9 @@ import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
 import type { ChangingEvent } from '@ts/data/data_source/types';
-import type { BeforePushEvent } from '@ts/data/store_types';
+import type { BeforePushEvent } from '@ts/data/types';
 import DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import { createDataSourceAdapterProvider } from '@ts/grids/grid_core/data_source_adapter/provider';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 import treeListCore from '../m_core';
@@ -932,13 +933,4 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
   }
 }
 
-let DataSourceAdapterTreeListType: any = DataSourceAdapterTreeList;
-
-export default {
-  extend(extender) {
-    DataSourceAdapterTreeListType = extender(DataSourceAdapterTreeListType);
-  },
-  create(component) {
-    return new DataSourceAdapterTreeListType(component);
-  },
-};
+export default createDataSourceAdapterProvider(DataSourceAdapterTreeList);
