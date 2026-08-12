@@ -3,27 +3,15 @@ name: PR Storybook - Preview Cleanup
 on:
   schedule:
     - cron: '0 3 * * 1'  # Every Monday at 03:00 UTC
-  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  approve-manual-cleanup:
-    name: Approve manual storybook cleanup
-    if: ${{ github.event_name == 'workflow_dispatch' }}
-    runs-on: ubuntu-latest
-    environment: storybook-cleanup
-    steps:
-      - name: Approve cleanup
-        run: echo "Manual storybook cleanup approved"
-
   cleanup:
     name: Delete stale PR storybook folders
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: approve-manual-cleanup
-    if: ${{ always() && !cancelled() && (github.event_name != 'workflow_dispatch' || needs.approve-manual-cleanup.result == 'success') }}
 
     steps:
       - name: Checkout gh-pages (full history)
