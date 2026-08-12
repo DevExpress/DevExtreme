@@ -333,18 +333,15 @@ $scheduler-month-date-text-padding: 6px;
     border-right-color: $scheduler-base-border-color;
   }
 
-  // the panel edge already draws this line; the border only loses its color because dropping it would shrink the cell
   > .dx-scheduler-group-row:first-child > .dx-scheduler-group-header:first-child {
     border-top-color: transparent;
   }
 
-  // a nested first header still starts a group boundary unless every ancestor group is also the first one
   .dx-scheduler-group-row:not(:first-child) .dx-scheduler-group-row:first-child > .dx-scheduler-group-header:first-child {
     border-top-color: $scheduler-base-border-color;
   }
 }
 
-// without hierarchy every grouping level is a column of its own, so the top cell of each column lies on the panel edge
 .dx-scheduler-work-space-vertical-group-table,
 .dx-scheduler-group-table {
   > .dx-scheduler-group-flex-container:not(.dx-scheduler-group-flex-container-hierarchical) > .dx-scheduler-group-row > .dx-scheduler-group-header:first-child {
