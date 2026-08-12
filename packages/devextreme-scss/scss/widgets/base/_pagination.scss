@@ -4,20 +4,20 @@
 
 
 // Design sizing values (parametrizable; fluent-next injects tokens)
-$pagination-page-padding-2: 7px 8px 8px !default;
+$pagination-page-padding-fallback: 7px 8px 8px !default;
 $pagination-page-horizontal-padding: 13px !default;
 $pagination-page-margin-left: 5px !default;
 $pagination-page-margin-right: 1px !default;
 $pagination-separator-padding-left: 8px !default;
 $pagination-separator-padding-right: 8px !default;
-$pagination-navigate-button-width-2: 10px !default;
+$pagination-navigate-button-width-fallback: 10px !default;
 $pagination-navigate-button-height: 20px !default;
 $pagination-first-child-margin-left: 1px !default;
 $pagination-first-child-padding-left: 10px !default;
 $pagination-first-child-padding-right: 9px !default;
 $pagination-first-child-padding-top: 7px !default;
 $pagination-first-child-padding-bottom: 8px !default;
-$pagination-first-child-margin-left-2: 4px !default;
+$pagination-page-size-margin-left: 4px !default;
 $pagination-page-index-width: 40px !default;
 $pagination-pages-count-padding-left: 6px !default;
 
@@ -48,7 +48,7 @@ $pagination-info-paddings: 9px;
     .dx-page {
       display: inline-block;
       cursor: pointer;
-      padding: $pagination-page-padding-2;
+      padding: $pagination-page-padding-fallback;
       margin-left: $pagination-page-margin-left;
       margin-right: $pagination-page-margin-right;
     }
@@ -66,7 +66,7 @@ $pagination-info-paddings: 9px;
     }
 
     .dx-navigate-button {
-      width: $pagination-navigate-button-width-2;
+      width: $pagination-navigate-button-width-fallback;
       height: $pagination-navigate-button-height;
       cursor: pointer;
       display: inline-block;
@@ -101,7 +101,7 @@ $pagination-info-paddings: 9px;
       padding-right: $pagination-first-child-padding-right;
       padding-top: $pagination-first-child-padding-top;
       padding-bottom: $pagination-first-child-padding-bottom;
-      margin-left: $pagination-first-child-margin-left-2;
+      margin-left: $pagination-page-size-margin-left;
       margin-right: $pagination-page-margin-right;
     }
   }
