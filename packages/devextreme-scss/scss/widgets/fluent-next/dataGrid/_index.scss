@@ -1,5 +1,4 @@
 @use "../colors" as *;
-@use "../../../_design-system/variables/ds" as ds;
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
@@ -31,7 +30,7 @@
   $datagrid-focused-border-color: gridBaseColors.$grid-border-focused,
   $header-filter-color: gridBaseColors.$grid-header-filter-icon-rest,
   $header-filter-color-empty: gridBaseColors.$grid-header-filter-empty-icon-rest,
-  $base-focus-color: ds.$color-content-neutral-default-inverted-rest,
+  $base-focus-color: gridBaseColors.$grid-content-focused,
   $datagrid-text-stub-background-image-path: gridBaseColors.$grid-text-stub-bg-rest,
   $datagrid-group-row-border: $data-grid-group-row-border,
   $datagrid-sticky-column-border: $data-grid-sticky-column-border,
