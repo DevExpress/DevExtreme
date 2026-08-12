@@ -333,9 +333,7 @@ $scheduler-month-date-text-padding: 6px;
     border-right-color: $scheduler-base-border-color;
   }
 
-  // the panel edge already draws this line, so the first group must not add a separator of its own
-  // the border stays in place and only loses its color: dropping it would shrink the cell and break
-  // the alignment between the group panel and the date table
+  // the panel edge already draws this line; the border only loses its color because dropping it would shrink the cell
   > .dx-scheduler-group-row:first-child > .dx-scheduler-group-header:first-child {
     border-top-color: transparent;
   }
