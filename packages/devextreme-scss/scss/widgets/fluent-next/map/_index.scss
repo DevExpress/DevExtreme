@@ -1,9 +1,6 @@
-@use "../colors" as *;
-@use "../sizes" as *;
-@use "../../../_design-system/variables/ds" as ds;
+@use "sizes" as mapSizes;
 @use "../../base/map" with (
-  $map-marker-tooltip-margin: ds.$spacing-100,
+  $map-marker-tooltip-margin: mapSizes.$map-marker-tooltip-margin,
 );
 
 // adduse
-

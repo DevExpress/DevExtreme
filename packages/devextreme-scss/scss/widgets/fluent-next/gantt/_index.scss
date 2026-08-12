@@ -9,7 +9,6 @@
 @use "../../base/gantt/mixins" as *;
 @use "../gridBase/colors" as gridBaseColors;
 @use "../form/sizes" as formSizes;
-@use "../../../_design-system/variables/ds" as ds;
 
 // adduse
 @use "../splitterBar";
@@ -253,7 +252,7 @@
   }
 
   .dx-gantt-sel {
-    background-color: ds.$color-surface-primary-deep-rest;
+    background-color: $gantt-selection-bg-rest;
   }
 
   .dx-gantt-conn-v {
