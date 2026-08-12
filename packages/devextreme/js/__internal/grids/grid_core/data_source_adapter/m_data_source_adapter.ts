@@ -12,7 +12,6 @@ import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
 import type { StoreChange } from '@js/data/store';
 import type { ChangingEvent, DataSource } from '@ts/data/data_source/types';
 import type { BeforePushEvent } from '@ts/data/store_types';
-import errors from '@ts/ui/errors';
 
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
@@ -106,8 +105,7 @@ export default class DataSourceAdapter extends modules.Controller {
 
   public init(dataSource?: DataSource): void {
     if (!dataSource) {
-      // TODO
-      throw errors.Error('E1041', this.component.NAME);
+      return;
     }
 
     const that = this;
