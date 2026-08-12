@@ -1,4 +1,3 @@
-import type { DataSourceEventName as PublicDataSourceEventName } from '@js/common/data';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { DataSourceOptionsStub } from '@js/data/data_source';
 import type PublicDataSource from '@js/data/data_source';
@@ -29,7 +28,9 @@ export interface ChangingEvent {
   changes: StoreChange[];
 }
 
-type DataSourceEventName = PublicDataSourceEventName
+type DataSourceEventName = | 'changed'
+  | 'loadError'
+  | 'loadingChanged'
   | 'customizeStoreLoadOptions'
   | 'customizeLoadResult'
   | 'changing';
