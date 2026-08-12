@@ -582,7 +582,7 @@ export class RowsView extends ColumnsView {
   protected _checkRowKeys(options) {
     const that = this;
     const rows = that._getRows(options);
-    const keyExpr = that._dataController.store() && that._dataController.store().key();
+    const keyExpr = that._dataController.store()?.key();
 
     keyExpr && rows.some((row) => {
       if (row.rowType === 'data' && row.key === undefined) {
