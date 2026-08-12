@@ -44,7 +44,7 @@ jobs:
   approve-package-publishing:
     name: Approve package publishing
     if: ${{ inputs.tag == 'stable' || (github.event_name == 'workflow_dispatch' && !contains(github.workflow_ref, '/.github/workflows/packages_publishing_scheduler.yml@')) }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     environment: packages-publishing
     steps:
       - name: Approve publishing
