@@ -5,20 +5,19 @@
 $color: null !default;
 $mode: null !default;
 
-$fluent-color-accent-modificator: null !default;
-$fluent-color-theme-modificator: null !default;
-
+$theme-marker-color: null !default;
+$theme-marker-mode: null !default;
 
 @if $color == "blue" {
-  $fluent-color-accent-modificator: "blue" !default;
+  $theme-marker-color: "blue" !default;
 }
 
 @if $mode == "light" {
-  $fluent-color-theme-modificator: "light" !default;
+  $theme-marker-mode: "light" !default;
 }
 
 @if $mode == "dark" {
-  $fluent-color-theme-modificator: "dark" !default;
+  $theme-marker-mode: "dark" !default;
 }
 
 /*

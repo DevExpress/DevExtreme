@@ -26,6 +26,7 @@ $scheduler-workspace-bg-rest: ds.$color-surface-neutral-default-rest !default;
 $scheduler-workspace-accent-content-rest: ds.$color-content-primary-default-rest !default;
 
 $scheduler-current-time-cell-content-rest: ds.$color-content-primary-default-rest !default;
+$scheduler-current-time-cell-date-bg-rest: $scheduler-current-time-cell-content-rest !default;
 $scheduler-time-indicator-content-rest: ds.$color-surface-danger-default-rest !default;
 $scheduler-dd-appointment-content-hovered: ds.$color-content-neutral-default-inverted-rest !default;
 $scheduler-form-icon-rest: ds.$color-content-neutral-subdued-rest !default;
