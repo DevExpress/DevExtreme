@@ -739,7 +739,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
 
   protected pushHandler(e: BeforePushEvent): void {
     const reshapeOnPush = this._dataSource._reshapeOnPush;
-    const isNeedReshape = reshapeOnPush && !!e.changes?.length;
+    const isNeedReshape = reshapeOnPush && !!e.changes.length;
 
     if (isNeedReshape) {
       this._isReload = true;
