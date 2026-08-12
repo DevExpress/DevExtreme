@@ -2,6 +2,8 @@ import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
+import { xmlaServiceMock } from '../../apiMocks/xmlaServiceMock';
+import { widgetsGalleryServiceMock } from '../../apiMocks/widgetsGalleryServiceMock';
 
 const PIVOTGRID_FIELD_CHOOSER_BUTTON = 'dx-pivotgrid-field-chooser-button';
 const TREEVIEW_SEARCH_FIELD = 'dx-treeview-search';
@@ -9,6 +11,7 @@ const TEXTEDITOR_INPUT = 'dx-texteditor-input';
 const FIELD_CHOOSER_CONTENT = 'dx-popup-normal';
 
 fixture('PivotGrid.IntegratedFieldChooser')
+  .requestHooks(widgetsGalleryServiceMock, xmlaServiceMock)
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 800];
   });

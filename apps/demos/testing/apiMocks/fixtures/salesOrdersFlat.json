@@ -1,0 +1,224 @@
+{
+  "data": [
+    {
+      "Id": 1,
+      "ProductCategoryName": "Cameras and camcorders ",
+      "ProductSubcategoryName": "Digital Cameras",
+      "ProductName": "A. Datum Point Shoot Digital Camera M500 Black",
+      "UnitPrice": 198.0,
+      "SalesQuantity": 8,
+      "SalesAmount": 1544.4,
+      "DateKey": "2023-01-02T00:00:00",
+      "StoreName": "Contoso Baildon Store"
+    },
+    {
+      "Id": 2,
+      "ProductCategoryName": "Computers",
+      "ProductSubcategoryName": "Computers Accessories",
+      "ProductName": "Contoso Battery charger - bike E200 Black",
+      "UnitPrice": 19.9,
+      "SalesQuantity": 4,
+      "SalesAmount": 78.605,
+      "DateKey": "2023-02-12T00:00:00",
+      "StoreName": "Contoso North America Reseller"
+    },
+    {
+      "Id": 3,
+      "ProductCategoryName": "Cameras and camcorders ",
+      "ProductSubcategoryName": "Camcorders",
+      "ProductName": "Fabrikam Budget Moviemaker 2/3'' 17mm E100 White",
+      "UnitPrice": 410.0,
+      "SalesQuantity": 9,
+      "SalesAmount": 3628.5,
+      "DateKey": "2024-01-24T00:00:00",
+      "StoreName": "Contoso Cambridge Store"
+    },
+    {
+      "Id": 4,
+      "ProductCategoryName": "Cell phones",
+      "ProductSubcategoryName": "Touch Screen Phones ",
+      "ProductName": "The Phone Company Touch Screen Phones 4-Wire/On-wall M302 Grey",
+      "UnitPrice": 289.0,
+      "SalesQuantity": 8,
+      "SalesAmount": 2254.2,
+      "DateKey": "2024-01-13T00:00:00",
+      "StoreName": "Contoso Europe Online Store"
+    },
+    {
+      "Id": 5,
+      "ProductCategoryName": "Cameras and camcorders ",
+      "ProductSubcategoryName": "Digital SLR Cameras",
+      "ProductName": "Fabrikam SLR Camera 35\" X358 Blue",
+      "UnitPrice": 436.2,
+      "SalesQuantity": 24,
+      "SalesAmount": 10207.08,
+      "DateKey": "2024-01-22T00:00:00",
+      "StoreName": "Contoso Europe Online Store"
+    },
+    {
+      "Id": 6,
+      "ProductCategoryName": "Home Appliances",
+      "ProductSubcategoryName": "Air Conditioners",
+      "ProductName": "Contoso Air conditioner 8000BTU M0320 Silver",
+      "UnitPrice": 399.99,
+      "SalesQuantity": 36,
+      "SalesAmount": 13999.65,
+      "DateKey": "2023-07-02T00:00:00",
+      "StoreName": "Contoso Catalog Store"
+    },
+    {
+      "Id": 7,
+      "ProductCategoryName": "Cameras and camcorders ",
+      "ProductSubcategoryName": "Digital Cameras",
+      "ProductName": "A. Datum Slim Digital Camera M180 Green",
+      "UnitPrice": 148.0,
+      "SalesQuantity": 6,
+      "SalesAmount": 843.6,
+      "DateKey": "2023-11-19T00:00:00",
+      "StoreName": "Contoso Asia Reseller"
+    },
+    {
+      "Id": 8,
+      "ProductCategoryName": "TV and Video",
+      "ProductSubcategoryName": "Televisions",
+      "ProductName": "Adventure Works 32\" LCD HDTV M130 Black",
+      "UnitPrice": 499.99,
+      "SalesQuantity": 9,
+      "SalesAmount": 4399.912,
+      "DateKey": "2024-04-10T00:00:00",
+      "StoreName": "Contoso Asia Online Store"
+    },
+    {
+      "Id": 9,
+      "ProductCategoryName": "Games and Toys",
+      "ProductSubcategoryName": "Download Games",
+      "ProductName": "MGS King& Myths: The Age Collection M340",
+      "UnitPrice": 72.45,
+      "SalesQuantity": 24,
+      "SalesAmount": 1702.575,
+      "DateKey": "2024-07-14T00:00:00",
+      "StoreName": "Contoso North America Online Store"
+    },
+    {
+      "Id": 10,
+      "ProductCategoryName": "Computers",
+      "ProductSubcategoryName": "Monitors",
+      "ProductName": "Adventure Works LCD17 E200 Black",
+      "UnitPrice": 99.0,
+      "SalesQuantity": 18,
+      "SalesAmount": 1702.8,
+      "DateKey": "2025-04-10T00:00:00",
+      "StoreName": "Contoso Asia Reseller"
+    },
+    {
+      "Id": 11,
+      "ProductCategoryName": "Games and Toys",
+      "ProductSubcategoryName": "Download Games",
+      "ProductName": "MGS Age of Empires Expansion: The Rise of Rome 2009 E181",
+      "UnitPrice": 32.0,
+      "SalesQuantity": 4,
+      "SalesAmount": 128.0,
+      "DateKey": "2023-02-04T00:00:00",
+      "StoreName": "Contoso North America Online Store"
+    },
+    {
+      "Id": 12,
+      "ProductCategoryName": "Computers",
+      "ProductSubcategoryName": "Projectors & Screens",
+      "ProductName": "Proseware Projector 480p LCD12 Black",
+      "UnitPrice": 229.0,
+      "SalesQuantity": 10,
+      "SalesAmount": 2290.0,
+      "DateKey": "2023-04-29T00:00:00",
+      "StoreName": "Contoso Buffalo Store"
+    },
+    {
+      "Id": 13,
+      "ProductCategoryName": "Computers",
+      "ProductSubcategoryName": "Printers, Scanners & Fax",
+      "ProductName": "Proseware Slim-Design Fax Machine with Answering System X180 Green",
+      "UnitPrice": 236.0,
+      "SalesQuantity": 12,
+      "SalesAmount": 2832.0,
+      "DateKey": "2023-07-25T00:00:00",
+      "StoreName": "Contoso South Portland Store"
+    },
+    {
+      "Id": 14,
+      "ProductCategoryName": "Cameras and camcorders ",
+      "ProductSubcategoryName": "Cameras & Camcorders Accessories",
+      "ProductName": "Contoso Carrying Case E312 Blue",
+      "UnitPrice": 49.96,
+      "SalesQuantity": 13,
+      "SalesAmount": 639.488,
+      "DateKey": "2024-12-16T00:00:00",
+      "StoreName": "Contoso Everett Store"
+    },
+    {
+      "Id": 15,
+      "ProductCategoryName": "Games and Toys",
+      "ProductSubcategoryName": "Download Games",
+      "ProductName": "MGS Age of Mythology: Gold Edition 2009 E144",
+      "UnitPrice": 43.0,
+      "SalesQuantity": 10,
+      "SalesAmount": 430.0,
+      "DateKey": "2024-10-17T00:00:00",
+      "StoreName": "Contoso North America Online Store"
+    },
+    {
+      "Id": 16,
+      "ProductCategoryName": "Home Appliances",
+      "ProductSubcategoryName": "Microwaves",
+      "ProductName": "Contoso Microwave 1.0CuFt E0110 Black",
+      "UnitPrice": 139.99,
+      "SalesQuantity": 9,
+      "SalesAmount": 1245.911,
+      "DateKey": "2023-01-05T00:00:00",
+      "StoreName": "Contoso Anchorage Store"
+    },
+    {
+      "Id": 17,
+      "ProductCategoryName": "Music, Movies and Audio Books",
+      "ProductSubcategoryName": "Movie DVD",
+      "ProductName": "Contoso DVD 15-Inch Player Portable L200 Silver",
+      "UnitPrice": 289.99,
+      "SalesQuantity": 9,
+      "SalesAmount": 2609.91,
+      "DateKey": "2024-02-19T00:00:00",
+      "StoreName": "Contoso Holyoke Store"
+    },
+    {
+      "Id": 18,
+      "ProductCategoryName": "Games and Toys",
+      "ProductSubcategoryName": "Download Games",
+      "ProductName": "MGS Fable: The Lost Chapters E107",
+      "UnitPrice": 56.0,
+      "SalesQuantity": 3,
+      "SalesAmount": 156.8,
+      "DateKey": "2023-08-24T00:00:00",
+      "StoreName": "Contoso North America Online Store"
+    },
+    {
+      "Id": 19,
+      "ProductCategoryName": "Computers",
+      "ProductSubcategoryName": "Monitors",
+      "ProductName": "WWI LCD22 M2002 Black",
+      "UnitPrice": 619.0,
+      "SalesQuantity": 12,
+      "SalesAmount": 7428.0,
+      "DateKey": "2024-07-16T00:00:00",
+      "StoreName": "Contoso Thimphu No.2 Store"
+    },
+    {
+      "Id": 20,
+      "ProductCategoryName": "Audio",
+      "ProductSubcategoryName": "Recording Pen",
+      "ProductName": "WWI 1GBPulse Smart pen E50 Black",
+      "UnitPrice": 149.95,
+      "SalesQuantity": 20,
+      "SalesAmount": 2999.0,
+      "DateKey": "2025-07-17T00:00:00",
+      "StoreName": "Contoso Moscow  No.1 Store"
+    }
+  ]
+}

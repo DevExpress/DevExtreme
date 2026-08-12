@@ -1,0 +1,72 @@
+{
+  "data": [
+    {
+      "key": "Audio",
+      "items": null,
+      "count": 32333,
+      "summary": [
+        44238009.2184
+      ]
+    },
+    {
+      "key": "Cameras and camcorders ",
+      "items": null,
+      "count": 158065,
+      "summary": [
+        752110841.5622
+      ]
+    },
+    {
+      "key": "Cell phones",
+      "items": null,
+      "count": 116198,
+      "summary": [
+        261145700.4295
+      ]
+    },
+    {
+      "key": "Computers",
+      "items": null,
+      "count": 240354,
+      "summary": [
+        938511735.214
+      ]
+    },
+    {
+      "key": "Games and Toys",
+      "items": null,
+      "count": 60386,
+      "summary": [
+        44010918.4998
+      ]
+    },
+    {
+      "key": "Home Appliances",
+      "items": null,
+      "count": 269849,
+      "summary": [
+        1150244829.8325
+      ]
+    },
+    {
+      "key": "Music, Movies and Audio Books",
+      "items": null,
+      "count": 38050,
+      "summary": [
+        48836547.1406
+      ]
+    },
+    {
+      "key": "TV and Video",
+      "items": null,
+      "count": 84765,
+      "summary": [
+        399157492.6133
+      ]
+    }
+  ],
+  "totalCount": 1000000,
+  "summary": [
+    3638256074.5103
+  ]
+}
