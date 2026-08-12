@@ -270,9 +270,9 @@
     "$mode",
     "$size",
     "$accent",
-    "$fluent-color-accent-modificator",
-    "$fluent-color-theme-modificator",
-    "$fluent-size-postfix"
+    "$theme-marker-color",
+    "$theme-marker-mode",
+    "$theme-marker-size-postfix"
   ],
   "exemptFolders": {
     "cardView": "own cross-theme BEM system on null !default base variables; renaming it would require touching generic/material/fluent, which breaks the byte-identity constraint"

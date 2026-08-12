@@ -1,4 +1,3 @@
-@use "sass:color";
 @use "../common/colors" as *;
 @use "colors" as *;
 @use "sizes" as *;
@@ -7,7 +6,6 @@
 @use "../toolbar/mixins" as *;
 @use "../../base/popup" with (
   $popup-title-padding: $popup-title-padding,
-  $popup-title-min-height-2: $fluent-popup-title-min-height-2,
   $popup-dialog-message-padding: $popup-dialog-message-padding,
   $popup-dialog-shader-color: $popup-dialog-backdrop-rest,
 );

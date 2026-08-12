@@ -41,7 +41,7 @@
       "unclassified": 0
     },
     "checkBox": {
-      "themePrefixed": 3,
+      "themePrefixed": 0,
       "unclassified": 0
     },
     "colorBox": {
@@ -58,7 +58,7 @@
     },
     "dataGrid": {
       "themePrefixed": 0,
-      "unclassified": 1
+      "unclassified": 0
     },
     "dateBox": {
       "themePrefixed": 0,
@@ -73,7 +73,7 @@
       "unclassified": 0
     },
     "diagram": {
-      "themePrefixed": 1,
+      "themePrefixed": 0,
       "unclassified": 0
     },
     "drawer": {
@@ -105,11 +105,11 @@
       "unclassified": 0
     },
     "fileManager": {
-      "themePrefixed": 8,
+      "themePrefixed": 0,
       "unclassified": 0
     },
     "fileUploader": {
-      "themePrefixed": 3,
+      "themePrefixed": 0,
       "unclassified": 0
     },
     "filterBuilder": {
@@ -185,7 +185,7 @@
       "unclassified": 0
     },
     "pagination": {
-      "themePrefixed": 3,
+      "themePrefixed": 0,
       "unclassified": 0
     },
     "pivotGrid": {
@@ -197,7 +197,7 @@
       "unclassified": 0
     },
     "popup": {
-      "themePrefixed": 1,
+      "themePrefixed": 0,
       "unclassified": 0
     },
     "progressBar": {
@@ -318,11 +318,11 @@
     },
     "treeList": {
       "themePrefixed": 0,
-      "unclassified": 6
+      "unclassified": 0
     },
     "treeView": {
       "themePrefixed": 0,
-      "unclassified": 1
+      "unclassified": 0
     },
     "validation": {
       "themePrefixed": 0,
@@ -333,6 +333,15 @@
       "unclassified": 0
     }
   },
+  "baseWiring": [
+    "dataGrid: $datagrid-cell-padding (star)",
+    "treeList: $treelist-expand-checkbox-right-gap (star)",
+    "treeList: $treelist-expand-checkbox-size (star)",
+    "treeList: $treelist-expand-icon-name-collapsed (star)",
+    "treeList: $treelist-expand-icon-name-expanded (star)",
+    "treeList: $treelist-expand-icon-right-gap (star)",
+    "treeList: $treelist-expand-icon-size (star)"
+  ],
   "systemTierNames": [],
   "multipleDeclarationHomes": [],
   "foreignReads": {

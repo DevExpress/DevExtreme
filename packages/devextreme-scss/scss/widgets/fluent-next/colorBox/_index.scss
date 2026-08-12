@@ -1,5 +1,4 @@
 @use "sass:math";
-@use "sass:color";
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
@@ -8,7 +7,7 @@
   $colorbox-texteditor-input-container-width: $color-box-input-container-width,
   $colorbox-texteditor-input-container-height: $color-box-input-container-height,
   $colorbox-texteditor-input-container-inset-inline-start: $color-box-input-container-inset-inline-start,
-  $colorbox-overlay-padding-2: $color-box-overlay-padding,
+  $colorbox-overlay-padding: $color-box-overlay-padding,
   $colorbox-toolbar-item-padding-right: $color-box-toolbar-item-padding-inline-end,
 );
 @use "../../base/colorBox/mixins" as *;
