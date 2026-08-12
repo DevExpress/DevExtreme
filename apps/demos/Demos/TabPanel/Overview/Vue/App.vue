@@ -95,7 +95,7 @@ const iconPosition = ref(iconPositions[0]);
 }
 
 .dx-theme-material .widget-container {
-  background-color: color-mix(in srgb, var(--dxds-color-surface-neutral-default-inverted-rest, #bfbfbf) calc(var(--dxds-opacity-5, 0.15) * 100%), transparent);
+  background-color: var(--dx-color-options-panel-bg);
 }
 
 .dx-tabpanel-tabs-position-left .dx-tabpanel-container,
@@ -119,7 +119,7 @@ const iconPosition = ref(iconPositions[0]);
   box-sizing: border-box;
   width: 272px;
   padding: 20px;
-  background-color: color-mix(in srgb, var(--dxds-color-surface-neutral-default-inverted-rest, #bfbfbf) calc(var(--dxds-opacity-5, 0.15) * 100%), transparent);
+  background-color: var(--dx-color-options-panel-bg);
 }
 
 .caption {

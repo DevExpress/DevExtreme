@@ -63,7 +63,7 @@ const expandedRowKeys = [1, 3, 6];
 .options {
   padding: 20px;
   margin-top: 20px;
-  background-color: color-mix(in srgb, var(--dxds-color-surface-neutral-default-inverted-rest, #bfbfbf) calc(var(--dxds-opacity-5, 0.15) * 100%), transparent);
+  background-color: var(--dx-color-options-panel-bg);
   position: absolute;
   bottom: 0;
   width: 100%;

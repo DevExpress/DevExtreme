@@ -60,7 +60,7 @@ function onUploadProgress(e: DxFileUploaderTypes.ProgressEvent) {
   overflow-y: auto;
   padding: 18px;
   margin-top: 40px;
-  background-color: color-mix(in srgb, var(--dxds-color-surface-neutral-default-inverted-rest, #bfbfbf) calc(var(--dxds-opacity-5, 0.15) * 100%), transparent);
+  background-color: var(--dx-color-options-panel-bg);
 }
 
 .segment-size,

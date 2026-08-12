@@ -86,7 +86,7 @@ const baseColors = computed(() => getPalette(palette.value).simpleSet);
 
 .options {
   padding: 20px;
-  background-color: color-mix(in srgb, var(--dxds-color-surface-neutral-default-inverted-rest, #bfbfbf) calc(var(--dxds-opacity-5, 0.15) * 100%), transparent);
+  background-color: var(--dx-color-options-panel-bg);
   margin-top: 20px;
 }
 

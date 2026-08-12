@@ -217,6 +217,8 @@ $typography-bg: $base-bg !default;
 $typography-color: $base-text-color !default;
 $typography-link-color: $base-link-color !default;
 
+$base-color-options-panel-bg: rgba(191, 191, 191, 0.15) !default;
+
 :root {
   --dx-component-color-bg: #{$base-bg};
   --dx-color-main-bg: #{$typography-bg};
@@ -231,4 +233,5 @@ $typography-link-color: $base-link-color !default;
   --dx-color-link: #{$base-link-color};
   --dx-color-shadow: #{$base-shadow-color};
   --dx-color-separator: #{$base-border-color};
+  --dx-color-options-panel-bg: #{$base-color-options-panel-bg};
 }

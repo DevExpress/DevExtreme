@@ -42,4 +42,5 @@ $theme-marker-mode: null !default;
   --dx-color-link: #{ds.$color-content-primary-default-rest};
   --dx-color-shadow: #{ds.$color-shadow-key};
   --dx-color-separator: #{ds.$color-border-neutral-subdued-rest};
+  --dx-color-options-panel-bg: color-mix(in srgb, #{ds.$color-surface-neutral-default-inverted-rest} calc(#{ds.$opacity-5} * 100%), transparent);
 }
