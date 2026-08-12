@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { findComponentByPath } from '../utils/componentFinder';
 
 export default function ComponentView() {
@@ -22,4 +22,4 @@ export default function ComponentView() {
         </Suspense>
     </div>
   );
-} 
+}

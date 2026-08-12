@@ -5,6 +5,7 @@ import { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import config from '@js/core/config';
 import $ from '@js/core/renderer';
+import type { Callback } from '@js/core/utils/callbacks';
 import Callbacks from '@js/core/utils/callbacks';
 import { compileGetter } from '@js/core/utils/data';
 import { Deferred, when } from '@js/core/utils/deferred';
@@ -19,8 +20,8 @@ import Store from '@js/data/abstract_store';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
 import inflector from '@ts/core/utils/m_inflector';
-import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { Column, ColumnsChanges, FilterField } from '@ts/grids/grid_core/columns_controller/types';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
 
@@ -126,11 +127,11 @@ export class ColumnsController extends modules.Controller {
 
   private __sortingUpdated: any;
 
-  public columnsChanged: any;
+  public columnsChanged!: Callback<[ColumnsChanges]>;
 
   public aiColumnOptionChanged: any;
 
-  public _columnChanges: any;
+  public _columnChanges?: ColumnsChanges;
 
   protected _dataController!: DataController;
 
@@ -515,15 +516,26 @@ export class ColumnsController extends modules.Controller {
     return this._fixedColumns[rowIndex] || [];
   }
 
-  public getFilteringColumns() {
-    return this.getColumns().filter((item) => (item.dataField || item.name) && (item.allowFiltering || item.allowHeaderFiltering)).map((item) => {
-      const field = extend(true, {}, item);
+  public getFilteringColumns(): FilterField[] {
+    const isFilterableColumn = (column: Column): boolean => {
+      const hasIdentifier = !!column.dataField || !!column.name;
+      const allowsFiltering = !!column.allowFiltering || !!column.allowHeaderFiltering;
+      return hasIdentifier && allowsFiltering && !column.type;
+    };
+
+    const toFilterField = (column: Column): FilterField => {
+      const field: FilterField = extend(true, {}, column);
       if (!isDefined(field.dataField)) {
         field.dataField = field.name;
       }
-      field.filterOperations = item.filterOperations !== item.defaultFilterOperations ? field.filterOperations : null;
+      field.filterOperations = column.filterOperations !== column.defaultFilterOperations
+        ? field.filterOperations
+        : null;
       return field;
-    });
+    };
+
+    const columns: Column[] = this.getColumns();
+    return columns.filter(isFilterableColumn).map(toFilterField);
   }
 
   /**

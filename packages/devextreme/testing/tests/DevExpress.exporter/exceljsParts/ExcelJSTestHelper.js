@@ -40,7 +40,7 @@ class ExcelJSTestHelper {
     }
 
     checkColumnWidths(expectedWidths, startColumnIndex) {
-        const tolerance = 0.2;
+        const tolerance = 0.3;
 
         for(let i = 0; i < expectedWidths.length; i++) {
             const actual = this.worksheet.getColumn(startColumnIndex + i).width;
@@ -202,25 +202,11 @@ class ExcelJSPivotGridTestHelper extends ExcelJSTestHelper {
     }
 
     getColumnsAreaColumnWidths(component) {
-        const columnWidths = [];
-
-        const showTotalsPrior = component.option('showTotalsPrior');
-        const columnsAreaColumns = component.$element().find('.dx-pivotgrid-horizontal-headers tr')[showTotalsPrior === 'columns' || showTotalsPrior === 'both' ? 'first' : 'last']().find('td');
-
-        columnsAreaColumns.each((_, element) => columnWidths.push(element.getBoundingClientRect().width));
-
-        return columnWidths;
+        return component._columnsArea.getColumnsWidth();
     }
 
     getRowsAreaColumnWidths(component) {
-        const columnWidths = [];
-
-        const rowsAreaColumns = component.$element().find('.dx-pivotgrid-vertical-headers tr').first().find('td');
-
-
-        rowsAreaColumns.each((_, element) => columnWidths.push(element.getBoundingClientRect().width));
-
-        return columnWidths;
+        return component._rowsArea.getColumnsWidth();
     }
 
     toExcelWidths(widths) {

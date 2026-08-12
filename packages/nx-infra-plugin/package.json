@@ -3,6 +3,8 @@
   "version": "26.1.4",
   "type": "commonjs",
   "private": true,
+  "author": "Developer Express Inc.",
+  "license": "SEE LICENSE IN LICENSE.md",
   "executors": "./dist/executors.json",
   "exports": {
     ".": {
@@ -23,11 +25,11 @@
     "tsc-alias": "1.8.16"
   },
   "peerDependencies": {
-    "@babel/core": ">=7.0.0",
-    "@babel/plugin-transform-modules-commonjs": ">=7.0.0",
-    "@babel/plugin-transform-object-rest-spread": ">=7.0.0",
-    "@babel/plugin-transform-runtime": ">=7.0.0",
-    "@babel/preset-env": ">=7.0.0",
+    "@babel/core": ">=7.0.0 <8.0.0",
+    "@babel/plugin-transform-modules-commonjs": ">=7.0.0 <8.0.0",
+    "@babel/plugin-transform-object-rest-spread": ">=7.0.0 <8.0.0",
+    "@babel/plugin-transform-runtime": ">=7.0.0 <8.0.0",
+    "@babel/preset-env": ">=7.0.0 <8.0.0",
     "babel-plugin-add-module-exports": ">=1.0.0",
     "babel-plugin-inferno": ">=6.0.0",
     "core-js-compat": ">=3.0.0",

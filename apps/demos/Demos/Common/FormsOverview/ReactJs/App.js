@@ -2,7 +2,8 @@ import React from 'react';
 import {
   Form, GroupItem, Label, SimpleItem,
 } from 'devextreme-react/form';
-import 'devextreme-react/text-area';
+import 'devextreme/ui/select_box';
+import 'devextreme/ui/text_area';
 import { employee, positions, states } from './data.js';
 
 const birthDateOptions = { width: '100%' };

@@ -12,6 +12,46 @@ import { writeFileText, readFileText } from '../../utils';
 
 const WORKSPACE_ROOT = findWorkspaceRoot();
 
+type WatchHandler = (event: string, file: string) => void;
+
+function getWatchHandler(): WatchHandler | undefined {
+  return (globalThis as unknown as { __babelWatchHandler?: WatchHandler }).__babelWatchHandler;
+}
+
+// Mock chokidar so the shared watch util's projectRequire('chokidar') resolves; the mock
+// captures the 'all' handler on globalThis so the test can drive a rebuild deterministically.
+function writeChokidarMock(projectRoot: string): void {
+  const chokidarDir = path.join(projectRoot, 'node_modules', 'chokidar');
+  fs.mkdirSync(chokidarDir, { recursive: true });
+  fs.writeFileSync(path.join(chokidarDir, 'package.json'), JSON.stringify({ main: 'index.js' }));
+  fs.writeFileSync(
+    path.join(chokidarDir, 'index.js'),
+    [
+      'module.exports = {',
+      '  watch: function watch() {',
+      '    return {',
+      '      on: function on(event, handler) { globalThis.__babelWatchHandler = handler; return this; },',
+      '      close: function close() { return Promise.resolve(); },',
+      '    };',
+      '  },',
+      '};',
+      '',
+    ].join('\n'),
+  );
+}
+
+async function waitFor(
+  predicate: () => Promise<boolean> | boolean,
+  timeoutMs = 3000,
+): Promise<void> {
+  const start = Date.now();
+  while (Date.now() - start < timeoutMs) {
+    if (await predicate()) return;
+    await new Promise((resolve) => setTimeout(resolve, 20));
+  }
+  throw new Error('waitFor timed out');
+}
+
 const BABEL_CONFIG = `
 'use strict';
 
@@ -66,7 +106,7 @@ describe('BabelTransformExecutor E2E', () => {
 
     process.chdir(projectDir);
 
-    const buildDir = path.join(projectDir, 'build', 'gulp');
+    const buildDir = path.join(projectDir, 'build');
     fs.mkdirSync(buildDir, { recursive: true });
     await writeFileText(path.join(buildDir, 'transpile-config.js'), BABEL_CONFIG);
 
@@ -122,7 +162,7 @@ export function helper() {
   ])('$configKey config', ({ configKey, outDir, shouldContain, shouldNotContain }) => {
     it('should transform files correctly', async () => {
       const options: BabelTransformExecutorSchema = {
-        babelConfigPath: './build/gulp/transpile-config.js',
+        babelConfigPath: './build/transpile-config.js',
         configKey,
         sourcePattern: './js/**/*.js',
         outDir,
@@ -145,7 +185,7 @@ export function helper() {
 
   it('should forward removeDebug option to stripDebug helper', async () => {
     const options: BabelTransformExecutorSchema = {
-      babelConfigPath: './build/gulp/transpile-config.js',
+      babelConfigPath: './build/transpile-config.js',
       configKey: 'cjs',
       sourcePattern: './js/**/*.js',
       outDir: './artifacts/transpiled-prod',
@@ -171,7 +211,7 @@ module.exports = {
   },
 };
 `;
-    const minimalConfigPath = './build/gulp/minimal-config.js';
+    const minimalConfigPath = './build/minimal-config.js';
 
     beforeEach(async () => {
       await writeFileText(path.join(projectDir, minimalConfigPath), MINIMAL_BABEL_CONFIG);
@@ -262,4 +302,114 @@ module.exports = {
       expect(enContent).toEqual({ greeting: 'Hello' });
     }, 30000);
   });
+});
+
+describe('BabelTransformExecutor flat config + watch', () => {
+  let tempDir: string;
+  let context = createMockContext();
+  let projectDir: string;
+  let savedCwd: string;
+
+  const FLAT_CONFIG = JSON.stringify({ comments: false });
+
+  beforeEach(async () => {
+    savedCwd = process.cwd();
+    tempDir = createTempDir('nx-babel-watch-e2e-');
+    context = createMockContext({ root: tempDir });
+    projectDir = path.join(tempDir, 'packages', 'test-lib');
+    fs.mkdirSync(projectDir, { recursive: true });
+    await writeFileText(
+      path.join(projectDir, 'package.json'),
+      JSON.stringify({ name: 'test-lib' }),
+    );
+    process.chdir(projectDir);
+
+    // Flat (keyless) babel config, mirroring testing/tests.babelrc.json usage.
+    await writeFileText(path.join(projectDir, 'babel.flat.json'), FLAT_CONFIG);
+
+    const jsDir = path.join(projectDir, 'js');
+    fs.mkdirSync(jsDir, { recursive: true });
+    await writeFileText(
+      path.join(jsDir, 'a.js'),
+      'const a = 1; // comment-a\nmodule.exports = a;\n',
+    );
+    await writeFileText(
+      path.join(jsDir, 'b.js'),
+      'const b = 2; // comment-b\nmodule.exports = b;\n',
+    );
+  });
+
+  afterEach(() => {
+    process.chdir(savedCwd);
+    cleanupTempDir(tempDir);
+    delete (globalThis as unknown as { __babelWatchHandler?: WatchHandler }).__babelWatchHandler;
+  });
+
+  it('uses the whole module as the babel config when configKey is omitted', async () => {
+    const options: BabelTransformExecutorSchema = {
+      babelConfigPath: './babel.flat.json',
+      sourcePattern: './js/**/*.js',
+      outDir: './out',
+    };
+
+    const result = await executor(options, context);
+    expect(result.success).toBe(true);
+
+    const aContent = await readFileText(path.join(projectDir, 'out', 'a.js'));
+    expect(aContent).not.toContain('comment-a');
+  }, 30000);
+
+  it('watch mode re-transforms only the changed file', async () => {
+    writeChokidarMock(projectDir);
+
+    const options: BabelTransformExecutorSchema = {
+      babelConfigPath: './babel.flat.json',
+      sourcePattern: './js/**/*.js',
+      outDir: './out',
+      watch: true,
+    };
+
+    const aOut = path.join(projectDir, 'out', 'a.js');
+    const bOut = path.join(projectDir, 'out', 'b.js');
+
+    const originalOnce = process.once;
+    let stopWatch: (() => void) | undefined;
+    let run: Promise<{ success: boolean }> | undefined;
+
+    (process as unknown as { once: typeof process.once }).once = ((
+      event: string,
+      handler: () => void,
+    ) => {
+      if (event === 'SIGINT' || event === 'SIGTERM') {
+        stopWatch = handler;
+        return process;
+      }
+      return originalOnce.call(process, event, handler as never);
+    }) as typeof process.once;
+
+    try {
+      run = executor(options, context);
+
+      await waitFor(() => typeof getWatchHandler() === 'function');
+
+      // Only a.js changes; b.js must stay untouched (file-level incremental).
+      getWatchHandler()?.('change', path.join(projectDir, 'js', 'a.js'));
+
+      await waitFor(() => fs.existsSync(aOut));
+      expect(await readFileText(aOut)).not.toContain('comment-a');
+      expect(fs.existsSync(bOut)).toBe(false);
+
+      stopWatch?.();
+      stopWatch = undefined;
+
+      expect((await run).success).toBe(true);
+      run = undefined;
+    } finally {
+      stopWatch?.();
+      if (run) {
+        await run;
+      }
+      (process as unknown as { once: typeof process.once }).once = originalOnce;
+    }
+  }, 30000);
 });

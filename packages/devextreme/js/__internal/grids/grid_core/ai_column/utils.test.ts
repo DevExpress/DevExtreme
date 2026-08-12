@@ -3,11 +3,13 @@ import {
 } from '@jest/globals';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import type { Item } from '../data_controller/m_data_controller';
+import type { ProcessedItem } from '../data_controller/types';
+import type { RawItemData } from '../data_source_adapter/types';
 import {
   getDataFromRowItems,
   isAIColumnAutoMode,
   isEditorOptions,
+  isKeyMissingInData,
   isPopupOptions,
   isPromptOption,
   isRefreshOption,
@@ -25,7 +27,7 @@ describe('reduceDataCachedKeys', () => {
       b: 'test b',
       c: 'test c',
     };
-    const result = reduceDataCachedKeys(data, cachedData, 'key');
+    const result = reduceDataCachedKeys(data, cachedData, (item) => item.key as PropertyKey);
     expect(result).toEqual(
       { a: { key: 'a', value: '1' } },
     );
@@ -38,7 +40,7 @@ describe('reduceDataCachedKeys', () => {
       { key: 'c', value: '3' },
     ];
     const cachedKeys = {};
-    const result = reduceDataCachedKeys(data, cachedKeys, 'key');
+    const result = reduceDataCachedKeys(data, cachedKeys, (item) => item.key as PropertyKey);
     expect(result).toEqual({
       a: { key: 'a', value: '1' },
       b: { key: 'b', value: '2' },
@@ -57,7 +59,7 @@ describe('reduceDataCachedKeys', () => {
       b: 'test b',
       c: 'test c',
     };
-    const result = reduceDataCachedKeys(data, cachedData, 'key');
+    const result = reduceDataCachedKeys(data, cachedData, (item) => item.key as PropertyKey);
     expect(result).toEqual({ });
   });
 
@@ -71,10 +73,72 @@ describe('reduceDataCachedKeys', () => {
       2: 'two',
       3: 'three',
     };
-    const result = reduceDataCachedKeys(data, cachedKeys, 'key');
+    const result = reduceDataCachedKeys(data, cachedKeys, (item) => item.key as PropertyKey);
     expect(result).toEqual({
       1: { key: 1, value: '1' },
     });
+  });
+});
+
+describe('isKeyMissingInData', () => {
+  it('should return false when a primitive key is present in all rows', () => {
+    const data: RawItemData[] = [
+      { id: 1, name: 'A' },
+      { id: 2, name: 'B' },
+    ];
+    expect(isKeyMissingInData(data, 'id')).toBe(false);
+  });
+
+  it('should return true when a primitive key is missing from a row', () => {
+    const data: RawItemData[] = [
+      { id: 1, name: 'A' },
+      { name: 'B' },
+    ];
+    expect(isKeyMissingInData(data, 'id')).toBe(true);
+  });
+
+  it('should return false when a primitive key is present but null or undefined', () => {
+    const data: RawItemData[] = [
+      { id: null, name: 'A' },
+      { id: undefined, name: 'B' },
+    ];
+    expect(isKeyMissingInData(data, 'id')).toBe(false);
+  });
+
+  it('should return false when all compound key fields are present in all rows', () => {
+    const data: RawItemData[] = [
+      { id1: 1, id2: 'a' },
+      { id1: 2, id2: 'b' },
+    ];
+    expect(isKeyMissingInData(data, ['id1', 'id2'])).toBe(false);
+  });
+
+  it('should return true when a compound key subfield is missing from a row', () => {
+    const data: RawItemData[] = [
+      { id1: 1, id2: 'a' },
+      { id1: 2 },
+    ];
+    expect(isKeyMissingInData(data, ['id1', 'id2'])).toBe(true);
+  });
+
+  it('should return false when a function key expression resolves for all rows', () => {
+    const data: RawItemData[] = [
+      { id: 1, name: 'A' },
+      { id: 2, name: 'B' },
+    ];
+    expect(isKeyMissingInData(data, (row) => row.id)).toBe(false);
+  });
+
+  it('should return true when a function key expression cannot resolve a row', () => {
+    const data: RawItemData[] = [
+      { id: 1, name: 'A' },
+      { name: 'B' },
+    ];
+    expect(isKeyMissingInData(data, (row) => row.id)).toBe(true);
+  });
+
+  it('should return false for empty data', () => {
+    expect(isKeyMissingInData([], 'id')).toBe(false);
   });
 });
 
@@ -96,7 +160,7 @@ describe('getDataFromRowItems', () => {
         key: 'id',
         rowType: 'data',
       },
-    ] as unknown as Item[];
+    ] as unknown as ProcessedItem[];
     const result = getDataFromRowItems(items);
     expect(result).toEqual([
       { id: 1, value: 'one' },
@@ -116,7 +180,7 @@ describe('getDataFromRowItems', () => {
         key: 'id',
         rowType: 'group',
       },
-    ] as unknown as Item[];
+    ] as unknown as ProcessedItem[];
     const result = getDataFromRowItems(items);
     expect(result).toEqual([
       { id: 1, value: 'one' },
@@ -197,6 +261,7 @@ describe('isPopupOptions', () => {
     })).toBe(false);
   });
 });
+
 describe('isEditorOptions', () => {
   it('should return true for editorOptions option names', () => {
     expect(isEditorOptions('ai.editorOptions.width', 200)).toBe(true);

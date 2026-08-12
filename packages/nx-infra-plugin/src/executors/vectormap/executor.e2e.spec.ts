@@ -76,11 +76,11 @@ const LICENSE_TEMPLATE = `/*<%= commentType %>
 `;
 
 async function setupLicenseTemplate(projectDir: string): Promise<string> {
-  const buildDir = path.join(projectDir, 'build', 'gulp');
+  const buildDir = path.join(projectDir, 'build');
   fs.mkdirSync(buildDir, { recursive: true });
   const templatePath = path.join(buildDir, 'license-header.txt');
   await writeFileText(templatePath, LICENSE_TEMPLATE);
-  return './build/gulp/license-header.txt';
+  return './build/license-header.txt';
 }
 
 describe('VectormapExecutor E2E', () => {

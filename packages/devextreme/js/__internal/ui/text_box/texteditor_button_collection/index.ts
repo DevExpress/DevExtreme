@@ -4,6 +4,7 @@ import $ from '@js/core/renderer';
 import type dxButton from '@js/ui/button';
 import type { Properties } from '@js/ui/button';
 import errors from '@js/ui/widget/ui.errors';
+import type Widget from '@ts/core/widget/widget';
 import type TextEditorBase from '@ts/ui/text_box/text_editor.base';
 import type TextEditorButton from '@ts/ui/text_box/texteditor_button_collection/button';
 import CustomButton from '@ts/ui/text_box/texteditor_button_collection/custom';
@@ -63,25 +64,29 @@ function isPredefinedButtonName(
   return !!predefinedButtonsInfo.find((info) => info.name === name);
 }
 
-export type TextEditorButtonInfo = PublicTextEditorButton & {
+export type TextEditorButtonInfo<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TComponent extends Widget<any> = TextEditorBase,
+> = PublicTextEditorButton & {
   name: string;
   Ctor: new (
     name: string,
-    editor: TextEditorBase,
+    editor: TComponent,
     options: Properties,
-  ) => TextEditorButton;
+  ) => TextEditorButton<TComponent>;
 };
 
 export default class TextEditorButtonCollection<
-  TComponent extends TextEditorBase = TextEditorBase,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TComponent extends Widget<any> = TextEditorBase,
 > {
-  buttons!: TextEditorButton[];
+  buttons!: TextEditorButton<TComponent>[];
 
   editor!: TComponent;
 
-  defaultButtonsInfo!: TextEditorButtonInfo[];
+  defaultButtonsInfo!: TextEditorButtonInfo<TComponent>[];
 
-  constructor(editor: TComponent, defaultButtonsInfo: TextEditorButtonInfo[]) {
+  constructor(editor: TComponent, defaultButtonsInfo: TextEditorButtonInfo<TComponent>[]) {
     this.buttons = [];
     this.defaultButtonsInfo = defaultButtonsInfo;
     this.editor = editor;
@@ -89,8 +94,8 @@ export default class TextEditorButtonCollection<
 
   _compileButtonInfo(
     buttons: (string | PublicTextEditorButton)[],
-  ): TextEditorButtonInfo[] {
-    const names: (string | TextEditorButtonInfo)[] = [];
+  ): TextEditorButtonInfo<TComponent>[] {
+    const names: (string | TextEditorButtonInfo<TComponent>)[] = [];
 
     return buttons.map((button) => {
       if (typeof button === 'string') {
@@ -129,14 +134,14 @@ export default class TextEditorButtonCollection<
 
       checkNamesUniqueness(names, name);
 
-      return { ...button, Ctor: CustomButton } as unknown as TextEditorButtonInfo;
+      return { ...button, Ctor: CustomButton } as unknown as TextEditorButtonInfo<TComponent>;
     });
   }
 
-  _createButton(buttonsInfo: TextEditorButtonInfo): TextEditorButton {
+  _createButton(buttonsInfo: TextEditorButtonInfo<TComponent>): TextEditorButton<TComponent> {
     const { Ctor, options, name } = buttonsInfo;
 
-    const button: TextEditorButton = new Ctor(name, this.editor, options ?? {});
+    const button: TextEditorButton<TComponent> = new Ctor(name, this.editor, options ?? {});
 
     this.buttons.push(button);
 

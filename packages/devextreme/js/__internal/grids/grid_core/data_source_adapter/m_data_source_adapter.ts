@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-dynamic-delete */
 import ArrayStore from '@js/common/data/array_store';
 import { applyBatch } from '@js/common/data/array_utils';
+import type { Callback } from '@js/core/utils/callbacks';
 import Callbacks from '@js/core/utils/callbacks';
 import { getKeyHash } from '@js/core/utils/common';
 import { Deferred, when } from '@js/core/utils/deferred';
@@ -18,11 +19,15 @@ import {
   getPageDataFromCache,
   setPageDataToCache,
 } from './m_data_source_adapter_utils';
+import type {
+  ChangedEvent, LoadOperation, OperationTypes, RemoteOperationsOptions,
+} from './types';
+import { normalizeRemoteOperations } from './utils/remoteOperations';
 
 export default class DataSourceAdapter extends modules.Controller {
   protected _dataSource: any;
 
-  private _remoteOperations: any;
+  private _remoteOperations!: RemoteOperationsOptions;
 
   private _isLastPage!: boolean;
 
@@ -38,7 +43,7 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private _cachedPagingData: any;
 
-  private _lastOperationTypes: any;
+  private _lastOperationTypes!: OperationTypes;
 
   private _eventsStrategy: any;
 
@@ -54,31 +59,31 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private _isRefreshing: any;
 
-  private _loadingOperationTypes: any;
+  private _loadingOperationTypes?: OperationTypes;
 
   private _isRefreshed: any;
 
   protected _lastOperationId: any;
 
-  private _operationTypes: any;
+  private _operationTypes?: OperationTypes;
 
   private _isCustomLoading: any;
 
-  protected changed: any;
+  protected changed!: Callback<[ChangedEvent?]>;
 
   protected loadingChanged: any;
 
   private loadError: any;
 
-  private customizeStoreLoadOptions: any;
+  private customizeStoreLoadOptions!: Callback<[LoadOperation]>;
 
   private changing: any;
 
   private pushed: any;
 
-  private _dataChangedHandler!: (e: any) => any;
+  private _dataChangedHandlerProxy!: (e: ChangedEvent) => void;
 
-  private _customizeStoreLoadOptionsHandler!: (e: any) => any;
+  private _customizeStoreLoadOptionsHandlerProxy!: (e: LoadOperation) => void;
 
   private _dataLoadedHandler!: (e: any) => any;
 
@@ -94,11 +99,14 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private readonly group!: (args?: any) => any;
 
-  public init(dataSource?, remoteOperations?) {
+  public init(dataSource?) {
     const that = this;
 
     that._dataSource = dataSource;
-    that._remoteOperations = remoteOperations || {};
+    that._remoteOperations = normalizeRemoteOperations(
+      this.option('remoteOperations'),
+      dataSource.store(),
+    );
 
     that._isLastPage = !dataSource.isLastPage();
     that._hasLastPage = false;
@@ -116,16 +124,16 @@ export default class DataSourceAdapter extends modules.Controller {
     that.changing = Callbacks();
     that.pushed = Callbacks();
 
-    that._dataChangedHandler = that._handleDataChanged.bind(that);
-    that._customizeStoreLoadOptionsHandler = that._handleCustomizeStoreLoadOptions.bind(that);
+    that._dataChangedHandlerProxy = that._dataChangedHandler.bind(that);
+    that._customizeStoreLoadOptionsHandlerProxy = that._customizeStoreLoadOptionsHandler.bind(that);
     that._dataLoadedHandler = that._handleDataLoaded.bind(that);
     that._loadingChangedHandler = that._handleLoadingChanged.bind(that);
     that._loadErrorHandler = that._handleLoadError.bind(that);
     that._pushHandler = that._handlePush.bind(that);
     that._changingHandler = that._handleChanging.bind(that);
 
-    dataSource.on('changed', that._dataChangedHandler);
-    dataSource.on('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandler);
+    dataSource.on('changed', that._dataChangedHandlerProxy);
+    dataSource.on('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandlerProxy);
     dataSource.on('customizeLoadResult', that._dataLoadedHandler);
     dataSource.on('loadingChanged', that._loadingChangedHandler);
     dataSource.on('loadError', that._loadErrorHandler);
@@ -146,8 +154,8 @@ export default class DataSourceAdapter extends modules.Controller {
     const dataSource = that._dataSource;
     const store = dataSource.store();
 
-    dataSource.off('changed', that._dataChangedHandler);
-    dataSource.off('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandler);
+    dataSource.off('changed', that._dataChangedHandlerProxy);
+    dataSource.off('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandlerProxy);
     dataSource.off('customizeLoadResult', that._dataLoadedHandler);
     dataSource.off('loadingChanged', that._loadingChangedHandler);
     dataSource.off('loadError', that._loadErrorHandler);
@@ -162,7 +170,7 @@ export default class DataSourceAdapter extends modules.Controller {
   /**
    * @extended: TreeLists's data_source_adapter
    */
-  protected remoteOperations() {
+  public remoteOperations(): RemoteOperationsOptions {
     return this._remoteOperations;
   }
 
@@ -342,7 +350,11 @@ export default class DataSourceAdapter extends modules.Controller {
     return currentOperationTypes.some((operationType) => remoteOperations[operationType]);
   }
 
-  protected _calculateOperationTypes(loadOptions, lastLoadOptions, isFullReload?: boolean) {
+  protected _calculateOperationTypes(
+    loadOptions,
+    lastLoadOptions,
+    isFullReload?: boolean,
+  ): OperationTypes {
     return calculateOperationTypes(loadOptions, lastLoadOptions, isFullReload);
   }
 
@@ -396,9 +408,9 @@ export default class DataSourceAdapter extends modules.Controller {
     }
   }
 
-  protected _handleCustomizeStoreLoadOptions(options) {
+  protected _customizeStoreLoadOptionsHandler(options: LoadOperation): void {
     this._handleDataLoading(options);
-    if (!(options.data?.length === 0)) {
+    if (!(Array.isArray(options.data) && options.data.length === 0)) {
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       options.data = getPageDataFromCache(options, true) || options.cachedStoreData;
     }
@@ -407,7 +419,7 @@ export default class DataSourceAdapter extends modules.Controller {
   /**
    * @extended: virtual_scrolling
    */
-  protected _handleDataLoading(options) {
+  protected _handleDataLoading(options: LoadOperation): void {
     const dataSource = this._dataSource;
     const lastLoadOptions = this._lastLoadOptions;
 
@@ -580,8 +592,10 @@ export default class DataSourceAdapter extends modules.Controller {
     when(options.data).done(() => {
       if (options.lastLoadOptions) {
         this._lastLoadOptions = options.lastLoadOptions;
+
         Object.keys(options.operationTypes).forEach((operationType) => {
-          this._lastOperationTypes[operationType] = this._lastOperationTypes[operationType] || options.operationTypes[operationType];
+          // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+          this._lastOperationTypes[operationType] ||= options.operationTypes[operationType];
         });
       }
     });
@@ -630,11 +644,14 @@ export default class DataSourceAdapter extends modules.Controller {
   /**
    * @extended: virtual_scrolling
    */
-  protected _handleDataChanged(args) {
+  // ChangedEvent
+  protected _dataChangedHandler(e?: ChangedEvent) {
     let currentTotalCount;
     const dataSource = this._dataSource;
     let isLoading = false;
-    const isDataLoading = !args || isDefined(args.changeType);
+
+    // At this stage e.changeType can be defined only if virtual scrolling and scrolling.legacyMode is true
+    const isDataLoading = !e || isDefined(e.changeType);
 
     const itemsCount = this.itemsCount();
 
@@ -676,7 +693,7 @@ export default class DataSourceAdapter extends modules.Controller {
       this._lastOperationTypes = {};
 
       this.component._optionCache = {};
-      this.changed.fire(args);
+      this.changed.fire(e);
       this.component._optionCache = undefined;
     }
   }
@@ -694,7 +711,7 @@ export default class DataSourceAdapter extends modules.Controller {
     return this._loadingOperationTypes;
   }
 
-  private operationTypes() {
+  public operationTypes(): OperationTypes | undefined {
     return this._operationTypes;
   }
 
@@ -830,7 +847,7 @@ export default class DataSourceAdapter extends modules.Controller {
       that._scheduleCustomLoadCallbacks(d);
       dataSource._scheduleLoadCallbacks(d);
 
-      that._handleCustomizeStoreLoadOptions(loadResult);
+      that._customizeStoreLoadOptionsHandler(loadResult);
       executeTask(() => {
         if (!dataSource.store()) {
           return d.reject('canceled');

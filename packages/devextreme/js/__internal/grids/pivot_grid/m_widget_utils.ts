@@ -10,7 +10,7 @@ import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
 import { isDefined, isNumeric, type } from '@js/core/utils/type';
 import formatHelper from '@js/format_helper';
-import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
+import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 
 import { CLASSES } from './const';
 

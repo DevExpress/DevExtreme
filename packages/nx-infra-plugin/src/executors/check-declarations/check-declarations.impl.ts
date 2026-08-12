@@ -12,7 +12,7 @@ import {
 } from './declaration-check-content';
 import { CheckDeclarationsExecutorSchema } from './schema';
 
-const DEFAULT_MODULES_METADATA = './build/gulp/modules_metadata.json';
+const DEFAULT_MODULES_METADATA = './build/modules_metadata.json';
 const DEFAULT_TS_BUNDLE = './artifacts/ts/dx.all.d.ts';
 const DEFAULT_BUNDLE_ARTIFACT = './artifacts/ts/dx.all.d.ts';
 const DEFAULT_MODULES_PATTERN = './js/**/*.d.ts';
@@ -98,7 +98,6 @@ export function buildDefaultCompilerOptions(
     strict: true,
     noImplicitAny: false,
     types: ['jquery'],
-    // gulp-typescript accepted legacy names; TS API expects standard lib entries (4.9).
     lib: ['ES2017', 'DOM'],
     moduleResolution: ts.ModuleResolutionKind.NodeJs,
     typeRoots: [path.join(projectRoot, 'node_modules', '@types')],

@@ -13,7 +13,7 @@ import {
   isPlainObject, isString,
 } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
-import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { EditingControllerRequired, ModuleType } from '@ts/grids/grid_core/m_types';
 import { ColumnsView } from '@ts/grids/grid_core/views/m_columns_view';
@@ -817,11 +817,15 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     return sortByGroups;
   }
 
-  protected _createDataSourceAdapterCore(dataSource, remoteOperations) {
-    const that = this;
-    const dataSourceAdapter = super._createDataSourceAdapterCore(dataSource, remoteOperations);
+  protected _createDataSourceAdapter(dataSource) {
+    const dataSourceAdapter = super._createDataSourceAdapter(dataSource);
 
-    dataSourceAdapter.summaryGetter((currentRemoteOperations) => that._getSummaryOptions(currentRemoteOperations || remoteOperations));
+    dataSourceAdapter.summaryGetter((currentRemoteOperations) => {
+      const result = this._getSummaryOptions(
+        currentRemoteOperations ?? dataSourceAdapter.remoteOperations(),
+      );
+      return result;
+    });
 
     return dataSourceAdapter;
   }

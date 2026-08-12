@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import type { FC } from 'react';
-import 'devextreme-react/text-area';
+import 'devextreme/ui/text_area';
 import { Form, SimpleItem } from 'devextreme-react/form';
 
 import type { FormProps } from './types.ts';

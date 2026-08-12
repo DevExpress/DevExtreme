@@ -1,7 +1,7 @@
 import { equalByValue } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { DataController, dataControllerModule } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import { DataController, dataControllerModule } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { RowKey } from '@ts/grids/grid_core/m_types';
 
 import dataSourceAdapterProvider from '../data_source_adapter/m_data_source_adapter';
@@ -23,7 +23,7 @@ export class TreeListDataController extends DataController {
     return level;
   }
 
-  protected _generateDataItem(node, options) {
+  protected _generateDataItem(node?: any, options?: any): any {
     return {
       rowType: 'data',
       node,

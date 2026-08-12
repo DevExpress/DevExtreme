@@ -36,7 +36,6 @@
 
 <script setup lang="ts">
 import { DxForm, DxRangeRule, DxSimpleItem } from 'devextreme-vue/form';
-import 'devextreme-vue/number-box';
 import { watch, ref } from 'vue';
 import type { BookingFormData } from './types.ts';
 import { getInitialFormData } from './data.ts';

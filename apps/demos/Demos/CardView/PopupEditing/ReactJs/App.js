@@ -7,7 +7,7 @@ import CardView, {
   Form,
   Item,
 } from 'devextreme-react/card-view';
-import 'devextreme-react/text-area';
+import 'devextreme/ui/text_area';
 import { employees } from './data.js';
 
 function altExpr({ fullName }) {

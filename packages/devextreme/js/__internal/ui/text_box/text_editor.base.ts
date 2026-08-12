@@ -20,12 +20,13 @@ import { isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type dxButton from '@js/ui/button';
 import LoadIndicator from '@js/ui/load_indicator';
+import type dxTextBox from '@js/ui/text_box';
 import type { dxTextEditorOptions } from '@js/ui/text_box/ui.text_editor.base';
 import { current, isFluent, isMaterial } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import { focused } from '@ts/core/utils/m_selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { ValueChangedEvent } from '@ts/ui/editor/editor';
+import type { EditorInternalProperties, ValueChangedEvent, WithValidationMessageMode } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
 
 import ClearButton from './text_editor.clear';
@@ -33,7 +34,7 @@ import { TextEditorLabel } from './text_editor.label';
 import type { TextEditorButtonInfo } from './texteditor_button_collection/index';
 import TextEditorButtonCollection from './texteditor_button_collection/index';
 
-export interface TextEditorBaseProperties extends dxTextEditorOptions<TextEditorBase> {
+export interface TextEditorInternalProperties extends EditorInternalProperties {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   displayValueFormatter?: ((value: string | any[]) => string);
 
@@ -43,10 +44,19 @@ export interface TextEditorBaseProperties extends dxTextEditorOptions<TextEditor
 
   showValidationMark?: boolean;
 
-  mode?: string;
-
   displayValue?: string;
 }
+
+export interface TextEditorBaseProperties<
+  TComponent = dxTextBox,
+> extends dxTextEditorOptions<TComponent>, TextEditorInternalProperties {
+  mode?: string;
+}
+
+export type TextEditorPropertiesConstraint = WithValidationMessageMode<
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TextEditorBaseProperties<any>
+>;
 
 export const TEXTEDITOR_CLASS = 'dx-texteditor';
 export const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
@@ -99,7 +109,7 @@ const checkButtonsOptionType = (buttons: TextEditorBaseProperties['buttons']): v
 };
 
 class TextEditorBase<
-  TProperties extends TextEditorBaseProperties = TextEditorBaseProperties,
+  TProperties extends TextEditorPropertiesConstraint = TextEditorBaseProperties,
 > extends Editor<TProperties> {
   _showValidMark?: boolean;
 
@@ -733,7 +743,7 @@ class TextEditorBase<
       const hasActionSubscription = this.hasActionSubscription(actionName as keyof TProperties);
 
       if (hasActionSubscription) {
-        const action = this._createActionByOption(actionName as keyof TProperties, {
+        const action = this._createActionByOption(actionName, {
           excludeValidators: ['readOnly'],
         });
 

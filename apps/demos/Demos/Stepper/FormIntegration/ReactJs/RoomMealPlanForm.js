@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import 'devextreme-react/select-box';
+import 'devextreme/ui/select_box';
 import { Form, SimpleItem } from 'devextreme-react/form';
 import { mealPlans, roomTypes } from './data.js';
 

@@ -7,14 +7,13 @@ import type { ClickEvent as ButtonClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type {
   ContentReadyEvent,
-  InitializedEvent,
   ItemClickEvent,
   ItemContextMenuEvent,
   Properties as ListProperties,
 } from '@js/ui/list';
 import type dxOverlay from '@js/ui/overlay';
 import type { Properties as OverlayProperties } from '@js/ui/overlay';
-import type { Appointment, AppointmentClickEvent, Properties as SchedulerProperties } from '@js/ui/scheduler';
+import type { Appointment, Properties as SchedulerProperties } from '@js/ui/scheduler';
 import { createPromise } from '@ts/core/utils/promise';
 import List from '@ts/ui/list/list.edit';
 import type Tooltip from '@ts/ui/tooltip';
@@ -69,10 +68,6 @@ export interface AppointmentTooltipOptions {
   onItemContextMenu: (eventArgs: unknown) => void;
   createEventArgs: (e: ItemContextMenuEvent<AppointmentTooltipItem>) =>
   AppointmentTooltipContextMenuEventArgs;
-  newAppointments?: boolean; // TODO<Appointments>
-  onAppointmentClick: (e: AppointmentClickEvent) => void;
-  onListInitialized: (e: InitializedEvent) => void;
-  onListDisposing: () => void;
 }
 
 export interface AppointmentTooltipExtraOptions {
@@ -241,8 +236,6 @@ export abstract class TooltipStrategyBase {
     return {
       dataSource: dataList,
       onContentReady: this.onListRender.bind(this),
-      onInitialized: this.onListInitialized.bind(this),
-      onDisposing: this._options.onListDisposing,
       onItemClick: (
         e: ItemClickEvent<AppointmentTooltipItem>,
       ): void => this.onListItemClick(e),
@@ -259,9 +252,6 @@ export abstract class TooltipStrategyBase {
       pageLoadMode: 'scrollBottom',
     };
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected onListInitialized(e: InitializedEvent): void { }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected onListRender(e: ContentReadyEvent<AppointmentTooltipItem>): void { }
@@ -340,19 +330,7 @@ export abstract class TooltipStrategyBase {
 
     this.hide();
 
-    if (this._options.newAppointments) {
-      if (this.extraOptions?.isButtonClick) {
-        // @ts-expect-error 'component' and 'element' are set by action
-        this._options.onAppointmentClick({
-          appointmentElement: e.itemElement,
-          appointmentData: e.itemData.appointment,
-          targetedAppointmentData: e.itemData.targetedAppointment,
-          event: e.event,
-        });
-      }
-    } else {
-      this.extraOptions?.clickEvent?.(e);
-    }
+    this.extraOptions?.clickEvent?.(e);
 
     this._options.showAppointmentPopup(
       e.itemData.appointment,

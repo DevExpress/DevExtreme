@@ -11,7 +11,7 @@ import { isDefined } from 'core/utils/type';
 
 import 'ui/data_grid';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 let helper;
 
@@ -444,7 +444,7 @@ const moduleConfig = {
             }).dxDataGrid('instance');
 
             exportDataGrid(getOptions(this, dataGrid, null, true)).then(() => {
-                helper.checkColumnWidths([3.8, 67.6, undefined], topLeft.column);
+                helper.checkColumnWidths([6.2, 65.2, undefined], topLeft.column);
                 done();
             });
         });

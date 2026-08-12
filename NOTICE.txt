@@ -110,10 +110,6 @@ tslib (Open Source - BSD Zero Clause License)
 Copyright (c) Microsoft Corporation.
 https://github.com/microsoft/tslib/blob/master/LICENSE.txt
 
-Unplugin (Open Source - MIT License)
-Copyright (c) 2021-PRESENT Nuxt Contrib
-https://github.com/unjs/unplugin/blob/main/LICENSE
-
 Zod (Open Source - MIT License)
 Copyright (c) 2025 Colin McDonnell
 https://github.com/colinhacks/zod/blob/main/LICENSE

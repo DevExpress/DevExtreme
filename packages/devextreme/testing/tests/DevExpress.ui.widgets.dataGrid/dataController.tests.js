@@ -8066,7 +8066,7 @@ QUnit.module('Filtering', {
             isApplyFilterCalled = true;
         };
 
-        this.dataController._handleColumnsChanged({
+        this.dataController.columnsChangedHandler({
             changeTypes: {
                 columns: 'test'
             },

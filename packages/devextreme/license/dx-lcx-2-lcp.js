@@ -1,5 +1,4 @@
 
-const { MESSAGES } = require('./messages');
 const LCX_SIGNATURE = 'LCXv1';
 const LCP_SIGNATURE = 'LCPv1';
 const SIGN_LENGTH = 68 * 2; // 136 chars

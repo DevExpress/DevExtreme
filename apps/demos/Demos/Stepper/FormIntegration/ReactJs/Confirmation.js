@@ -1,5 +1,4 @@
 import React from 'react';
-import 'devextreme-react/date-range-box';
 
 const Confirmation = ({ formData, isConfirmed }) => {
   if (isConfirmed) {

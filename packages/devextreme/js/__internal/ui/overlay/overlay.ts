@@ -60,7 +60,9 @@ const ready = readyCallbacks.add;
 const window = windowUtils.getWindow();
 const viewPortChanged = changeCallback;
 
-const OVERLAY_STACK: Overlay[] = [];
+export // NOTE: the stack is global and holds overlays of every properties flavor.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const OVERLAY_STACK: Overlay<any>[] = [];
 const ANONYMOUS_TEMPLATE_NAME = 'content';
 const TAB_KEY = 'tab';
 
@@ -506,7 +508,6 @@ class Overlay<
 
     const overlayStack = this._overlayStack();
     const innerOverlayElement = $closestInnerOverlay.get(0);
-    // @ts-expect-error this and Overlay have no overlap
     const thisIndex = overlayStack.indexOf(this);
 
     for (let i = 0; i < overlayStack.length; i += 1) {
@@ -545,7 +546,8 @@ class Overlay<
     return false;
   }
 
-  _overlayStack(): Overlay[] {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _overlayStack(): Overlay<any>[] {
     return OVERLAY_STACK;
   }
 
@@ -918,7 +920,6 @@ class Overlay<
 
   _updateZIndexStackPosition(pushToStack: boolean): void {
     const overlayStack = this._overlayStack();
-    // @ts-expect-error this and Overlay have no overlap
     const index = overlayStack.indexOf(this);
     const isInStack = index !== -1;
     const { zIndex } = this.option();
@@ -934,7 +935,6 @@ class Overlay<
 
     if (!isInStack) {
       this._zIndex = zIndex ?? zIndexPool.create(this._zIndexInitValue());
-      // @ts-expect-error this and Overlay have no overlap
       overlayStack.push(this);
     }
 

@@ -728,12 +728,10 @@ class CollectionWidget<
     } = args;
 
     if (name === 'items') {
-      // @ts-expect-error ts-error
       const matches = fullName.match(ITEM_PATH_REGEX);
 
       if (matches?.length) {
         const property = matches[matches.length - 1];
-        // @ts-expect-error ts-error
         const itemPath = fullName.replace(`.${property}`, '');
         const item = this.option(itemPath);
 
@@ -1491,7 +1489,7 @@ class CollectionWidget<
     actionArgs: ActionArgs<TItem>,
     actionConfig?: ActionConfig,
   ): void {
-    const action = this._createActionByOption(handlerOptionName, {
+    const action = this._createActionByOption(String(handlerOptionName), {
       validatingTargetName: 'itemElement',
       ...actionConfig,
     });

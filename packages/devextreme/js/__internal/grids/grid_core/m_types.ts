@@ -1,11 +1,13 @@
 /* eslint-disable spellcheck/spell-checker */
 
-import type { GridBase, GridBaseOptions, SelectionBase } from '@js/common/grids';
+import type {
+  GridBase, GridBaseOptions, SelectionBase,
+} from '@js/common/grids';
 import type { Component } from '@js/core/component';
 import type { PropertyType } from '@js/core/index';
 import type { dxElementWrapper } from '@js/core/renderer';
-import type { Properties as DataGridOptions } from '@js/ui/data_grid';
-import type { Properties as TreeListdOptions } from '@js/ui/tree_list';
+import type { Properties as DataGridOptions, Scrolling as DataGridScrolling } from '@js/ui/data_grid';
+import type { Properties as TreeListdOptions, Scrolling as TreeListScrolling } from '@js/ui/tree_list';
 import type Widget from '@js/ui/widget/ui.widget';
 
 import type { EditingController } from './editing/m_editing';
@@ -104,6 +106,8 @@ type TemporarlyOptionsTakenFromDataGrid = Pick<DataGridOptions,
 | 'onEditingStart'
 | 'toolbar'
 | 'summary'
+| 'remoteOperations'
+| 'keyExpr'
 >;
 
 type TemporarlyOptionsTakenFromTreeList = Pick<TreeListdOptions,
@@ -128,6 +132,8 @@ export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unkno
   loadItemsOnExportingSelectedItems?: boolean | undefined;
 
   selection?: InternalSelection;
+
+  scrolling?: DataGridScrolling | TreeListScrolling;
 }
 
 // todo: move to upper .d.ts files
@@ -183,7 +189,7 @@ export interface Controllers {
   columns: import('./columns_controller/m_columns_controller').ColumnsController;
   columnsResizer: import('./columns_resizing_reordering/m_columns_resizing_reordering').ColumnsResizerViewController;
   contextMenu: import('./context_menu/m_context_menu').ContextMenuController;
-  data: import('./data_controller/m_data_controller').DataController;
+  data: import('./data_controller/data_controller').DataController;
   draggingHeader: import('./columns_resizing_reordering/m_columns_resizing_reordering').DraggingHeaderViewController;
   // todo: export is dataGrid-only controller
   editing: import('./editing/m_editing').EditingController;

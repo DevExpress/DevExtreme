@@ -5,7 +5,7 @@ import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import Guid from '@js/core/guid';
-import $ from '@js/core/renderer';
+import $, { type dxElementWrapper } from '@js/core/renderer';
 import { when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
@@ -51,6 +51,8 @@ const FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS = `${FILTER_BUILDER_CLASS}-menu
 const SOURCE = 'filterBuilder';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+const POPUP_CONTENT_CLASS = 'dx-popup-content';
+const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const TREEVIEW_NODE_CONTAINER = 'dx-treeview-node-container';
 
 const TAB_KEY = 'tab';
@@ -765,10 +767,23 @@ class FilterBuilder extends Widget<any> {
     this._documentClickHandler = documentClickHandler;
   }
 
-  _isFocusOnEditorParts($editor, target?) {
+  _isFocusOnEditorParts($editor: dxElementWrapper, target?: HTMLElement): boolean {
     const activeElement = target || domAdapter.getActiveElement();
-    return $(activeElement).closest($editor.children()).length
-            || $(activeElement).closest('.dx-dropdowneditor-overlay').length;
+    const isFocusOnEditor = $(activeElement).closest($editor).length > 0;
+    if (isFocusOnEditor) {
+      return true;
+    }
+
+    const overlay = $(activeElement).closest(`.${DROPDOWN_EDITOR_OVERLAY_CLASS}`);
+    const isFocusOnOverlay = overlay.length > 0;
+    if (isFocusOnOverlay) {
+      const overlayID = overlay.find(`.${POPUP_CONTENT_CLASS}`).attr('id');
+      const editorOwns = $editor.attr('aria-owns') ?? $editor.find('[aria-owns]').attr('aria-owns');
+      const overlayOwnedByEditor = isDefined(editorOwns) && editorOwns === overlayID;
+      return overlayOwnedByEditor;
+    }
+
+    return false;
   }
 
   _removeEvents() {
