@@ -9,7 +9,7 @@ $colorbox-input-left-padding: 40px;
 $colorbox-texteditor-input-container-width: 15px !default;
 $colorbox-texteditor-input-container-height: 15px !default;
 $colorbox-texteditor-input-container-inset-inline-start: 14px !default;
-$colorbox-overlay-padding-2: 20px !default;
+$colorbox-overlay-padding: 20px !default;
 $colorbox-toolbar-item-padding-right: 10px !default;
 
 .dx-colorbox-input-container {
@@ -55,7 +55,7 @@ $colorbox-toolbar-item-padding-right: 10px !default;
 }
 
 .dx-colorbox-overlay {
-  padding: $colorbox-overlay-padding-2;
+  padding: $colorbox-overlay-padding;
 
   .dx-popup-content {
     overflow: hidden;
