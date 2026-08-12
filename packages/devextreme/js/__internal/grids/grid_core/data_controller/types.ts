@@ -5,11 +5,8 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 
 import type { Column } from '../columns_controller/types';
 import type { ChangedEvent, OperationTypes, RawItemData } from '../data_source_adapter/types';
-/** data */
 
-export interface DataSourceAdapterLike {
-  _dataSource: DataSource;
-}
+/** rows */
 
 export interface ItemProcessingOptions {
   visibleColumns: Column[];
@@ -17,6 +14,19 @@ export interface ItemProcessingOptions {
   rowIndex?: number;
   detailColumnIndex?: number;
   isDeferredSelection?: boolean;
+}
+
+export type RowUpdate = (row?: ProcessedItem, keepRow?: boolean) => void;
+
+export type RowWatch = (
+  getter: (data: RawItemData) => unknown,
+  updateValue: (value: unknown) => void,
+  updateRow?: (row: ProcessedItem) => void,
+) => () => void;
+
+export interface Cell {
+  column?: Column;
+  update?: RowUpdate;
 }
 
 export interface GeneratedItem {
@@ -33,15 +43,24 @@ export interface GeneratedItem {
 
 export interface ProcessedItem extends GeneratedItem {
   values: unknown[];
+  oldValues?: unknown[];
   dataIndex?: number;
   isSelected?: boolean;
   visible?: boolean;
   isExpanded?: boolean;
   loadIndex?: number;
   rowIndex?: number;
-  cells?: unknown[];
+  cells?: Cell[];
   summaryCells?: unknown[];
+  update?: RowUpdate;
+  watch?: RowWatch;
 }
+
+/** changes */
+
+export type RowChangeType = 'update' | 'insert' | 'remove';
+
+export type RowOperation = RowChangeType | 'replace';
 
 interface DataChangeBase {
   isFirstRender?: boolean;
@@ -49,10 +68,19 @@ interface DataChangeBase {
   needUpdateDimensions?: boolean;
   isDataChanged?: boolean;
   operationTypes?: OperationTypes | null;
-  items?: unknown[];
+  items?: ProcessedItem[];
   changes?: unknown[];
   cancel?: boolean;
   isLiveUpdate?: boolean;
+}
+
+export interface UpdateChange extends DataChangeBase {
+  changeType: 'update';
+  rowIndices: number[];
+  changeTypes?: RowChangeType[];
+  columnIndices?: (number[] | undefined)[];
+  isFullUpdate?: boolean;
+  allowInvisibleRowIndices?: boolean;
 }
 
 interface SelectionChange extends DataChangeBase {
@@ -65,13 +93,6 @@ interface FocusedRowChange extends DataChangeBase {
   focusedRowKey: unknown | null;
 }
 
-interface UpdateChange extends DataChangeBase {
-  changeType: 'update';
-  rowIndices: number[];
-  isFullUpdate?: boolean;
-  allowInvisibleRowIndices?: boolean;
-}
-
 export type DataChange = | UpdateChange
   | SelectionChange
   | FocusedRowChange
@@ -82,6 +103,23 @@ export type DataChange = | UpdateChange
   | (DataChangeBase & { changeType: 'refresh', isLiveUpdate: boolean; isOptionChanged: boolean })
   | (DataChangeBase & { changeType: 'refresh', event: unknown; virtualColumnsScrolling: boolean })
   | (DataChangeBase & { changeType: 'refresh', useProcessedItemsCache: boolean; cancelEmptyChanges: boolean });
+
+export type ChangedRows = Required<
+  Pick<UpdateChange, 'items' | 'rowIndices' | 'changeTypes' | 'columnIndices'>
+>;
+
+export interface UpdateRowChange {
+  changeType: RowChangeType;
+  rowIndex: number;
+  item?: ProcessedItem;
+  columnIndices?: number[];
+}
+
+/** data source */
+
+export interface DataSourceAdapterLike {
+  _dataSource: DataSource;
+}
 
 /** callbacks */
 
