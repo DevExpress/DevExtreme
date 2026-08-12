@@ -7,7 +7,7 @@
 $fileuploader-button-margin-left: 12px !default;
 $fileuploader-upload-button-margin-top: 10px !default;
 $fileuploader-show-file-list-padding-top: 22px !default;
-$fileuploader-file-container-padding-2: 4px 0 4px !default;
+$fileuploader-file-container-padding: 4px 0 4px !default;
 $fileuploader-button-width: 28px !default;
 $fileuploader-button-height: 28px !default;
 $fileuploader-button-margin-right: 10px !default;
@@ -16,10 +16,10 @@ $fileuploader-file-status-message-height: 16px !default;
 $fileuploader-progressbar-height: 22px !default;
 $fileuploader-file-size-padding-left: 4px !default;
 $fileuploader-file-icon-padding-right: 6px !default;
-$fileuploader-button-margin-left-2: 10px !default;
+$fileuploader-file-container-button-margin-left: 10px !default;
 $fileuploader-cancel-button-position-end-margin-right: 4px !default;
 $fileuploader-file-size-padding-right: 4px !default;
-$fileuploader-file-status-message-margin-bottom-2: 2px !default;
+$fileuploader-file-status-message-line-margin-bottom: 2px !default;
 $fileuploader-cancel-button-margin-top: 5px !default;
 
 $fileuploader-status-message-font-size: 12px !default;
@@ -126,7 +126,7 @@ $fileuploader-input-wrapper-vertical-padding: 1em !default; // dx-relative
   display: flex;
   align-items: center;
   width: 100%;
-  padding: $fileuploader-file-container-padding-2;
+  padding: $fileuploader-file-container-padding;
 
   .dx-button {
     width: $fileuploader-button-width;
@@ -241,7 +241,7 @@ $fileuploader-input-wrapper-vertical-padding: 1em !default; // dx-relative
     }
 
     .dx-fileuploader-file-container .dx-fileuploader-button {
-      margin-left: $fileuploader-button-margin-left-2;
+      margin-left: $fileuploader-file-container-button-margin-left;
       margin-right: 0;
 
       &.dx-fileuploader-cancel-button-position-end {
@@ -268,7 +268,7 @@ $fileuploader-input-wrapper-vertical-padding: 1em !default; // dx-relative
 
     span {
       display: block;
-      margin-bottom: $fileuploader-file-status-message-margin-bottom-2;
+      margin-bottom: $fileuploader-file-status-message-line-margin-bottom;
 
       &:last-child {
         margin-bottom: 0;

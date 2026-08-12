@@ -201,12 +201,17 @@ const OVERRIDES = {
     'motion',
   ],
 
-  // Bundle configuration and theme identity: exempt from the component-prefix rule.
-  // They are string-concatenated into .dx-theme-marker, which themes.current() parses at runtime,
-  // and named by build/bundle-template.fluent-next.scss (see GOTCHAS.md §5).
+  /*
+   * Bundle configuration and theme identity: exempt from the component-prefix rule.
+   * The first four are named by build/bundle-template.fluent-next.scss, which substitutes $COLOR,
+   * $MODE and $SIZE into them (see GOTCHAS.md §5), so their spelling belongs to the build.
+   * The $theme-marker-* trio is the theme's own: each holds one segment of the .dx-theme-marker
+   * font-family that themes.current() parses at runtime. Only their VALUES reach that string, so
+   * the names are free — they carry no component and are named after the thing they compose.
+   */
   themeIdentity: [
     '$color', '$mode', '$size', '$accent',
-    '$fluent-color-accent-modificator', '$fluent-color-theme-modificator', '$fluent-size-postfix',
+    '$theme-marker-color', '$theme-marker-mode', '$theme-marker-size-postfix',
   ],
 
   // Folders exempt from the standard, with the reason recorded in NAMING.md.

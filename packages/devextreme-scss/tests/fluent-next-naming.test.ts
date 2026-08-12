@@ -122,13 +122,42 @@ const findSignatureRanges = (content: string): [number, number][] => {
 };
 
 /**
+ * Argument lists of `@include`. A named argument (`$checkbox-border-color-focused: $x`) binds the
+ * base mixin's parameter by its own name: the key is base's spelling, exactly like a `with()` key,
+ * and must not read as a declaration of this file (NAMING.md, "Исключения").
+ */
+const findIncludeRanges = (content: string): [number, number][] => {
+  const ranges: [number, number][] = [];
+  const opener = /@include\s+[\w.-]+\s*\(/g;
+  let match = opener.exec(content);
+
+  while (match !== null) {
+    let depth = 1;
+    let index = match.index + match[0].length;
+    while (index < content.length && depth > 0) {
+      if (content[index] === '(') depth += 1;
+      if (content[index] === ')') depth -= 1;
+      index += 1;
+    }
+    ranges.push([match.index, index]);
+    match = opener.exec(content);
+  }
+
+  return ranges;
+};
+
+/**
  * A declaration is module-level when every enclosing block is a control directive: Sass `@if`/`@each`
  * do not create scope, but a mixin, a function or a style rule do. That is what separates the theme's
  * variables from the 14 function locals in color.scss and button/_mixins.scss.
  */
 const parseFile = (file: string): Parsed => {
   const content = stripComments(readFileSync(file, 'utf8'));
-  const withRanges = [...findWithRanges(content), ...findSignatureRanges(content)];
+  const withRanges = [
+    ...findWithRanges(content),
+    ...findSignatureRanges(content),
+    ...findIncludeRanges(content),
+  ];
   const declarations: string[] = [];
   const references: string[] = [];
   const bareReferences: string[] = [];
@@ -318,6 +347,27 @@ const perFolder = <T>(compute: (files: Parsed[], folder: string) => T): Record<s
   return result;
 };
 
+/*
+ * Base wiring is configuration, not ownership. Two shapes, both structural:
+ *   - star: the file star-imports the very base module that declares the name, and the top-level
+ *     `$x: … !default` SETS base's variable (the load-bearing mechanism O8 documents). The spelling
+ *     is base's, so neither grammar nor ownership applies.
+ *   - feeder: `$fluent-<baseName>` passed as a `with()` value for base's `-2` key. Base holds PAIRS
+ *     of parameters for these spots (an old key and a `-2` redesign key) and the theme feeds both;
+ *     the grammar name is already taken by the OLD key's feeder, so renaming the `-2` feeder would
+ *     invent a distinction that does not exist. The knot is base's duplicated parameters — see the
+ *     `-2`-pairs entry in DIVERGENCES.md; until base deduplicates, the feeder keeps the mirror name.
+ * Every wiring declaration is listed exactly in the `baseWiring` finding: a new one is a conscious
+ * baseline edit, not a silent pass.
+ */
+const baseWiringKind = (variable: string, file: string): 'star' | 'feeder' | null => {
+  if (starredBaseParameters(file).has(variable)) return 'star';
+  if (variable.startsWith('$fluent-') && baseNames.has(`$${variable.slice('$fluent-'.length)}`)) {
+    return 'feeder';
+  }
+  return null;
+};
+
 const findings = {
   // O1: a folder may only declare its own component's variables.
   ownershipOfDeclarations: perFolder((files, folder) => {
@@ -325,8 +375,9 @@ const findings = {
     const counts = { themePrefixed: 0, unclassified: 0 };
     const foreignComponent: string[] = [];
 
-    files.forEach(({ declarations }) => declarations.forEach((variable) => {
+    files.forEach(({ file, declarations }) => declarations.forEach((variable) => {
       if (isThemeIdentity(variable) || isSystemName(variable)) return;
+      if (baseWiringKind(variable, file)) return; // counted exactly, in baseWiring below
       const component = componentOf(variable);
       if (component === own) return;
       if (component) foreignComponent.push(`${variable} (${component})`);
@@ -339,6 +390,15 @@ const findings = {
       ...(foreignComponent.length ? { foreignComponent: [...new Set(foreignComponent)].sort() } : {}),
     };
   }),
+
+  // The exact wiring inventory excluded from O1 above. Exact-match by design: adding a wiring
+  // declaration must show up as a baseline diff.
+  baseWiring: parsedFiles
+    .flatMap(({ file, folder, declarations }) => declarations
+      .map((variable) => ({ variable, kind: baseWiringKind(variable, file), folder }))
+      .filter((entry) => entry.kind && !exemptFolders.includes(entry.folder))
+      .map(({ folder, variable, kind }) => `${folder}: ${variable} (${kind})`))
+    .sort(),
 
   /*
    * The system tier: the theme root and `common/` hold no component, so the per-component ownership
@@ -582,6 +642,16 @@ test('registries are in sync with the generated design tokens', () => {
   );
   const tokenCount = [...generatedComponentTokens.matchAll(/--dxds-[a-z0-9-]+:/g)].length;
   expect(tokenCount).toBe(registries.derivedFrom.componentTokenCount);
+});
+
+test('no name carries the theme prefix', () => {
+  const offenders = walk(themeRoot, '.scss').flatMap((file) => {
+    const found = [...stripComments(readFileSync(file, 'utf8')).matchAll(/\$fluent-[\w-]+/g)];
+    return [...new Set(found.map((match) => match[0]))]
+      .map((name) => `${resolve(file).slice(resolve(themeRoot).length + 1)}: ${name}`);
+  });
+
+  expect(offenders).toEqual([]);
 });
 
 /**
