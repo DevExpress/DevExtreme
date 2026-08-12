@@ -5,7 +5,7 @@ test.describe('inputs-list-in-form scenarios', () => {
         await page.goto('/examples/inputs-list-in-form');
     });
 
-    test('Phone inputs should adding and deleting correctly', async ({ page }) => {
+    test('Phone inputs should be added and deleted correctly', async ({ page }) => {
         const addButton = page.locator('.dx-button-text', { hasText: 'Add phone' });
         const deleteButton = page.locator('.dx-button', { has: page.locator('.dx-icon-trash') });
         const phoneGroup = page.locator('[aria-labelledby$="_phones-container"]');

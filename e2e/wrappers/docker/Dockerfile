@@ -1,8 +1,7 @@
-# Reproduces the "Wrappers E2E Tests" CI environment: Node from .node-version
-# and Google Chrome pinned to the version used by .github/actions/setup-chrome.
-FROM node:24.16.0-bookworm-slim
+ARG NODE_IMAGE=node:lts-bookworm-slim
+FROM ${NODE_IMAGE}
 
-ARG CHROME_VERSION=150.0.7871.181
+ARG CHROME_VERSION
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends ca-certificates curl \
