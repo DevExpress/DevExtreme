@@ -170,12 +170,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Start server for ${{ matrix.framework }}
-        working-directory: e2e/wrappers
-        run: |
-          pnpm run start:${{ matrix.framework }} &
-          sleep 10
-
       - name: Run tests for ${{ matrix.framework }}
         working-directory: e2e/wrappers
         run: pnpm run test:${{ matrix.framework }}
@@ -185,5 +179,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: test-fails-${{matrix.framework}}
-          path: e2e/wrappers/screenshots
+          path: |
+            e2e/wrappers/playwright-report
+            e2e/wrappers/test-results
           if-no-files-found: ignore
