@@ -2575,9 +2575,9 @@ export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataControll
     this._updateEditRow(this.items(true));
   }
 
-  protected _applyChangeUpdate(change) {
+  protected applyChangeUpdate(change) {
     this._updateEditRow(change.items);
-    super._applyChangeUpdate(change);
+    super.applyChangeUpdate(change);
   }
 
   protected _applyChangesOnly(change) {

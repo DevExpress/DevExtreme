@@ -1,22 +1,19 @@
 // TODO: fix the rules disabled below
 /* eslint-disable @stylistic/max-len */
-/* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable consistent-return */
-/* eslint-disable max-depth */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-plusplus */
 import type { DataSource, Store } from '@js/common/data';
 import $ from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
-import { deferRender, equalByValue } from '@js/core/utils/common';
+import { deferRender } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
@@ -63,10 +60,15 @@ import type {
   PagingResult,
   ProcessedItem,
   RefreshOptions,
+  UpdateChange,
+  UpdateRowChange,
   UserState,
 } from './types';
 import { resolvePaginate, syncPaging } from './utils/paging';
 import { getRefreshOptions } from './utils/refresh';
+import {
+  getChangedRowIndices, getRowOperation, isSameGroupRowState, pushChangedRow, resetChangedRows,
+} from './utils/row_changes';
 import { generateRowValues } from './utils/row_values';
 
 export class DataController extends DataHelperMixin(modules.Controller) {
@@ -811,7 +813,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
 
     if (change.changeType === 'update') {
-      this._applyChangeUpdate(change);
+      this.applyChangeUpdate(change);
     } else if (change.changeType === 'refresh') {
       if (this.items().length && change.repaintChangesOnly) {
         this._applyChangesOnly(change);
@@ -821,168 +823,195 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
   }
 
-  private _applyChangeFull(change) {
-    this._items = change.items.slice(0);
+  private _applyChangeFull(change: DataChange): void {
+    this._items = (change.items ?? []).slice(0);
   }
 
-  private _getRowIndices(change) {
-    const rowIndices = change.rowIndices.slice(0);
-    const rowIndexDelta = this.getRowIndexDelta();
+  private updateRow(
+    newItem: ProcessedItem,
+    rowIndex: number,
+    visibleRowIndex: number,
+    isPartialUpdate: boolean,
+  ): UpdateRowChange {
+    const oldItem = this._items[rowIndex];
 
-    rowIndices.sort((a, b) => a - b);
+    this._items[rowIndex] = newItem;
 
-    for (let i = 0; i < rowIndices.length; i++) {
-      let correctedRowIndex = rowIndices[i];
-
-      if (change.allowInvisibleRowIndices) {
-        correctedRowIndex += rowIndexDelta;
-      }
-
-      if (correctedRowIndex < 0) {
-        rowIndices.splice(i, 1);
-        i--;
-      }
+    if (oldItem.visible !== newItem.visible) {
+      return {
+        changeType: 'update',
+        rowIndex: visibleRowIndex,
+        item: { visible: newItem.visible } as ProcessedItem,
+      };
     }
 
-    return rowIndices;
+    return {
+      changeType: 'update',
+      rowIndex: visibleRowIndex,
+      item: newItem,
+      columnIndices: isPartialUpdate
+        ? this._partialUpdateRow(oldItem, newItem, visibleRowIndex)
+        : undefined,
+    };
+  }
+
+  private applyRowOperation(
+    newItems: ProcessedItem[],
+    rowIndex: number,
+    rowIndexDelta: number,
+    isPartialUpdate: boolean,
+  ): UpdateRowChange | undefined {
+    const visibleRowIndex = rowIndex - rowIndexDelta;
+    const item = newItems[rowIndex];
+
+    if (item) {
+      item.rowIndex = rowIndex;
+    }
+
+    switch (getRowOperation(this._items, newItems, rowIndex)) {
+      case 'update':
+        return this.updateRow(item, rowIndex, visibleRowIndex, isPartialUpdate);
+      case 'insert':
+        this._items.splice(rowIndex, 0, item);
+        return { changeType: 'insert', rowIndex: visibleRowIndex, item };
+      case 'remove':
+        this._items.splice(rowIndex, 1);
+        return { changeType: 'remove', rowIndex: visibleRowIndex, item };
+      case 'replace':
+        this._items[rowIndex] = item;
+        return { changeType: 'update', rowIndex: visibleRowIndex, item };
+      default:
+        return undefined;
+    }
   }
 
   /**
    * @extended: editing
    */
-  protected _applyChangeUpdate(change): void {
-    const { items } = change;
-    const rowIndices = this._getRowIndices(change);
+  protected applyChangeUpdate(change: UpdateChange): void {
+    const newItems = change.items ?? [];
     const rowIndexDelta = this.getRowIndexDelta();
-    const repaintChangesOnly = this.option('repaintChangesOnly');
-    let prevIndex = -1;
+    const isPartialUpdate = Boolean(this.option('repaintChangesOnly')) && !change.isFullUpdate;
+    const rowIndices = getChangedRowIndices(
+      change.rowIndices,
+      rowIndexDelta,
+      change.allowInvisibleRowIndices,
+    );
+    const changedRows = resetChangedRows(change);
+    let prevRowIndex = -1;
     let rowIndexCorrection = 0;
-    let changeType;
 
-    change.items = [];
-    change.rowIndices = [];
-    change.columnIndices = [];
-    change.changeTypes = [];
+    rowIndices.forEach((changedRowIndex: number) => {
+      const rowIndex = changedRowIndex + rowIndexCorrection + rowIndexDelta;
 
-    const equalItems = function (item1, item2, strict?) {
-      let result = item1 && item2 && equalByValue(item1.key, item2.key);
-      if (result && strict) {
-        result = item1.rowType === item2.rowType && (item2.rowType !== 'detail' || item1.isEditing === item2.isEditing);
-      }
-      return result;
-    };
-
-    each(rowIndices, (index, rowIndex) => {
-      let columnIndices;
-
-      rowIndex += rowIndexCorrection + rowIndexDelta;
-
-      if (prevIndex === rowIndex) return;
-
-      prevIndex = rowIndex;
-      const oldItem = this._items[rowIndex];
-      const oldNextItem = this._items[rowIndex + 1];
-      const newItem = items[rowIndex];
-      const newNextItem = items[rowIndex + 1];
-
-      const strict = equalItems(oldItem, oldNextItem) || equalItems(newItem, newNextItem);
-
-      if (newItem) {
-        newItem.rowIndex = rowIndex;
-        change.items.push(newItem);
-      }
-
-      if (oldItem && newItem && equalItems(oldItem, newItem, strict)) {
-        changeType = 'update';
-        this._items[rowIndex] = newItem;
-        if (oldItem.visible !== newItem.visible) {
-          change.items.splice(-1, 1, { visible: newItem.visible });
-        } else if (repaintChangesOnly && !change.isFullUpdate) {
-          columnIndices = this._partialUpdateRow(oldItem, newItem, rowIndex - rowIndexDelta);
-        }
-      } else if (newItem && !oldItem || (newNextItem && equalItems(oldItem, newNextItem, strict))) {
-        changeType = 'insert';
-        this._items.splice(rowIndex, 0, newItem);
-        rowIndexCorrection++;
-      } else if (oldItem && !newItem || (oldNextItem && equalItems(newItem, oldNextItem, strict))) {
-        changeType = 'remove';
-        this._items.splice(rowIndex, 1);
-        rowIndexCorrection--;
-        prevIndex = -1;
-      } else if (newItem) {
-        changeType = 'update';
-        this._items[rowIndex] = newItem;
-      } else {
+      if (prevRowIndex === rowIndex) {
         return;
       }
 
-      change.rowIndices.push(rowIndex - rowIndexDelta);
-      change.changeTypes.push(changeType);
-      change.columnIndices.push(columnIndices);
+      prevRowIndex = rowIndex;
+
+      const changedRow = this.applyRowOperation(newItems, rowIndex, rowIndexDelta, isPartialUpdate);
+
+      if (!changedRow) {
+        return;
+      }
+
+      pushChangedRow(changedRows, changedRow);
+
+      if (changedRow.changeType === 'insert') {
+        rowIndexCorrection += 1;
+      } else if (changedRow.changeType === 'remove') {
+        rowIndexCorrection -= 1;
+        prevRowIndex = -1;
+      }
     });
   }
 
   /**
    * @extended: editing, validating
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _isCellChanged(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
-    if (JSON.stringify(oldRow.values[columnIndex]) !== JSON.stringify(newRow.values[columnIndex])) {
+  protected _isCellChanged(
+    oldRow: ProcessedItem,
+    newRow: ProcessedItem,
+    visibleRowIndex: number,
+    columnIndex: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    isLiveUpdate?: boolean,
+  ): boolean {
+    const oldValue = oldRow.values[columnIndex];
+    const newValue = newRow.values[columnIndex];
+
+    if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
       return true;
     }
 
-    function isCellModified(row, columnIndex) {
-      return row.modifiedValues ? row.modifiedValues[columnIndex] !== undefined : false;
-    }
+    const isCellModified = (row: ProcessedItem): boolean => row.modifiedValues?.[columnIndex] !== undefined;
 
-    if (isCellModified(oldRow, columnIndex) !== isCellModified(newRow, columnIndex)) {
-      return true;
-    }
-
-    return false;
+    return isCellModified(oldRow) !== isCellModified(newRow);
   }
 
   /**
    * @extended: editing_row_based, editing, editing_form_based
    */
-  protected _getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate) {
-    let columnIndices;
-    if (oldItem.rowType === newItem.rowType) {
-      if (newItem.rowType !== 'group' && newItem.rowType !== 'groupFooter') {
-        columnIndices = [];
+  protected _getChangedColumnIndices(
+    oldItem: ProcessedItem,
+    newItem: ProcessedItem,
+    visibleRowIndex: number,
+    isLiveUpdate?: boolean,
+  ): number[] | undefined {
+    if (oldItem.rowType !== newItem.rowType) {
+      return undefined;
+    }
 
-        if (newItem.rowType !== 'detail') {
-          for (let columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
-            if (this._isCellChanged(oldItem, newItem, visibleRowIndex, columnIndex, isLiveUpdate)) {
-              columnIndices.push(columnIndex);
-            }
-          }
-        }
+    if (newItem.rowType === 'group') {
+      if (!oldItem.cells || !isSameGroupRowState(oldItem, newItem)) {
+        return undefined;
       }
 
-      if (newItem.rowType === 'group' && oldItem.cells) {
-        const isRowStateEquals = newItem.isExpanded === oldItem.isExpanded
-        && newItem.data.isContinuation === oldItem.data.isContinuation
-        && newItem.data.isContinuationOnNextPage === oldItem.data.isContinuationOnNextPage;
+      return oldItem.cells
+        .map((cell, index) => (cell.column?.type !== 'groupExpand' ? index : -1))
+        .filter((index) => index >= 0);
+    }
 
-        if (isRowStateEquals) {
-          columnIndices = oldItem.cells.map((cell, index) => (cell.column?.type !== 'groupExpand' ? index : -1)).filter((index) => index >= 0);
-        }
+    if (newItem.rowType === 'groupFooter') {
+      return undefined;
+    }
+
+    const columnIndices: number[] = [];
+
+    if (newItem.rowType === 'detail') {
+      return columnIndices;
+    }
+
+    for (let columnIndex = 0; columnIndex < oldItem.values.length; columnIndex += 1) {
+      if (this._isCellChanged(oldItem, newItem, visibleRowIndex, columnIndex, isLiveUpdate)) {
+        columnIndices.push(columnIndex);
       }
     }
+
     return columnIndices;
   }
 
-  private _partialUpdateRow(oldItem, newItem, visibleRowIndex, isLiveUpdate?) {
-    let changedColumnIndices = this._getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate);
+  private _partialUpdateRow(
+    oldItem: ProcessedItem,
+    newItem: ProcessedItem,
+    visibleRowIndex: number,
+    isLiveUpdate?: boolean,
+  ): number[] | undefined {
+    const changedColumnIndices = this
+      ._getChangedColumnIndices(
+        oldItem,
+        newItem,
+        visibleRowIndex,
+        isLiveUpdate,
+      );
+    const columnIndices = changedColumnIndices?.length && this.option('dataRowTemplate')
+      ? undefined
+      : changedColumnIndices;
 
-    if (changedColumnIndices?.length && this.option('dataRowTemplate')) {
-      changedColumnIndices = undefined;
-    }
-
-    if (changedColumnIndices) {
+    if (columnIndices) {
       oldItem.cells?.forEach((cell, columnIndex) => {
-        const isCellChanged = changedColumnIndices.indexOf(columnIndex) >= 0;
+        const isCellChanged = columnIndices.includes(columnIndex);
         if (!isCellChanged && cell?.update) {
           cell.update(newItem);
         }
@@ -999,24 +1028,24 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       oldItem.update?.(newItem);
     }
 
-    return changedColumnIndices;
+    return columnIndices;
   }
 
-  protected _isItemEquals(item1, item2) {
+  protected _isItemEquals(item1: ProcessedItem, item2: ProcessedItem): boolean {
     if (JSON.stringify(item1.values) !== JSON.stringify(item2.values)) {
       return false;
     }
 
-    const compareFields = ['modified', 'isNewRow', 'removed', 'isEditing'];
+    const compareFields = ['modified', 'isNewRow', 'removed', 'isEditing'] as const;
     if (compareFields.some((field) => item1[field] !== item2[field])) {
       return false;
     }
 
     if (item1.rowType === 'group' || item1.rowType === 'groupFooter') {
-      const expandedMatch = item1.isExpanded === item2.isExpanded;
-      const summaryCellsMatch = JSON.stringify(item1.summaryCells) === JSON.stringify(item2.summaryCells);
-      const continuationMatch = item1.data?.isContinuation === item2.data?.isContinuation && item1.data?.isContinuationOnNextPage === item2.data?.isContinuationOnNextPage;
-      if (!expandedMatch || !summaryCellsMatch || !continuationMatch) {
+      const summaryCellsMatch = JSON.stringify(item1.summaryCells)
+        === JSON.stringify(item2.summaryCells);
+
+      if (!summaryCellsMatch || !isSameGroupRowState(item1, item2)) {
         return false;
       }
     }
