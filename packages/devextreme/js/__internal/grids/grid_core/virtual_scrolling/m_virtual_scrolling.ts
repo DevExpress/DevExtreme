@@ -23,6 +23,7 @@ import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type { ChangedEvent } from '../data_source_adapter/types';
 import gridCoreUtils from '../m_utils';
+import type { StateStoringDataControllerExtension } from '../state_storing/extenders/state_storing_data_controller';
 import type { RowsViewScrollEvent } from '../views/types';
 import { subscribeToExternalScrollers, VirtualScrollController } from './m_virtual_scrolling_core';
 import type { ChangedLoadParams } from './types';
@@ -476,9 +477,9 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     super.dispose.apply(this, arguments as any);
   }
 
-  protected _refreshDataSource() {
-    // @ts-expect-error
-    const baseResult = super._refreshDataSource.apply(this, arguments as any) || new Deferred().resolve().promise();
+  protected _refreshDataSource(): DeferredObj<unknown> {
+    // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
+    const baseResult: DeferredObj<unknown> = super._refreshDataSource() ?? Deferred().resolve().promise();
 
     baseResult.done(this.initVirtualRows.bind(this));
 
@@ -1434,6 +1435,8 @@ export const resizing = (Base: ModuleType<ResizingController>) => class VirtualS
 };
 
 export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRowsViewExtender extends Base {
+  protected _dataController!: DataController & Partial<StateStoringDataControllerExtension>;
+
   private _isFixedTableRendering: any;
 
   private _heightWarningIsThrown: any;
@@ -1461,11 +1464,9 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
       !this._scrollTop && this._scrollToCurrentPageOnResize();
     });
 
-    this._dataController
-      // @ts-expect-error
-      .stateLoaded?.add(() => {
-        this._scrollToCurrentPageOnResize();
-      });
+    this._dataController.stateLoaded?.add(() => {
+      this._scrollToCurrentPageOnResize();
+    });
 
     this._scrollToCurrentPageOnResize();
   }

@@ -206,7 +206,7 @@ export interface Controllers {
   resizing: import('./views/m_grid_view').ResizingController;
   selection: import('./selection/m_selection').SelectionController;
   validating: import('./validating/m_validating').ValidatingController;
-  stateStoring: import('./state_storing/m_state_storing_core').StateStoringController;
+  stateStoring: import('./state_storing/m_state_storing_controller').StateStoringController;
   synchronizeScrolling: import('./views/m_grid_view').SynchronizeScrollingController;
   tablePosition: import('./columns_resizing_reordering/m_columns_resizing_reordering').TablePositionViewController;
   toastViewController: import('./toast/m_toast_controller').ToastViewController;
