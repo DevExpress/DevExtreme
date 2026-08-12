@@ -1,5 +1,5 @@
 // eslint-disable-next-line max-classes-per-file
-import { stateStoringModule } from '@ts/grids/grid_core/state_storing/m_state_storing';
+import { stateStoringModule } from '@ts/grids/grid_core/state_storing/state_storing_module';
 
 import type { DataController } from '../grid_core/data_controller/data_controller';
 import type { ModuleType } from '../grid_core/m_types';

@@ -41,7 +41,6 @@ import type {
 } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
-import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
 import type { VirtualScrollController } from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
 
 import { DataHelperMixin } from './data_helper_mixin';
@@ -151,8 +150,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _selectionController!: SelectionController;
 
-  protected _stateStoringController!: StateStoringController;
-
   private loadErrorHandlerProxy!: (e: Error | string) => void;
 
   private dataPushedHandlerProxy!: (changes: StoreChange[]) => void;
@@ -173,7 +170,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._focusController = this.getController('focus');
     this._headerFilterController = this.getController('headerFilter');
     this._selectionController = this.getController('selection');
-    this._stateStoringController = this.getController('stateStoring');
 
     this._isPaging = false;
     this._currentOperationTypes = null;

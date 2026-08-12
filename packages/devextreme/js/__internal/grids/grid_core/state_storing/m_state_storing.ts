@@ -1,15 +1,13 @@
 /* eslint-disable max-classes-per-file */
 import { equalByValue, getKeyHash } from '@js/core/utils/common';
-import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
-import type { DataController } from '../data_controller/data_controller';
 import type { ModuleType } from '../m_types';
 import type { SelectionController } from '../selection/m_selection';
 import type { RowsView } from '../views/m_rows_view';
-import { StateStoringController } from './m_state_storing_core';
+import type { StateStoringController } from './m_state_storing_core';
 
 const getDataState = (that) => {
   // TODO getView
@@ -91,7 +89,7 @@ const getFilterValue = (that, state) => {
   return that._initialFilterValue ?? filterSyncController.getFilterValueFromColumns(columns);
 };
 
-const rowsView = (Base: ModuleType<RowsView>) => class StateStoringRowsViewExtender extends Base {
+export const rowsView = (Base: ModuleType<RowsView>) => class StateStoringRowsViewExtender extends Base {
   public init() {
     super.init();
 
@@ -109,7 +107,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class StateStoringRowsViewExten
   }
 };
 
-const stateStoring = (Base: ModuleType<StateStoringController>) => class StateStoringExtender extends Base {
+export const stateStoring = (Base: ModuleType<StateStoringController>) => class StateStoringExtender extends Base {
   private readonly _initialPageSize: any;
 
   public init() {
@@ -209,7 +207,7 @@ const stateStoring = (Base: ModuleType<StateStoringController>) => class StateSt
   }
 };
 
-const columns = (Base: ModuleType<ColumnsController>) => class StateStoringColumnsExtender extends Base {
+export const columns = (Base: ModuleType<ColumnsController>) => class StateStoringColumnsExtender extends Base {
   protected _shouldReturnVisibleColumns() {
     // @ts-expect-error
     const result = super._shouldReturnVisibleColumns.apply(this, arguments);
@@ -218,59 +216,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class StateStoringColum
   }
 };
 
-const data = (Base: ModuleType<DataController>) => class StateStoringDataExtender extends Base {
-  private _restoreStateTimeoutID: any;
-
-  public dispose() {
-    clearTimeout(this._restoreStateTimeoutID);
-    super.dispose();
-  }
-
-  protected callbackNames() {
-    return super.callbackNames().concat(['stateLoaded']);
-  }
-
-  protected _refreshDataSource() {
-    if (this._stateStoringController.isEnabled() && !this._stateStoringController.isLoaded()) {
-      clearTimeout(this._restoreStateTimeoutID);
-
-      // @ts-expect-error
-      const deferred = new Deferred();
-      this._restoreStateTimeoutID = setTimeout(() => {
-        this._stateStoringController.load().always(() => {
-          this._restoreStateTimeoutID = null;
-        }).done(() => {
-          super._refreshDataSource();
-          // @ts-expect-error
-          this.stateLoaded.fire();
-          deferred.resolve();
-        }).fail((error) => {
-          // @ts-expect-error
-          this.stateLoaded.fire();
-          this.loadErrorHandler(error || 'Unknown error');
-          deferred.reject();
-        });
-      });
-      return deferred.promise();
-    } if (!this.isStateLoading()) {
-      super._refreshDataSource();
-    }
-  }
-
-  public isLoading() {
-    return super.isLoading() || this._stateStoringController.isLoading();
-  }
-
-  private isStateLoading() {
-    return isDefined(this._restoreStateTimeoutID);
-  }
-
-  public isLoaded() {
-    return super.isLoaded() && !this.isStateLoading();
-  }
-};
-
-const selection = (Base: ModuleType<SelectionController>) => class StateStoringSelectionExtender extends Base {
+export const selection = (Base: ModuleType<SelectionController>) => class StateStoringSelectionExtender extends Base {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _fireSelectionChanged(options) {
     const isDeferredSelection = this.option('selection.deferred');
@@ -280,33 +226,4 @@ const selection = (Base: ModuleType<SelectionController>) => class StateStoringS
     // @ts-expect-error
     super._fireSelectionChanged.apply(this, arguments);
   }
-};
-
-export const stateStoringModule = {
-  defaultOptions() {
-    return {
-      stateStoring: {
-        enabled: false,
-        storageKey: undefined,
-        type: 'localStorage',
-        customLoad: undefined,
-        customSave: undefined,
-        savingTimeout: 2000,
-      },
-    };
-  },
-  controllers: {
-    stateStoring: StateStoringController,
-  },
-  extenders: {
-    views: {
-      rowsView,
-    },
-    controllers: {
-      stateStoring,
-      columns,
-      data,
-      selection,
-    },
-  },
 };
