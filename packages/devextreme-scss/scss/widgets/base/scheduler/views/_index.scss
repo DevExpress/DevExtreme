@@ -333,13 +333,15 @@ $scheduler-month-date-text-padding: 6px;
     border-right-color: $scheduler-base-border-color;
   }
 
+  // the panel edge already draws this line, so the first group must not add a separator of its own
+  // the border stays in place and only loses its color: dropping it would shrink the cell and break
+  // the alignment between the group panel and the date table
   > .dx-scheduler-group-row:first-child > .dx-scheduler-group-header:first-child {
-    border-top: none;
+    border-top-color: transparent;
   }
 
   // a nested first header still starts a group boundary unless every ancestor group is also the first one
   .dx-scheduler-group-row:not(:first-child) .dx-scheduler-group-row:first-child > .dx-scheduler-group-header:first-child {
-    border-top: $scheduler-base-border;
     border-top-color: $scheduler-base-border-color;
   }
 }
@@ -348,7 +350,7 @@ $scheduler-month-date-text-padding: 6px;
 .dx-scheduler-work-space-vertical-group-table,
 .dx-scheduler-group-table {
   > .dx-scheduler-group-flex-container:not(.dx-scheduler-group-flex-container-hierarchical) > .dx-scheduler-group-row > .dx-scheduler-group-header:first-child {
-    border-top: none;
+    border-top-color: transparent;
   }
 }
 
