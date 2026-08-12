@@ -2,7 +2,6 @@
 /* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
@@ -16,7 +15,6 @@ import type { Callback } from '@js/core/utils/callbacks';
 import { deferRender } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
-import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
 import { findChanges } from '@ts/core/utils/m_array_compare';
