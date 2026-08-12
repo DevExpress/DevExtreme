@@ -1230,7 +1230,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     const rows = this.getVisibleRows();
     const dataSource = this.dataSource();
 
-    if (dataSource && e.changes) {
+    if (dataSource) {
       e.changes.forEach((change) => {
         if (change.index === undefined) {
           return;
