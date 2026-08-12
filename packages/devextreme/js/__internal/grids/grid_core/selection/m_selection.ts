@@ -665,8 +665,7 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
   }
 
   public refresh(options): any {
-    // @ts-expect-error
-    const d: DeferredObj<void> = new Deferred();
+    const d = Deferred();
 
     super.refresh(options).done(() => {
       const skipSelectionRefresh = isObject(options) && !(options as any).selection;
@@ -676,8 +675,9 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
         return;
       }
 
-      this._selectionController.refresh().done(d.resolve).fail(d.reject);
-    }).fail(d.reject);
+      this._selectionController.refresh().done(d.resolve as (...args: unknown[]) => void)
+        .fail(d.reject as (...args: unknown[]) => void);
+    }).fail(d.reject as (...args: unknown[]) => void);
 
     return d.promise();
   }

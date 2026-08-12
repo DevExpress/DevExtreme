@@ -8,6 +8,23 @@ import type { ChangedEvent, OperationTypes, RawItemData } from '../data_source_a
 
 /** rows */
 
+export interface RefreshOptions {
+  load?: boolean;
+  reload?: boolean;
+  changesOnly?: boolean;
+  lookup?: boolean;
+  selection?: boolean;
+  allowCancelEditing?: boolean;
+  isPageChanged?: boolean;
+}
+
+export interface UserState {
+  searchText: string | undefined;
+  pageIndex: number;
+  pageSize: number;
+  expandedRowKeys?: unknown;
+}
+
 export interface ItemProcessingOptions {
   visibleColumns: Column[];
   dataIndex: number;
