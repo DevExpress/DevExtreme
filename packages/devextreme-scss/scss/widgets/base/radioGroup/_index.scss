@@ -5,7 +5,7 @@
 
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $radiogroup-radio-value-container-padding-inline-end: 10px !default;
-$radiogroup-collection-column-gap-2: 17px !default;
+$radiogroup-collection-column-gap: 17px !default;
 
 .dx-radio-value-container {
   padding-inline-end: $radiogroup-radio-value-container-padding-inline-end;
@@ -15,6 +15,6 @@ $radiogroup-collection-column-gap-2: 17px !default;
   .dx-collection {
     display: flex;
     flex-wrap: wrap;
-    column-gap: $radiogroup-collection-column-gap-2;
+    column-gap: $radiogroup-collection-column-gap;
   }
 }

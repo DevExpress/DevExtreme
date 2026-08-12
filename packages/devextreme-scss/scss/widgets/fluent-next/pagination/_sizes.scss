@@ -36,19 +36,17 @@ $pagination-page-border-radius: 20px !default; // dx-offscale: 20px (pill; candi
 $pagination-navigate-button-width: ds.$spacing-90 !default;
 
 // Base-layer sizing injected with design tokens (wave B2)
-$fluent-pagination-page-padding-2: ds.$spacing-70 ds.$spacing-80 ds.$spacing-80 !default;
 $pagination-page-margin-inline-start: ds.$spacing-50 !default;
 $pagination-page-margin-inline-end: ds.$spacing-10 !default;
 $pagination-separator-padding-inline-start: ds.$spacing-80 !default;
 $pagination-separator-padding-inline-end: ds.$spacing-80 !default;
-$fluent-pagination-navigate-button-width-2: ds.$spacing-100 !default;
 $pagination-navigate-button-height: ds.$spacing-200 !default;
 $pagination-first-child-margin-inline-start: ds.$spacing-10 !default;
 $pagination-first-child-padding-inline-start: ds.$spacing-100 !default;
 $pagination-first-child-padding-inline-end: ds.$spacing-90 !default;
 $pagination-first-child-padding-block-start: ds.$spacing-70 !default;
 $pagination-first-child-padding-block-end: ds.$spacing-80 !default;
-$fluent-pagination-first-child-margin-left-2: ds.$spacing-40 !default;
+$pagination-page-size-margin-left: ds.$spacing-40 !default;
 $pagination-page-index-width: ds.$spacing-400 !default;
 $pagination-pages-count-padding-inline-start: ds.$spacing-60 !default;
 
