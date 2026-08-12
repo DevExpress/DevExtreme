@@ -46,6 +46,8 @@ export class MultiLineStrategy {
 
   _hideOverflowItems(): void {}
 
+  _openOverflowMenu(): void {}
+
   _dimensionChanged(): void {}
 
   _itemOptionChanged(): void {}

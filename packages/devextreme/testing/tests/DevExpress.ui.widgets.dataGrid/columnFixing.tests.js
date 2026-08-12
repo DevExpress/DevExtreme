@@ -1,4 +1,4 @@
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import 'ui/data_grid';
 
@@ -2071,7 +2071,7 @@ QUnit.module('Fixed columns', {
 
         // arrange
         const scrollable = that.rowsView.getScrollable();
-        scrollable.scrollTo(600);
+        scrollable.scrollTo(1000);
         $(scrollable.container()).trigger('scroll');
         that.clock.tick(10);
 
@@ -2107,7 +2107,7 @@ QUnit.module('Fixed columns', {
 
         // assert
         const $fixedTable = that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').find('table');
-        assert.roughEqual(translator.getTranslate($fixedTable).y, -330, 10);
+        assert.roughEqual(translator.getTranslate($fixedTable).y, -300, 10);
 
         // act
         that.rowsView._handleScroll({
@@ -2352,7 +2352,7 @@ QUnit.module('Headers reordering and resizing with fixed columns', {
         assert.deepEqual(pointsByColumns[2], { columnIndex: 6, index: 6, x: -9075, y: -10000 }, 'third point');
     });
 
-    QUnit.test('Reordering -  get points by columns for children of the band column fixed to the left', function(assert) {
+    QUnit.test('Reordering - get points by columns for children of the band column fixed to the left', function(assert) {
         // arrange
         const that = this;
         const $testElement = $('#container').width(925);
@@ -2362,7 +2362,7 @@ QUnit.module('Headers reordering and resizing with fixed columns', {
         that.setupDataGrid();
 
         that.columnHeadersView.render($testElement);
-        $testElement.find('tbody > tr').height(33);
+
         const visibleColumns = that.columnsController.getVisibleColumns(1);
 
         // act
@@ -2379,17 +2379,17 @@ QUnit.module('Headers reordering and resizing with fixed columns', {
         assert.equal(pointsByColumns[0].columnIndex, 0, 'columnIndex');
         assert.equal(pointsByColumns[0].index, 0, 'index');
         assert.equal(pointsByColumns[0].x, -10000, 'x');
-        assert.roughEqual(pointsByColumns[0].y, -9967, 5, 'y');
+        assert.roughEqual(pointsByColumns[0].y, -9957, 5, 'y');
 
         assert.equal(pointsByColumns[1].columnIndex, 1, 'columnIndex');
         assert.equal(pointsByColumns[1].index, 1, 'index');
         assert.equal(pointsByColumns[1].x, -9815, 'x');
-        assert.roughEqual(pointsByColumns[1].y, -9967, 5, 'y');
+        assert.roughEqual(pointsByColumns[1].y, -9957, 5, 'y');
 
         assert.equal(pointsByColumns[2].columnIndex, 2, 'columnIndex');
         assert.equal(pointsByColumns[2].index, 2, 'index');
         assert.equal(pointsByColumns[2].x, -9630, 'x');
-        assert.roughEqual(pointsByColumns[2].y, -9967, 5, 'y');
+        assert.roughEqual(pointsByColumns[2].y, -9957, 5, 'y');
     });
 
     QUnit.test('Reordering - get points by columns for children of the band column fixed to the right', function(assert) {
@@ -2402,7 +2402,7 @@ QUnit.module('Headers reordering and resizing with fixed columns', {
         that.setupDataGrid();
 
         that.columnHeadersView.render($testElement);
-        $testElement.find('tbody > tr').height(33);
+
         const visibleColumns = that.columnsController.getVisibleColumns(1);
 
         // act
@@ -2420,17 +2420,17 @@ QUnit.module('Headers reordering and resizing with fixed columns', {
         assert.equal(pointsByColumns[0].columnIndex, 2, 'columnIndex');
         assert.equal(pointsByColumns[0].index, 2, 'index');
         assert.equal(pointsByColumns[0].x, -9445, 'x');
-        assert.roughEqual(pointsByColumns[0].y, -9967, 5, 'y');
+        assert.roughEqual(pointsByColumns[0].y, -9957, 5, 'y');
 
         assert.equal(pointsByColumns[1].columnIndex, 3, 'columnIndex');
         assert.equal(pointsByColumns[1].index, 3, 'index');
         assert.equal(pointsByColumns[1].x, -9260, 'x');
-        assert.roughEqual(pointsByColumns[1].y, -9967, 5, 'y');
+        assert.roughEqual(pointsByColumns[1].y, -9957, 5, 'y');
 
         assert.equal(pointsByColumns[2].columnIndex, 4, 'columnIndex');
         assert.equal(pointsByColumns[2].index, 4, 'index');
         assert.equal(pointsByColumns[2].x, -9075, 'x');
-        assert.roughEqual(pointsByColumns[2].y, -9967, 5, 'y');
+        assert.roughEqual(pointsByColumns[2].y, -9957, 5, 'y');
     });
 
     QUnit.test('Reordering -  get points by columns with startColumnIndex for children of the band column fixed to the right', function(assert) {
@@ -2443,7 +2443,7 @@ QUnit.module('Headers reordering and resizing with fixed columns', {
         that.setupDataGrid();
 
         that.columnHeadersView.render($testElement);
-        $testElement.find('tbody > tr').height(33);
+
         const visibleColumns = that.columnsController.getVisibleColumns(1);
 
         // act
@@ -2461,17 +2461,17 @@ QUnit.module('Headers reordering and resizing with fixed columns', {
         assert.equal(pointsByColumns[0].columnIndex, 2, 'columnIndex');
         assert.equal(pointsByColumns[0].index, 2, 'index');
         assert.equal(pointsByColumns[0].x, -9445, 'x');
-        assert.roughEqual(pointsByColumns[0].y, -9967, 5, 'y');
+        assert.roughEqual(pointsByColumns[0].y, -9957, 5, 'y');
 
         assert.equal(pointsByColumns[1].columnIndex, 3, 'columnIndex');
         assert.equal(pointsByColumns[1].index, 3, 'index');
         assert.equal(pointsByColumns[1].x, -9260, 'x');
-        assert.roughEqual(pointsByColumns[1].y, -9967, 5, 'y');
+        assert.roughEqual(pointsByColumns[1].y, -9957, 5, 'y');
 
         assert.equal(pointsByColumns[2].columnIndex, 4, 'columnIndex');
         assert.equal(pointsByColumns[2].index, 4, 'index');
         assert.equal(pointsByColumns[2].x, -9075, 'x');
-        assert.roughEqual(pointsByColumns[2].y, -9967, 5, 'y');
+        assert.roughEqual(pointsByColumns[2].y, -9957, 5, 'y');
     });
 
     QUnit.test('Reordering - set rows opacity for fixed column', function(assert) {

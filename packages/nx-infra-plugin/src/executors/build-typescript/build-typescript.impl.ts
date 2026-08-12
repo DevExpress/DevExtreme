@@ -239,6 +239,62 @@ function emitStandard(program: ts.Program): EmitProgramResult {
   return { success: true };
 }
 
+// Same tsc-alias resolution as the one-shot build, applied per incremental re-emit.
+async function runWatch(config: ResolvedConfig): Promise<void> {
+  const aliasTranspileFunc =
+    config.resolvePaths && config.resolvePathsBaseDir
+      ? await createAliasTranspileFunc(config.tsconfigPath, config.resolvePathsBaseDir)
+      : undefined;
+
+  await ensureDir(config.outDir);
+
+  const reportDiagnostic = (diagnostic: ts.Diagnostic): void => {
+    formatDiagnostics([diagnostic]).forEach((message) => logger.error(message));
+  };
+  const reportWatchStatus = (diagnostic: ts.Diagnostic): void => {
+    logger.verbose(ts.flattenDiagnosticMessageText(diagnostic.messageText, NEWLINE_CHAR));
+  };
+
+  const compilerOptions: ts.CompilerOptions = {
+    outDir: config.outDir,
+    ...(config.resolvePaths ? {} : { paths: {} }),
+  };
+
+  const host = ts.createWatchCompilerHost(
+    config.tsconfigPath,
+    compilerOptions,
+    ts.sys,
+    ts.createSemanticDiagnosticsBuilderProgram,
+    reportDiagnostic,
+    reportWatchStatus,
+  );
+
+  const emitWriteFile: ts.WriteFileCallback = (filePath, data, writeByteOrderMark) => {
+    let content = data;
+    if (aliasTranspileFunc && config.resolvePathsBaseDir) {
+      const normalizedFilePath = replacePathPrefix(
+        filePath,
+        config.outDir,
+        config.resolvePathsBaseDir,
+      );
+      content = aliasTranspileFunc(normalizedFilePath, data);
+    }
+    ts.sys.writeFile(filePath, content, writeByteOrderMark);
+  };
+  (host as { writeFile?: ts.WriteFileCallback }).writeFile = emitWriteFile;
+  const watchProgram = ts.createWatchProgram(host);
+  logger.verbose(`TypeScript watch is emitting to ${config.outDir}...`);
+
+  await new Promise<void>((resolve) => {
+    const stop = (): void => {
+      watchProgram.close();
+      resolve();
+    };
+    process.once('SIGINT', stop);
+    process.once('SIGTERM', stop);
+  });
+}
+
 interface ResolvedBuildTypescript {
   config: ResolvedConfig;
 }
@@ -250,7 +306,12 @@ export default createExecutor<BuildTypescriptExecutorSchema, ResolvedBuildTypesc
     validateOptions(config);
     return { config };
   },
-  run: async ({ config }) => {
+  run: async ({ config }, options) => {
+    if (options.watch) {
+      await runWatch(config);
+      return;
+    }
+
     const { content: tsconfigContent, compilerOptions } = await loadTsConfig(config.tsconfigPath);
     compilerOptions.outDir = config.outDir;
     await ensureDir(config.outDir);

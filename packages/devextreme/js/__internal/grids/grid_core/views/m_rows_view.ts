@@ -21,6 +21,7 @@ import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_col
 import type {
   ColumnsResizerViewController,
 } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
+import { generateRowValues } from '@ts/grids/grid_core/data_controller/utils/row_values';
 import type { ErrorHandlingController } from '@ts/grids/grid_core/error_handling/m_error_handling';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
@@ -28,11 +29,13 @@ import type { ValidatingController } from '@ts/grids/grid_core/validating/m_vali
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/const';
+import { isLocalStore } from '../data_source_adapter/utils/store';
 import type { EditingController } from '../editing/m_editing';
 import gridCoreUtils from '../m_utils';
 import { CLASSES } from '../sticky_columns/const';
 import { ColumnsView } from './m_columns_view';
-import { getCellText } from './utils';
+import type { RowsViewScrollEvent } from './types';
+import { getCellText, getMaxHorizontalScrollOffset } from './utils';
 
 const ROWS_VIEW_CLASS = 'rowsview';
 const CONTENT_CLASS = 'content';
@@ -51,9 +54,6 @@ export const ROW_LINES_CLASS = 'dx-row-lines';
 
 const LOADPANEL_HIDE_TIMEOUT = 200;
 
-function getMaxHorizontalScrollOffset(scrollable) {
-  return scrollable ? Math.round(scrollable.scrollWidth() - scrollable.clientWidth()) : 0;
-}
 export function isGroupRow({ rowType, column }) {
   return rowType === 'group'
     && isDefined(column.groupIndex)
@@ -336,7 +336,7 @@ export class RowsView extends ColumnsView {
     if (!arg.data || arg.rowType !== 'data' || arg.isNewRow || !this.option('twoWayBindingEnabled') || !watch || !row) return;
 
     const dispose = watch(
-      () => dataController.generateDataValues(arg.data, arg.columns),
+      () => generateRowValues(arg.data, arg.columns),
       () => {
         dataController.repaintRows([row.rowIndex], this.option('repaintChangesOnly'));
       },
@@ -357,7 +357,7 @@ export class RowsView extends ColumnsView {
       $element.append('<div>');
     }
     if (force || !that._loadPanel) {
-      that._renderLoadPanel($element, $element.parent(), that._dataController.isLocalStore());
+      that._renderLoadPanel($element, $element.parent(), isLocalStore(that._dataController.store()));
     }
 
     if ((force || !that.getScrollable()) && that._dataController.isLoaded()) {
@@ -380,26 +380,26 @@ export class RowsView extends ColumnsView {
   /**
    * @extended: column_fixing, virtual_column, virtual_scrolling
    */
-  protected _handleScroll(e) {
-    const that = this;
-    const rtlEnabled = that.option('rtlEnabled');
+  protected _handleScroll(e: RowsViewScrollEvent): void {
+    const { top, left } = e.scrollOffset;
+    const rtlEnabled = this.option('rtlEnabled');
     const isNativeScrolling = e.component.option('useNative');
+    const isHorizontalScrollbarVisible = this.isScrollbarVisible(true);
 
-    that._scrollTop = e.scrollOffset.top;
-    that._scrollLeft = e.scrollOffset.left;
-    let scrollLeft = e.scrollOffset.left;
+    this._scrollTop = top;
+    this._scrollLeft = rtlEnabled && !isHorizontalScrollbarVisible ? -1 : left;
+
     if (rtlEnabled) {
-      this._scrollRight = getMaxHorizontalScrollOffset(e.component) - this._scrollLeft;
+      const maxHorizontalScrollOffset = getMaxHorizontalScrollOffset(
+        this._scrollableContainer?.get(0),
+      );
 
-      if (isNativeScrolling) {
-        scrollLeft = -this._scrollRight;
-      }
-
-      if (!this.isScrollbarVisible(true)) {
-        this._scrollLeft = -1;
-      }
+      this._scrollRight = maxHorizontalScrollOffset - left;
     }
-    that.scrollChanged.fire({ ...e.scrollOffset, left: scrollLeft }, that.name);
+
+    const scrollLeft = rtlEnabled && isNativeScrolling ? -this._scrollRight : left;
+
+    this.scrollChanged.fire({ ...e.scrollOffset, left: scrollLeft }, this.name);
   }
 
   private _renderScrollableCore($element) {
@@ -582,7 +582,7 @@ export class RowsView extends ColumnsView {
   protected _checkRowKeys(options) {
     const that = this;
     const rows = that._getRows(options);
-    const keyExpr = that._dataController.store() && that._dataController.store().key();
+    const keyExpr = that._dataController.store()?.key();
 
     keyExpr && rows.some((row) => {
       if (row.rowType === 'data' && row.key === undefined) {
@@ -1161,8 +1161,11 @@ export class RowsView extends ColumnsView {
     const rtlEnabled = this.option('rtlEnabled');
 
     if (rtlEnabled) {
-      const maxHorizontalScrollOffset = getMaxHorizontalScrollOffset(scrollable);
+      const maxHorizontalScrollOffset = getMaxHorizontalScrollOffset(
+        this._scrollableContainer?.get(0),
+      );
       const scrollRight = maxHorizontalScrollOffset - scrollLeft;
+
       if (scrollRight !== this._scrollRight) {
         this._scrollLeft = maxHorizontalScrollOffset - this._scrollRight;
       }
@@ -1237,7 +1240,7 @@ export class RowsView extends ColumnsView {
       return;
     }
 
-    if (!loadPanel && messageText !== undefined && dataController.isLocalStore() && loadPanelOptions.enabled === 'auto' && $element) {
+    if (!loadPanel && messageText !== undefined && isLocalStore(dataController.store()) && loadPanelOptions.enabled === 'auto' && $element) {
       that._renderLoadPanel($element, $element.parent());
       loadPanel = that._loadPanel;
     }

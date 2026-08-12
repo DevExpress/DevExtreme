@@ -1,8 +1,11 @@
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "colors" as *;
+@use "../colors" as *;
 @use "../common/mixins" as *;
 @use "../common/sizes" as *;
 @use "../../base/dropDownMenu";
+@use "../../base/dropDownMenu/mixins" as *;
 
 // adduse
 
@@ -18,3 +21,5 @@
     box-shadow: $fluent-base-dropdown-widgets-shadow;
   }
 }
+
+@include dx-dropdownmenu-focus-outline($base-accent, $base-border-radius, $fluent-dropdownmenu-section-horizontal-margin);

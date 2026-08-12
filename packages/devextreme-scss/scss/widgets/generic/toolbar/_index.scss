@@ -10,6 +10,7 @@
 @use "../button/sizes" as *;
 @use "mixins" as *;
 @use "../../base/toolbar";
+@use "../../base/toolbar/mixins" as *;
 
 // adduse
 @use "../dropDownMenu";
@@ -99,3 +100,5 @@
     }
   }
 }
+
+@include dx-toolbar-focus-outline($base-accent, $base-border-radius);

@@ -12,6 +12,7 @@ import ContextMenu from '@js/ui/context_menu';
 import TreeView from '@js/ui/tree_view';
 
 import { foreachDataLevel, getCompareFunction } from '../m_widget_utils';
+import { getFieldsHotkeysA11yLabel } from './a11y';
 import { ATTRIBUTES, CLASSES, ICONS } from './const';
 import { FieldChooserBase } from './m_field_chooser_base';
 
@@ -97,7 +98,7 @@ export class FieldChooser extends FieldChooserBase {
         layout: 0,
         dataSource: null,
         encodeHtml: true,
-        onContextMenuPreparing: null,
+        onContextMenuPreparing: undefined,
         allowSearch: false,
         searchTimeout: 500,
         texts: {
@@ -261,7 +262,9 @@ export class FieldChooser extends FieldChooserBase {
 
     $element
       .addClass(CLASSES.fieldChooser.self)
-      .addClass(CLASSES.pivotGrid.fieldsContainer);
+      .addClass(CLASSES.pivotGrid.fieldsContainer)
+      .attr('role', 'group')
+      .attr('aria-label', getFieldsHotkeysA11yLabel(localizationMessage.format('dxPivotGrid-fieldChooserTitle')));
 
     that._dataChangedHandlers = [];
 
@@ -287,6 +290,7 @@ export class FieldChooser extends FieldChooserBase {
     this.renderSortable();
     this._renderContextMenu();
     this.updateDimensions();
+    this.updateFieldsTabIndexes();
   }
 
   _fireContentReadyAction() {
@@ -547,6 +551,13 @@ export class FieldChooser extends FieldChooserBase {
         that.renderField(field, true).appendTo($container);
       }
     });
+
+    // A menubar without menu items is invalid ARIA, so an empty area stays
+    // without the role until fields are dropped into it.
+    const hasFields = !!$container.children().length;
+    $container
+      .attr('role', hasFields ? 'menubar' : null)
+      .attr('aria-label', hasFields ? that.option(`texts.${area}Fields`) : null);
   }
 
   _renderArea(container, area) {

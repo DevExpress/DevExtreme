@@ -1,4 +1,5 @@
-import type { DataType, Format } from '@js/common';
+import type { DataType } from '@js/common';
+import type { Format } from '@js/common/core/localization';
 import dateLocalization from '@js/common/core/localization/date';
 import { compileGetter, getPathParts } from '@js/core/utils/data';
 import { captionize } from '@js/core/utils/inflector';
@@ -6,7 +7,7 @@ import {
   isDefined,
   isString, type,
 } from '@js/core/utils/type';
-import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
+import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import { getTreeNodeByPath, setTreeNodeByPath } from '@ts/grids/new/grid_core/utils/tree/index';
 import type { ComponentType } from 'inferno';
 
@@ -30,18 +31,16 @@ const getGlobalFormat = (
   }
 
   if (isString(globalFormat)) {
-    return (
-      (value: Date | string | number) => {
-        const dateValue = value instanceof Date ? value : new Date(value);
+    return (value: Date | number): string => {
+      const dateValue = value instanceof Date ? value : new Date(value);
 
-        return isNaN(dateValue.getTime())
-          ? ''
-          : dateLocalization.format(dateValue, globalFormat) as string;
-      }
-    ) as unknown as Format;
+      return isNaN(dateValue.getTime())
+        ? ''
+        : dateLocalization.format(dateValue, globalFormat) as string;
+    };
   }
 
-  return globalFormat as Format;
+  return globalFormat;
 };
 
 const getGlobalColumnFormat = (

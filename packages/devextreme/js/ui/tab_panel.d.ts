@@ -224,23 +224,23 @@ export interface dxTabPanelOptions<
      * @action
      * @public
      */
-    onTitleClick?: ((e: TitleClickEvent<TItem, TKey>) => void) | string;
+    onTitleClick?: ((e: TitleClickEvent<TItem, TKey>) => void) | string | null;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/tab_panel:TitleHoldEvent}
      * @action
      * @public
      */
-    onTitleHold?: ((e: TitleHoldEvent<TItem, TKey>) => void);
+    onTitleHold?: ((e: TitleHoldEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/tab_panel:TitleRenderedEvent}
      * @action
      * @public
      */
-    onTitleRendered?: ((e: TitleRenderedEvent<TItem, TKey>) => void);
+    onTitleRendered?: ((e: TitleRenderedEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
      * @default false

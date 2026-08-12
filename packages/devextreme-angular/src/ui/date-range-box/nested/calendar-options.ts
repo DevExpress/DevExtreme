@@ -75,10 +75,10 @@ export class DxoDateRangeBoxCalendarOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get disabledDates(): Array<Date> | ((data: DisabledDate) => boolean) {
+    get disabledDates(): Array<Date> | ((data: DisabledDate) => boolean) | null {
         return this._getOption('disabledDates');
     }
-    set disabledDates(value: Array<Date> | ((data: DisabledDate) => boolean)) {
+    set disabledDates(value: Array<Date> | ((data: DisabledDate) => boolean) | null) {
         this._setOption('disabledDates', value);
     }
 
@@ -283,18 +283,18 @@ export class DxoDateRangeBoxCalendarOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get validationError(): any {
+    get validationError(): any | null {
         return this._getOption('validationError');
     }
-    set validationError(value: any) {
+    set validationError(value: any | null) {
         this._setOption('validationError', value);
     }
 
     @Input()
-    get validationErrors(): Array<any> {
+    get validationErrors(): Array<any> | null {
         return this._getOption('validationErrors');
     }
-    set validationErrors(value: Array<any>) {
+    set validationErrors(value: Array<any> | null) {
         this._setOption('validationErrors', value);
     }
 

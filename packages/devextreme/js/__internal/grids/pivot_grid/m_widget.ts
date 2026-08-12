@@ -30,10 +30,15 @@ import { ChartIntegrationMixin } from './chart_integration/m_chart_integration';
 import DataAreaImport from './data_area/m_data_area';
 import DataControllerImport from './data_controller/m_data_controller';
 import { ExportController } from './export/m_export';
+import { getFieldsHotkeysA11yLabel } from './field_chooser/a11y';
 import { FieldChooser } from './field_chooser/m_field_chooser';
 import { FieldChooserBase } from './field_chooser/m_field_chooser_base';
 import { FieldsArea } from './fields_area/m_fields_area';
 import HeadersArea from './headers_area/m_headers_area';
+import { FAKE_TABLE_CLASS, HORIZONTAL_HEADERS_AREA_CLASS, VERTICAL_HEADERS_AREA_CLASS } from './keyboard_navigation/const';
+import { RovingTabIndex } from './keyboard_navigation/roving_tab_index';
+import type { CellNavigationDirection } from './keyboard_navigation/table_cell_navigation';
+import { buildCellMatrix, getAdjacentCell } from './keyboard_navigation/table_cell_navigation';
 import { findField, mergeArraysByMaxValue, setFieldProperty } from './m_widget_utils';
 
 const window = getWindow();
@@ -59,6 +64,13 @@ const DIV = '<div>';
 const TEST_HEIGHT = 66666;
 
 const FIELD_CALCULATED_OPTIONS = ['allowSorting', 'allowSortingBySummary', 'allowFiltering', 'allowExpandAll'];
+
+const ARROW_KEY_DIRECTIONS: Record<string, CellNavigationDirection> = {
+  ArrowUp: 'up',
+  ArrowDown: 'down',
+  ArrowLeft: 'left',
+  ArrowRight: 'right',
+};
 
 function getArraySum(array) {
   let sum = 0;
@@ -110,6 +122,12 @@ function clickedOnFieldsArea($targetElement) {
 
 class PivotGrid extends Widget {
   _dataController: any;
+
+  _columnsAreaNavigation: RovingTabIndex | undefined;
+
+  _rowsAreaNavigation: RovingTabIndex | undefined;
+
+  _contextMenuOwnerNavigation: RovingTabIndex | undefined;
 
   _scrollLeft: any;
 
@@ -194,7 +212,7 @@ class PivotGrid extends Widget {
         height: 600,
         applyChangesMode: 'instantly',
       },
-      onContextMenuPreparing: null,
+      onContextMenuPreparing: undefined,
       allowSorting: false,
       allowSortingBySummary: false,
       allowFiltering: false,
@@ -251,13 +269,13 @@ class PivotGrid extends Widget {
         exportToExcel: localizationMessage.format('dxDataGrid-exportToExcel'),
         dataNotAvailable: localizationMessage.format('dxPivotGrid-dataNotAvailable'),
       },
-      onCellClick: null,
-      onCellPrepared: null,
+      onCellClick: undefined,
+      onCellPrepared: undefined,
       showBorders: false,
 
       stateStoring: {
         enabled: false,
-        storageKey: null,
+        storageKey: undefined,
         type: 'localStorage',
         customLoad: null,
         customSave: null,
@@ -266,7 +284,7 @@ class PivotGrid extends Widget {
 
       onExpandValueChanging: null,
       renderCellCountLimit: 20000,
-      onExporting: null,
+      onExporting: undefined,
       headerFilter: {
         width: 252,
         height: 325,
@@ -697,8 +715,21 @@ class PivotGrid extends Widget {
         const items = that._getContextMenuItems(args);
         if (items) {
           actionArgs.component.option('items', items);
+          if (event.type === 'keydown') {
+            // A keyboard event carries no pointer coordinates, so the menu is
+            // anchored to the focused cell instead.
+            if (actionArgs.position) {
+              actionArgs.position.of = $(targetElement);
+            }
+          } else {
+            that._contextMenuOwnerNavigation = undefined;
+          }
           actionArgs.cancel = false;
         }
+      },
+      onHidden() {
+        that._contextMenuOwnerNavigation?.refocusFocusedItem();
+        that._contextMenuOwnerNavigation = undefined;
       },
       onItemClick(params) {
         params.itemData.onItemClick && params.itemData.onItemClick(params);
@@ -891,8 +922,175 @@ class PivotGrid extends Widget {
     });
   }
 
+  _getColumnsAreaNavigation() {
+    this._columnsAreaNavigation = this._columnsAreaNavigation ?? new RovingTabIndex({
+      component: this,
+      getItems: () => this._getColumnHeaderCells(),
+      scrollToItem: (item) => this._columnsArea.scrollToElement(item),
+      getItemId: (item) => this._getHeaderCellId(item),
+    });
+
+    return this._columnsAreaNavigation;
+  }
+
+  // aria-colindex is absolute (it includes the virtual scrolling offset), so
+  // it identifies the same logical cell across re-renders that re-slice the
+  // rendered header pages.
+  _getHeaderCellId(cell: HTMLElement): string | undefined {
+    const columnIndex = cell.getAttribute('aria-colindex');
+    const row = cell.parentElement as HTMLTableRowElement | null;
+
+    if (!columnIndex || !row) {
+      return undefined;
+    }
+
+    return `${row.sectionRowIndex}:${columnIndex}`;
+  }
+
+  _getRowsAreaNavigation() {
+    this._rowsAreaNavigation = this._rowsAreaNavigation ?? new RovingTabIndex({
+      component: this,
+      getItems: () => this._getRowHeaderCells(),
+      scrollToItem: (item) => this._rowsArea.scrollToElement(item),
+      getItemId: (item) => this._getRowHeaderCellId(item),
+    });
+
+    return this._rowsAreaNavigation;
+  }
+
+  // aria-rowindex is absolute as well, so it identifies the same logical row
+  // header cell across virtual scrolling re-renders.
+  _getRowHeaderCellId(cell: HTMLElement): string | undefined {
+    const rowIndex = cell.getAttribute('aria-rowindex');
+    const { cellIndex } = cell as HTMLTableCellElement;
+
+    if (!rowIndex || cellIndex < 0) {
+      return undefined;
+    }
+
+    return `${cellIndex}:${rowIndex}`;
+  }
+
+  _getHeaderAreaCells(cellSelector: string): HTMLElement[] {
+    const element = this.$element().get(0);
+
+    if (!element) {
+      return [];
+    }
+
+    const cells: HTMLElement[] = Array.from(element.querySelectorAll(cellSelector));
+
+    return cells.filter((cell) => !cell.closest(`.${FAKE_TABLE_CLASS}`));
+  }
+
+  // Only cells marked as navigable on render take part in the roving
+  // tabindex: whitespace filler cells are rendered without tabindex.
+  _getColumnHeaderCells(): HTMLElement[] {
+    return this._getHeaderAreaCells(`thead.${HORIZONTAL_HEADERS_AREA_CLASS} td[tabindex]`);
+  }
+
+  _getRowHeaderCells(): HTMLElement[] {
+    return this._getHeaderAreaCells(`tbody.${VERTICAL_HEADERS_AREA_CLASS} td[tabindex]`);
+  }
+
+  _getCellAreaNavigation(cell): RovingTabIndex | undefined {
+    if (cell.closest?.(`.${FAKE_TABLE_CLASS}`)) {
+      return undefined;
+    }
+    if (cell.closest?.(`thead.${HORIZONTAL_HEADERS_AREA_CLASS}`)) {
+      return this._getColumnsAreaNavigation();
+    }
+    if (cell.closest?.(`tbody.${VERTICAL_HEADERS_AREA_CLASS}`)) {
+      return this._getRowsAreaNavigation();
+    }
+
+    return undefined;
+  }
+
+  _normalizeCellNavigationDirection(direction: CellNavigationDirection): CellNavigationDirection {
+    if (!this.option('rtlEnabled')) {
+      return direction;
+    }
+    if (direction === 'left') {
+      return 'right';
+    }
+    if (direction === 'right') {
+      return 'left';
+    }
+
+    return direction;
+  }
+
+  _handleCellArrowKeyDown(e, direction: CellNavigationDirection) {
+    const cell = e.currentTarget;
+    const navigation = this._getCellAreaNavigation(cell);
+
+    if (!navigation) {
+      return;
+    }
+
+    e.preventDefault();
+
+    const section = cell.closest('thead, tbody');
+    const normalizedDirection = this._normalizeCellNavigationDirection(direction);
+    let target = getAdjacentCell(section, cell, normalizedDirection);
+
+    // Non-navigable placeholders (e.g. whitespace filler cells) have no
+    // tabindex and are skipped over.
+    while (target && !target.hasAttribute('tabindex')) {
+      target = getAdjacentCell(section, target, normalizedDirection);
+    }
+
+    if (target) {
+      navigation.focusItem(target);
+    }
+  }
+
+  _handleCellFocusIn(e) {
+    this._getCellAreaNavigation(e.currentTarget)?.handleFocusIn(e.currentTarget);
+  }
+
+  _handleCellContextMenuKeyDown(e) {
+    const cell = e.currentTarget;
+    const navigation = this._getCellAreaNavigation(cell);
+
+    if (!navigation) {
+      return;
+    }
+
+    this._showContextMenuFromKeyboard(e, navigation);
+  }
+
+  _handleFieldContextMenuKeyDown(e, navigation: RovingTabIndex) {
+    this._showContextMenuFromKeyboard(e, navigation);
+  }
+
+  _showContextMenuFromKeyboard(e, navigation: RovingTabIndex) {
+    if (!this._contextMenu) {
+      return;
+    }
+
+    // The internal _show is called instead of the public show() because only
+    // _show accepts the initiating event that onPositioning builds items from.
+    this._contextMenu._show(e);
+
+    if (this._contextMenu.option('visible')) {
+      e.preventDefault();
+      this._contextMenuOwnerNavigation = navigation;
+    }
+  }
+
   _handleCellKeyDown(e) {
+    const direction = ARROW_KEY_DIRECTIONS[e.key];
+    if (direction) {
+      this._handleCellArrowKeyDown(e, direction);
+      return;
+    }
     if (e.repeat) {
+      return;
+    }
+    if (e.key === 'ContextMenu' || (e.shiftKey && e.key === 'F10')) {
+      this._handleCellContextMenuKeyDown(e);
       return;
     }
     if (e.key !== 'Enter' && e.key !== ' ') {
@@ -1121,6 +1319,7 @@ class PivotGrid extends Widget {
 
     eventsEngine.on($table, addNamespace(clickEventName, 'dxPivotGrid'), 'td', that._handleCellClick.bind(that));
     eventsEngine.on($table, addNamespace('keydown', 'dxPivotGrid'), 'td', that._handleCellKeyDown.bind(that));
+    eventsEngine.on($table, addNamespace('focusin', 'dxPivotGrid'), 'td', that._handleCellFocusIn.bind(that));
 
     return $table;
   }
@@ -1138,16 +1337,46 @@ class PivotGrid extends Widget {
     const that = this;
     const rowsArea = that._rowsArea || new HeadersArea.VerticalHeadersArea(that);
     that._rowsArea = rowsArea;
+
+    const navigation = that._getRowsAreaNavigation();
+    const needRestoreFocus = navigation.containsActiveElement();
+
     rowsArea.render(rowsAreaElement, that._dataController.getRowsInfo());
+    navigation.updateTabIndexes();
+
+    if (needRestoreFocus) {
+      navigation.refocusFocusedItem();
+      that._scheduleNavigationFocusRestore(navigation);
+    }
 
     return rowsArea;
+  }
+
+  _scheduleNavigationFocusRestore(navigation: RovingTabIndex) {
+    const onReady = () => {
+      this.off('contentReady', onReady);
+      if (!navigation.containsActiveElement()) {
+        navigation.refocusFocusedItem();
+      }
+    };
+    this.on('contentReady', onReady);
   }
 
   _renderColumnsArea(columnsAreaElement) {
     const that = this;
     const columnsArea = that._columnsArea || new HeadersArea.HorizontalHeadersArea(that);
     that._columnsArea = columnsArea;
+
+    const navigation = that._getColumnsAreaNavigation();
+    const needRestoreFocus = navigation.containsActiveElement();
+
     columnsArea.render(columnsAreaElement, that._dataController.getColumnsInfo());
+    navigation.updateTabIndexes();
+
+    if (needRestoreFocus) {
+      navigation.refocusFocusedItem();
+      that._scheduleNavigationFocusRestore(navigation);
+    }
 
     return columnsArea;
   }
@@ -1158,7 +1387,7 @@ class PivotGrid extends Widget {
     that.$element()
       .addClass(PIVOTGRID_CLASS)
       .attr('role', 'group')
-      .attr('aria-label', localizationMessage.format('dxPivotGrid-ariaLabel'));
+      .attr('aria-label', getFieldsHotkeysA11yLabel(localizationMessage.format('dxPivotGrid-ariaLabel')));
   }
 
   _renderContentImpl() {
@@ -1234,6 +1463,7 @@ class PivotGrid extends Widget {
       visible: that.option('visible'),
       // @ts-expect-error ts-error
       remoteSort: that.option('scrolling.mode') === 'virtual',
+      onFieldContextMenuKeyDown: that._handleFieldContextMenuKeyDown.bind(that),
     };
 
     if (that._fieldChooserBase) {
@@ -1285,11 +1515,55 @@ class PivotGrid extends Widget {
       dataArea.tableElement().attr('id'),
     ].filter(isDefined).join(' ');
 
+    const rowHeaderColumnCount = this._reserveRowHeaderColumns(dataArea, rowsArea, columnsArea);
+
     $gridElement
       .attr('role', 'grid')
       .attr('aria-owns', tableIds)
       .attr('aria-rowcount', this._dataController.totalRowCount())
-      .attr('aria-colcount', this._dataController.totalColumnCount());
+      .attr('aria-colcount', this._dataController.totalColumnCount() + rowHeaderColumnCount);
+  }
+
+  _reserveRowHeaderColumns(dataArea, rowsArea, columnsArea): number {
+    // The reserved width is the full row-header column count, not the widest
+    // rendered row: virtual scrolling can page in rows whose visible cells do
+    // not reach the rightmost header column, which would otherwise shift the
+    // colindex axis between pages.
+    const rowHeaderColumnCount = rowsArea.getColumnsCount();
+
+    if (!rowHeaderColumnCount) {
+      return 0;
+    }
+
+    const rowsBody = rowsArea.tableElement().children('tbody').get(0);
+    const matrix = rowsBody ? buildCellMatrix(rowsBody) : [];
+    const indexed = new Set<HTMLTableCellElement>();
+    matrix.forEach((row) => {
+      row.forEach((cell, columnIndex) => {
+        if (cell && cell.getAttribute('role') && !indexed.has(cell)) {
+          indexed.add(cell);
+          cell.setAttribute('aria-colindex', String(columnIndex + 1));
+        }
+      });
+    });
+
+    const shifted = new Set<HTMLTableCellElement>();
+    [columnsArea, dataArea].forEach((area) => {
+      area.tableElement().find('td[aria-colindex]').each((_, td) => {
+        if (shifted.has(td)) {
+          return;
+        }
+        shifted.add(td);
+        let base = td.getAttribute('data-dx-base-colindex');
+        if (base === null) {
+          base = td.getAttribute('aria-colindex');
+          td.setAttribute('data-dx-base-colindex', base);
+        }
+        td.setAttribute('aria-colindex', String(Number(base) + rowHeaderColumnCount));
+      });
+    });
+
+    return rowHeaderColumnCount;
   }
 
   _update(isFirstDrawing) {

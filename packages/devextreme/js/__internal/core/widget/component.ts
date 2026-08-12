@@ -123,9 +123,9 @@ export class Component<
 
   _getDefaultOptions(): TProperties {
     return {
-      onInitialized: null,
-      onOptionChanged: null,
-      onDisposing: null,
+      onInitialized: undefined,
+      onOptionChanged: undefined,
+      onDisposing: undefined,
 
       defaultOptionsRules: null,
     } as unknown as TProperties;
@@ -401,7 +401,7 @@ export class Component<
   }
 
   _createActionByOption(
-    optionName: keyof TProperties,
+    optionName: keyof TProperties | (string & {}),
     config?: ActionConfig,
   ): (event?: unknown) => void {
     // eslint-disable-next-line @typescript-eslint/init-declarations

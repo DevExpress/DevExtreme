@@ -299,22 +299,22 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     loadingIndicator?: LoadingIndicator;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/bar_gauge:TooltipHiddenEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
+    onTooltipHidden?: ((e: TooltipHiddenEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/bar_gauge:TooltipShownEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onTooltipShown?: ((e: TooltipShownEvent) => void);
+    onTooltipShown?: ((e: TooltipShownEvent) => void) | undefined;
     /**
      * @docid
      * @default "Material"

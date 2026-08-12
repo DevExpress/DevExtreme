@@ -2311,15 +2311,15 @@ class Diagram extends Widget<Properties> {
         fileName: 'Diagram',
       },
 
-      onItemClick: null,
+      onItemClick: undefined,
 
-      onItemDblClick: null,
+      onItemDblClick: undefined,
 
-      onSelectionChanged: null,
+      onSelectionChanged: undefined,
 
-      onRequestEditOperation: null,
+      onRequestEditOperation: undefined,
 
-      onRequestLayoutUpdate: null,
+      onRequestLayoutUpdate: undefined,
     });
   }
 

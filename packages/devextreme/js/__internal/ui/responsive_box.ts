@@ -97,8 +97,7 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
       rows: [],
       cols: [],
       singleColumnScreen: '',
-      // @ts-expect-error ts-error
-      screenByWidth: null,
+      screenByWidth: undefined,
       height: '100%',
       width: '100%',
       activeStateEnabled: false,

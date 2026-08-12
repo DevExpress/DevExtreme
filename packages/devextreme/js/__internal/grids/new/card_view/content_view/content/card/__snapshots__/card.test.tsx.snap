@@ -19,7 +19,7 @@ exports[`Rendering should be rendered correctly 1`] = `
         class="dx-cardview-card-header"
       >
         <div
-          class="dx-toolbar dx-widget dx-visibility-change-handler dx-collection"
+          class="dx-toolbar dx-toolbar-focus-mode dx-widget dx-visibility-change-handler dx-collection"
           role="toolbar"
         >
           <div
@@ -41,7 +41,7 @@ exports[`Rendering should be rendered correctly 1`] = `
                     aria-readonly="false"
                     class="dx-widget dx-checkbox"
                     role="checkbox"
-                    tabindex="0"
+                    tabindex="-1"
                   >
                     <input
                       type="hidden"
@@ -88,7 +88,7 @@ exports[`Rendering should be rendered correctly 1`] = `
                     aria-label="edit"
                     class="dx-widget dx-button dx-button-mode-text dx-button-normal dx-button-has-icon"
                     role="button"
-                    tabindex="0"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-button-content"
@@ -110,7 +110,7 @@ exports[`Rendering should be rendered correctly 1`] = `
                     aria-label="trash"
                     class="dx-widget dx-button dx-button-mode-text dx-button-normal dx-button-has-icon"
                     role="button"
-                    tabindex="0"
+                    tabindex="-1"
                   >
                     <div
                       class="dx-button-content"

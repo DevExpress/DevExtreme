@@ -1,4 +1,5 @@
 import type DataGrid from 'devextreme-testcafe-models/dataGrid';
+import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 
 // [borderLeftWidth, borderRightWidth] in pixels
 type Borders = [left: number, right: number];
@@ -130,4 +131,16 @@ export async function checkSummaryCellBorders(
         );
     }
   }
+}
+
+/*
+  Overrides the toolbar items' :focus-visible outline,
+  because in e2e tests flaky outline would appear
+  */
+export async function insertStylesToSuppressGroupPanelFocusOutline(): Promise<void> {
+  await insertStylesheetRulesToPage(`
+    .dx-group-panel-item:focus-visible:not(.dx-toolbar-item) {
+      outline: none !important;
+    }
+  `);
 }

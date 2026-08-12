@@ -48,19 +48,19 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<
     /**
      * @docid
      * @action
-     * @default null
+     * @default undefined
      * @public
      */
-    onDisposing?: ((e: EventInfo<TComponent>) => void);
+    onDisposing?: ((e: EventInfo<TComponent>) => void) | undefined;
     /**
      * @docid
      * @action
-     * @default null
+     * @default undefined
      * @type_function_param1 e:object
      * @type_function_param1_field component:<DOMComponent>
      * @public
      */
-    onOptionChanged?: ((e: OptionChangedEventInfo<TComponent>) => void);
+    onOptionChanged?: ((e: OptionChangedEventInfo<TComponent>) => void) | undefined;
     /**
      * @docid
      * @default false

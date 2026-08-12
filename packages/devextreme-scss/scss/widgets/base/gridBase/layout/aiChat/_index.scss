@@ -5,6 +5,14 @@
   padding: 0;
 }
 
+.dx-ai-chat .dx-popup-title .dx-toolbar-after .dx-toolbar-item:not(:last-child) {
+  padding-inline-end: $ai-chat-toolbar-item-spacing;
+}
+
+.dx-ai-chat .dx-popup-title.dx-toolbar .dx-closebutton {
+  inset-inline-start: 0;
+}
+
 .dx-ai-chat__content {
   border: none;
   min-height: auto;

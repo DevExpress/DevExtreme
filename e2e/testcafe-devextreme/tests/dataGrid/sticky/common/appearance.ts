@@ -10,12 +10,6 @@ const DATA_GRID_SELECTOR = '#container';
 fixture.disablePageReloads`FixedColumns - appearance`
   .page(url(__dirname, '../../../container.html'));
 
-// visual: generic.light
-// visual: generic.light.compact
-// visual: material.blue
-// visual: material.blue.compact
-// visual: fluent.blue
-// visual: fluent.blue.compact
 [false, true].forEach(
   (showRowLines) => {
     // T1268664

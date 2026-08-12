@@ -103,14 +103,14 @@ import {
 } from '@ts/ui/form/form.utils';
 import type { LoadPanelProperties } from '@ts/ui/load_panel';
 import LoadPanel from '@ts/ui/load_panel';
-import ValidationEngine from '@ts/ui/m_validation_engine';
-import ValidationSummary from '@ts/ui/m_validation_summary';
 import type { ScreenSizeQualifier } from '@ts/ui/responsive_box';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 import type { TabPanelProperties } from '@ts/ui/tab_panel/tab_panel';
 import TabPanel from '@ts/ui/tab_panel/tab_panel';
 import { TEXTEDITOR_CLASS, TEXTEDITOR_INPUT_CLASS } from '@ts/ui/text_box/text_editor.base';
 import { TOOLBAR_CLASS } from '@ts/ui/toolbar/constants';
+import ValidationEngine from '@ts/ui/validation_engine';
+import ValidationSummary from '@ts/ui/validation_summary';
 
 export type FormAICommandName = 'smartPaste';
 export interface AICommandParamsMap {
@@ -203,12 +203,9 @@ class Form extends Widget<FormProperties> {
       screenByWidth: defaultScreenFactorFunc,
       labelLocation: 'left',
       readOnly: false,
-      // @ts-expect-error ts-error
-      onFieldDataChanged: null,
-      // @ts-expect-error ts-error
-      customizeItem: null,
-      // @ts-expect-error ts-error
-      onEditorEnterKey: null,
+      onFieldDataChanged: undefined,
+      customizeItem: undefined,
+      onEditorEnterKey: undefined,
       minColWidth: 200,
       alignItemLabels: true,
       alignItemLabelsInAllGroups: true,
@@ -225,10 +222,8 @@ class Form extends Widget<FormProperties> {
       stylingMode: config().editorStylingMode,
       labelMode: 'outside',
       isDirty: false,
-      // @ts-expect-error ts-error
-      onSmartPasting: null,
-      // @ts-expect-error ts-error
-      onSmartPasted: null,
+      onSmartPasting: undefined,
+      onSmartPasted: undefined,
     };
   }
 

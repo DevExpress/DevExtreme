@@ -185,7 +185,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @type_function_return string|Element|jQuery
      * @public
      */
-    fieldTemplate?: template | ((selectedItem: any, fieldElement: DxElement) => string | UserDefinedElement);
+    fieldTemplate?: template | ((selectedItem: any, fieldElement: DxElement) => string | UserDefinedElement) | null;
     /**
      * @docid
      * @default false
@@ -215,36 +215,36 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     nextButtonText?: string;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/lookup:PageLoadingEvent}
      * @action
      * @public
      */
-    onPageLoading?: ((e: PageLoadingEvent) => void);
+    onPageLoading?: ((e: PageLoadingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/lookup:PullRefreshEvent}
      * @action
      * @public
      */
-    onPullRefresh?: ((e: PullRefreshEvent) => void);
+    onPullRefresh?: ((e: PullRefreshEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/lookup:ScrollEvent}
      * @action
      * @public
      */
-    onScroll?: ((e: ScrollEvent) => void);
+    onScroll?: ((e: ScrollEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/lookup:ValueChangedEvent}
      * @action
      * @public
      */
-    onValueChanged?: ((e: ValueChangedEvent) => void);
+    onValueChanged?: ((e: ValueChangedEvent) => void) | undefined;
     /**
      * @docid
      * @default "scrollBottom"

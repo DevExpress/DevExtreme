@@ -9,11 +9,18 @@ import { each } from '@js/core/utils/iterator';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
-import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
+import type {
+  DataChange,
+  GeneratedItem,
+  ItemProcessingOptions,
+  ProcessedItem,
+} from '../data_controller/types';
+import type { RawItemData } from '../data_source_adapter/types';
 import gridCoreUtils from '../m_utils';
 import { CLASSES } from './const';
 import { isDetailRow } from './utils';
@@ -131,11 +138,14 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
     return super._processDataItem.apply(this, arguments as any);
   }
 
-  protected _processDataItem(data, options) {
+  protected _processDataItem(
+    generatedItem: GeneratedItem,
+    options: ItemProcessingOptions,
+  ): ProcessedItem {
     const that = this;
-    const dataItem = super._processDataItem.apply(that, arguments as any);
+    const processedItem = super._processDataItem(generatedItem, options);
 
-    dataItem.isExpanded = that.isRowExpanded(dataItem.key);
+    processedItem.isExpanded = that.isRowExpanded(processedItem.key);
 
     if (options.detailColumnIndex === undefined) {
       options.detailColumnIndex = -1;
@@ -149,33 +159,32 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
       });
     }
     if (options.detailColumnIndex >= 0) {
-      dataItem.values[options.detailColumnIndex] = dataItem.isExpanded;
+      processedItem.values[options.detailColumnIndex] = processedItem.isExpanded;
     }
-    return dataItem;
+    return processedItem;
   }
 
   protected _processItemsHack() {
     return super._processItems.apply(this, arguments as any);
   }
 
-  protected _processItems(items, change) {
-    const that = this;
+  protected _processItems(items: RawItemData[], change: DataChange): ProcessedItem[] {
     const { changeType } = change;
-    const result: any[] = [];
+    const result: ProcessedItem[] = [];
 
-    items = super._processItems.apply(that, arguments as any);
+    const processedItems = super._processItems(items, change);
 
     if (changeType === 'loadingAll') {
-      return items;
+      return processedItems;
     }
 
     if (changeType === 'refresh') {
-      that._expandedItems = grep(that._expandedItems, (item) => item.visible);
+      this._expandedItems = grep(this._expandedItems, (item) => item.visible);
     }
 
-    each(items, (index, item) => {
+    processedItems.forEach((item) => {
       result.push(item);
-      const expandIndex = gridCoreUtils.getIndexByKey(item.key, that._expandedItems);
+      const expandIndex = gridCoreUtils.getIndexByKey(item.key, this._expandedItems);
 
       if (item.rowType === 'data' && (item.isExpanded || expandIndex >= 0) && !item.isNewRow) {
         result.push({

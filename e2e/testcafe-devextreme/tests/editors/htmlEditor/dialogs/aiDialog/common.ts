@@ -26,7 +26,7 @@ export async function openAIDialog(
 ): Promise<HtmlEditor> {
   const htmlEditor = new HtmlEditor('#container');
   await t
-    .click(htmlEditor.toolbar.getItemByName('ai'))
+    .click(htmlEditor.toolbar.getItemByName('ai').element)
     .click(Selector(`.${SUBMENU_CLASS} .${MENU_ITEM_CLASS}`).nth(command));
 
   if (option !== undefined) {

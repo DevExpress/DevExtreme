@@ -149,17 +149,13 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
       readOnly: false,
       colCount: 1,
       labelLocation: 'left',
-      // @ts-expect-error ts-error
-      onFieldDataChanged: null,
-      // @ts-expect-error ts-error
-      onEditorEnterKey: null,
-      // @ts-expect-error ts-error
-      customizeItem: null,
+      onFieldDataChanged: undefined,
+      onEditorEnterKey: undefined,
+      customizeItem: undefined,
       alignItemLabels: true,
       minColWidth: MIN_COLUMN_WIDTH,
       showRequiredMark: true,
-      // @ts-expect-error ts-error
-      screenByWidth: null,
+      screenByWidth: undefined,
       showOptionalMark: false,
       requiredMark: '*',
       labelMode: 'outside',

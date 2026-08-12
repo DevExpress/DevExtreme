@@ -88,10 +88,10 @@ export class DxiVectorMapAnnotationComponent extends CollectionNestedOption impl
     }
 
     @Input()
-    get coordinates(): Array<number> {
+    get coordinates(): Array<number> | undefined {
         return this._getOption('coordinates');
     }
-    set coordinates(value: Array<number>) {
+    set coordinates(value: Array<number> | undefined) {
         this._setOption('coordinates', value);
     }
 

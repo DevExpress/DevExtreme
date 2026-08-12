@@ -2473,7 +2473,7 @@ QUnit.module('applyChangesMode: onDemand', {
 
         // assert
         assert.strictEqual(isCanceled, false, 'cancelChanges return false');
-        assert.strictEqual(this.fieldChooser.option('state'), null, 'state is empty');
+        assert.strictEqual(this.fieldChooser.option('state'), undefined, 'state is empty');
     });
 
     QUnit.test('cancel changes on field chooser repaint', function(assert) {

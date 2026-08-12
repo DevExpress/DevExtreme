@@ -8,7 +8,6 @@ fixture.disablePageReloads`Search Panel`
   .page(url(__dirname, '../../container.html'));
 
 // T1046688
-// visual: material.blue.light
 test.meta({ browserSize: [800, 800] })('searchPanel has correct view inside masterDetail', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

@@ -15,6 +15,14 @@ const purePressKey = async (t, key): Promise<void> => {
     .wait(100);
 };
 
+const focusOutByTab = async (t, editor): Promise<void> => {
+  await purePressKey(t, 'tab');
+
+  if (await editor.isFocused) {
+    await purePressKey(t, 'tab');
+  }
+};
+
 test('Click on action button should correctly work with SelectBox containing the field template (T811890)', async (t) => {
   const selectBox = new SelectBox('#container');
   const { getInstance } = selectBox;
@@ -122,7 +130,7 @@ test('editor can be focused out after click on action button', async (t) => {
     .click(actionButton.element)
     .expect(selectBox.isFocused).ok();
 
-  await purePressKey(t, 'tab');
+  await focusOutByTab(t, selectBox);
   await t
     .expect(selectBox.isFocused).notOk();
 }).before(async () => createWidget('dxSelectBox', {

@@ -38,7 +38,7 @@ import dxForm, { Properties as FormProperties } from './form';
 import dxPopup, { Properties as PopupProperties } from './popup';
 
 import dxSortable from './sortable';
-import { Item as ToolbarItemBase } from './toolbar';
+import { dxToolbarItem } from './toolbar';
 
 import Widget, {
   WidgetOptions,
@@ -282,11 +282,11 @@ export type AppointmentUpdatingEvent = EventInfo<dxScheduler> & {
   /**
    * @docid _ui_scheduler_AppointmentUpdatingEvent.oldData
    */
-  readonly oldData: any;
+  readonly oldData: Object;
   /**
    * @docid _ui_scheduler_AppointmentUpdatingEvent.newData
    */
-  readonly newData: any;
+  readonly newData: Object;
   /**
    * @docid _ui_scheduler_AppointmentUpdatingEvent.cancel
    */
@@ -451,10 +451,7 @@ export type DateNavigatorTextInfo = {
  * @namespace DevExpress.ui
  * @docid
  */
-export interface dxSchedulerOptions extends Omit<
-  WidgetOptions<dxScheduler>,
-  'onContentReady' | 'onDisposing' | 'onInitialized' | 'onOptionChanged'
-> {
+export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @default false
@@ -584,11 +581,11 @@ export interface dxSchedulerOptions extends Omit<
     customizeDateNavigatorText?: ((info: DateNavigatorTextInfo) => string) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 itemData:object
      * @public
      */
-    dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+    dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement) | undefined;
     /**
      * @docid
      * @default null
@@ -598,11 +595,11 @@ export interface dxSchedulerOptions extends Omit<
     dataSource?: DataSourceLike<Appointment> | null;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 itemData:object
      * @public
      */
-    dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+    dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement) | undefined;
     /**
      * @docid
      * @default undefined
@@ -745,113 +742,113 @@ export interface dxSchedulerOptions extends Omit<
     noDataText?: string;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/scheduler:AppointmentAddedEvent}
      * @action
      * @public
      */
-    onAppointmentAdded?: ((e: AppointmentAddedEvent) => void);
+    onAppointmentAdded?: ((e: AppointmentAddedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/scheduler:AppointmentAddingEvent}
      * @action
      * @public
      */
-    onAppointmentAdding?: ((e: AppointmentAddingEvent) => void);
+    onAppointmentAdding?: ((e: AppointmentAddingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type function
      * @type_function_param1 e:{ui/scheduler:AppointmentClickEvent}
      * @action
      * @public
      */
-    onAppointmentClick?: ((e: AppointmentClickEvent) => void) | string;
+    onAppointmentClick?: ((e: AppointmentClickEvent) => void) | string | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type function
      * @type_function_param1 e:{ui/scheduler:AppointmentContextMenuEvent}
      * @action
      * @public
      */
-    onAppointmentContextMenu?: ((e: AppointmentContextMenuEvent) => void) | string;
+    onAppointmentContextMenu?: ((e: AppointmentContextMenuEvent) => void) | string | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type function
      * @type_function_param1 e:{ui/scheduler:AppointmentDblClickEvent}
      * @action
      * @public
      */
-    onAppointmentDblClick?: ((e: AppointmentDblClickEvent) => void) | string;
+    onAppointmentDblClick?: ((e: AppointmentDblClickEvent) => void) | string | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/scheduler:AppointmentDeletedEvent}
      * @action
      * @public
      */
-    onAppointmentDeleted?: ((e: AppointmentDeletedEvent) => void);
+    onAppointmentDeleted?: ((e: AppointmentDeletedEvent) => void) | undefined;
 
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/scheduler:AppointmentDeletingEvent}
      * @action
      * @public
      */
-    onAppointmentDeleting?: ((e: AppointmentDeletingEvent) => void);
+    onAppointmentDeleting?: ((e: AppointmentDeletingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/scheduler:AppointmentTooltipShowingEvent}
      * @action
      * @public
      */
-    onAppointmentTooltipShowing?: ((e: AppointmentTooltipShowingEvent) => void);
+    onAppointmentTooltipShowing?: ((e: AppointmentTooltipShowingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/scheduler:AppointmentFormOpeningEvent}
      * @action
      * @public
      */
-    onAppointmentFormOpening?: ((e: AppointmentFormOpeningEvent) => void);
+    onAppointmentFormOpening?: ((e: AppointmentFormOpeningEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/scheduler:AppointmentRenderedEvent}
      * @action
      * @public
      */
-    onAppointmentRendered?: ((e: AppointmentRenderedEvent) => void);
+    onAppointmentRendered?: ((e: AppointmentRenderedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/scheduler:AppointmentUpdatedEvent}
      * @action
      * @public
      */
-    onAppointmentUpdated?: ((e: AppointmentUpdatedEvent) => void);
+    onAppointmentUpdated?: ((e: AppointmentUpdatedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/scheduler:AppointmentUpdatingEvent}
      * @action
      * @public
      */
-    onAppointmentUpdating?: ((e: AppointmentUpdatingEvent) => void);
+    onAppointmentUpdating?: ((e: AppointmentUpdatingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type function
      * @type_function_param1 e:{ui/scheduler:CellClickEvent}
      * @action
      * @public
      */
-    onCellClick?: ((e: CellClickEvent) => void) | string;
+    onCellClick?: ((e: CellClickEvent) => void) | string | undefined;
     /**
      * @docid
      * @default undefined
@@ -862,41 +859,13 @@ export interface dxSchedulerOptions extends Omit<
     onSelectionEnd?: ((e: SelectionEndEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type function
      * @type_function_param1 e:{ui/scheduler:CellContextMenuEvent}
      * @action
      * @public
      */
-    onCellContextMenu?: ((e: CellContextMenuEvent) => void) | string;
-    /**
-     * @docid
-     * @public
-     * @type_function_param1 e:{ui/scheduler:ContentReadyEvent}
-     * @action
-     */
-    onContentReady?: (e: ContentReadyEvent) => void;
-    /**
-     * @docid
-     * @public
-     * @type_function_param1 e:{ui/scheduler:DisposingEvent}
-     * @action
-     */
-    onDisposing?: (e: DisposingEvent) => void;
-    /**
-     * @docid
-     * @public
-     * @type_function_param1 e:{ui/scheduler:InitializedEvent}
-     * @action
-     */
-    onInitialized?: (e: InitializedEvent) => void;
-    /**
-     * @docid
-     * @public
-     * @type_function_param1 e:{ui/scheduler:OptionChangedEvent}
-     * @action
-     */
-    onOptionChanged?: (e: OptionChangedEvent) => void;
+    onCellContextMenu?: ((e: CellContextMenuEvent) => void) | string | undefined;
     /**
      * @docid
      * @default "dialog"
@@ -923,11 +892,11 @@ export interface dxSchedulerOptions extends Omit<
     remoteFiltering?: boolean;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 itemData:object
      * @public
      */
-    resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+    resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement) | undefined;
     /**
      * @docid
      * @default []
@@ -1043,11 +1012,11 @@ export interface dxSchedulerOptions extends Omit<
     textExpr?: string;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 itemData:object
      * @public
      */
-    timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+    timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement) | undefined;
     /**
      * @docid
      * @default ""
@@ -1118,13 +1087,11 @@ export interface dxSchedulerOptions extends Omit<
       cellDuration?: number;
       /**
        * @docid
-       * @default null
        * @type_function_param1 itemData:object
        */
       dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
       /**
        * @docid
-       * @default null
        * @type_function_param1 itemData:object
        */
       dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
@@ -1174,7 +1141,6 @@ export interface dxSchedulerOptions extends Omit<
       name?: string | undefined;
       /**
        * @docid
-       * @default null
        * @type_function_param1 itemData:object
        */
       resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
@@ -1190,7 +1156,6 @@ export interface dxSchedulerOptions extends Omit<
       startDayHour?: number;
       /**
        * @docid
-       * @default null
        * @type_function_param1 itemData:object
        */
       timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
@@ -1256,7 +1221,7 @@ export type dxSchedulerToolbarItem = ToolbarItem;
  * @namespace DevExpress.ui.dxScheduler
  * @public
  */
-export type ToolbarItem = ToolbarItemBase & {
+export type ToolbarItem = dxToolbarItem & {
   /**
    * @docid dxSchedulerToolbarItem.name
    * @public
@@ -1530,3 +1495,38 @@ export interface dxSchedulerScrolling {
    */
   mode?: ScrollMode;
 }
+
+/// #DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onAppointmentAdded' | 'onAppointmentAdding' | 'onAppointmentClick' | 'onAppointmentContextMenu' | 'onAppointmentDblClick' | 'onAppointmentDeleted' | 'onAppointmentDeleting' | 'onAppointmentFormOpening' | 'onAppointmentRendered' | 'onAppointmentTooltipShowing' | 'onAppointmentUpdated' | 'onAppointmentUpdating' | 'onCellClick' | 'onCellContextMenu' | 'onSelectionEnd'>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @docid dxSchedulerOptions.onContentReady
+ * @type_function_param1 e:{ui/scheduler:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @docid dxSchedulerOptions.onDisposing
+ * @type_function_param1 e:{ui/scheduler:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @docid dxSchedulerOptions.onInitialized
+ * @type_function_param1 e:{ui/scheduler:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @docid dxSchedulerOptions.onOptionChanged
+ * @type_function_param1 e:{ui/scheduler:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+};
+/// #ENDDEBUG

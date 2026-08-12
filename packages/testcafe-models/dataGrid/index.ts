@@ -86,6 +86,7 @@ export const CLASS = {
   aiPromptEditor: 'dx-ai-prompt-editor',
   aiAssistantChat: 'dx-ai-chat',
   aiAssistantButton: 'ai-assistant-button',
+  aiAssistantConfirmDialog: 'ai-assistant-confirm-dialog',
   sortableDragging: 'dx-sortable-dragging',
 };
 
@@ -445,6 +446,32 @@ export default class DataGrid extends GridCore {
       () => (getInstance() as any).getScrollable().scrollTop(),
       { dependencies: { getInstance } },
     )();
+  }
+
+  isScrolledToBottom(): Promise<boolean> {
+    const { getInstance } = this;
+    return ClientFunction(() => {
+      const scrollable = (getInstance() as any).getScrollable();
+
+      if (!scrollable) {
+        return false;
+      }
+
+      return scrollable.scrollHeight() - scrollable.clientHeight() - scrollable.scrollTop() <= 1;
+    }, { dependencies: { getInstance } })();
+  }
+
+  isScrolledToRight(): Promise<boolean> {
+    const { getInstance } = this;
+    return ClientFunction(() => {
+      const scrollable = (getInstance() as any).getScrollable();
+
+      if (!scrollable) {
+        return false;
+      }
+
+      return scrollable.scrollWidth() - scrollable.clientWidth() - scrollable.scrollLeft() <= 1;
+    }, { dependencies: { getInstance } })();
   }
 
   getScrollbarWidth(isHorizontal: boolean): Promise<number> {
@@ -1099,7 +1126,10 @@ export default class DataGrid extends GridCore {
   }
 
   getAIAssistantChat(): AIAssistantChat {
-    return new AIAssistantChat(this.body.find(`.${CLASS.overlayWrapper}.${CLASS.aiAssistantChat}`));
+    return new AIAssistantChat(
+      this.body.find(`.${CLASS.overlayWrapper}.${CLASS.aiAssistantChat}`),
+      this.addWidgetPrefix(CLASS.aiAssistantConfirmDialog),
+    );
   }
 
   getAIAssistantButton(): Selector {

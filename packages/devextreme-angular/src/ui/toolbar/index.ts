@@ -75,6 +75,19 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
     instance: DxToolbar<TItem, TKey> = null;
 
     /**
+     * [descr:dxToolbarOptions.allowKeyboardNavigation]
+    
+     */
+    @Input()
+    get allowKeyboardNavigation(): boolean {
+        return this._getOption('allowKeyboardNavigation');
+    }
+    set allowKeyboardNavigation(value: boolean) {
+        this._setOption('allowKeyboardNavigation', value);
+    }
+
+
+    /**
      * [descr:dxToolbarOptions.dataSource]
     
      */
@@ -324,6 +337,13 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() allowKeyboardNavigationChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() dataSourceChange: EventEmitter<Array<any | dxToolbarItem | string> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
@@ -438,6 +458,7 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
             { subscribe: 'itemHold', emit: 'onItemHold' },
             { subscribe: 'itemRendered', emit: 'onItemRendered' },
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { emit: 'allowKeyboardNavigationChange' },
             { emit: 'dataSourceChange' },
             { emit: 'disabledChange' },
             { emit: 'elementAttrChange' },

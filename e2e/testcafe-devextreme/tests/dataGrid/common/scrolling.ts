@@ -3,7 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
 import type { DataGridScrollMode } from 'devextreme/ui/data_grid';
-import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
+import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { salesApiMock } from './apiMocks/salesApiMock';
@@ -37,6 +37,12 @@ function getData(rowCount: number, colCount: number): Record<string, string>[] {
 
 async function getTestLoadCount(): Promise<number> {
   return ClientFunction(() => (window as any).testLoadCount as number)();
+}
+
+async function getTestLoadOptions(): Promise<{ skip: number; take: number }[]> {
+  return ClientFunction(
+    () => (window as any).testLoadOptions as { skip: number; take: number }[],
+  )();
 }
 
 fixture.disablePageReloads`Scrolling`
@@ -362,6 +368,134 @@ test('Scroll position after grouping when RTL (T388508)', async (t) => {
     field4: '4',
   }],
 }));
+
+[false, true].forEach((rtlEnabled) => {
+  test(`Headers should have a border before the scrollbar gutter when the vertical scrollbar occupies space (rtlEnabled = ${rtlEnabled}) (T1306973)`, async (t) => {
+    // arrange, act
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid('#container');
+
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    const headersElement = dataGrid.getHeaders().element;
+    const paddingProperty = rtlEnabled ? 'padding-left' : 'padding-right';
+    const padding = parseFloat(await headersElement.getStyleProperty(paddingProperty));
+
+    // assert
+    await t
+      .expect(headersElement.hasClass('dx-datagrid-scroller-spacing'))
+      .ok()
+      .expect(padding)
+      .eql(14);
+
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `grid-headers-scroller-spacing-border${rtlEnabled ? '-rtl' : ''}.png`,
+      { element: '#container' },
+    );
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await insertStylesheetRulesToPage(`
+      ::-webkit-scrollbar { -webkit-appearance: none; width: 14px; height: 14px; }
+      ::-webkit-scrollbar-thumb { background-color: rgba(0, 0, 0, .5); border-radius: 7px; }
+      ::-webkit-scrollbar-track { background-color: #fafafa; border-${rtlEnabled ? 'right' : 'left'}: 1px solid #e0e0e0; }
+    `);
+
+    return createWidget('dxDataGrid', {
+      rtlEnabled,
+      width: 700,
+      height: 300,
+      showBorders: true,
+      dataSource: getData(30, 5),
+      columns: ['field_0', 'field_1', 'field_2', 'field_3', 'field_4'],
+      filterRow: {
+        visible: true,
+      },
+      summary: {
+        totalItems: [{
+          column: 'field_0',
+          summaryType: 'count',
+        }],
+      },
+      scrolling: {
+        useNative: true,
+      },
+    });
+  }).after(async () => {
+    await removeStylesheetRulesFromPage();
+  });
+});
+
+test('Horizontal scrolling should work correctly in RTL mode with native scrolling (T1318490)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const rowsScrollContainer = dataGrid.getScrollContainer();
+  const headersScrollContainer = dataGrid.getHeadersScrollContainer();
+
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  // assert: the grid must not scroll itself on initialization
+  await t
+    .expect(rowsScrollContainer.scrollLeft)
+    .eql(0)
+    .expect(headersScrollContainer.scrollLeft)
+    .eql(0);
+
+  const initialScrollLeft = await dataGrid.getScrollLeft();
+
+  // act: scroll to the left
+  await dataGrid.scrollTo(t, { x: initialScrollLeft - 120 });
+
+  // assert: the headers are in sync with the content
+  await t
+    .expect(rowsScrollContainer.scrollLeft)
+    .eql(-120)
+    .expect(headersScrollContainer.scrollLeft)
+    .eql(-120);
+
+  // act: scroll back to the right edge
+  await dataGrid.scrollTo(t, { x: initialScrollLeft });
+
+  // assert: the content must not jump to the opposite edge
+  await t
+    .expect(rowsScrollContainer.scrollLeft)
+    .eql(0)
+    .expect(headersScrollContainer.scrollLeft)
+    .eql(0);
+}).before(async () => {
+  await insertStylesheetRulesToPage(`
+    ::-webkit-scrollbar { -webkit-appearance: none; width: 14px; height: 14px; }
+    ::-webkit-scrollbar-thumb { background-color: rgba(0, 0, 0, .5); border-radius: 7px; }
+    ::-webkit-scrollbar-track { background-color: #fafafa; }
+  `);
+
+  return createWidget('dxDataGrid', {
+    rtlEnabled: true,
+    width: 700,
+    height: 300,
+    showBorders: true,
+    dataSource: getData(30, 5),
+    columns: [
+      { dataField: 'field_0', width: 300 },
+      { dataField: 'field_1', width: 300 },
+      { dataField: 'field_2', width: 300 },
+      { dataField: 'field_3', width: 300 },
+      { dataField: 'field_4', width: 300 },
+    ],
+    scrolling: {
+      useNative: true,
+    },
+  });
+}).after(async () => {
+  await removeStylesheetRulesFromPage();
+});
 
 test('Header container should have padding-right after expanding the master row with a detail grid when using native scrolling (T1004507)', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -1044,7 +1178,7 @@ test.meta({ browserSize: [800, 800] })('Rows are rendered properly when window c
 })());
 
 // T1129252
-test.meta({ unstable: true })('The data should display correctly after changing the dataSource and focusedRowIndex options when scroll position is at the end', async (t) => {
+test('The data should display correctly after changing the dataSource and focusedRowIndex options when scroll position is at the end', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -1067,6 +1201,7 @@ test.meta({ unstable: true })('The data should display correctly after changing 
     .expect(dataGrid.isReady())
     .ok();
 
+  await t.expect(dataGrid.apiGetTopVisibleRowData()).eql({ id: 96, text: 'item 96' });
   await testScreenshot(t, takeScreenshot, 'grid-virtual-scrolling-T1129252.png', { element: '#container' });
   await t
     .expect(compareResults.isValid())
@@ -1705,7 +1840,7 @@ test.meta({ browserSize: [800, 200] })('Editing buttons should rerender correctl
 });
 
 // T1181439
-test.meta({ unstable: true })('Restoring focus on re-rendering should be done without unexpected scrolling to the focused element', async (t) => {
+test('Restoring focus on re-rendering should be done without unexpected scrolling to the focused element', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
@@ -1714,7 +1849,7 @@ test.meta({ unstable: true })('Restoring focus on re-rendering should be done wi
 
   await t.click(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(19).element);
 
-  await dataGrid.scrollBy(t, { left: 0 });
+  await dataGrid.scrollBy(t, { left: -1000 });
   await dataGrid.scrollBy(t, { top: 50 });
 
   await t.expect(dataGrid.getScrollLeft()).eql(0);
@@ -1973,9 +2108,6 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
 });
 
 // T1270354
-// visual: generic.light
-// visual: material.blue.light
-// visual: fluent.blue.light
 [
   { useNative: true },
   { useNative: false },
@@ -2034,6 +2166,74 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
       });
     });
 });
+
+test('Remote virtual scrolling should send one request on init when starting on a non-first page with async templates (T1326786)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
+  await t.expect(dataGrid.getScrollTop()).gt(0);
+  await t.expect(dataGrid.apiPageIndex()).eql(10);
+
+  const loadOptions = await getTestLoadOptions();
+
+  await t.expect(loadOptions).eql([{ skip: 1000, take: 100 }]);
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).testLoadOptions = [];
+  })();
+
+  return createWidget('dxDataGrid', () => ({
+    height: 1000,
+    remoteOperations: true,
+    renderAsync: false,
+    templatesRenderAsynchronously: true,
+    dataSource: new (window as any).DevExpress.data.CustomStore({
+      key: 'id',
+      load(loadOptions: any) {
+        (window as any).testLoadOptions.push({
+          skip: loadOptions.skip,
+          take: loadOptions.take,
+        });
+
+        const skip = loadOptions.skip ?? 0;
+        const take = loadOptions.take ?? 20;
+        const data: Record<string, unknown>[] = [];
+
+        for (let i = skip; i < skip + take; i += 1) {
+          data.push({ id: i, text: `item ${i}` });
+        }
+
+        return Promise.resolve({ data, totalCount: 5000 });
+      },
+    }),
+    scrolling: {
+      mode: 'virtual',
+      useNative: false,
+    },
+    paging: {
+      pageSize: 100,
+      pageIndex: 10,
+    },
+    columns: [
+      { dataField: 'id', cellTemplate: 'cell' },
+      'text',
+    ],
+    integrationOptions: {
+      templates: {
+        cell: {
+          render(e: any) {
+            setTimeout(() => {
+              ($(e.container) as any).text(e.model.value);
+              e.onRendered?.();
+            });
+          },
+        },
+      },
+    },
+  }));
+}).after(async () => ClientFunction(() => {
+  delete (window as any).testLoadOptions;
+})());
 
 fixture`Scrolling - warnings`
   .page(url(__dirname, '../../container.html'));

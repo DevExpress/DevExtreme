@@ -3,6 +3,7 @@ import type { WidgetName } from '../types';
 import Widget from '../internal/widget';
 import Popup from '../popup';
 import ColumnHeaderArea from './columnHeaderArea';
+import ColumnsArea from './columnsArea';
 import DataHeaderArea from './dataHeaderArea';
 import FieldChooser from './fieldChooser';
 import FilterHeaderArea from './filterHeaderArea';
@@ -76,6 +77,10 @@ export default class PivotGrid extends Widget {
 
   getRowsArea(idx?: number): RowsArea {
     return new RowsArea(this.element, idx);
+  }
+
+  getColumnsArea(idx?: number): ColumnsArea {
+    return new ColumnsArea(this.element, idx);
   }
 
   getDataHeaderArea(): DataHeaderArea {

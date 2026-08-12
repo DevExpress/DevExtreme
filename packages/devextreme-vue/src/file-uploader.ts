@@ -157,7 +157,7 @@ const componentConfig = {
     uploadMode: String as PropType<FileUploadMode>,
     uploadUrl: String,
     validationError: {},
-    validationErrors: Array as PropType<Array<any>>,
+    validationErrors: Array as PropType<Array<any> | null>,
     validationStatus: String as PropType<ValidationStatus>,
     value: Array as PropType<Array<any>>,
     visible: Boolean,

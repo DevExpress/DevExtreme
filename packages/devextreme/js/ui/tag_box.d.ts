@@ -238,28 +238,28 @@ export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Excl
     multiline?: boolean;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/tag_box:MultiTagPreparingEvent}
      * @action
      * @public
      */
-    onMultiTagPreparing?: ((e: MultiTagPreparingEvent) => void);
+    onMultiTagPreparing?: ((e: MultiTagPreparingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/tag_box:SelectAllValueChangedEvent}
      * @action
      * @public
      */
-    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void);
+    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/tag_box:SelectionChangedEvent}
      * @action
      * @public
      */
-    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void) | undefined;
     /**
      * @docid
      * @default 'page'

@@ -9,7 +9,7 @@ import { testScreenshot } from '../../../helpers/themeUtils';
 fixture.disablePageReloads`Selection`
   .page(url(__dirname, '../../container.html'));
 
-test.meta({ unstable: true })('selectAll state should be correct after unselect item if refresh(true) is called inside onSelectionChanged (T1048081)', async (t) => {
+test('selectAll state should be correct after unselect item if refresh(true) is called inside onSelectionChanged (T1048081)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   const firstRowSelectionCheckBox = new CheckBox(dataGrid.getDataCell(0, 0).getEditor().element);
@@ -49,13 +49,19 @@ test('The Select All checkbox should be visible when a column headerCellTemplate
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.expect(dataGrid.isReady()).ok();
+  await t.expect(
+    dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1).element
+      .withText('header template').exists,
+  ).ok();
+
   // assert
   await testScreenshot(t, takeScreenshot, 'T1141405-grid-select-all.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (t) => {
+}).before(async () => {
   await createWidget('dxDataGrid', {
     dataSource: [...new Array(2)].map((_, index) => ({ id: index, text: `item ${index}` })),
     renderAsync: false,
@@ -88,8 +94,6 @@ test('The Select All checkbox should be visible when a column headerCellTemplate
       },
     });
   })();
-
-  await t.wait(300);
 });
 
 // T1214734
@@ -248,19 +252,26 @@ test('Sensitivity option change should be correctly handled during runtime chang
 
 // ---
 
-test.meta({ unstable: true })('"Select All" checkbox should not react when not visible', async (t) => {
+test('"Select All" checkbox should not react when not visible', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   const selectAllCheckBox = new CheckBox(
     dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).getEditor().element,
   );
   const editorCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).element;
 
-  await t.expect(await selectAllCheckBox.option('visible')).notOk();
+  await t
+    .expect(selectAllCheckBox.element.exists)
+    .ok()
+    .expect(selectAllCheckBox.element.visible)
+    .notOk();
 
   await t.click(editorCell);
 
-  await t.expect(await selectAllCheckBox.option('visible')).notOk();
+  await t
+    .expect(selectAllCheckBox.element.visible)
+    .notOk();
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [],
   keyExpr: 'orderId',

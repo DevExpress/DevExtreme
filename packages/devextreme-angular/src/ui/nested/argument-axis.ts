@@ -108,10 +108,10 @@ export class DxoArgumentAxisComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get breaks(): Array<ScaleBreak> {
+    get breaks(): undefined | Array<ScaleBreak> {
         return this._getOption('breaks');
     }
-    set breaks(value: Array<ScaleBreak>) {
+    set breaks(value: undefined | Array<ScaleBreak>) {
         this._setOption('breaks', value);
     }
 
@@ -196,10 +196,10 @@ export class DxoArgumentAxisComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get holidays(): Array<Date | string | number> {
+    get holidays(): undefined | Array<Date | string | number> {
         return this._getOption('holidays');
     }
-    set holidays(value: Array<Date | string | number>) {
+    set holidays(value: undefined | Array<Date | string | number>) {
         this._setOption('holidays', value);
     }
 
@@ -316,10 +316,10 @@ export class DxoArgumentAxisComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get placeholderSize(): number {
+    get placeholderSize(): number | null {
         return this._getOption('placeholderSize');
     }
-    set placeholderSize(value: number) {
+    set placeholderSize(value: number | null) {
         this._setOption('placeholderSize', value);
     }
 
@@ -332,10 +332,10 @@ export class DxoArgumentAxisComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get singleWorkdays(): Array<Date | string | number> {
+    get singleWorkdays(): undefined | Array<Date | string | number> {
         return this._getOption('singleWorkdays');
     }
-    set singleWorkdays(value: Array<Date | string | number>) {
+    set singleWorkdays(value: undefined | Array<Date | string | number>) {
         this._setOption('singleWorkdays', value);
     }
 

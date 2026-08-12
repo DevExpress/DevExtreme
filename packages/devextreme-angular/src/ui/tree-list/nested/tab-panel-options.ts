@@ -288,18 +288,18 @@ export class DxoTreeListTabPanelOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get onTitleHold(): ((e: TitleHoldEvent) => void) {
+    get onTitleHold(): ((e: TitleHoldEvent) => void) | undefined {
         return this._getOption('onTitleHold');
     }
-    set onTitleHold(value: ((e: TitleHoldEvent) => void)) {
+    set onTitleHold(value: ((e: TitleHoldEvent) => void) | undefined) {
         this._setOption('onTitleHold', value);
     }
 
     @Input()
-    get onTitleRendered(): ((e: TitleRenderedEvent) => void) {
+    get onTitleRendered(): ((e: TitleRenderedEvent) => void) | undefined {
         return this._getOption('onTitleRendered');
     }
-    set onTitleRendered(value: ((e: TitleRenderedEvent) => void)) {
+    set onTitleRendered(value: ((e: TitleRenderedEvent) => void) | undefined) {
         this._setOption('onTitleRendered', value);
     }
 
@@ -344,10 +344,10 @@ export class DxoTreeListTabPanelOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get selectedItem(): any {
+    get selectedItem(): any | null {
         return this._getOption('selectedItem');
     }
-    set selectedItem(value: any) {
+    set selectedItem(value: any | null) {
         this._setOption('selectedItem', value);
     }
 
@@ -427,7 +427,7 @@ export class DxoTreeListTabPanelOptionsComponent extends NestedOption implements
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectedItemChange: EventEmitter<any>;
+    @Output() selectedItemChange: EventEmitter<any | null>;
     protected get _optionPath() {
         return 'tabPanelOptions';
     }

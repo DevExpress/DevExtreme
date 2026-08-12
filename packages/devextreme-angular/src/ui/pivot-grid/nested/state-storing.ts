@@ -64,10 +64,10 @@ export class DxoPivotGridStateStoringComponent extends NestedOption implements O
     }
 
     @Input()
-    get storageKey(): string {
+    get storageKey(): string | undefined {
         return this._getOption('storageKey');
     }
-    set storageKey(value: string) {
+    set storageKey(value: string | undefined) {
         this._setOption('storageKey', value);
     }
 

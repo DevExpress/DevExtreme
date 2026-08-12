@@ -16,7 +16,7 @@ test('TabPanel in HtmlEditor must have correct borders', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const htmlEditor = new HtmlEditor('#container');
 
-  await t.click(htmlEditor.toolbar.getItemByName('image'));
+  await t.click(htmlEditor.toolbar.getItemByName('image').element);
 
   await testScreenshot(t, takeScreenshot, 'tabpanel-in-htmleditor.png', {
     element: ADD_IMAGE_POPUP_CONTENT_SELECTOR,
@@ -40,7 +40,7 @@ test('Add button should be enabled after switch to url form', async (t) => {
   const htmlEditor = new HtmlEditor('#container');
 
   await t
-    .click(htmlEditor.toolbar.getItemByName('image'))
+    .click(htmlEditor.toolbar.getItemByName('image').element)
 
     .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
     .eql(true);
@@ -70,7 +70,7 @@ test('Add button should be disable after switch to image upload form', async (t)
   const htmlEditor = new HtmlEditor('#container');
 
   await t
-    .click(htmlEditor.toolbar.getItemByName('image'))
+    .click(htmlEditor.toolbar.getItemByName('image').element)
 
     .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
     .notOk()
@@ -109,7 +109,7 @@ test('AddImage form shouldn\'t lead to side effects in other forms', async (t) =
   const htmlEditor = new HtmlEditor('#container');
 
   await t
-    .click(htmlEditor.toolbar.getItemByName('image'))
+    .click(htmlEditor.toolbar.getItemByName('image').element)
 
     .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
     .ok()
@@ -120,7 +120,7 @@ test('AddImage form shouldn\'t lead to side effects in other forms', async (t) =
     .click(htmlEditor.dialog.footerToolbar.cancelButton.element);
 
   await t
-    .click(htmlEditor.toolbar.getItemByName('link'))
+    .click(htmlEditor.toolbar.getItemByName('link').element)
 
     .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
     .notOk()
@@ -131,7 +131,7 @@ test('AddImage form shouldn\'t lead to side effects in other forms', async (t) =
     .click(htmlEditor.dialog.footerToolbar.addButton.element);
 
   await t
-    .click(htmlEditor.toolbar.getItemByName('color'))
+    .click(htmlEditor.toolbar.getItemByName('color').element)
 
     .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
     .notOk()

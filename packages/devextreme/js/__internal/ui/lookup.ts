@@ -30,6 +30,7 @@ import type {
 import type { Properties } from '@js/ui/lookup';
 import Popover from '@js/ui/popover/ui.popover';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
+import type { TextBoxType } from '@js/ui/text_box';
 import { current, isMaterial } from '@js/ui/themes';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -135,12 +136,9 @@ class Lookup extends DropDownList<LookupProperties> {
       pulledDownText: messageLocalization.format('dxList-pulledDownText'),
       refreshingText: messageLocalization.format('dxList-refreshingText'),
       pageLoadingText: messageLocalization.format('dxList-pageLoadingText'),
-      // @ts-expect-error public API
-      onScroll: null,
-      // @ts-expect-error public API
-      onPullRefresh: null,
-      // @ts-expect-error public API
-      onPageLoading: null,
+      onScroll: undefined,
+      onPullRefresh: undefined,
+      onPageLoading: undefined,
       pageLoadMode: 'scrollBottom',
       nextButtonText: messageLocalization.format('dxList-nextButtonText'),
       grouped: false,
@@ -161,8 +159,7 @@ class Lookup extends DropDownList<LookupProperties> {
         animation: {},
         title: '',
         titleTemplate: 'title',
-        // @ts-expect-error ts-error
-        onTitleRendered: null,
+        onTitleRendered: undefined,
         fullScreen: false,
         maxHeight: '100vh',
       },
@@ -682,6 +679,10 @@ class Lookup extends DropDownList<LookupProperties> {
         shading: false,
         hideOnParentScroll: true,
         _fixWrapperPosition: false,
+        // NOTE: popover set role based on toolbarOptions, but
+        // Lookup with showCancelButton: false, do not have toolbar, so we use option.
+        _popoverContentRole: 'dialog',
+        _preventDialogContainerFocus: true,
         width: this._isInitialOptionValue('dropDownOptions.width')
           ? (): number => getOuterWidth(this.$element()) as number
           : popupConfig.width,
@@ -689,8 +690,6 @@ class Lookup extends DropDownList<LookupProperties> {
     );
     // @ts-expect-error fix on Dom Component level
     this._popup = this._createComponent(this._$popup, Popover, options);
-
-    this._popup.$overlayContent().attr('role', 'dialog');
 
     this._popup.on({
       showing: this._popupShowingHandler.bind(this),
@@ -923,7 +922,7 @@ class Lookup extends DropDownList<LookupProperties> {
       const $searchBox = this._$searchBox;
 
       const currentDevice = devices.current();
-      const searchMode = currentDevice.android ? 'text' : 'search';
+      const searchMode: TextBoxType = currentDevice.android ? 'text' : 'search';
 
       let isKeyboardListeningEnabled = false;
 
@@ -944,7 +943,7 @@ class Lookup extends DropDownList<LookupProperties> {
         onValueChanged: (): void => { this._searchHandler(); },
       };
 
-      this._searchBox = this._createComponent($searchBox, TextBox, textBoxOptions);
+      this._searchBox = this._createComponent<TextBox>($searchBox, TextBox, textBoxOptions);
 
       this._registerSearchKeyHandlers();
       // @ts-expect-error _$list is a List component; insertBefore expects a dxElementWrapper

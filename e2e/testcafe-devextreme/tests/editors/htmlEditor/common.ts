@@ -60,7 +60,7 @@ test('AI toolbar item', async (t) => {
   await testScreenshot(t, takeScreenshot, 'htmleditor-ai-toolbar-item.png', { element: '#container' });
 
   await t
-    .click(htmlEditor.toolbar.getItemByName('ai'))
+    .click(htmlEditor.toolbar.getItemByName('ai').element)
     .click(Selector(`.${SUBMENU_CLASS}`).find(`.${MENU_ITEM_CLASS}`).nth(5));
 
   await testScreenshot(t, takeScreenshot, 'htmleditor-ai-toolbar-item-expanded.png', { element: '#container' });

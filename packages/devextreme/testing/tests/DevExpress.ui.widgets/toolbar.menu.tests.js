@@ -584,19 +584,6 @@ QUnit.module('widget sizing render', moduleConfig, () => {
             this.keyboard = keyboardMock(this.overflowMenu.$button());
         }
     }, () => {
-        QUnit.test('list focusStateEnabled option', function(assert) {
-            assert.expect(3);
-
-            this.instance.option({ focusStateEnabled: false });
-            assert.ok(!this.overflowMenu.list().option('focusStateEnabled'));
-
-            this.instance.option('focusStateEnabled', true);
-            assert.ok(this.overflowMenu.list().option('focusStateEnabled'));
-
-            const $listItemContainer = this.overflowMenu.$list().find(`.${SCROLLVIEW_CONTENT_CLASS}`);
-            assert.equal($listItemContainer.attr('tabindex'), -1, 'tabindex for list is -1');
-        });
-
         QUnit.test('enter/space keys', function(assert) {
             assert.expect(3);
 
@@ -609,23 +596,6 @@ QUnit.module('widget sizing render', moduleConfig, () => {
 
             this.keyboard.keyDown('space');
             assert.ok(!this.overflowMenu.popup().option('visible'));
-        });
-
-        QUnit.test('navigation by arrows', function(assert) {
-            this.instance.option('opened', false);
-            this.overflowMenu.$button().focusin();
-
-            this.keyboard.keyDown('enter');
-            assert.ok(this.overflowMenu.popup().option('visible'));
-
-            this.keyboard.keyDown('down');
-            assert.ok(this.overflowMenu.$items().attr('id'), 'first item is active');
-
-            this.keyboard.keyDown('down');
-            assert.ok(this.overflowMenu.$items().eq(1).attr('id'), 'second item is active');
-
-            this.keyboard.keyDown('up');
-            assert.ok(this.overflowMenu.$items().eq(0).attr('id'), 'third item is active');
         });
 
         QUnit.test('hide popup on press tab', function(assert) {
@@ -693,7 +663,7 @@ QUnit.module('widget sizing render', moduleConfig, () => {
                         {
                             template: () => $('<div>').dxButton({ text: 'Button' })
                         },
-                    ]
+                    ],
                 });
             },
             afterEach: function() {
@@ -749,25 +719,6 @@ QUnit.module('widget sizing render', moduleConfig, () => {
                 keyboardMock($button).keyDown('enter');
                 assert.equal(popup.option('visible'), false, 'enter on a dxButton closed popup');
             });
-        });
-
-        QUnit.test('Enter or space press should call onItemClick (T318240)', function(assert) {
-            let itemClicked = 0;
-
-            this.instance.option('onItemClick', function() { itemClicked++; });
-
-            this.instance.option('opened', false);
-            this.overflowMenu.$button().focusin();
-
-            this.keyboard.keyDown('enter');
-            this.keyboard.keyDown('down');
-            this.keyboard.keyDown('enter');
-
-            this.keyboard.keyDown('enter');
-            this.keyboard.keyDown('down');
-            this.keyboard.keyDown('space');
-
-            assert.equal(itemClicked, 2, 'item was clicked twice');
         });
 
         QUnit.test('No exceptions on tab key pressing when popup is not opened', function(assert) {
@@ -833,22 +784,6 @@ QUnit.module('aria accessibility', moduleConfig, () => {
         this.overflowMenu.click();
 
         assert.strictEqual(this.$element.find('.dx-list-item:first').attr('role'), 'menuitem');
-    });
-
-    QUnit.test('aria-activedescendant on widget should point to focused list item', function(assert) {
-        this.instance.option({ items: [1, 2, 3], opened: true });
-
-        this.overflowMenu.click();
-
-        const $listItem = this.$element.find('.dx-list-item:first');
-
-        this.overflowMenu.click();
-        const list = this.overflowMenu.list();
-        list.option('focusedElement', $listItem);
-
-        const $listItemContainer = list.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`);
-        assert.notEqual($listItemContainer.attr('aria-activedescendant'), undefined);
-        assert.strictEqual($listItemContainer.attr('aria-activedescendant'), $listItem.attr('id'));
     });
 
     QUnit.test('aria-expanded property', function(assert) {

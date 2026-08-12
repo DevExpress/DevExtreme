@@ -3,40 +3,28 @@ export const skippedTests = {
     // WebGL initialization error at the provider. There is no point in adding a mask
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
 
-    // Remote WidgetsGalleryDataService is unstable (RemoteGrouping is covered by a separate mocked test)
-    DataGrid: ['RemoteVirtualScrolling', 'CustomDataSource', 'AIColumns'],
-
-    // AI answers are not stable
-    TreeList: ['AIColumns'],
+    // Remote WidgetsGalleryDataService is unstable and not mocked yet
+    PivotGrid: ['WebAPIService'],
   },
   Angular: {
     // WebGL initialization error at the provider. There is no point in adding a mask
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
 
-    // Remote WidgetsGalleryDataService is unstable (RemoteGrouping is covered by a separate mocked test)
-    DataGrid: ['RemoteVirtualScrolling', 'CustomDataSource', 'AIColumns'],
-
-    // AI answers are not stable
-    TreeList: ['AIColumns'],
+    // Remote WidgetsGalleryDataService is unstable and not mocked yet
+    PivotGrid: ['WebAPIService'],
   },
   React: {
     // WebGL initialization error at the provider. There is no point in adding a mask
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
 
-    // Remote WidgetsGalleryDataService is unstable (RemoteGrouping is covered by a separate mocked test)
-    DataGrid: ['RemoteVirtualScrolling', 'CustomDataSource', 'AIColumns'],
-
-    // AI answers are not stable
-    TreeList: ['AIColumns'],
+    // Remote WidgetsGalleryDataService is unstable and not mocked yet
+    PivotGrid: ['WebAPIService'],
   },
   Vue: {
     // WebGL initialization error at the provider. There is no point in adding a mask
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
 
-    // Remote WidgetsGalleryDataService is unstable (RemoteGrouping is covered by a separate mocked test)
-    DataGrid: ['RemoteVirtualScrolling', 'CustomDataSource', 'AIColumns'],
-
-    // AI answers are not stable
-    TreeList: ['AIColumns'],
+    // Remote WidgetsGalleryDataService is unstable and not mocked yet
+    PivotGrid: ['WebAPIService'],
   },
 };

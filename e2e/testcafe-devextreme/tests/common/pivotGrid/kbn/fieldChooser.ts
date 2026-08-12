@@ -38,6 +38,33 @@ const PIVOT_GRID_SELECTOR = '#container';
   }, PIVOT_GRID_SELECTOR));
 });
 
+test('Export button should have visible focus state', async (t) => {
+  const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t
+    .pressKey('tab')
+    .pressKey('tab')
+    .expect(pivotGrid.getExportButton().focused)
+    .ok();
+
+  await testScreenshot(t, takeScreenshot, 'export-button_focus.png');
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxPivotGrid', {
+  allowFiltering: true,
+  showBorders: true,
+  height: 470,
+  fieldChooser: {
+    enabled: true,
+  },
+  export: {
+    enabled: true,
+  },
+}, PIVOT_GRID_SELECTOR));
+
 test('Field chooser button should have correct aria attributes', async (t) => {
   const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
 

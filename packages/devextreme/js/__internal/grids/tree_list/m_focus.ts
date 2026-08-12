@@ -1,7 +1,7 @@
 import { Deferred } from '@js/core/utils/deferred';
 import { focusModule } from '@ts/grids/grid_core/focus/m_focus';
 
-import type { DataController } from '../grid_core/data_controller/m_data_controller';
+import type { DataController } from '../grid_core/data_controller/data_controller';
 import type { ModuleType } from '../grid_core/m_types';
 import core from './m_core';
 
@@ -98,21 +98,25 @@ const data = (
   }
 
   protected getPageIndexByKey(key) {
-    const that = this;
-    const dataSource = that._dataSource;
+    const dataSource = this._dataSource;
     // @ts-expect-error
     const d = new Deferred();
 
-    that.expandAscendants(key).done(() => {
+    this.expandAscendants(key).done(() => {
       dataSource.load({
         parentIds: [],
       }).done((nodes) => {
-        const offset = findIndex(nodes, (node) => that.keyOf(node.data) === key);
+        if (this._dataSource !== dataSource) {
+          d.resolve(-1);
+          return;
+        }
+
+        const offset = findIndex(nodes, (node) => this.keyOf(node.data) === key);
 
         let pageIndex = -1;
 
         if (offset >= 0) {
-          pageIndex = Math.floor(offset / that.pageSize());
+          pageIndex = Math.floor(offset / this.pageSize());
         }
 
         d.resolve(pageIndex);

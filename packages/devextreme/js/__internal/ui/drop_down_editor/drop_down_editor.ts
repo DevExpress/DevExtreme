@@ -1,4 +1,3 @@
-import type { Mode, Position } from '@js/common';
 import type { PositionConfig } from '@js/common/core/animation';
 import animationPosition from '@js/common/core/animation/position';
 import { locate, move } from '@js/common/core/animation/translator';
@@ -29,15 +28,18 @@ import type {
   EventInfo,
   PointerInteractionEvent,
 } from '@js/events';
-import type { Properties } from '@js/ui/drop_down_editor/ui.drop_down_editor';
+import type dxDropDownEditor from '@js/ui/drop_down_editor/ui.drop_down_editor';
+import type { dxDropDownEditorOptions, Properties } from '@js/ui/drop_down_editor/ui.drop_down_editor';
 import type { InitializedEvent as PopupInitializedEvent, Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import errors from '@js/ui/widget/ui.errors';
-import Widget from '@js/ui/widget/ui.widget';
+import { getComponentInstance } from '@ts/core/utils/m_public_component';
 import { focused } from '@ts/core/utils/m_selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
+import Widget from '@ts/core/widget/widget';
 import type { PositioningEvent } from '@ts/ui/overlay/overlay';
 import TextBox from '@ts/ui/text_box/text_box';
+import type { TextEditorInternalProperties } from '@ts/ui/text_box/text_editor.base';
 
 import type Popover from '../popover/popover';
 import type { TextEditorButtonInfo } from '../text_box/texteditor_button_collection/index';
@@ -66,32 +68,10 @@ export const DROP_DOWN_EDITOR_DEPRECATED_OPTIONS = {
   },
 };
 
-export interface DropDownEditorProperties extends Omit<
-  Properties,
-  | 'onChange'
-  | 'onCopy'
-  | 'onCut'
-  | 'onEnterKey'
-  | 'onFocusIn'
-  | 'onFocusOut'
-  | 'onInput'
-  | 'onKeyDown'
-  | 'onKeyUp'
-  | 'onPaste'
-  | 'onValueChanged'
-  | 'validationMessagePosition'
-  | 'onContentReady'
-  | 'onDisposing'
-  | 'onOptionChanged'
-  | 'onInitialized'
-> {
+export interface DropDownEditorInternalProperties extends TextEditorInternalProperties {
   buttonsLocation?: string;
 
   fieldTemplate?: string | Element | Function | null;
-
-  _onMarkupRendered?: () => void;
-
-  onPopupInitialized?: (e: { component: DropDownEditor; popup: Popup }) => void;
 
   popupPosition?: PositionConfig;
 
@@ -100,8 +80,12 @@ export interface DropDownEditorProperties extends Omit<
   applyButtonText?: string;
 
   cancelButtonText?: string;
+}
 
-  validationMessagePosition?: Position | Mode;
+export interface DropDownEditorProperties<
+  TComponent = dxDropDownEditor,
+> extends dxDropDownEditorOptions<TComponent>, DropDownEditorInternalProperties {
+  onPopupInitialized?: (e: { component: TComponent; popup: Popup }) => void;
 }
 
 interface TemplateRenderPayload {
@@ -126,8 +110,8 @@ function createTemplateWrapperElement(): dxElementWrapper {
 }
 
 class DropDownEditor<
-  TProperties extends DropDownEditorProperties = DropDownEditorProperties,
-// @ts-expect-error validationMessagePosition: Position | Mode vs TextBoxProperties (Position)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TProperties extends DropDownEditorProperties<any> = DropDownEditorProperties,
 > extends TextBox<TProperties> {
   _$container!: dxElementWrapper;
 
@@ -176,10 +160,12 @@ class DropDownEditor<
           : this._getFirstPopupElement();
 
         if ($focusableElement) {
-          // @ts-expect-error should be added on EventsEngine level
-          eventsEngine.trigger($focusableElement, 'focus');
-          // @ts-expect-error should be added on dxElementWrapper level
-          $focusableElement.select();
+          const $target = getComponentInstance<Widget>($focusableElement)?._focusTarget?.();
+          const $focusTarget = $target?.length ? $target : $focusableElement;
+          // @ts-expect-error ts-error should be added on EventsEngine level
+          eventsEngine.trigger($focusTarget, 'focus');
+          // @ts-expect-error ts-error should be added on dxElementWrapper level
+          $focusTarget.select();
         }
         e.preventDefault();
       },
@@ -227,7 +213,6 @@ class DropDownEditor<
   }
 
   _getDefaultButtons(): TextEditorButtonInfo[] {
-    // @ts-expect-error should be fixed on TextEditorButtonInfo level
     return super._getDefaultButtons().concat([{ name: 'dropDown', Ctor: DropDownButton }]);
   }
 
@@ -1039,7 +1024,7 @@ class DropDownEditor<
     super._clean();
   }
 
-  _setPopupOption(...args: [string, unknown?]): void {
+  _setPopupOption(...args: [string, unknown?] | [Record<string, unknown>]): void {
     this._setWidgetOption('_popup', args);
   }
 
@@ -1125,7 +1110,6 @@ class DropDownEditor<
   }
 
   _popupOptionChanged(args: OptionChanged<TProperties>): void {
-    // @ts-expect-error Add getOptionsFromContainer static method to Widget
     const options = Widget.getOptionsFromContainer(args);
 
     this._setPopupOption(options);

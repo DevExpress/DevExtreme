@@ -56,7 +56,7 @@ function testsFactory(testModel: {
   assertFirstColumnHidden: (t: TestController, cardView: CardView) => Promise<void>;
   config: any; // TODO: add typing
 }) {
-  test.meta({ unstable: true })(`column chooser in ${testModel.name} mode should work after multiple hide/show actions`, async (t) => {
+  test(`column chooser in ${testModel.name} mode should work after multiple hide/show actions`, async (t) => {
     const cardView = new CardView('#container');
 
     await cardView.apiShowColumnChooser();
@@ -65,7 +65,6 @@ function testsFactory(testModel: {
     await testModel.assertFirstColumnHidden(t, cardView);
 
     await testModel.showFirstColumn(t, cardView);
-
     await testModel.assertFirstColumnVisible(t, cardView);
 
     await testModel.hideFirstColumn(t, cardView);

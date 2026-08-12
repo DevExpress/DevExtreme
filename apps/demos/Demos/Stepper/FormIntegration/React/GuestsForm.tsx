@@ -1,7 +1,6 @@
 import React, { memo } from 'react';
 import type { FC } from 'react';
 import { Form, RangeRule, SimpleItem } from 'devextreme-react/form';
-import 'devextreme-react/number-box';
 
 import type { FormProps } from './types.ts';
 

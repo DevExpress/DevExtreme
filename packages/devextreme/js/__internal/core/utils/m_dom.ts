@@ -174,6 +174,45 @@ export const isElementInDom = ($element) => {
   return !!$(shadowHost || element).closest(getWindow().document).length;
 };
 
+const ARIA_DESCRIBEDBY_ATTRIBUTE = 'aria-describedby';
+
+export const getAriaDescriptionIds = (element: Element): string[] => (element.getAttribute(ARIA_DESCRIBEDBY_ATTRIBUTE) ?? '').split(/\s+/).filter(Boolean);
+
+export const setAriaDescriptionIds = (element: Element, ids: string[]): void => {
+  const value = ids.join(' ');
+
+  if (!value) {
+    element.removeAttribute(ARIA_DESCRIBEDBY_ATTRIBUTE);
+  } else if (element.getAttribute(ARIA_DESCRIBEDBY_ATTRIBUTE) !== value) {
+    element.setAttribute(ARIA_DESCRIBEDBY_ATTRIBUTE, value);
+  }
+};
+
+// Adds the id to the element's aria-describedby list, preserving ids from other
+// owners. Returns true when the id was actually added (was not present yet).
+export const addAriaDescriptionId = (element: Element, id: string): boolean => {
+  const ids = getAriaDescriptionIds(element);
+
+  if (ids.includes(id)) {
+    return false;
+  }
+
+  ids.push(id);
+  setAriaDescriptionIds(element, ids);
+
+  return true;
+};
+
+// Removes the id from the element's aria-describedby list, keeping ids from other owners.
+export const removeAriaDescriptionId = (element: Element, id: string): void => {
+  const ids = getAriaDescriptionIds(element);
+  const restIds = ids.filter((token) => token !== id);
+
+  if (restIds.length !== ids.length) {
+    setAriaDescriptionIds(element, restIds);
+  }
+};
+
 export default {
   resetActiveElement,
   clearSelection,
@@ -187,4 +226,6 @@ export default {
   insertBefore,
   replaceWith,
   isElementInDom,
+  addAriaDescriptionId,
+  removeAriaDescriptionId,
 };

@@ -311,25 +311,25 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @default null
      * @public
      */
-    mediaResizing?: dxHtmlEditorMediaResizing;
+    mediaResizing?: dxHtmlEditorMediaResizing | null;
     /**
      * @docid
      * @default null
      * @public
      */
-    tableResizing?: dxHtmlEditorTableResizing;
+    tableResizing?: dxHtmlEditorTableResizing | null;
     /**
      * @docid
      * @default null
      * @public
      */
-    mentions?: Array<dxHtmlEditorMention>;
+    mentions?: Array<dxHtmlEditorMention> | null;
     /**
      * @docid
      * @default null
      * @public
      */
-    tableContextMenu?: dxHtmlEditorTableContextMenu;
+    tableContextMenu?: dxHtmlEditorTableContextMenu | null;
     /**
      * @docid
      * @default { tabs: ["url"], fileUploadMode: 'base64', uploadUrl: undefined, uploadDirectory: undefined }
@@ -344,20 +344,20 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     name?: string;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/html_editor:FocusInEvent}
      * @action
      * @public
      */
-    onFocusIn?: ((e: FocusInEvent) => void);
+    onFocusIn?: ((e: FocusInEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/html_editor:FocusOutEvent}
      * @action
      * @public
      */
-    onFocusOut?: ((e: FocusOutEvent) => void);
+    onFocusOut?: ((e: FocusOutEvent) => void) | undefined;
     /**
      * @docid
      * @default ""
@@ -369,13 +369,13 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @default null
      * @public
      */
-    toolbar?: dxHtmlEditorToolbar;
+    toolbar?: dxHtmlEditorToolbar | null;
     /**
      * @docid
      * @default null
      * @public
      */
-    variables?: dxHtmlEditorVariables;
+    variables?: dxHtmlEditorVariables | null;
     /**
      * @docid
      * @default 'outlined'
@@ -638,7 +638,6 @@ export interface dxHtmlEditorImageUpload {
     tabs?: Array<ImageUploadTab | HtmlEditorImageUploadTab>;
     /**
     * @docid
-    * @default null
     * @type dxFileUploaderOptions
     * @public
     */
@@ -764,7 +763,6 @@ export interface dxHtmlEditorMention {
     searchTimeout?: number;
     /**
      * @docid
-     * @default null
      * @type_function_param1 mentionData:object
      * @type_function_return string|Element|jQuery
      * @public

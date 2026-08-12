@@ -103,10 +103,15 @@ function MainViewComponent({
 export class MainView extends View<MainViewProps> {
   protected override component = MainViewComponent;
 
+  private readonly integrationOptions = computed(() => ({
+    templates: this.options.oneWay('integrationOptions.templates').value,
+  }));
+
   private readonly config = computed(() => ({
     rtlEnabled: this.options.oneWay('rtlEnabled').value,
     disabled: this.options.oneWay('disabled').value,
     templatesRenderAsynchronously: this.options.oneWay('templatesRenderAsynchronously').value,
+    integrationOptions: this.integrationOptions.value,
   }));
 
   private readonly commonProps = {

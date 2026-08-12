@@ -12,7 +12,7 @@ import type { Properties } from '@ts/ui/toolbar/toolbar';
 import type Toolbar from '@ts/ui/toolbar/toolbar';
 
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
-const TOOLBAR_DROP_DOWN_MENU_CONTAINER_CLASS = 'dx-toolbar-menu-container';
+export const TOOLBAR_DROP_DOWN_MENU_CONTAINER_CLASS = 'dx-toolbar-menu-container';
 
 const TOOLBAR_BUTTON_CLASS = 'dx-toolbar-button';
 
@@ -57,11 +57,13 @@ export class SingleLineStrategy {
 
     const {
       disabled,
+      allowKeyboardNavigation,
       menuContainer,
     } = this._toolbar.option();
 
     this._menu = this._toolbar._createComponent($menu, DropDownMenu, {
       disabled,
+      allowKeyboardNavigation,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       itemTemplate: () => menuItemTemplate,
       onItemClick: (e) => { itemClickAction(e); },
@@ -171,7 +173,8 @@ export class SingleLineStrategy {
   }
 
   _hasVisibleMenuItems(items?: Item[]): boolean {
-    const menuItems = items ?? this._toolbar.option('items');
+    const { items: toolbarItems } = this._toolbar.option();
+    const menuItems = items ?? toolbarItems;
     let result = false;
 
     const optionGetter = compileGetter('visible');
@@ -206,6 +209,10 @@ export class SingleLineStrategy {
     this._hideOverflowItems(elementWidth);
 
     return elementWidth;
+  }
+
+  _openOverflowMenu(focusTarget: 'first' | 'last'): void {
+    this._menu?.openWithFocus(focusTarget);
   }
 
   _hideOverflowItems(width?: number): void {
@@ -267,6 +274,9 @@ export class SingleLineStrategy {
     switch (name) {
       case 'disabled':
         this._menu?.option(name, value);
+        break;
+      case 'allowKeyboardNavigation':
+        this._menu?.option('allowKeyboardNavigation', value);
         break;
       case 'overflowMenuVisible':
         this._menu?.option('opened', value);

@@ -223,6 +223,33 @@ QUnit.module('basic', {
         assert.strictEqual($overlayContent.attr('aria-labelledby'), undefined);
     });
 
+    QUnit.test('aria-labelledby should not be set when a custom titleTemplate renders no label element', function(assert) {
+        const instance = $('#popup').dxPopup({
+            title: 'title',
+            titleTemplate: () => $('<div>').text('custom title'),
+            visible: true,
+        }).dxPopup('instance');
+
+        const $overlayContent = instance.$content().parent();
+
+        assert.strictEqual($overlayContent.attr('aria-labelledby'), undefined);
+    });
+
+    QUnit.test('aria-labelledby should not reference a missing element after a runtime titleTemplate change', function(assert) {
+        const instance = $('#popup').dxPopup({
+            title: 'title',
+            visible: true,
+        }).dxPopup('instance');
+
+        const $overlayContent = instance.$content().parent();
+
+        assert.ok($overlayContent.attr('aria-labelledby'), 'aria-labelledby is set for the default title');
+
+        instance.option('titleTemplate', () => $('<div>').text('custom title'));
+
+        assert.strictEqual($overlayContent.attr('aria-labelledby'), undefined);
+    });
+
     QUnit.test('popup wrapper should have fixed or absolute position in fullscreen', function(assert) {
         $('#popup').dxPopup({ fullScreen: true, visible: true });
 
@@ -383,6 +410,28 @@ QUnit.module('basic', {
 
         assert.ok($bottomToolbar.hasClass('dx-toolbar'), 'bottom toolbar is present');
         assert.equal($bottomToolbar.text(), 'bottom text', 'bottom toolbar has correct content');
+    });
+
+    QUnit.test('popup toolbars have allowKeyboardNavigation: false', function(assert) {
+        const $popup = $('#popup').dxPopup({
+            visible: true,
+            showTitle: true,
+            title: 'Title',
+            toolbarItems: [{ shortcut: 'done' }, { shortcut: 'cancel' }],
+        });
+        const instance = $popup.dxPopup('instance');
+
+        const $bottomToolbar = instance.$content().parent().find(`.${POPUP_BOTTOM_CLASS}`);
+        const bottomToolbarInstance = $bottomToolbar.dxToolbar('instance');
+
+        const { allowKeyboardNavigation } = bottomToolbarInstance.option();
+        assert.strictEqual(allowKeyboardNavigation, false, 'bottom toolbar has allowKeyboardNavigation: false');
+
+        const $topToolbar = instance.$content().parent().find(`.${POPUP_TITLE_CLASS}`);
+        const topToolbarInstance = $topToolbar.dxToolbar('instance');
+
+        const { allowKeyboardNavigation: topAllowKeyboardNavigation } = topToolbarInstance.option();
+        assert.strictEqual(topAllowKeyboardNavigation, false, 'top toolbar has allowKeyboardNavigation: false');
     });
 
     QUnit.test(`top toolbar has specific ${POPUP_HAS_CLOSE_BUTTON_CLASS} class`, function(assert) {

@@ -78,10 +78,10 @@ export interface BaseGaugeOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @action
      * @public
      */
-    onTooltipHidden?: ((e: EventInfo<TComponent> & TooltipInfo) => void);
+    onTooltipHidden?: ((e: EventInfo<TComponent> & TooltipInfo) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:object
      * @type_function_param1_field component:this
      * @type_function_param1_field target:object
@@ -89,7 +89,7 @@ export interface BaseGaugeOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @action
      * @public
      */
-    onTooltipShown?: ((e: EventInfo<TComponent> & TooltipInfo) => void);
+    onTooltipShown?: ((e: EventInfo<TComponent> & TooltipInfo) => void) | undefined;
     /**
      * @docid
      * @type object
@@ -109,7 +109,7 @@ export interface BaseGaugeOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @fires BaseWidgetOptions.onOptionChanged
      * @public
      */
-    subvalues?: Array<number>;
+    subvalues?: Array<number> | undefined;
     /**
      * @docid
      * @type object
@@ -231,14 +231,14 @@ export interface BaseGaugeScale {
      * @notUsedInTheme
      * @public
      */
-    customMinorTicks?: Array<number>;
+    customMinorTicks?: Array<number> | undefined;
     /**
      * @docid BaseGaugeOptions.scale.customTicks
      * @default undefined
      * @notUsedInTheme
      * @public
      */
-    customTicks?: Array<number>;
+    customTicks?: Array<number> | undefined;
     /**
      * @docid BaseGaugeOptions.scale.endValue
      * @default 100

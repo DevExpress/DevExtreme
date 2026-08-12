@@ -33,10 +33,10 @@ type ICircularGaugeOptions = React.PropsWithChildren<ReplaceFieldTypes<Propertie
   centerRender?: (...params: any) => React.ReactNode;
   centerComponent?: React.ComponentType<any>;
   defaultLoadingIndicator?: Record<string, any>;
-  defaultSubvalues?: Array<number>;
+  defaultSubvalues?: Array<number> | undefined;
   defaultValue?: number | undefined;
   onLoadingIndicatorChange?: (value: Record<string, any>) => void;
-  onSubvaluesChange?: (value: Array<number>) => void;
+  onSubvaluesChange?: (value: Array<number> | undefined) => void;
   onValueChange?: (value: number | undefined) => void;
 }>
 
@@ -445,8 +445,8 @@ const RangeContainer = Object.assign<typeof _componentRangeContainer, NestedComp
 // CircularGauge
 type IScaleProps = React.PropsWithChildren<{
   allowDecimals?: boolean | undefined;
-  customMinorTicks?: Array<number>;
-  customTicks?: Array<number>;
+  customMinorTicks?: Array<number> | undefined;
+  customTicks?: Array<number> | undefined;
   endValue?: number;
   label?: Record<string, any> | {
     customizeText?: ((scaleValue: { value: number, valueText: string }) => string);
@@ -542,7 +542,7 @@ const Size = Object.assign<typeof _componentSize, NestedComponentMeta>(_componen
 type ISubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
-  text?: string;
+  text?: string | undefined;
   textOverflow?: TextOverflow;
   wordWrap?: WordWrap;
 }>
@@ -670,11 +670,11 @@ type ITitleProps = React.PropsWithChildren<{
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
-    text?: string;
+    text?: string | undefined;
     textOverflow?: TextOverflow;
     wordWrap?: WordWrap;
   };
-  text?: string;
+  text?: string | undefined;
   textOverflow?: TextOverflow;
   verticalAlignment?: VerticalEdge;
   wordWrap?: WordWrap;

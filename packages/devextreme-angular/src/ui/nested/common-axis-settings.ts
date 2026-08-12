@@ -154,10 +154,10 @@ export class DxoCommonAxisSettingsComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get placeholderSize(): number {
+    get placeholderSize(): number | null {
         return this._getOption('placeholderSize');
     }
-    set placeholderSize(value: number) {
+    set placeholderSize(value: number | null) {
         this._setOption('placeholderSize', value);
     }
 

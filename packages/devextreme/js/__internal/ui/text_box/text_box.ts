@@ -2,24 +2,30 @@ import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getOuterWidth, getWidth } from '@js/core/utils/size';
+import type dxTextBox from '@js/ui/text_box';
+import type { dxTextBoxOptions } from '@js/ui/text_box';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { WithValidationMessageMode } from '@ts/ui/editor/editor';
 import TextEditor from '@ts/ui/text_box/text_editor.mask';
 
-import type { TextEditorBaseProperties } from './text_editor.base';
+import type { TextEditorInternalProperties } from './text_editor.base';
 
 // STYLE textBox
 
-export interface TextBoxProperties extends TextEditorBaseProperties {
+export interface TextBoxProperties<
+  TComponent = dxTextBox,
+> extends dxTextBoxOptions<TComponent>, TextEditorInternalProperties {
   maxLength?: string | number | null;
 }
 
-const TEXTBOX_CLASS = 'dx-textbox';
+export const TEXTBOX_CLASS = 'dx-textbox';
 const SEARCHBOX_CLASS = 'dx-searchbox';
 const ICON_CLASS = 'dx-icon';
 const SEARCH_ICON_CLASS = 'dx-icon-search';
 
 class TextBox<
-  TProperties extends TextBoxProperties = TextBoxProperties,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TProperties extends WithValidationMessageMode<TextBoxProperties<any>> = TextBoxProperties,
 > extends TextEditor<TProperties> {
   _$searchIcon?: dxElementWrapper;
 

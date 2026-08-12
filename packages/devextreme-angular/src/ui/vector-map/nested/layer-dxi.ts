@@ -73,10 +73,10 @@ export class DxiVectorMapLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get colorGroups(): Array<number> {
+    get colorGroups(): Array<number> | undefined {
         return this._getOption('colorGroups');
     }
-    set colorGroups(value: Array<number>) {
+    set colorGroups(value: Array<number> | undefined) {
         this._setOption('colorGroups', value);
     }
 
@@ -257,10 +257,10 @@ export class DxiVectorMapLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get sizeGroups(): Array<number> {
+    get sizeGroups(): Array<number> | undefined {
         return this._getOption('sizeGroups');
     }
-    set sizeGroups(value: Array<number>) {
+    set sizeGroups(value: Array<number> | undefined) {
         this._setOption('sizeGroups', value);
     }
 

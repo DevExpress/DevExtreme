@@ -8,7 +8,7 @@ import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
-import type { DataController } from '../data_controller/m_data_controller';
+import type { DataController } from '../data_controller/data_controller';
 import modules from '../m_modules';
 import type { ModuleType } from '../m_types';
 import type { ToastViewController } from '../toast/m_toast_controller';

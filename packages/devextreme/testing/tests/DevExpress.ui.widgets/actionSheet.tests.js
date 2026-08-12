@@ -64,6 +64,19 @@ QUnit.module('action sheet', {
         assert.strictEqual($popoverInstance.$content().parent().attr('role'), 'dialog');
     });
 
+    QUnit.test('popover mode target should not have aria-describedby', function(assert) {
+        const instance = $('#actionSheet').dxActionSheet({
+            usePopover: true,
+            target: $('#container')
+        }).dxActionSheet('instance');
+
+        assert.strictEqual($('#container').attr('aria-describedby'), undefined, 'target is not described before showing');
+
+        instance.show();
+
+        assert.strictEqual($('#container').attr('aria-describedby'), undefined, 'target is not described after showing');
+    });
+
     QUnit.test('popup should have role="dialog" attribute', function(assert) {
         $('#actionSheet').dxActionSheet({ usePopover: false });
 

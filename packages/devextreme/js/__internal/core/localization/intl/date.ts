@@ -1,8 +1,8 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { Format as LocalizationFormat, FormatObject } from '@js/localization';
+import { resolvePresetOverride } from '@ts/core/global_format_config';
 import localizationCoreUtils from '@ts/core/localization/core';
 import type { DateFormatter, Format } from '@ts/core/localization/date';
-import { resolvePresetOverride } from '@ts/core/m_global_format_config';
 import { extend } from '@ts/core/utils/m_extend';
 
 interface DateArgs {

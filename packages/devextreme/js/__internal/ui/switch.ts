@@ -21,7 +21,7 @@ import type { SupportedKeys } from '@ts/core/widget/widget';
 import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/m_swipe';
 import Editor from '@ts/ui/editor/editor';
 
-const SWITCH_CLASS = 'dx-switch';
+export const SWITCH_CLASS = 'dx-switch';
 const SWITCH_WRAPPER_CLASS = `${SWITCH_CLASS}-wrapper`;
 const SWITCH_CONTAINER_CLASS = `${SWITCH_CLASS}-container`;
 const SWITCH_INNER_CLASS = `${SWITCH_CLASS}-inner`;

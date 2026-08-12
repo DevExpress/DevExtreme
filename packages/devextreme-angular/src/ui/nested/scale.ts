@@ -55,18 +55,18 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get customMinorTicks(): Array<number> {
+    get customMinorTicks(): undefined | Array<number> {
         return this._getOption('customMinorTicks');
     }
-    set customMinorTicks(value: Array<number>) {
+    set customMinorTicks(value: undefined | Array<number>) {
         this._setOption('customMinorTicks', value);
     }
 
     @Input()
-    get customTicks(): Array<number> {
+    get customTicks(): undefined | Array<number> {
         return this._getOption('customTicks');
     }
-    set customTicks(value: Array<number>) {
+    set customTicks(value: undefined | Array<number>) {
         this._setOption('customTicks', value);
     }
 
@@ -175,10 +175,10 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get breaks(): Array<ScaleBreak> {
+    get breaks(): undefined | Array<ScaleBreak> {
         return this._getOption('breaks');
     }
-    set breaks(value: Array<ScaleBreak>) {
+    set breaks(value: undefined | Array<ScaleBreak>) {
         this._setOption('breaks', value);
     }
 
@@ -215,10 +215,10 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get holidays(): Array<Date | string | number> {
+    get holidays(): undefined | Array<Date | string | number> {
         return this._getOption('holidays');
     }
-    set holidays(value: Array<Date | string | number>) {
+    set holidays(value: undefined | Array<Date | string | number>) {
         this._setOption('holidays', value);
     }
 
@@ -287,10 +287,10 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get singleWorkdays(): Array<Date | string | number> {
+    get singleWorkdays(): undefined | Array<Date | string | number> {
         return this._getOption('singleWorkdays');
     }
-    set singleWorkdays(value: Array<Date | string | number>) {
+    set singleWorkdays(value: undefined | Array<Date | string | number>) {
         this._setOption('singleWorkdays', value);
     }
 

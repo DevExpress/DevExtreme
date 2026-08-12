@@ -1,3 +1,4 @@
+import localizationMessage from '@js/common/core/localization/message';
 import Quill from 'devextreme-quill';
 
 // eslint-disable-next-line import/no-mutable-exports
@@ -11,7 +12,10 @@ if (Quill) {
       super(quill, options);
       this.quill.root.classList.add('dx-htmleditor-content');
       this.quill.root.setAttribute('role', 'textbox');
-      this.quill.root.setAttribute('aria-label', 'Editor content');
+      this.quill.root.setAttribute('aria-label', [
+        localizationMessage.format('dxHtmlEditor-editorAriaLabel'),
+        localizationMessage.format('dxHtmlEditor-ariaEscapeInstruction'),
+      ].join('. '));
       this.quill.root.setAttribute('aria-multiline', 'true');
     }
   };

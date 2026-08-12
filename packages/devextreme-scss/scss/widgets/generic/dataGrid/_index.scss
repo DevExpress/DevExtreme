@@ -80,7 +80,7 @@
     text-overflow: ellipsis;
     display: inline-block;
     position: sticky;
-    background-color: $datagrid-group-row-bg;
+    background-color: inherit; // T1303478
     max-width: 100%;
     overflow: clip;
   }

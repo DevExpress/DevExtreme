@@ -121,20 +121,20 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     keyExpr?: string | ((item: any) => any);
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/button_group:ItemClickEvent}
      * @action
      * @public
      */
-    onItemClick?: ((e: ItemClickEvent) => void);
+    onItemClick?: ((e: ItemClickEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/button_group:SelectionChangedEvent}
      * @action
      * @public
      */
-    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void) | undefined;
     /**
      * @docid
      * @fires dxButtonGroupOptions.onSelectionChanged

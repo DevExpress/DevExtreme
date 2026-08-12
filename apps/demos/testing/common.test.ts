@@ -24,6 +24,7 @@ import {
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
 import { knownWarnings } from './known-warnings';
 import { skippedTests } from './skipped-tests';
+import { widgetsGalleryServiceMock } from './apiMocks/widgetsGalleryServiceMock';
 
 import { gitHubIgnored } from '../utils/visual-tests/github-ignored-list';
 
@@ -153,14 +154,12 @@ Object.values(FRAMEWORKS).forEach((approach) => {
   if (!shouldRunFramework(approach)) { return; }
   fixture(approach)
     .beforeEach(async (t) => {
-      t.ctx.watchDogHandle = setTimeout(() => { throw new Error('test timeout exceeded'); }, 3 * 60 * 1000);
-
       if (process.env.STRATEGY !== 'accessibility') {
         await t.resizeWindow(1000, 800);
       }
     })
-    .afterEach(async (t) => clearTimeout(t.ctx.watchDogHandle))
-    .clientScripts(getClientScripts());
+    .clientScripts(getClientScripts())
+    .requestHooks(widgetsGalleryServiceMock);
 
   const getDemoPaths = (platform) => glob.sync('Demos/*/*')
     .map((path) => join(path, platform));

@@ -65,18 +65,18 @@ export class DxoChartLegendTitleComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get subtitle(): string | { font?: Font, offset?: number, text?: string } {
+    get subtitle(): string | { font?: Font, offset?: number, text?: string | undefined } {
         return this._getOption('subtitle');
     }
-    set subtitle(value: string | { font?: Font, offset?: number, text?: string }) {
+    set subtitle(value: string | { font?: Font, offset?: number, text?: string | undefined }) {
         this._setOption('subtitle', value);
     }
 
     @Input()
-    get text(): string {
+    get text(): string | undefined {
         return this._getOption('text');
     }
-    set text(value: string) {
+    set text(value: string | undefined) {
         this._setOption('text', value);
     }
 

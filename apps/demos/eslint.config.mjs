@@ -102,6 +102,7 @@ export default [
           'dxo',
           'jsx',
           'luxon',
+          'onopen',
           'sanitizer',
           'rehype',
           'timestamps',
@@ -508,10 +509,11 @@ export default [
     files: ['utils/tests/**/*.*'],
   })),
 
-  // utils directory
+  // utils / shared loaders
   {
     files: [
       'utils/**/*.js',
+      'shared/loaders/**/*.js',
     ],
     ignores: [
       'utils/testing/',

@@ -47,10 +47,10 @@ export abstract class DxoCalendarOptions extends NestedOption {
         this._setOption('disabled', value);
     }
 
-    get disabledDates(): Function | Array<Date> {
+    get disabledDates(): Function | null | Array<Date> {
         return this._getOption('disabledDates');
     }
-    set disabledDates(value: Function | Array<Date>) {
+    set disabledDates(value: Function | null | Array<Date>) {
         this._setOption('disabledDates', value);
     }
 
@@ -222,17 +222,17 @@ export abstract class DxoCalendarOptions extends NestedOption {
         this._setOption('tabIndex', value);
     }
 
-    get validationError(): any {
+    get validationError(): any | null {
         return this._getOption('validationError');
     }
-    set validationError(value: any) {
+    set validationError(value: any | null) {
         this._setOption('validationError', value);
     }
 
-    get validationErrors(): Array<any> {
+    get validationErrors(): null | Array<any> {
         return this._getOption('validationErrors');
     }
-    set validationErrors(value: Array<any>) {
+    set validationErrors(value: null | Array<any>) {
         this._setOption('validationErrors', value);
     }
 

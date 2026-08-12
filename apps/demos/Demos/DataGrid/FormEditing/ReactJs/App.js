@@ -2,7 +2,7 @@ import React from 'react';
 import DataGrid, {
   Column, FormItem, Editing, Paging, Lookup,
 } from 'devextreme-react/data-grid';
-import 'devextreme-react/text-area';
+import 'devextreme/ui/text_area';
 import { employees, states } from './data.js';
 
 const notesEditorOptions = { height: 100 };

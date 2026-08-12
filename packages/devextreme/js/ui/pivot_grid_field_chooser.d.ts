@@ -193,12 +193,12 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
     /**
      * @docid
      * @type_function_param1 e:{ui/pivot_grid_field_chooser:ContextMenuPreparingEvent}
-     * @default null
+     * @default undefined
 
      * @action
      * @public
      */
-    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void);
+    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void) | undefined;
     /**
      * @docid
      * @default 500
@@ -207,10 +207,10 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
     searchTimeout?: number;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @public
      */
-    state?: any;
+    state?: any | undefined;
     /**
      * @docid
      * @public

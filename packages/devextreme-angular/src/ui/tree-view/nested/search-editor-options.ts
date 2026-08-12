@@ -62,10 +62,10 @@ export class DxoTreeViewSearchEditorOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get buttons(): Array<string | TextBoxPredefinedButton | TextEditorButton> {
+    get buttons(): Array<string | TextBoxPredefinedButton | TextEditorButton> | undefined {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<string | TextBoxPredefinedButton | TextEditorButton>) {
+    set buttons(value: Array<string | TextBoxPredefinedButton | TextEditorButton> | undefined) {
         this._setOption('buttons', value);
     }
 
@@ -190,10 +190,10 @@ export class DxoTreeViewSearchEditorOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get maxLength(): number | string {
+    get maxLength(): null | number | string {
         return this._getOption('maxLength');
     }
-    set maxLength(value: number | string) {
+    set maxLength(value: null | number | string) {
         this._setOption('maxLength', value);
     }
 
@@ -414,18 +414,18 @@ export class DxoTreeViewSearchEditorOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get validationError(): any {
+    get validationError(): any | null {
         return this._getOption('validationError');
     }
-    set validationError(value: any) {
+    set validationError(value: any | null) {
         this._setOption('validationError', value);
     }
 
     @Input()
-    get validationErrors(): Array<any> {
+    get validationErrors(): Array<any> | null {
         return this._getOption('validationErrors');
     }
-    set validationErrors(value: Array<any>) {
+    set validationErrors(value: Array<any> | null) {
         this._setOption('validationErrors', value);
     }
 

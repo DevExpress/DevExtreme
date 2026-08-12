@@ -59,7 +59,6 @@ QUnit.module('Pager', {
     }
 }, () => {
 
-    const isRenovation = !!Pager.IS_RENOVATED_WIDGET;
     QUnit.test('Not initialize pager when pager is not visible', function(assert) {
     // arrange
         const testElement = $('#container');
@@ -204,12 +203,8 @@ QUnit.module('Pager', {
         this.dataController.updatePagesCount(1);
 
         // assert
-        if(isRenovation) {
-            assert.strictEqual(testElement.find('.dx-next-button').length, 1, 'pager has next page button');
-            assert.strictEqual(testElement.find('.dx-prev-button').length, 0, 'pager doesnt have prev page button');
-        } else {
-            assert.ok(pagerView.getPager()._testShowMoreButton, 'showMoreButton in pager');
-        }
+        assert.strictEqual(testElement.find('.dx-next-button').length, 1, 'pager has next page button');
+        assert.strictEqual(testElement.find('.dx-prev-button').length, 0, 'pager doesnt have prev page button');
     });
 
     QUnit.test('Visible is changed from dataController', function(assert) {

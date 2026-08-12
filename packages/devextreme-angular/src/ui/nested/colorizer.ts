@@ -65,10 +65,10 @@ export class DxoColorizerComponent extends NestedOption implements OnDestroy, On
     }
 
     @Input()
-    get range(): Array<number> {
+    get range(): undefined | Array<number> {
         return this._getOption('range');
     }
-    set range(value: Array<number>) {
+    set range(value: undefined | Array<number>) {
         this._setOption('range', value);
     }
 

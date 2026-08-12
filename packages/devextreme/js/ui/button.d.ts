@@ -109,12 +109,12 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     icon?: string;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/button:ClickEvent}
      * @action
      * @public
      */
-    onClick?: ((e: ClickEvent) => void);
+    onClick?: ((e: ClickEvent) => void) | undefined;
     /**
      * @docid
      * @default 'contained'

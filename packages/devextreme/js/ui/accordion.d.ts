@@ -201,7 +201,7 @@ export interface dxAccordionOptions<
      * @action
      * @public
      */
-    onItemTitleClick?: ((e: ItemTitleClickEvent<TItem, TKey>) => void) | string;
+    onItemTitleClick?: ((e: ItemTitleClickEvent<TItem, TKey>) => void) | string | null;
     /**
      * @docid
      * @default false

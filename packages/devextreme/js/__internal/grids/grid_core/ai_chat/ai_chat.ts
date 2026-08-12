@@ -170,6 +170,7 @@ export class AIChat {
     if (needToShowRegenerateButton(message) && this.options.onRegenerate) {
       const $button = $('<i>')
         .addClass(`dx-icon dx-icon-${REGENERATE_ICON} ${CLASSES.messageRegenerateButton}`)
+        .attr('title', messageLocalization.format('dxDataGrid-aiAssistantRegenerateButtonText'))
         .appendTo($row);
 
       eventsEngine.on($button, clickEventName, () => {

@@ -1,6 +1,7 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { removeEvent } from '@js/common/core/events/remove';
 import { data as elementData } from '@js/core/element_data';
+import type { dxElementWrapper } from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 
 const COMPONENT_NAMES_DATA_KEY = 'dxComponents';
@@ -47,6 +48,19 @@ export function getInstanceByElement<T = any>($element, componentClass): T {
   const name = getName(componentClass);
 
   return elementData($element.get(0), name);
+}
+
+export function getComponentInstance<T = unknown>($element: dxElementWrapper): T | undefined {
+  const element = $element.get(0);
+
+  if (!element) {
+    return undefined;
+  }
+
+  const names = elementData(element, COMPONENT_NAMES_DATA_KEY) as string[] | undefined;
+  const componentName = names?.[0];
+
+  return componentName ? (elementData(element, componentName) as T) : undefined;
 }
 
 export { getName as name };

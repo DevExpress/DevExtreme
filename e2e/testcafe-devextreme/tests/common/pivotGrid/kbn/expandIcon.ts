@@ -20,13 +20,13 @@ test('Expandable cell should have a visible focus outline when focused by keyboa
   for (let i = 0; i < 10; i += 1) {
     await t.pressKey('tab');
 
-    if (await Selector(':focus').hasAttribute('aria-expanded')) {
+    if (await Selector(':focus').find('[aria-expanded]').exists) {
       break;
     }
   }
 
   await t
-    .expect(Selector(':focus').hasAttribute('aria-expanded'))
+    .expect(Selector(':focus').find('[aria-expanded]').exists)
     .ok('an expandable cell is focused');
 
   await testScreenshot(t, takeScreenshot, 'pivotgrid_kbn_expandable_cell_focused.png', { element: pivotGrid.element });

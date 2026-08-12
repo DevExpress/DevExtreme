@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import filterUtils from '@js/ui/shared/filtering';
@@ -11,7 +12,7 @@ import {
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
-import type { DataController } from '../data_controller/m_data_controller';
+import type { DataController } from '../data_controller/data_controller';
 import modules from '../m_modules';
 import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
@@ -101,11 +102,11 @@ const getConditionFromHeaderFilter = function (column) {
     canSyncHeaderFilterWithFilterRow(column)
           && !Array.isArray(filterValues[0])
   )) {
-    column.filterType === FILTER_TYPES_EXCLUDE ? selectedOperation = '<>' : selectedOperation = '=';
+    selectedOperation = column.filterType === FILTER_TYPES_EXCLUDE ? '<>' : '=';
     // eslint-disable-next-line prefer-destructuring
     value = filterValues[0];
   } else {
-    column.filterType === FILTER_TYPES_EXCLUDE ? selectedOperation = 'noneof' : selectedOperation = 'anyof';
+    selectedOperation = column.filterType === FILTER_TYPES_EXCLUDE ? 'noneof' : 'anyof';
     value = filterValues;
   }
   return [getColumnIdentifier(column), selectedOperation, value];
@@ -122,7 +123,7 @@ const updateFilterRowCondition = function (columnsController, column, condition)
   const filterValue = condition?.[2];
   const filterOperations = column.filterOperations || column.defaultFilterOperations;
 
-  const selectedOperationExists = !filterOperations || filterOperations.indexOf(selectedFilterOperation) >= 0;
+  const selectedOperationExists = !filterOperations || filterOperations.includes(selectedFilterOperation);
   const defaultOperationSelected = selectedFilterOperation === column.defaultFilterOperation;
   const builtInOperationSelected = FILTER_ROW_OPERATIONS.includes(selectedFilterOperation);
   const filterValueNotNullOrEmpty = filterValue !== null && filterValue !== '';
@@ -134,11 +135,15 @@ const updateFilterRowCondition = function (columnsController, column, condition)
     filterRowOptions = {
       filterValue,
       selectedFilterOperation,
+      bufferedFilterValue: undefined,
+      bufferedSelectedFilterOperation: undefined,
     };
   } else {
     filterRowOptions = {
       filterValue: undefined,
       selectedFilterOperation: undefined,
+      bufferedFilterValue: undefined,
+      bufferedSelectedFilterOperation: undefined,
     };
   }
   columnsController.columnOption(getColumnIdentifier(column), filterRowOptions);
@@ -170,12 +175,11 @@ export class FilterSyncController extends modules.Controller {
   }
 
   public syncFilterValue() {
-    const that = this;
     const columns = this._columnsController.getFilteringColumns();
 
     this._skipSyncColumnOptions = true;
     columns.forEach((column) => {
-      const filterConditions = getMatchedConditions(that.option('filterValue'), getColumnIdentifier(column));
+      const filterConditions = getMatchedConditions(this.option('filterValue'), getColumnIdentifier(column));
       if (filterConditions.length === 1) {
         const filterCondition = filterConditions[0];
         updateHeaderFilterCondition(this._columnsController, column, filterCondition);
@@ -349,14 +353,12 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterSyn
     this.component.endUpdate();
   }
 
-  protected _applyFilter(): Promise<void> {
+  protected _applyFilter(): DeferredObj<unknown> {
     if (this._filterSyncController._skipSyncColumnOptions) {
-      // @ts-expect-error
-      return new Deferred().resolve();
+      return Deferred().resolve();
     }
 
-    // @ts-expect-error
-    return super._applyFilter.apply(this, arguments);
+    return super._applyFilter();
   }
 };
 
