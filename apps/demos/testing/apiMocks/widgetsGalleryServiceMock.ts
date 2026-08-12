@@ -14,6 +14,9 @@ import {
   fileManagerDbHandler,
   fileManagerFileSystemHandler,
 } from './handlers/fileManager';
+import { schedulerDataHandler } from './handlers/schedulerData';
+import { schedulerSignalRHandler } from './handlers/schedulerSignalR';
+import { googleCalendarHandler } from './handlers/googleCalendar';
 
 // The AI-column endpoint is a cross-origin POST with non-simple headers
 // (api-key, content-type), so the browser issues a CORS preflight. Advertise
@@ -60,6 +63,12 @@ const handlers: MockHandler[] = [
   fileManagerDbHandler,
   // GET /api/file-manager-file-system?command=GetDirContents
   fileManagerFileSystemHandler,
+  // GET /api/SchedulerData (Scheduler WebAPIService)
+  schedulerDataHandler,
+  // GET /api/SchedulerSignalR (Scheduler SignalRService)
+  schedulerSignalRHandler,
+  // GET googleapis.com/calendar/v3/.../events (Scheduler GoogleCalendarIntegration)
+  googleCalendarHandler,
 ];
 
 export const widgetsGalleryServiceMock = handlers.reduce(
