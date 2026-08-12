@@ -41,6 +41,7 @@
       },
       "inputs": [
         "{projectRoot}/build/tokens/**/*",
+        "{projectRoot}/scss/widgets/fluent-next/**/*",
         "{workspaceRoot}/pnpm-lock.yaml"
       ],
       "outputs": [
@@ -72,7 +73,9 @@
       "options": {
         "mode": "all"
       },
-      "dependsOn": ["build:tokens"],
+      "dependsOn": [
+        "build:tokens"
+      ],
       "inputs": [
         "{projectRoot}/build/**/*",
         "{projectRoot}/fonts/**/*",
@@ -94,7 +97,9 @@
       "options": {
         "mode": "ci"
       },
-      "dependsOn": ["build:tokens"],
+      "dependsOn": [
+        "build:tokens"
+      ],
       "inputs": [
         "{projectRoot}/build/**/*",
         "{projectRoot}/fonts/**/*",
@@ -173,7 +178,9 @@
         "mode": "all",
         "watch": true
       },
-      "dependsOn": ["build:tokens"],
+      "dependsOn": [
+        "build:tokens"
+      ],
       "inputs": [
         "{projectRoot}/build/**/*",
         "{projectRoot}/fonts/**/*",
@@ -198,10 +205,25 @@
       "options": {
         "script": "test"
       },
-      "dependsOn": ["build:tokens"],
+      "dependsOn": [
+        "build:tokens",
+        "typecheck"
+      ],
       "inputs": [
         "{projectRoot}/**/*"
       ]
+    },
+    "typecheck": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "typecheck"
+      },
+      "inputs": [
+        "{projectRoot}/build/tokens/**/*.ts",
+        "{projectRoot}/tests/**/*.ts",
+        "{projectRoot}/tsconfig.json"
+      ],
+      "cache": true
     }
   },
   "tags": []
