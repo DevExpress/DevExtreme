@@ -19,7 +19,7 @@ The tests are written with [Playwright](https://playwright.dev/) and use the sys
 ## Run locally
 
 ```bash
-pnpm install
+pnpm install --frozen-lockfile
 pnpm nx all:build-testing workflows
 
 cd e2e/wrappers

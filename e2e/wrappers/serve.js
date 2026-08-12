@@ -20,6 +20,11 @@ if(!distDir) {
     process.exit(1);
 }
 
+if(!Number.isInteger(port) || port <= 0) {
+    console.error(`❌ Invalid port: ${argv.port}. Pass a positive integer, for example --port=3030.`);
+    process.exit(1);
+}
+
 const root = path.resolve(__dirname, distDir);
 const indexPath = path.join(root, 'index.html');
 
