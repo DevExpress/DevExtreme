@@ -3174,11 +3174,11 @@ const editing = (Base: ModuleType<EditingController>) => class EditingController
 };
 
 const data = (Base: ModuleType<DataController>) => class DataControllerKeyboardExtender extends Base {
-  protected _correctRowIndices(getRowIndexCorrection) {
+  protected correctRowIndices(getRowIndexCorrection) {
     const that = this;
     const focusedCellPosition = this._keyboardNavigationController._focusedCellPosition;
 
-    super._correctRowIndices.apply(that, arguments as any);
+    super.correctRowIndices.apply(that, arguments as any);
 
     if (focusedCellPosition && focusedCellPosition.rowIndex >= 0) {
       const focusedRowIndexCorrection = getRowIndexCorrection(focusedCellPosition.rowIndex);

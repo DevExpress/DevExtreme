@@ -2580,9 +2580,9 @@ export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataControll
     super.applyChangeUpdate(change);
   }
 
-  protected _applyChangesOnly(change) {
+  protected applyChangesOnly(change) {
     this._updateEditRow(change.items);
-    super._applyChangesOnly(change);
+    super.applyChangesOnly(change);
   }
 
   protected _processItems(items: RawItemData[], change: DataChange): ProcessedItem[] {

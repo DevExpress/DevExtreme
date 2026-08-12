@@ -1,8 +1,8 @@
 import { equalByValue } from '@js/core/utils/common';
 
 import type {
-  ChangedRows, ProcessedItem, RowOperation, UpdateChange,
-  UpdateRowChange,
+  ChangedRows, DataChange, ProcessedItem, RowIndexByKey,
+  RowOperation, UpdateChange, UpdateRowChange,
 } from '../types';
 
 export function isSameItem(
@@ -29,6 +29,54 @@ export function isSameGroupRowState(item1: ProcessedItem, item2: ProcessedItem):
   return item1.isExpanded === item2.isExpanded
     && item1.data?.isContinuation === item2.data?.isContinuation
     && item1.data?.isContinuationOnNextPage === item2.data?.isContinuationOnNextPage;
+}
+
+/**
+ * Rows of different types may share a key, so the row type is a part of the key
+ * the diff is built on.
+ */
+export function getRowKey(row: ProcessedItem): string {
+  return `${row.rowType},${JSON.stringify(row.key)}`;
+}
+
+/**
+ * Numbers the rows and maps their keys to the new indices: both the diff and
+ * the row index correction look rows up by key.
+ */
+export function indexRowsByKey(items: ProcessedItem[]): RowIndexByKey {
+  const indexByKey: RowIndexByKey = {};
+
+  items.forEach((item, index) => {
+    indexByKey[getRowKey(item)] = index;
+    item.rowIndex = index;
+  });
+
+  return indexByKey;
+}
+
+/**
+ * A row that only got new data keeps its cells: the updaters the rows view has
+ * installed on the row and on every cell take the new row in place.
+ */
+export function updateRowCells(oldItem: ProcessedItem, newItem: ProcessedItem): void {
+  if (!oldItem.cells) {
+    return;
+  }
+
+  oldItem.update?.(newItem);
+  oldItem.cells.forEach((cell) => {
+    cell?.update?.(newItem, true);
+  });
+}
+
+/**
+ * A store change is indexed by data rows, while an insert index coming from the
+ * grid counts every visible row — group rows included.
+ */
+export function getDataRowIndex(rows: ProcessedItem[], visibleRowIndex: number): number {
+  const previousRows = rows.slice(0, visibleRowIndex);
+
+  return previousRows.filter((row) => row?.rowType === 'data' || row?.rowType === 'group').length;
 }
 
 export function getChangedRowIndices(
@@ -76,20 +124,37 @@ export function getRowOperation(
   return newItem ? 'replace' : undefined;
 }
 
-export function resetChangedRows(change: UpdateChange): ChangedRows {
-  const changedRows: ChangedRows = {
+export function createChangedRows(): ChangedRows {
+  return {
     items: [],
     rowIndices: [],
     changeTypes: [],
     columnIndices: [],
   };
+}
 
-  change.items = changedRows.items;
+function setChangedRows(change: UpdateChange, changedRows: ChangedRows): void {
   change.rowIndices = changedRows.rowIndices;
-  change.changeTypes = changedRows.changeTypes;
   change.columnIndices = changedRows.columnIndices;
+  change.changeTypes = changedRows.changeTypes;
+  change.items = changedRows.items;
+}
+
+export function resetChangedRows(change: UpdateChange): ChangedRows {
+  const changedRows = createChangedRows();
+
+  setChangedRows(change, changedRows);
 
   return changedRows;
+}
+
+export function convertToUpdateChange(change: DataChange, changedRows: ChangedRows): void {
+  const updateChange = change as UpdateChange;
+
+  updateChange.repaintChangesOnly = true;
+  updateChange.changeType = 'update';
+
+  setChangedRows(updateChange, changedRows);
 }
 
 export function pushChangedRow(changedRows: ChangedRows, changedRow: UpdateRowChange): void {
