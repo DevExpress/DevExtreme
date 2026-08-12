@@ -43,9 +43,13 @@ const stripComments = (content) => content
   .filter((_, index) => index % 2 === 0)
   .join('');
 
+/*
+ * Argument lists of `@use … with ( … )` and of `@include …( … )`: a `$name:` KEY inside either is
+ * the base module's parameter, spelled as base spells it, and never a name of this file.
+ */
 const withRanges = (content) => {
   const ranges = [];
-  const opener = /\bwith\s*\(/g;
+  const opener = /\bwith\s*\(|@include\s+[\w.-]+\s*\(/g;
   let match = opener.exec(content);
   while (match !== null) {
     let depth = 1;
@@ -230,11 +234,12 @@ const guard = () => {
     allFiles.forEach((file) => {
       const content = stripComments(readFileSync(file, 'utf8'));
       /*
-       * An occurrence of the old name in a `with()` KEY position is not an occurrence of ours: that is
-       * the base module's parameter, which this rename must not touch. Counting it made checks 5 and 6
-       * fire on 60 already-applied names — the file still mentioned the old spelling as a with() key,
-       * and the NEW name was "visible via `as *`" simply because the folder star-imports its own
-       * _colors.scss, which is how a widget reads its own variables.
+       * An occurrence of the old name in a `with()` or named-`@include` KEY position is not an
+       * occurrence of ours: that is the base module's parameter, which this rename must not touch.
+       * Counting it made checks 5 and 6 fire on 60 already-applied names — the file still mentioned
+       * the old spelling as a with() key, and the NEW name was "visible via `as *`" simply because
+       * the folder star-imports its own _colors.scss, which is how a widget reads its own variables.
+       * The named-argument form repeated it on the four base parameters treeview-checkbox() binds.
        */
       const keyRanges = withRanges(content);
       const real = [...content.matchAll(new RegExp(`\\${from}(?![\\w-])`, 'g'))].some((match) => {
@@ -343,7 +348,7 @@ const applyBatch = (batch) => {
           ? /([a-zA-Z][\w-]*)\.$/.exec(original.slice(0, index))?.[1]
           : null;
         const target = name ? names[name] : undefined;
-        // a `with()` KEY is the base module's parameter name and must keep its spelling
+        // a `with()` or named-`@include` KEY is the base module's parameter name and must keep its spelling
         const isWithKey = keyRanges.some(([from, to]) => index >= from && index < to)
           && /^\s*:/.test(original.slice(index + (name?.length ?? 0)));
 
@@ -386,9 +391,9 @@ const residue = () => Object.entries(mapping.batches).flatMap(([batch, names]) =
       const content = stripComments(readFileSync(file, 'utf8'));
       const ranges = withRanges(content);
       const pattern = new RegExp(`\\${from}(?![\\w-])`, 'g');
-      // A surviving occurrence in a `with()` KEY position is not a survivor: that is the base
-      // module's parameter name, which this rename must not touch (dataGrid/treeList/pivotGrid
-      // configure base with $datagrid-* keys).
+      // A surviving occurrence in a `with()` or named-`@include` KEY position is not a survivor:
+      // that is the base module's parameter name, which this rename must not touch
+      // (dataGrid/treeList/pivotGrid configure base with $datagrid-* keys).
       return [...content.matchAll(pattern)].some((match) => {
         const inWith = ranges.some(([start, end]) => match.index >= start && match.index < end);
         const isKey = /^\s*:/.test(content.slice(match.index + from.length));
