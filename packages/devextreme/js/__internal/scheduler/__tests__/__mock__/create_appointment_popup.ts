@@ -66,6 +66,7 @@ interface CreateAppointmentPopupOptions {
   startDayHour?: number;
   timeZone?: string;
   resources?: ResourceConfig[];
+  preloadResources?: boolean;
   onAppointmentFormOpening?: (...args: unknown[]) => void;
   onSave?: jest.Mock<(appointment: Record<string, unknown>) => PromiseLike<unknown>>;
   title?: string;
@@ -112,7 +113,7 @@ export const createAppointmentPopup = async (
   const timeZoneCalculator = createTimeZoneCalculator(options.timeZone ?? NO_TIMEZONE);
   const editing = { ...DEFAULT_EDITING, ...options.editing };
 
-  if (options.resources?.length) {
+  if (options.resources?.length && options.preloadResources !== false) {
     await Promise.all(
       resourceManager.resources.map((r) => r.load()),
     );
