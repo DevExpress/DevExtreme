@@ -6,7 +6,7 @@ import {
   INVALIDATE_CLASS,
   VALIDATION_STATUS,
   validationResultIsValid,
-} from '../m_validating';
+} from '../const';
 
 interface ValidatingControllerReader {
   getCellValidationResult: (options: { rowKey: unknown; columnIndex: number }) => unknown;
