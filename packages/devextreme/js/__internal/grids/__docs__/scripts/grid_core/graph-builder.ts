@@ -312,6 +312,13 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
     return nodeIds.has(id) ? id : null;
   }
 
+  const denseRuntime = new Map<string, {
+    source: string;
+    target: string;
+    edgeData: Record<string, unknown>;
+    extenders: Set<string>;
+  }>();
+
   for (const dep of data.runtimeDependencies) {
     const kind: ExtenderKind = dep.toType === 'controller' ? 'controllers' : 'views';
     const targetId = targetNodeId(kind, dep.to);
@@ -333,9 +340,16 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
         extenderName: dep.from,
       }, 'edge-runtime view-detailed');
 
-      // A module reaching its own child is internal wiring, visible once expanded
-      if (nodeParent.get(targetId) !== ownerModule) {
-        addEdge(ownerModule, targetId, { ...edgeData, ownerModule }, 'edge-runtime view-dense');
+      // Collapsed, every extender of a module that reaches the same target shares
+      // one edge, so it has to name all of them.
+      const key = `${ownerModule}|${targetId}`;
+      const pending = denseRuntime.get(key);
+      if (pending) {
+        pending.extenders.add(dep.from);
+      } else {
+        denseRuntime.set(key, {
+          source: ownerModule, target: targetId, edgeData, extenders: new Set([dep.from]),
+        });
       }
       // eslint-disable-next-line no-continue
       continue;
@@ -357,6 +371,14 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
     } else {
       addEdge(sourceId, targetId, edgeData, 'edge-runtime');
     }
+  }
+
+  for (const entry of denseRuntime.values()) {
+    addEdge(entry.source, entry.target, {
+      ...entry.edgeData,
+      ownerModule: entry.source,
+      extenderName: [...entry.extenders].sort().join(', '),
+    }, 'edge-runtime view-dense');
   }
 
   // 6. Add ownership edges: who calls `new` on a class the registry never sees

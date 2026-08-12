@@ -57,6 +57,7 @@ ${BASE_CSS}
   </div>
   <div>
     <h2>Edge Types</h2>
+    <label class="select-all-row"><input type="checkbox" id="toggle-all-edges" checked> Select / Unselect All</label>
     <label><input type="checkbox" class="edge-toggle" data-cls="edge-inherit-ctrl" checked> Inheritance (ctrl)</label>
     <label><input type="checkbox" class="edge-toggle" data-cls="edge-inherit-view" checked> Inheritance (view)</label>
     <label><input type="checkbox" class="edge-toggle" data-cls="edge-ext-ctrl" checked> Extender Chain (ctrl)</label>
@@ -412,8 +413,8 @@ function runDepLevelsLayout() {
   var modules = cy.nodes('.module');
 
   // 2. Build dependency map: target → set of target ids it depends on.
-  //    Only inheritance contributes: an extender binds to a target but nothing
-  //    inherits from an extender, so extenders are levelled separately in 4.
+  //    Inheritance alone leaves nearly every module on level 0, so extension
+  //    counts too: a module's own targets sit above everything it extends.
   var deps = {};
   targets.forEach(function(n) { deps[n.id()] = new Set(); });
 
@@ -422,6 +423,17 @@ function runDepLevelsLayout() {
     var src = e.source().id();
     var tgt = e.target().id();
     if (deps[src]) deps[src].add(tgt);
+  });
+
+  // Extension: module → target, taken from the collapsed edges so the source is
+  // the module itself. Every child of that module depends on the extended target.
+  cy.edges('.edge-ext-ctrl.view-dense, .edge-ext-view.view-dense').forEach(function(e) {
+    var extTarget = e.target().id();
+    e.source().children().forEach(function(child) {
+      if (deps[child.id()] && child.id() !== extTarget) {
+        deps[child.id()].add(extTarget);
+      }
+    });
   });
 
   // 3. Compute global levels via recursive topological sort
@@ -454,12 +466,20 @@ function runDepLevelsLayout() {
   //    Extension-only modules land above everything they extend, as before.
   var moduleLevel = {};
   modules.forEach(function(mod) {
-    var maxLv = -1;
+    var ownMax = -1;
+    var extMax = -1;
     mod.children().forEach(function(c) {
-      var lv = c.hasClass('gc-ext') ? extLevel[c.id()] : level[c.id()];
-      if (lv !== undefined && lv > maxLv) maxLv = lv;
+      if (c.hasClass('gc-ext')) {
+        var el = extLevel[c.id()];
+        if (el !== undefined && el > extMax) extMax = el;
+      } else {
+        var tl = level[c.id()];
+        if (tl !== undefined && tl > ownMax) ownMax = tl;
+      }
     });
-    moduleLevel[mod.id()] = maxLv >= 0 ? maxLv : 0;
+    // Step 2 already lifted own targets above everything the module extends, so
+    // extender levels only decide the position of extension-only modules.
+    moduleLevel[mod.id()] = ownMax >= 0 ? ownMax : (extMax >= 0 ? extMax : 0);
   });
 
   targets.forEach(function(n) {
@@ -538,6 +558,7 @@ function runDepLevelsLayout() {
   var CHILD_COL_GAP = 16;
   var CHILD_ROW_GAP = 12;
   var CHILD_PAD = 24; // padding inside module for label at top + border
+  var CHILD_MAX_ROW_WIDTH = 320; // wrap children instead of stretching the module
 
   // childLayout[modId] = { width, height, childPositions: { childId: {dx, dy} } }
   var childLayout = {};
@@ -558,48 +579,57 @@ function runDepLevelsLayout() {
       if (il > maxInner) maxInner = il;
     });
 
-    // Lay out each inner row
-    var innerYAccum = CHILD_PAD;
-    var maxRowWidth = 0;
-    var cp = {};
-
+    // Break each inner level into lines, so a module with many children grows
+    // downwards instead of stretching its whole level sideways
+    var lines = [];
     for (var il = maxInner; il >= 0; il--) {
       var row = byInner[il];
       if (!row) continue;
       row.sort(function(a, b) { return (a.data('label') || '').localeCompare(b.data('label') || ''); });
+      var line = [];
+      var lineW = 0;
+      for (var ri = 0; ri < row.length; ri++) {
+        var cw = row[ri].outerWidth() || 80;
+        if (line.length && lineW + CHILD_COL_GAP + cw > CHILD_MAX_ROW_WIDTH) {
+          lines.push(line);
+          line = [];
+          lineW = 0;
+        }
+        lineW += (line.length ? CHILD_COL_GAP : 0) + cw;
+        line.push(row[ri]);
+      }
+      if (line.length) lines.push(line);
+    }
+
+    var innerYAccum = CHILD_PAD;
+    var maxRowWidth = 0;
+    var cp = {};
+    var lineWidths = [];
+
+    lines.forEach(function(ln) {
       var rowX = 0;
       var rowH = 0;
-      for (var ri = 0; ri < row.length; ri++) {
-        var child = row[ri];
+      ln.forEach(function(child) {
         var cw = child.outerWidth() || 80;
         var ch = child.outerHeight() || 30;
         if (ch > rowH) rowH = ch;
         cp[child.id()] = { dx: rowX + cw / 2, dy: innerYAccum + ch / 2 };
         rowX += cw + CHILD_COL_GAP;
-      }
+      });
       var rw = rowX - CHILD_COL_GAP;
+      lineWidths.push(rw);
       if (rw > maxRowWidth) maxRowWidth = rw;
       innerYAccum += rowH + CHILD_ROW_GAP;
-    }
+    });
 
     var modW = Math.max(maxRowWidth + CHILD_PAD * 2, 100);
     var modH = innerYAccum - CHILD_ROW_GAP + CHILD_PAD;
 
-    // Center each inner row horizontally within modW
-    for (var il2 = 0; il2 <= maxInner; il2++) {
-      var row2 = byInner[il2];
-      if (!row2) continue;
-      var rowMinX = Infinity, rowMaxX = -Infinity;
-      row2.forEach(function(c) {
-        var p = cp[c.id()];
-        var hw = (c.outerWidth() || 80) / 2;
-        if (p.dx - hw < rowMinX) rowMinX = p.dx - hw;
-        if (p.dx + hw > rowMaxX) rowMaxX = p.dx + hw;
-      });
-      var rowW2 = rowMaxX - rowMinX;
-      var rowOff = (modW - CHILD_PAD * 2 - rowW2) / 2 - rowMinX;
-      row2.forEach(function(c) { cp[c.id()].dx += rowOff; });
-    }
+    // Center each line horizontally within modW
+    lines.forEach(function(ln, li) {
+      var rowOff = (modW - CHILD_PAD * 2 - lineWidths[li]) / 2;
+      ln.forEach(function(c) { cp[c.id()].dx += rowOff; });
+    });
 
     childLayout[mod.id()] = { width: modW, height: modH, childPositions: cp };
   });
@@ -607,8 +637,10 @@ function runDepLevelsLayout() {
   // 8. Position top-level items in rows by level.
   //    All items on the same level share the same Y center.
   //    Ext-only modules (no children) are sized as squares matching the row height.
-  var ROW_GAP = 120;
+  var ROW_GAP = 120;      // between levels
+  var SUB_ROW_GAP = 60;   // between the wrapped lines of one level
   var COL_GAP = 50;
+  var MAX_ROW_WIDTH = 2400;
   var positions = {};
   var maxGlobalLevel = 0;
   Object.keys(byLevel).forEach(function(k) { if (+k > maxGlobalLevel) maxGlobalLevel = +k; });
@@ -640,12 +672,44 @@ function runDepLevelsLayout() {
     }
   });
 
+  function itemWidth(node) {
+    var cl = childLayout[node.id()];
+    return cl ? cl.width : (node.outerWidth() || 80);
+  }
+
+  // A level holding a dozen modules runs thousands of pixels wide, so break it
+  // into lines of comparable length rather than one strip.
+  function wrapIntoLines(items) {
+    var total = -COL_GAP;
+    items.forEach(function(n) { total += itemWidth(n) + COL_GAP; });
+
+    var lineCount = Math.max(1, Math.ceil(total / MAX_ROW_WIDTH));
+    var target = total / lineCount;
+    var lines = [];
+    var line = [];
+    var lineW = 0;
+
+    items.forEach(function(n) {
+      var w = itemWidth(n);
+      if (line.length && lineW + COL_GAP + w > target && lines.length < lineCount - 1) {
+        lines.push(line);
+        line = [];
+        lineW = 0;
+      }
+      lineW += (line.length ? COL_GAP : 0) + w;
+      line.push(n);
+    });
+    if (line.length) lines.push(line);
+
+    return lines;
+  }
+
   // Second pass: position items, center-aligning vertically within each row
+  var placedRows = [];
   var yAccum = 0;
   for (var lv = 0; lv <= maxGlobalLevel; lv++) {
     var items = byLevel[lv];
     if (!items || items.length === 0) continue;
-    var rowHeight = rowHeights[lv] || 40;
 
     items.sort(function(a, b) {
       var aIsModule = a.data('nodeType') === 'module' ? 0 : 1;
@@ -654,70 +718,73 @@ function runDepLevelsLayout() {
       return (a.data('label') || '').localeCompare(b.data('label') || '');
     });
 
-    var rowCenterY = -yAccum - rowHeight / 2;
-    var xAccum = 0;
-    for (var i = 0; i < items.length; i++) {
-      var node = items[i];
-      var isModule = node.data('nodeType') === 'module';
-      var cl = isModule ? childLayout[node.id()] : null;
-      var w = cl ? cl.width : (node.outerWidth() || 80);
-      var h = cl ? cl.height : (node.outerHeight() || 40);
+    var lines = wrapIntoLines(items);
+    lines.forEach(function(lineItems, li) {
+      var rowHeight = 0;
+      lineItems.forEach(function(n) {
+        var clH = childLayout[n.id()];
+        var hh = clH ? clH.height : (n.outerHeight() || 40);
+        if (hh > rowHeight) rowHeight = hh;
+      });
 
-      var nodeCenterX = xAccum + w / 2;
-      positions[node.id()] = { x: nodeCenterX, y: rowCenterY };
+      var rowCenterY = -yAccum - rowHeight / 2;
+      var xAccum = 0;
+      lineItems.forEach(function(node) {
+        var isModule = node.data('nodeType') === 'module';
+        var cl = isModule ? childLayout[node.id()] : null;
+        var w = cl ? cl.width : (node.outerWidth() || 80);
+        var h = cl ? cl.height : (node.outerHeight() || 40);
 
-      // Position children using computed sub-layout offsets, centered within the module
-      if (isModule && cl && Object.keys(cl.childPositions).length > 0) {
-        var originX = xAccum;
-        var originY = rowCenterY - h / 2;
-        Object.keys(cl.childPositions).forEach(function(cid) {
-          var off = cl.childPositions[cid];
-          positions[cid] = { x: originX + CHILD_PAD + off.dx, y: originY + off.dy };
-        });
-      }
+        positions[node.id()] = { x: xAccum + w / 2, y: rowCenterY };
 
-      // The expand/collapse button rides in the module's top-right corner,
-      // outside the child flow.
-      if (isModule) {
-        var toggle = node.children('.mod-toggle');
-        if (toggle.nonempty()) {
-          positions[toggle.id()] = { x: xAccum + w - 14, y: rowCenterY - h / 2 + 14 };
+        // Position children using computed sub-layout offsets, centered within the module
+        if (isModule && cl && Object.keys(cl.childPositions).length > 0) {
+          var originX = xAccum;
+          var originY = rowCenterY - h / 2;
+          Object.keys(cl.childPositions).forEach(function(cid) {
+            var off = cl.childPositions[cid];
+            positions[cid] = { x: originX + CHILD_PAD + off.dx, y: originY + off.dy };
+          });
         }
-      }
 
-      xAccum += w + COL_GAP;
-    }
-    yAccum += rowHeight + ROW_GAP;
+        // The expand/collapse button rides in the module's top-right corner,
+        // outside the child flow.
+        if (isModule) {
+          var toggle = node.children('.mod-toggle');
+          if (toggle.nonempty()) {
+            positions[toggle.id()] = { x: xAccum + w - 14, y: rowCenterY - h / 2 + 14 };
+          }
+        }
+
+        xAccum += w + COL_GAP;
+      });
+
+      placedRows.push(lineItems);
+      yAccum += rowHeight + (li === lines.length - 1 ? ROW_GAP : SUB_ROW_GAP);
+    });
   }
 
   // 9. Center rows horizontally
   var globalMaxX = 0;
-  Object.keys(byLevel).forEach(function(k) {
-    var items = byLevel[k];
-    if (!items) return;
-    items.forEach(function(n) {
+  placedRows.forEach(function(rowItems) {
+    rowItems.forEach(function(n) {
       var p = positions[n.id()];
-      var cl = childLayout[n.id()];
-      var hw = cl ? cl.width / 2 : ((n.outerWidth() || 80) / 2);
+      var hw = itemWidth(n) / 2;
       if (p && p.x + hw > globalMaxX) globalMaxX = p.x + hw;
     });
   });
 
-  for (var lv2 = 0; lv2 <= maxGlobalLevel; lv2++) {
-    var rowItems = byLevel[lv2];
-    if (!rowItems || rowItems.length === 0) continue;
+  placedRows.forEach(function(rowItems) {
     var minX = Infinity, maxX = -Infinity;
     rowItems.forEach(function(n) {
       var p = positions[n.id()];
       if (p) {
-        var cl = childLayout[n.id()];
-        var hw = cl ? cl.width / 2 : ((n.outerWidth() || 80) / 2);
+        var hw = itemWidth(n) / 2;
         if (p.x - hw < minX) minX = p.x - hw;
         if (p.x + hw > maxX) maxX = p.x + hw;
       }
     });
-    var rowWidth = maxX - minX;
-    var offset = (globalMaxX - rowWidth) / 2 - minX;
+    var offset = (globalMaxX - (maxX - minX)) / 2 - minX;
     rowItems.forEach(function(n) {
       var p = positions[n.id()];
       if (p) p.x += offset;
@@ -727,7 +794,7 @@ function runDepLevelsLayout() {
         if (cp) cp.x += offset;
       });
     });
-  }
+  });
 
   // 10. Apply positions
   cy.layout({
@@ -981,6 +1048,7 @@ document.getElementById('btn-reset').addEventListener('click', () => {
   document.getElementById('toggle-all-areas').indeterminate = false;
   document.querySelectorAll('.area-toggle').forEach(cb => { cb.checked = true; });
   cy.elements().style('display', 'element');
+  document.getElementById('toggle-all-edges').checked = true;
   document.querySelectorAll('.edge-toggle').forEach(function(cb) { cb.checked = true; });
   document.querySelector('input[name="edge-routing"][value="bezier"]').checked = true;
   setAllExpanded(false);

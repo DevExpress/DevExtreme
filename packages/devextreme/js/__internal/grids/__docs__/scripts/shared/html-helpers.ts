@@ -254,6 +254,18 @@ document.querySelectorAll('.edge-toggle').forEach(function(cb) {
   }
 });
 
+/* ── Shared: Edge type select all (optional, only if the template renders it) ── */
+var toggleAllEdges = document.getElementById('toggle-all-edges');
+if (toggleAllEdges) {
+  toggleAllEdges.addEventListener('change', function() {
+    var checked = this.checked;
+    document.querySelectorAll('.edge-toggle').forEach(function(cb) {
+      cb.checked = checked;
+      cb.dispatchEvent(new Event('change'));
+    });
+  });
+}
+
 /* ── Shared: Search ── */
 document.getElementById('search').addEventListener('input', function() {
   var q = this.value.toLowerCase().trim();
