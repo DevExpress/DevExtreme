@@ -12,6 +12,7 @@ const FIELD_CHOOSER_CONTENT = 'dx-popup-normal';
 
 fixture('PivotGrid.IntegratedFieldChooser')
   .requestHooks(widgetsGalleryServiceMock, xmlaServiceMock)
+  // eslint-disable-next-line require-await
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 800];
   });

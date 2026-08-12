@@ -21,7 +21,7 @@ const xmlHeaders = {
   'content-type': 'text/xml',
 };
 
-const corsHeaders = {
+const preflightHeaders = {
   'access-control-allow-headers': 'Origin, Content-Type, Accept, SOAPAction',
   'access-control-allow-origin': '*',
   'access-control-allow-methods': 'POST, OPTIONS',
@@ -39,7 +39,7 @@ const isCountQuery = (body: string): boolean => (
 
 export const xmlaServiceMock = RequestMock()
   .onRequestTo((req) => isXmlaUrl(req.url) && req.method === 'options')
-  .respond(undefined, 200, corsHeaders)
+  .respond(undefined, 200, preflightHeaders)
 
   // Structure (Discover)
   .onRequestTo((req) => isXmlaUrl(req.url)
