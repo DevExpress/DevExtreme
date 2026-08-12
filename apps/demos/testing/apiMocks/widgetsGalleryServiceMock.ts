@@ -1,6 +1,7 @@
 import { RequestMock } from 'testcafe';
 import type { MockHandler } from './types';
 import { salesHandler } from './handlers/sales';
+import { salesOrdersHandler } from './handlers/salesOrders';
 import { ordersHandler } from './handlers/orders';
 import { openAIHandler } from './handlers/openai';
 import { diagramEmployeesHandler } from './handlers/diagramEmployees';
@@ -13,6 +14,9 @@ import {
   fileManagerDbHandler,
   fileManagerFileSystemHandler,
 } from './handlers/fileManager';
+import { schedulerDataHandler } from './handlers/schedulerData';
+import { schedulerSignalRHandler } from './handlers/schedulerSignalR';
+import { googleCalendarHandler } from './handlers/googleCalendar';
 
 // The AI-column endpoint is a cross-origin POST with non-simple headers
 // (api-key, content-type), so the browser issues a CORS preflight. Advertise
@@ -37,6 +41,8 @@ const getCrossOriginHeaders = (req: { headers?: Record<string, string> }) => {
 const handlers: MockHandler[] = [
   // GET /api/Sales, excluding /api/Sales/Orders
   salesHandler,
+  // GET /api/Sales/Orders (PivotGrid WebAPIService)
+  salesOrdersHandler,
   // GET /api/orders
   ordersHandler,
   // POST demo-openai chat completions (AI column)
@@ -57,6 +63,12 @@ const handlers: MockHandler[] = [
   fileManagerDbHandler,
   // GET /api/file-manager-file-system?command=GetDirContents
   fileManagerFileSystemHandler,
+  // GET /api/SchedulerData (Scheduler WebAPIService)
+  schedulerDataHandler,
+  // GET /api/SchedulerSignalR (Scheduler SignalRService)
+  schedulerSignalRHandler,
+  // GET googleapis.com/calendar/v3/.../events (Scheduler GoogleCalendarIntegration)
+  googleCalendarHandler,
 ];
 
 export const widgetsGalleryServiceMock = handlers.reduce(
