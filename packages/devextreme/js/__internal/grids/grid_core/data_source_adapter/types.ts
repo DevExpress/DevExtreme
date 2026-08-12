@@ -1,10 +1,13 @@
 import type { Mode } from '@js/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import type { Properties } from '@js/ui/data_grid';
 import type {
   ChangedEvent as BaseChangedEvent,
   LoadOperation as BaseLoadOperation,
   StoreLoadOptions,
 } from '@ts/data/data_source/types';
+
+export type RawItemData = Record<string, unknown>;
 
 export type RemoteOperations = Properties['remoteOperations'];
 
@@ -24,12 +27,14 @@ export interface OperationTypes {
   paging?: boolean;
 }
 
-export interface LoadOperation extends BaseLoadOperation {
-  data?: unknown[];
-  cachedStoreData?: unknown[];
+export interface LoadOperation extends Omit<BaseLoadOperation, 'operationId'> {
+  operationId?: number;
+  data?: RawItemData[] | DeferredObj<RawItemData[]>;
+  cachedStoreData?: RawItemData[];
   storeLoadOptions: StoreLoadOptions & {
     isLoadingAll?: boolean;
   };
+  loadOptions?: StoreLoadOptions;
   originalStoreLoadOptions?: StoreLoadOptions;
   remoteOperations?: RemoteOperations;
   isCustomLoading?: boolean;
@@ -42,7 +47,8 @@ export interface LoadOperation extends BaseLoadOperation {
   group?: unknown[] | null;
   extra?: {
     totalCount?: number;
-  }
+    summary?: unknown[];
+  };
 }
 
 export interface ChangedEvent extends BaseChangedEvent {

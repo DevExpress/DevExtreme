@@ -4,14 +4,12 @@ import type { ScalarFilterValue } from '@js/common/grids';
 import type { DeferredObj } from '@js/core/utils/deferred';
 
 import type { Column } from '../columns_controller/types';
-import type { ChangedEvent, OperationTypes } from '../data_source_adapter/types';
+import type { ChangedEvent, OperationTypes, RawItemData } from '../data_source_adapter/types';
 /** data */
 
 export interface DataSourceAdapterLike {
   _dataSource: DataSource;
 }
-
-export type RawItemData = Record<string, unknown>;
 
 export interface ItemProcessingOptions {
   visibleColumns: Column[];
