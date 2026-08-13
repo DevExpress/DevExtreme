@@ -3,7 +3,7 @@ import { stateStoringModule } from '@ts/grids/grid_core/state_storing/state_stor
 
 import type { DataController } from '../grid_core/data_controller/data_controller';
 import type { ModuleType } from '../grid_core/m_types';
-import type { StateStoringController } from '../grid_core/state_storing/m_state_storing_core';
+import type { StateStoringController } from '../grid_core/state_storing/m_state_storing_controller';
 import treeListCore from './m_core';
 
 const stateStoring = (

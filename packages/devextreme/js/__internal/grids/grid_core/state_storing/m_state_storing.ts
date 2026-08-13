@@ -4,10 +4,12 @@ import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { DataController } from '../data_controller/data_controller';
 import type { ModuleType } from '../m_types';
 import type { SelectionController } from '../selection/m_selection';
 import type { RowsView } from '../views/m_rows_view';
-import type { StateStoringController } from './m_state_storing_core';
+import type { StateStoringDataControllerExtension } from './extenders/state_storing_data_controller';
+import type { StateStoringController } from './m_state_storing_controller';
 
 const getDataState = (that) => {
   // TODO getView
@@ -90,10 +92,11 @@ const getFilterValue = (that, state) => {
 };
 
 export const rowsView = (Base: ModuleType<RowsView>) => class StateStoringRowsViewExtender extends Base {
+  protected _dataController!: DataController & StateStoringDataControllerExtension;
+
   public init() {
     super.init();
 
-    // @ts-expect-error
     this._dataController.stateLoaded.add(() => {
       if (this._dataController.isLoaded() && !this._dataController.getDataSource()) {
         this.setLoading(false);

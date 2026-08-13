@@ -7,7 +7,7 @@ import {
   selection,
   stateStoring,
 } from './m_state_storing';
-import { StateStoringController } from './m_state_storing_core';
+import { StateStoringController } from './m_state_storing_controller';
 
 export const stateStoringModule = {
   defaultOptions(): { stateStoring: StateStoring } {

@@ -3,10 +3,11 @@ import { Deferred } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
-import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
+
+import type { StateStoringController } from '../m_state_storing_controller';
 
 export interface StateStoringDataControllerExtension {
-  stateLoaded?: Callback<[]>;
+  stateLoaded: Callback<[]>;
 }
 
 export const data = (
@@ -14,7 +15,7 @@ export const data = (
 ): ModuleType<
   DataController & StateStoringDataControllerExtension
 > => class StateStoringDataExtender extends Base {
-  public stateLoaded?: Callback<[]>;
+  public stateLoaded!: Callback<[]>;
 
   protected _stateStoringController!: StateStoringController;
 
@@ -50,11 +51,11 @@ export const data = (
           .done(() => {
             super._refreshDataSource();
 
-            this.stateLoaded?.fire();
+            this.stateLoaded.fire();
             deferred.resolve();
           })
           .fail((error) => {
-            this.stateLoaded?.fire();
+            this.stateLoaded.fire();
             this._handleLoadError(error ?? 'Unknown error');
             deferred.reject();
           });
