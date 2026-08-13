@@ -37,10 +37,11 @@ async function inlineDataUri(content: string, scssRoot: string): Promise<string>
 async function copyScssWithInlineDataUri(
   scssPackagePath: string,
   outputDir: string,
+  exclude: string[],
 ): Promise<void> {
   const scssSourceDir = path.join(scssPackagePath, 'scss');
   const cwd = toPosixPath(scssSourceDir);
-  const relPaths = await glob('**/*', { cwd, nodir: true });
+  const relPaths = await glob('**/*', { cwd, nodir: true, ignore: exclude });
 
   await Promise.all(
     relPaths.map(async (relPath) => {
@@ -77,6 +78,7 @@ async function copyIcons(scssPackagePath: string, outputDir: string): Promise<vo
 interface ResolvedScssAssemble {
   scssPackagePath: string;
   outputDir: string;
+  exclude: string[];
 }
 
 export default createExecutor<ScssAssembleExecutorSchema, ResolvedScssAssemble>({
@@ -84,11 +86,11 @@ export default createExecutor<ScssAssembleExecutorSchema, ResolvedScssAssemble>(
   resolve: (options, { projectRoot }) => {
     const scssPackagePath = path.resolve(projectRoot, options.scssPackagePath);
     const outputDir = path.resolve(projectRoot, options.outputDir);
-    return { scssPackagePath, outputDir };
+    return { scssPackagePath, outputDir, exclude: options.exclude ?? [] };
   },
-  run: async ({ scssPackagePath, outputDir }) => {
+  run: async ({ scssPackagePath, outputDir, exclude }) => {
     await Promise.all([
-      copyScssWithInlineDataUri(scssPackagePath, outputDir),
+      copyScssWithInlineDataUri(scssPackagePath, outputDir, exclude),
       copyFonts(scssPackagePath, outputDir),
       copyIcons(scssPackagePath, outputDir),
     ]);

@@ -83,4 +83,29 @@ describe('ScssAssembleExecutor E2E', () => {
     expect(content).toContain(expectedSvg);
     expect(content).toContain(expectedPng);
   });
+
+  it('should keep excluded sources out of the package', async () => {
+    await writeFileText(
+      path.join(scssPackageDir, 'scss', 'widgets', 'kept', '_index.scss'),
+      '.a {}',
+    );
+    await writeFileText(
+      path.join(scssPackageDir, 'scss', 'widgets', 'dropped', '_index.scss'),
+      '.b {}',
+    );
+    await writeFileText(path.join(scssPackageDir, 'scss', 'bundles', 'dx.kept.scss'), '.c {}');
+    await writeFileText(path.join(scssPackageDir, 'scss', 'bundles', 'dx.dropped.scss'), '.d {}');
+
+    const context = createMockContext({ root: tempDir });
+    const result = await executor(
+      { ...OPTIONS, exclude: ['widgets/dropped/**', 'bundles/dx.dropped.scss'] },
+      context,
+    );
+
+    expect(result.success).toBe(true);
+    expect(fs.existsSync(path.join(outputDir, 'widgets', 'kept', '_index.scss'))).toBe(true);
+    expect(fs.existsSync(path.join(outputDir, 'bundles', 'dx.kept.scss'))).toBe(true);
+    expect(fs.existsSync(path.join(outputDir, 'widgets', 'dropped'))).toBe(false);
+    expect(fs.existsSync(path.join(outputDir, 'bundles', 'dx.dropped.scss'))).toBe(false);
+  });
 });

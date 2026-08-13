@@ -11,6 +11,13 @@
     "outputDir": {
       "type": "string",
       "description": "Output directory for assembled SCSS files (relative to project root)."
+    },
+    "exclude": {
+      "type": "array",
+      "description": "Glob patterns, relative to the scss directory, kept out of the package.",
+      "items": {
+        "type": "string"
+      }
     }
   },
   "required": ["scssPackagePath", "outputDir"]

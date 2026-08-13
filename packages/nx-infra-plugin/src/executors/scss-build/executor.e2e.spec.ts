@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import executor from './executor';
+import executor, { findMissingThemeCss } from './executor';
 import { ScssBuildExecutorSchema } from './schema';
 import { createMockContext, createTempDir, cleanupTempDir } from '../../utils/test-utils';
 import { writeFileText, writeJson, readFileText } from '../../utils';
@@ -29,7 +29,7 @@ function createMockModules(projectRoot: string): void {
       '}',
       'module.exports = {',
       '  SassString,',
-      '  compile: () => ({ css: \'@charset "UTF-8"; .a{display:flex}\' })',
+      '  compile: () => ({ css: \'/**\\n * Do not edit directly, this file was auto-generated.\\n */\\n@charset "UTF-8"; .a{display:flex}\' })',
       '};',
       '',
     ].join('\n'),
@@ -144,6 +144,11 @@ async function setupProjectStructure(workspaceRoot: string): Promise<string> {
     '.generic-$COLOR { color: red; }',
   );
 
+  await writeFileText(
+    path.join(projectRoot, 'scss', '_design-system', 'fluent', 'accents', 'blue.scss'),
+    ':root { --dxds-primary-100: #0f6cbd; }',
+  );
+
   createMockModules(projectRoot);
   return projectRoot;
 }
@@ -189,6 +194,33 @@ describe('ScssBuildExecutor E2E', () => {
     expect(commonCss).toContain('DevExtreme (dx.common.css)');
   });
 
+  it('compiles design-system accent sources into the accents subfolder without minification', async () => {
+    const projectRoot = await setupProjectStructure(tempDir);
+    await writeFileText(
+      path.join(projectRoot, 'scss', '_design-system', 'fluent', 'accents', 'storm.scss'),
+      ':root { --dxds-primary-100: #6d6a68; }',
+    );
+
+    const context = createMockContext({
+      root: tempDir,
+      projectName: 'devextreme-scss',
+      projectRoot: 'packages/devextreme-scss',
+    });
+
+    const options: ScssBuildExecutorSchema = { mode: 'all', cssOutputDir: './artifacts/css' };
+    const result = await executor(options, context);
+
+    expect(result.success).toBe(true);
+
+    const stormCss = await readFileText(
+      path.join(projectRoot, 'artifacts', 'css', 'accents', 'storm.css'),
+    );
+    expect(stormCss).toContain('DevExtreme (storm.css)');
+    expect(stormCss).not.toContain('/*min:');
+    expect(stormCss).not.toContain('/*prefixed*/');
+    expect(stormCss).not.toContain('auto-generated');
+  });
+
   it('builds ci mode only for selected dev bundles and uses ci profile', async () => {
     const projectRoot = await setupProjectStructure(tempDir);
     const context = createMockContext({
@@ -217,6 +249,41 @@ describe('ScssBuildExecutor E2E', () => {
     expect(lightCss).toContain('/*min:ci*/');
 
     expect(fs.existsSync(path.join(projectRoot, 'scss', 'bundles', 'dx.common.scss'))).toBe(true);
+  });
+
+  it('fails when the design-system produced no accent palettes', async () => {
+    const projectRoot = await setupProjectStructure(tempDir);
+    fs.rmSync(path.join(projectRoot, 'scss', '_design-system'), { recursive: true });
+
+    const context = createMockContext({
+      root: tempDir,
+      projectName: 'devextreme-scss',
+      projectRoot: 'packages/devextreme-scss',
+    });
+
+    const options: ScssBuildExecutorSchema = { mode: 'all', cssOutputDir: './artifacts/css' };
+    const result = await executor(options, context);
+
+    expect(result.success).toBe(false);
+  });
+
+  it('reports declared themes that left no CSS behind', async () => {
+    const projectRoot = await setupProjectStructure(tempDir);
+    const context = createMockContext({
+      root: tempDir,
+      projectName: 'devextreme-scss',
+      projectRoot: 'packages/devextreme-scss',
+    });
+
+    await executor({ mode: 'all', cssOutputDir: './artifacts/css' }, context);
+
+    const cssDir = path.join(projectRoot, 'artifacts', 'css');
+    const deps = { themeOptions: { getThemes: () => [['generic', 'default', 'light']] } };
+
+    expect(findMissingThemeCss(cssDir, deps as never)).toEqual([]);
+
+    fs.rmSync(path.join(cssDir, 'dx.light.css'));
+    expect(findMissingThemeCss(cssDir, deps as never)).toEqual(['dx.light.css']);
   });
 
   it('fails in ci mode when a configured bundle source is missing', async () => {
