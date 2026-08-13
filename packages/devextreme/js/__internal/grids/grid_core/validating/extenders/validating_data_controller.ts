@@ -1,5 +1,6 @@
 import $ from '@js/core/renderer';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { Cell, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
 import {
@@ -8,9 +9,24 @@ import {
   validationResultIsValid,
 } from '../const';
 
+interface CellValidationResult {
+  status?: string;
+}
+
+type ValidationResult = CellValidationResult | string | undefined;
+
+interface ValidationData {
+  isValid?: boolean;
+}
+
+type ValidatedCell = Cell & {
+  validationStatus?: string;
+  cellElement?: Element;
+};
+
 interface ValidatingControllerReader {
-  getCellValidationResult: (options: { rowKey: unknown; columnIndex: number }) => unknown;
-  getValidationData: (key: unknown) => { isValid?: boolean } | undefined;
+  getCellValidationResult: (options: { rowKey: unknown; columnIndex: number }) => ValidationResult;
+  getValidationData: (key: unknown) => ValidationData | undefined;
 }
 
 export const validatingDataControllerExtender = (
@@ -23,33 +39,60 @@ export const validatingDataControllerExtender = (
     super.init();
   }
 
-  private _getValidationStatus(validationResult): string {
-    const validationStatus = validationResultIsValid(validationResult)
-      ? validationResult.status
-      : validationResult;
+  private _getValidationStatus(validationResult: ValidationResult): string {
+    if (!validationResultIsValid(validationResult)) {
+      return (validationResult as string | undefined) ?? VALIDATION_STATUS.valid;
+    }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return validationStatus ?? VALIDATION_STATUS.valid;
+    return (validationResult as CellValidationResult).status ?? VALIDATION_STATUS.valid;
   }
 
-  protected _isCellChanged(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate): boolean {
+  private _isRowEditStateChanged(
+    oldRow: ProcessedItem,
+    newRow: ProcessedItem,
+    columnIndex: number,
+  ): boolean {
     const cell = oldRow.cells?.[columnIndex];
+    const hasValidationRules = !!cell?.column?.validationRules?.length;
+
+    return oldRow.isEditing !== newRow.isEditing && hasValidationRules;
+  }
+
+  private _isCellValidationStateChanged(
+    oldRow: ProcessedItem,
+    newRow: ProcessedItem,
+    columnIndex: number,
+  ): boolean {
+    const cell = oldRow.cells?.[columnIndex] as ValidatedCell | undefined;
+
     const oldValidationStatus = this._getValidationStatus({ status: cell?.validationStatus });
-    const validationResult = this._validatingController.getCellValidationResult({
-      rowKey: oldRow.key,
-      columnIndex,
-    });
-    const validationData = this._validatingController.getValidationData(oldRow.key);
-    const newValidationStatus = this._getValidationStatus(validationResult);
+    const newValidationStatus = this._getValidationStatus(
+      this._validatingController.getCellValidationResult({ rowKey: oldRow.key, columnIndex }),
+    );
     const rowIsModified = JSON.stringify(newRow.modifiedValues)
       !== JSON.stringify(oldRow.modifiedValues);
     const validationStatusChanged = oldValidationStatus !== newValidationStatus && rowIsModified;
+
+    const validationData = this._validatingController.getValidationData(oldRow.key);
     const cellIsMarkedAsInvalid = $(cell?.cellElement)
       .hasClass(this.addWidgetPrefix(INVALIDATE_CLASS));
-    const hasValidationRules = cell?.column.validationRules?.length;
-    const rowEditStateChanged = oldRow.isEditing !== newRow.isEditing && hasValidationRules;
-    const cellValidationStateChanged = validationStatusChanged
-      || (validationData?.isValid && cellIsMarkedAsInvalid);
+
+    return validationStatusChanged || !!(validationData?.isValid && cellIsMarkedAsInvalid);
+  }
+
+  protected _isCellChanged(
+    oldRow: ProcessedItem,
+    newRow: ProcessedItem,
+    visibleRowIndex: number,
+    columnIndex: number,
+    isLiveUpdate?: boolean,
+  ): boolean {
+    const rowEditStateChanged = this._isRowEditStateChanged(oldRow, newRow, columnIndex);
+    const cellValidationStateChanged = this._isCellValidationStateChanged(
+      oldRow,
+      newRow,
+      columnIndex,
+    );
 
     if (rowEditStateChanged || cellValidationStateChanged) {
       return true;
