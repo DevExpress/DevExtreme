@@ -1,6 +1,6 @@
 import messageLocalization from '@js/common/core/localization/message';
 
-import { data } from './extenders/validating_data_controller';
+import { validatingDataControllerExtender } from './extenders/validating_data_controller';
 import {
   ValidatingController,
   validatingEditingExtender,
@@ -25,7 +25,7 @@ export const validatingModule = {
     controllers: {
       editing: validatingEditingExtender,
       editorFactory: validatingEditorFactoryExtender,
-      data,
+      data: validatingDataControllerExtender,
     },
     views: {
       rowsView: validatingRowsViewExtender,
