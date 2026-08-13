@@ -7,7 +7,6 @@ const fs = require('fs');
 const os = require('os');
 const esbuild = require('esbuild');
 const { extractDemoHeadExtras, extractDemoBodyInner } = require('./demo-html');
-const { vendorGlobalPlugin, vendorScriptTag } = require('./vendor-bundle');
 
 const DEMOS_APP_ROOT = path.resolve(__dirname, '..', '..');
 const REPO_ROOT = path.resolve(DEMOS_APP_ROOT, '..', '..');
@@ -62,6 +61,9 @@ function applyShard(demos) {
 const SHARED_TSCONFIG_TEMPLATE = path.join(__dirname, 'tsconfig.csp-bundle-angular.json');
 const GENERATED_TSCONFIG_DIR = path.join(__dirname, '.csp-bundle-angular-tsconfigs');
 const ANGULAR_ZONE_SCRIPT = '../../../../node_modules/zone.js/bundles/zone.umd.js';
+// esbuild's own code-splitting output (shared chunks across a batch's demos) — a plain
+// build artifact directory, wiped and regenerated on every run.
+const CHUNKS_DIRNAME = '_chunks';
 
 // @angular/build is transitive via @angular-devkit/build-angular; resolve through it for pnpm.
 function resolveAngularBuildPrivate() {
@@ -105,19 +107,13 @@ function buildHtml({ jsFiles, cssFiles, srcDir }) {
     ...cssFiles.map((f) => `<link rel="stylesheet" type="text/css" href="./${f}" />`),
   ].join('\n    ');
   const bodyInner = extractDemoBodyInner(srcDir) || DEFAULT_BODY_INNER;
-  const scriptTag = (f) => {
-    const src = f.startsWith('.') ? f : `./${f}`;
-    const type = f === ANGULAR_ZONE_SCRIPT ? '' : ' type="module"';
-    return `<script src="${src}"${type}></script>`;
-  };
-  // zone.js must load before the vendor bundle: @angular/core does async work
-  // (promises, etc.) at module-evaluation time, and that needs to be zone-patched.
-  const vendorTag = vendorScriptTag('Angular');
-  const scripts = [
-    ...jsFiles.filter((f) => f === ANGULAR_ZONE_SCRIPT).map(scriptTag),
-    vendorTag,
-    ...jsFiles.filter((f) => f !== ANGULAR_ZONE_SCRIPT).map(scriptTag),
-  ].filter(Boolean).join('\n    ');
+  const scripts = jsFiles
+    .map((f) => {
+      const src = f.startsWith('.') ? f : `./${f}`;
+      const type = f === ANGULAR_ZONE_SCRIPT ? '' : ' type="module"';
+      return `<script src="${src}"${type}></script>`;
+    })
+    .join('\n    ');
   return `<!DOCTYPE html>
 <html lang="en">
   <head>
@@ -561,6 +557,14 @@ function makeBuildOptions({
     outdir,
     bundle: true,
     format: 'esm',
+    // A batch's demos share one esbuild build (see bundleDemoBatch); splitting lets esbuild
+    // find and extract code common across its entry points into a shared chunk automatically
+    // — no custom externalization plugin involved, so nothing can shadow the AOT compiler
+    // plugin's own need to read every file's real source (see git history for what happens
+    // when something does: NG0919/`void 0` dependency arrays). Content-hashed and a no-op for
+    // a single-entry (non-batched) build, so safe to always set.
+    splitting: true,
+    chunkNames: `${CHUNKS_DIRNAME}/[hash]`,
     platform: 'browser',
     target: 'es2022',
     mainFields: ['es2020', 'es2015', 'browser', 'module', 'main'],
@@ -585,7 +589,6 @@ function makeBuildOptions({
     logLevel: 'silent',
     metafile: true,
     plugins: [
-      vendorGlobalPlugin('Angular'),
       angularSingleCopyPlugin,
       antiForgeryPlugin,
       systemJsQuirksPlugin,
@@ -717,6 +720,13 @@ async function main() {
   fs.mkdirSync(OUT_ROOT, { recursive: true });
   if (fs.existsSync(GENERATED_TSCONFIG_DIR)) {
     fs.rmSync(GENERATED_TSCONFIG_DIR, { recursive: true, force: true });
+  }
+  // Shared across every demo's own build (see makeBuildOptions' chunkNames) — not owned by
+  // any single demo's own folder, so not covered by the per-demo wipe above; always safe to
+  // fully regenerate since chunk filenames are content-hashed.
+  const chunksDir = path.join(OUT_ROOT, CHUNKS_DIRNAME);
+  if (fs.existsSync(chunksDir)) {
+    fs.rmSync(chunksDir, { recursive: true, force: true });
   }
   sweepStalePatchedTsFiles(SRC_DEMOS_DIR);
 

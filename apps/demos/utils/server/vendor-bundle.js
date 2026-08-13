@@ -25,16 +25,11 @@ function globalVarName(framework) {
   return `__DX_VENDOR_${framework.toUpperCase()}__`;
 }
 
+// Angular isn't supported here — see build-vendor-bundles.js's header comment.
 const VENDOR_PREFIXES = {
   React: [/^react$/, /^react-dom(\/.*)?$/, /^devextreme(-react)?(\/.*)?$/, /^globalize$/],
   ReactJs: [/^react$/, /^react-dom(\/.*)?$/, /^devextreme(-react)?(\/.*)?$/, /^globalize$/],
   Vue: [/^vue$/, /^devextreme(-vue)?(\/.*)?$/, /^globalize$/],
-  Angular: [
-    /^@angular\/(core|common|forms|platform-browser|platform-browser-dynamic|animations|router)(\/.*)?$/,
-    /^devextreme(-angular)?(\/.*)?$/,
-    /^rxjs(\/.*)?$/,
-    /^globalize$/,
-  ],
 };
 
 function isVendorSpecifier(spec, framework) {
@@ -47,7 +42,6 @@ const VENDOR_KEYWORDS = {
   React: ['devextreme-react', 'devextreme', 'react-dom', 'react', 'globalize'],
   ReactJs: ['devextreme-react', 'devextreme', 'react-dom', 'react', 'globalize'],
   Vue: ['devextreme-vue', 'devextreme', 'vue', 'globalize'],
-  Angular: ['devextreme-angular', 'devextreme', '@angular', 'rxjs', 'globalize'],
 };
 
 const SOURCE_EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.jsx', '.vue']);
