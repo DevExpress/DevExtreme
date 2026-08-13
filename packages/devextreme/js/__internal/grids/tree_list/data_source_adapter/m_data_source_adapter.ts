@@ -9,7 +9,10 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
+import type { ChangingEvent } from '@ts/data/data_source/types';
+import type { BeforePushEvent } from '@ts/data/types';
 import DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import { createDataSourceAdapterProvider } from '@ts/grids/grid_core/data_source_adapter/provider';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 import treeListCore from '../m_core';
@@ -328,7 +331,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
   /**
    * @extended: TreeLists's data_source_adapter
    */
-  protected _customizeStoreLoadOptionsHandler(options): void {
+  protected customizeStoreLoadOptionsHandler(options) {
     const rootValue: any = this.option('rootValue');
     const parentIdExpr = this.option('parentIdExpr');
     let { parentIds } = options.storeLoadOptions;
@@ -337,7 +340,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
       options.isCustomLoading = false;
     }
 
-    super._customizeStoreLoadOptionsHandler.apply(this, arguments as any);
+    super.customizeStoreLoadOptionsHandler.apply(this, arguments as any);
 
     if (options.remoteOperations.filtering && !options.isCustomLoading) {
       if (isFullBranchFilterMode(this) && options.cachedStoreData || !options.storeLoadOptions.filter) {
@@ -528,14 +531,15 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     return processedChanges;
   }
 
-  protected _handleChanging(e) {
-    super._handleChanging.apply(this, arguments as any);
+  protected changingHandler(e: ChangingEvent): void {
+    super.changingHandler.apply(this, arguments as any);
 
     const processChanges = (changes) => {
       const changesToProcess = changes.filter((item) => item.type === 'update');
       return this._processChanges(changesToProcess);
     };
 
+    // @ts-expect-error need create treelist specific ChangingEvent type
     e.postProcessChanges = processChanges;
   }
 
@@ -611,14 +615,14 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     return baseChanges;
   }
 
-  protected _handleDataLoaded(options) {
+  protected customizeLoadResultHandler(options) {
     const data = options.data = this._convertDataToPlainStructure(options.data);
     if (!options.remoteOperations.filtering && options.loadOptions.filter) {
       // @ts-expect-error
       options.fullData = queryByOptions(query(options.data), { sort: options.loadOptions && options.loadOptions.sort }).toArray();
     }
     this._updateHasItemsMap(options);
-    super._handleDataLoaded(options);
+    super.customizeLoadResultHandler(options);
 
     if (!options.isCustomLoading) {
       this._lastExpandedRowKeys = this.option('expandedRowKeys')?.slice();
@@ -702,7 +706,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     this._totalItemsCount = resultData.length;
   }
 
-  protected _handleDataLoadedCore(options) {
+  protected customizeLoadResultHandlerCore(options) {
     const that = this;
     const { data } = options;
     const filter = options.storeLoadOptions.filter || options.loadOptions.filter;
@@ -723,7 +727,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
           that._loadChildrenIfNeed(data, options).done((data) => {
             options.data = data;
             that._processTreeStructure(options, visibleItems);
-            super._handleDataLoadedCore.call(that, options);
+            super.customizeLoadResultHandlerCore.call(that, options);
             d.resolve(options.data);
           });
         }).fail(d.reject);
@@ -731,18 +735,18 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
       that._processTreeStructure(options);
     }
 
-    super._handleDataLoadedCore(options);
+    super.customizeLoadResultHandlerCore(options);
   }
 
-  protected _handlePush({ changes }) {
+  protected pushHandler(e: BeforePushEvent): void {
     const reshapeOnPush = this._dataSource._reshapeOnPush;
-    const isNeedReshape = reshapeOnPush && !!changes.length;
+    const isNeedReshape = reshapeOnPush && !!e.changes.length;
 
     if (isNeedReshape) {
       this._isReload = true;
     }
-    changes.forEach((change) => { change.index ??= -1; });
-    super._handlePush.apply(this, arguments as any);
+    e.changes.forEach((change) => { change.index ??= -1; });
+    super.pushHandler(e);
   }
 
   public init(dataSource) {
@@ -886,6 +890,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     }
 
     const loadOptions = that._dataSource._createStoreLoadOptions();
+    // @ts-expect-error need create treelist specific storeLoadOptions type
     loadOptions.parentIds = keys;
 
     that.load(loadOptions)
@@ -928,13 +933,4 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
   }
 }
 
-let DataSourceAdapterTreeListType: any = DataSourceAdapterTreeList;
-
-export default {
-  extend(extender) {
-    DataSourceAdapterTreeListType = extender(DataSourceAdapterTreeListType);
-  },
-  create(component) {
-    return new DataSourceAdapterTreeListType(component);
-  },
-};
+export default createDataSourceAdapterProvider(DataSourceAdapterTreeList);
