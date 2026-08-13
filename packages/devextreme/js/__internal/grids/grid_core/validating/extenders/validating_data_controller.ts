@@ -3,15 +3,12 @@ import type { DataController } from '@ts/grids/grid_core/data_controller/data_co
 import type { Cell, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
+import type { CellValidationResult, ValidationStatus } from '../const';
 import {
   INVALIDATE_CLASS,
   VALIDATION_STATUS,
   validationResultIsValid,
 } from '../const';
-
-interface CellValidationResult {
-  status?: string;
-}
 
 type ValidationResult = CellValidationResult | string | undefined;
 
@@ -20,7 +17,7 @@ interface ValidationData {
 }
 
 type ValidatedCell = Cell & {
-  validationStatus?: string;
+  validationStatus?: ValidationStatus;
   cellElement?: Element;
 };
 
@@ -41,10 +38,10 @@ export const validatingDataControllerExtender = (
 
   private _getValidationStatus(validationResult: ValidationResult): string {
     if (!validationResultIsValid(validationResult)) {
-      return (validationResult as string | undefined) ?? VALIDATION_STATUS.valid;
+      return validationResult ?? VALIDATION_STATUS.valid;
     }
 
-    return (validationResult as CellValidationResult).status ?? VALIDATION_STATUS.valid;
+    return validationResult.status ?? VALIDATION_STATUS.valid;
   }
 
   private _isRowEditStateChanged(
@@ -73,11 +70,15 @@ export const validatingDataControllerExtender = (
       !== JSON.stringify(oldRow.modifiedValues);
     const validationStatusChanged = oldValidationStatus !== newValidationStatus && rowIsModified;
 
+    if (validationStatusChanged) {
+      return true;
+    }
+
     const validationData = this._validatingController.getValidationData(oldRow.key);
     const cellIsMarkedAsInvalid = $(cell?.cellElement)
       .hasClass(this.addWidgetPrefix(INVALIDATE_CLASS));
 
-    return validationStatusChanged || !!(validationData?.isValid && cellIsMarkedAsInvalid);
+    return !!validationData?.isValid && cellIsMarkedAsInvalid;
   }
 
   protected _isCellChanged(
