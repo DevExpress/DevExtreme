@@ -277,7 +277,9 @@ async function buildVendorBundle(framework, esbuildOptions = {}) {
       break;
     }
 
-    // Regex discovery can pick up dead specifiers that never resolve; drop and retry.
+    // Regex-based discovery can pick up type-only/dead specifiers that never
+    // actually resolve; drop exactly the lines esbuild reports and retry.
+    const buildCwd = esbuildOptions.absWorkingDir || process.cwd();
     const badLines = new Set();
     for (const e of result.err.errors || []) {
       if (!e.location) continue; // eslint-disable-line no-continue
