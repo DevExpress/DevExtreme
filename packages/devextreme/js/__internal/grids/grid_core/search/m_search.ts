@@ -242,7 +242,6 @@ const rowsView = (
   private _getStringNormalizer() {
     const isCaseSensitive = this.option('searchPanel.highlightCaseSensitive');
     const dataSource = this._dataController?.getDataSource?.();
-    // @ts-expect-error `langParams` is missing in the public load options typings
     const langParams = dataSource?.loadOptions?.()?.langParams;
 
     return (str: string): string => toComparable(str, isCaseSensitive, langParams);

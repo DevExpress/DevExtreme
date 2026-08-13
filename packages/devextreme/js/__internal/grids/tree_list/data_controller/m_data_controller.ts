@@ -2,12 +2,13 @@ import { equalByValue } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { DataController, dataControllerModule } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { DataSourceAdapterProvider } from '@ts/grids/grid_core/data_source_adapter/types';
 
 import dataSourceAdapterProvider from '../data_source_adapter/m_data_source_adapter';
 import treeListCore from '../m_core';
 
 export class TreeListDataController extends DataController {
-  protected _getDataSourceAdapter() {
+  protected _getDataSourceAdapterProvider(): DataSourceAdapterProvider {
     return dataSourceAdapterProvider;
   }
 
