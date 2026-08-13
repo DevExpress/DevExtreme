@@ -13,7 +13,7 @@ interface ValidatingControllerReader {
   getValidationData: (key: unknown) => { isValid?: boolean } | undefined;
 }
 
-export const data = (
+export const validatingDataControllerExtender = (
   Base: ModuleType<DataController>,
 ): ModuleType<DataController> => class ValidatingDataControllerExtender extends Base {
   protected _validatingController!: ValidatingControllerReader;
