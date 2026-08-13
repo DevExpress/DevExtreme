@@ -871,7 +871,7 @@
                 "DemoType": "Web"
               },
               {
-                "Title": "AI-Powered Detail View",
+                "Title": "AI-powered Detail View",
                 "Name": "AI-PoweredDetailView",
                 "Widget": "DataGrid",
                 "DemoType": "Web",
