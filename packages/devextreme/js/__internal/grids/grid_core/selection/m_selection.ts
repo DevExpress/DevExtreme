@@ -682,10 +682,9 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
     return d.promise();
   }
 
-  // eslint-disable-next-line
-  protected _dataChangedHandler(e?: ChangedEvent) {
+  protected dataChangedHandler(e?: ChangedEvent): void {
     const hasLoadOperation = this.hasLoadOperation();
-    super._dataChangedHandler(e);
+    super.dataChangedHandler(e);
 
     if (hasLoadOperation && !this._repaintChangesOnly) {
       this._selectionController.focusedItemIndex(-1);
