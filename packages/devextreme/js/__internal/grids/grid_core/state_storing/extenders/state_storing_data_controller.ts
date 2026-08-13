@@ -16,7 +16,6 @@ export const stateStoringDataControllerExtender = (
 ): ModuleType<
   DataController & StateStoringDataControllerExtension
 > => class StateStoringDataExtender extends Base {
-  // Defined in StateStoringRowsViewExtender.init()
   public stateLoaded!: Callback<[]>;
 
   protected _stateStoringController!: StateStoringController;
@@ -54,9 +53,9 @@ export const stateStoringDataControllerExtender = (
             this.stateLoaded.fire();
             deferred.resolve();
           })
-          .fail((error) => {
+          .fail((error: Error) => {
             this.stateLoaded.fire();
-            this._handleLoadError(error ?? 'Unknown error');
+            this.loadErrorHandler(error ?? 'Unknown error');
             deferred.reject();
           });
       });
