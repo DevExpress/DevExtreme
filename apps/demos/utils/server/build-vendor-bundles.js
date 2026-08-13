@@ -6,7 +6,7 @@ const fs = require('fs');
 const { buildVendorBundle } = require('./vendor-bundle');
 
 const REQUESTED = process.argv.slice(2);
-const FRAMEWORKS = REQUESTED.length > 0 ? REQUESTED : ['React', 'Vue', 'Angular'];
+const FRAMEWORKS = REQUESTED.length > 0 ? REQUESTED : ['React', 'Vue'];
 
 function reactVueOptions(framework) {
   // eslint-disable-next-line global-require
