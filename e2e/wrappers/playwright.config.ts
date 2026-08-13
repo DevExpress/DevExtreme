@@ -33,7 +33,12 @@ export default defineConfig<TestOptions>({
         channel: 'chrome',
         headless: true,
         viewport: { width: 1200, height: 800 },
-        launchOptions: { args: ['--no-sandbox', '--disable-gpu'] },
+        launchOptions: {
+            args: ['--no-sandbox', '--disable-gpu'],
+            // Playwright hides scrollbars in headless by default, so the page gets no scrollbar
+            // gutter and its layout differs from a real browser and from the TestCafe etalons.
+            ignoreDefaultArgs: ['--hide-scrollbars'],
+        },
         trace: 'retain-on-failure',
         screenshot: 'only-on-failure',
     },
