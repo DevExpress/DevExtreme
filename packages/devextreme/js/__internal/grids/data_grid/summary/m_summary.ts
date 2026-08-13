@@ -13,6 +13,7 @@ import {
   isPlainObject, isString,
 } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
+import type { DataSource } from '@ts/data/data_source/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { EditingControllerRequired, ModuleType } from '@ts/grids/grid_core/m_types';
@@ -387,7 +388,7 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     }
   }
 
-  protected _handleDataLoadedCore(options) {
+  protected customizeLoadResultHandlerCore(options) {
     const groups = normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group || []);
     const remoteOperations = options.remoteOperations || {};
     const summary = this.summaryGetter()(remoteOperations);
@@ -419,7 +420,7 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
       this._totalAggregates = options.extra && options.extra.summary || this._totalAggregates;
     }
 
-    super._handleDataLoadedCore(options);
+    super.customizeLoadResultHandlerCore(options);
   }
 };
 
@@ -815,9 +816,10 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     return sortByGroups;
   }
 
-  protected _createDataSourceAdapter(dataSource) {
+  protected _createDataSourceAdapter(dataSource: DataSource) {
     const dataSourceAdapter = super._createDataSourceAdapter(dataSource);
 
+    // @ts-expect-error summaryGetter is defined in summary DataSourceAdapterExtender
     dataSourceAdapter.summaryGetter((currentRemoteOperations) => {
       const result = this._getSummaryOptions(
         currentRemoteOperations ?? dataSourceAdapter.remoteOperations(),
