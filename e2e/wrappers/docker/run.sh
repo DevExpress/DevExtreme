@@ -33,11 +33,12 @@ echo "Node $NODE_VERSION, Google Chrome $CHROME_VERSION"
 PLATFORM=linux/amd64
 
 docker build --platform "$PLATFORM" \
-    --build-arg "NODE_IMAGE=node:$NODE_VERSION-bookworm-slim" \
+    --build-arg "NODE_VERSION=$NODE_VERSION" \
     --build-arg "CHROME_VERSION=$CHROME_VERSION" \
     -t devextreme-wrappers-e2e "$DOCKER_DIR"
 
-docker run --rm --ipc=host --platform "$PLATFORM" \
+# Shared memory and seccomp are set as the CI runner container gets them.
+docker run --rm --platform "$PLATFORM" --shm-size=2gb --security-opt seccomp=unconfined \
     -v "$REPO_ROOT:/repo" \
     -w /repo/e2e/wrappers \
     -e CI=true \
