@@ -2,7 +2,6 @@
 /* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
@@ -12,12 +11,10 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-plusplus */
 import type { DataSource, Store } from '@js/common/data';
-import $ from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
 import { deferRender } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
-import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
 import { findChanges } from '@ts/core/utils/m_array_compare';
@@ -235,7 +232,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       'endCustomLoading',
       'filter',
       'getCombinedFilter',
-      'getDataByKeys',
       'getDataSource',
       'getKeyByRowIndex',
       'getRowIndexByKey',
@@ -1612,24 +1608,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public getRowIndexOffset(byLoadedRows?: boolean): number {
     return 0;
-  }
-
-  private getDataByKeys(rowKeys: RowKey[]): DeferredObj<RawItemData[]> {
-    const result = Deferred<RawItemData[]>();
-    const deferreds: DeferredObj<RawItemData>[] = [];
-    const data: RawItemData[] = [];
-
-    each(rowKeys, (index: number, key: RowKey) => {
-      deferreds.push(this.byKey(key).done((keyData) => {
-        data[index] = keyData;
-      }));
-    });
-
-    when.apply($, deferreds).always(() => {
-      result.resolve(data);
-    });
-
-    return result;
   }
 
   private changePaging(optionName: PagingOptionName, value?: number): PagingResult {
