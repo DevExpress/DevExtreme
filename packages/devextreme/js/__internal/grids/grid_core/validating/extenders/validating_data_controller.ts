@@ -10,7 +10,7 @@ import {
 
 interface ValidatingControllerReader {
   getCellValidationResult: (options: { rowKey: unknown; columnIndex: number }) => unknown;
-  _getValidationData: (key: unknown) => { isValid?: boolean } | undefined;
+  getValidationData: (key: unknown) => { isValid?: boolean } | undefined;
 }
 
 export const data = (
@@ -39,7 +39,7 @@ export const data = (
       rowKey: oldRow.key,
       columnIndex,
     });
-    const validationData = this._validatingController._getValidationData(oldRow.key);
+    const validationData = this._validatingController.getValidationData(oldRow.key);
     const newValidationStatus = this._getValidationStatus(validationResult);
     const rowIsModified = JSON.stringify(newRow.modifiedValues)
       !== JSON.stringify(oldRow.modifiedValues);

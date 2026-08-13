@@ -142,6 +142,10 @@ export class ValidatingController extends modules.Controller {
     return !!validationData && !!validationData.validated;
   }
 
+  public getValidationData(key) {
+    return this._getValidationData(key);
+  }
+
   public _getValidationData(key, create?) {
     const keyHash = getKeyHash(key);
     const isObjectKeyHash = isObject(keyHash);
