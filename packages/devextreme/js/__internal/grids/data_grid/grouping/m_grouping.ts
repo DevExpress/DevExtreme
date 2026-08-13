@@ -188,12 +188,12 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     return this._grouping.handleDataLoading(options);
   }
 
-  protected _handleDataLoaded(options) {
-    return this._grouping.handleDataLoaded(options, super._handleDataLoaded.bind(this));
+  protected customizeLoadResultHandler(options) {
+    return this._grouping.handleDataLoaded(options, super.customizeLoadResultHandler.bind(this));
   }
 
-  protected _handleDataLoadedCore(options) {
-    return this._grouping.handleDataLoadedCore(options, super._handleDataLoadedCore.bind(this));
+  protected customizeLoadResultHandlerCore(options) {
+    return this._grouping.handleDataLoadedCore(options, super.customizeLoadResultHandlerCore.bind(this));
   }
 };
 
