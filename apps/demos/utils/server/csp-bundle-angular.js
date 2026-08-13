@@ -7,6 +7,7 @@ const fs = require('fs');
 const os = require('os');
 const esbuild = require('esbuild');
 const { extractDemoHeadExtras, extractDemoBodyInner } = require('./demo-html');
+const { vendorGlobalPlugin, vendorScriptTag } = require('./vendor-bundle');
 
 const DEMOS_APP_ROOT = path.resolve(__dirname, '..', '..');
 const REPO_ROOT = path.resolve(DEMOS_APP_ROOT, '..', '..');
@@ -115,6 +116,7 @@ function buildHtml({ jsFiles, cssFiles, srcDir }) {
       return `<script src="${src}"${type}></script>`;
     })
     .join('\n    ');
+  const vendorTag = vendorScriptTag('Angular');
   return `<!DOCTYPE html>
 <html lang="en">
   <head>
@@ -126,7 +128,7 @@ function buildHtml({ jsFiles, cssFiles, srcDir }) {
   </head>
   <body class="dx-viewport">
     ${bodyInner}
-    ${scripts}
+    ${vendorTag ? `${vendorTag}\n    ` : ''}${scripts}
   </body>
 </html>
 `;
@@ -590,6 +592,7 @@ function makeBuildOptions({
     logLevel: 'silent',
     metafile: true,
     plugins: [
+      vendorGlobalPlugin('Angular'),
       angularSingleCopyPlugin,
       antiForgeryPlugin,
       systemJsQuirksPlugin,

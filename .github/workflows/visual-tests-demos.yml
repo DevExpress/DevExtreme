@@ -272,7 +272,6 @@ jobs:
             devextreme-react-installer.tgz
             devextreme-vue-installer.tgz
           retention-days: 1
-
   build-vendor-bundles:
     name: Build vendor bundles (React, Vue)
     runs-on: devextreme-shr2
