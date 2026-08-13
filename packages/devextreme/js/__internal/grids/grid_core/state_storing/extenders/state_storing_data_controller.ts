@@ -1,4 +1,5 @@
 import type { Callback } from '@js/core/utils/callbacks';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
@@ -10,11 +11,12 @@ export interface StateStoringDataControllerExtension {
   stateLoaded: Callback<[]>;
 }
 
-export const data = (
+export const stateStoringDataControllerExtender = (
   Base: ModuleType<DataController>,
 ): ModuleType<
   DataController & StateStoringDataControllerExtension
 > => class StateStoringDataExtender extends Base {
+  // Defined in StateStoringRowsViewExtender.init()
   public stateLoaded!: Callback<[]>;
 
   protected _stateStoringController!: StateStoringController;
@@ -35,9 +37,7 @@ export const data = (
     return super.callbackNames().concat(['stateLoaded']);
   }
 
-  // eslint-disable-next-line @stylistic/max-len
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type,@typescript-eslint/no-misused-promises
-  protected _refreshDataSource() {
+  protected _refreshDataSource(): DeferredObj<unknown> | undefined {
     if (this._stateStoringController.isEnabled() && !this._stateStoringController.isLoaded()) {
       clearTimeout(this._restoreStateTimeoutID ?? undefined);
 
@@ -61,6 +61,7 @@ export const data = (
           });
       });
 
+      // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
       return deferred.promise();
     }
 
@@ -72,7 +73,6 @@ export const data = (
   }
 
   public isLoading(): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return super.isLoading() || this._stateStoringController.isLoading();
   }
 
@@ -81,7 +81,6 @@ export const data = (
   }
 
   public isLoaded(): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return super.isLoaded() && !this.isStateLoading();
   }
 };

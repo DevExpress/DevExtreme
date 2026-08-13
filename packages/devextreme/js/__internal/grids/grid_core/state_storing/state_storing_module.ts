@@ -1,6 +1,6 @@
 import type { StateStoring } from '@js/common/grids';
 
-import { data } from './extenders/state_storing_data_controller';
+import { stateStoringDataControllerExtender } from './extenders/state_storing_data_controller';
 import {
   columns,
   rowsView,
@@ -32,7 +32,7 @@ export const stateStoringModule = {
     controllers: {
       stateStoring,
       columns,
-      data,
+      data: stateStoringDataControllerExtender,
       selection,
     },
   },

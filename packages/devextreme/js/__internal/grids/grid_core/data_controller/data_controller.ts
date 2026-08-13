@@ -1301,7 +1301,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended: state_storing
    */
-  public isLoading() {
+  public isLoading(): boolean {
     return this._isLoading || this._isCustomLoading;
   }
 

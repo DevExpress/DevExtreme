@@ -477,9 +477,8 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     super.dispose.apply(this, arguments as any);
   }
 
-  protected _refreshDataSource() {
-    // @ts-expect-error
-    const baseResult = super._refreshDataSource.apply(this, arguments as any) || new Deferred().resolve().promise();
+  protected _refreshDataSource(): DeferredObj<unknown> {
+    const baseResult = super._refreshDataSource() ?? Deferred().resolve();
 
     baseResult.done(this.initVirtualRows.bind(this));
 
