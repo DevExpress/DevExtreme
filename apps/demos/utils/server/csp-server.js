@@ -244,8 +244,7 @@ function buildCspHeader(demoKey, nonce, framework) {
     directives[key] = [...values];
   }
 
-  // Angular stamps this nonce (via ngCspNonce) on the <style> elements it
-  // injects for component styles.
+  // Angular stamps this nonce (via ngCspNonce) on injected component <style> elements.
   if (nonce && framework === 'Angular') {
     directives['style-src'].push(`'nonce-${nonce}'`);
   }
@@ -290,8 +289,7 @@ function parseDemoPath(url) {
 function cspMiddleware(req, res, next) {
   const { demoKey, framework } = parseDemoPath(req.path);
 
-  // Angular needs a nonce for the component <style> elements it injects.
-  // React/Vue/jQuery demos are plain esbuild bundles with no inline scripts.
+  // Only Angular injects inline component <style> elements needing a nonce.
   const nonce = framework === 'Angular' ? generateNonce() : null;
   if (nonce) {
     res.locals.cspNonce = nonce;
@@ -363,8 +361,7 @@ const demoIndexHandler = (request, response) => {
     return;
   }
 
-  // Angular stamps ngCspNonce on <demo-app> so its injected component <style>
-  // elements carry the nonce the CSP header's style-src requires.
+  // Stamps ngCspNonce on <demo-app> so injected component <style> carries the nonce.
   const { cspNonce } = response.locals;
   if (cspNonce && approach === 'Angular') {
     fileContent = fileContent.replace(/<demo-app(?=[\s>])/, `<demo-app ngCspNonce="${cspNonce}"`);

@@ -273,10 +273,11 @@ jobs:
             devextreme-vue-installer.tgz
           retention-days: 1
 
-  build-demos:
-    name: ${{ matrix.SHARD_TOTAL == 1 && format('Build demos ({0})', matrix.FRAMEWORK) || format('Build demos ({0} {1}/{2})', matrix.FRAMEWORK, matrix.SHARD_INDEX, matrix.SHARD_TOTAL) }}
+  # UNTESTED DRAFT — diff-reviewed locally only, never run in real CI.
+  build-vendor-bundles:
+    name: Build vendor bundles (React, Vue)
     runs-on: devextreme-shr2
-    timeout-minutes: 30
+    timeout-minutes: 15
     needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
     if: |
       always() &&
@@ -284,6 +285,68 @@ jobs:
       needs.determine-framework-tests-scope.result == 'success' &&
       needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
       needs.build-devextreme.result == 'success'
+    env:
+      NODE_OPTIONS: --max-old-space-size=8192
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v6
+
+      - name: Use Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: '.node-version'
+
+      - name: Download devextreme sources
+        uses: actions/download-artifact@v8
+        with:
+          name: devextreme-sources
+
+      - uses: pnpm/action-setup@v6
+        with:
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache/restore@v5
+        name: Restore pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-cache
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install tgz
+        working-directory: apps/demos
+        run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
+
+      - name: Build vendor bundles
+        working-directory: apps/demos
+        run: node utils/server/build-vendor-bundles.js
+
+      - name: Copy vendor bundles
+        uses: actions/upload-artifact@v7
+        with:
+          name: devextreme-vendor-bundles
+          path: apps/demos/bundles/vendor
+          retention-days: 1
+
+  build-demos:
+    name: ${{ matrix.SHARD_TOTAL == 1 && format('Build demos ({0})', matrix.FRAMEWORK) || format('Build demos ({0} {1}/{2})', matrix.FRAMEWORK, matrix.SHARD_INDEX, matrix.SHARD_TOTAL) }}
+    runs-on: devextreme-shr2
+    timeout-minutes: 30
+    needs: [check-should-run, determine-framework-tests-scope, build-devextreme, build-vendor-bundles]
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
+      needs.build-devextreme.result == 'success' &&
+      needs.build-vendor-bundles.result == 'success'
     env:
       NODE_OPTIONS: --max-old-space-size=8192
     strategy:
@@ -340,6 +403,13 @@ jobs:
 #    - name: Link wrappers packages
 #      run: pnpm install --frozen-lockfile
 
+      # No-op for Angular (no manifest — see build-vendor-bundles).
+      - name: Download vendor bundles
+        uses: actions/download-artifact@v8
+        with:
+          name: devextreme-vendor-bundles
+          path: apps/demos/bundles/vendor
+
       - name: Build demo bundles
         working-directory: apps/demos
         env:
@@ -353,11 +423,7 @@ jobs:
         working-directory: apps/demos
         run: pnpm exec tsc --noEmit
 
-      # Packed into one tarball rather than uploaded as ~950 loose files: with a
-      # glob path, upload-artifact roots the archive at the least common ancestor
-      # of the matched files, so the Demos/ prefix the consumers extract into
-      # would silently disappear. A single explicit file has no such ambiguity
-      # (and uploads far faster).
+      # Packed into one tarball — a glob path would lose the Demos/ prefix on extract.
       - name: Pack demo bundles
         working-directory: apps/demos
         run: |
@@ -855,7 +921,7 @@ jobs:
         if-no-files-found: ignore
 
   testcafe-frameworks-all:
-    needs: [check-should-run, determine-framework-tests-scope, build-demos]
+    needs: [check-should-run, determine-framework-tests-scope, build-demos, build-vendor-bundles]
     if: |
       always() &&
       needs.check-should-run.outputs.should-run == 'true' &&
@@ -938,12 +1004,6 @@ jobs:
       working-directory: apps/demos
       run: pnpm run prepare-js
 
-    # Demo bundles are built once per framework/shard in build-demos and
-    # downloaded here to overlay onto this job's own checkout (same commit).
-    # Every artifact holds a file named demo-bundles.tgz, so each lands in its
-    # own directory and the unpack step below extracts them all into apps/demos,
-    # restoring Demos/<Widget>/<Demo>/<Framework>/bundle.{js,css} — exactly
-    # where each demo's own index.html expects them.
     - name: Download demo bundles (React)
       if: startsWith(matrix.CONSTEL, 'react')
       uses: actions/download-artifact@v8
@@ -958,9 +1018,7 @@ jobs:
         name: devextreme-bundles-Vue
         path: apps/demos/.demo-bundles/vue
 
-    # Angular is built in 3 shards (see build-demos) but tested in 10 — every
-    # Angular test shard needs all 3 build shards since the two shard schemes
-    # don't line up demo-for-demo.
+    # Angular is built in 3 shards but tested in 10 — every test shard needs all 3.
     - name: Download demo bundles (Angular shard 1)
       if: startsWith(matrix.CONSTEL, 'angular')
       uses: actions/download-artifact@v8
@@ -981,6 +1039,13 @@ jobs:
       with:
         name: devextreme-bundles-Angular-shard3
         path: apps/demos/.demo-bundles/angular-shard3
+
+    # No-op for angular demos (no manifest — see build-vendor-bundles.js).
+    - name: Download vendor bundles
+      uses: actions/download-artifact@v8
+      with:
+        name: devextreme-vendor-bundles
+        path: apps/demos/bundles/vendor
 
     - name: Unpack demo bundles
       run: |
@@ -1048,7 +1113,7 @@ jobs:
         if-no-files-found: ignore
 
   testcafe-frameworks-changed:
-    needs: [check-should-run, determine-framework-tests-scope, build-demos]
+    needs: [check-should-run, determine-framework-tests-scope, build-demos, build-vendor-bundles]
     if: |
       always() &&
       needs.check-should-run.outputs.should-run == 'true' &&
@@ -1119,11 +1184,6 @@ jobs:
         working-directory: apps/demos
         run: pnpm run prepare-js
 
-      # Demo bundles are built once per framework/shard in build-demos and
-      # downloaded here to overlay onto this job's own checkout (same commit).
-      # Every artifact holds a file named demo-bundles.tgz, so each lands in its
-      # own directory and the unpack step below extracts them all into
-      # apps/demos, restoring Demos/<Widget>/<Demo>/<Framework>/bundle.{js,css}.
       - name: Download demo bundles (React)
         if: matrix.CONSTEL == 'react'
         uses: actions/download-artifact@v8
@@ -1165,6 +1225,13 @@ jobs:
         with:
           name: changed-demos
           path: apps/demos
+
+      # No-op for angular demos (no manifest — see build-vendor-bundles.js).
+      - name: Download vendor bundles
+        uses: actions/download-artifact@v8
+        with:
+          name: devextreme-vendor-bundles
+          path: apps/demos/bundles/vendor
 
       - name: Unpack demo bundles
         run: |
@@ -1404,10 +1471,7 @@ jobs:
       working-directory: apps/demos
       run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
-    # Every demo is a plain esbuild bundle now, so this is the same build
-    # step build-demos runs — done again here (independently, in parallel)
-    # rather than depending on that job, to keep this check's timing
-    # decoupled from the rest of the pipeline.
+    # Rebuilt independently rather than depending on build-demos, to keep timing decoupled.
     - name: Bundle demos for CSP check
       working-directory: apps/demos
       env:
