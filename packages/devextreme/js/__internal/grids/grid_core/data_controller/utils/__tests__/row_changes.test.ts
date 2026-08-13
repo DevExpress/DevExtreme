@@ -6,9 +6,9 @@ import type {
   ChangedRows, DataChange, ProcessedItem, UpdateChange,
 } from '../../types';
 import {
-  convertToUpdateChange, getChangedRowIndices, getDataRowIndex, getRowKey,
+  getChangedRowIndices, getDataRowIndex, getRowKey,
   getRowOperation, indexRowsByKey, isSameGroupRowState, isSameItem,
-  pushChangedRow, resetChangedRows, updateRowCells,
+  markUpdateChange, pushChangedRow, resetChangedRows, updateRowCells,
 } from '../row_changes';
 
 const row = (partial: Partial<ProcessedItem>): ProcessedItem => ({
@@ -282,14 +282,14 @@ describe('resetChangedRows', () => {
   });
 });
 
-describe('convertToUpdateChange', () => {
+describe('markUpdateChange', () => {
   const refreshChange = (): DataChange => ({ changeType: 'refresh', items: [row({ key: 1 })] });
 
   it('should turn the refresh change into a partial update carrying the rows', () => {
     const change = refreshChange();
     const changedRows = emptyChangedRows();
 
-    convertToUpdateChange(change, changedRows);
+    markUpdateChange(change, changedRows);
 
     const updateChange = change as UpdateChange;
     expect(updateChange.changeType).toBe('update');

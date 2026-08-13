@@ -65,9 +65,17 @@ import type {
 import { resolvePaginate, syncPaging } from './utils/paging';
 import { getRefreshOptions } from './utils/refresh';
 import {
-  convertToUpdateChange, createChangedRows, getChangedRowIndices, getDataRowIndex,
-  getRowKey, getRowOperation, indexRowsByKey, isSameGroupRowState, pushChangedRow,
-  resetChangedRows, updateRowCells,
+  getChangedRowIndices,
+  getDataRowIndex,
+  getRowKey,
+  getRowOperation,
+  indexRowsByKey,
+  initChangedRows,
+  isSameGroupRowState,
+  markUpdateChange,
+  pushChangedRow,
+  resetChangedRows,
+  updateRowCells,
 } from './utils/row_changes';
 import { generateRowValues } from './utils/row_values';
 
@@ -1099,7 +1107,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   private applyItemChanges(itemChanges: ItemChange[], isLiveUpdate: boolean): ChangedRows {
-    const changedRows = createChangedRows();
+    const changedRows = initChangedRows();
 
     itemChanges.forEach((itemChange) => {
       const changedRow = this.applyItemChange(itemChange, isLiveUpdate);
@@ -1141,7 +1149,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     const changedRows = this.applyItemChanges(itemChanges, change.isLiveUpdate ?? true);
 
-    convertToUpdateChange(change, changedRows);
+    markUpdateChange(change, changedRows);
 
     if (oldItems.length) {
       change.isLiveUpdate = true;

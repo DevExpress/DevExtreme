@@ -124,7 +124,7 @@ export function getRowOperation(
   return newItem ? 'replace' : undefined;
 }
 
-export function createChangedRows(): ChangedRows {
+export function initChangedRows(): ChangedRows {
   return {
     items: [],
     rowIndices: [],
@@ -133,7 +133,7 @@ export function createChangedRows(): ChangedRows {
   };
 }
 
-function setChangedRows(change: UpdateChange, changedRows: ChangedRows): void {
+function attachChangedRows(change: UpdateChange, changedRows: ChangedRows): void {
   change.rowIndices = changedRows.rowIndices;
   change.columnIndices = changedRows.columnIndices;
   change.changeTypes = changedRows.changeTypes;
@@ -141,20 +141,20 @@ function setChangedRows(change: UpdateChange, changedRows: ChangedRows): void {
 }
 
 export function resetChangedRows(change: UpdateChange): ChangedRows {
-  const changedRows = createChangedRows();
+  const changedRows = initChangedRows();
 
-  setChangedRows(change, changedRows);
+  attachChangedRows(change, changedRows);
 
   return changedRows;
 }
 
-export function convertToUpdateChange(change: DataChange, changedRows: ChangedRows): void {
+export function markUpdateChange(change: DataChange, changedRows: ChangedRows): void {
   const updateChange = change as UpdateChange;
 
   updateChange.repaintChangesOnly = true;
   updateChange.changeType = 'update';
 
-  setChangedRows(updateChange, changedRows);
+  attachChangedRows(updateChange, changedRows);
 }
 
 export function pushChangedRow(changedRows: ChangedRows, changedRow: UpdateRowChange): void {
