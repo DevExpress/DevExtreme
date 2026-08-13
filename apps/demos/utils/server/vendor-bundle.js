@@ -26,13 +26,14 @@ function globalVarName(framework) {
 }
 
 const VENDOR_PREFIXES = {
-  React: [/^react$/, /^react-dom(\/.*)?$/, /^devextreme(-react)?(\/.*)?$/],
-  ReactJs: [/^react$/, /^react-dom(\/.*)?$/, /^devextreme(-react)?(\/.*)?$/],
-  Vue: [/^vue$/, /^devextreme(-vue)?(\/.*)?$/],
+  React: [/^react$/, /^react-dom(\/.*)?$/, /^devextreme(-react)?(\/.*)?$/, /^globalize$/],
+  ReactJs: [/^react$/, /^react-dom(\/.*)?$/, /^devextreme(-react)?(\/.*)?$/, /^globalize$/],
+  Vue: [/^vue$/, /^devextreme(-vue)?(\/.*)?$/, /^globalize$/],
   Angular: [
     /^@angular\/(core|common|forms|platform-browser|platform-browser-dynamic|animations|router)(\/.*)?$/,
     /^devextreme(-angular)?(\/.*)?$/,
     /^rxjs(\/.*)?$/,
+    /^globalize$/,
   ],
 };
 
@@ -43,10 +44,10 @@ function isVendorSpecifier(spec, framework) {
 // Substring match for the coverage-map check in vendorGlobalPlugin — a resolved chunk
 // file path won't match VENDOR_PREFIXES' bare-specifier regexes but still contains this.
 const VENDOR_KEYWORDS = {
-  React: ['devextreme-react', 'devextreme', 'react-dom', 'react'],
-  ReactJs: ['devextreme-react', 'devextreme', 'react-dom', 'react'],
-  Vue: ['devextreme-vue', 'devextreme', 'vue'],
-  Angular: ['devextreme-angular', 'devextreme', '@angular', 'rxjs'],
+  React: ['devextreme-react', 'devextreme', 'react-dom', 'react', 'globalize'],
+  ReactJs: ['devextreme-react', 'devextreme', 'react-dom', 'react', 'globalize'],
+  Vue: ['devextreme-vue', 'devextreme', 'vue', 'globalize'],
+  Angular: ['devextreme-angular', 'devextreme', '@angular', 'rxjs', 'globalize'],
 };
 
 const SOURCE_EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.jsx', '.vue']);
@@ -96,6 +97,20 @@ function discoverSpecifiers(framework) {
 
 function safeName(spec) {
   return spec.replace(/[^a-zA-Z0-9_]/g, '_');
+}
+
+function escapeRegExp(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// Narrow on purpose: esbuild only round-trips to JS for paths matching this filter,
+// so a broad filter here pays that cost for every resolution in the bundle.
+function specifierFilter(specifiers) {
+  return new RegExp(`^(?:${specifiers.map(escapeRegExp).join('|')})$`);
+}
+
+function keywordFilter(keywords) {
+  return new RegExp(keywords.map(escapeRegExp).join('|'));
 }
 
 // Every absolute file path reachable from the entry file, per the vendor build's own metafile.
@@ -263,29 +278,29 @@ function vendorGlobalPlugin(framework) {
       const coverageMap = new Map(manifest.coverage || []);
       const keywords = VENDOR_KEYWORDS[framework] || [];
 
-      // Broad filter: a bundler-internal reimport can bypass the bare specifier text
-      // entirely, so this needs to see every resolve call — the keyword check below
-      // keeps the resolve()-and-check path rare.
-      build.onResolve({ filter: /.*/ }, async (args) => {
-        if (args.pluginData && args.pluginData.dxVendorPathCheck) return null;
-        if (specSet.has(args.path)) {
-          return { path: safeName(args.path), namespace: 'dx-vendor-external' };
-        }
-        if (coverageMap.size === 0) return null;
-        if (args.kind === 'entry-point') return null; // build.resolve() rejects this kind
-        if (!keywords.some((kw) => args.path.includes(kw))) return null;
-
-        const resolved = await build.resolve(args.path, {
-          kind: args.kind,
-          importer: args.importer,
-          resolveDir: args.resolveDir,
-          pluginData: { dxVendorPathCheck: true },
-        });
-        if (resolved.errors.length > 0 || resolved.external) return null;
-        const key = coverageMap.get(resolved.path);
-        if (!key) return null;
-        return { path: key, namespace: 'dx-vendor-external' };
+      build.onResolve({ filter: specifierFilter(manifest.specifiers) }, (args) => {
+        if (!specSet.has(args.path)) return null;
+        return { path: safeName(args.path), namespace: 'dx-vendor-external' };
       });
+
+      // A bundler-internal reimport can bypass the bare specifier text entirely (resolving
+      // straight to one of the vendor bundle's internal chunk files). Catching that in
+      // onResolve would need a recursive build.resolve() call to find out where it lands —
+      // but nested build.resolve() calls can't reliably guard against reentrancy via
+      // pluginData (other plugins' own nested resolves overwrite it with their own flag),
+      // which caused infinite mutual recursion with other plugins here. onLoad sidesteps
+      // this entirely: by the time it fires, esbuild has already resolved args.path to an
+      // absolute file path, so the coverage map can be checked directly, no recursion needed.
+      if (coverageMap.size > 0 && keywords.length > 0) {
+        build.onLoad({ filter: keywordFilter(keywords) }, (args) => {
+          const key = coverageMap.get(args.path);
+          if (!key) return null;
+          return {
+            contents: `module.exports = Object.assign({ __esModule: true }, window.${manifest.globalVar}[${JSON.stringify(key)}]);`,
+            loader: 'js',
+          };
+        });
+      }
 
       build.onLoad({ filter: /.*/, namespace: 'dx-vendor-external' }, (args) => ({
         // __esModule:true so esbuild's CJS-interop helper doesn't double-wrap default exports.
