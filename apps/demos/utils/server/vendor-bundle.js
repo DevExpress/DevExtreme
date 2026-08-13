@@ -1,5 +1,5 @@
 // Builds a shared devextreme/framework-runtime bundle once per framework so demos
-// can reference it instead of each bundling their own copy — see buildVendorBundle.
+// can reference it instead of each bundling their own copy.
 
 const path = require('path');
 const fs = require('fs');
@@ -8,7 +8,7 @@ const esbuild = require('esbuild');
 const DEMOS_APP_ROOT = path.join(__dirname, '..', '..');
 const SRC_DEMOS_DIR = path.join(DEMOS_APP_ROOT, 'Demos');
 const VENDOR_OUT_DIR = path.join(DEMOS_APP_ROOT, 'bundles', 'vendor');
-// Inside apps/demos (not os.tmpdir()) so node_modules resolution finds apps/demos/node_modules.
+// Not os.tmpdir(): needs to be under apps/demos for node_modules resolution to work.
 const VENDOR_SCRATCH_DIR = path.join(DEMOS_APP_ROOT, '.vendor-entry-tmp');
 
 const VENDOR_HREF_PREFIX = '../../../../bundles/vendor/';
@@ -25,7 +25,6 @@ function globalVarName(framework) {
   return `__DX_VENDOR_${framework.toUpperCase()}__`;
 }
 
-// Prefix-based: devextreme/devextreme-react/devextreme-vue have no root export.
 const VENDOR_PREFIXES = {
   React: [/^react$/, /^react-dom(\/.*)?$/, /^devextreme(-react)?(\/.*)?$/],
   ReactJs: [/^react$/, /^react-dom(\/.*)?$/, /^devextreme(-react)?(\/.*)?$/],
@@ -40,6 +39,15 @@ const VENDOR_PREFIXES = {
 function isVendorSpecifier(spec, framework) {
   return (VENDOR_PREFIXES[framework] || []).some((re) => re.test(spec));
 }
+
+// Substring match for the coverage-map check in vendorGlobalPlugin — a resolved chunk
+// file path won't match VENDOR_PREFIXES' bare-specifier regexes but still contains this.
+const VENDOR_KEYWORDS = {
+  React: ['devextreme-react', 'devextreme', 'react-dom', 'react'],
+  ReactJs: ['devextreme-react', 'devextreme', 'react-dom', 'react'],
+  Vue: ['devextreme-vue', 'devextreme', 'vue'],
+  Angular: ['devextreme-angular', 'devextreme', '@angular', 'rxjs'],
+};
 
 const SOURCE_EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.jsx', '.vue']);
 const IMPORT_SPECIFIER_RE = /(?:import|export)(?:[^'";]*?from)?\s*['"]([^'"]+)['"]|require\(\s*['"]([^'"]+)['"]\s*\)|import\(\s*['"]([^'"]+)['"]\s*\)/g;
@@ -90,14 +98,33 @@ function safeName(spec) {
   return spec.replace(/[^a-zA-Z0-9_]/g, '_');
 }
 
-function escapeRegExp(s) {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
+// Every absolute file path reachable from the entry file, per the vendor build's own metafile.
+// Each gets its own export slot in the final bundle (see buildVendorBundle) rather than being
+// redirected to whichever specifier's barrel transitively reaches it — a barrel only re-exports
+// its own public surface, not everything it privately imports.
+function computeClosure(metafile, entryFile, buildCwd) {
+  if (!metafile || !entryFile) return [];
+  const toAbs = (p) => (path.isAbsolute(p) ? p : path.resolve(buildCwd, p));
+  const entryKey = Object.keys(metafile.inputs).find((k) => toAbs(k) === entryFile);
+  if (!entryKey) return [];
 
-// Narrow on purpose: esbuild only round-trips to JS for paths matching this filter,
-// so a broad filter here pays that cost for every resolution in the bundle.
-function specifierFilter(specifiers) {
-  return new RegExp(`^(?:${specifiers.map(escapeRegExp).join('|')})$`);
+  const closure = [];
+  const seen = new Set();
+  const stack = (metafile.inputs[entryKey].imports || []).map((imp) => imp.path).filter(Boolean);
+  while (stack.length > 0) {
+    const cur = stack.pop();
+    const abs = toAbs(cur);
+    if (seen.has(abs)) continue; // eslint-disable-line no-continue
+    seen.add(abs);
+    // Skip esbuild's own synthetic inputs (e.g. "<runtime>") — not real, resolvable files.
+    if (fs.existsSync(abs)) closure.push(abs);
+    const info = metafile.inputs[cur];
+    if (!info) continue; // eslint-disable-line no-continue
+    for (const childImp of info.imports || []) {
+      if (childImp.path) stack.push(childImp.path);
+    }
+  }
+  return closure;
 }
 
 const MAX_ATTEMPTS = 10;
@@ -109,7 +136,10 @@ async function buildVendorBundle(framework, esbuildOptions = {}) {
   fs.mkdirSync(VENDOR_OUT_DIR, { recursive: true });
   fs.mkdirSync(VENDOR_SCRATCH_DIR, { recursive: true });
 
+  const buildCwd = esbuildOptions.absWorkingDir || process.cwd();
   const dropped = new Set();
+  let finalMetafile = null;
+  let finalEntryFile = null;
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt += 1) {
     const entryContents = specifiers
       .map((spec) => `export * as ${safeName(spec)} from ${JSON.stringify(spec)};`)
@@ -127,18 +157,20 @@ async function buildVendorBundle(framework, esbuildOptions = {}) {
         format: 'iife',
         globalName: globalVarName(framework),
         minify: true,
-        metafile: false,
+        metafile: true,
         logLevel: 'silent',
-      }).then(() => ({ ok: true })).catch((err) => ({ ok: false, err }));
+      }).then((r) => ({ ok: true, metafile: r.metafile })).catch((err) => ({ ok: false, err }));
     } finally {
       fs.rmSync(entryFile, { force: true });
     }
 
-    if (result.ok) break;
+    if (result.ok) {
+      finalMetafile = result.metafile;
+      finalEntryFile = entryFile;
+      break;
+    }
 
-    // Regex-based discovery can pick up type-only/dead specifiers that never
-    // actually resolve; drop exactly the lines esbuild reports and retry.
-    const buildCwd = esbuildOptions.absWorkingDir || process.cwd();
+    // Regex discovery can pick up dead specifiers that never resolve; drop and retry.
     const badLines = new Set();
     for (const e of result.err.errors || []) {
       if (!e.location) continue; // eslint-disable-line no-continue
@@ -161,11 +193,38 @@ async function buildVendorBundle(framework, esbuildOptions = {}) {
     console.warn(`vendor-bundle: dropped ${dropped.size} unresolvable specifier(s) for ${framework}: ${[...dropped].join(', ')}`);
   }
 
+  // Second pass: rebuild with an `export * as` entry for every file in the closure too.
+  const closure = computeClosure(finalMetafile, finalEntryFile, buildCwd);
+  const coverage = closure.map((absPath, i) => [absPath, `__f${i}`]);
+
+  const finalPassEntryContents = [
+    ...specifiers.map((spec) => `export * as ${safeName(spec)} from ${JSON.stringify(spec)};`),
+    ...coverage.map(([absPath, key]) => `export * as ${key} from ${JSON.stringify(absPath)};`),
+  ].join('\n');
+  const finalPassEntryFile = path.join(VENDOR_SCRATCH_DIR, `entry-final-${framework}-${process.pid}-${Date.now()}.js`);
+  fs.writeFileSync(finalPassEntryFile, finalPassEntryContents);
+  try {
+    await esbuild.build({
+      ...esbuildOptions,
+      entryPoints: [finalPassEntryFile],
+      outfile: vendorFilePath(framework),
+      bundle: true,
+      format: 'iife',
+      globalName: globalVarName(framework),
+      minify: true,
+      metafile: false,
+      logLevel: 'silent',
+    });
+  } finally {
+    fs.rmSync(finalPassEntryFile, { force: true });
+  }
+
   const manifest = {
     framework,
     specifiers,
     globalVar: globalVarName(framework),
     file: path.basename(vendorFilePath(framework)),
+    coverage,
   };
   fs.writeFileSync(manifestPath(framework), JSON.stringify(manifest, null, 2));
   manifestCache.set(framework, manifest);
@@ -201,15 +260,36 @@ function vendorGlobalPlugin(framework) {
       if (!manifest) return;
       if (manifest.specifiers.length === 0) return;
       const specSet = new Set(manifest.specifiers);
+      const coverageMap = new Map(manifest.coverage || []);
+      const keywords = VENDOR_KEYWORDS[framework] || [];
 
-      build.onResolve({ filter: specifierFilter(manifest.specifiers) }, (args) => {
-        if (!specSet.has(args.path)) return null;
-        return { path: args.path, namespace: 'dx-vendor-external' };
+      // Broad filter: a bundler-internal reimport can bypass the bare specifier text
+      // entirely, so this needs to see every resolve call — the keyword check below
+      // keeps the resolve()-and-check path rare.
+      build.onResolve({ filter: /.*/ }, async (args) => {
+        if (args.pluginData && args.pluginData.dxVendorPathCheck) return null;
+        if (specSet.has(args.path)) {
+          return { path: safeName(args.path), namespace: 'dx-vendor-external' };
+        }
+        if (coverageMap.size === 0) return null;
+        if (args.kind === 'entry-point') return null; // build.resolve() rejects this kind
+        if (!keywords.some((kw) => args.path.includes(kw))) return null;
+
+        const resolved = await build.resolve(args.path, {
+          kind: args.kind,
+          importer: args.importer,
+          resolveDir: args.resolveDir,
+          pluginData: { dxVendorPathCheck: true },
+        });
+        if (resolved.errors.length > 0 || resolved.external) return null;
+        const key = coverageMap.get(resolved.path);
+        if (!key) return null;
+        return { path: key, namespace: 'dx-vendor-external' };
       });
 
       build.onLoad({ filter: /.*/, namespace: 'dx-vendor-external' }, (args) => ({
         // __esModule:true so esbuild's CJS-interop helper doesn't double-wrap default exports.
-        contents: `module.exports = Object.assign({ __esModule: true }, window.${manifest.globalVar}[${JSON.stringify(safeName(args.path))}]);`,
+        contents: `module.exports = Object.assign({ __esModule: true }, window.${manifest.globalVar}[${JSON.stringify(args.path)}]);`,
         loader: 'js',
       }));
     },
