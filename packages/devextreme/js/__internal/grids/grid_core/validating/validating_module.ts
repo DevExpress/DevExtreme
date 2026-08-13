@@ -1,4 +1,5 @@
 import messageLocalization from '@js/common/core/localization/message';
+import type { EditingTextsBase } from '@js/common/grids';
 
 import { validatingDataControllerExtender } from './extenders/validating_data_controller';
 import {
@@ -8,8 +9,12 @@ import {
   validatingRowsViewExtender,
 } from './m_validating';
 
+interface ValidatingModuleOptions {
+  editing: { texts: Pick<EditingTextsBase, 'validationCancelChanges'> };
+}
+
 export const validatingModule = {
-  defaultOptions(): { editing: { texts: { validationCancelChanges: string } } } {
+  defaultOptions(): ValidatingModuleOptions {
     return {
       editing: {
         texts: {
