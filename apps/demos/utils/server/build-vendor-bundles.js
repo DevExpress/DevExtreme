@@ -1,12 +1,15 @@
-// CLI: node utils/server/build-vendor-bundles.js [React|Vue|Angular ...]
-// Defaults to all three.
+// CLI: node utils/server/build-vendor-bundles.js [React|Vue ...]
+// Defaults to both. Angular isn't supported here — see csp-bundle-angular.js's
+// `splitting: true` batch build instead (a standalone vendor bundle conflicts with the
+// per-demo Angular compiler plugin's own need to read every file's real source; see git
+// history / project memory for the investigation).
 
 const path = require('path');
 const fs = require('fs');
 const { buildVendorBundle } = require('./vendor-bundle');
 
 const REQUESTED = process.argv.slice(2);
-const FRAMEWORKS = REQUESTED.length > 0 ? REQUESTED : ['React', 'Vue', 'Angular'];
+const FRAMEWORKS = REQUESTED.length > 0 ? REQUESTED : ['React', 'Vue'];
 
 function reactVueOptions(framework) {
   // eslint-disable-next-line global-require

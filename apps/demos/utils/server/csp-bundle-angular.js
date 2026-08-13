@@ -7,7 +7,6 @@ const fs = require('fs');
 const os = require('os');
 const esbuild = require('esbuild');
 const { extractDemoHeadExtras, extractDemoBodyInner } = require('./demo-html');
-const { vendorGlobalPlugin, vendorScriptTag } = require('./vendor-bundle');
 
 const DEMOS_APP_ROOT = path.resolve(__dirname, '..', '..');
 const REPO_ROOT = path.resolve(DEMOS_APP_ROOT, '..', '..');
@@ -109,19 +108,13 @@ function buildHtml({ jsFiles, cssFiles, srcDir }) {
     ...cssFiles.map((f) => `<link rel="stylesheet" type="text/css" href="./${f}" />`),
   ].join('\n    ');
   const bodyInner = extractDemoBodyInner(srcDir) || DEFAULT_BODY_INNER;
-  const scriptTag = (f) => {
-    const src = f.startsWith('.') ? f : `./${f}`;
-    const type = f === ANGULAR_ZONE_SCRIPT ? '' : ' type="module"';
-    return `<script src="${src}"${type}></script>`;
-  };
-  // zone.js must load before the vendor bundle: @angular/core does async work
-  // (promises, etc.) at module-evaluation time, and that needs to be zone-patched.
-  const vendorTag = vendorScriptTag('Angular');
-  const scripts = [
-    ...jsFiles.filter((f) => f === ANGULAR_ZONE_SCRIPT).map(scriptTag),
-    vendorTag,
-    ...jsFiles.filter((f) => f !== ANGULAR_ZONE_SCRIPT).map(scriptTag),
-  ].filter(Boolean).join('\n    ');
+  const scripts = jsFiles
+    .map((f) => {
+      const src = f.startsWith('.') ? f : `./${f}`;
+      const type = f === ANGULAR_ZONE_SCRIPT ? '' : ' type="module"';
+      return `<script src="${src}"${type}></script>`;
+    })
+    .join('\n    ');
   return `<!DOCTYPE html>
 <html lang="en">
   <head>
@@ -597,7 +590,6 @@ function makeBuildOptions({
     logLevel: 'silent',
     metafile: true,
     plugins: [
-      vendorGlobalPlugin('Angular'),
       angularSingleCopyPlugin,
       antiForgeryPlugin,
       systemJsQuirksPlugin,
