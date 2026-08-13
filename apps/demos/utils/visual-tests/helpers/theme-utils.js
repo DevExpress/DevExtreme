@@ -28,10 +28,10 @@ export async function testScreenshot(
   const testTheme = process.env.THEME;
 
   const themeOptions = {
-    // looksSameComparisonOptions: {
-    //   tolerance: 20,
-    //   antialiasingTolerance: 20,
-    // },
+    looksSameComparisonOptions: {
+      tolerance: 20,
+      antialiasingTolerance: 20,
+    },
     textDiffTreshold: 0.2,
   };
 
