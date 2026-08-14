@@ -1,4 +1,4 @@
-We plan to integrate AI-driven data exploration into the [DataGrid](https://js.devexpress.com/Documentation/Guide/UI_Components/DataGrid/Overview/)'s master-detail scenario. This new functionality allows users to analyze individual records data using natural language. 
+We plan to integrate AI-driven data exploration into the [DataGrid](https://js.devexpress.com/Documentation/Guide/UI_Components/DataGrid/Overview/)'s master-detail scenario. This new functionality allows users to analyze individual record data using natural language. 
 
 In v25.2, we released the [AI column capability](https://www.devexpress.com/subscriptions/new-2025-2.xml#js-grids-ai-columns) for DataGrid. This feature introduced the ability to extend component data using an AI prompt. However, certain usage scenarios do not require generated data for every row. Instead, users may need on-demand data generation for specific rows. Our new AI detail scenario will offer this capability, which can significantly reduce AI token consumption and enhance data generation performance. 
 
