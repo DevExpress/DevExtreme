@@ -131,6 +131,12 @@ export interface UpdateRowChange {
   columnIndices?: number[];
 }
 
+export type RowIndexByKey = Record<string, number | undefined>;
+
+export type ItemChange = | { type: 'insert'; index: number; data: ProcessedItem }
+  | { type: 'update'; index: number; data: ProcessedItem; oldItem: ProcessedItem }
+  | { type: 'remove'; index: number; oldItem: ProcessedItem };
+
 /** data source */
 
 export interface DataSourceAdapterLike {
