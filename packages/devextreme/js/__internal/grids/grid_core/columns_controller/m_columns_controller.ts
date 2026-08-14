@@ -23,7 +23,7 @@ import inflector from '@ts/core/utils/m_inflector';
 import type { Column, ColumnsChanges, FilterField } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
-import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
+import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_controller';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import modules from '../m_modules';
