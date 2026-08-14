@@ -1,12 +1,12 @@
-const $ = require('jquery');
-const devices = require('core/devices');
-const fx = require('common/core/animation/fx');
-const keyboardMock = require('../../helpers/keyboardMock.js');
-const { createWrapper } = require('../../helpers/scheduler/helpers.js');
-const { waitAsync } = require('../../helpers/scheduler/waitForAsync.js');
+import $ from 'jquery';
+import devices from 'core/devices';
+import fx from 'common/core/animation/fx';
+import keyboardMock from '../../helpers/keyboardMock.js';
+import { createWrapper } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
-require('__internal/scheduler/scheduler');
-require('ui/drop_down_button');
+import '__internal/scheduler/scheduler';
+import 'ui/drop_down_button';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler"></div>');

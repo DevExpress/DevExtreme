@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import legendModule, { Legend } from 'viz/components/legend';
+import legendModule from 'viz/components/legend';
 import {
     Renderer,
     Title,
@@ -14,6 +14,8 @@ import loadingIndicatorModule from 'viz/core/loading_indicator';
 import dxBarGauge from 'viz/bar_gauge';
 
 import '__internal/viz/gauges/bar_gauge';
+
+const { Legend } = legendModule;
 
 const environment = {
     beforeEach() {

@@ -5,7 +5,7 @@ import { Renderer, Legend, ExportMenu } from '../../helpers/vizMocks.js';
 import trackerModule from 'viz/chart_components/tracker';
 import chartThemeManagerModule from 'viz/components/chart_theme_manager';
 import legendModule from 'viz/components/legend';
-import seriesModule, { Series } from 'viz/series/base_series';
+import seriesModule from 'viz/series/base_series';
 import seriesFamilyModule from 'viz/core/series_family';
 import axisModule from 'viz/axes/base_axis';
 import dxPolarChart from 'viz/polar_chart';
@@ -17,6 +17,8 @@ import layoutManagerModule from 'viz/chart_components/layout_manager';
 import exportModule from '__internal/viz/core/exportModule';
 
 import 'viz/chart';
+
+const { Series } = seriesModule;
 
 const stubTooltip = sinon.createStubInstance(tooltipModule.Tooltip);
 const stubRange = sinon.createStubInstance(rangeModule.Range);

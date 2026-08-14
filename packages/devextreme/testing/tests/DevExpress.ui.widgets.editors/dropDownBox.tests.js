@@ -3,7 +3,7 @@ import renderer from 'core/renderer';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import fx from 'common/core/animation/fx';
 import DropDownBox from 'ui/drop_down_box';
-import typeUtils, { isRenderer } from 'core/utils/type';
+import { isRenderer, isFunction } from 'core/utils/type';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
 import { normalizeKeyName } from 'common/core/events/utils/index';
@@ -789,7 +789,7 @@ QUnit.module('popup options', moduleConfig, () => {
             contentTemplate: () => $content
         });
 
-        assert.ok(typeUtils.isFunction(instance.option('dropDownOptions.hideOnParentScroll')));
+        assert.ok(isFunction(instance.option('dropDownOptions.hideOnParentScroll')));
     });
 
     [true, false].forEach((isMac) => {
