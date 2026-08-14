@@ -121,14 +121,14 @@ export class StateStoringController<
       return undefined;
     }
 
-    if (options.type === 'custom' && options.customLoad) {
-      return options.customLoad();
+    if (options.type === 'custom') {
+      return options.customLoad?.();
     }
 
     try {
       const storedState = getStorage(options)?.getItem(getUniqueStorageKey(options));
 
-      return storedState ? JSON.parse(storedState) as TState : undefined;
+      return isDefined(storedState) ? JSON.parse(storedState) as TState : undefined;
     } catch (e: unknown) {
       errors.log('W1022', 'State storing', (e as Error).message);
 

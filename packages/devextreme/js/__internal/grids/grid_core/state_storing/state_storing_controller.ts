@@ -91,7 +91,11 @@ const getFilterValue = (that, state: GridState): InternalGridOptions['filterValu
 };
 
 export class GridStateStoringController extends StateStoringController<GridState> {
-  private readonly _initialPageSize?: number;
+  // eslint-disable-next-line @typescript-eslint/prefer-readonly
+  private _initialPageSize?: number;
+
+  // eslint-disable-next-line @typescript-eslint/prefer-readonly
+  private _initialFilterValue?: InternalGridOptions['filterValue'];
 
   public init(): this {
     super.init();
