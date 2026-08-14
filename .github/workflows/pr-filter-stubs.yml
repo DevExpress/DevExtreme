@@ -20,7 +20,7 @@ jobs:
 
       - name: Other files filter
         id: otherFilesFilter
-        uses: DevExpress/github-actions/pr-filter@v1
+        uses: DevExpress/github-actions/pr-filter@pr-filter
         with:
           paths: '**;!apps/**/*.md'
           gh-token: ${{ secrets.GITHUB_TOKEN }}
