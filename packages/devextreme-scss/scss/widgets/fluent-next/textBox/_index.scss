@@ -29,36 +29,36 @@
 
   &.dx-editor-underlined {
     .dx-icon-search {
-      @include dx-texteditor-search-icon($text-box-search-icon-size);
+      @include dx-texteditor-search-icon(var(--dx-text-box-search-icon-size));
     }
 
     .dx-texteditor-input,
     .dx-placeholder::before {
-      padding-inline-start: $text-box-search-icon-size;
+      padding-inline-start: var(--dx-text-box-search-icon-size);
     }
   }
 
   &.dx-editor-filled,
   &.dx-editor-outlined {
     .dx-icon-search {
-      @include dx-texteditor-search-icon($text-box-search-icon-size);
+      @include dx-texteditor-search-icon(var(--dx-text-box-search-icon-size));
     }
 
     .dx-texteditor-input,
     .dx-placeholder::before {
-      padding-inline-start: $text-box-search-icon-size;
+      padding-inline-start: var(--dx-text-box-search-icon-size);
     }
   }
 
   &.dx-state-disabled {
     .dx-icon-search {
-      color: $text-box-content-disabled;
+      color: var(--dx-text-box-content-disabled);
     }
   }
 }
 
 .dx-searchbar {
-  padding-bottom: $text-box-search-bar-padding-block-end;
+  padding-bottom: var(--dx-text-box-search-bar-padding-block-end);
 
   .dx-texteditor {
     margin: 0;

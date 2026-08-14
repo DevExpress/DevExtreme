@@ -2,23 +2,23 @@
 @use "sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/splitter" with (
-  $splitter-resize-handle-gap: $splitter-resize-handle-gap,
+  $splitter-resize-handle-gap: var(--dx-splitter-resize-handle-gap),
 );
 @use "../../base/splitter/mixins" as *;
 
 .dx-splitter {
   @include resize-handle-states(
-    $splitter-resize-handle-content-rest,
-    $splitter-resize-handle-bg-rest,
-    $splitter-resize-handle-content-hovered,
-    $splitter-resize-handle-bg-hovered,
-    $splitter-resize-handle-content-focused,
-    $splitter-resize-handle-bg-focused,
+    var(--dx-splitter-resize-handle-content-rest),
+    var(--dx-splitter-resize-handle-bg-rest),
+    var(--dx-splitter-resize-handle-content-hovered),
+    var(--dx-splitter-resize-handle-bg-hovered),
+    var(--dx-splitter-resize-handle-content-focused),
+    var(--dx-splitter-resize-handle-bg-focused),
   );
 }
 
 .dx-resize-handle {
   .dx-icon {
-    @include dx-icon-sizing($splitter-resize-handle-icon-size);
+    @include dx-icon-sizing(var(--dx-splitter-resize-handle-icon-size));
   }
 }

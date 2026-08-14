@@ -25,7 +25,7 @@
       &::before {
         border-radius: 0;
         width: calc(100% - 2 * $date-range-box-active-bar-margin-inline);
-        margin: 0 $date-range-box-active-bar-margin-inline;
+        margin: 0 var(--dx-date-range-box-active-bar-margin-inline);
       }
     }
   }
@@ -33,13 +33,13 @@
   &.dx-editor-underlined,
   &.dx-editor-filled {
     &::before {
-      border-bottom-width: $date-range-box-input-filled-border-block-end-width;
+      border-bottom-width: var(--dx-date-range-box-input-filled-border-block-end-width);
       transition: none;
     }
 
     &.dx-state-hover {
       &::after {
-        border-bottom-width: $date-range-box-border-block-end-width-hovered;
+        border-bottom-width: var(--dx-date-range-box-border-block-end-width-hovered);
         transition: none;
       }
     }
@@ -47,7 +47,7 @@
     &.dx-state-focused {
       &.dx-invalid {
         &::before {
-          border-bottom-width: $date-range-box-invalid-border-block-end-width;
+          border-bottom-width: var(--dx-date-range-box-invalid-border-block-end-width);
           transition: none;
         }
       }
@@ -64,15 +64,15 @@
     > .dx-texteditor-buttons-container {
       > .dx-button,
       > .dx-clear-button-area {
-        margin-inline-start: $date-range-box-custom-button-margin;
-        margin-inline-end: $date-range-box-custom-button-margin;
+        margin-inline-start: var(--dx-date-range-box-custom-button-margin);
+        margin-inline-end: var(--dx-date-range-box-custom-button-margin);
 
         &:first-child {
           margin-inline-start: 0;
         }
 
         &:last-child {
-          margin-inline-end: $date-range-box-custom-button-margin;
+          margin-inline-end: var(--dx-date-range-box-custom-button-margin);
         }
       }
 

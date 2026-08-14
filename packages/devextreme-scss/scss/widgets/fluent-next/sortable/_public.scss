@@ -1,0 +1,12 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-sortable-clone-opacity: #{$sortable-clone-opacity};
+  --dx-sortable-clone-shadow-ambient-rest: #{$sortable-clone-shadow-ambient-rest};
+  --dx-sortable-clone-shadow-key-rest: #{$sortable-clone-shadow-key-rest};
+  --dx-sortable-placeholder-border: #{$sortable-placeholder-border};
+  --dx-sortable-placeholder-border-rest: #{$sortable-placeholder-border-rest};
+  --dx-sortable-placeholder-inside-border-width: #{$sortable-placeholder-inside-border-width};
+  --dx-sortable-source-opacity: #{$sortable-source-opacity};
+}

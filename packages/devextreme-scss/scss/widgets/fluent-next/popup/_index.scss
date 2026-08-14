@@ -4,6 +4,7 @@
 @use "../../base/icon_fonts" as *;
 @use "../toolbar/mixins" as *;
 @use "../../base/popup" with (
+  $popup-title-min-height-fallback: null,
   $popup-title-padding: $popup-title-padding,
   $popup-dialog-message-padding: $popup-dialog-message-padding,
   $popup-dialog-shader-color: $popup-dialog-backdrop-rest,

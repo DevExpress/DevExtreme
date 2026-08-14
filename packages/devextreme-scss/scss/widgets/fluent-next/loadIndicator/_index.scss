@@ -26,8 +26,8 @@
 .dx-loadindicator-segment-inner {
   position: relative;
   height: 100%;
-  border-color: $load-indicator-segment-border-rest;
-  border-width: $load-indicator-segment-border-width;
+  border-color: var(--dx-load-indicator-segment-border-rest);
+  border-width: var(--dx-load-indicator-segment-border-width);
   border-style: solid;
   border-bottom-color: transparent;
   animation: none;
@@ -73,7 +73,7 @@
     box-sizing: border-box;
 
     .dx-loadindicator-segment-inner {
-      border-color: $load-indicator-segment-inner-border-rest;
+      border-color: var(--dx-load-indicator-segment-inner-border-rest);
       width: 100%;
       left: 0;
     }
@@ -96,9 +96,9 @@
 }
 
 @include baseLoadIndicator.loadindicator-animation-sparkle(
-  $load-indicator-sparkle-stop-1-bg-rest,
-  $load-indicator-sparkle-stop-2-bg-rest,
-  $load-indicator-sparkle-stop-3-bg-rest
+  var(--dx-load-indicator-sparkle-stop-1-bg-rest),
+  var(--dx-load-indicator-sparkle-stop-2-bg-rest),
+  var(--dx-load-indicator-sparkle-stop-3-bg-rest)
 );
 
 @keyframes dx-content-rotation {

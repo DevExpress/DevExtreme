@@ -90,11 +90,11 @@
             }
         },
         {
-            "comment": "A file that emits rules consumes the widget's own variables, so the token a value comes from is stated once, next to the other variables of that widget. Declaration files are exempted by the override below. `@use … with ()` arguments are at-rule parameters and stay invisible to stylelint; fluent-next-naming.test.ts covers that form.",
+            "comment": "A file that emits rules consumes the widget's own variables, so the token a value comes from is stated once, next to the other variables of that widget. Declaration files are exempted by the override below. `var(--dx-…)` is NOT banned as a form since wave F: the component tier is emitted (_public.scss chains) and consumed (pilot rules) through it, and name validity is enforced by fluent-next-naming.test.ts against public-surface.json — stylelint could only see the spelling, not whether the name exists. `@use … with ()` arguments are at-rule parameters and stay invisible to stylelint; the naming test covers that form too.",
             "files": ["scss/widgets/fluent-next/**/*.scss"],
             "rules": {
                 "declaration-property-value-disallowed-list": [
-                    { "/.*/": ["/var\\(\\s*--dxds-/", "/var\\(\\s*--dx-/", "/\\bds\\.\\$/"] },
+                    { "/.*/": ["/var\\(\\s*--dxds-/", "/\\bds\\.\\$/"] },
                     { "message": "Use the widget's own variable here: resolve the design token in _colors.scss or _sizes.scss. A custom property compiles even when its name is wrong." }
                 ]
             }

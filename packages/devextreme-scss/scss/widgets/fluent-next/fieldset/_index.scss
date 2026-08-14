@@ -10,7 +10,7 @@
 @use "../switch/sizes" as switchSizes;
 @use "../slider/sizes" as sliderSizes;
 @use "../../base/fieldset" with (
-  $fieldset-root-margin-bottom: $fieldset-margin-block-end,
+  $fieldset-root-margin-bottom: var(--dx-fieldset-margin-block-end),
 );
 
 @mixin dx-fieldset-styling() {
@@ -19,7 +19,7 @@
   }
 
   .dx-field-label {
-    color: $fieldset-field-label-content-rest;
+    color: var(--dx-fieldset-field-label-content-rest);
     font-size: formSizes.$form-label-font-size;
     cursor: default;
 
@@ -30,8 +30,8 @@
 
   .dx-field-value {
     &.dx-attention {
-      color: $fieldset-field-value-invalid-content-rest;
-      padding-left: $fieldset-attention-icon-offset;
+      color: var(--dx-fieldset-field-value-invalid-content-rest);
+      padding-left: var(--dx-fieldset-attention-icon-offset);
 
       &::before {
         @include dx-invalid-fluent-badge();
@@ -48,7 +48,7 @@
 @mixin dx-field-value-widget-position($name, $size) {
   &.#{$name},
   &:not(.dx-widget) > .#{$name} {
-    margin: calc((#{$fieldset-field-min-height} - #{$size}) / 2) 0;
+    margin: calc((var(--dx-fieldset-field-min-height) - #{$size}) / 2) 0;
   }
 }
 
@@ -61,7 +61,7 @@
 
   .dx-field-label {
     align-self: center;
-    padding-right: $fieldset-field-label-value-spacing;
+    padding-right: var(--dx-fieldset-field-label-value-spacing);
   }
 
   .dx-field-value {
@@ -81,12 +81,12 @@
     @include dx-field-value-widget-position(dx-checkbox, checkBoxSizes.$check-box-icon-font-size);
     @include dx-field-value-widget-position(dx-switch, switchSizes.$switch-height);
     @include dx-field-value-widget-position(dx-slider, sliderSizes.$slider-height);
-    @include dx-field-value-widget-position(dx-radiogroup, $fieldset-radio-group-min-height);
+    @include dx-field-value-widget-position(dx-radiogroup, var(--dx-fieldset-radio-group-min-height));
 
     &.dx-attention {
-      padding: $fieldset-field-value-top-padding $fieldset-field-value-padding-inline $fieldset-field-value-bottom-padding;
+      padding: var(--dx-fieldset-field-value-top-padding) var(--dx-fieldset-field-value-padding-inline) var(--dx-fieldset-field-value-bottom-padding);
       position: relative;
-      padding-left: $fieldset-attention-icon-offset;
+      padding-left: var(--dx-fieldset-attention-icon-offset);
 
       &::before {
         left: 0;
@@ -95,7 +95,7 @@
   }
 
   .dx-field-value-static {
-    padding: $fieldset-field-value-top-padding $fieldset-field-value-padding-inline $fieldset-field-value-bottom-padding;
+    padding: var(--dx-fieldset-field-value-top-padding) var(--dx-fieldset-field-value-padding-inline) var(--dx-fieldset-field-value-bottom-padding);
   }
 }
 
@@ -136,8 +136,8 @@
 @include dx-fieldset-styling();
 @include dx-fieldset-sizing-base();
 @include dx-fieldset-sizing(
-  $fieldset-margin-block,
-  $fieldset-margin-inline,
-  $fieldset-header-margin-block,
-  $fieldset-field-margin-block
+  var(--dx-fieldset-margin-block),
+  var(--dx-fieldset-margin-inline),
+  var(--dx-fieldset-header-margin-block),
+  var(--dx-fieldset-field-margin-block)
 );

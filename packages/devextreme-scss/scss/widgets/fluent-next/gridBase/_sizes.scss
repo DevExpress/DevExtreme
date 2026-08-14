@@ -38,6 +38,9 @@ $grid-column-chooser-item-margin: ds.$spacing-80 !default;
 $grid-command-edit-icon-margin: ds.$spacing-40 !default;
 $grid-command-edit-text-margin: ds.$spacing-20 !default;
 
+// Общий на все гриды: base рисует фокус-кольцо кнопки AI-колонки правилом БЕЗ скоупа виджета (одинаковый селектор в base/dataGrid и base/treeList), поэтому значение обязано резолвиться в любом гриде — имя живёт в gridBase, а не в dataGrid/treeList (F15)
+$grid-outline-focused: ds.$spacing-20 solid !default;
+
 $grid-command-edit-icon-size: null !default;
 $grid-filter-panel-icon-size: null !default;
 
@@ -119,7 +122,7 @@ $grid-header-cell-font-size: $grid-cell-font-size !default;
 
 // Values hoisted from style-file literals (tokenized)
 $grid-icon-button-border-radius: ds.$border-radius-20 !default;
-$grid-margin-inline-start: ds.$spacing-50 !important !default;
+$grid-margin-inline-start: ds.$spacing-50 !default;
 $grid-icon-margin: 0 ds.$spacing-30 !default;
 $grid-filter-operation-icon-margin-block-start: ds.$spacing-20 !default;
 $grid-sort-index-icon-padding-inline-end: ds.$spacing-40 !default;

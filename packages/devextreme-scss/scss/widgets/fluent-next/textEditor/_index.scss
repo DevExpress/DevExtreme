@@ -8,30 +8,30 @@
 @use "../common/mixins" as *;
 @use "../common/sizes" as *;
 @use "../../base/textEditor" with (
-  $texteditor-clear-button-area-width: $text-editor-clear-button-width,
+  $texteditor-clear-button-area-width: var(--dx-text-editor-clear-button-width),
 );
 @use "../../base/textEditor/mixins" as *;
 
 @mixin texteditor-outlined-styling() {
-  background-color: $text-editor-outlined-bg-rest;
-  border-radius: $text-editor-input-border-radius;
-  border-width: $text-editor-border-width;
+  background-color: var(--dx-text-editor-outlined-bg-rest);
+  border-radius: var(--dx-text-editor-input-border-radius);
+  border-width: var(--dx-text-editor-border-width);
   border-style: solid;
-  border-color: $text-editor-border-rest;
-  border-bottom-color: $text-editor-line-rest;
+  border-color: var(--dx-text-editor-border-rest);
+  border-bottom-color: var(--dx-text-editor-line-rest);
 
   &::before {
     box-sizing: border-box;
     content: "";
     position: absolute;
-    left: $text-editor-line-inset-inline-start;
-    bottom: $text-editor-line-inset-block-end;
-    right: $text-editor-line-inset-inline-end;
-    height: $text-editor-input-border-radius;
+    left: var(--dx-text-editor-line-inset-inline-start);
+    bottom: var(--dx-text-editor-line-inset-block-end);
+    right: var(--dx-text-editor-line-inset-inline-end);
+    height: var(--dx-text-editor-input-border-radius);
     width: calc(100% + 2 * $text-editor-border-width);
-    border-bottom-left-radius: $text-editor-input-border-radius;
-    border-bottom-right-radius: $text-editor-input-border-radius;
-    border-bottom-color: $text-editor-indicator-rest;
+    border-bottom-left-radius: var(--dx-text-editor-input-border-radius);
+    border-bottom-right-radius: var(--dx-text-editor-input-border-radius);
+    border-bottom-color: var(--dx-text-editor-indicator-rest);
     clip-path: inset(calc(100% - 2px) 0 0);
     transform: scaleX(0);
     transition-property: transform;
@@ -43,7 +43,7 @@
   &.dx-texteditor-with-floating-label {
     .dx-texteditor-label {
       width: calc(100% + 2 * $text-editor-border-width);
-      inset: $text-editor-label-inset;
+      inset: var(--dx-text-editor-label-inset);
     }
 
     .dx-datebox {
@@ -54,37 +54,37 @@
   &.dx-state-disabled,
   &.dx-state-readonly {
     background-color: transparent;
-    border-color: $text-editor-border-disabled;
+    border-color: var(--dx-text-editor-border-disabled);
   }
 
   &.dx-invalid {
-    border-color: $text-editor-invalid-border-rest;
+    border-color: var(--dx-text-editor-invalid-border-rest);
 
     &.dx-state-hover,
     &.dx-state-focused {
-      border-color: $text-editor-invalid-border-focused;
+      border-color: var(--dx-text-editor-invalid-border-focused);
     }
 
     &::before {
-      border-color: $text-editor-invalid-border-rest;
+      border-color: var(--dx-text-editor-invalid-border-rest);
     }
   }
 
   &.dx-state-hover {
-    background-color: $text-editor-outlined-bg-hovered;
-    border-left-color: $text-editor-border-hovered;
-    border-right-color: $text-editor-border-hovered;
-    border-top-color: $text-editor-border-hovered;
-    border-bottom-color: $text-editor-line-hovered;
+    background-color: var(--dx-text-editor-outlined-bg-hovered);
+    border-left-color: var(--dx-text-editor-border-hovered);
+    border-right-color: var(--dx-text-editor-border-hovered);
+    border-top-color: var(--dx-text-editor-border-hovered);
+    border-bottom-color: var(--dx-text-editor-line-hovered);
   }
 
   &.dx-state-focused,
   &.dx-state-active {
-    background-color: $text-editor-outlined-bg-focused;
-    border-left-color: $text-editor-border-focused;
-    border-right-color: $text-editor-border-focused;
-    border-top-color: $text-editor-border-focused;
-    border-bottom-color: $text-editor-line-focused;
+    background-color: var(--dx-text-editor-outlined-bg-focused);
+    border-left-color: var(--dx-text-editor-border-focused);
+    border-right-color: var(--dx-text-editor-border-focused);
+    border-top-color: var(--dx-text-editor-border-focused);
+    border-bottom-color: var(--dx-text-editor-line-focused);
 
     &::before {
       transform: scaleX(1);
@@ -96,106 +96,106 @@
 }
 
 @mixin texteditor-filled-styling() {
-  background-color: $text-editor-filled-bg-rest;
-  border-radius: $text-editor-input-border-radius;
-  border-width: $text-editor-border-width;
+  background-color: var(--dx-text-editor-filled-bg-rest);
+  border-radius: var(--dx-text-editor-input-border-radius);
+  border-width: var(--dx-text-editor-border-width);
   border-style: solid;
   border-color: transparent;
 
   .dx-placeholder::before,
   .dx-texteditor-input {
-    padding-top: $text-editor-input-filled-padding-block-start;
-    padding-bottom: $text-editor-input-filled-padding-block-end;
+    padding-top: var(--dx-text-editor-input-filled-padding-block-start);
+    padding-bottom: var(--dx-text-editor-input-filled-padding-block-end);
   }
 
   &::before {
-    left: $text-editor-line-inset-inline-start;
-    bottom: $text-editor-line-inset-block-end;
-    right: $text-editor-line-inset-inline-end;
-    height: $text-editor-input-border-radius;
+    left: var(--dx-text-editor-line-inset-inline-start);
+    bottom: var(--dx-text-editor-line-inset-block-end);
+    right: var(--dx-text-editor-line-inset-inline-end);
+    height: var(--dx-text-editor-input-border-radius);
     width: calc(100% + 2 * $text-editor-border-width);
-    border-bottom-left-radius: $text-editor-input-border-radius;
-    border-bottom-right-radius: $text-editor-input-border-radius;
-    border-bottom-color: $text-editor-indicator-rest;
+    border-bottom-left-radius: var(--dx-text-editor-input-border-radius);
+    border-bottom-right-radius: var(--dx-text-editor-input-border-radius);
+    border-bottom-color: var(--dx-text-editor-indicator-rest);
     clip-path: inset(calc(100% - 2px) 0 0);
   }
 
   &.dx-state-hover {
-    background-color: $text-editor-filled-bg-hovered;
+    background-color: var(--dx-text-editor-filled-bg-hovered);
   }
 
   &.dx-state-focused,
   &.dx-state-active {
-    background-color: $text-editor-filled-bg-focused;
+    background-color: var(--dx-text-editor-filled-bg-focused);
   }
 
   &.dx-state-disabled,
   &.dx-state-readonly {
     background-color: transparent;
-    border-color: $text-editor-border-disabled;
+    border-color: var(--dx-text-editor-border-disabled);
   }
 
   &.dx-invalid {
-    border-color: $text-editor-invalid-border-rest;
+    border-color: var(--dx-text-editor-invalid-border-rest);
 
     &.dx-state-hover,
     &.dx-state-focused {
-      border-color: $text-editor-invalid-border-focused;
+      border-color: var(--dx-text-editor-invalid-border-focused);
     }
   }
 }
 
 @mixin texteditor-underlined-styling() {
-  background-color: $text-editor-underlined-bg-rest;
+  background-color: var(--dx-text-editor-underlined-bg-rest);
   border-radius: 0;
 
   &::after {
-    border-bottom-width: $text-editor-line-border-block-end-width-focused;
+    border-bottom-width: var(--dx-text-editor-line-border-block-end-width-focused);
     border-bottom-style: solid;
-    border-bottom-color: $text-editor-line-rest;
+    border-bottom-color: var(--dx-text-editor-line-rest);
   }
 
   &.dx-state-hover {
-    background-color: $text-editor-underlined-bg-hovered;
+    background-color: var(--dx-text-editor-underlined-bg-hovered);
 
     &::after {
-      border-bottom-color: $text-editor-line-hovered;
+      border-bottom-color: var(--dx-text-editor-line-hovered);
     }
   }
 
   &.dx-state-focused,
   &.dx-state-active {
-    background-color: $text-editor-underlined-bg-focused;
+    background-color: var(--dx-text-editor-underlined-bg-focused);
   }
 
   .dx-texteditor-input,
   .dx-lookup-field {
-    min-height: $text-editor-input-min-height;
+    min-height: var(--dx-text-editor-input-min-height);
   }
 
   .dx-texteditor-input,
   .dx-placeholder::before {
-    padding-top: $text-editor-input-underlined-padding-block-start;
-    padding-bottom: $text-editor-input-underlined-padding-block-end;
-    padding-left: $text-editor-input-underlined-padding-inline;
-    padding-right: $text-editor-input-underlined-padding-inline;
+    padding-top: var(--dx-text-editor-input-underlined-padding-block-start);
+    padding-bottom: var(--dx-text-editor-input-underlined-padding-block-end);
+    padding-left: var(--dx-text-editor-input-underlined-padding-inline);
+    padding-right: var(--dx-text-editor-input-underlined-padding-inline);
   }
 
   &.dx-state-disabled,
   &.dx-state-readonly {
     &::after {
-      border-bottom-color: $text-editor-border-disabled;
+      border-bottom-color: var(--dx-text-editor-border-disabled);
     }
   }
 
   &.dx-invalid {
     &::after {
-      border-bottom-color: $text-editor-invalid-border-rest;
+      border-bottom-color: var(--dx-text-editor-invalid-border-rest);
     }
 
     &.dx-state-hover {
       &::after {
-        border-bottom-color: $text-editor-invalid-border-focused;
+        border-bottom-color: var(--dx-text-editor-invalid-border-focused);
       }
     }
   }
@@ -203,7 +203,7 @@
 
 @mixin texteditor-input-padding-filled() {
   .dx-texteditor-input {
-    padding-inline-end: calc(#{$text-editor-invalid-badge-size} + #{$text-editor-input-filled-padding-inline});
+    padding-inline-end: calc(var(--dx-text-editor-invalid-badge-size) + var(--dx-text-editor-input-filled-padding-inline));
   }
 }
 
@@ -212,7 +212,7 @@
 }
 
 @mixin texteditor-validation-icon-offset-filled() {
-  inset-inline-end: $text-editor-button-filled-inset-inline-end;
+  inset-inline-end: var(--dx-text-editor-button-filled-inset-inline-end);
 }
 
 @mixin validation-icon-position() {
@@ -220,7 +220,7 @@
   &.dx-valid {
     &.dx-editor-underlined {
       .dx-texteditor-input {
-        padding-inline-end: calc(#{$text-editor-invalid-badge-size} + #{$text-editor-input-underlined-padding-inline});
+        padding-inline-end: calc(var(--dx-text-editor-invalid-badge-size) + var(--dx-text-editor-input-underlined-padding-inline));
       }
     }
 
@@ -247,7 +247,7 @@
   &.dx-validation-pending {
     &.dx-editor-underlined {
       .dx-texteditor-input {
-        padding-inline-end: calc(#{$text-editor-invalid-badge-size} + #{$text-editor-input-underlined-padding-inline});
+        padding-inline-end: calc(var(--dx-text-editor-invalid-badge-size) + var(--dx-text-editor-input-underlined-padding-inline));
       }
     }
 
@@ -271,7 +271,7 @@
 }
 
 .dx-texteditor {
-  border-radius: $text-editor-input-border-radius;
+  border-radius: var(--dx-text-editor-input-border-radius);
   position: relative;
 
   @mixin dx-texteditor-borders-position() {
@@ -297,25 +297,25 @@
 
   &.dx-state-focused {
     .dx-texteditor-label {
-      color: $text-editor-label-content-focused;
-      font-size: $text-editor-label-font-size;
+      color: var(--dx-text-editor-label-content-focused);
+      font-size: var(--dx-text-editor-label-font-size);
     }
 
     &.dx-invalid {
       .dx-texteditor-label {
-        color: $text-editor-invalid-content-rest;
+        color: var(--dx-text-editor-invalid-content-rest);
       }
     }
   }
 
   &.dx-texteditor-label-outside {
     .dx-texteditor-label {
-      color: $text-editor-content-rest;
+      color: var(--dx-text-editor-content-rest);
     }
 
     &.dx-invalid {
       .dx-texteditor-label {
-        color: $text-editor-invalid-content-rest;
+        color: var(--dx-text-editor-invalid-content-rest);
       }
     }
   }
@@ -323,9 +323,9 @@
   &.dx-state-focused,
   &.dx-state-active {
     &::before {
-      border-bottom-width: $text-editor-line-border-block-end-width-active;
+      border-bottom-width: var(--dx-text-editor-line-border-block-end-width-active);
       border-bottom-style: solid;
-      border-bottom-color: $text-editor-indicator-rest;
+      border-bottom-color: var(--dx-text-editor-indicator-rest);
       transform: scale(1);
       transition-property: transform;
       transition-duration: 0.2s;
@@ -341,12 +341,12 @@
     .dx-placeholder::before,
     .dx-texteditor-input,
     .dx-lookup-field {
-      color: $text-editor-content-disabled;
+      color: var(--dx-text-editor-content-disabled);
     }
 
     .dx-lookup-arrow,
     .dx-dropdowneditor-icon {
-      color: $text-editor-content-disabled;
+      color: var(--dx-text-editor-content-disabled);
     }
   }
 
@@ -357,7 +357,7 @@
   }
 
   .dx-texteditor-input {
-    min-height: calc(#{$text-editor-input-min-height} - 2px);
+    min-height: calc(var(--dx-text-editor-input-min-height) - 2px);
   }
 
   @include validation-icon-position();
@@ -386,8 +386,8 @@
 
 .dx-show-clear-button {
   .dx-clear-button-area {
-    width: $text-editor-icon-container-size;
-    min-width: $text-editor-icon-container-size;
+    width: var(--dx-text-editor-icon-container-size);
+    min-width: var(--dx-text-editor-icon-container-size);
     right: 0;
     display: flex;
     align-items: center;
@@ -404,12 +404,12 @@
       content: "\f15f";
     }
 
-    color: $text-editor-clear-button-icon-rest;
+    color: var(--dx-text-editor-clear-button-icon-rest);
   }
 
   &.dx-state-disabled {
     .dx-icon-clear {
-      color: $text-editor-content-disabled;
+      color: var(--dx-text-editor-content-disabled);
     }
   }
 
@@ -421,31 +421,31 @@
 
 /* B231111 */
 .dx-placeholder {
-  color: $text-editor-placeholder-rest;
-  font-size: $text-editor-font-size;
+  color: var(--dx-text-editor-placeholder-rest);
+  font-size: var(--dx-text-editor-font-size);
   line-height: normal;
 }
 
 .dx-texteditor-input {
   margin: 0;
   background-color: transparent;
-  color: $text-editor-content-rest;
-  font-size: $text-editor-font-size;
-  line-height: $text-editor-line-height;
+  color: var(--dx-text-editor-content-rest);
+  font-size: var(--dx-text-editor-font-size);
+  line-height: var(--dx-text-editor-line-height);
 }
 
 .dx-invalid.dx-texteditor {
   &.dx-state-hover {
     &::after {
-      border-bottom-color: $text-editor-invalid-border-rest;
+      border-bottom-color: var(--dx-text-editor-invalid-border-rest);
     }
   }
 
   &.dx-state-focused,
   &.dx-state-active {
     &::before {
-      border-bottom: $text-editor-line-border-block-end-active;
-      border-bottom-color: $text-editor-invalid-border-focused;
+      border-bottom: var(--dx-text-editor-line-border-block-end-active);
+      border-bottom-color: var(--dx-text-editor-invalid-border-focused);
     }
   }
 
@@ -458,8 +458,8 @@
 
 .dx-texteditor-label {
   position: absolute;
-  font-size: $text-editor-label-font-size;
-  color: $text-editor-label-content-rest;
+  font-size: var(--dx-text-editor-label-font-size);
+  color: var(--dx-text-editor-label-content-rest);
   white-space: nowrap;
   user-select: none;
   pointer-events: none;
@@ -479,77 +479,77 @@
       width: auto;
       max-width: 100%;
       display: block;
-      margin-bottom: $text-editor-label-margin-block-end;
+      margin-bottom: var(--dx-text-editor-label-margin-block-end);
     }
   }
 
   .dx-invalid & {
-    color: $text-editor-invalid-content-rest;
+    color: var(--dx-text-editor-invalid-content-rest);
   }
 }
 
 @include dx-editor-outlined(
-  $text-editor-input-border-radius,
+  var(--dx-text-editor-input-border-radius),
   $text-editor-label-font-size,
   $global-border-width,
   $global-border-width,
   solid,
-  $text-editor-label-height,
-  $text-editor-label-height,
-  calc((1px + #{$text-editor-font-size}) / 2),
-  $text-editor-label-outside-offset,
+  var(--dx-text-editor-label-height),
+  var(--dx-text-editor-label-height),
+  calc((1px + var(--dx-text-editor-font-size)) / 2),
+  var(--dx-text-editor-label-outside-offset),
   0.5px,
-  $text-editor-input-filled-padding-inline,
-  $text-editor-input-filled-padding-inline,
-  $text-editor-outlined-bg-rest,
+  var(--dx-text-editor-input-filled-padding-inline),
+  var(--dx-text-editor-input-filled-padding-inline),
+  var(--dx-text-editor-outlined-bg-rest),
   1px solid transparent,
-  $text-editor-border-rest,
-  $text-editor-line-rest,
-  $text-editor-border-disabled,
-  $text-editor-border-disabled,
-  $text-editor-border-hovered,
-  $text-editor-line-hovered,
-  $text-editor-border-focused,
-  $text-editor-line-focused,
-  $text-editor-invalid-border-rest,
-  $text-editor-invalid-border-focused,
+  var(--dx-text-editor-border-rest),
+  var(--dx-text-editor-line-rest),
+  var(--dx-text-editor-border-disabled),
+  var(--dx-text-editor-border-disabled),
+  var(--dx-text-editor-border-hovered),
+  var(--dx-text-editor-line-hovered),
+  var(--dx-text-editor-border-focused),
+  var(--dx-text-editor-line-focused),
+  var(--dx-text-editor-invalid-border-rest),
+  var(--dx-text-editor-invalid-border-focused),
   $text-editor-label-transition,
-  $text-editor-font-size,
-  $text-editor-input-filled-padding-block-start,
+  var(--dx-text-editor-font-size),
+  var(--dx-text-editor-input-filled-padding-block-start),
   1px,
-  $text-editor-font-size,
-  $text-editor-label-outside-height,
+  var(--dx-text-editor-font-size),
+  var(--dx-text-editor-label-outside-height),
 );
 @include dx-editor-filled(
   $text-editor-label-transition,
-  $text-editor-label-font-size,
-  $text-editor-label-font-size,
-  $text-editor-label-font-size,
-  $text-editor-label-offset,
-  $text-editor-label-outside-offset,
-  $text-editor-font-size,
-  $text-editor-font-size,
-  $text-editor-font-size,
-  $text-editor-input-filled-padding-inline,
-  $text-editor-input-filled-with-label-padding-block-start,
-  $text-editor-input-filled-with-label-padding-block-end,
-  $text-editor-font-size,
-  $text-editor-label-outside-height,
+  var(--dx-text-editor-label-font-size),
+  var(--dx-text-editor-label-font-size),
+  var(--dx-text-editor-label-font-size),
+  var(--dx-text-editor-label-offset),
+  var(--dx-text-editor-label-outside-offset),
+  var(--dx-text-editor-font-size),
+  var(--dx-text-editor-font-size),
+  var(--dx-text-editor-font-size),
+  var(--dx-text-editor-input-filled-padding-inline),
+  var(--dx-text-editor-input-filled-with-label-padding-block-start),
+  var(--dx-text-editor-input-filled-with-label-padding-block-end),
+  var(--dx-text-editor-font-size),
+  var(--dx-text-editor-label-outside-height),
 );
 @include dx-editor-underlined(
   $text-editor-label-transition,
-  $text-editor-label-font-size,
-  $text-editor-label-font-size,
-  $text-editor-label-font-size,
-  $text-editor-label-offset,
-  $text-editor-label-outside-offset,
-  $text-editor-font-size,
-  $text-editor-font-size,
-  $text-editor-font-size,
-  $text-editor-input-underlined-with-label-padding-block-start,
-  $text-editor-input-underlined-with-label-padding-block-end,
-  $text-editor-font-size,
-  $text-editor-label-outside-height,
+  var(--dx-text-editor-label-font-size),
+  var(--dx-text-editor-label-font-size),
+  var(--dx-text-editor-label-font-size),
+  var(--dx-text-editor-label-offset),
+  var(--dx-text-editor-label-outside-offset),
+  var(--dx-text-editor-font-size),
+  var(--dx-text-editor-font-size),
+  var(--dx-text-editor-font-size),
+  var(--dx-text-editor-input-underlined-with-label-padding-block-start),
+  var(--dx-text-editor-input-underlined-with-label-padding-block-end),
+  var(--dx-text-editor-font-size),
+  var(--dx-text-editor-label-outside-height),
 );
 
 .dx-valid.dx-texteditor {
@@ -569,10 +569,10 @@
 }
 
 @include dx-editor-buttons-container-material(
-  $text-editor-button-underlined-height,
-  $text-editor-custom-button-margin,
-  $text-editor-custom-button-margin,
+  var(--dx-text-editor-button-underlined-height),
+  var(--dx-text-editor-custom-button-margin),
+  var(--dx-text-editor-custom-button-margin),
   0,
-  $text-editor-spin-button-padding-inline,
+  var(--dx-text-editor-spin-button-padding-inline),
   buttonSizes.$button-padding-block,
 );

@@ -1,0 +1,19 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-toolbar-bg-rest: #{$toolbar-bg-rest};
+  --dx-toolbar-button-text-font-weight: #{$toolbar-button-text-font-weight};
+  --dx-toolbar-content-rest: #{$toolbar-content-rest};
+  --dx-toolbar-group-margin: #{$toolbar-group-margin};
+  --dx-toolbar-height: #{$toolbar-height};
+  --dx-toolbar-item-padding: #{$toolbar-item-padding};
+  --dx-toolbar-item-spacing: #{$toolbar-item-spacing};
+  --dx-toolbar-label-font-size: #{$toolbar-label-font-size};
+  --dx-toolbar-label-font-weight: #{$toolbar-label-font-weight};
+  --dx-toolbar-menu-section-border-block-end: #{$toolbar-menu-section-border-block-end};
+  --dx-toolbar-padding: #{$toolbar-padding};
+  --dx-toolbar-section-padding: #{$toolbar-section-padding};
+  --dx-toolbar-separator-border-rest: #{$toolbar-separator-border-rest};
+  --dx-toolbar-text-editor-width: #{$toolbar-text-editor-width};
+}

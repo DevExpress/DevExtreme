@@ -1,0 +1,11 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-load-indicator-segment-border-rest: #{$load-indicator-segment-border-rest};
+  --dx-load-indicator-segment-border-width: #{$load-indicator-segment-border-width};
+  --dx-load-indicator-segment-inner-border-rest: #{$load-indicator-segment-inner-border-rest};
+  --dx-load-indicator-sparkle-stop-1-bg-rest: #{$load-indicator-sparkle-stop-1-bg-rest};
+  --dx-load-indicator-sparkle-stop-2-bg-rest: #{$load-indicator-sparkle-stop-2-bg-rest};
+  --dx-load-indicator-sparkle-stop-3-bg-rest: #{$load-indicator-sparkle-stop-3-bg-rest};
+}

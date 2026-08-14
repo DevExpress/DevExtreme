@@ -1,0 +1,30 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-data-grid-block-separator-bg-rest: #{$data-grid-block-separator-bg-rest};
+  --dx-data-grid-block-separator-border-radius: #{$data-grid-block-separator-border-radius};
+  --dx-data-grid-cell-outline-focused: #{$data-grid-cell-outline-focused};
+  --dx-data-grid-cell-padding: #{$data-grid-cell-padding};
+  --dx-data-grid-error-message-margin-block-end: #{$data-grid-error-message-margin-block-end};
+  --dx-data-grid-filter-panel-outline-offset-focused: #{$data-grid-filter-panel-outline-offset-focused};
+  --dx-data-grid-form-buttons-margin-block-start: #{$data-grid-form-buttons-margin-block-start};
+  --dx-data-grid-form-buttons-margin-inline-start: #{$data-grid-form-buttons-margin-inline-start};
+  --dx-data-grid-form-buttons-rtl-margin-inline-start: #{$data-grid-form-buttons-rtl-margin-inline-start};
+  --dx-data-grid-group-panel-item-bg-rest: #{$data-grid-group-panel-item-bg-rest};
+  --dx-data-grid-group-panel-item-border-radius: #{$data-grid-group-panel-item-border-radius};
+  --dx-data-grid-group-panel-item-border-rest: #{$data-grid-group-panel-item-border-rest};
+  --dx-data-grid-group-panel-item-border-width: #{$data-grid-group-panel-item-border-width};
+  --dx-data-grid-group-panel-item-font-weight: #{$data-grid-group-panel-item-font-weight};
+  --dx-data-grid-group-panel-item-margin-inline-end: #{$data-grid-group-panel-item-margin-inline-end};
+  --dx-data-grid-group-panel-item-min-width: #{$data-grid-group-panel-item-min-width};
+  --dx-data-grid-group-panel-item-padding: #{$data-grid-group-panel-item-padding};
+  --dx-data-grid-group-panel-item-padding-block: #{$data-grid-group-panel-item-padding-block};
+  --dx-data-grid-group-panel-item-rtl-margin-inline-end: #{$data-grid-group-panel-item-rtl-margin-inline-end};
+  --dx-data-grid-group-panel-item-sort-margin-inline-start: #{$data-grid-group-panel-item-sort-margin-inline-start};
+  --dx-data-grid-group-panel-item-sort-rtl-margin-inline-start: #{$data-grid-group-panel-item-sort-rtl-margin-inline-start};
+  --dx-data-grid-group-row-border: #{$data-grid-group-row-border};
+  --dx-data-grid-group-row-font-weight: #{$data-grid-group-row-font-weight};
+  --dx-data-grid-outline-offset-focused: #{$data-grid-outline-offset-focused};
+  --dx-data-grid-sticky-column-border: #{$data-grid-sticky-column-border};
+}

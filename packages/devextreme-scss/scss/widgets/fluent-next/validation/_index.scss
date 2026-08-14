@@ -4,16 +4,16 @@
 @use "../textEditor/sizes" as textEditorSizes;
 @use "../overlay";
 @include baseValidation.dx-base-validation(
-  $validation-summary-content-rest,
-  $validation-message-content-rest,
-  $validation-message-bg-rest,
-  $validation-overlay-border-radius
+  var(--dx-validation-summary-content-rest),
+  var(--dx-validation-message-content-rest),
+  var(--dx-validation-message-bg-rest),
+  var(--dx-validation-overlay-border-radius)
 );
 @include baseValidation.dx-modern-styles-validation(
-  $validation-message-font-size,
-  $validation-message-line-height,
+  var(--dx-validation-message-font-size),
+  var(--dx-validation-message-line-height),
   textEditorSizes.$text-editor-input-filled-padding-inline,
-  $validation-summary-item-margin,
-  $validation-message-padding-block,
-  $validation-message-padding-inline,
+  var(--dx-validation-summary-item-margin),
+  var(--dx-validation-message-padding-block),
+  var(--dx-validation-message-padding-inline),
 );

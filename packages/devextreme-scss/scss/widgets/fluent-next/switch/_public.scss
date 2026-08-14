@@ -1,0 +1,36 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-switch-bg-rest: #{$switch-bg-rest};
+  --dx-switch-border-disabled: #{$switch-border-disabled};
+  --dx-switch-box-shadow: #{$switch-box-shadow};
+  --dx-switch-container-height: #{if($switch-container-height == $switch-height, var(--dx-switch-height), $switch-container-height)};
+  --dx-switch-container-margin-block: #{$switch-container-margin-block};
+  --dx-switch-container-padding-inline: #{if($switch-container-padding-inline == $switch-handle-margin, var(--dx-switch-handle-margin), $switch-container-padding-inline)};
+  --dx-switch-container-rtl-offset: #{$switch-container-rtl-offset};
+  --dx-switch-handle-bg-disabled: #{$switch-handle-bg-disabled};
+  --dx-switch-handle-border-radius: #{$switch-handle-border-radius};
+  --dx-switch-handle-height: #{$switch-handle-height};
+  --dx-switch-handle-margin: #{$switch-handle-margin};
+  --dx-switch-handle-off-bg-rest: #{$switch-handle-off-bg-rest};
+  --dx-switch-handle-on-bg-rest: #{$switch-handle-on-bg-rest};
+  --dx-switch-handle-on-box-shadow: #{$switch-handle-on-box-shadow};
+  --dx-switch-handle-on-box-shadow-blur: #{$switch-handle-on-box-shadow-blur};
+  --dx-switch-handle-on-shadow-rest: #{$switch-handle-on-shadow-rest};
+  --dx-switch-height: #{$switch-height};
+  --dx-switch-invalid-border-focused: #{$switch-invalid-border-focused};
+  --dx-switch-invalid-border-hovered: #{$switch-invalid-border-hovered};
+  --dx-switch-invalid-border-rest: #{$switch-invalid-border-rest};
+  --dx-switch-off-border-active: #{$switch-off-border-active};
+  --dx-switch-off-border-hovered: #{$switch-off-border-hovered};
+  --dx-switch-off-border-rest: #{$switch-off-border-rest};
+  --dx-switch-on-bg-disabled: #{$switch-on-bg-disabled};
+  --dx-switch-on-bg-rest: #{$switch-on-bg-rest};
+  --dx-switch-on-border-focused: #{$switch-on-border-focused};
+  --dx-switch-on-border-hovered: #{$switch-on-border-hovered};
+  --dx-switch-on-border-rest: #{$switch-on-border-rest};
+  --dx-switch-padding: #{$switch-padding};
+  --dx-switch-transition: #{$switch-transition};
+  --dx-switch-width: #{$switch-width};
+}

@@ -2,26 +2,26 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/toast" with (
-  $toast-content-padding: $toast-content-padding,
-  $toast-icon-width: $toast-icon-width,
-  $toast-icon-height: $toast-icon-height,
-  $toast-icon-margin-right: $toast-icon-margin-inline-end,
-  $toast-icon-margin-left: $toast-icon-rtl-margin-inline-end,
-  $toast-stack-gap: $toast-stack-gap,
+  $toast-content-padding: var(--dx-toast-content-padding),
+  $toast-icon-width: var(--dx-toast-icon-width),
+  $toast-icon-height: var(--dx-toast-icon-height),
+  $toast-icon-margin-right: var(--dx-toast-icon-margin-inline-end),
+  $toast-icon-margin-left: var(--dx-toast-icon-rtl-margin-inline-end),
+  $toast-stack-gap: var(--dx-toast-stack-gap),
 );
 @use "../overlay";
 
 .dx-toast-stack {
-  gap: $toast-item-gap;
+  gap: var(--dx-toast-item-gap);
 }
 
 .dx-toast-content {
   font-size: $global-font-size;
-  font-weight: $toast-content-font-weight;
-  padding: $toast-content-padding-block $toast-content-padding-inline;
-  border-radius: $toast-border-radius;
-  box-shadow: $toast-box-shadow;
-  min-height: $toast-height;
+  font-weight: var(--dx-toast-content-font-weight);
+  padding: var(--dx-toast-content-padding-block) var(--dx-toast-content-padding-inline);
+  border-radius: var(--dx-toast-border-radius);
+  box-shadow: var(--dx-toast-box-shadow);
+  min-height: var(--dx-toast-height);
   display: flex;
   align-items: center;
 }
@@ -35,21 +35,21 @@
 }
 
 .dx-toast-info {
-  background-color: $toast-info-bg-rest;
-  color: $toast-info-content-rest;
+  background-color: var(--dx-toast-info-bg-rest);
+  color: var(--dx-toast-info-content-rest);
 }
 
 .dx-toast-warning {
-  background-color: $toast-warning-bg-rest;
-  color: $toast-warning-content-rest;
+  background-color: var(--dx-toast-warning-bg-rest);
+  color: var(--dx-toast-warning-content-rest);
 }
 
 .dx-toast-error {
-  background-color: $toast-error-bg-rest;
-  color: $toast-error-content-rest;
+  background-color: var(--dx-toast-error-bg-rest);
+  color: var(--dx-toast-error-content-rest);
 }
 
 .dx-toast-success {
-  background-color: $toast-success-bg-rest;
-  color: $toast-success-content-rest;
+  background-color: var(--dx-toast-success-bg-rest);
+  color: var(--dx-toast-success-content-rest);
 }

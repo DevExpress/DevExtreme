@@ -12,43 +12,43 @@
 @use "../button/sizes" as buttonSizes;
 @use "../../base/toolbar/mixins" as *;
 @use "../../base/toolbar" with (
-  $toolbar-item-padding: $toolbar-item-padding,
-  $toolbar-group-margin: $toolbar-group-margin,
-  $toolbar-texteditor-width: $toolbar-text-editor-width,
+  $toolbar-item-padding: var(--dx-toolbar-item-padding),
+  $toolbar-group-margin: var(--dx-toolbar-group-margin),
+  $toolbar-texteditor-width: var(--dx-toolbar-text-editor-width),
 );
 @use "../dropDownMenu";
 
 .dx-toolbar {
-  background-color: $toolbar-bg-rest;
-  color: $toolbar-content-rest;
+  background-color: var(--dx-toolbar-bg-rest);
+  color: var(--dx-toolbar-content-rest);
 
   @include dx-toolbar-sizing(
-    $toolbar-height,
-    $toolbar-padding,
-    $toolbar-label-font-size,
-    $toolbar-item-spacing
+    var(--dx-toolbar-height),
+    var(--dx-toolbar-padding),
+    var(--dx-toolbar-label-font-size),
+    var(--dx-toolbar-item-spacing)
   );
 
   &.dx-toolbar-multiline {
     .dx-toolbar-item {
-      height: $toolbar-height;
+      height: var(--dx-toolbar-height);
     }
   }
 }
 
 .dx-toolbar-after {
   .dx-toolbar-item {
-    @include dx-toolbar-item-padding($toolbar-item-spacing);
+    @include dx-toolbar-item-padding(var(--dx-toolbar-item-spacing));
   }
 }
 
 .dx-toolbar-background {
-  background-color: $toolbar-bg-rest;
+  background-color: var(--dx-toolbar-bg-rest);
 }
 
 .dx-toolbar-menu-section {
-  border-bottom: $toolbar-menu-section-border-block-end;
-  border-bottom-color: $toolbar-separator-border-rest;
+  border-bottom: var(--dx-toolbar-menu-section-border-block-end);
+  border-bottom-color: var(--dx-toolbar-separator-border-rest);
 
   .dx-list-item-content,
   .dx-toolbar-item-auto-hide {
@@ -88,7 +88,7 @@
 
     .dx-button-text {
       text-transform: none;
-      font-weight: $toolbar-button-text-font-weight;
+      font-weight: var(--dx-toolbar-button-text-font-weight);
     }
 
     .dx-button-content {
@@ -153,8 +153,8 @@
   }
 
   .dx-toolbar-hidden-button-group {
-    margin-top: $toolbar-padding;
-    margin-bottom: $toolbar-padding;
+    margin-top: var(--dx-toolbar-padding);
+    margin-bottom: var(--dx-toolbar-padding);
 
     &:first-of-type {
       margin-top: listSizes.$list-padding-block;

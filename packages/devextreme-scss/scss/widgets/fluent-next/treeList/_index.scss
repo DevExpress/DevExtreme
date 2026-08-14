@@ -7,15 +7,15 @@
 @use "../gridBase/colors" as gridBaseColors;
 @use "../gridBase/sizes" as gridBaseSizes;
 @use "../../base/treeList" as baseTreeList with (
-  $treelist-expandable-node-line-height: $tree-list-empty-space-height,
-  $treelist-sticky-column-border: $tree-list-sticky-column-border,
-  $treelist-cell-focus-outline: $tree-list-cell-outline-focused,
-  $treelist-header-filter-outline: $tree-list-outline-focused,
-  $treelist-header-filter-outline-offset: $tree-list-outline-offset-focused,
-  $treelist-button-margin-left: $tree-list-form-buttons-margin-inline-start,
-  $treelist-button-margin-top: $tree-list-form-buttons-margin-block-start,
-  $treelist-error-message-margin-bottom: $tree-list-error-message-margin-block-end,
-  $treelist-button-margin-right: $tree-list-form-buttons-rtl-margin-inline-start,
+  $treelist-expandable-node-line-height: var(--dx-tree-list-empty-space-height),
+  $treelist-sticky-column-border: var(--dx-tree-list-sticky-column-border),
+  $treelist-cell-focus-outline: var(--dx-tree-list-cell-outline-focused),
+  $treelist-header-filter-outline: var(--dx-grid-outline-focused),
+  $treelist-header-filter-outline-offset: var(--dx-tree-list-outline-offset-focused),
+  $treelist-button-margin-left: var(--dx-tree-list-form-buttons-margin-inline-start),
+  $treelist-button-margin-top: var(--dx-tree-list-form-buttons-margin-block-start),
+  $treelist-error-message-margin-bottom: var(--dx-tree-list-error-message-margin-block-end),
+  $treelist-button-margin-right: var(--dx-tree-list-form-buttons-rtl-margin-inline-start),
   $datagrid-border: gridBaseSizes.$grid-border,
   $datagrid-drag-header-border-color: gridBaseColors.$grid-drag-header-border-rest,
   $datagrid-row-error-bg: gridBaseColors.$grid-row-error-bg-rest,
@@ -34,7 +34,7 @@
 
 .dx-treelist-rowsview {
   tr:not(.dx-row-focused) .dx-treelist-empty-space {
-    color: $tree-list-chevron-icon-rest;
+    color: var(--dx-tree-list-chevron-icon-rest);
   }
 
   .dx-sort-up,
@@ -45,7 +45,7 @@
 
   tr:not(.dx-row-focused).dx-selection {
     .dx-treelist-empty-space {
-      color: $tree-list-chevron-icon-selected;
+      color: var(--dx-tree-list-chevron-icon-selected);
     }
   }
 
