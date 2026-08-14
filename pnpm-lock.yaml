@@ -222,6 +222,7 @@ overrides:
   systemjs-builder>terser: 5.46.2
   fast-uri@>=3.0.0 <3.1.5: ^3.1.5
   '@hono/node-server@<2.0.12': ^2.0.12
+  nanoid@<3.3.18: ^3.3.18
   stylelint-config-recommended-vue>stylelint-config-html: 1.1.0
   stylelint-config-recommended-vue>stylelint-config-recommended: 16.0.0
   dompurify@<=3.4.12: ^3.4.13
@@ -364,7 +365,7 @@ importers:
     dependencies:
       '@angular-devkit/build-angular':
         specifier: ^22.0.9
-        version: 22.1.2(333cf821b16210d0e4840f3db1257d08)
+        version: 22.1.2(b192cc97f9f903533cf6da00631c7a4d)
       '@angular/animations':
         specifier: ^22.0.8
         version: 22.1.0(@angular/core@22.1.0(@angular/compiler@22.1.0)(rxjs@7.8.2)(zone.js@0.16.2))
@@ -12923,8 +12924,8 @@ packages:
     resolution: {integrity: sha512-BzQguy9W9NJgoVn2mRWzbFrFWWztGCcng2QI9+41frfk+Athwgx3qhqhvStz7ExeUUu7Kzw427sNzHpEZNINog==}
     engines: {node: '>=16.0.0'}
 
-  nanoid@3.3.17:
-    resolution: {integrity: sha512-xQLf0A3HOMlgHq0n247/LRuAOYmB7dXJ/DvAxGvsSBij45XtBSmQycu+F8ODbHwns/XyFZagyL1+J0Offw1E0g==}
+  nanoid@3.3.18:
+    resolution: {integrity: sha512-DTg4MJbGMWkfi6VZFdNt2/caMbQy4Ou+Op/hJQvGEWcnVfoA1QA+xzRKAzw9jD6+GVOOeYr/mIcuDSdug6F6+w==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
@@ -16859,13 +16860,13 @@ snapshots:
       - webpack-cli
       - yaml
 
-  '@angular-devkit/build-angular@22.1.2(333cf821b16210d0e4840f3db1257d08)':
+  '@angular-devkit/build-angular@22.1.2(b192cc97f9f903533cf6da00631c7a4d)':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@angular-devkit/architect': 0.2201.2(chokidar@5.0.0)
       '@angular-devkit/build-webpack': 0.2201.2(chokidar@5.0.0)(webpack-dev-server@5.2.6(tslib@2.8.1)(webpack@5.109.2(@swc/core@1.15.47(@swc/helpers@0.5.23))(esbuild@0.28.1)(postcss@8.5.25)))(webpack@5.109.2(@swc/core@1.15.47(@swc/helpers@0.5.23))(esbuild@0.28.1)(postcss@8.5.25))
       '@angular-devkit/core': 22.1.2(chokidar@5.0.0)
-      '@angular/build': 22.1.2(6cc4381ca5707f29eb1bc864ad5f537d)
+      '@angular/build': 22.1.2(f2c6f0244958832d42f34f07650eaf4c)
       '@angular/compiler-cli': 22.1.0(@angular/compiler@22.1.0)(typescript@6.0.3)
       '@babel/core': 8.0.1
       '@babel/generator': 8.0.0
@@ -16926,7 +16927,6 @@ snapshots:
     transitivePeerDependencies:
       - '@angular/compiler'
       - '@emnapi/core'
-      - '@emnapi/runtime'
       - '@minify-html/node'
       - '@rspack/core'
       - '@swc/core'
@@ -17205,7 +17205,7 @@ snapshots:
       - tsx
       - yaml
 
-  '@angular/build@22.1.2(6cc4381ca5707f29eb1bc864ad5f537d)':
+  '@angular/build@22.1.2(f2c6f0244958832d42f34f07650eaf4c)':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@angular-devkit/architect': 0.2201.2(chokidar@5.0.0)
@@ -17224,11 +17224,11 @@ snapshots:
       listr2: 10.2.2
       magic-string: 1.0.0
       mrmime: 2.0.1
-      oxc-parser: 0.142.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
+      oxc-parser: 0.142.0(@emnapi/core@1.11.2)
       parse5-html-rewriting-stream: 8.0.1
       picomatch: 4.0.5
       piscina: 5.2.0
-      rolldown: 1.2.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
+      rolldown: 1.2.0(@emnapi/core@1.11.2)
       sass: 1.101.0
       semver: 7.8.5
       source-map-support: 0.5.21
@@ -17250,7 +17250,6 @@ snapshots:
       rollup: 4.59.0
     transitivePeerDependencies:
       - '@emnapi/core'
-      - '@emnapi/runtime'
       - '@types/node'
       - '@vitejs/devtools'
       - chokidar
@@ -21151,12 +21150,12 @@ snapshots:
   '@oxc-parser/binding-openharmony-arm64@0.142.0':
     optional: true
 
-  '@oxc-parser/binding-wasm32-wasi@0.142.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)':
+  '@oxc-parser/binding-wasm32-wasi@0.142.0(@emnapi/core@1.11.2)':
     dependencies:
+      '@emnapi/runtime': 1.11.2
       '@napi-rs/wasm-runtime': 1.2.2(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
     transitivePeerDependencies:
       - '@emnapi/core'
-      - '@emnapi/runtime'
     optional: true
 
   '@oxc-parser/binding-win32-arm64-msvc@0.142.0':
@@ -22055,12 +22054,12 @@ snapshots:
       '@napi-rs/wasm-runtime': 1.2.2(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
     optional: true
 
-  '@rolldown/binding-wasm32-wasi@1.2.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)':
+  '@rolldown/binding-wasm32-wasi@1.2.0(@emnapi/core@1.11.2)':
     dependencies:
+      '@emnapi/runtime': 1.11.2
       '@napi-rs/wasm-runtime': 1.2.2(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
     transitivePeerDependencies:
       - '@emnapi/core'
-      - '@emnapi/runtime'
     optional: true
 
   '@rolldown/binding-win32-arm64-msvc@1.0.3':
@@ -31543,7 +31542,7 @@ snapshots:
 
   mylas@2.1.14: {}
 
-  nanoid@3.3.17: {}
+  nanoid@3.3.18: {}
 
   napi-postinstall@0.3.4: {}
 
@@ -32175,7 +32174,7 @@ snapshots:
       object-keys: 1.1.1
       safe-push-apply: 1.0.0
 
-  oxc-parser@0.142.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2):
+  oxc-parser@0.142.0(@emnapi/core@1.11.2):
     dependencies:
       '@oxc-project/types': 0.142.0
     optionalDependencies:
@@ -32195,13 +32194,12 @@ snapshots:
       '@oxc-parser/binding-linux-x64-gnu': 0.142.0
       '@oxc-parser/binding-linux-x64-musl': 0.142.0
       '@oxc-parser/binding-openharmony-arm64': 0.142.0
-      '@oxc-parser/binding-wasm32-wasi': 0.142.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
+      '@oxc-parser/binding-wasm32-wasi': 0.142.0(@emnapi/core@1.11.2)
       '@oxc-parser/binding-win32-arm64-msvc': 0.142.0
       '@oxc-parser/binding-win32-ia32-msvc': 0.142.0
       '@oxc-parser/binding-win32-x64-msvc': 0.142.0
     transitivePeerDependencies:
       - '@emnapi/core'
-      - '@emnapi/runtime'
 
   p-finally@2.0.1: {}
 
@@ -32588,7 +32586,7 @@ snapshots:
 
   postcss@8.5.25:
     dependencies:
-      nanoid: 3.3.17
+      nanoid: 3.3.18
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
@@ -33268,7 +33266,7 @@ snapshots:
       '@rolldown/binding-win32-arm64-msvc': 1.1.5
       '@rolldown/binding-win32-x64-msvc': 1.1.5
 
-  rolldown@1.2.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2):
+  rolldown@1.2.0(@emnapi/core@1.11.2):
     dependencies:
       '@oxc-project/types': 0.140.0
       '@rolldown/pluginutils': 1.0.1
@@ -33284,12 +33282,11 @@ snapshots:
       '@rolldown/binding-linux-x64-gnu': 1.2.0
       '@rolldown/binding-linux-x64-musl': 1.2.0
       '@rolldown/binding-openharmony-arm64': 1.2.0
-      '@rolldown/binding-wasm32-wasi': 1.2.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
+      '@rolldown/binding-wasm32-wasi': 1.2.0(@emnapi/core@1.11.2)
       '@rolldown/binding-win32-arm64-msvc': 1.2.0
       '@rolldown/binding-win32-x64-msvc': 1.2.0
     transitivePeerDependencies:
       - '@emnapi/core'
-      - '@emnapi/runtime'
 
   rollup-plugin-dts@6.4.1(rollup@4.59.0)(typescript@4.9.5):
     dependencies:
@@ -34762,7 +34759,7 @@ snapshots:
       lodash: 4.18.1
       mkdirp: 0.5.6
       mustache: 2.3.2
-      nanoid: 3.3.17
+      nanoid: 3.3.18
       os-family: 1.1.0
       pify: 2.3.0
       pinkie: 2.0.4
@@ -34789,7 +34786,7 @@ snapshots:
       merge-stream: 1.0.1
       mime: 1.4.1
       mustache: 2.3.2
-      nanoid: 3.3.17
+      nanoid: 3.3.18
       os-family: 1.1.0
       parse5: 7.3.0
       pinkie: 2.0.4
@@ -34902,7 +34899,7 @@ snapshots:
       moment: 2.30.1
       moment-duration-format-commonjs: 1.0.1
       mustache: 2.3.2
-      nanoid: 3.3.17
+      nanoid: 3.3.18
       os-family: 1.1.0
       parse5: 1.5.1
       pify: 2.3.0
