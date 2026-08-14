@@ -1,9 +1,14 @@
-import { describe, expect, it } from '@jest/globals';
-
-import type { ChangedRows, ProcessedItem, UpdateChange } from '../../types';
 import {
-  getChangedRowIndices, getRowOperation, isSameGroupRowState,
-  isSameItem, pushChangedRow, resetChangedRows,
+  describe, expect, it, jest,
+} from '@jest/globals';
+
+import type {
+  ChangedRows, DataChange, ProcessedItem, UpdateChange,
+} from '../../types';
+import {
+  getChangedRowIndices, getDataRowIndex, getRowKey,
+  getRowOperation, indexRowsByKey, isSameGroupRowState, isSameItem,
+  markUpdateChange, pushChangedRow, resetChangedRows, updateRowCells,
 } from '../row_changes';
 
 const row = (partial: Partial<ProcessedItem>): ProcessedItem => ({
@@ -111,6 +116,77 @@ describe('isSameGroupRowState', () => {
   });
 });
 
+describe('getRowKey', () => {
+  it('should tell apart the rows of different types with the same key', () => {
+    expect(getRowKey(row({ key: 1, rowType: 'data' })))
+      .not.toBe(getRowKey(row({ key: 1, rowType: 'detail' })));
+  });
+
+  it('should return the same key for equal composite keys', () => {
+    expect(getRowKey(row({ key: { id: 1, room: 2 } })))
+      .toBe(getRowKey(row({ key: { id: 1, room: 2 } })));
+  });
+});
+
+describe('indexRowsByKey', () => {
+  it('should number the rows and map their keys to the indices', () => {
+    const items = [row({ key: 1 }), row({ key: 2 })];
+
+    const indexByKey = indexRowsByKey(items);
+
+    expect(items.map((item) => item.rowIndex)).toEqual([0, 1]);
+    expect(indexByKey[getRowKey(items[0])]).toBe(0);
+    expect(indexByKey[getRowKey(items[1])]).toBe(1);
+  });
+
+  it('should return undefined for an unknown key', () => {
+    const indexByKey = indexRowsByKey([row({ key: 1 })]);
+
+    expect(indexByKey[getRowKey(row({ key: 2 }))]).toBeUndefined();
+  });
+});
+
+describe('updateRowCells', () => {
+  it('should pass the new row to the row and cell updaters', () => {
+    const newItem = row({ key: 1 });
+    const update = jest.fn();
+    const cellUpdate = jest.fn();
+    const oldItem = row({ key: 1, update, cells: [{ update: cellUpdate }, {}] });
+
+    updateRowCells(oldItem, newItem);
+
+    expect(update).toHaveBeenCalledWith(newItem);
+    expect(cellUpdate).toHaveBeenCalledWith(newItem, true);
+  });
+
+  it('should do nothing when the row has no cells', () => {
+    const update = jest.fn();
+
+    updateRowCells(row({ key: 1, update }), row({ key: 1 }));
+
+    expect(update).not.toHaveBeenCalled();
+  });
+});
+
+describe('getDataRowIndex', () => {
+  const rows = [
+    row({ rowType: 'data' }),
+    row({ rowType: 'group' }),
+    row({ rowType: 'detail' }),
+    row({ rowType: 'data' }),
+  ];
+
+  it('should count the data and group rows before the visible index', () => {
+    expect(getDataRowIndex(rows, 0)).toBe(0);
+    expect(getDataRowIndex(rows, 3)).toBe(2);
+    expect(getDataRowIndex(rows, rows.length)).toBe(3);
+  });
+
+  it('should count the rows that are there when the index is out of range', () => {
+    expect(getDataRowIndex(rows, 10)).toBe(3);
+  });
+});
+
 describe('getChangedRowIndices', () => {
   it('should sort the indices ascending', () => {
     expect(getChangedRowIndices([4, 0, 2], 0)).toEqual([0, 2, 4]);
@@ -203,6 +279,25 @@ describe('resetChangedRows', () => {
     expect(change.columnIndices).toBe(changedRows.columnIndices);
     expect(changedRows.rowIndices).toEqual([]);
     expect(changedRows.items).toEqual([]);
+  });
+});
+
+describe('markUpdateChange', () => {
+  const refreshChange = (): DataChange => ({ changeType: 'refresh', items: [row({ key: 1 })] });
+
+  it('should turn the refresh change into a partial update carrying the rows', () => {
+    const change = refreshChange();
+    const changedRows = emptyChangedRows();
+
+    markUpdateChange(change, changedRows);
+
+    const updateChange = change as UpdateChange;
+    expect(updateChange.changeType).toBe('update');
+    expect(updateChange.repaintChangesOnly).toBe(true);
+    expect(updateChange.items).toBe(changedRows.items);
+    expect(updateChange.rowIndices).toBe(changedRows.rowIndices);
+    expect(updateChange.changeTypes).toBe(changedRows.changeTypes);
+    expect(updateChange.columnIndices).toBe(changedRows.columnIndices);
   });
 });
 
