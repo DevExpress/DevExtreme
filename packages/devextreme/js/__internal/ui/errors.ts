@@ -162,6 +162,6 @@ export default errorUtils(errors.ERROR_MESSAGES, {
   W1027: 'A prompt should be specified for a custom command.',
   W1028: 'Nested/banded columns do not support the following properties: {0}.',
   W1029: '\'hiddenWeekDays\' must leave at least one weekday visible.',
-  W1030: 'No tile server is configured for the OSM map provider. Specify the "providerConfig.tileServer" option.',
-  W1032: 'The OSM map provider tile server is configured without an "attribution". Attribution is required when displaying OpenStreetMap data; set the "attribution" field of the "providerConfig.tileServer" option (for example, "© OpenStreetMap contributors").',
+  W1030: '\'tileServer\' is not configured for the OSM map provider.',
+  W1032: '\'attribution\' is not configured for the OSM tile server.',
 });
