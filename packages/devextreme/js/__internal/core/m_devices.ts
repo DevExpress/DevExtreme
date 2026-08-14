@@ -319,7 +319,7 @@ class Devices {
       return;
     }
 
-    const deviceOrName = sessionStorage.getItem('dx-force-device');
+    const deviceOrName = sessionStorage.getItem('dx-force-device') ?? '';
 
     try {
       return JSON.parse(deviceOrName);
