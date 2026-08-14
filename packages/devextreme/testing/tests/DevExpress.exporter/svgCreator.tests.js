@@ -1,8 +1,10 @@
-const $ = require('jquery');
-const isFunction = require('core/utils/type').isFunction;
-const exporter = require('exporter').svg;
+import $ from 'jquery';
+import { isFunction } from 'core/utils/type';
+import { svg } from 'exporter';
+import * as svgUtils from 'core/utils/svg';
+
+const exporter = svg;
 const svgCreator = exporter.creator;
-const svgUtils = require('core/utils/svg');
 
 function setupCanvasStub() {
     // Blob

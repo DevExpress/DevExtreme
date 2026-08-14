@@ -1,5 +1,5 @@
-const numberLocalization = require('common/core/localization/number');
-const dateLocalization = require('common/core/localization/date');
+import numberLocalization from 'common/core/localization/number';
+import dateLocalization from 'common/core/localization/date';
 
 QUnit.module('Custom date names', {
     beforeEach: function() {

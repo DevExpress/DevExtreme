@@ -1,17 +1,15 @@
-require('../../helpers/noIntl.js');
-const getNumberFormatter = require('common/core/localization/ldml/number').getFormatter;
-const getNumberFormat = require('common/core/localization/ldml/number').getFormat;
-const getDateParser = require('common/core/localization/ldml/date.parser').getParser;
-const getRegExpInfo = require('common/core/localization/ldml/date.parser').getRegExpInfo;
-const getDateFormatter = require('common/core/localization/ldml/date.formatter').getFormatter;
-const getDateFormat = require('common/core/localization/ldml/date.format').getFormat;
-const defaultDateNames = require('common/core/localization/default_date_names');
-const numberLocalization = require('common/core/localization/number');
-const dateLocalization = require('common/core/localization/date');
-const extend = require('core/utils/extend').extend;
-const console = require('core/utils/console').logger;
+import '../../helpers/noIntl.js';
+import { getFormatter as getNumberFormatter, getFormat as getNumberFormat } from 'common/core/localization/ldml/number';
+import { getParser as getDateParser, getRegExpInfo } from 'common/core/localization/ldml/date.parser';
+import { getFormatter as getDateFormatter } from 'common/core/localization/ldml/date.formatter';
+import { getFormat as getDateFormat } from 'common/core/localization/ldml/date.format';
+import defaultDateNames from 'common/core/localization/default_date_names';
+import numberLocalization from 'common/core/localization/number';
+import dateLocalization from 'common/core/localization/date';
+import { extend } from 'core/utils/extend';
+import { logger as console } from 'core/utils/console';
 
-require('common/core/localization/currency');
+import 'common/core/localization/currency';
 
 const dateParts = extend({}, defaultDateNames, {
     getPeriodNames: function() {
@@ -406,14 +404,14 @@ QUnit.module('number formatter', () => {
         assert.deepEqual(regExpInfo.patterns, [
             'HH', '\' h \'', 'mm'
         ]);
-        // eslint-disable-next-line no-useless-escape
+
         assert.deepEqual(regExpInfo.regexp, /^(2[0-3]|1[0-9]|0?[0-9])(\ h\ )([1-5][0-9]|0?[0-9])$/i);
 
         regExpInfo = getRegExpInfo('HH:mm', parts);
         assert.deepEqual(regExpInfo.patterns, [
             'HH', ':', 'mm'
         ]);
-        // eslint-disable-next-line no-useless-escape
+
         assert.deepEqual(regExpInfo.regexp, /^(2[0-3]|1[0-9]|0?[0-9])(h|:)([1-5][0-9]|0?[0-9])$/i);
 
         parts.getTimeSeparator = function() {
@@ -423,7 +421,7 @@ QUnit.module('number formatter', () => {
         assert.deepEqual(regExpInfo.patterns, [
             'HH', ':', 'mm'
         ]);
-        // eslint-disable-next-line no-useless-escape
+
         assert.deepEqual(regExpInfo.regexp, /^(2[0-3]|1[0-9]|0?[0-9])(\[\.\]|:)([1-5][0-9]|0?[0-9])$/i);
     });
 

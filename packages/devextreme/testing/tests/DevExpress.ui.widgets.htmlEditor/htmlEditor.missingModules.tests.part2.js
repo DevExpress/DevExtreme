@@ -1,1 +1,1 @@
-require('../../helpers/ignoreQuillTimers.js');
+import '../../helpers/ignoreQuillTimers.js';

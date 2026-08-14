@@ -1,5 +1,5 @@
-const CustomStore = require('common/data/custom_store').CustomStore;
-const ErrorHandlingHelper = require('../../helpers/data.errorHandlingHelper.js');
+import { CustomStore } from 'common/data/custom_store';
+import ErrorHandlingHelper from '../../helpers/data.errorHandlingHelper.js';
 
 const RAW = 'raw';
 
