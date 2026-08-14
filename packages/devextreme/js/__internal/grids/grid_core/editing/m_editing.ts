@@ -6,6 +6,7 @@ import pointerEvents from '@js/common/core/events/pointer';
 import { removeEvent } from '@js/common/core/events/remove';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
+import type { Store } from '@js/common/data';
 import { createObjectWithChanges } from '@js/common/data/array_utils';
 import type { DataChange as EditingDataChange, GridsEditMode } from '@js/common/grids';
 import devices from '@js/core/devices';
@@ -37,8 +38,8 @@ import type {
   GeneratedItem,
   ItemProcessingOptions,
   ProcessedItem,
-  RawItemData,
 } from '../data_controller/types';
+import type { RawItemData } from '../data_source_adapter/types';
 import modules from '../m_modules';
 import type {
   Controllers, ModuleType, RowKey, Views,
@@ -718,7 +719,7 @@ class EditingControllerImpl extends modules.ViewController {
             if (equalByValue(item.key, key)) {
               result = index;
             }
-          } else if (equalByValue(dataController.keyOf(item), key)) {
+          } else if (equalByValue(dataController.keyOf(item as RawItemData), key)) {
             result = index;
           }
         }
@@ -1613,7 +1614,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   private _processChanges(deferreds, results, dataChanges, changes) {
-    const store = this._dataController.store();
+    const store = this._dataController.store() as Store;
 
     each(changes, (index, change) => {
       const oldData = this._getOldData(change.key);
@@ -1631,13 +1632,13 @@ class EditingControllerImpl extends modules.ViewController {
       switch (type) {
         case DATA_EDIT_DATA_REMOVE_TYPE:
           params = { data: oldData, key: change.key, cancel: false };
-          deferred = this._executeEditingAction('onRowRemoving', params, () => store.remove(change.key).done((key) => {
+          deferred = this._executeEditingAction('onRowRemoving', params, () => fromPromise(store.remove(change.key)).done((key) => {
             dataChanges.push({ type: 'remove', key });
           }));
           break;
         case DATA_EDIT_DATA_INSERT_TYPE:
           params = { data, cancel: false };
-          deferred = this._executeEditingAction('onRowInserting', params, () => store.insert(params.data).done((data, key) => {
+          deferred = this._executeEditingAction('onRowInserting', params, () => fromPromise(store.insert(params.data)).done((data, key) => {
             if (isDefined(key)) {
               const initialKey = changeCopy.key;
 
@@ -1654,7 +1655,7 @@ class EditingControllerImpl extends modules.ViewController {
           params = {
             newData: data, oldData, key: change.key, cancel: false,
           };
-          deferred = this._executeEditingAction('onRowUpdating', params, () => store.update(change.key, params.newData).done((data, key) => {
+          deferred = this._executeEditingAction('onRowUpdating', params, () => fromPromise(store.update(change.key, params.newData)).done((data, key) => {
             if (data && isObject(data) && data !== params.newData) {
               changeCopy.data = data;
             }
@@ -1781,7 +1782,6 @@ class EditingControllerImpl extends modules.ViewController {
       }
       when(this._beforeSaveEditData()).done((cancel) => {
         if (cancel) {
-          // @ts-expect-error
           this._resolveAfterSave(deferred, { cancel });
           return;
         }
@@ -1801,7 +1801,7 @@ class EditingControllerImpl extends modules.ViewController {
     return deferred.promise();
   }
 
-  private _resolveAfterSave(deferred, { cancel = undefined, error = undefined } = {}) {
+  private _resolveAfterSave(deferred, { cancel = undefined, error = undefined }: { cancel?: unknown; error?: unknown } = {}) {
     // @ts-expect-error
     when(this._afterSaveEditData(cancel)).done(() => {
       deferred.resolve(error);
@@ -2575,9 +2575,9 @@ export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataControll
     this._updateEditRow(this.items(true));
   }
 
-  protected _applyChangeUpdate(change) {
+  protected applyChangeUpdate(change) {
     this._updateEditRow(change.items);
-    super._applyChangeUpdate(change);
+    super.applyChangeUpdate(change);
   }
 
   protected _applyChangesOnly(change) {

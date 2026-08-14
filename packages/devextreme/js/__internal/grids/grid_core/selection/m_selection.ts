@@ -20,7 +20,7 @@ import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ContextMenuController } from '@ts/grids/grid_core/context_menu/m_context_menu';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
-import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
+import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_controller';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import Selection from '@ts/ui/selection/selection';
 
@@ -665,8 +665,7 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
   }
 
   public refresh(options): any {
-    // @ts-expect-error
-    const d: DeferredObj<void> = new Deferred();
+    const d = Deferred();
 
     super.refresh(options).done(() => {
       const skipSelectionRefresh = isObject(options) && !(options as any).selection;
@@ -676,16 +675,16 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
         return;
       }
 
-      this._selectionController.refresh().done(d.resolve).fail(d.reject);
-    }).fail(d.reject);
+      this._selectionController.refresh().done(d.resolve as (...args: unknown[]) => void)
+        .fail(d.reject as (...args: unknown[]) => void);
+    }).fail(d.reject as (...args: unknown[]) => void);
 
     return d.promise();
   }
 
-  // eslint-disable-next-line
-  protected _dataChangedHandler(e?: ChangedEvent) {
+  protected dataChangedHandler(e?: ChangedEvent): void {
     const hasLoadOperation = this.hasLoadOperation();
-    super._dataChangedHandler(e);
+    super.dataChangedHandler(e);
 
     if (hasLoadOperation && !this._repaintChangesOnly) {
       this._selectionController.focusedItemIndex(-1);

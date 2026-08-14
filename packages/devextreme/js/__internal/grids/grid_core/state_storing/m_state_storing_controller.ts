@@ -48,7 +48,7 @@ export class StateStoringController extends modules.ViewController {
 
   private _isLoaded: any;
 
-  private _isLoading: any;
+  private _isLoading!: boolean;
 
   private _windowUnloadHandler: any;
 
@@ -145,7 +145,7 @@ export class StateStoringController extends modules.ViewController {
     return this._isLoaded;
   }
 
-  public isLoading() {
+  public isLoading(): boolean {
     return this._isLoading;
   }
 

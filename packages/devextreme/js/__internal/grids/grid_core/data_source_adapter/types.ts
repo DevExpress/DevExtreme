@@ -1,10 +1,16 @@
 import type { Mode } from '@js/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import type { Properties } from '@js/ui/data_grid';
 import type {
   ChangedEvent as BaseChangedEvent,
   LoadOperation as BaseLoadOperation,
   StoreLoadOptions,
 } from '@ts/data/data_source/types';
+
+import type { InternalGrid, ModuleType } from '../m_types';
+import type DataSourceAdapter from './m_data_source_adapter';
+
+export type RawItemData = Record<string, unknown>;
 
 export type RemoteOperations = Properties['remoteOperations'];
 
@@ -24,12 +30,14 @@ export interface OperationTypes {
   paging?: boolean;
 }
 
-export interface LoadOperation extends BaseLoadOperation {
-  data?: unknown[];
-  cachedStoreData?: unknown[];
+export interface LoadOperation extends Omit<BaseLoadOperation, 'operationId'> {
+  operationId?: number;
+  data?: RawItemData[] | DeferredObj<RawItemData[]>;
+  cachedStoreData?: RawItemData[];
   storeLoadOptions: StoreLoadOptions & {
     isLoadingAll?: boolean;
   };
+  loadOptions?: StoreLoadOptions;
   originalStoreLoadOptions?: StoreLoadOptions;
   remoteOperations?: RemoteOperations;
   isCustomLoading?: boolean;
@@ -42,7 +50,8 @@ export interface LoadOperation extends BaseLoadOperation {
   group?: unknown[] | null;
   extra?: {
     totalCount?: number;
-  }
+    summary?: unknown[];
+  };
 }
 
 export interface ChangedEvent extends BaseChangedEvent {
@@ -50,4 +59,15 @@ export interface ChangedEvent extends BaseChangedEvent {
   // also can be 'append', 'prepend', 'pageIndex' in case of
   changeType?: 'loadError';
   error?: unknown;
+}
+
+/** provider */
+
+export type DataSourceAdapterExtender = (
+  Base: ModuleType<DataSourceAdapter>,
+) => ModuleType<DataSourceAdapter>;
+
+export interface DataSourceAdapterProvider {
+  extend: (extender: DataSourceAdapterExtender) => void;
+  create: (component: InternalGrid) => DataSourceAdapter;
 }
