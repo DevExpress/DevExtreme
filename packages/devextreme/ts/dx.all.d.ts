@@ -23358,7 +23358,12 @@ declare module DevExpress.ui {
      */
     export type InitializedEvent =
       DevExpress.common.core.events.InitializedEventInfo<dxMap>;
-    export type MapProvider = 'azure' | 'bing' | 'google' | 'googleStatic';
+    export type MapProvider =
+      | 'azure'
+      | 'bing'
+      | 'google'
+      | 'googleStatic'
+      | 'osm';
     export type MapType = 'hybrid' | 'roadmap' | 'satellite';
     /**
      * [descr:_ui_map_MarkerAddedEvent]
@@ -23390,6 +23395,34 @@ declare module DevExpress.ui {
     export type OptionChangedEvent =
       DevExpress.common.core.events.EventInfo<dxMap> &
         DevExpress.common.core.events.ChangedOptionInfo;
+    /**
+     * [descr:OsmTileServer]
+     */
+    export type OsmTileServer =
+      | string
+      | OsmTileServerConfig
+      | ((type: MapType) => string | OsmTileServerConfig | null | undefined);
+    /**
+     * [descr:OsmTileServerConfig]
+     */
+    export interface OsmTileServerConfig {
+      /**
+       * [descr:OsmTileServerConfig.url]
+       */
+      url: string;
+      /**
+       * [descr:OsmTileServerConfig.attribution]
+       */
+      attribution?: string;
+      /**
+       * [descr:OsmTileServerConfig.subdomains]
+       */
+      subdomains?: string | Array<string>;
+      /**
+       * [descr:OsmTileServerConfig.maxZoom]
+       */
+      maxZoom?: number;
+    }
     export type Properties = dxMapOptions;
     /**
      * [descr:_ui_map_ReadyEvent]
@@ -23561,6 +23594,10 @@ declare module DevExpress.ui {
        * @deprecated [depNote:dxMapOptions.providerConfig.useAdvancedMarkers]
        */
       useAdvancedMarkers?: boolean;
+      /**
+       * [descr:dxMapOptions.providerConfig.tileServer]
+       */
+      tileServer?: DevExpress.ui.dxMap.OsmTileServer | undefined;
     };
     /**
      * [descr:dxMapOptions.routes]
