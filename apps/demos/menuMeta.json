@@ -835,6 +835,7 @@
           {
             "Name": "Master-Detail",
             "Equivalents": "preview row",
+            "Badge": "Updated",
             "Demos": [
               {
                 "Title": "Master-Detail View",
@@ -858,6 +859,14 @@
                   "/Models/SampleData/DataGridEmployees.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "AI-Powered Detail View",
+                "Name": "AIDetailView",
+                "Widget": "DataGrid",
+                "Badge": "Roadmap",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-wg-roadmap-ai-powered-detail-view.xml"
               },
               {
                 "Title": "Advanced Master-Detail View",
