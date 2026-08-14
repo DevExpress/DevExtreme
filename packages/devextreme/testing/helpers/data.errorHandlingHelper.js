@@ -1,16 +1,8 @@
-(function(root, factory) {
-    root.DevExpress = root.DevExpress || {};
-    root.DevExpress.data = root.DevExpress.data || {};
-    root.DevExpress.data.testing = root.DevExpress.data.testing || {};
+import $ from 'jquery';
+import Class from 'core/class';
+import * as errorsModule from 'common/data/errors';
 
-    if(typeof define === 'function' && define.amd) {
-        define(function(require, exports, module) {
-            root.DevExpress.data.testing.ErrorHandlingHelper = module.exports = factory(require('jquery'), require('core/class'), require('common/data/errors'));
-        });
-    } else {
-        root.DevExpress.data.testing.ErrorHandlingHelper = factory(window.jQuery, DevExpress.Class, DevExpress.data);
-    }
-}(window, function($, Class, errorsModule) {
+const __moduleExports = (function($, Class, errorsModule) {
     return Class.inherit({
 
         ctor: function() {
@@ -76,4 +68,11 @@
             });
         }
     });
-}));
+})($, Class, errorsModule);
+
+window.DevExpress = window.DevExpress || {};
+window.DevExpress.data = window.DevExpress.data || {};
+window.DevExpress.data.testing = window.DevExpress.data.testing || {};
+window.DevExpress.data.testing.ErrorHandlingHelper = __moduleExports;
+
+export default __moduleExports;

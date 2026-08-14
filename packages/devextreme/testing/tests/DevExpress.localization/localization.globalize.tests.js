@@ -1,26 +1,3 @@
-SystemJS.config({
-    meta: {
-        './localization.base.tests.js': {
-            deps: [
-                'common/core/localization/globalize/core',
-                'common/core/localization/globalize/number',
-                'common/core/localization/globalize/currency',
-                'common/core/localization/globalize/date',
-                'common/core/localization/globalize/message'
-            ]
-        }
-    },
-    packages: {
-        'globalize': {
-            meta: {
-                '../globalize.js': {
-                    deps: ['cldr/unresolved']
-                }
-            }
-        }
-    }
-});
-
 define(function(require, exports, module) {
     const cldrData = [
         require('devextreme-cldr-data/ar.json!json'),
@@ -547,7 +524,7 @@ define(function(require, exports, module) {
     });
 
     QUnit.module('Exceljs format', () => {
-        ExcelJSLocalizationFormatTests.default.runCurrencyTests([
+        ExcelJSLocalizationFormatTests.runCurrencyTests([
             { value: 'USD', expected: '$#,##0_);\\($#,##0\\)' },
             { value: 'RUB', expected: '\\R\\U\\B#,##0_);\\(\\R\\U\\B#,##0\\)' },
             { value: 'JPY', expected: '\\¥#,##0_);\\(\\¥#,##0\\)' },
@@ -556,7 +533,7 @@ define(function(require, exports, module) {
             { value: 'SEK', expected: '\\S\\E\\K#,##0_);\\(\\S\\E\\K#,##0\\)' }
         ]);
 
-        ExcelJSLocalizationFormatTests.default.runPivotGridCurrencyTests([
+        ExcelJSLocalizationFormatTests.runPivotGridCurrencyTests([
             { value: 'USD', expected: '$#,##0_);\\($#,##0\\)' },
             { value: 'RUB', expected: '\\R\\U\\B#,##0_);\\(\\R\\U\\B#,##0\\)' },
             { value: 'JPY', expected: '\\¥#,##0_);\\(\\¥#,##0\\)' },

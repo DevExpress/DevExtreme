@@ -11,6 +11,7 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getHeight, getWidth } from '@js/core/utils/size';
+import { setHeight } from '@js/core/utils/style';
 import { isDefined, isNumeric, isString } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import * as accessibility from '@js/ui/shared/accessibility';
@@ -826,7 +827,7 @@ export class ResizingController extends modules.ViewController {
 
       // IE11
       if (maxHeightHappened && !isMaxHeightApplied) {
-        $(groupElement).css('height', maxHeight);
+        setHeight($(groupElement), maxHeight);
       }
 
       if (!dataController.isLoaded()) {

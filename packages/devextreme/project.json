@@ -152,6 +152,20 @@
         "{projectRoot}/artifacts/npm/devextreme-internal/bundles/dx.custom.config.js"
       ]
     },
+    "copy:qunit:dx-custom": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "options": {
+        "files": [
+          {
+            "from": "./build/bundle-templates/dx.custom.js",
+            "to": "./artifacts/transpiled-esm-npm/bundles/dx.custom.js"
+          }
+        ]
+      },
+      "dependsOn": ["build:devextreme-bundler-config"],
+      "inputs": ["{projectRoot}/build/bundle-templates/dx.custom.js"],
+      "outputs": ["{projectRoot}/artifacts/transpiled-esm-npm/bundles/dx.custom.js"]
+    },
     "build:devextreme-bundler-config:watch": {
       "executor": "devextreme-nx-infra-plugin:concatenate-files",
       "cache": false,
@@ -322,6 +336,11 @@
           { "from": "./js/viz/vector_map.utils/_settings.json", "to": "./viz/vector_map.utils/_settings.json" }
         ]
       },
+      "configurations": {
+        "qunit": {
+          "removeDebug": false
+        }
+      },
       "inputs": [
         "jsSourcesProduction",
         "jsAssetsProduction"
@@ -410,12 +429,83 @@
           ".jsx": ".js"
         }
       },
+      "configurations": {
+        "qunit": {
+          "removeDebug": false
+        }
+      },
       "inputs": [
         "internalTsArtifacts"
       ],
       "outputs": [
         "{projectRoot}/artifacts/transpiled-esm-npm/esm/__internal"
       ]
+    },
+    "build:npm:esm:watch": {
+      "executor": "devextreme-nx-infra-plugin:babel-transform",
+      "cache": false,
+      "options": {
+        "babelConfigPath": "./build/transpile-config.js",
+        "configKey": "esm",
+        "sourcePattern": "./js/**/*.{js,jsx}",
+        "excludePatterns": [
+          "./js/**/*.d.ts",
+          "./js/__internal/**/*"
+        ],
+        "outDir": "./artifacts/transpiled-esm-npm/esm",
+        "removeDebug": true,
+        "watch": true,
+        "copyAssets": [
+          { "from": "./js/localization/messages", "to": "./localization/messages" },
+          { "from": "./js/viz/vector_map.utils/_settings.json", "to": "./viz/vector_map.utils/_settings.json" }
+        ]
+      },
+      "configurations": {
+        "qunit": {
+          "removeDebug": false
+        }
+      }
+    },
+    "build:npm:esm:internal:watch": {
+      "executor": "devextreme-nx-infra-plugin:babel-transform",
+      "cache": false,
+      "options": {
+        "babelConfigPath": "./build/transpile-config.js",
+        "configKey": "esm",
+        "sourcePattern": "./artifacts/dist_ts/__internal/**/*.{js,jsx}",
+        "outDir": "./artifacts/transpiled-esm-npm/esm/__internal",
+        "removeDebug": true,
+        "watch": true,
+        "renameExtensions": {
+          ".jsx": ".js"
+        }
+      },
+      "configurations": {
+        "qunit": {
+          "removeDebug": false
+        }
+      }
+    },
+    "build:qunit-esm": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "parallel": true,
+        "commands": [
+          "pnpm nx run devextreme:build:npm:esm -c qunit",
+          "pnpm nx run devextreme:build:npm:esm:internal -c qunit"
+        ]
+      },
+      "dependsOn": [
+        "build:ts:internal"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/transpiled-esm-npm/esm"
+      ],
+      "cache": true,
+      "metadata": {
+        "description": "ESM artifacts for QUnit native import-map loader (?loader=esm)."
+      }
     },
     "build:npm:cjs:internal": {
       "executor": "devextreme-nx-infra-plugin:babel-transform",
@@ -530,14 +620,12 @@
             "pnpm nx build:devextreme-bundler-config devextreme",
             "pnpm nx build:devextreme-bundler-config devextreme -c prod",
             "pnpm nx build:ts:internal devextreme",
-            "pnpm nx run-many --targets=build:cjs,build:cjs:internal,build:cjs:bundles --projects=devextreme --parallel",
-            "pnpm nx run-many --targets=build:cjs,build:cjs:internal,build:cjs:bundles --projects=devextreme --parallel -c production",
-            "pnpm nx run-many --targets=build:npm:cjs,build:npm:cjs:internal --projects=devextreme --parallel",
+            "pnpm nx run-many --targets=build:npm:esm,build:npm:esm:internal --projects=devextreme --parallel -c qunit",
+            "pnpm nx copy:qunit:dx-custom devextreme",
             "pnpm nx clean:dist-ts devextreme"
           ],
           "outputs": [
-            "{projectRoot}/artifacts/transpiled",
-            "{projectRoot}/artifacts/transpiled-renovation-npm",
+            "{projectRoot}/artifacts/transpiled-esm-npm",
             "{projectRoot}/build/bundle-templates/dx.custom.js",
             "{projectRoot}/artifacts/npm/devextreme/bundles/dx.custom.config.js"
           ]
@@ -570,10 +658,8 @@
       "options": {
         "commands": [
           "pnpm nx build:ts:internal:watch devextreme",
-          "pnpm nx build:cjs:watch devextreme",
-          "pnpm nx build:cjs:watch devextreme -c production",
-          "pnpm nx build:cjs:internal:watch devextreme",
-          "pnpm nx build:cjs:internal:watch devextreme -c production"
+          "pnpm nx build:npm:esm:watch devextreme -c qunit",
+          "pnpm nx build:npm:esm:internal:watch devextreme -c qunit"
         ],
         "cwd": "{projectRoot}",
         "parallel": true
@@ -1729,7 +1815,7 @@
           "pnpm nx clean:artifacts devextreme",
           "pnpm nx build:localization devextreme",
           "pnpm nx build:transpile devextreme -c ci",
-          "pnpm nx run-many --targets=bundle:debug,build:vectormap,copy:vendor --projects=devextreme --parallel"
+          "pnpm nx run-many --targets=build:vectormap,copy:vendor --projects=devextreme --parallel"
         ],
         "parallel": false
       },
@@ -1755,57 +1841,8 @@
       ],
       "cache": true,
       "metadata": {
-        "description": "Dev/CI test build. Skips prod bundles, aspnet, declarations, npm, and license checks."
+        "description": "Dev/CI QUnit build (native ESM import-map). Skips all CJS transpile/bundle steps, npm CJS dual-mode, prod bundles, aspnet, declarations, npm packing, and license checks."
       }
-    },
-    "build:systemjs": {
-      "executor": "nx:run-commands",
-      "options": {
-        "cwd": "{projectRoot}",
-        "parallel": true,
-        "commands": [
-          "node testing/systemjs-builder.js --transpile=modules",
-          "node testing/systemjs-builder.js --transpile=testing",
-          "node testing/systemjs-builder.js --transpile=css",
-          "node testing/systemjs-builder.js --transpile=js-vendors"
-        ]
-      },
-      "dependsOn": [
-        "build:dev"
-      ],
-      "inputs": [
-        "internalPackageEnv",
-        {
-          "env": "DEVEXTREME_TEST_CI"
-        },
-        {
-          "dependentTasksOutputFiles": "packages/devextreme/artifacts/transpiled/**/*"
-        },
-        {
-          "dependentTasksOutputFiles": "packages/devextreme/artifacts/css/dx.light.css"
-        },
-        {
-          "dependentTasksOutputFiles": "packages/devextreme/artifacts/css/dx.material.blue.light.css"
-        },
-        {
-          "dependentTasksOutputFiles": "packages/devextreme/artifacts/css/dx.fluent.blue.light.css"
-        },
-        {
-          "dependentTasksOutputFiles": "packages/devextreme/artifacts/css/dx-gantt.css"
-        },
-        "{projectRoot}/testing/content/**/*",
-        "{projectRoot}/testing/helpers/**/*",
-        "{projectRoot}/testing/tests/**/*",
-        "{projectRoot}/testing/systemjs-builder.js",
-        "{workspaceRoot}/pnpm-lock.yaml"
-      ],
-      "outputs": [
-        "{projectRoot}/artifacts/transpiled-systemjs",
-        "{projectRoot}/artifacts/transpiled-testing",
-        "{projectRoot}/artifacts/css-systemjs",
-        "{projectRoot}/artifacts/js-systemjs"
-      ],
-      "cache": true
     },
     "dev": {
       "executor": "nx:run-commands",
@@ -1827,7 +1864,6 @@
         "commands": [
           "pnpm nx build:transpile:watch devextreme",
           "pnpm nx build:devextreme-bundler-config:watch devextreme",
-          "pnpm nx bundle:watch devextreme",
           "pnpm nx test-env devextreme"
         ]
       }

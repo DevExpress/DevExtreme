@@ -10,7 +10,7 @@ import { Series } from 'viz/series/base_series';
 import * as loadingIndicatorModule from 'viz/core/loading_indicator';
 import * as exportMenuModule from 'viz/core/export';
 import rendererModule from 'viz/core/renderers/renderer_default';
-import * as errors from 'viz/core/errors_warnings';
+import errors from 'viz/core/errors_warnings';
 import * as baseWidgetUtils from '__internal/viz/core/base_widget.utils';
 import * as typeUtils from 'core/utils/type';
 
@@ -367,7 +367,17 @@ const Point = stubClass(pointModule.Point);
 const Legend = stubClass(legendModule.Legend);
 const Title = stubClass(titleModule.Title);
 const Tooltip = stubClass(tooltipModule.Tooltip);
-const Axis = stubClass(axisModule.Axis);
+// ESM npm artifacts strip /// #DEBUG methods (removeDebug: true).
+// Restore the ones gauges/charts call on mocks (kept in legacy CJS transpile).
+const Axis = stubClass(axisModule.Axis, null, {
+    $extraFunctions: [
+        'shift',
+        '_getTickMarkPoints',
+        '_validateOverlappingMode',
+        '_getStep',
+        '_validateDisplayMode',
+    ],
+});
 const SeriesStub = stubClass(Series);
 
 export {
