@@ -7,29 +7,29 @@
 // adduse
 @use "../scrollable";
 @use "../../base/scrollView" with (
-  $scrollview-top-pocket-width: $scroll-view-top-pocket-width,
-  $scrollview-top-pocket-height: $scroll-view-top-pocket-height,
-  $scrollview-pull-down-indicator-padding: $scroll-view-pull-down-indicator-padding,
-  $scrollview-icon-pulldown-padding: $scroll-view-icon-pull-down-padding,
-  $scrollview-pull-down-indicator-width: $scroll-view-pull-down-indicator-width,
-  $scrollview-pull-down-image-margin: $scroll-view-pull-down-image-margin,
-  $scrollview-pull-down-image-height: $scroll-view-pull-down-image-height,
-  $scrollview-scrollbottom-padding: $scroll-view-scroll-bottom-padding,
-  $scrollview-scrollbottom-indicator-margin: $scroll-view-scroll-bottom-indicator-margin,
-  $scrollview-scrollbottom-indicator-margin-rtl: $scroll-view-scroll-bottom-indicator-rtl-margin,
-  $scrollview-pulldown-icon-font-size: $scroll-view-pull-down-icon-font-size,
+  $scrollview-top-pocket-width: var(--dx-scroll-view-top-pocket-width),
+  $scrollview-top-pocket-height: var(--dx-scroll-view-top-pocket-height),
+  $scrollview-pull-down-indicator-padding: var(--dx-scroll-view-pull-down-indicator-padding),
+  $scrollview-icon-pulldown-padding: var(--dx-scroll-view-icon-pull-down-padding),
+  $scrollview-pull-down-indicator-width: var(--dx-scroll-view-pull-down-indicator-width),
+  $scrollview-pull-down-image-margin: var(--dx-scroll-view-pull-down-image-margin),
+  $scrollview-pull-down-image-height: var(--dx-scroll-view-pull-down-image-height),
+  $scrollview-scrollbottom-padding: var(--dx-scroll-view-scroll-bottom-padding),
+  $scrollview-scrollbottom-indicator-margin: var(--dx-scroll-view-scroll-bottom-indicator-margin),
+  $scrollview-scrollbottom-indicator-margin-rtl: var(--dx-scroll-view-scroll-bottom-indicator-rtl-margin),
+  $scrollview-pulldown-icon-font-size: var(--dx-scroll-view-pull-down-icon-font-size),
 );
 
 
 .dx-scrollview-scrollbottom-text,
 .dx-scrollview-pull-down-text {
-  margin-left: $scroll-view-pull-down-text-margin-inline-start;
+  margin-left: var(--dx-scroll-view-pull-down-text-margin-inline-start);
   top: calc((50px - #{$global-font-size}) / 2);
   display: inline-block;
 
   .dx-rtl & {
     margin-left: 0;
-    margin-right: $scroll-view-rtl-margin-inline-end;
+    margin-right: var(--dx-scroll-view-rtl-margin-inline-end);
   }
 }
 
@@ -43,36 +43,36 @@
 
 .dx-scrollable-native.dx-scrollable-native-android .dx-scrollview-pull-down {
   background-color: scrollableColors.$scrollable-bg-rest;
-  box-shadow: 0 1px 4px 0 $scroll-view-shadow-rest;
+  box-shadow: 0 1px 4px 0 var(--dx-scroll-view-shadow-rest);
 }
 
 .dx-scrollview-scrollbottom-loading {
   .dx-scrollview-scrollbottom-image {
-    width: $scroll-view-scroll-bottom-image-width;
-    height: $scroll-view-scroll-bottom-image-height;
+    width: var(--dx-scroll-view-scroll-bottom-image-width);
+    height: var(--dx-scroll-view-scroll-bottom-image-height);
   }
 }
 
 .dx-scrollview-scrollbottom-indicator,
 .dx-scrollview-pull-down-indicator {
   margin-right: 0;
-  height: $scroll-view-load-indicator-size;
-  width: $scroll-view-load-indicator-size;
+  height: var(--dx-scroll-view-load-indicator-size);
+  width: var(--dx-scroll-view-load-indicator-size);
   border-radius: math.div($scroll-view-load-indicator-size, 2);
   display: inline-flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 1px 3px 1px $scroll-view-shadow-rest;
+  box-shadow: 0 1px 3px 1px var(--dx-scroll-view-shadow-rest);
   opacity: 1;
 
 
   > .dx-loadindicator {
-    height: $scroll-view-scroll-bottom-image-height;
-    width: $scroll-view-scroll-bottom-image-width;
+    height: var(--dx-scroll-view-scroll-bottom-image-height);
+    width: var(--dx-scroll-view-scroll-bottom-image-width);
 
     > .dx-loadindicator-wrapper {
-      font-size: $scroll-view-load-indicator-font-size;
+      font-size: var(--dx-scroll-view-load-indicator-font-size);
     }
   }
 }

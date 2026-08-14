@@ -6,15 +6,15 @@
 // adduse
 
 .dx-badge {
-  background-color: $badge-bg-rest;
-  color: $badge-content-rest;
-  font-size: $badge-font-size;
-  padding: $badge-padding;
-  border-radius: $badge-border-radius;
-  line-height: $badge-line-height;
+  background-color: var(--dx-badge-bg-rest);
+  color: var(--dx-badge-content-rest);
+  font-size: var(--dx-badge-font-size);
+  padding: var(--dx-badge-padding);
+  border-radius: var(--dx-badge-border-radius);
+  line-height: var(--dx-badge-line-height);
 
   .dx-state-disabled & {
-    color: $badge-content-disabled;
-    background-color: $badge-bg-disabled;
+    color: var(--dx-badge-content-disabled);
+    background-color: var(--dx-badge-bg-disabled);
   }
 }

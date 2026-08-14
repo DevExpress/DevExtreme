@@ -36,29 +36,31 @@
   .dx-#{$widget-name},
   .dx-#{$widget-name}-container {
     .dx-bordered-top-view {
-      border-top-left-radius: $grid-border-radius;
-      border-top-right-radius: $grid-border-radius;
+      border-top-left-radius: var(--dx-grid-border-radius);
+      border-top-right-radius: var(--dx-grid-border-radius);
     }
 
     .dx-bordered-bottom-view {
-      border-bottom-left-radius: $grid-border-radius;
-      border-bottom-right-radius: $grid-border-radius;
+      border-bottom-left-radius: var(--dx-grid-border-radius);
+      border-bottom-right-radius: var(--dx-grid-border-radius);
     }
 
     .dx-menu {
       background-color: transparent;
-      margin-top: calc((#{$grid-header-height} - #{buttonSizes.$button-height}) / 2);
-      margin-left: $grid-margin-inline-start;
+      margin-top: calc((var(--dx-grid-header-height) - #{buttonSizes.$button-height}) / 2);
+
+      // stylelint-disable-next-line declaration-no-important
+      margin-left: var(--dx-grid-margin-inline-start) !important;
       height: buttonSizes.$button-height;
 
       .dx-menu-item {
         .dx-menu-item-content {
-          padding: $grid-menu-item-padding;
+          padding: var(--dx-grid-menu-item-padding);
 
           .dx-icon {
-            @include dx-icon-sizing($grid-menu-item-icon-size);
+            @include dx-icon-sizing(var(--dx-grid-menu-item-icon-size));
 
-            margin: $grid-icon-margin;
+            margin: var(--dx-grid-icon-margin);
           }
         }
       }
@@ -67,10 +69,10 @@
     &.dx-filter-menu {
       .dx-menu-item-content {
         .dx-icon {
-          @include dx-icon-sizing($grid-menu-item-icon-size);
+          @include dx-icon-sizing(var(--dx-grid-menu-item-icon-size));
 
           &.dx-icon-filter-operation-default {
-            margin-top: $grid-filter-operation-icon-margin-block-start;
+            margin-top: var(--dx-grid-filter-operation-icon-margin-block-start);
           }
         }
       }
@@ -87,7 +89,7 @@
         .dx-texteditor-container {
           .dx-texteditor-input,
           .dx-placeholder::before {
-            padding-left: $grid-editor-input-padding;
+            padding-left: var(--dx-grid-editor-input-padding);
           }
         }
       }
@@ -97,41 +99,41 @@
       .dx-menu-items-container {
         .dx-icon-context-menu-sort-asc {
           @include dx-icon(sortuptext);
-          @include dx-icon-sizing(calc(#{$grid-menu-item-icon-size} - 4px));
+          @include dx-icon-sizing(calc(var(--dx-grid-menu-item-icon-size) - 4px));
         }
 
         .dx-icon-context-menu-sort-desc {
           @include dx-icon(sortdowntext);
-          @include dx-icon-sizing(calc(#{$grid-menu-item-icon-size} - 4px));
+          @include dx-icon-sizing(calc(var(--dx-grid-menu-item-icon-size) - 4px));
         }
 
         .dx-icon-context-menu-sort-none {
-          @include dx-icon-sizing(calc(#{$grid-menu-item-icon-size} - 4px));
+          @include dx-icon-sizing(calc(var(--dx-grid-menu-item-icon-size) - 4px));
         }
 
         .dx-icon-fix-column {
           @include dx-icon(fixcolumn);
-          @include dx-icon-sizing(calc(#{$grid-menu-item-icon-size} - 4px));
+          @include dx-icon-sizing(calc(var(--dx-grid-menu-item-icon-size) - 4px));
         }
 
         .dx-icon-fix-column-left {
           @include dx-icon(fixcolumnleft);
-          @include dx-icon-sizing(calc(#{$grid-menu-item-icon-size} - 4px));
+          @include dx-icon-sizing(calc(var(--dx-grid-menu-item-icon-size) - 4px));
         }
 
         .dx-icon-fix-column-right {
           @include dx-icon(fixcolumnright);
-          @include dx-icon-sizing(calc(#{$grid-menu-item-icon-size} - 4px));
+          @include dx-icon-sizing(calc(var(--dx-grid-menu-item-icon-size) - 4px));
         }
 
         .dx-icon-stick-column {
           @include dx-icon(stickcolumn);
-          @include dx-icon-sizing(calc(#{$grid-menu-item-icon-size} - 4px));
+          @include dx-icon-sizing(calc(var(--dx-grid-menu-item-icon-size) - 4px));
         }
 
         .dx-icon-unfix-column {
           @include dx-icon(unfixcolumn);
-          @include dx-icon-sizing(calc(#{$grid-menu-item-icon-size} - 4px));
+          @include dx-icon-sizing(calc(var(--dx-grid-menu-item-icon-size) - 4px));
         }
       }
     }
@@ -139,11 +141,11 @@
     .dx-sort-up,
     .dx-sort-down,
     .dx-header-filter {
-      @include dx-icon-sizing($grid-header-icon-size, $grid-header-icon-container-size);
+      @include dx-icon-sizing(var(--dx-grid-header-icon-size), var(--dx-grid-header-icon-container-size));
     }
 
     .dx-header-filter:not(.dx-header-filter-empty) {
-      color: $grid-header-filter-icon-active;
+      color: var(--dx-grid-header-filter-icon-active);
     }
 
     .dx-icon-filter-operation-equals {
@@ -195,27 +197,27 @@
     }
 
     .dx-column-indicators {
-      height: $grid-header-line-height;
+      height: var(--dx-grid-header-line-height);
 
       .dx-sort-index-icon {
-        padding-right: $grid-sort-index-icon-padding-inline-end;
-        margin-left: $grid-sort-index-icon-margin-inline-start;
-        font-size: calc(#{$grid-header-cell-font-size} - 1px);
+        padding-right: var(--dx-grid-sort-index-icon-padding-inline-end);
+        margin-left: var(--dx-grid-sort-index-icon-margin-inline-start);
+        font-size: calc(var(--dx-grid-header-cell-font-size) - 1px);
         position: relative;
-        bottom: $grid-sort-index-icon-inset-block-end;
+        bottom: var(--dx-grid-sort-index-icon-inset-block-end);
       }
 
       > div {
-        @include dx-icon-sizing($grid-header-icon-size, $grid-header-icon-container-size);
+        @include dx-icon-sizing(var(--dx-grid-header-icon-size), var(--dx-grid-header-icon-container-size));
       }
 
       > span {
-        margin-left: $grid-header-cell-sort-index-margin-inline-start;
+        margin-left: var(--dx-grid-header-cell-sort-index-margin-inline-start);
       }
     }
 
     .dx-placeholder::before {
-      font-size: $grid-cell-font-size;
+      font-size: var(--dx-grid-cell-font-size);
     }
   }
 
@@ -228,28 +230,28 @@
       }
 
       // T838734
-      border-top: $grid-row-removed-border-block-start;
-      border-top-color: $grid-row-alternation-bg-rest;
-      border-bottom: $grid-row-removed-border-block-end;
-      border-bottom-color: $grid-row-alternation-bg-rest;
+      border-top: var(--dx-grid-row-removed-border-block-start);
+      border-top-color: var(--dx-grid-row-alternation-bg-rest);
+      border-bottom: var(--dx-grid-row-removed-border-block-end);
+      border-bottom-color: var(--dx-grid-row-alternation-bg-rest);
     }
 
     .dx-link {
-      color: $grid-link-content-rest;
+      color: var(--dx-grid-link-content-rest);
     }
 
     .dx-error-row {
       .dx-closebutton {
         float: right;
-        margin: calc(#{$grid-cell-padding-block} + 2px);
+        margin: calc(var(--dx-grid-cell-padding-block) + 2px);
 
         @include dx-icon(close);
         @include dx-icon-sizing(14px);
       }
 
       .dx-error-message {
-        padding: $grid-cell-padding-block;
-        padding-right: $grid-error-message-padding-inline-end;
+        padding: var(--dx-grid-cell-padding-block);
+        padding-right: var(--dx-grid-error-message-padding-inline-end);
       }
     }
 
@@ -259,15 +261,15 @@
       > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all) {
         &.dx-command-edit {
           .dx-link:not(.dx-link-icon) {
-            margin: 0 $grid-command-edit-text-margin;
-            min-width: $grid-link-icon-min-width;
+            margin: 0 var(--dx-grid-command-edit-text-margin);
+            min-width: var(--dx-grid-link-icon-min-width);
           }
 
           &.dx-command-edit-with-icons {
             .dx-link {
-              @include dx-icon-sizing($grid-command-edit-icon-size);
+              @include dx-icon-sizing(var(--dx-grid-command-edit-icon-size));
 
-              margin: 0 $grid-command-edit-icon-margin;
+              margin: 0 var(--dx-grid-command-edit-icon-margin);
               vertical-align: middle;
             }
 
@@ -278,11 +280,11 @@
 
           .dx-state-disabled {
             &.dx-link {
-              opacity: $grid-text-link-opacity-disabled;
+              opacity: var(--dx-grid-text-link-opacity-disabled);
             }
 
             &.dx-link-icon {
-              opacity: $grid-icon-link-opacity-disabled;
+              opacity: var(--dx-grid-icon-link-opacity-disabled);
             }
           }
         }
@@ -302,13 +304,13 @@
     .dx-#{$widget-name}-drop-highlight {
       & > td {
         .dx-header-filter {
-          color: $grid-drop-highlight-content-rest;
+          color: var(--dx-grid-drop-highlight-content-rest);
         }
 
         .dx-checkbox {
           .dx-checkbox-icon {
-            background-color: $grid-drop-highlight-content-rest;
-            color: $grid-drop-highlight-bg-rest;
+            background-color: var(--dx-grid-drop-highlight-content-rest);
+            color: var(--dx-grid-drop-highlight-bg-rest);
           }
         }
       }
@@ -321,7 +323,7 @@
     }
 
     .dx-error-message {
-      padding: $grid-cell-padding;
+      padding: var(--dx-grid-cell-padding);
     }
   }
 
@@ -332,17 +334,17 @@
   .dx-#{$widget-name}-headers,
   .dx-#{$widget-name}-rowsview {
     .dx-texteditor-input {
-      min-height: $grid-header-line-height;
+      min-height: var(--dx-grid-header-line-height);
     }
 
     .dx-lookup {
       height: auto;
 
       .dx-lookup-field {
-        padding-left: $grid-cell-padding-inline;
-        padding-top: $grid-cell-padding-block;
-        padding-bottom: $grid-cell-padding-block;
-        font-size: $grid-cell-font-size;
+        padding-left: var(--dx-grid-cell-padding-inline);
+        padding-top: var(--dx-grid-cell-padding-block);
+        padding-bottom: var(--dx-grid-cell-padding-block);
+        font-size: var(--dx-grid-cell-font-size);
       }
     }
 
@@ -395,25 +397,25 @@
       &.dx-state-hover,
       &.dx-state-focused,
       &.dx-state-active {
-        background: $grid-editor-bg-rest;
+        background: var(--dx-grid-editor-bg-rest);
         box-shadow: none;
       }
 
       &:not(.dx-tagbox) .dx-texteditor-input {
-        background: $grid-editor-bg-rest;
-        font-size: $grid-cell-font-size;
-        height: $grid-cell-height;
-        line-height: $grid-cell-height;
+        background: var(--dx-grid-editor-bg-rest);
+        font-size: var(--dx-grid-cell-font-size);
+        height: var(--dx-grid-cell-height);
+        line-height: var(--dx-grid-cell-height);
         margin-top: 0;
       }
 
       &:not(.dx-tagbox):not(.dx-colorbox) .dx-texteditor-input {
-        padding: 0 $grid-cell-padding-inline;
+        padding: 0 var(--dx-grid-cell-padding-inline);
       }
 
       .dx-placeholder::before {
-        padding-right: $grid-cell-padding-inline;
-        padding-left: $grid-cell-padding-inline;
+        padding-right: var(--dx-grid-cell-padding-inline);
+        padding-left: var(--dx-grid-cell-padding-inline);
       }
 
       &.dx-validation-pending {
@@ -426,7 +428,7 @@
       }
 
       &:not(.dx-tagbox) .dx-tag-container {
-        min-height: $grid-cell-height;
+        min-height: var(--dx-grid-cell-height);
         padding: 0;
       }
 
@@ -455,7 +457,7 @@
     }
 
     .dx-dropdowneditor {
-      background-color: $grid-editor-bg-rest;
+      background-color: var(--dx-grid-editor-bg-rest);
     }
 
     &.dx-focused .dx-dropdowneditor-icon {
@@ -464,16 +466,16 @@
 
     &.dx-editor-inline-block:not(.dx-command-select) {
       &::before {
-        padding-top: $grid-cell-padding-block;
-        padding-bottom: $grid-cell-padding-block;
+        padding-top: var(--dx-grid-cell-padding-block);
+        padding-bottom: var(--dx-grid-cell-padding-block);
       }
     }
   }
 
   .dx-#{$widget-name}-column-chooser-list {
     .dx-empty-message {
-      color: $grid-column-chooser-message-content-rest;
-      padding: 0 $grid-column-chooser-padding-inline;
+      color: var(--dx-grid-column-chooser-message-content-rest);
+      padding: 0 var(--dx-grid-column-chooser-padding-inline);
     }
   }
 
@@ -482,36 +484,36 @@
 
     &.dx-#{$widget-name}-column-chooser-mode-drag {
       .dx-popup-content {
-        padding: $grid-column-chooser-padding;
+        padding: var(--dx-grid-column-chooser-padding);
 
         .dx-treeview-search {
-          margin-bottom: $grid-tree-view-search-margin-block-end;
+          margin-bottom: var(--dx-grid-tree-view-search-margin-block-end);
         }
 
         .dx-treeview-node {
-          padding-left: $grid-tree-view-node-padding-inline-start;
+          padding-left: var(--dx-grid-tree-view-node-padding-inline-start);
         }
       }
     }
 
     &.dx-#{$widget-name}-column-chooser-mode-select {
       .dx-popup-content {
-        padding: $grid-column-chooser-padding;
+        padding: var(--dx-grid-column-chooser-padding);
       }
 
       .dx-#{$widget-name}-column-chooser-plain, .dx-#{$widget-name}-column-chooser-list {
         .dx-treeview-select-all-item {
-          padding-inline-start: $grid-tree-view-select-all-item-padding-inline-start;
+          padding-inline-start: var(--dx-grid-tree-view-select-all-item-padding-inline-start);
         }
       }
     }
 
     .dx-overlay-content {
-      background-color: $grid-column-chooser-bg-rest;
+      background-color: var(--dx-grid-column-chooser-bg-rest);
 
       .dx-popup-title {
         background-color: transparent;
-        border-bottom: $grid-popup-title-border-block-end;
+        border-bottom: var(--dx-grid-popup-title-border-block-end);
         border-bottom-color: popupColors.$popup-title-border-rest;
 
         .dx-toolbar-label {
@@ -521,13 +523,13 @@
 
       .dx-popup-content {
         .dx-column-chooser-item {
-          margin: $grid-column-chooser-list-item-margin;
-          background-color: $grid-column-chooser-item-bg-rest;
-          color: $grid-column-chooser-item-content-rest;
-          font-weight: $grid-column-chooser-font-weight;
-          font-size: $grid-header-cell-font-size;
-          padding: $grid-cell-padding-block;
-          line-height: $grid-header-line-height;
+          margin: var(--dx-grid-column-chooser-list-item-margin);
+          background-color: var(--dx-grid-column-chooser-item-bg-rest);
+          color: var(--dx-grid-column-chooser-item-content-rest);
+          font-weight: var(--dx-grid-column-chooser-font-weight);
+          font-size: var(--dx-grid-header-cell-font-size);
+          padding: var(--dx-grid-cell-padding-block);
+          line-height: var(--dx-grid-header-line-height);
           box-shadow: $grid-drag-header-box-shadow;
         }
       }
@@ -535,18 +537,18 @@
   }
 
   .dx-#{$widget-name}-drag-header {
-    border-color: $grid-drag-header-border-rest;
+    border-color: var(--dx-grid-drag-header-border-rest);
     box-shadow: $grid-drag-header-box-shadow;
-    color: $grid-column-chooser-item-content-rest;
-    font-weight: $grid-column-chooser-font-weight;
-    padding: $grid-header-cell-padding-block;
-    background-color: $grid-drag-header-bg-rest;
-    line-height: $grid-header-line-height;
-    font-size: $grid-header-cell-font-size;
+    color: var(--dx-grid-column-chooser-item-content-rest);
+    font-weight: var(--dx-grid-column-chooser-font-weight);
+    padding: var(--dx-grid-header-cell-padding-block);
+    background-color: var(--dx-grid-drag-header-bg-rest);
+    line-height: var(--dx-grid-header-line-height);
+    font-size: var(--dx-grid-header-cell-font-size);
   }
 
   .dx-#{$widget-name}-columns-separator {
-    background-color: $grid-column-separator-bg-rest;
+    background-color: var(--dx-grid-column-separator-bg-rest);
   }
 
   .dx-#{$widget-name}-columns-separator-transparent {
@@ -558,10 +560,10 @@
       content: "";
       position: absolute;
       bottom: 0;
-      height: $grid-column-chooser-item-height;
-      background-color: $grid-border-focused;
+      height: var(--dx-grid-column-chooser-item-height);
+      background-color: var(--dx-grid-border-focused);
       left: 0;
-      right: $grid-after-inset-inline-end;
+      right: var(--dx-grid-after-inset-inline-end);
     }
 
     &.dx-focused-cell-modified::after {
@@ -577,15 +579,15 @@
     &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) {
       & > .dx-#{$widget-name}-readonly .dx-texteditor {
         .dx-texteditor-input {
-          background-color: $grid-row-bg-hovered;
-          color: $grid-row-content-hovered;
+          background-color: var(--dx-grid-row-bg-hovered);
+          color: var(--dx-grid-row-content-hovered);
         }
       }
     }
   }
 
   .dx-#{$widget-name}-headers {
-    color: $grid-column-chooser-item-content-rest;
+    color: var(--dx-grid-column-chooser-item-content-rest);
     touch-action: pinch-zoom;
 
     &::before {
@@ -596,24 +598,24 @@
       bottom: 0;
       right: 0;
       pointer-events: none;
-      border-bottom: $grid-border;
-      border-bottom-color: $grid-border-rest;
+      border-bottom: var(--dx-grid-border);
+      border-bottom-color: var(--dx-grid-border-rest);
     }
 
     .dx-#{$widget-name}-table {
       .dx-#{$widget-name}-borders & {
-        border-bottom-width: $grid-editor-input-border-block-end-width;
+        border-bottom-width: var(--dx-grid-editor-input-border-block-end-width);
       }
 
       .dx-row {
         > td {
           .dx-sort {
-            color: $grid-header-filter-empty-icon-rest;
+            color: var(--dx-grid-header-filter-empty-icon-rest);
           }
 
           &:not([class*="dx-command"], .dx-editor-cell, .dx-#{$widget-name}-group-space):hover {
             .dx-#{$widget-name}-text-content {
-              color: $grid-content-rest;
+              color: var(--dx-grid-content-rest);
             }
           }
         }
@@ -622,7 +624,7 @@
   }
 
   .dx-#{$widget-name}-filter-row {
-    background-color: $grid-filter-row-bg-rest;
+    background-color: var(--dx-grid-filter-row-bg-rest);
 
     .dx-menu {
       margin-left: 0;
@@ -644,7 +646,7 @@
     }
 
     .dx-filter-modified {
-      background-color: $grid-cell-modified-bg-rest;
+      background-color: var(--dx-grid-cell-modified-bg-rest);
     }
 
     td .dx-editor-container .dx-filter-range-content {
@@ -659,7 +661,7 @@
   .dx-#{$widget-name}-filter-range-overlay {
     .dx-overlay-content {
       overflow: inherit;
-      background-color: $grid-filter-row-bg-rest;
+      background-color: var(--dx-grid-filter-row-bg-rest);
       box-shadow: $grid-drag-header-box-shadow;
 
       .dx-texteditor {
@@ -670,14 +672,14 @@
         }
 
         .dx-texteditor-input {
-          font-size: $grid-cell-font-size;
-          height: calc(#{$grid-cell-height} + 1px);
-          padding-right: $grid-filter-row-editor-padding-inline;
-          padding-left: $grid-filter-row-editor-padding-inline;
+          font-size: var(--dx-grid-cell-font-size);
+          height: calc(var(--dx-grid-cell-height) + 1px);
+          padding-right: var(--dx-grid-filter-row-editor-padding-inline);
+          padding-left: var(--dx-grid-filter-row-editor-padding-inline);
         }
 
         .dx-placeholder::before {
-          padding-left: $grid-filter-row-editor-padding-inline;
+          padding-left: var(--dx-grid-filter-row-editor-padding-inline);
         }
       }
 
@@ -688,9 +690,9 @@
   }
 
   .dx-#{$widget-name}-header-panel {
-    border-bottom: $grid-border;
-    border-bottom-color: $grid-border-rest;
-    padding: $grid-header-panel-padding;
+    border-bottom: var(--dx-grid-border);
+    border-bottom-color: var(--dx-grid-border-rest);
+    padding: var(--dx-grid-header-panel-padding);
 
     .dx-toolbar-text-auto-hide .dx-button.dx-button-has-icon {
       border-radius: $global-border-radius;
@@ -744,7 +746,7 @@
 
     @include dx-icon-sizing($global-icon-size);
 
-    color: $grid-icon-rest;
+    color: var(--dx-grid-icon-rest);
   }
 
   .dx-row.dx-row-focused {
@@ -754,8 +756,8 @@
   }
 
   .dx-#{$widget-name}-rowsview {
-    border-top: $grid-row-border-block-start-focused;
-    border-top-color: $grid-border-rest;
+    border-top: var(--dx-grid-row-border-block-start-focused);
+    border-top-color: var(--dx-grid-border-rest);
 
     .dx-#{$widget-name}-headers + &,
     &.dx-#{$widget-name}-after-headers {
@@ -763,8 +765,8 @@
     }
 
     .dx-row {
-      border-top: $grid-row-border;
-      border-bottom: $grid-row-border;
+      border-top: var(--dx-grid-row-border);
+      border-bottom: var(--dx-grid-row-border);
 
       &:focus {
         outline: none;
@@ -779,7 +781,7 @@
         .dx-validator {
           &.dx-#{$widget-name}-invalid,
           &.dx-invalid {
-            background-color: $grid-row-invalid-bg-rest;
+            background-color: var(--dx-grid-row-invalid-bg-rest);
           }
         }
       }
@@ -787,7 +789,7 @@
 
     .dx-overlay-wrapper.dx-invalid-message {
       .dx-overlay-content {
-        padding: $grid-overlay-content-padding;
+        padding: var(--dx-grid-overlay-content-padding);
         background-color: validationColors.$validation-message-bg-rest;
         color: validationColors.$validation-message-content-rest;
       }
@@ -799,9 +801,9 @@
       }
 
       .dx-field-item-content {
-        line-height: $grid-adaptive-column-height;
-        min-height: $grid-adaptive-column-height;
-        font-size: $grid-cell-font-size;
+        line-height: var(--dx-grid-adaptive-column-height);
+        min-height: var(--dx-grid-adaptive-column-height);
+        font-size: var(--dx-grid-cell-font-size);
 
         &.dx-focused {
           padding: 0;
@@ -809,9 +811,9 @@
       }
 
       .dx-texteditor-input {
-        font-size: $grid-cell-font-size;
-        height: $grid-adaptive-column-height;
-        line-height: $grid-adaptive-column-height;
+        font-size: var(--dx-grid-cell-font-size);
+        height: var(--dx-grid-adaptive-column-height);
+        line-height: var(--dx-grid-adaptive-column-height);
       }
 
       .dx-texteditor::after,
@@ -825,31 +827,31 @@
     }
 
     .dx-item-modified {
-      background-color: $grid-cell-modified-bg-rest;
+      background-color: var(--dx-grid-cell-modified-bg-rest);
     }
 
     .dx-row-focused {
       &.dx-data-row {
         & .dx-command-edit .dx-link {
-          color: $grid-row-content-focused;
+          color: var(--dx-grid-row-content-focused);
         }
 
         & > td:not(.dx-focused):not(.dx-cell-modified):not(.dx-#{$widget-name}-invalid),
         & .dx-command-edit .dx-link {
           & .dx-#{$widget-name}-group-opened,
           & .dx-#{$widget-name}-group-closed {
-            color: $grid-row-content-focused;
+            color: var(--dx-grid-row-content-focused);
           }
         }
       }
 
       &.dx-group-row {
-        background-color: $grid-row-bg-focused;
-        color: $grid-row-content-focused;
+        background-color: var(--dx-grid-row-bg-focused);
+        color: var(--dx-grid-row-content-focused);
 
         & .dx-#{$widget-name}-group-opened,
         & .dx-#{$widget-name}-group-closed {
-          color: $grid-row-content-focused;
+          color: var(--dx-grid-row-content-focused);
         }
       }
     }
@@ -877,43 +879,43 @@
 
     &.dx-#{$widget-name}-sticky-columns {
       .dx-row.dx-edit-row > td:not(.dx-master-detail-cell) .dx-texteditor-input {
-        height: calc(#{$grid-cell-height} - 2px);
-        line-height: calc(#{$grid-cell-height} - 2px);
+        height: calc(var(--dx-grid-cell-height) - 2px);
+        line-height: calc(var(--dx-grid-cell-height) - 2px);
       }
 
       .dx-master-detail-row > .dx-master-detail-cell {
         > .dx-#{$widget-name}-master-detail-container {
-          padding: $grid-master-detail-padding;
+          padding: var(--dx-grid-master-detail-padding);
         }
       }
     }
   }
 
   .dx-#{$widget-name}-search-text {
-    color: $grid-search-content-rest;
-    background-color: $grid-search-bg-rest;
+    color: var(--dx-grid-search-content-rest);
+    background-color: var(--dx-grid-search-bg-rest);
   }
 
   .dx-#{$widget-name}-nodata {
-    color: $grid-no-data-content-rest;
-    font-size: $grid-no-data-font-size;
+    color: var(--dx-grid-no-data-content-rest);
+    font-size: var(--dx-grid-no-data-font-size);
   }
 
   .dx-#{$widget-name}-bottom-load-panel {
-    border-top: $grid-border;
-    border-top-color: $grid-border-rest;
-    background-color: $grid-bg-rest;
+    border-top: var(--dx-grid-border);
+    border-top-color: var(--dx-grid-border-rest);
+    background-color: var(--dx-grid-bg-rest);
   }
 
   .dx-#{$widget-name}-summary-item {
-    color: $grid-summary-content-rest;
+    color: var(--dx-grid-summary-content-rest);
   }
 
   .dx-#{$widget-name}-total-footer {
-    border-bottom: $grid-border;
-    border-bottom-color: $grid-border-rest;
-    border-top: $grid-border;
-    border-top-color: $grid-border-rest;
+    border-bottom: var(--dx-grid-border);
+    border-bottom-color: var(--dx-grid-border-rest);
+    border-top: var(--dx-grid-border);
+    border-top-color: var(--dx-grid-border-rest);
 
     > .dx-#{$widget-name}-content {
       padding: 0;
@@ -942,13 +944,13 @@
         buttonColors.$button-danger-contained-content-rest
       );
 
-      margin: $grid-revert-button-margin;
-      height: $grid-cell-height;
+      margin: var(--dx-grid-revert-button-margin);
+      height: var(--dx-grid-cell-height);
       box-shadow: none;
       min-width: inherit;
 
       &.dx-button-has-icon:not(.dx-button-has-text) {
-        border-radius: $grid-icon-button-border-radius;
+        border-radius: var(--dx-grid-icon-button-border-radius);
       }
 
       &.dx-state-hover {
@@ -963,7 +965,7 @@
       .dx-menu {
         .dx-menu-item-has-submenu.dx-menu-item-has-icon {
           .dx-icon {
-            margin: $grid-icon-margin;
+            margin: var(--dx-grid-icon-margin);
           }
         }
       }
@@ -978,25 +980,25 @@
 
   .dx-header-filter-menu {
     .dx-popup-content {
-      padding: $grid-content-padding;
+      padding: var(--dx-grid-content-padding);
     }
   }
 
   .dx-#{$widget-name}-filter-panel {
-    background-color: $grid-bg-rest;
-    padding: $grid-filter-panel-padding;
+    background-color: var(--dx-grid-bg-rest);
+    padding: var(--dx-grid-filter-panel-padding);
 
     .dx-#{$widget-name}-filter-panel-text,
     .dx-#{$widget-name}-filter-panel-clear-filter {
-      color: $grid-filter-panel-content-rest;
-      font-size: $grid-cell-font-size;
-      line-height: $grid-checkbox-size;
+      color: var(--dx-grid-filter-panel-content-rest);
+      font-size: var(--dx-grid-cell-font-size);
+      line-height: var(--dx-grid-checkbox-size);
     }
 
     .dx-icon-filter {
-      color: $grid-filter-panel-content-rest;
+      color: var(--dx-grid-filter-panel-content-rest);
 
-      @include dx-icon-sizing($grid-filter-panel-icon-size);
+      @include dx-icon-sizing(var(--dx-grid-filter-panel-icon-size));
     }
   }
 
@@ -1011,42 +1013,42 @@
   }
 
   .dx-#{$widget-name}-dragview {
-    border-radius: $grid-border-radius;
+    border-radius: var(--dx-grid-border-radius);
 
     .dx-#{$widget-name}-borders {
-      border-radius: $grid-border-radius;
+      border-radius: var(--dx-grid-border-radius);
     }
   }
 
   .dx-#{$widget-name}-sticky-columns .dx-#{$widget-name}-draggable-column {
     opacity: 1;
-    color: $grid-draggable-column-content-rest;
+    color: var(--dx-grid-draggable-column-content-rest);
   }
 
   .dx-command-ai-header-content {
     max-width: calc(100% - (buttonSizes.$button-height - $grid-cell-padding-inline + $grid-command-ai-button-max-width));
 
     .dx-#{$widget-name}-text-content {
-      padding-left: $grid-command-ai-content-padding-inline-start;
+      padding-left: var(--dx-grid-command-ai-content-padding-inline-start);
     }
 
     .dx-icon-chatsparkleoutline {
-      @include dx-icon-sizing($grid-command-ai-icon-size);
+      @include dx-icon-sizing(var(--dx-grid-command-ai-icon-size));
     }
   }
 
   .dx-command-ai-header-button {
     left: auto;
-    right: $grid-command-ai-button-max-width;
+    right: var(--dx-grid-command-ai-button-max-width);
   }
 
   td[style*="text-align: right"] .dx-command-ai-header-button {
-    left: $grid-command-ai-button-max-width;
+    left: var(--dx-grid-command-ai-button-max-width);
     right: auto;
   }
 
   .dx-ai-prompt-editor__progressbar .dx-progressbar-animating-container {
-    height: $grid-ai-prompt-editor-progress-bar-height;
+    height: var(--dx-grid-ai-prompt-editor-progress-bar-height);
     border-radius: 0;
   }
 }

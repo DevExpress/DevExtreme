@@ -2,16 +2,16 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/splitterBar" with (
-  $splitterbar-splitter-border-width: $splitter-bar-border-width,
-  $splitterbar-splitter-bar-width: $splitter-bar-width,
+  $splitterbar-splitter-border-width: var(--dx-splitter-bar-border-width),
+  $splitterbar-splitter-bar-width: var(--dx-splitter-bar-width),
 );
 
 // adduse
 .dx-splitter-bar {
-  background-color: $splitter-bar-bg-active;
+  background-color: var(--dx-splitter-bar-bg-active);
 
   &.dx-splitter-inactive {
-    background-color: $splitter-bar-border-rest;
+    background-color: var(--dx-splitter-bar-border-rest);
   }
 }
 

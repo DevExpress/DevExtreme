@@ -2,7 +2,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/box" with (
-  $box-item-content-font-size: $box-item-content-font-size,
+  $box-item-content-font-size: var(--dx-box-item-content-font-size),
 );
 
 // adduse

@@ -4,7 +4,7 @@
 @use "../button/sizes" as buttonSizes;
 @use "../button/colors" as buttonColors;
 @use "../../base/buttonGroup" with (
-  $buttongroup-mode-text-column-gap: $button-group-text-column-gap,
+  $buttongroup-mode-text-column-gap: var(--dx-button-group-text-column-gap),
 );
 @use "../../base/buttonGroup/mixins" as *;
 
@@ -29,8 +29,8 @@
     box-shadow: none;
     border-width: 0;
     border-style: solid;
-    border-inline-end-width: $button-group-item-contained-border-inline-end-width;
-    border-inline-end-color: $button-group-separator-rest;
+    border-inline-end-width: var(--dx-button-group-item-contained-border-inline-end-width);
+    border-inline-end-color: var(--dx-button-group-separator-rest);
 
     &.dx-buttongroup-last-item {
       border-inline-end-width: 0;

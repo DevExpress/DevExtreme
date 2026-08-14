@@ -173,6 +173,118 @@ const OVERRIDES = {
     textEditor: ['button'],
   },
 
+  /*
+   * Wave F: where the emitted --dx-* component tier is DECLARED (the Blazor --dxbl- model: on the
+   * component's root class, not in :root — per-instance overrides via the cascade, no :root bloat).
+   * The default derivation is `.dx-<component-without-hyphens>`; an entry here overrides it, and
+   * every selector is machine-gated against the built bundle (assertRootSelectorsExist).
+   *
+   * The root must be an ancestor-or-self of every box the component's variables paint. Two facts
+   * decide the exceptions:
+   *   - overlays render OUTSIDE the widget's source element (inside .dx-overlay-wrapper), so the
+   *     widget class is not an ancestor of the painted boxes — the wrapper/content class is;
+   *   - chassis variables are consumed wherever the chassis renders, so their scope is the shared
+   *     runtime class when the hierarchy provides one (.dx-texteditor, .dx-menu-base), and the
+   *     dependents' root list when it does not (grid).
+   * Popup satellites of composite widgets are included where known (date-box wrapper, tag-box
+   * popup); a consumption wave that converts a declaration must still prove its subject sits under
+   * one of these roots (browser smoke) — grid's column-chooser-style satellites get added here when
+   * that component's consumption wave lands.
+   */
+  rootSelectors: {
+    /*
+     * The drop-down editor's inner button is a dxButton whose root carries dx-button-normal +
+     * dx-dropdowneditor-button but NOT dx-button (found by the F12 runtime reachability audit:
+     * button variables did not reach .dx-button-content inside every dropdown editor).
+     */
+    button: ['.dx-button', '.dx-dropdowneditor-button'],
+    // overlays: the painted boxes live under the overlay wrapper, not under the source element
+    toast: ['.dx-toast-wrapper', '.dx-toast-stack'],
+    tooltip: ['.dx-tooltip-wrapper'],
+    popover: ['.dx-popover-wrapper'],
+    'load-panel': ['.dx-loadpanel-content'],
+    'action-sheet': ['.dx-actionsheet-popup-wrapper', '.dx-actionsheet-popover-wrapper'],
+    'context-menu': ['.dx-context-menu'], // the overlay content itself carries the class
+    'drop-down-list': ['.dx-dropdownlist-popup-wrapper'],
+    'drop-down-menu': ['.dx-dropdownmenu-popup-wrapper'],
+    'date-view': ['.dx-dateview-rollers'], // .dx-dateview exists only in JS; rollers is the styled root
+    validation: ['.dx-invalid-message', '.dx-validationsummary'],
+    overlay: ['.dx-overlay-wrapper'],
+    // field widgets with a drop-down part: the field root plus the popup surface
+    lookup: ['.dx-lookup', '.dx-lookup-popup-wrapper'],
+    'select-box': ['.dx-selectbox', '.dx-selectbox-popup-wrapper'],
+    'tag-box': ['.dx-tagbox', '.dx-tagbox-popup-wrapper'],
+    'date-box': ['.dx-datebox', '.dx-datebox-wrapper'],
+    'color-box': ['.dx-colorbox', '.dx-colorbox-overlay'],
+    'drop-down-button': ['.dx-dropdownbutton', '.dx-dropdownbutton-popup-wrapper'],
+    'drop-down-editor': ['.dx-dropdowneditor', '.dx-dropdowneditor-overlay'],
+    /*
+     * Chassis. .dx-menu-base sits on dxMenu's root, on every submenu overlay content (Submenu
+     * extends ContextMenu, whose content carries the class) and on dxContextMenu's content, so one
+     * class scopes the whole family. Known hole for the consumption wave: the decorative
+     * .dx-context-menu-container-border / -content-delimiter boxes may sit OUTSIDE .dx-menu-base
+     * inside the overlay — prove ancestry before converting those two declarations.
+     */
+    /*
+     * The adaptive mode renders a TreeView inside an overlay whose content carries only
+     * .dx-menu-adaptive-mode — no .dx-menu-base (found by the F14 runtime audit after the PR
+     * screenshot failures: adaptive item metrics collapsed).
+     */
+    menu: ['.dx-menu-base', '.dx-menu-adaptive-mode'],
+    /*
+     * text-editor's shared runtime class covers every REAL editor, but the theme also paints
+     * surfaces that reuse editor styling without the class (found by the F12 reachability audit,
+     * reported live on htmlEditor): dxHtmlEditor's root carries only .dx-htmleditor while
+     * textEditor/_index.scss styles .dx-htmleditor.dx-htmleditor-<stylingMode> with editor vars.
+     */
+    'text-editor': ['.dx-texteditor', '.dx-htmleditor'],
+    /*
+     * The grids paint their overlay satellites outside the grid element: the column chooser is a
+     * Popup whose WRAPPER carries .dx-datagrid-column-chooser / .dx-treelist-column-chooser.
+     */
+    grid: ['.dx-datagrid', '.dx-treelist', '.dx-pivotgrid', '.dx-cardview',
+      '.dx-datagrid-column-chooser', '.dx-treelist-column-chooser',
+      // the header-filter popup wrapper is shared by all grids and lives outside them (F14)
+      '.dx-header-filter-menu',
+      /*
+       * F15, from the second round of PR screenshots. The column drag preview is appended to the
+       * SWATCH container (m_columns_resizing_reordering: element().appendTo(getSwatchContainer)),
+       * so it is a sibling of the grid, not a descendant — its background, border and header
+       * metrics came out unpainted. The AI assistant is a Popup whose wrapper carries
+       * .dx-ai-chat .dx-aidialog (grid_core/ai_chat: wrapperAttr), likewise outside the grid.
+       */
+      '.dx-datagrid-drag-header', '.dx-treelist-drag-header', '.dx-ai-chat'],
+    /*
+     * The dragged clone is created as $('<div>').appendTo(container) — the container defaults to
+     * the viewport — and the placeholder is inserted next to it, so both live outside .dx-sortable
+     * (F15: the row drag preview lost its shadow). .dx-sortable-dragging rides the drag element in
+     * both clone and no-clone modes, which is what `.dx-sortable-dragging > *` needs.
+     */
+    sortable: ['.dx-sortable', '.dx-sortable-dragging', '.dx-sortable-placeholder'],
+    /*
+     * Canonical fieldset markup is .dx-fieldset > .dx-field, but demos and apps also use
+     * .dx-field standalone — the tier rides the field itself so both layouts resolve.
+     */
+    fieldset: ['.dx-fieldset', '.dx-field'],
+    /*
+     * Toolbar paints outside its own element (found by the wave-F5 reachability audit and its
+     * browser smoke): .dx-toolbar-menu-section lives in the overflow-menu POPUP — desktop renders
+     * it under .dx-dropdownmenu-popup-wrapper (verified live: the wrapper carries no toolbar
+     * class), .dx-toolbar-menu-container is the other, mobile overflow surface the bundle styles;
+     * .dx-toolbar-background is a styled legacy hook no code in this repo attaches (external
+     * products may), so it carries the tier itself.
+     */
+    toolbar: ['.dx-toolbar', '.dx-dropdownmenu-popup-wrapper', '.dx-toolbar-menu-container',
+      '.dx-toolbar-background'],
+    // .dx-box exists only in JS; the only styled box is the item content
+    box: ['.dx-box-item-content'],
+    'splitter-bar': ['.dx-splitter-bar', '.dx-splitter-border'], // two disjoint styled roots
+    // global utility painted on arbitrary elements (.dx-icon plus per-widget image boxes):
+    // :root, the same place Blazor keeps its 24 cross-component names
+    icon: [':root'],
+    typography: [], // system tier — publishes .dx-typography-* utility classes, emits no component vars
+  },
+
   // System-tier concerns (common/). Each must map to a non-component token family.
   systemConcerns: [
     // Foundation values shared by the whole theme: icon size, base font size, border radius/width.
@@ -894,6 +1006,38 @@ const assertParseable = (parts, states, modifiers, subElements) => {
   });
 };
 
+/*
+ * The typo gate for rootSelectors: every class the emitter will declare on must exist in the built
+ * bundle. Hard requirement when REGENERATING (regeneration is a curated act — build first); --check
+ * still works without a build (byte comparison; the committed content already passed the gate).
+ */
+const assertRootSelectorsExist = (rootSelectors) => {
+  const bundle = join(packageRoot, '..', 'devextreme', 'artifacts', 'css', 'dx.fluent-next.blue.light.css');
+  try {
+    statSync(bundle);
+  } catch {
+    if (process.argv.includes('--check')) {
+      process.stderr.write('note: built bundle absent — rootSelectors gate skipped for --check\n');
+      return;
+    }
+    throw new Error(`rootSelectors gate needs the built bundle at ${bundle} — build the theme first`);
+  }
+  const classes = new Set(
+    [...readFileSync(bundle, 'utf8').matchAll(/\.(dx-[a-z0-9-]+)/g)].map((match) => match[1]),
+  );
+  Object.entries(rootSelectors).forEach(([component, selectors]) => {
+    selectors.forEach((selector) => {
+      if (selector === ':root') return;
+      if (!/^\.dx-[a-z0-9-]+$/.test(selector)) {
+        throw new Error(`rootSelectors[${component}]: "${selector}" is not a single .dx-* class or :root`);
+      }
+      if (!classes.has(selector.slice(1))) {
+        throw new Error(`rootSelectors[${component}]: "${selector}" does not occur in the built bundle`);
+      }
+    });
+  });
+};
+
 const build = () => {
   const folders = listFolders(themeDir);
   const derived = deriveFromTokens(OVERRIDES.states);
@@ -918,6 +1062,19 @@ const build = () => {
   const subElements = OVERRIDES.subElements;
   assertParseable(parts, OVERRIDES.states, OVERRIDES.modifiers, subElements);
 
+  // Wave F: emission scope per migrated component — explicit override or the derived widget class
+  const rootSelectors = {};
+  OVERRIDES.migrated.forEach((component) => {
+    rootSelectors[component] = OVERRIDES.rootSelectors[component]
+      ?? [`.dx-${component.replace(/-/g, '')}`];
+  });
+  const orphanRoots = Object.keys(OVERRIDES.rootSelectors)
+    .filter((component) => !OVERRIDES.migrated.includes(component));
+  if (orphanRoots.length) {
+    throw new Error(`rootSelectors for non-migrated components: ${orphanRoots.join(', ')}`);
+  }
+  assertRootSelectorsExist(rootSelectors);
+
   return {
     $comment: 'GENERATED by tools/naming/derive-registries.mjs — do not edit by hand. '
       + 'Judgment calls live in OVERRIDES in that script; vocabularies are derived from the '
@@ -936,6 +1093,7 @@ const build = () => {
     systemFolders: OVERRIDES.systemFolders,
     systemConcerns: [...OVERRIDES.systemConcerns].sort(),
     chassis: OVERRIDES.chassis,
+    rootSelectors,
     themeIdentity: OVERRIDES.themeIdentity,
     exemptFolders: OVERRIDES.exemptFolders,
     parts,

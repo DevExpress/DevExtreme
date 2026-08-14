@@ -1,0 +1,21 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-accordion-bg-rest: #{$accordion-bg-rest};
+  --dx-accordion-body-padding: #{$accordion-body-padding};
+  --dx-accordion-content-disabled: #{$accordion-content-disabled};
+  --dx-accordion-content-rest: #{$accordion-content-rest};
+  --dx-accordion-item-border-radius: #{$accordion-item-border-radius};
+  --dx-accordion-item-opened-margin: #{$accordion-item-opened-margin};
+  --dx-accordion-title-bg-active: #{$accordion-title-bg-active};
+  --dx-accordion-title-bg-hovered: #{$accordion-title-bg-hovered};
+  --dx-accordion-title-content-active: #{if($accordion-title-content-active == $accordion-content-rest, var(--dx-accordion-content-rest), $accordion-title-content-active)};
+  --dx-accordion-title-font-size: #{$accordion-title-font-size};
+  --dx-accordion-title-font-weight: #{$accordion-title-font-weight};
+  --dx-accordion-title-height: #{$accordion-title-height};
+  --dx-accordion-title-icon-margin: #{$accordion-title-icon-margin};
+  --dx-accordion-title-icon-size: #{$accordion-title-icon-size};
+  --dx-accordion-title-padding-block: #{$accordion-title-padding-block};
+  --dx-accordion-title-padding-inline: #{$accordion-title-padding-inline};
+}

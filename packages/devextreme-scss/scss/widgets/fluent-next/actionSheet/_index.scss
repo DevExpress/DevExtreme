@@ -8,7 +8,7 @@
 
 .dx-actionsheet-container {
   .dx-actionsheet-item:not(:last-child) {
-    margin: $action-sheet-item-margin;
+    margin: var(--dx-action-sheet-item-margin);
   }
 
   .dx-button {
@@ -18,5 +18,5 @@
 
 .dx-button.dx-actionsheet-cancel {
   margin: 0;
-  margin-top: $action-sheet-item-margin-block-end;
+  margin-top: var(--dx-action-sheet-item-margin-block-end);
 }

@@ -6,8 +6,8 @@
 // adduse
 
 .dx-card {
-  box-shadow: $card-shadow-rest;
+  box-shadow: var(--dx-card-shadow-rest);
   border-radius: $global-border-radius;
-  background-color: $card-bg-rest;
-  margin: $card-margin;
+  background-color: var(--dx-card-bg-rest);
+  margin: var(--dx-card-margin);
 }

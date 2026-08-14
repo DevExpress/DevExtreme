@@ -44,7 +44,11 @@ $checkbox-text-padding-inline-start: 5px !default;
   white-space: pre-wrap;
   word-wrap: break-word;
   line-height: normal;
-  padding-inline-start: $checkbox-text-padding-inline-start;
+
+  // fluent-next passes null: its own rule paints this box, the base copy would be dead weight
+  @if $checkbox-text-padding-inline-start {
+    padding-inline-start: $checkbox-text-padding-inline-start;
+  }
 }
 
 .dx-state-disabled {
