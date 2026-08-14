@@ -95,7 +95,7 @@
     "del": "2.2.2",
     "devextreme-aspnet-data": "5.1.0",
     "devextreme-cldr-data": "1.0.3",
-    "devextreme-exceljs-fork": "4.4.9",
+    "devextreme-exceljs-fork": "4.4.13",
     "eslint": "catalog:",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-airbnb-typescript": "catalog:",
