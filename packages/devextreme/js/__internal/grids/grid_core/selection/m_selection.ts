@@ -25,6 +25,7 @@ import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import Selection from '@ts/ui/selection/selection';
 
 import type { DataController } from '../data_controller/data_controller';
+import type { GeneratedItem, ItemProcessingOptions, ProcessedItem } from '../data_controller/types';
 import type { ChangedEvent } from '../data_source_adapter/types';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
@@ -639,27 +640,32 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
     });
   }
 
-  protected _processDataItem(item, options) {
+  protected _processDataItem(
+    generatedItem: GeneratedItem,
+    options: ItemProcessingOptions,
+  ): ProcessedItem {
+    const processedItem = super._processDataItem(generatedItem, options);
     const hasSelectColumn = this._selectionController.isSelectColumnVisible();
-    const isDeferredSelection = options.isDeferredSelection = options.isDeferredSelection === undefined ? this.option('selection.deferred') : options.isDeferredSelection;
-    const dataItem = super._processDataItem.apply(this, arguments as any);
+    options.isDeferredSelection ??= this.option('selection.deferred');
 
-    dataItem.isSelected = this._selectionController.isRowSelected(isDeferredSelection ? dataItem.data : dataItem.key);
+    processedItem.isSelected = this._selectionController.isRowSelected(
+      options.isDeferredSelection ? processedItem.data : processedItem.key,
+    );
 
-    if (hasSelectColumn && dataItem.values) {
-      for (let i = 0; i < options.visibleColumns.length; i++) {
+    if (hasSelectColumn && processedItem.values) {
+      for (let i = 0; i < options.visibleColumns.length; i += 1) {
         if (options.visibleColumns[i].command === 'select') {
-          dataItem.values[i] = dataItem.isSelected;
+          processedItem.values[i] = processedItem.isSelected;
           break;
         }
       }
     }
-    return dataItem;
+
+    return processedItem;
   }
 
   public refresh(options): any {
-    // @ts-expect-error
-    const d: DeferredObj<void> = new Deferred();
+    const d = Deferred();
 
     super.refresh(options).done(() => {
       const skipSelectionRefresh = isObject(options) && !(options as any).selection;
@@ -669,8 +675,9 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
         return;
       }
 
-      this._selectionController.refresh().done(d.resolve).fail(d.reject);
-    }).fail(d.reject);
+      this._selectionController.refresh().done(d.resolve as (...args: unknown[]) => void)
+        .fail(d.reject as (...args: unknown[]) => void);
+    }).fail(d.reject as (...args: unknown[]) => void);
 
     return d.promise();
   }

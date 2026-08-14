@@ -495,12 +495,12 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
   .dx-scheduler-group-header {
     font-size: $generic-scheduler-group-header-agenda-font-size;
     width: $generic-scheduler-group-header-table-cell-width;
+    box-shadow: inset 0 -1px 0 0 $scheduler-accent-border-color;
   }
 
   .dx-scheduler-group-header-content {
     width: $generic-scheduler-group-header-table-cell-width;
     padding: $generic-scheduler-agenda-group-header-padding;
-    box-shadow: inset 0 -1px 0 0 $scheduler-accent-border-color;
   }
 
   .dx-scheduler-time-panel-cell {

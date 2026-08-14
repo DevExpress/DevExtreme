@@ -6,8 +6,9 @@ import pointerEvents from '@js/common/core/events/pointer';
 import { removeEvent } from '@js/common/core/events/remove';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
+import type { Store } from '@js/common/data';
 import { createObjectWithChanges } from '@js/common/data/array_utils';
-import type { DataChange, GridsEditMode } from '@js/common/grids';
+import type { DataChange as EditingDataChange, GridsEditMode } from '@js/common/grids';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
 import Guid from '@js/core/guid';
@@ -32,6 +33,13 @@ import { generateRowValues } from '@ts/grids/grid_core/data_controller/utils/row
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
+import type {
+  DataChange,
+  GeneratedItem,
+  ItemProcessingOptions,
+  ProcessedItem,
+} from '../data_controller/types';
+import type { RawItemData } from '../data_source_adapter/types';
 import modules from '../m_modules';
 import type {
   Controllers, ModuleType, RowKey, Views,
@@ -711,7 +719,7 @@ class EditingControllerImpl extends modules.ViewController {
             if (equalByValue(item.key, key)) {
               result = index;
             }
-          } else if (equalByValue(dataController.keyOf(item), key)) {
+          } else if (equalByValue(dataController.keyOf(item as RawItemData), key)) {
             result = index;
           }
         }
@@ -775,8 +783,8 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: validatiing
    */
-  public processItems(items, e) {
-    const { changeType } = e;
+  public processItems(items: RawItemData[], change: DataChange): RawItemData[] {
+    const { changeType } = change;
 
     this.update(changeType);
 
@@ -811,20 +819,20 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: validating
    */
-  public processDataItem(item, options) {
+  public processDataItem(generatedItem: GeneratedItem, options: ItemProcessingOptions): void {
     const columns = options.visibleColumns;
-    const key = item.data[INSERT_INDEX] ? item.data.key : item.key;
+    const key = generatedItem.data[INSERT_INDEX] ? generatedItem.data.key : generatedItem.key;
     const changes = this.getChanges();
 
     const editIndex = gridCoreUtils.getIndexByKey(key, changes);
-    item.isEditing = false;
+    generatedItem.isEditing = false;
 
     if (editIndex >= 0) {
-      this._processDataItemCore(item, changes[editIndex], key, columns);
+      this._processDataItemCore(generatedItem, changes[editIndex], key, columns);
     }
   }
 
-  protected _processDataItemCore(item, change, key, columns) {
+  protected _processDataItemCore(item: GeneratedItem, change, key, columns) {
     const { data, type } = change;
 
     // eslint-disable-next-line default-case
@@ -873,7 +881,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   private _addInsertInfo(
-    change: Partial<DataChange>,
+    change: Partial<EditingDataChange>,
     parentKey?: RowKey,
   ): { insertInfo: InsertInfo; key: RowKey } {
     let insertInfo: InsertInfo | undefined;
@@ -1055,7 +1063,7 @@ class EditingControllerImpl extends modules.ViewController {
    * @exteded: TreeList's editing
    */
   protected _addRowCore(data, parentKey, initialOldEditRowIndex) {
-    const change: Partial<DataChange> = { data, type: DATA_EDIT_DATA_INSERT_TYPE };
+    const change: Partial<EditingDataChange> = { data, type: DATA_EDIT_DATA_INSERT_TYPE };
     const editRowIndex = this._getVisibleEditRowIndex();
     const insertInfo = this._addInsertInfo(change, parentKey);
     const { key } = insertInfo;
@@ -1606,7 +1614,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   private _processChanges(deferreds, results, dataChanges, changes) {
-    const store = this._dataController.store();
+    const store = this._dataController.store() as Store;
 
     each(changes, (index, change) => {
       const oldData = this._getOldData(change.key);
@@ -1624,13 +1632,13 @@ class EditingControllerImpl extends modules.ViewController {
       switch (type) {
         case DATA_EDIT_DATA_REMOVE_TYPE:
           params = { data: oldData, key: change.key, cancel: false };
-          deferred = this._executeEditingAction('onRowRemoving', params, () => store.remove(change.key).done((key) => {
+          deferred = this._executeEditingAction('onRowRemoving', params, () => fromPromise(store.remove(change.key)).done((key) => {
             dataChanges.push({ type: 'remove', key });
           }));
           break;
         case DATA_EDIT_DATA_INSERT_TYPE:
           params = { data, cancel: false };
-          deferred = this._executeEditingAction('onRowInserting', params, () => store.insert(params.data).done((data, key) => {
+          deferred = this._executeEditingAction('onRowInserting', params, () => fromPromise(store.insert(params.data)).done((data, key) => {
             if (isDefined(key)) {
               const initialKey = changeCopy.key;
 
@@ -1647,7 +1655,7 @@ class EditingControllerImpl extends modules.ViewController {
           params = {
             newData: data, oldData, key: change.key, cancel: false,
           };
-          deferred = this._executeEditingAction('onRowUpdating', params, () => store.update(change.key, params.newData).done((data, key) => {
+          deferred = this._executeEditingAction('onRowUpdating', params, () => fromPromise(store.update(change.key, params.newData)).done((data, key) => {
             if (data && isObject(data) && data !== params.newData) {
               changeCopy.data = data;
             }
@@ -1774,7 +1782,6 @@ class EditingControllerImpl extends modules.ViewController {
       }
       when(this._beforeSaveEditData()).done((cancel) => {
         if (cancel) {
-          // @ts-expect-error
           this._resolveAfterSave(deferred, { cancel });
           return;
         }
@@ -1794,7 +1801,7 @@ class EditingControllerImpl extends modules.ViewController {
     return deferred.promise();
   }
 
-  private _resolveAfterSave(deferred, { cancel = undefined, error = undefined } = {}) {
+  private _resolveAfterSave(deferred, { cancel = undefined, error = undefined }: { cancel?: unknown; error?: unknown } = {}) {
     // @ts-expect-error
     when(this._afterSaveEditData(cancel)).done(() => {
       deferred.resolve(error);
@@ -2563,14 +2570,14 @@ export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataControll
     }
   }
 
-  protected _updateItemsCore(change) {
+  protected _updateItemsCore(change: DataChange): void {
     super._updateItemsCore(change);
     this._updateEditRow(this.items(true));
   }
 
-  protected _applyChangeUpdate(change) {
+  protected applyChangeUpdate(change) {
     this._updateEditRow(change.items);
-    super._applyChangeUpdate(change);
+    super.applyChangeUpdate(change);
   }
 
   protected _applyChangesOnly(change) {
@@ -2578,25 +2585,28 @@ export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataControll
     super._applyChangesOnly(change);
   }
 
-  protected _processItems(items, change) {
+  protected _processItems(items: RawItemData[], change: DataChange): ProcessedItem[] {
     items = this._editingController.processItems(items, change);
     return super._processItems(items, change);
   }
 
-  protected _processDataItem(dataItem, options) {
-    this._editingController.processDataItem(dataItem, options);
-    return super._processDataItem(dataItem, options);
+  protected _processDataItem(
+    generatedItem: GeneratedItem,
+    options: ItemProcessingOptions,
+  ): ProcessedItem {
+    this._editingController.processDataItem(generatedItem, options);
+    return super._processDataItem(generatedItem, options);
   }
 
-  protected _processItem(item, options) {
-    item = super._processItem(item, options);
+  protected _processItem(dataItem: RawItemData, options: ItemProcessingOptions) {
+    const processedItem = super._processItem(dataItem, options);
 
-    if (item.isNewRow) {
+    if (processedItem.isNewRow) {
       options.dataIndex--;
-      delete item.dataIndex;
+      delete processedItem.dataIndex;
     }
 
-    return item;
+    return processedItem;
   }
 
   protected _getChangedColumnIndices(oldItem, newItem, rowIndex, isLiveUpdate) {

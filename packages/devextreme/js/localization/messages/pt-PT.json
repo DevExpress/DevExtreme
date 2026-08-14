@@ -92,8 +92,8 @@
         "dxFileUploader-removeFileButtonLabel": "Remover ficheiro {0}",
         "dxFileUploader-uploadFileButtonLabel": "Carregar ficheiro {0}",
 
-        "dxRangeSlider-ariaFrom": "De {0}",
-        "dxRangeSlider-ariaTill": "Até {0}",
+        "dxRangeSlider-ariaFrom": "De",
+        "dxRangeSlider-ariaTill": "Até",
         "dxSwitch-switchedOnText": "LIGADO",
         "dxSwitch-switchedOffText": "DESLIGADO",
 
