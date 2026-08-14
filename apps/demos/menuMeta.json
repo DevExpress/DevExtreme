@@ -862,7 +862,7 @@
               },
               {
                 "Title": "AI-powered Detail View",
-                "Name": "AIPoweredDetailView",
+                "Name": "AI-PoweredDetailView",
                 "Widget": "DataGrid",
                 "DemoType": "Web",
                 "Badge": "Roadmap",
