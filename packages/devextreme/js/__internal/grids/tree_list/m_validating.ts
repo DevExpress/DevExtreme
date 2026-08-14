@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { validatingModule } from '@ts/grids/grid_core/validating/m_validating';
+import { validatingModule } from '@ts/grids/grid_core/validating/validating_module';
 
 import type { EditingController } from '../grid_core/editing/m_editing';
 import type { ModuleType } from '../grid_core/m_types';

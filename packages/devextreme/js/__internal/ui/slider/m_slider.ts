@@ -20,7 +20,8 @@ import { getExponentLength, getRemainderByDivision, roundFloatPart } from '@js/c
 import { getWidth, setWidth } from '@js/core/utils/size';
 import type { dxSliderBaseOptions } from '@js/ui/slider';
 import { current as currentTheme, isMaterial } from '@js/ui/themes';
-import { render } from '@ts/core/utils/m_ink_ripple';
+import type { InkRipple } from '@ts/core/utils/ink_ripple';
+import { render } from '@ts/core/utils/ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 
@@ -50,16 +51,7 @@ export interface SliderProperties extends SliderBaseProperties {
 class Slider<
   TProperties extends SliderBaseProperties = SliderProperties,
 > extends TrackBar<TProperties> {
-  _inkRipple?: {
-    showWave: (config: {
-      element: dxElementWrapper;
-      event: unknown;
-    }) => void;
-    hideWave: (config: {
-      element: dxElementWrapper;
-      event: unknown;
-    }) => void;
-  };
+  _inkRipple?: InkRipple;
 
   _$submitElement!: dxElementWrapper;
 

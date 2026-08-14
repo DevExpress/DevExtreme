@@ -6,6 +6,7 @@ import { writeOutputFiles } from '../shared/output-writer';
 import {
   EXCLUDED_DIRS, EXCLUDED_FILE_NAMES, GRID_CORE_ROOT, OUTPUT_DIR,
 } from './constants';
+import { collectExternalModules } from './external-modules';
 import { generateHtml } from './html-template';
 import { parseFile } from './parser';
 import {
@@ -14,7 +15,9 @@ import {
   buildInheritanceChains,
   findStandaloneRegistrations,
   resolveAliasesInClasses,
+  resolveExtenderDefinitions,
   resolveModuleClassRefs,
+  resolveOwnership,
   resolveRuntimeDeps,
   validateData,
 } from './resolver';
@@ -68,6 +71,11 @@ function main(): void {
         modules.push(mod);
       }
     }
+    // 3a. Adopt modules registered from data_grid / tree_list out of grid_core parts
+    const externalModules = collectExternalModules(globalClasses, fileByRelPath, globalAliasMap);
+    modules.push(...externalModules);
+    console.log(`Adopted ${externalModules.length} externally registered modules: ${externalModules.map((m) => m.moduleName).join(', ')}`);
+
     modules.sort((a, b) => a.moduleName.localeCompare(b.moduleName));
     console.log(`Found ${modules.length} modules`);
 
@@ -87,8 +95,22 @@ function main(): void {
     );
     console.log(`Built ${inheritanceChains.length} inheritance chains`);
 
+    // 5a. Resolve extender definitions (defining file + returned class name)
+    const extenderRefs = resolveExtenderDefinitions(modules, fileByRelPath);
+    console.log(`Resolved ${extenderRefs.size} distinct extender functions`);
+
+    // 5b. Attach classes a module creates with `new` instead of registering
+    const ownershipLinks = resolveOwnership(
+      allParsedFiles,
+      modules,
+      extenderRefs,
+      standaloneControllers,
+      standaloneViews,
+    );
+    console.log(`Found ${ownershipLinks.length} owned classes`);
+
     // 6. Resolve runtime dependencies
-    const runtimeDependencies = resolveRuntimeDeps(allParsedFiles, modules);
+    const runtimeDependencies = resolveRuntimeDeps(allParsedFiles, modules, extenderRefs);
     console.log(`Found ${runtimeDependencies.length} runtime dependencies`);
 
     // 7. Validate
@@ -102,6 +124,7 @@ function main(): void {
       standaloneControllers,
       standaloneViews,
       runtimeDependencies,
+      ownershipLinks,
       inheritanceChains,
     };
 
@@ -115,6 +138,7 @@ function main(): void {
     console.log(`  Extension-only modules: ${modules.filter((m) => Object.keys(m.controllers).length === 0 && Object.keys(m.views).length === 0).length}`);
     console.log(`  Standalone controllers: ${Object.keys(standaloneControllers).length}`);
     console.log(`  Standalone views: ${Object.keys(standaloneViews).length}`);
+    console.log(`  Owned classes: ${ownershipLinks.length}`);
     console.log(`  Runtime dependencies: ${runtimeDependencies.length}`);
     console.log(`  Inheritance chains: ${inheritanceChains.length}`);
   } catch (e) {
