@@ -1,5 +1,6 @@
 import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
-import { hideWave, initConfig, showWave } from '@ts/core/utils/m_ink_ripple';
+import type { InkRippleConfig as ResolvedInkRippleConfig } from '@ts/core/utils/ink_ripple';
+import { hideWave, initConfig, showWave } from '@ts/core/utils/ink_ripple';
 
 export interface InkRippleConfig {
   isCentered?: boolean;
@@ -22,7 +23,7 @@ export const defaultInkRippleProps = {
 };
 
 export class InkRipple extends BaseInfernoComponent<InkRippleProps> {
-  private readonly __getterCache: { getConfig?: InkRippleConfig } = {};
+  private readonly __getterCache: { getConfig?: ResolvedInkRippleConfig } = {};
 
   constructor(props: InkRippleProps) {
     super(props);
@@ -31,7 +32,7 @@ export class InkRipple extends BaseInfernoComponent<InkRippleProps> {
     this.showWave = this.showWave.bind(this);
   }
 
-  get getConfig(): InkRippleConfig {
+  get getConfig(): ResolvedInkRippleConfig {
     if (this.__getterCache.getConfig === undefined) {
       this.__getterCache.getConfig = initConfig(this.props.config);
     }

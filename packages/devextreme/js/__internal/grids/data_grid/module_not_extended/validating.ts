@@ -1,4 +1,4 @@
-import { validatingModule } from '@ts/grids/grid_core/validating/m_validating';
+import { validatingModule } from '@ts/grids/grid_core/validating/validating_module';
 
 import gridCore from '../m_core';
 

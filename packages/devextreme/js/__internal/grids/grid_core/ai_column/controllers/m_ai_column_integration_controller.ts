@@ -8,7 +8,7 @@ import errors from '@js/ui/widget/ui.errors';
 
 import type { ColumnsController } from '../../columns_controller/m_columns_controller';
 import type { DataController } from '../../data_controller/data_controller';
-import type { RawItemData } from '../../data_controller/types';
+import type { RawItemData } from '../../data_source_adapter/types';
 import type { ErrorHandlingController } from '../../error_handling/m_error_handling';
 import { Controller } from '../../m_modules';
 import type { RowKey } from '../../m_types';
@@ -137,7 +137,7 @@ export class AIColumnIntegrationController extends Controller {
     }
 
     const keyField = this.dataController.key();
-    if (isKeyMissingInData(args.data, keyField)) {
+    if (keyField === undefined || isKeyMissingInData(args.data, keyField)) {
       this.dataController.fireError('E1046', keyField);
       return;
     }
