@@ -111,9 +111,6 @@
           "pnpm nx build devextreme",
           "pnpm nx run-many --targets=pack --projects=devextreme-angular,devextreme-react,devextreme-vue --parallel",
           "node scripts/prepare-js-configs.js",
-          "pnpm run generate-ng-umd",
-          "pnpm run generate-devextreme-angular-umd",
-          "pnpm run generate-external-bundles",
           "pnpm run generate-tgz-packages"
         ],
         "parallel": false,
@@ -124,10 +121,7 @@
         "{projectRoot}/scripts/**/*",
         "{projectRoot}/utils/shared/config-helper.js",
         "{projectRoot}/utils/copy-shared-resources/**/*",
-        "{projectRoot}/menuMeta.json",
-        "{projectRoot}/rollup.ng.umd.config.mjs",
-        "{projectRoot}/rollup.devextreme-angular.umd.config.mjs",
-        "{projectRoot}/rollup.external.bundles.config.mjs"
+        "{projectRoot}/menuMeta.json"
       ]
     }
   },
