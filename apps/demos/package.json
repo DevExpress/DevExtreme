@@ -160,7 +160,7 @@
         "link-repos": "node utils/interactive/link-repos.js",
         "launch-demo": "node utils/shell/server.js",
         "generate-tgz-packages": "node utils/create-tgz-packages.js",
-        "prepare-js": "node scripts/prepare-js-configs.js && pnpm run generate-tgz-packages",
+        "prepare-js": "pnpm run generate-tgz-packages",
         "eslint": "eslint",
         "lint-html": "prettier --check .",
         "lint-js": "eslint . --ignore-pattern 'Demos'",

@@ -110,7 +110,6 @@
         "commands": [
           "pnpm nx build devextreme",
           "pnpm nx run-many --targets=pack --projects=devextreme-angular,devextreme-react,devextreme-vue --parallel",
-          "node scripts/prepare-js-configs.js",
           "pnpm run generate-tgz-packages"
         ],
         "parallel": false,
@@ -118,10 +117,7 @@
       },
       "inputs": [
         "default",
-        "{projectRoot}/scripts/**/*",
-        "{projectRoot}/utils/shared/config-helper.js",
-        "{projectRoot}/utils/copy-shared-resources/**/*",
-        "{projectRoot}/menuMeta.json"
+        "{projectRoot}/utils/create-tgz-packages.js"
       ]
     }
   },
