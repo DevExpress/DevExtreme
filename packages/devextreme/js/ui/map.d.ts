@@ -14,11 +14,48 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type MapProvider = 'azure' | 'bing' | 'google' | 'googleStatic';
+export type MapProvider = 'azure' | 'bing' | 'google' | 'googleStatic' | 'osm';
 /** @public */
 export type RouteMode = 'driving' | 'walking';
 /** @public */
 export type MapType = 'hybrid' | 'roadmap' | 'satellite';
+
+/**
+ * @docid
+ * @public
+ */
+// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
+export interface OsmTileServerConfig {
+  /**
+   * @docid
+   */
+  url: string;
+  /**
+   * @docid
+   * @default ''
+   */
+  attribution?: string;
+  /**
+   * @docid
+   * @default 'abc'
+   */
+  // eslint-disable-next-line spellcheck/spell-checker -- tile server option name
+  subdomains?: string | Array<string>;
+  /**
+   * @docid
+   * @default 19
+   */
+  maxZoom?: number;
+}
+
+/**
+ * @docid
+ * @public
+ */
+// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifiers
+export type OsmTileServer = string | OsmTileServerConfig
+// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
+| ((type: MapType) => string | OsmTileServerConfig | null | undefined);
 
 /**
  * @docid _ui_map_ClickEvent
@@ -336,6 +373,13 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
        * @deprecated
        */
       useAdvancedMarkers?: boolean;
+      /**
+       * @docid
+       * @public
+       * @default undefined
+       */
+      // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
+      tileServer?: OsmTileServer | undefined;
     };
     /**
      * @docid

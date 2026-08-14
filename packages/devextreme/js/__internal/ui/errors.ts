@@ -113,6 +113,8 @@ export default errorUtils(errors.ERROR_MESSAGES, {
 
   E1068: '\'aiIntegration\' is not configured for the AI Assistant.',
 
+  E1069: 'The OSM map provider requires OpenLayers. Load the OpenLayers browser build before initializing the map.',
+
   W1001: 'The "key" option cannot be modified after initialization',
 
   W1002: 'An item with the key \'{0}\' does not exist',
@@ -160,4 +162,6 @@ export default errorUtils(errors.ERROR_MESSAGES, {
   W1027: 'A prompt should be specified for a custom command.',
   W1028: 'Nested/banded columns do not support the following properties: {0}.',
   W1029: '\'hiddenWeekDays\' must leave at least one weekday visible.',
+  W1030: 'No tile server is configured for the OSM map provider. Specify the "providerConfig.tileServer" option.',
+  W1032: 'The OSM map provider tile server is configured without an "attribution". Attribution is required when displaying OpenStreetMap data; set the "attribution" field of the "providerConfig.tileServer" option (for example, "© OpenStreetMap contributors").',
 });
