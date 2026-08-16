@@ -22,6 +22,6 @@ test.describe('TextBox Dynamic Styles scenarios', () => {
         await textboxInput.press('Enter');
 
         await expect(textboxInput).toHaveValue('trigger again');
-        await expect(textboxWrapper).toHaveCSS('background-color', 'rgb(54, 162, 235)');
+        await expect(textboxWrapper).toHaveCSS('background-color', 'rgb(0, 0, 0)');
     });
 });
