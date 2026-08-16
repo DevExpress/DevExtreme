@@ -174,12 +174,20 @@ jobs:
         working-directory: e2e/wrappers
         run: pnpm run test:${{ matrix.framework }}
 
-      - name: Upload test artifacts on failure
+      # The report and the traces are uploaded separately: each artifact then unpacks into the
+      # layout "playwright show-report" and "playwright show-trace" expect.
+      - name: Upload test report on failure
         if: ${{ failure() }}
         uses: actions/upload-artifact@v7
         with:
-          name: test-fails-${{matrix.framework}}
-          path: |
-            e2e/wrappers/playwright-report
-            e2e/wrappers/test-results
+          name: playwright-report-${{matrix.framework}}
+          path: e2e/wrappers/playwright-report
+          if-no-files-found: ignore
+
+      - name: Upload test traces on failure
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-traces-${{matrix.framework}}
+          path: e2e/wrappers/test-results
           if-no-files-found: ignore

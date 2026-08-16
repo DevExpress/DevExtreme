@@ -43,26 +43,33 @@ cd e2e/wrappers
 docker/run.sh react19
 ```
 
-To drive the run from the browser on your machine, start the UI mode inside the container and
-open `http://localhost:9323`:
+The browser runs in the container while you watch and re-run the tests from the browser on your
+machine — start the UI mode and open `http://localhost:9323`:
 
 ```bash
-docker run --rm --platform linux/amd64 --shm-size=2gb -p 9323:9323 \
-    -v "$(git rev-parse --show-toplevel):/repo" -w /repo/e2e/wrappers -e FRAMEWORK=react19 \
-    devextreme-wrappers-e2e \
-    node_modules/.bin/playwright test --ui-host=0.0.0.0 --ui-port=9323
+docker/run.sh --ui react19
 ```
 
 The repository is mounted, so edits made on the host are picked up and the watch mode re-runs
-the affected tests. Plain `--ui` is not used on purpose: it opens the interface in the bundled
-Chromium, which is deliberately not installed.
+the affected tests. Plain `playwright test --ui` is not used on purpose: it opens the interface
+in the bundled Chromium, which is deliberately not installed.
 
-Artifacts from a failed CI run are read with the same tooling:
+## Investigate a failed CI run
+
+The `Wrappers E2E Tests` workflow uploads two artifacts per framework when tests fail: the HTML
+report and the traces. Download them and open with the tools Playwright ships:
 
 ```bash
-pnpm exec playwright show-report <unpacked artifact>/playwright-report
-pnpm exec playwright show-trace <unpacked artifact>/test-results/<test>/trace.zip --port 0
+gh run download <run-id> -n playwright-report-react19 -D ci-report
+gh run download <run-id> -n playwright-traces-react19 -D ci-traces
+
+pnpm exec playwright show-report ci-report
+pnpm exec playwright show-trace ci-traces/<test-name>/trace.zip --port 0
 ```
+
+The trace is a step-by-step timeline: the DOM before and after every action, network, console
+output and the error, so a failure that only happens on CI can be inspected without reproducing
+it. To reproduce it anyway, run the same test in the container — the environment matches.
 
 ## Rendering
 
