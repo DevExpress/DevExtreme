@@ -371,7 +371,6 @@ export class SelectionController extends modules.Controller {
     }
 
     if (isDeferredMode) {
-      // @ts-expect-error
       that.option('selectionFilter', selectionFilter);
       selectionChangedOptions = {};
     } else if (args.addedItemKeys.length || args.removedItemKeys.length) {
