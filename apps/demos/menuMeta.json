@@ -861,14 +861,6 @@
                 "DemoType": "Web"
               },
               {
-                "Title": "AI-powered Detail View",
-                "Name": "AI-PoweredDetailView",
-                "Widget": "DataGrid",
-                "DemoType": "Web",
-                "Badge": "Roadmap",
-                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-wg-roadmap-ai-powered-detail-view.xml"
-              },
-              {
                 "Title": "Advanced Master-Detail View",
                 "Name": "AdvancedMasterDetailView",
                 "Widget": "DataGrid",
