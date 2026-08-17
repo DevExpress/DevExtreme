@@ -519,7 +519,7 @@ export const applyUserState = function (that: ColumnsController) {
 
       if (fieldName === 'dataType') {
         column[fieldName] = column[fieldName] || userStateColumn[fieldName];
-      } else if (USER_STATE_FIELD_NAMES_15_1.includes(fieldName)) {
+      } else if ((USER_STATE_FIELD_NAMES_15_1 as readonly string[]).includes(fieldName)) {
         if (fieldName in userStateColumn) {
           column[fieldName] = userStateColumn[fieldName];
         }
