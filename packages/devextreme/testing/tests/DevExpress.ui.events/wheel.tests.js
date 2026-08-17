@@ -1,6 +1,6 @@
-const $ = require('jquery');
-const wheelEvent = require('common/core/events/core/wheel');
-const nativePointerMock = require('../../helpers/nativePointerMock.js');
+import $ from 'jquery';
+import * as wheelEvent from 'common/core/events/core/wheel';
+import nativePointerMock from '../../helpers/nativePointerMock.js';
 
 QUnit.testStart(function() {
     const markup =
