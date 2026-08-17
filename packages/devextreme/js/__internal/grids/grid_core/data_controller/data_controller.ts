@@ -1,11 +1,3 @@
-// TODO: fix the rules disabled below
-/* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable consistent-return */
-
 import type { Store } from '@js/common/data';
 import type { Callback } from '@js/core/utils/callbacks';
 import { deferRender } from '@js/core/utils/common';
@@ -593,7 +585,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
             ? {
               ...e,
               changeType: e?.changeType ?? 'refresh',
-            // need to cast, because in virtual scrolling with scrolling.legacyMode, e has more fields
+            // in virtual scrolling with scrolling.legacyMode, e has more fields
             } as DataChange
             : { changeType: 'refresh' };
 
@@ -629,7 +621,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this.pushed.fire(changes);
   }
 
-  public fireError(...args: unknown[]) {
+  public fireError(...args: unknown[]): void {
     this.dataErrorOccurred.fire(errors.Error(...args));
   }
 
@@ -647,7 +639,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     });
   }
 
-  protected _getSpecificDataSourceOption() {
+  protected _getSpecificDataSourceOption(): unknown {
     const dataSource = this.option('dataSource');
 
     if (Array.isArray(dataSource)) {
@@ -718,7 +710,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended: virtual_scrolling
    */
-  protected getRowIndexDelta() {
+  protected getRowIndexDelta(): number {
     return 0;
   }
 
@@ -935,7 +927,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       return true;
     }
 
-    const isCellModified = (row: ProcessedItem): boolean => row.modifiedValues?.[columnIndex] !== undefined;
+    const isCellModified = (
+      row: ProcessedItem,
+    ): boolean => row.modifiedValues?.[columnIndex] !== undefined;
 
     return isCellModified(oldRow) !== isCellModified(newRow);
   }
@@ -1355,11 +1349,13 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     const filterExpr: DataFilter = filterArgs.length === 1 ? filterArgs[0] : filterArgs;
 
     if (gridCoreUtils.equalFilterParameters(filter, filterExpr, langParams)) {
-      return;
+      return undefined;
     }
 
     this._dataSource?.filter(filterExpr);
     this._applyFilter();
+
+    return undefined;
   }
 
   /**
@@ -1483,15 +1479,16 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   public pageCount(): number {
-    return this._dataSource ? this._dataSource.pageCount() : 1;
+    return this._dataSource ? this._dataSource.pageCount() as number : 1;
   }
 
-  public dataSource() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public dataSource(): any {
     return this._dataSource;
   }
 
   public store(): Store | undefined {
-    return this._dataSource?.store();
+    return this._dataSource?.store() as Store | undefined;
   }
 
   public loadAll(data?: RawItemData[], skipFilter = false): DeferredObj<ProcessedItem[]> {
@@ -1587,7 +1584,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       return Deferred<RawItemData>().resolve(this.items()[rowIndex].data);
     }
 
-    return fromPromise(store.byKey(key));
+    return fromPromise(store.byKey(key)) as DeferredObj<RawItemData>;
   }
 
   public key(): string | string[] | undefined {
@@ -1730,7 +1727,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended editing
    */
-  public repaintRows(rowIndexes: number | (number | undefined)[] | undefined, changesOnly?: boolean): void {
+  public repaintRows(
+    rowIndexes: number | (number | undefined)[] | undefined,
+    changesOnly?: boolean,
+  ): void {
     const rowIndices = Array.isArray(rowIndexes) ? rowIndexes : [rowIndexes];
 
     if (rowIndices.length > 1 || isDefined(rowIndices[0])) {
