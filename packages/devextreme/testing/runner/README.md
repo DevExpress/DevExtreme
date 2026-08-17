@@ -37,16 +37,15 @@ This module is the integration point: almost every special-case rewrite for QUni
 
 Serve-time **CJS → ESM** source rewrites for QUnit tests, helpers, and bundle templates.
 
-Legacy suites still use `require()`, `module.exports` / `exports.*`, AMD `define(function () { … })`, and CJS-style `import x from 'bare-specifier'`. Native ESM cannot load those as-is.
+`testing/tests/**` and `testing/helpers/**` are now fully native ESM (no `require()`/`module.exports`/AMD left) — the CJS/AMD rewrites below only still fire for `build/bundle-templates/**` (bundler-input sources, out of scope for the QUnit migration). CJS-style `import x from 'bare-specifier'` (bare default/named imports on modules with an imperfect export shape) is still common everywhere and always rewritten, except `jquery` — its shim has a real `export default $`, so it's excluded and loads natively.
 
 **What it does:**
 
-1. **`require('…')`** → hoisted `import * as __dxReq_N` plus `('default' in ns ? ns.default : { …ns })` at the call site (keeps explicit `default: null` for noJQuery/…; mutable shallow copy only when there is no default — needed when tests assign onto the module object).
-2. **`module.exports` / `exports.*`** → wrap the file with a synthetic `module`/`exports` object and emit `export default` + named exports.
-3. **Bare default / named imports** → namespace import + CJS default interop (`'default' in ns ? ns.default : …`, merge default object/function into named bindings when needed).
-4. **AMD `define(function () { … })`** → IIFE, with imports hoisted to file top (imports inside `if (define.amd)` are illegal in ESM).
-5. **Plugin-style JSON** (`file.json!` / `file.json!json`) → absolute URLs with `?esm-export=1`.
-6. **`aspnet.js`** → dedicated UMD → ESM conversion (`rewriteAspnetArtifactToEsm`).
+1. **`require('…')`** (bundle templates only) → hoisted `import * as __dxReq_N` plus `('default' in ns ? ns.default : { …ns })` at the call site (keeps explicit `default: null` for noJQuery/…; mutable shallow copy only when there is no default — needed when tests assign onto the module object).
+2. **`module.exports` / `exports.*`** (bundle templates only) → wrap the file with a synthetic `module`/`exports` object and emit `export default` + named exports.
+3. **Bare default / named imports** → namespace import + CJS default interop (`'default' in ns ? ns.default : …`, merge default object/function into named bindings when needed); `jquery` is excluded and passes through untouched.
+4. **Plugin-style JSON** (`file.json!` / `file.json!json`, bundle templates only) → absolute URLs with `?esm-export=1`.
+5. **`aspnet.js`** → dedicated UMD → ESM conversion (`rewriteAspnetArtifactToEsm`).
 
 `esm-shims/` files are **excluded** from this pipeline (`isQunitTestOrHelperPath`) — they are already real ESM.
 
