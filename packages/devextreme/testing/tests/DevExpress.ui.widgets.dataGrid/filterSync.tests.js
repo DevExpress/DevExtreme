@@ -729,9 +729,7 @@ QUnit.module('getCombinedFilter', {
             filterValue: [['Test', 'anyof', [1, 2, 3]], 'and', filterRowFilter]
         });
 
-        this.headerFilterController.getCurrentColumn = function() {
-            return { dataField: 'Test' };
-        };
+        this.dataController.setFilterExcludedColumn({ dataField: 'Test' });
 
         // assert
         assert.deepEqual(this.getCombinedFilter(true), undefined, 'combined filter');
@@ -749,9 +747,7 @@ QUnit.module('getCombinedFilter', {
             filterValue: [['Test', 'anyof', [1, 2, 3]], 'and', filterRowFilter]
         });
 
-        this.headerFilterController.getCurrentColumn = function() {
-            return { dataField: 'Test' };
-        };
+        this.dataController.setFilterExcludedColumn({ dataField: 'Test' });
 
         // assert
         assert.deepEqual(this.getCombinedFilter(true), [
