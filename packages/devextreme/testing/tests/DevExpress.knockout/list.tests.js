@@ -1,13 +1,13 @@
 // eslint-disable-next-line spellcheck/spell-checker
-const { rerender } = require('inferno');
-const $ = require('jquery');
-const ko = require('knockout');
-const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
+import { rerender } from 'inferno';
+import $ from 'jquery';
+import ko from 'knockout';
+import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
-require('ui/list');
-require('integration/knockout');
+import 'ui/list';
+import 'integration/knockout';
 
-require('fluent_blue_light.css!');
+import 'fluent_blue_light.css!';
 
 const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
