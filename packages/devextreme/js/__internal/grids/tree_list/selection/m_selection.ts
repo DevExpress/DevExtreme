@@ -9,10 +9,10 @@ import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_col
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { ChangedEvent } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import { dataSelectionExtenderMixin } from '@ts/grids/grid_core/selection/extenders/selection_data_controller';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 import {
   columnHeadersSelectionExtenderMixin,
-  dataSelectionExtenderMixin,
   rowsViewSelectionExtenderMixin,
 } from '@ts/grids/grid_core/selection/m_selection';
 import { selectionModule } from '@ts/grids/grid_core/selection/selection_module';

@@ -1,9 +1,9 @@
 import type { Properties as DataGridProperties, Selection } from '@js/ui/data_grid';
 
+import { dataSelectionExtenderMixin } from './extenders/selection_data_controller';
 import {
   columnHeadersSelectionExtenderMixin,
   contextMenu,
-  dataSelectionExtenderMixin,
   rowsViewSelectionExtenderMixin,
   SelectionController,
 } from './m_selection';
