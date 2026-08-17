@@ -26,7 +26,6 @@ const DATAGRID_DEPRECATED_TEMPLATE_WARNING = 'Specifying grid templates with the
 gridCore.registerModulesOrder([
   'stateStoring',
   'columns',
-  'data',
   'selection',
   'editorFactory',
   'columnChooser',
@@ -38,6 +37,7 @@ gridCore.registerModulesOrder([
   'masterDetail',
   'validating',
   'adaptivity',
+  'data',
   'virtualScrolling',
   'aiColumn',
   'columnHeaders',
