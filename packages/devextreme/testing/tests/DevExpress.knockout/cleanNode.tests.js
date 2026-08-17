@@ -1,8 +1,8 @@
-require('integration/knockout');
+import 'integration/knockout';
 
-const $ = require('jquery');
-const ko = require('knockout');
-const dataUtils = require('core/element_data');
+import $ from 'jquery';
+import ko from 'knockout';
+import * as dataUtils from 'core/element_data';
 
 const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 

@@ -1,1 +1,1 @@
-require('../DevExpress.ui.widgets/progressBar.markup.tests.js');
+import '../DevExpress.ui.widgets/progressBar.markup.tests.js';

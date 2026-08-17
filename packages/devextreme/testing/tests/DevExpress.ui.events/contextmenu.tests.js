@@ -1,9 +1,9 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const devices = require('core/devices');
-const support = require('core/utils/support');
-const holdEvent = require('common/core/events/hold');
-const contextMenuEvent = require('common/core/events/contextmenu');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import devices from 'core/devices';
+import * as support from 'core/utils/support';
+import holdEvent from 'common/core/events/hold';
+import * as contextMenuEvent from 'common/core/events/contextmenu';
 
 QUnit.testStart(function() {
     const markup =

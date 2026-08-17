@@ -1,1 +1,1 @@
-require('../DevExpress.ui.widgets.editors/colorView.markup.tests.js');
+import '../DevExpress.ui.widgets.editors/colorView.markup.tests.js';

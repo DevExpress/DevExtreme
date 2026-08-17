@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const ko = require('knockout');
+import $ from 'jquery';
+import ko from 'knockout';
 
-require('ui/tree_list');
-require('integration/knockout');
+import 'ui/tree_list';
+import 'integration/knockout';
 
 if(QUnit.urlParams['nocsp']) {
     QUnit.module('treeList');
