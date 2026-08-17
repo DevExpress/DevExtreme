@@ -68,7 +68,7 @@ const processLoadState = (that): void => {
   }
 };
 
-const getFilterValue = (that, state: GridState): InternalGridOptions['filterValue'] => {
+const getFilterValue = (that, state: GridState): InternalGridOptions['filterValue'] | null => {
   // TODO: getController
   const filterSyncController = that.getController('filterSync');
   if (!filterSyncController) {
@@ -188,6 +188,7 @@ export class GridStateStoringController extends StateStoringController<GridState
 
     this.option('searchPanel.text', state.searchText ?? '');
 
+    // @ts-expect-error
     this.option('filterValue', getFilterValue(this, state));
     this.option('filterPanel.filterEnabled', state.filterPanel ? state.filterPanel.filterEnabled : true);
 
