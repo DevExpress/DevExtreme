@@ -1,16 +1,17 @@
-/* eslint-disable max-classes-per-file */
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import messageLocalization from '@js/common/core/localization/message';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
-import type { DataController } from '../data_controller/data_controller';
+import type { DataChange } from '../data_controller/types';
 import modules from '../m_modules';
-import type { ModuleType } from '../m_types';
 import type { ToastViewController } from '../toast/m_toast_controller';
 import type { RowsView } from '../views/m_rows_view';
 
@@ -24,6 +25,10 @@ export class ErrorHandlingController extends modules.ViewController {
 
   private _columnsController!: ColumnsController;
 
+  private _dataController!: DataController;
+
+  private _editingController!: EditingController;
+
   private _columnHeadersView!: ColumnHeadersView;
 
   private _rowsView!: RowsView;
@@ -36,7 +41,31 @@ export class ErrorHandlingController extends modules.ViewController {
     this._columnHeadersView = this.getView('columnHeadersView');
     this._toastViewController = this.getController('toastViewController');
     this._rowsView = this.getView('rowsView');
+    this._dataController = this.getController('data');
+    this._editingController = this.getController('editing');
+
+    this._dataController.dataErrorOccurred.add(this.handleDataErrorOccurred);
+    this._dataController.changed.add(this.handleDataChanged);
   }
+
+  private readonly handleDataErrorOccurred = (
+    error: unknown,
+    $popupContent?: dxElementWrapper,
+  ): void => {
+    if (this.option('errorRowEnabled')) {
+      this.renderErrorRow(error, undefined, $popupContent);
+    }
+  };
+
+  private readonly handleDataChanged = (e?: DataChange): void => {
+    if (e?.changeType === 'loadError') {
+      return;
+    }
+
+    if (this._editingController && !this._editingController.hasChanges()) {
+      this.removeErrorRow();
+    }
+  };
 
   private _createErrorRow(error, $tableElements?) {
     let $errorRow;
@@ -163,28 +192,6 @@ export class ErrorHandlingController extends modules.ViewController {
   }
 }
 
-const data = (Base: ModuleType<DataController>) => class ErrorHandlingDataControllerExtends extends Base {
-  public init() {
-    super.init();
-
-    this.dataErrorOccurred.add((error, $popupContent) => {
-      if (this.option('errorRowEnabled')) {
-        this._errorHandlingController.renderErrorRow(error, undefined, $popupContent);
-      }
-    });
-
-    this.changed.add((e) => {
-      if (e && e.changeType === 'loadError') {
-        return;
-      }
-
-      if (this._editingController && !this._editingController.hasChanges()) {
-        this._errorHandlingController?.removeErrorRow?.();
-      }
-    });
-  }
-};
-
 export const errorHandlingModule = {
   defaultOptions() {
     return {
@@ -193,10 +200,5 @@ export const errorHandlingModule = {
   },
   controllers: {
     errorHandling: ErrorHandlingController,
-  },
-  extenders: {
-    controllers: {
-      data,
-    },
   },
 };

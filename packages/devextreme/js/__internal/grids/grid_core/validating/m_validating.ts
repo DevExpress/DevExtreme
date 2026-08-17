@@ -28,13 +28,14 @@ import errors from '@js/ui/widget/ui.errors';
 import { focused } from '@ts/core/utils/m_selectors';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import type { ErrorHandlingController } from '@ts/grids/grid_core/error_handling/m_error_handling';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import { EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR } from '../editing/const';
 import type { EditingController } from '../editing/m_editing';
 import type { NormalizedEditCellOptions } from '../editing/types';
 import modules from '../m_modules';
-import type { ModuleType } from '../m_types';
+import type { Controllers, ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import {
   INVALIDATE_CLASS,
@@ -672,6 +673,14 @@ export class ValidatingController extends modules.Controller {
 }
 
 export const validatingEditingExtender = (Base: ModuleType<EditingController>) => class ValidateEditingControllerExtender extends Base {
+  protected _errorHandlingController!: ErrorHandlingController;
+
+  public init(): void {
+    super.init();
+
+    this._errorHandlingController = this.getController('errorHandling');
+  }
+
   protected processDataItemTreeListHack(item) {
     // @ts-expect-error
     super.processDataItem.apply(this, arguments);
