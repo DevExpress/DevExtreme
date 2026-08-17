@@ -2,10 +2,10 @@
 /* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable consistent-return */
-/* eslint-disable no-param-reassign */
+
 import type { Store } from '@js/common/data';
 import type { Callback } from '@js/core/utils/callbacks';
 import { deferRender } from '@js/core/utils/common';
@@ -36,7 +36,6 @@ import type {
   Controllers, Module, OptionChanged, RowKey,
 } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
-import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 import type { VirtualScrollController } from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
 
 import { DataHelperMixin } from './data_helper_mixin';
@@ -157,8 +156,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _focusController!: FocusController;
 
-  protected _selectionController!: SelectionController;
-
   private loadErrorHandlerProxy!: (e: Error | string) => void;
 
   private dataPushedHandlerProxy!: (changes: StoreChange[]) => void;
@@ -178,7 +175,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._focusController = this.getController('focus');
     this._headerFilterController = this.getController('headerFilter');
-    this._selectionController = this.getController('selection');
 
     this._isPaging = false;
     this._currentOperationTypes = null;
