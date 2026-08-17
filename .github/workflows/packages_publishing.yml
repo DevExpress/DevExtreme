@@ -44,6 +44,7 @@ jobs:
   build:
     name: Build packages
     runs-on: ubuntu-latest
+    environment: ${{ inputs.tag == 'stable' || (github.event_name == 'workflow_dispatch' && !contains(github.workflow_ref, '/.github/workflows/packages_publishing_scheduler.yml@')) && 'packages-publishing' || 'packages-publishing-automation' }}
     outputs:
       packages: ${{ steps.filter.outputs.packages }}
     steps:
@@ -166,7 +167,6 @@ jobs:
     name: Publish package
     runs-on: ubuntu-slim
     needs: build
-    environment: ${{ inputs.tag == 'stable' || (github.event_name == 'workflow_dispatch' && !contains(github.workflow_ref, '/.github/workflows/packages_publishing_scheduler.yml@')) && 'packages-publishing' || 'packages-publishing-automation' }}
     strategy:
       fail-fast: false
       matrix:
