@@ -5,6 +5,10 @@ export interface ArrayStore extends BaseArrayStore {
   _array: unknown[];
 }
 
+export interface BeforePushEvent {
+  changes: StoreChange[];
+}
+
 type BeforePushHandler = (e: { changes: StoreChange[] }) => void;
 
 declare module '@js/data/store' {

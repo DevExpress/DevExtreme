@@ -1,12 +1,4 @@
 import DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import { createDataSourceAdapterProvider } from '@ts/grids/grid_core/data_source_adapter/provider';
 
-let DataSourceAdapterType: any = DataSourceAdapter;
-
-export default {
-  extend(extender) {
-    DataSourceAdapterType = extender(DataSourceAdapterType);
-  },
-  create(component) {
-    return new DataSourceAdapterType(component);
-  },
-};
+export default createDataSourceAdapterProvider(DataSourceAdapter);

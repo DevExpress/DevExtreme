@@ -107,7 +107,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - uses: DevExpress/github-actions/send-teams-notification@v1
+      - uses: DevExpress/github-actions/send-teams-notification@send-teams-notification
         with:
           hook_url: ${{secrets.TEAMS_ALERT}}
           bearer_token: ${{secrets.GITHUB_TOKEN}}

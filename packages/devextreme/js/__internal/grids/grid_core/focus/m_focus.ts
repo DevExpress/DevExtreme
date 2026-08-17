@@ -4,6 +4,7 @@ import { equalByValue } from '@js/core/utils/common';
 import { Deferred, type DeferredObj, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isBoolean, isDefined } from '@js/core/utils/type';
+import type { StoreChange } from '@js/data/store';
 import type { Key } from '@ts/grids/new/grid_core/data_controller/types';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
@@ -602,8 +603,8 @@ const data = (Base: ModuleType<DataController>) => class FocusDataControllerExte
     }
   }
 
-  protected _handleDataPushed(changes) {
-    super._handleDataPushed(changes);
+  protected dataPushedHandler(changes: StoreChange[]): void {
+    super.dataPushedHandler(changes);
 
     const focusedRowKey = this.option('focusedRowKey');
 

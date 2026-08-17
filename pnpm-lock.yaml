@@ -89,8 +89,8 @@ catalogs:
       specifier: 4.1.69
       version: 4.1.69
     devextreme-exceljs-fork:
-      specifier: 4.4.11
-      version: 4.4.11
+      specifier: 4.4.13
+      version: 4.4.13
     devextreme-quill:
       specifier: 1.7.10
       version: 1.7.10
@@ -222,6 +222,7 @@ overrides:
   systemjs-builder>terser: 5.46.2
   fast-uri@>=3.0.0 <3.1.5: ^3.1.5
   '@hono/node-server@<2.0.12': ^2.0.12
+  nanoid@<3.3.18: ^3.3.18
   stylelint-config-recommended-vue>stylelint-config-html: 1.1.0
   stylelint-config-recommended-vue>stylelint-config-recommended: 16.0.0
   dompurify@<=3.4.12: ^3.4.13
@@ -364,7 +365,7 @@ importers:
     dependencies:
       '@angular-devkit/build-angular':
         specifier: ^22.0.9
-        version: 22.1.2(333cf821b16210d0e4840f3db1257d08)
+        version: 22.1.2(b192cc97f9f903533cf6da00631c7a4d)
       '@angular/animations':
         specifier: ^22.0.8
         version: 22.1.0(@angular/core@22.1.0(@angular/compiler@22.1.0)(rxjs@7.8.2)(zone.js@0.16.2))
@@ -454,7 +455,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-exceljs-fork:
         specifier: 'catalog:'
-        version: 4.4.11
+        version: 4.4.13
       devextreme-quill:
         specifier: 'catalog:'
         version: 1.7.10
@@ -1480,7 +1481,7 @@ importers:
         version: 1.0.3
       devextreme-exceljs-fork:
         specifier: 'catalog:'
-        version: 4.4.11
+        version: 4.4.13
       eslint:
         specifier: 'catalog:'
         version: 9.39.4(jiti@2.7.0)
@@ -7998,9 +7999,9 @@ packages:
     resolution: {integrity: sha512-wuLJMmIBQYCsGZgYLTy5FIB2pF6Lfb6cXMSF8Qywwk3t20zWnAi7zLcQFdKQmIB8wyZpY5ER38x08GbwtR2cLA==}
     engines: {node: '>= 14'}
 
-  archiver@7.0.1:
-    resolution: {integrity: sha512-ZcbTaIqJOfCc03QwD468Unz/5Ir8ATtvAHsK+FdXbDIbGfihqh9mrvdcYunQzqn4HrvWWaFyaxJhGZagaJJpPQ==}
-    engines: {node: '>= 14'}
+  archiver@8.0.0:
+    resolution: {integrity: sha512-fV1orZfsnPn9BaSByR/qE67rJCLJEy2Ox5bq7nJh+jquWaNh6Sfec75kJ2T6PtdGUbPQlrVoSVCEOa5SdiTQ1g==}
+    engines: {node: '>=18'}
 
   arg@4.1.3:
     resolution: {integrity: sha512-58S9QDqG0Xx27YwPSt9fJxivjYl432YCwfDMfZ+71RAqUrZef7LrKQZ3LHLOwCS4FLNBplP533Zx895SeOCHvA==}
@@ -9005,9 +9006,9 @@ packages:
   commondir@1.0.1:
     resolution: {integrity: sha512-W9pAhw0ja1Edb5GVdIF1mjZw/ASI0AlShXM83UUGe2DVr5TdAPEA1OA8m/g8zWp9x6On7gqufY+FatDbC3MDQg==}
 
-  compress-commons@6.0.2:
-    resolution: {integrity: sha512-6FqVXeETqWPoGcfzrXb37E50NP0LXT8kAMu5ooZayhWWdgEY4lBEEcbQNXtkuKQsGduxiIcI4gOTsxTmuq/bSg==}
-    engines: {node: '>= 14'}
+  compress-commons@7.0.1:
+    resolution: {integrity: sha512-g0S8KAD8qf4+V//pr3BfB1aBnARLXNz2Gx+jmHU0LEriUuoQUOPOulVquHKTJ8+EAIIO7fhseNDr9wK5Q9FKBQ==}
+    engines: {node: '>=18'}
 
   compressible@2.0.18:
     resolution: {integrity: sha512-AF3r7P5dWxL8MxyITRMlORQNaOA2IkAFaTr4k7BUumjPtRpGDTZpl0Pb1XCO6JeDCBdp126Cgs9sMxqSjgYyRg==}
@@ -9149,9 +9150,9 @@ packages:
     engines: {node: '>=0.8'}
     hasBin: true
 
-  crc32-stream@6.0.0:
-    resolution: {integrity: sha512-piICUB6ei4IlTv1+653yq5+KoqfBYmj9bw6LqXoOneTMDXk5nM1qt12mFW1caG3LlJXEKW1Bp0WggEmIfQB34g==}
-    engines: {node: '>= 14'}
+  crc32-stream@7.0.1:
+    resolution: {integrity: sha512-IBWsY8xznyQrcHn8h4bC8/4ErNke5elzgG8GcqF4RFPw6aHkWWRc7Tgw6upjaTX/CT/yQgqYENkxYsTYN+hW2g==}
+    engines: {node: '>=18'}
 
   create-ecdh@4.0.4:
     resolution: {integrity: sha512-mf+TCx8wWc9VpuxfP2ht0iSISLZnt0JgWlrOKZiNqyUZWnjIaCIVNQArMHnCZKfEYRg6IM7A+NeJoN8gf/Ws0A==}
@@ -9550,9 +9551,9 @@ packages:
   devextreme-cldr-data@1.0.3:
     resolution: {integrity: sha512-xd+uWv1KzEhr+ZH/MOWfDei3GFz+NAYyKUR9HgjM9BBwPel7PpMElYp4whM+PtAjziBaTssQnA//ob5c3BovTA==}
 
-  devextreme-exceljs-fork@4.4.11:
-    resolution: {integrity: sha512-XVzddujTzWs/o7FyA3wXAAnL3NeR9LX1zUm8E7fQlnyc1bnfiAN01L5UTZC2U6SS4nXMDuLOlFWDI81IvBWZeg==}
-    engines: {node: '>=18'}
+  devextreme-exceljs-fork@4.4.13:
+    resolution: {integrity: sha512-YqDhWIs4QGLdDcdmBifhj0DXSXsdoDdNvOuWCy1n8lLz7oviIf1UTcijXcwX5ak6sq5FruFavgRrKdlr86U/eg==}
+    engines: {node: '>=22.21.1'}
 
   devextreme-internal-tools@22.0.0:
     resolution: {integrity: sha512-L8WIA1uEFVr9ICv3EUKMIa8WVu+r24e1/CCynmgEbi/jFYm7Gm6eW+NnCW/ow/sgrVg8D82AOD5QR3hXyYaO0Q==}
@@ -11531,6 +11532,10 @@ packages:
     resolution: {integrity: sha512-LnQR4bZ9IADDRSkvpqMGvt/tEJWclzklNgSw48V5EAaAeDd6qGvN8ei6k5p0tvxSR171VmGyHuTiAOfxAbr8kA==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
+  is-stream@4.0.1:
+    resolution: {integrity: sha512-Dnz92NInDqYckGEUJv689RbRiTSEHCQ7wOVeALbkOz999YpqT46yMRIGtSNl2iCL1waAZSx40+h59NV/EwzV/A==}
+    engines: {node: '>=18'}
+
   is-string@1.1.1:
     resolution: {integrity: sha512-BtEeSsoaQjlSPBemMQIrY1MY0uM6vnS1g5fmufYOtnxLGUZM2178PKbhsk7Ffv58IX+ZtcvoGwccYsh0PglkAA==}
     engines: {node: '>= 0.4'}
@@ -12923,8 +12928,8 @@ packages:
     resolution: {integrity: sha512-BzQguy9W9NJgoVn2mRWzbFrFWWztGCcng2QI9+41frfk+Athwgx3qhqhvStz7ExeUUu7Kzw427sNzHpEZNINog==}
     engines: {node: '>=16.0.0'}
 
-  nanoid@3.3.17:
-    resolution: {integrity: sha512-xQLf0A3HOMlgHq0n247/LRuAOYmB7dXJ/DvAxGvsSBij45XtBSmQycu+F8ODbHwns/XyFZagyL1+J0Offw1E0g==}
+  nanoid@3.3.18:
+    resolution: {integrity: sha512-DTg4MJbGMWkfi6VZFdNt2/caMbQy4Ou+Op/hJQvGEWcnVfoA1QA+xzRKAzw9jD6+GVOOeYr/mIcuDSdug6F6+w==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
@@ -14032,8 +14037,9 @@ packages:
     resolution: {integrity: sha512-oIGGmcpTLwPga8Bn6/Z75SVaH1z5dUut2ibSyAMVhmUggWpmDn2dapB0n7f8nwaSiRtepAsfJyfXIO5DCVAODg==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
-  readdir-glob@1.1.3:
-    resolution: {integrity: sha512-v05I2k7xN8zXvPD9N+z/uhXPaj0sUFCe2rcWZIpBsqxfP7xXFQ0tipAd/wjj1YxWyWtUS5IDJpOG82JKt2EAVA==}
+  readdir-glob@3.0.0:
+    resolution: {integrity: sha512-AhNB2KgKeVJr16nK9LLZbJNWnYoT23ZrumNKFDebHBdkC8KHSqWo871JAUhoWC/RtjEVdqNMFpM6qrwRbaUqpw==}
+    engines: {node: '>=18'}
 
   readdirp@3.6.0:
     resolution: {integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==}
@@ -16525,9 +16531,9 @@ packages:
     resolution: {integrity: sha512-xYqdZFUK/VYazNl/oCDYN+3WloWQwMfZxBoiNt6qNyk+xfOdi598muWE42rNZFp1kNOiqW936q5RhUdnpqElSg==}
     engines: {node: '>=18'}
 
-  zip-stream@6.0.1:
-    resolution: {integrity: sha512-zK7YHHz4ZXpW89AHXUPbQVGKI7uvkd3hzusTdotCg1UxyaVtg0zFJSTfW/Dq5f7OBBVnq6cZIaC8Ti4hb6dtCA==}
-    engines: {node: '>= 14'}
+  zip-stream@7.0.5:
+    resolution: {integrity: sha512-dSvYKdvLsAHCDqPOhIwk/q5CvuWtTB3Dgpoe0uVEFjTzIOAmsQpprX25InCvrvJsirEbu1OHyy67n/kAj1Sw/w==}
+    engines: {node: '>=18'}
 
   zod-to-json-schema@3.24.6:
     resolution: {integrity: sha512-h/z3PKvcTcTetyjl1fkj79MHNEjm+HpD6NXheWjzOekY7kV+lwDYnHw+ivHkijnCSMz1yJaWBD9vu/Fcmk+vEg==}
@@ -16859,13 +16865,13 @@ snapshots:
       - webpack-cli
       - yaml
 
-  '@angular-devkit/build-angular@22.1.2(333cf821b16210d0e4840f3db1257d08)':
+  '@angular-devkit/build-angular@22.1.2(b192cc97f9f903533cf6da00631c7a4d)':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@angular-devkit/architect': 0.2201.2(chokidar@5.0.0)
       '@angular-devkit/build-webpack': 0.2201.2(chokidar@5.0.0)(webpack-dev-server@5.2.6(tslib@2.8.1)(webpack@5.109.2(@swc/core@1.15.47(@swc/helpers@0.5.23))(esbuild@0.28.1)(postcss@8.5.25)))(webpack@5.109.2(@swc/core@1.15.47(@swc/helpers@0.5.23))(esbuild@0.28.1)(postcss@8.5.25))
       '@angular-devkit/core': 22.1.2(chokidar@5.0.0)
-      '@angular/build': 22.1.2(6cc4381ca5707f29eb1bc864ad5f537d)
+      '@angular/build': 22.1.2(f2c6f0244958832d42f34f07650eaf4c)
       '@angular/compiler-cli': 22.1.0(@angular/compiler@22.1.0)(typescript@6.0.3)
       '@babel/core': 8.0.1
       '@babel/generator': 8.0.0
@@ -16926,7 +16932,6 @@ snapshots:
     transitivePeerDependencies:
       - '@angular/compiler'
       - '@emnapi/core'
-      - '@emnapi/runtime'
       - '@minify-html/node'
       - '@rspack/core'
       - '@swc/core'
@@ -17205,7 +17210,7 @@ snapshots:
       - tsx
       - yaml
 
-  '@angular/build@22.1.2(6cc4381ca5707f29eb1bc864ad5f537d)':
+  '@angular/build@22.1.2(f2c6f0244958832d42f34f07650eaf4c)':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@angular-devkit/architect': 0.2201.2(chokidar@5.0.0)
@@ -17224,11 +17229,11 @@ snapshots:
       listr2: 10.2.2
       magic-string: 1.0.0
       mrmime: 2.0.1
-      oxc-parser: 0.142.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
+      oxc-parser: 0.142.0(@emnapi/core@1.11.2)
       parse5-html-rewriting-stream: 8.0.1
       picomatch: 4.0.5
       piscina: 5.2.0
-      rolldown: 1.2.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
+      rolldown: 1.2.0(@emnapi/core@1.11.2)
       sass: 1.101.0
       semver: 7.8.5
       source-map-support: 0.5.21
@@ -17250,7 +17255,6 @@ snapshots:
       rollup: 4.59.0
     transitivePeerDependencies:
       - '@emnapi/core'
-      - '@emnapi/runtime'
       - '@types/node'
       - '@vitejs/devtools'
       - chokidar
@@ -21151,12 +21155,12 @@ snapshots:
   '@oxc-parser/binding-openharmony-arm64@0.142.0':
     optional: true
 
-  '@oxc-parser/binding-wasm32-wasi@0.142.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)':
+  '@oxc-parser/binding-wasm32-wasi@0.142.0(@emnapi/core@1.11.2)':
     dependencies:
+      '@emnapi/runtime': 1.11.2
       '@napi-rs/wasm-runtime': 1.2.2(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
     transitivePeerDependencies:
       - '@emnapi/core'
-      - '@emnapi/runtime'
     optional: true
 
   '@oxc-parser/binding-win32-arm64-msvc@0.142.0':
@@ -22055,12 +22059,12 @@ snapshots:
       '@napi-rs/wasm-runtime': 1.2.2(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
     optional: true
 
-  '@rolldown/binding-wasm32-wasi@1.2.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)':
+  '@rolldown/binding-wasm32-wasi@1.2.0(@emnapi/core@1.11.2)':
     dependencies:
+      '@emnapi/runtime': 1.11.2
       '@napi-rs/wasm-runtime': 1.2.2(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
     transitivePeerDependencies:
       - '@emnapi/core'
-      - '@emnapi/runtime'
     optional: true
 
   '@rolldown/binding-win32-arm64-msvc@1.0.3':
@@ -24392,15 +24396,17 @@ snapshots:
       normalize-path: 3.0.0
       readable-stream: 4.7.0
 
-  archiver@7.0.1:
+  archiver@8.0.0:
     dependencies:
-      archiver-utils: 5.0.2
       async: 3.2.6
       buffer-crc32: 1.0.0
+      is-stream: 4.0.1
+      lazystream: 1.0.1
+      normalize-path: 3.0.0
       readable-stream: 4.7.0
-      readdir-glob: 1.1.3
+      readdir-glob: 3.0.0
       tar-stream: 3.2.0
-      zip-stream: 6.0.1
+      zip-stream: 7.0.5
     transitivePeerDependencies:
       - bare-abort-controller
       - bare-buffer
@@ -25711,11 +25717,11 @@ snapshots:
 
   commondir@1.0.1: {}
 
-  compress-commons@6.0.2:
+  compress-commons@7.0.1:
     dependencies:
       crc-32: 1.2.2
-      crc32-stream: 6.0.0
-      is-stream: 2.0.1
+      crc32-stream: 7.0.1
+      is-stream: 4.0.1
       normalize-path: 3.0.0
       readable-stream: 4.7.0
 
@@ -25891,7 +25897,7 @@ snapshots:
 
   crc-32@1.2.2: {}
 
-  crc32-stream@6.0.0:
+  crc32-stream@7.0.1:
     dependencies:
       crc-32: 1.2.2
       readable-stream: 4.7.0
@@ -26406,9 +26412,9 @@ snapshots:
 
   devextreme-cldr-data@1.0.3: {}
 
-  devextreme-exceljs-fork@4.4.11:
+  devextreme-exceljs-fork@4.4.13:
     dependencies:
-      archiver: 7.0.1
+      archiver: 8.0.0
       dayjs: 1.11.21
       fast-csv: 5.0.7
       jszip: 3.10.1
@@ -29260,6 +29266,8 @@ snapshots:
 
   is-stream@3.0.0: {}
 
+  is-stream@4.0.1: {}
+
   is-string@1.1.1:
     dependencies:
       call-bound: 1.0.4
@@ -31543,7 +31551,7 @@ snapshots:
 
   mylas@2.1.14: {}
 
-  nanoid@3.3.17: {}
+  nanoid@3.3.18: {}
 
   napi-postinstall@0.3.4: {}
 
@@ -32175,7 +32183,7 @@ snapshots:
       object-keys: 1.1.1
       safe-push-apply: 1.0.0
 
-  oxc-parser@0.142.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2):
+  oxc-parser@0.142.0(@emnapi/core@1.11.2):
     dependencies:
       '@oxc-project/types': 0.142.0
     optionalDependencies:
@@ -32195,13 +32203,12 @@ snapshots:
       '@oxc-parser/binding-linux-x64-gnu': 0.142.0
       '@oxc-parser/binding-linux-x64-musl': 0.142.0
       '@oxc-parser/binding-openharmony-arm64': 0.142.0
-      '@oxc-parser/binding-wasm32-wasi': 0.142.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
+      '@oxc-parser/binding-wasm32-wasi': 0.142.0(@emnapi/core@1.11.2)
       '@oxc-parser/binding-win32-arm64-msvc': 0.142.0
       '@oxc-parser/binding-win32-ia32-msvc': 0.142.0
       '@oxc-parser/binding-win32-x64-msvc': 0.142.0
     transitivePeerDependencies:
       - '@emnapi/core'
-      - '@emnapi/runtime'
 
   p-finally@2.0.1: {}
 
@@ -32588,7 +32595,7 @@ snapshots:
 
   postcss@8.5.25:
     dependencies:
-      nanoid: 3.3.17
+      nanoid: 3.3.18
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
@@ -32955,9 +32962,9 @@ snapshots:
       process: 0.11.10
       string_decoder: 1.3.0
 
-  readdir-glob@1.1.3:
+  readdir-glob@3.0.0:
     dependencies:
-      minimatch: 5.1.9
+      minimatch: 10.2.4
 
   readdirp@3.6.0:
     dependencies:
@@ -33268,7 +33275,7 @@ snapshots:
       '@rolldown/binding-win32-arm64-msvc': 1.1.5
       '@rolldown/binding-win32-x64-msvc': 1.1.5
 
-  rolldown@1.2.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2):
+  rolldown@1.2.0(@emnapi/core@1.11.2):
     dependencies:
       '@oxc-project/types': 0.140.0
       '@rolldown/pluginutils': 1.0.1
@@ -33284,12 +33291,11 @@ snapshots:
       '@rolldown/binding-linux-x64-gnu': 1.2.0
       '@rolldown/binding-linux-x64-musl': 1.2.0
       '@rolldown/binding-openharmony-arm64': 1.2.0
-      '@rolldown/binding-wasm32-wasi': 1.2.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
+      '@rolldown/binding-wasm32-wasi': 1.2.0(@emnapi/core@1.11.2)
       '@rolldown/binding-win32-arm64-msvc': 1.2.0
       '@rolldown/binding-win32-x64-msvc': 1.2.0
     transitivePeerDependencies:
       - '@emnapi/core'
-      - '@emnapi/runtime'
 
   rollup-plugin-dts@6.4.1(rollup@4.59.0)(typescript@4.9.5):
     dependencies:
@@ -34762,7 +34768,7 @@ snapshots:
       lodash: 4.18.1
       mkdirp: 0.5.6
       mustache: 2.3.2
-      nanoid: 3.3.17
+      nanoid: 3.3.18
       os-family: 1.1.0
       pify: 2.3.0
       pinkie: 2.0.4
@@ -34789,7 +34795,7 @@ snapshots:
       merge-stream: 1.0.1
       mime: 1.4.1
       mustache: 2.3.2
-      nanoid: 3.3.17
+      nanoid: 3.3.18
       os-family: 1.1.0
       parse5: 7.3.0
       pinkie: 2.0.4
@@ -34902,7 +34908,7 @@ snapshots:
       moment: 2.30.1
       moment-duration-format-commonjs: 1.0.1
       mustache: 2.3.2
-      nanoid: 3.3.17
+      nanoid: 3.3.18
       os-family: 1.1.0
       parse5: 1.5.1
       pify: 2.3.0
@@ -36750,10 +36756,10 @@ snapshots:
 
   yoctocolors@2.2.0: {}
 
-  zip-stream@6.0.1:
+  zip-stream@7.0.5:
     dependencies:
-      archiver-utils: 5.0.2
-      compress-commons: 6.0.2
+      compress-commons: 7.0.1
+      normalize-path: 3.0.0
       readable-stream: 4.7.0
 
   zod-to-json-schema@3.24.6(zod@3.24.4):

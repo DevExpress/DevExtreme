@@ -239,7 +239,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         ];
         let dataSource = createDataSource(array, { key: 'id' });
 
-        this.dataController._dataPushedHandler = dataPushedHandlerSpy;
+        this.dataController.dataPushedHandlerProxy = dataPushedHandlerSpy;
         this.dataController.setDataSource(dataSource);
         dataSource = this.dataController.dataSource();
         dataSource.load();

@@ -1782,7 +1782,6 @@ class EditingControllerImpl extends modules.ViewController {
       }
       when(this._beforeSaveEditData()).done((cancel) => {
         if (cancel) {
-          // @ts-expect-error
           this._resolveAfterSave(deferred, { cancel });
           return;
         }
@@ -1802,7 +1801,7 @@ class EditingControllerImpl extends modules.ViewController {
     return deferred.promise();
   }
 
-  private _resolveAfterSave(deferred, { cancel = undefined, error = undefined } = {}) {
+  private _resolveAfterSave(deferred, { cancel = undefined, error = undefined }: { cancel?: unknown; error?: unknown } = {}) {
     // @ts-expect-error
     when(this._afterSaveEditData(cancel)).done(() => {
       deferred.resolve(error);
@@ -2576,14 +2575,14 @@ export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataControll
     this._updateEditRow(this.items(true));
   }
 
-  protected _applyChangeUpdate(change) {
+  protected applyChangeUpdate(change) {
     this._updateEditRow(change.items);
-    super._applyChangeUpdate(change);
+    super.applyChangeUpdate(change);
   }
 
-  protected _applyChangesOnly(change) {
+  protected applyChangesOnly(change) {
     this._updateEditRow(change.items);
-    super._applyChangesOnly(change);
+    super.applyChangesOnly(change);
   }
 
   protected _processItems(items: RawItemData[], change: DataChange): ProcessedItem[] {
