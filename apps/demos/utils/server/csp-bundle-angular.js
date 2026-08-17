@@ -403,25 +403,25 @@ function isFileCached(filePath) {
 }
 
 // ---- devextreme path redirect plugin ----
-// apps/demos/node_modules/devextreme only ships bundles/; redirect to the real CJS
-// modules under packages/devextreme/artifacts, as the SystemJS dev config does.
-const DEVEXTREME_CJS_ROOT = path.join(
-  REPO_ROOT, 'packages', 'devextreme', 'artifacts', 'transpiled-esm-npm', 'cjs',
+// apps/demos/node_modules/devextreme only ships bundles/; redirect to the real
+// ESM modules under packages/devextreme/artifacts.
+const DEVEXTREME_ESM_ROOT = path.join(
+  REPO_ROOT, 'packages', 'devextreme', 'artifacts', 'transpiled-esm-npm', 'esm',
 );
 const devextremeRedirectPlugin = {
-  name: 'csp-bundle-angular:devextreme-cjs-redirect',
+  name: 'csp-bundle-angular:devextreme-esm-redirect',
   setup(build) {
     build.onResolve({ filter: /^devextreme(\/.*)?$/ }, (args) => {
       const sub = args.path === 'devextreme' ? '' : args.path.slice('devextreme/'.length);
       // Try the path as-is first (explicit extensions), then implicit .js/index.js/.mjs.
       const candidates = sub
         ? [
-          path.join(DEVEXTREME_CJS_ROOT, sub),
-          path.join(DEVEXTREME_CJS_ROOT, `${sub}.js`),
-          path.join(DEVEXTREME_CJS_ROOT, sub, 'index.js'),
-          path.join(DEVEXTREME_CJS_ROOT, `${sub}.mjs`),
+          path.join(DEVEXTREME_ESM_ROOT, sub),
+          path.join(DEVEXTREME_ESM_ROOT, `${sub}.js`),
+          path.join(DEVEXTREME_ESM_ROOT, sub, 'index.js'),
+          path.join(DEVEXTREME_ESM_ROOT, `${sub}.mjs`),
         ]
-        : [path.join(DEVEXTREME_CJS_ROOT, 'index.js')];
+        : [path.join(DEVEXTREME_ESM_ROOT, 'index.js')];
       for (const candidate of candidates) {
         if (isFileCached(candidate)) {
           return { path: candidate };

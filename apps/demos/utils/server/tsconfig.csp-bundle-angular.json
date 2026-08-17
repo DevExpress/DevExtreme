@@ -16,8 +16,8 @@
     "baseUrl": "../../",
     "paths": {
       "@angular/*": ["node_modules/@angular/*"],
-      "devextreme": ["../../packages/devextreme/artifacts/transpiled-esm-npm/cjs/index"],
-      "devextreme/*": ["../../packages/devextreme/artifacts/transpiled-esm-npm/cjs/*"],
+      "devextreme": ["../../packages/devextreme/artifacts/transpiled-esm-npm/esm/index"],
+      "devextreme/*": ["../../packages/devextreme/artifacts/transpiled-esm-npm/esm/*"],
       "devextreme-dist/*": ["../../packages/devextreme/artifacts/*"],
       "globalize/*": ["../../node_modules/globalize/dist/globalize/*"],
       "anti-forgery": ["shared/anti-forgery/fetch-override.js"]
