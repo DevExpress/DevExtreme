@@ -29,18 +29,18 @@ import type { GeneratedItem, ItemProcessingOptions, ProcessedItem } from '../dat
 import type { ChangedEvent } from '../data_source_adapter/types';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
-
-const EDITOR_CELL_CLASS = 'dx-editor-cell';
-const ROW_CLASS = 'dx-row';
-const ROW_SELECTION_CLASS = 'dx-selection';
-const SELECT_CHECKBOX_CLASS = 'dx-select-checkbox';
-const CHECKBOXES_HIDDEN_CLASS = 'dx-select-checkboxes-hidden';
-const COMMAND_SELECT_CLASS = 'dx-command-select';
-const SELECTION_DISABLED_CLASS = 'dx-selection-disabled';
-const DATA_ROW_CLASS = 'dx-data-row';
-
-const SHOW_CHECKBOXES_MODE = 'selection.showCheckBoxesMode';
-const SELECTION_MODE = 'selection.mode';
+import {
+  CHECKBOXES_HIDDEN_CLASS,
+  COMMAND_SELECT_CLASS,
+  DATA_ROW_CLASS,
+  EDITOR_CELL_CLASS,
+  ROW_CLASS,
+  ROW_SELECTION_CLASS,
+  SELECT_CHECKBOX_CLASS,
+  SELECTION_DISABLED_CLASS,
+  SELECTION_MODE,
+  SHOW_CHECKBOXES_MODE,
+} from './const';
 
 const processLongTap = function (that, dxEvent) {
   // TODO getView
@@ -321,18 +321,28 @@ export class SelectionController extends modules.Controller {
     }
   }
 
-  public _updateCheckboxesState(options) {
-    const { isDeferredMode } = options;
-    const { selectionFilter } = options;
-    const { selectedItemKeys } = options;
-    const { removedItemKeys } = options;
+  public _updateCheckboxesState(options): void {
+    const isDeferredMode = this.option('selection.deferred');
+    const {
+      selectionFilter, selectedItemKeys, removedItemKeys,
+    } = options;
 
-    if (this.option(SHOW_CHECKBOXES_MODE) === 'onClick') {
-      if (isDeferredMode ? selectionFilter && isSeveralRowsSelected(this, selectionFilter) : selectedItemKeys.length > 1) {
-        this.startSelectionWithCheckboxes();
-      } else if (isDeferredMode ? selectionFilter && !selectionFilter.length : selectedItemKeys.length === 0 && removedItemKeys.length) {
-        this.stopSelectionWithCheckboxes();
-      }
+    if (this.option(SHOW_CHECKBOXES_MODE) !== 'onClick') {
+      return;
+    }
+
+    const hasSeveralItemsSelected = isDeferredMode
+      ? !!selectionFilter && isSeveralRowsSelected(this, selectionFilter)
+      : selectedItemKeys.length > 1;
+
+    const hasNoItemsSelected = isDeferredMode
+      ? !!selectionFilter && selectionFilter.length === 0
+      : selectedItemKeys.length === 0 && removedItemKeys.length > 0;
+
+    if (hasSeveralItemsSelected) {
+      this.startSelectionWithCheckboxes();
+    } else if (hasNoItemsSelected) {
+      this.stopSelectionWithCheckboxes();
     }
   }
 
@@ -360,7 +370,6 @@ export class SelectionController extends modules.Controller {
       selectedItemKeys: args.selectedItemKeys,
       removedItemKeys: args.removedItemKeys,
       selectionFilter,
-      isDeferredMode,
     });
 
     if (changedItemIndexes.length || (isSelectionWithCheckboxes !== that.isSelectionWithCheckboxes())) {
@@ -618,14 +627,17 @@ export class SelectionController extends modules.Controller {
 }
 
 export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => class DataControllerSelectionExtender extends Base {
-  public init() {
+  private _selectionController!: SelectionController;
+
+  public init(): void {
     const isDeferredMode = this.option('selection.deferred');
 
-    super.init.apply(this, arguments as any);
+    this._selectionController = this.getController('selection');
+    super.init();
 
     if (isDeferredMode) {
+      // MYTODO
       this._selectionController._updateCheckboxesState({
-        isDeferredMode: true,
         selectionFilter: this.option('selectionFilter'),
       });
     }
@@ -663,21 +675,21 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
     return processedItem;
   }
 
-  public refresh(options): any {
+  public refresh(options): DeferredObj<unknown> {
+    const skipSelectionRefresh = isObject(options) && !(options as any).selection;
+
+    if (skipSelectionRefresh) {
+      return super.refresh(options);
+    }
+
     const d = Deferred();
 
     super.refresh(options).done(() => {
-      const skipSelectionRefresh = isObject(options) && !(options as any).selection;
-
-      if (skipSelectionRefresh) {
-        d.resolve();
-        return;
-      }
-
       this._selectionController.refresh().done(d.resolve as (...args: unknown[]) => void)
         .fail(d.reject as (...args: unknown[]) => void);
     }).fail(d.reject as (...args: unknown[]) => void);
 
+    // @ts-expect-error
     return d.promise();
   }
 
@@ -718,7 +730,7 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
   }
 };
 
-const contextMenu = (Base: ModuleType<ContextMenuController>) => class ContextMenuControllerSelectionExtender extends Base {
+export const contextMenu = (Base: ModuleType<ContextMenuController>) => class ContextMenuControllerSelectionExtender extends Base {
   protected _contextMenuPrepared(options) {
     const dxEvent = options.event;
 
@@ -1009,38 +1021,4 @@ export const rowsViewSelectionExtenderMixin = (Base: ModuleType<RowsView>) => cl
       $(tableElement).toggleClass(CHECKBOXES_HIDDEN_CLASS, isCheckBoxesHidden);
     });
   }
-};
-
-export const selectionModule = {
-  defaultOptions() {
-    return {
-      selection: {
-        mode: 'none', // "single", "multiple"
-        showCheckBoxesMode: 'onClick', // "onLongTap", "always", "none"
-        allowSelectAll: true,
-        selectAllMode: 'allPages',
-        deferred: false,
-        maxFilterLengthInRequest: 1500,
-        alwaysSelectByShift: false,
-      },
-      selectionFilter: [],
-      selectedRowKeys: [],
-    };
-  },
-
-  controllers: {
-    selection: SelectionController,
-  },
-
-  extenders: {
-    controllers: {
-      data: dataSelectionExtenderMixin,
-      contextMenu,
-    },
-
-    views: {
-      columnHeadersView: columnHeadersSelectionExtenderMixin,
-      rowsView: rowsViewSelectionExtenderMixin,
-    },
-  },
 };
