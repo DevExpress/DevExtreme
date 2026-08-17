@@ -5,7 +5,7 @@ import type { DataController } from '@ts/grids/grid_core/data_controller/data_co
 import type { InternalGridOptions } from '@ts/grids/grid_core/m_types';
 
 import type { StateStoringDataControllerExtension } from './extenders/state_storing_data_controller';
-import { StateStoringController } from './m_state_storing_controller';
+import { StateStoringController } from './state_storing_controller_core';
 import type { GridState } from './types';
 
 const getDataState = (that): GridState => {

@@ -5,7 +5,7 @@ import { isDefined } from '@js/core/utils/type';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
-import type { StateStoringController } from '../m_state_storing_controller';
+import type { StateStoringController } from '../state_storing_controller_core';
 
 export interface StateStoringDataControllerExtension {
   stateLoaded: Callback<[]>;
