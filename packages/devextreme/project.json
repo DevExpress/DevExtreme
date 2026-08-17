@@ -1226,12 +1226,7 @@
       "executor": "devextreme-nx-infra-plugin:scss-assemble",
       "options": {
         "scssPackagePath": "../devextreme-scss",
-        "outputDir": "./artifacts/npm/devextreme/scss",
-        "exclude": [
-          "widgets/fluent-next/**",
-          "_design-system/**",
-          "bundles/dx.fluent-next.*.scss"
-        ]
+        "outputDir": "./artifacts/npm/devextreme/scss"
       },
       "configurations": {
         "internal": {
@@ -1247,7 +1242,8 @@
       "inputs": [
         "{workspaceRoot}/packages/devextreme-scss/scss/**/*",
         "{workspaceRoot}/packages/devextreme-scss/fonts/**/*",
-        "{workspaceRoot}/packages/devextreme-scss/icons/**/*"
+        "{workspaceRoot}/packages/devextreme-scss/icons/**/*",
+        "{workspaceRoot}/packages/devextreme-scss/build/internal-scss-paths.json"
       ],
       "outputs": [
         "{projectRoot}/artifacts/npm/devextreme/scss/**/*",
