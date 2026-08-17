@@ -1,13 +1,8 @@
 import type { StateStoring } from '@js/common/grids';
 
 import { stateStoringDataControllerExtender } from './extenders/state_storing_data_controller';
-import {
-  columns,
-  rowsView,
-  selection,
-  stateStoring,
-} from './m_state_storing';
-import { StateStoringController } from './m_state_storing_controller';
+import { columns, rowsView, selection } from './m_state_storing';
+import { GridStateStoringController } from './state_storing_controller';
 
 export const stateStoringModule = {
   defaultOptions(): { stateStoring: StateStoring } {
@@ -23,14 +18,13 @@ export const stateStoringModule = {
     };
   },
   controllers: {
-    stateStoring: StateStoringController,
+    stateStoring: GridStateStoringController,
   },
   extenders: {
     views: {
       rowsView,
     },
     controllers: {
-      stateStoring,
       columns,
       data: stateStoringDataControllerExtender,
       selection,

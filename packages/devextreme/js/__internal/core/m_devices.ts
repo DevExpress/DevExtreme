@@ -321,6 +321,10 @@ class Devices {
 
     const deviceOrName = sessionStorage.getItem('dx-force-device');
 
+    if (deviceOrName === null) {
+      return null;
+    }
+
     try {
       return JSON.parse(deviceOrName);
     } catch (ex) {

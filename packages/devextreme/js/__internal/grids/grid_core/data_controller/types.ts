@@ -21,7 +21,7 @@ export interface UserState {
   searchText: string | undefined;
   pageIndex: number;
   pageSize: number;
-  expandedRowKeys?: unknown;
+  expandedRowKeys?: unknown[];
 }
 
 export interface ItemProcessingOptions {

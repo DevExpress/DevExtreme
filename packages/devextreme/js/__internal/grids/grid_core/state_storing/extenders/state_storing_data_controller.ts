@@ -9,6 +9,7 @@ import type { StateStoringController } from '../m_state_storing_controller';
 
 export interface StateStoringDataControllerExtension {
   stateLoaded: Callback<[]>;
+  isStateLoading: () => boolean;
 }
 
 export const stateStoringDataControllerExtender = (
@@ -53,9 +54,10 @@ export const stateStoringDataControllerExtender = (
             this.stateLoaded.fire();
             deferred.resolve();
           })
-          .fail((error: Error) => {
+          // NOTE: DeferredObj types fail() with the resolved value, not the rejection reason
+          .fail((error: unknown) => {
             this.stateLoaded.fire();
-            this.loadErrorHandler(error ?? 'Unknown error');
+            this.loadErrorHandler((error as Error | undefined) ?? 'Unknown error');
             deferred.reject();
           });
       });
@@ -75,7 +77,7 @@ export const stateStoringDataControllerExtender = (
     return super.isLoading() || this._stateStoringController.isLoading();
   }
 
-  private isStateLoading(): boolean {
+  public isStateLoading(): boolean {
     return isDefined(this._restoreStateTimeoutID);
   }
 
