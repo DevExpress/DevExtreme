@@ -14,8 +14,8 @@ import {
   columnHeadersSelectionExtenderMixin,
   dataSelectionExtenderMixin,
   rowsViewSelectionExtenderMixin,
-  selectionModule,
 } from '@ts/grids/grid_core/selection/m_selection';
+import { selectionModule } from '@ts/grids/grid_core/selection/selection_module';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import treeListCore from '../m_core';
