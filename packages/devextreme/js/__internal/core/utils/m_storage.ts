@@ -2,8 +2,8 @@ import { getWindow } from '@js/core/utils/window';
 
 const window = getWindow();
 
-const getSessionStorage = function () {
-  let sessionStorage;
+const getSessionStorage = function (): Storage | undefined {
+  let sessionStorage: Storage | undefined;
 
   try {
     sessionStorage = window.sessionStorage;
