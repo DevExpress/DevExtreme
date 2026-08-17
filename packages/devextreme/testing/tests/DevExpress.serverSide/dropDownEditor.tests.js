@@ -1,6 +1,6 @@
-require('../DevExpress.ui.widgets.editors/dropDownEditor.markup.tests.js');
+import '../DevExpress.ui.widgets.editors/dropDownEditor.markup.tests.js';
 
-const $ = require('jquery');
+import $ from 'jquery';
 
 QUnit.testStart(function() {
     const markup =
