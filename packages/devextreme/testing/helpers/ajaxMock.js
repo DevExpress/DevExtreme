@@ -1,7 +1,8 @@
-const ajax = require('core/utils/ajax');
-const extend = require('core/utils/extend').extend;
-const typeUtils = require('core/utils/type');
-const $ = require('jquery');
+import $ from 'jquery';
+import ajax from 'core/utils/ajax';
+import { extend } from 'core/utils/extend';
+import { isDefined } from 'core/utils/type';
+
 const originSendRequest = ajax.sendRequest;
 let urlMap = {};
 const timers = [];
@@ -20,7 +21,7 @@ const findUrlOptions = function(requestUrl) {
     }
 };
 
-exports.setup = function(options) {
+export function setup(options) {
     urlMap[options.url] = options;
 
     ajax.sendRequest = function(request) {
@@ -29,7 +30,7 @@ exports.setup = function(options) {
         const mockOptions = findUrlOptions(request.url);
         const jQueryTextStatus = mockOptions.jQueryTextStatus;
 
-        response.status = typeUtils.isDefined(mockOptions.status) ? mockOptions.status : 200;
+        response.status = isDefined(mockOptions.status) ? mockOptions.status : 200;
         response.statusText = mockOptions.statusText || '200 OK';
         response.responseText = mockOptions.responseText;
 
@@ -48,12 +49,14 @@ exports.setup = function(options) {
 
         return deferred.promise();
     };
-};
+}
 
-exports.clear = function() {
+export function clear() {
     ajax.sendRequest = originSendRequest;
     urlMap = {};
     timers.forEach(function(timerId) {
         clearTimeout(timerId);
     });
-};
+}
+
+export default { setup, clear };
