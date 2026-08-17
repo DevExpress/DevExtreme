@@ -17,6 +17,7 @@ import type {
 } from '@ts/grids/grid_core/data_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { ErrorHandlingController } from '@ts/grids/grid_core/error_handling/m_error_handling';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
@@ -1437,6 +1438,8 @@ export const resizing = (Base: ModuleType<ResizingController>) => class VirtualS
 export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRowsViewExtender extends Base {
   protected _dataController!: DataController & Partial<StateStoringDataControllerExtension>;
 
+  protected _errorHandlingController!: ErrorHandlingController;
+
   private _isFixedTableRendering: any;
 
   private _heightWarningIsThrown: any;
@@ -1445,8 +1448,10 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
   private readonly _scrollTimeoutID: any;
 
-  public init() {
+  public init(): void {
     super.init();
+
+    this._errorHandlingController = this.getController('errorHandling');
 
     this._dataController.pageChanged.add((pageIndex) => {
       const scrollTop = this._scrollTop;

@@ -18,7 +18,6 @@ import type {
 import { isLocalStore } from '@ts/grids/grid_core/data_source_adapter/utils/store';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
-import type { ErrorHandlingController } from '@ts/grids/grid_core/error_handling/m_error_handling';
 import type { FilterSyncController } from '@ts/grids/grid_core/filter/m_filter_sync';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
@@ -136,8 +135,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _editorFactoryController!: EditorFactory;
 
-  protected _errorHandlingController!: ErrorHandlingController;
-
   protected _filterSyncController!: FilterSyncController;
 
   private _filterExcludedColumn: Column | null = null;
@@ -161,7 +158,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._adaptiveColumnsController = this.getController('adaptiveColumns');
     this._editingController = this.getController('editing');
     this._editorFactoryController = this.getController('editorFactory');
-    this._errorHandlingController = this.getController('errorHandling');
     this._filterSyncController = this.getController('filterSync');
     this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._focusController = this.getController('focus');
