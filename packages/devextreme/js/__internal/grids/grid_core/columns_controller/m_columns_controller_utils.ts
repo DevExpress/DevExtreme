@@ -727,11 +727,8 @@ const isVisibleWidthChangePendingForColumn = (that: ColumnsController, columnInd
 };
 
 const invalidateStaleVisibleWidths = (that: ColumnsController, changedColumn): void => {
-  if (isVisibleWidthChangePendingForColumn(that, changedColumn.index)) {
-    return;
-  }
-
-  if (isDefined(changedColumn.visibleWidth)) {
+  if (isDefined(changedColumn.visibleWidth)
+    && !isVisibleWidthChangePendingForColumn(that, changedColumn.index)) {
     changedColumn.visibleWidth = null;
   }
 
@@ -748,9 +745,22 @@ const invalidateStaleVisibleWidths = (that: ColumnsController, changedColumn): v
   });
 };
 
-export const columnOptionCore = function (that: ColumnsController, column, optionName, value?, notFireEvent?) {
+interface ColumnOptionCoreOptions {
+  invalidateVisibleWidths?: boolean;
+  notFireEvent?: boolean;
+}
+
+export const columnOptionCore = function (
+  that: ColumnsController,
+  column,
+  optionName,
+  value?,
+  options: ColumnOptionCoreOptions = {},
+) {
   const optionGetter = compileGetter(optionName);
   const columnIndex = column.index;
+  const { invalidateVisibleWidths = true } = options;
+  let { notFireEvent } = options;
   let columns;
   let changeType;
   let initialColumn;
@@ -773,7 +783,7 @@ export const columnOptionCore = function (that: ColumnsController, column, optio
       changeType = 'columns';
     }
 
-    if (optionName === 'width') {
+    if (optionName === 'width' && invalidateVisibleWidths) {
       invalidateStaleVisibleWidths(that, column);
     }
 

@@ -4957,6 +4957,45 @@ QUnit.module('Move Columns', { beforeEach: setupModule, afterEach: teardownModul
 
 QUnit.module('Column Option', { beforeEach: setupModule, afterEach: teardownModule }, () => {
 
+    // T1329677
+    QUnit.test('changing width via columnOption should invalidate calculated widths', function(assert) {
+        this.applyOptions({ columns: ['field1', 'field2', 'field3'] });
+        this.columnsController.columnOption(0, 'visibleWidth', 100);
+        this.columnsController.columnOption(1, 'visibleWidth', 110);
+        this.columnsController.columnOption(2, 'visibleWidth', 120);
+
+        this.columnsController.columnOption(1, 'width', 150);
+
+        assert.deepEqual(
+            this.columnsController.getColumns().map(column => column.visibleWidth),
+            [null, null, null],
+            'calculated widths are invalidated'
+        );
+    });
+
+    // T1329677
+    QUnit.test('updating resolved column dimensions should preserve calculated widths of other columns', function(assert) {
+        this.applyOptions({ columns: ['field1', 'field2', 'field3'] });
+        this.columnsController.columnOption(0, 'visibleWidth', 100);
+        this.columnsController.columnOption(1, 'visibleWidth', 110);
+        this.columnsController.columnOption(2, 'visibleWidth', 120);
+
+        this.columnsController.updateColumnDimensions([{
+            columnIndex: 1,
+            visibleWidth: null,
+            width: 150
+        }]);
+
+        const columns = this.columnsController.getColumns();
+
+        assert.strictEqual(columns[1].width, 150, 'column width is updated');
+        assert.deepEqual(
+            columns.map(column => column.visibleWidth),
+            [100, null, 120],
+            'calculated widths of other columns are preserved'
+        );
+    });
+
     QUnit.test('update exist column parameter', function(assert) {
         this.applyOptions({ columns: ['field1', 'field2', 'field3'] });
 
