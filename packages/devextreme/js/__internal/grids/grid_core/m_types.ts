@@ -195,7 +195,7 @@ export interface Controllers {
   // todo: export is dataGrid-only controller
   editing: import('./editing/m_editing').EditingController;
   editorFactory: import('./editor_factory/m_editor_factory').EditorFactory;
-  errorHandling: import('./error_handling/m_error_handling').ErrorHandlingController;
+  errorHandling: import('./error_handling/error_handling_view_controlller').ErrorHandlingViewController;
   export: import('../data_grid/export/m_export').ExportController;
   filterSync: import('./filter/m_filter_sync').FilterSyncController;
   focus: import('./focus/m_focus').FocusController;
