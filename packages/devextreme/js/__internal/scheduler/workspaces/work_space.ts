@@ -830,11 +830,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       useKeyboard: false,
       bounceEnabled: false,
       updateManually: true,
-      onScroll: () => {
-        if (this.groupedStrategy instanceof VerticalGroupedStrategy) {
-          this.groupedStrategy.cache.clear();
-        }
-      },
       // TODO (Scrollable:useKeyboard) -> remove this WA
       //  after ScrollView private option "useKeyboard" will be extended to useNative: true
       // NOTE: Scrollable container focusable by default
@@ -1635,15 +1630,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return this.$element().find(`.${cellClass}`);
   }
 
-  private getFirstAndLastDataTableCell(): Element[] {
-    const selector = this.isVirtualScrolling()
-      ? `.${DATE_TABLE_CELL_CLASS}, .${VIRTUAL_CELL_CLASS}`
-      : `.${DATE_TABLE_CELL_CLASS}`;
-
-    const $cells = this.$element().find(selector);
-    return [$cells.get(0), $cells.get(-1)];
-  }
-
   private getAllCells(allDay: boolean): dxElementWrapper {
     if (this.isVerticalGroupedWorkSpace()) {
       return this.$dateTable.find(`td:not(.${VIRTUAL_CELL_CLASS})`);
@@ -1937,35 +1923,25 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   getGroupBoundsVertical(groupIndex: number): GroupBoundsOffset | undefined {
-    const groupedMap = this.viewDataProvider.groupedDataMap.dateTableGroupedMap[groupIndex];
-    const firstRowIndex = Number(this.viewDataProvider.hasGroupAllDayPanel(groupIndex));
-    const firstCell = groupedMap?.[firstRowIndex]?.[0];
-    const lastRow = groupedMap?.[groupedMap.length - 1];
-    const lastCell = lastRow?.[lastRow.length - 1];
-
-    if (firstCell && lastCell) {
-      const $first = this.domGetDateCell(firstCell.position);
-      const $last = this.domGetDateCell(lastCell.position);
-      const firstOffset = $first.offset();
-      const lastOffset = $last.offset();
-
-      if ($first.length && $last.length && firstOffset && lastOffset) {
-        return {
-          left: firstOffset.left,
-          right: lastOffset.left + (getOuterWidth($last) as number),
-          top: firstOffset.top,
-          bottom: lastOffset.top + (getOuterHeight($last) as number),
-        };
-      }
+    if (!(this.groupedStrategy instanceof VerticalGroupedStrategy)) {
+      return undefined;
     }
 
-    const $firstAndLastCells = this.getFirstAndLastDataTableCell();
-    if (this.groupedStrategy instanceof VerticalGroupedStrategy) {
-      return this.groupedStrategy.getGroupBoundsOffset(groupIndex, [
-        $firstAndLastCells[0], $firstAndLastCells[1],
-      ]);
+    const $dateTable = this.getDateTable();
+    const dateTableOffset = $dateTable.offset();
+
+    if (!dateTableOffset) {
+      return undefined;
     }
-    return undefined;
+
+    const { top, height } = this.groupedStrategy.getGroupVerticalOffset(groupIndex);
+
+    return {
+      left: dateTableOffset.left,
+      right: dateTableOffset.left + (getOuterWidth($dateTable) as number),
+      top: dateTableOffset.top + top,
+      bottom: dateTableOffset.top + top + height,
+    };
   }
 
   getGroupBoundsHorizontal(
