@@ -1,9 +1,6 @@
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../common/sizes" as *;
-
-// adduse
 @use "../dropDownList";
 
 @mixin autocomplete-editor-container-offset() {

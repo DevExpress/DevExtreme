@@ -9,11 +9,8 @@
   $contextmenu-menu-separator-height: $context-menu-separator-height,
   $contextmenu-menu-separator-margin: $context-menu-separator-margin,
 );
-
-// adduse
 @use "../overlay";
 @use "../menuBase" as *;
-
 
 .dx-context-menu {
   color: menuColors.$menu-content-rest;

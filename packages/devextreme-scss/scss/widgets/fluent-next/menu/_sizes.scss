@@ -1,8 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 // Moved from menuBase/ so the component has a single declaration home (NAMING.md, O2)
 $menu-item-line-height: null !default;
 $menu-item-with-icon-padding-inline: null !default;
@@ -30,7 +28,6 @@ $menu-padding-block: null !default;
 @if $size == "compact" {
   $menu-padding-block: ds.$spacing-40 !default;
 }
-
 
 // Values hoisted from style-file literals (tokenized)
 $menu-tree-view-border: ds.$border-width-10 solid !default;

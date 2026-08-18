@@ -1,8 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 $toast-border-radius: $global-border-radius !default;
 $toast-height: null !default;
 $toast-item-gap: null !default;

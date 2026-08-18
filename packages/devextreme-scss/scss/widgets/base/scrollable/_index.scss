@@ -1,8 +1,6 @@
 @use "sass:selector";
 @use "./mixins" as *;
 
-// adduse
-
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $scrollable-scroll-width: 5px !default;
 $scrollable-scroll-height: 5px !default;

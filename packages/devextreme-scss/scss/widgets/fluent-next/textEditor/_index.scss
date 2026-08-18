@@ -12,9 +12,6 @@
 );
 @use "../../base/textEditor/mixins" as *;
 
-// adduse
-
-
 @mixin texteditor-outlined-styling() {
   background-color: $text-editor-outlined-bg-rest;
   border-radius: $text-editor-input-border-radius;
@@ -283,7 +280,7 @@
     bottom: 0;
     height: 0;
     width: 100%;
-    content: '';
+    content: "";
     position: absolute;
   }
 
@@ -404,7 +401,7 @@
 
   .dx-icon-clear {
     &::before {
-      content: '\f15f';
+      content: "\f15f";
     }
 
     color: $text-editor-clear-button-icon-rest;

@@ -1,15 +1,10 @@
-@use "../../../colors" as *;
-@use "../../../sizes" as *;
 @use "../../../../base/icon_fonts" as *;
 @use "../../../../base/tabs";
 @use "../../variables/colors" as *;
 @use "../../variables/sizes" as *;
 @use "../../mixins" as *;
-
-// adduse
 @use "../../../scrollable";
 @use "../../../badge";
-
 
 .dx-tabs {
   padding: 0;

@@ -1,7 +1,4 @@
 @use "../../../_design-system/variables/ds" as ds;
-@use "../sizes" as *;
-
-// adduse
 
 // Base-layer sizing injected with design tokens (wave B2)
 $splitter-bar-border-width: ds.$spacing-70 !default;

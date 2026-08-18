@@ -3,8 +3,6 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../scrollable/colors" as scrollableColors;
-
-// adduse
 @use "../scrollable";
 @use "../../base/scrollView" with (
   $scrollview-top-pocket-width: $scroll-view-top-pocket-width,
@@ -19,7 +17,6 @@
   $scrollview-scrollbottom-indicator-margin-rtl: $scroll-view-scroll-bottom-indicator-rtl-margin,
   $scrollview-pulldown-icon-font-size: $scroll-view-pull-down-icon-font-size,
 );
-
 
 .dx-scrollview-scrollbottom-text,
 .dx-scrollview-pull-down-text {
@@ -65,7 +62,6 @@
   align-items: center;
   box-shadow: 0 1px 3px 1px $scroll-view-shadow-rest;
   opacity: 1;
-
 
   > .dx-loadindicator {
     height: $scroll-view-scroll-bottom-image-height;

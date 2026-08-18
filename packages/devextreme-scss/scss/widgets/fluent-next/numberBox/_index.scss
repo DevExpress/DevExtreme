@@ -5,8 +5,6 @@
 @use "../../base/numberBox" with (
   $numberbox-spin-idle-opacity: $number-box-spin-opacity-rest,
 );
-
-// adduse
 @use "../textEditor" as *;
 
 .dx-numberbox {

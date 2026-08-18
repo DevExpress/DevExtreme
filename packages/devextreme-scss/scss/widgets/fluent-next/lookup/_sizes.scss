@@ -1,8 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 // Not a colour: an opacity / a composite box-shadow belongs here (NAMING.md O7)
 $lookup-box-shadow: ds.$box-shadow-sm !default;
 

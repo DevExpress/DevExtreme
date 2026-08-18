@@ -5,8 +5,6 @@
   $speeddialaction-fa-button-label-border-radius: $speed-dial-action-fa-button-label-border-radius,
 );
 @use "../button/colors" as buttonColors;
-
-// adduse
 @use "../overlay";
 @include baseSpeedDialAction.dx-fa-button-mixin(
   $speed-dial-action-main-fa-button-size,

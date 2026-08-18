@@ -1,7 +1,6 @@
 @use "../common/colors" as *;
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../toolbar/mixins" as *;
 @use "../../base/popup" with (
@@ -9,8 +8,6 @@
   $popup-dialog-message-padding: $popup-dialog-message-padding,
   $popup-dialog-shader-color: $popup-dialog-backdrop-rest,
 );
-
-// adduse
 @use "../overlay";
 
 .dx-popup-wrapper {

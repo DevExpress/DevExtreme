@@ -1,15 +1,12 @@
 @use "../colors" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 $grid-content-rest: ds.$color-content-neutral-default-rest !default;
 
 $grid-bg-rest: ds.$color-surface-neutral-default-rest !default;
 $grid-border-rest: ds.$color-border-neutral-default-rest !default;
 
 $grid-column-chooser-item-content-rest: $grid-content-rest !default;
-
 
 $grid-drag-header-border-rest: rgb(from #{ds.$color-border-primary-default-rest} r g b / 0.5) !default;
 $grid-drag-header-shadow-ambient-rest: ds.$color-shadow-ambient !default;
@@ -72,13 +69,12 @@ $grid-text-stub-bg-rest: null !default;
 $grid-filter-panel-content-rest: ds.$color-content-primary-default-rest !default;
 $grid-draggable-column-content-rest: ds.$color-content-neutral-subdued-rest !default;
 
-
 @if $mode == "light" {
-  $grid-text-stub-bg-rest: data-uri('images/widgets/fluent-next/color-schemes/light/grid/text-stub.png') !default;
+  $grid-text-stub-bg-rest: data-uri("images/widgets/fluent-next/color-schemes/light/grid/text-stub.png") !default;
 }
 
 @if $mode == "dark" {
-  $grid-text-stub-bg-rest: data-uri('images/widgets/fluent-next/color-schemes/dark/grid/text-stub.png') !default;
+  $grid-text-stub-bg-rest: data-uri("images/widgets/fluent-next/color-schemes/dark/grid/text-stub.png") !default;
 }
 
 $grid-header-filter-empty-icon-rest: $grid-header-filter-icon-rest !default;

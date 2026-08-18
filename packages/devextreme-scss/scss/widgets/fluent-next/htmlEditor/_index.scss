@@ -17,8 +17,6 @@
   $htmleditor-aidialog-title-font-weight: $html-editor-ai-dialog-title-font-weight,
 );
 
-// adduse
-
 .dx-htmleditor {
   border-color: transparent;
   position: relative;
@@ -34,7 +32,7 @@
     bottom: 0;
     height: 0;
     width: 100%;
-    content: '';
+    content: "";
     position: absolute;
     z-index: 2;
     transform: scale(0);
@@ -50,7 +48,7 @@
       right: $html-editor-toolbar-wrapper-inset-inline-end;
       z-index: 2;
       background-color: $html-editor-cover-bg-rest;
-      content: '';
+      content: "";
       pointer-events: none;
     }
   }
@@ -91,7 +89,7 @@
       bottom: 0;
       height: 0;
       width: 100%;
-      content: '';
+      content: "";
       position: absolute;
     }
 
