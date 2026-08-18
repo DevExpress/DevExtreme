@@ -13,7 +13,6 @@ $diagram-image-icon-base-color: null !default;
 $diagram-image-icon-accent-color: null !default;
 $diagram-toolbox-shape-text-opacity: null !default;
 
-
 @if $color == "carmine" {
   $diagram-normal-format-active-bg: color.adjust($base-element-bg, $lightness: -10%, $space: hsl) !default;
   $diagram-default-format-active-bg: color.adjust($base-accent, $lightness: -10%, $space: hsl) !default;

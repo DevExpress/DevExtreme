@@ -110,7 +110,6 @@ $texteditor-label-transition:
   $texteditor-border-bottom-color-focused: color.adjust($texteditor-border-bottom-color-hover, $lightness: -3.92%, $space: hsl) !default;
 }
 
-
 @if $mode == "dark" {
   @if $color == "blue" {
     $texteditor-outlined-bg: $base-element-bg !default;

@@ -23,7 +23,6 @@ $badge-invalid-bg: $base-invalid-color;
   @include disabled-widget-mixin($opacity);
 }
 
-
 @mixin badge-settings() {
   pointer-events: none;
   position: absolute;

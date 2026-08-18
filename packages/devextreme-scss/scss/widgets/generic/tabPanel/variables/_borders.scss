@@ -12,7 +12,6 @@ $generic-tabpanel-tab-border-focused-bottom: null !default;
 $generic-tabpanel-tab-border-focused-left: null !default;
 $generic-tabpanel-tab-border-focused-right: null !default;
 
-
 @if $color == "carmine" {
   $generic-tabpanel-tab-border-transparent: $generic-tabs-border-width solid transparent !default;
   $generic-tabpanel-tab-border-selected-bottom: $generic-tabs-border-width solid !default;

@@ -7,7 +7,6 @@
 */
 $textbox-search-icon-color: null !default;
 
-
 @if $color == "carmine" {
   $textbox-search-icon-color: color.adjust($base-icon-color, $lightness: 3%, $space: hsl) !default;
 }

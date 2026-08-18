@@ -23,7 +23,6 @@ $generic-dropdowneditor-invalid-badge-with-clear-offset: $generic-dropdowneditor
 
 $generic-dropdowneditor-invalid-badge-size: $generic-invalid-badge-size + $generic-invalid-badge-horizontal-padding;
 
-
 @mixin dx-dropdowneditor-button-icon() {
   width: $generic-dropdowneditor-button-size;
   height: 100%;

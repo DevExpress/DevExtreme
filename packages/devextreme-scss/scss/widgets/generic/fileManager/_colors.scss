@@ -19,7 +19,6 @@ $filemanager-file-item-focused-border: $base-accent !default;
 $filemanager-item-focused-color: null !default;
 $filemanager-progressbox-shadow-color: null !default;
 
-
 @if $color == "carmine" {
   $filemanager-file-toolbar-bg: color.adjust($base-bg, $lightness: -3%, $space: hsl) !default;
   $filemanager-dirs-tree-item-focus-bg: color.adjust($base-bg, $lightness: -8%, $space: hsl) !default;

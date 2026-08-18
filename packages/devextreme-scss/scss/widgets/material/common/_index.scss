@@ -3,7 +3,6 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 
-
 .dx-theme-marker {
   font-family: "dx.material.#{$material-color-accent-modificator}.#{$material-color-theme-modificator}#{$material-size-postfix}";
 }

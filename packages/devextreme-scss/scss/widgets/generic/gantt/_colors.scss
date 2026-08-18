@@ -7,7 +7,6 @@ $gantt-selection-bg: null !default;
 $gantt-parent-task-bg: null !default;
 $gantt-icon-color: null !default;
 
-
 @if $color == "carmine" {
 
   $gantt-collapsable-row-bg: color.adjust($base-bg, $lightness: -5%, $space: hsl) !default;

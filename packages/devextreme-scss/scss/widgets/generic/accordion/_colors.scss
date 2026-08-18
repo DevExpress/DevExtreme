@@ -45,7 +45,6 @@ $accordion-title-active-bg: null !default;
 */
 $accordion-item-hover-bg: null !default;
 
-
 @if $color == "carmine" {
   $accordion-title-color: $accordion-color !default;
   $accordion-item-focused-border-color: $base-accent !default;

@@ -317,7 +317,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
     justify-content: flex-end;
   }
 
-
   &.dx-scheduler-header-panel-current-time-cell {
     &::before {
       content: none;
@@ -734,7 +733,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 .dx-scheduler-time-panel {
   font-size: $material-scheduler-workspace-info-text-size;
 }
-
 
 .dx-scheduler-work-space-grouped:not(.dx-scheduler-agenda) .dx-scheduler-group-row th,
 .dx-scheduler-work-space.dx-scheduler-work-space-grouped:not(.dx-scheduler-work-space-vertical-grouped):not(.dx-scheduler-timeline) .dx-scheduler-last-group-cell {

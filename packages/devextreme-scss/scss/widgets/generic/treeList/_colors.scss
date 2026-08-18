@@ -5,7 +5,6 @@
 $treelist-spin-icon-color: null !default;
 $treelist-selection-spin-icon-color: null !default;
 
-
 @if $color == "carmine" {
   $treelist-spin-icon-color: $datagrid-spin-icon-color !default;
   $treelist-selection-spin-icon-color: color.adjust($datagrid-spin-icon-color, $lightness: 100%, $space: hsl) !default;

@@ -124,7 +124,6 @@ $base-border-color-disabled: null !default;
 
 $scrollview-pulldown-path: null !default;
 
-
 @if $color == "blue" {
   $fluent-color-accent-modificator: "blue" !default;
 }
@@ -295,7 +294,6 @@ $base-invalid-color: $base-danger !default;
 $base-invalid-color-hover: $base-danger-hover !default;
 $base-invalid-color-active: $base-danger-active !default;
 $base-invalid-color-selected: $base-danger-selected !default;
-
 
 :root {
   --dx-component-color-bg: #{$base-bg};

@@ -64,7 +64,6 @@ $filterbuilder-item-value-hover-color: color.change($base-icon-color, $alpha: 0.
 $filterbuilder-item-value-focus-color: $base-icon-color !default;
 $filterbuilder-menu-icon-color: $base-text-color !default;
 
-
 @if $mode == "light" {
   $filterbuilder-text-focus-color: #fff !default;
 }

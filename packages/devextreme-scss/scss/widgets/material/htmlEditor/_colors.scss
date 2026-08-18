@@ -13,7 +13,6 @@ $htmleditor-resize-handle-bg: $base-accent !default;
 $htmleditor-mention-bg: null !default;
 $htmleditor-table-border-color: $base-border-color !default;
 
-
 @if $mode == "light" {
   $htmleditor-mention-bg: color.adjust($base-bg, $lightness: -12%, $space: hsl) !default;
 }

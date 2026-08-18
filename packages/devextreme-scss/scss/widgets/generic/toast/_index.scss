@@ -4,9 +4,7 @@
 @use "../../base/toast";
 @use "../overlay";
 
-
 $generic-toast-shadow: 0 2px 3px 0 $toast-shadow-color;
-
 
 .dx-toast-content {
   color: $toast-color;

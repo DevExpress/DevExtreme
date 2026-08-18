@@ -4,7 +4,6 @@
 @use "../../base/colorView";
 @include dx-base-colorview-styles($colorview-handle-color, $colorview-handle-border-color);
 
-
 $generic-colorview-alpha-width: $generic-colorview-palette-width + 4;
 $generic-colorview-hue-scale-height: $generic-colorview-palette-height;
 

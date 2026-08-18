@@ -4,7 +4,6 @@
 @use "../../base/dropDownList";
 @use "../dropDownEditor";
 
-
 .dx-dropdownlist-popup-wrapper {
   @include dx-dropdownlist-list-appearance();
 }

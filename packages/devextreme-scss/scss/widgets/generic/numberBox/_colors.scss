@@ -24,7 +24,6 @@ $numberbox-spin-container-border-radius: $base-border-radius !default;
 */
 $numberbox-spin-icon-color: $base-icon-color !default;
 
-
 @if $color == "carmine" {
   $numberbox-spin-active-bg: color.adjust($button-normal-bg, $lightness: -30%, $space: hsl) !default;
   $numberbox-spin-active-color: $base-text-color !default;

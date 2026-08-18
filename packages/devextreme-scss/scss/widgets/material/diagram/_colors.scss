@@ -13,7 +13,6 @@ $diagram-image-icon-base-color: null !default;
 $diagram-image-icon-accent-color: null !default;
 $diagram-toolbox-shape-text-opacity: null !default;
 
-
 @if $mode == "light" {
   $diagram-image-icon-base-color: $base-icon-color !default;
   $diagram-image-icon-accent-color: $load-indicator-segment-bg-color !default;

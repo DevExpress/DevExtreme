@@ -3,7 +3,6 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 
-
 .dx-theme-marker {
   font-family: "dx.fluent.#{$fluent-color-accent-modificator}.#{$fluent-color-theme-modificator}#{$fluent-size-postfix}";
 }

@@ -13,7 +13,6 @@ $colorview-handle-border-color: null !default;
 $colorview-border-color: $base-border-color !default;
 $colorview-label-color: $base-label-color !default;
 
-
 @if $color == "carmine" {
   $colorbox-overlay-bg: $overlay-content-bg !default;
   $colorbox-palette-cell-bg: $colorbox-overlay-bg !default;

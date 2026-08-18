@@ -4,7 +4,6 @@
 $splitter-inactive-color: $base-border-color !default;
 $splitter-bg: null !default;
 
-
 @if $color == "carmine" {
   $splitter-bg: color.change($base-accent, $alpha: 0.5) !default;
 }

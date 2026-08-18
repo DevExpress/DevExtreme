@@ -13,7 +13,6 @@ $tileview-hover-border-color: null !default;
 $tileview-active-bg: null !default;
 $tileview-active-color: null !default;
 
-
 @if $color == "carmine" {
   $tileview-bg: $base-element-bg !default;
   $tileview-border-color: color.change($base-border-color, $alpha: 0.6) !default;

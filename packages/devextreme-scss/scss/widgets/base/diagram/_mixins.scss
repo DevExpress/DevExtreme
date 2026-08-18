@@ -110,7 +110,6 @@
     @include diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/bring-to-front.svg'), $toolbar-color, $icon-size, $icon-size);
   }
 
-
   .dx-diagram-i-menu-bring-to-front {
     @include diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/bring-to-front.svg'), $menu-color, $icon-size, $icon-size);
   }
