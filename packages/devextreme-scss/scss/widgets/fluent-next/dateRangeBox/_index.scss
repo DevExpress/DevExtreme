@@ -9,9 +9,6 @@
 @use "../../base/icon_fonts" as *;
 @use "../textEditor" as *;
 
-// adduse
-
-
 .dx-daterangebox {
   @include dx-dropdowneditor-button-icon-styling(daterangepicker);
 

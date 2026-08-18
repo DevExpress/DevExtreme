@@ -1,7 +1,6 @@
 @use "sass:math";
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../dropDownEditor" as *;
 @use "../../base/dropDownEditor/mixins" as *;
@@ -16,8 +15,6 @@
   $datebox-apply-button-margin-right: $date-box-apply-button-margin-inline-end,
 );
 @use "mixins" as *;
-
-// adduse
 @use "../timeView";
 @use "../dateView";
 

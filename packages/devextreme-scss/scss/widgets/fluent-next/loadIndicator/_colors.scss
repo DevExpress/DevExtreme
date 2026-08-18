@@ -1,9 +1,6 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 $load-indicator-segment-border-rest: ds.$color-content-primary-default-rest !default;
-
 
 // Light track: DS spinner loader==track kills the ring contrast (see DIVERGENCES.md)
 $load-indicator-segment-inner-border-rest: ds.$color-surface-primary-subdued-rest !default;

@@ -1,14 +1,10 @@
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/tooltip" with (
   $tooltip-overlay-content-min-width: $tooltip-overlay-content-min-width,
   $tooltip-overlay-content-min-height: $tooltip-overlay-content-min-height,
   $tooltip-popup-content-padding: $tooltip-popup-content-padding,
 );
-
-// adduse
-
 
 .dx-tooltip-wrapper {
   .dx-overlay-content {

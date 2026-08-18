@@ -1,4 +1,3 @@
-@use "../colors" as *;
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
@@ -36,7 +35,7 @@
   $datagrid-sticky-column-border: $data-grid-sticky-column-border,
   $datagrid-cell-focus-outline: $data-grid-cell-outline-focused,
 );
-@use 'layout/cell';
+@use "layout/cell";
 @include grid-base(datagrid);
 
 .dx-datagrid-group-panel {
@@ -94,7 +93,6 @@
     border-top: none;
   }
 
-
   .dx-row.dx-group-row {
     &:not(.dx-row-focused) {
       color: gridBaseColors.$grid-group-row-content-rest;
@@ -128,7 +126,6 @@
 
 }
 
-
 .dx-rtl {
   .dx-datagrid-group-panel {
     .dx-group-panel-item,
@@ -137,4 +134,3 @@
     }
   }
 }
-

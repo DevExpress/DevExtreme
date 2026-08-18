@@ -1,8 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 // Not a colour: a font size that used to sit in _colors.scss (NAMING.md, O7)
 $accordion-title-font-size: $global-font-size !default;
 

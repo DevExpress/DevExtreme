@@ -1,6 +1,5 @@
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../gridBase/colors" as gridBaseColors;
 @use "../treeView/sizes" as treeViewSizes;
@@ -51,9 +50,6 @@
   $pivotgrid-fields-area-head-cell-side-padding: $pivot-grid-fields-area-head-cell-padding-inline,
 );
 
-// adduse
-
-
 .dx-pivotgrid-fields-container {
   &.dx-drag {
     .dx-area-field.dx-area-box {
@@ -84,18 +80,17 @@
   }
 
   .dx-sort-up {
-    @include dx-icon-sizing(buttonSizes.$button-icon-size)
+    @include dx-icon-sizing(buttonSizes.$button-icon-size);
   }
 
   .dx-sort-down {
-    @include dx-icon-sizing(buttonSizes.$button-icon-size)
+    @include dx-icon-sizing(buttonSizes.$button-icon-size);
   }
 
   .dx-header-filter {
-    @include dx-icon-sizing(buttonSizes.$button-icon-size)
+    @include dx-icon-sizing(buttonSizes.$button-icon-size);
   }
 }
-
 
 .dx-pivotgrid {
   background-color: $pivot-grid-area-bg-rest;
@@ -132,7 +127,6 @@
       }
     }
   }
-
 
   .dx-area-description-cell {
     .dx-pivotgrid-toolbar {

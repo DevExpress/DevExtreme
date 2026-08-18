@@ -1,6 +1,5 @@
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../common/sizes" as *;
 @use "../textEditor/sizes" as textEditorSizes;
 @use "../../base/icon_fonts" as *;
@@ -8,8 +7,6 @@
   $dropdowneditor-icon-idle-opacity: $drop-down-editor-icon-opacity-rest,
 );
 @use "../../base/dropDownEditor/mixins" as *;
-
-// adduse
 
 @mixin dx-dropdowneditor-button-icon() {
   width: $drop-down-editor-button-size;

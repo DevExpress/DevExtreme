@@ -1,7 +1,5 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 $scheduler-base-border-rest: ds.$color-border-neutral-default-rest !default;
 $scheduler-cell-bg-active: ds.$color-surface-neutral-default-active !default;
 $scheduler-cell-bg-hovered: ds.$color-surface-neutral-default-hovered !default;

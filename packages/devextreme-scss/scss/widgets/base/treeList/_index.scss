@@ -24,7 +24,7 @@ $treelist-expandable-node-line-height: 1px !default;
 $treelist-sticky-column-border: 2px solid !default;
 $treelist-cell-focus-outline: 2px solid !default;
 
-@use 'layout/cell' with (
+@use "layout/cell" with (
   $treelist-border: $datagrid-border,
   $treelist-border-color: $datagrid-border-color,
   $treelist-base-background-color: $datagrid-base-background-color,
@@ -43,7 +43,6 @@ $treelist-border-color: $datagrid-border-color;
 $treelist-focused-border-color: $datagrid-focused-border-color;
 $treelist-text-stub-background-image-path: $datagrid-text-stub-background-image-path;
 $treelist-row-error-color: $datagrid-row-error-color;
-
 
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $treelist-header-filter-outline: 2px solid !default;

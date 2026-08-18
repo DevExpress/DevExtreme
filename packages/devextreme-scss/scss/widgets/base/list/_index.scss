@@ -1,13 +1,9 @@
 @use "../mixins" as *;
 @use "../button/mixins" as *;
 
-// adduse
-
-
 $list-response-wait-opacity: 0.5 !default;
 
 $list-searchbox-margin-bottom: 5px;
-
 
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $list-item-badge-container-width: 20px !default;
