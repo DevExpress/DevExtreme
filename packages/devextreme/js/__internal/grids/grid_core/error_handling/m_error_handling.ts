@@ -4,7 +4,6 @@ import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
-import type { DxError } from '@ts/core/utils/m_error';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
@@ -22,7 +21,7 @@ import {
   ERROR_MESSAGE_CLASS,
   ERROR_ROW_CLASS,
 } from './const';
-import type { ExternalError } from './types';
+import type { GridError } from './types';
 import { getErrorMessage, isDxError } from './utils';
 
 export class ErrorHandlingController extends modules.ViewController {
@@ -54,7 +53,7 @@ export class ErrorHandlingController extends modules.ViewController {
   }
 
   private readonly handleDataErrorOccurred = (
-    error: DxError | ExternalError | string,
+    error: GridError,
     $popupContent?: dxElementWrapper,
   ): void => {
     if (this.option('errorRowEnabled')) {
@@ -73,7 +72,7 @@ export class ErrorHandlingController extends modules.ViewController {
   };
 
   private _createErrorRow(
-    error: DxError | ExternalError | string,
+    error: GridError,
     $tableElements?: dxElementWrapper,
   ): dxElementWrapper {
     const $errorMessage = this._renderErrorMessage(error);
@@ -115,7 +114,7 @@ export class ErrorHandlingController extends modules.ViewController {
     return $errorMessage;
   }
 
-  private _renderErrorMessage(error: DxError | ExternalError | string): dxElementWrapper {
+  private _renderErrorMessage(error: GridError): dxElementWrapper {
     const $message = $('<div>')
       .addClass(ERROR_MESSAGE_CLASS)
       .text(getErrorMessage(error));
@@ -131,7 +130,7 @@ export class ErrorHandlingController extends modules.ViewController {
   }
 
   public renderErrorRow(
-    error: DxError | ExternalError | string,
+    error: GridError,
     rowIndex: number | undefined,
     $popupContent: dxElementWrapper | undefined,
   ): dxElementWrapper | undefined {
