@@ -98,30 +98,18 @@ const formatDate = new Intl.DateTimeFormat('en-US').format;
 
 #gridContainer tr.notes-row td {
   height: 70px;
-  color: #999;
-}
-
-.dark #gridContainer tr.notes-row td {
-  color: #777;
+  color: var(--dxds-color-content-neutral-deep-rest, #999);
 }
 
 #gridContainer tbody.dx-state-hover {
-  background-color: #ebebeb;
-}
-
-.dark #gridContainer tbody.dx-state-hover {
-  background-color: #484848;
+  background-color: var(--dxds-color-surface-neutral-default-hovered, #ebebeb);
 }
 
 #gridContainer tbody.dx-state-hover tr.main-row td {
-  color: #000;
-}
-
-.dark #gridContainer tbody.dx-state-hover tr.main-row td {
-  color: #ccc;
+  color: var(--dxds-color-content-neutral-default-rest, #000);
 }
 
 #gridContainer tbody.dx-state-hover tr.notes-row td {
-  color: #888;
+  color: var(--dxds-color-content-neutral-deep-rest, #888);
 }
 </style>
