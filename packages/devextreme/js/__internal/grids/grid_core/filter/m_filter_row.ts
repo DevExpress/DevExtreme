@@ -550,9 +550,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     const dataSource = this._dataController.dataSource();
 
     if (options.lookup && this.option('syncLookupFilterValues')) {
-      this._dataController.setFilterExcludedColumn(options);
-      const filter = this._dataController.getCombinedFilter();
-      this._dataController.setFilterExcludedColumn(null);
+      const filter = this._dataController.getCombinedFilterWithExcludedColumn(options);
 
       const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(options, dataSource, filter);
       const lookupOptions = {
@@ -781,9 +779,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       const editor = getEditorInstance($cell?.find('.dx-editor-container'));
 
       if (editor) {
-        this._dataController.setFilterExcludedColumn(column);
-        const filter = this._dataController.getCombinedFilter() || null;
-        this._dataController.setFilterExcludedColumn(null);
+        const filter = this._dataController.getCombinedFilterWithExcludedColumn(column) || null;
 
         const editorDataSource = editor.option('dataSource');
         const shouldUpdateFilter = !filterChanged
@@ -831,7 +827,7 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterRow
     const filters = [super._calculateAdditionalFilter()];
     const columns = this._columnsController.getVisibleColumns(null, true);
 
-    const excludedColumn = this._filterExcludedColumn;
+    const excludedColumn = this.getFilterExcludedColumn();
 
     each(columns, function () {
       const shouldSkip = excludedColumn?.index === this.index;

@@ -139,7 +139,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _filterSyncController!: FilterSyncController;
 
-  protected _filterExcludedColumn: Column | null = null;
+  private _filterExcludedColumn: Column | null = null;
 
   protected _keyboardNavigationController!: KeyboardNavigationController;
 
@@ -347,12 +347,20 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return this.combinedFilter(undefined, returnDataField);
   }
 
-  public setFilterExcludedColumn(column: Column | null): void {
-    this._filterExcludedColumn = column;
-  }
-
   public getFilterExcludedColumn(): Column | null {
     return this._filterExcludedColumn;
+  }
+
+  public getCombinedFilterWithExcludedColumn(
+    excludedColumn: Column | null,
+    returnDataField?: boolean,
+  ): DataFilter {
+    this._filterExcludedColumn = excludedColumn;
+    try {
+      return this.getCombinedFilter(returnDataField);
+    } finally {
+      this._filterExcludedColumn = null;
+    }
   }
 
   private combinedFilter(filter: DataFilter, returnDataField?: boolean): DataFilter {
