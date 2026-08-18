@@ -273,7 +273,6 @@ jobs:
             devextreme-vue-installer.tgz
           retention-days: 1
 
-  # UNTESTED DRAFT — diff-reviewed locally only, never run in real CI.
   build-vendor-bundles:
     name: Build vendor bundles (React, Vue)
     runs-on: devextreme-shr2

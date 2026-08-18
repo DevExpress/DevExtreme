@@ -29,11 +29,12 @@ const RETRY_CONCURRENCY = (() => {
   return 2;
 })();
 
-// 12 is a safe default — larger batches OOM the CI runner.
+// Larger batches OOM the CI runner.
+const DEFAULT_SAFE_BATCH_SIZE = 12;
 const BATCH_SIZE = (() => {
   const fromEnv = parseInt(process.env.CSP_BUNDLE_BATCH_SIZE, 10);
   if (fromEnv > 0) return fromEnv;
-  return 12;
+  return DEFAULT_SAFE_BATCH_SIZE;
 })();
 
 const BATCH_CONCURRENCY = (() => {
