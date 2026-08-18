@@ -396,7 +396,7 @@ class Slider<
           .appendTo(this._$wrapper);
       }
 
-      this._$minLabel.text(numberLocalization.format(min, labelFormat));
+      this._$minLabel.text(numberLocalization.format(min!, labelFormat));
 
       if (!this._$maxLabel) {
         this._$maxLabel = $('<div>')
@@ -404,7 +404,7 @@ class Slider<
           .appendTo(this._$wrapper);
       }
 
-      this._$maxLabel.text(numberLocalization.format(max, labelFormat));
+      this._$maxLabel.text(numberLocalization.format(max!, labelFormat));
 
       // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-base-to-string
       this.$element().addClass(SLIDER_LABEL_POSITION_CLASS_PREFIX + position);

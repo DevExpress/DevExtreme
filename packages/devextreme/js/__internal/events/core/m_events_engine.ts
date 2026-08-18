@@ -11,6 +11,7 @@ import {
   isFunction, isObject, isString, isWindow,
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
+import type { Injection } from '@ts/core/utils/dependency_injector';
 import {
   EMPTY_EVENT_NAME,
   EVENT_PROPERTIES,
@@ -28,6 +29,29 @@ function matchesSafe(target, selector) {
 const elementDataMap = new WeakMap();
 let guid = 0;
 let skipEvent;
+
+type EventsEngineMethod = (...args: any[]) => void;
+
+interface EventFactory {
+  prototype: any;
+  (src?: any, config?: any): any;
+  new (src?: any, config?: any): any;
+}
+
+interface EventsEngine {
+  on: EventsEngineMethod;
+  one: EventsEngineMethod;
+  off: EventsEngineMethod;
+  trigger: EventsEngineMethod;
+  triggerHandler: EventsEngineMethod;
+  Event: EventFactory;
+  set: (engine: Injection<EventsEngine>) => void;
+  subscribeGlobal: EventsEngineMethod;
+  forcePassiveFalseEventNames: typeof forcePassiveFalseEventNames;
+  passiveEventHandlersSupported: () => boolean;
+  elementDataMap: typeof elementDataMap;
+  detectPassiveEventHandlersSupport: () => boolean;
+}
 
 const special = (function () {
   const specialData = {};
@@ -109,7 +133,7 @@ const eventsEngine = injector({
     const handlersController = getHandlersController(element, event.type);
     handlersController.callHandlers(event, extraParameters);
   })),
-});
+} as EventsEngine);
 
 function applyForEach(args, method) {
   const element = args[0];
@@ -457,7 +481,7 @@ function normalizeEventArguments(callback) {
     }
 
     callback.call(this, src, config);
-  };
+  } as EventFactory;
   Object.assign(eventsEngine.Event.prototype, {
     _propagationStopped: false,
     _immediatePropagationStopped: false,
@@ -622,7 +646,7 @@ hookTouchProps(addProperty);
 const beforeSetStrategy = Callbacks();
 const afterSetStrategy = Callbacks();
 
-eventsEngine.set = function (engine) {
+eventsEngine.set = function (engine: Injection<EventsEngine>) {
   beforeSetStrategy.fire();
   eventsEngine.inject(engine);
   initEvent(engine.Event);
@@ -631,7 +655,7 @@ eventsEngine.set = function (engine) {
 
 eventsEngine.subscribeGlobal = function () {
   applyForEach(arguments, normalizeOnArguments(function () {
-    const args = arguments;
+    const args: any = arguments;
 
     eventsEngine.on.apply(this, args);
 

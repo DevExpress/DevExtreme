@@ -101,54 +101,64 @@ const LDML_FORMATTERS = {
   },
 };
 
-export const getFormatter = (
+export function getFormatter(
+  format: string,
+  dateParts: LdlmDateLocalization,
+): (date: Date | null) => string;
+export function getFormatter(
   format: string | undefined,
   dateParts: LdlmDateLocalization,
-) => (date: Date | null): Date | string | null => {
+): (date: Date | null) => Date | string | null;
+export function getFormatter(
+  format: string | undefined,
+  dateParts: LdlmDateLocalization,
+): (date: Date | null) => Date | string | null {
+  return (date: Date | null): Date | string | null => {
   // eslint-disable-next-line @typescript-eslint/init-declarations
-  let charIndex: number;
-  // eslint-disable-next-line @typescript-eslint/init-declarations
-  let formatter: typeof LDML_FORMATTERS[keyof typeof LDML_FORMATTERS];
-  // eslint-disable-next-line @typescript-eslint/init-declarations
-  let char: string;
-  let charCount = 0;
-  const separator = '\'';
-  let isEscaping = false;
-  // eslint-disable-next-line @typescript-eslint/init-declarations
-  let isCurrentCharEqualsNext: boolean;
-  let result = '';
+    let charIndex: number;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let formatter: typeof LDML_FORMATTERS[keyof typeof LDML_FORMATTERS];
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let char: string;
+    let charCount = 0;
+    const separator = '\'';
+    let isEscaping = false;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let isCurrentCharEqualsNext: boolean;
+    let result = '';
 
-  if (!date) {
-    return null;
-  }
+    if (!date) {
+      return null;
+    }
 
-  if (!format) {
-    return date;
-  }
+    if (!format) {
+      return date;
+    }
 
-  const useUtc = format.endsWith('Z') || format.endsWith('\'Z\'');
+    const useUtc = format.endsWith('Z') || format.endsWith('\'Z\'');
 
-  for (charIndex = 0; charIndex < format.length; charIndex += 1) {
-    char = format[charIndex];
-    formatter = LDML_FORMATTERS[char];
-    isCurrentCharEqualsNext = char === format[charIndex + 1];
-    charCount += 1;
+    for (charIndex = 0; charIndex < format.length; charIndex += 1) {
+      char = format[charIndex];
+      formatter = LDML_FORMATTERS[char];
+      isCurrentCharEqualsNext = char === format[charIndex + 1];
+      charCount += 1;
 
-    if (!isCurrentCharEqualsNext) {
-      if (formatter && !isEscaping) {
-        result += formatter(date, charCount, useUtc, dateParts);
+      if (!isCurrentCharEqualsNext) {
+        if (formatter && !isEscaping) {
+          result += formatter(date, charCount, useUtc, dateParts);
+        }
+        charCount = 0;
       }
-      charCount = 0;
-    }
 
-    if (char === separator && !isCurrentCharEqualsNext) {
-      isEscaping = !isEscaping;
-    } else if (isEscaping || !formatter) {
-      result += char;
+      if (char === separator && !isCurrentCharEqualsNext) {
+        isEscaping = !isEscaping;
+      } else if (isEscaping || !formatter) {
+        result += char;
+      }
+      if (char === separator && isCurrentCharEqualsNext) {
+        charIndex += 1;
+      }
     }
-    if (char === separator && isCurrentCharEqualsNext) {
-      charIndex += 1;
-    }
-  }
-  return result;
-};
+    return result;
+  };
+}

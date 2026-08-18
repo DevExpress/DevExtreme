@@ -127,7 +127,7 @@ if (Globalize?.formatDate) {
       return Globalize.locale().main(`dates/calendars/gregorian/${path}`);
     },
 
-    getPeriodNames(format: Format, type: string): string[] {
+    getPeriodNames(format?: Format, type?: string): string[] {
       // eslint-disable-next-line no-param-reassign
       format = format || 'wide';
       // eslint-disable-next-line no-param-reassign
@@ -137,7 +137,7 @@ if (Globalize?.formatDate) {
       return [json.am, json.pm];
     },
 
-    getMonthNames(format: Format, type: string): string[] {
+    getMonthNames(format: Format, type?: string): string[] {
       const months: Record<string, string> = Globalize.locale().main(`dates/calendars/gregorian/months/${type === 'format' ? type : 'stand-alone'}/${format || 'wide'}`);
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -228,7 +228,7 @@ if (Globalize?.formatDate) {
       return this.removeRtlMarks(formatter(date));
     },
 
-    parse(text: string, format: FormatObject | DateParser | string): Date | null | undefined {
+    parse(text: string, format?: FormatObject | DateParser | string): Date | null | undefined {
       if (!text) {
         return undefined;
       }

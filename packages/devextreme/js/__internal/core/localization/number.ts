@@ -62,8 +62,8 @@ export interface FormatterConfig {
   unlimitedIntegerDigits?: boolean;
 }
 
-const numberLocalization = dependencyInjector({
-  engine() {
+const numberLocalizationBase = {
+  engine(): string {
     return 'base';
   },
   numericFormats: NUMERIC_FORMATS,
@@ -267,7 +267,10 @@ const numberLocalization = dependencyInjector({
     return this.format(1.2, { type: 'fixedPoint', precision: 1 })[1] as string;
   },
 
-  convertDigits(value: string | number, toStandard?: boolean): string | number {
+  convertDigits<TValue extends string | number | Date | null | undefined>(
+    value: TValue,
+    toStandard?: boolean,
+  ): TValue {
     const digits: string = this.format(90, 'decimal');
 
     if (typeof value !== 'string' || digits[1] === '0') {
@@ -280,7 +283,7 @@ const numberLocalization = dependencyInjector({
     const regExp = new RegExp(`[${fromFirstDigit}-${fromLastDigit}]`, 'g');
 
     // eslint-disable-next-line @stylistic/max-len
-    return value.replace(regExp, (char) => String.fromCharCode(char.charCodeAt(0) + (toFirstDigit.charCodeAt(0) - fromFirstDigit.charCodeAt(0))));
+    return value.replace(regExp, (char) => String.fromCharCode(char.charCodeAt(0) + (toFirstDigit.charCodeAt(0) - fromFirstDigit.charCodeAt(0)))) as TValue;
   },
 
   getNegativeEtalonRegExp(format: FormatConfig | string): RegExp {
@@ -298,7 +301,7 @@ const numberLocalization = dependencyInjector({
     return new RegExp(negativeEtalon, 'g');
   },
 
-  getSign(text: string, format: FormatConfig | string): 1 | -1 {
+  getSign(text: string, format?: FormatConfig | string): 1 | -1 {
     if (!format) {
       if (text.replace(/[^0-9-]/g, '').startsWith('-')) {
         return -1;
@@ -357,7 +360,7 @@ const numberLocalization = dependencyInjector({
     return this._formatNumber(value, numberConfig, format) as string;
   },
 
-  parse(text: string, format: FormatConfig | string): number | null | undefined {
+  parse(text: string, format?: FormatConfig | string): number | null | undefined {
     if (!text) {
       return undefined;
     }
@@ -437,7 +440,20 @@ const numberLocalization = dependencyInjector({
     }
     return result;
   },
-});
+};
+
+type NumberLocalizationContract = Omit<typeof numberLocalizationBase, 'format'>
+  & typeof currencyLocalization
+  & {
+    format: {
+      (value: number, format?: LocalizationFormat): string;
+      (value: string | number, format?: LocalizationFormat): string | number;
+    };
+  };
+
+const numberLocalization = dependencyInjector(
+  numberLocalizationBase as NumberLocalizationContract,
+);
 
 numberLocalization.inject(currencyLocalization);
 
