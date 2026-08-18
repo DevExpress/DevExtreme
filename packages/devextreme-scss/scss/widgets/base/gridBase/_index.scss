@@ -1,11 +1,8 @@
-@use 'sass:math';
+@use "sass:math";
 @use "../mixins" as *;
-@use 'variables' as *;
-@use 'layout/cell' as *;
+@use "variables" as *;
+@use "layout/cell" as *;
 @use "layout/aiChat" as *;
-
-// adduse
-
 
 .dx-gridbase-container {
   display: flex;
@@ -127,7 +124,7 @@
         }
 
         &.dx-header-filter::after {
-          content: '';
+          content: "";
           position: absolute;
           top: 0;
           bottom: 0;
@@ -422,7 +419,7 @@
   .dx-cell-modified,
   .dx-#{$widget-name}-invalid {
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       border: 2px solid transparent;
       top: 0;
@@ -453,7 +450,7 @@
     &.dx-editor-inline-block:not(.dx-command-select) {
       &::before {
         display: inline-block;
-        content: '\200b';
+        content: "\200b";
         vertical-align: middle;
         padding-top: $grid-cell-padding;
         padding-bottom: $grid-cell-padding;
@@ -635,7 +632,7 @@
         left: 0;
         bottom: 0;
         right: 0;
-        content: '';
+        content: "";
       }
     }
 
@@ -751,7 +748,6 @@
         height: auto;
       }
     }
-
 
     &:focus {
       outline: 0;
@@ -935,7 +931,6 @@
         }
       }
     }
-
 
     .dx-#{$widget-name}-filter-row {
       .dx-editor-cell .dx-editor-with-menu {

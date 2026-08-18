@@ -1,7 +1,6 @@
 @use "./mixins" as *;
 @use "./popover/mixins" as *;
 
-// adduse
 $slider-tooltip-content-height: 28px;
 $slider-tooltip-arrow-height: 7px;
 
@@ -26,7 +25,7 @@ $slider-tooltip-arrow-height: 7px;
   &::before {
     display: inline-block;
     height: 100%;
-    content: '';
+    content: "";
     vertical-align: middle;
   }
 

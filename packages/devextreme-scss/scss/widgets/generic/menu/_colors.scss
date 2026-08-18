@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 /**
 * $name 40. Popup background color
@@ -147,4 +144,3 @@ $menu-container-shadow-color: null !default;
   $menu-item-focused-selected-bg: color.change($base-focus-bg, $alpha: 0.7) !default;
   $menu-container-shadow-color: color.change($base-shadow-color, $alpha: 0.15) !default;
 }
-

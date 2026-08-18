@@ -1,7 +1,5 @@
 @use "../sizes" as *;
 
-// adduse
-
 $generic-badge-padding: null !default;
 
 @if $size == "default" {

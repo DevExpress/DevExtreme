@@ -2,8 +2,6 @@
 @use "sass:math";
 @use "sass:selector";
 
-// adduse
-
 $list-style: decimal lower-alpha lower-roman;
 $list-style-width: 1.2em;
 $list-style-margin: 0.3em;
@@ -219,15 +217,15 @@ $transparent-border: 1px solid transparent;
     position: relative;
 
     &[data-list="bullet"]::before {
-      content: '\2022';
+      content: "\2022";
     }
 
     &[data-list="checked"]::before {
-      content: '\2611';
+      content: "\2611";
     }
 
     &[data-list="unchecked"]::before {
-      content: '\2610';
+      content: "\2610";
     }
 
     &::before {

@@ -1,9 +1,6 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../color" as extcolor;
-
-// adduse
 
 /**
 * $name 10. Border color
@@ -88,4 +85,3 @@ $agenda-appointment-recurrence-icon-color: $base-inverted-text-color !default;
 $agenda-appointment-hover-bg: $base-hover-bg !default;
 $agenda-appointment-active-bg: color.change(#000, $alpha: 0.08) !default;
 $agenda-appointment-text-color: $base-text-color !default;
-

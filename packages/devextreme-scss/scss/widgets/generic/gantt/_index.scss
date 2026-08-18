@@ -2,15 +2,11 @@
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/gantt";
 @use "../../base/gantt/mixins" as *;
 @use "../gridBase/colors" as *;
 @use "../toolbar/sizes" as *;
-
-// adduse
 @use "../splitterBar";
-
 
 $gantt-successor-background-color: white;
 
@@ -163,7 +159,7 @@ $gantt-successor-background-color: white;
         &:not(.dx-gantt-smallTask)::after,
         &:not(.dx-gantt-smallTask):not(.dx-gantt-noPrg) .dx-gantt-tPrg::before,
         &:not(.dx-gantt-smallTask).dx-gantt-cmpl .dx-gantt-tPrg::after {
-          content: '';
+          content: "";
           position: absolute;
           bottom: -8px;
           border-width: 4px;

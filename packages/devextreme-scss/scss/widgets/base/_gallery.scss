@@ -1,6 +1,5 @@
 @use "./mixins" as *;
 
-// adduse
 .dx-gallery {
   width: 100%;
   height: 100%;
@@ -107,7 +106,6 @@
   height: 10px;
   cursor: pointer;
 }
-
 
 .dx-state-disabled {
   .dx-gallery-nav-button-prev,

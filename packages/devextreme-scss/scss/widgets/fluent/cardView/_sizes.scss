@@ -1,17 +1,15 @@
 @use "../sizes" as *;
-@use '../../base/cardView/variables' as *;
-@use '../../base/cardView/header_panel/variables' as *;
-@use '../../base/cardView/header_panel/item/variables' as *;
-@use '../../base/cardView/content_view/content/card/variables' as *;
-@use '../../base/cardView/content_view/content/card/header/variables' as *;
-@use '../../base/cardView/content_view/content/card/cover/variables' as *;
-@use '../../base/cardView/content_view/content/card/content/variables' as *;
-@use '../../base/cardView/content_view/content/variables' as *;
-@use '../../base/cardView/content_view/no_data/variables' as *;
-@use '../../base/cardView/column_chooser/variables' as *;
-@use '../../base/cardView/filter_panel/variables' as *;
-
-// adduse
+@use "../../base/cardView/variables" as *;
+@use "../../base/cardView/header_panel/variables" as *;
+@use "../../base/cardView/header_panel/item/variables" as *;
+@use "../../base/cardView/content_view/content/card/variables" as *;
+@use "../../base/cardView/content_view/content/card/header/variables" as *;
+@use "../../base/cardView/content_view/content/card/cover/variables" as *;
+@use "../../base/cardView/content_view/content/card/content/variables" as *;
+@use "../../base/cardView/content_view/content/variables" as *;
+@use "../../base/cardView/content_view/no_data/variables" as *;
+@use "../../base/cardView/column_chooser/variables" as *;
+@use "../../base/cardView/filter_panel/variables" as *;
 
 // #region COMMON SETTINGS
 
@@ -333,7 +331,7 @@ $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !defau
 
   // Search highlight
   $cardview-fluent-card__content__field-value--highlighted-border-radius: 5px !default;
-  $cardview-fluent-card__content__field-value--highlighted-border-padding: .125em 0.2em !default;
+  $cardview-fluent-card__content__field-value--highlighted-border-padding: 0.125em 0.2em !default;
   $cardview-fluent-card__content__field-value--highlighted-text-weight: 500 !default;
 
   // Column chooser
@@ -415,7 +413,7 @@ $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !defau
 
   // Search highlight
   $cardview-fluent-card__content__field-value--highlighted-border-radius: 5px !default;
-  $cardview-fluent-card__content__field-value--highlighted-border-padding: .125em 0.2em !default;
+  $cardview-fluent-card__content__field-value--highlighted-border-padding: 0.125em 0.2em !default;
   $cardview-fluent-card__content__field-value--highlighted-text-weight: 500 !default;
 
   // Column chooser

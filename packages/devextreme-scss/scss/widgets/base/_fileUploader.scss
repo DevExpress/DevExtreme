@@ -1,8 +1,5 @@
 @use "./mixins" as *;
 
-// adduse
-
-
 .dx-fileuploader {
   &.dx-state-disabled .dx-fileuploader-input {
     display: none;
@@ -152,7 +149,7 @@
   cursor: default;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -50%;
     overflow: hidden;

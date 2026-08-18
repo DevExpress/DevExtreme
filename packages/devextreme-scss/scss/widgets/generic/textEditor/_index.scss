@@ -13,8 +13,6 @@
 @use "../../base/textEditor/mixins" as *;
 @use "../colorBox/sizes" as *;
 
-// adduse
-
 $generic-texteditor-border-width: $generic-base-border-width;
 $generic-texteditor-input-padding:
   $generic-base-inline-borderedwidget-top-padding
