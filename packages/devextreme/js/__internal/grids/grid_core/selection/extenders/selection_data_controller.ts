@@ -15,11 +15,11 @@ export const dataSelectionExtenderMixin = (
   private _selectionController!: SelectionController;
 
   public init(): void {
-    const isDeferredMode = this.option('selection.deferred');
-
     this._selectionController = this.getController('selection');
+
     super.init();
 
+    const isDeferredMode = this.option('selection.deferred');
     if (isDeferredMode) {
       this._selectionController._updateCheckboxesState({
         selectionFilter: this.option('selectionFilter'),
