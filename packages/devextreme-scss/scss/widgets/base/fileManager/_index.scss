@@ -1,8 +1,5 @@
 @use "../mixins" as *;
 
-// adduse
-
-
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $filemanager-root-height: 500px !default;
 $filemanager-root-border: 1px solid !default;

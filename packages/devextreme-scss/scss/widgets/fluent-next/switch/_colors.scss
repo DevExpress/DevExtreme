@@ -1,7 +1,5 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 $switch-on-border-rest: ds.$color-surface-primary-compound-rest !default;
 $switch-on-border-hovered: ds.$color-surface-primary-compound-hovered !default;
 $switch-on-border-focused: ds.$color-surface-primary-default-active !default;

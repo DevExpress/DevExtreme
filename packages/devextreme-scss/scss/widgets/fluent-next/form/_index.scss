@@ -14,10 +14,7 @@
   $form-field-item-label-location-right-padding-inline-start: $form-field-item-label-location-right-padding-inline-start,
 );
 @use "../../base/icon_fonts" as *;
-
-// adduse
 @use "../scrollable";
-
 
 .dx-form-group-caption {
   font-size: $form-group-caption-font-size;
