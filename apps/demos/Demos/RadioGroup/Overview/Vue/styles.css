@@ -1,17 +1,17 @@
 .low .dx-radiobutton-checked .dx-radiobutton-icon .dx-radiobutton-icon-dot {
-  background: gray;
+  background: var(--dxds-color-content-neutral-deep-rest, gray);
 }
 
 .normal .dx-radiobutton-checked .dx-radiobutton-icon .dx-radiobutton-icon-dot {
-  background: green;
+  background: var(--dxds-color-content-success-default-rest, green);
 }
 
 .urgent .dx-radiobutton-checked .dx-radiobutton-icon .dx-radiobutton-icon-dot {
-  background: orange;
+  background: var(--dxds-color-content-warning-default-rest, orange);
 }
 
 .high .dx-radiobutton-checked .dx-radiobutton-icon .dx-radiobutton-icon-dot {
-  background: red;
+  background: var(--dxds-color-content-danger-default-rest, red);
 }
 
 #radio-group-with-selection {

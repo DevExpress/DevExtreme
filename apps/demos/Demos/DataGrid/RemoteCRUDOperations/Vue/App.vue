@@ -181,7 +181,7 @@ const clearRequests = () => {
 .options {
   padding: 20px;
   margin-top: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
 }
 
 .caption {
@@ -233,7 +233,7 @@ const clearRequests = () => {
 
 #requests ul li {
   padding: 7px 0;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--dxds-color-border-neutral-default-rest, #ddd);
 }
 
 #requests ul li:last-child {

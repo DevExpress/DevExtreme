@@ -14,18 +14,18 @@
 }
 
 .dx-tile {
-  border: 1px solid #999;
+  border: 1px solid var(--dxds-color-border-neutral-default-rest, #999);
 }
 
 .dx-tile.dx-state-hover {
-  border-color: #eee;
+  border-color: var(--dxds-color-surface-utility-gray-default-rest, #eee);
 }
 
 .dx-tile-content .price {
   font-size: 12px;
   position: absolute;
-  background-color: black;
-  color: white;
+  background-color: var(--dxds-color-surface-utility-gray-default-rest, black);
+  color: var(--dxds-color-content-neutral-default-on-surface-rest, white);
   opacity: 0.6;
   padding: 2px;
   left: 9px;

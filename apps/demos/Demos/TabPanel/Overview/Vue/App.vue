@@ -95,7 +95,7 @@ const iconPosition = ref(iconPositions[0]);
 }
 
 .dx-theme-material .widget-container {
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
 }
 
 .dx-tabpanel-tabs-position-left .dx-tabpanel-container,
@@ -119,7 +119,7 @@ const iconPosition = ref(iconPositions[0]);
   box-sizing: border-box;
   width: 272px;
   padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
 }
 
 .caption {

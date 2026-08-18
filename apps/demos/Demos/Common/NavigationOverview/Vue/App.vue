@@ -111,8 +111,7 @@ function changeSelection({ itemData }: DxTreeViewTypes.ItemSelectionChangedEvent
   display: inline-block;
   width: 180px;
   padding: 0 10px 10px;
-  background-color: rgba(191, 191, 191, 0.15);
-  box-shadow: -5px 0 14px -8px rgba(0, 0, 0, 0.25) inset;
+  background-color: var(--dx-color-options-panel-bg);
 }
 
 .right-content {
@@ -159,7 +158,7 @@ sup {
 .stats > div {
   display: table-cell;
   text-align: center;
-  border: 1px solid rgba(191, 191, 191, 0.25);
+  border: 1px solid var(--dxds-color-border-neutral-subdued-rest, rgba(191, 191, 191, 0.25));
   padding: 20px 0 25px;
   width: 33%;
 }
@@ -203,7 +202,7 @@ sup {
 #tabpanel .stats {
   width: 398px;
   margin-top: 20px;
-  border-top: 1px solid rgba(191, 191, 191, 0.25);
+  border-top: 1px solid var(--dxds-color-border-neutral-subdued-rest, rgba(191, 191, 191, 0.25));
 }
 
 #tabpanel .stats > div {
@@ -223,7 +222,7 @@ sup {
 .flag {
   width: 172px;
   max-height: 122px;
-  border: 1px solid rgba(191, 191, 191, 0.25);
+  border: 1px solid var(--dxds-color-border-neutral-subdued-rest, rgba(191, 191, 191, 0.25));
   float: left;
   margin: 0 30px 10px 0;
 }

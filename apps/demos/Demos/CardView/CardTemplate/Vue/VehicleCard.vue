@@ -70,7 +70,6 @@ defineEmits(['show-info']);
       justify-content: center;
       aspect-ratio: 16 / 9;
       width: 100%;
-      background-color: #fff;
   }
 
   .vehicle__img {

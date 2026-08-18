@@ -7,7 +7,7 @@
   height: 64px;
   width: 64px;
   float: left;
-  border: 1px solid #eee;
+  border: 1px solid var(--dxds-color-border-neutral-default-rest, #eee);
   border-radius: 50%;
   overflow: hidden;
   margin-right: 20px;
@@ -32,7 +32,7 @@
 
 .options {
   padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
   position: absolute;
   right: 0;
   top: 0;

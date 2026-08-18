@@ -28,11 +28,14 @@ const styleObject = ref({ backgroundColor: props.itemData.color });
     text-align: center;
     float: left;
     margin-right: 12px;
-    color: white;
     width: 18px;
     height: 18px;
     font-size: 19.5px;
     border-radius: 18px;
     margin-top: 2px;
+  }
+
+  .dx-scheduler-appointment-title {
+    color: var(--dxds-color-content-neutral-default-static-dark-rest, unset);
   }
 </style>

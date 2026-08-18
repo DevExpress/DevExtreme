@@ -240,7 +240,7 @@ function getTopVisibleNode(component: DxSortableInstance) {
   padding: 20px 30px;
   font-size: 115%;
   font-weight: bold;
-  border-right: 1px solid rgba(165, 165, 165, 0.4);
+  border-right: 1px solid var(--dxds-color-border-neutral-subdued-rest, rgba(165, 165, 165, 0.4));
   height: 100%;
 }
 
