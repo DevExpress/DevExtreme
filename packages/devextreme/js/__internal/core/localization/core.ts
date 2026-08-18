@@ -1,6 +1,6 @@
 import parentLocales from '@ts/core/localization/cldr-data/parent_locales';
 import getParentLocale from '@ts/core/localization/parentLocale';
-import { injector as dependencyInjector } from '@ts/core/utils/m_dependency_injector';
+import { injector as dependencyInjector } from '@ts/core/utils/dependency_injector';
 
 const DEFAULT_LOCALE = 'en';
 
