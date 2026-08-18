@@ -1,6 +1,4 @@
-@use "sass:color";
 @use "sass:string" as string;
-@use "../../../colors" as *;
 @use "../../../sizes" as *;
 @use "../../../button/colors" as *;
 @use "../../../button/mixins" as *;
@@ -10,13 +8,10 @@
 @use "../../variables/sizes" as *;
 @use "../../mixins" as *;
 @use "../../../common/sizes" as *;
-
-// adduse
 @use "../../../scrollable";
 @use "../../../badge";
 @use "styling-mode/primary" as *;
 @use "styling-mode/secondary" as *;
-
 
 .dx-tab {
   gap: $fluent-tabs-item-gap;

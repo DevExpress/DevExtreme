@@ -1,7 +1,5 @@
 @use "../sizes" as *;
 
-// adduse
-
 $fluent-xl-font-size: null !default;
 $fluent-l-font-size: null !default;
 $fluent-m-font-size: null !default;
@@ -57,4 +55,3 @@ $fluent-h6-font-size: null !default;
   --dx-font-size-sm: #{$fluent-s-font-size};
   --dx-font-size-xs: #{$fluent-xs-font-size};
 }
-

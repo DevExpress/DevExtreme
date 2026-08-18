@@ -1,15 +1,11 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 /**
 * $name 80. Search icon color
 * $type color
 */
 $textbox-search-icon-color: null !default;
-
 
 @if $color == "carmine" {
   $textbox-search-icon-color: color.adjust($base-icon-color, $lightness: 3%, $space: hsl) !default;
@@ -42,4 +38,3 @@ $textbox-search-icon-color: null !default;
 @if $color == "softblue" {
   $textbox-search-icon-color: $base-icon-color !default;
 }
-
