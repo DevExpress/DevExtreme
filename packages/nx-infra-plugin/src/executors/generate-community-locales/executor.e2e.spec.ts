@@ -120,6 +120,22 @@ describe('GenerateCommunityLocalesExecutor E2E', () => {
     expect(enContent).toBe(EN_JSON);
   });
 
+  it('fails when the default locale file is malformed', async () => {
+    await writeFileText(path.join(fixture.messagesDir, 'en.json'), '{ "en": { ');
+
+    const result = await executor({}, context);
+
+    expect(result.success).toBe(false);
+  });
+
+  it('fails when the default locale file holds another locale', async () => {
+    await writeFileText(path.join(fixture.messagesDir, 'en.json'), EN_JSON.replace('"en"', '"es"'));
+
+    const result = await executor({}, context);
+
+    expect(result.success).toBe(false);
+  });
+
   it('fails when the messages directory is missing', async () => {
     const result = await executor({ messagesDir: './js/localization/does-not-exist' }, context);
 

@@ -15,6 +15,8 @@ const ERROR_MESSAGES = {
   DEFAULT_LOCALE_NOT_FOUND: (filePath: string) => `Default locale file not found: ${filePath}`,
   INVALID_OUTPUT: (filePath: string, reason: string) =>
     `Normalized content for ${filePath} is not valid JSON: ${reason}`,
+  DEFAULT_LOCALE_KEY_MISSING: (filePath: string, locale: string) =>
+    `Default locale file ${filePath} has no "${locale}" dictionary`,
 } as const;
 
 // A single `"key": "value"` regexp
@@ -85,6 +87,12 @@ export default createExecutor<
     }
 
     const defaultFile = await readFileText(defaultFilePath);
+    const defaultDictionary = (JSON.parse(defaultFile) as Record<string, LocaleDictionary>)[
+      defaultLocale
+    ];
+    if (!defaultDictionary) {
+      throw new Error(ERROR_MESSAGES.DEFAULT_LOCALE_KEY_MISSING(defaultFilePath, defaultLocale));
+    }
 
     const localeFiles = await discoverFiles({
       cwd: messagesDir,
