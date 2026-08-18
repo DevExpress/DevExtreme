@@ -70,11 +70,11 @@ const customizeTooltip = ({ value, target }: any) => ({
 }
 
 .demo-table tr:nth-child(2) td {
-  border: 1px solid var(--dxds-color-border-neutral-default-rest, #c2c2c2);
+  border-top: 1px solid var(--dxds-color-border-neutral-default-rest, #c2c2c2);
 }
 
 .demo-table td:first-of-type {
-  border: 1px solid var(--dxds-color-border-neutral-default-rest, #c2c2c2);
+  border-left: 1px solid var(--dxds-color-border-neutral-default-rest, #c2c2c2);
 }
 
 .demo-table .bullet {

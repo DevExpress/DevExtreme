@@ -191,7 +191,7 @@ watch(scrollByContent, enforceWidthConstraint);
 }
 
 .dx-viewport:not(.dx-theme-generic) .dx-tabs-horizontal {
-  border-inline-end: 1px solid var(--dxds-color-border-neutral-subdued-rest, rgb(225, 225, 225, 0.4));
+  border-block-end: 1px solid var(--dxds-color-border-neutral-subdued-rest, rgb(225, 225, 225, 0.4));
 }
 
 .dx-viewport:not(.dx-theme-generic) .dx-tabs-vertical {

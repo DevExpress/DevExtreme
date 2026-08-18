@@ -142,6 +142,6 @@ const screen = ((width: number) => ((width < 700) ? 'sm' : 'lg')) as unknown as 
   font-size: 20px;
   padding-top: 10px;
   text-align: center;
-  color: var(--dxds-color-content-neutral-default-on-surface-rest, #000);
+  color: var(--dxds-color-content-neutral-default-rest, #000);
 }
 </style>
