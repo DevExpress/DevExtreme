@@ -158,8 +158,6 @@ jobs:
     steps:
       - name: Get sources
         uses: actions/checkout@v6
-        with:
-          ref: ${{ inputs.branch || github.ref }}
 
       - name: Download packages
         uses: actions/download-artifact@v8

@@ -3,7 +3,6 @@ name: Publishing to GitHub Packages (scheduler)
 on:
   schedule:
     - cron: '00 18 * * *'
-  pull_request:
 
 jobs:
   publish:
