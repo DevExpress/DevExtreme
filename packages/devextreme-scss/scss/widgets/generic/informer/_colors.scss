@@ -18,14 +18,14 @@ $informer-info-background-color: null !default;
   $informer-error-color: extcolor.adjust-if-not-achromatic($color: $base-danger, $hue: 2deg, $saturation: -16.93%, $lightness: -6.08%);
   $informer-error-background-color: rgba(212, 63, 58, 0.1);
   $informer-info-color: color.adjust($base-text-color, $lightness: -12.94%, $space: hsl);
-  $informer-info-background-color: color.adjust($base-text-color, $lightness: -68.63%, $space: hsl);;
+  $informer-info-background-color: color.adjust($base-text-color, $lightness: -68.63%, $space: hsl);
 }
 
 @if $color == "dark" {
   $informer-error-color: $base-danger;
   $informer-error-background-color: rgba(212, 63, 58, 0.1);
   $informer-info-color: $base-text-color;
-  $informer-info-background-color: color.adjust($base-text-color, $lightness: -55.69%, $space: hsl)
+  $informer-info-background-color: color.adjust($base-text-color, $lightness: -55.69%, $space: hsl);
 }
 
 @if $color == "darkmoon" {
@@ -46,7 +46,7 @@ $informer-info-background-color: null !default;
   $informer-error-color: extcolor.adjust-if-not-achromatic($color: $base-danger, $hue: -351deg, $saturation: -27.05%, $lightness: -4.90%);
   $informer-error-background-color: extcolor.adjust-if-not-achromatic($color: $base-danger, $hue: -348deg, $saturation: -26.83%, $lightness: 33.73%);
   $informer-info-color: extcolor.adjust-if-not-achromatic($color: $base-text-color, $hue: -191deg, $saturation: -32.77%, $lightness: -3.33%);
-  $informer-info-background-color: extcolor.adjust-if-not-achromatic($color: $base-text-color, $hue: -191deg, $saturation: -32.77%, $lightness: 68.82%)
+  $informer-info-background-color: extcolor.adjust-if-not-achromatic($color: $base-text-color, $hue: -191deg, $saturation: -32.77%, $lightness: 68.82%);
 }
 
 @if $color == "light" {

@@ -4,7 +4,7 @@
 $fluent-datagrid-grouppanel-item-bg: null !default;
 
 @if $mode == "light" {
-  @if $color == "blue"{
+  @if $color == "blue" {
     $fluent-datagrid-grouppanel-item-bg: color.adjust($base-bg, $lightness: -5.88%, $space: hsl) !default;
   }
 

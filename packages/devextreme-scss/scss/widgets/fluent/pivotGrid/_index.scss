@@ -69,15 +69,15 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
   }
 
   .dx-sort-up {
-    @include dx-icon-sizing($fluent-button-icon-size)
+    @include dx-icon-sizing($fluent-button-icon-size);
   }
 
   .dx-sort-down {
-    @include dx-icon-sizing($fluent-button-icon-size)
+    @include dx-icon-sizing($fluent-button-icon-size);
   }
 
   .dx-header-filter {
-    @include dx-icon-sizing($fluent-button-icon-size)
+    @include dx-icon-sizing($fluent-button-icon-size);
   }
 }
 

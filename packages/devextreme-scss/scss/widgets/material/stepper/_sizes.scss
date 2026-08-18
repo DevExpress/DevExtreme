@@ -11,7 +11,7 @@ $stepper-step-optional-mark-font-size: $material-xs-font-size !default;
 $stepper-step-icon-size: $material-button-icon-size !default;
 
 $stepper-step-selected-font-weight: 500 !default;
-$stepper-step-transition-duration: .2s !default;
+$stepper-step-transition-duration: 0.2s !default;
 
 @if $size == "default" {
   $stepper-padding: 12px !default;

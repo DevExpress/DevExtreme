@@ -39,7 +39,7 @@ $pivotgrid-position-indicator-color: gray !default;
 $pivotgrid-chevron-icon-color: $pivotgrid-area-color !default;
 
 @if $mode == "light" {
-  @if $color == "blue"{
+  @if $color == "blue" {
     $pivotgrid-grandtotalcolor: $base-hover-bg !default;
     $pivotgrid-field-area-box-background-color: color.adjust($base-bg, $lightness: -5.88%, $space: hsl) !default;
   }
