@@ -1,7 +1,5 @@
-@use "sass:color";
 @use "sass:selector";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../common/sizes" as *;
@@ -9,9 +7,6 @@
 @use "../button/colors" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/dropDownEditor";
-
-// adduse
-
 
 $generic-dropdowneditor-container-button-size: $generic-base-inline-borderedwidget-inner-size;
 $generic-dropdowneditor-button-offset: $generic-base-border-width;

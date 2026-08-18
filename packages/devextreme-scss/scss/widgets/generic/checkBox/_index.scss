@@ -1,14 +1,8 @@
-@use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/checkBox";
 @use "../../base/checkBox/mixins" as *;
-
-// adduse
-
 
 $generic-checkbox-disable-opacity: 0.4;
 

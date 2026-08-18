@@ -1,9 +1,6 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../overlay/colors" as *;
-
-// adduse
 
 /**
 * $name 10. Overlay background
@@ -72,4 +69,3 @@ $colorview-label-color: $base-label-color !default;
   $colorview-handle-color: $base-bg !default;
   $colorview-handle-border-color: color.change($base-inverted-bg, $alpha: 0.2) !default;
 }
-

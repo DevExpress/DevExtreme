@@ -1,10 +1,6 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../gridBase/colors" as *;
-
-// adduse
-
 
 $treelist-spin-icon-color: null !default;
 $treelist-selection-spin-icon-color: null !default;
@@ -49,4 +45,3 @@ $treelist-selection-spin-icon-color: null !default;
   $treelist-spin-icon-color: $datagrid-spin-icon-color !default;
   $treelist-selection-spin-icon-color: $base-icon-color !default;
 }
-

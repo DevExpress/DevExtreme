@@ -1,10 +1,6 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../overlay/colors" as *;
-
-// adduse
-
 
 $speed-dial-action-bg: null !default;
 $speed-dial-action-hover-bg: null !default;
@@ -26,4 +22,3 @@ $speed-dial-action-shading-color: $overlay-shader-bg !default;
   $speed-dial-action-hover-bg: color.adjust($speed-dial-action-bg, $lightness: 8%, $space: hsl) !default;
   $speed-dial-action-active-bg: color.adjust($speed-dial-action-bg, $lightness: 36%, $space: hsl) !default;
 }
-

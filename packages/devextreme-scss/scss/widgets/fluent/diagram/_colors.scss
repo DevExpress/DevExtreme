@@ -1,10 +1,7 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../button/colors" as *;
 @use "../loadIndicator/colors" as *;
-
-// adduse
 
 $diagram-border-color: $base-border-color !default;
 $diagram-toolbar-border-color: $base-border-color !default;
@@ -28,4 +25,3 @@ $diagram-toolbox-shape-text-opacity: null !default;
   $diagram-image-icon-accent-color: $base-accent !default;
   $diagram-toolbox-shape-text-opacity: 0.5 !default;
 }
-

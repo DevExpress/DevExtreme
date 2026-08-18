@@ -11,8 +11,6 @@
 @use "../checkBox/colors" as *;
 @use "../../base/list";
 @use "../../base/list/mixins" as *;
-
-// adduse
 @use "../badge";
 
 $generic-list-border: $generic-list-border-width solid;

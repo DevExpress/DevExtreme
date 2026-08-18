@@ -1,8 +1,5 @@
 @use "./mixins" as *;
 
-// adduse
-
-
 .dx-fileuploader {
   &.dx-state-disabled .dx-fileuploader-input {
     display: none;

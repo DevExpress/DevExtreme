@@ -13,8 +13,6 @@
 @use "../../base/textEditor/mixins" as *;
 @use "../colorBox/sizes" as *;
 
-// adduse
-
 $material-base-standard-texteditor-input-horizontal-padding: 0;
 $material-texteditor-icon-container-size: $material-base-icon-size - 2px;
 $material-texteditor-invalid-badge-size: $material-invalid-badge-size + 2 * $material-invalid-badge-horizontal-padding;

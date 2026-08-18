@@ -1,9 +1,5 @@
-@use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../overlay/colors" as *;
-
-// adduse
 
 /**
 * $name 10. Text color
@@ -112,4 +108,3 @@ $toast-success-icon-image-bg: null !default;
   $toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/error.png') !default;
   $toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/success.png') !default;
 }
-

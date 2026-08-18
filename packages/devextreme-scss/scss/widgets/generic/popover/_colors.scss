@@ -1,10 +1,5 @@
-@use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../overlay/colors" as *;
-
-// adduse
-
 
 $popover-arrow-bg: null !default;
 
@@ -48,4 +43,3 @@ $popover-arrow-bg: null !default;
 
   $popover-arrow-bg: $overlay-content-bg !default;
 }
-

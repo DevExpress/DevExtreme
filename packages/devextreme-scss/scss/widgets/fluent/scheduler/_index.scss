@@ -1,5 +1,4 @@
 @use "sass:math";
-@use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
@@ -53,8 +52,6 @@
 @use "../button/colors" as *;
 @use "../button/mixins" as *;
 @use "../tooltip/colors" as *;
-
-// adduse
 @use "../recurrenceEditor" as *;
 @use "../scrollable";
 

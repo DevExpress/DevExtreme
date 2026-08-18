@@ -1,9 +1,6 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../color" as extcolor;
-
-// adduse
 
 /**
 * $name 140. Badge text color
@@ -50,4 +47,3 @@ $badge-bg: null !default;
 @if $color == "softblue" {
   $badge-bg: extcolor.difference($base-accent, #171717) !default;
 }
-

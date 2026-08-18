@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 /**
 * $name 80. Search icon color
@@ -42,4 +39,3 @@ $textbox-search-icon-color: null !default;
 @if $color == "softblue" {
   $textbox-search-icon-color: $base-icon-color !default;
 }
-

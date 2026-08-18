@@ -1,8 +1,5 @@
 @use "../mixins" as *;
 
-// adduse
-
-
 .dx-calendar {
   @include user-select(none);
 

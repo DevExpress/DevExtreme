@@ -1,10 +1,7 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../button/colors" as *;
 @use "../color" as extcolor;
-
-// adduse
 
 $datagrid-base-color: $base-text-color !default;
 

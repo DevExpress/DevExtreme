@@ -4,8 +4,6 @@
 @use './column_chooser';
 @use './variables' as *;
 
-// adduse
-
 .dx-cardview {
   padding: $cardview-padding;
   background-color: $cardview-bg-color;

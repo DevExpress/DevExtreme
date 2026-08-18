@@ -4,8 +4,6 @@
 @use "../overlay/colors" as *;
 @use "../color" as extcolor;
 
-// adduse
-
 /**
 * $name 10. Text color
 * $type color
@@ -26,4 +24,3 @@ $tooltip-border-radius: $base-border-radius !default;
 @if $mode == "dark" {
   $tooltip-bg: color.adjust($base-bg, $lightness: 60%, $space: hsl) !default;
 }
-

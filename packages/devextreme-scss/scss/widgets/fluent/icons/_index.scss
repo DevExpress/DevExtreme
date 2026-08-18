@@ -1,13 +1,8 @@
-@use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
-
-// adduse
-
-
 @include dx-font-icons("dxiconsfluent", "DevExtreme Fluent Icons", "devextreme_fluent_icons", optimizeLegibility);
 
 .dx-icon {

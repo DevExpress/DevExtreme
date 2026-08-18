@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 /**
 * $name 50. Text color
@@ -112,4 +109,3 @@ $accordion-item-hover-bg: null !default;
   $accordion-title-active-bg: color.change(color.adjust($accordion-background-color, $lightness: -62.5%, $space: hsl), $alpha: 0.2) !default;
   $accordion-item-hover-bg: $base-hover-bg !default;
 }
-

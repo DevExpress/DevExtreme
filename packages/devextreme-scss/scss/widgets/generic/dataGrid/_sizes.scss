@@ -1,8 +1,6 @@
 @use "../sizes" as *;
 @use '../../base/dataGrid/variables' as *;
 
-// adduse
-
 $generic-datagrid-cell-padding: null !default;
 
 @if $size == "default" {

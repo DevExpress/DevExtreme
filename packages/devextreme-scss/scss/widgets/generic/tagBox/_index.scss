@@ -1,15 +1,11 @@
-@use "sass:color";
 @use "sass:selector";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../textEditor" as *;
 @use "../common/sizes" as *;
 @use "../../base/tagBox";
-
-// adduse
 
 .dx-tagbox:not(.dx-texteditor-empty) {
   .dx-texteditor-input {

@@ -1,5 +1,4 @@
 @use "sass:math";
-@use "sass:color";
 @use "sass:selector";
 @use "colors" as *;
 @use "../colors" as *;
@@ -21,8 +20,6 @@
 @use "../button/colors" as *;
 @use "../validation/colors" as *;
 @use "../typography/sizes" as *;
-
-// adduse
 @use "../scrollable";
 @use "../overlay";
 @use "../pagination";

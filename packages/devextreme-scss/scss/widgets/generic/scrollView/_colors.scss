@@ -1,9 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
-
 
 $scrollview-shadow-color: null !default;
 $scrollview-pull-down-bg: null !default;
@@ -64,4 +60,3 @@ $scrollview-pull-down-bg: null !default;
   $scrollview-shadow-color: color.change($base-shadow-color, $alpha: 0.37) !default;
   $scrollview-pull-down-bg: data-uri('images/widgets/generic/color-schemes/light/pulldown.png') 0 0 no-repeat !default;
 }
-

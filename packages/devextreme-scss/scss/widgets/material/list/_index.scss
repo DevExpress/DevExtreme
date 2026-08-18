@@ -11,8 +11,6 @@
 @use "../../base/list" as *;
 @use "../../base/list/mixins" as *;
 @use "../radioGroup/colors" as *;
-
-// adduse
 @use "../badge";
 
 $material-list-item-border-width: 1px;

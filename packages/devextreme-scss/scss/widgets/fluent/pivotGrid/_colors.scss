@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 $pivotgrid-area-background: $base-bg !default;
 $pivotgrid-border-color: $base-border-color !default;
