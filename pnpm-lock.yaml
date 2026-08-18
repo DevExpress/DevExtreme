@@ -101,8 +101,8 @@ catalogs:
       specifier: 18.0.0
       version: 18.0.0
     eslint-config-devextreme:
-      specifier: 1.1.11
-      version: 1.1.11
+      specifier: 1.1.12
+      version: 1.1.12
     eslint-plugin-i18n:
       specifier: 2.4.0
       version: 2.4.0
@@ -699,7 +699,7 @@ importers:
         version: 18.0.0(@typescript-eslint/eslint-plugin@8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3))(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3))(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3))(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3))(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0)))(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))
       eslint-config-devextreme:
         specifier: 'catalog:'
-        version: 1.1.11(ce5b91406908a89bdf524114f8a63403)
+        version: 1.1.12(ce5b91406908a89bdf524114f8a63403)
       eslint-plugin-deprecation:
         specifier: 3.0.0
         version: 3.0.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3)
@@ -1005,7 +1005,7 @@ importers:
         version: 9.39.4(jiti@2.7.0)
       eslint-config-devextreme:
         specifier: 'catalog:'
-        version: 1.1.11(e7e867bd33c690a08fadda74cc761c98)
+        version: 1.1.12(e7e867bd33c690a08fadda74cc761c98)
       eslint-plugin-i18n:
         specifier: 'catalog:'
         version: 2.4.0
@@ -1077,7 +1077,7 @@ importers:
         version: 9.39.4(jiti@2.7.0)
       eslint-config-devextreme:
         specifier: 'catalog:'
-        version: 1.1.11(30aa35f929e53af9438a8ef64dc417e0)
+        version: 1.1.12(30aa35f929e53af9438a8ef64dc417e0)
       eslint-migration-utils:
         specifier: workspace:*
         version: link:../../packages/eslint-migration-utils
@@ -1152,7 +1152,7 @@ importers:
         version: 9.39.4(jiti@2.7.0)
       eslint-config-devextreme:
         specifier: 'catalog:'
-        version: 1.1.11(e7e867bd33c690a08fadda74cc761c98)
+        version: 1.1.12(e7e867bd33c690a08fadda74cc761c98)
       eslint-migration-utils:
         specifier: workspace:*
         version: link:../../packages/eslint-migration-utils
@@ -1493,7 +1493,7 @@ importers:
         version: 18.0.0(@typescript-eslint/eslint-plugin@8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.7.0))(typescript@4.9.5))(eslint@9.39.4(jiti@2.7.0))(typescript@4.9.5))(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.7.0))(typescript@4.9.5))(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.7.0))(typescript@4.9.5))(eslint@9.39.4(jiti@2.7.0)))(eslint@9.39.4(jiti@2.7.0))
       eslint-config-devextreme:
         specifier: 'catalog:'
-        version: 1.1.11(794db514d7683f2a7fa0de882e690393)
+        version: 1.1.12(794db514d7683f2a7fa0de882e690393)
       eslint-migration-utils:
         specifier: workspace:*
         version: link:../eslint-migration-utils
@@ -1714,7 +1714,7 @@ importers:
         version: 9.39.4(jiti@2.7.0)
       eslint-config-devextreme:
         specifier: 'catalog:'
-        version: 1.1.11(30aa35f929e53af9438a8ef64dc417e0)
+        version: 1.1.12(30aa35f929e53af9438a8ef64dc417e0)
       eslint-migration-utils:
         specifier: workspace:*
         version: link:../eslint-migration-utils
@@ -1876,7 +1876,7 @@ importers:
         version: 18.0.0(@typescript-eslint/eslint-plugin@8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.7.0))(typescript@4.9.5))(eslint@9.39.4(jiti@2.7.0))(typescript@4.9.5))(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.7.0))(typescript@4.9.5))(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.7.0))(typescript@4.9.5))(eslint@9.39.4(jiti@2.7.0)))(eslint@9.39.4(jiti@2.7.0))
       eslint-config-devextreme:
         specifier: 'catalog:'
-        version: 1.1.11(794db514d7683f2a7fa0de882e690393)
+        version: 1.1.12(794db514d7683f2a7fa0de882e690393)
       eslint-migration-utils:
         specifier: workspace:*
         version: link:../eslint-migration-utils
@@ -1986,7 +1986,7 @@ importers:
         version: 18.0.0(@typescript-eslint/eslint-plugin@8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.7.0))(typescript@4.9.5))(eslint@9.39.4(jiti@2.7.0))(typescript@4.9.5))(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.7.0))(typescript@4.9.5))(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.7.0))(typescript@4.9.5))(eslint@9.39.4(jiti@2.7.0)))(eslint@9.39.4(jiti@2.7.0))
       eslint-config-devextreme:
         specifier: 'catalog:'
-        version: 1.1.11(37c58b81ceccc604e0410df575ba418a)
+        version: 1.1.12(37c58b81ceccc604e0410df575ba418a)
       eslint-plugin-import:
         specifier: 'catalog:'
         version: 2.32.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.7.0))(typescript@4.9.5))(eslint@9.39.4(jiti@2.7.0))
@@ -2068,7 +2068,7 @@ importers:
         version: 18.0.0(@typescript-eslint/eslint-plugin@8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.7.0))(typescript@4.9.5))(eslint@9.39.4(jiti@2.7.0))(typescript@4.9.5))(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.7.0))(typescript@4.9.5))(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.7.0))(typescript@4.9.5))(eslint@9.39.4(jiti@2.7.0)))(eslint@9.39.4(jiti@2.7.0))
       eslint-config-devextreme:
         specifier: 'catalog:'
-        version: 1.1.11(794db514d7683f2a7fa0de882e690393)
+        version: 1.1.12(794db514d7683f2a7fa0de882e690393)
       eslint-plugin-i18n:
         specifier: 'catalog:'
         version: 2.4.0
@@ -9975,13 +9975,13 @@ packages:
       '@typescript-eslint/parser': ^7.0.0
       eslint: ^8.56.0
 
-  eslint-config-devextreme@1.1.11:
-    resolution: {integrity: sha512-hQM6zqwmRT43MES4/nJJJ21CuKrcn1aayq5oPjCW4wEC1UG7H09tZLX41L7Zg2YceRcTgZ2y093vEMG8wlWoEw==}
+  eslint-config-devextreme@1.1.12:
+    resolution: {integrity: sha512-L9GnWa8C6JXTLg0/QLDy5ZUcb9/ojMUyiWciome+lFNWAsHeO3fSjtmctB9iKJ+RROUBwBxuGVtqpa2kOOEm3w==}
     peerDependencies:
       '@stylistic/eslint-plugin': ^5.4.0
       '@typescript-eslint/eslint-plugin': ^8.44.0
       '@typescript-eslint/parser': ^8.44.0
-      eslint: 9.18.0
+      eslint: 9.39.4
       eslint-plugin-import: ^2.32.0
       eslint-plugin-jest: ^29.0.1
       eslint-plugin-jsx-a11y: ^6.10.2
@@ -26973,7 +26973,7 @@ snapshots:
     transitivePeerDependencies:
       - eslint-plugin-import
 
-  eslint-config-devextreme@1.1.11(30aa35f929e53af9438a8ef64dc417e0):
+  eslint-config-devextreme@1.1.12(30aa35f929e53af9438a8ef64dc417e0):
     dependencies:
       '@stylistic/eslint-plugin': 5.10.0(eslint@9.39.4(jiti@2.7.0))
       '@typescript-eslint/eslint-plugin': 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.7.0))(typescript@5.8.3))(eslint@9.39.4(jiti@2.7.0))(typescript@5.8.3)
@@ -26992,7 +26992,7 @@ snapshots:
       stylelint: 16.22.0(typescript@5.8.3)
       stylelint-config-standard: 38.0.0(stylelint@16.22.0(typescript@5.8.3))
 
-  eslint-config-devextreme@1.1.11(37c58b81ceccc604e0410df575ba418a):
+  eslint-config-devextreme@1.1.12(37c58b81ceccc604e0410df575ba418a):
     dependencies:
       '@stylistic/eslint-plugin': 5.10.0(eslint@9.39.4(jiti@2.7.0))
       '@typescript-eslint/eslint-plugin': 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.7.0))(typescript@4.9.5))(eslint@9.39.4(jiti@2.7.0))(typescript@4.9.5)
@@ -27011,7 +27011,7 @@ snapshots:
       stylelint: 16.22.0(typescript@4.9.5)
       stylelint-config-standard: 38.0.0(stylelint@16.22.0(typescript@4.9.5))
 
-  eslint-config-devextreme@1.1.11(794db514d7683f2a7fa0de882e690393):
+  eslint-config-devextreme@1.1.12(794db514d7683f2a7fa0de882e690393):
     dependencies:
       '@stylistic/eslint-plugin': 5.10.0(eslint@9.39.4(jiti@2.7.0))
       '@typescript-eslint/eslint-plugin': 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.7.0))(typescript@4.9.5))(eslint@9.39.4(jiti@2.7.0))(typescript@4.9.5)
@@ -27030,7 +27030,7 @@ snapshots:
       stylelint: 16.22.0(typescript@4.9.5)
       stylelint-config-standard: 38.0.0(stylelint@16.22.0(typescript@4.9.5))
 
-  eslint-config-devextreme@1.1.11(ce5b91406908a89bdf524114f8a63403):
+  eslint-config-devextreme@1.1.12(ce5b91406908a89bdf524114f8a63403):
     dependencies:
       '@stylistic/eslint-plugin': 5.10.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))
       '@typescript-eslint/eslint-plugin': 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3))(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3)
@@ -27049,7 +27049,7 @@ snapshots:
       stylelint: 16.22.0(typescript@6.0.3)
       stylelint-config-standard: 38.0.0(stylelint@16.22.0(typescript@6.0.3))
 
-  eslint-config-devextreme@1.1.11(e7e867bd33c690a08fadda74cc761c98):
+  eslint-config-devextreme@1.1.12(e7e867bd33c690a08fadda74cc761c98):
     dependencies:
       '@stylistic/eslint-plugin': 5.10.0(eslint@9.39.4(jiti@2.7.0))
       '@typescript-eslint/eslint-plugin': 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.7.0))(typescript@5.9.3))(eslint@9.39.4(jiti@2.7.0))(typescript@5.9.3)
