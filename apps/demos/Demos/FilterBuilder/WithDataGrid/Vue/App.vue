@@ -38,7 +38,7 @@ function buttonClick() {
 <style scoped>
 .filter-container {
   background-color: transparent;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.14), 0 0 2px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: var(--dxds-box-shadow-lg, 0 8px 16px 0 rgba(0, 0, 0, 0.14), 0 0 2px 0 rgba(0, 0, 0, 0.12));
   border-radius: 6px;
   padding: 5px;
   width: 500px;
