@@ -1937,6 +1937,28 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   getGroupBoundsVertical(groupIndex: number): GroupBoundsOffset | undefined {
+    const groupedMap = this.viewDataProvider.groupedDataMap.dateTableGroupedMap[groupIndex];
+    const firstRowIndex = Number(this.viewDataProvider.hasGroupAllDayPanel(groupIndex));
+    const firstCell = groupedMap?.[firstRowIndex]?.[0];
+    const lastRow = groupedMap?.[groupedMap.length - 1];
+    const lastCell = lastRow?.[lastRow.length - 1];
+
+    if (firstCell && lastCell) {
+      const $first = this.domGetDateCell(firstCell.position);
+      const $last = this.domGetDateCell(lastCell.position);
+      const firstOffset = $first.offset();
+      const lastOffset = $last.offset();
+
+      if ($first.length && $last.length && firstOffset && lastOffset) {
+        return {
+          left: firstOffset.left,
+          right: lastOffset.left + (getOuterWidth($last) as number),
+          top: firstOffset.top,
+          bottom: lastOffset.top + (getOuterHeight($last) as number),
+        };
+      }
+    }
+
     const $firstAndLastCells = this.getFirstAndLastDataTableCell();
     if (this.groupedStrategy instanceof VerticalGroupedStrategy) {
       return this.groupedStrategy.getGroupBoundsOffset(groupIndex, [
