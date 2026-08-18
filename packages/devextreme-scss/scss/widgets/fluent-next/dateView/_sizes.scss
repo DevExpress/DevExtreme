@@ -1,7 +1,4 @@
-@use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
-
-// adduse
 
 $date-view-roller-height: 182px !default; // dx-offscale: 182px
 $date-view-roller-item-height: ds.$spacing-400 !default;

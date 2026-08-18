@@ -3,8 +3,6 @@
 @use "../../../_design-system/variables/ds" as ds;
 @use "../common/sizes" as *;
 
-// adduse
-
 // Moved out of _index.scss: variables belong in _sizes/_colors (NAMING.md O7)
 $text-editor-invalid-badge-size: calc(#{$invalid-badge-size} + 2 * #{$invalid-badge-padding-inline});
 

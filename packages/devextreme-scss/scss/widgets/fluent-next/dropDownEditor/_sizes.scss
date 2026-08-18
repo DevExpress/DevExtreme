@@ -2,14 +2,11 @@
 @use "../../../_design-system/variables/ds" as ds;
 @use "../common/sizes" as *;
 
-// adduse
-
 // Not a colour: an opacity / a composite box-shadow belongs here (NAMING.md O7)
 $drop-down-editor-icon-opacity-rest: ds.$opacity-35 !default;
 
 $drop-down-editor-list-font-size: null !default;
 $drop-down-editor-list-line-height: null !default;
-
 
 @if $size == "default" {
   $drop-down-editor-list-font-size: ds.$font-size-base-md !default;

@@ -1,14 +1,11 @@
 @use "sass:math";
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/slider" with (
   $slider-label-position-bottom-padding-bottom: $slider-label-bottom-padding-block-end,
   $slider-label-position-top-padding-top: $slider-label-top-padding-block-start,
 );
 @use "../../base/popover/mixins" as *;
-
-// adduse
 
 .dx-slider-wrapper {
   height: $slider-wrapper-height;

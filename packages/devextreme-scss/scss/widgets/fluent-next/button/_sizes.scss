@@ -1,8 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 // Geometry, so it lives here rather than in _colors.scss (NAMING.md O7)
 $button-border-radius: $global-border-radius !default;
 

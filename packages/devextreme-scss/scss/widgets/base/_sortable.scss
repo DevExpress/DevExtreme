@@ -2,15 +2,12 @@
 @use "sass:meta";
 @use "./mixins" as *;
 
-// adduse
-
 $sortable-clone-shadow-color-first: rgba(0, 0, 0, 0.1) !default;
 $sortable-clone-shadow-color-second: rgba(0, 0, 0, 0.2) !default;
 $sortable-clone-opacity: 0.9 !default;
 $sortable-source-opacity: 0.5 !default;
 
 $base-accent: null !default;
-
 
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $sortable-placeholder-border: 1px solid !default;

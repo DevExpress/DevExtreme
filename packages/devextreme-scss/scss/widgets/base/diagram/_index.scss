@@ -1,8 +1,5 @@
 @use "../mixins" as *;
 
-// adduse
-
-
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $diagram-root-height: 600px !default;
 $diagram-root-min-height: 350px !default;

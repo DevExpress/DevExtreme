@@ -2,10 +2,8 @@
 @use "colors" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 // Moved out of _index.scss (O7): a transition and a shadow are values, not rules
-$switch-transition: all 0.2s cubic-bezier(0.33,0,0.67,1);
+$switch-transition: all 0.2s cubic-bezier(0.33, 0, 0.67, 1);
 $switch-box-shadow: none;
 
 // Not a colour: a radius that used to sit in _colors.scss (NAMING.md, O7)
