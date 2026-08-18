@@ -13,7 +13,12 @@ const TODO_MARKER = 'TODO';
 const ERROR_MESSAGES = {
   MESSAGES_DIR_NOT_FOUND: (directory: string) => `Messages directory not found: ${directory}`,
   DEFAULT_LOCALE_NOT_FOUND: (filePath: string) => `Default locale file not found: ${filePath}`,
+  INVALID_OUTPUT: (filePath: string, reason: string) =>
+    `Normalized content for ${filePath} is not valid JSON: ${reason}`,
 } as const;
+
+// A single `"key": "value"` regexp
+const ENTRY_LINE = /^(\s*)"((?:[^"\\]|\\.)*)":\s*"(?:[^"\\]|\\.)*"(,?)(\s*)$/;
 
 interface LocaleDictionary {
   [key: string]: string;
@@ -21,7 +26,6 @@ interface LocaleDictionary {
 
 function normalizeLocaleFile(
   defaultFile: string,
-  defaultDictionaryKeys: string[],
   defaultLocale: string,
   fileContents: string,
 ): string {
@@ -30,23 +34,31 @@ function normalizeLocaleFile(
   const [locale] = Object.keys(parsedFile);
   const dictionary = parsedFile[locale];
 
-  let newFile = defaultFile.replace(`"${defaultLocale}"`, `"${locale}"`);
-
-  defaultDictionaryKeys.forEach((key) => {
-    let replaceValue: string | null = null;
-    if (Object.prototype.hasOwnProperty.call(dictionary, key)) {
-      const val = dictionary[key];
-      if (!val.includes(TODO_MARKER)) {
-        replaceValue = val.replace(/"/g, '\\"');
+  return defaultFile
+    .replace(`"${defaultLocale}"`, `"${locale}"`)
+    .split('\n')
+    .map((line) => {
+      const match = ENTRY_LINE.exec(line);
+      if (!match) {
+        return line;
       }
-    }
 
-    if (replaceValue != null) {
-      newFile = newFile.replace(new RegExp(`"${key}":.*"(,)?`), `"${key}": "${replaceValue}"$1`);
-    }
-  });
+      const [, indent, rawKey, comma, lineEnding] = match;
+      const key = JSON.parse(`"${rawKey}"`) as string;
 
-  return newFile;
+      if (!Object.prototype.hasOwnProperty.call(dictionary, key)) {
+        return line;
+      }
+
+      const val = dictionary[key];
+      if (val.includes(TODO_MARKER)) {
+        return line;
+      }
+
+      // JSON.stringify adds the quotes and escapes backslashes, quotes and control characters.
+      return `${indent}"${rawKey}": ${JSON.stringify(val)}${comma}${lineEnding}`;
+    })
+    .join('\n');
 }
 
 interface ResolvedGenerateCommunityLocales {
@@ -74,9 +86,6 @@ export default createExecutor<
     }
 
     const defaultFile = await readFileText(defaultFilePath);
-    const defaultDictionaryKeys = Object.keys(
-      (JSON.parse(defaultFile) as Record<string, LocaleDictionary>)[defaultLocale],
-    );
 
     const localeFiles = await discoverFiles({
       cwd: messagesDir,
@@ -89,12 +98,15 @@ export default createExecutor<
     await Promise.all(
       localeFiles.map(async (filePath) => {
         const fileContents = await readFileText(filePath);
-        const newFile = normalizeLocaleFile(
-          defaultFile,
-          defaultDictionaryKeys,
-          defaultLocale,
-          fileContents,
-        );
+        const newFile = normalizeLocaleFile(defaultFile, defaultLocale, fileContents);
+
+        // Never write a file the next run could not read back.
+        try {
+          JSON.parse(newFile);
+        } catch (error) {
+          throw new Error(ERROR_MESSAGES.INVALID_OUTPUT(filePath, (error as Error).message));
+        }
+
         await writeFileText(filePath, newFile);
       }),
     );
