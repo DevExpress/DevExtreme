@@ -235,7 +235,7 @@ class NumberBoxBase<
         return numberLocalization.format(
           Number(value),
           globalNumberFormat,
-        ) as string;
+        );
       }
     }
 

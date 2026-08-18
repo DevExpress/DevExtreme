@@ -2,8 +2,8 @@
 import { keyboard } from '@js/common/core/events/short';
 import domAdapter from '@js/core/dom_adapter';
 import { cleanDataRecursive } from '@js/core/element_data';
-import injector from '@js/core/utils/dependency_injector';
 import { hydrate, InfernoEffectHost } from '@ts/core/r1/runtime/inferno/index';
+import { injector } from '@ts/core/utils/dependency_injector';
 import { render } from 'inferno';
 import { createElement } from 'inferno-create-element';
 

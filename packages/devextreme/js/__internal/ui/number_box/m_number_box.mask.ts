@@ -518,7 +518,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
       parsedValue = Math.abs(this._parsedValue * 0);
     }
 
-    if (isNaN(parsedValue)) {
+    if (isNaN(Number(parsedValue))) {
       return undefined;
     }
 
@@ -546,7 +546,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
     const sign = number.getSign(text, format?.formatter || format);
     const textWithoutStubs = this._removeStubs(text, true);
     const parsedValue = this._parse(textWithoutStubs, format);
-    const parsedValueSign = parsedValue < 0 ? -1 : 1;
+    const parsedValueSign = parsedValue != null && parsedValue < 0 ? -1 : 1;
     const parsedValueWithSign = isNumeric(parsedValue) && sign !== parsedValueSign ? sign * parsedValue : parsedValue;
 
     return parsedValueWithSign;

@@ -1,5 +1,5 @@
-import injector from '@js/core/utils/dependency_injector';
 import { getWindow } from '@js/core/utils/window';
+import { injector } from '@ts/core/utils/dependency_injector';
 
 const window = getWindow();
 

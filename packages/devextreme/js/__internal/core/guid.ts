@@ -1,47 +1,47 @@
-import Class from '@js/core/class';
+export class Guid {
+  private readonly _value: string;
 
-const Guid = Class.inherit({
-  ctor: function (value) {
-    if (value) {
-      value = String(value);
-    }
-    this._value = this._normalize(value || this._generate());
-  },
+  constructor(value?: string) {
+    const initialValue = value ? String(value) : '';
 
-  _normalize: function (value) {
-    value = value.replace(/[^a-f0-9]/ig, '').toLowerCase();
-    while (value.length < 32) {
-      value += '0';
+    this._value = this._normalize(initialValue || this._generate());
+  }
+
+  private _normalize(value: string): string {
+    let normalizedValue = value.replace(/[^a-f0-9]/ig, '').toLowerCase();
+
+    while (normalizedValue.length < 32) {
+      normalizedValue += '0';
     }
+
     return [
-      value.substr(0, 8),
-      value.substr(8, 4),
-      value.substr(12, 4),
-      value.substr(16, 4),
-      value.substr(20, 12),
+      normalizedValue.slice(0, 8),
+      normalizedValue.slice(8, 12),
+      normalizedValue.slice(12, 16),
+      normalizedValue.slice(16, 20),
+      normalizedValue.slice(20, 32),
     ].join('-');
-  },
+  }
 
-  _generate: function () {
+  private _generate(): string {
     let value = '';
-    for (let i = 0; i < 32; i++) {
+
+    for (let i = 0; i < 32; i += 1) {
       value += Math.round(Math.random() * 15).toString(16);
     }
+
     return value;
-  },
+  }
 
-  toString: function () {
+  public toString(): string {
     return this._value;
-  },
+  }
 
-  valueOf: function () {
+  public valueOf(): string {
     return this._value;
-  },
+  }
 
-  toJSON: function () {
+  public toJSON(): string {
     return this._value;
-  },
-
-});
-
-export { Guid };
+  }
+}
