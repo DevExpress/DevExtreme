@@ -35,7 +35,7 @@
 
 ::ng-deep .movie-preview > .movie-details {
   font-size: 12px;
-  color: #242424;
+  color: var(--dxds-color-content-neutral-default-rest, #242424);
 }
 
 ::ng-deep .movie-preview > .movie-details > .title {

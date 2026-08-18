@@ -77,6 +77,6 @@ function timer() {
 }
 
 .complete .dx-progressbar-range {
-  background-color: green;
+  background-color: var(--dxds-color-surface-success-default-rest, green);
 }
 </style>

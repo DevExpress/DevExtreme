@@ -82,8 +82,8 @@ const companies = multiViewItems;
 .multiview-item {
   margin: 25px;
   user-select: none;
-  border-top: 1px solid lightgray;
-  border-bottom: 1px solid lightgray;
+  border-top: 1px solid var(--dxds-color-border-neutral-default-rest, lightgray);
+  border-bottom: 1px solid var(--dxds-color-border-neutral-default-rest, lightgray);
   padding: 20px 0 30px;
 }
 
@@ -107,7 +107,7 @@ const companies = multiViewItems;
 
 .options {
   padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
   margin-top: 20px;
 }
 

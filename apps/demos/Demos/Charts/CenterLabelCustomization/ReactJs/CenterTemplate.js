@@ -35,7 +35,7 @@ export default function TooltipTemplate(pieChart) {
         textAnchor="middle"
         x="100"
         y="120"
-        style={{ fontSize: 18, fill: '#494949' }}
+        style={{ fontSize: 18, fill: 'var(--dxds-color-content-neutral-subdued-rest, #494949)' }}
       >
         <tspan x="100">{country}</tspan>
         <tspan
