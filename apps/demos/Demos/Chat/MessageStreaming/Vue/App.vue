@@ -254,8 +254,8 @@ function sendSuggestion(prompt: string): void {
 .chat-suggestion-card {
   border-radius: 12px;
   padding: 16px;
-  border: 1px solid #EBEBEB;
-  background: #FAFAFA;
+  border: 1px solid var(--dxds-color-border-neutral-deep-rest, #EBEBEB);
+  background: var(--dxds-color-surface-neutral-subdued-rest, #FAFAFA);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -269,20 +269,20 @@ function sendSuggestion(prompt: string): void {
 }
 
 .chat-suggestion-card:hover {
-  border: 1px solid #E0E0E0;
-  background: #F5F5F5;
-  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.04), 0 4px 24px 0 rgba(0, 0, 0, 0.02);
+  border: 1px solid var(--dxds-color-border-neutral-subdued-rest, #E0E0E0);
+  background: var(--dxds-color-surface-neutral-deep-rest, #F5F5F5);
+  box-shadow: var(--dxds-box-shadow-xs, 0 4px 12px 0 rgba(0, 0, 0, 0.04), 0 4px 24px 0 rgba(0, 0, 0, 0.02));
 }
 
 .chat-suggestion-card-title {
-  color: #242424;
+  color: var(--dxds-color-content-neutral-default-rest, #242424);
   font-size: 12px;
   font-weight: 600;
   line-height: 16px;
 }
 
 .chat-suggestion-card-prompt {
-  color: #616161;
+  color: var(--dxds-color-content-neutral-subdued-rest, #616161);
   font-size: 12px;
   font-weight: 400;
   line-height: 16px;
