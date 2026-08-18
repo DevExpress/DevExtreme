@@ -729,12 +729,8 @@ QUnit.module('getCombinedFilter', {
             filterValue: [['Test', 'anyof', [1, 2, 3]], 'and', filterRowFilter]
         });
 
-        this.headerFilterController.getCurrentColumn = function() {
-            return { dataField: 'Test' };
-        };
-
         // assert
-        assert.deepEqual(this.getCombinedFilter(true), undefined, 'combined filter');
+        assert.deepEqual(this.dataController.getCombinedFilterWithExcludedColumn({ dataField: 'Test' }, true), undefined, 'combined filter');
     });
 
     QUnit.test('add currentColumn header filter value when filterSyncEnabled = false', function(assert) {
@@ -749,12 +745,8 @@ QUnit.module('getCombinedFilter', {
             filterValue: [['Test', 'anyof', [1, 2, 3]], 'and', filterRowFilter]
         });
 
-        this.headerFilterController.getCurrentColumn = function() {
-            return { dataField: 'Test' };
-        };
-
         // assert
-        assert.deepEqual(this.getCombinedFilter(true), [
+        assert.deepEqual(this.dataController.getCombinedFilterWithExcludedColumn({ dataField: 'Test' }, true), [
             [
                 ['Test', '=', 1],
                 'or',
