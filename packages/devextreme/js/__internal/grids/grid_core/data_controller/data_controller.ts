@@ -9,7 +9,7 @@ import errors from '@js/ui/widget/ui.errors';
 import { findChanges } from '@ts/core/utils/m_array_compare';
 import { fromPromise } from '@ts/core/utils/m_deferred';
 import type { ChangingEvent, DataSource, StoreLoadOptions } from '@ts/data/data_source/types';
-import type { ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
+import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type {
   ChangedEvent, DataSourceAdapterProvider, LoadOperation, OperationTypes, RawItemData,
@@ -18,10 +18,8 @@ import { isLocalStore } from '@ts/grids/grid_core/data_source_adapter/utils/stor
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { ErrorHandlingController } from '@ts/grids/grid_core/error_handling/m_error_handling';
-import type { ApplyFilterViewController } from '@ts/grids/grid_core/filter/m_filter_row';
 import type { FilterSyncController } from '@ts/grids/grid_core/filter/m_filter_sync';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
-import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
 import modules from '@ts/grids/grid_core/m_modules';
 import type {
@@ -141,9 +139,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _filterSyncController!: FilterSyncController;
 
-  protected _headerFilterController!: HeaderFilterController;
-
-  protected _applyFilterController!: ApplyFilterViewController;
+  private _filterExcludedColumn: Column | null = null;
 
   protected _keyboardNavigationController!: KeyboardNavigationController;
 
@@ -166,10 +162,8 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._editorFactoryController = this.getController('editorFactory');
     this._errorHandlingController = this.getController('errorHandling');
     this._filterSyncController = this.getController('filterSync');
-    this._applyFilterController = this.getController('applyFilter');
     this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._focusController = this.getController('focus');
-    this._headerFilterController = this.getController('headerFilter');
     this._selectionController = this.getController('selection');
 
     this._isPaging = false;
@@ -348,6 +342,22 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   public getCombinedFilter(returnDataField?: boolean): DataFilter {
     return this.combinedFilter(undefined, returnDataField);
+  }
+
+  public getFilterExcludedColumn(): Column | null {
+    return this._filterExcludedColumn;
+  }
+
+  public getCombinedFilterWithExcludedColumn(
+    excludedColumn: Column | null,
+    returnDataField?: boolean,
+  ): DataFilter {
+    this._filterExcludedColumn = excludedColumn;
+    try {
+      return this.getCombinedFilter(returnDataField);
+    } finally {
+      this._filterExcludedColumn = null;
+    }
   }
 
   private combinedFilter(filter: DataFilter, returnDataField?: boolean): DataFilter {
