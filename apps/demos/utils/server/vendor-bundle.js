@@ -6,8 +6,6 @@ const fs = require('fs');
 const esbuild = require('esbuild');
 
 const DEMOS_APP_ROOT = path.join(__dirname, '..', '..');
-console.log('DEMOS_APP_ROOT', DEMOS_APP_ROOT);
-console.log('dirname', __dirname);
 const SRC_DEMOS_DIR = path.join(DEMOS_APP_ROOT, 'Demos');
 const VENDOR_OUT_DIR = path.join(DEMOS_APP_ROOT, 'bundles', 'vendor');
 // Not os.tmpdir(): needs to be under apps/demos for node_modules resolution to work.
