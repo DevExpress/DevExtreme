@@ -20,7 +20,7 @@
   $base-focus-color: $base-focus-color,
   $datagrid-text-stub-background-image-path: $datagrid-text-stub-background-image-path,
 );
-@use 'layout/cell';
+@use "layout/cell";
 @include grid-base(datagrid);
 
 .dx-datagrid-group-panel {

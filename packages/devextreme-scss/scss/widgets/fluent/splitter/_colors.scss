@@ -30,7 +30,7 @@ $splitter-resize-handle-bg-hover: null !default;
 */
 $splitter-resize-handle-bg-focused: $base-accent !default;
 
-@if $mode == 'light' {
+@if $mode == "light" {
   $splitter-resize-handle-color: $base-icon-color !default;
   $splitter-resize-handle-color-focused: $base-inverted-text-color !default;
 
@@ -38,7 +38,7 @@ $splitter-resize-handle-bg-focused: $base-accent !default;
   $splitter-resize-handle-bg-hover: $base-border-color-hover !default;
 }
 
-@if $mode == 'dark' {
+@if $mode == "dark" {
   $splitter-resize-handle-color: $base-text-color !default;
   $splitter-resize-handle-color-focused: $base-inverted-text-color !default;
 

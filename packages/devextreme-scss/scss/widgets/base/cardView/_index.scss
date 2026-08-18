@@ -1,8 +1,8 @@
-@use './content_view';
-@use './header_panel';
-@use './filter_panel';
-@use './column_chooser';
-@use './variables' as *;
+@use "./content_view";
+@use "./header_panel";
+@use "./filter_panel";
+@use "./column_chooser";
+@use "./variables" as *;
 
 .dx-cardview {
   padding: $cardview-padding;

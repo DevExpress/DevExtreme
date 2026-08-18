@@ -5,7 +5,7 @@
 @use "../sizes" as *;
 @use "../list/colors" as *;
 @use "../toolbar/sizes" as *;
-@use '../../base/scheduler/layout/header' as *;
+@use "../../base/scheduler/layout/header" as *;
 @use "../../base/mixins" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/scheduler" as baseScheduler with (
@@ -74,11 +74,11 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
   height: $generic-scheduler-workspace-date-table-cell-height;
 
   &.dx-scheduler-time-panel-current-time-cell::before {
-    content: '';
+    content: "";
   }
 
   &::after {
-    content: '';
+    content: "";
   }
 }
 

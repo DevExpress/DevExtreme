@@ -110,7 +110,7 @@ $generic-switch-inner-size: $generic-switch-height - $generic-switch-border-weig
 
   &::before {
     display: block;
-    content: ' ';
+    content: " ";
     width: 100%;
     height: 100%;
     background-color: $switch-handle-off-bg;

@@ -39,7 +39,7 @@
       right: 1px;
       z-index: 2;
       background-color: color.change($base-bg, $alpha: 0.4);
-      content: '';
+      content: "";
       pointer-events: none;
     }
 
@@ -162,7 +162,7 @@
       bottom: -1px;
       height: 0;
       width: 100%;
-      content: '';
+      content: "";
       position: absolute;
       z-index: 2;
       transform: scale(0);

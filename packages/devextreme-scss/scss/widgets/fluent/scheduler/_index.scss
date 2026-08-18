@@ -7,7 +7,7 @@
 @use "../form/sizes" as *;
 @use "../radioGroup/sizes" as *;
 @use "../toolbar/sizes" as *;
-@use '../../base/scheduler/layout/header' as *;
+@use "../../base/scheduler/layout/header" as *;
 @use "../../base/mixins" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/scheduler" as baseScheduler with (

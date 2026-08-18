@@ -23,7 +23,7 @@ $fluent-color-theme-modificator: null !default;
 * $name 10. Font family
 * $type text
 */
-$base-font-family: 'segoe ui', -apple-system, BlinkMacSystemFont, 'avenir next', avenir, 'helvetica neue', 'adwaita sans', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif !default;
+$base-font-family: "segoe ui", -apple-system, BlinkMacSystemFont, "avenir next", avenir, "helvetica neue", "adwaita sans", cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif !default;
 
 /**
 * $name 30. Page background color
@@ -195,7 +195,7 @@ $scrollview-pulldown-path: null !default;
   $base-danger-active: color.adjust($base-danger, $saturation: -3.56%, $space: hsl, $lightness: -35.69%) !default;
   $base-danger-selected: color.adjust($base-danger, $saturation: -2.78%, $space: hsl, $lightness: -22.55%) !default;
 
-  $scrollview-pulldown-path: data-uri('images/widgets/fluent/color-schemes/light/pulldown.png') !default;
+  $scrollview-pulldown-path: data-uri("images/widgets/fluent/color-schemes/light/pulldown.png") !default;
 }
 
 @if $mode == "dark" {
@@ -252,7 +252,7 @@ $scrollview-pulldown-path: null !default;
   $base-danger-active: extcolor.adjust-if-not-achromatic($color: $base-danger, $hue: 1.8deg, $saturation: -0.9%, $lightness: 28.8%) !default;
   $base-danger-selected: extcolor.adjust-if-not-achromatic($color: $base-danger, $hue: 0.7deg, $saturation: 1.3%, $lightness: 14.9%);
 
-  $scrollview-pulldown-path: data-uri('images/widgets/fluent/color-schemes/dark/pulldown.png') !default;
+  $scrollview-pulldown-path: data-uri("images/widgets/fluent/color-schemes/dark/pulldown.png") !default;
 }
 
 /**

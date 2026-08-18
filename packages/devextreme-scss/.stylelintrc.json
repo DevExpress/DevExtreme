@@ -39,6 +39,7 @@
         "selector-no-vendor-prefix": true,
         "selector-pseudo-element-colon-notation": "double",
         "shorthand-property-no-redundant-values": null,
+        "@stylistic/string-quotes": "double",
         "@stylistic/unit-case": "lower",
         "value-no-vendor-prefix": true,
         "value-keyword-case": null,

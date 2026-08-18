@@ -435,12 +435,12 @@ $diagram-toolbox-title-size: 12px;
 @include diagram-action-icons-mixin($base-icon-color, $menu-color, $generic-diagram-toolbar-icon-size,  $diagram-toolbar-colorbutton-border-width);
 
 .dx-diagram-toolbox-popup .dx-button-has-icon .dx-icon.dx-icon-diagram-toolbox-drag {
-  @include diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/toolbox-drag.svg'), $popup-title-color, $diagram-toolbox-title-size, $diagram-toolbox-title-size);
+  @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/toolbox-drag.svg"), $popup-title-color, $diagram-toolbox-title-size, $diagram-toolbox-title-size);
 
   line-height: $diagram-toolbox-title-size;
   background-size: $diagram-toolbox-title-size $diagram-toolbox-title-size;
 }
 
 .dx-diagram-i-button-properties-panel-open {
-  @include diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/properties-panel-open.svg'), $button-default-color, $generic-diagram-toolbar-icon-size, $generic-diagram-toolbar-icon-size);
+  @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/properties-panel-open.svg"), $button-default-color, $generic-diagram-toolbar-icon-size, $generic-diagram-toolbar-icon-size);
 }

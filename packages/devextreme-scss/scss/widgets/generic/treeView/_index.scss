@@ -21,8 +21,8 @@
   $generic-treeview-toggle-item-width + $generic-treeview-item-element-gap,
 );
 @include default-expander-icon(
-  'spindown',
-  'spinright',
+  "spindown",
+  "spinright",
   $generic-base-icon-size,
   $generic-treeview-toggle-item-width,
   $treeview-spin-icon-color,

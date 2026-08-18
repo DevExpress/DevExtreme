@@ -99,7 +99,7 @@ $stepper-connector-value-bg: $base-text-color !default;
   $stepper-step-disabled-bg: color.adjust($base-bg, $lightness: 5.49%, $space: hsl) !default;
 }
 
-@if $color == 'dark' {
+@if $color == "dark" {
   $stepper-step-base-bg: color.adjust($base-bg, $lightness: 13.73%, $space: hsl) !default;
   $stepper-step-base-hover-bg: color.adjust($base-bg, $lightness: 17.65%, $space: hsl) !default;
 
@@ -147,7 +147,7 @@ $stepper-connector-value-bg: $base-text-color !default;
   $stepper-step-disabled-bg: color.adjust($base-bg, $lightness: -6.67%, $space: hsl) !default;
 }
 
-@if $color == 'light' {
+@if $color == "light" {
   $stepper-step-base-bg: color.adjust($base-bg, $lightness: -13.33%, $space: hsl) !default;
   $stepper-step-base-hover-bg: color.adjust($base-bg, $lightness: -16.86%, $space: hsl) !default;
 

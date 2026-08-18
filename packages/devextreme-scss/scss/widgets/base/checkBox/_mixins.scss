@@ -33,7 +33,7 @@
       @include dx-checkbox-icon-centered($icon-height, $icon-width);
 
       &::before {
-        content: '';
+        content: "";
         background-color: $color-bg;
         border-radius: $icon-border-radius;
       }

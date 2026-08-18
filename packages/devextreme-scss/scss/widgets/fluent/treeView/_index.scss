@@ -103,8 +103,8 @@
 }
 
 @include default-expander-icon(
-  'chevrondown',
-  'chevronright',
+  "chevrondown",
+  "chevronright",
   $fluent-base-icon-size,
   $fluent-treeview-toggle-item-width,
   $treeview-spin-icon-color,

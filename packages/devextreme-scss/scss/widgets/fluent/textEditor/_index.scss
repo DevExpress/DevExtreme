@@ -285,7 +285,7 @@ $fluent-editor-border-width: 1px;
     bottom: 0;
     height: 0;
     width: 100%;
-    content: '';
+    content: "";
     position: absolute;
   }
 
@@ -406,7 +406,7 @@ $fluent-editor-border-width: 1px;
 
   .dx-icon-clear {
     &::before {
-      content: '\f15f';
+      content: "\f15f";
     }
 
     color: $texteditor-button-clear-icon-color;

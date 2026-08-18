@@ -22,7 +22,7 @@
 @use "../typography/sizes" as *;
 @use "variables" as *;
 @forward "variables";
-@use 'layout/cell' as *;
+@use "layout/cell" as *;
 @use "layout/aiChat" as *;
 @use "../scrollable";
 @use "../overlay";
@@ -561,7 +561,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
     touch-action: pinch-zoom;
 
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;

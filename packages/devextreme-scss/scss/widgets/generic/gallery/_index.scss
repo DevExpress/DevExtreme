@@ -27,7 +27,7 @@
     @include dx-icon-font-centered-sizing(32px);
 
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       width: 32px;
       height: 100%;

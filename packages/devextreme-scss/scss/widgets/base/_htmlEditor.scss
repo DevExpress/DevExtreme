@@ -217,15 +217,15 @@ $transparent-border: 1px solid transparent;
     position: relative;
 
     &[data-list="bullet"]::before {
-      content: '\2022';
+      content: "\2022";
     }
 
     &[data-list="checked"]::before {
-      content: '\2611';
+      content: "\2611";
     }
 
     &[data-list="unchecked"]::before {
-      content: '\2610';
+      content: "\2610";
     }
 
     &::before {

@@ -1,17 +1,17 @@
-@use 'sass:color';
-@use '../colors' as *;
-@use '../color' as extcolor;
-@use '../../base/cardView/variables' as *;
-@use '../../base/cardView/header_panel/variables' as *;
-@use '../../base/cardView/header_panel/item/variables' as *;
-@use '../../base/cardView/content_view/content/card/variables' as *;
-@use '../../base/cardView/content_view/content/card/header/variables' as *;
-@use '../../base/cardView/content_view/content/card/cover/variables' as *;
-@use '../../base/cardView/content_view/content/card/content/variables' as *;
-@use '../../base/cardView/content_view/content/variables' as *;
-@use '../../base/cardView/content_view/no_data/variables' as *;
-@use '../../base/cardView/column_chooser/variables' as *;
-@use '../../base/cardView/filter_panel/variables' as *;
+@use "sass:color";
+@use "../colors" as *;
+@use "../color" as extcolor;
+@use "../../base/cardView/variables" as *;
+@use "../../base/cardView/header_panel/variables" as *;
+@use "../../base/cardView/header_panel/item/variables" as *;
+@use "../../base/cardView/content_view/content/card/variables" as *;
+@use "../../base/cardView/content_view/content/card/header/variables" as *;
+@use "../../base/cardView/content_view/content/card/cover/variables" as *;
+@use "../../base/cardView/content_view/content/card/content/variables" as *;
+@use "../../base/cardView/content_view/content/variables" as *;
+@use "../../base/cardView/content_view/no_data/variables" as *;
+@use "../../base/cardView/column_chooser/variables" as *;
+@use "../../base/cardView/filter_panel/variables" as *;
 
 // #region COMMON SETTINGS
 
@@ -403,7 +403,7 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
 
 // #endregion
 
-@if $mode == 'light' {
+@if $mode == "light" {
 
   // Common
   $cardview-fluent-common-bg-color: $base-typography-bg !default;

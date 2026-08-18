@@ -200,7 +200,7 @@ $generic-list-search-editor-height: math.round($generic-base-line-height * $gene
         border-color: transparent;
         border-width: 5px 5px 0 5px;
         border-top-color: $list-group-color;
-        content: ' ';
+        content: " ";
       }
 
       .dx-list-group-collapsed &::before {

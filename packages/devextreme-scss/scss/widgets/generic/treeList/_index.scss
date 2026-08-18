@@ -21,7 +21,7 @@
   $header-filter-color-empty: $header-filter-color-empty,
   $base-focus-color: $base-focus-color,
 );
-@use 'layout/cell';
+@use "layout/cell";
 @include grid-base(treelist);
 
 .dx-treelist-rowsview {
