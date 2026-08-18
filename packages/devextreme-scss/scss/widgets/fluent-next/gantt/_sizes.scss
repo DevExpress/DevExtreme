@@ -1,8 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 $gantt-header-item-height: null !default;
 $gantt-task-title-padding-inline-start: null !default;
 $gantt-task-height: null !default;
@@ -26,7 +24,6 @@ $gantt-task-wrapper-padding-block-start: 0 !default;
   $gantt-dependency-successor-size: ds.$spacing-100 !default;
   $gantt-milestone-size: ds.$spacing-140 !default;
 }
-
 
 // Values hoisted from style-file literals (tokenized)
 $gantt-task-progress-notch-border-width: ds.$border-width-40 !default;

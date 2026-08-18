@@ -2,8 +2,6 @@
 @use "../../../_design-system/variables/ds" as ds;
 @use "../common/colors" as *;
 
-// adduse
-
 $speed-dial-action-content-rest: ds.$color-content-neutral-default-rest !default;
 $speed-dial-action-shadow-rest: ds.$box-shadow-md !default;
 $speed-dial-action-label-shadow-rest: ds.$box-shadow-sm !default;

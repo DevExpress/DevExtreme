@@ -1,8 +1,6 @@
 @use "../colors" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 $file-manager-border-rest: ds.$color-border-neutral-default-rest !default;
 $file-manager-file-toolbar-bg-rest: ds.$color-surface-neutral-subdued-rest !default;
 $file-manager-editor-bg-active: rgb(from #{ds.$color-content-neutral-default-rest} r g b / 0.1) !default;

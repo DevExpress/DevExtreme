@@ -1,8 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 // Not colours: two radii that used to sit in _colors.scss (NAMING.md, O7)
 $calendar-cell-contoured-border-radius: 50% !default;
 $calendar-week-number-border-radius: 0 !default;

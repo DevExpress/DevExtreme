@@ -1,9 +1,6 @@
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/popover";
-
-// adduse
 
 .dx-popover-wrapper {
   .dx-popup-title {

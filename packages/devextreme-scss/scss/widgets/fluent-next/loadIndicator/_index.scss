@@ -1,9 +1,6 @@
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/loadIndicator" as baseLoadIndicator;
-
-// adduse
 
 .dx-loadindicator {
   line-height: 100%;

@@ -1,8 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 // Not a colour: an opacity / a composite box-shadow belongs here (NAMING.md O7)
 $number-box-spin-opacity-rest: ds.$opacity-20 !default;
 
@@ -16,4 +14,3 @@ $number-box-spin-container-touch-friendly-width: null !default;
 @else if $size == "compact" {
   $number-box-spin-container-touch-friendly-width: ds.$spacing-480 !default;
 }
-

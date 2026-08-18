@@ -19,16 +19,13 @@
 @use "../typography/sizes" as typographySizes;
 @use "../common/sizes" as *;
 @use "../dropDownEditor/sizes" as dropDownEditorSizes;
-
-// adduse
 @use "../scrollable";
 @use "../overlay";
 @use "../pagination";
-@use 'variables' as *;
-@forward 'variables';
-@use 'layout/cell' as *;
+@use "variables" as *;
+@forward "variables";
+@use "layout/cell" as *;
 @use "layout/aiChat" as *;
-
 
 @mixin grid-base($widget-name) {
   @include fluent-grid-base-cell($widget-name);
@@ -589,7 +586,7 @@
     touch-action: pinch-zoom;
 
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;

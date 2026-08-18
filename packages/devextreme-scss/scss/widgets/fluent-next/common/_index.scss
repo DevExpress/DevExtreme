@@ -3,8 +3,6 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 
-
-// adduse
 .dx-theme-marker {
   font-family: "dx.fluent-next.#{$theme-marker-color}.#{$theme-marker-mode}#{$theme-marker-size-postfix}";
 }

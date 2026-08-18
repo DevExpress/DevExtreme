@@ -1,8 +1,5 @@
 @use "./mixins" as *;
 
-// adduse
-
-
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $pagination-page-padding-fallback: 7px 8px 8px !default;
 $pagination-page-horizontal-padding: 13px !default;
