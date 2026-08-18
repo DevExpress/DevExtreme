@@ -1,8 +1,4 @@
 @use "../../../_design-system/variables/ds" as ds;
-@use "../sizes" as *;
-@use "../colors" as *;
-
-// adduse
 
 // Base-layer values injected with design tokens (wave B1)
 $sortable-clone-shadow-ambient-rest: ds.$color-shadow-ambient !default;

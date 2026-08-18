@@ -1,8 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 // Not colours: two opacities that used to sit in _colors.scss (NAMING.md, O7)
 $pagination-info-opacity: ds.$opacity-70 !default;
 $pagination-nav-opacity-disabled: ds.$opacity-30 !default;

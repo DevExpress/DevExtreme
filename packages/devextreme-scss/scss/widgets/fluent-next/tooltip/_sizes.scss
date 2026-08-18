@@ -2,8 +2,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 // Not a colour: a radius that used to sit in _colors.scss (NAMING.md, O7)
 $tooltip-border-radius: $global-border-radius !default;
 

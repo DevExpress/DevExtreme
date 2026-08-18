@@ -2,8 +2,6 @@
 @use "../button/colors" as buttonColors;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 $chat-bg-rest: ds.$color-surface-neutral-default-rest !default;
 
 $chat-border-rest: ds.$color-border-neutral-default-rest !default;

@@ -1,6 +1,5 @@
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/pagination" with (
   $pagination-page-margin-left: $pagination-page-margin-inline-start,
@@ -21,9 +20,6 @@
   $pagination-page-horizontal-padding: $pagination-page-padding-inline,
 );
 @use "../gridBase/sizes" as gridBaseSizes;
-
-// adduse
-
 
 .dx-pager,
 .dx-pagination {

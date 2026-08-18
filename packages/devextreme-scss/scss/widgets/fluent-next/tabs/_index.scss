@@ -1,5 +1,3 @@
-@use "../colors" as *;
-@use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/tabs";
 @use "variables/colors" as *;
@@ -8,7 +6,5 @@
 @use "layout/tabs" as *;
 @use "layout/tab/base" as *;
 @use "layout/navigation-button/base" as *;
-
-// adduse
 @use "../scrollable";
 @use "../badge";
