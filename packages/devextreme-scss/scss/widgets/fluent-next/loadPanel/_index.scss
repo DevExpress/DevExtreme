@@ -1,15 +1,11 @@
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/loadPanel" with (
   $loadpanel-content-padding: $load-panel-content-padding,
   $loadpanel-content-border: $load-panel-content-border,
   $loadpanel-content-border-radius: $load-panel-content-border-radius,
 );
-
-// adduse
 @use "../overlay";
-
 
 .dx-loadpanel-content {
   border: none;

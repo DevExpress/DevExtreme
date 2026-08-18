@@ -9,7 +9,6 @@ $scheduler-appointment-resizing-opacity: ds.$opacity-70 !default;
 $scheduler-appointment-opacity-disabled: ds.$opacity-60 !default;
 $scheduler-appointment-drag-source-opacity: ds.$opacity-70 !default;
 
-
 $scheduler-workspace-date-table-cell-height: null !default;
 $scheduler-toolbar-item-offset: null !default;
 $scheduler-header-panel-day-font-size: null !default;
@@ -87,7 +86,6 @@ $scheduler-collapsed-all-day-table-cell-height: null !default;
 
 $scheduler-header-panel-time-cell-height: ds.$spacing-320 !default;
 $scheduler-header-panel-time-cell-padding: null !default;
-
 
 @if $size == "default" {
   $scheduler-collapsed-all-day-table-cell-height: ds.$spacing-320 !default;

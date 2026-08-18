@@ -1,7 +1,5 @@
 @use "../colors" as *;
 
-// adduse
-
 /*
  * The clock face and arrows are SVG data-uri images: colors are baked into the
  * background-image at build time (string replace). CSS var() tokens do NOT resolve inside a

@@ -1,8 +1,6 @@
 @use "../sizes" as *;
-@use '../../base/dataGrid/variables' as *;
+@use "../../base/dataGrid/variables" as *;
 @use "../../../_design-system/variables/ds" as ds;
-
-// adduse
 
 $data-grid-cell-padding: ds.$spacing-70 !default;
 $data-grid-group-panel-item-font-weight: ds.$font-weight-base-default !default;

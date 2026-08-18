@@ -1,8 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 // Moved here from the theme root: this component owns it (NAMING.md O1)
 $html-editor-add-image-dialog-padding-inline-end: ds.$spacing-50 !default;
 

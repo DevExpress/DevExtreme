@@ -1,7 +1,4 @@
-@use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
-
-// adduse
 
 $date-box-overlay-item-margin: ds.$spacing-160 !default;
 $date-box-overlay-item-adaptive-margin: ds.$spacing-180 !default;

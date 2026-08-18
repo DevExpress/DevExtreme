@@ -1,14 +1,10 @@
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../common/mixins" as *;
 @use "../../base/dropDownList" with (
   $dropdownlist-list-min-height: $drop-down-list-min-height,
 );
-
-// adduse
 @use "../dropDownEditor";
-
 
 .dx-dropdownlist-popup-wrapper {
   @include dx-dropdownlist-list-appearance();

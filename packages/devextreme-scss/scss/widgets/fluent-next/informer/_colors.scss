@@ -1,7 +1,5 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 $informer-error-content-rest: ds.$color-content-danger-default-rest !default;
 $informer-error-bg-rest: ds.$color-surface-danger-deep-rest !default;
 $informer-info-content-rest: ds.$color-content-neutral-default-rest !default;

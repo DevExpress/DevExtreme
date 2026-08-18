@@ -1,15 +1,12 @@
 @use "sass:math";
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/mixins" as *;
 @use "../../base/progressBar" with (
   $progressbar-status-padding-right: $progress-bar-status-padding-inline-end,
   $progressbar-status-padding-left: $progress-bar-status-padding-inline-start,
   $progressbar-status-font-size: $progress-bar-status-font-size,
 );
-
-// adduse
 
 .dx-progressbar-container {
   height: $progress-bar-height;

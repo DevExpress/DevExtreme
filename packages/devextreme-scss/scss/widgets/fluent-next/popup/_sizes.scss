@@ -3,8 +3,6 @@
 @use "../../../_design-system/variables/ds" as ds;
 @use "../typography/sizes" as typographySizes;
 
-// adduse
-
 // Not a colour: a radius that used to sit in _colors.scss (NAMING.md, O7)
 $popup-border-radius: calc(#{$global-border-radius} * 2) !default;
 

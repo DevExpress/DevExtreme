@@ -16,8 +16,6 @@
 );
 @use "../../base/list/mixins" as *;
 @use "../radioButton/colors" as radioButtonColors;
-
-// adduse
 @use "../badge";
 
 .dx-state-disabled {

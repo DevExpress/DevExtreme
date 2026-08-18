@@ -1,8 +1,5 @@
 @use "./mixins" as *;
 
-// adduse
-
-
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $splitterbar-splitter-border-width: 7px !default;
 $splitterbar-splitter-bar-width: 1px !default;

@@ -1,8 +1,4 @@
 @use "../../../_design-system/variables/ds" as ds;
-@use "../sizes" as *;
-
-// adduse
-
 
 // Values hoisted from style-file literals (tokenized)
 $scroll-view-load-indicator-font-size: ds.$font-size-240 !default; // dx-icon-glyph-size: text roles not applicable

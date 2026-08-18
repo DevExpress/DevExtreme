@@ -1,6 +1,5 @@
 @use "./mixins" as *;
 
-// adduse
 $menubase-expand-arrow-container-width: 2em !default; // dx-relative
 .dx-menu-base {
   @include user-select(none);

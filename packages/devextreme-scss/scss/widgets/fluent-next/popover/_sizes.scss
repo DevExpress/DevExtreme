@@ -1,8 +1,4 @@
 @use "../../../_design-system/variables/ds" as ds;
-@use "../sizes" as *;
-
-// adduse
-
 
 // Values hoisted from style-file literals (tokenized)
 $popover-popup-title-border-start-start-radius: ds.$border-radius-60 !default;

@@ -1,8 +1,5 @@
 @use "./mixins" as *;
 
-// adduse
-
-
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $fileuploader-button-margin-left: 12px !default;
 $fileuploader-upload-button-margin-top: 10px !default;

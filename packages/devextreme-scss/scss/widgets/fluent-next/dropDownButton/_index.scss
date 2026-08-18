@@ -1,14 +1,10 @@
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../button/mixins" as *;
 @use "../common/mixins" as *;
 @use "../../base/dropDownButton";
 @use "../../base/dropDownButton/mixins" as *;
-
-// adduse
-
 @include dx-dropdownbutton(
   $drop-down-button-toggle-spindown-icon-size,
   $drop-down-button-action-padding-inline,
@@ -39,4 +35,3 @@
     }
   }
 }
-

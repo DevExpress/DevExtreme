@@ -2,9 +2,6 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/informer/mixins" as *;
-
-// adduse
-
 @include informer(
   $informer-error-content-rest,
   $informer-error-bg-rest,

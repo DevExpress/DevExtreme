@@ -9,8 +9,6 @@
 @use "../../base/gantt/mixins" as *;
 @use "../gridBase/colors" as gridBaseColors;
 @use "../form/sizes" as formSizes;
-
-// adduse
 @use "../splitterBar";
 
 .dx-gantt {
@@ -118,7 +116,7 @@
         &:not(.dx-gantt-smallTask)::after,
         &:not(.dx-gantt-smallTask):not(.dx-gantt-noPrg) .dx-gantt-tPrg::before,
         &:not(.dx-gantt-smallTask).dx-gantt-cmpl .dx-gantt-tPrg::after {
-          content: '';
+          content: "";
           position: absolute;
           bottom: $gantt-task-progress-inset-block-end;
           border-width: $gantt-task-progress-notch-border-width;

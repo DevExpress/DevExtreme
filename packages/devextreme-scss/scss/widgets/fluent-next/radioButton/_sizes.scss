@@ -1,8 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 $radio-button-size: ds.$spacing-160 !default;
 $radio-button-dot-size: ds.$spacing-100 !default;
 

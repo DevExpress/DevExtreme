@@ -3,8 +3,6 @@
 @use "../../base/treeList/variables" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 $tree-list-expand-icon-size: null !default;
 
 @if $size == "default" {

@@ -3,8 +3,6 @@
 @use "../sizes" as *;
 @use "../../base/card";
 
-// adduse
-
 .dx-card {
   box-shadow: $card-shadow-rest;
   border-radius: $global-border-radius;

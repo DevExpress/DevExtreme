@@ -106,8 +106,8 @@
 }
 
 @include baseTreeView.default-expander-icon(
-  'chevrondown',
-  'chevronright',
+  "chevrondown",
+  "chevronright",
   $global-icon-size,
   $tree-view-toggle-item-width,
   $tree-view-spin-icon-rest,

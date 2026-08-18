@@ -1,7 +1,4 @@
-@use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
-
-// adduse
 
 $time-view-field-min-height: 35px !default; // dx-offscale: 35px
 $time-view-time-separator-margin: ds.$spacing-50 !default;

@@ -60,10 +60,7 @@
   $filemanager-progress-bold-font-weight: $file-manager-progress-bold-font-weight,
 );
 @use "../../base/fileManager/mixins" as *;
-
-// adduse
 @use "../splitterBar";
-
 
 .dx-filemanager {
   border-color: $file-manager-border-rest;

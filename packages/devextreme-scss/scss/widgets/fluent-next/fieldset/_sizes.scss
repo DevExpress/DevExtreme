@@ -2,8 +2,6 @@
 @use "../common/sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 // Moved here from the theme root: this component owns it (NAMING.md O1)
 $fieldset-value-padding-inline: null !default;
 

@@ -1,7 +1,4 @@
-@use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
-
-// adduse
 
 $load-panel-padding: ds.$spacing-120 ds.$spacing-240 !default;
 $load-panel-border-radius: ds.$border-radius-80 !default;

@@ -1,9 +1,6 @@
 @use "../mixins" as *;
 @use "./mixins" as *;
 
-// adduse
-
-
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $checkbox-text-padding-inline-start: 5px !default;
 

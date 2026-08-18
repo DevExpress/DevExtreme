@@ -1,7 +1,6 @@
 @use "sass:math";
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/gallery" with (
   $gallery-root-border-width: $gallery-border-width,
@@ -9,8 +8,6 @@
   $gallery-indicator-height: $gallery-indicator-height,
   $gallery-indicator-item-margin: $gallery-indicator-item-margin,
 );
-
-// adduse
 
 .dx-gallery {
   .dx-gallery-nav-button-prev,
@@ -33,7 +30,7 @@
     @include dx-icon-font-centered-sizing(32px);
 
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       width: $gallery-nav-button-width;
       height: $gallery-nav-button-height;
@@ -79,7 +76,6 @@
     }
   }
 }
-
 
 .dx-gallery-indicator {
   pointer-events: none;

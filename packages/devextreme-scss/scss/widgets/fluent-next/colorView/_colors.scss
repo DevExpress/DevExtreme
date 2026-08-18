@@ -1,8 +1,6 @@
 @use "../../../_design-system/variables/ds" as ds;
 @use "../common/colors" as *;
 
-// adduse
-
 $color-view-content-box-overlay-bg-rest: $surface-overlay-rest !default;
 $color-view-bg-box-palette-cell-bg-rest: $color-view-content-box-overlay-bg-rest !default;
 $color-view-border-rest: ds.$color-border-neutral-default-rest !default;

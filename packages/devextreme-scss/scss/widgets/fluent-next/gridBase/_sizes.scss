@@ -2,8 +2,6 @@
 @use "../../../_design-system/variables/ds" as ds;
 @use "../button/sizes" as buttonSizes;
 
-// adduse
-
 // Not colours: a font weight and two opacities (NAMING.md O7)
 $grid-column-chooser-font-weight: ds.$font-weight-base-strong !default;
 $grid-text-link-opacity-disabled: ds.$opacity-35;

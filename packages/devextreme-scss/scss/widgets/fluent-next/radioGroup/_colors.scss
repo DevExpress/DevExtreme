@@ -1,10 +1,7 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 /*
  * The shared radio mixin paints ring (border) and dot (content) with one variable per state;
  * the danger-compound border/content/surface roles resolve identically, so a single variable
  * stays faithful. Extend dx-radiobutton-states-mixin args if the DS ever splits these roles.
  */
-

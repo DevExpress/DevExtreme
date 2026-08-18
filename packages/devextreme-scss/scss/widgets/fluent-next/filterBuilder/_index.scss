@@ -1,6 +1,5 @@
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../common/sizes" as *;
 @use "../../base/filterBuilder" with (
   $filterbuilder-action-icon-margin-left: $filter-builder-action-icon-margin-inline-start,
@@ -41,9 +40,6 @@
     $filterbuilder-menu-icon-color: $filter-builder-menu-icon-rest,
 );
 @use "../textEditor/colors" as textEditorColors;
-
-// adduse
-
 
 .dx-filterbuilder {
   .dx-filterbuilder-action-icon {

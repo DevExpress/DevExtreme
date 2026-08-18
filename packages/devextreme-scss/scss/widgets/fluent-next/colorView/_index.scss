@@ -1,11 +1,7 @@
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/colorView/mixins" as *;
 @use "../../base/colorView";
-
-// adduse
-
 @include dx-base-colorview-styles($color-view-handle-content-rest, $color-view-handle-border-rest);
 
 .dx-colorview-container {

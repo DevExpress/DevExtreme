@@ -1,13 +1,10 @@
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/splitter" with (
   $splitter-resize-handle-gap: $splitter-resize-handle-gap,
 );
 @use "../../base/splitter/mixins" as *;
-
-// adduse
 
 .dx-splitter {
   @include resize-handle-states(

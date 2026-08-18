@@ -1,13 +1,10 @@
 @use "sass:math";
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../textEditor/colors" as textEditorColors;
 @use "../textEditor/sizes" as textEditorSizes;
 @use "../../base/textBox";
-
-// adduse
 @use "../textEditor" as *;
 
 @mixin dx-texteditor-search-icon($texteditor-icon-size) {

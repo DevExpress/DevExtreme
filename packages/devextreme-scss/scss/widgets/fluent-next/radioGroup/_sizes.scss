@@ -1,8 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 $radio-group-radio-button-margin-block: null !default;
 
 @if $size == "default" {
@@ -12,7 +10,6 @@ $radio-group-radio-button-margin-block: null !default;
 @else if $size == "compact" {
   $radio-group-radio-button-margin-block: ds.$spacing-60 !default;
 }
-
 
 // Values hoisted from style-file literals (tokenized)
 $radio-group-collection-column-gap: ds.$spacing-160 !default;

@@ -1,12 +1,11 @@
 $treeview-disabled-opacity: 0.5 !default;
 
-@use 'sass:math';
-@use 'sass:meta';
+@use "sass:math";
+@use "sass:meta";
 @use "./common" with (
   $treeview-disabled-opacity: $treeview-disabled-opacity,
 );
 @use "../../base/icon_fonts" as *;
-
 
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $treeview-select-all-item-border-bottom: 1px solid !default;

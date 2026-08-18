@@ -1,8 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 $date-range-box-active-bar-margin-inline: null !default;
 
 @if $size == "default" {

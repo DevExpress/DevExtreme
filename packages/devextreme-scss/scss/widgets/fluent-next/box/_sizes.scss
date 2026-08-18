@@ -1,8 +1,4 @@
 @use "../../../_design-system/variables/ds" as ds;
-@use "../sizes" as *;
-
-// adduse
-
 
 // Base-layer values injected with design tokens (wave B1)
 $box-item-content-font-size: ds.$font-size-base-md !default;

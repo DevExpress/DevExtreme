@@ -1,6 +1,4 @@
 @use "../sizes" as *;
-
-// adduse
 @use "../toolbar/sizes" as toolbarSizes;
 @use "../../../_design-system/variables/ds" as ds;
 
@@ -51,7 +49,6 @@ $file-manager-toolbar-height: toolbarSizes.$toolbar-height;
   $file-manager-progress-panel-title-padding-block: ds.$spacing-100 !default;
   $file-manager-progress-box-button-close-margin-block-start: ds.$spacing-50 !default;
 }
-
 
 // Values hoisted from style-file literals (tokenized)
 $file-manager-toolbar-padding: 0 ds.$spacing-100 !default;

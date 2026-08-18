@@ -1,8 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 $text-box-search-icon-size: null !default;
 
 @if $size == "default" {

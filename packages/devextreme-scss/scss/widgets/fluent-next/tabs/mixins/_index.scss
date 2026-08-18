@@ -1,8 +1,5 @@
 @use "../variables/sizes" as *;
 
-// adduse
-
-
 @mixin dx-tabs-indicator {
   &::after {
     content: "";

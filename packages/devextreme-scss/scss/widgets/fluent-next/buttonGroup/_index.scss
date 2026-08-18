@@ -1,14 +1,11 @@
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../button/sizes" as buttonSizes;
 @use "../button/colors" as buttonColors;
 @use "../../base/buttonGroup" with (
   $buttongroup-mode-text-column-gap: $button-group-text-column-gap,
 );
 @use "../../base/buttonGroup/mixins" as *;
-
-// adduse
 
 .dx-buttongroup {
   &.dx-state-disabled {
