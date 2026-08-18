@@ -26,10 +26,6 @@
   font-size: 24px;
 }
 
-::ng-deep .dark #product-details > div {
-  color: #f0f0f0;
-}
-
 ::ng-deep .hidden {
   visibility: hidden;
 }

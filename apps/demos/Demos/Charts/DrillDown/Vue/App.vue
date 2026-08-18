@@ -72,7 +72,7 @@ function drillInfoClick(node: Record<string, any>) {
 }
 
 .link {
-  color: #337ab7;
+  color: var(--dxds-color-content-primary-default-rest, #337ab7);
   text-decoration: underline;
   cursor: pointer;
 }
