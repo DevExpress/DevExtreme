@@ -1,13 +1,9 @@
 @use "sass:math";
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/textArea";
 @use "../../base/textArea/mixins" as *;
 @use "../textEditor/sizes" as textEditorSizes;
-
-// adduse
-
 @include dx-textarea(
   2px,
   $text-area-content-line-height,

@@ -264,7 +264,6 @@ $scheduler-renovation-virtual-row-height: 50px !default;
   @return $size + $scheduler-left-column-width * $scheduler-small-size-factor;
 }
 
-
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $scheduler-appointment-content-horizontal-padding: 0 7px !default;
 $scheduler-appointment-recurrence-icon-top: 9px !default;

@@ -2,8 +2,6 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
-
-// adduse
 @use "../menuBase" as *;
 @use "../button/sizes" as buttonSizes;
 @use "../../base/menu" with (
@@ -106,6 +104,6 @@
 
   .dx-treeview-node-container:first-child > .dx-treeview-node {
     border-bottom: $menu-tree-view-node-border-block-end;
-    border-bottom-color: $menu-popup-border-rest
+    border-bottom-color: $menu-popup-border-rest;
   }
 }

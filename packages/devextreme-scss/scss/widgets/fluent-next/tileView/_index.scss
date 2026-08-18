@@ -1,12 +1,8 @@
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/tileView" with (
   $tileview-wrapper-height: $tile-view-wrapper-height,
 );
-
-// adduse
-
 
 .dx-tile {
   color: $tile-view-content-rest;

@@ -1,12 +1,9 @@
 @use "sass:math";
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/checkBox";
 @use "../../base/checkBox/mixins" as *;
-
-// adduse
 
 .dx-checkbox-icon {
   width: $check-box-arrow-icon-size;

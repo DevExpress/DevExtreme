@@ -1,8 +1,6 @@
-@use "../colors" as *;
 @use "sass:math";
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/mixins" as *;
 @use "../../base/icon_fonts" as *;
 @use "../gridBase" as *;
@@ -31,7 +29,7 @@
   $header-filter-color-empty: gridBaseColors.$grid-header-filter-empty-icon-rest,
   $base-focus-color: gridBaseColors.$grid-content-focused,
 );
-@use 'layout/cell';
+@use "layout/cell";
 @include grid-base(treelist);
 
 .dx-treelist-rowsview {

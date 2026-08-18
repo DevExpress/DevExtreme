@@ -5,8 +5,6 @@
 @use "../button/sizes" as buttonSizes;
 @use "../typography/sizes" as typographySizes;
 
-// adduse
-
 $chat-border-radius: calc(#{$global-border-radius} * 3) !default;
 $chat-bubble-border-radius: null !default;
 $chat-bubble-padding: null !default;

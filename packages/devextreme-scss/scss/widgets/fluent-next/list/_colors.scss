@@ -2,8 +2,6 @@
 @use "../button/colors" as buttonColors;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 $list-normal-content-rest: ds.$color-content-neutral-default-rest !default;
 
 $list-border-rest: ds.$color-border-neutral-default-rest !default;
