@@ -28,13 +28,25 @@ const nodeExists = function (array, currentKey) {
   return !!array.filter((key) => key === currentKey).length;
 };
 
-const data = (Base: ModuleType<DataController>) => class DataSelectionTreeListExtender extends dataSelectionExtenderMixin(Base) {
+interface TreeListSelectionControllerExtension {
+  isRecursiveSelection: () => boolean;
+  updateSelectionState: (options: {
+    selectedItemKeys?: unknown[];
+    removedItemKeys?: unknown[];
+  }) => void;
+}
+
+const data = (
+  Base: ModuleType<DataController>,
+): ModuleType<DataController> => class DataSelectionTreeListExtender
+  extends dataSelectionExtenderMixin(Base) {
+  // eslint-disable-next-line @typescript-eslint/prefer-readonly
+  private _selectionController!: SelectionController & TreeListSelectionControllerExtension;
+
   protected dataChangedHandler(e?: ChangedEvent): void {
-    // @ts-expect-error
     const isRecursiveSelection = this._selectionController.isRecursiveSelection();
 
     if (isRecursiveSelection) {
-      // @ts-expect-error
       this._selectionController.updateSelectionState({
         selectedItemKeys: this.option('selectedRowKeys'),
       });
@@ -46,12 +58,10 @@ const data = (Base: ModuleType<DataController>) => class DataSelectionTreeListEx
     const that = this;
     // @ts-expect-error
     const d = super.loadDescendants.apply(that, arguments);
-    // @ts-expect-error
     const isRecursiveSelection = this._selectionController.isRecursiveSelection();
 
     if (isRecursiveSelection) {
       d.done(() => {
-        // @ts-expect-error
         this._selectionController.updateSelectionState({
           selectedItemKeys: that.option('selectedRowKeys'),
         });
@@ -62,7 +72,11 @@ const data = (Base: ModuleType<DataController>) => class DataSelectionTreeListEx
   }
 };
 
-const selection = (Base: ModuleType<SelectionController>) => class SelectionControllerTreeListExtender extends Base {
+const selection = (
+  Base: ModuleType<SelectionController>,
+): ModuleType<
+SelectionController & TreeListSelectionControllerExtension
+> => class SelectionControllerTreeListExtender extends Base {
   private _selectionStateByKey: any;
 
   private _isSelectionNormalizing: any;
@@ -481,14 +495,14 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     return result;
   }
 
-  private isRecursiveSelection() {
+  public isRecursiveSelection() {
     const selectionMode = this.option('selection.mode');
     const isRecursive = this.option('selection.recursive');
 
     return selectionMode === 'multiple' && isRecursive;
   }
 
-  private updateSelectionState(options) {
+  public updateSelectionState(options): void {
     const removedItemKeys = options.removedItemKeys || [];
     const selectedItemKeys = options.selectedItemKeys || [];
 
