@@ -55,7 +55,6 @@ function normalizeLocaleFile(
         return line;
       }
 
-      // JSON.stringify adds the quotes and escapes backslashes, quotes and control characters.
       return `${indent}"${rawKey}": ${JSON.stringify(val)}${comma}${lineEnding}`;
     })
     .join('\n');
@@ -100,7 +99,6 @@ export default createExecutor<
         const fileContents = await readFileText(filePath);
         const newFile = normalizeLocaleFile(defaultFile, defaultLocale, fileContents);
 
-        // Never write a file the next run could not read back.
         try {
           JSON.parse(newFile);
         } catch (error) {
