@@ -313,11 +313,11 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterSyn
     let filterValue = this.option('filterValue');
 
     if (this.isFilterSyncActive()) {
-      const currentColumn = this._filterExcludedColumn;
-      const needRemoveCurrentColumnFilter = isDefined(currentColumn);
+      const excludedColumn = this.getFilterExcludedColumn();
+      const needRemoveCurrentColumnFilter = isDefined(excludedColumn);
 
       if (needRemoveCurrentColumnFilter && filterValue) {
-        filterValue = removeFieldConditionsFromFilter(filterValue, getColumnIdentifier(currentColumn));
+        filterValue = removeFieldConditionsFromFilter(filterValue, getColumnIdentifier(excludedColumn));
       }
     }
     const customOperations = this._filterSyncController.getCustomFilterOperations();

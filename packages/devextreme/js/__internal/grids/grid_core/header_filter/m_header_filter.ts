@@ -234,9 +234,7 @@ export class HeaderFilterController extends Modules.ViewController {
       isLookup = true;
 
       if (this.option('syncLookupFilterValues')) {
-        this._dataController.setFilterExcludedColumn(column);
-        const filter = this._dataController.getCombinedFilter();
-        this._dataController.setFilterExcludedColumn(null);
+        const filter = this._dataController.getCombinedFilterWithExcludedColumn(column);
 
         options.dataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
       } else {
@@ -245,9 +243,7 @@ export class HeaderFilterController extends Modules.ViewController {
     } else {
       const cutoffLevel = Array.isArray(group) ? group.length - 1 : 0;
 
-      this._dataController.setFilterExcludedColumn(column);
-      const filter = this._dataController.getCombinedFilter();
-      this._dataController.setFilterExcludedColumn(null);
+      const filter = this._dataController.getCombinedFilterWithExcludedColumn(column);
 
       options.dataSource = {
         filter,
@@ -493,12 +489,12 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterRow
     const that = this;
     const filters = [super._calculateAdditionalFilter()];
     const columns = that._columnsController.getVisibleColumns(null, true);
-    const currentColumn = this._filterExcludedColumn;
+    const excludedColumn = this.getFilterExcludedColumn();
 
     each(columns, (_, column) => {
       let filter;
 
-      if (currentColumn && currentColumn.index === column.index) {
+      if (excludedColumn && excludedColumn.index === column.index) {
         return;
       }
 
