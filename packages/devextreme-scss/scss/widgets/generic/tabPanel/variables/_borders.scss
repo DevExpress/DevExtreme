@@ -1,11 +1,8 @@
 @use "../../colors" as *;
 @use "../variables/sizes" as *;
-@use "../../sizes" as *;
 @use "../../button/colors" as *;
 @use "../../tabs/variables/sizes" as *;
 @use "../../tabs/variables/colors" as *;
-
-// adduse
 
 $generic-tabpanel-tab-border-transparent: null !default;
 $generic-tabpanel-tab-border-selected-bottom: null !default;
@@ -14,7 +11,6 @@ $generic-tabpanel-tab-border-active-bottom: null !default;
 $generic-tabpanel-tab-border-focused-bottom: null !default;
 $generic-tabpanel-tab-border-focused-left: null !default;
 $generic-tabpanel-tab-border-focused-right: null !default;
-
 
 @if $color == "carmine" {
   $generic-tabpanel-tab-border-transparent: $generic-tabs-border-width solid transparent !default;

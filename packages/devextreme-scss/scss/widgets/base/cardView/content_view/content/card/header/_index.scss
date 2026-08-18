@@ -1,5 +1,5 @@
-@use './variables' as *;
-@use '../variables' as *;
+@use "./variables" as *;
+@use "../variables" as *;
 
 .dx-cardview-card-header {
   display: flex;
@@ -38,7 +38,7 @@
   }
 
   .dx-toolbar-item-content::before {
-    content: '';
+    content: "";
     width: 20px;
     height: 20px;
     display: inline-block;

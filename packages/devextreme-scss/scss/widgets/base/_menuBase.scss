@@ -1,6 +1,5 @@
 @use "./mixins" as *;
 
-// adduse
 .dx-menu-base {
   @include user-select(none);
 

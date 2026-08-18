@@ -15,7 +15,7 @@
     margin-top: math.div(-$icon-height, 2);
     inset-inline-start: 50%;
     margin-inline-start: math.div(-$icon-width, 2);
-    font-size: $font-size,
+    font-size: $font-size;
   }
 }
 
@@ -33,7 +33,7 @@
       @include dx-checkbox-icon-centered($icon-height, $icon-width);
 
       &::before {
-        content: '';
+        content: "";
         background-color: $color-bg;
         border-radius: $icon-border-radius;
       }

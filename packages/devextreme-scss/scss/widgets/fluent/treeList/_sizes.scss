@@ -2,8 +2,6 @@
 @use "../sizes" as *;
 @use "../../base/treeList/variables" as *;
 
-// adduse
-
 $treelist-fluent-expand-icon-size: null !default;
 
 @if $size == "default" {

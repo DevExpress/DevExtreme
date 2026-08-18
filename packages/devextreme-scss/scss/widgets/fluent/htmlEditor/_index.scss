@@ -17,8 +17,6 @@
 @use "../../base/mixins" as *;
 @use "../../base/htmlEditor";
 
-// adduse
-
 .dx-htmleditor {
   border-color: transparent;
   position: relative;
@@ -34,7 +32,7 @@
     bottom: 0;
     height: 0;
     width: 100%;
-    content: '';
+    content: "";
     position: absolute;
     z-index: 2;
     transform: scale(0);
@@ -50,7 +48,7 @@
       right: 1px;
       z-index: 2;
       background-color: color.change($base-bg, $alpha: 0.4);
-      content: '';
+      content: "";
       pointer-events: none;
     }
   }
@@ -91,7 +89,7 @@
       bottom: 0;
       height: 0;
       width: 100%;
-      content: '';
+      content: "";
       position: absolute;
     }
 

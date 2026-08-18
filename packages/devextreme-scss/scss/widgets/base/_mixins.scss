@@ -43,7 +43,6 @@
   }
 }
 
-
 @mixin dx-overflow($x: hidden) {
   overflow: $x;
   text-overflow: ellipsis;
@@ -60,7 +59,7 @@
   &::after {
     height: 100%;
     display: inline-block;
-    content: '';
+    content: "";
     vertical-align: middle;
   }
 }
