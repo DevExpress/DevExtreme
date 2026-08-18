@@ -1,0 +1,6 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-select-box-list-bg-rest: #{$select-box-list-bg-rest};
+}

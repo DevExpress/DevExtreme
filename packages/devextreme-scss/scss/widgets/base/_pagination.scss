@@ -48,7 +48,12 @@ $pagination-info-paddings: 9px;
     .dx-page {
       display: inline-block;
       cursor: pointer;
-      padding: $pagination-page-padding-fallback;
+
+      // fluent-next passes null: its own rule paints this box, the base copy would be dead weight
+      @if $pagination-page-padding-fallback {
+        padding: $pagination-page-padding-fallback;
+      }
+
       margin-left: $pagination-page-margin-left;
       margin-right: $pagination-page-margin-right;
     }
@@ -66,7 +71,12 @@ $pagination-info-paddings: 9px;
     }
 
     .dx-navigate-button {
-      width: $pagination-navigate-button-width-fallback;
+
+      // fluent-next passes null: its own rule paints this box, the base copy would be dead weight
+      @if $pagination-navigate-button-width-fallback {
+        width: $pagination-navigate-button-width-fallback;
+      }
+
       height: $pagination-navigate-button-height;
       cursor: pointer;
       display: inline-block;
@@ -94,6 +104,7 @@ $pagination-info-paddings: 9px;
       &.dx-first-child {
         margin-left: $pagination-first-child-margin-left;
       }
+
 
       display: inline-block;
       cursor: pointer;

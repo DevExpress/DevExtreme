@@ -1,0 +1,20 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-fieldset-attention-icon-offset: #{$fieldset-attention-icon-offset};
+  --dx-fieldset-field-label-content-rest: #{$fieldset-field-label-content-rest};
+  --dx-fieldset-field-label-value-spacing: #{$fieldset-field-label-value-spacing};
+  --dx-fieldset-field-margin-block: #{$fieldset-field-margin-block};
+  --dx-fieldset-field-min-height: #{$fieldset-field-min-height};
+  --dx-fieldset-field-value-bottom-padding: #{$fieldset-field-value-bottom-padding};
+  --dx-fieldset-field-value-invalid-content-rest: #{$fieldset-field-value-invalid-content-rest};
+  --dx-fieldset-field-value-padding-inline: #{if($fieldset-field-value-padding-inline == $fieldset-value-padding-inline, var(--dx-fieldset-value-padding-inline), $fieldset-field-value-padding-inline)};
+  --dx-fieldset-field-value-top-padding: #{$fieldset-field-value-top-padding};
+  --dx-fieldset-header-margin-block: #{$fieldset-header-margin-block};
+  --dx-fieldset-margin-block: #{$fieldset-margin-block};
+  --dx-fieldset-margin-block-end: #{$fieldset-margin-block-end};
+  --dx-fieldset-margin-inline: #{$fieldset-margin-inline};
+  --dx-fieldset-radio-group-min-height: #{$fieldset-radio-group-min-height};
+  --dx-fieldset-value-padding-inline: #{$fieldset-value-padding-inline};
+}

@@ -4,11 +4,11 @@
 @use "../sizes" as *;
 @use "../colorView/colors" as colorViewColors;
 @use "../../base/colorBox" with (
-  $colorbox-texteditor-input-container-width: $color-box-input-container-width,
-  $colorbox-texteditor-input-container-height: $color-box-input-container-height,
-  $colorbox-texteditor-input-container-inset-inline-start: $color-box-input-container-inset-inline-start,
-  $colorbox-overlay-padding: $color-box-overlay-padding,
-  $colorbox-toolbar-item-padding-right: $color-box-toolbar-item-padding-inline-end,
+  $colorbox-texteditor-input-container-width: var(--dx-color-box-input-container-width),
+  $colorbox-texteditor-input-container-height: var(--dx-color-box-input-container-height),
+  $colorbox-texteditor-input-container-inset-inline-start: var(--dx-color-box-input-container-inset-inline-start),
+  $colorbox-overlay-padding: var(--dx-color-box-overlay-padding),
+  $colorbox-toolbar-item-padding-right: var(--dx-color-box-toolbar-item-padding-inline-end),
 );
 @use "../../base/colorBox/mixins" as *;
 
@@ -21,18 +21,18 @@
   .dx-colorbox-input-container {
     .dx-placeholder::before,
     .dx-colorbox-input {
-      padding-inline-start: $color-box-preview-min-width;
+      padding-inline-start: var(--dx-color-box-preview-min-width);
     }
 
     &::after {
-      left: calc(#{$color-box-preview-inset-inline-start} + 1px);
+      left: calc(var(--dx-color-box-preview-inset-inline-start) + 1px);
     }
   }
 
   &.dx-texteditor {
     .dx-texteditor-label {
       .dx-label-before {
-        min-width: $color-box-preview-min-width;
+        min-width: var(--dx-color-box-preview-min-width);
       }
     }
   }
@@ -42,20 +42,20 @@
   position: absolute;
   top: 50%;
   z-index: 2;
-  width: $color-box-preview-icon-size;
-  height: $color-box-preview-icon-size;
-  margin-top: calc(#{$color-box-preview-icon-size} / -2);
-  inset-inline-start: $color-box-preview-inset-inline-start;
-  border: $color-box-preview-border;
+  width: var(--dx-color-box-preview-icon-size);
+  height: var(--dx-color-box-preview-icon-size);
+  margin-top: calc(var(--dx-color-box-preview-icon-size) / -2);
+  inset-inline-start: var(--dx-color-box-preview-inset-inline-start);
+  border: var(--dx-color-box-preview-border);
   border-color: colorViewColors.$color-view-border-rest;
 
   .dx-icon-colordismiss {
-    color: $color-box-preview-icon-rest;
+    color: var(--dx-color-box-preview-icon-rest);
   }
 
   .dx-state-disabled & {
     .dx-icon-colordismiss {
-      color: $color-box-content-disabled;
+      color: var(--dx-color-box-content-disabled);
     }
   }
 }
@@ -66,7 +66,7 @@
   }
 
   .dx-popup-content {
-    padding: $color-box-overlay-content-padding;
+    padding: var(--dx-color-box-overlay-content-padding);
   }
 
   padding: 0;

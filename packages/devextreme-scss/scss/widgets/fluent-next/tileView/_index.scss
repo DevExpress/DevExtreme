@@ -2,28 +2,28 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/tileView" with (
-  $tileview-wrapper-height: $tile-view-wrapper-height,
+  $tileview-wrapper-height: var(--dx-tile-view-wrapper-height),
 );
 
 // adduse
 
 
 .dx-tile {
-  color: $tile-view-content-rest;
-  background-color: $tile-view-bg-rest;
-  border: $tile-view-tile-border;
-  border-color: $tile-view-border-rest;
+  color: var(--dx-tile-view-content-rest);
+  background-color: var(--dx-tile-view-bg-rest);
+  border: var(--dx-tile-view-tile-border);
+  border-color: var(--dx-tile-view-border-rest);
   text-align: left;
 
   &.dx-state-focused,
   &.dx-state-hover {
-    background-color: $tile-view-bg-hovered;
-    border-color: $tile-view-border-hovered;
+    background-color: var(--dx-tile-view-bg-hovered);
+    border-color: var(--dx-tile-view-border-hovered);
   }
 
   &.dx-state-active {
-    background-color: $tile-view-bg-active;
-    color: $tile-view-content-active;
+    background-color: var(--dx-tile-view-bg-active);
+    color: var(--dx-tile-view-content-active);
     border-color: transparent;
   }
 }

@@ -8,12 +8,12 @@
   buttonColors.$button-default-contained-bg-rest,
   buttonColors.$button-default-outlined-bg-hovered,
 );
-@include ai-chat-message-pending($grid-ai-chat-message-pending-content-rest);
-@include ai-chat-message-success($grid-ai-chat-message-success-content-rest);
-@include ai-chat-message-error($grid-ai-chat-message-error-content-rest);
-@include ai-chat-messagebubble-border($grid-ai-chat-message-border-rest);
+@include ai-chat-message-pending(var(--dx-grid-ai-chat-message-pending-content-rest));
+@include ai-chat-message-success(var(--dx-grid-ai-chat-message-success-content-rest));
+@include ai-chat-message-error(var(--dx-grid-ai-chat-message-error-content-rest));
+@include ai-chat-messagebubble-border(var(--dx-grid-ai-chat-message-border-rest));
 @include ai-chat-message-regenerate-button(buttonColors.$button-normal-contained-bg-active);
-@include ai-chat-message-icon($grid-ai-chat-message-icon-size);
+@include ai-chat-message-icon(var(--dx-grid-ai-chat-message-icon-size));
 
 .dx-ai-chat--disabled .dx-ai-chat__message-regenerate-button {
   @include baseWidget.disabled-widget();

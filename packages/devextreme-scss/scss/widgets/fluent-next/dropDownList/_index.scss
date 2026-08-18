@@ -3,7 +3,7 @@
 @use "../sizes" as *;
 @use "../common/mixins" as *;
 @use "../../base/dropDownList" with (
-  $dropdownlist-list-min-height: $drop-down-list-min-height,
+  $dropdownlist-list-min-height: var(--dx-drop-down-list-min-height),
 );
 
 // adduse

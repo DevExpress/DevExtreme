@@ -31,38 +31,38 @@
 
   // (0,1,0)
   .dx-command-adaptive {
-    width: calc(2 * #{$grid-cell-padding-inline} + #{$global-icon-size});
-    min-width: calc(2 * #{$grid-cell-padding-inline} + #{$global-icon-size});
+    width: calc(2 * var(--dx-grid-cell-padding-inline) + #{$global-icon-size});
+    min-width: calc(2 * var(--dx-grid-cell-padding-inline) + #{$global-icon-size});
   }
 
   // (0,2,0)
   .dx-#{$widget-name} .dx-command-drag {
-    width: calc(2 * #{$grid-cell-padding-inline} + #{$global-icon-size});
-    min-width: calc(2 * #{$grid-cell-padding-inline} + #{$global-icon-size});
+    width: calc(2 * var(--dx-grid-cell-padding-inline) + #{$global-icon-size});
+    min-width: calc(2 * var(--dx-grid-cell-padding-inline) + #{$global-icon-size});
   }
 
   // (0,7,1) - (0,9,1)
   .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-command-select,
   .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending).dx-command-select,
   .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-command-select {
-    width: $grid-command-select-column-width;
-    min-width: $grid-command-select-column-width;
+    width: var(--dx-grid-command-select-column-width);
+    min-width: var(--dx-grid-command-select-column-width);
   }
 
   // (0,7,1) - (0,9,1)
   .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-command-edit,
   .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending).dx-command-edit,
   .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-command-edit {
-    width: $grid-command-edit-column-width;
-    min-width: $grid-command-edit-column-width;
+    width: var(--dx-grid-command-edit-column-width);
+    min-width: var(--dx-grid-command-edit-column-width);
   }
 
   // (0,8,1) - (0,10,1)
   .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-command-edit.dx-command-edit-with-icons,
   .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending).dx-command-edit.dx-command-edit-with-icons,
   .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-command-edit.dx-command-edit-with-icons {
-    width: $grid-command-edit-column-with-icons-width;
-    min-width: $grid-command-edit-column-with-icons-width;
+    width: var(--dx-grid-command-edit-column-with-icons-width);
+    min-width: var(--dx-grid-command-edit-column-with-icons-width);
   }
 
   // #endregion
@@ -71,67 +71,67 @@
 
   // (0,2,1)
   .dx-#{$widget-name} .dx-row-lines > td {
-    border-bottom: $grid-border;
-    border-bottom-color: $grid-border-rest;
+    border-bottom: var(--dx-grid-border);
+    border-bottom-color: var(--dx-grid-border-rest);
   }
 
   // (0,2,1)
   .dx-#{$widget-name} .dx-column-lines > td {
-    border-left: $grid-border;
-    border-left-color: $grid-border-rest;
-    border-right: $grid-border;
-    border-right-color: $grid-border-rest;
+    border-left: var(--dx-grid-border);
+    border-left-color: var(--dx-grid-border-rest);
+    border-right: var(--dx-grid-border);
+    border-right-color: var(--dx-grid-border-rest);
   }
 
   // (0,3,0) - (0,4,0)
   .dx-#{$widget-name}-rowsview .dx-master-detail-row > .dx-#{$widget-name}-group-space,
   .dx-#{$widget-name}-rowsview .dx-master-detail-row .dx-master-detail-cell:not(.dx-row-lines) {
-    border-top: $grid-border;
-    border-top-color: $grid-border-rest;
-    border-bottom: $grid-border;
-    border-bottom-color: $grid-border-rest;
+    border-top: var(--dx-grid-border);
+    border-top-color: var(--dx-grid-border-rest);
+    border-bottom: var(--dx-grid-border);
+    border-bottom-color: var(--dx-grid-border-rest);
   }
 
   // (0,3,1)
   .dx-#{$widget-name}-headers .dx-#{$widget-name}-table .dx-row > td {
-    border-bottom: $grid-border;
-    border-bottom-color: $grid-border-rest;
+    border-bottom: var(--dx-grid-border);
+    border-bottom-color: var(--dx-grid-border-rest);
   }
 
   // (0,3,1)
   .dx-#{$widget-name}-rowsview .dx-row.dx-edit-row > td {
-    border-top: $grid-border;
-    border-top-color: $grid-border-rest;
-    border-bottom: $grid-border;
-    border-bottom-color: $grid-border-rest;
+    border-top: var(--dx-grid-border);
+    border-top-color: var(--dx-grid-border-rest);
+    border-bottom: var(--dx-grid-border);
+    border-bottom-color: var(--dx-grid-border-rest);
   }
 
   // (0,3,1)
   .dx-#{$widget-name}-rowsview .dx-row-removed.dx-row-lines > td {
-    border-top: $grid-row-lines-border-block-start;
-    border-top-color: $grid-cell-removed-border-rest;
-    border-bottom: $grid-row-lines-border-block-end;
-    border-bottom-color: $grid-cell-removed-border-rest;
+    border-top: var(--dx-grid-row-lines-border-block-start);
+    border-top-color: var(--dx-grid-cell-removed-border-rest);
+    border-bottom: var(--dx-grid-row-lines-border-block-end);
+    border-bottom-color: var(--dx-grid-cell-removed-border-rest);
   }
 
   // (0,3,1)
   .dx-#{$widget-name}-rowsview .dx-row-removed:not(.dx-row-lines) > td {
-    border-top: $grid-row-lines-border-block-start;
-    border-top-color: $grid-row-bg-hovered;
+    border-top: var(--dx-grid-row-lines-border-block-start);
+    border-top-color: var(--dx-grid-row-bg-hovered);
   }
 
   // (0,3,1) - (0,4,2)
   .dx-#{$widget-name}-rowsview .dx-row-focused:not(.dx-row-lines) > td,
   .dx-#{$widget-name}-rowsview .dx-row-focused:not(.dx-row-lines) > tr:first-child > td {
-    border-bottom: $grid-row-lines-border-block-end;
-    border-bottom-color: $grid-row-bg-focused;
+    border-bottom: var(--dx-grid-row-lines-border-block-end);
+    border-bottom-color: var(--dx-grid-row-bg-focused);
   }
 
   // (0,4,1)
   .dx-#{$widget-name}-rowsview .dx-row.dx-edit-row:first-child > td {
     border-top-width: 0;
-    border-bottom: $grid-border;
-    border-bottom-color: $grid-border-rest;
+    border-bottom: var(--dx-grid-border);
+    border-bottom-color: var(--dx-grid-border-rest);
   }
 
   // (0,4,1) - (0,5,1)
@@ -145,7 +145,7 @@
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > tr > td.dx-#{$widget-name}-group-space,
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > td.dx-#{$widget-name}-group-space,
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > tr > td.dx-#{$widget-name}-group-space {
-    border-right-color: $grid-selection-bg-rest;
+    border-right-color: var(--dx-grid-selection-bg-rest);
   }
 
   // (0,5,1) - (0,6,1)
@@ -153,23 +153,23 @@
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > tr > td.dx-pointer-events-none,
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > td.dx-pointer-events-none,
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > tr > td.dx-pointer-events-none {
-    border-left-color: $grid-row-border-selected;
-    border-right-color: $grid-row-border-selected;
+    border-left-color: var(--dx-grid-row-border-selected);
+    border-right-color: var(--dx-grid-row-border-selected);
   }
 
   // (0,5,1) - (0,6,1)
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):not(.dx-row-lines) > td,
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover:not(.dx-row-lines) > td {
-    border-bottom: $grid-row-lines-border-block-end;
-    border-bottom-color: $grid-selection-bg-rest;
-    border-top: $grid-row-lines-border-block-start;
-    border-top-color: $grid-selection-bg-rest;
+    border-bottom: var(--dx-grid-row-lines-border-block-end);
+    border-bottom-color: var(--dx-grid-selection-bg-rest);
+    border-top: var(--dx-grid-row-lines-border-block-start);
+    border-top-color: var(--dx-grid-selection-bg-rest);
   }
 
   // (0,5,1) - (0,6,1)
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused).dx-row-lines > td,
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover.dx-row-lines > td {
-    border-bottom-color: $grid-row-border-selected;
+    border-bottom-color: var(--dx-grid-row-border-selected);
   }
 
   // (0,7,1)
@@ -181,13 +181,13 @@
     .dx-#{$widget-name}-column-no-border,
     .dx-pointer-events-none
   ) {
-    border-left: $grid-row-lines-border-inline-start;
-    border-left-color: $grid-border-rest;
+    border-left: var(--dx-grid-row-lines-border-inline-start);
+    border-left-color: var(--dx-grid-border-rest);
   }
 
   // (0,10,1)
   .dx-rtl .dx-data-row.dx-state-hover:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) > td:not(.dx-focused).dx-#{$widget-name}-group-space {
-    border-left-color: $grid-row-bg-hovered;
+    border-left-color: var(--dx-grid-row-bg-hovered);
     border-right-color: transparent;
   }
 
@@ -198,7 +198,7 @@
   .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row > tr > td,
   .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row:hover > td,
   .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row:hover > tr > td {
-    border-right-color: $grid-row-border-selected;
+    border-right-color: var(--dx-grid-row-border-selected);
   }
 
   // (0,5,1) - (0,6,2)
@@ -206,7 +206,7 @@
   .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row > tr > td.dx-pointer-events-none,
   .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row:hover > td.dx-pointer-events-none,
   .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row:hover > tr > td.dx-pointer-events-none {
-    border-left-color: $grid-row-border-selected;
+    border-left-color: var(--dx-grid-row-border-selected);
   }
 
   // (0,6,1)
@@ -218,8 +218,8 @@
     .dx-#{$widget-name}-column-no-border,
     .dx-pointer-events-none
   ) {
-    border-right: $grid-cell-border-inline-end;
-    border-right-color: $grid-border-rest;
+    border-right: var(--dx-grid-cell-border-inline-end);
+    border-right-color: var(--dx-grid-border-rest);
   }
 
   // (0,6,1) - (0,7,2)
@@ -227,7 +227,7 @@
   .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row > tr > td:not(.dx-focused).dx-#{$widget-name}-group-space,
   .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row:hover > td:not(.dx-focused).dx-#{$widget-name}-group-space,
   .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row:hover > tr > td:not(.dx-focused).dx-#{$widget-name}-group-space {
-    border-left-color: $grid-selection-bg-rest;
+    border-left-color: var(--dx-grid-selection-bg-rest);
   }
 
   // #endregion
@@ -236,12 +236,12 @@
 
   // (0,4,1)
   .dx-#{$widget-name} .dx-#{$widget-name}-table .dx-header-row > td:first-child {
-    border-top-left-radius: $grid-border-radius;
+    border-top-left-radius: var(--dx-grid-border-radius);
   }
 
   // (0,4,1)
   .dx-#{$widget-name} .dx-#{$widget-name}-table .dx-header-row > td:last-child {
-    border-top-right-radius: $grid-border-radius;
+    border-top-right-radius: var(--dx-grid-border-radius);
   }
 
   // #endregion
@@ -251,7 +251,7 @@
   // (0,1,0)
   .dx-cell-modified,
   .dx-#{$widget-name}-invalid {
-    padding: $grid-cell-padding-block 0 $grid-cell-padding-block 0;
+    padding: var(--dx-grid-cell-padding-block) 0 var(--dx-grid-cell-padding-block) 0;
   }
 
   // (0,1,0)
@@ -262,7 +262,7 @@
 
   // (0,2,1)
   .dx-#{$widget-name} .dx-row > td {
-    padding: $grid-cell-padding-block $grid-cell-padding-inline;
+    padding: var(--dx-grid-cell-padding-block) var(--dx-grid-cell-padding-inline);
   }
 
   // (0,2,1)
@@ -272,13 +272,13 @@
 
   // (0,3,0)
   .dx-#{$widget-name}-rowsview .dx-master-detail-row > .dx-master-detail-cell {
-    padding: $grid-master-detail-padding;
+    padding: var(--dx-grid-master-detail-padding);
   }
 
   // (0,3,1)
   .dx-#{$widget-name} .dx-#{$widget-name}-table .dx-header-row > td {
-    padding-top: $grid-header-cell-padding-block;
-    padding-bottom: $grid-header-cell-padding-block;
+    padding-top: var(--dx-grid-header-cell-padding-block);
+    padding-bottom: var(--dx-grid-header-cell-padding-block);
   }
 
   // (0,3,1)
@@ -290,7 +290,7 @@
   // (0,3,1)
   .dx-#{$widget-name}-rowsview td.dx-validation-pending.dx-cell-modified,
   .dx-#{$widget-name}-rowsview td.dx-validation-pending .dx-#{$widget-name}-invalid {
-    padding: $grid-cell-padding;
+    padding: var(--dx-grid-cell-padding);
     padding-right: textEditorSizes.$text-editor-invalid-badge-size;
   }
 
@@ -305,40 +305,40 @@
   .dx-rtl .dx-#{$widget-name}-rowsview td.dx-validation-pending.dx-cell-modified,
   .dx-rtl .dx-#{$widget-name}-rowsview td.dx-validation-pending .dx-#{$widget-name}-invalid {
     padding-left: textEditorSizes.$text-editor-invalid-badge-size;
-    padding-right: $grid-cell-padding-inline;
+    padding-right: var(--dx-grid-cell-padding-inline);
   }
 
   // (0,5,1)
   .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-data-row:not(.dx-row-lines, .dx-edit-row, .dx-selection, .dx-row-focused, .dx-row-removed) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
-    padding-top: calc(#{$grid-cell-padding-block} + 1px);
+    padding-top: calc(var(--dx-grid-cell-padding-block) + 1px);
   }
 
   // (0,5,1)
   .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row.dx-edit-row > td.dx-command-edit {
-    padding-top: calc(#{$grid-cell-padding-block} - 1px);
+    padding-top: calc(var(--dx-grid-cell-padding-block) - 1px);
   }
 
   // (0,6,1)
   .dx-#{$widget-name}-headers.dx-header-multi-row .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row.dx-header-row > td {
-    padding-top: $grid-header-row-padding-block-start;
-    padding-bottom: $grid-header-row-padding-block-end;
+    padding-top: var(--dx-grid-header-row-padding-block-start);
+    padding-bottom: var(--dx-grid-header-row-padding-block-end);
   }
 
   // (0,6,1)
   .dx-row.dx-group-row + .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-data-row td:not(.dx-command-expand, .dx-editor-cell),
   .dx-row.dx-master-detail-row + .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-data-row td:not(.dx-command-expand, .dx-editor-cell) {
-    padding-top: $grid-cell-padding-block;
+    padding-top: var(--dx-grid-cell-padding-block);
   }
 
   // (0,7,0)
   .dx-#{$widget-name}-headers.dx-header-multi-row .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row.dx-header-row .dx-command-select {
-    padding-bottom: calc((#{$grid-header-height} - #{$grid-checkbox-size}) / 2);
+    padding-bottom: calc((var(--dx-grid-header-height) - var(--dx-grid-checkbox-size)) / 2);
   }
 
   // (0,8,1) T1303478
   .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row.dx-selection:not(.dx-edit-row):not(.dx-row-lines):not(.dx-group-row) > td:not(.dx-editor-cell, .dx-master-detail-cell),
   .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row.dx-row-focused:not(.dx-edit-row):not(.dx-row-lines):not(.dx-group-row) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
-    padding-bottom: calc(#{$grid-cell-padding-block} - 1px);
+    padding-bottom: calc(var(--dx-grid-cell-padding-block) - 1px);
   }
 
   // (0,7,1) - (0,9,1)
@@ -348,7 +348,7 @@
   .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending) .dx-#{$widget-name}-group-space,
   .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-command-expand,
   .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all) .dx-#{$widget-name}-group-space {
-    padding: $grid-validation-pending-padding;
+    padding: var(--dx-grid-validation-pending-padding);
   }
 
   // (0,8,1) - (0,10,1)
@@ -371,23 +371,23 @@
 
   // (0,2,1)
   .dx-#{$widget-name} .dx-row-alt > td {
-    background-color: $grid-row-alternation-bg-rest;
+    background-color: var(--dx-grid-row-alternation-bg-rest);
   }
 
   // (0,2,1)
   .dx-#{$widget-name} .dx-#{$widget-name}-drop-highlight > td {
-    background-color: $grid-drop-highlight-bg-rest;
+    background-color: var(--dx-grid-drop-highlight-bg-rest);
   }
 
   // (0,2,1)
   .dx-#{$widget-name}-rowsview .dx-row-removed > td {
-    background-color: $grid-row-removed-bg-rest;
+    background-color: var(--dx-grid-row-removed-bg-rest);
   }
 
   // (0,4,0)
   .dx-#{$widget-name}-rowsview .dx-master-detail-row:not(.dx-#{$widget-name}-edit-form) > .dx-#{$widget-name}-group-space,
   .dx-#{$widget-name}-rowsview .dx-master-detail-row:not(.dx-#{$widget-name}-edit-form) .dx-master-detail-cell {
-    background-color: $grid-master-detail-cell-bg-rest;
+    background-color: var(--dx-grid-master-detail-cell-bg-rest);
   }
 
   // (0,4,0) - (0,6,0)
@@ -397,14 +397,14 @@
   .dx-#{$widget-name}-rowsview .dx-adaptive-detail-row.dx-selection:not(.dx-edit-row) .dx-cell-modified,
   .dx-#{$widget-name}-rowsview .dx-data-row.dx-selection:hover:not(.dx-edit-row) .dx-cell-modified,
   .dx-#{$widget-name}-rowsview .dx-adaptive-detail-row.dx-selection:hover:not(.dx-edit-row) .dx-cell-modified {
-    background-color: $grid-cell-modified-bg-rest;
+    background-color: var(--dx-grid-cell-modified-bg-rest);
   }
 
   // (0,4,1)
   .dx-#{$widget-name}-headers.dx-#{$widget-name}-sticky-columns .dx-#{$widget-name}-filter-row > td.dx-#{$widget-name}-sticky-column,
   .dx-#{$widget-name}-headers.dx-#{$widget-name}-sticky-columns .dx-#{$widget-name}-filter-row > td.dx-#{$widget-name}-sticky-column-left,
   .dx-#{$widget-name}-headers.dx-#{$widget-name}-sticky-columns .dx-#{$widget-name}-filter-row > td.dx-#{$widget-name}-sticky-column-right {
-    background-color: $grid-filter-row-bg-rest;
+    background-color: var(--dx-grid-filter-row-bg-rest);
   }
 
   // (0,4,1) - (0,5,2)
@@ -412,28 +412,28 @@
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > tr > td,
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > td,
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > tr > td {
-    background-color: $grid-selection-bg-rest;
+    background-color: var(--dx-grid-selection-bg-rest);
   }
 
   // (0,5,1)
   .dx-#{$widget-name}-headers .dx-#{$widget-name}-table .dx-row > td:not([class*="dx-command"], .dx-editor-cell, .dx-#{$widget-name}-group-space):hover {
-    background-color: $grid-row-bg-hovered;
+    background-color: var(--dx-grid-row-bg-hovered);
   }
 
   // (0,6,1)
   .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row > td:not(.dx-focused):not(.dx-cell-modified):not(.dx-#{$widget-name}-invalid) {
-    background-color: $grid-row-bg-focused;
+    background-color: var(--dx-grid-row-bg-focused);
   }
 
   // (0,7,1) - (0,7,2)
   .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row.dx-edit-row > td.dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-invalid),
   .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row.dx-edit-row > tr > td.dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-invalid) {
-    background-color: $grid-bg-rest;
+    background-color: var(--dx-grid-bg-rest);
   }
 
   // (0,8,1)
   .dx-data-row.dx-state-hover:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) > td:not(.dx-focused) {
-    background-color: $grid-row-bg-hovered;
+    background-color: var(--dx-grid-row-bg-hovered);
   }
 
   // (0,8,1)
@@ -447,12 +447,12 @@
 
   // (0,2,1)
   .dx-#{$widget-name} .dx-#{$widget-name}-drop-highlight > td {
-    color: $grid-drop-highlight-content-rest;
+    color: var(--dx-grid-drop-highlight-content-rest);
   }
 
   // (0,2,1)
   .dx-#{$widget-name}-rowsview .dx-row-removed > td {
-    color: $grid-cell-removed-content-rest;
+    color: var(--dx-grid-cell-removed-content-rest);
   }
 
   // (0,4,1) - (0,5,2)
@@ -460,23 +460,23 @@
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > tr > td,
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > td,
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > tr > td {
-    color: $grid-row-content-selected;
+    color: var(--dx-grid-row-content-selected);
   }
 
   // (0,6,1)
   .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row > td:not(.dx-focused):not(.dx-cell-modified):not(.dx-#{$widget-name}-invalid) {
-    color: $grid-row-content-focused;
+    color: var(--dx-grid-row-content-focused);
   }
 
   // (0,7,1)
   .dx-data-row.dx-state-hover:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) > td {
-    color: $grid-row-content-hovered;
+    color: var(--dx-grid-row-content-hovered);
   }
 
   // (0,7,1) - (0,7,2)
   .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row.dx-edit-row > td.dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-invalid),
   .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row.dx-edit-row > tr > td.dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-invalid) {
-    color: $grid-content-rest;
+    color: var(--dx-grid-content-rest);
   }
 
   // #endregion
@@ -485,15 +485,15 @@
 
   // (0,2,1)
   .dx-#{$widget-name} .dx-row > td {
-    font-size: $grid-cell-font-size;
-    line-height: $grid-cell-line-height;
+    font-size: var(--dx-grid-cell-font-size);
+    line-height: var(--dx-grid-cell-line-height);
   }
 
   // (0,3,1)
   .dx-#{$widget-name}-headers .dx-#{$widget-name}-table .dx-row > td {
-    line-height: $grid-header-line-height;
-    font-weight: $grid-column-chooser-font-weight;
-    font-size: $grid-header-cell-font-size;
+    line-height: var(--dx-grid-header-line-height);
+    font-weight: var(--dx-grid-column-chooser-font-weight);
+    font-size: var(--dx-grid-header-cell-font-size);
   }
 
   // (0,7,1) - (0,9,1)

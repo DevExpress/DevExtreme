@@ -21,7 +21,7 @@
 }
 
 .dx-dateviewroller {
-  min-width: $date-view-roller-min-width;
+  min-width: var(--dx-date-view-roller-min-width);
   text-align: center;
   display: inline-block;
 
@@ -32,16 +32,16 @@
   .dx-scrollable-content::before,
   .dx-scrollable-content::after {
     content: "";
-    height: $date-view-roller-padding;
+    height: var(--dx-date-view-roller-padding);
     display: block;
   }
 
   .dx-scrollable-container {
-    height: $date-view-roller-height;
+    height: var(--dx-date-view-roller-height);
   }
 
   &.dx-dateviewroller-year {
-    min-width: $date-view-roller-year-min-width;
+    min-width: var(--dx-date-view-roller-year-min-width);
   }
 
   &.dx-state-active {
@@ -52,18 +52,18 @@
 }
 
 .dx-dateviewroller-month {
-  min-width: $date-view-roller-month-min-width;
+  min-width: var(--dx-date-view-roller-month-min-width);
 }
 
 .dx-dateviewroller-hours {
   &::after {
     content: ":";
-    font-size: $date-view-hours-colon-font-size;
+    font-size: var(--dx-date-view-hours-colon-font-size);
     position: absolute;
     inset-inline-end: -9%;
     font-weight: bold;
     top: 37%;
-    color: $date-view-content-rest;
+    color: var(--dx-date-view-content-rest);
   }
 
   .dx-dateview-item-selected-frame {
@@ -78,21 +78,21 @@
 }
 
 .dx-dateview-item {
-  height: $date-view-roller-item-height;
-  line-height: $date-view-roller-item-height;
+  height: var(--dx-date-view-roller-item-height);
+  line-height: var(--dx-date-view-roller-item-height);
   text-align: center;
-  font-size: $date-view-item-font-size;
-  color: $date-view-content-rest;
+  font-size: var(--dx-date-view-item-font-size);
+  color: var(--dx-date-view-content-rest);
 }
 
 .dx-dateview-item-selected {
-  font-size: $date-view-item-font-size-selected;
-  color: $date-view-item-content-selected;
+  font-size: var(--dx-date-view-item-font-size-selected);
+  color: var(--dx-date-view-item-content-selected);
 }
 
 .dx-dateview-item-selected-frame {
   position: absolute;
-  top: $date-view-roller-padding;
+  top: var(--dx-date-view-roller-padding);
   width: 100%;
 
   &::before,
@@ -102,19 +102,19 @@
     display: block;
     width: 100%;
     position: absolute;
-    height: $date-view-roller-padding;
+    height: var(--dx-date-view-roller-padding);
   }
 
   &::before {
-    top: calc(-1 * #{$date-view-roller-padding});
+    top: calc(-1 * var(--dx-date-view-roller-padding));
 
-    @include gradient-linear($date-view-roller-top-shadow-rest);
+    @include gradient-linear(var(--dx-date-view-roller-top-shadow-rest));
   }
 
   &::after {
-    top: $date-view-roller-item-height;
+    top: var(--dx-date-view-roller-item-height);
 
-    @include gradient-linear($date-view-roller-bottom-shadow-rest);
+    @include gradient-linear(var(--dx-date-view-roller-bottom-shadow-rest));
   }
 }
 
@@ -125,14 +125,14 @@
   }
 
   .dx-dateviewroller-month {
-    min-width: $date-view-roller-month-phone-min-width;
+    min-width: var(--dx-date-view-roller-month-phone-min-width);
   }
 
   .dx-dateview-item {
-    font-size: $date-view-item-phone-font-size;
+    font-size: var(--dx-date-view-item-phone-font-size);
   }
 
   .dx-dateview-item-selected {
-    font-size: $date-view-item-phone-font-size-selected;
+    font-size: var(--dx-date-view-item-phone-font-size-selected);
   }
 }
