@@ -205,8 +205,7 @@ function discoverComponentStyleFiles(tsFiles) {
       const src = fs.readFileSync(tsFile, 'utf8');
       for (const m of src.matchAll(STYLE_URLS_RE)) {
         for (const item of m[1].matchAll(STYLE_URL_ITEM_RE)) {
-          // Drop the SystemJS `${modulePrefix}` placeholder; under AOT it collapses to ''.
-          const cleaned = item[1].includes('${') ? item[1].replace(/\$\{[^}]+\}/g, '') : item[1];
+          const cleaned = item[1];
           result.add(path.resolve(path.dirname(tsFile), cleaned));
         }
       }
@@ -273,19 +272,17 @@ function removeShims(installed) {
   }
 }
 
-// ---- SystemJS-style templateUrl / styleUrls patcher ----
-// Demo components use SystemJS-era paths (`.${modulePrefix}/<name>.html`) that
-// resolve wrong under AOT. The real resource is always a sibling of the .ts with
-// the same basename, so rewrite to `./<basename>.<ext>` and feed the patched copy
-// (written next to the original so its relative imports still resolve) via
-// fileReplacements.
+// ---- templateUrl / styleUrls patcher ----
+// Rewrite component resource paths to `./<basename>.<ext>` (sibling of the .ts)
+// and feed the patched copy (written next to the original so its relative
+// imports still resolve) via fileReplacements. Also prepend @ts-nocheck so
+// JIT-era demo code compiles under AOT.
 const PATCHED_TS_PREFIX = '.csp-bundle-angular-patched.';
 const TEMPLATE_URL_RE = /templateUrl\s*:\s*([`'"])([^`'"]+)\1/g;
 const STYLE_URLS_INLINE_RE = /styleUrls\s*:\s*\[\s*([`'"])([^`'"]+)\1\s*\]/g;
 const allPatchedTsFiles = new Set();
 
 function aotRelativeFor(tsFile, originalSpec) {
-  // The original spec embeds the SystemJS `${modulePrefix}` plus the dir name.
   // The real resource is a sibling of the .ts with the same basename.
   const ext = path.extname(originalSpec);
   if (!ext) return null;
@@ -363,7 +360,7 @@ function findDemoTsFiles(rootDir) {
   return out;
 }
 
-// Map the bare `anti-forgery` specifier as the SystemJS config does.
+// Map the bare `anti-forgery` specifier to the shared fetch override.
 const ANTI_FORGERY_PATH = path.join(DEMOS_APP_ROOT, 'shared', 'anti-forgery', 'fetch-override.js');
 const antiForgeryPlugin = {
   name: 'csp-bundle-angular:anti-forgery',
@@ -474,10 +471,10 @@ const devextremeDistRedirectPlugin = {
   },
 };
 
-// Rewrite SystemJS specifiers (npm:foo, <spec>!json, globalize/<sub>) for esbuild.
+// Resolve `globalize/<sub>` to the dist browser build.
 const GLOBALIZE_BASE = path.join(REPO_ROOT, 'node_modules', 'globalize', 'dist', 'globalize');
-const systemJsQuirksPlugin = {
-  name: 'csp-bundle-angular:systemjs-quirks',
+const globalizePlugin = {
+  name: 'csp-bundle-angular:globalize',
   setup(build) {
     build.onResolve({ filter: /^globalize\/[^/]+$/ }, (args) => {
       const sub = args.path.slice('globalize/'.length);
@@ -490,31 +487,6 @@ const systemJsQuirksPlugin = {
       }
       return null;
     });
-
-    build.onResolve({ filter: /(^npm:)|(!json$)/ }, async (args) => {
-      let spec = args.path;
-      const forceJson = spec.endsWith('!json');
-      if (forceJson) spec = spec.slice(0, -'!json'.length);
-      if (spec.startsWith('npm:')) spec = spec.slice('npm:'.length);
-
-      const resolved = await build.resolve(spec, {
-        kind: args.kind,
-        importer: args.importer,
-        resolveDir: args.resolveDir,
-        pluginData: { cspBundleAngularResolved: true },
-      });
-      if (resolved.errors.length > 0) return resolved;
-
-      if (forceJson) {
-        return { path: resolved.path, namespace: 'csp-bundle-angular-force-json' };
-      }
-      return { path: resolved.path, external: resolved.external };
-    });
-
-    build.onLoad({ filter: /.*/, namespace: 'csp-bundle-angular-force-json' }, (args) => ({
-      contents: fs.readFileSync(args.path, 'utf8'),
-      loader: 'json',
-    }));
   },
 };
 
@@ -591,10 +563,9 @@ function makeBuildOptions({
     target: 'es2022',
     mainFields: ['es2020', 'es2015', 'browser', 'module', 'main'],
     conditions: ['es2020', 'es2015', 'module'],
-    // Resolve bare `globalize` to the core build (as the dev config and the
-    // React/Vue bundler do). Its package main (node-main.js) eagerly requires
-    // globalize/plural, which demands plurals-type-cardinal CLDR data the demos
-    // don't load (E_MISSING_CLDR).
+    // Resolve bare `globalize` to the core build (as the React/Vue bundler does).
+    // Its package main (node-main.js) eagerly requires globalize/plural, which
+    // demands plurals-type-cardinal CLDR data the demos don't load (E_MISSING_CLDR).
     alias: {
       globalize: path.join(NODE_MODULES, 'globalize', 'dist', 'globalize.js'),
     },
@@ -616,7 +587,7 @@ function makeBuildOptions({
     plugins: [
       angularSingleCopyPlugin,
       antiForgeryPlugin,
-      systemJsQuirksPlugin,
+      globalizePlugin,
       devextremeAngularSnakeCasePlugin,
       devextremeDistRedirectPlugin,
       devextremeRedirectPlugin,

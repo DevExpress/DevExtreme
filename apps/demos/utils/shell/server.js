@@ -24,12 +24,11 @@ const port = Number(portArgument) || 8080;
 const getDemoPath = (requestPath) => requestPath.replace(/^\/apps\/demos(?=\/|$)/, '');
 
 // Demos built via esbuild (see utils/build/) ship bundle.js next to their own
-// source instead of going through SystemJS's in-browser transpile. Rebuild
-// on-demand, only for the demo actually being viewed, so local dev doesn't
-// need a watcher over all ~2,500 demos.
+// source. Rebuild on-demand, only for the demo actually being viewed, so local
+// dev doesn't need a watcher over all ~2,500 demos.
 const BUNDLED_APPROACHES = new Set(['React', 'ReactJs', 'Vue', 'Angular']);
 const GENERATED_ENTRY_NAMES = new Set([
-  'bundle.js', 'bundle.css', indexFileName, 'config.js', 'tsconfig.json', 'description.md',
+  'bundle.js', 'bundle.css', indexFileName, 'tsconfig.json', 'description.md',
 ]);
 
 function newestSourceMtimeMs(dir) {

@@ -1,6 +1,5 @@
 // Pre-bundles React/Vue demos with esbuild for the CSP check, so it validates the
-// production CSP profile instead of the SystemJS dev loader's relaxations.
-// Output: apps/demos/csp-bundled-demos/<Widget>/<Name>/<Framework>/index.html.
+// production CSP profile. Output: apps/demos/csp-bundled-demos/<Widget>/<Name>/<Framework>/index.html.
 // Angular is delegated to csp-bundle-angular.js.
 
 const path = require('path');
@@ -87,7 +86,7 @@ function findEntry(srcDir) {
   return null;
 }
 
-// Treat imports of missing .css files (carried over from SystemJS configs) as empty.
+// Treat imports of missing .css files as empty.
 const ignoreMissingCssPlugin = {
   name: 'csp-bundle:ignore-missing-css',
   setup(build) {
@@ -105,13 +104,12 @@ const ignoreMissingCssPlugin = {
   },
 };
 
-// Rewrite SystemJS-specific import specifiers (npm:<pkg>, <spec>!json,
-// anti-forgery, globalize/<sub>) so esbuild resolves them like the dev loader.
+// Resolve demo-specific bare specifiers (anti-forgery, globalize/<sub>) for esbuild.
 const ANTI_FORGERY_PATH = path.join(DEMOS_APP_ROOT, 'shared', 'anti-forgery', 'fetch-override.js');
 const GLOBALIZE_BASE = path.join(NODE_MODULES, 'globalize', 'dist', 'globalize');
 
-const systemJsQuirksPlugin = {
-  name: 'csp-bundle:systemjs-quirks',
+const demoAliasesPlugin = {
+  name: 'csp-bundle:demo-aliases',
   setup(build) {
     build.onResolve({ filter: /^anti-forgery$/ }, () => ({ path: ANTI_FORGERY_PATH }));
 
@@ -121,32 +119,6 @@ const systemJsQuirksPlugin = {
       if (fs.existsSync(full)) return { path: full };
       return null;
     });
-
-    // `npm:foo/bar` -> `foo/bar`; trailing `!json` -> stripped, JSON loader forced.
-    build.onResolve({ filter: /(^npm:)|(!json$)/ }, async (args) => {
-      let spec = args.path;
-      const forceJson = spec.endsWith('!json');
-      if (forceJson) spec = spec.slice(0, -'!json'.length);
-      if (spec.startsWith('npm:')) spec = spec.slice('npm:'.length);
-
-      const resolved = await build.resolve(spec, {
-        kind: args.kind,
-        importer: args.importer,
-        resolveDir: args.resolveDir,
-        pluginData: { cspBundleResolved: true },
-      });
-      if (resolved.errors.length > 0) return resolved;
-
-      if (forceJson) {
-        return { path: resolved.path, namespace: 'csp-bundle-force-json' };
-      }
-      return { path: resolved.path, external: resolved.external };
-    });
-
-    build.onLoad({ filter: /.*/, namespace: 'csp-bundle-force-json' }, (args) => ({
-      contents: fs.readFileSync(args.path, 'utf8'),
-      loader: 'json',
-    }));
   },
 };
 
@@ -211,7 +183,7 @@ function getSharedOptions(framework) {
     alias: {
       react: path.join(NODE_MODULES, 'react'),
       'react-dom': path.join(NODE_MODULES, 'react-dom'),
-      // Alias bare 'globalize' to the browser build, as the SystemJS configs do.
+      // Alias bare 'globalize' to the browser build.
       globalize: path.join(NODE_MODULES, 'globalize', 'dist', 'globalize.js'),
     },
     define: {
@@ -222,14 +194,14 @@ function getSharedOptions(framework) {
     logLevel: 'silent',
     plugins: [
       devextremeDedupePlugin,
-      systemJsQuirksPlugin,
+      demoAliasesPlugin,
       ignoreMissingCssPlugin,
       ...(framework === 'Vue' ? [getVuePlugin()] : []),
     ],
   };
 }
 
-// Reuse the dev <body> markup (minus its SystemJS <script> tags) so the bundle
+// Reuse the dev <body> markup (minus its <script> tags) so the bundle
 // renders into the same mount node — a few demos don't use `#app`.
 const DEFAULT_BODY_INNER = `<div class="demo-container">
       <div id="app"></div>
