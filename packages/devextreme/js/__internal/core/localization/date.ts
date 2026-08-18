@@ -85,7 +85,6 @@ const dateLocalization = dependencyInjector({
         (presetOverride as string).toLowerCase()
       ] || presetOverride as string;
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return numberLocalization.convertDigits(
         getLDMLDateFormatter(pattern, this)(date),
       );
@@ -114,16 +113,20 @@ const dateLocalization = dependencyInjector({
 
     return result;
   },
-  getMonthNames(format: BaseFormat): string[] {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getMonthNames(format: Format, type?: string): string[] {
     return defaultDateNames.getMonthNames(format);
   },
-  getDayNames(format: BaseFormat): string[] {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getDayNames(format: Format, type?: string): string[] {
     return defaultDateNames.getDayNames(format);
   },
-  getQuarterNames(format: BaseFormat): string[] {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getQuarterNames(format: Format, type?: string): string[] {
     return defaultDateNames.getQuarterNames(format);
   },
-  getPeriodNames(format: BaseFormat): string[] {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getPeriodNames(format?: Format, type?: string): string[] {
     return defaultDateNames.getPeriodNames(format);
   },
   getTimeSeparator(): string {
@@ -175,7 +178,6 @@ const dateLocalization = dependencyInjector({
         // eslint-disable-next-line no-param-reassign
         format = (FORMATS_TO_PATTERN_MAP[(format as string).toLowerCase()] || format) as string;
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return numberLocalization.convertDigits(getLDMLDateFormatter(format, this)(date));
       }
     }
@@ -216,7 +218,6 @@ const dateLocalization = dependencyInjector({
         // eslint-disable-next-line @typescript-eslint/no-shadow
         const text: string = that.format(value, format);
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return numberLocalization.convertDigits(text, true);
       };
       try {
