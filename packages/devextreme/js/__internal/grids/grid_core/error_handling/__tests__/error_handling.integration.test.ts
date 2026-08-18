@@ -50,7 +50,6 @@ const createFailingStore = (): FailingStore => {
 const reload = async (instance: DataGridInstance): Promise<void> => {
   instance.refresh().catch(() => {});
   await flushAsync();
-  await flushAsync();
 };
 
 describe('DataGrid error handling', () => {
@@ -132,19 +131,21 @@ describe('DataGrid error handling', () => {
     });
 
     it('should suppress the error row when onDataErrorOccurred returns false', async () => {
+      const onDataErrorOccurred = jest.fn(() => false);
       const { store, failNextLoad } = createFailingStore();
       const { $container, instance } = await createDataGrid({
         dataSource: store,
         keyExpr: 'id',
         // The dataErrorOccurred callback is created with stopOnFalse, so a
         // handler returning false suppresses the subscribers after it.
-        onDataErrorOccurred: (() => false) as unknown as () => void,
+        onDataErrorOccurred: onDataErrorOccurred as unknown as () => void,
       });
       await flushAsync();
 
       failNextLoad(true);
       await reload(instance);
 
+      expect(onDataErrorOccurred).toHaveBeenCalledTimes(1);
       expect($container.find(ERROR_ROW_SELECTOR).length).toBe(0);
     });
   });
