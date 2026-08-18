@@ -9,8 +9,6 @@ on:
     paths-ignore:
       - 'apps/**/*.md'
   merge_group:
-  push:
-    branches: [26_1]
 
 env:
   MAX_LENGTH: 170
