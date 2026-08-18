@@ -1,7 +1,5 @@
 @use "../sizes" as *;
 
-// adduse
-
 $generic-actionsheet-item-margin: null !default;
 
 @if $size == "default" {

@@ -1,5 +1,4 @@
 @use "sass:math";
-@use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
@@ -8,7 +7,7 @@
 @use "../form/sizes" as *;
 @use "../radioGroup/sizes" as *;
 @use "../toolbar/sizes" as *;
-@use '../../base/scheduler/layout/header' as *;
+@use "../../base/scheduler/layout/header" as *;
 @use "../../base/mixins" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/scheduler" as baseScheduler with (
@@ -53,8 +52,6 @@
 @use "../button/colors" as *;
 @use "../button/mixins" as *;
 @use "../tooltip/colors" as *;
-
-// adduse
 @use "../recurrenceEditor" as *;
 @use "../scrollable";
 
@@ -339,7 +336,6 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     justify-content: flex-end;
   }
 
-
   &.dx-scheduler-header-panel-current-time-cell {
     color: $scheduler-panel-text-color;
 
@@ -470,7 +466,6 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
       text-align: right;
     }
   }
-
 
   .dx-scheduler-header-panel-current-time-cell {
     .dx-scheduler-header-panel-cell-date343 {
@@ -764,7 +759,6 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 .dx-scheduler-time-panel {
   font-size: $fluent-scheduler-workspace-info-text-size;
 }
-
 
 .dx-scheduler-work-space-grouped:not(.dx-scheduler-agenda) .dx-scheduler-group-row th,
 .dx-scheduler-work-space.dx-scheduler-work-space-grouped:not(.dx-scheduler-work-space-vertical-grouped):not(.dx-scheduler-timeline) .dx-scheduler-last-group-cell {

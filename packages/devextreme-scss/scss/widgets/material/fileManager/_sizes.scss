@@ -1,6 +1,4 @@
 @use "../sizes" as *;
-
-// adduse
 @use "../toolbar/sizes" as *;
 
 $filemanager-toolbar-separator-height: null !default;
@@ -50,4 +48,3 @@ $filemanager-toolbar-height: $material-toolbar-height;
   $filemanager-progress-panel-title-padding: 10px !default;
   $filemanager-progress-box-button-close-margin-top: 5px !default;
 }
-

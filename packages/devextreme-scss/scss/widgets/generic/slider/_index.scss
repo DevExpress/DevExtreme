@@ -3,10 +3,7 @@
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/slider";
-
-// adduse
 
 $generic-slider-radius: 2px;
 
@@ -78,7 +75,6 @@ $generic-slider-radius: 2px;
   }
 }
 
-
 .dx-slider-handle {
   margin-top: math.div(-$generic-slider-height, 2);
   margin-inline-end: math.div(-$generic-slider-width, 2);
@@ -121,4 +117,3 @@ $generic-slider-radius: 2px;
     }
   }
 }
-

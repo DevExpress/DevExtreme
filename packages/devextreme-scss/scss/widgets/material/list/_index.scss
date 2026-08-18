@@ -11,8 +11,6 @@
 @use "../../base/list" as *;
 @use "../../base/list/mixins" as *;
 @use "../radioGroup/colors" as *;
-
-// adduse
 @use "../badge";
 
 $material-list-item-border-width: 1px;
@@ -47,7 +45,6 @@ $material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding 
       font-size: $material-list-main-font-size;
     }
 
-
     .dx-clear-button-area {
       width: $material-base-icon-size - 1px;
     }
@@ -69,7 +66,6 @@ $material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding 
     content: none;
   }
 }
-
 
 .dx-list-item-before-bag,
 .dx-list-item-after-bag {

@@ -1,10 +1,7 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../button/colors" as *;
 @use "../color" as extcolor;
-
-// adduse
 
 /**
 * $name 10. Border color
@@ -92,7 +89,7 @@ $header-panel-cell-date: null !default;
   $scheduler-appointment-text-color: #000 !default;
   $header-panel-cell-date: #424242;
 
-  @if $color == "blue"{
+  @if $color == "blue" {
     $scheduler-appointment-base-color: color.adjust($base-accent, $lightness: 48%, $space: hsl) !default;
     $scheduler-cell-hover-bg: $base-hover-bg !default;
     $scheduler-cell-active-bg: color.change(color.adjust($base-bg, $lightness: -13.3%, $space: hsl), $alpha: 0.7) !default;
@@ -113,7 +110,7 @@ $header-panel-cell-date: null !default;
   $header-panel-cell-date: #adadad;
   $scheduler-cell-hover-bg: $base-hover-bg !default;
 
-  @if $color == "blue"{
+  @if $color == "blue" {
     $scheduler-cell-active-bg: color.change(color.adjust($base-bg, $lightness: -13.3%, $space: hsl), $alpha: 0.7) !default;
     $scheduler-workspace-focused-cell-color: color.change($base-accent, $alpha: 0.12) !default;
   }

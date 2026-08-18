@@ -1,14 +1,10 @@
 @use "../../../colors" as *;
-@use "../../../sizes" as *;
 @use "../../../button/colors" as *;
 @use "../../../../base/icon_fonts" as *;
 @use "../../../../base/tabs";
 @use "../../variables/colors" as *;
 @use "../../variables/sizes" as *;
 @use "../../variables/borders/borders-horizontal";
-
-// adduse
-
 
 $generic-tabs-vertical-border-hover-top: null !default;
 $generic-tabs-vertical-border-hover-bottom: null !default;

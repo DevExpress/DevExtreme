@@ -1,7 +1,4 @@
 @use "./mixins" as *;
-
-// adduse
-
 @include dx-popover-arrow-size(20px);
 
 .dx-popover-arrow {
