@@ -1,8 +1,6 @@
 @use "../sizes" as *;
 @use "../../base/dropDownMenu";
 
-// adduse
-
 .dx-dropdownmenu-popup-wrapper {
   .dx-overlay-content {
     box-shadow: $material-base-dropdown-widgets-shadow;

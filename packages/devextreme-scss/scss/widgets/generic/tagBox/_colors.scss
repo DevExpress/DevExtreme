@@ -1,9 +1,6 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../color" as extcolor;
-
-// adduse
 
 /**
 * $name 10. Tag text color
@@ -108,4 +105,3 @@ $tagbox-select-all-border-color: $base-border-color !default;
   $tagbox-tag-focused-color: $tagbox-tag-color !default;
   $tagbox-tag-focused-button-remove-bg: $tagbox-tag-button-remove-bg !default;
 }
-

@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 /**
 * $name 10. Border color
@@ -169,4 +166,3 @@ $switch-border-radius: null !default;
   $switch-container-readonly-bg: $switch-bg !default;
   $switch-border-radius: $base-border-radius-exsmall !default;
 }
-

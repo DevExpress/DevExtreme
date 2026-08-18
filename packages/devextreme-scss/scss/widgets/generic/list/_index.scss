@@ -11,8 +11,6 @@
 @use "../checkBox/colors" as *;
 @use "../../base/list";
 @use "../../base/list/mixins" as *;
-
-// adduse
 @use "../badge";
 
 $generic-list-border: $generic-list-border-width solid;
@@ -202,7 +200,7 @@ $generic-list-search-editor-height: math.round($generic-base-line-height * $gene
         border-color: transparent;
         border-width: 5px 5px 0 5px;
         border-top-color: $list-group-color;
-        content: ' ';
+        content: " ";
       }
 
       .dx-list-group-collapsed &::before {

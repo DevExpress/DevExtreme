@@ -20,7 +20,7 @@
 @use "../validation/colors" as *;
 @use "variables" as *;
 @forward "variables";
-@use 'layout/cell' as *;
+@use "layout/cell" as *;
 @use "layout/aiChat" as *;
 @use "../scrollable";
 @use "../overlay";
@@ -424,7 +424,7 @@ $generic-grid-base-cell-input-height: math.round($generic-base-line-height * $ge
     touch-action: pinch-zoom;
 
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;

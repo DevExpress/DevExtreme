@@ -32,9 +32,6 @@
   $pivotgrid-button-top-padding: $pivotgrid-button-top-padding,
 );
 
-// adduse
-
-
 $material-pivotgrid-headers-font-size: 12px;
 $material-pivotgrid-area-font-size: 13px;
 $material-pivotgrid-chevron-icon-size: 20px;
@@ -68,7 +65,6 @@ $material-pivotgridfieldchooser-field-min-height: 36px;
     }
   }
 }
-
 
 .dx-pivotgrid {
   background-color: $pivotgrid-area-background;
@@ -105,7 +101,6 @@ $material-pivotgridfieldchooser-field-min-height: 36px;
       }
     }
   }
-
 
   .dx-area-description-cell {
     .dx-pivotgrid-toolbar {

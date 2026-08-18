@@ -1,11 +1,8 @@
-@use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 
-
-// adduse
 .dx-theme-marker {
   font-family: "dx.material.#{$material-color-accent-modificator}.#{$material-color-theme-modificator}#{$material-size-postfix}";
 }

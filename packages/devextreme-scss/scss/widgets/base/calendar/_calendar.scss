@@ -1,8 +1,5 @@
 @use "../mixins" as *;
 
-// adduse
-
-
 .dx-calendar {
   @include user-select(none);
 
@@ -77,7 +74,6 @@
     @include dx-overflow();
   }
 }
-
 
 .dx-calendar-week-number-cell.dx-calendar-week-selection {
   cursor: pointer;
