@@ -604,11 +604,6 @@ jobs:
       working-directory: apps/demos
       run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
-    - name: Prepare JS
-      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
-      working-directory: apps/demos
-      run: pnpm run prepare-js
-
     - name: Check generated JS demos
       if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       working-directory: apps/demos
@@ -675,10 +670,6 @@ jobs:
     - name: Install tgz
       working-directory: apps/demos
       run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
-
-    - name: Prepare JS
-      working-directory: apps/demos
-      run: pnpm run prepare-js
 
     - name: Check generated JS demos
       working-directory: apps/demos
@@ -934,10 +925,6 @@ jobs:
       working-directory: apps/demos
       run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
-    - name: Prepare JS
-      working-directory: apps/demos
-      run: pnpm run prepare-js
-
     # Demo bundles are built once per framework/shard in build-demos and
     # downloaded here to overlay onto this job's own checkout (same commit).
     # Every artifact holds a file named demo-bundles.tgz, so each lands in its
@@ -1114,10 +1101,6 @@ jobs:
       - name: Install tgz
         working-directory: apps/demos
         run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
-
-      - name: Prepare JS
-        working-directory: apps/demos
-        run: pnpm run prepare-js
 
       # Demo bundles are built once per framework/shard in build-demos and
       # downloaded here to overlay onto this job's own checkout (same commit).

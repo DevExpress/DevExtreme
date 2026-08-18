@@ -10,7 +10,7 @@ To run the demos on your machine, clone this repository, run `pnpm install`, and
 
 From the monorepo root.
 
-Build DevExtreme, pack the Angular/React/Vue wrappers, and prepare demo extras (openai tarball):
+Build DevExtreme and pack the Angular/React/Vue wrappers:
 
 ```
 pnpm run demos:prepare

@@ -109,15 +109,13 @@
       "options": {
         "commands": [
           "pnpm nx build devextreme",
-          "pnpm nx run-many --targets=pack --projects=devextreme-angular,devextreme-react,devextreme-vue --parallel",
-          "pnpm run generate-tgz-packages"
+          "pnpm nx run-many --targets=pack --projects=devextreme-angular,devextreme-react,devextreme-vue --parallel"
         ],
         "parallel": false,
         "cwd": "{projectRoot}"
       },
       "inputs": [
-        "default",
-        "{projectRoot}/utils/create-tgz-packages.js"
+        "default"
       ]
     }
   },
