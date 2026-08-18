@@ -7476,17 +7476,17 @@ QUnit.module('New virtual scrolling mode', {
         const dataSource = this.createDataSource({
             pageSize: 3
         });
-        const dataLoadingHandler = dataSource._customizeStoreLoadOptionsHandler;
+        const originalDataLoadingHandler = dataSource.customizeStoreLoadOptionsHandlerProxy;
         const takeValues = [];
         const skipValues = [];
 
-        dataSource._customizeStoreLoadOptionsHandler = function(options) {
-            dataLoadingHandler.apply(dataSource, arguments);
+        dataSource.customizeStoreLoadOptionsHandlerProxy = function(options) {
+            originalDataLoadingHandler.apply(dataSource, arguments);
             skipValues.push(options.storeLoadOptions.skip);
             takeValues.push(options.storeLoadOptions.take);
         };
-        dataSource._dataSource.off('customizeStoreLoadOptions', dataLoadingHandler);
-        dataSource._dataSource.on('customizeStoreLoadOptions', dataSource._customizeStoreLoadOptionsHandler);
+        dataSource._dataSource.off('customizeStoreLoadOptions', originalDataLoadingHandler);
+        dataSource._dataSource.on('customizeStoreLoadOptions', dataSource.customizeStoreLoadOptionsHandlerProxy);
 
         try {
             // act
@@ -7507,8 +7507,8 @@ QUnit.module('New virtual scrolling mode', {
             assert.strictEqual(takeValues[1], 3, 'second take value');
             assert.deepEqual(dataSource.items(), TEN_NUMBERS.slice(0, 9), 'second load items');
         } finally {
-            dataSource._dataSource.off('customizeStoreLoadOptions', dataSource._dataLoadingHandler);
-            dataSource._dataSource.on('customizeStoreLoadOptions', dataLoadingHandler);
+            dataSource._dataSource.off('customizeStoreLoadOptions', dataSource.customizeStoreLoadOptionsHandlerProxy);
+            dataSource._dataSource.on('customizeStoreLoadOptions', originalDataLoadingHandler);
         }
     });
 
@@ -7518,15 +7518,15 @@ QUnit.module('New virtual scrolling mode', {
         const dataSource = this.createDataSource({
             pageSize: 3
         });
-        const loadingChangeHandler = dataSource._loadingChangedHandler;
+        const originalLoadingChangeHandler = dataSource.loadingChangedHandlerProxy;
         const startLoadTimeValues = [];
 
-        dataSource._loadingChangedHandler = function() {
-            loadingChangeHandler.apply(dataSource, arguments);
+        dataSource.loadingChangedHandlerProxy = function() {
+            originalLoadingChangeHandler.apply(dataSource, arguments);
             startLoadTimeValues.push(dataSource._startLoadTime);
         };
-        dataSource._dataSource.off('loadingChanged', loadingChangeHandler);
-        dataSource._dataSource.on('loadingChanged', dataSource._loadingChangedHandler);
+        dataSource._dataSource.off('loadingChanged', originalLoadingChangeHandler);
+        dataSource._dataSource.on('loadingChanged', dataSource.loadingChangedHandlerProxy);
 
         try {
             // act
@@ -7537,8 +7537,8 @@ QUnit.module('New virtual scrolling mode', {
             assert.notOk(startLoadTimeValues[0], 'not initizlized on the first call');
             assert.notOk(startLoadTimeValues[1], 'not initizlized on the second call');
         } finally {
-            dataSource._dataSource.off('loadingChanged', dataSource._loadingChangedHandler);
-            dataSource._dataSource.on('loadingChanged', loadingChangeHandler);
+            dataSource._dataSource.off('loadingChanged', dataSource.loadingChangedHandlerProxy);
+            dataSource._dataSource.on('loadingChanged', originalLoadingChangeHandler);
         }
     });
 

@@ -1,10 +1,11 @@
-import type { DataChange } from '@js/common/grids';
 import type { Callback } from '@js/core/utils/callbacks';
+import type { StoreChange } from '@js/data/store';
 import { isDefined } from '@ts/core/utils/m_type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import type { ColumnsController } from '../../columns_controller/m_columns_controller';
-import type { DataController, HandleDataChangedArguments, UserData } from '../../data_controller/data_controller';
+import type { DataController } from '../../data_controller/data_controller';
+import type { ChangedEvent, RawItemData } from '../../data_source_adapter/types';
 import { Controller } from '../../m_modules';
 import type { RowKey } from '../../m_types';
 import gridCoreUtils from '../../m_utils';
@@ -19,13 +20,13 @@ export class AIColumnController extends Controller {
 
   private aiColumnIntegrationController!: AIColumnIntegrationController;
 
-  private dataSourceChangedHandler!: (e?: HandleDataChangedArguments) => void;
+  private dataSourceChangedHandler!: (e?: ChangedEvent) => void;
 
   private storeUpdatedHandler!: (key: RowKey) => void;
 
   private storeRemovedHandler!: (key: RowKey) => void;
 
-  private storeBeforePushHandler!: ({ changes }: { changes: DataChange[] }) => void;
+  private storeBeforePushHandler!: ({ changes }: { changes: StoreChange[] }) => void;
 
   private dataControllerChangedHandler!: () => void;
 
@@ -59,7 +60,7 @@ export class AIColumnController extends Controller {
 
     this.columnsController.addCommandColumn({
       ...getAICommandColumnDefaultOptions(),
-      calculateCellValue(data: UserData) {
+      calculateCellValue(data: RawItemData) {
         const key = dataController.keyOf(data);
         const cellValue = aiColumnIntegrationController.getAIColumnText(this.name, key);
         const defaultValue = that.getDefaultCellValue(this, cellValue);
@@ -139,7 +140,7 @@ export class AIColumnController extends Controller {
     this.clearAIColumnsByKey(key);
   }
 
-  private handleStoreBeforePush({ changes }: { changes: DataChange[] }): void {
+  private handleStoreBeforePush({ changes }: { changes: StoreChange[] }): void {
     changes.forEach(({ key }) => {
       if (isDefined(key)) {
         this.clearAIColumnsByKey(key);
@@ -149,6 +150,7 @@ export class AIColumnController extends Controller {
 
   private updateAICells(): void {
     this.dataController.updateItems({
+      changeType: 'refresh',
       repaintChangesOnly: this.option('repaintChangesOnly'),
     });
   }
@@ -187,8 +189,8 @@ export class AIColumnController extends Controller {
     }
   }
 
-  private handleDataSourceChanged(args?: HandleDataChangedArguments): void {
-    if (args?.changeType === 'loadError') {
+  private handleDataSourceChanged(e?: ChangedEvent): void {
+    if (e?.changeType === 'loadError') {
       return;
     }
 

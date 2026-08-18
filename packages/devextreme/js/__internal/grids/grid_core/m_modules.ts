@@ -194,7 +194,7 @@ export class ModuleItem {
     return undefined;
   }
 
-  public executeAction(actionName, options) {
+  public executeAction(actionName, options): unknown {
     const action = this._actions[actionName];
 
     return action && action(options);

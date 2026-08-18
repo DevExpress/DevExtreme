@@ -150,6 +150,12 @@ $pivotgrid-expand-icon-text-offset: 0;
     outline: none;
   }
 
+  .dx-pivotgrid-toolbar .dx-button:focus-visible {
+    outline: 2px solid;
+    outline-color: $pivotgrid-accent-color;
+    outline-offset: -2px;
+  }
+
   .dx-column-header,
   .dx-filter-header {
     .dx-pivotgrid-toolbar {

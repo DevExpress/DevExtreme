@@ -882,7 +882,6 @@ class Draggable extends DOMComponent<Draggable, Properties> {
     const component = this.option('component');
 
     if (component) {
-      // @ts-expect-error ts-error
       args.component = component;
       // @ts-expect-error ts-error
       args.element = component.element();

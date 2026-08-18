@@ -20,11 +20,13 @@ import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ContextMenuController } from '@ts/grids/grid_core/context_menu/m_context_menu';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
-import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
+import type { StateStoringController } from '@ts/grids/grid_core/state_storing/state_storing_controller_core';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import Selection from '@ts/ui/selection/selection';
 
 import type { DataController } from '../data_controller/data_controller';
+import type { GeneratedItem, ItemProcessingOptions, ProcessedItem } from '../data_controller/types';
+import type { ChangedEvent } from '../data_source_adapter/types';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
 
@@ -369,7 +371,6 @@ export class SelectionController extends modules.Controller {
     }
 
     if (isDeferredMode) {
-      // @ts-expect-error
       that.option('selectionFilter', selectionFilter);
       selectionChangedOptions = {};
     } else if (args.addedItemKeys.length || args.removedItemKeys.length) {
@@ -638,27 +639,32 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
     });
   }
 
-  protected _processDataItem(item, options) {
+  protected _processDataItem(
+    generatedItem: GeneratedItem,
+    options: ItemProcessingOptions,
+  ): ProcessedItem {
+    const processedItem = super._processDataItem(generatedItem, options);
     const hasSelectColumn = this._selectionController.isSelectColumnVisible();
-    const isDeferredSelection = options.isDeferredSelection = options.isDeferredSelection === undefined ? this.option('selection.deferred') : options.isDeferredSelection;
-    const dataItem = super._processDataItem.apply(this, arguments as any);
+    options.isDeferredSelection ??= this.option('selection.deferred');
 
-    dataItem.isSelected = this._selectionController.isRowSelected(isDeferredSelection ? dataItem.data : dataItem.key);
+    processedItem.isSelected = this._selectionController.isRowSelected(
+      options.isDeferredSelection ? processedItem.data : processedItem.key,
+    );
 
-    if (hasSelectColumn && dataItem.values) {
-      for (let i = 0; i < options.visibleColumns.length; i++) {
+    if (hasSelectColumn && processedItem.values) {
+      for (let i = 0; i < options.visibleColumns.length; i += 1) {
         if (options.visibleColumns[i].command === 'select') {
-          dataItem.values[i] = dataItem.isSelected;
+          processedItem.values[i] = processedItem.isSelected;
           break;
         }
       }
     }
-    return dataItem;
+
+    return processedItem;
   }
 
   public refresh(options): any {
-    // @ts-expect-error
-    const d: DeferredObj<void> = new Deferred();
+    const d = Deferred();
 
     super.refresh(options).done(() => {
       const skipSelectionRefresh = isObject(options) && !(options as any).selection;
@@ -668,16 +674,16 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
         return;
       }
 
-      this._selectionController.refresh().done(d.resolve).fail(d.reject);
-    }).fail(d.reject);
+      this._selectionController.refresh().done(d.resolve as (...args: unknown[]) => void)
+        .fail(d.reject as (...args: unknown[]) => void);
+    }).fail(d.reject as (...args: unknown[]) => void);
 
     return d.promise();
   }
 
-  // eslint-disable-next-line
-  protected _handleDataChanged(e?) {
+  protected dataChangedHandler(e?: ChangedEvent): void {
     const hasLoadOperation = this.hasLoadOperation();
-    super._handleDataChanged.apply(this, arguments as any);
+    super.dataChangedHandler(e);
 
     if (hasLoadOperation && !this._repaintChangesOnly) {
       this._selectionController.focusedItemIndex(-1);
@@ -703,7 +709,9 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
     const changes = this._changes;
     const isUpdateSelection = changes.length > 1 && changes.every((change) => change.changeType === 'updateSelection');
     if (isUpdateSelection) {
-      const itemIndexes = changes.map((change) => change.itemIndexes || []).reduce((a, b) => a.concat(b));
+      const itemIndexes = changes
+        .map((change): number[] => ('itemIndexes' in change ? change.itemIndexes : []))
+        .reduce((a, b) => a.concat(b));
       this._changes = [{ changeType: 'updateSelection', itemIndexes }];
     }
     super._endUpdateCore.apply(this, arguments as any);

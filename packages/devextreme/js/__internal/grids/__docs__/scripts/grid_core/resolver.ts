@@ -1,22 +1,33 @@
 /* eslint-disable spellcheck/spell-checker, max-depth */
+import * as fs from 'fs';
+import * as path from 'path';
+
 import { parseMixinCall, stripAllMixins } from '../shared/ast-helpers';
+import { getRelativePath } from '../shared/file-discovery';
 import type { BuildChainOptions } from '../shared/inheritance';
 import { buildInheritanceChainCore } from '../shared/inheritance';
 import type { HeritageInfo } from '../shared/types';
 import {
   BARE_MODULE_BASES,
   getFeatureAreaFromPath,
+  GRID_CORE_ROOT,
   M_MODULES_PATH,
   MODULES_PREFIX,
+  TS_ALIAS_PREFIX,
 } from './constants';
 import type {
   ClassRegistrationInfo,
+  ExtenderKind,
+  ExtenderRef,
   GlobalClassInfo,
   InheritanceEntry,
   ModuleInfo,
+  OwnershipLink,
   ParsedFile,
   RuntimeDependency,
 } from './types';
+
+const EXTENDER_KINDS: ExtenderKind[] = ['controllers', 'views'];
 
 // ─── Global Class Registry ───────────────────────────────────────────────────
 
@@ -395,11 +406,129 @@ export function buildInheritanceChains(
   return entries.sort((a, b) => a.className.localeCompare(b.className));
 }
 
+// ─── Extender Definition Resolution ──────────────────────────────────────────
+
+/**
+ * Resolve an import specifier to a grid_core-relative path.
+ * Paths outside grid_core come back prefixed with `../`.
+ */
+export function resolveSpecifierToRelPath(spec: string, fromFileAbs: string): string | null {
+  let base: string | null = null;
+
+  if (spec.startsWith('.')) {
+    base = path.resolve(path.dirname(fromFileAbs), spec);
+  } else if (spec.startsWith(TS_ALIAS_PREFIX)) {
+    base = path.join(GRID_CORE_ROOT, spec.slice(TS_ALIAS_PREFIX.length));
+  }
+
+  if (!base) {
+    return null;
+  }
+
+  const candidates = [`${base}.ts`, path.join(base, 'index.ts')];
+  const found = candidates.find((candidate) => fs.existsSync(candidate));
+
+  return found ? getRelativePath(found, GRID_CORE_ROOT) : null;
+}
+
+interface ExtenderDefinitionSite { relPath: string; varName: string; className: string }
+
+/** Follow imports and re-exports from `moduleFile` until the defining file is reached. */
+function findExtenderDefinition(
+  extenderName: string,
+  moduleFile: ParsedFile,
+  fileByRelPath: Map<string, ParsedFile>,
+): ExtenderDefinitionSite | null {
+  let file = moduleFile;
+  let varName = extenderName;
+  const visited = new Set<string>();
+
+  while (!visited.has(`${file.relPath}#${varName}`)) {
+    visited.add(`${file.relPath}#${varName}`);
+
+    const def = file.extenderDefs.get(varName);
+    if (def) {
+      return { relPath: file.relPath, varName, className: def.className };
+    }
+
+    const spec = file.importSources.get(varName);
+    const relPath = spec ? resolveSpecifierToRelPath(spec, file.filePath) : null;
+    const next = relPath ? fileByRelPath.get(relPath) : undefined;
+    if (!next) {
+      return null;
+    }
+
+    varName = file.importedNames.get(varName) ?? varName;
+    file = next;
+  }
+
+  return null;
+}
+
+function findExtenderDefinitionIn(
+  extenderName: string,
+  moduleFiles: ParsedFile[],
+  fileByRelPath: Map<string, ParsedFile>,
+): ExtenderDefinitionSite | null {
+  for (const file of moduleFiles) {
+    const def = findExtenderDefinition(extenderName, file, fileByRelPath);
+    if (def) {
+      return def;
+    }
+  }
+
+  return null;
+}
+
+export function resolveExtenderDefinitions(
+  modules: ModuleInfo[],
+  fileByRelPath: Map<string, ParsedFile>,
+): Map<string, ExtenderRef[]> {
+  const refToEntries = new Map<string, ExtenderRef[]>();
+
+  for (const mod of modules) {
+    const moduleFiles = (mod.registrationFiles ?? [mod.sourceFile])
+      .map((relPath) => fileByRelPath.get(relPath))
+      .filter((pf): pf is ParsedFile => !!pf);
+
+    if (!moduleFiles.length) {
+      // eslint-disable-next-line no-continue
+      continue;
+    }
+
+    for (const kind of EXTENDER_KINDS) {
+      for (const [target, ext] of Object.entries(mod.extenders[kind])) {
+        const def = findExtenderDefinitionIn(ext.extenderName, moduleFiles, fileByRelPath);
+        if (!def) {
+          console.warn(`WARN: Could not resolve extender "${ext.extenderName}" registered by "${mod.moduleName}" for ${kind.slice(0, -1)} "${target}"`);
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+
+        ext.extenderClass = def.className || undefined;
+        ext.sourceFile = def.relPath;
+
+        const ref = `ext:${def.relPath}#${def.varName}`;
+        const entries = refToEntries.get(ref);
+        const entry: ExtenderRef = { module: mod.moduleName, kind, target };
+        if (entries) {
+          entries.push(entry);
+        } else {
+          refToEntries.set(ref, [entry]);
+        }
+      }
+    }
+  }
+
+  return refToEntries;
+}
+
 // ─── Runtime Dependency Resolution ───────────────────────────────────────────
 
 export function resolveRuntimeDeps(
   allParsedFiles: ParsedFile[],
   modules: ModuleInfo[],
+  extenderRefs: Map<string, ExtenderRef[]>,
 ): RuntimeDependency[] {
   const allDeps: RuntimeDependency[] = [];
 
@@ -414,17 +543,6 @@ export function resolveRuntimeDeps(
     }
   }
 
-  // Build a map: extenderName → moduleName
-  const extenderToModule = new Map<string, string>();
-  for (const mod of modules) {
-    for (const ext of Object.values(mod.extenders.controllers)) {
-      extenderToModule.set(ext.extenderName, mod.moduleName);
-    }
-    for (const ext of Object.values(mod.extenders.views)) {
-      extenderToModule.set(ext.extenderName, mod.moduleName);
-    }
-  }
-
   // Build a map: sourceFile → moduleName (for fallback lookup)
   const sourceFileToModule = new Map<string, string>();
   for (const mod of modules) {
@@ -433,20 +551,31 @@ export function resolveRuntimeDeps(
 
   for (const pf of allParsedFiles) {
     for (const dep of pf.runtimeDeps) {
-      const fromModule = classToModule.get(dep.from)
-        ?? extenderToModule.get(dep.from)
-        ?? sourceFileToModule.get(pf.relPath)
-        ?? '';
+      const owningEntries = extenderRefs.get(dep.fromRef);
 
-      allDeps.push({ ...dep, fromModule });
+      if (owningEntries?.length) {
+        // The same extender function can be registered by more than one module;
+        // the dependency belongs to each of those extender nodes.
+        for (const ref of owningEntries) {
+          allDeps.push({ ...dep, fromModule: ref.module, fromExtender: ref });
+        }
+      } else {
+        const fromModule = classToModule.get(dep.from)
+          ?? sourceFileToModule.get(pf.relPath)
+          ?? '';
+
+        allDeps.push({ ...dep, fromModule });
+      }
     }
   }
 
-  // Deduplicate
+  // Deduplicate on the resolved owner, not the bare name
   const seen = new Set<string>();
   const unique: RuntimeDependency[] = [];
   for (const dep of allDeps) {
-    const key = `${dep.from}|${dep.to}|${dep.via}`;
+    const ext = dep.fromExtender;
+    const owner = ext ? `${dep.fromRef}@${ext.module}/${ext.kind}/${ext.target}` : dep.fromRef;
+    const key = `${owner}|${dep.to}|${dep.via}`;
     if (!seen.has(key)) {
       seen.add(key);
       unique.push(dep);
@@ -454,6 +583,85 @@ export function resolveRuntimeDeps(
   }
 
   return unique.sort((a, b) => a.from.localeCompare(b.from) || a.to.localeCompare(b.to));
+}
+
+// ─── Ownership Resolution ────────────────────────────────────────────────────
+
+/** Module each call site belongs to, keyed the same way as `RuntimeDependency.fromRef`. */
+function buildModuleOfRef(
+  modules: ModuleInfo[],
+  extenderRefs: Map<string, ExtenderRef[]>,
+): Map<string, string> {
+  const moduleOfRef = new Map<string, string>();
+
+  for (const mod of modules) {
+    for (const entry of [...Object.values(mod.controllers), ...Object.values(mod.views)]) {
+      moduleOfRef.set(`class:${entry.className}`, mod.moduleName);
+    }
+  }
+
+  for (const [ref, entries] of extenderRefs) {
+    const owners = new Set(entries.map((e) => e.module));
+    if (owners.size === 1) {
+      moduleOfRef.set(ref, entries[0].module);
+    }
+  }
+
+  return moduleOfRef;
+}
+
+/**
+ * Attach classes that no module registers but a module's own code creates with `new`
+ * They are moved out of the standalone lists into the owning module
+ */
+export function resolveOwnership(
+  allParsedFiles: ParsedFile[],
+  modules: ModuleInfo[],
+  extenderRefs: Map<string, ExtenderRef[]>,
+  standaloneControllers: Record<string, ClassRegistrationInfo>,
+  standaloneViews: Record<string, ClassRegistrationInfo>,
+): OwnershipLink[] {
+  const moduleOfRef = buildModuleOfRef(modules, extenderRefs);
+  const moduleByName = new Map(modules.map((mod) => [mod.moduleName, mod]));
+  const instances = allParsedFiles.flatMap((pf) => pf.instances);
+
+  // className → where it currently sits in the standalone lists
+  const unowned = new Map<string, { key: string; list: Record<string, ClassRegistrationInfo> }>();
+  for (const list of [standaloneControllers, standaloneViews]) {
+    for (const [key, info] of Object.entries(list)) {
+      unowned.set(info.className, { key, list });
+    }
+  }
+
+  const candidates = new Set(unowned.keys());
+
+  let moved = true;
+  while (moved) {
+    moved = false;
+
+    for (const inst of instances) {
+      const slot = unowned.get(inst.className);
+      const mod = moduleByName.get(moduleOfRef.get(inst.ownerRef) ?? '');
+
+      if (slot && mod) {
+        mod.owned[slot.key] = slot.list[slot.key];
+        Reflect.deleteProperty(slot.list, slot.key);
+        unowned.delete(inst.className);
+        moduleOfRef.set(`class:${inst.className}`, mod.moduleName);
+        moved = true;
+      }
+    }
+  }
+
+  return instances
+    .filter((inst) => candidates.has(inst.className) && moduleOfRef.has(inst.ownerRef))
+    .map((inst) => ({
+      from: inst.owner,
+      fromRef: inst.ownerRef,
+      fromModule: moduleOfRef.get(inst.ownerRef) ?? '',
+      to: inst.className,
+      location: inst.location,
+    }));
 }
 
 // ─── Module Class Reference Resolution ───────────────────────────────────────
@@ -525,6 +733,22 @@ export function validateData(
   standaloneViews: Record<string, ClassRegistrationInfo>,
   runtimeDependencies: RuntimeDependency[],
 ): void {
+  // Same-named modules collapse into one diagram node, hiding one of them
+  const moduleFiles = new Map<string, string[]>();
+  for (const mod of modules) {
+    const files = moduleFiles.get(mod.moduleName);
+    if (files) {
+      files.push(mod.sourceFile);
+    } else {
+      moduleFiles.set(mod.moduleName, [mod.sourceFile]);
+    }
+  }
+  for (const [moduleName, files] of moduleFiles) {
+    if (files.length > 1) {
+      console.warn(`WARN: Module "${moduleName}" is declared in ${files.join(' and ')}; only the first is drawn`);
+    }
+  }
+
   const knownControllers = new Set<string>();
   const knownViews = new Set<string>();
   for (const mod of modules) {

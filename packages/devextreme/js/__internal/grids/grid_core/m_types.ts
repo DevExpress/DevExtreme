@@ -1,11 +1,13 @@
 /* eslint-disable spellcheck/spell-checker */
 
-import type { GridBase, GridBaseOptions, SelectionBase } from '@js/common/grids';
+import type {
+  GridBase, GridBaseOptions, SelectionBase,
+} from '@js/common/grids';
 import type { Component } from '@js/core/component';
 import type { PropertyType } from '@js/core/index';
 import type { dxElementWrapper } from '@js/core/renderer';
-import type { Properties as DataGridOptions } from '@js/ui/data_grid';
-import type { Properties as TreeListdOptions } from '@js/ui/tree_list';
+import type { Properties as DataGridOptions, Scrolling as DataGridScrolling } from '@js/ui/data_grid';
+import type { Properties as TreeListdOptions, Scrolling as TreeListScrolling } from '@js/ui/tree_list';
 import type Widget from '@js/ui/widget/ui.widget';
 
 import type { EditingController } from './editing/m_editing';
@@ -104,6 +106,9 @@ type TemporarlyOptionsTakenFromDataGrid = Pick<DataGridOptions,
 | 'onEditingStart'
 | 'toolbar'
 | 'summary'
+| 'remoteOperations'
+| 'keyExpr'
+| 'selectionFilter'
 >;
 
 type TemporarlyOptionsTakenFromTreeList = Pick<TreeListdOptions,
@@ -128,6 +133,8 @@ export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unkno
   loadItemsOnExportingSelectedItems?: boolean | undefined;
 
   selection?: InternalSelection;
+
+  scrolling?: DataGridScrolling | TreeListScrolling;
 }
 
 // todo: move to upper .d.ts files
@@ -201,7 +208,7 @@ export interface Controllers {
   selection: import('./selection/m_selection').SelectionController;
   validating: import('./validating/m_validating').ValidatingController;
   searchPanel: import('./search/m_search').SearchPanelViewController;
-  stateStoring: import('./state_storing/m_state_storing_core').StateStoringController;
+  stateStoring: import('./state_storing/state_storing_controller_core').StateStoringController;
   synchronizeScrolling: import('./views/m_grid_view').SynchronizeScrollingController;
   tablePosition: import('./columns_resizing_reordering/m_columns_resizing_reordering').TablePositionViewController;
   toastViewController: import('./toast/m_toast_controller').ToastViewController;

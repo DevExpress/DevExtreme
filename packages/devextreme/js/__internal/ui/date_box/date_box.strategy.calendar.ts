@@ -22,14 +22,12 @@ const TODAY_BUTTON_CLASS = 'dx-button-today';
 class CalendarStrategy<
   TValue = Date | null,
   TComponent = DateBox,
-> extends DateBoxStrategy<TValue> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TDateBox extends DateBox<any> = DateBox,
+> extends DateBoxStrategy<TValue, TDateBox> {
+  NAME = 'Calendar';
+
   _lastActionElement?: string;
-
-  constructor(dateBox: DateBox) {
-    super(dateBox);
-
-    this.NAME = 'Calendar';
-  }
 
   getWidget(): Calendar {
     return this._widget as Calendar;

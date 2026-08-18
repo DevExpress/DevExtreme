@@ -7,7 +7,7 @@ import type { DxEvent } from '@js/events';
 import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
 
-import type TextEditorBase from '../text_box/text_editor.base';
+import type Editor from '../editor/editor';
 import TextEditorButton from '../text_box/texteditor_button_collection/button';
 import type DropDownEditor from './drop_down_editor';
 import type { DropDownEditorProperties } from './drop_down_editor';
@@ -22,26 +22,34 @@ const BUTTON_MESSAGE = 'dxDropDownEditor-selectLabel';
 
 type DropDownButtonOptions = Pick<ButtonProperties, 'focusStateEnabled' | 'hoverStateEnabled' | 'activeStateEnabled' | 'disabled' | 'visible' | 'template'> & { useInkRipple: boolean };
 
-export default class DropDownButton extends TextEditorButton {
-  // @ts-expect-error narrow type to enable DropDownEditor-specific options
-  declare editor: DropDownEditor | null;
+// NOTE: the members an editor must provide to render a drop down button. They are
+// declared here, next to the only consumer: opening is not an Editor concern.
+interface EditorWithDropDown {
+  // eslint-disable-next-line @typescript-eslint/method-signature-style
+  _shouldCallOpenHandler?(): boolean;
 
+  // eslint-disable-next-line @typescript-eslint/method-signature-style
+  _openHandler?(): void;
+}
+
+export default class DropDownButton<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TComponent extends Editor<any> & EditorWithDropDown = DropDownEditor,
+> extends TextEditorButton<TComponent> {
   declare instance: Button | null;
 
   currentTemplate: DropDownEditorProperties['dropDownButtonTemplate'] | null;
 
-  constructor(name: string, editor: TextEditorBase, options: ButtonProperties) {
+  constructor(name: string, editor: TComponent, options: ButtonProperties) {
     super(name, editor, options);
 
     this.currentTemplate = null;
   }
 
   _attachEvents(instance: Button): void {
-    instance.option('onClick', (e) => {
-      // @ts-expect-error _shouldCallOpenHandler should be typed
+    instance.option('onClick', () => {
       if (this.editor?._shouldCallOpenHandler?.()) {
-        // @ts-expect-error _openHandler should be typed
-        this.editor?._openHandler(e);
+        this.editor?._openHandler?.();
 
         return;
       }
@@ -49,8 +57,7 @@ export default class DropDownButton extends TextEditorButton {
       const { openOnFieldClick } = this.editor?.option() ?? {};
 
       if (!openOnFieldClick) {
-        // @ts-expect-error _openHandler should be typed
-        this.editor?._openHandler(e);
+        this.editor?._openHandler?.();
       }
     });
 
@@ -76,7 +83,7 @@ export default class DropDownButton extends TextEditorButton {
 
     this._addToContainer($element);
 
-    const instance = editor._createComponent<Button, ButtonProperties>(
+    const instance: Button = editor._createComponent(
       $element,
       Button,
       extend(
@@ -159,8 +166,7 @@ export default class DropDownButton extends TextEditorButton {
     this.currentTemplate = dropDownButtonTemplate;
   }
 
-  // @ts-expect-error inconsistent return type, fix in TextEditorButton
-  update(): void {
+  update(): boolean {
     const shouldUpdate = super.update();
 
     if (shouldUpdate) {
@@ -172,5 +178,7 @@ export default class DropDownButton extends TextEditorButton {
       instance?.option(options);
       this._legacyRender($editor, instance?.$element(), options.visible);
     }
+
+    return shouldUpdate;
   }
 }

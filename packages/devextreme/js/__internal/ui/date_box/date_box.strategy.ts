@@ -13,14 +13,18 @@ import type List from '@ts/ui/list/list.edit.search';
 import type { PopupProperties } from '@ts/ui/popup/popup';
 import type Popup from '@ts/ui/popup/popup';
 
-class DateBoxStrategy<TValue = Date | null> {
+class DateBoxStrategy<
+  TValue = Date | null,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TDateBox extends DateBox<any> = DateBox,
+> {
   public NAME!: string;
 
-  dateBox!: DateBox;
+  dateBox!: TDateBox;
 
   _widget!: Calendar | DateView | List | null;
 
-  constructor(dateBox: DateBox) {
+  constructor(dateBox: TDateBox) {
     this.dateBox = dateBox;
   }
 

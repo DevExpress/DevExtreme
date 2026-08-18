@@ -60,7 +60,9 @@ const ready = readyCallbacks.add;
 const window = windowUtils.getWindow();
 const viewPortChanged = changeCallback;
 
-export const OVERLAY_STACK: Overlay[] = [];
+export // NOTE: the stack is global and holds overlays of every properties flavor.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const OVERLAY_STACK: Overlay<any>[] = [];
 const ANONYMOUS_TEMPLATE_NAME = 'content';
 const TAB_KEY = 'tab';
 
@@ -544,7 +546,8 @@ class Overlay<
     return false;
   }
 
-  _overlayStack(): Overlay[] {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _overlayStack(): Overlay<any>[] {
     return OVERLAY_STACK;
   }
 

@@ -1,4 +1,4 @@
-import ValidationEngine from '../__internal/ui/m_validation_engine';
+import ValidationEngine from '../__internal/ui/validation_engine';
 
 export default ValidationEngine;
 

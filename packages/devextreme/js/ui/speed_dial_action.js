@@ -1,4 +1,4 @@
-import SpeedDialAction from '../__internal/ui/speed_dial_action/m_speed_dial_action';
+import SpeedDialAction from '../__internal/ui/speed_dial_action/speed_dial_action';
 
 export default SpeedDialAction;
 
