@@ -148,7 +148,7 @@ function changeFavoriteState() {
 <style>
 .large-text {
   font-size: 24px;
-  color: #ff6a50;
+  color: var(--dxds-color-content-utility-orange-default-rest, #ff6a50);
 }
 
 .opacity {
@@ -168,7 +168,7 @@ function changeFavoriteState() {
 .images .item-content {
   position: relative;
   margin: 5px;
-  color: #fff;
+  color: var(--dxds-color-content-neutral-default-on-surface-rest, #fff);
   cursor: pointer;
 }
 
@@ -185,7 +185,7 @@ function changeFavoriteState() {
 }
 
 .images .item-content:hover > .item-options {
-  box-shadow: inset 0 0 0 2px #f05b41;
+  box-shadow: inset 0 0 0 2px var(--dxds-color-border-utility-orange-default-rest, #f05b41);
 }
 
 .item-content .item-options > div {
@@ -194,7 +194,7 @@ function changeFavoriteState() {
   width: 100%;
   height: 64px;
   padding-top: 4px;
-  background-color: rgba(19, 32, 51, 0.8);
+  background-color: color-mix(in srgb, var(--dxds-color-surface-neutral-default-static-dark-rest, rgb(19, 32, 51)) calc(var(--dxds-opacity-80, 0.8) * 100%), transparent);
   z-index: 1;
   box-sizing: border-box;
   border-left: 2px solid transparent;
@@ -202,9 +202,9 @@ function changeFavoriteState() {
 }
 
 .images .item-content:hover > .item-options > div {
-  border-bottom: 2px solid #f05b41;
-  border-left: 2px solid #f05b41;
-  border-right: 2px solid #f05b41;
+  border-bottom: 2px solid var(--dxds-color-border-utility-orange-default-rest, #f05b41);
+  border-left: 2px solid var(--dxds-color-border-utility-orange-default-rest, #f05b41);
+  border-right: 2px solid var(--dxds-color-border-utility-orange-default-rest, #f05b41);
 }
 
 .item-content .item-options .address,
@@ -225,12 +225,12 @@ function changeFavoriteState() {
   top: 0;
   bottom: 0;
   text-align: center;
-  border-left: 1px solid rgba(255, 255, 255, 0.4);
+  border-left: 1px solid color-mix(in srgb, var(--dxds-color-border-neutral-compound-on-surface-rest, rgb(255, 255, 255)) calc(var(--dxds-opacity-40, 0.4) * 100%), transparent);
   line-height: 13px;
 }
 
 .item-content .item-options .agent > div:hover {
-  color: #f05b41;
+  color: var(--dxds-color-border-utility-orange-default-rest, #f05b41);
 }
 
 .item-content .item-options .agent img {
@@ -271,14 +271,14 @@ function changeFavoriteState() {
 }
 
 .dx-button.favorites {
-  background-color: #f05b41;
-  color: #fff;
+  background-color: var(--dxds-color-border-utility-orange-default-rest, #f05b41);
+  color: var(--dxds-color-content-neutral-default-on-surface-rest, #fff);
   position: absolute;
   top: 5px;
   right: 0;
 }
 
 .dx-button.favorites .dx-icon {
-  color: #fff;
+  color: var(--dxds-color-content-neutral-default-on-surface-rest, #fff);
 }
 </style>

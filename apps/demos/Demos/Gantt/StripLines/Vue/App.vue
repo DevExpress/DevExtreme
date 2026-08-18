@@ -47,6 +47,6 @@ const currentTime = new Date();
 </script>
 <style>
   .dx-gantt .dx-gantt-tm.current-time {
-    border-left: 1px solid red;
+    border-left: 1px solid var(--dxds-color-border-utility-red-default-rest, red);
   }
 </style>
