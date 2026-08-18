@@ -63,7 +63,7 @@ const deleteEmployeeFunc = () => props.deleteEmployee(props.employee);
     #diagram .template .template-button {
       cursor: pointer;
       font-size: 8pt;
-      fill: navy;
+      fill: var(--dxds-color-content-utility-blue-default-rest, navy);
     }
 
     #diagram .template .template-button:hover {
