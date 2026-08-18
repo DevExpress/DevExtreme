@@ -1,8 +1,5 @@
 @use "./mixins" as *;
 
-// adduse
-
-
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $scrollview-top-pocket-width: 40px !default;
 $scrollview-top-pocket-height: 40px !default;

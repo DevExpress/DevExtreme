@@ -1,8 +1,5 @@
 @use "./mixins" as *;
 
-// adduse
-
-
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $menu-separator-margin-inline-end: 15px !default;
 $menu-separator-margin-bottom: 15px !default;

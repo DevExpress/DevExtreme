@@ -1,8 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 /*
  * O4: these used to be read from popup/, speedDialAction/ and fieldset/. Diagram's floating
  * toolbar and its toolbar text are diagram's own anatomy, so the values live here; the

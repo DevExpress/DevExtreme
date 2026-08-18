@@ -1,12 +1,8 @@
 @use "../../../_design-system/variables/ds" as ds;
-@use "../sizes" as *;
-
-// adduse
 
 // Not colours: two opacities that used to sit in _colors.scss (NAMING.md, O7)
 $sortable-clone-opacity: ds.$opacity-90 !default;
 $sortable-source-opacity: ds.$opacity-50 !default;
-
 
 // Base-layer sizing injected with design tokens (wave B2)
 $sortable-placeholder-border: ds.$border-width-10 solid !default;

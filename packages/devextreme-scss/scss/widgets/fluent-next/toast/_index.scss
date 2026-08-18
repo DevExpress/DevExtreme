@@ -9,10 +9,7 @@
   $toast-icon-margin-left: $toast-icon-rtl-margin-inline-end,
   $toast-stack-gap: $toast-stack-gap,
 );
-
-// adduse
 @use "../overlay";
-
 
 .dx-toast-stack {
   gap: $toast-item-gap;

@@ -1,8 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 // Not a colour: a font weight that used to sit in _colors.scss (NAMING.md, O7)
 $pivot-grid-field-area-box-font-weight: ds.$font-weight-base-default !default;
 

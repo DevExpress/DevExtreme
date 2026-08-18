@@ -1,13 +1,10 @@
 @use "colors" as *;
-@use "../sizes" as *;
 @use "../menu/colors" as menuColors;
 @use "../menu/sizes" as menuSizes;
 @use "../../base/icon_fonts" as *;
 @use "../../base/mixins" as *;
 @use "../../base/menuBase";
 @use "../button/sizes" as buttonSizes;
-
-// adduse
 
 .dx-menu-item {
   color: menuColors.$menu-content-rest;

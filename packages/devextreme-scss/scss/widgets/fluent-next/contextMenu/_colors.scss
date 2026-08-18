@@ -1,7 +1,5 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 $context-menu-content-disabled: ds.$color-content-neutral-default-disabled !default;
 $context-menu-icon-rest: ds.$color-content-neutral-subdued-rest !default;
 $context-menu-shadow-rest: ds.$box-shadow-md !default;

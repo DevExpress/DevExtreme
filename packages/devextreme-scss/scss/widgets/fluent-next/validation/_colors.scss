@@ -1,7 +1,5 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 $validation-message-content-rest: ds.$color-content-danger-default-rest !default;
 $validation-message-bg-rest: ds.$color-surface-danger-deep-rest !default;
 $validation-summary-content-rest: ds.$color-content-danger-default-rest !default;

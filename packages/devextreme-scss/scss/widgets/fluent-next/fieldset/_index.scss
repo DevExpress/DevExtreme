@@ -13,8 +13,6 @@
   $fieldset-root-margin-bottom: $fieldset-margin-block-end,
 );
 
-// adduse
-
 @mixin dx-fieldset-styling() {
   .dx-field {
     @include dx-base-typography();
