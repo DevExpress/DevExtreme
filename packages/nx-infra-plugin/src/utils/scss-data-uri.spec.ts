@@ -2,8 +2,16 @@ import { DATA_URI_SCSS_REGEX, encodeDataUriContent, encodeDataUriForCssUrl } fro
 
 describe('scss-data-uri', () => {
   it.each([
-    ['data-uri("image/svg+xml;charset=UTF-8", "images/a.svg")', 'image/svg+xml;charset=UTF-8', 'images/a.svg'],
-    ["data-uri('image/svg+xml;charset=UTF-8', 'images/a.svg')", 'image/svg+xml;charset=UTF-8', 'images/a.svg'],
+    [
+      'data-uri("image/svg+xml;charset=UTF-8", "images/a.svg")',
+      'image/svg+xml;charset=UTF-8',
+      'images/a.svg',
+    ],
+    [
+      "data-uri('image/svg+xml;charset=UTF-8', 'images/a.svg')",
+      'image/svg+xml;charset=UTF-8',
+      'images/a.svg',
+    ],
     ['data-uri("images/a.png")', undefined, 'images/a.png'],
     ["data-uri('images/a.png')", undefined, 'images/a.png'],
   ])('regex parses %s regardless of quote style', (input, mime, filePath) => {
