@@ -63,11 +63,11 @@ const props = {
 
 describe('Rendering', () => {
   beforeEach(() => {
-    jest.spyOn(Guid.prototype, '_normalize').mockReturnValue('guidmock');
+    jest.spyOn(Guid.prototype, 'toString').mockReturnValue('guidmock');
   });
 
   afterEach(() => {
-    jest.spyOn(Guid.prototype, '_normalize').mockRestore();
+    jest.spyOn(Guid.prototype, 'toString').mockRestore();
   });
   it('should be rendered correctly', () => {
     const container = document.createElement('div');

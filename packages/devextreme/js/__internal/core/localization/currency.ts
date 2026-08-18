@@ -16,10 +16,12 @@ export default {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.callBase.apply(this, [value, format, formatConfig]);
   },
-  getCurrencySymbol(): { symbol: string } {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getCurrencySymbol(currency?: string): { symbol: string } {
     return { symbol: '$' };
   },
-  getOpenXmlCurrencyFormat(): string {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getOpenXmlCurrencyFormat(currency?: string): string | undefined {
     return '$#,##0{0}_);\\($#,##0{0}\\)';
   },
 };

@@ -33,11 +33,11 @@ function getCardContent(container: Element) {
 
 describe('Options', () => {
   beforeEach(() => {
-    jest.spyOn(Guid.prototype, '_normalize').mockReturnValue('guidmock');
+    jest.spyOn(Guid.prototype, 'toString').mockReturnValue('guidmock');
   });
 
   afterEach(() => {
-    jest.spyOn(Guid.prototype, '_normalize').mockRestore();
+    jest.spyOn(Guid.prototype, 'toString').mockRestore();
   });
   it('searchPanel.text (card contains match)', async () => {
     const { container, cardView } = setup({

@@ -151,8 +151,8 @@ export class Card extends Component<CardProps> {
 
     const cardRole = Template ? 'presentation' : 'application';
 
-    const coverId = new Guid();
-    const contentId = new Guid();
+    const coverId = new Guid().toString();
+    const contentId = new Guid().toString();
 
     return (
       <KbnFocusTrap
