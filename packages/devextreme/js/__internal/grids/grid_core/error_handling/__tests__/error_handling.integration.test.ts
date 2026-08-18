@@ -12,8 +12,10 @@ import {
   flushAsync,
 } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 
-const ERROR_ROW_SELECTOR = '.dx-error-row';
-const ERROR_MESSAGE_SELECTOR = '.dx-error-message';
+import { ERROR_MESSAGE_CLASS, ERROR_ROW_CLASS } from '../const';
+
+const ERROR_ROW_SELECTOR = `.${ERROR_ROW_CLASS}`;
+const ERROR_MESSAGE_SELECTOR = `.${ERROR_MESSAGE_CLASS}`;
 
 const DATA = [
   { id: 1, name: 'test1' },

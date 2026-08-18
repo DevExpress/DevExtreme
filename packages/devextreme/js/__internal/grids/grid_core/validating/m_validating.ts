@@ -35,7 +35,7 @@ import { EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR } from '../editing/co
 import type { EditingController } from '../editing/m_editing';
 import type { NormalizedEditCellOptions } from '../editing/types';
 import modules from '../m_modules';
-import type { Controllers, ModuleType } from '../m_types';
+import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import {
   INVALIDATE_CLASS,
@@ -1046,6 +1046,8 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
       $popupContent = this.getPopupContent();
       return this._errorHandlingController && this._errorHandlingController.renderErrorRow(validationData?.errorText, rowIndex, $popupContent);
     }
+
+    return undefined;
   }
 
   public updateFieldValue(e) {
