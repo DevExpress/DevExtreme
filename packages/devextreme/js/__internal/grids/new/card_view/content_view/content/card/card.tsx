@@ -7,7 +7,7 @@ import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
 import { off, on } from '@js/events/index';
 import type * as dxToolbar from '@js/ui/toolbar';
-import { Guid } from '@ts/core/m_guid';
+import { Guid } from '@ts/core/guid';
 import { combineClasses } from '@ts/core/utils/combine_classes';
 import type { Position } from '@ts/grids/new/grid_core/accessibility/types';
 import { getCardDescriptiveLabel, getCardRoleDescription, getCardStateDescription } from '@ts/grids/new/grid_core/accessibility/utils';

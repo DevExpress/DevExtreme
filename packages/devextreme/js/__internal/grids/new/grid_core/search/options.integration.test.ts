@@ -5,7 +5,7 @@ import {
   describe, expect, it,
   jest,
 } from '@jest/globals';
-import { Guid } from '@ts/core/m_guid';
+import { Guid } from '@ts/core/guid';
 import CardView from '@ts/grids/new/card_view/widget';
 import type { Options as GridCoreOptions } from '@ts/grids/new/grid_core/options';
 import { rerender } from 'inferno';
