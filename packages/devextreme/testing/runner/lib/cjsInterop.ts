@@ -2,8 +2,11 @@
  * Serve-time CJS → ESM helpers for QUnit tests/helpers under native ESM.
  *
  * 1) `import x from 'mod'` → namespace + `'default' in ns ? ns.default : {…ns}`
- * 2) `require(...)` → equivalent ESM imports
+ *    (skipped for `jquery` — its shim has a real `export default $`)
+ * 2) `require(...)` → equivalent ESM imports (only fires for `build/bundle-templates/`
+ *    sources now — `testing/tests/**`/`testing/helpers/**` are require()-free)
  * 3) CJS `module.exports` / `exports.*` → `export default` + named exports
+ *    (same: bundle-templates only)
  */
 
 const MIXED_DEFAULT_NAMED_RE = /import\s+([A-Za-z_$][\w$]*)\s*,\s*(\{[^}]*\})\s*from\s*('[^']+'|"[^"]+")/g;
@@ -116,59 +119,6 @@ function isOffsetInsideComment(source: string, offset: number): boolean {
     }
   }
   return false;
-}
-
-/**
- * Index of the matching `}` for `{` at `openIndex`, skipping strings,
- * template literals, and comments.
- */
-function findMatchingBrace(source: string, openIndex: number): number {
-  if (source[openIndex] !== '{') {
-    return -1;
-  }
-
-  let depth = 0;
-  let i = openIndex;
-  while (i < source.length) {
-    if (source.startsWith('/*', i)) {
-      const end = source.indexOf('*/', i + 2);
-      i = end < 0 ? source.length : end + 2;
-    } else if (source.startsWith('//', i)) {
-      const end = source.indexOf('\n', i);
-      i = end < 0 ? source.length : end + 1;
-    } else {
-      const ch = source[i];
-      if (ch === '"' || ch === '\'') {
-        i = skipQuotedString(source, i);
-      } else if (ch === '`') {
-        i += 1;
-        while (i < source.length) {
-          if (source[i] === '\\') {
-            i += 2;
-          } else if (source[i] === '`') {
-            i += 1;
-            break;
-          } else if (source[i] === '$' && source[i + 1] === '{') {
-            const innerClose = findMatchingBrace(source, i + 1);
-            i = innerClose < 0 ? source.length : innerClose + 1;
-          } else {
-            i += 1;
-          }
-        }
-      } else {
-        if (ch === '{') {
-          depth += 1;
-        } else if (ch === '}') {
-          depth -= 1;
-          if (depth === 0) {
-            return i;
-          }
-        }
-        i += 1;
-      }
-    }
-  }
-  return -1;
 }
 
 /**
@@ -372,49 +322,6 @@ function hoistImportsFromSource(source: string): { imports: string[]; body: stri
   };
 }
 
-function rewriteAmdDefineFactory(source: string): string {
-  const defineStartRe = /define\s*\(\s*function\s*\([^)]*\)\s*\{/g;
-  const hoistedImports: string[] = [];
-  let next = '';
-  let lastIndex = 0;
-  let match = defineStartRe.exec(source);
-
-  // Replace define(function () { ... }) with an IIFE; hoist imports to file top
-  // (imports inside `if (define.amd)` are a SyntaxError under native ESM).
-  while (match) {
-    const openBrace = match.index + match[0].length - 1;
-    const closeBrace = findMatchingBrace(source, openBrace);
-    if (closeBrace < 0) {
-      break;
-    }
-
-    let end = closeBrace + 1;
-    const after = /^\s*\)\s*;?/.exec(source.slice(end));
-    if (after) {
-      end += after[0].length;
-    }
-
-    next += source.slice(lastIndex, match.index);
-    const body = source.slice(openBrace + 1, closeBrace);
-    // One pass only — do not mix mid-body `import` insertion (duplicates bindings).
-    const rewrittenBody = rewriteRequiresToEsm(body);
-    const { imports, body: bodyScript } = hoistImportsFromSource(rewrittenBody);
-    hoistedImports.push(...imports);
-    next += `(function() {\n${bodyScript}\n})();`;
-    lastIndex = end;
-    defineStartRe.lastIndex = end;
-    match = defineStartRe.exec(source);
-  }
-
-  next += source.slice(lastIndex);
-
-  if (!hoistedImports.length) {
-    return next;
-  }
-
-  return `${[...new Set(hoistedImports)].join('\n')}\n${next}`;
-}
-
 /** Collect `exports.foo` / `module.exports.foo` assignment names for ESM named re-exports. */
 function collectCjsExportNames(source: string): string[] {
   const names = new Set<string>();
@@ -503,8 +410,7 @@ ${namedExports ? `${namedExports}\n` : ''}`;
 
 export function rewriteQunitTestHelperSource(source: string, sourcePath?: string): string {
   resetRewriteCounters();
-  let next = rewriteAmdDefineFactory(source);
-  next = normalizeBundleTemplateRelativeEsmSpecifiers(next, sourcePath);
+  let next = normalizeBundleTemplateRelativeEsmSpecifiers(source, sourcePath);
   next = rewriteRequiresToEsm(next, sourcePath);
   next = wrapCjsModuleExports(next, sourcePath);
   next = rewriteCjsStyleDefaultImports(next);
@@ -541,7 +447,7 @@ export function rewriteAspnetArtifactToEsm(source: string, sourcePath?: string):
   let body = source.slice(match.index + match[0].length);
   body = body.replace(/\}\)\s*;?\s*$/, '');
 
-  return `import * as __dxAspnetJquery from 'jquery';
+  return `import __dxAspnetJquery from 'jquery';
 import * as __dxAspnetTemplateEngineRegistry from './core/templates/template_engine_registry';
 import * as __dxAspnetTemplateBase from './core/templates/template_base';
 import * as __dxAspnetGuid from './core/guid';
@@ -556,7 +462,7 @@ ${body}
 };
 
 const __dxAspnet = __dxAspnetFactory(
-  ${cjsDefaultExpr('__dxAspnetJquery')},
+  __dxAspnetJquery,
   __dxAspnetTemplateEngineRegistry.setTemplateEngine,
   __dxAspnetTemplateBase.renderedCallbacks,
   ${cjsDefaultExpr('__dxAspnetGuid')},

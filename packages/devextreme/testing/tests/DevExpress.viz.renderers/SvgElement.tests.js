@@ -562,12 +562,11 @@ function checkDashStyle(assert, elem, result, style, value) {
 
             this.Element = renderer.SvgElement;
 
-            this.jQuery = $;
-            $ = coreRenderer;
+            this.$ = coreRenderer;
             this.eventsEngine = eventsEngine;
             this.rendererStub = { fake: 'fake', root: { element: document.createElement('div') } };
-            this.$emptyStub = sinon.stub($.fn, 'empty');
-            this.$removeStub = sinon.stub($.fn, 'remove').callsFake(function() { return this; });
+            this.$emptyStub = sinon.stub(this.$.fn, 'empty');
+            this.$removeStub = sinon.stub(this.$.fn, 'remove').callsFake(function() { return this; });
             this.$onStub = sinon.stub(this.eventsEngine, 'on');
             this.$offStub = sinon.stub(this.eventsEngine, 'off');
             this.$triggerStub = sinon.stub(this.eventsEngine, 'trigger');
@@ -578,7 +577,6 @@ function checkDashStyle(assert, elem, result, style, value) {
             this.$onStub.restore();
             this.$offStub.restore();
             this.$triggerStub.restore();
-            $ = this.jQuery;
         }
     });
 
@@ -588,8 +586,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         const result = elem.clear();
 
         assert.equal(result, elem);
-        assert.ok($.fn.empty.calledOnce);
-        assert.equal($.fn.empty.firstCall.thisValue.get(0), $(elem.element).get(0));
+        assert.ok(this.$.fn.empty.calledOnce);
+        assert.equal(this.$.fn.empty.firstCall.thisValue.get(0), this.$(elem.element).get(0));
     });
 
     QUnit.test('Disposing', function(assert) {
@@ -598,8 +596,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         const result = elem.dispose();
 
         assert.equal(result, elem);
-        assert.ok($.fn.remove.calledOnce);
-        assert.equal($.fn.remove.firstCall.thisValue.get(0), $(elem.element).get(0));
+        assert.ok(this.$.fn.remove.calledOnce);
+        assert.equal(this.$.fn.remove.firstCall.thisValue.get(0), this.$(elem.element).get(0));
     });
 
     QUnit.test('On', function(assert) {
@@ -610,7 +608,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         assert.equal(result, elem);
         assert.ok(this.eventsEngine.on.calledOnce);
         assert.deepEqual(this.eventsEngine.on.firstCall.args.slice(1), [1, 2, 3, 4]);
-        assert.equal(this.eventsEngine.on.firstCall.args[0].get(0), $(elem.element).get(0));
+        assert.equal(this.eventsEngine.on.firstCall.args[0].get(0), this.$(elem.element).get(0));
     });
 
     QUnit.test('Off', function(assert) {
@@ -622,7 +620,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         assert.ok(this.eventsEngine.off.calledOnce);
         assert.deepEqual(this.eventsEngine.off.firstCall.args.slice(1), [1, 2, 3, 4]);
-        assert.equal(this.eventsEngine.off.firstCall.args[0].get(0), $(elem.element).get(0));
+        assert.equal(this.eventsEngine.off.firstCall.args[0].get(0), this.$(elem.element).get(0));
     });
 
     QUnit.test('Trigger', function(assert) {
@@ -635,7 +633,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         assert.ok(this.eventsEngine.trigger.calledOnce);
         assert.deepEqual(this.eventsEngine.trigger.firstCall.args.slice(1), [1, 2, 3, 4]);
         assert.equal(this.eventsEngine.trigger.firstCall.args[0].length, 1);
-        assert.equal(this.eventsEngine.trigger.firstCall.args[0].get(0), $(elem.element).get(0));
+        assert.equal(this.eventsEngine.trigger.firstCall.args[0].get(0), this.$(elem.element).get(0));
     });
 
     QUnit.module('SvgElement. attr API, set attrs', {
