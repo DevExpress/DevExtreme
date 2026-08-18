@@ -244,6 +244,25 @@ function buildHtml({
 `;
 }
 
+// CodeSandbox-facing manifest of every npm package this one demo actually needs — the
+// framework's shared vendor-bundle packages plus whatever this demo alone imports on top
+// (e.g. jspdf, rrule, openai). See utils/server/vendor-bundle.js for how each is resolved.
+function writeDemoManifest({
+  srcDir, destDir, framework,
+}) {
+  // eslint-disable-next-line global-require
+  const { discoverDemoSpecifiers, resolvePackageVersions, getVendorManifest } = require('./vendor-bundle');
+  const vendorManifest = getVendorManifest(framework);
+  const packages = {
+    ...(vendorManifest ? vendorManifest.packages : {}),
+    ...resolvePackageVersions(discoverDemoSpecifiers(srcDir)),
+  };
+  fs.writeFileSync(
+    path.join(destDir, 'demo.manifest.json'),
+    JSON.stringify({ framework, packages }, null, 2),
+  );
+}
+
 async function bundleDemoTo({ srcDir, destDir, framework }) {
   const entry = findEntry(srcDir);
   if (!entry) return { ok: false, reason: 'no entry point (index.tsx|ts|jsx|js)' };
@@ -276,6 +295,8 @@ async function bundleDemoTo({ srcDir, destDir, framework }) {
     fs.copyFileSync(stylesSrc, dest);
     cssFiles.push('bundle.css');
   }
+
+  writeDemoManifest({ srcDir, destDir, framework });
 
   return { ok: true, jsFiles, cssFiles };
 }

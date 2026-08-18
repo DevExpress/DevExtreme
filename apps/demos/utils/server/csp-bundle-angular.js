@@ -524,6 +524,20 @@ function prepareDemo(demo) {
   return { ...demo, effectiveEntry, fileReplacements };
 }
 
+// CodeSandbox-facing manifest of every npm package a demo needs. Angular has no shared
+// vendor bundle (see this file's header comment), so unlike React/Vue this is entirely
+// derived from the demo's own imports — plus zone.js, which every Angular demo needs but
+// none of them import (it's loaded via ANGULAR_ZONE_SCRIPT's <script> tag instead).
+function writeDemoManifest(demo, destDir) {
+  // eslint-disable-next-line global-require
+  const { discoverDemoSpecifiers, resolvePackageVersions } = require('./vendor-bundle');
+  const packages = resolvePackageVersions([...discoverDemoSpecifiers(demo.srcDir), 'zone.js']);
+  fs.writeFileSync(
+    path.join(destDir, 'demo.manifest.json'),
+    JSON.stringify({ framework: FRAMEWORK, packages }, null, 2),
+  );
+}
+
 function sortJsFiles(jsFiles) {
   return jsFiles.sort((a, b) => {
     if (a === 'polyfills.js') return -1;
@@ -638,6 +652,7 @@ async function bundleDemo(demo, createCompilerPlugin, destDirOverride) {
   const cssFiles = outputs.filter((o) => o.endsWith('.css')).map((o) => path.basename(o));
 
   fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({ jsFiles, cssFiles, srcDir: prepared.srcDir }));
+  writeDemoManifest(prepared, destDir);
   return { ok: true };
 }
 
@@ -676,6 +691,7 @@ async function bundleDemoBatch(batch, createCompilerPlugin) {
       ...localJsFiles,
     ];
     fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({ jsFiles, cssFiles, srcDir: demo.srcDir }));
+    writeDemoManifest(demo, destDir);
   }
 
   return { ok: true };
