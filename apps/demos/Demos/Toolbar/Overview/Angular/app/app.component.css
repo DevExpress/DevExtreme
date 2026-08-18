@@ -1,3 +1,7 @@
+::ng-deep .demo-container {
+  padding: 4px;
+}
+
 ::ng-deep .toolbar-label,
 ::ng-deep .toolbar-label > b {
   font-size: 16px;
