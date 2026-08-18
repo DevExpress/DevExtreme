@@ -15,20 +15,6 @@ on:
         type: string
         description: Package file filter pattern
         required: false
-  workflow_call:
-    inputs:
-      tag:
-        type: string
-        default: daily
-        required: false
-      filter:
-        type: string
-        default: ''
-        required: false
-      branch:
-        type: string
-        default: ''
-        required: false
 
 permissions:
   contents: read
@@ -43,14 +29,12 @@ jobs:
   build:
     name: Build packages
     runs-on: ubuntu-latest
-    environment: ${{ (inputs.tag == 'stable' || (github.event_name == 'workflow_dispatch' && !contains(github.workflow_ref, '/.github/workflows/packages_publishing_scheduler.yml@'))) && 'packages-publishing' || 'packages-publishing-automation' }}
+    environment: ${{ (inputs.tag == 'stable' && 'packages-publishing-stable') || 'packages-publishing-daily' }}
     outputs:
       packages: ${{ steps.filter.outputs.packages }}
     steps:
       - name: Get sources
         uses: actions/checkout@v6
-        with:
-          ref: ${{ inputs.branch || github.ref }}
 
       - name: Set up nodejs
         uses: actions/setup-node@v6
@@ -115,8 +99,6 @@ jobs:
     steps:
       - name: Get sources
         uses: actions/checkout@v6
-        with:
-          ref: ${{ inputs.branch || github.ref }}
 
       - name: Download artifacts
         uses: actions/download-artifact@v8
