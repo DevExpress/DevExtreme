@@ -1,8 +1,5 @@
 @use "./mixins" as *;
 
-// adduse
-
-
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $loadpanel-content-padding: 10px !default;
 $loadpanel-content-border: 1px solid #ccc !default;

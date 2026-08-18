@@ -1,8 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 $progress-bar-height: null !default;
 $progress-bar-border-radius: $global-border-radius !default;
 $progress-bar-status-margin-block-start: null !default;

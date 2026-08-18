@@ -1,8 +1,5 @@
 @use "./mixins";
 
-// adduse
-
-
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $timeview-numberbox-width: 70px !default;
 $timeview-numberbox-spin-touch-friendly-width: 110px !default;

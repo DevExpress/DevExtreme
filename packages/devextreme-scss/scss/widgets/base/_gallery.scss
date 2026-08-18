@@ -1,7 +1,5 @@
 @use "./mixins" as *;
 
-// adduse
-
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $gallery-root-border-width: 1px !default;
 $gallery-indicator-bottom: 10px !default;

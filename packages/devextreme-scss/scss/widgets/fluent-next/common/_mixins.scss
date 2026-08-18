@@ -44,7 +44,7 @@
   font-weight: $invalid-badge-font-weight;
   background-color: $invalid-badge-bg-rest;
   color: $invalid-badge-content-rest;
-  content: '!';
+  content: "!";
   border-radius: 50%;
 }
 
@@ -53,9 +53,9 @@
 
   font-size: $valid-badge-font-size;
   font-weight: bold;
-  font-family: 'DXIcons', sans-serif;
+  font-family: "DXIcons", sans-serif;
   color: $valid-badge-content-rest;
-  content: '\f005';
+  content: "\f005";
 
   @include baseValidation.validation-badge-animation();
 }

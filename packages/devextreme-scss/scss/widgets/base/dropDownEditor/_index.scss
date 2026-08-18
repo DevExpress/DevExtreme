@@ -3,8 +3,6 @@
 @use "./mixins" as *;
 @use "../textEditor/mixins" as *;
 
-// adduse
-
 $dropdowneditor-icon-idle-opacity: 0.35 !default;
 
 .dx-dropdowneditor {

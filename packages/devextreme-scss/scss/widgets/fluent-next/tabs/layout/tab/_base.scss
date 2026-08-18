@@ -1,19 +1,14 @@
 @use "sass:string" as string;
-@use "../../../colors" as *;
-@use "../../../sizes" as *;
 @use "../../../../base/icon_fonts" as *;
 @use "../../../../base/tabs";
 @use "../../variables/colors" as *;
 @use "../../variables/sizes" as *;
 @use "../../mixins" as *;
 @use "../../../common/sizes" as *;
-
-// adduse
 @use "../../../scrollable";
 @use "../../../badge";
 @use "styling-mode/primary" as *;
 @use "styling-mode/secondary" as *;
-
 
 .dx-tab {
   gap: $tabs-item-gap;

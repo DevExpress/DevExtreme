@@ -1,7 +1,4 @@
-@use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
-
-// adduse
 
 $gallery-indicator-size: ds.$spacing-80 !default;
 $gallery-indicator-size-selected: ds.$spacing-120 !default;

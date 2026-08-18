@@ -1,12 +1,8 @@
 @use "sass:math";
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/radioButton/mixins" as *;
 @use "../../base/radioButton";
-
-// adduse
-
 @include dx-radiobutton-icon-mixin(
   $radio-button-size,
   $radio-button-border-width,

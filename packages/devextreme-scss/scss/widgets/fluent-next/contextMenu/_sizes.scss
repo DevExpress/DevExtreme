@@ -1,8 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// adduse
-
 $context-menu-padding-inline: null !default;
 $context-menu-border-radius: $global-border-radius !default;
 $context-menu-items-container-padding: ds.$spacing-40 !default;

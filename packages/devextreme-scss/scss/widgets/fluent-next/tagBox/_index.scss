@@ -1,13 +1,10 @@
 @use "sass:math";
 @use "colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../textEditor" as *;
 @use "../common/sizes" as *;
 @use "../../base/tagBox";
-
-// adduse
 
 .dx-tagbox {
   .dx-tag-container {
