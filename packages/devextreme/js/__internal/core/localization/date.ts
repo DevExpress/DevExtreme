@@ -10,7 +10,7 @@ import { getFormatter as getLDMLDateFormatter } from '@ts/core/localization/ldml
 import { getParser as getLDMLDateParser } from '@ts/core/localization/ldml/date.parser';
 import numberLocalization from '@ts/core/localization/number';
 import errors from '@ts/core/m_errors';
-import { injector as dependencyInjector } from '@ts/core/utils/m_dependency_injector';
+import { injector as dependencyInjector } from '@ts/core/utils/dependency_injector';
 import { each } from '@ts/core/utils/m_iterator';
 import { isString } from '@ts/core/utils/m_type';
 
