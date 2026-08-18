@@ -22,7 +22,6 @@ import type {
   ColumnsResizerViewController,
 } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
 import { generateRowValues } from '@ts/grids/grid_core/data_controller/utils/row_values';
-import type { ErrorHandlingController } from '@ts/grids/grid_core/error_handling/m_error_handling';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
@@ -105,8 +104,6 @@ export class RowsView extends ColumnsView {
 
   protected _validatingController!: ValidatingController;
 
-  protected _errorHandlingController!: ErrorHandlingController;
-
   public _columnHeadersView!: ColumnHeadersView;
 
   public _hasHeight: boolean | undefined;
@@ -138,7 +135,6 @@ export class RowsView extends ColumnsView {
     this._focusController = this.getController('focus');
     this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._validatingController = this.getController('validating');
-    this._errorHandlingController = this.getController('errorHandling');
     this._columnHeadersView = this.getView('columnHeadersView');
     this._rowHeight = 0;
     this._scrollTop = 0;
