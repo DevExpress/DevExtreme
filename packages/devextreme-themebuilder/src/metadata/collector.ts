@@ -1,13 +1,21 @@
 import { promises as fs } from 'fs';
 import {
-  resolve, relative, join, dirname,
+  resolve, relative, join, dirname, sep,
 } from 'path';
 import MetadataGenerator from './generator';
+import internalScssPaths from '../../../devextreme-scss/build/internal-scss-paths.json';
+
+const isInternalScssPath = (relativePath: string): boolean => {
+  const posixPath = relativePath.split(sep).join('/');
+  return internalScssPaths.some((internalPath) => posixPath.startsWith(internalPath));
+};
 
 export default class MetadataCollector {
   generator = new MetadataGenerator();
 
   static async saveScssFiles(files: Promise<FileInfo[]>, destination: string): Promise<void> {
+    await fs.rm(resolve(destination), { recursive: true, force: true });
+
     await Promise.all((await files).map(async (file) => {
       const absolutePath = resolve(join(destination, file.path));
       const directory = dirname(absolutePath);
@@ -36,8 +44,7 @@ export default class MetadataCollector {
     handler: (content: string) => string,
   ): Promise<FileInfo[]> {
     const fileList = (await this.getFileList(dirName))
-      // fluent-next is an internal design-tokens theme, not exposed in ThemeBuilder
-      .filter((filePath) => !filePath.includes('fluent-next'));
+      .filter((filePath) => !isInternalScssPath(relative(dirName, filePath)));
 
     return Promise.all(fileList.map(async (filePath) => {
       const relativePath = relative(dirName, filePath);
