@@ -2,10 +2,10 @@ import type { Properties as DataGridProperties, Selection } from '@js/ui/data_gr
 
 import { selectionDataControllerExtender } from './extenders/selection_data_controller';
 import {
-  columnHeadersSelectionExtenderMixin,
-  contextMenu,
-  rowsViewSelectionExtenderMixin,
+  selectionColumnHeadersViewExtender,
+  selectionContextMenuControllerExtender,
   SelectionController,
+  selectionRowsViewExtender,
 } from './m_selection';
 
 interface SelectionModuleOptions {
@@ -41,12 +41,12 @@ export const selectionModule = {
   extenders: {
     controllers: {
       data: selectionDataControllerExtender,
-      contextMenu,
+      contextMenu: selectionContextMenuControllerExtender,
     },
 
     views: {
-      columnHeadersView: columnHeadersSelectionExtenderMixin,
-      rowsView: rowsViewSelectionExtenderMixin,
+      columnHeadersView: selectionColumnHeadersViewExtender,
+      rowsView: selectionRowsViewExtender,
     },
   },
 };

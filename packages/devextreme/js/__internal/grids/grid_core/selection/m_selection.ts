@@ -631,7 +631,7 @@ export class SelectionController extends modules.Controller {
   }
 }
 
-export const contextMenu = (Base: ModuleType<ContextMenuController>) => class ContextMenuControllerSelectionExtender extends Base {
+export const selectionContextMenuControllerExtender = (Base: ModuleType<ContextMenuController>) => class SelectionContextMenuControllerExtender extends Base {
   protected _contextMenuPrepared(options) {
     const dxEvent = options.event;
 
@@ -641,7 +641,7 @@ export const contextMenu = (Base: ModuleType<ContextMenuController>) => class Co
   }
 };
 
-export const columnHeadersSelectionExtenderMixin = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeadersSelectionExtender extends Base {
+export const selectionColumnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) => class SelectionColumnHeadersViewExtender extends Base {
   public init() {
     super.init();
     this._selectionController.selectionChanged.add(this._updateSelectAllValue.bind(this));
@@ -748,7 +748,9 @@ export const columnHeadersSelectionExtenderMixin = (Base: ModuleType<ColumnHeade
   }
 };
 
-export const rowsViewSelectionExtenderMixin = (Base: ModuleType<RowsView>) => class RowsViewSelectionExtender extends Base {
+export const selectionRowsViewExtender = (
+  Base: ModuleType<RowsView>,
+): ModuleType<RowsView> => class SelectionRowsViewExtender extends Base {
   private renderSelectCheckBoxContainer($container, options) {
     if (options.rowType === 'data' && !options.row.isNewRow) {
       $container.addClass(EDITOR_CELL_CLASS);
