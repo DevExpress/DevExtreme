@@ -623,13 +623,13 @@ $icons: (
 
 @mixin dx-font-icons($font-file: "dxicons", $font-name: "DevExtreme Generic Icons", $font-name-safari: "devextreme_generic_icons", $text-rendering: auto) {
   @font-face {
-    font-family: 'DXIcons';
+    font-family: "DXIcons";
     src:
       local("#{$font-name}"),
       local("#{$font-name-safari}"),
-      url("icons/#{$font-file}.woff2") format('woff2'),
-      url("icons/#{$font-file}.woff") format('woff'),
-      url("icons/#{$font-file}.ttf") format('truetype');
+      url("icons/#{$font-file}.woff2") format("woff2"),
+      url("icons/#{$font-file}.woff") format("woff"),
+      url("icons/#{$font-file}.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
   }
@@ -688,4 +688,3 @@ $icons: (
     content: "\f11c"; // hidepanel icon
   }
 }
-

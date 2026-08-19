@@ -16,7 +16,7 @@ $base-focus-color: null !default;
 @use "../icon_fonts" as *;
 @use "./common" as *;
 @use "./expandable" as *;
-@use 'layout/cell' with (
+@use "layout/cell" with (
   $treelist-border: $datagrid-border,
   $treelist-border-color: $datagrid-border-color,
   $treelist-base-background-color: $datagrid-base-background-color,
@@ -110,7 +110,7 @@ $treelist-row-error-color: $datagrid-row-error-color;
     font-family: inherit;
 
     &::before {
-      font-family: 'DXIcons', sans-serif;
+      font-family: "DXIcons", sans-serif;
     }
   }
 
@@ -181,7 +181,7 @@ $treelist-row-error-color: $datagrid-row-error-color;
       &::before {
         display: block;
         height: 100%;
-        content: '';
+        content: "";
         background-image: $treelist-text-stub-background-image-path;
         background-repeat: no-repeat repeat;
       }

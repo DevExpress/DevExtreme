@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 $scrollable-bg: $base-element-bg !default;
 
@@ -20,4 +17,3 @@ $scrollable-scrollbar-bg: transparent !default;
 @if $mode == "dark" {
   $scrollable-scroll-bg: color.change(color.adjust($scrollable-bg, $lightness: 25%, $space: hsl), $alpha: 0.7) !default;
 }
-

@@ -6,11 +6,8 @@
 @use "../button/sizes" as *;
 @use "../menuBase/sizes" as *;
 @use "../../base/icon_fonts" as *;
-
-// adduse
 @use "../menuBase" as *;
 @use "../../base/menu";
-
 
 $material-menu-font-size: $material-base-font-size;
 
@@ -111,6 +108,6 @@ $material-menu-font-size: $material-base-font-size;
 
   .dx-treeview-node-container:first-child > .dx-treeview-node {
     border-bottom: 1px solid;
-    border-bottom-color: $menu-popup-border-color
+    border-bottom-color: $menu-popup-border-color;
   }
 }

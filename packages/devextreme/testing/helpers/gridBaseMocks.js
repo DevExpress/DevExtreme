@@ -236,6 +236,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             getCombinedFilter: commonUtils.noop,
 
+            getFilterExcludedColumn: commonUtils.noop,
+
+            getCombinedFilterWithExcludedColumn: commonUtils.noop,
+
             getRowIndexByKey: function(key) {
                 return gridCore.getIndexByKey(key, options.items);
             },
@@ -247,6 +251,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             skipProcessingPagingChange: commonUtils.noop,
             changed: $.Callbacks(),
             loadingChanged: $.Callbacks(),
+            dataErrorOccurred: $.Callbacks('stopOnFalse'),
             pageChanged: $.Callbacks(),
             dataSourceChanged: $.Callbacks(),
             pushed: $.Callbacks(),

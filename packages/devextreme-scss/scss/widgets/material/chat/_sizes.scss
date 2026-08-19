@@ -4,8 +4,6 @@
 @use "../typography/sizes" as *;
 @use "../button/colors" as *;
 
-// adduse
-
 $chat-border-radius: $base-border-radius * 2 !default; // 8px
 $chat-bubble-border-radius: $base-border-radius * 2 !default;
 $chat-bubble-padding: null !default;

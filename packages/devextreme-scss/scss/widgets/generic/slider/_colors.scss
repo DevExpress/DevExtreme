@@ -1,9 +1,6 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../color" as extcolor;
-
-// adduse
 
 /**
 * $name 10. Bar background color
@@ -96,4 +93,3 @@ $slider-handle-border-radius: $base-border-radius - 1px !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
   $slider-invalid-handle-accent-bg: color.adjust($base-danger, $lightness: -10%, $space: hsl) !default;
 }
-

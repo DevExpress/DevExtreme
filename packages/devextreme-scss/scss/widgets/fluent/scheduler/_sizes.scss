@@ -3,7 +3,6 @@
 @use "../form/sizes" as *;
 @use "../toolbar/sizes" as *;
 
-
 $fluent-scheduler-workspace-date-table-cell-height: null !default;
 $fluent-scheduler-toolbar-item-offset: null !default;
 $fluent-scheduler-navigator-height: null !default;
@@ -86,7 +85,6 @@ $fluent-scheduler-collapsed-all-day-table-cell-height: null !default;
 
 $header-panel-time-cell-height: 32px !default;
 $header-panel-time-cell-padding: null !default;
-
 
 @if $size == "default" {
   $fluent-scheduler-collapsed-all-day-table-cell-height: 32px !default;

@@ -1,9 +1,6 @@
 @use "../variables/colors" as *;
 @use "../variables/sizes" as *;
 
-// adduse
-
-
 @mixin dx-tabs-indicator-primary($position, $color) {
   &::after {
     content: "";

@@ -1,8 +1,4 @@
-@use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 $checkbox-border-color: $base-border-color-accessible !default;
 $checkbox-border-color-hover: $base-border-color-accessible-hover !default;

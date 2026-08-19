@@ -3,12 +3,9 @@
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/checkBox";
 @use "../../base/checkBox/mixins" as *;
-
-// adduse
 
 $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 
