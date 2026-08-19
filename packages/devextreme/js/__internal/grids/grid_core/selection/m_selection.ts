@@ -23,6 +23,7 @@ import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/state_storing_controller_core';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import Selection from '@ts/ui/selection/selection';
+import type { SelectionChangeEvent, SelectionFilter, SelectionOptions } from '@ts/ui/selection/types';
 
 import type { DataController } from '../data_controller/data_controller';
 import modules from '../m_modules';
@@ -121,7 +122,7 @@ export class SelectionController extends modules.Controller {
 
   protected _stateStoringController!: StateStoringController;
 
-  private _selectionMode?: string;
+  private _selectionMode!: string;
 
   private _isSelectionWithCheckboxes?: boolean;
 
@@ -143,7 +144,8 @@ export class SelectionController extends modules.Controller {
     this._dataController = this.getController('data');
     this._columnsController = this.getController('columns');
     this._stateStoringController = this.getController('stateStoring');
-    this._selectionMode = mode;
+    // mode has a default value
+    this._selectionMode = mode!;
     this._isSelectionWithCheckboxes = false;
 
     this._selection = this._createSelection();
@@ -200,7 +202,7 @@ export class SelectionController extends modules.Controller {
   /**
    * @extended: TreeList's selection
    */
-  protected _getSelectionConfig() {
+  protected _getSelectionConfig(): SelectionOptions {
     const dataController = this._dataController;
     const columnsController = this._columnsController;
     const selectionOptions: any = this.option('selection') ?? {};
@@ -211,12 +213,13 @@ export class SelectionController extends modules.Controller {
     const legacyScrollingMode = this.option('scrolling.legacyMode');
 
     return {
-      selectedKeys: this.option('selectedRowKeys'),
+      selectedKeys: this.option('selectedRowKeys') ?? [],
       mode: this._selectionMode,
       deferred,
       alwaysSelectByShift: selectionOptions.alwaysSelectByShift,
       maxFilterLengthInRequest: selectionOptions.maxFilterLengthInRequest,
-      selectionFilter: this.option('selectionFilter'),
+      // @ts-expect-error poorly typed SelectionOptions
+      selectionFilter: this.option('selectionFilter') ?? [],
       ignoreDisabledItems: true,
       isVirtualPaging: virtualPaging,
       sensitivity: this.option('selection.sensitivity'),
@@ -250,6 +253,7 @@ export class SelectionController extends modules.Controller {
       getItemData(item) {
         return isDefined(item?.rowType) ? item?.oldData || item?.data : item;
       },
+      // @ts-expect-error poorly typed SelectionOptions
       filter() {
         return dataController.getCombinedFilter(deferred);
       },
@@ -300,7 +304,6 @@ export class SelectionController extends modules.Controller {
   private _createSelection() {
     const options = this._getSelectionConfig();
 
-    // @ts-expect-error TKey
     return new Selection(options);
   }
 
@@ -319,23 +322,27 @@ export class SelectionController extends modules.Controller {
     }
   }
 
-  public _updateCheckboxesState(options): void {
-    const isDeferredMode = this.option('selection.deferred');
-    const {
-      selectionFilter, selectedItemKeys, removedItemKeys,
-    } = options;
-
+  public _updateCheckboxesState(options: {
+    selectionFilter?: SelectionFilter;
+    selectedItemKeys?: unknown[];
+    removedItemKeys?: unknown[];
+  }): void {
     if (this.option(SHOW_CHECKBOXES_MODE) !== 'onClick') {
       return;
     }
 
+    const isDeferredMode = this.option('selection.deferred');
+    const { selectionFilter } = options;
+    const selectedItemKeysLength = options.selectedItemKeys?.length ?? 0;
+    const removedItemKeysLength = options.removedItemKeys?.length ?? 0;
+
     const hasSeveralItemsSelected = isDeferredMode
       ? !!selectionFilter && isSeveralRowsSelected(this, selectionFilter)
-      : selectedItemKeys.length > 1;
+      : selectedItemKeysLength > 1;
 
     const hasNoItemsSelected = isDeferredMode
       ? !!selectionFilter && selectionFilter.length === 0
-      : selectedItemKeys.length === 0 && removedItemKeys.length > 0;
+      : selectedItemKeysLength === 0 && removedItemKeysLength > 0;
 
     if (hasSeveralItemsSelected) {
       this.startSelectionWithCheckboxes();
@@ -347,7 +354,7 @@ export class SelectionController extends modules.Controller {
   /**
    * @extended: TreeList's selection
    */
-  protected _updateSelectedItems(args) {
+  protected _updateSelectedItems(e: SelectionChangeEvent<unknown, unknown>): void {
     const that = this;
     let selectionChangedOptions;
     const isDeferredMode = that.option('selection.deferred');
@@ -365,8 +372,8 @@ export class SelectionController extends modules.Controller {
     const visibleChangedItemIndexes = that.getChangedItemIndexes(visibleItems);
 
     that._updateCheckboxesState({
-      selectedItemKeys: args.selectedItemKeys,
-      removedItemKeys: args.removedItemKeys,
+      selectedItemKeys: e.selectedItemKeys,
+      removedItemKeys: e.removedItemKeys,
       selectionFilter,
     });
 
@@ -380,15 +387,15 @@ export class SelectionController extends modules.Controller {
     if (isDeferredMode) {
       that.option('selectionFilter', selectionFilter);
       selectionChangedOptions = {};
-    } else if (args.addedItemKeys.length || args.removedItemKeys.length) {
+    } else if (e.addedItemKeys.length || e.removedItemKeys.length) {
       that._selectedItemsInternalChange = true;
-      that.option('selectedRowKeys', args.selectedItemKeys.slice(0));
+      that.option('selectedRowKeys', e.selectedItemKeys.slice(0));
       that._selectedItemsInternalChange = false;
       selectionChangedOptions = {
-        selectedRowsData: args.selectedItems.slice(0),
-        selectedRowKeys: args.selectedItemKeys.slice(0),
-        currentSelectedRowKeys: args.addedItemKeys.slice(0),
-        currentDeselectedRowKeys: args.removedItemKeys.slice(0),
+        selectedRowsData: e.selectedItems.slice(0),
+        selectedRowKeys: e.selectedItemKeys.slice(0),
+        currentSelectedRowKeys: e.addedItemKeys.slice(0),
+        currentDeselectedRowKeys: e.removedItemKeys.slice(0),
       };
     }
 
