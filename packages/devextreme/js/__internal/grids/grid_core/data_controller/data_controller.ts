@@ -16,7 +16,6 @@ import type {
 } from '@ts/grids/grid_core/data_source_adapter/types';
 import { isLocalStore } from '@ts/grids/grid_core/data_source_adapter/utils/store';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
-import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { FilterSyncController } from '@ts/grids/grid_core/filter/m_filter_sync';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
@@ -45,6 +44,7 @@ import type {
   ProcessedItem,
   RefreshOptions,
   RowIndexByKey,
+  RowIndexCorrection,
   UpdateChange,
   UpdateRowChange,
   UserState,
@@ -117,6 +117,8 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   public dataSourceChanged!: Callback<[]>;
 
+  public rowIndicesCorrected!: Callback<[RowIndexCorrection]>;
+
   protected _lastRenderingPageIndex?: number;
 
   protected _isPagingByRendering?: boolean;
@@ -130,8 +132,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   public _rowsScrollController?: VirtualScrollController | null;
 
   protected _editingController!: EditingController;
-
-  protected _editorFactoryController!: EditorFactory;
 
   protected _filterSyncController!: FilterSyncController;
 
@@ -153,7 +153,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._columnsController = this.getController('columns');
     this._adaptiveColumnsController = this.getController('adaptiveColumns');
     this._editingController = this.getController('editing');
-    this._editorFactoryController = this.getController('editorFactory');
     this._filterSyncController = this.getController('filterSync');
     this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._focusController = this.getController('focus');
@@ -187,7 +186,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   protected callbackNames(): string[] {
-    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged', 'pushed'];
+    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged', 'pushed', 'rowIndicesCorrected'];
   }
 
   protected callbackFlags(name?: string): CallbackFlags | undefined {
@@ -1147,16 +1146,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       change.isLiveUpdate = true;
     }
 
-    this.correctRowIndices(
-      (rowIndex) => this.getRowIndexCorrection(rowIndex, oldItems, newIndexByKey),
+    this.rowIndicesCorrected.fire(
+      (rowIndex: number): number => this.getRowIndexCorrection(rowIndex, oldItems, newIndexByKey),
     );
   }
-
-  /**
-   * @extended: keyboard_navigation
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected correctRowIndices(getRowIndexCorrection: (rowIndex: number) => number): void { }
 
   /**
    * @extend: virtual_scrolling
