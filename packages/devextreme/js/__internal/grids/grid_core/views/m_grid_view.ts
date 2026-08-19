@@ -148,7 +148,8 @@ export class ResizingController extends modules.ViewController {
         // @ts-expect-error e.isDelayed is set for virtual scrolling with scrolling.legacyMode
         const isDelayed = change?.isDelayed;
         const needFireContentReady = changeType
-          && !change.isRowStateUpdate
+          && changeType !== 'updateSelection'
+          && changeType !== 'updateFocusedRow'
           && changeType !== 'pageIndex'
           && !isDelayed;
 

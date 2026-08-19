@@ -182,7 +182,6 @@ export class FocusController extends core.ViewController {
     this.option('focusedRowIndex', -1);
     this.getDataController().updateItems({
       changeType: 'updateFocusedRow',
-      isRowStateUpdate: true,
       focusedRowKey: null,
     });
 
@@ -311,7 +310,6 @@ export class FocusController extends core.ViewController {
       if (this.option('focusedRowEnabled')) {
         this.getDataController().updateItems({
           changeType: 'updateFocusedRow',
-          isRowStateUpdate: true,
           focusedRowKey: key,
         });
       } else {
