@@ -27,6 +27,7 @@ import type { SelectionChangeEvent, SelectionFilter, SelectionOptions } from '@t
 
 import type { DataController } from '../data_controller/data_controller';
 import type { DataChange } from '../data_controller/types';
+import { isEditRow } from '../keyboard_navigation/utils';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
 import {
@@ -830,8 +831,7 @@ export const selectionRowsViewExtender = (
           }
 
           const { isSelected } = changeItem;
-          const needSelectionClass = Boolean(isSelected)
-            && !that._editingController.isEditRow(index);
+          const needSelectionClass = Boolean(isSelected) && !isEditRow($row);
 
           $row
             .toggleClass(ROW_SELECTION_CLASS, needSelectionClass)
