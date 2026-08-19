@@ -15,7 +15,8 @@ const DEFAULT_BUNDLES_DIR = './scss/bundles';
 const DEFAULT_CSS_OUTPUT_DIR = '../devextreme/artifacts/css';
 const ACCENT_SOURCES_DIR = './scss/_design-system/fluent/accents';
 const ACCENT_OUTPUT_DIR_NAME = 'accents';
-const GENERATOR_BANNER_REGEX = /^\s*\/\*[\s\S]*?auto-generated[\s\S]*?\*\/\s*/;
+const LEADING_COMMENT_REGEX = /^\s*\/\*[\s\S]*?\*\/\s*/;
+const GENERATOR_BANNER_MARKER = 'auto-generated';
 const DEFAULT_DEV_BUNDLE_NAMES = [
   'light',
   'light.compact',
@@ -243,7 +244,10 @@ async function compileAccentOverrides(
     const compiled = deps.sass.compile(source);
     const outFileName = `${path.basename(source, '.scss')}.css`;
     const license = createStarLicenseHeader(outFileName, deps.devextremeVersion);
-    const css = compiled.css.replace(GENERATOR_BANNER_REGEX, '');
+    const leadingComment = LEADING_COMMENT_REGEX.exec(compiled.css)?.[0] ?? '';
+    const css = leadingComment.includes(GENERATOR_BANNER_MARKER)
+      ? compiled.css.slice(leadingComment.length)
+      : compiled.css;
     const withHeader = prependLicenseAndMoveCharsetFirst(css, license);
     await writeFileText(path.join(accentOutputDir, outFileName), withHeader);
   }

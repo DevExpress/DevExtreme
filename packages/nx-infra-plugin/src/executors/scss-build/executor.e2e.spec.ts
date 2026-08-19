@@ -29,7 +29,9 @@ function createMockModules(projectRoot: string): void {
       '}',
       'module.exports = {',
       '  SassString,',
-      '  compile: () => ({ css: \'/**\\n * Do not edit directly, this file was auto-generated.\\n */\\n@charset "UTF-8"; .a{display:flex}\' })',
+      "  compile: (source) => ({ css: source.includes('unbannered')",
+      "    ? '/* not the banner */\\n:root{--first-declaration:1}\\n/* mentions auto-generated */\\n:root{--last-declaration:2}'",
+      '    : \'/**\\n * Do not edit directly, this file was auto-generated.\\n */\\n@charset "UTF-8"; .a{display:flex}\' })',
       '};',
       '',
     ].join('\n'),
@@ -219,6 +221,29 @@ describe('ScssBuildExecutor E2E', () => {
     expect(stormCss).not.toContain('/*min:');
     expect(stormCss).not.toContain('/*prefixed*/');
     expect(stormCss).not.toContain('auto-generated');
+  });
+
+  it('strips only a leading generator banner, keeping css that merely mentions auto-generated', async () => {
+    const projectRoot = await setupProjectStructure(tempDir);
+    await writeFileText(
+      path.join(projectRoot, 'scss', '_design-system', 'fluent', 'accents', 'unbannered.scss'),
+      ':root { --dxds-primary-100: #6d6a68; }',
+    );
+
+    const context = createMockContext({
+      root: tempDir,
+      projectName: 'devextreme-scss',
+      projectRoot: 'packages/devextreme-scss',
+    });
+
+    await executor({ mode: 'all', cssOutputDir: './artifacts/css' }, context);
+
+    const unbanneredCss = await readFileText(
+      path.join(projectRoot, 'artifacts', 'css', 'accents', 'unbannered.css'),
+    );
+    expect(unbanneredCss).toContain('/* not the banner */');
+    expect(unbanneredCss).toContain('--first-declaration');
+    expect(unbanneredCss).toContain('--last-declaration');
   });
 
   it('builds ci mode only for selected dev bundles and uses ci profile', async () => {
