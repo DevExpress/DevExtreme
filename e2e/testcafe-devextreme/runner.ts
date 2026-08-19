@@ -7,6 +7,7 @@ import parseArgs from 'minimist';
 import { DEFAULT_BROWSER_SIZE } from './helpers/const';
 import {
   addShadowRootTree,
+  applyViewportEnvironment,
   clearTestPage,
   loadAxeCore,
   loadShadowDomExtension,
@@ -99,8 +100,15 @@ const getTestCafeConfig = (cache: boolean): Partial<TestCafeConfigurationOptions
 
 const changeTheme = async (t: TestController, themeName: string): Promise<void> => {
   const changeThemeClientFn = ClientFunction(() => new Promise<void>((resolve) => {
-    (window as any).DevExpress.ui.themes.ready(resolve);
-    (window as any).DevExpress.ui.themes.current(themeName);
+    const dxUi = (window as any).DevExpress?.ui;
+
+    if (!dxUi) {
+      resolve();
+      return;
+    }
+
+    dxUi.themes.ready(resolve);
+    dxUi.themes.current(themeName);
   }), { dependencies: { themeName } });
 
   return changeThemeClientFn.with({ boundTestRun: t })();
@@ -113,6 +121,15 @@ function setTestingPlatform(args: ParsedArgs): void {
 function setTestingTheme(args: ParsedArgs): void {
   process.env.theme = args.theme || 'fluent.blue.light';
 }
+
+const normalizeThemeForMatching = (themeName?: string): string | undefined => themeName?.replace(/^fluent-next/, 'fluent');
+
+const matchTheme = (
+  actualTheme: string | undefined,
+  expectedTheme: string | undefined,
+): boolean => (
+  normalizeThemeForMatching(actualTheme) === normalizeThemeForMatching(expectedTheme)
+);
 
 function setShadowDom(args: ParsedArgs): void {
   process.env.shadowDom = args.shadowDom.toString();
@@ -287,7 +304,7 @@ async function main() {
         testMeta?: any,
       ) => {
         if (testMeta?.runInTheme) {
-          return testMeta.runInTheme === process.env.theme;
+          return matchTheme(testMeta.runInTheme, process.env.theme);
         }
         return true;
       });
@@ -299,7 +316,7 @@ async function main() {
           _fixturePath: string,
           testMeta?: any,
         ) => {
-          if (testMeta?.runInTheme === process.env.theme) {
+          if (matchTheme(testMeta?.runInTheme, process.env.theme)) {
             return true;
           }
 
@@ -307,7 +324,7 @@ async function main() {
             return false;
           }
 
-          return testMeta.themes.includes(args.theme);
+          return testMeta.themes.some((themeName: string) => matchTheme(themeName, args.theme));
         });
       }
 
@@ -363,6 +380,7 @@ async function main() {
               await t.resizeWindow(width, height);
             } else {
               await loadAxeCore(t);
+              await applyViewportEnvironment(t);
             }
 
             const currentTheme = await getCurrentTheme(t) || 'fluent.blue.light';

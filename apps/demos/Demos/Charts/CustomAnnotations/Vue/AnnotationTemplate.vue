@@ -63,7 +63,7 @@ const formatNumber = new Intl.NumberFormat('en-US', { minimumFractionDigits: 0 }
 .border {
   width: 60px;
   height: 40px;
-  stroke: rgba(191, 191, 191, 0.25);
+  stroke: var(--dxds-color-border-neutral-subdued-rest, rgba(191, 191, 191, 0.25));
   stroke-width: 1px;
   fill: transparent;
 }

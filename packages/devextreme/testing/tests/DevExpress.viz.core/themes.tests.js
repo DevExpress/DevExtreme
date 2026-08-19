@@ -358,6 +358,19 @@ QUnit.test('Invalid input data (with color scheme)', function(assert) {
     });
 });
 
+[
+    'fluent-next.blue.light',
+    'fluent-next.blue.light.compact',
+    'fluent-next.blue.dark',
+    'fluent-next.blue.dark.compact',
+].forEach((theme) => {
+    QUnit.test(`fluent-next theme should be registered: ${theme}`, function(assert) {
+        themeModule.currentTheme(theme);
+
+        assert.strictEqual(themeModule.currentTheme(), theme);
+    });
+});
+
 
 QUnit.module('refresh all', {
     createItem: function() {

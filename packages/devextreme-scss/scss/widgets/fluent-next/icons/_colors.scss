@@ -1,0 +1,4 @@
+@use "../scrollView/colors" as scrollViewColors;
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$icon-pulldown-bg-rest: scrollViewColors.$scroll-view-pull-down-bg-rest !default;

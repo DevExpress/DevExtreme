@@ -1,0 +1,66 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/icon_fonts" as *;
+@use "../textEditor/colors" as textEditorColors;
+@use "../textEditor/sizes" as textEditorSizes;
+@use "../../base/textBox";
+@use "../textEditor" as *;
+
+@mixin dx-texteditor-search-icon($texteditor-icon-size) {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $texteditor-icon-size;
+  height: 100%;
+
+  &::before {
+    font-size: textEditorSizes.$text-editor-icon-container-size;
+  }
+}
+
+.dx-searchbox {
+  .dx-icon-search {
+    @include dx-icon(search);
+
+    color: textEditorColors.$text-editor-placeholder-rest;
+  }
+
+  &.dx-editor-underlined {
+    .dx-icon-search {
+      @include dx-texteditor-search-icon($text-box-search-icon-size);
+    }
+
+    .dx-texteditor-input,
+    .dx-placeholder::before {
+      padding-inline-start: $text-box-search-icon-size;
+    }
+  }
+
+  &.dx-editor-filled,
+  &.dx-editor-outlined {
+    .dx-icon-search {
+      @include dx-texteditor-search-icon($text-box-search-icon-size);
+    }
+
+    .dx-texteditor-input,
+    .dx-placeholder::before {
+      padding-inline-start: $text-box-search-icon-size;
+    }
+  }
+
+  &.dx-state-disabled {
+    .dx-icon-search {
+      color: $text-box-content-disabled;
+    }
+  }
+}
+
+.dx-searchbar {
+  padding-bottom: $text-box-search-bar-padding-block-end;
+
+  .dx-texteditor {
+    margin: 0;
+  }
+}

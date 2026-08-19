@@ -1,0 +1,35 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/recurrenceEditor" ;
+
+.dx-recurrence-numberbox-interval {
+  margin-right: $recurrence-editor-number-box-margin;
+}
+
+.dx-recurrence-numberbox-interval-label {
+  font-size: $global-font-size;
+  margin-top: $recurrence-editor-interval-number-box-margin-block-start;
+}
+
+.dx-recurrence-button-group {
+  .dx-button-content {
+    padding: $recurrence-editor-button-group-padding;
+  }
+
+  .dx-buttongroup-wrapper > div {
+    min-width: 0;
+  }
+}
+
+.dx-recurrence-radiogroup-repeat-type {
+  margin: $recurrence-editor-radio-group-margin 0;
+}
+
+.dx-recurrence-datebox-until-date {
+  margin-top: $recurrence-editor-until-date-box-margin-block-start;
+}
+
+.dx-recurrence-numberbox-repeat-count {
+  margin-top: $recurrence-editor-count-number-box-margin-block-start;
+}

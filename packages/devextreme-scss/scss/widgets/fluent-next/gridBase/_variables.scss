@@ -1,0 +1,18 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+
+$grid-cell-padding-block: calc((#{$grid-cell-height} - #{$grid-cell-line-height}) / 2);
+$grid-cell-padding: $grid-cell-padding-block $grid-cell-padding-inline;
+$grid-header-cell-padding-block: calc((#{$grid-header-height} - #{$grid-header-line-height}) / 2);
+$grid-command-select-column-width: calc(#{$grid-checkbox-size} + 2 * #{$grid-cell-padding-inline});
+$grid-master-detail-padding: 16px;
+
+/*
+ * The two layers of one drop shadow, kept as a single value: `ambient, key` is the only way they
+ * are ever used, and splitting them needs a per-layer name in the slot position, which the
+ * grammar reserves for a CSS property (NAMING.md, size slots).
+ */
+$grid-drag-header-box-shadow:
+  0 0 1px $grid-drag-header-shadow-ambient-rest,
+  0 1px 3px $grid-drag-header-shadow-key-rest;

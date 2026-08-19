@@ -1,0 +1,52 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// Not colours: two opacities that used to sit in _colors.scss (NAMING.md, O7)
+$pagination-info-opacity: ds.$opacity-70 !default;
+$pagination-nav-opacity-disabled: ds.$opacity-30 !default;
+
+$pagination-padding: ds.$spacing-130 !default;
+$pagination-separator-padding: ds.$spacing-80 !default;
+$pagination-page-padding: ds.$spacing-90 ds.$spacing-120 !default;
+$pagination-page-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
+$pagination-page-font-size: ds.$font-size-base-sm !default;
+$pagination-nav-button-padding: $pagination-page-padding !default;
+$pagination-nav-button-height: ds.$spacing-120 !default;
+$pagination-nav-button-icon-size: null !default;
+$pagination-page-sizes-compact-min-width: null !default;
+$pagination-page-index-compact-min-width: null !default;
+
+@if $size == "default" {
+  $pagination-nav-button-icon-size: ds.$spacing-210 !default;
+  $pagination-page-sizes-compact-min-width: 62px !default; // dx-offscale: 62px
+  $pagination-page-index-compact-min-width: ds.$spacing-320 !default;
+}
+
+@else if $size == "compact" {
+  $pagination-nav-button-icon-size: ds.$spacing-160 !default;
+  $pagination-page-sizes-compact-min-width: 42px !default; // dx-offscale: 42px
+  $pagination-page-index-compact-min-width: 27px !default; // dx-offscale: 27px
+}
+
+// Values hoisted from style-file literals (tokenized)
+$pagination-font-weight-selected: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)
+$pagination-page-border-radius: 20px !default; // dx-offscale: 20px (pill; candidate: ds.$border-radius-full)
+$pagination-navigate-button-width: ds.$spacing-90 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$pagination-page-margin-inline-start: ds.$spacing-50 !default;
+$pagination-page-margin-inline-end: ds.$spacing-10 !default;
+$pagination-separator-padding-inline-start: ds.$spacing-80 !default;
+$pagination-separator-padding-inline-end: ds.$spacing-80 !default;
+$pagination-navigate-button-height: ds.$spacing-200 !default;
+$pagination-first-child-margin-inline-start: ds.$spacing-10 !default;
+$pagination-first-child-padding-inline-start: ds.$spacing-100 !default;
+$pagination-first-child-padding-inline-end: ds.$spacing-90 !default;
+$pagination-first-child-padding-block-start: ds.$spacing-70 !default;
+$pagination-first-child-padding-block-end: ds.$spacing-80 !default;
+$pagination-page-size-margin-left: ds.$spacing-40 !default;
+$pagination-page-index-width: ds.$spacing-400 !default;
+$pagination-pages-count-padding-inline-start: ds.$spacing-60 !default;
+
+// B2 tail: pagination page horizontal padding
+$pagination-page-padding-inline: ds.$spacing-130 !default;

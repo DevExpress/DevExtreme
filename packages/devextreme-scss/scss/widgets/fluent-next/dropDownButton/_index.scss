@@ -1,0 +1,37 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/icon_fonts" as *;
+@use "../button/mixins" as *;
+@use "../common/mixins" as *;
+@use "../../base/dropDownButton";
+@use "../../base/dropDownButton/mixins" as *;
+@include dx-dropdownbutton(
+  $drop-down-button-toggle-spindown-icon-size,
+  $drop-down-button-action-padding-inline,
+);
+
+.dx-dropdownbutton-popup-wrapper {
+  @include dx-dropdownlist-list-appearance();
+}
+
+.dx-dropdownbutton {
+  &:not(.dx-dropdownbutton-has-arrow) {
+    .dx-button-has-icon:not(.dx-button-has-text) {
+      @include dx-button-onlyicon-sizing();
+    }
+  }
+
+  &.dx-state-disabled {
+    opacity: 1;
+  }
+}
+
+.dx-dropdownbutton-action {
+  &.dx-button-has-icon,
+  &.dx-button-has-text {
+    .dx-icon-spindown.dx-icon-right {
+      width: $drop-down-button-action-spindown-icon-size;
+      height: $drop-down-button-action-spindown-icon-size;
+    }
+  }
+}

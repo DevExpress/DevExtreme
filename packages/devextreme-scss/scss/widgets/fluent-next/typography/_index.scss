@@ -1,0 +1,65 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../common/mixins" as *;
+@use "mixins" as *;
+
+.dx-theme-fluent-next-typography {
+  background-color: $typography-bg-rest;
+
+  @include dx-base-typography();
+
+  h1 {
+    font-weight: $typography-heading-1-font-weight;
+    font-size: $typography-heading-1-font-size;
+  }
+
+  h2 {
+    font-weight: $typography-heading-2-font-weight;
+    font-size: $typography-heading-2-font-size;
+  }
+
+  h3 {
+    font-weight: $typography-heading-3-font-weight;
+    font-size: $typography-heading-3-font-size;
+  }
+
+  h4 {
+    font-weight: $typography-heading-4-font-weight;
+    font-size: $typography-heading-4-font-size;
+  }
+
+  h5 {
+    font-weight: $typography-heading-5-font-weight;
+    font-size: $typography-heading-5-font-size;
+  }
+
+  h6 {
+    font-weight: $typography-heading-6-font-weight;
+    font-size: $typography-heading-6-font-size;
+  }
+
+  .dx-font-xl {
+    font-size: $typography-xl-font-size;
+  }
+
+  .dx-font-l {
+    font-size: $typography-l-font-size;
+  }
+
+  .dx-font-m {
+    font-size: $typography-m-font-size;
+  }
+
+  .dx-font-s {
+    @include dx-s-font-mixin();
+  }
+
+  small,
+  .dx-font-xs {
+    font-size: $typography-xs-font-size;
+  }
+
+  a {
+    color: $typography-link-content-rest;
+  }
+}

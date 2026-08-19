@@ -1,0 +1,120 @@
+@use "sass:string" as string;
+@use "../../../../base/icon_fonts" as *;
+@use "../../../../base/tabs";
+@use "../../variables/colors" as *;
+@use "../../variables/sizes" as *;
+@use "../../mixins" as *;
+@use "../../../common/sizes" as *;
+@use "../../../scrollable";
+@use "../../../badge";
+@use "styling-mode/primary" as *;
+@use "styling-mode/secondary" as *;
+
+.dx-tab {
+  gap: $tabs-item-gap;
+  padding: $tabs-item-padding;
+  background-color: $tabs-tab-bg-rest;
+  color: $tabs-tab-content-rest;
+
+  &.dx-state-hover {
+    background-color: $tabs-tab-bg-hovered;
+  }
+
+  &.dx-tab-selected {
+    color: $tabs-tab-content-selected;
+
+    .dx-icon {
+      color: $tabs-tab-icon-content-selected;
+    }
+
+    .dx-tab-text .dx-tab-text-span {
+      visibility: visible;
+
+      .dx-tab-text-span-pseudo {
+        visibility: hidden;
+      }
+    }
+  }
+
+  &.dx-state-disabled {
+    color: $tabs-tab-content-disabled;
+
+    .dx-tab-text .dx-tab-text-span-pseudo {
+      color: $tabs-tab-content-disabled;
+    }
+
+    .dx-icon {
+      color: $tabs-tab-icon-content-disabled;
+    }
+  }
+
+  &.dx-state-active {
+    background-color: $tabs-tab-bg-active;
+  }
+
+  .dx-tab-text {
+    column-gap: $tabs-text-column-gap;
+    row-gap: $tabs-item-gap;
+    line-height: $global-line-height;
+
+    .dx-tab-text-span {
+      position: relative;
+      display: block;
+      font-weight: $tabs-tab-accent-font-weight;
+      visibility: hidden;
+    }
+
+    .dx-tab-text-span-pseudo {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      pointer-events: none;
+      color: $tabs-tab-content-rest;
+      font-weight: $tabs-tab-basic-font-weight;
+      visibility: visible;
+    }
+  }
+
+  .dx-icon {
+    color: $tabs-tab-icon-rest;
+    visibility: visible;
+
+    @include dx-icon-sizing($tabs-icon-size);
+
+    width: 1em;
+    height: 1em;
+    line-height: 1;
+  }
+
+  .dx-tabs-item-badge {
+    align-self: center;
+    min-width: $tabs-badge-min-size;
+    min-height: $tabs-badge-min-size;
+  }
+}
+
+.dx-tabs.dx-state-focused {
+  .dx-tab.dx-state-focused {
+    background-color: $tabs-tab-bg-focused;
+  }
+}
+
+.dx-tabs-icon-position-start .dx-tab-text::after {
+  text-align: end;
+}
+
+.dx-tabs-icon-position-end .dx-tab-text::after {
+  text-align: start;
+}
+
+.dx-tabs-icon-position-top .dx-tab-text::after {
+  text-align: center;
+  vertical-align: bottom;
+}
+
+.dx-tabs-icon-position-bottom .dx-tab-text::after {
+  text-align: center;
+  vertical-align: top;
+}

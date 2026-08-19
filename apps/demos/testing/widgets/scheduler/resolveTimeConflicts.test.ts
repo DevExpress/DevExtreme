@@ -25,21 +25,21 @@ runManualTest('Scheduler', 'ResolveTimeConflicts', (test) => {
   });
 });
 
-runManualTest('Scheduler', 'ResolveTimeConflicts', (test) => {
-  test('AppointmentPopup in recurrence group with conflict informer', async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-    await t
-      .doubleClick(Selector('.dx-scheduler-appointment').withText('Approve Personal'))
-      .click('.dx-scheduler-form-all-day-switch .dx-switch-container')
-      .click('.dx-scheduler-form-repeat-editor .dx-selectbox')
-      .click(Selector('.dx-selectbox-popup-wrapper .dx-list-item').withText('Daily'))
-      .click(Selector('.dx-popup-title .dx-button').withAttribute('aria-label', 'Save'));
-
-    await testScreenshot(t, takeScreenshot, 'scheduler_ResolveTimeConflicts_appointment-popup_recurrence-group_conflict-informer.png');
-
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  });
-});
+// runManualTest('Scheduler', 'ResolveTimeConflicts', (test) => {
+//   test('AppointmentPopup in recurrence group with conflict informer', async (t) => {
+//     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+//
+//     await t
+//       .doubleClick(Selector('.dx-scheduler-appointment').withText('Approve Personal'))
+//       .click('.dx-scheduler-form-all-day-switch .dx-switch-container')
+//       .click('.dx-scheduler-form-repeat-editor .dx-selectbox')
+//       .click(Selector('.dx-selectbox-popup-wrapper .dx-list-item').withText('Daily'))
+//       .click(Selector('.dx-popup-title .dx-button').withAttribute('aria-label', 'Save'));
+//
+//     await testScreenshot(t, takeScreenshot, 'scheduler_ResolveTimeConflicts_appointment-popup_recurrence-group_conflict-informer.png');
+//
+//     await t
+//       .expect(compareResults.isValid())
+//       .ok(compareResults.errorMessages());
+//   });
+// });

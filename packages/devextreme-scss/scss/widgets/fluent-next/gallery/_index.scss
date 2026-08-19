@@ -1,0 +1,113 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/icon_fonts" as *;
+@use "../../base/gallery" with (
+  $gallery-root-border-width: $gallery-border-width,
+  $gallery-indicator-bottom: $gallery-indicator-inset-block-end,
+  $gallery-indicator-height: $gallery-indicator-height,
+  $gallery-indicator-item-margin: $gallery-indicator-item-margin,
+);
+
+.dx-gallery {
+  .dx-gallery-nav-button-prev,
+  .dx-gallery-nav-button-next {
+    position: absolute;
+    top: 0;
+    width: 34%;
+    height: 100%;
+    background: transparent;
+    cursor: pointer;
+
+    &.dx-state-hover::after {
+      background-color: $gallery-nav-button-bg-hovered;
+    }
+
+    &.dx-state-active::after {
+      background-color: $gallery-nav-button-bg-active;
+    }
+
+    @include dx-icon-font-centered-sizing(32px);
+
+    &::after {
+      content: "";
+      position: absolute;
+      width: $gallery-nav-button-width;
+      height: $gallery-nav-button-height;
+      background: $gallery-nav-button-bg-rest;
+      border-radius: 50%;
+      top: 50%;
+      margin-top: $gallery-nav-button-margin-block-start;
+    }
+
+    &::before {
+      position: absolute;
+      z-index: 10;
+      clear: both;
+      font-size: $gallery-nav-icon-font-size;
+      color: $gallery-nav-arrow-content-rest;
+    }
+  }
+
+  .dx-gallery-nav-button-prev {
+    @include dx-icon(chevronleft);
+
+    &::after {
+      left: $gallery-nav-button-inset-inline;
+    }
+
+    &::before {
+      left: calc(#{$gallery-nav-button-inset-inline} - 1px);
+      right: auto;
+      margin-left: 0;
+    }
+  }
+
+  .dx-gallery-nav-button-next {
+    @include dx-icon(chevronright);
+
+    &::after {
+      right: $gallery-nav-button-inset-inline;
+    }
+
+    &::before {
+      right: calc(#{$gallery-nav-button-inset-inline} - 1px);
+      left: auto;
+    }
+  }
+}
+
+.dx-gallery-indicator {
+  pointer-events: none;
+  text-align: center;
+}
+
+.dx-gallery-indicator-item {
+  border-radius: 50%;
+  box-sizing: border-box;
+  border: $gallery-indicator-item-border;
+  border-color: $gallery-indicator-item-border-rest;
+  pointer-events: auto;
+  margin: calc(5px - #{$gallery-indicator-size} / 2) 6px;
+  width: $gallery-indicator-size;
+  height: $gallery-indicator-size;
+  background: $gallery-indicator-bg-rest;
+}
+
+.dx-gallery-indicator-item-active,
+.dx-gallery-indicator-item-selected {
+  width: $gallery-indicator-size-selected;
+  height: $gallery-indicator-size-selected;
+  background: $gallery-indicator-item-bg-selected;
+  border: $gallery-indicator-item-border-selected;
+  border-color: $gallery-indicator-border-selected;
+  margin: calc(5px - #{$gallery-indicator-size-selected} / 2) 6px;
+}
+
+.dx-state-focused.dx-gallery {
+  border-color: $gallery-border-focused;
+
+  .dx-gallery-indicator-item-selected {
+    background: $gallery-indicator-bg-focused;
+  }
+}

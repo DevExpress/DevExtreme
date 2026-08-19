@@ -1,0 +1,10 @@
+@use "../../base/icon_fonts" as *;
+@use "../../base/tabs";
+@use "variables/colors" as *;
+@use "variables/sizes" as *;
+@use "mixins" as *;
+@use "layout/tabs" as *;
+@use "layout/tab/base" as *;
+@use "layout/navigation-button/base" as *;
+@use "../scrollable";
+@use "../badge";

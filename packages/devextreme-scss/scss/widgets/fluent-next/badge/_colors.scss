@@ -1,0 +1,8 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$badge-content-rest: ds.$color-content-neutral-default-static-dark-rest !default;
+
+$badge-bg-rest: ds.$color-surface-primary-default-rest !default;
+
+$badge-content-disabled: ds.$color-content-neutral-subdued-disabled !default;
+$badge-bg-disabled: ds.$color-surface-neutral-subdued-disabled !default;

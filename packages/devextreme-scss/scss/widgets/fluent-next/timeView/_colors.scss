@@ -1,0 +1,23 @@
+@use "../colors" as *;
+
+/*
+ * The clock face and arrows are SVG data-uri images: colors are baked into the
+ * background-image at build time (string replace). CSS var() tokens do NOT resolve inside a
+ * data-uri (they render black), so the values below are the static per-mode equivalents of
+ * the ds.$ tokens named in the markers. See DIVERGENCES.md.
+ */
+$time-view-clock-digits-content-rest: null !default;
+$time-view-clock-accent-bg-rest: null !default;
+$time-view-clock-bg-rest: null !default;
+
+@if $mode == "light" {
+  $time-view-clock-digits-content-rest: #161616 !default; // dx-data-uri-static: ds.$color-content-neutral-default-rest
+  $time-view-clock-accent-bg-rest: #242424 !default; // dx-data-uri-static: ds.$color-surface-neutral-default-inverted-rest
+  $time-view-clock-bg-rest: #fafafa !default; // dx-data-uri-static: ds.$color-surface-neutral-subdued-rest
+}
+
+@if $mode == "dark" {
+  $time-view-clock-digits-content-rest: #fff !default; // dx-data-uri-static: ds.$color-content-neutral-default-rest
+  $time-view-clock-accent-bg-rest: #fff !default; // dx-data-uri-static: ds.$color-surface-neutral-default-inverted-rest
+  $time-view-clock-bg-rest: #1d1d1d !default; // dx-data-uri-static: ds.$color-surface-neutral-subdued-rest
+}

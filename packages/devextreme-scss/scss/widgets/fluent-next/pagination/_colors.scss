@@ -1,0 +1,8 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$pagination-page-content-selected: ds.$color-content-neutral-default-static-dark-rest !default;
+$pagination-page-bg-hovered: ds.$color-surface-neutral-default-hovered !default;
+
+$pagination-page-bg-selected: ds.$color-surface-primary-default-rest !default;
+
+// Base-layer values injected with design tokens (wave B1)

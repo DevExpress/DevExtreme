@@ -1,0 +1,144 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/icon_fonts" as *;
+@use "../dropDownEditor" as *;
+@use "../../base/dropDownEditor/mixins" as *;
+@use "../textEditor" as *;
+@use "../textEditor/sizes" as textEditorSizes;
+@use "../dropDownEditor/sizes" as dropDownEditorSizes;
+@use "../../base/dateBox" with (
+  $datebox-texteditor-height: $date-box-input-height,
+  $datebox-popup-content-padding-top: $date-box-popup-content-padding-block-start,
+  $datebox-popup-content-padding-bottom: $date-box-popup-content-padding-block-end,
+  $datebox-button-min-width: $date-box-button-min-width,
+  $datebox-apply-button-margin-right: $date-box-apply-button-margin-inline-end,
+);
+@use "mixins" as *;
+@use "../timeView";
+@use "../dateView";
+
+.dx-datebox-wrapper {
+  .dx-popup-title {
+    min-height: $date-box-popup-title-min-height;
+    border-bottom: none;
+    background: none;
+  }
+
+  .dx-item {
+    border: none;
+  }
+
+  .dx-popup-bottom {
+    .dx-button {
+      width: auto;
+    }
+  }
+}
+
+.dx-datebox-datetime-time-side {
+  justify-content: flex-end;
+}
+
+.dx-datebox-wrapper-rollers.dx-datebox-wrapper-time .dx-popup-content {
+  margin: $date-box-popup-content-margin;
+}
+
+.dx-datebox-wrapper-list {
+  .dx-overlay-content {
+    border-top: none;
+  }
+}
+
+.dx-device-phone .dx-datebox-wrapper-rollers {
+  .dx-popup-content {
+    padding: $date-box-content-padding;
+  }
+}
+
+.dx-datebox-time {
+  @include dx-dropdowneditor-button-icon-styling(clock);
+}
+
+.dx-datebox-date {
+  @include dx-dropdowneditor-button-icon-styling(event);
+}
+
+.dx-datebox-datetime {
+  @include dx-dropdowneditor-button-icon-styling(eventall);
+}
+
+.dx-datebox-wrapper-calendar {
+  .dx-popup-content {
+    padding: 0;
+  }
+
+  .dx-calendar {
+    border: none;
+    margin: $date-box-overlay-item-margin;
+  }
+
+  .dx-datebox-container-cell {
+    margin-right: $date-box-overlay-item-margin;
+    margin-bottom: $date-box-overlay-item-margin;
+  }
+}
+
+.dx-datebox-wrapper-calendar.dx-datebox-wrapper-datetime {
+  .dx-timeview {
+    padding: $date-box-overlay-item-margin;
+  }
+
+  .dx-datebox-container-cell {
+    margin-top: $date-box-container-cell-margin-block-start;
+    margin-right: $date-box-overlay-item-margin;
+  }
+}
+
+@media (max-width: 320px) {
+  .dx-datebox-wrapper-calendar .dx-calendar {
+    margin: $date-box-overlay-item-adaptive-margin;
+  }
+}
+
+.dx-rtl {
+  .dx-datebox-wrapper {
+    .dx-popup-bottom {
+      .dx-toolbar-button + .dx-toolbar-button {
+        .dx-button {
+          margin-right: $date-box-button-margin-inline-end;
+          margin-left: 0;
+        }
+      }
+    }
+  }
+}
+
+.dx-datebox-wrapper-list .dx-popup-content {
+  padding: 0;
+}
+
+.dx-datebox {
+  input[type="date"] {
+    line-height: normal;
+  }
+
+  &,
+  &:not(.dx-texteditor-empty) {
+    &.dx-auto-width {
+      @include invalid-dropdowneditor-input-padding(
+        dropDownEditorSizes.$drop-down-editor-invalid-badge-size,
+        textEditorSizes.$text-editor-input-underlined-padding-inline,
+        textEditorSizes.$text-editor-input-filled-padding-inline
+      );
+    }
+  }
+}
+
+.dx-texteditor {
+  &.dx-datebox-native {
+    .dx-texteditor-input {
+      padding-right: textEditorSizes.$text-editor-spin-button-padding-inline;
+    }
+  }
+}

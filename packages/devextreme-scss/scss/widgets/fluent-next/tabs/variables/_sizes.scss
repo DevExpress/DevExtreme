@@ -1,0 +1,62 @@
+@use "../../sizes" as *;
+@use "../../../../_design-system/variables/ds" as ds;
+
+// Not a colour: an opacity that used to sit in _colors.scss (NAMING.md, O7)
+$tabs-nav-button-opacity-disabled: 0 !default;
+
+// Moved here from the theme root: this component owns it (NAMING.md O1)
+$tabs-text-column-gap: ds.$spacing-80 !default;
+
+$tabs-item-gap: ds.$spacing-40 !default;
+$tabs-item-padding: null !default;
+$tabs-item-padding-block: null !default;
+$tabs-item-padding-inline: null !default;
+$tabs-tab-height: null !default;
+
+$tabs-tab-basic-font-weight: ds.$font-weight-base-default !default;
+$tabs-tab-accent-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)
+$tabs-icon-size: $global-icon-size !default;
+
+$tabs-tab-nav-button-icon-width: null !default;
+$tabs-tab-nav-button-icon-height: null !default;
+$tabs-tab-nav-button-icon-font-size: null !default;
+$tabs-tab-nav-button-content-padding: null !default;
+
+$tabs-tab-vertical-nav-button-content-padding: null !default;
+
+$tabs-indicator-primary-thickness: ds.$spacing-20 !default;
+$tabs-indicator-secondary-thickness: ds.$spacing-30 !default;
+
+$tabs-indicator-primary-length: 100% !default;
+$tabs-indicator-secondary-length: 100% !default;
+
+$tabs-item-secondary-border-radius: ds.$border-radius-40 !default;
+$tabs-indicator-secondary-border-radius: ds.$border-radius-40 !default;
+
+$tabs-badge-min-size: null !default;
+
+@if $size == "default" {
+  $tabs-item-padding-block: ds.$spacing-120 !default;
+  $tabs-item-padding-inline: ds.$spacing-100 !default;
+  $tabs-item-padding: $tabs-item-padding-block $tabs-item-padding-inline !default;
+  $tabs-tab-height: auto !default;
+  $tabs-tab-nav-button-icon-width: ds.$spacing-200 !default;
+  $tabs-tab-nav-button-icon-height: ds.$spacing-200 !default;
+  $tabs-tab-nav-button-icon-font-size: ds.$font-size-200 !default; // dx-icon-glyph-size: text roles not applicable
+  $tabs-tab-nav-button-content-padding: 0 ds.$spacing-40 !default;
+  $tabs-tab-vertical-nav-button-content-padding: ds.$spacing-40 0 !default;
+  $tabs-badge-min-size: ds.$spacing-200 !default;
+}
+
+@else if $size == "compact" {
+  $tabs-item-padding-block: ds.$spacing-80 !default;
+  $tabs-item-padding-inline: ds.$spacing-80 !default;
+  $tabs-item-padding: $tabs-item-padding-block $tabs-item-padding-inline !default;
+  $tabs-tab-height: auto !default;
+  $tabs-tab-nav-button-icon-width: ds.$spacing-160 !default;
+  $tabs-tab-nav-button-icon-height: ds.$spacing-160 !default;
+  $tabs-tab-nav-button-icon-font-size: ds.$font-size-160 !default; // dx-icon-glyph-size: text roles not applicable
+  $tabs-tab-nav-button-content-padding: 0 ds.$spacing-40 !default;
+  $tabs-tab-vertical-nav-button-content-padding: ds.$spacing-40 0 !default;
+  $tabs-badge-min-size: ds.$spacing-160 !default;
+}

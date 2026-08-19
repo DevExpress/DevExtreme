@@ -21,10 +21,23 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
+      styles-changed: ${{ steps.changes.outputs.styles }}
     steps:
+      - uses: actions/checkout@v6
       - name: Check RUN_TESTS flag
         id: check
         run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
+
+      - uses: dorny/paths-filter@v4
+        id: changes
+        with:
+          filters: |
+            styles:
+              - 'packages/devextreme-scss/scss/**'
+              - 'packages/devextreme-scss/icons/**'
+              - 'packages/devextreme-scss/images/**'
+              - 'packages/devextreme-scss/fonts/**'
+              - 'packages/devextreme/js/**/themes/**'
 
   get-changes:
     runs-on: ubuntu-latest
@@ -120,8 +133,12 @@ jobs:
             { "STRATEGY": "screenshots", "THEME": "fluent.blue.light", "CONSTEL": "jquery(1/3)" },
             { "STRATEGY": "screenshots", "THEME": "fluent.blue.light", "CONSTEL": "jquery(2/3)" },
             { "STRATEGY": "screenshots", "THEME": "fluent.blue.light", "CONSTEL": "jquery(3/3)" },
+            { "STRATEGY": "screenshots", "THEME": "fluent-next.blue.light", "CONSTEL": "jquery(1/3)" },
+            { "STRATEGY": "screenshots", "THEME": "fluent-next.blue.light", "CONSTEL": "jquery(2/3)" },
+            { "STRATEGY": "screenshots", "THEME": "fluent-next.blue.light", "CONSTEL": "jquery(3/3)" },
             { "STRATEGY": "accessibility", "THEME": "material.blue.light", "CONSTEL": "jquery" },
-            { "STRATEGY": "accessibility", "THEME": "fluent.blue.light", "CONSTEL": "jquery" }
+            { "STRATEGY": "accessibility", "THEME": "fluent.blue.light", "CONSTEL": "jquery" },
+            { "STRATEGY": "accessibility", "THEME": "fluent-next.blue.light", "CONSTEL": "jquery" }
           ]
           JSON
           )
@@ -129,16 +146,20 @@ jobs:
           dark_accessibility_matrix=$(cat <<'JSON'
           [
             { "STRATEGY": "accessibility", "THEME": "material.blue.dark", "CONSTEL": "jquery" },
-            { "STRATEGY": "accessibility", "THEME": "fluent.blue.dark", "CONSTEL": "jquery" }
+            { "STRATEGY": "accessibility", "THEME": "fluent.blue.dark", "CONSTEL": "jquery" },
+            { "STRATEGY": "accessibility", "THEME": "fluent-next.blue.dark", "CONSTEL": "jquery" }
           ]
           JSON
           )
 
+          # Dark accessibility (color-contrast) runs when framework tests are in scope
+          # OR when styles changed — mirroring the style_dependent_matrix gate in testcafe_tests.yml.
           matrix=$(jq -c -n \
             --argjson base "$base_matrix" \
             --argjson darkAccessibility "$dark_accessibility_matrix" \
             --arg frameworkTestsScope "${{ needs.determine-framework-tests-scope.outputs.framework-tests-scope }}" \
-            '{ include: ($base + (if $frameworkTestsScope != "none" then $darkAccessibility else [] end)) }')
+            --arg stylesChanged "${{ needs.check-should-run.outputs.styles-changed }}" \
+            '{ include: ($base + (if $frameworkTestsScope != "none" or $stylesChanged == "true" then $darkAccessibility else [] end)) }')
 
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
@@ -860,7 +881,7 @@ jobs:
           angular(9/10),
           angular(10/10),
         ]
-        THEME: ['fluent.blue.light']
+        THEME: ['fluent.blue.light', 'fluent-next.blue.light']
 
     runs-on: devextreme-shr2
     name: ${{ matrix.CONSTEL }}-screenshots-${{ matrix.THEME }}
@@ -989,7 +1010,7 @@ jobs:
       fail-fast: false
       matrix:
         CONSTEL: [react, vue, angular]
-        THEME: ['fluent.blue.light']
+        THEME: ['fluent.blue.light', 'fluent-next.blue.light']
 
     runs-on: devextreme-shr2
     name: ${{ matrix.CONSTEL }}-screenshots-${{ matrix.THEME }}

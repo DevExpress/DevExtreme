@@ -1,0 +1,147 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/radioButton/mixins" as *;
+@use "../../base/radioButton";
+@include dx-radiobutton-icon-mixin(
+  $radio-button-size,
+  $radio-button-border-width,
+  $radio-button-dot-size,
+  true,
+);
+@include dx-radiobutton-states-mixin(
+  $radio-button-icon-bg-rest,
+  $radio-button-icon-border-rest,
+  $radio-button-icon-border-read-only,
+  null,
+  null,
+  $radio-button-icon-bg-focused,
+  $radio-button-checked-bg-rest,
+  $radio-button-invalid-bg-rest,
+  $radio-button-invalid-bg-hovered,
+  $radio-button-invalid-bg-focused,
+  1,
+  true,
+);
+
+.dx-radiobutton-icon {
+  &::after {
+    content: none;
+  }
+}
+
+.dx-radio-value-container {
+  padding-inline-end: $radio-button-value-container-padding-inline-end;
+}
+
+.dx-state-readonly {
+  .dx-radiobutton-icon-dot {
+    background-color: $radio-button-content-disabled;
+  }
+
+  .dx-radiobutton-icon {
+    border-color: $radio-button-content-disabled;
+  }
+
+  .dx-radiobutton-checked {
+    &.dx-state-hover,
+    &.dx-state-focused,
+    &.dx-state-active {
+      .dx-radiobutton-icon-dot {
+        background-color: $radio-button-content-disabled;
+      }
+    }
+  }
+}
+
+.dx-radiobutton {
+  &.dx-state-hover {
+    .dx-radiobutton-icon {
+      border-color: $radio-button-icon-border-hovered;
+    }
+  }
+
+  &.dx-state-active {
+    .dx-radiobutton-icon {
+      border-color: $radio-button-icon-border-active;
+    }
+  }
+
+  &.dx-state-focused {
+    .dx-radiobutton-icon {
+      border-color: $radio-button-checked-bg-active;
+    }
+  }
+}
+
+.dx-radiobutton-checked {
+  &.dx-state-hover {
+    .dx-radiobutton-icon {
+      border-color: $radio-button-checked-bg-hovered;
+    }
+
+    .dx-radiobutton-icon-dot {
+      background-color: $radio-button-checked-bg-hovered;
+    }
+  }
+
+  &.dx-state-active,
+  &.dx-state-focused {
+    .dx-radiobutton-icon {
+      border-color: $radio-button-checked-bg-active;
+    }
+
+    .dx-radiobutton-icon-dot {
+      background-color: $radio-button-checked-bg-active;
+    }
+  }
+}
+
+.dx-invalid {
+  .dx-state-hover {
+    &.dx-radiobutton {
+      .dx-radiobutton-icon {
+        border-color: $radio-button-invalid-bg-hovered;
+      }
+
+      .dx-radiobutton-icon-dot {
+        background-color: $radio-button-invalid-bg-hovered;
+      }
+    }
+  }
+
+  .dx-state-active,
+  .dx-state-focused {
+    &.dx-radiobutton {
+      .dx-radiobutton-icon {
+        border-color: $radio-button-invalid-bg-focused;
+      }
+
+      .dx-radiobutton-icon-dot {
+        background-color: $radio-button-invalid-bg-focused;
+      }
+    }
+  }
+
+  &.dx-state-readonly {
+    .dx-radiobutton {
+      .dx-radiobutton-icon-dot {
+        background-color: $radio-button-content-disabled;
+      }
+    }
+  }
+}
+
+.dx-state-disabled {
+  .dx-radiobutton {
+    color: $radio-button-content-disabled;
+
+    .dx-radiobutton-icon {
+      border-color: $radio-button-content-disabled;
+    }
+
+    .dx-radiobutton-icon-dot {
+      background-color: $radio-button-content-disabled;
+    }
+  }
+}

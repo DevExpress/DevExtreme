@@ -1,0 +1,19 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$gallery-indicator-size: ds.$spacing-80 !default;
+$gallery-indicator-size-selected: ds.$spacing-120 !default;
+$gallery-nav-button-inset-inline: ds.$spacing-80 !default;
+
+// Values hoisted from style-file literals (tokenized)
+$gallery-nav-icon-font-size: ds.$font-size-320 !default; // dx-icon-glyph-size: text roles not applicable
+$gallery-nav-button-width: ds.$spacing-320 !default;
+$gallery-nav-button-height: ds.$spacing-320 !default;
+$gallery-nav-button-margin-block-start: -16px !default; // dx-offscale: -16px
+$gallery-indicator-item-border: ds.$border-width-10 solid !default;
+$gallery-indicator-item-border-selected: ds.$border-width-20 solid !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$gallery-border-width: ds.$border-width-10 !default;
+$gallery-indicator-inset-block-end: ds.$spacing-100 !default;
+$gallery-indicator-height: ds.$spacing-100 !default;
+$gallery-indicator-item-margin: 0 ds.$spacing-20 !default;

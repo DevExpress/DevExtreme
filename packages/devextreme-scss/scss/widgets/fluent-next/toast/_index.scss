@@ -1,0 +1,55 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/toast" with (
+  $toast-content-padding: $toast-content-padding,
+  $toast-icon-width: $toast-icon-width,
+  $toast-icon-height: $toast-icon-height,
+  $toast-icon-margin-right: $toast-icon-margin-inline-end,
+  $toast-icon-margin-left: $toast-icon-rtl-margin-inline-end,
+  $toast-stack-gap: $toast-stack-gap,
+);
+@use "../overlay";
+
+.dx-toast-stack {
+  gap: $toast-item-gap;
+}
+
+.dx-toast-content {
+  font-size: $global-font-size;
+  font-weight: $toast-content-font-weight;
+  padding: $toast-content-padding-block $toast-content-padding-inline;
+  border-radius: $toast-border-radius;
+  box-shadow: $toast-box-shadow;
+  min-height: $toast-height;
+  display: flex;
+  align-items: center;
+}
+
+.dx-toast-icon {
+  display: none;
+}
+
+.dx-toast-message {
+  padding: 0;
+}
+
+.dx-toast-info {
+  background-color: $toast-info-bg-rest;
+  color: $toast-info-content-rest;
+}
+
+.dx-toast-warning {
+  background-color: $toast-warning-bg-rest;
+  color: $toast-warning-content-rest;
+}
+
+.dx-toast-error {
+  background-color: $toast-error-bg-rest;
+  color: $toast-error-content-rest;
+}
+
+.dx-toast-success {
+  background-color: $toast-success-bg-rest;
+  color: $toast-success-content-rest;
+}

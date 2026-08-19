@@ -1,0 +1,82 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icon_fonts" as *;
+@use "../menu/sizes" as menuSizes;
+@use "../menu/colors" as menuColors;
+@use "../button/sizes" as buttonSizes;
+@use "../../base/contextMenu" with (
+  $contextmenu-menu-separator-height: $context-menu-separator-height,
+  $contextmenu-menu-separator-margin: $context-menu-separator-margin,
+);
+@use "../overlay";
+@use "../menuBase" as *;
+
+.dx-context-menu {
+  color: menuColors.$menu-content-rest;
+
+  .dx-menu-items-container {
+    display: flex;
+    flex-direction: column;
+    padding: $context-menu-items-container-padding;
+    gap: $context-menu-items-container-gap;
+  }
+
+  .dx-menu-item {
+    border-radius: $context-menu-item-border-radius;
+
+    .dx-menu-item-content {
+      display: flex;
+      align-items: center;
+      padding: menuSizes.$menu-padding-block $context-menu-padding-inline;
+      gap: $context-menu-item-content-gap;
+
+      .dx-menu-item-text {
+        padding-inline: $context-menu-item-text-padding-inline;
+      }
+
+      .dx-menu-item-popout-container {
+        inset-inline-end: $context-menu-padding-inline;
+        width: $global-icon-size;
+        display: flex;
+        align-items: center;
+
+        .dx-menu-item-popout {
+          display: flex;
+          align-items: center;
+
+          @include dx-icon(spinright);
+          @include dx-icon-sizing(buttonSizes.$button-icon-size);
+        }
+      }
+    }
+
+    .dx-menu-item-popout {
+      color: $context-menu-icon-rest;
+    }
+
+    &.dx-state-disabled {
+      .dx-menu-item-popout {
+        color: $context-menu-content-disabled;
+      }
+    }
+
+    &.dx-menu-item-has-submenu > .dx-menu-item-content {
+      padding-inline-end: menuSizes.$menu-item-with-icon-padding-inline;
+    }
+  }
+
+  &.dx-overlay-content.dx-state-focused {
+    box-shadow: none;
+  }
+
+  .dx-submenu {
+    background-color: menuColors.$menu-popup-bg-rest;
+    border-radius: $context-menu-border-radius;
+    box-shadow: $context-menu-shadow-rest;
+  }
+
+  .dx-menu-separator {
+    background-color: menuColors.$menu-separator-bg-rest;
+  }
+}

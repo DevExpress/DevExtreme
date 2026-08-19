@@ -1,0 +1,65 @@
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+
+.dx-theme-marker {
+  font-family: "dx.fluent-next.#{$theme-marker-color}.#{$theme-marker-mode}#{$theme-marker-size-postfix}";
+}
+
+// stylelint-disable declaration-no-important
+.dx-theme-accent-as-text-color {
+  color: $palette-accent !important;
+}
+
+.dx-theme-text-color {
+  color: $palette-text !important;
+}
+
+.dx-theme-background-color-as-text-color {
+  color: $palette-bg !important;
+}
+
+.dx-theme-border-color-as-text-color {
+  color: $palette-border !important;
+}
+
+.dx-theme-accent-as-background-color {
+  background-color: $palette-accent !important;
+  fill: $palette-accent !important;
+}
+
+.dx-theme-text-color-as-background-color {
+  background-color: $palette-text !important;
+  fill: $palette-text !important;
+}
+
+.dx-theme-background-color {
+  background-color: $palette-bg !important;
+  fill: $palette-bg !important;
+}
+
+.dx-theme-typography-background-color {
+  background-color: $global-bg-rest !important;
+}
+
+.dx-theme-border-color-as-background-color {
+  background-color: $palette-border !important;
+  fill: $palette-border !important;
+}
+
+.dx-theme-accent-as-border-color {
+  border-color: $palette-accent !important;
+}
+
+.dx-theme-text-color-as-border-color {
+  border-color: $palette-text !important;
+}
+
+.dx-theme-background-color-as-border-color {
+  border-color: $palette-bg !important;
+}
+
+.dx-theme-border-color {
+  border-color: $palette-border !important;
+}

@@ -1,0 +1,47 @@
+@use "../sizes" as *;
+@use "../../base/dataGrid/variables" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$data-grid-cell-padding: ds.$spacing-70 !default;
+$data-grid-group-panel-item-font-weight: ds.$font-weight-base-default !default;
+
+$data-grid-group-panel-item-border-radius: null !default;
+$data-grid-group-panel-item-padding-block: null !default;
+
+@if $size == "default" {
+  $data-grid-group-panel-item-border-radius: ds.$border-radius-60 !default;
+  $data-grid-group-panel-item-padding-block: ds.$spacing-50 !default;
+}
+
+@else if $size == "compact" {
+  $data-grid-group-panel-item-border-radius: ds.$border-radius-40 !default;
+  $data-grid-group-panel-item-padding-block: ds.$spacing-20 !default;
+}
+
+$datagrid-cell-padding: $data-grid-cell-padding !default;
+
+// Values hoisted from style-file literals (tokenized)
+$data-grid-group-row-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)
+$data-grid-group-panel-item-border-width: ds.$border-width-10 !default;
+$data-grid-group-panel-item-padding: $data-grid-group-panel-item-padding-block ds.$spacing-100 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$data-grid-outline-focused: ds.$spacing-20 solid !default;
+$data-grid-outline-offset-focused: ds.$spacing-20 !default;
+$data-grid-filter-panel-outline-offset-focused: ds.$spacing-30 !default;
+$data-grid-form-buttons-margin-inline-start: ds.$spacing-100 !default;
+$data-grid-form-buttons-margin-block-start: ds.$spacing-100 !default;
+$data-grid-error-message-margin-block-end: ds.$spacing-200 !default;
+$data-grid-form-buttons-rtl-margin-inline-start: ds.$spacing-100 !default;
+
+$data-grid-group-row-border: ds.$border-width-10 solid !default;
+$data-grid-sticky-column-border: ds.$border-width-20 solid !default;
+$data-grid-cell-outline-focused: ds.$spacing-20 solid !default;
+
+// Base submodule sizing injected with design tokens (B2 tail)
+$data-grid-group-panel-item-min-width: ds.$spacing-300 !default;
+$data-grid-group-panel-item-margin-inline-end: ds.$spacing-100 !default;
+$data-grid-group-panel-item-sort-margin-inline-start: ds.$spacing-60 !default;
+$data-grid-block-separator-border-radius: ds.$border-radius-30 !default;
+$data-grid-group-panel-item-rtl-margin-inline-end: ds.$spacing-100 !default;
+$data-grid-group-panel-item-sort-rtl-margin-inline-start: ds.$spacing-60 !default;

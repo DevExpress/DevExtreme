@@ -1,9 +1,16 @@
 @use "sass:selector";
 @use "./mixins" as *;
 
+$popup-dialog-shader-color: #444 !default;
+
+// Design sizing values (parametrizable; fluent-next injects tokens)
+$popup-title-padding: 10px !default;
+$popup-title-min-height-fallback: 19px !default;
+$popup-dialog-message-padding: 10px 10px 5px 10px !default;
+
 .dx-popup-title {
-  padding: 10px;
-  min-height: 19px;
+  padding: $popup-title-padding;
+  min-height: $popup-title-min-height-fallback;
   -webkit-user-drag: none;
 
   @include user-select(none);
@@ -72,7 +79,7 @@
 }
 
 .dx-popup-content {
-  padding: 10px;
+  padding: $popup-title-padding;
   -webkit-user-drag: none;
 
   &.dx-dialog-content {
@@ -98,12 +105,12 @@
 
 .dx-dialog-root {
   .dx-overlay-shader {
-    background-color: #444;
+    background-color: $popup-dialog-shader-color;
   }
 }
 
 .dx-dialog-message {
-  padding: 10px 10px 5px 10px;
+  padding: $popup-dialog-message-padding;
 }
 
 .dx-prevent-safari-scrolling {

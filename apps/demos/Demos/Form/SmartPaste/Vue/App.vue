@@ -274,7 +274,7 @@ onMounted(() => {
 }
 
 .instruction {
-  color: var(--dx-texteditor-color-label);
+  color: var(--dxds-color-content-neutral-subdued-rest, var(--dx-texteditor-color-label));
 }
 
 .textarea-container {

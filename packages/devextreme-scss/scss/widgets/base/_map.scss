@@ -1,3 +1,6 @@
+// Design sizing values (parametrizable; fluent-next injects tokens)
+$map-marker-tooltip-margin: 10px !default;
+
 .dx-map-container,
 .dx-map-shield {
   position: relative;
@@ -19,5 +22,5 @@
 }
 
 .dx-map-marker-tooltip {
-  margin: 10px;
+  margin: $map-marker-tooltip-margin;
 }

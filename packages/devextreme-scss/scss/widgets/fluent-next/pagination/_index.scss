@@ -1,0 +1,109 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/icon_fonts" as *;
+@use "../../base/pagination" with (
+  $pagination-page-margin-left: $pagination-page-margin-inline-start,
+  $pagination-page-margin-right: $pagination-page-margin-inline-end,
+  $pagination-separator-padding-left: $pagination-separator-padding-inline-start,
+  $pagination-separator-padding-right: $pagination-separator-padding-inline-end,
+  $pagination-navigate-button-height: $pagination-navigate-button-height,
+  $pagination-first-child-margin-left: $pagination-first-child-margin-inline-start,
+  $pagination-first-child-padding-left: $pagination-first-child-padding-inline-start,
+  $pagination-first-child-padding-right: $pagination-first-child-padding-inline-end,
+  $pagination-first-child-padding-top: $pagination-first-child-padding-block-start,
+  $pagination-first-child-padding-bottom: $pagination-first-child-padding-block-end,
+  $pagination-page-size-margin-left: $pagination-page-size-margin-left,
+  $pagination-page-index-width: $pagination-page-index-width,
+  $pagination-pages-count-padding-left: $pagination-pages-count-padding-inline-start,
+  $pagination-info-opacity: $pagination-info-opacity,
+  $pagination-nav-disabled-opacity: $pagination-nav-opacity-disabled,
+  $pagination-page-horizontal-padding: $pagination-page-padding-inline,
+);
+@use "../gridBase/sizes" as gridBaseSizes;
+
+.dx-pager,
+.dx-pagination {
+  padding: $pagination-padding gridBaseSizes.$grid-cell-padding-inline;
+
+  &.dx-light-mode {
+    .dx-page-sizes {
+      min-width: $pagination-page-sizes-compact-min-width;
+    }
+
+    .dx-page-index {
+      min-width: $pagination-page-index-compact-min-width;
+    }
+
+    .dx-pages {
+      .dx-page-indexes {
+        vertical-align: middle;
+      }
+
+      .dx-navigate-button,
+      .dx-light-pages {
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .dx-pages {
+    .dx-page {
+      padding: $pagination-page-padding;
+      line-height: $pagination-page-line-height;
+    }
+
+    .dx-separator {
+      padding-left: $pagination-separator-padding;
+      padding-right: $pagination-separator-padding;
+    }
+
+    .dx-navigate-button {
+      width: $pagination-navigate-button-width;
+      height: $pagination-nav-button-height;
+      padding: $pagination-nav-button-padding;
+    }
+
+    .dx-prev-button {
+      @include dx-icon(chevronleft);
+    }
+
+    .dx-next-button {
+      @include dx-icon(chevronright);
+    }
+
+    .dx-prev-button,
+    .dx-next-button {
+      @include dx-icon-font-centered-sizing($pagination-nav-button-icon-size);
+    }
+  }
+
+  .dx-page,
+  .dx-page-size {
+    font-size: $pagination-page-font-size;
+
+    &:hover {
+      background-color: $pagination-page-bg-hovered;
+    }
+
+    border-radius: $pagination-page-border-radius;
+  }
+
+  .dx-page-sizes .dx-page-size {
+    &:first-child,
+    &.dx-first-child {
+      margin-left: 0;
+    }
+
+    padding: $pagination-page-padding;
+    line-height: $pagination-page-line-height;
+  }
+
+  .dx-pages,
+  .dx-page-sizes {
+    .dx-selection {
+      font-weight: $pagination-font-weight-selected;
+      background-color: $pagination-page-bg-selected;
+      color: $pagination-page-content-selected;
+    }
+  }
+}

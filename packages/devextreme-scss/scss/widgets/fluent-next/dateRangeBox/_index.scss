@@ -1,0 +1,110 @@
+@use "sass:math";
+@use "../textEditor/sizes" as textEditorSizes;
+@use "../textEditor/colors" as textEditorColors;
+@use "../dateBox/mixins" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "colors" as *;
+@use "../../base/dateRangeBox";
+@use "../../base/icon_fonts" as *;
+@use "../textEditor" as *;
+
+.dx-daterangebox {
+  @include dx-dropdowneditor-button-icon-styling(daterangepicker);
+
+  &.dx-editor-outlined,
+  &.dx-editor-filled {
+    &::before {
+      content: none;
+    }
+  }
+
+  .dx-editor-outlined,
+  .dx-editor-filled {
+    &.dx-datebox {
+      &::before {
+        border-radius: 0;
+        width: calc(100% - 2 * $date-range-box-active-bar-margin-inline);
+        margin: 0 $date-range-box-active-bar-margin-inline;
+      }
+    }
+  }
+
+  &.dx-editor-underlined,
+  &.dx-editor-filled {
+    &::before {
+      border-bottom-width: $date-range-box-input-filled-border-block-end-width;
+      transition: none;
+    }
+
+    &.dx-state-hover {
+      &::after {
+        border-bottom-width: $date-range-box-border-block-end-width-hovered;
+        transition: none;
+      }
+    }
+
+    &.dx-state-focused {
+      &.dx-invalid {
+        &::before {
+          border-bottom-width: $date-range-box-invalid-border-block-end-width;
+          transition: none;
+        }
+      }
+    }
+  }
+
+  &.dx-editor-underlined {
+    .dx-daterangebox-separator {
+      padding-right: textEditorSizes.$text-editor-input-filled-padding-inline;
+    }
+  }
+
+  &.dx-texteditor {
+    > .dx-texteditor-buttons-container {
+      > .dx-button,
+      > .dx-clear-button-area {
+        margin-inline-start: $date-range-box-custom-button-margin;
+        margin-inline-end: $date-range-box-custom-button-margin;
+
+        &:first-child {
+          margin-inline-start: 0;
+        }
+
+        &:last-child {
+          margin-inline-end: $date-range-box-custom-button-margin;
+        }
+      }
+
+      > .dx-dropdowneditor-button:last-child {
+        margin-inline-end: textEditorSizes.$text-editor-spin-button-padding-inline;
+      }
+
+      > .dx-clear-button-area:last-child,
+      > .dx-clear-button-area + div:empty:last-child {
+        margin-inline-end: textEditorSizes.$text-editor-button-filled-inset-inline-end;
+      }
+    }
+  }
+
+  .dx-datebox {
+    &.dx-end-datebox {
+      &.dx-texteditor {
+        &.dx-invalid {
+          .dx-texteditor-input {
+            padding-inline-end: textEditorSizes.$text-editor-invalid-badge-size;
+          }
+        }
+      }
+    }
+  }
+}
+
+.dx-daterangebox-separator {
+  padding-left: textEditorSizes.$text-editor-input-filled-padding-inline;
+  color: textEditorColors.$text-editor-content-disabled;
+
+  .dx-icon {
+    @include dx-icon-sizing($global-icon-size);
+  }
+}

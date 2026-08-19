@@ -1,0 +1,19 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/validation" as baseValidation;
+@use "../textEditor/sizes" as textEditorSizes;
+@use "../overlay";
+@include baseValidation.dx-base-validation(
+  $validation-summary-content-rest,
+  $validation-message-content-rest,
+  $validation-message-bg-rest,
+  $validation-overlay-border-radius
+);
+@include baseValidation.dx-modern-styles-validation(
+  $validation-message-font-size,
+  $validation-message-line-height,
+  textEditorSizes.$text-editor-input-filled-padding-inline,
+  $validation-summary-item-margin,
+  $validation-message-padding-block,
+  $validation-message-padding-inline,
+);

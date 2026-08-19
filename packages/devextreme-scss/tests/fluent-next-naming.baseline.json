@@ -1,0 +1,385 @@
+{
+  "ownershipOfDeclarations": {
+    "accordion": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "actionSheet": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "autocomplete": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "badge": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "box": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "button": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "buttonGroup": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "calendar": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "card": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "chat": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "checkBox": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "colorBox": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "colorView": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "contextMenu": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "dataGrid": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "dateBox": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "dateRangeBox": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "dateView": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "diagram": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "drawer": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "dropDownBox": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "dropDownButton": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "dropDownEditor": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "dropDownList": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "dropDownMenu": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "fieldset": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "fileManager": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "fileUploader": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "filterBuilder": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "form": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "gallery": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "gantt": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "gridBase": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "htmlEditor": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "icons": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "informer": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "list": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "loadIndicator": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "loadPanel": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "lookup": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "map": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "menu": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "menuBase": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "multiView": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "numberBox": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "overlay": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "pagination": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "pivotGrid": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "popover": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "popup": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "progressBar": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "radioButton": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "radioGroup": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "rangeSlider": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "recurrenceEditor": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "responsiveBox": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "scheduler": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "scrollView": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "scrollable": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "selectBox": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "slider": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "sortable": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "speechToText": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "speedDialAction": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "splitter": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "splitterBar": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "stepper": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "switch": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "tabPanel": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "tabs": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "tagBox": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "textArea": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "textBox": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "textEditor": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "tileView": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "timeView": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "toast": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "toolbar": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "tooltip": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "treeList": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "treeView": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "validation": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "widget": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    }
+  },
+  "baseWiring": [
+    "dataGrid: $datagrid-cell-padding (star)",
+    "treeList: $treelist-expand-checkbox-right-gap (star)",
+    "treeList: $treelist-expand-checkbox-size (star)",
+    "treeList: $treelist-expand-icon-name-collapsed (star)",
+    "treeList: $treelist-expand-icon-name-expanded (star)",
+    "treeList: $treelist-expand-icon-right-gap (star)",
+    "treeList: $treelist-expand-icon-size (star)"
+  ],
+  "systemTierNames": [],
+  "multipleDeclarationHomes": [],
+  "foreignReads": {
+    "icons": [
+      "scrollViewColors.$scroll-view-pull-down-bg-rest"
+    ]
+  },
+  "declarationsOutsideVariableFiles": [],
+  "starImportsOfBase": [
+    "dataGrid/_sizes.scss: ../../base/dataGrid/variables",
+    "treeList/_sizes.scss: ../../base/treeList/variables"
+  ],
+  "crossWidgetStarImports": [],
+  "deadVariables": [],
+  "publicSurfaceUnused": [
+    "--dx-button-padding-inline",
+    "--dx-color-shadow",
+    "--dx-component-height",
+    "--dx-font-size",
+    "--dx-font-size-heading-1",
+    "--dx-font-size-heading-2",
+    "--dx-font-size-heading-3",
+    "--dx-font-size-heading-4",
+    "--dx-font-size-heading-6",
+    "--dx-font-size-lg",
+    "--dx-font-size-md",
+    "--dx-font-size-xl",
+    "--dx-line-height",
+    "--dx-list-item-padding-block",
+    "--dx-list-item-padding-inline",
+    "--dx-popup-toolbar-item-padding-inline",
+    "--dx-texteditor-color-text",
+    "--dx-toolbar-height"
+  ],
+  "publicSurfaceUndeclared": [
+    "--dx-texteditor-label-color"
+  ],
+  "publicSurfaceDifferences": [
+    "--dx-line-height: only in fluent, fluent-next"
+  ]
+}

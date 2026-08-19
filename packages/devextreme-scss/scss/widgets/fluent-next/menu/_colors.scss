@@ -1,0 +1,20 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$menu-popup-bg-rest: ds.$color-surface-neutral-default-rest !default;
+$menu-item-bg-hovered: ds.$color-surface-neutral-default-hovered !default;
+$menu-item-bg-active: ds.$color-surface-neutral-default-active !default;
+
+$menu-content-rest: ds.$color-content-neutral-default-rest !default;
+$menu-item-expanded-content-rest: $menu-content-rest !default;
+
+$menu-item-bg-selected: ds.$color-surface-neutral-default-selected !default;
+$menu-popup-border-rest: ds.$color-border-neutral-default-rest !default;
+$menu-separator-bg-rest: ds.$color-border-neutral-subdued-rest !default;
+$menu-item-content-selected: ds.$color-content-neutral-default-rest !default;
+$menu-item-link-content-rest: ds.$color-content-primary-default-rest !default;
+$menu-item-bg-selected-focused: ds.$color-surface-neutral-default-selected-hovered !default;
+
+$menu-shadow-focused: ds.$box-shadow-md !default;
+
+// Moved here from menuBase/: menu/ is the declaration home of the menu component (O2)
+$menu-item-content-disabled: ds.$color-content-neutral-default-disabled;

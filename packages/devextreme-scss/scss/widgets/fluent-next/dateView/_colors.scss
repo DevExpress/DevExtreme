@@ -1,0 +1,8 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// Fade gradients over the surface — relative-color bridge (no gradient role in foundation).
+$date-view-roller-top-shadow-rest: 0deg, rgb(from #{ds.$color-surface-neutral-default-rest} r g b / 0) 0%, rgb(from #{ds.$color-surface-neutral-default-rest} r g b / 0.8) 60% !default;
+$date-view-roller-bottom-shadow-rest: 180deg, rgb(from #{ds.$color-surface-neutral-default-rest} r g b / 0) 0%, rgb(from #{ds.$color-surface-neutral-default-rest} r g b / 0.8) 60% !default;
+$date-view-content-rest: ds.$color-content-neutral-default-rest !default;
+
+$date-view-item-content-selected: ds.$color-surface-primary-default-rest !default;

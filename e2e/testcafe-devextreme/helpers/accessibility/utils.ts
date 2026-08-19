@@ -1,12 +1,24 @@
 /* eslint-disable spellcheck/spell-checker */
 import { axeCheck, createReport } from '@testcafe-community/axe';
 import { ElementContext, RunOptions } from 'axe-core';
+import { getThemeName } from '../themeUtils';
 
 export interface A11yCheckOptions extends RunOptions {
   runOnly?: any;
 }
 
 const defaultOptions = {};
+const COLOR_CONTRAST_RULE = 'color-contrast';
+
+// axe gives a `rule`-type runOnly precedence over rules[id].enabled, so forcing runOnly would
+// silently re-enable color-contrast for callers that opted out of it (or narrowed runOnly).
+const isColorContrastChecked = (options: A11yCheckOptions): boolean => {
+  if (options.rules?.[COLOR_CONTRAST_RULE]?.enabled === false) {
+    return false;
+  }
+
+  return options.runOnly === undefined || options.runOnly === COLOR_CONTRAST_RULE;
+};
 
 const createFullReport = (results, configuration) => {
   let report = createReport(results.violations);
@@ -25,7 +37,20 @@ export const a11yCheck = async (
   configuration = {},
 ):
 Promise<void> => {
-  const { error, results } = await axeCheck(t, selector, { rules: {}, ...options });
+  // fluent-next shares fluent's structure/ARIA (already covered by the fluent run),
+  // so only color-contrast is re-checked for it — regardless of the caller's config.
+  const isColorContrastOnly = getThemeName() === 'fluent-next';
+
+  // Nothing is left to check: the caller excluded the only rule this theme runs.
+  if (isColorContrastOnly && !isColorContrastChecked(options)) {
+    return;
+  }
+
+  const effectiveOptions: A11yCheckOptions = isColorContrastOnly
+    ? { ...options, runOnly: COLOR_CONTRAST_RULE }
+    : options;
+
+  const { error, results } = await axeCheck(t, selector, { rules: {}, ...effectiveOptions });
 
   await t
     .expect(error)

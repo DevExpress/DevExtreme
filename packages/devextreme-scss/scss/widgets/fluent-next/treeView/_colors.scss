@@ -1,0 +1,25 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$tree-view-content-rest: ds.$color-content-neutral-default-rest !default;
+
+$tree-view-bg-focused: ds.$color-surface-neutral-default-hovered !default;
+$tree-view-content-focused: ds.$color-content-neutral-default-rest !default;
+$tree-view-bg-hovered: ds.$color-surface-neutral-default-hovered !default;
+$tree-view-item-content-hovered: ds.$color-content-neutral-default-rest !default;
+$tree-view-border-rest: ds.$color-border-neutral-default-rest !default;
+$tree-view-item-content-selected: $tree-view-content-rest !default;
+$tree-view-item-bg-selected: ds.$color-surface-neutral-default-selected !default;
+$tree-view-spin-icon-rest: ds.$color-content-neutral-subdued-rest !default;
+$tree-view-checkbox-checked-border-focused: ds.$color-border-primary-compound-active !default;
+
+$tree-view-checkbox-border-disabled: ds.$color-content-neutral-default-disabled !default;
+$tree-view-checkbox-icon-disabled: ds.$color-content-neutral-default-disabled !default;
+$tree-view-checkbox-indeterminate-bg-disabled: ds.$color-content-neutral-default-disabled !default;
+$tree-view-checkbox-bg-disabled: ds.$color-surface-neutral-default-disabled !default;
+$tree-view-item-content-disabled: ds.$color-content-neutral-default-disabled !default;
+$tree-view-checkbox-border-focused: ds.$color-border-neutral-accessible-disabled !default;
+$tree-view-checkbox-bg-focused: ds.$color-surface-neutral-default-disabled !default;
+$tree-view-checkbox-accent-content-focused: ds.$color-surface-primary-default-hovered !default;
+
+// Base-layer values injected with design tokens (wave B1)

@@ -1,0 +1,16 @@
+@use "../button/colors" as buttonColors;
+@use "../../../_design-system/variables/ds" as ds;
+@use "../common/colors" as *;
+
+$speed-dial-action-content-rest: ds.$color-content-neutral-default-rest !default;
+$speed-dial-action-shadow-rest: ds.$box-shadow-md !default;
+$speed-dial-action-label-shadow-rest: ds.$box-shadow-sm !default;
+$speed-dial-action-backdrop-rest: $backdrop-rest !default;
+
+$speed-dial-action-bg-rest: buttonColors.$button-normal-contained-bg-rest !default;
+$speed-dial-action-bg-hovered: buttonColors.$button-normal-contained-bg-hovered !default;
+$speed-dial-action-bg-active: buttonColors.$button-normal-contained-bg-active !default;
+
+$speed-dial-action-main-bg-rest: ds.$color-surface-primary-default-rest !default;
+$speed-dial-action-main-bg-hovered: ds.$color-surface-primary-default-hovered !default;
+$speed-dial-action-main-bg-active: ds.$color-surface-primary-default-active !default;

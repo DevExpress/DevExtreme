@@ -1,0 +1,578 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icon_fonts" as *;
+@use "../common/sizes" as *;
+@use "../button/sizes" as buttonSizes;
+@use "../common/mixins" as *;
+@use "../common/sizes" as *;
+@use "../../base/textEditor" with (
+  $texteditor-clear-button-area-width: $text-editor-clear-button-width,
+);
+@use "../../base/textEditor/mixins" as *;
+
+@mixin texteditor-outlined-styling() {
+  background-color: $text-editor-outlined-bg-rest;
+  border-radius: $text-editor-input-border-radius;
+  border-width: $text-editor-border-width;
+  border-style: solid;
+  border-color: $text-editor-border-rest;
+  border-bottom-color: $text-editor-line-rest;
+
+  &::before {
+    box-sizing: border-box;
+    content: "";
+    position: absolute;
+    left: $text-editor-line-inset-inline-start;
+    bottom: $text-editor-line-inset-block-end;
+    right: $text-editor-line-inset-inline-end;
+    height: $text-editor-input-border-radius;
+    width: calc(100% + 2 * $text-editor-border-width);
+    border-bottom-left-radius: $text-editor-input-border-radius;
+    border-bottom-right-radius: $text-editor-input-border-radius;
+    border-bottom-color: $text-editor-indicator-rest;
+    clip-path: inset(calc(100% - 2px) 0 0);
+    transform: scaleX(0);
+    transition-property: transform;
+    transition-duration: 50ms;
+    transition-timing-function: cubic-bezier(0.7, 0, 1, 0.5);
+  }
+
+  &.dx-texteditor-with-label,
+  &.dx-texteditor-with-floating-label {
+    .dx-texteditor-label {
+      width: calc(100% + 2 * $text-editor-border-width);
+      inset: $text-editor-label-inset;
+    }
+
+    .dx-datebox {
+      border: none;
+    }
+  }
+
+  &.dx-state-disabled,
+  &.dx-state-readonly {
+    background-color: transparent;
+    border-color: $text-editor-border-disabled;
+  }
+
+  &.dx-invalid {
+    border-color: $text-editor-invalid-border-rest;
+
+    &.dx-state-hover,
+    &.dx-state-focused {
+      border-color: $text-editor-invalid-border-focused;
+    }
+
+    &::before {
+      border-color: $text-editor-invalid-border-rest;
+    }
+  }
+
+  &.dx-state-hover {
+    background-color: $text-editor-outlined-bg-hovered;
+    border-left-color: $text-editor-border-hovered;
+    border-right-color: $text-editor-border-hovered;
+    border-top-color: $text-editor-border-hovered;
+    border-bottom-color: $text-editor-line-hovered;
+  }
+
+  &.dx-state-focused,
+  &.dx-state-active {
+    background-color: $text-editor-outlined-bg-focused;
+    border-left-color: $text-editor-border-focused;
+    border-right-color: $text-editor-border-focused;
+    border-top-color: $text-editor-border-focused;
+    border-bottom-color: $text-editor-line-focused;
+
+    &::before {
+      transform: scaleX(1);
+      transition-property: transform;
+      transition-duration: 200ms;
+      transition-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1);
+    }
+  }
+}
+
+@mixin texteditor-filled-styling() {
+  background-color: $text-editor-filled-bg-rest;
+  border-radius: $text-editor-input-border-radius;
+  border-width: $text-editor-border-width;
+  border-style: solid;
+  border-color: transparent;
+
+  .dx-placeholder::before,
+  .dx-texteditor-input {
+    padding-top: $text-editor-input-filled-padding-block-start;
+    padding-bottom: $text-editor-input-filled-padding-block-end;
+  }
+
+  &::before {
+    left: $text-editor-line-inset-inline-start;
+    bottom: $text-editor-line-inset-block-end;
+    right: $text-editor-line-inset-inline-end;
+    height: $text-editor-input-border-radius;
+    width: calc(100% + 2 * $text-editor-border-width);
+    border-bottom-left-radius: $text-editor-input-border-radius;
+    border-bottom-right-radius: $text-editor-input-border-radius;
+    border-bottom-color: $text-editor-indicator-rest;
+    clip-path: inset(calc(100% - 2px) 0 0);
+  }
+
+  &.dx-state-hover {
+    background-color: $text-editor-filled-bg-hovered;
+  }
+
+  &.dx-state-focused,
+  &.dx-state-active {
+    background-color: $text-editor-filled-bg-focused;
+  }
+
+  &.dx-state-disabled,
+  &.dx-state-readonly {
+    background-color: transparent;
+    border-color: $text-editor-border-disabled;
+  }
+
+  &.dx-invalid {
+    border-color: $text-editor-invalid-border-rest;
+
+    &.dx-state-hover,
+    &.dx-state-focused {
+      border-color: $text-editor-invalid-border-focused;
+    }
+  }
+}
+
+@mixin texteditor-underlined-styling() {
+  background-color: $text-editor-underlined-bg-rest;
+  border-radius: 0;
+
+  &::after {
+    border-bottom-width: $text-editor-line-border-block-end-width-focused;
+    border-bottom-style: solid;
+    border-bottom-color: $text-editor-line-rest;
+  }
+
+  &.dx-state-hover {
+    background-color: $text-editor-underlined-bg-hovered;
+
+    &::after {
+      border-bottom-color: $text-editor-line-hovered;
+    }
+  }
+
+  &.dx-state-focused,
+  &.dx-state-active {
+    background-color: $text-editor-underlined-bg-focused;
+  }
+
+  .dx-texteditor-input,
+  .dx-lookup-field {
+    min-height: $text-editor-input-min-height;
+  }
+
+  .dx-texteditor-input,
+  .dx-placeholder::before {
+    padding-top: $text-editor-input-underlined-padding-block-start;
+    padding-bottom: $text-editor-input-underlined-padding-block-end;
+    padding-left: $text-editor-input-underlined-padding-inline;
+    padding-right: $text-editor-input-underlined-padding-inline;
+  }
+
+  &.dx-state-disabled,
+  &.dx-state-readonly {
+    &::after {
+      border-bottom-color: $text-editor-border-disabled;
+    }
+  }
+
+  &.dx-invalid {
+    &::after {
+      border-bottom-color: $text-editor-invalid-border-rest;
+    }
+
+    &.dx-state-hover {
+      &::after {
+        border-bottom-color: $text-editor-invalid-border-focused;
+      }
+    }
+  }
+}
+
+@mixin texteditor-input-padding-filled() {
+  .dx-texteditor-input {
+    padding-inline-end: calc(#{$text-editor-invalid-badge-size} + #{$text-editor-input-filled-padding-inline});
+  }
+}
+
+@mixin texteditor-validation-icon-offset() {
+  inset-inline-end: $invalid-badge-offset;
+}
+
+@mixin texteditor-validation-icon-offset-filled() {
+  inset-inline-end: $text-editor-button-filled-inset-inline-end;
+}
+
+@mixin validation-icon-position() {
+  &.dx-invalid,
+  &.dx-valid {
+    &.dx-editor-underlined {
+      .dx-texteditor-input {
+        padding-inline-end: calc(#{$text-editor-invalid-badge-size} + #{$text-editor-input-underlined-padding-inline});
+      }
+    }
+
+    &.dx-editor-filled,
+    &.dx-editor-outlined {
+      @include texteditor-input-padding-filled();
+
+      .dx-texteditor-input-container {
+        &::after {
+          @include texteditor-validation-icon-offset-filled();
+        }
+      }
+    }
+
+    .dx-texteditor-input-container {
+      &::after {
+        @include texteditor-validation-icon-offset();
+      }
+    }
+  }
+}
+
+@mixin pending-indicator-position() {
+  &.dx-validation-pending {
+    &.dx-editor-underlined {
+      .dx-texteditor-input {
+        padding-inline-end: calc(#{$text-editor-invalid-badge-size} + #{$text-editor-input-underlined-padding-inline});
+      }
+    }
+
+    &.dx-editor-filled,
+    &.dx-editor-outlined {
+      @include texteditor-input-padding-filled();
+
+      .dx-texteditor-input-container {
+        .dx-pending-indicator {
+          @include texteditor-validation-icon-offset-filled();
+        }
+      }
+    }
+
+    .dx-texteditor-input-container {
+      .dx-pending-indicator {
+        @include texteditor-validation-icon-offset();
+      }
+    }
+  }
+}
+
+.dx-texteditor {
+  border-radius: $text-editor-input-border-radius;
+  position: relative;
+
+  @mixin dx-texteditor-borders-position() {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 0;
+    width: 100%;
+    content: "";
+    position: absolute;
+  }
+
+  &::before {
+    @include dx-texteditor-borders-position();
+
+    z-index: 2;
+    transform: scale(0);
+  }
+
+  &::after {
+    @include dx-texteditor-borders-position();
+  }
+
+  &.dx-state-focused {
+    .dx-texteditor-label {
+      color: $text-editor-label-content-focused;
+      font-size: $text-editor-label-font-size;
+    }
+
+    &.dx-invalid {
+      .dx-texteditor-label {
+        color: $text-editor-invalid-content-rest;
+      }
+    }
+  }
+
+  &.dx-texteditor-label-outside {
+    .dx-texteditor-label {
+      color: $text-editor-content-rest;
+    }
+
+    &.dx-invalid {
+      .dx-texteditor-label {
+        color: $text-editor-invalid-content-rest;
+      }
+    }
+  }
+
+  &.dx-state-focused,
+  &.dx-state-active {
+    &::before {
+      border-bottom-width: $text-editor-line-border-block-end-width-active;
+      border-bottom-style: solid;
+      border-bottom-color: $text-editor-indicator-rest;
+      transform: scale(1);
+      transition-property: transform;
+      transition-duration: 0.2s;
+      transition-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1);
+    }
+  }
+
+  &.dx-state-disabled {
+    opacity: 1;
+    background-color: transparent;
+
+    .dx-texteditor-label,
+    .dx-placeholder::before,
+    .dx-texteditor-input,
+    .dx-lookup-field {
+      color: $text-editor-content-disabled;
+    }
+
+    .dx-lookup-arrow,
+    .dx-dropdowneditor-icon {
+      color: $text-editor-content-disabled;
+    }
+  }
+
+  &.dx-state-readonly {
+    .dx-lookup-arrow {
+      display: none;
+    }
+  }
+
+  .dx-texteditor-input {
+    min-height: calc(#{$text-editor-input-min-height} - 2px);
+  }
+
+  @include validation-icon-position();
+  @include pending-indicator-position();
+
+  &.dx-editor-filled,
+  &.dx-editor-outlined {
+    .dx-placeholder::before,
+    .dx-texteditor-input {
+      padding: $text-editor-input-filled-padding;
+    }
+  }
+
+  &.dx-editor-filled {
+    @include texteditor-filled-styling();
+  }
+
+  &.dx-editor-underlined {
+    @include texteditor-underlined-styling();
+  }
+
+  &.dx-editor-outlined {
+    @include texteditor-outlined-styling();
+  }
+}
+
+.dx-show-clear-button {
+  .dx-clear-button-area {
+    width: $text-editor-icon-container-size;
+    min-width: $text-editor-icon-container-size;
+    right: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  &.dx-texteditor-empty {
+    .dx-clear-button-area {
+      display: none;
+    }
+  }
+
+  .dx-icon-clear {
+    &::before {
+      content: "\f15f";
+    }
+
+    color: $text-editor-clear-button-icon-rest;
+  }
+
+  &.dx-state-disabled {
+    .dx-icon-clear {
+      color: $text-editor-content-disabled;
+    }
+  }
+
+  &:not(.dx-texteditor-empty) {
+    @include validation-icon-position();
+    @include pending-indicator-position();
+  }
+}
+
+/* B231111 */
+.dx-placeholder {
+  color: $text-editor-placeholder-rest;
+  font-size: $text-editor-font-size;
+  line-height: normal;
+}
+
+.dx-texteditor-input {
+  margin: 0;
+  background-color: transparent;
+  color: $text-editor-content-rest;
+  font-size: $text-editor-font-size;
+  line-height: $text-editor-line-height;
+}
+
+.dx-invalid.dx-texteditor {
+  &.dx-state-hover {
+    &::after {
+      border-bottom-color: $text-editor-invalid-border-rest;
+    }
+  }
+
+  &.dx-state-focused,
+  &.dx-state-active {
+    &::before {
+      border-bottom: $text-editor-line-border-block-end-active;
+      border-bottom-color: $text-editor-invalid-border-focused;
+    }
+  }
+
+  &.dx-show-invalid-badge .dx-texteditor-input-container {
+    &::after {
+      @include dx-invalid-fluent-badge();
+    }
+  }
+}
+
+.dx-texteditor-label {
+  position: absolute;
+  font-size: $text-editor-label-font-size;
+  color: $text-editor-label-content-rest;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  cursor: text;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  top: 0;
+  left: 0;
+
+  .dx-label {
+    display: flex;
+
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: auto;
+      max-width: 100%;
+      display: block;
+      margin-bottom: $text-editor-label-margin-block-end;
+    }
+  }
+
+  .dx-invalid & {
+    color: $text-editor-invalid-content-rest;
+  }
+}
+
+@include dx-editor-outlined(
+  $text-editor-input-border-radius,
+  $text-editor-label-font-size,
+  $global-border-width,
+  $global-border-width,
+  solid,
+  $text-editor-label-height,
+  $text-editor-label-height,
+  calc((1px + #{$text-editor-font-size}) / 2),
+  $text-editor-label-outside-offset,
+  0.5px,
+  $text-editor-input-filled-padding-inline,
+  $text-editor-input-filled-padding-inline,
+  $text-editor-outlined-bg-rest,
+  1px solid transparent,
+  $text-editor-border-rest,
+  $text-editor-line-rest,
+  $text-editor-border-disabled,
+  $text-editor-border-disabled,
+  $text-editor-border-hovered,
+  $text-editor-line-hovered,
+  $text-editor-border-focused,
+  $text-editor-line-focused,
+  $text-editor-invalid-border-rest,
+  $text-editor-invalid-border-focused,
+  $text-editor-label-transition,
+  $text-editor-font-size,
+  $text-editor-input-filled-padding-block-start,
+  1px,
+  $text-editor-font-size,
+  $text-editor-label-outside-height,
+);
+@include dx-editor-filled(
+  $text-editor-label-transition,
+  $text-editor-label-font-size,
+  $text-editor-label-font-size,
+  $text-editor-label-font-size,
+  $text-editor-label-offset,
+  $text-editor-label-outside-offset,
+  $text-editor-font-size,
+  $text-editor-font-size,
+  $text-editor-font-size,
+  $text-editor-input-filled-padding-inline,
+  $text-editor-input-filled-with-label-padding-block-start,
+  $text-editor-input-filled-with-label-padding-block-end,
+  $text-editor-font-size,
+  $text-editor-label-outside-height,
+);
+@include dx-editor-underlined(
+  $text-editor-label-transition,
+  $text-editor-label-font-size,
+  $text-editor-label-font-size,
+  $text-editor-label-font-size,
+  $text-editor-label-offset,
+  $text-editor-label-outside-offset,
+  $text-editor-font-size,
+  $text-editor-font-size,
+  $text-editor-font-size,
+  $text-editor-input-underlined-with-label-padding-block-start,
+  $text-editor-input-underlined-with-label-padding-block-end,
+  $text-editor-font-size,
+  $text-editor-label-outside-height,
+);
+
+.dx-valid.dx-texteditor {
+  .dx-texteditor-input-container {
+    &::after {
+      @include dx-valid-fluent-badge();
+    }
+  }
+}
+
+.dx-validation-pending.dx-texteditor {
+  .dx-texteditor-input-container {
+    .dx-pending-indicator {
+      @include dx-pending-indicator-fluent();
+    }
+  }
+}
+
+@include dx-editor-buttons-container-material(
+  $text-editor-button-underlined-height,
+  $text-editor-custom-button-margin,
+  $text-editor-custom-button-margin,
+  0,
+  $text-editor-spin-button-padding-inline,
+  buttonSizes.$button-padding-block,
+);

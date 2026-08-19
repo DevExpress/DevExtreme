@@ -1,0 +1,11 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$load-indicator-segment-border-rest: ds.$color-content-primary-default-rest !default;
+
+// Light track: DS spinner loader==track kills the ring contrast (see DIVERGENCES.md)
+$load-indicator-segment-inner-border-rest: ds.$color-surface-primary-subdued-rest !default;
+
+// Decorative accent shimmer; foundation has no sparkle role — primary surface steps (see DIVERGENCES.md)
+$load-indicator-sparkle-stop-1-bg-rest: ds.$color-surface-primary-default-rest !default;
+$load-indicator-sparkle-stop-2-bg-rest: ds.$color-surface-primary-default-hovered !default;
+$load-indicator-sparkle-stop-3-bg-rest: ds.$color-surface-primary-compound-rest !default;

@@ -1,0 +1,23 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$recurrence-editor-until-date-box-margin-block-start: null !default;
+$recurrence-editor-count-number-box-margin-block-start: null !default;
+$recurrence-editor-interval-number-box-margin-block-start: null !default;
+
+@if $size == "default" {
+  $recurrence-editor-until-date-box-margin-block-start: ds.$spacing-600 !default;
+  $recurrence-editor-count-number-box-margin-block-start: 102px !default; // dx-offscale: 102px
+  $recurrence-editor-interval-number-box-margin-block-start: ds.$spacing-300 !default;
+}
+
+@else if $size == "compact" {
+  $recurrence-editor-until-date-box-margin-block-start: 46px !default; // dx-offscale: 46px
+  $recurrence-editor-count-number-box-margin-block-start: 78px !default; // dx-offscale: 78px
+  $recurrence-editor-interval-number-box-margin-block-start: ds.$spacing-220 !default;
+}
+
+// Values hoisted from style-file literals (tokenized)
+$recurrence-editor-number-box-margin: ds.$spacing-110 !default;
+$recurrence-editor-button-group-padding: ds.$spacing-60 !default;
+$recurrence-editor-radio-group-margin: ds.$spacing-150 !default;

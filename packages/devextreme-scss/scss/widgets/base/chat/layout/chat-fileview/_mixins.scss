@@ -1,3 +1,5 @@
+@use "sass:meta";
+
 @mixin chat-file(
   $chat-file-container-width,
   $chat-file-container-padding,
@@ -31,7 +33,7 @@
   }
 
   .dx-chat-file-name {
-    margin-inline-end: $chat-file-base-section-gap * 2;
+    margin-inline-end: if(meta.type-of($chat-file-base-section-gap) == number, $chat-file-base-section-gap * 2, calc(#{$chat-file-base-section-gap} * 2));
     margin-inline-start: $chat-file-base-section-gap;
   }
 

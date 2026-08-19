@@ -1,0 +1,4 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// Values hoisted from style-file literals (tokenized)
+$card-margin: ds.$spacing-20 ds.$spacing-20 ds.$spacing-30 !default;

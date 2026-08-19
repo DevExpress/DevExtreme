@@ -35,7 +35,9 @@ export default class MetadataCollector {
     dirName: string,
     handler: (content: string) => string,
   ): Promise<FileInfo[]> {
-    const fileList = await this.getFileList(dirName);
+    const fileList = (await this.getFileList(dirName))
+      // fluent-next is an internal design-tokens theme, not exposed in ThemeBuilder
+      .filter((filePath) => !filePath.includes('fluent-next'));
 
     return Promise.all(fileList.map(async (filePath) => {
       const relativePath = relative(dirName, filePath);

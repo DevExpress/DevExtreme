@@ -26,6 +26,9 @@ const DEFAULT_DEV_BUNDLE_NAMES = [
   'fluent.blue.dark',
   'fluent.saas.light',
   'fluent.saas.dark',
+  'fluent-next.blue.light',
+  'fluent-next.blue.light.compact',
+  'fluent-next.blue.dark',
 ];
 
 interface BuildDependencies {
@@ -74,7 +77,7 @@ function prependLicenseAndMoveCharsetFirst(minifiedCss: string, license: string)
 function generateBundleName(theme: string, size: string, color: string, mode?: string): string {
   return (
     'dx'
-    + (theme === 'material' || theme === 'fluent' ? `.${theme}` : '')
+    + (theme === 'material' || theme === 'fluent' || theme === 'fluent-next' ? `.${theme}` : '')
     + `.${color}`
     + (mode ? `.${mode}` : '')
     + (size === 'default' ? '' : '.compact')

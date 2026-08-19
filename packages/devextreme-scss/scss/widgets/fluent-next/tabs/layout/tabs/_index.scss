@@ -1,0 +1,16 @@
+@use "../../../../base/icon_fonts" as *;
+@use "../../../../base/tabs";
+@use "../../variables/colors" as *;
+@use "../../variables/sizes" as *;
+@use "../../mixins" as *;
+@use "../../../scrollable";
+@use "../../../badge";
+
+.dx-tabs {
+  padding: 0;
+  background-color: $tabs-tab-bg-rest;
+
+  .dx-scrollable {
+    flex-basis: 100%;
+  }
+}

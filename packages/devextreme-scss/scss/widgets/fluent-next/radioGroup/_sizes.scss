@@ -1,0 +1,19 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$radio-group-radio-button-margin-block: null !default;
+
+@if $size == "default" {
+  $radio-group-radio-button-margin-block: ds.$spacing-120 !default;
+}
+
+@else if $size == "compact" {
+  $radio-group-radio-button-margin-block: ds.$spacing-60 !default;
+}
+
+// Values hoisted from style-file literals (tokenized)
+$radio-group-collection-column-gap: ds.$spacing-160 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$radio-group-value-container-padding-inline-end: ds.$spacing-100 !default;
+$radio-group-collection-horizontal-column-gap: ds.$spacing-170 !default;

@@ -1,0 +1,59 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$form-group-caption-bottom-margin: null !default;
+$form-group-caption-top-padding: null !default;
+$form-group-content-bottom-padding: null !default;
+$form-group-caption-font-size: null !default;
+$form-top-label-padding: 0 !default;
+$form-top-label-bottom-margin: null !default;
+$form-default-top-padding: null !default;
+$form-help-text-font-size: ds.$font-size-caption-md !default;
+$form-layout-manager-padding-inline: null !default;
+$form-layout-manager-padding-block: null !default;
+$form-layout-manager-tabpanel-content-padding: null !default;
+
+$form-label-font-size: $global-font-size !default;
+$form-label-icon-size: $global-icon-size !default;
+$form-group-custom-caption-icon-margin: null !default;
+
+@if $size == "default" {
+  $form-group-caption-bottom-margin: ds.$spacing-40 !default;
+  $form-group-caption-top-padding: ds.$spacing-160 !default;
+  $form-group-content-bottom-padding: ds.$spacing-160 !default;
+  $form-group-caption-font-size: ds.$font-size-title-md !default;
+  $form-group-custom-caption-icon-margin: ds.$spacing-60 !default;
+  $form-default-top-padding: ds.$spacing-160 !default;
+  $form-top-label-bottom-margin: ds.$spacing-40 !default;
+  $form-layout-manager-padding-inline: ds.$spacing-120 !default;
+  $form-layout-manager-padding-block: ds.$spacing-80 !default;
+  $form-layout-manager-tabpanel-content-padding: ds.$spacing-240 !default;
+}
+
+@else if $size == "compact" {
+  $form-group-caption-bottom-margin: ds.$spacing-40 !default;
+  $form-group-caption-top-padding: ds.$spacing-120 !default;
+  $form-group-content-bottom-padding: ds.$spacing-120 !default;
+  $form-group-caption-font-size: ds.$font-size-title-sm !default;
+  $form-group-custom-caption-icon-margin: ds.$spacing-40 !default;
+  $form-default-top-padding: ds.$spacing-80 !default;
+  $form-top-label-bottom-margin: ds.$spacing-20 !default;
+  $form-layout-manager-padding-inline: ds.$spacing-80 !default;
+  $form-layout-manager-padding-block: ds.$spacing-60 !default;
+  $form-layout-manager-tabpanel-content-padding: ds.$spacing-160 !default;
+}
+
+// Values hoisted from style-file literals (tokenized)
+$form-field-item-help-text-padding-block-start: ds.$spacing-20 !default;
+$form-group-content-border-block-start: ds.$border-width-10 solid !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$form-first-row-padding-block-start: ds.$spacing-100 !default;
+$form-switch-margin-block-start: ds.$spacing-70 !default;
+$form-switch-margin-block-end: ds.$spacing-40 !default;
+$form-multiview-item-content-padding: ds.$spacing-200 !default;
+$form-group-content-padding-block-start: ds.$spacing-190 !default;
+$form-group-content-padding-block-end: ds.$spacing-200 !default;
+$form-group-content-margin-block-start: ds.$spacing-60 !default;
+$form-field-item-label-location-left-padding-inline-end: ds.$spacing-100 !default;
+$form-field-item-label-location-right-padding-inline-start: ds.$spacing-100 !default;

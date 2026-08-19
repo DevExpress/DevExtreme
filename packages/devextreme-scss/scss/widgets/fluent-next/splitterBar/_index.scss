@@ -1,0 +1,18 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/splitterBar" with (
+  $splitterbar-splitter-border-width: $splitter-bar-border-width,
+  $splitterbar-splitter-bar-width: $splitter-bar-width,
+);
+
+.dx-splitter-bar {
+  background-color: $splitter-bar-bg-active;
+
+  &.dx-splitter-inactive {
+    background-color: $splitter-bar-border-rest;
+  }
+}
+
+.dx-splitter-border {
+  background-color: transparent;
+}

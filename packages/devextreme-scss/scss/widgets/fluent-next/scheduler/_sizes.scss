@@ -1,0 +1,333 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// Not colours: opacities that used to sit in _colors.scss (NAMING.md, O7)
+$scheduler-other-month-cell-opacity: 1 !default;
+$scheduler-agenda-details-opacity: ds.$opacity-70 !default;
+$scheduler-appointment-date-opacity: ds.$opacity-70 !default;
+$scheduler-appointment-resizing-opacity: ds.$opacity-70 !default;
+$scheduler-appointment-opacity-disabled: ds.$opacity-60 !default;
+$scheduler-appointment-drag-source-opacity: ds.$opacity-70 !default;
+
+$scheduler-workspace-date-table-cell-height: null !default;
+$scheduler-toolbar-item-offset: null !default;
+$scheduler-header-panel-day-font-size: null !default;
+$scheduler-appointment-tooltip-title-font-size: null !default;
+$scheduler-appointment-tooltip-date-font-size: null !default;
+$scheduler-workspace-month-cell-left-offset: null !default;
+$scheduler-appointment-content-padding: null !default;
+$scheduler-recurring-appointment-content-padding: null !default;
+$scheduler-appointment-content-rtl-padding: null !default;
+$scheduler-recurring-appointment-content-rtl-padding: null !default;
+$scheduler-dropdown-button-height: null !default;
+$scheduler-dropdown-button-padding: null !default;
+$scheduler-dropdown-button-margin: null !default;
+$scheduler-dropdown-button-margin-block: null !default;
+$scheduler-dropdown-button-adaptive-margin: null !default;
+$scheduler-dropdown-button-adaptive-margin-block: null !default;
+$scheduler-appointment-tooltip-content-margin-inline-start: null !default;
+$scheduler-tooltip-marker-size: null !default;
+$scheduler-appointment-tooltip-title-margin-block-start: null !default;
+$scheduler-appointment-tooltip-remove-padding-block-start: null !default;
+
+$scheduler-appointment-popup-toolbar-height: null !default;
+$scheduler-appointment-popup-icon-container-height: null !default;
+$scheduler-appointment-popup-icon-padding-inline-end: null !default;
+$scheduler-appointment-popup-icon-margin-block-start: null !default;
+$scheduler-appointment-popup-item-padding-inline: null !default;
+$scheduler-appointment-popup-all-day-item-height: null !default;
+$scheduler-appointment-popup-days-of-week-buttons-gap: null !default;
+$scheduler-appointment-popup-repeat-end-item-height: null !default;
+
+$scheduler-appointment-short-content-padding: null !default;
+$scheduler-appointment-15min-height: null !default;
+$scheduler-appointment-20min-height: null !default;
+$scheduler-appointment-25min-height: null !default;
+$scheduler-appointment-10min-recurrence-padding-inline-end: null !default;
+$scheduler-appointment-10min-title-font-size: null !default;
+$scheduler-appointment-10min-title-line-height: null !default;
+$scheduler-appointment-10min-icon-font-size: null !default;
+$scheduler-appointment-10min-icon-inset-inline-end: null !default;
+$scheduler-appointment-15min-recurrence-padding-inline-end: null !default;
+$scheduler-appointment-15min-title-font-size: null !default;
+$scheduler-appointment-15min-title-line-height: null !default;
+$scheduler-appointment-15min-icon-font-size: null !default;
+$scheduler-appointment-15min-icon-inset-inline-end: null !default;
+$scheduler-appointment-20min-recurrence-padding-inline-end: null !default;
+$scheduler-appointment-20min-icon-inset-inline-end: null !default;
+
+$scheduler-left-column-width: 65px !default; // dx-offscale: 65px
+$scheduler-timeline-date-table-cell-height: 50px !default; // dx-offscale: 50px
+
+$scheduler-border-radius: 0 !default;
+
+$scheduler-navigator-icon-font-size: $global-icon-size;
+$scheduler-appointment-month-font-size: ds.$spacing-120 !default;
+$scheduler-workspace-info-font-size: ds.$spacing-160 !default;
+$scheduler-all-day-title-font-size: ds.$font-size-caption-md !default;
+$scheduler-time-panel-font-size: ds.$font-size-caption-md !default;
+$scheduler-header-panel-margin: ds.$spacing-140 !default;
+$scheduler-group-header-font-size: ds.$font-size-title-xs !default;
+$scheduler-group-header-table-cell-width: ds.$spacing-1000 !default;
+$scheduler-appointment-transparent-left-border: ds.$spacing-10 solid transparent !default;
+$scheduler-appointment-transparent-right-border: ds.$spacing-10 solid transparent !default;
+$scheduler-workspace-month-header-height: ds.$spacing-220 !default;
+$scheduler-workspace-month-timeline-time-height: ds.$spacing-340 !default;
+
+$scheduler-agenda-appointment-title-font-size: null !default;
+$scheduler-header-height: null !default;
+$scheduler-header-offset: null !default;
+
+$scheduler-timeline-cell-height: 50px !default; // dx-offscale: 50px
+
+$scheduler-header-day-element-height: null !default;
+
+$scheduler-collapsed-all-day-table-cell-height: null !default;
+
+$scheduler-header-panel-time-cell-height: ds.$spacing-320 !default;
+$scheduler-header-panel-time-cell-padding: null !default;
+
+@if $size == "default" {
+  $scheduler-collapsed-all-day-table-cell-height: ds.$spacing-320 !default;
+  $scheduler-header-panel-time-cell-padding: ds.$spacing-120 !default;
+
+  $scheduler-header-day-element-height: ds.$spacing-260;
+  $scheduler-workspace-date-table-cell-height: 38px !default; // dx-offscale: 38px
+
+  $scheduler-header-panel-day-font-size: ds.$font-size-title-sm !default;
+  $scheduler-header-height: 46px !default; // dx-offscale: 46px
+  $scheduler-header-offset: 0 ds.$spacing-120 !default;
+  $scheduler-toolbar-item-offset: ds.$spacing-40 !default;
+
+  $scheduler-appointment-tooltip-title-font-size: ds.$font-size-title-sm !default;
+  $scheduler-appointment-tooltip-date-font-size: ds.$font-size-140 !default; // dx-no-semantic-role: compact branch (110) is off the role scale
+  $scheduler-workspace-month-cell-left-offset: ds.$spacing-80 !default;
+
+  $scheduler-appointment-content-padding: ds.$spacing-60 ds.$spacing-80 ds.$spacing-60 ds.$spacing-120 !default;
+  $scheduler-recurring-appointment-content-padding: ds.$spacing-60 ds.$spacing-200 ds.$spacing-60 ds.$spacing-120 !default;
+  $scheduler-appointment-content-rtl-padding: ds.$spacing-60 ds.$spacing-120 ds.$spacing-60 ds.$spacing-80 !default;
+  $scheduler-recurring-appointment-content-rtl-padding: ds.$spacing-60 ds.$spacing-120 ds.$spacing-60 ds.$spacing-200 !default;
+  $scheduler-dropdown-button-height: ds.$spacing-220 !default;
+  $scheduler-dropdown-button-padding: ds.$spacing-40 !default;
+  $scheduler-dropdown-button-margin: ds.$spacing-50 ds.$spacing-10 ds.$spacing-30 ds.$spacing-30 !default;
+  $scheduler-dropdown-button-margin-block: ds.$spacing-50 ds.$spacing-30 ds.$spacing-30 ds.$spacing-30 !default;
+  $scheduler-dropdown-button-adaptive-margin: 0 ds.$spacing-20 !default;
+  $scheduler-dropdown-button-adaptive-margin-block: 0 ds.$spacing-20 0 ds.$spacing-10 !default;
+
+  $scheduler-appointment-tooltip-content-margin-inline-start: ds.$spacing-60 !default;
+  $scheduler-tooltip-marker-size: ds.$spacing-120 !default;
+  $scheduler-appointment-tooltip-title-margin-block-start: 0 !default;
+  $scheduler-appointment-tooltip-remove-padding-block-start: ds.$spacing-10 !default;
+
+  $scheduler-appointment-popup-toolbar-height: ds.$spacing-560 !default;
+  $scheduler-appointment-popup-icon-container-height: ds.$spacing-320 !default;
+  $scheduler-appointment-popup-icon-padding-inline-end: ds.$spacing-100 !default;
+  $scheduler-appointment-popup-icon-margin-block-start: ds.$spacing-240 !default;
+  $scheduler-appointment-popup-item-padding-inline: ds.$spacing-60 !default;
+  $scheduler-appointment-popup-all-day-item-height: ds.$spacing-400 !default;
+  $scheduler-appointment-popup-days-of-week-buttons-gap: ds.$spacing-120 !default;
+  $scheduler-appointment-popup-repeat-end-item-height: ds.$spacing-320 !default;
+
+  $scheduler-agenda-appointment-title-font-size: ds.$font-size-base-md;
+
+  $scheduler-appointment-short-content-padding: 0 ds.$spacing-80 0 ds.$spacing-120 !default;
+  $scheduler-appointment-15min-height: 17px !default; // literal: used in @container conditions where var() is invalid
+  $scheduler-appointment-20min-height: 24px !default; // literal: used in @container conditions where var() is invalid
+  $scheduler-appointment-25min-height: 32px !default; // literal: used in @container conditions where var() is invalid
+
+  $scheduler-appointment-10min-recurrence-padding-inline-end: ds.$spacing-140 !default;
+  $scheduler-appointment-10min-title-font-size: ds.$spacing-80 !default;
+  $scheduler-appointment-10min-title-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
+  $scheduler-appointment-10min-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
+  $scheduler-appointment-10min-icon-inset-inline-end: ds.$spacing-20 !default;
+
+  $scheduler-appointment-15min-recurrence-padding-inline-end: ds.$spacing-140 !default;
+  $scheduler-appointment-15min-title-font-size: ds.$font-size-base-sm !default;
+  $scheduler-appointment-15min-title-line-height: ds.$line-height-180 !default; // dx-no-semantic-role: 180 is off the line-height-role scale
+  $scheduler-appointment-15min-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
+  $scheduler-appointment-15min-icon-inset-inline-end: ds.$spacing-20 !default;
+
+  $scheduler-appointment-20min-icon-inset-inline-end: ds.$spacing-20 !default;
+  $scheduler-appointment-20min-recurrence-padding-inline-end: ds.$spacing-180 !default;
+}
+
+@else if $size == "compact" {
+  $scheduler-collapsed-all-day-table-cell-height: ds.$spacing-240 !default;
+  $scheduler-header-panel-time-cell-padding: ds.$spacing-80 !default;
+
+  $scheduler-header-day-element-height: ds.$spacing-240;
+  $scheduler-workspace-date-table-cell-height: ds.$spacing-280 !default;
+
+  $scheduler-header-panel-day-font-size: ds.$font-size-title-xs !default;
+  $scheduler-header-height: ds.$spacing-340 !default;
+  $scheduler-header-offset: ds.$spacing-20 ds.$spacing-80 !default;
+  $scheduler-toolbar-item-offset: ds.$spacing-40 !default;
+
+  $scheduler-appointment-tooltip-title-font-size: ds.$font-size-title-xs !default;
+  $scheduler-appointment-tooltip-date-font-size: ds.$font-size-110 !default; // dx-no-semantic-role: 110 is off the font-size-role scale
+  $scheduler-workspace-month-cell-left-offset: ds.$spacing-40 !default;
+
+  $scheduler-appointment-content-padding: ds.$spacing-40 ds.$spacing-60 ds.$spacing-40 ds.$spacing-80 !default;
+  $scheduler-recurring-appointment-content-padding: ds.$spacing-40 ds.$spacing-160 ds.$spacing-40 ds.$spacing-80 !default;
+  $scheduler-appointment-content-rtl-padding: ds.$spacing-40 ds.$spacing-80 ds.$spacing-40 ds.$spacing-60 !default;
+  $scheduler-recurring-appointment-content-rtl-padding: ds.$spacing-40 ds.$spacing-80 ds.$spacing-40 ds.$spacing-160 !default;
+  $scheduler-dropdown-button-height: ds.$spacing-180 !default;
+  $scheduler-dropdown-button-padding: ds.$spacing-20 !default;
+  $scheduler-dropdown-button-margin: ds.$spacing-20 ds.$spacing-10 ds.$spacing-20 ds.$spacing-30 !default;
+  $scheduler-dropdown-button-margin-block: ds.$spacing-20 ds.$spacing-10 ds.$spacing-20 ds.$spacing-10 !default;
+  $scheduler-dropdown-button-adaptive-margin: 0 ds.$spacing-20 !default;
+  $scheduler-dropdown-button-adaptive-margin-block: 0 ds.$spacing-20 0 ds.$spacing-10 !default;
+
+  $scheduler-appointment-tooltip-content-margin-inline-start: ds.$spacing-80 !default;
+  $scheduler-tooltip-marker-size: ds.$spacing-180 !default;
+  $scheduler-appointment-tooltip-title-margin-block-start: ds.$spacing-30 !default;
+  $scheduler-appointment-tooltip-remove-padding-block-start: ds.$spacing-20 !default;
+
+  $scheduler-appointment-popup-toolbar-height: ds.$spacing-480 !default;
+  $scheduler-appointment-popup-icon-container-height: ds.$spacing-240 !default;
+  $scheduler-appointment-popup-icon-padding-inline-end: ds.$spacing-80 !default;
+  $scheduler-appointment-popup-icon-margin-block-start: ds.$spacing-180 !default;
+  $scheduler-appointment-popup-item-padding-inline: ds.$spacing-40 !default;
+  $scheduler-appointment-popup-all-day-item-height: ds.$spacing-300 !default;
+  $scheduler-appointment-popup-days-of-week-buttons-gap: ds.$spacing-80 !default;
+  $scheduler-appointment-popup-repeat-end-item-height: ds.$spacing-240 !default;
+
+  $scheduler-agenda-appointment-title-font-size: ds.$spacing-130;
+
+  $scheduler-appointment-short-content-padding: 0 ds.$spacing-80 0 ds.$spacing-120 !default;
+  $scheduler-appointment-15min-height: 17px !default; // literal: used in @container conditions where var() is invalid
+  $scheduler-appointment-20min-height: 24px !default; // literal: used in @container conditions where var() is invalid
+  $scheduler-appointment-25min-height: 32px !default; // literal: used in @container conditions where var() is invalid
+
+  $scheduler-appointment-10min-recurrence-padding-inline-end: ds.$spacing-140 !default;
+  $scheduler-appointment-10min-title-font-size: ds.$spacing-80 !default;
+  $scheduler-appointment-10min-title-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
+  $scheduler-appointment-10min-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
+  $scheduler-appointment-10min-icon-inset-inline-end: ds.$spacing-20 !default;
+
+  $scheduler-appointment-15min-recurrence-padding-inline-end: ds.$spacing-160 !default;
+  $scheduler-appointment-15min-title-font-size: ds.$font-size-base-sm !default;
+  $scheduler-appointment-15min-title-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
+  $scheduler-appointment-15min-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
+  $scheduler-appointment-15min-icon-inset-inline-end: ds.$spacing-50 !default;
+
+  $scheduler-appointment-20min-recurrence-padding-inline-end: ds.$spacing-200 !default;
+  $scheduler-appointment-20min-icon-inset-inline-end: ds.$spacing-50 !default;
+}
+
+// Values hoisted from style-file literals (tokenized)
+$scheduler-group-header-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)
+$scheduler-tooltip-subject-font-weight: ds.$font-weight-base-strong !default;
+$scheduler-appointment-title-font-size: ds.$font-size-base-sm !default;
+$scheduler-appointment-details-font-size: ds.$font-size-caption-sm !default;
+$scheduler-header-panel-cell-date-font-size: ds.$font-size-title-xs !default;
+$scheduler-navigator-button-font-size: ds.$font-size-base-sm !default;
+$scheduler-appointment-border-radius: ds.$border-radius-40 !default;
+$scheduler-time-panel-cell-margin-block-start: -6px !default; // dx-offscale: -6px
+$scheduler-small-padding-inline-end: ds.$spacing-20 !default;
+$scheduler-small-padding-inline-start: ds.$spacing-20 !default;
+$scheduler-date-time-indicator-height: ds.$spacing-20 !default;
+$scheduler-header-panel-cell-padding-block-end: ds.$spacing-20 !default;
+$scheduler-header-panel-cell-date-margin-block-end: ds.$spacing-10 !default;
+$scheduler-small-margin-block-start: ds.$spacing-40 !default;
+$scheduler-small-margin-block-end: ds.$spacing-40 !default;
+$scheduler-small-margin-inline-start: ds.$spacing-80 !default;
+$scheduler-month-appointment-content-rtl-padding: ds.$spacing-40 ds.$spacing-120 0 ds.$spacing-80 !default;
+$scheduler-month-recurrence-appointment-content-rtl-padding: ds.$spacing-40 ds.$spacing-120 0 ds.$spacing-200 !default;
+$scheduler-month-appointment-content-padding: ds.$spacing-40 ds.$spacing-80 0 ds.$spacing-120 !default;
+$scheduler-month-recurrence-appointment-content-padding: ds.$spacing-40 ds.$spacing-200 0 ds.$spacing-120 !default;
+$scheduler-date-table-cell-height: ds.$spacing-1000 !default;
+$scheduler-appointment-collector-margin-inline-start: ds.$spacing-520 !default;
+$scheduler-appointment-collector-margin-inline-end: ds.$spacing-520 !default;
+$scheduler-group-header-content-inset-block-start: ds.$spacing-80 !default;
+$scheduler-widget-margin-block-end: ds.$spacing-30 !default;
+$scheduler-appointment-strip-width: ds.$spacing-60 !default;
+$scheduler-group-header-content-padding-block-start: ds.$spacing-20 !default;
+$scheduler-tooltip-appointment-item-marker-body-margin-block-start: ds.$spacing-120 !default;
+$scheduler-tooltip-appointment-item-content-date-margin-block-start: ds.$spacing-40 !default;
+$scheduler-group-header-width: ds.$spacing-1000 !default;
+$scheduler-group-header-border-block-end: ds.$border-width-10 solid !default;
+$scheduler-last-group-cell-border-inline-end: ds.$border-width-10 solid !default;
+$scheduler-rtl-border-inline-start: ds.$border-width-10 solid !default;
+$scheduler-list-item-border-block-end: ds.$border-width-10 solid !default;
+$scheduler-month-date-font-size: ds.$font-size-base-md !default;
+$scheduler-first-of-month-border: ds.$border-width-10 solid !default;
+$scheduler-agenda-time-panel-cell-padding: ds.$spacing-80 !default;
+$scheduler-scrollable-content-min-height: 600px !default; // dx-offscale: 600px
+$scheduler-header-panel-empty-cell-border-block-end-width: ds.$border-width-10 !default;
+$scheduler-appointment-strip-border-start-end-radius: ds.$border-radius-60 !default;
+$scheduler-appointment-strip-border-end-end-radius: ds.$border-radius-60 !default;
+$scheduler-appointment-strip-border-start-start-radius: ds.$border-radius-60 !default;
+$scheduler-appointment-strip-border-end-start-radius: ds.$border-radius-60 !default;
+
+// Base-layer values injected with design tokens (wave B1)
+$scheduler-agenda-title-font-weight: ds.$font-weight-base-stronger !default;
+$scheduler-agenda-details-font-size: ds.$font-size-caption-md !default;
+$scheduler-appointment-icon-font-size: ds.$font-size-180 !default; // dx-icon-glyph-size: text roles not applicable
+
+// Base-layer sizing injected with design tokens (wave B2 — scheduler/views)
+$scheduler-views-header-border: ds.$border-width-20 solid !default;
+$scheduler-views-empty-cell-border-block-end: ds.$border-width-10 solid !default;
+$scheduler-views-empty-cell-border-inline-end: ds.$border-width-10 solid !default;
+$scheduler-views-empty-cell-border-inline-start: ds.$border-width-10 solid !default;
+$scheduler-views-first-child-border-inline-start: ds.$border-width-10 solid transparent !default;
+$scheduler-views-time-panel-border-block-end: ds.$border-width-10 solid transparent !default;
+$scheduler-views-group-header-padding: 0 ds.$spacing-50 !default;
+$scheduler-views-sidebar-group-header-padding: 0 ds.$spacing-50 0 ds.$spacing-100 !default;
+$scheduler-views-time-indicator-height: ds.$spacing-10 !default;
+$scheduler-views-group-header-content-height: ds.$spacing-400 !default;
+$scheduler-views-vertical-group-min-height: ds.$spacing-1000 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$scheduler-all-day-appointment-content-padding: 0 ds.$spacing-70 !default;
+$scheduler-appointment-recurrence-icon-inset-block-start: ds.$spacing-90 !default;
+$scheduler-header-panel-current-time-cell-height: ds.$spacing-20 !default;
+$scheduler-recurrence-appointment-content-padding: 0 25px 0 ds.$spacing-70 !default; // dx-offscale: 25px
+$scheduler-rtl-padding: 0 ds.$spacing-70 0 25px !default; // dx-offscale: 25px
+$scheduler-appointment-collector-width: ds.$spacing-240 !default;
+$scheduler-appointment-content-padding-inline-end: ds.$spacing-50 !default;
+
+// Base submodule sizing injected with design tokens (B2 tail)
+$scheduler-common-collector-margin: 0 ds.$spacing-30 !default;
+$scheduler-common-collector-size: ds.$spacing-280 !default;
+
+// Base submodule sizing injected with design tokens (B2 tail)
+$scheduler-tooltip-width: 360px !default;  // dx-offscale: 360px
+$scheduler-tooltip-content-padding: ds.$spacing-50 !default;
+$scheduler-tooltip-title-margin-block-start: ds.$spacing-70 !default;
+$scheduler-tooltip-title-margin-inline-start: ds.$spacing-50 !default;
+$scheduler-tooltip-date-margin: ds.$spacing-50 ds.$spacing-100 !default;
+$scheduler-tooltip-remove-margin-block-start: ds.$spacing-100 !default;
+
+// B2 tail: scheduler font-sizes
+$scheduler-appointment-content-details-font-size: ds.$font-size-110 !default; // dx-no-semantic-role: 11px has no font-size role
+$scheduler-tooltip-subject-font-size: ds.$font-size-title-sm !default;
+$scheduler-tooltip-date-font-size: ds.$font-size-caption-md !default;
+
+// B2 tail: deep scheduler submodules (multi-hop)
+$scheduler-appointment-reduced-icon-inset-block-start: ds.$spacing-30 !default;
+$scheduler-appointment-marker-border-radius-active: ds.$border-radius-40 !default;
+$scheduler-appointment-content-details-margin-block-start: ds.$spacing-20 !default;
+$scheduler-appointment-reduced-icon-rtl-inset-inline-start: ds.$spacing-30 !default;
+$scheduler-agenda-appointment-item-padding: ds.$spacing-100 !default;
+$scheduler-agenda-appointment-item-border-radius: ds.$border-radius-50 !default;
+$scheduler-agenda-appointment-right-layout-margin-inline-start: ds.$spacing-100 !default;
+$scheduler-agenda-appointment-allday-padding-inline-end: ds.$spacing-50 !default;
+$scheduler-agenda-appointment-resource-item-margin-inline-start: ds.$spacing-150 !default;
+$scheduler-agenda-appointment-resource-value-margin-inline-start: ds.$spacing-30 !default;
+$scheduler-agenda-appointment-rtl-margin-inline-end: ds.$spacing-100 !default;
+$scheduler-timeline-min-height: ds.$spacing-1000 !default;
+$scheduler-timeline-group-two-empty-cell-width: ds.$spacing-1600 !default;
+$scheduler-timeline-group-header-width: ds.$spacing-800 !default;
+$scheduler-timeline-group-three-empty-cell-width: 240px !default; // dx-offscale: 240px
+$scheduler-timeline-cell-width: 200px !default; // dx-offscale: 200px
+$scheduler-agenda-left-column-width: 70px !default; // dx-offscale: 70px
+$scheduler-group-header-agenda-font-size: ds.$font-size-180 !default; // dx-no-semantic-role: 18px has no font-size role
+$scheduler-agenda-date-table-padding-block-start: ds.$spacing-100 !default;
+$scheduler-virtual-row-height: 50px !default; // dx-offscale: 50px
+
+/*
+ * Derived values, moved out of _index.scss: a file that emits rules must not declare
+ * variables (NAMING.md, O7).
+ */
+$scheduler-all-day-table-cell-height: calc(#{$scheduler-workspace-date-table-cell-height} * 1.5);

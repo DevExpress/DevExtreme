@@ -1,0 +1,64 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$scheduler-base-border-rest: ds.$color-border-neutral-default-rest !default;
+$scheduler-cell-bg-active: ds.$color-surface-neutral-default-active !default;
+$scheduler-cell-bg-hovered: ds.$color-surface-neutral-default-hovered !default;
+$scheduler-group-separator-border-rest: ds.$color-border-neutral-accessible-rest !default;
+
+$scheduler-accent-border-rest: ds.$color-border-neutral-default-rest !default;
+
+$scheduler-appointment-content-rest: ds.$color-content-neutral-default-rest !default;
+$scheduler-appointment-content-focused: null !default;
+
+$scheduler-appointment-base-content-rest: ds.$color-surface-primary-subdued-rest !default;
+
+$scheduler-appointment-start-content-rest: ds.$color-shadow-key-darker !default;
+$scheduler-appointment-content-active: ds.$color-surface-primary-deep-active;
+
+$scheduler-workspace-cell-content-focused: ds.$color-surface-primary-alpha-rest !default;
+
+$scheduler-first-month-border-rest: ds.$color-border-neutral-default-rest !default;
+$scheduler-droppable-cell-bg-rest: ds.$color-surface-neutral-deep-rest !default;
+$scheduler-panel-content-rest: ds.$color-content-neutral-subdued-rest !default;
+$scheduler-workspace-bg-rest: ds.$color-surface-neutral-default-rest !default;
+$scheduler-workspace-accent-content-rest: ds.$color-content-primary-default-rest !default;
+
+$scheduler-current-time-cell-content-rest: ds.$color-content-primary-default-rest !default;
+$scheduler-current-time-cell-date-bg-rest: $scheduler-current-time-cell-content-rest !default;
+$scheduler-time-indicator-content-rest: ds.$color-surface-danger-default-rest !default;
+$scheduler-dd-appointment-content-hovered: ds.$color-content-neutral-default-inverted-rest !default;
+$scheduler-form-icon-rest: ds.$color-content-neutral-subdued-rest !default;
+$scheduler-workspace-month-content-rest: ds.$color-content-neutral-default-rest !default;
+$scheduler-workspace-other-month-content-rest: ds.$color-content-neutral-subdued-rest !default;
+$scheduler-dropdown-appointment-date-content-rest: ds.$color-content-neutral-subdued-rest !default;
+$scheduler-workspace-cell-content-active: $scheduler-accent-border-rest !default;
+$scheduler-workspace-cell-content-hovered: $scheduler-workspace-month-content-rest !default;
+$scheduler-header-bg-rest: ds.$color-surface-neutral-default-rest !default;
+$scheduler-all-day-panel-bg-rest: ds.$color-surface-neutral-default-rest !default;
+$scheduler-appointment-bg-focused: false !default;
+$scheduler-appointment-shadow-focused: false !default;
+$scheduler-time-indicator-bg-rest: rgb(from #{ds.$color-content-neutral-default-rest} r g b / 0.03) !default;
+
+$scheduler-tooltip-appointment-content-rest: ds.$color-content-neutral-default-rest !default;
+$scheduler-appointment-overlay-bg-rest: ds.$color-surface-neutral-default-rest !default;
+
+// Agenda
+$scheduler-agenda-appointment-recurrence-icon-rest: ds.$color-content-neutral-default-inverted-rest !default;
+$scheduler-agenda-appointment-bg-hovered: ds.$color-surface-neutral-default-hovered !default;
+$scheduler-agenda-appointment-bg-active: ds.$color-surface-neutral-alpha-active !default;
+$scheduler-agenda-appointment-content-rest: ds.$color-content-neutral-default-rest !default;
+
+$scheduler-header-panel-cell-date-content-rest: ds.$color-content-neutral-subdued-rest !default;
+
+$scheduler-first-month-cell-bg-rest: rgb(from #{$scheduler-appointment-base-content-rest} r g b / 0.15) !default;
+$scheduler-appointment-content-focused: $scheduler-appointment-content-rest;
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$scheduler-appointment-strip-bg-rest: ds.$color-surface-primary-default-rest !default;
+$scheduler-bg-rest: ds.$color-surface-neutral-default-rest !default;
+$scheduler-border-rest: ds.$color-border-neutral-default-rest !default;
+$scheduler-inverted-content-rest: ds.$color-content-neutral-default-inverted-rest !default;
+
+// Base-layer values injected with design tokens (wave B1)
+$scheduler-appointment-dragging-shadow-rest: 7px 7px 15px 0 ds.$color-shadow-key !default;
+$scheduler-tooltip-shadow-rest: ds.$box-shadow-md !default;

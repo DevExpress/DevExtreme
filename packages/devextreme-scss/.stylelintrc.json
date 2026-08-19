@@ -18,6 +18,10 @@
         "@stylistic/declaration-colon-space-after": "always-single-line",
         "@stylistic/declaration-colon-space-before": "never",
         "declaration-no-important": true,
+        "declaration-property-value-disallowed-list": [
+            { "/.*/": ["/var\\(\\s*--dxds-/"] },
+            { "message": "Read a design token through the ds bridge (ds.$name), not var(--dxds-…): the bridge fails the build on an unknown name, a raw custom property compiles and degrades silently." }
+        ],
         "font-family-name-quotes": "always-unless-keyword",
         "@stylistic/function-comma-space-after": "always-single-line",
         "@stylistic/indentation": [2, { "ignore": ["inside-parens"] }],
@@ -75,5 +79,39 @@
         "scss/operator-no-newline-before": true,
         "scss/operator-no-unspaced": true,
         "scss/operator-no-newline-after": null
-    }
+    },
+    "overrides": [
+        {
+            "comment": "fluent-next follows the naming standard in scss/widgets/fluent-next/NAMING.md: strict kebab-case, no underscores and no BEM separators, so a variable name maps 1:1 onto a public --dx-* custom property. cardView is excluded because its own cross-theme BEM system is a documented exemption.",
+            "files": ["scss/widgets/fluent-next/**/*.scss"],
+            "ignoreFiles": ["scss/widgets/fluent-next/cardView/**/*.scss"],
+            "rules": {
+                "scss/dollar-variable-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+            }
+        },
+        {
+            "comment": "A file that emits rules consumes the widget's own variables, so the token a value comes from is stated once, next to the other variables of that widget. Declaration files are exempted by the override below. `@use … with ()` arguments are at-rule parameters and stay invisible to stylelint; fluent-next-naming.test.ts covers that form.",
+            "files": ["scss/widgets/fluent-next/**/*.scss"],
+            "rules": {
+                "declaration-property-value-disallowed-list": [
+                    { "/.*/": ["/var\\(\\s*--dxds-/", "/var\\(\\s*--dx-/", "/\\bds\\.\\$/"] },
+                    { "message": "Use the widget's own variable here: resolve the design token in _colors.scss or _sizes.scss. A custom property compiles even when its name is wrong." }
+                ]
+            }
+        },
+        {
+            "comment": "Turning a token into a widget variable is what these files are for, so only the raw custom-property form stays banned here.",
+            "files": [
+                "scss/widgets/fluent-next/**/_colors.scss",
+                "scss/widgets/fluent-next/**/_sizes.scss",
+                "scss/widgets/fluent-next/**/_variables.scss"
+            ],
+            "rules": {
+                "declaration-property-value-disallowed-list": [
+                    { "/.*/": ["/var\\(\\s*--dxds-/", "/var\\(\\s*--dx-/"] },
+                    { "message": "Read a design token through the ds bridge (ds.$name), not as a custom property: the bridge fails the build on an unknown name, a custom property compiles and degrades silently." }
+                ]
+            }
+        }
+    ]
 }

@@ -1,0 +1,1049 @@
+@use "sass:math";
+@use "sass:selector";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icon_fonts" as *;
+@use "../dropDownEditor" as *;
+@use "../textEditor" as *;
+@use "../textEditor/sizes" as textEditorSizes;
+@use "../common/mixins" as *;
+@use "../popup/colors" as popupColors;
+@use "../popup/sizes" as popupSizes;
+@use "../menu/colors" as menuColors;
+@use "../button/mixins" as *;
+@use "../button/sizes" as buttonSizes;
+@use "../../base/button/mixins" as *;
+@use "../button/colors" as buttonColors;
+@use "../validation/colors" as validationColors;
+@use "../typography/sizes" as typographySizes;
+@use "../common/sizes" as *;
+@use "../dropDownEditor/sizes" as dropDownEditorSizes;
+@use "../scrollable";
+@use "../overlay";
+@use "../pagination";
+@use "variables" as *;
+@forward "variables";
+@use "layout/cell" as *;
+@use "layout/aiChat" as *;
+
+@mixin grid-base($widget-name) {
+  @include fluent-grid-base-cell($widget-name);
+
+  .dx-#{$widget-name},
+  .dx-#{$widget-name}-container {
+    .dx-bordered-top-view {
+      border-top-left-radius: $grid-border-radius;
+      border-top-right-radius: $grid-border-radius;
+    }
+
+    .dx-bordered-bottom-view {
+      border-bottom-left-radius: $grid-border-radius;
+      border-bottom-right-radius: $grid-border-radius;
+    }
+
+    .dx-menu {
+      background-color: transparent;
+      margin-top: calc((#{$grid-header-height} - #{buttonSizes.$button-height}) / 2);
+      margin-left: $grid-margin-inline-start;
+      height: buttonSizes.$button-height;
+
+      .dx-menu-item {
+        .dx-menu-item-content {
+          padding: $grid-menu-item-padding;
+
+          .dx-icon {
+            @include dx-icon-sizing($grid-menu-item-icon-size);
+
+            margin: $grid-icon-margin;
+          }
+        }
+      }
+    }
+
+    &.dx-filter-menu {
+      .dx-menu-item-content {
+        .dx-icon {
+          @include dx-icon-sizing($grid-menu-item-icon-size);
+
+          &.dx-icon-filter-operation-default {
+            margin-top: $grid-filter-operation-icon-margin-block-start;
+          }
+        }
+      }
+    }
+
+    .dx-#{$widget-name}-filter-row .dx-editor-with-menu {
+      .dx-menu-item-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .dx-texteditor {
+        .dx-texteditor-container {
+          .dx-texteditor-input,
+          .dx-placeholder::before {
+            padding-left: $grid-editor-input-padding;
+          }
+        }
+      }
+    }
+
+    &.dx-context-menu {
+      .dx-menu-items-container {
+        .dx-icon-context-menu-sort-asc {
+          @include dx-icon(sortuptext);
+          @include dx-icon-sizing(calc(#{$grid-menu-item-icon-size} - 4px));
+        }
+
+        .dx-icon-context-menu-sort-desc {
+          @include dx-icon(sortdowntext);
+          @include dx-icon-sizing(calc(#{$grid-menu-item-icon-size} - 4px));
+        }
+
+        .dx-icon-context-menu-sort-none {
+          @include dx-icon-sizing(calc(#{$grid-menu-item-icon-size} - 4px));
+        }
+
+        .dx-icon-fix-column {
+          @include dx-icon(fixcolumn);
+          @include dx-icon-sizing(calc(#{$grid-menu-item-icon-size} - 4px));
+        }
+
+        .dx-icon-fix-column-left {
+          @include dx-icon(fixcolumnleft);
+          @include dx-icon-sizing(calc(#{$grid-menu-item-icon-size} - 4px));
+        }
+
+        .dx-icon-fix-column-right {
+          @include dx-icon(fixcolumnright);
+          @include dx-icon-sizing(calc(#{$grid-menu-item-icon-size} - 4px));
+        }
+
+        .dx-icon-stick-column {
+          @include dx-icon(stickcolumn);
+          @include dx-icon-sizing(calc(#{$grid-menu-item-icon-size} - 4px));
+        }
+
+        .dx-icon-unfix-column {
+          @include dx-icon(unfixcolumn);
+          @include dx-icon-sizing(calc(#{$grid-menu-item-icon-size} - 4px));
+        }
+      }
+    }
+
+    .dx-sort-up,
+    .dx-sort-down,
+    .dx-header-filter {
+      @include dx-icon-sizing($grid-header-icon-size, $grid-header-icon-container-size);
+    }
+
+    .dx-header-filter:not(.dx-header-filter-empty) {
+      color: $grid-header-filter-icon-active;
+    }
+
+    .dx-icon-filter-operation-equals {
+      @include dx-icon(equal);
+    }
+
+    .dx-icon-filter-operation-default {
+      @include dx-icon(find);
+    }
+
+    .dx-icon-filter-operation-not-equals {
+      @include dx-icon(notequal);
+    }
+
+    .dx-icon-filter-operation-less {
+      @include dx-icon(less);
+    }
+
+    .dx-icon-filter-operation-less-equal {
+      @include dx-icon(lessorequal);
+    }
+
+    .dx-icon-filter-operation-greater {
+      @include dx-icon(greater);
+    }
+
+    .dx-icon-filter-operation-greater-equal {
+      @include dx-icon(greaterorequal);
+    }
+
+    .dx-icon-filter-operation-contains {
+      @include dx-icon(contains);
+    }
+
+    .dx-icon-filter-operation-not-contains {
+      @include dx-icon(doesnotcontain);
+    }
+
+    .dx-icon-filter-operation-starts-with {
+      @include dx-icon(startswith);
+    }
+
+    .dx-icon-filter-operation-ends-with {
+      @include dx-icon(endswith);
+    }
+
+    .dx-icon-filter-operation-between {
+      @include dx-icon(range);
+    }
+
+    .dx-column-indicators {
+      height: $grid-header-line-height;
+
+      .dx-sort-index-icon {
+        padding-right: $grid-sort-index-icon-padding-inline-end;
+        margin-left: $grid-sort-index-icon-margin-inline-start;
+        font-size: calc(#{$grid-header-cell-font-size} - 1px);
+        position: relative;
+        bottom: $grid-sort-index-icon-inset-block-end;
+      }
+
+      > div {
+        @include dx-icon-sizing($grid-header-icon-size, $grid-header-icon-container-size);
+      }
+
+      > span {
+        margin-left: $grid-header-cell-sort-index-margin-inline-start;
+      }
+    }
+
+    .dx-placeholder::before {
+      font-size: $grid-cell-font-size;
+    }
+  }
+
+  .dx-#{$widget-name} {
+    line-height: inherit;
+
+    .dx-row-alt {
+      &.dx-row:not(.dx-row-removed) {
+        border-bottom-color: transparent;
+      }
+
+      // T838734
+      border-top: $grid-row-removed-border-block-start;
+      border-top-color: $grid-row-alternation-bg-rest;
+      border-bottom: $grid-row-removed-border-block-end;
+      border-bottom-color: $grid-row-alternation-bg-rest;
+    }
+
+    .dx-link {
+      color: $grid-link-content-rest;
+    }
+
+    .dx-error-row {
+      .dx-closebutton {
+        float: right;
+        margin: calc(#{$grid-cell-padding-block} + 2px);
+
+        @include dx-icon(close);
+        @include dx-icon-sizing(14px);
+      }
+
+      .dx-error-message {
+        padding: $grid-cell-padding-block;
+        padding-right: $grid-error-message-padding-inline-end;
+      }
+    }
+
+    .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row {
+      > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all),
+      > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending),
+      > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all) {
+        &.dx-command-edit {
+          .dx-link:not(.dx-link-icon) {
+            margin: 0 $grid-command-edit-text-margin;
+            min-width: $grid-link-icon-min-width;
+          }
+
+          &.dx-command-edit-with-icons {
+            .dx-link {
+              @include dx-icon-sizing($grid-command-edit-icon-size);
+
+              margin: 0 $grid-command-edit-icon-margin;
+              vertical-align: middle;
+            }
+
+            .dx-link:not(.dx-link-icon) {
+              width: auto;
+            }
+          }
+
+          .dx-state-disabled {
+            &.dx-link {
+              opacity: $grid-text-link-opacity-disabled;
+            }
+
+            &.dx-link-icon {
+              opacity: $grid-icon-link-opacity-disabled;
+            }
+          }
+        }
+      }
+    }
+
+    .dx-#{$widget-name}-rowsview .dx-virtual-row > td[style*="text-align: right"]:before {
+      background-position-y: 49px;
+    }
+
+    .dx-command-drag {
+      .dx-#{$widget-name}-drag-icon {
+        @include dx-icon-sizing($global-icon-size);
+      }
+    }
+
+    .dx-#{$widget-name}-drop-highlight {
+      & > td {
+        .dx-header-filter {
+          color: $grid-drop-highlight-content-rest;
+        }
+
+        .dx-checkbox {
+          .dx-checkbox-icon {
+            background-color: $grid-drop-highlight-content-rest;
+            color: $grid-drop-highlight-bg-rest;
+          }
+        }
+      }
+    }
+  }
+
+  .dx-#{$widget-name}-edit-popup {
+    .dx-popup-content {
+      padding: 0;
+    }
+
+    .dx-error-message {
+      padding: $grid-cell-padding;
+    }
+  }
+
+  .dx-#{$widget-name}-edit-popup-form {
+    padding: popupSizes.$popup-content-padding-block popupSizes.$popup-content-padding;
+  }
+
+  .dx-#{$widget-name}-headers,
+  .dx-#{$widget-name}-rowsview {
+    .dx-texteditor-input {
+      min-height: $grid-header-line-height;
+    }
+
+    .dx-lookup {
+      height: auto;
+
+      .dx-lookup-field {
+        padding-left: $grid-cell-padding-inline;
+        padding-top: $grid-cell-padding-block;
+        padding-bottom: $grid-cell-padding-block;
+        font-size: $grid-cell-font-size;
+      }
+    }
+
+    .dx-dropdowneditor-button-visible.dx-dropdowneditor {
+      &.dx-show-clear-button {
+        &.dx-invalid,
+        &.dx-valid,
+        &.dx-validation-pending {
+          .dx-texteditor-input {
+            padding-right: dropDownEditorSizes.$drop-down-editor-invalid-badge-size;
+          }
+
+          &.dx-rtl .dx-texteditor-input {
+            padding-right: 0;
+            padding-left: dropDownEditorSizes.$drop-down-editor-invalid-badge-size;
+          }
+        }
+      }
+
+      &.dx-invalid,
+      &.dx-valid,
+      &.dx-validation-pending {
+        .dx-texteditor-input {
+          padding-right: dropDownEditorSizes.$drop-down-editor-invalid-badge-size;
+        }
+
+        &.dx-rtl .dx-texteditor-input {
+          padding-right: 0;
+          padding-left: dropDownEditorSizes.$drop-down-editor-invalid-badge-size;
+        }
+      }
+
+      &.dx-rtl .dx-texteditor-input {
+        padding-right: 0;
+      }
+    }
+  }
+
+  .dx-editor-cell {
+    .dx-numberbox-spin-button {
+      background-color: transparent;
+    }
+
+    .dx-icon-clear {
+      left: 0;
+    }
+
+    .dx-texteditor {
+      &,
+      &.dx-state-hover,
+      &.dx-state-focused,
+      &.dx-state-active {
+        background: $grid-editor-bg-rest;
+        box-shadow: none;
+      }
+
+      &:not(.dx-tagbox) .dx-texteditor-input {
+        background: $grid-editor-bg-rest;
+        font-size: $grid-cell-font-size;
+        height: $grid-cell-height;
+        line-height: $grid-cell-height;
+        margin-top: 0;
+      }
+
+      &:not(.dx-tagbox):not(.dx-colorbox) .dx-texteditor-input {
+        padding: 0 $grid-cell-padding-inline;
+      }
+
+      .dx-placeholder::before {
+        padding-right: $grid-cell-padding-inline;
+        padding-left: $grid-cell-padding-inline;
+      }
+
+      &.dx-validation-pending {
+        .dx-texteditor-input-container {
+          .dx-texteditor-input {
+            padding-top: 0;
+            padding-bottom: 0;
+          }
+        }
+      }
+
+      &:not(.dx-tagbox) .dx-tag-container {
+        min-height: $grid-cell-height;
+        padding: 0;
+      }
+
+      &:not(.dx-editor-filled):not(.dx-editor-outlined) {
+        .dx-texteditor-input,
+        .dx-tag-container {
+          margin-top: 0;
+        }
+      }
+
+      .dx-texteditor-buttons-container {
+        right: 0;
+      }
+
+      &::after,
+      &::before {
+        content: none;
+      }
+
+      &.dx-rtl,
+      .dx-rtl & {
+        .dx-texteditor-buttons-container {
+          left: 0;
+        }
+      }
+    }
+
+    .dx-dropdowneditor {
+      background-color: $grid-editor-bg-rest;
+    }
+
+    &.dx-focused .dx-dropdowneditor-icon {
+      border-radius: 0;
+    }
+
+    &.dx-editor-inline-block:not(.dx-command-select) {
+      &::before {
+        padding-top: $grid-cell-padding-block;
+        padding-bottom: $grid-cell-padding-block;
+      }
+    }
+  }
+
+  .dx-#{$widget-name}-column-chooser-list {
+    .dx-empty-message {
+      color: $grid-column-chooser-message-content-rest;
+      padding: 0 $grid-column-chooser-padding-inline;
+    }
+  }
+
+  .dx-#{$widget-name}-column-chooser {
+    @include dx-base-typography();
+
+    &.dx-#{$widget-name}-column-chooser-mode-drag {
+      .dx-popup-content {
+        padding: $grid-column-chooser-padding;
+
+        .dx-treeview-search {
+          margin-bottom: $grid-tree-view-search-margin-block-end;
+        }
+
+        .dx-treeview-node {
+          padding-left: $grid-tree-view-node-padding-inline-start;
+        }
+      }
+    }
+
+    &.dx-#{$widget-name}-column-chooser-mode-select {
+      .dx-popup-content {
+        padding: $grid-column-chooser-padding;
+      }
+
+      .dx-#{$widget-name}-column-chooser-plain, .dx-#{$widget-name}-column-chooser-list {
+        .dx-treeview-select-all-item {
+          padding-inline-start: $grid-tree-view-select-all-item-padding-inline-start;
+        }
+      }
+    }
+
+    .dx-overlay-content {
+      background-color: $grid-column-chooser-bg-rest;
+
+      .dx-popup-title {
+        background-color: transparent;
+        border-bottom: $grid-popup-title-border-block-end;
+        border-bottom-color: popupColors.$popup-title-border-rest;
+
+        .dx-toolbar-label {
+          font-size: typographySizes.$typography-m-font-size;
+        }
+      }
+
+      .dx-popup-content {
+        .dx-column-chooser-item {
+          margin: $grid-column-chooser-list-item-margin;
+          background-color: $grid-column-chooser-item-bg-rest;
+          color: $grid-column-chooser-item-content-rest;
+          font-weight: $grid-column-chooser-font-weight;
+          font-size: $grid-header-cell-font-size;
+          padding: $grid-cell-padding-block;
+          line-height: $grid-header-line-height;
+          box-shadow: $grid-drag-header-box-shadow;
+        }
+      }
+    }
+  }
+
+  .dx-#{$widget-name}-drag-header {
+    border-color: $grid-drag-header-border-rest;
+    box-shadow: $grid-drag-header-box-shadow;
+    color: $grid-column-chooser-item-content-rest;
+    font-weight: $grid-column-chooser-font-weight;
+    padding: $grid-header-cell-padding-block;
+    background-color: $grid-drag-header-bg-rest;
+    line-height: $grid-header-line-height;
+    font-size: $grid-header-cell-font-size;
+  }
+
+  .dx-#{$widget-name}-columns-separator {
+    background-color: $grid-column-separator-bg-rest;
+  }
+
+  .dx-#{$widget-name}-columns-separator-transparent {
+    background-color: transparent;
+  }
+
+  .dx-#{$widget-name}-focus-overlay {
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      height: $grid-column-chooser-item-height;
+      background-color: $grid-border-focused;
+      left: 0;
+      right: $grid-after-inset-inline-end;
+    }
+
+    &.dx-focused-cell-modified::after {
+      background-color: buttonColors.$button-success-contained-bg-hovered;
+    }
+
+    &.dx-focused-cell-invalid::after {
+      background-color: buttonColors.$button-danger-contained-bg-hovered;
+    }
+  }
+
+  .dx-data-row.dx-state-hover {
+    &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) {
+      & > .dx-#{$widget-name}-readonly .dx-texteditor {
+        .dx-texteditor-input {
+          background-color: $grid-row-bg-hovered;
+          color: $grid-row-content-hovered;
+        }
+      }
+    }
+  }
+
+  .dx-#{$widget-name}-headers {
+    color: $grid-column-chooser-item-content-rest;
+    touch-action: pinch-zoom;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      pointer-events: none;
+      border-bottom: $grid-border;
+      border-bottom-color: $grid-border-rest;
+    }
+
+    .dx-#{$widget-name}-table {
+      .dx-#{$widget-name}-borders & {
+        border-bottom-width: $grid-editor-input-border-block-end-width;
+      }
+
+      .dx-row {
+        > td {
+          .dx-sort {
+            color: $grid-header-filter-empty-icon-rest;
+          }
+
+          &:not([class*="dx-command"], .dx-editor-cell, .dx-#{$widget-name}-group-space):hover {
+            .dx-#{$widget-name}-text-content {
+              color: $grid-content-rest;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .dx-#{$widget-name}-filter-row {
+    background-color: $grid-filter-row-bg-rest;
+
+    .dx-menu {
+      margin-left: 0;
+
+      .dx-menu-horizontal {
+        .dx-menu-items-container {
+          height: 100%;
+          position: absolute;
+
+          .dx-menu-item-wrapper {
+            height: 100%;
+          }
+        }
+      }
+
+      .dx-overlay-content {
+        color: menuColors.$menu-content-rest;
+      }
+    }
+
+    .dx-filter-modified {
+      background-color: $grid-cell-modified-bg-rest;
+    }
+
+    td .dx-editor-container .dx-filter-range-content {
+      padding:
+        $grid-cell-padding-block
+        $grid-cell-padding-inline
+        $grid-cell-padding-block
+        $grid-editor-input-padding;
+    }
+  }
+
+  .dx-#{$widget-name}-filter-range-overlay {
+    .dx-overlay-content {
+      overflow: inherit;
+      background-color: $grid-filter-row-bg-rest;
+      box-shadow: $grid-drag-header-box-shadow;
+
+      .dx-texteditor {
+        &.dx-state-focused::after,
+        &.dx-state-hover::after {
+          top: auto;
+          bottom: 0;
+        }
+
+        .dx-texteditor-input {
+          font-size: $grid-cell-font-size;
+          height: calc(#{$grid-cell-height} + 1px);
+          padding-right: $grid-filter-row-editor-padding-inline;
+          padding-left: $grid-filter-row-editor-padding-inline;
+        }
+
+        .dx-placeholder::before {
+          padding-left: $grid-filter-row-editor-padding-inline;
+        }
+      }
+
+      .dx-invalid-message.dx-overlay-wrapper {
+        display: none;
+      }
+    }
+  }
+
+  .dx-#{$widget-name}-header-panel {
+    border-bottom: $grid-border;
+    border-bottom-color: $grid-border-rest;
+    padding: $grid-header-panel-padding;
+
+    .dx-toolbar-text-auto-hide .dx-button.dx-button-has-icon {
+      border-radius: $global-border-radius;
+    }
+  }
+
+  .dx-icon-column-chooser {
+    @include dx-icon(columnchooser);
+  }
+
+  .dx-#{$widget-name}-addrow-button {
+    .dx-icon-edit-button-addrow {
+      @include dx-icon(add);
+      @include dx-icon-sizing($global-icon-size);
+    }
+  }
+
+  .dx-#{$widget-name}-cancel-button {
+    .dx-icon-edit-button-cancel {
+      @include dx-icon(revert);
+      @include dx-icon-sizing($global-icon-size);
+    }
+  }
+
+  .dx-#{$widget-name}-save-button {
+    .dx-icon-edit-button-save {
+      @include dx-icon(save);
+      @include dx-icon-sizing($global-icon-size);
+    }
+  }
+
+  .dx-apply-button {
+    .dx-icon-apply-filter {
+      @include dx-icon(filter);
+      @include dx-icon-sizing($global-icon-size);
+    }
+  }
+
+  .dx-datagrid-export-menu {
+    .dx-menu-item .dx-icon-xlsxfile {
+      @include dx-icon-sizing($global-icon-size);
+    }
+
+    .dx-menu-item .dx-icon-exportselected {
+      @include dx-icon-sizing($global-icon-size);
+    }
+  }
+
+  .dx-#{$widget-name}-adaptive-more {
+    vertical-align: middle;
+
+    @include dx-icon-sizing($global-icon-size);
+
+    color: $grid-icon-rest;
+  }
+
+  .dx-row.dx-row-focused {
+    .dx-#{$widget-name}-adaptive-more {
+      color: inherit;
+    }
+  }
+
+  .dx-#{$widget-name}-rowsview {
+    border-top: $grid-row-border-block-start-focused;
+    border-top-color: $grid-border-rest;
+
+    .dx-#{$widget-name}-headers + &,
+    &.dx-#{$widget-name}-after-headers {
+      border-top: none;
+    }
+
+    .dx-row {
+      border-top: $grid-row-border;
+      border-bottom: $grid-row-border;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .dx-data-row,
+    .dx-adaptive-detail-row {
+      &,
+      &.dx-selection,
+      &.dx-selection:hover {
+        .dx-validator {
+          &.dx-#{$widget-name}-invalid,
+          &.dx-invalid {
+            background-color: $grid-row-invalid-bg-rest;
+          }
+        }
+      }
+    }
+
+    .dx-overlay-wrapper.dx-invalid-message {
+      .dx-overlay-content {
+        padding: $grid-overlay-content-padding;
+        background-color: validationColors.$validation-message-bg-rest;
+        color: validationColors.$validation-message-content-rest;
+      }
+    }
+
+    .dx-adaptive-detail-row {
+      .dx-field-item-label {
+        padding-top: 0;
+      }
+
+      .dx-field-item-content {
+        line-height: $grid-adaptive-column-height;
+        min-height: $grid-adaptive-column-height;
+        font-size: $grid-cell-font-size;
+
+        &.dx-focused {
+          padding: 0;
+        }
+      }
+
+      .dx-texteditor-input {
+        font-size: $grid-cell-font-size;
+        height: $grid-adaptive-column-height;
+        line-height: $grid-adaptive-column-height;
+      }
+
+      .dx-texteditor::after,
+      .dx-texteditor::before {
+        content: none;
+      }
+
+      .dx-texteditor.dx-editor-outlined {
+        box-shadow: none;
+      }
+    }
+
+    .dx-item-modified {
+      background-color: $grid-cell-modified-bg-rest;
+    }
+
+    .dx-row-focused {
+      &.dx-data-row {
+        & .dx-command-edit .dx-link {
+          color: $grid-row-content-focused;
+        }
+
+        & > td:not(.dx-focused):not(.dx-cell-modified):not(.dx-#{$widget-name}-invalid),
+        & .dx-command-edit .dx-link {
+          & .dx-#{$widget-name}-group-opened,
+          & .dx-#{$widget-name}-group-closed {
+            color: $grid-row-content-focused;
+          }
+        }
+      }
+
+      &.dx-group-row {
+        background-color: $grid-row-bg-focused;
+        color: $grid-row-content-focused;
+
+        & .dx-#{$widget-name}-group-opened,
+        & .dx-#{$widget-name}-group-closed {
+          color: $grid-row-content-focused;
+        }
+      }
+    }
+
+    &.dx-scrollable-scrollbars-alwaysvisible.dx-scrollable-both .dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content {
+      padding-right: 0;
+    }
+
+    td {
+      &.dx-validation-pending {
+        > .dx-pending-indicator {
+          @include dx-pending-indicator-fluent();
+          @include texteditor-validation-icon-offset();
+
+          right: $invalid-badge-size;
+          background-color: transparent;
+
+          @at-root #{selector.append(".dx-rtl", &)},
+          .dx-rtl & {
+            left: $invalid-badge-size;
+          }
+        }
+      }
+    }
+
+    &.dx-#{$widget-name}-sticky-columns {
+      .dx-row.dx-edit-row > td:not(.dx-master-detail-cell) .dx-texteditor-input {
+        height: calc(#{$grid-cell-height} - 2px);
+        line-height: calc(#{$grid-cell-height} - 2px);
+      }
+
+      .dx-master-detail-row > .dx-master-detail-cell {
+        > .dx-#{$widget-name}-master-detail-container {
+          padding: $grid-master-detail-padding;
+        }
+      }
+    }
+  }
+
+  .dx-#{$widget-name}-search-text {
+    color: $grid-search-content-rest;
+    background-color: $grid-search-bg-rest;
+  }
+
+  .dx-#{$widget-name}-nodata {
+    color: $grid-no-data-content-rest;
+    font-size: $grid-no-data-font-size;
+  }
+
+  .dx-#{$widget-name}-bottom-load-panel {
+    border-top: $grid-border;
+    border-top-color: $grid-border-rest;
+    background-color: $grid-bg-rest;
+  }
+
+  .dx-#{$widget-name}-summary-item {
+    color: $grid-summary-content-rest;
+  }
+
+  .dx-#{$widget-name}-total-footer {
+    border-bottom: $grid-border;
+    border-bottom-color: $grid-border-rest;
+    border-top: $grid-border;
+    border-top-color: $grid-border-rest;
+
+    > .dx-#{$widget-name}-content {
+      padding: 0;
+    }
+  }
+
+  .dx-#{$widget-name}-revert-tooltip {
+    .dx-overlay-content {
+      background-color: transparent;
+      min-width: inherit;
+    }
+
+    .dx-revert-button {
+      @include dx-button-sizing(2px, 2px, 2px, 18px, 0);
+
+      border-radius: buttonSizes.$button-border-radius;
+
+      @include dx-button-styling-variant(
+        buttonColors.$button-danger-contained-bg-rest,
+        buttonColors.$button-danger-contained-content-rest,
+        buttonColors.$button-danger-contained-content-rest,
+        buttonColors.$button-danger-contained-content-rest,
+        buttonColors.$button-danger-contained-bg-rest,
+        buttonColors.$button-danger-contained-bg-rest,
+        buttonColors.$button-danger-contained-bg-rest,
+        buttonColors.$button-danger-contained-content-rest
+      );
+
+      margin: $grid-revert-button-margin;
+      height: $grid-cell-height;
+      box-shadow: none;
+      min-width: inherit;
+
+      &.dx-button-has-icon:not(.dx-button-has-text) {
+        border-radius: $grid-icon-button-border-radius;
+      }
+
+      &.dx-state-hover {
+        box-shadow: none;
+      }
+    }
+  }
+
+  .dx-rtl {
+    .dx-#{$widget-name},
+    .dx-#{$widget-name}-container {
+      .dx-menu {
+        .dx-menu-item-has-submenu.dx-menu-item-has-icon {
+          .dx-icon {
+            margin: $grid-icon-margin;
+          }
+        }
+      }
+    }
+
+    .dx-#{$widget-name}-rowsview {
+      &.dx-scrollable-scrollbars-alwaysvisible.dx-scrollable-both .dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content {
+        padding-left: 0;
+      }
+    }
+  }
+
+  .dx-header-filter-menu {
+    .dx-popup-content {
+      padding: $grid-content-padding;
+    }
+  }
+
+  .dx-#{$widget-name}-filter-panel {
+    background-color: $grid-bg-rest;
+    padding: $grid-filter-panel-padding;
+
+    .dx-#{$widget-name}-filter-panel-text,
+    .dx-#{$widget-name}-filter-panel-clear-filter {
+      color: $grid-filter-panel-content-rest;
+      font-size: $grid-cell-font-size;
+      line-height: $grid-checkbox-size;
+    }
+
+    .dx-icon-filter {
+      color: $grid-filter-panel-content-rest;
+
+      @include dx-icon-sizing($grid-filter-panel-icon-size);
+    }
+  }
+
+  .dx-adaptive-item-text {
+    padding-left: textEditorSizes.$text-editor-input-filled-padding-inline;
+    padding-right: textEditorSizes.$text-editor-input-filled-padding-inline;
+    &.dx-cell-modified,
+    &.dx-#{$widget-name}-invalid {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  }
+
+  .dx-#{$widget-name}-dragview {
+    border-radius: $grid-border-radius;
+
+    .dx-#{$widget-name}-borders {
+      border-radius: $grid-border-radius;
+    }
+  }
+
+  .dx-#{$widget-name}-sticky-columns .dx-#{$widget-name}-draggable-column {
+    opacity: 1;
+    color: $grid-draggable-column-content-rest;
+  }
+
+  .dx-command-ai-header-content {
+    max-width: calc(100% - (buttonSizes.$button-height - $grid-cell-padding-inline + $grid-command-ai-button-max-width));
+
+    .dx-#{$widget-name}-text-content {
+      padding-left: $grid-command-ai-content-padding-inline-start;
+    }
+
+    .dx-icon-chatsparkleoutline {
+      @include dx-icon-sizing($grid-command-ai-icon-size);
+    }
+  }
+
+  .dx-command-ai-header-button {
+    left: auto;
+    right: $grid-command-ai-button-max-width;
+  }
+
+  td[style*="text-align: right"] .dx-command-ai-header-button {
+    left: $grid-command-ai-button-max-width;
+    right: auto;
+  }
+
+  .dx-ai-prompt-editor__progressbar .dx-progressbar-animating-container {
+    height: $grid-ai-prompt-editor-progress-bar-height;
+    border-radius: 0;
+  }
+}

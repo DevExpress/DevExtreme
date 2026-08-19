@@ -1,0 +1,26 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$switch-on-border-rest: ds.$color-surface-primary-compound-rest !default;
+$switch-on-border-hovered: ds.$color-surface-primary-compound-hovered !default;
+$switch-on-border-focused: ds.$color-surface-primary-default-active !default;
+
+$switch-bg-rest: ds.$color-surface-transparent-rest !default;
+
+$switch-handle-off-bg-rest: ds.$color-content-neutral-subdued-rest !default;
+
+$switch-on-bg-rest: ds.$color-surface-primary-compound-rest !default;
+
+$switch-handle-on-bg-rest: ds.$color-content-neutral-default-inverted-rest !default;
+$switch-on-bg-disabled: ds.$color-surface-neutral-default-disabled !default;
+$switch-handle-bg-disabled: ds.$color-content-neutral-subdued-disabled !default;
+$switch-border-disabled: ds.$color-border-neutral-accessible-disabled !default;
+$switch-off-border-rest: ds.$color-border-neutral-accessible-rest !default;
+$switch-off-border-hovered: ds.$color-border-neutral-accessible-hovered !default;
+$switch-off-border-active: ds.$color-border-neutral-accessible-active !default;
+
+$switch-invalid-border-rest: ds.$color-border-danger-default-rest !default;
+$switch-invalid-border-hovered: ds.$color-border-danger-default-hovered !default;
+$switch-invalid-border-focused: ds.$color-border-danger-default-hovered !default;
+
+// Subtle ring around the ON handle; no switch shadow role — relative-color bridge over the handle token (see DIVERGENCES.md)
+$switch-handle-on-shadow-rest: rgb(from #{ds.$color-content-neutral-default-inverted-rest} r g b / 0.1) !default;

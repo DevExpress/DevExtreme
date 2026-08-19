@@ -1,0 +1,46 @@
+@forward "./variables";
+@use "./variables" as *;
+@use "../../_design-system/variables/ds" as ds;
+
+$color: null !default;
+$mode: null !default;
+
+$theme-marker-color: null !default;
+$theme-marker-mode: null !default;
+
+@if $color == "blue" {
+  $theme-marker-color: "blue" !default;
+}
+
+@if $mode == "light" {
+  $theme-marker-mode: "light" !default;
+}
+
+@if $mode == "dark" {
+  $theme-marker-mode: "dark" !default;
+}
+
+/*
+ * Public --dx-* custom properties, chained onto the design-token roles (a custom property may
+ * reference another custom property). Mode/accent branching lives in the token definitions.
+ * --dx-color-shadow carries alpha (the DS ships no solid-black token; the shadow roles are
+ * rgba over black) — unlike the legacy solid #000 of the other themes.
+ */
+:root {
+  --dx-component-color-bg: #{ds.$color-surface-neutral-default-rest};
+  --dx-color-main-bg: #{ds.$color-surface-neutral-subdued-rest};
+  --dx-color-primary: #{ds.$color-content-primary-default-rest};
+
+  // Content-role, not surface: consumers use these as text/icon colors (fluent's semantic $base-*), and the two roles diverge in dark mode
+  --dx-color-danger: #{ds.$color-content-danger-default-rest};
+  --dx-color-success: #{ds.$color-content-success-default-rest};
+  --dx-color-warning: #{ds.$color-content-warning-default-rest};
+  --dx-color-border: #{ds.$color-border-neutral-default-rest};
+  --dx-color-text: #{ds.$color-content-neutral-default-rest};
+  --dx-color-icon: #{ds.$color-content-neutral-subdued-rest};
+  --dx-color-spin-icon: #{ds.$color-content-neutral-subdued-rest};
+  --dx-color-link: #{ds.$color-content-primary-default-rest};
+  --dx-color-shadow: #{ds.$color-shadow-key};
+  --dx-color-separator: #{ds.$color-border-neutral-subdued-rest};
+  --dx-color-options-panel-bg: color-mix(in srgb, #{ds.$color-surface-neutral-default-inverted-rest} calc(#{ds.$opacity-5} * 100%), transparent);
+}

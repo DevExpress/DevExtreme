@@ -1,0 +1,10 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$load-panel-padding: ds.$spacing-120 ds.$spacing-240 !default;
+$load-panel-border-radius: ds.$border-radius-80 !default;
+$load-panel-box-shadow: 0 ds.$spacing-80 ds.$spacing-160 0 ds.$color-shadow-key !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$load-panel-content-padding: ds.$spacing-100 !default;
+$load-panel-content-border: ds.$border-width-10 solid ds.$color-border-neutral-default-rest !default;
+$load-panel-content-border-radius: ds.$border-radius-50 !default;

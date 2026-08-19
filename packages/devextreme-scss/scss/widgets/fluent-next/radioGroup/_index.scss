@@ -1,0 +1,24 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/radioGroup/mixins" as *;
+@use "../../base/radioGroup" with (
+  $radiogroup-radio-value-container-padding-inline-end: $radio-group-value-container-padding-inline-end,
+  $radiogroup-collection-column-gap: $radio-group-collection-horizontal-column-gap,
+);
+@use "../radioButton";
+@include dx-radiogroup-mixin(
+  $radio-group-radio-button-margin-block,
+  0,
+);
+
+.dx-radiogroup {
+  &.dx-state-disabled {
+    opacity: 1;
+  }
+}
+
+.dx-radiogroup-horizontal {
+  .dx-collection {
+    column-gap: $radio-group-collection-column-gap;
+  }
+}

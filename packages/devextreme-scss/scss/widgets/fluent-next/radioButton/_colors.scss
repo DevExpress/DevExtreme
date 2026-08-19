@@ -1,0 +1,20 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+/*
+ * Moved from radioGroup/: these are the RADIO BUTTON's colours, and radioButton owns
+ * `radio-button` (NAMING.md, O2). The readers followed.
+ */
+$radio-button-icon-bg-rest: ds.$color-surface-neutral-default-rest !default;
+$radio-button-icon-border-rest: ds.$color-border-neutral-accessible-rest !default;
+$radio-button-icon-border-hovered: ds.$color-border-neutral-accessible-hovered !default;
+$radio-button-icon-border-active: ds.$color-border-neutral-accessible-active !default;
+$radio-button-icon-border-read-only: $radio-button-icon-border-rest !default;
+$radio-button-icon-bg-focused: ds.$color-surface-neutral-alpha-hovered !default;
+$radio-button-checked-bg-rest: ds.$color-surface-primary-default-rest !default;
+$radio-button-checked-bg-hovered: ds.$color-surface-primary-default-hovered !default;
+$radio-button-checked-bg-active: ds.$color-surface-primary-default-active !default;
+$radio-button-invalid-bg-rest: ds.$color-border-danger-compound-rest !default;
+$radio-button-invalid-bg-hovered: ds.$color-border-danger-compound-hovered !default;
+$radio-button-invalid-bg-focused: ds.$color-border-danger-compound-active !default;
+
+$radio-button-content-disabled: ds.$color-content-neutral-default-disabled !default;

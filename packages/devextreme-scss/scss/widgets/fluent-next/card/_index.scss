@@ -1,0 +1,11 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/card";
+
+.dx-card {
+  box-shadow: $card-shadow-rest;
+  border-radius: $global-border-radius;
+  background-color: $card-bg-rest;
+  margin: $card-margin;
+}

@@ -1,0 +1,4 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$typography-bg-rest: ds.$color-surface-neutral-subdued-rest !default;
+$typography-link-content-rest: ds.$color-content-primary-default-rest !default;

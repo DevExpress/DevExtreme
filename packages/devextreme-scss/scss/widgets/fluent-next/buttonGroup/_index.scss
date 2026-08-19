@@ -1,0 +1,40 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../button/sizes" as buttonSizes;
+@use "../button/colors" as buttonColors;
+@use "../../base/buttonGroup" with (
+  $buttongroup-mode-text-column-gap: $button-group-text-column-gap,
+);
+@use "../../base/buttonGroup/mixins" as *;
+
+.dx-buttongroup {
+  &.dx-state-disabled {
+    opacity: 1;
+  }
+}
+
+@include dx-buttongroup-sizing(
+  buttonSizes.$button-border-radius,
+  1px,
+);
+
+.dx-buttongroup-mode-contained {
+  border-radius: buttonSizes.$button-border-radius;
+  box-shadow: buttonSizes.$button-box-shadow buttonColors.$button-normal-shadow-rest;
+
+  .dx-button-mode-contained {
+    box-shadow: none;
+    border-width: 0;
+    border-style: solid;
+    border-inline-end-width: $button-group-item-contained-border-inline-end-width;
+    border-inline-end-color: $button-group-separator-rest;
+
+    &.dx-buttongroup-last-item {
+      border-inline-end-width: 0;
+    }
+  }
+
+  &.dx-state-disabled {
+    box-shadow: none;
+  }
+}

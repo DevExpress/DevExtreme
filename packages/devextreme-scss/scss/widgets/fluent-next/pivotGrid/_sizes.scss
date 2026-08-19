@@ -1,0 +1,87 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// Not a colour: a font weight that used to sit in _colors.scss (NAMING.md, O7)
+$pivot-grid-field-area-box-font-weight: ds.$font-weight-base-default !default;
+
+$pivot-grid-cell-padding: null !default;
+$pivot-grid-left-right-padding: null !default;
+$pivot-grid-expanded-cell-padding: null !default;
+$pivot-grid-total-text-left-padding: null !default;
+$pivot-grid-header-top-bottom-padding: null !default;
+$pivot-grid-button-top-padding: null !default;
+$pivot-grid-area-field-padding-block: null !default;
+
+$pivot-grid-empty-column-width: ds.$spacing-190 !default;
+$pivot-grid-field-indicators-offset: ds.$spacing-60 !default;
+$pivot-grid-indicators-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
+$pivot-grid-empty-area-text-padding: ds.$spacing-50 !default;
+
+$pivot-grid-area-field-border-radius: null !default;
+
+@if $size == "default" {
+  $pivot-grid-cell-padding: ds.$spacing-100 ds.$spacing-160 !default;
+  $pivot-grid-left-right-padding: ds.$spacing-100 !default;
+  $pivot-grid-header-top-bottom-padding: ds.$spacing-140 !default;
+  $pivot-grid-expanded-cell-padding: ds.$spacing-100 ds.$spacing-140 ds.$spacing-100 ds.$spacing-190 !default;
+  $pivot-grid-total-text-left-padding: ds.$spacing-220 !default;
+  $pivot-grid-button-top-padding: ds.$spacing-100 !default;
+  $pivot-grid-area-field-border-radius: ds.$border-radius-60 !default;
+  $pivot-grid-area-field-padding-block: ds.$spacing-50 !default;
+}
+
+@else if $size == "compact" {
+  $pivot-grid-cell-padding: ds.$spacing-70 ds.$spacing-110 !default;
+  $pivot-grid-left-right-padding: ds.$spacing-80 !default;
+  $pivot-grid-header-top-bottom-padding: ds.$spacing-50 !default;
+  $pivot-grid-expanded-cell-padding: ds.$spacing-70 ds.$spacing-80 ds.$spacing-70 ds.$spacing-130 !default;
+  $pivot-grid-total-text-left-padding: ds.$spacing-160 !default;
+  $pivot-grid-button-top-padding: ds.$spacing-50 !default;
+  $pivot-grid-area-field-border-radius: ds.$border-radius-40 !default;
+  $pivot-grid-area-field-padding-block: ds.$spacing-10 !default;
+}
+
+// Values hoisted from style-file literals (tokenized)
+$pivot-grid-headers-font-size: ds.$font-size-title-xs !default;
+$pivot-grid-area-font-size: 13px !default; // dx-offscale: 13px
+$pivot-grid-area-field-line-height: ds.$line-height-base-md !default;
+$pivot-grid-header-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)
+$pivot-grid-expanded-padding: 0 ds.$spacing-50 0 ds.$spacing-100 !default;
+$pivot-grid-toolbar-padding-inline-start: ds.$spacing-80 !default;
+$pivot-grid-area-fields-margin-block-start: ds.$spacing-80 !default;
+$pivot-grid-tree-view-node-container-padding-inline-end: ds.$spacing-80 !default;
+$pivot-grid-checkbox-inset-inline-start: ds.$spacing-80 !default;
+$pivot-grid-tree-view-item-padding: ds.$spacing-90 ds.$spacing-80 !default;
+$pivot-grid-icon-margin: 0 ds.$spacing-50 -1px 0 !default; // dx-offscale: -1px
+$pivot-grid-area-box-border: ds.$border-width-10 solid !default;
+$pivot-grid-chevron-icon-size: ds.$spacing-200 !default;
+$pivot-grid-field-chooser-field-min-height: ds.$spacing-360 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$pivot-grid-position-indicator-vertical-height: ds.$spacing-20 !default;
+$pivot-grid-position-indicator-horizontal-width: ds.$spacing-20 !default;
+$pivot-grid-position-indicator-last-margin-inline-start: ds.$spacing-30 !default;
+$pivot-grid-area-box-margin-block-end: ds.$spacing-40 !default;
+$pivot-grid-expand-icon-container-outline: ds.$spacing-20 solid !default;
+$pivot-grid-toolbar-margin-inline-end: ds.$spacing-100 !default;
+$pivot-grid-field-chooser-button-margin-inline-end: ds.$spacing-40 !default;
+$pivot-grid-button-margin: ds.$spacing-10 !default;
+$pivot-grid-last-cell-min-width: 50px !default; // dx-offscale: 50px
+$pivot-grid-icon-sorted-margin-inline-start: ds.$spacing-50 !default;
+$pivot-grid-fields-area-head-padding: 0 ds.$spacing-20 !default;
+$pivot-grid-tree-view-search-margin: ds.$spacing-50 !default;
+$pivot-grid-area-padding: ds.$spacing-50 !default;
+$pivot-grid-area-fields-margin-block-start-alt: ds.$spacing-30 !default;
+$pivot-grid-position-indicator-last-rtl-margin-inline-start: ds.$spacing-10 !default;
+$pivot-grid-toolbar-margin-inline-start: ds.$spacing-100 !default;
+$pivot-grid-field-chooser-button-margin-inline-start: ds.$spacing-40 !default;
+$pivot-grid-fields-area-head-padding-inline-start: ds.$spacing-20 !default;
+$pivot-grid-icon-sorted-margin-inline-end: ds.$spacing-50 !default;
+
+// Base submodule sizing injected with design tokens (B2 tail)
+$pivot-grid-field-chooser-drag-width: ds.$spacing-1000 !default;
+$pivot-grid-field-chooser-drag-height: ds.$spacing-1000 !default;
+
+// B2 tail: pivotGrid cell side paddings
+$pivot-grid-header-cell-padding-inline: ds.$spacing-20 !default;
+$pivot-grid-fields-area-head-cell-padding-inline: ds.$spacing-20 !default;

@@ -1,0 +1,45 @@
+@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$file-manager-border-rest: ds.$color-border-neutral-default-rest !default;
+$file-manager-file-toolbar-bg-rest: ds.$color-surface-neutral-subdued-rest !default;
+$file-manager-editor-bg-active: rgb(from #{ds.$color-content-neutral-default-rest} r g b / 0.1) !default;
+$file-manager-dirs-tree-item-content-focused: ds.$color-content-neutral-default-rest !default;
+$file-manager-breadcrumbs-item-bg-focused: ds.$color-surface-neutral-default-active !default;
+$file-manager-breadcrumbs-item-content-focused: ds.$color-content-neutral-default-rest !default;
+$file-manager-custom-thumbnail-content-rest: ds.$color-content-neutral-default-disabled !default;
+$file-manager-file-item-select-content-rest: ds.$color-content-neutral-default-inverted-rest !default;
+$file-manager-file-item-select-bg-rest: rgb(from #{ds.$color-surface-primary-default-rest} r g b / 0.8) !default;
+$file-manager-file-item-select-content-focused: ds.$color-content-neutral-default-inverted-rest !default;
+$file-manager-file-item-select-bg-focused: rgb(from #{ds.$color-surface-primary-default-rest} r g b / 0.7) !default;
+$file-manager-file-item-bg-hovered: ds.$color-surface-neutral-default-hovered !default;
+$file-manager-file-item-border-focused: ds.$color-border-primary-default-rest !default;
+$file-manager-item-content-focused: ds.$color-content-neutral-default-inverted-rest !default;
+$file-manager-dirs-tree-item-bg-focused: ds.$color-surface-neutral-default-active !default;
+
+/*
+ * The status icons (refresh/progress/done/error overlays) are SVG data-uri images: colors are
+ * baked into the background-image at build time (string replace). CSS var() tokens do NOT
+ * resolve inside a data-uri (they render black), so the values below are the static per-mode
+ * equivalents of the ds.$ tokens named in the markers. See DIVERGENCES.md.
+ */
+$file-manager-icon-success-content-rest: #107c10 !default; // dx-data-uri-static: ds.$color-surface-success-default-rest (mode-invariant)
+$file-manager-icon-danger-content-rest: #c50f1f !default; // dx-data-uri-static: ds.$color-surface-danger-default-rest (mode-invariant)
+$file-manager-icon-rest: null !default;
+$file-manager-icon-inverted-content-rest: null !default;
+
+@if $mode == "light" {
+  $file-manager-icon-rest: #161616 !default; // dx-data-uri-static: ds.$color-content-neutral-default-rest
+  $file-manager-icon-inverted-content-rest: #fff !default; // dx-data-uri-static: ds.$color-content-neutral-default-inverted-rest
+}
+
+@if $mode == "dark" {
+  $file-manager-icon-rest: #fff !default; // dx-data-uri-static: ds.$color-content-neutral-default-rest
+  $file-manager-icon-inverted-content-rest: #161616 !default; // dx-data-uri-static: ds.$color-content-neutral-default-inverted-rest
+}
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$file-manager-drop-zone-placeholder-border-rest: ds.$color-border-primary-default-rest !default;
+$file-manager-bg-rest: ds.$color-surface-neutral-default-rest !default;
+$file-manager-danger-bg-rest: ds.$color-surface-danger-default-rest !default;
+$file-manager-inverted-content-rest: ds.$color-content-neutral-default-static-dark-rest !default;

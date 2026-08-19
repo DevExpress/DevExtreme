@@ -1,0 +1,168 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/slider" with (
+  $slider-label-position-bottom-padding-bottom: $slider-label-bottom-padding-block-end,
+  $slider-label-position-top-padding-top: $slider-label-top-padding-block-start,
+);
+@use "../../base/popover/mixins" as *;
+
+.dx-slider-wrapper {
+  height: $slider-wrapper-height;
+
+  @include dx-popover-arrow-size(14px, 2px);
+}
+
+.dx-slider-bar {
+  margin-top: calc((#{$slider-wrapper-height} - #{$slider-track-height}) / 2);
+  margin-right: calc((#{$slider-handle-size}) / 2);
+  margin-left: calc((#{$slider-handle-size}) / 2);
+  background: $slider-bar-bg-rest;
+  height: $slider-track-height;
+  border-radius: $slider-track-border-radius;
+}
+
+.dx-slider-range {
+  height: $slider-track-height;
+  border-radius: $slider-track-border-radius;
+
+  &.dx-slider-range-visible {
+    background: $slider-accent-bg-rest;
+  }
+}
+
+.dx-slider-handle {
+  margin-top: calc(#{$slider-track-height} / 2 - #{$slider-handle-size} / 2);
+  margin-inline-end: calc(#{$slider-handle-size} / -2);
+  width: $slider-handle-size;
+  height: $slider-handle-size;
+  border-radius: $slider-border-radius;
+  border-width: $slider-handle-border-width;
+  border-style: solid;
+  border-color: $slider-border-rest;
+  background-color: $slider-element-bg;
+
+  &::after {
+    position: absolute;
+    display: block;
+    inset: 0;
+    background: $slider-accent-bg-rest;
+    content: "";
+    border-radius: $slider-border-radius;
+    border-width: $slider-handle-inner-border-width;
+    border-style: solid;
+    border-color: $slider-element-bg;
+  }
+
+  &.dx-state-hover {
+    &::after {
+      background: $slider-accent-bg-hovered;
+    }
+  }
+
+  &.dx-state-focused {
+    border-color: $slider-accent-content-focused;
+
+    &::after {
+      background: $slider-accent-content-focused;
+    }
+  }
+
+  .dx-tooltip-wrapper {
+    .dx-overlay-content {
+      .dx-popup-content {
+        line-height: normal;
+        color: $slider-tooltip-content-rest;
+
+        .dx-slider-tooltip-position-top & {
+          padding-top: $slider-tooltip-top-padding-block-start;
+        }
+      }
+
+      &.dx-state-disabled {
+        .dx-popup-content {
+          padding-top: calc((#{$slider-tooltip-width}) / 2);
+
+          .dx-slider-tooltip-position-top & {
+            padding-top: $slider-tooltip-top-padding-block-start;
+            padding-bottom: calc((#{$slider-tooltip-width}) / 2);
+          }
+        }
+      }
+    }
+  }
+}
+
+.dx-slider-tooltip-position-top {
+  padding-top: calc(#{$slider-tooltip-width} + 6px);
+}
+
+.dx-slider-tooltip-position-bottom {
+  padding-bottom: calc(#{$slider-tooltip-width} + 6px);
+}
+
+.dx-slider-label-position-bottom {
+  .dx-slider-label {
+    bottom: $slider-label-bottom-inset-block-end;
+  }
+}
+
+.dx-slider-label-position-top {
+  .dx-slider-label {
+    top: $slider-label-top-inset-block-start;
+  }
+}
+
+.dx-invalid {
+  .dx-slider-handle {
+    &::after {
+      background-color: $slider-theme-invalid-color;
+    }
+
+    &.dx-state-hover {
+      &::after {
+        background-color: $slider-invalid-bg-hovered;
+      }
+    }
+
+    &.dx-state-focused {
+      border-color: $slider-invalid-content-focused;
+
+      &::after {
+        background-color: $slider-invalid-content-focused;
+      }
+    }
+  }
+
+  .dx-slider-range-visible {
+    background-color: $slider-invalid-bg-rest;
+    border-color: $slider-invalid-bg-rest;
+  }
+}
+
+.dx-state-disabled {
+  &.dx-slider,
+  .dx-slider {
+    opacity: 1;
+
+    .dx-slider-handle {
+      opacity: 1;
+    }
+  }
+
+  &.dx-slider-handle {
+    border-color: $slider-bg-disabled;
+
+    &::after {
+      background: $slider-bg-disabled;
+    }
+  }
+
+  .dx-slider-bar {
+    background: $slider-bar-bg-disabled;
+  }
+
+  .dx-slider-range.dx-slider-range-visible {
+    background: $slider-bg-disabled;
+  }
+}

@@ -1,0 +1,18 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/actionSheet";
+
+.dx-actionsheet-container {
+  .dx-actionsheet-item:not(:last-child) {
+    margin: $action-sheet-item-margin;
+  }
+
+  .dx-button {
+    margin: 0;
+  }
+}
+
+.dx-button.dx-actionsheet-cancel {
+  margin: 0;
+  margin-top: $action-sheet-item-margin-block-end;
+}

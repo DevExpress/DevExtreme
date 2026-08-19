@@ -1,5 +1,28 @@
 @use "./mixins" as *;
 
+// Design sizing values (parametrizable; fluent-next injects tokens)
+$fileuploader-button-margin-left: 12px !default;
+$fileuploader-upload-button-margin-top: 10px !default;
+$fileuploader-show-file-list-padding-top: 22px !default;
+$fileuploader-file-container-padding: 4px 0 4px !default;
+$fileuploader-button-width: 28px !default;
+$fileuploader-button-height: 28px !default;
+$fileuploader-button-margin-right: 10px !default;
+$fileuploader-cancel-button-position-end-margin-left: 4px !default;
+$fileuploader-file-status-message-height: 16px !default;
+$fileuploader-progressbar-height: 22px !default;
+$fileuploader-file-size-padding-left: 4px !default;
+$fileuploader-file-icon-padding-right: 6px !default;
+$fileuploader-file-container-button-margin-left: 10px !default;
+$fileuploader-cancel-button-position-end-margin-right: 4px !default;
+$fileuploader-file-size-padding-right: 4px !default;
+$fileuploader-file-status-message-line-margin-bottom: 2px !default;
+$fileuploader-cancel-button-margin-top: 5px !default;
+
+$fileuploader-status-message-font-size: 12px !default;
+$fileuploader-file-size-font-size: 10px !default;
+
+$fileuploader-input-wrapper-vertical-padding: 1em !default; // dx-relative
 .dx-fileuploader {
   &.dx-state-disabled .dx-fileuploader-input {
     display: none;
@@ -28,12 +51,12 @@
   }
 
   &::before {
-    padding-top: 1em;
+    padding-top: $fileuploader-input-wrapper-vertical-padding;
     margin-top: -1em;
   }
 
   &::after {
-    padding-bottom: 1em;
+    padding-bottom: $fileuploader-input-wrapper-vertical-padding;
     margin-bottom: -1em;
   }
 
@@ -42,7 +65,7 @@
   }
 
   .dx-button + .dx-button {
-    margin-left: 12px;
+    margin-left: $fileuploader-button-margin-left;
   }
 }
 
@@ -74,7 +97,7 @@
   vertical-align: middle;
 
   & > .dx-fileuploader-upload-button {
-    margin-top: 10px;
+    margin-top: $fileuploader-upload-button-margin-top;
   }
 }
 
@@ -92,7 +115,7 @@
   width: 100%;
 
   .dx-fileuploader-show-file-list & {
-    padding-top: 22px;
+    padding-top: $fileuploader-show-file-list-padding-top;
   }
 }
 
@@ -100,16 +123,16 @@
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 4px 0 4px;
+  padding: $fileuploader-file-container-padding;
 
   .dx-button {
-    width: 28px;
-    height: 28px;
-    margin-right: 10px;
+    width: $fileuploader-button-width;
+    height: $fileuploader-button-height;
+    margin-right: $fileuploader-button-margin-right;
 
     &.dx-fileuploader-cancel-button-position-end {
       margin-right: 0;
-      margin-left: 4px;
+      margin-left: $fileuploader-cancel-button-position-end-margin-left;
     }
 
     &.dx-state-invisible {
@@ -175,14 +198,14 @@
 
 .dx-fileuploader-file-status-message {
   float: left;
-  font-size: 12px;
-  height: 16px;
+  font-size: $fileuploader-status-message-font-size;
+  height: $fileuploader-file-status-message-height;
 }
 
 .dx-fileuploader .dx-progressbar {
   float: left;
   width: 100%;
-  height: 22px;
+  height: $fileuploader-progressbar-height;
   margin-top: -6px;
 }
 
@@ -194,17 +217,17 @@
 }
 
 .dx-fileuploader-file-size {
-  padding-left: 4px;
+  padding-left: $fileuploader-file-size-padding-left;
   float: left;
   vertical-align: super;
-  font-size: 10px;
+  font-size: $fileuploader-file-size-font-size;
 }
 
 .dx-fileuploader-file-icon {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-right: 6px;
+  padding-right: $fileuploader-file-icon-padding-right;
 }
 
 .dx-rtl {
@@ -215,12 +238,12 @@
     }
 
     .dx-fileuploader-file-container .dx-fileuploader-button {
-      margin-left: 10px;
+      margin-left: $fileuploader-file-container-button-margin-left;
       margin-right: 0;
 
       &.dx-fileuploader-cancel-button-position-end {
         margin-left: 0;
-        margin-right: 4px;
+        margin-right: $fileuploader-cancel-button-position-end-margin-right;
       }
     }
 
@@ -231,7 +254,7 @@
     }
 
     .dx-fileuploader-file-size {
-      padding-right: 4px;
+      padding-right: $fileuploader-file-size-padding-right;
     }
   }
 }
@@ -242,7 +265,7 @@
 
     span {
       display: block;
-      margin-bottom: 2px;
+      margin-bottom: $fileuploader-file-status-message-line-margin-bottom;
 
       &:last-child {
         margin-bottom: 0;
@@ -255,6 +278,6 @@
   }
 
   .dx-fileuploader-cancel-button {
-    margin-top: 5px;
+    margin-top: $fileuploader-cancel-button-margin-top;
   }
 }

@@ -1,0 +1,20 @@
+@use "sizes" as *;
+@use "../common/sizes" as *;
+@use "../../base/dropDownMenu" with (
+  $dropdownmenu-list-min-width: $drop-down-menu-list-min-width,
+  $dropdownmenu-list-border-radius: $drop-down-menu-list-border-radius,
+  $dropdownmenu-popup-content-padding: $drop-down-menu-popup-content-padding,
+);
+
+.dx-dropdownmenu-popup-wrapper {
+  .dx-toolbar-menu-section {
+    display: flex;
+    flex-direction: column;
+    row-gap: $drop-down-menu-section-row-gap;
+    margin-inline: $drop-down-menu-section-margin-inline;
+  }
+
+  .dx-overlay-content {
+    box-shadow: $global-dropdown-box-shadow;
+  }
+}

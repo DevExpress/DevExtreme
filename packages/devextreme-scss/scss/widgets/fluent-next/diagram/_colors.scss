@@ -1,0 +1,72 @@
+@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+/*
+ * O4: diagram used to read Button's contained backgrounds for these. They are not buttons —
+ * they are SVG strokes and fills on connector marks and the geometry mark — so the coupling
+ * moves to the token. `ds.$color-surface-primary-default-rest` is a BUTTON component token used
+ * outside button; keeping it preserves the value, and the mapping question is recorded in
+ * DIVERGENCES.md.
+ */
+$diagram-connector-border-rest: ds.$color-surface-primary-default-rest !default;
+$diagram-connection-border-rest: ds.$color-surface-success-default-rest !default;
+$diagram-geometry-mark-border-rest: ds.$color-surface-danger-default-rest !default;
+
+/*
+ * Stays in _colors.scss on purpose: the split between the two files is mode-dependent against
+ * size-dependent, not colour against number, and this opacity branches on $mode — which only
+ * _colors.scss has in scope. `opacity` is therefore a part as well as a size slot, resolved by
+ * file like `content` and `text` (NAMING.md, PARTS).
+ */
+$diagram-toolbox-shape-text-opacity-rest: null !default;
+
+@if $mode == "light" {
+  $diagram-toolbox-shape-text-opacity-rest: 0.25 !default;
+}
+
+@if $mode == "dark" {
+  $diagram-toolbox-shape-text-opacity-rest: 0.5 !default;
+}
+
+$diagram-border-rest: ds.$color-border-neutral-default-rest !default;
+$diagram-toolbar-border-rest: ds.$color-border-neutral-default-rest !default;
+$diagram-normal-format-bg-active: ds.$color-surface-neutral-alpha-active !default;
+$diagram-default-format-bg-active: ds.$color-surface-primary-default-active !default;
+$diagram-danger-format-bg-active: ds.$color-surface-danger-default-active !default;
+$diagram-success-format-bg-active: ds.$color-surface-success-default-active !default;
+$diagram-image-icon-base-content-rest: ds.$color-content-neutral-subdued-rest !default;
+$diagram-image-icon-accent-border-rest: ds.$color-content-primary-default-rest !default;
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$diagram-bg-rest: ds.$color-surface-neutral-default-rest !default;
+$diagram-danger-icon-rest: ds.$color-content-danger-default-rest !default;
+
+/*
+ * SVG data-uri icons are colored by baking the value into a background-image data-uri at build
+ * time (string replace of `currentColor`). CSS var() tokens do NOT resolve inside such a data-uri
+ * (they render black), so the values below are the static per-mode equivalents of the ds.$ tokens
+ * named in the markers — keep them in sync with the design-tokens package. See DIVERGENCES.
+ */
+$diagram-content-rest: null !default;
+$diagram-properties-panel-icon-rest: null !default;
+
+@if $mode == "light" {
+  $diagram-content-rest: #161616 !default; // dx-data-uri-static: ds.$color-content-neutral-default-rest
+  $diagram-properties-panel-icon-rest: #fff !default; // dx-data-uri-static: ds.$color-content-neutral-default-inverted-rest
+}
+
+@if $mode == "dark" {
+  $diagram-content-rest: #fff !default; // dx-data-uri-static: ds.$color-content-neutral-default-rest
+  $diagram-properties-panel-icon-rest: #161616 !default; // dx-data-uri-static: ds.$color-content-neutral-default-inverted-rest
+}
+
+// Canvas = deeper neutral surface
+$diagram-canvas-bg-rest: ds.$color-surface-neutral-subdued-rest !default;
+$diagram-shadow-rest: 0 1px 8px ds.$color-shadow-key !default;
+
+// Values hoisted from style-file literals (tokenized)
+$diagram-selection-mark-content-rest: ds.$color-border-neutral-accessible-rest !default;
+$diagram-selection-bg-rest: rgb(from #{ds.$color-border-neutral-accessible-rest} r g b / 0.02) !default;
+
+// Base-layer values injected with design tokens (wave B1)
+$diagram-popup-title-toolbar-bg-rest: ds.$color-surface-neutral-alpha-hovered !default;

@@ -1,0 +1,43 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/mixins" as *;
+@use "../../base/switch";
+@use "../../base/switch/mixins" as *;
+@include dx-switch(
+  $switch-width,
+  $switch-height,
+  $switch-padding,
+  $switch-handle-height,
+  $switch-container-height,
+  $switch-container-padding-inline,
+  $switch-container-margin-block,
+  $switch-handle-margin,
+  $switch-handle-border-radius,
+  $switch-transition,
+);
+@include dx-switch-states-fluent(
+  $switch-on-bg-disabled,
+  $switch-handle-bg-disabled,
+  $switch-box-shadow,
+  $switch-bg-rest,
+  $switch-on-bg-rest,
+  $switch-on-border-hovered,
+  $switch-on-border-focused,
+  $switch-handle-on-box-shadow,
+  $switch-handle-off-bg-rest,
+  $switch-handle-on-bg-rest,
+  1px solid,
+  $switch-off-border-rest,
+  $switch-off-border-hovered,
+  $switch-off-border-active,
+  $switch-on-border-rest,
+  $switch-invalid-border-rest,
+  $switch-invalid-border-hovered,
+  $switch-invalid-border-focused,
+  $switch-border-disabled,
+);
+@include dx-switch-rtl(
+  calc(#{$switch-handle-height} - #{$switch-handle-margin}),
+  $switch-handle-on-box-shadow-blur,
+  $switch-container-rtl-offset,
+);

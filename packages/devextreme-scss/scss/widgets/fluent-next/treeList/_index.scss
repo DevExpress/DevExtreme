@@ -1,0 +1,65 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/mixins" as *;
+@use "../../base/icon_fonts" as *;
+@use "../gridBase" as *;
+@use "../gridBase/colors" as gridBaseColors;
+@use "../gridBase/sizes" as gridBaseSizes;
+@use "../../base/treeList" as baseTreeList with (
+  $treelist-expandable-node-line-height: $tree-list-empty-space-height,
+  $treelist-sticky-column-border: $tree-list-sticky-column-border,
+  $treelist-cell-focus-outline: $tree-list-cell-outline-focused,
+  $treelist-header-filter-outline: $tree-list-outline-focused,
+  $treelist-header-filter-outline-offset: $tree-list-outline-offset-focused,
+  $treelist-button-margin-left: $tree-list-form-buttons-margin-inline-start,
+  $treelist-button-margin-top: $tree-list-form-buttons-margin-block-start,
+  $treelist-error-message-margin-bottom: $tree-list-error-message-margin-block-end,
+  $treelist-button-margin-right: $tree-list-form-buttons-rtl-margin-inline-start,
+  $datagrid-border: gridBaseSizes.$grid-border,
+  $datagrid-drag-header-border-color: gridBaseColors.$grid-drag-header-border-rest,
+  $datagrid-row-error-bg: gridBaseColors.$grid-row-error-bg-rest,
+  $datagrid-base-color: gridBaseColors.$grid-content-rest,
+  $datagrid-base-background-color: gridBaseColors.$grid-bg-rest,
+  $datagrid-border-color: gridBaseColors.$grid-border-rest,
+  $datagrid-focused-border-color: gridBaseColors.$grid-border-focused,
+  $datagrid-text-stub-background-image-path: gridBaseColors.$grid-text-stub-bg-rest,
+  $datagrid-row-error-color: gridBaseColors.$grid-row-error-content-rest,
+  $header-filter-color: gridBaseColors.$grid-header-filter-icon-rest,
+  $header-filter-color-empty: gridBaseColors.$grid-header-filter-empty-icon-rest,
+  $base-focus-color: gridBaseColors.$grid-content-focused,
+);
+@use "layout/cell";
+@include grid-base(treelist);
+
+.dx-treelist-rowsview {
+  tr:not(.dx-row-focused) .dx-treelist-empty-space {
+    color: $tree-list-chevron-icon-rest;
+  }
+
+  .dx-sort-up,
+  .dx-sort-down,
+  .dx-header-filter {
+    vertical-align: middle;
+  }
+
+  tr:not(.dx-row-focused).dx-selection {
+    .dx-treelist-empty-space {
+      color: $tree-list-chevron-icon-selected;
+    }
+  }
+
+  .dx-treelist-cell-expandable {
+    .dx-treelist-text-content {
+      white-space: normal;
+    }
+  }
+
+  &.dx-treelist-nowrap .dx-treelist-table {
+    .dx-treelist-cell-expandable {
+      .dx-treelist-text-content {
+        white-space: nowrap;
+      }
+    }
+  }
+}
