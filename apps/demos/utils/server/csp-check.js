@@ -71,11 +71,8 @@ function findChrome() {
 
 const CHROME_PATH = findChrome();
 
-// The CI job that runs this script bundles only its own shard (csp-bundle.js
-// applies the same round-robin split), so checking must use the identical
-// partition. Checking a demo another shard bundled means no bundle.js on disk,
-// which costs a 30s render deadline plus a retry each — enough to blow the
-// job's timeout rather than fail.
+// Must use the same shard partition as csp-bundle.js, or a demo bundled by
+// another shard has no bundle.js on disk and burns its render deadline + retry.
 const SHARD_TOTAL = Math.max(1, parseInt(process.env.CSP_SHARD_TOTAL, 10) || 1);
 const SHARD_INDEX = (() => {
   const n = parseInt(process.env.CSP_SHARD_INDEX, 10);
@@ -222,8 +219,7 @@ function findDemos() {
   return applyShard(result);
 }
 
-// Wait until the DOM is quiet after load so late-rendered resources fire their
-// CSP violations before we snapshot, bounded by SETTLE_MAX_MS.
+// Waits until the DOM is quiet so late-rendered resources fire their CSP violations first.
 function waitForDomIdle(tab) {
   return tab.send('Runtime.evaluate', {
     awaitPromise: true,

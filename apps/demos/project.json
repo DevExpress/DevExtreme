@@ -114,7 +114,8 @@
           "pnpm run generate-ng-umd",
           "pnpm run generate-devextreme-angular-umd",
           "pnpm run generate-external-bundles",
-          "pnpm run generate-tgz-packages"
+          "pnpm run generate-tgz-packages",
+          "pnpm run build-vendor-bundles"
         ],
         "parallel": false,
         "cwd": "{projectRoot}"
@@ -127,7 +128,9 @@
         "{projectRoot}/menuMeta.json",
         "{projectRoot}/rollup.ng.umd.config.mjs",
         "{projectRoot}/rollup.devextreme-angular.umd.config.mjs",
-        "{projectRoot}/rollup.external.bundles.config.mjs"
+        "{projectRoot}/rollup.external.bundles.config.mjs",
+        "{projectRoot}/utils/server/build-vendor-bundles.js",
+        "{projectRoot}/utils/server/vendor-bundle.js"
       ]
     }
   },

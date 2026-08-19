@@ -32,6 +32,9 @@ Demos/**/tsconfig.json
 # each demo's own source, same convention as Demos/**/config.js above.
 Demos/**/bundle.js
 Demos/**/bundle.css
+# esbuild's own code-splitting output for batched Angular demo builds (see
+# csp-bundle-angular.js's makeBuildOptions) — shared chunks, not owned by any one demo.
+Demos/_chunks
 
 .DS_Store
 **/.DS_Store
@@ -43,6 +46,9 @@ csp-bundled-demos
 # Scratch artifacts from utils/server/csp-bundle-angular.js (cleaned up on success).
 utils/server/.csp-bundle-angular-*
 Demos/**/.csp-bundle-angular-patched.*.ts
+
+# Scratch entry files from utils/server/vendor-bundle.js (cleaned up on success).
+.vendor-entry-tmp
 
 .angular
 angular.json
