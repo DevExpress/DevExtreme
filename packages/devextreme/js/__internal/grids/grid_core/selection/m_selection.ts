@@ -382,7 +382,6 @@ export class SelectionController extends modules.Controller {
     if (changedItemIndexes.length || (isSelectionWithCheckboxes !== that.isSelectionWithCheckboxes())) {
       dataController.updateItems({
         changeType: 'updateSelection',
-        isRowStateUpdate: true,
         itemIndexes: visibleChangedItemIndexes,
       });
     }
@@ -801,7 +800,6 @@ export const selectionRowsViewExtender = (
         if ($(event.target).closest(`.${SELECT_CHECKBOX_CLASS}`).length) {
           this._dataController.updateItems({
             changeType: 'updateSelection',
-            isRowStateUpdate: true,
             itemIndexes: [rowIndex],
           });
         }
