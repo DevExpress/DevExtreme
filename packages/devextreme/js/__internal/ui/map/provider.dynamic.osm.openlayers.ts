@@ -148,14 +148,19 @@ class OpenLayersMap implements MapEngineMap {
   }
 
   replaceTileLayer(options: MapEngineTileLayerOptions): void {
-    const source = new this._api.source.ImageTile({
-      attributions: options.attribution,
+    const sourceOptions: Options = {
       maxZoom: options.maxZoom,
       url: options.url.includes('{s}')
         // eslint-disable-next-line spellcheck/spell-checker -- tile server option name
         ? createTileUrlList(options.url, options.subdomains)
         : options.url,
-    });
+    };
+
+    if (options.attribution !== undefined) {
+      sourceOptions.attributions = options.attribution;
+    }
+
+    const source = new this._api.source.ImageTile(sourceOptions);
 
     if (this._tileLayer) {
       this._tileLayer.setSource(source);

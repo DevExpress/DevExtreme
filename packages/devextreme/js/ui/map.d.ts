@@ -32,7 +32,6 @@ export interface OsmTileServerConfig {
   url: string;
   /**
    * @docid
-   * @default ''
    */
   attribution?: string;
   /**

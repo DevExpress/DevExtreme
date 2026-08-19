@@ -243,7 +243,6 @@ QUnit.module('OSM: tile server', moduleConfig, () => {
             },
             onReady: () => {
                 assert.deepEqual(openLayersMock.tileSourceOptions, {
-                    attributions: '',
                     maxZoom: 19,
                     url: 'https://tiles.example.com/{z}/{x}/{y}.png'
                 }, 'tile source defaults are applied');

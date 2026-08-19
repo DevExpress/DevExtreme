@@ -85,10 +85,13 @@ class OsmProvider extends DynamicProvider {
     }
 
     const result: MapEngineTileLayerOptions = {
-      attribution: config.attribution ?? '',
       maxZoom: config.maxZoom ?? DEFAULT_MAX_ZOOM,
       url: config.url,
     };
+
+    if (config.attribution !== undefined) {
+      result.attribution = config.attribution;
+    }
 
     if (config.url.includes('{s}')) {
       // eslint-disable-next-line spellcheck/spell-checker -- tile server option name
