@@ -111,7 +111,6 @@ export const selectionDataControllerExtender = (
 
       this.changes = [{
         changeType: 'updateSelection',
-        isRowStateUpdate: true,
         itemIndexes,
       }];
     }

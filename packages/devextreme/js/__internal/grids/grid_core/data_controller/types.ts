@@ -89,7 +89,6 @@ export interface DataChangeBase {
   changes?: unknown[];
   cancel?: boolean;
   isLiveUpdate?: boolean;
-  isRowStateUpdate?: boolean;
 }
 
 export interface UpdateChange extends DataChangeBase {
@@ -104,13 +103,11 @@ export interface UpdateChange extends DataChangeBase {
 interface SelectionChange extends DataChangeBase {
   changeType: 'updateSelection';
   itemIndexes: number[];
-  isRowStateUpdate: true;
 }
 
 interface FocusedRowChange extends DataChangeBase {
   changeType: 'updateFocusedRow';
   focusedRowKey: unknown | null;
-  isRowStateUpdate: true;
 }
 
 export type DataChange = | UpdateChange
