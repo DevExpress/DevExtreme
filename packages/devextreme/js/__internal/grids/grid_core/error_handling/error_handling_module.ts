@@ -1,4 +1,4 @@
-import { ErrorHandlingController } from './m_error_handling';
+import { ErrorHandlingViewController } from './error_handling_view_controller';
 
 export const errorHandlingModule = {
   defaultOptions(): { errorRowEnabled: boolean } {
@@ -7,6 +7,6 @@ export const errorHandlingModule = {
     };
   },
   controllers: {
-    errorHandling: ErrorHandlingController,
+    errorHandling: ErrorHandlingViewController,
   },
 };
