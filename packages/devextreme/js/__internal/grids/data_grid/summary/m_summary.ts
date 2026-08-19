@@ -426,8 +426,19 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
 
 dataSourceAdapterProvider.extend(dataSourceAdapterExtender);
 
-const data = (Base: ModuleType<DataController>) => class SummaryDataControllerExtender extends Base {
-  private _footerItems: any;
+const summaryDataControllerExtender = (
+  Base: ModuleType<DataController>,
+): ModuleType<DataController> => class SummaryDataControllerExtender extends Base {
+  private _footerItems!: any[];
+
+  // MYTODO: change to private after DataController._editingController is removed
+  protected _editingController!: EditingController;
+
+  public init(): void {
+    this._footerItems = [];
+    this._editingController = this.getController('editing');
+    super.init();
+  }
 
   private _isDataColumn(column) {
     return column && (!isDefined(column.groupIndex) || column.showWhenGrouped);
@@ -876,11 +887,6 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     super.optionChanged(args);
   }
 
-  public init() {
-    this._footerItems = [];
-    super.init();
-  }
-
   public footerItems() {
     return this._footerItems;
   }
@@ -1038,7 +1044,7 @@ gridCore.registerModule('summary', {
   },
   extenders: {
     controllers: {
-      data,
+      data: summaryDataControllerExtender,
       editing,
     },
     views: {
