@@ -84,7 +84,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _repaintChangesOnly?: boolean;
 
-  protected _changes!: DataChange[];
+  protected changes!: DataChange[];
 
   private _skipProcessingPagingChange?: boolean;
 
@@ -114,7 +114,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   public pushed!: Callback<[StoreChange[]]>;
 
-  public changed!: Callback;
+  public changed!: Callback<[DataChange]>;
 
   public loadingChanged!: Callback<[boolean, string?]>;
 
@@ -179,7 +179,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._isLoading = false;
     this._isCustomLoading = false;
     this._repaintChangesOnly = undefined;
-    this._changes = [];
+    this.changes = [];
 
     this.createAction('onDataErrorOccurred');
 
@@ -385,10 +385,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    * @protected
    */
   protected _endUpdateCore(): void {
-    const changes = this._changes;
+    const { changes } = this;
 
     if (changes.length) {
-      this._changes = [];
+      this.changes = [];
       const repaintChangesOnly = changes.every((change) => change.repaintChangesOnly);
       const change: DataChange = changes.length === 1
         ? changes[0]
@@ -1253,7 +1253,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
 
     if (this._updateLockCount && !change.cancel) {
-      this._changes.push(change);
+      this.changes.push(change);
       return;
     }
 

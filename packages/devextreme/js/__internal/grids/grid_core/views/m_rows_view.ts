@@ -205,7 +205,7 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: editing_row_based, focus, selection
+   * @extended: focus, selection
    */
   protected _update(change?) { }
 
