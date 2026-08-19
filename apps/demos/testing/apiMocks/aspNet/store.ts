@@ -47,7 +47,7 @@ const loadResult = (rows: Row[], url: string): unknown => {
   const summaries = options.totalSummary as Summary[];
 
   return {
-    data: query(items).slice(options.skip, options.take).toArray() as Row[],
+    data: query(items).slice(options.skip ?? 0, options.take).toArray() as Row[],
     totalCount: options.requireTotalCount ? items.length : -1,
     groupCount: -1,
     summary: summaries?.length

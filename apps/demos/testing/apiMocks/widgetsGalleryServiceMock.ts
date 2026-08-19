@@ -23,6 +23,19 @@ import { dataGridWebApiCustomersLookupHandler } from './handlers/dataGridWebApi/
 import { dataGridWebApiShippersLookupHandler } from './handlers/dataGridWebApi/shippersLookup';
 import { dataGridWebApiOrderDetailsHandler } from './handlers/dataGridWebApi/orderDetails';
 import { treeListTasksTasksHandlers } from './handlers/treeListTasks/tasks';
+import { dataGridAdvancedMasterDetailViewGetSuppliersHandler } from './handlers/dataGridAdvancedMasterDetailView/getSuppliers';
+import { dataGridAdvancedMasterDetailViewGetProductsBySupplierHandler } from './handlers/dataGridAdvancedMasterDetailView/getProductsBySupplier';
+import { dataGridAdvancedMasterDetailViewGetOrdersByProductHandler } from './handlers/dataGridAdvancedMasterDetailView/getOrdersByProduct';
+import { dataGridBatchUpdateWebApiHandlers } from './handlers/dataGridBatchUpdateWebApi';
+import { dataGridCustomEditorsEmployeesHandler } from './handlers/dataGridCustomEditors/employees';
+import { dataGridCustomEditorsTasksHandlers } from './handlers/dataGridCustomEditors/tasks';
+import { dataGridRowReorderingEmployeesHandler } from './handlers/dataGridRowReordering/employees';
+import { dataGridRowReorderingTasksHandlers } from './handlers/dataGridRowReordering/tasks';
+import { dataGridSemanticSearchGetHandler } from './handlers/dataGridSemanticSearch';
+import { dndBetweenGridsHandlers } from './handlers/dndBetweenGrids';
+import { dataGridEmployeesValidationHandlers } from './handlers/dataGridEmployeesValidation';
+import { remoteValidationCheckUniqueEmailAddressHandler } from './handlers/remoteValidation';
+import { treeListDataHandler } from './handlers/treeListData';
 import { treeListTasksTaskEmployeesHandler } from './handlers/treeListTasks/taskEmployees';
 
 // The AI-column endpoint is a cross-origin POST with non-simple headers
@@ -97,6 +110,37 @@ const handlers: MockHandler[] = [
   // PUT /api/TreeListTasks/UpdateTask
   // DELETE /api/TreeListTasks/DeleteTask
   ...treeListTasksTasksHandlers,
+  // GET /api/DataGridAdvancedMasterDetailView/GetSuppliers
+  dataGridAdvancedMasterDetailViewGetSuppliersHandler,
+  // GET /api/DataGridAdvancedMasterDetailView/GetProductsBySupplier?SupplierID=
+  dataGridAdvancedMasterDetailViewGetProductsBySupplierHandler,
+  // GET /api/DataGridAdvancedMasterDetailView/GetOrdersByProduct?ProductID=
+  dataGridAdvancedMasterDetailViewGetOrdersByProductHandler,
+  // GET /api/DataGridBatchUpdateWebApi/Orders
+  // POST /api/DataGridBatchUpdateWebApi/Batch
+  ...dataGridBatchUpdateWebApiHandlers,
+  // GET /api/DataGridCustomEditors/Employees
+  dataGridCustomEditorsEmployeesHandler,
+  // GET /api/DataGridCustomEditors/Tasks
+  // POST /api/DataGridCustomEditors/InsertTask
+  // PUT /api/DataGridCustomEditors/UpdateTask
+  ...dataGridCustomEditorsTasksHandlers,
+  // GET /api/DataGridRowReordering/Employees
+  dataGridRowReorderingEmployeesHandler,
+  // GET /api/DataGridRowReordering/Tasks
+  // PUT /api/DataGridRowReordering/UpdateTask
+  ...dataGridRowReorderingTasksHandlers,
+  // GET /api/DataGridSemanticSearch/Get
+  dataGridSemanticSearchGetHandler,
+  // GET /api/DnDBetweenGrids/Tasks
+  // PUT /api/DnDBetweenGrids/UpdateTask
+  ...dndBetweenGridsHandlers,
+  // GET/POST/PUT/DELETE /api/DataGridEmployeesValidation
+  ...dataGridEmployeesValidationHandlers,
+  // GET /RemoteValidation/CheckUniqueEmailAddress?id=&email=
+  remoteValidationCheckUniqueEmailAddressHandler,
+  // GET /api/treeListData?parentIds=
+  treeListDataHandler,
 ];
 
 export const widgetsGalleryServiceMock = handlers.reduce(
