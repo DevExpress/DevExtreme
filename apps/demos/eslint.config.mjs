@@ -99,6 +99,7 @@ export default [
           'axe',
           'canvg',
           'devextreme',
+          'dnd',
           'dxo',
           'jsx',
           'luxon',
