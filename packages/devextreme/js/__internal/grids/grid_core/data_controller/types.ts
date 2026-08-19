@@ -78,7 +78,7 @@ export type RowChangeType = 'update' | 'insert' | 'remove';
 
 export type RowOperation = RowChangeType | 'replace';
 
-interface DataChangeBase {
+export interface DataChangeBase {
   isFirstRender?: boolean;
   repaintChangesOnly?: boolean;
   needUpdateDimensions?: boolean;
@@ -88,6 +88,7 @@ interface DataChangeBase {
   changes?: unknown[];
   cancel?: boolean;
   isLiveUpdate?: boolean;
+  isRowStateUpdate?: boolean;
 }
 
 export interface UpdateChange extends DataChangeBase {
@@ -102,11 +103,13 @@ export interface UpdateChange extends DataChangeBase {
 interface SelectionChange extends DataChangeBase {
   changeType: 'updateSelection';
   itemIndexes: number[];
+  isRowStateUpdate: true;
 }
 
 interface FocusedRowChange extends DataChangeBase {
   changeType: 'updateFocusedRow';
   focusedRowKey: unknown | null;
+  isRowStateUpdate: true;
 }
 
 export type DataChange = | UpdateChange

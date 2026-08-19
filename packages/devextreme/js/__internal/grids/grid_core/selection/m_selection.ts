@@ -26,6 +26,7 @@ import Selection from '@ts/ui/selection/selection';
 import type { SelectionChangeEvent, SelectionFilter, SelectionOptions } from '@ts/ui/selection/types';
 
 import type { DataController } from '../data_controller/data_controller';
+import type { DataChange } from '../data_controller/types';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
 import {
@@ -380,6 +381,7 @@ export class SelectionController extends modules.Controller {
     if (changedItemIndexes.length || (isSelectionWithCheckboxes !== that.isSelectionWithCheckboxes())) {
       dataController.updateItems({
         changeType: 'updateSelection',
+        isRowStateUpdate: true,
         itemIndexes: visibleChangedItemIndexes,
       });
     }
@@ -798,6 +800,7 @@ export const selectionRowsViewExtender = (
         if ($(event.target).closest(`.${SELECT_CHECKBOX_CLASS}`).length) {
           this._dataController.updateItems({
             changeType: 'updateSelection',
+            isRowStateUpdate: true,
             itemIndexes: [rowIndex],
           });
         }
@@ -805,32 +808,39 @@ export const selectionRowsViewExtender = (
     }));
   }
 
-  protected _update(change) {
+  protected _update(change: DataChange): void {
     const that = this;
     const tableElements = that.getTableElements();
 
     if (change.changeType === 'updateSelection') {
-      if (tableElements.length > 0) {
-        each(tableElements, (_, tableElement) => {
-          each(change.itemIndexes || [], (_, index) => {
-            let $row;
-
-            // T108078
-            if (change.items[index]) {
-              $row = that._getRowElements($(tableElement)).eq(index);
-              if ($row.length) {
-                const { isSelected } = change.items[index];
-                $row
-                  .toggleClass(ROW_SELECTION_CLASS, isSelected === undefined ? false : isSelected)
-                  .find(`.${SELECT_CHECKBOX_CLASS}`).dxCheckBox('option', 'value', isSelected);
-                that.setAria('selected', String(isSelected), $row);
-              }
-            }
-          });
-        });
-
-        that._updateCheckboxesClass();
+      if (tableElements.length === 0 || !change.items) {
+        return;
       }
+
+      const changeItems = change.items;
+
+      each(tableElements, (_, tableElement) => {
+        change.itemIndexes.forEach((index) => {
+          const changeItem = changeItems[index];
+          const $row = that._getRowElements($(tableElement)).eq(index);
+
+          // T108078
+          if (!changeItem || !$row.length) {
+            return;
+          }
+
+          const { isSelected } = changeItem;
+          const needSelectionClass = Boolean(isSelected)
+            && !that._editingController.isEditRow(index);
+
+          $row
+            .toggleClass(ROW_SELECTION_CLASS, needSelectionClass)
+            .find(`.${SELECT_CHECKBOX_CLASS}`).dxCheckBox('option', 'value', isSelected);
+          that.setAria('selected', String(isSelected), $row);
+        });
+      });
+
+      that._updateCheckboxesClass();
     } else {
       super._update(change);
     }
