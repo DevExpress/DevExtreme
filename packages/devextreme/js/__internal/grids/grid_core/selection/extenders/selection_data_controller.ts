@@ -101,14 +101,19 @@ export const selectionDataControllerExtender = (
   }
 
   protected _endUpdateCore(): void {
-    const changes = this._changes;
-    const isUpdateSelection = changes.length > 1 && changes.every((change) => change.changeType === 'updateSelection');
+    const isUpdateSelection = this.changes.length > 1
+      && this.changes.every((change) => change.changeType === 'updateSelection');
 
     if (isUpdateSelection) {
-      const itemIndexes = changes
+      const itemIndexes = this.changes
         .map((change): number[] => ('itemIndexes' in change ? change.itemIndexes : []))
         .reduce((a, b) => a.concat(b));
-      this._changes = [{ changeType: 'updateSelection', itemIndexes }];
+
+      this.changes = [{
+        changeType: 'updateSelection',
+        isRowStateUpdate: true,
+        itemIndexes,
+      }];
     }
 
     super._endUpdateCore();
