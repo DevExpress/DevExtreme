@@ -91,6 +91,7 @@ import {
   VIEWPORT_BOTTOM_NEW_ROW_POSITION,
   VIEWPORT_TOP_NEW_ROW_POSITION,
 } from './const';
+import { dataControllerEditingExtenderMixin } from './extenders/editing_data_controller';
 import type { ICellBasedEditingControllerExtender } from './m_editing_cell_based';
 import type { IFormBasedEditingControllerExtender } from './m_editing_form_based';
 import {
@@ -2544,117 +2545,7 @@ export type EditingController = EditingControllerImpl
   & ICellBasedEditingControllerExtender
   & IFormBasedEditingControllerExtender;
 
-export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataController>) => class DataControllerEditingExtender extends Base {
-  public reload(full, repaintChangesOnly) {
-    !repaintChangesOnly && this._editingController.refresh();
-
-    return super.reload.apply(this, arguments as any);
-  }
-
-  public repaintRows() {
-    if (this._editingController.isSaving()) return;
-    return super.repaintRows.apply(this, arguments as any);
-  }
-
-  private _updateEditRow(items) {
-    const editRowKey = this.option(EDITING_EDITROWKEY_OPTION_NAME);
-    const editRowIndex = gridCoreUtils.getIndexByKey(editRowKey, items);
-    const editItem = items[editRowIndex];
-    if (editItem) {
-      editItem.isEditing = true;
-      // @ts-expect-error Badly typed based class
-      this._updateEditItem?.(editItem);
-    }
-  }
-
-  protected _updateItemsCore(change: DataChange): void {
-    super._updateItemsCore(change);
-    this._updateEditRow(this.items(true));
-  }
-
-  protected applyChangeUpdate(change) {
-    this._updateEditRow(change.items);
-    super.applyChangeUpdate(change);
-  }
-
-  protected applyChangesOnly(change) {
-    this._updateEditRow(change.items);
-    super.applyChangesOnly(change);
-  }
-
-  protected _processItems(items: RawItemData[], change: DataChange): ProcessedItem[] {
-    items = this._editingController.processItems(items, change);
-    return super._processItems(items, change);
-  }
-
-  protected _processDataItem(
-    generatedItem: GeneratedItem,
-    options: ItemProcessingOptions,
-  ): ProcessedItem {
-    this._editingController.processDataItem(generatedItem, options);
-    return super._processDataItem(generatedItem, options);
-  }
-
-  protected _processItem(dataItem: RawItemData, options: ItemProcessingOptions) {
-    const processedItem = super._processItem(dataItem, options);
-
-    if (processedItem.isNewRow) {
-      options.dataIndex--;
-      delete processedItem.dataIndex;
-    }
-
-    return processedItem;
-  }
-
-  protected _getChangedColumnIndices(oldItem, newItem, rowIndex, isLiveUpdate) {
-    if (oldItem.isNewRow !== newItem.isNewRow || oldItem.removed !== newItem.removed) {
-      return;
-    }
-
-    return super._getChangedColumnIndices.apply(this, arguments as any);
-  }
-
-  protected _isCellChanged(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
-    const cell = oldRow.cells && oldRow.cells[columnIndex];
-    const isEditing = this._editingController && this._editingController.isEditCell(visibleRowIndex, columnIndex);
-
-    if (isLiveUpdate && isEditing) {
-      return false;
-    }
-
-    if (cell && cell.column && !cell.column.showEditorAlways && cell.isEditing !== isEditing) {
-      return true;
-    }
-
-    return super._isCellChanged.apply(this, arguments as any);
-  }
-
-  protected needToRefreshOnDataSourceChange(args) {
-    const isParasiteChange = Array.isArray(args.value) && args.value === args.previousValue && this._editingController.isSaving();
-    return !isParasiteChange;
-  }
-
-  protected _handleDataSourceChange(args) {
-    const result = super._handleDataSourceChange(args);
-    const changes: any = this.option('editing.changes');
-    const dataSource = args.value;
-    if (Array.isArray(dataSource) && changes.length) {
-      const dataSourceKeys = dataSource.map((item) => this.keyOf(item));
-      const newChanges = changes.filter((change) => change.type === 'insert' || dataSourceKeys.some((key) => equalByValue(change.key, key)));
-      if (newChanges.length !== changes.length) {
-        this.option('editing.changes', newChanges);
-      }
-      const editRowKey = this.option('editing.editRowKey');
-      const isEditNewItem = newChanges.some(
-        (change) => change.type === 'insert' && equalByValue(editRowKey, change.key),
-      );
-      if (!isEditNewItem && dataSourceKeys.every((key) => !equalByValue(editRowKey, key))) {
-        this.option('editing.editRowKey', undefined);
-      }
-    }
-    return result;
-  }
-};
+export { dataControllerEditingExtenderMixin };
 
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender extends Base {
   private _pointerDownTarget: any;
