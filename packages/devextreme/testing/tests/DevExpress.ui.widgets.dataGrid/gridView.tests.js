@@ -924,7 +924,7 @@ QUnit.module('Grid view', {
         // act
         this.resizingController._initPostRenderHandlers();
         this.resizingController._refreshSizesHandler({
-            changeType: 'updateSelection'
+            changeType: 'updateSelection',
         });
 
         // assert
