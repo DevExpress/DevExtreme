@@ -53,10 +53,10 @@ async function inlineDataUri(content: string, scssRoot: string): Promise<string>
 async function copyScssWithInlineDataUri(
   scssPackagePath: string,
   outputDir: string,
+  internalPaths: string[],
 ): Promise<void> {
   const scssSourceDir = path.join(scssPackagePath, 'scss');
   const cwd = toPosixPath(scssSourceDir);
-  const internalPaths = await readInternalScssPaths(scssPackagePath);
   const relPaths = (await glob('**/*', { cwd, nodir: true })).filter(
     (relPath) => !isInternalScssPath(relPath, internalPaths),
   );
@@ -106,8 +106,12 @@ export default createExecutor<ScssAssembleExecutorSchema, ResolvedScssAssemble>(
     return { scssPackagePath, outputDir };
   },
   run: async ({ scssPackagePath, outputDir }) => {
+    const internalPaths = await readInternalScssPaths(scssPackagePath);
+
+    await fs.rm(outputDir, { recursive: true, force: true });
+
     await Promise.all([
-      copyScssWithInlineDataUri(scssPackagePath, outputDir),
+      copyScssWithInlineDataUri(scssPackagePath, outputDir, internalPaths),
       copyFonts(scssPackagePath, outputDir),
       copyIcons(scssPackagePath, outputDir),
     ]);
