@@ -52,12 +52,6 @@ export default [
     },
     ...spellCheckConfig,
     {
-        files: ['js/ui/map_types.d.ts'],
-        rules: {
-            'spellcheck/spell-checker': 'off',
-        },
-    },
-    {
         plugins: {
             'no-only-tests': noOnlyTests,
             i18n: i18N,

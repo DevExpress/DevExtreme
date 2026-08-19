@@ -3,7 +3,6 @@ import type { MapLocation } from '@js/ui/map';
 export interface MapEngineTileLayerOptions {
   attribution?: string;
   maxZoom: number;
-  // eslint-disable-next-line spellcheck/spell-checker -- tile server option name
   subdomains?: string | string[];
   url: string;
 }

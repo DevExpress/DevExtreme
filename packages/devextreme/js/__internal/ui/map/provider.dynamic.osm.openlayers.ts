@@ -83,10 +83,8 @@ const toCoordinate = (api: OpenLayersApi, location: MapLocation): Coordinate => 
 
 const createTileUrlList = (
   url: string,
-  // eslint-disable-next-line spellcheck/spell-checker -- tile server option name
   subdomains: MapEngineTileLayerOptions['subdomains'],
 ): string[] => {
-  // eslint-disable-next-line spellcheck/spell-checker -- tile server option name
   const values = Array.isArray(subdomains) ? subdomains : [...(subdomains ?? '')];
 
   return values.map((value) => url.replace('{s}', value));
@@ -151,7 +149,6 @@ class OpenLayersMap implements MapEngineMap {
     const sourceOptions: Options = {
       maxZoom: options.maxZoom,
       url: options.url.includes('{s}')
-        // eslint-disable-next-line spellcheck/spell-checker -- tile server option name
         ? createTileUrlList(options.url, options.subdomains)
         : options.url,
     };

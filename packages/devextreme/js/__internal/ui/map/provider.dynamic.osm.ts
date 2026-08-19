@@ -3,7 +3,6 @@ import { getWindow } from '@js/core/utils/window';
 import type {
   MapLocation,
   MapType,
-  // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
   OsmTileServerConfig as TileServerConfig,
 } from '@js/ui/map';
 import errors from '@js/ui/widget/ui.errors';
@@ -24,7 +23,6 @@ import { createOpenLayersEngine } from './provider.dynamic.osm.openlayers';
 const DEFAULT_MAX_ZOOM = 19;
 const DEFAULT_SUBDOMAINS = 'abc';
 
-// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap provider identifier
 class OsmProvider extends DynamicProvider {
   _engine?: MapEngine;
 
@@ -94,7 +92,6 @@ class OsmProvider extends DynamicProvider {
     }
 
     if (config.url.includes('{s}')) {
-      // eslint-disable-next-line spellcheck/spell-checker -- tile server option name
       result.subdomains = config.subdomains?.length ? config.subdomains : DEFAULT_SUBDOMAINS;
     }
 
@@ -184,5 +181,4 @@ class OsmProvider extends DynamicProvider {
   }
 }
 
-// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap provider identifier
 export default OsmProvider;

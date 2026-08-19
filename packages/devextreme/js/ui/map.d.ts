@@ -24,7 +24,6 @@ export type MapType = 'hybrid' | 'roadmap' | 'satellite';
  * @docid
  * @public
  */
-// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
 export type OsmTileServerConfig = {
   /**
    * @docid
@@ -37,7 +36,6 @@ export type OsmTileServerConfig = {
   /**
    * @docid
    */
-  // eslint-disable-next-line spellcheck/spell-checker -- tile server option name
   subdomains?: string | Array<string>;
   /**
    * @docid
@@ -49,9 +47,7 @@ export type OsmTileServerConfig = {
  * @docid
  * @public
  */
-// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifiers
 export type OsmTileServer = string | OsmTileServerConfig
-// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
 | ((type: MapType) => string | OsmTileServerConfig | undefined);
 
 /**
@@ -375,7 +371,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
        * @public
        * @default undefined
        */
-      // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
       tileServer?: OsmTileServer | undefined;
     };
     /**

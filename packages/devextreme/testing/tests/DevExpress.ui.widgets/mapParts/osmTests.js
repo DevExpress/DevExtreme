@@ -1,6 +1,5 @@
 import $ from 'jquery';
 
-// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap provider identifier
 import OsmProvider from '__internal/ui/map/provider.dynamic.osm';
 import { createOpenLayersEngine } from '__internal/ui/map/provider.dynamic.osm.openlayers';
 import errors from 'ui/widget/ui.errors';
@@ -60,7 +59,6 @@ const moduleConfig = {
         window.ol = openLayersMock;
     }
 };
-// eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap provider identifier
 const createProvider = () => new OsmProvider({
     option: () => ({
         providerConfig: {}
@@ -331,7 +329,6 @@ QUnit.module('OSM: tile server', moduleConfig, () => {
                 tileServer: {
                     url: 'https://{s}.tiles.example.com/{z}/{x}/{y}.png',
                     attribution: 'Example attribution',
-                    // eslint-disable-next-line spellcheck/spell-checker -- tile server option name
                     subdomains: 'ab'
                 }
             },
@@ -359,14 +356,12 @@ QUnit.module('OSM: tile server', moduleConfig, () => {
     });
     QUnit.test('empty subdomains use the default value', function(assert) {
         ['', []].forEach(value => {
-            // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap provider identifier
             const provider = new OsmProvider({
                 option: () => ({
                     providerConfig: {
                         tileServer: {
                             url: 'https://{s}.tiles.example.com/{z}/{x}/{y}.png',
                             attribution: 'Example attribution',
-                            // eslint-disable-next-line spellcheck/spell-checker -- tile server option name
                             subdomains: value
                         }
                     }
@@ -375,7 +370,6 @@ QUnit.module('OSM: tile server', moduleConfig, () => {
             const options = provider._resolveTileLayerOptions('roadmap');
             const valueType = Array.isArray(value) ? 'array' : 'string';
 
-            // eslint-disable-next-line spellcheck/spell-checker -- tile server option name
             assert.strictEqual(options.subdomains, 'abc', `empty ${valueType} uses default subdomains`);
         });
     });
@@ -387,7 +381,6 @@ QUnit.module('OSM: tile server', moduleConfig, () => {
                 tileServer: {
                     url: 'https://{s}.tiles.example.com/{z}/{x}/{y}.png',
                     attribution: 'Example attribution',
-                    // eslint-disable-next-line spellcheck/spell-checker -- tile server option name
                     subdomains: ['first', 'second']
                 }
             },
