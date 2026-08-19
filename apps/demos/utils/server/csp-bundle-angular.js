@@ -378,9 +378,10 @@ function isFileCached(filePath) {
   return fileExistsCache.get(filePath);
 }
 
-// apps/demos/node_modules/devextreme only ships bundles/; redirect to the real CJS modules.
-const DEVEXTREME_CJS_ROOT = path.join(
-  REPO_ROOT, 'packages', 'devextreme', 'artifacts', 'transpiled-esm-npm', 'cjs',
+// apps/demos/node_modules/devextreme only ships bundles/; redirect to the real
+// ESM modules under packages/devextreme/artifacts.
+const DEVEXTREME_ESM_ROOT = path.join(
+  REPO_ROOT, 'packages', 'devextreme', 'artifacts', 'transpiled-esm-npm', 'esm',
 );
 const devextremeRedirectPlugin = {
   name: 'csp-bundle-angular:devextreme-esm-redirect',
