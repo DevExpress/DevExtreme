@@ -312,14 +312,12 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   /**
    * @extended: filter_row, virtual_column
    */
-  protected _renderCore() {
-    const $container = this.element();
-    const change = {};
-
+  protected _renderCore(options?) {
     if (this._tableElement && !this._dataController.isLoaded() && !this._hasRowElements) {
-      // @ts-expect-error
-      return new Deferred().resolve();
+      return Deferred().resolve();
     }
+
+    const $container = this.element();
 
     $container
       .addClass(this.addWidgetPrefix(HEADERS_CLASS))
@@ -327,12 +325,12 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
 
     this.setAria('role', 'presentation', $container);
 
+    const change = {};
     const deferred = this._updateContent(this._renderTable({ change }), change);
 
     $container.toggleClass(MULTI_ROW_HEADER_CLASS, this.getRowCount() > 1);
 
-    // @ts-expect-error
-    super._renderCore.apply(this, arguments);
+    super._renderCore(options);
 
     return deferred.done((): void => {
       this.updateScrollLeftPosition();
