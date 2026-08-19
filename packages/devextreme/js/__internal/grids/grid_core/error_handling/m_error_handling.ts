@@ -1,28 +1,37 @@
-/* eslint-disable max-classes-per-file */
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import messageLocalization from '@js/common/core/localization/message';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
+import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
+import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
+import modules from '@ts/grids/grid_core/m_modules';
+import type { OptionChanged } from '@ts/grids/grid_core/m_types';
+import type { ToastViewController } from '@ts/grids/grid_core/toast/m_toast_controller';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
+import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
-import type { ColumnHeadersView } from '../column_headers/m_column_headers';
-import type { DataController } from '../data_controller/data_controller';
-import modules from '../m_modules';
-import type { ModuleType } from '../m_types';
-import type { ToastViewController } from '../toast/m_toast_controller';
-import type { RowsView } from '../views/m_rows_view';
-
-const ERROR_ROW_CLASS = 'dx-error-row';
-const ERROR_MESSAGE_CLASS = 'dx-error-message';
-const ERROR_CLOSEBUTTON_CLASS = 'dx-closebutton';
-const ACTION_CLASS = 'action';
+import {
+  ACTION_CLASS,
+  ERROR_CLOSEBUTTON_CLASS,
+  ERROR_MESSAGE_CLASS,
+  ERROR_ROW_CLASS,
+} from './const';
+import type { GridError } from './types';
+import { getErrorMessage, isDxError } from './utils';
 
 export class ErrorHandlingController extends modules.ViewController {
   private _resizingController!: ResizingController;
 
   private _columnsController!: ColumnsController;
+
+  private _dataController!: DataController;
+
+  private _editingController!: EditingController;
 
   private _columnHeadersView!: ColumnHeadersView;
 
@@ -30,41 +39,67 @@ export class ErrorHandlingController extends modules.ViewController {
 
   private _toastViewController!: ToastViewController;
 
-  public init() {
+  public init(): void {
     this._resizingController = this.getController('resizing');
     this._columnsController = this.getController('columns');
     this._columnHeadersView = this.getView('columnHeadersView');
     this._toastViewController = this.getController('toastViewController');
     this._rowsView = this.getView('rowsView');
+    this._dataController = this.getController('data');
+    this._editingController = this.getController('editing');
+
+    this._dataController.dataErrorOccurred.add(this.handleDataErrorOccurred);
+    this._dataController.changed.add(this.handleDataChanged);
   }
 
-  private _createErrorRow(error, $tableElements?) {
-    let $errorRow;
-    let $closeButton;
+  private readonly handleDataErrorOccurred = (
+    error: GridError,
+    $popupContent?: dxElementWrapper,
+  ): void => {
+    if (this.option('errorRowEnabled')) {
+      this.renderErrorRow(error, undefined, $popupContent);
+    }
+  };
+
+  private readonly handleDataChanged = (e?: DataChange): void => {
+    if (e?.changeType === 'loadError') {
+      return;
+    }
+
+    if (this._editingController && !this._editingController.hasChanges()) {
+      this.removeErrorRow();
+    }
+  };
+
+  private _createErrorRow(
+    error: GridError,
+    $tableElements?: dxElementWrapper,
+  ): dxElementWrapper {
     const $errorMessage = this._renderErrorMessage(error);
 
     if ($tableElements) {
-      $errorRow = $('<tr>')
+      const $errorRow = $('<tr>')
         .attr('role', 'row')
         .addClass(ERROR_ROW_CLASS);
-      $closeButton = $('<div>').addClass(ERROR_CLOSEBUTTON_CLASS).addClass(this.addWidgetPrefix(ACTION_CLASS));
+      const $closeButton = $('<div>')
+        .addClass(ERROR_CLOSEBUTTON_CLASS)
+        .addClass(this.addWidgetPrefix(ACTION_CLASS));
 
       eventsEngine.on($closeButton, clickEventName, this.createAction((args) => {
         const e = args.event;
-        let $errorRow;
         const errorRowIndex = $(e.currentTarget).closest(`.${ERROR_ROW_CLASS}`).index();
 
         e.stopPropagation();
         each($tableElements, (_, tableElement) => {
-          $errorRow = $(tableElement).children('tbody').children('tr').eq(errorRowIndex);
-          this.removeErrorRow($errorRow);
+          const $row = $(tableElement).children('tbody').children('tr').eq(errorRowIndex);
+          this.removeErrorRow($row);
         });
 
         this._resizingController?.fireContentReadyAction?.();
       }));
 
       $('<td>')
-        // @ts-expect-errors
+        // @ts-expect-error object attributes
         .attr({
           colSpan: this._columnsController.getVisibleColumns().length,
           role: 'gridcell',
@@ -79,53 +114,58 @@ export class ErrorHandlingController extends modules.ViewController {
     return $errorMessage;
   }
 
-  private _renderErrorMessage(error) {
-    const message = error.url ? error.message.replace(error.url, '') : error.message || error;
+  private _renderErrorMessage(error: GridError): dxElementWrapper {
     const $message = $('<div>')
       .addClass(ERROR_MESSAGE_CLASS)
-      .text(message);
+      .text(getErrorMessage(error));
 
     this.setAria('role', 'alert', $message);
     this.setAria('roledescription', messageLocalization.format('dxDataGrid-ariaError'), $message);
 
-    if (error.url) {
+    if (isDxError(error)) {
       $('<a>').attr('href', error.url).text(error.url).appendTo($message);
     }
 
     return $message;
   }
 
-  public renderErrorRow(error, rowIndex, $popupContent) {
-    const that = this;
-    let $errorMessageElement;
-    let $firstErrorRow;
-
+  public renderErrorRow(
+    error: GridError,
+    rowIndex: number | undefined,
+    $popupContent: dxElementWrapper | undefined,
+  ): dxElementWrapper | undefined {
     if ($popupContent) {
       $popupContent.find(`.${ERROR_MESSAGE_CLASS}`).remove();
-      $errorMessageElement = that._createErrorRow(error);
+      const $errorMessageElement = this._createErrorRow(error);
       $popupContent.prepend($errorMessageElement);
+
       return $errorMessageElement;
     }
 
-    const viewElement = rowIndex >= 0 || !that._columnHeadersView.isVisible() ? that._rowsView : that._columnHeadersView;
-    const $tableElements = viewElement.getTableElements();
+    const targetRowIndex = rowIndex ?? -1;
+    const hasTargetRow = targetRowIndex >= 0;
+    const shouldRenderInRowsView = hasTargetRow || !this._columnHeadersView.isVisible();
+    const viewElement = shouldRenderInRowsView ? this._rowsView : this._columnHeadersView;
 
-    each($tableElements, (_, tableElement) => {
-      $errorMessageElement = that._createErrorRow(error, $tableElements);
-      $firstErrorRow = $firstErrorRow || $errorMessageElement;
+    const $tableElements: dxElementWrapper = viewElement.getTableElements();
+    let $firstErrorRow: dxElementWrapper | undefined;
 
-      if (rowIndex >= 0) {
-        const $row = viewElement._getRowElements($(tableElement)).eq(rowIndex);
-        that.removeErrorRow($row.next());
+    each($tableElements, (_, tableElement: Element): void => {
+      const $errorMessageElement = this._createErrorRow(error, $tableElements);
+      $firstErrorRow = $firstErrorRow ?? $errorMessageElement;
+
+      if (hasTargetRow) {
+        const $row = viewElement._getRowElements($(tableElement)).eq(targetRowIndex);
+        this.removeErrorRow($row.next());
         $errorMessageElement.insertAfter($row);
       } else {
         const $tbody = $(tableElement).children('tbody');
         const rowElements = $tbody.children('tr');
-        if (that._columnHeadersView.isVisible()) {
-          that.removeErrorRow(rowElements.last());
+        if (this._columnHeadersView.isVisible()) {
+          this.removeErrorRow(rowElements.last());
           $(tableElement).append($errorMessageElement);
         } else {
-          that.removeErrorRow(rowElements.first());
+          this.removeErrorRow(rowElements.first());
           $tbody.first().prepend($errorMessageElement);
         }
       }
@@ -136,19 +176,28 @@ export class ErrorHandlingController extends modules.ViewController {
     return $firstErrorRow;
   }
 
-  public removeErrorRow($row?) {
-    if (!$row) {
-      const $columnHeaders = this._columnHeadersView && this._columnHeadersView.element();
-      $row = $columnHeaders && $columnHeaders.find(`.${ERROR_ROW_CLASS}`);
-      if (!$row || !$row.length) {
-        const $rowsViewElement = this._rowsView.element();
-        $row = $rowsViewElement && $rowsViewElement.find(`.${ERROR_ROW_CLASS}`);
-      }
+  private findErrorRows(): dxElementWrapper | undefined {
+    const $columnHeaders: dxElementWrapper | undefined = this._columnHeadersView?.element();
+    const $headerErrorRows = $columnHeaders?.find(`.${ERROR_ROW_CLASS}`);
+
+    if ($headerErrorRows?.length) {
+      return $headerErrorRows;
     }
-    $row && $row.hasClass(ERROR_ROW_CLASS) && $row.remove();
+
+    const $rowsViewElement: dxElementWrapper | undefined = this._rowsView?.element();
+
+    return $rowsViewElement?.find(`.${ERROR_ROW_CLASS}`);
   }
 
-  public optionChanged(args) {
+  public removeErrorRow($row?: dxElementWrapper): void {
+    const $errorRow = $row ?? this.findErrorRows();
+
+    if ($errorRow?.hasClass(ERROR_ROW_CLASS)) {
+      $errorRow.remove();
+    }
+  }
+
+  public optionChanged(args: OptionChanged): void {
     switch (args.name) {
       case 'errorRowEnabled':
         args.handled = true;
@@ -158,45 +207,7 @@ export class ErrorHandlingController extends modules.ViewController {
     }
   }
 
-  public showToastError(message: string) {
+  public showToastError(message: string): void {
     this._toastViewController.showToast(message, { type: 'error' });
   }
 }
-
-const data = (Base: ModuleType<DataController>) => class ErrorHandlingDataControllerExtends extends Base {
-  public init() {
-    super.init();
-
-    this.dataErrorOccurred.add((error, $popupContent) => {
-      if (this.option('errorRowEnabled')) {
-        this._errorHandlingController.renderErrorRow(error, undefined, $popupContent);
-      }
-    });
-
-    this.changed.add((e) => {
-      if (e && e.changeType === 'loadError') {
-        return;
-      }
-
-      if (this._editingController && !this._editingController.hasChanges()) {
-        this._errorHandlingController?.removeErrorRow?.();
-      }
-    });
-  }
-};
-
-export const errorHandlingModule = {
-  defaultOptions() {
-    return {
-      errorRowEnabled: true,
-    };
-  },
-  controllers: {
-    errorHandling: ErrorHandlingController,
-  },
-  extenders: {
-    controllers: {
-      data,
-    },
-  },
-};
