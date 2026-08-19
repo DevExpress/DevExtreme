@@ -56,7 +56,7 @@ const loadResult = (rows: Row[], url: string): unknown => {
   };
 };
 
-const pathPattern = (path: string): RegExp => new RegExp(`${path}(?:\\?|$)`, 'i');
+const pathPattern = (path: string): RegExp => new RegExp(`${path}/?(?:\\?|$)`, 'i');
 
 const isValidMethods = (req: MockRequest, methods: string[]): boolean => methods
   .includes(req.method.toLowerCase());

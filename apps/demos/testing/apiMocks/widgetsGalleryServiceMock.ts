@@ -34,6 +34,8 @@ import { dataGridRowReorderingTasksHandlers } from './handlers/dataGridRowReorde
 import { dataGridSemanticSearchGetHandler } from './handlers/dataGridSemanticSearch';
 import { dndBetweenGridsHandlers } from './handlers/dndBetweenGrids';
 import { dataGridEmployeesValidationHandlers } from './handlers/dataGridEmployeesValidation';
+import { dataGridCollaborativeEditingHandlers } from './handlers/dataGridCollaborativeEditing';
+import { dataGridStatesLookupHandler } from './handlers/dataGridStatesLookup';
 import { remoteValidationCheckUniqueEmailAddressHandler } from './handlers/remoteValidation';
 import { treeListDataHandler } from './handlers/treeListData';
 import { treeListTasksTaskEmployeesHandler } from './handlers/treeListTasks/taskEmployees';
@@ -137,6 +139,10 @@ const handlers: MockHandler[] = [
   ...dndBetweenGridsHandlers,
   // GET/POST/PUT/DELETE /api/DataGridEmployeesValidation
   ...dataGridEmployeesValidationHandlers,
+  // GET/POST/PUT/DELETE /api/DataGridCollaborativeEditing
+  ...dataGridCollaborativeEditingHandlers,
+  // GET /api/DataGridStatesLookup (DataGrid CollaborativeEditing lookup)
+  dataGridStatesLookupHandler,
   // GET /RemoteValidation/CheckUniqueEmailAddress?id=&email=
   remoteValidationCheckUniqueEmailAddressHandler,
   // GET /api/treeListData?parentIds=
