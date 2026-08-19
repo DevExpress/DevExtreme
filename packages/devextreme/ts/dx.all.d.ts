@@ -23405,7 +23405,7 @@ declare module DevExpress.ui {
     /**
      * [descr:OsmTileServerConfig]
      */
-    export interface OsmTileServerConfig {
+    export type OsmTileServerConfig = {
       /**
        * [descr:OsmTileServerConfig.url]
        */
@@ -23422,7 +23422,7 @@ declare module DevExpress.ui {
        * [descr:OsmTileServerConfig.maxZoom]
        */
       maxZoom?: number;
-    }
+    };
     export type Properties = dxMapOptions;
     /**
      * [descr:_ui_map_ReadyEvent]

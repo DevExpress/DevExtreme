@@ -25,7 +25,7 @@ export type MapType = 'hybrid' | 'roadmap' | 'satellite';
  * @public
  */
 // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
-export interface OsmTileServerConfig {
+export type OsmTileServerConfig = {
   /**
    * @docid
    */
@@ -43,7 +43,7 @@ export interface OsmTileServerConfig {
    * @docid
    */
   maxZoom?: number;
-}
+};
 
 /**
  * @docid
