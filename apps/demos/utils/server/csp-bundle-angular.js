@@ -822,7 +822,7 @@ module.exports = {
   ANGULAR_ZONE_SCRIPT,
   angularSingleCopyPlugin,
   antiForgeryPlugin,
-  systemJsQuirksPlugin,
+  globalizePlugin,
   devextremeAngularSnakeCasePlugin,
   devextremeDistRedirectPlugin,
   devextremeRedirectPlugin,
