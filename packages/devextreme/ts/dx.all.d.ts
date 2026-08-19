@@ -23401,7 +23401,7 @@ declare module DevExpress.ui {
     export type OsmTileServer =
       | string
       | OsmTileServerConfig
-      | ((type: MapType) => string | OsmTileServerConfig | null | undefined);
+      | ((type: MapType) => string | OsmTileServerConfig | undefined);
     /**
      * [descr:OsmTileServerConfig]
      */

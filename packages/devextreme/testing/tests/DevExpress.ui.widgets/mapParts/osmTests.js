@@ -307,13 +307,13 @@ QUnit.module('OSM: tile server', moduleConfig, () => {
             }
         });
     });
-    QUnit.test('tileServer callback can return null on initialization', function(assert) {
+    QUnit.test('tileServer callback can return undefined on initialization', function(assert) {
         const done = assert.async();
         const log = sinon.stub(errors, 'log');
         $('#map').dxMap({
             provider: 'osm',
             providerConfig: {
-                tileServer: () => null
+                tileServer: () => undefined
             },
             onReady: () => {
                 assert.ok(log.calledWith('W1030'), 'W1030 is logged');
@@ -499,7 +499,7 @@ QUnit.module('OSM: tile server', moduleConfig, () => {
                 tileServer: type => type === 'roadmap' ? {
                     url: 'https://roadmap.example.com/{z}/{x}/{y}.png',
                     attribution: 'Example attribution'
-                } : null
+                } : undefined
             },
             onReady: () => initialized.resolve()
         }).dxMap('instance');

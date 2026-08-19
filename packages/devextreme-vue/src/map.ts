@@ -252,7 +252,7 @@ const DxProviderConfigConfig = {
   },
   props: {
     mapId: String,
-    tileServer: [Object, Function, String] as PropType<OsmTileServer | (((type: MapType) => string | OsmTileServerConfig | null | undefined)) | OsmTileServerConfig | string>,
+    tileServer: [Object, Function, String] as PropType<OsmTileServer | (((type: MapType) => string | OsmTileServerConfig | undefined)) | OsmTileServerConfig | string>,
     useAdvancedMarkers: Boolean
   }
 };
