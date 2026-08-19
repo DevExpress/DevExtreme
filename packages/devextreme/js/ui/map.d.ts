@@ -52,7 +52,7 @@ export type OsmTileServerConfig = {
 // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifiers
 export type OsmTileServer = string | OsmTileServerConfig
 // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
-| ((type: MapType) => string | OsmTileServerConfig | null | undefined);
+| ((type: MapType) => string | OsmTileServerConfig | undefined);
 
 /**
  * @docid _ui_map_ClickEvent
