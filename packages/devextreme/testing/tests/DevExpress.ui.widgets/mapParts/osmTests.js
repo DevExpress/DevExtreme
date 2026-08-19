@@ -169,6 +169,37 @@ QUnit.module('OSM: map loading', moduleConfig, () => {
             done();
         });
     });
+    QUnit.test('map initializes after OpenLayers is loaded and repaint is called', function(assert) {
+        const done = assert.async();
+        delete window.ol;
+        const map = $('#map').dxMap({
+            provider: 'osm',
+            providerConfig: {
+                tileServer: {
+                    url: 'https://tiles.example.com/{z}/{x}/{y}.png',
+                    attribution: 'Example attribution'
+                }
+            }
+        }).dxMap('instance');
+
+        map._lastAsyncAction.then(() => {
+            assert.ok(false, 'initialization should reject');
+            done();
+        }, error => {
+            assert.strictEqual(error.message, errors.Error('E1069').message, 'E1069 is returned');
+
+            window.ol = openLayersMock;
+            map.repaint();
+
+            map._lastAsyncAction.then(() => {
+                assert.ok(openLayersMock.mapCreated, 'OpenLayers creates the map after repaint');
+                done();
+            }, repaintError => {
+                assert.ok(false, `repaint failed: ${repaintError.message}`);
+                done();
+            });
+        });
+    });
     QUnit.test('load rejects with E1069 when the OpenLayers ImageTile API is missing', function(assert) {
         const done = assert.async();
         const provider = createProvider();
