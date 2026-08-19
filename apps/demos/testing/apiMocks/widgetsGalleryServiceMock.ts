@@ -22,6 +22,8 @@ import { dataGridWebApiOrdersHandlers } from './handlers/dataGridWebApi/orders';
 import { dataGridWebApiCustomersLookupHandler } from './handlers/dataGridWebApi/customersLookup';
 import { dataGridWebApiShippersLookupHandler } from './handlers/dataGridWebApi/shippersLookup';
 import { dataGridWebApiOrderDetailsHandler } from './handlers/dataGridWebApi/orderDetails';
+import { treeListTasksTasksHandlers } from './handlers/treeListTasks/tasks';
+import { treeListTasksTaskEmployeesHandler } from './handlers/treeListTasks/taskEmployees';
 
 // The AI-column endpoint is a cross-origin POST with non-simple headers
 // (api-key, content-type), so the browser issues a CORS preflight. Advertise
@@ -88,6 +90,13 @@ const handlers: MockHandler[] = [
   // PUT /api/DataGridWebApi/UpdateOrder
   // DELETE /api/DataGridWebApi/DeleteOrder
   ...dataGridWebApiOrdersHandlers,
+  // GET /api/TreeListTasks/TaskEmployees
+  treeListTasksTaskEmployeesHandler,
+  // GET /api/TreeListTasks/Tasks
+  // POST /api/TreeListTasks/InsertTask
+  // PUT /api/TreeListTasks/UpdateTask
+  // DELETE /api/TreeListTasks/DeleteTask
+  ...treeListTasksTasksHandlers,
 ];
 
 export const widgetsGalleryServiceMock = handlers.reduce(
