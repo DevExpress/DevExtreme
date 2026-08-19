@@ -373,10 +373,9 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
       /**
        * @docid
        * @public
-       * @default undefined
        */
       // eslint-disable-next-line spellcheck/spell-checker -- OpenStreetMap API identifier
-      tileServer?: OsmTileServer | undefined;
+      tileServer?: OsmTileServer;
     };
     /**
      * @docid
