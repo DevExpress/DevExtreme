@@ -1,8 +1,6 @@
 /* eslint-disable global-require, import/no-dynamic-require */
 
-// Bundles every Angular demo into csp-bundled-demos/<Widget>/<Demo>/Angular/ via
-// AOT (@angular/build/private's createCompilerPlugin). Kept separate from
-// csp-bundle.js, which delegates here for --framework=Angular.
+// Bundles every Angular demo via AOT; csp-bundle.js delegates here for --framework=Angular.
 
 const path = require('path');
 const fs = require('fs');
@@ -14,9 +12,6 @@ const DEMOS_APP_ROOT = path.resolve(__dirname, '..', '..');
 const REPO_ROOT = path.resolve(DEMOS_APP_ROOT, '..', '..');
 const SRC_DEMOS_DIR = path.join(DEMOS_APP_ROOT, 'Demos');
 
-// Write bundle.js next to each demo's own source (the real, only demo tree)
-// instead of into the csp-bundled-demos/ side directory used by the CSP-only
-// check. This is what CI's demo-build step uses in production.
 const IN_PLACE = process.env.BUNDLE_IN_PLACE === '1';
 const OUT_ROOT = IN_PLACE ? SRC_DEMOS_DIR : path.join(DEMOS_APP_ROOT, 'csp-bundled-demos');
 const NODE_MODULES = path.join(DEMOS_APP_ROOT, 'node_modules');
@@ -34,13 +29,12 @@ const RETRY_CONCURRENCY = (() => {
   return 2;
 })();
 
-// Demos per esbuild build. Larger batches amortize the per-build Angular
-// compilation setup but are memory-bound — too large OOMs the CI runner. 12 is
-// the safe default; raise via CSP_BUNDLE_BATCH_SIZE only on a high-RAM box.
+// Larger batches OOM the CI runner.
+const DEFAULT_SAFE_BATCH_SIZE = 12;
 const BATCH_SIZE = (() => {
   const fromEnv = parseInt(process.env.CSP_BUNDLE_BATCH_SIZE, 10);
   if (fromEnv > 0) return fromEnv;
-  return 12;
+  return DEFAULT_SAFE_BATCH_SIZE;
 })();
 
 const BATCH_CONCURRENCY = (() => {
@@ -49,11 +43,8 @@ const BATCH_CONCURRENCY = (() => {
   return 1;
 })();
 
-// Optional substring filter for local smoke tests, e.g. CSP_BUNDLE_FILTER=Common/FormsOverview.
 const FILTER = (process.env.CSP_BUNDLE_FILTER || '').trim();
 
-// Optional round-robin sharding across parallel CI jobs (CSP_SHARD_TOTAL /
-// CSP_SHARD_INDEX, 1-based).
 const SHARD_TOTAL = Math.max(1, parseInt(process.env.CSP_SHARD_TOTAL, 10) || 1);
 const SHARD_INDEX = (() => {
   const n = parseInt(process.env.CSP_SHARD_INDEX, 10);
@@ -71,6 +62,9 @@ function applyShard(demos) {
 const SHARED_TSCONFIG_TEMPLATE = path.join(__dirname, 'tsconfig.csp-bundle-angular.json');
 const GENERATED_TSCONFIG_DIR = path.join(__dirname, '.csp-bundle-angular-tsconfigs');
 const ANGULAR_ZONE_SCRIPT = '../../../../node_modules/zone.js/bundles/zone.umd.js';
+// esbuild's own code-splitting output (shared chunks across a batch's demos) — a plain
+// build artifact directory, wiped and regenerated on every run.
+const CHUNKS_DIRNAME = '_chunks';
 
 // @angular/build is transitive via @angular-devkit/build-angular; resolve through it for pnpm.
 function resolveAngularBuildPrivate() {
@@ -81,8 +75,7 @@ function resolveAngularBuildPrivate() {
   return require(require.resolve('@angular/build/private', { paths: [buildAngularDir] }));
 }
 
-// Per demo, write a tsconfig that extends the shared template and lists the entry
-// in `files` (ngc rejects empty files+include, TS18002). Slug avoids collisions.
+// ngc rejects empty files+include (TS18002), so `files` always lists the entry.
 function writeTsconfig(name, entryPaths) {
   fs.mkdirSync(GENERATED_TSCONFIG_DIR, { recursive: true });
   const slug = name.replace(/[\\/]/g, '__').replace(/[^a-zA-Z0-9_.-]/g, '_');
@@ -104,8 +97,6 @@ function writeDemoTsconfig(entryPath) {
   return writeTsconfig(path.relative(REPO_ROOT, entryPath), [entryPath]);
 }
 
-// A couple of demos add their own markup next to <demo-app> (Charts/AxisLabelCustomization
-// keeps its SVG filter <defs> there), so the body is carried over rather than fixed.
 const DEFAULT_BODY_INNER = `<div class="demo-container">
       <demo-app>Loading...</demo-app>
     </div>`;
@@ -175,10 +166,8 @@ function findDemos() {
   return out;
 }
 
-// ---- CSS asset shim infrastructure ----
-// Demo component CSS uses url() paths that assumed inline injection (resolved
-// against the document URL). Under AOT they resolve against the CSS file location
-// and fall one dir short, so we symlink the asset at the "wrong" location.
+// Under AOT, component CSS url() paths resolve one dir short of where they used
+// to (against the CSS file, not the document) — symlink the asset at the wrong path.
 const ASSET_EXT_RE = /\.(png|jpe?g|gif|svg|webp|ico|avif)(\?[^)'"\s]*)?$/i;
 const URL_RE = /url\(\s*(['"]?)([^)'"]+?)\1\s*\)/g;
 
@@ -214,7 +203,6 @@ function discoverComponentStyleFiles(tsFiles) {
   return Array.from(result);
 }
 
-// Build a deduplicated list of (wrongPath -> realPath) asset shims across all demos.
 function computeGlobalShims(allCssFiles) {
   const seen = new Map(); // wrongPath -> { rescued }
   for (const cssFile of allCssFiles) {
@@ -272,18 +260,14 @@ function removeShims(installed) {
   }
 }
 
-// ---- templateUrl / styleUrls patcher ----
-// Rewrite component resource paths to `./<basename>.<ext>` (sibling of the .ts)
-// and feed the patched copy (written next to the original so its relative
-// imports still resolve) via fileReplacements. Also prepend @ts-nocheck so
-// JIT-era demo code compiles under AOT.
+// Demo components use SystemJS-era templateUrl/styleUrls paths that resolve wrong
+// under AOT; patch to `./<basename>.<ext>` and feed the copy via fileReplacements.
 const PATCHED_TS_PREFIX = '.csp-bundle-angular-patched.';
 const TEMPLATE_URL_RE = /templateUrl\s*:\s*([`'"])([^`'"]+)\1/g;
 const STYLE_URLS_INLINE_RE = /styleUrls\s*:\s*\[\s*([`'"])([^`'"]+)\1\s*\]/g;
 const allPatchedTsFiles = new Set();
 
 function aotRelativeFor(tsFile, originalSpec) {
-  // The real resource is a sibling of the .ts with the same basename.
   const ext = path.extname(originalSpec);
   if (!ext) return null;
   const tsBase = path.basename(tsFile, '.ts');
@@ -338,8 +322,7 @@ function sweepStalePatchedTsFiles(rootDir) {
   }
 }
 
-// Collect every .ts file under the demo's app/ subtree (all need @ts-nocheck),
-// excluding patch siblings so re-runs are idempotent.
+// Excludes patch siblings so re-runs stay idempotent.
 function findDemoTsFiles(rootDir) {
   const out = [];
   function walk(dir) {
@@ -360,7 +343,6 @@ function findDemoTsFiles(rootDir) {
   return out;
 }
 
-// Map the bare `anti-forgery` specifier to the shared fetch override.
 const ANTI_FORGERY_PATH = path.join(DEMOS_APP_ROOT, 'shared', 'anti-forgery', 'fetch-override.js');
 const antiForgeryPlugin = {
   name: 'csp-bundle-angular:anti-forgery',
@@ -369,15 +351,12 @@ const antiForgeryPlugin = {
   },
 };
 
-// ---- single @angular copy ----
-// The pnpm store holds several @angular/core versions, so an importer-relative
-// resolve can bundle two — two DI systems (NG0203/NG05100/NG0300). Resolve every
-// @angular/* from a single base (apps/demos) so the bundle shares one copy.
+// Resolves every @angular/* from a single base so the bundle shares one copy —
+// otherwise two DI systems can end up bundled (NG0203/NG05100/NG0300).
 const angularSingleCopyPlugin = {
   name: 'csp-bundle-angular:single-angular-copy',
   setup(build) {
     build.onResolve({ filter: /^@angular\// }, async (args) => {
-      // Re-entry guard: our own build.resolve() below re-triggers this hook.
       if (args.pluginData && args.pluginData.ngDeduped) return null;
       const resolved = await build.resolve(args.path, {
         kind: args.kind,
@@ -399,18 +378,15 @@ function isFileCached(filePath) {
   return fileExistsCache.get(filePath);
 }
 
-// ---- devextreme path redirect plugin ----
-// apps/demos/node_modules/devextreme only ships bundles/; redirect to the real
-// ESM modules under packages/devextreme/artifacts.
-const DEVEXTREME_ESM_ROOT = path.join(
-  REPO_ROOT, 'packages', 'devextreme', 'artifacts', 'transpiled-esm-npm', 'esm',
+// apps/demos/node_modules/devextreme only ships bundles/; redirect to the real CJS modules.
+const DEVEXTREME_CJS_ROOT = path.join(
+  REPO_ROOT, 'packages', 'devextreme', 'artifacts', 'transpiled-esm-npm', 'cjs',
 );
 const devextremeRedirectPlugin = {
   name: 'csp-bundle-angular:devextreme-esm-redirect',
   setup(build) {
     build.onResolve({ filter: /^devextreme(\/.*)?$/ }, (args) => {
       const sub = args.path === 'devextreme' ? '' : args.path.slice('devextreme/'.length);
-      // Try the path as-is first (explicit extensions), then implicit .js/index.js/.mjs.
       const candidates = sub
         ? [
           path.join(DEVEXTREME_ESM_ROOT, sub),
@@ -429,8 +405,8 @@ const devextremeRedirectPlugin = {
   },
 };
 
-// Re-resolve snake_case devextreme-angular/ui/* imports (e.g. html_editor) to the
-// kebab-case form the npm dist actually ships.
+// Re-resolves snake_case devextreme-angular/ui/* imports (e.g. html_editor) to
+// the kebab-case form the npm dist actually ships.
 const devextremeAngularSnakeCasePlugin = {
   name: 'csp-bundle-angular:devextreme-angular-snake-case',
   setup(build) {
@@ -449,8 +425,7 @@ const devextremeAngularSnakeCasePlugin = {
   },
 };
 
-// Redirect devextreme-dist/js/* (VectorMap data) to the real files under
-// packages/devextreme/artifacts/js — the dist package is near-empty.
+// devextreme-dist/js is near-empty — redirect VectorMap data to the real artifacts/js files.
 const DEVEXTREME_ARTIFACTS_JS = path.join(REPO_ROOT, 'packages', 'devextreme', 'artifacts', 'js');
 const devextremeDistRedirectPlugin = {
   name: 'csp-bundle-angular:devextreme-dist-redirect',
@@ -514,8 +489,6 @@ function makeCompilerPlugin(createCompilerPlugin, tsconfig, fileReplacements) {
 }
 
 function prepareDemo(demo) {
-  // Patch every .ts in the demo and feed the copies via fileReplacements; point
-  // the entry (which bypasses resolveModuleNames) at its patched copy directly.
   const fileReplacements = {};
   for (const tsFile of findDemoTsFiles(path.join(demo.srcDir, 'app'))) {
     const patched = patchComponentTs(tsFile);
@@ -559,13 +532,19 @@ function makeBuildOptions({
     outdir,
     bundle: true,
     format: 'esm',
+    // A batch's demos share one esbuild build (see bundleDemoBatch); splitting lets esbuild
+    // find and extract code common across its entry points into a shared chunk automatically
+    // — no custom externalization plugin involved, so nothing can shadow the AOT compiler
+    // plugin's own need to read every file's real source (see git history for what happens
+    // when something does: NG0919/`void 0` dependency arrays). Content-hashed and a no-op for
+    // a single-entry (non-batched) build, so safe to always set.
+    splitting: true,
+    chunkNames: `${CHUNKS_DIRNAME}/[hash]`,
     platform: 'browser',
     target: 'es2022',
     mainFields: ['es2020', 'es2015', 'browser', 'module', 'main'],
     conditions: ['es2020', 'es2015', 'module'],
-    // Resolve bare `globalize` to the core build (as the React/Vue bundler does).
-    // Its package main (node-main.js) eagerly requires globalize/plural, which
-    // demands plurals-type-cardinal CLDR data the demos don't load (E_MISSING_CLDR).
+    // globalize's package main eagerly requires plural CLDR data the demos don't load (E_MISSING_CLDR).
     alias: {
       globalize: path.join(NODE_MODULES, 'globalize', 'dist', 'globalize.js'),
     },
@@ -620,9 +599,7 @@ async function bundleDemo(demo, createCompilerPlugin, destDirOverride) {
     return { ok: false, reason: (err && err.message) || String(err) };
   }
 
-  // The Angular AOT compiler plugin can list a component style output in the
-  // metafile that it ends up inlining instead of actually emitting (no file on
-  // disk) — filter to outputs that are really there before linking them.
+  // The AOT compiler plugin can list a style output it actually inlined instead of emitting.
   const outputs = Object.keys((result.metafile && result.metafile.outputs) || {})
     .filter((o) => fs.existsSync(path.resolve(DEMOS_APP_ROOT, o)));
   const localJsFiles = sortJsFiles(outputs.filter((o) => o.endsWith('.js')).map((o) => path.basename(o)));
@@ -703,9 +680,7 @@ async function main() {
   if (FILTER) console.log(`Filter: ${FILTER}`);
   console.log('');
 
-  // Wipe previous Angular output; leave React/Vue subtrees alone. In-place
-  // mode writes into the demo's own source folder, which must NOT be wiped
-  // (that would delete the demo's actual source, not just old output).
+  // IN_PLACE writes into the demo's own source folder, which must not be wiped.
   if (!IN_PLACE && fs.existsSync(OUT_ROOT)) {
     const existingWidgets = fs.readdirSync(OUT_ROOT, { withFileTypes: true }).filter((w) => w.isDirectory());
     for (const widget of existingWidgets) {
@@ -720,6 +695,13 @@ async function main() {
   fs.mkdirSync(OUT_ROOT, { recursive: true });
   if (fs.existsSync(GENERATED_TSCONFIG_DIR)) {
     fs.rmSync(GENERATED_TSCONFIG_DIR, { recursive: true, force: true });
+  }
+  // Shared across every demo's own build (see makeBuildOptions' chunkNames) — not owned by
+  // any single demo's own folder, so not covered by the per-demo wipe above; always safe to
+  // fully regenerate since chunk filenames are content-hashed.
+  const chunksDir = path.join(OUT_ROOT, CHUNKS_DIRNAME);
+  if (fs.existsSync(chunksDir)) {
+    fs.rmSync(chunksDir, { recursive: true, force: true });
   }
   sweepStalePatchedTsFiles(SRC_DEMOS_DIR);
 
@@ -825,11 +807,6 @@ if (require.main === module) {
   });
 }
 
-// The exports below (beyond `main`) exist so utils/build/build-angular-demo.js
-// can drive a single, in-place demo build (e.g. for the dev server's
-// lazy-build-on-request path) without duplicating this file's AOT/asset-shim
-// logic — they're the same internals `main()` uses, just with `destDir`
-// overridable per call instead of hardcoded to OUT_ROOT.
 module.exports = {
   main,
   resolveAngularBuildPrivate,
@@ -843,4 +820,12 @@ module.exports = {
   bundleDemo,
   buildHtml,
   ANGULAR_ZONE_SCRIPT,
+  angularSingleCopyPlugin,
+  antiForgeryPlugin,
+  systemJsQuirksPlugin,
+  devextremeAngularSnakeCasePlugin,
+  devextremeDistRedirectPlugin,
+  devextremeRedirectPlugin,
+  NODE_MODULES,
+  DEMOS_APP_ROOT,
 };

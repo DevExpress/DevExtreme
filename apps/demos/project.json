@@ -109,13 +109,16 @@
       "options": {
         "commands": [
           "pnpm nx build devextreme",
-          "pnpm nx run-many --targets=pack --projects=devextreme-angular,devextreme-react,devextreme-vue --parallel"
+          "pnpm nx run-many --targets=pack --projects=devextreme-angular,devextreme-react,devextreme-vue --parallel",
+          "pnpm run build-vendor-bundles"
         ],
         "parallel": false,
         "cwd": "{projectRoot}"
       },
       "inputs": [
-        "default"
+        "default",
+        "{projectRoot}/utils/server/build-vendor-bundles.js",
+        "{projectRoot}/utils/server/vendor-bundle.js"
       ]
     }
   },

@@ -1,6 +1,4 @@
-// Pre-bundles React/Vue demos with esbuild for the CSP check, so it validates the
-// production CSP profile. Output: apps/demos/csp-bundled-demos/<Widget>/<Name>/<Framework>/index.html.
-// Angular is delegated to csp-bundle-angular.js.
+// Bundles React/Vue demos with esbuild. Angular is delegated to csp-bundle-angular.js.
 
 const path = require('path');
 const fs = require('fs');
@@ -11,9 +9,6 @@ const { extractDemoHeadExtras, extractDemoBodyInner } = require('./demo-html');
 const FRAMEWORK_ARG = (process.argv.find((a) => a.startsWith('--framework=')) || '').split('=')[1];
 const FRAMEWORK = FRAMEWORK_ARG || process.env.CSP_FRAMEWORKS || 'React';
 
-// ReactJs is the generated JavaScript twin of each React demo (see
-// utils/ts-to-js-converter) — same JSX sources with .js extensions, which the
-// shared '.js': 'jsx' loader already covers, so it needs no separate handling.
 const SUPPORTED = ['React', 'ReactJs', 'Vue', 'Angular'];
 if (!SUPPORTED.includes(FRAMEWORK)) {
   console.log(`csp-bundle: framework ${FRAMEWORK} is not supported (only ${SUPPORTED.join(', ')}). Nothing to do.`);
@@ -22,9 +17,6 @@ if (!SUPPORTED.includes(FRAMEWORK)) {
 
 const IS_ANGULAR = FRAMEWORK === 'Angular';
 
-// Write bundle.js/bundle.css next to each demo's own source (the real, only
-// demo tree) instead of into the csp-bundled-demos/ side directory used by the
-// CSP-only check. This is what CI's demo-build step uses in production.
 const IN_PLACE = process.env.BUNDLE_IN_PLACE === '1';
 
 const DEMOS_APP_ROOT = path.join(__dirname, '..', '..');
@@ -38,8 +30,6 @@ const CONCURRENCY = (() => {
   return Math.max(4, (os.cpus() || []).length - 1);
 })();
 
-// Optional round-robin sharding across parallel CI jobs (CSP_SHARD_TOTAL /
-// CSP_SHARD_INDEX, 1-based).
 const SHARD_TOTAL = Math.max(1, parseInt(process.env.CSP_SHARD_TOTAL, 10) || 1);
 const SHARD_INDEX = (() => {
   const n = parseInt(process.env.CSP_SHARD_INDEX, 10);
@@ -58,7 +48,6 @@ function findDemos() {
   const out = [];
   if (!fs.existsSync(SRC_DEMOS_DIR)) return out;
 
-  // Optional substring filter for local smoke tests: CSP_BUNDLE_FILTER=Button/Icons
   const filter = (process.env.CSP_BUNDLE_FILTER || '').trim();
 
   const widgets = fs.readdirSync(SRC_DEMOS_DIR, { withFileTypes: true })
@@ -86,7 +75,6 @@ function findEntry(srcDir) {
   return null;
 }
 
-// Treat imports of missing .css files as empty.
 const ignoreMissingCssPlugin = {
   name: 'csp-bundle:ignore-missing-css',
   setup(build) {
@@ -104,7 +92,6 @@ const ignoreMissingCssPlugin = {
   },
 };
 
-// Resolve demo-specific bare specifiers (anti-forgery, globalize/<sub>) for esbuild.
 const ANTI_FORGERY_PATH = path.join(DEMOS_APP_ROOT, 'shared', 'anti-forgery', 'fetch-override.js');
 const GLOBALIZE_BASE = path.join(NODE_MODULES, 'globalize', 'dist', 'globalize');
 
@@ -122,16 +109,14 @@ const demoAliasesPlugin = {
   },
 };
 
-// Force a single devextreme copy: collapse resolved cjs paths to their esm twin.
-// Mixing both (esm via devextreme-react, cjs via aspnet-data require) bundles two
-// copies of the Class/callBase system and infinitely recurses in the data path.
+// Collapse resolved cjs devextreme paths to their esm twin — mixing both copies
+// the Class/callBase system and infinitely recurses in the data path.
 const DX_CJS_SEG = `${path.sep}devextreme${path.sep}cjs${path.sep}`;
 const DX_ESM_SEG = `${path.sep}devextreme${path.sep}esm${path.sep}`;
 const devextremeDedupePlugin = {
   name: 'csp-bundle:devextreme-single-copy',
   setup(build) {
     build.onResolve({ filter: /^devextreme(\/.*)?$/ }, async (args) => {
-      // Re-entry guard: our own build.resolve() below re-triggers this hook.
       if (args.pluginData && args.pluginData.dxDeduped) return null;
       const resolved = await build.resolve(args.path, {
         kind: args.kind,
@@ -151,11 +136,6 @@ const devextremeDedupePlugin = {
   },
 };
 
-// Vue's esbuild plugin is safe to reuse across builds, so it's memoized per
-// process rather than tied to the CLI's single module-level FRAMEWORK — lets
-// getSharedOptions() be called for either framework from a long-lived process
-// (e.g. the dev server's lazy build-on-request path), not just this CLI's
-// single-framework-per-run invocation.
 let vuePluginInstance = null;
 function getVuePlugin() {
   if (!vuePluginInstance) {
@@ -168,6 +148,8 @@ function getVuePlugin() {
 }
 
 function getSharedOptions(framework) {
+  // eslint-disable-next-line global-require
+  const { vendorGlobalPlugin } = require('./vendor-bundle');
   return {
     bundle: true,
     minify: false,
@@ -183,7 +165,6 @@ function getSharedOptions(framework) {
     alias: {
       react: path.join(NODE_MODULES, 'react'),
       'react-dom': path.join(NODE_MODULES, 'react-dom'),
-      // Alias bare 'globalize' to the browser build.
       globalize: path.join(NODE_MODULES, 'globalize', 'dist', 'globalize.js'),
     },
     define: {
@@ -193,6 +174,7 @@ function getSharedOptions(framework) {
     },
     logLevel: 'silent',
     plugins: [
+      vendorGlobalPlugin(framework),
       devextremeDedupePlugin,
       demoAliasesPlugin,
       ignoreMissingCssPlugin,
@@ -201,15 +183,13 @@ function getSharedOptions(framework) {
   };
 }
 
-// Reuse the dev <body> markup (minus its <script> tags) so the bundle
-// renders into the same mount node — a few demos don't use `#app`.
 const DEFAULT_BODY_INNER = `<div class="demo-container">
       <div id="app"></div>
     </div>`;
 
-function buildHtml({ jsFile, cssFiles, srcDir }) {
-  // Theme first, then whatever the demo declared (dx-gantt.css, font-awesome, …),
-  // then the demo's own styles last — the cascade order the dev page had.
+function buildHtml({
+  jsFile, cssFiles, srcDir, framework,
+}) {
   const headLinks = [
     '<link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme-dist/css/dx.light.css" />',
     ...extractDemoHeadExtras(srcDir),
@@ -217,6 +197,10 @@ function buildHtml({ jsFile, cssFiles, srcDir }) {
   ].join('\n    ');
 
   const bodyInner = extractDemoBodyInner(srcDir) || DEFAULT_BODY_INNER;
+
+  // eslint-disable-next-line global-require
+  const { vendorScriptTag } = require('./vendor-bundle');
+  const vendorTag = vendorScriptTag(framework);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -229,15 +213,12 @@ function buildHtml({ jsFile, cssFiles, srcDir }) {
   </head>
   <body class="dx-viewport">
     ${bodyInner}
-    <script src="./${jsFile}"></script>
+    ${vendorTag ? `${vendorTag}\n    ` : ''}<script src="./${jsFile}"></script>
   </body>
 </html>
 `;
 }
 
-// Core esbuild step, parameterized by destination + framework so it can be
-// reused both for the CSP-check output (below) and for an in-place build that
-// writes bundle.js next to the demo's own source (see utils/build/).
 async function bundleDemoTo({ srcDir, destDir, framework }) {
   const entry = findEntry(srcDir);
   if (!entry) return { ok: false, reason: 'no entry point (index.tsx|ts|jsx|js)' };
@@ -264,8 +245,6 @@ async function bundleDemoTo({ srcDir, destDir, framework }) {
 
   if (jsFiles.length === 0) return { ok: false, reason: 'no JS output produced' };
 
-  // Standalone styles.css that the dev demo references separately (React) —
-  // normalized to bundle.css too, so callers only ever deal with one CSS name.
   const stylesSrc = path.join(srcDir, 'styles.css');
   if (cssFiles.length === 0 && fs.existsSync(stylesSrc)) {
     const dest = path.join(destDir, 'bundle.css');
@@ -283,7 +262,9 @@ async function bundleDemo(demo, { destDir: destDirOverride, framework = FRAMEWOR
 
   fs.writeFileSync(
     path.join(destDir, 'index.html'),
-    buildHtml({ jsFile: result.jsFiles[0], cssFiles: result.cssFiles, srcDir: demo.srcDir }),
+    buildHtml({
+      jsFile: result.jsFiles[0], cssFiles: result.cssFiles, srcDir: demo.srcDir, framework,
+    }),
   );
 
   return { ok: true };
@@ -308,9 +289,7 @@ async function main() {
   console.log(`Source: ${SRC_DEMOS_DIR}`);
   console.log(`Output: ${OUT_ROOT}\n`);
 
-  // Wipe only this framework's previous output so per-framework runs don't clash.
-  // In-place mode writes into the demo's own source folder, which must NOT be
-  // wiped (that would delete the demo's actual source, not just old output).
+  // IN_PLACE writes into the demo's own source folder, which must not be wiped.
   if (!IN_PLACE && fs.existsSync(OUT_ROOT)) {
     const existingWidgets = fs.readdirSync(OUT_ROOT, { withFileTypes: true })
       .filter((w) => w.isDirectory());
@@ -377,5 +356,5 @@ if (require.main === module) {
 }
 
 module.exports = {
-  bundleDemo, bundleDemoTo, findEntry, buildHtml, extractDemoBodyInner,
+  bundleDemo, bundleDemoTo, findEntry, buildHtml, extractDemoBodyInner, getSharedOptions,
 };
