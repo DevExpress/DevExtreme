@@ -21,6 +21,7 @@ import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_hand
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { VirtualItemsCount } from '@ts/grids/grid_core/virtual_data_loader/types';
 
 import type { ChangedEvent } from '../data_source_adapter/types';
 import gridCoreUtils from '../m_utils';
@@ -456,7 +457,16 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     return proxyDataSourceAdapterMethod(this, 'loadIfNeed', [...arguments]);
   }
 };
-export const data = (Base: ModuleType<DataController>) => class VirtualScrollingDataControllerExtender extends Base {
+
+export interface VirtualScrollingDataControllerExtension {
+  virtualItemsCount: () => VirtualItemsCount | undefined;
+}
+
+export const data = (
+  Base: ModuleType<DataController>,
+): ModuleType<
+  DataController & VirtualScrollingDataControllerExtension
+> => class VirtualScrollingDataControllerExtender extends Base {
   private _loadViewportParams: any;
 
   private _allItems: any;
@@ -1278,16 +1288,14 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     return viewportParams && viewportParams.skip + viewportParams.take;
   }
 
-  private virtualItemsCount() {
+  public virtualItemsCount(): VirtualItemsCount | undefined {
     const rowsScrollController = this._rowsScrollController;
 
     if (rowsScrollController) {
-      // @ts-expect-error
-      return rowsScrollController.virtualItemsCount.apply(rowsScrollController, arguments);
+      return rowsScrollController.virtualItemsCount();
     }
 
-    const dataSource = this._dataSource;
-    return dataSource?.virtualItemsCount.apply(dataSource, arguments);
+    return this._dataSource?.virtualItemsCount() as VirtualItemsCount | undefined;
   }
 
   public pageIndex(): number;
