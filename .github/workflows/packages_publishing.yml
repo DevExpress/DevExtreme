@@ -25,6 +25,7 @@ jobs:
   build:
     name: Build packages
     runs-on: windows-latest
+    environment: ${{ (inputs.tag == 'stable' && 'packages-publishing-stable') || 'packages-publishing-daily' }}
     outputs:
       packages: ${{ steps.filter.outputs.packages }}
     steps:
