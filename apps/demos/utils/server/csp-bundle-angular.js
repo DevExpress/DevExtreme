@@ -524,14 +524,20 @@ function prepareDemo(demo) {
   return { ...demo, effectiveEntry, fileReplacements };
 }
 
-// CodeSandbox-facing manifest of every npm package a demo needs. Angular has no shared
-// vendor bundle (see this file's header comment), so unlike React/Vue this is entirely
-// derived from the demo's own imports — plus zone.js, which every Angular demo needs but
-// none of them import (it's loaded via ANGULAR_ZONE_SCRIPT's <script> tag instead).
+// No Angular demo imports either: zone.js arrives via ANGULAR_ZONE_SCRIPT's <script> tag
+// (and is an optional peer, so the peer walk skips it), and reflect-metadata is what makes
+// constructor injection resolve for a consumer that compiles these demos in JIT mode.
+const ANGULAR_IMPLICIT_PACKAGES = ['zone.js', 'reflect-metadata'];
+
+// CodeSandbox-facing manifest of every npm package a demo needs — its own imports plus the
+// peers those pull in. See utils/server/vendor-bundle.js for how each is resolved.
 function writeDemoManifest(demo, destDir) {
   // eslint-disable-next-line global-require
   const { discoverDemoSpecifiers, resolvePackageVersions } = require('./vendor-bundle');
-  const packages = resolvePackageVersions([...discoverDemoSpecifiers(demo.srcDir), 'zone.js']);
+  const packages = resolvePackageVersions([
+    ...discoverDemoSpecifiers(demo.srcDir),
+    ...ANGULAR_IMPLICIT_PACKAGES,
+  ]);
   fs.writeFileSync(
     path.join(destDir, 'demo.manifest.json'),
     JSON.stringify({ framework: FRAMEWORK, packages }, null, 2),

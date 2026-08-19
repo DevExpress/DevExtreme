@@ -127,28 +127,57 @@ function nearestPackageJson(startFile) {
   }
 }
 
-function readVersion(pkgJsonPath) {
-  return JSON.parse(fs.readFileSync(pkgJsonPath, 'utf8')).version || null;
+function readJson(pkgJsonPath) {
+  return JSON.parse(fs.readFileSync(pkgJsonPath, 'utf8'));
 }
 
-const packageVersionCache = new Map();
-function resolvePackageVersion(pkgName, resolveDir) {
+// The fallback path is for packages whose `exports` map doesn't expose ./package.json.
+const packageJsonCache = new Map();
+function readPackageJson(pkgName, resolveDir) {
   const cacheKey = `${resolveDir}::${pkgName}`;
-  if (packageVersionCache.has(cacheKey)) return packageVersionCache.get(cacheKey);
+  if (packageJsonCache.has(cacheKey)) return packageJsonCache.get(cacheKey);
 
-  let version = null;
+  let pkg = null;
   try {
-    version = readVersion(require.resolve(`${pkgName}/package.json`, { paths: [resolveDir] }));
+    pkg = readJson(require.resolve(`${pkgName}/package.json`, { paths: [resolveDir] }));
   } catch {
     try {
       const pkgJsonPath = nearestPackageJson(require.resolve(pkgName, { paths: [resolveDir] }));
-      if (pkgJsonPath) version = readVersion(pkgJsonPath);
+      if (pkgJsonPath) pkg = readJson(pkgJsonPath);
     } catch {
-      version = null;
+      pkg = null;
     }
   }
-  packageVersionCache.set(cacheKey, version);
-  return version;
+  packageJsonCache.set(cacheKey, pkg);
+  return pkg;
+}
+
+function resolvePackageVersion(pkgName, resolveDir) {
+  const pkg = readPackageJson(pkgName, resolveDir);
+  return (pkg && pkg.version) || null;
+}
+
+// Import scanning can't find a peer dependency — nothing imports one — yet `devextreme` is
+// a peer of all three wrappers. Resolved to installed versions because the declared ranges
+// read `workspace:*`. Optional peers are skipped; callers add the ones they need.
+function addRequiredPeers(packages, resolveDir) {
+  const queue = Object.keys(packages);
+  const seen = new Set(queue);
+
+  while (queue.length > 0) {
+    const pkg = readPackageJson(queue.shift(), resolveDir);
+    const optional = (pkg && pkg.peerDependenciesMeta) || {};
+    for (const peer of Object.keys((pkg && pkg.peerDependencies) || {})) {
+      if (!seen.has(peer) && !(optional[peer] && optional[peer].optional)) {
+        seen.add(peer);
+        queue.push(peer);
+        const version = resolvePackageVersion(peer, resolveDir);
+        if (version) packages[peer] = version;
+      }
+    }
+  }
+
+  return packages;
 }
 
 function resolvePackageVersions(specifiers, resolveDir = DEMOS_APP_ROOT) {
@@ -163,7 +192,7 @@ function resolvePackageVersions(specifiers, resolveDir = DEMOS_APP_ROOT) {
       console.warn(`vendor-bundle: could not resolve a version for package "${pkgName}" (from specifier "${spec}")`);
     }
   }
-  return packages;
+  return addRequiredPeers(packages, resolveDir);
 }
 
 function safeName(spec) {

@@ -244,19 +244,15 @@ function buildHtml({
 `;
 }
 
-// CodeSandbox-facing manifest of every npm package this one demo actually needs — the
-// framework's shared vendor-bundle packages plus whatever this demo alone imports on top
-// (e.g. jspdf, rrule, openai). See utils/server/vendor-bundle.js for how each is resolved.
+// CodeSandbox-facing manifest of every npm package this one demo needs: what it imports
+// itself (devextreme-react, jspdf, openai, …) plus the peers those pull in. Deliberately
+// not the shared vendor manifest, which lists the union over every demo of the framework.
 function writeDemoManifest({
   srcDir, destDir, framework,
 }) {
   // eslint-disable-next-line global-require
-  const { discoverDemoSpecifiers, resolvePackageVersions, getVendorManifest } = require('./vendor-bundle');
-  const vendorManifest = getVendorManifest(framework);
-  const packages = {
-    ...(vendorManifest ? vendorManifest.packages : {}),
-    ...resolvePackageVersions(discoverDemoSpecifiers(srcDir)),
-  };
+  const { discoverDemoSpecifiers, resolvePackageVersions } = require('./vendor-bundle');
+  const packages = resolvePackageVersions(discoverDemoSpecifiers(srcDir));
   fs.writeFileSync(
     path.join(destDir, 'demo.manifest.json'),
     JSON.stringify({ framework, packages }, null, 2),
