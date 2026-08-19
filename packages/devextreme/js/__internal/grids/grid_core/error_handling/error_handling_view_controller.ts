@@ -24,7 +24,7 @@ import {
 import type { GridError } from './types';
 import { getErrorMessage, isDxError } from './utils';
 
-export class ErrorHandlingController extends modules.ViewController {
+export class ErrorHandlingViewController extends modules.ViewController {
   private _resizingController!: ResizingController;
 
   private _columnsController!: ColumnsController;
@@ -148,6 +148,7 @@ export class ErrorHandlingController extends modules.ViewController {
     const viewElement = shouldRenderInRowsView ? this._rowsView : this._columnHeadersView;
 
     const $tableElements: dxElementWrapper = viewElement.getTableElements();
+    // eslint-disable-next-line @typescript-eslint/init-declarations
     let $firstErrorRow: dxElementWrapper | undefined;
 
     each($tableElements, (_, tableElement: Element): void => {
