@@ -169,10 +169,10 @@ QUnit.module('OSM: map loading', moduleConfig, () => {
             done();
         });
     });
-    QUnit.test('load rejects with E1069 when OpenLayers API is incompatible', function(assert) {
+    QUnit.test('load rejects with E1069 when the OpenLayers ImageTile API is missing', function(assert) {
         const done = assert.async();
         const provider = createProvider();
-        window.ol = {};
+        window.ol = Object.assign({}, openLayersMock, { source: {} });
         provider._loadImpl().then(() => {
             assert.ok(false, 'load should reject');
             done();
