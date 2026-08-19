@@ -72,11 +72,41 @@ export const expandAllDayAllDayPanel = <T extends Pick<ListEntity, 'startDateUTC
   };
 });
 
-export const expandAllDayRegularPanel = <T extends Pick<ListEntity, 'startDateUTC' | 'endDateUTC' | 'allDay'>>(
-  entities: T[],
-): T[] => entities.map((entity) => {
+interface ExpandAllDayRegularPanelOptions {
+  startDayHour: number;
+  viewOffsetMs: number;
+  ignoreAllDayHours: boolean;
+}
+
+const expandAllDayRegularPanelEntity = <T extends Pick<ListEntity, 'startDateUTC' | 'endDateUTC' | 'allDay'>>(
+  entity: T,
+  { startDayHour, viewOffsetMs, ignoreAllDayHours }: ExpandAllDayRegularPanelOptions,
+): T => {
   if (!entity.allDay) {
     return entity;
+  }
+
+  if (ignoreAllDayHours) {
+    if (viewOffsetMs === 0) {
+      const normalizedStart = new Date(entity.startDateUTC)
+        .setUTCHours(startDayHour, 0, 0, 0);
+      const endDate = new Date(entity.endDateUTC);
+      endDate.setUTCDate(endDate.getUTCDate() + 1);
+
+      return {
+        ...entity,
+        startDateUTC: normalizedStart,
+        endDateUTC: endDate.setUTCHours(startDayHour, 0, 0, 0),
+      };
+    }
+
+    return {
+      ...entity,
+      startDateUTC: getShiftedStartDate(entity.startDateUTC, viewOffsetMs)
+        + startDayHour * toMs('hour'),
+      endDateUTC: getShiftedEndDate(entity.endDateUTC + DAY_MS, viewOffsetMs)
+        + startDayHour * toMs('hour'),
+    };
   }
 
   const startDate = new Date(entity.startDateUTC);
@@ -93,4 +123,9 @@ export const expandAllDayRegularPanel = <T extends Pick<ListEntity, 'startDateUT
         startDate.getUTCMilliseconds(),
       ),
   };
-});
+};
+
+export const expandAllDayRegularPanel = <T extends Pick<ListEntity, 'startDateUTC' | 'endDateUTC' | 'allDay'>>(
+  entities: T[],
+  options: ExpandAllDayRegularPanelOptions,
+): T[] => entities.map((entity) => expandAllDayRegularPanelEntity(entity, options));
