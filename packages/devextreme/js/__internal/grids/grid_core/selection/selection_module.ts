@@ -21,8 +21,8 @@ export const selectionModule = {
   defaultOptions(): SelectionModuleOptions {
     return {
       selection: {
-        mode: 'none', // "single", "multiple"
-        showCheckBoxesMode: 'onClick', // "onLongTap", "always", "none"
+        mode: 'none',
+        showCheckBoxesMode: 'onClick',
         allowSelectAll: true,
         selectAllMode: 'allPages',
         deferred: false,
