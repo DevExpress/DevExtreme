@@ -28,7 +28,7 @@ import errors from '@js/ui/widget/ui.errors';
 import { focused } from '@ts/core/utils/m_selectors';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
-import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controlller';
+import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import { EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR } from '../editing/const';

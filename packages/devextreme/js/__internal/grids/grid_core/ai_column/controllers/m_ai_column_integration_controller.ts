@@ -9,7 +9,7 @@ import errors from '@js/ui/widget/ui.errors';
 import type { ColumnsController } from '../../columns_controller/m_columns_controller';
 import type { DataController } from '../../data_controller/data_controller';
 import type { RawItemData } from '../../data_source_adapter/types';
-import type { ErrorHandlingViewController } from '../../error_handling/error_handling_view_controlller';
+import type { ErrorHandlingViewController } from '../../error_handling/error_handling_view_controller';
 import { Controller } from '../../m_modules';
 import type { RowKey } from '../../m_types';
 import type { InternalRequestCallbacks } from '../types';

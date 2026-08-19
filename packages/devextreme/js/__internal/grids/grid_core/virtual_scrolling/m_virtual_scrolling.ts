@@ -17,7 +17,7 @@ import type {
 } from '@ts/grids/grid_core/data_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controlller';
+import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
