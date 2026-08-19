@@ -18,6 +18,10 @@ const EN_JSON = `{
         "No": "No",
         "Cancel": "Cancel",
         "Quote": "Say \\"hi\\"",
+        "Path": "Path",
+        "Price": "Price",
+        "Newline": "Newline",
+        "Trailing": "Trailing",
         "Loading": "Loading..."
     }
 }
@@ -28,6 +32,10 @@ const FR_JSON_INPUT = `{
         "Yes": "Oui",
         "No": "TODO: Non",
         "Quote": "Dire \\"salut\\"",
+        "Path": "Chemin C:\\\\dossier",
+        "Price": "Prix $& taxes",
+        "Newline": "Ligne1\\nLigne2",
+        "Trailing": "Termine par \\\\",
         "Loading": "Chargement...",
         "Extra": "Extra"
     }
@@ -40,6 +48,10 @@ const EXPECTED_FR = `{
         "No": "No",
         "Cancel": "Cancel",
         "Quote": "Dire \\"salut\\"",
+        "Path": "Chemin C:\\\\dossier",
+        "Price": "Prix $& taxes",
+        "Newline": "Ligne1\\nLigne2",
+        "Trailing": "Termine par \\\\",
         "Loading": "Chargement..."
     }
 }
@@ -89,6 +101,14 @@ describe('GenerateCommunityLocalesExecutor E2E', () => {
 
     const frContent = await readFileText(path.join(fixture.messagesDir, 'fr.json'));
     expect(frContent).toBe(EXPECTED_FR);
+
+    const parsed = JSON.parse(frContent) as { fr: Record<string, string> };
+    expect(parsed.fr).toMatchObject({
+      Path: 'Chemin C:\\dossier',
+      Price: 'Prix $& taxes',
+      Newline: 'Ligne1\nLigne2',
+      Trailing: 'Termine par \\',
+    });
   });
 
   it('leaves the default locale file untouched', async () => {
@@ -98,6 +118,22 @@ describe('GenerateCommunityLocalesExecutor E2E', () => {
 
     const enContent = await readFileText(path.join(fixture.messagesDir, 'en.json'));
     expect(enContent).toBe(EN_JSON);
+  });
+
+  it('fails when the default locale file is malformed', async () => {
+    await writeFileText(path.join(fixture.messagesDir, 'en.json'), '{ "en": { ');
+
+    const result = await executor({}, context);
+
+    expect(result.success).toBe(false);
+  });
+
+  it('fails when the default locale file holds another locale', async () => {
+    await writeFileText(path.join(fixture.messagesDir, 'en.json'), EN_JSON.replace('"en"', '"es"'));
+
+    const result = await executor({}, context);
+
+    expect(result.success).toBe(false);
   });
 
   it('fails when the messages directory is missing', async () => {
