@@ -8,10 +8,11 @@ import type {
 import type { ChangedEvent } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
+import type { SelectionFilter } from '@ts/ui/selection/types';
 
-export const dataSelectionExtenderMixin = (
+export const selectionDataControllerExtender = (
   Base: ModuleType<DataController>,
-): ModuleType<DataController> => class DataControllerSelectionExtender extends Base {
+): ModuleType<DataController> => class SelectionDataControllerExtender extends Base {
   private _selectionController!: SelectionController;
 
   public init(): void {
@@ -22,7 +23,7 @@ export const dataSelectionExtenderMixin = (
     const isDeferredMode = this.option('selection.deferred');
     if (isDeferredMode) {
       this._selectionController._updateCheckboxesState({
-        selectionFilter: this.option('selectionFilter'),
+        selectionFilter: this.option('selectionFilter') as SelectionFilter | undefined,
       });
     }
   }
