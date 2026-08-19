@@ -17,6 +17,11 @@ import {
 import { schedulerDataHandler } from './handlers/schedulerData';
 import { schedulerSignalRHandler } from './handlers/schedulerSignalR';
 import { googleCalendarHandler } from './handlers/googleCalendar';
+import { commonAntiForgeryHandler } from './handlers/commonAntiForgery';
+import { dataGridWebApiOrdersHandlers } from './handlers/dataGridWebApi/orders';
+import { dataGridWebApiCustomersLookupHandler } from './handlers/dataGridWebApi/customersLookup';
+import { dataGridWebApiShippersLookupHandler } from './handlers/dataGridWebApi/shippersLookup';
+import { dataGridWebApiOrderDetailsHandler } from './handlers/dataGridWebApi/orderDetails';
 
 // The AI-column endpoint is a cross-origin POST with non-simple headers
 // (api-key, content-type), so the browser issues a CORS preflight. Advertise
@@ -25,11 +30,12 @@ import { googleCalendarHandler } from './handlers/googleCalendar';
 // response may not answer with a wildcard origin — echo the request origin back.
 const getCrossOriginHeaders = (req: { headers?: Record<string, string> }) => {
   const origin = req.headers?.origin;
+  const requestedHeaders = req.headers?.['access-control-request-headers'];
 
   return {
     'access-control-allow-origin': origin ?? '*',
-    'access-control-allow-methods': 'GET, POST, OPTIONS',
-    'access-control-allow-headers': '*',
+    'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'access-control-allow-headers': requestedHeaders ?? '*',
     ...(origin ? { 'access-control-allow-credentials': 'true' } : {}),
   };
 };
@@ -69,6 +75,19 @@ const handlers: MockHandler[] = [
   schedulerSignalRHandler,
   // GET googleapis.com/calendar/v3/.../events (Scheduler GoogleCalendarIntegration)
   googleCalendarHandler,
+  // GET /api/Common/GetAntiForgeryToken (shared/anti-forgery overrides)
+  commonAntiForgeryHandler,
+  // GET /api/DataGridWebApi/CustomersLookup
+  dataGridWebApiCustomersLookupHandler,
+  // GET /api/DataGridWebApi/ShippersLookup
+  dataGridWebApiShippersLookupHandler,
+  // GET /api/DataGridWebApi/OrderDetails?orderID=
+  dataGridWebApiOrderDetailsHandler,
+  // GET /api/DataGridWebApi/Orders
+  // POST /api/DataGridWebApi/InsertOrder
+  // PUT /api/DataGridWebApi/UpdateOrder
+  // DELETE /api/DataGridWebApi/DeleteOrder
+  ...dataGridWebApiOrdersHandlers,
 ];
 
 export const widgetsGalleryServiceMock = handlers.reduce(
