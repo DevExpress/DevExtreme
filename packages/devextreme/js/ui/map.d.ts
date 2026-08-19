@@ -36,13 +36,11 @@ export interface OsmTileServerConfig {
   attribution?: string;
   /**
    * @docid
-   * @default 'abc'
    */
   // eslint-disable-next-line spellcheck/spell-checker -- tile server option name
   subdomains?: string | Array<string>;
   /**
    * @docid
-   * @default 19
    */
   maxZoom?: number;
 }
