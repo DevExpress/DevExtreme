@@ -27,6 +27,7 @@ import { focused } from '@ts/core/utils/m_selectors';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { RowIndexCorrection } from '@ts/grids/grid_core/data_controller/types';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import type { RowsViewScrollEvent } from '@ts/grids/grid_core/views/types';
@@ -181,9 +182,13 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
 
     this.initDocumentHandlers();
+
+    // init runs again on option changes, so drop the previous subscription first
+    this._dataController.rowIndicesCorrected.remove(this.handleRowIndicesCorrected);
+    this._dataController.rowIndicesCorrected.add(this.handleRowIndicesCorrected);
   }
 
-  public dispose() {
+  public dispose(): void {
     super.dispose();
     this._resetFocusedView();
     eventsEngine.off(
@@ -193,7 +198,23 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     );
     clearTimeout(this._updateFocusTimeout);
     accessibility.unsubscribeVisibilityChange();
+    this._dataController.rowIndicesCorrected.remove(this.handleRowIndicesCorrected);
   }
+
+  private readonly handleRowIndicesCorrected = (
+    getRowIndexCorrection: RowIndexCorrection,
+  ): void => {
+    const focusedCellPosition = this._focusedCellPosition;
+
+    if (focusedCellPosition && focusedCellPosition.rowIndex >= 0) {
+      const focusedRowIndexCorrection = getRowIndexCorrection(focusedCellPosition.rowIndex);
+
+      if (focusedRowIndexCorrection) {
+        focusedCellPosition.rowIndex += focusedRowIndexCorrection;
+        this._editorFactory.refocus();
+      }
+    }
+  };
 
   private focusedHandler($element: dxElementWrapper): void {
     this.setupFocusedView();
@@ -3175,20 +3196,6 @@ const editing = (Base: ModuleType<EditingController>) => class EditingController
 };
 
 const data = (Base: ModuleType<DataController>) => class DataControllerKeyboardExtender extends Base {
-  protected correctRowIndices(getRowIndexCorrection) {
-    const focusedCellPosition = this._keyboardNavigationController._focusedCellPosition;
-
-    super.correctRowIndices(getRowIndexCorrection);
-
-    if (focusedCellPosition && focusedCellPosition.rowIndex >= 0) {
-      const focusedRowIndexCorrection = getRowIndexCorrection(focusedCellPosition.rowIndex);
-      if (focusedRowIndexCorrection) {
-        focusedCellPosition.rowIndex += focusedRowIndexCorrection;
-        this._editorFactoryController.refocus();
-      }
-    }
-  }
-
   private getMaxRowIndex() {
     let result = this.items().length - 1;
     // @ts-expect-error
