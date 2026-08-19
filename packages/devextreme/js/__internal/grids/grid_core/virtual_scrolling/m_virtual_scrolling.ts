@@ -17,12 +17,14 @@ import type {
 } from '@ts/grids/grid_core/data_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { ErrorHandlingController } from '@ts/grids/grid_core/error_handling/m_error_handling';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type { ChangedEvent } from '../data_source_adapter/types';
 import gridCoreUtils from '../m_utils';
+import type { StateStoringDataControllerExtension } from '../state_storing/extenders/state_storing_data_controller';
 import type { RowsViewScrollEvent } from '../views/types';
 import { subscribeToExternalScrollers, VirtualScrollController } from './m_virtual_scrolling_core';
 import type { ChangedLoadParams } from './types';
@@ -204,15 +206,15 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     };
   }
 
-  protected _handleLoadingChanged(isLoading) {
+  protected loadingChangedHandler(isLoading: boolean): void {
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
-      super._handleLoadingChanged.apply(this, arguments as any);
+      super.loadingChangedHandler(isLoading);
       return;
     }
 
     if (!isVirtualMode(this) || this._isLoadingAll) {
       this._isLoading = isLoading;
-      super._handleLoadingChanged.apply(this, arguments as any);
+      super.loadingChangedHandler(isLoading);
     }
 
     if (isLoading) {
@@ -222,24 +224,24 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     }
   }
 
-  protected _handleLoadError() {
+  protected loadErrorHandler(e: Error | string): void {
     if (this.option(LEGACY_SCROLLING_MODE) !== false) {
       this._isLoading = false;
       this.loadingChanged.fire(false);
     }
 
-    super._handleLoadError.apply(this, arguments as any);
+    super.loadErrorHandler(e);
   }
 
-  protected _dataChangedHandler(e?: ChangedEvent) {
+  protected dataChangedHandler(e?: ChangedEvent): void {
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
       this._items = this._dataSource.items().slice();
       this._totalCount = this._dataSourceTotalCount(true);
-      super._dataChangedHandler(e);
+      super.dataChangedHandler(e);
       return;
     }
 
-    const callBase = super._dataChangedHandler.bind(this);
+    const callBase = super.dataChangedHandler.bind(this);
 
     this._virtualScrollController.handleDataChanged(callBase, e);
   }
@@ -285,7 +287,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     return this.option(LEGACY_SCROLLING_MODE) === false ? this._dataSource.isLoading() : this._isLoading;
   }
 
-  protected isLoaded() {
+  public isLoaded() {
     return this._dataSource.isLoaded() && this._isLoaded;
   }
 
@@ -476,9 +478,9 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     super.dispose.apply(this, arguments as any);
   }
 
-  protected _refreshDataSource() {
-    // @ts-expect-error
-    const baseResult = super._refreshDataSource.apply(this, arguments as any) || new Deferred().resolve().promise();
+  protected _refreshDataSource(): DeferredObj<unknown> {
+    // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
+    const baseResult: DeferredObj<unknown> = super._refreshDataSource() ?? Deferred().resolve().promise();
 
     baseResult.done(this.initVirtualRows.bind(this));
 
@@ -1434,6 +1436,10 @@ export const resizing = (Base: ModuleType<ResizingController>) => class VirtualS
 };
 
 export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRowsViewExtender extends Base {
+  protected _dataController!: DataController & Partial<StateStoringDataControllerExtension>;
+
+  protected _errorHandlingController!: ErrorHandlingController;
+
   private _isFixedTableRendering: any;
 
   private _heightWarningIsThrown: any;
@@ -1442,8 +1448,10 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
   private readonly _scrollTimeoutID: any;
 
-  public init() {
+  public init(): void {
     super.init();
+
+    this._errorHandlingController = this.getController('errorHandling');
 
     this._dataController.pageChanged.add((pageIndex) => {
       const scrollTop = this._scrollTop;
@@ -1461,11 +1469,9 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
       !this._scrollTop && this._scrollToCurrentPageOnResize();
     });
 
-    this._dataController
-      // @ts-expect-error
-      .stateLoaded?.add(() => {
-        this._scrollToCurrentPageOnResize();
-      });
+    this._dataController.stateLoaded?.add(() => {
+      this._scrollToCurrentPageOnResize();
+    });
 
     this._scrollToCurrentPageOnResize();
   }

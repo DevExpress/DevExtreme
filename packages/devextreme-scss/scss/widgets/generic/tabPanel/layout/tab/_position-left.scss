@@ -1,7 +1,5 @@
 @use "../../variables/colors" as *;
-@use "../../../colors" as *;
 @use "../../variables/sizes" as *;
-@use "../../../sizes" as *;
 @use "../../../tabs/variables/colors" as *;
 @use "../../../tabs/variables/borders" as *;
 @use "../../../tabs/variables/sizes" as *;
@@ -9,8 +7,6 @@
 @use "../../../tabs" as *;
 @use "../../../../base/tabPanel";
 @use "../../variables/borders" as *;
-
-// adduse
 
 .dx-tabpanel-tabs-position-left {
   > .dx-tabpanel-tabs {

@@ -2,8 +2,6 @@
 @use "sass:color";
 @use "../color" as extcolor;
 
-// adduse
-
 $informer-error-color: $base-invalid-color !default;
 $informer-error-background-color: null !default;
 $informer-info-color: $base-text-color !default;

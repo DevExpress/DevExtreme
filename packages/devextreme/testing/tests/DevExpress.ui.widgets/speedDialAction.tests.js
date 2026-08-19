@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import config from 'core/config';
 import fx from 'common/core/animation/fx';
-import SpeedDialItem from '__internal/ui/speed_dial_action/m_speed_dial_item';
+import SpeedDialItem from '__internal/ui/speed_dial_action/speed_dial_item';
 
 import 'ui/speed_dial_action';
 import 'fluent_blue_light.css!';

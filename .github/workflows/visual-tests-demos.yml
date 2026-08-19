@@ -40,7 +40,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Get changed files
-        uses: DevExpress/github-actions/get-changed-files@v1
+        uses: DevExpress/github-actions/get-changed-files@get-changed-files
         with:
           gh-token: ${{ secrets.GITHUB_TOKEN }}
           paths: 'apps/demos/Demos/**/*'
@@ -990,12 +990,6 @@ jobs:
       working-directory: apps/demos
       run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
-    # Demo bundles are built once per framework/shard in build-demos and
-    # downloaded here to overlay onto this job's own checkout (same commit).
-    # Every artifact holds a file named demo-bundles.tgz, so each lands in its
-    # own directory and the unpack step below extracts them all into apps/demos,
-    # restoring Demos/<Widget>/<Demo>/<Framework>/bundle.{js,css} — exactly
-    # where each demo's own index.html expects them.
     - name: Download demo bundles (React)
       if: startsWith(matrix.CONSTEL, 'react')
       uses: actions/download-artifact@v8
@@ -1172,11 +1166,6 @@ jobs:
         working-directory: apps/demos
         run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
-      # Demo bundles are built once per framework/shard in build-demos and
-      # downloaded here to overlay onto this job's own checkout (same commit).
-      # Every artifact holds a file named demo-bundles.tgz, so each lands in its
-      # own directory and the unpack step below extracts them all into
-      # apps/demos, restoring Demos/<Widget>/<Demo>/<Framework>/bundle.{js,css}.
       - name: Download demo bundles (React)
         if: matrix.CONSTEL == 'react'
         uses: actions/download-artifact@v8

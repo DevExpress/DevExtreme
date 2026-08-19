@@ -2,9 +2,6 @@
 @use "./mixins" as *;
 @use "sass:string" as string;
 
-// adduse
-
-
 .dx-texteditor {
   display: block;
 
@@ -38,7 +35,7 @@
   }
 
   &::after {
-    content: ' ';
+    content: " ";
     display: inline-block;
     height: 100%;
     vertical-align: middle;

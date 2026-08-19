@@ -29,7 +29,7 @@ const nodeExists = function (array, currentKey) {
 };
 
 const data = (Base: ModuleType<DataController>) => class DataSelectionTreeListExtender extends dataSelectionExtenderMixin(Base) {
-  protected _dataChangedHandler(e?: ChangedEvent) {
+  protected dataChangedHandler(e?: ChangedEvent): void {
     // @ts-expect-error
     const isRecursiveSelection = this._selectionController.isRecursiveSelection();
 
@@ -39,7 +39,7 @@ const data = (Base: ModuleType<DataController>) => class DataSelectionTreeListEx
         selectedItemKeys: this.option('selectedRowKeys'),
       });
     }
-    super._dataChangedHandler(e);
+    super.dataChangedHandler(e);
   }
 
   private loadDescendants() {

@@ -42,16 +42,16 @@ $generic-dropdownlist-min-height:
 
   background-color: $badge-invalid-bg;
   color: $base-inverted-text-color;
-  content: '!';
+  content: "!";
   border-radius: 50%;
 }
 
 @mixin dx-valid-generic-badge() {
   @include badge-settings();
 
-  font-family: 'DXIcons', sans-serif;
+  font-family: "DXIcons", sans-serif;
   color: $base-success;
-  content: '\f005';
+  content: "\f005";
 
   @include validation-badge-animation();
 }

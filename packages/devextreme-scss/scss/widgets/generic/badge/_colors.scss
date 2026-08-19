@@ -1,9 +1,6 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../color" as extcolor;
-
-// adduse
 
 /**
 * $name 140. Badge text color
@@ -16,7 +13,6 @@ $badge-color: $base-inverted-text-color !default;
 * $type color
 */
 $badge-bg: null !default;
-
 
 @if $color == "carmine" {
   $badge-bg: #ff5f42 !default;
@@ -50,4 +46,3 @@ $badge-bg: null !default;
 @if $color == "softblue" {
   $badge-bg: extcolor.difference($base-accent, #171717) !default;
 }
-

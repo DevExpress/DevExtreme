@@ -7,6 +7,9 @@ import type {
   StoreLoadOptions,
 } from '@ts/data/data_source/types';
 
+import type { InternalGrid, ModuleType } from '../m_types';
+import type DataSourceAdapter from './m_data_source_adapter';
+
 export type RawItemData = Record<string, unknown>;
 
 export type RemoteOperations = Properties['remoteOperations'];
@@ -56,4 +59,15 @@ export interface ChangedEvent extends BaseChangedEvent {
   // also can be 'append', 'prepend', 'pageIndex' in case of
   changeType?: 'loadError';
   error?: unknown;
+}
+
+/** provider */
+
+export type DataSourceAdapterExtender = (
+  Base: ModuleType<DataSourceAdapter>,
+) => ModuleType<DataSourceAdapter>;
+
+export interface DataSourceAdapterProvider {
+  extend: (extender: DataSourceAdapterExtender) => void;
+  create: (component: InternalGrid) => DataSourceAdapter;
 }

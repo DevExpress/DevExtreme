@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 $treeview-color: $base-text-color !default;
 
@@ -43,4 +40,3 @@ $treeview-checkbox-accent-color-focused: null !default;
   $treeview-checkbox-background-color-focused: color.change($base-bg, $lightness: 21.96%, $space: hsl) !default;
   $treeview-checkbox-accent-color-focused: color.change($base-accent, $lightness: 84%, $space: hsl) !default;
 }
-

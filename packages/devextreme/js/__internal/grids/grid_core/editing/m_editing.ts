@@ -128,8 +128,6 @@ class EditingControllerImpl extends modules.ViewController {
 
   protected _keyboardNavigationController!: Controllers['keyboardNavigation'];
 
-  protected _errorHandlingController!: Controllers['errorHandling'];
-
   protected _rowsView!: Views['rowsView'];
 
   private _headerPanelView!: Views['headerPanel'];
@@ -177,7 +175,6 @@ class EditingControllerImpl extends modules.ViewController {
     this._focusController = this.getController('focus');
     this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._columnsResizerController = this.getController('columnsResizer');
-    this._errorHandlingController = this.getController('errorHandling');
     this._rowsView = this.getView('rowsView');
     this._headerPanelView = this.getView('headerPanel');
     this._lastOperation = null;
@@ -2580,9 +2577,9 @@ export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataControll
     super.applyChangeUpdate(change);
   }
 
-  protected _applyChangesOnly(change) {
+  protected applyChangesOnly(change) {
     this._updateEditRow(change.items);
-    super._applyChangesOnly(change);
+    super.applyChangesOnly(change);
   }
 
   protected _processItems(items: RawItemData[], change: DataChange): ProcessedItem[] {

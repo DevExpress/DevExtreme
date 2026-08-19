@@ -110,7 +110,7 @@
         "commands": [
           "pnpm nx build devextreme",
           "pnpm nx run-many --targets=pack --projects=devextreme-angular,devextreme-react,devextreme-vue --parallel",
-          "pnpm run build-vendor-bundles"
+          "pnpm run build-vendor-bundles",
         ],
         "parallel": false,
         "cwd": "{projectRoot}"

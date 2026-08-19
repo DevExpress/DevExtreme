@@ -41,7 +41,7 @@ import type {
 import type dxList from '@js/ui/list';
 import type { ScrollEvent } from '@js/ui/scroll_view';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
-import { render } from '@ts/core/utils/m_ink_ripple';
+import { render } from '@ts/core/utils/ink_ripple';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';

@@ -32,9 +32,6 @@
   $pivotgrid-button-top-padding: $pivotgrid-button-top-padding,
 );
 
-// adduse
-
-
 $fluent-pivotgrid-headers-font-size: 14px;
 $fluent-pivotgrid-area-font-size: 13px;
 $fluent-pivotgrid-chevron-icon-size: 20px;
@@ -72,18 +69,17 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
   }
 
   .dx-sort-up {
-    @include dx-icon-sizing($fluent-button-icon-size)
+    @include dx-icon-sizing($fluent-button-icon-size);
   }
 
   .dx-sort-down {
-    @include dx-icon-sizing($fluent-button-icon-size)
+    @include dx-icon-sizing($fluent-button-icon-size);
   }
 
   .dx-header-filter {
-    @include dx-icon-sizing($fluent-button-icon-size)
+    @include dx-icon-sizing($fluent-button-icon-size);
   }
 }
-
 
 .dx-pivotgrid {
   background-color: $pivotgrid-area-background;
@@ -120,7 +116,6 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
       }
     }
   }
-
 
   .dx-area-description-cell {
     .dx-pivotgrid-toolbar {

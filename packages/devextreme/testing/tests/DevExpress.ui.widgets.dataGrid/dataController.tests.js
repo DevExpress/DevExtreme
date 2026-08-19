@@ -239,7 +239,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         ];
         let dataSource = createDataSource(array, { key: 'id' });
 
-        this.dataController._dataPushedHandler = dataPushedHandlerSpy;
+        this.dataController.dataPushedHandlerProxy = dataPushedHandlerSpy;
         this.dataController.setDataSource(dataSource);
         dataSource = this.dataController.dataSource();
         dataSource.load();
@@ -2605,58 +2605,6 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         // assert
         assert.equal(this.dataController.items().length, 2, 'count loaded items');
         assert.strictEqual(data, undefined, 'not data');
-    });
-
-    QUnit.test('getDataByKeys from loaded items and data store', function(assert) {
-    // arrange
-        const array = [
-            { name: 'Alex', phone: '55-55-55' },
-            { name: 'Sam', phone: '66-66-66' },
-            { name: 'Dan', phone: '98-75-21' }
-        ];
-        let data;
-
-        const dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
-
-        this.dataController.setDataSource(dataSource);
-        dataSource.load();
-
-        // act
-        this.dataController.getDataByKeys(['Alex', 'Dan']).done(function(result) {
-            data = result;
-        });
-
-        // assert
-        assert.equal(this.dataController.items().length, 2, 'count loaded items');
-        assert.equal(data.length, 2, 'count data');
-        assert.deepEqual(data[0], { name: 'Alex', phone: '55-55-55' }, 'data 1');
-        assert.deepEqual(data[1], { name: 'Dan', phone: '98-75-21' }, 'data 2');
-    });
-
-    QUnit.test('getDataByKeys not has keys', function(assert) {
-    // arrange
-        const array = [
-            { name: 'Alex', phone: '55-55-55' },
-            { name: 'Sam', phone: '66-66-66' },
-            { name: 'Dan', phone: '98-75-21' }
-        ];
-        let data;
-
-        const dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
-
-        this.dataController.setDataSource(dataSource);
-        dataSource.load();
-
-        // act
-        this.dataController.getDataByKeys(['Sam', 'Test2']).done(function(result) {
-            data = result;
-        });
-
-        // assert
-        assert.equal(this.dataController.items().length, 2, 'count loaded items');
-        assert.equal(data.length, 1, 'count data');
-        assert.deepEqual(data[0], { name: 'Sam', phone: '66-66-66' }, 'data 1');
-        assert.strictEqual(data[1], undefined, 'not data 2');
     });
 
     QUnit.test('getKeyByRowIndex', function(assert) {

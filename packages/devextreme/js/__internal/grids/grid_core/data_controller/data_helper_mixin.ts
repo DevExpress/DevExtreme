@@ -1,5 +1,6 @@
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import DataController from '@ts/ui/collection/m_data_controller';
 
@@ -49,9 +50,11 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
   /**
    * @extended: state_storing, virtual_scrolling
    */
-  protected _refreshDataSource(): void {
+  protected _refreshDataSource(): DeferredObj<unknown> | undefined {
     this._initDataSource();
     this._loadDataSource();
+
+    return undefined;
   }
 
   protected _initDataSource(): void {

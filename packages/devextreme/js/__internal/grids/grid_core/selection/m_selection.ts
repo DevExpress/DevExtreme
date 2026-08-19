@@ -20,7 +20,7 @@ import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ContextMenuController } from '@ts/grids/grid_core/context_menu/m_context_menu';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
-import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
+import type { StateStoringController } from '@ts/grids/grid_core/state_storing/state_storing_controller_core';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import Selection from '@ts/ui/selection/selection';
 
@@ -371,7 +371,6 @@ export class SelectionController extends modules.Controller {
     }
 
     if (isDeferredMode) {
-      // @ts-expect-error
       that.option('selectionFilter', selectionFilter);
       selectionChangedOptions = {};
     } else if (args.addedItemKeys.length || args.removedItemKeys.length) {
@@ -682,10 +681,9 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
     return d.promise();
   }
 
-  // eslint-disable-next-line
-  protected _dataChangedHandler(e?: ChangedEvent) {
+  protected dataChangedHandler(e?: ChangedEvent): void {
     const hasLoadOperation = this.hasLoadOperation();
-    super._dataChangedHandler(e);
+    super.dataChangedHandler(e);
 
     if (hasLoadOperation && !this._repaintChangesOnly) {
       this._selectionController.focusedItemIndex(-1);

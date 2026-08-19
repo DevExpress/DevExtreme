@@ -1,13 +1,8 @@
-@use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../scheduler/sizes" as *;
 @use "../../base/recurrenceEditor" as *;
-
-// adduse
-
 
 $material-recurrence-number-box-margin: 11px;
 $material-recurrence-button-group-padding: 6px;
