@@ -9,13 +9,13 @@ import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_col
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { ChangedEvent } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import { selectionDataControllerExtender } from '@ts/grids/grid_core/selection/extenders/selection_data_controller';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 import {
-  columnHeadersSelectionExtenderMixin,
-  dataSelectionExtenderMixin,
-  rowsViewSelectionExtenderMixin,
-  selectionModule,
+  selectionColumnHeadersViewExtender,
+  selectionRowsViewExtender,
 } from '@ts/grids/grid_core/selection/m_selection';
+import { selectionModule } from '@ts/grids/grid_core/selection/selection_module';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import treeListCore from '../m_core';
@@ -28,13 +28,25 @@ const nodeExists = function (array, currentKey) {
   return !!array.filter((key) => key === currentKey).length;
 };
 
-const data = (Base: ModuleType<DataController>) => class DataSelectionTreeListExtender extends dataSelectionExtenderMixin(Base) {
+interface TreeListSelectionControllerExtension {
+  isRecursiveSelection: () => boolean;
+  updateSelectionState: (options: {
+    selectedItemKeys?: unknown[];
+    removedItemKeys?: unknown[];
+  }) => void;
+}
+
+const data = (
+  Base: ModuleType<DataController>,
+): ModuleType<DataController> => class DataSelectionTreeListExtender
+  extends selectionDataControllerExtender(Base) {
+  // eslint-disable-next-line @typescript-eslint/prefer-readonly
+  private _selectionController!: SelectionController & TreeListSelectionControllerExtension;
+
   protected dataChangedHandler(e?: ChangedEvent): void {
-    // @ts-expect-error
     const isRecursiveSelection = this._selectionController.isRecursiveSelection();
 
     if (isRecursiveSelection) {
-      // @ts-expect-error
       this._selectionController.updateSelectionState({
         selectedItemKeys: this.option('selectedRowKeys'),
       });
@@ -46,12 +58,10 @@ const data = (Base: ModuleType<DataController>) => class DataSelectionTreeListEx
     const that = this;
     // @ts-expect-error
     const d = super.loadDescendants.apply(that, arguments);
-    // @ts-expect-error
     const isRecursiveSelection = this._selectionController.isRecursiveSelection();
 
     if (isRecursiveSelection) {
       d.done(() => {
-        // @ts-expect-error
         this._selectionController.updateSelectionState({
           selectedItemKeys: that.option('selectedRowKeys'),
         });
@@ -62,7 +72,11 @@ const data = (Base: ModuleType<DataController>) => class DataSelectionTreeListEx
   }
 };
 
-const selection = (Base: ModuleType<SelectionController>) => class SelectionControllerTreeListExtender extends Base {
+const selection = (
+  Base: ModuleType<SelectionController>,
+): ModuleType<
+SelectionController & TreeListSelectionControllerExtension
+> => class SelectionControllerTreeListExtender extends Base {
   private _selectionStateByKey: any;
 
   private _isSelectionNormalizing: any;
@@ -94,7 +108,6 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     };
     config.isSelectableItem = (item) => !!item;
     config.getItemData = (item) => item;
-    // @ts-expect-error
     config.allowLoadByRange = undefined;
     return config;
   }
@@ -481,14 +494,14 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     return result;
   }
 
-  private isRecursiveSelection() {
+  public isRecursiveSelection() {
     const selectionMode = this.option('selection.mode');
     const isRecursive = this.option('selection.recursive');
 
     return selectionMode === 'multiple' && isRecursive;
   }
 
-  private updateSelectionState(options) {
+  public updateSelectionState(options): void {
     const removedItemKeys = options.removedItemKeys || [];
     const selectedItemKeys = options.selectedItemKeys || [];
 
@@ -561,7 +574,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
   }
 };
 
-const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeaderViewSelectionTreeListExtender extends columnHeadersSelectionExtenderMixin(Base) {
+const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeaderViewSelectionTreeListExtender extends selectionColumnHeadersViewExtender(Base) {
   protected _processTemplate(template, options) {
     const that = this;
     let resultTemplate;
@@ -616,7 +629,9 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
   }
 };
 
-const rowsView = (Base: ModuleType<RowsView>) => class RowsViewSelectionTreeListExtender extends rowsViewSelectionExtenderMixin(Base) {
+const rowsView = (
+  Base: ModuleType<RowsView>,
+): ModuleType<RowsView> => class TreeListSelectionRowsViewExtender extends selectionRowsViewExtender(Base) {
   protected _renderIcons(
     $container: dxElementWrapper,
     options,
@@ -640,6 +655,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewSelectionTreeList
 
     // @ts-expect-error
     if (this.isExpandIcon($targetElement)) {
+      // @ts-expect-error
       super._rowClickForTreeList.apply(this, arguments as any);
     } else {
       super._rowClick.apply(this, arguments as any);

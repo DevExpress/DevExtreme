@@ -79,7 +79,7 @@ export type RowChangeType = 'update' | 'insert' | 'remove';
 
 export type RowOperation = RowChangeType | 'replace';
 
-interface DataChangeBase {
+export interface DataChangeBase {
   isFirstRender?: boolean;
   repaintChangesOnly?: boolean;
   needUpdateDimensions?: boolean;

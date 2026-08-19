@@ -25,7 +25,6 @@ import type {
   Controllers, Module, OptionChanged, RowKey,
 } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
-import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 import type { VirtualScrollController } from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
 
 import { DataHelperMixin } from './data_helper_mixin';
@@ -82,7 +81,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _repaintChangesOnly?: boolean;
 
-  protected _changes!: DataChange[];
+  protected changes!: DataChange[];
 
   private _skipProcessingPagingChange?: boolean;
 
@@ -112,7 +111,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   public pushed!: Callback<[StoreChange[]]>;
 
-  public changed!: Callback;
+  public changed!: Callback<[DataChange]>;
 
   public loadingChanged!: Callback<[boolean, string?]>;
 
@@ -142,8 +141,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _focusController!: FocusController;
 
-  protected _selectionController!: SelectionController;
-
   private loadErrorHandlerProxy!: (e: Error | string) => void;
 
   private dataPushedHandlerProxy!: (changes: StoreChange[]) => void;
@@ -160,7 +157,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._filterSyncController = this.getController('filterSync');
     this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._focusController = this.getController('focus');
-    this._selectionController = this.getController('selection');
 
     this._isPaging = false;
     this._currentOperationTypes = null;
@@ -173,7 +169,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._isLoading = false;
     this._isCustomLoading = false;
     this._repaintChangesOnly = undefined;
-    this._changes = [];
+    this.changes = [];
 
     this.createAction('onDataErrorOccurred');
 
@@ -395,10 +391,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    * @protected
    */
   protected _endUpdateCore(): void {
-    const changes = this._changes;
+    const { changes } = this;
 
     if (changes.length) {
-      this._changes = [];
+      this.changes = [];
       const repaintChangesOnly = changes.every((change) => change.repaintChangesOnly);
       const change: DataChange = changes.length === 1
         ? changes[0]
@@ -1263,7 +1259,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
 
     if (this._updateLockCount && !change.cancel) {
-      this._changes.push(change);
+      this.changes.push(change);
       return;
     }
 

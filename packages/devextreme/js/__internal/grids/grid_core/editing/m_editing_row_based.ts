@@ -138,13 +138,6 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingRowBasedEx
 
     return $row;
   }
-
-  protected _update(change) {
-    super._update(change);
-    if (change.changeType === 'updateSelection') {
-      this.getTableElements().children('tbody').children(`.${EDIT_ROW}`).removeClass(ROW_SELECTED_CLASS);
-    }
-  }
 };
 
 export const editingRowBasedModule = {
