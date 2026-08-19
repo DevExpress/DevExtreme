@@ -737,12 +737,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
    * @extended: column_fixing, filter_row, row_dragging, virtual_columns
    */
   protected _resizeCore() {
-    const scrollLeft = this._scrollLeft;
-
-    if (scrollLeft >= 0) {
-      this._scrollLeft = 0;
-      this.scrollTo({ left: scrollLeft });
-    }
+    this.updateScrollLeftPosition();
   }
 
   /**
@@ -1080,7 +1075,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return ['scrollChanged'];
   }
 
-  protected _updateScrollLeftPosition() {
+  protected updateScrollLeftPosition(): void {
     const scrollLeft = this._scrollLeft;
 
     if (scrollLeft >= 0) {
