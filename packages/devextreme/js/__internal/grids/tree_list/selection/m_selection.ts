@@ -9,7 +9,7 @@ import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_col
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { ChangedEvent } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
-import { dataSelectionExtenderMixin } from '@ts/grids/grid_core/selection/extenders/selection_data_controller';
+import { selectionDataControllerExtender } from '@ts/grids/grid_core/selection/extenders/selection_data_controller';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 import {
   columnHeadersSelectionExtenderMixin,
@@ -39,7 +39,7 @@ interface TreeListSelectionControllerExtension {
 const data = (
   Base: ModuleType<DataController>,
 ): ModuleType<DataController> => class DataSelectionTreeListExtender
-  extends dataSelectionExtenderMixin(Base) {
+  extends selectionDataControllerExtender(Base) {
   // eslint-disable-next-line @typescript-eslint/prefer-readonly
   private _selectionController!: SelectionController & TreeListSelectionControllerExtension;
 
@@ -108,7 +108,6 @@ SelectionController & TreeListSelectionControllerExtension
     };
     config.isSelectableItem = (item) => !!item;
     config.getItemData = (item) => item;
-    // @ts-expect-error
     config.allowLoadByRange = undefined;
     return config;
   }
