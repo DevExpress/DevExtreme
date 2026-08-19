@@ -227,7 +227,7 @@ export class FooterView extends ColumnsView {
 
     if (totalItem && totalItem.summaryCells && totalItem.summaryCells.length) {
       this._updateContent(this._renderTable({ change }), change);
-      needUpdateScrollLeft && this._updateScrollLeftPosition();
+      needUpdateScrollLeft && this.updateScrollLeftPosition();
     }
 
     return super._renderCore(change);
