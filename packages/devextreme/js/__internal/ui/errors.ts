@@ -113,7 +113,7 @@ export default errorUtils(errors.ERROR_MESSAGES, {
 
   E1068: '\'aiIntegration\' is not configured for the AI Assistant.',
 
-  E1069: 'Could not find OpenLayers. Load the library before Map initialization.',
+  E1069: 'Could not find a compatible version of OpenLayers. Load a supported version before Map initialization.',
 
   W1001: 'The "key" option cannot be modified after initialization',
 
