@@ -12,8 +12,8 @@ import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import { selectionDataControllerExtender } from '@ts/grids/grid_core/selection/extenders/selection_data_controller';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 import {
-  columnHeadersSelectionExtenderMixin,
-  rowsViewSelectionExtenderMixin,
+  selectionColumnHeadersViewExtender,
+  selectionRowsViewExtender,
 } from '@ts/grids/grid_core/selection/m_selection';
 import { selectionModule } from '@ts/grids/grid_core/selection/selection_module';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
@@ -574,7 +574,7 @@ SelectionController & TreeListSelectionControllerExtension
   }
 };
 
-const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeaderViewSelectionTreeListExtender extends columnHeadersSelectionExtenderMixin(Base) {
+const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeaderViewSelectionTreeListExtender extends selectionColumnHeadersViewExtender(Base) {
   protected _processTemplate(template, options) {
     const that = this;
     let resultTemplate;
@@ -629,7 +629,9 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
   }
 };
 
-const rowsView = (Base: ModuleType<RowsView>) => class RowsViewSelectionTreeListExtender extends rowsViewSelectionExtenderMixin(Base) {
+const rowsView = (
+  Base: ModuleType<RowsView>,
+): ModuleType<RowsView> => class TreeListSelectionRowsViewExtender extends selectionRowsViewExtender(Base) {
   protected _renderIcons(
     $container: dxElementWrapper,
     options,
@@ -653,6 +655,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewSelectionTreeList
 
     // @ts-expect-error
     if (this.isExpandIcon($targetElement)) {
+      // @ts-expect-error
       super._rowClickForTreeList.apply(this, arguments as any);
     } else {
       super._rowClick.apply(this, arguments as any);
