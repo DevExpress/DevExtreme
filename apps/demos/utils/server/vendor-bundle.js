@@ -52,7 +52,6 @@ function walk(dir, out) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) {
-      if (GENERATED_DIR_NAMES.has(entry.name)) continue; // eslint-disable-line no-continue
       walk(full, out);
     } else if (SOURCE_EXTENSIONS.has(path.extname(entry.name)) && !GENERATED_FILE_RE.test(entry.name)) {
       out.push(full);
