@@ -498,7 +498,16 @@ const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => c
   }
 };
 
-const editorFactory = (Base: ModuleType<EditorFactory>) => class FocusEditorFactoryExtender extends Base {
+const focusEditorFactoryViewControllerExtender = (
+  Base: ModuleType<EditorFactory>,
+) => class FocusEditorFactoryExtender extends Base {
+  protected _keyboardNavigationController!: KeyboardNavigationController;
+
+  public init(): void {
+    this._keyboardNavigationController = this.getController('keyboardNavigation');
+    super.init();
+  }
+
   protected renderFocusOverlay($element, isHideBorder) {
     const focusedRowEnabled = this.option('focusedRowEnabled');
 
@@ -548,8 +557,17 @@ const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExten
   }
 };
 
-const data = (Base: ModuleType<DataController>) => class FocusDataControllerExtender extends Base {
+const focusDataControllerExtender = (
+  Base: ModuleType<DataController>,
+) => class FocusDataControllerExtender extends Base {
   private _isDataPushed = false;
+
+  protected _keyboardNavigationController!: KeyboardNavigationController;
+
+  public init(): void {
+    this._keyboardNavigationController = this.getController('keyboardNavigation');
+    super.init();
+  }
 
   protected _applyChange(change) {
     if (change && change.changeType === 'updateFocusedRow') return;
@@ -1044,11 +1062,11 @@ export const focusModule = {
     controllers: {
       keyboardNavigation,
 
-      editorFactory,
+      editorFactory: focusEditorFactoryViewControllerExtender,
 
       columns,
 
-      data,
+      data: focusDataControllerExtender,
 
       editing,
     },
