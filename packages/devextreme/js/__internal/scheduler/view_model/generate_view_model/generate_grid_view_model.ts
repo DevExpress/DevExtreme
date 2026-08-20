@@ -22,6 +22,7 @@ export const sortAppointments = (
 ): SortedEntity[] => {
   const {
     isMonthView,
+    isTimelineView,
     hasAllDayPanel,
     snapToCellsMode,
     viewOffset,
@@ -35,7 +36,7 @@ export const sortAppointments = (
       sortByStartDate(group);
       const innerStep0 = isMonthView || panelName === 'allDayPanel'
         ? expandAllDayAllDayPanel(group, endDayHour, viewOffset)
-        : expandAllDayRegularPanel(group);
+        : expandAllDayRegularPanel(group, isTimelineView);
       const innerStep1 = splitByParts(innerStep0, optionManager.getSplitIntervals(panelName));
       sortByDuration(innerStep1);
       sortByStartDate(innerStep1);

@@ -98,13 +98,9 @@ describe('expandAllDay', () => {
       ]);
     });
 
-    it('should set +1 day from end date to all day appointment', () => {
+    it('should keep dates of all day appointment with duration', () => {
       expect(expandAllDayRegularPanel([
         {
-          allDay: true,
-          startDateUTC: Date.UTC(2020, 0, 10),
-          endDateUTC: Date.UTC(2020, 0, 10),
-        }, {
           allDay: true,
           startDateUTC: Date.UTC(2020, 0, 10, 4),
           endDateUTC: Date.UTC(2020, 0, 11, 5),
@@ -116,9 +112,29 @@ describe('expandAllDay', () => {
       ])).toEqual([
         {
           allDay: true,
-          startDateUTC: Date.UTC(2020, 0, 10),
-          endDateUTC: Date.UTC(2020, 0, 11),
+          startDateUTC: Date.UTC(2020, 0, 10, 4),
+          endDateUTC: Date.UTC(2020, 0, 11, 5),
         }, {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 11, 23),
+          endDateUTC: Date.UTC(2020, 0, 12),
+        },
+      ]);
+    });
+
+    it('should expand all day appointment with duration on timeline view', () => {
+      expect(expandAllDayRegularPanel([
+        {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10, 4),
+          endDateUTC: Date.UTC(2020, 0, 11, 5),
+        }, {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 11, 23),
+          endDateUTC: Date.UTC(2020, 0, 12),
+        },
+      ], true)).toEqual([
+        {
           allDay: true,
           startDateUTC: Date.UTC(2020, 0, 10, 4),
           endDateUTC: Date.UTC(2020, 0, 12, 4),
@@ -126,6 +142,22 @@ describe('expandAllDay', () => {
           allDay: true,
           startDateUTC: Date.UTC(2020, 0, 11, 23),
           endDateUTC: Date.UTC(2020, 0, 13, 23),
+        },
+      ]);
+    });
+
+    it('should set +1 day from end date to zero-duration all day appointment', () => {
+      expect(expandAllDayRegularPanel([
+        {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10),
+          endDateUTC: Date.UTC(2020, 0, 10),
+        },
+      ])).toEqual([
+        {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10),
+          endDateUTC: Date.UTC(2020, 0, 11),
         },
       ]);
     });

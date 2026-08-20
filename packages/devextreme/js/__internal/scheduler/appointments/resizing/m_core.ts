@@ -31,7 +31,7 @@ const getCellData = (
   // NOTE: All day appointments occupy day if they start at the beginning of the day,
   // but long appointments are not. So for all day appointments endDate === startDate,
   // for long appointments endDate = startDate + 1 day.
-  if (!isAllDay) {
+  if (!isAllDay && isOccupiedAllDay) {
     cellData.endDate = dateUtilsTs.addOffsets(cellData.startDate, toMs('day'));
   }
 
