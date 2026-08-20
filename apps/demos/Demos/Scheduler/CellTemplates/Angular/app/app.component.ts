@@ -47,7 +47,12 @@ export class AppComponent {
 
   currentView = this.views[0];
 
-  ariaDescription = () => {
+  formatHour = (hours: number) => new Date(2021, 0, 1, hours).toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+  });
+
+  disabledDatesDescription = () => {
     const disabledDates = this.holidays
       .filter((date) => !this.isWeekend(date))
       .map((date) => new Date(date).toLocaleDateString('en-US', {
@@ -65,6 +70,16 @@ export class AppComponent {
     }
     return '';
   };
+
+  disabledTimeDescription = () => {
+    const from = this.formatHour(this.dinnerTime.from);
+    const to = this.formatHour(this.dinnerTime.to);
+    return `The time range from ${from} to ${to} is disabled on all days`;
+  };
+
+  ariaDescription = () => [this.disabledDatesDescription(), this.disabledTimeDescription()]
+    .filter(Boolean)
+    .join('. ');
 
   constructor(public dataService: DataService) {
     this.dinnerTime = this.dataService.getDinnerTime();
