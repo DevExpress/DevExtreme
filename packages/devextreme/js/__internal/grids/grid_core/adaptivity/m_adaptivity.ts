@@ -926,16 +926,15 @@ const rowsView = (
   protected _renderCells($row, options) {
     super._renderCells($row, options);
 
-    const { adaptiveColumnsController } = this;
-    const hidingColumnsQueueLength = adaptiveColumnsController.getHidingColumnsQueue().length;
-    const hiddenColumnsLength = adaptiveColumnsController.getHiddenColumns().length;
+    const hidingColumnsQueueLength = this.adaptiveColumnsController.getHidingColumnsQueue().length;
+    const hiddenColumnsLength = this.adaptiveColumnsController.getHiddenColumns().length;
 
     if (hidingColumnsQueueLength && !hiddenColumnsLength) {
       getDataCellElements($row).last().addClass(LAST_DATA_CELL_CLASS);
     }
 
     if (options.row.rowType === 'data') {
-      adaptiveColumnsController.setCommandAdaptiveAriaLabel($row, EXPAND_ARIA_NAME);
+      this.adaptiveColumnsController.setCommandAdaptiveAriaLabel($row, EXPAND_ARIA_NAME);
     }
   }
 
@@ -1392,8 +1391,9 @@ const resizing = (Base: ModuleType<ResizingController>) => class AdaptivityResiz
   }
 
   protected _needStretch() {
-    const { adaptiveColumnsController } = this;
-    return super._needStretch.apply(this, arguments as any) || adaptiveColumnsController.getHidingColumnsQueue().length || adaptiveColumnsController.hasHiddenColumns();
+    return super._needStretch.apply(this, arguments as any)
+      || this.adaptiveColumnsController.getHidingColumnsQueue().length
+      || this.adaptiveColumnsController.hasHiddenColumns();
   }
 };
 
