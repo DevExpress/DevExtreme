@@ -117,7 +117,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   public dataSourceChanged!: Callback<[]>;
 
-  public rowIndicesCorrected!: Callback<[RowIndexCorrection]>;
+  public rowIndicesChanged!: Callback<[RowIndexCorrection]>;
 
   protected _lastRenderingPageIndex?: number;
 
@@ -186,7 +186,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   protected callbackNames(): string[] {
-    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged', 'pushed', 'rowIndicesCorrected'];
+    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged', 'pushed', 'rowIndicesChanged'];
   }
 
   protected callbackFlags(name?: string): CallbackFlags | undefined {
@@ -1146,7 +1146,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       change.isLiveUpdate = true;
     }
 
-    this.rowIndicesCorrected.fire(
+    this.rowIndicesChanged.fire(
       (rowIndex: number): number => this.getRowIndexCorrection(rowIndex, oldItems, newIndexByKey),
     );
   }
