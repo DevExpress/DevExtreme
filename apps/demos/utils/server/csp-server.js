@@ -257,6 +257,10 @@ const CSP_FRAMEWORK_ALLOWLIST = {
     CheckBox: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
     Form: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
     'Lookup/Templates': { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    'Slider/Overview': { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    'Sortable/Customization': { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    'TagBox/Grouping': { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    'SelectBox/SearchAndEditing': { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
     // globalize/message.js uses new Function() internally
     'Localization/UsingGlobalize': { 'script-src': ["'unsafe-eval'"] },
   },
