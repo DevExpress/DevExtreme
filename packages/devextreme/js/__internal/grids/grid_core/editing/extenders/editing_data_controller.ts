@@ -17,6 +17,8 @@ import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import { EDITING_EDITROWKEY_OPTION_NAME } from '../const';
 import type { EditingController } from '../m_editing';
 
+type EditingCell = Cell & { isEditing?: boolean };
+
 export const dataControllerEditingExtenderMixin = (
   Base: ModuleType<DataController>,
 ): ModuleType<DataController> => class DataControllerEditingExtender extends Base {
@@ -120,7 +122,7 @@ export const dataControllerEditingExtenderMixin = (
     columnIndex: number,
     isLiveUpdate?: boolean,
   ): boolean {
-    const cell = oldRow.cells?.[columnIndex] as (Cell & { isEditing?: boolean }) | undefined;
+    const cell = oldRow.cells?.[columnIndex] as EditingCell | undefined;
     const isEditing = this._editingController
       && this._editingController.isEditCell(visibleRowIndex, columnIndex);
 
@@ -145,24 +147,33 @@ export const dataControllerEditingExtenderMixin = (
 
   protected _handleDataSourceChange(args: OptionChanged): boolean {
     const result = super._handleDataSourceChange(args);
-    const changes = this.option('editing.changes') as EditingDataChange[];
     const dataSource = args.value;
-    if (Array.isArray(dataSource) && changes.length) {
-      const dataSourceKeys = dataSource.map((item) => this.keyOf(item));
-      const newChanges = changes.filter(
-        (change) => change.type === 'insert' || dataSourceKeys.some((key) => equalByValue(change.key, key)),
-      );
-      if (newChanges.length !== changes.length) {
-        this.option('editing.changes', newChanges);
-      }
-      const editRowKey = this.option('editing.editRowKey');
-      const isEditNewItem = newChanges.some(
-        (change) => change.type === 'insert' && equalByValue(editRowKey, change.key),
-      );
-      if (!isEditNewItem && dataSourceKeys.every((key) => !equalByValue(editRowKey, key))) {
-        this.option('editing.editRowKey', null);
-      }
+    if (Array.isArray(dataSource)) {
+      this._dropEditingStateForRemovedItems(dataSource);
     }
     return result;
+  }
+
+  private _dropEditingStateForRemovedItems(dataSource: RawItemData[]): void {
+    const changes = this.option('editing.changes') as EditingDataChange[];
+    if (!changes.length) {
+      return;
+    }
+
+    const dataSourceKeys = dataSource.map((item) => this.keyOf(item));
+    const survivingChanges = changes.filter(
+      (change) => change.type === 'insert' || dataSourceKeys.some((key) => equalByValue(change.key, key)),
+    );
+    if (survivingChanges.length !== changes.length) {
+      this.option('editing.changes', survivingChanges);
+    }
+
+    const editRowKey = this.option('editing.editRowKey');
+    const isEditingNewRow = survivingChanges.some(
+      (change) => change.type === 'insert' && equalByValue(editRowKey, change.key),
+    );
+    if (!isEditingNewRow && dataSourceKeys.every((key) => !equalByValue(editRowKey, key))) {
+      this.option('editing.editRowKey', null);
+    }
   }
 };
