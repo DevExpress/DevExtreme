@@ -3,7 +3,7 @@
     <DxFileManager
       :file-system-provider="remoteProvider"
       :on-selected-file-opened="displayImagePopup"
-      current-path="Widescreen"
+      current-path="Places"
     >
       <DxPermissions
         :create="true"
