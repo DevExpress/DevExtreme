@@ -25,11 +25,10 @@ const isAllDay = (
 ): boolean => {
   const adapter = new AppointmentAdapter(appointmentData, scheduler._dataAccessors);
 
-  if (VERTICAL_VIEW_TYPES.includes(scheduler.currentView.type)) {
-    return isAppointmentTakesAllDay(adapter, scheduler.option('allDayPanelMode'));
-  }
-
-  return adapter.allDay;
+  return isAppointmentTakesAllDay(
+    adapter,
+    scheduler.getViewOption('allDayPanelMode'),
+  );
 };
 
 const subscribes = {
