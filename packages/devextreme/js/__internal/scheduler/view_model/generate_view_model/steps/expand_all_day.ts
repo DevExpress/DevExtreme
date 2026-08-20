@@ -74,12 +74,13 @@ export const expandAllDayAllDayPanel = <T extends Pick<ListEntity, 'startDateUTC
 
 export const expandAllDayRegularPanel = <T extends Pick<ListEntity, 'startDateUTC' | 'endDateUTC' | 'allDay'>>(
   entities: T[],
+  isTimelineView = false,
 ): T[] => entities.map((entity) => {
   if (!entity.allDay) {
     return entity;
   }
 
-  if (entity.endDateUTC > entity.startDateUTC) {
+  if (!isTimelineView && entity.endDateUTC > entity.startDateUTC) {
     return entity;
   }
 
