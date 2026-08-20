@@ -6,7 +6,7 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-      "esModuleInterop": true,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
