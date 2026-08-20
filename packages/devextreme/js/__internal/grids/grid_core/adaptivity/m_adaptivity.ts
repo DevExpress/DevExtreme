@@ -1190,9 +1190,12 @@ const data = (
 ) => class AdaptivityDataControllerExtender extends Base {
   private _adaptiveExpandedKey: any;
 
+  protected _adaptiveColumnsController!: AdaptiveColumnsController;
+
   public init() {
     super.init();
     this._adaptiveExpandedKey = undefined;
+    this._adaptiveColumnsController = this.getController('adaptiveColumns');
   }
 
   protected _processItems(items: RawItemData[], change: DataChange): ProcessedItem[] {

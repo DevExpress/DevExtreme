@@ -126,8 +126,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   // TODO public controller
   public _columnsController!: Controllers['columns'];
 
-  protected _adaptiveColumnsController!: Controllers['adaptiveColumns'];
-
   // TODO public controller
   public _rowsScrollController?: VirtualScrollController | null;
 
@@ -151,7 +149,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._items = [];
     this._cachedProcessedItems = null;
     this._columnsController = this.getController('columns');
-    this._adaptiveColumnsController = this.getController('adaptiveColumns');
     this._editingController = this.getController('editing');
     this._filterSyncController = this.getController('filterSync');
     this._keyboardNavigationController = this.getController('keyboardNavigation');
