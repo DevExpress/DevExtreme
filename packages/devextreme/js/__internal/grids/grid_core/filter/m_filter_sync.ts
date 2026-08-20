@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import filterUtils from '@js/ui/shared/filtering';
@@ -312,13 +313,11 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterSyn
     let filterValue = this.option('filterValue');
 
     if (this.isFilterSyncActive()) {
-      const currentColumnForHeaderFilter = this._headerFilterController.getCurrentColumn();
-      const currentColumnForFilterRow = this._applyFilterController.getCurrentColumnForFiltering();
-      const currentColumn = currentColumnForHeaderFilter || currentColumnForFilterRow;
-      const needRemoveCurrentColumnFilter = currentColumnForHeaderFilter || isDefined(currentColumnForFilterRow?.filterValue);
+      const excludedColumn = this.getFilterExcludedColumn();
+      const needRemoveCurrentColumnFilter = isDefined(excludedColumn);
 
       if (needRemoveCurrentColumnFilter && filterValue) {
-        filterValue = removeFieldConditionsFromFilter(filterValue, getColumnIdentifier(currentColumn));
+        filterValue = removeFieldConditionsFromFilter(filterValue, getColumnIdentifier(excludedColumn));
       }
     }
     const customOperations = this._filterSyncController.getCustomFilterOperations();
@@ -352,14 +351,12 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterSyn
     this.component.endUpdate();
   }
 
-  protected _applyFilter(): Promise<void> {
+  protected _applyFilter(): DeferredObj<unknown> {
     if (this._filterSyncController._skipSyncColumnOptions) {
-      // @ts-expect-error
-      return new Deferred().resolve();
+      return Deferred().resolve();
     }
 
-    // @ts-expect-error
-    return super._applyFilter.apply(this, arguments);
+    return super._applyFilter();
   }
 };
 

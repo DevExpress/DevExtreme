@@ -236,7 +236,7 @@
         "dxDataGrid-moveColumnToTheRight": "Przenieś w prawo",
         "dxDataGrid-moveColumnToTheLeft": "Przenieś w lewo",
 
-        "dxTreeList-ariaTreeList": "Lista strukturalna",
+        "dxTreeList-ariaTreeList": "Lista strukturalna. Liczba wierszy: {0}. Liczba kolumn: {1}",
         "dxTreeList-ariaExpandableInstruction": "Naciśnij Ctrl + strzałka w prawo, aby rozwinąć fokusowany węzeł, i Ctrl + strzałka w lewo, aby go zwinąć",
         "dxTreeList-ariaSearchInGrid": "Szukaj w liście strukturalnej",
         "dxTreeList-ariaToolbar": "Pasek narzędzi listy strukturalnej",

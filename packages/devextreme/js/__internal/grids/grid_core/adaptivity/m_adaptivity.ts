@@ -24,6 +24,8 @@ import { AI_COLUMN_NAME } from '../ai_column/const';
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { ColumnsResizerViewController, DraggingHeaderViewController } from '../columns_resizing_reordering/m_columns_resizing_reordering';
 import type { DataController } from '../data_controller/data_controller';
+import type { DataChange, ProcessedItem } from '../data_controller/types';
+import type { RawItemData } from '../data_source_adapter/types';
 import type { EditingController } from '../editing/m_editing';
 import type { EditorFactory } from '../editor_factory/m_editor_factory';
 import type { Direction } from '../keyboard_navigation/const';
@@ -1193,25 +1195,25 @@ const data = (
     this._adaptiveExpandedKey = undefined;
   }
 
-  protected _processItems(items, change) {
+  protected _processItems(items: RawItemData[], change: DataChange): ProcessedItem[] {
+    const processedItems = super._processItems(items, change);
     const { changeType } = change;
 
-    items = super._processItems.apply(this, arguments as any);
-
     if ((changeType === 'loadingAll') || !isDefined(this._adaptiveExpandedKey)) {
-      return items;
+      return processedItems;
     }
 
-    const expandRowIndex = gridCoreUtils.getIndexByKey(this._adaptiveExpandedKey, items);
+    const expandRowIndex = gridCoreUtils.getIndexByKey(this._adaptiveExpandedKey, processedItems);
     const newMode = this.option(LEGACY_SCROLLING_MODE) === false;
 
     if (expandRowIndex >= 0) {
-      const item = items[expandRowIndex];
-      items.splice(expandRowIndex + 1, 0, {
+      const item = processedItems[expandRowIndex];
+      processedItems.splice(expandRowIndex + 1, 0, {
         visible: true,
         rowType: ADAPTIVE_ROW_TYPE,
         key: item.key,
         data: item.data,
+        // @ts-expect-error treelist specific field
         node: item.node,
         modifiedValues: item.modifiedValues,
         isNewRow: item.isNewRow,
@@ -1221,7 +1223,7 @@ const data = (
       this._adaptiveExpandedKey = undefined;
     }
 
-    return items;
+    return processedItems;
   }
 
   private _getRowIndicesForExpand(key) {

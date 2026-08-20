@@ -16,9 +16,13 @@ on:
         description: Package file filter pattern
         required: false
 
+permissions:
+  contents: read
+  packages: write
+
 env:
   NX_SKIP_NX_CACHE: true
-  FILTER: ${{ github.event_name == 'workflow_dispatch' && inputs.filter || '' }}
+  FILTER: ${{ inputs.filter || '' }}
   SET_TIMESTAMP_VERSION:  ${{ inputs.tag == 'daily' }}
   SBOM_PACKAGE_NAMES: devextreme,devextreme-angular,devextreme-react,devextreme-vue,devextreme-themebuilder
 
@@ -26,6 +30,7 @@ jobs:
   build:
     name: Build packages
     runs-on: ubuntu-latest
+    environment: ${{ (inputs.tag == 'stable' && 'packages-publishing-stable') || 'packages-publishing-daily' }}
     outputs:
       packages: ${{ steps.filter.outputs.packages }}
     steps:
@@ -269,7 +274,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - uses: DevExpress/github-actions/send-teams-notification@v1
+      - uses: DevExpress/github-actions/send-teams-notification@send-teams-notification
         with:
           hook_url: ${{secrets.TEAMS_ALERT}}
           bearer_token: ${{secrets.GITHUB_TOKEN}}

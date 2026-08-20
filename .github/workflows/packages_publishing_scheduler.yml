@@ -3,7 +3,6 @@ name: Publishing to GitHub Packages (scheduler)
 on:
   schedule:
     - cron: '00 18 * * *'
-  workflow_dispatch:
 
 jobs:
   publish:
@@ -19,10 +18,8 @@ jobs:
       - name: Get sources
         uses: actions/checkout@v6
         with:
-          sparse-checkout: |
-            README.md
-          sparse-checkout-cone-mode: false
+          sparse-checkout: README.md
 
       - name: Publish Packages (${{ matrix.branch }})
         run: |
-          gh workflow run packages_publishing.yml -f tag=daily --ref ${{ matrix.branch }}          
+          gh workflow run packages_publishing.yml -f tag=daily --ref ${{ matrix.branch }}

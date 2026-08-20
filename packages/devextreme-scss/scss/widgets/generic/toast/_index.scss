@@ -1,16 +1,10 @@
-@use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/toast";
-
-// adduse
 @use "../overlay";
 
-
 $generic-toast-shadow: 0 2px 3px 0 $toast-shadow-color;
-
 
 .dx-toast-content {
   color: $toast-color;

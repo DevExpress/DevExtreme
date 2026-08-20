@@ -13,7 +13,7 @@ minimumReleaseAge: 0
 
 overrides:
   "basic-ftp@<5.3.1": ">=5.3.1"
-  "js-yaml@<4.3.0": "^4.3.0"
+  "js-yaml@<4.3.1": "^4.3.1"
   "rollup@<4.59.0": "^4.59.0"
   "json5@<1.0.2": ^2.2.3
   "axios@<1.18.0": ^1.18.0
@@ -21,7 +21,6 @@ overrides:
   "semver@<5.7.2": ^5.7.2
   qs: ">=6.15.2"
   "vite@>=7.0.0 <=7.3.4": ^7.3.5
-  "dompurify@<3.4.12": ^3.4.12
   "hono@<4.12.34": "^4.12.34"
   "minimatch@>=9.0.0 < 9.0.7": 9.0.9
   "picomatch@>=4.0.0 <4.0.4": 4.0.4
@@ -35,6 +34,7 @@ overrides:
   "brace-expansion@>=3.0.0 <5.0.9": "^5.0.9"
   "yaml@>=2.0.0 <2.8.3": ^2.8.3
   "follow-redirects@<=1.15.11": ">=1.16.0"
+  "less@<4.8.0": ^4.8.0
   "ws@>=8.0.0 <8.21.0": ^8.21.0
   "ws@>=7.0.0 <7.5.11": ^7.5.11
   "launch-editor@<2.14.1": ^2.14.1
@@ -60,6 +60,8 @@ overrides:
   "systemjs-builder>terser": 5.46.2
   "fast-uri@>=3.0.0 <3.1.5": "^3.1.5"
   "@hono/node-server@<2.0.12": "^2.0.12"
+  "dompurify@<=3.4.12": "^3.4.13"
+  "nanoid@<3.3.17": "^3.3.17"
 catalog:
   axe-core: 4.11.3
   inferno: ^8.2.3
@@ -68,12 +70,12 @@ catalog:
   inferno-server: ^8.2.3
   devexpress-diagram: 2.2.29
   devexpress-gantt: 4.1.69
-  devextreme-exceljs-fork: 4.4.11
+  devextreme-exceljs-fork: 4.4.13
   devextreme-quill: 1.8.0
   "@eslint/js": 9.39.4
   eslint: 9.39.4
   eslint-config-airbnb-typescript: 18.0.0
-  eslint-config-devextreme: 1.1.11
+  eslint-config-devextreme: 1.1.12
   eslint-plugin-i18n: 2.4.0
   eslint-plugin-import: 2.32.0
   eslint-plugin-jsx-a11y: 6.10.2

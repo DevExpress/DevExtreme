@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 $button-border-radius: $base-border-radius !default;
 
@@ -705,4 +702,3 @@ $button-success-text-bg-selected: null !default;
   $button-success-text-bg-active: $button-success-outlined-bg-active !default;
   $button-success-text-bg-selected: color.change($button-success-bg, $alpha: 0.3) !default;
 }
-

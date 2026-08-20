@@ -106,6 +106,9 @@ type TemporarlyOptionsTakenFromDataGrid = Pick<DataGridOptions,
 | 'onEditingStart'
 | 'toolbar'
 | 'summary'
+| 'remoteOperations'
+| 'keyExpr'
+| 'selectionFilter'
 >;
 
 type TemporarlyOptionsTakenFromTreeList = Pick<TreeListdOptions,
@@ -192,7 +195,7 @@ export interface Controllers {
   // todo: export is dataGrid-only controller
   editing: import('./editing/m_editing').EditingController;
   editorFactory: import('./editor_factory/m_editor_factory').EditorFactory;
-  errorHandling: import('./error_handling/m_error_handling').ErrorHandlingController;
+  errorHandling: import('./error_handling/error_handling_view_controller').ErrorHandlingViewController;
   export: import('../data_grid/export/m_export').ExportController;
   filterSync: import('./filter/m_filter_sync').FilterSyncController;
   focus: import('./focus/m_focus').FocusController;
@@ -205,7 +208,7 @@ export interface Controllers {
   selection: import('./selection/m_selection').SelectionController;
   validating: import('./validating/m_validating').ValidatingController;
   searchPanel: import('./search/m_search').SearchPanelViewController;
-  stateStoring: import('./state_storing/m_state_storing_core').StateStoringController;
+  stateStoring: import('./state_storing/state_storing_controller_core').StateStoringController;
   synchronizeScrolling: import('./views/m_grid_view').SynchronizeScrollingController;
   tablePosition: import('./columns_resizing_reordering/m_columns_resizing_reordering').TablePositionViewController;
   toastViewController: import('./toast/m_toast_controller').ToastViewController;

@@ -12,12 +12,20 @@ import { getWindow } from '@js/core/utils/window';
 import LoadIndicator from '@js/ui/load_indicator';
 import errors from '@js/ui/widget/ui.errors';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type {
+  DataChange, PagingResult, ProcessedItem,
+} from '@ts/grids/grid_core/data_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { VirtualItemsCount } from '@ts/grids/grid_core/virtual_data_loader/types';
 
+import type { ChangedEvent } from '../data_source_adapter/types';
 import gridCoreUtils from '../m_utils';
+import type { StateStoringDataControllerExtension } from '../state_storing/extenders/state_storing_data_controller';
 import type { RowsViewScrollEvent } from '../views/types';
 import { subscribeToExternalScrollers, VirtualScrollController } from './m_virtual_scrolling_core';
 import type { ChangedLoadParams } from './types';
@@ -199,15 +207,15 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     };
   }
 
-  protected _handleLoadingChanged(isLoading) {
+  protected loadingChangedHandler(isLoading: boolean): void {
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
-      super._handleLoadingChanged.apply(this, arguments as any);
+      super.loadingChangedHandler(isLoading);
       return;
     }
 
     if (!isVirtualMode(this) || this._isLoadingAll) {
       this._isLoading = isLoading;
-      super._handleLoadingChanged.apply(this, arguments as any);
+      super.loadingChangedHandler(isLoading);
     }
 
     if (isLoading) {
@@ -217,24 +225,24 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     }
   }
 
-  protected _handleLoadError() {
+  protected loadErrorHandler(e: Error | string): void {
     if (this.option(LEGACY_SCROLLING_MODE) !== false) {
       this._isLoading = false;
       this.loadingChanged.fire(false);
     }
 
-    super._handleLoadError.apply(this, arguments as any);
+    super.loadErrorHandler(e);
   }
 
-  protected _handleDataChanged(e) {
+  protected dataChangedHandler(e?: ChangedEvent): void {
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
       this._items = this._dataSource.items().slice();
       this._totalCount = this._dataSourceTotalCount(true);
-      super._handleDataChanged.apply(this, arguments as any);
+      super.dataChangedHandler(e);
       return;
     }
 
-    const callBase = super._handleDataChanged.bind(this);
+    const callBase = super.dataChangedHandler.bind(this);
 
     this._virtualScrollController.handleDataChanged(callBase, e);
   }
@@ -280,7 +288,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     return this.option(LEGACY_SCROLLING_MODE) === false ? this._dataSource.isLoading() : this._isLoading;
   }
 
-  protected isLoaded() {
+  public isLoaded() {
     return this._dataSource.isLoaded() && this._isLoaded;
   }
 
@@ -449,7 +457,16 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     return proxyDataSourceAdapterMethod(this, 'loadIfNeed', [...arguments]);
   }
 };
-export const data = (Base: ModuleType<DataController>) => class VirtualScrollingDataControllerExtender extends Base {
+
+export interface VirtualScrollingDataControllerExtension {
+  virtualItemsCount: () => VirtualItemsCount | undefined;
+}
+
+export const virtualScrollingDataControllerExtender = (
+  Base: ModuleType<DataController>,
+): ModuleType<
+  DataController & VirtualScrollingDataControllerExtension
+> => class VirtualScrollingDataControllerExtender extends Base {
   private _loadViewportParams: any;
 
   private _allItems: any;
@@ -471,9 +488,9 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     super.dispose.apply(this, arguments as any);
   }
 
-  protected _refreshDataSource() {
-    // @ts-expect-error
-    const baseResult = super._refreshDataSource.apply(this, arguments as any) || new Deferred().resolve().promise();
+  protected _refreshDataSource(): DeferredObj<unknown> {
+    // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
+    const baseResult: DeferredObj<unknown> = super._refreshDataSource() ?? Deferred().resolve().promise();
 
     baseResult.done(this.initVirtualRows.bind(this));
 
@@ -749,8 +766,8 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     this._loadViewportParams = viewportParams;
   }
 
-  protected _processItems() {
-    const resultItems = super._processItems.apply(this, arguments as any);
+  protected _processItems(items: RawItemData[], change: DataChange): ProcessedItem[] {
+    const processedItems = super._processItems(items, change);
 
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
       const dataSource = this._dataSource;
@@ -760,7 +777,8 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
       let isPrevRowNew;
       let wasCountableItem = false;
       let newRows: any = [];
-      resultItems.forEach((item) => {
+
+      processedItems.forEach((item) => {
         const { rowType } = item;
         const itemCountable = isItemCountableByDataSource(item, dataSource);
 
@@ -783,6 +801,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
           newRows.forEach((it) => { it.loadIndex = currentIndex; });
           newRows = [];
         }
+
         item.loadIndex = currentIndex;
         prevCountable = itemCountable;
         prevRowType = rowType;
@@ -791,25 +810,27 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
       newRows.forEach((it) => { it.loadIndex = currentIndex; });
     }
 
-    return resultItems;
+    return processedItems;
   }
 
-  protected _afterProcessItems(items) {
-    this._itemCount = items.filter((item) => isItemCountableByDataSource(item, this._dataSource)).length;
+  protected _afterProcessItems(processedItems: ProcessedItem[]): ProcessedItem[] {
+    this._itemCount = processedItems.filter((item) => isItemCountableByDataSource(item, this._dataSource)).length;
+
     if (isDefined(this._loadViewportParams)) {
       this._updateLoadViewportParams();
 
-      let result = items;
-      this._allItems = items;
+      let result = processedItems;
+      this._allItems = processedItems;
 
-      if (items.length) {
+      if (processedItems.length) {
         const { skipForCurrentPage } = this.getLoadPageParams(true);
-        const skip = items[0].loadIndex + skipForCurrentPage;
+        const skip = processedItems[0].loadIndex! + skipForCurrentPage;
         const { take } = this._loadViewportParams;
-        result = items.filter((it) => {
+
+        result = processedItems.filter((it) => {
           const isNewRowInEmptyData = it.isNewRow && it.loadIndex === skip && take === 0;
-          const isLoadIndexGreaterStart = it.loadIndex >= skip;
-          const isLoadIndexLessEnd = it.loadIndex < skip + take || isNewRowInEmptyData;
+          const isLoadIndexGreaterStart = it.loadIndex! >= skip;
+          const isLoadIndexLessEnd = it.loadIndex! < skip + take || isNewRowInEmptyData;
           return isLoadIndexGreaterStart && isLoadIndexLessEnd;
         });
       }
@@ -817,7 +838,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
       return result;
     }
 
-    return super._afterProcessItems.apply(this, arguments as any);
+    return super._afterProcessItems(processedItems);
   }
 
   protected _applyChange(change) {
@@ -904,12 +925,17 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     return offset;
   }
 
-  protected getDataIndex() {
+  protected getDataIndex(change: DataChange): number {
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
       return this.getRowIndexOffset(true, true);
     }
 
-    return super.getDataIndex.apply(this, arguments as any);
+    // @ts-expect-error changeType can be 'append' only when virtual scrolling with scrolling.legacyMode are enabled
+    const lastVisibleItem = change.changeType === 'append' && this._items.length > 0
+      ? this._items.at(-1)
+      : null;
+
+    return isDefined(lastVisibleItem?.dataIndex) ? lastVisibleItem!.dataIndex + 1 : 0;
   }
 
   private viewportSize() {
@@ -1168,6 +1194,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
       if (needToUpdateItems) {
         const noPendingChangesInEditing = !this._editingController?.getChanges()?.length;
         this.updateItems({
+          changeType: 'refresh',
           repaintChangesOnly: true,
           needUpdateDimensions: true,
           useProcessedItemsCache: noPendingChangesInEditing,
@@ -1261,19 +1288,19 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     return viewportParams && viewportParams.skip + viewportParams.take;
   }
 
-  private virtualItemsCount() {
+  public virtualItemsCount(): VirtualItemsCount | undefined {
     const rowsScrollController = this._rowsScrollController;
 
     if (rowsScrollController) {
-      // @ts-expect-error
-      return rowsScrollController.virtualItemsCount.apply(rowsScrollController, arguments);
+      return rowsScrollController.virtualItemsCount();
     }
 
-    const dataSource = this._dataSource;
-    return dataSource?.virtualItemsCount.apply(dataSource, arguments);
+    return this._dataSource?.virtualItemsCount() as VirtualItemsCount | undefined;
   }
 
-  public pageIndex(pageIndex?) {
+  public pageIndex(): number;
+  public pageIndex(value: number): DeferredObj<unknown>;
+  public pageIndex(pageIndex?): PagingResult {
     const virtualPaging = isVirtualPaging(this);
     const rowsScrollController = this._rowsScrollController;
     if (this.option(LEGACY_SCROLLING_MODE) === false && virtualPaging && rowsScrollController) {
@@ -1332,10 +1359,10 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     super.reset.apply(this, arguments as any);
   }
 
-  protected _applyFilter(): Promise<void> {
+  protected _applyFilter(): DeferredObj<unknown> {
     this._dataSource?.loadPageCount(1);
 
-    return super._applyFilter.apply(this, arguments as any);
+    return super._applyFilter();
   }
 
   private getVirtualContentSize() {
@@ -1417,6 +1444,10 @@ export const resizing = (Base: ModuleType<ResizingController>) => class VirtualS
 };
 
 export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRowsViewExtender extends Base {
+  protected _dataController!: DataController & Partial<StateStoringDataControllerExtension>;
+
+  protected _errorHandlingController!: ErrorHandlingViewController;
+
   private _isFixedTableRendering: any;
 
   private _heightWarningIsThrown: any;
@@ -1425,8 +1456,10 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
   private readonly _scrollTimeoutID: any;
 
-  public init() {
+  public init(): void {
     super.init();
+
+    this._errorHandlingController = this.getController('errorHandling');
 
     this._dataController.pageChanged.add((pageIndex) => {
       const scrollTop = this._scrollTop;
@@ -1444,11 +1477,9 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
       !this._scrollTop && this._scrollToCurrentPageOnResize();
     });
 
-    this._dataController
-      // @ts-expect-error
-      .stateLoaded?.add(() => {
-        this._scrollToCurrentPageOnResize();
-      });
+    this._dataController.stateLoaded?.add(() => {
+      this._scrollToCurrentPageOnResize();
+    });
 
     this._scrollToCurrentPageOnResize();
   }
@@ -1937,7 +1968,7 @@ export const virtualScrollingModule = {
   },
   extenders: {
     controllers: {
-      data,
+      data: virtualScrollingDataControllerExtender,
       resizing,
     },
     views: {

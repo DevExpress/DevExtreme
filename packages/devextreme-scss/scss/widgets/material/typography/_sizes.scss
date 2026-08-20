@@ -1,7 +1,5 @@
 @use "../sizes" as *;
 
-// adduse
-
 $material-xl-font-size: null !default;
 $material-l-font-size: null !default;
 $material-m-font-size: null !default;
@@ -57,4 +55,3 @@ $material-h6-font-size: null !default;
   --dx-font-size-sm: #{$material-s-font-size};
   --dx-font-size-xs: #{$material-xs-font-size};
 }
-

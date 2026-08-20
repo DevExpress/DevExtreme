@@ -33,7 +33,9 @@ import {
   VIRTUAL_COMMAND_COLUMN_NAME,
 } from './const';
 import type { ColumnsController } from './m_columns_controller';
-import type { Column, ColumnIndex, DropLocationNames } from './types';
+import type {
+  Column, ColumnIndex, ColumnsChanges, DropLocationNames,
+} from './types';
 
 const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns: any[]): void => {
   if (controller?._isWarnedAboutUnsupportedProperties) return;
@@ -517,7 +519,7 @@ export const applyUserState = function (that: ColumnsController) {
 
       if (fieldName === 'dataType') {
         column[fieldName] = column[fieldName] || userStateColumn[fieldName];
-      } else if (USER_STATE_FIELD_NAMES_15_1.includes(fieldName)) {
+      } else if ((USER_STATE_FIELD_NAMES_15_1 as readonly string[]).includes(fieldName)) {
         if (fieldName in userStateColumn) {
           column[fieldName] = userStateColumn[fieldName];
         }
@@ -610,16 +612,19 @@ export function assignColumns(that, columns) {
   that.updateColumnDataTypes();
 }
 
-export const updateColumnChanges = function (that: ColumnsController, changeType, optionName?, columnIndex?) {
-  const columnChanges = that._columnChanges || {
+export const updateColumnChanges = (
+  that: ColumnsController,
+  changeType: Exclude<keyof ColumnsChanges['changeTypes'], 'length'>,
+  optionName?: string,
+  columnIndex?: number,
+): void => {
+  const columnChanges: ColumnsChanges = that._columnChanges ?? {
     optionNames: { length: 0 },
     changeTypes: { length: 0 },
     columnIndex, // TODO replace columnIndex -> columnIndices
   };
 
-  optionName = optionName || 'all';
-
-  optionName = optionName.split('.')[0];
+  const normalizedOptionName = (optionName ?? 'all').split('.')[0] as keyof Column | 'all';
 
   const { changeTypes } = columnChanges;
 
@@ -630,8 +635,8 @@ export const updateColumnChanges = function (that: ColumnsController, changeType
 
   const { optionNames } = columnChanges;
 
-  if (optionName && !optionNames[optionName]) {
-    optionNames[optionName] = true;
+  if (normalizedOptionName && !optionNames[normalizedOptionName]) {
+    optionNames[normalizedOptionName] = true;
     optionNames.length++;
   }
   if (columnIndex === undefined || columnIndex !== columnChanges.columnIndex) {

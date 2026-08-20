@@ -7,6 +7,7 @@ import { Deferred } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
+import type { VirtualItemsCount } from '@ts/grids/grid_core/virtual_data_loader/types';
 
 import gridCoreUtils from '../m_utils';
 import { VirtualDataLoader } from '../virtual_data_loader/m_virtual_data_loader';
@@ -167,7 +168,7 @@ class VirtualScrollController {
     return this._isVirtual;
   }
 
-  private virtualItemsCount() {
+  public virtualItemsCount(): VirtualItemsCount | undefined {
     if (isVirtualMode(this)) {
       const dataOptions = this._dataOptions;
       const totalItemsCount = dataOptions.totalItemsCount();
@@ -186,8 +187,7 @@ class VirtualScrollController {
         };
       }
 
-      // @ts-expect-error
-      return this._dataLoader.virtualItemsCount.apply(this._dataLoader, arguments);
+      return this._dataLoader.virtualItemsCount();
     }
 
     return undefined;

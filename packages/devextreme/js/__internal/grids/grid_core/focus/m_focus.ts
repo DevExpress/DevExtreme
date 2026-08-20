@@ -4,6 +4,7 @@ import { equalByValue } from '@js/core/utils/common';
 import { Deferred, type DeferredObj, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isBoolean, isDefined } from '@js/core/utils/type';
+import type { StoreChange } from '@js/data/store';
 import type { Key } from '@ts/grids/new/grid_core/data_controller/types';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
@@ -497,23 +498,32 @@ const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => c
   }
 };
 
-const editorFactory = (Base: ModuleType<EditorFactory>) => class FocusEditorFactoryExtender extends Base {
+const focusEditorFactoryViewControllerExtender = (
+  Base: ModuleType<EditorFactory>,
+) => class FocusEditorFactoryExtender extends Base {
+  protected keyboardNavigationController!: KeyboardNavigationController;
+
+  public init(): void {
+    this.keyboardNavigationController = this.getController('keyboardNavigation');
+    super.init();
+  }
+
   protected renderFocusOverlay($element, isHideBorder) {
     const focusedRowEnabled = this.option('focusedRowEnabled');
 
     if (
       !focusedRowEnabled
-      || !this._keyboardNavigationController?.isRowFocusType()
+      || !this.keyboardNavigationController?.isRowFocusType()
       || this._editingController.isEditing()
       || this._columnHeadersView.isFilterRowCell($element)
     ) {
       super.renderFocusOverlay($element, isHideBorder);
     } else if (focusedRowEnabled) {
-      const isRowElement = this._keyboardNavigationController._getElementType($element) === 'row';
+      const isRowElement = this.keyboardNavigationController._getElementType($element) === 'row';
 
       if (isRowElement && !$element.hasClass(ROW_FOCUSED_CLASS)) {
-        const $cell = this._keyboardNavigationController.getFirstValidCellInRow($element);
-        this._keyboardNavigationController.focus($cell);
+        const $cell = this.keyboardNavigationController.getFirstValidCellInRow($element);
+        this.keyboardNavigationController.focus($cell);
       }
     }
   }
@@ -547,8 +557,17 @@ const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExten
   }
 };
 
-const data = (Base: ModuleType<DataController>) => class FocusDataControllerExtender extends Base {
+const focusDataControllerExtender = (
+  Base: ModuleType<DataController>,
+) => class FocusDataControllerExtender extends Base {
   private _isDataPushed = false;
+
+  protected keyboardNavigationController!: KeyboardNavigationController;
+
+  public init(): void {
+    this.keyboardNavigationController = this.getController('keyboardNavigation');
+    super.init();
+  }
 
   protected _applyChange(change) {
     if (change && change.changeType === 'updateFocusedRow') return;
@@ -602,8 +621,8 @@ const data = (Base: ModuleType<DataController>) => class FocusDataControllerExte
     }
   }
 
-  protected _handleDataPushed(changes) {
-    super._handleDataPushed(changes);
+  protected dataPushedHandler(changes: StoreChange[]): void {
+    super.dataPushedHandler(changes);
 
     const focusedRowKey = this.option('focusedRowKey');
 
@@ -627,7 +646,7 @@ const data = (Base: ModuleType<DataController>) => class FocusDataControllerExte
     const {
       reload, fullReload, pageIndex, paging,
     } = operationTypes;
-    const isVirtualScrolling = this._keyboardNavigationController._isVirtualScrolling();
+    const isVirtualScrolling = this.keyboardNavigationController._isVirtualScrolling();
     const pagingWithoutVirtualScrolling = paging && !isVirtualScrolling;
     const focusedRowKey = this.option('focusedRowKey');
     const isAutoNavigate = this._focusController.isAutoNavigateToFocusedRow();
@@ -1043,11 +1062,11 @@ export const focusModule = {
     controllers: {
       keyboardNavigation,
 
-      editorFactory,
+      editorFactory: focusEditorFactoryViewControllerExtender,
 
       columns,
 
-      data,
+      data: focusDataControllerExtender,
 
       editing,
     },

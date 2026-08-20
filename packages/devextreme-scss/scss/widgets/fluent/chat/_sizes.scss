@@ -6,8 +6,6 @@
 @use "../popup/sizes" as *;
 @use "../button/colors" as *;
 
-// adduse
-
 $chat-border-radius: $base-border-radius * 3 !default;
 $chat-bubble-border-radius: null !default;
 $chat-bubble-padding: null !default;

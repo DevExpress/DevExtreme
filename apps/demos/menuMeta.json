@@ -835,6 +835,7 @@
           {
             "Name": "Master-Detail",
             "Equivalents": "preview row",
+            "Badge": "Updated",
             "Demos": [
               {
                 "Title": "Master-Detail View",
@@ -858,6 +859,14 @@
                   "/Models/SampleData/DataGridEmployees.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "AI-powered Detail View",
+                "Name": "AIPoweredDetailView",
+                "Widget": "DataGrid",
+                "DemoType": "Web",
+                "Badge": "Roadmap",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-wg-roadmap-ai-powered-detail-view.xml"
               },
               {
                 "Title": "Advanced Master-Detail View",
@@ -6466,6 +6475,7 @@
         "Name": "Map",
         "Breadcrumb": true,
         "Equivalents": "dxMap, dx-map",
+        "Badge": "Updated",
         "Demos": [
           {
             "Title": "Providers and Types",
@@ -6473,6 +6483,14 @@
             "Widget": "Map",
             "ShowOnMainPage": true,
             "MainPageTitle": "Map"
+          },
+          {
+            "Title": "OpenStreetMap Provider",
+            "Name": "OpenStreetMapProvider",
+            "Widget": "Map",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-wg-roadmap-openstreetmap-provider.xml"
           },
           {
             "Title": "Markers",

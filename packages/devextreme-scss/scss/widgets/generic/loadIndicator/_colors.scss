@@ -1,9 +1,6 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../color" as extcolor;
-
-// adduse
 
 /**
 * $name 10. Indicator color
@@ -78,4 +75,3 @@ $load-indicator-animation-sparkle-bg-color3: null !default;
   $load-indicator-animation-sparkle-bg-color2: color.adjust($base-accent, $saturation: -8.58%, $space: hsl, $lightness: 27.06%) !default;
   $load-indicator-animation-sparkle-bg-color3: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 2deg, $saturation: -6.88%, $lightness: 33.14%) !default;
 }
-
