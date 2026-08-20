@@ -462,7 +462,7 @@ export interface VirtualScrollingDataControllerExtension {
   virtualItemsCount: () => VirtualItemsCount | undefined;
 }
 
-export const data = (
+export const virtualScrollingDataControllerExtender = (
   Base: ModuleType<DataController>,
 ): ModuleType<
   DataController & VirtualScrollingDataControllerExtension
@@ -1968,7 +1968,7 @@ export const virtualScrollingModule = {
   },
   extenders: {
     controllers: {
-      data,
+      data: virtualScrollingDataControllerExtender,
       resizing,
     },
     views: {
