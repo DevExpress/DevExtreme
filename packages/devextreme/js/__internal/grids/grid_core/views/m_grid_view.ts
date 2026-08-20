@@ -115,7 +115,7 @@ export class ResizingController extends modules.ViewController {
 
   private _lastHeight: any;
 
-  protected _adaptiveColumnsController!: AdaptiveColumnsController;
+  protected adaptiveColumnsController!: AdaptiveColumnsController;
 
   private _editorFactoryController!: EditorFactory;
 
@@ -132,7 +132,7 @@ export class ResizingController extends modules.ViewController {
     this._dataController = this.getController('data');
     this._columnsController = this.getController('columns');
     this._columnHeadersView = this.getView('columnHeadersView');
-    this._adaptiveColumnsController = this.getController('adaptiveColumns');
+    this.adaptiveColumnsController = this.getController('adaptiveColumns');
     this._editorFactoryController = this.getController('editorFactory');
     this._footerView = this.getView('footerView');
     this._rowsView = this.getView('rowsView');
