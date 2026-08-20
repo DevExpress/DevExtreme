@@ -2,6 +2,12 @@ import { describe, expect, it } from '@jest/globals';
 
 import { expandAllDayAllDayPanel, expandAllDayRegularPanel } from './expand_all_day';
 
+const defaultRegularPanelOptions = {
+  startDayHour: 0,
+  viewOffsetMs: 0,
+  ignoreAllDayHours: false,
+};
+
 describe('expandAllDay', () => {
   describe('expandAllDayAllDayPanel', () => {
     it('should not expand regular appointment', () => {
@@ -89,7 +95,7 @@ describe('expandAllDay', () => {
         allDay: false,
         startDateUTC: Date.UTC(2020, 0, 10, 0),
         endDateUTC: Date.UTC(2020, 0, 10, 1),
-      }])).toEqual([
+      }], defaultRegularPanelOptions)).toEqual([
         {
           allDay: false,
           startDateUTC: Date.UTC(2020, 0, 10, 0),
@@ -113,7 +119,7 @@ describe('expandAllDay', () => {
           startDateUTC: Date.UTC(2020, 0, 11, 23),
           endDateUTC: Date.UTC(2020, 0, 12),
         },
-      ])).toEqual([
+      ], defaultRegularPanelOptions)).toEqual([
         {
           allDay: true,
           startDateUTC: Date.UTC(2020, 0, 10),
@@ -126,6 +132,102 @@ describe('expandAllDay', () => {
           allDay: true,
           startDateUTC: Date.UTC(2020, 0, 11, 23),
           endDateUTC: Date.UTC(2020, 0, 13, 23),
+        },
+      ]);
+    });
+
+    it('should ignore hours in all day appointment dates when ignoreAllDayHours is true', () => {
+      expect(expandAllDayRegularPanel([
+        {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10, 5),
+          endDateUTC: Date.UTC(2020, 0, 10, 5),
+        }, {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10, 4),
+          endDateUTC: Date.UTC(2020, 0, 11, 5),
+        },
+      ], {
+        startDayHour: 8,
+        viewOffsetMs: 0,
+        ignoreAllDayHours: true,
+      })).toEqual([
+        {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10, 8),
+          endDateUTC: Date.UTC(2020, 0, 11, 8),
+        }, {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10, 8),
+          endDateUTC: Date.UTC(2020, 0, 12, 8),
+        },
+      ]);
+    });
+
+    it('should ignore hours for timeline all day appointment the same way as for week view', () => {
+      expect(expandAllDayRegularPanel([
+        {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10, 5),
+          endDateUTC: Date.UTC(2020, 0, 10, 17),
+        },
+      ], {
+        startDayHour: 0,
+        viewOffsetMs: 0,
+        ignoreAllDayHours: true,
+      })).toEqual([
+        {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10, 0),
+          endDateUTC: Date.UTC(2020, 0, 11, 0),
+        },
+      ]);
+    });
+
+    it('should ignore hours and keep calendar dates so view offset can shift them like timed appointments', () => {
+      expect(expandAllDayRegularPanel([
+        {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10, 20, 30),
+          endDateUTC: Date.UTC(2020, 0, 10, 23, 30),
+        }, {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10, 2),
+          endDateUTC: Date.UTC(2020, 0, 11, 2),
+        },
+      ], {
+        startDayHour: 0,
+        viewOffsetMs: -735 * 60_000,
+        ignoreAllDayHours: true,
+      })).toEqual([
+        {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10, 0),
+          endDateUTC: Date.UTC(2020, 0, 11, 0),
+        }, {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10, 0),
+          endDateUTC: Date.UTC(2020, 0, 12, 0),
+        },
+      ]);
+    });
+
+    it('should not compensate a full-day view offset on all day appointments', () => {
+      expect(expandAllDayRegularPanel([
+        {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10, 20, 30),
+          endDateUTC: Date.UTC(2020, 0, 10, 23, 30),
+        },
+      ], {
+        startDayHour: 0,
+        viewOffsetMs: -1440 * 60_000,
+        ignoreAllDayHours: true,
+      })).toEqual([
+        {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10, 0),
+          endDateUTC: Date.UTC(2020, 0, 11, 0),
         },
       ]);
     });

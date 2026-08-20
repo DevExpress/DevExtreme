@@ -2089,8 +2089,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     if (
       appointment.allDay
-      && !this._workSpace.supportAllDayRow()
       && !this._workSpace.keepOriginalHours()
+      && (
+        !this._workSpace.supportAllDayRow()
+        || this.option('allDayPanelMode') === 'hidden'
+      )
     ) {
       const dateCopy = new Date(resultedStartDate);
       dateCopy.setHours(0);

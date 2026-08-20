@@ -72,11 +72,30 @@ export const expandAllDayAllDayPanel = <T extends Pick<ListEntity, 'startDateUTC
   };
 });
 
-export const expandAllDayRegularPanel = <T extends Pick<ListEntity, 'startDateUTC' | 'endDateUTC' | 'allDay'>>(
-  entities: T[],
-): T[] => entities.map((entity) => {
+interface ExpandAllDayRegularPanelOptions {
+  startDayHour: number;
+  viewOffsetMs: number;
+  ignoreAllDayHours: boolean;
+}
+
+const expandAllDayRegularPanelEntity = <T extends Pick<ListEntity, 'startDateUTC' | 'endDateUTC' | 'allDay'>>(
+  entity: T,
+  { startDayHour, ignoreAllDayHours }: ExpandAllDayRegularPanelOptions,
+): T => {
   if (!entity.allDay) {
     return entity;
+  }
+
+  if (ignoreAllDayHours) {
+    const startDayHourMs = startDayHour * toMs('hour');
+    const startOfCalendarDay = new Date(entity.startDateUTC).setUTCHours(0, 0, 0, 0);
+    const endOfNextCalendarDay = new Date(entity.endDateUTC).setUTCHours(0, 0, 0, 0) + DAY_MS;
+
+    return {
+      ...entity,
+      startDateUTC: startOfCalendarDay + startDayHourMs,
+      endDateUTC: endOfNextCalendarDay + startDayHourMs,
+    };
   }
 
   const startDate = new Date(entity.startDateUTC);
@@ -93,4 +112,9 @@ export const expandAllDayRegularPanel = <T extends Pick<ListEntity, 'startDateUT
         startDate.getUTCMilliseconds(),
       ),
   };
-});
+};
+
+export const expandAllDayRegularPanel = <T extends Pick<ListEntity, 'startDateUTC' | 'endDateUTC' | 'allDay'>>(
+  entities: T[],
+  options: ExpandAllDayRegularPanelOptions,
+): T[] => entities.map((entity) => expandAllDayRegularPanelEntity(entity, options));

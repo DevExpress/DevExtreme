@@ -25,8 +25,9 @@ export const sortAppointments = (
     hasAllDayPanel,
     snapToCellsMode,
     viewOffset,
-    compareOptions: { endDayHour },
+    compareOptions: { endDayHour, startDayHour },
   } = optionManager.options;
+  const ignoreAllDayHours = !hasAllDayPanel && !isMonthView;
 
   const step2 = maybeSplit(items, hasAllDayPanel, (entities, panelName) => {
     const byGroup = groupByGroupIndex(entities);
@@ -35,7 +36,11 @@ export const sortAppointments = (
       sortByStartDate(group);
       const innerStep0 = isMonthView || panelName === 'allDayPanel'
         ? expandAllDayAllDayPanel(group, endDayHour, viewOffset)
-        : expandAllDayRegularPanel(group);
+        : expandAllDayRegularPanel(group, {
+          startDayHour,
+          viewOffsetMs: viewOffset,
+          ignoreAllDayHours,
+        });
       const innerStep1 = splitByParts(innerStep0, optionManager.getSplitIntervals(panelName));
       sortByDuration(innerStep1);
       sortByStartDate(innerStep1);
