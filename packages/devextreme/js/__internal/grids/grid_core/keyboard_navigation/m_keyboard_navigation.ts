@@ -31,6 +31,7 @@ import type { RowIndexCorrection } from '@ts/grids/grid_core/data_controller/typ
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import type { RowsViewScrollEvent } from '@ts/grids/grid_core/views/types';
+import type { VirtualScrollingDataControllerExtension } from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling';
 import { memoize } from '@ts/utils/memoize';
 
 import {
@@ -128,7 +129,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private _testInteractiveElement: any;
 
-  protected _dataController!: Controllers['data'];
+  protected _dataController!: DataController & Partial<VirtualScrollingDataControllerExtension>;
 
   private _selectionController!: Controllers['selection'];
 
@@ -184,8 +185,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     this.initDocumentHandlers();
 
     // init runs again on option changes, so drop the previous subscription first
-    this._dataController.rowIndicesCorrected.remove(this.handleRowIndicesCorrected);
-    this._dataController.rowIndicesCorrected.add(this.handleRowIndicesCorrected);
+    this._dataController.rowIndicesChanged.remove(this.rowIndicesChangedHandler);
+    this._dataController.rowIndicesChanged.add(this.rowIndicesChangedHandler);
   }
 
   public dispose(): void {
@@ -198,10 +199,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     );
     clearTimeout(this._updateFocusTimeout);
     accessibility.unsubscribeVisibilityChange();
-    this._dataController.rowIndicesCorrected.remove(this.handleRowIndicesCorrected);
+    this._dataController.rowIndicesChanged.remove(this.rowIndicesChangedHandler);
   }
 
-  private readonly handleRowIndicesCorrected = (
+  private readonly rowIndicesChangedHandler = (
     getRowIndexCorrection: RowIndexCorrection,
   ): void => {
     const focusedCellPosition = this._focusedCellPosition;
@@ -2063,15 +2064,24 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     return this._isCellValid($cell);
   }
 
-  private _isLastRow(rowIndex: number): boolean {
-    const dataController = this._dataController;
+  private getMaxRowIndex(): number {
+    const lastLoadedRowIndex = this._dataController.items().length - 1;
+    const virtualItemsCount = this._dataController.virtualItemsCount?.();
 
+    if (!virtualItemsCount) {
+      return lastLoadedRowIndex;
+    }
+
+    return lastLoadedRowIndex + this._dataController.getRowIndexOffset() + virtualItemsCount.end;
+  }
+
+  private _isLastRow(rowIndex: number): boolean {
     if (this._isVirtualRowRender()) {
-      return rowIndex >= (dataController as any).getMaxRowIndex();
+      return rowIndex >= this.getMaxRowIndex();
     }
 
     const lastVisibleIndex = Math.max(
-      ...dataController.items()
+      ...this._dataController.items()
         .map((item, index) => (item.visible !== false ? index : -1)),
     );
 
@@ -3195,21 +3205,6 @@ const editing = (Base: ModuleType<EditingController>) => class EditingController
   }
 };
 
-const data = (Base: ModuleType<DataController>) => class DataControllerKeyboardExtender extends Base {
-  private getMaxRowIndex() {
-    let result = this.items().length - 1;
-    // @ts-expect-error
-    const virtualItemsCount = this.virtualItemsCount();
-
-    if (virtualItemsCount) {
-      const rowIndexOffset = this.getRowIndexOffset();
-      result += rowIndexOffset + virtualItemsCount.end;
-    }
-
-    return result;
-  }
-};
-
 const adaptiveColumns = (Base: ModuleType<AdaptiveColumnsController>) => class AdaptiveColumnsKeyboardExtender extends Base {
   protected _showHiddenCellsInView({ viewName, $cells, isCommandColumn }) {
     super._showHiddenCellsInView.apply(this, arguments as any);
@@ -3260,7 +3255,6 @@ export const keyboardNavigationModule: import('../m_types').Module = {
     },
     controllers: {
       editing,
-      data,
       adaptiveColumns,
       keyboardNavigation: keyboardNavigationScrollableA11yExtender,
     },
