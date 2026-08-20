@@ -1,4 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
+import { hierarchicalRoomsConfigMock } from '@ts/scheduler/__mock__/resource_manager.mock';
 
 import type { ResourceConfig } from '../../../utils/loader/types';
 import { ResourceManager } from '../../../utils/resource_manager/resource_manager';
@@ -66,5 +67,38 @@ describe('splitByGroupIndex', () => {
       { ...items[2], groupIndex: 4 },
       { ...items[2], groupIndex: 5 },
     ]);
+  });
+
+  describe('hierarchical resource', () => {
+    // Leaf group order: 11 → 0, 12 → 1, 21 → 2, solo → 3
+    const asItem = (roomId: unknown): MinimalAppointmentEntity => ({
+      itemData: { roomId } as unknown as MinimalAppointmentEntity['itemData'],
+    } as MinimalAppointmentEntity);
+
+    it('should set groupIndex of the appointment leaf', async () => {
+      const options = await getFilterOptions([{ ...hierarchicalRoomsConfigMock }]);
+      const item = asItem(21);
+
+      expect(splitByGroupIndex([item], options)).toEqual([{ ...item, groupIndex: 2 }]);
+    });
+
+    it('should drop an appointment that matches no leaf', async () => {
+      const options = await getFilterOptions([{ ...hierarchicalRoomsConfigMock }]);
+
+      expect(splitByGroupIndex([asItem('board')], options)).toEqual([]);
+    });
+
+    it('should split an allowMultiple appointment across its leaf bands', async () => {
+      const options = await getFilterOptions([{
+        ...hierarchicalRoomsConfigMock,
+        allowMultiple: true,
+      }]);
+      const item = asItem(['board', 12, 'solo']);
+
+      expect(splitByGroupIndex([item], options)).toEqual([
+        { ...item, groupIndex: 1 },
+        { ...item, groupIndex: 3 },
+      ]);
+    });
   });
 });
