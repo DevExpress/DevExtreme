@@ -29,19 +29,23 @@ export class ItemsController {
     ),
   );
 
+  // Re-emits only when visibleColumnsLayout changes, which excludes sort/filter properties,
+  // so `items` still does not recompute on those (T1306983, T1309423).
+  private readonly layoutColumns = computed(
+    () => ({
+      key: this.visibleColumnsLayout.value,
+      columns: this.columnsController.visibleColumns.peek(),
+    }),
+  );
+
   public readonly items = computed(
     () => {
-      // NOTE: We should trigger computed by search options change,
-      // But all work with these options encapsulated in SearchHighlightTextProcessor
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      this.searchController.highlightTextOptions.value;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      this.visibleColumnsLayout.value;
+      const { columns } = this.layoutColumns.value;
 
       return this.dataController.items.value.map(
         (item, itemIndex) => this.createCardInfo(
           item,
-          this.columnsController.visibleColumns.peek(),
+          columns,
           itemIndex,
           this.selectedCardKeys.value,
         ),
