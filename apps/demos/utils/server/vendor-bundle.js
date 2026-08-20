@@ -32,14 +32,23 @@ const VENDOR_PREFIXES = {
   Vue: [/^vue$/, /^devextreme(-vue)?(\/.*)?$/, /^globalize$/],
 };
 
+// Takes precedence over VENDOR_PREFIXES: these mutate global state on import, and the vendor
+// bundle is shared by every demo of a framework. Excluded specifiers fall through to normal
+// per-demo bundling.
+const VENDOR_EXCLUDE_PATTERNS = [
+  /^devextreme(-react|-vue)?\/(.*\/)?localization\/(globalize|intl)(\/.*)?$/,
+  /^globalize$/,
+];
+
 function isVendorSpecifier(spec, framework) {
+  if (VENDOR_EXCLUDE_PATTERNS.some((re) => re.test(spec))) return false;
   return (VENDOR_PREFIXES[framework] || []).some((re) => re.test(spec));
 }
 
 const VENDOR_KEYWORDS = {
-  React: ['devextreme-react', 'devextreme', 'react-dom', 'react', 'globalize'],
-  ReactJs: ['devextreme-react', 'devextreme', 'react-dom', 'react', 'globalize'],
-  Vue: ['devextreme-vue', 'devextreme', 'vue', 'globalize'],
+  React: ['devextreme-react', 'devextreme', 'react-dom', 'react'],
+  ReactJs: ['devextreme-react', 'devextreme', 'react-dom', 'react'],
+  Vue: ['devextreme-vue', 'devextreme', 'vue'],
 };
 
 const SOURCE_EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.jsx', '.vue']);
