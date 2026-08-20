@@ -5,7 +5,6 @@ import { adaptivityDataControllerExtender } from './extenders/adaptivity_data_co
 import { adaptivityDraggingHeaderExtender } from './extenders/adaptivity_dragging_header';
 import { adaptivityEditingExtender } from './extenders/adaptivity_editing';
 import { adaptivityEditorFactoryExtender } from './extenders/adaptivity_editor_factory';
-import { adaptivityExportExtender } from './extenders/adaptivity_export';
 import { adaptivityHeadersKeyboardNavigationExtender } from './extenders/adaptivity_headers_keyboard_navigation';
 import { adaptivityKeyboardNavigationExtender } from './extenders/adaptivity_keyboard_navigation';
 import { adaptivityResizingControllerExtender } from './extenders/adaptivity_resizing_controller';
@@ -26,7 +25,6 @@ export const adaptivityModule: Module = {
       rowsView: adaptivityRowsViewExtender,
     },
     controllers: {
-      export: adaptivityExportExtender,
       columnsResizer: adaptivityColumnsResizerExtender,
       draggingHeader: adaptivityDraggingHeaderExtender,
       editing: adaptivityEditingExtender,
