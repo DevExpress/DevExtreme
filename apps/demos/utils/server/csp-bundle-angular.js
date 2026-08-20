@@ -13,6 +13,7 @@ const REPO_ROOT = path.resolve(DEMOS_APP_ROOT, '..', '..');
 const SRC_DEMOS_DIR = path.join(DEMOS_APP_ROOT, 'Demos');
 
 const IN_PLACE = process.env.BUNDLE_IN_PLACE === '1';
+const IS_GENERATE_MANIFESTS = process.env.CSP_BUNDLE_GENERATE_MANIFESTS === '1';
 const OUT_ROOT = IN_PLACE ? SRC_DEMOS_DIR : path.join(DEMOS_APP_ROOT, 'csp-bundled-demos');
 const NODE_MODULES = path.join(DEMOS_APP_ROOT, 'node_modules');
 const FRAMEWORK = 'Angular';
@@ -524,15 +525,8 @@ function prepareDemo(demo) {
   return { ...demo, effectiveEntry, fileReplacements };
 }
 
-// No Angular demo imports either: zone.js arrives via ANGULAR_ZONE_SCRIPT's <script> tag
-// (and is an optional peer, so the peer walk skips it), and reflect-metadata is what makes
-// constructor injection resolve for a consumer that compiles these demos in JIT mode.
 const ANGULAR_IMPLICIT_PACKAGES = ['zone.js', 'reflect-metadata'];
-
-// CodeSandbox-facing manifest of every npm package a demo needs — its own imports plus the
-// peers those pull in. See utils/server/vendor-bundle.js for how each is resolved.
 function writeDemoManifest(demo, destDir) {
-  // eslint-disable-next-line global-require
   const { discoverDemoSpecifiers, resolvePackageVersions } = require('./vendor-bundle');
   const packages = resolvePackageVersions([
     ...discoverDemoSpecifiers(demo.srcDir),
@@ -658,7 +652,7 @@ async function bundleDemo(demo, createCompilerPlugin, destDirOverride) {
   const cssFiles = outputs.filter((o) => o.endsWith('.css')).map((o) => path.basename(o));
 
   fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({ jsFiles, cssFiles, srcDir: prepared.srcDir }));
-  writeDemoManifest(prepared, destDir);
+  if (IS_GENERATE_MANIFESTS) writeDemoManifest(prepared, destDir);
   return { ok: true };
 }
 
@@ -697,7 +691,7 @@ async function bundleDemoBatch(batch, createCompilerPlugin) {
       ...localJsFiles,
     ];
     fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({ jsFiles, cssFiles, srcDir: demo.srcDir }));
-    writeDemoManifest(demo, destDir);
+    if (IS_GENERATE_MANIFESTS) writeDemoManifest(demo, destDir);
   }
 
   return { ok: true };

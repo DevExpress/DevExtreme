@@ -52,7 +52,6 @@ function walk(dir, out) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) {
-      if (GENERATED_DIR_NAMES.has(entry.name)) continue; // eslint-disable-line no-continue
       walk(full, out);
     } else if (SOURCE_EXTENSIONS.has(path.extname(entry.name)) && !GENERATED_FILE_RE.test(entry.name)) {
       out.push(full);
@@ -82,7 +81,8 @@ function discoverSpecifiers(framework) {
   const found = new Set();
   if (!fs.existsSync(SRC_DEMOS_DIR)) return found;
 
-  const widgets = fs.readdirSync(SRC_DEMOS_DIR, { withFileTypes: true }).filter((w) => w.isDirectory());
+  const widgets = fs.readdirSync(SRC_DEMOS_DIR, { withFileTypes: true })
+    .filter((w) => w.isDirectory() && !GENERATED_DIR_NAMES.has(w.name));
   for (const widget of widgets) {
     const demoDir = path.join(SRC_DEMOS_DIR, widget.name);
     const demos = fs.readdirSync(demoDir, { withFileTypes: true }).filter((d) => d.isDirectory());
@@ -157,9 +157,6 @@ function resolvePackageVersion(pkgName, resolveDir) {
   return (pkg && pkg.version) || null;
 }
 
-// Import scanning can't find a peer dependency — nothing imports one — yet `devextreme` is
-// a peer of all three wrappers. Resolved to installed versions because the declared ranges
-// read `workspace:*`. Optional peers are skipped; callers add the ones they need.
 function addRequiredPeers(packages, resolveDir) {
   const queue = Object.keys(packages);
   const seen = new Set(queue);
@@ -189,6 +186,7 @@ function resolvePackageVersions(specifiers, resolveDir = DEMOS_APP_ROOT) {
     if (version) {
       packages[pkgName] = version;
     } else {
+      // TODO: exit with error here?
       console.warn(`vendor-bundle: could not resolve a version for package "${pkgName}" (from specifier "${spec}")`);
     }
   }

@@ -18,6 +18,7 @@ if (!SUPPORTED.includes(FRAMEWORK)) {
 const IS_ANGULAR = FRAMEWORK === 'Angular';
 
 const IN_PLACE = process.env.BUNDLE_IN_PLACE === '1';
+const IS_GENERATE_MANIFESTS = process.env.CSP_BUNDLE_GENERATE_MANIFESTS === '1';
 
 const DEMOS_APP_ROOT = path.join(__dirname, '..', '..');
 const SRC_DEMOS_DIR = path.join(DEMOS_APP_ROOT, 'Demos');
@@ -244,9 +245,6 @@ function buildHtml({
 `;
 }
 
-// CodeSandbox-facing manifest of every npm package this one demo needs: what it imports
-// itself (devextreme-react, jspdf, openai, …) plus the peers those pull in. Deliberately
-// not the shared vendor manifest, which lists the union over every demo of the framework.
 function writeDemoManifest({
   srcDir, destDir, framework,
 }) {
@@ -292,7 +290,7 @@ async function bundleDemoTo({ srcDir, destDir, framework }) {
     cssFiles.push('bundle.css');
   }
 
-  writeDemoManifest({ srcDir, destDir, framework });
+  if (IS_GENERATE_MANIFESTS) writeDemoManifest({ srcDir, destDir, framework });
 
   return { ok: true, jsFiles, cssFiles };
 }

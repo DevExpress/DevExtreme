@@ -1,8 +1,5 @@
 // CLI: node utils/server/build-vendor-bundles.js [React|Vue ...]
 // Defaults to both. Angular isn't supported here — see csp-bundle-angular.js's
-// `splitting: true` batch build instead (a standalone vendor bundle conflicts with the
-// per-demo Angular compiler plugin's own need to read every file's real source; see git
-// history / project memory for the investigation).
 
 const path = require('path');
 const fs = require('fs');
