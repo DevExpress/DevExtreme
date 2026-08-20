@@ -501,10 +501,10 @@ const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => c
 const focusEditorFactoryViewControllerExtender = (
   Base: ModuleType<EditorFactory>,
 ) => class FocusEditorFactoryExtender extends Base {
-  protected _keyboardNavigationController!: KeyboardNavigationController;
+  protected keyboardNavigationController!: KeyboardNavigationController;
 
   public init(): void {
-    this._keyboardNavigationController = this.getController('keyboardNavigation');
+    this.keyboardNavigationController = this.getController('keyboardNavigation');
     super.init();
   }
 
@@ -513,17 +513,17 @@ const focusEditorFactoryViewControllerExtender = (
 
     if (
       !focusedRowEnabled
-      || !this._keyboardNavigationController?.isRowFocusType()
+      || !this.keyboardNavigationController?.isRowFocusType()
       || this._editingController.isEditing()
       || this._columnHeadersView.isFilterRowCell($element)
     ) {
       super.renderFocusOverlay($element, isHideBorder);
     } else if (focusedRowEnabled) {
-      const isRowElement = this._keyboardNavigationController._getElementType($element) === 'row';
+      const isRowElement = this.keyboardNavigationController._getElementType($element) === 'row';
 
       if (isRowElement && !$element.hasClass(ROW_FOCUSED_CLASS)) {
-        const $cell = this._keyboardNavigationController.getFirstValidCellInRow($element);
-        this._keyboardNavigationController.focus($cell);
+        const $cell = this.keyboardNavigationController.getFirstValidCellInRow($element);
+        this.keyboardNavigationController.focus($cell);
       }
     }
   }
@@ -562,10 +562,10 @@ const focusDataControllerExtender = (
 ) => class FocusDataControllerExtender extends Base {
   private _isDataPushed = false;
 
-  protected _keyboardNavigationController!: KeyboardNavigationController;
+  protected keyboardNavigationController!: KeyboardNavigationController;
 
   public init(): void {
-    this._keyboardNavigationController = this.getController('keyboardNavigation');
+    this.keyboardNavigationController = this.getController('keyboardNavigation');
     super.init();
   }
 
@@ -646,7 +646,7 @@ const focusDataControllerExtender = (
     const {
       reload, fullReload, pageIndex, paging,
     } = operationTypes;
-    const isVirtualScrolling = this._keyboardNavigationController._isVirtualScrolling();
+    const isVirtualScrolling = this.keyboardNavigationController._isVirtualScrolling();
     const pagingWithoutVirtualScrolling = paging && !isVirtualScrolling;
     const focusedRowKey = this.option('focusedRowKey');
     const isAutoNavigate = this._focusController.isAutoNavigateToFocusedRow();

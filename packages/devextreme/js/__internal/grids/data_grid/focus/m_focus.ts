@@ -28,7 +28,7 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
   private changeRowExpand(path, isRowClick) {
     // @ts-expect-error
     if (this.option('focusedRowEnabled') && Array.isArray(path) && this.isRowExpanded(path)) {
-      if ((!isRowClick || !this._keyboardNavigationController.isKeyboardEnabled()) && this._isFocusedRowInsideGroup(path)) {
+      if ((!isRowClick || !this.keyboardNavigationController.isKeyboardEnabled()) && this._isFocusedRowInsideGroup(path)) {
         this.option('focusedRowKey', path);
       }
     }
