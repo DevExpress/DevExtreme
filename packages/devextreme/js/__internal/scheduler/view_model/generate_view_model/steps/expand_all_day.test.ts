@@ -184,7 +184,7 @@ describe('expandAllDay', () => {
       ]);
     });
 
-    it('should map all day appointment to its calendar offset-day, ignoring hours', () => {
+    it('should ignore hours and keep calendar dates so view offset can shift them like timed appointments', () => {
       expect(expandAllDayRegularPanel([
         {
           allDay: true,
@@ -202,17 +202,17 @@ describe('expandAllDay', () => {
       })).toEqual([
         {
           allDay: true,
-          startDateUTC: Date.UTC(2020, 0, 9, 11, 45),
-          endDateUTC: Date.UTC(2020, 0, 10, 11, 45),
+          startDateUTC: Date.UTC(2020, 0, 10, 0),
+          endDateUTC: Date.UTC(2020, 0, 11, 0),
         }, {
           allDay: true,
-          startDateUTC: Date.UTC(2020, 0, 9, 11, 45),
-          endDateUTC: Date.UTC(2020, 0, 11, 11, 45),
+          startDateUTC: Date.UTC(2020, 0, 10, 0),
+          endDateUTC: Date.UTC(2020, 0, 12, 0),
         },
       ]);
     });
 
-    it('should keep all day appointment on its calendar day when offset is a full day', () => {
+    it('should not compensate a full-day view offset on all day appointments', () => {
       expect(expandAllDayRegularPanel([
         {
           allDay: true,
@@ -226,8 +226,8 @@ describe('expandAllDay', () => {
       })).toEqual([
         {
           allDay: true,
-          startDateUTC: Date.UTC(2020, 0, 9, 0),
-          endDateUTC: Date.UTC(2020, 0, 10, 0),
+          startDateUTC: Date.UTC(2020, 0, 10, 0),
+          endDateUTC: Date.UTC(2020, 0, 11, 0),
         },
       ]);
     });

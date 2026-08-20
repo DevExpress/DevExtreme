@@ -80,7 +80,7 @@ interface ExpandAllDayRegularPanelOptions {
 
 const expandAllDayRegularPanelEntity = <T extends Pick<ListEntity, 'startDateUTC' | 'endDateUTC' | 'allDay'>>(
   entity: T,
-  { startDayHour, viewOffsetMs, ignoreAllDayHours }: ExpandAllDayRegularPanelOptions,
+  { startDayHour, ignoreAllDayHours }: ExpandAllDayRegularPanelOptions,
 ): T => {
   if (!entity.allDay) {
     return entity;
@@ -93,8 +93,8 @@ const expandAllDayRegularPanelEntity = <T extends Pick<ListEntity, 'startDateUTC
 
     return {
       ...entity,
-      startDateUTC: startOfCalendarDay + viewOffsetMs + startDayHourMs,
-      endDateUTC: endOfNextCalendarDay + viewOffsetMs + startDayHourMs,
+      startDateUTC: startOfCalendarDay + startDayHourMs,
+      endDateUTC: endOfNextCalendarDay + startDayHourMs,
     };
   }
 
