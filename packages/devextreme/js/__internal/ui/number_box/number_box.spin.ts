@@ -8,6 +8,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
+import type { DxEvent, PointerInteractionEvent } from '@js/events/events.types';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
@@ -21,10 +22,14 @@ const NUMBER_BOX = 'dxNumberBox';
 const POINTERUP_EVENT_NAME = addNamespace(pointerEvents.up, NUMBER_BOX);
 const POINTERCANCEL_EVENT_NAME = addNamespace(pointerEvents.cancel, NUMBER_BOX);
 
+export interface SpinChangeEvent {
+  event: DxEvent<PointerInteractionEvent>;
+}
+
 export interface SpinButtonProperties extends WidgetProperties {
   direction?: string;
 
-  onChange?: () => void;
+  onChange?: ((e: SpinChangeEvent) => void) | null;
 }
 
 class SpinButton extends Widget<SpinButtonProperties> {
@@ -40,7 +45,6 @@ class SpinButton extends Widget<SpinButtonProperties> {
     return {
       ...super._getDefaultOptions(),
       direction: 'up',
-      // @ts-expect-error ts-error
       onChange: null,
       activeStateEnabled: true,
       hoverStateEnabled: true,
@@ -73,7 +77,7 @@ class SpinButton extends Widget<SpinButtonProperties> {
     this._spinChangeHandler = this._createActionByOption('onChange');
   }
 
-  _spinDownHandler(e): void {
+  _spinDownHandler(e: DxEvent<PointerInteractionEvent>): void {
     e.preventDefault();
 
     this._clearTimer();
