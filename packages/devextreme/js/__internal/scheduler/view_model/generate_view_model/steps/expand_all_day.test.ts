@@ -183,5 +183,25 @@ describe('expandAllDay', () => {
         },
       ]);
     });
+
+    it('should preserve hours in all day appointment dates when view offset is used', () => {
+      expect(expandAllDayRegularPanel([
+        {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10, 20, 30),
+          endDateUTC: Date.UTC(2020, 0, 10, 23, 30),
+        },
+      ], {
+        startDayHour: 0,
+        viewOffsetMs: -735 * 60_000,
+        ignoreAllDayHours: false,
+      })).toEqual([
+        {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10, 20, 30),
+          endDateUTC: Date.UTC(2020, 0, 11, 20, 30),
+        },
+      ]);
+    });
   });
 });

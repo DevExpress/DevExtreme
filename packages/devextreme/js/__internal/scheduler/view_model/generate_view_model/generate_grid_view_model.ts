@@ -27,7 +27,7 @@ export const sortAppointments = (
     viewOffset,
     compareOptions: { endDayHour, startDayHour },
   } = optionManager.options;
-  const ignoreAllDayHours = !hasAllDayPanel && !isMonthView;
+  const ignoreAllDayHours = !hasAllDayPanel && !isMonthView && viewOffset === 0;
 
   const step2 = maybeSplit(items, hasAllDayPanel, (entities, panelName) => {
     const byGroup = groupByGroupIndex(entities);
