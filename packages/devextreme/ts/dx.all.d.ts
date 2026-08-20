@@ -27320,6 +27320,10 @@ declare module DevExpress.ui {
        */
       label?: string;
       /**
+       * [descr:dxSchedulerOptions.resources.parentIdExpr]
+       */
+      parentIdExpr?: string;
+      /**
        * [descr:dxSchedulerOptions.resources.useColorAsDefault]
        */
       useColorAsDefault?: boolean;
