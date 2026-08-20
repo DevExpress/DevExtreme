@@ -8,7 +8,7 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  merge_group:
+  workflow_call:
   workflow_dispatch:
 
 env:

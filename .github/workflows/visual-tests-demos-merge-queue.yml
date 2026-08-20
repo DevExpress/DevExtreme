@@ -1,0 +1,147 @@
+name: Demos Visual Tests (merge queue)
+
+on:
+  merge_group:
+
+concurrency:
+  group: wf-${{ github.event.merge_group.head_sha || github.sha }}-${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  attempt1:
+    name: Attempt 1
+    uses: ./.github/workflows/visual-tests-demos.yml
+    secrets: inherit
+
+  triage:
+    name: Triage attempt 1
+    runs-on: ubuntu-latest
+    needs: [attempt1]
+    if: always()
+    timeout-minutes: 10
+    permissions:
+      actions: read
+    outputs:
+      needs_retry: ${{ steps.decide.outputs.needs_retry }}
+      real_failure: ${{ steps.decide.outputs.real_failure }}
+    steps:
+      - id: decide
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+          ATTEMPT1_RESULT: ${{ needs.attempt1.result }}
+        run: |
+          set -euo pipefail
+
+          emit() {
+            echo "needs_retry=$1"   >> "$GITHUB_OUTPUT"
+            echo "real_failure=$2"  >> "$GITHUB_OUTPUT"
+          }
+
+          if [ "$ATTEMPT1_RESULT" = "success" ]; then
+            echo "Attempt 1 passed."
+            emit false false
+            exit 0
+          fi
+
+          if [ "$ATTEMPT1_RESULT" = "cancelled" ]; then
+            echo "Attempt 1 was cancelled; not retrying."
+            emit false true
+            exit 0
+          fi
+
+          # Pull every job of this run and pick the ones under attempt1 that failed.
+          jobs=$(gh api --paginate "/repos/$REPO/actions/runs/$RUN_ID/jobs?per_page=100")
+          failed_ids=$(echo "$jobs" | jq -r '
+            .jobs[]
+            | select(.conclusion=="failure")
+            | select(.name | startswith("Attempt 1 /"))
+            | .id')
+
+          if [ -z "$failed_ids" ]; then
+            echo "Attempt 1 failed but no failed inner job identified; not retrying."
+            emit false true
+            exit 0
+          fi
+
+          all_spot=1
+          while IFS= read -r jid; do
+            [ -n "$jid" ] || continue
+            jname=$(echo "$jobs" | jq -r --argjson id "$jid" \
+              '.jobs[] | select(.id==$id) | .name')
+
+            spot=0
+
+            # Signature 1: GitHub appends this banner when the runner disconnects.
+            if gh api -H "Accept: application/vnd.github.raw" \
+                 "/repos/$REPO/actions/jobs/$jid/logs" 2>/dev/null \
+                 | tail -400 | grep -q "lost communication with the server"; then
+              spot=1
+            fi
+
+            # Signature 2: last step never completed (runner died silently, job
+            # timed out with an in-progress step).
+            if [ $spot -eq 0 ]; then
+              last_status=$(echo "$jobs" | jq -r --argjson id "$jid" \
+                '.jobs[] | select(.id==$id) | .steps[-1].status // ""')
+              last_conclusion=$(echo "$jobs" | jq -r --argjson id "$jid" \
+                '.jobs[] | select(.id==$id) | .steps[-1].conclusion // ""')
+              if [ "$last_status" = "in_progress" ] || [ -z "$last_conclusion" ]; then
+                spot=1
+              fi
+            fi
+
+            if [ $spot -eq 1 ]; then
+              echo "$jname → spot-like failure (retriable)"
+            else
+              echo "$jname → real failure"
+              all_spot=0
+            fi
+          done <<< "$failed_ids"
+
+          if [ $all_spot -eq 1 ]; then
+            echo "All attempt-1 failures look like spot terminations; retrying."
+            emit true false
+          else
+            echo "At least one real failure in attempt 1; not retrying."
+            emit false true
+          fi
+
+  attempt2:
+    name: Attempt 2
+    needs: [attempt1, triage]
+    if: needs.triage.outputs.needs_retry == 'true'
+    uses: ./.github/workflows/visual-tests-demos.yml
+    secrets: inherit
+
+  gate:
+    name: Merge queue gate
+    runs-on: ubuntu-latest
+    needs: [attempt1, triage, attempt2]
+    if: always()
+    timeout-minutes: 5
+    steps:
+      - name: Verdict
+        env:
+          ATTEMPT1: ${{ needs.attempt1.result }}
+          ATTEMPT2: ${{ needs.attempt2.result }}
+          REAL_FAILURE: ${{ needs.triage.outputs.real_failure }}
+        run: |
+          set -e
+          echo "attempt1=$ATTEMPT1  attempt2=$ATTEMPT2  real_failure=$REAL_FAILURE"
+
+          if [ "$REAL_FAILURE" = "true" ]; then
+            echo "Real failure detected in attempt 1."
+            exit 1
+          fi
+          if [ "$ATTEMPT1" = "success" ]; then
+            echo "Attempt 1 passed."
+            exit 0
+          fi
+          if [ "$ATTEMPT2" = "success" ]; then
+            echo "Attempt 1 flaked on spot; attempt 2 recovered."
+            exit 0
+          fi
+          echo "Retry did not recover."
+          exit 1
