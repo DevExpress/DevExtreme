@@ -77,12 +77,6 @@ jobs:
 
             category=""
             case "$child" in
-              "CSP check (jQuery)")
-                category="csp-check-jquery"
-                ;;
-              "CSP check ("*")")
-                category="csp-check-frameworks"
-                ;;
               angular\(*\)-screenshots-*)
                 category="testcafe-frameworks-all"
                 ;;
@@ -117,21 +111,6 @@ jobs:
 
             echo "$child → spot-like failure, category=$category"
             case "$category" in
-              csp-check-jquery)
-                retry_json=$(echo "$retry_json" | jq -c '.["csp-check-jquery"] = true')
-                ;;
-              csp-check-frameworks)
-                inner=$(echo "$child" | sed -E 's/^CSP check \((.+)\)$/\1/')
-                fw=$(echo "$inner"      | awk '{print $1}')
-                shard=$(echo "$inner"   | awk '{print $2}')
-                si=${shard%/*}
-                st=${shard#*/}
-                retry_json=$(echo "$retry_json" | jq -c \
-                  --arg fw "$fw" --argjson si "$si" --argjson st "$st" \
-                  '.["csp-check-frameworks"].include =
-                    ((.["csp-check-frameworks"].include // [])
-                     + [{FRAMEWORK:$fw, SHARD_INDEX:$si, SHARD_TOTAL:$st}])')
-                ;;
               testcafe-frameworks-all)
                 constel=$(echo "$child" | sed -E 's/^(.+)-screenshots-.+$/\1/')
                 theme=$(echo   "$child" | sed -E 's/^.+-screenshots-(.+)$/\1/')

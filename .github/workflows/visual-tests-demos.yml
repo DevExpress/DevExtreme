@@ -189,46 +189,6 @@ jobs:
           fi
           echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
 
-  determine-csp-frameworks-matrix:
-    runs-on: ubuntu-latest
-    name: Determine csp-check-frameworks matrix
-    needs: [check-should-run, determine-framework-tests-scope]
-    if: |
-      always() &&
-      needs.check-should-run.outputs.should-run == 'true' &&
-      needs.determine-framework-tests-scope.result == 'success' &&
-      needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
-    outputs:
-      matrix: ${{ steps.matrix.outputs.matrix }}
-    steps:
-      - name: Build matrix
-        id: matrix
-        env:
-          IS_RETRY: ${{ inputs.is_retry }}
-          RETRY_TARGETS: ${{ inputs.retry_targets }}
-        run: |
-          set -euo pipefail
-          if [ "$IS_RETRY" = "true" ]; then
-            matrix=$(echo "$RETRY_TARGETS" | jq -c '.["csp-check-frameworks"] // {"include":[]}')
-          else
-            matrix=$(cat <<'JSON'
-          {
-            "include": [
-              { "FRAMEWORK": "React",   "SHARD_INDEX": 1, "SHARD_TOTAL": 2 },
-              { "FRAMEWORK": "React",   "SHARD_INDEX": 2, "SHARD_TOTAL": 2 },
-              { "FRAMEWORK": "Vue",     "SHARD_INDEX": 1, "SHARD_TOTAL": 2 },
-              { "FRAMEWORK": "Vue",     "SHARD_INDEX": 2, "SHARD_TOTAL": 2 },
-              { "FRAMEWORK": "Angular", "SHARD_INDEX": 1, "SHARD_TOTAL": 3 },
-              { "FRAMEWORK": "Angular", "SHARD_INDEX": 2, "SHARD_TOTAL": 3 },
-              { "FRAMEWORK": "Angular", "SHARD_INDEX": 3, "SHARD_TOTAL": 3 }
-            ]
-          }
-          JSON
-          )
-            matrix=$(echo "$matrix" | jq -c .)
-          fi
-          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
-
   build-devextreme:
     runs-on: devextreme-shr2
     name: Build DevExtreme
@@ -1239,10 +1199,8 @@ jobs:
     if: |
       always() &&
       needs.check-should-run.outputs.should-run == 'true' &&
-      (
-        (inputs.is_retry != true && needs.build-devextreme.result == 'success') ||
-        (inputs.is_retry == true && fromJson(inputs.retry_targets)['csp-check-jquery'] == true)
-      )
+      needs.build-devextreme.result == 'success' &&
+      inputs.is_retry != true
     runs-on: devextreme-shr2
     timeout-minutes: 60
     env:
@@ -1308,24 +1266,30 @@ jobs:
         name: csp-violations-jquery
         path: apps/demos/csp-reports/
         if-no-files-found: ignore
-        overwrite: true
 
   csp-check-frameworks:
     name: ${{ matrix.SHARD_TOTAL == 1 && format('CSP check ({0})', matrix.FRAMEWORK) || format('CSP check ({0} {1}/{2})', matrix.FRAMEWORK, matrix.SHARD_INDEX, matrix.SHARD_TOTAL) }}
-    needs: [check-should-run, determine-framework-tests-scope, build-devextreme, determine-csp-frameworks-matrix]
+    needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
     if: |
       always() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.determine-framework-tests-scope.result == 'success' &&
       needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
-      needs.determine-csp-frameworks-matrix.result == 'success' &&
-      (
-        (inputs.is_retry != true && needs.build-devextreme.result == 'success') ||
-        (inputs.is_retry == true && fromJson(inputs.retry_targets)['csp-check-frameworks'] != null)
-      )
+      needs.build-devextreme.result == 'success' &&
+      inputs.is_retry != true
     strategy:
       fail-fast: false
-      matrix: ${{ fromJson(needs.determine-csp-frameworks-matrix.outputs.matrix) }}
+      # Angular AOT bundling is slow, so it is split into parallel shards
+      # (CSP_SHARD_*, round-robin in csp-bundle-angular.js). React/Vue stay light.
+      matrix:
+        include:
+          - { FRAMEWORK: React,   SHARD_INDEX: 1, SHARD_TOTAL: 2 }
+          - { FRAMEWORK: React,   SHARD_INDEX: 2, SHARD_TOTAL: 2 }
+          - { FRAMEWORK: Vue,     SHARD_INDEX: 1, SHARD_TOTAL: 2 }
+          - { FRAMEWORK: Vue,     SHARD_INDEX: 2, SHARD_TOTAL: 2 }
+          - { FRAMEWORK: Angular, SHARD_INDEX: 1, SHARD_TOTAL: 3 }
+          - { FRAMEWORK: Angular, SHARD_INDEX: 2, SHARD_TOTAL: 3 }
+          - { FRAMEWORK: Angular, SHARD_INDEX: 3, SHARD_TOTAL: 3 }
     runs-on: devextreme-shr2
     timeout-minutes: 60
     env:
@@ -1402,7 +1366,6 @@ jobs:
         name: csp-violations-${{ matrix.FRAMEWORK }}${{ matrix.SHARD_TOTAL != 1 && format('-shard{0}', matrix.SHARD_INDEX) || '' }}
         path: apps/demos/csp-reports/
         if-no-files-found: ignore
-        overwrite: true
 
   csp-report-summary:
     name: CSP Violations Summary
@@ -1474,4 +1437,3 @@ jobs:
           name: csp-violations-report
           path: apps/demos/csp-reports/
           if-no-files-found: ignore
-          overwrite: true
