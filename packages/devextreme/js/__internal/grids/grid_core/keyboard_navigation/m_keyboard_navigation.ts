@@ -185,8 +185,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     this.initDocumentHandlers();
 
     // init runs again on option changes, so drop the previous subscription first
-    this._dataController.rowIndicesChanged.remove(this.handleRowIndicesChanged);
-    this._dataController.rowIndicesChanged.add(this.handleRowIndicesChanged);
+    this._dataController.rowIndicesChanged.remove(this.rowIndicesChangedHandler);
+    this._dataController.rowIndicesChanged.add(this.rowIndicesChangedHandler);
   }
 
   public dispose(): void {
@@ -199,10 +199,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     );
     clearTimeout(this._updateFocusTimeout);
     accessibility.unsubscribeVisibilityChange();
-    this._dataController.rowIndicesChanged.remove(this.handleRowIndicesChanged);
+    this._dataController.rowIndicesChanged.remove(this.rowIndicesChangedHandler);
   }
 
-  private readonly handleRowIndicesChanged = (
+  private readonly rowIndicesChangedHandler = (
     getRowIndexCorrection: RowIndexCorrection,
   ): void => {
     const focusedCellPosition = this._focusedCellPosition;
