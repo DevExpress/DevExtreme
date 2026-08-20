@@ -221,14 +221,46 @@ const CSP_FRAMEWORK_ALLOWLIST = {
     },
   },
   Angular: {
+    FilterBuilder: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
     // globalize/message.js uses new Function() internally
     'Localization/UsingGlobalize': { 'script-src': ["'unsafe-eval'"] },
   },
   React: {
+    'Slider/Overview': {
+      'font-src': ['https://maxcdn.bootstrapcdn.com'],
+    },
+    'Sortable/Customization': {
+      'font-src': ['https://maxcdn.bootstrapcdn.com'],
+    },
+    'TagBox/Grouping': {
+      'font-src': ['https://maxcdn.bootstrapcdn.com'],
+    },
+    'SelectBox/Grouping': {
+      'font-src': ['https://maxcdn.bootstrapcdn.com'],
+    },
+    'SelectBox/SearchAndEditing': {
+      'font-src': ['https://maxcdn.bootstrapcdn.com'],
+    },
+    Calendar: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    CheckBox: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    'DateRangeBox/Overview': { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    Form: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    'Lookup/Templates': { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
     // globalize/message.js uses new Function() internally
     'Localization/UsingGlobalize': { 'script-src': ["'unsafe-eval'"] },
   },
   Vue: {
+    'SelectBox/Grouping': {
+      'font-src': ['https://maxcdn.bootstrapcdn.com'],
+    },
+    Calendar: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    CheckBox: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    Form: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    'Lookup/Templates': { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    'Slider/Overview': { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    'Sortable/Customization': { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    'TagBox/Grouping': { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    'SelectBox/SearchAndEditing': { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
     // globalize/message.js uses new Function() internally
     'Localization/UsingGlobalize': { 'script-src': ["'unsafe-eval'"] },
   },

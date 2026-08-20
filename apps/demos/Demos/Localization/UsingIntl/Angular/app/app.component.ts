@@ -4,24 +4,18 @@ import { DxSelectBoxModule, DxDataGridModule } from 'devextreme-angular';
 
 import { locale, loadMessages, formatMessage } from 'devextreme-angular/common/core/localization';
 
-import deMessages from 'npm:devextreme/localization/messages/de.json!json';
-import ruMessages from 'npm:devextreme/localization/messages/ru.json!json';
+import deMessages from 'devextreme/localization/messages/de.json';
+import ruMessages from 'devextreme/localization/messages/ru.json';
 import { Locale, Payment, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   providers: [Service],
   preserveWhitespaces: true,
   imports: [
