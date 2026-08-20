@@ -9,6 +9,15 @@ on:
     paths-ignore:
       - 'apps/**/*.md'
   workflow_call:
+    inputs:
+      is_retry:
+        description: 'Set by the merge-queue wrapper on attempt 2.'
+        type: boolean
+        default: false
+      retry_targets:
+        description: 'JSON map of jobs / matrix entries to re-run on retry.'
+        type: string
+        default: '{}'
   workflow_dispatch:
 
 env:
@@ -142,6 +151,84 @@ jobs:
 
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
+  determine-frameworks-all-matrix:
+    runs-on: ubuntu-latest
+    name: Determine testcafe-frameworks-all matrix
+    needs: [check-should-run, determine-framework-tests-scope]
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'all'
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - name: Build matrix
+        id: matrix
+        env:
+          IS_RETRY: ${{ inputs.is_retry }}
+          RETRY_TARGETS: ${{ inputs.retry_targets }}
+        run: |
+          set -euo pipefail
+          if [ "$IS_RETRY" = "true" ]; then
+            matrix=$(echo "$RETRY_TARGETS" | jq -c '.["testcafe-frameworks-all"] // {"include":[]}')
+          else
+            matrix=$(cat <<'JSON'
+          {
+            "CONSTEL": [
+              "react(1/3)","react(2/3)","react(3/3)",
+              "vue(1/5)","vue(2/5)","vue(3/5)","vue(4/5)","vue(5/5)",
+              "angular(1/10)","angular(2/10)","angular(3/10)","angular(4/10)","angular(5/10)",
+              "angular(6/10)","angular(7/10)","angular(8/10)","angular(9/10)","angular(10/10)"
+            ],
+            "THEME": ["fluent.blue.light"]
+          }
+          JSON
+          )
+            matrix=$(echo "$matrix" | jq -c .)
+          fi
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+
+  determine-csp-frameworks-matrix:
+    runs-on: ubuntu-latest
+    name: Determine csp-check-frameworks matrix
+    needs: [check-should-run, determine-framework-tests-scope]
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - name: Build matrix
+        id: matrix
+        env:
+          IS_RETRY: ${{ inputs.is_retry }}
+          RETRY_TARGETS: ${{ inputs.retry_targets }}
+        run: |
+          set -euo pipefail
+          if [ "$IS_RETRY" = "true" ]; then
+            matrix=$(echo "$RETRY_TARGETS" | jq -c '.["csp-check-frameworks"] // {"include":[]}')
+          else
+            matrix=$(cat <<'JSON'
+          {
+            "include": [
+              { "FRAMEWORK": "React",   "SHARD_INDEX": 1, "SHARD_TOTAL": 2 },
+              { "FRAMEWORK": "React",   "SHARD_INDEX": 2, "SHARD_TOTAL": 2 },
+              { "FRAMEWORK": "Vue",     "SHARD_INDEX": 1, "SHARD_TOTAL": 2 },
+              { "FRAMEWORK": "Vue",     "SHARD_INDEX": 2, "SHARD_TOTAL": 2 },
+              { "FRAMEWORK": "Angular", "SHARD_INDEX": 1, "SHARD_TOTAL": 3 },
+              { "FRAMEWORK": "Angular", "SHARD_INDEX": 2, "SHARD_TOTAL": 3 },
+              { "FRAMEWORK": "Angular", "SHARD_INDEX": 3, "SHARD_TOTAL": 3 }
+            ]
+          }
+          JSON
+          )
+            matrix=$(echo "$matrix" | jq -c .)
+          fi
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+
   build-devextreme:
     runs-on: devextreme-shr2
     name: Build DevExtreme
@@ -149,7 +236,8 @@ jobs:
     if: |
       always() &&
       needs.check-should-run.outputs.should-run == 'true' &&
-      needs.determine-framework-tests-scope.result == 'success'
+      needs.determine-framework-tests-scope.result == 'success' &&
+      inputs.is_retry != true
     env:
       NODE_OPTIONS: --max-old-space-size=8192
     timeout-minutes: 30
@@ -283,7 +371,8 @@ jobs:
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.determine-framework-tests-scope.result == 'success' &&
       needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
-      needs.build-devextreme.result == 'success'
+      needs.build-devextreme.result == 'success' &&
+      inputs.is_retry != true
     env:
       NODE_OPTIONS: --max-old-space-size=8192
 
@@ -355,7 +444,8 @@ jobs:
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.determine-framework-tests-scope.result == 'success' &&
       needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
-      needs.build-devextreme.result == 'success'
+      needs.build-devextreme.result == 'success' &&
+      inputs.is_retry != true
 
     runs-on: ubuntu-latest
     timeout-minutes: 60
@@ -498,7 +588,8 @@ jobs:
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.determine-framework-tests-scope.result == 'success' &&
       needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'changed' &&
-      needs.build-devextreme.result == 'success'
+      needs.build-devextreme.result == 'success' &&
+      inputs.is_retry != true
 
     steps:
     - name: Get sources
@@ -611,7 +702,8 @@ jobs:
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.determine-framework-tests-scope.result == 'success' &&
       needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'all' &&
-      needs.build-devextreme.result == 'success'
+      needs.build-devextreme.result == 'success' &&
+      inputs.is_retry != true
 
     steps:
     - name: Get sources
@@ -678,7 +770,8 @@ jobs:
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.determine-framework-tests-scope.result == 'success' &&
       needs.determine-jquery-test-matrix.result == 'success' &&
-      needs.build-devextreme.result == 'success'
+      needs.build-devextreme.result == 'success' &&
+      inputs.is_retry != true
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.determine-jquery-test-matrix.outputs.matrix) }}
@@ -830,37 +923,20 @@ jobs:
         if-no-files-found: ignore
 
   testcafe-frameworks-all:
-    needs: [check-should-run, determine-framework-tests-scope, build-demos]
+    needs: [check-should-run, determine-framework-tests-scope, build-demos, determine-frameworks-all-matrix]
     if: |
       always() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.determine-framework-tests-scope.result == 'success' &&
       needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'all' &&
-      needs.build-demos.result == 'success'
+      needs.determine-frameworks-all-matrix.result == 'success' &&
+      (
+        (inputs.is_retry != true && needs.build-demos.result == 'success') ||
+        (inputs.is_retry == true && fromJson(inputs.retry_targets)['testcafe-frameworks-all'] != null)
+      )
     strategy:
       fail-fast: false
-      matrix:
-        CONSTEL: [
-          react(1/3),
-          react(2/3),
-          react(3/3),
-          vue(1/5),
-          vue(2/5),
-          vue(3/5),
-          vue(4/5),
-          vue(5/5),
-          angular(1/10),
-          angular(2/10),
-          angular(3/10),
-          angular(4/10),
-          angular(5/10),
-          angular(6/10),
-          angular(7/10),
-          angular(8/10),
-          angular(9/10),
-          angular(10/10),
-        ]
-        THEME: ['fluent.blue.light']
+      matrix: ${{ fromJson(needs.determine-frameworks-all-matrix.outputs.matrix) }}
 
     runs-on: devextreme-shr2
     name: ${{ matrix.CONSTEL }}-screenshots-${{ matrix.THEME }}
@@ -976,6 +1052,7 @@ jobs:
         name: screenshots-${{ env.JOB_NAME }}
         path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
         if-no-files-found: ignore
+        overwrite: true
 
   testcafe-frameworks-changed:
     needs: [check-should-run, determine-framework-tests-scope, build-demos]
@@ -984,7 +1061,8 @@ jobs:
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.determine-framework-tests-scope.result == 'success' &&
       needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'changed' &&
-      needs.build-demos.result == 'success'
+      needs.build-demos.result == 'success' &&
+      inputs.is_retry != true
     strategy:
       fail-fast: false
       matrix:
@@ -1144,6 +1222,7 @@ jobs:
           name: screenshots-angular
           pattern: screenshots-angular*
           delete-merged: true
+          overwrite: true
 
       - name: Merge jQuery accessibility reports
         if: needs.testcafe-jquery.result == 'failure'
@@ -1160,7 +1239,10 @@ jobs:
     if: |
       always() &&
       needs.check-should-run.outputs.should-run == 'true' &&
-      needs.build-devextreme.result == 'success'
+      (
+        (inputs.is_retry != true && needs.build-devextreme.result == 'success') ||
+        (inputs.is_retry == true && fromJson(inputs.retry_targets)['csp-check-jquery'] == true)
+      )
     runs-on: devextreme-shr2
     timeout-minutes: 60
     env:
@@ -1226,29 +1308,24 @@ jobs:
         name: csp-violations-jquery
         path: apps/demos/csp-reports/
         if-no-files-found: ignore
+        overwrite: true
 
   csp-check-frameworks:
     name: ${{ matrix.SHARD_TOTAL == 1 && format('CSP check ({0})', matrix.FRAMEWORK) || format('CSP check ({0} {1}/{2})', matrix.FRAMEWORK, matrix.SHARD_INDEX, matrix.SHARD_TOTAL) }}
-    needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
+    needs: [check-should-run, determine-framework-tests-scope, build-devextreme, determine-csp-frameworks-matrix]
     if: |
       always() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.determine-framework-tests-scope.result == 'success' &&
       needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
-      needs.build-devextreme.result == 'success'
+      needs.determine-csp-frameworks-matrix.result == 'success' &&
+      (
+        (inputs.is_retry != true && needs.build-devextreme.result == 'success') ||
+        (inputs.is_retry == true && fromJson(inputs.retry_targets)['csp-check-frameworks'] != null)
+      )
     strategy:
       fail-fast: false
-      # Angular AOT bundling is slow, so it is split into parallel shards
-      # (CSP_SHARD_*, round-robin in csp-bundle-angular.js). React/Vue stay light.
-      matrix:
-        include:
-          - { FRAMEWORK: React,   SHARD_INDEX: 1, SHARD_TOTAL: 2 }
-          - { FRAMEWORK: React,   SHARD_INDEX: 2, SHARD_TOTAL: 2 }
-          - { FRAMEWORK: Vue,     SHARD_INDEX: 1, SHARD_TOTAL: 2 }
-          - { FRAMEWORK: Vue,     SHARD_INDEX: 2, SHARD_TOTAL: 2 }
-          - { FRAMEWORK: Angular, SHARD_INDEX: 1, SHARD_TOTAL: 3 }
-          - { FRAMEWORK: Angular, SHARD_INDEX: 2, SHARD_TOTAL: 3 }
-          - { FRAMEWORK: Angular, SHARD_INDEX: 3, SHARD_TOTAL: 3 }
+      matrix: ${{ fromJson(needs.determine-csp-frameworks-matrix.outputs.matrix) }}
     runs-on: devextreme-shr2
     timeout-minutes: 60
     env:
@@ -1325,6 +1402,7 @@ jobs:
         name: csp-violations-${{ matrix.FRAMEWORK }}${{ matrix.SHARD_TOTAL != 1 && format('-shard{0}', matrix.SHARD_INDEX) || '' }}
         path: apps/demos/csp-reports/
         if-no-files-found: ignore
+        overwrite: true
 
   csp-report-summary:
     name: CSP Violations Summary
@@ -1396,3 +1474,4 @@ jobs:
           name: csp-violations-report
           path: apps/demos/csp-reports/
           if-no-files-found: ignore
+          overwrite: true
