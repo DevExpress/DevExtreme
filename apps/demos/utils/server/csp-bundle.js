@@ -95,8 +95,8 @@ const ignoreMissingCssPlugin = {
 const ANTI_FORGERY_PATH = path.join(DEMOS_APP_ROOT, 'shared', 'anti-forgery', 'fetch-override.js');
 const GLOBALIZE_BASE = path.join(NODE_MODULES, 'globalize', 'dist', 'globalize');
 
-const systemJsQuirksPlugin = {
-  name: 'csp-bundle:systemjs-quirks',
+const demoAliasesPlugin = {
+  name: 'csp-bundle:demo-aliases',
   setup(build) {
     build.onResolve({ filter: /^anti-forgery$/ }, () => ({ path: ANTI_FORGERY_PATH }));
 
@@ -106,31 +106,6 @@ const systemJsQuirksPlugin = {
       if (fs.existsSync(full)) return { path: full };
       return null;
     });
-
-    build.onResolve({ filter: /(^npm:)|(!json$)/ }, async (args) => {
-      let spec = args.path;
-      const forceJson = spec.endsWith('!json');
-      if (forceJson) spec = spec.slice(0, -'!json'.length);
-      if (spec.startsWith('npm:')) spec = spec.slice('npm:'.length);
-
-      const resolved = await build.resolve(spec, {
-        kind: args.kind,
-        importer: args.importer,
-        resolveDir: args.resolveDir,
-        pluginData: { cspBundleResolved: true },
-      });
-      if (resolved.errors.length > 0) return resolved;
-
-      if (forceJson) {
-        return { path: resolved.path, namespace: 'csp-bundle-force-json' };
-      }
-      return { path: resolved.path, external: resolved.external };
-    });
-
-    build.onLoad({ filter: /.*/, namespace: 'csp-bundle-force-json' }, (args) => ({
-      contents: fs.readFileSync(args.path, 'utf8'),
-      loader: 'json',
-    }));
   },
 };
 
@@ -201,7 +176,7 @@ function getSharedOptions(framework) {
     plugins: [
       vendorGlobalPlugin(framework),
       devextremeDedupePlugin,
-      systemJsQuirksPlugin,
+      demoAliasesPlugin,
       ignoreMissingCssPlugin,
       ...(framework === 'Vue' ? [getVuePlugin()] : []),
     ],

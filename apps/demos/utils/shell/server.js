@@ -27,7 +27,7 @@ const getDemoPath = (requestPath) => requestPath.replace(/^\/apps\/demos(?=\/|$)
 // watching all ~2,500 demos.
 const BUNDLED_APPROACHES = new Set(['React', 'ReactJs', 'Vue', 'Angular']);
 const GENERATED_ENTRY_NAMES = new Set([
-  'bundle.js', 'bundle.css', indexFileName, 'config.js', 'tsconfig.json', 'description.md',
+  'bundle.js', 'bundle.css', indexFileName, 'tsconfig.json', 'description.md',
 ]);
 
 function newestSourceMtimeMs(dir) {

@@ -9,12 +9,12 @@ import 'devextreme/common/core/localization/globalize/message';
 
 // import 'devextreme-angular/common/core/localization';
 
-import deMessages from 'npm:devextreme/localization/messages/de.json!json';
-import ruMessages from 'npm:devextreme/localization/messages/ru.json!json';
+import deMessages from 'devextreme/localization/messages/de.json';
+import ruMessages from 'devextreme/localization/messages/ru.json';
 
-import deCldrData from 'npm:devextreme-cldr-data/de.json!json';
-import ruCldrData from 'npm:devextreme-cldr-data/ru.json!json';
-import supplementalCldrData from 'npm:devextreme-cldr-data/supplemental.json!json';
+import deCldrData from 'devextreme-cldr-data/de.json';
+import ruCldrData from 'devextreme-cldr-data/ru.json';
+import supplementalCldrData from 'devextreme-cldr-data/supplemental.json';
 
 import Globalize from 'globalize';
 import { Locale, Payment, Service } from './app.service';
@@ -23,16 +23,10 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   providers: [Service],
   preserveWhitespaces: true,
   imports: [

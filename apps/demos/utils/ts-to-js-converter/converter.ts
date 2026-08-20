@@ -256,7 +256,6 @@ const formatOutputs = async (
     eslintPatterns,
     '--config',
     eslintConfig,
-    '--ignore-pattern "**/config.js"',
     '--ignore-pattern "*.tsbuildinfo"',
   ].join(' ');
 

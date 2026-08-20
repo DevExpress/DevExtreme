@@ -23,9 +23,6 @@ changed-files.json
 
 !.vscode/settings.json
 
-shared/empty-file.js
-
-Demos/**/config.js
 Demos/**/tsconfig.json
 
 # esbuild in-place demo build output (see utils/build/) — generated next to
