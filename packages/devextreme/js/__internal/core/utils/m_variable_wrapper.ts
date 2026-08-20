@@ -1,8 +1,15 @@
-/* eslint-disable object-shorthand */
 import { logger } from '@js/core/utils/console';
 import dependencyInjector from '@js/core/utils/dependency_injector';
 
-const variableWrapper = dependencyInjector({
+interface VariableWrapper {
+  isWrapped: (value: any) => boolean;
+  isWritableWrapped: (value: any) => boolean;
+  wrap: (value: any) => any;
+  unwrap: (value: any) => any;
+  assign: (variable: any, value: any) => void;
+}
+
+const variableWrapper = dependencyInjector<VariableWrapper>({
   isWrapped: function () {
     return false;
   },

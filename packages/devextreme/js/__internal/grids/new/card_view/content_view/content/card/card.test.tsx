@@ -2,7 +2,7 @@ import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import { compileGetter } from '@js/common/data';
-import { Guid } from '@ts/core/m_guid';
+import { Guid } from '@ts/core/guid';
 import { render } from 'inferno';
 
 import { Card } from './card';
