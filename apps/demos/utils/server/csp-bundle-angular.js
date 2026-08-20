@@ -28,8 +28,9 @@ const RETRY_CONCURRENCY = (() => {
   return 2;
 })();
 
-// Larger batches OOM the CI runner.
-const DEFAULT_SAFE_BATCH_SIZE = 12;
+// One global batch shares the most code across demos. Infinity rather than a fixed number
+// so it always covers the current demo count, not just whatever it happened to be when set.
+const DEFAULT_SAFE_BATCH_SIZE = Infinity;
 const BATCH_SIZE = (() => {
   const fromEnv = parseInt(process.env.CSP_BUNDLE_BATCH_SIZE, 10);
   if (fromEnv > 0) return fromEnv;
@@ -578,7 +579,7 @@ function makeBuildOptions({
       'process.env.NODE_ENV': '"production"',
       ngJitMode: 'false',
     },
-    minify: false,
+    minify: true,
     sourcemap: false,
     logLevel: 'silent',
     metafile: true,
@@ -763,9 +764,16 @@ async function main() {
       });
     } else {
       const batches = chunk(preparedDemos, BATCH_SIZE);
+      // `batchIndex * BATCH_SIZE` would be NaN when BATCH_SIZE is Infinity.
+      let cursor = 0;
+      const batchStarts = batches.map((batch) => {
+        const start = cursor;
+        cursor += batch.length;
+        return start;
+      });
 
       await runPool(batches, BATCH_CONCURRENCY, async (batch, batchIndex) => {
-        const firstIndex = batchIndex * BATCH_SIZE;
+        const firstIndex = batchStarts[batchIndex];
         const lastIndex = Math.min(firstIndex + batch.length, demos.length);
         const res = await bundleDemoBatch(batch, createCompilerPlugin);
         if (res.ok) {
