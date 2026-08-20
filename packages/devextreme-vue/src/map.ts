@@ -14,6 +14,8 @@ import {
  RouteRemovedEvent,
  MapProvider,
  MapType,
+ OsmTileServer,
+ OsmTileServerConfig,
  RouteMode,
 } from "devextreme/ui/map";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -245,10 +247,12 @@ const DxProviderConfigConfig = {
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:mapId": null,
+    "update:tileServer": null,
     "update:useAdvancedMarkers": null,
   },
   props: {
     mapId: String,
+    tileServer: [Object, Function, String] as PropType<OsmTileServer | (((type: MapType) => string | OsmTileServerConfig | undefined)) | OsmTileServerConfig | string>,
     useAdvancedMarkers: Boolean
   }
 };

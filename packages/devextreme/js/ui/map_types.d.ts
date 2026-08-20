@@ -2,6 +2,8 @@ export {
   MapProvider,
   RouteMode,
   MapType,
+  OsmTileServerConfig,
+  OsmTileServer,
   ClickEvent,
   DisposingEvent,
   InitializedEvent,

@@ -14,6 +14,7 @@ import {
 
 
 
+import type { OsmTileServer } from 'devextreme/ui/map';
 
 import {
     DxIntegrationModule,
@@ -36,6 +37,14 @@ export class DxoProviderConfigComponent extends NestedOption implements OnDestro
     }
     set mapId(value: string) {
         this._setOption('mapId', value);
+    }
+
+    @Input()
+    get tileServer(): OsmTileServer | undefined {
+        return this._getOption('tileServer');
+    }
+    set tileServer(value: OsmTileServer | undefined) {
+        this._setOption('tileServer', value);
     }
 
     @Input()

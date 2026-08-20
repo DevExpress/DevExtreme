@@ -21,6 +21,7 @@ import type { LocationOption } from './provider.dynamic';
 import azure from './provider.dynamic.azure';
 import bing from './provider.dynamic.bing';
 import google from './provider.dynamic.google';
+import osm from './provider.dynamic.osm';
 // NOTE external urls must have protocol explicitly specified
 // (because inside Cordova package the protocol is "file:")
 import googleStatic from './provider.google_static';
@@ -30,6 +31,7 @@ const PROVIDERS = {
   googleStatic,
   google,
   bing,
+  osm,
 };
 
 const MAP_CLASS = 'dx-map';
@@ -54,7 +56,7 @@ class Map extends Widget<MapProperties> {
 
   _lastAsyncAction!: Promise<void>;
 
-  _provider!: azure | googleStatic | google | bing;
+  _provider!: azure | googleStatic | google | bing | osm;
 
   _asyncActionSuppressed?: boolean;
 

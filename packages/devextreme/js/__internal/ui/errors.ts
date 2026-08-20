@@ -113,6 +113,8 @@ export default errorUtils(errors.ERROR_MESSAGES, {
 
   E1068: '\'aiIntegration\' is not configured for the AI Assistant.',
 
+  E1069: 'Could not find a compatible version of OpenLayers. Load a supported version before Map initialization.',
+
   W1001: 'The "key" option cannot be modified after initialization',
 
   W1002: 'An item with the key \'{0}\' does not exist',
@@ -160,4 +162,6 @@ export default errorUtils(errors.ERROR_MESSAGES, {
   W1027: 'A prompt should be specified for a custom command.',
   W1028: 'Nested/banded columns do not support the following properties: {0}.',
   W1029: '\'hiddenWeekDays\' must leave at least one weekday visible.',
+  W1030: '\'tileServer\' is not configured for the OSM map provider.',
+  W1032: '\'attribution\' is not configured for the OSM tile server.',
 });
