@@ -29,12 +29,8 @@ const RETRY_CONCURRENCY = (() => {
   return 2;
 })();
 
-// Was 12 (larger batches were believed to OOM the CI runner). Local testing up through a
-// single batch covering all ~500 Angular demos found no OOM/crash and a much better size
-// win (splitting finds far more shared code across a bigger entry-point set) — trying a
-// single global batch on the real CI runner to confirm before trusting it there too.
-// Infinity means "one batch, whatever the current demo count is" rather than a number that
-// has to be kept above the demo count by hand.
+// One global batch shares the most code across demos. Infinity rather than a fixed number
+// so it always covers the current demo count, not just whatever it happened to be when set.
 const DEFAULT_SAFE_BATCH_SIZE = Infinity;
 const BATCH_SIZE = (() => {
   const fromEnv = parseInt(process.env.CSP_BUNDLE_BATCH_SIZE, 10);
@@ -790,9 +786,7 @@ async function main() {
       });
     } else {
       const batches = chunk(preparedDemos, BATCH_SIZE);
-      // Derived from actual batch lengths rather than `batchIndex * BATCH_SIZE` — the latter
-      // is NaN when BATCH_SIZE is Infinity (a single all-demos batch), and is off for the
-      // last (possibly partial) batch either way.
+      // `batchIndex * BATCH_SIZE` would be NaN when BATCH_SIZE is Infinity.
       let cursor = 0;
       const batchStarts = batches.map((batch) => {
         const start = cursor;
