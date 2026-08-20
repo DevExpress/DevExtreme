@@ -591,7 +591,7 @@ function makeBuildOptions({
       'process.env.NODE_ENV': '"production"',
       ngJitMode: 'false',
     },
-    minify: false,
+    minify: true,
     sourcemap: false,
     logLevel: 'silent',
     metafile: true,
