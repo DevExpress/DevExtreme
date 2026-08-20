@@ -89,23 +89,12 @@ const expandAllDayRegularPanelEntity = <T extends Pick<ListEntity, 'startDateUTC
   if (ignoreAllDayHours) {
     const startDayHourMs = startDayHour * toMs('hour');
     const startOfCalendarDay = new Date(entity.startDateUTC).setUTCHours(0, 0, 0, 0);
-    const endOfCalendarDay = new Date(entity.endDateUTC).setUTCHours(0, 0, 0, 0);
-
-    if (viewOffsetMs === 0) {
-      const endDate = new Date(endOfCalendarDay);
-      endDate.setUTCDate(endDate.getUTCDate() + 1);
-
-      return {
-        ...entity,
-        startDateUTC: startOfCalendarDay + startDayHourMs,
-        endDateUTC: endDate.setUTCHours(0, 0, 0, 0) + startDayHourMs,
-      };
-    }
+    const endOfNextCalendarDay = new Date(entity.endDateUTC).setUTCHours(0, 0, 0, 0) + DAY_MS;
 
     return {
       ...entity,
-      startDateUTC: getShiftedStartDate(startOfCalendarDay, viewOffsetMs) + startDayHourMs,
-      endDateUTC: getShiftedEndDate(endOfCalendarDay, viewOffsetMs) + startDayHourMs,
+      startDateUTC: startOfCalendarDay + viewOffsetMs + startDayHourMs,
+      endDateUTC: endOfNextCalendarDay + viewOffsetMs + startDayHourMs,
     };
   }
 

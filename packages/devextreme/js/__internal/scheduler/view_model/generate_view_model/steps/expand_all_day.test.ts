@@ -203,11 +203,31 @@ describe('expandAllDay', () => {
         {
           allDay: true,
           startDateUTC: Date.UTC(2020, 0, 9, 11, 45),
-          endDateUTC: Date.UTC(2020, 0, 10, 11, 44),
+          endDateUTC: Date.UTC(2020, 0, 10, 11, 45),
         }, {
           allDay: true,
           startDateUTC: Date.UTC(2020, 0, 9, 11, 45),
-          endDateUTC: Date.UTC(2020, 0, 11, 11, 44),
+          endDateUTC: Date.UTC(2020, 0, 11, 11, 45),
+        },
+      ]);
+    });
+
+    it('should keep all day appointment on its calendar day when offset is a full day', () => {
+      expect(expandAllDayRegularPanel([
+        {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10, 20, 30),
+          endDateUTC: Date.UTC(2020, 0, 10, 23, 30),
+        },
+      ], {
+        startDayHour: 0,
+        viewOffsetMs: -1440 * 60_000,
+        ignoreAllDayHours: true,
+      })).toEqual([
+        {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 9, 0),
+          endDateUTC: Date.UTC(2020, 0, 10, 0),
         },
       ]);
     });
