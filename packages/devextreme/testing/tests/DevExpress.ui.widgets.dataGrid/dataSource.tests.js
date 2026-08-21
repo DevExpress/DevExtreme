@@ -58,9 +58,12 @@ const createDataSource = function(options) {
         return items;
     };
 
+    dataSourceAdapter.setSummary = (summary) => {
+        dataSourceAdapter.getSummary = () => summary;
+    };
+
     return dataSourceAdapter;
 };
-
 
 QUnit.module('Grid DataSource', {
     beforeEach: function() {
@@ -3019,7 +3022,7 @@ QUnit.module('Remote group paging', {
         });
         const loadingChanged = sinon.stub();
 
-        dataSource.summary({
+        dataSource.setSummary({
             groupAggregates: [{
                 summaryType: 'count'
             }],
@@ -6019,7 +6022,7 @@ QUnit.module('Summary', {
     QUnit.test('Total summary without grouping', function(assert) {
         const dataSource = this.createDataSource({});
 
-        dataSource.summary({
+        dataSource.setSummary({
             totalAggregates: [{
                 aggregator: 'count'
             }, {
@@ -6040,7 +6043,7 @@ QUnit.module('Summary', {
             group: 'this'
         });
 
-        dataSource.summary({
+        dataSource.setSummary({
             totalAggregates: [{
                 aggregator: 'count'
             }, {
@@ -6068,7 +6071,7 @@ QUnit.module('Summary', {
             }
         });
 
-        dataSource.summary({
+        dataSource.setSummary({
             totalAggregates: [{
                 aggregator: 'count'
             }, {
@@ -6105,7 +6108,7 @@ QUnit.module('Summary', {
             }
         });
 
-        dataSource.summary({
+        dataSource.setSummary({
             totalAggregates: [{
                 aggregator: 'count'
             }, {
@@ -6137,7 +6140,7 @@ QUnit.module('Summary', {
             remoteOperations: false
         });
 
-        dataSource.summary({
+        dataSource.setSummary({
             totalAggregates: [{
                 aggregator: 'count'
             }, {
@@ -6166,7 +6169,7 @@ QUnit.module('Summary', {
             })
         });
 
-        dataSource.summary({
+        dataSource.setSummary({
             totalAggregates: [{
                 aggregator: 'count'
             }, {
@@ -6303,7 +6306,7 @@ QUnit.module('Cache', {
             remoteOperations: true
         });
 
-        dataSource.summary({
+        dataSource.setSummary({
             totalAggregates: [{
                 selector: 'this',
                 aggregator: 'sum'
@@ -6470,7 +6473,7 @@ QUnit.module('Cache', {
             }
         });
 
-        dataSource.summary({
+        dataSource.setSummary({
             totalAggregates: [{
                 selector: 'this',
                 aggregator: 'count'
@@ -6592,7 +6595,7 @@ QUnit.module('Cache', {
 
         let stepCount = 0;
 
-        dataSource.summary({
+        dataSource.setSummary({
             totalAggregates: [{
                 aggregator: {
                     seed: 0,
@@ -6629,7 +6632,7 @@ QUnit.module('Cache', {
 
         let stepCount = 0;
 
-        dataSource.summary({
+        dataSource.setSummary({
             totalAggregates: [{
                 aggregator: {
                     seed: 0,
@@ -6669,7 +6672,7 @@ QUnit.module('Cache', {
 
         let stepCount = 0;
 
-        dataSource.summary({
+        dataSource.setSummary({
             totalAggregates: [{
                 aggregator: {
                     seed: 0,

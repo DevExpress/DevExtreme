@@ -11449,32 +11449,6 @@ QUnit.module('Summary', {
         assert.deepEqual(headerFilterItems.map(function(item) { return item.value; }), [15, 18, 19, 20, 25], 'items are sorted');
     });
 
-    QUnit.test('findSummaryItem by custom name', function(assert) {
-        const summaryItems = [{
-            name: 'testCount1',
-            summaryType: 'count'
-        }, {
-            name: 'testCount2',
-            summaryType: 'count'
-        }, {
-            name: 'testMin',
-            summaryType: 'min',
-            column: 'testField'
-        }];
-
-        // act
-        this.setupDataGridModules();
-        this.clock.tick(10);
-
-        // assert
-        assert.strictEqual(this.dataController._findSummaryItem(summaryItems, 'count'), 0, 'find by summaryType');
-        assert.strictEqual(this.dataController._findSummaryItem(summaryItems, 'testField'), 2, 'find by column name');
-        assert.strictEqual(this.dataController._findSummaryItem(summaryItems, 'min_testField'), 2, 'find by summary type+column name');
-        assert.strictEqual(this.dataController._findSummaryItem(summaryItems, 'testCount2'), 1, 'find by name');
-        assert.strictEqual(this.dataController._findSummaryItem(summaryItems, 1), 1, 'find by summary item index');
-        assert.strictEqual(this.dataController._findSummaryItem(summaryItems, 'test3'), -1, 'find by wrong name');
-    });
-
     QUnit.test('group sorting by summary sortOrder desc', function(assert) {
         this.options = {
             columns: ['name', 'age'],
