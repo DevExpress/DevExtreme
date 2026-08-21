@@ -14,6 +14,7 @@ import {
   afterTest,
   beforeTest,
   createDataGrid,
+  spyOnOption,
 } from '../../../__tests__/__mock__/helpers/utils';
 import {
   pageIndexCommand,
@@ -80,7 +81,7 @@ describe('pagingCommand', () => {
       [false],
     ])('calls component.option("paging.enabled", %s) and returns success', async (enabled) => {
       const instance = await createGrid({ paging: { enabled: !enabled } });
-      const spy = jest.spyOn(instance, 'option');
+      const spy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await pagingCommand.execute(instance, callbacks)({ enabled });
