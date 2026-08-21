@@ -91,7 +91,7 @@ import {
   VIEWPORT_BOTTOM_NEW_ROW_POSITION,
   VIEWPORT_TOP_NEW_ROW_POSITION,
 } from './const';
-import { dataControllerEditingExtenderMixin } from './extenders/editing_data_controller';
+import { editingDataControllerExtender } from './extenders/editing_data_controller';
 import type { ICellBasedEditingControllerExtender } from './m_editing_cell_based';
 import type { IFormBasedEditingControllerExtender } from './m_editing_form_based';
 import {
@@ -2545,8 +2545,6 @@ export type EditingController = EditingControllerImpl
   & ICellBasedEditingControllerExtender
   & IFormBasedEditingControllerExtender;
 
-export { dataControllerEditingExtenderMixin };
-
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender extends Base {
   private _pointerDownTarget: any;
 
@@ -2869,7 +2867,7 @@ export const editingModule = {
   },
   extenders: {
     controllers: {
-      data: dataControllerEditingExtenderMixin,
+      data: editingDataControllerExtender,
     },
     views: {
       rowsView,

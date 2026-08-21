@@ -4,18 +4,21 @@ import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
 import type { EditingController } from '../m_editing';
 
-export const dataControllerEditingFormBasedExtender = (
+interface FormBasedEditingControllerExtension {
+  isFormEditMode: () => boolean;
+}
+
+export const editingFormBasedDataControllerExtender = (
   Base: ModuleType<DataController>,
-): ModuleType<DataController> => class DataEditingFormBasedExtender extends Base {
-  protected _editingController!: EditingController;
+): ModuleType<DataController> => class EditingFormBasedDataControllerExtender extends Base {
+  protected _editingController!: EditingController & FormBasedEditingControllerExtension;
 
   public init(): void {
-    this._editingController = this.getController('editing');
+    this._editingController = this.getController('editing') as EditingController & FormBasedEditingControllerExtension;
     super.init();
   }
 
   private _updateEditItem(item: ProcessedItem): void {
-    // @ts-expect-error isFormEditMode is private on the editing controller
     if (this._editingController.isFormEditMode()) {
       item.rowType = 'detail';
     }
@@ -27,7 +30,6 @@ export const dataControllerEditingFormBasedExtender = (
     visibleRowIndex: number,
     isLiveUpdate?: boolean,
   ): number[] | undefined {
-    // @ts-expect-error isFormEditMode is private on the editing controller
     if (isLiveUpdate === false && newItem.isEditing && this._editingController.isFormEditMode()) {
       return undefined;
     }
