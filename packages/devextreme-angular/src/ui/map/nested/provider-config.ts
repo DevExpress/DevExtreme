@@ -14,7 +14,7 @@ import {
 
 
 
-import type { OsmTileServer } from 'devextreme/ui/map';
+import type { OsmCalculateRouteParams, OsmTileServer } from 'devextreme/ui/map';
 
 import {
     DxIntegrationModule,
@@ -31,6 +31,22 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoMapProviderConfigComponent extends NestedOption implements OnDestroy, OnInit  {
+    @Input()
+    get calculateLocation(): ((query: string) => any) {
+        return this._getOption('calculateLocation');
+    }
+    set calculateLocation(value: ((query: string) => any)) {
+        this._setOption('calculateLocation', value);
+    }
+
+    @Input()
+    get calculateRoute(): ((params: OsmCalculateRouteParams) => any) {
+        return this._getOption('calculateRoute');
+    }
+    set calculateRoute(value: ((params: OsmCalculateRouteParams) => any)) {
+        this._setOption('calculateRoute', value);
+    }
+
     @Input()
     get mapId(): string {
         return this._getOption('mapId');

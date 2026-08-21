@@ -32,6 +32,22 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoProviderConfigComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
+    get calculateLocation(): Function {
+        return this._getOption('calculateLocation');
+    }
+    set calculateLocation(value: Function) {
+        this._setOption('calculateLocation', value);
+    }
+
+    @Input()
+    get calculateRoute(): Function {
+        return this._getOption('calculateRoute');
+    }
+    set calculateRoute(value: Function) {
+        this._setOption('calculateRoute', value);
+    }
+
+    @Input()
     get mapId(): string {
         return this._getOption('mapId');
     }
