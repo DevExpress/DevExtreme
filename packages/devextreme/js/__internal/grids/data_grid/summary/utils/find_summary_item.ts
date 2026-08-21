@@ -14,7 +14,7 @@ const getFullName = (summaryItem: SummaryItem): string | undefined => {
 
 export const findSummaryItem = (
   summaryItems?: SummaryItem[],
-  name?: string | number,
+  name?: string | number | null,
 ): number => {
   if (!summaryItems?.length || !isDefined(name)) {
     return -1;
