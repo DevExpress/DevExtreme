@@ -5,6 +5,5 @@ const packageName = pack.name;
 
 module.exports = {
   ...base,
-  name: packageName,
   displayName: packageName,
 };
