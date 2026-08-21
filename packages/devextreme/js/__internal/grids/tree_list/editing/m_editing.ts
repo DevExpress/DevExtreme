@@ -234,7 +234,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class TreeListEditingRowsViewEx
   }
 };
 
-const data = (Base: ModuleType<DataController>) => class DataControllerTreeListEditingExtender extends editingDataControllerExtender(Base) {
+const data = (Base: ModuleType<DataController>) => class TreeListEditingDataControllerExtender extends editingDataControllerExtender(Base) {
   private changeRowExpand() {
     this._editingController.refresh();
     // @ts-expect-error
