@@ -33,7 +33,7 @@ import {
   FOCUSABLE_ELEMENT_SELECTOR,
   FORM_BUTTONS_CONTAINER_CLASS,
 } from './const';
-import { dataControllerEditingFormBasedExtender } from './extenders/editing_form_based_data_controller';
+import { editingFormBasedDataControllerExtender } from './extenders/editing_form_based_data_controller';
 import type { EditingController } from './m_editing';
 import { forEachFormItems, getEditorType } from './m_editing_utils';
 
@@ -584,7 +584,7 @@ export const editingFormBasedModule = {
   extenders: {
     controllers: {
       editing: editingControllerExtender,
-      data: dataControllerEditingFormBasedExtender,
+      data: editingFormBasedDataControllerExtender,
     },
     views: {
       rowsView,
