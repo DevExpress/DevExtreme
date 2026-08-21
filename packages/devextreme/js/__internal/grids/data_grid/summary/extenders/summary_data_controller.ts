@@ -1,3 +1,18 @@
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable consistent-return */
+/* eslint-disable no-param-reassign */
+/* eslint-disable @typescript-eslint/no-this-alias */
+/* eslint-disable @typescript-eslint/init-declarations */
+/* eslint-disable no-self-compare */
+/* eslint-disable @typescript-eslint/no-invalid-this */
+/* eslint-disable prefer-rest-params */
+/* eslint-disable @stylistic/max-len */
+/* eslint-disable no-plusplus */
+/* eslint-disable @typescript-eslint/prefer-for-of */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import { compileGetter } from '@js/core/utils/data';
 import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
