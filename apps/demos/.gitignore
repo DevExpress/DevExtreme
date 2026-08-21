@@ -25,12 +25,9 @@ changed-files.json
 
 Demos/**/tsconfig.json
 
-# esbuild in-place demo build output (see utils/build/) — generated next to
-# each demo's own source, same convention as Demos/**/config.js above.
 Demos/**/bundle.js
 Demos/**/bundle.css
-# esbuild's own code-splitting output for batched Angular demo builds (see
-# csp-bundle-angular.js's makeBuildOptions) — shared chunks, not owned by any one demo.
+Demos/**/demo.manifest.json
 Demos/_chunks
 
 .DS_Store

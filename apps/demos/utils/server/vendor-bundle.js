@@ -36,8 +36,6 @@ function isVendorSpecifier(spec, framework) {
   return (VENDOR_PREFIXES[framework] || []).some((re) => re.test(spec));
 }
 
-// Substring match for the coverage-map check in vendorGlobalPlugin — a resolved chunk
-// file path won't match VENDOR_PREFIXES' bare-specifier regexes but still contains this.
 const VENDOR_KEYWORDS = {
   React: ['devextreme-react', 'devextreme', 'react-dom', 'react', 'globalize'],
   ReactJs: ['devextreme-react', 'devextreme', 'react-dom', 'react', 'globalize'],
@@ -45,24 +43,46 @@ const VENDOR_KEYWORDS = {
 };
 
 const SOURCE_EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.jsx', '.vue']);
-const IMPORT_SPECIFIER_RE = /(?:import|export)(?:[^'";]*?from)?\s*['"]([^'"]+)['"]|require\(\s*['"]([^'"]+)['"]\s*\)|import\(\s*['"]([^'"]+)['"]\s*\)/g;
+const IMPORT_SPECIFIER_RE = /(?:^|\r?\n)\s*(?:import|export)(?:[^'";]*?from)?\s*['"]([^'"]+)['"]|require\(\s*['"]([^'"]+)['"]\s*\)|import\(\s*['"]([^'"]+)['"]\s*\)/g;
+
+const GENERATED_DIR_NAMES = new Set(['_chunks']);
+const GENERATED_FILE_RE = /^bundle(\.[0-9a-f]+)?\.(js|css)$|^\.csp-bundle-angular-patched\./;
 
 function walk(dir, out) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) {
       walk(full, out);
-    } else if (SOURCE_EXTENSIONS.has(path.extname(entry.name))) {
+    } else if (SOURCE_EXTENSIONS.has(path.extname(entry.name)) && !GENERATED_FILE_RE.test(entry.name)) {
       out.push(full);
     }
   }
+}
+
+function collectSpecifiersFromDir(dir, predicate) {
+  const found = new Set();
+  if (!fs.existsSync(dir)) return found;
+  const files = [];
+  walk(dir, files);
+  for (const file of files) {
+    const content = fs.readFileSync(file, 'utf8');
+    IMPORT_SPECIFIER_RE.lastIndex = 0;
+    let m;
+    // eslint-disable-next-line no-cond-assign
+    while ((m = IMPORT_SPECIFIER_RE.exec(content))) {
+      const spec = m[1] || m[2] || m[3];
+      if (spec && predicate(spec)) found.add(spec);
+    }
+  }
+  return found;
 }
 
 function discoverSpecifiers(framework) {
   const found = new Set();
   if (!fs.existsSync(SRC_DEMOS_DIR)) return found;
 
-  const widgets = fs.readdirSync(SRC_DEMOS_DIR, { withFileTypes: true }).filter((w) => w.isDirectory());
+  const widgets = fs.readdirSync(SRC_DEMOS_DIR, { withFileTypes: true })
+    .filter((w) => w.isDirectory() && !GENERATED_DIR_NAMES.has(w.name));
   for (const widget of widgets) {
     const demoDir = path.join(SRC_DEMOS_DIR, widget.name);
     const demos = fs.readdirSync(demoDir, { withFileTypes: true }).filter((d) => d.isDirectory());
@@ -72,21 +92,105 @@ function discoverSpecifiers(framework) {
         // eslint-disable-next-line no-continue
         continue;
       }
-      const files = [];
-      walk(fwDir, files);
-      for (const file of files) {
-        const content = fs.readFileSync(file, 'utf8');
-        IMPORT_SPECIFIER_RE.lastIndex = 0;
-        let m;
-        // eslint-disable-next-line no-cond-assign
-        while ((m = IMPORT_SPECIFIER_RE.exec(content))) {
-          const spec = m[1] || m[2] || m[3];
-          if (spec && isVendorSpecifier(spec, framework)) found.add(spec);
-        }
-      }
+      collectSpecifiersFromDir(fwDir, (spec) => isVendorSpecifier(spec, framework))
+        .forEach((spec) => found.add(spec));
     }
   }
   return found;
+}
+
+const NON_PACKAGE_SPECIFIERS = new Set(['anti-forgery']);
+
+function discoverDemoSpecifiers(demoFrameworkDir) {
+  return collectSpecifiersFromDir(
+    demoFrameworkDir,
+    (spec) => !spec.startsWith('.') && !NON_PACKAGE_SPECIFIERS.has(spec),
+  );
+}
+
+function packageNameForSpecifier(spec) {
+  let s = spec;
+  if (s.endsWith('!json')) s = s.slice(0, -'!json'.length);
+  if (s.startsWith('npm:')) s = s.slice('npm:'.length);
+  if (s.startsWith('@')) return s.split('/').slice(0, 2).join('/');
+  return s.split('/')[0];
+}
+
+function nearestPackageJson(startFile) {
+  let dir = path.dirname(startFile);
+  for (;;) {
+    const candidate = path.join(dir, 'package.json');
+    if (fs.existsSync(candidate)) return candidate;
+    const parent = path.dirname(dir);
+    if (parent === dir) return null;
+    dir = parent;
+  }
+}
+
+function readJson(pkgJsonPath) {
+  return JSON.parse(fs.readFileSync(pkgJsonPath, 'utf8'));
+}
+
+// The fallback path is for packages whose `exports` map doesn't expose ./package.json.
+const packageJsonCache = new Map();
+function readPackageJson(pkgName, resolveDir) {
+  const cacheKey = `${resolveDir}::${pkgName}`;
+  if (packageJsonCache.has(cacheKey)) return packageJsonCache.get(cacheKey);
+
+  let pkg = null;
+  try {
+    pkg = readJson(require.resolve(`${pkgName}/package.json`, { paths: [resolveDir] }));
+  } catch {
+    try {
+      const pkgJsonPath = nearestPackageJson(require.resolve(pkgName, { paths: [resolveDir] }));
+      if (pkgJsonPath) pkg = readJson(pkgJsonPath);
+    } catch {
+      pkg = null;
+    }
+  }
+  packageJsonCache.set(cacheKey, pkg);
+  return pkg;
+}
+
+function resolvePackageVersion(pkgName, resolveDir) {
+  const pkg = readPackageJson(pkgName, resolveDir);
+  return (pkg && pkg.version) || null;
+}
+
+function addRequiredPeers(packages, resolveDir) {
+  const queue = Object.keys(packages);
+  const seen = new Set(queue);
+
+  while (queue.length > 0) {
+    const pkg = readPackageJson(queue.shift(), resolveDir);
+    const optional = (pkg && pkg.peerDependenciesMeta) || {};
+    for (const peer of Object.keys((pkg && pkg.peerDependencies) || {})) {
+      if (!seen.has(peer) && !(optional[peer] && optional[peer].optional)) {
+        seen.add(peer);
+        queue.push(peer);
+        const version = resolvePackageVersion(peer, resolveDir);
+        if (version) packages[peer] = version;
+      }
+    }
+  }
+
+  return packages;
+}
+
+function resolvePackageVersions(specifiers, resolveDir = DEMOS_APP_ROOT) {
+  const packages = {};
+  for (const spec of specifiers) {
+    const pkgName = packageNameForSpecifier(spec);
+    if (Object.prototype.hasOwnProperty.call(packages, pkgName)) continue; // eslint-disable-line no-continue
+    const version = resolvePackageVersion(pkgName, resolveDir);
+    if (version) {
+      packages[pkgName] = version;
+    } else {
+      // TODO: exit with error here?
+      console.warn(`vendor-bundle: could not resolve a version for package "${pkgName}" (from specifier "${spec}")`);
+    }
+  }
+  return addRequiredPeers(packages, resolveDir);
 }
 
 function safeName(spec) {
@@ -97,8 +201,6 @@ function escapeRegExp(s) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-// Narrow on purpose: esbuild only round-trips to JS for paths matching this filter,
-// so a broad filter here pays that cost for every resolution in the bundle.
 function specifierFilter(specifiers) {
   return new RegExp(`^(?:${specifiers.map(escapeRegExp).join('|')})$`);
 }
@@ -107,10 +209,6 @@ function keywordFilter(keywords) {
   return new RegExp(keywords.map(escapeRegExp).join('|'));
 }
 
-// Every absolute file path reachable from the entry file, per the vendor build's own metafile.
-// Each gets its own export slot in the final bundle (see buildVendorBundle) rather than being
-// redirected to whichever specifier's barrel transitively reaches it — a barrel only re-exports
-// its own public surface, not everything it privately imports.
 function computeClosure(metafile, entryFile, buildCwd) {
   if (!metafile || !entryFile) return [];
   const toAbs = (p) => (path.isAbsolute(p) ? p : path.resolve(buildCwd, p));
@@ -234,6 +332,7 @@ async function buildVendorBundle(framework, esbuildOptions = {}) {
     globalVar: globalVarName(framework),
     file: path.basename(vendorFilePath(framework)),
     coverage,
+    packages: resolvePackageVersions(specifiers),
   };
   fs.writeFileSync(manifestPath(framework), JSON.stringify(manifest, null, 2));
   manifestCache.set(framework, manifest);
@@ -313,6 +412,8 @@ function vendorScriptTag(framework) {
 
 module.exports = {
   discoverSpecifiers,
+  discoverDemoSpecifiers,
+  resolvePackageVersions,
   buildVendorBundle,
   getVendorManifest,
   invalidateVendorManifestCache,

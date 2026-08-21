@@ -17,11 +17,10 @@ if (!SUPPORTED.includes(FRAMEWORK)) {
 
 const IS_ANGULAR = FRAMEWORK === 'Angular';
 
-const IN_PLACE = process.env.BUNDLE_IN_PLACE === '1';
+const IS_GENERATE_MANIFESTS = process.env.CSP_BUNDLE_GENERATE_MANIFESTS === '1';
 
 const DEMOS_APP_ROOT = path.join(__dirname, '..', '..');
 const SRC_DEMOS_DIR = path.join(DEMOS_APP_ROOT, 'Demos');
-const OUT_ROOT = IN_PLACE ? SRC_DEMOS_DIR : path.join(DEMOS_APP_ROOT, 'csp-bundled-demos');
 const NODE_MODULES = path.join(DEMOS_APP_ROOT, 'node_modules');
 
 const CONCURRENCY = (() => {
@@ -219,6 +218,21 @@ function buildHtml({
 `;
 }
 
+function writeDemoManifest({
+  srcDir, destDir, framework,
+}) {
+  // eslint-disable-next-line global-require
+  const { discoverDemoSpecifiers, resolvePackageVersions } = require('./vendor-bundle');
+  const packages = resolvePackageVersions([
+    ...discoverDemoSpecifiers(srcDir),
+    'devextreme-dist',
+  ]);
+  fs.writeFileSync(
+    path.join(destDir, 'demo.manifest.json'),
+    JSON.stringify({ framework, packages }, null, 2),
+  );
+}
+
 async function bundleDemoTo({ srcDir, destDir, framework }) {
   const entry = findEntry(srcDir);
   if (!entry) return { ok: false, reason: 'no entry point (index.tsx|ts|jsx|js)' };
@@ -252,11 +266,13 @@ async function bundleDemoTo({ srcDir, destDir, framework }) {
     cssFiles.push('bundle.css');
   }
 
+  if (IS_GENERATE_MANIFESTS) writeDemoManifest({ srcDir, destDir, framework });
+
   return { ok: true, jsFiles, cssFiles };
 }
 
 async function bundleDemo(demo, { destDir: destDirOverride, framework = FRAMEWORK } = {}) {
-  const destDir = destDirOverride || path.join(OUT_ROOT, demo.widget, demo.name, FRAMEWORK);
+  const destDir = destDirOverride || path.join(SRC_DEMOS_DIR, demo.widget, demo.name, FRAMEWORK);
   const result = await bundleDemoTo({ srcDir: demo.srcDir, destDir, framework });
   if (!result.ok) return result;
 
@@ -286,23 +302,9 @@ async function runPool(items, concurrency, fn) {
 async function main() {
   console.log(`Framework: ${FRAMEWORK}`);
   console.log(`Concurrency: ${CONCURRENCY}`);
-  console.log(`Source: ${SRC_DEMOS_DIR}`);
-  console.log(`Output: ${OUT_ROOT}\n`);
+  console.log(`Output: ${SRC_DEMOS_DIR}\n`);
 
-  // IN_PLACE writes into the demo's own source folder, which must not be wiped.
-  if (!IN_PLACE && fs.existsSync(OUT_ROOT)) {
-    const existingWidgets = fs.readdirSync(OUT_ROOT, { withFileTypes: true })
-      .filter((w) => w.isDirectory());
-    for (const widget of existingWidgets) {
-      const existingDemos = fs.readdirSync(path.join(OUT_ROOT, widget.name), { withFileTypes: true })
-        .filter((d) => d.isDirectory());
-      for (const demo of existingDemos) {
-        const fwDir = path.join(OUT_ROOT, widget.name, demo.name, FRAMEWORK);
-        if (fs.existsSync(fwDir)) fs.rmSync(fwDir, { recursive: true, force: true });
-      }
-    }
-  }
-  fs.mkdirSync(OUT_ROOT, { recursive: true });
+  fs.mkdirSync(SRC_DEMOS_DIR, { recursive: true });
 
   const allDemos = findDemos();
   const demos = applyShard(allDemos);

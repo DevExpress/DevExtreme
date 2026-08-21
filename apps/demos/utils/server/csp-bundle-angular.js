@@ -12,8 +12,7 @@ const DEMOS_APP_ROOT = path.resolve(__dirname, '..', '..');
 const REPO_ROOT = path.resolve(DEMOS_APP_ROOT, '..', '..');
 const SRC_DEMOS_DIR = path.join(DEMOS_APP_ROOT, 'Demos');
 
-const IN_PLACE = process.env.BUNDLE_IN_PLACE === '1';
-const OUT_ROOT = IN_PLACE ? SRC_DEMOS_DIR : path.join(DEMOS_APP_ROOT, 'csp-bundled-demos');
+const IS_GENERATE_MANIFESTS = process.env.CSP_BUNDLE_GENERATE_MANIFESTS === '1';
 const NODE_MODULES = path.join(DEMOS_APP_ROOT, 'node_modules');
 const FRAMEWORK = 'Angular';
 
@@ -506,6 +505,19 @@ function prepareDemo(demo) {
   return { ...demo, effectiveEntry, fileReplacements };
 }
 
+const ANGULAR_IMPLICIT_PACKAGES = ['zone.js', 'reflect-metadata', 'devextreme-dist'];
+function writeDemoManifest(demo, destDir) {
+  const { discoverDemoSpecifiers, resolvePackageVersions } = require('./vendor-bundle');
+  const packages = resolvePackageVersions([
+    ...discoverDemoSpecifiers(demo.srcDir),
+    ...ANGULAR_IMPLICIT_PACKAGES,
+  ]);
+  fs.writeFileSync(
+    path.join(destDir, 'demo.manifest.json'),
+    JSON.stringify({ framework: FRAMEWORK, packages }, null, 2),
+  );
+}
+
 function sortJsFiles(jsFiles) {
   return jsFiles.sort((a, b) => {
     if (a === 'polyfills.js') return -1;
@@ -588,7 +600,7 @@ function makeBuildOptions({
 
 async function bundleDemo(demo, createCompilerPlugin, destDirOverride) {
   const prepared = demo.effectiveEntry ? demo : prepareDemo(demo);
-  const destDir = destDirOverride || path.join(OUT_ROOT, prepared.widget, prepared.name, FRAMEWORK);
+  const destDir = destDirOverride || path.join(SRC_DEMOS_DIR, prepared.widget, prepared.name, FRAMEWORK);
   fs.mkdirSync(destDir, { recursive: true });
 
   const effectiveEntry = prepared.effectiveEntry;
@@ -620,6 +632,7 @@ async function bundleDemo(demo, createCompilerPlugin, destDirOverride) {
   const cssFiles = outputs.filter((o) => o.endsWith('.css')).map((o) => path.basename(o));
 
   fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({ jsFiles, cssFiles, srcDir: prepared.srcDir }));
+  if (IS_GENERATE_MANIFESTS) writeDemoManifest(prepared, destDir);
   return { ok: true };
 }
 
@@ -636,7 +649,7 @@ async function bundleDemoBatch(batch, createCompilerPlugin) {
   try {
     await esbuild.build(makeBuildOptions({
       entryPoints,
-      outdir: OUT_ROOT,
+      outdir: SRC_DEMOS_DIR,
       tsconfig,
       fileReplacements,
       createCompilerPlugin,
@@ -646,7 +659,7 @@ async function bundleDemoBatch(batch, createCompilerPlugin) {
   }
 
   for (const demo of batch) {
-    const destDir = path.join(OUT_ROOT, demo.widget, demo.name, FRAMEWORK);
+    const destDir = path.join(SRC_DEMOS_DIR, demo.widget, demo.name, FRAMEWORK);
     const cssFiles = ['bundle.css'].filter((file) => fs.existsSync(path.join(destDir, file)));
     const localJsFiles = sortJsFiles(['bundle.js'].filter((file) => fs.existsSync(path.join(destDir, file))));
     if (localJsFiles.length === 0) {
@@ -658,6 +671,7 @@ async function bundleDemoBatch(batch, createCompilerPlugin) {
       ...localJsFiles,
     ];
     fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({ jsFiles, cssFiles, srcDir: demo.srcDir }));
+    if (IS_GENERATE_MANIFESTS) writeDemoManifest(demo, destDir);
   }
 
   return { ok: true };
@@ -684,30 +698,19 @@ async function main() {
   console.log(`Batch concurrency: ${BATCH_CONCURRENCY}`);
   if (SHARD_TOTAL > 1) console.log(`Shard: ${SHARD_INDEX}/${SHARD_TOTAL}`);
   console.log(`Source: ${SRC_DEMOS_DIR}`);
-  console.log(`Output: ${OUT_ROOT}`);
+  console.log(`Output: ${SRC_DEMOS_DIR}`);
   if (FILTER) console.log(`Filter: ${FILTER}`);
   console.log('');
 
-  // IN_PLACE writes into the demo's own source folder, which must not be wiped.
-  if (!IN_PLACE && fs.existsSync(OUT_ROOT)) {
-    const existingWidgets = fs.readdirSync(OUT_ROOT, { withFileTypes: true }).filter((w) => w.isDirectory());
-    for (const widget of existingWidgets) {
-      const widgetPath = path.join(OUT_ROOT, widget.name);
-      const existingDemos = fs.readdirSync(widgetPath, { withFileTypes: true }).filter((d) => d.isDirectory());
-      for (const demo of existingDemos) {
-        const fwDir = path.join(widgetPath, demo.name, FRAMEWORK);
-        if (fs.existsSync(fwDir)) fs.rmSync(fwDir, { recursive: true, force: true });
-      }
-    }
-  }
-  fs.mkdirSync(OUT_ROOT, { recursive: true });
+  fs.mkdirSync(SRC_DEMOS_DIR, { recursive: true });
+
   if (fs.existsSync(GENERATED_TSCONFIG_DIR)) {
     fs.rmSync(GENERATED_TSCONFIG_DIR, { recursive: true, force: true });
   }
   // Shared across every demo's own build (see makeBuildOptions' chunkNames) — not owned by
   // any single demo's own folder, so not covered by the per-demo wipe above; always safe to
   // fully regenerate since chunk filenames are content-hashed.
-  const chunksDir = path.join(OUT_ROOT, CHUNKS_DIRNAME);
+  const chunksDir = path.join(SRC_DEMOS_DIR, CHUNKS_DIRNAME);
   if (fs.existsSync(chunksDir)) {
     fs.rmSync(chunksDir, { recursive: true, force: true });
   }
