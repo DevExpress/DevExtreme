@@ -116,7 +116,7 @@ class EditingControllerImpl extends modules.ViewController {
 
   protected _dataController!: Controllers['data'];
 
-  protected _adaptiveColumnsController!: Controllers['adaptiveColumns'];
+  protected adaptiveColumnsController!: Controllers['adaptiveColumns'];
 
   protected _validatingController!: Controllers['validating'];
 
@@ -169,7 +169,7 @@ class EditingControllerImpl extends modules.ViewController {
   public init() {
     this._columnsController = this.getController('columns');
     this._dataController = this.getController('data');
-    this._adaptiveColumnsController = this.getController('adaptiveColumns');
+    this.adaptiveColumnsController = this.getController('adaptiveColumns');
     this._validatingController = this.getController('validating');
     this._editorFactoryController = this.getController('editorFactory');
     this._focusController = this.getController('focus');
