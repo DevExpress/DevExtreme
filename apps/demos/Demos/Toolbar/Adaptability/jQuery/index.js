@@ -127,7 +127,6 @@ const toolbarItems = [
   {
     locateInMenu: 'auto',
     location: 'before',
-    widget: 'dxButtonGroup',
     template(itemData, itemIndex, element) {
       const $buttonGroup = $('<div>').dxButtonGroup({
         items: textAlignItems,

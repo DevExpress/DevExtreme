@@ -120,7 +120,6 @@
             locate-in-menu="auto"
             template="textAlignTemplate"
             menu-item-template="textAlignMenuTemplate"
-            widget="dxButtonGroup"
           />
 
           <DxItem location="before">

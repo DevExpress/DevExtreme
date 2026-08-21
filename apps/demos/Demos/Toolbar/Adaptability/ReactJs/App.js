@@ -242,7 +242,6 @@ function App() {
             </Item>
 
             <Item
-              widget="dxButtonGroup"
               location="before"
               locateInMenu="auto"
               render={renderTextAlign}
