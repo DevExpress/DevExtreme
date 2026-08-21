@@ -907,7 +907,7 @@ const rowsView = (
 
     if (options.rowType === ADAPTIVE_ROW_TYPE && column.command === 'detail') {
       return function (container, options) {
-        that._adaptiveColumnsController.createFormByHiddenColumns($(container), options);
+        that.adaptiveColumnsController.createFormByHiddenColumns($(container), options);
       };
     }
     return super._getCellTemplate(options);
@@ -926,16 +926,15 @@ const rowsView = (
   protected _renderCells($row, options) {
     super._renderCells($row, options);
 
-    const adaptiveColumnsController = this._adaptiveColumnsController;
-    const hidingColumnsQueueLength = adaptiveColumnsController.getHidingColumnsQueue().length;
-    const hiddenColumnsLength = adaptiveColumnsController.getHiddenColumns().length;
+    const hidingColumnsQueueLength = this.adaptiveColumnsController.getHidingColumnsQueue().length;
+    const hiddenColumnsLength = this.adaptiveColumnsController.getHiddenColumns().length;
 
     if (hidingColumnsQueueLength && !hiddenColumnsLength) {
       getDataCellElements($row).last().addClass(LAST_DATA_CELL_CLASS);
     }
 
     if (options.row.rowType === 'data') {
-      adaptiveColumnsController.setCommandAdaptiveAriaLabel($row, EXPAND_ARIA_NAME);
+      this.adaptiveColumnsController.setCommandAdaptiveAriaLabel($row, EXPAND_ARIA_NAME);
     }
   }
 
@@ -961,7 +960,7 @@ const rowsView = (
     const item = this._dataController.items()[cellPosition?.rowIndex];
 
     if (item?.rowType === ADAPTIVE_ROW_TYPE) {
-      const $adaptiveDetailItems = this._adaptiveColumnsController.getAdaptiveDetailItems();
+      const $adaptiveDetailItems = this.adaptiveColumnsController.getAdaptiveDetailItems();
 
       return super.getCell(cellPosition, rows, $adaptiveDetailItems);
     }
@@ -972,7 +971,7 @@ const rowsView = (
     const item = this._dataController.items()[rowIndex];
 
     if (item && item.rowType === ADAPTIVE_ROW_TYPE) {
-      return this._adaptiveColumnsController.getItemContentByColumnIndex(columnIdentifier);
+      return this.adaptiveColumnsController.getItemContentByColumnIndex(columnIdentifier);
     }
     return super._getCellElement.apply(this, arguments as any);
   }
@@ -1081,13 +1080,13 @@ const editing = (
   }
 
   protected _beforeUpdateItems(rowIndices, rowIndex) {
-    if (!this._adaptiveColumnsController.isFormOrPopupEditMode() && this._adaptiveColumnsController.hasHiddenColumns()) {
+    if (!this.adaptiveColumnsController.isFormOrPopupEditMode() && this.adaptiveColumnsController.hasHiddenColumns()) {
       const items = this._dataController.items();
       const item = items[rowIndex];
       // @ts-expect-error
       const oldExpandRowIndex = gridCoreUtils.getIndexByKey(this._dataController.adaptiveExpandedKey(), items);
 
-      this._isForceRowAdaptiveExpand = !this._adaptiveColumnsController.hasAdaptiveDetailRowExpanded();
+      this._isForceRowAdaptiveExpand = !this.adaptiveColumnsController.hasAdaptiveDetailRowExpanded();
 
       if (oldExpandRowIndex >= 0) {
         rowIndices.push(oldExpandRowIndex + 1);
@@ -1102,22 +1101,22 @@ const editing = (
   protected _afterInsertRow(key) {
     super._afterInsertRow.apply(this, arguments as any);
 
-    if (this._adaptiveColumnsController.hasHiddenColumns()) {
+    if (this.adaptiveColumnsController.hasHiddenColumns()) {
       // @ts-expect-error
-      this._adaptiveColumnsController.toggleExpandAdaptiveDetailRow(key, this.isRowEditMode());
+      this.adaptiveColumnsController.toggleExpandAdaptiveDetailRow(key, this.isRowEditMode());
       this._isForceRowAdaptiveExpand = true;
     }
   }
 
   private _collapseAdaptiveDetailRow() {
     if (this._isRowEditMode() && this._isForceRowAdaptiveExpand) {
-      this._adaptiveColumnsController.collapseAdaptiveDetailRow();
+      this.adaptiveColumnsController.collapseAdaptiveDetailRow();
       this._isForceRowAdaptiveExpand = false;
     }
   }
 
   private _cancelEditAdaptiveDetailRow() {
-    if (this._adaptiveColumnsController.hasHiddenColumns()) {
+    if (this.adaptiveColumnsController.hasHiddenColumns()) {
       this._collapseAdaptiveDetailRow();
     }
   }
@@ -1126,7 +1125,7 @@ const editing = (
     super._afterSaveEditData.apply(this, arguments as any);
     // @ts-expect-error
     const deferred = new Deferred();
-    if (this._isRowEditMode() && this._adaptiveColumnsController.hasHiddenColumns()) {
+    if (this._isRowEditMode() && this.adaptiveColumnsController.hasHiddenColumns()) {
       when(this._validatingController.validate(true)).done((isValid) => {
         if (isValid) {
           this._cancelEditAdaptiveDetailRow();
@@ -1147,7 +1146,7 @@ const editing = (
   protected _getRowIndicesForCascadeUpdating(row) {
     const rowIndices = super._getRowIndicesForCascadeUpdating.apply(this, arguments as any);
 
-    if (this._adaptiveColumnsController.isAdaptiveDetailRowExpanded(row.key)) {
+    if (this.adaptiveColumnsController.isAdaptiveDetailRowExpanded(row.key)) {
       rowIndices.push(row.rowType === ADAPTIVE_ROW_TYPE ? row.rowIndex - 1 : row.rowIndex + 1);
     }
 
@@ -1167,8 +1166,8 @@ const editing = (
   }
 
   public editRow(rowIndex) {
-    if (this._adaptiveColumnsController.isFormOrPopupEditMode()) {
-      this._adaptiveColumnsController.collapseAdaptiveDetailRow();
+    if (this.adaptiveColumnsController.isFormOrPopupEditMode()) {
+      this.adaptiveColumnsController.collapseAdaptiveDetailRow();
     }
 
     return super.editRow(rowIndex);
@@ -1177,8 +1176,8 @@ const editing = (
   protected deleteRow(rowIndex) {
     const rowKey = this._dataController.getKeyByRowIndex(rowIndex);
 
-    if (this.getEditMode() === EDIT_MODE_BATCH && this._adaptiveColumnsController.isAdaptiveDetailRowExpanded(rowKey)) {
-      this._adaptiveColumnsController.collapseAdaptiveDetailRow();
+    if (this.getEditMode() === EDIT_MODE_BATCH && this.adaptiveColumnsController.isAdaptiveDetailRowExpanded(rowKey)) {
+      this.adaptiveColumnsController.collapseAdaptiveDetailRow();
     }
 
     super.deleteRow(rowIndex);
@@ -1190,9 +1189,12 @@ const data = (
 ) => class AdaptivityDataControllerExtender extends Base {
   private _adaptiveExpandedKey: any;
 
+  protected adaptiveColumnsController!: AdaptiveColumnsController;
+
   public init() {
     super.init();
     this._adaptiveExpandedKey = undefined;
+    this.adaptiveColumnsController = this.getController('adaptiveColumns');
   }
 
   protected _processItems(items: RawItemData[], change: DataChange): ProcessedItem[] {
@@ -1230,7 +1232,7 @@ const data = (
     // @ts-expect-error
     const rowIndices = super._getRowIndicesForExpand.apply(this, arguments);
 
-    if (this._adaptiveColumnsController.isAdaptiveDetailRowExpanded(key)) {
+    if (this.adaptiveColumnsController.isAdaptiveDetailRowExpanded(key)) {
       const lastRowIndex = rowIndices[rowIndices.length - 1];
       rowIndices.push(lastRowIndex + 1);
     }
@@ -1275,8 +1277,8 @@ const data = (
       rowIndices: [oldExpandLoadedRowIndex - rowIndexDelta, newExpandLoadedRowIndex - rowIndexDelta],
     });
 
-    this._adaptiveColumnsController.updateCommandAdaptiveAriaLabel(key, COLLAPSE_ARIA_NAME);
-    this._adaptiveColumnsController.updateCommandAdaptiveAriaLabel(oldKey, EXPAND_ARIA_NAME);
+    this.adaptiveColumnsController.updateCommandAdaptiveAriaLabel(key, COLLAPSE_ARIA_NAME);
+    this.adaptiveColumnsController.updateCommandAdaptiveAriaLabel(oldKey, EXPAND_ARIA_NAME);
   }
 };
 
@@ -1302,11 +1304,11 @@ const editorFactory = (
 const columns = (
   Base: ModuleType<ColumnsController>,
 ) => class AdaptivityColumnsExtender extends Base {
-  private _adaptiveColumnsController!: AdaptiveColumnsController;
+  private adaptiveColumnsController!: AdaptiveColumnsController;
 
   public init(isApplyingUserState?: boolean): void {
     super.init(isApplyingUserState);
-    this._adaptiveColumnsController = this.getController('adaptiveColumns');
+    this.adaptiveColumnsController = this.getController('adaptiveColumns');
   }
 
   protected _isColumnVisible(column) {
@@ -1320,7 +1322,7 @@ const columns = (
 
   public isAdaptiveHiddenColumn(column: Column): boolean {
     return super.isAdaptiveHiddenColumn(column)
-      || this._adaptiveColumnsController.isColumnHidden(column);
+      || this.adaptiveColumnsController.isColumnHidden(column);
   }
 };
 
@@ -1355,11 +1357,11 @@ const resizing = (Base: ModuleType<ResizingController>) => class AdaptivityResiz
 
   protected _needBestFit() {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return super._needBestFit() || !!this._adaptiveColumnsController.getHidingColumnsQueue().length;
+    return super._needBestFit() || !!this.adaptiveColumnsController.getHidingColumnsQueue().length;
   }
 
   protected _correctColumnWidths(resultWidths: (number | string | undefined)[], visibleColumns: Column[]): boolean {
-    const adaptiveController = this._adaptiveColumnsController;
+    const adaptiveController = this.adaptiveColumnsController;
     const oldHiddenColumns = adaptiveController.getHiddenColumns();
     const hidingColumnsQueue = adaptiveController.updateHidingQueue(this._columnsController.getColumns());
 
@@ -1383,14 +1385,15 @@ const resizing = (Base: ModuleType<ResizingController>) => class AdaptivityResiz
   }
 
   protected _toggleBestFitMode(isBestFit) {
-    this._adaptiveColumnsController._toggleGroupAdaptiveRowVisibility(isBestFit);
-    isBestFit && this._adaptiveColumnsController._showHiddenColumns();
+    this.adaptiveColumnsController._toggleGroupAdaptiveRowVisibility(isBestFit);
+    isBestFit && this.adaptiveColumnsController._showHiddenColumns();
     super._toggleBestFitMode(isBestFit);
   }
 
   protected _needStretch() {
-    const adaptiveColumnsController = this._adaptiveColumnsController;
-    return super._needStretch.apply(this, arguments as any) || adaptiveColumnsController.getHidingColumnsQueue().length || adaptiveColumnsController.hasHiddenColumns();
+    return super._needStretch.apply(this, arguments as any)
+      || this.adaptiveColumnsController.getHidingColumnsQueue().length
+      || this.adaptiveColumnsController.hasHiddenColumns();
   }
 };
 
