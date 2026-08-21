@@ -394,6 +394,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
       /**
        * @docid
        * @public
+       * @default undefined
        */
       tileServer?: OsmTileServer | undefined;
       /**
