@@ -148,7 +148,7 @@ const sortGroupsBySummary = function (data, group, summary) {
 const calculateAggregates = function (that: EditingControllerRequired, summary, data, groupLevel) {
   let calculator;
 
-  if (that.option('summary.recalculateWhileEditing')) {
+  if ((that as any).option('summary.recalculateWhileEditing')) {
     const editingController = that._editingController;
     if (editingController) {
       const insertedData = editingController.getInsertedData();
