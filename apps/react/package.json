@@ -27,7 +27,6 @@
     "webpack-dev-server": "5.2.6"
   },
   "scripts": {
-    "test": "node runner.js",
     "start": "webpack-dev-server",
     "build": "webpack"
   },
