@@ -20,7 +20,7 @@ import { getGroupAggregates } from './get_group_aggregates';
 
 export interface GetSummaryOptionsArgs {
   summary: Summary;
-  sortByGroupSummaryInfo: SortByGroupSummaryInfoItem[];
+  sortByGroupSummaryInfo?: SortByGroupSummaryInfoItem[];
   remoteOperations: RemoteOperationsOptions;
   getUpdatedItemData: GetUpdatedItemData;
   columnOption: GetColumnOption;
