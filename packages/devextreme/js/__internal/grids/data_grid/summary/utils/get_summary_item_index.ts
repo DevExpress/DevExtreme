@@ -12,7 +12,7 @@ const getFullName = (summaryItem: SummaryItem): string | undefined => {
   return summaryType ?? column;
 };
 
-export const findSummaryItem = (
+export const getSummaryItemIndex = (
   summaryItems?: SummaryItem[],
   name?: string | number | null,
 ): number => {

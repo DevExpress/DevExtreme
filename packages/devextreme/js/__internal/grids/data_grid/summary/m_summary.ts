@@ -153,7 +153,7 @@ const calculateAggregates = function (that: EditingControllerRequired, summary, 
   let calculator;
 
   if ((that as any).option('summary.recalculateWhileEditing')) {
-    const editingController = that._editingController;
+    const { editingController } = that;
     if (editingController) {
       const insertedData = editingController.getInsertedData();
       if (insertedData.length) {
@@ -288,15 +288,15 @@ export class FooterView extends ColumnsView {
 export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class SummaryDataSourceAdapterExtender extends Base implements EditingControllerRequired {
   private _totalAggregates: any;
 
-  private _columnsController!: ColumnsController;
+  private columnsController!: ColumnsController;
 
-  public _editingController!: EditingController;
+  public editingController!: EditingController;
 
   public init(dataSource?: DataSource): void {
     super.init(dataSource);
 
-    this._columnsController = this.getController('columns');
-    this._editingController = this.getController('editing');
+    this.columnsController = this.getController('columns');
+    this.editingController = this.getController('editing');
     this._totalAggregates = [];
   }
 
@@ -311,9 +311,9 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
       summary,
       sortByGroupSummaryInfo: this.option('sortByGroupSummaryInfo'),
       remoteOperations: remoteOperations ?? this.remoteOperations(),
-      getUpdatedItemData: (data) => this._editingController.getUpdatedData(data),
-      columnOption: (id) => this._columnsController.columnOption(id),
-      groupColumns: this._columnsController.getGroupColumns(),
+      getUpdatedItemData: (data) => this.editingController.getUpdatedData(data),
+      columnOption: (id) => this.columnsController.columnOption(id),
+      groupColumns: this.columnsController.getGroupColumns(),
       component: this.component as any,
     });
 

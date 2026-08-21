@@ -3,26 +3,26 @@ import {
 } from '@jest/globals';
 
 import type { SummaryItem } from '../../types';
-import { findSummaryItem } from '../find_summary_item';
+import { getSummaryItemIndex } from '../get_summary_item_index';
 
 describe('findSummaryItem', () => {
   describe('when there is nothing to search in or for', () => {
     const summaryItems: SummaryItem[] = [{ summaryType: 'count' }];
 
     it('should return -1 when summaryItems is not defined', () => {
-      expect(findSummaryItem(undefined, 'count')).toBe(-1);
+      expect(getSummaryItemIndex(undefined, 'count')).toBe(-1);
     });
 
     it('should return -1 when summaryItems is empty', () => {
-      expect(findSummaryItem([], 'count')).toBe(-1);
+      expect(getSummaryItemIndex([], 'count')).toBe(-1);
     });
 
     it('should return -1 when name is not defined', () => {
-      expect(findSummaryItem(summaryItems, undefined)).toBe(-1);
+      expect(getSummaryItemIndex(summaryItems, undefined)).toBe(-1);
     });
 
     it('should return -1 when name is null', () => {
-      expect(findSummaryItem(summaryItems, null)).toBe(-1);
+      expect(getSummaryItemIndex(summaryItems, null)).toBe(-1);
     });
   });
 
@@ -40,27 +40,27 @@ describe('findSummaryItem', () => {
     }];
 
     it('should find by summaryType', () => {
-      expect(findSummaryItem(summaryItems, 'count')).toBe(0);
+      expect(getSummaryItemIndex(summaryItems, 'count')).toBe(0);
     });
 
     it('should find by column name', () => {
-      expect(findSummaryItem(summaryItems, 'testField')).toBe(2);
+      expect(getSummaryItemIndex(summaryItems, 'testField')).toBe(2);
     });
 
     it('should find by summaryType + column name', () => {
-      expect(findSummaryItem(summaryItems, 'min_testField')).toBe(2);
+      expect(getSummaryItemIndex(summaryItems, 'min_testField')).toBe(2);
     });
 
     it('should find by name', () => {
-      expect(findSummaryItem(summaryItems, 'testCount2')).toBe(1);
+      expect(getSummaryItemIndex(summaryItems, 'testCount2')).toBe(1);
     });
 
     it('should find by summary item index', () => {
-      expect(findSummaryItem(summaryItems, 1)).toBe(1);
+      expect(getSummaryItemIndex(summaryItems, 1)).toBe(1);
     });
 
     it('should return -1 for a wrong name', () => {
-      expect(findSummaryItem(summaryItems, 'test3')).toBe(-1);
+      expect(getSummaryItemIndex(summaryItems, 'test3')).toBe(-1);
     });
   });
 
@@ -71,16 +71,16 @@ describe('findSummaryItem', () => {
     ];
 
     it('should find the first item by index 0', () => {
-      expect(findSummaryItem(summaryItems, 0)).toBe(0);
+      expect(getSummaryItemIndex(summaryItems, 0)).toBe(0);
     });
 
     it('should return -1 when index is out of range', () => {
-      expect(findSummaryItem(summaryItems, 2)).toBe(-1);
-      expect(findSummaryItem(summaryItems, -1)).toBe(-1);
+      expect(getSummaryItemIndex(summaryItems, 2)).toBe(-1);
+      expect(getSummaryItemIndex(summaryItems, -1)).toBe(-1);
     });
 
     it('should not match an index passed as a string', () => {
-      expect(findSummaryItem(summaryItems, '1')).toBe(-1);
+      expect(getSummaryItemIndex(summaryItems, '1')).toBe(-1);
     });
   });
 
@@ -88,21 +88,21 @@ describe('findSummaryItem', () => {
     it('should use summaryType only when column is not defined', () => {
       const summaryItems: SummaryItem[] = [{ summaryType: 'sum' }];
 
-      expect(findSummaryItem(summaryItems, 'sum')).toBe(0);
-      expect(findSummaryItem(summaryItems, 'sum_undefined')).toBe(-1);
+      expect(getSummaryItemIndex(summaryItems, 'sum')).toBe(0);
+      expect(getSummaryItemIndex(summaryItems, 'sum_undefined')).toBe(-1);
     });
 
     it('should use column only when summaryType is not defined', () => {
       const summaryItems: SummaryItem[] = [{ column: 'field' }];
 
-      expect(findSummaryItem(summaryItems, 'field')).toBe(0);
-      expect(findSummaryItem(summaryItems, 'undefined_field')).toBe(-1);
+      expect(getSummaryItemIndex(summaryItems, 'field')).toBe(0);
+      expect(getSummaryItemIndex(summaryItems, 'undefined_field')).toBe(-1);
     });
 
     it('should not match items without summaryType, column and name', () => {
       const summaryItems: SummaryItem[] = [{}, { summaryType: 'sum' }];
 
-      expect(findSummaryItem(summaryItems, 'sum')).toBe(1);
+      expect(getSummaryItemIndex(summaryItems, 'sum')).toBe(1);
     });
   });
 
@@ -113,7 +113,7 @@ describe('findSummaryItem', () => {
         { summaryType: 'count' },
       ];
 
-      expect(findSummaryItem(summaryItems, 'count')).toBe(0);
+      expect(getSummaryItemIndex(summaryItems, 'count')).toBe(0);
     });
 
     it('should prefer an earlier item matched by name over a later index match', () => {
@@ -122,7 +122,7 @@ describe('findSummaryItem', () => {
         { summaryType: 'min', column: 'field' },
       ];
 
-      expect(findSummaryItem(summaryItems, '1')).toBe(0);
+      expect(getSummaryItemIndex(summaryItems, '1')).toBe(0);
     });
 
     it('should not match a numeric name against an item name of the same digits', () => {
@@ -131,7 +131,7 @@ describe('findSummaryItem', () => {
         { name: 'other', summaryType: 'min' },
       ];
 
-      expect(findSummaryItem(summaryItems, 1)).toBe(1);
+      expect(getSummaryItemIndex(summaryItems, 1)).toBe(1);
     });
   });
 });
