@@ -1295,6 +1295,7 @@ const DxResourceConfig = {
     "update:fieldExpr": null,
     "update:icon": null,
     "update:label": null,
+    "update:parentIdExpr": null,
     "update:useColorAsDefault": null,
     "update:valueExpr": null,
   },
@@ -1306,6 +1307,7 @@ const DxResourceConfig = {
     fieldExpr: String,
     icon: String,
     label: String,
+    parentIdExpr: String,
     useColorAsDefault: Boolean,
     valueExpr: [Function, String] as PropType<((() => void)) | string>
   }

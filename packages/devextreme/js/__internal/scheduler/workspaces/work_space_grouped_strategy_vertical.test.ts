@@ -8,12 +8,10 @@ import VerticalGroupedStrategy from './work_space_grouped_strategy_vertical';
 
 jest.mock('@ts/scheduler/r1/utils/index', (): {
   calculateDayDuration: (startDayHour: number, endDayHour: number) => number;
-  getVerticalGroupCountClass: () => undefined;
 } => ({
   calculateDayDuration: (startDayHour: number, endDayHour: number): number => (
     endDayHour - startDayHour
   ),
-  getVerticalGroupCountClass: (): undefined => undefined,
 }));
 
 const createElement = ({

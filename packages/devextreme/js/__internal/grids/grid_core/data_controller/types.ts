@@ -43,6 +43,7 @@ export type RowWatch = (
 
 export interface Cell {
   column?: Column;
+  isEditing?: boolean;
   update?: RowUpdate;
 }
 
@@ -79,7 +80,7 @@ export type RowChangeType = 'update' | 'insert' | 'remove';
 
 export type RowOperation = RowChangeType | 'replace';
 
-interface DataChangeBase {
+export interface DataChangeBase {
   isFirstRender?: boolean;
   repaintChangesOnly?: boolean;
   needUpdateDimensions?: boolean;
@@ -133,6 +134,8 @@ export interface UpdateRowChange {
 }
 
 export type RowIndexByKey = Record<string, number | undefined>;
+
+export type RowIndexCorrection = (rowIndex: number) => number;
 
 export type ItemChange = | { type: 'insert'; index: number; data: ProcessedItem }
   | { type: 'update'; index: number; data: ProcessedItem; oldItem: ProcessedItem }

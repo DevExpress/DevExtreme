@@ -9,26 +9,20 @@ import errors from '@js/ui/widget/ui.errors';
 import { findChanges } from '@ts/core/utils/m_array_compare';
 import { fromPromise } from '@ts/core/utils/m_deferred';
 import type { ChangingEvent, DataSource, StoreLoadOptions } from '@ts/data/data_source/types';
-import type { ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
+import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type {
   ChangedEvent, DataSourceAdapterProvider, LoadOperation, OperationTypes, RawItemData,
 } from '@ts/grids/grid_core/data_source_adapter/types';
 import { isLocalStore } from '@ts/grids/grid_core/data_source_adapter/utils/store';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
-import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
-import type { ErrorHandlingController } from '@ts/grids/grid_core/error_handling/m_error_handling';
-import type { ApplyFilterViewController } from '@ts/grids/grid_core/filter/m_filter_row';
 import type { FilterSyncController } from '@ts/grids/grid_core/filter/m_filter_sync';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
-import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
-import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
 import modules from '@ts/grids/grid_core/m_modules';
 import type {
   Controllers, Module, OptionChanged, RowKey,
 } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
-import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 import type { VirtualScrollController } from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
 
 import { DataHelperMixin } from './data_helper_mixin';
@@ -49,6 +43,7 @@ import type {
   ProcessedItem,
   RefreshOptions,
   RowIndexByKey,
+  RowIndexCorrection,
   UpdateChange,
   UpdateRowChange,
   UserState,
@@ -85,7 +80,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   protected _repaintChangesOnly?: boolean;
 
-  protected _changes!: DataChange[];
+  protected changes!: DataChange[];
 
   private _skipProcessingPagingChange?: boolean;
 
@@ -115,11 +110,13 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   public pushed!: Callback<[StoreChange[]]>;
 
-  public changed!: Callback;
+  public changed!: Callback<[DataChange]>;
 
   public loadingChanged!: Callback<[boolean, string?]>;
 
   public dataSourceChanged!: Callback<[]>;
+
+  public rowIndicesChanged!: Callback<[RowIndexCorrection]>;
 
   protected _lastRenderingPageIndex?: number;
 
@@ -128,28 +125,16 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   // TODO public controller
   public _columnsController!: Controllers['columns'];
 
-  protected _adaptiveColumnsController!: Controllers['adaptiveColumns'];
-
   // TODO public controller
   public _rowsScrollController?: VirtualScrollController | null;
 
   protected _editingController!: EditingController;
 
-  protected _editorFactoryController!: EditorFactory;
-
-  protected _errorHandlingController!: ErrorHandlingController;
-
   protected _filterSyncController!: FilterSyncController;
 
-  protected _headerFilterController!: HeaderFilterController;
-
-  protected _applyFilterController!: ApplyFilterViewController;
-
-  protected _keyboardNavigationController!: KeyboardNavigationController;
+  private _filterExcludedColumn: Column | null = null;
 
   protected _focusController!: FocusController;
-
-  protected _selectionController!: SelectionController;
 
   private loadErrorHandlerProxy!: (e: Error | string) => void;
 
@@ -161,16 +146,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._items = [];
     this._cachedProcessedItems = null;
     this._columnsController = this.getController('columns');
-    this._adaptiveColumnsController = this.getController('adaptiveColumns');
     this._editingController = this.getController('editing');
-    this._editorFactoryController = this.getController('editorFactory');
-    this._errorHandlingController = this.getController('errorHandling');
     this._filterSyncController = this.getController('filterSync');
-    this._applyFilterController = this.getController('applyFilter');
-    this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._focusController = this.getController('focus');
-    this._headerFilterController = this.getController('headerFilter');
-    this._selectionController = this.getController('selection');
 
     this._isPaging = false;
     this._currentOperationTypes = null;
@@ -183,7 +161,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._isLoading = false;
     this._isCustomLoading = false;
     this._repaintChangesOnly = undefined;
-    this._changes = [];
+    this.changes = [];
 
     this.createAction('onDataErrorOccurred');
 
@@ -201,7 +179,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   protected callbackNames(): string[] {
-    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged', 'pushed'];
+    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged', 'pushed', 'rowIndicesChanged'];
   }
 
   protected callbackFlags(name?: string): CallbackFlags | undefined {
@@ -350,6 +328,22 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return this.combinedFilter(undefined, returnDataField);
   }
 
+  public getFilterExcludedColumn(): Column | null {
+    return this._filterExcludedColumn;
+  }
+
+  public getCombinedFilterWithExcludedColumn(
+    excludedColumn: Column | null,
+    returnDataField?: boolean,
+  ): DataFilter {
+    this._filterExcludedColumn = excludedColumn;
+    try {
+      return this.getCombinedFilter(returnDataField);
+    } finally {
+      this._filterExcludedColumn = null;
+    }
+  }
+
   private combinedFilter(filter: DataFilter, returnDataField?: boolean): DataFilter {
     if (!this._dataSource) {
       return filter;
@@ -389,10 +383,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    * @protected
    */
   protected _endUpdateCore(): void {
-    const changes = this._changes;
+    const { changes } = this;
 
     if (changes.length) {
-      this._changes = [];
+      this.changes = [];
       const repaintChangesOnly = changes.every((change) => change.repaintChangesOnly);
       const change: DataChange = changes.length === 1
         ? changes[0]
@@ -1145,16 +1139,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       change.isLiveUpdate = true;
     }
 
-    this.correctRowIndices(
-      (rowIndex) => this.getRowIndexCorrection(rowIndex, oldItems, newIndexByKey),
+    this.rowIndicesChanged.fire(
+      (rowIndex: number): number => this.getRowIndexCorrection(rowIndex, oldItems, newIndexByKey),
     );
   }
-
-  /**
-   * @extended: keyboard_navigation
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected correctRowIndices(getRowIndexCorrection: (rowIndex: number) => number): void { }
 
   /**
    * @extend: virtual_scrolling
@@ -1257,7 +1245,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
 
     if (this._updateLockCount && !change.cancel) {
-      this._changes.push(change);
+      this.changes.push(change);
       return;
     }
 

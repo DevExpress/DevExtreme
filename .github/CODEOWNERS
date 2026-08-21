@@ -103,7 +103,7 @@
 /packages/devextreme/js/ui/card_view_types.d.ts             @DevExpress/devextreme-grids
 /packages/devextreme/js/ui/card_view.js                     @DevExpress/devextreme-grids
 
-/packages/devextreme/js/__internal/grids/new/card_view/**   @DevExpress/devextreme-grids
+/packages/devextreme/js/__internal/grids/new/**             @DevExpress/devextreme-grids
 
 /packages/devextreme-scss/scss/widgets/base/cardView/**     @DevExpress/devextreme-grids
 /packages/devextreme-scss/scss/widgets/fluent/cardView/**   @DevExpress/devextreme-grids

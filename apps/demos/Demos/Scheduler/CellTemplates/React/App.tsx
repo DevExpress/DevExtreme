@@ -4,7 +4,7 @@ import Scheduler from 'devextreme-react/scheduler';
 import type { SchedulerTypes } from 'devextreme-react/scheduler';
 import type { FormRef } from 'devextreme-react/form';
 import notify from 'devextreme/ui/notify';
-import { data, holidays } from './data.ts';
+import { data, dinnerTime, holidays } from './data.ts';
 import Utils from './utils.ts';
 import DataCell from './DataCell.tsx';
 import DataCellMonth from './DataCellMonth.tsx';
@@ -13,7 +13,12 @@ import TimeCell from './TimeCell.tsx';
 
 const currentDate = new Date(2021, 3, 27);
 const views: SchedulerTypes.ViewType[] = ['workWeek', 'month'];
-const ariaDescription = () => {
+const formatHour = (hours: number) => new Date(2021, 0, 1, hours).toLocaleTimeString('en-US', {
+  hour: 'numeric',
+  minute: '2-digit',
+});
+
+const disabledDatesDescription = () => {
   const disabledDates = holidays
     .filter((date) => !Utils.isWeekend(date))
     .map((date) => new Date(date).toLocaleDateString('en-US', {
@@ -31,6 +36,16 @@ const ariaDescription = () => {
   }
   return '';
 };
+
+const disabledTimeDescription = () => {
+  const from = formatHour(dinnerTime.from);
+  const to = formatHour(dinnerTime.to);
+  return `The time range from ${from} to ${to} is disabled on all days`;
+};
+
+const ariaDescription = () => [disabledDatesDescription(), disabledTimeDescription()]
+  .filter(Boolean)
+  .join('. ');
 
 const notifyDisableDate = () => {
   notify('Cannot create or move an appointment/event to disabled time/date regions.', 'warning', 1000);
