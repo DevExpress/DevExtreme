@@ -90,6 +90,12 @@ interface IndexedColumns {
   negativeIndexedColumns: Record<string, Column[]>[];
 }
 
+export interface ColumnDimensionsUpdate {
+  columnIndex: Column['index'];
+  visibleWidth?: Column['visibleWidth'] | null;
+  width: Column['width'];
+}
+
 export class ColumnsController extends modules.Controller {
   public _skipProcessingColumnsChange: any;
 
@@ -1488,6 +1494,41 @@ export class ColumnsController extends modules.Controller {
     return this._columns ? this._columns.length : 0;
   }
 
+  /** Applies dimensions already resolved by an internal layout operation. */
+  public updateColumnDimensions(updates: ColumnDimensionsUpdate[]): void {
+    if (!updates.length) {
+      return;
+    }
+
+    const columnsByIndex = new Map<Column['index'], Column>();
+
+    this._columns.concat(this._commandColumns).forEach((column: Column) => {
+      if (!columnsByIndex.has(column.index)) {
+        columnsByIndex.set(column.index, column);
+      }
+    });
+
+    this.beginUpdate();
+    try {
+      updates.forEach((dimensions) => {
+        const column = columnsByIndex.get(dimensions.columnIndex);
+
+        if (!column) {
+          return;
+        }
+
+        if (Object.prototype.hasOwnProperty.call(dimensions, 'visibleWidth')) {
+          columnOptionCore(this, column, 'visibleWidth', dimensions.visibleWidth);
+        }
+        columnOptionCore(this, column, 'width', dimensions.width, {
+          invalidateVisibleWidths: false,
+        });
+      });
+    } finally {
+      this.endUpdate();
+    }
+  }
+
   public columnOption(identifier, option?, value?, notFireEvent?) {
     const that = this;
     const columns = that._columns.concat(that._commandColumns);
@@ -1501,10 +1542,10 @@ export class ColumnsController extends modules.Controller {
         if (arguments.length === 2) {
           return columnOptionCore(that, column, option);
         }
-        columnOptionCore(that, column, option, value, notFireEvent);
+        columnOptionCore(that, column, option, value, { notFireEvent });
       } else if (isObject(option)) {
         each(option, (optionName, optionValue) => {
-          columnOptionCore(that, column, optionName, optionValue, notFireEvent);
+          columnOptionCore(that, column, optionName, optionValue, { notFireEvent });
         });
       }
 

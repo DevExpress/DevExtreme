@@ -715,9 +715,52 @@ export const fireOptionChanged = function (that: ColumnsController, options) {
   }
 };
 
-export const columnOptionCore = function (that: ColumnsController, column, optionName, value?, notFireEvent?) {
+const isVisibleWidthChangePendingForColumn = (that: ColumnsController, columnIndex): boolean => {
+  const columnChanges = that._columnChanges;
+
+  if (!columnChanges?.optionNames?.visibleWidth) {
+    return false;
+  }
+
+  return columnChanges.columnIndex === columnIndex
+    || !!columnChanges.columnIndices?.includes(columnIndex);
+};
+
+const invalidateStaleVisibleWidths = (that: ColumnsController, changedColumn): void => {
+  if (isDefined(changedColumn.visibleWidth)
+    && !isVisibleWidthChangePendingForColumn(that, changedColumn.index)) {
+    changedColumn.visibleWidth = null;
+  }
+
+  that._columns.forEach((column) => {
+    const hasCalculatedVisibleWidth = isNumeric(column.visibleWidth)
+      && (!isDefined(column.width) || column.width === 'auto');
+    const shouldInvalidateVisibleWidth = column !== changedColumn
+      && hasCalculatedVisibleWidth
+      && !isVisibleWidthChangePendingForColumn(that, column.index);
+
+    if (shouldInvalidateVisibleWidth) {
+      column.visibleWidth = null;
+    }
+  });
+};
+
+interface ColumnOptionCoreOptions {
+  invalidateVisibleWidths?: boolean;
+  notFireEvent?: boolean;
+}
+
+export const columnOptionCore = function (
+  that: ColumnsController,
+  column,
+  optionName,
+  value?,
+  options: ColumnOptionCoreOptions = {},
+) {
   const optionGetter = compileGetter(optionName);
   const columnIndex = column.index;
+  const { invalidateVisibleWidths = true } = options;
+  let { notFireEvent } = options;
   let columns;
   let changeType;
   let initialColumn;
@@ -738,6 +781,10 @@ export const columnOptionCore = function (that: ColumnsController, column, optio
       changeType = 'sorting';
     } else {
       changeType = 'columns';
+    }
+
+    if (optionName === 'width' && invalidateVisibleWidths) {
+      invalidateStaleVisibleWidths(that, column);
     }
 
     const optionSetter = compileSetter(optionName);
