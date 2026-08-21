@@ -1,6 +1,6 @@
 import { equalByValue } from '@js/core/utils/common';
 import formatHelper from '@js/format_helper';
-import { computed, signal } from '@ts/core/state_manager/index';
+import { computed, signal, track } from '@ts/core/state_manager/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/data_controller';
 import { SearchController } from '@ts/grids/new/grid_core/search/index';
@@ -32,15 +32,16 @@ export class ItemsController {
   // Re-emits only when visibleColumnsLayout changes, which excludes sort/filter properties,
   // so `items` still does not recompute on those (T1306983, T1309423).
   private readonly layoutColumns = computed(
-    () => ({
-      key: this.visibleColumnsLayout.value,
-      columns: this.columnsController.visibleColumns.peek(),
-    }),
+    () => {
+      track(this.visibleColumnsLayout.value);
+
+      return this.columnsController.visibleColumns.peek();
+    },
   );
 
   public readonly items = computed(
     () => {
-      const { columns } = this.layoutColumns.value;
+      const columns = this.layoutColumns.value;
 
       return this.dataController.items.value.map(
         (item, itemIndex) => this.createCardInfo(
