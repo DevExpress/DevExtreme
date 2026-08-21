@@ -1,17 +1,15 @@
-// Pre-bundles React/Vue demos with esbuild for the CSP check, so it validates the
-// production CSP profile instead of the SystemJS dev loader's relaxations.
-// Output: apps/demos/csp-bundled-demos/<Widget>/<Name>/<Framework>/index.html.
-// Angular is delegated to csp-bundle-angular.js.
+// Bundles React/Vue demos with esbuild. Angular is delegated to csp-bundle-angular.js.
 
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const esbuild = require('esbuild');
+const { extractDemoHeadExtras, extractDemoBodyInner } = require('./demo-html');
 
 const FRAMEWORK_ARG = (process.argv.find((a) => a.startsWith('--framework=')) || '').split('=')[1];
 const FRAMEWORK = FRAMEWORK_ARG || process.env.CSP_FRAMEWORKS || 'React';
 
-const SUPPORTED = ['React', 'Vue', 'Angular'];
+const SUPPORTED = ['React', 'ReactJs', 'Vue', 'Angular'];
 if (!SUPPORTED.includes(FRAMEWORK)) {
   console.log(`csp-bundle: framework ${FRAMEWORK} is not supported (only ${SUPPORTED.join(', ')}). Nothing to do.`);
   process.exit(0);
@@ -19,9 +17,10 @@ if (!SUPPORTED.includes(FRAMEWORK)) {
 
 const IS_ANGULAR = FRAMEWORK === 'Angular';
 
+const IS_GENERATE_MANIFESTS = process.env.CSP_BUNDLE_GENERATE_MANIFESTS === '1';
+
 const DEMOS_APP_ROOT = path.join(__dirname, '..', '..');
 const SRC_DEMOS_DIR = path.join(DEMOS_APP_ROOT, 'Demos');
-const OUT_ROOT = path.join(DEMOS_APP_ROOT, 'csp-bundled-demos');
 const NODE_MODULES = path.join(DEMOS_APP_ROOT, 'node_modules');
 
 const CONCURRENCY = (() => {
@@ -30,8 +29,6 @@ const CONCURRENCY = (() => {
   return Math.max(4, (os.cpus() || []).length - 1);
 })();
 
-// Optional round-robin sharding across parallel CI jobs (CSP_SHARD_TOTAL /
-// CSP_SHARD_INDEX, 1-based).
 const SHARD_TOTAL = Math.max(1, parseInt(process.env.CSP_SHARD_TOTAL, 10) || 1);
 const SHARD_INDEX = (() => {
   const n = parseInt(process.env.CSP_SHARD_INDEX, 10);
@@ -50,7 +47,6 @@ function findDemos() {
   const out = [];
   if (!fs.existsSync(SRC_DEMOS_DIR)) return out;
 
-  // Optional substring filter for local smoke tests: CSP_BUNDLE_FILTER=Button/Icons
   const filter = (process.env.CSP_BUNDLE_FILTER || '').trim();
 
   const widgets = fs.readdirSync(SRC_DEMOS_DIR, { withFileTypes: true })
@@ -78,7 +74,6 @@ function findEntry(srcDir) {
   return null;
 }
 
-// Treat imports of missing .css files (carried over from SystemJS configs) as empty.
 const ignoreMissingCssPlugin = {
   name: 'csp-bundle:ignore-missing-css',
   setup(build) {
@@ -96,13 +91,11 @@ const ignoreMissingCssPlugin = {
   },
 };
 
-// Rewrite SystemJS-specific import specifiers (npm:<pkg>, <spec>!json,
-// anti-forgery, globalize/<sub>) so esbuild resolves them like the dev loader.
 const ANTI_FORGERY_PATH = path.join(DEMOS_APP_ROOT, 'shared', 'anti-forgery', 'fetch-override.js');
 const GLOBALIZE_BASE = path.join(NODE_MODULES, 'globalize', 'dist', 'globalize');
 
-const systemJsQuirksPlugin = {
-  name: 'csp-bundle:systemjs-quirks',
+const demoAliasesPlugin = {
+  name: 'csp-bundle:demo-aliases',
   setup(build) {
     build.onResolve({ filter: /^anti-forgery$/ }, () => ({ path: ANTI_FORGERY_PATH }));
 
@@ -112,45 +105,17 @@ const systemJsQuirksPlugin = {
       if (fs.existsSync(full)) return { path: full };
       return null;
     });
-
-    // `npm:foo/bar` -> `foo/bar`; trailing `!json` -> stripped, JSON loader forced.
-    build.onResolve({ filter: /(^npm:)|(!json$)/ }, async (args) => {
-      let spec = args.path;
-      const forceJson = spec.endsWith('!json');
-      if (forceJson) spec = spec.slice(0, -'!json'.length);
-      if (spec.startsWith('npm:')) spec = spec.slice('npm:'.length);
-
-      const resolved = await build.resolve(spec, {
-        kind: args.kind,
-        importer: args.importer,
-        resolveDir: args.resolveDir,
-        pluginData: { cspBundleResolved: true },
-      });
-      if (resolved.errors.length > 0) return resolved;
-
-      if (forceJson) {
-        return { path: resolved.path, namespace: 'csp-bundle-force-json' };
-      }
-      return { path: resolved.path, external: resolved.external };
-    });
-
-    build.onLoad({ filter: /.*/, namespace: 'csp-bundle-force-json' }, (args) => ({
-      contents: fs.readFileSync(args.path, 'utf8'),
-      loader: 'json',
-    }));
   },
 };
 
-// Force a single devextreme copy: collapse resolved cjs paths to their esm twin.
-// Mixing both (esm via devextreme-react, cjs via aspnet-data require) bundles two
-// copies of the Class/callBase system and infinitely recurses in the data path.
+// Collapse resolved cjs devextreme paths to their esm twin — mixing both copies
+// the Class/callBase system and infinitely recurses in the data path.
 const DX_CJS_SEG = `${path.sep}devextreme${path.sep}cjs${path.sep}`;
 const DX_ESM_SEG = `${path.sep}devextreme${path.sep}esm${path.sep}`;
 const devextremeDedupePlugin = {
   name: 'csp-bundle:devextreme-single-copy',
   setup(build) {
     build.onResolve({ filter: /^devextreme(\/.*)?$/ }, async (args) => {
-      // Re-entry guard: our own build.resolve() below re-triggers this hook.
       if (args.pluginData && args.pluginData.dxDeduped) return null;
       const resolved = await build.resolve(args.path, {
         kind: args.kind,
@@ -170,72 +135,71 @@ const devextremeDedupePlugin = {
   },
 };
 
-let vuePlugin = null;
-if (FRAMEWORK === 'Vue') {
-  // eslint-disable-next-line global-require
-  const mod = require('esbuild-plugin-vue3');
-  const factory = typeof mod === 'function' ? mod : (mod.default || mod);
-  vuePlugin = factory();
+let vuePluginInstance = null;
+function getVuePlugin() {
+  if (!vuePluginInstance) {
+    // eslint-disable-next-line global-require
+    const mod = require('esbuild-plugin-vue3');
+    const factory = typeof mod === 'function' ? mod : (mod.default || mod);
+    vuePluginInstance = factory();
+  }
+  return vuePluginInstance;
 }
 
-const SHARED_OPTIONS = {
-  bundle: true,
-  minify: false,
-  format: 'iife',
-  loader: {
-    '.js': 'jsx',
-    '.png': 'dataurl',
-    '.jpg': 'dataurl',
-    '.jpeg': 'dataurl',
-    '.gif': 'dataurl',
-    '.svg': 'dataurl',
-  },
-  alias: {
-    react: path.join(NODE_MODULES, 'react'),
-    'react-dom': path.join(NODE_MODULES, 'react-dom'),
-    // Alias bare 'globalize' to the browser build, as the SystemJS configs do.
-    globalize: path.join(NODE_MODULES, 'globalize', 'dist', 'globalize.js'),
-  },
-  define: {
-    'process.env.NODE_ENV': '"production"',
-    __VUE_OPTIONS_API__: 'true',
-    __VUE_PROD_DEVTOOLS__: 'false',
-  },
-  logLevel: 'silent',
-  plugins: [devextremeDedupePlugin, systemJsQuirksPlugin, ignoreMissingCssPlugin, ...(vuePlugin ? [vuePlugin] : [])],
-};
+function getSharedOptions(framework) {
+  // eslint-disable-next-line global-require
+  const { vendorGlobalPlugin } = require('./vendor-bundle');
+  return {
+    bundle: true,
+    minify: false,
+    format: 'iife',
+    loader: {
+      '.js': 'jsx',
+      '.png': 'dataurl',
+      '.jpg': 'dataurl',
+      '.jpeg': 'dataurl',
+      '.gif': 'dataurl',
+      '.svg': 'dataurl',
+    },
+    alias: {
+      react: path.join(NODE_MODULES, 'react'),
+      'react-dom': path.join(NODE_MODULES, 'react-dom'),
+      globalize: path.join(NODE_MODULES, 'globalize', 'dist', 'globalize.js'),
+    },
+    define: {
+      'process.env.NODE_ENV': '"production"',
+      __VUE_OPTIONS_API__: 'true',
+      __VUE_PROD_DEVTOOLS__: 'false',
+    },
+    logLevel: 'silent',
+    plugins: [
+      vendorGlobalPlugin(framework),
+      devextremeDedupePlugin,
+      demoAliasesPlugin,
+      ignoreMissingCssPlugin,
+      ...(framework === 'Vue' ? [getVuePlugin()] : []),
+    ],
+  };
+}
 
-// Reuse the dev <body> markup (minus its SystemJS <script> tags) so the bundle
-// renders into the same mount node — a few demos don't use `#app`.
 const DEFAULT_BODY_INNER = `<div class="demo-container">
       <div id="app"></div>
     </div>`;
 
-function extractDemoBodyInner(srcDir) {
-  try {
-    const html = fs.readFileSync(path.join(srcDir, 'index.html'), 'utf8');
-    const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
-    if (!bodyMatch) return null;
-    let withoutScripts = bodyMatch[1];
-    let previous;
-    do {
-      previous = withoutScripts;
-      withoutScripts = withoutScripts.replace(/<script\b[\s\S]*?<\/script\b[^>]*>/gi, '');
-    } while (withoutScripts !== previous);
-    const trimmed = withoutScripts.trim();
-    return trimmed || null;
-  } catch {
-    return null;
-  }
-}
-
-function buildHtml({ jsFile, cssFiles, srcDir }) {
-  const cssLinks = [
+function buildHtml({
+  jsFile, cssFiles, srcDir, framework,
+}) {
+  const headLinks = [
     '<link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme-dist/css/dx.light.css" />',
+    ...extractDemoHeadExtras(srcDir),
     ...cssFiles.map((f) => `<link rel="stylesheet" type="text/css" href="./${f}" />`),
   ].join('\n    ');
 
-  const bodyInner = (srcDir && extractDemoBodyInner(srcDir)) || DEFAULT_BODY_INNER;
+  const bodyInner = extractDemoBodyInner(srcDir) || DEFAULT_BODY_INNER;
+
+  // eslint-disable-next-line global-require
+  const { vendorScriptTag } = require('./vendor-bundle');
+  const vendorTag = vendorScriptTag(framework);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -244,27 +208,41 @@ function buildHtml({ jsFile, cssFiles, srcDir }) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-    ${cssLinks}
+    ${headLinks}
   </head>
   <body class="dx-viewport">
     ${bodyInner}
-    <script src="./${jsFile}"></script>
+    ${vendorTag ? `${vendorTag}\n    ` : ''}<script src="./${jsFile}"></script>
   </body>
 </html>
 `;
 }
 
-async function bundleDemo(demo) {
-  const entry = findEntry(demo.srcDir);
+function writeDemoManifest({
+  srcDir, destDir, framework,
+}) {
+  // eslint-disable-next-line global-require
+  const { discoverDemoSpecifiers, resolvePackageVersions } = require('./vendor-bundle');
+  const packages = resolvePackageVersions([
+    ...discoverDemoSpecifiers(srcDir),
+    'devextreme-dist',
+  ]);
+  fs.writeFileSync(
+    path.join(destDir, 'demo.manifest.json'),
+    JSON.stringify({ framework, packages }, null, 2),
+  );
+}
+
+async function bundleDemoTo({ srcDir, destDir, framework }) {
+  const entry = findEntry(srcDir);
   if (!entry) return { ok: false, reason: 'no entry point (index.tsx|ts|jsx|js)' };
 
-  const destDir = path.join(OUT_ROOT, demo.widget, demo.name, FRAMEWORK);
   fs.mkdirSync(destDir, { recursive: true });
 
   let result;
   try {
     result = await esbuild.build({
-      ...SHARED_OPTIONS,
+      ...getSharedOptions(framework),
       entryPoints: [entry],
       outdir: destDir,
       entryNames: 'bundle',
@@ -281,17 +259,28 @@ async function bundleDemo(demo) {
 
   if (jsFiles.length === 0) return { ok: false, reason: 'no JS output produced' };
 
-  // Standalone styles.css that the dev demo references separately (React).
-  const stylesSrc = path.join(demo.srcDir, 'styles.css');
+  const stylesSrc = path.join(srcDir, 'styles.css');
   if (cssFiles.length === 0 && fs.existsSync(stylesSrc)) {
-    const dest = path.join(destDir, 'styles.css');
+    const dest = path.join(destDir, 'bundle.css');
     fs.copyFileSync(stylesSrc, dest);
-    cssFiles.push('styles.css');
+    cssFiles.push('bundle.css');
   }
+
+  if (IS_GENERATE_MANIFESTS) writeDemoManifest({ srcDir, destDir, framework });
+
+  return { ok: true, jsFiles, cssFiles };
+}
+
+async function bundleDemo(demo, { destDir: destDirOverride, framework = FRAMEWORK } = {}) {
+  const destDir = destDirOverride || path.join(SRC_DEMOS_DIR, demo.widget, demo.name, FRAMEWORK);
+  const result = await bundleDemoTo({ srcDir: demo.srcDir, destDir, framework });
+  if (!result.ok) return result;
 
   fs.writeFileSync(
     path.join(destDir, 'index.html'),
-    buildHtml({ jsFile: jsFiles[0], cssFiles, srcDir: demo.srcDir }),
+    buildHtml({
+      jsFile: result.jsFiles[0], cssFiles: result.cssFiles, srcDir: demo.srcDir, framework,
+    }),
   );
 
   return { ok: true };
@@ -313,23 +302,9 @@ async function runPool(items, concurrency, fn) {
 async function main() {
   console.log(`Framework: ${FRAMEWORK}`);
   console.log(`Concurrency: ${CONCURRENCY}`);
-  console.log(`Source: ${SRC_DEMOS_DIR}`);
-  console.log(`Output: ${OUT_ROOT}\n`);
+  console.log(`Output: ${SRC_DEMOS_DIR}\n`);
 
-  // Wipe only this framework's previous output so per-framework runs don't clash.
-  if (fs.existsSync(OUT_ROOT)) {
-    const existingWidgets = fs.readdirSync(OUT_ROOT, { withFileTypes: true })
-      .filter((w) => w.isDirectory());
-    for (const widget of existingWidgets) {
-      const existingDemos = fs.readdirSync(path.join(OUT_ROOT, widget.name), { withFileTypes: true })
-        .filter((d) => d.isDirectory());
-      for (const demo of existingDemos) {
-        const fwDir = path.join(OUT_ROOT, widget.name, demo.name, FRAMEWORK);
-        if (fs.existsSync(fwDir)) fs.rmSync(fwDir, { recursive: true, force: true });
-      }
-    }
-  }
-  fs.mkdirSync(OUT_ROOT, { recursive: true });
+  fs.mkdirSync(SRC_DEMOS_DIR, { recursive: true });
 
   const allDemos = findDemos();
   const demos = applyShard(allDemos);
@@ -370,11 +345,18 @@ async function main() {
   }
 }
 
-const entrypoint = IS_ANGULAR ? require('./csp-bundle-angular').main : main;
+if (require.main === module) {
+  // eslint-disable-next-line global-require
+  const entrypoint = IS_ANGULAR ? require('./csp-bundle-angular').main : main;
 
-entrypoint().then(() => {
-  process.exit(process.exitCode || 0);
-}).catch((err) => {
-  console.error('csp-bundle failed:', err);
-  process.exit(1);
-});
+  entrypoint().then(() => {
+    process.exit(process.exitCode || 0);
+  }).catch((err) => {
+    console.error('csp-bundle failed:', err);
+    process.exit(1);
+  });
+}
+
+module.exports = {
+  bundleDemo, bundleDemoTo, findEntry, buildHtml, extractDemoBodyInner, getSharedOptions,
+};

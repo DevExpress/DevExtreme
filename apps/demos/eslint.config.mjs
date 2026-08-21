@@ -42,7 +42,6 @@ export default [
       'publish-demos',
       'Demos/**/testcafe-test-code.js',
       'shared/empty-file.ts',
-      'Demos/**/config.js',
       'Demos/**/Vue/**/*.html',
       'utils/templates/**/*.ts',
       'utils/templates/**/*.tsx',
@@ -268,20 +267,6 @@ export default [
     },
   },
 
-  // ./configs directory
-  {
-    files: ['configs/**/*.js'],
-    languageOptions: {
-      globals: {
-        System: true,
-      },
-    },
-    rules: {
-      'no-dupe-keys': 0,
-      '@stylistic/quote-props': ['error', 'consistent'],
-    },
-  },
-
   // jQuery demos
   {
     files: ['Demos/**/jQuery/*.*', 'utils/templates/jQuery/**/*.*'],
@@ -328,11 +313,6 @@ export default [
       'react-perf': reactPerf,
       'react-hooks': reactHooks,
       react: reactPlugin
-    },
-    languageOptions: {
-      globals: {
-        System: false,
-      },
     },
     settings: {
       react: {
@@ -395,9 +375,6 @@ export default [
       parserOptions: {
         parser: tsParser,
         sourceType: 'module',
-      },
-      globals: {
-        System: false,
       },
     },
     rules: {
@@ -519,11 +496,10 @@ export default [
     files: ['utils/tests/**/*.*'],
   })),
 
-  // utils / shared loaders
+  // utils
   {
     files: [
       'utils/**/*.js',
-      'shared/loaders/**/*.js',
     ],
     ignores: [
       'utils/testing/',
@@ -537,7 +513,6 @@ export default [
       '@typescript-eslint/await-thenable': 0,
       'spellcheck/spell-checker': 0,
       'consistent-return': 0,
-      'import/no-unresolved': ['error', { ignore: ['^demo-ts-loader$', '^demo-ts-shared$'] }],
     },
   },
   {

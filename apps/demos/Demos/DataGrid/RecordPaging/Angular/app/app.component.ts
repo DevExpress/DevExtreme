@@ -7,17 +7,11 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
+  templateUrl: './app.component.html',
   providers: [Service],
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  styleUrls: ['./app.component.css'],
   imports: [
     DxDataGridModule,
     DxCheckBoxModule,

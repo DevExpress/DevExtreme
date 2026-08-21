@@ -7,7 +7,11 @@ const cookieParser = require('cookie-parser');
 const open = require('open');
 const rateLimit = require('express-rate-limit');
 const { join, normalize } = require('path');
-const { readFileSync, readdirSync } = require('fs');
+const {
+  readFileSync, readdirSync, existsSync, statSync,
+} = require('fs');
+const { buildReactVueDemoInPlace } = require('../build/build-react-vue-demo');
+const { buildAngularDemoInPlace } = require('../build/build-angular-demo');
 
 const root = join(__dirname, '..', '..');
 const indexFileName = 'index.html';
@@ -19,7 +23,73 @@ const port = Number(portArgument) || 8080;
 
 const getDemoPath = (requestPath) => requestPath.replace(/^\/apps\/demos(?=\/|$)/, '');
 
-const demoIndexHandler = (request, response) => {
+// Rebuilds on-demand, only for the demo actually being viewed, rather than
+// watching all ~2,500 demos.
+const BUNDLED_APPROACHES = new Set(['React', 'ReactJs', 'Vue', 'Angular']);
+const GENERATED_ENTRY_NAMES = new Set([
+  'bundle.js', 'bundle.css', indexFileName, 'tsconfig.json', 'description.md',
+]);
+
+function newestSourceMtimeMs(dir) {
+  let newest = 0;
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const isGenerated = GENERATED_ENTRY_NAMES.has(entry.name)
+      || entry.name.startsWith('.csp-bundle-angular-patched.');
+    if (!isGenerated) {
+      const fullPath = join(dir, entry.name);
+      const mtimeMs = entry.isDirectory()
+        ? newestSourceMtimeMs(fullPath)
+        : statSync(fullPath).mtimeMs;
+      newest = Math.max(newest, mtimeMs);
+    }
+  }
+  return newest;
+}
+
+function isBundleStale(srcDir) {
+  const bundlePath = join(srcDir, 'bundle.js');
+  if (!existsSync(bundlePath)) return true;
+  return newestSourceMtimeMs(srcDir) > statSync(bundlePath).mtimeMs;
+}
+
+// Dedupe concurrent requests for the same demo (e.g. a page loading several
+// assets at once) into a single in-flight build.
+const buildsInFlight = new Map();
+
+function ensureBundleFresh(widget, name, approach) {
+  if (!BUNDLED_APPROACHES.has(approach)) return Promise.resolve({ ok: true });
+
+  const srcDir = join(root, 'Demos', widget, name, approach);
+  if (!existsSync(srcDir) || !isBundleStale(srcDir)) return Promise.resolve({ ok: true });
+
+  if (buildsInFlight.has(srcDir)) return buildsInFlight.get(srcDir);
+
+  const buildPromise = (approach === 'Angular'
+    ? buildAngularDemoInPlace(widget, name, srcDir)
+    : buildReactVueDemoInPlace(approach, widget, name, srcDir))
+    .finally(() => buildsInFlight.delete(srcDir));
+
+  buildsInFlight.set(srcDir, buildPromise);
+  return buildPromise;
+}
+
+const demoIndexHandler = async (request, response) => {
+  const { widget, name, approach } = request.params;
+
+  if (widget && name && approach) {
+    let result;
+    try {
+      result = await ensureBundleFresh(widget, name, approach);
+    } catch (err) {
+      response.status(500).send(`Demo build failed: ${err.message}`);
+      return;
+    }
+    if (!result.ok) {
+      response.status(500).send(`Demo build failed: ${result.reason}`);
+      return;
+    }
+  }
+
   const parts = getDemoPath(request.path).split('/');
 
   parts.unshift(root);
