@@ -3,9 +3,9 @@ import {
 } from '@jest/globals';
 import type { CustomSummaryInfo } from '@js/ui/data_grid';
 import type dxDataGrid from '@js/ui/data_grid';
+import errors from '@js/ui/widget/ui.errors';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
-import errors from '@ts/ui/errors';
 
 import type {
   Aggregate, CustomAggregator, SummaryOptions,
