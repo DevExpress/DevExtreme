@@ -143,7 +143,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private _focusController!: Controllers['focus'];
 
-  private _adaptiveColumnsController!: Controllers['adaptiveColumns'];
+  private adaptiveColumnsController!: Controllers['adaptiveColumns'];
 
   private _columnResizerController!: Controllers['columnsResizer'];
 
@@ -157,7 +157,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     this._headerPanel = this.getView('headerPanel');
     this._editorFactory = this.getController('editorFactory');
     this._focusController = this.getController('focus');
-    this._adaptiveColumnsController = this.getController('adaptiveColumns');
+    this.adaptiveColumnsController = this.getController('adaptiveColumns');
     this._columnResizerController = this.getController('columnsResizer');
     this._rowsView = this.getView('rowsView');
 
@@ -1250,7 +1250,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
         (this._dataController as any).changeRowExpand(key);
       }
     } else if (needExpandAdaptiveRow) {
-      this._adaptiveColumnsController.toggleExpandAdaptiveDetailRow(key);
+      this.adaptiveColumnsController.toggleExpandAdaptiveDetailRow(key);
 
       this._updateFocusedCellPosition($cell);
     } else if (this.getMasterDetailCell($cell)?.is($cell)) {
