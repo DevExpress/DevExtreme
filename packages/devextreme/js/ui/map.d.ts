@@ -24,6 +24,43 @@ export type MapType = 'hybrid' | 'roadmap' | 'satellite';
  * @docid
  * @public
  */
+export type OsmCalculateLocation = (query: string) => PromiseLike<MapLocation | undefined>;
+
+/**
+ * @docid
+ * @public
+ */
+export type OsmCalculateRouteParams = {
+  locations: Array<MapLocation>;
+  mode: RouteMode | string;
+};
+
+/**
+ * @docid
+ * @public
+ */
+export type OsmGeoJsonLineString = {
+  type: 'LineString';
+  coordinates: Array<Array<number>>;
+};
+
+/**
+ * @docid
+ * @type Array<Array<number>>|OsmGeoJsonLineString
+ * @public
+ */
+export type OsmRouteResult = Array<[number, number]> | OsmGeoJsonLineString;
+
+/**
+ * @docid
+ * @public
+ */
+export type OsmCalculateRoute = (params: OsmCalculateRouteParams) => PromiseLike<OsmRouteResult>;
+
+/**
+ * @docid
+ * @public
+ */
 export type OsmTileServerConfig = {
   /**
    * @docid
@@ -369,9 +406,18 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
       /**
        * @docid
        * @public
-       * @default undefined
        */
       tileServer?: OsmTileServer | undefined;
+      /**
+       * @docid
+       * @public
+       */
+      calculateLocation?: (query: string) => PromiseLike<MapLocation | undefined>;
+      /**
+       * @docid
+       * @public
+       */
+      calculateRoute?: (params: OsmCalculateRouteParams) => PromiseLike<OsmRouteResult>;
     };
     /**
      * @docid
