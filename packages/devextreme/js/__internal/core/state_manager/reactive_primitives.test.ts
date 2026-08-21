@@ -77,5 +77,49 @@ describe('Reactive wrapper', () => {
 
       untrackedDispose();
     });
+
+    it('track subscribes the enclosing effect to its arguments', () => {
+      const first = ReactiveModule.signal(1);
+      const second = ReactiveModule.signal(1);
+
+      let effectRunCount = 0;
+
+      const dispose = ReactiveModule.effect(() => {
+        ReactiveModule.track(first.value, second.value);
+        effectRunCount += 1;
+      });
+
+      expect(effectRunCount).toBe(1);
+
+      first.value = 2;
+      expect(effectRunCount).toBe(2);
+
+      second.value = 2;
+      expect(effectRunCount).toBe(3);
+
+      dispose();
+
+      first.value = 3;
+      expect(effectRunCount).toBe(3);
+    });
+
+    it('track subscribes the enclosing computed to its arguments', () => {
+      const trackedSignal = ReactiveModule.signal(1);
+
+      let computedRunCount = 0;
+
+      const testComputed = ReactiveModule.computed(() => {
+        ReactiveModule.track(trackedSignal.value);
+        computedRunCount += 1;
+        return 'result';
+      });
+
+      expect(testComputed.value).toBe('result');
+      expect(computedRunCount).toBe(1);
+
+      trackedSignal.value = 2;
+      expect(testComputed.value).toBe('result');
+      expect(computedRunCount).toBe(2);
+    });
   });
 });
