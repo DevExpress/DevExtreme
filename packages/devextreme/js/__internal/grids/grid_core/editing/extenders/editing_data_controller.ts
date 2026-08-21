@@ -55,7 +55,7 @@ export const editingDataControllerExtender = (
     const editItem = items[editRowIndex];
     if (editItem) {
       editItem.isEditing = true;
-      // @ts-expect-error Badly typed based class
+      // @ts-expect-error form-based leakage
       this._updateEditItem?.(editItem);
     }
   }

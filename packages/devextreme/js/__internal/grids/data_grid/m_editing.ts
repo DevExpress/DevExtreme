@@ -7,7 +7,7 @@ import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
 import gridCore from './m_core';
 
-const data = (Base: ModuleType<DataController>) => class DataEditingDataGridExtender extends editingDataControllerExtender(Base) {
+const data = (Base: ModuleType<DataController>) => class DataGridEditingDataControllerExtender extends editingDataControllerExtender(Base) {
   protected _changeRowExpandCore(key) {
     const editingController = this._editingController;
 
