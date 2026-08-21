@@ -24,13 +24,7 @@ export type MapType = 'hybrid' | 'roadmap' | 'satellite';
  * @docid
  * @public
  */
-export type OsmCalculateLocation = (query: string) => PromiseLike<MapLocation | undefined>;
-
-/**
- * @docid
- * @public
- */
-export type OsmCalculateRouteParams = {
+export type CalculateOsmRouteInfo = {
   locations: Array<MapLocation>;
   mode: RouteMode | string;
 };
@@ -50,12 +44,6 @@ export type OsmGeoJsonLineString = {
  * @public
  */
 export type OsmRouteResult = Array<[number, number]> | OsmGeoJsonLineString;
-
-/**
- * @docid
- * @public
- */
-export type OsmCalculateRoute = (params: OsmCalculateRouteParams) => PromiseLike<OsmRouteResult>;
 
 /**
  * @docid
@@ -417,7 +405,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
        * @docid
        * @public
        */
-      calculateRoute?: (params: OsmCalculateRouteParams) => PromiseLike<OsmRouteResult>;
+      calculateRoute?: (params: CalculateOsmRouteInfo) => PromiseLike<OsmRouteResult>;
     };
     /**
      * @docid
