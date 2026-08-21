@@ -64,6 +64,7 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
       allowDrag: true,
       allowResize: true,
       reduced: null,
+      hideReducedIcon: false,
       isCompact: false,
       direction: 'vertical',
       resizableConfig: { keepAspectRatio: false },
@@ -102,6 +103,7 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
       case 'allowDrag':
       case 'allowResize':
       case 'reduced':
+      case 'hideReducedIcon':
       case 'sortedIndex':
       case 'isCompact':
       case 'direction':
@@ -230,7 +232,7 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
   _renderReducedAppointment() {
     const reducedPart: any = this.option('reduced');
 
-    if (!reducedPart) {
+    if (!reducedPart || this.option('hideReducedIcon')) {
       return;
     }
 
