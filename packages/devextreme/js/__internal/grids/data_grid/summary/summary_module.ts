@@ -2,7 +2,7 @@ import messageLocalization from '@js/common/core/localization/message';
 
 import gridCore from '../m_core';
 import dataSourceAdapterProvider from '../m_data_source_adapter';
-import { summaryDataControllerExtender } from './extenders/m_summary_data_controller';
+import { summaryDataControllerExtender } from './extenders/summary_data_controller';
 import {
   dataSourceAdapterExtender, FooterView, summaryEditingControllerExtender,
   summaryRowsViewExtender,
