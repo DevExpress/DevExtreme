@@ -1,4 +1,5 @@
 import messageLocalization from '@js/common/core/localization/message';
+import type { SortByGroupSummaryInfoItem, Summary } from '@js/ui/data_grid';
 
 import gridCore from '../m_core';
 import dataSourceAdapterProvider from '../m_data_source_adapter';
@@ -11,7 +12,10 @@ import {
 dataSourceAdapterProvider.extend(dataSourceAdapterExtender);
 
 gridCore.registerModule('summary', {
-  defaultOptions() {
+  defaultOptions(): {
+    summary: Summary,
+    sortByGroupSummaryInfo: SortByGroupSummaryInfoItem[] | undefined
+  } {
     return {
       summary: {
         groupItems: undefined,
