@@ -40,6 +40,7 @@ export interface CustomAggregator {
 export interface Aggregate {
   selector?: string | ((data: RawItemData) => unknown);
   aggregator?: string | Exclude<SummaryType, 'custom'> | CustomAggregator;
+  summaryType?: SummaryType | string | undefined;
   skipEmptyValues?: boolean;
 }
 
