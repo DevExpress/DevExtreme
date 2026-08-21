@@ -193,7 +193,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   protected _dataController!: DataController;
 
-  protected _adaptiveColumnsController!: AdaptiveColumnsController;
+  protected adaptiveColumnsController!: AdaptiveColumnsController;
 
   protected _columnChooserController!: ColumnChooserController;
 
@@ -207,7 +207,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     this._scrollLeft = -1;
     this._columnsController = this.getController('columns');
     this._dataController = this.getController('data');
-    this._adaptiveColumnsController = this.getController('adaptiveColumns');
+    this.adaptiveColumnsController = this.getController('adaptiveColumns');
     this._columnChooserController = this.getController('columnChooser');
     this._editorFactoryController = this.getController('editorFactory');
     this._selectionController = this.getController('selection');
