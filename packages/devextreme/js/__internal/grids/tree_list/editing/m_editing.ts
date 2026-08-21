@@ -8,7 +8,8 @@ import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import { dataControllerEditingExtenderMixin, editingModule } from '@ts/grids/grid_core/editing/m_editing';
+import { editingDataControllerExtender } from '@ts/grids/grid_core/editing/extenders/editing_data_controller';
+import { editingModule } from '@ts/grids/grid_core/editing/m_editing';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
@@ -233,7 +234,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class TreeListEditingRowsViewEx
   }
 };
 
-const data = (Base: ModuleType<DataController>) => class DataControllerTreeListEditingExtender extends dataControllerEditingExtenderMixin(Base) {
+const data = (Base: ModuleType<DataController>) => class DataControllerTreeListEditingExtender extends editingDataControllerExtender(Base) {
   private changeRowExpand() {
     this._editingController.refresh();
     // @ts-expect-error

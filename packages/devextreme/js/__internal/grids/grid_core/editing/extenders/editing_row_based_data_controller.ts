@@ -4,9 +4,9 @@ import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
 import type { EditingController } from '../m_editing';
 
-export const dataControllerEditingRowBasedExtender = (
+export const editingRowBasedDataControllerExtender = (
   Base: ModuleType<DataController>,
-): ModuleType<DataController> => class DataEditingRowBasedExtender extends Base {
+): ModuleType<DataController> => class EditingRowBasedDataControllerExtender extends Base {
   protected _editingController!: EditingController;
 
   public init(): void {

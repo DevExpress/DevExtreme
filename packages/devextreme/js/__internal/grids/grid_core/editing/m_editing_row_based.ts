@@ -11,7 +11,7 @@ import {
   MODES_WITH_DELAYED_FOCUS,
   ROW_SELECTED_CLASS,
 } from './const';
-import { dataControllerEditingRowBasedExtender } from './extenders/editing_row_based_data_controller';
+import { editingRowBasedDataControllerExtender } from './extenders/editing_row_based_data_controller';
 import type { EditingController } from './m_editing';
 
 const editingControllerExtender = (Base: ModuleType<EditingController>) => class RowBasedEditingControllerExtender extends Base {
@@ -140,7 +140,7 @@ export const editingRowBasedModule = {
   extenders: {
     controllers: {
       editing: editingControllerExtender,
-      data: dataControllerEditingRowBasedExtender,
+      data: editingRowBasedDataControllerExtender,
     },
     views: {
       rowsView,

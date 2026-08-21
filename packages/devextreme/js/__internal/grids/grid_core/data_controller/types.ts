@@ -43,6 +43,7 @@ export type RowWatch = (
 
 export interface Cell {
   column?: Column;
+  isEditing?: boolean;
   update?: RowUpdate;
 }
 

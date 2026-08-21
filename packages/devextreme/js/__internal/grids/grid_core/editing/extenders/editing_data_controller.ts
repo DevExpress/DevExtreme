@@ -3,7 +3,6 @@ import { equalByValue } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type {
-  Cell,
   DataChange,
   GeneratedItem,
   ItemProcessingOptions,
@@ -17,11 +16,9 @@ import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import { EDITING_EDITROWKEY_OPTION_NAME } from '../const';
 import type { EditingController } from '../m_editing';
 
-type EditingCell = Cell & { isEditing?: boolean };
-
-export const dataControllerEditingExtenderMixin = (
+export const editingDataControllerExtender = (
   Base: ModuleType<DataController>,
-): ModuleType<DataController> => class DataControllerEditingExtender extends Base {
+): ModuleType<DataController> => class EditingDataControllerExtender extends Base {
   protected _editingController!: EditingController;
 
   public init(): void {
@@ -122,7 +119,7 @@ export const dataControllerEditingExtenderMixin = (
     columnIndex: number,
     isLiveUpdate?: boolean,
   ): boolean {
-    const cell = oldRow.cells?.[columnIndex] as EditingCell | undefined;
+    const cell = oldRow.cells?.[columnIndex];
     const isEditing = this._editingController
       && this._editingController.isEditCell(visibleRowIndex, columnIndex);
 
