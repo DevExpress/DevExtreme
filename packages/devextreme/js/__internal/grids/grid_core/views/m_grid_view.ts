@@ -24,7 +24,7 @@ import type { ColumnsController } from '../columns_controller/m_columns_controll
 import type { DataController } from '../data_controller/data_controller';
 import type { DataChange } from '../data_controller/types';
 import modules from '../m_modules';
-import gridCoreUtils from '../m_utils';
+import gridCoreUtils, { type SelectionRange } from '../m_utils';
 import type { RowsView } from './m_rows_view';
 
 const BORDERS_CLASS = 'borders';
@@ -79,10 +79,16 @@ const calculateFreeWidthWithCurrentMinWidth = function (that, columnIndex, curre
   return calculateFreeWidth(that, widths.map((width, index) => (index === columnIndex ? currentMinWidth : width)));
 };
 
-const restoreFocus = function (focusedElement, selectionRange) {
+const restoreFocus = (focusedElement: Element, selectionRange: SelectionRange): void => {
   accessibility.hiddenFocus(focusedElement, true);
   gridCoreUtils.setSelectionRange(focusedElement, selectionRange);
 };
+
+interface MaxWidthController {
+  isModified: boolean;
+  set: (value: number) => void;
+  clear: () => void;
+}
 
 export class ResizingController extends modules.ViewController {
   private _refreshSizesHandler: any;
@@ -100,8 +106,6 @@ export class ResizingController extends modules.ViewController {
   private _gridView!: GridView;
 
   private _prevContentMinHeight: any;
-
-  private _maxWidth: any;
 
   private _hasWidth: any;
 
@@ -122,6 +126,26 @@ export class ResizingController extends modules.ViewController {
   protected _updateScrollableTimeoutID: any;
 
   public resizeCompleted!: Callback;
+
+  private readonly _maxWidth: MaxWidthController = {
+    isModified: false,
+    set: (value): void => {
+      const $element = this.component.$element();
+
+      this._maxWidth.isModified = true;
+      $element.css('maxWidth', value);
+    },
+    clear: (): void => {
+      const $element = this.component.$element();
+
+      if (!this._maxWidth.isModified || !$element || !$element.get(0)) {
+        return;
+      }
+
+      this._maxWidth.isModified = false;
+      $element[0].style.maxWidth = '';
+    },
+  };
 
   protected callbackNames() {
     return ['resizeCompleted'];
@@ -340,85 +364,55 @@ export class ResizingController extends modules.ViewController {
     }
   }
 
-  private _synchronizeColumns() {
+  private _enableTemporaryBestFitMode(): () => void {
+    const $element = this.component.$element();
+    const focusedElement = domAdapter.getActiveElement($element.get(0) as HTMLElement | null);
+    const selectionRange = gridCoreUtils.getSelectionRange(focusedElement);
+
+    this._toggleBestFitMode(true);
+
+    return (): void => {
+      this._toggleBestFitMode(false);
+
+      if (focusedElement && focusedElement !== domAdapter.getActiveElement()) {
+        const isFocusOutsideWindow = getBoundingRect(focusedElement).bottom < 0;
+
+        if (!isFocusOutsideWindow) {
+          restoreFocus(focusedElement, selectionRange);
+        }
+      }
+    };
+  }
+
+  private _synchronizeColumns(): void {
     const columnsController = this._columnsController;
     const visibleColumns = columnsController.getVisibleColumns();
-    const columnAutoWidth = this.option('columnAutoWidth');
+    const columnAutoWidth = this.option('columnAutoWidth') as boolean;
     const hasUndefinedColumnWidth = visibleColumns.some((column) => !isDefined(column.width));
-    let needBestFit = this._needBestFit();
-    let hasMinWidth = false;
-    let resetBestFitMode;
-    let isColumnWidthsCorrected = false;
-    let resultWidths: any[] = [];
-    let focusedElement;
-    let selectionRange;
+    const needBestFit = this._needBestFit() || visibleColumns.some((column) => column.width === 'auto');
+    const hasMinWidth = visibleColumns.some((column) => !!column.minWidth);
 
-    const normalizeWidthsByExpandColumns = function () {
-      let expandColumnWidth;
-
-      each(visibleColumns, (index, column) => {
-        if (column.type === 'groupExpand') {
-          expandColumnWidth = resultWidths[index];
-        }
-      });
-
-      each(visibleColumns, (index, column) => {
-        if (column.type === 'groupExpand' && expandColumnWidth) {
-          resultWidths[index] = expandColumnWidth;
-        }
-      });
-    };
-
-    !needBestFit && each(visibleColumns, (index, column) => {
-      if (column.width === 'auto') {
-        needBestFit = true;
-        return false;
-      }
-      return undefined;
-    });
-
-    each(visibleColumns, (index, column) => {
-      if (column.minWidth) {
-        hasMinWidth = true;
-        return false;
-      }
-      return undefined;
-    });
-
+    // Prepare for measurement
     this._toggleContentMinHeight(this._hasHeight); // T1047239, T1270354
-
     this._setVisibleWidths(visibleColumns, []);
-
-    const $element = this.component.$element();
-
-    if (needBestFit) {
-      // @ts-expect-error
-      focusedElement = domAdapter.getActiveElement($element.get(0));
-      selectionRange = gridCoreUtils.getSelectionRange(focusedElement);
-      this._toggleBestFitMode(true);
-      resetBestFitMode = true;
-    }
-
-    if ($element && $element.get(0) && this._maxWidth) {
-      delete this._maxWidth;
-      $element[0].style.maxWidth = '';
-    }
+    const restoreAfterBestFitMode = needBestFit && this._enableTemporaryBestFitMode();
+    this._maxWidth.clear();
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     deferUpdate(() => {
-      if (needBestFit) {
-        resultWidths = this._getBestFitWidths();
+      let resultWidths: (number | string | undefined)[] = [];
 
-        each(visibleColumns, (index, column) => {
-          const columnId = columnsController.getColumnId(column);
-          columnsController.columnOption(columnId, 'bestFitWidth', resultWidths[index], true);
-        });
-      } else if (hasMinWidth) {
+      if (needBestFit || hasMinWidth) {
         resultWidths = this._getBestFitWidths();
       }
 
-      each(visibleColumns, function (index) {
-        const { width } = this;
+      each(visibleColumns, (index, column) => {
+        if (needBestFit) {
+          const columnId = columnsController.getColumnId(column);
+          columnsController.columnOption(columnId, 'bestFitWidth', resultWidths[index], true);
+        }
+
+        const { width } = column;
         if (width !== 'auto') {
           if (isDefined(width)) {
             resultWidths[index] = isNumeric(width) || isPixelWidth(width) ? parseFloat(width) : width;
@@ -428,21 +422,14 @@ export class ResizingController extends modules.ViewController {
         }
       });
 
-      if (resetBestFitMode) {
-        this._toggleBestFitMode(false);
-        resetBestFitMode = false;
-        if (focusedElement && focusedElement !== domAdapter.getActiveElement()) {
-          const isFocusOutsideWindow = getBoundingRect(focusedElement).bottom < 0;
-          if (!isFocusOutsideWindow) {
-            restoreFocus(focusedElement, selectionRange);
-          }
-        }
+      if (restoreAfterBestFitMode) {
+        restoreAfterBestFitMode();
       }
 
-      isColumnWidthsCorrected = this._correctColumnWidths(resultWidths, visibleColumns);
+      const isColumnWidthsCorrected = this._correctColumnWidths(resultWidths, visibleColumns);
 
       if (columnAutoWidth) {
-        normalizeWidthsByExpandColumns();
+        this._normalizeWidthsByExpandColumns(resultWidths, visibleColumns);
         if (this._needStretch()) {
           this._processStretch(resultWidths, visibleColumns);
         }
@@ -480,6 +467,21 @@ export class ResizingController extends modules.ViewController {
     return freeWidth / columnCountWithoutWidth;
   }
 
+  private readonly _normalizeWidthsByExpandColumns = (resultWidths, visibleColumns): void => {
+    const expandColumnIndex = visibleColumns.findIndex((column) => column.type === 'groupExpand');
+    const expandColumnWidth = resultWidths[expandColumnIndex];
+
+    if (!isDefined(expandColumnWidth)) {
+      return;
+    }
+
+    each(visibleColumns, (index, column) => {
+      if (column.type === 'groupExpand') {
+        resultWidths[index] = expandColumnWidth;
+      }
+    });
+  };
+
   /**
    * @extended: adaptivity
    */
@@ -489,7 +491,6 @@ export class ResizingController extends modules.ViewController {
     let hasPercentWidth = false;
     let hasAutoWidth = false;
     let isColumnWidthsCorrected = false;
-    const $element = that.component.$element();
     const hasWidth = that._hasWidth;
 
     for (i = 0; i < visibleColumns.length; i++) {
@@ -542,9 +543,7 @@ export class ResizingController extends modules.ViewController {
           if (hasWidth === false && !hasPercentWidth) {
             const borderWidth = gridCoreUtils.getComponentBorderWidth(this, $rowsViewElement);
 
-            that._maxWidth = totalWidth + scrollbarWidth + borderWidth;
-
-            $element.css('maxWidth', that._maxWidth);
+            that._maxWidth.set(totalWidth + scrollbarWidth + borderWidth);
           }
         }
       }
