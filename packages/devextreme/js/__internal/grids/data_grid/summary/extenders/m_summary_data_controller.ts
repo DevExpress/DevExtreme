@@ -22,7 +22,6 @@ export const summaryDataControllerExtender = (
 ): ModuleType<DataController> => class SummaryDataControllerExtender extends Base {
   private _footerItems!: any[];
 
-  // MYTODO: change to private after DataController._editingController is removed
   protected _editingController!: EditingController;
 
   public init(): void {
