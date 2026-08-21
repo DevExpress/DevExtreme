@@ -163,5 +163,7 @@ export default errorUtils(errors.ERROR_MESSAGES, {
   W1028: 'Nested/banded columns do not support the following properties: {0}.',
   W1029: '\'hiddenWeekDays\' must leave at least one weekday visible.',
   W1030: '\'tileServer\' is not configured for the OSM map provider.',
+  W1031: '\'calculateLocation\' is not configured for the OSM map provider.',
   W1032: '\'attribution\' is not configured for the OSM tile server.',
+  W1033: '\'calculateRoute\' is not configured for the OSM map provider.',
 });

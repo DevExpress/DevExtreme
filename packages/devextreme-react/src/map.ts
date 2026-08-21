@@ -8,7 +8,7 @@ import dxMap, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ClickEvent, DisposingEvent, InitializedEvent, MarkerAddedEvent, MarkerRemovedEvent, ReadyEvent, RouteAddedEvent, RouteRemovedEvent, OsmTileServer, RouteMode } from "devextreme/ui/map";
+import type { ClickEvent, DisposingEvent, InitializedEvent, MarkerAddedEvent, MarkerRemovedEvent, ReadyEvent, RouteAddedEvent, RouteRemovedEvent, CalculateOsmRouteInfo, OsmTileServer, RouteMode } from "devextreme/ui/map";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -182,6 +182,8 @@ const Marker = Object.assign<typeof _componentMarker, NestedComponentMeta>(_comp
 // owners:
 // Map
 type IProviderConfigProps = React.PropsWithChildren<{
+  calculateLocation?: ((query: string) => any);
+  calculateRoute?: ((params: CalculateOsmRouteInfo) => any);
   mapId?: string;
   tileServer?: OsmTileServer | undefined;
   useAdvancedMarkers?: boolean;

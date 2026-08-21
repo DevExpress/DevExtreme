@@ -23338,6 +23338,13 @@ declare module DevExpress.ui {
   }
   module dxMap {
     /**
+     * [descr:CalculateOsmRouteInfo]
+     */
+    export type CalculateOsmRouteInfo = {
+      locations: Array<MapLocation>;
+      mode: RouteMode | string;
+    };
+    /**
      * [descr:_ui_map_ClickEvent]
      */
     export type ClickEvent = DevExpress.common.core.events.NativeEventInfo<
@@ -23395,6 +23402,17 @@ declare module DevExpress.ui {
     export type OptionChangedEvent =
       DevExpress.common.core.events.EventInfo<dxMap> &
         DevExpress.common.core.events.ChangedOptionInfo;
+    /**
+     * [descr:OsmGeoJsonLineString]
+     */
+    export type OsmGeoJsonLineString = {
+      type: 'LineString';
+      coordinates: Array<Array<number>>;
+    };
+    /**
+     * [descr:OsmRouteResult]
+     */
+    export type OsmRouteResult = Array<[number, number]> | OsmGeoJsonLineString;
     /**
      * [descr:OsmTileServer]
      */
@@ -23598,6 +23616,18 @@ declare module DevExpress.ui {
        * [descr:dxMapOptions.providerConfig.tileServer]
        */
       tileServer?: DevExpress.ui.dxMap.OsmTileServer | undefined;
+      /**
+       * [descr:dxMapOptions.providerConfig.calculateLocation]
+       */
+      calculateLocation?: (
+        query: string
+      ) => PromiseLike<MapLocation | undefined>;
+      /**
+       * [descr:dxMapOptions.providerConfig.calculateRoute]
+       */
+      calculateRoute?: (
+        params: DevExpress.ui.dxMap.CalculateOsmRouteInfo
+      ) => PromiseLike<DevExpress.ui.dxMap.OsmRouteResult>;
     };
     /**
      * [descr:dxMapOptions.routes]
