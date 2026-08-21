@@ -1,7 +1,6 @@
 import type {
   CustomSummaryInfo,
   SortByGroupSummaryInfoItem,
-  SortOrder,
   Summary,
 } from '@js/ui/data_grid';
 import type dxDataGrid from '@js/ui/data_grid';
@@ -15,8 +14,8 @@ import errors from '@ts/ui/errors';
 import type {
   Aggregate, CustomAggregator, SortByGroups, SortInfo, SummaryItem, SummaryOptions,
 } from '../types';
-import { findSummaryItem } from './find_summary_item';
 import { getGroupAggregates } from './get_group_aggregates';
+import { getSummaryItemIndex } from './get_summary_item_index';
 
 export interface GetSummaryOptionsArgs {
   summary: Summary;
@@ -102,88 +101,68 @@ const createCustomAggregator = (
   };
 };
 
-const getAggregates = (
-  summaryItems: SummaryItem[],
-  remoteOperations: boolean,
-  args: GetSummaryOptionsArgs,
-): Aggregate[] => {
+const createLocalAggregate = (summaryItem: SummaryItem, args: GetSummaryOptionsArgs): Aggregate => {
   const {
     recalculateWhileEditing,
     skipEmptyValues: commonSkipEmptyValues,
   } = args.summary;
 
-  return summaryItems.map((summaryItem) => {
-    const aggregator = summaryItem.summaryType ?? 'count';
+  const aggregator = summaryItem.summaryType ?? 'count';
 
-    if (remoteOperations) {
-      return {
-        selector: summaryItem.column,
-        summaryType: aggregator,
-      };
+  const column = isDefined(summaryItem.column)
+    ? args.columnOption(summaryItem.column)
+    : undefined;
+
+  const selector = getSelector(
+    column,
+    summaryItem,
+    Boolean(recalculateWhileEditing),
+    args.getUpdatedItemData,
+  );
+
+  const skipEmptyValues = summaryItem.skipEmptyValues ?? commonSkipEmptyValues;
+
+  if (aggregator === 'custom') {
+    let { calculateCustomSummary } = args.summary;
+
+    if (!calculateCustomSummary) {
+      errors.log('E1026');
+      calculateCustomSummary = noop;
     }
 
-    const column = isDefined(summaryItem.column)
-      ? args.columnOption(summaryItem.column)
-      : undefined;
-
-    const selector = getSelector(
-      column,
-      summaryItem,
-      Boolean(recalculateWhileEditing),
-      args.getUpdatedItemData,
+    const customAggregator = createCustomAggregator(
+      calculateCustomSummary,
+      args.component,
+      summaryItem.name,
     );
-
-    const skipEmptyValues = summaryItem.skipEmptyValues ?? commonSkipEmptyValues;
-
-    if (aggregator === 'custom') {
-      let { calculateCustomSummary } = args.summary;
-
-      if (!calculateCustomSummary) {
-        errors.log('E1026');
-        calculateCustomSummary = noop;
-      }
-
-      const customAggregator = createCustomAggregator(
-        calculateCustomSummary,
-        args.component,
-        summaryItem.name,
-      );
-
-      return {
-        selector,
-        aggregator: customAggregator,
-        skipEmptyValues,
-      };
-    }
 
     return {
       selector,
-      aggregator,
+      aggregator: customAggregator,
       skipEmptyValues,
     };
-  });
-};
-
-const addSortInfo = (
-  sortByGroups: SortByGroups,
-  groupColumn: Column | undefined,
-  selector: Selector,
-  sortOrder: SortOrder | undefined,
-): void => {
-  const groupIndex = groupColumn?.groupIndex;
-
-  if (!isDefined(groupIndex)) {
-    return;
   }
 
-  const groupSortInfo = sortByGroups[groupIndex] ?? [];
-
-  groupSortInfo.push({
+  return {
     selector,
-    desc: (sortOrder ?? groupColumn?.sortOrder) === 'desc',
-  });
+    aggregator,
+    skipEmptyValues,
+  };
+};
 
-  sortByGroups[groupIndex] = groupSortInfo;
+const getAggregates = (
+  summaryItems: SummaryItem[],
+  remoteOperations: boolean,
+  args: GetSummaryOptionsArgs,
+): Aggregate[] => {
+  if (remoteOperations) {
+    return summaryItems.map((summaryItem) => ({
+      selector: summaryItem.column,
+      summaryType: summaryItem.summaryType ?? 'count',
+    }));
+  }
+
+  return summaryItems.map((summaryItem) => createLocalAggregate(summaryItem, args));
 };
 
 const getSummarySortByGroups = (args: GetSummaryOptionsArgs): SortByGroups | undefined => {
@@ -194,34 +173,38 @@ const getSummarySortByGroups = (args: GetSummaryOptionsArgs): SortByGroups | und
     sortByGroupSummaryInfo,
   } = args;
 
-  if (!summary.groupItems?.length) return undefined;
+  if (!summary.groupItems?.length) {
+    return undefined;
+  }
 
   const sortByGroups: SortByGroups = [];
 
   (sortByGroupSummaryInfo ?? []).forEach(({ groupColumn, sortOrder, summaryItem }) => {
-    const summaryItemIndex = findSummaryItem(summary.groupItems, summaryItem);
+    const summaryItemIndex = getSummaryItemIndex(summary.groupItems, summaryItem);
 
-    if (summaryItemIndex < 0) return;
+    if (summaryItemIndex < 0) {
+      return;
+    }
 
     const selector: SortInfo['selector'] = (data) => getGroupAggregates(data)[summaryItemIndex];
+    const normalizedGroupColumns = isDefined(groupColumn)
+      ? [columnOption(groupColumn)]
+      : groupColumns;
 
-    if (isDefined(groupColumn)) {
-      addSortInfo(
-        sortByGroups,
-        columnOption(groupColumn),
-        selector,
-        sortOrder,
-      );
-    } else {
-      groupColumns.forEach(
-        (column) => addSortInfo(
-          sortByGroups,
-          column,
+    normalizedGroupColumns
+      .forEach((column) => {
+        const groupIndex = column?.groupIndex;
+
+        if (!isDefined(groupIndex)) {
+          return;
+        }
+
+        sortByGroups[groupIndex] ??= [];
+        sortByGroups[groupIndex].push({
           selector,
-          sortOrder,
-        ),
-      );
-    }
+          desc: (sortOrder ?? column?.sortOrder) === 'desc',
+        });
+      });
   });
 
   return sortByGroups;

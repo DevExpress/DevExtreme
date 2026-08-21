@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable consistent-return */
-/* eslint-disable no-param-reassign */
+
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-self-compare */
@@ -27,8 +26,8 @@ import type {
   CalculateSummaryCellsArgs, ColumnMap, SummaryCellItem,
 } from '../types';
 import { getColumnFromMap, getSummaryCellIndex } from '../utils';
-import { findSummaryItem } from '../utils/find_summary_item';
 import { getGroupAggregates } from '../utils/get_group_aggregates';
+import { getSummaryItemIndex } from '../utils/get_summary_item_index';
 
 export const summaryDataControllerExtender = (
   Base: ModuleType<DataController>,
@@ -277,7 +276,7 @@ export const summaryDataControllerExtender = (
   }
 
   private getTotalSummaryValue(summaryItemName) {
-    const summaryItemIndex = findSummaryItem(this.option('summary.totalItems'), summaryItemName);
+    const summaryItemIndex = getSummaryItemIndex(this.option('summary.totalItems'), summaryItemName);
     const aggregates = this._dataSource.totalAggregates();
 
     if (aggregates.length && summaryItemIndex > -1) {
