@@ -200,7 +200,7 @@ const getSummarySortByGroups = (args: GetSummaryOptionsArgs): SortByGroups | und
         }
 
         sortByGroups[groupIndex] ??= [];
-        sortByGroups[groupIndex].push({
+        sortByGroups[groupIndex]?.push({
           selector,
           desc: (sortOrder ?? column?.sortOrder) === 'desc',
         });
