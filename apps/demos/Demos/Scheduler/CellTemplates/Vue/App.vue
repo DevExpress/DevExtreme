@@ -47,7 +47,7 @@ import { computed, ref } from 'vue';
 import { DxForm } from 'devextreme-vue';
 import { DxScheduler, type DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import notify from 'devextreme/ui/notify';
-import { data, holidays } from './data.ts';
+import { data, dinnerTime, holidays } from './data.ts';
 import Utils from './utils.ts';
 import DataCell from './DataCell.vue';
 import DataCellMonth from './DataCellMonth.vue';
@@ -61,7 +61,12 @@ const dataSource = data;
 
 const isMonthView = computed(() => currentView.value === 'month');
 
-const ariaDescription = computed(() => {
+const formatHour = (hours: number) => new Date(2021, 0, 1, hours).toLocaleTimeString('en-US', {
+  hour: 'numeric',
+  minute: '2-digit',
+});
+
+const disabledDatesDescription = () => {
   const disabledDates = holidays
     .filter((date) => !Utils.isWeekend(date))
     .map((date) => new Date(date).toLocaleDateString('en-US', {
@@ -78,7 +83,17 @@ const ariaDescription = computed(() => {
     return `${disabledDates.join(', ')} are disabled dates`;
   }
   return '';
-});
+};
+
+const disabledTimeDescription = () => {
+  const from = formatHour(dinnerTime.from);
+  const to = formatHour(dinnerTime.to);
+  return `The time range from ${from} to ${to} is disabled on all days`;
+};
+
+const ariaDescription = computed(() => [disabledDatesDescription(), disabledTimeDescription()]
+  .filter(Boolean)
+  .join('. '));
 
 function onContentReady(e: DxSchedulerTypes.ContentReadyEvent) {
   setComponentAria(e.component?.$element());

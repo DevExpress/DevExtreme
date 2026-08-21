@@ -3987,6 +3987,12 @@
                   "/Models/SampleData/GroupByDateTasks.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "Multilevel Grouping",
+                "Name": "MultilevelGrouping",
+                "Widget": "Scheduler",
+                "DemoType": "Web"
               }
             ]
           },
