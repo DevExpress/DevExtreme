@@ -14,7 +14,7 @@ import {
 
 
 
-import type { OsmCalculateRouteParams, OsmTileServer } from 'devextreme/ui/map';
+import type { CalculateOsmRouteInfo, OsmTileServer } from 'devextreme/ui/map';
 
 import {
     DxIntegrationModule,
@@ -40,10 +40,10 @@ export class DxoMapProviderConfigComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get calculateRoute(): ((params: OsmCalculateRouteParams) => any) {
+    get calculateRoute(): ((params: CalculateOsmRouteInfo) => any) {
         return this._getOption('calculateRoute');
     }
-    set calculateRoute(value: ((params: OsmCalculateRouteParams) => any)) {
+    set calculateRoute(value: ((params: CalculateOsmRouteInfo) => any)) {
         this._setOption('calculateRoute', value);
     }
 
