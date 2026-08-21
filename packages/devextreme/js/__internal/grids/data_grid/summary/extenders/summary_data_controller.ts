@@ -18,33 +18,25 @@ import { each } from '@js/core/utils/iterator';
 import {
   isDefined, isEmptyObject, isString,
 } from '@js/core/utils/type';
-import type { DataSource } from '@ts/data/data_source/types';
-import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import type { RawItemData, RemoteOperationsOptions } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
 import gridCore from '../../m_core';
 import { DATAGRID_GROUP_FOOTER_ROW_TYPE, DATAGRID_TOTAL_FOOTER_ROW_TYPE } from '../const';
 import type {
-  CalculateSummaryCellsArgs, ColumnMap, SummaryCellItem, SummaryOptions,
+  CalculateSummaryCellsArgs, ColumnMap, SummaryCellItem,
 } from '../types';
 import { getColumnFromMap, getSummaryCellIndex } from '../utils';
 import { findSummaryItem } from '../utils/find_summary_item';
 import { getGroupAggregates } from '../utils/get_group_aggregates';
-import { getSummaryOptions } from '../utils/get_summary_options';
 
 export const summaryDataControllerExtender = (
   Base: ModuleType<DataController>,
 ): ModuleType<DataController> => class SummaryDataControllerExtender extends Base {
   private _footerItems!: any[];
 
-  protected _editingController!: EditingController;
-
   public init(): void {
     this._footerItems = [];
-    this._editingController = this.getController('editing');
     super.init();
   }
 
@@ -278,34 +270,6 @@ export const summaryDataControllerExtender = (
       }
     }
     super._updateItemsCore(change);
-  }
-
-  protected _createDataSourceAdapter(dataSource: DataSource) {
-    const dataSourceAdapter = super._createDataSourceAdapter(dataSource);
-
-    // @ts-expect-error summaryGetter is defined in summary DataSourceAdapterExtender
-    dataSourceAdapter.summaryGetter(
-      (remoteOperations: RemoteOperationsOptions): SummaryOptions | undefined => {
-        const summary = this.option('summary');
-
-        if (!summary) {
-          return undefined;
-        }
-
-        const result = getSummaryOptions({
-          summary,
-          sortByGroupSummaryInfo: this.option('sortByGroupSummaryInfo'),
-          remoteOperations: remoteOperations ?? dataSourceAdapter.remoteOperations(),
-          getUpdatedItemData: (data) => this._editingController.getUpdatedData(data) as RawItemData,
-          columnOption: (id) => this._columnsController.columnOption(id) as Column | undefined,
-          groupColumns: this._columnsController.getGroupColumns(),
-          component: this.component as any,
-        });
-        return result;
-      },
-    );
-
-    return dataSourceAdapter;
   }
 
   public publicMethods(): string[] {
