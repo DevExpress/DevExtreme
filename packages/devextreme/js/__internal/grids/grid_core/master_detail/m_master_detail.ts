@@ -10,7 +10,7 @@ import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { ModuleType, RowKey } from '@ts/grids/grid_core/m_types';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
@@ -98,7 +98,7 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
     return !!(that._isExpandAll ^ (expandIndex >= 0 && that._expandedItems[expandIndex].visible));
   }
 
-  private _getRowIndicesForExpand(key) {
+  protected getRowIndicesForExpand(key: RowKey): number[] {
     const rowIndex = this.getRowIndexByKey(key);
 
     return [rowIndex, rowIndex + 1];
@@ -123,7 +123,7 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
 
       that.updateItems({
         changeType: 'update',
-        rowIndices: that._getRowIndicesForExpand(key),
+        rowIndices: that.getRowIndicesForExpand(key),
       });
       that.resetCachedProcessedItems();
 
