@@ -13,6 +13,10 @@ import { ScssBuildExecutorSchema } from './schema';
 
 const DEFAULT_BUNDLES_DIR = './scss/bundles';
 const DEFAULT_CSS_OUTPUT_DIR = '../devextreme/artifacts/css';
+const ACCENT_SOURCES_DIR = './scss/_design-system/fluent/accents';
+const ACCENT_OUTPUT_DIR_NAME = 'accents';
+const LEADING_COMMENT_REGEX = /^\s*\/\*[\s\S]*?\*\/\s*/;
+const GENERATOR_BANNER_MARKER = 'auto-generated';
 const DEFAULT_DEV_BUNDLE_NAMES = [
   'light',
   'light.compact',
@@ -112,6 +116,19 @@ async function generateScssBundles(
   await writeFileText(path.join(resolvedBundlesDir, 'dx.common.scss'), commonTemplate);
 }
 
+export function findMissingThemeCss(cssOutputDir: string, deps: BuildDependencies): string[] {
+  const declaredCssNames = [
+    ...deps.themeOptions
+      .getThemes()
+      .map(([theme, size, color, mode]) =>
+        generateBundleName(theme, size, color, mode).replace(/\.scss$/, '.css'),
+      ),
+    'dx.common.css',
+  ];
+
+  return declaredCssNames.filter((name) => !fs.existsSync(path.join(cssOutputDir, name)));
+}
+
 function loadDependencies(projectRoot: string): BuildDependencies {
   const projectRequire = createRequire(path.join(projectRoot, 'package.json'));
 
@@ -207,6 +224,35 @@ async function compileFile(
   await writeFileText(path.join(outputDir, outFileName), withHeader);
 }
 
+async function compileAccentOverrides(
+  projectRoot: string,
+  cssOutputDir: string,
+  deps: BuildDependencies,
+): Promise<void> {
+  const accentSourcesDir = path.resolve(projectRoot, ACCENT_SOURCES_DIR);
+  const pattern = normalizeGlobPathForWindows(path.join(accentSourcesDir, '*.scss'));
+  const accentSources = await glob(pattern, { nodir: true });
+
+  if (accentSources.length === 0) {
+    throw new Error(`No accent palettes to compile in ${accentSourcesDir}`);
+  }
+
+  const accentOutputDir = path.join(cssOutputDir, ACCENT_OUTPUT_DIR_NAME);
+
+  for (const source of accentSources) {
+    logger.verbose(`Compiling accent ${source}`);
+    const compiled = deps.sass.compile(source);
+    const outFileName = `${path.basename(source, '.scss')}.css`;
+    const license = createStarLicenseHeader(outFileName, deps.devextremeVersion);
+    const leadingComment = LEADING_COMMENT_REGEX.exec(compiled.css)?.[0] ?? '';
+    const css = leadingComment.includes(GENERATOR_BANNER_MARKER)
+      ? compiled.css.slice(leadingComment.length)
+      : compiled.css;
+    const withHeader = prependLicenseAndMoveCharsetFirst(css, license);
+    await writeFileText(path.join(accentOutputDir, outFileName), withHeader);
+  }
+}
+
 async function copyThemeAssets(projectRoot: string, cssOutputDir: string): Promise<void> {
   const fontsFrom = path.resolve(projectRoot, 'fonts');
   const iconsFrom = path.resolve(projectRoot, 'icons');
@@ -280,6 +326,15 @@ async function runSingleBuild(
     logger.verbose(`Compiling ${source}`);
     await compileFile(source, cssOutputDir, minifyProfile, deps, projectRoot);
   }
+
+  await compileAccentOverrides(projectRoot, cssOutputDir, deps);
+
+  if (options.mode !== 'ci') {
+    const missingThemeCss = findMissingThemeCss(cssOutputDir, deps);
+    if (missingThemeCss.length > 0) {
+      throw new Error(`Declared themes produced no CSS: ${missingThemeCss.join(', ')}`);
+    }
+  }
 }
 
 function loadChokidar(projectRoot: string): {
@@ -319,6 +374,7 @@ async function runWatchBuild(
       await compileFile(source, cssOutputDir, minifyProfile, deps, projectRoot);
     }
 
+    await compileAccentOverrides(projectRoot, cssOutputDir, deps);
     await copyThemeAssets(projectRoot, cssOutputDir);
   };
 
