@@ -608,7 +608,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     const ariaSearchBox = messageLocalization.format('dxDataGrid-ariaSearchBox');
 
     that._createComponent($menu, Menu, {
-      // @ts-expect-error
       integrationOptions: {},
       activeStateEnabled: false,
       selectionMode: 'single',

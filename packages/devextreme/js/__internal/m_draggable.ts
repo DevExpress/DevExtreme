@@ -755,7 +755,6 @@ class Draggable extends DOMComponent<Draggable, Properties> {
     if (isFunction(area)) {
       area = area.call(this);
     }
-    // @ts-expect-error ts-error
     return $(area);
   }
 

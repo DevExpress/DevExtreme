@@ -168,7 +168,7 @@ export class ModuleItem {
   public _createComponent<TComponent extends Component<any>>(
     $container: dxElementWrapper,
     component: new (...args) => TComponent,
-    options?: TComponent extends Component<infer TOptions> ? TOptions : never,
+    options?: (TComponent extends Component<infer TOptions> ? TOptions : never) | object,
   ): TComponent {
     return this.component._createComponent(
       $container,

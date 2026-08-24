@@ -68,7 +68,6 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         onItemEnterKeyPressed: this._tryOpen.bind(this),
         itemThumbnailTemplate: this._getItemThumbnailContainer.bind(this),
         getTooltipText: this._getTooltipText.bind(this),
-        // @ts-expect-error ts-error
         onSelectionChanged: this._onItemListSelectionChanged.bind(this),
         onFocusedItemChanged: this._onItemListFocusedItemChanged.bind(this),
         onContentReady: this._onContentReady.bind(this),

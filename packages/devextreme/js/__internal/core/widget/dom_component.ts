@@ -336,9 +336,8 @@ class DOMComponent<
   _createComponent<TTComponent, IProperties = Record<string, unknown>>(
     element: string | HTMLElement | dxElementWrapper | Element,
     component: string | (new (...args) => TTComponent),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    componentConfiguration: TTComponent extends Component<any, infer TTProperties>
-      ? TTProperties
+    componentConfiguration: TTComponent extends { _getDefaultOptions: () => infer TTProperties }
+      ? TTProperties | object
       : IProperties,
   ): TTComponent {
     const configuration = componentConfiguration ?? {};

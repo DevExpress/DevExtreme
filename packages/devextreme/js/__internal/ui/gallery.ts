@@ -764,7 +764,6 @@ class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKe
         const { event } = e;
         this._swipeEndHandler(event);
       },
-      // @ts-expect-error ts-error
       itemSizeFunc: this._elementWidth.bind(this),
     });
   }

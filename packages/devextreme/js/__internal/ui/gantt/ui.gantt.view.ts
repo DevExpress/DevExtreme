@@ -629,10 +629,9 @@ export class GanttView extends Widget<GanttViewProperties> {
     return this.callExportHelperMethod('getTreeListEmptyDataCellInfo');
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  callExportHelperMethod(methodName, ...args) {
-    const helper = this.option('exportHelper');
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  callExportHelperMethod(methodName: string, ...args: unknown[]): unknown {
+    const helper = this.option('exportHelper') as Record<string, (...args: unknown[]) => unknown>;
+
     return helper[methodName](...args);
   }
 

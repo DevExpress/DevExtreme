@@ -786,7 +786,6 @@ class ContextMenu<
   _initScrollable($container: dxElementWrapper): void {
     this._createComponent($container, Scrollable, {
       useKeyboard: false,
-      // @ts-expect-error ts-error
       _onVisibilityChanged: (scrollable: Scrollable) => {
         scrollable.scrollTo(0);
       },

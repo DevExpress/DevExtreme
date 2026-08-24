@@ -276,7 +276,7 @@ class MenuBase<
   _renderSelectedItem(): void {
     const selectedKeys = this._dataAdapter.getSelectedNodesKeys();
     const selectedKey = selectedKeys.length && selectedKeys[0];
-    const selectedItem = this.option('selectedItem');
+    const selectedItem = this.option('selectedItem') as Item;
 
     if (!selectedKey) {
       this._selectByItem(selectedItem);
@@ -700,7 +700,7 @@ class MenuBase<
     if (!selectedNode || (selectedNode.internalFields.item !== itemData)) {
       this.selectItem(itemData);
     } else {
-      this._fireSelectionChangeEvent(null, this.option('selectedItem'));
+      this._fireSelectionChangeEvent(null, this.option('selectedItem') as Item);
       this._setOptionWithoutOptionChange('selectedItem', null);
     }
   }
@@ -811,7 +811,7 @@ class MenuBase<
 
     const itemData = isElement(itemElement) ? this._getItemData(itemElement) : itemElement;
     const selectedKey = this._dataAdapter.getSelectedNodesKeys()[0];
-    const selectedItem = this.option('selectedItem');
+    const selectedItem = this.option('selectedItem') as Item;
     const node = this._dataAdapter.getNodeByItem(itemData);
 
     if (node && node.internalFields.key !== selectedKey) {
@@ -829,7 +829,7 @@ class MenuBase<
   unselectItem(itemElement: Element): void {
     const itemData = itemElement.nodeType ? this._getItemData(itemElement) : itemElement;
     const node = this._dataAdapter.getNodeByItem(itemData);
-    const selectedItem = this.option('selectedItem');
+    const selectedItem = this.option('selectedItem') as Item;
 
     if (node?.internalFields.selected) {
       this._toggleItemSelection(node, false);

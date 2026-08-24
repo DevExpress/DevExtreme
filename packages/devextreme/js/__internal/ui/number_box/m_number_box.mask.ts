@@ -581,9 +581,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
   }
 
   _isValueInRange(value) {
-    // @ts-expect-error ts-error
     const min = ensureDefined(this.option('min'), -Infinity);
-    // @ts-expect-error ts-error
     const max = ensureDefined(this.option('max'), Infinity);
 
     return inRange(value, min, max);

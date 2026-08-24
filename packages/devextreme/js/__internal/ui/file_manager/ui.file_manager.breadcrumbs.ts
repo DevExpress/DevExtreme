@@ -53,9 +53,7 @@ class FileManagerBreadcrumbs extends Widget<FileManagerBreadcrumbsOptions> {
     const $menu = $('<div>').appendTo(this.$element());
     this._menu = this._createComponent($menu, Menu, {
       dataSource: this._getMenuItems(),
-      // @ts-expect-error ts-error
       onItemClick: this._onItemClick.bind(this),
-      // @ts-expect-error ts-error
       onItemRendered: this._onItemRendered.bind(this),
     });
   }

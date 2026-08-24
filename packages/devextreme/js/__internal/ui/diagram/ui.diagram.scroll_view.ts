@@ -54,7 +54,6 @@ class DiagramScrollView extends Widget<Properties> {
     this._scrollView = this._createComponent(
       $scrollViewWrapper,
       ScrollView,
-      // @ts-expect-error ts-error
       options,
     );
     this._onCreateDiagramAction({

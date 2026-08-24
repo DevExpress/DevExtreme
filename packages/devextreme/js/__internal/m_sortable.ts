@@ -893,7 +893,6 @@ class Sortable extends Draggable {
     const $draggableItem = this._getDraggableElement();
     let size = this.option('draggableElementSize');
     if (!size) {
-      // @ts-expect-error ts-error
       size = isVerticalOrientation
         ? (getOuterHeight($draggableItem) + getOuterHeight($draggableItem, true)) / 2
         : (getOuterWidth($draggableItem) + getOuterWidth($draggableItem, true)) / 2;

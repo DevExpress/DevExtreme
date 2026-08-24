@@ -287,7 +287,6 @@ class ActionSheet extends CollectionWidget<Properties> {
             this.hide();
           }
         },
-        // @ts-expect-error
         integrationOptions: {},
       });
     }

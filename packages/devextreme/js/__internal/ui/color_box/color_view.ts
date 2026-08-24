@@ -507,7 +507,6 @@ class ColorView extends Editor<ColorViewProperties> {
 
     this._createComponent(this._$paletteHandle, Draggable, {
       contentTemplate: null,
-      // @ts-expect-error need to fix type for Draggable boundary option
       boundary: this._$palette,
       allowMoveByClick: true,
       boundOffset: () => -this._paletteHandleHeight / 2,
@@ -588,7 +587,6 @@ class ColorView extends Editor<ColorViewProperties> {
         .appendTo(this._$hueScaleWrapper);
       this._createComponent(this._$hueScaleHandle, Draggable, {
         contentTemplate: null,
-        // @ts-expect-error need to fix type for Draggable boundary option
         boundary: this._$hueScaleWrapper,
         allowMoveByClick: true,
         dragDirection: 'vertical',
@@ -860,7 +858,6 @@ class ColorView extends Editor<ColorViewProperties> {
       .appendTo($parent);
     this._createComponent(this._$alphaChannelHandle, Draggable, {
       contentTemplate: null,
-      // @ts-expect-error need to fix type for Draggable
       boundary: $parent,
       allowMoveByClick: true,
       dragDirection: 'horizontal',

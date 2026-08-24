@@ -43,12 +43,10 @@ class EditDecoratorContext extends EditDecorator {
           type: 'slide',
           duration: 300,
           from: {
-            // @ts-expect-error ts-error
             height: 0,
             opacity: 1,
           },
           to: {
-            // @ts-expect-error ts-error
             // eslint-disable-next-line @typescript-eslint/no-unsafe-return
             height: (): number => getOuterHeight(this._$menuList),
             opacity: 1,
@@ -66,10 +64,8 @@ class EditDecoratorContext extends EditDecorator {
         },
       },
       _ignoreFunctionValueDeprecation: true,
-      // @ts-expect-error ts-error
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       height: (): number => (this._$menuList ? getOuterHeight(this._$menuList) : 0),
-      // @ts-expect-error ts-error
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       width: (): number => getOuterWidth(this._list.$element()),
       onContentReady: (e: EventInfo<dxOverlay<OverlayProperties>>): void => {

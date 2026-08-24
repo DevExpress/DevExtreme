@@ -206,7 +206,6 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       icon: 'overflow',
       template: 'content',
       stylingMode: isFluent(current()) ? 'text' : 'contained',
-      // @ts-expect-error
       useInkRipple,
       hoverStateEnabled: false,
       focusStateEnabled: false,
@@ -266,14 +265,10 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       contentTemplate: (contentElement) => this._renderList(contentElement),
       maxHeight: this._getMaxHeight(),
       position: {
-        // @ts-expect-error
         my: `top ${rtlEnabled ? 'left' : 'right'}`,
-        // @ts-expect-error
         at: `bottom ${rtlEnabled ? 'left' : 'right'}`,
         collision: 'fit flip',
-        // @ts-expect-error
         offset: { v: POPUP_VERTICAL_OFFSET },
-        // @ts-expect-error
         of: this.$element(),
       },
       animation,

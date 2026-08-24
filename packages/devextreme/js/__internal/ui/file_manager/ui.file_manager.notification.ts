@@ -412,7 +412,6 @@ class FileManagerNotificationControl extends Widget<FileManagerNotificationContr
       const { positionTargetSelector } = this.option();
 
       this._notificationPopup = this._createComponent($popup, Popup, {
-        // @ts-expect-error ts-error
         container: this.$element(),
         width: 'auto',
         height: 'auto',
@@ -421,12 +420,10 @@ class FileManagerNotificationControl extends Widget<FileManagerNotificationContr
         shading: false,
         visible: false,
         hideOnOutsideClick: true,
-        // @ts-expect-error ts-error
         animation: { duration: 0 },
         position: {
           my: 'right top',
           at: 'right top',
-          // @ts-expect-error ts-error
           of: this._progressDrawer?.$element()
             .find(positionTargetSelector),
           offset: '-10 -5',
