@@ -1,8 +1,11 @@
+import type { ScrollingBase } from '@js/common/grids';
+
 import { virtualScrollingDataControllerExtender } from './extenders/virtual_scrolling_data_controller';
 import { resizing, rowsView } from './m_virtual_scrolling';
 
 interface VirtualScrollingModuleOptions {
-  scrolling: {
+  scrolling: ScrollingBase & {
+    mode: string;
     timeout: number;
     updateTimeout: number;
     minTimeout: number;
@@ -10,9 +13,6 @@ interface VirtualScrollingModuleOptions {
     removeInvisiblePages: boolean;
     rowPageSize: number;
     prerenderedRowChunkSize: number;
-    mode: string;
-    preloadEnabled: boolean;
-    rowRenderingMode: string;
     loadTwoPagesOnStart: boolean;
     legacyMode: boolean;
     prerenderedRowCount: number;
