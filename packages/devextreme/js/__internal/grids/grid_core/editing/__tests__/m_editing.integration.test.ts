@@ -334,8 +334,9 @@ describe('DataGrid editing', () => {
       });
 
       component.apiCellValue(0, 'FirstName', 'Updated');
-      await component.apiSaveEditData();
+      const saving = component.apiSaveEditData();
       await flushAsync();
+      await saving;
 
       expect(component.getDataCell(0, 0).getText()).toBe('Updated');
       expect(component.apiGetVisibleRows()[0].data.Tasks).toBe(tasks);
