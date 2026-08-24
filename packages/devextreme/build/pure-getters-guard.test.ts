@@ -1,16 +1,3 @@
-/**
- * Guard against minifiers deleting signal dependency subscriptions (T1334012)
- *
- * `@preact/signals-core` subscribes as a *side effect* of reading `.value`, so a read whose result
- * is never used can still be load-bearing. Terser's `compress.pure_getters` asserts that no getter
- * has side effects and deletes such reads, silently unsubscribing the reaction.
- *
- * This is not an exotic opt-in: Angular CLI's legacy webpack builder enables
- * `pure_getters` by default via `buildOptimizer`
- *
- * Every module is minified twice and the two outputs are compared. Any `.value` read
- * that survives without `pure_getters` but disappears with it is a lost subscription.
- */
 import { transformSync } from '@babel/core';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -21,21 +8,10 @@ const terser = require(require.resolve('terser', {
 
 const GRIDS_NEW = path.join(__dirname, '../js/__internal/grids/new');
 
-/**
- * A read of `.value`, with its receiver chain so failures name the culprit.
- *
- * Assignment targets (`item.value = x`) are excluded, comparisons (`item.value === x`) kept.
- * Without that exclusion Terser collapsing an if/else into a single ternary assignment looks
- * exactly like a deleted read — `filtering/header_filter/legacy_header_filter.ts` does this and
- * reported a false positive.
- */
+/** A read of `.value`, with its receiver chain so failures name the culprit. */
 const VALUE_READ = /[\w$.]*\.value\b(?!\s*=(?!=))/g;
 
-/**
- * `.tsx` is excluded: only `@babel/plugin-transform-typescript` is available here, with no JSX
- * syntax plugin, so view files cannot be parsed. No known subscription lives in a view, but this
- * is a real coverage gap — widen the filter if a JSX parser is ever added.
- */
+/** `.tsx` is excluded - widen the filter if a JSX parser is ever added. */
 function listModules(dir: string): string[] {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
     const entryPath = path.join(dir, entry.name);
@@ -106,6 +82,8 @@ describe('compress.pure_getters must not drop signal subscriptions (T1334012)', 
   it.each(MODULES.map((m) => [path.relative(GRIDS_NEW, m), m]))(
     '%s',
     async (_name: string, absPath: string) => {
+      // Every module is minified twice and the two outputs are compared. Any `.value` read
+      // that survives without `pure_getters` but disappears with it is a lost subscription.
       const [before, after] = await Promise.all([minify(absPath, false), minify(absPath, true)]);
 
       expect(lostReads(before, after)).toEqual([]);
