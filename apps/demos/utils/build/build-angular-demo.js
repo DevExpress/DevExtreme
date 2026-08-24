@@ -7,6 +7,7 @@ const {
   installShims,
   removeShims,
   cleanupPatchedTsFiles,
+  cleanupEntryShims,
   bundleDemo,
 } = require('../server/csp-bundle-angular');
 
@@ -36,6 +37,7 @@ async function buildAngularDemoInPlace(widget, name, srcDir) {
   } finally {
     removeShims(installed);
     cleanupPatchedTsFiles();
+    cleanupEntryShims();
   }
 }
 

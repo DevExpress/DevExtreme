@@ -29,6 +29,7 @@ Demos/**/bundle.js
 Demos/**/bundle.css
 Demos/**/demo.manifest.json
 Demos/_chunks
+Demos/**/_chunks
 
 .DS_Store
 **/.DS_Store

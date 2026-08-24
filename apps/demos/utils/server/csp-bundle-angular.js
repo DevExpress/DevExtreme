@@ -7,6 +7,7 @@ const fs = require('fs');
 const os = require('os');
 const esbuild = require('esbuild');
 const { extractDemoHeadExtras, extractDemoBodyInner } = require('./demo-html');
+const { createEntryShimSource } = require('./demo-render-signal');
 
 const DEMOS_APP_ROOT = path.resolve(__dirname, '..', '..');
 const REPO_ROOT = path.resolve(DEMOS_APP_ROOT, '..', '..');
@@ -61,6 +62,8 @@ function applyShard(demos) {
 
 const SHARED_TSCONFIG_TEMPLATE = path.join(__dirname, 'tsconfig.csp-bundle-angular.json');
 const GENERATED_TSCONFIG_DIR = path.join(__dirname, '.csp-bundle-angular-tsconfigs');
+// Under apps/demos so the shim's bare devextreme import resolves through node_modules.
+const GENERATED_SHIM_DIR = path.join(__dirname, '.csp-bundle-angular-shims');
 const ANGULAR_ZONE_SCRIPT = '../../../../node_modules/zone.js/bundles/zone.umd.js';
 // esbuild's own code-splitting output (shared chunks across a batch's demos) — a plain
 // build artifact directory, wiped and regenerated on every run.
@@ -93,8 +96,26 @@ function writeTsconfig(name, entryPaths) {
   return dest;
 }
 
-function writeDemoTsconfig(entryPath) {
-  return writeTsconfig(path.relative(REPO_ROOT, entryPath), [entryPath]);
+function writeDemoTsconfig(shimPath, entryPath) {
+  return writeTsconfig(path.relative(REPO_ROOT, entryPath), [shimPath, entryPath]);
+}
+
+const allEntryShims = new Set();
+
+function writeEntryShim(demo, entryPath) {
+  fs.mkdirSync(GENERATED_SHIM_DIR, { recursive: true });
+  const slug = `${demo.widget}-${demo.name}`.replace(/[^a-zA-Z0-9_.-]/g, '_');
+  const dest = path.join(GENERATED_SHIM_DIR, `${slug}.ts`);
+  fs.writeFileSync(dest, createEntryShimSource(entryPath, { tsNoCheck: true }));
+  allEntryShims.add(dest);
+  return dest;
+}
+
+function cleanupEntryShims() {
+  for (const f of allEntryShims) {
+    try { fs.unlinkSync(f); } catch { /* already gone */ }
+  }
+  allEntryShims.clear();
 }
 
 const DEFAULT_BODY_INNER = `<div class="demo-container">
@@ -502,7 +523,11 @@ function prepareDemo(demo) {
     if (patched) fileReplacements[tsFile] = patched;
   }
   const effectiveEntry = fileReplacements[demo.entry] || demo.entry;
-  return { ...demo, effectiveEntry, fileReplacements };
+  // esbuild builds the shim, which theme-gates and then imports the demo's own entry.
+  const shimEntry = writeEntryShim(demo, effectiveEntry);
+  return {
+    ...demo, effectiveEntry, shimEntry, fileReplacements,
+  };
 }
 
 const ANGULAR_IMPLICIT_PACKAGES = ['zone.js', 'reflect-metadata', 'devextreme-dist'];
@@ -604,12 +629,12 @@ async function bundleDemo(demo, createCompilerPlugin, destDirOverride) {
   fs.mkdirSync(destDir, { recursive: true });
 
   const effectiveEntry = prepared.effectiveEntry;
-  const tsconfig = writeDemoTsconfig(effectiveEntry);
+  const tsconfig = writeDemoTsconfig(prepared.shimEntry, effectiveEntry);
 
   let result;
   try {
     result = await esbuild.build(makeBuildOptions({
-      entryPoints: { bundle: effectiveEntry },
+      entryPoints: { bundle: prepared.shimEntry },
       outdir: destDir,
       tsconfig,
       fileReplacements: prepared.fileReplacements || {},
@@ -620,7 +645,9 @@ async function bundleDemo(demo, createCompilerPlugin, destDirOverride) {
   }
 
   // The AOT compiler plugin can list a style output it actually inlined instead of emitting.
+  // Shared chunks are imported by bundle.js itself, so they must not become script tags.
   const outputs = Object.keys((result.metafile && result.metafile.outputs) || {})
+    .filter((o) => !o.includes(`${CHUNKS_DIRNAME}/`))
     .filter((o) => fs.existsSync(path.resolve(DEMOS_APP_ROOT, o)));
   const localJsFiles = sortJsFiles(outputs.filter((o) => o.endsWith('.js')).map((o) => path.basename(o)));
   if (localJsFiles.length === 0) return { ok: false, reason: 'no JS output produced' };
@@ -640,8 +667,8 @@ async function bundleDemoBatch(batch, createCompilerPlugin) {
   const entryPoints = {};
   const entryPaths = [];
   for (const demo of batch) {
-    entryPoints[entryNameForDemo(demo, 'bundle')] = demo.effectiveEntry;
-    entryPaths.push(demo.effectiveEntry);
+    entryPoints[entryNameForDemo(demo, 'bundle')] = demo.shimEntry;
+    entryPaths.push(demo.shimEntry, demo.effectiveEntry);
   }
 
   const tsconfig = writeTsconfig(`batch-${batch[0].widget}-${batch[0].name}-${batch.length}-${Date.now()}`, entryPaths);
@@ -704,8 +731,10 @@ async function main() {
 
   fs.mkdirSync(SRC_DEMOS_DIR, { recursive: true });
 
-  if (fs.existsSync(GENERATED_TSCONFIG_DIR)) {
-    fs.rmSync(GENERATED_TSCONFIG_DIR, { recursive: true, force: true });
+  for (const dir of [GENERATED_TSCONFIG_DIR, GENERATED_SHIM_DIR]) {
+    if (fs.existsSync(dir)) {
+      fs.rmSync(dir, { recursive: true, force: true });
+    }
   }
   // Shared across every demo's own build (see makeBuildOptions' chunkNames) — not owned by
   // any single demo's own folder, so not covered by the per-demo wipe above; always safe to
@@ -804,6 +833,7 @@ async function main() {
   } finally {
     removeShims(installed);
     cleanupPatchedTsFiles();
+    cleanupEntryShims();
   }
 
   const dt = ((Date.now() - t0) / 1000).toFixed(1);
@@ -835,6 +865,7 @@ module.exports = {
   installShims,
   removeShims,
   cleanupPatchedTsFiles,
+  cleanupEntryShims,
   bundleDemo,
   buildHtml,
   ANGULAR_ZONE_SCRIPT,
