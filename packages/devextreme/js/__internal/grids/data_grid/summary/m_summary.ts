@@ -29,7 +29,7 @@ import {
   DATAGRID_TOTAL_FOOTER_CLASS,
   DATAGRID_TOTAL_FOOTER_ROW_TYPE,
 } from './const';
-import type { SummaryOptions } from './types';
+import type { Aggregate, SummaryOptions } from './types';
 import { getSummaryOptions } from './utils/get_summary_options';
 
 export const renderSummaryCell = function (cell, options, setAria) {
@@ -149,37 +149,6 @@ const sortGroupsBySummary = function (data, group, summary) {
   return data;
 };
 
-const calculateAggregates = function (that: EditingControllerRequired, summary, data, groupLevel) {
-  let calculator;
-
-  if ((that as any).option('summary.recalculateWhileEditing')) {
-    const { editingController } = that;
-    if (editingController) {
-      const insertedData = editingController.getInsertedData();
-      if (insertedData.length) {
-        data = applyAddedData(data, insertedData, groupLevel);
-      }
-
-      const removedData = editingController.getRemovedData();
-      if (removedData.length) {
-        data = applyRemovedData(data, removedData, groupLevel);
-      }
-    }
-  }
-
-  if (summary) {
-    calculator = new AggregateCalculator({
-      totalAggregates: summary.totalAggregates,
-      groupAggregates: summary.groupAggregates,
-      data,
-      groupLevel,
-    });
-
-    calculator.calculate();
-  }
-  return calculator ? calculator.totalAggregates() : [];
-};
-
 export class FooterView extends ColumnsView {
   protected _getRows() {
     // @ts-expect-error
@@ -285,8 +254,12 @@ export class FooterView extends ColumnsView {
   }
 }
 
-export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class SummaryDataSourceAdapterExtender extends Base implements EditingControllerRequired {
-  private _totalAggregates: any;
+export const summaryDataSourceAdapterExtender = (
+  Base: ModuleType<DataSourceAdapter>,
+): ModuleType<DataSourceAdapter> => class SummaryDataSourceAdapterExtender
+  extends Base
+  implements EditingControllerRequired {
+  private _totalAggregates!: unknown[];
 
   private columnsController!: ColumnsController;
 
@@ -320,7 +293,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     return result;
   }
 
-  private totalAggregates() {
+  public totalAggregates(): unknown[] {
     return this._totalAggregates;
   }
 
@@ -375,26 +348,76 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     }
   }
 
-  protected customizeLoadResultHandlerCore(options) {
-    const groups = normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group || []);
-    const remoteOperations = options.remoteOperations || {};
+  private calculateTotalAggregates(
+    data,
+    totalAggregates: Aggregate[],
+    groupAggregates: Aggregate[],
+    groupLevel: number,
+  ): unknown[] {
+    let dataWithEditingChanges = data;
+
+    if (this.option('summary.recalculateWhileEditing')) {
+      const insertedData = this.editingController.getInsertedData();
+      if (insertedData.length) {
+        dataWithEditingChanges = applyAddedData(dataWithEditingChanges, insertedData, groupLevel);
+      }
+
+      const removedData = this.editingController.getRemovedData();
+      if (removedData.length) {
+        dataWithEditingChanges = applyRemovedData(dataWithEditingChanges, removedData, groupLevel);
+      }
+    }
+
+    const calculator = new AggregateCalculator({
+      data: dataWithEditingChanges,
+      totalAggregates,
+      groupAggregates,
+      groupLevel,
+    });
+
+    calculator.calculate();
+
+    return calculator.totalAggregates();
+  }
+
+  protected customizeLoadResultHandlerCore(options): void {
+    const groups = normalizeSortingInfo(
+      options.storeLoadOptions.group ?? options.loadOptions.group ?? [],
+    );
+    const remoteOperations = options.remoteOperations ?? {};
     const summary = this.getSummary(remoteOperations);
 
     if (!options.isCustomLoading || options.storeLoadOptions.isLoadingAll) {
       if (remoteOperations.summary) {
         if (!remoteOperations.paging && groups.length && summary) {
           if (!remoteOperations.grouping) {
-            calculateAggregates(this, { groupAggregates: summary.groupAggregates }, options.data, groups.length);
+            this.calculateTotalAggregates(
+              options.data,
+              [],
+              summary.groupAggregates,
+              groups.length,
+            );
           }
           options.data = sortGroupsBySummary(options.data, groups, summary);
         }
       } else if (!remoteOperations.paging && summary) {
-        const operationTypes = options.operationTypes || {};
+        const operationTypes = options.operationTypes ?? {};
         const hasOperations = Object.keys(operationTypes).some((type) => operationTypes[type]);
-        if (!hasOperations || !options.cachedData?.extra?.summary || groups.length && summary.groupAggregates.length) {
-          const totalAggregates = calculateAggregates(this, summary, options.data, groups.length);
+
+        if (
+          !hasOperations
+          || !options.cachedData?.extra?.summary
+          || (groups.length && summary.groupAggregates.length)
+        ) {
+          const totalAggregates = this.calculateTotalAggregates(
+            options.data,
+            summary.totalAggregates,
+            summary.groupAggregates,
+            groups.length,
+          );
           options.extra = isPlainObject(options.extra) ? options.extra : {};
           options.extra.summary = totalAggregates;
+
           if (options.cachedData) {
             options.cachedData.extra = options.extra;
           }
@@ -404,7 +427,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     }
 
     if (!options.isCustomLoading) {
-      this._totalAggregates = options.extra && options.extra.summary || this._totalAggregates;
+      this._totalAggregates = options.extra?.summary ?? this._totalAggregates;
     }
 
     super.customizeLoadResultHandlerCore(options);
