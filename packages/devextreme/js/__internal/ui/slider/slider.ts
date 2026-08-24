@@ -25,8 +25,8 @@ import { render } from '@ts/core/utils/ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 
-import TrackBar from '../m_track_bar';
-import SliderHandle from './m_slider_handle';
+import TrackBar from '../track_bar';
+import SliderHandle from './slider_handle';
 
 const SLIDER_CLASS = 'dx-slider';
 const SLIDER_WRAPPER_CLASS = 'dx-slider-wrapper';

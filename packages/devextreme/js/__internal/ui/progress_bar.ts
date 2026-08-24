@@ -5,7 +5,7 @@ import $ from '@js/core/renderer';
 import { isFunction } from '@js/core/utils/type';
 import type { Properties } from '@js/ui/progress_bar';
 import type { OptionChanged } from '@ts/core/widget/types';
-import TrackBar from '@ts/ui/m_track_bar';
+import TrackBar from '@ts/ui/track_bar';
 
 const PROGRESSBAR_CLASS = 'dx-progressbar';
 const PROGRESSBAR_CONTAINER_CLASS = 'dx-progressbar-container';
