@@ -307,4 +307,39 @@ describe('DataGrid editing', () => {
       expect(editingController.allowUpdating({ row: newRow }, 'click', false)).toBe(false);
     });
   });
+
+  describe('Nested arrays in row data (T1334039)', () => {
+    const createDataSourceWithTasks = (): Record<string, unknown>[] => [
+      { ID: 1, FirstName: 'John', Tasks: [{ ID: 11, Subject: 'Task 1' }] },
+      { ID: 2, FirstName: 'Olivia', Tasks: [{ ID: 21, Subject: 'Task 2' }] },
+    ];
+
+    it.each([
+      { refreshMode: 'reshape' as const },
+      { refreshMode: 'repaint' as const },
+      { refreshMode: 'full' as const },
+    ])('should keep the nested array reference after saving a cell when refreshMode is "$refreshMode"', async ({ refreshMode }) => {
+      const dataSourceWithTasks = createDataSourceWithTasks();
+      const tasks = dataSourceWithTasks[0].Tasks;
+
+      const { component } = await createDataGrid({
+        keyExpr: 'ID',
+        dataSource: dataSourceWithTasks,
+        columns: ['FirstName'],
+        editing: {
+          mode: 'cell',
+          refreshMode,
+          allowUpdating: true,
+        },
+      });
+
+      component.apiCellValue(0, 'FirstName', 'Updated');
+      await component.apiSaveEditData();
+      await flushAsync();
+
+      expect(component.getDataCell(0, 0).getText()).toBe('Updated');
+      expect(component.apiGetVisibleRows()[0].data.Tasks).toBe(tasks);
+      expect(dataSourceWithTasks[0].Tasks).toBe(tasks);
+    });
+  });
 });
