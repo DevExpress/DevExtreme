@@ -59,8 +59,10 @@ export default class CustomButton extends TextEditorButton {
   }
 
   _prepareIntegrationOptions(editor: TextEditorBase): Record<string, unknown> {
+    const { integrationOptions } = editor.option();
+
     return {
-      ...(editor.option('integrationOptions') as Record<string, unknown>),
+      ...integrationOptions,
       skipTemplates: ['content'],
     };
   }

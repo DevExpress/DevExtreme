@@ -26,7 +26,9 @@ export type CreateComponentFn = <TTComponent, IProperties = Record<string, unkno
   element: string | HTMLElement | dxElementWrapper | Element,
   component: string | (new (...args) => TTComponent),
   componentConfiguration: TTComponent extends { _getDefaultOptions: () => infer TTProperties }
-    ? TTProperties | object
+    ? string extends keyof TTProperties
+      ? object
+      : Partial<TTProperties> & { integrationOptions?: Record<string, unknown> }
     : IProperties,
 ) => TTComponent;
 

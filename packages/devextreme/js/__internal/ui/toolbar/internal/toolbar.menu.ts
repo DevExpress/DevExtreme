@@ -251,13 +251,12 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
 
     this._popup = this._createComponent(this._$popup, Popup, {
       focusStateEnabled: !allowKeyboardNavigation,
-      onInitialized(e) {
-        const { component } = e;
-        // @ts-expect-error
-        component.$wrapper()
-          .addClass(DROP_DOWN_MENU_POPUP_WRAPPER_CLASS)
-          .addClass(DROP_DOWN_MENU_POPUP_CLASS)
-          .toggleClass(DROP_DOWN_MENU_LIST_FOCUS_MODE_CLASS, !!allowKeyboardNavigation);
+      wrapperAttr: {
+        class: [
+          DROP_DOWN_MENU_POPUP_WRAPPER_CLASS,
+          DROP_DOWN_MENU_POPUP_CLASS,
+          allowKeyboardNavigation ? DROP_DOWN_MENU_LIST_FOCUS_MODE_CLASS : '',
+        ].filter(Boolean).join(' '),
       },
       deferRendering: false,
       preventScrollEvents: false,

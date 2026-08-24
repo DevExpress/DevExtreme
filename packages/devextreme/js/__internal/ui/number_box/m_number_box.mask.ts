@@ -11,9 +11,11 @@ import { fitIntoRange, inRange } from '@js/core/utils/math';
 import {
   isDefined, isFunction, isNumeric, isPlainObject, isString,
 } from '@js/core/utils/type';
+import type { NativeEventInfo } from '@js/events';
 import type { Format, FormatObject } from '@js/localization';
 import type { Properties } from '@js/ui/number_box';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import type { TextEditorInternalProperties } from '@ts/ui/text_box/text_editor.base';
 
 import NumberBoxBase from './m_number_box.base';
 import {
@@ -46,10 +48,15 @@ const asFormatObject = (format: Format | undefined): FormatObject | undefined =>
 
 export interface NumberBoxMaskProperties extends Omit<Properties, 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput'
 | 'onKeyDown' | 'onKeyUp' | 'onPaste' | 'onValueChanged' | 'onContentReady' | 'onDisposing'
-| 'onOptionChanged' | 'onInitialized' > {
+| 'onOptionChanged' | 'onInitialized' >, Omit<TextEditorInternalProperties, 'displayValueFormatter'> {
   useMaskBehavior?: boolean;
 
   displayValueFormatter?: ((value: any) => string);
+
+  onValueChanged?: (
+    e: NativeEventInfo<unknown> & { value?: number | null; previousValue?: number | null },
+  ) => void;
+
 }
 
 class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {

@@ -29,15 +29,17 @@ import type {
 } from '@js/ui/list';
 import type { Properties } from '@js/ui/lookup';
 import Popover from '@js/ui/popover/ui.popover';
-import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
+import type { ToolbarItem } from '@js/ui/popup';
 import type { TextBoxType } from '@js/ui/text_box';
 import { current, isMaterial } from '@js/ui/themes';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
+import type { DropDownEditorInternalProperties } from '@ts/ui/drop_down_editor/drop_down_editor';
 import DropDownList from '@ts/ui/drop_down_editor/drop_down_list';
 import { getElementWidth } from '@ts/ui/drop_down_editor/utils';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
+import type { PopupProperties } from '@ts/ui/popup/popup';
 import TextBox from '@ts/ui/text_box/text_box';
 
 import type { FieldTemplate } from './drop_down_editor/drop_down_editor';
@@ -67,7 +69,8 @@ const MATERIAL_LOOKUP_LIST_ITEMS_COUNT = 5;
 const MATERIAL_LOOKUP_LIST_PADDING = 8;
 const WINDOW_RATIO = 0.8;
 
-export interface LookupProperties extends Omit<Properties, 'onItemClick' | 'onSelectionChanged'> {
+export interface LookupProperties extends Omit<Properties, 'onItemClick' | 'onSelectionChanged' | 'dropDownOptions' | 'fieldTemplate'>,
+  DropDownEditorInternalProperties {
   _scrollToSelectedItemEnabled?: boolean;
 }
 
@@ -1251,12 +1254,7 @@ class Lookup extends DropDownList<LookupProperties> {
         switch (fullName) {
           case 'dropDownOptions.width':
           case 'dropDownOptions.height': {
-            const initialDropDownOptions = this.initialOption(
-              'dropDownOptions',
-            ) as Record<string, unknown>;
-            const initialValue = initialDropDownOptions[
-              getFieldName(fullName)
-            ] as string | number | undefined;
+            const initialValue = this.initialOption('dropDownOptions')?.[getFieldName(fullName)];
             const optionArgs = {
               ...args,
               value: value === 'auto' ? initialValue : value,

@@ -57,6 +57,8 @@ export interface ComponentProperties<TComponent> extends ComponentOptions<
   InitializedEventInfo<TComponent>,
   OptionChangedEventInfo<TComponent>
 > {
+  integrationOptions?: Record<string, unknown>;
+
   onInitializing?: ((e: [ComponentProperties<TComponent>]) => void) | undefined;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

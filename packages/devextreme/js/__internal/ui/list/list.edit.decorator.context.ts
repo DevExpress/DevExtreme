@@ -8,11 +8,9 @@ import type {
   PointerInteractionEvent,
 } from '@js/events';
 import type { ItemClickEvent } from '@js/ui/list';
-import type dxOverlay from '@js/ui/overlay';
 import { ListBase } from '@ts/ui/list/list.base';
 import EditDecorator from '@ts/ui/list/list.edit.decorator';
 import { register as registerDecorator } from '@ts/ui/list/list.edit.decorator_registry';
-import type { OverlayProperties } from '@ts/ui/overlay/overlay';
 import Overlay from '@ts/ui/overlay/overlay';
 
 const CONTEXTMENU_CLASS = 'dx-list-context-menu';
@@ -68,14 +66,14 @@ class EditDecoratorContext extends EditDecorator {
       height: (): number => (this._$menuList ? getOuterHeight(this._$menuList) : 0),
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       width: (): number => getOuterWidth(this._list.$element()),
-      onContentReady: (e: EventInfo<dxOverlay<OverlayProperties>>): void => {
+      onContentReady: (e): void => {
         this._renderMenuContent(e);
       },
     });
   }
 
-  _renderMenuContent(e: EventInfo<dxOverlay<OverlayProperties>>): void {
-    const $overlayContent = $(e.component.content());
+  _renderMenuContent(e: EventInfo<unknown>): void {
+    const $overlayContent = $((e.component as Overlay).content());
 
     const { menuItems = [], allowItemDeleting } = this._list.option();
     const items = menuItems.slice();

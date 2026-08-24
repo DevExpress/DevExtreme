@@ -420,7 +420,7 @@ class FileManagerNotificationControl extends Widget<FileManagerNotificationContr
         shading: false,
         visible: false,
         hideOnOutsideClick: true,
-        animation: { duration: 0 },
+        animation: null,
         position: {
           my: 'right top',
           at: 'right top',

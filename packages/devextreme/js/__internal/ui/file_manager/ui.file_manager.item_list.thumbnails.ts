@@ -162,7 +162,10 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     };
   }
 
-  _onItemListSelectionChanged({ addedItemKeys, removedItemKeys }): void {
+  _onItemListSelectionChanged({ addedItemKeys, removedItemKeys }: {
+    addedItemKeys?: unknown[];
+    removedItemKeys?: unknown[];
+  }): void {
     const selectedItemInfos = this.getSelectedItems();
     const selectedItems = selectedItemInfos?.map(
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return

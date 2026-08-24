@@ -21,6 +21,7 @@ import type { ButtonStyle, Properties } from '@js/ui/button';
 import Button from '@js/ui/button';
 import ContextMenu from '@js/ui/context_menu';
 import type { Properties as PivotGridProperties } from '@js/ui/pivot_grid';
+import type { ToolbarItem } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import { restoreFocus, saveFocusedElementInfo } from '@js/ui/shared/accessibility';
 import { current, isGeneric } from '@js/ui/themes';
@@ -595,7 +596,7 @@ class PivotGrid extends Widget {
 
     const container = that._pivotGridContainer;
     const fieldChooserOptions = (that.option('fieldChooser') || {}) as FieldChooserOptions;
-    const toolbarItems = fieldChooserOptions.applyChangesMode === 'onDemand' ? [
+    const toolbarItems: ToolbarItem[] = fieldChooserOptions.applyChangesMode === 'onDemand' ? [
       {
         toolbar: 'bottom',
         location: 'after',

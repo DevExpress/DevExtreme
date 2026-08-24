@@ -40,6 +40,20 @@ import DOMComponent from '@ts/core/widget/dom_component';
 
 import Animator from './ui/scroll_view/animator';
 
+type BoundOffset = number | string | { h?: number; v?: number };
+
+export interface DraggableProperties extends Omit<Properties, 'boundary' | 'onDisposing' | 'onInitialized' | 'onOptionChanged'> {
+  allowMoveByClick?: boolean;
+
+  boundOffset?: BoundOffset | (() => BoundOffset);
+
+  boundary?: Properties['boundary'] | dxElementWrapper;
+
+  component?: unknown;
+
+  contentTemplate?: string | null;
+}
+
 const window = getWindow();
 const KEYDOWN_EVENT = 'keydown';
 
@@ -283,7 +297,7 @@ class ScrollAnimator extends Animator {
   }
 }
 
-class Draggable extends DOMComponent<Draggable, Properties> {
+class Draggable extends DOMComponent<Draggable, DraggableProperties> {
   _$sourceElement?: dxElementWrapper | null;
 
   _initScrollTop!: number;
@@ -326,7 +340,7 @@ class Draggable extends DOMComponent<Draggable, Properties> {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _fireRemoveEvent(sourceEvent?) {}
 
-  _getDefaultOptions(): Properties {
+  _getDefaultOptions(): DraggableProperties {
     return {
       ...super._getDefaultOptions(),
       onDragStart: undefined,

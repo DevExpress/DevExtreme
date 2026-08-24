@@ -159,7 +159,6 @@ class Form extends Widget<FormProperties> {
 
   _groupsColCount!: number[];
 
-  // eslint-disable-next-line no-restricted-globals
   autoColCountChangedTimeoutId?: ReturnType<typeof setTimeout>;
 
   _rootLayoutManager!: LayoutManager;
@@ -1030,7 +1029,9 @@ class Form extends Widget<FormProperties> {
     element: string | HTMLElement | dxElementWrapper,
     component: string | (new (...args) => TTComponent),
     componentConfiguration: TTComponent extends { _getDefaultOptions: () => infer TTProperties }
-      ? TTProperties | object
+      ? string extends keyof TTProperties
+        ? object
+        : Partial<TTProperties> & { integrationOptions?: Record<string, unknown> }
       : IProperties,
   ): TTComponent {
     const { readOnly } = this.option();
@@ -1833,7 +1834,7 @@ class Form extends Widget<FormProperties> {
     id: string,
     option?: string,
     value?: Item[] | TabbedItem['tabs'] | undefined,
-  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+
   ): Item | void {
     const { items } = this.option();
 

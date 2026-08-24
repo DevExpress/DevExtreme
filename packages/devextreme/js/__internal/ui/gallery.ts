@@ -139,7 +139,6 @@ class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKe
 
   _$wrapper!: dxElementWrapper;
 
-  // eslint-disable-next-line no-restricted-globals
   _slideshowTimer?: ReturnType<typeof setTimeout>;
 
   _cacheElementWidth?: number;
@@ -764,7 +763,7 @@ class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKe
         const { event } = e;
         this._swipeEndHandler(event);
       },
-      itemSizeFunc: this._elementWidth.bind(this),
+      itemSizeFunc: (): number => this._elementWidth() ?? 0,
     });
   }
 
