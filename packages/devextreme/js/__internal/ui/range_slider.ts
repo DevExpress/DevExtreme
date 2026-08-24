@@ -9,9 +9,9 @@ import { applyServerDecimalSeparator } from '@js/core/utils/common';
 import { getWidth } from '@js/core/utils/size';
 import type { Properties } from '@js/ui/range_slider';
 import type { SupportedKeys } from '@ts/core/widget/widget';
-import Slider from '@ts/ui/slider/m_slider';
+import Slider from '@ts/ui/slider/slider';
 
-import SliderHandle from './slider/m_slider_handle';
+import SliderHandle from './slider/slider_handle';
 
 const RANGE_SLIDER_CLASS = 'dx-rangeslider';
 const RANGE_SLIDER_START_HANDLE_CLASS = `${RANGE_SLIDER_CLASS}-start-handle`;
