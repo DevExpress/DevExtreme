@@ -381,49 +381,53 @@ export const summaryDataSourceAdapterExtender = (
   }
 
   protected customizeLoadResultHandlerCore(options): void {
+    if (options.isCustomLoading && !options.storeLoadOptions.isLoadingAll) {
+      super.customizeLoadResultHandlerCore(options);
+      return;
+    }
+
     const groups = normalizeSortingInfo(
       options.storeLoadOptions.group ?? options.loadOptions.group ?? [],
     );
     const remoteOperations = options.remoteOperations ?? {};
     const summary = this.getSummary(remoteOperations);
 
-    if (!options.isCustomLoading || options.storeLoadOptions.isLoadingAll) {
-      if (remoteOperations.summary) {
-        if (!remoteOperations.paging && groups.length && summary) {
-          if (!remoteOperations.grouping) {
-            this.calculateTotalAggregates(
-              options.data,
-              [],
-              summary.groupAggregates,
-              groups.length,
-            );
-          }
-          options.data = sortGroupsBySummary(options.data, groups, summary);
-        }
-      } else if (!remoteOperations.paging && summary) {
-        const operationTypes = options.operationTypes ?? {};
-        const hasOperations = Object.keys(operationTypes).some((type) => operationTypes[type]);
-
-        if (
-          !hasOperations
-          || !options.cachedData?.extra?.summary
-          || (groups.length && summary.groupAggregates.length)
-        ) {
-          const totalAggregates = this.calculateTotalAggregates(
+    if (remoteOperations.summary) {
+      if (!remoteOperations.paging && groups.length && summary) {
+        if (!remoteOperations.grouping) {
+          this.calculateTotalAggregates(
             options.data,
-            summary.totalAggregates,
+            [],
             summary.groupAggregates,
             groups.length,
           );
-          options.extra = isPlainObject(options.extra) ? options.extra : {};
-          options.extra.summary = totalAggregates;
-
-          if (options.cachedData) {
-            options.cachedData.extra = options.extra;
-          }
         }
+
         options.data = sortGroupsBySummary(options.data, groups, summary);
       }
+    } else if (!remoteOperations.paging && summary) {
+      const operationTypes = options.operationTypes ?? {};
+      const hasOperations = Object.keys(operationTypes).some((type) => operationTypes[type]);
+
+      if (
+        !hasOperations
+        || !options.cachedData?.extra?.summary
+        || (groups.length && summary.groupAggregates.length)
+      ) {
+        const totalAggregates = this.calculateTotalAggregates(
+          options.data,
+          summary.totalAggregates,
+          summary.groupAggregates,
+          groups.length,
+        );
+        options.extra = isPlainObject(options.extra) ? options.extra : {};
+        options.extra.summary = totalAggregates;
+
+        if (options.cachedData) {
+          options.cachedData.extra = options.extra;
+        }
+      }
+      options.data = sortGroupsBySummary(options.data, groups, summary);
     }
 
     if (!options.isCustomLoading) {

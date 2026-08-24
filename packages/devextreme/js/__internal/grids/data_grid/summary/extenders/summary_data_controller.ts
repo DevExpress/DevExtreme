@@ -114,11 +114,13 @@ export const summaryDataControllerExtender = (
         const prevColumn = options.visibleColumns[visibleIndex - 1];
 
         if (groupItem.groupIndex === column.groupIndex) {
-          groupColumnIndex = column.index ?? -1;
+          // @ts-expect-error badly typed Column
+          groupColumnIndex = column.index;
         }
 
         if (visibleIndex > 0 && prevColumn.command === 'expand' && column.command !== 'expand') {
-          afterGroupColumnIndex = column.index ?? -1;
+          // @ts-expect-error badly typed Column
+          afterGroupColumnIndex = column.index;
         }
       });
 
@@ -300,10 +302,14 @@ export const summaryDataControllerExtender = (
   }
 
   public optionChanged(e: OptionChanged): void {
-    if (['summary', 'sortByGroupSummaryInfo'].includes(e.name)) {
-      e.name = 'dataSource';
+    switch (e.name) {
+      case 'summary':
+      case 'sortByGroupSummaryInfo':
+        e.handled = true;
+        this.reset();
+        return;
+      default:
+        super.optionChanged(e);
     }
-
-    super.optionChanged(e);
   }
 };
