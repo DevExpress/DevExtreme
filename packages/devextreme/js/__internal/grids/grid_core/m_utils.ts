@@ -96,8 +96,9 @@ const getGlobalFormat = (dataType: string): Format | undefined => {
   return isString(globalFormat)
     ? (value): string => {
       const dateValue = value instanceof Date ? value : new Date(value);
-      // @ts-expect-error dateLocalization.format will definitely return a string here
-      return isNaN(dateValue.getTime()) ? '' : dateLocalization.format(dateValue, globalFormat);
+      return isNaN(dateValue.getTime())
+        ? ''
+        : dateLocalization.format(dateValue, globalFormat) as string;
     }
     : globalFormat;
 };
