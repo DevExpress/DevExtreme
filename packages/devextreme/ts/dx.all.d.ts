@@ -2075,7 +2075,9 @@ declare module DevExpress.common.charts {
   };
   export type ChartsDataType = 'datetime' | 'numeric' | 'string';
   export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
-  export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
+  export type DashStyle =
+    | 'solid'
+    | DevExpress.core.RepeatUnion<'dash' | 'dot' | 'longDash', 5>;
   export type DiscreteAxisDivisionMode = 'betweenLabels' | 'crossLabels';
   /**
    * [descr:Font]
@@ -7192,6 +7194,15 @@ declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
+  type BuildTuple<
+    Length extends number,
+    Result extends unknown[] = []
+  > = Result['length'] extends Length
+    ? Result
+    : BuildTuple<Length, [...Result, unknown]>;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
   export type ComponentFactory<TComponent> = {
     new (
       element: UserDefinedElement,
@@ -7486,6 +7497,22 @@ declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
+  export type RepeatUnion<
+    T extends string,
+    Depth extends number
+  > = RepeatUnionInternal<T, BuildTuple<Depth>>;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  type RepeatUnionInternal<
+    T extends string,
+    DepthTuple extends unknown[]
+  > = DepthTuple['length'] extends 0
+    ? never
+    : T | `${T}${RepeatUnionInternal<T, Tail<DepthTuple>>}`;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
   export type Scalar =
     | string
     | String
@@ -7501,6 +7528,12 @@ declare module DevExpress.core {
     | Array<unknown>
     | null
     | undefined;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  type Tail<T extends unknown[]> = T extends [unknown, ...infer Rest]
+    ? Rest
+    : [];
 
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
