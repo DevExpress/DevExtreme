@@ -617,7 +617,7 @@ export class ExportController extends dataGridCore.ViewController {
       aggregates: totalAggregates,
       visibleColumns: this._columnsController.getVisibleColumns(null, true),
       calculateTargetColumnIndex: (summaryItem, column) => (
-        isDataColumn(column) ? column.index : -1
+        isDataColumn(column) ? (column?.index ?? -1) : -1
       ),
     });
   }
