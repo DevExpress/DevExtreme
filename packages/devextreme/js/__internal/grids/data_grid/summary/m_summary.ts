@@ -3,11 +3,13 @@ import dataQuery from '@js/common/data/query';
 import storeHelper from '@js/common/data/store_helper';
 import { normalizeSortingInfo } from '@js/common/data/utils';
 import $ from '@js/core/renderer';
-import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
+import { isDefined, isPlainObject } from '@js/core/utils/type';
+import type { DataSource } from '@ts/data/data_source/types';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import type { RemoteOperationsOptions } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { EditingControllerRequired, ModuleType } from '@ts/grids/grid_core/m_types';
 import { ColumnsView } from '@ts/grids/grid_core/views/m_columns_view';
 
@@ -27,6 +29,8 @@ import {
   DATAGRID_TOTAL_FOOTER_CLASS,
   DATAGRID_TOTAL_FOOTER_ROW_TYPE,
 } from './const';
+import type { SummaryOptions } from './types';
+import { getSummaryOptions } from './utils/get_summary_options';
 
 export const renderSummaryCell = function (cell, options, setAria) {
   const $cell = $(cell);
@@ -149,7 +153,7 @@ const calculateAggregates = function (that: EditingControllerRequired, summary, 
   let calculator;
 
   if ((that as any).option('summary.recalculateWhileEditing')) {
-    const editingController = that._editingController;
+    const { editingController } = that;
     if (editingController) {
       const insertedData = editingController.getInsertedData();
       if (insertedData.length) {
@@ -284,34 +288,36 @@ export class FooterView extends ColumnsView {
 export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class SummaryDataSourceAdapterExtender extends Base implements EditingControllerRequired {
   private _totalAggregates: any;
 
-  private _summaryGetter: any;
+  private columnsController!: ColumnsController;
 
-  public _editingController!: EditingController;
+  public editingController!: EditingController;
 
-  public init() {
-    super.init.apply(this, arguments as any);
+  public init(dataSource?: DataSource): void {
+    super.init(dataSource);
 
-    this._editingController = this.getController('editing');
+    this.columnsController = this.getController('columns');
+    this.editingController = this.getController('editing');
     this._totalAggregates = [];
-    this._summaryGetter = noop;
   }
 
-  private summaryGetter(summaryGetter?) {
-    if (!arguments.length) {
-      return this._summaryGetter;
+  private getSummary(remoteOperations?: RemoteOperationsOptions): SummaryOptions | undefined {
+    const summary = this.option('summary');
+
+    if (!summary) {
+      return undefined;
     }
 
-    if (isFunction(summaryGetter)) {
-      this._summaryGetter = summaryGetter;
-    }
-  }
+    const result = getSummaryOptions({
+      summary,
+      sortByGroupSummaryInfo: this.option('sortByGroupSummaryInfo'),
+      remoteOperations: remoteOperations ?? this.remoteOperations(),
+      getUpdatedItemData: (data) => this.editingController.getUpdatedData(data),
+      columnOption: (id) => this.columnsController.columnOption(id),
+      groupColumns: this.columnsController.getGroupColumns(),
+      component: this.component as any,
+    });
 
-  private summary(summary?) {
-    if (!arguments.length) {
-      return this._summaryGetter();
-    }
-
-    this._summaryGetter = function () { return summary; };
+    return result;
   }
 
   private totalAggregates() {
@@ -319,7 +325,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
   }
 
   private isLastLevelGroupItemsPagingLocal() {
-    const summary = this.summary();
+    const summary = this.getSummary();
     const sortByGroupsInfo = summary?.sortByGroups();
 
     return sortByGroupsInfo?.length;
@@ -342,7 +348,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
   }
 
   protected _customizeRemoteOperations(options) {
-    const summary = this.summary();
+    const summary = this.getSummary();
 
     if (summary) {
       if (options.remoteOperations.summary) {
@@ -372,7 +378,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
   protected customizeLoadResultHandlerCore(options) {
     const groups = normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group || []);
     const remoteOperations = options.remoteOperations || {};
-    const summary = this.summaryGetter()(remoteOperations);
+    const summary = this.getSummary(remoteOperations);
 
     if (!options.isCustomLoading || options.storeLoadOptions.isLoadingAll) {
       if (remoteOperations.summary) {

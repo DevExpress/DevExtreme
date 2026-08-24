@@ -240,7 +240,7 @@ export interface Views {
 }
 
 export interface EditingControllerRequired {
-  _editingController: EditingController;
+  editingController: EditingController;
 }
 
 type ViewTypes = {
