@@ -89,8 +89,6 @@ function collectSpecifiersFromDir(dir, predicate) {
 
 function discoverSpecifiers(framework) {
   const found = new Set();
-  // Imported by the generated demo entry shim, not by demo sources, so discovery can't find it —
-  // and it must be the same instance the widgets use, not a second per-demo copy.
   if (isVendorSpecifier(THEMES_SPECIFIER, framework)) found.add(THEMES_SPECIFIER);
   if (!fs.existsSync(SRC_DEMOS_DIR)) return found;
 

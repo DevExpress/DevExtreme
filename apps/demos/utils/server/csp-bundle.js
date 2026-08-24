@@ -245,8 +245,6 @@ async function bundleDemoTo({ srcDir, destDir, framework }) {
     const shared = getSharedOptions(framework);
     result = await esbuild.build({
       ...shared,
-      // The demo's own entry is imported by the shim, not bundled directly — see
-      // demo-render-signal.js.
       entryPoints: [virtualEntryPath(entry)],
       plugins: [virtualEntryPlugin({ resolveDir: srcDir }), ...shared.plugins],
       outdir: destDir,

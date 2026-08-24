@@ -30,7 +30,7 @@ Angular, React, and Vue demos are bundled on demand when you open a page. jQuery
 
 ### Demo render signal
 
-Angular, React, and Vue demos are not bundled from their own entry point directly. `utils/server/demo-render-signal.js` generates a shim that becomes the bundle's entry point; the shim waits for `themes.initialized()` from `devextreme/ui/themes`, then imports the demo's entry (`index.tsx` / `index.ts` / `app/app.component.ts`), so nothing mounts before the theme CSS is applied. The signalling itself lives in `utils/server/demo-render-signal.runtime.js` (covered by `utils/tests/server/demo-render-signal.runtime.test.js`), which the shim imports.
+Angular, React, and Vue demos are not bundled from their own entry point directly. `utils/server/demo-render-signal.js` generates a shim that becomes the bundle's entry point; the shim waits for `themes.initialized()` from `devextreme/ui/themes`, then imports the demo's entry (`index.tsx` / `index.ts` / `app/app.component.ts`), so nothing mounts before the theme CSS is applied. 
 
 Once the demo has rendered, the shim posts one message to the embedding page:
 
@@ -38,13 +38,6 @@ Once the demo has rendered, the shim posts one message to the embedding page:
 window.parent.postMessage({ type: 'demo-rendered' }, '*');
 ```
 
-**This message is a contract with devextreme-site**, whose iframe host hides its loading spinner on it. Renaming `demo-rendered`, or dropping the message, breaks that host and has to be coordinated with the devextreme-site repository.
-
-- Posted at most once per document load — never again on re-render. A theme switch reloads the iframe, so the host gets exactly one message per load.
-- Posted after the theme CSS is applied *and* the demo's root element (`#app` or `demo-app`) has content.
-- Always posted eventually: if the bundle fails to load, or the root element stays empty past the shim's timeout, the message is posted anyway so the host never waits forever.
-- The payload carries no other fields today; a host must ignore unknown fields so fields can be added later.
-- jQuery demos do not post it — they load `dx.all.js` as a global script, so their host waits on `DevExpress.ui.themes.current({ loadCallback })` instead.
 
 ### Before Commiting Changes
 

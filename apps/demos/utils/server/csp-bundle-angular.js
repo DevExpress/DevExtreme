@@ -113,7 +113,9 @@ function writeEntryShim(demo, entryPath) {
 
 function cleanupEntryShims() {
   for (const f of allEntryShims) {
-    try { fs.unlinkSync(f); } catch { /* already gone */ }
+    try { fs.unlinkSync(f); } catch {
+      console.warn(`Failed to remove entry shim ${f}`);
+    }
   }
   allEntryShims.clear();
 }
@@ -523,7 +525,6 @@ function prepareDemo(demo) {
     if (patched) fileReplacements[tsFile] = patched;
   }
   const effectiveEntry = fileReplacements[demo.entry] || demo.entry;
-  // esbuild builds the shim, which theme-gates and then imports the demo's own entry.
   const shimEntry = writeEntryShim(demo, effectiveEntry);
   return {
     ...demo, effectiveEntry, shimEntry, fileReplacements,
