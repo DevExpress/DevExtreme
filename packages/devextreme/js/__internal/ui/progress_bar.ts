@@ -2,7 +2,6 @@ import registerComponent from '@js/core/component_registrator';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { isFunction } from '@js/core/utils/type';
 import type { Properties } from '@js/ui/progress_bar';
 import type { OptionChanged } from '@ts/core/widget/types';
 import TrackBar from '@ts/ui/track_bar';
@@ -17,13 +16,15 @@ const PROGRESSBAR_INDETERMINATE_SEGMENT_CONTAINER = 'dx-progressbar-animating-co
 const PROGRESSBAR_INDETERMINATE_SEGMENT = 'dx-progressbar-animating-segment';
 
 export interface ProgressBarProperties extends Omit<Properties,
- 'onValueChanged' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'
+'onValueChanged' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'
 > {
+  min: number;
+
+  max: number;
+
   _animatingSegmentCount: number;
 
   statusPosition: string;
-
-  statusFormat?: (ratio: number) => string;
 
   showStatus: boolean;
 }
@@ -39,7 +40,7 @@ class ProgressBar extends TrackBar<ProgressBarProperties> {
     return {
       ...super._getDefaultOptions(),
       value: 0,
-      statusFormat(ratio): string {
+      statusFormat(ratio: number): string {
         return `Progress: ${Math.round(ratio * 100)}%`;
       },
       showStatus: true,
@@ -87,7 +88,6 @@ class ProgressBar extends TrackBar<ProgressBarProperties> {
     this._toggleStatus(showStatus);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _useTemplates(): boolean {
     return false;
   }
@@ -117,7 +117,7 @@ class ProgressBar extends TrackBar<ProgressBarProperties> {
     this._$segmentContainer.appendTo(this._$wrapper);
   }
 
-  _toggleStatus(value: boolean): void {
+  _toggleStatus(value: boolean | undefined): void {
     const { statusPosition } = this.option();
     const splitPosition = statusPosition.split(' ');
 
@@ -182,20 +182,12 @@ class ProgressBar extends TrackBar<ProgressBarProperties> {
   }
 
   _setStatus(): void {
-    const { statusFormat } = this.option();
+    const { statusFormat, value } = this.option();
 
-    let format = statusFormat;
+    const statusText = typeof statusFormat === 'function'
+      ? statusFormat.call(this, this._currentRatio, value as number)
+      : this._currentRatio;
 
-    if (isFunction(format)) {
-      format = format.bind(this);
-    } else {
-      // @ts-expect-error ts-error
-      format = function (value) {
-        return value;
-      };
-    }
-    // @ts-expect-error ts-error
-    const statusText = format(this._currentRatio, this.option('value'));
     this._$status.text(statusText);
   }
 
@@ -211,7 +203,7 @@ class ProgressBar extends TrackBar<ProgressBarProperties> {
         this._setStatus();
         break;
       case 'showStatus':
-        this._toggleStatus(value as ProgressBarProperties[typeof name]);
+        this._toggleStatus(value);
         break;
       case 'statusPosition': {
         const { showStatus } = this.option();

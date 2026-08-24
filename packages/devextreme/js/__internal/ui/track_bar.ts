@@ -1,9 +1,9 @@
-import { fx } from '@js/common/core/animation';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { hasWindow } from '@js/core/utils/window';
 import type { dxTrackBarOptions } from '@js/ui/track_bar';
+import fx from '@ts/common/core/animation/fx';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Editor from '@ts/ui/editor/editor';
 
@@ -12,7 +12,17 @@ const TRACKBAR_CONTAINER_CLASS = 'dx-trackbar-container';
 const TRACKBAR_RANGE_CLASS = 'dx-trackbar-range';
 const TRACKBAR_WRAPPER_CLASS = 'dx-trackbar-wrapper';
 
-export interface TrackBarProperties extends dxTrackBarOptions<TrackBar> {}
+export interface RangeStyles {
+  width?: number | string;
+  left?: string;
+  right?: string;
+}
+
+export interface TrackBarProperties extends dxTrackBarOptions<TrackBar> {
+  min: number;
+
+  max: number;
+}
 
 class TrackBar<
   TProperties extends TrackBarProperties = TrackBarProperties,
@@ -74,23 +84,23 @@ class TrackBar<
 
   _renderValue(): void {
     const { value: val, min, max } = this.option();
-    // @ts-expect-error ts-error
+
     if (min > max) {
       return;
     }
-    // @ts-expect-error ts-error
+
     if (val < min) {
       this.option('value', min);
       this._currentRatio = 0;
       return;
     }
-    // @ts-expect-error ts-error
+
     if (val > max) {
       this.option('value', max);
       this._currentRatio = 1;
       return;
     }
-    // @ts-expect-error ts-error
+
     const ratio = min === max ? 0 : (val - min) / (max - min);
     if (!this._needPreventAnimation) {
       this._setRangeStyles({ width: `${ratio * 100}%` });
@@ -98,7 +108,7 @@ class TrackBar<
 
     this.setAria({
       // eslint-disable-next-line spellcheck/spell-checker
-      valuemin: this.option('min'),
+      valuemin: min,
       // eslint-disable-next-line spellcheck/spell-checker
       valuemax: max,
       // eslint-disable-next-line spellcheck/spell-checker
@@ -108,12 +118,11 @@ class TrackBar<
     this._currentRatio = ratio;
   }
 
-  _rangeStylesConfig(): Record<string, unknown> {
+  _rangeStylesConfig(): RangeStyles {
     return { width: `${this._currentRatio * 100}%` };
   }
 
-  _setRangeStyles(options?): void {
-    // @ts-expect-error ts-error
+  _setRangeStyles(options?: RangeStyles): void {
     fx.stop(this._$range);
 
     if (!options) {
@@ -124,7 +133,8 @@ class TrackBar<
     if (this._needPreventAnimation || !hasWindow()) {
       return;
     }
-    // @ts-expect-error ts-error
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     fx.animate(this._$range, {
       type: 'custom',
       duration: 100,
@@ -148,7 +158,6 @@ class TrackBar<
   }
 
   _dispose(): void {
-    // @ts-expect-error ts-error
     fx.stop(this._$range);
     super._dispose();
   }
