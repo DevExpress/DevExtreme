@@ -5,12 +5,12 @@ import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_da
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import { virtualScrollingDataControllerExtender } from '@ts/grids/grid_core/virtual_scrolling/extenders/virtual_scrolling_data_controller';
 import {
   dataSourceAdapterExtender as virtualScrollingDataSourceAdapterExtender,
   rowsView as virtualScrollingRowsViewExtender,
-  virtualScrollingDataControllerExtender,
-  virtualScrollingModule,
 } from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling';
+import { virtualScrollingModule } from '@ts/grids/grid_core/virtual_scrolling/virtual_scrolling_module';
 
 import dataSourceAdapterProvider from './data_source_adapter/m_data_source_adapter';
 import gridCore from './m_core';
