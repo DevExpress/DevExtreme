@@ -88,7 +88,8 @@
       ],
       "outputs": [
         "{projectRoot}/scss/bundles",
-        "{workspaceRoot}/packages/devextreme/artifacts/css/dx.*.css"
+        "{workspaceRoot}/packages/devextreme/artifacts/css/dx.*.css",
+        "{workspaceRoot}/packages/devextreme/artifacts/css/accents"
       ],
       "cache": true
     },
@@ -113,7 +114,8 @@
       ],
       "outputs": [
         "{projectRoot}/scss/bundles",
-        "{workspaceRoot}/packages/devextreme/artifacts/css/dx.*.css"
+        "{workspaceRoot}/packages/devextreme/artifacts/css/dx.*.css",
+        "{workspaceRoot}/packages/devextreme/artifacts/css/accents"
       ],
       "cache": true
     },
@@ -139,6 +141,7 @@
       "outputs": [
         "{projectRoot}/scss/bundles",
         "{workspaceRoot}/packages/devextreme/artifacts/css/dx.*.css",
+        "{workspaceRoot}/packages/devextreme/artifacts/css/accents",
         "{workspaceRoot}/packages/devextreme/artifacts/css/fonts",
         "{workspaceRoot}/packages/devextreme/artifacts/css/icons"
       ],
@@ -167,6 +170,7 @@
       "outputs": [
         "{projectRoot}/scss/bundles",
         "{workspaceRoot}/packages/devextreme/artifacts/css/dx.*.css",
+        "{workspaceRoot}/packages/devextreme/artifacts/css/accents",
         "{workspaceRoot}/packages/devextreme/artifacts/css/fonts",
         "{workspaceRoot}/packages/devextreme/artifacts/css/icons"
       ],
