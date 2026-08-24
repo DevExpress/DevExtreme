@@ -37,7 +37,8 @@ jest.mock('../m_utils', () => ({
 const mockPopupInstance = {
   toggle: jest.fn<() => Promise<boolean>>().mockResolvedValue(true),
   hide: jest.fn<() => Promise<boolean>>().mockResolvedValue(true),
-  option: jest.fn<(name: string) => unknown>().mockReturnValue(false),
+  option: jest.fn<(name: string | Record<string, unknown>, value?: unknown) => unknown>()
+    .mockReturnValue(false),
   dispose: jest.fn(),
 };
 

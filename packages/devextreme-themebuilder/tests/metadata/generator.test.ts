@@ -143,7 +143,7 @@ $base-color: rgb(0,170,0);
 `;
 
   test('parse items with duplicates', () => {
-    expect(() => MetadataGenerator.getMetaItems(sample)).toThrowError('$slideout-background has duplicated comment');
+    expect(() => MetadataGenerator.getMetaItems(sample)).toThrow('$slideout-background has duplicated comment');
   });
 });
 
@@ -156,7 +156,7 @@ $slideout-background: #000;
 `;
 
   test('parse items with duplicates', () => {
-    expect(() => MetadataGenerator.getMetaItems(sample)).toThrowError('$slideout-background value has no \'!default\' flag');
+    expect(() => MetadataGenerator.getMetaItems(sample)).toThrow('$slideout-background value has no \'!default\' flag');
   });
 });
 

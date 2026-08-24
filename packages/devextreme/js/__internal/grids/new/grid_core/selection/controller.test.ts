@@ -1026,7 +1026,7 @@ describe('SelectionController', () => {
         expect(() => {
           // @ts-expect-error - accessing private method
           selectionController.selectionChanged(selectionChangedEvent);
-        }).toThrowError('E1042');
+        }).toThrow('E1042');
       });
     });
 

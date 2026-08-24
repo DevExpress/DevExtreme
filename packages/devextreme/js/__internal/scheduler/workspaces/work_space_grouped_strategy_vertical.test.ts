@@ -106,14 +106,13 @@ describe('VerticalGroupedStrategy', () => {
       supportAllDayRow: (): boolean => true,
       showAllDayPanel: (): boolean => true,
     }));
-    const $indicator = {
-      css: jest.fn(),
-    } as unknown as dxElementWrapper;
+    const cssMock = jest.fn<(name: string, value?: unknown) => unknown>();
+    const $indicator = { css: cssMock } as unknown as dxElementWrapper;
 
     strategy.shiftIndicator($indicator, 15, 0, 2);
 
-    expect($indicator.css).toHaveBeenCalledWith('left', 30 + 40);
-    expect($indicator.css).toHaveBeenCalledWith('top', 15 + 100 + 200 + 20 * 3);
+    expect(cssMock).toHaveBeenCalledWith('left', 30 + 40);
+    expect(cssMock).toHaveBeenCalledWith('top', 15 + 100 + 200 + 20 * 3);
   });
 
   it('should use group height for shader max height', () => {
