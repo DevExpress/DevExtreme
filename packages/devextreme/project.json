@@ -1233,10 +1233,17 @@
           "outputDir": "./artifacts/npm/devextreme-internal/scss"
         }
       },
+      "dependsOn": [
+        {
+          "projects": ["devextreme-scss"],
+          "target": "build:themes"
+        }
+      ],
       "inputs": [
         "{workspaceRoot}/packages/devextreme-scss/scss/**/*",
         "{workspaceRoot}/packages/devextreme-scss/fonts/**/*",
-        "{workspaceRoot}/packages/devextreme-scss/icons/**/*"
+        "{workspaceRoot}/packages/devextreme-scss/icons/**/*",
+        "{workspaceRoot}/packages/devextreme-scss/build/internal-scss-paths.json"
       ],
       "outputs": [
         "{projectRoot}/artifacts/npm/devextreme/scss/**/*",
