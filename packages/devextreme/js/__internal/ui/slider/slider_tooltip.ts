@@ -19,7 +19,7 @@ export interface SliderTooltipProperties extends TooltipProperties {
 }
 
 class SliderTooltip extends Tooltip<SliderTooltipProperties> {
-  // @ts-expect-error ts-error
+  // @ts-expect-error TPosition is invariant in the base controller fields
   _positionController!: SliderTooltipPositionController;
 
   _getDefaultOptions(): SliderTooltipProperties {
@@ -30,16 +30,16 @@ class SliderTooltip extends Tooltip<SliderTooltipProperties> {
       hideOnOutsideClick: false,
       hideTopOverlayHandler: null,
       hideOnParentScroll: false,
-      // @ts-expect-error ts-error
+      // @ts-expect-error null is used at runtime to disable the animation
       animation: null,
-      // @ts-expect-error ts-error
+      // @ts-expect-error null is used at runtime to disable the arrow positioning
       arrowPosition: null,
       templatesRenderAsynchronously: false,
       _fixWrapperPosition: false,
       useResizeObserver: false,
       _describeTarget: false,
       showMode: 'onHover',
-      format: (value) => value,
+      format: (value: number): string => `${value}`,
       value: 0,
     };
   }
@@ -58,7 +58,6 @@ class SliderTooltip extends Tooltip<SliderTooltipProperties> {
     this._renderContentText();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _toggleAriaAttributes(): void {}
 
   _renderContentText(): void {

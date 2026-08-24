@@ -4,11 +4,14 @@ import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-// @ts-expect-error
-import { applyServerDecimalSeparator } from '@js/core/utils/common';
 import { getWidth } from '@js/core/utils/size';
+import type { DxEvent } from '@js/events';
 import type { Properties } from '@js/ui/range_slider';
+import { applyServerDecimalSeparator } from '@ts/core/utils/m_common';
+import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import type { SwipeUpdateEvent } from '@ts/events/m_swipe';
+import type { SliderPointerEvent } from '@ts/ui/slider/slider';
 import Slider from '@ts/ui/slider/slider';
 
 import SliderHandle from './slider/slider_handle';
@@ -18,7 +21,25 @@ const RANGE_SLIDER_START_HANDLE_CLASS = `${RANGE_SLIDER_CLASS}-start-handle`;
 const RANGE_SLIDER_END_HANDLE_CLASS = `${RANGE_SLIDER_CLASS}-end-handle`;
 
 export interface RangeSliderProperties extends Properties {
-  value?: number[];
+  min: number;
+
+  max: number;
+
+  step: number;
+
+  keyStep: number;
+
+  useInkRipple: boolean;
+
+  start: number;
+
+  end: number;
+
+  startName: string;
+
+  endName: string;
+
+  value: number[];
 }
 
 class RangeSlider extends Slider<RangeSliderProperties> {
@@ -35,38 +56,38 @@ class RangeSlider extends Slider<RangeSliderProperties> {
   _supportedKeys(): SupportedKeys {
     const { rtlEnabled } = this.option();
 
-    const that = this;
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const _changeHandle = function (e, capturedHandle) {
-      if (that.option('start') === that.option('end')) {
-        that._capturedHandle = capturedHandle;
-        e.target = that._capturedHandle;
-        // @ts-expect-error ts-error
-        eventsEngine.trigger(that._capturedHandle, 'focus');
+    const changeHandle = (e: DxEvent<KeyboardEvent>, capturedHandle: dxElementWrapper): void => {
+      const { start, end } = this.option();
+
+      if (start === end) {
+        this._capturedHandle = capturedHandle;
+        e.target = capturedHandle.get(0);
+        // @ts-expect-error trigger is not declared in the public events engine type
+        eventsEngine.trigger(capturedHandle, 'focus');
       }
     };
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const _setHandleValue = function (e, step, sign) {
+    const setHandleValue = (e: DxEvent<KeyboardEvent>, step: number, sign: number): void => {
       const isStart = $(e.target).hasClass(RANGE_SLIDER_START_HANDLE_CLASS);
 
       const valueOption = isStart ? 'start' : 'end';
-      let val = that.option(valueOption);
+      const { start, end } = this.option();
+      const normalizedStep = this._valueStep(step);
 
-      step = that._valueStep(step);
-      // @ts-expect-error ts-error
-      val += sign * (rtlEnabled ? -step : step);
-      that.option(valueOption, val);
+      const newValue = (isStart ? start : end)
+        + sign * (rtlEnabled ? -normalizedStep : normalizedStep);
+
+      this.option(valueOption, newValue);
     };
 
-    const moveHandleRight = function (e, step) {
-      _changeHandle(e, rtlEnabled ? that._$handleStart : that._$handleEnd);
-      _setHandleValue(e, step, 1);
+    const moveHandleRight = (e: DxEvent<KeyboardEvent>, step: number): void => {
+      changeHandle(e, rtlEnabled ? this._$handleStart : this._$handleEnd);
+      setHandleValue(e, step, 1);
     };
 
-    const moveHandleLeft = function (e, step) {
-      _changeHandle(e, rtlEnabled ? that._$handleEnd : that._$handleStart);
-      _setHandleValue(e, step, -1);
+    const moveHandleLeft = (e: DxEvent<KeyboardEvent>, step: number): void => {
+      changeHandle(e, rtlEnabled ? this._$handleEnd : this._$handleStart);
+      setHandleValue(e, step, -1);
     };
 
     return {
@@ -131,18 +152,16 @@ class RangeSlider extends Slider<RangeSliderProperties> {
 
     this._$submitStartElement = $('<input>')
       .attr('type', 'hidden')
-      // @ts-expect-error ts-error
       .attr('name', startName)
       .appendTo($element);
 
     this._$submitEndElement = $('<input>')
       .attr('type', 'hidden')
-      // @ts-expect-error ts-error
       .attr('name', endName)
       .appendTo($element);
   }
 
-  _initOptions(options): void {
+  _initOptions(options: RangeSliderProperties): void {
     super._initOptions(options);
 
     const initialValue = this.initialOption('value');
@@ -160,9 +179,10 @@ class RangeSlider extends Slider<RangeSliderProperties> {
     super._initMarkup();
   }
 
-  _renderContentImpl(): void {
+  _renderContentImpl(): Promise<void> | void {
     this._callHandlerMethod('repaint');
-    super._renderContentImpl();
+
+    return super._renderContentImpl();
   }
 
   _renderHandle(): void {
@@ -177,18 +197,16 @@ class RangeSlider extends Slider<RangeSliderProperties> {
     this._updateHandleAriaLabels();
   }
 
-  _startHandler(args): void {
+  _startHandler(args: { event: SliderPointerEvent }): void {
     const e = args.event;
     const $range = this._$range;
     const rangeWidth = getWidth($range);
-    // @ts-expect-error ts-error
-    const eventOffsetX = eventData(e).x - this._$bar.offset().left;
-    // @ts-expect-error ts-error
-    const startHandleX = $range.position().left;
-    // @ts-expect-error ts-error
-    const endHandleX = $range.position().left + rangeWidth;
-    const rtlEnabled = this.option('rtlEnabled');
-    const startHandleIsClosest = (rtlEnabled ? -1 : 1) * ((startHandleX + endHandleX) / 2 - eventOffsetX) > 0;
+    const eventOffsetX = eventData(e).x - (this._$bar.offset()?.left ?? 0);
+    const startHandleX = $range.position()?.left ?? 0;
+    const endHandleX = ($range.position()?.left ?? 0) + rangeWidth;
+    const { rtlEnabled } = this.option();
+    const startHandleIsClosest = (rtlEnabled ? -1 : 1)
+      * ((startHandleX + endHandleX) / 2 - eventOffsetX) > 0;
 
     this._capturedHandle = startHandleIsClosest ? this._$handleStart : this._$handleEnd;
 
@@ -196,26 +214,26 @@ class RangeSlider extends Slider<RangeSliderProperties> {
   }
 
   _updateHandleAriaLabels(): void {
-    // @ts-expect-error ts-error
-    this.setAria('label', messageLocalization.getFormatter('dxRangeSlider-ariaFrom')(this.option('dxRangeSlider-ariaFrom')), this._$handleStart);
-    // @ts-expect-error ts-error
-    this.setAria('label', messageLocalization.getFormatter('dxRangeSlider-ariaTill')(this.option('dxRangeSlider-ariaTill')), this._$handleEnd);
+    const ariaFromFormatter: (value?: unknown) => string = messageLocalization.getFormatter('dxRangeSlider-ariaFrom');
+    const ariaTillFormatter: (value?: unknown) => string = messageLocalization.getFormatter('dxRangeSlider-ariaTill');
+
+    this.setAria('label', ariaFromFormatter(this.option('dxRangeSlider-ariaFrom')), this._$handleStart);
+    this.setAria('label', ariaTillFormatter(this.option('dxRangeSlider-ariaTill')), this._$handleEnd);
   }
 
   _activeHandle(): dxElementWrapper {
     return this._capturedHandle;
   }
 
-  _updateHandlePosition(e): void {
-    const rtlEnabled = this.option('rtlEnabled');
+  _updateHandlePosition(e: { event: SwipeUpdateEvent }): void {
+    const { rtlEnabled, max, min } = this.option();
     const offsetDirection = rtlEnabled ? -1 : 1;
-    const max = this.option('max');
-    const min = this.option('min');
-    // @ts-expect-error ts-error
-    let newRatio = this._startOffset + offsetDirection * e.event.offset / this._swipePixelRatio();
-    // @ts-expect-error ts-error
-    newRatio = newRatio.toPrecision(12); // NOTE: android 2.3 has problems with mathematics
-    // @ts-expect-error ts-error
+
+    // NOTE: android 2.3 has problems with mathematics
+    const newRatio = Number(
+      ((this._startOffset ?? 0) + (offsetDirection * e.event.offset) / this._swipePixelRatio())
+        .toPrecision(12),
+    );
     const newValue = newRatio * (max - min) + min;
 
     this._updateSelectedRangePosition(newRatio, newRatio);
@@ -230,13 +248,11 @@ class RangeSlider extends Slider<RangeSliderProperties> {
       } else {
         $nextHandle = this._$handleEnd;
       }
-      // @ts-expect-error ts-error
+      // @ts-expect-error trigger is not declared in the public events engine type
       eventsEngine.trigger($nextHandle, 'focus');
 
       if ($nextHandle && $nextHandle !== this._capturedHandle) {
-        // @ts-expect-error ts-error
         const leftRatio = (startValue - min) / (max - min);
-        // @ts-expect-error ts-error
         const rightRatio = (endValue - min) / (max - min);
 
         this._updateSelectedRangePosition(leftRatio, rightRatio);
@@ -251,27 +267,25 @@ class RangeSlider extends Slider<RangeSliderProperties> {
   }
 
   _updateSelectedRangePosition(leftRatio: number, rightRatio: number): void {
-    const { rtlEnabled } = this.option();
-    const moveRight = this._capturedHandle === this._$handleStart && rtlEnabled
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      || this._capturedHandle === this._$handleEnd && !rtlEnabled;
+    const { rtlEnabled = false } = this.option();
+    const moveRight = (this._capturedHandle === this._$handleStart && rtlEnabled)
+      || (this._capturedHandle === this._$handleEnd && !rtlEnabled);
 
     const prop = moveRight ? 'right' : 'left';
-    // @ts-expect-error ts-error
-    if (rtlEnabled ^ moveRight) {
+
+    if (rtlEnabled !== moveRight) {
       this._$range.css(prop, `${100 - rightRatio * 100}%`);
     } else {
       this._$range.css(prop, `${leftRatio * 100}%`);
     }
   }
 
-  _setValueOnSwipe(value): void {
+  _setValueOnSwipe(value: number): void {
     const option = this._capturedHandle === this._$handleStart ? 'start' : 'end';
     let [start, end] = this._getActualValue();
     const { max, min } = this.option();
-    // @ts-expect-error ts-error
+
     start = Math.min(Math.max(start, min), max);
-    // @ts-expect-error ts-error
     end = Math.min(Math.max(end, min), max);
 
     if (option === 'start') {
@@ -292,12 +306,9 @@ class RangeSlider extends Slider<RangeSliderProperties> {
 
   _renderValue(): void {
     let [valStart, valEnd] = this._getActualValue();
-    const { min, max } = this.option();
-    const rtlEnabled = this.option('rtlEnabled');
+    const { min, max, rtlEnabled } = this.option();
 
-    // @ts-expect-error ts-error
     valStart = Math.max(min, Math.min(valStart, max));
-    // @ts-expect-error ts-error
     valEnd = Math.max(valStart, Math.min(valEnd, max));
 
     const { valueChangeMode } = this.option();
@@ -310,9 +321,8 @@ class RangeSlider extends Slider<RangeSliderProperties> {
 
     this._$submitStartElement.val(applyServerDecimalSeparator(valStart));
     this._$submitEndElement.val(applyServerDecimalSeparator(valEnd));
-    // @ts-expect-error ts-error
+
     const ratio1 = max === min ? 0 : (valStart - min) / (max - min);
-    // @ts-expect-error ts-error
     const ratio2 = max === min ? 0 : (valEnd - min) / (max - min);
 
     const startOffset = `${parseFloat((ratio1 * 100).toPrecision(12))}%`;
@@ -325,42 +335,43 @@ class RangeSlider extends Slider<RangeSliderProperties> {
       });
     }
 
-    SliderHandle.getInstance(this._$handleStart).option('value', valStart);
-    SliderHandle.getInstance(this._$handleEnd).option('value', valEnd);
+    SliderHandle.getInstance<SliderHandle>(this._$handleStart).option('value', valStart);
+    SliderHandle.getInstance<SliderHandle>(this._$handleEnd).option('value', valEnd);
   }
 
-  _callHandlerMethod(name, args?): void {
-    SliderHandle.getInstance(this._$handleStart)[name](args);
-    SliderHandle.getInstance(this._$handleEnd)[name](args);
+  _callHandlerMethod(name: 'repaint' | 'updateTooltipPosition'): void {
+    SliderHandle.getInstance<SliderHandle>(this._$handleStart)[name]();
+    SliderHandle.getInstance<SliderHandle>(this._$handleEnd)[name]();
   }
 
   _setValueOption(): void {
-    const start = this.option('start');
-    const end = this.option('end');
+    const { start, end } = this.option();
 
     this.option('value', [start, end]);
   }
 
-  _rangesAreEqual(firstRange, secondRange): boolean {
+  _rangesAreEqual(firstRange: number[], secondRange: number[]): boolean {
     return firstRange[0] === secondRange[0] && firstRange[1] === secondRange[1];
   }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<RangeSliderProperties>): void {
     switch (args.name) {
       case 'value': {
-        if (this._rangesAreEqual(args.value, args.previousValue)) {
+        const value = args.value as number[];
+        const previousValue = args.previousValue as number[];
+
+        if (this._rangesAreEqual(value, previousValue)) {
           break;
         }
 
-        this._setOptionWithoutOptionChange('start', args.value[0]);
-        this._setOptionWithoutOptionChange('end', args.value[1]);
+        this._setOptionWithoutOptionChange('start', value[0]);
+        this._setOptionWithoutOptionChange('end', value[1]);
 
         this._renderValue();
 
-        const start = this.option('start');
-        const end = this.option('end');
+        const { start, end } = this.option();
 
-        const isDirty = !this._rangesAreEqual(this._initialValue, args.value);
+        const isDirty = !this._rangesAreEqual(this._initialValue as number[], value);
         this.option('isDirty', isDirty);
 
         this._createActionByOption('onValueChanged', {
@@ -370,7 +381,7 @@ class RangeSlider extends Slider<RangeSliderProperties> {
           end,
           value: [start, end],
           event: this._valueChangeEventInstance,
-          previousValue: args.previousValue,
+          previousValue,
         });
 
         this.validationRequest.fire({
@@ -386,10 +397,10 @@ class RangeSlider extends Slider<RangeSliderProperties> {
         this._setValueOption();
         break;
       case 'startName':
-        this._$submitStartElement.attr('name', args.value);
+        this._$submitStartElement.attr('name', args.value as string);
         break;
       case 'endName':
-        this._$submitEndElement.attr('name', args.value);
+        this._$submitEndElement.attr('name', args.value as string);
         break;
       case 'name':
         break;
