@@ -360,6 +360,7 @@ QUnit.test('map function + grouping + aggregating', function(assert) {
         onCustomizeLoadResult: function(loadResult) {
             const calculator = new AggregateCalculator({
                 data: loadResult.data,
+                totalAggregates: [],
                 groupAggregates: [
                     { aggregator: 'count' }
                 ],
