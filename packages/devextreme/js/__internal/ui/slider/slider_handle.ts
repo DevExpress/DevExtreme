@@ -4,7 +4,7 @@ import type { Format } from '@js/localization';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
-import SliderTooltip from '@ts/ui/slider/m_slider_tooltip';
+import SliderTooltip from '@ts/ui/slider/slider_tooltip';
 
 const SLIDER_HANDLE_CLASS = 'dx-slider-handle';
 

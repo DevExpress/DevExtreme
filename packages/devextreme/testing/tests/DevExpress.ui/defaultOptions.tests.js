@@ -55,7 +55,7 @@ import Scheduler from '__internal/scheduler/scheduler';
 import Scrollable from '__internal/ui/scroll_view/scrollable';
 import ScrollView from 'ui/scroll_view';
 import SelectBox from 'ui/select_box';
-import SliderHandle from '__internal/ui/slider/m_slider_handle';
+import SliderHandle from '__internal/ui/slider/slider_handle';
 import SpeechToText from 'ui/speech_to_text';
 import Splitter from 'ui/splitter';
 import Stepper from 'ui/stepper';
