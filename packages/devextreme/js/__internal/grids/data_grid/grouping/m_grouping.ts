@@ -393,11 +393,14 @@ const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => cla
     return new Deferred().resolve();
   }
 
-  public optionChanged(args) {
-    if (args.name === 'grouping'/* autoExpandAll */) {
-      args.name = 'dataSource';
+  public optionChanged(e) {
+    if (e.name === 'grouping'/* autoExpandAll */) {
+      e.handled = true;
+      this.reset();
+      return;
     }
-    super.optionChanged(args);
+
+    super.optionChanged(e);
   }
 };
 
