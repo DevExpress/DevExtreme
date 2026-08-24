@@ -8,7 +8,7 @@ import SliderTooltip from '@ts/ui/slider/slider_tooltip';
 
 const SLIDER_HANDLE_CLASS = 'dx-slider-handle';
 
-export interface SliderHandlerProperties extends WidgetProperties {
+export interface SliderHandleProperties extends WidgetProperties {
   value?: number;
 
   tooltip?: {
@@ -19,17 +19,17 @@ export interface SliderHandlerProperties extends WidgetProperties {
   };
 }
 
-class SliderHandle extends Widget<SliderHandlerProperties> {
+class SliderHandle extends Widget<SliderHandleProperties> {
   _sliderTooltip?: SliderTooltip | null;
 
-  _getDefaultOptions(): SliderHandlerProperties {
+  _getDefaultOptions(): SliderHandleProperties {
     return {
       ...super._getDefaultOptions(),
       hoverStateEnabled: false,
       value: 0,
       tooltip: {
         enabled: false,
-        format: (value) => value,
+        format: (value: number): string => `${value}`,
         position: 'top',
         showMode: 'onHover',
       },
@@ -40,10 +40,12 @@ class SliderHandle extends Widget<SliderHandlerProperties> {
     super._initMarkup();
     this.$element().addClass(SLIDER_HANDLE_CLASS);
 
+    const { value } = this.option();
+
     this.setAria({
       role: 'slider',
       // eslint-disable-next-line spellcheck/spell-checker
-      valuenow: this.option('value'),
+      valuenow: value,
       label: 'Slider',
     });
   }
@@ -78,13 +80,14 @@ class SliderHandle extends Widget<SliderHandlerProperties> {
     this._sliderTooltip = null;
   }
 
-  _updateTooltipOptions(args): void {
+  _updateTooltipOptions(args: OptionChanged<SliderHandleProperties>): void {
     const tooltipOptions = Widget.getOptionsFromContainer(args);
+
     this._setWidgetOption('_sliderTooltip', [tooltipOptions]);
     this._sliderTooltip?.option('visible', tooltipOptions.enabled);
   }
 
-  _optionChanged(args: OptionChanged<SliderHandlerProperties>): void {
+  _optionChanged(args: OptionChanged<SliderHandleProperties>): void {
     const { name, value } = args;
     switch (name) {
       case 'value': {

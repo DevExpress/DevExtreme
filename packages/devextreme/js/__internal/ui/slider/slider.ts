@@ -7,24 +7,27 @@ import {
   addNamespace, eventData, isMouseEvent, isTouchEvent,
 } from '@js/common/core/events/utils/index';
 import numberLocalization from '@js/common/core/localization/number';
+import type { DeepPartial } from '@js/core';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-// @ts-expect-error ts-error
-import { applyServerDecimalSeparator } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { getExponentLength, getRemainderByDivision, roundFloatPart } from '@js/core/utils/math';
 import { getWidth, setWidth } from '@js/core/utils/size';
+import type { DxEvent, PointerInteractionEvent } from '@js/events';
 import type { dxSliderBaseOptions } from '@js/ui/slider';
 import { current as currentTheme, isMaterial } from '@js/ui/themes';
 import type { InkRipple } from '@ts/core/utils/ink_ripple';
 import { render } from '@ts/core/utils/ink_ripple';
+import { applyServerDecimalSeparator } from '@ts/core/utils/m_common';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/m_swipe';
 
+import type { RangeStyles } from '../track_bar';
 import TrackBar from '../track_bar';
 import SliderHandle from './slider_handle';
 
@@ -42,7 +45,24 @@ const SLIDER_VALIDATION_NAMESPACE = 'Validation';
 
 // STYLE slider
 
-export interface SliderBaseProperties extends Omit<dxSliderBaseOptions<Slider>, 'onValueChanged' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {}
+export type SliderPointerEvent = DxEvent<PointerInteractionEvent> & {
+  pageX: number;
+  pageY: number;
+};
+
+export interface SliderBaseProperties extends Omit<dxSliderBaseOptions<Slider>, 'onValueChanged' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
+  min: number;
+
+  max: number;
+
+  step: number;
+
+  keyStep: number;
+
+  useInkRipple: boolean;
+
+  value?: number | number[];
+}
 
 export interface SliderProperties extends SliderBaseProperties {
   value?: number;
@@ -55,7 +75,7 @@ class Slider<
 
   _$submitElement!: dxElementWrapper;
 
-  _actualValue?: number | number[];
+  _actualValue?: TProperties['value'];
 
   _$handle!: dxElementWrapper;
 
@@ -69,7 +89,6 @@ class Slider<
 
   _startOffset?: number;
 
-  // eslint-disable-next-line class-methods-use-this
   protected _activeStateUnit(): string {
     return SLIDER_HANDLE_SELECTOR;
   }
@@ -77,36 +96,35 @@ class Slider<
   _supportedKeys(): SupportedKeys {
     const { rtlEnabled } = this.option();
 
-    const roundedValue = (offset, isLeftDirection) => {
-      offset = this._valueStep(offset);
+    const roundedValue = (offset: number, isLeftDirection: boolean | undefined): number => {
+      const normalizedOffset = this._valueStep(offset);
       const {
         step, value, min, max,
-      } = this.option();
-      // @ts-expect-error ts-error
+      } = this.option() as TProperties & { value: number };
       const currentPosition = value - min;
-      const remainder = getRemainderByDivision(currentPosition, step, this._getValueExponentLength());
+      const remainder = getRemainderByDivision(
+        currentPosition,
+        step,
+        this._getValueExponentLength(),
+      );
 
       let result = isLeftDirection
-        // @ts-expect-error ts-error
-        ? value - offset + (remainder ? step - remainder : 0)
-        : value + offset - remainder;
-      // @ts-expect-error ts-error
+        ? value - normalizedOffset + (remainder ? step - remainder : 0)
+        : value + normalizedOffset - remainder;
+
       if (result < min) {
-        // @ts-expect-error ts-error
         result = min;
-        // @ts-expect-error ts-error
       } else if (result > max) {
-        // @ts-expect-error ts-error
         result = max;
       }
 
       return this._roundToExponentLength(result);
     };
 
-    const moveHandleRight = (offset) => {
+    const moveHandleRight = (offset: number): void => {
       this.option('value', roundedValue(offset, rtlEnabled));
     };
-    const moveHandleLeft = (offset) => {
+    const moveHandleLeft = (offset: number): void => {
       this.option('value', roundedValue(offset, !rtlEnabled));
     };
 
@@ -147,7 +165,7 @@ class Slider<
     };
   }
 
-  _processKeyboardEvent(e): void {
+  _processKeyboardEvent(e: DxEvent<KeyboardEvent>): void {
     e.preventDefault();
     e.stopPropagation();
     this._saveValueChangeEvent(e);
@@ -163,37 +181,33 @@ class Slider<
       showRange: true,
       tooltip: {
         enabled: false,
-        format(value) {
-          return value;
-        },
+        format: (value: number): string => `${value}`,
         position: 'top',
         showMode: 'onHover',
       },
       label: {
         visible: false,
         position: 'bottom',
-        format(value) {
-          return value;
-        },
+        format: (value: number): string => `${value}`,
       },
       keyStep: 1,
       useInkRipple: false,
-      // @ts-expect-error ts-error
-      validationMessageOffset: isMaterial() ? { h: 18, v: 0 } : { h: 7, v: 4 },
+      validationMessageOffset: isMaterial(currentTheme()) ? { h: 18, v: 0 } : { h: 7, v: 4 },
       focusStateEnabled: true,
       valueChangeMode: 'onHandleMove',
     };
   }
 
   _toggleValidationMessage(visible: boolean): void {
-    if (!this.option('isValid')) {
+    const { isValid } = this.option();
+
+    if (!isValid) {
       this.$element()
         .toggleClass(INVALID_MESSAGE_VISIBLE_CLASS, visible);
     }
   }
 
   _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
-    // @ts-expect-error ts-error
     return super._defaultOptionsRules().concat([
       {
         device(): boolean {
@@ -201,7 +215,7 @@ class Slider<
         },
         options: {
           focusStateEnabled: true,
-        },
+        } as DeepPartial<TProperties>,
       },
       {
         device(): boolean {
@@ -210,7 +224,7 @@ class Slider<
         },
         options: {
           useInkRipple: true,
-        },
+        } as DeepPartial<TProperties>,
       },
     ]);
   }
@@ -218,7 +232,12 @@ class Slider<
   _initMarkup(): void {
     this.$element().addClass(SLIDER_CLASS);
     this._renderSubmitElement();
-    this.option('useInkRipple') && this._renderInkRipple();
+
+    const { useInkRipple } = this.option();
+
+    if (useInkRipple) {
+      this._renderInkRipple();
+    }
 
     super._initMarkup();
 
@@ -273,14 +292,13 @@ class Slider<
     });
   }
 
-  _renderInkWave(element, dxEvent, doRender, waveIndex): void {
+  _renderInkWave(element: dxElementWrapper, doRender: boolean, waveIndex: number): void {
     if (!this._inkRipple) {
       return;
     }
 
     const config = {
       element,
-      event: dxEvent,
       wave: waveIndex,
     };
 
@@ -326,13 +344,15 @@ class Slider<
   }
 
   _renderRangeVisibility(): void {
-    this._$range.toggleClass(SLIDER_RANGE_VISIBLE_CLASS, Boolean(this.option('showRange')));
+    const { showRange } = this.option();
+
+    this._$range.toggleClass(SLIDER_RANGE_VISIBLE_CLASS, Boolean(showRange));
   }
 
   _renderHandle(): void {
     const { value } = this.option();
 
-    this._$handle = this._renderHandleImpl(value, this._$handle);
+    this._$handle = this._renderHandleImpl(value as number | undefined, this._$handle);
   }
 
   _renderHandleImpl(
@@ -355,18 +375,20 @@ class Slider<
   }
 
   _renderAriaMinAndMax(): void {
+    const { min, max } = this.option();
+
     this.setAria({
       // eslint-disable-next-line spellcheck/spell-checker
-      valuemin: this.option('min'),
+      valuemin: min,
       // eslint-disable-next-line spellcheck/spell-checker
-      valuemax: this.option('max'),
+      valuemax: max,
     }, this._$handle);
   }
 
   _toggleActiveState($element: dxElementWrapper, value: boolean): void {
     super._toggleActiveState($element, value);
 
-    this._renderInkWave($element, null, !!value, 1);
+    this._renderInkWave($element, !!value, 1);
   }
 
   _toggleFocusClass(isFocused: boolean, $element: dxElementWrapper): void {
@@ -377,7 +399,7 @@ class Slider<
     }
 
     const $focusTarget = $($element || this._focusTarget());
-    this._renderInkWave($focusTarget, null, isFocused, 0);
+    this._renderInkWave($focusTarget, isFocused, 0);
   }
 
   _renderLabels(): void {
@@ -385,29 +407,24 @@ class Slider<
       .removeClass(`${SLIDER_LABEL_POSITION_CLASS_PREFIX}bottom`)
       .removeClass(`${SLIDER_LABEL_POSITION_CLASS_PREFIX}top`);
 
-    if (this.option('label.visible')) {
-      const { min, max } = this.option();
-      const position = this.option('label.position');
-      const labelFormat = this.option('label.format');
+    const { label, min, max } = this.option();
 
-      if (!this._$minLabel) {
-        this._$minLabel = $('<div>')
-          .addClass(SLIDER_LABEL_CLASS)
-          .appendTo(this._$wrapper);
-      }
+    if (label?.visible) {
+      const { position, format } = label;
 
-      this._$minLabel.text(numberLocalization.format(min!, labelFormat));
+      this._$minLabel ??= $('<div>')
+        .addClass(SLIDER_LABEL_CLASS)
+        .appendTo(this._$wrapper);
 
-      if (!this._$maxLabel) {
-        this._$maxLabel = $('<div>')
-          .addClass(SLIDER_LABEL_CLASS)
-          .appendTo(this._$wrapper);
-      }
+      this._$minLabel.text(numberLocalization.format(min, format));
 
-      this._$maxLabel.text(numberLocalization.format(max!, labelFormat));
+      this._$maxLabel ??= $('<div>')
+        .addClass(SLIDER_LABEL_CLASS)
+        .appendTo(this._$wrapper);
 
-      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-base-to-string
-      this.$element().addClass(SLIDER_LABEL_POSITION_CLASS_PREFIX + position);
+      this._$maxLabel.text(numberLocalization.format(max, format));
+
+      this.$element().addClass(`${SLIDER_LABEL_POSITION_CLASS_PREFIX}${position}`);
     } else {
       if (this._$minLabel) {
         this._$minLabel.remove();
@@ -422,10 +439,8 @@ class Slider<
   }
 
   _renderStartHandler(): void {
-    // @ts-expect-error ts-error
-    const pointerDownEventName = addNamespace(pointerEvents.down, this.NAME);
-    // @ts-expect-error ts-error
-    const clickEventName = addNamespace(clickName, this.NAME);
+    const pointerDownEventName = addNamespace(pointerEvents.down, this.NAME ?? '');
+    const clickEventName = addNamespace(clickName, this.NAME ?? '');
     const startAction = this._createAction(this._startHandler.bind(this));
     const $element = this.$element();
 
@@ -441,9 +456,9 @@ class Slider<
       const $handle = this._activeHandle();
 
       if ($handle) {
-        // @ts-expect-error ts-error
+        // @ts-expect-error trigger is not declared in the public events engine type
         eventsEngine.trigger($handle, 'focusin');
-        // @ts-expect-error ts-error
+        // @ts-expect-error trigger is not declared in the public events engine type
         eventsEngine.trigger($handle, 'focus');
       }
       startAction({ event: e });
@@ -458,12 +473,11 @@ class Slider<
   }
 
   _itemWidthFunc(): number {
-    // @ts-expect-error ts-error
-    return this._itemWidthRatio;
+    return this._itemWidthRatio ?? 0;
   }
 
-  _swipeStartHandler(e): void {
-    const rtlEnabled = this.option('rtlEnabled');
+  _swipeStartHandler(e: { event: SwipeStartEvent }): void {
+    const { rtlEnabled, activeStateEnabled } = this.option();
 
     if (isTouchEvent(e.event)) {
       this._createAction(this._startHandler.bind(this))({ event: e.event });
@@ -472,22 +486,23 @@ class Slider<
     this._feedbackDeferred = Deferred();
     lock(this._feedbackDeferred);
 
-    const { activeStateEnabled } = this.option();
-    // @ts-expect-error ts-error
-    this._toggleActiveState(this._activeHandle(), activeStateEnabled);
+    this._toggleActiveState(this._activeHandle(), !!activeStateEnabled);
 
-    this._startOffset = this._currentRatio;
-    const startOffset = this._startOffset * this._swipePixelRatio();
-    const endOffset = (1 - this._startOffset) * this._swipePixelRatio();
+    const startOffsetRatio = this._currentRatio;
+    this._startOffset = startOffsetRatio;
+
+    const swipePixelRatio = this._swipePixelRatio();
+    const startOffset = startOffsetRatio * swipePixelRatio;
+    const endOffset = (1 - startOffsetRatio) * swipePixelRatio;
     e.event.maxLeftOffset = rtlEnabled ? endOffset : startOffset;
     e.event.maxRightOffset = rtlEnabled ? startOffset : endOffset;
 
-    this._itemWidthRatio = getWidth(this.$element()) / this._swipePixelRatio();
+    this._itemWidthRatio = getWidth(this.$element()) / swipePixelRatio;
 
     this._needPreventAnimation = true;
   }
 
-  _swipeEndHandler(e): void {
+  _swipeEndHandler(e: { event: SwipeEndEvent }): void {
     if (this._isSingleValuePossible()) {
       return;
     }
@@ -495,9 +510,10 @@ class Slider<
     this._feedbackDeferred?.resolve();
     this._toggleActiveState(this._activeHandle(), false);
 
-    const offsetDirection = this.option('rtlEnabled') ? -1 : 1;
-    // @ts-expect-error ts-error
-    const ratio = this._startOffset + offsetDirection * e.event.targetOffset / this._swipePixelRatio();
+    const { rtlEnabled } = this.option();
+    const offsetDirection = rtlEnabled ? -1 : 1;
+    const ratio = (this._startOffset ?? 0)
+      + (offsetDirection * e.event.targetOffset) / this._swipePixelRatio();
 
     delete this._needPreventAnimation;
     this._saveValueChangeEvent(e.event);
@@ -518,7 +534,7 @@ class Slider<
     return this._$handle;
   }
 
-  _swipeUpdateHandler(e): void {
+  _swipeUpdateHandler(e: { event: SwipeUpdateEvent }): void {
     if (this._isSingleValuePossible()) {
       return;
     }
@@ -527,10 +543,13 @@ class Slider<
     this._updateHandlePosition(e);
   }
 
-  _updateHandlePosition(e): void {
-    const offsetDirection = this.option('rtlEnabled') ? -1 : 1;
-    // @ts-expect-error ts-error
-    const newRatio = Math.min(this._startOffset + offsetDirection * e.event.offset / this._swipePixelRatio(), 1);
+  _updateHandlePosition(e: { event: SwipeUpdateEvent }): void {
+    const { rtlEnabled } = this.option();
+    const offsetDirection = rtlEnabled ? -1 : 1;
+    const newRatio = Math.min(
+      (this._startOffset ?? 0) + (offsetDirection * e.event.offset) / this._swipePixelRatio(),
+      1,
+    );
 
     setWidth(this._$range, `${newRatio * 100}%`);
 
@@ -538,15 +557,15 @@ class Slider<
   }
 
   _swipePixelRatio(): number {
-    const { min, max } = this.option();
-    const step = this._valueStep(this.option('step'));
-    // @ts-expect-error ts-error
-    return (max - min) / step;
+    const { min, max, step } = this.option();
+    const normalizedStep = this._valueStep(step);
+
+    return (max - min) / normalizedStep;
   }
 
-  _valueStep(step): number {
+  _valueStep(step: number): number {
     if (!step || isNaN(step)) {
-      step = 1;
+      return 1;
     }
 
     return step;
@@ -567,13 +586,11 @@ class Slider<
     return roundFloatPart(value, valueExponentLength);
   }
 
-  _changeValueOnSwipe(ratio): void {
-    const { min, max } = this.option();
+  _changeValueOnSwipe(ratio: number): void {
+    const { min, max, step: stepOption } = this.option();
 
-    const step = this._valueStep(this.option('step'));
-    // @ts-expect-error ts-error
+    const step = this._valueStep(stepOption);
     const newChange = ratio * (max - min);
-    // @ts-expect-error ts-error
     let newValue = min + newChange;
 
     if (step < 0) {
@@ -583,22 +600,19 @@ class Slider<
     if (newValue === max || newValue === min) {
       this._setValueOnSwipe(newValue);
     } else {
-      // @ts-expect-error ts-error
       const stepCount = Math.round((newValue - min) / step);
-      // @ts-expect-error ts-error
       newValue = this._roundToExponentLength(stepCount * step + min);
-      // @ts-expect-error ts-error
       this._setValueOnSwipe(Math.max(Math.min(newValue, max), min));
     }
   }
 
-  _setValueOnSwipe(value): void {
+  _setValueOnSwipe(value: number): void {
     this._actualValue = value;
 
     const { valueChangeMode } = this.option();
 
     if (valueChangeMode === 'onHandleRelease') {
-      SliderHandle.getInstance(this._activeHandle()).option('value', value);
+      SliderHandle.getInstance<SliderHandle>(this._activeHandle()).option('value', value);
     } else {
       this.option('value', value);
       this._saveValueChangeEvent(undefined);
@@ -606,7 +620,7 @@ class Slider<
     }
   }
 
-  _getActualValue(): number[] {
+  _getActualValue(): TProperties['value'] {
     const { value } = this.option();
 
     return this._actualValue ?? value;
@@ -618,16 +632,17 @@ class Slider<
     return min === max;
   }
 
-  _startHandler(args): void {
+  _startHandler(args: { event: SliderPointerEvent }): void {
     if (this._isSingleValuePossible()) {
       return;
     }
 
     const e = args.event;
-    // @ts-expect-error ts-error
-    this._currentRatio = (eventData(e).x - this._$bar.offset().left) / getWidth(this._$bar);
+    const { rtlEnabled } = this.option();
 
-    if (this.option('rtlEnabled')) {
+    this._currentRatio = (eventData(e).x - (this._$bar.offset()?.left ?? 0)) / getWidth(this._$bar);
+
+    if (rtlEnabled) {
       this._currentRatio = 1 - this._currentRatio;
     }
 
@@ -641,15 +656,17 @@ class Slider<
     const value = this._getActualValue();
 
     this._getSubmitElement().val(applyServerDecimalSeparator(value));
-    SliderHandle.getInstance(this._activeHandle()).option('value', value);
+    SliderHandle.getInstance<SliderHandle>(this._activeHandle()).option('value', value);
   }
 
-  _setRangeStyles(options): void {
-    options && this._$range.css(options);
+  _setRangeStyles(options?: RangeStyles): void {
+    if (options) {
+      this._$range.css(options);
+    }
   }
 
-  _callHandlerMethod(name, args?): void {
-    SliderHandle.getInstance(this._$handle)[name](args);
+  _callHandlerMethod(name: 'repaint' | 'updateTooltipPosition'): void {
+    SliderHandle.getInstance<SliderHandle>(this._$handle)[name]();
   }
 
   _repaintHandle(): void {
