@@ -5,12 +5,8 @@
 $color: null !default;
 $mode: null !default;
 
-$theme-marker-color: null !default;
+$theme-marker-color: $color !default;
 $theme-marker-mode: null !default;
-
-@if $color == "blue" {
-  $theme-marker-color: "blue" !default;
-}
 
 @if $mode == "light" {
   $theme-marker-mode: "light" !default;
