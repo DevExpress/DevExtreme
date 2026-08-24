@@ -11,7 +11,6 @@
 /* eslint-disable prefer-spread */
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
@@ -23,7 +22,7 @@ import { getOuterHeight } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type {
-  DataChange, PagingResult, ProcessedItem,
+  DataChange, PagingOptionName, PagingResult, ProcessedItem, RefreshOptions,
 } from '@ts/grids/grid_core/data_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
@@ -58,11 +57,6 @@ export const virtualScrollingDataControllerExtender = (
 > => class VirtualScrollingDataControllerExtender extends Base {
   protected _editingController!: EditingController;
 
-  public init(): void {
-    this._editingController = this.getController('editing');
-    super.init();
-  }
-
   private _loadViewportParams: any;
 
   private _allItems: any;
@@ -77,7 +71,12 @@ export const virtualScrollingDataControllerExtender = (
 
   private _itemCount: any;
 
-  public dispose() {
+  public init(): void {
+    this._editingController = this.getController('editing');
+    super.init();
+  }
+
+  public dispose(): void {
     const rowsScrollController = this._rowsScrollController;
 
     rowsScrollController?.dispose();
@@ -93,7 +92,7 @@ export const virtualScrollingDataControllerExtender = (
     return baseResult;
   }
 
-  protected _loadDataSource() {
+  protected _loadDataSource(): DeferredObj<unknown> {
     if (this._rowsScrollController && isVirtualPaging(this)) {
       const { loadPageCount } = isDefined(this._loadViewportParams) ? this.getLoadPageParams() : { loadPageCount: 0 };
 
@@ -110,7 +109,8 @@ export const virtualScrollingDataControllerExtender = (
     return pageSize && pageSize < rowPageSize ? pageSize : rowPageSize;
   }
 
-  public reload() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public reload(reload?: boolean, changesOnly?: boolean): DeferredObj<unknown> {
     const rowsScrollController = this._rowsScrollController || this._dataSource;
     const itemIndex = rowsScrollController?.getItemIndexByPosition();
     const result = super.reload.apply(this, arguments as any);
@@ -472,7 +472,7 @@ export const virtualScrollingDataControllerExtender = (
     return allItems ? this._allItems || this._items : this._visibleItems || this._items;
   }
 
-  protected getRowIndexDelta() {
+  protected getRowIndexDelta(): number {
     let delta = 0;
 
     if (this.option(LEGACY_SCROLLING_MODE)) {
@@ -864,10 +864,10 @@ export const virtualScrollingDataControllerExtender = (
     return dataSource?.getContentOffset.apply(dataSource, arguments);
   }
 
-  public refresh(options) {
+  public refresh(options?: boolean | RefreshOptions): DeferredObj<unknown> {
     const dataSource = this._dataSource;
 
-    if (dataSource && options?.load && isAppendMode(this)) {
+    if (dataSource && typeof options !== 'boolean' && options?.load && isAppendMode(this)) {
       dataSource.resetCurrentTotalCount();
     }
 
@@ -906,7 +906,7 @@ export const virtualScrollingDataControllerExtender = (
     return super.pageIndex.apply(this, arguments as any);
   }
 
-  protected _fireChanged(e) {
+  protected _fireChanged(e: DataChange): void {
     super._fireChanged.apply(this, arguments as any);
 
     const { operationTypes } = e;
@@ -919,7 +919,7 @@ export const virtualScrollingDataControllerExtender = (
     }
   }
 
-  protected _getPagingOptionValue(optionName) {
+  protected _getPagingOptionValue(optionName: PagingOptionName): number {
     let result = super._getPagingOptionValue.apply(this, arguments as any);
 
     if (this.option(LEGACY_SCROLLING_MODE) === false && isVirtualPaging(this)) {
@@ -929,11 +929,11 @@ export const virtualScrollingDataControllerExtender = (
     return result;
   }
 
-  public isEmpty() {
+  public isEmpty(): boolean {
     return this.option(LEGACY_SCROLLING_MODE) === false ? !this.items(true).length : super.isEmpty.apply(this, arguments as any);
   }
 
-  public isLastPageLoaded() {
+  public isLastPageLoaded(): boolean {
     let result = false;
 
     if (this.option(LEGACY_SCROLLING_MODE) === false && isVirtualPaging(this)) {
@@ -948,7 +948,7 @@ export const virtualScrollingDataControllerExtender = (
     return result;
   }
 
-  public reset() {
+  public reset(): void {
     this._itemCount = 0;
     this._allItems = null;
     super.reset.apply(this, arguments as any);
