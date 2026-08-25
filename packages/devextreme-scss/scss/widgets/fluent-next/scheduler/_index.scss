@@ -697,6 +697,11 @@
       .dx-scheduler-group-header {
         border-bottom: none;
       }
+
+      .dx-scheduler-header-panel .dx-scheduler-group-row:has(+ .dx-scheduler-group-row) .dx-scheduler-group-header {
+        border-bottom: $scheduler-group-header-border-block-end;
+        border-bottom-color: $scheduler-base-border-rest;
+      }
     }
 
     &.dx-scheduler-agenda {
@@ -813,7 +818,7 @@
   border-right: $scheduler-last-group-cell-border-inline-end;
   border-right-color: $scheduler-group-separator-border-rest;
 
-  &:last-child {
+  &:last-child:not(:where(.dx-scheduler-group-header-inner-column)) {
     border-right: none;
   }
 
@@ -823,7 +828,7 @@
     border-right: baseScheduler.$scheduler-base-border;
     border-right-color: $scheduler-base-border-rest;
 
-    &:last-child {
+    &:last-child:not(:where(.dx-scheduler-group-header-inner-column)) {
       border-left: none;
     }
   }
@@ -1077,7 +1082,11 @@
 }
 
 .dx-scheduler-timeline .dx-scheduler-group-flex-container .dx-scheduler-group-header {
-  width: $scheduler-group-header-width;
+  width: $scheduler-group-header-table-cell-width;
+}
+
+.dx-scheduler-timeline .dx-scheduler-group-flex-container-hierarchical .dx-scheduler-group-row > .dx-scheduler-group-header.dx-scheduler-group-header-leaf:only-child {
+  min-width: $scheduler-group-header-table-cell-width;
 }
 
 .dx-scheduler-header-panel-empty-cell {

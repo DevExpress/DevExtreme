@@ -1,5 +1,7 @@
 @use "sizes" as *;
+@use "../common/colors" as *;
 @use "../common/sizes" as *;
+@use "../../base/dropDownMenu/mixins" as *;
 @use "../../base/dropDownMenu" with (
   $dropdownmenu-list-min-width: $drop-down-menu-list-min-width,
   $dropdownmenu-list-border-radius: $drop-down-menu-list-border-radius,
@@ -18,3 +20,5 @@
     box-shadow: $global-dropdown-box-shadow;
   }
 }
+
+@include dx-dropdownmenu-focus-outline($focus-rect-outline-rest, $focus-rect-border-radius, $drop-down-menu-section-margin-inline);
