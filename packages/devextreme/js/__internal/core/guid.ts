@@ -24,13 +24,9 @@ export class Guid {
   }
 
   private _generate(): string {
-    let value = '';
+    const bytes = crypto.getRandomValues(new Uint8Array(16));
 
-    for (let i = 0; i < 32; i += 1) {
-      value += Math.round(Math.random() * 15).toString(16);
-    }
-
-    return value;
+    return Array.from(bytes, (byte: number): string => byte.toString(16).padStart(2, '0')).join('');
   }
 
   public toString(): string {
