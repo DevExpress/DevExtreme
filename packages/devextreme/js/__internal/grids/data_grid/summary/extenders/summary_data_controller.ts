@@ -1,29 +1,22 @@
-/* eslint-disable consistent-return */
-
-/* eslint-disable @typescript-eslint/no-this-alias */
-/* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-self-compare */
-/* eslint-disable @typescript-eslint/no-invalid-this */
-/* eslint-disable prefer-rest-params */
-/* eslint-disable @stylistic/max-len */
-/* eslint-disable no-plusplus */
-/* eslint-disable @typescript-eslint/prefer-for-of */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
 import {
   isDefined, isEmptyObject, isString,
 } from '@js/core/utils/type';
+import type { Format } from '@js/localization';
+import type { SummaryGroupItem as SummaryGroupItemOption } from '@js/ui/data_grid';
+import type { Column } from '@ts/grids/data_grid/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { DataChange, ItemProcessingOptions, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
+import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/m_types';
 
+import type { ProcessGroupItemsOptions } from '../../grouping/types';
 import gridCore from '../../m_core';
+import { isDataColumn } from '../../m_utils';
 import { DATAGRID_GROUP_FOOTER_ROW_TYPE, DATAGRID_TOTAL_FOOTER_ROW_TYPE } from '../const';
 import type {
-  CalculateSummaryCellsArgs, ColumnMap, SummaryCellItem,
+  CalculateSummaryCellsArgs, ColumnMap, FooterItem, SummaryCellItem,
+  SummaryGroupItem,
 } from '../types';
 import { getColumnFromMap, getSummaryCellIndex } from '../utils';
 import { getGroupAggregates } from '../utils/get_group_aggregates';
@@ -32,24 +25,40 @@ import { getSummaryItemIndex } from '../utils/get_summary_item_index';
 export const summaryDataControllerExtender = (
   Base: ModuleType<DataController>,
 ): ModuleType<DataController> => class SummaryDataControllerExtender extends Base {
-  private _footerItems!: any[];
+  private _footerItems!: FooterItem[];
 
   public init(): void {
     this._footerItems = [];
     super.init();
   }
 
-  private _isDataColumn(column) {
-    return column && (!isDefined(column.groupIndex) || column.showWhenGrouped);
+  public publicMethods(): string[] {
+    return [...super.publicMethods(), 'getTotalSummaryValue'];
   }
 
-  private _isGroupFooterVisible() {
-    const groupItems: any = this.option('summary.groupItems') || [];
+  public footerItems(): FooterItem[] {
+    return this._footerItems;
+  }
 
-    for (let i = 0; i < groupItems.length; i++) {
-      const groupItem = groupItems[i];
-      const column = this._columnsController.columnOption(groupItem.showInColumn || groupItem.column);
-      if (groupItem.showInGroupFooter && this._isDataColumn(column)) {
+  public getTotalSummaryValue(summaryItemName?: string | number | null): unknown {
+    const summaryItemIndex = getSummaryItemIndex(this.option('summary.totalItems'), summaryItemName);
+    const aggregates = this._dataSource.totalAggregates();
+
+    if (aggregates.length && summaryItemIndex > -1) {
+      return aggregates[summaryItemIndex];
+    }
+
+    return undefined;
+  }
+
+  private _isGroupFooterVisible(): boolean {
+    const groupItems = this.option('summary.groupItems') ?? [];
+
+    for (const groupItem of groupItems) {
+      const columnName = groupItem.showInColumn ?? groupItem.column;
+      const column = this._columnsController.columnOption(columnName);
+
+      if (groupItem.showInGroupFooter && isDataColumn(column)) {
         return true;
       }
     }
@@ -57,17 +66,23 @@ export const summaryDataControllerExtender = (
     return false;
   }
 
-  private _processGroupItems(items, groupCount, options) {
+  protected _processGroupItems(
+    items: RawItemData[],
+    groupsCount: number,
+    options?: ProcessGroupItemsOptions & { isGroupFooterVisible?: boolean },
+  ): RawItemData[] {
     const data = options?.data;
     // @ts-expect-error
-    const result = super._processGroupItems.apply(this, arguments);
+    const result = super._processGroupItems(items, groupsCount, options) as RawItemData[];
 
     if (options) {
-      if (options.isGroupFooterVisible === undefined) {
-        options.isGroupFooterVisible = this._isGroupFooterVisible();
-      }
+      options.isGroupFooterVisible ??= this._isGroupFooterVisible();
 
-      if (data?.items && options.isGroupFooterVisible && (options.collectContinuationItems || !data.isContinuationOnNextPage)) {
+      if (
+        data?.items
+        && options.isGroupFooterVisible
+        && (options.collectContinuationItems || !data.isContinuationOnNextPage)
+      ) {
         result.push({
           rowType: DATAGRID_GROUP_FOOTER_ROW_TYPE,
           key: options.path.slice(),
@@ -77,26 +92,35 @@ export const summaryDataControllerExtender = (
         });
       }
     }
+
     return result;
   }
 
-  private _processGroupItem(groupItem, options) {
-    options.summaryGroupItems ??= this.option('summary.groupItems') || [];
+  protected _processGroupItem(
+    groupItem: SummaryGroupItem,
+    options: ItemProcessingOptions<Column> & {
+      summaryGroupItems?: SummaryGroupItemOption[];
+      summaryColumnMap?: ColumnMap;
+    },
+  ): ProcessedItem {
+    options.summaryGroupItems ??= this.option('summary.groupItems') ?? [];
     options.summaryColumnMap ??= this._buildColumnLookupMap();
 
     if (groupItem.rowType === 'group') {
       let groupColumnIndex = -1;
       let afterGroupColumnIndex = -1;
 
-      each(options.visibleColumns, function (visibleIndex: any) {
+      options.visibleColumns.forEach((column, visibleIndex) => {
         const prevColumn = options.visibleColumns[visibleIndex - 1];
 
-        if (groupItem.groupIndex === this.groupIndex) {
-          groupColumnIndex = this.index;
+        if (groupItem.groupIndex === column.groupIndex) {
+          // @ts-expect-error badly typed Column
+          groupColumnIndex = column.index;
         }
 
-        if (visibleIndex > 0 && prevColumn.command === 'expand' && this.command !== 'expand') {
-          afterGroupColumnIndex = this.index;
+        if (visibleIndex > 0 && prevColumn.command === 'expand' && column.command !== 'expand') {
+          // @ts-expect-error badly typed Column
+          afterGroupColumnIndex = column.index;
         }
       });
 
@@ -114,7 +138,7 @@ export const summaryDataControllerExtender = (
             && !isDefined(column.groupIndex)
             && (column.index !== afterGroupColumnIndex)
           ) {
-            return column.index;
+            return column.index ?? -1;
           }
 
           return groupColumnIndex;
@@ -130,7 +154,7 @@ export const summaryDataControllerExtender = (
         aggregates: getGroupAggregates(groupItem.data),
         visibleColumns: options.visibleColumns,
         calculateTargetColumnIndex: (summaryItem, column) => (
-          summaryItem.showInGroupFooter && this._isDataColumn(column) ? column.index : -1
+          summaryItem.showInGroupFooter && isDataColumn(column) ? (column?.index ?? -1) : -1
         ),
         isGroupRow: false,
         columnMap: options.summaryColumnMap,
@@ -174,16 +198,28 @@ export const summaryDataControllerExtender = (
     calculateTargetColumnIndex,
     isGroupRow,
     columnMap,
-  }: CalculateSummaryCellsArgs) {
+  }: CalculateSummaryCellsArgs): SummaryCellItem[][] {
     const summaryCells: SummaryCellItem[][] = [];
     const summaryCellsByColumns: Record<number, SummaryCellItem[]> = {};
-    const getColumnByKey = (key) => (
+
+    const getColumnByKey = (key?: string): Column | undefined => (
       columnMap
         ? getColumnFromMap(key, columnMap)
-        : this._columnsController.columnOption(key)
+        : (this._columnsController.columnOption(key) as Column | undefined)
     );
+    const getValueFormat = (summaryItem: SummaryCellItem, column?: Column): Format | undefined => {
+      if (isDefined(summaryItem.valueFormat)) {
+        return summaryItem.valueFormat;
+      }
 
-    each(summaryItems, (summaryIndex, summaryItem) => {
+      if (summaryItem.summaryType !== 'count') {
+        return gridCore.getFormatByDataType(column?.dataType);
+      }
+
+      return undefined;
+    };
+
+    summaryItems.forEach((summaryItem, summaryIndex) => {
       const column = getColumnByKey(summaryItem.column);
       const showInColumn = summaryItem.showInColumn
         ? getColumnByKey(summaryItem.showInColumn)
@@ -196,18 +232,13 @@ export const summaryDataControllerExtender = (
         }
 
         const aggregate = aggregates[summaryIndex];
-        if (aggregate === aggregate) {
-          let valueFormat;
-          if (isDefined(summaryItem.valueFormat)) {
-            valueFormat = summaryItem.valueFormat;
-          } else if (summaryItem.summaryType !== 'count') {
-            valueFormat = gridCore.getFormatByDataType(column?.dataType);
-          }
+
+        if (!Number.isNaN(aggregate as number)) {
           summaryCellsByColumns[columnIndex].push(extend({}, summaryItem, {
             value: isString(aggregate) && column?.deserializeValue
               ? column.deserializeValue(aggregate)
               : aggregate,
-            valueFormat,
+            valueFormat: getValueFormat(summaryItem, column),
             columnCaption: column && column.index !== columnIndex ? column.caption : undefined,
           }));
         }
@@ -226,31 +257,29 @@ export const summaryDataControllerExtender = (
     return summaryCells;
   }
 
-  private _getSummaryCells(summaryTotalItems, totalAggregates) {
+  private _getSummaryCells(summaryTotalItems, totalAggregates): SummaryCellItem[][] {
     const columnsController = this._columnsController;
 
     return this._calculateSummaryCells({
       summaryItems: summaryTotalItems,
       aggregates: totalAggregates,
       visibleColumns: columnsController.getVisibleColumns(),
-      calculateTargetColumnIndex: (_, column) => (
-        this._isDataColumn(column) ? column.index : -1
+      calculateTargetColumnIndex: (_, column): number => (
+        isDataColumn(column) ? (column?.index ?? -1) : -1
       ),
     });
   }
 
-  protected _updateItemsCore(change) {
-    const that = this;
-    let summaryCells: SummaryCellItem[][] | undefined;
-    const dataSource = that._dataSource;
-    const footerItems = that._footerItems;
-    const oldSummaryCells = footerItems?.[0]?.summaryCells;
-    const summaryTotalItems: any = that.option('summary.totalItems');
+  protected _updateItemsCore(change: DataChange): void {
+    const dataSource = this._dataSource;
+    const summaryTotalItems = this.option('summary.totalItems');
+    const oldSummaryCells = this._footerItems?.[0]?.summaryCells;
 
-    that._footerItems = [];
+    this._footerItems = [];
+
     if (dataSource && summaryTotalItems?.length) {
       const totalAggregates = dataSource.totalAggregates();
-      summaryCells = that._getSummaryCells(summaryTotalItems, totalAggregates);
+      const summaryCells = this._getSummaryCells(summaryTotalItems, totalAggregates);
 
       if (change?.repaintChangesOnly && oldSummaryCells) {
         change.totalColumnIndices = summaryCells.map((summaryCell, index) => {
@@ -262,36 +291,25 @@ export const summaryDataControllerExtender = (
       }
 
       if (summaryCells.length) {
-        that._footerItems.push({
+        this._footerItems.push({
           rowType: DATAGRID_TOTAL_FOOTER_ROW_TYPE,
           summaryCells,
         });
       }
     }
+
     super._updateItemsCore(change);
   }
 
-  public publicMethods(): string[] {
-    return [...super.publicMethods(), 'getTotalSummaryValue'];
-  }
-
-  private getTotalSummaryValue(summaryItemName) {
-    const summaryItemIndex = getSummaryItemIndex(this.option('summary.totalItems'), summaryItemName);
-    const aggregates = this._dataSource.totalAggregates();
-
-    if (aggregates.length && summaryItemIndex > -1) {
-      return aggregates[summaryItemIndex];
+  public optionChanged(e: OptionChanged): void {
+    switch (e.name) {
+      case 'summary':
+      case 'sortByGroupSummaryInfo':
+        e.handled = true;
+        this.reset();
+        return;
+      default:
+        super.optionChanged(e);
     }
-  }
-
-  public optionChanged(args) {
-    if (args.name === 'summary' || args.name === 'sortByGroupSummaryInfo') {
-      args.name = 'dataSource';
-    }
-    super.optionChanged(args);
-  }
-
-  public footerItems() {
-    return this._footerItems;
   }
 };

@@ -18,6 +18,7 @@ import { isDefined, isFunction, isString } from '@js/core/utils/type';
 import variableWrapper from '@js/core/utils/variable_wrapper';
 import { getWindow } from '@js/core/utils/window';
 import formatHelper from '@js/format_helper';
+import type { Format } from '@js/localization';
 import LoadPanel from '@js/ui/load_panel';
 import sharedFiltering from '@js/ui/shared/filtering';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
@@ -85,7 +86,7 @@ const getIntervalSelector = function () {
   }
 };
 
-const getGlobalFormat = (dataType) => {
+const getGlobalFormat = (dataType: string): Format | undefined => {
   const globalFormat = getGlobalFormatByDataType(dataType);
 
   if (!globalFormat) {
@@ -93,9 +94,11 @@ const getGlobalFormat = (dataType) => {
   }
 
   return isString(globalFormat)
-    ? (value) => {
+    ? (value): string => {
       const dateValue = value instanceof Date ? value : new Date(value);
-      return isNaN(dateValue.getTime()) ? '' : dateLocalization.format(dateValue, globalFormat);
+      return isNaN(dateValue.getTime())
+        ? ''
+        : dateLocalization.format(dateValue, globalFormat) as string;
     }
     : globalFormat;
 };
