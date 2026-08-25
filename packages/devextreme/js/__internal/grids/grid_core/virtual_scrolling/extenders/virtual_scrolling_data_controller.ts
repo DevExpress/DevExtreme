@@ -28,23 +28,24 @@ import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types'
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { VirtualItemsCount } from '@ts/grids/grid_core/virtual_data_loader/types';
 
-import type { EditingController } from '../../editing/m_editing';
 import gridCoreUtils from '../../m_utils';
 import {
   LEGACY_SCROLLING_MODE,
   LOAD_TIMEOUT,
   VISIBLE_PAGE_INDEX,
 } from '../const';
-import {
-  correctCount,
-  isAppendMode,
-  isItemCountableByDataSource,
-  isVirtualMode,
-  isVirtualPaging,
-  updateItemIndices,
-} from '../m_virtual_scrolling';
 import { VirtualScrollController } from '../m_virtual_scrolling_core';
 import type { ChangedLoadParams } from '../types';
+import {
+  correctCount,
+  isItemCountableByDataSource,
+  updateItemIndices,
+} from '../utils/items';
+import {
+  isAppendMode,
+  isVirtualMode,
+  isVirtualPaging,
+} from '../utils/scrolling_mode';
 
 export interface VirtualScrollingDataControllerExtension {
   virtualItemsCount: () => VirtualItemsCount | undefined;
@@ -55,8 +56,6 @@ export const virtualScrollingDataControllerExtender = (
 ): ModuleType<
   DataController & VirtualScrollingDataControllerExtension
 > => class VirtualScrollingDataControllerExtender extends Base {
-  protected _editingController!: EditingController;
-
   private _loadViewportParams: any;
 
   private _allItems: any;
@@ -70,11 +69,6 @@ export const virtualScrollingDataControllerExtender = (
   private _needUpdateViewportAfterLoading: any;
 
   private _itemCount: any;
-
-  public init(): void {
-    this._editingController = this.getController('editing');
-    super.init();
-  }
 
   public dispose(): void {
     const rowsScrollController = this._rowsScrollController;
@@ -241,7 +235,7 @@ export const virtualScrollingDataControllerExtender = (
       itemsCount() {
         return this.items(true).length;
       },
-      correctCount(items, count, fromEnd) {
+      correctCount(items: ProcessedItem[], count, fromEnd) {
         return correctCount(items, count, fromEnd, (item, isNextAfterLast, fromEnd) => {
           if (item.isNewRow) {
             return isNextAfterLast && !fromEnd;
@@ -444,7 +438,7 @@ export const virtualScrollingDataControllerExtender = (
 
     if (removeCount) {
       const fromEnd = changeType === 'prepend';
-      removeCount = correctCount(that._items, removeCount, fromEnd, (item, isNextAfterLast) => item.rowType === 'data' && !item.isNewRow || (item.rowType === 'group' && (that._dataSource.isGroupItemCountable(item.data) || isNextAfterLast)));
+      removeCount = correctCount(that._items, removeCount, fromEnd, (item, isNextAfterLast) => isItemCountableByDataSource(item, that._dataSource) || (item.rowType === 'group' && isNextAfterLast));
 
       change.removeCount = removeCount;
     }
@@ -787,7 +781,7 @@ export const virtualScrollingDataControllerExtender = (
                         || checkLoadedParamsOnly);
 
       if (needToUpdateItems) {
-        const noPendingChangesInEditing = !this._editingController?.getChanges()?.length;
+        const noPendingChangesInEditing = !this.option('editing.changes')?.length;
         this.updateItems({
           changeType: 'refresh',
           repaintChangesOnly: true,

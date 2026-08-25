@@ -30,45 +30,11 @@ import {
   LOAD_TIMEOUT,
   PAGING_METHOD_NAMES,
   ROW_INSERTED,
-  SCROLLING_MODE_INFINITE,
-  SCROLLING_MODE_VIRTUAL,
   VIRTUAL_ROW_CLASS,
 } from './const';
 import { subscribeToExternalScrollers, VirtualScrollController } from './m_virtual_scrolling_core';
-
-export const isVirtualMode = function (that) {
-  return that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL;
-};
-
-export const isAppendMode = function (that) {
-  return that.option('scrolling.mode') === SCROLLING_MODE_INFINITE;
-};
-
-export const isVirtualPaging = function (that) {
-  return isVirtualMode(that) || isAppendMode(that);
-};
-
-export const correctCount = function (items, count, fromEnd, isItemCountableFunc) {
-  for (let i = 0; i < count + 1; i++) {
-    const item = items[fromEnd ? items.length - 1 - i : i];
-    if (item && !isItemCountableFunc(item, i === count, fromEnd)) {
-      count++;
-    }
-  }
-  return count;
-};
-
-export const isItemCountableByDataSource = function (item, dataSource) {
-  return item.rowType === 'data' && !item.isNewRow || item.rowType === 'group' && dataSource.isGroupItemCountable(item.data);
-};
-
-export const updateItemIndices = function (items) {
-  items.forEach((item, index) => {
-    item.rowIndex = index;
-  });
-
-  return items;
-};
+import { isItemCountableByDataSource } from './utils/items';
+import { isAppendMode, isVirtualMode, isVirtualPaging } from './utils/scrolling_mode';
 
 export const updateLoading = function (that) {
   const beginPageIndex = that._virtualScrollController.beginPageIndex(-1);
