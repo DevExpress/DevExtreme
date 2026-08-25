@@ -1,28 +1,20 @@
-interface CountableItem {
-  rowType?: string;
-  isNewRow?: boolean;
-  data?: unknown;
-}
-
-interface RowIndexedItem {
-  rowIndex?: number;
-}
+import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 
 interface GroupCountableDataSource {
   isGroupItemCountable: (data: unknown) => boolean;
 }
 
-type IsItemCountableFunc<TItem> = (
-  item: TItem,
+type IsItemCountableFunc = (
+  item: ProcessedItem,
   isNextAfterLast: boolean,
   fromEnd: boolean,
 ) => boolean;
 
-export const correctCount = <TItem>(
-  items: TItem[],
+export const correctCount = (
+  items: ProcessedItem[],
   count: number,
   fromEnd: boolean,
-  isItemCountableFunc: IsItemCountableFunc<TItem>,
+  isItemCountableFunc: IsItemCountableFunc,
 ): number => {
   let result = count;
 
@@ -37,12 +29,12 @@ export const correctCount = <TItem>(
 };
 
 export const isItemCountableByDataSource = (
-  item: CountableItem,
+  item: ProcessedItem,
   dataSource: GroupCountableDataSource,
 ): boolean => (item.rowType === 'data' && !item.isNewRow)
   || (item.rowType === 'group' && dataSource.isGroupItemCountable(item.data));
 
-export const updateItemIndices = <TItem extends RowIndexedItem>(items: TItem[]): TItem[] => {
+export const updateItemIndices = (items: ProcessedItem[]): ProcessedItem[] => {
   items.forEach((item, index) => {
     item.rowIndex = index;
   });

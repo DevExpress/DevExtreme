@@ -1,43 +1,51 @@
 import {
   describe, expect, it,
 } from '@jest/globals';
+import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 
 import {
   correctCount, isItemCountableByDataSource, updateItemIndices,
 } from '../items';
 
+type TestItem = ProcessedItem & { countable?: boolean };
+
+const asItems = (items: unknown[]): ProcessedItem[] => items as ProcessedItem[];
+const asItem = (item: unknown): ProcessedItem => item as ProcessedItem;
+const isCountable = (item: ProcessedItem): boolean => (item as TestItem).countable ?? false;
+
 describe('correctCount', () => {
   it('should not increase count when all items are countable', () => {
-    const items = [{ v: 1 }, { v: 2 }, { v: 3 }];
+    const items = asItems([{ v: 1 }, { v: 2 }, { v: 3 }]);
 
     expect(correctCount(items, 2, false, () => true)).toBe(2);
   });
 
   it('should increase count for each not countable item from the start', () => {
-    const items = [
+    const items = asItems([
       { countable: false },
       { countable: true },
       { countable: false },
       { countable: true },
       { countable: true },
-    ];
+    ]);
 
-    const result = correctCount(items, 2, false, (item) => item.countable);
+    const result = correctCount(items, 2, false, isCountable);
 
     expect(result).toBe(4);
   });
 
   it('should walk from the end when fromEnd is true', () => {
-    const items = [
+    const items = asItems([
       { countable: true },
       { countable: false },
       { countable: true },
-    ];
+    ]);
 
     const seen: boolean[] = [];
     const result = correctCount(items, 1, true, (item) => {
-      seen.push(item.countable);
-      return item.countable;
+      const countable = isCountable(item);
+      seen.push(countable);
+      return countable;
     });
 
     expect(result).toBe(2);
@@ -46,7 +54,7 @@ describe('correctCount', () => {
   });
 
   it('should pass isNextAfterLast as true only when i equals the current count', () => {
-    const items = [{ id: 0 }, { id: 1 }, { id: 2 }];
+    const items = asItems([{ id: 0 }, { id: 1 }, { id: 2 }]);
     const flags: boolean[] = [];
 
     correctCount(items, 1, false, (_item, isNextAfterLast) => {
@@ -58,9 +66,9 @@ describe('correctCount', () => {
   });
 
   it('should stop against missing items (undefined) without incrementing', () => {
-    const items = [{ countable: true }];
+    const items = asItems([{ countable: true }]);
 
-    expect(correctCount(items, 3, false, (item) => item.countable)).toBe(3);
+    expect(correctCount(items, 3, false, isCountable)).toBe(3);
   });
 });
 
@@ -70,29 +78,29 @@ describe('isItemCountableByDataSource', () => {
   };
 
   it('should count a data row that is not a new row', () => {
-    expect(isItemCountableByDataSource({ rowType: 'data', isNewRow: false }, dataSource)).toBe(true);
+    expect(isItemCountableByDataSource(asItem({ rowType: 'data', isNewRow: false }), dataSource)).toBe(true);
   });
 
   it('should not count a new data row', () => {
-    expect(isItemCountableByDataSource({ rowType: 'data', isNewRow: true }, dataSource)).toBe(false);
+    expect(isItemCountableByDataSource(asItem({ rowType: 'data', isNewRow: true }), dataSource)).toBe(false);
   });
 
   it('should count a group row when the data source says it is countable', () => {
-    expect(isItemCountableByDataSource({ rowType: 'group', data: 'countable' }, dataSource)).toBe(true);
+    expect(isItemCountableByDataSource(asItem({ rowType: 'group', data: 'countable' }), dataSource)).toBe(true);
   });
 
   it('should not count a group row when the data source says it is not countable', () => {
-    expect(isItemCountableByDataSource({ rowType: 'group', data: 'other' }, dataSource)).toBe(false);
+    expect(isItemCountableByDataSource(asItem({ rowType: 'group', data: 'other' }), dataSource)).toBe(false);
   });
 
   it('should not count other row types', () => {
-    expect(isItemCountableByDataSource({ rowType: 'groupFooter' }, dataSource)).toBe(false);
+    expect(isItemCountableByDataSource(asItem({ rowType: 'groupFooter' }), dataSource)).toBe(false);
   });
 });
 
 describe('updateItemIndices', () => {
   it('should assign rowIndex to each item by position', () => {
-    const items = [{ rowIndex: -1 }, { rowIndex: -1 }, { rowIndex: -1 }];
+    const items = asItems([{ rowIndex: -1 }, { rowIndex: -1 }, { rowIndex: -1 }]);
 
     updateItemIndices(items);
 
@@ -100,7 +108,7 @@ describe('updateItemIndices', () => {
   });
 
   it('should return the same array reference', () => {
-    const items = [{ rowIndex: 0 }];
+    const items = asItems([{ rowIndex: 0 }]);
 
     expect(updateItemIndices(items)).toBe(items);
   });

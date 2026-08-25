@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 
 import {
-  isAppendMode, isVirtualMode, isVirtualPaging,
+  isInfiniteMode, isVirtualMode, isVirtualPaging,
 } from '../scrolling_mode';
 
 const createController = (mode: string): { option: (name: string) => unknown } => ({
@@ -24,17 +24,17 @@ describe('isVirtualMode', () => {
   });
 });
 
-describe('isAppendMode', () => {
+describe('isInfiniteMode', () => {
   it('should be true for the infinite scrolling mode', () => {
-    expect(isAppendMode(createController('infinite'))).toBe(true);
+    expect(isInfiniteMode(createController('infinite'))).toBe(true);
   });
 
   it('should be false for the virtual scrolling mode', () => {
-    expect(isAppendMode(createController('virtual'))).toBe(false);
+    expect(isInfiniteMode(createController('virtual'))).toBe(false);
   });
 
   it('should be false for the standard scrolling mode', () => {
-    expect(isAppendMode(createController('standard'))).toBe(false);
+    expect(isInfiniteMode(createController('standard'))).toBe(false);
   });
 });
 
