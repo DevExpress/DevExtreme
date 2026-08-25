@@ -817,8 +817,8 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
   private _updateBottomLoading() {
     const that = this;
     const virtualMode = isVirtualMode(this);
-    const appendMode = isInfiniteMode(this);
-    const showBottomLoading = !that._dataController.hasKnownLastPage() && that._dataController.isLoaded() && (virtualMode || appendMode);
+    const infiniteMode = isInfiniteMode(this);
+    const showBottomLoading = !that._dataController.hasKnownLastPage() && that._dataController.isLoaded() && (virtualMode || infiniteMode);
     const $contentElement = that._findContentElement();
     const bottomLoadPanelElement = that._findBottomLoadPanel($contentElement);
 
