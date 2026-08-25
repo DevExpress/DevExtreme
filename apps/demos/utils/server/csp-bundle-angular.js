@@ -111,13 +111,13 @@ function writeEntryShim(demo, entryPath) {
   return dest;
 }
 
-function cleanupEntryShims() {
-  for (const f of allEntryShims) {
+function cleanupEntryShims(shimPaths) {
+  for (const f of shimPaths ?? allEntryShims) {
     try { fs.unlinkSync(f); } catch {
       console.warn(`Failed to remove entry shim ${f}`);
     }
+    allEntryShims.delete(f);
   }
-  allEntryShims.clear();
 }
 
 const DEFAULT_BODY_INNER = `<div class="demo-container">
@@ -331,11 +331,11 @@ function patchComponentTs(tsFile) {
   return dest;
 }
 
-function cleanupPatchedTsFiles() {
-  for (const f of allPatchedTsFiles) {
+function cleanupPatchedTsFiles(tsFiles) {
+  for (const f of tsFiles ?? allPatchedTsFiles) {
     try { fs.unlinkSync(f); } catch { /* already gone */ }
+    allPatchedTsFiles.delete(f);
   }
-  allPatchedTsFiles.clear();
 }
 
 // Safety net: delete patched-TS scratch files left behind by a crashed run.
