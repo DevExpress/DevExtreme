@@ -165,6 +165,7 @@ function getSharedOptions(framework) {
     alias: {
       react: path.join(NODE_MODULES, 'react'),
       'react-dom': path.join(NODE_MODULES, 'react-dom'),
+      vue: path.join(NODE_MODULES, 'vue'),
       globalize: path.join(NODE_MODULES, 'globalize', 'dist', 'globalize.js'),
     },
     define: {

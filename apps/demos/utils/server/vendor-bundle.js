@@ -247,12 +247,20 @@ function computeClosure(metafile, entryFile, buildCwd) {
 
 const MAX_ATTEMPTS = 10;
 
-async function buildVendorBundle(framework, esbuildOptions = {}) {
+async function buildVendorBundle(framework, baseEsbuildOptions = {}) {
   let specifiers = Array.from(discoverSpecifiers(framework)).sort();
   if (specifiers.length === 0) return null;
 
   fs.mkdirSync(VENDOR_OUT_DIR, { recursive: true });
   fs.mkdirSync(VENDOR_SCRATCH_DIR, { recursive: true });
+
+  const esbuildOptions = {
+    ...baseEsbuildOptions,
+    alias: {
+      vue: path.join(DEMOS_APP_ROOT, 'node_modules', 'vue'),
+      ...baseEsbuildOptions.alias,
+    },
+  };
 
   const buildCwd = esbuildOptions.absWorkingDir || process.cwd();
   const dropped = new Set();
