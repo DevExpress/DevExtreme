@@ -15,7 +15,6 @@ import type {
   ChangedEvent, DataSourceAdapterProvider, LoadOperation, OperationTypes, RawItemData,
 } from '@ts/grids/grid_core/data_source_adapter/types';
 import { isLocalStore } from '@ts/grids/grid_core/data_source_adapter/utils/store';
-import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { FilterSyncController } from '@ts/grids/grid_core/filter/m_filter_sync';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import modules from '@ts/grids/grid_core/m_modules';
@@ -128,8 +127,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   // TODO public controller
   public _rowsScrollController?: VirtualScrollController | null;
 
-  protected _editingController!: EditingController;
-
   protected _filterSyncController!: FilterSyncController;
 
   private _filterExcludedColumn: Column | null = null;
@@ -146,7 +143,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this._items = [];
     this._cachedProcessedItems = null;
     this._columnsController = this.getController('columns');
-    this._editingController = this.getController('editing');
     this._filterSyncController = this.getController('filterSync');
     this._focusController = this.getController('focus');
 
