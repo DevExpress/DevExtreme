@@ -386,6 +386,7 @@ export default [
 
       'vue/camelcase': 'error',
       'vue/component-name-in-template-casing': 'error',
+      'vue/enforce-style-attribute': ['error', { allow: ['plain'] }],
       'vue/singleline-html-element-content-newline': 0,
       'vue/multiline-html-element-content-newline': 0,
       'vue/attributes-order': 0,

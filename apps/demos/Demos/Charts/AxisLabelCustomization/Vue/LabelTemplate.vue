@@ -24,7 +24,7 @@ defineProps<{
 
 const getFilePath = (text: string): string => `../../../../images/flags/3x2/${text.toLowerCase().replace(' ', '')}.svg`;
 </script>
-<style scoped>
+<style>
 .template-text {
   fill: #767676;
   font-family: "Segoe UI", "Helvetica Neue", "Trebuchet MS", Verdana, sans-serif;

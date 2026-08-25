@@ -47,7 +47,7 @@ const filteredData = computed(() => Object.fromEntries(
 ));
 </script>
 
-<style scoped>
+<style>
 .pane-content {
   padding: 12px;
 }

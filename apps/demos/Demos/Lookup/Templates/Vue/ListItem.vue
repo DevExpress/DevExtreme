@@ -14,7 +14,7 @@ withDefaults(defineProps<{
   itemData: () => ({} as Record<string, any>),
 });
 </script>
-<style scoped>
+<style>
   .custom-item > img {
     height: 48px;
     width: 38px;

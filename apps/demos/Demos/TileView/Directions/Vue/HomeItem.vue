@@ -11,7 +11,7 @@ withDefaults(defineProps<{
   itemData: () => ({} as Record<string, any>),
 });
 </script>
-<style scoped>
+<style>
   .tile-image {
     height: 100%;
     width: 100%;

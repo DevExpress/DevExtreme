@@ -167,6 +167,16 @@ pnpm run convert-to-js split       # after React TypeScript changes
 pnpm run fix-lint
 ```
 
+`add-demo` can scaffold from an existing demo, which copies that demo's files wholesale — check what you inherited rather than assuming the source demo was right.
+
+### Demo styles
+
+**Demo styles are page-level, not component-level** (see `.github/instructions/demo-styles.instructions.md`). A demo is one page with one component tree, iframed by the site, and its four framework variants must render identically — so styles are always authored globally.
+
+- **Vue:** plain `<style>`, never `<style scoped>`. `vue/enforce-style-attribute` fails lint on it. Scoping also cannot reach widget-generated DOM (`.dx-*` internals) or the surrounding `#app` / `body`, so encapsulated rules silently die.
+- **Angular:** `::ng-deep`, or `encapsulation: ViewEncapsulation.None`.
+- **jQuery, React:** global `styles.css`.
+
 ## Code Style Conventions
 
 These rules apply to `packages/devextreme/js/**/*.d.ts` (see `.github/instructions/API_conventions.instructions.md`):

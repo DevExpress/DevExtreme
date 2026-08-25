@@ -11,7 +11,7 @@ defineProps<{
 }>();
 </script>
 
-<style scoped>
+<style>
 .status {
   display: flex;
   align-items: center;

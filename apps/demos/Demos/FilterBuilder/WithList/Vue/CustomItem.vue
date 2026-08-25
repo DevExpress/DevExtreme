@@ -26,7 +26,7 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 
 const currency = (data: number) => currencyFormatter.format(data);
 </script>
-<style scoped>
+<style>
 .product {
   height: 65px;
 }

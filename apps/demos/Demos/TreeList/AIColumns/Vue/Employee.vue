@@ -20,7 +20,7 @@ defineProps<{
 }>();
 </script>
 
-<style scoped>
+<style>
 .employee__wrapper {
   display: flex;
   align-items: center;

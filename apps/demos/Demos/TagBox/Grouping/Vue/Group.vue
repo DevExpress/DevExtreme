@@ -11,7 +11,7 @@ withDefaults(defineProps<{
   itemData: () => ({ key: '' }),
 });
 </script>
-<style scoped>
+<style>
   .custom-icon .icon {
     color: #f05b41;
   }

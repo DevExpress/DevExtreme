@@ -8,7 +8,7 @@ defineProps<{
 }>();
 </script>
 
-<style scoped>
+<style>
 .category__wrapper {
   display: inline-block;
   padding: 2px 8px;

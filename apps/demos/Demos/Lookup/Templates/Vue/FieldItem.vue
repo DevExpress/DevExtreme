@@ -14,7 +14,7 @@ withDefaults(defineProps<{
   itemData: () => ({} as Record<string, any>),
 });
 </script>
-<style scoped>
+<style>
   .custom-field > img {
     vertical-align: middle;
     height: 30px;

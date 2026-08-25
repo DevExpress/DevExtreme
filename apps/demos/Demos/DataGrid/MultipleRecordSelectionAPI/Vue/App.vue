@@ -123,7 +123,7 @@ const onSelectionChanged = (e: DxDataGridTypes.SelectionChangedEvent<Employee>) 
   selectionChangedBySelectBox = false;
 };
 </script>
-<style scoped>
+<style>
 #grid {
   display: flex;
   align-items: center;

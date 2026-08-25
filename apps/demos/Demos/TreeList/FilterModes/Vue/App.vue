@@ -64,7 +64,7 @@ import { employees } from './data.ts';
 const filterMode = ref<DxTreeListTypes.TreeListFilterMode>('matchOnly');
 const filterModes: DxTreeListTypes.TreeListFilterMode[] = ['matchOnly', 'withAncestors', 'fullBranch'];
 </script>
-<style scoped>
+<style>
 #employees {
   height: 440px;
 }

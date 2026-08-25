@@ -54,7 +54,7 @@ const isDisabled = ref(props.tagData.Name === 'SuperHD Video Player');
 const show = ref(false);
 const target = ref(null);
 </script>
-<style scoped>
+<style>
 .dx-tag-content {
   display: flex;
   align-items: center;

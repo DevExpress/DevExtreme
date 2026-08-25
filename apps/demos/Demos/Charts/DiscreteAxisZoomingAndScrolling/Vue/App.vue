@@ -112,7 +112,7 @@ const series = [{
 
 const customizeText = ({ valueText }: { valueText: string }) => `${valueText}%`;
 </script>
-<style scoped>
+<style>
 #zoomedChart {
   margin-bottom: 20px;
 }

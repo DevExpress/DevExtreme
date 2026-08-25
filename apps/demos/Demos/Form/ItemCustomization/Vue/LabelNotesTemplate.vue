@@ -28,7 +28,7 @@ withDefaults(defineProps<{
   data: () => ({} as Record<string, any>),
 });
 </script>
-<style scoped>
+<style>
 #helpedInfo {
   color: #42a5f5;
 }

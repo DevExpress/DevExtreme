@@ -40,7 +40,7 @@ import {
 import { populationData } from './data.ts';
 import AnnotationTemplate from './AnnotationTemplate.vue';
 </script>
-<style scoped>
+<style>
 #chart {
   height: 440px;
 }

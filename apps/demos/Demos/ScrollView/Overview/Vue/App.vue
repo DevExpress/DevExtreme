@@ -119,7 +119,7 @@ function onValueChanged(args: DxCheckBoxTypes.ValueChangedEvent) {
   );
 }
 </script>
-<style scoped>
+<style>
 #scrollview-demo {
   min-height: 550px;
 }

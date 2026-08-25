@@ -23,7 +23,7 @@ const props = withDefaults(defineProps<{
 const styleObject = ref({ backgroundColor: props.itemData.color });
 </script>
 
-<style scoped>
+<style>
   .item-badge {
     text-align: center;
     float: left;

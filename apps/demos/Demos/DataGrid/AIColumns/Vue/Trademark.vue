@@ -38,7 +38,7 @@ const onKeyDown = (event: KeyboardEvent) => {
 };
 </script>
 
-<style scoped>
+<style>
 .trademark__wrapper {
   display: flex;
   align-items: center;
