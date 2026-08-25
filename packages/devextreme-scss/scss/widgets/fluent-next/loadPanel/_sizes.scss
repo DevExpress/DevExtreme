@@ -6,5 +6,5 @@ $load-panel-box-shadow: 0 ds.$spacing-80 ds.$spacing-160 0 ds.$color-shadow-key 
 
 // Base-layer sizing injected with design tokens (wave B2)
 $load-panel-content-padding: ds.$spacing-100 !default;
-$load-panel-content-border: ds.$border-width-10 solid ds.$color-border-neutral-default-rest !default;
+$load-panel-content-border: ds.$border-width-10 solid ds.$color-border !default;
 $load-panel-content-border-radius: ds.$border-radius-50 !default;

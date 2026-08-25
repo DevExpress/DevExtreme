@@ -1905,8 +1905,8 @@ importers:
   packages/devextreme-scss:
     devDependencies:
       '@devexpress/design-tokens-internal':
-        specifier: 262.6.0
-        version: 262.6.0
+        specifier: 262.10.1
+        version: 262.10.1
       '@stylistic/stylelint-plugin':
         specifier: 3.1.3
         version: 3.1.3(stylelint@16.22.0(typescript@5.9.3))
@@ -4493,8 +4493,8 @@ packages:
   '@devexpress/callsite-record@4.1.7':
     resolution: {integrity: sha512-qr3VQYc0KopduFkEY6SxaOIi1Xhm0jIWQfrxxMVboI/p2rjF/Mj/iqaiUxQQP6F3ujpW/7l0mzhf17uwcFZhBA==}
 
-  '@devexpress/design-tokens-internal@262.6.0':
-    resolution: {integrity: sha512-sr8LYpToFAyP59o05a77ZTyIkdhSUjljJujZYGzb1JUdOa4KJ07edkamuHFWyMEgj6nxxwGvQwJORdnl/gXp0A==}
+  '@devexpress/design-tokens-internal@262.10.1':
+    resolution: {integrity: sha512-7kSaM2l0osM84SNoDSPdgu6lfuVceT7FgnpU1uYIZRKpvxqLAzKpWhO5u9dhbIPj3B05k42Rf1iQHO16AInj7g==}
 
   '@devexpress/utils@2.1.1':
     resolution: {integrity: sha512-hlemXR3L0yDPsMdhTQl9EtjiEYxIHklH7I4RKPkOhfrF5+jb4f3kkfvbKT7nA9aoFEHPPF0/hll43gOBpUpY0g==}
@@ -20542,7 +20542,7 @@ snapshots:
       lodash: 4.18.1
       pinkie-promise: 2.0.1
 
-  '@devexpress/design-tokens-internal@262.6.0': {}
+  '@devexpress/design-tokens-internal@262.10.1': {}
 
   '@devexpress/utils@2.1.1':
     dependencies:
