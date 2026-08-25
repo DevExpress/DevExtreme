@@ -1,0 +1,1 @@
+DevExtreme Scheduler currently supports appointment grouping at a single resource level. With v26.2, we will extend this behavior with hierarchical (multi-level) resource grouping based on direct parent-child relationships in your resource data source.
