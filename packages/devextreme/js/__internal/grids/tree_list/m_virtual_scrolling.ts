@@ -10,7 +10,7 @@ import {
   rowsView as virtualScrollingRowsViewExtender,
   virtualScrollingDataControllerExtender,
   virtualScrollingModule,
-} from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling';
+} from '@ts/grids/grid_core/virtual_scrolling/index';
 
 import dataSourceAdapterProvider from './data_source_adapter/m_data_source_adapter';
 import gridCore from './m_core';
