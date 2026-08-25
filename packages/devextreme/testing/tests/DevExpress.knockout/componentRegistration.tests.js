@@ -28,38 +28,30 @@ const cleanComponentRegistrations = function() {
 moduleWithoutCsp(
     'simple component tests', {
         beforeEach: function() {
-            const TestComponent = DOMComponent.inherit({
-                _defaultOptions: function() {
-                    return {
-                        text: '',
-                        array: [],
-                        obj: null,
-                        complex: {
-                            nested: ''
-                        },
-                        complexByReference: null
-                    };
-                },
-                _optionChanged: function() {
+            class TestComponent extends DOMComponent {
+                _optionChanged() {
                     this._invalidate();
-                },
-                _setOptionsByReference: function() {
-                    this.callBase();
+                }
+
+                _setOptionsByReference() {
+                    super._setOptionsByReference();
 
                     $.extend(this._optionsByReference, {
                         complexByReference: true
                     });
-                },
-                _setDeprecatedOptions: function() {
-                    this.callBase();
+                }
+
+                _setDeprecatedOptions() {
+                    super._setDeprecatedOptions();
                     $.extend(this._deprecatedOptions, {
                         'checked': { alias: 'value' }
                     });
-                },
+                }
+
                 _useTemplates() {
                     return false;
                 }
-            });
+            }
 
             registerComponent('dxTest', TestComponent);
             this.TestComponent = TestComponent;
@@ -526,11 +518,11 @@ moduleWithoutCsp(
         });
 
         QUnit.test('KO integration don\'t breaks defaultOptions', function(assert) {
-            const TestDOMComponent = DOMComponent.inherit({
+            class TestDOMComponent extends DOMComponent {
                 _useTemplates() {
                     return false;
                 }
-            });
+            }
 
             registerComponent('TestDOMComponent', TestDOMComponent);
 
@@ -571,9 +563,9 @@ moduleWithoutCsp(
         QUnit.test('component should works correctly if observable option changed on ctor (T179839)', function(assert) {
             assert.expect(0);
 
-            registerComponent('dxTestWidget', Widget.inherit({
-                _renderContentImpl: noop
-            }));
+            registerComponent('dxTestWidget', class extends Widget {
+                _renderContentImpl() { }
+            });
 
             const markup = $('<div><div />')
                 .attr('data-bind', 'dxTestWidget: { option1: myValue, onContentReady: onContentReady }')
@@ -637,12 +629,12 @@ moduleWithoutCsp(
         });
 
         QUnit.test('component should notify view model if option changed on ctor after initialization (T219862)', function(assert) {
-            const ComponentClass = this.TestComponent.inherit({
-                _render: function() {
-                    this.callBase();
+            class ComponentClass extends this.TestComponent {
+                _render() {
+                    super._render();
                     this.option('a', 2);
                 }
-            });
+            }
 
             registerComponent('T219862', ComponentClass);
 
@@ -665,7 +657,7 @@ moduleWithoutCsp(
                 return;
             }
 
-            const ComponentClass = this.TestComponent.inherit({});
+            class ComponentClass extends this.TestComponent {}
             const titleObservable = ko.observable('title');
 
             const vm = {
@@ -728,15 +720,8 @@ moduleWithoutCsp(
     'nested Widget with templates enabled',
     {
         beforeEach: function() {
-            const TestContainer = Widget.inherit({
-
-                _defaultOptions: function() {
-                    return $.extend(this.callBase(), {
-                        text: ''
-                    });
-                },
-
-                _render: function() {
+            class TestContainer extends Widget {
+                _render() {
                     const content = $('<div />')
                         .addClass('dx-content')
                         .appendTo(this.$element());
@@ -749,40 +734,32 @@ moduleWithoutCsp(
                     if(text) {
                         content.append($('<span />').text(text));
                     }
-                },
-
-                _renderContentImpl: noop,
-
-                _clean: function() {
-                    this.$element().empty();
-                },
-
-                _optionChanged: function() {
-                    this._invalidate();
                 }
 
-            });
+                _renderContentImpl() { }
 
-            const TestWidget = Widget.inherit({
+                _clean() {
+                    this.$element().empty();
+                }
 
-                _defaultOptions: function() {
-                    return $.extend(this.callBase(), {
-                        text: ''
-                    });
-                },
+                _optionChanged() {
+                    this._invalidate();
+                }
+            }
 
-                _render: function() {
+            class TestWidget extends Widget {
+                _render() {
                     this.$element().append($('<span />').text(this.option('text')));
-                },
+                }
 
-                _clean: function() {
+                _clean() {
                     this.$element().empty();
-                },
+                }
 
-                _optionChanged: function() {
+                _optionChanged() {
                     this._invalidate();
                 }
-            });
+            }
 
             registerComponent('dxTestContainer', TestContainer);
             registerComponent('dxTestWidget', TestWidget);
@@ -885,13 +862,13 @@ moduleWithoutCsp(
 );
 
 moduleWithoutCsp('Widget & CollectionWidget with templates enabled', function() {
-    const TestContainer = Widget.inherit({
-        _renderContentImpl: function() {
+    class TestContainer extends Widget {
+        _renderContentImpl() {
             if(this.option('integrationOptions.templates').template) {
                 this.option('integrationOptions.templates').template.render({ container: this.$element() });
             }
         }
-    });
+    }
 
     QUnit.test('widget should use Template, but not KoTemplate, if it created not as KO binding', function(assert) {
         registerComponent('dxTestContainer', TestContainer);
@@ -927,13 +904,13 @@ moduleWithoutCsp('Widget & CollectionWidget with templates enabled', function() 
     });
 
     QUnit.test('retrieving default KO template only for collection widgets created with knockout', function(assert) {
-        const TestContainer = CollectionWidget.inherit({
-            _renderContentImpl: function() {
+        class TestContainer extends CollectionWidget {
+            _renderContentImpl() {
                 if(this.option('integrationOptions.templates').template) {
                     this.option('integrationOptions.templates').template.render({ container: this.$element() });
                 }
             }
-        });
+        }
 
         registerComponent('dxTestContainer', TestContainer);
 
@@ -962,23 +939,17 @@ moduleWithoutCsp('Widget & CollectionWidget with templates enabled', function() 
     });
 
     QUnit.test('creates default template from its contents', function(assert) {
-        const TestContainer = Widget.inherit({
-            _defaultOptions: function() {
-                return $.extend(this.callBase(), {
-                    items: null
-                });
-            },
-
-            _render: function() {
+        class TestContainer extends Widget {
+            _render() {
                 this.option('integrationOptions.templates')['template'].render({ container: this.$element() });
-            },
+            }
 
-            _renderContentImpl: noop,
+            _renderContentImpl() { }
 
-            _clean: function() {
+            _clean() {
                 this.$element().empty();
             }
-        });
+        }
 
         registerComponent('dxTestContainer', TestContainer);
         try {
@@ -1015,15 +986,8 @@ moduleWithoutCsp('Widget & CollectionWidget with templates enabled', function() 
     });
 
     QUnit.test('binding-context of KoTemplate', function(assert) {
-        const TestRepeater = Widget.inherit({
-
-            _defaultOptions: function() {
-                return $.extend(this.callBase(), {
-                    items: []
-                });
-            },
-
-            _render: function() {
+        class TestRepeater extends Widget {
+            _render() {
                 const that = this;
                 $.each(that.option('items'), function(index, item) {
                     that.option('integrationOptions.templates')['itemTemplate'].render({
@@ -1031,14 +995,14 @@ moduleWithoutCsp('Widget & CollectionWidget with templates enabled', function() 
                         container: that.$element()
                     });
                 });
-            },
+            }
 
-            _renderContentImpl: noop,
+            _renderContentImpl() { }
 
-            _clean: function() {
+            _clean() {
                 this.$element().empty();
             }
-        });
+        }
 
         registerComponent('dxTestRepeater', TestRepeater);
         try {
@@ -1079,14 +1043,11 @@ moduleWithoutCsp(
     },
     function() {
         QUnit.test('ko.observable subscriptions should be disposed', function(assert) {
-            const TestComponent = DOMComponent.inherit({
-                _defaultOptions: function() {
-                    return { text: '', array: [], obj: null };
-                },
+            class TestComponent extends DOMComponent {
                 _useTemplates() {
                     return false;
                 }
-            });
+            }
 
             registerComponent('dxTest', TestComponent);
 
@@ -1130,15 +1091,20 @@ moduleWithoutCsp(
         });
 
         QUnit.test('regressions: nested component should be disposed', function(assert) {
-            const TestComponent = DOMComponent.inherit({
-                NAME: 'TestComponent',
-                _dispose: function() {
+            class TestComponent extends DOMComponent {
+                ctor(element, options) {
+                    this.NAME = 'TestComponent';
+                    super.ctor(element, options);
+                }
+
+                _dispose() {
                     this.__disposed__ = true;
-                },
+                }
+
                 _useTemplates() {
                     return false;
                 }
-            });
+            }
 
             registerComponent('TestComponent', TestComponent);
 
@@ -1160,15 +1126,16 @@ moduleWithoutCsp(
             QUnit.test('regression: B233447 - component disposing should be called once per component (' + caseName + ')', function(assert) {
                 registerComponent(
                     'dxTestComponent',
-                    DOMComponent.inherit({
-                        _dispose: function() {
+                    class extends DOMComponent {
+                        _dispose() {
                             this.__disposeCount__ = this.__disposeCount__ || 0;
                             this.__disposeCount__++;
-                        },
+                        }
+
                         _useTemplates() {
                             return false;
                         }
-                    })
+                    }
                 );
 
                 try {
@@ -1191,15 +1158,15 @@ moduleWithoutCsp(
         });
 
         QUnit.test('CollectionWidget clean subscriptions', function(assert) {
-            const TestCollectionContainer = CollectionWidget.inherit({
-                _itemClass: function() {
+            class TestCollectionContainer extends CollectionWidget {
+                _itemClass() {
                     return 'dx-test-item';
-                },
+                }
 
-                _itemDataKey: function() {
+                _itemDataKey() {
                     return 'dxTestItemData';
                 }
-            });
+            }
 
             registerComponent('dxTestCollectionContainer', TestCollectionContainer);
 
@@ -1248,20 +1215,15 @@ moduleWithoutCsp(
     'component action context',
     {
         beforeEach: function() {
-            registerComponent('dxTest', DOMComponent.inherit({
-                _defaultOptions: function() {
-                    return $.extend(this.callBase(), {
-                        onHandler: noop
-                    });
-                },
-
-                trigger: function(e) {
+            registerComponent('dxTest', class extends DOMComponent {
+                trigger(e) {
                     this._createActionByOption('onHandler')(e);
-                },
+                }
+
                 _useTemplates() {
                     return false;
                 }
-            }));
+            });
 
             $(
                 '<div id=\'aggregatedModelComponentActionContext\'>' +
@@ -1330,16 +1292,17 @@ moduleWithoutCsp(
 moduleWithoutCsp('Template w/o ko scenario', function() {
 
     QUnit.test('widget with templates enabled', function(assert) {
-        const TestContainer = Widget.inherit({
-            _renderContentImpl: function() {
+        class TestContainer extends Widget {
+            _renderContentImpl() {
                 if(this.option('integrationOptions.templates').template) {
                     this.option('integrationOptions.templates').template.render({ container: this.$element() });
                 }
-            },
-            _optionChanged: function() {
+            }
+
+            _optionChanged() {
                 this._invalidate();
             }
-        });
+        }
 
         registerComponent('dxTestContainer', TestContainer);
 
@@ -1359,15 +1322,15 @@ moduleWithoutCsp('Template w/o ko scenario', function() {
     });
 
     QUnit.test('collection container widget', function(assert) {
-        const TestCollectionContainer = CollectionWidget.inherit({
-            _itemClass: function() {
+        class TestCollectionContainer extends CollectionWidget {
+            _itemClass() {
                 return 'dx-test-item';
-            },
+            }
 
-            _itemDataKey: function() {
+            _itemDataKey() {
                 return 'dxTestItemData';
             }
-        });
+        }
 
         registerComponent('dxTestCollectionContainer', TestCollectionContainer);
 
@@ -1401,7 +1364,9 @@ moduleWithoutCsp('predicate for manual option binding control', {
             }
         });
 
-        registerComponent('dxTest', DOMComponent.inherit({ _useTemplates() { return false; } }));
+        registerComponent('dxTest', class extends DOMComponent {
+            _useTemplates() { return false; }
+        });
 
         this.$component = $('<div></div>')
             .attr('data-bind', 'dxTest: $data')
@@ -1586,9 +1551,11 @@ moduleWithoutCsp('predicate for manual option binding control', {
 
     QUnit.test('onInitializing should be fired before widget rendering', function(assert) {
         const renderSpy = sinon.spy();
-        registerComponent('dxTestWidget', Widget.inherit({
-            _render: renderSpy
-        }));
+        registerComponent('dxTestWidget', class extends Widget {
+            _render(...args) {
+                renderSpy.apply(this, args);
+            }
+        });
 
         let onInitializingCalled = false;
 
@@ -1610,9 +1577,11 @@ moduleWithoutCsp('predicate for manual option binding control', {
 
     QUnit.test('beginUpdate in onInitializing should defer widget rendering until endUpdate', function(assert) {
         const renderSpy = sinon.spy();
-        registerComponent('dxTestWidget', Widget.inherit({
-            _render: renderSpy
-        }));
+        registerComponent('dxTestWidget', class extends Widget {
+            _render(...args) {
+                renderSpy.apply(this, args);
+            }
+        });
 
         let component;
 
