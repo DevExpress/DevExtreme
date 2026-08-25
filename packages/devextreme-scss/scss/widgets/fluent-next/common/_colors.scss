@@ -13,6 +13,9 @@ $backdrop-rest: ds.$color-surface-backdrop-default-rest !default;
 $global-dropdown-shadow-ambient: ds.$color-shadow-ambient !default;
 $global-dropdown-shadow-key: ds.$color-shadow-key !default;
 
+// Focus ring for the widgets that draw one themselves: the accent role, as in legacy fluent.
+$focus-rect-outline-rest: ds.$color-surface-primary-default-rest !default;
+
 $palette-accent: ds.$color-surface-primary-default-rest !default;
 $palette-bg: ds.$color-surface-neutral-default-rest !default;
 $palette-border: ds.$color-border-neutral-default-rest !default;
