@@ -261,8 +261,13 @@ class DiagramToolbox extends DiagramFloatingPanel {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   _getAccordionDataSource() {
     const result = [];
-    const toolboxGroups = this.option('toolboxGroups');
-    // @ts-expect-error ts-error
+    const toolboxGroups = this.option('toolboxGroups') as {
+      category: string;
+      title?: string;
+      expanded?: boolean;
+      displayMode?: string;
+      shapes?: string[];
+    }[];
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < toolboxGroups.length; i += 1) {
       const { category } = toolboxGroups[i];

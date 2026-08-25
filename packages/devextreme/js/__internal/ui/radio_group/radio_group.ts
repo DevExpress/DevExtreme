@@ -238,8 +238,6 @@ class RadioGroup extends Editor<RadioGroupProperties> {
       // @ts-expect-error _getCollectionKeyExpr is injected by DataExpressionMixin
       keyExpr: this._getCollectionKeyExpr(),
       noDataText: '',
-      // @ts-expect-error scrollingEnabled is absent from CollectionWidgetProperties
-      scrollingEnabled: false,
       selectByClick: false,
       selectionMode: 'single',
       selectedItemKeys: this._getSelectedItemKeys(value),

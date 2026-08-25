@@ -279,9 +279,7 @@ class SchedulerAgenda extends WorkSpace {
         const resourceItem = resource?.items
           .find((rItem) => rItem.id === value);
 
-        // @ts-expect-error
         if (cellTemplate?.render) {
-          // @ts-expect-error
           cellTemplates.push(cellTemplate.render.bind(cellTemplate, {
             model: {
               data: resourceData,

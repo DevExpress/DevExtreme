@@ -62,10 +62,14 @@ function setAttribute(
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface WidgetProperties<TComponent = any> extends WidgetOptions<TComponent>, Omit<
+export interface WidgetProperties<TComponent = any> extends Omit<WidgetOptions<TComponent>, 'width' | 'height'>, Omit<
   DOMComponentProperties<TComponent>,
   keyof WidgetOptions<TComponent>
 > {
+  width?: DOMComponentProperties<TComponent>['width'];
+
+  height?: DOMComponentProperties<TComponent>['height'];
+
   useResizeObserver?: boolean;
   onKeyboardHandled?: (event: KeyboardKeyDownEvent) => void;
   isActive?: boolean;

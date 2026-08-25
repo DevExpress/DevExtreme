@@ -895,7 +895,7 @@ export class AppointmentForm {
   }
 
   showMainGroup(): void {
-    const currentHeight = this.dxPopup.option('height') as string | number | undefined;
+    const currentHeight = this.dxPopup.option('height');
     const configuredHeight = this.getEditingObject()?.popup?.height ?? 'auto';
 
     if (typeof currentHeight === 'number') {
@@ -925,7 +925,7 @@ export class AppointmentForm {
 
     this.updateAnimationOffset();
 
-    const currentHeight = this.dxPopup.option('height') as string | number | undefined;
+    const currentHeight = this.dxPopup.option('height');
 
     if (currentHeight === 'auto' || currentHeight === undefined) {
       const overlayHeight = this.dxPopup.$overlayContent().get(0).clientHeight;

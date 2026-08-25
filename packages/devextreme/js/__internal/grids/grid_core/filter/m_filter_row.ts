@@ -318,14 +318,13 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     return that._createComponent($overlay, Overlay, {
       height: 'auto',
       shading: false,
-      showTitle: false,
       focusStateEnabled: false,
       hideOnOutsideClick: true,
       hideOnParentScroll: true,
       _hideOnParentScrollTarget: $overlay,
       wrapperAttr: { class: filterRangeOverlayClass },
       container: this.element(),
-      animation: false,
+      animation: null,
       position: {
         my: 'top',
         at: 'top',
@@ -375,7 +374,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
         return $(contentElement).addClass(that.getWidgetContainerClass());
       },
       onShown(e) {
-        const $editor = e.component.$content().find(`.${EDITOR_CONTAINER_CLASS}`).first();
+        const $editor = $(e.component.content()).find(`.${EDITOR_CONTAINER_CLASS}`).first();
         // @ts-expect-error
         eventsEngine.trigger($editor.find(EDITORS_INPUT_SELECTOR), 'focus');
       },
@@ -608,7 +607,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     const ariaSearchBox = messageLocalization.format('dxDataGrid-ariaSearchBox');
 
     that._createComponent($menu, Menu, {
-      // @ts-expect-error
       integrationOptions: {},
       activeStateEnabled: false,
       selectionMode: 'single',
