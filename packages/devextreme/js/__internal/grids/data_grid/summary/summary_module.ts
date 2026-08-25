@@ -5,11 +5,11 @@ import gridCore from '../m_core';
 import dataSourceAdapterProvider from '../m_data_source_adapter';
 import { summaryDataControllerExtender } from './extenders/summary_data_controller';
 import {
-  dataSourceAdapterExtender, FooterView, summaryEditingControllerExtender,
+  FooterView, summaryDataSourceAdapterExtender, summaryEditingControllerExtender,
   summaryRowsViewExtender,
 } from './m_summary';
 
-dataSourceAdapterProvider.extend(dataSourceAdapterExtender);
+dataSourceAdapterProvider.extend(summaryDataSourceAdapterExtender);
 
 gridCore.registerModule('summary', {
   defaultOptions(): {
