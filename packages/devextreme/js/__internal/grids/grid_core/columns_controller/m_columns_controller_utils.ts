@@ -734,7 +734,7 @@ const invalidateStaleVisibleWidths = (that: ColumnsController, changedColumn): v
     changedColumn.visibleWidth = null;
   }
 
-  that._columns.forEach((column) => {
+  that._columns.concat(that._commandColumns).forEach((column) => {
     const hasCalculatedVisibleWidth = isNumeric(column.visibleWidth)
       && (!isDefined(column.width) || column.width === 'auto');
     const shouldInvalidateVisibleWidth = column !== changedColumn
