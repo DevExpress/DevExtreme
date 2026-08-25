@@ -318,14 +318,13 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     return that._createComponent($overlay, Overlay, {
       height: 'auto',
       shading: false,
-      showTitle: false,
       focusStateEnabled: false,
       hideOnOutsideClick: true,
       hideOnParentScroll: true,
       _hideOnParentScrollTarget: $overlay,
       wrapperAttr: { class: filterRangeOverlayClass },
       container: this.element(),
-      animation: false,
+      animation: null,
       position: {
         my: 'top',
         at: 'top',
@@ -375,7 +374,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
         return $(contentElement).addClass(that.getWidgetContainerClass());
       },
       onShown(e) {
-        const $editor = e.component.$content().find(`.${EDITOR_CONTAINER_CLASS}`).first();
+        const $editor = $(e.component.content()).find(`.${EDITOR_CONTAINER_CLASS}`).first();
         // @ts-expect-error
         eventsEngine.trigger($editor.find(EDITORS_INPUT_SELECTOR), 'focus');
       },
@@ -550,9 +549,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     const dataSource = this._dataController.dataSource();
 
     if (options.lookup && this.option('syncLookupFilterValues')) {
-      this._applyFilterViewController.setCurrentColumnForFiltering(options);
-      const filter = this._dataController.getCombinedFilter();
-      this._applyFilterViewController.setCurrentColumnForFiltering(null);
+      const filter = this._dataController.getCombinedFilterWithExcludedColumn(options);
 
       const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(options, dataSource, filter);
       const lookupOptions = {
@@ -610,7 +607,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     const ariaSearchBox = messageLocalization.format('dxDataGrid-ariaSearchBox');
 
     that._createComponent($menu, Menu, {
-      // @ts-expect-error
       integrationOptions: {},
       activeStateEnabled: false,
       selectionMode: 'single',
@@ -766,7 +762,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 
     const columns = this._columnsController.getVisibleColumns();
     const dataSource = this._dataController.dataSource();
-    const applyFilterViewController = this._applyFilterViewController;
     const rowIndex = this.element().find(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).index();
 
     if (rowIndex === -1) {
@@ -782,9 +777,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       const editor = getEditorInstance($cell?.find('.dx-editor-container'));
 
       if (editor) {
-        applyFilterViewController.setCurrentColumnForFiltering(column);
-        const filter = this._dataController.getCombinedFilter() || null;
-        applyFilterViewController.setCurrentColumnForFiltering(null);
+        const filter = this._dataController.getCombinedFilterWithExcludedColumn(column) || null;
 
         const editorDataSource = editor.option('dataSource');
         const shouldUpdateFilter = !filterChanged
@@ -832,10 +825,10 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterRow
     const filters = [super._calculateAdditionalFilter()];
     const columns = this._columnsController.getVisibleColumns(null, true);
 
-    const applyFilterController = this._applyFilterController;
+    const excludedColumn = this.getFilterExcludedColumn();
 
     each(columns, function () {
-      const shouldSkip = applyFilterController.getCurrentColumnForFiltering()?.index === this.index;
+      const shouldSkip = excludedColumn?.index === this.index;
       if (this.allowFiltering && this.calculateFilterExpression && isDefined(this.filterValue) && !shouldSkip) {
         const filter = this.createFilterExpression(this.filterValue, this.selectedFilterOperation || this.defaultFilterOperation, 'filterRow');
         filters.push(filter);
@@ -848,8 +841,6 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterRow
 
 export class ApplyFilterViewController extends modules.ViewController {
   private _headerPanel: any;
-
-  private _currentColumn: any;
 
   private _columnsController!: ColumnsController;
 
@@ -900,14 +891,6 @@ export class ApplyFilterViewController extends modules.ViewController {
       columnHeadersViewElement.find(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)} .${FILTER_MODIFIED_CLASS}`).removeClass(FILTER_MODIFIED_CLASS);
       this._getHeaderPanel().enableApplyButton(false);
     }
-  }
-
-  public setCurrentColumnForFiltering(column) {
-    this._currentColumn = column;
-  }
-
-  public getCurrentColumnForFiltering() {
-    return this._currentColumn;
   }
 }
 

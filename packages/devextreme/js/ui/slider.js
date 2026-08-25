@@ -1,2 +1,2 @@
-import Slider from '../__internal/ui/slider/m_slider';
+import Slider from '../__internal/ui/slider/slider';
 export default Slider;

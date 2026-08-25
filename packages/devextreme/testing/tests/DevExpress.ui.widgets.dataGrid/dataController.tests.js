@@ -239,7 +239,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         ];
         let dataSource = createDataSource(array, { key: 'id' });
 
-        this.dataController._dataPushedHandler = dataPushedHandlerSpy;
+        this.dataController.dataPushedHandlerProxy = dataPushedHandlerSpy;
         this.dataController.setDataSource(dataSource);
         dataSource = this.dataController.dataSource();
         dataSource.load();
@@ -2605,58 +2605,6 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         // assert
         assert.equal(this.dataController.items().length, 2, 'count loaded items');
         assert.strictEqual(data, undefined, 'not data');
-    });
-
-    QUnit.test('getDataByKeys from loaded items and data store', function(assert) {
-    // arrange
-        const array = [
-            { name: 'Alex', phone: '55-55-55' },
-            { name: 'Sam', phone: '66-66-66' },
-            { name: 'Dan', phone: '98-75-21' }
-        ];
-        let data;
-
-        const dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
-
-        this.dataController.setDataSource(dataSource);
-        dataSource.load();
-
-        // act
-        this.dataController.getDataByKeys(['Alex', 'Dan']).done(function(result) {
-            data = result;
-        });
-
-        // assert
-        assert.equal(this.dataController.items().length, 2, 'count loaded items');
-        assert.equal(data.length, 2, 'count data');
-        assert.deepEqual(data[0], { name: 'Alex', phone: '55-55-55' }, 'data 1');
-        assert.deepEqual(data[1], { name: 'Dan', phone: '98-75-21' }, 'data 2');
-    });
-
-    QUnit.test('getDataByKeys not has keys', function(assert) {
-    // arrange
-        const array = [
-            { name: 'Alex', phone: '55-55-55' },
-            { name: 'Sam', phone: '66-66-66' },
-            { name: 'Dan', phone: '98-75-21' }
-        ];
-        let data;
-
-        const dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
-
-        this.dataController.setDataSource(dataSource);
-        dataSource.load();
-
-        // act
-        this.dataController.getDataByKeys(['Sam', 'Test2']).done(function(result) {
-            data = result;
-        });
-
-        // assert
-        assert.equal(this.dataController.items().length, 2, 'count loaded items');
-        assert.equal(data.length, 1, 'count data');
-        assert.deepEqual(data[0], { name: 'Sam', phone: '66-66-66' }, 'data 1');
-        assert.strictEqual(data[1], undefined, 'not data 2');
     });
 
     QUnit.test('getKeyByRowIndex', function(assert) {
@@ -11499,32 +11447,6 @@ QUnit.module('Summary', {
 
         // assert
         assert.deepEqual(headerFilterItems.map(function(item) { return item.value; }), [15, 18, 19, 20, 25], 'items are sorted');
-    });
-
-    QUnit.test('findSummaryItem by custom name', function(assert) {
-        const summaryItems = [{
-            name: 'testCount1',
-            summaryType: 'count'
-        }, {
-            name: 'testCount2',
-            summaryType: 'count'
-        }, {
-            name: 'testMin',
-            summaryType: 'min',
-            column: 'testField'
-        }];
-
-        // act
-        this.setupDataGridModules();
-        this.clock.tick(10);
-
-        // assert
-        assert.strictEqual(this.dataController._findSummaryItem(summaryItems, 'count'), 0, 'find by summaryType');
-        assert.strictEqual(this.dataController._findSummaryItem(summaryItems, 'testField'), 2, 'find by column name');
-        assert.strictEqual(this.dataController._findSummaryItem(summaryItems, 'min_testField'), 2, 'find by summary type+column name');
-        assert.strictEqual(this.dataController._findSummaryItem(summaryItems, 'testCount2'), 1, 'find by name');
-        assert.strictEqual(this.dataController._findSummaryItem(summaryItems, 1), 1, 'find by summary item index');
-        assert.strictEqual(this.dataController._findSummaryItem(summaryItems, 'test3'), -1, 'find by wrong name');
     });
 
     QUnit.test('group sorting by summary sortOrder desc', function(assert) {

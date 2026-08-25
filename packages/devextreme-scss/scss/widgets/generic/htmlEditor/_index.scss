@@ -15,8 +15,6 @@
 @use "../../base/mixins" as *;
 @use "../../base/htmlEditor";
 
-// adduse
-
 .dx-htmleditor {
   .dx-htmleditor-toolbar-wrapper {
     padding: 5px;
@@ -41,7 +39,7 @@
       right: 1px;
       z-index: 2;
       background-color: color.change($base-bg, $alpha: 0.2);
-      content: '';
+      content: "";
       pointer-events: none;
     }
 

@@ -195,7 +195,6 @@ class NumberBoxBase<
   _renderValue() {
     const inputValue = this._input().val();
     const value = this.option('value');
-    // @ts-expect-error ts-error
     if (!inputValue.length || Number(inputValue) !== value) {
       this._forceValueRender();
       this._toggleEmptinessEventHandler();
@@ -235,7 +234,7 @@ class NumberBoxBase<
         return numberLocalization.format(
           Number(value),
           globalNumberFormat,
-        ) as string;
+        );
       }
     }
 

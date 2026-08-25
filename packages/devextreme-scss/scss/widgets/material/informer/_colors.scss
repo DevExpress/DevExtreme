@@ -1,8 +1,6 @@
 @use "../colors" as *;
 @use "../color" as extcolor;
 
-// adduse
-
 $informer-error-color: $base-danger !default;
 $informer-error-background-color: null !default;
 $informer-info-color: $base-text-color !default;

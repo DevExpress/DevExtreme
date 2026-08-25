@@ -9,7 +9,7 @@ const getFilePath = (fileName: string): string => {
 };
 
 const getImagesFromContent = (content: string): string[] => {
-  const dataUriRegex = /data-uri\((?:'(image\/svg\+xml;charset=UTF-8)',\s)?['"]?([^)'"]+)['"]?\)/g;
+  const dataUriRegex = /data-uri\((?:['"](image\/svg\+xml;charset=UTF-8)['"],\s)?['"]?([^)'"]+)['"]?\)/g;
   const result: string[] = [];
   let match = dataUriRegex.exec(content);
 

@@ -1,10 +1,7 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../button/colors" as *;
 @use "../textEditor/colors" as *;
-
-// adduse
 
 /**
 * $name 20. Dropdown button hovered state background color
@@ -13,7 +10,6 @@
 $dropdowneditor-button-hover-bg: null !default;
 $dropdowneditor-filled-button-hover-bg: color.change($base-accent, $alpha: 0.2) !default;
 $dropdowneditor-button-hover-border-color: null !default;
-
 
 /**
 * $name 30. Dropdown button active state background color
@@ -98,4 +94,3 @@ $dropdowneditor-icon-border-radius: $base-border-radius - 1px !default;
   $dropdowneditor-button-active-bg: color.adjust($button-normal-bg, $lightness: -30%, $space: hsl) !default;
   $dropdowneditor-icon-active-color: $base-icon-color !default;
 }
-

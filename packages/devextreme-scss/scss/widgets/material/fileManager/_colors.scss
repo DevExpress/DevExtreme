@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 $filemanager-border-color: $base-border-color !default;
 $filemanager-file-toolbar-bg: color.adjust($base-bg, $lightness: -3%, $space: hsl) !default;
@@ -21,7 +18,6 @@ $filemanager-item-focused-color: $base-inverted-text-color !default;
 $filemanager-dirs-tree-item-focus-bg: null !default;
 $filemanager-progressbox-shadow-color: null !default;
 
-
 @if $mode == "light" {
   $filemanager-dirs-tree-item-focus-bg: color.adjust($base-bg, $lightness: -8%, $space: hsl) !default;
   $filemanager-progressbox-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
@@ -31,4 +27,3 @@ $filemanager-progressbox-shadow-color: null !default;
   $filemanager-dirs-tree-item-focus-bg: color.adjust($base-bg, $lightness: 8%, $space: hsl) !default;
   $filemanager-progressbox-shadow-color: color.change(color.adjust($base-shadow-color, $lightness: -100%, $space: hsl), $alpha: 0.3) !default;
 }
-

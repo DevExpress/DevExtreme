@@ -1,16 +1,11 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../gridBase/colors" as *;
-
-// adduse
-
 
 $gantt-collapsable-row-bg: null !default;
 $gantt-selection-bg: null !default;
 $gantt-parent-task-bg: null !default;
 $gantt-icon-color: null !default;
-
 
 @if $color == "carmine" {
 
@@ -75,4 +70,3 @@ $gantt-icon-color: null !default;
   $gantt-parent-task-bg: $base-success !default;
   $gantt-icon-color: color.adjust($base-text-color, $lightness: 20%, $space: hsl) !default;
 }
-

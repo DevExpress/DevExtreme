@@ -6,19 +6,80 @@ import {
 import coreLocalization from '@js/common/core/localization/core';
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { format } from '@js/core/utils/string';
 import { isDefined } from '@js/core/utils/type';
+import type { Properties as GanttProperties } from '@js/ui/gantt';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import { getGanttViewCore } from '@ts/ui/gantt/gantt_importer';
+import type { GanttExportHelper } from '@ts/ui/gantt/ui.gantt.export_helper';
 import { TaskAreaContainer } from '@ts/ui/gantt/ui.gantt.task.area.container';
 
 const visualStateKey = 'visualState';
 const fullScreenModeKey = 'fullScreen';
 
 interface GanttViewProperties extends WidgetProperties {
+  exportHelper?: GanttExportHelper;
+
+  rowHeight?: number;
+
+  headerHeight?: number;
+
+  mainElement?: dxElementWrapper;
+
+  modelChangesListener?: unknown;
+
+  visualState?: unknown;
+
+  tasks?: GanttProperties['tasks'];
+
+  dependencies?: GanttProperties['dependencies'];
+
+  resources?: GanttProperties['resources'];
+
+  resourceAssignments?: GanttProperties['resourceAssignments'];
+
+  allowSelection?: GanttProperties['allowSelection'];
+
+  selectedRowKey?: GanttProperties['selectedRowKey'];
+
+  showResources?: GanttProperties['showResources'];
+
+  showDependencies?: GanttProperties['showDependencies'];
+
+  startDateRange?: GanttProperties['startDateRange'];
+
+  endDateRange?: GanttProperties['endDateRange'];
+
+  taskTitlePosition?: GanttProperties['taskTitlePosition'];
+
+  firstDayOfWeek?: GanttProperties['firstDayOfWeek'];
+
+  showRowLines?: GanttProperties['showRowLines'];
+
+  scaleType?: GanttProperties['scaleType'];
+
+  scaleTypeRange?: GanttProperties['scaleTypeRange'];
+
+  editing?: GanttProperties['editing'];
+
+  validation?: GanttProperties['validation'];
+
+  stripLines?: GanttProperties['stripLines'];
+
+  bars?: unknown[];
+
+  taskTooltipContentTemplate?: unknown;
+
+  taskProgressTooltipContentTemplate?: unknown;
+
+  taskTimeTooltipContentTemplate?: unknown;
+
+  taskContentTemplate?: unknown;
+
   onSelectionChanged?: Function;
   onViewTypeChanged?: Function;
   onScroll?: Function;
@@ -106,8 +167,6 @@ export class GanttView extends Widget<GanttViewProperties> {
       editing: this._parseEditingSettings(this.option('editing')),
       validation: this.option('validation'),
       stripLines: {
-        // @ts-expect-error ts-error
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         stripLines: this.option('stripLines')?.map((item) => ({ ...item })),
       },
       areHorizontalBordersEnabled: this.option('showRowLines'),
@@ -318,7 +377,6 @@ export class GanttView extends Widget<GanttViewProperties> {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   _optionChanged(args): void {
     switch (args.name) {
       case 'width':
@@ -473,9 +531,8 @@ export class GanttView extends Widget<GanttViewProperties> {
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getExternalTaskAreaContainer(element) {
-    if (!this._taskAreaContainer) {
-      this._taskAreaContainer = new TaskAreaContainer(element, this);
-    }
+    this._taskAreaContainer ??= new TaskAreaContainer(element, this);
+
     return this._taskAreaContainer;
   }
 
@@ -526,7 +583,7 @@ export class GanttView extends Widget<GanttViewProperties> {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getMainElement() {
     // @ts-expect-error ts-error
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
     return this.option('mainElement').get(0);
   }
 
@@ -601,39 +658,37 @@ export class GanttView extends Widget<GanttViewProperties> {
   // export
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getTreeListTableStyle() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.callExportHelperMethod('getTreeListTableStyle');
+    const { exportHelper } = this.option();
+
+    return exportHelper?.getTreeListTableStyle();
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getTreeListColCount() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.callExportHelperMethod('getTreeListColCount');
+    const { exportHelper } = this.option();
+
+    return exportHelper?.getTreeListColCount();
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getTreeListHeaderInfo(colIndex) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.callExportHelperMethod('getTreeListHeaderInfo', colIndex);
+    const { exportHelper } = this.option();
+
+    return exportHelper?.getTreeListHeaderInfo(colIndex);
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getTreeListCellInfo(rowIndex, colIndex, key) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.callExportHelperMethod('getTreeListCellInfo', key, colIndex);
+    const { exportHelper } = this.option();
+
+    return exportHelper?.getTreeListCellInfo(key, colIndex);
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getTreeListEmptyDataCellInfo() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.callExportHelperMethod('getTreeListEmptyDataCellInfo');
-  }
+    const { exportHelper } = this.option();
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  callExportHelperMethod(methodName, ...args) {
-    const helper = this.option('exportHelper');
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return helper[methodName](...args);
+    return exportHelper?.getTreeListEmptyDataCellInfo();
   }
 
   applyTasksExpandedState(state): void {

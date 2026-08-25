@@ -1,9 +1,6 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../overlay/colors" as *;
-
-// adduse
 
 /**
 * $name 10. Overlay background
@@ -15,7 +12,6 @@ $colorview-handle-color: null !default;
 $colorview-handle-border-color: null !default;
 $colorview-border-color: $base-border-color !default;
 $colorview-label-color: $base-label-color !default;
-
 
 @if $color == "carmine" {
   $colorbox-overlay-bg: $overlay-content-bg !default;
@@ -72,4 +68,3 @@ $colorview-label-color: $base-label-color !default;
   $colorview-handle-color: $base-bg !default;
   $colorview-handle-border-color: color.change($base-inverted-bg, $alpha: 0.2) !default;
 }
-

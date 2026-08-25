@@ -5,7 +5,9 @@ import { Component } from '@js/core/component';
 import { getPathParts } from '@js/core/utils/data';
 import type { ChangedOptionInfo } from '@js/events';
 import type { ReadonlySignal, Signal } from '@ts/core/state_manager/index';
-import { computed, effect, signal } from '@ts/core/state_manager/index';
+import {
+  computed, effect, signal, track,
+} from '@ts/core/state_manager/index';
 import { extend } from '@ts/core/utils/m_extend';
 import type { ComponentType } from 'inferno';
 
@@ -219,8 +221,7 @@ export class OptionsController<
       const actionOption = this.oneWay(name);
       return computed(
         () => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-          actionOption.value;
+          track(actionOption.value);
           // @ts-expect-error
           return this.component._createActionByOption(name) as any;
         },

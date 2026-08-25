@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 $scrollable-bg: $base-bg !default;
 
@@ -75,4 +72,3 @@ $scrollable-scrollbar-active-bg: null !default;
   $scrollable-scrollbar-bg: transparent !default;
   $scrollable-scrollbar-active-bg: color.change(color.adjust($scrollable-bg, $lightness: -25%, $space: hsl), $alpha: 0.2) !default;
 }
-

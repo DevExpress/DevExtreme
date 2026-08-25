@@ -1,8 +1,6 @@
 @use "sass:math";
-@use "sass:color";
 @use "sass:selector";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../common/mixins" as *;
@@ -12,8 +10,6 @@
 @use "../switch/sizes" as *;
 @use "../slider/sizes" as *;
 @use "../../base/fieldset";
-
-// adduse
 
 @mixin dx-fieldset-styling() {
   .dx-field {

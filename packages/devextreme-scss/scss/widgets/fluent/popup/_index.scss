@@ -1,16 +1,11 @@
-@use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../overlay/colors" as *;
 @use "../toolbar/mixins" as *;
 @use "../toolbar/sizes" as *;
 @use "../typography/sizes" as *;
 @use "../../base/popup";
-
-// adduse
 @use "../overlay";
 
 $fluent-popup-toolbar-label-font-size: $fluent-m-font-size;

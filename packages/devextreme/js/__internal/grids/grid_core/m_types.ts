@@ -49,7 +49,11 @@ type GridBaseType = GridBase<unknown, unknown> & Omit<Widget<InternalGridOptions
 export type CreateComponent<TComponent extends Component<any>> = (
   $container: dxElementWrapper,
   component: new (...args) => TComponent,
-  options?: TComponent extends Component<infer TOptions> ? TOptions : never,
+  options?: TComponent extends { _getDefaultOptions: () => infer TOptions }
+    ? string extends keyof TOptions ? object : Partial<TOptions> & { integrationOptions?: Record<string, unknown> }
+    : TComponent extends Component<infer TOptions>
+      ? Partial<TOptions> | Record<string, unknown>
+      : Record<string, unknown>,
 ) => TComponent;
 
 export interface InternalGrid extends GridBaseType {
@@ -108,6 +112,8 @@ type TemporarlyOptionsTakenFromDataGrid = Pick<DataGridOptions,
 | 'summary'
 | 'remoteOperations'
 | 'keyExpr'
+| 'selectionFilter'
+| 'sortByGroupSummaryInfo'
 >;
 
 type TemporarlyOptionsTakenFromTreeList = Pick<TreeListdOptions,
@@ -194,7 +200,7 @@ export interface Controllers {
   // todo: export is dataGrid-only controller
   editing: import('./editing/m_editing').EditingController;
   editorFactory: import('./editor_factory/m_editor_factory').EditorFactory;
-  errorHandling: import('./error_handling/m_error_handling').ErrorHandlingController;
+  errorHandling: import('./error_handling/error_handling_view_controller').ErrorHandlingViewController;
   export: import('../data_grid/export/m_export').ExportController;
   filterSync: import('./filter/m_filter_sync').FilterSyncController;
   focus: import('./focus/m_focus').FocusController;
@@ -207,7 +213,7 @@ export interface Controllers {
   selection: import('./selection/m_selection').SelectionController;
   validating: import('./validating/m_validating').ValidatingController;
   searchPanel: import('./search/m_search').SearchPanelViewController;
-  stateStoring: import('./state_storing/m_state_storing_core').StateStoringController;
+  stateStoring: import('./state_storing/state_storing_controller_core').StateStoringController;
   synchronizeScrolling: import('./views/m_grid_view').SynchronizeScrollingController;
   tablePosition: import('./columns_resizing_reordering/m_columns_resizing_reordering').TablePositionViewController;
   toastViewController: import('./toast/m_toast_controller').ToastViewController;
@@ -243,7 +249,7 @@ export interface Views {
 }
 
 export interface EditingControllerRequired {
-  _editingController: EditingController;
+  editingController: EditingController;
 }
 
 type ViewTypes = {

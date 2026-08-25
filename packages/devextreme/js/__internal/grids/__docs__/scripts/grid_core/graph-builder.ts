@@ -2,10 +2,25 @@
 import type { CytoscapeElement } from '../shared/graph-context';
 import { createGraphContext } from '../shared/graph-context';
 import { MODULE_ITEM_CLASS, MODULES_PREFIX } from './constants';
-import type { ArchitectureData } from './types';
+import type { ArchitectureData, ExtenderKind, ExtenderRef } from './types';
+
+const EXTENDER_KINDS: ExtenderKind[] = ['controllers', 'views'];
 
 function nonEmpty(value: string): string | undefined {
   return value || undefined;
+}
+
+function extenderNodeId(ref: ExtenderRef): string {
+  return `ext-${ref.module}-${ref.kind}-${ref.target}`;
+}
+
+function targetNodeId(kind: ExtenderKind, target: string): string {
+  return kind === 'controllers' ? `ctrl-${target}` : `view-${target}`;
+}
+
+/** Owned classes have no registration name, so the class name identifies them. */
+function ownedNodeId(className: string): string {
+  return `owned-${className}`;
 }
 
 function buildNodeIdMap(data: ArchitectureData): Map<string, string> {
@@ -21,6 +36,9 @@ function buildNodeIdMap(data: ArchitectureData): Map<string, string> {
       const nodeId = `view-${regName}`;
       map.set(view.className, nodeId);
       map.set(regName, nodeId);
+    }
+    for (const owned of Object.values(mod.owned)) {
+      map.set(owned.className, ownedNodeId(owned.className));
     }
   }
 
@@ -90,6 +108,7 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
       label: mod.registeredAs ?? mod.moduleName,
       nodeType: 'module',
       sourceFile: mod.sourceFile,
+      registeredBy: nonEmpty((mod.registrationFiles ?? []).join(', ')),
       featureArea: mod.featureArea,
       definesControllers: nonEmpty(Object.keys(mod.controllers).join(', ')),
       definesViews: nonEmpty(Object.keys(mod.views).join(', ')),
@@ -125,6 +144,59 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
         sourceFile: view.sourceFile,
         featureArea: mod.featureArea,
       }, 'gc-target gc-target-view');
+    }
+
+    // Add children the module creates itself, without going through the registry
+    for (const [name, owned] of Object.entries(mod.owned)) {
+      const roleClass = owned.className.endsWith('View') ? 'gc-target-view' : 'gc-target-controller';
+
+      addNode(ownedNodeId(owned.className), {
+        label: name,
+        parent: moduleId,
+        nodeType: 'owned',
+        className: owned.className,
+        baseClass: owned.baseClass,
+        mixins: nonEmpty(owned.mixins.join(', ')),
+        sourceFile: owned.sourceFile,
+        featureArea: mod.featureArea,
+      }, `gc-target ${roleClass} gc-owned`);
+    }
+
+    // Add one extender child per extended target (shown when the module is expanded)
+    for (const kind of EXTENDER_KINDS) {
+      for (const [target, ext] of Object.entries(mod.extenders[kind])) {
+        const ref: ExtenderRef = { module: mod.moduleName, kind, target };
+        const shapeClass = kind === 'controllers' ? 'gc-ext-controller' : 'gc-ext-view';
+
+        addNode(extenderNodeId(ref), {
+          label: target,
+          parent: moduleId,
+          ownerModule: moduleId,
+          nodeType: 'extender',
+          extenderKind: kind === 'controllers' ? 'controller' : 'view',
+          extenderName: ext.extenderName,
+          extenderClass: ext.extenderClass,
+          extendsTarget: target,
+          moduleName: mod.registeredAs ?? mod.moduleName,
+          sourceFile: ext.sourceFile ?? mod.sourceFile,
+          featureArea: mod.featureArea,
+        }, `gc-ext ${shapeClass} view-detailed`);
+      }
+    }
+
+    // Expand/collapse affordance, only for modules that actually have extenders
+    const extenderCount = Object.keys(mod.extenders.controllers).length
+      + Object.keys(mod.extenders.views).length;
+
+    if (extenderCount > 0) {
+      addNode(`modtoggle-${mod.moduleName}`, {
+        label: '+',
+        parent: moduleId,
+        ownerModule: moduleId,
+        nodeType: 'moduleToggle',
+        extenderCount,
+        featureArea: mod.featureArea,
+      }, 'mod-toggle no-select');
     }
   }
 
@@ -179,44 +251,144 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
     }
   }
 
-  // 4. Add extension edges (from module to target controller/view)
+  // 4. Add extension edges. Two variants of the same relation:
+  //    dense    — module → target, the collapsed overview
+  //    detailed — extender node → target, showing which extender binds what
   for (const mod of data.modules) {
     const moduleId = `mod-${mod.moduleName}`;
 
-    for (const [targetName, ext] of Object.entries(mod.extenders.controllers)) {
-      const targetId = `ctrl-${targetName}`;
-      if (nodeIds.has(targetId)) {
-        addEdge(moduleId, targetId, {
-          edgeType: 'extension',
-          extenderName: ext.extenderName,
-          label: mod.registeredAs ?? mod.moduleName,
-        }, 'edge-ext-ctrl');
-      }
-    }
+    for (const kind of EXTENDER_KINDS) {
+      const edgeClass = kind === 'controllers' ? 'edge-ext-ctrl' : 'edge-ext-view';
 
-    for (const [targetName, ext] of Object.entries(mod.extenders.views)) {
-      const targetId = `view-${targetName}`;
-      if (nodeIds.has(targetId)) {
-        addEdge(moduleId, targetId, {
+      for (const [target, ext] of Object.entries(mod.extenders[kind])) {
+        const targetId = targetNodeId(kind, target);
+        if (!nodeIds.has(targetId)) {
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+
+        const edgeData = {
           edgeType: 'extension',
           extenderName: ext.extenderName,
+          extenderClass: ext.extenderClass,
+          ownerModule: moduleId,
           label: mod.registeredAs ?? mod.moduleName,
-        }, 'edge-ext-view');
+        };
+
+        addEdge(moduleId, targetId, edgeData, `${edgeClass} view-dense`);
+        addEdge(
+          extenderNodeId({ module: mod.moduleName, kind, target }),
+          targetId,
+          edgeData,
+          `${edgeClass} view-detailed`,
+        );
       }
     }
   }
 
-  // 5. Add runtime dependency edges
-  for (const dep of data.runtimeDependencies) {
-    const sourceId = nodeIdMap.get(dep.from);
-    const targetId = dep.toType === 'controller' ? `ctrl-${dep.to}` : `view-${dep.to}`;
-
-    if (sourceId && nodeIds.has(sourceId) && nodeIds.has(targetId)) {
-      addEdge(sourceId, targetId, {
-        edgeType: 'runtime',
-        via: dep.via,
-      }, 'edge-runtime');
+  // 5. Add runtime dependency edges.
+  //    A call inside an extender belongs to that extender, not to the base class
+  //    it is named after: collapsed it is drawn from the module, expanded from the
+  //    extender — landing on the module's own extender of the target if it has one.
+  const classModule = new Map<string, string>();
+  for (const mod of data.modules) {
+    for (const ctrl of Object.values(mod.controllers)) {
+      classModule.set(ctrl.className, mod.moduleName);
     }
+    for (const view of Object.values(mod.views)) {
+      classModule.set(view.className, mod.moduleName);
+    }
+  }
+  const moduleByName = new Map(data.modules.map((mod) => [mod.moduleName, mod]));
+
+  /** The module's own extender node for `target`, if it registers one. */
+  function ownExtenderId(moduleName: string, kind: ExtenderKind, target: string): string | null {
+    const mod = moduleByName.get(moduleName);
+    if (!mod?.extenders[kind][target]) {
+      return null;
+    }
+    const id = extenderNodeId({ module: moduleName, kind, target });
+
+    return nodeIds.has(id) ? id : null;
+  }
+
+  const denseRuntime = new Map<string, {
+    source: string;
+    target: string;
+    edgeData: Record<string, unknown>;
+    extenders: Set<string>;
+  }>();
+
+  for (const dep of data.runtimeDependencies) {
+    const kind: ExtenderKind = dep.toType === 'controller' ? 'controllers' : 'views';
+    const targetId = targetNodeId(kind, dep.to);
+    if (!nodeIds.has(targetId)) {
+      // eslint-disable-next-line no-continue
+      continue;
+    }
+
+    const edgeData = { edgeType: 'runtime', via: dep.via, location: dep.location };
+
+    if (dep.fromExtender) {
+      const ownerModule = `mod-${dep.fromExtender.module}`;
+      const sourceId = extenderNodeId(dep.fromExtender);
+      const own = ownExtenderId(dep.fromExtender.module, kind, dep.to);
+
+      addEdge(sourceId, own && own !== sourceId ? own : targetId, {
+        ...edgeData,
+        ownerModule,
+        extenderName: dep.from,
+      }, 'edge-runtime view-detailed');
+
+      // Collapsed, every extender of a module that reaches the same target shares
+      // one edge, so it has to name all of them.
+      const key = `${ownerModule}|${targetId}`;
+      const pending = denseRuntime.get(key);
+      if (pending) {
+        pending.extenders.add(dep.from);
+      } else {
+        denseRuntime.set(key, {
+          source: ownerModule, target: targetId, edgeData, extenders: new Set([dep.from]),
+        });
+      }
+      // eslint-disable-next-line no-continue
+      continue;
+    }
+
+    const sourceId = nodeIdMap.get(dep.from);
+    if (!sourceId || !nodeIds.has(sourceId)) {
+      // eslint-disable-next-line no-continue
+      continue;
+    }
+
+    const ownerName = classModule.get(dep.from);
+    const own = ownerName ? ownExtenderId(ownerName, kind, dep.to) : null;
+
+    if (own && own !== sourceId) {
+      const ownerModule = `mod-${ownerName}`;
+      addEdge(sourceId, targetId, { ...edgeData, ownerModule }, 'edge-runtime view-dense');
+      addEdge(sourceId, own, { ...edgeData, ownerModule }, 'edge-runtime view-detailed');
+    } else {
+      addEdge(sourceId, targetId, edgeData, 'edge-runtime');
+    }
+  }
+
+  for (const entry of denseRuntime.values()) {
+    addEdge(entry.source, entry.target, {
+      ...entry.edgeData,
+      ownerModule: entry.source,
+      extenderName: [...entry.extenders].sort().join(', '),
+    }, 'edge-runtime view-dense');
+  }
+
+  // 6. Add ownership edges: who calls `new` on a class the registry never sees
+  for (const link of data.ownershipLinks) {
+    const sourceId = nodeIdMap.get(link.from) ?? `mod-${link.fromModule}`;
+
+    addEdge(sourceId, ownedNodeId(link.to), {
+      edgeType: 'ownership',
+      location: link.location,
+    }, 'edge-owns');
   }
 
   return elements;

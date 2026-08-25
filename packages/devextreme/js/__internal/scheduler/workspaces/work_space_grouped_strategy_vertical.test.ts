@@ -8,12 +8,10 @@ import VerticalGroupedStrategy from './work_space_grouped_strategy_vertical';
 
 jest.mock('@ts/scheduler/r1/utils/index', (): {
   calculateDayDuration: (startDayHour: number, endDayHour: number) => number;
-  getVerticalGroupCountClass: () => undefined;
 } => ({
   calculateDayDuration: (startDayHour: number, endDayHour: number): number => (
     endDayHour - startDayHour
   ),
-  getVerticalGroupCountClass: (): undefined => undefined,
 }));
 
 const createElement = ({
@@ -72,16 +70,9 @@ describe('VerticalGroupedStrategy', () => {
   it('should use uniform group heights when group heights are not specified', () => {
     const strategy = new VerticalGroupedStrategy(createConfig());
 
-    const result = strategy.getGroupBoundsOffset(2, [
-      createElement({ left: 10 }),
-      createElement({ right: 710 }),
-    ]);
-
-    expect(result).toEqual({
-      left: 10,
-      right: 710,
-      top: 2 * 480 + 20 + 5 - 10,
-      bottom: 2 * 480 + 20 + 5 - 10 + 480,
+    expect(strategy.getGroupVerticalOffset(2)).toEqual({
+      top: 2 * 480,
+      height: 480,
     });
   });
 
@@ -90,16 +81,22 @@ describe('VerticalGroupedStrategy', () => {
       getGroupHeights: (): number[] => [100, 200, 300],
     }));
 
-    const result = strategy.getGroupBoundsOffset(2, [
-      createElement({ left: 10 }),
-      createElement({ right: 710 }),
-    ]);
+    expect(strategy.getGroupVerticalOffset(2)).toEqual({
+      top: 100 + 200,
+      height: 300,
+    });
+  });
 
-    expect(result).toEqual({
-      left: 10,
-      right: 710,
-      top: 100 + 200 + 20 + 5 - 10,
-      bottom: 100 + 200 + 20 + 5 - 10 + 300,
+  it('should offset group bounds by the all-day row height, not by the cell height', () => {
+    const strategy = new VerticalGroupedStrategy(createConfig({
+      getGroupHeights: (): number[] => [100, 200, 300],
+      supportAllDayRow: (): boolean => true,
+      showAllDayPanel: (): boolean => true,
+    }));
+
+    expect(strategy.getGroupVerticalOffset(2)).toEqual({
+      top: 100 + 200 + 20 * 3,
+      height: 300,
     });
   });
 
@@ -109,14 +106,13 @@ describe('VerticalGroupedStrategy', () => {
       supportAllDayRow: (): boolean => true,
       showAllDayPanel: (): boolean => true,
     }));
-    const $indicator = {
-      css: jest.fn(),
-    } as unknown as dxElementWrapper;
+    const cssMock = jest.fn<(name: string, value?: unknown) => unknown>();
+    const $indicator = { css: cssMock } as unknown as dxElementWrapper;
 
     strategy.shiftIndicator($indicator, 15, 0, 2);
 
-    expect($indicator.css).toHaveBeenCalledWith('left', 30 + 40);
-    expect($indicator.css).toHaveBeenCalledWith('top', 15 + 100 + 200 + 20 * 3);
+    expect(cssMock).toHaveBeenCalledWith('left', 30 + 40);
+    expect(cssMock).toHaveBeenCalledWith('top', 15 + 100 + 200 + 20 * 3);
   });
 
   it('should use group height for shader max height', () => {

@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 $menu-popup-bg: $base-bg !default;
 $menu-item-hover-bg: $base-hover-bg !default;

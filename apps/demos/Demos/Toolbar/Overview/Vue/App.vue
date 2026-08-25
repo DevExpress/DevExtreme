@@ -110,6 +110,10 @@ const settingsButtonOptions = {
 };
 </script>
 <style>
+.demo-container {
+  padding: 4px;
+}
+
 .toolbar-label,
 .toolbar-label > b {
   font-size: 16px;

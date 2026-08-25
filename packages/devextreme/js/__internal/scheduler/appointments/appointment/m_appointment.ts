@@ -282,7 +282,13 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
   _createResizingConfig() {
     const config: any = this.option('direction') === 'vertical' ? this._getVerticalResizingRule() : this._getHorizontalResizingRule();
 
-    if (!this.invoke('isGroupedByDate')) {
+    const cellHeight = Math.round(this.invoke('getCellHeight') ?? 0);
+    const allDayHeight = Math.round(this.invoke('getAllDayHeight') ?? 0);
+    const allDayBreaksCellGrid = Boolean(this.invoke('isVerticalGroupedWorkSpace'))
+      && allDayHeight > 0
+      && allDayHeight !== cellHeight;
+
+    if (!this.invoke('isGroupedByDate') && !allDayBreaksCellGrid) {
       config.stepPrecision = 'strict';
     }
 

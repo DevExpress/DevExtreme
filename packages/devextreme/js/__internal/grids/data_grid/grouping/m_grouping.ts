@@ -10,7 +10,9 @@ import { isDefined, isString } from '@js/core/utils/type';
 import { restoreFocus, setTabIndex } from '@js/ui/shared/accessibility';
 import { ColumnContextMenuMixin } from '@ts/grids/grid_core/context_menu/m_column_context_menu_mixin';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { ItemProcessingOptions, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import { registerKeyboardAction } from '@ts/grids/grid_core/m_accessibility';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
@@ -29,6 +31,7 @@ import {
 } from './const';
 import { GroupingHelper as CollapsedGroupingHelper } from './m_grouping_collapsed';
 import { GroupingHelper as ExpandedGroupingHelper } from './m_grouping_expanded';
+import type { GroupItem, ProcessGroupItemsOptions } from './types';
 
 const DATAGRID_EXPAND_CLASS = 'dx-datagrid-expand';
 const DATAGRID_GROUP_ROW_CLASS = 'dx-group-row';
@@ -188,12 +191,12 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     return this._grouping.handleDataLoading(options);
   }
 
-  protected _handleDataLoaded(options) {
-    return this._grouping.handleDataLoaded(options, super._handleDataLoaded.bind(this));
+  protected customizeLoadResultHandler(options) {
+    return this._grouping.handleDataLoaded(options, super.customizeLoadResultHandler.bind(this));
   }
 
-  protected _handleDataLoadedCore(options) {
-    return this._grouping.handleDataLoadedCore(options, super._handleDataLoadedCore.bind(this));
+  protected customizeLoadResultHandlerCore(options) {
+    return this._grouping.handleDataLoadedCore(options, super.customizeLoadResultHandlerCore.bind(this));
   }
 };
 
@@ -210,33 +213,49 @@ const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => cla
     that.createAction('onRowCollapsed');
   }
 
-  protected _beforeProcessItems(items) {
+  protected _beforeProcessItems(items: RawItemData[]): RawItemData[] {
+    items = super._beforeProcessItems(items);
+
     const groupColumns = this._columnsController.getGroupColumns();
 
-    items = super._beforeProcessItems(items);
     if (items.length && groupColumns.length) {
+      // @ts-expect-error
       items = this._processGroupItems(items, groupColumns.length);
     }
+
     return items;
   }
 
-  protected _processItem(item, options) {
-    if (isDefined(item.groupIndex) && isString(item.rowType) && item.rowType.indexOf('group') === 0) {
-      item = this._processGroupItem(item, options);
+  protected _processItem(
+    dataItem: RawItemData | GroupItem,
+    options: ItemProcessingOptions,
+  ): ProcessedItem {
+    if (
+      isDefined(dataItem.groupIndex)
+      && isString(dataItem.rowType)
+      && dataItem.rowType.startsWith('group')
+    ) {
+      const processedGroupItem = this._processGroupItem(dataItem as GroupItem, options);
       options.dataIndex = 0;
-    } else {
-      // @ts-expect-error
-      item = super._processItem.apply(this, arguments);
+      return processedGroupItem;
     }
-    return item;
+
+    return super._processItem(dataItem as RawItemData, options);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private _processGroupItem(item, options?) {
-    return item;
+  protected _processGroupItem(
+    groupItem: GroupItem,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    options: ItemProcessingOptions,
+  ): ProcessedItem {
+    return groupItem;
   }
 
-  private _processGroupItems(items, groupsCount, options?) {
+  protected _processGroupItems(
+    items: RawItemData[],
+    groupsCount: number,
+    options?: ProcessGroupItemsOptions,
+  ): (RawItemData | GroupItem)[] {
     const that = this;
     const groupedColumns = that._columnsController.getGroupColumns();
     const column = groupedColumns[groupedColumns.length - groupsCount];
@@ -265,17 +284,23 @@ const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => cla
         });
       }
     }
+
     if (items) {
       if (groupsCount === 0) {
-        resultItems.push.apply(resultItems, items);
+        resultItems.push(...items);
       } else {
-        for (let i = 0; i < items.length; i++) {
-          const item = items[i];
+        for (const item of items) {
           if (item && 'items' in item) {
             options.data = item;
             options.path.push(item.key);
-            options.values.push(column && column.deserializeValue && !column.calculateDisplayValue ? column.deserializeValue(item.key) : item.key);
-            that._processGroupItems(item.items, groupsCount - 1, options);
+            options.values.push(
+              column?.deserializeValue && !column.calculateDisplayValue
+                ? column.deserializeValue(item.key)
+                : item.key,
+            );
+
+            that._processGroupItems((item as any).items, groupsCount - 1, options);
+
             options.data = undefined;
             options.path.pop();
             options.values.pop();
@@ -368,11 +393,14 @@ const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => cla
     return new Deferred().resolve();
   }
 
-  public optionChanged(args) {
-    if (args.name === 'grouping'/* autoExpandAll */) {
-      args.name = 'dataSource';
+  public optionChanged(e) {
+    if (e.name === 'grouping'/* autoExpandAll */) {
+      e.handled = true;
+      this.reset();
+      return;
     }
-    super.optionChanged(args);
+
+    super.optionChanged(e);
   }
 };
 

@@ -15,20 +15,6 @@ on:
         type: string
         description: Package file filter pattern
         required: false
-  workflow_call:
-    inputs:
-      tag:
-        type: string
-        default: daily
-        required: false
-      filter:
-        type: string
-        default: ''
-        required: false
-      branch:
-        type: string
-        default: ''
-        required: false
 
 permissions:
   contents: read
@@ -41,27 +27,15 @@ env:
   SBOM_PACKAGE_NAMES: devextreme,devextreme-angular,devextreme-react,devextreme-vue,devextreme-themebuilder
 
 jobs:
-  approve-package-publishing:
-    name: Approve package publishing
-    if: ${{ inputs.tag == 'stable' || (github.event_name == 'workflow_dispatch' && !contains(github.workflow_ref, '/.github/workflows/packages_publishing_scheduler.yml@')) }}
-    runs-on: ubuntu-slim
-    environment: packages-publishing
-    steps:
-      - name: Approve publishing
-        run: echo "Package publishing approved"
-
   build:
     name: Build packages
     runs-on: ubuntu-latest
-    needs: approve-package-publishing
-    if: ${{ always() && !cancelled() && (needs.approve-package-publishing.result == 'success' || needs.approve-package-publishing.result == 'skipped') }}
+    environment: ${{ (inputs.tag == 'stable' && 'packages-publishing-stable') || 'packages-publishing-daily' }}
     outputs:
       packages: ${{ steps.filter.outputs.packages }}
     steps:
       - name: Get sources
         uses: actions/checkout@v6
-        with:
-          ref: ${{ inputs.branch || github.ref }}
 
       - name: Set up nodejs
         uses: actions/setup-node@v6
@@ -184,8 +158,6 @@ jobs:
     steps:
       - name: Get sources
         uses: actions/checkout@v6
-        with:
-          ref: ${{ inputs.branch || github.ref }}
 
       - name: Download packages
         uses: actions/download-artifact@v8
@@ -302,7 +274,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - uses: DevExpress/github-actions/send-teams-notification@v1
+      - uses: DevExpress/github-actions/send-teams-notification@send-teams-notification
         with:
           hook_url: ${{secrets.TEAMS_ALERT}}
           bearer_token: ${{secrets.GITHUB_TOKEN}}
