@@ -1,25 +1,26 @@
 import $ from 'jquery';
 import Editor from 'ui/editor/editor';
-import Class from 'core/class';
 
 const READONLY_STATE_CLASS = 'dx-state-readonly';
 
-const Fixture = Class.inherit({
-    createEditor: function(options) {
+class Fixture {
+    createEditor(options) {
         this.$element = $('<div/>').appendTo('#qunit-fixture');
         const editor = new Editor(this.$element, options);
 
         return editor;
-    },
-    createOnlyElement: function(options) {
+    }
+
+    createOnlyElement(options) {
         this.$element = $('<div/>').appendTo('#qunit-fixture');
 
         return this.$element;
-    },
-    teardown: function() {
+    }
+
+    teardown() {
         this.$element.remove();
     }
-});
+}
 
 QUnit.module('Editor markup', {
     beforeEach: function() {

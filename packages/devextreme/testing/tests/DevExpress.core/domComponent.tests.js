@@ -4,7 +4,6 @@ import devices from '__internal/core/m_devices';
 import DOMComponent from 'core/dom_component';
 import dataUtils from 'core/element_data';
 import { TemplateManager } from 'core/template_manager';
-import { noop } from 'core/utils/common';
 import publicComponentUtils from 'core/utils/public_component';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import eventsEngine from 'common/core/events/core/events_engine';
@@ -24,9 +23,9 @@ const RTL_CLASS = 'dx-rtl';
 
 QUnit.module('default', {
     beforeEach: function() {
-        this.TestComponentWithTemplate = DOMComponent.inherit({
+        this.TestComponentWithTemplate = class extends DOMComponent {
             _initTemplates() {
-                this.callBase();
+                super._initTemplates();
                 this._templateManager.addDefaultTemplates({
                     content: {
                         render() {
@@ -35,29 +34,28 @@ QUnit.module('default', {
                     }
                 });
             }
-        });
-        this.TestComponent = DOMComponent.inherit({
-
+        };
+        this.TestComponent = class extends DOMComponent {
             ctor(element, options) {
                 this._traceLog = [];
-                this.callBase(element, options);
-            },
+                super.ctor(element, options);
+            }
 
             _optionsByReference() {
                 return {
                     byReference: true
                 };
-            },
+            }
 
             _getDefaultOptions() {
                 return $.extend(
-                    this.callBase(),
+                    super._getDefaultOptions(),
                     {
                         opt1: 'default',
                         opt2: 'default'
                     }
                 );
-            },
+            }
 
             _optionChanged(name, value, prevValue) {
                 this._traceLog.push({
@@ -65,16 +63,16 @@ QUnit.module('default', {
                     arguments: $.makeArray(arguments)
                 });
 
-                this.callBase(...arguments);
-            },
+                super._optionChanged(...arguments);
+            }
 
             _refresh(...args) {
                 this._traceLog.push({
                     method: '_refresh',
                     arguments: $.makeArray(args)
                 });
-                this.callBase(...args);
-            },
+                super._refresh(...args);
+            }
 
             _init(...args) {
                 this._traceLog.push({
@@ -82,8 +80,8 @@ QUnit.module('default', {
                     arguments: $.makeArray(args)
                 });
 
-                this.callBase();
-            },
+                super._init();
+            }
 
             _render(...args) {
                 this._traceLog.push({
@@ -91,8 +89,8 @@ QUnit.module('default', {
                     arguments: $.makeArray(args)
                 });
 
-                this.callBase();
-            },
+                super._render();
+            }
 
             _clean(...args) {
                 this._traceLog.push({
@@ -100,59 +98,59 @@ QUnit.module('default', {
                     arguments: $.makeArray(args)
                 });
 
-                this.callBase();
-            },
+                super._clean();
+            }
 
             _invalidate(...args) {
                 this._traceLog.push({
                     method: '_invalidate',
                     arguments: $.makeArray(args)
                 });
-                this.callBase();
-            },
+                super._invalidate();
+            }
 
             _dispose(...args) {
                 this._traceLog.push({
                     method: '_dispose',
                     arguments: $.makeArray(args)
                 });
-                this.callBase();
-            },
+                super._dispose();
+            }
 
             beginUpdate(...args) {
                 this._traceLog.push({
                     method: 'beginUpdate',
                     arguments: $.makeArray(args)
                 });
-                this.callBase();
-            },
+                super.beginUpdate();
+            }
 
             endUpdate(...args) {
                 this._traceLog.push({
                     method: 'endUpdate',
                     arguments: $.makeArray(args)
                 });
-                this.callBase();
-            },
+                super.endUpdate();
+            }
 
             func(arg) {
                 return arg;
-            },
+            }
 
             action() {
 
-            },
+            }
 
             instanceChain() {
                 return this;
-            },
+            }
 
             _getTraceLogByMethod(methodName) {
                 return $.grep(this._traceLog, i => {
                     return i.method === methodName;
                 });
             }
-        });
+        };
 
         registerComponent('TestComponent', nameSpace, this.TestComponent);
         registerComponent('TestComponentWithTemplate', nameSpace, this.TestComponentWithTemplate);
@@ -216,15 +214,15 @@ QUnit.module('default', {
     });
 
     QUnit.test('component lifecycle, changing a couple of options', function(assert) {
-        const TestComponent = this.TestComponent.inherit({
+        class TestComponent extends this.TestComponent {
             _optionChanged(args) {
-                this.callBase(args);
+                super._optionChanged(args);
 
                 if($.inArray(args.name, ['a', 'b', 'c']) > -1) {
                     this._invalidate();
                 }
             }
-        });
+        }
 
         const instance = new TestComponent('#component', { a: 1 });
 
@@ -289,14 +287,14 @@ QUnit.module('default', {
     });
 
     QUnit.test('mass option change call \'refresh\' once', function(assert) {
-        const TestComponent = this.TestComponent.inherit({
+        class TestComponent extends this.TestComponent {
             _optionChanged(args) {
-                this.callBase(args);
+                super._optionChanged(args);
                 if($.inArray(args.name, ['opt1', 'opt2']) > -1) {
                     this._invalidate();
                 }
             }
-        });
+        }
 
         const instance = new TestComponent('#component', {
             opt1: 'opt1',
@@ -338,12 +336,12 @@ QUnit.module('default', {
         const $secondElement = $('#anotherComponent');
         const $elements = $($firstElement).add($secondElement);
 
-        registerComponent('TestComponent', this.TestComponent.inherit({
+        registerComponent('TestComponent', class extends this.TestComponent {
             setterReturningThis() {
                 this._setterReturningThisCalled = true;
                 return this;
             }
-        }));
+        });
 
         const firstInstance = $firstElement.TestComponent().TestComponent('instance');
         const secondInstance = $secondElement.TestComponent().TestComponent('instance');
@@ -359,11 +357,11 @@ QUnit.module('default', {
         const $secondElement = $('#anotherComponent');
         const $elements = $($firstElement).add($secondElement);
 
-        registerComponent('TestComponent', this.TestComponent.inherit({
+        registerComponent('TestComponent', class extends this.TestComponent {
             setterReturningThis() {
                 return this;
             }
-        }));
+        });
 
         const firstInstance = $firstElement.TestComponent().TestComponent('instance');
         $secondElement.TestComponent().TestComponent('instance');
@@ -407,11 +405,11 @@ QUnit.module('default', {
         const $firstElement = $('#component');
         const $secondElement = $('#anotherComponent');
 
-        registerComponent('TestComponent', this.TestComponent.inherit({
+        registerComponent('TestComponent', class extends this.TestComponent {
             createComponent(element, name, config) {
                 return this._createComponent(element, name, config);
             }
-        }));
+        });
 
         const firstInstance = $firstElement.TestComponent({ disabled: true }).TestComponent('instance');
         const secondInstance = firstInstance.createComponent($secondElement, 'TestComponent', {});
@@ -423,11 +421,11 @@ QUnit.module('default', {
         const $firstElement = $('#component');
         const $secondElement = $('#anotherComponent');
 
-        registerComponent('TestComponent', this.TestComponent.inherit({
+        registerComponent('TestComponent', class extends this.TestComponent {
             createComponent(element, name, config) {
                 return this._createComponent(element, name, config);
             }
-        }));
+        });
 
         const firstInstance = $firstElement.TestComponent({ disabled: true }).TestComponent('instance');
         const secondInstance = firstInstance.createComponent($secondElement, 'TestComponent', {});
@@ -440,11 +438,11 @@ QUnit.module('default', {
         const $firstElement = $('#component');
         const $secondElement = $('#anotherComponent');
 
-        registerComponent('TestComponent', this.TestComponent.inherit({
+        registerComponent('TestComponent', class extends this.TestComponent {
             createComponent(element, name, config) {
                 return this._createComponent(element, name, config);
             }
-        }));
+        });
 
         const firstInstance = $firstElement.TestComponent({ rtlEnabled: true }).TestComponent('instance');
         const secondInstance = firstInstance.createComponent($secondElement, 'TestComponent', {});
@@ -456,11 +454,11 @@ QUnit.module('default', {
         const $firstElement = $('#component');
         const $secondElement = $('#anotherComponent');
 
-        registerComponent('TestComponent', this.TestComponent.inherit({
+        registerComponent('TestComponent', class extends this.TestComponent {
             createComponent(element, name, config) {
                 return this._createComponent(element, name, config);
             }
-        }));
+        });
 
         const firstInstance = $firstElement.TestComponent({ templatesRenderAsynchronously: true }).TestComponent('instance');
         const secondInstance = firstInstance.createComponent($secondElement, 'TestComponent', {});
@@ -537,11 +535,11 @@ QUnit.module('default', {
 
         assert.ok(instance._templateManager instanceof TemplateManager, 'create instance');
 
-        const ComponentWithoutTemplates = DOMComponent.inherit({
+        class ComponentWithoutTemplates extends DOMComponent {
             _useTemplates() {
                 return false;
             }
-        });
+        }
         registerComponent('ComponentWithoutTemplates', nameSpace, ComponentWithoutTemplates);
 
         const $element2 = $('#component').ComponentWithoutTemplates();
@@ -579,16 +577,16 @@ QUnit.module('default', {
     });
 
     QUnit.test('customizing default option rules', function(assert) {
-        const TestComponent = DOMComponent.inherit({
+        class TestComponent extends DOMComponent {
             _defaultOptionsRules() {
-                return this.callBase().slice(0).concat([{
+                return super._defaultOptionsRules().slice(0).concat([{
                     device: { platform: 'ios' },
                     options: {
                         test: 'value'
                     }
                 }]);
-            },
-        });
+            }
+        }
 
         registerComponent('TestComponent', TestComponent);
 
@@ -607,21 +605,21 @@ QUnit.module('default', {
     });
 
     QUnit.test('customizing default option rules applies only on the target component class', function(assert) {
-        const TestComponent1 = DOMComponent.inherit({
+        class TestComponent1 extends DOMComponent {
             _getDefaultOptions() {
-                return $.extend(this.callBase(), {
+                return $.extend(super._getDefaultOptions(), {
                     test: 'Initial value 1'
                 });
             }
-        });
+        }
 
-        const TestComponent2 = TestComponent1.inherit({
+        class TestComponent2 extends TestComponent1 {
             _getDefaultOptions() {
-                return $.extend(this.callBase(), {
+                return $.extend(super._getDefaultOptions(), {
                     test: 'Initial value 2'
                 });
             }
-        });
+        }
 
         registerComponent('TestComponent1', TestComponent1);
         registerComponent('TestComponent2', TestComponent2);
@@ -653,21 +651,21 @@ QUnit.module('default', {
     });
 
     QUnit.test('should not be inherited by child class/component (T1286533)', function(assert) {
-        const TestComponent1 = DOMComponent.inherit({
+        class TestComponent1 extends DOMComponent {
             _getDefaultOptions() {
-                return $.extend(this.callBase(), {
+                return $.extend(super._getDefaultOptions(), {
                     test: 'test1'
                 });
-            },
-        });
+            }
+        }
 
-        const TestComponent2 = TestComponent1.inherit({
+        class TestComponent2 extends TestComponent1 {
             _getDefaultOptions() {
-                return $.extend(this.callBase(), {
+                return $.extend(super._getDefaultOptions(), {
                     test: 'test2'
                 });
-            },
-        });
+            }
+        }
 
         registerComponent('TestComponent1', TestComponent1);
         registerComponent('TestComponent2', TestComponent2);
@@ -696,8 +694,11 @@ QUnit.module('default', {
         let hidingFired = 0;
         let shownFired = 0;
 
-        const TestComponent = this.TestComponent.inherit({
-            NAME: 'TestComponent',
+        class TestComponent extends this.TestComponent {
+            ctor(element, options) {
+                this.NAME = 'TestComponent';
+                super.ctor(element, options);
+            }
 
             _visibilityChanged(visible) {
                 if(visible) {
@@ -706,7 +707,7 @@ QUnit.module('default', {
                     hidingFired++;
                 }
             }
-        });
+        }
 
         const $element = $('#component');
         new TestComponent($element);
@@ -730,15 +731,27 @@ QUnit.module('default', {
             visible ? shownFired++ : hidingFired++;
         };
 
-        const TestComponent1 = this.TestComponent.inherit({
-            NAME: 'TestComponent1',
-            _visibilityChanged: visibilityChanged
-        });
+        class TestComponent1 extends this.TestComponent {
+            ctor(element, options) {
+                this.NAME = 'TestComponent1';
+                super.ctor(element, options);
+            }
 
-        const TestComponent2 = this.TestComponent.inherit({
-            NAME: 'TestComponent2',
-            _visibilityChanged: visibilityChanged
-        });
+            _visibilityChanged(visible) {
+                visibilityChanged(visible);
+            }
+        }
+
+        class TestComponent2 extends this.TestComponent {
+            ctor(element, options) {
+                this.NAME = 'TestComponent2';
+                super.ctor(element, options);
+            }
+
+            _visibilityChanged(visible) {
+                visibilityChanged(visible);
+            }
+        }
 
         const $element = $('#component');
         new TestComponent1($element);
@@ -759,10 +772,16 @@ QUnit.module('default', {
             visible ? shownFired++ : hidingFired++;
         };
 
-        const TestComponent = this.TestComponent.inherit({
-            NAME: 'TestComponent1',
-            _visibilityChanged: visibilityChanged
-        });
+        class TestComponent extends this.TestComponent {
+            ctor(element, options) {
+                this.NAME = 'TestComponent1';
+                super.ctor(element, options);
+            }
+
+            _visibilityChanged(visible) {
+                visibilityChanged(visible);
+            }
+        }
 
         const $element = $('#component');
         new TestComponent($element);
@@ -788,10 +807,16 @@ QUnit.module('default', {
             visible ? shownFired++ : hidingFired++;
         };
 
-        const TestComponent = this.TestComponent.inherit({
-            NAME: 'TestComponent1',
-            _visibilityChanged: visibilityChanged
-        });
+        class TestComponent extends this.TestComponent {
+            ctor(element, options) {
+                this.NAME = 'TestComponent1';
+                super.ctor(element, options);
+            }
+
+            _visibilityChanged(visible) {
+                visibilityChanged(visible);
+            }
+        }
 
         const $element = $('#component').hide();
         new TestComponent($element);
@@ -817,10 +842,16 @@ QUnit.module('default', {
             visible ? shownFired++ : hidingFired++;
         };
 
-        const TestComponent = this.TestComponent.inherit({
-            NAME: 'TestComponent1',
-            _visibilityChanged: visibilityChanged
-        });
+        class TestComponent extends this.TestComponent {
+            ctor(element, options) {
+                this.NAME = 'TestComponent1';
+                super.ctor(element, options);
+            }
+
+            _visibilityChanged(visible) {
+                visibilityChanged(visible);
+            }
+        }
 
         const $parent = $('#component').hide();
         const $component = $('<div>').hide().appendTo($parent);
@@ -841,13 +872,16 @@ QUnit.module('default', {
     QUnit.test('_dimensionChanged is called when window resize fired', function(assert) {
         let dimensionChanged = 0;
 
-        const TestComponent = this.TestComponent.inherit({
-            NAME: 'TestComponent',
+        class TestComponent extends this.TestComponent {
+            ctor(element, options) {
+                this.NAME = 'TestComponent';
+                super.ctor(element, options);
+            }
 
             _dimensionChanged(visible) {
                 dimensionChanged++;
             }
-        });
+        }
 
         const $element = $('#component');
         new TestComponent($element);
@@ -862,15 +896,18 @@ QUnit.module('default', {
     QUnit.test('_dimensionChanged is called when dxresize event fired', function(assert) {
         let dimensionChanged = 0;
 
-        const TestComponent = this.TestComponent.inherit({
-            NAME: 'TestComponent',
+        class TestComponent extends this.TestComponent {
+            ctor(element, options) {
+                this.NAME = 'TestComponent';
+                super.ctor(element, options);
+            }
 
-            _visibilityChanged: noop,
+            _visibilityChanged() { }
 
             _dimensionChanged() {
                 dimensionChanged++;
             }
-        });
+        }
 
         const $element = $('#component').addClass('dx-visibility-change-handler');
         new TestComponent($element);
@@ -969,13 +1006,13 @@ QUnit.module('default', {
     });
 
     QUnit.test('changing class via \'elementAttr\' option should preserve component specific classes', function(assert) {
-        const SomeComponent = DOMComponent.inherit({
+        class SomeComponent extends DOMComponent {
             _render() {
                 this.$element().addClass('dx-some-class1');
-                this.callBase();
+                super._render();
                 this.$element().addClass('dx-some-class2');
             }
-        });
+        }
 
         const $element = $('#component');
         const instance = new SomeComponent($element);
@@ -1014,14 +1051,14 @@ QUnit.module('default', {
     });
 
     QUnit.test('Dispose: content of container is cleaned', function(assert) {
-        const SomeComponent = DOMComponent.inherit({
+        class SomeComponent extends DOMComponent {
             _render() {
                 const p = document.createElement('p');
                 p.textContent = 'Some text';
                 this.$element()[0].appendChild(p);
-                this.callBase();
+                super._render();
             }
-        });
+        }
 
         const element = $('#component');
         const instance = new SomeComponent(element);
@@ -1110,7 +1147,7 @@ QUnit.module('default', {
         let disposeRun = false;
         let clickRun = false;
 
-        const SomeComponent = DOMComponent.inherit({
+        class SomeComponent extends DOMComponent {
             _render() {
                 const p = document.createElement('p');
                 p.textContent = 'Some text';
@@ -1118,12 +1155,13 @@ QUnit.module('default', {
                 eventsEngine.on(this.$element(), 'click', () => {
                     clickRun = true;
                 });
-                this.callBase();
-            },
+                super._render();
+            }
+
             _dispose() {
                 disposeRun = true;
             }
-        });
+        }
 
         const element = $('#component');
         const instance = new SomeComponent(element);
@@ -1150,7 +1188,7 @@ QUnit.module('default', {
     QUnit.test('getInstance method', function(assert) {
         const $element = $('#component');
         const instance = new this.TestComponent($element);
-        const AnotherComponent = DOMComponent.inherit();
+        class AnotherComponent extends DOMComponent {}
 
         assert.equal(this.TestComponent.getInstance($element), instance);
         assert.equal(this.TestComponent.getInstance($element.get(0)), instance);
@@ -1174,17 +1212,17 @@ QUnit.module('default', {
     });
 
     QUnit.test('reset dimensions with custom default value', function(assert) {
-        const TestComponentCustomDefault = DOMComponent.inherit({
+        class TestComponentCustomDefault extends DOMComponent {
             _getDefaultOptions() {
                 return $.extend(
-                    this.callBase(),
+                    super._getDefaultOptions(),
                     {
                         width: 20,
                         height: 10
                     }
                 );
-            },
-        });
+            }
+        }
 
         registerComponent('TestComponentCustomDefault', nameSpace, TestComponentCustomDefault);
 
@@ -1204,7 +1242,7 @@ QUnit.module('default', {
 
 QUnit.module('License check', {
     beforeEach: function() {
-        this.TestComponent = DOMComponent.inherit();
+        this.TestComponent = class extends DOMComponent {};
         sinon.spy(licenseModule, 'validateLicense');
         setLicenseCheckSkipCondition(false);
     },
