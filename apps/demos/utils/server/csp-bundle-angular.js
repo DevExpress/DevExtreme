@@ -572,19 +572,14 @@ function makeBuildOptions({
   tsconfig,
   fileReplacements,
   createCompilerPlugin,
+  splitting = true,
 }) {
   return {
     entryPoints,
     outdir,
     bundle: true,
     format: 'esm',
-    // A batch's demos share one esbuild build (see bundleDemoBatch); splitting lets esbuild
-    // find and extract code common across its entry points into a shared chunk automatically
-    // — no custom externalization plugin involved, so nothing can shadow the AOT compiler
-    // plugin's own need to read every file's real source (see git history for what happens
-    // when something does: NG0919/`void 0` dependency arrays). Content-hashed and a no-op for
-    // a single-entry (non-batched) build, so safe to always set.
-    splitting: true,
+    splitting,
     chunkNames: `${CHUNKS_DIRNAME}/[hash]`,
     platform: 'browser',
     target: 'es2022',
@@ -628,6 +623,7 @@ async function bundleDemo(demo, createCompilerPlugin, destDirOverride) {
   const prepared = demo.effectiveEntry ? demo : prepareDemo(demo);
   const destDir = destDirOverride || path.join(SRC_DEMOS_DIR, prepared.widget, prepared.name, FRAMEWORK);
   fs.mkdirSync(destDir, { recursive: true });
+  fs.rmSync(path.join(destDir, CHUNKS_DIRNAME), { recursive: true, force: true });
 
   const effectiveEntry = prepared.effectiveEntry;
   const tsconfig = writeDemoTsconfig(prepared.shimEntry, effectiveEntry);
@@ -640,6 +636,7 @@ async function bundleDemo(demo, createCompilerPlugin, destDirOverride) {
       tsconfig,
       fileReplacements: prepared.fileReplacements || {},
       createCompilerPlugin,
+      splitting: false,
     }));
   } catch (err) {
     return { ok: false, reason: (err && err.message) || String(err) };
