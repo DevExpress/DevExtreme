@@ -30,9 +30,7 @@ class SliderTooltip extends Tooltip<SliderTooltipProperties> {
       hideOnOutsideClick: false,
       hideTopOverlayHandler: null,
       hideOnParentScroll: false,
-      // @ts-expect-error null is used at runtime to disable the animation
       animation: null,
-      // @ts-expect-error null is used at runtime to disable the arrow positioning
       arrowPosition: null,
       templatesRenderAsynchronously: false,
       _fixWrapperPosition: false,
