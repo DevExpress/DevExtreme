@@ -31,7 +31,7 @@ import type { RowIndexCorrection } from '@ts/grids/grid_core/data_controller/typ
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import type { RowsViewScrollEvent } from '@ts/grids/grid_core/views/types';
-import type { VirtualScrollingDataControllerExtension } from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling';
+import type { VirtualScrollingDataControllerExtension } from '@ts/grids/grid_core/virtual_scrolling/index';
 import { memoize } from '@ts/utils/memoize';
 
 import {
