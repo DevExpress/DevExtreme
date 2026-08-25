@@ -6,7 +6,7 @@ interface ScrollingModeController {
 
 export const isVirtualMode = (that: ScrollingModeController): boolean => that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL;
 
-export const isAppendMode = (that: ScrollingModeController): boolean => that.option('scrolling.mode') === SCROLLING_MODE_INFINITE;
+export const isInfiniteMode = (that: ScrollingModeController): boolean => that.option('scrolling.mode') === SCROLLING_MODE_INFINITE;
 
 export const isVirtualPaging = (that: ScrollingModeController): boolean => isVirtualMode(that)
-  || isAppendMode(that);
+  || isInfiniteMode(that);
