@@ -113,6 +113,7 @@ type TemporarlyOptionsTakenFromDataGrid = Pick<DataGridOptions,
 | 'remoteOperations'
 | 'keyExpr'
 | 'selectionFilter'
+| 'sortByGroupSummaryInfo'
 >;
 
 type TemporarlyOptionsTakenFromTreeList = Pick<TreeListdOptions,

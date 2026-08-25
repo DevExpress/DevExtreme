@@ -25,8 +25,8 @@ export interface UserState {
   expandedRowKeys?: unknown[];
 }
 
-export interface ItemProcessingOptions {
-  visibleColumns: Column[];
+export interface ItemProcessingOptions<TColumn extends Column = Column> {
+  visibleColumns: TColumn[];
   dataIndex: number;
   rowIndex?: number;
   detailColumnIndex?: number;
@@ -90,6 +90,7 @@ export interface DataChangeBase {
   changes?: unknown[];
   cancel?: boolean;
   isLiveUpdate?: boolean;
+  totalColumnIndices?: number[];
 }
 
 export interface UpdateChange extends DataChangeBase {
