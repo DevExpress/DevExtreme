@@ -729,8 +729,12 @@ const trackPendingVisibleWidthChange = (that: ColumnsController, columnIndex): v
 const isVisibleWidthChangePendingForColumn = (that: ColumnsController, columnIndex): boolean => !!that._pendingVisibleWidthColumnIndices?.has(columnIndex);
 
 const invalidateStaleVisibleWidths = (that: ColumnsController, changedColumn): void => {
-  if (isDefined(changedColumn.visibleWidth)
-    && !isVisibleWidthChangePendingForColumn(that, changedColumn.index)) {
+  const hasCalculatedVisibleWidth = isNumeric(changedColumn.visibleWidth)
+    || changedColumn.visibleWidth === 'auto';
+  const shouldInvalidateChangedColumnVisibleWidth = hasCalculatedVisibleWidth
+    && !isVisibleWidthChangePendingForColumn(that, changedColumn.index);
+
+  if (shouldInvalidateChangedColumnVisibleWidth) {
     changedColumn.visibleWidth = null;
   }
 

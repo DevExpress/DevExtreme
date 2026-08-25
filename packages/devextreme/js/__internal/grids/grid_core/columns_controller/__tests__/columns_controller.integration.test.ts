@@ -8,6 +8,7 @@ import {
   beforeTest,
   createDataGrid,
 } from '../../__tests__/__mock__/helpers/utils';
+import { HIDDEN_COLUMNS_WIDTH } from '../../adaptivity/const';
 
 describe('getFilteringColumns', () => {
   beforeEach(beforeTest);
@@ -156,6 +157,34 @@ describe('Bugs', () => {
       expect(columnsController.getColumns().map((column) => column.visibleWidth)).toEqual([
         null, null, null,
       ]);
+    });
+
+    it('should preserve an adaptive-hidden marker when a column width changes through columnOption', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1' }],
+        columns: ['field1'],
+      });
+      const columnsController = instance.getController('columns');
+
+      columnsController.columnOption(0, 'visibleWidth', HIDDEN_COLUMNS_WIDTH);
+
+      instance.columnOption(0, 'width', 150);
+
+      expect(columnsController.columnOption(0, 'visibleWidth')).toBe(HIDDEN_COLUMNS_WIDTH);
+    });
+
+    it('should invalidate an auto visible width when a column width changes through columnOption', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1' }],
+        columns: ['field1'],
+      });
+      const columnsController = instance.getController('columns');
+
+      columnsController.columnOption(0, 'visibleWidth', 'auto');
+
+      instance.columnOption(0, 'width', 150);
+
+      expect(columnsController.columnOption(0, 'visibleWidth')).toBeNull();
     });
 
     it('should invalidate calculated widths of command columns when another column width changes through columnOption', async () => {
