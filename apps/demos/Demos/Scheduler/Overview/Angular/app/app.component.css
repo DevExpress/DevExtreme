@@ -16,9 +16,9 @@
 ::ng-deep .dx-color-scheme-orange-light,
 ::ng-deep .dx-color-scheme-purple-light,
 ::ng-deep .dx-color-scheme-teal-light {
-  --text-color-1: var(--dxds-color-content-neutral-subdued-rest, rgba(0, 0, 0, .6));
-  --text-color-2: var(--dxds-color-content-neutral-default-inverted-rest, rgba(255, 255, 255, 1));
-  --disabled-color: var(--dxds-color-content-neutral-deep-rest, rgba(0, 0, 0, 0.38));
+  --text-color-1: var(--dxds-color-content-subtle, rgba(0, 0, 0, .6));
+  --text-color-2: var(--dxds-color-content-inverted, rgba(255, 255, 255, 1));
+  --disabled-color: var(--dxds-color-content-subtler, rgba(0, 0, 0, 0.38));
   --person-color-1: var(--dxds-color-content-green, rgba(50, 134, 56, 1));
   --person-color-2: var(--dxds-color-content-orange, rgba(194, 81, 0, 1));
 }
@@ -32,9 +32,9 @@
 ::ng-deep .dx-color-scheme-orange-dark,
 ::ng-deep .dx-color-scheme-purple-dark,
 ::ng-deep .dx-color-scheme-teal-dark {
-  --text-color-1: var(--dxds-color-content-neutral-subdued-rest, rgba(255, 255, 255, 1));
-  --text-color-2: var(--dxds-color-content-neutral-default-inverted-rest, rgba(54, 54, 64, 1));
-  --disabled-color: var(--dxds-color-content-neutral-subdued-disabled, rgba(255, 255, 255, 0.38));
+  --text-color-1: var(--dxds-color-content-subtle, rgba(255, 255, 255, 1));
+  --text-color-2: var(--dxds-color-content-inverted, rgba(54, 54, 64, 1));
+  --disabled-color: var(--dxds-color-content-subtle-disabled, rgba(255, 255, 255, 0.38));
   --person-color-1: var(--dxds-color-content-green, rgba(159, 213, 161, 1));
   --person-color-2: var(--dxds-color-content-orange, rgba(255, 181, 127, 1));
 }
@@ -76,9 +76,9 @@
   overflow: hidden;
   position: relative;
   height: 124px;
-  border: 1px solid var(--dxds-color-border-neutral-default-static-light-rest, rgba(0, 0, 0, 0.24));
+  border: 1px solid var(--dxds-color-border-static-light, rgba(0, 0, 0, 0.24));
   border-radius: 50%;
-  background-color: var(--dxds-color-surface-neutral-default-static-light-rest, #fff);
+  background-color: var(--dxds-color-bg-static-light, #fff);
 }
 
 ::ng-deep .avatar img {
@@ -126,7 +126,7 @@
 }
 
 ::ng-deep .dx-color-scheme-contrast .info {
-  color: var(--dxds-color-content-neutral-default-on-surface-rest, #fff);
+  color: var(--dxds-color-content-on-color, #fff);
 }
 
 ::ng-deep .day-cell {
@@ -137,7 +137,7 @@
 }
 
 ::ng-deep .dx-scheduler-appointment {
-  color: var(--dxds-color-content-neutral-default-on-surface-rest, #fff);
+  color: var(--dxds-color-content-on-color, #fff);
 }
 
 ::ng-deep .employee-1 {

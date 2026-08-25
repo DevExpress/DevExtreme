@@ -271,7 +271,7 @@ const onOverlappingRuleChanged = (e: DxSelectBoxTypes.ValueChangedEvent) => {
 
 <style>
 .dx-scheduler-appointment {
-  color: var(--dxds-color-content-neutral-default-static-light-rest, #242424);
+  color: var(--dxds-color-content-static-light, #242424);
 }
 
 .options {
@@ -292,8 +292,8 @@ const onOverlappingRuleChanged = (e: DxSelectBoxTypes.ValueChangedEvent) => {
 }
 
 .conflict-informer {
-  background-color: var(--dxds-color-surface-danger-deep-rest, #FCEAE8);
-  color: var(--dxds-color-content-danger-default-rest, #C50F1F);
+  background-color: var(--dxds-color-bg-danger-subtler, #FCEAE8);
+  color: var(--dxds-color-content-danger, #C50F1F);
   font-size: 12px;
   padding: 0 12px;
   height: 36px;

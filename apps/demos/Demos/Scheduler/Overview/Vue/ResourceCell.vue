@@ -39,9 +39,9 @@ withDefaults(defineProps<{
   overflow: hidden;
   position: relative;
   height: 124px;
-  border: 1px solid var(--dxds-color-border-neutral-default-static-light-rest, rgba(0, 0, 0, 0.24));
+  border: 1px solid var(--dxds-color-border-static-light, rgba(0, 0, 0, 0.24));
   border-radius: 50%;
-  background-color: var(--dxds-color-surface-neutral-default-static-light-rest, #fff);
+  background-color: var(--dxds-color-bg-static-light, #fff);
 }
 
 .avatar img {
@@ -89,6 +89,6 @@ withDefaults(defineProps<{
 }
 
 .dx-color-scheme-contrast .info {
-  color: var(--dxds-color-content-neutral-default-on-surface-rest, #fff);
+  color: var(--dxds-color-content-on-color, #fff);
 }
 </style>

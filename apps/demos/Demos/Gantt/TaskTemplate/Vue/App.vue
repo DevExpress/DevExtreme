@@ -119,7 +119,7 @@ function getImagePath(taskId: number) {
 
 .custom-task-wrapper {
   padding: 8px;
-  color: var(--dxds-color-content-neutral-default-inverted-rest, #fff);
+  color: var(--dxds-color-content-inverted, #fff);
 }
 
 .custom-task-wrapper > * {
@@ -134,7 +134,7 @@ function getImagePath(taskId: number) {
   height: 32px;
   border-radius: 50%;
   margin: 8px;
-  background-color: var(--dxds-color-content-neutral-default-on-surface-rest, #fff);
+  background-color: var(--dxds-color-content-on-color, #fff);
   overflow: hidden;
 }
 
@@ -157,7 +157,7 @@ function getImagePath(taskId: number) {
   bottom: 0;
   width: 0%;
   height: 4px;
-  background: color-mix(in srgb, var(--dxds-color-surface-neutral-default-static-dark-rest, #000) calc(var(--dxds-opacity-30, 0.3) * 100%), transparent);
+  background: color-mix(in srgb, var(--dxds-color-bg-static-dark, #000) calc(var(--dxds-opacity-30, 0.3) * 100%), transparent);
 }
 
 .dx-gantt .dx-row {

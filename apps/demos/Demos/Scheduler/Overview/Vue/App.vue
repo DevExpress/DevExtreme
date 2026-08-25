@@ -65,9 +65,9 @@ const dataSource = data;
 .dx-color-scheme-orange-light,
 .dx-color-scheme-purple-light,
 .dx-color-scheme-teal-light {
-  --text-color-1: var(--dxds-color-content-neutral-subdued-rest, rgba(0, 0, 0, .6));
-  --text-color-2: var(--dxds-color-content-neutral-default-inverted-rest, rgba(255, 255, 255, 1));
-  --disabled-color: var(--dxds-color-content-neutral-deep-rest, rgba(0, 0, 0, 0.38));
+  --text-color-1: var(--dxds-color-content-subtle, rgba(0, 0, 0, .6));
+  --text-color-2: var(--dxds-color-content-inverted, rgba(255, 255, 255, 1));
+  --disabled-color: var(--dxds-color-content-subtler, rgba(0, 0, 0, 0.38));
   --person-color-1: var(--dxds-color-content-green, rgba(50, 134, 56, 1));
   --person-color-2: var(--dxds-color-content-orange, rgba(194, 81, 0, 1));
 }
@@ -81,9 +81,9 @@ const dataSource = data;
 .dx-color-scheme-orange-dark,
 .dx-color-scheme-purple-dark,
 .dx-color-scheme-teal-dark {
-  --text-color-1: var(--dxds-color-content-neutral-subdued-rest, rgba(255, 255, 255, 1));
-  --text-color-2: var(--dxds-color-content-neutral-default-inverted-rest, rgba(54, 54, 64, 1));
-  --disabled-color: var(--dxds-color-content-neutral-subdued-disabled, rgba(255, 255, 255, 0.38));
+  --text-color-1: var(--dxds-color-content-subtle, rgba(255, 255, 255, 1));
+  --text-color-2: var(--dxds-color-content-inverted, rgba(54, 54, 64, 1));
+  --disabled-color: var(--dxds-color-content-subtle-disabled, rgba(255, 255, 255, 0.38));
   --person-color-1: var(--dxds-color-content-green, rgba(159, 213, 161, 1));
   --person-color-2: var(--dxds-color-content-orange, rgba(255, 181, 127, 1));
 }
@@ -120,7 +120,7 @@ const dataSource = data;
 }
 
 .dx-scheduler-appointment {
-  color: var(--dxds-color-content-neutral-default-on-surface-rest, #fff);
+  color: var(--dxds-color-content-on-color, #fff);
 }
 
 </style>
