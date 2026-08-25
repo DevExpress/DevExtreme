@@ -1,4 +1,4 @@
-import type { Column } from '@js/ui/data_grid';
+import type { Column, Row } from '@js/ui/data_grid';
 import DataGrid from '@js/ui/data_grid';
 import { DataGridBaseModel } from '@ts/grids/grid_core/__tests__/__mock__/model/data_grid_base';
 
@@ -15,6 +15,10 @@ export class DataGridModel extends DataGridBaseModel<DataGrid> {
     }
 
     return this.getInstance().getVisibleColumns(headerLevel);
+  }
+
+  public apiGetVisibleRows(): Row[] {
+    return this.getInstance().getVisibleRows();
   }
 
   public setDataGridOptions(options: Record<string, unknown>): void {

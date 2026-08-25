@@ -114,7 +114,7 @@ const deepExtendArraySafe = function (target, changes, extendComplexObject?, ass
       newValue = deepExtendArraySafe(goDeeper ? prevValue : {}, newValue, extendComplexObject, assignByReference, shouldCopyUndefined);
     }
 
-    const isDeepCopyArray = Array.isArray(newValue) && !assignByReference;
+    const isDeepCopyArray = Array.isArray(newValue) && !assignByReference && prevValue !== newValue;
     const hasDifferentNewValue = (shouldCopyUndefined || newValue !== undefined) && prevValue !== newValue
           || shouldCopyUndefined && prevValue === undefined;
 
