@@ -158,7 +158,7 @@ describe('Bugs', () => {
       ]);
     });
 
-    it('should invalidate the calculated width of a command column when its width changes through columnOption', async () => {
+    it('should invalidate calculated widths of command columns when another column width changes through columnOption', async () => {
       const { instance } = await createDataGrid({
         dataSource: [{ field1: 'value 1' }],
         columns: ['field1'],
@@ -168,7 +168,7 @@ describe('Bugs', () => {
       columnsController.addCommandColumn({ command: 'test', width: 'auto' });
       columnsController.columnOption('command:test', 'visibleWidth', 100);
 
-      instance.columnOption('command:test', 'width', 150);
+      instance.columnOption('field1', 'width', 150);
 
       expect(columnsController.columnOption('command:test', 'visibleWidth')).toBeNull();
     });
