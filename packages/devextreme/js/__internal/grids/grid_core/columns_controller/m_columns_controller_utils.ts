@@ -657,6 +657,10 @@ export const updateColumnChanges = (
 };
 
 export const fireColumnsChanged = function (that: ColumnsController) {
+  if (!that._updateLockCount) {
+    that._pendingVisibleWidthColumnIndices = undefined;
+  }
+
   const onColumnsChanging: any = that.option('onColumnsChanging');
   const columnChanges = that._columnChanges;
   const reinitOptionNames = ['dataField', 'lookup', 'dataType', 'columns'];
@@ -715,16 +719,14 @@ export const fireOptionChanged = function (that: ColumnsController, options) {
   }
 };
 
-const isVisibleWidthChangePendingForColumn = (that: ColumnsController, columnIndex): boolean => {
-  const columnChanges = that._columnChanges;
-
-  if (!columnChanges?.optionNames?.visibleWidth) {
-    return false;
+const trackPendingVisibleWidthChange = (that: ColumnsController, columnIndex): void => {
+  if (isDefined(columnIndex)) {
+    that._pendingVisibleWidthColumnIndices ??= new Set();
+    that._pendingVisibleWidthColumnIndices.add(columnIndex);
   }
-
-  return columnChanges.columnIndex === columnIndex
-    || !!columnChanges.columnIndices?.includes(columnIndex);
 };
+
+const isVisibleWidthChangePendingForColumn = (that: ColumnsController, columnIndex): boolean => !!that._pendingVisibleWidthColumnIndices?.has(columnIndex);
 
 const invalidateStaleVisibleWidths = (that: ColumnsController, changedColumn): void => {
   if (isDefined(changedColumn.visibleWidth)
@@ -783,7 +785,9 @@ export const columnOptionCore = function (
       changeType = 'columns';
     }
 
-    if (optionName === 'width' && invalidateVisibleWidths) {
+    if (optionName === 'visibleWidth') {
+      trackPendingVisibleWidthChange(that, columnIndex);
+    } else if (optionName === 'width' && invalidateVisibleWidths) {
       invalidateStaleVisibleWidths(that, column);
     }
 

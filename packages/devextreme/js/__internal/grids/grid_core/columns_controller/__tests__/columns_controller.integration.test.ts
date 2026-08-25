@@ -180,5 +180,68 @@ describe('Bugs', () => {
         100, null, 120,
       ]);
     });
+
+    it('should invalidate a stale visible width when another option changed the same column in the batch', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2', field3: 'value 3' }],
+        columns: ['field1', 'field2', 'field3'],
+      });
+      const columnsController = instance.getController('columns');
+
+      columnsController.columnOption(0, 'visibleWidth', 100);
+      columnsController.columnOption(1, 'visibleWidth', 110);
+      columnsController.columnOption(2, 'visibleWidth', 120);
+
+      columnsController.beginUpdate();
+      columnsController.columnOption(1, 'caption', 'Updated field 2');
+      columnsController.columnOption(0, 'visibleWidth', 105);
+      columnsController.columnOption(1, 'width', 150);
+      columnsController.endUpdate();
+
+      expect(columnsController.getColumns().map((column) => column.visibleWidth)).toEqual([
+        105, null, null,
+      ]);
+    });
+
+    it('should preserve visible widths that are pending for their respective columns', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2', field3: 'value 3' }],
+        columns: ['field1', 'field2', 'field3'],
+      });
+      const columnsController = instance.getController('columns');
+
+      columnsController.columnOption(0, 'visibleWidth', 100);
+      columnsController.columnOption(1, 'visibleWidth', 110);
+      columnsController.columnOption(2, 'visibleWidth', 120);
+
+      columnsController.beginUpdate();
+      columnsController.columnOption(0, 'visibleWidth', 105);
+      columnsController.columnOption(1, 'visibleWidth', 115);
+      columnsController.columnOption(1, 'width', 150);
+      columnsController.endUpdate();
+
+      expect(columnsController.getColumns().map((column) => column.visibleWidth)).toEqual([
+        105, 115, null,
+      ]);
+    });
+
+    it('should clear pending visible widths after the update batch completes', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2', field3: 'value 3' }],
+        columns: ['field1', 'field2', 'field3'],
+      });
+      const columnsController = instance.getController('columns');
+
+      columnsController.columnOption(0, 'visibleWidth', 100);
+
+      columnsController.beginUpdate();
+      columnsController.columnOption(0, 'visibleWidth', 105);
+      columnsController.columnOption(0, 'width', 150);
+      columnsController.endUpdate();
+
+      columnsController.columnOption(0, 'width', 160);
+
+      expect(columnsController.columnOption(0, 'visibleWidth')).toBeNull();
+    });
   });
 });

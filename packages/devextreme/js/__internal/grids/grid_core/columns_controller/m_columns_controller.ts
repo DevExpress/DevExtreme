@@ -139,6 +139,8 @@ export class ColumnsController extends modules.Controller {
 
   public _columnChanges?: ColumnsChanges;
 
+  public _pendingVisibleWidthColumnIndices?: Set<number>;
+
   protected _dataController!: DataController;
 
   protected _focusController!: FocusController;
