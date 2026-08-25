@@ -172,6 +172,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   /**
+   * TODO: Define this method only in masterDetail.
+   * Remove the override from adaptive behavior
+   * and move the implementation to masterDetail.
+   *
    * @extended: adaptivity, master_detail
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
