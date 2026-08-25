@@ -1,6 +1,6 @@
 .large-text {
   font-size: 24px;
-  color: var(--dxds-color-content-utility-orange-default-rest, #ff6a50);
+  color: var(--dxds-color-content-orange, #ff6a50);
 }
 
 .opacity {
