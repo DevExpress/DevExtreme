@@ -6027,7 +6027,8 @@ QUnit.module('Summary', {
                 aggregator: 'count'
             }, {
                 aggregator: 'sum'
-            }]
+            }],
+            groupAggregates: [],
         });
 
         // act
@@ -6113,7 +6114,8 @@ QUnit.module('Summary', {
                 aggregator: 'count'
             }, {
                 aggregator: 'sum'
-            }]
+            }],
+            groupAggregates: [],
         });
 
         // act
@@ -6145,7 +6147,8 @@ QUnit.module('Summary', {
                 aggregator: 'count'
             }, {
                 aggregator: 'sum'
-            }]
+            }],
+            groupAggregates: [],
         });
 
         // act
@@ -6480,7 +6483,8 @@ QUnit.module('Cache', {
             }, {
                 selector: 'this',
                 aggregator: 'sum'
-            }]
+            }],
+            groupAggregates: [],
         });
 
         dataSource.load();
@@ -6604,7 +6608,8 @@ QUnit.module('Cache', {
                         return a + b;
                     }
                 }
-            }]
+            }],
+            groupAggregates: []
         });
         dataSource.load();
         this.clock.tick(10);
@@ -6681,7 +6686,8 @@ QUnit.module('Cache', {
                         return a + b;
                     }
                 }
-            }]
+            }],
+            groupAggregates: []
         });
         dataSource.load();
         this.clock.tick(10);

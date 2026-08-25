@@ -1,7 +1,7 @@
 import {
   describe, expect, it,
 } from '@jest/globals';
-import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import type { Column } from '@ts/grids/data_grid/types';
 
 import { getColumnFromMap, getSummaryCellIndex } from '../utils';
 

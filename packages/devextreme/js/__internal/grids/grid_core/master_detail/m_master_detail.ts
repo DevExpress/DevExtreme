@@ -206,9 +206,6 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
     let isAutoExpandAllChanged;
 
     if (args.name === 'masterDetail') {
-      args.name = 'dataSource';
-
-      // eslint-disable-next-line default-case
       switch (args.fullName) {
         case 'masterDetail': {
           const value = args.value || {};
@@ -228,11 +225,19 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
         case 'masterDetail.autoExpandAll':
           isAutoExpandAllChanged = true;
           break;
+        default:
+          break;
       }
+
       if (isEnabledChanged || isAutoExpandAllChanged) {
         initMasterDetail(that);
       }
+
+      args.handled = true;
+      this.reset();
+      return;
     }
+
     super.optionChanged(args);
   }
 };
