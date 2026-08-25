@@ -48,21 +48,19 @@ QUnit.module('events unsubscribing', {
         const that = this;
 
         registerEmitter({
-            emitter: Emitter.inherit({
-
-                ctor: function() {
-                    this.callBase.apply(this, arguments);
+            emitter: class extends Emitter {
+                ctor(...args) {
+                    super.ctor(...args);
 
                     that.emitterCreated++;
-                },
+                }
 
-                dispose: function() {
-                    this.callBase.apply(this, arguments);
+                dispose(...args) {
+                    super.dispose(...args);
 
                     that.emitterDisposed++;
                 }
-
-            }),
+            },
             events: ['dxteststart', 'dxtestend']
         });
     }
@@ -1063,17 +1061,18 @@ testMultitouch({
 QUnit.module('events unsubscription');
 
 QUnit.test('manager resets only needed emitter', function(assert) {
-    const testEmitter = Emitter.inherit({
-        end: function(e) {
+    class TestEmitter extends Emitter {
+        end(e) {
             $(e.target).trigger('dxtestevent');
-        },
-        validatePointers: function() {
+        }
+
+        validatePointers() {
             return true;
         }
-    });
+    }
 
     registerEmitter({
-        emitter: testEmitter,
+        emitter: TestEmitter,
         bubble: true,
         events: [
             'dxtestevent'
