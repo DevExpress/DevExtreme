@@ -42,14 +42,14 @@ If builds behave unexpectedly, clear the Nx cache: `rm -rf .nx/cache`
 pnpm run test-jest                                          # All JSDOM tests
 
 # Single file/pattern — invoke Jest directly.
-# Note: this repo currently uses Jest 29.x, where the flag is --testPathPattern (singular).
-pnpm exec jest --no-coverage --runInBand --selectProjects jsdom-tests --testPathPattern "<pattern>"
+# Note: this repo uses Jest 30.x, where the flag is --testPathPatterns (plural).
+pnpm exec jest --no-coverage --runInBand --selectProjects jsdom-tests --testPathPatterns "<pattern>"
 
 # Watch mode for a single file/pattern:
-pnpm exec jest --watch --no-coverage --selectProjects jsdom-tests --testPathPattern "<pattern>"
+pnpm exec jest --watch --no-coverage --selectProjects jsdom-tests --testPathPatterns "<pattern>"
 ```
 
-Example: `pnpm exec jest --no-coverage --runInBand --selectProjects jsdom-tests --testPathPattern "js/__internal/grids/data_grid/ai_assistant/commands/__tests__/summary.test.ts"`
+Example: `pnpm exec jest --no-coverage --runInBand --selectProjects jsdom-tests --testPathPatterns "js/__internal/grids/data_grid/ai_assistant/commands/__tests__/summary.test.ts"`
 
 Jest tests for grid components live under `js/__internal/grids/` — typically in `__tests__/` subdirectories alongside the source (in `grid_core/`, `data_grid/`, and `tree_list/`).
 

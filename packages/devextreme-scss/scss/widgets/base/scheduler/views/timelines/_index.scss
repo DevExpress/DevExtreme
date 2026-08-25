@@ -195,9 +195,14 @@ $scheduler-timeline-min-height: 100px;
     }
 
     .dx-scheduler-group-row .dx-scheduler-group-header {
-      border: none;
+      border-bottom: none;
       border-top: $scheduler-base-border;
       border-top-color: $scheduler-base-border-color;
+    }
+
+    .dx-scheduler-group-row th.dx-scheduler-group-header {
+      border-right: none;
+      border-left: none;
     }
 
     &.dx-scheduler-work-space-group-by-date {

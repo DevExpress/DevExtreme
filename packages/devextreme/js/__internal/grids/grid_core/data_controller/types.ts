@@ -25,8 +25,8 @@ export interface UserState {
   expandedRowKeys?: unknown[];
 }
 
-export interface ItemProcessingOptions {
-  visibleColumns: Column[];
+export interface ItemProcessingOptions<TColumn extends Column = Column> {
+  visibleColumns: TColumn[];
   dataIndex: number;
   rowIndex?: number;
   detailColumnIndex?: number;
@@ -43,6 +43,7 @@ export type RowWatch = (
 
 export interface Cell {
   column?: Column;
+  isEditing?: boolean;
   update?: RowUpdate;
 }
 
@@ -79,7 +80,7 @@ export type RowChangeType = 'update' | 'insert' | 'remove';
 
 export type RowOperation = RowChangeType | 'replace';
 
-interface DataChangeBase {
+export interface DataChangeBase {
   isFirstRender?: boolean;
   repaintChangesOnly?: boolean;
   needUpdateDimensions?: boolean;
@@ -89,6 +90,7 @@ interface DataChangeBase {
   changes?: unknown[];
   cancel?: boolean;
   isLiveUpdate?: boolean;
+  totalColumnIndices?: number[];
 }
 
 export interface UpdateChange extends DataChangeBase {
@@ -133,6 +135,8 @@ export interface UpdateRowChange {
 }
 
 export type RowIndexByKey = Record<string, number | undefined>;
+
+export type RowIndexCorrection = (rowIndex: number) => number;
 
 export type ItemChange = | { type: 'insert'; index: number; data: ProcessedItem }
   | { type: 'update'; index: number; data: ProcessedItem; oldItem: ProcessedItem }

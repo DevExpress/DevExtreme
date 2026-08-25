@@ -5,12 +5,20 @@ import $ from '@js/core/renderer';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import DataGrid from '@js/ui/data_grid';
 import { DataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/data_grid';
-import type { Controllers, Views } from '@ts/grids/grid_core/m_types';
+import type { Controllers, InternalGrid, Views } from '@ts/grids/grid_core/m_types';
 
 export interface DataGridInstance extends DataGrid {
   getController: <T extends keyof Controllers>(name: T) => Controllers[T];
   getView: <T extends keyof Views>(name: T) => Views[T];
 }
+
+export type OptionSpy = jest.Mock<(optionName: string, optionValue?: unknown) => unknown>;
+
+// `option` is an overloaded signature whose value parameter narrows to `never` for a
+// non-literal option name. Jest matchers type their arguments from that signature, so
+// a spy has to be viewed through a single-signature type to be asserted on.
+export const spyOnOption = (instance: InternalGrid): OptionSpy => jest
+  .spyOn(instance, 'option') as unknown as OptionSpy;
 
 export const SELECTORS = {
   gridContainer: '#gridContainer',

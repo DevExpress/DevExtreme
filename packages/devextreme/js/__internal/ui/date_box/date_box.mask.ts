@@ -164,7 +164,7 @@ class DateBoxMask<
 
   _toggleAmPm(): void {
     const currentValue = this._getActivePartProp('text');
-    const periodNames = dateLocalization.getPeriodNames(this._formatPattern);
+    const periodNames = dateLocalization.getPeriodNames();
     const indexOfCurrentValue = periodNames.indexOf(currentValue);
 
     // eslint-disable-next-line no-bitwise
@@ -379,8 +379,9 @@ class DateBoxMask<
     if (isLDMLPattern) {
       this._formatPattern = format;
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      this._formatPattern = getFormat((value) => dateLocalization.format(value, format)) as string;
+      this._formatPattern = getFormat(
+        (value) => dateLocalization.format(value, format) as string,
+      ) as string;
     }
 
     return this._formatPattern;
@@ -487,7 +488,7 @@ class DateBoxMask<
       .split(quantifierRegexp)
       .map((sourcePart) => (quantifierRegexp.test(sourcePart)
         ? sourcePart
-        : numberLocalization.convertDigits(sourcePart, false)) as string)
+        : numberLocalization.convertDigits(sourcePart, false)))
       .join('');
     this._regExpInfo.regexp = new RegExp(convertedSource, flags);
   }

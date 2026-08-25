@@ -1,21 +1,15 @@
 /* eslint-disable max-classes-per-file */
-import messageLocalization from '@js/common/core/localization/message';
 import dataQuery from '@js/common/data/query';
 import storeHelper from '@js/common/data/store_helper';
 import { normalizeSortingInfo } from '@js/common/data/utils';
 import $ from '@js/core/renderer';
-import { noop } from '@js/core/utils/common';
-import { compileGetter } from '@js/core/utils/data';
 import { extend } from '@js/core/utils/extend';
-import { each, map } from '@js/core/utils/iterator';
-import {
-  isDefined, isEmptyObject, isFunction,
-  isPlainObject, isString,
-} from '@js/core/utils/type';
-import errors from '@js/ui/widget/ui.errors';
+import { each } from '@js/core/utils/iterator';
+import { isDefined, isPlainObject } from '@js/core/utils/type';
 import type { DataSource } from '@ts/data/data_source/types';
-import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import type { RemoteOperationsOptions } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { EditingControllerRequired, ModuleType } from '@ts/grids/grid_core/m_types';
 import { ColumnsView } from '@ts/grids/grid_core/views/m_columns_view';
 
@@ -23,21 +17,20 @@ import type { EditingController } from '../../grid_core/editing/m_editing';
 import type { RowsView } from '../../grid_core/views/m_rows_view';
 import AggregateCalculator from '../m_aggregate_calculator';
 import gridCore from '../m_core';
-import dataSourceAdapterProvider from '../m_data_source_adapter';
-import type { CalculateSummaryCellsArgs, ColumnMap, SummaryCellItem } from './types';
-import { getColumnFromMap, getSummaryCellIndex } from './utils';
-
-const DATAGRID_TOTAL_FOOTER_CLASS = 'dx-datagrid-total-footer';
-const DATAGRID_SUMMARY_ITEM_CLASS = 'dx-datagrid-summary-item';
-const DATAGRID_TEXT_CONTENT_CLASS = 'dx-datagrid-text-content';
-const DATAGRID_GROUP_FOOTER_CLASS = 'dx-datagrid-group-footer';
-const DATAGRID_GROUP_TEXT_CONTENT_CLASS = 'dx-datagrid-group-text-content';
-const DATAGRID_NOWRAP_CLASS = 'dx-datagrid-nowrap';
-const DATAGRID_FOOTER_ROW_CLASS = 'dx-footer-row';
-const DATAGRID_CELL_DISABLED = 'dx-cell-focus-disabled';
-
-const DATAGRID_GROUP_FOOTER_ROW_TYPE = 'groupFooter';
-const DATAGRID_TOTAL_FOOTER_ROW_TYPE = 'totalFooter';
+import {
+  DATAGRID_CELL_DISABLED,
+  DATAGRID_FOOTER_ROW_CLASS,
+  DATAGRID_GROUP_FOOTER_CLASS,
+  DATAGRID_GROUP_FOOTER_ROW_TYPE,
+  DATAGRID_GROUP_TEXT_CONTENT_CLASS,
+  DATAGRID_NOWRAP_CLASS,
+  DATAGRID_SUMMARY_ITEM_CLASS,
+  DATAGRID_TEXT_CONTENT_CLASS,
+  DATAGRID_TOTAL_FOOTER_CLASS,
+  DATAGRID_TOTAL_FOOTER_ROW_TYPE,
+} from './const';
+import type { Aggregate, SummaryOptions } from './types';
+import { getSummaryOptions } from './utils/get_summary_options';
 
 export const renderSummaryCell = function (cell, options, setAria) {
   const $cell = $(cell);
@@ -71,14 +64,6 @@ const getSummaryCellOptions = function (that, options) {
     summaryItems: options.row.summaryCells[options.columnIndex],
     summaryTexts,
   };
-};
-
-const getGroupAggregates = function (data) {
-  return data.summary || data.aggregates || [];
-};
-
-const recalculateWhileEditing = function (that) {
-  return that.option('summary.recalculateWhileEditing');
 };
 
 const forEachGroup = function (groups, groupCount, callback, path?) {
@@ -164,37 +149,6 @@ const sortGroupsBySummary = function (data, group, summary) {
   return data;
 };
 
-const calculateAggregates = function (that: EditingControllerRequired, summary, data, groupLevel) {
-  let calculator;
-
-  if (recalculateWhileEditing(that)) {
-    const editingController = that._editingController;
-    if (editingController) {
-      const insertedData = editingController.getInsertedData();
-      if (insertedData.length) {
-        data = applyAddedData(data, insertedData, groupLevel);
-      }
-
-      const removedData = editingController.getRemovedData();
-      if (removedData.length) {
-        data = applyRemovedData(data, removedData, groupLevel);
-      }
-    }
-  }
-
-  if (summary) {
-    calculator = new AggregateCalculator({
-      totalAggregates: summary.totalAggregates,
-      groupAggregates: summary.groupAggregates,
-      data,
-      groupLevel,
-    });
-
-    calculator.calculate();
-  }
-  return calculator ? calculator.totalAggregates() : [];
-};
-
 export class FooterView extends ColumnsView {
   protected _getRows() {
     // @ts-expect-error
@@ -227,7 +181,7 @@ export class FooterView extends ColumnsView {
 
     if (totalItem && totalItem.summaryCells && totalItem.summaryCells.length) {
       this._updateContent(this._renderTable({ change }), change);
-      needUpdateScrollLeft && this._updateScrollLeftPosition();
+      needUpdateScrollLeft && this.updateScrollLeftPosition();
     }
 
     return super._renderCore(change);
@@ -300,45 +254,51 @@ export class FooterView extends ColumnsView {
   }
 }
 
-const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class SummaryDataSourceAdapterExtender extends Base implements EditingControllerRequired {
-  private _totalAggregates: any;
+export const summaryDataSourceAdapterExtender = (
+  Base: ModuleType<DataSourceAdapter>,
+): ModuleType<DataSourceAdapter> => class SummaryDataSourceAdapterExtender
+  extends Base
+  implements EditingControllerRequired {
+  private _totalAggregates!: unknown[];
 
-  private _summaryGetter: any;
+  private columnsController!: ColumnsController;
 
-  public _editingController!: EditingController;
+  public editingController!: EditingController;
 
-  public init() {
-    super.init.apply(this, arguments as any);
+  public init(dataSource?: DataSource): void {
+    super.init(dataSource);
 
-    this._editingController = this.getController('editing');
+    this.columnsController = this.getController('columns');
+    this.editingController = this.getController('editing');
     this._totalAggregates = [];
-    this._summaryGetter = noop;
   }
 
-  private summaryGetter(summaryGetter?) {
-    if (!arguments.length) {
-      return this._summaryGetter;
+  private getSummary(remoteOperations?: RemoteOperationsOptions): SummaryOptions | undefined {
+    const summary = this.option('summary');
+
+    if (!summary) {
+      return undefined;
     }
 
-    if (isFunction(summaryGetter)) {
-      this._summaryGetter = summaryGetter;
-    }
+    const result = getSummaryOptions({
+      summary,
+      sortByGroupSummaryInfo: this.option('sortByGroupSummaryInfo'),
+      remoteOperations: remoteOperations ?? this.remoteOperations(),
+      getUpdatedItemData: (data) => this.editingController.getUpdatedData(data),
+      columnOption: (id) => this.columnsController.columnOption(id),
+      groupColumns: this.columnsController.getGroupColumns(),
+      component: this.component as any,
+    });
+
+    return result;
   }
 
-  private summary(summary?) {
-    if (!arguments.length) {
-      return this._summaryGetter();
-    }
-
-    this._summaryGetter = function () { return summary; };
-  }
-
-  private totalAggregates() {
+  public totalAggregates(): unknown[] {
     return this._totalAggregates;
   }
 
   private isLastLevelGroupItemsPagingLocal() {
-    const summary = this.summary();
+    const summary = this.getSummary();
     const sortByGroupsInfo = summary?.sortByGroups();
 
     return sortByGroupsInfo?.length;
@@ -361,7 +321,7 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
   }
 
   protected _customizeRemoteOperations(options) {
-    const summary = this.summary();
+    const summary = this.getSummary();
 
     if (summary) {
       if (options.remoteOperations.summary) {
@@ -388,507 +348,101 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     }
   }
 
-  protected customizeLoadResultHandlerCore(options) {
-    const groups = normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group || []);
-    const remoteOperations = options.remoteOperations || {};
-    const summary = this.summaryGetter()(remoteOperations);
+  private calculateTotalAggregates(
+    data,
+    totalAggregates: Aggregate[],
+    groupAggregates: Aggregate[],
+    groupLevel: number,
+  ): unknown[] {
+    let dataWithEditingChanges = data;
 
-    if (!options.isCustomLoading || options.storeLoadOptions.isLoadingAll) {
-      if (remoteOperations.summary) {
-        if (!remoteOperations.paging && groups.length && summary) {
-          if (!remoteOperations.grouping) {
-            calculateAggregates(this, { groupAggregates: summary.groupAggregates }, options.data, groups.length);
-          }
-          options.data = sortGroupsBySummary(options.data, groups, summary);
-        }
-      } else if (!remoteOperations.paging && summary) {
-        const operationTypes = options.operationTypes || {};
-        const hasOperations = Object.keys(operationTypes).some((type) => operationTypes[type]);
-        if (!hasOperations || !options.cachedData?.extra?.summary || groups.length && summary.groupAggregates.length) {
-          const totalAggregates = calculateAggregates(this, summary, options.data, groups.length);
-          options.extra = isPlainObject(options.extra) ? options.extra : {};
-          options.extra.summary = totalAggregates;
-          if (options.cachedData) {
-            options.cachedData.extra = options.extra;
-          }
-        }
-        options.data = sortGroupsBySummary(options.data, groups, summary);
+    if (this.option('summary.recalculateWhileEditing')) {
+      const insertedData = this.editingController.getInsertedData();
+      if (insertedData.length) {
+        dataWithEditingChanges = applyAddedData(dataWithEditingChanges, insertedData, groupLevel);
+      }
+
+      const removedData = this.editingController.getRemovedData();
+      if (removedData.length) {
+        dataWithEditingChanges = applyRemovedData(dataWithEditingChanges, removedData, groupLevel);
       }
     }
 
+    const calculator = new AggregateCalculator({
+      data: dataWithEditingChanges,
+      totalAggregates,
+      groupAggregates,
+      groupLevel,
+    });
+
+    calculator.calculate();
+
+    return calculator.totalAggregates();
+  }
+
+  protected customizeLoadResultHandlerCore(options): void {
+    if (options.isCustomLoading && !options.storeLoadOptions.isLoadingAll) {
+      super.customizeLoadResultHandlerCore(options);
+      return;
+    }
+
+    const groups = normalizeSortingInfo(
+      options.storeLoadOptions.group ?? options.loadOptions.group ?? [],
+    );
+    const remoteOperations = options.remoteOperations ?? {};
+    const summary = this.getSummary(remoteOperations);
+
+    if (remoteOperations.summary) {
+      if (!remoteOperations.paging && groups.length && summary) {
+        if (!remoteOperations.grouping) {
+          this.calculateTotalAggregates(
+            options.data,
+            [],
+            summary.groupAggregates,
+            groups.length,
+          );
+        }
+
+        options.data = sortGroupsBySummary(options.data, groups, summary);
+      }
+    } else if (!remoteOperations.paging && summary) {
+      const operationTypes = options.operationTypes ?? {};
+      const hasOperations = Object.keys(operationTypes).some((type) => operationTypes[type]);
+
+      if (
+        !hasOperations
+        || !options.cachedData?.extra?.summary
+        || (groups.length && summary.groupAggregates.length)
+      ) {
+        const totalAggregates = this.calculateTotalAggregates(
+          options.data,
+          summary.totalAggregates,
+          summary.groupAggregates,
+          groups.length,
+        );
+        options.extra = isPlainObject(options.extra) ? options.extra : {};
+        options.extra.summary = totalAggregates;
+
+        if (options.cachedData) {
+          options.cachedData.extra = options.extra;
+        }
+      }
+      options.data = sortGroupsBySummary(options.data, groups, summary);
+    }
+
     if (!options.isCustomLoading) {
-      this._totalAggregates = options.extra && options.extra.summary || this._totalAggregates;
+      this._totalAggregates = options.extra?.summary ?? this._totalAggregates;
     }
 
     super.customizeLoadResultHandlerCore(options);
   }
 };
 
-dataSourceAdapterProvider.extend(dataSourceAdapterExtender);
-
-const data = (Base: ModuleType<DataController>) => class SummaryDataControllerExtender extends Base {
-  private _footerItems: any;
-
-  private _isDataColumn(column) {
-    return column && (!isDefined(column.groupIndex) || column.showWhenGrouped);
-  }
-
-  private _isGroupFooterVisible() {
-    const groupItems: any = this.option('summary.groupItems') || [];
-
-    for (let i = 0; i < groupItems.length; i++) {
-      const groupItem = groupItems[i];
-      const column = this._columnsController.columnOption(groupItem.showInColumn || groupItem.column);
-      if (groupItem.showInGroupFooter && this._isDataColumn(column)) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  private _processGroupItems(items, groupCount, options) {
-    const data = options && options.data;
-    // @ts-expect-error
-    const result = super._processGroupItems.apply(this, arguments);
-
-    if (options) {
-      if (options.isGroupFooterVisible === undefined) {
-        options.isGroupFooterVisible = this._isGroupFooterVisible();
-      }
-
-      if (data && data.items && options.isGroupFooterVisible && (options.collectContinuationItems || !data.isContinuationOnNextPage)) {
-        result.push({
-          rowType: DATAGRID_GROUP_FOOTER_ROW_TYPE,
-          key: options.path.slice(),
-          data,
-          groupIndex: options.path.length - 1,
-          values: [],
-        });
-      }
-    }
-    return result;
-  }
-
-  private _processGroupItem(groupItem, options) {
-    options.summaryGroupItems ??= this.option('summary.groupItems') || [];
-    options.summaryColumnMap ??= this._buildColumnLookupMap();
-
-    if (groupItem.rowType === 'group') {
-      let groupColumnIndex = -1;
-      let afterGroupColumnIndex = -1;
-
-      each(options.visibleColumns, function (visibleIndex: any) {
-        const prevColumn = options.visibleColumns[visibleIndex - 1];
-
-        if (groupItem.groupIndex === this.groupIndex) {
-          groupColumnIndex = this.index;
-        }
-
-        if (visibleIndex > 0 && prevColumn.command === 'expand' && this.command !== 'expand') {
-          afterGroupColumnIndex = this.index;
-        }
-      });
-
-      groupItem.summaryCells = this._calculateSummaryCells({
-        summaryItems: options.summaryGroupItems,
-        aggregates: getGroupAggregates(groupItem.data),
-        visibleColumns: options.visibleColumns,
-        calculateTargetColumnIndex: (summaryItem, column) => {
-          if (summaryItem.showInGroupFooter) {
-            return -1;
-          }
-
-          if (summaryItem.alignByColumn
-            && column
-            && !isDefined(column.groupIndex)
-            && (column.index !== afterGroupColumnIndex)
-          ) {
-            return column.index;
-          }
-
-          return groupColumnIndex;
-        },
-        isGroupRow: true,
-        columnMap: options.summaryColumnMap,
-      });
-    }
-
-    if (groupItem.rowType === DATAGRID_GROUP_FOOTER_ROW_TYPE) {
-      groupItem.summaryCells = this._calculateSummaryCells({
-        summaryItems: options.summaryGroupItems,
-        aggregates: getGroupAggregates(groupItem.data),
-        visibleColumns: options.visibleColumns,
-        calculateTargetColumnIndex: (summaryItem, column) => (
-          summaryItem.showInGroupFooter && this._isDataColumn(column) ? column.index : -1
-        ),
-        isGroupRow: false,
-        columnMap: options.summaryColumnMap,
-      });
-    }
-
-    return groupItem;
-  }
-
-  // The map is built once per _processItems cycle (via options) and discarded after.
-  private _buildColumnLookupMap(): ColumnMap {
-    const columnMap: ColumnMap = new Map();
-    const allColumns = this._columnsController.getColumns();
-
-    for (const column of allColumns) {
-      const copiedColumn = { ...column };
-      // The method registers each column under a few keys: index, name, dataField, and caption.
-      // This is because the developer can specify summaryItem.column (and summaryItem.showInColumn)
-      // in any of these forms — number for column index and string for all the rest.
-      const keys = [
-        column.index,
-        column.name,
-        column.dataField,
-        column.caption,
-      ].filter((key) => (
-        key !== undefined && !columnMap.has(key)
-      ));
-
-      for (const key of keys) {
-        columnMap.set(key, copiedColumn);
-      }
-    }
-
-    return columnMap;
-  }
-
-  private _calculateSummaryCells({
-    summaryItems,
-    aggregates,
-    visibleColumns,
-    calculateTargetColumnIndex,
-    isGroupRow,
-    columnMap,
-  }: CalculateSummaryCellsArgs) {
-    const summaryCells: SummaryCellItem[][] = [];
-    const summaryCellsByColumns: Record<number, SummaryCellItem[]> = {};
-    const getColumnByKey = (key) => (
-      columnMap
-        ? getColumnFromMap(key, columnMap)
-        : this._columnsController.columnOption(key)
-    );
-
-    each(summaryItems, (summaryIndex, summaryItem) => {
-      const column = getColumnByKey(summaryItem.column);
-      const showInColumn = summaryItem.showInColumn
-        ? getColumnByKey(summaryItem.showInColumn)
-        : undefined;
-      const columnIndex = calculateTargetColumnIndex(summaryItem, showInColumn ?? column);
-
-      if (columnIndex >= 0) {
-        if (!summaryCellsByColumns[columnIndex]) {
-          summaryCellsByColumns[columnIndex] = [];
-        }
-
-        const aggregate = aggregates[summaryIndex];
-        if (aggregate === aggregate) {
-          let valueFormat;
-          if (isDefined(summaryItem.valueFormat)) {
-            valueFormat = summaryItem.valueFormat;
-          } else if (summaryItem.summaryType !== 'count') {
-            valueFormat = gridCore.getFormatByDataType(column && column.dataType);
-          }
-          summaryCellsByColumns[columnIndex].push(extend({}, summaryItem, {
-            value: isString(aggregate) && column && column.deserializeValue
-              ? column.deserializeValue(aggregate)
-              : aggregate,
-            valueFormat,
-            columnCaption: column && column.index !== columnIndex ? column.caption : undefined,
-          }));
-        }
-      }
-    });
-
-    if (!isEmptyObject(summaryCellsByColumns)) {
-      visibleColumns.forEach((column, visibleIndex) => {
-        const prevColumn = visibleColumns[visibleIndex - 1];
-        const columnIndex = getSummaryCellIndex(column, prevColumn, isGroupRow);
-
-        summaryCells.push(summaryCellsByColumns[columnIndex] || []);
-      });
-    }
-
-    return summaryCells;
-  }
-
-  private _getSummaryCells(summaryTotalItems, totalAggregates) {
-    const columnsController = this._columnsController;
-
-    return this._calculateSummaryCells({
-      summaryItems: summaryTotalItems,
-      aggregates: totalAggregates,
-      visibleColumns: columnsController.getVisibleColumns(),
-      calculateTargetColumnIndex: (_, column) => (
-        this._isDataColumn(column) ? column.index : -1
-      ),
-    });
-  }
-
-  protected _updateItemsCore(change) {
-    const that = this;
-    let summaryCells: SummaryCellItem[][] | undefined;
-    const dataSource = that._dataSource;
-    const footerItems = that._footerItems;
-    const oldSummaryCells = footerItems && footerItems[0] && footerItems[0].summaryCells;
-    const summaryTotalItems: any = that.option('summary.totalItems');
-
-    that._footerItems = [];
-    if (dataSource && summaryTotalItems && summaryTotalItems.length) {
-      const totalAggregates = dataSource.totalAggregates();
-      summaryCells = that._getSummaryCells(summaryTotalItems, totalAggregates);
-
-      if (change && change.repaintChangesOnly && oldSummaryCells) {
-        change.totalColumnIndices = summaryCells.map((summaryCell, index) => {
-          if (JSON.stringify(summaryCell) !== JSON.stringify(oldSummaryCells[index])) {
-            return index;
-          }
-          return -1;
-        }).filter((index) => index >= 0);
-      }
-
-      if (summaryCells.length) {
-        that._footerItems.push({
-          rowType: DATAGRID_TOTAL_FOOTER_ROW_TYPE,
-          summaryCells,
-        });
-      }
-    }
-    super._updateItemsCore(change);
-  }
-
-  private _prepareUnsavedDataSelector(selector) {
-    if (recalculateWhileEditing(this)) {
-      const editingController = this._editingController;
-      if (editingController) {
-        return function (data) {
-          data = editingController.getUpdatedData(data);
-          return selector(data);
-        };
-      }
-    }
-
-    return selector;
-  }
-
-  private _prepareAggregateSelector(selector, aggregator) {
-    selector = this._prepareUnsavedDataSelector(selector);
-
-    if (aggregator === 'avg' || aggregator === 'sum') {
-      return function (data) {
-        const value = selector(data);
-        return isDefined(value) ? Number(value) : value;
-      };
-    }
-
-    return selector;
-  }
-
-  private _getAggregates(summaryItems, remoteOperations) {
-    const that = this;
-    let calculateCustomSummary: any = that.option('summary.calculateCustomSummary');
-    const commonSkipEmptyValues = that.option('summary.skipEmptyValues');
-
-    return map(summaryItems || [], (summaryItem) => {
-      const column = this._columnsController.columnOption(summaryItem.column);
-      const calculateCellValue = column && column.calculateCellValue ? column.calculateCellValue.bind(column) : compileGetter(column ? column.dataField : summaryItem.column);
-      let aggregator = summaryItem.summaryType || 'count';
-      const skipEmptyValues = isDefined(summaryItem.skipEmptyValues) ? summaryItem.skipEmptyValues : commonSkipEmptyValues;
-
-      if (remoteOperations) {
-        return {
-          selector: summaryItem.column,
-          summaryType: aggregator,
-        };
-      }
-      const selector = that._prepareAggregateSelector(calculateCellValue, aggregator);
-
-      if (aggregator === 'custom') {
-        if (!calculateCustomSummary) {
-          errors.log('E1026');
-          calculateCustomSummary = function () { };
-        }
-        const options: any = {
-          component: that.component,
-          name: summaryItem.name,
-        };
-        calculateCustomSummary(options);
-        options.summaryProcess = 'calculate';
-        aggregator = {
-          seed(groupIndex) {
-            options.summaryProcess = 'start';
-            options.totalValue = undefined;
-            options.groupIndex = groupIndex;
-            delete options.value;
-            calculateCustomSummary(options);
-            return options.totalValue;
-          },
-          step(totalValue, value) {
-            options.summaryProcess = 'calculate';
-            options.totalValue = totalValue;
-            options.value = value;
-            calculateCustomSummary(options);
-            return options.totalValue;
-          },
-          finalize(totalValue) {
-            options.summaryProcess = 'finalize';
-            options.totalValue = totalValue;
-            delete options.value;
-            calculateCustomSummary(options);
-            return options.totalValue;
-          },
-        };
-      }
-      return {
-        selector,
-        aggregator,
-        skipEmptyValues,
-      };
-    });
-  }
-
-  private _addSortInfo(sortByGroups, groupColumn, selector, sortOrder) {
-    if (groupColumn) {
-      const { groupIndex } = groupColumn;
-      sortOrder = sortOrder || groupColumn.sortOrder;
-      if (isDefined(groupIndex)) {
-        sortByGroups[groupIndex] = sortByGroups[groupIndex] || [];
-        sortByGroups[groupIndex].push({
-          selector,
-          desc: sortOrder === 'desc',
-        });
-      }
-    }
-  }
-
-  private _findSummaryItem(summaryItems, name) {
-    let summaryItemIndex: any = -1;
-
-    const getFullName = function (summaryItem) {
-      const { summaryType } = summaryItem;
-      const { column } = summaryItem;
-
-      return summaryType && column && `${summaryType}_${column}`;
-    };
-
-    if (isDefined(name)) {
-      // @ts-expect-error
-      each(summaryItems || [], function (index) {
-        if (this.name === name || index === name || this.summaryType === name || this.column === name || getFullName(this) === name) {
-          summaryItemIndex = index;
-          return false;
-        }
-      });
-    }
-    return summaryItemIndex;
-  }
-
-  private _getSummarySortByGroups(sortByGroupSummaryInfo, groupSummaryItems) {
-    const that = this;
-    const columnsController = that._columnsController;
-    const groupColumns = columnsController.getGroupColumns();
-    const sortByGroups = [];
-
-    if (!groupSummaryItems || !groupSummaryItems.length) return;
-
-    each(sortByGroupSummaryInfo || [], function () {
-      const { sortOrder } = this;
-      let { groupColumn } = this;
-      const summaryItemIndex = that._findSummaryItem(groupSummaryItems, this.summaryItem);
-
-      if (summaryItemIndex < 0) return;
-
-      const selector = function (data) {
-        return getGroupAggregates(data)[summaryItemIndex];
-      };
-
-      if (isDefined(groupColumn)) {
-        groupColumn = columnsController.columnOption(groupColumn);
-        that._addSortInfo(sortByGroups, groupColumn, selector, sortOrder);
-      } else {
-        each(groupColumns, (groupIndex, groupColumn) => {
-          that._addSortInfo(sortByGroups, groupColumn, selector, sortOrder);
-        });
-      }
-    });
-    return sortByGroups;
-  }
-
-  protected _createDataSourceAdapter(dataSource: DataSource) {
-    const dataSourceAdapter = super._createDataSourceAdapter(dataSource);
-
-    // @ts-expect-error summaryGetter is defined in summary DataSourceAdapterExtender
-    dataSourceAdapter.summaryGetter((currentRemoteOperations) => {
-      const result = this._getSummaryOptions(
-        currentRemoteOperations ?? dataSourceAdapter.remoteOperations(),
-      );
-      return result;
-    });
-
-    return dataSourceAdapter;
-  }
-
-  private _getSummaryOptions(remoteOperations) {
-    const that = this;
-    const groupSummaryItems = that.option('summary.groupItems');
-    const totalSummaryItems = that.option('summary.totalItems');
-    const sortByGroupSummaryInfo = that.option('sortByGroupSummaryInfo');
-    const groupAggregates = that._getAggregates(groupSummaryItems, remoteOperations && remoteOperations.grouping && remoteOperations.summary);
-    const totalAggregates = that._getAggregates(totalSummaryItems, remoteOperations && remoteOperations.summary);
-    const sortByGroups = function () {
-      return that._getSummarySortByGroups(sortByGroupSummaryInfo, groupSummaryItems);
-    };
-
-    if (groupAggregates.length || totalAggregates.length) {
-      return {
-        groupAggregates,
-        totalAggregates,
-        sortByGroups,
-      };
-    }
-
-    return undefined;
-  }
-
-  public publicMethods() {
-    const methods = super.publicMethods();
-    methods.push('getTotalSummaryValue');
-    return methods;
-  }
-
-  private getTotalSummaryValue(summaryItemName) {
-    const summaryItemIndex = this._findSummaryItem(this.option('summary.totalItems'), summaryItemName);
-    const aggregates = this._dataSource.totalAggregates();
-
-    if (aggregates.length && summaryItemIndex > -1) {
-      return aggregates[summaryItemIndex];
-    }
-  }
-
-  public optionChanged(args) {
-    if (args.name === 'summary' || args.name === 'sortByGroupSummaryInfo') {
-      args.name = 'dataSource';
-    }
-    super.optionChanged(args);
-  }
-
-  public init() {
-    this._footerItems = [];
-    super.init();
-  }
-
-  public footerItems() {
-    return this._footerItems;
-  }
-};
-
-const editing = (Base: ModuleType<EditingController>) => class SummaryEditingController extends Base {
+export const summaryEditingControllerExtender = (
+  Base: ModuleType<EditingController>,
+): ModuleType<EditingController> => class SummaryEditingController extends Base {
   private _refreshSummary() {
-    if (recalculateWhileEditing(this) && !this.isSaving()) {
+    if (this.option('summary.recalculateWhileEditing') && !this.isSaving()) {
       this._dataController.refresh({
         load: true,
         changesOnly: true,
@@ -926,7 +480,9 @@ const editing = (Base: ModuleType<EditingController>) => class SummaryEditingCon
   }
 };
 
-const rowsView = (Base: ModuleType<RowsView>) => class SummaryRowsViewExtender extends Base {
+export const summaryRowsViewExtender = (
+  Base: ModuleType<RowsView>,
+): ModuleType<RowsView> => class SummaryRowsViewExtender extends Base {
   protected _createRow(row) {
     // @ts-expect-error
     const $row = super._createRow.apply(this, arguments);
@@ -1008,41 +564,3 @@ const rowsView = (Base: ModuleType<RowsView>) => class SummaryRowsViewExtender e
     return parameters;
   }
 };
-
-gridCore.registerModule('summary', {
-  defaultOptions() {
-    return {
-      summary: {
-        groupItems: undefined,
-        totalItems: undefined,
-        calculateCustomSummary: undefined,
-        skipEmptyValues: true,
-        recalculateWhileEditing: false,
-        texts: {
-          sum: messageLocalization.format('dxDataGrid-summarySum'),
-          sumOtherColumn: messageLocalization.format('dxDataGrid-summarySumOtherColumn'),
-          min: messageLocalization.format('dxDataGrid-summaryMin'),
-          minOtherColumn: messageLocalization.format('dxDataGrid-summaryMinOtherColumn'),
-          max: messageLocalization.format('dxDataGrid-summaryMax'),
-          maxOtherColumn: messageLocalization.format('dxDataGrid-summaryMaxOtherColumn'),
-          avg: messageLocalization.format('dxDataGrid-summaryAvg'),
-          avgOtherColumn: messageLocalization.format('dxDataGrid-summaryAvgOtherColumn'),
-          count: messageLocalization.format('dxDataGrid-summaryCount'),
-        },
-      },
-      sortByGroupSummaryInfo: undefined,
-    };
-  },
-  views: {
-    footerView: FooterView,
-  },
-  extenders: {
-    controllers: {
-      data,
-      editing,
-    },
-    views: {
-      rowsView,
-    },
-  },
-});

@@ -36,7 +36,7 @@ export class PagerView extends modules.View {
         } else {
           this.render();
         }
-      } else if (!e || e.changeType !== 'update' && e.changeType !== 'updateSelection' && e.changeType !== 'updateFocusedRow') {
+      } else if (!e || (e.changeType !== 'update' && e.changeType !== 'updateSelection' && e.changeType !== 'updateFocusedRow')) {
         this._pager = null;
         this.render();
       }

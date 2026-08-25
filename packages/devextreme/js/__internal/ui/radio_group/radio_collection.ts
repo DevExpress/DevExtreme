@@ -5,7 +5,8 @@ import { deferRender } from '@js/core/utils/common';
 import type { DxEvent } from '@js/events';
 import type { CollectionWidgetItem as CollectionWidgetItemProperties } from '@js/ui/collection/ui.collection_widget.base';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
-import type { CollectionWidgetBaseProperties, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
+import type { PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
+import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
 import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
 
 const RADIO_BUTTON_CHECKED_CLASS = 'dx-radiobutton-checked';
@@ -17,7 +18,7 @@ const RADIO_BUTTON_CLASS = 'dx-radiobutton';
 
 const ITEM_CONTENT_CLASS = 'dx-item-content';
 
-export type Properties = CollectionWidgetBaseProperties<RadioCollection>;
+export type Properties = CollectionWidgetEditProperties<RadioCollection>;
 
 class RadioCollection extends CollectionWidget<Properties> {
   _focusTarget(): dxElementWrapper {
