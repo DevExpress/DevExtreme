@@ -14,6 +14,7 @@ import {
  RouteRemovedEvent,
  MapProvider,
  MapType,
+ CalculateOsmRouteInfo,
  OsmTileServer,
  OsmTileServerConfig,
  RouteMode,
@@ -246,11 +247,15 @@ const DxProviderConfigConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:calculateLocation": null,
+    "update:calculateRoute": null,
     "update:mapId": null,
     "update:tileServer": null,
     "update:useAdvancedMarkers": null,
   },
   props: {
+    calculateLocation: Function as PropType<((query: string) => any)>,
+    calculateRoute: Function as PropType<((params: CalculateOsmRouteInfo) => any)>,
     mapId: String,
     tileServer: [Object, Function, String] as PropType<OsmTileServer | (((type: MapType) => string | OsmTileServerConfig | undefined)) | OsmTileServerConfig | string>,
     useAdvancedMarkers: Boolean
