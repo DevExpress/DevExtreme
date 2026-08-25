@@ -174,8 +174,7 @@ jobs:
         working-directory: e2e/wrappers
         run: pnpm run test:${{ matrix.framework }}
 
-      # The report and the traces are uploaded separately: each artifact then unpacks into the
-      # layout "playwright show-report" and "playwright show-trace" expect.
+      # Kept as two artifacts: merged into one, the report no longer opens from the download.
       - name: Upload test report on failure
         if: ${{ failure() }}
         uses: actions/upload-artifact@v7
