@@ -63,24 +63,6 @@ export type AllPermutations<T extends string> = UnionLength<T> extends PermutedU
   [K in T]: Permutations<T> | AllPermutations<Exclude<T, K>>
 }[T] : string;
 
-type BuildTuple<Length extends number, Result extends unknown[] = []> = Result['length'] extends Length
-  ? Result
-  : BuildTuple<Length, [...Result, unknown]>;
-
-type Tail<T extends unknown[]> = T extends [unknown, ...infer Rest] ? Rest : [];
-
-type RepeatUnionInternal<
-  T extends string,
-  DepthTuple extends unknown[],
-> = DepthTuple['length'] extends 0
-  ? never
-  : T | `${T}${RepeatUnionInternal<T, Tail<DepthTuple>>}`;
-
-export type RepeatUnion<
-  T extends string,
-  Depth extends number,
-> = RepeatUnionInternal<T, BuildTuple<Depth>>;
-
 /// #DEBUG
 
 export type EventProps<T> = Extract<keyof T, `on${any}`>;
