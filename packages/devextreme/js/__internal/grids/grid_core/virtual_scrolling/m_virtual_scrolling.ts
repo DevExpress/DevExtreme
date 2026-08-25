@@ -30,45 +30,11 @@ import {
   LOAD_TIMEOUT,
   PAGING_METHOD_NAMES,
   ROW_INSERTED,
-  SCROLLING_MODE_INFINITE,
-  SCROLLING_MODE_VIRTUAL,
   VIRTUAL_ROW_CLASS,
 } from './const';
 import { subscribeToExternalScrollers, VirtualScrollController } from './m_virtual_scrolling_core';
-
-export const isVirtualMode = function (that) {
-  return that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL;
-};
-
-export const isAppendMode = function (that) {
-  return that.option('scrolling.mode') === SCROLLING_MODE_INFINITE;
-};
-
-export const isVirtualPaging = function (that) {
-  return isVirtualMode(that) || isAppendMode(that);
-};
-
-export const correctCount = function (items, count, fromEnd, isItemCountableFunc) {
-  for (let i = 0; i < count + 1; i++) {
-    const item = items[fromEnd ? items.length - 1 - i : i];
-    if (item && !isItemCountableFunc(item, i === count, fromEnd)) {
-      count++;
-    }
-  }
-  return count;
-};
-
-export const isItemCountableByDataSource = function (item, dataSource) {
-  return item.rowType === 'data' && !item.isNewRow || item.rowType === 'group' && dataSource.isGroupItemCountable(item.data);
-};
-
-export const updateItemIndices = function (items) {
-  items.forEach((item, index) => {
-    item.rowIndex = index;
-  });
-
-  return items;
-};
+import { isItemCountableByDataSource } from './utils/items';
+import { isInfiniteMode, isVirtualMode, isVirtualPaging } from './utils/scrolling_mode';
 
 export const updateLoading = function (that) {
   const beginPageIndex = that._virtualScrollController.beginPageIndex(-1);
@@ -243,7 +209,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
       renderAsync = this._renderTime >= this.option('scrolling.renderingThreshold');
     }
 
-    if ((isVirtualMode(this) || (isAppendMode(this) && newMode)) && !operationTypes.reload && (operationTypes.skip || newMode) && !renderAsync) {
+    if ((isVirtualMode(this) || (isInfiniteMode(this) && newMode)) && !operationTypes.reload && (operationTypes.skip || newMode) && !renderAsync) {
       options.delay = undefined;
     }
 
@@ -333,7 +299,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
         updateLoading(this);
         this._isLoaded = true;
 
-        if (isAppendMode(this)) {
+        if (isInfiniteMode(this)) {
           this.pageIndex(0);
           dataSource.pageIndex(0);
           storeLoadOptions.pageIndex = 0;
@@ -346,7 +312,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
             storeLoadOptions.skip = this.pageIndex() * this.pageSize();
           }
         }
-      } else if (isAppendMode(this) && storeLoadOptions.skip && this._totalCountCorrection < 0) {
+      } else if (isInfiniteMode(this) && storeLoadOptions.skip && this._totalCountCorrection < 0) {
         storeLoadOptions.skip += this._totalCountCorrection;
       }
     }
@@ -571,7 +537,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     const pageSize = this._dataController ? this._dataController.pageSize() : 0;
     let scrollPosition;
 
-    if (isVirtualMode(this) || isAppendMode(this)) {
+    if (isVirtualMode(this) || isInfiniteMode(this)) {
       const itemSize = this._dataController
         // @ts-expect-error
         .getItemSize();
@@ -851,8 +817,8 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
   private _updateBottomLoading() {
     const that = this;
     const virtualMode = isVirtualMode(this);
-    const appendMode = isAppendMode(this);
-    const showBottomLoading = !that._dataController.hasKnownLastPage() && that._dataController.isLoaded() && (virtualMode || appendMode);
+    const infiniteMode = isInfiniteMode(this);
+    const showBottomLoading = !that._dataController.hasKnownLastPage() && that._dataController.isLoaded() && (virtualMode || infiniteMode);
     const $contentElement = that._findContentElement();
     const bottomLoadPanelElement = that._findBottomLoadPanel($contentElement);
 
@@ -900,7 +866,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
   protected _needUpdateRowHeight(itemsCount) {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return super._needUpdateRowHeight.apply(this, arguments as any) || (itemsCount > 0
-              && (isAppendMode(this) && !gridCoreUtils.isVirtualRowRendering(this))
+              && (isInfiniteMode(this) && !gridCoreUtils.isVirtualRowRendering(this))
     );
   }
 
