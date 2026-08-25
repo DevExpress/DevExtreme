@@ -3986,6 +3986,14 @@
                 "DemoType": "Web"
               },
               {
+                "Title": "Hierarchical Grouping",
+                "Name": "MultilevelGrouping",
+                "Widget": "Scheduler",
+                "Badge": "Roadmap",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-wg-roadmap-hierarchical-grouping.xml"
+              },
+              {
                 "Title": "Grouping by Date",
                 "Name": "GroupByDate",
                 "Widget": "Scheduler",
