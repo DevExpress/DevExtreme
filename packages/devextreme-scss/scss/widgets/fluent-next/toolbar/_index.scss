@@ -5,9 +5,12 @@
 @use "../../base/icon_fonts" as *;
 @use "../list/sizes" as listSizes;
 @use "../button/mixins" as *;
+@use "../common/colors" as *;
+@use "../common/sizes" as *;
 @use "../button/colors" as buttonColors;
 @use "mixins" as *;
 @use "../button/sizes" as buttonSizes;
+@use "../../base/toolbar/mixins" as *;
 @use "../../base/toolbar" with (
   $toolbar-item-padding: $toolbar-item-padding,
   $toolbar-group-margin: $toolbar-group-margin,
@@ -179,3 +182,5 @@
     line-height: 0;
   }
 }
+
+@include dx-toolbar-focus-outline($focus-rect-outline-rest, $focus-rect-border-radius);
