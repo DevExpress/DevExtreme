@@ -2,7 +2,6 @@ import { HorizontalAlignment } from '../common';
 import { Format } from '../localization';
 import { BaseLegendItem } from '../viz/common';
 import { baseSeriesObject } from '../viz/chart';
-import { RepeatUnion } from '../core';
 
 /**
  * @public
@@ -49,9 +48,13 @@ export type ChartsDataType = 'datetime' | 'numeric' | 'string';
 /**
  * @public
  * @namespace DevExpress.common.charts
- * @type 'dash'|'dot'|'longDash'|'solid'
  */
-export type DashStyle = 'solid' | RepeatUnion<'dash' | 'dot' | 'longDash', 5>;
+export type DashStyle = 'solid'
+| 'dash' | 'dot' | 'longDash'
+| `${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}`
+| `${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}`
+| `${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}`
+| `${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}`;
 
 /**
  * @public
