@@ -6,22 +6,21 @@ import errors from 'core/errors';
 import devices from '__internal/core/m_devices';
 import config from 'core/config';
 
-const TestComponent = Component.inherit({
-
+class TestComponent extends Component {
     ctor(options) {
         this._resetTraceLog();
-        this.callBase(options);
-    },
+        super.ctor(options);
+    }
 
     _setOptionsByReference() {
-        this.callBase();
+        super._setOptionsByReference();
         $.extend(this._optionsByReference, {
             byReference: true
         });
-    },
+    }
 
     _setDeprecatedOptions() {
-        this.callBase();
+        super._setDeprecatedOptions();
 
         $.extend(this._deprecatedOptions, {
             deprecated: { since: '15.2', alias: 'deprecatedAlias' },
@@ -31,19 +30,11 @@ const TestComponent = Component.inherit({
             'thirdLevel.option.deprecated': { since: '15.2', alias: 'thirdLevel.option.deprecatedAlias' },
             'onDeprecatedEvent': { since: '20.1', message: 'Use another events instead' }
         });
-    },
-
-    _setOptionAliases() {
-        this.callBase();
-
-        $.extend(this._getOptionAliases(), {
-            checked: 'value'
-        });
-    },
+    }
 
     _getDefaultOptions() {
         return $.extend(
-            this.callBase(),
+            super._getDefaultOptions(),
             {
                 opt1: 'default',
                 opt2: 'default',
@@ -71,7 +62,7 @@ const TestComponent = Component.inherit({
                 }
             }
         );
-    },
+    }
 
     _optionChanged(name, value, prevValue) {
         this._traceLog.push({
@@ -79,8 +70,8 @@ const TestComponent = Component.inherit({
             arguments: $.makeArray(arguments)
         });
 
-        this.callBase(...arguments);
-    },
+        super._optionChanged(...arguments);
+    }
 
     _init(...args) {
         this._traceLog.push({
@@ -88,43 +79,43 @@ const TestComponent = Component.inherit({
             arguments: $.makeArray(args)
         });
 
-        this.callBase();
-    },
+        super._init();
+    }
 
     beginUpdate(...args) {
         this._traceLog.push({
             method: 'beginUpdate',
             arguments: $.makeArray(args)
         });
-        this.callBase();
-    },
+        super.beginUpdate();
+    }
 
     endUpdate(...args) {
         this._traceLog.push({
             method: 'endUpdate',
             arguments: $.makeArray(args)
         });
-        this.callBase();
-    },
+        super.endUpdate();
+    }
 
     func(arg) {
         return arg;
-    },
+    }
 
     instanceChain() {
         return this;
-    },
+    }
 
     _getTraceLogByMethod(methodName) {
         return $.grep(this._traceLog, i => {
             return i.method === methodName;
         });
-    },
+    }
 
     _resetTraceLog() {
         this._traceLog = [];
     }
-});
+}
 
 class TestDeprecatedComponent extends Component {
     constructor(options) {
@@ -371,12 +362,15 @@ QUnit.module('default', {}, () => {
     });
 
     QUnit.test('complex options', function(assert) {
-        let component1 = Component.inherit({
-            NAME: 'component1',
+        class Component1 extends Component {
+            ctor(options) {
+                this.NAME = 'component1';
+                super.ctor(options);
+            }
 
             _getDefaultOptions() {
                 return $.extend(
-                    this.callBase(), {
+                    super._getDefaultOptions(), {
                         plain: {
                             a: {
                                 b: 'b'
@@ -385,9 +379,9 @@ QUnit.module('default', {}, () => {
                     }
                 );
             }
-        });
+        }
 
-        component1 = new component1({
+        const component1 = new Component1({
             plain: {
                 a: {
                     b1: 'b1'
@@ -413,7 +407,14 @@ QUnit.module('default', {}, () => {
     QUnit.test('option value equality comparison', function(assert) {
         let triggered;
 
-        const instance = new (Component.inherit({ NAME: 'temp' }))({
+        class TempComponent extends Component {
+            ctor(options) {
+                this.NAME = 'temp';
+                super.ctor(options);
+            }
+        }
+
+        const instance = new TempComponent({
             onOptionChanged() {
                 triggered = true;
             }
@@ -1128,11 +1129,11 @@ QUnit.module('defaultOptions', {
     beforeEach: function() {
         this.originalDevice = devices.current();
         this.createClass = defaultOptionsRules => {
-            return Component.inherit({
+            return class extends Component {
                 _defaultOptionsRules() {
-                    return this.callBase().slice(0).concat(defaultOptionsRules);
+                    return super._defaultOptionsRules().slice(0).concat(defaultOptionsRules);
                 }
-            });
+            };
         };
     },
     afterEach: function() {
@@ -1235,7 +1236,7 @@ QUnit.module('defaultOptions', {
                 test: 'value'
             }
         }]);
-        const ChildComponent = TestComponent.inherit();
+        class ChildComponent extends TestComponent {}
 
         assert.equal(new ChildComponent().option('test'), 'value', 'test option is configured for child component');
     });
@@ -1246,15 +1247,15 @@ QUnit.module('defaultOptions', {
                 test: 'parent'
             }
         }]);
-        const ChildComponent = TestComponent.inherit({
+        class ChildComponent extends TestComponent {
             _defaultOptionsRules() {
-                return this.callBase().slice(0).concat([{
+                return super._defaultOptionsRules().slice(0).concat([{
                     options: {
                         test: 'child'
                     }
                 }]);
             }
-        });
+        }
 
         assert.equal(new ChildComponent().option('test'), 'child', 'test option configured with child component defaults');
     });
@@ -1265,57 +1266,53 @@ QUnit.module('defaultOptions', {
                 test: 'parent'
             }
         }]);
-        const ChildComponent = TestComponent.inherit({
-            _defaultOptions() {
-                return $.extend(this.callBase(), {
-                    test: 'default'
-                });
-            },
+        class ChildComponent extends TestComponent {
             _defaultOptionsRules() {
-                return this.callBase().slice(0).concat([{
+                return super._defaultOptionsRules().slice(0).concat([{
                     options: {
                         test: 'byRule'
                     }
                 }]);
             }
-        });
+        }
 
         assert.equal(new ChildComponent().option('test'), 'byRule', 'test option configured with child component defaults');
     });
 
     QUnit.test('initial option test', function(assert) {
-        const TestComponent = Component.inherit({
+        class TestComponent extends Component {
             _getDefaultOptions() {
                 return {
                     test: 'parent'
                 };
             }
-        });
-        const ChildComponent = TestComponent.inherit({
+        }
+        class ChildComponent extends TestComponent {
             _getDefaultOptions() {
                 return $.extend(
-                    this.callBase(),
+                    super._getDefaultOptions(),
                     {
                         anotherTest: 'default',
                         test: 'initial'
                     }
                 );
-            },
+            }
+
             _defaultOptionsRules() {
-                return this.callBase().slice(0).concat([{
+                return super._defaultOptionsRules().slice(0).concat([{
                     options: {
                         anotherTest: 'byRule'
                     }
                 }]);
             }
-        });
+        }
 
         assert.equal(new ChildComponent().initialOption('test'), 'initial', 'test initial option configured with component defaults');
         assert.equal(new ChildComponent().initialOption('anotherTest'), 'byRule', 'test initial option configured with child component defaults rules');
     });
 
     QUnit.test('Checking current option value with initial option value (option value as function)', function(assert) {
-        const TestComponent = Component.inherit({
+        class TestComponent extends Component {
             _getDefaultOptions() {
                 return {
                     test() {
@@ -1323,7 +1320,7 @@ QUnit.module('defaultOptions', {
                     }
                 };
             }
-        });
+        }
 
         assert.ok(new TestComponent()._isInitialOptionValue('test'), 'current value equal initial value');
         assert.notOk(new TestComponent({
@@ -1334,7 +1331,7 @@ QUnit.module('defaultOptions', {
     });
 
     QUnit.test('Checking current option value with initial option value (option value as function) when option is object', function(assert) {
-        const TestComponent = Component.inherit({
+        class TestComponent extends Component {
             _getDefaultOptions() {
                 return {
                     optionsObject: {
@@ -1344,7 +1341,7 @@ QUnit.module('defaultOptions', {
                     }
                 };
             }
-        });
+        }
 
         assert.ok(new TestComponent()._isInitialOptionValue('optionsObject.test'), 'current value equal initial value');
         assert.notOk(new TestComponent({
@@ -1357,7 +1354,7 @@ QUnit.module('defaultOptions', {
     });
 
     QUnit.test('Checking current option value with initial option value (option value as object)', function(assert) {
-        const TestComponent = Component.inherit({
+        class TestComponent extends Component {
             _getDefaultOptions() {
                 return {
                     test: {
@@ -1365,7 +1362,7 @@ QUnit.module('defaultOptions', {
                     }
                 };
             }
-        });
+        }
 
         assert.ok(new TestComponent()._isInitialOptionValue('test'), 'current value equal initial value');
         assert.notOk(new TestComponent({
@@ -1377,16 +1374,16 @@ QUnit.module('defaultOptions', {
     });
 
     QUnit.test('\'defaultOptionRules\' option', function(assert) {
-        const TestComponent = Component.inherit({
+        class TestComponent extends Component {
             _defaultOptionsRules() {
-                return this.callBase().slice(0).concat([{
+                return super._defaultOptionsRules().slice(0).concat([{
                     options: {
                         a: 1,
                         b: 2
                     }
                 }]);
             }
-        });
+        }
 
         const options = new TestComponent({
             defaultOptionsRules: [{

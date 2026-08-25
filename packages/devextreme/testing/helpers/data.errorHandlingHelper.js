@@ -5,24 +5,24 @@
 
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
-            root.DevExpress.data.testing.ErrorHandlingHelper = module.exports = factory(require('jquery'), require('core/class'), require('common/data/errors'));
+            root.DevExpress.data.testing.ErrorHandlingHelper = module.exports = factory(require('jquery'), require('common/data/errors'));
         });
     } else {
-        root.DevExpress.data.testing.ErrorHandlingHelper = factory(window.jQuery, DevExpress.Class, DevExpress.data);
+        root.DevExpress.data.testing.ErrorHandlingHelper = factory(window.jQuery, DevExpress.data);
     }
-}(window, function($, Class, errorsModule) {
-    return Class.inherit({
+}(window, function($, errorsModule) {
+    return class ErrorHandlingHelper {
 
-        ctor: function() {
+        constructor() {
             this.optionalHandler = $.proxy(
                 function(arg) {
                     this.optionalHandlerImpl(arg);
                 },
                 this
             );
-        },
+        }
 
-        run: function(action, done, assert) {
+        run(action, done, assert) {
             const globalFired = $.Deferred();
             const optionalFired = $.Deferred();
             const failFired = $.Deferred();
@@ -75,5 +75,5 @@
                 done();
             });
         }
-    });
+    };
 }));
