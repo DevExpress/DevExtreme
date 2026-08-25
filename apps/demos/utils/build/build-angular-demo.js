@@ -7,6 +7,7 @@ const {
   installShims,
   removeShims,
   cleanupPatchedTsFiles,
+  cleanupEntryShims,
   bundleDemo,
 } = require('../server/csp-bundle-angular');
 
@@ -27,15 +28,17 @@ async function buildAngularDemoInPlace(widget, name, srcDir) {
   const cssFiles = discoverComponentStyleFiles([entry]);
   const shims = computeGlobalShims(cssFiles);
   let installed = [];
+  let prepared = null;
 
   try {
     installed = installShims(shims);
     const createCompilerPlugin = await getCreateCompilerPlugin();
-    const prepared = prepareDemo(demo);
+    prepared = prepareDemo(demo);
     return await bundleDemo(prepared, createCompilerPlugin, srcDir);
   } finally {
     removeShims(installed);
-    cleanupPatchedTsFiles();
+    cleanupPatchedTsFiles(prepared ? Object.values(prepared.fileReplacements) : []);
+    cleanupEntryShims(prepared ? [prepared.shimEntry] : []);
   }
 }
 

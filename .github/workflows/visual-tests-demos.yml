@@ -425,7 +425,7 @@ jobs:
       - name: Pack demo bundles
         working-directory: apps/demos
         run: |
-          find Demos \( -name 'bundle.js' -o -name 'bundle.css' \) -print0 \
+          find Demos \( -name 'bundle.js' -o -name 'bundle.css' -o -path '*/_chunks/*.js' \) -print0 \
             | tar -czf demo-bundles.tgz --null --files-from -
           tar -tzf demo-bundles.tgz | head -3
 

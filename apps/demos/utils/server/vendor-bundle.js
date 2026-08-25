@@ -4,6 +4,7 @@
 const path = require('path');
 const fs = require('fs');
 const esbuild = require('esbuild');
+const { THEMES_SPECIFIER } = require('./demo-render-signal');
 
 const DEMOS_APP_ROOT = path.join(__dirname, '..', '..');
 const SRC_DEMOS_DIR = path.join(DEMOS_APP_ROOT, 'Demos');
@@ -88,6 +89,7 @@ function collectSpecifiersFromDir(dir, predicate) {
 
 function discoverSpecifiers(framework) {
   const found = new Set();
+  if (isVendorSpecifier(THEMES_SPECIFIER, framework)) found.add(THEMES_SPECIFIER);
   if (!fs.existsSync(SRC_DEMOS_DIR)) return found;
 
   const widgets = fs.readdirSync(SRC_DEMOS_DIR, { withFileTypes: true })

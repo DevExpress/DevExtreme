@@ -5,6 +5,7 @@ const fs = require('fs');
 const os = require('os');
 const esbuild = require('esbuild');
 const { extractDemoHeadExtras, extractDemoBodyInner } = require('./demo-html');
+const { virtualEntryPath, virtualEntryPlugin } = require('./demo-render-signal');
 
 const FRAMEWORK_ARG = (process.argv.find((a) => a.startsWith('--framework=')) || '').split('=')[1];
 const FRAMEWORK = FRAMEWORK_ARG || process.env.CSP_FRAMEWORKS || 'React';
@@ -242,9 +243,11 @@ async function bundleDemoTo({ srcDir, destDir, framework }) {
 
   let result;
   try {
+    const shared = getSharedOptions(framework);
     result = await esbuild.build({
-      ...getSharedOptions(framework),
-      entryPoints: [entry],
+      ...shared,
+      entryPoints: [virtualEntryPath(entry)],
+      plugins: [virtualEntryPlugin({ resolveDir: srcDir }), ...shared.plugins],
       outdir: destDir,
       entryNames: 'bundle',
       assetNames: 'bundle',

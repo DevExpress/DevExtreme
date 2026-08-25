@@ -28,6 +28,17 @@ You can pass a port as an extra argument. That is useful when you need to switch
 
 Angular, React, and Vue demos are bundled on demand when you open a page. jQuery demos load `dx.all.js` from `devextreme-dist`.
 
+### Demo render signal
+
+Angular, React, and Vue demos are not bundled from their own entry point directly. `utils/server/demo-render-signal.js` generates a shim that becomes the bundle's entry point; the shim waits for `themes.initialized()` from `devextreme/ui/themes`, then imports the demo's entry (`index.tsx` / `index.ts` / `app/app.component.ts`), so nothing mounts before the theme CSS is applied. 
+
+Once the demo has rendered, the shim posts one message to the embedding page:
+
+```js
+window.parent.postMessage({ type: 'demo-rendered' }, '*');
+```
+
+
 ### Before Commiting Changes
 
 Auto-fix lint errors:
