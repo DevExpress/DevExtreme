@@ -422,7 +422,7 @@ jobs:
         run: pnpm exec tsc --noEmit
 
       # Packed into one tarball — a glob path would lose the Demos/ prefix on extract.
-      - name: Pack demo bundle
+      - name: Pack demo bundles
         working-directory: apps/demos
         run: |
           find Demos \( -name 'bundle.js' -o -name 'bundle.css' -o -path '*/_chunks/*.js' \) -print0 \
