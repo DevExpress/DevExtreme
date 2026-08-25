@@ -17,7 +17,6 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
-import type { DataController } from '../data_controller/data_controller';
 import type { EditingController } from '../editing/m_editing';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
 import modules from '../m_modules';
@@ -46,6 +45,7 @@ import {
   MASTER_DETAIL_CELL_CLASS,
   ROWS_VIEW,
 } from './const';
+import type { AdaptivityDataController } from './types';
 import { getHideableColumns } from './utils';
 
 function getColumnId(that, column) {
@@ -72,7 +72,7 @@ function adaptiveCellTemplate(container, options) {
 export class AdaptiveColumnsController extends modules.ViewController {
   private _columnsController!: ColumnsController;
 
-  private _dataController!: DataController;
+  private _dataController!: AdaptivityDataController;
 
   private _editingController!: EditingController;
 
@@ -90,7 +90,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
 
   public init() {
     this._columnsController = this.getController('columns');
-    this._dataController = this.getController('data');
+    this._dataController = this.getController('data') as AdaptivityDataController;
     this._editingController = this.getController('editing');
     this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._rowsView = this.getView('rowsView');

@@ -12,12 +12,13 @@ import {
   LEGACY_SCROLLING_MODE,
 } from '../const';
 import type { AdaptiveColumnsController } from '../m_adaptivity';
+import type { AdaptivityDataController } from '../types';
 import { getAdaptiveDetailRowIndex, resolveAdaptiveDetailRowTarget } from '../utils';
 
 export const adaptivityDataControllerExtender = (
   Base: ModuleType<DataController>,
-): ModuleType<DataController> => class AdaptivityDataControllerExtender extends Base {
-  private adaptiveExpandedKey: RowKey | undefined;
+): ModuleType<AdaptivityDataController> => class AdaptivityDataControllerExtender extends Base {
+  private adaptiveExpandedKey?: RowKey;
 
   protected adaptiveColumnsController!: AdaptiveColumnsController;
 
@@ -89,12 +90,13 @@ export const adaptivityDataControllerExtender = (
 
   private updateAdaptiveDetailRows(oldRowIndex: number, newRowIndex: number): void {
     const rowIndexDelta = this.getRowIndexDelta();
+    const rowIndices = [oldRowIndex, newRowIndex]
+      .map((rowIndex) => getAdaptiveDetailRowIndex(rowIndex, rowIndexDelta));
 
     this.updateItems({
       allowInvisibleRowIndices: true,
       changeType: 'update',
-      rowIndices: [oldRowIndex, newRowIndex]
-        .map((rowIndex) => getAdaptiveDetailRowIndex(rowIndex, rowIndexDelta)),
+      rowIndices,
     });
   }
 

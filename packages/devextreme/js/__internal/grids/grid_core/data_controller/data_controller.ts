@@ -1825,25 +1825,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   public resetCachedProcessedItems(): void {
     this._cachedProcessedItems = null;
   }
-
-  /**
-   * @extended: adaptivity
-   */
-  public getAdaptiveExpandedKey(): RowKey | undefined {
-    return undefined;
-  }
-
-  /**
-   * @extended: adaptivity
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public setAdaptiveExpandedKey(key: RowKey): void {}
-
-  /**
-   * @extended: adaptivity
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public toggleExpandAdaptiveDetailRow(key?: RowKey, alwaysExpanded = false): void {}
 }
 export const dataControllerModule: Module = {
   defaultOptions() {

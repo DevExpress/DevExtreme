@@ -14,10 +14,13 @@ import {
   EDIT_MODE_ROW,
   FORM_ITEM_CONTENT_CLASS,
 } from '../const';
+import type { AdaptivityDataController } from '../types';
 
 export const adaptivityEditingViewControllerExtender = (
   Base: ModuleType<EditingController>,
 ): ModuleType<EditingController> => class AdaptivityEditingViewControllerExtender extends Base {
+  protected _dataController!: AdaptivityDataController;
+
   private _isForceRowAdaptiveExpand?: boolean;
 
   private _isRowEditMode() {

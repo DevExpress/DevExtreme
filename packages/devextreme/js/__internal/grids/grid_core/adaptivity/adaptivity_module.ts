@@ -1,4 +1,4 @@
-import type { Module } from '../m_types';
+import type { InternalGridOptions, Module } from '../m_types';
 import { adaptivityColumnsControllerExtender } from './extenders/adaptivity_columns_controller';
 import { adaptivityColumnsResizerViewControllerExtender } from './extenders/adaptivity_columns_resizer_view_controller';
 import { adaptivityDataControllerExtender } from './extenders/adaptivity_data_controller';
@@ -12,7 +12,7 @@ import { adaptivityRowsViewExtender } from './extenders/adaptivity_rows_view';
 import { AdaptiveColumnsController } from './m_adaptivity';
 
 export const adaptivityModule: Module = {
-  defaultOptions() {
+  defaultOptions(): Pick<InternalGridOptions, 'columnHidingEnabled'> {
     return {
       columnHidingEnabled: false,
     };

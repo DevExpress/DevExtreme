@@ -20,6 +20,7 @@ import {
   HIDDEN_COLUMNS_WIDTH,
   LAST_DATA_CELL_CLASS,
 } from '../const';
+import type { AdaptivityDataController } from '../types';
 
 function getDataCellElements($row) {
   return $row.find('td:not(.dx-datagrid-hidden-column):not([class*=\'dx-command-\'])');
@@ -28,6 +29,8 @@ function getDataCellElements($row) {
 export const adaptivityRowsViewExtender = (
   Base: ModuleType<RowsView>,
 ): ModuleType<RowsView> => class AdaptivityRowsViewExtender extends Base {
+  protected _dataController!: AdaptivityDataController;
+
   protected _getCellTemplate(options) {
     const that = this;
     const { column } = options;
