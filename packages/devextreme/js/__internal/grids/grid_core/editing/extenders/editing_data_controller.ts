@@ -16,10 +16,16 @@ import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import { EDITING_EDITROWKEY_OPTION_NAME } from '../const';
 import type { EditingController } from '../m_editing';
 
+export interface EditingDataControllerExtension {
+  _editingController: EditingController;
+}
+
 export const editingDataControllerExtender = (
   Base: ModuleType<DataController>,
-): ModuleType<DataController> => class EditingDataControllerExtender extends Base {
-  protected _editingController!: EditingController;
+): ModuleType<
+  DataController & EditingDataControllerExtension
+> => class EditingDataControllerExtender extends Base {
+  public _editingController!: EditingController;
 
   public init(): void {
     this._editingController = this.getController('editing');
