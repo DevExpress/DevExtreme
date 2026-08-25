@@ -51,6 +51,18 @@ QUnit.test('generation is based on crypto.getRandomValues', function(assert) {
     }
 });
 
+QUnit.test('generation fails without Web Crypto instead of degrading to a weak source', function(assert) {
+    const stub = sinon.stub(globalThis, 'crypto').value(undefined);
+
+    try {
+        assert.throws(function() {
+            return new Guid();
+        });
+    } finally {
+        stub.restore();
+    }
+});
+
 QUnit.test('valueOf and JSON stringify', function(assert) {
     const g = new Guid();
     const str = g.valueOf();
