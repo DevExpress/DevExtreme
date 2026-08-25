@@ -3927,7 +3927,7 @@
               },
               {
                 "Title": "Hierarchical Grouping",
-                "Name": "HierarchicalGrouping",
+                "Name": "MultilevelGrouping",
                 "Widget": "Scheduler",
                 "Badge": "Roadmap",
                 "DemoType": "Web",
