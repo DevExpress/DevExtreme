@@ -138,4 +138,47 @@ describe('Bugs', () => {
       expect(dataCellsArray.length).toBe(1);
     });
   });
+
+  describe('T1329677 - DataGrid - Column width changes are not applied immediately', () => {
+    it('should invalidate calculated widths when a column width changes through columnOption', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2', field3: 'value 3' }],
+        columns: ['field1', 'field2', 'field3'],
+      });
+      const columnsController = instance.getController('columns');
+
+      columnsController.columnOption(0, 'visibleWidth', 100);
+      columnsController.columnOption(1, 'visibleWidth', 110);
+      columnsController.columnOption(2, 'visibleWidth', 120);
+
+      instance.columnOption(1, 'width', 150);
+
+      expect(columnsController.getColumns().map((column) => column.visibleWidth)).toEqual([
+        null, null, null,
+      ]);
+    });
+
+    it('should preserve calculated widths of unrelated columns when applying resolved dimensions', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2', field3: 'value 3' }],
+        columns: ['field1', 'field2', 'field3'],
+      });
+      const columnsController = instance.getController('columns');
+
+      columnsController.columnOption(0, 'visibleWidth', 100);
+      columnsController.columnOption(1, 'visibleWidth', 110);
+      columnsController.columnOption(2, 'visibleWidth', 120);
+
+      columnsController.updateColumnDimensions([{
+        columnIndex: 1,
+        visibleWidth: null,
+        width: 150,
+      }]);
+
+      expect(columnsController.columnOption(1, 'width')).toBe(150);
+      expect(columnsController.getColumns().map((column) => column.visibleWidth)).toEqual([
+        100, null, 120,
+      ]);
+    });
+  });
 });
