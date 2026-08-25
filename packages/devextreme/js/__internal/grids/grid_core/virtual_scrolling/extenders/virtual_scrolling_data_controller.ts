@@ -42,7 +42,7 @@ import {
   updateItemIndices,
 } from '../utils/items';
 import {
-  isAppendMode,
+  isInfiniteMode,
   isVirtualMode,
   isVirtualPaging,
 } from '../utils/scrolling_mode';
@@ -661,7 +661,7 @@ export const virtualScrollingDataControllerExtender = (
   private _pageIndexIsValid(pageIndex) {
     let result = true;
 
-    if (isAppendMode(this) && this.hasKnownLastPage() || isVirtualMode(this)) {
+    if (isInfiniteMode(this) && this.hasKnownLastPage() || isVirtualMode(this)) {
       result = pageIndex * this.pageSize() < this.totalItemsCount();
     }
 
@@ -671,7 +671,7 @@ export const virtualScrollingDataControllerExtender = (
   private isAllLoadedInAppendMode(): boolean {
     const loadedItemCount = this.pageSize() * (this._dataSource?.loadPageCount() ?? 0);
 
-    return isAppendMode(this) && this.totalItemsCount() < loadedItemCount;
+    return isInfiniteMode(this) && this.totalItemsCount() < loadedItemCount;
   }
 
   // T1326786: the grid is scrolled to paging.pageIndex on the first resize only,
@@ -861,7 +861,7 @@ export const virtualScrollingDataControllerExtender = (
   public refresh(options?: boolean | RefreshOptions): DeferredObj<unknown> {
     const dataSource = this._dataSource;
 
-    if (dataSource && typeof options !== 'boolean' && options?.load && isAppendMode(this)) {
+    if (dataSource && typeof options !== 'boolean' && options?.load && isInfiniteMode(this)) {
       dataSource.resetCurrentTotalCount();
     }
 
