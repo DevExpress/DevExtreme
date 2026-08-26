@@ -134,7 +134,6 @@ const getClientScripts = (approach: string) => {
   if (approach !== 'jQuery') {
     const testGlobalsScriptPath = buildTestGlobalsScript();
     if (testGlobalsScriptPath) {
-      // @ts-expect-error ts-error
       scripts.push(testGlobalsScriptPath);
     }
   }
