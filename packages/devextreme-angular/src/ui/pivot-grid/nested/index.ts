@@ -1,5 +1,5 @@
-export * from './embedded-field-chooser-texts';
 export * from './export';
+export * from './field-chooser-texts';
 export * from './field-chooser';
 export * from './field-panel-texts';
 export * from './field-panel';
