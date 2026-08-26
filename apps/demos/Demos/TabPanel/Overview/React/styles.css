@@ -82,15 +82,15 @@
 }
 
 .task-item-priority-high::before {
-  background-color: var(--dxds-color-surface-utility-red-default-rest, #e1bee7);
+  background-color: var(--dxds-color-bg-red, #e1bee7);
 }
 
 .task-item-priority-medium::before {
-  background-color: var(--dxds-color-surface-utility-yellow-default-rest, #ffe0b2);
+  background-color: var(--dxds-color-bg-yellow, #ffe0b2);
 }
 
 .task-item-priority-low::before {
-  background-color: var(--dxds-color-surface-utility-green-default-rest, #c8e6c9);
+  background-color: var(--dxds-color-bg-green, #c8e6c9);
 }
 
 .task-item-text,
@@ -118,9 +118,9 @@
 }
 
 .dx-color-scheme-contrast .task-item {
-  border: 1px solid var(--dxds-color-border-neutral-compound-on-surface-rest, #fff);
+  border: 1px solid var(--dxds-color-border-on-color-shared, #fff);
 }
 
 .dx-theme-fluent.dx-color-scheme-blue-dark .task-item {
-  background-color: var(--dxds-color-surface-utility-red-default-rest, #1f1f1f);
+  background-color: var(--dxds-color-bg-red, #1f1f1f);
 }

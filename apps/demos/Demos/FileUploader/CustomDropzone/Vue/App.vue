@@ -108,7 +108,7 @@ function onUploadStarted() {
 #dropzone-external {
   width: 350px;
   height: 350px;
-  background-color: var(--dxds-color-surface-neutral-deep-rest, rgba(0,0,0,0.08));
+  background-color: var(--dxds-color-bg-low, rgba(0,0,0,0.08));
   border-width: 2px;
   border-style: dashed;
   padding: 10px;

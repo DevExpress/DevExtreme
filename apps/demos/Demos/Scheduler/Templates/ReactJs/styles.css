@@ -35,7 +35,7 @@
 
 .movie-preview>.movie-details {
   font-size: 12px;
-  color: var(--dxds-color-content-neutral-default-rest, #242424);
+  color: var(--dxds-color-content, #242424);
 }
 
 .movie-preview>.movie-details>.title {

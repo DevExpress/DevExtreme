@@ -46,7 +46,7 @@ body {
   position: relative;
   overflow: hidden;
   border-bottom: var(--dx-border-width) solid var(--dx-color-border);
-  background-color: var(--dxds-color-surface-neutral-default-rest, #fff);
+  background-color: var(--dxds-color-bg, #fff);
 }
 
 ::ng-deep .employees__img {

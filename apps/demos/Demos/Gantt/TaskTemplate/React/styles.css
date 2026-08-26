@@ -3,31 +3,31 @@
 }
 
 .custom-task-color-0 {
-  background-color: var(--dxds-color-content-utility-purple-default-rest, #512DA8);
+  background-color: var(--dxds-color-content-purple, #512DA8);
 }
 
 .custom-task-color-1 {
-  background-color: var(--dxds-color-content-utility-green-default-rest, #2E7D32);
+  background-color: var(--dxds-color-content-green, #2E7D32);
 }
 
 .custom-task-color-2 {
-  background-color: var(--dxds-color-content-utility-blue-default-rest, #1564C0);
+  background-color: var(--dxds-color-content-blue, #1564C0);
 }
 
 .custom-task-color-3 {
-  background-color: var(--dxds-color-content-utility-pink-default-rest, #C2185B);
+  background-color: var(--dxds-color-content-pink, #C2185B);
 }
 
 .custom-task-color-4 {
-  background-color: var(--dxds-color-content-utility-red-default-rest, #C62828);
+  background-color: var(--dxds-color-content-red, #C62828);
 }
 
 .custom-task-color-5 {
-  background-color: var(--dxds-color-content-utility-orange-default-rest, #DD2C00);
+  background-color: var(--dxds-color-content-orange, #DD2C00);
 }
 
 .custom-task-color-6 {
-  background-color: var(--dxds-color-content-utility-indigo-default-rest, #7B1FA2);
+  background-color: var(--dxds-color-content-indigo, #7B1FA2);
 }
 
 .custom-task {
@@ -39,7 +39,7 @@
 
 .custom-task-wrapper {
   padding: 8px;
-  color: var(--dxds-color-content-neutral-default-inverted-rest, #fff);
+  color: var(--dxds-color-content-inverted, #fff);
 }
 
 .custom-task-wrapper > * {
@@ -54,7 +54,7 @@
   height: 32px;
   border-radius: 50%;
   margin: 8px;
-  background-color: var(--dxds-color-content-neutral-default-on-surface-rest, #fff);
+  background-color: var(--dxds-color-content-on-color, #fff);
   overflow: hidden;
 }
 
@@ -77,7 +77,7 @@
   bottom: 0;
   width: 0%;
   height: 4px;
-  background: color-mix(in srgb, var(--dxds-color-surface-neutral-default-static-dark-rest, #000) calc(var(--dxds-opacity-30, 0.3) * 100%), transparent);
+  background: color-mix(in srgb, var(--dxds-color-bg-static-dark, #000) calc(var(--dxds-opacity-30, 0.3) * 100%), transparent);
 }
 
 .dx-gantt .dx-row {
