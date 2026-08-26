@@ -1,5 +1,12 @@
 import { isDefined } from '@js/core/utils/type';
 import type { Column } from '@ts/grids/data_grid/types';
+import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
+
+import { DATAGRID_GROUP_FOOTER_ROW_TYPE } from './const';
+
+export function hasSummaryCells(item: ProcessedItem): boolean {
+  return item.rowType === 'group' || item.rowType === DATAGRID_GROUP_FOOTER_ROW_TYPE;
+}
 
 export function getSummaryCellIndex(
   column: Column,

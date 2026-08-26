@@ -25,6 +25,7 @@ export function isSameItem(
   return isSameRowType && (!isDetailRow || isSameEditingState);
 }
 
+// TODO remove after related checks moved to extenders (duplicated in grouping)
 export function isSameGroupRowState(item1: ProcessedItem, item2: ProcessedItem): boolean {
   return item1.isExpanded === item2.isExpanded
     && item1.data?.isContinuation === item2.data?.isContinuation
@@ -174,13 +175,27 @@ export function resetChangedRows(change: UpdateChange): ChangedRows {
   return changedRows;
 }
 
-export function markUpdateChange(change: DataChange, changedRows: ChangedRows): void {
+function toChangedRows(updateRowChanges: UpdateRowChange[]): ChangedRows {
+  return {
+    items: updateRowChanges
+      .map(({ item }) => item)
+      .filter((item): item is ProcessedItem => !!item),
+    rowIndices: updateRowChanges.map(({ rowIndex }) => rowIndex),
+    changeTypes: updateRowChanges.map(({ changeType }) => changeType),
+    columnIndices: updateRowChanges.map(({ columnIndices }) => columnIndices),
+  };
+}
+
+export function convertToUpdateChange(
+  change: DataChange,
+  updateRowChanges: UpdateRowChange[],
+): void {
   const updateChange = change as UpdateChange;
 
   updateChange.repaintChangesOnly = true;
   updateChange.changeType = 'update';
 
-  attachChangedRows(updateChange, changedRows);
+  attachChangedRows(updateChange, toChangedRows(updateRowChanges));
 }
 
 export function pushChangedRow(changedRows: ChangedRows, changedRow: UpdateRowChange): void {

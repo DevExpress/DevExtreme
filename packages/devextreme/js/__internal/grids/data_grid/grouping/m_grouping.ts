@@ -32,6 +32,7 @@ import {
 import { GroupingHelper as CollapsedGroupingHelper } from './m_grouping_collapsed';
 import { GroupingHelper as ExpandedGroupingHelper } from './m_grouping_expanded';
 import type { GroupItem, ProcessGroupItemsOptions } from './types';
+import { isSameContinuationState, isSameExpandedState } from './utils';
 
 const DATAGRID_EXPAND_CLASS = 'dx-datagrid-expand';
 const DATAGRID_GROUP_ROW_CLASS = 'dx-group-row';
@@ -312,6 +313,16 @@ const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => cla
     }
 
     return resultItems;
+  }
+
+  protected isSameRowState(item1: ProcessedItem, item2: ProcessedItem): boolean {
+    // Master detail sets `isExpanded` on data rows, so the guard cannot be dropped.
+    if (item1.rowType === 'group'
+      && (!isSameExpandedState(item1, item2) || !isSameContinuationState(item1, item2))) {
+      return false;
+    }
+
+    return super.isSameRowState(item1, item2);
   }
 
   public publicMethods() {
