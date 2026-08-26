@@ -1,0 +1,8 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-card-bg: #{$card-bg};
+  --dx-card-margin: #{$card-margin};
+  --dx-card-shadow: #{$card-shadow};
+}

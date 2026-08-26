@@ -4,15 +4,16 @@
 @use "../../base/icon_fonts" as *;
 @use "../toolbar/mixins" as *;
 @use "../../base/popup" with (
+  $popup-title-min-height-fallback: null,
   $popup-title-padding: $popup-title-padding,
   $popup-dialog-message-padding: $popup-dialog-message-padding,
-  $popup-dialog-shader-color: $popup-dialog-backdrop-rest,
+  $popup-dialog-shader-color: $popup-dialog-backdrop,
 );
 @use "../overlay";
 
 .dx-popup-wrapper {
   & > .dx-overlay-content {
-    background: $surface-overlay-rest;
+    background: $surface-overlay;
     box-shadow: $popup-content-box-shadow;
     border-radius: $popup-border-radius;
   }
@@ -32,9 +33,9 @@
   position: relative;
   min-height: $popup-title-min-height;
   border-bottom: $popup-title-border-block-end;
-  border-bottom-color: $popup-title-border-rest;
-  background: $popup-title-bg-rest;
-  color: $popup-title-content-rest;
+  border-bottom-color: $popup-title-border;
+  background: $popup-title-bg;
+  color: $popup-title-content;
 
   &.dx-toolbar {
     @include dx-toolbar-sizing(
@@ -57,8 +58,8 @@
 }
 
 .dx-popup-bottom {
-  background: $popup-bottom-bg-rest;
-  color: $popup-bottom-content-rest;
+  background: $popup-bottom-bg;
+  color: $popup-bottom-content;
 
   &.dx-toolbar {
     @include dx-toolbar-sizing(

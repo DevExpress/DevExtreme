@@ -57,7 +57,7 @@
 
   display: flex;
   align-items: center;
-  color: $list-icon-rest;
+  color: $list-icon;
 }
 
 .dx-list-item-badge-container {
@@ -243,7 +243,7 @@
       &:not(:last-child) {
         padding-bottom: $list-padding-block;
         border-bottom: $list-item-border;
-        border-bottom-color: $list-border-rest;
+        border-bottom-color: $list-border;
       }
     }
 
@@ -262,7 +262,7 @@
       }
 
       .dx-list-group-header {
-        color: $list-group-content-rest;
+        color: $list-group-content;
       }
     }
 
@@ -288,8 +288,8 @@
   .dx-list-group-header {
     font-weight: $list-group-header-font-weight;
     padding: $list-group-header-padding-block $item-horizontal-padding;
-    background: $list-group-header-bg-rest;
-    color: $list-expanded-group-content-rest;
+    background: $list-group-header-bg;
+    color: $list-expanded-group-content;
     border-top: $list-item-border;
     border-top-color: transparent;
     display: flex;
@@ -297,7 +297,7 @@
     column-gap: $list-item-padding-inline;
 
     .dx-list-group-header-indicator {
-      color: $list-header-indicator-content-rest;
+      color: $list-header-indicator-content;
 
       .dx-list-collapsible-groups & {
         display: flex;
@@ -328,7 +328,7 @@
   .dx-list-item {
     border-radius: $global-border-radius;
 
-    @include toggle-delete-icon($list-toggle-delete-icon-rest);
+    @include toggle-delete-icon($list-toggle-delete-icon);
 
     &.dx-state-hover,
     &.dx-state-active {
@@ -351,7 +351,7 @@
     }
 
     .dx-icon {
-      color: $list-icon-rest;
+      color: $list-icon;
     }
 
     .dx-icon-toggle-delete {
@@ -361,10 +361,10 @@
     &.dx-list-item-ghost-reordering {
       &.dx-state-focused {
         &.dx-state-hover {
-          color: $list-item-ghost-content-rest;
-          background: $list-item-ghost-bg-rest;
-          border: $list-item-ghost-border;
-          border-color: $list-item-ghost-border-rest;
+          color: $list-item-ghost-content;
+          background: $list-item-ghost-bg;
+          border: $list-item-ghost-border-width solid;
+          border-color: $list-item-ghost-border;
         }
       }
     }
@@ -372,7 +372,7 @@
 
   .dx-list-item,
   .dx-list .dx-empty-message {
-    color: $list-normal-content-rest;
+    color: $list-normal-content;
 
     .dx-list-item-separator-hidden & {
       border-top: none;
@@ -398,8 +398,8 @@
   }
 
   .dx-list-border-visible {
-    border: $list-border;
-    border-color: $list-border-rest;
+    border: $list-border-width solid;
+    border-color: $list-border;
   }
 
   .dx-list-item-before-bag {
@@ -436,7 +436,7 @@
       left: 0;
       right: 0;
       height: $list-select-all-height;
-      background-color: $list-base-select-all-separator-bg-rest;
+      background-color: $list-base-select-all-separator-bg;
     }
   }
 
@@ -463,7 +463,7 @@
 
       @include dx-icon(dragvertical);
 
-      color: $list-icon-rest;
+      color: $list-icon;
 
       @include dx-icon-sizing($global-icon-size);
     }
@@ -476,8 +476,8 @@
   .dx-list-slide-menu-button-delete {
     @include dx-icon(trash);
 
-    color: $list-inverted-content-rest;
-    background-color: $list-menu-button-delete-bg-rest;
+    color: $list-inverted-content;
+    background-color: $list-menu-button-delete-bg;
     font-size: $global-icon-size;
     display: table-cell;
     vertical-align: middle;
@@ -487,8 +487,8 @@
 
   .dx-list-slide-menu-button-menu {
     border: $list-slide-menu-button-menu-border;
-    color: $list-menu-button-default-content-rest;
-    background-color: $list-menu-button-default-bg-rest;
+    color: $list-menu-button-default-content;
+    background-color: $list-menu-button-default-bg;
   }
 
   .dx-list-static-delete-button {
@@ -505,11 +505,11 @@
   }
 
   .dx-list-context-menucontent {
-    background-color: $list-hold-menu-bg-rest;
+    background-color: $list-hold-menu-bg;
     border: $list-context-menu-content-border;
-    border-color: $list-hold-menu-border-rest;
+    border-color: $list-hold-menu-border;
     border-radius: $global-border-radius;
-    box-shadow: $list-hold-menu-shadow-rest 0 2px 7.2px 0;
+    box-shadow: $list-hold-menu-shadow 0 2px 7.2px 0;
 
     .dx-list-items {
       margin-left: $list-padding-block;

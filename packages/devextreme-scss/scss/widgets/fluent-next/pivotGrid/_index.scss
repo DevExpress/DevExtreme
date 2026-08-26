@@ -26,24 +26,24 @@
   $pivotgrid-field-chooser-button-margin-left: $pivot-grid-field-chooser-button-margin-inline-start,
   $pivotgrid-fields-area-head-padding-left: $pivot-grid-fields-area-head-padding-inline-start,
   $pivotgrid-icon-sorted-margin-right: $pivot-grid-icon-sorted-margin-inline-end,
-  $pivotgrid-drag-header-border-color: $pivot-grid-drag-header-border-rest,
-  $pivotgrid-drag-header-first-shadow-color: $pivot-grid-drag-header-first-shadow-rest,
-  $pivotgrid-drag-header-second-shadow-color: $pivot-grid-drag-header-shadow-key-rest,
-  $pivotgrid-border-color: $pivot-grid-border-rest,
+  $pivotgrid-drag-header-border-color: $pivot-grid-drag-header-border,
+  $pivotgrid-drag-header-first-shadow-color: $pivot-grid-drag-header-first-shadow,
+  $pivotgrid-drag-header-second-shadow-color: $pivot-grid-drag-header-shadow-key,
+  $pivotgrid-border-color: $pivot-grid-border,
   $pivotgrid-common-left-right-padding: $pivot-grid-left-right-padding,
-  $pivotgrid-area-color: $pivot-grid-area-content-rest,
-  $header-filter-color: gridBaseColors.$grid-header-filter-icon-rest,
-  $header-filter-color-empty: gridBaseColors.$grid-header-filter-empty-icon-rest,
-  $pivotgrid-area-background: $pivot-grid-area-bg-rest,
+  $pivotgrid-area-color: $pivot-grid-area-content,
+  $header-filter-color: gridBaseColors.$grid-header-filter-icon,
+  $header-filter-color-empty: gridBaseColors.$grid-header-filter-empty-icon,
+  $pivotgrid-area-background: $pivot-grid-area-bg,
   $pivotgrid-common-top-bottom-padding: $pivot-grid-area-field-padding-block,
   $pivotgrid-header-top-bottom-padding: $pivot-grid-header-top-bottom-padding,
   $pivotgrid-field-indicators-offset: $pivot-grid-field-indicators-offset,
   $pivotgrid-indicators-line-height: $pivot-grid-indicators-line-height,
-  $pivotgrid-totalcolor: $pivot-grid-total-content-rest,
-  $pivotgrid-field-area-text-color: $pivot-grid-field-area-content-rest,
-  $pivotgrid-data-area-color: $pivot-grid-data-area-content-rest,
-  $pivotgrid-grandtotalcolor: $pivot-grid-grand-total-content-rest,
-  $pivotgrid-accent-color: $pivot-grid-accent-content-rest,
+  $pivotgrid-totalcolor: $pivot-grid-total-content,
+  $pivotgrid-field-area-text-color: $pivot-grid-field-area-content,
+  $pivotgrid-data-area-color: $pivot-grid-data-area-content,
+  $pivotgrid-grandtotalcolor: $pivot-grid-grand-total-content,
+  $pivotgrid-accent-color: $pivot-grid-accent-content,
   $pivotgrid-empty-area-text-padding: $pivot-grid-empty-area-text-padding,
   $pivotgrid-button-top-padding: $pivot-grid-button-top-padding,
   $pivotgrid-header-cell-side-padding: $pivot-grid-header-cell-padding-inline,
@@ -53,16 +53,16 @@
 .dx-pivotgrid-fields-container {
   &.dx-drag {
     .dx-area-field.dx-area-box {
-      background-color: $pivot-grid-area-field-bg-rest;
+      background-color: $pivot-grid-area-field-bg;
       border: $pivot-grid-area-box-border;
       border-color: $pivot-grid-border-disabled;
-      box-shadow: $pivot-grid-drag-header-shadow-rest;
+      box-shadow: $pivot-grid-drag-header-shadow;
     }
   }
 
   .dx-area-field.dx-area-box {
-    color: $pivot-grid-field-area-box-content-rest;
-    background-color: $pivot-grid-field-area-box-bg-rest;
+    color: $pivot-grid-field-area-box-content;
+    background-color: $pivot-grid-field-area-box-bg;
     border-radius: $pivot-grid-area-field-border-radius;
     border: $pivot-grid-area-box-border;
     border-color: $pivot-grid-border-disabled;
@@ -71,10 +71,10 @@
     line-height: $pivot-grid-area-field-line-height;
 
     .dx-header-filter {
-      color: $pivot-grid-header-filter-content-rest;
+      color: $pivot-grid-header-filter-content;
 
       &.dx-header-filter-empty {
-        color: $pivot-grid-area-content-rest;
+        color: $pivot-grid-area-content;
       }
     }
   }
@@ -93,7 +93,7 @@
 }
 
 .dx-pivotgrid {
-  background-color: $pivot-grid-area-bg-rest;
+  background-color: $pivot-grid-area-bg;
 
   .dx-pivotgrid-area {
     &.dx-pivotgrid-area-data {
@@ -110,7 +110,7 @@
 
       .dx-grandtotal,
       .dx-total {
-        color: $pivot-grid-content-rest;
+        color: $pivot-grid-content;
       }
     }
 
@@ -157,14 +157,14 @@
     @include dx-icon(chevronright);
     @include dx-icon-font-centered-sizing($pivot-grid-chevron-icon-size);
 
-    color: $pivot-grid-chevron-icon-rest;
+    color: $pivot-grid-chevron-icon;
   }
 
   .dx-pivotgrid-expanded .dx-expand {
     @include dx-icon(chevrondown);
     @include dx-icon-font-centered-sizing($pivot-grid-chevron-icon-size);
 
-    color: $pivot-grid-chevron-icon-rest;
+    color: $pivot-grid-chevron-icon;
   }
 
   .dx-area-tree-view {
@@ -187,7 +187,7 @@
       text-transform: uppercase;
       font-size: $pivot-grid-headers-font-size;
       font-weight: $pivot-grid-header-font-weight;
-      color: $pivot-grid-area-content-rest;
+      color: $pivot-grid-area-content;
       vertical-align: middle;
     }
 
@@ -236,6 +236,6 @@
 
 .dx-pivotgrid-fields-container { // stylelint-disable-line no-duplicate-selectors
   .dx-position-indicator {
-    background-color: $pivot-grid-position-indicator-bg-rest;
+    background-color: $pivot-grid-position-indicator-bg;
   }
 }

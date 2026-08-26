@@ -3,13 +3,13 @@
 @use "sizes" as *;
 @use "../../base/informer/mixins" as *;
 @include informer(
-  $informer-error-content-rest,
-  $informer-error-bg-rest,
-  $informer-info-content-rest,
-  $informer-info-bg-rest,
-  $informer-border-radius,
-  $informer-icon-size,
-  $informer-padding-inline,
-  $informer-padding-block,
-  $informer-column-gap,
+  var(--dx-informer-error-content),
+  var(--dx-informer-error-bg),
+  var(--dx-informer-info-content),
+  var(--dx-informer-info-bg),
+  var(--dx-informer-border-radius),
+  var(--dx-informer-icon-size),
+  var(--dx-informer-padding-inline),
+  var(--dx-informer-padding-block),
+  var(--dx-informer-column-gap),
 );

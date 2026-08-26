@@ -7,24 +7,24 @@
 @use "../../base/chat/mixins" as *;
 @use "../common/mixins" as *;
 @include chat(
-  $chat-bg-rest,
-  $chat-border-rest,
+  $chat-bg,
+  $chat-border,
   $chat-border-radius,
 );
 @include chat-avatar(
   $chat-avatar-size,
-  $chat-avatar-content-rest,
-  $chat-avatar-bg-rest,
+  $chat-avatar-content,
+  $chat-avatar-bg,
 );
 @include chat-file(
   $chat-file-container-width,
   $chat-file-container-padding,
-  $chat-file-container-bg-rest,
+  $chat-file-container-bg,
   $chat-file-container-border-radius,
-  $chat-file-container-box-shadow-rest,
+  $chat-file-container-box-shadow,
   $chat-file-button-size,
   $chat-file-secondary-font-size,
-  $chat-file-secondary-content-rest,
+  $chat-file-secondary-content,
   $chat-file-base-section-gap,
   $chat-file-size-max-width,
   $chat-file-icon-font-size,
@@ -34,7 +34,7 @@
   $chat-file-container-width,
 );
 @include chat-alertlist(
-  $chat-alert-list-content-rest,
+  $chat-alert-list-content,
   $chat-alerts-padding-block,
   $chat-alerts-padding-inline,
   $chat-alert-padding-block,
@@ -42,7 +42,7 @@
 );
 @include chat-messagebox(
   $chat-message-box-padding,
-  $chat-message-box-border-rest,
+  $chat-message-box-border,
   $chat-message-box-gap,
   $chat-message-box-textarea-border-radius,
   $chat-message-box-textarea-padding,
@@ -50,17 +50,17 @@
   $chat-file-container-width,
   $chat-message-box-files-container-padding,
   $chat-message-box-files-container-padding-block-start,
-  $chat-message-box-file-bg-rest,
-  $chat-message-box-file-cancel-button-secondary-content-rest,
-  $chat-file-container-box-shadow-rest,
+  $chat-message-box-file-bg,
+  $chat-message-box-file-cancel-button-secondary-content,
+  $chat-file-container-box-shadow,
 );
 @include chat-messagebubble(
   $chat-bubble-padding,
   $chat-bubble-border-radius,
-  $chat-bubble-secondary-content-rest,
-  $chat-bubble-secondary-bg-rest,
-  $chat-bubble-primary-content-rest,
-  $chat-bubble-primary-bg-rest,
+  $chat-bubble-secondary-content,
+  $chat-bubble-secondary-bg,
+  $chat-bubble-primary-content,
+  $chat-bubble-primary-bg,
   $chat-bubble-container-gap,
   $chat-bubble-delete-gap,
   $chat-bubble-delete-icon-size,
@@ -72,8 +72,8 @@
   $chat-message-group-alignment-start-gap,
   $chat-message-group-padding,
   $chat-information-font-size,
-  $chat-information-author-name-content-rest,
-  $chat-information-timestamp-content-rest,
+  $chat-information-author-name-content,
+  $chat-information-timestamp-content,
   $chat-information-gap,
   $chat-information-icon-size,
   $chat-information-edited-gap,
@@ -84,22 +84,22 @@
   $chat-message-list-empty-icon-size,
   $chat-message-list-empty-icon-margin-block-end,
   $chat-message-list-empty-row-gap,
-  $chat-message-list-empty-icon-rest,
-  $chat-message-list-empty-icon-bg-rest,
+  $chat-message-list-empty-icon,
+  $chat-message-list-empty-icon-bg,
   $chat-message-list-empty-message-font-size,
-  $chat-message-list-empty-message-content-rest,
+  $chat-message-list-empty-message-content,
   $chat-message-list-empty-prompt-font-size,
-  $chat-message-list-empty-prompt-content-rest,
+  $chat-message-list-empty-prompt-content,
 );
 @include chat-messagelist(
   $chat-message-list-padding,
-  $chat-message-list-day-header-content-rest,
+  $chat-message-list-day-header-content,
   $chat-message-list-day-header-padding-block-end,
   $chat-message-list-day-header-first-padding-block-start,
   $chat-message-list-day-header-font-size,
 );
 @include chat-messagelist-contextmenu(
-  $chat-message-list-context-menu-delete-button-content-rest,
+  $chat-message-list-context-menu-delete-button-content,
   $chat-message-list-context-menu-delete-button-content-focused,
   $chat-message-list-context-menu-delete-button-bg-focused,
 );
@@ -108,26 +108,26 @@
   $chat-typing-indicator-padding,
   $chat-typing-indicator-row-gap,
   $chat-typing-indicator-font-size,
-  $chat-typing-indicator-content-rest,
+  $chat-typing-indicator-content,
   $chat-typing-indicator-bubble-padding-block,
   $chat-typing-indicator-bubble-padding-inline,
   $chat-typing-indicator-bubble-border-radius,
-  $chat-typing-indicator-bubble-bg-rest,
+  $chat-typing-indicator-bubble-bg,
   $chat-typing-indicator-bubble-column-gap,
   $chat-typing-indicator-circle-size,
   $chat-typing-indicator-circle-center-size,
   $chat-typing-indicator-circle-border-radius,
-  $chat-typing-indicator-circle-bg-rest,
-  $chat-typing-indicator-circle-center-bg-rest,
+  $chat-typing-indicator-circle-bg,
+  $chat-typing-indicator-circle-center-bg,
 );
 @include message-editing-preview(
   $chat-message-editing-preview-content-padding-inline,
   $chat-message-editing-preview-content-row-gap,
-  $chat-message-editing-preview-accent-content-rest,
+  $chat-message-editing-preview-accent-content,
   $chat-message-editing-preview-caption-font-size,
   $chat-message-box-padding,
   $chat-message-editing-preview-border-width,
-  $chat-message-editing-preview-cancel-button-content-rest,
+  $chat-message-editing-preview-cancel-button-content,
 );
 @include chat-confirmation-popup(
   $chat-border-radius,
@@ -142,7 +142,7 @@
   $chat-suggestions-border-width,
   $chat-suggestions-button-max-width,
   $chat-suggestions-gap,
-  $chat-suggestions-box-shadow-rest,
+  $chat-suggestions-box-shadow,
 );
 
 .dx-chat-file {
