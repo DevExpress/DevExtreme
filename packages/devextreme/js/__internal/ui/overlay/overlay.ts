@@ -380,13 +380,11 @@ class Overlay<
     return this._$content;
   }
 
-  ctor(element: Element, options: TProperties): void {
-    super.ctor(element, options);
+  _initOptions(options: TProperties): void {
+    super._initOptions(options);
 
-    if (options) {
-      if ('preventScrollEvents' in options && !options._ignorePreventScrollEventsDeprecation) {
-        this._logDeprecatedPreventScrollEventsInfo();
-      }
+    if ('preventScrollEvents' in options && !options._ignorePreventScrollEventsDeprecation) {
+      this._logDeprecatedPreventScrollEventsInfo();
     }
   }
 
