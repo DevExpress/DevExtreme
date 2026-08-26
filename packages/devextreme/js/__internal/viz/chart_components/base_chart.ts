@@ -1,3 +1,24 @@
+/* eslint-disable @stylistic/max-len */
+/* eslint-disable @stylistic/no-mixed-operators */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/init-declarations */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-use-before-define */
+/* eslint-disable consistent-return */
+/* eslint-disable max-depth */
+/* eslint-disable no-bitwise */
+/* eslint-disable no-continue */
+/* eslint-disable no-multi-assign */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-plusplus */
+/* eslint-disable prefer-rest-params */
+/* eslint-disable prefer-spread */
+
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { isPointerEvent, isTouchEvent } from '@js/common/core/events/utils/index';
 // @ts-expect-error
@@ -19,7 +40,7 @@ import { plugin as tooltipPlugin } from '@ts/viz/core/tooltip';
 import { map as _map, processSeriesTemplate, setCanvasValues as _setCanvasValues } from '@ts/viz/core/utils';
 import { Series } from '@ts/viz/series/base_series';
 
-import BaseWidget from '../core/m_base_widget';
+import BaseWidget from '../core/base_widget';
 import { RollingStock } from './rolling_stock';
 
 type SortingMethodParams = (a: any, b: any) => number;

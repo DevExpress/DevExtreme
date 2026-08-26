@@ -1,3 +1,22 @@
+/* eslint-disable @stylistic/max-len */
+/* eslint-disable @stylistic/no-mixed-operators */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/init-declarations */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-use-before-define */
+/* eslint-disable @typescript-eslint/prefer-for-of */
+/* eslint-disable @typescript-eslint/prefer-for-of */
+/* eslint-disable consistent-return */
+/* eslint-disable max-depth */
+/* eslint-disable no-bitwise */
+/* eslint-disable no-continue */
+/* eslint-disable no-multi-assign */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-plusplus */
+
 import registerComponent from '@js/core/component_registrator';
 import { noop } from '@js/core/utils/common';
 import { extend as _extend } from '@js/core/utils/extend';
@@ -26,8 +45,8 @@ import rangeDataCalculator from '@ts/viz/series/helpers/range_data_calculator';
 import { Range } from '@ts/viz/translators/range';
 import { prepareSegmentRectPoints } from '@ts/viz/utils';
 
-import { AdvancedChart } from './chart_components/m_advanced_chart';
-import { overlapping } from './chart_components/m_base_chart';
+import { AdvancedChart } from './chart_components/advanced_chart';
+import { overlapping } from './chart_components/base_chart';
 
 const DEFAULT_PANE_NAME = 'default';
 const VISUAL_RANGE = 'VISUAL_RANGE';
