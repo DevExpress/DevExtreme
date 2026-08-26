@@ -1,13 +1,16 @@
-// Bundles just the devextreme modules test-code.js files need, exposed as window.DevExpress —
-// a lightweight stand-in for the UMD global jQuery demos get for free from dx.all.js.
+// Exposes the devextreme widgets test-code.js needs as window.DevExpress, a stand-in for the
+// UMD global jQuery gets from dx.all.js. Bundled through the same vendorGlobalPlugin real
+// React/Vue demos use, so classes match by identity, not just by name — Angular has no
+// equivalent shared-vendor mechanism, so it's unsupported here.
 
 const fs = require('fs');
 const path = require('path');
 const { glob } = require('glob');
 const esbuild = require('esbuild');
+const { getSharedOptions } = require('../server/csp-bundle');
 
 const DEMOS_ROOT = path.join(__dirname, '..', '..');
-const OUT_FILE = path.join(DEMOS_ROOT, 'bundles', 'vendor', 'test-globals.js');
+const SUPPORTED_FRAMEWORKS = new Set(['React', 'Vue']);
 
 const IMPORT_AND_RE = /testUtils\.importAnd\(\(\)\s*=>\s*(\[[^\]]+\]|'[^']+')\s*,\s*\(\)\s*=>\s*(\[[^\]]+\]|DevExpress\.[a-zA-Z0-9_.]+)/g;
 
@@ -43,17 +46,16 @@ function discoverTestGlobals() {
   return specifierToPath;
 }
 
-let cachedPath = null;
+function outputPath(framework) {
+  return path.join(DEMOS_ROOT, 'bundles', 'vendor', `test-globals-${framework.toLowerCase()}.js`);
+}
 
-// Written to disk (not inlined) so TestCafe can serve it as a cached <script src>.
-function buildTestGlobalsScript() {
-  if (cachedPath !== null) return cachedPath;
+// Async because vendorGlobalPlugin needs it; called from build-vendor-bundles.js ahead of time.
+async function buildTestGlobalsScript(framework) {
+  if (!SUPPORTED_FRAMEWORKS.has(framework)) return null;
 
   const specifierToPath = discoverTestGlobals();
-  if (specifierToPath.size === 0) {
-    cachedPath = '';
-    return cachedPath;
-  }
+  if (specifierToPath.size === 0) return null;
 
   const entries = Array.from(specifierToPath.entries());
   const namespaces = new Set(entries.map(([, accessorPath]) => accessorPath.split('.')[0]));
@@ -65,23 +67,28 @@ function buildTestGlobalsScript() {
     ...entries.map(([, accessorPath], i) => `window.DevExpress.${accessorPath} = m${i}.default;`),
   ].join('\n');
 
-  fs.mkdirSync(path.dirname(OUT_FILE), { recursive: true });
+  const outFile = outputPath(framework);
+  fs.mkdirSync(path.dirname(outFile), { recursive: true });
 
-  esbuild.buildSync({
+  const shared = getSharedOptions(framework);
+  await esbuild.build({
+    ...shared,
     stdin: {
       contents: entryContents,
       resolveDir: DEMOS_ROOT,
       loader: 'js',
     },
-    outfile: OUT_FILE,
-    bundle: true,
-    format: 'iife',
+    outfile: outFile,
     minify: true,
-    logLevel: 'silent',
   });
 
-  cachedPath = OUT_FILE;
-  return cachedPath;
+  return outFile;
 }
 
-module.exports = { buildTestGlobalsScript };
+function getTestGlobalsScriptPath(framework) {
+  if (!SUPPORTED_FRAMEWORKS.has(framework)) return '';
+  const outFile = outputPath(framework);
+  return fs.existsSync(outFile) ? outFile : '';
+}
+
+module.exports = { buildTestGlobalsScript, getTestGlobalsScriptPath };

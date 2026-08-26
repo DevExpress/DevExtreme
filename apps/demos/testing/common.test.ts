@@ -22,7 +22,7 @@ import {
   isFluent,
 } from '../utils/visual-tests/helpers/theme-utils';
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
-import { buildTestGlobalsScript } from '../utils/visual-tests/test-globals-bundle';
+import { getTestGlobalsScriptPath } from '../utils/visual-tests/test-globals-bundle';
 import { knownWarnings } from './known-warnings';
 import { skippedTests } from './skipped-tests';
 import { widgetsGalleryServiceMock } from './apiMocks/widgetsGalleryServiceMock';
@@ -130,12 +130,10 @@ const getClientScripts = (approach: string) => {
     scripts.push({ module: 'axe-core/axe.min.js' });
   }
 
-  // jQuery gets window.DevExpress for free from dx.all.js; other frameworks need a stand-in.
-  if (approach !== 'jQuery') {
-    const testGlobalsScriptPath = buildTestGlobalsScript();
-    if (testGlobalsScriptPath) {
-      scripts.push(testGlobalsScriptPath);
-    }
+  const testGlobalsScriptPath = getTestGlobalsScriptPath(approach);
+  if (testGlobalsScriptPath) {
+    // @ts-expect-error
+    scripts.push(testGlobalsScriptPath);
   }
 
   if (isCspEnabled()) {

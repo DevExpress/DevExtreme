@@ -4,6 +4,7 @@
 const path = require('path');
 const fs = require('fs');
 const { buildVendorBundle } = require('./vendor-bundle');
+const { buildTestGlobalsScript } = require('../visual-tests/test-globals-bundle');
 
 const REQUESTED = process.argv.slice(2);
 const FRAMEWORKS = REQUESTED.length > 0 ? REQUESTED : ['React', 'Vue'];
@@ -31,6 +32,16 @@ async function main() {
     const outFile = path.join(__dirname, '..', '..', 'bundles', 'vendor', manifest.file);
     const size = fs.statSync(outFile).size;
     console.log(`${manifest.specifiers.length} specifiers, ${(size / 1024).toFixed(0)} KB -> bundles/vendor/${manifest.file}`);
+
+    process.stdout.write(`Building test globals bundle for ${framework}... `);
+    const testGlobalsFile = await buildTestGlobalsScript(framework);
+    if (!testGlobalsFile) {
+      console.log('skipped (no testUtils.importAnd usages found)');
+      // eslint-disable-next-line no-continue
+      continue;
+    }
+    const testGlobalsSize = fs.statSync(testGlobalsFile).size;
+    console.log(`${(testGlobalsSize / 1024).toFixed(0)} KB -> ${path.relative(path.join(__dirname, '..', '..'), testGlobalsFile)}`);
   }
 }
 
