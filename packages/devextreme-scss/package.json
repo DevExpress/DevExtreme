@@ -23,7 +23,7 @@
     "check-naming-registries": "pnpm run naming:check",
     "lint": "stylelint scss/widgets",
     "naming:baseline": "UPDATE_NAMING_BASELINE=1 jest --no-coverage --runInBand --config=./tests/jest.config.json",
-    "naming:check": "node tools/naming/rename.mjs --check && node tools/naming/derive-registries.mjs --check",
+    "naming:check": "node tools/naming/rename.mjs --check && node tools/naming/derive-registries.mjs --check && node tools/review/reachability.mjs",
     "naming:propose": "node tools/naming/propose.mjs",
     "naming:registries": "node tools/naming/derive-registries.mjs",
     "naming:residue": "node tools/naming/rename.mjs --residue",

@@ -265,6 +265,185 @@
       ]
     }
   },
+  "rootSelectors": {
+    "toast": [
+      ".dx-toast-wrapper",
+      ".dx-toast-stack"
+    ],
+    "button": [
+      ".dx-button",
+      ".dx-dropdowneditor-button"
+    ],
+    "text-editor": [
+      ".dx-texteditor",
+      ".dx-htmleditor"
+    ],
+    "text-box": [
+      ".dx-textbox"
+    ],
+    "text-area": [
+      ".dx-textarea"
+    ],
+    "number-box": [
+      ".dx-numberbox"
+    ],
+    "date-box": [
+      ".dx-datebox",
+      ".dx-datebox-wrapper"
+    ],
+    "date-range-box": [
+      ".dx-daterangebox"
+    ],
+    "select-box": [
+      ".dx-selectbox",
+      ".dx-selectbox-popup-wrapper"
+    ],
+    "lookup": [
+      ".dx-lookup",
+      ".dx-lookup-popup-wrapper"
+    ],
+    "tag-box": [
+      ".dx-tagbox",
+      ".dx-tagbox-popup-wrapper"
+    ],
+    "color-box": [
+      ".dx-colorbox",
+      ".dx-colorbox-overlay"
+    ],
+    "drop-down-editor": [
+      ".dx-dropdowneditor",
+      ".dx-dropdowneditor-overlay"
+    ],
+    "drop-down-list": [
+      ".dx-dropdownlist-popup-wrapper"
+    ],
+    "grid": [
+      ".dx-datagrid",
+      ".dx-treelist",
+      ".dx-pivotgrid",
+      ".dx-cardview",
+      ".dx-datagrid-column-chooser",
+      ".dx-treelist-column-chooser",
+      ".dx-header-filter-menu",
+      ".dx-datagrid-drag-header",
+      ".dx-treelist-drag-header",
+      ".dx-ai-chat"
+    ],
+    "data-grid": [
+      ".dx-datagrid"
+    ],
+    "tree-list": [
+      ".dx-treelist"
+    ],
+    "switch": [
+      ".dx-switch"
+    ],
+    "date-view": [
+      ".dx-dateview-rollers"
+    ],
+    "gallery": [
+      ".dx-gallery"
+    ],
+    "typography": [],
+    "toolbar": [
+      ".dx-toolbar",
+      ".dx-dropdownmenu-popup-wrapper",
+      ".dx-toolbar-menu-container",
+      ".dx-toolbar-background"
+    ],
+    "overlay": [
+      ".dx-overlay-wrapper"
+    ],
+    "informer": [
+      ".dx-informer"
+    ],
+    "scroll-view": [
+      ".dx-scrollview"
+    ],
+    "context-menu": [
+      ".dx-context-menu"
+    ],
+    "fieldset": [
+      ".dx-fieldset",
+      ".dx-field"
+    ],
+    "menu": [
+      ".dx-menu-base",
+      ".dx-menu-adaptive-mode"
+    ],
+    "progress-bar": [
+      ".dx-progressbar"
+    ],
+    "load-indicator": [
+      ".dx-loadindicator"
+    ],
+    "drop-down-menu": [
+      ".dx-dropdownmenu-popup-wrapper"
+    ],
+    "accordion": [
+      ".dx-accordion"
+    ],
+    "action-sheet": [
+      ".dx-actionsheet-popup-wrapper",
+      ".dx-actionsheet-popover-wrapper"
+    ],
+    "box": [
+      ".dx-box-item-content"
+    ],
+    "button-group": [
+      ".dx-buttongroup"
+    ],
+    "load-panel": [
+      ".dx-loadpanel-content"
+    ],
+    "tile-view": [
+      ".dx-tileview"
+    ],
+    "validation": [
+      ".dx-invalid-message",
+      ".dx-validationsummary"
+    ],
+    "tooltip": [
+      ".dx-tooltip-wrapper"
+    ],
+    "radio-button": [
+      ".dx-radiobutton"
+    ],
+    "scrollable": [
+      ".dx-scrollable"
+    ],
+    "drop-down-button": [
+      ".dx-dropdownbutton",
+      ".dx-dropdownbutton-popup-wrapper"
+    ],
+    "badge": [
+      ".dx-badge"
+    ],
+    "card": [
+      ".dx-card"
+    ],
+    "icon": [
+      ":root"
+    ],
+    "popover": [
+      ".dx-popover-wrapper"
+    ],
+    "splitter": [
+      ".dx-splitter"
+    ],
+    "splitter-bar": [
+      ".dx-splitter-bar",
+      ".dx-splitter-border"
+    ],
+    "sortable": [
+      ".dx-sortable",
+      ".dx-sortable-dragging",
+      ".dx-sortable-placeholder"
+    ],
+    "tab-panel": [
+      ".dx-tabpanel"
+    ]
+  },
   "themeIdentity": [
     "$color",
     "$mode",
@@ -310,7 +489,6 @@
     "veil"
   ],
   "states": [
-    "rest",
     "hovered",
     "active",
     "focused",

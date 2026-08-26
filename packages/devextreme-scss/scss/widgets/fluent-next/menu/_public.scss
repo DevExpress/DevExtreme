@@ -1,0 +1,29 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-menu-content: #{$menu-content};
+  --dx-menu-item-bg-active: #{$menu-item-bg-active};
+  --dx-menu-item-bg-hovered: #{$menu-item-bg-hovered};
+  --dx-menu-item-bg-selected: #{$menu-item-bg-selected};
+  --dx-menu-item-bg-selected-focused: #{$menu-item-bg-selected-focused};
+  --dx-menu-item-content-disabled: #{$menu-item-content-disabled};
+  --dx-menu-item-content-padding-inline-start: #{$menu-item-content-padding-inline-start};
+  --dx-menu-item-content-selected: #{$menu-item-content-selected};
+  --dx-menu-item-expanded-content: #{if($menu-item-expanded-content == $menu-content, var(--dx-menu-content), $menu-item-expanded-content)};
+  --dx-menu-item-icon-gap: #{$menu-item-icon-gap};
+  --dx-menu-item-line-height: #{$menu-item-line-height};
+  --dx-menu-item-link-content: #{$menu-item-link-content};
+  --dx-menu-item-with-icon-padding-inline: #{$menu-item-with-icon-padding-inline};
+  --dx-menu-padding-block: #{$menu-padding-block};
+  --dx-menu-padding-inline: #{$menu-padding-inline};
+  --dx-menu-popup-bg: #{$menu-popup-bg};
+  --dx-menu-popup-border: #{$menu-popup-border};
+  --dx-menu-separator-bg: #{$menu-separator-bg};
+  --dx-menu-separator-margin-block-end: #{$menu-separator-margin-block-end};
+  --dx-menu-separator-margin-inline-end: #{$menu-separator-margin-inline-end};
+  --dx-menu-shadow-focused: #{$menu-shadow-focused};
+  --dx-menu-tree-view-border: #{$menu-tree-view-border};
+  --dx-menu-tree-view-node-border-block-end: #{$menu-tree-view-node-border-block-end};
+  --dx-menu-tree-view-node-padding: #{$menu-tree-view-node-padding};
+}

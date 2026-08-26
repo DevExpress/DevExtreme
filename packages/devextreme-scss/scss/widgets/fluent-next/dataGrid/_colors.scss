@@ -1,7 +1,7 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$data-grid-group-panel-item-bg-rest: ds.$color-bg-low !default;
+$data-grid-group-panel-item-bg: ds.$color-bg-low !default;
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$data-grid-block-separator-bg-rest: ds.$color-bg-primary !default;
-$data-grid-group-panel-item-border-rest: ds.$color-border-disabled !default;
+$data-grid-block-separator-bg: ds.$color-bg-primary !default;
+$data-grid-group-panel-item-border: ds.$color-border-disabled !default;

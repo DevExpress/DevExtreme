@@ -6,7 +6,7 @@
 @use "../textEditor/sizes" as textEditorSizes;
 @include dx-textarea(
   2px,
-  $text-area-content-line-height,
+  var(--dx-text-area-content-line-height),
   textEditorSizes.$text-editor-input-filled-padding-block-start,
   textEditorSizes.$text-editor-input-filled-with-label-padding-block-start,
   textEditorSizes.$text-editor-input-underlined-with-label-padding-block-start,

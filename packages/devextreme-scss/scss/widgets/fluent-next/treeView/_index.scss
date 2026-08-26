@@ -110,7 +110,7 @@
   "chevronright",
   $global-icon-size,
   $tree-view-toggle-item-width,
-  $tree-view-spin-icon-rest,
+  $tree-view-spin-icon,
 );
 @include baseTreeView.treeview-item(
   $tree-view-item-element-gap,
@@ -125,7 +125,7 @@
 );
 @include baseTreeView.treeview-checkbox(
   $tree-view-checkbox-container-size,
-  $tree-view-content-rest,
+  $tree-view-content,
   $checkbox-border-color-focused: $tree-view-checkbox-checked-border-focused,
   $treeview-item-selected-color: $tree-view-item-content-selected,
   $treeview-item-selected-bg: $tree-view-item-bg-selected,
@@ -136,7 +136,7 @@
 @include baseTreeView.treeview-aux-items(
   $tree-view-search-box-margin-block-end,
   $tree-view-search-editor-height,
-  $tree-view-border-rest,
+  $tree-view-border,
   $tree-view-select-all-item-padding,
   $tree-view-item-element-gap,
   $tree-view-select-all-item-border-visible-padding,

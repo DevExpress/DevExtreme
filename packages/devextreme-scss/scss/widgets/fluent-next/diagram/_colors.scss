@@ -8,9 +8,9 @@
  * outside button; keeping it preserves the value, and the mapping question is recorded in
  * DIVERGENCES.md.
  */
-$diagram-connector-border-rest: ds.$color-bg-primary !default;
-$diagram-connection-border-rest: ds.$color-bg-success !default;
-$diagram-geometry-mark-border-rest: ds.$color-bg-danger !default;
+$diagram-connector-border: ds.$color-bg-primary !default;
+$diagram-connection-border: ds.$color-bg-success !default;
+$diagram-geometry-mark-border: ds.$color-bg-danger !default;
 
 /*
  * Stays in _colors.scss on purpose: the split between the two files is mode-dependent against
@@ -18,28 +18,28 @@ $diagram-geometry-mark-border-rest: ds.$color-bg-danger !default;
  * _colors.scss has in scope. `opacity` is therefore a part as well as a size slot, resolved by
  * file like `content` and `text` (NAMING.md, PARTS).
  */
-$diagram-toolbox-shape-text-opacity-rest: null !default;
+$diagram-toolbox-shape-text-opacity: null !default;
 
 @if $mode == "light" {
-  $diagram-toolbox-shape-text-opacity-rest: 0.25 !default;
+  $diagram-toolbox-shape-text-opacity: 0.25 !default;
 }
 
 @if $mode == "dark" {
-  $diagram-toolbox-shape-text-opacity-rest: 0.5 !default;
+  $diagram-toolbox-shape-text-opacity: 0.5 !default;
 }
 
-$diagram-border-rest: ds.$color-border !default;
-$diagram-toolbar-border-rest: ds.$color-border !default;
+$diagram-border: ds.$color-border !default;
+$diagram-toolbar-border: ds.$color-border !default;
 $diagram-normal-format-bg-active: ds.$color-bg-alpha-active !default;
 $diagram-default-format-bg-active: ds.$color-bg-primary-active !default;
 $diagram-danger-format-bg-active: ds.$color-bg-danger-active !default;
 $diagram-success-format-bg-active: ds.$color-bg-success-active !default;
-$diagram-image-icon-base-content-rest: ds.$color-content-subtle !default;
-$diagram-image-icon-accent-border-rest: ds.$color-content-primary !default;
+$diagram-image-icon-base-content: ds.$color-content-subtle !default;
+$diagram-image-icon-accent-border: ds.$color-content-primary !default;
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$diagram-bg-rest: ds.$color-bg !default;
-$diagram-danger-icon-rest: ds.$color-content-danger !default;
+$diagram-bg: ds.$color-bg !default;
+$diagram-danger-icon: ds.$color-content-danger !default;
 
 /*
  * SVG data-uri icons are colored by baking the value into a background-image data-uri at build
@@ -47,26 +47,26 @@ $diagram-danger-icon-rest: ds.$color-content-danger !default;
  * (they render black), so the values below are the static per-mode equivalents of the ds.$ tokens
  * named in the markers — keep them in sync with the design-tokens package. See DIVERGENCES.
  */
-$diagram-content-rest: null !default;
-$diagram-properties-panel-icon-rest: null !default;
+$diagram-content: null !default;
+$diagram-properties-panel-icon: null !default;
 
 @if $mode == "light" {
-  $diagram-content-rest: #161616 !default; // dx-data-uri-static: ds.$color-content
-  $diagram-properties-panel-icon-rest: #fff !default; // dx-data-uri-static: ds.$color-content-inverted
+  $diagram-content: #161616 !default; // dx-data-uri-static: ds.$color-content
+  $diagram-properties-panel-icon: #fff !default; // dx-data-uri-static: ds.$color-content-inverted
 }
 
 @if $mode == "dark" {
-  $diagram-content-rest: #fff !default; // dx-data-uri-static: ds.$color-content
-  $diagram-properties-panel-icon-rest: #161616 !default; // dx-data-uri-static: ds.$color-content-inverted
+  $diagram-content: #fff !default; // dx-data-uri-static: ds.$color-content
+  $diagram-properties-panel-icon: #161616 !default; // dx-data-uri-static: ds.$color-content-inverted
 }
 
 // Canvas = deeper neutral surface
-$diagram-canvas-bg-rest: ds.$color-bg-canvas !default;
-$diagram-shadow-rest: 0 1px 8px ds.$color-shadow-key !default;
+$diagram-canvas-bg: ds.$color-bg-canvas !default;
+$diagram-shadow: 0 1px 8px ds.$color-shadow-key !default;
 
 // Values hoisted from style-file literals (tokenized)
-$diagram-selection-mark-content-rest: ds.$color-border-contrast !default;
-$diagram-selection-bg-rest: rgb(from #{ds.$color-border-contrast} r g b / 0.02) !default;
+$diagram-selection-mark-content: ds.$color-border-contrast !default;
+$diagram-selection-bg: rgb(from #{ds.$color-border-contrast} r g b / 0.02) !default;
 
 // Base-layer values injected with design tokens (wave B1)
-$diagram-popup-title-toolbar-bg-rest: ds.$color-bg-alpha-hovered !default;
+$diagram-popup-title-toolbar-bg: ds.$color-bg-alpha-hovered !default;

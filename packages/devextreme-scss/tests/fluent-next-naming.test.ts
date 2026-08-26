@@ -32,6 +32,10 @@ const themeRoot = join(widgetsRoot, 'fluent-next');
 
 // Labels a stylesheet for error messages: `fluent-next/common/_mixins.scss`.
 const sourceLabel = (file: string): string => file.slice(widgetsRoot.length + 1);
+
+// The hand-maintained wave-F component tier (see the "wave F" test block and NAMING.md).
+const isPublicTierFile = (file: string): boolean => file.endsWith('_public.scss')
+  || file.endsWith('_public-tier.scss');
 const registries = JSON.parse(
   readFileSync(join(packageRoot, 'tools', 'naming', 'registries.json'), 'utf8'),
 );
@@ -572,9 +576,17 @@ const findings = {
    * this measures only "not referenced anywhere in this repository". 18 of 38 names are in that state,
    * and one of them — `--dx-line-height` — is not referenced even by the themes themselves.
    */
+  /*
+   * All three publicSurface* checks below cover the LEGACY tier only: the emitted wave-F component
+   * tier (_public.scss / _public-tier.scss) is write-only by design until the consumption wave, it
+   * exists in fluent-next alone by the tier contract (NAMING.md, 06.08), and it has its own hard
+   * invariants in the "wave F" block further down — mixing it in here would drown the legacy
+   * ratchets in 769 by-design entries.
+   */
   publicSurfaceUnused: (() => {
     const declared = new Set<string>();
     THEMES.forEach((theme) => walk(join(packageRoot, 'scss', 'widgets', theme), '.scss')
+      .filter((file) => !isPublicTierFile(file))
       .forEach((file) => [...stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file))
         .matchAll(/(--dx-[a-z0-9-]+)\s*:/g)]
         .forEach((match) => declared.add(match[1]))));
@@ -586,6 +598,7 @@ const findings = {
   publicSurfaceUndeclared: (() => {
     const declared = new Set<string>();
     THEMES.forEach((theme) => walk(join(packageRoot, 'scss', 'widgets', theme), '.scss')
+      .filter((file) => !isPublicTierFile(file))
       .forEach((file) => [...stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file))
         .matchAll(/(--dx-[a-z0-9-]+)\s*:/g)]
         .forEach((match) => declared.add(match[1]))));
@@ -599,10 +612,12 @@ const findings = {
   publicSurfaceDifferences: (() => {
     const perTheme = THEMES.map((theme) => {
       const names = new Set<string>();
-      walk(join(packageRoot, 'scss', 'widgets', theme), '.scss').forEach((file) => {
-        [...stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file)).matchAll(/(--dx-[a-z0-9-]+)\s*:/g)]
-          .forEach((match) => names.add(match[1]));
-      });
+      walk(join(packageRoot, 'scss', 'widgets', theme), '.scss')
+        .filter((file) => !isPublicTierFile(file))
+        .forEach((file) => {
+          [...stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file)).matchAll(/(--dx-[a-z0-9-]+)\s*:/g)]
+            .forEach((match) => names.add(match[1]));
+        });
       return { theme, names };
     });
     const union = new Set(perTheme.flatMap(({ names }) => [...names]));
@@ -610,6 +625,57 @@ const findings = {
       .filter((name) => perTheme.some(({ names }) => !names.has(name)))
       .map((name) => `${name}: only in ${perTheme
         .filter(({ names }) => names.has(name)).map(({ theme }) => theme).join(', ')}`);
+  })(),
+
+  /*
+   * Wave F guard: hand-written `--dx-…:` declarations. The component tier is emitted ONLY from the
+   * generated _public.scss files; everything else declaring a --dx name is the frozen legacy
+   * surface (the pre-standard public tier, typography's scale publication, gridBase's runtime
+   * bits). Exact list by design: a new manual emission is a conscious baseline edit.
+   */
+  publicTierManualDeclarations: walk(themeRoot, '.scss')
+    .filter((file) => !isPublicTierFile(file))
+    .flatMap((file) => [...stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file))
+      .matchAll(/(--dx-[a-z0-9-]+)\s*:/g)]
+      .map((match) => `${sourceLabel(file)}: ${match[1]}`))
+    .sort(),
+
+  /*
+   * Wave F9, the lock on consumption: a read of a TIER variable in a rule file is a place the
+   * --dx-* tier is bypassed — the pixel is right, but a per-instance override silently does
+   * nothing there. Everything convertible was converted by waves F3–F9 (declarations,
+   * calc-interpolations, allowlisted mixin arguments, with() wiring values); this exact list is
+   * the irreducible remainder — Sass math (math.div, `2 *`), unguarded-math mixin arguments and
+   * Sass-local derivations — plus the declaration files and with() keys, which are excluded by
+   * construction. A new entry means a new bypass: consume it or justify it here. The tier name
+   * set comes from the hand-maintained _public.scss files (their own sync gate lives in the
+   * "wave F" block below).
+   */
+  unconsumedManifestReads: (() => {
+    const manifestNames = new Set(walk(themeRoot, '.scss')
+      .filter((file) => file.endsWith('_public.scss'))
+      .flatMap((file) => [...stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file))
+        .matchAll(/(--dx-[a-z0-9-]+)\s*:/g)]
+        .map((match) => `$${match[1].slice('--dx-'.length)}`)));
+    return walk(themeRoot, '.scss')
+      .filter((file) => !DECLARATION_FILES.some((name) => file.endsWith(name))
+        && !isPublicTierFile(file))
+      .flatMap((file) => {
+        const source = stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file));
+        return source.split('\n').flatMap((line) => [
+          /*
+           * A with() KEY is base's spelling and is skipped by the leading-token check below even
+           * when it coincides with a manifest name; the VALUE on the same line is a read like any
+           * other — an unconverted `$base-key: $manifest-var,` is a tier bypass and must count.
+           */
+          ...line.matchAll(/(^|[^\w.$-])(\$[a-z0-9-]+)/g),
+        ]
+          .map((match) => match[2])
+          .filter((token) => manifestNames.has(token)
+            && !new RegExp(`^\\s*\\${token}\\s*:`).test(line))
+          .map((token) => `${sourceLabel(file)}: ${token}`));
+      })
+      .sort();
   })(),
 };
 
@@ -692,7 +758,6 @@ const grammarViolation = (variable: string, component: string, isColors: boolean
   const state = [...registries.states]
     .sort((a: string, b: string) => b.length - a.length)
     .find((candidate: string) => rest === candidate || rest.endsWith(`-${candidate}`));
-  if (isColors && !state) return 'no state segment (rest is mandatory in _colors.scss)';
   if (state) rest = rest.slice(0, -state.length).replace(/-$/, '');
 
   const slot = [...allowedSlots]
@@ -785,6 +850,216 @@ test('the rename mapping stays collision-free and fully applied', () => {
     .map(([from]) => from)
     .filter((from) => declaredEverywhere.has(from) || referencedEverywhere.has(from));
   expect(survivors).toEqual([]);
+});
+
+// ---------------------------------------------------------------------------------------------
+// wave F: the hand-maintained --dx-* component tier
+// ---------------------------------------------------------------------------------------------
+
+/*
+ * The tier contract (NAMING.md, 06.08): --dxds-* roles/scales are the stable public API; --dx-* is
+ * the product's own component tier, declared in <folder>/_public.scss onto
+ * registries.rootSelectors and free to evolve between releases. Since 14.08.2026 the tier files
+ * are ORDINARY HAND-MAINTAINED SCSS (the generator was dismantled by decision — a projection this
+ * mechanical did not deserve a writer, only a guard). Everything the generator used to guarantee
+ * is enforced here instead:
+ *   - composition: every eligible variable of a migrated component has its --dx twin, and nothing
+ *     else is declared (eligibility knowledge lives in tierExpectation below: data-uri exclusion
+ *     is transitive through references, CSS-wide keywords cannot ride a custom property, base
+ *     wiring is base's spelling, null has nothing to publish);
+ *   - the conditional-chain FORM for same-component references (an unconditional chain silently
+ *     ignores with() reconfiguration and starves the dead-variable gates — GOTCHAS §18.3);
+ *   - collector ↔ registries.rootSelectors consistency.
+ */
+const CSS_WIDE_KEYWORDS = new Set(['inherit', 'initial', 'unset', 'revert', 'revert-layer']);
+
+const tierFoldersOf = (component: string): string[] => {
+  const folders = Object.entries(components)
+    .filter(([, owner]) => owner === component)
+    .map(([folder]) => folder);
+  const home = registries.declarationHome[component];
+  if (home && !folders.includes(home)) folders.push(home);
+  return folders.filter((folder) => !exemptFolders.includes(folder));
+};
+
+/** Which variables the tier MUST declare, and why the rest are excluded. */
+const tierExpectation = (): Map<string, { component: string; reason: string | null }> => {
+  const wiring = new Set(findings.baseWiring.map((entry) => /(\$[a-z0-9-]+)/.exec(entry)![1]));
+  const records = new Map<string, { component: string; value: string; reason: string | null }>();
+
+  (registries.migrated as string[]).forEach((component) => {
+    const declared = new Map<string, { value: string; marker: boolean }>();
+    const feeders = new Set<string>();
+    tierFoldersOf(component).forEach((folder) => {
+      const dir = join(themeRoot, folder);
+      if (!existsSync(dir)) return;
+      walk(dir, '.scss').forEach((file) => {
+        if (/(^|\/)_(colors|sizes|variables)\.scss$/.test(file)) {
+          stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file)).split('\n')
+            .forEach((line) => {
+              const match = /^\s*(\$[a-z0-9-]+)\s*:\s*([^;]*);(.*)$/.exec(line);
+              if (!match) return;
+              const previous = declared.get(match[1]);
+              declared.set(match[1], {
+                value: match[2].trim().replace(/\s*!default$/, ''),
+                marker: (previous?.marker ?? false) || /dx-data-uri-static/.test(match[3] + match[2]),
+              });
+            });
+        }
+        [...readFileSync(file, 'utf8').matchAll(/(?:icons?-mixin|icon-colored|data-uri)\s*\(([^)]*)\)/g)]
+          .forEach((call) => [...call[1].matchAll(/\$[a-z0-9-]+/g)]
+            .forEach(([variable]) => feeders.add(variable)));
+      });
+    });
+    declared.forEach(({ value, marker }, variable) => {
+      const reason = marker || feeders.has(variable) || /(^|[^\w-])data-uri\(/.test(value)
+        ? 'data-uri'
+        : wiring.has(variable) ? 'base-wiring'
+          : CSS_WIDE_KEYWORDS.has(value) ? 'css-wide-keyword'
+            : value.includes('!important') ? 'important'
+              : value === 'null' ? 'null' : null;
+      records.set(variable, { component, value, reason });
+    });
+  });
+
+  // a reference (namespaced or not — grammar names are globally unique) to a data-uri-excluded
+  // name carries the same baked image, so the referrer is excluded too
+  for (let changed = true; changed;) {
+    changed = false;
+    records.forEach((record) => {
+      if (record.reason) return;
+      if ([...record.value.matchAll(/\$[a-z0-9-]+/g)]
+        .some(([token]) => records.get(token)?.reason === 'data-uri')) {
+        record.reason = 'data-uri';
+        changed = true;
+      }
+    });
+  }
+  return new Map([...records].map(([variable, { component, reason }]) => [variable, { component, reason }]));
+};
+
+const tierRecords = tierExpectation();
+const publicTierFiles = walk(themeRoot, '.scss').filter((file) => file.endsWith('_public.scss'));
+const tierDeclared = new Map<string, string>(); // $variable -> declaring _public file
+publicTierFiles.forEach((file) => {
+  [...stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file))
+    .matchAll(/(--dx-[a-z0-9-]+)\s*:/g)]
+    .forEach((match) => tierDeclared.set(`$${match[1].slice('--dx-'.length)}`, file));
+});
+
+test('component tier: _public.scss declarations equal the eligible variables exactly', () => {
+  const eligible = new Map([...tierRecords].filter(([, { reason }]) => !reason));
+  const missing = [...eligible.keys()].filter((variable) => !tierDeclared.has(variable)).sort()
+    .map((variable) => `${variable} (${eligible.get(variable)!.component}): add `
+      + `\`--dx-${variable.slice(1)}: #{${variable}};\` to the component's _public.scss`);
+  const extra = [...tierDeclared.keys()].filter((variable) => !eligible.has(variable)).sort()
+    .map((variable) => {
+      const reason = tierRecords.get(variable)?.reason;
+      return `--dx-${variable.slice(1)} (${sourceLabel(tierDeclared.get(variable)!)}): ${reason
+        ? `the variable is excluded from the tier (${reason}) — remove the declaration`
+        : 'no such variable in the component\'s declaration files — remove or fix the declaration'}`;
+    });
+  expect({ missing, extra }).toEqual({ missing: [], extra: [] });
+});
+
+test('component tier: same-component references keep the conditional chain form', () => {
+  const offenders: string[] = [];
+  publicTierFiles.forEach((file) => {
+    stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file)).split('\n').forEach((line) => {
+      if (!line.includes('var(--dx-')) return;
+      const declaration = /^\s*(--dx-[a-z0-9-]+)\s*:\s*(.*);\s*$/.exec(line);
+      if (!declaration) {
+        offenders.push(`${sourceLabel(file)}: "${line.trim()}" — var(--dx-…) outside a tier declaration`);
+        return;
+      }
+      const [, property, value] = declaration;
+      const own = `$${property.slice('--dx-'.length)}`;
+      const chain = /^#\{if\((\$[a-z0-9-]+) == (\$[a-z0-9-]+), var\((--dx-[a-z0-9-]+)\), (\$[a-z0-9-]+)\)\}$/
+        .exec(value.trim());
+      if (!chain || chain[1] !== own || chain[4] !== own
+        || `$${chain[3].slice('--dx-'.length)}` !== chain[2]) {
+        offenders.push(`${sourceLabel(file)}: ${property} — a same-component reference must be `
+          + `written as #{if(${own} == $target, var(--dx-target), ${own})}; an unconditional chain `
+          + 'ignores with() reconfiguration and starves the dead-variable gates (GOTCHAS §18.3)');
+        return;
+      }
+      if (!tierDeclared.has(chain[2])) {
+        offenders.push(`${sourceLabel(file)}: ${property} chains to ${chain[2]}, which the tier does not declare`);
+      }
+    });
+  });
+  expect(offenders).toEqual([]);
+});
+
+test('component tier: the collector matches registries.rootSelectors exactly', () => {
+  const collector = stripScssComments(
+    readFileSync(join(themeRoot, '_public-tier.scss'), 'utf8'),
+    'fluent-next/_public-tier.scss',
+  );
+  const namespaceToFolder = new Map<string, string>();
+  [...collector.matchAll(/@use "([^"]+)\/public" as (\w+);/g)]
+    .forEach((match) => namespaceToFolder.set(match[2], match[1]));
+
+  const offenders: string[] = [];
+  const includedFolders: string[] = [];
+  // the @use header is not a selector — rules are matched on the body after it
+  const rulesSource = collector.split('\n').filter((line) => !line.startsWith('@use ')).join('\n');
+  [...rulesSource.matchAll(/([^{}]+)\{([^{}]*)\}/g)].forEach(([, selectorText, body]) => {
+    const namespaces = [...body.matchAll(/@include (\w+)\.publish\(\);/g)].map((match) => match[1]);
+    if (!namespaces.length) return;
+    const folders = namespaces.map((namespace) => namespaceToFolder.get(namespace) ?? `?${namespace}`);
+    includedFolders.push(...folders);
+    const ruleComponents = new Set(folders.map((folder) => components[folder]));
+    if (ruleComponents.size !== 1) {
+      offenders.push(`collector rule mixes components: ${[...ruleComponents].join(', ')}`);
+      return;
+    }
+    const [component] = [...ruleComponents];
+    const actual = selectorText.split(',').map((selector) => selector.trim()).filter(Boolean).sort();
+    const expected = [...(registries.rootSelectors[component] ?? [])].sort();
+    if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+      offenders.push(`collector rule for "${component}": selectors [${actual.join(', ')}] != `
+        + `registries.rootSelectors [${expected.join(', ')}]`);
+    }
+  });
+
+  const publicFolders = publicTierFiles.map((file) => sourceLabel(file).split('/')[1]);
+  const sortedIncludes = [...includedFolders].sort();
+  expect({
+    offenders,
+    includedTwice: sortedIncludes.filter((folder, index) => sortedIncludes[index - 1] === folder),
+    notIncluded: publicFolders.filter((folder) => !includedFolders.includes(folder)).sort(),
+    unknownNamespace: includedFolders.filter((folder) => folder.startsWith('?')),
+  }).toEqual({ offenders: [], includedTwice: [], notIncluded: [], unknownNamespace: [] });
+});
+
+test('component tier: every var(--dx-…) read in the theme resolves to a declared name', () => {
+  /*
+   * stylelint does not ban the FORM (the tier is consumed through it) — this is the check that
+   * took over: a read anywhere in fluent-next must hit the tier, the legacy surface, or the JS
+   * runtime contract. A typo'd custom property compiles and dies silently at computed-value time;
+   * this fails the build instead.
+   */
+  const declared = new Set([
+    ...[...tierDeclared.keys()].map((variable) => `--dx-${variable.slice(1)}`),
+    ...RUNTIME_CONTRACT,
+    ...findings.publicTierManualDeclarations.map((entry) => entry.slice(entry.indexOf(': ') + 2)),
+  ]);
+  const offenders = walk(themeRoot, '.scss').flatMap((file) => [
+    ...stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file)).matchAll(/var\(\s*(--dx-[a-z0-9-]+)/g),
+  ].map((match) => match[1])
+    .filter((name) => !declared.has(name))
+    .map((name) => `${sourceLabel(file)}: var(${name}) resolves to no declared --dx name`));
+  expect(offenders).toEqual([]);
+});
+
+test('component tier: every declaring component has bundle-gated root selectors', () => {
+  // The selectors themselves are gated against the built bundle by derive-registries.mjs; this
+  // holds the committed json coherent — a declaring component may not lack a scope.
+  const declaring = [...new Set(publicTierFiles
+    .map((file) => components[sourceLabel(file).split('/')[1]]))];
+  expect(declaring.filter((component) => !registries.rootSelectors?.[component]?.length))
+    .toEqual([]);
 });
 
 // ---------------------------------------------------------------------------------------------

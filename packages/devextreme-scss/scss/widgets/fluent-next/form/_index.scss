@@ -23,7 +23,7 @@
 .dx-form-group-with-caption { // stylelint-disable-line no-duplicate-selectors
   & > .dx-form-group-content {
     border-top: $form-group-content-border-block-start;
-    border-top-color: $form-group-border-rest;
+    border-top-color: $form-group-border;
     padding-bottom: $form-group-content-bottom-padding;
     padding-top: $form-group-caption-top-padding;
     margin-top: $form-group-caption-bottom-margin;
@@ -94,11 +94,11 @@
 }
 
 .dx-field-item-label-text {
-  color: $form-field-item-content-rest;
+  color: $form-field-item-content;
 }
 
 .dx-field-item-help-text {
-  color: $form-item-help-content-rest;
+  color: $form-item-help-content;
   padding-top: $form-field-item-help-text-padding-block-start;
   font-size: $form-help-text-font-size;
   font-style: normal;
@@ -111,12 +111,12 @@
 
 .dx-field-item-optional .dx-label > span::after,
 .dx-field-item-optional-mark {
-  color: $form-field-mark-content-rest;
+  color: $form-field-mark-content;
 }
 
 .dx-field-item-required .dx-label > span::after,
 .dx-field-item-required-mark {
-  color: $form-field-required-content-rest;
+  color: $form-field-required-content;
 }
 
 .dx-field-item-custom-label-content {

@@ -1,20 +1,20 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$html-editor-toolbar-border-rest: ds.$color-border-subtle !default;
-$html-editor-variable-bg-rest: ds.$color-bg-primary-alpha-hovered !default;
-$html-editor-resize-frame-border-rest: ds.$color-border-primary !default;
-$html-editor-resize-trigger-rest: ds.$color-bg-primary !default;
-$html-editor-mention-bg-rest: ds.$color-bg-selected !default;
-$html-editor-table-border-rest: ds.$color-border !default;
-$html-editor-file-uploader-input-wrapper-border-rest: ds.$color-border !default;
-$html-editor-file-uploader-input-wrapper-bg-rest: ds.$color-bg-canvas !default;
+$html-editor-toolbar-border: ds.$color-border-subtle !default;
+$html-editor-variable-bg: ds.$color-bg-primary-alpha-hovered !default;
+$html-editor-resize-frame-border: ds.$color-border-primary !default;
+$html-editor-resize-trigger: ds.$color-bg-primary !default;
+$html-editor-mention-bg: ds.$color-bg-selected !default;
+$html-editor-table-border: ds.$color-border !default;
+$html-editor-file-uploader-input-wrapper-border: ds.$color-border !default;
+$html-editor-file-uploader-input-wrapper-bg: ds.$color-bg-canvas !default;
 
 // Color computations hoisted from style files (phase 0.5 layer normalization)
-$html-editor-cover-bg-rest: rgb(from #{ds.$color-bg} r g b / 0.4) !default;
-$html-editor-faded-content-rest: rgb(from #{ds.$color-content} r g b / 0.8) !default;
-$html-editor-uploader-cover-bg-rest: rgb(from #{ds.$color-border} r g b / 0.8) !default;
-$html-editor-highlighted-row-bg-rest: ds.$color-bg-primary-alpha-active !default;
+$html-editor-cover-bg: rgb(from #{ds.$color-bg} r g b / 0.4) !default;
+$html-editor-faded-content: rgb(from #{ds.$color-content} r g b / 0.8) !default;
+$html-editor-uploader-cover-bg: rgb(from #{ds.$color-border} r g b / 0.8) !default;
+$html-editor-highlighted-row-bg: ds.$color-bg-primary-alpha-active !default;
 
 // Base-layer values injected with design tokens (wave B1)
-$html-editor-code-block-bg-rest: rgb(from #{ds.$color-content-subtle} r g b / 0.15) !default;
-$html-editor-placeholder-content-rest: ds.$color-content-subtler !default;
+$html-editor-code-block-bg: rgb(from #{ds.$color-content-subtle} r g b / 0.15) !default;
+$html-editor-placeholder-content: ds.$color-content-subtler !default;

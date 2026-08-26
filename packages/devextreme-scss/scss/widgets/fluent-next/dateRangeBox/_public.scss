@@ -1,0 +1,10 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-date-range-box-active-bar-margin-inline: #{$date-range-box-active-bar-margin-inline};
+  --dx-date-range-box-border-block-end-width-hovered: #{$date-range-box-border-block-end-width-hovered};
+  --dx-date-range-box-custom-button-margin: #{$date-range-box-custom-button-margin};
+  --dx-date-range-box-input-filled-border-block-end-width: #{$date-range-box-input-filled-border-block-end-width};
+  --dx-date-range-box-invalid-border-block-end-width: #{$date-range-box-invalid-border-block-end-width};
+}

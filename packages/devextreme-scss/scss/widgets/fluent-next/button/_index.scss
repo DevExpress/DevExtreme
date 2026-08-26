@@ -4,14 +4,14 @@
 @use "../../base/button";
 
 .dx-button-content {
-  line-height: $button-content-line-height;
+  line-height: var(--dx-button-content-line-height);
 }
 
 .dx-button-text {
-  line-height: $button-text-line-height;
-  text-transform: $button-text-transform;
-  font-weight: $button-text-font-weight;
-  letter-spacing: $button-text-letter-spacing;
+  line-height: var(--dx-button-text-line-height);
+  text-transform: var(--dx-button-text-transform);
+  font-weight: var(--dx-button-text-font-weight);
+  letter-spacing: var(--dx-button-text-letter-spacing);
 }
 
 .dx-button {
@@ -34,12 +34,12 @@
 
 .dx-button-mode-contained {
   &.dx-button-normal {
-    box-shadow: $button-box-shadow $button-normal-shadow-rest;
+    box-shadow: var(--dx-button-box-shadow) var(--dx-button-normal-shadow);
   }
 }
 
 .dx-button { // stylelint-disable-line no-duplicate-selectors
-  height: $button-height;
+  height: var(--dx-button-height);
   position: relative;
 
   .dx-button-content {
@@ -47,168 +47,168 @@
   }
 
   @include dx-button-styling(
-    $button-normal-contained-bg-rest,
-    $button-normal-contained-content-rest,
-    $button-normal-contained-bg-hovered,
-    $button-normal-contained-bg-focused,
-    $button-normal-contained-bg-active,
-    $button-normal-contained-icon-rest,
-    $button-normal-contained-bg-selected,
-    $button-normal-contained-content-selected,
+    var(--dx-button-normal-contained-bg),
+    var(--dx-button-normal-contained-content),
+    var(--dx-button-normal-contained-bg-hovered),
+    var(--dx-button-normal-contained-bg-focused),
+    var(--dx-button-normal-contained-bg-active),
+    var(--dx-button-normal-contained-icon),
+    var(--dx-button-normal-contained-bg-selected),
+    var(--dx-button-normal-contained-content-selected),
   );
 
   &.dx-button-default {
     @include dx-button-styling(
-      $button-default-contained-bg-rest,
-      $button-default-contained-content-rest,
-      $button-default-contained-bg-hovered,
-      $button-default-contained-bg-focused,
-      $button-default-contained-bg-active,
-      $button-default-contained-icon-rest,
-      $button-default-contained-bg-selected,
-      $button-default-contained-content-selected,
+      var(--dx-button-default-contained-bg),
+      var(--dx-button-default-contained-content),
+      var(--dx-button-default-contained-bg-hovered),
+      var(--dx-button-default-contained-bg-focused),
+      var(--dx-button-default-contained-bg-active),
+      var(--dx-button-default-contained-icon),
+      var(--dx-button-default-contained-bg-selected),
+      var(--dx-button-default-contained-content-selected),
     );
   }
 
   &.dx-button-danger {
     @include dx-button-styling(
-      $button-danger-contained-bg-rest,
-      $button-danger-contained-content-rest,
-      $button-danger-contained-bg-hovered,
-      $button-danger-contained-bg-focused,
-      $button-danger-contained-bg-active,
-      $button-danger-contained-icon-rest,
-      $button-danger-contained-bg-selected,
-      $button-danger-contained-content-selected,
+      var(--dx-button-danger-contained-bg),
+      var(--dx-button-danger-contained-content),
+      var(--dx-button-danger-contained-bg-hovered),
+      var(--dx-button-danger-contained-bg-focused),
+      var(--dx-button-danger-contained-bg-active),
+      var(--dx-button-danger-contained-icon),
+      var(--dx-button-danger-contained-bg-selected),
+      var(--dx-button-danger-contained-content-selected),
     );
   }
 
   &.dx-button-success {
     @include dx-button-styling(
-      $button-success-contained-bg-rest,
-      $button-success-contained-content-rest,
-      $button-success-contained-bg-hovered,
-      $button-success-contained-bg-focused,
-      $button-success-contained-bg-active,
-      $button-success-contained-icon-rest,
-      $button-success-contained-bg-selected,
-      $button-success-contained-content-selected,
+      var(--dx-button-success-contained-bg),
+      var(--dx-button-success-contained-content),
+      var(--dx-button-success-contained-bg-hovered),
+      var(--dx-button-success-contained-bg-focused),
+      var(--dx-button-success-contained-bg-active),
+      var(--dx-button-success-contained-icon),
+      var(--dx-button-success-contained-bg-selected),
+      var(--dx-button-success-contained-content-selected),
     );
   }
 }
 
 .dx-button-mode-text {
   @include dx-button-flat-color-styling(
-    $button-normal-contained-content-rest,
-    $button-normal-contained-content-rest,
-    $button-normal-contained-content-rest,
-    $button-normal-text-bg-rest,
-    $button-normal-text-bg-hovered,
-    $button-normal-text-bg-focused,
-    $button-normal-text-bg-active,
-    $button-normal-text-bg-selected,
-    $button-normal-contained-content-selected,
+    var(--dx-button-normal-contained-content),
+    var(--dx-button-normal-contained-content),
+    var(--dx-button-normal-contained-content),
+    var(--dx-button-normal-text-bg),
+    var(--dx-button-normal-text-bg-hovered),
+    var(--dx-button-normal-text-bg-focused),
+    var(--dx-button-normal-text-bg-active),
+    var(--dx-button-normal-text-bg-selected),
+    var(--dx-button-normal-contained-content-selected),
   );
 
   &.dx-button-default {
     @include dx-button-flat-color-styling(
-      $button-default-text-content-rest,
-      $button-default-text-content-hovered,
-      $button-default-text-content-active,
-      $button-default-text-bg-rest,
-      $button-default-text-bg-hovered,
-      $button-default-text-bg-focused,
-      $button-default-text-bg-active,
-      $button-default-text-bg-selected,
-      $button-default-text-content-selected,
+      var(--dx-button-default-text-content),
+      var(--dx-button-default-text-content-hovered),
+      var(--dx-button-default-text-content-active),
+      var(--dx-button-default-text-bg),
+      var(--dx-button-default-text-bg-hovered),
+      var(--dx-button-default-text-bg-focused),
+      var(--dx-button-default-text-bg-active),
+      var(--dx-button-default-text-bg-selected),
+      var(--dx-button-default-text-content-selected),
     );
   }
 
   &.dx-button-danger {
     @include dx-button-flat-color-styling(
-      $button-danger-text-content-rest,
-      $button-danger-text-content-hovered,
-      $button-danger-text-content-active,
-      $button-danger-text-bg-rest,
-      $button-danger-text-bg-hovered,
-      $button-danger-text-bg-focused,
-      $button-danger-text-bg-active,
-      $button-danger-text-bg-selected,
-      $button-danger-text-content-selected,
+      var(--dx-button-danger-text-content),
+      var(--dx-button-danger-text-content-hovered),
+      var(--dx-button-danger-text-content-active),
+      var(--dx-button-danger-text-bg),
+      var(--dx-button-danger-text-bg-hovered),
+      var(--dx-button-danger-text-bg-focused),
+      var(--dx-button-danger-text-bg-active),
+      var(--dx-button-danger-text-bg-selected),
+      var(--dx-button-danger-text-content-selected),
     );
   }
 
   &.dx-button-success {
     @include dx-button-flat-color-styling(
-      $button-success-text-content-rest,
-      $button-success-text-content-hovered,
-      $button-success-text-content-active,
-      $button-success-text-bg-rest,
-      $button-success-text-bg-hovered,
-      $button-success-text-bg-focused,
-      $button-success-text-bg-active,
-      $button-success-text-bg-selected,
-      $button-success-text-content-selected,
+      var(--dx-button-success-text-content),
+      var(--dx-button-success-text-content-hovered),
+      var(--dx-button-success-text-content-active),
+      var(--dx-button-success-text-bg),
+      var(--dx-button-success-text-bg-hovered),
+      var(--dx-button-success-text-bg-focused),
+      var(--dx-button-success-text-bg-active),
+      var(--dx-button-success-text-bg-selected),
+      var(--dx-button-success-text-content-selected),
     );
   }
 }
 
 .dx-button-mode-outlined {
   @include dx-button-outlined-color-styling(
-    $button-normal-contained-content-rest,
-    $button-normal-contained-content-rest,
-    $button-normal-contained-content-rest,
-    $button-normal-outlined-border-rest,
-    $button-normal-outlined-bg-rest,
-    $button-normal-outlined-bg-hovered,
-    $button-normal-outlined-bg-focused,
-    $button-normal-outlined-bg-active,
-    $button-normal-outlined-bg-selected,
-    $button-normal-contained-content-selected,
+    var(--dx-button-normal-contained-content),
+    var(--dx-button-normal-contained-content),
+    var(--dx-button-normal-contained-content),
+    var(--dx-button-normal-outlined-border),
+    var(--dx-button-normal-outlined-bg),
+    var(--dx-button-normal-outlined-bg-hovered),
+    var(--dx-button-normal-outlined-bg-focused),
+    var(--dx-button-normal-outlined-bg-active),
+    var(--dx-button-normal-outlined-bg-selected),
+    var(--dx-button-normal-contained-content-selected),
   );
 
   &.dx-button-default {
     @include dx-button-outlined-color-styling(
-      $button-default-outlined-content-rest,
-      $button-default-outlined-content-hovered,
-      $button-default-outlined-content-active,
-      $button-default-outlined-border-rest,
-      $button-default-outlined-bg-rest,
-      $button-default-outlined-bg-hovered,
-      $button-default-outlined-bg-focused,
-      $button-default-outlined-bg-active,
-      $button-default-outlined-bg-selected,
-      $button-default-outlined-content-selected,
+      var(--dx-button-default-outlined-content),
+      var(--dx-button-default-outlined-content-hovered),
+      var(--dx-button-default-outlined-content-active),
+      var(--dx-button-default-outlined-border),
+      var(--dx-button-default-outlined-bg),
+      var(--dx-button-default-outlined-bg-hovered),
+      var(--dx-button-default-outlined-bg-focused),
+      var(--dx-button-default-outlined-bg-active),
+      var(--dx-button-default-outlined-bg-selected),
+      var(--dx-button-default-outlined-content-selected),
     );
   }
 
   &.dx-button-danger {
     @include dx-button-outlined-color-styling(
-      $button-danger-outlined-content-rest,
-      $button-danger-outlined-content-hovered,
-      $button-danger-outlined-content-active,
-      $button-danger-outlined-border-rest,
-      $button-danger-outlined-bg-rest,
-      $button-danger-outlined-bg-hovered,
-      $button-danger-outlined-bg-focused,
-      $button-danger-outlined-bg-active,
-      $button-danger-outlined-bg-selected,
-      $button-danger-outlined-content-selected,
+      var(--dx-button-danger-outlined-content),
+      var(--dx-button-danger-outlined-content-hovered),
+      var(--dx-button-danger-outlined-content-active),
+      var(--dx-button-danger-outlined-border),
+      var(--dx-button-danger-outlined-bg),
+      var(--dx-button-danger-outlined-bg-hovered),
+      var(--dx-button-danger-outlined-bg-focused),
+      var(--dx-button-danger-outlined-bg-active),
+      var(--dx-button-danger-outlined-bg-selected),
+      var(--dx-button-danger-outlined-content-selected),
     );
   }
 
   &.dx-button-success {
     @include dx-button-outlined-color-styling(
-      $button-success-outlined-content-rest,
-      $button-success-outlined-content-hovered,
-      $button-success-outlined-content-active,
-      $button-success-outlined-border-rest,
-      $button-success-outlined-bg-rest,
-      $button-success-outlined-bg-hovered,
-      $button-success-outlined-bg-focused,
-      $button-success-outlined-bg-active,
-      $button-success-outlined-bg-selected,
-      $button-success-outlined-content-selected,
+      var(--dx-button-success-outlined-content),
+      var(--dx-button-success-outlined-content-hovered),
+      var(--dx-button-success-outlined-content-active),
+      var(--dx-button-success-outlined-border),
+      var(--dx-button-success-outlined-bg),
+      var(--dx-button-success-outlined-bg-hovered),
+      var(--dx-button-success-outlined-bg-focused),
+      var(--dx-button-success-outlined-bg-active),
+      var(--dx-button-success-outlined-bg-selected),
+      var(--dx-button-success-outlined-content-selected),
     );
   }
 }

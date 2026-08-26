@@ -40,7 +40,7 @@ $gantt-task-edit-wrapper-padding-inline-start: ds.$spacing-10 !default;
 $gantt-task-edit-progress-width: ds.$spacing-120 !default;
 $gantt-task-edit-progress-height: ds.$spacing-60 !default;
 $gantt-edit-progress-inset-block-end: -14px !default; // dx-offscale: -14px
-$gantt-border: ds.$border-width-10 solid !default;
+$gantt-border-width: ds.$border-width-10 !default;
 $gantt-toolbar-wrapper-border-block-end: ds.$border-width-10 solid !default;
 $gantt-hb-border-block-start: ds.$border-width-10 solid !default;
 $gantt-vb-border-inline-start: ds.$border-width-10 solid !default;

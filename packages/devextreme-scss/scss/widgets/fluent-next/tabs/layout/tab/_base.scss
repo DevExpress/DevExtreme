@@ -13,8 +13,8 @@
 .dx-tab {
   gap: $tabs-item-gap;
   padding: $tabs-item-padding;
-  background-color: $tabs-tab-bg-rest;
-  color: $tabs-tab-content-rest;
+  background-color: $tabs-tab-bg;
+  color: $tabs-tab-content;
 
   &.dx-state-hover {
     background-color: $tabs-tab-bg-hovered;
@@ -71,14 +71,14 @@
       bottom: 0;
       left: 0;
       pointer-events: none;
-      color: $tabs-tab-content-rest;
+      color: $tabs-tab-content;
       font-weight: $tabs-tab-basic-font-weight;
       visibility: visible;
     }
   }
 
   .dx-icon {
-    color: $tabs-tab-icon-rest;
+    color: $tabs-tab-icon;
     visibility: visible;
 
     @include dx-icon-sizing($tabs-icon-size);

@@ -10,7 +10,11 @@ $contextmenu-menu-separator-margin: 5px 0 !default;
   }
 
   .dx-menu-items-container {
-    padding: $contextmenu-menu-items-container-padding;
+
+    // fluent-next passes null: its own rule paints this box, the base copy would be dead weight
+    @if $contextmenu-menu-items-container-padding {
+      padding: $contextmenu-menu-items-container-padding;
+    }
   }
 
   .dx-menu-item .dx-submenu {

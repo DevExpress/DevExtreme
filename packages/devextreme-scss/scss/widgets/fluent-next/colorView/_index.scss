@@ -2,7 +2,7 @@
 @use "sizes" as *;
 @use "../../base/colorView/mixins" as *;
 @use "../../base/colorView";
-@include dx-base-colorview-styles($color-view-handle-content-rest, $color-view-handle-border-rest);
+@include dx-base-colorview-styles($color-view-handle-content, $color-view-handle-border);
 
 .dx-colorview-container {
   width: $color-view-container-width;
@@ -72,7 +72,7 @@
 }
 
 .dx-colorview-container label { // stylelint-disable-line no-duplicate-selectors
-  color: $color-view-label-content-rest;
+  color: $color-view-label-content;
 }
 
 .dx-colorview-palette-cell,
@@ -82,8 +82,8 @@
   padding: $color-view-color-preview-container-padding;
   margin: $color-view-color-preview-container-margin;
   margin-top: 0;
-  background-color: $color-view-bg-box-palette-cell-bg-rest;
-  box-shadow: 0 0 0 1px $color-view-border-rest;
+  background-color: $color-view-bg-box-palette-cell-bg;
+  box-shadow: 0 0 0 1px $color-view-border;
 }
 
 .dx-colorview-color-preview-container {

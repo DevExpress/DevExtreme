@@ -1,21 +1,21 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$slider-bar-bg-rest: ds.$color-border-contrast !default;
+$slider-bar-bg: ds.$color-border-contrast !default;
 
-$slider-accent-bg-rest: ds.$color-bg-primary !default;
+$slider-accent-bg: ds.$color-bg-primary !default;
 $slider-accent-bg-hovered: ds.$color-bg-primary-hovered !default;
 $slider-accent-content-focused: ds.$color-bg-primary-active !default;
 
-$slider-invalid-bg-rest: ds.$color-border-danger !default;
+$slider-invalid-bg: ds.$color-border-danger !default;
 $slider-invalid-bg-hovered: ds.$color-border-danger-hovered !default;
 $slider-invalid-content-focused: ds.$color-border-danger-hovered !default;
 
 $slider-bg-disabled: ds.$color-content-disabled !default;
 $slider-bar-bg-disabled: ds.$color-bg-disabled !default;
 
-$slider-tooltip-content-rest: ds.$color-content !default;
+$slider-tooltip-content: ds.$color-content !default;
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$slider-border-rest: ds.$color-border !default;
+$slider-border: ds.$color-border !default;
 $slider-element-bg: ds.$color-bg !default;
 $slider-theme-invalid-color: ds.$color-border-danger !default;

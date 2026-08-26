@@ -6,7 +6,7 @@
   $timeview-numberbox-width: $time-view-field-number-box-width,
   $timeview-numberbox-spin-touch-friendly-width: $time-view-field-number-box-spin-touch-friendly-width,
 );
-@include clock-action-icons-mixin($time-view-clock-accent-bg-rest, $time-view-clock-bg-rest, $time-view-clock-digits-content-rest);
+@include clock-action-icons-mixin($time-view-clock-accent-bg, $time-view-clock-bg, $time-view-clock-digits-content);
 
 .dx-timeview {
   height: auto;

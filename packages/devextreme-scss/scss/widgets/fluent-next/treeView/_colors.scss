@@ -1,16 +1,16 @@
 @use "../../../_design-system/variables/ds" as ds;
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$tree-view-content-rest: ds.$color-content !default;
+$tree-view-content: ds.$color-content !default;
 
 $tree-view-bg-focused: ds.$color-bg-hovered !default;
 $tree-view-content-focused: ds.$color-content !default;
 $tree-view-bg-hovered: ds.$color-bg-hovered !default;
 $tree-view-item-content-hovered: ds.$color-content !default;
-$tree-view-border-rest: ds.$color-border !default;
-$tree-view-item-content-selected: $tree-view-content-rest !default;
+$tree-view-border: ds.$color-border !default;
+$tree-view-item-content-selected: $tree-view-content !default;
 $tree-view-item-bg-selected: ds.$color-bg-selected !default;
-$tree-view-spin-icon-rest: ds.$color-content-subtle !default;
+$tree-view-spin-icon: ds.$color-content-subtle !default;
 $tree-view-checkbox-checked-border-focused: ds.$color-border-primary-shared-active !default;
 
 $tree-view-checkbox-border-disabled: ds.$color-content-disabled !default;

@@ -9,7 +9,7 @@ $gallery-nav-icon-font-size: ds.$font-size-320 !default; // dx-icon-glyph-size: 
 $gallery-nav-button-width: ds.$spacing-320 !default;
 $gallery-nav-button-height: ds.$spacing-320 !default;
 $gallery-nav-button-margin-block-start: -16px !default; // dx-offscale: -16px
-$gallery-indicator-item-border: ds.$border-width-10 solid !default;
+$gallery-indicator-item-border-width: ds.$border-width-10 !default;
 $gallery-indicator-item-border-selected: ds.$border-width-20 solid !default;
 
 // Base-layer sizing injected with design tokens (wave B2)

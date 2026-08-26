@@ -14,5 +14,5 @@ $grid-master-detail-padding: 16px;
  * grammar reserves for a CSS property (NAMING.md, size slots).
  */
 $grid-drag-header-box-shadow:
-  0 0 1px $grid-drag-header-shadow-ambient-rest,
-  0 1px 3px $grid-drag-header-shadow-key-rest;
+  0 0 1px $grid-drag-header-shadow-ambient,
+  0 1px 3px $grid-drag-header-shadow-key;

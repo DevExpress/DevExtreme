@@ -1,0 +1,32 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-tag-box-border-disabled: #{$tag-box-border-disabled};
+  --dx-tag-box-filled-with-label-padding-block-end: #{$tag-box-filled-with-label-padding-block-end};
+  --dx-tag-box-filled-with-label-padding-block-start: #{$tag-box-filled-with-label-padding-block-start};
+  --dx-tag-box-list-select-all-border-block-end: #{$tag-box-list-select-all-border-block-end};
+  --dx-tag-box-select-all-line: #{$tag-box-select-all-line};
+  --dx-tag-box-select-all-margin-block-end: #{$tag-box-select-all-margin-block-end};
+  --dx-tag-box-select-all-padding-block-end: #{$tag-box-select-all-padding-block-end};
+  --dx-tag-box-tag-bg-disabled: #{$tag-box-tag-bg-disabled};
+  --dx-tag-box-tag-bg-hovered: #{$tag-box-tag-bg-hovered};
+  --dx-tag-box-tag-bg: #{$tag-box-tag-bg};
+  --dx-tag-box-tag-border-focused: #{$tag-box-tag-border-focused};
+  --dx-tag-box-tag-border-radius: #{$tag-box-tag-border-radius};
+  --dx-tag-box-tag-border-width: #{$tag-box-tag-border-width};
+  --dx-tag-box-tag-container-gap: #{$tag-box-tag-container-gap};
+  --dx-tag-box-tag-container-padding-block: #{$tag-box-tag-container-padding-block};
+  --dx-tag-box-tag-container-padding-inline-start: #{$tag-box-tag-container-padding-inline-start};
+  --dx-tag-box-tag-content-active: #{$tag-box-tag-content-active};
+  --dx-tag-box-tag-content-disabled: #{$tag-box-tag-content-disabled};
+  --dx-tag-box-tag-content-font-size: #{$tag-box-tag-content-font-size};
+  --dx-tag-box-tag-content-line-height: #{$tag-box-tag-content-line-height};
+  --dx-tag-box-tag-content-min-width: #{$tag-box-tag-content-min-width};
+  --dx-tag-box-tag-content-padding-block: #{$tag-box-tag-content-padding-block};
+  --dx-tag-box-tag-content-padding-inline-end: #{$tag-box-tag-content-padding-inline-end};
+  --dx-tag-box-tag-content-padding-inline-start: #{$tag-box-tag-content-padding-inline-start};
+  --dx-tag-box-tag-content: #{$tag-box-tag-content};
+  --dx-tag-box-tag-remove-button-content: #{$tag-box-tag-remove-button-content};
+  --dx-tag-box-tag-size: #{$tag-box-tag-size};
+}

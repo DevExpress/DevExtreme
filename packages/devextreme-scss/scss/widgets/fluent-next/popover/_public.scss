@@ -1,0 +1,7 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-popover-popup-title-border-start-end-radius: #{$popover-popup-title-border-start-end-radius};
+  --dx-popover-popup-title-border-start-start-radius: #{$popover-popup-title-border-start-start-radius};
+}

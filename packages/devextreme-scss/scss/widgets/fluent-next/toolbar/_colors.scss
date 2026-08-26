@@ -1,5 +1,5 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$toolbar-bg-rest: transparent !default;
-$toolbar-content-rest: ds.$color-content !default;
-$toolbar-separator-border-rest: ds.$color-border-subtle !default;
+$toolbar-bg: transparent !default;
+$toolbar-content: ds.$color-content !default;
+$toolbar-separator-border: ds.$color-border-subtle !default;

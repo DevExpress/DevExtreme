@@ -1,0 +1,11 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-load-indicator-segment-border: #{$load-indicator-segment-border};
+  --dx-load-indicator-segment-border-width: #{$load-indicator-segment-border-width};
+  --dx-load-indicator-segment-inner-border: #{$load-indicator-segment-inner-border};
+  --dx-load-indicator-sparkle-stop-1-bg: #{$load-indicator-sparkle-stop-1-bg};
+  --dx-load-indicator-sparkle-stop-2-bg: #{$load-indicator-sparkle-stop-2-bg};
+  --dx-load-indicator-sparkle-stop-3-bg: #{$load-indicator-sparkle-stop-3-bg};
+}

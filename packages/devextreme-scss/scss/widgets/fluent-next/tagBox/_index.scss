@@ -9,9 +9,9 @@
 .dx-tagbox {
   .dx-tag-container {
     height: 100%;
-    padding-top: $tag-box-tag-container-padding-block;
-    padding-bottom: $tag-box-tag-container-padding-block;
-    gap: $tag-box-tag-container-gap;
+    padding-top: var(--dx-tag-box-tag-container-padding-block);
+    padding-bottom: var(--dx-tag-box-tag-container-padding-block);
+    gap: var(--dx-tag-box-tag-container-gap);
 
     .dx-texteditor-input {
       padding: 0;
@@ -21,8 +21,8 @@
 
   &.dx-editor-underlined {
     .dx-tag-container {
-      padding-top: calc(#{$tag-box-tag-container-padding-block} + 1px);
-      padding-bottom: calc(#{$tag-box-tag-container-padding-block} + 1px);
+      padding-top: calc(var(--dx-tag-box-tag-container-padding-block) + 1px);
+      padding-bottom: calc(var(--dx-tag-box-tag-container-padding-block) + 1px);
     }
   }
 
@@ -30,14 +30,14 @@
   &.dx-editor-filled,
   &.dx-editor-underlined {
     .dx-texteditor-input {
-      height: $tag-box-tag-size;
+      height: var(--dx-tag-box-tag-size);
     }
   }
 
   &.dx-editor-outlined,
   &.dx-editor-filled {
     .dx-tag-container {
-      padding-inline-start: $tag-box-tag-container-padding-inline-start;
+      padding-inline-start: var(--dx-tag-box-tag-container-padding-inline-start);
     }
   }
 
@@ -57,29 +57,29 @@
     &.dx-editor-filled {
       .dx-tag-container,
       .dx-placeholder::before {
-        padding-top: $tag-box-filled-with-label-padding-block-start;
-        padding-bottom: $tag-box-filled-with-label-padding-block-end;
+        padding-top: var(--dx-tag-box-filled-with-label-padding-block-start);
+        padding-bottom: var(--dx-tag-box-filled-with-label-padding-block-end);
       }
     }
 
     &.dx-editor-underlined {
       .dx-tag-container,
       .dx-placeholder::before {
-        padding-top: calc(#{$tag-box-filled-with-label-padding-block-start} + 1px);
-        padding-bottom: calc(#{$tag-box-filled-with-label-padding-block-end} + 1px);
+        padding-top: calc(var(--dx-tag-box-filled-with-label-padding-block-start) + 1px);
+        padding-bottom: calc(var(--dx-tag-box-filled-with-label-padding-block-end) + 1px);
       }
     }
   }
 
   &.dx-state-disabled {
     .dx-tag-content {
-      color: $tag-box-tag-content-disabled;
-      background-color: $tag-box-tag-bg-disabled;
+      color: var(--dx-tag-box-tag-content-disabled);
+      background-color: var(--dx-tag-box-tag-bg-disabled);
     }
 
     .dx-tag-remove-button {
       &::before {
-        color: $tag-box-tag-content-disabled;
+        color: var(--dx-tag-box-tag-content-disabled);
       }
     }
   }
@@ -94,54 +94,54 @@
 .dx-tag-content {
   display: inline-flex;
   align-items: center;
-  font-size: $tag-box-tag-content-font-size;
-  line-height: $tag-box-tag-content-line-height;
+  font-size: var(--dx-tag-box-tag-content-font-size);
+  line-height: var(--dx-tag-box-tag-content-line-height);
   margin: 0;
-  padding-top: $tag-box-tag-content-padding-block;
-  padding-bottom: $tag-box-tag-content-padding-block;
-  padding-inline-start: $tag-box-tag-content-padding-inline-start;
-  padding-inline-end: $tag-box-tag-content-padding-inline-end;
-  min-width: $tag-box-tag-content-min-width;
-  background-color: $tag-box-tag-bg-rest;
-  color: $tag-box-tag-content-rest;
-  border-radius: $tag-box-tag-border-radius;
-  border-width: $tag-box-tag-border-width;
+  padding-top: var(--dx-tag-box-tag-content-padding-block);
+  padding-bottom: var(--dx-tag-box-tag-content-padding-block);
+  padding-inline-start: var(--dx-tag-box-tag-content-padding-inline-start);
+  padding-inline-end: var(--dx-tag-box-tag-content-padding-inline-end);
+  min-width: var(--dx-tag-box-tag-content-min-width);
+  background-color: var(--dx-tag-box-tag-bg);
+  color: var(--dx-tag-box-tag-content);
+  border-radius: var(--dx-tag-box-tag-border-radius);
+  border-width: var(--dx-tag-box-tag-border-width);
   border-style: solid;
-  border-color: $tag-box-border-disabled;
+  border-color: var(--dx-tag-box-border-disabled);
 }
 
 .dx-tag-remove-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: $tag-box-tag-size;
+  width: var(--dx-tag-box-tag-size);
   height: 100%;
 
   @include dx-icon(clear);
 
-  font-size: calc(#{$tag-box-tag-content-font-size} + 2px);
+  font-size: calc(var(--dx-tag-box-tag-content-font-size) + 2px);
 
   &::before {
     content: "\f15f";
     display: flex;
     align-items: center;
     justify-content: center;
-    color: $tag-box-tag-remove-button-content-rest;
+    color: var(--dx-tag-box-tag-remove-button-content);
   }
 }
 
 .dx-tag {
   &:hover {
     .dx-tag-content {
-      background-color: $tag-box-tag-bg-hovered;
-      color: $tag-box-tag-content-active;
+      background-color: var(--dx-tag-box-tag-bg-hovered);
+      color: var(--dx-tag-box-tag-content-active);
     }
   }
 
   &.dx-state-focused {
     .dx-tag-content {
-      color: $tag-box-tag-content-active;
-      border-color: $tag-box-tag-border-focused;
+      color: var(--dx-tag-box-tag-content-active);
+      border-color: var(--dx-tag-box-tag-border-focused);
     }
   }
 }
@@ -169,10 +169,10 @@
 
 .dx-tagbox-popup-wrapper {
   .dx-list-select-all {
-    border-bottom: $tag-box-list-select-all-border-block-end;
-    border-bottom-color: $tag-box-select-all-line-rest;
-    padding-bottom: $tag-box-select-all-padding-block-end;
-    margin-bottom: $tag-box-select-all-margin-block-end;
+    border-bottom: var(--dx-tag-box-list-select-all-border-block-end);
+    border-bottom-color: var(--dx-tag-box-select-all-line);
+    padding-bottom: var(--dx-tag-box-select-all-padding-block-end);
+    margin-bottom: var(--dx-tag-box-select-all-margin-block-end);
 
     &::after {
       background-color: transparent;

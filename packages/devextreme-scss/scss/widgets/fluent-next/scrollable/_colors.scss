@@ -1,6 +1,6 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$scrollable-bg-rest: ds.$color-bg !default;
+$scrollable-bg: ds.$color-bg !default;
 
-$scrollable-scroll-bg-rest: ds.$color-content-subtle !default;
-$scrollable-scrollbar-bg-rest: ds.$color-bg-none !default;
+$scrollable-scroll-bg: ds.$color-content-subtle !default;
+$scrollable-scrollbar-bg: ds.$color-bg-none !default;

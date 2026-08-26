@@ -8,7 +8,7 @@ $grid-text-link-opacity-disabled: ds.$opacity-35;
 $grid-icon-link-opacity-disabled: ds.$opacity-60;
 $grid-group-panel-message-line-height: buttonSizes.$button-text-line-height;
 
-$grid-border: 1px solid !default;
+$grid-border-width: 1px !default;
 $grid-border-radius: 0 !default;
 
 $grid-cell-height: null !default;
@@ -37,6 +37,8 @@ $grid-header-icon-container-size: ds.$spacing-200 !default;
 $grid-column-chooser-item-margin: ds.$spacing-80 !default;
 $grid-command-edit-icon-margin: ds.$spacing-40 !default;
 $grid-command-edit-text-margin: ds.$spacing-20 !default;
+
+$grid-outline-focused: ds.$spacing-20 solid !default;
 
 $grid-command-edit-icon-size: null !default;
 $grid-filter-panel-icon-size: null !default;
@@ -119,7 +121,7 @@ $grid-header-cell-font-size: $grid-cell-font-size !default;
 
 // Values hoisted from style-file literals (tokenized)
 $grid-icon-button-border-radius: ds.$border-radius-20 !default;
-$grid-margin-inline-start: ds.$spacing-50 !important !default;
+$grid-margin-inline-start: ds.$spacing-50 !default;
 $grid-icon-margin: 0 ds.$spacing-30 !default;
 $grid-filter-operation-icon-margin-block-start: ds.$spacing-20 !default;
 $grid-sort-index-icon-padding-inline-end: ds.$spacing-40 !default;

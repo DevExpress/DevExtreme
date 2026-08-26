@@ -1,0 +1,12 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-number-box-content-disabled: #{$number-box-content-disabled};
+  --dx-number-box-spin-bg-active: #{$number-box-spin-bg-active};
+  --dx-number-box-spin-bg-hovered: #{$number-box-spin-bg-hovered};
+  --dx-number-box-spin-container-touch-friendly-width: #{$number-box-spin-container-touch-friendly-width};
+  --dx-number-box-spin-container-width: #{$number-box-spin-container-width};
+  --dx-number-box-spin-icon: #{$number-box-spin-icon};
+  --dx-number-box-spin-opacity: #{$number-box-spin-opacity};
+}

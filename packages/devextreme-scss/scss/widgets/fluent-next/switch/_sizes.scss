@@ -24,7 +24,7 @@ $switch-handle-on-box-shadow-blur: 0 !default;
  * Composite box-shadow (geometry + a colour reference), so it belongs here rather than in
  * _colors.scss — same rule as $toast-box-shadow. Moved out of _index.scss (O7).
  */
-$switch-handle-on-box-shadow: 0 0 0 $switch-handle-on-box-shadow-blur $switch-handle-on-shadow-rest;
+$switch-handle-on-box-shadow: 0 0 0 $switch-handle-on-box-shadow-blur $switch-handle-on-shadow;
 $switch-container-rtl-offset: ds.$spacing-60 !default;
 
 @if $size == "default" {
