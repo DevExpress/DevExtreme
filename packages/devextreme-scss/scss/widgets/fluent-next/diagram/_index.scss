@@ -1,5 +1,4 @@
 @use "sass:math";
-@use "../common/colors" as *;
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/diagram" with (
@@ -140,11 +139,11 @@
 
 .dx-diagram-toolbox-panel,
 .dx-diagram-properties-panel {
-  background: $surface-overlay;
+  background: var(--dx-surface-overlay);
 }
 
 .dx-diagram-floating-toolbar-container {
-  background: $surface-overlay;
+  background: var(--dx-surface-overlay);
   box-shadow: $diagram-shadow;
   border-radius: $diagram-floating-toolbar-container-border-radius;
   padding: $diagram-floating-toolbar-container-padding;

@@ -1,10 +1,9 @@
 @use "colors" as *;
 @use "sizes" as *;
-@use "../common/sizes" as *;
 @use "../dropDownList";
 
 @mixin autocomplete-editor-container-offset() {
-  inset-inline-end: $invalid-badge-padding-inline;
+  inset-inline-end: var(--dx-invalid-badge-padding-inline);
 }
 
 .dx-autocomplete.dx-invalid,

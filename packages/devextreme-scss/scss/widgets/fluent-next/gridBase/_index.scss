@@ -17,7 +17,6 @@
 @use "../button/colors" as buttonColors;
 @use "../validation/colors" as validationColors;
 @use "../typography/sizes" as typographySizes;
-@use "../common/sizes" as *;
 @use "../dropDownEditor/sizes" as dropDownEditorSizes;
 @use "../scrollable";
 @use "../overlay";
@@ -869,12 +868,12 @@
           @include dx-pending-indicator-fluent();
           @include texteditor-validation-icon-offset();
 
-          right: $invalid-badge-size;
+          right: var(--dx-invalid-badge-size);
           background-color: transparent;
 
           @at-root #{selector.append(".dx-rtl", &)},
           .dx-rtl & {
-            left: $invalid-badge-size;
+            left: var(--dx-invalid-badge-size);
           }
         }
       }

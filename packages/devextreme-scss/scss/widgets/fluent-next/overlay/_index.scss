@@ -1,10 +1,9 @@
 @use "sizes" as *;
 @use "../common/mixins" as *;
 @use "../../base/overlay";
-@use "../common/colors" as *;
 
 .dx-overlay-shader {
-  background-color: $backdrop-bg;
+  background-color: var(--dx-backdrop-bg);
 }
 
 .dx-overlay-wrapper {

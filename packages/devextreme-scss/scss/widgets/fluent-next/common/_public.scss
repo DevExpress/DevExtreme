@@ -1,0 +1,33 @@
+@use "sizes" as *;
+@use "colors" as *;
+
+@mixin publish {
+  --dx-backdrop-bg: #{$backdrop-bg};
+  --dx-focus-rect-border-radius: #{$focus-rect-border-radius};
+  --dx-focus-rect-outline: #{$focus-rect-outline};
+  --dx-global-bg: #{$global-bg};
+  --dx-global-content: #{$global-content};
+  --dx-global-disabled-opacity: #{$global-disabled-opacity};
+  --dx-global-dropdown-border-block-end-width: #{$global-dropdown-border-block-end-width};
+  --dx-global-dropdown-box-shadow: #{$global-dropdown-box-shadow};
+  --dx-global-dropdown-content-padding: #{$global-dropdown-content-padding};
+  --dx-global-dropdown-flipped-border-block-start-width: #{$global-dropdown-flipped-border-block-start-width};
+  --dx-global-dropdown-shadow-ambient: #{$global-dropdown-shadow-ambient};
+  --dx-global-dropdown-shadow-key: #{$global-dropdown-shadow-key};
+  --dx-global-font-family: #{$global-font-family};
+  --dx-global-inline-widget-inner-height: #{$global-inline-widget-inner-height};
+  --dx-global-line-height: #{$global-line-height};
+  --dx-invalid-badge-bg: #{$invalid-badge-bg};
+  --dx-invalid-badge-content: #{$invalid-badge-content};
+  --dx-invalid-badge-font-weight: #{$invalid-badge-font-weight};
+  --dx-invalid-badge-offset: #{$invalid-badge-offset};
+  --dx-invalid-badge-padding-inline: #{$invalid-badge-padding-inline};
+  --dx-invalid-badge-size: #{$invalid-badge-size};
+  --dx-palette-accent: #{$palette-accent};
+  --dx-palette-bg: #{$palette-bg};
+  --dx-palette-border: #{$palette-border};
+  --dx-palette-text: #{$palette-text};
+  --dx-surface-overlay: #{$surface-overlay};
+  --dx-valid-badge-content: #{$valid-badge-content};
+  --dx-valid-badge-font-size: #{$valid-badge-font-size};
+}
