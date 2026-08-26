@@ -469,6 +469,7 @@
         "srcDir": "./js",
         "excludePatterns": [
           "__internal/**/*",
+          "ui/map/openlayers.register.js",
           "viz/docs/**/*",
           "bundles/**/*"
         ],

@@ -1,6 +1,7 @@
 import $ from 'jquery';
 
 import OsmProvider from '__internal/ui/map/provider.dynamic.osm';
+import { setRegisteredMapEngine } from '__internal/ui/map/provider.dynamic.osm.engine';
 import { createOpenLayersEngine } from '__internal/ui/map/provider.dynamic.osm.openlayers';
 import errors from 'ui/widget/ui.errors';
 
@@ -33,6 +34,7 @@ const resetOpenLayersMock = () => {
 const moduleConfig = {
     beforeEach(assert) {
         const setup = () => {
+            setRegisteredMapEngine(undefined);
             window.ol = openLayersMock;
             resetOpenLayersMock();
         };
@@ -56,6 +58,7 @@ const moduleConfig = {
         });
     },
     afterEach() {
+        setRegisteredMapEngine(undefined);
         window.ol = openLayersMock;
     }
 };
@@ -65,6 +68,37 @@ const createProvider = () => new OsmProvider({
     })
 }, null);
 QUnit.module('OSM: map loading', moduleConfig, () => {
+    QUnit.test('registered OpenLayers engine takes priority over window.ol', function(assert) {
+        const done = assert.async();
+        const engine = createOpenLayersEngine(openLayersMock);
+        const provider = createProvider();
+        setRegisteredMapEngine(engine);
+        provider._loadImpl().then(() => {
+            assert.strictEqual(provider._engine, engine, 'registered engine is selected');
+            done();
+        });
+    });
+    QUnit.test('map initializes with a registered OpenLayers engine when window.ol is missing', function(assert) {
+        const done = assert.async();
+        setRegisteredMapEngine(createOpenLayersEngine(openLayersMock));
+        delete window.ol;
+        $('#map').dxMap({
+            provider: 'osm',
+            providerConfig: {
+                tileServer: {
+                    url: 'https://tiles.example.com/{z}/{x}/{y}.png',
+                    attribution: 'Example attribution'
+                }
+            },
+            onReady: ({
+                originalMap
+            }) => {
+                assert.ok(openLayersMock.mapCreated, 'registered OpenLayers engine creates the map');
+                assert.strictEqual(originalMap, openLayersMock.mapInstance, 'originalMap is returned');
+                done();
+            }
+        });
+    });
     QUnit.test('map initializes with OpenLayers from window.ol', function(assert) {
         const done = assert.async();
         $('#map').dxMap({
