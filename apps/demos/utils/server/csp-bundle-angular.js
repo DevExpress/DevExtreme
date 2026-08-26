@@ -181,7 +181,7 @@ function findDemos() {
     const demos = fs.readdirSync(widgetDir, { withFileTypes: true }).filter((d) => d.isDirectory());
     for (const demo of demos) {
       const key = `${widget.name}/${demo.name}`;
-      if (SKIPPED_DEMOS.has(`${key}/${FRAMEWORK}`)) continue;
+      if (SKIPPED_DEMOS.has(`${key}/${FRAMEWORK}`)) continue; // eslint-disable-line no-continue
       const fwDir = path.join(widgetDir, demo.name, FRAMEWORK);
       const matchesFilter = !FILTER || key.includes(FILTER);
       if (matchesFilter && fs.existsSync(path.join(fwDir, 'index.html'))) {

@@ -49,12 +49,6 @@ function getValues(getter) {
 }
 
 function importAnd(es6, cjs, callback) {
-  if (window.Promise && window.System) {
-    return Promise.all(getValues(es6)
-      .map((x) => window.System.import(x)))
-      .then((x) => callback(...x));
-  }
-
   return callback(...getValues(cjs));
 }
 

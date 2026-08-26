@@ -22,6 +22,7 @@ import {
   isFluent,
 } from '../utils/visual-tests/helpers/theme-utils';
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
+import { buildTestGlobalsScript } from '../utils/visual-tests/test-globals-bundle';
 import { knownWarnings } from './known-warnings';
 import { skippedTests } from './skipped-tests';
 import { widgetsGalleryServiceMock } from './apiMocks/widgetsGalleryServiceMock';
@@ -120,13 +121,22 @@ const getIgnoredRules = (testName) => {
   ];
 };
 
-const getClientScripts = () => {
+const getClientScripts = (approach: string) => {
   const scripts = [
     { module: 'mockdate' },
   ];
 
   if (process.env.STRATEGY === 'accessibility') {
     scripts.push({ module: 'axe-core/axe.min.js' });
+  }
+
+  // jQuery gets window.DevExpress for free from dx.all.js; other frameworks need a stand-in.
+  if (approach !== 'jQuery') {
+    const testGlobalsScriptPath = buildTestGlobalsScript();
+    if (testGlobalsScriptPath) {
+      // @ts-expect-error ts-error
+      scripts.push(testGlobalsScriptPath);
+    }
   }
 
   if (isCspEnabled()) {
@@ -159,7 +169,7 @@ Object.values(FRAMEWORKS).forEach((approach) => {
         await t.resizeWindow(1000, 800);
       }
     })
-    .clientScripts(getClientScripts())
+    .clientScripts(getClientScripts(approach))
     .requestHooks(widgetsGalleryServiceMock, xmlaServiceMock);
 
   const getDemoPaths = (platform) => glob.sync('Demos/*/*')
