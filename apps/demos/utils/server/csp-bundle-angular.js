@@ -30,7 +30,7 @@ const RETRY_CONCURRENCY = (() => {
 })();
 
 // One global batch shares the most code across demos. Infinity rather than a fixed number
-// so it always covers the current demo count, not just whatever it happened to be when set.
+// so it always covers the current demo count
 const DEFAULT_SAFE_BATCH_SIZE = Infinity;
 const BATCH_SIZE = (() => {
   const fromEnv = parseInt(process.env.CSP_BUNDLE_BATCH_SIZE, 10);
