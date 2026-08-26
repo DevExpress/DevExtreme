@@ -48,8 +48,23 @@ function getValues(getter) {
   return Array.isArray(values) ? values : [values];
 }
 
+function tryGetValues(getter) {
+  try {
+    const values = getValues(getter);
+    return values.every((v) => v !== undefined) ? values : null;
+  } catch {
+    return null;
+  }
+}
+
+// window.DevExpress (see test-globals-bundle.js) is assigned asynchronously after page load,
+// so cjs() can throw or return undefined for a short window right after navigation.
 function importAnd(es6, cjs, callback) {
-  return callback(...getValues(cjs));
+  let values = null;
+  return postponeUntilInternal(() => {
+    values = tryGetValues(cjs);
+    return values !== null;
+  }, 50, 10000).then(() => callback(...(values || getValues(cjs))));
 }
 
 function mockOptionMethod(instance) {
