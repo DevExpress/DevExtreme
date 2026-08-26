@@ -60,12 +60,15 @@ async function buildTestGlobalsScript(framework) {
   const entries = Array.from(specifierToPath.entries());
   const namespaces = new Set(entries.map(([, accessorPath]) => accessorPath.split('.')[0]));
 
-  const entryContents = [
-    ...entries.map(([specifier], i) => `import * as m${i} from ${JSON.stringify(specifier)};`),
-    'window.DevExpress = window.DevExpress || {};',
-    ...Array.from(namespaces).map((ns) => `window.DevExpress.${ns} = window.DevExpress.${ns} || {};`),
-    ...entries.map(([, accessorPath], i) => `window.DevExpress.${accessorPath} = m${i}.default;`),
-  ].join('\n');
+  // setTimeout + dynamic import: this runs as a clientScript in <head>, before the page's own
+  // <script src="react.vendor.js"> in <body> sets up window.__DX_VENDOR_REACT__.
+  const entryContents = `setTimeout(function () {
+    Promise.all([${entries.map(([specifier]) => `import(${JSON.stringify(specifier)})`).join(', ')}]).then(function (m) {
+      window.DevExpress = window.DevExpress || {};
+      ${Array.from(namespaces).map((ns) => `window.DevExpress.${ns} = window.DevExpress.${ns} || {};`).join('\n      ')}
+      ${entries.map(([, accessorPath], i) => `window.DevExpress.${accessorPath} = m[${i}].default;`).join('\n      ')}
+    });
+  }, 0);`;
 
   const outFile = outputPath(framework);
   fs.mkdirSync(path.dirname(outFile), { recursive: true });
