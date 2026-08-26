@@ -5,8 +5,6 @@ const fs = require('fs');
 const path = require('path');
 const { glob } = require('glob');
 const esbuild = require('esbuild');
-const { getSharedOptions } = require('../server/csp-bundle');
-const { getVendorManifest } = require('../server/vendor-bundle');
 
 const DEMOS_ROOT = path.join(__dirname, '..', '..');
 const SUPPORTED_FRAMEWORKS = new Set(['React', 'Vue']);
@@ -49,7 +47,9 @@ function outputPath(framework) {
   return path.join(DEMOS_ROOT, 'bundles', 'vendor', `test-globals-${framework.toLowerCase()}.js`);
 }
 
-// Async for vendorGlobalPlugin; called from build-vendor-bundles.js ahead of time.
+// Async for vendorGlobalPlugin; called from build-vendor-bundles.js ahead of time. Requires
+// csp-bundle/vendor-bundle lazily so merely importing this module (e.g. from
+// matrix-test-helper.ts) doesn't pull them into Jest's coverage run.
 async function buildTestGlobalsScript(framework) {
   if (!SUPPORTED_FRAMEWORKS.has(framework)) return null;
 
@@ -59,6 +59,8 @@ async function buildTestGlobalsScript(framework) {
   const entries = Array.from(specifierToPath.entries());
   const namespaces = new Set(entries.map(([, accessorPath]) => accessorPath.split('.')[0]));
 
+  // eslint-disable-next-line global-require
+  const { getVendorManifest } = require('../server/vendor-bundle');
   const manifest = getVendorManifest(framework);
   if (!manifest) return null;
 
@@ -79,6 +81,8 @@ async function buildTestGlobalsScript(framework) {
   const outFile = outputPath(framework);
   fs.mkdirSync(path.dirname(outFile), { recursive: true });
 
+  // eslint-disable-next-line global-require
+  const { getSharedOptions } = require('../server/csp-bundle');
   const shared = getSharedOptions(framework);
   await esbuild.build({
     ...shared,
