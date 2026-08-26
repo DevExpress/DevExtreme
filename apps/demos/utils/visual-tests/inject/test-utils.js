@@ -57,8 +57,7 @@ function tryGetValues(getter) {
   }
 }
 
-// window.DevExpress (see test-globals-bundle.js) is assigned asynchronously after page load,
-// so cjs() can throw or return undefined for a short window right after navigation.
+// window.DevExpress is assigned asynchronously, so cjs() can throw right after navigation.
 function importAnd(es6, cjs, callback) {
   let values = null;
   return postponeUntilInternal(() => {

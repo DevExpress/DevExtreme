@@ -1,13 +1,12 @@
-// Exposes the devextreme widgets test-code.js needs as window.DevExpress, a stand-in for the
-// UMD global jQuery gets from dx.all.js. Bundled through the same vendorGlobalPlugin real
-// React/Vue demos use, so classes match by identity, not just by name — Angular has no
-// equivalent shared-vendor mechanism, so it's unsupported here.
+// Exposes the devextreme widgets test-code.js needs as window.DevExpress, matching real
+// React/Vue demos by identity via vendorGlobalPlugin (Angular has no equivalent mechanism).
 
 const fs = require('fs');
 const path = require('path');
 const { glob } = require('glob');
 const esbuild = require('esbuild');
 const { getSharedOptions } = require('../server/csp-bundle');
+const { getVendorManifest } = require('../server/vendor-bundle');
 
 const DEMOS_ROOT = path.join(__dirname, '..', '..');
 const SUPPORTED_FRAMEWORKS = new Set(['React', 'Vue']);
@@ -50,7 +49,7 @@ function outputPath(framework) {
   return path.join(DEMOS_ROOT, 'bundles', 'vendor', `test-globals-${framework.toLowerCase()}.js`);
 }
 
-// Async because vendorGlobalPlugin needs it; called from build-vendor-bundles.js ahead of time.
+// Async for vendorGlobalPlugin; called from build-vendor-bundles.js ahead of time.
 async function buildTestGlobalsScript(framework) {
   if (!SUPPORTED_FRAMEWORKS.has(framework)) return null;
 
@@ -60,15 +59,22 @@ async function buildTestGlobalsScript(framework) {
   const entries = Array.from(specifierToPath.entries());
   const namespaces = new Set(entries.map(([, accessorPath]) => accessorPath.split('.')[0]));
 
-  // setTimeout + dynamic import: this runs as a clientScript in <head>, before the page's own
-  // <script src="react.vendor.js"> in <body> sets up window.__DX_VENDOR_REACT__.
-  const entryContents = `setTimeout(function () {
+  const manifest = getVendorManifest(framework);
+  if (!manifest) return null;
+
+  // Poll for the vendor global instead of a fixed delay: it loads via <script src>, a network
+  // fetch no setTimeout can reliably outlast.
+  const entryContents = `(function wait() {
+    if (typeof window.${manifest.globalVar} === 'undefined') {
+      setTimeout(wait, 50);
+      return;
+    }
     Promise.all([${entries.map(([specifier]) => `import(${JSON.stringify(specifier)})`).join(', ')}]).then(function (m) {
       window.DevExpress = window.DevExpress || {};
       ${Array.from(namespaces).map((ns) => `window.DevExpress.${ns} = window.DevExpress.${ns} || {};`).join('\n      ')}
       ${entries.map(([, accessorPath], i) => `window.DevExpress.${accessorPath} = m[${i}].default;`).join('\n      ')}
     });
-  }, 0);`;
+  })();`;
 
   const outFile = outputPath(framework);
   fs.mkdirSync(path.dirname(outFile), { recursive: true });

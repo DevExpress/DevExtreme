@@ -3,6 +3,7 @@ import { join } from 'path';
 import { ClientFunction } from 'testcafe';
 import { THEME } from './helpers/theme-utils';
 import { gitHubIgnored } from './github-ignored-list';
+import { getTestGlobalsScriptPath } from './test-globals-bundle';
 
 export const FRAMEWORKS = {
   jquery: 'jQuery',
@@ -311,10 +312,12 @@ export function runManualTestCore(
   };
 
   const testStyles = getTestStyles(demo);
+  const testGlobalsScriptPath = getTestGlobalsScriptPath(FRAMEWORKS[framework]);
 
   const clientScripts = [
     { module: 'mockdate' },
     join(__dirname, './inject/test-utils.js'),
+    ...(testGlobalsScriptPath ? [testGlobalsScriptPath] : []),
     { content: injectStyle(globalReadFrom(__dirname, './inject/test-styles.css', (x) => x)) },
     ...(testStyles !== '' ? [{ content: injectStyle(testStyles) }] : []),
     ...clientScriptSource,
