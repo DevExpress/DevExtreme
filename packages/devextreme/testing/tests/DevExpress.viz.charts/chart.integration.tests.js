@@ -7,7 +7,7 @@ import titleModule from 'viz/core/title';
 import dxChart from 'viz/chart';
 import dxPieChart from 'viz/pie_chart';
 import dxPolarChart from 'viz/polar_chart';
-import { overlapping } from '__internal/viz/chart_components/m_base_chart';
+import { overlapping } from '__internal/viz/chart_components/base_chart';
 import seriesFamilyModule from 'viz/core/series_family';
 import { setupSeriesFamily } from '../../helpers/chartMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';

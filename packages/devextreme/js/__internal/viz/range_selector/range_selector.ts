@@ -40,10 +40,10 @@ import { Axis } from '@ts/viz/axes/base_axis';
 import { tickGenerator } from '@ts/viz/axes/tick_generator';
 import { correctValueType, getParser } from '@ts/viz/components/parse_utils';
 // PLUGINS_SECTION
+import baseWidgetModule from '@ts/viz/core/base_widget';
 import { plugin as dataSourcePlugin } from '@ts/viz/core/data_source';
 import { plugin as exportPlugin } from '@ts/viz/core/export';
 import { plugin as LoadingIndicatorPlugin } from '@ts/viz/core/loading_indicator';
-import baseWidgetModule from '@ts/viz/core/m_base_widget';
 import { plugin as titlePlugin } from '@ts/viz/core/title';
 import {
   convertVisualRangeObject,
