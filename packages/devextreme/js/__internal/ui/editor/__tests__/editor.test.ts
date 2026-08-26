@@ -15,12 +15,12 @@ interface ValidationRequestArgs {
 }
 
 class ProbeEditor extends Editor {
-  public hasValidationRequestOnOptionsInit?: boolean;
+  public hasValidationRequestOnInitMarkup?: boolean;
 
-  _initOptions(options: EditorProperties): void {
-    this.hasValidationRequestOnOptionsInit = Boolean(this.validationRequest);
+  _initMarkup(): void {
+    this.hasValidationRequestOnInitMarkup = Boolean(this.validationRequest);
 
-    super._initOptions(options);
+    super._initMarkup();
   }
 }
 
@@ -43,10 +43,10 @@ describe('Editor initialization', () => {
     document.body.innerHTML = '';
   });
 
-  it('creates validationRequest before the options are initialized', () => {
+  it('creates validationRequest before the markup is rendered', () => {
     const instance = createEditor();
 
-    expect(instance.hasValidationRequestOnOptionsInit).toBe(true);
+    expect(instance.hasValidationRequestOnInitMarkup).toBe(true);
   });
 
   it('marks the element as a validation target with the validation state ready', () => {

@@ -94,8 +94,6 @@ class Editor<
 
   _createElement(element: Element): void {
     super._createElement(element);
-    this.showValidationMessageTimeout = undefined;
-    this.validationRequest = Callbacks();
     const $element = this.$element();
     if ($element) {
       data($element[0], VALIDATION_TARGET, this);
@@ -109,6 +107,9 @@ class Editor<
   }
 
   _init(): void {
+    this.showValidationMessageTimeout = undefined;
+    this.validationRequest = Callbacks();
+
     this._initialValue = this.option('value');
     super._init();
 
