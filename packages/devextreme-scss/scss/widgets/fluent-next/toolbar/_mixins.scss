@@ -5,11 +5,11 @@
   overflow: visible;
 
   .dx-toolbar-before {
-    padding-inline-end: $toolbar-section-padding;
+    padding-inline-end: var(--dx-toolbar-section-padding);
   }
 
   .dx-toolbar-after {
-    padding-inline-start: $toolbar-section-padding;
+    padding-inline-start: var(--dx-toolbar-section-padding);
   }
 
   .dx-toolbar-before:empty,
@@ -32,7 +32,7 @@
     padding-inline-end: $item-spacing;
 
     &.dx-toolbar-first-in-group {
-      padding-left: calc(#{$toolbar-item-spacing} * 4);
+      padding-left: calc(var(--dx-toolbar-item-spacing) * 4);
     }
 
     &:last-child {
@@ -42,7 +42,7 @@
 
   .dx-toolbar-label {
     font-size: $label-font-size;
-    font-weight: $toolbar-label-font-weight;
+    font-weight: var(--dx-toolbar-label-font-weight);
   }
 }
 

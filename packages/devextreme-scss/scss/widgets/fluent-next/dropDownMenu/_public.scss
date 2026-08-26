@@ -1,0 +1,10 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-drop-down-menu-list-border-radius: #{$drop-down-menu-list-border-radius};
+  --dx-drop-down-menu-list-min-width: #{$drop-down-menu-list-min-width};
+  --dx-drop-down-menu-popup-content-padding: #{$drop-down-menu-popup-content-padding};
+  --dx-drop-down-menu-section-margin-inline: #{$drop-down-menu-section-margin-inline};
+  --dx-drop-down-menu-section-row-gap: #{$drop-down-menu-section-row-gap};
+}

@@ -1,0 +1,17 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-color-box-content-disabled: #{$color-box-content-disabled};
+  --dx-color-box-input-container-height: #{$color-box-input-container-height};
+  --dx-color-box-input-container-inset-inline-start: #{$color-box-input-container-inset-inline-start};
+  --dx-color-box-input-container-width: #{$color-box-input-container-width};
+  --dx-color-box-overlay-content-padding: #{$color-box-overlay-content-padding};
+  --dx-color-box-overlay-padding: #{$color-box-overlay-padding};
+  --dx-color-box-preview-border: #{$color-box-preview-border};
+  --dx-color-box-preview-icon: #{$color-box-preview-icon};
+  --dx-color-box-preview-icon-size: #{$color-box-preview-icon-size};
+  --dx-color-box-preview-inset-inline-start: #{$color-box-preview-inset-inline-start};
+  --dx-color-box-preview-min-width: #{$color-box-preview-min-width};
+  --dx-color-box-toolbar-item-padding-inline-end: #{$color-box-toolbar-item-padding-inline-end};
+}

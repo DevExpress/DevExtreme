@@ -17,7 +17,7 @@
   margin-top: calc((#{$slider-wrapper-height} - #{$slider-track-height}) / 2);
   margin-right: calc((#{$slider-handle-size}) / 2);
   margin-left: calc((#{$slider-handle-size}) / 2);
-  background: $slider-bar-bg-rest;
+  background: $slider-bar-bg;
   height: $slider-track-height;
   border-radius: $slider-track-border-radius;
 }
@@ -27,7 +27,7 @@
   border-radius: $slider-track-border-radius;
 
   &.dx-slider-range-visible {
-    background: $slider-accent-bg-rest;
+    background: $slider-accent-bg;
   }
 }
 
@@ -39,14 +39,14 @@
   border-radius: $slider-border-radius;
   border-width: $slider-handle-border-width;
   border-style: solid;
-  border-color: $slider-border-rest;
+  border-color: $slider-border;
   background-color: $slider-element-bg;
 
   &::after {
     position: absolute;
     display: block;
     inset: 0;
-    background: $slider-accent-bg-rest;
+    background: $slider-accent-bg;
     content: "";
     border-radius: $slider-border-radius;
     border-width: $slider-handle-inner-border-width;
@@ -72,7 +72,7 @@
     .dx-overlay-content {
       .dx-popup-content {
         line-height: normal;
-        color: $slider-tooltip-content-rest;
+        color: $slider-tooltip-content;
 
         .dx-slider-tooltip-position-top & {
           padding-top: $slider-tooltip-top-padding-block-start;
@@ -135,8 +135,8 @@
   }
 
   .dx-slider-range-visible {
-    background-color: $slider-invalid-bg-rest;
-    border-color: $slider-invalid-bg-rest;
+    background-color: $slider-invalid-bg;
+    border-color: $slider-invalid-bg;
   }
 }
 

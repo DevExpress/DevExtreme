@@ -12,7 +12,7 @@
 
 @mixin dx-base-typography() {
   @include dx-base-typography-mixin(
-      $global-content-rest,
+      $global-content,
       $global-font-size,
       $global-font-family,
       $global-line-height
@@ -42,8 +42,8 @@
 
   font-size: $global-font-size;
   font-weight: $invalid-badge-font-weight;
-  background-color: $invalid-badge-bg-rest;
-  color: $invalid-badge-content-rest;
+  background-color: $invalid-badge-bg;
+  color: $invalid-badge-content;
   content: "!";
   border-radius: 50%;
 }
@@ -54,7 +54,7 @@
   font-size: $valid-badge-font-size;
   font-weight: bold;
   font-family: "DXIcons", sans-serif;
-  color: $valid-badge-content-rest;
+  color: $valid-badge-content;
   content: "\f005";
 
   @include baseValidation.validation-badge-animation();

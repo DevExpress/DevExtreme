@@ -1,0 +1,13 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-badge-bg-disabled: #{$badge-bg-disabled};
+  --dx-badge-bg: #{$badge-bg};
+  --dx-badge-border-radius: #{$badge-border-radius};
+  --dx-badge-content-disabled: #{$badge-content-disabled};
+  --dx-badge-content: #{$badge-content};
+  --dx-badge-font-size: #{$badge-font-size};
+  --dx-badge-line-height: #{$badge-line-height};
+  --dx-badge-padding: #{$badge-padding};
+}

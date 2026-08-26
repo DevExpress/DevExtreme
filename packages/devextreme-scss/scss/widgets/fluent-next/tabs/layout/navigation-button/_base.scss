@@ -17,7 +17,7 @@
 .dx-tabs-nav-button {
   border: none;
   height: $tabs-tab-height;
-  background-color: $tabs-nav-button-bg-rest;
+  background-color: $tabs-nav-button-bg;
 
   &.dx-button.dx-state-disabled.dx-button-mode-contained {
     visibility: hidden;
@@ -35,7 +35,7 @@
 
   &.dx-state-disabled {
     opacity: 1;
-    background-color: $tabs-tab-bg-rest;
+    background-color: $tabs-tab-bg;
 
     .dx-button-content {
       opacity: $tabs-nav-button-opacity-disabled;
