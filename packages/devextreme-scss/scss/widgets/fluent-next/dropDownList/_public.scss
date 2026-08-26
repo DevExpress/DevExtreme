@@ -1,0 +1,6 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-drop-down-list-min-height: #{$drop-down-list-min-height};
+}

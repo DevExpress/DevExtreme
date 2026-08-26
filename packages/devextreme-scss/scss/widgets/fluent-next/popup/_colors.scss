@@ -1,13 +1,13 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$popup-title-bg-rest: transparent !default;
-$popup-title-content-rest: ds.$color-content !default;
-$popup-title-border-rest: ds.$color-border !default;
-$popup-bottom-bg-rest: $popup-title-bg-rest !default;
-$popup-bottom-content-rest: ds.$color-content !default;
-$popup-content-shadow-ambient-rest: ds.$color-shadow-ambient !default;
-$popup-content-shadow-key-rest: ds.$color-shadow-key !default;
+$popup-title-bg: transparent !default;
+$popup-title-content: ds.$color-content !default;
+$popup-title-border: ds.$color-border !default;
+$popup-bottom-bg: $popup-title-bg !default;
+$popup-bottom-content: ds.$color-content !default;
+$popup-content-shadow-ambient: ds.$color-shadow-ambient !default;
+$popup-content-shadow-key: ds.$color-shadow-key !default;
 $popup-content-shadow-focused: ds.$color-shadow-key !default;
 
 // Base-layer values injected with design tokens (wave B1)
-$popup-dialog-backdrop-rest: ds.$color-bg-backdrop !default;
+$popup-dialog-backdrop: ds.$color-bg-backdrop !default;

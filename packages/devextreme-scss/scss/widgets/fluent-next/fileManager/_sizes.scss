@@ -63,7 +63,7 @@ $file-manager-progress-bold-font-weight: ds.$font-weight-base-strong !default;
 
 // Base-layer sizing injected with design tokens (wave B2)
 $file-manager-height: 500px !default; // dx-offscale: 500px
-$file-manager-border: ds.$border-width-10 solid !default;
+$file-manager-border-width: ds.$border-width-10 !default;
 $file-manager-overlay-content-min-width: 240px !default; // dx-offscale: 240px
 $file-manager-overlay-content-max-width: 400px !default; // dx-offscale: 400px
 $file-manager-popup-content-padding: ds.$spacing-150 !default;

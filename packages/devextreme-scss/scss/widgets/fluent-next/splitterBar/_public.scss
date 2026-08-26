@@ -1,0 +1,9 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-splitter-bar-bg-active: #{$splitter-bar-bg-active};
+  --dx-splitter-bar-border: #{$splitter-bar-border};
+  --dx-splitter-bar-border-width: #{$splitter-bar-border-width};
+  --dx-splitter-bar-width: #{$splitter-bar-width};
+}

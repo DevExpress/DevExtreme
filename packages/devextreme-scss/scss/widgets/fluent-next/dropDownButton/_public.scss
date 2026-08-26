@@ -1,0 +1,8 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-drop-down-button-action-padding-inline: #{$drop-down-button-action-padding-inline};
+  --dx-drop-down-button-action-spindown-icon-size: #{$drop-down-button-action-spindown-icon-size};
+  --dx-drop-down-button-toggle-spindown-icon-size: #{$drop-down-button-toggle-spindown-icon-size};
+}

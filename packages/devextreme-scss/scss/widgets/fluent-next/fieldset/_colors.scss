@@ -1,4 +1,4 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$fieldset-field-label-content-rest: ds.$color-content !default;
-$fieldset-field-value-invalid-content-rest: ds.$color-border-danger !default;
+$fieldset-field-label-content: ds.$color-content !default;
+$fieldset-field-value-invalid-content: ds.$color-border-danger !default;

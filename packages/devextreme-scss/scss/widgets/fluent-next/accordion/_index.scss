@@ -5,8 +5,8 @@
 @use "../../base/accordion";
 
 .dx-accordion {
-  background-color: $accordion-bg-rest;
-  color: $accordion-content-rest;
+  background-color: var(--dx-accordion-bg);
+  color: var(--dx-accordion-content);
 }
 
 .dx-accordion-item {
@@ -15,21 +15,21 @@
 
   &.dx-state-hover {
     & > .dx-accordion-item-title {
-      background-color: $accordion-title-bg-hovered;
+      background-color: var(--dx-accordion-title-bg-hovered);
     }
   }
 
   &.dx-state-active,
   &.dx-state-focused {
     > .dx-accordion-item-title {
-      color: $accordion-title-content-active;
-      background-color: $accordion-title-bg-active;
+      color: var(--dx-accordion-title-content-active);
+      background-color: var(--dx-accordion-title-bg-active);
     }
   }
 }
 
 .dx-accordion-item-opened {
-  margin-block: $accordion-item-opened-margin;
+  margin-block: var(--dx-accordion-item-opened-margin);
 
   & > .dx-accordion-item-title {
     &::before {
@@ -39,41 +39,41 @@
 }
 
 .dx-accordion-item-title {
-  border-radius: $accordion-item-border-radius;
-  min-height: $accordion-title-height;
-  padding: $accordion-title-padding-block $accordion-title-padding-inline;
+  border-radius: var(--dx-accordion-item-border-radius);
+  min-height: var(--dx-accordion-title-height);
+  padding: var(--dx-accordion-title-padding-block) var(--dx-accordion-title-padding-inline);
 
   &::before {
     content: "\f016";
     font-weight: normal;
-    font-size: $accordion-title-icon-size;
+    font-size: var(--dx-accordion-title-icon-size);
     font-family: DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes
     line-height: 100%;
-    margin-inline-end: $accordion-title-icon-margin;
+    margin-inline-end: var(--dx-accordion-title-icon-margin);
   }
 
   .dx-icon {
-    @include dx-icon-sizing($accordion-title-icon-size);
+    @include dx-icon-sizing(var(--dx-accordion-title-icon-size));
   }
 }
 
 .dx-accordion-item-title-caption {
-  color: $accordion-title-content-rest;
-  font-size: $accordion-title-font-size;
-  font-weight: $accordion-title-font-weight;
+  color: $accordion-title-content;
+  font-size: var(--dx-accordion-title-font-size);
+  font-weight: var(--dx-accordion-title-font-weight);
 
   .dx-icon {
-    @include dx-icon-margin($accordion-title-icon-margin);
+    @include dx-icon-margin(var(--dx-accordion-title-icon-margin));
   }
 }
 
 .dx-state-disabled {
   &.dx-accordion {
     opacity: 1;
-    color: $accordion-content-disabled;
+    color: var(--dx-accordion-content-disabled);
   }
 }
 
 .dx-accordion-item-body {
-  padding: $accordion-body-padding;
+  padding: var(--dx-accordion-body-padding);
 }
