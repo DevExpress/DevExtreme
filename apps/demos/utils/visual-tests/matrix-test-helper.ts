@@ -75,6 +75,20 @@ export const waitForAngularLoading = ClientFunction(() => new Promise((resolve) 
   }, 1000);
 }));
 
+// <link rel="stylesheet"> loads over the network like any other asset — a screenshot taken
+// before it resolves gets unstyled, default-browser layout (e.g. unreset <p> margins).
+export const waitForStylesheets = ClientFunction(() => new Promise((resolve) => {
+  const check = () => {
+    const links = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
+    if (links.every((link: any) => link.sheet !== null)) {
+      resolve(undefined);
+      return;
+    }
+    setTimeout(check, 50);
+  };
+  check();
+}));
+
 function getInterestProcessArgs() {
   return process.argv.slice(2);
 }
@@ -312,9 +326,7 @@ export function runManualTestCore(
   };
 
   const testStyles = getTestStyles(demo);
-  const testGlobalsScriptPath = testCodeSource.includes('testUtils.importAnd')
-    ? getTestGlobalsScriptPath(FRAMEWORKS[framework])
-    : '';
+  const testGlobalsScriptPath = getTestGlobalsScriptPath(FRAMEWORKS[framework]);
 
   const clientScripts = [
     { module: 'mockdate' },
@@ -329,6 +341,8 @@ export function runManualTestCore(
     .page(testURL);
 
   test.before?.(async (t) => {
+    await waitForStylesheets();
+
     if (testCodeSource) {
       await execCode(testCodeSource);
     }
