@@ -1,13 +1,13 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$splitter-resize-handle-content-rest: ds.$color-content-subtle !default;
+$splitter-resize-handle-content: ds.$color-content-subtle !default;
 
 $splitter-resize-handle-content-focused: ds.$color-content-static-dark !default;
 
-$splitter-resize-handle-bg-rest: ds.$color-border !default;
+$splitter-resize-handle-bg: ds.$color-border !default;
 
 $splitter-resize-handle-bg-hovered: ds.$color-border-hovered !default;
 
 $splitter-resize-handle-bg-focused: ds.$color-bg-primary !default;
 
-$splitter-resize-handle-content-hovered: $splitter-resize-handle-content-rest !default;
+$splitter-resize-handle-content-hovered: $splitter-resize-handle-content !default;

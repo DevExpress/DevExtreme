@@ -5,10 +5,10 @@
 @use "../menuBase" as *;
 @use "../button/sizes" as buttonSizes;
 @use "../../base/menu" with (
-  $menu-separator-margin-inline-end: $menu-separator-margin-inline-end,
-  $menu-separator-margin-bottom: $menu-separator-margin-block-end,
-  $menu-treeview-node-padding: $menu-tree-view-node-padding,
-  $menu-item-content-padding-inline-start: $menu-item-content-padding-inline-start,
+  $menu-separator-margin-inline-end: var(--dx-menu-separator-margin-inline-end),
+  $menu-separator-margin-bottom: var(--dx-menu-separator-margin-block-end),
+  $menu-treeview-node-padding: var(--dx-menu-tree-view-node-padding),
+  $menu-item-content-padding-inline-start: var(--dx-menu-item-content-padding-inline-start),
 );
 
 .dx-context-menu-container-border {
@@ -20,11 +20,11 @@
 }
 
 .dx-menu {
-  color: $menu-content-rest;
+  color: var(--dx-menu-content);
 
   .dx-menu-horizontal {
     .dx-menu-item-popout {
-      margin-inline-start: $menu-item-icon-gap;
+      margin-inline-start: var(--dx-menu-item-icon-gap);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -36,7 +36,7 @@
 
   .dx-menu-vertical {
     .dx-menu-item-popout {
-      margin-inline-start: $menu-item-icon-gap;
+      margin-inline-start: var(--dx-menu-item-icon-gap);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -51,7 +51,7 @@
 
     .dx-menu-item-content {
       display: flex;
-      padding: $menu-padding-block $menu-padding-inline;
+      padding: var(--dx-menu-padding-block) var(--dx-menu-padding-inline);
 
       .dx-menu-item-popout-container {
         display: flex;
@@ -69,7 +69,7 @@
 
       &.dx-menu-item-has-icon {
         .dx-icon {
-          margin-inline-end: $menu-item-icon-gap;
+          margin-inline-end: var(--dx-menu-item-icon-gap);
         }
       }
     }
@@ -77,16 +77,16 @@
 }
 
 .dx-menu-adaptive-mode {
-  background-color: $menu-popup-bg-rest;
+  background-color: var(--dx-menu-popup-bg);
 
   .dx-treeview {
-    border: $menu-tree-view-border;
-    border-color: $menu-popup-border-rest;
+    border: var(--dx-menu-tree-view-border);
+    border-color: var(--dx-menu-popup-border);
     border-radius: $global-border-radius;
 
     &,
     &.dx-state-focused {
-      box-shadow: $menu-shadow-focused;
+      box-shadow: var(--dx-menu-shadow-focused);
     }
   }
 
@@ -97,13 +97,13 @@
       }
 
       .dx-treeview-toggle-item-visibility {
-        color: $menu-popup-bg-rest;
+        color: var(--dx-menu-popup-bg);
       }
     }
   }
 
   .dx-treeview-node-container:first-child > .dx-treeview-node {
-    border-bottom: $menu-tree-view-node-border-block-end;
-    border-bottom-color: $menu-popup-border-rest;
+    border-bottom: var(--dx-menu-tree-view-node-border-block-end);
+    border-bottom-color: var(--dx-menu-popup-border);
   }
 }

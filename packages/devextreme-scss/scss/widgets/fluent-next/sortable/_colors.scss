@@ -1,8 +1,8 @@
 @use "../../../_design-system/variables/ds" as ds;
 
 // Base-layer values injected with design tokens (wave B1)
-$sortable-clone-shadow-ambient-rest: ds.$color-shadow-ambient !default;
-$sortable-clone-shadow-key-rest: ds.$color-shadow-key !default;
+$sortable-clone-shadow-ambient: ds.$color-shadow-ambient !default;
+$sortable-clone-shadow-key: ds.$color-shadow-key !default;
 
 // Drop-position indicator / dragged-clone border — same accent-border family as the gridBase drag-header decision (DIVERGENCES: border-primary + alpha bridge in base)
-$sortable-placeholder-border-rest: ds.$color-border-primary !default;
+$sortable-placeholder-border: ds.$color-border-primary !default;

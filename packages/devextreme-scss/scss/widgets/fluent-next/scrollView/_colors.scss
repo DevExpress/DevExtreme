@@ -1,14 +1,14 @@
 @use "../colors" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-$scroll-view-shadow-rest: ds.$color-shadow-key !default;
+$scroll-view-shadow: ds.$color-shadow-key !default;
 
-$scroll-view-pull-down-bg-rest: null !default;
+$scroll-view-pull-down-bg: null !default;
 
 @if $mode == "light" {
-  $scroll-view-pull-down-bg-rest: data-uri("images/widgets/fluent-next/color-schemes/light/pulldown.png") !default;
+  $scroll-view-pull-down-bg: data-uri("images/widgets/fluent-next/color-schemes/light/pulldown.png") !default;
 }
 
 @if $mode == "dark" {
-  $scroll-view-pull-down-bg-rest: data-uri("images/widgets/fluent-next/color-schemes/dark/pulldown.png") !default;
+  $scroll-view-pull-down-bg: data-uri("images/widgets/fluent-next/color-schemes/dark/pulldown.png") !default;
 }

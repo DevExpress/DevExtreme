@@ -2,7 +2,9 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/icon_fonts" as *;
-@use "../../base/checkBox";
+@use "../../base/checkBox" with (
+  $checkbox-text-padding-inline-start: null,
+);
 @use "../../base/checkBox/mixins" as *;
 
 .dx-checkbox-icon {
@@ -10,9 +12,9 @@
   height: $check-box-arrow-icon-size;
   border-width: $check-box-border-width;
   border-style: solid;
-  border-color: $check-box-border-rest;
+  border-color: $check-box-border;
   border-radius: $check-box-icon-border-radius;
-  background-color: $check-box-icon-bg-rest;
+  background-color: $check-box-icon-bg;
   font-size: $check-box-icon-font-size;
 
   &::before {
@@ -32,7 +34,7 @@
 
   &.dx-invalid {
     .dx-checkbox-icon {
-      border-color: $check-box-invalid-border-rest;
+      border-color: $check-box-invalid-border;
     }
   }
 
@@ -87,9 +89,9 @@
 
 .dx-checkbox-checked {
   .dx-checkbox-icon {
-    color: $check-box-icon-bg-rest;
-    border-color: $check-box-icon-checked-bg-rest;
-    background-color: $check-box-icon-checked-bg-rest;
+    color: $check-box-icon-bg;
+    border-color: $check-box-icon-checked-bg;
+    background-color: $check-box-icon-checked-bg;
 
     @include dx-icon(check);
 
@@ -129,7 +131,7 @@
 
   &.dx-invalid {
     .dx-checkbox-icon {
-      background-color: $check-box-invalid-bg-rest;
+      background-color: $check-box-invalid-bg;
     }
   }
 
@@ -139,14 +141,14 @@
   &.dx-state-readonly.dx-invalid {
     .dx-checkbox-icon {
       color: $check-box-icon-bg-disabled;
-      background-color: $check-box-icon-bg-rest;
+      background-color: $check-box-icon-bg;
     }
   }
 }
 
 @include dx-checkbox-icon-indeterminate(
-  $check-box-icon-bg-rest,
-  $check-box-icon-checked-bg-rest,
+  $check-box-icon-bg,
+  $check-box-icon-checked-bg,
   $check-box-indeterminate-icon-height,
   $check-box-indeterminate-icon-width,
   $check-box-indeterminate-icon-border-radius,
@@ -154,13 +156,13 @@
 
 .dx-checkbox-indeterminate {
   .dx-checkbox-icon {
-    border-color: $check-box-icon-checked-bg-rest;
+    border-color: $check-box-icon-checked-bg;
   }
 
   &.dx-invalid {
     .dx-checkbox-icon {
       &::before {
-        background-color: $check-box-invalid-mark-bg-rest;
+        background-color: $check-box-invalid-mark-bg;
       }
     }
   }

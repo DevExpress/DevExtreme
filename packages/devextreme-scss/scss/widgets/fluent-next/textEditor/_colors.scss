@@ -1,50 +1,50 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$text-editor-content-rest: ds.$color-content !default;
+$text-editor-content: ds.$color-content !default;
 
-$text-editor-placeholder-rest: ds.$color-content-subtle !default;
+$text-editor-placeholder: ds.$color-content-subtle !default;
 
-$text-editor-outlined-bg-rest: ds.$color-bg !default;
+$text-editor-outlined-bg: ds.$color-bg !default;
 
-$text-editor-outlined-bg-hovered: $text-editor-outlined-bg-rest !default;
+$text-editor-outlined-bg-hovered: $text-editor-outlined-bg !default;
 
-$text-editor-outlined-bg-focused: $text-editor-outlined-bg-rest !default;
+$text-editor-outlined-bg-focused: $text-editor-outlined-bg !default;
 
-$text-editor-filled-bg-rest: ds.$color-bg-low !default;
+$text-editor-filled-bg: ds.$color-bg-low !default;
 
-$text-editor-underlined-bg-rest: transparent !default;
+$text-editor-underlined-bg: transparent !default;
 
-$text-editor-underlined-bg-hovered: $text-editor-underlined-bg-rest !default;
+$text-editor-underlined-bg-hovered: $text-editor-underlined-bg !default;
 
-$text-editor-underlined-bg-focused: $text-editor-underlined-bg-rest !default;
+$text-editor-underlined-bg-focused: $text-editor-underlined-bg !default;
 
-$text-editor-border-rest: ds.$color-border !default;
+$text-editor-border: ds.$color-border !default;
 $text-editor-border-hovered: ds.$color-border-hovered !default;
 $text-editor-border-focused: ds.$color-border-active !default;
 
-$text-editor-line-rest: ds.$color-content-subtle !default;
+$text-editor-line: ds.$color-content-subtle !default;
 $text-editor-line-hovered: ds.$color-content-subtle-hovered !default;
 $text-editor-line-focused: ds.$color-content-subtle-hovered !default;
 
-$text-editor-indicator-rest: ds.$color-content-primary !default;
+$text-editor-indicator: ds.$color-content-primary !default;
 
-$text-editor-clear-button-icon-rest: ds.$color-content-subtle !default;
+$text-editor-clear-button-icon: ds.$color-content-subtle !default;
 $text-editor-invalid-border-focused: ds.$color-border-danger-hovered !default;
-$text-editor-invalid-border-rest: ds.$color-border-danger-shared !default;
+$text-editor-invalid-border: ds.$color-border-danger-shared !default;
 $text-editor-border-disabled: ds.$color-border-disabled !default;
 $text-editor-content-disabled: ds.$color-content-disabled !default;
 
-$text-editor-filled-bg-hovered: $text-editor-filled-bg-rest !default;
+$text-editor-filled-bg-hovered: $text-editor-filled-bg !default;
 
-$text-editor-filled-bg-focused: $text-editor-filled-bg-rest !default;
+$text-editor-filled-bg-focused: $text-editor-filled-bg !default;
 
-$text-editor-label-content-rest: $text-editor-placeholder-rest;
+$text-editor-label-content: $text-editor-placeholder;
 $text-editor-label-content-focused: ds.$color-content-primary;
 
 :root {
-  --dx-texteditor-color-text: #{$text-editor-content-rest};
-  --dx-texteditor-color-label: #{$text-editor-label-content-rest};
+  --dx-texteditor-color-text: #{$text-editor-content};
+  --dx-texteditor-color-label: #{$text-editor-label-content};
 }
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$text-editor-invalid-content-rest: ds.$color-border-danger-shared !default;
+$text-editor-invalid-content: ds.$color-border-danger-shared !default;

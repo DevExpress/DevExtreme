@@ -6,18 +6,18 @@
  * data-uri (they render black), so the values below are the static per-mode equivalents of
  * the ds.$ tokens named in the markers. See DIVERGENCES.md.
  */
-$time-view-clock-digits-content-rest: null !default;
-$time-view-clock-accent-bg-rest: null !default;
-$time-view-clock-bg-rest: null !default;
+$time-view-clock-digits-content: null !default;
+$time-view-clock-accent-bg: null !default;
+$time-view-clock-bg: null !default;
 
 @if $mode == "light" {
-  $time-view-clock-digits-content-rest: #161616 !default; // dx-data-uri-static: ds.$color-content
-  $time-view-clock-accent-bg-rest: #242424 !default; // dx-data-uri-static: ds.$color-bg-inverted
-  $time-view-clock-bg-rest: #fafafa !default; // dx-data-uri-static: ds.$color-bg-canvas
+  $time-view-clock-digits-content: #161616 !default; // dx-data-uri-static: ds.$color-content
+  $time-view-clock-accent-bg: #242424 !default; // dx-data-uri-static: ds.$color-bg-inverted
+  $time-view-clock-bg: #fafafa !default; // dx-data-uri-static: ds.$color-bg-canvas
 }
 
 @if $mode == "dark" {
-  $time-view-clock-digits-content-rest: #fff !default; // dx-data-uri-static: ds.$color-content
-  $time-view-clock-accent-bg-rest: #fff !default; // dx-data-uri-static: ds.$color-bg-inverted
-  $time-view-clock-bg-rest: #1d1d1d !default; // dx-data-uri-static: ds.$color-bg-canvas
+  $time-view-clock-digits-content: #fff !default; // dx-data-uri-static: ds.$color-content
+  $time-view-clock-accent-bg: #fff !default; // dx-data-uri-static: ds.$color-bg-inverted
+  $time-view-clock-bg: #1d1d1d !default; // dx-data-uri-static: ds.$color-bg-canvas
 }

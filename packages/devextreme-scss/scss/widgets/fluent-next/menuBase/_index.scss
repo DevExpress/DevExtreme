@@ -7,10 +7,10 @@
 @use "../button/sizes" as buttonSizes;
 
 .dx-menu-item {
-  color: menuColors.$menu-content-rest;
+  color: menuColors.$menu-content;
 
   a {
-    color: menuColors.$menu-item-link-content-rest;
+    color: menuColors.$menu-item-link-content;
   }
 
   &.dx-state-disabled {
@@ -53,7 +53,7 @@
 .dx-menu-item-expanded,
 .dx-menu-item-expanded.dx-state-hover,
 .dx-menu-item-expanded.dx-state-focused {
-  color: menuColors.$menu-item-expanded-content-rest;
+  color: menuColors.$menu-item-expanded-content;
   background-color: menuColors.$menu-item-bg-selected;
 }
 
