@@ -1,24 +1,24 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$calendar-content-rest: ds.$color-content !default;
+$calendar-content: ds.$color-content !default;
 
-$calendar-navigator-content-rest: ds.$color-content !default;
+$calendar-navigator-content: ds.$color-content !default;
 
-$calendar-header-content-rest: $calendar-content-rest !default;
+$calendar-header-content: $calendar-content !default;
 
-$calendar-cell-other-content-rest: ds.$color-content-subtle !default;
-$calendar-bg-rest: transparent !default;
+$calendar-cell-other-content: ds.$color-content-subtle !default;
+$calendar-bg: transparent !default;
 $calendar-bg-hovered: ds.$color-bg-primary-subtler-selected !default;
 $calendar-cell-border-hovered: $calendar-bg-hovered !default;
-$calendar-cell-content-hovered: $calendar-content-rest !default;
+$calendar-cell-content-hovered: $calendar-content !default;
 
 $calendar-cell-bg-selected: ds.$color-bg-primary !default;
 $calendar-cell-content-selected: ds.$color-content-static-dark !default;
 $calendar-cell-bg-active: ds.$color-bg-primary-subtler-active !default;
-$calendar-cell-contoured-border-rest: $calendar-cell-bg-active !default;
-$calendar-invalid-border-rest: ds.$color-border-danger !default;
+$calendar-cell-contoured-border: $calendar-cell-bg-active !default;
+$calendar-invalid-border: ds.$color-border-danger !default;
 $calendar-invalid-border-focused: ds.$color-border-danger-hovered !default;
-$calendar-week-number-cell-content-rest: ds.$color-content-subtle !default;
-$calendar-week-number-cell-bg-rest: ds.$color-bg-canvas !default;
+$calendar-week-number-cell-content: ds.$color-content-subtle !default;
+$calendar-week-number-cell-bg: ds.$color-bg-canvas !default;
 
-$calendar-cell-other-content-hovered: $calendar-cell-other-content-rest !default;
+$calendar-cell-other-content-hovered: $calendar-cell-other-content !default;

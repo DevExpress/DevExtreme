@@ -4,7 +4,7 @@
 @use "mixins" as *;
 
 .dx-theme-fluent-next-typography {
-  background-color: $typography-bg-rest;
+  background-color: $typography-bg;
 
   @include dx-base-typography();
 
@@ -60,6 +60,6 @@
   }
 
   a {
-    color: $typography-link-content-rest;
+    color: $typography-link-content;
   }
 }

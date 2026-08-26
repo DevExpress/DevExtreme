@@ -1,17 +1,17 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$menu-popup-bg-rest: ds.$color-bg !default;
+$menu-popup-bg: ds.$color-bg !default;
 $menu-item-bg-hovered: ds.$color-bg-hovered !default;
 $menu-item-bg-active: ds.$color-bg-active !default;
 
-$menu-content-rest: ds.$color-content !default;
-$menu-item-expanded-content-rest: $menu-content-rest !default;
+$menu-content: ds.$color-content !default;
+$menu-item-expanded-content: $menu-content !default;
 
 $menu-item-bg-selected: ds.$color-bg-selected !default;
-$menu-popup-border-rest: ds.$color-border !default;
-$menu-separator-bg-rest: ds.$color-border-subtle !default;
+$menu-popup-border: ds.$color-border !default;
+$menu-separator-bg: ds.$color-border-subtle !default;
 $menu-item-content-selected: ds.$color-content !default;
-$menu-item-link-content-rest: ds.$color-content-primary !default;
+$menu-item-link-content: ds.$color-content-primary !default;
 $menu-item-bg-selected-focused: ds.$color-bg-selected-hovered !default;
 
 $menu-shadow-focused: ds.$box-shadow-md !default;

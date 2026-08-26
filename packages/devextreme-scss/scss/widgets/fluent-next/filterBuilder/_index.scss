@@ -16,28 +16,28 @@
   $filterbuilder-treeview-node-margin-right: $filter-builder-tree-view-node-margin-inline-end,
   $filterbuilder-scrollable-max-height: $filter-builder-scrollable-max-height,
   $filterbuilder-range-separator-opacity: $filter-builder-range-separator-opacity,
-    $filterbuilder-bg: $filter-builder-bg-rest,
-    $filterbuilder-text-color: $filter-builder-content-rest,
+    $filterbuilder-bg: $filter-builder-bg,
+    $filterbuilder-text-color: $filter-builder-content,
     $filterbuilder-text-focus-color: $filter-builder-text-content-focused,
-    $filterbuilder-group-operation-color: $filter-builder-group-operation-content-rest,
+    $filterbuilder-group-operation-color: $filter-builder-group-operation-content,
     $filterbuilder-group-operation-hover-color: $filter-builder-group-operation-content-hovered,
     $filterbuilder-group-operation-focus-color: $filter-builder-group-operation-content-focused,
-    $filterbuilder-item-operator-color: $filter-builder-item-operator-content-rest,
+    $filterbuilder-item-operator-color: $filter-builder-item-operator-content,
     $filterbuilder-item-operator-hover-color: $filter-builder-item-operator-content-hovered,
     $filterbuilder-item-operator-focus-color: $filter-builder-item-operator-content-focused,
-    $filterbuilder-item-field-color: $filter-builder-item-field-content-rest,
+    $filterbuilder-item-field-color: $filter-builder-item-field-content,
     $filterbuilder-item-field-hover-color: $filter-builder-item-field-content-hovered,
     $filterbuilder-item-field-focus-color: $filter-builder-item-field-content-focused,
-    $filterbuilder-item-value-color: $filter-builder-item-value-content-rest,
+    $filterbuilder-item-value-color: $filter-builder-item-value-content,
     $filterbuilder-item-value-hover-color: $filter-builder-item-value-content-hovered,
     $filterbuilder-item-value-focus-color: $filter-builder-item-value-content-focused,
-    $filterbuilder-plus-icon-color: $filter-builder-plus-icon-rest,
+    $filterbuilder-plus-icon-color: $filter-builder-plus-icon,
     $filterbuilder-plus-icon-hover-color: $filter-builder-plus-icon-content-hovered,
     $filterbuilder-plus-icon-focus-color: $filter-builder-plus-icon-content-focused,
-    $filterbuilder-remove-icon-color: $filter-builder-remove-icon-rest,
+    $filterbuilder-remove-icon-color: $filter-builder-remove-icon,
     $filterbuilder-remove-icon-hover-color: $filter-builder-remove-icon-content-hovered,
     $filterbuilder-remove-icon-focus-color: $filter-builder-remove-icon-content-focused,
-    $filterbuilder-menu-icon-color: $filter-builder-menu-icon-rest,
+    $filterbuilder-menu-icon-color: $filter-builder-menu-icon,
 );
 @use "../textEditor/colors" as textEditorColors;
 
@@ -71,7 +71,7 @@
 }
 
 .dx-filterbuilder-range-separator {
-  color: textEditorColors.$text-editor-content-rest;
+  color: textEditorColors.$text-editor-content;
 }
 
 .dx-filterbuilder-overlay {
