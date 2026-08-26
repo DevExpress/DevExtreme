@@ -4,20 +4,20 @@
 @use "../textEditor/sizes" as textEditorSizes;
 @use "../../base/icon_fonts" as *;
 @use "../../base/dropDownEditor" with (
-  $dropdowneditor-icon-idle-opacity: $drop-down-editor-icon-opacity-rest,
+  $dropdowneditor-icon-idle-opacity: var(--dx-drop-down-editor-icon-opacity),
 );
 @use "../../base/dropDownEditor/mixins" as *;
 
 @mixin dx-dropdowneditor-button-icon() {
-  width: $drop-down-editor-button-size;
+  width: var(--dx-drop-down-editor-button-size);
   height: 100%;
 
-  @include dx-icon-font-centered-sizing($drop-down-editor-button-size);
+  @include dx-icon-font-centered-sizing(var(--dx-drop-down-editor-button-size));
 }
 
 .dx-dropdowneditor-button {
-  width: $drop-down-editor-button-size;
-  min-width: $drop-down-editor-button-size;
+  width: var(--dx-drop-down-editor-button-size);
+  min-width: var(--dx-drop-down-editor-button-size);
 
   .dx-state-readonly & {
     .dx-dropdowneditor-icon {
@@ -27,7 +27,7 @@
 }
 
 .dx-dropdowneditor-icon {
-  color: $drop-down-editor-icon-rest;
+  color: var(--dx-drop-down-editor-icon);
 
   @include dx-icon(spindown);
   @include dx-dropdowneditor-button-icon();
@@ -68,7 +68,7 @@
 .dx-valid,
 .dx-validation-pending {
   @include invalid-dropdowneditor-input-padding(
-    $drop-down-editor-invalid-badge-size,
+    var(--dx-drop-down-editor-invalid-badge-size),
     textEditorSizes.$text-editor-input-underlined-padding-inline,
     textEditorSizes.$text-editor-input-filled-padding-inline
   );
@@ -77,7 +77,7 @@
 .dx-dropdowneditor.dx-dropdowneditor-active,
 .dx-dropdowneditor-button.dx-state-active {
   .dx-dropdowneditor-icon {
-    color: $drop-down-editor-icon-active;
+    color: var(--dx-drop-down-editor-icon-active);
     opacity: 1;
 
     @include dx-icon(spinup);
@@ -89,14 +89,14 @@
 .dx-valid.dx-dropdowneditor {
   .dx-texteditor-buttons-container {
     &::after {
-      inset-inline-end: $drop-down-editor-invalid-badge-inset-inline-end;
+      inset-inline-end: var(--dx-drop-down-editor-invalid-badge-inset-inline-end);
     }
   }
 
   &.dx-show-clear-button:not(.dx-texteditor-empty) {
     .dx-texteditor-buttons-container {
       &::after {
-        inset-inline-end: $drop-down-editor-invalid-badge-with-clear-inset-inline-end;
+        inset-inline-end: var(--dx-drop-down-editor-invalid-badge-with-clear-inset-inline-end);
       }
     }
   }
@@ -113,7 +113,7 @@
   .dx-list-group-header,
   .dx-list-item-content,
   .dx-list-select-all-label {
-    font-size: $drop-down-editor-list-font-size;
-    line-height: $drop-down-editor-list-line-height;
+    font-size: var(--dx-drop-down-editor-list-font-size);
+    line-height: var(--dx-drop-down-editor-list-line-height);
   }
 }

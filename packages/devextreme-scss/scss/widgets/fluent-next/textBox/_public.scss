@@ -1,0 +1,8 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-text-box-content-disabled: #{$text-box-content-disabled};
+  --dx-text-box-search-bar-padding-block-end: #{$text-box-search-bar-padding-block-end};
+  --dx-text-box-search-icon-size: #{$text-box-search-icon-size};
+}

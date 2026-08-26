@@ -1,34 +1,34 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$filter-builder-bg-rest: ds.$color-bg !default;
+$filter-builder-bg: ds.$color-bg !default;
 
-$filter-builder-content-rest: ds.$color-content !default;
+$filter-builder-content: ds.$color-content !default;
 
 $filter-builder-text-content-focused: ds.$color-content-static-dark !default;
 
-$filter-builder-plus-icon-rest: ds.$color-content-success !default;
+$filter-builder-plus-icon: ds.$color-content-success !default;
 $filter-builder-plus-icon-content-hovered: ds.$color-content-success-hovered !default;
 $filter-builder-plus-icon-content-focused: ds.$color-content-success-active !default;
 
-$filter-builder-remove-icon-rest: ds.$color-content-danger !default;
+$filter-builder-remove-icon: ds.$color-content-danger !default;
 $filter-builder-remove-icon-content-hovered: ds.$color-content-danger-hovered !default;
 $filter-builder-remove-icon-content-focused: ds.$color-content-danger-active !default;
 
-$filter-builder-group-operation-content-rest: ds.$color-bg-danger-subtle !default;
+$filter-builder-group-operation-content: ds.$color-bg-danger-subtle !default;
 $filter-builder-group-operation-content-hovered: ds.$color-bg-danger-subtle-hovered !default;
 $filter-builder-group-operation-content-focused: ds.$color-bg-danger !default;
 
-$filter-builder-item-field-content-rest: ds.$color-bg-primary-subtle !default;
+$filter-builder-item-field-content: ds.$color-bg-primary-subtle !default;
 $filter-builder-item-field-content-hovered: ds.$color-bg-primary-subtle-hovered !default;
 $filter-builder-item-field-content-focused: ds.$color-bg-primary !default;
 
-$filter-builder-item-operator-content-rest: ds.$color-bg-success-subtle !default;
+$filter-builder-item-operator-content: ds.$color-bg-success-subtle !default;
 $filter-builder-item-operator-content-hovered: ds.$color-bg-success-subtle-hovered !default;
 $filter-builder-item-operator-content-focused: ds.$color-bg-success !default;
 
-$filter-builder-item-value-content-rest: ds.$color-bg-secondary-selected !default;
+$filter-builder-item-value-content: ds.$color-bg-secondary-selected !default;
 $filter-builder-item-value-content-hovered: ds.$color-bg-alpha-hovered !default;
 $filter-builder-item-value-content-focused: ds.$color-bg-alpha-active !default;
-$filter-builder-menu-icon-rest: ds.$color-content !default;
+$filter-builder-menu-icon: ds.$color-content !default;
 
 // Base-layer values injected with design tokens (wave B1)

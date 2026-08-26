@@ -4,16 +4,16 @@
  * Moved from radioGroup/: these are the RADIO BUTTON's colours, and radioButton owns
  * `radio-button` (NAMING.md, O2). The readers followed.
  */
-$radio-button-icon-bg-rest: ds.$color-bg !default;
-$radio-button-icon-border-rest: ds.$color-border-contrast !default;
+$radio-button-icon-bg: ds.$color-bg !default;
+$radio-button-icon-border: ds.$color-border-contrast !default;
 $radio-button-icon-border-hovered: ds.$color-border-contrast-hovered !default;
 $radio-button-icon-border-active: ds.$color-border-contrast-active !default;
-$radio-button-icon-border-read-only: $radio-button-icon-border-rest !default;
+$radio-button-icon-border-read-only: $radio-button-icon-border !default;
 $radio-button-icon-bg-focused: ds.$color-bg-alpha-hovered !default;
-$radio-button-checked-bg-rest: ds.$color-bg-primary !default;
+$radio-button-checked-bg: ds.$color-bg-primary !default;
 $radio-button-checked-bg-hovered: ds.$color-bg-primary-hovered !default;
 $radio-button-checked-bg-active: ds.$color-bg-primary-active !default;
-$radio-button-invalid-bg-rest: ds.$color-border-danger-shared !default;
+$radio-button-invalid-bg: ds.$color-border-danger-shared !default;
 $radio-button-invalid-bg-hovered: ds.$color-border-danger-shared-hovered !default;
 $radio-button-invalid-bg-focused: ds.$color-border-danger-shared-active !default;
 
