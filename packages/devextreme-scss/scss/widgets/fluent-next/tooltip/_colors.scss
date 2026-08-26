@@ -1,5 +1,5 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$tooltip-content-rest: ds.$color-content-neutral-default-rest !default;
+$tooltip-content-rest: ds.$color-content !default;
 
-$tooltip-bg-rest: ds.$color-surface-neutral-default-rest !default;
+$tooltip-bg-rest: ds.$color-bg !default;

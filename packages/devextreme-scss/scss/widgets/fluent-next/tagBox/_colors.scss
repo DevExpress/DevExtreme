@@ -1,16 +1,16 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$tag-box-tag-content-rest: ds.$color-content-neutral-default-rest !default;
+$tag-box-tag-content-rest: ds.$color-content !default;
 
-$tag-box-tag-bg-rest: ds.$color-surface-neutral-deep-rest !default;
-$tag-box-tag-bg-hovered: ds.$color-surface-neutral-default-hovered !default;
+$tag-box-tag-bg-rest: ds.$color-bg-low !default;
+$tag-box-tag-bg-hovered: ds.$color-bg-hovered !default;
 
-$tag-box-tag-content-active: ds.$color-content-neutral-default-rest !default;
+$tag-box-tag-content-active: ds.$color-content !default;
 
-$tag-box-tag-remove-button-content-rest: ds.$color-content-neutral-subdued-rest !default;
-$tag-box-tag-border-focused: ds.$color-border-primary-default-rest !default;
-$tag-box-select-all-line-rest: ds.$color-border-neutral-default-rest !default;
-$tag-box-tag-content-disabled: ds.$color-content-neutral-default-disabled !default;
-$tag-box-tag-bg-disabled: ds.$color-surface-neutral-subdued-disabled !default;
+$tag-box-tag-remove-button-content-rest: ds.$color-content-subtle !default;
+$tag-box-tag-border-focused: ds.$color-border-primary !default;
+$tag-box-select-all-line-rest: ds.$color-border !default;
+$tag-box-tag-content-disabled: ds.$color-content-disabled !default;
+$tag-box-tag-bg-disabled: ds.$color-bg-canvas-disabled !default;
 
-$tag-box-border-disabled: ds.$color-border-neutral-default-disabled !default;
+$tag-box-border-disabled: ds.$color-border-disabled !default;

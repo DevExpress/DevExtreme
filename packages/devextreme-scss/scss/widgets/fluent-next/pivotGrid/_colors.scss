@@ -1,29 +1,29 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$pivot-grid-area-bg-rest: ds.$color-surface-neutral-default-rest !default;
-$pivot-grid-border-rest: ds.$color-border-neutral-default-rest !default;
+$pivot-grid-area-bg-rest: ds.$color-bg !default;
+$pivot-grid-border-rest: ds.$color-border !default;
 
-$pivot-grid-area-content-rest: ds.$color-content-neutral-default-rest !default;
+$pivot-grid-area-content-rest: ds.$color-content !default;
 $pivot-grid-field-area-box-content-rest: $pivot-grid-area-content-rest !default;
-$pivot-grid-field-area-box-bg-rest: ds.$color-surface-neutral-deep-rest !default;
-$pivot-grid-data-area-content-rest: ds.$color-content-neutral-default-rest !default;
+$pivot-grid-field-area-box-bg-rest: ds.$color-bg-low !default;
+$pivot-grid-data-area-content-rest: ds.$color-content !default;
 
-$pivot-grid-total-content-rest: ds.$color-surface-neutral-default-rest !default;
+$pivot-grid-total-content-rest: ds.$color-bg !default;
 
-$pivot-grid-grand-total-content-rest: ds.$color-surface-neutral-deep-rest !default;
+$pivot-grid-grand-total-content-rest: ds.$color-bg-low !default;
 
-$pivot-grid-field-area-content-rest: ds.$color-content-neutral-subdued-rest !default;
-$pivot-grid-accent-content-rest: ds.$color-border-primary-default-rest !default;
-$pivot-grid-drag-header-border-rest: rgb(from #{ds.$color-border-primary-default-rest} r g b / 0.5) !default;
+$pivot-grid-field-area-content-rest: ds.$color-content-subtle !default;
+$pivot-grid-accent-content-rest: ds.$color-border-primary !default;
+$pivot-grid-drag-header-border-rest: rgb(from #{ds.$color-border-primary} r g b / 0.5) !default;
 $pivot-grid-drag-header-first-shadow-rest: ds.$color-shadow-ambient !default;
 $pivot-grid-drag-header-shadow-key-rest: ds.$color-shadow-key !default;
-$pivot-grid-position-indicator-bg-rest: ds.$color-border-neutral-accessible-rest !default;
+$pivot-grid-position-indicator-bg-rest: ds.$color-border-contrast !default;
 $pivot-grid-chevron-icon-rest: $pivot-grid-area-content-rest !default;
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$pivot-grid-header-filter-content-rest: ds.$color-content-primary-default-rest !default;
-$pivot-grid-border-disabled: ds.$color-border-neutral-default-disabled !default;
-$pivot-grid-content-rest: ds.$color-content-neutral-default-rest !default;
+$pivot-grid-header-filter-content-rest: ds.$color-content-primary !default;
+$pivot-grid-border-disabled: ds.$color-border-disabled !default;
+$pivot-grid-content-rest: ds.$color-content !default;
 
 // Color computations hoisted from style files (phase 0.5 layer normalization)
 $pivot-grid-drag-header-shadow-rest: 0 3px 4px ds.$color-shadow-key !default;

@@ -14,18 +14,18 @@
 }
 
 ::ng-deep .dx-tile {
-  border: 1px solid var(--dxds-color-border-neutral-default-rest, #999);
+  border: 1px solid var(--dxds-color-border, #999);
 }
 
 ::ng-deep .dx-tile.dx-state-hover {
-  border-color: var(--dxds-color-surface-utility-gray-default-rest, #eee);
+  border-color: var(--dxds-color-bg-gray, #eee);
 }
 
 ::ng-deep .dx-tile-content .price {
   font-size: 12px;
   position: absolute;
-  background-color: var(--dxds-color-surface-utility-gray-default-rest, black);
-  color: var(--dxds-color-content-neutral-default-on-surface-rest, white);
+  background-color: var(--dxds-color-bg-gray, black);
+  color: var(--dxds-color-content-on-color, white);
   opacity: 0.6;
   padding: 2px;
   left: 9px;

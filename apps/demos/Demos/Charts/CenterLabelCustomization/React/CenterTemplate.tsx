@@ -22,7 +22,7 @@ export default function TooltipTemplate(pieChart: ReturnType<PieChartRef['instan
     <svg>
       <circle cx="100" cy="100" r={pieChart.getInnerRadius() - 6} fill="#eee"></circle>
       <image href={getImagePath(country)} x="70" y="58" width="60" height="40" />
-      <text textAnchor="middle" x="100" y="120" style={{ fontSize: 18, fill: 'var(--dxds-color-content-neutral-subdued-rest, #494949)' }}>
+      <text textAnchor="middle" x="100" y="120" style={{ fontSize: 18, fill: 'var(--dxds-color-content-subtle, #494949)' }}>
         <tspan x="100">{country}</tspan>
         <tspan x="100" dy="20px" style={{ fontWeight: 600 }}>{
           calculateTotal(pieChart)

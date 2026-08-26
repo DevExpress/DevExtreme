@@ -32,7 +32,7 @@ withDefaults(defineProps<{
   object-fit: contain;
   margin-right: 14px;
   border-radius: 25px;
-  border: 1px solid var(--dxds-color-border-neutral-default-rest, #d3d3d3);
-  background-color: var(--dxds-color-surface-neutral-default-static-light-rest, #fff);
+  border: 1px solid var(--dxds-color-border, #d3d3d3);
+  background-color: var(--dxds-color-bg-static-light, #fff);
 }
 </style>

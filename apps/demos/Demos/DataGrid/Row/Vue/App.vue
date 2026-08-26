@@ -98,18 +98,18 @@ const formatDate = new Intl.DateTimeFormat('en-US').format;
 
 #gridContainer tr.notes-row td {
   height: 70px;
-  color: var(--dxds-color-content-neutral-deep-rest, #999);
+  color: var(--dxds-color-content-subtler, #999);
 }
 
 #gridContainer tbody.dx-state-hover {
-  background-color: var(--dxds-color-surface-neutral-default-hovered, #ebebeb);
+  background-color: var(--dxds-color-bg-hovered, #ebebeb);
 }
 
 #gridContainer tbody.dx-state-hover tr.main-row td {
-  color: var(--dxds-color-content-neutral-default-rest, #000);
+  color: var(--dxds-color-content, #000);
 }
 
 #gridContainer tbody.dx-state-hover tr.notes-row td {
-  color: var(--dxds-color-content-neutral-deep-rest, #888);
+  color: var(--dxds-color-content-subtler, #888);
 }
 </style>

@@ -73,7 +73,7 @@ function onSnapToCellsModeChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
 }
 
 .dx-scheduler-appointment-content {
-  color: var(--dxds-color-content-neutral-default-on-surface-rest, white);
+  color: var(--dxds-color-content-on-color, white);
 }
 
 .options {

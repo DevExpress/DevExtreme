@@ -50,7 +50,7 @@ function getCurrentTraining(date: number, employeeID: number) {
 }
 
 .dx-scheduler-appointment {
-  color: var(--dxds-color-content-neutral-default-on-surface-rest, #fff);
+  color: var(--dxds-color-content-on-color, #fff);
 }
 
 .employee-1 {

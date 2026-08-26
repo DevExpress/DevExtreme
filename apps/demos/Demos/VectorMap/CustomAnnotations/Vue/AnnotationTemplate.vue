@@ -67,7 +67,7 @@ const formatNumber = new Intl.NumberFormat('en-US', {
 .border {
   width: 60px;
   height: 40px;
-  stroke: var(--dxds-color-border-neutral-subdued-rest, rgba(191, 191, 191, 0.25));
+  stroke: var(--dxds-color-border-subtle, rgba(191, 191, 191, 0.25));
   stroke-width: 1px;
   fill: transparent;
 }
