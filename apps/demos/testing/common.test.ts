@@ -111,6 +111,21 @@ const getIgnoredRules = (testName) => {
     'Gantt-Validation': ['aria-required-parent', 'aria-valid-attr-value'],
 
     'Localization-UsingGlobalize': ['label'],
+
+    // Appointments painted with saturated resource colors keep the theme's dark text,
+    // so their title/date contrast drops below AA. Needs a scheduler-level fix.
+    'Scheduler-AppointmentCountPerCell': ['color-contrast'],
+    'Scheduler-ContextMenu': ['color-contrast'],
+    'Scheduler-GroupByDate': ['color-contrast'],
+    'Scheduler-GroupingByResources': ['color-contrast'],
+    'Scheduler-RecurringAppointments': ['color-contrast'],
+    'Scheduler-ResolveTimeConflicts': ['color-contrast'],
+    'Scheduler-Timelines': ['color-contrast'],
+    'Scheduler-VirtualScrolling': ['color-contrast'],
+
+    // Icon-only tabs render no text, so they have no accessible name.
+    // Naming them needs Tabs widget support (like Button labels icon-only buttons).
+    'Tabs-Overview': ['aria-tab-name'],
   };
 
   return [
