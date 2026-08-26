@@ -1,11 +1,11 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/sortable" as baseSortable with (
-  $sortable-placeholder-border: var(--dx-sortable-placeholder-border),
+  $sortable-placeholder-border: var(--dx-sortable-placeholder-border-width) solid,
   $sortable-placeholder-inside-border-width: var(--dx-sortable-placeholder-inside-border-width),
-  $sortable-clone-shadow-color-first: var(--dx-sortable-clone-shadow-ambient-rest),
-  $sortable-clone-shadow-color-second: var(--dx-sortable-clone-shadow-key-rest),
+  $sortable-clone-shadow-color-first: var(--dx-sortable-clone-shadow-ambient),
+  $sortable-clone-shadow-color-second: var(--dx-sortable-clone-shadow-key),
   $sortable-clone-opacity: var(--dx-sortable-clone-opacity),
   $sortable-source-opacity: var(--dx-sortable-source-opacity),
-  $base-accent: var(--dx-sortable-placeholder-border-rest),
+  $base-accent: var(--dx-sortable-placeholder-border),
 );

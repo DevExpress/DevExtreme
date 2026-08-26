@@ -14,7 +14,7 @@
 @use "../menuBase" as *;
 
 .dx-context-menu {
-  color: menuColors.$menu-content-rest;
+  color: menuColors.$menu-content;
 
   .dx-menu-items-container {
     display: flex;
@@ -53,7 +53,7 @@
     }
 
     .dx-menu-item-popout {
-      color: var(--dx-context-menu-icon-rest);
+      color: var(--dx-context-menu-icon);
     }
 
     &.dx-state-disabled {
@@ -72,12 +72,12 @@
   }
 
   .dx-submenu {
-    background-color: menuColors.$menu-popup-bg-rest;
+    background-color: menuColors.$menu-popup-bg;
     border-radius: var(--dx-context-menu-border-radius);
-    box-shadow: var(--dx-context-menu-shadow-rest);
+    box-shadow: var(--dx-context-menu-shadow);
   }
 
   .dx-menu-separator {
-    background-color: menuColors.$menu-separator-bg-rest;
+    background-color: menuColors.$menu-separator-bg;
   }
 }

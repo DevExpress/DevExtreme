@@ -8,7 +8,7 @@ $grid-text-link-opacity-disabled: ds.$opacity-35;
 $grid-icon-link-opacity-disabled: ds.$opacity-60;
 $grid-group-panel-message-line-height: buttonSizes.$button-text-line-height;
 
-$grid-border: 1px solid !default;
+$grid-border-width: 1px !default;
 $grid-border-radius: 0 !default;
 
 $grid-cell-height: null !default;
@@ -38,7 +38,6 @@ $grid-column-chooser-item-margin: ds.$spacing-80 !default;
 $grid-command-edit-icon-margin: ds.$spacing-40 !default;
 $grid-command-edit-text-margin: ds.$spacing-20 !default;
 
-// Общий на все гриды: base рисует фокус-кольцо кнопки AI-колонки правилом БЕЗ скоупа виджета (одинаковый селектор в base/dataGrid и base/treeList), поэтому значение обязано резолвиться в любом гриде — имя живёт в gridBase, а не в dataGrid/treeList (F15)
 $grid-outline-focused: ds.$spacing-20 solid !default;
 
 $grid-command-edit-icon-size: null !default;

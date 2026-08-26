@@ -13,12 +13,12 @@
 @use "../../base/textEditor/mixins" as *;
 
 @mixin texteditor-outlined-styling() {
-  background-color: var(--dx-text-editor-outlined-bg-rest);
+  background-color: var(--dx-text-editor-outlined-bg);
   border-radius: var(--dx-text-editor-input-border-radius);
   border-width: var(--dx-text-editor-border-width);
   border-style: solid;
-  border-color: var(--dx-text-editor-border-rest);
-  border-bottom-color: var(--dx-text-editor-line-rest);
+  border-color: var(--dx-text-editor-border);
+  border-bottom-color: var(--dx-text-editor-line);
 
   &::before {
     box-sizing: border-box;
@@ -28,10 +28,10 @@
     bottom: var(--dx-text-editor-line-inset-block-end);
     right: var(--dx-text-editor-line-inset-inline-end);
     height: var(--dx-text-editor-input-border-radius);
-    width: calc(100% + 2 * $text-editor-border-width);
+    width: calc(100% + 2 * var(--dx-text-editor-border-width));
     border-bottom-left-radius: var(--dx-text-editor-input-border-radius);
     border-bottom-right-radius: var(--dx-text-editor-input-border-radius);
-    border-bottom-color: var(--dx-text-editor-indicator-rest);
+    border-bottom-color: var(--dx-text-editor-indicator);
     clip-path: inset(calc(100% - 2px) 0 0);
     transform: scaleX(0);
     transition-property: transform;
@@ -42,7 +42,7 @@
   &.dx-texteditor-with-label,
   &.dx-texteditor-with-floating-label {
     .dx-texteditor-label {
-      width: calc(100% + 2 * $text-editor-border-width);
+      width: calc(100% + 2 * var(--dx-text-editor-border-width));
       inset: var(--dx-text-editor-label-inset);
     }
 
@@ -58,7 +58,7 @@
   }
 
   &.dx-invalid {
-    border-color: var(--dx-text-editor-invalid-border-rest);
+    border-color: var(--dx-text-editor-invalid-border);
 
     &.dx-state-hover,
     &.dx-state-focused {
@@ -66,7 +66,7 @@
     }
 
     &::before {
-      border-color: var(--dx-text-editor-invalid-border-rest);
+      border-color: var(--dx-text-editor-invalid-border);
     }
   }
 
@@ -96,7 +96,7 @@
 }
 
 @mixin texteditor-filled-styling() {
-  background-color: var(--dx-text-editor-filled-bg-rest);
+  background-color: var(--dx-text-editor-filled-bg);
   border-radius: var(--dx-text-editor-input-border-radius);
   border-width: var(--dx-text-editor-border-width);
   border-style: solid;
@@ -113,10 +113,10 @@
     bottom: var(--dx-text-editor-line-inset-block-end);
     right: var(--dx-text-editor-line-inset-inline-end);
     height: var(--dx-text-editor-input-border-radius);
-    width: calc(100% + 2 * $text-editor-border-width);
+    width: calc(100% + 2 * var(--dx-text-editor-border-width));
     border-bottom-left-radius: var(--dx-text-editor-input-border-radius);
     border-bottom-right-radius: var(--dx-text-editor-input-border-radius);
-    border-bottom-color: var(--dx-text-editor-indicator-rest);
+    border-bottom-color: var(--dx-text-editor-indicator);
     clip-path: inset(calc(100% - 2px) 0 0);
   }
 
@@ -136,7 +136,7 @@
   }
 
   &.dx-invalid {
-    border-color: var(--dx-text-editor-invalid-border-rest);
+    border-color: var(--dx-text-editor-invalid-border);
 
     &.dx-state-hover,
     &.dx-state-focused {
@@ -146,13 +146,13 @@
 }
 
 @mixin texteditor-underlined-styling() {
-  background-color: var(--dx-text-editor-underlined-bg-rest);
+  background-color: var(--dx-text-editor-underlined-bg);
   border-radius: 0;
 
   &::after {
     border-bottom-width: var(--dx-text-editor-line-border-block-end-width-focused);
     border-bottom-style: solid;
-    border-bottom-color: var(--dx-text-editor-line-rest);
+    border-bottom-color: var(--dx-text-editor-line);
   }
 
   &.dx-state-hover {
@@ -190,7 +190,7 @@
 
   &.dx-invalid {
     &::after {
-      border-bottom-color: var(--dx-text-editor-invalid-border-rest);
+      border-bottom-color: var(--dx-text-editor-invalid-border);
     }
 
     &.dx-state-hover {
@@ -303,19 +303,19 @@
 
     &.dx-invalid {
       .dx-texteditor-label {
-        color: var(--dx-text-editor-invalid-content-rest);
+        color: var(--dx-text-editor-invalid-content);
       }
     }
   }
 
   &.dx-texteditor-label-outside {
     .dx-texteditor-label {
-      color: var(--dx-text-editor-content-rest);
+      color: var(--dx-text-editor-content);
     }
 
     &.dx-invalid {
       .dx-texteditor-label {
-        color: var(--dx-text-editor-invalid-content-rest);
+        color: var(--dx-text-editor-invalid-content);
       }
     }
   }
@@ -325,7 +325,7 @@
     &::before {
       border-bottom-width: var(--dx-text-editor-line-border-block-end-width-active);
       border-bottom-style: solid;
-      border-bottom-color: var(--dx-text-editor-indicator-rest);
+      border-bottom-color: var(--dx-text-editor-indicator);
       transform: scale(1);
       transition-property: transform;
       transition-duration: 0.2s;
@@ -404,7 +404,7 @@
       content: "\f15f";
     }
 
-    color: var(--dx-text-editor-clear-button-icon-rest);
+    color: var(--dx-text-editor-clear-button-icon);
   }
 
   &.dx-state-disabled {
@@ -421,7 +421,7 @@
 
 /* B231111 */
 .dx-placeholder {
-  color: var(--dx-text-editor-placeholder-rest);
+  color: var(--dx-text-editor-placeholder);
   font-size: var(--dx-text-editor-font-size);
   line-height: normal;
 }
@@ -429,7 +429,7 @@
 .dx-texteditor-input {
   margin: 0;
   background-color: transparent;
-  color: var(--dx-text-editor-content-rest);
+  color: var(--dx-text-editor-content);
   font-size: var(--dx-text-editor-font-size);
   line-height: var(--dx-text-editor-line-height);
 }
@@ -437,7 +437,7 @@
 .dx-invalid.dx-texteditor {
   &.dx-state-hover {
     &::after {
-      border-bottom-color: var(--dx-text-editor-invalid-border-rest);
+      border-bottom-color: var(--dx-text-editor-invalid-border);
     }
   }
 
@@ -459,7 +459,7 @@
 .dx-texteditor-label {
   position: absolute;
   font-size: var(--dx-text-editor-label-font-size);
-  color: var(--dx-text-editor-label-content-rest);
+  color: var(--dx-text-editor-label-content);
   white-space: nowrap;
   user-select: none;
   pointer-events: none;
@@ -484,7 +484,7 @@
   }
 
   .dx-invalid & {
-    color: var(--dx-text-editor-invalid-content-rest);
+    color: var(--dx-text-editor-invalid-content);
   }
 }
 
@@ -501,17 +501,17 @@
   0.5px,
   var(--dx-text-editor-input-filled-padding-inline),
   var(--dx-text-editor-input-filled-padding-inline),
-  var(--dx-text-editor-outlined-bg-rest),
+  var(--dx-text-editor-outlined-bg),
   1px solid transparent,
-  var(--dx-text-editor-border-rest),
-  var(--dx-text-editor-line-rest),
+  var(--dx-text-editor-border),
+  var(--dx-text-editor-line),
   var(--dx-text-editor-border-disabled),
   var(--dx-text-editor-border-disabled),
   var(--dx-text-editor-border-hovered),
   var(--dx-text-editor-line-hovered),
   var(--dx-text-editor-border-focused),
   var(--dx-text-editor-line-focused),
-  var(--dx-text-editor-invalid-border-rest),
+  var(--dx-text-editor-invalid-border),
   var(--dx-text-editor-invalid-border-focused),
   $text-editor-label-transition,
   var(--dx-text-editor-font-size),

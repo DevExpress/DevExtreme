@@ -228,13 +228,13 @@
 
       // T838734
       border-top: var(--dx-grid-row-removed-border-block-start);
-      border-top-color: var(--dx-grid-row-alternation-bg-rest);
+      border-top-color: var(--dx-grid-row-alternation-bg);
       border-bottom: var(--dx-grid-row-removed-border-block-end);
-      border-bottom-color: var(--dx-grid-row-alternation-bg-rest);
+      border-bottom-color: var(--dx-grid-row-alternation-bg);
     }
 
     .dx-link {
-      color: var(--dx-grid-link-content-rest);
+      color: var(--dx-grid-link-content);
     }
 
     .dx-error-row {
@@ -301,13 +301,13 @@
     .dx-#{$widget-name}-drop-highlight {
       & > td {
         .dx-header-filter {
-          color: var(--dx-grid-drop-highlight-content-rest);
+          color: var(--dx-grid-drop-highlight-content);
         }
 
         .dx-checkbox {
           .dx-checkbox-icon {
-            background-color: var(--dx-grid-drop-highlight-content-rest);
-            color: var(--dx-grid-drop-highlight-bg-rest);
+            background-color: var(--dx-grid-drop-highlight-content);
+            color: var(--dx-grid-drop-highlight-bg);
           }
         }
       }
@@ -394,12 +394,12 @@
       &.dx-state-hover,
       &.dx-state-focused,
       &.dx-state-active {
-        background: var(--dx-grid-editor-bg-rest);
+        background: var(--dx-grid-editor-bg);
         box-shadow: none;
       }
 
       &:not(.dx-tagbox) .dx-texteditor-input {
-        background: var(--dx-grid-editor-bg-rest);
+        background: var(--dx-grid-editor-bg);
         font-size: var(--dx-grid-cell-font-size);
         height: var(--dx-grid-cell-height);
         line-height: var(--dx-grid-cell-height);
@@ -454,7 +454,7 @@
     }
 
     .dx-dropdowneditor {
-      background-color: var(--dx-grid-editor-bg-rest);
+      background-color: var(--dx-grid-editor-bg);
     }
 
     &.dx-focused .dx-dropdowneditor-icon {
@@ -471,7 +471,7 @@
 
   .dx-#{$widget-name}-column-chooser-list {
     .dx-empty-message {
-      color: var(--dx-grid-column-chooser-message-content-rest);
+      color: var(--dx-grid-column-chooser-message-content);
       padding: 0 var(--dx-grid-column-chooser-padding-inline);
     }
   }
@@ -506,12 +506,12 @@
     }
 
     .dx-overlay-content {
-      background-color: var(--dx-grid-column-chooser-bg-rest);
+      background-color: var(--dx-grid-column-chooser-bg);
 
       .dx-popup-title {
         background-color: transparent;
         border-bottom: var(--dx-grid-popup-title-border-block-end);
-        border-bottom-color: popupColors.$popup-title-border-rest;
+        border-bottom-color: popupColors.$popup-title-border;
 
         .dx-toolbar-label {
           font-size: typographySizes.$typography-m-font-size;
@@ -521,8 +521,8 @@
       .dx-popup-content {
         .dx-column-chooser-item {
           margin: var(--dx-grid-column-chooser-list-item-margin);
-          background-color: var(--dx-grid-column-chooser-item-bg-rest);
-          color: var(--dx-grid-column-chooser-item-content-rest);
+          background-color: var(--dx-grid-column-chooser-item-bg);
+          color: var(--dx-grid-column-chooser-item-content);
           font-weight: var(--dx-grid-column-chooser-font-weight);
           font-size: var(--dx-grid-header-cell-font-size);
           padding: var(--dx-grid-cell-padding-block);
@@ -534,18 +534,18 @@
   }
 
   .dx-#{$widget-name}-drag-header {
-    border-color: var(--dx-grid-drag-header-border-rest);
+    border-color: var(--dx-grid-drag-header-border);
     box-shadow: $grid-drag-header-box-shadow;
-    color: var(--dx-grid-column-chooser-item-content-rest);
+    color: var(--dx-grid-column-chooser-item-content);
     font-weight: var(--dx-grid-column-chooser-font-weight);
     padding: var(--dx-grid-header-cell-padding-block);
-    background-color: var(--dx-grid-drag-header-bg-rest);
+    background-color: var(--dx-grid-drag-header-bg);
     line-height: var(--dx-grid-header-line-height);
     font-size: var(--dx-grid-header-cell-font-size);
   }
 
   .dx-#{$widget-name}-columns-separator {
-    background-color: var(--dx-grid-column-separator-bg-rest);
+    background-color: var(--dx-grid-column-separator-bg);
   }
 
   .dx-#{$widget-name}-columns-separator-transparent {
@@ -584,7 +584,7 @@
   }
 
   .dx-#{$widget-name}-headers {
-    color: var(--dx-grid-column-chooser-item-content-rest);
+    color: var(--dx-grid-column-chooser-item-content);
     touch-action: pinch-zoom;
 
     &::before {
@@ -595,8 +595,8 @@
       bottom: 0;
       right: 0;
       pointer-events: none;
-      border-bottom: var(--dx-grid-border);
-      border-bottom-color: var(--dx-grid-border-rest);
+      border-bottom: var(--dx-grid-border-width) solid;
+      border-bottom-color: var(--dx-grid-border);
     }
 
     .dx-#{$widget-name}-table {
@@ -607,12 +607,12 @@
       .dx-row {
         > td {
           .dx-sort {
-            color: var(--dx-grid-header-filter-empty-icon-rest);
+            color: var(--dx-grid-header-filter-empty-icon);
           }
 
           &:not([class*="dx-command"], .dx-editor-cell, .dx-#{$widget-name}-group-space):hover {
             .dx-#{$widget-name}-text-content {
-              color: var(--dx-grid-content-rest);
+              color: var(--dx-grid-content);
             }
           }
         }
@@ -622,12 +622,12 @@
 
   .dx-#{$widget-name}-headers.dx-#{$widget-name}-scroller-spacing {
     > .dx-#{$widget-name}-scroll-container:not(.dx-#{$widget-name}-content-fixed) {
-      box-shadow: 1px 0 0 $grid-border-rest;
+      box-shadow: 1px 0 0 var(--dx-grid-border);
     }
   }
 
   .dx-#{$widget-name}-filter-row {
-    background-color: var(--dx-grid-filter-row-bg-rest);
+    background-color: var(--dx-grid-filter-row-bg);
 
     .dx-menu {
       margin-left: 0;
@@ -644,12 +644,12 @@
       }
 
       .dx-overlay-content {
-        color: menuColors.$menu-content-rest;
+        color: menuColors.$menu-content;
       }
     }
 
     .dx-filter-modified {
-      background-color: var(--dx-grid-cell-modified-bg-rest);
+      background-color: var(--dx-grid-cell-modified-bg);
     }
 
     td .dx-editor-container .dx-filter-range-content {
@@ -664,7 +664,7 @@
   .dx-#{$widget-name}-filter-range-overlay {
     .dx-overlay-content {
       overflow: inherit;
-      background-color: var(--dx-grid-filter-row-bg-rest);
+      background-color: var(--dx-grid-filter-row-bg);
       box-shadow: $grid-drag-header-box-shadow;
 
       .dx-texteditor {
@@ -693,8 +693,8 @@
   }
 
   .dx-#{$widget-name}-header-panel {
-    border-bottom: var(--dx-grid-border);
-    border-bottom-color: var(--dx-grid-border-rest);
+    border-bottom: var(--dx-grid-border-width) solid;
+    border-bottom-color: var(--dx-grid-border);
     padding: var(--dx-grid-header-panel-padding);
 
     .dx-toolbar-text-auto-hide .dx-button.dx-button-has-icon {
@@ -749,7 +749,7 @@
 
     @include dx-icon-sizing($global-icon-size);
 
-    color: var(--dx-grid-icon-rest);
+    color: var(--dx-grid-icon);
   }
 
   .dx-row.dx-row-focused {
@@ -760,7 +760,7 @@
 
   .dx-#{$widget-name}-rowsview {
     border-top: var(--dx-grid-row-border-block-start-focused);
-    border-top-color: var(--dx-grid-border-rest);
+    border-top-color: var(--dx-grid-border);
 
     .dx-#{$widget-name}-headers + &,
     &.dx-#{$widget-name}-after-headers {
@@ -784,7 +784,7 @@
         .dx-validator {
           &.dx-#{$widget-name}-invalid,
           &.dx-invalid {
-            background-color: var(--dx-grid-row-invalid-bg-rest);
+            background-color: var(--dx-grid-row-invalid-bg);
           }
         }
       }
@@ -793,8 +793,8 @@
     .dx-overlay-wrapper.dx-invalid-message {
       .dx-overlay-content {
         padding: var(--dx-grid-overlay-content-padding);
-        background-color: validationColors.$validation-message-bg-rest;
-        color: validationColors.$validation-message-content-rest;
+        background-color: validationColors.$validation-message-bg;
+        color: validationColors.$validation-message-content;
       }
     }
 
@@ -830,7 +830,7 @@
     }
 
     .dx-item-modified {
-      background-color: var(--dx-grid-cell-modified-bg-rest);
+      background-color: var(--dx-grid-cell-modified-bg);
     }
 
     .dx-row-focused {
@@ -895,30 +895,30 @@
   }
 
   .dx-#{$widget-name}-search-text {
-    color: var(--dx-grid-search-content-rest);
-    background-color: var(--dx-grid-search-bg-rest);
+    color: var(--dx-grid-search-content);
+    background-color: var(--dx-grid-search-bg);
   }
 
   .dx-#{$widget-name}-nodata {
-    color: var(--dx-grid-no-data-content-rest);
+    color: var(--dx-grid-no-data-content);
     font-size: var(--dx-grid-no-data-font-size);
   }
 
   .dx-#{$widget-name}-bottom-load-panel {
-    border-top: var(--dx-grid-border);
-    border-top-color: var(--dx-grid-border-rest);
-    background-color: var(--dx-grid-bg-rest);
+    border-top: var(--dx-grid-border-width) solid;
+    border-top-color: var(--dx-grid-border);
+    background-color: var(--dx-grid-bg);
   }
 
   .dx-#{$widget-name}-summary-item {
-    color: var(--dx-grid-summary-content-rest);
+    color: var(--dx-grid-summary-content);
   }
 
   .dx-#{$widget-name}-total-footer {
-    border-bottom: var(--dx-grid-border);
-    border-bottom-color: var(--dx-grid-border-rest);
-    border-top: var(--dx-grid-border);
-    border-top-color: var(--dx-grid-border-rest);
+    border-bottom: var(--dx-grid-border-width) solid;
+    border-bottom-color: var(--dx-grid-border);
+    border-top: var(--dx-grid-border-width) solid;
+    border-top-color: var(--dx-grid-border);
 
     > .dx-#{$widget-name}-content {
       padding: 0;
@@ -937,14 +937,14 @@
       border-radius: buttonSizes.$button-border-radius;
 
       @include dx-button-styling-variant(
-        buttonColors.$button-danger-contained-bg-rest,
-        buttonColors.$button-danger-contained-content-rest,
-        buttonColors.$button-danger-contained-content-rest,
-        buttonColors.$button-danger-contained-content-rest,
-        buttonColors.$button-danger-contained-bg-rest,
-        buttonColors.$button-danger-contained-bg-rest,
-        buttonColors.$button-danger-contained-bg-rest,
-        buttonColors.$button-danger-contained-content-rest
+        buttonColors.$button-danger-contained-bg,
+        buttonColors.$button-danger-contained-content,
+        buttonColors.$button-danger-contained-content,
+        buttonColors.$button-danger-contained-content,
+        buttonColors.$button-danger-contained-bg,
+        buttonColors.$button-danger-contained-bg,
+        buttonColors.$button-danger-contained-bg,
+        buttonColors.$button-danger-contained-content
       );
 
       margin: var(--dx-grid-revert-button-margin);
@@ -976,7 +976,7 @@
 
     .dx-#{$widget-name}-headers.dx-#{$widget-name}-scroller-spacing {
       > .dx-#{$widget-name}-scroll-container:not(.dx-#{$widget-name}-content-fixed) {
-        box-shadow: -1px 0 0 $grid-border-rest;
+        box-shadow: -1px 0 0 var(--dx-grid-border);
       }
     }
 
@@ -994,18 +994,18 @@
   }
 
   .dx-#{$widget-name}-filter-panel {
-    background-color: var(--dx-grid-bg-rest);
+    background-color: var(--dx-grid-bg);
     padding: var(--dx-grid-filter-panel-padding);
 
     .dx-#{$widget-name}-filter-panel-text,
     .dx-#{$widget-name}-filter-panel-clear-filter {
-      color: var(--dx-grid-filter-panel-content-rest);
+      color: var(--dx-grid-filter-panel-content);
       font-size: var(--dx-grid-cell-font-size);
       line-height: var(--dx-grid-checkbox-size);
     }
 
     .dx-icon-filter {
-      color: var(--dx-grid-filter-panel-content-rest);
+      color: var(--dx-grid-filter-panel-content);
 
       @include dx-icon-sizing(var(--dx-grid-filter-panel-icon-size));
     }
@@ -1031,7 +1031,7 @@
 
   .dx-#{$widget-name}-sticky-columns .dx-#{$widget-name}-draggable-column {
     opacity: 1;
-    color: var(--dx-grid-draggable-column-content-rest);
+    color: var(--dx-grid-draggable-column-content);
   }
 
   .dx-command-ai-header-content {

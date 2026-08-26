@@ -5,13 +5,13 @@
 @use "./sizes" as *;
 @use "../../../../base/widget" as baseWidget;
 @include ai-chat-messagelist-empty(
-  buttonColors.$button-default-contained-bg-rest,
+  buttonColors.$button-default-contained-bg,
   buttonColors.$button-default-outlined-bg-hovered,
 );
-@include ai-chat-message-pending(var(--dx-grid-ai-chat-message-pending-content-rest));
-@include ai-chat-message-success(var(--dx-grid-ai-chat-message-success-content-rest));
-@include ai-chat-message-error(var(--dx-grid-ai-chat-message-error-content-rest));
-@include ai-chat-messagebubble-border(var(--dx-grid-ai-chat-message-border-rest));
+@include ai-chat-message-pending(var(--dx-grid-ai-chat-message-pending-content));
+@include ai-chat-message-success(var(--dx-grid-ai-chat-message-success-content));
+@include ai-chat-message-error(var(--dx-grid-ai-chat-message-error-content));
+@include ai-chat-messagebubble-border(var(--dx-grid-ai-chat-message-border));
 @include ai-chat-message-regenerate-button(buttonColors.$button-normal-contained-bg-active);
 @include ai-chat-message-icon(var(--dx-grid-ai-chat-message-icon-size));
 

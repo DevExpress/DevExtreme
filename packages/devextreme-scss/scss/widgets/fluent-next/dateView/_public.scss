@@ -2,20 +2,20 @@
 @use "sizes" as *;
 
 @mixin publish {
-  --dx-date-view-content-rest: #{$date-view-content-rest};
+  --dx-date-view-content: #{$date-view-content};
   --dx-date-view-hours-colon-font-size: #{$date-view-hours-colon-font-size};
   --dx-date-view-item-content-selected: #{$date-view-item-content-selected};
   --dx-date-view-item-font-size: #{$date-view-item-font-size};
   --dx-date-view-item-font-size-selected: #{$date-view-item-font-size-selected};
   --dx-date-view-item-phone-font-size: #{$date-view-item-phone-font-size};
   --dx-date-view-item-phone-font-size-selected: #{$date-view-item-phone-font-size-selected};
-  --dx-date-view-roller-bottom-shadow-rest: #{$date-view-roller-bottom-shadow-rest};
+  --dx-date-view-roller-bottom-shadow: #{$date-view-roller-bottom-shadow};
   --dx-date-view-roller-height: #{$date-view-roller-height};
   --dx-date-view-roller-item-height: #{$date-view-roller-item-height};
   --dx-date-view-roller-min-width: #{$date-view-roller-min-width};
   --dx-date-view-roller-month-min-width: #{$date-view-roller-month-min-width};
   --dx-date-view-roller-month-phone-min-width: #{$date-view-roller-month-phone-min-width};
   --dx-date-view-roller-padding: #{$date-view-roller-padding};
-  --dx-date-view-roller-top-shadow-rest: #{$date-view-roller-top-shadow-rest};
+  --dx-date-view-roller-top-shadow: #{$date-view-roller-top-shadow};
   --dx-date-view-roller-year-min-width: #{$date-view-roller-year-min-width};
 }

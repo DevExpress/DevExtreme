@@ -8,8 +8,8 @@
 
 .dx-tooltip-wrapper {
   .dx-overlay-content {
-    background-color: var(--dx-tooltip-bg-rest);
-    color: var(--dx-tooltip-content-rest);
+    background-color: var(--dx-tooltip-bg);
+    color: var(--dx-tooltip-content);
     border: var(--dx-tooltip-overlay-content-border);
     border-radius: var(--dx-tooltip-border-radius);
     min-height: auto;
@@ -23,7 +23,7 @@
   &.dx-popover-wrapper .dx-popover-arrow {
     &::after {
       box-shadow: var(--dx-tooltip-box-shadow);
-      background: var(--dx-tooltip-bg-rest);
+      background: var(--dx-tooltip-bg);
       border-top-right-radius: var(--dx-tooltip-arrow-border-radius);
     }
   }

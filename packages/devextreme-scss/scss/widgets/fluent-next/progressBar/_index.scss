@@ -10,36 +10,36 @@
 
 .dx-progressbar-container {
   height: var(--dx-progress-bar-height);
-  background-color: var(--dx-progress-bar-bg-rest);
+  background-color: var(--dx-progress-bar-bg);
   border-radius: var(--dx-progress-bar-border-radius);
 }
 
 .dx-progressbar-range {
   position: relative;
-  background-color: var(--dx-progress-bar-range-bg-rest);
+  background-color: var(--dx-progress-bar-range-bg);
   border-radius: var(--dx-progress-bar-border-radius);
   box-sizing: content-box;
 }
 
 .dx-progressbar-animating-container {
   height: var(--dx-progress-bar-height);
-  background-color: var(--dx-progress-bar-bg-rest);
+  background-color: var(--dx-progress-bar-bg);
   background-size: var(--dx-progress-bar-indeterminate-width) 5px;
   animation: dx-loader 2s linear infinite;
   border-radius: var(--dx-progress-bar-border-radius);
 
-  @include gradient-linear(var(--dx-progress-bar-indeterminate-bg-rest));
+  @include gradient-linear(var(--dx-progress-bar-indeterminate-bg));
 
   background-repeat: repeat;
 }
 
 .dx-invalid {
   .dx-progressbar-range {
-    background-color: var(--dx-progress-bar-range-invalid-bg-rest);
+    background-color: var(--dx-progress-bar-range-invalid-bg);
   }
 
   .dx-progressbar-animating-container {
-    @include gradient-linear(var(--dx-progress-bar-indeterminate-invalid-bg-rest));
+    @include gradient-linear(var(--dx-progress-bar-indeterminate-invalid-bg));
 
     background-repeat: repeat;
   }
@@ -73,7 +73,7 @@
 
 .dx-progressbar-status {
   padding-top: var(--dx-progress-bar-status-margin-block-start);
-  color: var(--dx-progress-bar-label-content-rest);
+  color: var(--dx-progress-bar-label-content);
 
   .dx-progressbar .dx-position-right & {
     padding-top: 0;
@@ -86,7 +86,7 @@
     .dx-progressbar-animating-container {
       animation: dx-loader-rtl 2s linear infinite;
 
-      @include gradient-linear(var(--dx-progress-bar-indeterminate-bg-rest));
+      @include gradient-linear(var(--dx-progress-bar-indeterminate-bg));
 
       background-repeat: repeat;
     }

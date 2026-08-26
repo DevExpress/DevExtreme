@@ -19,8 +19,8 @@
 @use "../dropDownMenu";
 
 .dx-toolbar {
-  background-color: var(--dx-toolbar-bg-rest);
-  color: var(--dx-toolbar-content-rest);
+  background-color: var(--dx-toolbar-bg);
+  color: var(--dx-toolbar-content);
 
   @include dx-toolbar-sizing(
     var(--dx-toolbar-height),
@@ -43,12 +43,12 @@
 }
 
 .dx-toolbar-background {
-  background-color: var(--dx-toolbar-bg-rest);
+  background-color: var(--dx-toolbar-bg);
 }
 
 .dx-toolbar-menu-section {
   border-bottom: var(--dx-toolbar-menu-section-border-block-end);
-  border-bottom-color: var(--dx-toolbar-separator-border-rest);
+  border-bottom-color: var(--dx-toolbar-separator-border);
 
   .dx-list-item-content,
   .dx-toolbar-item-auto-hide {
@@ -99,10 +99,10 @@
   .dx-toolbar-hidden-button {
     .dx-button-normal {
       @include dx-button-flat-color-styling(
-        buttonColors.$button-normal-contained-content-rest,
-        buttonColors.$button-normal-contained-content-rest,
-        buttonColors.$button-normal-contained-content-rest,
-        buttonColors.$button-normal-text-bg-rest,
+        buttonColors.$button-normal-contained-content,
+        buttonColors.$button-normal-contained-content,
+        buttonColors.$button-normal-contained-content,
+        buttonColors.$button-normal-text-bg,
         buttonColors.$button-normal-text-bg-hovered,
         buttonColors.$button-normal-text-bg-focused,
         buttonColors.$button-normal-text-bg-active
@@ -111,10 +111,10 @@
 
     .dx-button-default {
       @include dx-button-flat-color-styling(
-        buttonColors.$button-default-text-content-rest,
+        buttonColors.$button-default-text-content,
         buttonColors.$button-default-text-content-hovered,
         buttonColors.$button-default-text-content-active,
-        buttonColors.$button-default-text-bg-rest,
+        buttonColors.$button-default-text-bg,
         buttonColors.$button-default-text-bg-hovered,
         buttonColors.$button-default-text-bg-focused,
         buttonColors.$button-default-text-bg-active
@@ -123,10 +123,10 @@
 
     .dx-button-danger {
       @include dx-button-flat-color-styling(
-        buttonColors.$button-danger-contained-bg-rest,
-        buttonColors.$button-danger-contained-bg-rest,
-        buttonColors.$button-danger-contained-bg-rest,
-        buttonColors.$button-danger-text-bg-rest,
+        buttonColors.$button-danger-contained-bg,
+        buttonColors.$button-danger-contained-bg,
+        buttonColors.$button-danger-contained-bg,
+        buttonColors.$button-danger-text-bg,
         buttonColors.$button-danger-text-bg-hovered,
         buttonColors.$button-danger-text-bg-focused,
         buttonColors.$button-danger-text-bg-active
@@ -135,10 +135,10 @@
 
     .dx-button-success {
       @include dx-button-flat-color-styling(
-        buttonColors.$button-success-contained-bg-rest,
-        buttonColors.$button-success-contained-bg-rest,
-        buttonColors.$button-success-contained-bg-rest,
-        buttonColors.$button-success-text-bg-rest,
+        buttonColors.$button-success-contained-bg,
+        buttonColors.$button-success-contained-bg,
+        buttonColors.$button-success-contained-bg,
+        buttonColors.$button-success-text-bg,
         buttonColors.$button-success-text-bg-hovered,
         buttonColors.$button-success-text-bg-focused,
         buttonColors.$button-success-text-bg-active
@@ -183,4 +183,4 @@
   }
 }
 
-@include dx-toolbar-focus-outline($focus-rect-outline-rest, $focus-rect-border-radius);
+@include dx-toolbar-focus-outline($focus-rect-outline, $focus-rect-border-radius);

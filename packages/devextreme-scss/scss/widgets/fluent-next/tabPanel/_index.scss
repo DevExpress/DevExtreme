@@ -23,7 +23,7 @@
   > .dx-tabpanel-tabs {
     .dx-tabs {
       border-bottom: var(--dx-tab-panel-tabs-top-border);
-      border-bottom-color: var(--dx-tab-panel-border-rest);
+      border-bottom-color: var(--dx-tab-panel-border);
 
       @at-root #{selector.append(".dx-empty-collection", &)} {
         border-bottom: none;
@@ -36,7 +36,7 @@
   > .dx-tabpanel-tabs {
     .dx-tabs {
       border-top: var(--dx-tab-panel-tabs-bottom-border);
-      border-top-color: var(--dx-tab-panel-border-rest);
+      border-top-color: var(--dx-tab-panel-border);
 
       @at-root #{selector.append(".dx-empty-collection", &)} {
         border-top: none;
@@ -49,7 +49,7 @@
   > .dx-tabpanel-tabs {
     .dx-tabs {
       border-right: var(--dx-tab-panel-tabs-left-border);
-      border-right-color: var(--dx-tab-panel-border-rest);
+      border-right-color: var(--dx-tab-panel-border);
 
       @at-root #{selector.append(".dx-empty-collection", &)} {
         border-right: none;
@@ -62,7 +62,7 @@
   > .dx-tabpanel-tabs {
     .dx-tabs {
       border-left: var(--dx-tab-panel-tabs-right-border);
-      border-left-color: var(--dx-tab-panel-border-rest);
+      border-left-color: var(--dx-tab-panel-border);
 
       @at-root #{selector.append(".dx-empty-collection", &)} {
         border-left: none;

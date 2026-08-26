@@ -2,7 +2,7 @@
 @use "sizes" as *;
 
 @mixin publish {
-  --dx-tab-panel-border-rest: #{$tab-panel-border-rest};
+  --dx-tab-panel-border: #{$tab-panel-border};
   --dx-tab-panel-tabs-bottom-border: #{$tab-panel-tabs-bottom-border};
   --dx-tab-panel-tabs-left-border: #{$tab-panel-tabs-left-border};
   --dx-tab-panel-tabs-right-border: #{$tab-panel-tabs-right-border};

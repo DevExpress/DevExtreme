@@ -21,4 +21,4 @@
   }
 }
 
-@include dx-dropdownmenu-focus-outline($focus-rect-outline-rest, $focus-rect-border-radius, $drop-down-menu-section-margin-inline);
+@include dx-dropdownmenu-focus-outline($focus-rect-outline, $focus-rect-border-radius, var(--dx-drop-down-menu-section-margin-inline));

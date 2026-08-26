@@ -3,6 +3,6 @@
 
 @mixin publish {
   --dx-button-group-item-contained-border-inline-end-width: #{$button-group-item-contained-border-inline-end-width};
-  --dx-button-group-separator-rest: #{$button-group-separator-rest};
+  --dx-button-group-separator: #{$button-group-separator};
   --dx-button-group-text-column-gap: #{$button-group-text-column-gap};
 }

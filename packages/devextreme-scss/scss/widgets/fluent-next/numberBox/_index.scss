@@ -3,7 +3,7 @@
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/numberBox" with (
-  $numberbox-spin-idle-opacity: var(--dx-number-box-spin-opacity-rest),
+  $numberbox-spin-idle-opacity: var(--dx-number-box-spin-opacity),
 );
 @use "../textEditor" as *;
 
@@ -32,13 +32,13 @@
 .dx-numberbox-spin-up-icon {
   @include dx-icon(spinup);
 
-  color: var(--dx-number-box-spin-icon-rest);
+  color: var(--dx-number-box-spin-icon);
 }
 
 .dx-numberbox-spin-down-icon {
   @include dx-icon(spindown);
 
-  color: var(--dx-number-box-spin-icon-rest);
+  color: var(--dx-number-box-spin-icon);
 }
 
 .dx-numberbox-spin-up-icon,

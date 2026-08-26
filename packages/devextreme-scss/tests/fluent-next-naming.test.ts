@@ -758,7 +758,6 @@ const grammarViolation = (variable: string, component: string, isColors: boolean
   const state = [...registries.states]
     .sort((a: string, b: string) => b.length - a.length)
     .find((candidate: string) => rest === candidate || rest.endsWith(`-${candidate}`));
-  if (isColors && !state) return 'no state segment (rest is mandatory in _colors.scss)';
   if (state) rest = rest.slice(0, -state.length).replace(/-$/, '');
 
   const slot = [...allowedSlots]

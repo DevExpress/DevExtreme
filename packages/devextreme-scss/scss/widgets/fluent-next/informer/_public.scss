@@ -4,11 +4,11 @@
 @mixin publish {
   --dx-informer-border-radius: #{$informer-border-radius};
   --dx-informer-column-gap: #{$informer-column-gap};
-  --dx-informer-error-bg-rest: #{$informer-error-bg-rest};
-  --dx-informer-error-content-rest: #{$informer-error-content-rest};
+  --dx-informer-error-bg: #{$informer-error-bg};
+  --dx-informer-error-content: #{$informer-error-content};
   --dx-informer-icon-size: #{$informer-icon-size};
-  --dx-informer-info-bg-rest: #{$informer-info-bg-rest};
-  --dx-informer-info-content-rest: #{$informer-info-content-rest};
+  --dx-informer-info-bg: #{$informer-info-bg};
+  --dx-informer-info-content: #{$informer-info-content};
   --dx-informer-padding-block: #{$informer-padding-block};
   --dx-informer-padding-inline: #{$informer-padding-inline};
 }

@@ -16,17 +16,17 @@
   $treelist-button-margin-top: var(--dx-tree-list-form-buttons-margin-block-start),
   $treelist-error-message-margin-bottom: var(--dx-tree-list-error-message-margin-block-end),
   $treelist-button-margin-right: var(--dx-tree-list-form-buttons-rtl-margin-inline-start),
-  $datagrid-border: gridBaseSizes.$grid-border,
-  $datagrid-drag-header-border-color: gridBaseColors.$grid-drag-header-border-rest,
-  $datagrid-row-error-bg: gridBaseColors.$grid-row-error-bg-rest,
-  $datagrid-base-color: gridBaseColors.$grid-content-rest,
-  $datagrid-base-background-color: gridBaseColors.$grid-bg-rest,
-  $datagrid-border-color: gridBaseColors.$grid-border-rest,
+  $datagrid-border: gridBaseSizes.$grid-border-width solid,
+  $datagrid-drag-header-border-color: gridBaseColors.$grid-drag-header-border,
+  $datagrid-row-error-bg: gridBaseColors.$grid-row-error-bg,
+  $datagrid-base-color: gridBaseColors.$grid-content,
+  $datagrid-base-background-color: gridBaseColors.$grid-bg,
+  $datagrid-border-color: gridBaseColors.$grid-border,
   $datagrid-focused-border-color: gridBaseColors.$grid-border-focused,
-  $datagrid-text-stub-background-image-path: gridBaseColors.$grid-text-stub-bg-rest,
-  $datagrid-row-error-color: gridBaseColors.$grid-row-error-content-rest,
-  $header-filter-color: gridBaseColors.$grid-header-filter-icon-rest,
-  $header-filter-color-empty: gridBaseColors.$grid-header-filter-empty-icon-rest,
+  $datagrid-text-stub-background-image-path: gridBaseColors.$grid-text-stub-bg,
+  $datagrid-row-error-color: gridBaseColors.$grid-row-error-content,
+  $header-filter-color: gridBaseColors.$grid-header-filter-icon,
+  $header-filter-color-empty: gridBaseColors.$grid-header-filter-empty-icon,
   $base-focus-color: gridBaseColors.$grid-content-focused,
 );
 @use "layout/cell";
@@ -34,7 +34,7 @@
 
 .dx-treelist-rowsview {
   tr:not(.dx-row-focused) .dx-treelist-empty-space {
-    color: var(--dx-tree-list-chevron-icon-rest);
+    color: var(--dx-tree-list-chevron-icon);
   }
 
   .dx-sort-up,

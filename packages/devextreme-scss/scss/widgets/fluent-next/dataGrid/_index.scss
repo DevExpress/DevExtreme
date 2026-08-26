@@ -19,18 +19,18 @@
   $datagrid-button-margin-top: var(--dx-data-grid-form-buttons-margin-block-start),
   $datagrid-error-message-margin-bottom: var(--dx-data-grid-error-message-margin-block-end),
   $datagrid-button-margin-right: var(--dx-data-grid-form-buttons-rtl-margin-inline-start),
-  $datagrid-border: gridBaseSizes.$grid-border,
-  $datagrid-border-color: gridBaseColors.$grid-border-rest,
-  $datagrid-drag-header-border-color: gridBaseColors.$grid-drag-header-border-rest,
-  $datagrid-row-error-bg: gridBaseColors.$grid-row-error-bg-rest,
-  $datagrid-row-error-color: gridBaseColors.$grid-row-error-content-rest,
-  $datagrid-base-color: gridBaseColors.$grid-content-rest,
-  $datagrid-base-background-color: gridBaseColors.$grid-bg-rest,
+  $datagrid-border: gridBaseSizes.$grid-border-width solid,
+  $datagrid-border-color: gridBaseColors.$grid-border,
+  $datagrid-drag-header-border-color: gridBaseColors.$grid-drag-header-border,
+  $datagrid-row-error-bg: gridBaseColors.$grid-row-error-bg,
+  $datagrid-row-error-color: gridBaseColors.$grid-row-error-content,
+  $datagrid-base-color: gridBaseColors.$grid-content,
+  $datagrid-base-background-color: gridBaseColors.$grid-bg,
   $datagrid-focused-border-color: gridBaseColors.$grid-border-focused,
-  $header-filter-color: gridBaseColors.$grid-header-filter-icon-rest,
-  $header-filter-color-empty: gridBaseColors.$grid-header-filter-empty-icon-rest,
+  $header-filter-color: gridBaseColors.$grid-header-filter-icon,
+  $header-filter-color-empty: gridBaseColors.$grid-header-filter-empty-icon,
   $base-focus-color: gridBaseColors.$grid-content-focused,
-  $datagrid-text-stub-background-image-path: gridBaseColors.$grid-text-stub-bg-rest,
+  $datagrid-text-stub-background-image-path: gridBaseColors.$grid-text-stub-bg,
   $datagrid-group-row-border: var(--dx-data-grid-group-row-border),
   $datagrid-sticky-column-border: var(--dx-data-grid-sticky-column-border),
   $datagrid-cell-focus-outline: var(--dx-data-grid-cell-outline-focused),
@@ -43,7 +43,7 @@
   touch-action: pinch-zoom;
 
   .dx-group-panel-message {
-    color: gridBaseColors.$grid-column-chooser-item-content-rest;
+    color: gridBaseColors.$grid-column-chooser-item-content;
     font-weight: gridBaseSizes.$grid-column-chooser-font-weight;
     padding: var(--dx-data-grid-cell-padding) 0;
     border-top: gridBaseSizes.$grid-hidden-border;
@@ -53,27 +53,27 @@
 
   .dx-group-panel-item {
     margin-right: gridBaseSizes.$grid-group-panel-item-margin-inline;
-    color: gridBaseColors.$grid-column-chooser-item-content-rest;
+    color: gridBaseColors.$grid-column-chooser-item-content;
     font-weight: var(--dx-data-grid-group-panel-item-font-weight);
     font-size: gridBaseSizes.$grid-header-cell-font-size;
     line-height: gridBaseSizes.$grid-header-line-height;
-    background: var(--dx-data-grid-group-panel-item-bg-rest);
+    background: var(--dx-data-grid-group-panel-item-bg);
     border-radius: var(--dx-data-grid-group-panel-item-border-radius);
     padding: var(--dx-data-grid-group-panel-item-padding);
     border-width: var(--dx-data-grid-group-panel-item-border-width);
     border-style: solid;
-    border-color: var(--dx-data-grid-group-panel-item-border-rest);
+    border-color: var(--dx-data-grid-group-panel-item-border);
   }
 
   .dx-block-separator {
     margin-right: gridBaseSizes.$grid-group-panel-item-margin-inline;
-    color: gridBaseColors.$grid-column-chooser-item-content-rest;
+    color: gridBaseColors.$grid-column-chooser-item-content;
     font-weight: gridBaseSizes.$grid-column-chooser-font-weight;
-    background-color: var(--dx-data-grid-block-separator-bg-rest);
+    background-color: var(--dx-data-grid-block-separator-bg);
   }
 
   .dx-sort {
-    color: gridBaseColors.$grid-header-filter-empty-icon-rest;
+    color: gridBaseColors.$grid-header-filter-empty-icon;
   }
 }
 
@@ -95,8 +95,8 @@
 
   .dx-row.dx-group-row {
     &:not(.dx-row-focused) {
-      color: gridBaseColors.$grid-group-row-content-rest;
-      background-color: gridBaseColors.$grid-group-row-bg-rest;
+      color: gridBaseColors.$grid-group-row-content;
+      background-color: gridBaseColors.$grid-group-row-bg;
     }
 
     font-size: gridBaseSizes.$grid-header-cell-font-size;
@@ -108,20 +108,20 @@
   @include dx-icon(chevrondown);
   @include dx-icon-sizing($global-icon-size);
 
-  color: gridBaseColors.$grid-chevron-icon-rest;
+  color: gridBaseColors.$grid-chevron-icon;
 }
 
 .dx-datagrid-group-closed {
   @include dx-icon(chevronright);
   @include dx-icon-sizing($global-icon-size);
 
-  color: gridBaseColors.$grid-chevron-icon-rest;
+  color: gridBaseColors.$grid-chevron-icon;
 }
 
 .dx-row.dx-datagrid-group-footer {
   &.dx-column-lines {
-    border-bottom: gridBaseSizes.$grid-border;
-    border-bottom-color: gridBaseColors.$grid-border-rest;
+    border-bottom: gridBaseSizes.$grid-border-width solid;
+    border-bottom-color: gridBaseColors.$grid-border;
   }
 
 }

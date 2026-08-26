@@ -19,7 +19,7 @@
   }
 
   .dx-field-label {
-    color: var(--dx-fieldset-field-label-content-rest);
+    color: var(--dx-fieldset-field-label-content);
     font-size: formSizes.$form-label-font-size;
     cursor: default;
 
@@ -30,7 +30,7 @@
 
   .dx-field-value {
     &.dx-attention {
-      color: var(--dx-fieldset-field-value-invalid-content-rest);
+      color: var(--dx-fieldset-field-value-invalid-content);
       padding-left: var(--dx-fieldset-attention-icon-offset);
 
       &::before {

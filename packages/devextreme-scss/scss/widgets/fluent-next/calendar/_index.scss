@@ -9,12 +9,12 @@
 );
 @use "../../base/calendar/mixins" as *;
 @include dx-calendar-mixin(
-  $calendar-bg-rest,
+  $calendar-bg,
   $calendar-legacy-width,
   $calendar-legacy-height,
   $calendar-element-padding,
   $calendar-footer-button-height,
-  $calendar-invalid-border-rest,
+  $calendar-invalid-border,
   $calendar-invalid-border-focused,
 );
 
@@ -24,18 +24,18 @@
 }
 
 @include dx-calendar-navigator-mixin(
-  $calendar-navigator-content-rest,
+  $calendar-navigator-content,
 );
 @include dx-calendar-body-mixin(
-  $calendar-week-number-cell-content-rest,
-  $calendar-week-number-cell-bg-rest,
+  $calendar-week-number-cell-content,
+  $calendar-week-number-cell-bg,
   $calendar-week-number-border-radius,
   $calendar-cell-font-size,
-  $calendar-header-content-rest,
+  $calendar-header-content,
 );
 @include dx-calendar-cell-mixin(
   $calendar-cell-contoured-border-radius,
-  $calendar-content-rest,
+  $calendar-content,
   $global-border-radius,
   $calendar-cell-bg-selected,
   $calendar-bg-hovered,
@@ -43,8 +43,8 @@
   $calendar-cell-bg-active,
   $calendar-cell-bg-selected,
   $calendar-cell-content-selected,
-  $calendar-cell-contoured-border-rest,
-  $calendar-cell-other-content-rest,
+  $calendar-cell-contoured-border,
+  $calendar-cell-other-content,
   $calendar-cell-other-content-hovered,
   $calendar-cell-border-hovered,
   999em,

@@ -2,12 +2,12 @@
 @use "sizes" as *;
 
 @mixin publish {
-  --dx-scrollable-bg-rest: #{$scrollable-bg-rest};
-  --dx-scrollable-scroll-bg-rest: #{$scrollable-scroll-bg-rest};
+  --dx-scrollable-bg: #{$scrollable-bg};
+  --dx-scrollable-scroll-bg: #{$scrollable-scroll-bg};
   --dx-scrollable-scroll-height: #{$scrollable-scroll-height};
   --dx-scrollable-scroll-padding: #{$scrollable-scroll-padding};
   --dx-scrollable-scroll-width: #{$scrollable-scroll-width};
-  --dx-scrollable-scrollbar-bg-rest: #{$scrollable-scrollbar-bg-rest};
+  --dx-scrollable-scrollbar-bg: #{$scrollable-scrollbar-bg};
   --dx-scrollable-scrollbar-size: #{$scrollable-scrollbar-size};
   --dx-scrollable-scrollbar-thin-size: #{$scrollable-scrollbar-thin-size};
 }

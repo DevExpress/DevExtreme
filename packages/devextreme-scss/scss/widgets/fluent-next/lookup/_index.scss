@@ -105,7 +105,7 @@
   spindown,
   "\f001",
   $global-icon-size,
-  var(--dx-lookup-icon-rest),
+  var(--dx-lookup-icon),
   var(--dx-lookup-icon-active),
   $global-icon-size,
 );
@@ -141,7 +141,7 @@
 
     &::after {
       box-shadow: var(--dx-lookup-box-shadow);
-      background: $surface-overlay-rest;
+      background: $surface-overlay;
       border-top-right-radius: var(--dx-lookup-arrow-border-radius);
     }
   }
@@ -157,7 +157,7 @@
 
 .dx-lookup-empty {
   .dx-lookup-field {
-    color: textEditorColors.$text-editor-placeholder-rest;
+    color: textEditorColors.$text-editor-placeholder;
   }
 }
 

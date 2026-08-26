@@ -77,13 +77,13 @@
   .dx-fileuploader-input-label { // stylelint-disable-line no-duplicate-selectors
     padding: calc(#{$file-uploader-padding-block} * 2) calc(#{$file-uploader-padding-block} + 2px);
     border: $file-uploader-file-wrapper-border-width dashed;
-    border-color: $file-uploader-border-rest;
+    border-color: $file-uploader-border;
   }
 }
 
 .dx-fileuploader-file-status-message,
 .dx-fileuploader-file-size {
-  color: $file-uploader-file-name-status-content-rest;
+  color: $file-uploader-file-name-status-content;
 }
 
 .dx-fileuploader-input {
@@ -92,7 +92,7 @@
 
 .dx-fileuploader-input-label {
   padding: calc(#{$file-uploader-padding-block} + (#{$global-font-size} / 2 - #{$file-uploader-padding-block}) / 2 + 1px) calc(#{$file-uploader-padding-block} + 2px);
-  color: $file-uploader-file-name-content-rest;
+  color: $file-uploader-file-name-content;
 
   @include dx-overflow();
 }
@@ -118,8 +118,8 @@
     padding: $file-uploader-file-container-padding;
     margin-bottom: $file-uploader-file-container-margin-block-end;
     border-radius: $file-uploader-files-container-border-radius;
-    background-color: $file-uploader-files-container-bg-rest;
-    box-shadow: $file-uploader-file-container-shadow-rest;
+    background-color: $file-uploader-files-container-bg;
+    box-shadow: $file-uploader-file-container-shadow;
 
     .dx-fileuploader-button-container + .dx-fileuploader-button-container {
       .dx-button {
@@ -162,7 +162,7 @@
 }
 
 .dx-fileuploader .dx-progressbar-status {
-  color: $file-uploader-progress-bar-status-content-rest;
+  color: $file-uploader-progress-bar-status-content;
 }
 
 .dx-fileuploader-file {
@@ -172,25 +172,25 @@
 }
 
 .dx-fileuploader-file-icon {
-  color: $file-uploader-file-icon-rest;
+  color: $file-uploader-file-icon;
   font-size: $file-uploader-file-icon-font-size;
 }
 
 .dx-fileuploader-file-name {
   padding-bottom: calc((#{$file-uploader-padding-block}) / 2);
-  color: $file-uploader-file-name-content-rest;
+  color: $file-uploader-file-name-content;
   font-weight: $file-uploader-file-name-font-weight;
 }
 
 .dx-fileuploader-file-size {
   float: right;
   padding: $file-uploader-file-size-margin;
-  color: $file-uploader-label-content-rest;
+  color: $file-uploader-label-content;
 }
 
 .dx-fileuploader-invalid {
   .dx-fileuploader-file-status-message {
-    color: $file-uploader-file-status-message-invalid-content-rest;
+    color: $file-uploader-file-status-message-invalid-content;
 
     span {
       &:first-child {

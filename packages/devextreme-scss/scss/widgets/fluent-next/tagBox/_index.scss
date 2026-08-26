@@ -102,8 +102,8 @@
   padding-inline-start: var(--dx-tag-box-tag-content-padding-inline-start);
   padding-inline-end: var(--dx-tag-box-tag-content-padding-inline-end);
   min-width: var(--dx-tag-box-tag-content-min-width);
-  background-color: var(--dx-tag-box-tag-bg-rest);
-  color: var(--dx-tag-box-tag-content-rest);
+  background-color: var(--dx-tag-box-tag-bg);
+  color: var(--dx-tag-box-tag-content);
   border-radius: var(--dx-tag-box-tag-border-radius);
   border-width: var(--dx-tag-box-tag-border-width);
   border-style: solid;
@@ -126,7 +126,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--dx-tag-box-tag-remove-button-content-rest);
+    color: var(--dx-tag-box-tag-remove-button-content);
   }
 }
 
@@ -170,7 +170,7 @@
 .dx-tagbox-popup-wrapper {
   .dx-list-select-all {
     border-bottom: var(--dx-tag-box-list-select-all-border-block-end);
-    border-bottom-color: var(--dx-tag-box-select-all-line-rest);
+    border-bottom-color: var(--dx-tag-box-select-all-line);
     padding-bottom: var(--dx-tag-box-select-all-padding-block-end);
     margin-bottom: var(--dx-tag-box-select-all-margin-block-end);
 

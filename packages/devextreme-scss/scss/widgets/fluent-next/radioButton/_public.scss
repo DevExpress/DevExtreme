@@ -4,16 +4,16 @@
 @mixin publish {
   --dx-radio-button-checked-bg-active: #{$radio-button-checked-bg-active};
   --dx-radio-button-checked-bg-hovered: #{$radio-button-checked-bg-hovered};
-  --dx-radio-button-checked-bg-rest: #{$radio-button-checked-bg-rest};
+  --dx-radio-button-checked-bg: #{$radio-button-checked-bg};
   --dx-radio-button-content-disabled: #{$radio-button-content-disabled};
   --dx-radio-button-icon-bg-focused: #{$radio-button-icon-bg-focused};
-  --dx-radio-button-icon-bg-rest: #{$radio-button-icon-bg-rest};
+  --dx-radio-button-icon-bg: #{$radio-button-icon-bg};
   --dx-radio-button-icon-border-active: #{$radio-button-icon-border-active};
   --dx-radio-button-icon-border-hovered: #{$radio-button-icon-border-hovered};
-  --dx-radio-button-icon-border-read-only: #{if($radio-button-icon-border-read-only == $radio-button-icon-border-rest, var(--dx-radio-button-icon-border-rest), $radio-button-icon-border-read-only)};
-  --dx-radio-button-icon-border-rest: #{$radio-button-icon-border-rest};
+  --dx-radio-button-icon-border-read-only: #{if($radio-button-icon-border-read-only == $radio-button-icon-border, var(--dx-radio-button-icon-border), $radio-button-icon-border-read-only)};
+  --dx-radio-button-icon-border: #{$radio-button-icon-border};
   --dx-radio-button-invalid-bg-focused: #{$radio-button-invalid-bg-focused};
   --dx-radio-button-invalid-bg-hovered: #{$radio-button-invalid-bg-hovered};
-  --dx-radio-button-invalid-bg-rest: #{$radio-button-invalid-bg-rest};
+  --dx-radio-button-invalid-bg: #{$radio-button-invalid-bg};
   --dx-radio-button-value-container-padding-inline-end: #{$radio-button-value-container-padding-inline-end};
 }

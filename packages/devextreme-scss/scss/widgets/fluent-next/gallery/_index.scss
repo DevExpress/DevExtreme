@@ -34,7 +34,7 @@
       position: absolute;
       width: var(--dx-gallery-nav-button-width);
       height: var(--dx-gallery-nav-button-height);
-      background: var(--dx-gallery-nav-button-bg-rest);
+      background: var(--dx-gallery-nav-button-bg);
       border-radius: 50%;
       top: 50%;
       margin-top: var(--dx-gallery-nav-button-margin-block-start);
@@ -45,7 +45,7 @@
       z-index: 10;
       clear: both;
       font-size: var(--dx-gallery-nav-icon-font-size);
-      color: var(--dx-gallery-nav-arrow-content-rest);
+      color: var(--dx-gallery-nav-arrow-content);
     }
   }
 
@@ -85,13 +85,13 @@
 .dx-gallery-indicator-item {
   border-radius: 50%;
   box-sizing: border-box;
-  border: var(--dx-gallery-indicator-item-border);
-  border-color: var(--dx-gallery-indicator-item-border-rest);
+  border: var(--dx-gallery-indicator-item-border-width) solid;
+  border-color: var(--dx-gallery-indicator-item-border);
   pointer-events: auto;
   margin: calc(5px - var(--dx-gallery-indicator-size) / 2) 6px;
   width: var(--dx-gallery-indicator-size);
   height: var(--dx-gallery-indicator-size);
-  background: var(--dx-gallery-indicator-bg-rest);
+  background: var(--dx-gallery-indicator-bg);
 }
 
 .dx-gallery-indicator-item-active,

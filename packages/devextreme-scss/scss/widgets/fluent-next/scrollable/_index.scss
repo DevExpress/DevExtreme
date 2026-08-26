@@ -8,12 +8,12 @@
 );
 @use "../../base/scrollable/mixins" as *;
 @include dx-scrollable-scroll-content(
-  var(--dx-scrollable-scroll-bg-rest),
+  var(--dx-scrollable-scroll-bg),
 );
 @include dx-scrollable-scrollbar-hoverable(
-  var(--dx-scrollable-scrollbar-bg-rest),
+  var(--dx-scrollable-scrollbar-bg),
   transparent,
-  var(--dx-scrollable-scroll-bg-rest),
+  var(--dx-scrollable-scroll-bg),
 );
 @include dx-scrollable-scrollbar-vertical(
   var(--dx-scrollable-scrollbar-thin-size),

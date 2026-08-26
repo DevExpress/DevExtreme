@@ -4,10 +4,10 @@
 @mixin publish {
   --dx-splitter-resize-handle-bg-focused: #{$splitter-resize-handle-bg-focused};
   --dx-splitter-resize-handle-bg-hovered: #{$splitter-resize-handle-bg-hovered};
-  --dx-splitter-resize-handle-bg-rest: #{$splitter-resize-handle-bg-rest};
+  --dx-splitter-resize-handle-bg: #{$splitter-resize-handle-bg};
   --dx-splitter-resize-handle-content-focused: #{$splitter-resize-handle-content-focused};
-  --dx-splitter-resize-handle-content-hovered: #{if($splitter-resize-handle-content-hovered == $splitter-resize-handle-content-rest, var(--dx-splitter-resize-handle-content-rest), $splitter-resize-handle-content-hovered)};
-  --dx-splitter-resize-handle-content-rest: #{$splitter-resize-handle-content-rest};
+  --dx-splitter-resize-handle-content-hovered: #{if($splitter-resize-handle-content-hovered == $splitter-resize-handle-content, var(--dx-splitter-resize-handle-content), $splitter-resize-handle-content-hovered)};
+  --dx-splitter-resize-handle-content: #{$splitter-resize-handle-content};
   --dx-splitter-resize-handle-gap: #{$splitter-resize-handle-gap};
   --dx-splitter-resize-handle-icon-size: #{$splitter-resize-handle-icon-size};
 }

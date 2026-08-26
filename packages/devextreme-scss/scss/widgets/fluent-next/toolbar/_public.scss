@@ -2,9 +2,9 @@
 @use "sizes" as *;
 
 @mixin publish {
-  --dx-toolbar-bg-rest: #{$toolbar-bg-rest};
+  --dx-toolbar-bg: #{$toolbar-bg};
   --dx-toolbar-button-text-font-weight: #{$toolbar-button-text-font-weight};
-  --dx-toolbar-content-rest: #{$toolbar-content-rest};
+  --dx-toolbar-content: #{$toolbar-content};
   --dx-toolbar-group-margin: #{$toolbar-group-margin};
   --dx-toolbar-height: #{$toolbar-height};
   --dx-toolbar-item-padding: #{$toolbar-item-padding};
@@ -14,6 +14,6 @@
   --dx-toolbar-menu-section-border-block-end: #{$toolbar-menu-section-border-block-end};
   --dx-toolbar-padding: #{$toolbar-padding};
   --dx-toolbar-section-padding: #{$toolbar-section-padding};
-  --dx-toolbar-separator-border-rest: #{$toolbar-separator-border-rest};
+  --dx-toolbar-separator-border: #{$toolbar-separator-border};
   --dx-toolbar-text-editor-width: #{$toolbar-text-editor-width};
 }

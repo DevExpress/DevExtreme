@@ -5,10 +5,10 @@
 );
 
 .dx-tile {
-  color: var(--dx-tile-view-content-rest);
-  background-color: var(--dx-tile-view-bg-rest);
+  color: var(--dx-tile-view-content);
+  background-color: var(--dx-tile-view-bg);
   border: var(--dx-tile-view-tile-border);
-  border-color: var(--dx-tile-view-border-rest);
+  border-color: var(--dx-tile-view-border);
   text-align: left;
 
   &.dx-state-focused,

@@ -3,8 +3,8 @@
 
 @mixin publish {
   --dx-tree-list-cell-outline-focused: #{$tree-list-cell-outline-focused};
-  --dx-tree-list-chevron-icon-rest: #{$tree-list-chevron-icon-rest};
-  --dx-tree-list-chevron-icon-selected: #{if($tree-list-chevron-icon-selected == $tree-list-chevron-icon-rest, var(--dx-tree-list-chevron-icon-rest), $tree-list-chevron-icon-selected)};
+  --dx-tree-list-chevron-icon: #{$tree-list-chevron-icon};
+  --dx-tree-list-chevron-icon-selected: #{if($tree-list-chevron-icon-selected == $tree-list-chevron-icon, var(--dx-tree-list-chevron-icon), $tree-list-chevron-icon-selected)};
   --dx-tree-list-empty-space-height: #{$tree-list-empty-space-height};
   --dx-tree-list-error-message-margin-block-end: #{$tree-list-error-message-margin-block-end};
   --dx-tree-list-expand-icon-size: #{$tree-list-expand-icon-size};

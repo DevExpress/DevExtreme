@@ -8,8 +8,8 @@
 
 .dx-splitter {
   @include resize-handle-states(
-    var(--dx-splitter-resize-handle-content-rest),
-    var(--dx-splitter-resize-handle-bg-rest),
+    var(--dx-splitter-resize-handle-content),
+    var(--dx-splitter-resize-handle-bg),
     var(--dx-splitter-resize-handle-content-hovered),
     var(--dx-splitter-resize-handle-bg-hovered),
     var(--dx-splitter-resize-handle-content-focused),

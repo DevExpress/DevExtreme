@@ -20,7 +20,7 @@
 }
 
 .dx-menu {
-  color: var(--dx-menu-content-rest);
+  color: var(--dx-menu-content);
 
   .dx-menu-horizontal {
     .dx-menu-item-popout {
@@ -77,11 +77,11 @@
 }
 
 .dx-menu-adaptive-mode {
-  background-color: var(--dx-menu-popup-bg-rest);
+  background-color: var(--dx-menu-popup-bg);
 
   .dx-treeview {
     border: var(--dx-menu-tree-view-border);
-    border-color: var(--dx-menu-popup-border-rest);
+    border-color: var(--dx-menu-popup-border);
     border-radius: $global-border-radius;
 
     &,
@@ -97,13 +97,13 @@
       }
 
       .dx-treeview-toggle-item-visibility {
-        color: var(--dx-menu-popup-bg-rest);
+        color: var(--dx-menu-popup-bg);
       }
     }
   }
 
   .dx-treeview-node-container:first-child > .dx-treeview-node {
     border-bottom: var(--dx-menu-tree-view-node-border-block-end);
-    border-bottom-color: var(--dx-menu-popup-border-rest);
+    border-bottom-color: var(--dx-menu-popup-border);
   }
 }

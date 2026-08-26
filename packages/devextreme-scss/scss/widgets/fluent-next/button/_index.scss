@@ -34,7 +34,7 @@
 
 .dx-button-mode-contained {
   &.dx-button-normal {
-    box-shadow: var(--dx-button-box-shadow) var(--dx-button-normal-shadow-rest);
+    box-shadow: var(--dx-button-box-shadow) var(--dx-button-normal-shadow);
   }
 }
 
@@ -47,24 +47,24 @@
   }
 
   @include dx-button-styling(
-    var(--dx-button-normal-contained-bg-rest),
-    var(--dx-button-normal-contained-content-rest),
+    var(--dx-button-normal-contained-bg),
+    var(--dx-button-normal-contained-content),
     var(--dx-button-normal-contained-bg-hovered),
     var(--dx-button-normal-contained-bg-focused),
     var(--dx-button-normal-contained-bg-active),
-    var(--dx-button-normal-contained-icon-rest),
+    var(--dx-button-normal-contained-icon),
     var(--dx-button-normal-contained-bg-selected),
     var(--dx-button-normal-contained-content-selected),
   );
 
   &.dx-button-default {
     @include dx-button-styling(
-      var(--dx-button-default-contained-bg-rest),
-      var(--dx-button-default-contained-content-rest),
+      var(--dx-button-default-contained-bg),
+      var(--dx-button-default-contained-content),
       var(--dx-button-default-contained-bg-hovered),
       var(--dx-button-default-contained-bg-focused),
       var(--dx-button-default-contained-bg-active),
-      var(--dx-button-default-contained-icon-rest),
+      var(--dx-button-default-contained-icon),
       var(--dx-button-default-contained-bg-selected),
       var(--dx-button-default-contained-content-selected),
     );
@@ -72,12 +72,12 @@
 
   &.dx-button-danger {
     @include dx-button-styling(
-      var(--dx-button-danger-contained-bg-rest),
-      var(--dx-button-danger-contained-content-rest),
+      var(--dx-button-danger-contained-bg),
+      var(--dx-button-danger-contained-content),
       var(--dx-button-danger-contained-bg-hovered),
       var(--dx-button-danger-contained-bg-focused),
       var(--dx-button-danger-contained-bg-active),
-      var(--dx-button-danger-contained-icon-rest),
+      var(--dx-button-danger-contained-icon),
       var(--dx-button-danger-contained-bg-selected),
       var(--dx-button-danger-contained-content-selected),
     );
@@ -85,12 +85,12 @@
 
   &.dx-button-success {
     @include dx-button-styling(
-      var(--dx-button-success-contained-bg-rest),
-      var(--dx-button-success-contained-content-rest),
+      var(--dx-button-success-contained-bg),
+      var(--dx-button-success-contained-content),
       var(--dx-button-success-contained-bg-hovered),
       var(--dx-button-success-contained-bg-focused),
       var(--dx-button-success-contained-bg-active),
-      var(--dx-button-success-contained-icon-rest),
+      var(--dx-button-success-contained-icon),
       var(--dx-button-success-contained-bg-selected),
       var(--dx-button-success-contained-content-selected),
     );
@@ -99,10 +99,10 @@
 
 .dx-button-mode-text {
   @include dx-button-flat-color-styling(
-    var(--dx-button-normal-contained-content-rest),
-    var(--dx-button-normal-contained-content-rest),
-    var(--dx-button-normal-contained-content-rest),
-    var(--dx-button-normal-text-bg-rest),
+    var(--dx-button-normal-contained-content),
+    var(--dx-button-normal-contained-content),
+    var(--dx-button-normal-contained-content),
+    var(--dx-button-normal-text-bg),
     var(--dx-button-normal-text-bg-hovered),
     var(--dx-button-normal-text-bg-focused),
     var(--dx-button-normal-text-bg-active),
@@ -112,10 +112,10 @@
 
   &.dx-button-default {
     @include dx-button-flat-color-styling(
-      var(--dx-button-default-text-content-rest),
+      var(--dx-button-default-text-content),
       var(--dx-button-default-text-content-hovered),
       var(--dx-button-default-text-content-active),
-      var(--dx-button-default-text-bg-rest),
+      var(--dx-button-default-text-bg),
       var(--dx-button-default-text-bg-hovered),
       var(--dx-button-default-text-bg-focused),
       var(--dx-button-default-text-bg-active),
@@ -126,10 +126,10 @@
 
   &.dx-button-danger {
     @include dx-button-flat-color-styling(
-      var(--dx-button-danger-text-content-rest),
+      var(--dx-button-danger-text-content),
       var(--dx-button-danger-text-content-hovered),
       var(--dx-button-danger-text-content-active),
-      var(--dx-button-danger-text-bg-rest),
+      var(--dx-button-danger-text-bg),
       var(--dx-button-danger-text-bg-hovered),
       var(--dx-button-danger-text-bg-focused),
       var(--dx-button-danger-text-bg-active),
@@ -140,10 +140,10 @@
 
   &.dx-button-success {
     @include dx-button-flat-color-styling(
-      var(--dx-button-success-text-content-rest),
+      var(--dx-button-success-text-content),
       var(--dx-button-success-text-content-hovered),
       var(--dx-button-success-text-content-active),
-      var(--dx-button-success-text-bg-rest),
+      var(--dx-button-success-text-bg),
       var(--dx-button-success-text-bg-hovered),
       var(--dx-button-success-text-bg-focused),
       var(--dx-button-success-text-bg-active),
@@ -155,11 +155,11 @@
 
 .dx-button-mode-outlined {
   @include dx-button-outlined-color-styling(
-    var(--dx-button-normal-contained-content-rest),
-    var(--dx-button-normal-contained-content-rest),
-    var(--dx-button-normal-contained-content-rest),
-    var(--dx-button-normal-outlined-border-rest),
-    var(--dx-button-normal-outlined-bg-rest),
+    var(--dx-button-normal-contained-content),
+    var(--dx-button-normal-contained-content),
+    var(--dx-button-normal-contained-content),
+    var(--dx-button-normal-outlined-border),
+    var(--dx-button-normal-outlined-bg),
     var(--dx-button-normal-outlined-bg-hovered),
     var(--dx-button-normal-outlined-bg-focused),
     var(--dx-button-normal-outlined-bg-active),
@@ -169,11 +169,11 @@
 
   &.dx-button-default {
     @include dx-button-outlined-color-styling(
-      var(--dx-button-default-outlined-content-rest),
+      var(--dx-button-default-outlined-content),
       var(--dx-button-default-outlined-content-hovered),
       var(--dx-button-default-outlined-content-active),
-      var(--dx-button-default-outlined-border-rest),
-      var(--dx-button-default-outlined-bg-rest),
+      var(--dx-button-default-outlined-border),
+      var(--dx-button-default-outlined-bg),
       var(--dx-button-default-outlined-bg-hovered),
       var(--dx-button-default-outlined-bg-focused),
       var(--dx-button-default-outlined-bg-active),
@@ -184,11 +184,11 @@
 
   &.dx-button-danger {
     @include dx-button-outlined-color-styling(
-      var(--dx-button-danger-outlined-content-rest),
+      var(--dx-button-danger-outlined-content),
       var(--dx-button-danger-outlined-content-hovered),
       var(--dx-button-danger-outlined-content-active),
-      var(--dx-button-danger-outlined-border-rest),
-      var(--dx-button-danger-outlined-bg-rest),
+      var(--dx-button-danger-outlined-border),
+      var(--dx-button-danger-outlined-bg),
       var(--dx-button-danger-outlined-bg-hovered),
       var(--dx-button-danger-outlined-bg-focused),
       var(--dx-button-danger-outlined-bg-active),
@@ -199,11 +199,11 @@
 
   &.dx-button-success {
     @include dx-button-outlined-color-styling(
-      var(--dx-button-success-outlined-content-rest),
+      var(--dx-button-success-outlined-content),
       var(--dx-button-success-outlined-content-hovered),
       var(--dx-button-success-outlined-content-active),
-      var(--dx-button-success-outlined-border-rest),
-      var(--dx-button-success-outlined-bg-rest),
+      var(--dx-button-success-outlined-border),
+      var(--dx-button-success-outlined-bg),
       var(--dx-button-success-outlined-bg-hovered),
       var(--dx-button-success-outlined-bg-focused),
       var(--dx-button-success-outlined-bg-active),

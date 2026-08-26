@@ -24,7 +24,7 @@
   .dx-icon-search {
     @include dx-icon(search);
 
-    color: textEditorColors.$text-editor-placeholder-rest;
+    color: textEditorColors.$text-editor-placeholder;
   }
 
   &.dx-editor-underlined {

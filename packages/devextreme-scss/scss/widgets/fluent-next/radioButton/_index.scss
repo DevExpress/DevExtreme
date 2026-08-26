@@ -10,14 +10,14 @@
   true,
 );
 @include dx-radiobutton-states-mixin(
-  var(--dx-radio-button-icon-bg-rest),
-  var(--dx-radio-button-icon-border-rest),
+  var(--dx-radio-button-icon-bg),
+  var(--dx-radio-button-icon-border),
   var(--dx-radio-button-icon-border-read-only),
   null,
   null,
   var(--dx-radio-button-icon-bg-focused),
-  var(--dx-radio-button-checked-bg-rest),
-  var(--dx-radio-button-invalid-bg-rest),
+  var(--dx-radio-button-checked-bg),
+  var(--dx-radio-button-invalid-bg),
   var(--dx-radio-button-invalid-bg-hovered),
   var(--dx-radio-button-invalid-bg-focused),
   1,

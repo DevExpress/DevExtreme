@@ -3,10 +3,10 @@
 
 @mixin publish {
   --dx-tooltip-arrow-border-radius: #{$tooltip-arrow-border-radius};
-  --dx-tooltip-bg-rest: #{$tooltip-bg-rest};
+  --dx-tooltip-bg: #{$tooltip-bg};
   --dx-tooltip-border-radius: #{$tooltip-border-radius};
   --dx-tooltip-box-shadow: #{$tooltip-box-shadow};
-  --dx-tooltip-content-rest: #{$tooltip-content-rest};
+  --dx-tooltip-content: #{$tooltip-content};
   --dx-tooltip-font-size: #{$tooltip-font-size};
   --dx-tooltip-overlay-content-border: #{$tooltip-overlay-content-border};
   --dx-tooltip-overlay-content-min-height: #{$tooltip-overlay-content-min-height};

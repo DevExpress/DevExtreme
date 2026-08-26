@@ -4,7 +4,7 @@
 @mixin publish {
   --dx-context-menu-border-radius: #{$context-menu-border-radius};
   --dx-context-menu-content-disabled: #{$context-menu-content-disabled};
-  --dx-context-menu-icon-rest: #{$context-menu-icon-rest};
+  --dx-context-menu-icon: #{$context-menu-icon};
   --dx-context-menu-item-border-radius: #{$context-menu-item-border-radius};
   --dx-context-menu-item-content-gap: #{$context-menu-item-content-gap};
   --dx-context-menu-item-text-padding-inline: #{$context-menu-item-text-padding-inline};
@@ -13,5 +13,5 @@
   --dx-context-menu-padding-inline: #{$context-menu-padding-inline};
   --dx-context-menu-separator-height: #{$context-menu-separator-height};
   --dx-context-menu-separator-margin: #{$context-menu-separator-margin};
-  --dx-context-menu-shadow-rest: #{$context-menu-shadow-rest};
+  --dx-context-menu-shadow: #{$context-menu-shadow};
 }

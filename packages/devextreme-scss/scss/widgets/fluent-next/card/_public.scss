@@ -2,7 +2,7 @@
 @use "sizes" as *;
 
 @mixin publish {
-  --dx-card-bg-rest: #{$card-bg-rest};
+  --dx-card-bg: #{$card-bg};
   --dx-card-margin: #{$card-margin};
-  --dx-card-shadow-rest: #{$card-shadow-rest};
+  --dx-card-shadow: #{$card-shadow};
 }

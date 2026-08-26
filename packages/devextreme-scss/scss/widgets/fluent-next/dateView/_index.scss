@@ -60,7 +60,7 @@
     inset-inline-end: -9%;
     font-weight: bold;
     top: 37%;
-    color: var(--dx-date-view-content-rest);
+    color: var(--dx-date-view-content);
   }
 
   .dx-dateview-item-selected-frame {
@@ -79,7 +79,7 @@
   line-height: var(--dx-date-view-roller-item-height);
   text-align: center;
   font-size: var(--dx-date-view-item-font-size);
-  color: var(--dx-date-view-content-rest);
+  color: var(--dx-date-view-content);
 }
 
 .dx-dateview-item-selected {
@@ -105,13 +105,13 @@
   &::before {
     top: calc(-1 * var(--dx-date-view-roller-padding));
 
-    @include gradient-linear(var(--dx-date-view-roller-top-shadow-rest));
+    @include gradient-linear(var(--dx-date-view-roller-top-shadow));
   }
 
   &::after {
     top: var(--dx-date-view-roller-item-height);
 
-    @include gradient-linear(var(--dx-date-view-roller-bottom-shadow-rest));
+    @include gradient-linear(var(--dx-date-view-roller-bottom-shadow));
   }
 }
 

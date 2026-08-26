@@ -2,15 +2,15 @@
 @use "sizes" as *;
 
 @mixin publish {
-  --dx-validation-message-bg-rest: #{$validation-message-bg-rest};
+  --dx-validation-message-bg: #{$validation-message-bg};
   --dx-validation-message-content-padding: #{$validation-message-content-padding};
-  --dx-validation-message-content-rest: #{$validation-message-content-rest};
+  --dx-validation-message-content: #{$validation-message-content};
   --dx-validation-message-font-size: #{$validation-message-font-size};
   --dx-validation-message-line-height: #{$validation-message-line-height};
   --dx-validation-message-padding-block: #{$validation-message-padding-block};
   --dx-validation-message-padding-inline: #{$validation-message-padding-inline};
   --dx-validation-overlay-border-radius: #{$validation-overlay-border-radius};
-  --dx-validation-summary-content-rest: #{$validation-summary-content-rest};
+  --dx-validation-summary-content: #{$validation-summary-content};
   --dx-validation-summary-item-margin: #{$validation-summary-item-margin};
   --dx-validation-summary-margin-block-start: #{$validation-summary-margin-block-start};
 }

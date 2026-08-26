@@ -2,7 +2,7 @@
 @use "sizes" as *;
 
 @mixin publish {
-  --dx-data-grid-block-separator-bg-rest: #{$data-grid-block-separator-bg-rest};
+  --dx-data-grid-block-separator-bg: #{$data-grid-block-separator-bg};
   --dx-data-grid-block-separator-border-radius: #{$data-grid-block-separator-border-radius};
   --dx-data-grid-cell-outline-focused: #{$data-grid-cell-outline-focused};
   --dx-data-grid-cell-padding: #{$data-grid-cell-padding};
@@ -11,9 +11,9 @@
   --dx-data-grid-form-buttons-margin-block-start: #{$data-grid-form-buttons-margin-block-start};
   --dx-data-grid-form-buttons-margin-inline-start: #{$data-grid-form-buttons-margin-inline-start};
   --dx-data-grid-form-buttons-rtl-margin-inline-start: #{$data-grid-form-buttons-rtl-margin-inline-start};
-  --dx-data-grid-group-panel-item-bg-rest: #{$data-grid-group-panel-item-bg-rest};
+  --dx-data-grid-group-panel-item-bg: #{$data-grid-group-panel-item-bg};
   --dx-data-grid-group-panel-item-border-radius: #{$data-grid-group-panel-item-border-radius};
-  --dx-data-grid-group-panel-item-border-rest: #{$data-grid-group-panel-item-border-rest};
+  --dx-data-grid-group-panel-item-border: #{$data-grid-group-panel-item-border};
   --dx-data-grid-group-panel-item-border-width: #{$data-grid-group-panel-item-border-width};
   --dx-data-grid-group-panel-item-font-weight: #{$data-grid-group-panel-item-font-weight};
   --dx-data-grid-group-panel-item-margin-inline-end: #{$data-grid-group-panel-item-margin-inline-end};

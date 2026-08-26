@@ -4,8 +4,8 @@
 @use "../../base/card";
 
 .dx-card {
-  box-shadow: var(--dx-card-shadow-rest);
+  box-shadow: var(--dx-card-shadow);
   border-radius: $global-border-radius;
-  background-color: var(--dx-card-bg-rest);
+  background-color: var(--dx-card-bg);
   margin: var(--dx-card-margin);
 }

@@ -43,10 +43,10 @@
   margin-top: calc(var(--dx-color-box-preview-icon-size) / -2);
   inset-inline-start: var(--dx-color-box-preview-inset-inline-start);
   border: var(--dx-color-box-preview-border);
-  border-color: colorViewColors.$color-view-border-rest;
+  border-color: colorViewColors.$color-view-border;
 
   .dx-icon-colordismiss {
-    color: var(--dx-color-box-preview-icon-rest);
+    color: var(--dx-color-box-preview-icon);
   }
 
   .dx-state-disabled & {
@@ -58,7 +58,7 @@
 
 .dx-colorbox-overlay {
   &.dx-overlay-content {
-    background-color: colorViewColors.$color-view-content-box-overlay-bg-rest;
+    background-color: colorViewColors.$color-view-content-box-overlay-bg;
   }
 
   .dx-popup-content {

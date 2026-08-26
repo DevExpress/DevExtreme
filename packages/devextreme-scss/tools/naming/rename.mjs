@@ -28,7 +28,7 @@ const registries = JSON.parse(readFileSync(join(here, 'registries.json'), 'utf8'
 const mapping = JSON.parse(readFileSync(join(here, 'mapping.json'), 'utf8'));
 
 const NAME_PATTERN = /^\$[a-z][a-z0-9]*(-[a-z0-9]+)*$/;
-/* A variable name can be a prefix of another ($toast-info-bg vs $toast-info-bg-rest), so `\b` is
+/* A variable name can be a prefix of another ($grid-border vs $grid-border-width), so `\b` is
  * not a boundary here: after `bg` comes `-`, which `\b` happily matches. */
 const occurrence = (name) => new RegExp(`\\${name}(?![\\w-])`);
 
@@ -130,7 +130,10 @@ const sizeBucket = (name) => {
   // "blur radius" is the CSS term for a shadow's blur length and has nothing to do with corners.
   if (/blur/.test(name)) return 'spacing';
   if (/radius/.test(name)) return 'border-radius';
-  if (/border.*width|border-size/.test(name)) return 'border-width';
+  // A bare `-border` segment is the border shorthand or its width (`1px solid`, `$border-width-10`);
+  // radius and the radius corners are matched above. The segment must be hyphen-delimited, or
+  // `borderedwidget` would be read as a border.
+  if (/(^|-)border(-|$)|border-size/.test(name)) return 'border-width';
   if (/letter-spacing/.test(name)) return 'letter-spacing';
   if (/font-weight/.test(name)) return 'font-weight';
   return 'spacing';
@@ -213,7 +216,12 @@ const guard = () => {
     //    disagreement means one of the two names lies about the value — and a rename never touches
     //    values. Ask the tokens the value is built from: if they agree with the NEW name, the old
     //    name was the liar and the rename fixes it; anything else is a real problem.
-    if (sizeBucket(from) !== sizeBucket(to)) {
+    // The bucket heuristic only says something about a SIZE: it reads `border`/`line`/`outline`
+    // as lengths and would flag every colour rename that adds or drops such a word. Ask the
+    // declaration site — either end of the rename, since the batch may or may not be applied yet.
+    const isSize = themeFiles.some((file) => file.endsWith('_sizes.scss')
+      && (declaredIn(file).has(from) || declaredIn(file).has(to)));
+    if (isSize && sizeBucket(from) !== sizeBucket(to)) {
       // Old name before the batch is applied, new name after it: `--check` has to give the same
       // verdict either side of `--apply`, or a re-run turns a landed batch red.
       const actual = valueBucket(from) ?? valueBucket(to);

@@ -2,20 +2,20 @@
 @use "sizes" as *;
 
 @mixin publish {
-  --dx-progress-bar-bg-rest: #{$progress-bar-bg-rest};
+  --dx-progress-bar-bg: #{$progress-bar-bg};
   --dx-progress-bar-border-radius: #{$progress-bar-border-radius};
   --dx-progress-bar-container-bg-disabled: #{$progress-bar-container-bg-disabled};
   --dx-progress-bar-content-disabled: #{$progress-bar-content-disabled};
   --dx-progress-bar-height: #{$progress-bar-height};
   --dx-progress-bar-indeterminate-bg-disabled: #{$progress-bar-indeterminate-bg-disabled};
-  --dx-progress-bar-indeterminate-bg-rest: #{$progress-bar-indeterminate-bg-rest};
-  --dx-progress-bar-indeterminate-invalid-bg-rest: #{$progress-bar-indeterminate-invalid-bg-rest};
+  --dx-progress-bar-indeterminate-bg: #{$progress-bar-indeterminate-bg};
+  --dx-progress-bar-indeterminate-invalid-bg: #{$progress-bar-indeterminate-invalid-bg};
   --dx-progress-bar-indeterminate-width: #{$progress-bar-indeterminate-width};
-  --dx-progress-bar-label-content-rest: #{$progress-bar-label-content-rest};
+  --dx-progress-bar-label-content: #{$progress-bar-label-content};
   --dx-progress-bar-range-bg-disabled: #{$progress-bar-range-bg-disabled};
-  --dx-progress-bar-range-bg-rest: #{$progress-bar-range-bg-rest};
-  --dx-progress-bar-range-indeterminate-bg-rest: #{$progress-bar-range-indeterminate-bg-rest};
-  --dx-progress-bar-range-invalid-bg-rest: #{$progress-bar-range-invalid-bg-rest};
+  --dx-progress-bar-range-bg: #{$progress-bar-range-bg};
+  --dx-progress-bar-range-indeterminate-bg: #{$progress-bar-range-indeterminate-bg};
+  --dx-progress-bar-range-invalid-bg: #{$progress-bar-range-invalid-bg};
   --dx-progress-bar-status-font-size: #{$progress-bar-status-font-size};
   --dx-progress-bar-status-margin-block-start: #{$progress-bar-status-margin-block-start};
   --dx-progress-bar-status-padding-inline-end: #{$progress-bar-status-padding-inline-end};

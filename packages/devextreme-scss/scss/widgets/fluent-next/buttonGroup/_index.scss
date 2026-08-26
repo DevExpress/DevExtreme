@@ -20,14 +20,14 @@
 
 .dx-buttongroup-mode-contained {
   border-radius: buttonSizes.$button-border-radius;
-  box-shadow: buttonSizes.$button-box-shadow buttonColors.$button-normal-shadow-rest;
+  box-shadow: buttonSizes.$button-box-shadow buttonColors.$button-normal-shadow;
 
   .dx-button-mode-contained {
     box-shadow: none;
     border-width: 0;
     border-style: solid;
     border-inline-end-width: var(--dx-button-group-item-contained-border-inline-end-width);
-    border-inline-end-color: var(--dx-button-group-separator-rest);
+    border-inline-end-color: var(--dx-button-group-separator);
 
     &.dx-buttongroup-last-item {
       border-inline-end-width: 0;

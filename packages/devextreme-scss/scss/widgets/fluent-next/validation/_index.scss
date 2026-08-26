@@ -4,9 +4,9 @@
 @use "../textEditor/sizes" as textEditorSizes;
 @use "../overlay";
 @include baseValidation.dx-base-validation(
-  var(--dx-validation-summary-content-rest),
-  var(--dx-validation-message-content-rest),
-  var(--dx-validation-message-bg-rest),
+  var(--dx-validation-summary-content),
+  var(--dx-validation-message-content),
+  var(--dx-validation-message-bg),
   var(--dx-validation-overlay-border-radius)
 );
 @include baseValidation.dx-modern-styles-validation(

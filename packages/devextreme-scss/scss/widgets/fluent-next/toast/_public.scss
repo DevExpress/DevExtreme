@@ -2,26 +2,26 @@
 @use "sizes" as *;
 
 @mixin publish {
-  --dx-toast-bg-rest: #{$toast-bg-rest};
+  --dx-toast-bg: #{$toast-bg};
   --dx-toast-border-radius: #{$toast-border-radius};
   --dx-toast-box-shadow: #{$toast-box-shadow};
   --dx-toast-content-font-weight: #{$toast-content-font-weight};
   --dx-toast-content-padding: #{$toast-content-padding};
   --dx-toast-content-padding-block: #{$toast-content-padding-block};
   --dx-toast-content-padding-inline: #{$toast-content-padding-inline};
-  --dx-toast-error-bg-rest: #{$toast-error-bg-rest};
-  --dx-toast-error-content-rest: #{$toast-error-content-rest};
+  --dx-toast-error-bg: #{$toast-error-bg};
+  --dx-toast-error-content: #{$toast-error-content};
   --dx-toast-height: #{$toast-height};
   --dx-toast-icon-height: #{$toast-icon-height};
   --dx-toast-icon-margin-inline-end: #{$toast-icon-margin-inline-end};
   --dx-toast-icon-rtl-margin-inline-end: #{$toast-icon-rtl-margin-inline-end};
   --dx-toast-icon-width: #{$toast-icon-width};
-  --dx-toast-info-bg-rest: #{if($toast-info-bg-rest == $toast-bg-rest, var(--dx-toast-bg-rest), $toast-info-bg-rest)};
-  --dx-toast-info-content-rest: #{$toast-info-content-rest};
+  --dx-toast-info-bg: #{if($toast-info-bg == $toast-bg, var(--dx-toast-bg), $toast-info-bg)};
+  --dx-toast-info-content: #{$toast-info-content};
   --dx-toast-item-gap: #{$toast-item-gap};
   --dx-toast-stack-gap: #{$toast-stack-gap};
-  --dx-toast-success-bg-rest: #{$toast-success-bg-rest};
-  --dx-toast-success-content-rest: #{$toast-success-content-rest};
-  --dx-toast-warning-bg-rest: #{$toast-warning-bg-rest};
-  --dx-toast-warning-content-rest: #{$toast-warning-content-rest};
+  --dx-toast-success-bg: #{$toast-success-bg};
+  --dx-toast-success-content: #{$toast-success-content};
+  --dx-toast-warning-bg: #{$toast-warning-bg};
+  --dx-toast-warning-content: #{$toast-warning-content};
 }

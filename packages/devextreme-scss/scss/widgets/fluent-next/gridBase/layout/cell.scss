@@ -71,47 +71,47 @@
 
   // (0,2,1)
   .dx-#{$widget-name} .dx-row-lines > td {
-    border-bottom: var(--dx-grid-border);
-    border-bottom-color: var(--dx-grid-border-rest);
+    border-bottom: var(--dx-grid-border-width) solid;
+    border-bottom-color: var(--dx-grid-border);
   }
 
   // (0,2,1)
   .dx-#{$widget-name} .dx-column-lines > td {
-    border-left: var(--dx-grid-border);
-    border-left-color: var(--dx-grid-border-rest);
-    border-right: var(--dx-grid-border);
-    border-right-color: var(--dx-grid-border-rest);
+    border-left: var(--dx-grid-border-width) solid;
+    border-left-color: var(--dx-grid-border);
+    border-right: var(--dx-grid-border-width) solid;
+    border-right-color: var(--dx-grid-border);
   }
 
   // (0,3,0) - (0,4,0)
   .dx-#{$widget-name}-rowsview .dx-master-detail-row > .dx-#{$widget-name}-group-space,
   .dx-#{$widget-name}-rowsview .dx-master-detail-row .dx-master-detail-cell:not(.dx-row-lines) {
-    border-top: var(--dx-grid-border);
-    border-top-color: var(--dx-grid-border-rest);
-    border-bottom: var(--dx-grid-border);
-    border-bottom-color: var(--dx-grid-border-rest);
+    border-top: var(--dx-grid-border-width) solid;
+    border-top-color: var(--dx-grid-border);
+    border-bottom: var(--dx-grid-border-width) solid;
+    border-bottom-color: var(--dx-grid-border);
   }
 
   // (0,3,1)
   .dx-#{$widget-name}-headers .dx-#{$widget-name}-table .dx-row > td {
-    border-bottom: var(--dx-grid-border);
-    border-bottom-color: var(--dx-grid-border-rest);
+    border-bottom: var(--dx-grid-border-width) solid;
+    border-bottom-color: var(--dx-grid-border);
   }
 
   // (0,3,1)
   .dx-#{$widget-name}-rowsview .dx-row.dx-edit-row > td {
-    border-top: var(--dx-grid-border);
-    border-top-color: var(--dx-grid-border-rest);
-    border-bottom: var(--dx-grid-border);
-    border-bottom-color: var(--dx-grid-border-rest);
+    border-top: var(--dx-grid-border-width) solid;
+    border-top-color: var(--dx-grid-border);
+    border-bottom: var(--dx-grid-border-width) solid;
+    border-bottom-color: var(--dx-grid-border);
   }
 
   // (0,3,1)
   .dx-#{$widget-name}-rowsview .dx-row-removed.dx-row-lines > td {
     border-top: var(--dx-grid-row-lines-border-block-start);
-    border-top-color: var(--dx-grid-cell-removed-border-rest);
+    border-top-color: var(--dx-grid-cell-removed-border);
     border-bottom: var(--dx-grid-row-lines-border-block-end);
-    border-bottom-color: var(--dx-grid-cell-removed-border-rest);
+    border-bottom-color: var(--dx-grid-cell-removed-border);
   }
 
   // (0,3,1)
@@ -130,8 +130,8 @@
   // (0,4,1)
   .dx-#{$widget-name}-rowsview .dx-row.dx-edit-row:first-child > td {
     border-top-width: 0;
-    border-bottom: var(--dx-grid-border);
-    border-bottom-color: var(--dx-grid-border-rest);
+    border-bottom: var(--dx-grid-border-width) solid;
+    border-bottom-color: var(--dx-grid-border);
   }
 
   // (0,4,1) - (0,5,1)
@@ -145,7 +145,7 @@
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > tr > td.dx-#{$widget-name}-group-space,
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > td.dx-#{$widget-name}-group-space,
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > tr > td.dx-#{$widget-name}-group-space {
-    border-right-color: var(--dx-grid-selection-bg-rest);
+    border-right-color: var(--dx-grid-selection-bg);
   }
 
   // (0,5,1) - (0,6,1)
@@ -161,9 +161,9 @@
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):not(.dx-row-lines) > td,
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover:not(.dx-row-lines) > td {
     border-bottom: var(--dx-grid-row-lines-border-block-end);
-    border-bottom-color: var(--dx-grid-selection-bg-rest);
+    border-bottom-color: var(--dx-grid-selection-bg);
     border-top: var(--dx-grid-row-lines-border-block-start);
-    border-top-color: var(--dx-grid-selection-bg-rest);
+    border-top-color: var(--dx-grid-selection-bg);
   }
 
   // (0,5,1) - (0,6,1)
@@ -182,7 +182,7 @@
     .dx-pointer-events-none
   ) {
     border-left: var(--dx-grid-row-lines-border-inline-start);
-    border-left-color: var(--dx-grid-border-rest);
+    border-left-color: var(--dx-grid-border);
   }
 
   // (0,10,1)
@@ -219,7 +219,7 @@
     .dx-pointer-events-none
   ) {
     border-right: var(--dx-grid-cell-border-inline-end);
-    border-right-color: var(--dx-grid-border-rest);
+    border-right-color: var(--dx-grid-border);
   }
 
   // (0,6,1) - (0,7,2)
@@ -227,7 +227,7 @@
   .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row > tr > td:not(.dx-focused).dx-#{$widget-name}-group-space,
   .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row:hover > td:not(.dx-focused).dx-#{$widget-name}-group-space,
   .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row:hover > tr > td:not(.dx-focused).dx-#{$widget-name}-group-space {
-    border-left-color: var(--dx-grid-selection-bg-rest);
+    border-left-color: var(--dx-grid-selection-bg);
   }
 
   // #endregion
@@ -320,7 +320,7 @@
 
   // (0,6,1)
   .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-data-row.dx-row-focused:not(.dx-row-lines, .dx-edit-row, .dx-row-removed) > td:not(.dx-editor-cell, .dx-master-detail-cell, .dx-command-drag) {
-    padding-top: calc(#{$grid-cell-padding-block} + 1px);
+    padding-top: calc(var(--dx-grid-cell-padding-block) + 1px);
   }
 
   // (0,6,1)
@@ -381,23 +381,23 @@
 
   // (0,2,1)
   .dx-#{$widget-name} .dx-row-alt > td {
-    background-color: var(--dx-grid-row-alternation-bg-rest);
+    background-color: var(--dx-grid-row-alternation-bg);
   }
 
   // (0,2,1)
   .dx-#{$widget-name} .dx-#{$widget-name}-drop-highlight > td {
-    background-color: var(--dx-grid-drop-highlight-bg-rest);
+    background-color: var(--dx-grid-drop-highlight-bg);
   }
 
   // (0,2,1)
   .dx-#{$widget-name}-rowsview .dx-row-removed > td {
-    background-color: var(--dx-grid-row-removed-bg-rest);
+    background-color: var(--dx-grid-row-removed-bg);
   }
 
   // (0,4,0)
   .dx-#{$widget-name}-rowsview .dx-master-detail-row:not(.dx-#{$widget-name}-edit-form) > .dx-#{$widget-name}-group-space,
   .dx-#{$widget-name}-rowsview .dx-master-detail-row:not(.dx-#{$widget-name}-edit-form) .dx-master-detail-cell {
-    background-color: var(--dx-grid-master-detail-cell-bg-rest);
+    background-color: var(--dx-grid-master-detail-cell-bg);
   }
 
   // (0,4,0) - (0,6,0)
@@ -407,14 +407,14 @@
   .dx-#{$widget-name}-rowsview .dx-adaptive-detail-row.dx-selection:not(.dx-edit-row) .dx-cell-modified,
   .dx-#{$widget-name}-rowsview .dx-data-row.dx-selection:hover:not(.dx-edit-row) .dx-cell-modified,
   .dx-#{$widget-name}-rowsview .dx-adaptive-detail-row.dx-selection:hover:not(.dx-edit-row) .dx-cell-modified {
-    background-color: var(--dx-grid-cell-modified-bg-rest);
+    background-color: var(--dx-grid-cell-modified-bg);
   }
 
   // (0,4,1)
   .dx-#{$widget-name}-headers.dx-#{$widget-name}-sticky-columns .dx-#{$widget-name}-filter-row > td.dx-#{$widget-name}-sticky-column,
   .dx-#{$widget-name}-headers.dx-#{$widget-name}-sticky-columns .dx-#{$widget-name}-filter-row > td.dx-#{$widget-name}-sticky-column-left,
   .dx-#{$widget-name}-headers.dx-#{$widget-name}-sticky-columns .dx-#{$widget-name}-filter-row > td.dx-#{$widget-name}-sticky-column-right {
-    background-color: var(--dx-grid-filter-row-bg-rest);
+    background-color: var(--dx-grid-filter-row-bg);
   }
 
   // (0,4,1) - (0,5,2)
@@ -422,7 +422,7 @@
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > tr > td,
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > td,
   .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > tr > td {
-    background-color: var(--dx-grid-selection-bg-rest);
+    background-color: var(--dx-grid-selection-bg);
   }
 
   // (0,5,1)
@@ -438,7 +438,7 @@
   // (0,7,1) - (0,7,2)
   .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row.dx-edit-row > td.dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-invalid),
   .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row.dx-edit-row > tr > td.dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-invalid) {
-    background-color: var(--dx-grid-bg-rest);
+    background-color: var(--dx-grid-bg);
   }
 
   // (0,8,1)
@@ -457,12 +457,12 @@
 
   // (0,2,1)
   .dx-#{$widget-name} .dx-#{$widget-name}-drop-highlight > td {
-    color: var(--dx-grid-drop-highlight-content-rest);
+    color: var(--dx-grid-drop-highlight-content);
   }
 
   // (0,2,1)
   .dx-#{$widget-name}-rowsview .dx-row-removed > td {
-    color: var(--dx-grid-cell-removed-content-rest);
+    color: var(--dx-grid-cell-removed-content);
   }
 
   // (0,4,1) - (0,5,2)
@@ -486,7 +486,7 @@
   // (0,7,1) - (0,7,2)
   .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row.dx-edit-row > td.dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-invalid),
   .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row.dx-edit-row > tr > td.dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-invalid) {
-    color: var(--dx-grid-content-rest);
+    color: var(--dx-grid-content);
   }
 
   // #endregion

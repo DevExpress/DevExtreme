@@ -370,8 +370,13 @@ const OVERRIDES = {
   // A button inside another widget is a nested component (anatomy rule 3), not a part.
   partsRemove: ['button'],
 
+  /*
+   * `rest` is not a word here: the design-tokens vocabulary spells the resting value with no
+   * suffix at all (`$color-bg` next to `$color-bg-hovered`), and the theme follows it. `focused`
+   * and `read-only` have no token counterpart — they are DOM states the token tier never models.
+   */
   states: [
-    'rest', 'hovered', 'active', 'focused',
+    'hovered', 'active', 'focused',
     'selected', 'selected-hovered', 'selected-active', 'selected-focused',
     'disabled', 'read-only',
   ],
@@ -1040,7 +1045,14 @@ const assertRootSelectorsExist = (rootSelectors) => {
 
 const build = () => {
   const folders = listFolders(themeDir);
-  const derived = deriveFromTokens(OVERRIDES.states);
+  /*
+   * The PACKAGE's own state vocabulary, used only to strip a trailing state off a token name
+   * while deriving parts. It is not our grammar: the package's component tier still spells the
+   * resting value `-rest` (300 of its 732 names), so `rest` has to be strippable here even when
+   * our own names leave it implicit — otherwise `rest` is read as the part and the real parts
+   * (backdrop, grip, scrim, thumb, veil) vanish.
+   */
+  const derived = deriveFromTokens([...OVERRIDES.states, 'rest']);
 
   const parts = sortedUnique([
     ...derived.parts.filter((part) => !OVERRIDES.partExclude.includes(part)),

@@ -4,7 +4,7 @@
 @mixin publish {
   --dx-load-panel-border-radius: #{$load-panel-border-radius};
   --dx-load-panel-box-shadow: #{$load-panel-box-shadow};
-  --dx-load-panel-content-bg-rest: #{$load-panel-content-bg-rest};
+  --dx-load-panel-content-bg: #{$load-panel-content-bg};
   --dx-load-panel-content-border: #{$load-panel-content-border};
   --dx-load-panel-content-border-radius: #{$load-panel-content-border-radius};
   --dx-load-panel-content-padding: #{$load-panel-content-padding};

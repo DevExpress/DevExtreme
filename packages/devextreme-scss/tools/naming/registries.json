@@ -489,7 +489,6 @@
     "veil"
   ],
   "states": [
-    "rest",
     "hovered",
     "active",
     "focused",

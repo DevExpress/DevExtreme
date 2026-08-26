@@ -3,8 +3,8 @@
 @use "../../base/badge";
 
 .dx-badge {
-  background-color: var(--dx-badge-bg-rest);
-  color: var(--dx-badge-content-rest);
+  background-color: var(--dx-badge-bg);
+  color: var(--dx-badge-content);
   font-size: var(--dx-badge-font-size);
   padding: var(--dx-badge-padding);
   border-radius: var(--dx-badge-border-radius);

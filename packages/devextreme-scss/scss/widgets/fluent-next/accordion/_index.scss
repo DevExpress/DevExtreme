@@ -5,8 +5,8 @@
 @use "../../base/accordion";
 
 .dx-accordion {
-  background-color: var(--dx-accordion-bg-rest);
-  color: var(--dx-accordion-content-rest);
+  background-color: var(--dx-accordion-bg);
+  color: var(--dx-accordion-content);
 }
 
 .dx-accordion-item {
@@ -58,7 +58,7 @@
 }
 
 .dx-accordion-item-title-caption {
-  color: $accordion-title-content-rest;
+  color: $accordion-title-content;
   font-size: var(--dx-accordion-title-font-size);
   font-weight: var(--dx-accordion-title-font-weight);
 

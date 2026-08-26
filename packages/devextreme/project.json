@@ -1660,9 +1660,6 @@
       ],
       "outputs": [
         "{projectRoot}/artifacts",
-        "!{projectRoot}/artifacts/css/dx.*.css",
-        "!{projectRoot}/artifacts/css/fonts/**",
-        "!{projectRoot}/artifacts/css/icons/**",
         "{projectRoot}/build/bundle-templates/dx.custom.js",
         "{projectRoot}/js/__internal/core/localization/cldr-data",
         "{projectRoot}/js/__internal/core/localization/default_messages.ts"
@@ -1727,10 +1724,7 @@
         "{workspaceRoot}/pnpm-lock.yaml"
       ],
       "outputs": [
-        "{projectRoot}/artifacts",
-        "!{projectRoot}/artifacts/css/dx.*.css",
-        "!{projectRoot}/artifacts/css/fonts/**",
-        "!{projectRoot}/artifacts/css/icons/**"
+        "{projectRoot}/artifacts"
       ],
       "cache": true,
       "configurations": {
@@ -1772,9 +1766,6 @@
       ],
       "outputs": [
         "{projectRoot}/artifacts",
-        "!{projectRoot}/artifacts/css/dx.*.css",
-        "!{projectRoot}/artifacts/css/fonts/**",
-        "!{projectRoot}/artifacts/css/icons/**",
         "{projectRoot}/build/bundle-templates/dx.custom.js",
         "{projectRoot}/js/__internal/core/localization/cldr-data",
         "{projectRoot}/js/__internal/core/localization/default_messages.ts"
