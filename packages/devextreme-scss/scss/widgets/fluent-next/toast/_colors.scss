@@ -1,19 +1,19 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$toast-bg-rest: ds.$color-surface-neutral-default-rest !default;
+$toast-bg-rest: ds.$color-bg !default;
 
 $toast-info-bg-rest: $toast-bg-rest !default;
 
-$toast-info-content-rest: ds.$color-content-neutral-default-rest !default;
+$toast-info-content-rest: ds.$color-content !default;
 
-$toast-warning-bg-rest: ds.$color-surface-warning-default-rest !default;
+$toast-warning-bg-rest: ds.$color-bg-warning !default;
 
-$toast-warning-content-rest: ds.$color-content-neutral-default-static-light-rest !default;
+$toast-warning-content-rest: ds.$color-content-static-light !default;
 
-$toast-error-bg-rest: ds.$color-surface-danger-default-rest !default;
+$toast-error-bg-rest: ds.$color-bg-danger !default;
 
-$toast-error-content-rest: ds.$color-content-neutral-default-static-dark-rest !default;
+$toast-error-content-rest: ds.$color-content-static-dark !default;
 
-$toast-success-bg-rest: ds.$color-surface-success-default-rest !default;
+$toast-success-bg-rest: ds.$color-bg-success !default;
 
-$toast-success-content-rest: ds.$color-content-neutral-default-static-dark-rest !default;
+$toast-success-content-rest: ds.$color-content-static-dark !default;
