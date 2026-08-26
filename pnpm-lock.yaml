@@ -1628,6 +1628,10 @@ importers:
       webpack-stream:
         specifier: 7.0.0
         version: 7.0.0(webpack@5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.1))
+    optionalDependencies:
+      ol:
+        specifier: 10.10.0
+        version: 10.10.0
     publishDirectory: artifacts/npm/devextreme
 
   packages/devextreme-angular:

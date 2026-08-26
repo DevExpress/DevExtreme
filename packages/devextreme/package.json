@@ -67,6 +67,9 @@
     "zod": "catalog:",
     "zod-to-json-schema": "catalog:"
   },
+  "optionalDependencies": {
+    "ol": "10.10.0"
+  },
   "devDependencies": {
     "@babel/core": "7.29.7",
     "@babel/eslint-parser": "catalog:",
