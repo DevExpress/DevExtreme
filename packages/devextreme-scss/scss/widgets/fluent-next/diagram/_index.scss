@@ -327,7 +327,7 @@
     padding: 0 $diagram-properties-panel-spacing $diagram-properties-panel-spacing;
 
     .dx-toolbar-item {
-      margin-bottom: calc((#{$diagram-properties-panel-spacing}) / 2);
+      margin-bottom: calc(#{$diagram-properties-panel-spacing} / 2);
 
       .dx-button {
         height: auto;

@@ -189,7 +189,7 @@
 }
 
 .dx-htmleditor-toolbar-separator {
-  height: calc((#{toolbarSizes.$toolbar-height}) / 2);
+  height: calc(#{toolbarSizes.$toolbar-height} / 2);
   border-inline-start-color: $html-editor-toolbar-border;
 }
 
