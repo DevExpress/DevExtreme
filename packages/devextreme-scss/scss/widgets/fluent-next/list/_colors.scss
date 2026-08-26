@@ -2,31 +2,31 @@
 @use "../button/colors" as buttonColors;
 @use "../../../_design-system/variables/ds" as ds;
 
-$list-normal-content-rest: ds.$color-content-neutral-default-rest !default;
+$list-normal-content-rest: ds.$color-content !default;
 
-$list-border-rest: ds.$color-border-neutral-default-rest !default;
+$list-border-rest: ds.$color-border !default;
 
 $list-group-header-bg-rest: transparent !default;
 
-$list-item-bg-hovered: ds.$color-surface-neutral-default-hovered !default;
+$list-item-bg-hovered: ds.$color-bg-hovered !default;
 
-$list-item-bg-selected: ds.$color-surface-neutral-default-selected !default;
-$list-item-bg-selected-hovered: ds.$color-surface-neutral-default-selected-hovered !default;
-$list-item-bg-selected-focused: ds.$color-surface-neutral-default-active !default;
-$list-item-content-hovered: ds.$color-content-neutral-default-rest !default;
-$list-header-indicator-content-rest: ds.$color-content-neutral-subdued-rest !default;
+$list-item-bg-selected: ds.$color-bg-selected !default;
+$list-item-bg-selected-hovered: ds.$color-bg-selected-hovered !default;
+$list-item-bg-selected-focused: ds.$color-bg-active !default;
+$list-item-content-hovered: ds.$color-content !default;
+$list-header-indicator-content-rest: ds.$color-content-subtle !default;
 
-$list-item-bg-active: ds.$color-surface-neutral-default-active !default;
-$list-hold-menu-bg-rest: ds.$color-surface-neutral-default-rest !default;
+$list-item-bg-active: ds.$color-bg-active !default;
+$list-hold-menu-bg-rest: ds.$color-bg !default;
 $list-hold-menu-border-rest: $list-border-rest !default;
 $list-hold-menu-shadow-rest: ds.$color-shadow-ambient !default;
 $list-menu-button-default-content-rest: buttonColors.$button-default-contained-content-rest !default;
 $list-menu-button-default-bg-rest: buttonColors.$button-default-contained-bg-rest !default;
-$list-menu-button-delete-bg-rest: ds.$color-surface-danger-default-rest !default;
-$list-item-ghost-bg-rest: ds.$color-surface-neutral-default-rest !default;
-$list-item-ghost-content-rest: ds.$color-content-neutral-subdued-rest !default;
-$list-item-ghost-border-rest: ds.$color-border-primary-default-rest !default;
-$list-icon-rest: ds.$color-content-neutral-subdued-rest !default;
+$list-menu-button-delete-bg-rest: ds.$color-bg-danger !default;
+$list-item-ghost-bg-rest: ds.$color-bg !default;
+$list-item-ghost-content-rest: ds.$color-content-subtle !default;
+$list-item-ghost-border-rest: ds.$color-border-primary !default;
+$list-icon-rest: ds.$color-content-subtle !default;
 
 /*
  * toggle-delete is an SVG data-uri image: the color is baked into the background-image at
@@ -37,23 +37,23 @@ $list-icon-rest: ds.$color-content-neutral-subdued-rest !default;
 $list-toggle-delete-icon-rest: null !default;
 
 @if $mode == "light" {
-  $list-toggle-delete-icon-rest: #444 !default; // dx-data-uri-static: ds.$color-content-neutral-subdued-rest
+  $list-toggle-delete-icon-rest: #444 !default; // dx-data-uri-static: ds.$color-content-subtle
 }
 
 @if $mode == "dark" {
-  $list-toggle-delete-icon-rest: #cbcbcb !default; // dx-data-uri-static: ds.$color-content-neutral-subdued-rest
+  $list-toggle-delete-icon-rest: #cbcbcb !default; // dx-data-uri-static: ds.$color-content-subtle
 }
 
-$list-base-select-all-separator-bg-rest: ds.$color-border-neutral-subdued-rest !default;
+$list-base-select-all-separator-bg-rest: ds.$color-border-subtle !default;
 
-$list-group-content-rest: ds.$color-content-neutral-default-rest !default;
+$list-group-content-rest: ds.$color-content !default;
 
 $list-expanded-group-content-rest: $list-group-content-rest !default;
 $list-item-content-selected: $list-normal-content-rest !default;
 
-$list-border-disabled: ds.$color-border-neutral-default-disabled !default;
-$list-content-disabled: ds.$color-content-neutral-default-disabled !default;
-$list-inverted-content-rest: ds.$color-content-neutral-default-static-dark-rest !default;
+$list-border-disabled: ds.$color-border-disabled !default;
+$list-content-disabled: ds.$color-content-disabled !default;
+$list-inverted-content-rest: ds.$color-content-static-dark !default;
 
 // Values hoisted from style-file literals (tokenized)
 

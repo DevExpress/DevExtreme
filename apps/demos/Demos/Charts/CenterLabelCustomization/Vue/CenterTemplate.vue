@@ -14,7 +14,7 @@
       height="40"
     />
     <text
-      :style="{fontSize: 18, fill: 'var(--dxds-color-content-neutral-subdued-rest, #494949)'}"
+      :style="{fontSize: 18, fill: 'var(--dxds-color-content-subtle, #494949)'}"
       text-anchor="middle"
       x="100"
       y="120"
