@@ -113,7 +113,7 @@ const dataSource = data.map((item) => {
   font-size: 16px;
   font-weight: 500;
   padding-bottom: 5px;
-  border-bottom: 1px solid var(--dxds-color-border-neutral-default-static-light-rest, #c5c5c5);
+  border-bottom: 1px solid var(--dxds-color-border-static-light, #c5c5c5);
 }
 
 .tooltip-body {

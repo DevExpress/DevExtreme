@@ -1,26 +1,26 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$check-box-border-rest: ds.$color-border-neutral-accessible-rest !default;
-$check-box-border-hovered: ds.$color-border-neutral-accessible-hovered !default;
-$check-box-border-active: ds.$color-border-neutral-accessible-active !default;
+$check-box-border-rest: ds.$color-border-contrast !default;
+$check-box-border-hovered: ds.$color-border-contrast-hovered !default;
+$check-box-border-active: ds.$color-border-contrast-active !default;
 
-$check-box-icon-bg-rest: ds.$color-content-neutral-default-inverted-rest !default;
+$check-box-icon-bg-rest: ds.$color-content-inverted !default;
 
-$check-box-icon-checked-bg-rest: ds.$color-surface-primary-default-rest !default;
-$check-box-icon-checked-bg-hovered: ds.$color-surface-primary-default-hovered !default;
-$check-box-icon-checked-bg-focused: ds.$color-surface-primary-default-active !default;
+$check-box-icon-checked-bg-rest: ds.$color-bg-primary !default;
+$check-box-icon-checked-bg-hovered: ds.$color-bg-primary-hovered !default;
+$check-box-icon-checked-bg-focused: ds.$color-bg-primary-active !default;
 
-$check-box-invalid-border-rest: ds.$color-border-danger-compound-rest !default;
-$check-box-invalid-border-hovered: ds.$color-border-danger-compound-hovered !default;
-$check-box-invalid-border-focused: ds.$color-border-danger-compound-active !default;
+$check-box-invalid-border-rest: ds.$color-border-danger-shared !default;
+$check-box-invalid-border-hovered: ds.$color-border-danger-shared-hovered !default;
+$check-box-invalid-border-focused: ds.$color-border-danger-shared-active !default;
 
-$check-box-invalid-bg-rest: ds.$color-surface-danger-compound-rest !default;
-$check-box-invalid-bg-hovered: ds.$color-surface-danger-compound-hovered !default;
-$check-box-invalid-bg-focused: ds.$color-surface-danger-compound-active !default;
+$check-box-invalid-bg-rest: ds.$color-bg-danger-shared !default;
+$check-box-invalid-bg-hovered: ds.$color-bg-danger-shared-hovered !default;
+$check-box-invalid-bg-focused: ds.$color-bg-danger-shared-active !default;
 
-$check-box-invalid-mark-bg-rest: ds.$color-content-danger-compound-rest !default;
-$check-box-invalid-mark-bg-hovered: ds.$color-content-danger-compound-hovered !default;
-$check-box-invalid-mark-bg-focused: ds.$color-content-danger-compound-active !default;
+$check-box-invalid-mark-bg-rest: ds.$color-content-danger-shared !default;
+$check-box-invalid-mark-bg-hovered: ds.$color-content-danger-shared-hovered !default;
+$check-box-invalid-mark-bg-focused: ds.$color-content-danger-shared-active !default;
 
-$check-box-border-disabled: ds.$color-border-neutral-accessible-disabled !default;
-$check-box-icon-bg-disabled: ds.$color-content-neutral-default-disabled !default;
+$check-box-border-disabled: ds.$color-border-contrast-disabled !default;
+$check-box-icon-bg-disabled: ds.$color-content-disabled !default;

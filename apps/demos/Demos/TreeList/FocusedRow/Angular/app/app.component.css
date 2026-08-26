@@ -7,7 +7,7 @@
   min-height: 100px;
   display: flex;
   flex-wrap: nowrap;
-  border: 2px solid var(--dxds-color-border-neutral-default-rest, rgba(0, 0, 0, 0.1));
+  border: 2px solid var(--dxds-color-border, rgba(0, 0, 0, 0.1));
   padding: 16px;
   box-sizing: border-box;
   align-items: center;

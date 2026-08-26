@@ -86,7 +86,7 @@ const notesOptions = { height: 140 };
   height: 128px;
   width: 128px;
   margin-right: 10px;
-  border: 1px solid var(--dxds-color-border-neutral-default-rest, #d2d3d5);
+  border: 1px solid var(--dxds-color-border, #d2d3d5);
   border-radius: 50%;
   background-image: url("../../../../images/petersmith.png");
   background-size: contain;

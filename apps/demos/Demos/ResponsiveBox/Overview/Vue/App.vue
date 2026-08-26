@@ -114,24 +114,24 @@ const screen = ((width: number) => ((width < 700) ? 'sm' : 'lg')) as unknown as 
 }
 
 .header {
-  background-color: var(--dxds-color-surface-utility-purple-subdued-rest, #C6B1DE);
+  background-color: var(--dxds-color-bg-purple-subtle, #C6B1DE);
   text-align: center;
 }
 
 .content {
-  background-color: var(--dxds-color-surface-utility-pink-subdued-rest, #EDBBE7);
+  background-color: var(--dxds-color-bg-pink-subtle, #EDBBE7);
 }
 
 .left-side-bar {
-  background-color: var(--dxds-color-surface-utility-yellow-subdued-rest, #F9E2AE);
+  background-color: var(--dxds-color-bg-yellow-subtle, #F9E2AE);
 }
 
 .right-side-bar {
-  background-color: var(--dxds-color-surface-utility-green-subdued-rest, #9FD89F);
+  background-color: var(--dxds-color-bg-green-subtle, #9FD89F);
 }
 
 .footer {
-  background-color: var(--dxds-color-surface-utility-blue-subdued-rest, #B4D6FA);
+  background-color: var(--dxds-color-bg-blue-subtle, #B4D6FA);
 }
 
 .item {
@@ -142,6 +142,6 @@ const screen = ((width: number) => ((width < 700) ? 'sm' : 'lg')) as unknown as 
   font-size: 20px;
   padding-top: 10px;
   text-align: center;
-  color: var(--dxds-color-content-neutral-default-rest, #000);
+  color: var(--dxds-color-content, #000);
 }
 </style>
