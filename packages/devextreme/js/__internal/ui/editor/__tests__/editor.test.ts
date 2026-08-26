@@ -3,6 +3,7 @@ import {
 } from '@jest/globals';
 import { data } from '@js/core/element_data';
 import $ from '@js/core/renderer';
+import Validator from '@ts/ui/validator';
 
 import type { EditorProperties } from '../editor';
 import Editor from '../editor';
@@ -14,39 +15,40 @@ interface ValidationRequestArgs {
   editor: unknown;
 }
 
-class ProbeEditor extends Editor {
-  public hasValidationRequestOnInitMarkup?: boolean;
+const disposables: { dispose: () => void }[] = [];
 
-  _initMarkup(): void {
-    this.hasValidationRequestOnInitMarkup = Boolean(this.validationRequest);
-
-    super._initMarkup();
-  }
-}
-
-const editors: ProbeEditor[] = [];
-
-const createEditor = (options: Partial<EditorProperties> = {}): ProbeEditor => {
+const createEditor = (options: Partial<EditorProperties> = {}): Editor => {
   const element = $('<div>').appendTo(document.body).get(0) as HTMLElement;
   // @ts-expect-error DOMComponent constructor is not typed for direct instantiation
-  const instance: ProbeEditor = new ProbeEditor(element, options);
+  const instance: Editor = new Editor(element, options);
 
-  editors.push(instance);
+  disposables.push(instance);
 
   return instance;
 };
 
 describe('Editor initialization', () => {
   afterEach(() => {
-    editors.forEach((instance) => instance.dispose());
-    editors.length = 0;
+    disposables.forEach((instance) => instance.dispose());
+    disposables.length = 0;
     document.body.innerHTML = '';
   });
 
-  it('creates validationRequest before the markup is rendered', () => {
-    const instance = createEditor();
+  it('lets a validator attach while the editor initialization is deferred by beginUpdate', () => {
+    const instance = createEditor({
+      onInitializing(this: Editor): void {
+        this.beginUpdate();
+      },
+    } as Partial<EditorProperties>);
 
-    expect(instance.hasValidationRequestOnInitMarkup).toBe(true);
+    expect(() => {
+      // @ts-expect-error DOMComponent constructor is not typed for direct instantiation
+      const validator: Validator = new Validator(instance.$element().get(0), {});
+
+      disposables.push(validator);
+    }).not.toThrow();
+
+    instance.endUpdate();
   });
 
   it('marks the element as a validation target with the validation state ready', () => {
