@@ -6,8 +6,8 @@
 @use "../../base/dropDownButton";
 @use "../../base/dropDownButton/mixins" as *;
 @include dx-dropdownbutton(
-  $drop-down-button-toggle-spindown-icon-size,
-  $drop-down-button-action-padding-inline,
+  var(--dx-drop-down-button-toggle-spindown-icon-size),
+  var(--dx-drop-down-button-action-padding-inline),
 );
 
 .dx-dropdownbutton-popup-wrapper {
@@ -30,8 +30,8 @@
   &.dx-button-has-icon,
   &.dx-button-has-text {
     .dx-icon-spindown.dx-icon-right {
-      width: $drop-down-button-action-spindown-icon-size;
-      height: $drop-down-button-action-spindown-icon-size;
+      width: var(--dx-drop-down-button-action-spindown-icon-size);
+      height: var(--dx-drop-down-button-action-spindown-icon-size);
     }
   }
 }

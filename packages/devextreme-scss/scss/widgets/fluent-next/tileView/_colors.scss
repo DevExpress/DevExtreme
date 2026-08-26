@@ -1,9 +1,9 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$tile-view-content-rest: ds.$color-content !default;
-$tile-view-bg-rest: ds.$color-bg !default;
-$tile-view-border-rest: ds.$color-border-subtle !default;
+$tile-view-content: ds.$color-content !default;
+$tile-view-bg: ds.$color-bg !default;
+$tile-view-border: ds.$color-border-subtle !default;
 $tile-view-bg-hovered: ds.$color-bg !default;
 $tile-view-border-hovered: ds.$color-border-primary !default;
 $tile-view-bg-active: ds.$color-bg-alpha-active !default;
-$tile-view-content-active: $tile-view-content-rest !default;
+$tile-view-content-active: $tile-view-content !default;

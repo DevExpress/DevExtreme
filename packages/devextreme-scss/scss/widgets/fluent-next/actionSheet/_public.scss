@@ -1,0 +1,7 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-action-sheet-item-margin: #{$action-sheet-item-margin};
+  --dx-action-sheet-item-margin-block-end: #{$action-sheet-item-margin-block-end};
+}

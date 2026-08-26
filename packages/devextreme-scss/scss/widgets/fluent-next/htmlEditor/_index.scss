@@ -12,8 +12,8 @@
 @use "../popup/sizes" as popupSizes;
 @use "../../base/mixins" as *;
 @use "../../base/htmlEditor" with (
-  $htmleditor-code-block-bg: $html-editor-code-block-bg-rest,
-  $htmleditor-placeholder-color: $html-editor-placeholder-content-rest,
+  $htmleditor-code-block-bg: $html-editor-code-block-bg,
+  $htmleditor-placeholder-color: $html-editor-placeholder-content,
   $htmleditor-aidialog-title-font-weight: $html-editor-ai-dialog-title-font-weight,
 );
 
@@ -47,7 +47,7 @@
       left: $html-editor-toolbar-wrapper-inset-inline-start;
       right: $html-editor-toolbar-wrapper-inset-inline-end;
       z-index: 2;
-      background-color: $html-editor-cover-bg-rest;
+      background-color: $html-editor-cover-bg;
       content: "";
       pointer-events: none;
     }
@@ -57,7 +57,7 @@
   &.dx-state-active {
     &::before {
       border-bottom: $html-editor-border-block-end-active;
-      border-bottom-color: textEditorColors.$text-editor-indicator-rest;
+      border-bottom-color: textEditorColors.$text-editor-indicator;
       transform: scale(1);
       transition-property: transform;
       transition-duration: 0.2s;
@@ -108,7 +108,7 @@
 .dx-invalid.dx-htmleditor {
   &.dx-state-hover {
     &::after {
-      border-bottom-color: textEditorColors.$text-editor-invalid-border-rest;
+      border-bottom-color: textEditorColors.$text-editor-invalid-border;
     }
   }
 
@@ -126,28 +126,28 @@
   padding: $html-editor-padding-block $html-editor-padding-inline;
 
   &.ql-blank::before { // stylelint-disable-line selector-class-pattern
-    color: textEditorColors.$text-editor-placeholder-rest;
+    color: textEditorColors.$text-editor-placeholder;
   }
 
   code,
   .ql-code-block-container { // stylelint-disable-line selector-class-pattern
-    color: $html-editor-faded-content-rest;
+    color: $html-editor-faded-content;
   }
 
   blockquote {
-    color: $html-editor-faded-content-rest;
-    border-inline-start-color: $html-editor-toolbar-border-rest;
+    color: $html-editor-faded-content;
+    border-inline-start-color: $html-editor-toolbar-border;
   }
 
   .dx-variable {
     & > span {
-      background: $html-editor-variable-bg-rest;
+      background: $html-editor-variable-bg;
     }
   }
 
   td,
   th {
-    border-color: $html-editor-table-border-rest;
+    border-color: $html-editor-table-border;
   }
 }
 
@@ -190,23 +190,23 @@
 
 .dx-htmleditor-toolbar-separator {
   height: calc((#{toolbarSizes.$toolbar-height}) / 2);
-  border-inline-start-color: $html-editor-toolbar-border-rest;
+  border-inline-start-color: $html-editor-toolbar-border;
 }
 
 .dx-htmleditor-toolbar-menu-separator {
-  border-top-color: $html-editor-toolbar-border-rest;
+  border-top-color: $html-editor-toolbar-border;
   margin-top: $html-editor-toolbar-menu-separator-margin;
   margin-bottom: $html-editor-toolbar-menu-separator-margin;
 }
 
 .dx-resize-frame {
-  border-color: $html-editor-resize-frame-border-rest;
+  border-color: $html-editor-resize-frame-border;
 
   .dx-resizable-handle-corner-top-right,
   .dx-resizable-handle-corner-top-left,
   .dx-resizable-handle-corner-bottom-right,
   .dx-resizable-handle-corner-bottom-left {
-    background-color: $html-editor-resize-trigger-rest;
+    background-color: $html-editor-resize-trigger;
   }
 
   .dx-resizable-handle-top,
@@ -214,7 +214,7 @@
   .dx-resizable-handle-right,
   .dx-resizable-handle-bottom {
     &::after {
-      background-color: $html-editor-resize-trigger-rest;
+      background-color: $html-editor-resize-trigger;
     }
   }
 }
@@ -252,9 +252,9 @@
     padding: $html-editor-add-image-dialog-file-uploader-padding;
     border-width: $html-editor-file-uploader-input-wrapper-border-width;
     border-style: dashed;
-    border-color: $html-editor-file-uploader-input-wrapper-border-rest;
+    border-color: $html-editor-file-uploader-input-wrapper-border;
     border-radius: $html-editor-file-uploader-input-wrapper-border-radius;
-    background-color: $html-editor-file-uploader-input-wrapper-bg-rest;
+    background-color: $html-editor-file-uploader-input-wrapper-bg;
 
     &::after,
     &::before {
@@ -276,7 +276,7 @@
     }
 
     .dx-fileuploader-content {
-      background-color: $html-editor-uploader-cover-bg-rest;
+      background-color: $html-editor-uploader-cover-bg;
     }
   }
 }
@@ -286,7 +286,7 @@
 }
 
 .dx-mention {
-  background-color: $html-editor-mention-bg-rest;
+  background-color: $html-editor-mention-bg;
 }
 
 .dx-suggestion-list-wrapper {
@@ -296,7 +296,7 @@
 .dx-table-resize-frame {
   > .dx-draggable-dragging + .dx-htmleditor-highlighted-column,
   > .dx-draggable-dragging + .dx-htmleditor-highlighted-row {
-    background-color: $html-editor-highlighted-row-bg-rest;
+    background-color: $html-editor-highlighted-row-bg;
   }
 }
 

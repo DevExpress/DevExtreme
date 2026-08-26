@@ -1,9 +1,9 @@
 @use "../../../_design-system/variables/ds" as ds;
 @use "../common/colors" as *;
 
-$color-view-content-box-overlay-bg-rest: $surface-overlay-rest !default;
-$color-view-bg-box-palette-cell-bg-rest: $color-view-content-box-overlay-bg-rest !default;
-$color-view-border-rest: ds.$color-border !default;
-$color-view-label-content-rest: ds.$color-content-subtle !default;
-$color-view-handle-content-rest: ds.$color-bg !default;
-$color-view-handle-border-rest: ds.$color-border !default;
+$color-view-content-box-overlay-bg: $surface-overlay !default;
+$color-view-bg-box-palette-cell-bg: $color-view-content-box-overlay-bg !default;
+$color-view-border: ds.$color-border !default;
+$color-view-label-content: ds.$color-content-subtle !default;
+$color-view-handle-content: ds.$color-bg !default;
+$color-view-handle-border: ds.$color-border !default;

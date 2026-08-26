@@ -3,7 +3,7 @@
 @use "../sizes" as *;
 @use "../../base/fileManager" with (
   $filemanager-root-height: $file-manager-height,
-  $filemanager-root-border: $file-manager-border,
+  $filemanager-root-border: $file-manager-border-width solid,
   $filemanager-overlay-content-min-width: $file-manager-overlay-content-min-width,
   $filemanager-overlay-content-max-width: $file-manager-overlay-content-max-width,
   $filemanager-popup-content-padding: $file-manager-popup-content-padding,
@@ -63,19 +63,19 @@
 @use "../splitterBar";
 
 .dx-filemanager {
-  border-color: $file-manager-border-rest;
+  border-color: $file-manager-border;
 
   .dx-filemanager-notification-common {
-    border-color: $file-manager-border-rest;
-    color: $file-manager-danger-bg-rest;
+    border-color: $file-manager-border;
+    color: $file-manager-danger-bg;
   }
 
   .dx-drawer-shrink .dx-filemanager-progress-panel {
-    border-left-color: $file-manager-border-rest;
+    border-left-color: $file-manager-border;
   }
 
   .dx-filemanager-progress-panel {
-    background-color: $file-manager-bg-rest;
+    background-color: $file-manager-bg;
 
     .dx-filemanager-progress-panel-title {
       padding-top: $file-manager-progress-panel-title-padding-block;
@@ -90,8 +90,8 @@
   }
 
   .dx-filemanager-progress-box-error {
-    color: $file-manager-inverted-content-rest;
-    background: $file-manager-danger-bg-rest;
+    color: $file-manager-inverted-content;
+    background: $file-manager-danger-bg;
   }
 
   .dx-filemanager-progress-box .dx-filemanager-progress-box-close-button {
@@ -100,17 +100,17 @@
 
   .dx-filemanager-toolbar {
     padding: $file-manager-toolbar-padding;
-    background: $file-manager-bg-rest;
+    background: $file-manager-bg;
     min-height: $file-manager-toolbar-height;
 
     &.dx-filemanager-file-toolbar,
     &.dx-filemanager-file-toolbar .dx-toolbar {
-      background: $file-manager-file-toolbar-bg-rest;
+      background: $file-manager-file-toolbar-bg;
     }
 
     .dx-filemanager-toolbar-separator-item {
       height: $file-manager-toolbar-separator-height;
-      background: $file-manager-border-rest;
+      background: $file-manager-border;
     }
 
     .dx-filemanager-toolbar-viewmode-item .dx-texteditor {
@@ -149,19 +149,19 @@
 
   .dx-filemanager-fileuploader-dropzone-placeholder {
     border: $file-manager-file-uploader-drop-zone-placeholder-border;
-    border-color: $file-manager-drop-zone-placeholder-border-rest;
+    border-color: $file-manager-drop-zone-placeholder-border;
   }
 
   .dx-filemanager-container {
-    border-top-color: $file-manager-border-rest;
+    border-top-color: $file-manager-border;
   }
 
   .dx-filemanager-dirs-panel {
-    border-right-color: $file-manager-border-rest;
+    border-right-color: $file-manager-border;
   }
 
   .dx-filemanager-breadcrumbs {
-    border-bottom-color: $file-manager-border-rest;
+    border-bottom-color: $file-manager-border;
 
     .dx-menu-item {
       &.dx-state-focused {
@@ -176,7 +176,7 @@
     }
 
     .dx-filemanager-breadcrumbs-separator-item .dx-menu-item-content {
-      background: $file-manager-border-rest;
+      background: $file-manager-border;
     }
 
     .dx-filemanager-breadcrumbs-separator-item,
@@ -189,8 +189,8 @@
 
   .dx-filemanager-thumbnails .dx-filemanager-thumbnails-item {
     &.dx-item-selected {
-      color: $file-manager-file-item-select-content-rest;
-      background: $file-manager-file-item-select-bg-rest;
+      color: $file-manager-file-item-select-content;
+      background: $file-manager-file-item-select-bg;
     }
 
     &.dx-state-hover:not(.dx-state-focused):not(.dx-item-selected) {
@@ -214,12 +214,12 @@
     }
 
     .dx-filemanager-item-custom-thumbnail {
-      color: $file-manager-custom-thumbnail-content-rest;
+      color: $file-manager-custom-thumbnail-content;
     }
   }
 
   .dx-filemanager-files-view {
-    background: $file-manager-bg-rest;
+    background: $file-manager-bg;
 
     &.dx-filemanager-details {
       .dx-filemanager-details-item-thumbnail {
@@ -311,4 +311,4 @@
   margin-left: $file-manager-context-menu-text-item-left-margin;
 }
 
-@include filemanager-icons-mixin($file-manager-icon-rest, $file-manager-icon-success-content-rest, $file-manager-icon-inverted-content-rest, $file-manager-icon-danger-content-rest, $file-manager-icon-inverted-content-rest, $file-manager-large-icon-size);
+@include filemanager-icons-mixin($file-manager-icon, $file-manager-icon-success-content, $file-manager-icon-inverted-content, $file-manager-icon-danger-content, $file-manager-icon-inverted-content, $file-manager-large-icon-size);
