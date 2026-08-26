@@ -2,6 +2,7 @@ import {
   describe, expect, it,
 } from '@jest/globals';
 
+import type { RawResourceData } from '../loader/types';
 import { ResourceDataAccessor } from './resource_data_accessor';
 
 describe('ResourceDataAccessor', () => {
@@ -54,6 +55,47 @@ describe('ResourceDataAccessor', () => {
       expect(customResource.complex.item.guid).toBe(10);
       expect(customResource.name).toBe('text');
       expect(customResource.mainColor).toBe('color');
+    });
+  });
+
+  describe('function valueExpr/displayExpr', () => {
+    const customResource: any = { complex: { item: { guid: '0' } }, name: 'Room 1' };
+    const accessor = new ResourceDataAccessor({
+      fieldExpr: 'roomId',
+      dataSource: [],
+      valueExpr: (resource: any) => resource.complex.item.guid,
+      displayExpr: (resource: any) => resource.name,
+      label: 'Room',
+    });
+
+    it('should get fields via a function expression', () => {
+      expect(accessor.get('id', customResource)).toBe(customResource.complex.item.guid);
+      expect(accessor.get('text', customResource)).toBe(customResource.name);
+    });
+
+    it('should not throw when setting a field defined by a function expression', () => {
+      expect(() => accessor.set('id', customResource, 10)).not.toThrow();
+      expect(() => accessor.set('text', customResource, 'text')).not.toThrow();
+    });
+  });
+
+  describe('parentId', () => {
+    const hierarchicalResource: RawResourceData = { id: 11, text: 'Room 11', parentId: 'board' };
+    const accessor = new ResourceDataAccessor({
+      fieldExpr: 'roomId',
+      dataSource: [],
+      parentIdExpr: 'parentId',
+      label: 'Room',
+    });
+
+    it('should get parentId with configured parentIdExpr', () => {
+      expect(accessor.get('parentId', hierarchicalResource)).toBe('board');
+    });
+
+    it('should set parentId with configured parentIdExpr', () => {
+      accessor.set('parentId', hierarchicalResource, 'open');
+
+      expect(hierarchicalResource.parentId).toBe('open');
     });
   });
 });

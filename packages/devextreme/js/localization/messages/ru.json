@@ -98,7 +98,7 @@
         "dxSwitch-switchedOffText": "Выкл",
 
         "dxForm-optionalMark": "необязательный",
-        "dxForm-requiredMessage": " Поле {0} должно быть заполнено",
+        "dxForm-requiredMessage": "Поле {0} должно быть заполнено",
         "dxForm-smartPasteButtonText": "Умная вставка",
         "dxForm-resetButtonText": "Сбросить",
         "dxForm-submitButtonText": "Отправить",

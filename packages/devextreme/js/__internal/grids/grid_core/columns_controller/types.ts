@@ -15,8 +15,10 @@ export type FilterField = Omit<Column, 'filterOperations'> & { filterOperations?
 
 export type AddedColumn = string | (Column & { columns?: (Column | string)[] });
 
-export interface Column extends ColumnBase {
+export interface InternalColumnOptions {
   parseValue?: (text: string) => unknown;
+  deserializeValue?: (value: unknown) => unknown;
+  serializeValue?: (value: unknown) => unknown;
   index?: number;
   groupIndex?: number;
   type?: string;
@@ -32,6 +34,8 @@ export interface Column extends ColumnBase {
   bufferedSelectedFilterOperation?: ColumnBase['selectedFilterOperation'];
   added?: AddedColumn;
 }
+
+export type Column = ColumnBase & InternalColumnOptions;
 
 export interface ColumnsChanges {
   changeTypes: {

@@ -145,10 +145,12 @@ QUnit.test('error handling', function(assert) {
 QUnit.test('error handling (with key)', function(assert) {
     assert.expect(0);
 
+    class MyStore extends ArrayStore {
+        _byKeyImpl() { return $.Deferred().reject(Error('forced')).promise(); }
+    }
+
     const source = new DataSource({
-        store: new (ArrayStore.inherit({
-            _byKeyImpl: function() { return $.Deferred().reject(Error('forced')).promise(); }
-        }))({ key: 'a', data: [] })
+        store: new MyStore({ key: 'a', data: [] })
     });
 
     const failFired = $.Deferred();
@@ -241,11 +243,11 @@ QUnit.test('requireTotalCount', function(assert) {
         };
     };
 
-    const MyStore = ArrayStore.inherit({
-        createQuery: function() {
-            return createWrappedQuery(this.callBase.apply(this, arguments));
+    class MyStore extends ArrayStore {
+        createQuery(...args) {
+            return createWrappedQuery(super.createQuery(...args));
         }
-    });
+    }
 
     const source = new DataSource({
         store: new MyStore(TEN_NUMBERS),
@@ -360,6 +362,7 @@ QUnit.test('map function + grouping + aggregating', function(assert) {
         onCustomizeLoadResult: function(loadResult) {
             const calculator = new AggregateCalculator({
                 data: loadResult.data,
+                totalAggregates: [],
                 groupAggregates: [
                     { aggregator: 'count' }
                 ],
@@ -644,13 +647,13 @@ QUnit.test('store load callback fired in disposed state', function(assert) {
 
     const loaded = $.Deferred();
 
-    const storeClass = Store.inherit({
-        _loadImpl: function() {
+    class MyStore extends Store {
+        _loadImpl() {
             return loaded.promise();
         }
-    });
+    }
 
-    const store = new storeClass();
+    const store = new MyStore();
 
     const source = new DataSource(store);
 
@@ -660,13 +663,13 @@ QUnit.test('store load callback fired in disposed state', function(assert) {
 });
 
 QUnit.test('store returned not an array', function(assert) {
-    const storeClass = Store.inherit({
-        _loadImpl: function() {
+    class MyStore extends Store {
+        _loadImpl() {
             return $.Deferred().resolve(1);
         }
-    });
+    }
 
-    const store = new storeClass();
+    const store = new MyStore();
 
     new DataSource(store).load().done(function(r) {
         assert.deepEqual(r, [1]);
@@ -683,11 +686,11 @@ QUnit.test('dataSource knows key of its store, and knows store as well', functio
 });
 
 QUnit.test('isLoading and loadingChanged', function(assert) {
-    const MyStore = Store.inherit({
-        load: function() {
+    class MyStore extends Store {
+        load() {
             return this.testDeferred.promise();
         }
-    });
+    }
 
     const store = new MyStore();
     const ds = new DataSource(store);
@@ -747,11 +750,11 @@ QUnit.test('beginLoading and endLoading', function(assert) {
 });
 
 QUnit.test('beginLoading and endLoading with load', function(assert) {
-    const MyStore = Store.inherit({
-        load: function() {
+    class MyStore extends Store {
+        load() {
             return this.testDeferred.promise();
         }
-    });
+    }
 
     const store = new MyStore();
     const ds = new DataSource(store);
@@ -1076,14 +1079,13 @@ QUnit.test('search API, default impl, complex selector', function(assert) {
 });
 
 QUnit.test('search API, custom impl', function(assert) {
-    const MyStore = Store.inherit({
-
-        ctor: function(o) {
-            this.callBase(o);
+    class MyStore extends Store {
+        ctor(o) {
+            super.ctor(o);
             this._useDefaultSearch = false;
-        },
+        }
 
-        _loadImpl: function(options) {
+        _loadImpl(options) {
             assert.ok(!options.filter);
 
             assert.equal(options.searchExpr, 'expr');
@@ -1092,8 +1094,7 @@ QUnit.test('search API, custom impl', function(assert) {
 
             return $.Deferred(); // api requires
         }
-
-    });
+    }
 
     const source = new DataSource(new MyStore());
     source.searchOperation('operation');

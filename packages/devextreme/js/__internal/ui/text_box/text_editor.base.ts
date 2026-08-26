@@ -401,7 +401,9 @@ class TextEditorBase<
 
   _createInput(): dxElementWrapper {
     const $input = $('<input>');
-    this._applyInputAttributes($input, this.option('inputAttr'));
+    const { inputAttr } = this.option();
+
+    this._applyInputAttributes($input, inputAttr);
     return $input;
   }
 
@@ -1023,9 +1025,12 @@ class TextEditorBase<
         this._updateValue();
         super._optionChanged(args);
         break;
-      case 'inputAttr':
-        this._applyInputAttributes(this._input(), this.option(name));
+      case 'inputAttr': {
+        const { inputAttr } = this.option();
+
+        this._applyInputAttributes(this._input(), inputAttr);
         break;
+      }
       case 'stylingMode':
         this._renderStylingMode();
         this._updateLabelWidth();

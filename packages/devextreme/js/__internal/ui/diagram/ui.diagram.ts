@@ -448,7 +448,9 @@ class Diagram extends Widget<Properties> {
   }
 
   _isHistoryToolbarVisible(): boolean {
-    return this.option('historyToolbar.visible') && !this.isReadOnlyMode();
+    const { historyToolbar } = this.option();
+
+    return Boolean(historyToolbar?.visible) && !this.isReadOnlyMode();
   }
 
   _renderHistoryToolbar($parent: dxElementWrapper): void {
@@ -599,7 +601,6 @@ class Diagram extends Widget<Properties> {
       const toolboxBounds = this._getToolboxBounds($parent, isServerSide);
       this._toolbox?.option('height', toolboxBounds.height);
       const prevIsMobileView = this._toolbox?.option('isMobileView');
-      // @ts-expect-error ts-error
       if (prevIsMobileView !== this.isMobileScreenSize()) {
         this._toolbox?.option({
           isMobileView: this.isMobileScreenSize(),
@@ -797,7 +798,6 @@ class Diagram extends Widget<Properties> {
     );
     this._propertiesPanelResizeCallback = (): void => {
       const prevIsMobileView = this._propertiesPanel?.option('isMobileView');
-      // @ts-expect-error ts-error
       if (prevIsMobileView !== this.isMobileScreenSize()) {
         this._propertiesPanel?.option({
           isMobileView: this.isMobileScreenSize(),
@@ -835,7 +835,6 @@ class Diagram extends Widget<Properties> {
         // @ts-expect-error ts-error
         onItemClick: (itemData): boolean => this._onBeforeCommandExecuted(itemData.command),
         export: this.option('export'),
-        // @ts-expect-error ts-error
         excludeCommands: this._getExcludeCommands(),
         onInternalCommand: this._onInternalCommand.bind(this),
         onCustomCommand: this._onCustomCommand.bind(this),
@@ -985,7 +984,6 @@ class Diagram extends Widget<Properties> {
     this._updateUnitItems();
     this._updateFormatUnitsMethod();
 
-    // @ts-expect-error ts-error
     if (this.option('units') !== DIAGRAM_DEFAULT_UNIT) {
       this._updateUnitsState();
     }
@@ -1000,15 +998,12 @@ class Diagram extends Widget<Properties> {
         this._updatePageSizeState();
       }
     }
-    // @ts-expect-error ts-error
     if (this.option('pageOrientation') !== DIAGRAM_DEFAULT_PAGE_ORIENTATION) {
       this._updatePageOrientationState();
     }
-    // @ts-expect-error ts-error
     if (this.option('pageColor') !== DIAGRAM_DEFAULT_PAGE_COLOR) {
       this._updatePageColorState();
     }
-    // @ts-expect-error ts-error
     if (this.option('viewUnits') !== DIAGRAM_DEFAULT_UNIT) {
       this._updateViewUnitsState();
     }
@@ -1021,14 +1016,12 @@ class Diagram extends Widget<Properties> {
     if (this.option('gridSize')) {
       this._updateGridSizeState();
     }
-    // @ts-expect-error ts-error
     if (this.option('zoomLevel') !== DIAGRAM_DEFAULT_ZOOMLEVEL) {
       this._updateZoomLevelState();
     }
     if (this.option('simpleView')) {
       this._updateSimpleViewState();
     }
-    // @ts-expect-error ts-error
     if (this.option('autoZoomMode') !== DIAGRAM_DEFAULT_AUTOZOOM_MODE) {
       this._updateAutoZoomState();
     }

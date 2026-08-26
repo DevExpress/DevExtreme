@@ -1,0 +1,374 @@
+[
+  {
+    "Value": "ALFKI",
+    "Text": "Alfreds Futterkiste (Germany)"
+  },
+  {
+    "Value": "ANATR",
+    "Text": "Ana Trujillo Emparedados y helados (Mexico)"
+  },
+  {
+    "Value": "ANTON",
+    "Text": "Antonio Moreno Taquería (Mexico)"
+  },
+  {
+    "Value": "AROUT",
+    "Text": "Around the Horn (UK)"
+  },
+  {
+    "Value": "BSBEV",
+    "Text": "B's Beverages (UK)"
+  },
+  {
+    "Value": "BERGS",
+    "Text": "Berglunds snabbköp (Sweden)"
+  },
+  {
+    "Value": "BLAUS",
+    "Text": "Blauer See Delikatessen (Germany)"
+  },
+  {
+    "Value": "BLONP",
+    "Text": "Blondesddsl père et fils (France)"
+  },
+  {
+    "Value": "BONAP",
+    "Text": "Bon app' (France)"
+  },
+  {
+    "Value": "BOTTM",
+    "Text": "Bottom-Dollar Markets (Canada)"
+  },
+  {
+    "Value": "BOLID",
+    "Text": "Bólido Comidas preparadas (Spain)"
+  },
+  {
+    "Value": "CACTU",
+    "Text": "Cactus Comidas para llevar (Argentina)"
+  },
+  {
+    "Value": "CENTC",
+    "Text": "Centro comercial Moctezuma (Mexico)"
+  },
+  {
+    "Value": "CHOPS",
+    "Text": "Chop-suey Chinese (Switzerland)"
+  },
+  {
+    "Value": "COMMI",
+    "Text": "Comércio Mineiro (Brazil)"
+  },
+  {
+    "Value": "CONSH",
+    "Text": "Consolidated Holdings (UK)"
+  },
+  {
+    "Value": "WANDK",
+    "Text": "Die Wandernde Kuh (Germany)"
+  },
+  {
+    "Value": "DRACD",
+    "Text": "Drachenblut Delikatessen (Germany)"
+  },
+  {
+    "Value": "DUMON",
+    "Text": "Du monde entier (France)"
+  },
+  {
+    "Value": "EASTC",
+    "Text": "Eastern Connection (UK)"
+  },
+  {
+    "Value": "ERNSH",
+    "Text": "Ernst Handel (Austria)"
+  },
+  {
+    "Value": "FISSA",
+    "Text": "FISSA Fabrica Inter. Salchichas S.A. (Spain)"
+  },
+  {
+    "Value": "FAMIA",
+    "Text": "Familia Arquibaldo (Brazil)"
+  },
+  {
+    "Value": "FOLIG",
+    "Text": "Folies gourmandes (France)"
+  },
+  {
+    "Value": "FOLKO",
+    "Text": "Folk och fä HB (Sweden)"
+  },
+  {
+    "Value": "FRANR",
+    "Text": "France restauration (France)"
+  },
+  {
+    "Value": "FRANS",
+    "Text": "Franchi S.p.A. (Italy)"
+  },
+  {
+    "Value": "FRANK",
+    "Text": "Frankenversand (Germany)"
+  },
+  {
+    "Value": "FURIB",
+    "Text": "Furia Bacalhau e Frutos do Mar (Portugal)"
+  },
+  {
+    "Value": "GROSR",
+    "Text": "GROSELLA-Restaurante (Venezuela)"
+  },
+  {
+    "Value": "GALED",
+    "Text": "Galería del gastrónomo (Spain)"
+  },
+  {
+    "Value": "GODOS",
+    "Text": "Godos Cocina Típica (Spain)"
+  },
+  {
+    "Value": "GOURL",
+    "Text": "Gourmet Lanchonetes (Brazil)"
+  },
+  {
+    "Value": "GREAL",
+    "Text": "Great Lakes Food Market (USA)"
+  },
+  {
+    "Value": "HILAA",
+    "Text": "HILARION-Abastos (Venezuela)"
+  },
+  {
+    "Value": "HANAR",
+    "Text": "Hanari Carnes (Brazil)"
+  },
+  {
+    "Value": "HUNGC",
+    "Text": "Hungry Coyote Import Store (USA)"
+  },
+  {
+    "Value": "HUNGO",
+    "Text": "Hungry Owl All-Night Grocers (Ireland)"
+  },
+  {
+    "Value": "Val2 ",
+    "Text": "IT ()"
+  },
+  {
+    "Value": "VALON",
+    "Text": "IT ()"
+  },
+  {
+    "Value": "ISLAT",
+    "Text": "Island Trading (UK)"
+  },
+  {
+    "Value": "KOENE",
+    "Text": "Königlich Essen (Germany)"
+  },
+  {
+    "Value": "LILAS",
+    "Text": "LILA-Supermercado (Venezuela)"
+  },
+  {
+    "Value": "LINOD",
+    "Text": "LINO-Delicateses (Venezuela)"
+  },
+  {
+    "Value": "LACOR",
+    "Text": "La corne d'abondance (France)"
+  },
+  {
+    "Value": "LAMAI",
+    "Text": "La maison d'Asie (France)"
+  },
+  {
+    "Value": "LAUGB",
+    "Text": "Laughing Bacchus Wine Cellars (Canada)"
+  },
+  {
+    "Value": "LAZYK",
+    "Text": "Lazy K Kountry Store (USA)"
+  },
+  {
+    "Value": "LEHMS",
+    "Text": "Lehmanns Marktstand (Germany)"
+  },
+  {
+    "Value": "LETSS",
+    "Text": "Let's Stop N Shop (USA)"
+  },
+  {
+    "Value": "LONEP",
+    "Text": "Lonesome Pine Restaurant (USA)"
+  },
+  {
+    "Value": "MAGAA",
+    "Text": "Magazzini Alimentari Riuniti (Italy)"
+  },
+  {
+    "Value": "MAISD",
+    "Text": "Maison Dewey (Belgium)"
+  },
+  {
+    "Value": "MORGK",
+    "Text": "Morgenstern Gesundkost (Germany)"
+  },
+  {
+    "Value": "MEREP",
+    "Text": "Mère Paillarde (Canada)"
+  },
+  {
+    "Value": "NORTS",
+    "Text": "North/South (UK)"
+  },
+  {
+    "Value": "OCEAN",
+    "Text": "Océano Atlántico Ltda. (Argentina)"
+  },
+  {
+    "Value": "OLDWO",
+    "Text": "Old World Delicatessen (USA)"
+  },
+  {
+    "Value": "OTTIK",
+    "Text": "Ottilies Käseladen (Germany)"
+  },
+  {
+    "Value": "PARIS",
+    "Text": "Paris spécialités (France)"
+  },
+  {
+    "Value": "PERIC",
+    "Text": "Pericles Comidas clásicas (Mexico)"
+  },
+  {
+    "Value": "PICCO",
+    "Text": "Piccolo und mehr (Austria)"
+  },
+  {
+    "Value": "PRINI",
+    "Text": "Princesa Isabel Vinhos (Portugal)"
+  },
+  {
+    "Value": "QUICK",
+    "Text": "QUICK-Stop (Germany)"
+  },
+  {
+    "Value": "QUEDE",
+    "Text": "Que Delícia (Brazil)"
+  },
+  {
+    "Value": "QUEEN",
+    "Text": "Queen Cozinha (Brazil)"
+  },
+  {
+    "Value": "RANCH",
+    "Text": "Rancho grande (Argentina)"
+  },
+  {
+    "Value": "RATTC",
+    "Text": "Rattlesnake Canyon Grocery (USA)"
+  },
+  {
+    "Value": "REGGC",
+    "Text": "Reggiani Caseifici (Italy)"
+  },
+  {
+    "Value": "RICAR",
+    "Text": "Ricardo Adocicados (Brazil)"
+  },
+  {
+    "Value": "RICSU",
+    "Text": "Richter Supermarkt (Switzerland)"
+  },
+  {
+    "Value": "ROMEY",
+    "Text": "Romero y tomillo (Spain)"
+  },
+  {
+    "Value": "SANTG",
+    "Text": "Santé Gourmet (Norway)"
+  },
+  {
+    "Value": "SAVEA",
+    "Text": "Save-a-lot Markets (USA)"
+  },
+  {
+    "Value": "SEVES",
+    "Text": "Seven Seas Imports (UK)"
+  },
+  {
+    "Value": "SIMOB",
+    "Text": "Simons bistro (Denmark)"
+  },
+  {
+    "Value": "SPLIR",
+    "Text": "Split Rail Beer & Ale (USA)"
+  },
+  {
+    "Value": "SPECD",
+    "Text": "Spécialités du monde (France)"
+  },
+  {
+    "Value": "SUPRD",
+    "Text": "Suprêmes délices (Belgium)"
+  },
+  {
+    "Value": "THEBI",
+    "Text": "The Big Cheese (USA)"
+  },
+  {
+    "Value": "THECR",
+    "Text": "The Cracker Box (USA)"
+  },
+  {
+    "Value": "TOMSP",
+    "Text": "Toms Spezialitäten (Germany)"
+  },
+  {
+    "Value": "TORTU",
+    "Text": "Tortuga Restaurante (Mexico)"
+  },
+  {
+    "Value": "TRADH",
+    "Text": "Tradição Hipermercados (Brazil)"
+  },
+  {
+    "Value": "TRAIH",
+    "Text": "Trail's Head Gourmet Provisioners (USA)"
+  },
+  {
+    "Value": "VAFFE",
+    "Text": "Vaffeljernet (Denmark)"
+  },
+  {
+    "Value": "VICTE",
+    "Text": "Victuailles en stock (France)"
+  },
+  {
+    "Value": "VINET",
+    "Text": "Vins et alcools Chevalier (France)"
+  },
+  {
+    "Value": "WARTH",
+    "Text": "Wartian Herkku (Finland)"
+  },
+  {
+    "Value": "WELLI",
+    "Text": "Wellington Importadora (Brazil)"
+  },
+  {
+    "Value": "WHITC",
+    "Text": "White Clover Markets (USA)"
+  },
+  {
+    "Value": "WILMK",
+    "Text": "Wilman Kala (Finland)"
+  },
+  {
+    "Value": "WOLZA",
+    "Text": "Wolski  Zajazd (Poland)"
+  }
+]

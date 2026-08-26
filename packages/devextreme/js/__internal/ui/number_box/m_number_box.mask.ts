@@ -11,9 +11,11 @@ import { fitIntoRange, inRange } from '@js/core/utils/math';
 import {
   isDefined, isFunction, isNumeric, isPlainObject, isString,
 } from '@js/core/utils/type';
+import type { NativeEventInfo } from '@js/events';
 import type { Format, FormatObject } from '@js/localization';
 import type { Properties } from '@js/ui/number_box';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import type { TextEditorInternalProperties } from '@ts/ui/text_box/text_editor.base';
 
 import NumberBoxBase from './m_number_box.base';
 import {
@@ -46,10 +48,15 @@ const asFormatObject = (format: Format | undefined): FormatObject | undefined =>
 
 export interface NumberBoxMaskProperties extends Omit<Properties, 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput'
 | 'onKeyDown' | 'onKeyUp' | 'onPaste' | 'onValueChanged' | 'onContentReady' | 'onDisposing'
-| 'onOptionChanged' | 'onInitialized' > {
+| 'onOptionChanged' | 'onInitialized' >, Omit<TextEditorInternalProperties, 'displayValueFormatter'> {
   useMaskBehavior?: boolean;
 
   displayValueFormatter?: ((value: any) => string);
+
+  onValueChanged?: (
+    e: NativeEventInfo<unknown> & { value?: number | null; previousValue?: number | null },
+  ) => void;
+
 }
 
 class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
@@ -518,7 +525,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
       parsedValue = Math.abs(this._parsedValue * 0);
     }
 
-    if (isNaN(parsedValue)) {
+    if (isNaN(Number(parsedValue))) {
       return undefined;
     }
 
@@ -546,7 +553,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
     const sign = number.getSign(text, format?.formatter || format);
     const textWithoutStubs = this._removeStubs(text, true);
     const parsedValue = this._parse(textWithoutStubs, format);
-    const parsedValueSign = parsedValue < 0 ? -1 : 1;
+    const parsedValueSign = parsedValue != null && parsedValue < 0 ? -1 : 1;
     const parsedValueWithSign = isNumeric(parsedValue) && sign !== parsedValueSign ? sign * parsedValue : parsedValue;
 
     return parsedValueWithSign;
@@ -581,9 +588,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
   }
 
   _isValueInRange(value) {
-    // @ts-expect-error ts-error
     const min = ensureDefined(this.option('min'), -Infinity);
-    // @ts-expect-error ts-error
     const max = ensureDefined(this.option('max'), Infinity);
 
     return inRange(value, min, max);

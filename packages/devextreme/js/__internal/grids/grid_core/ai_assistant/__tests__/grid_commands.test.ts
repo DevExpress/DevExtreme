@@ -30,6 +30,12 @@ interface SchemaShape {
   };
 }
 
+// The tests drive GridCommands with synthetic command names, so the spy signature is
+// widened from the predefined command union that CustomizeResponseText accepts.
+type CustomizeResponseTextSpy = (
+  command: { name: string; args: unknown },
+) => ReturnType<CustomizeResponseText>;
+
 const createMockComponent = (): InternalGrid => ({}) as InternalGrid;
 
 const createMockCommand = (
@@ -1065,7 +1071,7 @@ describe('GridCommands', () => {
     });
 
     it('should call customizeResponseText once per executed command with correct args', async () => {
-      const customizeSpy = jest.fn<CustomizeResponseText>(() => ({}));
+      const customizeSpy = jest.fn<CustomizeResponseTextSpy>(() => ({}));
       const command = createMockCommand('test');
       const gridCommands = new GridCommands(createMockComponent(), [command]);
 
@@ -1164,7 +1170,7 @@ describe('GridCommands', () => {
     });
 
     it('should not call customizeResponseText for aborted entry', async () => {
-      const customizeSpy = jest.fn<CustomizeResponseText>(() => ({
+      const customizeSpy = jest.fn<CustomizeResponseTextSpy>(() => ({
         success: 'custom',
       }));
       const component = createMockComponent();
@@ -1195,7 +1201,7 @@ describe('GridCommands', () => {
     });
 
     it('should not call customizeResponseText when no commands are executed', async () => {
-      const customizeSpy = jest.fn<CustomizeResponseText>(() => ({}));
+      const customizeSpy = jest.fn<CustomizeResponseTextSpy>(() => ({}));
       const gridCommands = new GridCommands(createMockComponent(), []);
 
       await gridCommands.executeCommands([], customizeSpy);

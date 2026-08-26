@@ -85,7 +85,8 @@ export class FileUploadStrategyBase {
 
   _isCustomCallback(name: keyof FileUploaderProperties): boolean {
     const callback = this.fileUploader?.option(name);
-    return callback && isFunction(callback);
+
+    return isFunction(callback);
   }
 
   _handleProgress(file: FileUploaderItem, e: Event | { loaded?: number; total?: number }): void {

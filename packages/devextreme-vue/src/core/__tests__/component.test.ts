@@ -304,7 +304,7 @@ describe('component rendering', () => {
       wrapper.setProps({ sampleProp: undefined });
 
       nextTick(() => {
-        expect((wrapper.vm as any as IConfigurable).$_config.updateValue).toBeCalled();
+        expect((wrapper.vm as any as IConfigurable).$_config.updateValue).toHaveBeenCalled();
         done();
       });
     });
@@ -2017,7 +2017,7 @@ describe('disposing', () => {
 
     component.unmount();
 
-    expect(Widget.dispose).toBeCalled();
+    expect(Widget.dispose).toHaveBeenCalled();
   });
 
   it('fires dxremove', () => {
