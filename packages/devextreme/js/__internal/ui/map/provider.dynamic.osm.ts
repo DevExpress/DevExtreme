@@ -18,6 +18,7 @@ import type {
   MapEngineMap,
   MapEngineTileLayerOptions,
 } from './provider.dynamic.osm.engine';
+import { getRegisteredMapEngine } from './provider.dynamic.osm.engine';
 import { createOpenLayersEngine } from './provider.dynamic.osm.openlayers';
 
 const DEFAULT_MAX_ZOOM = 19;
@@ -32,7 +33,7 @@ class OsmProvider extends DynamicProvider {
 
   _loadImpl(): Promise<void> {
     const window = getWindow() as Window & { ol?: unknown };
-    const engine = createOpenLayersEngine(window.ol);
+    const engine = getRegisteredMapEngine() ?? createOpenLayersEngine(window.ol);
 
     if (!engine) {
       return Promise.reject(errors.Error('E1069'));

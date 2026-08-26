@@ -23,3 +23,11 @@ export interface MapEngineMap {
 export interface MapEngine {
   createMap: (container: Element, view?: MapEngineSetViewOptions) => MapEngineMap;
 }
+
+const registry: { mapEngine?: MapEngine } = {};
+
+export const getRegisteredMapEngine = (): MapEngine | undefined => registry.mapEngine;
+
+export const setRegisteredMapEngine = (engine: MapEngine | undefined): void => {
+  registry.mapEngine = engine;
+};
