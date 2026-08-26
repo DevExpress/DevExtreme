@@ -3,12 +3,21 @@ import {
 } from '@jest/globals';
 
 import type {
-  ChangedRows, DataChange, ProcessedItem, UpdateChange,
+  ChangedRows, DataChange, ItemChange, ProcessedItem, UpdateChange,
 } from '../../types';
 import {
-  getChangedRowIndices, getDataRowIndex, getRowKey,
-  getRowOperation, indexRowsByKey, isSameGroupRowState, isSameItem,
-  markUpdateChange, pushChangedRow, resetChangedRows, updateRowCells,
+  getChangedRowIndices,
+  getDataRowIndex,
+  getRowKey,
+  getRowOperation,
+  indexRowsByKey,
+  isSameGroupRowState,
+  isSameItem,
+  markUpdateChange,
+  pushChangedRow,
+  resetChangedRows,
+  updateKeptRows,
+  updateRowCells,
 } from '../row_changes';
 
 const row = (partial: Partial<ProcessedItem>): ProcessedItem => ({
@@ -165,6 +174,95 @@ describe('updateRowCells', () => {
     updateRowCells(row({ key: 1, update }), row({ key: 1 }));
 
     expect(update).not.toHaveBeenCalled();
+  });
+});
+
+describe('updateKeptRows', () => {
+  const trackedRow = (key: number): ProcessedItem => row({
+    key,
+    update: jest.fn(),
+    cells: [{ update: jest.fn() }],
+  });
+
+  const updateOf = (item: ProcessedItem): jest.Mock => item.update as jest.Mock;
+
+  const refreshRows = (
+    oldItems: ProcessedItem[],
+    newItems: ProcessedItem[],
+    itemChanges: ItemChange[],
+  ): void => {
+    updateKeptRows(oldItems, newItems, indexRowsByKey(newItems), itemChanges);
+  };
+
+  it('should pass the new row to a row that has no changes', () => {
+    const oldItem = trackedRow(1);
+    const newItem = row({ key: 1 });
+
+    refreshRows([oldItem], [newItem], []);
+
+    expect(updateOf(oldItem)).toHaveBeenCalledWith(newItem);
+  });
+
+  it('should skip a row reported as updated', () => {
+    const oldItem = trackedRow(1);
+    const newItem = row({ key: 1 });
+
+    refreshRows([oldItem], [newItem], [{
+      type: 'update', index: 0, data: newItem, oldItem,
+    }]);
+
+    expect(updateOf(oldItem)).not.toHaveBeenCalled();
+  });
+
+  it('should skip a row that is gone from the new list', () => {
+    const oldItem = trackedRow(1);
+
+    refreshRows([oldItem], [], [{ type: 'remove', index: 0, oldItem }]);
+
+    expect(updateOf(oldItem)).not.toHaveBeenCalled();
+  });
+
+  it('should skip a reordered row', () => {
+    const [stayed, ...moved] = [trackedRow(1), trackedRow(2), trackedRow(3)];
+    const newRows = [row({ key: 1 }), row({ key: 3 }), row({ key: 2 })];
+
+    // [1, 2, 3] -> [1, 3, 2]: rows 2 and 3 each is reported as a remove plus an insert
+    refreshRows([stayed, ...moved], newRows, [
+      { type: 'remove', index: 2, oldItem: moved[1] },
+      { type: 'remove', index: 1, oldItem: moved[0] },
+      { type: 'insert', index: 1, data: newRows[1] },
+      { type: 'insert', index: 2, data: newRows[2] },
+    ]);
+
+    expect(updateOf(stayed)).toHaveBeenCalledWith(newRows[0]);
+    expect(updateOf(moved[0])).not.toHaveBeenCalled();
+    expect(updateOf(moved[1])).not.toHaveBeenCalled();
+  });
+
+  it('should ignore an inserted row, which has no old counterpart', () => {
+    const oldItem = trackedRow(1);
+    const inserted = row({ key: 2 });
+    const newItem = row({ key: 1 });
+
+    refreshRows([oldItem], [inserted, newItem], [{
+      type: 'insert', index: 0, data: inserted,
+    }]);
+
+    expect(updateOf(oldItem)).toHaveBeenCalledWith(newItem);
+  });
+
+  it('should refresh the rows in old-list order', () => {
+    const order: number[] = [];
+    const track = (key: number): ProcessedItem => row({
+      key,
+      update: jest.fn(() => { order.push(key); }),
+      cells: [{ update: jest.fn() }],
+    });
+    const oldItems = [track(1), track(2), track(3)];
+
+    refreshRows(oldItems, [row({ key: 1 }), row({ key: 2 }), row({ key: 3 })], []);
+
+    expect(order).toEqual([1, 2, 3]);
   });
 });
 

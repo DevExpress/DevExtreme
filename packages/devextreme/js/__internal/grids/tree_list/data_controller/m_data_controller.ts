@@ -38,7 +38,7 @@ export class TreeListDataController extends DataController {
     this._dataSource.load();
   }
 
-  protected _isItemEquals(item1, item2) {
+  protected isSameRowState(item1, item2): boolean {
     if (item1.isSelected !== item2.isSelected) {
       return false;
     }
@@ -51,7 +51,7 @@ export class TreeListDataController extends DataController {
       return false;
     }
 
-    return super._isItemEquals.apply(this, arguments as any);
+    return super.isSameRowState(item1, item2);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
