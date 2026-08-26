@@ -69,15 +69,15 @@ withDefaults(defineProps<{
   font-weight: 400;
   width: 200px;
   padding: 25px 10px 5px;
-  border: 1px solid var(--dxds-color-border-neutral-default-rest, #c2c2c2);
+  border: 1px solid var(--dxds-color-border, #c2c2c2);
 }
 
 .rows-content tr:nth-child(2) td {
-  border-top: 1px solid var(--dxds-color-border-neutral-default-rest, #c2c2c2);
+  border-top: 1px solid var(--dxds-color-border, #c2c2c2);
 }
 
 .rows-content td:first-of-type {
-  border-left: 1px solid var(--dxds-color-border-neutral-default-rest, #c2c2c2);
+  border-left: 1px solid var(--dxds-color-border, #c2c2c2);
 }
 
 .rows-content .sparkline {

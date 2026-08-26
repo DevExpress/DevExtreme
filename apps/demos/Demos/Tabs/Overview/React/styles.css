@@ -66,10 +66,10 @@
 }
 
 .dx-viewport:not(.dx-theme-generic) .dx-tabs-horizontal {
-  border-block-end: 1px solid var(--dxds-color-border-neutral-subdued-rest, rgb(225, 225, 225, 0.4));
+  border-block-end: 1px solid var(--dxds-color-border-subtle, rgb(225, 225, 225, 0.4));
 }
 
 .dx-viewport:not(.dx-theme-generic) .dx-tabs-vertical {
   height: 232px;
-  border-inline-end: 1px solid var(--dxds-color-border-neutral-subdued-rest, rgb(225, 225, 225, 0.4));
+  border-inline-end: 1px solid var(--dxds-color-border-subtle, rgb(225, 225, 225, 0.4));
 }

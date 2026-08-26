@@ -1,17 +1,17 @@
 ::ng-deep .low .dx-radiobutton-checked .dx-radiobutton-icon .dx-radiobutton-icon-dot {
-  background: var(--dxds-color-content-neutral-deep-rest, gray);
+  background: var(--dxds-color-content-subtler, gray);
 }
 
 ::ng-deep .normal .dx-radiobutton-checked .dx-radiobutton-icon .dx-radiobutton-icon-dot {
-  background: var(--dxds-color-content-success-default-rest, green);
+  background: var(--dxds-color-content-success, green);
 }
 
 ::ng-deep .urgent .dx-radiobutton-checked .dx-radiobutton-icon .dx-radiobutton-icon-dot {
-  background: var(--dxds-color-content-warning-default-rest, orange);
+  background: var(--dxds-color-content-warning, orange);
 }
 
 ::ng-deep .high .dx-radiobutton-checked .dx-radiobutton-icon .dx-radiobutton-icon-dot {
-  background: var(--dxds-color-content-danger-default-rest, red);
+  background: var(--dxds-color-content-danger, red);
 }
 
 ::ng-deep #radio-group-with-selection {

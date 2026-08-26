@@ -1,14 +1,14 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$file-uploader-file-name-content-rest: ds.$color-content-neutral-default-rest !default;
-$file-uploader-file-icon-rest: ds.$color-content-neutral-subdued-rest !default;
-$file-uploader-progress-bar-status-content-rest: ds.$color-content-neutral-default-rest !default;
-$file-uploader-files-container-bg-rest: ds.$color-surface-neutral-default-rest !default;
+$file-uploader-file-name-content-rest: ds.$color-content !default;
+$file-uploader-file-icon-rest: ds.$color-content-subtle !default;
+$file-uploader-progress-bar-status-content-rest: ds.$color-content !default;
+$file-uploader-files-container-bg-rest: ds.$color-bg !default;
 
-$file-uploader-file-name-status-content-rest: ds.$color-content-neutral-subdued-rest !default;
+$file-uploader-file-name-status-content-rest: ds.$color-content-subtle !default;
 
-$file-uploader-border-rest: ds.$color-border-neutral-default-rest !default;
+$file-uploader-border-rest: ds.$color-border !default;
 
-$file-uploader-file-status-message-invalid-content-rest: ds.$color-surface-danger-default-rest !default;
-$file-uploader-label-content-rest: ds.$color-content-neutral-subdued-rest !default;
+$file-uploader-file-status-message-invalid-content-rest: ds.$color-bg-danger !default;
+$file-uploader-label-content-rest: ds.$color-content-subtle !default;
 $file-uploader-file-container-shadow-rest: ds.$box-shadow-sm !default;
