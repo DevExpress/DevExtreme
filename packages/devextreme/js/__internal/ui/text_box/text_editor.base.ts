@@ -133,10 +133,12 @@ class TextEditorBase<
 
   _enterKeyAction?: ((event?: Record<string, unknown>) => void);
 
-  ctor(element: Element, options: TProperties): void {
-    if (options) {
-      checkButtonsOptionType(options.buttons);
-    }
+  _init(): void {
+    super._init();
+
+    const { buttons } = this.option();
+
+    checkButtonsOptionType(buttons);
 
     this._buttonCollection = new TextEditorButtonCollection(
       this as unknown as TextEditorBase,
@@ -146,8 +148,6 @@ class TextEditorBase<
     this._$beforeButtonsContainer = null;
     this._$afterButtonsContainer = null;
     this._labelContainerElement = null;
-
-    super.ctor(element, options);
   }
 
   _getDefaultOptions(): TProperties {
