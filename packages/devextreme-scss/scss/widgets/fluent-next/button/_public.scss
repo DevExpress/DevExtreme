@@ -8,6 +8,7 @@
   --dx-button-contained-bg-disabled: #{$button-contained-bg-disabled};
   --dx-button-content-disabled: #{$button-content-disabled};
   --dx-button-content-line-height: #{$button-content-line-height};
+  --dx-button-content-padding: calc((var(--dx-button-height) - var(--dx-button-icon-size) - var(--dx-border-width) * 2) / 2);
   --dx-button-danger-contained-bg-active: #{$button-danger-contained-bg-active};
   --dx-button-danger-contained-bg-focused: #{$button-danger-contained-bg-focused};
   --dx-button-danger-contained-bg-hovered: #{$button-danger-contained-bg-hovered};

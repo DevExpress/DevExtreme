@@ -8,7 +8,11 @@
 @mixin dx-button-onlyicon-sizing($icon-size: $button-icon-size) {
   min-width: var(--dx-button-height);
 
-  $button-content-padding: calc((#{$button-height} - #{$icon-size} - #{$global-border-width} * 2) / 2);
+  $button-content-padding: if(
+    $icon-size == $button-icon-size,
+    var(--dx-button-content-padding),
+    calc((#{$button-height} - #{$icon-size} - #{$global-border-width} * 2) / 2)
+  );
 
   @include dx-button-sizing(
     $button-content-padding,
