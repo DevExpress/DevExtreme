@@ -1,4 +1,3 @@
-import Emitter from '@js/common/core/events/core/emitter';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   createEvent, eventData, eventDelta, isDxMouseWheelEvent, isMouseEvent, isTouchEvent, needSkipEvent,
@@ -12,6 +11,8 @@ import { styleProp } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
 import devices from '@ts/core/m_devices';
 import domUtils from '@ts/core/utils/m_dom';
+import type { EmitterConfigData, EmitterEvent, EventCoords } from '@ts/events/core/m_emitter';
+import Emitter from '@ts/events/core/m_emitter';
 
 const ready = readyCallbacks.add;
 const { abs } = Math;
@@ -24,11 +25,22 @@ let TOUCH_BOUNDARY = 10;
 const IMMEDIATE_TOUCH_BOUNDARY = 0;
 const IMMEDIATE_TIMEOUT = 180;
 
-const supportPointerEvents = function () {
+// The gesture pipeline operates on pointer events that always carry
+// page coordinates.
+export type GestureEvent = EmitterEvent & {
+  pageX: number;
+  pageY: number;
+};
+
+export type GestureDirection = 'both' | 'horizontal' | 'vertical';
+
+type GestureCover = (toggle: boolean, cursor: string) => void;
+
+const supportPointerEvents = function (): string | undefined {
   return styleProp('pointer-events');
 };
 
-const setGestureCover = callOnce(() => {
+const setGestureCover = callOnce((): GestureCover => {
   const GESTURE_COVER_CLASS = 'dx-gesture-cover';
 
   const isDesktop = devices.real().deviceType === 'desktop';
@@ -40,53 +52,82 @@ const setGestureCover = callOnce(() => {
   const $cover = $('<div>')
     .addClass(GESTURE_COVER_CLASS)
     .css('pointerEvents', 'none');
-  // @ts-expect-error
+  // @ts-expect-error subscribeGlobal is not declared in the public events engine type
   eventsEngine.subscribeGlobal($cover, 'dxmousewheel', (e) => {
     e.preventDefault();
   });
 
   ready(() => {
-    // @ts-expect-error
+    // @ts-expect-error appendTo accepts a selector at runtime
     $cover.appendTo('body');
   });
 
   return function (toggle, cursor) {
     $cover.css('pointerEvents', toggle ? 'all' : 'none');
-    toggle && $cover.css('cursor', cursor);
+    if (toggle) {
+      $cover.css('cursor', cursor);
+    }
   };
 });
 
-const gestureCover = function (toggle, cursor) {
-  const gestureCoverStrategy = setGestureCover();
+const gestureCover = function (toggle: boolean, cursor: string): void {
+  const gestureCoverStrategy: GestureCover = setGestureCover();
   gestureCoverStrategy(toggle, cursor);
 };
 
-const GestureEmitter = Emitter.inherit({
+class GestureEmitter extends Emitter {
+  gesture = true;
 
-  gesture: true,
+  direction?: GestureDirection;
 
-  configure(data) {
+  immediate?: boolean;
+
+  immediateTimeout?: number;
+
+  _stage?: number;
+
+  _startEvent!: GestureEvent;
+
+  _startEventData!: EventCoords;
+
+  _immediateTimer?: ReturnType<typeof setTimeout>;
+
+  _immediateAccepted?: boolean;
+
+  static initialTouchBoundary = TOUCH_BOUNDARY;
+
+  static touchBoundary(newBoundary?: number): number | undefined {
+    if (isDefined(newBoundary)) {
+      TOUCH_BOUNDARY = newBoundary;
+      return undefined;
+    }
+
+    return TOUCH_BOUNDARY;
+  }
+
+  configure(data: EmitterConfigData, eventName?: string): void {
     this.getElement().css('msTouchAction', data.immediate ? 'pinch-zoom' : '');
 
-    this.callBase(data);
-  },
+    super.configure(data, eventName);
+  }
 
-  allowInterruptionByMouseWheel() {
+  allowInterruptionByMouseWheel(): boolean {
     return this._stage !== STARTED;
-  },
+  }
 
-  getDirection() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getDirection(e?: EmitterEvent): GestureDirection | undefined {
     return this.direction;
-  },
+  }
 
-  _cancel() {
-    this.callBase.apply(this, arguments);
+  _cancel(e?: EmitterEvent): void {
+    super._cancel(e);
 
     this._toggleGestureCover(false);
     this._stage = SLEEP;
-  },
+  }
 
-  start(e) {
+  start(e: EmitterEvent): void {
     // T1328053: macOS Ctrl+click opens the system context menu. Kept out of needSkipEvent()
     // because importing m_devices into that low-level events util forces `new Devices()` into
     // early module init and breaks init order (resizeCallbacks stops firing).
@@ -104,9 +145,9 @@ const GestureEmitter = Emitter.inherit({
     this._init(e);
 
     this._setupImmediateTimer();
-  },
+  }
 
-  _setupImmediateTimer() {
+  _setupImmediateTimer(): void {
     clearTimeout(this._immediateTimer);
     this._immediateAccepted = false;
 
@@ -122,9 +163,9 @@ const GestureEmitter = Emitter.inherit({
     this._immediateTimer = setTimeout(() => {
       this._immediateAccepted = true;
     }, this.immediateTimeout ?? IMMEDIATE_TIMEOUT);
-  },
+  }
 
-  move(e) {
+  move(e: EmitterEvent): void {
     if (this._stage === INITED && this._directionConfirmed(e)) {
       this._stage = STARTED;
 
@@ -146,12 +187,11 @@ const GestureEmitter = Emitter.inherit({
       this._clearSelection(e);
       this._move(e);
     }
-  },
+  }
 
-  _directionConfirmed(e) {
+  _directionConfirmed(e: EmitterEvent): boolean {
     const touchBoundary = this._getTouchBoundary(e);
-    // @ts-expect-error
-    const delta = eventDelta(this._startEventData, eventData(e));
+    const delta: EventCoords = eventDelta(this._startEventData, eventData(e));
     const deltaX = abs(delta.x);
     const deltaY = abs(delta.y);
 
@@ -163,53 +203,52 @@ const GestureEmitter = Emitter.inherit({
     const horizontalAccepted = direction === 'horizontal' && horizontalMove;
     const verticalAccepted = direction === 'vertical' && verticalMove;
 
-    return bothAccepted || horizontalAccepted || verticalAccepted || this._immediateAccepted;
-  },
+    return Boolean(bothAccepted || horizontalAccepted || verticalAccepted || this._immediateAccepted);
+  }
 
-  _validateMove(touchBoundary, mainAxis, crossAxis) {
-    return mainAxis && mainAxis >= touchBoundary && (this.immediate ? mainAxis >= crossAxis : true);
-  },
+  _validateMove(touchBoundary: number, mainAxis: number, crossAxis: number): boolean {
+    return Boolean(mainAxis) && mainAxis >= touchBoundary && (this.immediate ? mainAxis >= crossAxis : true);
+  }
 
-  _getTouchBoundary(e) {
+  _getTouchBoundary(e: EmitterEvent): number {
     return this.immediate || isDxMouseWheelEvent(e) ? IMMEDIATE_TOUCH_BOUNDARY : TOUCH_BOUNDARY;
-  },
+  }
 
-  _adjustStartEvent(e) {
+  _adjustStartEvent(e: EmitterEvent): void {
     const touchBoundary = this._getTouchBoundary(e);
-    // @ts-expect-error
-    const delta = eventDelta(this._startEventData, eventData(e));
+    const delta: EventCoords = eventDelta(this._startEventData, eventData(e));
 
     this._startEvent.pageX += sign(delta.x) * touchBoundary;
     this._startEvent.pageY += sign(delta.y) * touchBoundary;
-  },
+  }
 
-  _resetActiveElement() {
+  _resetActiveElement(): void {
     if (devices.real().platform === 'ios' && this.getElement().find(':focus').length) {
       domUtils.resetActiveElement();
     }
-  },
+  }
 
-  _toggleGestureCover(toggle) {
+  _toggleGestureCover(toggle: boolean): void {
     this._toggleGestureCoverImpl(toggle);
-  },
+  }
 
-  _toggleGestureCoverImpl(toggle) {
+  _toggleGestureCoverImpl(toggle: boolean): void {
     const isStarted = this._stage === STARTED;
 
     if (isStarted) {
-      gestureCover(toggle, this.getElement().css('cursor'));
+      gestureCover(toggle, this.getElement().css('cursor') as string);
     }
-  },
+  }
 
-  _clearSelection(e) {
+  _clearSelection(e: EmitterEvent): void {
     if (isDxMouseWheelEvent(e) || isTouchEvent(e)) {
       return;
     }
 
     domUtils.clearSelection();
-  },
+  }
 
-  end(e) {
+  end(e: EmitterEvent): void {
     this._toggleGestureCover(false);
 
     if (this._stage === STARTED) {
@@ -219,29 +258,28 @@ const GestureEmitter = Emitter.inherit({
     }
 
     this._stage = SLEEP;
-  },
-
-  dispose() {
-    clearTimeout(this._immediateTimer);
-    this.callBase.apply(this, arguments);
-    this._toggleGestureCover(false);
-  },
-
-  _init: noop,
-  _start: noop,
-  _move: noop,
-  _stop: noop,
-  _end: noop,
-
-});
-GestureEmitter.initialTouchBoundary = TOUCH_BOUNDARY;
-GestureEmitter.touchBoundary = function (newBoundary) {
-  if (isDefined(newBoundary)) {
-    TOUCH_BOUNDARY = newBoundary;
-    return;
   }
 
-  return TOUCH_BOUNDARY;
-};
+  dispose(): void {
+    clearTimeout(this._immediateTimer);
+    super.dispose();
+    this._toggleGestureCover(false);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _init(e: EmitterEvent): void {}
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _start(e: EmitterEvent): void {}
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _move(e: EmitterEvent): void {}
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _stop(e: EmitterEvent): void {}
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _end(e: EmitterEvent): void {}
+}
 
 export default GestureEmitter;

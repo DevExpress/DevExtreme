@@ -1,14 +1,14 @@
+/* eslint-disable max-classes-per-file */
 import { cancelAnimationFrame, requestAnimationFrame } from '@js/common/core/animation/frame';
-import registerEmitter from '@js/common/core/events/core/emitter_registrator';
 import eventsEngine from '@js/common/core/events/core/events_engine';
-import GestureEmitter from '@js/common/core/events/gesture/emitter.gesture';
 import {
   addNamespace, eventData, eventDelta, isDxMouseWheelEvent, isMouseEvent,
 } from '@js/common/core/events/utils/index';
-import Class from '@js/core/class';
+import type { dxElementWrapper } from '@js/core/renderer';
 import devices from '@ts/core/m_devices';
-
-const { abstract } = Class;
+import type { EmitterConfigData, EmitterEvent, EventCoords } from '@ts/events/core/m_emitter';
+import registerEmitter from '@ts/events/core/m_emitter_registrator';
+import GestureEmitter from '@ts/events/gesture/m_emitter.gesture';
 
 const realDevice = devices.real();
 
@@ -20,303 +20,308 @@ const SCROLL_END_EVENT = 'dxscrollend';
 const SCROLL_STOP_EVENT = 'dxscrollstop';
 const SCROLL_CANCEL_EVENT = 'dxscrollcancel';
 
-const Locker = Class.inherit((function () {
-  const NAMESPACED_SCROLL_EVENT = addNamespace(SCROLL_EVENT, 'dxScrollEmitter');
+const NAMESPACED_SCROLL_EVENT = addNamespace(SCROLL_EVENT, 'dxScrollEmitter');
 
-  return {
+const WHEEL_UNLOCK_TIMEOUT = 400;
+const POINTER_UNLOCK_TIMEOUT = 400;
 
-    ctor(element) {
-      this._element = element;
+const INERTIA_TIMEOUT = 100;
+const VELOCITY_CALC_TIMEOUT = 200;
+const FRAME_DURATION = Math.round(1000 / 60);
 
-      this._locked = false;
+type ScrollLockerElement = Element | dxElementWrapper;
 
-      this._proxiedScroll = (e) => {
-        if (!this._disposed) {
-          this._scroll(e);
-        }
-      };
-      eventsEngine.on(this._element, NAMESPACED_SCROLL_EVENT, this._proxiedScroll);
-    },
+type ScrollEvent = EmitterEvent & {
+  isScrollingEvent?: boolean;
+};
 
-    _scroll: abstract,
+type ScrollConfigData = EmitterConfigData & {
+  scrollTarget?: ScrollLockerElement;
+};
 
-    check(e, callback) {
-      if (this._locked) {
-        callback();
+abstract class Locker {
+  _element: ScrollLockerElement;
+
+  _locked: boolean;
+
+  _disposed?: boolean;
+
+  _proxiedScroll: (e: EmitterEvent) => void;
+
+  constructor(element: ScrollLockerElement) {
+    this._element = element;
+
+    this._locked = false;
+
+    this._proxiedScroll = (e) => {
+      if (!this._disposed) {
+        this._scroll(e);
       }
-    },
-
-    dispose() {
-      this._disposed = true;
-      eventsEngine.off(this._element, NAMESPACED_SCROLL_EVENT, this._proxiedScroll);
-    },
-
-  };
-})());
-
-const TimeoutLocker = Locker.inherit((function () {
-  return {
-
-    ctor(element, timeout) {
-      this.callBase(element);
-
-      this._timeout = timeout;
-    },
-
-    _scroll() {
-      this._prepare();
-      this._forget();
-    },
-
-    _prepare() {
-      if (this._timer) {
-        this._clearTimer();
-      }
-      this._locked = true;
-    },
-
-    _clearTimer() {
-      clearTimeout(this._timer);
-      this._locked = false;
-      this._timer = null;
-    },
-
-    _forget() {
-      const that = this;
-
-      this._timer = setTimeout(() => {
-        that._clearTimer();
-      }, this._timeout);
-    },
-
-    dispose() {
-      this.callBase();
-
-      this._clearTimer();
-    },
-
-  };
-})());
-
-const WheelLocker = TimeoutLocker.inherit((function () {
-  const WHEEL_UNLOCK_TIMEOUT = 400;
-
-  return {
-
-    ctor(element) {
-      this.callBase(element, WHEEL_UNLOCK_TIMEOUT);
-
-      this._lastWheelDirection = null;
-    },
-
-    check(e, callback) {
-      this._checkDirectionChanged(e);
-
-      this.callBase(e, callback);
-    },
-
-    _checkDirectionChanged(e) {
-      if (!isDxMouseWheelEvent(e)) {
-        this._lastWheelDirection = null;
-        return;
-      }
-
-      const direction = e.shiftKey || false;
-      const directionChange = this._lastWheelDirection !== null && direction !== this._lastWheelDirection;
-      this._lastWheelDirection = direction;
-
-      this._locked = this._locked && !directionChange;
-    },
-
-  };
-})());
-
-let PointerLocker = TimeoutLocker.inherit((function () {
-  const POINTER_UNLOCK_TIMEOUT = 400;
-
-  return {
-
-    ctor(element) {
-      this.callBase(element, POINTER_UNLOCK_TIMEOUT);
-    },
-
-  };
-})());
-
-(function () {
-  const { ios: isIos, android: isAndroid } = realDevice;
-
-  if (!(isIos || isAndroid)) {
-    return;
+    };
+    eventsEngine.on(this._element, NAMESPACED_SCROLL_EVENT, this._proxiedScroll);
   }
 
-  PointerLocker = Locker.inherit((function () {
-    return {
+  abstract _scroll(e: EmitterEvent): void;
 
-      _scroll() {
-        this._locked = true;
+  check(e: EmitterEvent, callback: () => void): void {
+    if (this._locked) {
+      callback();
+    }
+  }
 
-        const that = this;
-        cancelAnimationFrame(this._scrollFrame);
-        this._scrollFrame = requestAnimationFrame(() => {
-          that._locked = false;
-        });
-      },
+  dispose(): void {
+    this._disposed = true;
+    eventsEngine.off(this._element, NAMESPACED_SCROLL_EVENT, this._proxiedScroll);
+  }
+}
 
-      check(e, callback) {
-        cancelAnimationFrame(this._scrollFrame);
-        cancelAnimationFrame(this._checkFrame);
+class TimeoutLocker extends Locker {
+  _timeout: number;
 
-        const that = this;
-        const { callBase } = this;
-        this._checkFrame = requestAnimationFrame(() => {
-          callBase.call(that, e, callback);
+  _timer?: ReturnType<typeof setTimeout> | null;
 
-          that._locked = false;
-        });
-      },
+  constructor(element: ScrollLockerElement, timeout: number) {
+    super(element);
 
-      dispose() {
-        this.callBase();
+    this._timeout = timeout;
+  }
 
-        cancelAnimationFrame(this._scrollFrame);
-        cancelAnimationFrame(this._checkFrame);
-      },
+  _scroll(): void {
+    this._prepare();
+    this._forget();
+  }
 
-    };
-  })());
-}());
+  _prepare(): void {
+    if (this._timer) {
+      this._clearTimer();
+    }
+    this._locked = true;
+  }
 
-const ScrollEmitter = GestureEmitter.inherit((function () {
-  const INERTIA_TIMEOUT = 100;
-  const VELOCITY_CALC_TIMEOUT = 200;
-  const FRAME_DURATION = Math.round(1000 / 60);
+  _clearTimer(): void {
+    clearTimeout(this._timer ?? undefined);
+    this._locked = false;
+    this._timer = null;
+  }
 
-  return {
+  _forget(): void {
+    this._timer = setTimeout(() => {
+      this._clearTimer();
+    }, this._timeout);
+  }
 
-    ctor(element) {
-      this.callBase.apply(this, arguments);
-      this.direction = 'both';
+  dispose(): void {
+    super.dispose();
 
-      this._pointerLocker = new PointerLocker(element);
-      this._wheelLocker = new WheelLocker(element);
-    },
+    this._clearTimer();
+  }
+}
 
-    validate() {
-      return true;
-    },
+class WheelLocker extends TimeoutLocker {
+  _lastWheelDirection: boolean | null;
 
-    configure(data) {
-      if (data.scrollTarget) {
-        this._pointerLocker.dispose();
-        this._wheelLocker.dispose();
-        this._pointerLocker = new PointerLocker(data.scrollTarget);
-        this._wheelLocker = new WheelLocker(data.scrollTarget);
-      }
+  constructor(element: ScrollLockerElement) {
+    super(element, WHEEL_UNLOCK_TIMEOUT);
 
-      this.callBase(data);
-    },
+    this._lastWheelDirection = null;
+  }
 
-    _init(e) {
-      this._wheelLocker.check(e, () => {
-        if (isDxMouseWheelEvent(e)) {
-          this._accept(e);
-        }
-      });
+  check(e: EmitterEvent, callback: () => void): void {
+    this._checkDirectionChanged(e);
 
-      this._pointerLocker.check(e, () => {
-        const skipCheck = this.isNative && isMouseEvent(e);
-        if (!isDxMouseWheelEvent(e) && !skipCheck) {
-          this._accept(e);
-        }
-      });
+    super.check(e, callback);
+  }
 
-      this._fireEvent(SCROLL_INIT_EVENT, e);
+  _checkDirectionChanged(e: EmitterEvent & { shiftKey?: boolean }): void {
+    if (!isDxMouseWheelEvent(e)) {
+      this._lastWheelDirection = null;
+      return;
+    }
 
-      this._prevEventData = eventData(e);
-    },
+    const direction = e.shiftKey || false;
+    const directionChange = this._lastWheelDirection !== null && direction !== this._lastWheelDirection;
+    this._lastWheelDirection = direction;
 
-    move(e) {
-      this.callBase.apply(this, arguments);
+    this._locked = this._locked && !directionChange;
+  }
+}
 
-      e.isScrollingEvent = this.isNative || e.isScrollingEvent;
-    },
+class PointerTimeoutLocker extends TimeoutLocker {
+  constructor(element: ScrollLockerElement) {
+    super(element, POINTER_UNLOCK_TIMEOUT);
+  }
+}
 
-    _start(e) {
-      this._savedEventData = eventData(e);
+// NOTE: on iOS and Android the pointer lock is released on the next animation
+// frame instead of by a timeout.
+class PointerFrameLocker extends Locker {
+  _scrollFrame = -1;
 
-      this._fireEvent(SCROLL_START_EVENT, e);
+  _checkFrame = -1;
 
-      this._prevEventData = eventData(e);
-    },
+  _scroll(): void {
+    this._locked = true;
 
-    _move(e) {
-      const currentEventData: any = eventData(e);
+    cancelAnimationFrame(this._scrollFrame);
+    this._scrollFrame = requestAnimationFrame(() => {
+      this._locked = false;
+    });
+  }
 
-      this._fireEvent(SCROLL_MOVE_EVENT, e, {
-        delta: eventDelta(this._prevEventData, currentEventData),
-      });
+  check(e: EmitterEvent, callback: () => void): void {
+    cancelAnimationFrame(this._scrollFrame);
+    cancelAnimationFrame(this._checkFrame);
 
-      const delta = eventDelta(this._savedEventData, currentEventData);
-      if (delta.time > VELOCITY_CALC_TIMEOUT) {
-        this._savedEventData = this._prevEventData;
-      }
+    this._checkFrame = requestAnimationFrame(() => {
+      super.check(e, callback);
 
-      this._prevEventData = eventData(e);
-    },
+      this._locked = false;
+    });
+  }
 
-    _end(e) {
-      // @ts-expect-error
-      const endEventDelta = eventDelta(this._prevEventData, eventData(e));
-      let velocity = { x: 0, y: 0 };
+  dispose(): void {
+    super.dispose();
 
-      if (!isDxMouseWheelEvent(e) && endEventDelta.time < INERTIA_TIMEOUT) {
-        const delta = eventDelta(this._savedEventData, this._prevEventData);
-        const velocityMultiplier = FRAME_DURATION / delta.time;
+    cancelAnimationFrame(this._scrollFrame);
+    cancelAnimationFrame(this._checkFrame);
+  }
+}
 
-        velocity = { x: delta.x * velocityMultiplier, y: delta.y * velocityMultiplier };
-      }
+const { ios: isIos, android: isAndroid } = realDevice;
 
-      this._fireEvent(SCROLL_END_EVENT, e, {
-        velocity,
-      });
-    },
+const PointerLocker = isIos || isAndroid ? PointerFrameLocker : PointerTimeoutLocker;
 
-    _stop(e) {
-      this._fireEvent(SCROLL_STOP_EVENT, e);
-    },
+class ScrollEmitter extends GestureEmitter {
+  _pointerLocker: Locker;
 
-    cancel(e) {
-      this.callBase.apply(this, arguments);
+  _wheelLocker: Locker;
 
-      this._fireEvent(SCROLL_CANCEL_EVENT, e);
-    },
+  isNative?: boolean;
 
-    dispose() {
-      this.callBase.apply(this, arguments);
+  _prevEventData!: EventCoords;
 
+  _savedEventData!: EventCoords;
+
+  constructor(element: Element) {
+    super(element);
+    this.direction = 'both';
+
+    this._pointerLocker = new PointerLocker(element);
+    this._wheelLocker = new WheelLocker(element);
+  }
+
+  validate(): boolean {
+    return true;
+  }
+
+  configure(data: ScrollConfigData, eventName?: string): void {
+    if (data.scrollTarget) {
       this._pointerLocker.dispose();
       this._wheelLocker.dispose();
-    },
+      this._pointerLocker = new PointerLocker(data.scrollTarget);
+      this._wheelLocker = new WheelLocker(data.scrollTarget);
+    }
 
-    _clearSelection() {
-      if (this.isNative) {
-        return;
+    super.configure(data, eventName);
+  }
+
+  _init(e: EmitterEvent): void {
+    this._wheelLocker.check(e, () => {
+      if (isDxMouseWheelEvent(e)) {
+        this._accept(e);
       }
+    });
 
-      return this.callBase.apply(this, arguments);
-    },
-
-    _toggleGestureCover() {
-      if (this.isNative) {
-        return;
+    this._pointerLocker.check(e, () => {
+      const skipCheck = this.isNative && isMouseEvent(e);
+      if (!isDxMouseWheelEvent(e) && !skipCheck) {
+        this._accept(e);
       }
+    });
 
-      return this.callBase.apply(this, arguments);
-    },
+    this._fireEvent(SCROLL_INIT_EVENT, e);
 
-  };
-})());
+    this._prevEventData = eventData(e);
+  }
+
+  move(e: ScrollEvent): void {
+    super.move(e);
+
+    e.isScrollingEvent = this.isNative || e.isScrollingEvent;
+  }
+
+  _start(e: EmitterEvent): void {
+    this._savedEventData = eventData(e);
+
+    this._fireEvent(SCROLL_START_EVENT, e);
+
+    this._prevEventData = eventData(e);
+  }
+
+  _move(e: EmitterEvent): void {
+    const currentEventData: EventCoords = eventData(e);
+
+    this._fireEvent(SCROLL_MOVE_EVENT, e, {
+      delta: eventDelta(this._prevEventData, currentEventData),
+    });
+
+    const delta: EventCoords = eventDelta(this._savedEventData, currentEventData);
+    if (delta.time > VELOCITY_CALC_TIMEOUT) {
+      this._savedEventData = this._prevEventData;
+    }
+
+    this._prevEventData = eventData(e);
+  }
+
+  _end(e: EmitterEvent): void {
+    const endEventDelta: EventCoords = eventDelta(this._prevEventData, eventData(e));
+    let velocity = { x: 0, y: 0 };
+
+    if (!isDxMouseWheelEvent(e) && endEventDelta.time < INERTIA_TIMEOUT) {
+      const delta: EventCoords = eventDelta(this._savedEventData, this._prevEventData);
+      const velocityMultiplier = FRAME_DURATION / delta.time;
+
+      velocity = { x: delta.x * velocityMultiplier, y: delta.y * velocityMultiplier };
+    }
+
+    this._fireEvent(SCROLL_END_EVENT, e, {
+      velocity,
+    });
+  }
+
+  _stop(e: EmitterEvent): void {
+    this._fireEvent(SCROLL_STOP_EVENT, e);
+  }
+
+  cancel(e: EmitterEvent): void {
+    super.cancel(e);
+
+    this._fireEvent(SCROLL_CANCEL_EVENT, e);
+  }
+
+  dispose(): void {
+    super.dispose();
+
+    this._pointerLocker.dispose();
+    this._wheelLocker.dispose();
+  }
+
+  _clearSelection(e: EmitterEvent): void {
+    if (this.isNative) {
+      return;
+    }
+
+    super._clearSelection(e);
+  }
+
+  _toggleGestureCover(toggle: boolean): void {
+    if (this.isNative) {
+      return;
+    }
+
+    super._toggleGestureCover(toggle);
+  }
+}
 
 registerEmitter({
   emitter: ScrollEmitter,

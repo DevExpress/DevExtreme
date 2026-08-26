@@ -7,7 +7,7 @@ export function isTouchEvent(arg: { type: string }): boolean;
 export function isKeyboardEvent(arg: { type: string }): boolean;
 export function isFakeClickEvent(arg: { screenX: number; offsetX: number; pageX: number }): boolean;
 export function eventData(arg: { pageX: number; pageY: number; timeStamp: number }): { x: number; y: number; time: number };
-export function eventDelta(from: number, to: number): { x: number; y: number; time: number };
+export function eventDelta(from: { x: number; y: number; time: number }, to: { x: number; y: number; time: number }): { x: number; y: number; time: number };
 export function hasTouches(e: { type: string; pointers?: ArrayLike<any>; originalEvent: { touches?: ArrayLike<any> } }): number;
 export function forceSkipEvents(): boolean;
 export function stopEventsSkipping(): boolean;

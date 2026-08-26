@@ -1,6 +1,7 @@
-import Emitter from '@js/common/core/events/core/emitter';
-import registerEmitter from '@js/common/core/events/core/emitter_registrator';
 import { eventData, eventDelta } from '@js/common/core/events/utils/index';
+import type { EmitterEvent, EventCoords } from '@ts/events/core/m_emitter';
+import Emitter from '@ts/events/core/m_emitter';
+import registerEmitter from '@ts/events/core/m_emitter_registrator';
 
 const { abs } = Math;
 
@@ -8,15 +9,20 @@ const HOLD_EVENT_NAME = 'dxhold';
 const HOLD_TIMEOUT = 750;
 const TOUCH_BOUNDARY = 5;
 
-const HoldEmitter = Emitter.inherit({
+class HoldEmitter extends Emitter {
+  timeout?: number;
 
-  start(e) {
+  _startEventData!: EventCoords;
+
+  _holdTimer?: ReturnType<typeof setTimeout>;
+
+  start(e: EmitterEvent): void {
     this._startEventData = eventData(e);
 
     this._startTimer(e);
-  },
+  }
 
-  _startTimer(e) {
+  _startTimer(e: EmitterEvent): void {
     const holdTimeout = 'timeout' in this ? this.timeout : HOLD_TIMEOUT;
     this._holdTimer = setTimeout(() => {
       this._requestAccept(e);
@@ -25,38 +31,36 @@ const HoldEmitter = Emitter.inherit({
       });
       this._forgetAccept();
     }, holdTimeout);
-  },
+  }
 
-  move(e) {
+  move(e: EmitterEvent): void {
     if (this._touchWasMoved(e)) {
       this._cancel(e);
     }
-  },
+  }
 
-  _touchWasMoved(e) {
-    // @ts-expect-error
-    const delta = eventDelta(this._startEventData, eventData(e));
+  _touchWasMoved(e: EmitterEvent): boolean {
+    const delta: EventCoords = eventDelta(this._startEventData, eventData(e));
 
     return abs(delta.x) > TOUCH_BOUNDARY || abs(delta.y) > TOUCH_BOUNDARY;
-  },
+  }
 
-  end() {
+  end(): void {
     this._stopTimer();
-  },
+  }
 
-  _stopTimer() {
+  _stopTimer(): void {
     clearTimeout(this._holdTimer);
-  },
+  }
 
-  cancel() {
+  cancel(): void {
     this._stopTimer();
-  },
+  }
 
-  dispose() {
+  dispose(): void {
     this._stopTimer();
-  },
-
-});
+  }
+}
 
 registerEmitter({
   emitter: HoldEmitter,

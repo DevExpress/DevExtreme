@@ -1,11 +1,12 @@
-import Emitter from '@js/common/core/events/core/emitter';
-import registerEmitter from '@js/common/core/events/core/emitter_registrator';
+/* eslint-disable max-classes-per-file */
 import pointerEvents from '@js/common/core/events/pointer';
 import { isMouseEvent } from '@js/common/core/events/utils/index';
-import Class from '@js/core/class';
 import { ensureDefined, noop } from '@js/core/utils/common';
 import { contains } from '@js/core/utils/dom';
 import devices from '@ts/core/m_devices';
+import type { EmitterConfigData, EmitterEvent } from '@ts/events/core/m_emitter';
+import Emitter from '@ts/events/core/m_emitter';
+import registerEmitter from '@ts/events/core/m_emitter_registrator';
 
 const ACTIVE_EVENT_NAME = 'dxactive';
 const INACTIVE_EVENT_NAME = 'dxinactive';
@@ -13,31 +14,36 @@ const INACTIVE_EVENT_NAME = 'dxinactive';
 const ACTIVE_TIMEOUT = 30;
 const INACTIVE_TIMEOUT = 400;
 
-const FeedbackEvent = Class.inherit({
+class FeedbackEvent {
+  _timeout: number;
 
-  ctor(timeout, fire) {
+  _fire: () => void;
+
+  _timer?: ReturnType<typeof setTimeout>;
+
+  _fired = false;
+
+  constructor(timeout: number, fire: () => void) {
     this._timeout = timeout;
     this._fire = fire;
-  },
+  }
 
-  start() {
-    const that = this;
-
+  start(): void {
     this._schedule(() => {
-      that.force();
+      this.force();
     });
-  },
+  }
 
-  _schedule(fn) {
+  _schedule(fn: () => void): void {
     this.stop();
     this._timer = setTimeout(fn, this._timeout);
-  },
+  }
 
-  stop() {
+  stop(): void {
     clearTimeout(this._timer);
-  },
+  }
 
-  force() {
+  force(): void {
     if (this._fired) {
       return;
     }
@@ -45,27 +51,36 @@ const FeedbackEvent = Class.inherit({
     this.stop();
     this._fire();
     this._fired = true;
-  },
+  }
 
-  fired() {
+  fired(): boolean {
     return this._fired;
-  },
+  }
+}
 
-});
+let activeFeedback: FeedbackEmitter | null = null;
 
-let activeFeedback;
+interface FeedbackLockDeferred {
+  done: (callback: () => void) => unknown;
+}
 
-const FeedbackEmitter = Emitter.inherit({
+class FeedbackEmitter extends Emitter {
+  _active: FeedbackEvent;
 
-  ctor() {
-    this.callBase.apply(this, arguments);
+  _inactive: FeedbackEvent;
+
+  activeTimeout?: number;
+
+  inactiveTimeout?: number;
+
+  constructor(element: Element) {
+    super(element);
 
     this._active = new FeedbackEvent(0, noop);
     this._inactive = new FeedbackEvent(0, noop);
-  },
+  }
 
-  /* eslint-disable default-case */
-  configure(data, eventName) {
+  configure(data: EmitterConfigData, eventName?: string): void {
     switch (eventName) {
       case ACTIVE_EVENT_NAME:
         data.activeTimeout = data.timeout;
@@ -73,12 +88,14 @@ const FeedbackEmitter = Emitter.inherit({
       case INACTIVE_EVENT_NAME:
         data.inactiveTimeout = data.timeout;
         break;
+      default:
+        break;
     }
 
-    this.callBase(data);
-  },
+    super.configure(data);
+  }
 
-  start(e) {
+  start(e: EmitterEvent): void {
     if (activeFeedback) {
       const activeChildExists = contains(this.getElement().get(0), activeFeedback.getElement().get(0));
       const childJustActivated = !activeFeedback._active.fired();
@@ -94,11 +111,9 @@ const FeedbackEmitter = Emitter.inherit({
 
     this._initEvents(e);
     this._active.start();
-  },
+  }
 
-  _initEvents(e) {
-    const that = this;
-
+  _initEvents(e: EmitterEvent): void {
     const eventTarget = this._getEmitterTarget(e);
 
     const mouseEvent = isMouseEvent(e);
@@ -109,19 +124,19 @@ const FeedbackEmitter = Emitter.inherit({
     const inactiveTimeout = ensureDefined(this.inactiveTimeout, INACTIVE_TIMEOUT);
 
     this._active = new FeedbackEvent(deferFeedback ? activeTimeout : 0, () => {
-      that._fireEvent(ACTIVE_EVENT_NAME, e, { target: eventTarget });
+      this._fireEvent(ACTIVE_EVENT_NAME, e, { target: eventTarget });
     });
     this._inactive = new FeedbackEvent(deferFeedback ? inactiveTimeout : 0, () => {
-      that._fireEvent(INACTIVE_EVENT_NAME, e, { target: eventTarget });
+      this._fireEvent(INACTIVE_EVENT_NAME, e, { target: eventTarget });
       activeFeedback = null;
     });
-  },
+  }
 
-  cancel(e) {
+  cancel(e: EmitterEvent): void {
     this.end(e);
-  },
+  }
 
-  end(e) {
+  end(e: EmitterEvent): void {
     const skipTimers = e.type !== pointerEvents.up;
 
     if (skipTimers) {
@@ -135,9 +150,9 @@ const FeedbackEmitter = Emitter.inherit({
     if (skipTimers) {
       this._inactive.force();
     }
-  },
+  }
 
-  dispose() {
+  dispose(): void {
     this._active.stop();
     this._inactive.stop();
 
@@ -145,25 +160,24 @@ const FeedbackEmitter = Emitter.inherit({
       activeFeedback = null;
     }
 
-    this.callBase();
-  },
+    super.dispose();
+  }
 
-  lockInactive() {
+  lockInactive(): () => void {
     this._active.force();
     this._inactive.stop();
     activeFeedback = null;
     this._cancel();
 
     return this._inactive.force.bind(this._inactive);
-  },
+  }
 
-});
+  static lock(deferred: FeedbackLockDeferred): void {
+    const lockInactive = activeFeedback ? activeFeedback.lockInactive() : noop;
 
-FeedbackEmitter.lock = function (deferred) {
-  const lockInactive = activeFeedback ? activeFeedback.lockInactive() : noop;
-
-  deferred.done(lockInactive);
-};
+    deferred.done(lockInactive);
+  }
+}
 
 registerEmitter({
   emitter: FeedbackEmitter,
