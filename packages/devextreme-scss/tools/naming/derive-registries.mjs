@@ -894,7 +894,7 @@ const OVERRIDES = {
       'ai-chat', 'drag-header', 'filter-row', 'filter-panel', 'summary', 'column-separator',
       'no-data', 'link', 'editor', 'search', 'chevron', 'icon', 'text-stub', 'selection',
       'draggable-column', 'header-filter', 'drop-highlight', 'text-link', 'icon-link',
-      'checkbox', 'menu-item', 'header-panel', 'group-panel', 'command', 'edit', 'edit-column',
+      'checkbox', 'menu-item', 'context-menu', 'header-panel', 'group-panel', 'command', 'edit', 'edit-column',
       'select-column', 'icon-container', 'filter-operation',
       'adaptive-column', 'tree-view', 'node', 'select-all', 'sort-index', 'error-message', 'popup',
       'overlay', 'revert-button', 'validation', 'input', 'progress-bar', 'prompt-editor', 'after',

@@ -5,6 +5,7 @@
 @use "../../sizes" as *;
 @use "../../textEditor" as *;
 @use "../variables" as *;
+@use "../../textEditor/sizes" as textEditorSizes;
 
 @mixin fluent-grid-base-cell($widget-name) {
 
@@ -290,7 +291,7 @@
   .dx-#{$widget-name}-rowsview td.dx-validation-pending.dx-cell-modified,
   .dx-#{$widget-name}-rowsview td.dx-validation-pending .dx-#{$widget-name}-invalid {
     padding: var(--dx-grid-cell-padding);
-    padding-right: calc(var(--dx-invalid-badge-size) + 2 * var(--dx-invalid-badge-padding-inline));
+    padding-right: textEditorSizes.$text-editor-invalid-badge-size;
   }
 
   // (0,4,0)
@@ -303,7 +304,7 @@
   .dx-rtl.dx-#{$widget-name}-rowsview td.dx-validation-pending .dx-#{$widget-name}-invalid,
   .dx-rtl .dx-#{$widget-name}-rowsview td.dx-validation-pending.dx-cell-modified,
   .dx-rtl .dx-#{$widget-name}-rowsview td.dx-validation-pending .dx-#{$widget-name}-invalid {
-    padding-left: calc(var(--dx-invalid-badge-size) + 2 * var(--dx-invalid-badge-padding-inline));
+    padding-left: textEditorSizes.$text-editor-invalid-badge-size;
     padding-right: var(--dx-grid-cell-padding-inline);
   }
 

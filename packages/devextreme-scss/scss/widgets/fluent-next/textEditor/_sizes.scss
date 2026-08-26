@@ -1,6 +1,10 @@
 @use "sass:math";
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
+@use "../common/sizes" as *;
+
+// Moved out of _index.scss: variables belong in _sizes/_colors (NAMING.md O7)
+$text-editor-invalid-badge-size: calc(#{$invalid-badge-size} + 2 * #{$invalid-badge-padding-inline});
 
 // Geometry and motion, so they live here rather than in _colors.scss (NAMING.md O7)
 $text-editor-input-border-radius: $global-border-radius !default;

@@ -1,7 +1,0 @@
-@use "sizes" as *;
-
-@mixin publish {
-  --dx-invalid-badge-offset: calc(var(--dx-invalid-badge-padding-inline) / 2);
-  --dx-invalid-badge-padding-inline: #{$invalid-badge-padding-inline};
-  --dx-invalid-badge-size: #{$invalid-badge-size};
-}

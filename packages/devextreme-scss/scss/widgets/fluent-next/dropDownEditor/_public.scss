@@ -6,9 +6,9 @@
   --dx-drop-down-editor-icon-active: #{$drop-down-editor-icon-active};
   --dx-drop-down-editor-icon-opacity: #{$drop-down-editor-icon-opacity};
   --dx-drop-down-editor-icon: #{$drop-down-editor-icon};
-  --dx-drop-down-editor-invalid-badge-inset-inline-end: calc(var(--dx-drop-down-editor-button-size) + var(--dx-invalid-badge-offset));
-  --dx-drop-down-editor-invalid-badge-size: calc(var(--dx-invalid-badge-size) + var(--dx-invalid-badge-padding-inline));
-  --dx-drop-down-editor-invalid-badge-with-clear-inset-inline-end: calc(var(--dx-drop-down-editor-button-size) * 2 + var(--dx-invalid-badge-offset));
+  --dx-drop-down-editor-invalid-badge-inset-inline-end: #{$drop-down-editor-invalid-badge-inset-inline-end};
+  --dx-drop-down-editor-invalid-badge-size: #{$drop-down-editor-invalid-badge-size};
+  --dx-drop-down-editor-invalid-badge-with-clear-inset-inline-end: #{$drop-down-editor-invalid-badge-with-clear-inset-inline-end};
   --dx-drop-down-editor-list-font-size: #{$drop-down-editor-list-font-size};
   --dx-drop-down-editor-list-line-height: #{$drop-down-editor-list-line-height};
 }

@@ -1,6 +1,7 @@
 @use "sass:math";
 @use "colors" as *;
 @use "sizes" as *;
+@use "../common/sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../textEditor" as *;
 @use "../../base/tagBox";
@@ -146,7 +147,7 @@
 }
 
 @mixin tagbox-editor-container-offset() {
-  inset-inline-end: var(--dx-invalid-badge-padding-inline);
+  inset-inline-end: $invalid-badge-padding-inline;
 }
 
 .dx-tagbox.dx-invalid,

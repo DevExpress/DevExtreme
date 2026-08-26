@@ -32,7 +32,7 @@
   --dx-text-editor-input-underlined-padding-inline: #{$text-editor-input-underlined-padding-inline};
   --dx-text-editor-input-underlined-with-label-padding-block-end: #{$text-editor-input-underlined-with-label-padding-block-end};
   --dx-text-editor-input-underlined-with-label-padding-block-start: #{$text-editor-input-underlined-with-label-padding-block-start};
-  --dx-text-editor-invalid-badge-size: calc(var(--dx-invalid-badge-size) + 2 * var(--dx-invalid-badge-padding-inline));
+  --dx-text-editor-invalid-badge-size: #{$text-editor-invalid-badge-size};
   --dx-text-editor-invalid-border-focused: #{$text-editor-invalid-border-focused};
   --dx-text-editor-invalid-border: #{$text-editor-invalid-border};
   --dx-text-editor-invalid-content: #{$text-editor-invalid-content};
