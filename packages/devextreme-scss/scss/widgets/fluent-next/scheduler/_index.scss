@@ -55,7 +55,7 @@
   $scheduler-views-time-indicator-height: $scheduler-views-time-indicator-height,
   $scheduler-views-group-header-content-height: $scheduler-views-group-header-content-height,
   $scheduler-views-vertical-group-min-height: $scheduler-views-vertical-group-min-height,
-  $scheduler-tooltip-shadow: $scheduler-tooltip-shadow-rest,
+  $scheduler-tooltip-shadow: $scheduler-tooltip-shadow,
   $scheduler-appointment-icon-font-size: $scheduler-appointment-icon-font-size,
   $scheduler-appointment-date-opacity: $scheduler-appointment-date-opacity,
   $scheduler-appointment-resizing-opacity: $scheduler-appointment-resizing-opacity,
@@ -64,39 +64,39 @@
   $agenda-appointment-title-font-weight: $scheduler-agenda-title-font-weight,
   $agenda-appointment-details-font-size: $scheduler-agenda-details-font-size,
   $agenda-appointment-details-opacity: $scheduler-agenda-details-opacity,
-  $scheduler-appointment-dragging-shadow: $scheduler-appointment-dragging-shadow-rest,
-  $scheduler-tooltip-appointment-text-color: $scheduler-tooltip-appointment-content-rest,
-  $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg-rest,
+  $scheduler-appointment-dragging-shadow: $scheduler-appointment-dragging-shadow,
+  $scheduler-tooltip-appointment-text-color: $scheduler-tooltip-appointment-content,
+  $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg,
   $scheduler-tooltip-list-focused-bg: listColors.$list-item-bg-hovered,
-  $scheduler-appointment-base-color: $scheduler-appointment-base-content-rest,
-  $scheduler-appointment-start-color: $scheduler-appointment-start-content-rest,
+  $scheduler-appointment-base-color: $scheduler-appointment-base-content,
+  $scheduler-appointment-start-color: $scheduler-appointment-start-content,
   $scheduler-appointment-active-color: $scheduler-appointment-content-active,
-  $scheduler-base-border-color: $scheduler-base-border-rest,
-  $scheduler-accent-border-color: $scheduler-accent-border-rest,
-  $scheduler-current-time-cell-color: $scheduler-current-time-cell-content-rest,
-  $scheduler-time-indicator-color: $scheduler-time-indicator-content-rest,
-  $scheduler-time-indicator-background-color: $scheduler-time-indicator-bg-rest,
-  $scheduler-workspace-background-color: $scheduler-workspace-bg-rest,
+  $scheduler-base-border-color: $scheduler-base-border,
+  $scheduler-accent-border-color: $scheduler-accent-border,
+  $scheduler-current-time-cell-color: $scheduler-current-time-cell-content,
+  $scheduler-time-indicator-color: $scheduler-time-indicator-content,
+  $scheduler-time-indicator-background-color: $scheduler-time-indicator-bg,
+  $scheduler-workspace-background-color: $scheduler-workspace-bg,
   $scheduler-other-month-cell-opacity: $scheduler-other-month-cell-opacity,
-  $scheduler-workspace-month-text-color: $scheduler-workspace-month-content-rest,
-  $scheduler-workspace-accent-color: $scheduler-workspace-accent-content-rest,
-  $scheduler-first-month-cell-background-color: $scheduler-first-month-cell-bg-rest,
-  $scheduler-panel-text-color: $scheduler-panel-content-rest,
+  $scheduler-workspace-month-text-color: $scheduler-workspace-month-content,
+  $scheduler-workspace-accent-color: $scheduler-workspace-accent-content,
+  $scheduler-first-month-cell-background-color: $scheduler-first-month-cell-bg,
+  $scheduler-panel-text-color: $scheduler-panel-content,
   $scheduler-left-column-width: $scheduler-left-column-width,
   $scheduler-timeline-cell-height: $scheduler-timeline-cell-height,
   $scheduler-workspace-active-cell-color: $scheduler-workspace-cell-content-active,
   $scheduler-workspace-hovered-cell-color: $scheduler-workspace-cell-content-hovered,
   $scheduler-workspace-focused-cell-color: $scheduler-workspace-cell-content-focused,
-  $scheduler-droppable-cell-background-color: $scheduler-droppable-cell-bg-rest,
-  $scheduler-appointment-text-color: $scheduler-appointment-content-rest,
+  $scheduler-droppable-cell-background-color: $scheduler-droppable-cell-bg,
+  $scheduler-appointment-text-color: $scheduler-appointment-content,
   $scheduler-fill-focused-appointment: $scheduler-appointment-bg-focused,
   $scheduler-is-shadow-color-for-focused-state: $scheduler-appointment-shadow-focused,
   $scheduler-dd-appointment-hover-text-color: $scheduler-dd-appointment-content-hovered,
 
-  $agenda-appointment-recurrence-icon-color: $scheduler-agenda-appointment-recurrence-icon-rest,
+  $agenda-appointment-recurrence-icon-color: $scheduler-agenda-appointment-recurrence-icon,
   $agenda-appointment-hover-bg: $scheduler-agenda-appointment-bg-hovered,
   $agenda-appointment-active-bg: $scheduler-agenda-appointment-bg-active,
-  $agenda-appointment-text-color: $scheduler-agenda-appointment-content-rest,
+  $agenda-appointment-text-color: $scheduler-agenda-appointment-content,
   $agenda-appointment-title-font-size: $scheduler-agenda-appointment-title-font-size,
 
   $scheduler-appointment-popup-icon-margin-top: $scheduler-appointment-popup-icon-margin-block-start,
@@ -174,7 +174,7 @@
   height: $scheduler-all-day-table-cell-height;
   font-size: $scheduler-all-day-title-font-size;
   border-bottom: baseScheduler.$scheduler-base-border;
-  border-bottom-color: $scheduler-base-border-rest;
+  border-bottom-color: $scheduler-base-border;
   text-align: right;
   padding-right: $scheduler-agenda-time-panel-cell-padding;
 
@@ -379,13 +379,13 @@
 
   &.dx-scheduler-header-panel-week-cell {
     border-bottom: baseScheduler.$scheduler-base-border;
-    border-bottom-color: $scheduler-base-border-rest;
+    border-bottom-color: $scheduler-base-border;
     flex-flow: column;
     justify-content: flex-end;
   }
 
   &.dx-scheduler-header-panel-current-time-cell {
-    color: $scheduler-panel-content-rest;
+    color: $scheduler-panel-content;
 
     &::before {
       content: none;
@@ -396,8 +396,8 @@
     }
 
     .dx-scheduler-header-panel-cell-date:last-child {
-      color: $scheduler-inverted-content-rest;
-      background-color: $scheduler-current-time-cell-date-bg-rest;
+      color: $scheduler-inverted-content;
+      background-color: $scheduler-current-time-cell-date-bg;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -421,7 +421,7 @@
       margin-top: $scheduler-small-margin-block-start;
       margin-bottom: $scheduler-small-margin-block-end;
       margin-left: $scheduler-small-margin-inline-start;
-      color: $scheduler-header-panel-cell-date-content-rest;
+      color: $scheduler-header-panel-cell-date-content;
     }
   }
 }
@@ -451,7 +451,7 @@
     .dx-scheduler-time-panel,
     .dx-scheduler-header-panel-empty-cell {
       border-right: baseScheduler.$scheduler-base-border;
-      border-right-color: $scheduler-base-border-rest;
+      border-right-color: $scheduler-base-border;
     }
   }
 }
@@ -468,11 +468,11 @@
 
 .dx-scheduler-work-space.dx-scheduler-work-space-month {
   .dx-scheduler-date-table-other-month {
-    color: $scheduler-workspace-other-month-content-rest;
+    color: $scheduler-workspace-other-month-content;
   }
 
   .dx-scheduler-header-panel-cell-date:last-child {
-    color: $scheduler-header-panel-cell-date-content-rest;
+    color: $scheduler-header-panel-cell-date-content;
     border-radius: initial;
     background-color: initial;
   }
@@ -488,9 +488,9 @@
 
   .dx-scheduler-date-table-first-of-month {
     border-left: $scheduler-first-of-month-border;
-    border-left-color: $scheduler-first-month-border-rest;
+    border-left-color: $scheduler-first-month-border;
     border-top: $scheduler-first-of-month-border;
-    border-top-color: $scheduler-first-month-border-rest;
+    border-top-color: $scheduler-first-month-border;
   }
 
   .dx-scheduler-header-panel {
@@ -519,7 +519,7 @@
     .dx-scheduler-header-panel-cell-date343 {
       border-radius: initial;
       background-color: initial;
-      color: $scheduler-current-time-cell-content-rest;
+      color: $scheduler-current-time-cell-content;
     }
   }
 
@@ -533,7 +533,7 @@
   }
 
   .dx-scheduler-date-table-current-date {
-    color: $scheduler-current-time-cell-content-rest;
+    color: $scheduler-current-time-cell-content;
   }
 }
 
@@ -613,7 +613,7 @@
     @include dx-button-onlyicon-sizing($scheduler-navigator-icon-font-size);
   }
 
-  background-color: $scheduler-header-bg-rest;
+  background-color: $scheduler-header-bg;
   border-top-right-radius: $scheduler-border-radius;
   border-top-left-radius: $scheduler-border-radius;
 }
@@ -631,7 +631,7 @@
       font-size: $scheduler-group-header-font-size;
       text-align: left;
       border-bottom: $scheduler-group-header-border-block-end;
-      border-bottom-color: $scheduler-base-border-rest;
+      border-bottom-color: $scheduler-base-border;
 
       .dx-scheduler-group-header-content {
         padding-left: $scheduler-header-panel-margin;
@@ -668,11 +668,11 @@
 }
 
 .dx-scheduler-all-day-panel {
-  background-color: $scheduler-all-day-panel-bg-rest;
+  background-color: $scheduler-all-day-panel-bg;
 
   .dx-scheduler-all-day-table-cell {
     border-bottom: baseScheduler.$scheduler-base-border;
-    border-bottom-color: $scheduler-base-border-rest;
+    border-bottom-color: $scheduler-base-border;
   }
 }
 
@@ -690,7 +690,7 @@
   &.dx-scheduler-work-space-grouped {
     .dx-scheduler-all-day-title {
       border-top: baseScheduler.$scheduler-base-border;
-      border-top-color: $scheduler-base-border-rest;
+      border-top-color: $scheduler-base-border;
     }
 
     &.dx-scheduler-work-space-all-day:not(.dx-scheduler-work-space-week):not(.dx-scheduler-work-space-work-week) {
@@ -700,7 +700,7 @@
 
       .dx-scheduler-header-panel .dx-scheduler-group-row:has(+ .dx-scheduler-group-row) .dx-scheduler-group-header {
         border-bottom: $scheduler-group-header-border-block-end;
-        border-bottom-color: $scheduler-base-border-rest;
+        border-bottom-color: $scheduler-base-border;
       }
     }
 
@@ -758,7 +758,7 @@
 
   .dx-form {
     .dx-scheduler-form-icon {
-      color: $scheduler-form-icon-rest;
+      color: $scheduler-form-icon;
 
       &.dx-field-item.dx-flex-layout {
         height: $scheduler-appointment-popup-icon-container-height;
@@ -771,7 +771,7 @@
     }
 
     .dx-scheduler-form-subject-group .dx-scheduler-form-icon {
-      color: $scheduler-appointment-base-content-rest;
+      color: $scheduler-appointment-base-content;
     }
 
     .dx-scheduler-days-of-week-buttons {
@@ -816,7 +816,7 @@
 .dx-scheduler-work-space-grouped:not(.dx-scheduler-agenda) .dx-scheduler-group-row th,
 .dx-scheduler-work-space.dx-scheduler-work-space-grouped:not(.dx-scheduler-work-space-vertical-grouped):not(.dx-scheduler-timeline) .dx-scheduler-last-group-cell {
   border-right: $scheduler-last-group-cell-border-inline-end;
-  border-right-color: $scheduler-group-separator-border-rest;
+  border-right-color: $scheduler-group-separator-border;
 
   &:last-child:not(:where(.dx-scheduler-group-header-inner-column)) {
     border-right: none;
@@ -824,9 +824,9 @@
 
   .dx-rtl & {
     border-left: $scheduler-rtl-border-inline-start;
-    border-left-color: $scheduler-group-separator-border-rest;
+    border-left-color: $scheduler-group-separator-border;
     border-right: baseScheduler.$scheduler-base-border;
-    border-right-color: $scheduler-base-border-rest;
+    border-right-color: $scheduler-base-border;
 
     &:last-child:not(:where(.dx-scheduler-group-header-inner-column)) {
       border-left: none;
@@ -863,21 +863,21 @@
 }
 
 .dx-scheduler-dropdown-appointment-date {
-  color: $scheduler-dropdown-appointment-date-content-rest;
+  color: $scheduler-dropdown-appointment-date-content;
 }
 
 .dx-scheduler-work-space-vertical-grouped { // stylelint-disable-line no-duplicate-selectors
   &.dx-scheduler-work-space-month {
     .dx-scheduler-date-table-scrollable {
       border-top: baseScheduler.$scheduler-base-border;
-      border-top-color: $scheduler-base-border-rest;
+      border-top-color: $scheduler-base-border;
     }
   }
 }
 
 .dx-scheduler-work-space-both-scrollbar {
   .dx-scheduler-all-day-title {
-    background-color: $scheduler-all-day-panel-bg-rest;
+    background-color: $scheduler-all-day-panel-bg;
   }
 
   .dx-scheduler-header-panel {
@@ -895,7 +895,7 @@
     position: absolute;
     width: $scheduler-appointment-strip-width;
     height: 100%;
-    background-color: $scheduler-appointment-strip-bg-rest;
+    background-color: $scheduler-appointment-strip-bg;
   }
 
   @container (max-width: 8px) {
@@ -936,7 +936,7 @@
 
   .dx-scheduler-date-table-row,
   .dx-scheduler-time-panel-row {
-    box-shadow: inset 0 -1px 0 0 $scheduler-border-rest;
+    box-shadow: inset 0 -1px 0 0 $scheduler-border;
   }
 
   .dx-scheduler-time-panel-cell {
@@ -970,7 +970,7 @@
       border-bottom: none;
 
       &:not(:last-child) {
-        box-shadow: inset 0 -1px 0 0 $scheduler-group-separator-border-rest;
+        box-shadow: inset 0 -1px 0 0 $scheduler-group-separator-border;
       }
     }
   }
@@ -986,10 +986,10 @@
     padding: 0;
 
     @include dx-button-flat-color-styling(
-      buttonColors.$button-default-text-content-rest,
+      buttonColors.$button-default-text-content,
       buttonColors.$button-default-text-content-hovered,
       buttonColors.$button-default-text-content-active,
-      buttonColors.$button-default-text-bg-rest,
+      buttonColors.$button-default-text-bg,
       buttonColors.$button-default-text-bg-hovered,
       buttonColors.$button-default-text-bg-focused,
       buttonColors.$button-default-text-bg-active
@@ -1015,7 +1015,7 @@
       .dx-scheduler-time-panel,
       .dx-scheduler-header-panel-empty-cell {
         border-left: baseScheduler.$scheduler-base-border;
-        border-left-color: $scheduler-base-border-rest;
+        border-left-color: $scheduler-base-border;
         border-right: none;
       }
     }
@@ -1025,7 +1025,7 @@
 .dx-scheduler-appointment-tooltip-wrapper,
 .dx-scheduler-overlay-panel {
   .dx-overlay-content {
-    background-color: $scheduler-bg-rest;
+    background-color: $scheduler-bg;
 
     .dx-popup-content {
       padding: 0;
@@ -1036,7 +1036,7 @@
         margin-bottom: 0;
         margin-top: 0;
         border-bottom: $scheduler-list-item-border-block-end;
-        border-bottom-color: $scheduler-border-rest;
+        border-bottom-color: $scheduler-border;
 
         &:last-of-type {
           border-bottom-left-radius: tooltipSizes.$tooltip-border-radius;

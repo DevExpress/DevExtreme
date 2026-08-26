@@ -1651,6 +1651,11 @@
         "!{projectRoot}/js/__internal/core/localization/cldr-data/**/*",
         "!{projectRoot}/js/__internal/core/localization/default_messages.ts",
         "test",
+        "{workspaceRoot}/packages/devextreme-dist/package.json",
+        "{workspaceRoot}/packages/devextreme-scss/scss/**/*",
+        "{workspaceRoot}/packages/devextreme-scss/fonts/**/*",
+        "{workspaceRoot}/packages/devextreme-scss/icons/**/*",
+        "{workspaceRoot}/README.md",
         "{workspaceRoot}/pnpm-lock.yaml"
       ],
       "outputs": [
@@ -1711,6 +1716,11 @@
         "internalPackageEnv",
         "default",
         "test",
+        "{workspaceRoot}/packages/devextreme-dist/package.json",
+        "{workspaceRoot}/packages/devextreme-scss/scss/**/*",
+        "{workspaceRoot}/packages/devextreme-scss/fonts/**/*",
+        "{workspaceRoot}/packages/devextreme-scss/icons/**/*",
+        "{workspaceRoot}/README.md",
         "{workspaceRoot}/pnpm-lock.yaml"
       ],
       "outputs": [

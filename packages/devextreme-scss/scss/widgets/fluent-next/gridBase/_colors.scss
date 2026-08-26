@@ -1,24 +1,24 @@
 @use "../colors" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-$grid-content-rest: ds.$color-content !default;
+$grid-content: ds.$color-content !default;
 
-$grid-bg-rest: ds.$color-bg !default;
-$grid-border-rest: ds.$color-border !default;
+$grid-bg: ds.$color-bg !default;
+$grid-border: ds.$color-border !default;
 
-$grid-column-chooser-item-content-rest: $grid-content-rest !default;
+$grid-column-chooser-item-content: $grid-content !default;
 
-$grid-drag-header-border-rest: rgb(from #{ds.$color-border-primary} r g b / 0.5) !default;
-$grid-drag-header-shadow-ambient-rest: ds.$color-shadow-ambient !default;
-$grid-drag-header-shadow-key-rest: ds.$color-shadow-key !default;
-$grid-drag-header-bg-rest: $grid-bg-rest !default;
-$grid-header-filter-icon-rest: $grid-column-chooser-item-content-rest !default;
+$grid-drag-header-border: rgb(from #{ds.$color-border-primary} r g b / 0.5) !default;
+$grid-drag-header-shadow-ambient: ds.$color-shadow-ambient !default;
+$grid-drag-header-shadow-key: ds.$color-shadow-key !default;
+$grid-drag-header-bg: $grid-bg !default;
+$grid-header-filter-icon: $grid-column-chooser-item-content !default;
 
-$grid-selection-bg-rest: ds.$color-bg-primary-subtler !default;
+$grid-selection-bg: ds.$color-bg-primary-subtler !default;
 
-$grid-row-border-selected: $grid-border-rest !default;
+$grid-row-border-selected: $grid-border !default;
 
-$grid-row-content-selected: $grid-content-rest !default;
+$grid-row-content-selected: $grid-content !default;
 
 $grid-row-content-focused: ds.$color-content !default;
 
@@ -26,68 +26,68 @@ $grid-row-bg-focused: ds.$color-bg-primary-subtle !default;
 $grid-row-bg-hovered: ds.$color-bg-hovered !default;
 $grid-row-content-hovered: ds.$color-content !default;
 
-$grid-cell-modified-bg-rest: ds.$color-bg-success-subtler !default;
-$grid-cell-removed-border-rest: $grid-border-rest !default;
-$grid-row-removed-bg-rest: $grid-row-bg-hovered !default;
-$grid-cell-removed-content-rest: $grid-column-chooser-item-content-rest !default;
+$grid-cell-modified-bg: ds.$color-bg-success-subtler !default;
+$grid-cell-removed-border: $grid-border !default;
+$grid-row-removed-bg: $grid-row-bg-hovered !default;
+$grid-cell-removed-content: $grid-column-chooser-item-content !default;
 
-$grid-row-invalid-bg-rest: ds.$color-bg-danger-subtler !default;
-$grid-no-data-content-rest: ds.$color-content-subtle !default;
+$grid-row-invalid-bg: ds.$color-bg-danger-subtler !default;
+$grid-no-data-content: ds.$color-content-subtle !default;
 
-$grid-group-row-content-rest: $grid-column-chooser-item-content-rest !default;
+$grid-group-row-content: $grid-column-chooser-item-content !default;
 
-$grid-group-row-bg-rest: ds.$color-bg !default;
-$grid-master-detail-cell-bg-rest: ds.$color-bg-canvas !default;
+$grid-group-row-bg: ds.$color-bg !default;
+$grid-master-detail-cell-bg: ds.$color-bg-canvas !default;
 
-$grid-search-content-rest: ds.$color-content-on-highlight !default;
-$grid-chevron-icon-rest: ds.$color-content-subtle !default;
+$grid-search-content: ds.$color-content-on-highlight !default;
+$grid-chevron-icon: ds.$color-content-subtle !default;
 
-$grid-search-bg-rest: ds.$color-bg-highlight !default;
+$grid-search-bg: ds.$color-bg-highlight !default;
 
-$grid-row-error-content-rest: ds.$color-content-static-dark !default;
+$grid-row-error-content: ds.$color-content-static-dark !default;
 
-$grid-row-error-bg-rest: ds.$color-bg-danger !default;
-$grid-link-content-rest: ds.$color-content-primary !default;
+$grid-row-error-bg: ds.$color-bg-danger !default;
+$grid-link-content: ds.$color-content-primary !default;
 
 $grid-border-focused: ds.$color-border-primary !default;
 
-$grid-editor-bg-rest: transparent !default;
-$grid-drop-highlight-bg-rest: ds.$color-bg-primary !default;
-$grid-drop-highlight-content-rest: ds.$color-content-static-dark !default;
-$grid-column-chooser-bg-rest: ds.$color-bg !default;
-$grid-column-chooser-item-bg-rest: $grid-column-chooser-bg-rest !default;
+$grid-editor-bg: transparent !default;
+$grid-drop-highlight-bg: ds.$color-bg-primary !default;
+$grid-drop-highlight-content: ds.$color-content-static-dark !default;
+$grid-column-chooser-bg: ds.$color-bg !default;
+$grid-column-chooser-item-bg: $grid-column-chooser-bg !default;
 
-$grid-row-alternation-bg-rest: ds.$color-bg-low !default;
+$grid-row-alternation-bg: ds.$color-bg-low !default;
 
-$grid-summary-content-rest: ds.$color-content-subtle !default;
-$grid-column-chooser-message-content-rest: ds.$color-content-subtle !default;
-$grid-summary-bg-rest: $grid-bg-rest !default;
-$grid-column-separator-bg-rest: ds.$color-bg-primary !default;
-$grid-filter-row-bg-rest: ds.$color-bg-canvas !default;
+$grid-summary-content: ds.$color-content-subtle !default;
+$grid-column-chooser-message-content: ds.$color-content-subtle !default;
+$grid-summary-bg: $grid-bg !default;
+$grid-column-separator-bg: ds.$color-bg-primary !default;
+$grid-filter-row-bg: ds.$color-bg-canvas !default;
 $grid-header-filter-icon-active: ds.$color-content-primary !default;
-$grid-text-stub-bg-rest: null !default;
-$grid-filter-panel-content-rest: ds.$color-content-primary !default;
-$grid-draggable-column-content-rest: ds.$color-content-subtle !default;
+$grid-text-stub-bg: null !default;
+$grid-filter-panel-content: ds.$color-content-primary !default;
+$grid-draggable-column-content: ds.$color-content-subtle !default;
 
 @if $mode == "light" {
-  $grid-text-stub-bg-rest: data-uri("images/widgets/fluent-next/color-schemes/light/grid/text-stub.png") !default;
+  $grid-text-stub-bg: data-uri("images/widgets/fluent-next/color-schemes/light/grid/text-stub.png") !default;
 }
 
 @if $mode == "dark" {
-  $grid-text-stub-bg-rest: data-uri("images/widgets/fluent-next/color-schemes/dark/grid/text-stub.png") !default;
+  $grid-text-stub-bg: data-uri("images/widgets/fluent-next/color-schemes/dark/grid/text-stub.png") !default;
 }
 
-$grid-header-filter-empty-icon-rest: $grid-header-filter-icon-rest !default;
+$grid-header-filter-empty-icon: $grid-header-filter-icon !default;
 
 :root {
-  --dx-datagrid-row-alternation-bg: #{$grid-row-alternation-bg-rest};
+  --dx-datagrid-row-alternation-bg: #{$grid-row-alternation-bg};
 }
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$grid-ai-chat-message-pending-content-rest: ds.$color-content-primary !default;
-$grid-ai-chat-message-border-rest: ds.$color-border !default;
-$grid-ai-chat-message-error-content-rest: ds.$color-content-danger !default;
-$grid-icon-rest: ds.$color-content-subtle !default;
-$grid-ai-chat-message-success-content-rest: ds.$color-content-success !default;
+$grid-ai-chat-message-pending-content: ds.$color-content-primary !default;
+$grid-ai-chat-message-border: ds.$color-border !default;
+$grid-ai-chat-message-error-content: ds.$color-content-danger !default;
+$grid-icon: ds.$color-content-subtle !default;
+$grid-ai-chat-message-success-content: ds.$color-content-success !default;
 
 $grid-content-focused: ds.$color-content-inverted !default;

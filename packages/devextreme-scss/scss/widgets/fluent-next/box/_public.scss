@@ -1,0 +1,6 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-box-item-content-font-size: #{$box-item-content-font-size};
+}

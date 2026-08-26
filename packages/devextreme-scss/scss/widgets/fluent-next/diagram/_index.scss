@@ -14,16 +14,16 @@
   $diagram-loading-indicator-height: $diagram-loading-indicator-height,
   $diagram-context-toolbox-target-width: $diagram-context-toolbox-target-width,
   $diagram-context-toolbox-target-height: $diagram-context-toolbox-target-height,
-  $diagram-popup-title-toolbar-bg: $diagram-popup-title-toolbar-bg-rest,
+  $diagram-popup-title-toolbar-bg: $diagram-popup-title-toolbar-bg,
 );
 @use "../../base/diagram/mixins" as *;
 
 .dx-diagram {
-  border-color: $diagram-border-rest;
+  border-color: $diagram-border;
 
   // stylelint-disable selector-class-pattern
   .dxdi-control .dxdi-canvas {
-    background-color: $diagram-canvas-bg-rest;
+    background-color: $diagram-canvas-bg;
 
     .selection-mark,
     .item-selection-rect,
@@ -34,53 +34,53 @@
     .connector-selection,
     .connector-multi-selection,
     .extension-line path {
-      stroke: $diagram-connector-border-rest;
+      stroke: $diagram-connector-border;
     }
 
     .connector-side-mark,
     .extension-line text {
-      fill: $diagram-connector-border-rest;
+      fill: $diagram-connector-border;
     }
 
     .container-target,
     .connection-target,
     .connection-mark:not(.selector),
     .connection-point:not(.selector) {
-      stroke: $diagram-connection-border-rest;
+      stroke: $diagram-connection-border;
     }
 
     .connection-mark:not(.selector),
     .connection-point:not(.selector) {
       &.active {
-        fill: $diagram-connection-border-rest;
+        fill: $diagram-connection-border;
       }
     }
 
     .geometry-mark {
-      stroke: $diagram-geometry-mark-border-rest;
+      stroke: $diagram-geometry-mark-border;
     }
 
     .dxdi-main .dxdi-image {
       .dxdi-spinner {
         path {
-          stroke: $diagram-image-icon-accent-border-rest;
+          stroke: $diagram-image-icon-accent-border;
           stroke-opacity: 1;
         }
 
         ellipse {
-          stroke: $diagram-image-icon-base-content-rest;
+          stroke: $diagram-image-icon-base-content;
           stroke-opacity: $diagram-image-icon-muted-opacity;
         }
       }
 
       .dxdi-user .dxdi-background {
-        fill: $diagram-image-icon-base-content-rest;
+        fill: $diagram-image-icon-base-content;
         opacity: $diagram-image-icon-muted-opacity;
       }
 
       .dxdi-warning {
         ellipse {
-          fill: $diagram-danger-icon-rest;
+          fill: $diagram-danger-icon;
         }
       }
     }
@@ -89,63 +89,63 @@
   .dxdi-control:not(.focused) .dxdi-canvas {
     .selection-mark,
     .geometry-mark {
-      stroke: $diagram-selection-mark-content-rest;
+      stroke: $diagram-selection-mark-content;
     }
 
     .item-selection-rect,
     .items-selection-rect {
       fill: transparent;
-      stroke: $diagram-selection-mark-content-rest;
+      stroke: $diagram-selection-mark-content;
     }
 
     .items-selection-rect {
-      fill: $diagram-selection-bg-rest;
+      fill: $diagram-selection-bg;
     }
 
     .item-multi-selection-rect {
-      fill: $diagram-selection-bg-rest;
-      stroke: $diagram-selection-mark-content-rest;
+      fill: $diagram-selection-bg;
+      stroke: $diagram-selection-mark-content;
     }
 
     .connector-selection,
     .connector-multi-selection {
-      stroke: $diagram-selection-mark-content-rest;
+      stroke: $diagram-selection-mark-content;
     }
 
     .connector-point-mark,
     .connector-side-mark {
-      stroke: $diagram-selection-mark-content-rest;
+      stroke: $diagram-selection-mark-content;
     }
 
     .connector-side-mark {
-      fill: $diagram-selection-mark-content-rest;
+      fill: $diagram-selection-mark-content;
     }
   }
 
   .dxdi-text-input-container.connector-text .dxdi-text-input {
-    border-color: $diagram-connector-border-rest;
+    border-color: $diagram-connector-border;
   }
 
   // stylelint-enable selector-class-pattern
 
   .dx-diagram-toolbar-wrapper {
     border-bottom: $diagram-toolbar-wrapper-border-block-end;
-    border-bottom-color: $diagram-toolbar-border-rest;
+    border-bottom-color: $diagram-toolbar-border;
   }
 
   &.dx-diagram-fullscreen {
-    background-color: $diagram-bg-rest;
+    background-color: $diagram-bg;
   }
 }
 
 .dx-diagram-toolbox-panel,
 .dx-diagram-properties-panel {
-  background: $surface-overlay-rest;
+  background: $surface-overlay;
 }
 
 .dx-diagram-floating-toolbar-container {
-  background: $surface-overlay-rest;
-  box-shadow: $diagram-shadow-rest;
+  background: $surface-overlay;
+  box-shadow: $diagram-shadow;
   border-radius: $diagram-floating-toolbar-container-border-radius;
   padding: $diagram-floating-toolbar-container-padding;
 
@@ -197,7 +197,7 @@
 
 .dx-diagram-toolbox-popup {
   & > .dx-overlay-content {
-    box-shadow: $diagram-shadow-rest;
+    box-shadow: $diagram-shadow;
   }
 
   .dx-popup-title {
@@ -308,7 +308,7 @@
   }
 
   .dxdi-toolbox .dxdi-canvas .dxdi-shape-text { // stylelint-disable-line selector-class-pattern
-    opacity: $diagram-toolbox-shape-text-opacity-rest;
+    opacity: $diagram-toolbox-shape-text-opacity;
   }
 }
 
@@ -387,11 +387,11 @@
 
   .dx-diagram-toolbar-separator {
     height: 50%;
-    border-left-color: $diagram-toolbar-border-rest;
+    border-left-color: $diagram-toolbar-border;
   }
 
   .dx-diagram-toolbar-menu-separator {
-    border-top-color: $diagram-toolbar-border-rest;
+    border-top-color: $diagram-toolbar-border;
   }
 
   .dx-diagram-toolbar-text {
@@ -432,7 +432,7 @@
 
       .dx-icon {
         font-size: $diagram-toolbar-icon-size;
-        color: $diagram-content-rest;
+        color: $diagram-content;
       }
     }
   }
@@ -460,15 +460,15 @@
   }
 }
 
-@include diagram-action-icons-mixin($diagram-content-rest, $diagram-content-rest, $diagram-toolbar-icon-size, $diagram-toolbar-colorbutton-border-width);
+@include diagram-action-icons-mixin($diagram-content, $diagram-content, $diagram-toolbar-icon-size, $diagram-toolbar-colorbutton-border-width);
 
 .dx-diagram-toolbox-popup .dx-button-has-icon .dx-icon.dx-icon-diagram-toolbox-drag {
-  @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/toolbox-drag.svg"), $diagram-content-rest, $diagram-toolbox-title-size, $diagram-toolbox-title-size);
+  @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/toolbox-drag.svg"), $diagram-content, $diagram-toolbox-title-size, $diagram-toolbox-title-size);
 
   line-height: $diagram-toolbox-title-size;
   background-size: $diagram-toolbox-title-size $diagram-toolbox-title-size;
 }
 
 .dx-diagram-i-button-properties-panel-open {
-  @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/properties-panel-open.svg"), $diagram-properties-panel-icon-rest, $diagram-toolbar-icon-size, $diagram-toolbar-icon-size);
+  @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/properties-panel-open.svg"), $diagram-properties-panel-icon, $diagram-toolbar-icon-size, $diagram-toolbar-icon-size);
 }
