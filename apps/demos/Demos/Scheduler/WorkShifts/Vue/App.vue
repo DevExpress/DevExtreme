@@ -42,7 +42,7 @@ function onShiftChanged(e: DxRadioGroupTypes.ValueChangedEvent) {
 
 </script>
 
-<style scoped>
+<style>
 .options {
   background-color: rgba(191, 191, 191, 0.15);
   margin-top: 20px;

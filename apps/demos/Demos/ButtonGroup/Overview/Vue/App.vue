@@ -44,7 +44,7 @@ function itemClick(e: DxButtonGroupTypes.ItemClickEvent) {
   notify({ message: `The "${e.itemData.hint}" button was clicked`, width: 320 }, 'success', 1000);
 }
 </script>
-<style scoped>
+<style>
   .buttongroups-container {
     display: flex;
     justify-content: center;

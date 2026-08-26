@@ -50,7 +50,7 @@ const range = ref([0, 5]);
 
 const customizeText = ({ valueText }: Record<string, any>) => `${valueText} s`;
 </script>
-<style scoped>
+<style>
 #range-selector {
   height: 270px;
 }

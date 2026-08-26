@@ -90,7 +90,7 @@ function getEmployeeNames(employeeList: Employee[]) {
   return emptySelectedText;
 }
 </script>
-<style scoped>
+<style>
 #employees {
   max-height: 440px;
 }

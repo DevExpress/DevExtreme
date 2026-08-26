@@ -73,7 +73,7 @@ import {
 import { orders } from './data.ts';
 
 </script>
-<style scoped>
+<style>
 #gridContainer {
   padding: 10px;
 }

@@ -78,7 +78,7 @@ function onInitNewRow({ data }: DxTreeListTypes.InitNewRowEvent) {
   data.Task_Due_Date = new Date();
 }
 </script>
-<style scoped>
+<style>
 #tree-list-demo {
   min-height: 700px;
 }
