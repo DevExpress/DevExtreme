@@ -25,8 +25,8 @@ import '@ts/viz/tree_map/colorizing.discrete';
 import componentRegistrator from '@js/core/component_registrator';
 import { noop as _noop } from '@js/core/utils/common';
 // PLUGINS_SECTION
+import baseWidget from '@ts/viz/core/base_widget';
 import { plugin } from '@ts/viz/core/data_source';
-import baseWidget from '@ts/viz/core/m_base_widget';
 import { patchFontOptions as _patchFontOptions } from '@ts/viz/core/utils';
 import { getColorizer as _getColorizer, setDefaultColorizer } from '@ts/viz/tree_map/colorizing';
 import { buildRectAppearance as _buildRectAppearance, buildTextAppearance as _buildTextAppearance } from '@ts/viz/tree_map/common';
