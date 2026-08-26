@@ -25,7 +25,7 @@ import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { roundFloatPart } from '@js/core/utils/math';
 import { clone } from '@js/core/utils/object';
-import { overlapping } from '@ts/viz/chart_components/m_base_chart';
+import { overlapping } from '@ts/viz/chart_components/base_chart';
 import { plugin as pluginLegend } from '@ts/viz/components/legend';
 import { plugins as centerTemplatePlugins } from '@ts/viz/core/center_template';
 import {

@@ -1,3 +1,16 @@
+/* eslint-disable @stylistic/max-len */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/init-declarations */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable no-bitwise */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-plusplus */
+/* eslint-disable prefer-rest-params */
+/* eslint-disable prefer-spread */
+/* eslint-disable */
+
 import registerComponent from '@js/core/component_registrator';
 import { noop as _noop } from '@js/core/utils/common';
 import { extend as _extend } from '@js/core/utils/extend';
@@ -10,7 +23,7 @@ import { getVerticallyShiftedAngularCoords as _getVerticallyShiftedAngularCoords
 import { Range } from '@ts/viz/translators/range';
 import { Translator1D } from '@ts/viz/translators/translator1d';
 
-import { BaseChart, overlapping } from './chart_components/m_base_chart';
+import { BaseChart, overlapping } from './chart_components/base_chart';
 
 const { states } = consts;
 const seriesSpacing = consts.pieSeriesSpacing;

@@ -9,7 +9,7 @@ import {
     Tooltip
 } from '../../helpers/vizMocks.js';
 import tooltipModule from 'viz/core/tooltip';
-import BaseWidget from '__internal/viz/core/m_base_widget';
+import BaseWidget from '__internal/viz/core/base_widget';
 import rendererModule from 'viz/core/renderers/renderer_default';
 import dataValidatorModule from 'viz/components/data_validator';
 import translator2DModule from 'viz/translators/translator2d';
