@@ -312,7 +312,9 @@ export function runManualTestCore(
   };
 
   const testStyles = getTestStyles(demo);
-  const testGlobalsScriptPath = getTestGlobalsScriptPath(FRAMEWORKS[framework]);
+  const testGlobalsScriptPath = testCodeSource.includes('testUtils.importAnd')
+    ? getTestGlobalsScriptPath(FRAMEWORKS[framework])
+    : '';
 
   const clientScripts = [
     { module: 'mockdate' },

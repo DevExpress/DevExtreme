@@ -121,19 +121,13 @@ const getIgnoredRules = (testName) => {
   ];
 };
 
-const getClientScripts = (approach: string) => {
+const getClientScripts = () => {
   const scripts = [
     { module: 'mockdate' },
   ];
 
   if (process.env.STRATEGY === 'accessibility') {
     scripts.push({ module: 'axe-core/axe.min.js' });
-  }
-
-  const testGlobalsScriptPath = getTestGlobalsScriptPath(approach);
-  if (testGlobalsScriptPath) {
-    // @ts-expect-error
-    scripts.push(testGlobalsScriptPath);
   }
 
   if (isCspEnabled()) {
@@ -166,7 +160,7 @@ Object.values(FRAMEWORKS).forEach((approach) => {
         await t.resizeWindow(1000, 800);
       }
     })
-    .clientScripts(getClientScripts(approach))
+    .clientScripts(getClientScripts())
     .requestHooks(widgetsGalleryServiceMock, xmlaServiceMock);
 
   const getDemoPaths = (platform) => glob.sync('Demos/*/*')
@@ -184,6 +178,12 @@ Object.values(FRAMEWORKS).forEach((approach) => {
 
     const clientScriptSource = readFrom('../client-script.js', (x) => [{ content: x }]) || [];
     const testCodeSource = readFrom('../test-code.js', (x) => x);
+    if (testCodeSource?.includes('testUtils.importAnd')) {
+      const testGlobalsScriptPath = getTestGlobalsScriptPath(approach);
+      if (testGlobalsScriptPath) {
+        clientScriptSource.push(testGlobalsScriptPath);
+      }
+    }
     const testCafeCodeSource = readFrom('../testcafe-test-code.js', (x) => x);
     const visualTestSettings = readFrom('../visualtestrc.json', (x) => JSON.parse(x));
     const visualTestStyles = readFrom('../test-styles.css', (x) => injectStyle(x));
