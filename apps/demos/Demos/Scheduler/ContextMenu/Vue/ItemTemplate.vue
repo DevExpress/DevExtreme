@@ -36,6 +36,6 @@ const styleObject = ref({ backgroundColor: props.itemData.color });
   }
 
   .dx-scheduler-appointment-title {
-    color: var(--dxds-color-content-neutral-default-static-dark-rest, unset);
+    color: var(--dxds-color-content-static-dark, unset);
   }
 </style>

@@ -1,17 +1,17 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$progress-bar-bg-rest: ds.$color-border-neutral-default-rest !default;
+$progress-bar-bg-rest: ds.$color-border !default;
 
-$progress-bar-range-bg-rest: ds.$color-content-primary-default-rest !default;
-$progress-bar-container-bg-disabled: ds.$color-border-neutral-default-disabled !default;
-$progress-bar-range-bg-disabled: ds.$color-content-neutral-default-disabled !default;
-$progress-bar-range-indeterminate-bg-rest: ds.$color-content-primary-default-rest !default;
-$progress-bar-range-invalid-bg-rest: ds.$color-surface-danger-default-rest !default;
+$progress-bar-range-bg-rest: ds.$color-content-primary !default;
+$progress-bar-container-bg-disabled: ds.$color-border-disabled !default;
+$progress-bar-range-bg-disabled: ds.$color-content-disabled !default;
+$progress-bar-range-indeterminate-bg-rest: ds.$color-content-primary !default;
+$progress-bar-range-invalid-bg-rest: ds.$color-bg-danger !default;
 
 $progress-bar-indeterminate-bg-rest: -90deg, transparent 5%, $progress-bar-range-indeterminate-bg-rest, transparent 95%;
 $progress-bar-indeterminate-bg-disabled: -90deg, transparent 5%, $progress-bar-range-bg-disabled, transparent 95%;
 $progress-bar-indeterminate-invalid-bg-rest: -90deg, transparent 5%, $progress-bar-range-invalid-bg-rest, transparent 95%;
 
-$progress-bar-label-content-rest: ds.$color-content-neutral-default-rest !default;
+$progress-bar-label-content-rest: ds.$color-content !default;
 
-$progress-bar-content-disabled: ds.$color-content-neutral-default-disabled !default;
+$progress-bar-content-disabled: ds.$color-content-disabled !default;

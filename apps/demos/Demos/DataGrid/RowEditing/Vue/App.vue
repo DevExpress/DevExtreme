@@ -132,7 +132,7 @@ const clearEvents = () => {
 
 #events ul li {
   padding: 7px 0;
-  border-bottom: 1px solid var(--dxds-color-border-neutral-default-rest, #ddd);
+  border-bottom: 1px solid var(--dxds-color-border, #ddd);
 }
 
 #events ul li:last-child {

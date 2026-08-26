@@ -1,19 +1,19 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$gallery-indicator-bg-rest: ds.$color-surface-neutral-default-rest !default;
+$gallery-indicator-bg-rest: ds.$color-bg !default;
 
-$gallery-indicator-item-bg-selected: ds.$color-surface-primary-default-rest !default;
+$gallery-indicator-item-bg-selected: ds.$color-bg-primary !default;
 
-$gallery-indicator-bg-focused: ds.$color-surface-primary-default-rest !default;
-$gallery-indicator-item-border-rest: ds.$color-border-neutral-subdued-rest !default;
+$gallery-indicator-bg-focused: ds.$color-bg-primary !default;
+$gallery-indicator-item-border-rest: ds.$color-border-subtle !default;
 
 // Semi-transparent surface over the indicator — relative-color bridge.
-$gallery-indicator-border-selected: rgb(from #{ds.$color-surface-neutral-default-rest} r g b / 0.8) !default;
-$gallery-nav-button-bg-rest: ds.$color-content-neutral-subdued-rest !default;
-$gallery-nav-arrow-content-rest: ds.$color-content-neutral-default-static-dark-rest !default;
+$gallery-indicator-border-selected: rgb(from #{ds.$color-bg} r g b / 0.8) !default;
+$gallery-nav-button-bg-rest: ds.$color-content-subtle !default;
+$gallery-nav-arrow-content-rest: ds.$color-content-static-dark !default;
 
-$gallery-nav-button-bg-hovered: ds.$color-surface-primary-default-rest !default;
+$gallery-nav-button-bg-hovered: ds.$color-bg-primary !default;
 
-$gallery-nav-button-bg-active: ds.$color-surface-primary-default-active !default;
+$gallery-nav-button-bg-active: ds.$color-bg-primary-active !default;
 
-$gallery-border-focused: ds.$color-surface-primary-default-rest !default;
+$gallery-border-focused: ds.$color-bg-primary !default;

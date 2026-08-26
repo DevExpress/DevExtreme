@@ -1,5 +1,5 @@
 ::ng-deep #helpedInfo {
-  color: var(--dxds-color-content-primary-default-rest, #42a5f5);
+  color: var(--dxds-color-content-primary, #42a5f5);
 }
 
 ::ng-deep #tooltip-content {

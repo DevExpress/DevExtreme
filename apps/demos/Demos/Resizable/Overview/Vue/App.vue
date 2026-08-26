@@ -131,7 +131,7 @@ const resizableClasses = computed(() => ({
 }
 
 #grid {
-  border: 1px solid var(--dxds-color-border-neutral-default-static-dark-rest, #000);
+  border: 1px solid var(--dxds-color-border-static-dark, #000);
 }
 
 .no-left-handle .dx-resizable-handle-top,
@@ -171,19 +171,19 @@ const resizableClasses = computed(() => ({
 }
 
 .dx-resizable-handle-right {
-  border-right: 1px dotted var(--dxds-color-border-neutral-default-rest, #999);
+  border-right: 1px dotted var(--dxds-color-border, #999);
 }
 
 .dx-resizable-handle-top {
-  border-top: 1px dotted var(--dxds-color-border-neutral-default-rest, #999);
+  border-top: 1px dotted var(--dxds-color-border, #999);
 }
 
 .dx-resizable-handle-left {
-  border-left: 1px dotted var(--dxds-color-border-neutral-default-rest, #999);
+  border-left: 1px dotted var(--dxds-color-border, #999);
 }
 
 .dx-resizable-handle-bottom {
-  border-bottom: 1px dotted var(--dxds-color-border-neutral-default-rest, #999);
+  border-bottom: 1px dotted var(--dxds-color-border, #999);
 }
 
 .dx-resizable-handle::after {
@@ -193,7 +193,7 @@ const resizableClasses = computed(() => ({
   height: 9px;
   border: none;
   border-radius: 50%;
-  background-color: var(--dxds-color-surface-neutral-default-static-light-rest, #fff);
+  background-color: var(--dxds-color-bg-static-light, #fff);
   box-shadow: var(--dxds-box-shadow-sm, 0 2px 6px 0 rgba(0, 0, 0, 0.24));
 }
 
