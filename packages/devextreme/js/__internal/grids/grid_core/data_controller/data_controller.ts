@@ -1,9 +1,12 @@
 import type { Store } from '@js/common/data';
+import { DataSource as DataSourceClass } from '@js/common/data/data_source/data_source';
+import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import type { Callback } from '@js/core/utils/callbacks';
 import { deferRender } from '@js/core/utils/common';
 import { logger } from '@js/core/utils/console';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import type { StoreChange } from '@js/data/store';
@@ -26,7 +29,6 @@ import type {
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { VirtualScrollController } from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
 
-import { DataHelperMixin } from './data_helper_mixin';
 import type {
   BinaryDataFilterExpression,
   CallbackFlags,
@@ -66,7 +68,16 @@ import {
 } from './utils/row_changes';
 import { generateRowValues } from './utils/row_values';
 
-export class DataController extends DataHelperMixin(modules.Controller) {
+export class DataController extends modules.Controller {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public _dataSource?: any;
+
+  protected _isSharedDataSource?: boolean;
+
+  protected readyWatcher?: (isLoading: boolean) => void;
+
+  protected _ready?: (value?: boolean) => void;
+
   protected _items!: ProcessedItem[];
 
   private _cachedProcessedItems!: ProcessedItem[] | null;
@@ -664,14 +675,26 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return dataSource;
   }
 
+  public postInit(): void {
+    this.on('disposing', () => {
+      this._disposeDataSource();
+    });
+  }
+
+  /**
+   * @extended: state_storing, virtual_scrolling
+   */
+  protected _refreshDataSource(): DeferredObj<unknown> | undefined {
+    this._initDataSource();
+    this._loadDataSource();
+
+    return undefined;
+  }
+
   protected _initDataSource(): void {
     const hadDataSource = !!this._dataSource;
 
-    super._initDataSource();
-
-    // The raw DataSource for the new options, or null when there is no
-    // dataSource option. `setDataSource` below wraps it in the adapter.
-    const dataSource = this._dataSource;
+    const dataSource = this._createRawDataSource();
     this._useSortingGroupingFromColumns = true;
     this._cachedProcessedItems = null;
 
@@ -685,11 +708,42 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
   }
 
+  private _createRawDataSource(): DataSource | undefined {
+    const dataSourceOptions = this._getSpecificDataSourceOption();
+
+    this._disposeDataSource();
+
+    if (!dataSourceOptions) {
+      return undefined;
+    }
+
+    const isSharedDataSource = dataSourceOptions instanceof DataSourceClass;
+
+    if (isSharedDataSource) {
+      this._isSharedDataSource = true;
+    }
+
+    const dataSource = (isSharedDataSource
+      ? dataSourceOptions
+      : new DataSourceClass(
+        extend(true, {}, normalizeDataSourceOptions(dataSourceOptions, { fromUrlLoadMode: false })),
+      )) as DataSource;
+
+    this._addReadyWatcher(dataSource);
+
+    return dataSource;
+  }
+
+  private _addReadyWatcher(dataSource: DataSource): void {
+    this.readyWatcher = (isLoading: boolean): void => {
+      this._ready?.(!isLoading);
+    };
+    dataSource.on('loadingChanged', this.readyWatcher);
+  }
+
   /**
    * @extended: selection, virtual_scrolling
    */
-  // The mixin base types this as `void`, but the override returns a Deferred
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   protected _loadDataSource(): DeferredObj<unknown> {
     const dataSource = this._dataSource;
     const result: DeferredObj<unknown> = Deferred();

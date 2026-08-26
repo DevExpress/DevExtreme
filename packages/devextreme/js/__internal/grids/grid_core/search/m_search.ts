@@ -58,7 +58,7 @@ const dataController = (
   }
 
   protected _calculateAdditionalFilter(): DataFilter {
-    const dataSource = this._dataController?.getDataSource?.();
+    const dataSource = this.getDataSource?.();
     const langParams = dataSource?.loadOptions?.()?.langParams;
 
     const filter = super._calculateAdditionalFilter();
