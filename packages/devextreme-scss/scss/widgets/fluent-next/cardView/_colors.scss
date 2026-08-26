@@ -15,39 +15,39 @@
 
 // #region COMMON SETTINGS
 
-$cardview-fluent-common-bg-color: ds.$color-surface-neutral-subdued-rest !default;
+$cardview-fluent-common-bg-color: ds.$color-bg-canvas !default;
 
-$cardview-fluent-common-link-color: ds.$color-content-primary-default-rest !default;
+$cardview-fluent-common-link-color: ds.$color-content-primary !default;
 
-$cardview-fluent-common-text-color: ds.$color-content-neutral-default-rest !default;
+$cardview-fluent-common-text-color: ds.$color-content !default;
 
 // #endregion
 
 // #region CARD
 
-$cardview-fluent-card-bg-color: ds.$color-surface-neutral-default-rest !default;
+$cardview-fluent-card-bg-color: ds.$color-bg !default;
 
-$cardview-fluent-card-border-color: ds.$color-border-neutral-default-rest !default;
+$cardview-fluent-card-border-color: ds.$color-border !default;
 
 $cardview-fluent-card-divider-color: $cardview-fluent-card-border-color !default;
 
 $cardview-fluent-card-text-color: $cardview-fluent-common-text-color !default;
 
-$cardview-fluent-card__cover-bg-color: ds.$color-surface-neutral-default-static-light-rest !default;
+$cardview-fluent-card__cover-bg-color: ds.$color-bg-static-light !default;
 
-$cardview-fluent-card__cover--noimage-bg-color: ds.$color-surface-neutral-deep-rest !default;
+$cardview-fluent-card__cover--noimage-bg-color: ds.$color-bg-low !default;
 
-$cardview-fluent-card__cover--noimage__icon-color: ds.$color-content-neutral-subdued-rest !default;
+$cardview-fluent-card__cover--noimage__icon-color: ds.$color-content-subtle !default;
 
-$cardview-fluent-card--focused-outline-color: ds.$color-border-primary-default-rest !default;
+$cardview-fluent-card--focused-outline-color: ds.$color-border-primary !default;
 
 // #endregion
 
 // #region CARD (SELECTED)
 
-$cardview-fluent-card--selected-bg-color: ds.$color-surface-primary-deep-selected !default;
+$cardview-fluent-card--selected-bg-color: ds.$color-bg-primary-subtler-selected !default;
 
-$cardview-fluent-card--selected-border-color: ds.$color-border-primary-default-rest !default;
+$cardview-fluent-card--selected-border-color: ds.$color-border-primary !default;
 
 $cardview-fluent-card--selected-divider-color: $cardview-fluent-card--selected-border-color !default;
 
@@ -63,27 +63,27 @@ $cardview-fluent-card--selected__cover--noimage__icon-color: $cardview-fluent-ca
 
 // #region HEADER PANEL ITEM
 
-$cardview-fluent-header-panel__item-bg-color: ds.$color-surface-neutral-deep-rest !default;
+$cardview-fluent-header-panel__item-bg-color: ds.$color-bg-low !default;
 
-$cardview-fluent-header-panel__item-border-color: ds.$color-border-neutral-default-rest !default;
+$cardview-fluent-header-panel__item-border-color: ds.$color-border !default;
 
 $cardview-fluent-header-panel__item-text-color: $cardview-fluent-common-text-color !default;
 
 $cardview-fluent-header-panel__item__icon-color: $cardview-fluent-common-text-color !default;
 
-$cardview-fluent-header-panel__item__header-filter-icon--selected-color: ds.$color-content-primary-default-rest !default;
+$cardview-fluent-header-panel__item__header-filter-icon--selected-color: ds.$color-content-primary !default;
 
 $cardview-fluent-header-panel__item__sort-index-text-color: $cardview-fluent-common-text-color !default;
 
-$cardview-fluent-header-panel__item--focused-outline-color: ds.$color-border-primary-default-rest !default;
+$cardview-fluent-header-panel__item--focused-outline-color: ds.$color-border-primary !default;
 
 // #endregion
 
 // #region HEADER PANEL ITEM (HOVERED)
 
-$cardview-fluent-header-panel__item--hovered-bg-color: ds.$color-surface-neutral-deep-hovered !default;
+$cardview-fluent-header-panel__item--hovered-bg-color: ds.$color-bg-low-hovered !default;
 
-$cardview-fluent-header-panel__item--hovered-border-color: ds.$color-border-neutral-default-hovered !default;
+$cardview-fluent-header-panel__item--hovered-border-color: ds.$color-border-hovered !default;
 
 $cardview-fluent-header-panel__item--hovered-text-color: $cardview-fluent-header-panel__item-text-color !default;
 
@@ -101,13 +101,13 @@ $cardview-fluent-header-panel__item--disabled-bg-color: $cardview-fluent-header-
 
 $cardview-fluent-header-panel__item--disabled-border-color: $cardview-fluent-header-panel__item-border-color !default;
 
-$cardview-fluent-header-panel__item--disabled-text-color: ds.$color-content-neutral-default-disabled !default;
+$cardview-fluent-header-panel__item--disabled-text-color: ds.$color-content-disabled !default;
 
-$cardview-fluent-header-panel__item--disabled__icon-color: ds.$color-content-neutral-default-disabled !default;
+$cardview-fluent-header-panel__item--disabled__icon-color: ds.$color-content-disabled !default;
 
-$cardview-fluent-header-panel__item--disabled__header-filter-icon--selected-color: ds.$color-content-neutral-default-disabled !default;
+$cardview-fluent-header-panel__item--disabled__header-filter-icon--selected-color: ds.$color-content-disabled !default;
 
-$cardview-fluent-header-panel__item--disabled__sort-index-text-color: ds.$color-content-neutral-default-disabled !default;
+$cardview-fluent-header-panel__item--disabled__sort-index-text-color: ds.$color-content-disabled !default;
 
 // #endregion
 
@@ -121,7 +121,7 @@ $cardview-fluent-header-panel__item--dragged-text-color: $cardview-fluent-header
 
 $cardview-fluent-header-panel__item--dragged__allowance-icon-color: $cardview-fluent-common-text-color !default;
 
-$cardview-fluent-header-panel__item--dragged__prohibition-icon-color: ds.$color-content-danger-default-rest !default;
+$cardview-fluent-header-panel__item--dragged__prohibition-icon-color: ds.$color-content-danger !default;
 
 $cardview-fluent-header-panel__item--dragged-box-shadow-color: ds.$color-shadow-key !default;
 
@@ -129,13 +129,13 @@ $cardview-fluent-header-panel__item--dragged-box-shadow-color: ds.$color-shadow-
 
 // #region HEADER PANEL DROP ZONE
 
-$cardview-fluent-header-panel__dropzone-bg-color: ds.$color-surface-primary-subdued-rest !default;
+$cardview-fluent-header-panel__dropzone-bg-color: ds.$color-bg-primary-subtle !default;
 
-$cardview-fluent-header-panel__dropzone-border-color: ds.$color-border-primary-default-rest !default;
+$cardview-fluent-header-panel__dropzone-border-color: ds.$color-border-primary !default;
 
-$cardview-fluent-header-panel__dropzone-text-color: ds.$color-content-primary-default-rest !default;
+$cardview-fluent-header-panel__dropzone-text-color: ds.$color-content-primary !default;
 
-$cardview-fluent-header-panel__dropzone__icon-color: ds.$color-content-primary-default-rest !default;
+$cardview-fluent-header-panel__dropzone__icon-color: ds.$color-content-primary !default;
 
 // #endregion
 
@@ -143,11 +143,11 @@ $cardview-fluent-header-panel__dropzone__icon-color: ds.$color-content-primary-d
 
 $cardview-fluent-filter-panel-bg-color: $cardview-fluent-common-bg-color !default;
 
-$cardview-fluent-filter-panel-border-color: ds.$color-border-neutral-default-rest !default;
+$cardview-fluent-filter-panel-border-color: ds.$color-border !default;
 
-$cardview-fluent-filter-panel-text-color: ds.$color-content-primary-default-rest !default;
+$cardview-fluent-filter-panel-text-color: ds.$color-content-primary !default;
 
-$cardview-fluent-filter-panel__icon-color: ds.$color-content-primary-default-rest !default;
+$cardview-fluent-filter-panel__icon-color: ds.$color-content-primary !default;
 
 // #endregion
 
@@ -155,19 +155,19 @@ $cardview-fluent-filter-panel__icon-color: ds.$color-content-primary-default-res
 
 $cardview-fluent-nodata-view-bg-color: $cardview-fluent-common-bg-color !default;
 
-$cardview-fluent-nodata-view-text-color: ds.$color-content-neutral-subdued-rest !default;
+$cardview-fluent-nodata-view-text-color: ds.$color-content-subtle !default;
 
 $cardview-fluent-nodata-view__icon-color: $cardview-fluent-nodata-view-text-color !default;
 
-$cardview-fluent-nodata-view__icon-bg-color: ds.$color-surface-neutral-deep-rest !default;
+$cardview-fluent-nodata-view__icon-bg-color: ds.$color-bg-low !default;
 
 // #endregion
 
 // #region HIGHLIGHTS IN SEARCH
 
-$cardview-fluent-card__content__field-value--highlighted-bg-color: ds.$color-surface-highlight-rest !default;
+$cardview-fluent-card__content__field-value--highlighted-bg-color: ds.$color-bg-highlight !default;
 
-$cardview-fluent-card__content__field-value--highlighted-text-color: ds.$color-content-highlight-rest !default;
+$cardview-fluent-card__content__field-value--highlighted-text-color: ds.$color-content-on-highlight !default;
 
 $cardview-fluent-card__content__field-value--highlighted-box-shadow-color: ds.$color-shadow-key !default;
 
@@ -175,7 +175,7 @@ $cardview-fluent-card__content__field-value--highlighted-box-shadow-color: ds.$c
 
 // #region COLUMN CHOOSER
 
-$cardview-fluent-columnchooser--empty__message-color: ds.$color-content-neutral-subdued-rest !default;
+$cardview-fluent-columnchooser--empty__message-color: ds.$color-content-subtle !default;
 
 // #endregion
 
@@ -252,4 +252,4 @@ $cardview-card__content__field-value--highlighted-box-shadow: 0 1px 3px $cardvie
 
 $cardview-columnchooser--empty__message-color: $cardview-fluent-columnchooser--empty__message-color !default;
 
-$cardview-header-item__sort-indicator__border-color: ds.$color-border-primary-default-rest !default;
+$cardview-header-item__sort-indicator__border-color: ds.$color-border-primary !default;
