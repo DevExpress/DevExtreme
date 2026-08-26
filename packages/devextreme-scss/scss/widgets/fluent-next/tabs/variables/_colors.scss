@@ -1,34 +1,34 @@
 @use "../../../../_design-system/variables/ds" as ds;
 
-$tabs-tab-content-rest: ds.$color-content-neutral-default-rest !default;
+$tabs-tab-content-rest: ds.$color-content !default;
 
-$tabs-tab-content-selected: ds.$color-content-neutral-default-rest !default;
+$tabs-tab-content-selected: ds.$color-content !default;
 
-$tabs-tab-content-disabled: ds.$color-content-neutral-default-disabled !default;
+$tabs-tab-content-disabled: ds.$color-content-disabled !default;
 
-$tabs-tab-basic-border-selected: ds.$color-content-primary-default-rest !default;
-$tabs-tab-border-selected-active: ds.$color-content-primary-default-active !default;
-$tabs-tab-border-selected-hovered: ds.$color-content-primary-default-hovered !default;
-$tabs-tab-border-selected-focused: ds.$color-content-primary-default-rest !default;
-$tabs-tab-border-active: ds.$color-border-neutral-default-active !default;
-$tabs-tab-border-hovered: ds.$color-border-neutral-default-hovered !default;
+$tabs-tab-basic-border-selected: ds.$color-content-primary !default;
+$tabs-tab-border-selected-active: ds.$color-content-primary-active !default;
+$tabs-tab-border-selected-hovered: ds.$color-content-primary-hovered !default;
+$tabs-tab-border-selected-focused: ds.$color-content-primary !default;
+$tabs-tab-border-active: ds.$color-border-active !default;
+$tabs-tab-border-hovered: ds.$color-border-hovered !default;
 
-$tabs-tab-border-disabled: ds.$color-border-neutral-default-disabled !default;
+$tabs-tab-border-disabled: ds.$color-border-disabled !default;
 
 $tabs-tab-bg-rest: transparent !default;
 
 $tabs-tab-icon-rest: $tabs-tab-content-rest !default;
 
-$tabs-tab-icon-content-selected: ds.$color-content-primary-default-rest !default;
+$tabs-tab-icon-content-selected: ds.$color-content-primary !default;
 
-$tabs-tab-icon-content-disabled: ds.$color-content-neutral-default-disabled !default;
+$tabs-tab-icon-content-disabled: ds.$color-content-disabled !default;
 
 $tabs-tab-bg-hovered: transparent !default;
 
-$tabs-tab-bg-focused: ds.$color-surface-neutral-default-hovered !default;
-$tabs-tab-primary-bg-hovered: ds.$color-surface-neutral-default-hovered !default;
-$tabs-tab-primary-bg-focused: ds.$color-surface-neutral-default-hovered !default;
-$tabs-tab-primary-bg-active: ds.$color-surface-neutral-default-active !default;
+$tabs-tab-bg-focused: ds.$color-bg-hovered !default;
+$tabs-tab-primary-bg-hovered: ds.$color-bg-hovered !default;
+$tabs-tab-primary-bg-focused: ds.$color-bg-hovered !default;
+$tabs-tab-primary-bg-active: ds.$color-bg-active !default;
 
-$tabs-tab-bg-active: ds.$color-surface-neutral-default-rest !default;
+$tabs-tab-bg-active: ds.$color-bg !default;
 $tabs-nav-button-bg-rest: transparent !default;

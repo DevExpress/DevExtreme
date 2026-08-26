@@ -6,25 +6,25 @@
  * one widget's anatomy, and both map to a non-component token family, which is exactly the
  * admission criterion for the system tier (NAMING.md, common/).
  */
-$surface-overlay-rest: ds.$color-surface-neutral-default-rest !default;
-$backdrop-rest: ds.$color-surface-backdrop-default-rest !default;
+$surface-overlay-rest: ds.$color-bg !default;
+$backdrop-rest: ds.$color-bg-backdrop !default;
 
 // Dropdown/overlay shadow layer colors (mode-aware via the shadow roles).
 $global-dropdown-shadow-ambient: ds.$color-shadow-ambient !default;
 $global-dropdown-shadow-key: ds.$color-shadow-key !default;
 
 // Focus ring for the widgets that draw one themselves: the accent role, as in legacy fluent.
-$focus-rect-outline-rest: ds.$color-surface-primary-default-rest !default;
+$focus-rect-outline-rest: ds.$color-bg-primary !default;
 
-$palette-accent: ds.$color-surface-primary-default-rest !default;
-$palette-bg: ds.$color-surface-neutral-default-rest !default;
-$palette-border: ds.$color-border-neutral-default-rest !default;
+$palette-accent: ds.$color-bg-primary !default;
+$palette-bg: ds.$color-bg !default;
+$palette-border: ds.$color-border !default;
 
 // Non-color theme-level values (opacity/font family) — kept referencing the theme layer.
 $global-font-family: ds.$font-family-sans-serif !default;
-$invalid-badge-bg-rest: ds.$color-content-danger-compound-rest !default;
-$invalid-badge-content-rest: ds.$color-content-neutral-default-static-dark-rest !default;
-$valid-badge-content-rest: ds.$color-surface-success-default-rest !default;
-$palette-text: ds.$color-content-neutral-default-rest !default;
-$global-bg-rest: ds.$color-surface-neutral-default-rest !default;
-$global-content-rest: ds.$color-content-neutral-default-rest !default;
+$invalid-badge-bg-rest: ds.$color-content-danger-shared !default;
+$invalid-badge-content-rest: ds.$color-content-static-dark !default;
+$valid-badge-content-rest: ds.$color-bg-success !default;
+$palette-text: ds.$color-content !default;
+$global-bg-rest: ds.$color-bg !default;
+$global-content-rest: ds.$color-content !default;

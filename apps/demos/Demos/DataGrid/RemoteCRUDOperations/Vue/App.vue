@@ -233,7 +233,7 @@ const clearRequests = () => {
 
 #requests ul li {
   padding: 7px 0;
-  border-bottom: 1px solid var(--dxds-color-border-neutral-default-rest, #ddd);
+  border-bottom: 1px solid var(--dxds-color-border, #ddd);
 }
 
 #requests ul li:last-child {

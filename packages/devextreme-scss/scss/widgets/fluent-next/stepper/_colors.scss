@@ -1,32 +1,32 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$stepper-step-accent-bg-rest: ds.$color-surface-primary-default-rest !default;
+$stepper-step-accent-bg-rest: ds.$color-bg-primary !default;
 
-$stepper-step-accent-bg-hovered: ds.$color-surface-primary-default-hovered !default;
+$stepper-step-accent-bg-hovered: ds.$color-bg-primary-hovered !default;
 
-// $stepper-step-danger-bg: ds.$color-surface-danger-default-rest !default; // unused variable
+// $stepper-step-danger-bg: ds.$color-bg-danger !default; // unused variable
 
-// $stepper-step-danger-hover-bg: ds.$color-surface-danger-default-hovered !default; // unused variable
+// $stepper-step-danger-hover-bg: ds.$color-bg-danger-hovered !default; // unused variable
 
-$stepper-step-base-bg-rest: ds.$color-surface-neutral-default-rest !default;
+$stepper-step-base-bg-rest: ds.$color-bg !default;
 
-$stepper-step-base-bg-hovered: ds.$color-surface-neutral-default-hovered !default;
+$stepper-step-base-bg-hovered: ds.$color-bg-hovered !default;
 
-$stepper-step-base-border-rest: ds.$color-border-neutral-default-rest !default;
+$stepper-step-base-border-rest: ds.$color-border !default;
 
-$stepper-step-base-border-hovered: ds.$color-border-neutral-default-hovered !default;
+$stepper-step-base-border-hovered: ds.$color-border-hovered !default;
 
-$stepper-step-base-content-rest: ds.$color-content-neutral-default-rest !default;
+$stepper-step-base-content-rest: ds.$color-content !default;
 
-$stepper-step-base-label-content-rest: ds.$color-content-neutral-default-rest !default;
+$stepper-step-base-label-content-rest: ds.$color-content !default;
 
 $stepper-step-bg-selected: $stepper-step-accent-bg-rest !default;
 
 $stepper-step-bg-selected-hovered: $stepper-step-accent-bg-hovered !default;
 
-$stepper-step-content-selected: ds.$color-content-neutral-default-static-dark-rest !default;
+$stepper-step-content-selected: ds.$color-content-static-dark !default;
 
-$stepper-step-label-content-selected: ds.$color-content-primary-default-rest !default;
+$stepper-step-label-content-selected: ds.$color-content-primary !default;
 
 $stepper-step-invalid-bg-rest: $stepper-step-base-bg-rest !default;
 
@@ -36,23 +36,23 @@ $stepper-step-invalid-border-rest: $stepper-step-base-border-rest !default;
 
 $stepper-step-invalid-border-hovered: $stepper-step-base-border-hovered !default;
 
-$stepper-step-invalid-content-rest: ds.$color-content-danger-default-rest !default;
+$stepper-step-invalid-content-rest: ds.$color-content-danger !default;
 
-$stepper-step-invalid-content-hovered: ds.$color-content-danger-default-hovered !default;
+$stepper-step-invalid-content-hovered: ds.$color-content-danger-hovered !default;
 
-$stepper-step-invalid-label-content-rest: ds.$color-content-danger-default-rest !default;
+$stepper-step-invalid-label-content-rest: ds.$color-content-danger !default;
 
-$stepper-step-invalid-bg-selected: ds.$color-content-danger-default-rest !default;
+$stepper-step-invalid-bg-selected: ds.$color-content-danger !default;
 
-$stepper-step-invalid-bg-selected-hovered: ds.$color-surface-danger-default-hovered !default;
+$stepper-step-invalid-bg-selected-hovered: ds.$color-bg-danger-hovered !default;
 $stepper-step-shadow-disabled: $stepper-step-base-bg-rest !default;
 
-$stepper-step-bg-disabled: ds.$color-surface-neutral-default-disabled !default;
+$stepper-step-bg-disabled: ds.$color-bg-disabled !default;
 
-$stepper-step-content-disabled: ds.$color-content-neutral-default-disabled !default;
+$stepper-step-content-disabled: ds.$color-content-disabled !default;
 
-$stepper-connector-bg-rest: ds.$color-border-neutral-subdued-rest !default;
+$stepper-connector-bg-rest: ds.$color-border-subtle !default;
 
-$stepper-connector-value-bg-rest: ds.$color-surface-primary-default-rest !default;
+$stepper-connector-value-bg-rest: ds.$color-bg-primary !default;
 
-$stepper-step-shadow-rest: ds.$color-surface-neutral-default-rest !default;
+$stepper-step-shadow-rest: ds.$color-bg !default;

@@ -415,7 +415,7 @@ function onFontFamilyClick() {
   height: 36px;
   border: none;
   border-radius: 50px;
-  background-color: var(--dxds-color-surface-neutral-default-rest, #fff);
+  background-color: var(--dxds-color-bg, #fff);
   box-shadow: var(--dxds-box-shadow-sm, 0 2px 6px 0 rgba(0, 0, 0, 0.24));
 }
 
@@ -436,7 +436,7 @@ function onFontFamilyClick() {
 .resizable-container {
   padding: 10px;
   height: 300px;
-  border: 1px dotted var(--dxds-color-border-neutral-default-rest, #999);
+  border: 1px dotted var(--dxds-color-border, #999);
   border-radius: 4px;
   box-sizing: border-box;
 }
@@ -457,12 +457,12 @@ function onFontFamilyClick() {
 .toolbar-separator {
   height: 36px;
   margin: 0 5px;
-  border-left: 1px solid var(--dxds-color-border-neutral-subdued-rest, #ddd);
+  border-left: 1px solid var(--dxds-color-border-subtle, #ddd);
 }
 
 .toolbar-menu-separator {
   height: 1px;
-  border-bottom: 1px solid var(--dxds-color-border-neutral-subdued-rest, #ddd);
+  border-bottom: 1px solid var(--dxds-color-border-subtle, #ddd);
 }
 
 .dx-button-content {

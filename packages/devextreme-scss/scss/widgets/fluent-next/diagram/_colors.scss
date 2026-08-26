@@ -4,13 +4,13 @@
 /*
  * O4: diagram used to read Button's contained backgrounds for these. They are not buttons —
  * they are SVG strokes and fills on connector marks and the geometry mark — so the coupling
- * moves to the token. `ds.$color-surface-primary-default-rest` is a BUTTON component token used
+ * moves to the token. `ds.$color-bg-primary` is a BUTTON component token used
  * outside button; keeping it preserves the value, and the mapping question is recorded in
  * DIVERGENCES.md.
  */
-$diagram-connector-border-rest: ds.$color-surface-primary-default-rest !default;
-$diagram-connection-border-rest: ds.$color-surface-success-default-rest !default;
-$diagram-geometry-mark-border-rest: ds.$color-surface-danger-default-rest !default;
+$diagram-connector-border-rest: ds.$color-bg-primary !default;
+$diagram-connection-border-rest: ds.$color-bg-success !default;
+$diagram-geometry-mark-border-rest: ds.$color-bg-danger !default;
 
 /*
  * Stays in _colors.scss on purpose: the split between the two files is mode-dependent against
@@ -28,18 +28,18 @@ $diagram-toolbox-shape-text-opacity-rest: null !default;
   $diagram-toolbox-shape-text-opacity-rest: 0.5 !default;
 }
 
-$diagram-border-rest: ds.$color-border-neutral-default-rest !default;
-$diagram-toolbar-border-rest: ds.$color-border-neutral-default-rest !default;
-$diagram-normal-format-bg-active: ds.$color-surface-neutral-alpha-active !default;
-$diagram-default-format-bg-active: ds.$color-surface-primary-default-active !default;
-$diagram-danger-format-bg-active: ds.$color-surface-danger-default-active !default;
-$diagram-success-format-bg-active: ds.$color-surface-success-default-active !default;
-$diagram-image-icon-base-content-rest: ds.$color-content-neutral-subdued-rest !default;
-$diagram-image-icon-accent-border-rest: ds.$color-content-primary-default-rest !default;
+$diagram-border-rest: ds.$color-border !default;
+$diagram-toolbar-border-rest: ds.$color-border !default;
+$diagram-normal-format-bg-active: ds.$color-bg-alpha-active !default;
+$diagram-default-format-bg-active: ds.$color-bg-primary-active !default;
+$diagram-danger-format-bg-active: ds.$color-bg-danger-active !default;
+$diagram-success-format-bg-active: ds.$color-bg-success-active !default;
+$diagram-image-icon-base-content-rest: ds.$color-content-subtle !default;
+$diagram-image-icon-accent-border-rest: ds.$color-content-primary !default;
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$diagram-bg-rest: ds.$color-surface-neutral-default-rest !default;
-$diagram-danger-icon-rest: ds.$color-content-danger-default-rest !default;
+$diagram-bg-rest: ds.$color-bg !default;
+$diagram-danger-icon-rest: ds.$color-content-danger !default;
 
 /*
  * SVG data-uri icons are colored by baking the value into a background-image data-uri at build
@@ -51,22 +51,22 @@ $diagram-content-rest: null !default;
 $diagram-properties-panel-icon-rest: null !default;
 
 @if $mode == "light" {
-  $diagram-content-rest: #161616 !default; // dx-data-uri-static: ds.$color-content-neutral-default-rest
-  $diagram-properties-panel-icon-rest: #fff !default; // dx-data-uri-static: ds.$color-content-neutral-default-inverted-rest
+  $diagram-content-rest: #161616 !default; // dx-data-uri-static: ds.$color-content
+  $diagram-properties-panel-icon-rest: #fff !default; // dx-data-uri-static: ds.$color-content-inverted
 }
 
 @if $mode == "dark" {
-  $diagram-content-rest: #fff !default; // dx-data-uri-static: ds.$color-content-neutral-default-rest
-  $diagram-properties-panel-icon-rest: #161616 !default; // dx-data-uri-static: ds.$color-content-neutral-default-inverted-rest
+  $diagram-content-rest: #fff !default; // dx-data-uri-static: ds.$color-content
+  $diagram-properties-panel-icon-rest: #161616 !default; // dx-data-uri-static: ds.$color-content-inverted
 }
 
 // Canvas = deeper neutral surface
-$diagram-canvas-bg-rest: ds.$color-surface-neutral-subdued-rest !default;
+$diagram-canvas-bg-rest: ds.$color-bg-canvas !default;
 $diagram-shadow-rest: 0 1px 8px ds.$color-shadow-key !default;
 
 // Values hoisted from style-file literals (tokenized)
-$diagram-selection-mark-content-rest: ds.$color-border-neutral-accessible-rest !default;
-$diagram-selection-bg-rest: rgb(from #{ds.$color-border-neutral-accessible-rest} r g b / 0.02) !default;
+$diagram-selection-mark-content-rest: ds.$color-border-contrast !default;
+$diagram-selection-bg-rest: rgb(from #{ds.$color-border-contrast} r g b / 0.02) !default;
 
 // Base-layer values injected with design tokens (wave B1)
-$diagram-popup-title-toolbar-bg-rest: ds.$color-surface-neutral-alpha-hovered !default;
+$diagram-popup-title-toolbar-bg-rest: ds.$color-bg-alpha-hovered !default;
