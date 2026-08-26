@@ -6,10 +6,10 @@ import $ from '@js/core/renderer';
 import { wrapToArray } from '@js/core/utils/array';
 import { contains } from '@js/core/utils/dom';
 import * as iteratorUtils from '@js/core/utils/iterator';
-import type { EmitterEvent, EventCoords } from '@ts/events/core/m_emitter';
-import registerEmitter from '@ts/events/core/m_emitter_registrator';
-import type { GestureEvent } from '@ts/events/gesture/m_emitter.gesture';
-import GestureEmitter from '@ts/events/gesture/m_emitter.gesture';
+import type { EmitterEvent, EventCoords } from '@ts/events/core/emitter';
+import registerEmitter from '@ts/events/core/emitter_registrator';
+import type { GestureEvent } from '@ts/events/gesture/emitter.gesture';
+import GestureEmitter from '@ts/events/gesture/emitter.gesture';
 
 const DRAG_START_EVENT = 'dxdragstart';
 const DRAG_EVENT = 'dxdrag';
@@ -50,7 +50,7 @@ const knownDropTargetConfigs: DropTargetConfig[] = [];
 
 const dropTargetRegistration = {
 
-  setup(element: Element, data: DropTargetConfig) {
+  setup(element: Element, data: DropTargetConfig): void {
     const knownDropTarget = knownDropTargets.includes(element);
     if (!knownDropTarget) {
       knownDropTargets.push(element);
@@ -59,7 +59,7 @@ const dropTargetRegistration = {
     }
   },
 
-  add(element: Element, handleObj: DropTargetHandleObj) {
+  add(element: Element, handleObj: DropTargetHandleObj): void {
     const index = knownDropTargets.indexOf(element);
     this.updateEventsCounter(element, handleObj.type, 1);
 
@@ -69,18 +69,18 @@ const dropTargetRegistration = {
     }
   },
 
-  updateEventsCounter(element: Element, event: string | undefined, value: number) {
+  updateEventsCounter(element: Element, event: string | undefined, value: number): void {
     if ([DRAG_ENTER_EVENT, DRAG_LEAVE_EVENT, DROP_EVENT].includes(event ?? '')) {
       const eventsCount: number = elementData(element, DX_DRAG_EVENTS_COUNT_KEY) || 0;
       elementData(element, DX_DRAG_EVENTS_COUNT_KEY, Math.max(0, eventsCount + value));
     }
   },
 
-  remove(element: Element, handleObj: DropTargetHandleObj) {
+  remove(element: Element, handleObj: DropTargetHandleObj): void {
     this.updateEventsCounter(element, handleObj.type, -1);
   },
 
-  teardown(element: Element) {
+  teardown(element: Element): void {
     const handlersCount: number | undefined = elementData(element, DX_DRAG_EVENTS_COUNT_KEY);
     if (!handlersCount) {
       const index = knownDropTargets.indexOf(element);
@@ -99,7 +99,8 @@ registerEvent(DROP_EVENT, dropTargetRegistration);
 
 const getItemDelegatedTargets = function ($element: dxElementWrapper): dxElementWrapper {
   const dropTargetIndex = knownDropTargets.indexOf($element.get(0));
-  const dropTargetSelectors = knownDropTargetSelectors[dropTargetIndex].filter((selector) => selector);
+  const dropTargetSelectors = knownDropTargetSelectors[dropTargetIndex]
+    .filter((selector) => selector);
 
   let $delegatedTargets = $element.find(dropTargetSelectors.join(', '));
   if (knownDropTargetSelectors[dropTargetIndex].includes(undefined)) {
@@ -113,7 +114,10 @@ const getItemConfig = function ($element: dxElementWrapper): DropTargetConfig {
   return knownDropTargetConfigs[dropTargetIndex];
 };
 
-const getItemPosition = function (dropTargetConfig: DropTargetConfig, $element: dxElementWrapper): Coordinates {
+const getItemPosition = function (
+  dropTargetConfig: DropTargetConfig,
+  $element: dxElementWrapper,
+): Coordinates {
   if (dropTargetConfig.itemPositionFunc) {
     return dropTargetConfig.itemPositionFunc($element);
   }
@@ -121,7 +125,10 @@ const getItemPosition = function (dropTargetConfig: DropTargetConfig, $element: 
   return $element.offset() as Coordinates;
 };
 
-const getItemSize = function (dropTargetConfig: DropTargetConfig, $element: dxElementWrapper): { width: number; height: number } {
+const getItemSize = function (
+  dropTargetConfig: DropTargetConfig,
+  $element: dxElementWrapper,
+): { width: number; height: number } {
   if (dropTargetConfig.itemSizeFunc) {
     return dropTargetConfig.itemSizeFunc($element);
   }
@@ -254,6 +261,7 @@ class DragEmitter extends GestureEmitter {
   }
 
   _findDropTarget(e: GestureEvent): Element | undefined {
+    // eslint-disable-next-line @typescript-eslint/init-declarations
     let result: Element | undefined;
 
     iteratorUtils.each(knownDropTargets, (_, target) => {
@@ -284,7 +292,12 @@ class DragEmitter extends GestureEmitter {
     return active;
   }
 
-  _checkDropTarget(config: DropTargetConfig, $target: dxElementWrapper, $prevTarget: dxElementWrapper, e: GestureEvent): boolean | dxElementWrapper {
+  _checkDropTarget(
+    config: DropTargetConfig,
+    $target: dxElementWrapper,
+    $prevTarget: dxElementWrapper,
+    e: GestureEvent,
+  ): boolean | dxElementWrapper {
     const isDraggingElement = $target.get(0) === $(e.target).get(0);
     if (isDraggingElement) {
       return false;

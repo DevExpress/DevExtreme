@@ -9,9 +9,9 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import readyCallbacks from '@js/core/utils/ready_callbacks';
 import { getParentNode } from '@ts/core/utils/m_dom';
-import type Emitter from '@ts/events/core/m_emitter';
-import type { EmitterEvent } from '@ts/events/core/m_emitter';
-import type GestureEmitter from '@ts/events/gesture/m_emitter.gesture';
+import type Emitter from '@ts/events/core/emitter';
+import type { EmitterEvent } from '@ts/events/core/emitter';
+import type GestureEmitter from '@ts/events/gesture/emitter.gesture';
 
 const MANAGER_EVENT = 'dxEventManager';
 const EMITTER_DATA = 'dxEmitter';
@@ -44,13 +44,29 @@ class EventManager {
     readyCallbacks.add(() => {
       const document = domAdapter.getDocument();
       // @ts-expect-error subscribeGlobal is not declared in the public events engine type
-      eventsEngine.subscribeGlobal(document, addNamespace(pointerEvents.down, MANAGER_EVENT), this._pointerDownHandler.bind(this));
+      eventsEngine.subscribeGlobal(
+        document,
+        addNamespace(pointerEvents.down, MANAGER_EVENT),
+        this._pointerDownHandler.bind(this),
+      );
       // @ts-expect-error subscribeGlobal is not declared in the public events engine type
-      eventsEngine.subscribeGlobal(document, addNamespace(pointerEvents.move, MANAGER_EVENT), this._pointerMoveHandler.bind(this));
+      eventsEngine.subscribeGlobal(
+        document,
+        addNamespace(pointerEvents.move, MANAGER_EVENT),
+        this._pointerMoveHandler.bind(this),
+      );
       // @ts-expect-error subscribeGlobal is not declared in the public events engine type
-      eventsEngine.subscribeGlobal(document, addNamespace([pointerEvents.up, pointerEvents.cancel].join(' '), MANAGER_EVENT), this._pointerUpHandler.bind(this));
+      eventsEngine.subscribeGlobal(
+        document,
+        addNamespace([pointerEvents.up, pointerEvents.cancel].join(' '), MANAGER_EVENT),
+        this._pointerUpHandler.bind(this),
+      );
       // @ts-expect-error subscribeGlobal is not declared in the public events engine type
-      eventsEngine.subscribeGlobal(document, addNamespace(wheelEventName, MANAGER_EVENT), this._mouseWheelHandler.bind(this));
+      eventsEngine.subscribeGlobal(
+        document,
+        addNamespace(wheelEventName, MANAGER_EVENT),
+        this._mouseWheelHandler.bind(this),
+      );
     });
   }
 
@@ -276,7 +292,10 @@ const registerEmitter = function (emitterConfig: EmitterRegistrationConfig): voi
       noBubble: !emitterConfig.bubble,
 
       setup(element: Element) {
-        const subscriptions: Record<string, boolean> = elementData(element, EMITTER_SUBSCRIPTION_DATA) ?? {};
+        const subscriptions: Record<string, boolean> = elementData(
+          element,
+          EMITTER_SUBSCRIPTION_DATA,
+        ) ?? {};
 
         const emitters: Record<string, Emitter> = elementData(element, EMITTER_DATA) ?? {};
         const emitter = emitters[emitterName] ?? new EmitterClass(element);
@@ -298,7 +317,10 @@ const registerEmitter = function (emitterConfig: EmitterRegistrationConfig): voi
       },
 
       teardown(element: Element) {
-        const subscriptions: Record<string, boolean> = elementData(element, EMITTER_SUBSCRIPTION_DATA);
+        const subscriptions: Record<string, boolean> = elementData(
+          element,
+          EMITTER_SUBSCRIPTION_DATA,
+        );
 
         const emitters: Record<string, Emitter> = elementData(element, EMITTER_DATA);
         const emitter = emitters[emitterName];

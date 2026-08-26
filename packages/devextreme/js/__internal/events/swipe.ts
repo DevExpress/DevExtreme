@@ -1,10 +1,10 @@
 import type { Cancelable } from '@js/common/core/events';
 import { eventData } from '@js/common/core/events/utils';
 import { getHeight, getWidth } from '@js/core/utils/size';
-import type { EmitterEvent, EventCoords } from '@ts/events/core/m_emitter';
-import registerEmitter from '@ts/events/core/m_emitter_registrator';
-import type { GestureDirection } from '@ts/events/gesture/m_emitter.gesture';
-import GestureEmitter from '@ts/events/gesture/m_emitter.gesture';
+import type { EmitterEvent, EventCoords } from '@ts/events/core/emitter';
+import registerEmitter from '@ts/events/core/emitter_registrator';
+import type { GestureDirection } from '@ts/events/gesture/emitter.gesture';
+import GestureEmitter from '@ts/events/gesture/emitter.gesture';
 
 const SWIPE_START_EVENT = 'dxswipestart';
 const SWIPE_EVENT = 'dxswipe';
@@ -40,7 +40,9 @@ interface SwipeStrategy {
 
 const HorizontalStrategy: SwipeStrategy = {
   defaultItemSizeFunc() {
-    return getWidth(this.getElement());
+    const width: number = getWidth(this.getElement());
+
+    return width;
   },
 
   getBounds() {
@@ -52,18 +54,23 @@ const HorizontalStrategy: SwipeStrategy = {
 
   calcOffsetRatio(e) {
     const endEventData: EventCoords = eventData(e);
-    return (endEventData.x - ((this._savedEventData && this._savedEventData.x) || 0)) / this._itemSizeFunc().call(this, e);
+    const savedX = (this._savedEventData?.x) || 0;
+
+    return (endEventData.x - savedX) / this._itemSizeFunc().call(this, e);
   },
 
   isFastSwipe(e) {
     const endEventData: EventCoords = eventData(e);
-    return this.FAST_SWIPE_SPEED_LIMIT * Math.abs(endEventData.x - this._tickData.x) >= (endEventData.time - this._tickData.time);
+    return this.FAST_SWIPE_SPEED_LIMIT * Math.abs(endEventData.x - this._tickData.x)
+      >= (endEventData.time - this._tickData.time);
   },
 };
 
 const VerticalStrategy: SwipeStrategy = {
   defaultItemSizeFunc() {
-    return getHeight(this.getElement());
+    const height: number = getHeight(this.getElement());
+
+    return height;
   },
 
   getBounds() {
@@ -75,12 +82,15 @@ const VerticalStrategy: SwipeStrategy = {
 
   calcOffsetRatio(e) {
     const endEventData: EventCoords = eventData(e);
-    return (endEventData.y - ((this._savedEventData && this._savedEventData.y) || 0)) / this._itemSizeFunc().call(this, e);
+    const savedY = (this._savedEventData?.y) || 0;
+
+    return (endEventData.y - savedY) / this._itemSizeFunc().call(this, e);
   },
 
   isFastSwipe(e) {
     const endEventData: EventCoords = eventData(e);
-    return this.FAST_SWIPE_SPEED_LIMIT * Math.abs(endEventData.y - this._tickData.y) >= (endEventData.time - this._tickData.time);
+    return this.FAST_SWIPE_SPEED_LIMIT * Math.abs(endEventData.y - this._tickData.y)
+      >= (endEventData.time - this._tickData.time);
   },
 };
 
@@ -201,7 +211,7 @@ class SwipeEmitter extends GestureEmitter {
   }
 
   _calcTargetOffset(offsetRatio: number, isFast: boolean): number {
-    let result;
+    let result = 0;
     if (isFast) {
       result = Math.ceil(Math.abs(offsetRatio));
       if (offsetRatio < 0) {

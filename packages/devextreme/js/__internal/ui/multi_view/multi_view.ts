@@ -19,7 +19,7 @@ import type { DxEvent } from '@js/events';
 import CollectionWidgetLiveUpdate from '@js/ui/collection/ui.collection_widget.live_update';
 import type { Item, Properties } from '@js/ui/multi_view';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/m_swipe';
+import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/swipe';
 import type {
   CollectionItemInfo,
   CollectionItemKey,

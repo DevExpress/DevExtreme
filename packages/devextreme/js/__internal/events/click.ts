@@ -9,9 +9,9 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import devices from '@ts/core/m_devices';
 import domUtils from '@ts/core/utils/m_dom';
-import type { EmitterEvent } from '@ts/events/core/m_emitter';
-import Emitter from '@ts/events/core/m_emitter';
-import registerEmitter from '@ts/events/core/m_emitter_registrator';
+import type { EmitterEvent } from '@ts/events/core/emitter';
+import Emitter from '@ts/events/core/emitter';
+import registerEmitter from '@ts/events/core/emitter_registrator';
 
 const CLICK_EVENT_NAME = 'dxclick';
 
@@ -36,7 +36,8 @@ const onNodeRemove = (): void => {
 
 const clickHandler = function (e: EmitterEvent & { originalEvent: NativeClickEvent }): void {
   const { originalEvent } = e;
-  const eventAlreadyFired = lastFiredEvent === originalEvent || (originalEvent && originalEvent.DXCLICK_FIRED);
+  const eventAlreadyFired = lastFiredEvent === originalEvent
+    || (originalEvent && originalEvent.DXCLICK_FIRED);
   const leftButton = !e.which || e.which === 1;
 
   if (leftButton && !prevented && !eventAlreadyFired) {
@@ -57,7 +58,10 @@ const clickHandler = function (e: EmitterEvent & { originalEvent: NativeClickEve
 
     lastFiredEvent = originalEvent;
 
-    const subscriptionData: NodesDisposingSubscription = subscribeNodesDisposing(lastFiredEvent, onNodeRemove);
+    const subscriptionData: NodesDisposingSubscription = subscribeNodesDisposing(
+      lastFiredEvent,
+      onNodeRemove,
+    );
 
     subscriptions.set(lastFiredEvent, subscriptionData);
 
@@ -88,7 +92,7 @@ class ClickEmitter extends Emitter {
 }
 
 // NOTE: fixes native click blur on slow devices
-(function () {
+(function (): void {
   const desktopDevice = devices.real().generic;
 
   if (!desktopDevice) {
@@ -119,7 +123,11 @@ class ClickEmitter extends Emitter {
     const NATIVE_CLICK_FIXER_NAMESPACE = 'NATIVE_CLICK_FIXER';
     const document = domAdapter.getDocument();
     // @ts-expect-error subscribeGlobal is not declared in the public events engine type
-    eventsEngine.subscribeGlobal(document, addNamespace(pointerEvents.down, NATIVE_CLICK_FIXER_NAMESPACE), pointerDownHandler);
+    eventsEngine.subscribeGlobal(
+      document,
+      addNamespace(pointerEvents.down, NATIVE_CLICK_FIXER_NAMESPACE),
+      pointerDownHandler,
+    );
     // @ts-expect-error subscribeGlobal is not declared in the public events engine type
     eventsEngine.subscribeGlobal(document, addNamespace('click', NATIVE_CLICK_FIXER_NAMESPACE), nativeClickHandler);
   }

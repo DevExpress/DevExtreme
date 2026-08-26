@@ -3,7 +3,7 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, fireEvent } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
 import { closestCommonParent } from '@js/core/utils/dom';
-import type { EmitterEvent } from '@ts/events/core/m_emitter';
+import type { EmitterEvent } from '@ts/events/core/emitter';
 
 const DBLCLICK_EVENT_NAME = 'dxdblclick';
 const DBLCLICK_NAMESPACE = 'dxDblClick';

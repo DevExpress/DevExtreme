@@ -1,9 +1,9 @@
 import { hasTouches } from '@js/common/core/events/utils/index';
 import * as iteratorUtils from '@js/core/utils/iterator';
 import { fitIntoRange, sign as mathSign } from '@js/core/utils/math';
-import type { EmitterEvent, EmitterEventPointer } from '@ts/events/core/m_emitter';
-import Emitter from '@ts/events/core/m_emitter';
-import registerEmitter from '@ts/events/core/m_emitter_registrator';
+import type { EmitterEvent, EmitterEventPointer } from '@ts/events/core/emitter';
+import Emitter from '@ts/events/core/emitter';
+import registerEmitter from '@ts/events/core/emitter_registrator';
 
 interface EventAlias {
   name: string;
@@ -60,7 +60,10 @@ addAlias(ROTATE, {
   deltaRotation: true,
 });
 
-const getVector = function (first: EmitterEventPointer, second: EmitterEventPointer): TransformVector {
+const getVector = function (
+  first: EmitterEventPointer,
+  second: EmitterEventPointer,
+): TransformVector {
   return {
     x: second.pageX - first.pageX,
     y: -second.pageY + first.pageY,
@@ -97,7 +100,10 @@ const getRotation = function (firstVector: TransformVector, secondVector: Transf
   return sign * angle;
 };
 
-const getTranslation = function (firstVector: TransformVector, secondVector: TransformVector): { x: number; y: number } {
+const getTranslation = function (
+  firstVector: TransformVector,
+  secondVector: TransformVector,
+): { x: number; y: number } {
   return {
     x: firstVector.centerX - secondVector.centerX,
     y: firstVector.centerY - secondVector.centerY,
@@ -147,7 +153,11 @@ class TransformEmitter extends Emitter {
     };
   }
 
-  _fireEventAliases(eventPostfix: string, originalEvent: EmitterEvent, eventArgs?: Record<string, unknown>): void {
+  _fireEventAliases(
+    eventPostfix: string,
+    originalEvent: EmitterEvent,
+    eventArgs?: Record<string, unknown>,
+  ): void {
     const args: Record<string, unknown> = eventArgs ?? {};
 
     iteratorUtils.each(eventAliases, (_, eventAlias) => {

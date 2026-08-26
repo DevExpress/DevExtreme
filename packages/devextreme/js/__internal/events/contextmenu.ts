@@ -5,7 +5,7 @@ import { addNamespace, fireEvent, isMouseEvent } from '@js/common/core/events/ut
 import $ from '@js/core/renderer';
 import devices from '@ts/core/m_devices';
 import supportUtils from '@ts/core/utils/m_support';
-import type { EmitterEvent } from '@ts/events/core/m_emitter';
+import type { EmitterEvent } from '@ts/events/core/emitter';
 
 const CONTEXTMENU_NAMESPACE = 'dxContexMenu';
 
@@ -18,7 +18,11 @@ class ContextMenu {
   setup(element: Element): void {
     const $element = $(element);
 
-    eventsEngine.on($element, CONTEXTMENU_NAMESPACED_EVENT_NAME, this._contextMenuHandler.bind(this));
+    eventsEngine.on(
+      $element,
+      CONTEXTMENU_NAMESPACED_EVENT_NAME,
+      this._contextMenuHandler.bind(this),
+    );
 
     if (supportUtils.touch || devices.isSimulator()) {
       eventsEngine.on($element, HOLD_NAMESPACED_EVENT_NAME, this._holdHandler.bind(this));
@@ -38,10 +42,12 @@ class ContextMenu {
   }
 
   _fireContextMenu(e: EmitterEvent): EmitterEvent {
-    return fireEvent({
+    const event: EmitterEvent = fireEvent({
       type: CONTEXTMENU_EVENT_NAME,
       originalEvent: e,
     });
+
+    return event;
   }
 
   teardown(element: Element): void {

@@ -7,7 +7,7 @@ import $ from '@js/core/renderer';
 import type { DxEvent } from '@js/events';
 import { getPublicElement } from '@ts/core/m_element';
 import eventsEngine from '@ts/events/core/m_events_engine';
-import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import {
   DROP_DOWN_MENU_BUTTON_CLASS,
   MENU_ITEM_EXPANDED_CLASS,

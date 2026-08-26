@@ -1,9 +1,9 @@
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import devices from '@ts/core/m_devices';
-import type { EmitterEvent, EmitterEventPointer } from '@ts/events/core/m_emitter';
-import type { PointerEventInit } from '@ts/events/pointer/m_base';
-import BaseStrategy from '@ts/events/pointer/m_base';
+import type { EmitterEvent, EmitterEventPointer } from '@ts/events/core/emitter';
+import type { PointerEventInit } from '@ts/events/pointer/base';
+import BaseStrategy from '@ts/events/pointer/base';
 import type { PointerEventMap } from '@ts/events/pointer/m_observer';
 
 /* eslint-disable spellcheck/spell-checker */
@@ -44,7 +44,8 @@ const normalizeTouchEvent = function (e: TouchPointerEvent): NormalizedTouchData
 };
 
 const skipTouchWithSameIdentifier = function (pointerEvent: string): boolean {
-  return devices.real().platform === 'ios' && (pointerEvent === 'dxpointerdown' || pointerEvent === 'dxpointerup');
+  return devices.real().platform === 'ios'
+    && (pointerEvent === 'dxpointerdown' || pointerEvent === 'dxpointerup');
 };
 
 class TouchStrategy extends BaseStrategy {
@@ -74,7 +75,9 @@ class TouchStrategy extends BaseStrategy {
   }
 
   _fireEvent(args: PointerEventInit): EmitterEvent {
-    return super._fireEvent(extend(normalizeTouchEvent(args.originalEvent as TouchPointerEvent), args));
+    const touchEvent = args.originalEvent as TouchPointerEvent;
+
+    return super._fireEvent(extend(normalizeTouchEvent(touchEvent), args));
   }
 }
 

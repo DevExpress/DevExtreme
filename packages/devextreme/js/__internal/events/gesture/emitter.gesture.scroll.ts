@@ -6,9 +6,9 @@ import {
 } from '@js/common/core/events/utils/index';
 import type { dxElementWrapper } from '@js/core/renderer';
 import devices from '@ts/core/m_devices';
-import type { EmitterConfigData, EmitterEvent, EventCoords } from '@ts/events/core/m_emitter';
-import registerEmitter from '@ts/events/core/m_emitter_registrator';
-import GestureEmitter from '@ts/events/gesture/m_emitter.gesture';
+import type { EmitterConfigData, EmitterEvent, EventCoords } from '@ts/events/core/emitter';
+import registerEmitter from '@ts/events/core/emitter_registrator';
+import GestureEmitter from '@ts/events/gesture/emitter.gesture';
 
 const realDevice = devices.real();
 
@@ -53,7 +53,7 @@ abstract class Locker {
 
     this._locked = false;
 
-    this._proxiedScroll = (e) => {
+    this._proxiedScroll = (e): void => {
       if (!this._disposed) {
         this._scroll(e);
       }
@@ -139,7 +139,8 @@ class WheelLocker extends TimeoutLocker {
     }
 
     const direction = e.shiftKey || false;
-    const directionChange = this._lastWheelDirection !== null && direction !== this._lastWheelDirection;
+    const directionChange = this._lastWheelDirection !== null
+      && direction !== this._lastWheelDirection;
     this._lastWheelDirection = direction;
 
     this._locked = this._locked && !directionChange;

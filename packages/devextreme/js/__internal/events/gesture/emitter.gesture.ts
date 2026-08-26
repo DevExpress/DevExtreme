@@ -1,6 +1,7 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
-  createEvent, eventData, eventDelta, isDxMouseWheelEvent, isMouseEvent, isTouchEvent, needSkipEvent,
+  createEvent, eventData, eventDelta, isDxMouseWheelEvent,
+  isMouseEvent, isTouchEvent, needSkipEvent,
 } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
 import callOnce from '@js/core/utils/call_once';
@@ -11,8 +12,8 @@ import { styleProp } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
 import devices from '@ts/core/m_devices';
 import domUtils from '@ts/core/utils/m_dom';
-import type { EmitterConfigData, EmitterEvent, EventCoords } from '@ts/events/core/m_emitter';
-import Emitter from '@ts/events/core/m_emitter';
+import type { EmitterConfigData, EmitterEvent, EventCoords } from '@ts/events/core/emitter';
+import Emitter from '@ts/events/core/emitter';
 
 const ready = readyCallbacks.add;
 const { abs } = Math;
@@ -37,7 +38,9 @@ export type GestureDirection = 'both' | 'horizontal' | 'vertical';
 type GestureCover = (toggle: boolean, cursor: string) => void;
 
 const supportPointerEvents = function (): string | undefined {
-  return styleProp('pointer-events');
+  const prop: string | undefined = styleProp('pointer-events');
+
+  return prop;
 };
 
 const setGestureCover = callOnce((): GestureCover => {
@@ -203,11 +206,15 @@ class GestureEmitter extends Emitter {
     const horizontalAccepted = direction === 'horizontal' && horizontalMove;
     const verticalAccepted = direction === 'vertical' && verticalMove;
 
-    return Boolean(bothAccepted || horizontalAccepted || verticalAccepted || this._immediateAccepted);
+    return Boolean(
+      bothAccepted || horizontalAccepted || verticalAccepted || this._immediateAccepted,
+    );
   }
 
   _validateMove(touchBoundary: number, mainAxis: number, crossAxis: number): boolean {
-    return Boolean(mainAxis) && mainAxis >= touchBoundary && (this.immediate ? mainAxis >= crossAxis : true);
+    return Boolean(mainAxis)
+      && mainAxis >= touchBoundary
+      && (this.immediate ? mainAxis >= crossAxis : true);
   }
 
   _getTouchBoundary(e: EmitterEvent): number {

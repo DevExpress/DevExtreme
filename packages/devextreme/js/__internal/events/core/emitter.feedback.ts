@@ -4,9 +4,9 @@ import { isMouseEvent } from '@js/common/core/events/utils/index';
 import { ensureDefined, noop } from '@js/core/utils/common';
 import { contains } from '@js/core/utils/dom';
 import devices from '@ts/core/m_devices';
-import type { EmitterConfigData, EmitterEvent } from '@ts/events/core/m_emitter';
-import Emitter from '@ts/events/core/m_emitter';
-import registerEmitter from '@ts/events/core/m_emitter_registrator';
+import type { EmitterConfigData, EmitterEvent } from '@ts/events/core/emitter';
+import Emitter from '@ts/events/core/emitter';
+import registerEmitter from '@ts/events/core/emitter_registrator';
 
 const ACTIVE_EVENT_NAME = 'dxactive';
 const INACTIVE_EVENT_NAME = 'dxinactive';
@@ -97,7 +97,10 @@ class FeedbackEmitter extends Emitter {
 
   start(e: EmitterEvent): void {
     if (activeFeedback) {
-      const activeChildExists = contains(this.getElement().get(0), activeFeedback.getElement().get(0));
+      const activeChildExists = contains(
+        this.getElement().get(0),
+        activeFeedback.getElement().get(0),
+      );
       const childJustActivated = !activeFeedback._active.fired();
 
       if (activeChildExists && childJustActivated) {
@@ -107,6 +110,7 @@ class FeedbackEmitter extends Emitter {
 
       activeFeedback._inactive.force();
     }
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     activeFeedback = this;
 
     this._initEvents(e);

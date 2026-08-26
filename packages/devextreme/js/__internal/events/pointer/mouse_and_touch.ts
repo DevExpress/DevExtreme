@@ -1,11 +1,11 @@
 import { isMouseEvent } from '@js/common/core/events/utils/index';
 import { extend } from '@js/core/utils/extend';
-import type { EmitterEvent } from '@ts/events/core/m_emitter';
-import type { PointerEventInit } from '@ts/events/pointer/m_base';
-import BaseStrategy from '@ts/events/pointer/m_base';
-import MouseStrategy from '@ts/events/pointer/m_mouse';
+import type { EmitterEvent } from '@ts/events/core/emitter';
+import type { PointerEventInit } from '@ts/events/pointer/base';
+import BaseStrategy from '@ts/events/pointer/base';
 import type { PointerEventMap } from '@ts/events/pointer/m_observer';
-import TouchStrategy from '@ts/events/pointer/m_touch';
+import MouseStrategy from '@ts/events/pointer/mouse';
+import TouchStrategy from '@ts/events/pointer/touch';
 
 /* eslint-disable spellcheck/spell-checker */
 const eventMap: PointerEventMap = {
@@ -76,7 +76,9 @@ class MouseAndTouchStrategy extends BaseStrategy {
   }
 
   _fireEvent(args: PointerEventInit): EmitterEvent {
-    const normalizer = isMouseEvent(args.originalEvent) ? MouseStrategy.normalize : TouchStrategy.normalize;
+    const normalizer = isMouseEvent(args.originalEvent)
+      ? MouseStrategy.normalize
+      : TouchStrategy.normalize;
 
     // @ts-expect-error the normalizers expect their own strategy-specific event shape
     return super._fireEvent(extend(normalizer(args.originalEvent), args));

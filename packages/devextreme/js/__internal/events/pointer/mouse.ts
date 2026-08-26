@@ -1,8 +1,8 @@
 import browser from '@js/core/utils/browser';
 import { extend } from '@js/core/utils/extend';
-import type { EmitterEvent } from '@ts/events/core/m_emitter';
-import type { PointerEventInit } from '@ts/events/pointer/m_base';
-import BaseStrategy from '@ts/events/pointer/m_base';
+import type { EmitterEvent } from '@ts/events/core/emitter';
+import type { PointerEventInit } from '@ts/events/pointer/base';
+import BaseStrategy from '@ts/events/pointer/base';
 import type { PointerEventMap } from '@ts/events/pointer/m_observer';
 import Observer from '@ts/events/pointer/m_observer';
 
@@ -24,12 +24,17 @@ if (browser.safari) {
   eventMap.dxpointercancel += ' ' + 'dragstart';
 }
 
+// eslint-disable-next-line @typescript-eslint/init-declarations
+let observer: Observer;
+
 interface NormalizedPointerData {
   pointers: Event[];
   pointerId: number;
 }
 
-const normalizeMouseEvent = function (e: EmitterEvent & { pointerId?: number }): NormalizedPointerData {
+const normalizeMouseEvent = function (
+  e: EmitterEvent & { pointerId?: number },
+): NormalizedPointerData {
   e.pointerId = 1;
 
   return {
@@ -38,8 +43,6 @@ const normalizeMouseEvent = function (e: EmitterEvent & { pointerId?: number }):
   };
 };
 
-// eslint-disable-next-line @typescript-eslint/init-declarations
-let observer: Observer;
 let activated = false;
 const activateStrategy = function (): void {
   if (activated) {

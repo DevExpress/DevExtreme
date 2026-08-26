@@ -5,7 +5,7 @@ import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, fireEvent, isTouchEvent } from '@js/common/core/events/utils/index';
 import { data as elementData, removeData } from '@js/core/element_data';
 import devices from '@ts/core/m_devices';
-import type { EmitterEvent } from '@ts/events/core/m_emitter';
+import type { EmitterEvent } from '@ts/events/core/emitter';
 
 const HOVERSTART_NAMESPACE = 'dxHoverStart';
 const HOVERSTART = 'dxhoverstart';

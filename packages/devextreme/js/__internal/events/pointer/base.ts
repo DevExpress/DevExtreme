@@ -3,7 +3,7 @@ import { getEventTarget } from '@js/common/core/events/utils/event_target';
 import { addNamespace, eventSource, fireEvent } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
 import browser from '@js/core/utils/browser';
-import type { EmitterEvent } from '@ts/events/core/m_emitter';
+import type { EmitterEvent } from '@ts/events/core/emitter';
 
 const POINTER_EVENTS_NAMESPACE = 'dxPointerEvents';
 
@@ -66,7 +66,8 @@ class BaseStrategy {
   }
 
   _getDelegateTarget(e: EmitterEvent): Element | undefined {
-    let delegateTarget;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let delegateTarget: Element | undefined;
 
     if (this.noBubble) {
       delegateTarget = e.delegateTarget;
@@ -76,7 +77,9 @@ class BaseStrategy {
   }
 
   _fireEvent(args: PointerEventInit): EmitterEvent {
-    return fireEvent(args);
+    const event: EmitterEvent = fireEvent(args);
+
+    return event;
   }
 
   _setSelector(handleObj?: PointerEventHandleObj): void {

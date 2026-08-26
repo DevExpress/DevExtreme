@@ -144,7 +144,11 @@ class Emitter {
   }
 
   _getEmitterTarget(e: EmitterEvent): Element {
-    return (this.delegateSelector ? $(e.target).closest(this.delegateSelector) : this.getElement()).get(0);
+    const $target = this.delegateSelector
+      ? $(e.target).closest(this.delegateSelector)
+      : this.getElement();
+
+    return $target.get(0);
   }
 
   dispose(): void {}

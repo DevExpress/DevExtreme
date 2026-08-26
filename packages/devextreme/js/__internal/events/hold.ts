@@ -1,7 +1,7 @@
 import { eventData, eventDelta } from '@js/common/core/events/utils/index';
-import type { EmitterEvent, EventCoords } from '@ts/events/core/m_emitter';
-import Emitter from '@ts/events/core/m_emitter';
-import registerEmitter from '@ts/events/core/m_emitter_registrator';
+import type { EmitterEvent, EventCoords } from '@ts/events/core/emitter';
+import Emitter from '@ts/events/core/emitter';
+import registerEmitter from '@ts/events/core/emitter_registrator';
 
 const { abs } = Math;
 
