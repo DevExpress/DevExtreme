@@ -208,7 +208,7 @@
 }
 
 @mixin texteditor-validation-icon-offset() {
-  inset-inline-end: $invalid-badge-offset;
+  inset-inline-end: var(--dx-invalid-badge-offset);
 }
 
 @mixin texteditor-validation-icon-offset-filled() {

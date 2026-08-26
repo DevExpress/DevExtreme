@@ -1,6 +1,5 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
-@use "../common/sizes" as *;
 
 // Not a colour: an opacity / a composite box-shadow belongs here (NAMING.md O7)
 $drop-down-editor-icon-opacity: ds.$opacity-35 !default;
@@ -23,6 +22,3 @@ $drop-down-editor-list-line-height: null !default;
  * variables (NAMING.md, O7).
  */
 $drop-down-editor-button-size: $global-icon-size;
-$drop-down-editor-invalid-badge-inset-inline-end: calc(#{$drop-down-editor-button-size} + #{$invalid-badge-offset});
-$drop-down-editor-invalid-badge-with-clear-inset-inline-end: calc(#{$drop-down-editor-button-size} * 2 + #{$invalid-badge-offset});
-$drop-down-editor-invalid-badge-size: calc(#{$invalid-badge-size} + #{$invalid-badge-padding-inline});

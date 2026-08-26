@@ -30,10 +30,10 @@
   justify-content: center;
   align-items: center;
   top: 50%;
-  margin-top: calc(#{$invalid-badge-size} / -2);
-  width: $invalid-badge-size;
-  height: $invalid-badge-size;
-  line-height: calc(#{$invalid-badge-size} + 1px);
+  margin-top: calc(var(--dx-invalid-badge-size) / -2);
+  width: var(--dx-invalid-badge-size);
+  height: var(--dx-invalid-badge-size);
+  line-height: calc(var(--dx-invalid-badge-size) + 1px);
   font-size: $global-font-size;
 }
 
@@ -61,7 +61,7 @@
 }
 
 @mixin dx-pending-indicator-fluent() {
-  @include dx-pending-indicator($invalid-badge-size);
+  @include dx-pending-indicator(var(--dx-invalid-badge-size));
 }
 
 @mixin dx-dropdownlist-list-appearance() {

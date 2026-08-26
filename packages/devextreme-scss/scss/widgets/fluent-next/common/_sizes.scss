@@ -14,7 +14,6 @@ $focus-rect-border-radius: $global-border-radius !default;
 
 $invalid-badge-size: calc(#{$global-icon-size} - #{ds.$spacing-20}) !default;
 $invalid-badge-padding-inline: calc((#{$global-inline-widget-inner-height} - #{$invalid-badge-size}) / 2) !default;
-$invalid-badge-offset: calc(#{$invalid-badge-padding-inline} / 2) !default;
 
 $valid-badge-font-size: calc(#{$global-font-size} + 6px) !default;
 
