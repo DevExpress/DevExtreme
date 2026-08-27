@@ -83,7 +83,7 @@
   margin: $color-view-color-preview-container-margin;
   margin-top: 0;
   background-color: $color-view-bg-box-palette-cell-bg;
-  box-shadow: 0 0 0 1px $color-view-border;
+  box-shadow: 0 0 0 1px $color-view-border; // dx-line-width: 1px hairline ring drawn as a shadow
 }
 
 .dx-colorview-color-preview-container {
