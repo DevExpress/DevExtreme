@@ -15,8 +15,7 @@ pnpm run build:react19    # or build:vue3 / build:angular / build:all
 pnpm run test:react19     # or test:vue3 / test:angular
 ```
 
-`playwright test` starts the server for the built application itself. The Chat and Gantt examples
-exist for React only, so they are reported as skipped for the other frameworks.
+`playwright test` starts the server for the built application itself.
 
 ## Run in the CI environment
 
