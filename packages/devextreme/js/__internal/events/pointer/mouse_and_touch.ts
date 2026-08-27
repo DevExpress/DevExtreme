@@ -1,11 +1,14 @@
-import BaseStrategy from '@js/common/core/events/pointer/base';
-import MouseStrategy from '@js/common/core/events/pointer/mouse';
-import TouchStrategy from '@js/common/core/events/pointer/touch';
 import { isMouseEvent } from '@js/common/core/events/utils/index';
 import { extend } from '@js/core/utils/extend';
+import type { EmitterEvent } from '@ts/events/core/emitter';
+import type { PointerEventInit } from '@ts/events/pointer/base';
+import BaseStrategy from '@ts/events/pointer/base';
+import type { PointerEventMap } from '@ts/events/pointer/m_observer';
+import MouseStrategy from '@ts/events/pointer/mouse';
+import TouchStrategy from '@ts/events/pointer/touch';
 
 /* eslint-disable spellcheck/spell-checker */
-const eventMap = {
+const eventMap: PointerEventMap = {
   dxpointerdown: 'touchstart mousedown',
   dxpointermove: 'touchmove mousemove',
   dxpointerup: 'touchend mouseup',
@@ -17,7 +20,7 @@ const eventMap = {
 };
 
 let activated = false;
-const activateStrategy = function () {
+const activateStrategy = function (): void {
   if (activated) {
     return;
   }
@@ -26,17 +29,26 @@ const activateStrategy = function () {
   activated = true;
 };
 
-const MouseAndTouchStrategy = BaseStrategy.inherit({
+class MouseAndTouchStrategy extends BaseStrategy {
+  static map = eventMap;
 
-  EVENT_LOCK_TIMEOUT: 100,
+  static resetObserver = MouseStrategy.resetObserver;
 
-  ctor() {
-    this.callBase.apply(this, arguments);
+  EVENT_LOCK_TIMEOUT = 100;
+
+  _skipNextEvents?: boolean;
+
+  _mouseLocked?: boolean;
+
+  _unlockMouseTimer?: ReturnType<typeof setTimeout>;
+
+  constructor(eventName: string, originalEvents: string) {
+    super(eventName, originalEvents);
 
     activateStrategy();
-  },
+  }
 
-  _handler(e) {
+  _handler(e: EmitterEvent): EmitterEvent | undefined {
     const isMouse = isMouseEvent(e);
 
     if (!isMouse) {
@@ -44,7 +56,7 @@ const MouseAndTouchStrategy = BaseStrategy.inherit({
     }
 
     if (isMouse && this._mouseLocked) {
-      return;
+      return undefined;
     }
 
     if (isMouse && this._skipNextEvents) {
@@ -53,32 +65,31 @@ const MouseAndTouchStrategy = BaseStrategy.inherit({
 
       clearTimeout(this._unlockMouseTimer);
 
-      const that = this;
       this._unlockMouseTimer = setTimeout(() => {
-        that._mouseLocked = false;
+        this._mouseLocked = false;
       }, this.EVENT_LOCK_TIMEOUT);
 
-      return;
+      return undefined;
     }
 
-    return this.callBase(e);
-  },
+    return super._handler(e);
+  }
 
-  _fireEvent(args) {
-    const normalizer = isMouseEvent(args.originalEvent) ? MouseStrategy.normalize : TouchStrategy.normalize;
+  _fireEvent(args: PointerEventInit): EmitterEvent {
+    const normalizer = isMouseEvent(args.originalEvent)
+      ? MouseStrategy.normalize
+      : TouchStrategy.normalize;
 
-    return this.callBase(extend(normalizer(args.originalEvent), args));
-  },
+    // @ts-expect-error the normalizers expect their own strategy-specific event shape
+    return super._fireEvent(extend(normalizer(args.originalEvent), args));
+  }
 
-  dispose() {
-    this.callBase();
+  dispose(element?: Element): void {
+    super.dispose(element);
     this._skipNextEvents = false;
     this._mouseLocked = false;
     clearTimeout(this._unlockMouseTimer);
-  },
-});
-
-MouseAndTouchStrategy.map = eventMap;
-MouseAndTouchStrategy.resetObserver = MouseStrategy.resetObserver;
+  }
+}
 
 export default MouseAndTouchStrategy;

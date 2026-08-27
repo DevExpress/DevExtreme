@@ -2,7 +2,9 @@ import domAdapter from '@js/core/dom_adapter';
 import { each } from '@js/core/utils/iterator';
 import readyCallbacks from '@js/core/utils/ready_callbacks';
 
-const addEventsListener = function (events, handler) {
+export type PointerEventMap = Record<string, string>;
+
+const addEventsListener = function (events: string, handler: (e: Event) => void): void {
   readyCallbacks.add(() => {
     events
       .split(' ')
@@ -12,16 +14,35 @@ const addEventsListener = function (events, handler) {
   });
 };
 
-const Observer = function (eventMap, pointerEquals, onPointerAdding) {
-  onPointerAdding = onPointerAdding || function () { };
+class Observer {
+  _pointerEquals: (e: Event, pointer: Event) => boolean;
 
-  let pointers: any = [];
+  _onPointerAdding: (e: Event) => void;
 
-  const getPointerIndex = function (e) {
+  _pointers: Event[];
+
+  constructor(
+    eventMap: PointerEventMap,
+    pointerEquals: (e: Event, pointer: Event) => boolean,
+    onPointerAdding?: (e: Event) => void,
+  ) {
+    this._pointerEquals = pointerEquals;
+    this._onPointerAdding = onPointerAdding ?? function () { };
+    this._pointers = [];
+
+    /* eslint-disable spellcheck/spell-checker */
+    addEventsListener(eventMap.dxpointerdown, this._addPointer.bind(this));
+    addEventsListener(eventMap.dxpointermove, this._updatePointer.bind(this));
+    addEventsListener(eventMap.dxpointerup, this._removePointer.bind(this));
+    addEventsListener(eventMap.dxpointercancel, this._removePointer.bind(this));
+    /* eslint-enable spellcheck/spell-checker */
+  }
+
+  _getPointerIndex(e: Event): number {
     let index = -1;
 
-    each(pointers, (i: any, pointer) => {
-      if (!pointerEquals(e, pointer)) {
+    each(this._pointers, (i: number, pointer) => {
+      if (!this._pointerEquals(e, pointer)) {
         return true;
       }
 
@@ -30,39 +51,36 @@ const Observer = function (eventMap, pointerEquals, onPointerAdding) {
     });
 
     return index;
-  };
+  }
 
-  const addPointer = function (e) {
-    if (getPointerIndex(e) === -1) {
-      onPointerAdding(e);
-      pointers.push(e);
+  _addPointer(e: Event): void {
+    if (this._getPointerIndex(e) === -1) {
+      this._onPointerAdding(e);
+      this._pointers.push(e);
     }
-  };
+  }
 
-  const removePointer = function (e) {
-    const index = getPointerIndex(e);
+  _removePointer(e: Event): void {
+    const index = this._getPointerIndex(e);
     if (index > -1) {
-      pointers.splice(index, 1);
+      this._pointers.splice(index, 1);
     }
-  };
+  }
 
-  const updatePointer = function (e) {
-    pointers[getPointerIndex(e)] = e;
-  };
+  _updatePointer(e: Event): void {
+    const index = this._getPointerIndex(e);
+    if (index > -1) {
+      this._pointers[index] = e;
+    }
+  }
 
-  /* eslint-disable spellcheck/spell-checker */
-  addEventsListener(eventMap.dxpointerdown, addPointer);
-  addEventsListener(eventMap.dxpointermove, updatePointer);
-  addEventsListener(eventMap.dxpointerup, removePointer);
-  addEventsListener(eventMap.dxpointercancel, removePointer);
+  pointers(): Event[] {
+    return this._pointers;
+  }
 
-  this.pointers = function () {
-    return pointers;
-  };
-
-  this.reset = function () {
-    pointers = [];
-  };
-};
+  reset(): void {
+    this._pointers = [];
+  }
+}
 
 export default Observer;
