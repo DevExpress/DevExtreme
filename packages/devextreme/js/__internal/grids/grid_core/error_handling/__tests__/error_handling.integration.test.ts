@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import CustomStore from '@ts/data/m_custom_store';
+import CustomStore from '@js/data/custom_store';
 import type { DataGridInstance } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 import {
   afterTest,
@@ -25,7 +25,7 @@ const DATA = [
 const LOAD_ERROR_TEXT = 'Load error';
 
 interface FailingStore {
-  store: typeof CustomStore;
+  store: CustomStore;
   failNextLoad: (shouldFail: boolean) => void;
 }
 
