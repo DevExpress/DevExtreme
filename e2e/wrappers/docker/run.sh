@@ -31,7 +31,7 @@ RUN=(docker run --rm --platform linux/amd64 --shm-size=2gb --security-opt seccom
 if [ "$UI" = true ]; then
     echo "UI mode for $FRAMEWORK: open http://localhost:$UI_PORT"
     exec "${RUN[@]}" -p "$UI_PORT:$UI_PORT" devextreme-wrappers-e2e \
-        node_modules/.bin/playwright test --ui-host=0.0.0.0 --ui-port="$UI_PORT"
+        node_modules/.bin/playwright test --ui-host=0.0.0.0 --ui-port="$UI_PORT" "$@"
 fi
 
 exec "${RUN[@]}" -e CI=true devextreme-wrappers-e2e node_modules/.bin/playwright test "$@"
