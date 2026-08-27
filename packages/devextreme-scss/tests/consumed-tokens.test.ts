@@ -1,6 +1,7 @@
 import {
   buildAvailableNames,
   collectCustomPropertyReferences,
+  collectMarkupCustomPropertyReferences,
   collectTokenReferences,
   stripScssComments,
 } from '../build/tokens/consumed-tokens';
@@ -89,6 +90,42 @@ describe('collectCustomPropertyReferences', () => {
 
   it('ignores a reference parked in a comment', () => {
     expect(collectCustomPropertyReferences('// color: var(--dxds-spacing-40);', 'probe.scss')).toEqual([]);
+  });
+});
+
+describe('collectMarkupCustomPropertyReferences', () => {
+  it('collects a reference written with a fallback, as demos write them', () => {
+    expect(collectMarkupCustomPropertyReferences('.x { color: var(--dxds-color-content, #333); }')).toEqual([
+      'color-content',
+    ]);
+  });
+
+  it('keeps a reference that follows a url on the same line', () => {
+    expect(collectMarkupCustomPropertyReferences(
+      '.x { background: url(https://example.com/a.png); color: var(--dxds-color-content); }',
+    )).toEqual(['color-content']);
+  });
+
+  it('ignores a reference parked in a block comment', () => {
+    expect(collectMarkupCustomPropertyReferences('/* color: var(--dxds-gone); */ .x { color: var(--dxds-color-content); }')).toEqual([
+      'color-content',
+    ]);
+  });
+
+  it('ignores a reference parked in an html comment', () => {
+    expect(collectMarkupCustomPropertyReferences('<!-- var(--dxds-gone) --><b style="color: var(--dxds-color-content)"></b>')).toEqual([
+      'color-content',
+    ]);
+  });
+
+  it('does not throw on an unpaired block delimiter, which is normal in markup', () => {
+    expect(() => collectMarkupCustomPropertyReferences('const re = /[*]/; // var(--dxds-color-content)')).not.toThrow();
+  });
+
+  it('captures a malformed name whole, so a typo is reported as written', () => {
+    expect(collectMarkupCustomPropertyReferences('.x { color: var(--dxds-color-contnet); }')).toEqual([
+      'color-contnet',
+    ]);
   });
 });
 
