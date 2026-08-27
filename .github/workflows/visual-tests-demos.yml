@@ -339,7 +339,7 @@ jobs:
     timeout-minutes: 30
     needs: [check-should-run, determine-framework-tests-scope, build-devextreme, build-vendor-bundles]
     if: |
-      always() &&
+      !cancelled() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.determine-framework-tests-scope.result == 'success' &&
       needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&

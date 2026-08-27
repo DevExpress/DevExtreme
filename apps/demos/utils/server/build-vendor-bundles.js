@@ -1,5 +1,5 @@
 // CLI: node utils/server/build-vendor-bundles.js [React|Vue ...]
-// Defaults to both. Angular isn't supported here — see csp-bundle-angular.js's
+// Defaults to both. Angular isn't supported here — see csp-bundle-angular.js's splitting: true batch build instead.
 
 const path = require('path');
 const fs = require('fs');
