@@ -181,6 +181,9 @@
     "common",
     "typography"
   ],
+  "systemTier": [
+    "common"
+  ],
   "systemConcerns": [
     "backdrop",
     "focus-rect",
@@ -442,6 +445,9 @@
     ],
     "tab-panel": [
       ".dx-tabpanel"
+    ],
+    "common": [
+      ":root"
     ]
   },
   "themeIdentity": [
@@ -1726,6 +1732,7 @@
       "icon-link",
       "checkbox",
       "menu-item",
+      "context-menu",
       "header-panel",
       "group-panel",
       "command",

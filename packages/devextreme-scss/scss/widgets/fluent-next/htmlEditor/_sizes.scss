@@ -26,7 +26,7 @@ $html-editor-ai-dialog-border-radius: null !default;
   $html-editor-ai-dialog-selects-gap: ds.$spacing-80 !default;
   $html-editor-ai-dialog-content-gap: ds.$spacing-160 !default;
   $html-editor-ai-dialog-content-padding: ds.$spacing-160 ds.$spacing-240 !default;
-  $html-editor-ai-dialog-border-radius: calc(#{$global-border-radius} * 2) !default;
+  $html-editor-ai-dialog-border-radius: ds.$border-radius-80 !default;
 }
 
 @else if $size == "compact" {

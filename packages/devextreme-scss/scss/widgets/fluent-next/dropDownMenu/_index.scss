@@ -1,6 +1,4 @@
 @use "sizes" as *;
-@use "../common/colors" as *;
-@use "../common/sizes" as *;
 @use "../../base/dropDownMenu/mixins" as *;
 @use "../../base/dropDownMenu" with (
   $dropdownmenu-list-min-width: var(--dx-drop-down-menu-list-min-width),
@@ -17,8 +15,8 @@
   }
 
   .dx-overlay-content {
-    box-shadow: $global-dropdown-box-shadow;
+    box-shadow: var(--dx-global-dropdown-box-shadow);
   }
 }
 
-@include dx-dropdownmenu-focus-outline($focus-rect-outline, $focus-rect-border-radius, var(--dx-drop-down-menu-section-margin-inline));
+@include dx-dropdownmenu-focus-outline(var(--dx-focus-rect-outline), var(--dx-focus-rect-border-radius), var(--dx-drop-down-menu-section-margin-inline));
