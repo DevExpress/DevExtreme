@@ -211,6 +211,7 @@
       },
       "dependsOn": [
         "build:tokens",
+        "build:themes",
         "typecheck"
       ],
       "inputs": [
