@@ -75,8 +75,7 @@ export const waitForAngularLoading = ClientFunction(() => new Promise((resolve) 
   }, 1000);
 }));
 
-// <link rel="stylesheet"> loads over the network like any other asset — a screenshot taken
-// before it resolves gets unstyled, default-browser layout (e.g. unreset <p> margins).
+// A screenshot taken before <link rel="stylesheet"> resolves gets unstyled, default-browser layout.
 export const waitForStylesheets = ClientFunction(() => new Promise((resolve) => {
   const check = () => {
     const links = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));

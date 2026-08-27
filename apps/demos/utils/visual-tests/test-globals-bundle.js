@@ -1,7 +1,4 @@
-// Exposes the devextreme widgets test-code.js needs as window.DevExpress, matching real
-// React/Vue demos by identity via vendorGlobalPlugin. Angular doesn't use this file's own
-// build — csp-bundle-angular.js reuses discoverTestGlobalsFromContent to do the same
-// assignment inside each demo's own bundle instead (see its module doc comment).
+// Exposes the devextreme widgets test-code.js needs as window.DevExpress, matching React/Vue demos by identity via vendorGlobalPlugin (Angular does this inline in its own bundle instead, see csp-bundle-angular.js).
 
 const fs = require('fs');
 const path = require('path');
@@ -21,10 +18,7 @@ function parseList(raw) {
   return [raw.replace(/'/g, '')];
 }
 
-// Shared with csp-bundle-angular.js, which runs this against a single demo's own test-code.js
-// instead of globbing every demo (Angular doesn't need a separate vendor script to expose
-// window.DevExpress — its batch build already shares one devextreme module instance across a
-// shard, so the per-demo bundle can just do the assignment itself).
+// Shared with csp-bundle-angular.js, which runs this per-demo instead of globbing every demo.
 function discoverTestGlobalsFromContent(content, specifierToPath = new Map()) {
   IMPORT_AND_RE.lastIndex = 0;
   let match = IMPORT_AND_RE.exec(content);
@@ -58,9 +52,7 @@ function outputPath(framework) {
   return path.join(DEMOS_ROOT, 'bundles', 'vendor', `test-globals-${framework.toLowerCase()}.js`);
 }
 
-// Async for vendorGlobalPlugin; called from build-vendor-bundles.js ahead of time. Requires
-// csp-bundle/vendor-bundle lazily so merely importing this module (e.g. from
-// matrix-test-helper.ts) doesn't pull them into Jest's coverage run.
+// Requires csp-bundle/vendor-bundle lazily so importing this module doesn't pull them into Jest's coverage run.
 async function buildTestGlobalsScript(framework) {
   if (!SUPPORTED_FRAMEWORKS.has(framework)) return null;
 
@@ -75,8 +67,7 @@ async function buildTestGlobalsScript(framework) {
   const manifest = getVendorManifest(framework);
   if (!manifest) return null;
 
-  // Poll for the vendor global instead of a fixed delay: it loads via <script src>, a network
-  // fetch no setTimeout can reliably outlast.
+  // Poll for the vendor global instead of a fixed delay — it loads via <script src>.
   const entryContents = `(function wait() {
     if (typeof window.${manifest.globalVar} === 'undefined') {
       setTimeout(wait, 50);
