@@ -46,7 +46,7 @@ import type Toolbar from '@js/ui/toolbar';
 import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
-import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type {
   GeometryOptions, InternalPositionConfig, OverlayActions, OverlayInternalProperties,
 } from '@ts/ui/overlay/overlay';
