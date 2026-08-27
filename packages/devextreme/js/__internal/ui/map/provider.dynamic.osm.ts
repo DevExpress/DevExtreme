@@ -15,14 +15,25 @@ import type {
 import DynamicProvider from './provider.dynamic';
 import type {
   MapEngine,
+  MapEngineBounds,
+  MapEngineClickEvent,
   MapEngineMap,
   MapEngineTileLayerOptions,
+  MapEngineViewState,
 } from './provider.dynamic.osm.engine';
 import { getRegisteredMapEngine } from './provider.dynamic.osm.engine';
 import { createOpenLayersEngine } from './provider.dynamic.osm.openlayers';
 
 const DEFAULT_MAX_ZOOM = 19;
 const DEFAULT_SUBDOMAINS = 'abc';
+const LOCATION_EPSILON = 1e-10;
+
+const areLocationsEqual = (
+  first: MapLocation | null,
+  second: MapLocation,
+): boolean => first !== null
+  && Math.abs(first.lat - second.lat) < LOCATION_EPSILON
+  && Math.abs(first.lng - second.lng) < LOCATION_EPSILON;
 
 class OsmProvider extends DynamicProvider {
   _engine?: MapEngine;
@@ -56,6 +67,12 @@ class OsmProvider extends DynamicProvider {
 
     this._engineMap = engineMap;
     this._map = engineMap.originalMap;
+    engineMap.setControls(Boolean(this._option('controls')));
+    engineMap.setFocus(
+      Boolean(this._option('focusStateEnabled')),
+      this._option('tabIndex') ?? 0,
+    );
+    engineMap.setDisabled(Boolean(this._option('disabled')));
 
     return Promise.resolve();
   }
@@ -103,7 +120,38 @@ class OsmProvider extends DynamicProvider {
     return this._getLatLng(location) ?? { lat: 0, lng: 0 };
   }
 
-  _attachHandlers(): void {}
+  _attachHandlers(): void {
+    this._engineMap?.attachHandlers({
+      click: (event) => this._clickActionHandler(event),
+      viewChange: (view) => this._viewChangeHandler(view),
+    });
+  }
+
+  _clickActionHandler(event: MapEngineClickEvent): void {
+    this._fireClickAction(event);
+  }
+
+  _viewChangeHandler(view: MapEngineViewState): void {
+    const { bounds, center, zoom } = view;
+
+    if (bounds) {
+      const currentBounds = this._option('bounds');
+      const currentNorthEast = this._getLatLng(currentBounds?.northEast);
+      const currentSouthWest = this._getLatLng(currentBounds?.southWest);
+      if (!areLocationsEqual(currentNorthEast, bounds.northEast)
+        || !areLocationsEqual(currentSouthWest, bounds.southWest)) {
+        this._option('bounds', bounds);
+      }
+    }
+
+    if (center && !areLocationsEqual(this._getLatLng(this._option('center')), center)) {
+      this._option('center', center);
+    }
+
+    if (zoom !== undefined && zoom !== this._option('zoom')) {
+      this._option('zoom', zoom);
+    }
+  }
 
   updateDimensions(): Promise<void> {
     this._engineMap?.updateDimensions();
@@ -149,14 +197,36 @@ class OsmProvider extends DynamicProvider {
   }
 
   updateDisabled(): Promise<void> {
+    this._engineMap?.setDisabled(Boolean(this._option('disabled')));
+
+    return Promise.resolve();
+  }
+
+  updateFocus(): Promise<void> {
+    this._engineMap?.setFocus(
+      Boolean(this._option('focusStateEnabled')),
+      this._option('tabIndex') ?? 0,
+    );
+
     return Promise.resolve();
   }
 
   updateBounds(): Promise<void> {
+    const bounds = this._option('bounds');
+    const northEast = this._getLatLng(bounds?.northEast);
+    const southWest = this._getLatLng(bounds?.southWest);
+
+    if (northEast && southWest) {
+      const engineBounds: MapEngineBounds = { northEast, southWest };
+      this._engineMap?.fitBounds(engineBounds);
+    }
+
     return Promise.resolve();
   }
 
   updateControls(): Promise<void> {
+    this._engineMap?.setControls(Boolean(this._option('controls')));
+
     return Promise.resolve();
   }
 

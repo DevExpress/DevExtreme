@@ -267,6 +267,12 @@ class Map extends Widget<MapProperties> {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._queueAsyncAction('updateDisabled');
         break;
+      case 'focusStateEnabled':
+      case 'tabIndex':
+        super._optionChanged(args);
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        this._queueAsyncAction('updateFocus');
+        break;
       case 'width':
       case 'height':
         super._optionChanged(args);
