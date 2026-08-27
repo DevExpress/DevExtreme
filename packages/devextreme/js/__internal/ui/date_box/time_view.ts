@@ -3,7 +3,7 @@ import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { BoxItemData } from '@ts/ui/box';
 import Box from '@ts/ui/box';
 import dateUtils from '@ts/ui/date_box/date_utils';
