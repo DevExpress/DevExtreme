@@ -1341,7 +1341,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         let loadingCount = 0;
         this.dataController.store().on('loading', function() {
