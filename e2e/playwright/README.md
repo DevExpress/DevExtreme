@@ -24,11 +24,13 @@ pnpm run test --test "Buttons, stylingMode=text"         # one test by name
 
 The runner takes the flags the TestCafe one takes (`--componentFolder`, `--indices`, `--theme`,
 `--concurrency`, `--test`) and passes everything else straight to `playwright test`, so
-`pnpm run test --headed --debug` works too. The static server for the test page starts on its own.
+`pnpm run test --headed --repeat-each 3` works too. `--test` matches the name as a whole word, not
+as a regular expression. The static server for the test page starts on its own.
 
 ## Screenshots
 
-Etalons live in `etalons/` next to the test and carry the theme in the file name —
+`testScreenshot` shoots the whole viewport unless the call names an `element`, the way the TestCafe
+comparer did. Etalons live in `etalons/` next to the test and carry the theme in the file name —
 `Buttons, stylingMode=text (fluent.blue.light).png` — the same convention the TestCafe run uses.
 
 The pixel budget is asymmetric on purpose: **CI is the source of truth** (`maxDiffPixelRatio`
@@ -95,7 +97,7 @@ test('Button reports its text', async ({ page }) => {
     const button = new Button(page, '#container .dx-button');
 
     await expect(button.text).toHaveText('Find');
-    await testScreenshot(page, 'Button with text.png');
+    await testScreenshot(page, 'Button with text.png', { element: '#container' });
 });
 ```
 

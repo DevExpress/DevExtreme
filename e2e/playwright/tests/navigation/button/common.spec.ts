@@ -55,7 +55,7 @@ const BUTTONS = [
       }
     }
 
-    await testScreenshot(page, `${testName}.png`);
+    await testScreenshot(page, `${testName}.png`, { element: '#container' });
   });
 });
 

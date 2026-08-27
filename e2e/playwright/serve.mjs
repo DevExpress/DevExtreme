@@ -43,8 +43,11 @@ if(!fs.existsSync(bundlePath)) {
 const server = http.createServer((request, response) => {
     const { pathname } = new URL(request.url, `http://localhost:${port}`);
     const filePath = path.join(root, decodeURIComponent(pathname));
+    // A prefix check would also accept a sibling directory whose name starts with the root one.
+    const relative = path.relative(root, filePath);
+    const isInsideRoot = relative !== '' && !relative.startsWith('..') && !path.isAbsolute(relative);
 
-    if(!filePath.startsWith(root) || !fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
+    if(!isInsideRoot || !fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
         response.writeHead(404).end('Not found');
         return;
     }
@@ -56,6 +59,6 @@ const server = http.createServer((request, response) => {
     fs.createReadStream(filePath).pipe(response);
 });
 
-server.listen(port, () => {
+server.listen(port, '127.0.0.1', () => {
     console.log(`✅ Test pages are served at http://localhost:${port}`);
 });

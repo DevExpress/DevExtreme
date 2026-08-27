@@ -1,19 +1,15 @@
 import { test as base } from '@playwright/test';
 import { DEFAULT_BROWSER_SIZE, DEFAULT_THEME } from './helpers/const';
-import {
-  changeTheme,
-  clearTestPage,
-  openTestPage,
-  resetPageState,
-} from './helpers/testPageUtils';
+import { changeTheme, openTestPage, resetPageState } from './helpers/testPageUtils';
 
 export interface TestOptions {
   theme: string;
   browserSize: [number, number];
 }
 
-// Overriding "page" gives every test the prepared container page, the way the TestCafe runner
-// did it from its global test hooks.
+// Overriding "page" gives every test the prepared container page, the way the TestCafe runner did
+// it from its global test hooks. Nothing needs cleaning up afterwards: every test gets its own
+// context, and the widgets of the previous one die with its page.
 export const test = base.extend<TestOptions>({
   theme: [DEFAULT_THEME, { option: true }],
   browserSize: [DEFAULT_BROWSER_SIZE, { option: true }],
@@ -27,8 +23,6 @@ export const test = base.extend<TestOptions>({
     await resetPageState(page);
 
     await use(page);
-
-    await clearTestPage(page);
   },
 });
 

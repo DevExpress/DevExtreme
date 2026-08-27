@@ -47,11 +47,7 @@ export default abstract class Widget {
   }
 
   public async option(option: string | Record<string, unknown>, ...value: unknown[]): Promise<any> {
-    const isSetter = value.length > 0 || typeof option === 'object';
-
-    return isSetter
-      ? this.invoke('option', option, ...value)
-      : this.invoke('option', option);
+    return this.invoke('option', option, ...value);
   }
 
   public async focus(): Promise<void> {

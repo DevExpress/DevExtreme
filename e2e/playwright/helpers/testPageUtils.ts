@@ -27,48 +27,6 @@ export async function getCurrentTheme(page: Page): Promise<string> {
   return theme ?? DEFAULT_THEME;
 }
 
-export async function clearTestPage(page: Page): Promise<void> {
-  await page.evaluate(() => {
-    const widgetSelector = '.dx-widget';
-    const $elements = $(widgetSelector)
-      .filter((_, element) => $(element).parents(widgetSelector).length === 0);
-
-    $elements.each((_, element) => {
-      const $widgetElement = $(element);
-      const widgetNames = $widgetElement.data().dxComponents;
-
-      widgetNames?.forEach((name) => {
-        if ($widgetElement.hasClass('dx-widget')) {
-          ($widgetElement as any)[name]?.('dispose');
-        }
-      });
-      $widgetElement.empty();
-    });
-
-    document.getElementById('focusable-start')?.remove();
-    document.getElementById('stylesheetRules')?.remove();
-
-    const body = document.querySelector('body');
-
-    if (body) {
-      body.innerHTML = '';
-      body.className = 'dx-surface';
-    }
-
-    const temp = document.createElement('div');
-
-    temp.innerHTML = `
-      <div id="parentContainer" role="main">
-        <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
-        <div id="container"></div>
-        <div id="otherContainer"></div>
-      </div>
-    `;
-
-    body?.prepend(temp.firstElementChild!);
-  });
-}
-
 export async function resetPageState(page: Page): Promise<void> {
   await page.evaluate(() => {
     if (document.activeElement && document.activeElement !== document.body) {

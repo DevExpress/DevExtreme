@@ -1,6 +1,5 @@
 import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
-import { DEFAULT_SELECTOR } from './const';
 import { getFullThemeName, getThemePostfix } from './themeUtils';
 import { changeTheme } from './testPageUtils';
 
@@ -22,19 +21,16 @@ const getScreenshotName = (baseName: string, theme?: string): string => {
     : `${baseName}${themePostfix}.png`;
 };
 
+// No element means the whole viewport, the way the TestCafe comparer read a missing element.
 const resolveTarget = (
   page: Page,
   element: Locator | string | null | undefined,
 ): Locator | Page => {
-  if (element === null) {
-    return page;
-  }
-
   if (typeof element === 'string') {
     return page.locator(element);
   }
 
-  return element ?? page.locator(DEFAULT_SELECTOR);
+  return element ?? page;
 };
 
 export async function testScreenshot(
