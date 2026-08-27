@@ -149,6 +149,9 @@ const CSP_DEMO_ALLOWLIST = {
   'Scheduler/CellTemplates': {
     'img-src': ['data:'],
   },
+  'Gauges/Overview': {
+    'img-src': ['data:'],
+  },
   'ScrollView/Overview': {
     'img-src': ['data:'],
   },
