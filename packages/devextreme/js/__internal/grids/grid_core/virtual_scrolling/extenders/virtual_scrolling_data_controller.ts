@@ -77,9 +77,9 @@ export const virtualScrollingDataControllerExtender = (
     super.dispose.apply(this, arguments as any);
   }
 
-  protected _refreshDataSource(): DeferredObj<unknown> {
+  protected resetDataSource(): DeferredObj<unknown> {
     // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
-    const baseResult: DeferredObj<unknown> = super._refreshDataSource() ?? Deferred().resolve().promise();
+    const baseResult: DeferredObj<unknown> = super.resetDataSource() ?? Deferred().resolve().promise();
 
     baseResult.done(this.initVirtualRows.bind(this));
 
