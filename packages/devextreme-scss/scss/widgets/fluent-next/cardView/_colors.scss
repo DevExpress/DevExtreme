@@ -39,7 +39,7 @@ $cardview-fluent-card__cover--noimage-bg-color: ds.$color-bg-low !default;
 
 $cardview-fluent-card__cover--noimage__icon-color: ds.$color-content-subtle !default;
 
-$cardview-fluent-card--focused-outline-color: ds.$color-border-primary !default;
+$cardview-fluent-card--focused-outline-color: ds.$color-border-primary-shared !default;
 
 // #endregion
 
@@ -75,7 +75,7 @@ $cardview-fluent-header-panel__item__header-filter-icon--selected-color: ds.$col
 
 $cardview-fluent-header-panel__item__sort-index-text-color: $cardview-fluent-common-text-color !default;
 
-$cardview-fluent-header-panel__item--focused-outline-color: ds.$color-border-primary !default;
+$cardview-fluent-header-panel__item--focused-outline-color: ds.$color-border-primary-shared !default;
 
 // #endregion
 
