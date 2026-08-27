@@ -78,7 +78,7 @@ jobs:
     name: Determine scope for framework tests
     needs: [check-should-run, get-changes]
     if: |
-      always() &&
+      !cancelled() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       (needs.get-changes.result == 'success' || needs.get-changes.result == 'skipped')
     outputs:
@@ -104,7 +104,7 @@ jobs:
     name: Build DevExtreme
     needs: [check-should-run, determine-framework-tests-scope]
     if: |
-      always() &&
+      !cancelled() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.determine-framework-tests-scope.result == 'success'
     env:
@@ -192,7 +192,7 @@ jobs:
     timeout-minutes: 30
     needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
     if: |
-      always() &&
+      !cancelled() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.determine-framework-tests-scope.result == 'success' &&
       needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
@@ -264,7 +264,7 @@ jobs:
     name: Check TS
     needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
     if: |
-      always() &&
+      !cancelled() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.determine-framework-tests-scope.result == 'success' &&
       needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
@@ -326,7 +326,7 @@ jobs:
     name: Lint code base
     needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
     if: |
-      always() &&
+      !cancelled() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.determine-framework-tests-scope.result == 'success' &&
       needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
@@ -423,7 +423,7 @@ jobs:
     timeout-minutes: 10
     needs: [check-should-run, get-changes, build-devextreme, determine-framework-tests-scope]
     if: |
-      always() &&
+      !cancelled() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.determine-framework-tests-scope.result == 'success' &&
       needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'changed' &&
@@ -536,7 +536,7 @@ jobs:
     timeout-minutes: 15
     needs: [check-should-run, build-devextreme, determine-framework-tests-scope]
     if: |
-      always() &&
+      !cancelled() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.determine-framework-tests-scope.result == 'success' &&
       needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'all' &&
@@ -609,7 +609,7 @@ jobs:
   testcafe-jquery:
     needs: [check-should-run, build-devextreme]
     if: |
-      always() &&
+      !cancelled() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.build-devextreme.result == 'success'
     strategy:
@@ -775,7 +775,7 @@ jobs:
   testcafe-frameworks-all:
     needs: [check-should-run, determine-framework-tests-scope, build-demos]
     if: |
-      always() &&
+      !cancelled() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.determine-framework-tests-scope.result == 'success' &&
       needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'all' &&
@@ -925,7 +925,7 @@ jobs:
   testcafe-frameworks-changed:
     needs: [check-should-run, determine-framework-tests-scope, build-demos]
     if: |
-      always() &&
+      !cancelled() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.determine-framework-tests-scope.result == 'success' &&
       needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'changed' &&
@@ -1053,7 +1053,7 @@ jobs:
   merge-artifacts:
     runs-on: ubuntu-latest
     needs: [testcafe-jquery, testcafe-frameworks-all, testcafe-frameworks-changed]
-    if: always() && (needs.testcafe-jquery.result == 'failure' || needs.testcafe-frameworks-all.result == 'failure' || needs.testcafe-frameworks-changed.result == 'failure')
+    if: ${{ !cancelled() && (needs.testcafe-jquery.result == 'failure' || needs.testcafe-frameworks-all.result == 'failure' || needs.testcafe-frameworks-changed.result == 'failure') }}
 
     steps:
       - name: Merge jQuery screenshot artifacts
