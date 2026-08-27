@@ -344,11 +344,7 @@
   ],
   "systemTierNames": [],
   "multipleDeclarationHomes": [],
-  "foreignReads": {
-    "icons": [
-      "scrollViewColors.$scroll-view-pull-down-bg"
-    ]
-  },
+  "foreignReads": {},
   "declarationsOutsideVariableFiles": [],
   "starImportsOfBase": [
     "dataGrid/_sizes.scss: ../../base/dataGrid/variables",
@@ -369,19 +365,14 @@
     "--dx-font-size-lg",
     "--dx-font-size-md",
     "--dx-font-size-xl",
-    "--dx-line-height",
     "--dx-list-item-padding-block",
     "--dx-list-item-padding-inline",
     "--dx-popup-toolbar-item-padding-inline",
     "--dx-texteditor-color-text",
     "--dx-toolbar-height"
   ],
-  "publicSurfaceUndeclared": [
-    "--dx-texteditor-label-color"
-  ],
-  "publicSurfaceDifferences": [
-    "--dx-line-height: only in fluent, fluent-next"
-  ],
+  "publicSurfaceUndeclared": [],
+  "publicSurfaceDifferences": [],
   "publicTierManualDeclarations": [
     "fluent-next/_colors.scss: --dx-color-border",
     "fluent-next/_colors.scss: --dx-color-danger",
@@ -403,7 +394,6 @@
     "fluent-next/_sizes.scss: --dx-font-size",
     "fluent-next/_sizes.scss: --dx-font-size-icon",
     "fluent-next/button/_sizes.scss: --dx-button-padding-inline",
-    "fluent-next/common/_sizes.scss: --dx-line-height",
     "fluent-next/gridBase/_colors.scss: --dx-datagrid-row-alternation-bg",
     "fluent-next/list/_sizes.scss: --dx-list-item-padding-block",
     "fluent-next/list/_sizes.scss: --dx-list-item-padding-inline",
