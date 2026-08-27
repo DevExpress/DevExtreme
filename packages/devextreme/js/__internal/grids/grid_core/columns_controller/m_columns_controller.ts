@@ -1494,22 +1494,53 @@ export class ColumnsController extends modules.Controller {
     const column = findColumn(columns, identifier);
 
     if (column) {
+      const isOptionString = isString(option);
+
       if (arguments.length === 1) {
         return extend({}, column);
       }
-      if (isString(option)) {
-        if (arguments.length === 2) {
-          return columnOptionCore(that, column, option);
-        }
-        columnOptionCore(that, column, option, value, notFireEvent);
-      } else if (isObject(option)) {
-        each(option, (optionName, optionValue) => {
-          columnOptionCore(that, column, optionName, optionValue, notFireEvent);
-        });
+
+      if (isOptionString && arguments.length === 2) {
+        return columnOptionCore(that, column, option);
       }
 
-      fireColumnsChanged(that);
+      const setColumnOption = () => {
+        if (isOptionString) {
+          columnOptionCore(that, column, option, value, notFireEvent);
+        }
+        if (isObject(option)) {
+          each(option, (optionName, optionValue) => {
+            columnOptionCore(that, column, optionName, optionValue, notFireEvent);
+          });
+        }
+
+        fireColumnsChanged(that);
+      };
+
+      if (!notFireEvent && this.needToWrapToBeginEndUpdate(option)) {
+        this.wrapToBeginEndUpdate(setColumnOption);
+      } else {
+        setColumnOption();
+      }
     }
+  }
+
+  private needToWrapToBeginEndUpdate(option: string | Record<string, unknown>): boolean {
+    const isWidthChanging = isObject(option)
+      ? 'width' in option
+      : option === 'width';
+
+    return isWidthChanging && !this._updateLockCount;
+  }
+
+  private wrapToBeginEndUpdate(callback: () => void): void {
+    if (!isFunction(callback)) {
+      return;
+    }
+
+    this.component.beginUpdate();
+    callback();
+    this.component.endUpdate();
   }
 
   private clearSorting() {
