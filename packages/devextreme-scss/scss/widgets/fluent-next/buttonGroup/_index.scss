@@ -15,7 +15,7 @@
 
 @include dx-buttongroup-sizing(
   buttonSizes.$button-border-radius,
-  1px,
+  1px, // dx-line-width: 1px, the button border passed to dx-buttongroup-sizing
 );
 
 .dx-buttongroup-mode-contained {

@@ -24,7 +24,7 @@
 .dx-progressbar-animating-container {
   height: var(--dx-progress-bar-height);
   background-color: var(--dx-progress-bar-bg);
-  background-size: var(--dx-progress-bar-indeterminate-width) 5px;
+  background-size: var(--dx-progress-bar-indeterminate-width) 5px; // dx-fixed-size: 5px stripe pitch of the indeterminate gradient
   animation: dx-loader 2s linear infinite;
   border-radius: var(--dx-progress-bar-border-radius);
 
