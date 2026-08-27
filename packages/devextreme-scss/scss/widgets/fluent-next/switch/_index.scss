@@ -26,7 +26,7 @@
   var(--dx-switch-handle-on-box-shadow),
   var(--dx-switch-handle-off-bg),
   var(--dx-switch-handle-on-bg),
-  1px solid,
+  1px solid, // dx-line-width: 1px, the off-state border
   var(--dx-switch-off-border),
   var(--dx-switch-off-border-hovered),
   var(--dx-switch-off-border-active),
