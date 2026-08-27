@@ -15,8 +15,8 @@
 
 .dx-slider-bar {
   margin-top: calc((#{$slider-wrapper-height} - #{$slider-track-height}) / 2);
-  margin-right: calc((#{$slider-handle-size}) / 2);
-  margin-left: calc((#{$slider-handle-size}) / 2);
+  margin-right: calc(#{$slider-handle-size} / 2);
+  margin-left: calc(#{$slider-handle-size} / 2);
   background: $slider-bar-bg;
   height: $slider-track-height;
   border-radius: $slider-track-border-radius;
@@ -81,11 +81,11 @@
 
       &.dx-state-disabled {
         .dx-popup-content {
-          padding-top: calc((#{$slider-tooltip-width}) / 2);
+          padding-top: calc(#{$slider-tooltip-width} / 2);
 
           .dx-slider-tooltip-position-top & {
             padding-top: $slider-tooltip-top-padding-block-start;
-            padding-bottom: calc((#{$slider-tooltip-width}) / 2);
+            padding-bottom: calc(#{$slider-tooltip-width} / 2);
           }
         }
       }

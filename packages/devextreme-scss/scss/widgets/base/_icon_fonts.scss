@@ -224,12 +224,15 @@
     $icon-line-height: $container-size - $icon-paddings-dirty;
   } @else {
 
-    // Token-based themes pass var()/calc() values — the derivation moves to CSS. With the defaults ($container-size is $icon-size, no borders) it is identically zero, so print 0 instead of shipping calc((X - X - 0) / 2) to the browser.
-    $icon-padding: if(
-      $container-size == $icon-size and $borders-size == 0,
-      0,
-      calc((#{$container-size} - #{$icon-size} - #{$borders-size}) / 2)
-    );
+    // Token-based themes pass var()/calc() values — the derivation moves to CSS. With the defaults ($container-size is $icon-size, no borders) it is identically zero, so print 0 instead of shipping calc((X - X - 0) / 2) to the browser; a zero $borders-size alone drops its term the same way.
+    @if $container-size == $icon-size and $borders-size == 0 {
+      $icon-padding: 0;
+    } @else if $borders-size == 0 {
+      $icon-padding: calc((#{$container-size} - #{$icon-size}) / 2);
+    } @else {
+      $icon-padding: calc((#{$container-size} - #{$icon-size} - #{$borders-size}) / 2);
+    }
+
     $icon-line-height: $icon-size;
   }
 

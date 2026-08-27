@@ -127,7 +127,7 @@
   &:not(.dx-texteditor-empty) {
     &.dx-auto-width {
       @include invalid-dropdowneditor-input-padding(
-        dropDownEditorSizes.$drop-down-editor-invalid-badge-size,
+        var(--dx-drop-down-editor-invalid-badge-size),
         textEditorSizes.$text-editor-input-underlined-padding-inline,
         textEditorSizes.$text-editor-input-filled-padding-inline
       );

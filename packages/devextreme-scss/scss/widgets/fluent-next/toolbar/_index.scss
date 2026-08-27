@@ -5,8 +5,6 @@
 @use "../../base/icon_fonts" as *;
 @use "../list/sizes" as listSizes;
 @use "../button/mixins" as *;
-@use "../common/colors" as *;
-@use "../common/sizes" as *;
 @use "../button/colors" as buttonColors;
 @use "mixins" as *;
 @use "../button/sizes" as buttonSizes;
@@ -183,4 +181,4 @@
   }
 }
 
-@include dx-toolbar-focus-outline($focus-rect-outline, $focus-rect-border-radius);
+@include dx-toolbar-focus-outline(var(--dx-focus-rect-outline), var(--dx-focus-rect-border-radius));

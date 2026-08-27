@@ -4,7 +4,6 @@
 @use "../../variables/colors" as *;
 @use "../../variables/sizes" as *;
 @use "../../mixins" as *;
-@use "../../../common/sizes" as *;
 @use "../../../scrollable";
 @use "../../../badge";
 @use "styling-mode/primary" as *;
@@ -55,7 +54,7 @@
   .dx-tab-text {
     column-gap: $tabs-text-column-gap;
     row-gap: $tabs-item-gap;
-    line-height: $global-line-height;
+    line-height: var(--dx-global-line-height);
 
     .dx-tab-text-span {
       position: relative;

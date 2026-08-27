@@ -1,6 +1,4 @@
-@use "colors" as *;
 @use "../colors" as *;
-@use "sizes" as *;
 @use "../sizes" as *;
 
 .dx-theme-marker {
@@ -9,57 +7,57 @@
 
 // stylelint-disable declaration-no-important
 .dx-theme-accent-as-text-color {
-  color: $palette-accent !important;
+  color: var(--dx-palette-accent) !important;
 }
 
 .dx-theme-text-color {
-  color: $palette-text !important;
+  color: var(--dx-palette-text) !important;
 }
 
 .dx-theme-background-color-as-text-color {
-  color: $palette-bg !important;
+  color: var(--dx-palette-bg) !important;
 }
 
 .dx-theme-border-color-as-text-color {
-  color: $palette-border !important;
+  color: var(--dx-palette-border) !important;
 }
 
 .dx-theme-accent-as-background-color {
-  background-color: $palette-accent !important;
-  fill: $palette-accent !important;
+  background-color: var(--dx-palette-accent) !important;
+  fill: var(--dx-palette-accent) !important;
 }
 
 .dx-theme-text-color-as-background-color {
-  background-color: $palette-text !important;
-  fill: $palette-text !important;
+  background-color: var(--dx-palette-text) !important;
+  fill: var(--dx-palette-text) !important;
 }
 
 .dx-theme-background-color {
-  background-color: $palette-bg !important;
-  fill: $palette-bg !important;
+  background-color: var(--dx-palette-bg) !important;
+  fill: var(--dx-palette-bg) !important;
 }
 
 .dx-theme-typography-background-color {
-  background-color: $global-bg !important;
+  background-color: var(--dx-global-bg) !important;
 }
 
 .dx-theme-border-color-as-background-color {
-  background-color: $palette-border !important;
-  fill: $palette-border !important;
+  background-color: var(--dx-palette-border) !important;
+  fill: var(--dx-palette-border) !important;
 }
 
 .dx-theme-accent-as-border-color {
-  border-color: $palette-accent !important;
+  border-color: var(--dx-palette-accent) !important;
 }
 
 .dx-theme-text-color-as-border-color {
-  border-color: $palette-text !important;
+  border-color: var(--dx-palette-text) !important;
 }
 
 .dx-theme-background-color-as-border-color {
-  border-color: $palette-bg !important;
+  border-color: var(--dx-palette-bg) !important;
 }
 
 .dx-theme-border-color {
-  border-color: $palette-border !important;
+  border-color: var(--dx-palette-border) !important;
 }

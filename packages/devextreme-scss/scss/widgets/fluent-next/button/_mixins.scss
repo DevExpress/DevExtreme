@@ -5,15 +5,13 @@
 @use "../../base/icon_fonts" as *;
 @use "../../base/button/mixins" as *;
 
-@mixin dx-button-onlyicon-sizing($icon-size: $button-icon-size) {
+@mixin dx-button-onlyicon-sizing($icon-size: $button-icon-size, $content-padding: var(--dx-button-content-padding)) {
   min-width: var(--dx-button-height);
 
-  $button-content-padding: calc((#{$button-height} - #{$icon-size} - #{$global-border-width} * 2) / 2);
-
   @include dx-button-sizing(
-    $button-content-padding,
-    $button-content-padding,
-    $button-content-padding,
+    $content-padding,
+    $content-padding,
+    $content-padding,
     $icon-size,
     0
   );

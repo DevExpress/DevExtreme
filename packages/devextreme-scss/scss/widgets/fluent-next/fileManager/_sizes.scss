@@ -13,6 +13,8 @@ $file-manager-tree-view-item-top-bottom-padding: null !default;
 $file-manager-file-actions-button-top-bottom-padding: null !default;
 $file-manager-context-menu-text-item-left-margin: null !default;
 $file-manager-large-icon-size: null !default;
+$file-manager-progress-box-image-size: null !default;
+$file-manager-thumbnails-item-thumbnail-size: null !default;
 $file-manager-progress-panel-title-padding-block: null !default;
 $file-manager-progress-box-button-close-margin-block-start: null !default;
 
@@ -30,6 +32,8 @@ $file-manager-toolbar-height: toolbarSizes.$toolbar-height;
   $file-manager-file-actions-button-top-bottom-padding: ds.$spacing-20 !default;
   $file-manager-context-menu-text-item-left-margin: ds.$spacing-480 !default;
   $file-manager-large-icon-size: ds.$spacing-220 !default;
+  $file-manager-progress-box-image-size: ds.$spacing-400 !default;
+  $file-manager-thumbnails-item-thumbnail-size: ds.$spacing-400 !default;
   $file-manager-progress-panel-title-padding-block: ds.$spacing-160 !default;
   $file-manager-progress-box-button-close-margin-block-start: ds.$spacing-60 !default;
 }
@@ -46,6 +50,8 @@ $file-manager-toolbar-height: toolbarSizes.$toolbar-height;
   $file-manager-file-actions-button-top-bottom-padding: ds.$spacing-90 !default;
   $file-manager-context-menu-text-item-left-margin: ds.$spacing-300 !default;
   $file-manager-large-icon-size: ds.$spacing-160 !default;
+  $file-manager-progress-box-image-size: ds.$spacing-320 !default;
+  $file-manager-thumbnails-item-thumbnail-size: ds.$spacing-320 !default;
   $file-manager-progress-panel-title-padding-block: ds.$spacing-100 !default;
   $file-manager-progress-box-button-close-margin-block-start: ds.$spacing-50 !default;
 }

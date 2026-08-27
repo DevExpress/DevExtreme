@@ -52,6 +52,7 @@
   --dx-grid-content-focused: #{$grid-content-focused};
   --dx-grid-content-padding: #{$grid-content-padding};
   --dx-grid-content: #{$grid-content};
+  --dx-grid-context-menu-icon-size: #{$grid-context-menu-icon-size};
   --dx-grid-drag-header-bg: #{if($grid-drag-header-bg == $grid-bg, var(--dx-grid-bg), $grid-drag-header-bg)};
   --dx-grid-drag-header-border: #{$grid-drag-header-border};
   --dx-grid-drag-header-shadow-ambient: #{$grid-drag-header-shadow-ambient};

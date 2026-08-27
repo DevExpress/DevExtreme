@@ -3,7 +3,6 @@
 @use "sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../textEditor" as *;
-@use "../common/sizes" as *;
 @use "../../base/tagBox";
 
 .dx-tagbox {
@@ -147,7 +146,7 @@
 }
 
 @mixin tagbox-editor-container-offset() {
-  inset-inline-end: $invalid-badge-padding-inline;
+  inset-inline-end: var(--dx-invalid-badge-padding-inline);
 }
 
 .dx-tagbox.dx-invalid,

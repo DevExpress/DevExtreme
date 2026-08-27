@@ -1,6 +1,18 @@
 @use "sass:meta";
 @use "../icon_fonts" as *;
 
+@function badge-input-padding($invalid-badge-size, $input-horizontal-padding) {
+  @if meta.type-of($invalid-badge-size) == number and meta.type-of($input-horizontal-padding) == number {
+    @return $invalid-badge-size + $input-horizontal-padding;
+  }
+
+  @if $input-horizontal-padding == 0 {
+    @return $invalid-badge-size;
+  }
+
+  @return calc(#{$invalid-badge-size} + #{$input-horizontal-padding});
+}
+
 @mixin invalid-dropdowneditor-input-padding(
   $invalid-badge-size,
   $texteditor-underlined-input-horizontal-padding,
@@ -9,7 +21,7 @@
   &.dx-dropdowneditor-button-visible {
     &.dx-editor-underlined {
       .dx-texteditor-input {
-        padding-inline-end: if(meta.type-of($invalid-badge-size) == number and meta.type-of($texteditor-underlined-input-horizontal-padding) == number, $invalid-badge-size + $texteditor-underlined-input-horizontal-padding, calc(#{$invalid-badge-size} + #{$texteditor-underlined-input-horizontal-padding}));
+        padding-inline-end: badge-input-padding($invalid-badge-size, $texteditor-underlined-input-horizontal-padding);
       }
 
       .dx-start-datebox {
@@ -28,7 +40,7 @@
     &.dx-editor-filled,
     &.dx-editor-outlined {
       .dx-texteditor-input {
-        padding-inline-end: if(meta.type-of($invalid-badge-size) == number and meta.type-of($texteditor-filled-input-horizontal-padding) == number, $invalid-badge-size + $texteditor-filled-input-horizontal-padding, calc(#{$invalid-badge-size} + #{$texteditor-filled-input-horizontal-padding}));
+        padding-inline-end: badge-input-padding($invalid-badge-size, $texteditor-filled-input-horizontal-padding);
       }
 
       .dx-start-datebox {

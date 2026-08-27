@@ -6,6 +6,7 @@
 @use "buttonGroup/public" as buttonGroupPublic;
 @use "card/public" as cardPublic;
 @use "colorBox/public" as colorBoxPublic;
+@use "common/public" as commonPublic;
 @use "contextMenu/public" as contextMenuPublic;
 @use "dataGrid/public" as dataGridPublic;
 @use "dateBox/public" as dateBoxPublic;
@@ -45,6 +46,10 @@
 @use "tooltip/public" as tooltipPublic;
 @use "treeList/public" as treeListPublic;
 @use "validation/public" as validationPublic;
+
+:root {
+  @include commonPublic.publish();
+}
 
 .dx-accordion {
   @include accordionPublic.publish();
