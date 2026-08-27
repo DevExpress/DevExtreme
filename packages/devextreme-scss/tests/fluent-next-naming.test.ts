@@ -873,7 +873,12 @@ test('the rename mapping stays collision-free and fully applied', () => {
  */
 const CSS_WIDE_KEYWORDS = new Set(['inherit', 'initial', 'unset', 'revert', 'revert-layer']);
 
+// A system-tier entry (registries.systemTier) is its own folder; grammar for its names stays the
+// systemConcerns path, so it must not appear in `components` or `migrated`.
+const systemTier: string[] = registries.systemTier ?? [];
+
 const tierFoldersOf = (component: string): string[] => {
+  if (systemTier.includes(component)) return [component];
   const folders = Object.entries(components)
     .filter(([, owner]) => owner === component)
     .map(([folder]) => folder);
@@ -887,7 +892,7 @@ const tierExpectation = (): Map<string, { component: string; reason: string | nu
   const wiring = new Set(findings.baseWiring.map((entry) => /(\$[a-z0-9-]+)/.exec(entry)![1]));
   const records = new Map<string, { component: string; value: string; reason: string | null }>();
 
-  (registries.migrated as string[]).forEach((component) => {
+  [...(registries.migrated as string[]), ...systemTier].forEach((component) => {
     const declared = new Map<string, { value: string; marker: boolean }>();
     const feeders = new Set<string>();
     tierFoldersOf(component).forEach((folder) => {
@@ -1009,7 +1014,8 @@ test('component tier: the collector matches registries.rootSelectors exactly', (
     if (!namespaces.length) return;
     const folders = namespaces.map((namespace) => namespaceToFolder.get(namespace) ?? `?${namespace}`);
     includedFolders.push(...folders);
-    const ruleComponents = new Set(folders.map((folder) => components[folder]));
+    const ruleComponents = new Set(folders
+      .map((folder) => (systemTier.includes(folder) ? folder : components[folder])));
     if (ruleComponents.size !== 1) {
       offenders.push(`collector rule mixes components: ${[...ruleComponents].join(', ')}`);
       return;
@@ -1057,7 +1063,8 @@ test('component tier: every declaring component has bundle-gated root selectors'
   // The selectors themselves are gated against the built bundle by derive-registries.mjs; this
   // holds the committed json coherent — a declaring component may not lack a scope.
   const declaring = [...new Set(publicTierFiles
-    .map((file) => components[sourceLabel(file).split('/')[1]]))];
+    .map((file) => sourceLabel(file).split('/')[1])
+    .map((folder) => (systemTier.includes(folder) ? folder : components[folder])))];
   expect(declaring.filter((component) => !registries.rootSelectors?.[component]?.length))
     .toEqual([]);
 });

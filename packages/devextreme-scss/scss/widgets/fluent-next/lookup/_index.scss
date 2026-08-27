@@ -9,7 +9,6 @@
 @use "../common/mixins" as *;
 @use "../../base/lookup";
 @use "../../base/lookup/mixins" as *;
-@use "../common/colors" as *;
 @use "../dropDownList";
 
 .dx-lookup {
@@ -141,7 +140,7 @@
 
     &::after {
       box-shadow: var(--dx-lookup-box-shadow);
-      background: $surface-overlay;
+      background: var(--dx-surface-overlay);
       border-top-right-radius: var(--dx-lookup-arrow-border-radius);
     }
   }

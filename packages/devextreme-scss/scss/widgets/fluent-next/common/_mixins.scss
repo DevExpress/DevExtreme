@@ -1,6 +1,4 @@
 @use "sass:math";
-@use "colors" as *;
-@use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
 @use "../validation/sizes" as validationSizes;
@@ -12,14 +10,14 @@
 
 @mixin dx-base-typography() {
   @include dx-base-typography-mixin(
-      $global-content,
+      var(--dx-global-content),
       $global-font-size,
-      $global-font-family,
-      $global-line-height
+      var(--dx-global-font-family),
+      var(--dx-global-line-height)
     );
 }
 
-@mixin disabled-widget($opacity: $global-disabled-opacity) {
+@mixin disabled-widget($opacity: var(--dx-global-disabled-opacity)) {
   @include disabled-widget-mixin($opacity);
 }
 
@@ -30,10 +28,10 @@
   justify-content: center;
   align-items: center;
   top: 50%;
-  margin-top: calc(#{$invalid-badge-size} / -2);
-  width: $invalid-badge-size;
-  height: $invalid-badge-size;
-  line-height: calc(#{$invalid-badge-size} + 1px);
+  margin-top: calc(var(--dx-invalid-badge-size) / -2);
+  width: var(--dx-invalid-badge-size);
+  height: var(--dx-invalid-badge-size);
+  line-height: calc(var(--dx-invalid-badge-size) + 1px);
   font-size: $global-font-size;
 }
 
@@ -41,9 +39,9 @@
   @include badge-settings();
 
   font-size: $global-font-size;
-  font-weight: $invalid-badge-font-weight;
-  background-color: $invalid-badge-bg;
-  color: $invalid-badge-content;
+  font-weight: var(--dx-invalid-badge-font-weight);
+  background-color: var(--dx-invalid-badge-bg);
+  color: var(--dx-invalid-badge-content);
   content: "!";
   border-radius: 50%;
 }
@@ -51,36 +49,36 @@
 @mixin dx-valid-fluent-badge() {
   @include badge-settings();
 
-  font-size: $valid-badge-font-size;
+  font-size: var(--dx-valid-badge-font-size);
   font-weight: bold;
   font-family: "DXIcons", sans-serif;
-  color: $valid-badge-content;
+  color: var(--dx-valid-badge-content);
   content: "\f005";
 
   @include baseValidation.validation-badge-animation();
 }
 
 @mixin dx-pending-indicator-fluent() {
-  @include dx-pending-indicator($invalid-badge-size);
+  @include dx-pending-indicator(var(--dx-invalid-badge-size));
 }
 
 @mixin dx-dropdownlist-list-appearance() {
   height: 100%;
 
   &.dx-popup-wrapper .dx-overlay-content {
-    box-shadow: $global-dropdown-box-shadow;
+    box-shadow: var(--dx-global-dropdown-box-shadow);
     border-top-width: 0;
-    border-bottom-width: $global-dropdown-border-block-end-width;
+    border-bottom-width: var(--dx-global-dropdown-border-block-end-width);
 
     &.dx-dropdowneditor-overlay-flipped {
-      border-top-width: $global-dropdown-flipped-border-block-start-width;
+      border-top-width: var(--dx-global-dropdown-flipped-border-block-start-width);
       border-bottom-width: 0;
     }
   }
 
   .dx-popup-content {
     height: 100%;
-    padding: $global-dropdown-content-padding;
+    padding: var(--dx-global-dropdown-content-padding);
   }
 
   .dx-list {

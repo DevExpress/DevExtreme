@@ -92,7 +92,7 @@
       &.dx-texteditor {
         &.dx-invalid {
           .dx-texteditor-input {
-            padding-inline-end: textEditorSizes.$text-editor-invalid-badge-size;
+            padding-inline-end: var(--dx-text-editor-invalid-badge-size);
           }
         }
       }

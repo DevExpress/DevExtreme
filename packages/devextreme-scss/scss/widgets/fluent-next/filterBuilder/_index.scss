@@ -1,6 +1,5 @@
 @use "colors" as *;
 @use "sizes" as *;
-@use "../common/sizes" as *;
 @use "../../base/filterBuilder" with (
   $filterbuilder-action-icon-margin-left: $filter-builder-action-icon-margin-inline-start,
   $filterbuilder-action-icon-margin-right: $filter-builder-action-icon-margin-inline-end,
@@ -76,7 +75,7 @@
 
 .dx-filterbuilder-overlay {
   &.dx-popup-wrapper > .dx-overlay-content {
-    box-shadow: $global-dropdown-box-shadow;
+    box-shadow: var(--dx-global-dropdown-box-shadow);
   }
 
   &.dx-filterbuilder-operations {
