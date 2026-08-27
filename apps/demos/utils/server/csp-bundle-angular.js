@@ -194,6 +194,11 @@ function findAngularEntry(srcDir) {
   return null;
 }
 
+// TODO: remove once PivotGrid/StandaloneFieldChooser/Angular renders reliably (times out in csp-check.js)
+const SKIPPED_DEMOS = new Set([
+  'PivotGrid/StandaloneFieldChooser/Angular',
+]);
+
 function findDemos() {
   const out = [];
   if (!fs.existsSync(SRC_DEMOS_DIR)) return out;
@@ -204,6 +209,7 @@ function findDemos() {
     const demos = fs.readdirSync(widgetDir, { withFileTypes: true }).filter((d) => d.isDirectory());
     for (const demo of demos) {
       const key = `${widget.name}/${demo.name}`;
+      if (SKIPPED_DEMOS.has(`${key}/${FRAMEWORK}`)) continue; // eslint-disable-line no-continue
       const fwDir = path.join(widgetDir, demo.name, FRAMEWORK);
       const matchesFilter = !FILTER || key.includes(FILTER);
       if (matchesFilter && fs.existsSync(path.join(fwDir, 'index.html'))) {

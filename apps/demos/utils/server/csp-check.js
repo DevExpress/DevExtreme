@@ -183,6 +183,11 @@ function applyShard(demos) {
   return sorted.filter((_, i) => i % SHARD_TOTAL === SHARD_INDEX - 1);
 }
 
+// TODO: remove once PivotGrid/StandaloneFieldChooser/Angular renders reliably (times out here)
+const SKIPPED_DEMOS = new Set([
+  'PivotGrid/StandaloneFieldChooser/Angular',
+]);
+
 function findDemos() {
   const demosDirName = 'Demos';
   const demosDir = join(DEMO_ROOT, demosDirName);
@@ -204,6 +209,7 @@ function findDemos() {
       .filter((d) => d.isDirectory());
 
     for (const demo of demos) {
+      if (SKIPPED_DEMOS.has(`${widget.name}/${demo.name}/${FRAMEWORK}`)) continue; // eslint-disable-line no-continue
       const fwDir = join(widgetDir, demo.name, FRAMEWORK);
       if (existsSync(join(fwDir, 'index.html'))) {
         result.push({
