@@ -7,7 +7,6 @@
 @use "../textEditor/index" as *;
 @use "../toolbar/sizes" as toolbarSizes;
 @use "../common/mixins" as *;
-@use "../common/sizes" as *;
 @use "../fileUploader/sizes" as fileUploaderSizes;
 @use "../popup/sizes" as popupSizes;
 @use "../../base/mixins" as *;
@@ -122,7 +121,7 @@
 }
 
 .dx-htmleditor-content {
-  line-height: $global-line-height;
+  line-height: var(--dx-global-line-height);
   padding: $html-editor-padding-block $html-editor-padding-inline;
 
   &.ql-blank::before { // stylelint-disable-line selector-class-pattern
@@ -189,7 +188,7 @@
 }
 
 .dx-htmleditor-toolbar-separator {
-  height: calc((#{toolbarSizes.$toolbar-height}) / 2);
+  height: calc(#{toolbarSizes.$toolbar-height} / 2);
   border-inline-start-color: $html-editor-toolbar-border;
 }
 
