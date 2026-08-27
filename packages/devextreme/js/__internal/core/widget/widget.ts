@@ -26,7 +26,7 @@ import { focusable as focusableSelector } from '@ts/core/utils/m_selectors';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 
 export const WIDGET_CLASS = 'dx-widget';
 export const DISABLED_STATE_CLASS = 'dx-state-disabled';
