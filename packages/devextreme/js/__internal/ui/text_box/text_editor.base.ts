@@ -953,7 +953,6 @@ class TextEditorBase<
     const input = this._input()[0];
     const activeElement = domAdapter.getActiveElement(input);
 
-    // @ts-expect-error dxElementWrapper
     return this._input().is(activeElement);
   }
 
