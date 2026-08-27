@@ -35,8 +35,7 @@ export default defineConfig<TestOptions>({
         viewport: { width: 1200, height: 800 },
         launchOptions: {
             args: ['--no-sandbox', '--disable-gpu'],
-            // Playwright hides scrollbars in headless by default, so the page gets no scrollbar
-            // gutter and its layout differs from a real browser and from the TestCafe etalons.
+            // Playwright hides scrollbars in headless by default, which changes the page layout.
             ignoreDefaultArgs: ['--hide-scrollbars'],
         },
         trace: 'retain-on-failure',
