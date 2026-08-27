@@ -8,6 +8,7 @@ const os = require('os');
 const esbuild = require('esbuild');
 const { extractDemoHeadExtras, extractDemoBodyInner } = require('./demo-html');
 const { createEntryShimSource } = require('./demo-render-signal');
+const { discoverTestGlobalsFromContent } = require('../visual-tests/test-globals-bundle');
 
 const DEMOS_APP_ROOT = path.resolve(__dirname, '..', '..');
 const REPO_ROOT = path.resolve(DEMOS_APP_ROOT, '..', '..');
@@ -102,11 +103,38 @@ function writeDemoTsconfig(shimPath, entryPath) {
 
 const allEntryShims = new Set();
 
+// React/Vue demos each get their own separate esbuild.build() call, so testUtils.importAnd
+// needs an out-of-band vendor bundle (test-globals-bundle.js) to guarantee the widget classes
+// it imports are the exact same module instances the demo itself resolved (getInstance() keys
+// off a per-bundle WeakMap). Angular demos in a shard are instead all compiled together in one
+// esbuild.build() call (see bundleDemoBatch) and already share one devextreme module graph via
+// its own code-split _chunks — so the same identity guarantee holds for free if the assignment
+// just happens inside the demo's own bundle, no separate vendor script needed.
+function demoTestGlobals(demo) {
+  const testCodePath = path.join(path.dirname(demo.srcDir), 'test-code.js');
+  if (!fs.existsSync(testCodePath)) return [];
+  const content = fs.readFileSync(testCodePath, 'utf8');
+  return Array.from(discoverTestGlobalsFromContent(content).entries());
+}
+
+function testGlobalsShimSource(entries) {
+  if (entries.length === 0) return '';
+  const namespaces = new Set(entries.map(([, accessorPath]) => accessorPath.split('.')[0]));
+  return `
+    Promise.all([${entries.map(([specifier]) => `import(${JSON.stringify(specifier)})`).join(', ')}]).then(function (m) {
+      window.DevExpress = window.DevExpress || {};
+      ${Array.from(namespaces).map((ns) => `window.DevExpress.${ns} = window.DevExpress.${ns} || {};`).join('\n      ')}
+      ${entries.map(([, accessorPath], i) => `window.DevExpress.${accessorPath} = m[${i}].default;`).join('\n      ')}
+    });
+`;
+}
+
 function writeEntryShim(demo, entryPath) {
   fs.mkdirSync(GENERATED_SHIM_DIR, { recursive: true });
   const slug = `${demo.widget}-${demo.name}`.replace(/[^a-zA-Z0-9_.-]/g, '_');
   const dest = path.join(GENERATED_SHIM_DIR, `${slug}.ts`);
-  fs.writeFileSync(dest, createEntryShimSource(entryPath, { tsNoCheck: true }));
+  const source = createEntryShimSource(entryPath, { tsNoCheck: true }) + testGlobalsShimSource(demoTestGlobals(demo));
+  fs.writeFileSync(dest, source);
   allEntryShims.add(dest);
   return dest;
 }
@@ -604,6 +632,11 @@ function makeBuildOptions({
     sourcemap: false,
     logLevel: 'silent',
     metafile: true,
+    // The Angular compiler plugin only pushes extracted stylesheet resources (component CSS
+    // background-image/font url()s that it externalizes rather than inlines) onto
+    // result.outputFiles — with write:true (esbuild's own auto-write) those bytes are never
+    // reported anywhere and the file silently never reaches disk. Written explicitly below.
+    write: false,
     plugins: [
       angularSingleCopyPlugin,
       antiForgeryPlugin,
@@ -617,6 +650,58 @@ function makeBuildOptions({
     absWorkingDir: DEMOS_APP_ROOT,
     nodePaths: [NODE_MODULES],
   };
+}
+
+// esbuild doesn't write anything with write:false — bundle.js/bundle.css and the shared
+// chunks have to be flushed to disk explicitly. Extracted stylesheet resources (images, fonts)
+// are handled separately by emitDemoResources, which places them where they're actually needed
+// rather than at the stray location this plugin computes them at.
+async function writeOutputFiles(outputFiles) {
+  const codeFiles = (outputFiles || []).filter((f) => /\.(js|css)$/i.test(f.path));
+  await Promise.all(codeFiles.map(async (file) => {
+    await fs.promises.mkdir(path.dirname(file.path), { recursive: true });
+    await fs.promises.writeFile(file.path, file.contents);
+  }));
+}
+
+// Extracted stylesheet resources (background-image/font url()s the Angular compiler
+// externalizes) land wherever its internal stylesheet bundler happens to place them — not
+// necessarily next to the demo that references them. A relative CSS url() injected via a
+// runtime <style> tag resolves against the demo's own index.html, so the referenced file also
+// needs to exist as a sibling `media/` folder of that specific demo.
+function demoAssetBasenames(demo) {
+  const basenames = new Set();
+  for (const cssFile of discoverComponentStyleFiles([demo.entry])) {
+    if (fs.existsSync(cssFile)) {
+      const src = fs.readFileSync(cssFile, 'utf8');
+      for (const m of src.matchAll(URL_RE)) {
+        const spec = m[2];
+        const isExternal = path.isAbsolute(spec) || /^[a-z][\w+.-]*:/i.test(spec) || spec.startsWith('#');
+        if (!isExternal) {
+          basenames.add(path.basename(spec.split(/[?#]/)[0]));
+        }
+      }
+    }
+  }
+  return basenames;
+}
+
+async function emitDemoResources(demoDestDirs, outputFiles) {
+  const resourceFiles = (outputFiles || []).filter((f) => !/\.(js|css)$/i.test(f.path));
+  if (resourceFiles.length === 0) return;
+  const byBasename = new Map(resourceFiles.map((f) => [path.basename(f.path), f]));
+
+  await Promise.all(demoDestDirs.map(async ({ demo, destDir }) => {
+    const basenames = demoAssetBasenames(demo);
+    await Promise.all([...basenames].map(async (basename) => {
+      const file = byBasename.get(basename);
+      if (file) {
+        const dest = path.join(destDir, 'media', basename);
+        await fs.promises.mkdir(path.dirname(dest), { recursive: true });
+        await fs.promises.writeFile(dest, file.contents);
+      }
+    }));
+  }));
 }
 
 async function bundleDemo(demo, createCompilerPlugin, destDirOverride) {
@@ -638,6 +723,8 @@ async function bundleDemo(demo, createCompilerPlugin, destDirOverride) {
       createCompilerPlugin,
       splitting: false,
     }));
+    await writeOutputFiles(result.outputFiles);
+    await emitDemoResources([{ demo: prepared, destDir }], result.outputFiles);
   } catch (err) {
     return { ok: false, reason: (err && err.message) || String(err) };
   }
@@ -672,13 +759,18 @@ async function bundleDemoBatch(batch, createCompilerPlugin) {
   const tsconfig = writeTsconfig(`batch-${batch[0].widget}-${batch[0].name}-${batch.length}-${Date.now()}`, entryPaths);
   const fileReplacements = mergeFileReplacements(batch);
   try {
-    await esbuild.build(makeBuildOptions({
+    const result = await esbuild.build(makeBuildOptions({
       entryPoints,
       outdir: SRC_DEMOS_DIR,
       tsconfig,
       fileReplacements,
       createCompilerPlugin,
     }));
+    await writeOutputFiles(result.outputFiles);
+    await emitDemoResources(
+      batch.map((demo) => ({ demo, destDir: path.join(SRC_DEMOS_DIR, demo.widget, demo.name, FRAMEWORK) })),
+      result.outputFiles,
+    );
   } catch (err) {
     return { ok: false, reason: (err && err.message) || String(err) };
   }

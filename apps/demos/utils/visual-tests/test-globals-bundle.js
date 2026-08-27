@@ -1,5 +1,7 @@
 // Exposes the devextreme widgets test-code.js needs as window.DevExpress, matching real
-// React/Vue demos by identity via vendorGlobalPlugin (Angular has no equivalent mechanism).
+// React/Vue demos by identity via vendorGlobalPlugin. Angular doesn't use this file's own
+// build — csp-bundle-angular.js reuses discoverTestGlobalsFromContent to do the same
+// assignment inside each demo's own bundle instead (see its module doc comment).
 
 const fs = require('fs');
 const path = require('path');
@@ -19,25 +21,34 @@ function parseList(raw) {
   return [raw.replace(/'/g, '')];
 }
 
+// Shared with csp-bundle-angular.js, which runs this against a single demo's own test-code.js
+// instead of globbing every demo (Angular doesn't need a separate vendor script to expose
+// window.DevExpress — its batch build already shares one devextreme module instance across a
+// shard, so the per-demo bundle can just do the assignment itself).
+function discoverTestGlobalsFromContent(content, specifierToPath = new Map()) {
+  IMPORT_AND_RE.lastIndex = 0;
+  let match = IMPORT_AND_RE.exec(content);
+  while (match) {
+    const specifiers = parseList(match[1]);
+    const accessors = parseList(match[2]);
+    specifiers.forEach((specifier, i) => {
+      const accessor = accessors[i];
+      if (specifier && accessor) {
+        specifierToPath.set(specifier, accessor.replace(/^DevExpress\./, ''));
+      }
+    });
+    match = IMPORT_AND_RE.exec(content);
+  }
+  return specifierToPath;
+}
+
 function discoverTestGlobals() {
   const specifierToPath = new Map();
   const files = glob.sync('Demos/**/test-code.js', { cwd: DEMOS_ROOT });
 
   for (const file of files) {
     const content = fs.readFileSync(path.join(DEMOS_ROOT, file), 'utf8');
-    IMPORT_AND_RE.lastIndex = 0;
-    let match = IMPORT_AND_RE.exec(content);
-    while (match) {
-      const specifiers = parseList(match[1]);
-      const accessors = parseList(match[2]);
-      specifiers.forEach((specifier, i) => {
-        const accessor = accessors[i];
-        if (specifier && accessor) {
-          specifierToPath.set(specifier, accessor.replace(/^DevExpress\./, ''));
-        }
-      });
-      match = IMPORT_AND_RE.exec(content);
-    }
+    discoverTestGlobalsFromContent(content, specifierToPath);
   }
 
   return specifierToPath;
@@ -104,4 +115,4 @@ function getTestGlobalsScriptPath(framework) {
   return fs.existsSync(outFile) ? outFile : '';
 }
 
-module.exports = { buildTestGlobalsScript, getTestGlobalsScriptPath };
+module.exports = { buildTestGlobalsScript, getTestGlobalsScriptPath, discoverTestGlobalsFromContent };

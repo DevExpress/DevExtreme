@@ -27,6 +27,7 @@ Demos/**/tsconfig.json
 
 Demos/**/bundle.js
 Demos/**/bundle.css
+Demos/**/media
 Demos/**/demo.manifest.json
 Demos/_chunks
 Demos/**/_chunks
