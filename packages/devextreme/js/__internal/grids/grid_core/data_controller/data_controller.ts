@@ -720,9 +720,7 @@ export class DataController extends modules.Controller {
 
     const isSharedDataSource = dataSourceOptions instanceof DataSourceClass;
 
-    if (isSharedDataSource) {
-      this._isSharedDataSource = true;
-    }
+    this._isSharedDataSource = isSharedDataSource;
 
     const dataSource = (isSharedDataSource
       ? dataSourceOptions
