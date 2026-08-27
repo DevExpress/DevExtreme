@@ -13,8 +13,10 @@ $backdrop-bg: ds.$color-bg-backdrop !default;
 $global-dropdown-shadow-ambient: ds.$color-shadow-ambient !default;
 $global-dropdown-shadow-key: ds.$color-shadow-key !default;
 
-// Focus ring for the widgets that draw one themselves: the accent role, as in legacy fluent.
-$focus-rect-outline: ds.$color-bg-primary !default;
+// Focus ring for the widgets that draw one themselves. One role for every focus ring in the
+
+// theme, including cardView: mode-dependent, so the ring keeps 3:1 contrast in both modes.
+$focus-rect-outline: ds.$color-border-primary-shared !default;
 
 $palette-accent: ds.$color-bg-primary !default;
 $palette-bg: ds.$color-bg !default;
