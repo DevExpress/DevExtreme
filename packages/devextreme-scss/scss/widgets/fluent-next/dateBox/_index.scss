@@ -95,7 +95,7 @@
   }
 }
 
-@media (max-width: 320px) {
+@media (max-width: 320px) { // dx-literal-required: 320px in a @media condition, var() is invalid there
   .dx-datebox-wrapper-calendar .dx-calendar {
     margin: var(--dx-date-box-overlay-item-adaptive-margin);
   }
