@@ -1,4 +1,5 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
+import { Selector } from 'testcafe';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
@@ -39,6 +40,8 @@ test('Scheduler table elements have right aria attributes', async (t) => {
       tables.nth(i).getAttribute('aria-hidden'),
     ).eql('true');
   }
+
+  await t.hover(Selector('.dx-scheduler-date-table-other-month'));
 
   await a11yCheck(t, a11yCheckConfig, '#container');
 }).before(async () => {
