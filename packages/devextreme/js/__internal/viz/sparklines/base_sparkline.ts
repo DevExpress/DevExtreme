@@ -19,8 +19,8 @@ import { extend } from '@js/core/utils/extend';
 import { isFunction } from '@js/core/utils/type';
 // PLUGINS_SECTION
 // T422022
+import BaseWidget from '@ts/viz/core/base_widget';
 import { plugin } from '@ts/viz/core/export';
-import BaseWidget from '@ts/viz/core/m_base_widget';
 // PLUGINS_SECTION
 import { plugin as tooltipPlugin } from '@ts/viz/core/tooltip';
 import { pointInCanvas } from '@ts/viz/core/utils';

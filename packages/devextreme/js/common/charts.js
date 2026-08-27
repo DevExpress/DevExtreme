@@ -1,3 +1,3 @@
-import { registerPattern, registerGradient } from '../__internal/common/m_charts';
+import { registerPattern, registerGradient } from '../__internal/common/charts';
 
 export { registerPattern, registerGradient };

@@ -1,3 +1,16 @@
+/* eslint-disable @stylistic/no-mixed-operators */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable consistent-return */
+/* eslint-disable max-depth */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-plusplus */
+/* eslint-disable prefer-rest-params */
+/* eslint-disable prefer-spread */
+
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
@@ -15,7 +28,7 @@ import { getWindow, hasWindow } from '@js/core/utils/window';
 import warnings from '@js/viz/core/errors_warnings';
 // @ts-expect-error
 import { areCanvasesDifferent, floorCanvasDimensions } from '@js/viz/utils';
-import graphicObject from '@ts/common/m_charts';
+import graphicObject from '@ts/common/charts';
 import { BaseThemeManager } from '@ts/viz/core/base_theme_manager';
 import {
   createEventTrigger,
