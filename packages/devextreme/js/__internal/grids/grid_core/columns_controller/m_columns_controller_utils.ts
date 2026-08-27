@@ -656,7 +656,10 @@ export const updateColumnChanges = (
   resetColumnsCache(that);
 };
 
-export const fireColumnsChanged = function (that: ColumnsController) {
+export const fireColumnsChanged = function (
+  that: ColumnsController,
+  options?: { needToResize?: boolean },
+): void {
   const onColumnsChanging: any = that.option('onColumnsChanging');
   const columnChanges = that._columnChanges;
   const reinitOptionNames = ['dataField', 'lookup', 'dataType', 'columns'];
@@ -674,7 +677,10 @@ export const fireColumnsChanged = function (that: ColumnsController) {
       that.reinit();
       that._reinitAfterLookupChanges = undefined;
     } else {
-      that.columnsChanged.fire(columnChanges);
+      that.columnsChanged.fire({
+        ...columnChanges,
+        ...options,
+      });
     }
   }
 };

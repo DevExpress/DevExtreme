@@ -56,4 +56,5 @@ export interface ColumnsChanges {
   };
   columnIndex?: number;
   columnIndices?: number[];
+  needToResize?: boolean;
 }

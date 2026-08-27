@@ -21,6 +21,7 @@ import type { FooterView } from '../../data_grid/summary/m_summary';
 import type { AdaptiveColumnsController } from '../adaptivity/m_adaptivity';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { ColumnsChanges } from '../columns_controller/types';
 import type { DataController } from '../data_controller/data_controller';
 import type { DataChange } from '../data_controller/types';
 import modules from '../m_modules';
@@ -119,6 +120,8 @@ export class ResizingController extends modules.ViewController {
 
   private _editorFactoryController!: EditorFactory;
 
+  private columnsChangedHandler!: (e: ColumnsChanges) => void;
+
   protected _updateScrollableTimeoutID: any;
 
   public resizeCompleted!: Callback;
@@ -137,6 +140,19 @@ export class ResizingController extends modules.ViewController {
     this._footerView = this.getView('footerView');
     this._rowsView = this.getView('rowsView');
     this._gridView = this.getView('gridView');
+
+    if (!this.columnsChangedHandler) {
+      this.columnsChangedHandler = (): void => {
+        this._columnsController.columnsChanged.remove(this.columnsChangedHandler);
+        this.resize();
+      };
+
+      this._columnsController.columnsChanged.add((e: ColumnsChanges) => {
+        if (e.needToResize) {
+          this._columnsController.columnsChanged.add(this.columnsChangedHandler);
+        }
+      });
+    }
   }
 
   private _initPostRenderHandlers() {

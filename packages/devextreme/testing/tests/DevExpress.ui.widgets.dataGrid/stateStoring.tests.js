@@ -1119,9 +1119,13 @@ QUnit.module('State Storing with real controllers', {
 
     // T308264
     QUnit.test('Not save user state when the visibleWidth option in column changed', function(assert) {
-    // arrange, act
+        // arrange, act
         let userState;
         let customSaveCallCount = 0;
+
+        this.$element = function() {
+            return $('#container');
+        };
 
         this.setupDataGridModules({
             sorting: { mode: 'single' },
@@ -1142,6 +1146,10 @@ QUnit.module('State Storing with real controllers', {
                 store: [{ id: 1 }, { id: 2 }, { id: 3 }]
             }
         });
+
+        this.gridView.render(this.$element());
+        this.gridView.update();
+        this.clock.tick(200);
 
         // assert
         assert.strictEqual(customSaveCallCount, 1, 'customSave call count');

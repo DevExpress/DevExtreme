@@ -1508,8 +1508,24 @@ export class ColumnsController extends modules.Controller {
         });
       }
 
-      fireColumnsChanged(that);
+      // Can we simply write:
+      //
+      // fireColumnsChanged(that, { needToResize: !notFireEvent && this.needToResize(option) });
+      //
+      // But the QUnit tests that check the structure of the columnsChanged callback
+      // argument will fail because a new needToResize property will be added.
+      // We’ll just need to update the expected structure in those tests.
+      fireColumnsChanged(that, !notFireEvent && this.needToResize(option) ? { needToResize: true } : undefined);
     }
+  }
+
+  private needToResize(option: string | Record<string, unknown>): boolean {
+    const isWidthChanging = isObject(option)
+      ? 'width' in option
+      : option === 'width';
+    const isUpdateAllowed = !this._updateLockCount && !this.component._updateLockCount;
+
+    return isWidthChanging && isUpdateAllowed;
   }
 
   private clearSorting() {
