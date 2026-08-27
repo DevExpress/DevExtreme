@@ -70,6 +70,7 @@
     },
     "build:themes": {
       "executor": "devextreme-nx-infra-plugin:scss-build",
+      "parallelism": false,
       "options": {
         "mode": "all"
       },
@@ -211,6 +212,7 @@
       },
       "dependsOn": [
         "build:tokens",
+        "build:themes",
         "typecheck"
       ],
       "inputs": [
