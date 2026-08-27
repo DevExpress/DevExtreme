@@ -1257,9 +1257,6 @@ importers:
       luxon:
         specifier: 3.4.4
         version: 3.4.4
-      minimist:
-        specifier: 1.2.8
-        version: 1.2.8
       react:
         specifier: ^19.2.8
         version: 19.2.8

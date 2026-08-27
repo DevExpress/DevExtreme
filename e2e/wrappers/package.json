@@ -40,7 +40,6 @@
     "inferno-create-element": "^8.2.0",
     "jszip": "^3.10.1",
     "luxon": "3.4.4",
-    "minimist": "1.2.8",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-router": "^8.3.0",

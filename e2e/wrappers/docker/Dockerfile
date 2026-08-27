@@ -1,6 +1,4 @@
-# Mirrors the environment the tests get on CI: Ubuntu 24.04, Node from .node-version and
-# Google Chrome pinned to the version the workflow installs. Keep the font packages in sync
-# with the CI runner image — they affect text rendering and, later, screenshot comparison.
+# Mirrors the environment the tests get on CI.
 FROM ubuntu:24.04
 
 ARG NODE_VERSION

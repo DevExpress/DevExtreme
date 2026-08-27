@@ -43,7 +43,7 @@ export default defineConfig<TestOptions>({
         screenshot: 'only-on-failure',
     },
     webServer: {
-        command: `node ./serve.js --framework=${framework} --port=${port}`,
+        command: `node ./serve.mjs --framework=${framework} --port=${port}`,
         url: baseURL,
         reuseExistingServer: !process.env.CI,
         timeout: 30000,
