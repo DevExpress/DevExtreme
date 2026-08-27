@@ -28,6 +28,17 @@ export const collectCustomPropertyReferences = (content: string, source: string)
   ...stripScssComments(content, source).matchAll(/var\(\s*--dxds-([\w-]+)/g),
 ].map(([, name]) => name);
 
+// Demo code is CSS, HTML and framework markup, not Sass: `//` opens no comment there (it lives
+// inside every URL), and an unpaired `/*` is normal in a string or a regex. So this collector
+// strips only the delimited forms and never throws — a scan of somebody else's files must not be
+// able to fail the build on their punctuation.
+export const collectMarkupCustomPropertyReferences = (content: string): string[] => [
+  ...content
+    .replace(/\/\*[\s\S]*?\*\//g, ' ')
+    .replace(/<!--[\s\S]*?-->/g, ' ')
+    .matchAll(/var\(\s*--dxds-([\w-]+)/g),
+].map(([, name]) => name);
+
 // The index spans every design system and names repeat across them, so it is narrowed to the
 // source files the bridge is generated from.
 export const buildAvailableNames = (
