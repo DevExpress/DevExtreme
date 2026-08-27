@@ -1,27 +1,35 @@
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, fireEvent } from '@js/common/core/events/utils/index';
-import Class from '@js/core/class';
 import domAdapter from '@js/core/dom_adapter';
 import { closestCommonParent } from '@js/core/utils/dom';
+import type { EmitterEvent } from '@ts/events/core/emitter';
 
 const DBLCLICK_EVENT_NAME = 'dxdblclick';
 const DBLCLICK_NAMESPACE = 'dxDblClick';
 const NAMESPACED_CLICK_EVENT = addNamespace(clickEventName, DBLCLICK_NAMESPACE);
 const DBLCLICK_TIMEOUT = 300;
 
-const DblClick = Class.inherit({
-  ctor() {
+class DblClick {
+  _handlerCount: number;
+
+  _firstClickTarget?: Element | null;
+
+  _lastClickTimeStamp!: number;
+
+  _lastClickClearTimeout?: ReturnType<typeof setTimeout>;
+
+  constructor() {
     this._handlerCount = 0;
     this._forgetLastClick();
-  },
+  }
 
-  _forgetLastClick() {
+  _forgetLastClick(): void {
     this._firstClickTarget = null;
     this._lastClickTimeStamp = -DBLCLICK_TIMEOUT;
-  },
+  }
 
-  add() {
+  add(): void {
     if (this._handlerCount <= 0) {
       eventsEngine.on(
         domAdapter.getDocument(),
@@ -30,11 +38,10 @@ const DblClick = Class.inherit({
       );
     }
 
-    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     this._handlerCount += 1;
-  },
+  }
 
-  _clickHandler(e) {
+  _clickHandler(e: EmitterEvent): void {
     const timeStamp = e.timeStamp || Date.now();
     const timeBetweenClicks = timeStamp - this._lastClickTimeStamp;
     // NOTE: jQuery sets `timeStamp = Date.now()` for the triggered events, but
@@ -59,9 +66,9 @@ const DblClick = Class.inherit({
         this._forgetLastClick();
       }, DBLCLICK_TIMEOUT * 2);
     }
-  },
+  }
 
-  remove() {
+  remove(): void {
     this._handlerCount -= 1;
 
     if (this._handlerCount <= 0) {
@@ -71,9 +78,8 @@ const DblClick = Class.inherit({
 
       this._handlerCount = 0;
     }
-  },
-
-});
+  }
+}
 
 const dblClick = new DblClick();
 
