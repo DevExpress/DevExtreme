@@ -499,7 +499,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
 
         // assert
@@ -532,7 +532,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         // assert
         assert.deepEqual(this.dataController._dataSource.group(), [{ selector: 'name', isExpanded: false, desc: false }]);
@@ -569,7 +569,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         this.dataController.changed.add(function() {
             changedCallCount++;
@@ -623,7 +623,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         this.dataController.changed.add(function() {
             changedCallCount++;
@@ -667,7 +667,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             columns: ['name', 'age']
         });
 
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         this.dataController.changed.add(function() {
             changedCallCount++;
@@ -722,7 +722,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             ]
         });
 
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         const itemsCount = this.dataController.items().length;
 
@@ -755,7 +755,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             ]
         });
 
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         // act
         this.dataController.expandAll(1);
@@ -785,7 +785,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         // assert
         assert.equal(dataSource.items()[0].name, 'Alex', 'Item name is Alex');
         assert.equal(dataSource.items()[1].name, 'Alice', 'Item name is Alice');
@@ -814,7 +814,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         // assert
         assert.strictEqual(dataSource.sort(), null, 'sort is not defined');
@@ -841,7 +841,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         // assert
         assert.equal(dataSource.items()[0].name, 'Alex', 'Item0');
         assert.equal(dataSource.items()[1].name, 'Dan', 'Item1');
@@ -872,7 +872,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         const dataIndexGetter = this.dataController._dataSource.getDataIndexGetter();
         this.dataController._dataSource.getDataIndexGetter();
         assert.deepEqual(this.dataController._columnsController.getSortDataSourceParameters(), [{ desc: false, selector: dataIndexGetter }], 'Sort parameters');
@@ -902,7 +902,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             focusedRowEnabled: true
         });
 
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         // act
         const item0 = items.splice(0, 1)[0];
@@ -934,7 +934,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         const filter = this.dataController._generateOperationFilterByKey('Dan', data[1], false);
 
@@ -984,7 +984,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         this.dataController.getPageIndexByKey('Alice').done(function(pageIndex) {
             ++count;
             assert.equal(pageIndex, 3);
@@ -1009,7 +1009,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         this.dataController.getPageIndexByKey('Alice').done(function(pageIndex) {
             ++count;
             assert.equal(pageIndex, 1);
@@ -1037,7 +1037,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         dataSource.store().on('loading', loadingSpy);
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         assert.equal(loadingSpy.callCount, 1, 'loading count');
 
         this.dataController.getPageIndexByKey(['Alice']).done(function(pageIndex) {
@@ -1066,7 +1066,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         this.dataController.getPageIndexByKey({ name: 'Bob', age: 25 }).done(function(pageIndex) {
             assert.equal(pageIndex, 1);
         });
@@ -1092,7 +1092,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         this.dataController.getPageIndexByKey('Alice').done(function(pageIndex) {
             assert.equal(pageIndex, 2);
         });
@@ -1118,7 +1118,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         this.dataController.getPageIndexByKey({ name: 'Bob', age: 20 }).done(function(pageIndex) {
             assert.equal(pageIndex, 1);
         });
@@ -1152,7 +1152,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         this.dataController.getPageIndexByKey('Den').done(function(pageIndex) {
             assert.equal(pageIndex, 0);
         });
@@ -1186,7 +1186,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         this.dataController.getPageIndexByKey({ name: 'Alice', age: 19 }).done(function(pageIndex) {
             assert.equal(pageIndex, 1);
         });
@@ -1209,7 +1209,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         assert.equal(this.dataController.pageCount(), 2);
         this.dataController.getPageIndexByKey('Bob').done(function(pageIndex) {
             assert.equal(pageIndex, 1);
@@ -1234,7 +1234,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         assert.equal(this.dataController.pageCount(), 4);
         this.dataController.getPageIndexByKey('Bob').done(function(pageIndex) {
             assert.equal(pageIndex, 3);
@@ -1262,7 +1262,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         const dataController = this.dataController;
-        dataController._refreshDataSource();
+        dataController.resetDataSource();
         // assert
         dataController.getPageIndexByKey({ name: 'Bob', age: 24 }).done(function(pageIndex) {
             assert.equal(dataController.pageCount(), 5);
@@ -1293,7 +1293,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         const dataController = this.dataController;
-        dataController._refreshDataSource();
+        dataController.resetDataSource();
         // assert
         dataController.getGlobalRowIndexByKey('Mark').done(function(globalRowIndex) {
             ++foundRowCount;
@@ -1349,7 +1349,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         const dataController = this.dataController;
-        dataController._refreshDataSource();
+        dataController.resetDataSource();
 
         // act
         dataController.getGlobalRowIndexByKey('Bob').done(function(globalRowIndex) {
@@ -1377,7 +1377,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
                 // act
                 const dataController = this.dataController;
-                dataController._refreshDataSource();
+                dataController.resetDataSource();
 
                 // assert
                 dataController.getGlobalRowIndexByKey(1).done(globalRowIndex => {
@@ -1413,7 +1413,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         const dataController = this.dataController;
-        dataController._refreshDataSource();
+        dataController.resetDataSource();
         // assert
         dataController.getGlobalRowIndexByKey('Sad').done(function(globalRowIndex) {
             ++foundRowCount;
@@ -1481,7 +1481,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         const dataController = this.dataController;
-        dataController._refreshDataSource();
+        dataController.resetDataSource();
         // assert
         dataController.getGlobalRowIndexByKey('Sad').done(function(globalRowIndex) {
             ++foundRowCount;
@@ -1549,7 +1549,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         const dataController = this.dataController;
-        dataController._refreshDataSource();
+        dataController.resetDataSource();
         // assert
         dataController.getGlobalRowIndexByKey('Sad').done(function(globalRowIndex) {
             ++foundRowCount;
@@ -1616,7 +1616,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         const dataController = this.dataController;
-        dataController._refreshDataSource();
+        dataController.resetDataSource();
         // assert
         dataController.getGlobalRowIndexByKey('Alex').done(function(globalRowIndex) {
             ++foundRowCount;
@@ -1684,7 +1684,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         const dataController = this.dataController;
-        dataController._refreshDataSource();
+        dataController.resetDataSource();
         // assert
         dataController.getGlobalRowIndexByKey('Alex').done(function(globalRowIndex) {
             ++foundRowCount;
@@ -1756,7 +1756,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         const dataController = this.dataController;
-        dataController._refreshDataSource();
+        dataController.resetDataSource();
         // assert
         dataController.getGlobalRowIndexByKey('Alex').done(function(globalRowIndex) {
             ++foundRowCount;
@@ -1824,7 +1824,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         const dataController = this.dataController;
-        dataController._refreshDataSource();
+        dataController.resetDataSource();
         // assert
         dataController.getGlobalRowIndexByKey('Alex').done(function(globalRowIndex) {
             ++foundRowCount;
@@ -1891,7 +1891,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         const dataController = this.dataController;
-        dataController._refreshDataSource();
+        dataController.resetDataSource();
         // assert
         dataController.getGlobalRowIndexByKey('Alex').done(function(globalRowIndex) {
             ++foundRowCount;
@@ -1952,7 +1952,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         // assert
         assert.deepEqual(this.dataController._dataSource.group(), [{ selector: 'team', isExpanded: true, desc: false }]);
@@ -2759,7 +2759,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // actt
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         // assert
         assert.deepEqual(this.dataController.dataSource().remoteOperations(), {}, 'remote operations set correct');
@@ -2777,7 +2777,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // actt
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         // assert
         assert.deepEqual(this.dataController.dataSource().remoteOperations(), {
@@ -2804,7 +2804,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // actt
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         // assert
         assert.deepEqual(this.dataController.dataSource().remoteOperations(), {
@@ -2827,7 +2827,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // actt
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         // assert
         assert.deepEqual(this.dataController.dataSource().remoteOperations(), {}, 'remote operations set correct');
@@ -2844,7 +2844,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // actt
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         // assert
         assert.deepEqual(this.dataController.dataSource().remoteOperations(), { filtering: true, sorting: true, paging: true, grouping: true, summary: true }, 'remote operations set correct');
@@ -2886,7 +2886,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         // assert
         const items = this.dataController.items();
@@ -3386,7 +3386,7 @@ QUnit.module('Paging', { beforeEach: setupPagingModule, afterEach: teardownPagin
             pageIndex: 1
         };
 
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         assert.equal(this.dataController.pageIndex(), 1);
         assert.equal(this.dataController.pageCount(), 3);
@@ -4006,7 +4006,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
             filtering: true,
             paging: true
         });
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         this.clock.tick(300);
 
         const rowsScrollController = this.dataController._rowsScrollController;
