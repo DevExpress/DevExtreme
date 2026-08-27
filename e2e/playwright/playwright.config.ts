@@ -1,7 +1,7 @@
 import { defineConfig } from '@playwright/test';
 import type { TestOptions } from './fixtures';
 import {
-  DEFAULT_BROWSER_SIZE, DEFAULT_THEME, SERVER_PORT, TEST_PAGE_URL,
+  DEFAULT_BROWSER_SIZE, DEFAULT_THEME, readEnv, SERVER_PORT, TEST_PAGE_URL,
 } from './helpers/const';
 
 const baseURL = `http://localhost:${SERVER_PORT}`;
@@ -29,10 +29,10 @@ export default defineConfig<TestOptions>({
     toHaveScreenshot: screenshotBudget,
   },
   use: {
-    theme: process.env.THEME ?? DEFAULT_THEME,
+    theme: readEnv(process.env.THEME, DEFAULT_THEME),
     // The TestCafe run changes the machine timezone on the CI agent; the browser context
     // takes it per run instead, so the same agent can serve any timezone job.
-    timezoneId: process.env.TIMEZONE ?? 'GMT',
+    timezoneId: readEnv(process.env.TIMEZONE, 'GMT'),
     baseURL,
     channel: 'chrome',
     headless: true,

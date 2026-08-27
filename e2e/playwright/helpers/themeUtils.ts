@@ -1,6 +1,6 @@
-import { DEFAULT_THEME } from './const';
+import { DEFAULT_THEME, readEnv } from './const';
 
-export const getFullThemeName = (): string => process.env.THEME ?? DEFAULT_THEME;
+export const getFullThemeName = (): string => readEnv(process.env.THEME, DEFAULT_THEME);
 
 export const getThemeName = (): string => getFullThemeName().split('.')[0];
 
