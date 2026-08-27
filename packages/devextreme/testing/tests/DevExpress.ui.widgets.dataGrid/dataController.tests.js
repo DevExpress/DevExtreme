@@ -7746,7 +7746,7 @@ QUnit.module('Filtering', {
             remoteOperations: { filtering: true }
         });
 
-        this.dataController._isSharedDataSource = true;
+        this.dataController.isSharedDataSource = true;
         this.dataController.setDataSource(this.dataSource);
 
         let loadingCount = 0;
