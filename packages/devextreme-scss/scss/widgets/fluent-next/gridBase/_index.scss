@@ -198,7 +198,7 @@
       .dx-sort-index-icon {
         padding-right: var(--dx-grid-sort-index-icon-padding-inline-end);
         margin-left: var(--dx-grid-sort-index-icon-margin-inline-start);
-        font-size: calc(var(--dx-grid-header-cell-font-size) - 1px);
+        font-size: calc(var(--dx-grid-header-cell-font-size) - 1px); // dx-px-nudge: -1px off the header cell font size
         position: relative;
         bottom: var(--dx-grid-sort-index-icon-inset-block-end);
       }
@@ -239,10 +239,10 @@
     .dx-error-row {
       .dx-closebutton {
         float: right;
-        margin: calc(var(--dx-grid-cell-padding-block) + 2px);
+        margin: calc(var(--dx-grid-cell-padding-block) + 2px); // dx-px-nudge: +2px over the cell padding
 
         @include dx-icon(close);
-        @include dx-icon-sizing(14px);
+        @include dx-icon-sizing(14px); // dx-icon-glyph-size: 14px, the error row close glyph
       }
 
       .dx-error-message {
@@ -288,7 +288,7 @@
     }
 
     .dx-#{$widget-name}-rowsview .dx-virtual-row > td[style*="text-align: right"]:before {
-      background-position-y: 49px;
+      background-position-y: 49px; // dx-fixed-size: 49px sprite offset
     }
 
     .dx-command-drag {
@@ -621,7 +621,7 @@
 
   .dx-#{$widget-name}-headers.dx-#{$widget-name}-scroller-spacing {
     > .dx-#{$widget-name}-scroll-container:not(.dx-#{$widget-name}-content-fixed) {
-      box-shadow: 1px 0 0 var(--dx-grid-border);
+      box-shadow: 1px 0 0 var(--dx-grid-border); // dx-line-width: 1px hairline drawn as a shadow
     }
   }
 
@@ -675,7 +675,7 @@
 
         .dx-texteditor-input {
           font-size: var(--dx-grid-cell-font-size);
-          height: calc(var(--dx-grid-cell-height) + 1px);
+          height: calc(var(--dx-grid-cell-height) + 1px); // dx-px-nudge: +1px over the cell height
           padding-right: var(--dx-grid-filter-row-editor-padding-inline);
           padding-left: var(--dx-grid-filter-row-editor-padding-inline);
         }
@@ -881,8 +881,8 @@
 
     &.dx-#{$widget-name}-sticky-columns {
       .dx-row.dx-edit-row > td:not(.dx-master-detail-cell) .dx-texteditor-input {
-        height: calc(var(--dx-grid-cell-height) - 2px);
-        line-height: calc(var(--dx-grid-cell-height) - 2px);
+        height: calc(var(--dx-grid-cell-height) - 2px); // dx-px-nudge: -2px off the cell height
+        line-height: calc(var(--dx-grid-cell-height) - 2px); // dx-px-nudge: -2px off the cell height
       }
 
       .dx-master-detail-row > .dx-master-detail-cell {
@@ -931,7 +931,7 @@
     }
 
     .dx-revert-button {
-      @include dx-button-sizing(2px, 2px, 2px, 18px, 0);
+      @include dx-button-sizing(2px, 2px, 2px, 18px, 0); // dx-fixed-size: 2px paddings and an 18px icon of the revert button
 
       border-radius: buttonSizes.$button-border-radius;
 
@@ -975,7 +975,7 @@
 
     .dx-#{$widget-name}-headers.dx-#{$widget-name}-scroller-spacing {
       > .dx-#{$widget-name}-scroll-container:not(.dx-#{$widget-name}-content-fixed) {
-        box-shadow: -1px 0 0 var(--dx-grid-border);
+        box-shadow: -1px 0 0 var(--dx-grid-border); // dx-line-width: 1px hairline drawn as a shadow
       }
     }
 

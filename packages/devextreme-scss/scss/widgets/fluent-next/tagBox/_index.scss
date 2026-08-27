@@ -20,8 +20,8 @@
 
   &.dx-editor-underlined {
     .dx-tag-container {
-      padding-top: calc(var(--dx-tag-box-tag-container-padding-block) + 1px);
-      padding-bottom: calc(var(--dx-tag-box-tag-container-padding-block) + 1px);
+      padding-top: calc(var(--dx-tag-box-tag-container-padding-block) + 1px); // dx-px-nudge: +1px over the tag container padding
+      padding-bottom: calc(var(--dx-tag-box-tag-container-padding-block) + 1px); // dx-px-nudge: +1px over the tag container padding
     }
   }
 
@@ -64,8 +64,8 @@
     &.dx-editor-underlined {
       .dx-tag-container,
       .dx-placeholder::before {
-        padding-top: calc(var(--dx-tag-box-filled-with-label-padding-block-start) + 1px);
-        padding-bottom: calc(var(--dx-tag-box-filled-with-label-padding-block-end) + 1px);
+        padding-top: calc(var(--dx-tag-box-filled-with-label-padding-block-start) + 1px); // dx-px-nudge: +1px over the filled label padding
+        padding-bottom: calc(var(--dx-tag-box-filled-with-label-padding-block-end) + 1px); // dx-px-nudge: +1px over the filled label padding
       }
     }
   }
@@ -118,7 +118,7 @@
 
   @include dx-icon(clear);
 
-  font-size: calc(var(--dx-tag-box-tag-content-font-size) + 2px);
+  font-size: calc(var(--dx-tag-box-tag-content-font-size) + 2px); // dx-px-nudge: +2px over the tag content font size
 
   &::before {
     content: "\f15f";

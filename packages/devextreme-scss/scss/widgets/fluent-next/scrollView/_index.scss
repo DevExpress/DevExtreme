@@ -21,7 +21,7 @@
 .dx-scrollview-scrollbottom-text,
 .dx-scrollview-pull-down-text {
   margin-left: var(--dx-scroll-view-pull-down-text-margin-inline-start);
-  top: calc((50px - #{$global-font-size}) / 2);
+  top: calc((50px - #{$global-font-size}) / 2); // dx-fixed-size: 50px pull-down area height
   display: inline-block;
 
   .dx-rtl & {
@@ -40,7 +40,7 @@
 
 .dx-scrollable-native.dx-scrollable-native-android .dx-scrollview-pull-down {
   background-color: scrollableColors.$scrollable-bg;
-  box-shadow: 0 1px 4px 0 var(--dx-scroll-view-shadow);
+  box-shadow: 0 1px 4px 0 var(--dx-scroll-view-shadow); // dx-shadow-geometry: 0 1px 4px
 }
 
 .dx-scrollview-scrollbottom-loading {
@@ -60,7 +60,7 @@
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 1px 3px 1px var(--dx-scroll-view-shadow);
+  box-shadow: 0 1px 3px 1px var(--dx-scroll-view-shadow); // dx-shadow-geometry: 0 1px 3px 1px
   opacity: 1;
 
   > .dx-loadindicator {

@@ -31,7 +31,7 @@
   margin-top: calc(var(--dx-invalid-badge-size) / -2);
   width: var(--dx-invalid-badge-size);
   height: var(--dx-invalid-badge-size);
-  line-height: calc(var(--dx-invalid-badge-size) + 1px);
+  line-height: calc(var(--dx-invalid-badge-size) + 1px); // dx-px-nudge: +1px over the badge size
   font-size: $global-font-size;
 }
 
@@ -88,7 +88,7 @@
 
   .dx-list-select-all {
     margin-inline: listSizes.$list-item-margin-inline;
-    padding: calc(#{listSizes.$list-item-padding-block} + 2px) 0 calc(#{listSizes.$list-item-padding-block} - 2px);
+    padding: calc(#{listSizes.$list-item-padding-block} + 2px) 0 calc(#{listSizes.$list-item-padding-block} - 2px); // dx-px-nudge: +2px / -2px around the list item padding
   }
 
   .dx-list-items {

@@ -6,8 +6,8 @@ $grid-cell-padding-block: calc((#{$grid-cell-height} - #{$grid-cell-line-height}
 $grid-cell-padding: $grid-cell-padding-block $grid-cell-padding-inline;
 $grid-header-cell-padding-block: calc((#{$grid-header-height} - #{$grid-header-line-height}) / 2);
 $grid-command-select-column-width: calc(#{$grid-checkbox-size} + 2 * #{$grid-cell-padding-inline});
-$grid-context-menu-icon-size: calc(#{$grid-menu-item-icon-size} - 4px);
-$grid-master-detail-padding: 16px;
+$grid-context-menu-icon-size: calc(#{$grid-menu-item-icon-size} - 4px); // dx-px-nudge: -4px off the menu item icon size
+$grid-master-detail-padding: 16px; // dx-fixed-size: 16px master detail padding
 
 /*
  * The two layers of one drop shadow, kept as a single value: `ambient, key` is the only way they
@@ -15,5 +15,5 @@ $grid-master-detail-padding: 16px;
  * grammar reserves for a CSS property (NAMING.md, size slots).
  */
 $grid-drag-header-box-shadow:
-  0 0 1px $grid-drag-header-shadow-ambient,
-  0 1px 3px $grid-drag-header-shadow-key;
+  0 0 1px $grid-drag-header-shadow-ambient, // dx-shadow-geometry: 0 0 1px, the ambient layer
+  0 1px 3px $grid-drag-header-shadow-key; // dx-shadow-geometry: 0 1px 3px, the key layer

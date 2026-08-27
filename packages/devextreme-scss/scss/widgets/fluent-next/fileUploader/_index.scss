@@ -69,13 +69,13 @@
     padding-right: $file-uploader-file-wrapper-border-width;
 
     // NOTE: height of the widget should be the same in default and drag over states, but not with margin help
-    padding-bottom: calc(#{$file-uploader-padding-block} * 2 + #{$file-uploader-file-wrapper-border-width} + 1px);
+    padding-bottom: calc(#{$file-uploader-padding-block} * 2 + #{$file-uploader-file-wrapper-border-width} + 1px); // dx-px-nudge: +1px over the dragover padding
     padding-left: $file-uploader-file-wrapper-border-width;
     box-sizing: content-box;
   }
 
   .dx-fileuploader-input-label { // stylelint-disable-line no-duplicate-selectors
-    padding: calc(#{$file-uploader-padding-block} * 2) calc(#{$file-uploader-padding-block} + 2px);
+    padding: calc(#{$file-uploader-padding-block} * 2) calc(#{$file-uploader-padding-block} + 2px); // dx-px-nudge: +2px over the padding
     border: $file-uploader-file-wrapper-border-width dashed;
     border-color: $file-uploader-border;
   }
@@ -91,7 +91,7 @@
 }
 
 .dx-fileuploader-input-label {
-  padding: calc(#{$file-uploader-padding-block} + (#{$global-font-size} / 2 - #{$file-uploader-padding-block}) / 2 + 1px) calc(#{$file-uploader-padding-block} + 2px);
+  padding: calc(#{$file-uploader-padding-block} + (#{$global-font-size} / 2 - #{$file-uploader-padding-block}) / 2 + 1px) calc(#{$file-uploader-padding-block} + 2px); // dx-px-nudge: +1px and +2px over the padding
   color: $file-uploader-file-name-content;
 
   @include dx-overflow();

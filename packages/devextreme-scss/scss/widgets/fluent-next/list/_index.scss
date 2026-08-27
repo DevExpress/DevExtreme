@@ -441,7 +441,7 @@
   }
 
   .dx-list-select-all-checkbox {
-    margin: 0 calc(#{$item-horizontal-padding} - 4px);
+    margin: 0 calc(#{$item-horizontal-padding} - 4px); // dx-px-nudge: -4px off the item horizontal padding
   }
 
   .dx-list-select-all-label {
@@ -509,7 +509,7 @@
     border: $list-context-menu-content-border;
     border-color: $list-hold-menu-border;
     border-radius: $global-border-radius;
-    box-shadow: $list-hold-menu-shadow 0 2px 7.2px 0;
+    box-shadow: $list-hold-menu-shadow 0 2px 7.2px 0; // dx-shadow-geometry: 0 2px 7.2px
 
     .dx-list-items {
       margin-left: $list-padding-block;

@@ -99,8 +99,8 @@
       }
 
       &.dx-gantt-parent {
-        height: calc(#{$gantt-task-height} - 2px);
-        line-height: calc(#{$gantt-task-height} - 2px);
+        height: calc(#{$gantt-task-height} - 2px); // dx-px-nudge: -2px off the task height
+        line-height: calc(#{$gantt-task-height} - 2px); // dx-px-nudge: -2px off the task height
         background-color: $gantt-parent-task-bg;
         border-left-color: $gantt-parent-task-bg;
         border-right-color: $gantt-parent-task-bg;
@@ -153,7 +153,7 @@
         }
 
         .dx-gantt-task-edit-frame {
-          height: calc(#{$gantt-task-height} - 2px);
+          height: calc(#{$gantt-task-height} - 2px); // dx-px-nudge: -2px off the task height
         }
       }
     }
@@ -237,12 +237,12 @@
 
   .dx-gantt-task-edit-dependency-r,
   .dx-gantt-task-edit-successor-dependency-r {
-    left: calc(-1 * #{$gantt-dependency-successor-size} - 1px);
+    left: calc(-1 * #{$gantt-dependency-successor-size} - 1px); // dx-px-nudge: -1px off the dependency size
   }
 
   .dx-gantt-task-edit-dependency-l,
   .dx-gantt-task-edit-successor-dependency-l {
-    right: calc(-1 * #{$gantt-dependency-successor-size} - 1px);
+    right: calc(-1 * #{$gantt-dependency-successor-size} - 1px); // dx-px-nudge: -1px off the dependency size
   }
 
   .dx-gantt-task-edit-dependency-line {

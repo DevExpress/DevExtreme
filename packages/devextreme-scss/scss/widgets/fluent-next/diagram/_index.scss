@@ -266,8 +266,8 @@
     padding: $diagram-icon-padding;
     font-size: $diagram-popup-close-icon-font-size;
     line-height: $diagram-popup-close-icon-line-height;
-    background-position: 2px 2px;
-    background-size: 12px 12px;
+    background-position: 2px 2px; // dx-fixed-size: 2px sprite offset, tied to the data-uri artwork
+    background-size: 12px 12px; // dx-fixed-size: 12px sprite size, tied to the data-uri artwork
   }
 
   &.dx-diagram-mobile-popup {
@@ -454,7 +454,7 @@
 
   .dx-menu-separator {
     width: $diagram-separator-width;
-    height: calc(#{$diagram-toolbar-icon-size} + #{$diagram-touchbar-item-padding} + #{$diagram-touchbar-item-padding} + 2px);
+    height: calc(#{$diagram-toolbar-icon-size} + #{$diagram-touchbar-item-padding} + #{$diagram-touchbar-item-padding} + 2px); // dx-px-nudge: +2px over the icon and the two paddings
     margin: 0;
   }
 }

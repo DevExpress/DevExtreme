@@ -21,7 +21,7 @@
     }
 
     &::after {
-      left: calc(var(--dx-color-box-preview-inset-inline-start) + 1px);
+      left: calc(var(--dx-color-box-preview-inset-inline-start) + 1px); // dx-px-nudge: +1px over the preview inset
     }
   }
 
