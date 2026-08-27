@@ -286,7 +286,7 @@
   width: calc(2 * #{$file-manager-toolbar-viewmode-padding} + #{$global-icon-size});
 
   .dx-dropdownbutton-popup-wrapper.dx-dropdownbutton-popup-wrapper .dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item-content {
-    padding-left: calc(#{$file-manager-toolbar-viewmode-padding} - 1px);
+    padding-left: calc(#{$file-manager-toolbar-viewmode-padding} - 1px); // dx-px-nudge: -1px off the viewmode padding
     padding-right: $file-manager-toolbar-viewmode-padding;
     text-overflow: clip;
   }

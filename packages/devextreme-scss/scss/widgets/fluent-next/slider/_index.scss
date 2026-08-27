@@ -10,7 +10,7 @@
 .dx-slider-wrapper {
   height: $slider-wrapper-height;
 
-  @include dx-popover-arrow-size(14px, 2px);
+  @include dx-popover-arrow-size(14px, 2px); // dx-fixed-size: 14px arrow width and 2px offset
 }
 
 .dx-slider-bar {
@@ -94,11 +94,11 @@
 }
 
 .dx-slider-tooltip-position-top {
-  padding-top: calc(#{$slider-tooltip-width} + 6px);
+  padding-top: calc(#{$slider-tooltip-width} + 6px); // dx-px-nudge: +6px over the tooltip width
 }
 
 .dx-slider-tooltip-position-bottom {
-  padding-bottom: calc(#{$slider-tooltip-width} + 6px);
+  padding-bottom: calc(#{$slider-tooltip-width} + 6px); // dx-px-nudge: +6px over the tooltip width
 }
 
 .dx-slider-label-position-bottom {
