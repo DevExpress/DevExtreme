@@ -201,6 +201,5 @@ function listSelectionChanged(e: DxListTypes.SelectionChangedEvent) {
   font-size: 11px;
   line-height: 12px;
   padding-left: 6px;
-  color: var(--dx-texteditor-label-color);
 }
 </style>
