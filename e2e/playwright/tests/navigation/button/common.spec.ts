@@ -10,6 +10,9 @@ import {
 import { testScreenshot } from '../../../helpers/screenshots';
 import Button from '../../../models/button';
 
+// The tags list the themes this test also runs in; a test without them runs in the default one.
+const THEMES = { tag: ['@generic.light', '@material.blue.light', '@material.blue.light.compact'] };
+
 const STATES = ['default', 'focused', 'hover', 'active', 'selected', 'disabled'];
 
 const BUTTONS = [
@@ -56,7 +59,7 @@ const BUTTONS = [
   });
 });
 
-test('Button reports its text, selected and disabled state', async ({ page }) => {
+test('Button reports its text, selected and disabled state', THEMES, async ({ page }) => {
   await createWidget(page, 'dxButton', { text: 'Find', icon: 'find' });
 
   const button = new Button(page, '#container');

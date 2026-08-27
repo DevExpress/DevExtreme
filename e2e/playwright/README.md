@@ -43,6 +43,18 @@ docker/run.sh                       # verify
 docker/run.sh --update-snapshots    # rewrite the etalons of the tests that ran
 ```
 
+## Themes
+
+A test runs in the default theme unless it says otherwise. The jobs that run the whole suite in
+another theme (`generic`, `material`, `material - compact`) take only the tests tagged with that
+theme — the same opt-in the TestCafe `meta.themes` gives:
+
+```ts
+test('CheckBox switches its state on click', { tag: ['@generic.light'] }, async ({ page }) => {
+```
+
+Tag a test when its result does not depend on the theme, or when it has an etalon for that theme.
+
 ## Run in the CI environment
 
 The container takes Node from `.node-version` and Chrome from the version the workflow installs;
