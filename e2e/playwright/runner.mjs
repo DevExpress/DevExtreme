@@ -45,9 +45,10 @@ if(values.componentFolder) {
 }
 
 if(values.indices) {
-    const [current, total] = values.indices.split(/[_/\\]|of/i);
+    // "1/4", "1_4" and "1 of 4" all mean the same shard, the way the TestCafe runner read them.
+    const [current, total] = values.indices.split(/[_/\\]|of/i).map((part) => Number(part));
 
-    if(!current || !total) {
+    if(!Number.isInteger(current) || !Number.isInteger(total) || current < 1 || total < 1) {
         console.error(`❌ Invalid --indices: ${values.indices}. Pass it as "current/total", for example --indices 1/4.`);
         process.exit(1);
     }

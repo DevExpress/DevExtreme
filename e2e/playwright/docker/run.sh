@@ -12,7 +12,7 @@ fi
 
 REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
 NODE_VERSION="$(cat "$REPO_ROOT/.node-version")"
-CHROME_VERSION="$(grep -m1 "chrome-version:" "$REPO_ROOT/.github/workflows/testcafe_tests_playwright.yml" | cut -d: -f2 | tr -d " '\"")"
+CHROME_VERSION="$(grep -m1 "chrome-version:" "$REPO_ROOT/.github/workflows/playwright_tests.yml" | cut -d: -f2 | tr -d " '\"")"
 
 echo "Node $NODE_VERSION, Google Chrome $CHROME_VERSION"
 

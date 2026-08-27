@@ -56,12 +56,14 @@ export async function testScreenshot(
   await expect(target).toHaveScreenshot([getScreenshotName(screenshotName, theme)]);
 
   if (shouldTestInCompact) {
-    const themeName = theme ?? getFullThemeName();
+    // The theme of a "- compact" job already ends with the suffix; appending it twice would ask
+    // for a theme that does not exist.
+    const compactTheme = `${(theme ?? getFullThemeName()).replace(/\.compact$/, '')}.compact`;
 
-    await changeTheme(page, `${themeName}.compact`);
+    await changeTheme(page, compactTheme);
     await compactCallBack?.();
 
-    await expect(target).toHaveScreenshot([getScreenshotName(screenshotName, `${themeName}.compact`)]);
+    await expect(target).toHaveScreenshot([getScreenshotName(screenshotName, compactTheme)]);
   }
 
   if (theme || shouldTestInCompact) {
