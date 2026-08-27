@@ -1,8 +1,8 @@
-const fs = require('fs');
-const path = require('path');
-const process = require('process');
-const minimist = require('minimist');
-const express = require('express');
+import fs from 'node:fs';
+import path from 'node:path';
+import process from 'node:process';
+import { parseArgs } from 'node:util';
+import express from 'express';
 
 const DIST_DIRS = {
     react19: 'builders/react19/dist',
@@ -10,9 +10,15 @@ const DIST_DIRS = {
     vue3: 'builders/vue3/dist',
 };
 
-const argv = minimist(process.argv.slice(2));
-const framework = argv.framework;
-const port = Number(argv.port);
+const { values } = parseArgs({
+    options: {
+        framework: { type: 'string' },
+        port: { type: 'string' },
+    },
+});
+
+const framework = values.framework;
+const port = Number(values.port);
 const distDir = DIST_DIRS[framework];
 
 if(!distDir) {
@@ -21,11 +27,11 @@ if(!distDir) {
 }
 
 if(!Number.isInteger(port) || port <= 0) {
-    console.error(`❌ Invalid port: ${argv.port}. Pass a positive integer, for example --port=3030.`);
+    console.error(`❌ Invalid port: ${values.port}. Pass a positive integer, for example --port=3030.`);
     process.exit(1);
 }
 
-const root = path.resolve(__dirname, distDir);
+const root = path.resolve(import.meta.dirname, distDir);
 const indexPath = path.join(root, 'index.html');
 
 if(!fs.existsSync(indexPath)) {
