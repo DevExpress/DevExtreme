@@ -30,10 +30,6 @@ $global-dropdown-box-shadow: null !default;
   $global-dropdown-box-shadow: 0 0 ds.$spacing-20 0 $global-dropdown-shadow-ambient, 0 ds.$spacing-40 ds.$spacing-80 0 $global-dropdown-shadow-key !default;
 }
 
-:root {
-  --dx-line-height: #{$global-line-height};
-}
-
 // Values hoisted from style-file literals (tokenized)
 $invalid-badge-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)
 $global-dropdown-content-padding: ds.$spacing-10 !default;
