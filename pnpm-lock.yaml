@@ -1108,6 +1108,51 @@ importers:
         specifier: ^5.105.0
         version: 5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21))
 
+  e2e/playwright:
+    devDependencies:
+      '@eslint/js':
+        specifier: 'catalog:'
+        version: 9.39.4
+      '@playwright/test':
+        specifier: 'catalog:'
+        version: 1.62.1
+      '@stylistic/eslint-plugin':
+        specifier: 'catalog:'
+        version: 5.10.0(eslint@9.39.4(jiti@2.6.1))
+      '@types/jquery':
+        specifier: 'catalog:'
+        version: 4.0.1
+      '@types/node':
+        specifier: catalog:tools
+        version: 20.19.37
+      '@typescript-eslint/eslint-plugin':
+        specifier: 'catalog:'
+        version: 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.8.3))(eslint@9.39.4(jiti@2.6.1))(typescript@5.8.3)
+      '@typescript-eslint/parser':
+        specifier: 'catalog:'
+        version: 8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.8.3)
+      devextreme:
+        specifier: workspace:*
+        version: link:../../packages/devextreme/artifacts/npm/devextreme
+      eslint:
+        specifier: 'catalog:'
+        version: 9.39.4(jiti@2.6.1)
+      eslint-config-devextreme:
+        specifier: 'catalog:'
+        version: 1.1.12(5552857efccfb3f1ba025df865cdfd0e)
+      eslint-migration-utils:
+        specifier: workspace:*
+        version: link:../../packages/eslint-migration-utils
+      eslint-plugin-import:
+        specifier: 'catalog:'
+        version: 2.32.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.8.3))(eslint@9.39.4(jiti@2.6.1))
+      eslint-plugin-no-only-tests:
+        specifier: 'catalog:'
+        version: 3.3.0
+      typescript:
+        specifier: 5.8.3
+        version: 5.8.3
+
   e2e/testcafe-devextreme:
     devDependencies:
       '@babel/eslint-parser':
