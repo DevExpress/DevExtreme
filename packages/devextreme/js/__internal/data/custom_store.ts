@@ -8,11 +8,13 @@ import {
   XHR_ERROR_UNLOAD,
 } from '@js/common/data/utils';
 import config from '@js/core/config';
-import $ from '@js/core/renderer';
-// @ts-expect-error
+import type { DeferredObj } from '@js/core/utils/deferred';
+// @ts-expect-error core/utils/deferred.d.ts does not declare `fromPromise`
 import { Deferred, fromPromise, when } from '@js/core/utils/deferred';
 import { isFunction } from '@js/core/utils/type';
-import Store from '@js/data/abstract_store';
+import type { StoreChange } from '@js/data/store';
+import type { StoreLoadOptions, StoreOptions } from '@ts/data/abstract_store';
+import Store from '@ts/data/abstract_store';
 
 const TOTAL_COUNT = 'totalCount';
 const LOAD = 'load';
@@ -21,45 +23,65 @@ const INSERT = 'insert';
 const UPDATE = 'update';
 const REMOVE = 'remove';
 
-function isPromise(obj) {
-  return obj && isFunction(obj.then);
+export interface CustomStoreOptions extends StoreOptions {
+  useDefaultSearch?: boolean;
+  loadMode?: string;
+  cacheRawData?: boolean;
+  load?: Function;
+  totalCount?: Function;
+  byKey?: Function;
+  insert?: Function;
+  update?: Function;
+  remove?: Function;
 }
 
-function trivialPromise(value) {
-  // @ts-expect-error
-  return new Deferred().resolve(value).promise();
+function isPromise(obj: unknown): boolean {
+  if (typeof obj !== 'object' && typeof obj !== 'function') {
+    return false;
+  }
+
+  return obj !== null && 'then' in obj && isFunction(obj.then);
 }
 
-function ensureRequiredFuncOption(name, obj) {
+function trivialPromise(value?: unknown): DeferredObj<unknown> {
+  // @ts-expect-error DeferredObj typings: promise() is declared as a plain Promise
+  return Deferred<unknown>().resolve(value).promise();
+}
+
+function ensureRequiredFuncOption(name: string, obj: unknown): asserts obj is Function {
   if (!isFunction(obj)) {
     throw errors.Error('E4011', name);
   }
 }
 
-function throwInvalidUserFuncResult(name) {
+function throwInvalidUserFuncResult(name: string): never {
   throw errors.Error('E4012', name);
 }
 
-function createUserFuncFailureHandler(pendingDeferred) {
-  function errorMessageFromXhr(promiseArguments) {
-    const xhr = promiseArguments[0];
-    const textStatus = promiseArguments[1];
+function createUserFuncFailureHandler(
+  pendingDeferred: DeferredObj<unknown>,
+): (...args: unknown[]) => void {
+  function errorMessageFromXhr(promiseArguments: unknown[]): string | null {
+    const [xhr, textStatus] = promiseArguments;
 
-    if (!xhr || !xhr.getResponseHeader) {
+    if (typeof xhr !== 'object' || xhr === null
+      || !('getResponseHeader' in xhr) || !xhr.getResponseHeader) {
       return null;
     }
 
-    return errorMessageFromXhrUtility(xhr, textStatus);
+    const message: string = errorMessageFromXhrUtility(xhr, textStatus);
+
+    return message;
   }
 
-  return function (arg) {
-    let error;
+  return function (...args: unknown[]): void {
+    const [arg] = args;
 
-    if (arg instanceof Error) {
-      error = arg;
-    } else {
-      error = new Error(errorMessageFromXhr(arguments) || arg && String(arg) || 'Unknown error');
-    }
+    // String() is kept as is: the legacy fallback text relies on its default stringification.
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
+    const argMessage = arg ? String(arg) : '';
+    const message = errorMessageFromXhr(args) || argMessage || 'Unknown error';
+    const error = arg instanceof Error ? arg : new Error(message);
 
     if (error.message !== XHR_ERROR_UNLOAD) {
       pendingDeferred.reject(error);
@@ -67,12 +89,15 @@ function createUserFuncFailureHandler(pendingDeferred) {
   };
 }
 
-function invokeUserLoad(store, options) {
+function invokeUserLoad(
+  store: CustomStore,
+  options?: StoreLoadOptions,
+): DeferredObj<unknown[]> {
   const userFunc = store._loadFunc;
-  let userResult;
 
   ensureRequiredFuncOption(LOAD, userFunc);
-  userResult = userFunc.apply(store, [options]);
+
+  let userResult: unknown = userFunc.apply(store, [options]);
 
   if (Array.isArray(userResult)) {
     userResult = trivialPromise(userResult);
@@ -82,49 +107,66 @@ function invokeUserLoad(store, options) {
     throwInvalidUserFuncResult(LOAD);
   }
 
-  return fromPromise(userResult);
+  const result: DeferredObj<unknown[]> = fromPromise(userResult);
+
+  return result;
 }
 
-function invokeUserTotalCountFunc(store, options) {
+function invokeUserTotalCountFunc(
+  store: CustomStore,
+  options?: StoreLoadOptions,
+): DeferredObj<unknown> {
   const userFunc = store._totalCountFunc;
-  let userResult;
 
   if (!isFunction(userFunc)) {
     throw errors.Error('E4021');
   }
 
-  userResult = userFunc.apply(store, [options]);
+  let userResult: unknown = userFunc.apply(store, [options]);
 
   if (!isPromise(userResult)) {
-    userResult = Number(userResult);
-    if (!isFinite(userResult)) {
+    const count = Number(userResult);
+    if (!isFinite(count)) {
       throwInvalidUserFuncResult(TOTAL_COUNT);
     }
-    userResult = trivialPromise(userResult);
+    userResult = trivialPromise(count);
   }
 
-  return fromPromise(userResult);
+  const result: DeferredObj<unknown> = fromPromise(userResult);
+
+  return result;
 }
 
-function invokeUserByKeyFunc(store, key, extraOptions) {
+function invokeUserByKeyFunc(
+  store: CustomStore,
+  key: unknown,
+  extraOptions?: StoreLoadOptions,
+): DeferredObj<unknown> {
   const userFunc = store._byKeyFunc;
-  let userResult;
 
   ensureRequiredFuncOption(BY_KEY, userFunc);
-  userResult = userFunc.apply(store, [key, extraOptions]);
+
+  let userResult: unknown = userFunc.apply(store, [key, extraOptions]);
 
   if (!isPromise(userResult)) {
     userResult = trivialPromise(userResult);
   }
 
-  return fromPromise(userResult);
+  const result: DeferredObj<unknown> = fromPromise(userResult);
+
+  return result;
 }
 
-function runRawLoad(pendingDeferred, store, userFuncOptions, continuation) {
+function runRawLoad(
+  pendingDeferred: DeferredObj<unknown>,
+  store: CustomStore,
+  userFuncOptions: StoreLoadOptions,
+  continuation: (rawData: unknown[]) => void,
+): void {
   if (store.__rawData) {
     continuation(store.__rawData);
   } else {
-    const loadPromise = store.__rawDataPromise || invokeUserLoad(store, userFuncOptions);
+    const loadPromise = store.__rawDataPromise ?? invokeUserLoad(store, userFuncOptions);
 
     if (store._cacheRawData) {
       store.__rawDataPromise = loadPromise;
@@ -149,57 +191,60 @@ function runRawLoad(pendingDeferred, store, userFuncOptions, continuation) {
   }
 }
 
-function runRawLoadWithQuery(pendingDeferred, store, options, countOnly) {
-  options = options || {};
+function runRawLoadWithQuery(
+  pendingDeferred: DeferredObj<unknown>,
+  store: CustomStore,
+  options: StoreLoadOptions | undefined,
+  countOnly: boolean,
+): void {
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+  const loadOptions: StoreLoadOptions = options || {};
 
-  const userFuncOptions = {};
-  if ('userData' in options) {
-    // @ts-expect-error
-    userFuncOptions.userData = options.userData;
+  const userFuncOptions: StoreLoadOptions = {};
+  if ('userData' in loadOptions) {
+    userFuncOptions.userData = loadOptions.userData;
   }
 
   runRawLoad(pendingDeferred, store, userFuncOptions, (rawData) => {
     const rawDataQuery = arrayQuery(rawData, { errorHandler: store._errorHandler });
-    let itemsQuery;
-    let totalCountQuery;
-    const waitList = [];
+    const waitList: DeferredObj<unknown>[] = [];
 
-    let items;
-    let totalCount;
+    const result: { items?: unknown[]; totalCount?: unknown } = {};
 
     if (!countOnly) {
-      // @ts-expect-error
-      itemsQuery = storeHelper.queryByOptions(rawDataQuery, options);
+      const itemsQuery = storeHelper.queryByOptions(rawDataQuery, loadOptions, false);
       if (itemsQuery === rawDataQuery) {
-        items = rawData.slice(0);
+        result.items = rawData.slice(0);
       } else {
-        // @ts-expect-error
-        waitList.push(itemsQuery.enumerate().done((asyncResult) => {
-          items = asyncResult;
-        }));
+        const itemsPromise: DeferredObj<unknown> = itemsQuery.enumerate()
+          .done((asyncResult: unknown[]) => {
+            result.items = asyncResult;
+          });
+        waitList.push(itemsPromise);
       }
     }
 
-    if (options.requireTotalCount || countOnly) {
-      totalCountQuery = storeHelper.queryByOptions(rawDataQuery, options, true);
+    if (loadOptions.requireTotalCount || countOnly) {
+      const totalCountQuery = storeHelper.queryByOptions(rawDataQuery, loadOptions, true);
       if (totalCountQuery === rawDataQuery) {
-        totalCount = rawData.length;
+        result.totalCount = rawData.length;
       } else {
-        // @ts-expect-error
-        waitList.push(totalCountQuery.count().done((asyncResult) => {
-          totalCount = asyncResult;
-        }));
+        const totalCountPromise: DeferredObj<unknown> = totalCountQuery.count()
+          .done((asyncResult: unknown) => {
+            result.totalCount = asyncResult;
+          });
+        waitList.push(totalCountPromise);
       }
     }
 
-    when.apply($, waitList)
+    when(...waitList)
       .done(() => {
         if (countOnly) {
-          pendingDeferred.resolve(totalCount);
-        } else if (options.requireTotalCount) {
-          pendingDeferred.resolve(items, { totalCount });
+          pendingDeferred.resolve(result.totalCount);
+        } else if (loadOptions.requireTotalCount) {
+          pendingDeferred.resolve(result.items, { totalCount: result.totalCount });
         } else {
-          pendingDeferred.resolve(items);
+          pendingDeferred.resolve(result.items);
         }
       })
       .fail((x) => {
@@ -208,14 +253,16 @@ function runRawLoadWithQuery(pendingDeferred, store, options, countOnly) {
   });
 }
 
-function runRawLoadWithKey(pendingDeferred, store, key) {
+function runRawLoadWithKey(
+  pendingDeferred: DeferredObj<unknown>,
+  store: CustomStore,
+  key: unknown,
+): void {
   runRawLoad(pendingDeferred, store, {}, (rawData) => {
     const keyExpr = store.key();
-    let item;
 
-    for (let i = 0, len = rawData.length; i < len; i++) {
-      item = rawData[i];
-      if (keysEqual(keyExpr, store.keyOf(rawData[i]), key)) {
+    for (const item of rawData) {
+      if (keysEqual(keyExpr, store.keyOf(item), key)) {
         pendingDeferred.resolve(item);
         return;
       }
@@ -225,66 +272,85 @@ function runRawLoadWithKey(pendingDeferred, store, key) {
   });
 }
 
-export function isGroupItem(item): boolean {
+export function isGroupItem(item: unknown): boolean {
   if (item === undefined || item === null || typeof item !== 'object') {
     return false;
   }
   return 'key' in item && 'items' in item;
 }
 
-export function isLoadResultObject(res): boolean {
-  return !Array.isArray(res) && 'data' in res;
+export function isLoadResultObject(res: unknown): boolean {
+  return !Array.isArray(res) && typeof res === 'object' && res !== null && 'data' in res;
 }
 
-export function isGroupItemsArray(res): boolean {
+export function isGroupItemsArray(res: unknown): boolean {
   return Array.isArray(res) && !!res.length && isGroupItem(res[0]);
 }
 
-export function isItemsArray(res): boolean {
+export function isItemsArray(res: unknown): boolean {
   return Array.isArray(res) && !isGroupItem(res[0]);
 }
 
-// @ts-expect-error
-const CustomStore = Store.inherit({
-  ctor(options) {
-    options = options || {};
+class CustomStore extends Store {
+  _loadMode?: string;
 
-    this.callBase(options);
+  _cacheRawData: boolean;
 
-    this._useDefaultSearch = !!options.useDefaultSearch || options.loadMode === 'raw';
+  _loadFunc?: Function;
 
-    this._loadMode = options.loadMode;
+  _totalCountFunc?: Function;
 
-    this._cacheRawData = options.cacheRawData !== false;
+  _byKeyFunc?: Function;
 
-    this._loadFunc = options[LOAD];
+  _insertFunc?: Function;
 
-    this._totalCountFunc = options[TOTAL_COUNT];
+  _updateFunc?: Function;
 
-    this._byKeyFunc = options[BY_KEY];
+  _removeFunc?: Function;
 
-    this._insertFunc = options[INSERT];
+  __rawData?: unknown[];
 
-    this._updateFunc = options[UPDATE];
+  __rawDataPromise?: DeferredObj<unknown[]>;
 
-    this._removeFunc = options[REMOVE];
-  },
+  constructor(options?: CustomStoreOptions) {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const storeOptions: CustomStoreOptions = options || {};
 
-  _clearCache() {
+    super(storeOptions);
+
+    this._useDefaultSearch = !!storeOptions.useDefaultSearch || storeOptions.loadMode === 'raw';
+
+    this._loadMode = storeOptions.loadMode;
+
+    this._cacheRawData = storeOptions.cacheRawData !== false;
+
+    this._loadFunc = storeOptions[LOAD];
+
+    this._totalCountFunc = storeOptions[TOTAL_COUNT];
+
+    this._byKeyFunc = storeOptions[BY_KEY];
+
+    this._insertFunc = storeOptions[INSERT];
+
+    this._updateFunc = storeOptions[UPDATE];
+
+    this._removeFunc = storeOptions[REMOVE];
+  }
+
+  _clearCache(): void {
     delete this.__rawData;
-  },
+  }
 
-  createQuery() {
+  createQuery(): never {
     throw errors.Error('E4010');
-  },
+  }
 
-  clearRawDataCache() {
+  clearRawDataCache(): void {
     this._clearCache();
-  },
+  }
 
-  _totalCountImpl(options) {
-    // @ts-expect-error
-    let d = new Deferred();
+  _totalCountImpl(options?: StoreLoadOptions): DeferredObj<number> {
+    let d = Deferred<unknown>();
 
     if (this._loadMode === 'raw' && !this._totalCountFunc) {
       runRawLoadWithQuery(d, this, options, true);
@@ -295,23 +361,23 @@ const CustomStore = Store.inherit({
       d = this._addFailHandlers(d);
     }
 
+    // @ts-expect-error DeferredObj typings: promise() is declared as a plain Promise
     return d.promise();
-  },
+  }
 
-  _pushImpl(changes) {
+  _pushImpl(changes: StoreChange[]): void {
     if (this.__rawData) {
-      // @ts-expect-error
+      // @ts-expect-error array_utils is untyped: `applyBatch` destructures every option as required
       applyBatch({
         keyInfo: this,
         data: this.__rawData,
         changes,
       });
     }
-  },
+  }
 
-  _loadImpl(options) {
-    // @ts-expect-error
-    let d = new Deferred();
+  _loadImpl(options?: StoreLoadOptions): DeferredObj<unknown[]> {
+    let d = Deferred<unknown>();
 
     if (this._loadMode === 'raw') {
       runRawLoadWithQuery(d, this, options, false);
@@ -322,12 +388,12 @@ const CustomStore = Store.inherit({
       d = this._addFailHandlers(d);
     }
 
+    // @ts-expect-error DeferredObj typings: promise() is declared as a plain Promise
     return d.promise();
-  },
+  }
 
-  _byKeyImpl(key, extraOptions) {
-    // @ts-expect-error
-    const d = new Deferred();
+  _byKeyImpl(key: unknown, extraOptions?: StoreLoadOptions): DeferredObj<unknown> {
+    const d = Deferred<unknown>();
 
     if (this._byKeyViaLoad()) {
       this._requireKey();
@@ -338,22 +404,21 @@ const CustomStore = Store.inherit({
         .fail(createUserFuncFailureHandler(d));
     }
 
+    // @ts-expect-error DeferredObj typings: promise() is declared as a plain Promise
     return d.promise();
-  },
+  }
 
-  _byKeyViaLoad() {
+  _byKeyViaLoad(): boolean {
     return this._loadMode === 'raw' && !this._byKeyFunc;
-  },
+  }
 
-  _insertImpl(values) {
-    const that = this;
-    const userFunc = that._insertFunc;
-    let userResult;
-    // @ts-expect-error
-    const d = new Deferred();
+  _insertImpl(values: unknown): DeferredObj<unknown> {
+    const userFunc = this._insertFunc;
+    const d = Deferred<unknown>();
 
     ensureRequiredFuncOption(INSERT, userFunc);
-    userResult = userFunc.apply(that, [values]); // should return key or data
+
+    let userResult: unknown = userFunc.apply(this, [values]); // should return key or data
 
     if (!isPromise(userResult)) {
       userResult = trivialPromise(userResult);
@@ -364,22 +429,22 @@ const CustomStore = Store.inherit({
         if (config().useLegacyStoreResult) {
           d.resolve(values, serverResponse);
         } else {
-          d.resolve(serverResponse || values, that.keyOf(serverResponse));
+          d.resolve(serverResponse || values, this.keyOf(serverResponse));
         }
       })
       .fail(createUserFuncFailureHandler(d));
 
+    // @ts-expect-error DeferredObj typings: promise() is declared as a plain Promise
     return d.promise();
-  },
+  }
 
-  _updateImpl(key, values) {
+  _updateImpl(key: unknown, values: unknown): DeferredObj<unknown> {
     const userFunc = this._updateFunc;
-    let userResult;
-    // @ts-expect-error
-    const d = new Deferred();
+    const d = Deferred<unknown>();
 
     ensureRequiredFuncOption(UPDATE, userFunc);
-    userResult = userFunc.apply(this, [key, values]);
+
+    let userResult: unknown = userFunc.apply(this, [key, values]);
 
     if (!isPromise(userResult)) {
       userResult = trivialPromise(userResult);
@@ -395,20 +460,19 @@ const CustomStore = Store.inherit({
       })
       .fail(createUserFuncFailureHandler(d));
 
+    // @ts-expect-error DeferredObj typings: promise() is declared as a plain Promise
     return d.promise();
-  },
+  }
 
-  _removeImpl(key) {
+  _removeImpl(key: unknown): DeferredObj<unknown> {
     const userFunc = this._removeFunc;
-    let userResult;
-    // @ts-expect-error
-    const d = new Deferred();
+    const d = Deferred<unknown>();
 
     ensureRequiredFuncOption(REMOVE, userFunc);
-    userResult = userFunc.apply(this, [key]);
+
+    let userResult: unknown = userFunc.apply(this, [key]);
 
     if (!isPromise(userResult)) {
-      // @ts-expect-error
       userResult = trivialPromise();
     }
 
@@ -416,8 +480,9 @@ const CustomStore = Store.inherit({
       .done(() => { d.resolve(key); })
       .fail(createUserFuncFailureHandler(d));
 
+    // @ts-expect-error DeferredObj typings: promise() is declared as a plain Promise
     return d.promise();
-  },
-});
+  }
+}
 
 export default CustomStore;
