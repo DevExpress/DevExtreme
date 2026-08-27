@@ -1,10 +1,13 @@
-import BaseStrategy from '@js/common/core/events/pointer/base';
-import Observer from '@js/common/core/events/pointer/observer';
 import browser from '@js/core/utils/browser';
 import { extend } from '@js/core/utils/extend';
+import type { EmitterEvent } from '@ts/events/core/emitter';
+import type { PointerEventInit } from '@ts/events/pointer/base';
+import BaseStrategy from '@ts/events/pointer/base';
+import type { PointerEventMap } from '@ts/events/pointer/m_observer';
+import Observer from '@ts/events/pointer/m_observer';
 
 /* eslint-disable spellcheck/spell-checker */
-const eventMap = {
+const eventMap: PointerEventMap = {
   dxpointerdown: 'mousedown',
   dxpointermove: 'mousemove',
   dxpointerup: 'mouseup',
@@ -21,7 +24,17 @@ if (browser.safari) {
   eventMap.dxpointercancel += ' ' + 'dragstart';
 }
 
-const normalizeMouseEvent = function (e) {
+// eslint-disable-next-line @typescript-eslint/init-declarations
+let observer: Observer;
+
+interface NormalizedPointerData {
+  pointers: Event[];
+  pointerId: number;
+}
+
+const normalizeMouseEvent = function (
+  e: EmitterEvent & { pointerId?: number },
+): NormalizedPointerData {
   e.pointerId = 1;
 
   return {
@@ -30,37 +43,37 @@ const normalizeMouseEvent = function (e) {
   };
 };
 
-let observer;
 let activated = false;
-const activateStrategy = function () {
+const activateStrategy = function (): void {
   if (activated) {
     return;
   }
-  // @ts-expect-error
+
   observer = new Observer(eventMap, () => true);
 
   activated = true;
 };
 
-const MouseStrategy = BaseStrategy.inherit({
+class MouseStrategy extends BaseStrategy {
+  static map = eventMap;
 
-  ctor() {
-    this.callBase.apply(this, arguments);
+  static normalize = normalizeMouseEvent;
+
+  static activate = activateStrategy;
+
+  constructor(eventName: string, originalEvents: string) {
+    super(eventName, originalEvents);
 
     activateStrategy();
-  },
+  }
 
-  _fireEvent(args) {
-    return this.callBase(extend(normalizeMouseEvent(args.originalEvent), args));
-  },
+  static resetObserver = (): void => {
+    observer.reset();
+  };
 
-});
-
-MouseStrategy.map = eventMap;
-MouseStrategy.normalize = normalizeMouseEvent;
-MouseStrategy.activate = activateStrategy;
-MouseStrategy.resetObserver = function () {
-  observer.reset();
-};
+  _fireEvent(args: PointerEventInit): EmitterEvent {
+    return super._fireEvent(extend(normalizeMouseEvent(args.originalEvent), args));
+  }
+}
 
 export default MouseStrategy;
