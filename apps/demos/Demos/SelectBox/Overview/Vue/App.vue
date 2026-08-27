@@ -118,7 +118,7 @@ function onValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
 }
 
 </script>
-<style scoped>
+<style>
 .dx-dropdownlist-popup-wrapper .dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item-content {
   padding-left: 7px;
   padding-right: 7px;

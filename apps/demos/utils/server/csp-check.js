@@ -209,7 +209,7 @@ function findDemos() {
       .filter((d) => d.isDirectory());
 
     for (const demo of demos) {
-      if (SKIPPED_DEMOS.has(`${widget.name}/${demo.name}/${FRAMEWORK}`)) continue;
+      if (SKIPPED_DEMOS.has(`${widget.name}/${demo.name}/${FRAMEWORK}`)) continue; // eslint-disable-line no-continue
       const fwDir = join(widgetDir, demo.name, FRAMEWORK);
       if (existsSync(join(fwDir, 'index.html'))) {
         result.push({

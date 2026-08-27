@@ -8,6 +8,7 @@ const os = require('os');
 const esbuild = require('esbuild');
 const { extractDemoHeadExtras, extractDemoBodyInner } = require('./demo-html');
 const { createEntryShimSource } = require('./demo-render-signal');
+const { discoverTestGlobalsFromContent } = require('../visual-tests/test-globals-bundle');
 
 const DEMOS_APP_ROOT = path.resolve(__dirname, '..', '..');
 const REPO_ROOT = path.resolve(DEMOS_APP_ROOT, '..', '..');
@@ -29,8 +30,7 @@ const RETRY_CONCURRENCY = (() => {
   return 2;
 })();
 
-// One global batch shares the most code across demos. Infinity rather than a fixed number
-// so it always covers the current demo count
+// Infinity so one global batch always covers the current demo count, sharing the most code.
 const DEFAULT_SAFE_BATCH_SIZE = Infinity;
 const BATCH_SIZE = (() => {
   const fromEnv = parseInt(process.env.CSP_BUNDLE_BATCH_SIZE, 10);
@@ -65,8 +65,7 @@ const GENERATED_TSCONFIG_DIR = path.join(__dirname, '.csp-bundle-angular-tsconfi
 // Under apps/demos so the shim's bare devextreme import resolves through node_modules.
 const GENERATED_SHIM_DIR = path.join(__dirname, '.csp-bundle-angular-shims');
 const ANGULAR_ZONE_SCRIPT = '../../../../node_modules/zone.js/bundles/zone.umd.js';
-// esbuild's own code-splitting output (shared chunks across a batch's demos) — a plain
-// build artifact directory, wiped and regenerated on every run.
+// esbuild's code-splitting output (shared chunks across a batch) — wiped and regenerated each run.
 const CHUNKS_DIRNAME = '_chunks';
 
 // @angular/build is transitive via @angular-devkit/build-angular; resolve through it for pnpm.
@@ -102,11 +101,32 @@ function writeDemoTsconfig(shimPath, entryPath) {
 
 const allEntryShims = new Set();
 
+// Unlike React/Vue, a shard's Angular demos share one devextreme module graph, so test globals can be assigned inline (no test-globals-bundle.js needed).
+function demoTestGlobals(demo) {
+  const testCodePath = path.join(path.dirname(demo.srcDir), 'test-code.js');
+  if (!fs.existsSync(testCodePath)) return [];
+  const content = fs.readFileSync(testCodePath, 'utf8');
+  return Array.from(discoverTestGlobalsFromContent(content).entries());
+}
+
+function testGlobalsShimSource(entries) {
+  if (entries.length === 0) return '';
+  const namespaces = new Set(entries.map(([, accessorPath]) => accessorPath.split('.')[0]));
+  return `
+    Promise.all([${entries.map(([specifier]) => `import(${JSON.stringify(specifier)})`).join(', ')}]).then(function (m) {
+      window.DevExpress = window.DevExpress || {};
+      ${Array.from(namespaces).map((ns) => `window.DevExpress.${ns} = window.DevExpress.${ns} || {};`).join('\n      ')}
+      ${entries.map(([, accessorPath], i) => `window.DevExpress.${accessorPath} = m[${i}].default;`).join('\n      ')}
+    });
+`;
+}
+
 function writeEntryShim(demo, entryPath) {
   fs.mkdirSync(GENERATED_SHIM_DIR, { recursive: true });
   const slug = `${demo.widget}-${demo.name}`.replace(/[^a-zA-Z0-9_.-]/g, '_');
   const dest = path.join(GENERATED_SHIM_DIR, `${slug}.ts`);
-  fs.writeFileSync(dest, createEntryShimSource(entryPath, { tsNoCheck: true }));
+  const source = createEntryShimSource(entryPath, { tsNoCheck: true }) + testGlobalsShimSource(demoTestGlobals(demo));
+  fs.writeFileSync(dest, source);
   allEntryShims.add(dest);
   return dest;
 }
@@ -181,7 +201,7 @@ function findDemos() {
     const demos = fs.readdirSync(widgetDir, { withFileTypes: true }).filter((d) => d.isDirectory());
     for (const demo of demos) {
       const key = `${widget.name}/${demo.name}`;
-      if (SKIPPED_DEMOS.has(`${key}/${FRAMEWORK}`)) continue;
+      if (SKIPPED_DEMOS.has(`${key}/${FRAMEWORK}`)) continue; // eslint-disable-line no-continue
       const fwDir = path.join(widgetDir, demo.name, FRAMEWORK);
       const matchesFilter = !FILTER || key.includes(FILTER);
       if (matchesFilter && fs.existsSync(path.join(fwDir, 'index.html'))) {
@@ -195,8 +215,7 @@ function findDemos() {
   return out;
 }
 
-// Under AOT, component CSS url() paths resolve one dir short of where they used
-// to (against the CSS file, not the document) — symlink the asset at the wrong path.
+// Under AOT, component CSS url() paths resolve against the CSS file (not the document), one dir short — symlink the asset at the wrong path.
 const ASSET_EXT_RE = /\.(png|jpe?g|gif|svg|webp|ico|avif)(\?[^)'"\s]*)?$/i;
 const URL_RE = /url\(\s*(['"]?)([^)'"]+?)\1\s*\)/g;
 
@@ -289,8 +308,7 @@ function removeShims(installed) {
   }
 }
 
-// Demo components use SystemJS-era templateUrl/styleUrls paths that resolve wrong
-// under AOT; patch to `./<basename>.<ext>` and feed the copy via fileReplacements.
+// Demo components use SystemJS-era templateUrl/styleUrls paths that resolve wrong under AOT; patch to `./<basename>.<ext>` and feed the copy via fileReplacements.
 const PATCHED_TS_PREFIX = '.csp-bundle-angular-patched.';
 const TEMPLATE_URL_RE = /templateUrl\s*:\s*([`'"])([^`'"]+)\1/g;
 const STYLE_URLS_INLINE_RE = /styleUrls\s*:\s*\[\s*([`'"])([^`'"]+)\1\s*\]/g;
@@ -380,8 +398,7 @@ const antiForgeryPlugin = {
   },
 };
 
-// Resolves every @angular/* from a single base so the bundle shares one copy —
-// otherwise two DI systems can end up bundled (NG0203/NG05100/NG0300).
+// Resolves every @angular/* from a single base so the bundle shares one copy — otherwise two DI systems can end up bundled (NG0203/NG05100/NG0300).
 const angularSingleCopyPlugin = {
   name: 'csp-bundle-angular:single-angular-copy',
   setup(build) {
@@ -407,8 +424,7 @@ function isFileCached(filePath) {
   return fileExistsCache.get(filePath);
 }
 
-// apps/demos/node_modules/devextreme only ships bundles/; redirect to the real
-// ESM modules under packages/devextreme/artifacts.
+// apps/demos/node_modules/devextreme only ships bundles/; redirect to the real ESM modules under packages/devextreme/artifacts.
 const DEVEXTREME_ESM_ROOT = path.join(
   REPO_ROOT, 'packages', 'devextreme', 'artifacts', 'transpiled-esm-npm', 'esm',
 );
@@ -435,8 +451,7 @@ const devextremeRedirectPlugin = {
   },
 };
 
-// Re-resolves snake_case devextreme-angular/ui/* imports (e.g. html_editor) to
-// the kebab-case form the npm dist actually ships.
+// Re-resolves snake_case devextreme-angular/ui/* imports (e.g. html_editor) to the kebab-case form the npm dist actually ships.
 const devextremeAngularSnakeCasePlugin = {
   name: 'csp-bundle-angular:devextreme-angular-snake-case',
   setup(build) {
@@ -604,6 +619,8 @@ function makeBuildOptions({
     sourcemap: false,
     logLevel: 'silent',
     metafile: true,
+    // write:true would silently drop the Angular compiler's extracted stylesheet resources; written explicitly below instead.
+    write: false,
     plugins: [
       angularSingleCopyPlugin,
       antiForgeryPlugin,
@@ -617,6 +634,51 @@ function makeBuildOptions({
     absWorkingDir: DEMOS_APP_ROOT,
     nodePaths: [NODE_MODULES],
   };
+}
+
+// write:false means bundle.js/bundle.css and shared chunks must be flushed to disk explicitly (resources are handled separately by emitDemoResources).
+async function writeOutputFiles(outputFiles) {
+  const codeFiles = (outputFiles || []).filter((f) => /\.(js|css)$/i.test(f.path));
+  await Promise.all(codeFiles.map(async (file) => {
+    await fs.promises.mkdir(path.dirname(file.path), { recursive: true });
+    await fs.promises.writeFile(file.path, file.contents);
+  }));
+}
+
+// Extracted stylesheet resources land wherever esbuild's bundler puts them, not next to the demo — so copy each one into that demo's own `media/` folder too.
+function demoAssetBasenames(demo) {
+  const basenames = new Set();
+  for (const cssFile of discoverComponentStyleFiles([demo.entry])) {
+    if (fs.existsSync(cssFile)) {
+      const src = fs.readFileSync(cssFile, 'utf8');
+      for (const m of src.matchAll(URL_RE)) {
+        const spec = m[2];
+        const isExternal = path.isAbsolute(spec) || /^[a-z][\w+.-]*:/i.test(spec) || spec.startsWith('#');
+        if (!isExternal) {
+          basenames.add(path.basename(spec.split(/[?#]/)[0]));
+        }
+      }
+    }
+  }
+  return basenames;
+}
+
+async function emitDemoResources(demoDestDirs, outputFiles) {
+  const resourceFiles = (outputFiles || []).filter((f) => !/\.(js|css)$/i.test(f.path));
+  if (resourceFiles.length === 0) return;
+  const byBasename = new Map(resourceFiles.map((f) => [path.basename(f.path), f]));
+
+  await Promise.all(demoDestDirs.map(async ({ demo, destDir }) => {
+    const basenames = demoAssetBasenames(demo);
+    await Promise.all([...basenames].map(async (basename) => {
+      const file = byBasename.get(basename);
+      if (file) {
+        const dest = path.join(destDir, 'media', basename);
+        await fs.promises.mkdir(path.dirname(dest), { recursive: true });
+        await fs.promises.writeFile(dest, file.contents);
+      }
+    }));
+  }));
 }
 
 async function bundleDemo(demo, createCompilerPlugin, destDirOverride) {
@@ -638,12 +700,13 @@ async function bundleDemo(demo, createCompilerPlugin, destDirOverride) {
       createCompilerPlugin,
       splitting: false,
     }));
+    await writeOutputFiles(result.outputFiles);
+    await emitDemoResources([{ demo: prepared, destDir }], result.outputFiles);
   } catch (err) {
     return { ok: false, reason: (err && err.message) || String(err) };
   }
 
-  // The AOT compiler plugin can list a style output it actually inlined instead of emitting.
-  // Shared chunks are imported by bundle.js itself, so they must not become script tags.
+  // Drop shared chunks (already imported by bundle.js) and styles the AOT plugin listed but actually inlined.
   const outputs = Object.keys((result.metafile && result.metafile.outputs) || {})
     .filter((o) => !o.includes(`${CHUNKS_DIRNAME}/`))
     .filter((o) => fs.existsSync(path.resolve(DEMOS_APP_ROOT, o)));
@@ -672,13 +735,18 @@ async function bundleDemoBatch(batch, createCompilerPlugin) {
   const tsconfig = writeTsconfig(`batch-${batch[0].widget}-${batch[0].name}-${batch.length}-${Date.now()}`, entryPaths);
   const fileReplacements = mergeFileReplacements(batch);
   try {
-    await esbuild.build(makeBuildOptions({
+    const result = await esbuild.build(makeBuildOptions({
       entryPoints,
       outdir: SRC_DEMOS_DIR,
       tsconfig,
       fileReplacements,
       createCompilerPlugin,
     }));
+    await writeOutputFiles(result.outputFiles);
+    await emitDemoResources(
+      batch.map((demo) => ({ demo, destDir: path.join(SRC_DEMOS_DIR, demo.widget, demo.name, FRAMEWORK) })),
+      result.outputFiles,
+    );
   } catch (err) {
     return { ok: false, reason: (err && err.message) || String(err) };
   }
@@ -734,9 +802,7 @@ async function main() {
       fs.rmSync(dir, { recursive: true, force: true });
     }
   }
-  // Shared across every demo's own build (see makeBuildOptions' chunkNames) — not owned by
-  // any single demo's own folder, so not covered by the per-demo wipe above; always safe to
-  // fully regenerate since chunk filenames are content-hashed.
+  // Shared across every demo's build, so not covered by the per-demo wipe above; safe to regenerate since chunk filenames are content-hashed.
   const chunksDir = path.join(SRC_DEMOS_DIR, CHUNKS_DIRNAME);
   if (fs.existsSync(chunksDir)) {
     fs.rmSync(chunksDir, { recursive: true, force: true });

@@ -107,7 +107,7 @@ function changeLocale({ value }: DxSelectBoxTypes.ValueChangedEvent) {
   document.location.reload();
 }
 </script>
-<style scoped>
+<style>
 
 .options {
   padding: 20px;

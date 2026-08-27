@@ -355,7 +355,7 @@ const sendRequest = function (value: string) {
   });
 };
 </script>
-<style scoped>
+<style>
 form {
   margin: 10px 10px 15px;
 }
