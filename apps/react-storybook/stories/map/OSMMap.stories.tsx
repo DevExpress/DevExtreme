@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
+import { useArgs } from 'storybook/preview-api';
 
 import Attribution from 'ol/control/Attribution.js';
 import type OpenLayersMap from 'ol/Map.js';
@@ -7,7 +8,11 @@ import { fromLonLat, transformExtent } from 'ol/proj.js';
 import View from 'ol/View.js';
 import React from 'react';
 import Map from 'devextreme-react/map';
-import type { ReadyEvent } from 'devextreme/ui/map';
+import type {
+    MapLocation,
+    MapType,
+    ReadyEvent,
+} from 'devextreme/ui/map';
 import 'devextreme/ui/map/openlayers';
 
 const CENTER = { lat: 40.7484, lng: -73.9857 };
@@ -17,14 +22,25 @@ const TILE_SERVER = {
     attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     maxZoom: 19,
 };
-const PROVIDER_CONFIG = { tileServer: TILE_SERVER };
+const PROVIDER_CONFIG = { tileServer: () => TILE_SERVER };
 
 interface OsmStoryArgs {
+    center: MapLocation;
+    controls: boolean;
+    disabled: boolean;
+    focusStateEnabled: boolean;
+    rtlEnabled: boolean;
+    type: MapType;
     zoom: number;
 }
 
-const configureMap = (
+interface OsmMapStoryProps extends OsmStoryArgs {
+    updateArgs: (args: Partial<OsmStoryArgs>) => void;
+}
+
+const configureOpenLayersMap = (
     { originalMap }: ReadyEvent,
+    center: MapLocation,
     zoom: number,
 ): void => {
     const map = originalMap as OpenLayersMap;
@@ -34,36 +50,76 @@ const configureMap = (
     attribution?.setCollapsed(false);
     attribution?.setCollapsible(false);
     map.setView(new View({
-        center: fromLonLat([CENTER.lng, CENTER.lat]),
+        center: fromLonLat([center.lng, center.lat]),
         extent: transformExtent(EXTENT, 'EPSG:4326', 'EPSG:3857'),
         maxZoom: 16,
         minZoom: 14,
-        showFullExtent: false,
         smoothExtentConstraint: false,
         zoom,
     }));
 };
 
-const OsmMapStory = ({ zoom }: OsmStoryArgs): React.ReactElement => (
+const OsmMapStory = ({
+    center,
+    controls,
+    disabled,
+    focusStateEnabled,
+    rtlEnabled,
+    type,
+    updateArgs,
+    zoom,
+}: OsmMapStoryProps): React.ReactElement => (
     <Map
         provider="osm"
         providerConfig={PROVIDER_CONFIG}
-        center={CENTER}
+        center={center}
+        controls={controls}
+        disabled={disabled}
+        focusStateEnabled={focusStateEnabled}
+        rtlEnabled={rtlEnabled}
+        type={type}
         zoom={zoom}
         height={520}
         width="100%"
-        onReady={(event) => configureMap(event, zoom)}
+        onCenterChange={(value) => updateArgs({ center: value as MapLocation })}
+        onReady={(event) => configureOpenLayersMap(event, center, zoom)}
+        onZoomChange={(value) => updateArgs({ zoom: value })}
     />
 );
 
 const meta: Meta<OsmStoryArgs> = {
     title: 'Components/Map/OSM Provider',
-    component: OsmMapStory,
     tags: ['!test'],
+    render: function Render() {
+        const [args, updateArgs] = useArgs<OsmStoryArgs>();
+
+        return <OsmMapStory {...args} updateArgs={updateArgs} />;
+    },
     parameters: {
         layout: 'fullscreen',
     },
     argTypes: {
+        center: {
+            control: 'object',
+        },
+        controls: {
+            control: 'boolean',
+        },
+        disabled: {
+            control: 'boolean',
+        },
+        focusStateEnabled: {
+            control: 'boolean',
+        },
+        rtlEnabled: {
+            control: 'boolean',
+        },
+        type: {
+            control: 'select',
+            options: ['roadmap', 'satellite', 'hybrid'],
+            description: 'The public OSM tile server provides one style, so this control exercises '
+                + 'type changes without changing the map appearance.',
+        },
         zoom: {
             control: {
                 type: 'number',
@@ -81,6 +137,12 @@ type Story = StoryObj<OsmStoryArgs>;
 
 export const Default: Story = {
     args: {
+        center: CENTER,
+        controls: true,
+        disabled: false,
+        focusStateEnabled: true,
+        rtlEnabled: false,
+        type: 'roadmap',
         zoom: 15,
     },
 };
