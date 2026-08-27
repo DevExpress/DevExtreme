@@ -683,7 +683,9 @@ export class DataController extends modules.Controller {
   protected _initDataSource(): void {
     const hadDataSource = !!this._dataSource;
 
-    const dataSource = this._createRawDataSource();
+    this._disposeDataSource();
+
+    const dataSource = this.createRawDataSource();
     this._useSortingGroupingFromColumns = true;
     this._cachedProcessedItems = null;
 
@@ -697,22 +699,22 @@ export class DataController extends modules.Controller {
     }
   }
 
-  private _createRawDataSource(): DataSource | undefined {
+  private createRawDataSource(): DataSource | undefined {
     const dataSourceOptions = this._getSpecificDataSourceOption();
-
-    this._disposeDataSource();
 
     if (!dataSourceOptions) {
       return undefined;
     }
 
-    this._isSharedDataSource = dataSourceOptions instanceof DataSourceClass;
+    if (dataSourceOptions instanceof DataSourceClass) {
+      this._isSharedDataSource = true;
+      return dataSourceOptions as DataSource;
+    }
 
-    return (this._isSharedDataSource
-      ? dataSourceOptions
-      : new DataSourceClass(
-        extend(true, {}, normalizeDataSourceOptions(dataSourceOptions, { fromUrlLoadMode: false })),
-      )) as DataSource;
+    this._isSharedDataSource = false;
+    return new DataSourceClass(
+      extend(true, {}, normalizeDataSourceOptions(dataSourceOptions, {})),
+    ) as DataSource;
   }
 
   /**
