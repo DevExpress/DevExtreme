@@ -17,7 +17,6 @@
 @use "../button/colors" as buttonColors;
 @use "../validation/colors" as validationColors;
 @use "../typography/sizes" as typographySizes;
-@use "../common/sizes" as *;
 @use "../dropDownEditor/sizes" as dropDownEditorSizes;
 @use "../scrollable";
 @use "../overlay";
@@ -96,41 +95,41 @@
       .dx-menu-items-container {
         .dx-icon-context-menu-sort-asc {
           @include dx-icon(sortuptext);
-          @include dx-icon-sizing(calc(var(--dx-grid-menu-item-icon-size) - 4px));
+          @include dx-icon-sizing(var(--dx-grid-context-menu-icon-size));
         }
 
         .dx-icon-context-menu-sort-desc {
           @include dx-icon(sortdowntext);
-          @include dx-icon-sizing(calc(var(--dx-grid-menu-item-icon-size) - 4px));
+          @include dx-icon-sizing(var(--dx-grid-context-menu-icon-size));
         }
 
         .dx-icon-context-menu-sort-none {
-          @include dx-icon-sizing(calc(var(--dx-grid-menu-item-icon-size) - 4px));
+          @include dx-icon-sizing(var(--dx-grid-context-menu-icon-size));
         }
 
         .dx-icon-fix-column {
           @include dx-icon(fixcolumn);
-          @include dx-icon-sizing(calc(var(--dx-grid-menu-item-icon-size) - 4px));
+          @include dx-icon-sizing(var(--dx-grid-context-menu-icon-size));
         }
 
         .dx-icon-fix-column-left {
           @include dx-icon(fixcolumnleft);
-          @include dx-icon-sizing(calc(var(--dx-grid-menu-item-icon-size) - 4px));
+          @include dx-icon-sizing(var(--dx-grid-context-menu-icon-size));
         }
 
         .dx-icon-fix-column-right {
           @include dx-icon(fixcolumnright);
-          @include dx-icon-sizing(calc(var(--dx-grid-menu-item-icon-size) - 4px));
+          @include dx-icon-sizing(var(--dx-grid-context-menu-icon-size));
         }
 
         .dx-icon-stick-column {
           @include dx-icon(stickcolumn);
-          @include dx-icon-sizing(calc(var(--dx-grid-menu-item-icon-size) - 4px));
+          @include dx-icon-sizing(var(--dx-grid-context-menu-icon-size));
         }
 
         .dx-icon-unfix-column {
           @include dx-icon(unfixcolumn);
-          @include dx-icon-sizing(calc(var(--dx-grid-menu-item-icon-size) - 4px));
+          @include dx-icon-sizing(var(--dx-grid-context-menu-icon-size));
         }
       }
     }
@@ -351,12 +350,12 @@
         &.dx-valid,
         &.dx-validation-pending {
           .dx-texteditor-input {
-            padding-right: dropDownEditorSizes.$drop-down-editor-invalid-badge-size;
+            padding-right: var(--dx-drop-down-editor-invalid-badge-size);
           }
 
           &.dx-rtl .dx-texteditor-input {
             padding-right: 0;
-            padding-left: dropDownEditorSizes.$drop-down-editor-invalid-badge-size;
+            padding-left: var(--dx-drop-down-editor-invalid-badge-size);
           }
         }
       }
@@ -365,12 +364,12 @@
       &.dx-valid,
       &.dx-validation-pending {
         .dx-texteditor-input {
-          padding-right: dropDownEditorSizes.$drop-down-editor-invalid-badge-size;
+          padding-right: var(--dx-drop-down-editor-invalid-badge-size);
         }
 
         &.dx-rtl .dx-texteditor-input {
           padding-right: 0;
-          padding-left: dropDownEditorSizes.$drop-down-editor-invalid-badge-size;
+          padding-left: var(--dx-drop-down-editor-invalid-badge-size);
         }
       }
 
@@ -869,12 +868,12 @@
           @include dx-pending-indicator-fluent();
           @include texteditor-validation-icon-offset();
 
-          right: $invalid-badge-size;
+          right: var(--dx-invalid-badge-size);
           background-color: transparent;
 
           @at-root #{selector.append(".dx-rtl", &)},
           .dx-rtl & {
-            left: $invalid-badge-size;
+            left: var(--dx-invalid-badge-size);
           }
         }
       }
