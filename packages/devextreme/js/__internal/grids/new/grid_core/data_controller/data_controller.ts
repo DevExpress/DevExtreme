@@ -10,6 +10,7 @@ import {
 import { equalByValue } from '@ts/core/utils/m_common';
 import type { PromiseWithResolvers } from '@ts/core/utils/promise';
 import { createPromise } from '@ts/core/utils/promise';
+import type { StoreLoadOptions } from '@ts/data/abstract_store';
 
 import gridCoreUtils from '../../../grid_core/m_utils';
 import { ColumnsController } from '../columns_controller/columns_controller';
@@ -163,7 +164,9 @@ export class DataController {
           );
         };
 
-        const getLoadOptionsWithoutLocalPaging = (loadOptions): unknown => {
+        const getLoadOptionsWithoutLocalPaging = (
+          loadOptions: StoreLoadOptions,
+        ): StoreLoadOptions => {
           const { skip, take, ...rest } = loadOptions;
           return rest;
         };

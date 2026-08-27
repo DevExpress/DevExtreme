@@ -1,174 +1,248 @@
+import type { LoadOptions, Query } from '@js/common/data';
 import { errors, handleError } from '@js/common/data/errors';
 import storeHelper from '@js/common/data/store_helper';
 import { processRequestResultLock } from '@js/common/data/utils';
-import Class from '@js/core/class';
 import { EventsStrategy } from '@js/core/events_strategy';
-import { noop } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
-import { each } from '@js/core/utils/iterator';
 import { isEmptyObject } from '@js/core/utils/type';
+import type { StoreChange } from '@js/data/store';
 
-const { abstract } = Class;
 const { queryByOptions } = storeHelper;
 
-const storeImpl = {};
+export type StoreKey = string | string[];
 
-const Store = Class.inherit({
-  _langParams: {},
-  ctor(options) {
-    const that = this;
-    options = options || {};
+export type StoreErrorHandler = (error: unknown) => void;
+
+export interface LangParams {
+  locale?: string;
+  collatorOptions?: Intl.CollatorOptions;
+}
+
+export interface StoreLoadOptions extends LoadOptions<unknown> {
+  langParams?: LangParams;
+  _langParams?: LangParams;
+}
+
+type StoreEventOptionName = 'onLoaded'
+  | 'onLoading'
+  | 'onInserted'
+  | 'onInserting'
+  | 'onUpdated'
+  | 'onUpdating'
+  | 'onPush'
+  | 'onRemoved'
+  | 'onRemoving'
+  | 'onModified'
+  | 'onModifying';
+
+export type StoreOptions = {
+  key?: StoreKey;
+  errorHandler?: StoreErrorHandler;
+} & Partial<Record<StoreEventOptionName, Function>>;
+
+export type StoreConstructor = new (options?: StoreOptions) => Store;
+
+const EVENT_OPTION_NAMES: StoreEventOptionName[] = [
+  'onLoaded',
+  'onLoading',
+  'onInserted',
+  'onInserting',
+  'onUpdated',
+  'onUpdating',
+  'onPush',
+  'onRemoved',
+  'onRemoving',
+  'onModified',
+  'onModifying',
+];
+
+const storeImpl: Record<string, StoreConstructor> = {};
+
+class Store {
+  _eventsStrategy: EventsStrategy;
+
+  _langParams: LangParams = {};
+
+  _key?: StoreKey;
+
+  _keyGetter?: Function;
+
+  _errorHandler?: StoreErrorHandler;
+
+  _useDefaultSearch: boolean;
+
+  constructor(options?: StoreOptions) {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const storeOptions: StoreOptions = options || {};
+
     this._eventsStrategy = new EventsStrategy(this);
 
-    each(
-      [
-        'onLoaded',
+    EVENT_OPTION_NAMES.forEach((optionName) => {
+      const handler = storeOptions[optionName];
 
-        'onLoading',
+      if (handler) {
+        this.on(optionName.slice(2).toLowerCase(), handler);
+      }
+    });
 
-        'onInserted',
+    this._key = storeOptions.key;
 
-        'onInserting',
-
-        'onUpdated',
-
-        'onUpdating',
-
-        'onPush',
-
-        'onRemoved',
-
-        'onRemoving',
-
-        'onModified',
-
-        'onModifying',
-      ],
-      (_, optionName) => {
-        if (optionName in options) {
-          that.on(optionName.slice(2).toLowerCase(), options[optionName]);
-        }
-      },
-    );
-
-    this._key = options.key;
-
-    this._errorHandler = options.errorHandler;
+    this._errorHandler = storeOptions.errorHandler;
 
     this._useDefaultSearch = true;
-  },
+  }
 
-  _clearCache: noop,
-
-  _customLoadOptions() {
-    return null;
-  },
-
-  key() {
-    return this._key;
-  },
-
-  keyOf(obj) {
-    if (!this._keyGetter) {
-      this._keyGetter = compileGetter(this.key());
+  static create(alias: string, options?: StoreOptions): Store {
+    if (!(alias in storeImpl)) {
+      throw errors.Error('E4020', alias);
     }
 
-    return this._keyGetter(obj);
-  },
+    return new storeImpl[alias](options);
+  }
 
-  _requireKey() {
+  static registerClass<T extends StoreConstructor>(type: T, alias?: string): T {
+    if (alias) {
+      storeImpl[alias] = type;
+    }
+    return type;
+  }
+
+  _clearCache(): void {}
+
+  _customLoadOptions(): string[] | null {
+    return null;
+  }
+
+  key(): StoreKey | undefined {
+    return this._key;
+  }
+
+  keyOf(obj: unknown): unknown {
+    // @ts-expect-error core/utils/data.d.ts types compileGetter as `(expr: string) => unknown`,
+    // although it also accepts a compound key expression and returns a getter function
+    const keyGetter: Function = this._keyGetter ?? compileGetter(this.key());
+
+    this._keyGetter = keyGetter;
+
+    const result: unknown = keyGetter(obj);
+
+    return result;
+  }
+
+  _requireKey(): void {
     if (!this.key()) {
       throw errors.Error('E4005');
     }
-  },
-  load(options) {
-    const that = this;
+  }
 
-    options = options || {};
+  load(options?: StoreLoadOptions): DeferredObj<unknown[]> {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const loadOptions: StoreLoadOptions = options || {};
 
-    this._eventsStrategy.fireEvent('loading', [options]);
+    this._eventsStrategy.fireEvent('loading', [loadOptions]);
 
-    return this._withLock(this._loadImpl(options)).done((result) => {
-      that._eventsStrategy.fireEvent('loaded', [result, options]);
+    return this._withLock(this._loadImpl(loadOptions)).done((result) => {
+      this._eventsStrategy.fireEvent('loaded', [result, loadOptions]);
     });
-  },
+  }
 
-  _loadImpl(options) {
+  _loadImpl(options?: StoreLoadOptions): DeferredObj<unknown[]> {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const loadOptions: StoreLoadOptions = options || {};
+
     if (!isEmptyObject(this._langParams)) {
-      options = options || {};
-      options._langParams = { ...this._langParams, ...options._langParams };
+      loadOptions._langParams = { ...this._langParams, ...loadOptions._langParams };
     }
-    // @ts-expect-error
-    return queryByOptions(this.createQuery(options), options).enumerate();
-  },
 
-  _withLock(task) {
-    // @ts-expect-error
-    const result = new Deferred();
+    const result: DeferredObj<unknown[]> = queryByOptions(
+      this.createQuery(loadOptions),
+      loadOptions,
+      false,
+    ).enumerate();
 
-    task.done(function () {
-      const that = this;
-      const args = arguments;
+    return result;
+  }
 
+  _withLock<T>(task: DeferredObj<T>): DeferredObj<T> {
+    const result = Deferred<T>();
+
+    task.done(function (this: DeferredObj<T>, ...args: T[]) {
       processRequestResultLock
         .promise()
         .done(() => {
-          result.resolveWith(that, args);
+          result.resolveWith(this, args);
         });
-    }).fail(function () {
-      result.rejectWith(this, arguments);
+    }).fail(function (this: DeferredObj<T>, ...args: T[]) {
+      result.rejectWith(this, args);
     });
 
     return result;
-  },
+  }
 
-  createQuery: abstract,
+  // Kept as a throwing member (not a TS `abstract` one) so that a descendant
+  // that skips it still fails with E0001, as it did with Class.abstract.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  createQuery(options?: StoreLoadOptions): Query {
+    throw errors.Error('E0001');
+  }
 
-  totalCount(options) {
+  totalCount(options?: StoreLoadOptions): DeferredObj<number> {
     return this._totalCountImpl(options);
-  },
+  }
 
-  _totalCountImpl(options) {
-    return queryByOptions(this.createQuery(options), options, true).count();
-  },
+  _totalCountImpl(options?: StoreLoadOptions): DeferredObj<number> {
+    const result: DeferredObj<number> = queryByOptions(
+      this.createQuery(options),
+      options,
+      true,
+    ).count();
 
-  byKey(key, extraOptions) {
+    return result;
+  }
+
+  byKey(key: unknown, extraOptions?: StoreLoadOptions): DeferredObj<unknown> {
     return this._addFailHandlers(this._withLock(this._byKeyImpl(key, extraOptions)));
-  },
+  }
 
-  _byKeyImpl: abstract,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _byKeyImpl(key: unknown, extraOptions?: StoreLoadOptions): DeferredObj<unknown> {
+    throw errors.Error('E0001');
+  }
 
-  insert(values) {
-    const that = this;
+  insert(values: unknown): DeferredObj<unknown> {
+    this._eventsStrategy.fireEvent('modifying', []);
+    this._eventsStrategy.fireEvent('inserting', [values]);
 
-    that._eventsStrategy.fireEvent('modifying');
-    that._eventsStrategy.fireEvent('inserting', [values]);
-
-    return that._addFailHandlers(that._insertImpl(values).done((callbackValues, callbackKey) => {
-      that._eventsStrategy.fireEvent('inserted', [callbackValues, callbackKey]);
-      that._eventsStrategy.fireEvent('modified');
+    return this._addFailHandlers(this._insertImpl(values).done((callbackValues, callbackKey) => {
+      this._eventsStrategy.fireEvent('inserted', [callbackValues, callbackKey]);
+      this._eventsStrategy.fireEvent('modified', []);
     }));
-  },
+  }
 
-  _insertImpl: abstract,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _insertImpl(values: unknown): DeferredObj<unknown> {
+    throw errors.Error('E0001');
+  }
 
-  update(key, values) {
-    const that = this;
+  update(key: unknown, values: unknown): DeferredObj<unknown> {
+    this._eventsStrategy.fireEvent('modifying', []);
+    this._eventsStrategy.fireEvent('updating', [key, values]);
 
-    that._eventsStrategy.fireEvent('modifying');
-    that._eventsStrategy.fireEvent('updating', [key, values]);
-
-    return that._addFailHandlers(that._updateImpl(key, values).done(() => {
-      that._eventsStrategy.fireEvent('updated', [key, values]);
-      that._eventsStrategy.fireEvent('modified');
+    return this._addFailHandlers(this._updateImpl(key, values).done(() => {
+      this._eventsStrategy.fireEvent('updated', [key, values]);
+      this._eventsStrategy.fireEvent('modified', []);
     }));
-  },
+  }
 
-  _updateImpl: abstract,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _updateImpl(key: unknown, values: unknown): DeferredObj<unknown> {
+    throw errors.Error('E0001');
+  }
 
-  push(changes) {
-    const beforePushArgs = {
+  push(changes: StoreChange[]): void {
+    const beforePushArgs: { changes: StoreChange[]; waitFor: unknown[] } = {
       changes,
       waitFor: [],
     };
@@ -180,60 +254,39 @@ const Store = Class.inherit({
       this._eventsStrategy.fireEvent('beforePush', [{ changes }]);
       this._eventsStrategy.fireEvent('push', [changes]);
     });
-  },
+  }
 
-  _pushImpl: noop,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _pushImpl(changes: StoreChange[]): void {}
 
-  remove(key) {
-    const that = this;
+  remove(key: unknown): DeferredObj<unknown> {
+    this._eventsStrategy.fireEvent('modifying', []);
+    this._eventsStrategy.fireEvent('removing', [key]);
 
-    that._eventsStrategy.fireEvent('modifying');
-    that._eventsStrategy.fireEvent('removing', [key]);
-
-    return that._addFailHandlers(that._removeImpl(key).done((callbackKey) => {
-      that._eventsStrategy.fireEvent('removed', [callbackKey]);
-      that._eventsStrategy.fireEvent('modified');
+    return this._addFailHandlers(this._removeImpl(key).done((callbackKey) => {
+      this._eventsStrategy.fireEvent('removed', [callbackKey]);
+      this._eventsStrategy.fireEvent('modified', []);
     }));
-  },
+  }
 
-  _removeImpl: abstract,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _removeImpl(key: unknown): DeferredObj<unknown> {
+    throw errors.Error('E0001');
+  }
 
-  _addFailHandlers(deferred) {
+  _addFailHandlers(deferred: DeferredObj<unknown>): DeferredObj<unknown> {
     return deferred.fail(this._errorHandler).fail(handleError);
-  },
+  }
 
-  on(eventName, eventHandler) {
+  on(eventName: string, eventHandler: Function): this {
     this._eventsStrategy.on(eventName, eventHandler);
     return this;
-  },
+  }
 
-  off(eventName, eventHandler) {
+  off(eventName: string, eventHandler?: Function): this {
     this._eventsStrategy.off(eventName, eventHandler);
     return this;
-  },
-});
-// @ts-expect-error
-Store.create = function (alias, options) {
-  if (!(alias in storeImpl)) {
-    throw errors.Error('E4020', alias);
   }
-
-  return new storeImpl[alias](options);
-};
-// @ts-expect-error
-Store.registerClass = function (type, alias) {
-  if (alias) {
-    storeImpl[alias] = type;
-  }
-  return type;
-};
-Store.inherit = (function (inheritor) {
-  return function (members, alias) {
-    const type = inheritor.apply(this, [members]);
-    // @ts-expect-error
-    Store.registerClass(type, alias);
-    return type;
-  };
-}(Store.inherit));
+}
 
 export default Store;

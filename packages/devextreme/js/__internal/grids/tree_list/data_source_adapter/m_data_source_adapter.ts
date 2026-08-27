@@ -890,7 +890,6 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     }
 
     const loadOptions = that._dataSource._createStoreLoadOptions();
-    // @ts-expect-error need create treelist specific storeLoadOptions type
     loadOptions.parentIds = keys;
 
     that.load(loadOptions)
