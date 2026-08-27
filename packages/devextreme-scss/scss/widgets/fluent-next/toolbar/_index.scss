@@ -50,7 +50,7 @@
 
   .dx-list-item-content,
   .dx-toolbar-item-auto-hide {
-    padding: listSizes.$list-item-padding-block listSizes.$list-item-padding-inline calc(#{listSizes.$list-item-padding-block} - 1px);
+    padding: listSizes.$list-item-padding-block listSizes.$list-item-padding-inline calc(#{listSizes.$list-item-padding-block} - 1px); // dx-px-nudge: -1px off the list item padding
   }
 
   .dx-list-item-content {

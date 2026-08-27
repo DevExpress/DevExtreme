@@ -8,7 +8,7 @@ $grid-text-link-opacity-disabled: ds.$opacity-35;
 $grid-icon-link-opacity-disabled: ds.$opacity-60;
 $grid-group-panel-message-line-height: buttonSizes.$button-text-line-height;
 
-$grid-border-width: 1px !default;
+$grid-border-width: 1px !default; // dx-line-width: 1px
 $grid-border-radius: 0 !default;
 
 $grid-cell-height: null !default;
@@ -79,7 +79,7 @@ $grid-ai-prompt-editor-progress-bar-height: ds.$spacing-40 !default;
   $grid-command-edit-icon-size: ds.$spacing-200 !default;
   $grid-filter-panel-icon-size: ds.$spacing-200 !default;
   $grid-command-ai-icon-size: ds.$spacing-200 !default;
-  $grid-command-ai-content-padding-inline-start: calc(#{$grid-command-ai-icon-size} + 8px) !default;
+  $grid-command-ai-content-padding-inline-start: calc(#{$grid-command-ai-icon-size} + 8px) !default; // dx-px-nudge: +8px over the AI icon size
   $grid-command-ai-button-max-width: ds.$spacing-80 !default;
 }
 
@@ -113,7 +113,7 @@ $grid-ai-prompt-editor-progress-bar-height: ds.$spacing-40 !default;
   $grid-command-edit-icon-size: ds.$spacing-160 !default;
   $grid-filter-panel-icon-size: ds.$spacing-160 !default;
   $grid-command-ai-icon-size: ds.$spacing-160 !default;
-  $grid-command-ai-content-padding-inline-start: calc(#{$grid-command-ai-icon-size} + 6px) !default;
+  $grid-command-ai-content-padding-inline-start: calc(#{$grid-command-ai-icon-size} + 6px) !default; // dx-px-nudge: +6px over the AI icon size
   $grid-command-ai-button-max-width: ds.$spacing-60 !default;
 }
 

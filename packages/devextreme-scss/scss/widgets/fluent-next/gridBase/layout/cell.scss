@@ -309,22 +309,22 @@
 
   // (0,5,1)
   .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-data-row:not(.dx-row-lines, .dx-edit-row, .dx-selection, .dx-row-focused, .dx-row-removed) > td:not(.dx-editor-cell, .dx-master-detail-cell, .dx-command-drag) {
-    padding-top: calc(var(--dx-grid-cell-padding-block) + 1px);
+    padding-top: calc(var(--dx-grid-cell-padding-block) + 1px); // dx-px-nudge: +1px over the cell padding
   }
 
   // (0,5,1)
   .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row.dx-edit-row > td.dx-command-edit {
-    padding-top: calc(var(--dx-grid-cell-padding-block) - 1px);
+    padding-top: calc(var(--dx-grid-cell-padding-block) - 1px); // dx-px-nudge: -1px off the cell padding
   }
 
   // (0,6,1)
   .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-data-row.dx-row-focused:not(.dx-row-lines, .dx-edit-row, .dx-row-removed) > td:not(.dx-editor-cell, .dx-master-detail-cell, .dx-command-drag) {
-    padding-top: calc(var(--dx-grid-cell-padding-block) + 1px);
+    padding-top: calc(var(--dx-grid-cell-padding-block) + 1px); // dx-px-nudge: +1px over the cell padding
   }
 
   // (0,6,1)
   .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-data-row.dx-row-focused:not(.dx-row-lines, .dx-edit-row, .dx-row-removed) > td.dx-command-drag {
-    padding-top: 1px;
+    padding-top: 1px; // dx-px-nudge: 1px, the same correction where the cell has no base padding
   }
 
   // (0,6,1)
@@ -347,7 +347,7 @@
   // (0,8,1) T1303478
   .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row.dx-selection:not(.dx-edit-row):not(.dx-row-lines):not(.dx-group-row) > td:not(.dx-editor-cell, .dx-master-detail-cell, .dx-command-drag),
   .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row.dx-row-focused:not(.dx-edit-row):not(.dx-row-lines):not(.dx-group-row) > td:not(.dx-editor-cell, .dx-master-detail-cell, .dx-command-drag) {
-    padding-bottom: calc(var(--dx-grid-cell-padding-block) - 1px);
+    padding-bottom: calc(var(--dx-grid-cell-padding-block) - 1px); // dx-px-nudge: -1px off the cell padding
   }
 
   // (0,7,1) - (0,9,1)
