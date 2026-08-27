@@ -230,6 +230,25 @@ QUnit.module('OSM: map loading', moduleConfig, () => {
         engineMap.dispose();
         assert.strictEqual(container.getAttribute('tabindex'), '-1', 'updated client tabindex is preserved');
     });
+    QUnit.test('tabindex changed after initialization is preserved on runtime focus updates', function(assert) {
+        const engine = createOpenLayersEngine(openLayersMock);
+        const container = document.createElement('div');
+        const engineMap = engine.createMap(container);
+        container.setAttribute('tabindex', '-1');
+        engineMap.setFocus(true, 5);
+        assert.strictEqual(container.getAttribute('tabindex'), '-1', 'updated client tabindex is preserved');
+        engineMap.dispose();
+    });
+    QUnit.test('tabindex changed after initialization is preserved when disabled is toggled', function(assert) {
+        const engine = createOpenLayersEngine(openLayersMock);
+        const container = document.createElement('div');
+        const engineMap = engine.createMap(container);
+        container.setAttribute('tabindex', '-1');
+        engineMap.setDisabled(true);
+        engineMap.setDisabled(false);
+        assert.strictEqual(container.getAttribute('tabindex'), '-1', 'updated client tabindex is preserved');
+        engineMap.dispose();
+    });
     QUnit.test('engine map can be disposed more than once', function(assert) {
         const engine = createOpenLayersEngine(openLayersMock);
         const engineMap = engine.createMap(document.createElement('div'));

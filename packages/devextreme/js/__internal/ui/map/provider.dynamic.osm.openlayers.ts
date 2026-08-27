@@ -166,7 +166,7 @@ class OpenLayersMap implements MapEngineMap {
 
   private readonly _container: Element;
 
-  private readonly _ownsKeyboardTabIndex: boolean;
+  private _ownedKeyboardTabIndex: string | null | undefined;
 
   private _focusEnabled = true;
 
@@ -197,7 +197,7 @@ class OpenLayersMap implements MapEngineMap {
     view: MapEngineSetViewOptions = {},
   ) {
     this._container = container;
-    this._ownsKeyboardTabIndex = !container.hasAttribute('tabindex');
+    this._ownedKeyboardTabIndex = container.hasAttribute('tabindex') ? undefined : null;
     this._syncKeyboardTabIndex();
 
     this.originalMap = new _api.Map({
@@ -299,8 +299,8 @@ class OpenLayersMap implements MapEngineMap {
       this._tileLayer = undefined;
     }
     this.originalMap.setTarget(undefined);
-    if (this._ownsKeyboardTabIndex
-      && this._container.getAttribute('tabindex') === String(this._tabIndex)) {
+    if (this._ownedKeyboardTabIndex !== undefined
+      && this._container.getAttribute('tabindex') === this._ownedKeyboardTabIndex) {
       this._container.removeAttribute('tabindex');
     }
   }
@@ -415,14 +415,22 @@ class OpenLayersMap implements MapEngineMap {
   }
 
   private _syncKeyboardTabIndex(): void {
-    if (!this._ownsKeyboardTabIndex) {
+    if (this._ownedKeyboardTabIndex === undefined) {
+      return;
+    }
+
+    if (this._container.getAttribute('tabindex') !== this._ownedKeyboardTabIndex) {
+      this._ownedKeyboardTabIndex = undefined;
       return;
     }
 
     if (this._focusEnabled && !this._disabled) {
-      this._container.setAttribute('tabindex', String(this._tabIndex));
+      const tabIndex = String(this._tabIndex);
+      this._container.setAttribute('tabindex', tabIndex);
+      this._ownedKeyboardTabIndex = tabIndex;
     } else {
       this._container.removeAttribute('tabindex');
+      this._ownedKeyboardTabIndex = null;
     }
   }
 
