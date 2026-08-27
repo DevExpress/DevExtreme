@@ -21,7 +21,9 @@ docker build --platform linux/amd64 \
     --build-arg "CHROME_VERSION=$CHROME_VERSION" \
     -t devextreme-playwright-e2e "$REPO_ROOT/e2e/playwright/docker"
 
+# THEME and TIMEZONE are what the matrix varies, so they are handed to the container as they are.
 RUN=(docker run --rm --platform linux/amd64 --shm-size=2gb --security-opt seccomp=unconfined
+    -e "THEME=${THEME:-}" -e "TIMEZONE=${TIMEZONE:-}"
     -v "$REPO_ROOT:/repo" -w /repo/e2e/playwright)
 
 if [ "$UI" = true ]; then

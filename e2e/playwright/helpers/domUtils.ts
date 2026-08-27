@@ -124,3 +124,7 @@ export const removeStylesheetRulesFromPage = async (page: Page): Promise<void> =
   (stylesheetId) => { document.getElementById(stylesheetId)?.remove(); },
   STYLESHEET_RULES_ID,
 );
+
+export const blurActiveElement = async (page: Page): Promise<void> => page.evaluate(() => {
+  (document.activeElement as HTMLElement | null)?.blur();
+});

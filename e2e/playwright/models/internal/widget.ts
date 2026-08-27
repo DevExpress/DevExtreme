@@ -1,5 +1,6 @@
 import type { Locator, Page } from '@playwright/test';
 import type { WidgetName } from '../types';
+import { hasClass } from './hasClass';
 
 const CLASS = {
   focused: 'dx-state-focused',
@@ -40,10 +41,8 @@ export default abstract class Widget {
     return this.hasClass(CLASS.disabled);
   }
 
-  public async hasClass(className: string): Promise<boolean> {
-    const classes = await this.element.getAttribute('class');
-
-    return classes?.split(' ').includes(className) ?? false;
+  public hasClass(className: string): Promise<boolean> {
+    return hasClass(this.element, className);
   }
 
   public async option(option: string | Record<string, unknown>, ...value: unknown[]): Promise<any> {
