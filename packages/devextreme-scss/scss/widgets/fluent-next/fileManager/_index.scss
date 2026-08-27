@@ -84,9 +84,9 @@
   }
 
   .dx-filemanager-progress-box-image {
-    width: calc(#{$global-icon-size} * 2);
-    height: calc(#{$global-icon-size} * 2);
-    font-size: calc(#{$global-icon-size} * 2);
+    width: $file-manager-progress-box-image-size;
+    height: $file-manager-progress-box-image-size;
+    font-size: $file-manager-progress-box-image-size;
   }
 
   .dx-filemanager-progress-box-error {
@@ -208,9 +208,9 @@
     }
 
     .dx-filemanager-thumbnails-item-thumbnail {
-      width: calc(#{$global-icon-size} * 2);
-      height: calc(#{$global-icon-size} * 2);
-      font-size: calc(#{$global-icon-size} * 2);
+      width: $file-manager-thumbnails-item-thumbnail-size;
+      height: $file-manager-thumbnails-item-thumbnail-size;
+      font-size: $file-manager-thumbnails-item-thumbnail-size;
     }
 
     .dx-filemanager-item-custom-thumbnail {

@@ -177,7 +177,7 @@
 }
 
 .dx-fileuploader-file-name {
-  padding-bottom: calc((#{$file-uploader-padding-block}) / 2);
+  padding-bottom: calc(#{$file-uploader-padding-block} / 2);
   color: $file-uploader-file-name-content;
   font-weight: $file-uploader-file-name-font-weight;
 }

@@ -424,7 +424,6 @@
     "fluent-next/typography/_sizes.scss: --dx-font-size-xs"
   ],
   "unconsumedManifestReads": [
-    "fluent-next/button/_mixins.scss: $button-height",
     "fluent-next/button/_mixins.scss: $button-icon-margin",
     "fluent-next/button/_mixins.scss: $button-icon-size",
     "fluent-next/button/_mixins.scss: $button-icon-size",
