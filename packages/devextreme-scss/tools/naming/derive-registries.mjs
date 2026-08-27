@@ -51,6 +51,10 @@ const OVERRIDES = {
    */
   systemFolders: ['common', 'typography'],
 
+  // System folders whose declarations join the --dx tier (published from <folder>/_public.scss
+  // onto rootSelectors[folder]); grammar stays the systemConcerns path, not the component one.
+  systemTier: ['common'],
+
   // component -> folder that is allowed to declare it (O2: exactly one declaration home).
   // Only needed where more than one folder currently declares the component's variables.
   declarationHome: {
@@ -192,6 +196,8 @@ const OVERRIDES = {
    * that component's consumption wave lands.
    */
   rootSelectors: {
+    // system tier: theme-wide values (system concerns of common/) live on the document root
+    common: [':root'],
     /*
      * The drop-down editor's inner button is a dxButton whose root carries dx-button-normal +
      * dx-dropdowneditor-button but NOT dx-button (found by the F12 runtime reachability audit:
@@ -894,7 +900,7 @@ const OVERRIDES = {
       'ai-chat', 'drag-header', 'filter-row', 'filter-panel', 'summary', 'column-separator',
       'no-data', 'link', 'editor', 'search', 'chevron', 'icon', 'text-stub', 'selection',
       'draggable-column', 'header-filter', 'drop-highlight', 'text-link', 'icon-link',
-      'checkbox', 'menu-item', 'header-panel', 'group-panel', 'command', 'edit', 'edit-column',
+      'checkbox', 'menu-item', 'context-menu', 'header-panel', 'group-panel', 'command', 'edit', 'edit-column',
       'select-column', 'icon-container', 'filter-operation',
       'adaptive-column', 'tree-view', 'node', 'select-all', 'sort-index', 'error-message', 'popup',
       'overlay', 'revert-button', 'validation', 'input', 'progress-bar', 'prompt-editor', 'after',
@@ -1076,12 +1082,13 @@ const build = () => {
 
   // Wave F: emission scope per migrated component — explicit override or the derived widget class
   const rootSelectors = {};
-  OVERRIDES.migrated.forEach((component) => {
+  [...OVERRIDES.migrated, ...OVERRIDES.systemTier].forEach((component) => {
     rootSelectors[component] = OVERRIDES.rootSelectors[component]
       ?? [`.dx-${component.replace(/-/g, '')}`];
   });
   const orphanRoots = Object.keys(OVERRIDES.rootSelectors)
-    .filter((component) => !OVERRIDES.migrated.includes(component));
+    .filter((component) => !OVERRIDES.migrated.includes(component)
+      && !OVERRIDES.systemTier.includes(component));
   if (orphanRoots.length) {
     throw new Error(`rootSelectors for non-migrated components: ${orphanRoots.join(', ')}`);
   }
@@ -1103,6 +1110,7 @@ const build = () => {
     components,
     declarationHome,
     systemFolders: OVERRIDES.systemFolders,
+    systemTier: OVERRIDES.systemTier,
     systemConcerns: [...OVERRIDES.systemConcerns].sort(),
     chassis: OVERRIDES.chassis,
     rootSelectors,

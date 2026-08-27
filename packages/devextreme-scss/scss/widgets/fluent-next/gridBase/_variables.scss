@@ -6,6 +6,7 @@ $grid-cell-padding-block: calc((#{$grid-cell-height} - #{$grid-cell-line-height}
 $grid-cell-padding: $grid-cell-padding-block $grid-cell-padding-inline;
 $grid-header-cell-padding-block: calc((#{$grid-header-height} - #{$grid-header-line-height}) / 2);
 $grid-command-select-column-width: calc(#{$grid-checkbox-size} + 2 * #{$grid-cell-padding-inline});
+$grid-context-menu-icon-size: calc(#{$grid-menu-item-icon-size} - 4px);
 $grid-master-detail-padding: 16px;
 
 /*

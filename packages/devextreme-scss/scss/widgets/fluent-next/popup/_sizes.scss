@@ -4,7 +4,7 @@
 @use "../typography/sizes" as typographySizes;
 
 // Not a colour: a radius that used to sit in _colors.scss (NAMING.md, O7)
-$popup-border-radius: calc(#{$global-border-radius} * 2) !default;
+$popup-border-radius: ds.$border-radius-80 !default;
 
 $popup-content-padding: null !default;
 $popup-content-padding-block: null !default;

@@ -3,10 +3,8 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
-@use "../common/sizes" as *;
 @use "../button/sizes" as buttonSizes;
 @use "../common/mixins" as *;
-@use "../common/sizes" as *;
 @use "../../base/textEditor" with (
   $texteditor-clear-button-area-width: var(--dx-text-editor-clear-button-width),
 );
@@ -208,7 +206,7 @@
 }
 
 @mixin texteditor-validation-icon-offset() {
-  inset-inline-end: $invalid-badge-offset;
+  inset-inline-end: var(--dx-invalid-badge-offset);
 }
 
 @mixin texteditor-validation-icon-offset-filled() {
