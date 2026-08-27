@@ -1,6 +1,5 @@
 @use "colors" as *;
 @use "sizes" as *;
-@use "../common/sizes" as *;
 @use "../textEditor/sizes" as textEditorSizes;
 @use "../../base/icon_fonts" as *;
 @use "../../base/dropDownEditor" with (
@@ -105,7 +104,7 @@
 .dx-dropdowneditor-overlay {
   &.dx-popup-wrapper {
     .dx-overlay-content {
-      box-shadow: $global-dropdown-box-shadow;
+      box-shadow: var(--dx-global-dropdown-box-shadow);
       overflow: hidden;
     }
   }

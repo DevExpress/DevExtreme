@@ -90,7 +90,7 @@ $text-editor-input-filled-padding:
   $text-editor-input-filled-padding-block-end !default;
 
 $text-editor-button-filled-inset-inline-end: calc(#{$text-editor-input-filled-padding-inline} - #{ds.$spacing-40}) !default;
-$text-editor-spin-button-padding-inline: calc((#{$text-editor-input-filled-padding-inline}) / 2) !default;
+$text-editor-spin-button-padding-inline: calc(#{$text-editor-input-filled-padding-inline} / 2) !default;
 
 // Values hoisted from style-file literals (tokenized)
 $text-editor-border-width: ds.$border-width-10 !default;

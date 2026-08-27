@@ -1,4 +1,3 @@
-@use "../common/colors" as *;
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/icon_fonts" as *;
@@ -13,7 +12,7 @@
 
 .dx-popup-wrapper {
   & > .dx-overlay-content {
-    background: $surface-overlay;
+    background: var(--dx-surface-overlay);
     box-shadow: $popup-content-box-shadow;
     border-radius: $popup-border-radius;
   }
