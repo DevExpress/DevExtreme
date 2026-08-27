@@ -32,4 +32,16 @@ if [ "$UI" = true ]; then
         node_modules/.bin/playwright test --ui-host=0.0.0.0 --ui-port="$UI_PORT" "$@"
 fi
 
-exec "${RUN[@]}" -e CI=true devextreme-playwright-e2e node_modules/.bin/playwright test "$@"
+# CI=true keeps the strict screenshot budget, but its worker default is sized for a CI agent:
+# on a developer machine that many browsers starve each other and the timing-sensitive tests
+# (drag-n-drop above all) fail for no reason. Half the cores unless the caller says otherwise —
+# to reproduce a specific job, pass its matrix concurrency, e.g. --workers=3.
+WORKERS=(--workers=50%)
+for arg in "$@"; do
+    case "$arg" in
+        --workers|--workers=*) WORKERS=() ;;
+    esac
+done
+
+exec "${RUN[@]}" -e CI=true devextreme-playwright-e2e \
+    node_modules/.bin/playwright test "${WORKERS[@]}" "$@"

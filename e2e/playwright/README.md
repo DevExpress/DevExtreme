@@ -66,7 +66,13 @@ dependencies and the DevExtreme build come from the host.
 docker/run.sh                       # the whole suite, as CI runs it
 docker/run.sh --ui                  # then open http://localhost:9323
 THEME=generic.light docker/run.sh --grep @generic.light    # what the "generic" job runs
+docker/run.sh tests/common/pivotGrid/ --workers=3          # one folder at its job's concurrency
 ```
+
+The container runs on half the cores unless `--workers` says otherwise. A developer machine is
+smaller than a CI agent, and the timing-sensitive tests — drag-n-drop above all — fail under
+contention for no reason of their own. Reproducing a specific job means passing the concurrency its
+matrix entry declares.
 
 Open the UI on `localhost` — the address Playwright prints, `0.0.0.0`, is not a secure origin and
 its trace viewer will not load there.
