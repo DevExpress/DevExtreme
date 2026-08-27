@@ -1,6 +1,7 @@
 import type { Store } from '@js/common/data';
 import type { Callback } from '@js/core/utils/callbacks';
 import { deferRender } from '@js/core/utils/common';
+import { logger } from '@js/core/utils/console';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
@@ -61,7 +62,7 @@ import {
   markUpdateChange,
   pushChangedRow,
   resetChangedRows,
-  updateRowCells,
+  updateKeptRows,
 } from './utils/row_changes';
 import { generateRowValues } from './utils/row_values';
 
@@ -1023,7 +1024,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return columnIndices;
   }
 
-  protected _isItemEquals(item1: ProcessedItem, item2: ProcessedItem): boolean {
+  protected isSameRowState(item1: ProcessedItem, item2: ProcessedItem): boolean {
     if (JSON.stringify(item1.values) !== JSON.stringify(item2.values)) {
       return false;
     }
@@ -1078,28 +1079,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
   }
 
-  private findItemChanges(
-    oldItems: ProcessedItem[],
-    newItems: ProcessedItem[],
-  ): ItemChange[] | undefined {
-    const isItemEquals = (item1: ProcessedItem, item2: ProcessedItem): boolean => {
-      if (!this._isItemEquals(item1, item2)) {
-        return false;
-      }
-
-      updateRowCells(item1, item2);
-
-      return true;
-    };
-
-    return findChanges({
-      oldItems,
-      newItems,
-      getKey: getRowKey,
-      isItemEquals,
-    });
-  }
-
   private applyItemChanges(itemChanges: ItemChange[], isLiveUpdate: boolean): ChangedRows {
     const changedRows = initChangedRows();
 
@@ -1134,9 +1113,23 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     const newItems = change.items ?? [];
     const oldItems = this._items.slice();
     const newIndexByKey = indexRowsByKey(newItems);
-    const itemChanges = this.findItemChanges(oldItems, newItems);
+    const itemChanges = findChanges({
+      oldItems,
+      newItems,
+      getKey: getRowKey,
+      isItemEquals: this.isSameRowState.bind(this),
+    });
 
+    // Changes cannot be found for a moved row, duplicate keys, or any throw.
     if (!itemChanges) {
+      this._applyChangeFull(change);
+      return;
+    }
+
+    try {
+      updateKeptRows(oldItems, newItems, newIndexByKey, itemChanges);
+    } catch (error) {
+      logger.error(error);
       this._applyChangeFull(change);
       return;
     }
