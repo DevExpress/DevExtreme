@@ -131,9 +131,9 @@ $scheduler-header-panel-time-cell-padding: null !default;
   $scheduler-agenda-appointment-title-font-size: ds.$font-size-base-md;
 
   $scheduler-appointment-short-content-padding: 0 ds.$spacing-80 0 ds.$spacing-120 !default;
-  $scheduler-appointment-15min-height: 17px !default; // literal: used in @container conditions where var() is invalid
-  $scheduler-appointment-20min-height: 24px !default; // literal: used in @container conditions where var() is invalid
-  $scheduler-appointment-25min-height: 32px !default; // literal: used in @container conditions where var() is invalid
+  $scheduler-appointment-15min-height: 17px !default; // dx-literal-required: used in @container conditions, var() is invalid there
+  $scheduler-appointment-20min-height: 24px !default; // dx-literal-required: used in @container conditions, var() is invalid there
+  $scheduler-appointment-25min-height: 32px !default; // dx-literal-required: used in @container conditions, var() is invalid there
 
   $scheduler-appointment-10min-recurrence-padding-inline-end: ds.$spacing-140 !default;
   $scheduler-appointment-10min-title-font-size: ds.$spacing-80 !default;
@@ -195,9 +195,9 @@ $scheduler-header-panel-time-cell-padding: null !default;
   $scheduler-agenda-appointment-title-font-size: ds.$spacing-130;
 
   $scheduler-appointment-short-content-padding: 0 ds.$spacing-80 0 ds.$spacing-120 !default;
-  $scheduler-appointment-15min-height: 17px !default; // literal: used in @container conditions where var() is invalid
-  $scheduler-appointment-20min-height: 24px !default; // literal: used in @container conditions where var() is invalid
-  $scheduler-appointment-25min-height: 32px !default; // literal: used in @container conditions where var() is invalid
+  $scheduler-appointment-15min-height: 17px !default; // dx-literal-required: used in @container conditions, var() is invalid there
+  $scheduler-appointment-20min-height: 24px !default; // dx-literal-required: used in @container conditions, var() is invalid there
+  $scheduler-appointment-25min-height: 32px !default; // dx-literal-required: used in @container conditions, var() is invalid there
 
   $scheduler-appointment-10min-recurrence-padding-inline-end: ds.$spacing-140 !default;
   $scheduler-appointment-10min-title-font-size: ds.$spacing-80 !default;

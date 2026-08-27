@@ -61,7 +61,7 @@
   inherit,
   $calendar-cell-border-hovered,
   999em,
-  1px,
+  1px, // dx-line-width: 1px, the range cell border passed to dx-calendar-cell-in-range-mixin
   ".dx-calendar-cell-range-hover",
   ".dx-calendar-cell-range-hover-start",
   ".dx-calendar-cell-range-hover-end",

@@ -16,7 +16,7 @@ $invalid-badge-size: calc(#{$global-icon-size} - #{ds.$spacing-20}) !default;
 $invalid-badge-padding-inline: calc((#{$global-inline-widget-inner-height} - #{$invalid-badge-size}) / 2) !default;
 $invalid-badge-offset: calc(#{$invalid-badge-padding-inline} / 2) !default;
 
-$valid-badge-font-size: calc(#{$global-font-size} + 6px) !default;
+$valid-badge-font-size: calc(#{$global-font-size} + 6px) !default; // dx-px-nudge: +6px over the global font size
 
 $global-dropdown-box-shadow: null !default;
 
