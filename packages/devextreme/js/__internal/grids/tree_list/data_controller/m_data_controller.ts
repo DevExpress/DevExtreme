@@ -158,7 +158,7 @@ export class TreeListDataController extends DataController {
       case 'dataStructure':
         this._columnsController.reset();
         this._items = [];
-        this._refreshDataSource();
+        this.resetDataSource();
         args.handled = true;
         break;
       case 'expandedRowKeys':

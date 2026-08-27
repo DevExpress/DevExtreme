@@ -73,10 +73,6 @@ export class DataController extends modules.Controller {
 
   protected _isSharedDataSource?: boolean;
 
-  protected readyWatcher?: (isLoading: boolean) => void;
-
-  protected _ready?: (value?: boolean) => void;
-
   protected _items!: ProcessedItem[];
 
   private _cachedProcessedItems!: ProcessedItem[] | null;
@@ -178,8 +174,7 @@ export class DataController extends modules.Controller {
 
     this.dataErrorOccurred.add((error) => this.executeAction('onDataErrorOccurred', { error }));
 
-    this._refreshDataSource();
-    this.postInit();
+    this.resetDataSource();
   }
 
   /**
@@ -242,7 +237,7 @@ export class DataController extends modules.Controller {
   public reset(): void {
     this._columnsController.reset();
     this._items = [];
-    this._refreshDataSource();
+    this.resetDataSource();
   }
 
   /**
@@ -676,16 +671,10 @@ export class DataController extends modules.Controller {
     return dataSource;
   }
 
-  public postInit(): void {
-    this.on('disposing', () => {
-      this._disposeDataSource();
-    });
-  }
-
   /**
    * @extended: state_storing, virtual_scrolling
    */
-  protected _refreshDataSource(): DeferredObj<unknown> | undefined {
+  protected resetDataSource(): DeferredObj<unknown> | undefined {
     this._initDataSource();
     this._loadDataSource();
 
@@ -718,26 +707,13 @@ export class DataController extends modules.Controller {
       return undefined;
     }
 
-    const isSharedDataSource = dataSourceOptions instanceof DataSourceClass;
+    this._isSharedDataSource = dataSourceOptions instanceof DataSourceClass;
 
-    this._isSharedDataSource = isSharedDataSource;
-
-    const dataSource = (isSharedDataSource
+    return (this._isSharedDataSource
       ? dataSourceOptions
       : new DataSourceClass(
         extend(true, {}, normalizeDataSourceOptions(dataSourceOptions, { fromUrlLoadMode: false })),
       )) as DataSource;
-
-    this._addReadyWatcher(dataSource);
-
-    return dataSource;
-  }
-
-  private _addReadyWatcher(dataSource: DataSource): void {
-    this.readyWatcher = (isLoading: boolean): void => {
-      this._ready?.(!isLoading);
-    };
-    dataSource.on('loadingChanged', this.readyWatcher);
   }
 
   /**
@@ -1769,9 +1745,6 @@ export class DataController extends modules.Controller {
   }
 
   protected _disposeDataSource(): void {
-    if (this._dataSource?._eventsStrategy) {
-      this._dataSource._eventsStrategy.off('loadingChanged', this.readyWatcher);
-    }
     this.setDataSource(null);
   }
 
