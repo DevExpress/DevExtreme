@@ -11,6 +11,7 @@ import {
   afterTest,
   beforeTest,
   createDataGrid,
+  flushAsync,
 } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 
 const DATA = [
@@ -22,14 +23,14 @@ const getIsSharedDataSource = (instance: DataGridInstance): unknown => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const dataController = instance.getController('data') as any;
 
-  return dataController._isSharedDataSource as unknown;
+  return dataController.isSharedDataSource as unknown;
 };
 
 describe('DataController data source', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
 
-  describe('_isSharedDataSource', () => {
+  describe('isSharedDataSource', () => {
     it('should be true when a DataSource instance is passed', async () => {
       const sharedDataSource = new DataSource({ store: DATA, key: 'id' });
 
@@ -51,6 +52,7 @@ describe('DataController data source', () => {
       expect(getIsSharedDataSource(instance)).toBe(true);
 
       instance.option('dataSource', DATA);
+      await flushAsync();
 
       expect(getIsSharedDataSource(instance)).toBe(false);
     });

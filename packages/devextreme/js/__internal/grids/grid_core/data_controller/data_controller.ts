@@ -72,7 +72,7 @@ export class DataController extends modules.Controller {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public _dataSource?: any;
 
-  protected _isSharedDataSource?: boolean;
+  protected isSharedDataSource?: boolean;
 
   protected _items!: ProcessedItem[];
 
@@ -683,9 +683,7 @@ export class DataController extends modules.Controller {
   protected _initDataSource(): void {
     const hadDataSource = !!this._dataSource;
 
-    this._disposeDataSource();
-
-    const dataSource = this.createRawDataSource();
+    const dataSource = this.recreateDataSource();
     this._useSortingGroupingFromColumns = true;
     this._cachedProcessedItems = null;
 
@@ -699,19 +697,22 @@ export class DataController extends modules.Controller {
     }
   }
 
-  private createRawDataSource(): DataSource | undefined {
+  private recreateDataSource(): DataSource | undefined {
     const dataSourceOptions = this._getSpecificDataSourceOption();
 
+    this._disposeDataSource();
+
     if (!dataSourceOptions) {
+      this.isSharedDataSource = false;
       return undefined;
     }
 
     if (dataSourceOptions instanceof DataSourceClass) {
-      this._isSharedDataSource = true;
+      this.isSharedDataSource = true;
       return dataSourceOptions as DataSource;
     }
 
-    this._isSharedDataSource = false;
+    this.isSharedDataSource = false;
     return new DataSourceClass(
       extend(true, {}, normalizeDataSourceOptions(dataSourceOptions, {})),
     ) as DataSource;
@@ -1469,7 +1470,7 @@ export class DataController extends modules.Controller {
     if (!dataSource && oldDataSource) {
       oldDataSource.cancelAll();
       this.unsubscribeFromDataSource(oldDataSource);
-      oldDataSource.dispose(this._isSharedDataSource);
+      oldDataSource.dispose(this.isSharedDataSource);
     }
 
     const dataSourceAdapter = dataSource
