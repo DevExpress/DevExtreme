@@ -1,4 +1,12 @@
-@use "../scrollView/colors" as scrollViewColors;
+@use "../colors" as *;
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$icon-pulldown-bg: scrollViewColors.$scroll-view-pull-down-bg !default;
+$icon-pulldown-bg: null !default;
+
+@if $mode == "light" {
+  $icon-pulldown-bg: data-uri("images/widgets/fluent-next/color-schemes/light/pulldown.png") !default;
+}
+
+@if $mode == "dark" {
+  $icon-pulldown-bg: data-uri("images/widgets/fluent-next/color-schemes/dark/pulldown.png") !default;
+}
