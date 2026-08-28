@@ -1,0 +1,182 @@
+name: Demos Visual Tests (merge queue)
+
+on:
+  merge_group:
+
+concurrency:
+  group: wf-${{ github.event.merge_group.head_sha || github.sha }}-${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  attempt1:
+    name: Attempt 1
+    uses: ./.github/workflows/visual-tests-demos.yml
+    secrets: inherit
+
+  triage:
+    name: Triage attempt 1
+    runs-on: ubuntu-latest
+    needs: [attempt1]
+    if: always()
+    timeout-minutes: 10
+    permissions:
+      actions: read
+    outputs:
+      is_retry: ${{ steps.decide.outputs.is_retry }}
+      real_failure: ${{ steps.decide.outputs.real_failure }}
+      retry_targets: ${{ steps.decide.outputs.retry_targets }}
+    steps:
+      - id: decide
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+          ATTEMPT1_RESULT: ${{ needs.attempt1.result }}
+        run: |
+          set -euo pipefail
+
+          emit() {
+            echo "is_retry=$1"       >> "$GITHUB_OUTPUT"
+            echo "real_failure=$2"   >> "$GITHUB_OUTPUT"
+            echo "retry_targets=$3"  >> "$GITHUB_OUTPUT"
+          }
+
+          if [ "$ATTEMPT1_RESULT" = "success" ]; then
+            echo "Attempt 1 passed."
+            emit false false '{}'
+            exit 0
+          fi
+          if [ "$ATTEMPT1_RESULT" = "cancelled" ]; then
+            echo "Attempt 1 cancelled; not retrying."
+            emit false true '{}'
+            exit 0
+          fi
+
+          jobs=$(gh api --paginate "/repos/$REPO/actions/runs/$RUN_ID/jobs?per_page=100")
+          failed=$(echo "$jobs" | jq -c '
+            [ .jobs[]
+              | select(.conclusion=="failure")
+              | select(.name | startswith("Attempt 1 /"))
+              | { id, name, steps } ]')
+
+          count=$(echo "$failed" | jq 'length')
+          if [ "$count" -eq 0 ]; then
+            echo "Attempt 1 failed but no per-job failure identified; not retrying."
+            emit false true '{}'
+            exit 0
+          fi
+
+          retry_json='{}'
+          all_retriable=1
+
+          for i in $(seq 0 $((count - 1))); do
+            entry=$(echo "$failed" | jq -c ".[$i]")
+            jid=$(echo   "$entry" | jq -r '.id')
+            jname=$(echo "$entry" | jq -r '.name')
+            child=${jname#"Attempt 1 / "}
+
+            category=""
+            case "$child" in
+              angular\(*\)-screenshots-*)
+                category="testcafe-frameworks-all"
+                ;;
+              *)
+                echo "$child → real failure (not whitelisted for retry)"
+                all_retriable=0
+                continue
+                ;;
+            esac
+
+            # Spot signature: disconnect banner in the log tail, OR last step never
+            # completed (runner died silently, job hit timeout with an in-progress step).
+            spot=0
+            if gh api -H "Accept: application/vnd.github.raw" \
+                 "/repos/$REPO/actions/jobs/$jid/logs" 2>/dev/null \
+                 | tail -400 | grep -q "lost communication with the server"; then
+              spot=1
+            fi
+            if [ $spot -eq 0 ]; then
+              last_status=$(echo     "$entry" | jq -r '.steps[-1].status     // ""')
+              last_conclusion=$(echo "$entry" | jq -r '.steps[-1].conclusion // ""')
+              if [ "$last_status" = "in_progress" ] || [ -z "$last_conclusion" ]; then
+                spot=1
+              fi
+            fi
+
+            if [ $spot -eq 0 ]; then
+              echo "$child → real failure (no spot signature)"
+              all_retriable=0
+              continue
+            fi
+
+            echo "$child → spot-like failure, category=$category"
+            case "$category" in
+              testcafe-frameworks-all)
+                constel=$(echo "$child" | sed -E 's/^(.+)-screenshots-.+$/\1/')
+                theme=$(echo   "$child" | sed -E 's/^.+-screenshots-(.+)$/\1/')
+                retry_json=$(echo "$retry_json" | jq -c \
+                  --arg constel "$constel" --arg theme "$theme" \
+                  '.["testcafe-frameworks-all"].include =
+                    ((.["testcafe-frameworks-all"].include // [])
+                     + [{CONSTEL:$constel, THEME:$theme}])')
+                ;;
+            esac
+          done
+
+          if [ $all_retriable -eq 0 ]; then
+            echo "At least one non-retriable failure; not retrying."
+            emit false true '{}'
+            exit 0
+          fi
+
+          target_count=$(echo "$retry_json" | jq 'to_entries | length')
+          if [ "$target_count" -eq 0 ]; then
+            echo "No retriable targets identified; not retrying."
+            emit false true '{}'
+            exit 0
+          fi
+
+          echo "Attempt 2 will re-run:"
+          echo "$retry_json" | jq .
+          emit true false "$(echo "$retry_json" | jq -c .)"
+
+  attempt2:
+    name: Attempt 2
+    needs: [attempt1, triage]
+    if: needs.triage.outputs.is_retry == 'true'
+    uses: ./.github/workflows/visual-tests-demos.yml
+    with:
+      is_retry: true
+      retry_targets: ${{ needs.triage.outputs.retry_targets }}
+    secrets: inherit
+
+  gate:
+    name: Merge queue gate
+    runs-on: ubuntu-latest
+    needs: [attempt1, triage, attempt2]
+    if: always()
+    timeout-minutes: 5
+    steps:
+      - name: Verdict
+        env:
+          ATTEMPT1: ${{ needs.attempt1.result }}
+          ATTEMPT2: ${{ needs.attempt2.result }}
+          REAL_FAILURE: ${{ needs.triage.outputs.real_failure }}
+        run: |
+          set -e
+          echo "attempt1=$ATTEMPT1  attempt2=$ATTEMPT2  real_failure=$REAL_FAILURE"
+
+          if [ "$REAL_FAILURE" = "true" ]; then
+            echo "Real failure detected in attempt 1."
+            exit 1
+          fi
+          if [ "$ATTEMPT1" = "success" ]; then
+            echo "Attempt 1 passed."
+            exit 0
+          fi
+          if [ "$ATTEMPT2" = "success" ]; then
+            echo "Attempt 1 flaked on spot; attempt 2 recovered."
+            exit 0
+          fi
+          echo "Retry did not recover."
+          exit 1
