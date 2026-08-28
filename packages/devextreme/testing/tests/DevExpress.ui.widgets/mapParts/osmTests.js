@@ -10,26 +10,51 @@ import 'ui/map';
 let openLayersMock;
 const resetOpenLayersMock = () => {
     Object.assign(openLayersMock, {
+        addedControls: [],
         addedTileLayers: [],
         controlOptions: null,
+        fitOptions: null,
+        fittedExtent: null,
         interactionOptions: null,
+        interactions: [],
+        interactionStateChanges: [],
         mapCreated: false,
         mapInstance: null,
         mapOptions: null,
         mapResized: false,
         mapTarget: null,
+        onInteractionStateChanged: null,
         projectedCoordinates: [],
+        removedControls: [],
         removedLayers: [],
         throwOnTileSource: false,
         tileLayer: null,
         tileLayerOptions: null,
         tileSourceChanges: [],
         tileSourceOptions: null,
+        transformedCoordinates: [],
+        transformedExtents: [],
+        userProjection: null,
         viewCenter: null,
         viewCenterSetCount: 0,
+        viewExtent: [-74100, 40600, -73800, 40900],
         viewOptions: null,
-        viewZoom: null
+        viewZoom: null,
+        viewZoomSetCount: 0,
+        zoomControlCreatedCount: 0
     });
+};
+const onInteractionStates = (expectedStates, callback) => {
+    openLayersMock.onInteractionStateChanged = () => {
+        const actualStates = openLayersMock.interactions.map(interaction => interaction.getActive());
+        const stateMatches = actualStates.length === expectedStates.length
+            && actualStates.every((state, index) => state === expectedStates[index]);
+
+        if(stateMatches) {
+            openLayersMock.onInteractionStateChanged = null;
+            callback();
+        }
+    };
 };
 const moduleConfig = {
     beforeEach(assert) {
@@ -67,6 +92,8 @@ const createProvider = () => new OsmProvider({
         providerConfig: {}
     })
 }, null);
+const getOpenLayersKeyboardTarget = () => openLayersMock.mapOptions.keyboardEventTarget;
+const getOpenLayersMapTarget = () => openLayersMock.mapOptions.target;
 QUnit.module('OSM: map loading', moduleConfig, () => {
     QUnit.test('registered OpenLayers engine takes priority over window.ol', function(assert) {
         const done = assert.async();
@@ -123,11 +150,19 @@ QUnit.module('OSM: map loading', moduleConfig, () => {
         const container = document.createElement('div');
         const engineMap = engine.createMap(container);
         assert.strictEqual(container.getAttribute('tabindex'), '0', 'map target is focusable');
-        assert.deepEqual(openLayersMock.interactionOptions, {
-            onFocusOnly: false
-        }, 'pointer interactions do not require focus');
+        assert.strictEqual(openLayersMock.mapOptions.keyboardEventTarget, container, 'map target receives keyboard events');
         engineMap.dispose();
         assert.strictEqual(container.getAttribute('tabindex'), null, 'added tabindex is removed on dispose');
+    });
+    QUnit.test('OpenLayers interactions are configured for dxMap', function(assert) {
+        const engine = createOpenLayersEngine(openLayersMock);
+        const engineMap = engine.createMap(document.createElement('div'));
+        assert.deepEqual(openLayersMock.interactionOptions, {
+            altShiftDragRotate: false,
+            onFocusOnly: false,
+            pinchRotate: false
+        }, 'pointer interactions work without focus and cannot rotate the map');
+        engineMap.dispose();
     });
     QUnit.test('OpenLayers controls are configured for the tiles stage', function(assert) {
         const engine = createOpenLayersEngine(openLayersMock);
@@ -137,9 +172,10 @@ QUnit.module('OSM: map loading', moduleConfig, () => {
             rotate: false,
             zoom: false
         }, 'only the attribution control remains enabled');
+        assert.strictEqual(openLayersMock.addedControls.length, 0, 'zoom control is not added by default');
         engineMap.dispose();
     });
-    QUnit.test('OpenLayers Shadow DOM host is keyboard focusable', function(assert) {
+    QUnit.test('OpenLayers map target is the keyboard target in Shadow DOM', function(assert) {
         const engine = createOpenLayersEngine(openLayersMock);
         const host = document.createElement('div');
         const shadowRoot = host.attachShadow({
@@ -148,26 +184,51 @@ QUnit.module('OSM: map loading', moduleConfig, () => {
         const container = document.createElement('div');
         shadowRoot.appendChild(container);
         const engineMap = engine.createMap(container);
-        assert.strictEqual(host.getAttribute('tabindex'), '0', 'Shadow DOM host is focusable');
-        assert.strictEqual(container.getAttribute('tabindex'), null, 'nested map target does not add a second tab stop');
+        assert.strictEqual(host.getAttribute('tabindex'), null, 'Shadow DOM host is unchanged');
+        assert.strictEqual(container.getAttribute('tabindex'), '0', 'map target is focusable');
+        assert.strictEqual(openLayersMock.mapOptions.keyboardEventTarget, container, 'map target receives keyboard events');
         engineMap.dispose();
-        assert.strictEqual(host.getAttribute('tabindex'), null, 'added host tabindex is removed on dispose');
+        assert.strictEqual(container.getAttribute('tabindex'), null, 'added map target tabindex is removed on dispose');
     });
-    QUnit.test('existing tabindex is preserved on dispose', function(assert) {
-        const engine = createOpenLayersEngine(openLayersMock);
-        const container = document.createElement('div');
-        container.setAttribute('tabindex', '-1');
-        const engineMap = engine.createMap(container);
-        engineMap.dispose();
-        assert.strictEqual(container.getAttribute('tabindex'), '-1', 'client tabindex is preserved');
-    });
-    QUnit.test('tabindex changed after initialization is preserved on dispose', function(assert) {
+    QUnit.test('owned inert attribute is removed on dispose', function(assert) {
         const engine = createOpenLayersEngine(openLayersMock);
         const container = document.createElement('div');
         const engineMap = engine.createMap(container);
-        container.setAttribute('tabindex', '-1');
+        engineMap.setDisabled(true);
+        assert.ok(container.hasAttribute('inert'), 'map target is inert while disabled');
         engineMap.dispose();
-        assert.strictEqual(container.getAttribute('tabindex'), '-1', 'updated client tabindex is preserved');
+        assert.notOk(container.hasAttribute('inert'), 'owned inert attribute is removed');
+    });
+    QUnit.test('pre-existing inert attribute is preserved', function(assert) {
+        const engine = createOpenLayersEngine(openLayersMock);
+        const container = document.createElement('div');
+        container.setAttribute('inert', '');
+        const engineMap = engine.createMap(container);
+
+        engineMap.setDisabled(true);
+        engineMap.setDisabled(false);
+        assert.ok(container.hasAttribute('inert'), 'pre-existing inert attribute is preserved after enabling');
+
+        engineMap.dispose();
+        assert.ok(container.hasAttribute('inert'), 'pre-existing inert attribute is preserved on dispose');
+    });
+    QUnit.test('disabled map does not make its Shadow DOM host inert', function(assert) {
+        const engine = createOpenLayersEngine(openLayersMock);
+        const host = document.createElement('div');
+        const shadowRoot = host.attachShadow({ mode: 'open' });
+        const container = document.createElement('div');
+        const sibling = document.createElement('button');
+        shadowRoot.append(container, sibling);
+        const engineMap = engine.createMap(container);
+        engineMap.setDisabled(true);
+        assert.ok(container.hasAttribute('inert'), 'map container is inert');
+        assert.notOk(host.hasAttribute('inert'), 'Shadow DOM host remains interactive');
+        assert.notOk(sibling.hasAttribute('inert'), 'sibling remains interactive');
+        assert.strictEqual(container.getAttribute('tabindex'), null, 'owned map target tabindex is removed');
+        engineMap.setDisabled(false);
+        assert.notOk(container.hasAttribute('inert'), 'map container becomes interactive');
+        assert.strictEqual(container.getAttribute('tabindex'), '0', 'owned map target tabindex is restored');
+        engineMap.dispose();
     });
     QUnit.test('engine map can be disposed more than once', function(assert) {
         const engine = createOpenLayersEngine(openLayersMock);
@@ -242,6 +303,22 @@ QUnit.module('OSM: map loading', moduleConfig, () => {
         }, error => {
             assert.strictEqual(error.message, errors.Error('E1069').message, 'E1069 is returned');
             done();
+        });
+    });
+    ['getUserProjection', 'toLonLat', 'transform', 'transformExtent'].forEach(apiName => {
+        QUnit.test(`load rejects with E1069 when the OpenLayers ${apiName} API is missing`, function(assert) {
+            const done = assert.async();
+            const provider = createProvider();
+            const projectionApi = Object.assign({}, openLayersMock.proj);
+            delete projectionApi[apiName];
+            window.ol = Object.assign({}, openLayersMock, { proj: projectionApi });
+            provider._loadImpl().then(() => {
+                assert.ok(false, 'load should reject');
+                done();
+            }, error => {
+                assert.strictEqual(error.message, errors.Error('E1069').message, 'E1069 is returned');
+                done();
+            });
         });
     });
     QUnit.test('dispose detaches the OpenLayers map and removes its tile layer', function(assert) {
@@ -361,13 +438,13 @@ QUnit.module('OSM: tile server', moduleConfig, () => {
             provider: 'osm',
             providerConfig: {
                 tileServer: {
-                    url: 'https://{s}.tiles.example.com/{z}/{x}/{y}.png',
+                    url: 'https://{s}.tiles.example.com/{z}/{x}/{y}.png?mirror={s}',
                     attribution: 'Example attribution',
                     subdomains: 'ab'
                 }
             },
             onReady: () => {
-                assert.deepEqual(openLayersMock.tileSourceOptions.url, ['https://a.tiles.example.com/{z}/{x}/{y}.png', 'https://b.tiles.example.com/{z}/{x}/{y}.png'], 'subdomains are expanded');
+                assert.deepEqual(openLayersMock.tileSourceOptions.url, ['https://a.tiles.example.com/{z}/{x}/{y}.png?mirror=a', 'https://b.tiles.example.com/{z}/{x}/{y}.png?mirror=b'], 'all subdomain placeholders are expanded');
                 done();
             }
         });
@@ -630,8 +707,10 @@ QUnit.module('OSM: initial view', moduleConfig, () => {
                 const lastProjectedCoordinate = openLayersMock.projectedCoordinates[openLayersMock.projectedCoordinates.length - 1];
                 assert.ok(openLayersMock.projectedCoordinates.length > 0, 'projection API is called');
                 assert.deepEqual(lastProjectedCoordinate, [-73.98, 40.74], 'longitude and latitude are passed to the projection API');
-                assert.deepEqual(openLayersMock.viewCenter, [-73.98, 40.74], 'projected center is applied');
+                assert.deepEqual(openLayersMock.viewCenter, [-73980, 40740], 'projected center is applied');
                 assert.strictEqual(openLayersMock.viewZoom, 12.5, 'fractional zoom is applied');
+                assert.strictEqual(openLayersMock.viewCenterSetCount, 0, 'initial center is not applied twice');
+                assert.strictEqual(openLayersMock.viewZoomSetCount, 0, 'initial zoom is not applied twice');
                 done();
             }
         });
@@ -695,5 +774,401 @@ QUnit.module('OSM: initial view', moduleConfig, () => {
             });
             map.option('zoom', 12.5);
         });
+    });
+});
+QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
+    QUnit.test('focus options are applied to the OpenLayers keyboard target', function(assert) {
+        const done = assert.async();
+        const map = $('#map').dxMap({
+            provider: 'osm',
+            focusStateEnabled: false,
+            tabIndex: 5,
+            providerConfig: {
+                tileServer: {
+                    url: 'https://tiles.example.com/{z}/{x}/{y}.png',
+                    attribution: 'Example attribution'
+                }
+            },
+            onReady: () => {
+                const target = getOpenLayersKeyboardTarget();
+                assert.strictEqual(target.getAttribute('tabindex'), null, 'focus is disabled on initialization');
+                map.option('onUpdated', () => {
+                    assert.strictEqual(target.getAttribute('tabindex'), '5', 'configured tabIndex is applied');
+                    map.option('onUpdated', () => {
+                        assert.strictEqual(target.getAttribute('tabindex'), '-1', 'runtime tabIndex is applied');
+                        map.option('onUpdated', () => {
+                            assert.strictEqual(target.getAttribute('tabindex'), null, 'runtime focus disabling is applied');
+                            done();
+                        });
+                        map.option('focusStateEnabled', false);
+                    });
+                    map.option('tabIndex', -1);
+                });
+                map.option('focusStateEnabled', true);
+            }
+        }).dxMap('instance');
+    });
+    QUnit.test('OpenLayers view changes update center, fractional zoom, and bounds', function(assert) {
+        const done = assert.async();
+        const map = $('#map').dxMap({
+            provider: 'osm',
+            providerConfig: {
+                tileServer: {
+                    url: 'https://tiles.example.com/{z}/{x}/{y}.png',
+                    attribution: 'Example attribution'
+                }
+            },
+            onReady: () => {
+                const view = openLayersMock.mapInstance.getView();
+                view.setCenter([-73980, 40740]);
+                view.setZoom(12.5);
+                const centerSetCount = openLayersMock.viewCenterSetCount;
+                const zoomSetCount = openLayersMock.viewZoomSetCount;
+                openLayersMock.viewExtent = [-74100, 40600, -73800, 40900];
+                openLayersMock.mapInstance.trigger('moveend');
+                assert.deepEqual(map.option('center'), {
+                    lat: 40.74,
+                    lng: -73.98
+                }, 'center is synchronized');
+                assert.strictEqual(map.option('zoom'), 12.5, 'fractional zoom is synchronized');
+                assert.deepEqual(map.option('bounds'), {
+                    northEast: {
+                        lat: 40.9,
+                        lng: -73.8
+                    },
+                    southWest: {
+                        lat: 40.6,
+                        lng: -74.1
+                    }
+                }, 'bounds are synchronized');
+                assert.strictEqual(openLayersMock.viewCenterSetCount, centerSetCount, 'center is not written back to OpenLayers');
+                assert.strictEqual(openLayersMock.viewZoomSetCount, zoomSetCount, 'zoom is not written back to OpenLayers');
+                done();
+            }
+        }).dxMap('instance');
+    });
+    QUnit.test('OpenLayers click fires onClick with location and original event', function(assert) {
+        const done = assert.async();
+        const originalEvent = new PointerEvent('click');
+        const map = $('#map').dxMap({
+            provider: 'osm',
+            providerConfig: {
+                tileServer: {
+                    url: 'https://tiles.example.com/{z}/{x}/{y}.png',
+                    attribution: 'Example attribution'
+                }
+            },
+            onClick: event => {
+                assert.strictEqual(event.component, map, 'component is passed');
+                assert.deepEqual(event.location, {
+                    lat: 40.74,
+                    lng: -73.98
+                }, 'location is normalized');
+                assert.strictEqual(event.event, originalEvent, 'original event is passed');
+                done();
+            },
+            onReady: () => {
+                openLayersMock.mapInstance.trigger('click', {
+                    coordinate: [-73980, 40740],
+                    originalEvent
+                });
+            }
+        }).dxMap('instance');
+    });
+    QUnit.test('OpenLayers click without a coordinate is ignored', function(assert) {
+        const engine = createOpenLayersEngine(openLayersMock);
+        const engineMap = engine.createMap(document.createElement('div'));
+        const click = sinon.spy();
+        engineMap.attachHandlers({ click, viewChange: sinon.spy() });
+        openLayersMock.mapInstance.trigger('click', {
+            originalEvent: new PointerEvent('click')
+        });
+        assert.ok(click.notCalled, 'click handler is not called without a location');
+        engineMap.dispose();
+    });
+    QUnit.test('OpenLayers user projection is honored for the initial view, synchronization, and bounds', function(assert) {
+        const done = assert.async();
+        openLayersMock.userProjection = 'EPSG:4326';
+        const map = $('#map').dxMap({
+            provider: 'osm',
+            center: {
+                lat: 40.74,
+                lng: -73.98
+            },
+            zoom: 12.5,
+            providerConfig: {
+                tileServer: {
+                    url: 'https://tiles.example.com/{z}/{x}/{y}.png',
+                    attribution: 'Example attribution'
+                }
+            },
+            onReady: () => {
+                const view = openLayersMock.mapInstance.getView();
+                assert.deepEqual(openLayersMock.viewCenter, [-73.98, 40.74], 'initial center uses the user projection');
+                view.setCenter([-73.97, 40.75]);
+                openLayersMock.viewExtent = [-74.1, 40.6, -73.8, 40.9];
+                openLayersMock.mapInstance.trigger('moveend');
+                assert.deepEqual(map.option('center'), {
+                    lat: 40.75,
+                    lng: -73.97
+                }, 'center is synchronized from the user projection');
+                assert.deepEqual(map.option('bounds'), {
+                    northEast: {
+                        lat: 40.9,
+                        lng: -73.8
+                    },
+                    southWest: {
+                        lat: 40.6,
+                        lng: -74.1
+                    }
+                }, 'bounds are synchronized from the user projection');
+                map.option('onUpdated', () => {
+                    assert.deepEqual(openLayersMock.fittedExtent, [-74, 40.7, -73.9, 40.8], 'bounds are fitted in the user projection');
+                    done();
+                });
+                map.option('bounds', {
+                    northEast: {
+                        lat: 40.8,
+                        lng: -73.9
+                    },
+                    southWest: {
+                        lat: 40.7,
+                        lng: -74
+                    }
+                });
+            }
+        }).dxMap('instance');
+    });
+    QUnit.test('bounds crossing the antimeridian use the shorter wrapped extent', function(assert) {
+        const done = assert.async();
+        $('#map').dxMap({
+            provider: 'osm',
+            bounds: {
+                northEast: {
+                    lat: 10,
+                    lng: -170
+                },
+                southWest: {
+                    lat: -10,
+                    lng: 170
+                }
+            },
+            providerConfig: {
+                tileServer: {
+                    url: 'https://tiles.example.com/{z}/{x}/{y}.png',
+                    attribution: 'Example attribution'
+                }
+            },
+            onReady: () => {
+                assert.deepEqual(openLayersMock.fittedExtent, [170000, -10000, 190000, 10000], 'the wrapped 20 degree extent is fitted');
+                done();
+            }
+        });
+    });
+    QUnit.test('OpenLayers wrapped view coordinates are normalized on synchronization', function(assert) {
+        const done = assert.async();
+        const map = $('#map').dxMap({
+            provider: 'osm',
+            providerConfig: {
+                tileServer: {
+                    url: 'https://tiles.example.com/{z}/{x}/{y}.png',
+                    attribution: 'Example attribution'
+                }
+            },
+            onReady: () => {
+                openLayersMock.mapInstance.getView().setCenter([190000, 0]);
+                openLayersMock.viewExtent = [170000, -10000, 190000, 10000];
+                openLayersMock.mapInstance.trigger('moveend');
+                assert.deepEqual(map.option('center'), {
+                    lat: 0,
+                    lng: -170
+                }, 'center longitude is normalized');
+                assert.deepEqual(map.option('bounds'), {
+                    northEast: {
+                        lat: 10,
+                        lng: -170
+                    },
+                    southWest: {
+                        lat: -10,
+                        lng: 170
+                    }
+                }, 'bounds preserve the antimeridian crossing');
+                done();
+            }
+        }).dxMap('instance');
+    });
+    QUnit.test('controls option toggles the OpenLayers zoom control', function(assert) {
+        const done = assert.async();
+        const map = $('#map').dxMap({
+            provider: 'osm',
+            controls: true,
+            providerConfig: {
+                tileServer: {
+                    url: 'https://tiles.example.com/{z}/{x}/{y}.png',
+                    attribution: 'Example attribution'
+                }
+            },
+            onReady: () => {
+                assert.strictEqual(openLayersMock.addedControls.length, 1, 'zoom control is added on initialization');
+                map.option('onUpdated', () => {
+                    assert.strictEqual(openLayersMock.removedControls.length, 1, 'zoom control is removed');
+                    map.option('onUpdated', () => {
+                        assert.strictEqual(openLayersMock.addedControls.length, 2, 'zoom control is added again');
+                        done();
+                    });
+                    map.option('controls', true);
+                });
+                map.option('controls', false);
+            }
+        }).dxMap('instance');
+    });
+    QUnit.test('disabled option restores the previous interaction states', function(assert) {
+        const done = assert.async();
+        const map = $('#map').dxMap({
+            provider: 'osm',
+            controls: true,
+            providerConfig: {
+                tileServer: {
+                    url: 'https://tiles.example.com/{z}/{x}/{y}.png',
+                    attribution: 'Example attribution'
+                }
+            },
+            onReady: () => {
+                assert.strictEqual(openLayersMock.addedControls.length, 1, 'zoom control is present');
+                assert.deepEqual(openLayersMock.interactions.map(interaction => interaction.getActive()), [true, false], 'initial states are preserved');
+                assert.notOk(getOpenLayersMapTarget().hasAttribute('inert'), 'map target is keyboard accessible');
+                onInteractionStates([false, false], () => {
+                    assert.deepEqual(openLayersMock.interactions.map(interaction => interaction.getActive()), [false, false], 'all interactions are disabled');
+                    assert.ok(getOpenLayersMapTarget().hasAttribute('inert'), 'map target and controls are removed from keyboard navigation');
+                    assert.strictEqual(getOpenLayersKeyboardTarget().getAttribute('tabindex'), null, 'owned keyboard target tabindex is removed');
+                    onInteractionStates([true, false], () => {
+                        assert.deepEqual(openLayersMock.interactions.map(interaction => interaction.getActive()), [true, false], 'previous states are restored');
+                        assert.notOk(getOpenLayersMapTarget().hasAttribute('inert'), 'map target and controls return to keyboard navigation');
+                        assert.strictEqual(getOpenLayersKeyboardTarget().getAttribute('tabindex'), '0', 'owned keyboard target tabindex is restored');
+                        done();
+                    });
+                    map.option('disabled', false);
+                });
+                map.option('disabled', true);
+            }
+        }).dxMap('instance');
+    });
+    QUnit.test('disabled option is applied on initialization', function(assert) {
+        const done = assert.async();
+        onInteractionStates([false, false], () => {
+            assert.strictEqual(openLayersMock.addedControls.length, 1, 'zoom control is present');
+            assert.deepEqual(openLayersMock.interactions.map(interaction => interaction.getActive()), [false, false], 'all interactions are disabled');
+            assert.ok(getOpenLayersMapTarget().hasAttribute('inert'), 'map target and controls are removed from keyboard navigation');
+            assert.strictEqual(getOpenLayersKeyboardTarget().getAttribute('tabindex'), null, 'owned keyboard target tabindex is removed');
+            map.option('onUpdated', done);
+            map.option('disabled', false);
+        });
+        const map = $('#map').dxMap({
+            provider: 'osm',
+            controls: true,
+            disabled: true,
+            providerConfig: {
+                tileServer: {
+                    url: 'https://tiles.example.com/{z}/{x}/{y}.png',
+                    attribution: 'Example attribution'
+                }
+            }
+        }).dxMap('instance');
+    });
+    QUnit.test('bounds option fits the OpenLayers view on initialization and at runtime', function(assert) {
+        const done = assert.async();
+        const map = $('#map').dxMap({
+            provider: 'osm',
+            bounds: {
+                northEast: {
+                    lat: 40.8,
+                    lng: -73.9
+                },
+                southWest: {
+                    lat: 40.7,
+                    lng: -74
+                }
+            },
+            providerConfig: {
+                tileServer: {
+                    url: 'https://tiles.example.com/{z}/{x}/{y}.png',
+                    attribution: 'Example attribution'
+                }
+            },
+            onReady: () => {
+                assert.deepEqual(openLayersMock.fittedExtent, [-74000, 40700, -73900, 40800], 'initial bounds are fitted');
+                assert.strictEqual(openLayersMock.fitOptions, undefined, 'OpenLayers selects the viewport size');
+                map.option('onUpdated', () => {
+                    assert.deepEqual(openLayersMock.fittedExtent, [-74100, 40600, -73800, 40900], 'runtime bounds are fitted');
+                    done();
+                });
+                map.option('bounds', {
+                    northEast: [40.9, -73.8],
+                    southWest: [40.6, -74.1]
+                });
+            }
+        }).dxMap('instance');
+    });
+    QUnit.test('incomplete bounds do not change the OpenLayers view', function(assert) {
+        const done = assert.async();
+        const map = $('#map').dxMap({
+            provider: 'osm',
+            providerConfig: {
+                tileServer: {
+                    url: 'https://tiles.example.com/{z}/{x}/{y}.png',
+                    attribution: 'Example attribution'
+                }
+            },
+            onReady: () => {
+                map.option('onUpdated', () => {
+                    assert.strictEqual(openLayersMock.fittedExtent, null, 'view is not fitted without both bounds');
+                    done();
+                });
+                map.option('bounds', {
+                    northEast: {
+                        lat: 40.8,
+                        lng: -73.9
+                    },
+                    southWest: null
+                });
+            }
+        }).dxMap('instance');
+    });
+    QUnit.test('RTL mode preserves viewport and keyboard behavior', function(assert) {
+        const done = assert.async();
+        $('#map').dxMap({
+            provider: 'osm',
+            center: {
+                lat: 40.74,
+                lng: -73.98
+            },
+            controls: true,
+            rtlEnabled: true,
+            providerConfig: {
+                tileServer: {
+                    url: 'https://tiles.example.com/{z}/{x}/{y}.png',
+                    attribution: 'Example attribution'
+                }
+            },
+            onReady: () => {
+                assert.ok($('#map').hasClass('dx-rtl'), 'RTL mode is applied to the widget');
+                assert.deepEqual(openLayersMock.viewCenter, [-73980, 40740], 'center coordinates are not mirrored');
+                assert.strictEqual(openLayersMock.addedControls.length, 1, 'zoom control remains available');
+                assert.strictEqual(getOpenLayersKeyboardTarget().getAttribute('tabindex'), '0', 'map remains keyboard focusable');
+                done();
+            }
+        });
+    });
+    QUnit.test('dispose detaches OpenLayers event handlers', function(assert) {
+        const engine = createOpenLayersEngine(openLayersMock);
+        const engineMap = engine.createMap(document.createElement('div'));
+        const click = sinon.spy();
+        const viewChange = sinon.spy();
+        engineMap.attachHandlers({ click, viewChange });
+        engineMap.dispose();
+        openLayersMock.mapInstance.trigger('click', { coordinate: [-73980, 40740] });
+        openLayersMock.mapInstance.trigger('moveend');
+        assert.ok(click.notCalled, 'click handler is detached');
+        assert.ok(viewChange.notCalled, 'view change handler is detached');
     });
 });

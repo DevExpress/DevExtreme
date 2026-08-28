@@ -63,6 +63,10 @@ class Provider {
     Class.abstract();
   }
 
+  updateFocus(): Promise<void> {
+    return Promise.resolve();
+  }
+
   updateBounds(): void {
     Class.abstract();
   }

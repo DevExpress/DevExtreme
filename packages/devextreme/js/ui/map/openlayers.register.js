@@ -1,8 +1,14 @@
 import { defaults as defaultControls } from 'ol/control/defaults.js';
+import Zoom from 'ol/control/Zoom.js';
 import { defaults as defaultInteractions } from 'ol/interaction/defaults.js';
 import TileLayer from 'ol/layer/Tile.js';
 import Map from 'ol/Map.js';
-import { fromLonLat } from 'ol/proj.js';
+import {
+    getUserProjection,
+    toLonLat,
+    transform,
+    transformExtent,
+} from 'ol/proj.js';
 import ImageTile from 'ol/source/ImageTile.js';
 import View from 'ol/View.js';
 
@@ -13,6 +19,7 @@ setRegisteredMapEngine(createOpenLayersEngine({
     Map,
     View,
     control: {
+        Zoom,
         defaults: {
             defaults: defaultControls,
         },
@@ -26,7 +33,10 @@ setRegisteredMapEngine(createOpenLayersEngine({
         Tile: TileLayer,
     },
     proj: {
-        fromLonLat,
+        getUserProjection,
+        toLonLat,
+        transform,
+        transformExtent,
     },
     source: {
         ImageTile,
