@@ -105,6 +105,16 @@ export const editingDataControllerExtender = (
     return processedItem;
   }
 
+  protected isSameRowState(item1: ProcessedItem, item2: ProcessedItem): boolean {
+    const compareFields = ['modified', 'isNewRow', 'removed', 'isEditing'] as const;
+
+    if (compareFields.some((field) => item1[field] !== item2[field])) {
+      return false;
+    }
+
+    return super.isSameRowState(item1, item2);
+  }
+
   protected _getChangedColumnIndices(
     oldItem: ProcessedItem,
     newItem: ProcessedItem,
