@@ -1,1 +1,1 @@
-export { default } from '../../../../__internal/events/pointer/base';
+export { default } from '../../../../__internal/events/pointer/m_base';

@@ -12,7 +12,6 @@ import { extend } from '@js/core/utils/extend';
 import {
   isDefined, isRenderer, isString,
 } from '@js/core/utils/type';
-import type { DxEvent } from '@js/events';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { Component, RefObject, VNode } from 'inferno';
 import {
@@ -424,7 +423,8 @@ export class ComponentWrapper extends DOMComponent<ComponentWrapperProps> {
     keys.forEach((key) => {
       // eslint-disable-next-line
       result[key] = (e: Event): Event | undefined => (this.viewRef as any).keyDown(
-        KeyboardProcessor.createKeyDownOptions(e as DxEvent<KeyboardEvent>),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (KeyboardProcessor as any).createKeyDownOptions(e),
       );
     });
     return result;

@@ -32,7 +32,7 @@ import type {
 import { current, isFluent } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
-import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/swipe';
+import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/m_swipe';
 import Button from '@ts/ui/button/wrapper';
 import Editor from '@ts/ui/editor/editor';
 

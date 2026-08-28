@@ -5,4 +5,4 @@
   * @module events/hold
 */
 
-export { default } from '../../../__internal/events/hold';
+export { default } from '../../../__internal/events/m_hold';
