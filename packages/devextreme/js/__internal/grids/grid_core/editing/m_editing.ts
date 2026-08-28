@@ -692,7 +692,7 @@ class EditingControllerImpl extends modules.ViewController {
   protected getPopupContent(): any {}
 
   /**
-   * @extended: TreeList's editing
+   * @extended: TreeList's editing, DataGrid's grouping
    */
   protected _isProcessedItem(item) {
     return false;
