@@ -862,7 +862,7 @@ jobs:
         ]
         THEME: ['fluent.blue.light']
 
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     name: ${{ matrix.CONSTEL }}-screenshots-${{ matrix.THEME }}
     timeout-minutes: 60
 
@@ -991,7 +991,7 @@ jobs:
         CONSTEL: [react, vue, angular]
         THEME: ['fluent.blue.light']
 
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     name: ${{ matrix.CONSTEL }}-screenshots-${{ matrix.THEME }}
     timeout-minutes: 60
 
@@ -1249,7 +1249,7 @@ jobs:
           - { FRAMEWORK: Angular, SHARD_INDEX: 1, SHARD_TOTAL: 3 }
           - { FRAMEWORK: Angular, SHARD_INDEX: 2, SHARD_TOTAL: 3 }
           - { FRAMEWORK: Angular, SHARD_INDEX: 3, SHARD_TOTAL: 3 }
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     timeout-minutes: 60
     env:
       CSP_USE_BUNDLED: '1'
