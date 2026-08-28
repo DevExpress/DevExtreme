@@ -16,10 +16,10 @@ pnpm exec nx build devextreme -c testing
 
 cd e2e/playwright
 pnpm run test                                            # everything, fluent.blue.light
-pnpm run test --componentFolder navigation               # one component folder
+pnpm run test --componentFolder common/pivotGrid         # one component folder
 pnpm run test --theme material.blue.light                # another theme
 pnpm run test --indices 1/4 --concurrency 5              # one shard, five workers
-pnpm run test --test "Buttons, stylingMode=text"         # one test by name
+pnpm run test --test "PivotGrid markup"                  # one test by name
 ```
 
 The runner takes the flags the TestCafe one takes (`--componentFolder`, `--indices`, `--theme`,
@@ -31,7 +31,7 @@ as a regular expression. The static server for the test page starts on its own.
 
 `testScreenshot` shoots the whole viewport unless the call names an `element`, the way the TestCafe
 comparer did. Etalons live in `etalons/` next to the test and carry the theme in the file name —
-`Buttons, stylingMode=text (fluent.blue.light).png` — the same convention the TestCafe run uses.
+`PivotGrid markup (fluent.blue.light).png` — the same convention the TestCafe run uses.
 
 The pixel budget is asymmetric on purpose: **CI is the source of truth** (`maxDiffPixelRatio`
 0.001, `threshold` 0.1) and a local run is a sanity check (0.05 / 0.2).
@@ -52,7 +52,7 @@ another theme (`generic`, `material`, `material - compact`) take only the tests 
 theme — the same opt-in the TestCafe `meta.themes` gives:
 
 ```ts
-test('CheckBox switches its state on click', { tag: ['@generic.light'] }, async ({ page }) => {
+test('PivotGrid renders its areas', { tag: ['@generic.light'] }, async ({ page }) => {
 ```
 
 Tag a test when its result does not depend on the theme, or when it has an etalon for that theme.
@@ -73,8 +73,8 @@ its trace viewer will not load there.
 ## Read a failed CI run
 
 ```bash
-gh run download <run-id> -n playwright-report-navigation -D ci-report
-gh run download <run-id> -n playwright-traces-navigation -D ci-traces
+gh run download <run-id> -n playwright-report-common -D ci-report
+gh run download <run-id> -n playwright-traces-common -D ci-traces
 pnpm exec playwright show-report ci-report
 pnpm exec playwright show-trace ci-traces/<test-name>/trace.zip --port 0
 ```
@@ -89,15 +89,15 @@ failure that only happens on CI can be diagnosed without reproducing it.
 import { expect, test } from '../../../fixtures';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/screenshots';
-import Button from '../../../models/button';
+import PivotGrid from '../../../models/pivotGrid';
 
-test('Button reports its text', async ({ page }) => {
-    await createWidget(page, 'dxButton', { text: 'Find' });
+test('PivotGrid renders its data area', async ({ page }) => {
+    await createWidget(page, 'dxPivotGrid', { dataSource: { store: [] } });
 
-    const button = new Button(page, '#container .dx-button');
+    const pivotGrid = new PivotGrid(page, '#container');
 
-    await expect(button.text).toHaveText('Find');
-    await testScreenshot(page, 'Button with text.png', { element: '#container' });
+    await expect(pivotGrid.dataArea).toBeVisible();
+    await testScreenshot(page, 'PivotGrid markup.png', { element: '#container' });
 });
 ```
 
