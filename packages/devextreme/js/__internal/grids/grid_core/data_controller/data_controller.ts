@@ -1,9 +1,12 @@
 import type { Store } from '@js/common/data';
+import { DataSource as DataSourceClass } from '@js/common/data/data_source/data_source';
+import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import type { Callback } from '@js/core/utils/callbacks';
 import { deferRender } from '@js/core/utils/common';
 import { logger } from '@js/core/utils/console';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import type { StoreChange } from '@js/data/store';
 import errors from '@js/ui/widget/ui.errors';
@@ -25,11 +28,9 @@ import type {
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { VirtualScrollController } from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
 
-import { DataHelperMixin } from './data_helper_mixin';
 import type {
   BinaryDataFilterExpression,
   CallbackFlags,
-  ChangedRows,
   DataChange,
   DataFilter,
   DataSourceAdapterLike,
@@ -51,21 +52,25 @@ import type {
 import { resolvePaginate, syncPaging } from './utils/paging';
 import { getRefreshOptions } from './utils/refresh';
 import {
+  convertToUpdateChange,
   getChangedRowIndices,
   getDataRowIndex,
   getRowKey,
   getRowOperation,
   indexRowsByKey,
-  initChangedRows,
   isSameGroupRowState,
-  markUpdateChange,
   pushChangedRow,
   resetChangedRows,
   updateKeptRows,
 } from './utils/row_changes';
 import { generateRowValues } from './utils/row_values';
 
-export class DataController extends DataHelperMixin(modules.Controller) {
+export class DataController extends modules.Controller {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public _dataSource?: any;
+
+  protected isSharedDataSource?: boolean;
+
   protected _items!: ProcessedItem[];
 
   private _cachedProcessedItems!: ProcessedItem[] | null;
@@ -100,7 +105,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   private _readyDeferred?: DeferredObj<void>;
 
-  private _rowIndexOffset!: number;
+  private _rowIndexOffset?: number;
 
   private _loadingText?: string;
 
@@ -164,8 +169,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     this.dataErrorOccurred.add((error) => this.executeAction('onDataErrorOccurred', { error }));
 
-    this._refreshDataSource();
-    this.postInit();
+    this.resetDataSource();
   }
 
   /**
@@ -228,7 +232,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   public reset(): void {
     this._columnsController.reset();
     this._items = [];
-    this._refreshDataSource();
+    this.resetDataSource();
   }
 
   /**
@@ -662,14 +666,20 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return dataSource;
   }
 
+  /**
+   * @extended: state_storing, virtual_scrolling
+   */
+  protected resetDataSource(): DeferredObj<unknown> | undefined {
+    this._initDataSource();
+    this._loadDataSource();
+
+    return undefined;
+  }
+
   protected _initDataSource(): void {
     const hadDataSource = !!this._dataSource;
 
-    super._initDataSource();
-
-    // The raw DataSource for the new options, or null when there is no
-    // dataSource option. `setDataSource` below wraps it in the adapter.
-    const dataSource = this._dataSource;
+    const dataSource = this.recreateDataSource();
     this._useSortingGroupingFromColumns = true;
     this._cachedProcessedItems = null;
 
@@ -683,11 +693,30 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
   }
 
+  private recreateDataSource(): DataSource | undefined {
+    const dataSourceOptions = this._getSpecificDataSourceOption();
+
+    this._disposeDataSource();
+
+    if (!dataSourceOptions) {
+      this.isSharedDataSource = false;
+      return undefined;
+    }
+
+    if (dataSourceOptions instanceof DataSourceClass) {
+      this.isSharedDataSource = true;
+      return dataSourceOptions as unknown as DataSource;
+    }
+
+    this.isSharedDataSource = false;
+    return new DataSourceClass(
+      extend(true, {}, normalizeDataSourceOptions(dataSourceOptions, {})),
+    ) as unknown as DataSource;
+  }
+
   /**
    * @extended: selection, virtual_scrolling
    */
-  // The mixin base types this as `void`, but the override returns a Deferred
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   protected _loadDataSource(): DeferredObj<unknown> {
     const dataSource = this._dataSource;
     const result: DeferredObj<unknown> = Deferred();
@@ -807,13 +836,13 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       if (this.items().length && change.repaintChangesOnly) {
         this.applyChangesOnly(change);
       } else {
-        this._applyChangeFull(change);
+        this.applyChangeFull(change);
       }
     }
   }
 
-  private _applyChangeFull(change: DataChange): void {
-    this._items = (change.items ?? []).slice(0);
+  private applyChangeFull(change: DataChange): void {
+    this._items = (change.items ?? []).slice();
   }
 
   private updateRow(
@@ -1022,26 +1051,11 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return columnIndices;
   }
 
+  /**
+   * @extended: editing, grouping (DataGrid), summary (DataGrid), treelist
+   */
   protected isSameRowState(item1: ProcessedItem, item2: ProcessedItem): boolean {
-    if (JSON.stringify(item1.values) !== JSON.stringify(item2.values)) {
-      return false;
-    }
-
-    const compareFields = ['modified', 'isNewRow', 'removed', 'isEditing'] as const;
-    if (compareFields.some((field) => item1[field] !== item2[field])) {
-      return false;
-    }
-
-    if (item1.rowType === 'group' || item1.rowType === 'groupFooter') {
-      const summaryCellsMatch = JSON.stringify(item1.summaryCells)
-        === JSON.stringify(item2.summaryCells);
-
-      if (!summaryCellsMatch || !isSameGroupRowState(item1, item2)) {
-        return false;
-      }
-    }
-
-    return true;
+    return JSON.stringify(item1.values) === JSON.stringify(item2.values);
   }
 
   private applyItemChange(
@@ -1077,18 +1091,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
   }
 
-  private applyItemChanges(itemChanges: ItemChange[], isLiveUpdate: boolean): ChangedRows {
-    const changedRows = initChangedRows();
-
-    itemChanges.forEach((itemChange) => {
-      const changedRow = this.applyItemChange(itemChange, isLiveUpdate);
-
-      if (changedRow) {
-        pushChangedRow(changedRows, changedRow);
-      }
-    });
-
-    return changedRows;
+  private applyItemChanges(itemChanges: ItemChange[], isLiveUpdate: boolean): UpdateRowChange[] {
+    return itemChanges
+      .map((itemChange) => this.applyItemChange(itemChange, isLiveUpdate))
+      .filter((rowChange): rowChange is UpdateRowChange => rowChange !== undefined);
   }
 
   private getRowIndexCorrection(
@@ -1096,7 +1102,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     oldItems: ProcessedItem[],
     newIndexByKey: RowIndexByKey,
   ): number {
-    const oldRowIndexOffset = this._rowIndexOffset || 0;
+    const oldRowIndexOffset = this._rowIndexOffset ?? 0;
     const rowIndexOffset = this.getRowIndexOffset();
     const oldItem = oldItems[rowIndex - oldRowIndexOffset];
     const newVisibleRowIndex = oldItem ? newIndexByKey[getRowKey(oldItem)] : undefined;
@@ -1110,7 +1116,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   protected applyChangesOnly(change: DataChange): void {
     const newItems = change.items ?? [];
     const oldItems = this._items.slice();
-    const newIndexByKey = indexRowsByKey(newItems);
     const itemChanges = findChanges({
       oldItems,
       newItems,
@@ -1120,21 +1125,22 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     // Changes cannot be found for a moved row, duplicate keys, or any throw.
     if (!itemChanges) {
-      this._applyChangeFull(change);
+      this.applyChangeFull(change);
       return;
     }
+
+    const newIndexByKey = indexRowsByKey(newItems);
 
     try {
       updateKeptRows(oldItems, newItems, newIndexByKey, itemChanges);
     } catch (error) {
       logger.error(error);
-      this._applyChangeFull(change);
+      this.applyChangeFull(change);
       return;
     }
 
-    const changedRows = this.applyItemChanges(itemChanges, change.isLiveUpdate ?? true);
-
-    markUpdateChange(change, changedRows);
+    const updateRowChanges = this.applyItemChanges(itemChanges, change.isLiveUpdate ?? true);
+    convertToUpdateChange(change, updateRowChanges);
 
     if (oldItems.length) {
       change.isLiveUpdate = true;
@@ -1437,7 +1443,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     if (!dataSource && oldDataSource) {
       oldDataSource.cancelAll();
       this.unsubscribeFromDataSource(oldDataSource);
-      oldDataSource.dispose(this._isSharedDataSource);
+      oldDataSource.dispose(this.isSharedDataSource);
     }
 
     const dataSourceAdapter = dataSource
@@ -1706,9 +1712,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   protected _disposeDataSource(): void {
-    if (this._dataSource?._eventsStrategy) {
-      this._dataSource._eventsStrategy.off('loadingChanged', this.readyWatcher);
-    }
     this.setDataSource(null);
   }
 
