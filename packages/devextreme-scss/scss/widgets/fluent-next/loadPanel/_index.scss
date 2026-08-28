@@ -1,4 +1,3 @@
-@use "colors" as *;
 @use "sizes" as *;
 @use "../../base/loadPanel" with (
   $loadpanel-content-padding: var(--dx-load-panel-content-padding),
