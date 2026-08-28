@@ -4,7 +4,7 @@ import {
 import type { Column } from '@ts/grids/data_grid/types';
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 
-import { getColumnFromMap, getSummaryCellIndex, hasSummaryCells } from '../utils';
+import { getColumnFromMap, getSummaryCellIndex, isSummaryGroupItem } from '../utils';
 
 const makeColumn = (overrides: Partial<Column> = {}): Column => ({
   ...overrides,
@@ -17,15 +17,15 @@ const makeRow = (rowType: ProcessedItem['rowType']): ProcessedItem => ({
   values: [],
 });
 
-describe('hasSummaryCells', () => {
+describe('isSummaryGroupItem', () => {
   it.each(['group', 'groupFooter'] as const)('should return true for a %s row', (rowType) => {
-    expect(hasSummaryCells(makeRow(rowType))).toBe(true);
+    expect(isSummaryGroupItem(makeRow(rowType))).toBe(true);
   });
 
   it.each(['data', 'detail', 'detailAdaptive'] as const)(
     'should return false for a %s row',
     (rowType) => {
-      expect(hasSummaryCells(makeRow(rowType))).toBe(false);
+      expect(isSummaryGroupItem(makeRow(rowType))).toBe(false);
     },
   );
 });

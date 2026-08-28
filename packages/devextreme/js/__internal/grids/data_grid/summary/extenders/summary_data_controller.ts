@@ -19,7 +19,7 @@ import type {
   CalculateSummaryCellsArgs, ColumnMap, FooterItem, SummaryCellItem,
   SummaryGroupItem,
 } from '../types';
-import { getColumnFromMap, getSummaryCellIndex, hasSummaryCells } from '../utils';
+import { getColumnFromMap, getSummaryCellIndex, isSummaryGroupItem } from '../utils';
 import { getGroupAggregates } from '../utils/get_group_aggregates';
 import { getSummaryItemIndex } from '../utils/get_summary_item_index';
 
@@ -272,7 +272,7 @@ export const summaryDataControllerExtender = (
   }
 
   protected isSameRowState(item1: ProcessedItem, item2: ProcessedItem): boolean {
-    if (hasSummaryCells(item1)
+    if (isSummaryGroupItem(item1)
       && JSON.stringify(item1.summaryCells) !== JSON.stringify(item2.summaryCells)) {
       return false;
     }
