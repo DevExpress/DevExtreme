@@ -20,9 +20,11 @@ export default class SchedulerViewSwitcher {
     );
   }
 
+  // A theme that switches views with a button group has a button per view here instead of the one
+  // drop down button, and the TestCafe selector this replaces addressed the first of them.
   public getDropDownButton(): FocusableElement {
     return new FocusableElement(
-      this.element.locator(`.${CLASS.button}`),
+      this.element.locator(`.${CLASS.button}`).first(),
     );
   }
 }
