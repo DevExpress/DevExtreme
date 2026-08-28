@@ -6,17 +6,9 @@ $text-editor-placeholder: ds.$color-content-subtle !default;
 
 $text-editor-outlined-bg: ds.$color-bg !default;
 
-$text-editor-outlined-bg-hovered: $text-editor-outlined-bg !default;
-
-$text-editor-outlined-bg-focused: $text-editor-outlined-bg !default;
-
 $text-editor-filled-bg: ds.$color-bg-low !default;
 
 $text-editor-underlined-bg: transparent !default;
-
-$text-editor-underlined-bg-hovered: $text-editor-underlined-bg !default;
-
-$text-editor-underlined-bg-focused: $text-editor-underlined-bg !default;
 
 $text-editor-border: ds.$color-border !default;
 $text-editor-border-hovered: ds.$color-border-hovered !default;
@@ -34,16 +26,11 @@ $text-editor-invalid-border: ds.$color-border-danger-shared !default;
 $text-editor-border-disabled: ds.$color-border-disabled !default;
 $text-editor-content-disabled: ds.$color-content-disabled !default;
 
-$text-editor-filled-bg-hovered: $text-editor-filled-bg !default;
-
-$text-editor-filled-bg-focused: $text-editor-filled-bg !default;
-
-$text-editor-label-content: $text-editor-placeholder;
 $text-editor-label-content-focused: ds.$color-content-primary;
 
 :root {
   --dx-texteditor-color-text: #{$text-editor-content};
-  --dx-texteditor-color-label: #{$text-editor-label-content};
+  --dx-texteditor-color-label: #{$text-editor-placeholder};
 }
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
