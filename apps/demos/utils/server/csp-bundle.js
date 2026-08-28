@@ -6,6 +6,7 @@ const os = require('os');
 const esbuild = require('esbuild');
 const { extractDemoHeadExtras, extractDemoBodyInner } = require('./demo-html');
 const { virtualEntryPath, virtualEntryPlugin } = require('./demo-render-signal');
+const { readShardConfig, applyShard: applyShardGeneric } = require('./shard');
 
 const FRAMEWORK_ARG = (process.argv.find((a) => a.startsWith('--framework=')) || '').split('=')[1];
 const FRAMEWORK = FRAMEWORK_ARG || process.env.CSP_FRAMEWORKS || 'React';
@@ -30,18 +31,10 @@ const CONCURRENCY = (() => {
   return Math.max(4, (os.cpus() || []).length - 1);
 })();
 
-const SHARD_TOTAL = Math.max(1, parseInt(process.env.CSP_SHARD_TOTAL, 10) || 1);
-const SHARD_INDEX = (() => {
-  const n = parseInt(process.env.CSP_SHARD_INDEX, 10);
-  return n >= 1 && n <= SHARD_TOTAL ? n : 1;
-})();
+const { SHARD_TOTAL, SHARD_INDEX } = readShardConfig();
 
 function applyShard(demos) {
-  if (SHARD_TOTAL <= 1) return demos;
-  const sorted = [...demos].sort(
-    (a, b) => `${a.widget}/${a.name}`.localeCompare(`${b.widget}/${b.name}`),
-  );
-  return sorted.filter((_, i) => i % SHARD_TOTAL === SHARD_INDEX - 1);
+  return applyShardGeneric(demos, (d) => `${d.widget}/${d.name}`, { SHARD_TOTAL, SHARD_INDEX });
 }
 
 function findDemos() {
@@ -276,7 +269,7 @@ async function bundleDemoTo({ srcDir, destDir, framework }) {
 }
 
 async function bundleDemo(demo, { destDir: destDirOverride, framework = FRAMEWORK } = {}) {
-  const destDir = destDirOverride || path.join(SRC_DEMOS_DIR, demo.widget, demo.name, FRAMEWORK);
+  const destDir = destDirOverride || path.join(SRC_DEMOS_DIR, demo.widget, demo.name, framework);
   const result = await bundleDemoTo({ srcDir: demo.srcDir, destDir, framework });
   if (!result.ok) return result;
 

@@ -9,6 +9,7 @@ const esbuild = require('esbuild');
 const { extractDemoHeadExtras, extractDemoBodyInner } = require('./demo-html');
 const { createEntryShimSource } = require('./demo-render-signal');
 const { discoverTestGlobalsFromContent } = require('../visual-tests/test-globals-bundle');
+const { readShardConfig, applyShard: applyShardGeneric } = require('./shard');
 
 const DEMOS_APP_ROOT = path.resolve(__dirname, '..', '..');
 const REPO_ROOT = path.resolve(DEMOS_APP_ROOT, '..', '..');
@@ -46,18 +47,10 @@ const BATCH_CONCURRENCY = (() => {
 
 const FILTER = (process.env.CSP_BUNDLE_FILTER || '').trim();
 
-const SHARD_TOTAL = Math.max(1, parseInt(process.env.CSP_SHARD_TOTAL, 10) || 1);
-const SHARD_INDEX = (() => {
-  const n = parseInt(process.env.CSP_SHARD_INDEX, 10);
-  return n >= 1 && n <= SHARD_TOTAL ? n : 1;
-})();
+const { SHARD_TOTAL, SHARD_INDEX } = readShardConfig();
 
 function applyShard(demos) {
-  if (SHARD_TOTAL <= 1) return demos;
-  const sorted = [...demos].sort(
-    (a, b) => `${a.widget}/${a.name}`.localeCompare(`${b.widget}/${b.name}`),
-  );
-  return sorted.filter((_, i) => i % SHARD_TOTAL === SHARD_INDEX - 1);
+  return applyShardGeneric(demos, (d) => `${d.widget}/${d.name}`, { SHARD_TOTAL, SHARD_INDEX });
 }
 
 const SHARED_TSCONFIG_TEMPLATE = path.join(__dirname, 'tsconfig.csp-bundle-angular.json');

@@ -197,7 +197,6 @@ function resolvePackageVersions(specifiers, resolveDir = DEMOS_APP_ROOT) {
     if (version) {
       packages[pkgName] = version;
     } else {
-      // TODO: exit with error here?
       console.warn(`vendor-bundle: could not resolve a version for package "${pkgName}" (from specifier "${spec}")`);
     }
   }
@@ -374,11 +373,6 @@ function getVendorManifest(framework) {
   return manifest;
 }
 
-function invalidateVendorManifestCache(framework) {
-  if (framework) manifestCache.delete(framework);
-  else manifestCache.clear();
-}
-
 function vendorGlobalPlugin(framework) {
   return {
     name: 'vendor-bundle:external-global',
@@ -435,7 +429,6 @@ module.exports = {
   resolvePackageVersions,
   buildVendorBundle,
   getVendorManifest,
-  invalidateVendorManifestCache,
   vendorGlobalPlugin,
   vendorScriptTag,
   isVendorSpecifier,

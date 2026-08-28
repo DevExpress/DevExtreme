@@ -5,6 +5,7 @@ const {
   readdirSync, existsSync, readFileSync, writeFileSync, mkdirSync,
 } = require('fs');
 const http = require('http');
+const { readShardConfig, applyShard: applyShardGeneric } = require('./shard');
 
 const DEMO_ROOT = join(__dirname, '..', '..');
 const REPORT_DIR = join(DEMO_ROOT, 'csp-reports');
@@ -73,11 +74,7 @@ const CHROME_PATH = findChrome();
 
 // Must use the same shard partition as csp-bundle.js, or a demo bundled by
 // another shard has no bundle.js on disk and burns its render deadline + retry.
-const SHARD_TOTAL = Math.max(1, parseInt(process.env.CSP_SHARD_TOTAL, 10) || 1);
-const SHARD_INDEX = (() => {
-  const n = parseInt(process.env.CSP_SHARD_INDEX, 10);
-  return n >= 1 && n <= SHARD_TOTAL ? n : 1;
-})();
+const { SHARD_TOTAL, SHARD_INDEX } = readShardConfig();
 
 const DEBUG_PORT = (() => {
   const fromEnv = parseInt(process.env.CSP_DEBUG_PORT, 10);
@@ -176,11 +173,7 @@ async function waitForDebugger(port, maxWaitMs = 15000) {
 // Same round-robin split as csp-bundle.js's applyShard(), on the same sort key,
 // so shard k checks exactly the demos shard k bundled.
 function applyShard(demos) {
-  if (SHARD_TOTAL <= 1) return demos;
-  const sorted = [...demos].sort(
-    (a, b) => `${a.widget}/${a.demo}`.localeCompare(`${b.widget}/${b.demo}`),
-  );
-  return sorted.filter((_, i) => i % SHARD_TOTAL === SHARD_INDEX - 1);
+  return applyShardGeneric(demos, (d) => `${d.widget}/${d.demo}`, { SHARD_TOTAL, SHARD_INDEX });
 }
 
 // TODO: remove once PivotGrid/StandaloneFieldChooser/Angular renders reliably (times out here)

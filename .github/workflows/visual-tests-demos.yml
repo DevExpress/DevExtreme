@@ -411,7 +411,6 @@ jobs:
       - name: Build demo bundles
         working-directory: apps/demos
         env:
-          BUNDLE_IN_PLACE: '1'
           CSP_SHARD_INDEX: ${{ matrix.SHARD_INDEX }}
           CSP_SHARD_TOTAL: ${{ matrix.SHARD_TOTAL }}
         run: node utils/server/csp-bundle.js --framework=${{ matrix.FRAMEWORK }}
@@ -1456,7 +1455,6 @@ jobs:
     - name: Bundle demos for CSP check
       working-directory: apps/demos
       env:
-        BUNDLE_IN_PLACE: '1'
         CSP_SHARD_INDEX: ${{ matrix.SHARD_INDEX }}
         CSP_SHARD_TOTAL: ${{ matrix.SHARD_TOTAL }}
       run: node utils/server/csp-bundle.js --framework=${{ matrix.FRAMEWORK }}
