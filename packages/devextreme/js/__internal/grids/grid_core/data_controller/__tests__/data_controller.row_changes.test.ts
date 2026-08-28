@@ -7,6 +7,7 @@ import {
   jest,
 } from '@jest/globals';
 import { logger } from '@js/core/utils/console';
+import { refreshRow } from '@ts/grids/grid_core/__tests__/__mock__/helpers/row_changes';
 import {
   afterTest,
   beforeTest,
@@ -295,6 +296,29 @@ describe('DataController row changes', () => {
 
         loggedError.mockRestore();
       });
+    });
+  });
+
+  describe('isSameRowState', () => {
+    const dataRow = (partial: Partial<ProcessedItem> = {}): ProcessedItem => ({
+      rowType: 'data',
+      key: 1,
+      data: { id: 1 },
+      values: ['Alex', 15],
+      ...partial,
+    });
+
+    it('should not report a row when nothing changed', async () => {
+      const change = await refreshRow(dataRow(), dataRow());
+
+      expect(change.rowIndices).toEqual([]);
+    });
+
+    it('should report a row when a value changed', async () => {
+      const change = await refreshRow(dataRow(), dataRow({ values: ['Alex', 16] }));
+
+      expect(change.rowIndices).toEqual([0]);
+      expect(change.changeTypes).toEqual(['update']);
     });
   });
 });
