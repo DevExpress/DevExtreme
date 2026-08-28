@@ -4,7 +4,7 @@ import devices from '@ts/core/m_devices';
 import type { EmitterEvent, EmitterEventPointer } from '@ts/events/core/emitter';
 import type { PointerEventInit } from '@ts/events/pointer/base';
 import BaseStrategy from '@ts/events/pointer/base';
-import type { PointerEventMap } from '@ts/events/pointer/m_observer';
+import type { PointerEventMap } from '@ts/events/pointer/observer';
 
 /* eslint-disable spellcheck/spell-checker */
 const eventMap: PointerEventMap = {
