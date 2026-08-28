@@ -6,6 +6,7 @@ import type {
 import type { Component } from '@js/core/component';
 import type { PropertyType } from '@js/core/index';
 import type { dxElementWrapper } from '@js/core/renderer';
+import type { EventInfo } from '@js/events';
 import type { Properties as DataGridOptions, Scrolling as DataGridScrolling } from '@js/ui/data_grid';
 import type { Properties as TreeListdOptions, Scrolling as TreeListScrolling } from '@js/ui/tree_list';
 import type Widget from '@js/ui/widget/ui.widget';
@@ -14,6 +15,8 @@ import type { EditingController } from './editing/m_editing';
 import type { ModuleItem } from './m_modules';
 
 export type GridPropertyType<T, TProp extends string> = PropertyType<T, TProp> extends never ? never : PropertyType<T, TProp> | undefined;
+
+export type ExecuteActionArgs<TEvent> = Omit<TEvent, keyof EventInfo<unknown>>;
 
 // Data types
 export type RowKey = unknown;
@@ -168,21 +171,22 @@ type DotNestedKeys<T, RLIMIT extends number = 10> = (
 ) extends infer D ? Extract<D, string> : never;
 
 // todo: move to upper .d.ts files
-interface OptionChangedArgs<T extends string = string> {
+interface OptionChangedArgs<TOptions, T extends string = string> {
   name: T extends `${infer TName}.${string}` ? TName : T;
   fullName: T;
-  previousValue: GridPropertyType<InternalGridOptions, T>;
-  value: GridPropertyType<InternalGridOptions, T>;
+  previousValue: GridPropertyType<TOptions, T>;
+  value: GridPropertyType<TOptions, T>;
   handled: boolean;
 }
 
-// todo: move to upper .d.ts files
-type OptionNames = DotNestedKeys<Required<InternalGridOptions>>;
+// A feature outside grid_core unions its own slice in, e.g.
+// `OptionChanged | OptionChangedFor<Pick<Properties, 'grouping'>>`.
+export type OptionChangedFor<TOptions> = {
+  [P in DotNestedKeys<Required<TOptions>>]: OptionChangedArgs<TOptions, P>;
+}[DotNestedKeys<Required<TOptions>>];
 
 // todo: move to upper .d.ts files
-export type OptionChanged = {
-  [P in OptionNames]: OptionChangedArgs<P>;
-}[OptionNames];
+export type OptionChanged = OptionChangedFor<InternalGridOptions>;
 
 export interface Controllers {
   adaptiveColumns: import('./adaptivity/m_adaptivity').AdaptiveColumnsController;
