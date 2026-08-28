@@ -14,8 +14,8 @@
   --dx-text-editor-content-disabled: #{$text-editor-content-disabled};
   --dx-text-editor-content: #{$text-editor-content};
   --dx-text-editor-custom-button-margin: #{$text-editor-custom-button-margin};
-  --dx-text-editor-filled-bg-focused: #{if($text-editor-filled-bg-focused == $text-editor-filled-bg, var(--dx-text-editor-filled-bg), $text-editor-filled-bg-focused)};
-  --dx-text-editor-filled-bg-hovered: #{if($text-editor-filled-bg-hovered == $text-editor-filled-bg, var(--dx-text-editor-filled-bg), $text-editor-filled-bg-hovered)};
+  --dx-text-editor-filled-bg-focused: var(--dx-text-editor-filled-bg);
+  --dx-text-editor-filled-bg-hovered: var(--dx-text-editor-filled-bg);
   --dx-text-editor-filled-bg: #{$text-editor-filled-bg};
   --dx-text-editor-font-size: #{$text-editor-font-size};
   --dx-text-editor-icon-container-size: #{$text-editor-icon-container-size};
@@ -37,7 +37,7 @@
   --dx-text-editor-invalid-border: #{$text-editor-invalid-border};
   --dx-text-editor-invalid-content: #{$text-editor-invalid-content};
   --dx-text-editor-label-content-focused: #{$text-editor-label-content-focused};
-  --dx-text-editor-label-content: #{if($text-editor-label-content == $text-editor-placeholder, var(--dx-text-editor-placeholder), $text-editor-label-content)};
+  --dx-text-editor-label-content: var(--dx-text-editor-placeholder);
   --dx-text-editor-label-font-size: #{$text-editor-label-font-size};
   --dx-text-editor-label-height: #{$text-editor-label-height};
   --dx-text-editor-label-inset: #{$text-editor-label-inset};
@@ -55,12 +55,12 @@
   --dx-text-editor-line-inset-inline-end: #{$text-editor-line-inset-inline-end};
   --dx-text-editor-line-inset-inline-start: #{$text-editor-line-inset-inline-start};
   --dx-text-editor-line: #{$text-editor-line};
-  --dx-text-editor-outlined-bg-focused: #{if($text-editor-outlined-bg-focused == $text-editor-outlined-bg, var(--dx-text-editor-outlined-bg), $text-editor-outlined-bg-focused)};
-  --dx-text-editor-outlined-bg-hovered: #{if($text-editor-outlined-bg-hovered == $text-editor-outlined-bg, var(--dx-text-editor-outlined-bg), $text-editor-outlined-bg-hovered)};
+  --dx-text-editor-outlined-bg-focused: var(--dx-text-editor-outlined-bg);
+  --dx-text-editor-outlined-bg-hovered: var(--dx-text-editor-outlined-bg);
   --dx-text-editor-outlined-bg: #{$text-editor-outlined-bg};
   --dx-text-editor-placeholder: #{$text-editor-placeholder};
   --dx-text-editor-spin-button-padding-inline: #{$text-editor-spin-button-padding-inline};
-  --dx-text-editor-underlined-bg-focused: #{if($text-editor-underlined-bg-focused == $text-editor-underlined-bg, var(--dx-text-editor-underlined-bg), $text-editor-underlined-bg-focused)};
-  --dx-text-editor-underlined-bg-hovered: #{if($text-editor-underlined-bg-hovered == $text-editor-underlined-bg, var(--dx-text-editor-underlined-bg), $text-editor-underlined-bg-hovered)};
+  --dx-text-editor-underlined-bg-focused: var(--dx-text-editor-underlined-bg);
+  --dx-text-editor-underlined-bg-hovered: var(--dx-text-editor-underlined-bg);
   --dx-text-editor-underlined-bg: #{$text-editor-underlined-bg};
 }
