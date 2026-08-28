@@ -23,6 +23,7 @@ const resetOpenLayersMock = () => {
         mapOptions: null,
         mapResized: false,
         mapTarget: null,
+        onInteractionStateChanged: null,
         projectedCoordinates: [],
         removedControls: [],
         removedLayers: [],
@@ -42,6 +43,18 @@ const resetOpenLayersMock = () => {
         viewZoomSetCount: 0,
         zoomControlCreatedCount: 0
     });
+};
+const onInteractionStates = (expectedStates, callback) => {
+    openLayersMock.onInteractionStateChanged = () => {
+        const actualStates = openLayersMock.interactions.map(interaction => interaction.getActive());
+        const stateMatches = actualStates.length === expectedStates.length
+            && actualStates.every((state, index) => state === expectedStates[index]);
+
+        if(stateMatches) {
+            openLayersMock.onInteractionStateChanged = null;
+            callback();
+        }
+    };
 };
 const moduleConfig = {
     beforeEach(assert) {
@@ -766,19 +779,19 @@ QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
             onReady: () => {
                 const target = getOpenLayersKeyboardTarget();
                 assert.strictEqual(target.getAttribute('tabindex'), null, 'focus is disabled on initialization');
-                map.option('focusStateEnabled', true);
-                map._lastAsyncAction.then(() => {
+                map.option('onUpdated', () => {
                     assert.strictEqual(target.getAttribute('tabindex'), '5', 'configured tabIndex is applied');
-                    map.option('tabIndex', -1);
-                    map._lastAsyncAction.then(() => {
+                    map.option('onUpdated', () => {
                         assert.strictEqual(target.getAttribute('tabindex'), '-1', 'runtime tabIndex is applied');
-                        map.option('focusStateEnabled', false);
-                        map._lastAsyncAction.then(() => {
+                        map.option('onUpdated', () => {
                             assert.strictEqual(target.getAttribute('tabindex'), null, 'runtime focus disabling is applied');
                             done();
                         });
+                        map.option('focusStateEnabled', false);
                     });
+                    map.option('tabIndex', -1);
                 });
+                map.option('focusStateEnabled', true);
             }
         }).dxMap('instance');
     });
@@ -896,6 +909,10 @@ QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
                         lng: -74.1
                     }
                 }, 'bounds are synchronized from the user projection');
+                map.option('onUpdated', () => {
+                    assert.deepEqual(openLayersMock.fittedExtent, [-74, 40.7, -73.9, 40.8], 'bounds are fitted in the user projection');
+                    done();
+                });
                 map.option('bounds', {
                     northEast: {
                         lat: 40.8,
@@ -905,10 +922,6 @@ QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
                         lat: 40.7,
                         lng: -74
                     }
-                });
-                map._lastAsyncAction.then(() => {
-                    assert.deepEqual(openLayersMock.fittedExtent, [-74, 40.7, -73.9, 40.8], 'bounds are fitted in the user projection');
-                    done();
                 });
             }
         }).dxMap('instance');
@@ -984,15 +997,15 @@ QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
             },
             onReady: () => {
                 assert.strictEqual(openLayersMock.addedControls.length, 1, 'zoom control is added on initialization');
-                map.option('controls', false);
-                map._lastAsyncAction.then(() => {
+                map.option('onUpdated', () => {
                     assert.strictEqual(openLayersMock.removedControls.length, 1, 'zoom control is removed');
-                    map.option('controls', true);
-                    map._lastAsyncAction.then(() => {
+                    map.option('onUpdated', () => {
                         assert.strictEqual(openLayersMock.addedControls.length, 2, 'zoom control is added again');
                         done();
                     });
+                    map.option('controls', true);
                 });
+                map.option('controls', false);
             }
         }).dxMap('instance');
     });
@@ -1011,24 +1024,32 @@ QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
                 assert.strictEqual(openLayersMock.addedControls.length, 1, 'zoom control is present');
                 assert.deepEqual(openLayersMock.interactions.map(interaction => interaction.getActive()), [true, false], 'initial states are preserved');
                 assert.notOk(getOpenLayersMapTarget().hasAttribute('inert'), 'map target is keyboard accessible');
-                map.option('disabled', true);
-                map._lastAsyncAction.then(() => {
+                onInteractionStates([false, false], () => {
                     assert.deepEqual(openLayersMock.interactions.map(interaction => interaction.getActive()), [false, false], 'all interactions are disabled');
                     assert.ok(getOpenLayersMapTarget().hasAttribute('inert'), 'map target and controls are removed from keyboard navigation');
                     assert.strictEqual(getOpenLayersKeyboardTarget().getAttribute('tabindex'), null, 'owned keyboard target tabindex is removed');
-                    map.option('disabled', false);
-                    map._lastAsyncAction.then(() => {
+                    onInteractionStates([true, false], () => {
                         assert.deepEqual(openLayersMock.interactions.map(interaction => interaction.getActive()), [true, false], 'previous states are restored');
                         assert.notOk(getOpenLayersMapTarget().hasAttribute('inert'), 'map target and controls return to keyboard navigation');
                         assert.strictEqual(getOpenLayersKeyboardTarget().getAttribute('tabindex'), '0', 'owned keyboard target tabindex is restored');
                         done();
                     });
+                    map.option('disabled', false);
                 });
+                map.option('disabled', true);
             }
         }).dxMap('instance');
     });
     QUnit.test('disabled option is applied on initialization', function(assert) {
         const done = assert.async();
+        onInteractionStates([false, false], () => {
+            assert.strictEqual(openLayersMock.addedControls.length, 1, 'zoom control is present');
+            assert.deepEqual(openLayersMock.interactions.map(interaction => interaction.getActive()), [false, false], 'all interactions are disabled');
+            assert.ok(getOpenLayersMapTarget().hasAttribute('inert'), 'map target and controls are removed from keyboard navigation');
+            assert.strictEqual(getOpenLayersKeyboardTarget().getAttribute('tabindex'), null, 'owned keyboard target tabindex is removed');
+            map.option('onUpdated', done);
+            map.option('disabled', false);
+        });
         const map = $('#map').dxMap({
             provider: 'osm',
             controls: true,
@@ -1040,13 +1061,6 @@ QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
                 }
             }
         }).dxMap('instance');
-        map._lastAsyncAction.then(() => {
-            assert.strictEqual(openLayersMock.addedControls.length, 1, 'zoom control is present');
-            assert.deepEqual(openLayersMock.interactions.map(interaction => interaction.getActive()), [false, false], 'all interactions are disabled');
-            assert.ok(getOpenLayersMapTarget().hasAttribute('inert'), 'map target and controls are removed from keyboard navigation');
-            assert.strictEqual(getOpenLayersKeyboardTarget().getAttribute('tabindex'), null, 'owned keyboard target tabindex is removed');
-            done();
-        });
     });
     QUnit.test('bounds option fits the OpenLayers view on initialization and at runtime', function(assert) {
         const done = assert.async();
@@ -1071,13 +1085,13 @@ QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
             onReady: () => {
                 assert.deepEqual(openLayersMock.fittedExtent, [-74000, 40700, -73900, 40800], 'initial bounds are fitted');
                 assert.strictEqual(openLayersMock.fitOptions, undefined, 'OpenLayers selects the viewport size');
+                map.option('onUpdated', () => {
+                    assert.deepEqual(openLayersMock.fittedExtent, [-74100, 40600, -73800, 40900], 'runtime bounds are fitted');
+                    done();
+                });
                 map.option('bounds', {
                     northEast: [40.9, -73.8],
                     southWest: [40.6, -74.1]
-                });
-                map._lastAsyncAction.then(() => {
-                    assert.deepEqual(openLayersMock.fittedExtent, [-74100, 40600, -73800, 40900], 'runtime bounds are fitted');
-                    done();
                 });
             }
         }).dxMap('instance');
@@ -1093,16 +1107,16 @@ QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
                 }
             },
             onReady: () => {
+                map.option('onUpdated', () => {
+                    assert.strictEqual(openLayersMock.fittedExtent, null, 'view is not fitted without both bounds');
+                    done();
+                });
                 map.option('bounds', {
                     northEast: {
                         lat: 40.8,
                         lng: -73.9
                     },
                     southWest: null
-                });
-                map._lastAsyncAction.then(() => {
-                    assert.strictEqual(openLayersMock.fittedExtent, null, 'view is not fitted without both bounds');
-                    done();
                 });
             }
         }).dxMap('instance');

@@ -46,6 +46,9 @@
         setActive(active) {
             this.active = active;
             api.interactionStateChanges.push({ interaction: this, active });
+            if(api.onInteractionStateChanged) {
+                api.onInteractionStateChanged();
+            }
         }
     }
 
