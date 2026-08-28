@@ -345,59 +345,59 @@ $cardview-padding: var(--dx-card-view-padding) !default;
 $cardview-card-min-width: var(--dx-card-view-card-min-width) !default;
 $cardview-card-border-width: var(--dx-card-view-card-border-width) !default;
 $cardview-card-border-radius: var(--dx-card-view-card-border-radius) !default;
-$cardview-card__header-height: $card-view-card-header-height !default;
-$cardview-card__header-text-size: $card-view-card-header-font-size !default;
-$cardview-card__header__selection-checkbox-padding-right: $card-view-card-header-selection-checkbox-padding-inline-end !default;
-$cardview-card__field-caption-weight: $card-view-card-field-caption-font-weight !default;
-$cardview-card__cover-max-height: $card-view-card-cover-max-height !default;
-$cardview-card__cover--noimage__icon-size: $card-view-card-cover-noimage-icon-size !default;
-$cardview-card__content-padding: $card-view-card-content-padding !default;
-$cardview-card__content-row-gap: $card-view-card-content-row-gap !default;
-$cardview-card__content__cell-padding-vertical: $card-view-card-content-cell-padding-block !default;
-$cardview-card__content__cell-padding-horizontal: $card-view-card-content-cell-padding-inline !default;
+$cardview-card__header-height: var(--dx-card-view-card-header-height) !default;
+$cardview-card__header-text-size: var(--dx-card-view-card-header-font-size) !default;
+$cardview-card__header__selection-checkbox-padding-right: var(--dx-card-view-card-header-selection-checkbox-padding-inline-end) !default;
+$cardview-card__field-caption-weight: var(--dx-card-view-card-field-caption-font-weight) !default;
+$cardview-card__cover-max-height: var(--dx-card-view-card-cover-max-height) !default;
+$cardview-card__cover--noimage__icon-size: var(--dx-card-view-card-cover-noimage-icon-size) !default;
+$cardview-card__content-padding: var(--dx-card-view-card-content-padding) !default;
+$cardview-card__content-row-gap: var(--dx-card-view-card-content-row-gap) !default;
+$cardview-card__content__cell-padding-vertical: var(--dx-card-view-card-content-cell-padding-block) !default;
+$cardview-card__content__cell-padding-horizontal: var(--dx-card-view-card-content-cell-padding-inline) !default;
 
-$cardview-card--selected__field-caption-weight: $card-view-card-field-caption-font-weight-selected !default;
+$cardview-card--selected__field-caption-weight: var(--dx-card-view-card-field-caption-font-weight-selected) !default;
 
 $cardview-header-gap: var(--dx-card-view-header-gap) !default;
 
 $cardview-header-panel-vertical-margin: var(--dx-card-view-header-panel-margin-block) !default;
 $cardview-header-panel--empty-line-height: var(--dx-card-view-header-panel-empty-line-height) !default;
 
-$cardview-header-panel__item-border-width: $card-view-header-panel-item-border-width !default;
-$cardview-header-panel__item-border-radius: $card-view-header-panel-item-border-radius !default;
-$cardview-header-panel__item-padding-horizontal: $card-view-header-panel-item-padding-inline !default;
-$cardview-header-panel__item-padding-vertical: $card-view-header-panel-item-padding-block !default;
-$cardview-header-panel__item-text-weight: $card-view-header-panel-item-font-weight !default;
-$cardview-header-panel__item__sort-index-text-weight: $card-view-header-panel-item-sort-index-font-weight !default;
-$cardview-header-panel__item__icon-size: $card-view-header-panel-item-icon-size !default;
+$cardview-header-panel__item-border-width: var(--dx-card-view-header-panel-item-border-width) !default;
+$cardview-header-panel__item-border-radius: var(--dx-card-view-header-panel-item-border-radius) !default;
+$cardview-header-panel__item-padding-horizontal: var(--dx-card-view-header-panel-item-padding-inline) !default;
+$cardview-header-panel__item-padding-vertical: var(--dx-card-view-header-panel-item-padding-block) !default;
+$cardview-header-panel__item-text-weight: var(--dx-card-view-header-panel-item-font-weight) !default;
+$cardview-header-panel__item__sort-index-text-weight: var(--dx-card-view-header-panel-item-sort-index-font-weight) !default;
+$cardview-header-panel__item__icon-size: var(--dx-card-view-header-panel-item-icon-size) !default;
 
-$cardview-header-panel__item--hovered-text-weight: $card-view-header-panel-item-font-weight-hovered !default;
-$cardview-header-panel__item--hovered__sort-index-text-weight: $card-view-header-panel-item-sort-index-font-weight-hovered !default;
+$cardview-header-panel__item--hovered-text-weight: var(--dx-card-view-header-panel-item-font-weight-hovered) !default;
+$cardview-header-panel__item--hovered__sort-index-text-weight: var(--dx-card-view-header-panel-item-sort-index-font-weight-hovered) !default;
 
-$cardview-header-panel__item--disabled-text-weight: $card-view-header-panel-item-font-weight-disabled !default;
-$cardview-header-panel__item--disabled__sort-index-text-weight: $card-view-header-panel-item-sort-index-font-weight-disabled !default;
+$cardview-header-panel__item--disabled-text-weight: var(--dx-card-view-header-panel-item-font-weight-disabled) !default;
+$cardview-header-panel__item--disabled__sort-index-text-weight: var(--dx-card-view-header-panel-item-sort-index-font-weight-disabled) !default;
 
-$cardview-header-panel__item--dragged-text-weight: $card-view-header-panel-item-dragged-font-weight !default;
+$cardview-header-panel__item--dragged-text-weight: var(--dx-card-view-header-panel-item-dragged-font-weight) !default;
 
-$cardview-header-panel__dropzone-height: $card-view-header-panel-dropzone-height !default;
-$cardview-header-panel__dropzone-top: $card-view-header-panel-dropzone-inset-block-start !default;
-$cardview-header-panel__dropzone-border-width: $card-view-header-panel-dropzone-border-width !default;
-$cardview-header-panel__dropzone-border-radius: $card-view-header-panel-dropzone-border-radius !default;
+$cardview-header-panel__dropzone-height: var(--dx-card-view-header-panel-dropzone-height) !default;
+$cardview-header-panel__dropzone-top: var(--dx-card-view-header-panel-dropzone-inset-block-start) !default;
+$cardview-header-panel__dropzone-border-width: var(--dx-card-view-header-panel-dropzone-border-width) !default;
+$cardview-header-panel__dropzone-border-radius: var(--dx-card-view-header-panel-dropzone-border-radius) !default;
 
 $cardview-filter-panel-border-radius: var(--dx-card-view-filter-panel-border-radius) !default;
 
-$cardview-nodata-view__icon-container-size: $card-view-nodata-view-icon-container-size !default;
-$cardview-nodata-view__icon-container-margin: $card-view-nodata-view-icon-container-margin !default;
-$cardview-nodata-view__icon-size: $card-view-nodata-view-icon-size !default;
+$cardview-nodata-view__icon-container-size: var(--dx-card-view-nodata-view-icon-container-size) !default;
+$cardview-nodata-view__icon-container-margin: var(--dx-card-view-nodata-view-icon-container-margin) !default;
+$cardview-nodata-view__icon-size: var(--dx-card-view-nodata-view-icon-size) !default;
 
-$cardview-card__content__field-value--highlighted-border-radius: $card-view-card-content-field-value-highlighted-border-radius !default;
-$cardview-card__content__field-value--highlighted-border-padding: $card-view-card-content-field-value-highlighted-padding !default;
-$cardview-card__content__field-value--highlighted-text-weight: $card-view-card-content-field-value-highlighted-font-weight !default;
+$cardview-card__content__field-value--highlighted-border-radius: var(--dx-card-view-card-content-field-value-highlighted-border-radius) !default;
+$cardview-card__content__field-value--highlighted-border-padding: var(--dx-card-view-card-content-field-value-highlighted-padding) !default;
+$cardview-card__content__field-value--highlighted-text-weight: var(--dx-card-view-card-content-field-value-highlighted-font-weight) !default;
 
-$cardview-column-chooser--empty__message-horizontal-padding: $card-view-column-chooser-empty-message-horizontal-padding !default;
-$cardview-column-chooser__select-all-item-horizontal-padding: $card-view-column-chooser-select-all-item-horizontal-padding !default;
+$cardview-column-chooser--empty__message-horizontal-padding: var(--dx-card-view-column-chooser-empty-message-horizontal-padding) !default;
+$cardview-column-chooser__select-all-item-horizontal-padding: var(--dx-card-view-column-chooser-select-all-item-horizontal-padding) !default;
 
-$cardview-header-item__left-padding: $card-view-header-item-padding-inline-start !default;
-$cardview-header-item__right-padding: $card-view-header-item-padding-inline-end !default;
-$cardview-header-item__sort-indicator__border-size: $card-view-header-item-sort-indicator-border-width !default;
-$cardview-header-item__sort-indicator__border-radius: $card-view-header-item-sort-indicator-border-radius !default;
+$cardview-header-item__left-padding: var(--dx-card-view-header-item-padding-inline-start) !default;
+$cardview-header-item__right-padding: var(--dx-card-view-header-item-padding-inline-end) !default;
+$cardview-header-item__sort-indicator__border-size: var(--dx-card-view-header-item-sort-indicator-border-width) !default;
+$cardview-header-item__sort-indicator__border-radius: var(--dx-card-view-header-item-sort-indicator-border-radius) !default;

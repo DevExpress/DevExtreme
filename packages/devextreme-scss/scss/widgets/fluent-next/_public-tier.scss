@@ -320,7 +320,8 @@
   @include formPublic.publish();
 }
 
-.dx-htmleditor {
+.dx-htmleditor,
+.dx-aidialog {
   @include htmlEditorPublic.publish();
 }
 
@@ -367,7 +368,8 @@
   @include tabsPublic.publish();
 }
 
-.dx-chat {
+.dx-chat,
+.dx-messagelist-context-menu-content {
   @include chatPublic.publish();
 }
 
@@ -387,11 +389,13 @@
   @include mapPublic.publish();
 }
 
-.dx-pagination {
+.dx-pagination,
+.dx-pager {
   @include paginationPublic.publish();
 }
 
-.dx-pivotgrid {
+.dx-pivotgrid,
+.dx-pivotgridfieldchooser {
   @include pivotGridPublic.publish();
 }
 
@@ -412,6 +416,7 @@
   @include stepperPublic.publish();
 }
 
-.dx-cardview {
+.dx-cardview,
+.dx-cardview-header-item {
   @include cardViewPublic.publish();
 }

@@ -465,7 +465,8 @@
       ".dx-form"
     ],
     "html-editor": [
-      ".dx-htmleditor"
+      ".dx-htmleditor",
+      ".dx-aidialog"
     ],
     "list": [
       ".dx-list"
@@ -501,7 +502,8 @@
       ".dx-tabs"
     ],
     "chat": [
-      ".dx-chat"
+      ".dx-chat",
+      ".dx-messagelist-context-menu-content"
     ],
     "diagram": [
       ".dx-diagram"
@@ -516,10 +518,12 @@
       ".dx-stepper"
     ],
     "pivot-grid": [
-      ".dx-pivotgrid"
+      ".dx-pivotgrid",
+      ".dx-pivotgridfieldchooser"
     ],
     "pagination": [
-      ".dx-pagination"
+      ".dx-pagination",
+      ".dx-pager"
     ],
     "file-uploader": [
       ".dx-fileuploader"
@@ -536,7 +540,8 @@
       ".dx-recurrence-numberbox-repeat-count"
     ],
     "card-view": [
-      ".dx-cardview"
+      ".dx-cardview",
+      ".dx-cardview-header-item"
     ],
     "common": [
       ":root"

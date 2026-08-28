@@ -217,6 +217,25 @@ const OVERRIDES = {
     // same shape as date-view: .dx-colorview carries no rule, the container is the styled root and
     // the ancestor of every box the component paints (palette, scales, previews, controls)
     'color-view': ['.dx-colorview-container'],
+    /*
+     * Wave H satellites. dx-pager and dx-pagination are MUTUALLY EXCLUSIVE
+     * (pagination/content.tsx, getClasses): the standalone widget gets dx-pagination, a grid's
+     * pager runs in grid-compatibility mode and gets dx-pager instead — declaring on one leaves
+     * the tier empty in the other, which is what emptied every grid pager in CI.
+     */
+    pagination: ['.dx-pagination', '.dx-pager'],
+    // the field chooser is a widget of its own, shown in a popup outside .dx-pivotgrid
+    'pivot-grid': ['.dx-pivotgrid', '.dx-pivotgridfieldchooser'],
+    // the AI dialog is a popup: its wrapper carries .dx-aidialog and sits outside the editor
+    'html-editor': ['.dx-htmleditor', '.dx-aidialog'],
+    // the message context menu is overlay content, rendered outside .dx-chat
+    chat: ['.dx-chat', '.dx-messagelist-context-menu-content'],
+    /*
+     * The header item travels: dragging it puts a COPY inside .dx-sortable-dragging in the viewport
+     * (m_draggable/_createDragElement), and `.dx-sortable-dragging > .dx-cardview-header-item` paints
+     * that copy. The item is the only element reading the tier there, so it carries its own scope.
+     */
+    'card-view': ['.dx-cardview', '.dx-cardview-header-item'],
     // wave H roots that are not `.dx-<component>`: an overlay renders outside its source element,
     // and two components paint a box whose class is not their own
     popup: ['.dx-popup-wrapper'],
