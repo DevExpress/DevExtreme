@@ -27,7 +27,7 @@ class Observer {
     onPointerAdding?: (e: Event) => void,
   ) {
     this._pointerEquals = pointerEquals;
-    this._onPointerAdding = onPointerAdding ?? function () { };
+    this._onPointerAdding = onPointerAdding ?? ((): void => {});
     this._pointers = [];
 
     /* eslint-disable spellcheck/spell-checker */
