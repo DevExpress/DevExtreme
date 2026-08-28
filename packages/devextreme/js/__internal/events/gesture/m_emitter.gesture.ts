@@ -1,7 +1,7 @@
+import Emitter from '@js/common/core/events/core/emitter';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
-  createEvent, eventData, eventDelta, isDxMouseWheelEvent,
-  isMouseEvent, isTouchEvent, needSkipEvent,
+  createEvent, eventData, eventDelta, isDxMouseWheelEvent, isMouseEvent, isTouchEvent, needSkipEvent,
 } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
 import callOnce from '@js/core/utils/call_once';
@@ -12,8 +12,6 @@ import { styleProp } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
 import devices from '@ts/core/m_devices';
 import domUtils from '@ts/core/utils/m_dom';
-import type { EmitterConfigData, EmitterEvent, EventCoords } from '@ts/events/core/emitter';
-import Emitter from '@ts/events/core/emitter';
 
 const ready = readyCallbacks.add;
 const { abs } = Math;
@@ -26,24 +24,11 @@ let TOUCH_BOUNDARY = 10;
 const IMMEDIATE_TOUCH_BOUNDARY = 0;
 const IMMEDIATE_TIMEOUT = 180;
 
-// The gesture pipeline operates on pointer events that always carry
-// page coordinates.
-export type GestureEvent = EmitterEvent & {
-  pageX: number;
-  pageY: number;
+const supportPointerEvents = function () {
+  return styleProp('pointer-events');
 };
 
-export type GestureDirection = 'both' | 'horizontal' | 'vertical';
-
-type GestureCover = (toggle: boolean, cursor: string) => void;
-
-const supportPointerEvents = function (): string | undefined {
-  const prop: string | undefined = styleProp('pointer-events');
-
-  return prop;
-};
-
-const setGestureCover = callOnce((): GestureCover => {
+const setGestureCover = callOnce(() => {
   const GESTURE_COVER_CLASS = 'dx-gesture-cover';
 
   const isDesktop = devices.real().deviceType === 'desktop';
@@ -55,82 +40,53 @@ const setGestureCover = callOnce((): GestureCover => {
   const $cover = $('<div>')
     .addClass(GESTURE_COVER_CLASS)
     .css('pointerEvents', 'none');
-  // @ts-expect-error subscribeGlobal is not declared in the public events engine type
+  // @ts-expect-error
   eventsEngine.subscribeGlobal($cover, 'dxmousewheel', (e) => {
     e.preventDefault();
   });
 
   ready(() => {
-    // @ts-expect-error appendTo accepts a selector at runtime
+    // @ts-expect-error
     $cover.appendTo('body');
   });
 
   return function (toggle, cursor) {
     $cover.css('pointerEvents', toggle ? 'all' : 'none');
-    if (toggle) {
-      $cover.css('cursor', cursor);
-    }
+    toggle && $cover.css('cursor', cursor);
   };
 });
 
-const gestureCover = function (toggle: boolean, cursor: string): void {
-  const gestureCoverStrategy: GestureCover = setGestureCover();
+const gestureCover = function (toggle, cursor) {
+  const gestureCoverStrategy = setGestureCover();
   gestureCoverStrategy(toggle, cursor);
 };
 
-class GestureEmitter extends Emitter {
-  gesture = true;
+const GestureEmitter = Emitter.inherit({
 
-  direction?: GestureDirection;
+  gesture: true,
 
-  immediate?: boolean;
-
-  immediateTimeout?: number;
-
-  _stage?: number;
-
-  _startEvent!: GestureEvent;
-
-  _startEventData!: EventCoords;
-
-  _immediateTimer?: ReturnType<typeof setTimeout>;
-
-  _immediateAccepted?: boolean;
-
-  static initialTouchBoundary = TOUCH_BOUNDARY;
-
-  static touchBoundary(newBoundary?: number): number | undefined {
-    if (isDefined(newBoundary)) {
-      TOUCH_BOUNDARY = newBoundary;
-      return undefined;
-    }
-
-    return TOUCH_BOUNDARY;
-  }
-
-  configure(data: EmitterConfigData, eventName?: string): void {
+  configure(data) {
     this.getElement().css('msTouchAction', data.immediate ? 'pinch-zoom' : '');
 
-    super.configure(data, eventName);
-  }
+    this.callBase(data);
+  },
 
-  allowInterruptionByMouseWheel(): boolean {
+  allowInterruptionByMouseWheel() {
     return this._stage !== STARTED;
-  }
+  },
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getDirection(e?: EmitterEvent): GestureDirection | undefined {
+  getDirection() {
     return this.direction;
-  }
+  },
 
-  _cancel(e?: EmitterEvent): void {
-    super._cancel(e);
+  _cancel() {
+    this.callBase.apply(this, arguments);
 
     this._toggleGestureCover(false);
     this._stage = SLEEP;
-  }
+  },
 
-  start(e: EmitterEvent): void {
+  start(e) {
     // T1328053: macOS Ctrl+click opens the system context menu. Kept out of needSkipEvent()
     // because importing m_devices into that low-level events util forces `new Devices()` into
     // early module init and breaks init order (resizeCallbacks stops firing).
@@ -148,9 +104,9 @@ class GestureEmitter extends Emitter {
     this._init(e);
 
     this._setupImmediateTimer();
-  }
+  },
 
-  _setupImmediateTimer(): void {
+  _setupImmediateTimer() {
     clearTimeout(this._immediateTimer);
     this._immediateAccepted = false;
 
@@ -166,9 +122,9 @@ class GestureEmitter extends Emitter {
     this._immediateTimer = setTimeout(() => {
       this._immediateAccepted = true;
     }, this.immediateTimeout ?? IMMEDIATE_TIMEOUT);
-  }
+  },
 
-  move(e: EmitterEvent): void {
+  move(e) {
     if (this._stage === INITED && this._directionConfirmed(e)) {
       this._stage = STARTED;
 
@@ -190,11 +146,12 @@ class GestureEmitter extends Emitter {
       this._clearSelection(e);
       this._move(e);
     }
-  }
+  },
 
-  _directionConfirmed(e: EmitterEvent): boolean {
+  _directionConfirmed(e) {
     const touchBoundary = this._getTouchBoundary(e);
-    const delta: EventCoords = eventDelta(this._startEventData, eventData(e));
+    // @ts-expect-error
+    const delta = eventDelta(this._startEventData, eventData(e));
     const deltaX = abs(delta.x);
     const deltaY = abs(delta.y);
 
@@ -206,56 +163,53 @@ class GestureEmitter extends Emitter {
     const horizontalAccepted = direction === 'horizontal' && horizontalMove;
     const verticalAccepted = direction === 'vertical' && verticalMove;
 
-    return Boolean(
-      bothAccepted || horizontalAccepted || verticalAccepted || this._immediateAccepted,
-    );
-  }
+    return bothAccepted || horizontalAccepted || verticalAccepted || this._immediateAccepted;
+  },
 
-  _validateMove(touchBoundary: number, mainAxis: number, crossAxis: number): boolean {
-    return Boolean(mainAxis)
-      && mainAxis >= touchBoundary
-      && (this.immediate ? mainAxis >= crossAxis : true);
-  }
+  _validateMove(touchBoundary, mainAxis, crossAxis) {
+    return mainAxis && mainAxis >= touchBoundary && (this.immediate ? mainAxis >= crossAxis : true);
+  },
 
-  _getTouchBoundary(e: EmitterEvent): number {
+  _getTouchBoundary(e) {
     return this.immediate || isDxMouseWheelEvent(e) ? IMMEDIATE_TOUCH_BOUNDARY : TOUCH_BOUNDARY;
-  }
+  },
 
-  _adjustStartEvent(e: EmitterEvent): void {
+  _adjustStartEvent(e) {
     const touchBoundary = this._getTouchBoundary(e);
-    const delta: EventCoords = eventDelta(this._startEventData, eventData(e));
+    // @ts-expect-error
+    const delta = eventDelta(this._startEventData, eventData(e));
 
     this._startEvent.pageX += sign(delta.x) * touchBoundary;
     this._startEvent.pageY += sign(delta.y) * touchBoundary;
-  }
+  },
 
-  _resetActiveElement(): void {
+  _resetActiveElement() {
     if (devices.real().platform === 'ios' && this.getElement().find(':focus').length) {
       domUtils.resetActiveElement();
     }
-  }
+  },
 
-  _toggleGestureCover(toggle: boolean): void {
+  _toggleGestureCover(toggle) {
     this._toggleGestureCoverImpl(toggle);
-  }
+  },
 
-  _toggleGestureCoverImpl(toggle: boolean): void {
+  _toggleGestureCoverImpl(toggle) {
     const isStarted = this._stage === STARTED;
 
     if (isStarted) {
-      gestureCover(toggle, this.getElement().css('cursor') as string);
+      gestureCover(toggle, this.getElement().css('cursor'));
     }
-  }
+  },
 
-  _clearSelection(e: EmitterEvent): void {
+  _clearSelection(e) {
     if (isDxMouseWheelEvent(e) || isTouchEvent(e)) {
       return;
     }
 
     domUtils.clearSelection();
-  }
+  },
 
-  end(e: EmitterEvent): void {
+  end(e) {
     this._toggleGestureCover(false);
 
     if (this._stage === STARTED) {
@@ -265,28 +219,29 @@ class GestureEmitter extends Emitter {
     }
 
     this._stage = SLEEP;
-  }
+  },
 
-  dispose(): void {
+  dispose() {
     clearTimeout(this._immediateTimer);
-    super.dispose();
+    this.callBase.apply(this, arguments);
     this._toggleGestureCover(false);
+  },
+
+  _init: noop,
+  _start: noop,
+  _move: noop,
+  _stop: noop,
+  _end: noop,
+
+});
+GestureEmitter.initialTouchBoundary = TOUCH_BOUNDARY;
+GestureEmitter.touchBoundary = function (newBoundary) {
+  if (isDefined(newBoundary)) {
+    TOUCH_BOUNDARY = newBoundary;
+    return;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _init(e: EmitterEvent): void {}
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _start(e: EmitterEvent): void {}
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _move(e: EmitterEvent): void {}
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _stop(e: EmitterEvent): void {}
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _end(e: EmitterEvent): void {}
-}
+  return TOUCH_BOUNDARY;
+};
 
 export default GestureEmitter;

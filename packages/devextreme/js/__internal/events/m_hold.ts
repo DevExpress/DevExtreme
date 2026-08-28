@@ -1,7 +1,6 @@
+import Emitter from '@js/common/core/events/core/emitter';
+import registerEmitter from '@js/common/core/events/core/emitter_registrator';
 import { eventData, eventDelta } from '@js/common/core/events/utils/index';
-import type { EmitterEvent, EventCoords } from '@ts/events/core/emitter';
-import Emitter from '@ts/events/core/emitter';
-import registerEmitter from '@ts/events/core/emitter_registrator';
 
 const { abs } = Math;
 
@@ -9,21 +8,16 @@ const HOLD_EVENT_NAME = 'dxhold';
 const HOLD_TIMEOUT = 750;
 const TOUCH_BOUNDARY = 5;
 
-class HoldEmitter extends Emitter {
-  timeout?: number;
+const HoldEmitter = Emitter.inherit({
 
-  _startEventData!: EventCoords;
-
-  _holdTimer?: ReturnType<typeof setTimeout>;
-
-  start(e: EmitterEvent): void {
+  start(e) {
     this._startEventData = eventData(e);
 
     this._startTimer(e);
-  }
+  },
 
-  _startTimer(e: EmitterEvent): void {
-    const holdTimeout = this.timeout ?? HOLD_TIMEOUT;
+  _startTimer(e) {
+    const holdTimeout = 'timeout' in this ? this.timeout : HOLD_TIMEOUT;
     this._holdTimer = setTimeout(() => {
       this._requestAccept(e);
       this._fireEvent(HOLD_EVENT_NAME, e, {
@@ -31,36 +25,38 @@ class HoldEmitter extends Emitter {
       });
       this._forgetAccept();
     }, holdTimeout);
-  }
+  },
 
-  move(e: EmitterEvent): void {
+  move(e) {
     if (this._touchWasMoved(e)) {
       this._cancel(e);
     }
-  }
+  },
 
-  _touchWasMoved(e: EmitterEvent): boolean {
-    const delta: EventCoords = eventDelta(this._startEventData, eventData(e));
+  _touchWasMoved(e) {
+    // @ts-expect-error
+    const delta = eventDelta(this._startEventData, eventData(e));
 
     return abs(delta.x) > TOUCH_BOUNDARY || abs(delta.y) > TOUCH_BOUNDARY;
-  }
+  },
 
-  end(): void {
+  end() {
     this._stopTimer();
-  }
+  },
 
-  _stopTimer(): void {
+  _stopTimer() {
     clearTimeout(this._holdTimer);
-  }
+  },
 
-  cancel(): void {
+  cancel() {
     this._stopTimer();
-  }
+  },
 
-  dispose(): void {
+  dispose() {
     this._stopTimer();
-  }
-}
+  },
+
+});
 
 registerEmitter({
   emitter: HoldEmitter,

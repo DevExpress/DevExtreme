@@ -1,20 +1,12 @@
+import Emitter from '@js/common/core/events/core/emitter';
+import registerEmitter from '@js/common/core/events/core/emitter_registrator';
 import { hasTouches } from '@js/common/core/events/utils/index';
 import * as iteratorUtils from '@js/core/utils/iterator';
 import { fitIntoRange, sign as mathSign } from '@js/core/utils/math';
-import type { EmitterEvent, EmitterEventPointer } from '@ts/events/core/emitter';
-import Emitter from '@ts/events/core/emitter';
-import registerEmitter from '@ts/events/core/emitter_registrator';
 
 interface EventAlias {
   name: string;
-  args: Record<string, boolean>;
-}
-
-interface TransformVector {
-  x: number;
-  y: number;
-  centerX: number;
-  centerY: number;
+  args: any;
 }
 
 const DX_PREFIX = 'dx';
@@ -29,7 +21,7 @@ const UPDATE_POSTFIX = '';
 const END_POSTFIX = 'end';
 
 const eventAliases: EventAlias[] = [];
-const addAlias = function (eventName: string, eventArgs: Record<string, boolean>): void {
+const addAlias = function (eventName, eventArgs) {
   eventAliases.push({
     name: eventName,
     args: eventArgs,
@@ -60,10 +52,7 @@ addAlias(ROTATE, {
   deltaRotation: true,
 });
 
-const getVector = function (
-  first: EmitterEventPointer,
-  second: EmitterEventPointer,
-): TransformVector {
+const getVector = function (first, second) {
   return {
     x: second.pageX - first.pageX,
     y: -second.pageY + first.pageY,
@@ -72,21 +61,21 @@ const getVector = function (
   };
 };
 
-const getEventVector = function (e: EmitterEvent): TransformVector {
-  const pointers = e.pointers as EmitterEventPointer[];
+const getEventVector = function (e) {
+  const { pointers } = e;
 
   return getVector(pointers[0], pointers[1]);
 };
 
-const getDistance = function (vector: TransformVector): number {
+const getDistance = function (vector) {
   return Math.sqrt(vector.x * vector.x + vector.y * vector.y);
 };
 
-const getScale = function (firstVector: TransformVector, secondVector: TransformVector): number {
+const getScale = function (firstVector, secondVector) {
   return getDistance(firstVector) / getDistance(secondVector);
 };
 
-const getRotation = function (firstVector: TransformVector, secondVector: TransformVector): number {
+const getRotation = function (firstVector, secondVector) {
   const scalarProduct = firstVector.x * secondVector.x + firstVector.y * secondVector.y;
   const distanceProduct = getDistance(firstVector) * getDistance(secondVector);
 
@@ -100,26 +89,20 @@ const getRotation = function (firstVector: TransformVector, secondVector: Transf
   return sign * angle;
 };
 
-const getTranslation = function (
-  firstVector: TransformVector,
-  secondVector: TransformVector,
-): { x: number; y: number } {
+const getTranslation = function (firstVector, secondVector) {
   return {
     x: firstVector.centerX - secondVector.centerX,
     y: firstVector.centerY - secondVector.centerY,
   };
 };
 
-class TransformEmitter extends Emitter {
-  _startVector!: TransformVector;
+const TransformEmitter = Emitter.inherit({
 
-  _prevVector!: TransformVector;
-
-  validatePointers(e: EmitterEvent): boolean {
+  validatePointers(e) {
     return hasTouches(e) > 1;
-  }
+  },
 
-  start(e: EmitterEvent): void {
+  start(e) {
     this._accept(e);
 
     const startVector = getEventVector(e);
@@ -127,22 +110,22 @@ class TransformEmitter extends Emitter {
     this._prevVector = startVector;
 
     this._fireEventAliases(START_POSTFIX, e);
-  }
+  },
 
-  move(e: EmitterEvent): void {
+  move(e) {
     const currentVector = getEventVector(e);
     const eventArgs = this._getEventArgs(currentVector);
 
     this._fireEventAliases(UPDATE_POSTFIX, e, eventArgs);
     this._prevVector = currentVector;
-  }
+  },
 
-  end(e: EmitterEvent): void {
+  end(e) {
     const eventArgs = this._getEventArgs(this._prevVector);
     this._fireEventAliases(END_POSTFIX, e, eventArgs);
-  }
+  },
 
-  _getEventArgs(vector: TransformVector): Record<string, unknown> {
+  _getEventArgs(vector) {
     return {
       scale: getScale(vector, this._startVector),
       deltaScale: getScale(vector, this._prevVector),
@@ -151,27 +134,24 @@ class TransformEmitter extends Emitter {
       translation: getTranslation(vector, this._startVector),
       deltaTranslation: getTranslation(vector, this._prevVector),
     };
-  }
+  },
 
-  _fireEventAliases(
-    eventPostfix: string,
-    originalEvent: EmitterEvent,
-    eventArgs?: Record<string, unknown>,
-  ): void {
-    const args: Record<string, unknown> = eventArgs ?? {};
+  _fireEventAliases(eventPostfix, originalEvent, eventArgs) {
+    eventArgs = eventArgs || {};
 
     iteratorUtils.each(eventAliases, (_, eventAlias) => {
-      const aliasArgs: Record<string, unknown> = {};
+      const args = {};
       iteratorUtils.each(eventAlias.args, (name) => {
-        if (name in args) {
-          aliasArgs[name] = args[name];
+        if (name in eventArgs) {
+          args[name] = eventArgs[name];
         }
       });
 
-      this._fireEvent(DX_PREFIX + eventAlias.name + eventPostfix, originalEvent, aliasArgs);
+      this._fireEvent(DX_PREFIX + eventAlias.name + eventPostfix, originalEvent, args);
     });
-  }
-}
+  },
+
+});
 
 const eventNames = eventAliases.reduce((result: string[], eventAlias) => {
   [START_POSTFIX, UPDATE_POSTFIX, END_POSTFIX].forEach((eventPostfix) => {
@@ -184,7 +164,7 @@ registerEmitter({
   emitter: TransformEmitter,
   events: eventNames,
 });
-const exportNames: Record<string, string> = {};
+const exportNames: Record<string, any> = {};
 iteratorUtils.each(eventNames, (_, eventName: string) => {
   exportNames[eventName.substring(DX_PREFIX.length)] = eventName;
 });

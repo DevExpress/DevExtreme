@@ -7343,7 +7343,7 @@ declare module DevExpress.core {
 
     insertBefore(element: Element | dxElementWrapper): this;
 
-    is(selector: string | dxElementWrapper | Element): boolean;
+    is(selector: string | dxElementWrapper): boolean;
 
     last(): this;
 

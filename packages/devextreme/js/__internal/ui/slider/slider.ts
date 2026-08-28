@@ -25,7 +25,7 @@ import { render } from '@ts/core/utils/ink_ripple';
 import { applyServerDecimalSeparator } from '@ts/core/utils/m_common';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
-import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/swipe';
+import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/m_swipe';
 
 import type { RangeStyles } from '../track_bar';
 import TrackBar from '../track_bar';
