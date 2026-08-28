@@ -99,7 +99,8 @@ export default class AppointmentPopup {
 
     this.form = new Form(page, this.contentElement.locator(SELECTORS.form));
 
-    this.textEditor = new TextBox(page, this.contentElement.locator(SELECTORS.textEditor));
+    // TestCafe selectors resolved to their first match; a Locator has to say so explicitly.
+    this.textEditor = new TextBox(page, this.contentElement.locator(SELECTORS.textEditor).first());
 
     this.allDaySwitch = this.contentElement.locator(SELECTORS.allDaySwitch);
 

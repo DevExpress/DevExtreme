@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 
 const STYLESHEET_RULES_ID = 'stylesheetRules';
 
@@ -130,3 +130,17 @@ export const removeStylesheetRulesFromPage = async (page: Page): Promise<void> =
 export const blurActiveElement = async (page: Page): Promise<void> => page.evaluate(() => {
   (document.activeElement as HTMLElement | null)?.blur();
 });
+
+// The TestCafe helpers took a Selector, that is an element; these are their Locator counterparts.
+export const setElementStyle = async (target: Locator, value: string): Promise<void> => target.evaluate(
+  (element, style) => {
+    const current = element.getAttribute('style') ?? '';
+
+    element.setAttribute('style', `${current} ${style}`);
+  },
+  value,
+);
+
+export const getElementStyle = async (target: Locator): Promise<string> => (
+  await target.getAttribute('style')
+) ?? '';
