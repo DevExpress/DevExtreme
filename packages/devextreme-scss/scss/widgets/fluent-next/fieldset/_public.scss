@@ -9,7 +9,7 @@
   --dx-fieldset-field-min-height: #{$fieldset-field-min-height};
   --dx-fieldset-field-value-bottom-padding: #{$fieldset-field-value-bottom-padding};
   --dx-fieldset-field-value-invalid-content: #{$fieldset-field-value-invalid-content};
-  --dx-fieldset-field-value-padding-inline: #{if($fieldset-field-value-padding-inline == $fieldset-value-padding-inline, var(--dx-fieldset-value-padding-inline), $fieldset-field-value-padding-inline)};
+  --dx-fieldset-field-value-padding-inline: var(--dx-fieldset-value-padding-inline);
   --dx-fieldset-field-value-top-padding: #{$fieldset-field-value-top-padding};
   --dx-fieldset-header-margin-block: #{$fieldset-header-margin-block};
   --dx-fieldset-margin-block: #{$fieldset-margin-block};
