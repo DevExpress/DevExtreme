@@ -14,16 +14,21 @@ import {
   flushAsync,
 } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 
+import { DataController } from '../data_controller';
+
+declare class ExposedDataController extends DataController {
+  public isSharedDataSource?: boolean;
+}
+
 const DATA = [
   { id: 1, value: 'a' },
   { id: 2, value: 'b' },
 ];
 
 const getIsSharedDataSource = (instance: DataGridInstance): boolean | undefined => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const dataController = instance.getController('data') as any;
+  const dataController = instance.getController('data') as unknown as ExposedDataController;
 
-  return dataController.isSharedDataSource as boolean | undefined;
+  return dataController.isSharedDataSource;
 };
 
 describe('DataController data source', () => {
