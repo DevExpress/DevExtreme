@@ -43,10 +43,10 @@ const viewportClip = async (page: Page): Promise<{
   height: document.documentElement.clientHeight,
 }));
 
-// TestCafe shot an element that outgrows the viewport as the part of it that is on screen; the
-// Playwright element screenshot would scroll the rest into view and stitch a taller image, which
-// no existing etalon matches. Only such an element takes this path — one that fits is shot as it
-// always was.
+// TestCafe shot an element that outgrows the viewport by scrolling its start into view and taking
+// the part of it that was on screen; the Playwright element screenshot would instead stitch the
+// whole element, which no existing etalon matches. Only such an element takes this path — one that
+// fits is shot as it always was.
 const clippedToViewport = async (
   page: Page,
   locator: Locator,
@@ -63,11 +63,22 @@ const clippedToViewport = async (
     return null;
   }
 
+  // The clip has to stay inside the viewport: a full-page capture widens the viewport to the whole
+  // document, the scrollbar goes away, and a widget that fills its container re-lays out to the
+  // wider space — the shot would show a layout the page never had.
+  await locator.evaluate((element) => {
+    element.scrollIntoView({ block: 'start', inline: 'start' });
+  });
+
+  const scrolled = await locator.boundingBox() ?? box;
+  const x = Math.max(scrolled.x, 0);
+  const y = Math.max(scrolled.y, 0);
+
   return {
-    x: box.x,
-    y: box.y,
-    width: Math.min(box.width, viewport.width),
-    height: Math.min(box.height, viewport.height),
+    x,
+    y,
+    width: Math.min(scrolled.width, viewport.width - x),
+    height: Math.min(scrolled.height, viewport.height - y),
   };
 };
 
@@ -84,7 +95,7 @@ const expectScreenshot = async (
   const clip = await clippedToViewport(page, locator);
 
   if (clip) {
-    await expect(page).toHaveScreenshot([name], { clip, fullPage: true });
+    await expect(page).toHaveScreenshot([name], { clip });
     return;
   }
 

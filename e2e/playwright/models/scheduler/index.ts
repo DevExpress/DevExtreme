@@ -227,6 +227,14 @@ export default class Scheduler extends Widget {
     }, { time: date.getTime(), groupValue: group, isAllDay: allDay });
   }
 
+  // Scrolls the work space itself, in pixels — the counterpart of the TestCafe "scrollTo(x, y)"
+  // helper, and not of the widget's own "scrollTo(date)" above.
+  public async scrollWorkSpaceTo(offset: { left: number; top: number }): Promise<void> {
+    await this.element.evaluate((element, { left, top }) => {
+      $(element).data('dxScheduler').getWorkSpaceScrollable().scrollTo({ x: left, y: top });
+    }, offset);
+  }
+
   public async hideAppointmentTooltip(): Promise<void> {
     await this.invoke('hideAppointmentTooltip');
   }
