@@ -238,7 +238,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     return this._virtualScrollController.load();
   }
 
-  private isLoading() {
+  public isLoading() {
     return this.option(LEGACY_SCROLLING_MODE) === false ? this._dataSource.isLoading() : this._isLoading;
   }
 

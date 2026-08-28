@@ -8,9 +8,9 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
+import { isDefined, isPlainObject } from '@js/core/utils/type';
 import type { StoreChange } from '@js/data/store';
-import type { ChangingEvent, DataSource } from '@ts/data/data_source/types';
+import type { ChangingEvent, DataSource, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { BeforePushEvent } from '@ts/data/types';
 
 import modules from '../m_modules';
@@ -99,9 +99,67 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private changingHandlerProxy!: (e: ChangingEvent) => void;
 
-  protected store!: () => any;
+  public filter(): StoreLoadOptions['filter'];
+  public filter(...filterExpr: NonNullable<StoreLoadOptions['filter']>[]): void;
+  public filter(...args: unknown[]): unknown {
+    return (this._dataSource.filter as (...a: unknown[]) => unknown)(...args);
+  }
 
-  private readonly group!: (args?: any) => any;
+  public sort(): StoreLoadOptions['sort'];
+  public sort(...sortExpr: NonNullable<StoreLoadOptions['sort']>[]): void;
+  public sort(...args: unknown[]): unknown {
+    return (this._dataSource.sort as (...a: unknown[]) => unknown)(...args);
+  }
+
+  public group(): StoreLoadOptions['group'];
+  public group(...groupExpr: NonNullable<StoreLoadOptions['group']>[]): void;
+  public group(...args: unknown[]): unknown {
+    return (this._dataSource.group as (...a: unknown[]) => unknown)(...args);
+  }
+
+  public select(): StoreLoadOptions['select'];
+  public select(...selectExpr: NonNullable<StoreLoadOptions['select']>[]): void;
+  public select(...args: unknown[]): unknown {
+    return (this._dataSource.select as (...a: unknown[]) => unknown)(...args);
+  }
+
+  public paginate(): boolean | undefined;
+  public paginate(value: boolean): void;
+  public paginate(value?: boolean): boolean | undefined {
+    return (this._dataSource.paginate as (...a: unknown[]) => boolean | undefined)(value);
+  }
+
+  public requireTotalCount(): StoreLoadOptions['requireTotalCount'];
+  public requireTotalCount(value: boolean): void;
+  public requireTotalCount(value?: boolean): unknown {
+    return (this._dataSource.requireTotalCount as (...a: unknown[]) => unknown)(value);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public store(): any {
+    return this._dataSource.store();
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public key(): any {
+    return this._dataSource.key();
+  }
+
+  public isLoading(): boolean {
+    return this._dataSource.isLoading();
+  }
+
+  public loadOptions(): StoreLoadOptions {
+    return this._dataSource.loadOptions();
+  }
+
+  public cancel(operationId: number): boolean {
+    return this._dataSource.cancel(operationId);
+  }
+
+  public cancelAll(): void {
+    (this._dataSource as unknown as { cancelAll: () => void }).cancelAll();
+  }
 
   public init(dataSource?: DataSource): void {
     if (!dataSource) {
@@ -147,15 +205,6 @@ export default class DataSourceAdapter extends modules.Controller {
     dataSource.on('loadError', that.loadErrorHandlerProxy);
     dataSource.on('changing', that.changingHandlerProxy);
     dataSource.store().on('beforePush', that.pushHandlerProxy);
-
-    // TODO: remove copying dataSource's members
-    each(dataSource, (memberName, member) => {
-      if (!that[memberName] && isFunction(member)) {
-        that[memberName] = function () {
-          return this._dataSource[memberName].apply(this._dataSource, arguments);
-        };
-      }
-    });
   }
 
   public dispose(isSharedDataSource?: boolean): void {
