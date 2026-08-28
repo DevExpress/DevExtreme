@@ -13,7 +13,7 @@ export interface PointerEventHandleObj {
   data?: Record<string, unknown>;
 }
 
-export interface PointerEventInit {
+export interface PointerStrategyEventArgs {
   type: string;
   pointerType: string;
   originalEvent: EmitterEvent;
@@ -50,7 +50,7 @@ class BaseStrategy {
   _handler(e: EmitterEvent): EmitterEvent | undefined {
     const delegateTarget = this._getDelegateTarget(e);
 
-    const event: PointerEventInit = {
+    const event: PointerStrategyEventArgs = {
       type: this._eventName,
       pointerType: e.pointerType || eventSource(e),
       originalEvent: e,
@@ -76,7 +76,7 @@ class BaseStrategy {
     return delegateTarget;
   }
 
-  _fireEvent(args: PointerEventInit): EmitterEvent {
+  _fireEvent(args: PointerStrategyEventArgs): EmitterEvent {
     const event: EmitterEvent = fireEvent(args);
 
     return event;
@@ -109,8 +109,8 @@ class BaseStrategy {
     }
   }
 
-  remove(handleObj: PointerEventHandleObj): void {
-    this._setSelector(handleObj);
+  remove(): void {
+    this._selector = null;
 
     if (!this.noBubble) {
       this._handlerCount -= 1;
