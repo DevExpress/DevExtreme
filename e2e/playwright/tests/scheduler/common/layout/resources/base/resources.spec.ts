@@ -29,7 +29,7 @@ const createScheduler = async (
 
       await scheduler.toolbar.element.click();
       await scheduler.getAppointment('1 appointment', 0).element.click();
-      expect(await scheduler.appointmentTooltip.isVisible()).toBe(true);
+      await expect(scheduler.appointmentTooltip.wrapper).toBeVisible();
 
       await testScreenshot(page, `resource(view=${view}-resource=${!!resourcesValue}).png`);
     });
@@ -50,7 +50,7 @@ const createScheduler = async (
        */
       await scheduler.toolbar.element.click();
       await scheduler.getAppointment('1 appointment', 0).element.click();
-      expect(await scheduler.appointmentTooltip.isVisible()).toBe(true);
+      await expect(scheduler.appointmentTooltip.wrapper).toBeVisible();
 
       await testScreenshot(page, `resource(view=${view}-resource=${!!resourcesValue}).png`);
     });
