@@ -15,7 +15,7 @@ import type dxDateBox from '@js/ui/date_box';
 import type { DateLike } from '@js/ui/date_box';
 import dateLocalization from '@ts/core/localization/date';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
 import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
 import DateBoxBase from '@ts/ui/date_box/date_box.base';
 import { getDatePartIndexByPosition, renderDateParts } from '@ts/ui/date_box/date_box.mask.parts';

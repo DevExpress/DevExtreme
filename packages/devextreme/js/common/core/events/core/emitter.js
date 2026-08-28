@@ -1,1 +1,1 @@
-export { default } from '../../../../__internal/events/core/emitter';
+export { default } from '../../../../__internal/events/core/m_emitter';

@@ -19,7 +19,7 @@ import type { DxEvent } from '@js/events';
 import CollectionWidgetLiveUpdate from '@js/ui/collection/ui.collection_widget.live_update';
 import type { Item, Properties } from '@js/ui/multi_view';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/swipe';
+import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/m_swipe';
 import type {
   CollectionItemInfo,
   CollectionItemKey,
@@ -43,6 +43,7 @@ const MULTIVIEW_ANIMATION_DURATION = 200;
 
 const toNumber = (value): number => +value;
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 const getPosition = ($element: dxElementWrapper): number => locate($element).left;
 
 export interface MultiViewProperties extends Properties<Item>, Omit<
