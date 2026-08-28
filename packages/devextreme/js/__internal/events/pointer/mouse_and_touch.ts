@@ -1,7 +1,7 @@
 import { isMouseEvent } from '@js/common/core/events/utils/index';
 import { extend } from '@js/core/utils/extend';
 import type { EmitterEvent } from '@ts/events/core/emitter';
-import type { PointerEventInit } from '@ts/events/pointer/base';
+import type { PointerStrategyEventArgs } from '@ts/events/pointer/base';
 import BaseStrategy from '@ts/events/pointer/base';
 import MouseStrategy from '@ts/events/pointer/mouse';
 import type { PointerEventMap } from '@ts/events/pointer/observer';
@@ -75,7 +75,7 @@ class MouseAndTouchStrategy extends BaseStrategy {
     return super._handler(e);
   }
 
-  _fireEvent(args: PointerEventInit): EmitterEvent {
+  _fireEvent(args: PointerStrategyEventArgs): EmitterEvent {
     const normalizer = isMouseEvent(args.originalEvent)
       ? MouseStrategy.normalize
       : TouchStrategy.normalize;

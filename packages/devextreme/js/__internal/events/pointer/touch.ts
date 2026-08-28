@@ -2,7 +2,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import devices from '@ts/core/m_devices';
 import type { EmitterEvent, EmitterEventPointer } from '@ts/events/core/emitter';
-import type { PointerEventInit } from '@ts/events/pointer/base';
+import type { PointerStrategyEventArgs } from '@ts/events/pointer/base';
 import BaseStrategy from '@ts/events/pointer/base';
 import type { PointerEventMap } from '@ts/events/pointer/observer';
 
@@ -74,7 +74,7 @@ class TouchStrategy extends BaseStrategy {
     return super._handler(e);
   }
 
-  _fireEvent(args: PointerEventInit): EmitterEvent {
+  _fireEvent(args: PointerStrategyEventArgs): EmitterEvent {
     const touchEvent = args.originalEvent as TouchPointerEvent;
 
     return super._fireEvent(extend(normalizeTouchEvent(touchEvent), args));
