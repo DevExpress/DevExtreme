@@ -709,13 +709,13 @@ export class DataController extends modules.Controller {
 
     if (dataSourceOptions instanceof DataSourceClass) {
       this.isSharedDataSource = true;
-      return dataSourceOptions as DataSource;
+      return dataSourceOptions as unknown as DataSource;
     }
 
     this.isSharedDataSource = false;
     return new DataSourceClass(
       extend(true, {}, normalizeDataSourceOptions(dataSourceOptions, {})),
-    ) as DataSource;
+    ) as unknown as DataSource;
   }
 
   /**
