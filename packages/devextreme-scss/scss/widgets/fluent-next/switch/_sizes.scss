@@ -13,10 +13,8 @@ $switch-width: null !default;
 $switch-handle-margin: null !default;
 $switch-padding: ds.$spacing-80 !default;
 $switch-container-margin-block: null !default;
-$switch-container-padding-inline: null !default;
 $switch-height: null !default;
 $switch-handle-height: null !default;
-$switch-container-height: null !default;
 
 $switch-handle-on-box-shadow-blur: 0 !default;
 
@@ -32,9 +30,7 @@ $switch-container-rtl-offset: ds.$spacing-60 !default;
   $switch-handle-height: ds.$spacing-140 !default;
   $switch-handle-margin: ds.$spacing-30 !default;
   $switch-container-margin-block: 0 !default;
-  $switch-container-padding-inline: $switch-handle-margin !default;
   $switch-height: ds.$spacing-200 !default;
-  $switch-container-height: $switch-height !default;
 }
 
 @else if $size == "compact" {
@@ -42,7 +38,5 @@ $switch-container-rtl-offset: ds.$spacing-60 !default;
   $switch-handle-height: ds.$spacing-120 !default;
   $switch-handle-margin: ds.$spacing-20 !default;
   $switch-container-margin-block: 0 !default;
-  $switch-container-padding-inline: $switch-handle-margin !default;
   $switch-height: ds.$spacing-160 !default;
-  $switch-container-height: $switch-height !default;
 }

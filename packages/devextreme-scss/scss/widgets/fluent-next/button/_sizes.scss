@@ -6,7 +6,6 @@ $button-border-radius: $global-border-radius !default;
 
 $button-padding-inline: null !default;
 $button-padding-block: null !default;
-$button-icon-text-padding-inline-start: null !default;
 $button-content-line-height: 0 !default;
 $button-text-line-height: normal !default;
 $button-text-transform: none !default;
@@ -26,7 +25,6 @@ $button-box-shadow: 0 ds.$spacing-10 ds.$spacing-30 !default;
   $button-icon-margin: ds.$spacing-80 !default;
   $button-padding-inline: ds.$spacing-120 !default;
   $button-padding-block: ds.$spacing-60 !default;
-  $button-icon-text-padding-inline-start: $button-padding-inline !default;
 }
 
 @else if $size == "compact" {
@@ -35,7 +33,6 @@ $button-box-shadow: 0 ds.$spacing-10 ds.$spacing-30 !default;
   $button-icon-margin: ds.$spacing-40 !default;
   $button-padding-inline: ds.$spacing-80 !default;
   $button-padding-block: ds.$spacing-40 !default;
-  $button-icon-text-padding-inline-start: $button-padding-inline !default;
 }
 
 // Derived: the content padding of an icon-only button at the default icon size
