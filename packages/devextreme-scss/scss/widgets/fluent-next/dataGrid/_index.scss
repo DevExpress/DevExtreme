@@ -27,8 +27,8 @@
   $datagrid-base-color: gridBaseColors.$grid-content,
   $datagrid-base-background-color: gridBaseColors.$grid-bg,
   $datagrid-focused-border-color: gridBaseColors.$grid-border-focused,
-  $header-filter-color: gridBaseColors.$grid-header-filter-icon,
-  $header-filter-color-empty: gridBaseColors.$grid-header-filter-empty-icon,
+  $header-filter-color: gridBaseColors.$grid-content,
+  $header-filter-color-empty: gridBaseColors.$grid-content,
   $base-focus-color: gridBaseColors.$grid-content-focused,
   $datagrid-text-stub-background-image-path: gridBaseColors.$grid-text-stub-bg,
   $datagrid-group-row-border: var(--dx-data-grid-group-row-border),
@@ -43,7 +43,7 @@
   touch-action: pinch-zoom;
 
   .dx-group-panel-message {
-    color: gridBaseColors.$grid-column-chooser-item-content;
+    color: gridBaseColors.$grid-content;
     font-weight: gridBaseSizes.$grid-column-chooser-font-weight;
     padding: var(--dx-data-grid-cell-padding) 0;
     border-top: gridBaseSizes.$grid-hidden-border;
@@ -53,9 +53,9 @@
 
   .dx-group-panel-item {
     margin-right: gridBaseSizes.$grid-group-panel-item-margin-inline;
-    color: gridBaseColors.$grid-column-chooser-item-content;
+    color: gridBaseColors.$grid-content;
     font-weight: var(--dx-data-grid-group-panel-item-font-weight);
-    font-size: gridBaseSizes.$grid-header-cell-font-size;
+    font-size: gridBaseSizes.$grid-cell-font-size;
     line-height: gridBaseSizes.$grid-header-line-height;
     background: var(--dx-data-grid-group-panel-item-bg);
     border-radius: var(--dx-data-grid-group-panel-item-border-radius);
@@ -67,13 +67,13 @@
 
   .dx-block-separator {
     margin-right: gridBaseSizes.$grid-group-panel-item-margin-inline;
-    color: gridBaseColors.$grid-column-chooser-item-content;
+    color: gridBaseColors.$grid-content;
     font-weight: gridBaseSizes.$grid-column-chooser-font-weight;
     background-color: var(--dx-data-grid-block-separator-bg);
   }
 
   .dx-sort {
-    color: gridBaseColors.$grid-header-filter-empty-icon;
+    color: gridBaseColors.$grid-content;
   }
 }
 
@@ -95,11 +95,11 @@
 
   .dx-row.dx-group-row {
     &:not(.dx-row-focused) {
-      color: gridBaseColors.$grid-group-row-content;
+      color: gridBaseColors.$grid-content;
       background-color: gridBaseColors.$grid-group-row-bg;
     }
 
-    font-size: gridBaseSizes.$grid-header-cell-font-size;
+    font-size: gridBaseSizes.$grid-cell-font-size;
     font-weight: var(--dx-data-grid-group-row-font-weight);
   }
 }

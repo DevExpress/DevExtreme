@@ -16,7 +16,7 @@
   --dx-toast-icon-margin-inline-end: #{$toast-icon-margin-inline-end};
   --dx-toast-icon-rtl-margin-inline-end: #{$toast-icon-rtl-margin-inline-end};
   --dx-toast-icon-width: #{$toast-icon-width};
-  --dx-toast-info-bg: #{if($toast-info-bg == $toast-bg, var(--dx-toast-bg), $toast-info-bg)};
+  --dx-toast-info-bg: var(--dx-toast-bg);
   --dx-toast-info-content: #{$toast-info-content};
   --dx-toast-item-gap: #{$toast-item-gap};
   --dx-toast-stack-gap: #{$toast-stack-gap};

@@ -7,7 +7,6 @@ $button-contained-bg-disabled: ds.$color-bg-disabled !default;
  * role-honest variable rather than reusing the bg one, so design can move one without the other
  * (same split as checkBox, see DIVERGENCES.md).
  */
-$button-outlined-border-disabled: $button-contained-bg-disabled !default;
 $button-normal-shadow: ds.$color-shadow-key !default;
 
 $button-normal-contained-content: ds.$color-content !default;
@@ -103,22 +102,7 @@ $button-success-outlined-bg-focused: ds.$color-bg-success-subtler-hovered !defau
 $button-success-outlined-bg-active: ds.$color-bg-success-subtler-active !default;
 $button-success-outlined-bg-selected: ds.$color-bg-success-subtler-selected !default;
 
-$button-default-contained-icon: $button-default-contained-content !default;
-$button-normal-contained-icon: $button-normal-contained-content !default;
-$button-danger-contained-icon: $button-danger-contained-content !default;
-$button-success-contained-icon: $button-success-contained-content !default;
-
 $button-content-disabled: ds.$color-content-disabled !default;
-
-$button-normal-outlined-bg-hovered: $button-normal-contained-bg-hovered !default;
-$button-normal-outlined-bg-focused: $button-normal-contained-bg-focused !default;
-$button-normal-outlined-bg-active: $button-normal-contained-bg-active !default;
-$button-normal-outlined-bg-selected: $button-normal-contained-bg-selected !default;
-
-$button-normal-text-bg-hovered: $button-normal-contained-bg-hovered !default;
-$button-normal-text-bg-focused: $button-normal-contained-bg-focused !default;
-$button-normal-text-bg-active: $button-normal-contained-bg-active !default;
-$button-normal-text-bg-selected: $button-normal-contained-bg-selected !default;
 
 $button-default-outlined-content-hovered: ds.$color-content-primary-hovered !default;
 
@@ -128,37 +112,13 @@ $button-default-outlined-content-selected: ds.$color-content-primary-hovered !de
 
 $button-default-text-content-hovered: ds.$color-content-primary-hovered !default;
 
-$button-default-text-content-active: $button-default-outlined-content-active !default;
-
 $button-default-text-content-selected: ds.$color-content-primary-hovered !default;
 
 $button-default-text-bg: transparent !default;
-$button-default-text-bg-hovered: $button-default-outlined-bg-hovered !default;
-$button-default-text-bg-focused: $button-default-outlined-bg-focused !default;
-$button-default-text-bg-active: $button-default-outlined-bg-active !default;
-$button-default-text-bg-selected: $button-default-outlined-bg-selected !default;
-
-$button-danger-text-content: $button-danger-outlined-content !default;
-$button-danger-text-content-hovered: $button-danger-outlined-content-hovered !default;
-$button-danger-text-content-active: $button-danger-outlined-content-active !default;
-$button-danger-text-content-selected: $button-danger-outlined-content-selected !default;
 
 $button-danger-text-bg: transparent !default;
-$button-danger-text-bg-hovered: $button-danger-outlined-bg-hovered !default;
-$button-danger-text-bg-focused: $button-danger-outlined-bg-focused !default;
-$button-danger-text-bg-active: $button-danger-outlined-bg-active !default;
-$button-danger-text-bg-selected: $button-danger-outlined-bg-selected !default;
-
-$button-success-text-content: $button-success-outlined-content !default;
-$button-success-text-content-hovered: $button-success-outlined-content-hovered !default;
-$button-success-text-content-active: $button-success-outlined-content-active !default;
-$button-success-text-content-selected: $button-success-outlined-content-selected !default;
 
 $button-success-text-bg: transparent !default;
-$button-success-text-bg-hovered: $button-success-outlined-bg-hovered !default;
-$button-success-text-bg-focused: $button-success-outlined-bg-hovered !default;
-$button-success-text-bg-active: $button-success-outlined-bg-active !default;
-$button-success-text-bg-selected: $button-success-outlined-bg-selected !default;
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
 $button-normal-outlined-border: ds.$color-border !default;

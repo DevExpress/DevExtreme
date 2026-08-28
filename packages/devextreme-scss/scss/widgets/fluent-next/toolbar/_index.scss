@@ -101,9 +101,9 @@
         buttonColors.$button-normal-contained-content,
         buttonColors.$button-normal-contained-content,
         buttonColors.$button-normal-text-bg,
-        buttonColors.$button-normal-text-bg-hovered,
-        buttonColors.$button-normal-text-bg-focused,
-        buttonColors.$button-normal-text-bg-active
+        buttonColors.$button-normal-contained-bg-hovered,
+        buttonColors.$button-normal-contained-bg-focused,
+        buttonColors.$button-normal-contained-bg-active
       );
     }
 
@@ -111,11 +111,11 @@
       @include dx-button-flat-color-styling(
         buttonColors.$button-default-text-content,
         buttonColors.$button-default-text-content-hovered,
-        buttonColors.$button-default-text-content-active,
+        buttonColors.$button-default-outlined-content-active,
         buttonColors.$button-default-text-bg,
-        buttonColors.$button-default-text-bg-hovered,
-        buttonColors.$button-default-text-bg-focused,
-        buttonColors.$button-default-text-bg-active
+        buttonColors.$button-default-outlined-bg-hovered,
+        buttonColors.$button-default-outlined-bg-focused,
+        buttonColors.$button-default-outlined-bg-active
       );
     }
 
@@ -125,9 +125,9 @@
         buttonColors.$button-danger-contained-bg,
         buttonColors.$button-danger-contained-bg,
         buttonColors.$button-danger-text-bg,
-        buttonColors.$button-danger-text-bg-hovered,
-        buttonColors.$button-danger-text-bg-focused,
-        buttonColors.$button-danger-text-bg-active
+        buttonColors.$button-danger-outlined-bg-hovered,
+        buttonColors.$button-danger-outlined-bg-focused,
+        buttonColors.$button-danger-outlined-bg-active
       );
     }
 
@@ -137,9 +137,9 @@
         buttonColors.$button-success-contained-bg,
         buttonColors.$button-success-contained-bg,
         buttonColors.$button-success-text-bg,
-        buttonColors.$button-success-text-bg-hovered,
-        buttonColors.$button-success-text-bg-focused,
-        buttonColors.$button-success-text-bg-active
+        buttonColors.$button-success-outlined-bg-hovered,
+        buttonColors.$button-success-outlined-bg-hovered,
+        buttonColors.$button-success-outlined-bg-active
       );
     }
 
