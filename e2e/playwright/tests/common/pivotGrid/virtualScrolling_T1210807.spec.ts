@@ -1,4 +1,4 @@
-import { test } from '../../../fixtures';
+import { expect, test } from '../../../fixtures';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/screenshots';
 import PivotGrid from '../../../models/pivotGrid';
@@ -72,7 +72,21 @@ test('Row fields overlap data fields if dataFieldArea is set to "row" and virtua
   const firstHeaderRow = pivotGrid.getRowsArea(2).getCell(0);
 
   await firstHeaderRow.click();
-  await pivotGrid.scrollBy({ top: 30000 });
+
+  // The virtual scroll extends its range as rows load, so one jump lands short of the end and
+  // where exactly it stops depends on the machine. Scroll until the offset stops moving.
+  let previousScrollTop = -1;
+
+  await expect.poll(async () => {
+    await pivotGrid.scrollBy({ top: 30000 });
+
+    const scrollTop = await pivotGrid.getRowsAreaScrollTop();
+    const settled = scrollTop === previousScrollTop;
+
+    previousScrollTop = scrollTop;
+
+    return settled;
+  }).toBe(true);
 
   await testScreenshot(page, 'rows_do_not_overlap_data_fields_if_virtual_scrolling_enabled_T1210807.png', { element: pivotGrid.element });
 });

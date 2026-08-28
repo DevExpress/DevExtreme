@@ -21,16 +21,39 @@ const getScreenshotName = (baseName: string, theme?: string): string => {
     : `${baseName}${themePostfix}.png`;
 };
 
-// No element means the whole viewport, the way the TestCafe comparer read a missing element.
-const resolveTarget = (
+const resolveLocator = (
   page: Page,
   element: Locator | string | null | undefined,
-): Locator | Page => {
+): Locator | null => {
   if (typeof element === 'string') {
     return page.locator(element);
   }
 
-  return element ?? page;
+  return element ?? null;
+};
+
+// The page screenshot is clipped to the layout viewport: Playwright would otherwise include the
+// scrollbar, which TestCafe left out, and every full-page etalon would have to be re-recorded.
+const viewportClip = async (page: Page): Promise<{
+  x: number; y: number; width: number; height: number;
+}> => page.evaluate(() => ({
+  x: 0,
+  y: 0,
+  width: document.documentElement.clientWidth,
+  height: document.documentElement.clientHeight,
+}));
+
+const expectScreenshot = async (
+  page: Page,
+  locator: Locator | null,
+  name: string,
+): Promise<void> => {
+  if (!locator) {
+    await expect(page).toHaveScreenshot([name], { clip: await viewportClip(page) });
+    return;
+  }
+
+  await expect(locator).toHaveScreenshot([name]);
 };
 
 export async function testScreenshot(
@@ -51,9 +74,10 @@ export async function testScreenshot(
     await themeChanged?.();
   }
 
-  const target = resolveTarget(page, element);
+  // No element means the whole viewport, the way the TestCafe comparer read a missing element.
+  const target = resolveLocator(page, element);
 
-  await expect(target).toHaveScreenshot([getScreenshotName(screenshotName, theme)]);
+  await expectScreenshot(page, target, getScreenshotName(screenshotName, theme));
 
   if (shouldTestInCompact) {
     // The theme of a "- compact" job already ends with the suffix; appending it twice would ask
@@ -63,7 +87,7 @@ export async function testScreenshot(
     await changeTheme(page, compactTheme);
     await compactCallBack?.();
 
-    await expect(target).toHaveScreenshot([getScreenshotName(screenshotName, compactTheme)]);
+    await expectScreenshot(page, target, getScreenshotName(screenshotName, compactTheme));
   }
 
   if (theme || shouldTestInCompact) {
