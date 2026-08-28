@@ -158,7 +158,11 @@ test('Hidden scheduler should not resize', async ({ page }) => {
   await page.evaluate(() => {
     const instance = ($('#container') as any).dxScheduler('instance');
 
+    // The private resize entry points the TestCafe test called: the widget is hidden, so no real
+    // resize event reaches it and the regression can only be provoked from the inside.
+    // eslint-disable-next-line no-underscore-dangle
     instance._dimensionChanged();
+    // eslint-disable-next-line no-underscore-dangle
     instance._workSpace._dimensionChanged();
   });
 
