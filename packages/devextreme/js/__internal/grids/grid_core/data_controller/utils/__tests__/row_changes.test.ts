@@ -11,7 +11,6 @@ import {
   getChangedRowIndices,
   getDataRowIndex,
   getGroupColumnIndices,
-  getPartialUpdateColumnIndices,
   getRowKey,
   getRowOperation,
   indexRowsByKey,
@@ -507,28 +506,6 @@ describe('pushChangedRow', () => {
     expect(changedRows.rowIndices).toEqual([5]);
     expect(changedRows.changeTypes).toEqual(['remove']);
     expect(changedRows.columnIndices).toEqual([undefined]);
-  });
-});
-
-describe('getPartialUpdateColumnIndices', () => {
-  it('should repaint the whole row when it has a row template', () => {
-    expect(getPartialUpdateColumnIndices([1], true)).toBeUndefined();
-  });
-
-  it('should keep the changed columns without a row template', () => {
-    const changedColumnIndices = [1];
-
-    expect(getPartialUpdateColumnIndices(changedColumnIndices, false))
-      .toBe(changedColumnIndices);
-  });
-
-  it('should keep an empty list even with a row template', () => {
-    expect(getPartialUpdateColumnIndices([], true)).toEqual([]);
-  });
-
-  it('should keep the missing list as is', () => {
-    expect(getPartialUpdateColumnIndices(undefined, true)).toBeUndefined();
-    expect(getPartialUpdateColumnIndices(undefined, false)).toBeUndefined();
   });
 });
 

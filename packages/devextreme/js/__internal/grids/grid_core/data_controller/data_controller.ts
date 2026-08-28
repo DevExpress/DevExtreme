@@ -55,7 +55,6 @@ import {
   getChangedRowIndices,
   getDataRowIndex,
   getGroupColumnIndices,
-  getPartialUpdateColumnIndices,
   getRowKey,
   getRowOperation,
   indexRowsByKey,
@@ -998,8 +997,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       visibleRowIndex,
       isLiveUpdate,
     );
+    const hasDataRowTemplate = !!this.option('dataRowTemplate');
 
-    return getPartialUpdateColumnIndices(changedColumnIndices, !!this.option('dataRowTemplate'));
+    return changedColumnIndices?.length && hasDataRowTemplate ? undefined : changedColumnIndices;
   }
 
   /**

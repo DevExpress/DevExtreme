@@ -229,13 +229,6 @@ export function pushChangedRow(changedRows: ChangedRows, changedRow: UpdateRowCh
   changedRows.columnIndices.push(columnIndices);
 }
 
-export function getPartialUpdateColumnIndices(
-  changedColumnIndices: number[] | undefined,
-  hasDataRowTemplate: boolean,
-): number[] | undefined {
-  return changedColumnIndices?.length && hasDataRowTemplate ? undefined : changedColumnIndices;
-}
-
 export function partialUpdateRow(
   oldItem: ProcessedItem,
   newItem: ProcessedItem,
