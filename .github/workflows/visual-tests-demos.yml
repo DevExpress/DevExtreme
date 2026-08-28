@@ -18,7 +18,7 @@ env:
 jobs:
   check-should-run:
     name: Check if tests should run
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
     steps:
@@ -72,7 +72,7 @@ jobs:
           retention-days: 1
 
   determine-framework-tests-scope:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     name: Determine scope for framework tests
     needs: [check-should-run, get-changes]
     if: |
@@ -98,7 +98,7 @@ jobs:
           fi
 
   determine-jquery-test-matrix:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     name: Determine jQuery test matrix
     needs: [check-should-run, determine-framework-tests-scope]
     if: |
