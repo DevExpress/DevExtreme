@@ -132,7 +132,10 @@ export const blurActiveElement = async (page: Page): Promise<void> => page.evalu
 });
 
 // The TestCafe helpers took a Selector, that is an element; these are their Locator counterparts.
-export const setElementStyle = async (target: Locator, value: string): Promise<void> => target.evaluate(
+export const setElementStyle = async (
+  target: Locator,
+  value: string,
+): Promise<void> => target.evaluate(
   (element, style) => {
     const current = element.getAttribute('style') ?? '';
 
