@@ -8,16 +8,12 @@ const generateTimezoneOffsets = (): Record<string, number> => {
   new Array(27).fill(0).forEach((_, idx) => {
     const timezoneIdx = idx - 14;
 
-    switch (true) {
-      case timezoneIdx < 0:
-        result[`Etc/GMT${timezoneIdx}`] = timezoneIdx * -1;
-        break;
-      case timezoneIdx > 0:
-        result[`Etc/GMT+${timezoneIdx}`] = timezoneIdx * -1;
-        break;
-      default:
-        result['Etc/GMT'] = 0;
-        break;
+    if (timezoneIdx < 0) {
+      result[`Etc/GMT${timezoneIdx}`] = timezoneIdx * -1;
+    } else if (timezoneIdx > 0) {
+      result[`Etc/GMT+${timezoneIdx}`] = timezoneIdx * -1;
+    } else {
+      result['Etc/GMT'] = 0;
     }
   });
 
