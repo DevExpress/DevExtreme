@@ -19,11 +19,11 @@ const DATA = [
   { id: 2, value: 'b' },
 ];
 
-const getIsSharedDataSource = (instance: DataGridInstance): unknown => {
+const getIsSharedDataSource = (instance: DataGridInstance): boolean | undefined => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const dataController = instance.getController('data') as any;
 
-  return dataController.isSharedDataSource as unknown;
+  return dataController.isSharedDataSource as boolean | undefined;
 };
 
 describe('DataController data source', () => {
