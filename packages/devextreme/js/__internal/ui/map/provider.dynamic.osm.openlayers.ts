@@ -93,7 +93,10 @@ class OpenLayersMap implements MapEngineMap {
 
   attachHandlers(handlers: MapEngineEventHandlers): void {
     this._detachHandlers();
+    this._initHandlers(handlers);
+  }
 
+  private _initHandlers(handlers: MapEngineEventHandlers): void {
     const click = (event: unknown): void => {
       const { coordinate, originalEvent } = event as MapBrowserEventLike;
       if (!coordinate) {
