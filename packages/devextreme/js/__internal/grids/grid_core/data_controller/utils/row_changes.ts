@@ -1,7 +1,7 @@
 import { equalByValue } from '@js/core/utils/common';
 
 import type {
-  ChangedRows, DataChange, ProcessedItem, RowIndexByKey,
+  ChangedRows, DataChange, ItemChange, ProcessedItem, RowIndexByKey,
   RowOperation, UpdateChange, UpdateRowChange,
 } from '../types';
 
@@ -25,6 +25,7 @@ export function isSameItem(
   return isSameRowType && (!isDetailRow || isSameEditingState);
 }
 
+// TODO remove after related checks moved to extenders (duplicated in grouping)
 export function isSameGroupRowState(item1: ProcessedItem, item2: ProcessedItem): boolean {
   return item1.isExpanded === item2.isExpanded
     && item1.data?.isContinuation === item2.data?.isContinuation
@@ -55,8 +56,8 @@ export function indexRowsByKey(items: ProcessedItem[]): RowIndexByKey {
 }
 
 /**
- * A row that only got new data keeps its cells: the updaters the rows view has
- * installed on the row and on every cell take the new row in place.
+ * Refreshes a rendered row in place: the rows view's updaters take the new row
+ * instead of the old one. A row that was never rendered has no cells to update.
  */
 export function updateRowCells(oldItem: ProcessedItem, newItem: ProcessedItem): void {
   if (!oldItem.cells) {
@@ -66,6 +67,32 @@ export function updateRowCells(oldItem: ProcessedItem, newItem: ProcessedItem): 
   oldItem.update?.(newItem);
   oldItem.cells.forEach((cell) => {
     cell?.update?.(newItem, true);
+  });
+}
+
+export function updateKeptRows(
+  oldItems: ProcessedItem[],
+  newItems: ProcessedItem[],
+  newIndexByKey: RowIndexByKey,
+  itemChanges: ItemChange[],
+): void {
+  const changedItemKeys = new Set<string>();
+
+  itemChanges.forEach((itemChange) => {
+    changedItemKeys.add(getRowKey(
+      itemChange.type === 'insert' ? itemChange.data : itemChange.oldItem,
+    ));
+  });
+
+  oldItems.forEach((oldItem) => {
+    const key = getRowKey(oldItem);
+    const newIndex = newIndexByKey[key];
+
+    if (newIndex === undefined || changedItemKeys.has(key)) {
+      return;
+    }
+
+    updateRowCells(oldItem, newItems[newIndex]);
   });
 }
 
@@ -148,13 +175,27 @@ export function resetChangedRows(change: UpdateChange): ChangedRows {
   return changedRows;
 }
 
-export function markUpdateChange(change: DataChange, changedRows: ChangedRows): void {
+function toChangedRows(updateRowChanges: UpdateRowChange[]): ChangedRows {
+  return {
+    items: updateRowChanges
+      .map(({ item }) => item)
+      .filter((item): item is ProcessedItem => !!item),
+    rowIndices: updateRowChanges.map(({ rowIndex }) => rowIndex),
+    changeTypes: updateRowChanges.map(({ changeType }) => changeType),
+    columnIndices: updateRowChanges.map(({ columnIndices }) => columnIndices),
+  };
+}
+
+export function convertToUpdateChange(
+  change: DataChange,
+  updateRowChanges: UpdateRowChange[],
+): void {
   const updateChange = change as UpdateChange;
 
   updateChange.repaintChangesOnly = true;
   updateChange.changeType = 'update';
 
-  attachChangedRows(updateChange, changedRows);
+  attachChangedRows(updateChange, toChangedRows(updateRowChanges));
 }
 
 export function pushChangedRow(changedRows: ChangedRows, changedRow: UpdateRowChange): void {

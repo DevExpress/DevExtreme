@@ -1,6 +1,7 @@
 import type { Store } from '@js/common/data';
 import type { Callback } from '@js/core/utils/callbacks';
 import { deferRender } from '@js/core/utils/common';
+import { logger } from '@js/core/utils/console';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
@@ -28,7 +29,6 @@ import { DataHelperMixin } from './data_helper_mixin';
 import type {
   BinaryDataFilterExpression,
   CallbackFlags,
-  ChangedRows,
   DataChange,
   DataFilter,
   DataSourceAdapterLike,
@@ -50,17 +50,16 @@ import type {
 import { resolvePaginate, syncPaging } from './utils/paging';
 import { getRefreshOptions } from './utils/refresh';
 import {
+  convertToUpdateChange,
   getChangedRowIndices,
   getDataRowIndex,
   getRowKey,
   getRowOperation,
   indexRowsByKey,
-  initChangedRows,
   isSameGroupRowState,
-  markUpdateChange,
   pushChangedRow,
   resetChangedRows,
-  updateRowCells,
+  updateKeptRows,
 } from './utils/row_changes';
 import { generateRowValues } from './utils/row_values';
 
@@ -99,7 +98,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   private _readyDeferred?: DeferredObj<void>;
 
-  private _rowIndexOffset!: number;
+  private _rowIndexOffset?: number;
 
   private _loadingText?: string;
 
@@ -806,13 +805,13 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       if (this.items().length && change.repaintChangesOnly) {
         this.applyChangesOnly(change);
       } else {
-        this._applyChangeFull(change);
+        this.applyChangeFull(change);
       }
     }
   }
 
-  private _applyChangeFull(change: DataChange): void {
-    this._items = (change.items ?? []).slice(0);
+  private applyChangeFull(change: DataChange): void {
+    this._items = (change.items ?? []).slice();
   }
 
   private updateRow(
@@ -1021,26 +1020,11 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return columnIndices;
   }
 
-  protected _isItemEquals(item1: ProcessedItem, item2: ProcessedItem): boolean {
-    if (JSON.stringify(item1.values) !== JSON.stringify(item2.values)) {
-      return false;
-    }
-
-    const compareFields = ['modified', 'isNewRow', 'removed', 'isEditing'] as const;
-    if (compareFields.some((field) => item1[field] !== item2[field])) {
-      return false;
-    }
-
-    if (item1.rowType === 'group' || item1.rowType === 'groupFooter') {
-      const summaryCellsMatch = JSON.stringify(item1.summaryCells)
-        === JSON.stringify(item2.summaryCells);
-
-      if (!summaryCellsMatch || !isSameGroupRowState(item1, item2)) {
-        return false;
-      }
-    }
-
-    return true;
+  /**
+   * @extended: editing, grouping (DataGrid), summary (DataGrid), treelist
+   */
+  protected isSameRowState(item1: ProcessedItem, item2: ProcessedItem): boolean {
+    return JSON.stringify(item1.values) === JSON.stringify(item2.values);
   }
 
   private applyItemChange(
@@ -1076,40 +1060,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
   }
 
-  private findItemChanges(
-    oldItems: ProcessedItem[],
-    newItems: ProcessedItem[],
-  ): ItemChange[] | undefined {
-    const isItemEquals = (item1: ProcessedItem, item2: ProcessedItem): boolean => {
-      if (!this._isItemEquals(item1, item2)) {
-        return false;
-      }
-
-      updateRowCells(item1, item2);
-
-      return true;
-    };
-
-    return findChanges({
-      oldItems,
-      newItems,
-      getKey: getRowKey,
-      isItemEquals,
-    });
-  }
-
-  private applyItemChanges(itemChanges: ItemChange[], isLiveUpdate: boolean): ChangedRows {
-    const changedRows = initChangedRows();
-
-    itemChanges.forEach((itemChange) => {
-      const changedRow = this.applyItemChange(itemChange, isLiveUpdate);
-
-      if (changedRow) {
-        pushChangedRow(changedRows, changedRow);
-      }
-    });
-
-    return changedRows;
+  private applyItemChanges(itemChanges: ItemChange[], isLiveUpdate: boolean): UpdateRowChange[] {
+    return itemChanges
+      .map((itemChange) => this.applyItemChange(itemChange, isLiveUpdate))
+      .filter((rowChange): rowChange is UpdateRowChange => rowChange !== undefined);
   }
 
   private getRowIndexCorrection(
@@ -1117,7 +1071,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     oldItems: ProcessedItem[],
     newIndexByKey: RowIndexByKey,
   ): number {
-    const oldRowIndexOffset = this._rowIndexOffset || 0;
+    const oldRowIndexOffset = this._rowIndexOffset ?? 0;
     const rowIndexOffset = this.getRowIndexOffset();
     const oldItem = oldItems[rowIndex - oldRowIndexOffset];
     const newVisibleRowIndex = oldItem ? newIndexByKey[getRowKey(oldItem)] : undefined;
@@ -1131,17 +1085,31 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   protected applyChangesOnly(change: DataChange): void {
     const newItems = change.items ?? [];
     const oldItems = this._items.slice();
-    const newIndexByKey = indexRowsByKey(newItems);
-    const itemChanges = this.findItemChanges(oldItems, newItems);
+    const itemChanges = findChanges({
+      oldItems,
+      newItems,
+      getKey: getRowKey,
+      isItemEquals: this.isSameRowState.bind(this),
+    });
 
+    // Changes cannot be found for a moved row, duplicate keys, or any throw.
     if (!itemChanges) {
-      this._applyChangeFull(change);
+      this.applyChangeFull(change);
       return;
     }
 
-    const changedRows = this.applyItemChanges(itemChanges, change.isLiveUpdate ?? true);
+    const newIndexByKey = indexRowsByKey(newItems);
 
-    markUpdateChange(change, changedRows);
+    try {
+      updateKeptRows(oldItems, newItems, newIndexByKey, itemChanges);
+    } catch (error) {
+      logger.error(error);
+      this.applyChangeFull(change);
+      return;
+    }
+
+    const updateRowChanges = this.applyItemChanges(itemChanges, change.isLiveUpdate ?? true);
+    convertToUpdateChange(change, updateRowChanges);
 
     if (oldItems.length) {
       change.isLiveUpdate = true;

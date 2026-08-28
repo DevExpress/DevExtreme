@@ -21,9 +21,9 @@
 import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import formatHelper from '@js/format_helper';
+import BaseWidget from '@ts/viz/core/base_widget';
 import { plugin as exportPlugin } from '@ts/viz/core/export';
 import { plugin as loadingIndicatorPlugin } from '@ts/viz/core/loading_indicator';
-import BaseWidget from '@ts/viz/core/m_base_widget';
 import { plugin as titlePlugin } from '@ts/viz/core/title';
 import { plugin as tooltipPlugin } from '@ts/viz/core/tooltip';
 import { getAppropriateFormat as _getAppropriateFormat } from '@ts/viz/core/utils';

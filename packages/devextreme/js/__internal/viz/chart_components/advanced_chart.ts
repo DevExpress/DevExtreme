@@ -1,3 +1,19 @@
+/* eslint-disable @stylistic/max-len */
+/* eslint-disable @stylistic/no-mixed-operators */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/init-declarations */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-use-before-define */
+/* eslint-disable @typescript-eslint/prefer-for-of */
+/* eslint-disable max-depth */
+/* eslint-disable no-multi-assign */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-param-reassign */
+/* eslint-disable prefer-rest-params */
+/* eslint-disable prefer-spread */
+
 import { noop as _noop } from '@js/core/utils/common';
 import { extend as _extend } from '@js/core/utils/extend';
 import { reverseEach as _reverseEach } from '@js/core/utils/iterator';
@@ -13,7 +29,7 @@ import {
 import rangeDataCalculator from '@ts/viz/series/helpers/range_data_calculator';
 import { Range } from '@ts/viz/translators/range';
 
-import { BaseChart } from './m_base_chart';
+import { BaseChart } from './base_chart';
 
 const { isArray } = Array;
 

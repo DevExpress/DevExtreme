@@ -1,3 +1,7 @@
+/* eslint-disable @stylistic/max-len */
+/* eslint-disable @typescript-eslint/init-declarations */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+
 import registerComponent from '@js/core/component_registrator';
 import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
@@ -5,7 +9,7 @@ import { isDefined } from '@js/core/utils/type';
 import { plugins } from '@ts/viz/core/annotations';
 import { convertPolarToXY, normalizeAngle } from '@ts/viz/core/utils';
 
-import { AdvancedChart } from './chart_components/m_advanced_chart';
+import { AdvancedChart } from './chart_components/advanced_chart';
 
 const DEFAULT_PANE_NAME = 'default';
 const DOUBLE_PI_ANGLE = 360;

@@ -38,22 +38,49 @@ const getCellData = (
   return cellData;
 };
 
+// NOTE: Cell indexes are always counted from the left table border,
+// getCellData mirrors them in RTL.
+const getAppointmentCellIndexes = (
+  options: GetAppointmentDateRangeOptionsExtended,
+): { rowIndex: number; columnIndex: number } => {
+  const { cellHeight, cellWidth, relativeAppointmentRect } = options;
+
+  return {
+    rowIndex: Math.floor(relativeAppointmentRect.top / cellHeight),
+    columnIndex: Math.round(relativeAppointmentRect.left / cellWidth),
+  };
+};
+
 const getAppointmentLeftCell = (options: GetAppointmentDateRangeOptionsExtended): ViewCellData => {
+  const { appointment, rtlEnabled } = options;
+  const { rowIndex, columnIndex } = getAppointmentCellIndexes(options);
+
+  return getCellData(
+    options,
+    rowIndex,
+    columnIndex,
+    appointment.isOccupiedAllDay,
+    appointment.isAllDay,
+    rtlEnabled,
+  );
+};
+
+const getAppointmentRightCell = (options: GetAppointmentDateRangeOptionsExtended): ViewCellData => {
   const {
-    cellHeight,
     cellWidth,
+    cellCountInRow,
     relativeAppointmentRect,
     appointment,
     rtlEnabled,
   } = options;
-
-  const cellRowIndex = Math.floor(relativeAppointmentRect.top / cellHeight);
-  const cellColumnIndex = Math.round(relativeAppointmentRect.left / cellWidth);
+  const { rowIndex, columnIndex } = getAppointmentCellIndexes(options);
+  const cellsAmount = Math.round(relativeAppointmentRect.width / cellWidth);
+  const rightColumnIndex = Math.min(columnIndex + cellsAmount - 1, cellCountInRow - 1);
 
   return getCellData(
     options,
-    cellRowIndex,
-    cellColumnIndex,
+    rowIndex,
+    rightColumnIndex,
     appointment.isOccupiedAllDay,
     appointment.isAllDay,
     rtlEnabled,
@@ -61,38 +88,20 @@ const getAppointmentLeftCell = (options: GetAppointmentDateRangeOptionsExtended)
 };
 
 const getDateRangeHorizontal = (options: GetAppointmentDateRangeOptionsExtended): DateRange => {
-  const {
-    cellWidth,
-    cellCountInRow,
-    relativeAppointmentRect,
-    appointment,
-    handles,
-  } = options;
-
-  const appointmentFirstCell = getAppointmentLeftCell(options);
-  const appointmentCellsAmount = Math.round(relativeAppointmentRect.width / cellWidth);
-  const appointmentLastCellIndex = appointmentFirstCell.index + (appointmentCellsAmount - 1);
+  const { appointment, handles } = options;
 
   if (handles.left) {
+    const { startDate } = getAppointmentLeftCell(options);
+
     return {
-      startDate: appointmentFirstCell.startDate,
-      endDate: appointmentFirstCell.startDate > appointment.endDate
-        ? appointmentFirstCell.startDate
+      startDate,
+      endDate: startDate > appointment.endDate
+        ? startDate
         : appointment.endDate,
     };
   }
 
-  const appointmentRowIndex = Math.floor(appointmentLastCellIndex / cellCountInRow);
-  const appointmentColumnIndex = appointmentLastCellIndex % cellCountInRow;
-  const appointmentLastCell = getCellData(
-    options,
-    appointmentRowIndex,
-    appointmentColumnIndex,
-    appointment.isOccupiedAllDay,
-    appointment.isAllDay,
-  );
-
-  const { endDate } = appointmentLastCell;
+  const { endDate } = getAppointmentRightCell(options);
 
   return {
     startDate: endDate < appointment.startDate
@@ -103,38 +112,20 @@ const getDateRangeHorizontal = (options: GetAppointmentDateRangeOptionsExtended)
 };
 
 const getDateRangeHorizontalRTL = (options: GetAppointmentDateRangeOptionsExtended): DateRange => {
-  const {
-    cellCountInRow,
-    appointment,
-    handles,
-    cellWidth,
-    relativeAppointmentRect,
-  } = options;
-
-  const appointmentLastCell = getAppointmentLeftCell(options);
+  const { appointment, handles } = options;
 
   if (handles.right) {
-    const appointmentLastCellIndex = appointmentLastCell.index;
-    const appointmentCellsAmount = Math.round(relativeAppointmentRect.width / cellWidth);
-    const appointmentFirstCellIndex = appointmentLastCellIndex - appointmentCellsAmount + 1;
-    const appointmentRowIndex = Math.floor(appointmentLastCellIndex / cellCountInRow);
-    const appointmentFirstCell = getCellData(
-      options,
-      appointmentRowIndex,
-      appointmentFirstCellIndex,
-      appointment.isOccupiedAllDay,
-      appointment.isAllDay,
-    );
+    const { startDate } = getAppointmentRightCell(options);
 
     return {
-      startDate: appointmentFirstCell.startDate,
-      endDate: appointmentFirstCell.startDate > appointment.endDate
-        ? appointmentFirstCell.startDate
+      startDate,
+      endDate: startDate > appointment.endDate
+        ? startDate
         : appointment.endDate,
     };
   }
 
-  const { endDate } = appointmentLastCell;
+  const { endDate } = getAppointmentLeftCell(options);
 
   return {
     startDate: endDate < appointment.startDate
