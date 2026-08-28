@@ -4,6 +4,10 @@ export interface DragOptions {
   // A drag has to travel in several moves: one jump does not pass the threshold the DevExtreme
   // draggable uses to tell a drag from a click.
   steps?: number;
+  // Where inside the source to take hold of it, measured from its centre — the same meaning the
+  // offsets of "t.dragToElement" had.
+  offsetX?: number;
+  offsetY?: number;
 }
 
 const DEFAULT_STEPS = 10;
@@ -66,13 +70,14 @@ export const dragToElement = async (
   page: Page,
   source: Locator,
   target: Locator,
-  { steps = DEFAULT_STEPS }: DragOptions = {},
+  { steps = DEFAULT_STEPS, offsetX = 0, offsetY = 0 }: DragOptions = {},
 ): Promise<void> => {
   const from = await centerOf(source);
   const to = await centerOf(target);
 
-  await page.mouse.move(from.x, from.y);
+  await source.focus();
+  await page.mouse.move(from.x + offsetX, from.y + offsetY);
   await page.mouse.down();
-  await page.mouse.move(to.x, to.y, { steps });
+  await page.mouse.move(to.x + offsetX, to.y + offsetY, { steps });
   await page.mouse.up();
 };
