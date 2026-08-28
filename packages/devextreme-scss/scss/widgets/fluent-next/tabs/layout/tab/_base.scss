@@ -10,20 +10,20 @@
 @use "styling-mode/secondary" as *;
 
 .dx-tab {
-  gap: $tabs-item-gap;
-  padding: $tabs-item-padding;
-  background-color: $tabs-tab-bg;
-  color: $tabs-tab-content;
+  gap: var(--dx-tabs-item-gap);
+  padding: var(--dx-tabs-item-padding);
+  background-color: var(--dx-tabs-tab-bg);
+  color: var(--dx-tabs-tab-content);
 
   &.dx-state-hover {
-    background-color: $tabs-tab-bg-hovered;
+    background-color: var(--dx-tabs-tab-bg-hovered);
   }
 
   &.dx-tab-selected {
-    color: $tabs-tab-content-selected;
+    color: var(--dx-tabs-tab-content-selected);
 
     .dx-icon {
-      color: $tabs-tab-icon-content-selected;
+      color: var(--dx-tabs-tab-icon-content-selected);
     }
 
     .dx-tab-text .dx-tab-text-span {
@@ -36,30 +36,30 @@
   }
 
   &.dx-state-disabled {
-    color: $tabs-tab-content-disabled;
+    color: var(--dx-tabs-tab-content-disabled);
 
     .dx-tab-text .dx-tab-text-span-pseudo {
-      color: $tabs-tab-content-disabled;
+      color: var(--dx-tabs-tab-content-disabled);
     }
 
     .dx-icon {
-      color: $tabs-tab-icon-content-disabled;
+      color: var(--dx-tabs-tab-icon-content-disabled);
     }
   }
 
   &.dx-state-active {
-    background-color: $tabs-tab-bg-active;
+    background-color: var(--dx-tabs-tab-bg-active);
   }
 
   .dx-tab-text {
-    column-gap: $tabs-text-column-gap;
-    row-gap: $tabs-item-gap;
+    column-gap: var(--dx-tabs-text-column-gap);
+    row-gap: var(--dx-tabs-item-gap);
     line-height: var(--dx-global-line-height);
 
     .dx-tab-text-span {
       position: relative;
       display: block;
-      font-weight: $tabs-tab-accent-font-weight;
+      font-weight: var(--dx-tabs-tab-accent-font-weight);
       visibility: hidden;
     }
 
@@ -70,17 +70,17 @@
       bottom: 0;
       left: 0;
       pointer-events: none;
-      color: $tabs-tab-content;
-      font-weight: $tabs-tab-basic-font-weight;
+      color: var(--dx-tabs-tab-content);
+      font-weight: var(--dx-tabs-tab-basic-font-weight);
       visibility: visible;
     }
   }
 
   .dx-icon {
-    color: $tabs-tab-icon;
+    color: var(--dx-tabs-tab-icon);
     visibility: visible;
 
-    @include dx-icon-sizing($tabs-icon-size);
+    @include dx-icon-sizing(var(--dx-tabs-icon-size));
 
     width: 1em;
     height: 1em;
@@ -89,14 +89,14 @@
 
   .dx-tabs-item-badge {
     align-self: center;
-    min-width: $tabs-badge-min-size;
-    min-height: $tabs-badge-min-size;
+    min-width: var(--dx-tabs-badge-min-size);
+    min-height: var(--dx-tabs-badge-min-size);
   }
 }
 
 .dx-tabs.dx-state-focused {
   .dx-tab.dx-state-focused {
-    background-color: $tabs-tab-bg-focused;
+    background-color: var(--dx-tabs-tab-bg-focused);
   }
 }
 

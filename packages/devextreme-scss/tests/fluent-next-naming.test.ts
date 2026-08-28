@@ -912,7 +912,12 @@ const tierExpectation = (): Map<string, { component: string; reason: string | nu
               });
             });
         }
-        [...readFileSync(file, 'utf8').matchAll(/(?:icons?-mixin|icon-colored|data-uri)\s*\(([^)]*)\)/g)]
+        /*
+         * `toggle-delete-icon` joins the three direct forms because it is a wrapper: its body hands
+         * the colour to `list-icon-colored`, which bakes it INTO the svg string. A baked colour is
+         * frozen at build time, so publishing the variable would hand out a knob that turns nothing.
+         */
+        [...readFileSync(file, 'utf8').matchAll(/(?:icons?-mixin|icon-colored|data-uri|toggle-delete-icon)\s*\(((?:[^()]|\([^()]*\))*)\)/g)]
           .forEach((call) => [...call[1].matchAll(/\$[a-z0-9-]+/g)]
             .forEach(([variable]) => feeders.add(variable)));
       });

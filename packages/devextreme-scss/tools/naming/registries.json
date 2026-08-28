@@ -446,6 +446,98 @@
     "tab-panel": [
       ".dx-tabpanel"
     ],
+    "color-view": [
+      ".dx-colorview-container"
+    ],
+    "calendar": [
+      ".dx-calendar"
+    ],
+    "check-box": [
+      ".dx-checkbox"
+    ],
+    "drawer": [
+      ".dx-drawer"
+    ],
+    "filter-builder": [
+      ".dx-filterbuilder"
+    ],
+    "form": [
+      ".dx-form"
+    ],
+    "html-editor": [
+      ".dx-htmleditor"
+    ],
+    "list": [
+      ".dx-list"
+    ],
+    "popup": [
+      ".dx-popup-wrapper"
+    ],
+    "radio-group": [
+      ".dx-radiogroup"
+    ],
+    "speed-dial-action": [
+      ".dx-fa-button"
+    ],
+    "time-view": [
+      ".dx-timeview"
+    ],
+    "tree-view": [
+      ".dx-treeview"
+    ],
+    "widget": [
+      ".dx-surface"
+    ],
+    "scheduler": [
+      ".dx-scheduler",
+      ".dx-scheduler-appointment-popup",
+      ".dx-scheduler-appointment-tooltip-wrapper"
+    ],
+    "file-manager": [
+      ".dx-filemanager",
+      ".dx-filemanager-dialog-popup"
+    ],
+    "tabs": [
+      ".dx-tabs"
+    ],
+    "chat": [
+      ".dx-chat"
+    ],
+    "diagram": [
+      ".dx-diagram"
+    ],
+    "gantt": [
+      ".dx-gantt"
+    ],
+    "slider": [
+      ".dx-slider"
+    ],
+    "stepper": [
+      ".dx-stepper"
+    ],
+    "pivot-grid": [
+      ".dx-pivotgrid"
+    ],
+    "pagination": [
+      ".dx-pagination"
+    ],
+    "file-uploader": [
+      ".dx-fileuploader"
+    ],
+    "map": [
+      ".dx-map-container"
+    ],
+    "recurrence-editor": [
+      ".dx-recurrence-repeat-on",
+      ".dx-recurrence-button-group",
+      ".dx-recurrence-numberbox-interval-wrapper",
+      ".dx-recurrence-radiogroup-repeat-type",
+      ".dx-recurrence-datebox-until-date",
+      ".dx-recurrence-numberbox-repeat-count"
+    ],
+    "card-view": [
+      ".dx-cardview"
+    ],
     "common": [
       ":root"
     ]
@@ -459,9 +551,7 @@
     "$theme-marker-mode",
     "$theme-marker-size-postfix"
   ],
-  "exemptFolders": {
-    "cardView": "own cross-theme BEM system on null !default base variables; renaming it would require touching generic/material/fluent, which breaks the byte-identity constraint"
-  },
+  "exemptFolders": {},
   "parts": [
     "backdrop",
     "bg",
@@ -502,6 +592,7 @@
     "selected-hovered",
     "selected-active",
     "selected-focused",
+    "selected-disabled",
     "disabled",
     "read-only"
   ],
@@ -536,9 +627,13 @@
       "dragging",
       "inverted",
       "first-month",
+      "first-of-month",
       "other-month",
       "contoured",
       "faded",
+      "noimage",
+      "highlighted",
+      "dragged",
       "legacy",
       "other",
       "base",
@@ -594,6 +689,7 @@
       "hidden",
       "with-icons",
       "outside",
+      "basic",
       "primary",
       "secondary",
       "thin",
@@ -612,6 +708,7 @@
     "thickness",
     "min-size",
     "grid-template-columns",
+    "transition-duration",
     "padding",
     "padding-inline",
     "padding-block",
@@ -896,6 +993,40 @@
     "renovation"
   ],
   "subElements": {
+    "card-view": [
+      "card",
+      "cover",
+      "content",
+      "cell",
+      "field-value",
+      "field",
+      "header",
+      "selection-checkbox",
+      "column-chooser",
+      "select-all-item",
+      "message",
+      "filter-panel",
+      "header-panel",
+      "dropzone",
+      "item",
+      "header-filter",
+      "sort-index",
+      "sort-indicator",
+      "header-item",
+      "nodata-view",
+      "icon-container",
+      "cards",
+      "divider",
+      "allowance",
+      "prohibition",
+      "link",
+      "icon",
+      "caption",
+      "text"
+    ],
+    "map": [
+      "marker-tooltip"
+    ],
     "toast": [
       "content",
       "icon",
@@ -1061,6 +1192,8 @@
       "link"
     ],
     "slider": [
+      "element",
+      "handle",
       "bar",
       "handle",
       "inner",
@@ -1119,7 +1252,8 @@
       "icon",
       "nav-button",
       "content",
-      "badge"
+      "badge",
+      "indicator"
     ],
     "tree-view": [
       "item",
@@ -1149,6 +1283,7 @@
     ],
     "pagination": [
       "page",
+      "page-size",
       "page-index",
       "pages-count",
       "page-sizes",
@@ -1187,6 +1322,17 @@
       "element"
     ],
     "chat": [
+      "alert",
+      "alerts",
+      "button",
+      "confirmation-popup-content",
+      "confirmation-popup-toolbar",
+      "content",
+      "edited",
+      "section",
+      "size",
+      "start",
+      "view-items",
       "message-list",
       "message-box",
       "message",
@@ -1224,6 +1370,7 @@
       "palette-cell",
       "hue-scale",
       "hue-scale-cell",
+      "hue-scale-wrapper",
       "alpha",
       "controls",
       "container",
@@ -1238,6 +1385,29 @@
       "bg-box"
     ],
     "diagram": [
+      "accordion-v",
+      "close-icon",
+      "closebutton",
+      "colorbutton",
+      "connection",
+      "connector",
+      "container",
+      "editor",
+      "editor-button",
+      "geometry-mark",
+      "h",
+      "input",
+      "input-button",
+      "input-image",
+      "items",
+      "large-editor",
+      "medium-editor",
+      "mobile",
+      "muted",
+      "properties-layout-icon",
+      "selection",
+      "separator",
+      "touchbar-item",
       "toolbar",
       "toolbar-icon",
       "toolbar-wrapper",
@@ -1313,6 +1483,16 @@
       "custom-caption-icon"
     ],
     "gantt": [
+      "arrow",
+      "dependency-successor",
+      "edit-frame",
+      "edit-successor-dependency-l",
+      "header-item",
+      "items-container",
+      "milestone",
+      "notch",
+      "selection",
+      "successor",
       "task",
       "task-res",
       "task-title",
@@ -1408,6 +1588,8 @@
       "data-area"
     ],
     "stepper": [
+      "content",
+      "optional-mark",
       "step",
       "step-indicator",
       "step-label",
@@ -1544,6 +1726,11 @@
       "empty-cell"
     ],
     "file-manager": [
+      "thumbnail",
+      "box",
+      "path-separator",
+      "dialog",
+      "dialog-name-editor",
       "i-cancel",
       "text-item",
       "drop-zone-placeholder",
@@ -1599,6 +1786,7 @@
       "drop-zone"
     ],
     "file-uploader": [
+      "line",
       "file",
       "file-name",
       "file-size",
@@ -1957,6 +2145,34 @@
     "splitter",
     "splitter-bar",
     "sortable",
-    "tab-panel"
+    "tab-panel",
+    "color-view",
+    "calendar",
+    "check-box",
+    "drawer",
+    "filter-builder",
+    "form",
+    "html-editor",
+    "list",
+    "popup",
+    "radio-group",
+    "speed-dial-action",
+    "time-view",
+    "tree-view",
+    "widget",
+    "scheduler",
+    "file-manager",
+    "tabs",
+    "chat",
+    "diagram",
+    "gantt",
+    "slider",
+    "stepper",
+    "pivot-grid",
+    "pagination",
+    "file-uploader",
+    "map",
+    "recurrence-editor",
+    "card-view"
   ]
 }

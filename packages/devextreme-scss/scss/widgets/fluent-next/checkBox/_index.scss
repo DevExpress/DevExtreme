@@ -8,14 +8,14 @@
 @use "../../base/checkBox/mixins" as *;
 
 .dx-checkbox-icon {
-  width: $check-box-arrow-icon-size;
-  height: $check-box-arrow-icon-size;
-  border-width: $check-box-border-width;
+  width: var(--dx-check-box-arrow-icon-size);
+  height: var(--dx-check-box-arrow-icon-size);
+  border-width: var(--dx-check-box-border-width);
   border-style: solid;
-  border-color: $check-box-border;
-  border-radius: $check-box-icon-border-radius;
-  background-color: $check-box-icon-bg;
-  font-size: $check-box-icon-font-size;
+  border-color: var(--dx-check-box-border);
+  border-radius: var(--dx-check-box-icon-border-radius);
+  background-color: var(--dx-check-box-icon-bg);
+  font-size: var(--dx-check-box-icon-font-size);
 
   &::before {
     z-index: 1;
@@ -23,8 +23,8 @@
 }
 
 .dx-checkbox-text {
-  padding-inline-start: $check-box-text-padding-inline-start;
-  padding-inline-end: $check-box-text-padding-inline-end;
+  padding-inline-start: var(--dx-check-box-text-padding-inline-start);
+  padding-inline-end: var(--dx-check-box-text-padding-inline-end);
 }
 
 .dx-checkbox {
@@ -34,37 +34,37 @@
 
   &.dx-invalid {
     .dx-checkbox-icon {
-      border-color: $check-box-invalid-border;
+      border-color: var(--dx-check-box-invalid-border);
     }
   }
 
   &.dx-state-readonly {
     .dx-checkbox-icon {
-      border-color: $check-box-border-disabled;
+      border-color: var(--dx-check-box-border-disabled);
     }
   }
 
   &.dx-state-hover {
     .dx-checkbox-icon {
-      border-color: $check-box-border-hovered;
+      border-color: var(--dx-check-box-border-hovered);
     }
 
     &.dx-invalid {
       .dx-checkbox-icon {
-        border-color: $check-box-invalid-border-hovered;
+        border-color: var(--dx-check-box-invalid-border-hovered);
       }
     }
   }
 
   &.dx-state-active {
     .dx-checkbox-icon {
-      border-color: $check-box-border-active;
+      border-color: var(--dx-check-box-border-active);
     }
   }
 
   &.dx-state-focused {
     .dx-checkbox-icon {
-      border-color: $check-box-icon-checked-bg-focused;
+      border-color: var(--dx-check-box-icon-checked-bg-focused);
     }
   }
 
@@ -72,7 +72,7 @@
   &.dx-state-focused {
     &.dx-invalid {
       .dx-checkbox-icon {
-        border-color: $check-box-invalid-border-focused;
+        border-color: var(--dx-check-box-invalid-border-focused);
       }
     }
   }
@@ -82,34 +82,34 @@
     opacity: 1;
 
     .dx-checkbox-icon {
-      border-color: $check-box-border-disabled;
+      border-color: var(--dx-check-box-border-disabled);
     }
   }
 }
 
 .dx-checkbox-checked {
   .dx-checkbox-icon {
-    color: $check-box-icon-bg;
-    border-color: $check-box-icon-checked-bg;
-    background-color: $check-box-icon-checked-bg;
+    color: var(--dx-check-box-icon-bg);
+    border-color: var(--dx-check-box-icon-checked-bg);
+    background-color: var(--dx-check-box-icon-checked-bg);
 
     @include dx-icon(check);
 
-    font-size: $check-box-icon-font-size;
+    font-size: var(--dx-check-box-icon-font-size);
 
-    @include dx-checkbox-icon-centered($check-box-arrow-icon-size, $check-box-arrow-icon-size, $check-box-arrow-font-size);
+    @include dx-checkbox-icon-centered($check-box-arrow-icon-size, $check-box-arrow-icon-size, var(--dx-check-box-arrow-font-size));
   }
 
   &.dx-state-hover {
     .dx-checkbox-icon {
-      border-color: $check-box-icon-checked-bg-hovered;
-      background-color: $check-box-icon-checked-bg-hovered;
+      border-color: var(--dx-check-box-icon-checked-bg-hovered);
+      background-color: var(--dx-check-box-icon-checked-bg-hovered);
     }
 
     &.dx-invalid {
       .dx-checkbox-icon {
-        border-color: $check-box-invalid-border-hovered;
-        background-color: $check-box-invalid-bg-hovered;
+        border-color: var(--dx-check-box-invalid-border-hovered);
+        background-color: var(--dx-check-box-invalid-bg-hovered);
       }
     }
   }
@@ -117,21 +117,21 @@
   &.dx-state-active,
   &.dx-state-focused {
     .dx-checkbox-icon {
-      border-color: $check-box-icon-checked-bg-focused;
-      background-color: $check-box-icon-checked-bg-focused;
+      border-color: var(--dx-check-box-icon-checked-bg-focused);
+      background-color: var(--dx-check-box-icon-checked-bg-focused);
     }
 
     &.dx-invalid {
       .dx-checkbox-icon {
-        border-color: $check-box-invalid-border-focused;
-        background-color: $check-box-invalid-bg-focused;
+        border-color: var(--dx-check-box-invalid-border-focused);
+        background-color: var(--dx-check-box-invalid-bg-focused);
       }
     }
   }
 
   &.dx-invalid {
     .dx-checkbox-icon {
-      background-color: $check-box-invalid-bg;
+      background-color: var(--dx-check-box-invalid-bg);
     }
   }
 
@@ -140,48 +140,48 @@
   .dx-state-disabled &,
   &.dx-state-readonly.dx-invalid {
     .dx-checkbox-icon {
-      color: $check-box-icon-bg-disabled;
-      background-color: $check-box-icon-bg;
+      color: var(--dx-check-box-icon-bg-disabled);
+      background-color: var(--dx-check-box-icon-bg);
     }
   }
 }
 
 @include dx-checkbox-icon-indeterminate(
-  $check-box-icon-bg,
-  $check-box-icon-checked-bg,
+  var(--dx-check-box-icon-bg),
+  var(--dx-check-box-icon-checked-bg),
   $check-box-indeterminate-icon-height,
   $check-box-indeterminate-icon-width,
-  $check-box-indeterminate-icon-border-radius,
+  var(--dx-check-box-indeterminate-icon-border-radius),
 );
 
 .dx-checkbox-indeterminate {
   .dx-checkbox-icon {
-    border-color: $check-box-icon-checked-bg;
+    border-color: var(--dx-check-box-icon-checked-bg);
   }
 
   &.dx-invalid {
     .dx-checkbox-icon {
       &::before {
-        background-color: $check-box-invalid-mark-bg;
+        background-color: var(--dx-check-box-invalid-mark-bg);
       }
     }
   }
 
   &.dx-state-hover {
     .dx-checkbox-icon {
-      border-color: $check-box-icon-checked-bg-hovered;
+      border-color: var(--dx-check-box-icon-checked-bg-hovered);
 
       &::before {
-        background-color: $check-box-icon-checked-bg-hovered;
+        background-color: var(--dx-check-box-icon-checked-bg-hovered);
       }
     }
 
     &.dx-invalid {
       .dx-checkbox-icon {
-        border-color: $check-box-invalid-border-hovered;
+        border-color: var(--dx-check-box-invalid-border-hovered);
 
         &::before {
-          background-color: $check-box-invalid-mark-bg-hovered;
+          background-color: var(--dx-check-box-invalid-mark-bg-hovered);
         }
       }
     }
@@ -190,19 +190,19 @@
   &.dx-state-active,
   &.dx-state-focused {
     .dx-checkbox-icon {
-      border-color: $check-box-icon-checked-bg-focused;
+      border-color: var(--dx-check-box-icon-checked-bg-focused);
 
       &::before {
-        background-color: $check-box-icon-checked-bg-focused;
+        background-color: var(--dx-check-box-icon-checked-bg-focused);
       }
     }
 
     &.dx-invalid {
       .dx-checkbox-icon {
-        border-color: $check-box-invalid-border-focused;
+        border-color: var(--dx-check-box-invalid-border-focused);
 
         &::before {
-          background-color: $check-box-invalid-mark-bg-focused;
+          background-color: var(--dx-check-box-invalid-mark-bg-focused);
         }
       }
     }
@@ -214,7 +214,7 @@
   &.dx-state-readonly.dx-invalid {
     .dx-checkbox-icon {
       &::before {
-        background-color: $check-box-icon-bg-disabled;
+        background-color: var(--dx-check-box-icon-bg-disabled);
       }
     }
   }

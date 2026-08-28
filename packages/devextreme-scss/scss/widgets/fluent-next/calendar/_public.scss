@@ -1,0 +1,31 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-calendar-bg: #{$calendar-bg};
+  --dx-calendar-bg-hovered: #{$calendar-bg-hovered};
+  --dx-calendar-cell-bg-active: #{$calendar-cell-bg-active};
+  --dx-calendar-cell-bg-selected: #{$calendar-cell-bg-selected};
+  --dx-calendar-cell-border-hovered: var(--dx-calendar-bg-hovered);
+  --dx-calendar-cell-content-hovered: var(--dx-calendar-content);
+  --dx-calendar-cell-content-selected: #{$calendar-cell-content-selected};
+  --dx-calendar-cell-contoured-border: var(--dx-calendar-cell-bg-active);
+  --dx-calendar-cell-contoured-border-radius: #{$calendar-cell-contoured-border-radius};
+  --dx-calendar-cell-font-size: #{$calendar-cell-font-size};
+  --dx-calendar-cell-other-content: #{$calendar-cell-other-content};
+  --dx-calendar-cell-other-content-hovered: var(--dx-calendar-cell-other-content);
+  --dx-calendar-content: #{$calendar-content};
+  --dx-calendar-element-padding: #{$calendar-element-padding};
+  --dx-calendar-footer-button-height: #{$calendar-footer-button-height};
+  --dx-calendar-header-content: var(--dx-calendar-content);
+  --dx-calendar-invalid-border: #{$calendar-invalid-border};
+  --dx-calendar-invalid-border-focused: #{$calendar-invalid-border-focused};
+  --dx-calendar-legacy-height: #{$calendar-legacy-height};
+  --dx-calendar-legacy-width: #{$calendar-legacy-width};
+  --dx-calendar-navigator-content: #{$calendar-navigator-content};
+  --dx-calendar-week-day-header-font-size: #{$calendar-week-day-header-font-size};
+  --dx-calendar-week-day-header-font-weight: #{$calendar-week-day-header-font-weight};
+  --dx-calendar-week-number-border-radius: #{$calendar-week-number-border-radius};
+  --dx-calendar-week-number-cell-bg: #{$calendar-week-number-cell-bg};
+  --dx-calendar-week-number-cell-content: #{$calendar-week-number-cell-content};
+}

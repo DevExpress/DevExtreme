@@ -4,48 +4,76 @@
 @use "box/public" as boxPublic;
 @use "button/public" as buttonPublic;
 @use "buttonGroup/public" as buttonGroupPublic;
+@use "calendar/public" as calendarPublic;
 @use "card/public" as cardPublic;
+@use "cardView/public" as cardViewPublic;
+@use "chat/public" as chatPublic;
+@use "checkBox/public" as checkBoxPublic;
 @use "colorBox/public" as colorBoxPublic;
+@use "colorView/public" as colorViewPublic;
 @use "common/public" as commonPublic;
 @use "contextMenu/public" as contextMenuPublic;
 @use "dataGrid/public" as dataGridPublic;
 @use "dateBox/public" as dateBoxPublic;
 @use "dateRangeBox/public" as dateRangeBoxPublic;
 @use "dateView/public" as dateViewPublic;
+@use "diagram/public" as diagramPublic;
+@use "drawer/public" as drawerPublic;
 @use "dropDownButton/public" as dropDownButtonPublic;
 @use "dropDownEditor/public" as dropDownEditorPublic;
 @use "dropDownList/public" as dropDownListPublic;
 @use "dropDownMenu/public" as dropDownMenuPublic;
 @use "fieldset/public" as fieldsetPublic;
+@use "fileManager/public" as fileManagerPublic;
+@use "fileUploader/public" as fileUploaderPublic;
+@use "filterBuilder/public" as filterBuilderPublic;
+@use "form/public" as formPublic;
 @use "gallery/public" as galleryPublic;
+@use "gantt/public" as ganttPublic;
 @use "gridBase/public" as gridBasePublic;
+@use "htmlEditor/public" as htmlEditorPublic;
 @use "informer/public" as informerPublic;
+@use "list/public" as listPublic;
 @use "loadIndicator/public" as loadIndicatorPublic;
 @use "loadPanel/public" as loadPanelPublic;
 @use "lookup/public" as lookupPublic;
+@use "map/public" as mapPublic;
 @use "menu/public" as menuPublic;
 @use "numberBox/public" as numberBoxPublic;
+@use "pagination/public" as paginationPublic;
+@use "pivotGrid/public" as pivotGridPublic;
 @use "popover/public" as popoverPublic;
+@use "popup/public" as popupPublic;
 @use "progressBar/public" as progressBarPublic;
 @use "radioButton/public" as radioButtonPublic;
+@use "radioGroup/public" as radioGroupPublic;
+@use "recurrenceEditor/public" as recurrenceEditorPublic;
+@use "scheduler/public" as schedulerPublic;
 @use "scrollView/public" as scrollViewPublic;
 @use "scrollable/public" as scrollablePublic;
 @use "selectBox/public" as selectBoxPublic;
+@use "slider/public" as sliderPublic;
 @use "sortable/public" as sortablePublic;
+@use "speedDialAction/public" as speedDialActionPublic;
 @use "splitter/public" as splitterPublic;
 @use "splitterBar/public" as splitterBarPublic;
+@use "stepper/public" as stepperPublic;
 @use "switch/public" as switchPublic;
 @use "tabPanel/public" as tabPanelPublic;
+@use "tabs/public" as tabsPublic;
 @use "tagBox/public" as tagBoxPublic;
 @use "textArea/public" as textAreaPublic;
 @use "textBox/public" as textBoxPublic;
 @use "textEditor/public" as textEditorPublic;
 @use "tileView/public" as tileViewPublic;
+@use "timeView/public" as timeViewPublic;
 @use "toast/public" as toastPublic;
 @use "toolbar/public" as toolbarPublic;
 @use "tooltip/public" as tooltipPublic;
 @use "treeList/public" as treeListPublic;
+@use "treeView/public" as treeViewPublic;
 @use "validation/public" as validationPublic;
+@use "widget/public" as widgetPublic;
 
 :root {
   @include commonPublic.publish();
@@ -84,6 +112,10 @@
 .dx-colorbox,
 .dx-colorbox-overlay {
   @include colorBoxPublic.publish();
+}
+
+.dx-colorview-container {
+  @include colorViewPublic.publish();
 }
 
 .dx-context-menu {
@@ -266,4 +298,120 @@
 .dx-invalid-message,
 .dx-validationsummary {
   @include validationPublic.publish();
+}
+
+.dx-calendar {
+  @include calendarPublic.publish();
+}
+
+.dx-checkbox {
+  @include checkBoxPublic.publish();
+}
+
+.dx-drawer {
+  @include drawerPublic.publish();
+}
+
+.dx-filterbuilder {
+  @include filterBuilderPublic.publish();
+}
+
+.dx-form {
+  @include formPublic.publish();
+}
+
+.dx-htmleditor {
+  @include htmlEditorPublic.publish();
+}
+
+.dx-list {
+  @include listPublic.publish();
+}
+
+.dx-popup-wrapper {
+  @include popupPublic.publish();
+}
+
+.dx-radiogroup {
+  @include radioGroupPublic.publish();
+}
+
+.dx-fa-button {
+  @include speedDialActionPublic.publish();
+}
+
+.dx-timeview {
+  @include timeViewPublic.publish();
+}
+
+.dx-treeview {
+  @include treeViewPublic.publish();
+}
+
+.dx-surface {
+  @include widgetPublic.publish();
+}
+
+.dx-filemanager,
+.dx-filemanager-dialog-popup {
+  @include fileManagerPublic.publish();
+}
+
+.dx-scheduler,
+.dx-scheduler-appointment-popup,
+.dx-scheduler-appointment-tooltip-wrapper {
+  @include schedulerPublic.publish();
+}
+
+.dx-tabs {
+  @include tabsPublic.publish();
+}
+
+.dx-chat {
+  @include chatPublic.publish();
+}
+
+.dx-diagram {
+  @include diagramPublic.publish();
+}
+
+.dx-fileuploader {
+  @include fileUploaderPublic.publish();
+}
+
+.dx-gantt {
+  @include ganttPublic.publish();
+}
+
+.dx-map-container {
+  @include mapPublic.publish();
+}
+
+.dx-pagination {
+  @include paginationPublic.publish();
+}
+
+.dx-pivotgrid {
+  @include pivotGridPublic.publish();
+}
+
+.dx-recurrence-repeat-on,
+.dx-recurrence-button-group,
+.dx-recurrence-numberbox-interval-wrapper,
+.dx-recurrence-radiogroup-repeat-type,
+.dx-recurrence-datebox-until-date,
+.dx-recurrence-numberbox-repeat-count {
+  @include recurrenceEditorPublic.publish();
+}
+
+.dx-slider {
+  @include sliderPublic.publish();
+}
+
+.dx-stepper {
+  @include stepperPublic.publish();
+}
+
+.dx-cardview {
+  @include cardViewPublic.publish();
 }
