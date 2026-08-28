@@ -91,7 +91,9 @@ export default class AppointmentPopup {
     this.page = page;
 
     this.popup = new Popup(page, SELECTORS.appointmentPopup);
-    this.contentElement = page.locator(SELECTORS.appointmentPopupContent);
+    // The form's own dropdowns and load panels add more overlay contents once it is open; the
+    // dialog is the first of them, which is the one the TestCafe selector resolved to.
+    this.contentElement = page.locator(SELECTORS.appointmentPopupContent).first();
     this.toolbarElement = page.locator(SELECTORS.appointmentPopupToolbar);
 
     this.saveButton = new Button(page, this.toolbarElement.locator(SELECTORS.doneButton));

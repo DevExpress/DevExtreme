@@ -246,7 +246,11 @@ test.describe(() => {
 
     await appointmentPopup.startDateEditor.dropDownEditorButton.click();
 
-    await expect(appointmentPopup.startDateEditor.element.locator('.dx-calendar')).toBeVisible();
+    // The model reads the widget's own "visible" option, as the TestCafe test did: the popup root
+    // itself has no size, so a CSS-level visibility check would never pass.
+    await expect
+      .poll(() => appointmentPopup.startDateEditor.getPopup().isVisible())
+      .toBe(true);
 
     await testScreenshot(page, 'scheduler__appointment__main-form__startDate-calendar-opened.png');
   });

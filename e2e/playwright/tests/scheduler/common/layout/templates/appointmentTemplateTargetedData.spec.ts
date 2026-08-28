@@ -265,9 +265,10 @@ testOptions.forEach(({
       for (const { date, group } of scrollOptions) {
         await scheduler.scrollTo(date, group);
 
-        // The TestCafe test paused for the re-render the scroll triggers; the appointments it
-        // renders being on screen is the state that pause was waiting for.
-        await expect(scheduler.getAppointmentByIndex(0).element).toBeVisible();
+        // The assertion of this test lives inside the template: it throws when the targeted data
+        // does not match, and the error is collected below. The pause only lets the re-render the
+        // scroll triggers run the template — a scrolled-to group legitimately has no appointment.
+        await page.waitForTimeout(50);
       }
     }
 
