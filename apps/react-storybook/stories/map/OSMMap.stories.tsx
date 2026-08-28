@@ -7,7 +7,7 @@ import 'ol/ol.css';
 import { fromLonLat, transformExtent } from 'ol/proj.js';
 import View from 'ol/View.js';
 import React from 'react';
-import Map from 'devextreme-react/map';
+import Map, { type MapRef } from 'devextreme-react/map';
 import type {
     MapLocation,
     MapType,
@@ -16,6 +16,7 @@ import type {
 import 'devextreme/ui/map/openlayers';
 
 const CENTER = { lat: 40.7484, lng: -73.9857 };
+const CENTRAL_PARK_CENTER = { lat: 40.7829, lng: -73.9654 };
 const EXTENT: [number, number, number, number] = [-74.08, 40.67, -73.85, 40.88];
 const TILE_SERVER = {
     url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -25,7 +26,7 @@ const TILE_SERVER = {
 const PROVIDER_CONFIG = { tileServer: () => TILE_SERVER };
 
 interface OsmStoryArgs {
-    center: MapLocation;
+    centerOnCentralPark: boolean;
     controls: boolean;
     disabled: boolean;
     focusStateEnabled: boolean;
@@ -60,7 +61,7 @@ const configureOpenLayersMap = (
 };
 
 const OsmMapStory = ({
-    center,
+    centerOnCentralPark,
     controls,
     disabled,
     focusStateEnabled,
@@ -68,24 +69,33 @@ const OsmMapStory = ({
     type,
     updateArgs,
     zoom,
-}: OsmMapStoryProps): React.ReactElement => (
-    <Map
-        provider="osm"
-        providerConfig={PROVIDER_CONFIG}
-        center={center}
-        controls={controls}
-        disabled={disabled}
-        focusStateEnabled={focusStateEnabled}
-        rtlEnabled={rtlEnabled}
-        type={type}
-        zoom={zoom}
-        height={520}
-        width="100%"
-        onCenterChange={(value) => updateArgs({ center: value as MapLocation })}
-        onReady={(event) => configureOpenLayersMap(event, center, zoom)}
-        onZoomChange={(value) => updateArgs({ zoom: value })}
-    />
-);
+}: OsmMapStoryProps): React.ReactElement => {
+    const mapRef = React.useRef<MapRef>(null);
+    const center = centerOnCentralPark ? CENTRAL_PARK_CENTER : CENTER;
+
+    React.useEffect(() => {
+        mapRef.current?.instance()?.option('center', center);
+    }, [center]);
+
+    return (
+        <Map
+            ref={mapRef}
+            provider="osm"
+            providerConfig={PROVIDER_CONFIG}
+            defaultCenter={CENTER}
+            controls={controls}
+            disabled={disabled}
+            focusStateEnabled={focusStateEnabled}
+            rtlEnabled={rtlEnabled}
+            type={type}
+            zoom={zoom}
+            height={520}
+            width="100%"
+            onReady={(event) => configureOpenLayersMap(event, center, zoom)}
+            onZoomChange={(value) => updateArgs({ zoom: value })}
+        />
+    );
+};
 
 const meta: Meta<OsmStoryArgs> = {
     title: 'Components/Map/OSM Provider',
@@ -99,8 +109,9 @@ const meta: Meta<OsmStoryArgs> = {
         layout: 'fullscreen',
     },
     argTypes: {
-        center: {
-            control: 'object',
+        centerOnCentralPark: {
+            control: 'boolean',
+            description: 'Switches the map center between the default New York location and Central Park.',
         },
         controls: {
             control: 'boolean',
@@ -137,7 +148,7 @@ type Story = StoryObj<OsmStoryArgs>;
 
 export const Default: Story = {
     args: {
-        center: CENTER,
+        centerOnCentralPark: false,
         controls: true,
         disabled: false,
         focusStateEnabled: true,
