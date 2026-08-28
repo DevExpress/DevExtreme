@@ -199,6 +199,19 @@ QUnit.module('OSM: map loading', moduleConfig, () => {
         engineMap.dispose();
         assert.notOk(container.hasAttribute('inert'), 'owned inert attribute is removed');
     });
+    QUnit.test('pre-existing inert attribute is preserved', function(assert) {
+        const engine = createOpenLayersEngine(openLayersMock);
+        const container = document.createElement('div');
+        container.setAttribute('inert', '');
+        const engineMap = engine.createMap(container);
+
+        engineMap.setDisabled(true);
+        engineMap.setDisabled(false);
+        assert.ok(container.hasAttribute('inert'), 'pre-existing inert attribute is preserved after enabling');
+
+        engineMap.dispose();
+        assert.ok(container.hasAttribute('inert'), 'pre-existing inert attribute is preserved on dispose');
+    });
     QUnit.test('disabled map does not make its Shadow DOM host inert', function(assert) {
         const engine = createOpenLayersEngine(openLayersMock);
         const host = document.createElement('div');

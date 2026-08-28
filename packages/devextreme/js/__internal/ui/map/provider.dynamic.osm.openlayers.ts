@@ -50,6 +50,8 @@ class OpenLayersMap implements MapEngineMap {
 
   private _disabled = false;
 
+  private _ownsDisabledInert = false;
+
   private readonly _interactionStates = new Map<InteractionLike, boolean>();
 
   private _eventHandlers?: {
@@ -164,7 +166,7 @@ class OpenLayersMap implements MapEngineMap {
 
     this._disposed = true;
     this._detachHandlers();
-    this._container.removeAttribute('inert');
+    this._removeOwnedInert();
     this.setControls(false);
     if (this._tileLayer) {
       this.originalMap.removeLayer(this._tileLayer);
@@ -258,13 +260,23 @@ class OpenLayersMap implements MapEngineMap {
   }
 
   private _disableKeyboardAccess(): void {
-    this._container.setAttribute('inert', '');
+    if (!this._container.hasAttribute('inert')) {
+      this._container.setAttribute('inert', '');
+      this._ownsDisabledInert = true;
+    }
     this._syncKeyboardTabIndex();
   }
 
   private _restoreKeyboardAccess(): void {
-    this._container.removeAttribute('inert');
+    this._removeOwnedInert();
     this._syncKeyboardTabIndex();
+  }
+
+  private _removeOwnedInert(): void {
+    if (this._ownsDisabledInert) {
+      this._container.removeAttribute('inert');
+      this._ownsDisabledInert = false;
+    }
   }
 
   setFocus(enabled: boolean, tabIndex: number): void {
