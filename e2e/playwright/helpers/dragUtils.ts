@@ -9,6 +9,10 @@ export interface DragOptions {
 const DEFAULT_STEPS = 10;
 
 const centerOf = async (target: Locator): Promise<{ x: number; y: number }> => {
+  // A drag re-renders the area it happened in, so the next target can be mid-render when it is
+  // measured — the box has to be taken once the element is actually on screen.
+  await target.waitFor({ state: 'visible' });
+
   const box = await target.boundingBox();
 
   if (!box) {
