@@ -1,5 +1,7 @@
 import type { Locator, Page } from '@playwright/test';
 
+interface BoundingBox { x: number; y: number; width: number; height: number }
+
 export interface DragOptions {
   // A drag has to travel in several moves: one jump does not pass the threshold the DevExtreme
   // draggable uses to tell a drag from a click.
@@ -12,16 +14,29 @@ export interface DragOptions {
 
 const DEFAULT_STEPS = 10;
 
-const centerOf = async (target: Locator): Promise<{ x: number; y: number }> => {
-  // A drag re-renders the area it happened in, so the next target can be mid-render when it is
-  // measured — the box has to be taken once the element is actually on screen.
-  await target.waitFor({ state: 'visible' });
+const MEASURE_ATTEMPTS = 20;
+const MEASURE_INTERVAL_MS = 100;
 
-  const box = await target.boundingBox();
+const boxOf = async (target: Locator): Promise<BoundingBox> => {
+  // A drag re-renders the area it happened in, so the next target can be replaced between the
+  // moment it is found and the moment it is measured — the measurement is retried until it lands.
+  for (let attempt = 0; attempt < MEASURE_ATTEMPTS; attempt += 1) {
+    await target.waitFor({ state: 'visible' });
 
-  if (!box) {
-    throw new Error('The drag target has no bounding box — it is detached or not displayed.');
+    const box = await target.boundingBox();
+
+    if (box) {
+      return box;
+    }
+
+    await target.page().waitForTimeout(MEASURE_INTERVAL_MS);
   }
+
+  throw new Error('The drag target never reported a bounding box — it keeps being detached.');
+};
+
+const centerOf = async (target: Locator): Promise<{ x: number; y: number }> => {
+  const box = await boxOf(target);
 
   // Whole pixels, as the TestCafe automation used: half a pixel decides which side of a field the
   // drop indicator appears on, and the etalons record that.
