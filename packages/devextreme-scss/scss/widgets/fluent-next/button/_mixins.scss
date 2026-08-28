@@ -30,7 +30,7 @@
 @mixin dx-button-text-and-icon-sizing() {
   @include dx-button-sizing(
     $button-padding-block,
-    $button-icon-text-padding-inline-start,
+    $button-padding-inline,
     $button-padding-inline,
     $button-icon-size,
     $button-icon-margin,
