@@ -6,6 +6,7 @@ import type {
   ChangedRows, DataChange, ItemChange, ProcessedItem, UpdateChange,
 } from '../../types';
 import {
+  convertToUpdateChange,
   getChangedRowIndices,
   getDataRowIndex,
   getRowKey,
@@ -13,7 +14,6 @@ import {
   indexRowsByKey,
   isSameGroupRowState,
   isSameItem,
-  markUpdateChange,
   pushChangedRow,
   resetChangedRows,
   updateKeptRows,
@@ -380,22 +380,57 @@ describe('resetChangedRows', () => {
   });
 });
 
-describe('markUpdateChange', () => {
+describe('convertToUpdateChange', () => {
   const refreshChange = (): DataChange => ({ changeType: 'refresh', items: [row({ key: 1 })] });
 
-  it('should turn the refresh change into a partial update carrying the rows', () => {
+  it('should turn the refresh change into a partial update carrying no rows', () => {
     const change = refreshChange();
-    const changedRows = emptyChangedRows();
 
-    markUpdateChange(change, changedRows);
+    convertToUpdateChange(change, []);
+
+    expect(change).toEqual({
+      changeType: 'update',
+      repaintChangesOnly: true,
+      ...emptyChangedRows(),
+    });
+  });
+
+  it('should split the changed rows into a list per field', () => {
+    const change = refreshChange();
+    const firstItem = row({ key: 1 });
+    const secondItem = row({ key: 2 });
+
+    convertToUpdateChange(change, [
+      {
+        changeType: 'update', rowIndex: 0, item: firstItem, columnIndices: [0, 2],
+      },
+      { changeType: 'insert', rowIndex: 1, item: secondItem },
+    ]);
+
+    expect(change).toEqual({
+      changeType: 'update',
+      repaintChangesOnly: true,
+      items: [firstItem, secondItem],
+      rowIndices: [0, 1],
+      changeTypes: ['update', 'insert'],
+      columnIndices: [[0, 2], undefined],
+    });
+  });
+
+  it('should skip the item when the row is gone from the new list', () => {
+    const change = refreshChange();
+    const item = row({ key: 1 });
+
+    convertToUpdateChange(change, [
+      { changeType: 'remove', rowIndex: 0 },
+      { changeType: 'update', rowIndex: 1, item },
+    ]);
 
     const updateChange = change as UpdateChange;
-    expect(updateChange.changeType).toBe('update');
-    expect(updateChange.repaintChangesOnly).toBe(true);
-    expect(updateChange.items).toBe(changedRows.items);
-    expect(updateChange.rowIndices).toBe(changedRows.rowIndices);
-    expect(updateChange.changeTypes).toBe(changedRows.changeTypes);
-    expect(updateChange.columnIndices).toBe(changedRows.columnIndices);
+    expect(updateChange.items).toEqual([item]);
+    expect(updateChange.rowIndices).toEqual([0, 1]);
+    expect(updateChange.changeTypes).toEqual(['remove', 'update']);
+    expect(updateChange.columnIndices).toEqual([undefined, undefined]);
   });
 });
 
