@@ -92,7 +92,7 @@ catalog:
   zod-to-json-schema: 3.24.6
   "@babel/eslint-parser": 7.29.7
   "@eslint-stylistic/metadata": ^2.13.0
-  "@eslint/eslintrc": 3.3.5
+  "@eslint/eslintrc": 3.3.6
   "@stylistic/eslint-plugin": 5.10.0
   "@types/jquery": 4.0.1
   "@typescript-eslint/eslint-plugin": 8.52.0
