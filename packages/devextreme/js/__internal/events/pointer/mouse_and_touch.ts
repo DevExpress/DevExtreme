@@ -3,8 +3,8 @@ import { extend } from '@js/core/utils/extend';
 import type { EmitterEvent } from '@ts/events/core/emitter';
 import type { PointerEventInit } from '@ts/events/pointer/base';
 import BaseStrategy from '@ts/events/pointer/base';
-import type { PointerEventMap } from '@ts/events/pointer/m_observer';
 import MouseStrategy from '@ts/events/pointer/mouse';
+import type { PointerEventMap } from '@ts/events/pointer/observer';
 import TouchStrategy from '@ts/events/pointer/touch';
 
 /* eslint-disable spellcheck/spell-checker */
