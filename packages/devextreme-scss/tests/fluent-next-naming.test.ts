@@ -1000,7 +1000,8 @@ walk(themeRoot, '.scss')
   .filter((file) => /(^|\/)_(colors|sizes|variables)\.scss$/.test(file))
   .forEach((file) => {
     stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file)).split('\n').forEach((line, index) => {
-      const alias = /^\s*\$([a-z0-9-]+)\s*:\s*(?:[A-Za-z]\w*\.)?\$([a-z0-9-]+)\s*!default\s*;\s*$/.exec(line);
+      // `!default` is optional on purpose: an alias written without it is the same relation
+      const alias = /^\s*\$([a-z0-9-]+)\s*:\s*(?:[A-Za-z]\w*\.)?\$([a-z0-9-]+)\s*(?:!default)?\s*;\s*$/.exec(line);
       if (!alias) return;
       const home = tierDeclared.get(`$${alias[1]}`);
       if (!home || !tierDeclared.has(`$${alias[2]}`)) return;
