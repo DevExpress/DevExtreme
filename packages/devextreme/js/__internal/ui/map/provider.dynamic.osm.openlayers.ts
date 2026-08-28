@@ -1,5 +1,3 @@
-import type { MapLocation } from '@js/ui/map';
-
 import type {
   MapEngine,
   MapEngineBounds,
@@ -11,156 +9,31 @@ import type {
   MapEngineViewState,
 } from './provider.dynamic.osm.engine';
 import { SUBDOMAIN_PLACEHOLDER } from './provider.dynamic.osm.engine';
-
-type Options = Record<string, unknown>;
-type Coordinate = [number, number];
-type Extent = [number, number, number, number];
-
-const GEOGRAPHIC_PROJECTION = 'EPSG:4326';
-const DEFAULT_VIEW_PROJECTION = 'EPSG:3857';
-
-type ControlLike = object;
-
-interface InteractionLike {
-  getActive: () => boolean;
-  setActive: (active: boolean) => void;
-}
-
-interface CollectionLike<T> {
-  forEach: (callback: (item: T) => void) => void;
-}
-
-interface ViewLike {
-  calculateExtent: () => Extent;
-  fit: (extent: Extent) => void;
-  getCenter: () => Coordinate | undefined;
-  getProjection: () => unknown;
-  getZoom: () => number | undefined;
-  setCenter: (center: Coordinate) => void;
-  setZoom: (zoom: number) => void;
-}
-
-interface TileLayerLike {
-  setSource: (source: unknown) => void;
-}
-
-interface MapLike {
-  addControl: (control: ControlLike) => void;
-  addLayer: (layer: unknown) => void;
-  getInteractions: () => CollectionLike<InteractionLike>;
-  getView: () => ViewLike;
-  on: (type: string, listener: (event: unknown) => void) => void;
-  removeControl: (control: ControlLike) => void;
-  removeLayer: (layer: unknown) => void;
-  setTarget: (target?: Element) => void;
-  un: (type: string, listener: (event: unknown) => void) => void;
-  updateSize: () => void;
-}
+import type {
+  ControlLike,
+  Coordinate,
+  Extent,
+  InteractionLike,
+  MapLike,
+  OpenLayersApi,
+  Options,
+  TileLayerLike,
+} from './provider.dynamic.osm.openlayers.utils';
+import {
+  areCoordinatesEqual,
+  createTileUrlList,
+  DEFAULT_VIEW_PROJECTION,
+  GEOGRAPHIC_PROJECTION,
+  getCoordinateProjection,
+  isOpenLayersApi,
+  toCoordinate,
+  toLocation,
+} from './provider.dynamic.osm.openlayers.utils';
 
 interface MapBrowserEventLike {
   coordinate?: Coordinate;
   originalEvent?: Event;
 }
-
-interface OpenLayersApi {
-  Map: new (options: Options) => MapLike;
-  View: new (options: Options) => ViewLike;
-  control: {
-    Zoom: new () => ControlLike;
-    defaults: {
-      defaults: (options?: Options) => unknown;
-    };
-  };
-  interaction: {
-    defaults: {
-      defaults: (options?: Options) => unknown;
-    };
-  };
-  layer: {
-    Tile: new (options: Options) => TileLayerLike;
-  };
-  proj: {
-    getUserProjection: () => unknown | null;
-    toLonLat: (coordinate: Coordinate, projection?: unknown) => Coordinate;
-    transform: (coordinate: Coordinate, source: unknown, destination: unknown) => Coordinate;
-    transformExtent: (extent: Extent, source: unknown, destination: unknown) => Extent;
-  };
-  source: {
-    ImageTile: new (options: Options) => unknown;
-  };
-}
-
-const isRecord = (value: unknown): value is Record<string, unknown> => (
-  Boolean(value) && (typeof value === 'object' || typeof value === 'function')
-);
-
-const hasFunction = (value: unknown, property: string): boolean => (
-  isRecord(value) && typeof value[property] === 'function'
-);
-
-const isOpenLayersApi = (api: unknown): api is OpenLayersApi => {
-  if (!isRecord(api)) {
-    return false;
-  }
-
-  return typeof api.Map === 'function'
-    && typeof api.View === 'function'
-    && isRecord(api.control)
-    && hasFunction(api.control, 'Zoom')
-    && isRecord(api.control.defaults)
-    && hasFunction(api.control.defaults, 'defaults')
-    && isRecord(api.interaction)
-    && isRecord(api.interaction.defaults)
-    && hasFunction(api.interaction.defaults, 'defaults')
-    && hasFunction(api.layer, 'Tile')
-    && hasFunction(api.proj, 'getUserProjection')
-    && hasFunction(api.proj, 'toLonLat')
-    && hasFunction(api.proj, 'transform')
-    && hasFunction(api.proj, 'transformExtent')
-    && hasFunction(api.source, 'ImageTile');
-};
-
-const getCoordinateProjection = (
-  api: OpenLayersApi,
-  viewProjection: unknown,
-): unknown => api.proj.getUserProjection() ?? viewProjection;
-
-const areCoordinatesEqual = (
-  first: Coordinate | undefined,
-  second: Coordinate,
-): boolean => first?.[0] === second[0] && first[1] === second[1];
-
-const toCoordinate = (
-  api: OpenLayersApi,
-  location: MapLocation,
-  viewProjection: unknown,
-): Coordinate => api.proj.transform(
-  [location.lng, location.lat],
-  GEOGRAPHIC_PROJECTION,
-  getCoordinateProjection(api, viewProjection),
-);
-
-const toLocation = (
-  api: OpenLayersApi,
-  coordinate: Coordinate,
-  viewProjection: unknown,
-): MapLocation => {
-  const [lng, lat] = api.proj.toLonLat(
-    coordinate,
-    getCoordinateProjection(api, viewProjection),
-  );
-
-  return { lat, lng };
-};
-
-const createTileUrlList = (
-  url: string,
-  subdomains: MapEngineTileLayerOptions['subdomains'],
-): string[] => {
-  const values = Array.isArray(subdomains) ? subdomains : [...(subdomains ?? '')];
-
-  return values.map((value) => url.split(SUBDOMAIN_PLACEHOLDER).join(value));
-};
 
 class OpenLayersMap implements MapEngineMap {
   readonly originalMap: MapLike;
