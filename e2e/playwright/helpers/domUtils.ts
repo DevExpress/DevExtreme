@@ -115,7 +115,9 @@ export const insertStylesheetRulesToPage = async (
       document.head.appendChild(style);
     }
 
-    style.sheet?.insertRule(cssRules, style.sheet.cssRules.length);
+    // Appended as text, not through insertRule: the callers pass whole stylesheets, and
+    // insertRule takes exactly one rule.
+    style.textContent = `${style.textContent ?? ''}\n${cssRules}`;
   },
   { stylesheetId: STYLESHEET_RULES_ID, cssRules: rules },
 );
