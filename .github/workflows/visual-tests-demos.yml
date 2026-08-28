@@ -143,7 +143,7 @@ jobs:
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
   build-devextreme:
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     name: Build DevExtreme
     needs: [check-should-run, determine-framework-tests-scope]
     if: |
@@ -274,7 +274,7 @@ jobs:
           retention-days: 1
 
   build-demos:
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     name: Build Demos Bundles
     timeout-minutes: 30
     needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
@@ -603,7 +603,7 @@ jobs:
 
   check-generated-demos-all:
     name: Check generated demos
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     timeout-minutes: 20
     needs: [check-should-run, build-devextreme, determine-framework-tests-scope]
     if: |
@@ -685,7 +685,7 @@ jobs:
     env:
       ACCESSIBILITY_TESTCAFE_REPORT_PATH: "accessibility_testcafe_report"
 
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     name: ${{ matrix.CONSTEL }}-${{ matrix.STRATEGY }}-${{ matrix.THEME }}
     timeout-minutes: 30
 
@@ -1161,7 +1161,7 @@ jobs:
       !cancelled() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.build-devextreme.result == 'success'
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     timeout-minutes: 60
     env:
       CSP_USE_BUNDLED: '0'
