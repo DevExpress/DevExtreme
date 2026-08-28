@@ -7,6 +7,11 @@ import {
 const baseURL = `http://localhost:${SERVER_PORT}`;
 const [width, height] = DEFAULT_BROWSER_SIZE;
 
+// The TestCafe run changed the clock of the whole agent, so a "new Date(2015, 1, 9, 8)" written in
+// a test meant that hour in the job's timezone. Only the browser context takes TIMEZONE here, so
+// the process is pointed at it as well — before any test file builds a date.
+process.env.TZ = readEnv(process.env.TIMEZONE, 'GMT');
+
 // The pixel budget is asymmetric on purpose: CI is the source of truth and the etalons are
 // generated there, a local run only says whether the change is in the right ballpark.
 const screenshotBudget = process.env.CI

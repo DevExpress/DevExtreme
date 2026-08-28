@@ -25,6 +25,7 @@ const CLASS = {
     tail: 'dx-scheduler-appointment-tail',
   },
   draggableSource: 'dx-draggable-source',
+  itemContent: 'dx-item-content',
 };
 
 export default class Appointment {
@@ -45,7 +46,12 @@ export default class Appointment {
   constructor(scheduler: Locator, index = 0, text?: string) {
     const element = scheduler.locator(`.${CLASS.appointment}`);
 
-    this.element = (text ? element.filter({ hasText: text }) : element).nth(index);
+    // Every appointment carries a hidden accessibility description that ends with "…navigate to
+    // the first or last appointment", so a filter over the whole element matches on words from
+    // that sentence as well. The visible content is what the TestCafe "withText" looked at.
+    const content = scheduler.page().locator(`.${CLASS.itemContent}`, { hasText: text });
+
+    this.element = (text ? element.filter({ has: content }) : element).nth(index);
 
     const appointmentContentDate = this.element.locator(`.${CLASS.appointmentContentDate}`);
 
