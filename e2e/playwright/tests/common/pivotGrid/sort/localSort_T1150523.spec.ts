@@ -74,6 +74,11 @@ test('Should sort without DataSource reload if scrolling mode isn\'t virtual', a
 
   const requestLogger = createRequestLogger(page, API_URL);
 
+  // The initial load of the store is what the counter must not see: the assertion is about the
+  // requests the sort makes. The TestCafe original cleared the logger at this same point.
+  await page.waitForLoadState('networkidle');
+  requestLogger.clear();
+
   await field.click();
 
   await expect(field.locator('.dx-sort-down')).toBeVisible();
@@ -117,6 +122,9 @@ test('Should sort with DataSource reload if scrolling mode is virtual', async ({
   await expect(field.locator('.dx-sort-up')).toBeVisible();
 
   const requestLogger = createRequestLogger(page, API_URL);
+
+  await page.waitForLoadState('networkidle');
+  requestLogger.clear();
 
   await field.click();
 

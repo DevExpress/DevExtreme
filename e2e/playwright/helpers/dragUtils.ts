@@ -15,7 +15,12 @@ const centerOf = async (target: Locator): Promise<{ x: number; y: number }> => {
     throw new Error('The drag target has no bounding box — it is detached or not displayed.');
   }
 
-  return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+  // Whole pixels, as the TestCafe automation used: half a pixel decides which side of a field the
+  // drop indicator appears on, and the etalons record that.
+  return {
+    x: Math.round(box.x + box.width / 2),
+    y: Math.round(box.y + box.height / 2),
+  };
 };
 
 // Presses the mouse on the element and moves it, without releasing. This is the state the TestCafe
@@ -30,6 +35,9 @@ export const startDragToOffset = async (
 ): Promise<void> => {
   const { x, y } = await centerOf(source);
 
+  // The TestCafe automation focused the element it pressed on, and the widgets draw a focus ring
+  // for it; a bare mouse press does not, which would leave that state out of the screenshots.
+  await source.focus();
   await page.mouse.move(x, y);
   await page.mouse.down();
   await page.mouse.move(x + offsetX, y + offsetY, { steps });

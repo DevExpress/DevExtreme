@@ -36,12 +36,12 @@ fi
 # on a developer machine that many browsers starve each other and the timing-sensitive tests
 # (drag-n-drop above all) fail for no reason. Half the cores unless the caller says otherwise —
 # to reproduce a specific job, pass its matrix concurrency, e.g. --workers=3.
-WORKERS=(--workers=50%)
+WORKERS=--workers=50%
 for arg in "$@"; do
     case "$arg" in
-        --workers|--workers=*) WORKERS=() ;;
+        --workers|--workers=*) WORKERS= ;;
     esac
 done
 
 exec "${RUN[@]}" -e CI=true devextreme-playwright-e2e \
-    node_modules/.bin/playwright test "${WORKERS[@]}" "$@"
+    node_modules/.bin/playwright test ${WORKERS:+"$WORKERS"} "$@"

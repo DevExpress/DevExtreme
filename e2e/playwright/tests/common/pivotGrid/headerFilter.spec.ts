@@ -80,9 +80,11 @@ test('[T1284200] Should handle dxList "selectAll" when has unselected items on t
   await filterIconElement.click();
   await list.selectAll.checkBox.element.click();
 
-  expect(await list.selectAll.checkBox.isChecked()).toBe(true);
+  // Polled, not sampled: the select-all state settles only after dxList has walked the pages,
+  // and the TestCafe assertion it replaces re-read the selector until it matched.
+  await expect.poll(() => list.selectAll.checkBox.isChecked()).toBe(true);
 
   await list.selectAll.checkBox.element.click();
 
-  expect(await list.selectAll.checkBox.isChecked()).toBe(false);
+  await expect.poll(() => list.selectAll.checkBox.isChecked()).toBe(false);
 });
