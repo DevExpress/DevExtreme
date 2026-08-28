@@ -21,7 +21,10 @@ import type {
   MapEngineTileLayerOptions,
   MapEngineViewState,
 } from './provider.dynamic.osm.engine';
-import { getRegisteredMapEngine } from './provider.dynamic.osm.engine';
+import {
+  getRegisteredMapEngine,
+  SUBDOMAIN_PLACEHOLDER,
+} from './provider.dynamic.osm.engine';
 import { createOpenLayersEngine } from './provider.dynamic.osm.openlayers';
 
 const DEFAULT_MAX_ZOOM = 19;
@@ -109,7 +112,7 @@ class OsmProvider extends DynamicProvider {
       result.attribution = config.attribution;
     }
 
-    if (config.url.includes('{s}')) {
+    if (config.url.includes(SUBDOMAIN_PLACEHOLDER)) {
       result.subdomains = config.subdomains?.length ? config.subdomains : DEFAULT_SUBDOMAINS;
     }
 

@@ -1,5 +1,7 @@
 import type { MapLocation } from '@js/ui/map';
 
+export const SUBDOMAIN_PLACEHOLDER = '{s}';
+
 export interface MapEngineTileLayerOptions {
   attribution?: string;
   maxZoom: number;

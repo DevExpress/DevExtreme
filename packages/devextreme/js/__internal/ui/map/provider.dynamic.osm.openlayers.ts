@@ -10,6 +10,7 @@ import type {
   MapEngineTileLayerOptions,
   MapEngineViewState,
 } from './provider.dynamic.osm.engine';
+import { SUBDOMAIN_PLACEHOLDER } from './provider.dynamic.osm.engine';
 
 type Options = Record<string, unknown>;
 type Coordinate = [number, number];
@@ -158,7 +159,7 @@ const createTileUrlList = (
 ): string[] => {
   const values = Array.isArray(subdomains) ? subdomains : [...(subdomains ?? '')];
 
-  return values.map((value) => url.split('{s}').join(value));
+  return values.map((value) => url.split(SUBDOMAIN_PLACEHOLDER).join(value));
 };
 
 class OpenLayersMap implements MapEngineMap {
@@ -328,7 +329,7 @@ class OpenLayersMap implements MapEngineMap {
   replaceTileLayer(options: MapEngineTileLayerOptions): void {
     const sourceOptions: Options = {
       maxZoom: options.maxZoom,
-      url: options.url.includes('{s}')
+      url: options.url.includes(SUBDOMAIN_PLACEHOLDER)
         ? createTileUrlList(options.url, options.subdomains)
         : options.url,
     };
