@@ -68,7 +68,7 @@ export const summaryDataControllerExtender = (
   }
 
   protected processGroupItems(
-    items: RawItemData[],
+    items: RawItemData[] | null | undefined,
     groupsCount: number,
     options?: ProcessGroupItemsOptions & { isGroupFooterVisible?: boolean },
   ): RawItemData[] {

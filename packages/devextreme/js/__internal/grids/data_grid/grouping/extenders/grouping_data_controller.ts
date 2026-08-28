@@ -75,7 +75,7 @@ export const groupingDataControllerExtender = (
   }
 
   protected processGroupItems(
-    items: RawItemData[] | null,
+    items: RawItemData[] | null | undefined,
     groupsCount: number,
     parentOptions?: ProcessGroupItemsOptions,
   ): (RawItemData | GroupItem)[] {

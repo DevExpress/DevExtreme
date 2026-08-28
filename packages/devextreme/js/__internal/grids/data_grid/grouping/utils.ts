@@ -6,7 +6,7 @@ import type { GroupItem } from './types';
 
 export function isGroupNode(
   item: RawItemData,
-): item is RawItemData & { key: unknown; items: RawItemData[] | null } {
+): item is RawItemData & { key: unknown; items: RawItemData[] | null | undefined } {
   return 'items' in item;
 }
 
