@@ -1,6 +1,6 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
-import type { dxElementWrapper } from '@js/core/renderer';
+import Class from '@js/core/class';
 import $ from '@js/core/renderer';
 import type { DxEvent } from '@js/events';
 
@@ -22,13 +22,8 @@ export interface KeyboardKeyDownEvent {
   originalEvent: DxEvent<KeyboardEvent>;
 }
 
-export interface KeyboardProcessorOptions {
-  element?: Element | dxElementWrapper;
-  focusTarget?: Element | Element[] | dxElementWrapper | null;
-  handler?: (event: KeyboardKeyDownEvent) => void;
-}
-
 const createKeyDownOptions = (e: DxEvent<KeyboardEvent>): KeyboardKeyDownEvent => ({
+  // @ts-expect-error
   keyName: normalizeKeyName(e),
   key: e.key,
   code: e.code,
@@ -41,30 +36,13 @@ const createKeyDownOptions = (e: DxEvent<KeyboardEvent>): KeyboardKeyDownEvent =
   originalEvent: e,
 });
 
-class KeyboardProcessor {
-  _keydown = addNamespace(KEYDOWN_EVENT, NAMESPACE);
+const KeyboardProcessor = Class.inherit({
+  _keydown: addNamespace(KEYDOWN_EVENT, NAMESPACE),
+  _compositionStart: addNamespace(COMPOSITION_START_EVENT, NAMESPACE),
+  _compositionEnd: addNamespace(COMPOSITION_END_EVENT, NAMESPACE),
 
-  _compositionStart = addNamespace(COMPOSITION_START_EVENT, NAMESPACE);
-
-  _compositionEnd = addNamespace(COMPOSITION_END_EVENT, NAMESPACE);
-
-  _element?: dxElementWrapper;
-
-  _focusTarget?: Element | Element[] | dxElementWrapper | null;
-
-  _handler?: (event: KeyboardKeyDownEvent) => void;
-
-  _processFunction?: (e: DxEvent<KeyboardEvent>) => void;
-
-  _toggleProcessingWithContext?: (e: { type: string }) => void;
-
-  _isComposing?: boolean;
-
-  _isComposingJustFinished?: boolean;
-
-  static createKeyDownOptions = createKeyDownOptions;
-
-  constructor(options: KeyboardProcessorOptions = {}) {
+  ctor(options) {
+    options = options || {};
     if (options.element) {
       this._element = $(options.element);
     }
@@ -94,9 +72,9 @@ class KeyboardProcessor {
       eventsEngine.on(this._element, this._compositionStart, this._toggleProcessingWithContext);
       eventsEngine.on(this._element, this._compositionEnd, this._toggleProcessingWithContext);
     }
-  }
+  },
 
-  dispose(): void {
+  dispose() {
     if (this._element) {
       eventsEngine.off(this._element, this._keydown, this._processFunction);
       eventsEngine.off(this._element, this._compositionStart, this._toggleProcessingWithContext);
@@ -104,16 +82,18 @@ class KeyboardProcessor {
     }
     this._element = undefined;
     this._handler = undefined;
-  }
+  },
 
-  process(e: DxEvent<KeyboardEvent>): void {
+  process(e: DxEvent<KeyboardEvent>) {
     this._handler?.(createKeyDownOptions(e));
-  }
+  },
 
-  toggleProcessing({ type }: { type: string }): void {
+  toggleProcessing({ type }) {
     this._isComposing = type === COMPOSITION_START_EVENT;
     this._isComposingJustFinished = !this._isComposing;
-  }
-}
+  },
+});
+// @ts-expect-error
+KeyboardProcessor.createKeyDownOptions = createKeyDownOptions;
 
 export default KeyboardProcessor;

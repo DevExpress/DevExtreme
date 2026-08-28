@@ -1,15 +1,12 @@
+import registerEmitter from '@js/common/core/events/core/emitter_registrator';
 import registerEvent from '@js/common/core/events/core/event_registrator';
+import GestureEmitter from '@js/common/core/events/gesture/emitter.gesture';
 import { eventData as eData, fireEvent } from '@js/common/core/events/utils/index';
 import { data as elementData, removeData } from '@js/core/element_data';
-import type { Coordinates, dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { wrapToArray } from '@js/core/utils/array';
 import { contains } from '@js/core/utils/dom';
 import * as iteratorUtils from '@js/core/utils/iterator';
-import type { EmitterEvent, EventCoords } from '@ts/events/core/emitter';
-import registerEmitter from '@ts/events/core/emitter_registrator';
-import type { GestureEvent } from '@ts/events/gesture/emitter.gesture';
-import GestureEmitter from '@ts/events/gesture/emitter.gesture';
 
 const DRAG_START_EVENT = 'dxdragstart';
 const DRAG_EVENT = 'dxdrag';
@@ -21,36 +18,13 @@ const DROP_EVENT = 'dxdrop';
 
 const DX_DRAG_EVENTS_COUNT_KEY = 'dxDragEventsCount';
 
-interface DropTargetConfig {
-  itemPositionFunc?: ($element: dxElementWrapper) => Coordinates;
-  itemSizeFunc?: ($element: dxElementWrapper) => { width: number; height: number };
-  checkDropTarget?: ($target: dxElementWrapper, e: GestureEvent) => boolean;
-}
-
-interface DropTargetHandleObj {
-  type?: string;
-  selector?: string;
-}
-
-type DragStartEvent = EmitterEvent & {
-  maxLeftOffset?: number;
-  maxRightOffset?: number;
-  maxTopOffset?: number;
-  maxBottomOffset?: number;
-  targetElements?: Element | Element[] | null;
-};
-
-type DragMoveEvent = EmitterEvent & {
-  _cancelPreventDefault?: boolean;
-};
-
 const knownDropTargets: Element[] = [];
-const knownDropTargetSelectors: (string | undefined)[][] = [];
-const knownDropTargetConfigs: DropTargetConfig[] = [];
+const knownDropTargetSelectors: any[] = [];
+const knownDropTargetConfigs: any[] = [];
 
 const dropTargetRegistration = {
 
-  setup(element: Element, data: DropTargetConfig): void {
+  setup(element, data) {
     const knownDropTarget = knownDropTargets.includes(element);
     if (!knownDropTarget) {
       knownDropTargets.push(element);
@@ -59,7 +33,7 @@ const dropTargetRegistration = {
     }
   },
 
-  add(element: Element, handleObj: DropTargetHandleObj): void {
+  add(element, handleObj) {
     const index = knownDropTargets.indexOf(element);
     this.updateEventsCounter(element, handleObj.type, 1);
 
@@ -69,19 +43,19 @@ const dropTargetRegistration = {
     }
   },
 
-  updateEventsCounter(element: Element, event: string | undefined, value: number): void {
-    if ([DRAG_ENTER_EVENT, DRAG_LEAVE_EVENT, DROP_EVENT].includes(event ?? '')) {
-      const eventsCount: number = elementData(element, DX_DRAG_EVENTS_COUNT_KEY) || 0;
+  updateEventsCounter(element, event, value) {
+    if ([DRAG_ENTER_EVENT, DRAG_LEAVE_EVENT, DROP_EVENT].includes(event)) {
+      const eventsCount = elementData(element, DX_DRAG_EVENTS_COUNT_KEY) || 0;
       elementData(element, DX_DRAG_EVENTS_COUNT_KEY, Math.max(0, eventsCount + value));
     }
   },
 
-  remove(element: Element, handleObj: DropTargetHandleObj): void {
+  remove(element, handleObj) {
     this.updateEventsCounter(element, handleObj.type, -1);
   },
 
-  teardown(element: Element): void {
-    const handlersCount: number | undefined = elementData(element, DX_DRAG_EVENTS_COUNT_KEY);
+  teardown(element) {
+    const handlersCount = elementData(element, DX_DRAG_EVENTS_COUNT_KEY);
     if (!handlersCount) {
       const index = knownDropTargets.indexOf(element);
       knownDropTargets.splice(index, 1);
@@ -97,10 +71,9 @@ registerEvent(DRAG_ENTER_EVENT, dropTargetRegistration);
 registerEvent(DRAG_LEAVE_EVENT, dropTargetRegistration);
 registerEvent(DROP_EVENT, dropTargetRegistration);
 
-const getItemDelegatedTargets = function ($element: dxElementWrapper): dxElementWrapper {
+const getItemDelegatedTargets = function ($element) {
   const dropTargetIndex = knownDropTargets.indexOf($element.get(0));
-  const dropTargetSelectors = knownDropTargetSelectors[dropTargetIndex]
-    .filter((selector) => selector);
+  const dropTargetSelectors = knownDropTargetSelectors[dropTargetIndex].filter((selector) => selector);
 
   let $delegatedTargets = $element.find(dropTargetSelectors.join(', '));
   if (knownDropTargetSelectors[dropTargetIndex].includes(undefined)) {
@@ -109,26 +82,19 @@ const getItemDelegatedTargets = function ($element: dxElementWrapper): dxElement
   return $delegatedTargets;
 };
 
-const getItemConfig = function ($element: dxElementWrapper): DropTargetConfig {
+const getItemConfig = function ($element) {
   const dropTargetIndex = knownDropTargets.indexOf($element.get(0));
   return knownDropTargetConfigs[dropTargetIndex];
 };
 
-const getItemPosition = function (
-  dropTargetConfig: DropTargetConfig,
-  $element: dxElementWrapper,
-): Coordinates {
+const getItemPosition = function (dropTargetConfig, $element) {
   if (dropTargetConfig.itemPositionFunc) {
     return dropTargetConfig.itemPositionFunc($element);
   }
-  // NOTE: drop targets are always non-empty wrappers, so offset() is defined.
-  return $element.offset() as Coordinates;
+  return $element.offset();
 };
 
-const getItemSize = function (
-  dropTargetConfig: DropTargetConfig,
-  $element: dxElementWrapper,
-): { width: number; height: number } {
+const getItemSize = function (dropTargetConfig, $element) {
   if (dropTargetConfig.itemSizeFunc) {
     return dropTargetConfig.itemSizeFunc($element);
   }
@@ -139,102 +105,86 @@ const getItemSize = function (
   };
 };
 
-class DragEmitter extends GestureEmitter {
-  _initEvent!: EmitterEvent;
+const DragEmitter = GestureEmitter.inherit({
 
-  _maxLeftOffset?: number;
-
-  _maxRightOffset?: number;
-
-  _maxTopOffset?: number;
-
-  _maxBottomOffset?: number;
-
-  _dropTargets!: Element[];
-
-  _currentDropTarget?: Element | null;
-
-  constructor(element: Element) {
-    super(element);
+  ctor(element) {
+    this.callBase(element);
 
     this.direction = 'both';
-  }
+  },
 
-  _init(e: EmitterEvent): void {
+  _init(e) {
     this._initEvent = e;
-  }
+  },
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _start(e: EmitterEvent): void {
-    const startEvent: DragStartEvent = this._fireEvent(DRAG_START_EVENT, this._initEvent);
+  _start(e) {
+    e = this._fireEvent(DRAG_START_EVENT, this._initEvent);
 
-    this._maxLeftOffset = startEvent.maxLeftOffset;
-    this._maxRightOffset = startEvent.maxRightOffset;
-    this._maxTopOffset = startEvent.maxTopOffset;
-    this._maxBottomOffset = startEvent.maxBottomOffset;
+    this._maxLeftOffset = e.maxLeftOffset;
+    this._maxRightOffset = e.maxRightOffset;
+    this._maxTopOffset = e.maxTopOffset;
+    this._maxBottomOffset = e.maxBottomOffset;
 
-    if (startEvent.targetElements || startEvent.targetElements === null) {
-      const dropTargets = wrapToArray(startEvent.targetElements || []);
+    if (e.targetElements || e.targetElements === null) {
+      const dropTargets = wrapToArray(e.targetElements || []);
       this._dropTargets = iteratorUtils.map(dropTargets, (element) => $(element).get(0));
     } else {
       this._dropTargets = knownDropTargets;
     }
-  }
+  },
 
-  _move(e: GestureEvent): void {
-    const eventData: EventCoords = eData(e);
+  _move(e) {
+    const eventData = eData(e);
     const dragOffset = this._calculateOffset(eventData);
 
-    const moveEvent: DragMoveEvent = this._fireEvent(DRAG_EVENT, e, {
+    e = this._fireEvent(DRAG_EVENT, e, {
       offset: dragOffset,
     });
 
-    this._processDropTargets(moveEvent as GestureEvent);
+    this._processDropTargets(e);
 
-    if (!moveEvent._cancelPreventDefault) {
-      moveEvent.preventDefault();
+    if (!e._cancelPreventDefault) {
+      e.preventDefault();
     }
-  }
+  },
 
-  _calculateOffset(eventData: EventCoords): { x: number; y: number } {
+  _calculateOffset(eventData) {
     return {
       x: this._calculateXOffset(eventData),
       y: this._calculateYOffset(eventData),
     };
-  }
+  },
 
-  _calculateXOffset(eventData: EventCoords): number {
+  _calculateXOffset(eventData) {
     if (this.direction !== 'vertical') {
       const offset = eventData.x - this._startEventData.x;
 
       return this._fitOffset(offset, this._maxLeftOffset, this._maxRightOffset);
     }
     return 0;
-  }
+  },
 
-  _calculateYOffset(eventData: EventCoords): number {
+  _calculateYOffset(eventData) {
     if (this.direction !== 'horizontal') {
       const offset = eventData.y - this._startEventData.y;
 
       return this._fitOffset(offset, this._maxTopOffset, this._maxBottomOffset);
     }
     return 0;
-  }
+  },
 
-  _fitOffset(offset: number, minOffset: number | undefined, maxOffset: number | undefined): number {
-    let fittedOffset = offset;
-
+  _fitOffset(offset, minOffset, maxOffset) {
     if (minOffset != null) {
-      fittedOffset = Math.max(fittedOffset, -minOffset);
+      offset = Math.max(offset, -minOffset);
     }
     if (maxOffset != null) {
-      fittedOffset = Math.min(fittedOffset, maxOffset);
+      offset = Math.min(offset, maxOffset);
     }
 
-    return fittedOffset;
-  }
+    return offset;
+  },
 
-  _processDropTargets(e: GestureEvent): void {
+  _processDropTargets(e) {
     const target = this._findDropTarget(e);
     const sameTarget = target === this._currentDropTarget;
 
@@ -243,9 +193,9 @@ class DragEmitter extends GestureEmitter {
       this._currentDropTarget = target;
       this._fireDropTargetEvent(e, DRAG_ENTER_EVENT);
     }
-  }
+  },
 
-  _fireDropTargetEvent(event: EmitterEvent, eventName: string): void {
+  _fireDropTargetEvent(event, eventName) {
     if (!this._currentDropTarget) {
       return;
     }
@@ -258,30 +208,30 @@ class DragEmitter extends GestureEmitter {
     };
 
     fireEvent(eventData);
-  }
+  },
 
-  _findDropTarget(e: GestureEvent): Element | undefined {
-    // eslint-disable-next-line @typescript-eslint/init-declarations
-    let result: Element | undefined;
+  _findDropTarget(e) {
+    const that = this;
+    let result;
 
     iteratorUtils.each(knownDropTargets, (_, target) => {
-      if (!this._checkDropTargetActive(target)) {
+      if (!that._checkDropTargetActive(target)) {
         return;
       }
 
       const $target = $(target);
-      iteratorUtils.each(getItemDelegatedTargets($target), (_index, delegatedTarget) => {
+      iteratorUtils.each(getItemDelegatedTargets($target), (_, delegatedTarget) => {
         const $delegatedTarget = $(delegatedTarget);
-        if (this._checkDropTarget(getItemConfig($target), $delegatedTarget, $(result), e)) {
+        if (that._checkDropTarget(getItemConfig($target), $delegatedTarget, $(result), e)) {
           result = delegatedTarget;
         }
       });
     });
 
     return result;
-  }
+  },
 
-  _checkDropTargetActive(target: Element): boolean {
+  _checkDropTargetActive(target) {
     let active = false;
 
     iteratorUtils.each(this._dropTargets, (_, activeTarget) => {
@@ -290,14 +240,9 @@ class DragEmitter extends GestureEmitter {
     });
 
     return active;
-  }
+  },
 
-  _checkDropTarget(
-    config: DropTargetConfig,
-    $target: dxElementWrapper,
-    $prevTarget: dxElementWrapper,
-    e: GestureEvent,
-  ): boolean | dxElementWrapper {
+  _checkDropTarget(config, $target, $prevTarget, e) {
     const isDraggingElement = $target.get(0) === $(e.target).get(0);
     if (isDraggingElement) {
       return false;
@@ -328,10 +273,10 @@ class DragEmitter extends GestureEmitter {
     }
 
     return $target;
-  }
+  },
 
-  _end(e: GestureEvent): void {
-    const eventData: EventCoords = eData(e);
+  _end(e) {
+    const eventData = eData(e);
 
     this._fireEvent(DRAG_END_EVENT, e, {
       offset: this._calculateOffset(eventData),
@@ -339,8 +284,9 @@ class DragEmitter extends GestureEmitter {
 
     this._fireDropTargetEvent(e, DROP_EVENT);
     delete this._currentDropTarget;
-  }
-}
+  },
+
+});
 
 registerEmitter({
   emitter: DragEmitter,

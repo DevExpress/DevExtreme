@@ -6,7 +6,7 @@ import Popover from '@js/ui/popover/ui.popover';
 import Popup from '@js/ui/popup/ui.popup';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
-import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
 import type { CalendarProperties } from '@ts/ui/calendar/calendar';
 import Calendar from '@ts/ui/calendar/calendar';
 import Scrollable from '@ts/ui/scroll_view/scrollable';

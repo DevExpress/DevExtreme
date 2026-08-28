@@ -2,10 +2,10 @@ import registerEvent from '@js/common/core/events/core/event_registrator';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
 import { addNamespace, fireEvent, isMouseEvent } from '@js/common/core/events/utils/index';
+import Class from '@js/core/class';
 import $ from '@js/core/renderer';
 import devices from '@ts/core/m_devices';
 import supportUtils from '@ts/core/utils/m_support';
-import type { EmitterEvent } from '@ts/events/core/emitter';
 
 const CONTEXTMENU_NAMESPACE = 'dxContexMenu';
 
@@ -14,46 +14,42 @@ const HOLD_NAMESPACED_EVENT_NAME = addNamespace(holdEvent.name, CONTEXTMENU_NAME
 
 const CONTEXTMENU_EVENT_NAME = 'dxcontextmenu';
 
-class ContextMenu {
-  setup(element: Element): void {
+const ContextMenu = Class.inherit({
+
+  setup(element) {
     const $element = $(element);
 
-    eventsEngine.on(
-      $element,
-      CONTEXTMENU_NAMESPACED_EVENT_NAME,
-      this._contextMenuHandler.bind(this),
-    );
+    eventsEngine.on($element, CONTEXTMENU_NAMESPACED_EVENT_NAME, this._contextMenuHandler.bind(this));
 
     if (supportUtils.touch || devices.isSimulator()) {
       eventsEngine.on($element, HOLD_NAMESPACED_EVENT_NAME, this._holdHandler.bind(this));
     }
-  }
+  },
 
-  _holdHandler(e: EmitterEvent): void {
+  _holdHandler(e) {
     if (isMouseEvent(e) && !devices.isSimulator()) {
       return;
     }
 
     this._fireContextMenu(e);
-  }
+  },
 
-  _contextMenuHandler(e: EmitterEvent): void {
+  _contextMenuHandler(e) {
     this._fireContextMenu(e);
-  }
+  },
 
-  _fireContextMenu(e: EmitterEvent): EmitterEvent {
-    const event: EmitterEvent = fireEvent({
+  _fireContextMenu(e) {
+    return fireEvent({
       type: CONTEXTMENU_EVENT_NAME,
       originalEvent: e,
     });
+  },
 
-    return event;
-  }
-
-  teardown(element: Element): void {
+  teardown(element) {
     eventsEngine.off(element, `.${CONTEXTMENU_NAMESPACE}`);
-  }
-}
+  },
+
+});
 
 registerEvent(CONTEXTMENU_EVENT_NAME, new ContextMenu());
 
