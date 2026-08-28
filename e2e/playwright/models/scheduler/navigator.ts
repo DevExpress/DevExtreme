@@ -27,8 +27,10 @@ export default class SchedulerNavigator {
   constructor(page: Page, scheduler: Locator) {
     this.page = page;
     this.element = scheduler.locator(`.${CLASS.navigator}`);
-    this.nextButton = page.locator(`.${CLASS.navigatorButtonNext}`);
-    this.prevButton = page.locator(`.${CLASS.navigatorButtonPrev}`);
-    this.caption = page.locator(`.${CLASS.navigatorButtonCaption}`);
+    // Page-level, as the TestCafe model had them — with ".first()" spelling out the match that
+    // its Selector picked implicitly when more than one scheduler is on the page.
+    this.nextButton = page.locator(`.${CLASS.navigatorButtonNext}`).first();
+    this.prevButton = page.locator(`.${CLASS.navigatorButtonPrev}`).first();
+    this.caption = page.locator(`.${CLASS.navigatorButtonCaption}`).first();
   }
 }
