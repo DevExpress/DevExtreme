@@ -44,21 +44,23 @@ test('Appointment popup should be readOnly if appointment is disabled', async ({
 
   await testScreenshot(page, 'disabled-appointments-in-grid.png');
 
-  await scheduler.getAppointment('A', 0).element.click();
+  // The appointment under test is disabled, so Playwright would wait for it to become actionable
+  // for ever; TestCafe pressed it regardless, and the point of the test is what happens then.
+  await scheduler.getAppointment('A', 0).element.click({ force: true });
   await scheduler.appointmentTooltip.getListItem('A').element.click();
 
   await testScreenshot(page, 'disabled-appointment.png', { element: appointmentPopup.contentElement });
 
   await appointmentPopup.cancelButton.element.click();
 
-  await scheduler.getAppointment('B').element.click();
+  await scheduler.getAppointment('B').element.click({ force: true });
   await scheduler.appointmentTooltip.getListItem('B').element.click();
 
   await testScreenshot(page, 'enabled-appointment.png', { element: appointmentPopup.contentElement });
 
   await appointmentPopup.cancelButton.element.click();
 
-  await scheduler.getAppointment('C').element.click();
+  await scheduler.getAppointment('C').element.click({ force: true });
   await scheduler.appointmentTooltip.getListItem('C').element.click();
 
   await testScreenshot(page, 'disabled-by-function-appointment.png', {
@@ -67,7 +69,7 @@ test('Appointment popup should be readOnly if appointment is disabled', async ({
 
   await appointmentPopup.cancelButton.element.click();
 
-  await scheduler.getAppointment('D').element.click();
+  await scheduler.getAppointment('D').element.click({ force: true });
   await scheduler.appointmentTooltip.getListItem('D').element.click();
 
   await testScreenshot(page, 'enabled-by-function-appointment.png', {

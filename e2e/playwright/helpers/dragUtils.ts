@@ -71,10 +71,23 @@ const isInViewport = (page: Page, { x, y }: { x: number; y: number }): boolean =
 // in viewport coordinates, so an element outside the viewport would be pressed at coordinates that
 // land on something else — or nowhere at all.
 const prepareSource = async (source: Locator): Promise<void> => {
-  await source.scrollIntoViewIfNeeded();
-  // The TestCafe automation also focused the element it pressed on, and the widgets draw a focus
-  // ring for it; a bare mouse press does not, which would leave that state out of the screenshots.
-  await source.focus();
+  // Retried like the measurement below it: a drag re-renders the area it happened in, so the next
+  // source can be swapped out between being found and being scrolled to.
+  for (let attempt = 0; attempt < MEASURE_ATTEMPTS; attempt += 1) {
+    try {
+      await source.scrollIntoViewIfNeeded();
+      // The TestCafe automation also focused the element it pressed on, and the widgets draw a
+      // focus ring for it; a bare mouse press does not, which would leave that state out of the
+      // screenshots.
+      await source.focus();
+
+      return;
+    } catch {
+      await source.page().waitForTimeout(MEASURE_INTERVAL_MS);
+    }
+  }
+
+  throw new Error('The drag source never settled — it keeps being detached while it is prepared.');
 };
 
 // Presses the mouse on the element and moves it, without releasing. This is the state the TestCafe
