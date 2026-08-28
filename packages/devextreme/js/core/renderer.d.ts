@@ -64,7 +64,7 @@ export interface dxElementWrapper {
 
   insertBefore(element: Element | dxElementWrapper): this;
 
-  is(selector: string | dxElementWrapper): boolean;
+  is(selector: string | dxElementWrapper | Element): boolean;
 
   last(): this;
 
