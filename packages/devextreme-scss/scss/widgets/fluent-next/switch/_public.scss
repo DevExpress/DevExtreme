@@ -5,9 +5,9 @@
   --dx-switch-bg: #{$switch-bg};
   --dx-switch-border-disabled: #{$switch-border-disabled};
   --dx-switch-box-shadow: #{$switch-box-shadow};
-  --dx-switch-container-height: #{if($switch-container-height == $switch-height, var(--dx-switch-height), $switch-container-height)};
+  --dx-switch-container-height: var(--dx-switch-height);
   --dx-switch-container-margin-block: #{$switch-container-margin-block};
-  --dx-switch-container-padding-inline: #{if($switch-container-padding-inline == $switch-handle-margin, var(--dx-switch-handle-margin), $switch-container-padding-inline)};
+  --dx-switch-container-padding-inline: var(--dx-switch-handle-margin);
   --dx-switch-container-rtl-offset: #{$switch-container-rtl-offset};
   --dx-switch-handle-bg-disabled: #{$switch-handle-bg-disabled};
   --dx-switch-handle-border-radius: #{$switch-handle-border-radius};

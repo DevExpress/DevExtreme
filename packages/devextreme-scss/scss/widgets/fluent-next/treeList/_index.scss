@@ -25,8 +25,8 @@
   $datagrid-focused-border-color: gridBaseColors.$grid-border-focused,
   $datagrid-text-stub-background-image-path: gridBaseColors.$grid-text-stub-bg,
   $datagrid-row-error-color: gridBaseColors.$grid-row-error-content,
-  $header-filter-color: gridBaseColors.$grid-header-filter-icon,
-  $header-filter-color-empty: gridBaseColors.$grid-header-filter-empty-icon,
+  $header-filter-color: gridBaseColors.$grid-content,
+  $header-filter-color-empty: gridBaseColors.$grid-content,
   $base-focus-color: gridBaseColors.$grid-content-focused,
 );
 @use "layout/cell";

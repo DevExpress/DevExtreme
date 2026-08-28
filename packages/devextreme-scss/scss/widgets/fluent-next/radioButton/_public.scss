@@ -10,7 +10,7 @@
   --dx-radio-button-icon-bg: #{$radio-button-icon-bg};
   --dx-radio-button-icon-border-active: #{$radio-button-icon-border-active};
   --dx-radio-button-icon-border-hovered: #{$radio-button-icon-border-hovered};
-  --dx-radio-button-icon-border-read-only: #{if($radio-button-icon-border-read-only == $radio-button-icon-border, var(--dx-radio-button-icon-border), $radio-button-icon-border-read-only)};
+  --dx-radio-button-icon-border-read-only: var(--dx-radio-button-icon-border);
   --dx-radio-button-icon-border: #{$radio-button-icon-border};
   --dx-radio-button-invalid-bg-focused: #{$radio-button-invalid-bg-focused};
   --dx-radio-button-invalid-bg-hovered: #{$radio-button-invalid-bg-hovered};

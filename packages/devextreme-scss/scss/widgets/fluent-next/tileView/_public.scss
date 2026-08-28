@@ -7,7 +7,7 @@
   --dx-tile-view-bg: #{$tile-view-bg};
   --dx-tile-view-border-hovered: #{$tile-view-border-hovered};
   --dx-tile-view-border: #{$tile-view-border};
-  --dx-tile-view-content-active: #{if($tile-view-content-active == $tile-view-content, var(--dx-tile-view-content), $tile-view-content-active)};
+  --dx-tile-view-content-active: var(--dx-tile-view-content);
   --dx-tile-view-content: #{$tile-view-content};
   --dx-tile-view-tile-border: #{$tile-view-tile-border};
   --dx-tile-view-wrapper-height: #{$tile-view-wrapper-height};

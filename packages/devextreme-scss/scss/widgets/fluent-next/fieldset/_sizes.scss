@@ -37,7 +37,6 @@ $fieldset-field-label-value-spacing: null !default;
 
 $fieldset-field-min-height: $global-inline-widget-height !default;
 $fieldset-field-value-top-padding: ds.$spacing-210 !default;
-$fieldset-field-value-padding-inline: $fieldset-value-padding-inline !default;
 $fieldset-field-value-bottom-padding: ds.$spacing-200 !default;
 $fieldset-attention-icon-offset: calc(#{$fieldset-value-padding-inline} + #{$invalid-badge-size}) !default;
 $fieldset-radio-group-min-height: ds.$spacing-260 !default;
