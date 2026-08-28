@@ -988,11 +988,11 @@
     @include dx-button-flat-color-styling(
       buttonColors.$button-default-text-content,
       buttonColors.$button-default-text-content-hovered,
-      buttonColors.$button-default-text-content-active,
+      buttonColors.$button-default-outlined-content-active,
       buttonColors.$button-default-text-bg,
-      buttonColors.$button-default-text-bg-hovered,
-      buttonColors.$button-default-text-bg-focused,
-      buttonColors.$button-default-text-bg-active
+      buttonColors.$button-default-outlined-bg-hovered,
+      buttonColors.$button-default-outlined-bg-focused,
+      buttonColors.$button-default-outlined-bg-active
     );
 
     .dx-icon {

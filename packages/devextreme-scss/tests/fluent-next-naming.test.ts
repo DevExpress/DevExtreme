@@ -867,8 +867,9 @@ test('the rename mapping stays collision-free and fully applied', () => {
  *     else is declared (eligibility knowledge lives in tierExpectation below: data-uri exclusion
  *     is transitive through references, CSS-wide keywords cannot ride a custom property, base
  *     wiring is base's spelling, null has nothing to publish);
- *   - the conditional-chain FORM for same-component references (an unconditional chain silently
- *     ignores with() reconfiguration and starves the dead-variable gates — GOTCHAS §18.3);
+ *   - the LINK form for a reference the referrer can resolve — same component, or a target
+ *     published on `:root`: `--dx-a: var(--dx-b);` with no SCSS twin, so the relation is stated
+ *     once, in one place, and stays live when the target moves (GOTCHAS §18.3);
  *   - collector ↔ registries.rootSelectors consistency.
  */
 const CSS_WIDE_KEYWORDS = new Set(['inherit', 'initial', 'unset', 'revert', 'revert-layer']);
@@ -952,12 +953,74 @@ publicTierFiles.forEach((file) => {
     .forEach((match) => tierDeclared.set(`$${match[1].slice('--dx-'.length)}`, file));
 });
 
+/*
+ * Which targets a link may point at. A custom property resolves only under the scope it was
+ * declared on, so the referrer must sit inside the target's root: either the target is the same
+ * component's (same _public.scss), or it is published on `:root`, which every rule sits under.
+ * A target on ANOTHER component's root is out — `--dx-button-icon-size` lives on `.dx-button` /
+ * `.dx-dropdowneditor-button`, and a gridBase rule that draws outside a button would resolve it to
+ * nothing, taking the whole declaration with it (GOTCHAS §18.3, §21).
+ */
+const publishesOnRoot = (file: string): boolean => {
+  const folder = sourceLabel(file).split('/')[1];
+  const component = systemTier.includes(folder) ? folder : components[folder];
+  return (registries.rootSelectors[component] ?? []).includes(':root');
+};
+const linkableFrom = (target: string, referrer: string): boolean => {
+  const home = tierDeclared.get(`$${target.slice('--dx-'.length)}`);
+  return !!home && (home === referrer || publishesOnRoot(home));
+};
+
+/*
+ * A tier property whose whole value is `var(--dx-other)` states a relation instead of publishing a
+ * value: "this equals that until someone overrides that". It has no SCSS twin on purpose — the
+ * relation is written once, here, rather than duplicated as an alias variable that a value
+ * comparison then has to rediscover at build time.
+ */
+const tierLinks = new Map<string, { target: string; file: string }>(); // --dx-a -> --dx-b
+publicTierFiles.forEach((file) => {
+  stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file)).split('\n').forEach((line) => {
+    const link = /^\s*(--dx-[a-z0-9-]+)\s*:\s*var\((--dx-[a-z0-9-]+)\);\s*$/.exec(line);
+    if (link) tierLinks.set(link[1], { target: link[2], file });
+  });
+});
+
+/*
+ * The other side of the same coin: a declaration that is nothing but a reference to another
+ * published variable. Where the referrer can resolve the target it must become a link, and the
+ * declaration itself must go. Nothing else catches a frozen copy — the composition case only asks
+ * that the variable HAS a line, and the link case only looks at lines that already contain
+ * var(--dx-…). Every component still to be migrated meets this fork, which is why the check lives
+ * here. An alias whose target sits on another component's root is the boundary of the rule, not an
+ * offender: it keeps its copy, and `tierCopies` holds it against the link form.
+ */
+const tierAliases: { property: string; target: string; source: string }[] = [];
+const tierCopies: { property: string; target: string; source: string }[] = [];
+walk(themeRoot, '.scss')
+  .filter((file) => /(^|\/)_(colors|sizes|variables)\.scss$/.test(file))
+  .forEach((file) => {
+    stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file)).split('\n').forEach((line, index) => {
+      // `!default` is optional on purpose: an alias written without it is the same relation
+      const alias = /^\s*\$([a-z0-9-]+)\s*:\s*(?:[A-Za-z]\w*\.)?\$([a-z0-9-]+)\s*(?:!default)?\s*;\s*$/.exec(line);
+      if (!alias) return;
+      const home = tierDeclared.get(`$${alias[1]}`);
+      if (!home || !tierDeclared.has(`$${alias[2]}`)) return;
+      const record = {
+        property: `--dx-${alias[1]}`,
+        target: `--dx-${alias[2]}`,
+        source: `${sourceLabel(file)}:${index + 1}`,
+      };
+      (linkableFrom(record.target, home) ? tierAliases : tierCopies).push(record);
+    });
+  });
+
 test('component tier: _public.scss declarations equal the eligible variables exactly', () => {
   const eligible = new Map([...tierRecords].filter(([, { reason }]) => !reason));
   const missing = [...eligible.keys()].filter((variable) => !tierDeclared.has(variable)).sort()
     .map((variable) => `${variable} (${eligible.get(variable)!.component}): add `
       + `\`--dx-${variable.slice(1)}: #{${variable}};\` to the component's _public.scss`);
-  const extra = [...tierDeclared.keys()].filter((variable) => !eligible.has(variable)).sort()
+  const extra = [...tierDeclared.keys()]
+    .filter((variable) => !eligible.has(variable) && !tierLinks.has(`--dx-${variable.slice(1)}`)).sort()
     .map((variable) => {
       const reason = tierRecords.get(variable)?.reason;
       return `--dx-${variable.slice(1)} (${sourceLabel(tierDeclared.get(variable)!)}): ${reason
@@ -967,7 +1030,7 @@ test('component tier: _public.scss declarations equal the eligible variables exa
   expect({ missing, extra }).toEqual({ missing: [], extra: [] });
 });
 
-test('component tier: same-component references keep the conditional chain form', () => {
+test('component tier: references are written as links to a resolvable target', () => {
   const offenders: string[] = [];
   publicTierFiles.forEach((file) => {
     stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file)).split('\n').forEach((line) => {
@@ -978,20 +1041,75 @@ test('component tier: same-component references keep the conditional chain form'
         return;
       }
       const [, property, value] = declaration;
-      const own = `$${property.slice('--dx-'.length)}`;
-      const chain = /^#\{if\((\$[a-z0-9-]+) == (\$[a-z0-9-]+), var\((--dx-[a-z0-9-]+)\), (\$[a-z0-9-]+)\)\}$/
-        .exec(value.trim());
-      if (!chain || chain[1] !== own || chain[4] !== own
-        || `$${chain[3].slice('--dx-'.length)}` !== chain[2]) {
-        offenders.push(`${sourceLabel(file)}: ${property} — a same-component reference must be `
-          + `written as #{if(${own} == $target, var(--dx-target), ${own})}; an unconditional chain `
-          + 'ignores with() reconfiguration and starves the dead-variable gates (GOTCHAS §18.3)');
+      const link = tierLinks.get(property);
+      if (!link || `var(${link.target})` !== value.trim()) {
+        offenders.push(`${sourceLabel(file)}: ${property} — a reference must be the WHOLE value and `
+          + 'written as var(--dx-target); a comparison or a formula freezes the relation at build '
+          + 'time (GOTCHAS §18.3)');
         return;
       }
-      if (!tierDeclared.has(chain[2])) {
-        offenders.push(`${sourceLabel(file)}: ${property} chains to ${chain[2]}, which the tier does not declare`);
+      if (link.target === property) {
+        offenders.push(`${sourceLabel(file)}: ${property} links to itself`);
+        return;
+      }
+      if (!linkableFrom(link.target, file)) {
+        offenders.push(`${sourceLabel(file)}: ${property} links to ${link.target}, which is neither `
+          + 'declared by this component nor published on :root — outside the target\'s root the '
+          + 'link resolves to nothing and the declaration disappears; publish the value instead '
+          + '(GOTCHAS §18.3)');
       }
     });
+  });
+  expect(offenders).toEqual([]);
+});
+
+
+test('component tier: an alias is published as a link, not as a copy of the value', () => {
+  const offenders = tierAliases
+    .filter((alias) => tierLinks.get(alias.property)?.target !== alias.target)
+    .map((alias) => `${alias.source}: the declaration is a reference to `
+      + `${alias.target.slice('--dx-'.length)}, so the tier must publish `
+      + `\`${alias.property}: var(${alias.target});\` and the declaration itself must go — `
+      + 'publishing a copy of the value freezes the relation (GOTCHAS §18.3)');
+  expect(offenders).toEqual([]);
+});
+
+/*
+ * The boundary of the rule above, kept as a case of its own because the tree holds a live example
+ * and the two rules read as one: `$grid-menu-item-icon-size: $button-icon-size` (gridBase/_sizes)
+ * points at a name published on `.dx-button` / `.dx-dropdowneditor-button`. The grid rule that
+ * draws the menu item's icon is under neither, so here the copied value is the correct answer and
+ * the link form is the defect.
+ */
+test('component tier: an alias whose target sits on another root stays a copy', () => {
+  const offenders = tierCopies
+    .filter((copy) => tierLinks.has(copy.property))
+    .map((copy) => `${copy.source}: ${copy.property} is published as a link to ${copy.target}, `
+      + 'which lives on another component\'s root — the value must be published instead '
+      + '(GOTCHAS §18.3)');
+  expect(offenders).toEqual([]);
+});
+
+/*
+ * The defect this catches is invisible while the two values agree: `…-text-bg-focused` pointed at
+ * `…-outlined-bg-HOVERED` (button, PR #34888) and rendered correctly only because the outlined
+ * variant painted focus and hover the same. Dropping the state is legitimate — `…-bg-hovered:
+ * var(--dx-…-bg)` says "this state does not repaint it" — landing on a DIFFERENT state never is.
+ */
+test('component tier: a link between two states must keep the state', () => {
+  // longest first: `selected-hovered` must not be read as `hovered`
+  const states = [...(registries.states as string[])].sort((a, b) => b.length - a.length);
+  const stateOf = (property: string): string | undefined => states
+    .find((state) => property.endsWith(`-${state}`));
+
+  const offenders: string[] = [];
+  tierLinks.forEach(({ target, file }, property) => {
+    const state = stateOf(property);
+    const targetState = stateOf(target);
+    if (state && targetState && state !== targetState) {
+      offenders.push(`${sourceLabel(file)}: ${property} links to ${target} — the ${state} state `
+        + `points at ${targetState}`);
+    }
   });
   expect(offenders).toEqual([]);
 });
