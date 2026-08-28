@@ -1182,6 +1182,37 @@ test('component tier: every var(--dx-…) read in the theme resolves to a declar
   expect(offenders).toEqual([]);
 });
 
+/*
+ * The runtime reachability audit (playground/tier-reachability-audit.html) is the only judge of
+ * whether a variable reaches an element: "nested or not" is decided by the DOM, not by the text of
+ * a selector. But the gallery has an illness of its own — the vacuous pass: a component that is not
+ * on the page has nothing to check, and the audit stays green. That is how wave F stayed at 35
+ * widgets while wave H added 28 more components the gallery never built: their holes surfaced only
+ * in CI, as 208 screenshots.
+ *
+ * This case holds the gallery's roster: every component that publishes the tier must appear on the
+ * page, either as a widget (`widget('dxCardView', …)`) or as markup carrying one of its classes.
+ * Whether the SATELLITES are complete (is the popup opened, is the portal built) cannot be checked
+ * statically — the page itself does that, counting the roots that matched no element at all.
+ */
+test('component tier: every publishing component appears in the runtime-audit gallery', () => {
+  const gallery = join(packageRoot, '..', 'devextreme', 'playground', 'tier-reachability-audit.html');
+  if (!existsSync(gallery)) throw new Error(`the runtime-audit gallery is missing at ${gallery}`);
+  const source = readFileSync(gallery, 'utf8').toLowerCase();
+  const missing = publicTierFiles
+    .map((file) => sourceLabel(file).split('/')[1])
+    .filter((folder) => !systemTier.includes(folder))
+    .filter((folder) => {
+      if (source.includes(`dx${folder.toLowerCase()}`)) return false;
+      const component = components[folder];
+      const roots: string[] = registries.rootSelectors[component] ?? [];
+      return !roots.some((selector) => selector !== ':root' && source.includes(selector.slice(1)));
+    })
+    .map((folder) => `${folder} publishes the tier but the gallery never builds it — add `
+      + `widget('dx${folder}') or markup carrying one of its classes to buildGallery/addPortals`);
+  expect([...new Set(missing)].sort()).toEqual([]);
+});
+
 test('component tier: every declaring component has bundle-gated root selectors', () => {
   // The selectors themselves are gated against the built bundle by derive-registries.mjs; this
   // holds the committed json coherent — a declaring component may not lack a scope.

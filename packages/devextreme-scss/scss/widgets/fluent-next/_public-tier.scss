@@ -312,7 +312,9 @@
   @include drawerPublic.publish();
 }
 
-.dx-filterbuilder {
+.dx-filterbuilder,
+.dx-filterbuilder-overlay,
+.dx-filterbuilder-operations {
   @include filterBuilderPublic.publish();
 }
 
@@ -321,11 +323,13 @@
 }
 
 .dx-htmleditor,
-.dx-aidialog {
+.dx-aidialog,
+.dx-htmleditor-add-image-popup {
   @include htmlEditorPublic.publish();
 }
 
-.dx-list {
+.dx-list,
+.dx-list-context-menucontent {
   @include listPublic.publish();
 }
 
@@ -345,7 +349,8 @@
   @include timeViewPublic.publish();
 }
 
-.dx-treeview {
+.dx-treeview,
+.dx-sortable-dragging {
   @include treeViewPublic.publish();
 }
 
@@ -369,11 +374,17 @@
 }
 
 .dx-chat,
-.dx-messagelist-context-menu-content {
+.dx-messagelist-context-menu-content,
+.dx-chat-confirmation-popup-wrapper {
   @include chatPublic.publish();
 }
 
-.dx-diagram {
+.dx-diagram,
+.dx-diagram-properties-popup,
+.dx-diagram-toolbox-popup,
+.dx-diagram-contextmenu,
+.dx-diagram-context-toolbox,
+.dx-diagram-floating-toolbar-container {
   @include diagramPublic.publish();
 }
 
@@ -395,7 +406,8 @@
 }
 
 .dx-pivotgrid,
-.dx-pivotgridfieldchooser {
+.dx-pivotgridfieldchooser,
+.dx-pivotgrid-fields-container {
   @include pivotGridPublic.publish();
 }
 
@@ -417,6 +429,8 @@
 }
 
 .dx-cardview,
-.dx-cardview-header-item {
+.dx-cardview-header-item,
+.dx-cardview-column-chooser-list,
+.dx-cardview-column-chooser-plain {
   @include cardViewPublic.publish();
 }

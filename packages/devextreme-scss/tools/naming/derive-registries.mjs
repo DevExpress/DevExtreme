@@ -224,18 +224,43 @@ const OVERRIDES = {
      * the tier empty in the other, which is what emptied every grid pager in CI.
      */
     pagination: ['.dx-pagination', '.dx-pager'],
-    // the field chooser is a widget of its own, shown in a popup outside .dx-pivotgrid
-    'pivot-grid': ['.dx-pivotgrid', '.dx-pivotgridfieldchooser'],
-    // the AI dialog is a popup: its wrapper carries .dx-aidialog and sits outside the editor
-    'html-editor': ['.dx-htmleditor', '.dx-aidialog'],
-    // the message context menu is overlay content, rendered outside .dx-chat
-    chat: ['.dx-chat', '.dx-messagelist-context-menu-content'],
     /*
      * The header item travels: dragging it puts a COPY inside .dx-sortable-dragging in the viewport
      * (m_draggable/_createDragElement), and `.dx-sortable-dragging > .dx-cardview-header-item` paints
      * that copy. The item is the only element reading the tier there, so it carries its own scope.
      */
-    'card-view': ['.dx-cardview', '.dx-cardview-header-item'],
+    /*
+     * A tree item travels: applications wrap the widget in a dxSortable with
+     * `filter: '.dx-treeview-item'` (the shipped TreeView drag-and-drop demos do), and the clone is
+     * built in the viewport. The clone container is the scope — declaring on .dx-treeview-item would
+     * repeat 33 properties on every node of every tree.
+     */
+    'tree-view': ['.dx-treeview', '.dx-sortable-dragging'],
+    'card-view': ['.dx-cardview', '.dx-cardview-header-item',
+      // the column chooser is a popup: base paints its empty message and select-all item with
+      // cardView's parameters
+      '.dx-cardview-column-chooser-list', '.dx-cardview-column-chooser-plain'],
+    // the delete-message confirmation popup lives outside .dx-chat
+    chat: ['.dx-chat', '.dx-messagelist-context-menu-content', '.dx-chat-confirmation-popup-wrapper'],
+    // the add-image dialog is a popup (and it renders a fileUploader of its own)
+    'html-editor': ['.dx-htmleditor', '.dx-aidialog', '.dx-htmleditor-add-image-popup'],
+    // the field and operation drop-downs are overlays
+    'filter-builder': ['.dx-filterbuilder', '.dx-filterbuilder-overlay', '.dx-filterbuilder-operations'],
+    // the list's context menu is overlay content
+    list: ['.dx-list', '.dx-list-context-menucontent'],
+    /*
+     * .dx-pivotgrid-fields-container holds the clone while a field is dragged (in the field
+     * chooser and in the field panel). It is created outside both roots, and in CI the dragged
+     * field lost its background, border and shadow.
+     */
+    'pivot-grid': ['.dx-pivotgrid', '.dx-pivotgridfieldchooser', '.dx-pivotgrid-fields-container'],
+    // dialogs, the context menu and the view switcher are popups
+    'file-manager': ['.dx-filemanager', '.dx-filemanager-dialog-popup', '.dx-filemanager-context-menu',
+      '.dx-filemanager-dialog-name-editor-popup', '.dx-filemanager-dialog-delete-item-popup',
+      '.dx-filemanager-view-switcher-popup'],
+    // the properties panel, the toolbox and the context toolbars are popups and floating panels
+    diagram: ['.dx-diagram', '.dx-diagram-properties-popup', '.dx-diagram-toolbox-popup',
+      '.dx-diagram-contextmenu', '.dx-diagram-context-toolbox', '.dx-diagram-floating-toolbar-container'],
     // wave H roots that are not `.dx-<component>`: an overlay renders outside its source element,
     // and two components paint a box whose class is not their own
     popup: ['.dx-popup-wrapper'],

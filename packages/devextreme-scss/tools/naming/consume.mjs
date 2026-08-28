@@ -33,7 +33,7 @@
  * the parameters a body uses in UNGUARDED math, where a var() would produce invalid CSS.
  */
 
-/* wave F6, reviewed 13.08.2026 — see NAMING.md «Волна F as-built» and RENAME_PROGRESS.md */
+/* wave F6, reviewed 13.08.2026 — see NAMING.md "wave F as-built" and RENAME_PROGRESS.md */
 const VAR_SAFE_MIXINS = new Set([
   'dx-icon-sizing', 'dx-icon-margin', 'dx-icon-font-centered-sizing', 'gradient-linear',
   'dx-button-styling', 'dx-button-styling-variant', 'dx-button-flat-color-styling',
@@ -110,7 +110,7 @@ const packageRoot = join(here, '..', '..');
 const themeRoot = join(packageRoot, 'scss', 'widgets', 'fluent-next');
 const registries = JSON.parse(readFileSync(join(here, 'registries.json'), 'utf8'));
 
-/* Состав тира читается из рукописных _public.scss (манифест-json демонтирован волной F13). */
+/* The tier's contents are read from the handwritten _public.scss (wave F13 removed the json manifest). */
 const walkScss = (dir, out = []) => {
   readdirSync(dir, { withFileTypes: true }).forEach((entry) => {
     const abs = join(dir, entry.name);

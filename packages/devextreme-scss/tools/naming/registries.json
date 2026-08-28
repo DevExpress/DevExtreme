@@ -459,17 +459,21 @@
       ".dx-drawer"
     ],
     "filter-builder": [
-      ".dx-filterbuilder"
+      ".dx-filterbuilder",
+      ".dx-filterbuilder-overlay",
+      ".dx-filterbuilder-operations"
     ],
     "form": [
       ".dx-form"
     ],
     "html-editor": [
       ".dx-htmleditor",
-      ".dx-aidialog"
+      ".dx-aidialog",
+      ".dx-htmleditor-add-image-popup"
     ],
     "list": [
-      ".dx-list"
+      ".dx-list",
+      ".dx-list-context-menucontent"
     ],
     "popup": [
       ".dx-popup-wrapper"
@@ -484,7 +488,8 @@
       ".dx-timeview"
     ],
     "tree-view": [
-      ".dx-treeview"
+      ".dx-treeview",
+      ".dx-sortable-dragging"
     ],
     "widget": [
       ".dx-surface"
@@ -503,10 +508,16 @@
     ],
     "chat": [
       ".dx-chat",
-      ".dx-messagelist-context-menu-content"
+      ".dx-messagelist-context-menu-content",
+      ".dx-chat-confirmation-popup-wrapper"
     ],
     "diagram": [
-      ".dx-diagram"
+      ".dx-diagram",
+      ".dx-diagram-properties-popup",
+      ".dx-diagram-toolbox-popup",
+      ".dx-diagram-contextmenu",
+      ".dx-diagram-context-toolbox",
+      ".dx-diagram-floating-toolbar-container"
     ],
     "gantt": [
       ".dx-gantt"
@@ -519,7 +530,8 @@
     ],
     "pivot-grid": [
       ".dx-pivotgrid",
-      ".dx-pivotgridfieldchooser"
+      ".dx-pivotgridfieldchooser",
+      ".dx-pivotgrid-fields-container"
     ],
     "pagination": [
       ".dx-pagination",
@@ -541,7 +553,9 @@
     ],
     "card-view": [
       ".dx-cardview",
-      ".dx-cardview-header-item"
+      ".dx-cardview-header-item",
+      ".dx-cardview-column-chooser-list",
+      ".dx-cardview-column-chooser-plain"
     ],
     "common": [
       ":root"

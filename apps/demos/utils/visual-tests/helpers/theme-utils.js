@@ -28,10 +28,13 @@ export async function testScreenshot(
   const testTheme = process.env.THEME;
 
   const themeOptions = {
-    looksSameComparisonOptions: {
-      tolerance: 20,
-      antialiasingTolerance: 20,
-    },
+    // TEMPORARILY off so the run reports even small drifts (wave H, 28.08.2026).
+    // Restore before merge: without it the comparison is stricter than the comparator's own
+    // defaults, and it is stricter for EVERY theme, not just the one under investigation.
+    // looksSameComparisonOptions: {
+    //   tolerance: 20,
+    //   antialiasingTolerance: 20,
+    // },
     textDiffTreshold: 0.2,
   };
 
