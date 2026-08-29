@@ -3,6 +3,7 @@ import { focusModule } from '@ts/grids/grid_core/focus/m_focus';
 
 import type { DataController } from '../grid_core/data_controller/data_controller';
 import type { ModuleType } from '../grid_core/m_types';
+import type { DataSourceAdapterTreeList } from './data_source_adapter/m_data_source_adapter';
 import core from './m_core';
 
 function findIndex(items, callback) {
@@ -51,7 +52,7 @@ const data = (
 
   private getParentKey(key) {
     const that = this;
-    const dataSource = that._dataSource;
+    const dataSource = that._dataSource as unknown as DataSourceAdapterTreeList;
     // @ts-expect-error
     const node = that.getNodeByKey(key);
     // @ts-expect-error
@@ -63,7 +64,7 @@ const data = (
       dataSource.load({
         filter: [dataSource.getKeyExpr(), '=', key],
       }).done((items) => {
-        const parentData = items[0];
+        const parentData = (items as unknown[])[0];
 
         if (parentData) {
           d.resolve(dataSource.parentKeyOf(parentData));
@@ -78,16 +79,16 @@ const data = (
 
   private expandAscendants(key) {
     const that = this;
-    const dataSource = that._dataSource;
+    const dataSource = that._dataSource as unknown as DataSourceAdapterTreeList;
     // @ts-expect-error
     const d = new Deferred();
 
     that.getParentKey(key).done((parentKey) => {
       if (dataSource && parentKey !== undefined && parentKey !== that.option('rootValue')) {
-        dataSource._isNodesInitializing = true;
+        (dataSource as any)._isNodesInitializing = true;
         // @ts-expect-error
         that.expandRow(parentKey);
-        dataSource._isNodesInitializing = false;
+        (dataSource as any)._isNodesInitializing = false;
         that.expandAscendants(parentKey).done(d.resolve).fail(d.reject);
       } else {
         d.resolve();
@@ -98,7 +99,7 @@ const data = (
   }
 
   protected getPageIndexByKey(key) {
-    const dataSource = this._dataSource;
+    const dataSource = this._dataSource as unknown as DataSourceAdapterTreeList;
     // @ts-expect-error
     const d = new Deferred();
 
@@ -106,7 +107,7 @@ const data = (
       dataSource.load({
         parentIds: [],
       }).done((nodes) => {
-        if (this._dataSource !== dataSource) {
+        if ((this._dataSource as unknown) !== (dataSource as unknown)) {
           d.resolve(-1);
           return;
         }

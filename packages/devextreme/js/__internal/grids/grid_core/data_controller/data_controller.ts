@@ -66,8 +66,7 @@ import {
 import { generateRowValues } from './utils/row_values';
 
 export class DataController extends modules.Controller {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public _dataSource?: any;
+  public _dataSource?: DataSourceAdapter;
 
   protected isSharedDataSource?: boolean;
 
@@ -188,7 +187,8 @@ export class DataController extends modules.Controller {
    * @extended: virtual_scrolling
    */
   protected _getPagingOptionValue(optionName: PagingOptionName): number {
-    return this._dataSource[optionName]() as number;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return this._dataSource![optionName]() as number;
   }
 
   protected callbackNames(): string[] {
@@ -333,7 +333,7 @@ export class DataController extends modules.Controller {
   }
 
   public getDataSource(): DataSource | null | undefined {
-    const adapter: DataSourceAdapterLike | null | undefined = this._dataSource;
+    const adapter = this._dataSource as unknown as DataSourceAdapterLike | null | undefined;
     return adapter ? adapter._dataSource : null;
   }
 
@@ -418,6 +418,9 @@ export class DataController extends modules.Controller {
   private readonly customizeStoreLoadOptionsHandler = (e: LoadOperation): void => {
     const columnsController = this._columnsController;
     const dataSource = this._dataSource;
+    if (!dataSource) {
+      return;
+    }
     const { storeLoadOptions } = e;
 
     if (e.isCustomLoading && !storeLoadOptions.isLoadingAll) {
@@ -590,7 +593,7 @@ export class DataController extends modules.Controller {
           errors.log('W1005', this.component.NAME);
           this._applyFilter();
         } else {
-          this._currentOperationTypes = dataSource.operationTypes();
+          this._currentOperationTypes = dataSource.operationTypes() ?? null;
 
           const change: DataChange = isDefined(e)
             ? {
@@ -726,7 +729,7 @@ export class DataController extends modules.Controller {
         dataSource.load().done((...args: unknown[]) => {
           this._isPaging = false;
           result.resolve(...args);
-        }).fail(result.reject);
+        }).fail(result.reject as (...args: unknown[]) => void);
       } else {
         result.resolve();
       }
@@ -1450,7 +1453,7 @@ export class DataController extends modules.Controller {
       ? this._createDataSourceAdapter(dataSource)
       : null;
 
-    this._dataSource = dataSourceAdapter;
+    this._dataSource = dataSourceAdapter ?? undefined;
 
     if (dataSourceAdapter) {
       this._isLoading = !dataSourceAdapter.isLoaded();
@@ -1478,7 +1481,7 @@ export class DataController extends modules.Controller {
   }
 
   public pageCount(): number {
-    return this._dataSource ? this._dataSource.pageCount() as number : 1;
+    return this._dataSource ? this._dataSource.pageCount() : 1;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1525,15 +1528,15 @@ export class DataController extends modules.Controller {
           requireTotalCount: false,
         };
         dataSource.load(loadOptions)
-          .done((loadedItems: RawItemData[], extra: LoadOperation['extra']): void => {
+          .done((loadedItems: unknown, extra: unknown): void => {
             const items = this._processItems(
-              this._beforeProcessItems(loadedItems),
+              this._beforeProcessItems(loadedItems as RawItemData[]),
               { changeType: 'loadingAll' },
             );
             // @ts-expect-error DataGrid-only summary leaks into grid_core
-            d.resolve(items, extra?.summary);
+            d.resolve(items, (extra as LoadOperation['extra'])?.summary);
           })
-          .fail(d.reject);
+          .fail(d.reject as (...args: unknown[]) => void);
       } else {
         d.reject();
       }
@@ -1628,10 +1631,12 @@ export class DataController extends modules.Controller {
       this._skipProcessingPagingChange = false;
     }
 
-    const pageIndex = dataSource.pageIndex();
+    const pageIndex = dataSource.pageIndex() as unknown as number;
     this._isPaging = optionName === 'pageIndex';
 
-    const loadResult: DeferredObj<unknown> = dataSource[optionName === 'pageIndex' ? 'load' : 'reload']();
+    const loadResult: DeferredObj<unknown> = (
+      dataSource[optionName === 'pageIndex' ? 'load' : 'reload'] as () => DeferredObj<unknown>
+    )();
 
     return loadResult.done(() => {
       this._isPaging = false;
@@ -1779,19 +1784,19 @@ export class DataController extends modules.Controller {
   }
 
   public push(...args: unknown[]): unknown {
-    return this._dataSource?.push(...args);
+    return (this._dataSource?.push as ((...a: unknown[]) => unknown) | undefined)?.(...args);
   }
 
   private itemsCount(): number {
-    return (this._dataSource ? this._dataSource.itemsCount() : 0) as number;
+    return (this._dataSource ? this._dataSource.itemsCount() : 0);
   }
 
   public totalItemsCount(): number {
-    return (this._dataSource ? this._dataSource.totalItemsCount() : 0) as number;
+    return (this._dataSource ? this._dataSource.totalItemsCount() : 0);
   }
 
   public hasKnownLastPage(): boolean {
-    return (this._dataSource ? this._dataSource.hasKnownLastPage() : true) as boolean;
+    return (this._dataSource ? this._dataSource.hasKnownLastPage() : true);
   }
 
   /**
@@ -1802,7 +1807,7 @@ export class DataController extends modules.Controller {
   }
 
   public totalCount(): number {
-    return (this._dataSource ? this._dataSource.totalCount() : 0) as number;
+    return (this._dataSource ? this._dataSource.totalCount() : 0);
   }
 
   public hasLoadOperation(): boolean {

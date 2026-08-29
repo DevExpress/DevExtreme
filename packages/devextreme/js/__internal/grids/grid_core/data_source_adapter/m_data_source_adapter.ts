@@ -100,25 +100,25 @@ export default class DataSourceAdapter extends modules.Controller {
   private changingHandlerProxy!: (e: ChangingEvent) => void;
 
   public filter(): StoreLoadOptions['filter'];
-  public filter(...filterExpr: NonNullable<StoreLoadOptions['filter']>[]): void;
+  public filter(filterExpr: StoreLoadOptions['filter']): void;
   public filter(...args: unknown[]): unknown {
     return (this._dataSource.filter as (...a: unknown[]) => unknown)(...args);
   }
 
   public sort(): StoreLoadOptions['sort'];
-  public sort(...sortExpr: NonNullable<StoreLoadOptions['sort']>[]): void;
+  public sort(sortExpr: StoreLoadOptions['sort']): void;
   public sort(...args: unknown[]): unknown {
     return (this._dataSource.sort as (...a: unknown[]) => unknown)(...args);
   }
 
   public group(): StoreLoadOptions['group'];
-  public group(...groupExpr: NonNullable<StoreLoadOptions['group']>[]): void;
+  public group(groupExpr: StoreLoadOptions['group']): void;
   public group(...args: unknown[]): unknown {
     return (this._dataSource.group as (...a: unknown[]) => unknown)(...args);
   }
 
   public select(): StoreLoadOptions['select'];
-  public select(...selectExpr: NonNullable<StoreLoadOptions['select']>[]): void;
+  public select(selectExpr: StoreLoadOptions['select']): void;
   public select(...args: unknown[]): unknown {
     return (this._dataSource.select as (...a: unknown[]) => unknown)(...args);
   }
@@ -245,7 +245,7 @@ export default class DataSourceAdapter extends modules.Controller {
     }
   }
 
-  private resetCurrentTotalCount() {
+  public resetCurrentTotalCount() {
     this._currentTotalCount = 0;
     this._totalCountCorrection = 0;
   }
@@ -276,7 +276,7 @@ export default class DataSourceAdapter extends modules.Controller {
     return !isLocalOperations;
   }
 
-  private push(changes: StoreChange[], fromStore: boolean): void {
+  public push(changes: StoreChange[], fromStore: boolean): void {
     const store = this.store();
 
     if (this._needClearStoreDataCache()) {
@@ -305,7 +305,7 @@ export default class DataSourceAdapter extends modules.Controller {
     this.pushed.fire(changes);
   }
 
-  private getDataIndexGetter() {
+  public getDataIndexGetter() {
     if (!this._dataIndexGetter) {
       const store = this.store();
 
@@ -565,7 +565,7 @@ export default class DataSourceAdapter extends modules.Controller {
   /**
    * @extended: TreeLists's data_source_adapter
    */
-  protected customizeLoadResultHandler(options) {
+  public customizeLoadResultHandler(options) {
     const { loadOptions } = options;
     const localPaging = options.remoteOperations && !options.remoteOperations.paging;
     const { cachedData } = options;
@@ -774,7 +774,7 @@ export default class DataSourceAdapter extends modules.Controller {
     return this._operationTypes;
   }
 
-  private lastLoadOptions() {
+  public lastLoadOptions() {
     return this._lastLoadOptions || {};
   }
 
@@ -799,14 +799,14 @@ export default class DataSourceAdapter extends modules.Controller {
    * @extended: TreeLists's data_source_adapter
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected changeRowExpand(path?: any): any {}
+  public changeRowExpand(path?: any): any {}
 
-  private totalCount() {
+  public totalCount() {
     // eslint-disable-next-line radix
     return parseInt((this._currentTotalCount || this._dataSourceTotalCount()) + this._totalCountCorrection);
   }
 
-  private totalCountCorrection() {
+  public totalCountCorrection() {
     return this._totalCountCorrection;
   }
 
@@ -814,19 +814,19 @@ export default class DataSourceAdapter extends modules.Controller {
    * @extended: virtual_scrolling
    * @protected
    */
-  protected items(): any {}
+  public items(): any {}
 
   /**
    * @extended: virtual_scrolling
    */
-  protected itemsCount() {
+  public itemsCount() {
     return this._dataSource.items().length;
   }
 
   /**
    * @extended: TreeLists's data_source_adapter
    */
-  protected totalItemsCount() {
+  public totalItemsCount() {
     return this.totalCount();
   }
 
@@ -841,7 +841,7 @@ export default class DataSourceAdapter extends modules.Controller {
     return this._dataSource.pageSize(value);
   }
 
-  protected pageCount() {
+  public pageCount() {
     const that = this;
     const count = that.totalItemsCount() - that._totalCountCorrection;
     const pageSize = that.pageSize();
@@ -852,7 +852,7 @@ export default class DataSourceAdapter extends modules.Controller {
     return 1;
   }
 
-  protected hasKnownLastPage() {
+  public hasKnownLastPage() {
     return this._hasLastPage || this._dataSource.totalCount() >= 0;
   }
 
@@ -876,14 +876,14 @@ export default class DataSourceAdapter extends modules.Controller {
     return d;
   }
 
-  protected isCustomLoading() {
+  public isCustomLoading() {
     return !!this._isCustomLoading;
   }
 
   /**
    * @extended: virtual_scrolling
    */
-  protected load(options?): DeferredObj<unknown> {
+  public load(options?): DeferredObj<unknown> {
     const that = this;
     const dataSource = that._dataSource;
     const d = Deferred();
@@ -943,12 +943,13 @@ export default class DataSourceAdapter extends modules.Controller {
   /**
    * @extended: virtual_scrolling
    */
-  protected reload(full: boolean): DeferredObj<unknown> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public reload(full?: boolean, changesOnly?: boolean): DeferredObj<unknown> {
     const result = full ? this._dataSource.reload() : this._dataSource.load();
     return result as unknown as DeferredObj<unknown>;
   }
 
-  private getCachedStoreData() {
+  public getCachedStoreData() {
     return this._cachedStoreData;
   }
 
@@ -961,5 +962,5 @@ export default class DataSourceAdapter extends modules.Controller {
    * @extended: virtual_scrolling
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected pageIndex(pageIndex?) {}
+  public pageIndex(pageIndex?) {}
 }

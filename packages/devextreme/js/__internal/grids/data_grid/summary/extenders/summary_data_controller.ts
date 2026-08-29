@@ -43,7 +43,8 @@ export const summaryDataControllerExtender = (
 
   public getTotalSummaryValue(summaryItemName?: string | number | null): unknown {
     const summaryItemIndex = getSummaryItemIndex(this.option('summary.totalItems'), summaryItemName);
-    const aggregates = this._dataSource.totalAggregates();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const aggregates = (this._dataSource as any).totalAggregates();
 
     if (aggregates.length && summaryItemIndex > -1) {
       return aggregates[summaryItemIndex];
@@ -293,7 +294,8 @@ export const summaryDataControllerExtender = (
     this._footerItems = [];
 
     if (dataSource && summaryTotalItems?.length) {
-      const totalAggregates = dataSource.totalAggregates();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const totalAggregates = (dataSource as any).totalAggregates();
       const summaryCells = this._getSummaryCells(summaryTotalItems, totalAggregates);
 
       if (change?.repaintChangesOnly && oldSummaryCells) {

@@ -67,13 +67,13 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     }
   }
 
-  protected totalItemsCount() {
+  public totalItemsCount() {
     const totalCount = super.totalItemsCount();
 
     return totalCount > 0 && this._dataSource.group() && this._dataSource.requireTotalCount() ? totalCount + this._grouping.totalCountCorrection() : totalCount;
   }
 
-  protected itemsCount() {
+  public itemsCount() {
     return this._dataSource.group() ? this._grouping.itemsCount() || 0 : super.itemsCount.apply(this, arguments as any);
   }
 
@@ -130,7 +130,7 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     return this._grouping.refresh.apply(this._grouping, arguments);
   }
 
-  protected changeRowExpand(path) {
+  public changeRowExpand(path) {
     const that = this;
     const dataSource = that._dataSource;
 
@@ -192,7 +192,7 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     return this._grouping.handleDataLoading(options);
   }
 
-  protected customizeLoadResultHandler(options) {
+  public customizeLoadResultHandler(options) {
     return this._grouping.handleDataLoaded(options, super.customizeLoadResultHandler.bind(this));
   }
 
@@ -330,7 +330,7 @@ const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => cla
   }
 
   private collapseAll(groupIndex) {
-    const dataSource = this._dataSource;
+    const dataSource = this._dataSource as any;
     if (dataSource && dataSource.collapseAll(groupIndex)) {
       dataSource.pageIndex(0);
       dataSource.reload();
@@ -338,7 +338,7 @@ const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => cla
   }
 
   private expandAll(groupIndex) {
-    const dataSource = this._dataSource;
+    const dataSource = this._dataSource as any;
     if (dataSource && dataSource.expandAll(groupIndex)) {
       dataSource.pageIndex(0);
       dataSource.reload();
@@ -368,7 +368,7 @@ const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => cla
 
   protected _changeRowExpandCore(key) {
     const that = this;
-    const dataSource = this._dataSource;
+    const dataSource = this._dataSource as any;
 
     // @ts-expect-error
     const d = new Deferred();
@@ -383,7 +383,7 @@ const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => cla
   }
 
   private isRowExpanded(key) {
-    const dataSource = this._dataSource;
+    const dataSource = this._dataSource as any;
 
     return dataSource && dataSource.isRowExpanded(key);
   }

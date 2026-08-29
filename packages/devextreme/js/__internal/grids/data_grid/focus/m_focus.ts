@@ -88,7 +88,7 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
   }
 
   private _calculateGlobalRowIndexByGroupedData(key) {
-    const dataSource = this._dataSource;
+    const dataSource = this._dataSource as any;
     const filter = this._generateFilterByKey(key);
     // @ts-expect-error
     const deferred = new Deferred();
