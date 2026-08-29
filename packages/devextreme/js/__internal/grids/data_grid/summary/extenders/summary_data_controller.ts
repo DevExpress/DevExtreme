@@ -68,14 +68,14 @@ export const summaryDataControllerExtender = (
     return false;
   }
 
-  protected _processGroupItems(
-    items: RawItemData[],
+  protected processGroupItems(
+    items: RawItemData[] | null | undefined,
     groupsCount: number,
     options?: ProcessGroupItemsOptions & { isGroupFooterVisible?: boolean },
   ): RawItemData[] {
     const data = options?.data;
     // @ts-expect-error
-    const result = super._processGroupItems(items, groupsCount, options) as RawItemData[];
+    const result = super.processGroupItems(items, groupsCount, options) as RawItemData[];
 
     if (options) {
       options.isGroupFooterVisible ??= this._isGroupFooterVisible();
@@ -98,7 +98,7 @@ export const summaryDataControllerExtender = (
     return result;
   }
 
-  protected _processGroupItem(
+  protected processGroupItem(
     groupItem: SummaryGroupItem,
     options: ItemProcessingOptions<Column> & {
       summaryGroupItems?: SummaryGroupItemOption[];

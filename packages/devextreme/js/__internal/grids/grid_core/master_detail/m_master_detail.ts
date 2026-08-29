@@ -104,13 +104,13 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
     return [rowIndex, rowIndex + 1];
   }
 
-  private _changeRowExpandCore(key) {
+  private changeRowExpandCore(key) {
     const that = this;
 
     let result;
     if (Array.isArray(key)) {
       // @ts-expect-error
-      result = super._changeRowExpandCore.apply(that, arguments);
+      result = super.changeRowExpandCore.apply(that, arguments);
     } else {
       const expandIndex = gridCoreUtils.getIndexByKey(key, that._expandedItems);
       if (expandIndex >= 0) {
