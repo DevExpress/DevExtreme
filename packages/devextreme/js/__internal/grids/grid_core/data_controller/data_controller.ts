@@ -66,7 +66,7 @@ import {
 import { generateRowValues } from './utils/row_values';
 
 export class DataController extends modules.Controller {
-  public _dataSource?: DataSourceAdapter;
+  public _dataSource?: DataSourceAdapter | null;
 
   protected isSharedDataSource?: boolean;
 
@@ -1453,7 +1453,7 @@ export class DataController extends modules.Controller {
       ? this._createDataSourceAdapter(dataSource)
       : null;
 
-    this._dataSource = dataSourceAdapter ?? undefined;
+    this._dataSource = dataSourceAdapter;
 
     if (dataSourceAdapter) {
       this._isLoading = !dataSourceAdapter.isLoaded();
