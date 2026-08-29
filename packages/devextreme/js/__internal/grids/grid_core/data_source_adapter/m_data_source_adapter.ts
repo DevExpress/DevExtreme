@@ -149,6 +149,14 @@ export default class DataSourceAdapter extends modules.Controller {
     return this._dataSource.isLoading();
   }
 
+  public beginLoading(): void {
+    this._dataSource.beginLoading();
+  }
+
+  public endLoading(): void {
+    this._dataSource.endLoading();
+  }
+
   public loadOptions(): StoreLoadOptions {
     return this._dataSource.loadOptions();
   }
