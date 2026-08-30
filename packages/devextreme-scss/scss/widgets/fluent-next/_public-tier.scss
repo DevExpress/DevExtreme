@@ -365,7 +365,8 @@
 
 .dx-scheduler,
 .dx-scheduler-appointment-popup,
-.dx-scheduler-appointment-tooltip-wrapper {
+.dx-scheduler-appointment-tooltip-wrapper,
+.dx-scheduler-overlay-panel {
   @include schedulerPublic.publish();
 }
 
@@ -430,6 +431,7 @@
 
 .dx-cardview,
 .dx-cardview-header-item,
+.dx-cardview-header-item-sort-indicator,
 .dx-cardview-column-chooser-list,
 .dx-cardview-column-chooser-plain {
   @include cardViewPublic.publish();

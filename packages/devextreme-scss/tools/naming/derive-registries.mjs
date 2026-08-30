@@ -237,6 +237,14 @@ const OVERRIDES = {
      */
     'tree-view': ['.dx-treeview', '.dx-sortable-dragging'],
     'card-view': ['.dx-cardview', '.dx-cardview-header-item',
+      /*
+       * The drop indicator of the header panel is a dxSortable placeholder: JS builds it in the
+       * VIEWPORT and puts the cardView class on it, so `.dx-cardview-header-item-sort-indicator`
+       * paints an element no widget root contains. Legacy paints it with literals and before the
+       * tier it read `--dxds-*` from `:root` — both always resolved; the tier names did not, and
+       * the 4px indicator disappeared from six screenshots.
+       */
+      '.dx-cardview-header-item-sort-indicator',
       // the column chooser is a popup: base paints its empty message and select-all item with
       // cardView's parameters
       '.dx-cardview-column-chooser-list', '.dx-cardview-column-chooser-plain'],
@@ -272,7 +280,10 @@ const OVERRIDES = {
      * fileManager. Each class sits on the overlay WRAPPER, so it is an ancestor of the painted box.
      */
     scheduler: ['.dx-scheduler', '.dx-scheduler-appointment-popup',
-      '.dx-scheduler-appointment-tooltip-wrapper'],
+      '.dx-scheduler-appointment-tooltip-wrapper',
+      // the appointment tooltip and the collector render inside .dx-scheduler-overlay-panel, outside
+      // the widget: without it the tooltip lost its marker, its title weight and its paddings
+      '.dx-scheduler-overlay-panel'],
     'file-manager': ['.dx-filemanager', '.dx-filemanager-dialog-popup'],
     // the widget root of both exists only in JS; these are the styled roots that contain the boxes
     map: ['.dx-map-container'],

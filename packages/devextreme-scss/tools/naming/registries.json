@@ -497,7 +497,8 @@
     "scheduler": [
       ".dx-scheduler",
       ".dx-scheduler-appointment-popup",
-      ".dx-scheduler-appointment-tooltip-wrapper"
+      ".dx-scheduler-appointment-tooltip-wrapper",
+      ".dx-scheduler-overlay-panel"
     ],
     "file-manager": [
       ".dx-filemanager",
@@ -554,6 +555,7 @@
     "card-view": [
       ".dx-cardview",
       ".dx-cardview-header-item",
+      ".dx-cardview-header-item-sort-indicator",
       ".dx-cardview-column-chooser-list",
       ".dx-cardview-column-chooser-plain"
     ],
