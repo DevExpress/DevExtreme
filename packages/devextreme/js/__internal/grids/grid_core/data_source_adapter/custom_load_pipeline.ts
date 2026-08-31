@@ -9,10 +9,8 @@ import type { LoadOperation, RawItemData } from './types';
 
 export type CustomLoadOptions = StoreLoadOptions & { isLoadingAll?: boolean };
 
-// TODO:
-// - use options.delay instead of getLoadingTimeout
-// - modernize the code (remove each, codes-style)
-// - remove proxy methods
+export type CustomLoadResult = RawItemData[] & LoadOperation['extra'];
+
 export class CustomLoadPipeline {
   private customLoading = false;
 
@@ -25,7 +23,7 @@ export class CustomLoadPipeline {
     private readonly customizeLoadResult: (operation: LoadOperation) => void,
   ) {}
 
-  public load(options: CustomLoadOptions): DeferredObj<unknown> {
+  public load(options: CustomLoadOptions): DeferredObj<CustomLoadResult> {
     const { dataSource } = this;
     const d = Deferred();
     const store = dataSource.store();
@@ -89,10 +87,10 @@ export class CustomLoadPipeline {
       .always(() => {
         this.loadingAll = false;
       })
-      .promise() as unknown as DeferredObj<unknown>;
+      .promise() as unknown as DeferredObj<CustomLoadResult>;
   }
 
-  public loadAll(): DeferredObj<unknown> {
+  public loadAll(): DeferredObj<CustomLoadResult> {
     return this.load({
       ...this.dataSource.loadOptions(),
       isLoadingAll: true,
@@ -106,7 +104,7 @@ export class CustomLoadPipeline {
   public processLoadedData(
     data: RawItemData[],
     loadOptions: StoreLoadOptions,
-  ): DeferredObj<unknown> {
+  ): DeferredObj<CustomLoadResult> {
     const d = Deferred();
     const operation: LoadOperation = {
       data,
@@ -122,7 +120,7 @@ export class CustomLoadPipeline {
       .done((loadedData: unknown) => { d.resolve(loadedData, operation.extra); })
       .fail((...args: unknown[]) => { d.reject(...args); });
 
-    return d;
+    return d as unknown as DeferredObj<CustomLoadResult>;
   }
 
   public loadFromStore(loadOptions: StoreLoadOptions): DeferredObj<unknown> {

@@ -15,7 +15,7 @@ import type { BeforePushEvent } from '@ts/data/types';
 
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
-import type { CustomLoadOptions } from './custom_load_pipeline';
+import type { CustomLoadOptions, CustomLoadResult } from './custom_load_pipeline';
 import { CustomLoadPipeline } from './custom_load_pipeline';
 import {
   calculateOperationTypes,
@@ -825,14 +825,14 @@ export default class DataSourceAdapter extends modules.Controller {
     return this._dataSource.load() as unknown as DeferredObj<unknown>;
   }
 
-  public loadAll(): DeferredObj<unknown> {
+  public loadAll(): DeferredObj<CustomLoadResult> {
     return this._customLoadPipeline.loadAll();
   }
 
   public processLoadedData(
     data: RawItemData[],
     loadOptions: StoreLoadOptions,
-  ): DeferredObj<unknown> {
+  ): DeferredObj<CustomLoadResult> {
     return this._customLoadPipeline.processLoadedData(data, loadOptions);
   }
 
