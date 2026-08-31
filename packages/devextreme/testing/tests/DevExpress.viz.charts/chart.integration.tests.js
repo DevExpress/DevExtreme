@@ -5076,6 +5076,17 @@ QUnit.module('React async templates rendering', {
 });
 
 QUnit.module('encodeHtml', $.extend({}, moduleSetup, {
+    beforeEach: function() {
+        moduleSetup.beforeEach.call(this);
+        // QUnit keeps the fixture at left: -10000px, and the tooltip is not drawn
+        // when its anchor point is outside the canvas - move the fixture into the viewport
+        this.fixtureCss = $('#qunit-fixture').css(['left', 'top']);
+        $('#qunit-fixture').css({ left: 0, top: 0 });
+    },
+    afterEach: function() {
+        $('#qunit-fixture').css(this.fixtureCss);
+        moduleSetup.afterEach.call(this);
+    },
     createChartWithMarkupLikeTexts: function(encodeHtml) {
         return this.createChart({
             encodeHtml,
@@ -5089,40 +5100,39 @@ QUnit.module('encodeHtml', $.extend({}, moduleSetup, {
             }
         });
     },
-    getTexts: function(selector) {
-        return this.$container.find(selector + ' text').map(function() {
-            return $(this).text();
-        }).get();
-    },
-    getTooltipTextForFirstPoint: function(assert, chart) {
-        const tooltip = chart._tooltip;
-        const point = chart.getAllSeries()[0].getAllPoints()[0];
+    checkTexts: function(assert, chart, expected) {
+        function getTexts($root) {
+            return $root.find('text').map(function() {
+                return $(this).text();
+            }).get();
+        }
 
-        sinon.stub(tooltip, '_getCanvas').returns({ left: 0, top: 0, width: 1000, height: 1000, right: 0, bottom: 0 });
+        chart.getAllSeries()[0].getAllPoints()[0].showTooltip();
 
-        const shown = tooltip.show(point.getTooltipFormatObject(tooltip), { x: 100, y: 100, offset: 0 }, {});
-
-        tooltip._getCanvas.restore();
-        assert.ok(shown, 'tooltip is shown');
-
-        return $(tooltip._text.element).text();
+        assert.deepEqual(getTexts(this.$container.find('.dxc-arg-elements')), expected.axisLabels, 'argument axis labels');
+        assert.deepEqual(getTexts(this.$container.find('.dxc-legend')), expected.legend, 'legend');
+        assert.strictEqual(getTexts($('.dxc-tooltip')).join(''), expected.tooltip, 'tooltip');
     }
 }));
 
 QUnit.test('Markup-like texts are treated as html by default (T1334517)', function(assert) {
     const chart = this.createChartWithMarkupLikeTexts(undefined);
 
-    assert.deepEqual(this.getTexts('.dxc-arg-elements'), ['', 'B'], 'argument axis labels');
-    assert.deepEqual(this.getTexts('.dxc-legend'), [' | Total'], 'legend');
-    assert.strictEqual(this.getTooltipTextForFirstPoint(assert, chart), ' | Total - 850', 'tooltip');
+    this.checkTexts(assert, chart, {
+        axisLabels: ['', 'B'],
+        legend: [' | Total'],
+        tooltip: ' | Total - 850'
+    });
 });
 
 QUnit.test('Markup-like texts are rendered as is when encodeHtml is enabled (T1334517)', function(assert) {
     const chart = this.createChartWithMarkupLikeTexts(true);
 
-    assert.deepEqual(this.getTexts('.dxc-arg-elements'), ['<A>', 'B'], 'argument axis labels');
-    assert.deepEqual(this.getTexts('.dxc-legend'), ['<North America> | Total'], 'legend');
-    assert.strictEqual(this.getTooltipTextForFirstPoint(assert, chart), '<North America> | Total - 850', 'tooltip');
+    this.checkTexts(assert, chart, {
+        axisLabels: ['<A>', 'B'],
+        legend: ['<North America> | Total'],
+        tooltip: '<North America> | Total - 850'
+    });
 });
 
 QUnit.test('encodeHtml is applied on option changing (T1334517)', function(assert) {
@@ -5130,7 +5140,9 @@ QUnit.test('encodeHtml is applied on option changing (T1334517)', function(asser
 
     chart.option('encodeHtml', true);
 
-    assert.deepEqual(this.getTexts('.dxc-arg-elements'), ['<A>', 'B'], 'argument axis labels');
-    assert.deepEqual(this.getTexts('.dxc-legend'), ['<North America> | Total'], 'legend');
-    assert.strictEqual(this.getTooltipTextForFirstPoint(assert, chart), '<North America> | Total - 850', 'tooltip');
+    this.checkTexts(assert, chart, {
+        axisLabels: ['<A>', 'B'],
+        legend: ['<North America> | Total'],
+        tooltip: '<North America> | Total - 850'
+    });
 });
