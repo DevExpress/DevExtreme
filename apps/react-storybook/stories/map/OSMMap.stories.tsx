@@ -7,6 +7,7 @@ import 'ol/ol.css';
 import { fromLonLat, transformExtent } from 'ol/proj.js';
 import View from 'ol/View.js';
 import React from 'react';
+import Button from 'devextreme-react/button';
 import Map, { type MapRef } from 'devextreme-react/map';
 import type {
     MapLocation,
@@ -17,15 +18,45 @@ import 'devextreme/ui/map/openlayers';
 
 const CENTER = { lat: 40.7484, lng: -73.9857 };
 const CENTRAL_PARK_CENTER = { lat: 40.7829, lng: -73.9654 };
+const DEFAULT_MARKER_LOCATION = 'Empire State Building';
+const CUSTOM_MARKER_LOCATION = 'Bryant Park';
+const ADDED_MARKER_LOCATION = 'Times Square';
 const EXTENT: [number, number, number, number] = [-74.08, 40.67, -73.85, 40.88];
 const TILE_SERVER = {
     url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
     attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     maxZoom: 19,
 };
-const PROVIDER_CONFIG = { tileServer: () => TILE_SERVER };
+const MARKER_LOCATIONS: Record<string, MapLocation> = {
+    [DEFAULT_MARKER_LOCATION]: CENTER,
+    [CUSTOM_MARKER_LOCATION]: { lat: 40.7536, lng: -73.9832 },
+    [ADDED_MARKER_LOCATION]: { lat: 40.758, lng: -73.9855 },
+};
+const PROVIDER_CONFIG = {
+    calculateLocation: (query: string): Promise<MapLocation | undefined> => (
+        Promise.resolve(MARKER_LOCATIONS[query])
+    ),
+    tileServer: () => TILE_SERVER,
+};
+const DEFAULT_MARKER = { location: DEFAULT_MARKER_LOCATION };
+const CUSTOM_MARKER = {
+    location: CUSTOM_MARKER_LOCATION,
+    iconSrc: 'images/maps/map-marker.png',
+};
+const ADDED_MARKER = { location: ADDED_MARKER_LOCATION };
+const STORY_STYLE: React.CSSProperties = {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 8,
+    padding: 8,
+};
+const TOOLBAR_STYLE: React.CSSProperties = {
+    display: 'flex',
+    gap: 8,
+};
 
 interface OsmStoryArgs {
+    autoAdjust: boolean;
     centerOnCentralPark: boolean;
     controls: boolean;
     disabled: boolean;
@@ -61,6 +92,7 @@ const configureOpenLayersMap = (
 };
 
 const OsmMapStory = ({
+    autoAdjust,
     centerOnCentralPark,
     controls,
     disabled,
@@ -71,29 +103,68 @@ const OsmMapStory = ({
     zoom,
 }: OsmMapStoryProps): React.ReactElement => {
     const mapRef = React.useRef<MapRef>(null);
+    const [markerAdded, setMarkerAdded] = React.useState(false);
+    const markers = React.useMemo(() => [DEFAULT_MARKER, CUSTOM_MARKER], []);
     const center = centerOnCentralPark ? CENTRAL_PARK_CENTER : CENTER;
 
     React.useEffect(() => {
         mapRef.current?.instance()?.option('center', center);
     }, [center]);
 
+    const addMarker = (): void => {
+        const map = mapRef.current?.instance();
+        if (!map || markerAdded) {
+            return;
+        }
+
+        setMarkerAdded(true);
+        void map.addMarker(ADDED_MARKER).then(undefined, () => setMarkerAdded(false));
+    };
+
+    const removeMarker = (): void => {
+        const map = mapRef.current?.instance();
+        if (!map || !markerAdded) {
+            return;
+        }
+
+        setMarkerAdded(false);
+        void map.removeMarker(ADDED_MARKER).then(undefined, () => setMarkerAdded(true));
+    };
+
     return (
-        <Map
-            ref={mapRef}
-            provider="osm"
-            providerConfig={PROVIDER_CONFIG}
-            defaultCenter={CENTER}
-            controls={controls}
-            disabled={disabled}
-            focusStateEnabled={focusStateEnabled}
-            rtlEnabled={rtlEnabled}
-            type={type}
-            zoom={zoom}
-            height={520}
-            width="100%"
-            onReady={(event) => configureOpenLayersMap(event, center, zoom)}
-            onZoomChange={(value) => updateArgs({ zoom: value })}
-        />
+        <div style={STORY_STYLE}>
+            <div style={TOOLBAR_STYLE}>
+                <Button
+                    text="Add Marker"
+                    type="default"
+                    disabled={markerAdded}
+                    onClick={addMarker}
+                />
+                <Button
+                    text="Remove Marker"
+                    disabled={!markerAdded}
+                    onClick={removeMarker}
+                />
+            </div>
+            <Map
+                ref={mapRef}
+                provider="osm"
+                providerConfig={PROVIDER_CONFIG}
+                autoAdjust={autoAdjust}
+                defaultCenter={CENTER}
+                controls={controls}
+                disabled={disabled}
+                focusStateEnabled={focusStateEnabled}
+                markers={markers}
+                rtlEnabled={rtlEnabled}
+                type={type}
+                zoom={zoom}
+                height={520}
+                width="100%"
+                onReady={(event) => configureOpenLayersMap(event, center, zoom)}
+                onZoomChange={(value) => updateArgs({ zoom: value })}
+            />
+        </div>
     );
 };
 
@@ -109,6 +180,10 @@ const meta: Meta<OsmStoryArgs> = {
         layout: 'fullscreen',
     },
     argTypes: {
+        autoAdjust: {
+            control: 'boolean',
+            description: 'Automatically adjusts the map viewport when markers change.',
+        },
         centerOnCentralPark: {
             control: 'boolean',
             description: 'Switches the map center between the default New York location and Central Park.',
@@ -148,6 +223,7 @@ type Story = StoryObj<OsmStoryArgs>;
 
 export const Default: Story = {
     args: {
+        autoAdjust: false,
         centerOnCentralPark: false,
         controls: true,
         disabled: false,
