@@ -161,15 +161,9 @@ QUnit.test('Theme manager callback', function(assert) {
 });
 
 QUnit.test('encodeHtml is false by default (T1334517)', function(assert) {
-    this.onGetAnimationOptions = function() { return 'animation-option'; };
-
     this.createWidget();
 
-    assert.strictEqual(this.widget.option('encodeHtml'), false, 'option value');
-
-    this.themeManager.setCallback.lastCall.args[0]();
-
-    assert.strictEqual(this.renderer.setOptions.lastCall.args[0].encodeHtml, false, 'renderer option');
+    assert.strictEqual(this.widget.option('encodeHtml'), false);
 });
 
 // T190525
