@@ -122,6 +122,51 @@ StyleDictionary.registerPreprocessor({
   },
 });
 
+/*
+ * WORKAROUND for a bug in @devexpress/design-tokens-internal, present since 262.13.0: that release
+ * dropped `color.shadow-none` from semantic/colors/*, but semantic/box-shadow/{fluent,material}.json
+ * still reference it from every layer of `box-shadow.none`, so Style Dictionary fails the whole build
+ * on three unresolvable references. The value the token carried up to 262.12.0 is substituted here,
+ * which keeps the output identical to that release: `box-shadow.none` is all-zero geometry in a fully
+ * transparent colour.
+ *
+ * Remove this once the package defines the token again or stops referencing it. The other two
+ * preprocessors above patch the same class of export defect.
+ */
+const REMOVED_REFERENCES = new Map([
+  ['color.shadow-none', 'rgba(0,0,0,0)'],
+]);
+
+StyleDictionary.registerPreprocessor({
+  name: 'dx/substitute-removed-references',
+  preprocessor: (tokens) => {
+    const visit = (node) => {
+      if (typeof node !== 'object' || node === null) {
+        return;
+      }
+
+      Object.entries(node).forEach(([key, value]) => {
+        if (typeof value === 'string') {
+          REMOVED_REFERENCES.forEach((replacement, refPath) => {
+            if (value.includes(`{${refPath}}`) && !hasTokenAtPath(tokens, refPath)) {
+              console.warn(`[design-tokens] Substituting removed reference {${refPath}} -> ${replacement}`);
+              node[key] = value.replaceAll(`{${refPath}}`, replacement);
+            }
+          });
+
+          return;
+        }
+
+        visit(value);
+      });
+    };
+
+    visit(tokens);
+
+    return tokens;
+  },
+});
+
 const dirname = import.meta.dirname || path.dirname(url.fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
 const tokensDir = path.dirname(require.resolve('@devexpress/design-tokens-internal/package.json'));
@@ -230,7 +275,12 @@ const createConfig = (name, files, platformFiles) => ({
   theme: THEME_NAME,
   name,
   source: files.map((src) => path.resolve(tokensDir, `tokens/${src}.json`)),
-  preprocessors: ['dx/fix-dangling-size-references', 'dx/fix-composite-shadow-references', 'tokens-studio'],
+  preprocessors: [
+    'dx/fix-dangling-size-references',
+    'dx/fix-composite-shadow-references',
+    'dx/substitute-removed-references',
+    'tokens-studio',
+  ],
   expand: customExpand,
   platforms: getPlatformSettings(platformFiles),
 });
