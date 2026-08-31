@@ -115,7 +115,7 @@ export const editingDataControllerExtender = (
     return super.isSameRowState(item1, item2);
   }
 
-  protected _getChangedColumnIndices(
+  protected getChangedColumnIndices(
     oldItem: ProcessedItem,
     newItem: ProcessedItem,
     visibleRowIndex: number,
@@ -125,7 +125,7 @@ export const editingDataControllerExtender = (
       return undefined;
     }
 
-    return super._getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate);
+    return super.getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate);
   }
 
   protected _isCellChanged(
