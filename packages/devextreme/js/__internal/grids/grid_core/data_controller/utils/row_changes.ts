@@ -3,7 +3,7 @@ import { equalByValue } from '@js/core/utils/common';
 import type { OperationTypes } from '../../data_source_adapter/types';
 import type {
   ChangedRows, DataChange, ItemChange, ProcessedItem, RowIndexByKey,
-  RowOperation, UpdateChange, UpdateRowChange,
+  RowOperation, RowOperationOptions, UpdateChange, UpdateRowChange,
 } from '../types';
 
 export function isSameItem(
@@ -178,19 +178,11 @@ export function initChangedRows(): ChangedRows {
   };
 }
 
-function attachChangedRows(change: UpdateChange, changedRows: ChangedRows): void {
+export function attachChangedRows(change: UpdateChange, changedRows: ChangedRows): void {
   change.rowIndices = changedRows.rowIndices;
   change.columnIndices = changedRows.columnIndices;
   change.changeTypes = changedRows.changeTypes;
   change.items = changedRows.items;
-}
-
-export function resetChangedRows(change: UpdateChange): ChangedRows {
-  const changedRows = initChangedRows();
-
-  attachChangedRows(change, changedRows);
-
-  return changedRows;
 }
 
 function toChangedRows(updateRowChanges: UpdateRowChange[]): ChangedRows {
@@ -256,6 +248,101 @@ export function partialUpdateRow(
   }
 
   oldItem.update?.(newItem);
+}
+
+function updateRow(rowIndex: number, options: RowOperationOptions): UpdateRowChange {
+  const {
+    items, newItems, rowIndexDelta, getUpdatedColumnIndices,
+  } = options;
+  const visibleRowIndex = rowIndex - rowIndexDelta;
+  const oldItem = items[rowIndex];
+  const newItem = newItems[rowIndex];
+
+  items[rowIndex] = newItem;
+
+  if (oldItem.visible !== newItem.visible) {
+    return {
+      changeType: 'update',
+      rowIndex: visibleRowIndex,
+      item: { visible: newItem.visible } as ProcessedItem,
+    };
+  }
+
+  const columnIndices = getUpdatedColumnIndices?.(oldItem, newItem, visibleRowIndex);
+
+  partialUpdateRow(oldItem, newItem, columnIndices);
+
+  return {
+    changeType: 'update',
+    rowIndex: visibleRowIndex,
+    item: newItem,
+    columnIndices,
+  };
+}
+
+function applyRowOperation(
+  rowIndex: number,
+  options: RowOperationOptions,
+): UpdateRowChange | undefined {
+  const { items, newItems, rowIndexDelta } = options;
+  const visibleRowIndex = rowIndex - rowIndexDelta;
+  const item = newItems[rowIndex];
+
+  if (item) {
+    item.rowIndex = rowIndex;
+  }
+
+  switch (getRowOperation(items, newItems, rowIndex)) {
+    case 'update':
+      return updateRow(rowIndex, options);
+    case 'insert':
+      items.splice(rowIndex, 0, item);
+      return { changeType: 'insert', rowIndex: visibleRowIndex, item };
+    case 'remove':
+      items.splice(rowIndex, 1);
+      return { changeType: 'remove', rowIndex: visibleRowIndex, item };
+    case 'replace':
+      items[rowIndex] = item;
+      return { changeType: 'update', rowIndex: visibleRowIndex, item };
+    default:
+      return undefined;
+  }
+}
+
+export function applyRowOperations(
+  rowIndices: number[],
+  options: RowOperationOptions,
+): ChangedRows {
+  const changedRows = initChangedRows();
+  let prevRowIndex = -1;
+  let rowIndexCorrection = 0;
+
+  rowIndices.forEach((changedRowIndex) => {
+    const rowIndex = changedRowIndex + rowIndexCorrection + options.rowIndexDelta;
+
+    if (prevRowIndex === rowIndex) {
+      return;
+    }
+
+    prevRowIndex = rowIndex;
+
+    const changedRow = applyRowOperation(rowIndex, options);
+
+    if (!changedRow) {
+      return;
+    }
+
+    pushChangedRow(changedRows, changedRow);
+
+    if (changedRow.changeType === 'insert') {
+      rowIndexCorrection += 1;
+    } else if (changedRow.changeType === 'remove') {
+      rowIndexCorrection -= 1;
+      prevRowIndex = -1;
+    }
+  });
+
+  return changedRows;
 }
 
 /**

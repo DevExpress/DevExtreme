@@ -35,6 +35,7 @@ import type {
   DataFilter,
   DataSourceAdapterLike,
   GeneratedItem,
+  GetUpdatedColumnIndices,
   ItemChange,
   ItemProcessingOptions,
   PagingChanges,
@@ -52,17 +53,16 @@ import type {
 import { resolvePaginate, syncPaging } from './utils/paging';
 import { getRefreshOptions } from './utils/refresh';
 import {
+  applyRowOperations,
+  attachChangedRows,
   canDiffColumns,
   convertToUpdateChange,
   getChangedRowIndices,
   getDataRowIndex,
   getGroupColumnIndices,
   getRowKey,
-  getRowOperation,
   indexRowsByKey,
   partialUpdateRow,
-  pushChangedRow,
-  resetChangedRows,
   resolveRepaintChangesOnly,
   syncRowsAfterChange,
   updateKeptRows,
@@ -849,73 +849,10 @@ export class DataController extends modules.Controller {
     this._items = (change.items ?? []).slice();
   }
 
-  private updateRow(
-    newItem: ProcessedItem,
-    rowIndex: number,
-    visibleRowIndex: number,
-    isPartialUpdate: boolean,
-  ): UpdateRowChange {
-    const oldItem = this._items[rowIndex];
-
-    this._items[rowIndex] = newItem;
-
-    if (oldItem.visible !== newItem.visible) {
-      return {
-        changeType: 'update',
-        rowIndex: visibleRowIndex,
-        item: { visible: newItem.visible } as ProcessedItem,
-      };
-    }
-
-    const columnIndices = isPartialUpdate
-      ? this.getUpdatedColumnIndices(oldItem, newItem, visibleRowIndex)
-      : undefined;
-
-    partialUpdateRow(oldItem, newItem, columnIndices);
-
-    return {
-      changeType: 'update',
-      rowIndex: visibleRowIndex,
-      item: newItem,
-      columnIndices,
-    };
-  }
-
-  private applyRowOperation(
-    newItems: ProcessedItem[],
-    rowIndex: number,
-    rowIndexDelta: number,
-    isPartialUpdate: boolean,
-  ): UpdateRowChange | undefined {
-    const visibleRowIndex = rowIndex - rowIndexDelta;
-    const item = newItems[rowIndex];
-
-    if (item) {
-      item.rowIndex = rowIndex;
-    }
-
-    switch (getRowOperation(this._items, newItems, rowIndex)) {
-      case 'update':
-        return this.updateRow(item, rowIndex, visibleRowIndex, isPartialUpdate);
-      case 'insert':
-        this._items.splice(rowIndex, 0, item);
-        return { changeType: 'insert', rowIndex: visibleRowIndex, item };
-      case 'remove':
-        this._items.splice(rowIndex, 1);
-        return { changeType: 'remove', rowIndex: visibleRowIndex, item };
-      case 'replace':
-        this._items[rowIndex] = item;
-        return { changeType: 'update', rowIndex: visibleRowIndex, item };
-      default:
-        return undefined;
-    }
-  }
-
   /**
    * @extended: editing
    */
   protected applyChangeUpdate(change: UpdateChange): void {
-    const newItems = change.items ?? [];
     const rowIndexDelta = this.getRowIndexDelta();
     const isPartialUpdate = Boolean(this.option('repaintChangesOnly')) && !change.isFullUpdate;
     const rowIndices = getChangedRowIndices(
@@ -923,34 +860,15 @@ export class DataController extends modules.Controller {
       rowIndexDelta,
       change.allowInvisibleRowIndices,
     );
-    const changedRows = resetChangedRows(change);
-    let prevRowIndex = -1;
-    let rowIndexCorrection = 0;
 
-    rowIndices.forEach((changedRowIndex: number) => {
-      const rowIndex = changedRowIndex + rowIndexCorrection + rowIndexDelta;
-
-      if (prevRowIndex === rowIndex) {
-        return;
-      }
-
-      prevRowIndex = rowIndex;
-
-      const changedRow = this.applyRowOperation(newItems, rowIndex, rowIndexDelta, isPartialUpdate);
-
-      if (!changedRow) {
-        return;
-      }
-
-      pushChangedRow(changedRows, changedRow);
-
-      if (changedRow.changeType === 'insert') {
-        rowIndexCorrection += 1;
-      } else if (changedRow.changeType === 'remove') {
-        rowIndexCorrection -= 1;
-        prevRowIndex = -1;
-      }
+    const changedRows = applyRowOperations(rowIndices, {
+      items: this._items,
+      newItems: change.items ?? [],
+      rowIndexDelta,
+      getUpdatedColumnIndices: isPartialUpdate ? this.getUpdatedColumnIndices : undefined,
     });
+
+    attachChangedRows(change, changedRows);
   }
 
   /**
@@ -1018,12 +936,12 @@ export class DataController extends modules.Controller {
     return columnIndices;
   }
 
-  private getUpdatedColumnIndices(
+  private readonly getUpdatedColumnIndices: GetUpdatedColumnIndices = (
     oldItem: ProcessedItem,
     newItem: ProcessedItem,
     visibleRowIndex: number,
     isLiveUpdate?: boolean,
-  ): number[] | undefined {
+  ) => {
     const changedColumnIndices = this.getChangedColumnIndices(
       oldItem,
       newItem,
@@ -1033,7 +951,7 @@ export class DataController extends modules.Controller {
     const hasDataRowTemplate = !!this.option('dataRowTemplate');
 
     return changedColumnIndices?.length && hasDataRowTemplate ? undefined : changedColumnIndices;
-  }
+  };
 
   /**
    * @extended: editing, grouping (DataGrid), summary (DataGrid), treelist

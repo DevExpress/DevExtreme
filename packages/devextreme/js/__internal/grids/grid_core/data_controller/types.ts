@@ -134,6 +134,20 @@ export interface UpdateRowChange {
   columnIndices?: number[];
 }
 
+export type GetUpdatedColumnIndices = (
+  oldItem: ProcessedItem,
+  newItem: ProcessedItem,
+  visibleRowIndex: number,
+  isLiveUpdate?: boolean,
+) => number[] | undefined;
+
+export interface RowOperationOptions {
+  items: ProcessedItem[];
+  newItems: ProcessedItem[];
+  rowIndexDelta: number;
+  getUpdatedColumnIndices?: GetUpdatedColumnIndices;
+}
+
 export type RowIndexByKey = Record<string, number | undefined>;
 
 export type RowIndexCorrection = (rowIndex: number) => number;

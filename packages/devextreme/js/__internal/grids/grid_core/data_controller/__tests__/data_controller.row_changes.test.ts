@@ -7,6 +7,7 @@ import {
   jest,
 } from '@jest/globals';
 import { logger } from '@js/core/utils/console';
+import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import { refreshRow } from '@ts/grids/grid_core/__tests__/__mock__/helpers/row_changes';
 import {
   afterTest,
@@ -24,6 +25,8 @@ type CallLog = string[];
 declare class ExposedDataController extends DataController {
   public _items: ProcessedItem[];
 
+  public applyChangeUpdate: (change: UpdateChange) => void;
+
   public applyChangesOnly: (change: DataChange) => void;
 }
 
@@ -32,11 +35,14 @@ interface TestContext {
   log: CallLog;
 }
 
-const createGridWithCallLog = async (): Promise<TestContext> => {
+const createGridWithCallLog = async (
+  options: DataGridProperties = {},
+): Promise<TestContext> => {
   const { instance } = await createDataGrid({
     dataSource: [],
     columns: ['name', 'age'],
     repaintChangesOnly: true,
+    ...options,
   });
 
   return {
@@ -72,6 +78,12 @@ const createNewRow = (key: number, values: unknown[]): ProcessedItem => ({
 const createRefreshChange = (items: ProcessedItem[]): DataChange => ({
   changeType: 'refresh',
   repaintChangesOnly: true,
+  items,
+});
+
+const createUpdateChange = (items: ProcessedItem[]): UpdateChange => ({
+  changeType: 'update',
+  rowIndices: [0],
   items,
 });
 
@@ -296,6 +308,54 @@ describe('DataController row changes', () => {
 
         loggedError.mockRestore();
       });
+    });
+  });
+
+  describe('applyChangeUpdate', () => {
+    const updateRow = async (
+      options: DataGridProperties = {},
+      change: Partial<UpdateChange> = {},
+    ): Promise<TestContext & { change: UpdateChange }> => {
+      const { dataController, log } = await createGridWithCallLog(options);
+
+      dataController._items = [createOldRow(1, ['Alex', 15], log)];
+
+      const updateChange = {
+        ...createUpdateChange([createNewRow(1, ['Alex', 16])]),
+        ...change,
+      };
+      dataController.applyChangeUpdate(updateChange);
+
+      return { dataController, log, change: updateChange };
+    };
+
+    it('should repaint the changed cells only', async () => {
+      const { change, log } = await updateRow();
+
+      expect(change.rowIndices).toEqual([0]);
+      expect(change.changeTypes).toEqual(['update']);
+      expect(change.columnIndices).toEqual([[1]]);
+      expect(log).toEqual(['cell 1.0 replaceRow', 'row 1']);
+    });
+
+    it('should repaint the whole row when the changes are not tracked', async () => {
+      const { change, log } = await updateRow({ repaintChangesOnly: false });
+
+      expect(change.columnIndices).toEqual([undefined]);
+      expect(log).toEqual([]);
+    });
+
+    it('should repaint the whole row on a full update', async () => {
+      const { change, log } = await updateRow({}, { isFullUpdate: true });
+
+      expect(change.columnIndices).toEqual([undefined]);
+      expect(log).toEqual([]);
+    });
+
+    it('should repaint the whole row when a row template draws it', async () => {
+      const { change } = await updateRow({ dataRowTemplate: (): void => {} });
+
+      expect(change.columnIndices).toEqual([undefined]);
     });
   });
 
