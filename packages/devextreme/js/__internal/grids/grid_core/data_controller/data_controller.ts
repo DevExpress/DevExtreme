@@ -20,7 +20,7 @@ import type {
   ChangedEvent, DataSourceAdapterProvider, LoadOperation, OperationTypes, RawItemData,
 } from '@ts/grids/grid_core/data_source_adapter/types';
 import { isLocalStore } from '@ts/grids/grid_core/data_source_adapter/utils/store';
-import type { FilterSyncController } from '@ts/grids/grid_core/filter/m_filter_sync';
+import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/m_filter_sync';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import modules from '@ts/grids/grid_core/m_modules';
 import type {
