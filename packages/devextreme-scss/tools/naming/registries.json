@@ -182,7 +182,8 @@
     "typography"
   ],
   "systemTier": [
-    "common"
+    "common",
+    "typography"
   ],
   "systemConcerns": [
     "backdrop",
@@ -347,7 +348,9 @@
     "gallery": [
       ".dx-gallery"
     ],
-    "typography": [],
+    "typography": [
+      ":root"
+    ],
     "toolbar": [
       ".dx-toolbar",
       ".dx-dropdownmenu-popup-wrapper",
