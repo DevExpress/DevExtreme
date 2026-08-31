@@ -134,6 +134,12 @@ export interface UpdateRowChange {
   columnIndices?: number[];
 }
 
+export interface SyncRowsOptions {
+  newItems: ProcessedItem[];
+  oldItems: ProcessedItem[] | null;
+  rowIndexDelta: number;
+}
+
 export type RowIndexByKey = Record<string, number | undefined>;
 
 export type RowIndexCorrection = (rowIndex: number) => number;
