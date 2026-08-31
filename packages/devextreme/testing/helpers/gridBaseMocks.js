@@ -819,7 +819,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             select: function() {
                 return options.select;
             },
-            cancel: commonUtils.noop,
+            cancel: function() {
+                return false;
+            },
 
             on(eventName, eventHandler) {
                 this[eventName].add(eventHandler);

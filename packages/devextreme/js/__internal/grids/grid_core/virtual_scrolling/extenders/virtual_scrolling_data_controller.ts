@@ -59,7 +59,7 @@ export const virtualScrollingDataControllerExtender = (
 ): ModuleType<
   DataController & VirtualScrollingDataControllerExtension
 > => class VirtualScrollingDataControllerExtender extends Base {
-  public declare _dataSource?: VirtualScrollingDataSourceAdapter;
+  public declare _dataSource?: VirtualScrollingDataSourceAdapter | null;
 
   private _loadViewportParams: any;
 

@@ -10,7 +10,7 @@ import dataSourceAdapterProvider from '../data_source_adapter/m_data_source_adap
 import treeListCore from '../m_core';
 
 export class TreeListDataController extends DataController {
-  public declare _dataSource?: DataSourceAdapterTreeList;
+  public declare _dataSource?: DataSourceAdapterTreeList | null;
 
   protected _getDataSourceAdapterProvider(): DataSourceAdapterProvider {
     return dataSourceAdapterProvider;
