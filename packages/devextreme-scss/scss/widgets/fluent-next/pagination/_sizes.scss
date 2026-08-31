@@ -10,7 +10,6 @@ $pagination-separator-padding: ds.$spacing-80 !default;
 $pagination-page-padding: ds.$spacing-90 ds.$spacing-120 !default;
 $pagination-page-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
 $pagination-page-font-size: ds.$font-size-base-sm !default;
-$pagination-nav-button-padding: $pagination-page-padding !default;
 $pagination-nav-button-height: ds.$spacing-120 !default;
 $pagination-nav-button-icon-size: null !default;
 $pagination-page-sizes-compact-min-width: null !default;
@@ -44,7 +43,7 @@ $pagination-first-child-padding-inline-start: ds.$spacing-100 !default;
 $pagination-first-child-padding-inline-end: ds.$spacing-90 !default;
 $pagination-first-child-padding-block-start: ds.$spacing-70 !default;
 $pagination-first-child-padding-block-end: ds.$spacing-80 !default;
-$pagination-page-size-margin-left: ds.$spacing-40 !default;
+$pagination-page-size-margin-inline-start: ds.$spacing-40 !default;
 $pagination-page-index-width: ds.$spacing-400 !default;
 $pagination-pages-count-padding-inline-start: ds.$spacing-60 !default;
 

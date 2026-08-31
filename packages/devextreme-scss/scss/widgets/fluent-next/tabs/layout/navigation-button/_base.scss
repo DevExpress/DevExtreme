@@ -11,22 +11,22 @@
 }
 
 .dx-tabs-styling-mode-secondary .dx-tabs-nav-button {
-  border-radius: $tabs-item-secondary-border-radius;
+  border-radius: var(--dx-tabs-item-secondary-border-radius);
 }
 
 .dx-tabs-nav-button {
   border: none;
-  height: $tabs-tab-height;
-  background-color: $tabs-nav-button-bg;
+  height: var(--dx-tabs-tab-height);
+  background-color: var(--dx-tabs-nav-button-bg);
 
   &.dx-button.dx-state-disabled.dx-button-mode-contained {
     visibility: hidden;
   }
 
   &.dx-button-has-icon .dx-icon {
-    width: $tabs-tab-nav-button-icon-width;
-    height: $tabs-tab-nav-button-icon-height;
-    font-size: $tabs-tab-nav-button-icon-font-size;
+    width: var(--dx-tabs-tab-nav-button-icon-width);
+    height: var(--dx-tabs-tab-nav-button-icon-height);
+    font-size: var(--dx-tabs-tab-nav-button-icon-font-size);
   }
 
   &.dx-state-active {
@@ -35,21 +35,21 @@
 
   &.dx-state-disabled {
     opacity: 1;
-    background-color: $tabs-tab-bg;
+    background-color: var(--dx-tabs-tab-bg);
 
     .dx-button-content {
-      opacity: $tabs-nav-button-opacity-disabled;
+      opacity: var(--dx-tabs-nav-button-opacity-disabled);
     }
   }
 
   .dx-button-content {
     flex: unset;
-    padding: $tabs-tab-nav-button-content-padding;
+    padding: var(--dx-tabs-tab-nav-button-content-padding);
   }
 }
 
 .dx-tabs-vertical {
   .dx-tabs-nav-button {
-    padding: $tabs-tab-vertical-nav-button-content-padding;
+    padding: var(--dx-tabs-tab-vertical-nav-button-content-padding);
   }
 }

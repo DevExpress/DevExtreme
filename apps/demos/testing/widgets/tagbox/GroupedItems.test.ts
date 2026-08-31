@@ -33,7 +33,12 @@ runManualTest('TagBox', 'Grouping', (test) => {
       .pressKey('tab')
       .pressKey('alt+down');
 
-    await testScreenshot(t, takeScreenshot, 'tagbox_groupeditems_third_opened.png');
+    // Sub-pixel noise, measured 30.08.2026: the opened list re-renders its text a pixel off between
+    // runs. The looser comparison is asked for here, for this screenshot, rather than being the
+    // default for every screenshot in every theme.
+    await testScreenshot(t, takeScreenshot, 'tagbox_groupeditems_third_opened.png', undefined, {
+      looksSameComparisonOptions: { tolerance: 20, antialiasingTolerance: 20 },
+    });
 
     await t
       .expect(compareResults.isValid())

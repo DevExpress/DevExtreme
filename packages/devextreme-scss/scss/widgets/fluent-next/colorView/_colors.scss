@@ -1,8 +1,5 @@
 @use "../../../_design-system/variables/ds" as ds;
-@use "../common/colors" as *;
 
-$color-view-content-box-overlay-bg: $surface-overlay !default;
-$color-view-bg-box-palette-cell-bg: $color-view-content-box-overlay-bg !default;
 $color-view-border: ds.$color-border !default;
 $color-view-label-content: ds.$color-content-subtle !default;
 $color-view-handle-content: ds.$color-bg !default;
