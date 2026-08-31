@@ -240,7 +240,10 @@ function collectPackageRootEntries(): Record<string, string> {
   fs.readdirSync(ESM_FS_ROOT, { withFileTypes: true }).forEach((entry) => {
     if (entry.isFile() && entry.name.endsWith('.js')) {
       const name = entry.name.slice(0, -3);
-      const url = `${ESM_ROOT}/${entry.name}`;
+      // Extensionless, like the `viz/` `core/` `common/` prefix maps: artifacts import
+      // root modules as `../../exporter`, and a second URL for the same file would give
+      // the browser a second module instance with its own copy of every binding.
+      const url = `${ESM_ROOT}/${name}`;
       entries[name] = url;
       // Suites often `require('aspnet.js')` / `require('color.js')` with the extension.
       entries[entry.name] = url;

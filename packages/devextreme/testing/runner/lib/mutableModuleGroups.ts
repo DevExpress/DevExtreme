@@ -36,15 +36,6 @@ export const MUTABLE_MODULE_GROUPS: readonly MutableModuleGroup[] = [
     extraKeys: ['viz/axes/base_axis'],
   },
   {
-    internal: 'exporter.js',
-    extraKeys: ['exporter.js'],
-  },
-  {
-    internal: 'format_helper.js',
-    extraKeys: ['format_helper.js'],
-    apiFromDefault: true,
-  },
-  {
     internal: '__internal/viz/translators/translator2d.js',
     extraKeys: ['viz/translators/translator2d'],
   },
@@ -68,10 +59,6 @@ export const MUTABLE_MODULE_GROUPS: readonly MutableModuleGroup[] = [
     ],
   },
   {
-    internal: '__internal/viz/chart_components/tracker.js',
-    also: ['viz/chart_components/tracker.js'],
-  },
-  {
     internal: '__internal/viz/components/legend.js',
     also: ['viz/components/legend.js'],
   },
@@ -85,23 +72,6 @@ export const MUTABLE_MODULE_GROUPS: readonly MutableModuleGroup[] = [
       '__internal/core/localization/ldml/dateParserModule.js',
       'common/core/localization/ldml/date.parser.js',
     ],
-  },
-  {
-    internal: '__internal/events/m_visibility_change.js',
-    also: ['common/core/events/visibility_change.js'],
-    apiFromDefault: true,
-  },
-  {
-    internal: 'core/errors.js',
-    apiFromDefault: true,
-  },
-  {
-    internal: 'ui/widget/ui.errors.js',
-    apiFromDefault: true,
-  },
-  {
-    internal: '__internal/core/m_template_manager.js',
-    apiFromDefault: true,
   },
   {
     // Real named exports live in palette.js; paletteModule.js is only

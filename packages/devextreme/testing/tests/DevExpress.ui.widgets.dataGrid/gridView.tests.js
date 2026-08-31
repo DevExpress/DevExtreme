@@ -1,5 +1,5 @@
 import devices from '__internal/core/m_devices';
-import visibilityChange from 'common/core/events/visibility_change';
+import * as visibilityChange from 'common/core/events/visibility_change';
 import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import 'ui/data_grid';
@@ -913,9 +913,9 @@ QUnit.module('Grid view', {
 
         this.createGridView(this.defaultOptions);
 
-        visibilityChange.triggerShownEvent = function() {
+        visibilityChange.DEBUG_set_triggerShownEvent(function() {
             isShownEventTriggered = true;
-        };
+        });
 
         this.resizingController.component._fireContentReadyAction = function() {
             isContentReadyCalled = true;

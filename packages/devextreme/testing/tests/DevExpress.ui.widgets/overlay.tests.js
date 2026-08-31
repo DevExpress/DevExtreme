@@ -10,7 +10,9 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
 import { value as viewPort } from 'core/utils/view_port';
 import eventsEngine from 'common/core/events/core/events_engine';
-import visibilityChange, { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
+import * as visibilityChange from 'common/core/events/visibility_change';
+import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
+import { stubVisibilityEvent } from '../../helpers/visibilityChangeMock.js';
 import $ from 'jquery';
 import { hideCallback as hideTopOverlayCallback } from 'common/core/environment/hide_callback';
 import errors from 'core/errors';
@@ -778,9 +780,9 @@ testModule('visibility', moduleConfig, () => {
         const triggerFunction = visibilityChange.triggerResizeEvent;
 
         try {
-            visibilityChange.triggerResizeEvent = () => {
+            visibilityChange.DEBUG_set_triggerResizeEvent(() => {
                 assert.ok(true, 'event triggered');
-            };
+            });
 
             const $overlay = $('#overlay').dxOverlay({ visible: true });
             const overlay = $overlay.dxOverlay('instance');
@@ -789,7 +791,7 @@ testModule('visibility', moduleConfig, () => {
             overlay.show();
 
         } finally {
-            visibilityChange.triggerResizeEvent = triggerFunction;
+            visibilityChange.DEBUG_set_triggerResizeEvent(triggerFunction);
         }
     });
 
@@ -3127,7 +3129,7 @@ testModule('API', moduleConfig, () => {
         const instance = $element.dxOverlay({
             visible: true
         }).dxOverlay('instance');
-        const resizeStub = sinon.stub(visibilityChange, 'triggerResizeEvent');
+        const resizeStub = stubVisibilityEvent('triggerResizeEvent');
 
         instance.repaint();
 

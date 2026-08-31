@@ -1,7 +1,21 @@
 import VisibilityChangeModule from '../../../__internal/events/m_visibility_change';
 
-export const triggerShownEvent = VisibilityChangeModule.triggerShownEvent;
-export const triggerHidingEvent = VisibilityChangeModule.triggerHidingEvent;
-export const triggerResizeEvent = VisibilityChangeModule.triggerResizeEvent;
+export let triggerShownEvent = VisibilityChangeModule.triggerShownEvent;
+export let triggerHidingEvent = VisibilityChangeModule.triggerHidingEvent;
+export let triggerResizeEvent = VisibilityChangeModule.triggerResizeEvent;
+
+/// #DEBUG
+export function DEBUG_set_triggerShownEvent(value) {
+    triggerShownEvent = value;
+}
+
+export function DEBUG_set_triggerHidingEvent(value) {
+    triggerHidingEvent = value;
+}
+
+export function DEBUG_set_triggerResizeEvent(value) {
+    triggerResizeEvent = value;
+}
+/// #ENDDEBUG
 
 export default VisibilityChangeModule;
