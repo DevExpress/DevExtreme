@@ -14,6 +14,11 @@ const isBlobLike = function (value: unknown): boolean {
   return typeof Blob !== 'undefined' && value instanceof Blob;
 };
 
+const isCollectionLike = function (value: unknown): boolean {
+  return value instanceof Set || value instanceof Map
+    || value instanceof WeakSet || value instanceof WeakMap;
+};
+
 const orderEach = function (map, func) {
   const keys: string[] = [];
   let key;
@@ -47,6 +52,9 @@ const getDeepCopyTarget = (item) => {
   if (isObject(item)) {
     if (Array.isArray(item)) {
       return [];
+    }
+    if (isCollectionLike(item)) {
+      return item;
     }
     if (!isPlainObject(item)) {
       return Object.create(Object.getPrototypeOf(item));
@@ -97,7 +105,7 @@ const deepExtendArraySafe = function (target, changes, extendComplexObject?, ass
   let newValue;
   const assignFunc = useNewAssign ? newAssign : legacyAssign;
 
-  if (isBlobLike(changes)) {
+  if (isBlobLike(changes) || isCollectionLike(changes)) {
     return changes;
   }
 
@@ -129,6 +137,7 @@ const deepExtendArraySafe = function (target, changes, extendComplexObject?, ass
 export {
   clone,
   deepExtendArraySafe,
+  isCollectionLike,
   legacyAssign,
   newAssign,
   orderEach,
