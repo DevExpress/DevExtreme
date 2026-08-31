@@ -33,7 +33,6 @@ import type {
   CallbackFlags,
   DataChange,
   DataFilter,
-  DataSourceAdapterLike,
   GeneratedItem,
   ItemChange,
   ItemProcessingOptions,
@@ -333,8 +332,7 @@ export class DataController extends modules.Controller {
   }
 
   public getDataSource(): DataSource | null | undefined {
-    const adapter = this._dataSource as unknown as DataSourceAdapterLike | null | undefined;
-    return adapter ? adapter._dataSource : null;
+    return this._dataSource?._dataSource;
   }
 
   public getCombinedFilter(returnDataField?: boolean): DataFilter {
@@ -593,7 +591,7 @@ export class DataController extends modules.Controller {
           errors.log('W1005', this.component.NAME);
           this._applyFilter();
         } else {
-          this._currentOperationTypes = dataSource.operationTypes() ?? null;
+          this._currentOperationTypes = dataSource.operationTypes();
 
           const change: DataChange = isDefined(e)
             ? {
@@ -729,7 +727,7 @@ export class DataController extends modules.Controller {
         dataSource.load().done((...args: unknown[]) => {
           this._isPaging = false;
           result.resolve(...args);
-        }).fail(result.reject as (...args: unknown[]) => void);
+        }).fail((...args: unknown[]) => { result.reject(...args); });
       } else {
         result.resolve();
       }
@@ -1631,12 +1629,11 @@ export class DataController extends modules.Controller {
       this._skipProcessingPagingChange = false;
     }
 
-    const pageIndex = dataSource.pageIndex() as unknown as number;
+    // @ts-expect-error badly typed DataSourceAdapter
+    const pageIndex: number = dataSource.pageIndex();
     this._isPaging = optionName === 'pageIndex';
 
-    const loadResult: DeferredObj<unknown> = (
-      dataSource[optionName === 'pageIndex' ? 'load' : 'reload'] as () => DeferredObj<unknown>
-    )();
+    const loadResult: DeferredObj<unknown> = dataSource[optionName === 'pageIndex' ? 'load' : 'reload']();
 
     return loadResult.done(() => {
       this._isPaging = false;
@@ -1784,7 +1781,8 @@ export class DataController extends modules.Controller {
   }
 
   public push(...args: unknown[]): unknown {
-    return (this._dataSource?.push as ((...a: unknown[]) => unknown) | undefined)?.(...args);
+    // @ts-expect-error badly typed DataSourceAdapter
+    return this._dataSource?.push(...args);
   }
 
   private itemsCount(): number {

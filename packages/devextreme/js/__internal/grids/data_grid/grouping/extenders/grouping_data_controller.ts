@@ -147,20 +147,20 @@ export const groupingDataControllerExtender = (
   }
 
   private collapseAll(groupIndex: number): void {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const dataSource = this._dataSource as any;
+    const dataSource = this._dataSource;
+    // @ts-expect-error badly typed DataSourceAdapter
     if (dataSource?.collapseAll(groupIndex)) {
-      dataSource.pageIndex(0);
-      dataSource.reload();
+      dataSource?.pageIndex(0);
+      dataSource?.reload();
     }
   }
 
   private expandAll(groupIndex: number): void {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const dataSource = this._dataSource as any;
+    const dataSource = this._dataSource;
+    // @ts-expect-error badly typed DataSourceAdapter
     if (dataSource?.expandAll(groupIndex)) {
-      dataSource.pageIndex(0);
-      dataSource.reload();
+      dataSource?.pageIndex(0);
+      dataSource?.reload();
     }
   }
 
@@ -184,8 +184,7 @@ export const groupingDataControllerExtender = (
   }
 
   protected changeRowExpandCore(key: RowKey): DeferredObj<unknown> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const dataSource = this._dataSource as any;
+    const dataSource = this._dataSource;
 
     const d = Deferred();
     if (!dataSource) {
@@ -202,8 +201,8 @@ export const groupingDataControllerExtender = (
   }
 
   private isRowExpanded(key: RowKey): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return !!(this._dataSource as any)?.isRowExpanded(key);
+    // @ts-expect-error badly typed DataSourceAdapter
+    return !!this._dataSource?.isRowExpanded(key);
   }
 
   private expandRow(key: RowKey): DeferredObj<unknown> {

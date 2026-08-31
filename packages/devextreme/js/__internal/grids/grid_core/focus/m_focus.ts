@@ -546,7 +546,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExten
       if (notSortedKeys.length) {
         result = result || [];
         if (isLocalOperations) {
-          result.push({ selector: dataSource!.getDataIndexGetter(), desc: false });
+          result.push({ selector: dataSource?.getDataIndexGetter(), desc: false });
         } else {
           notSortedKeys.forEach((notSortedKey) => result.push({ selector: notSortedKey, desc: false }));
         }
