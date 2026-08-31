@@ -1518,11 +1518,11 @@ export class DataController extends modules.Controller {
         sort: dataSource.sort(),
       })
         .done(resolveWithProcessedItems)
-        .fail((...args) => { d.reject(...args); });
+        .fail(d.reject as (...args: unknown[]) => void);
     } else if (!dataSource.isLoading()) {
       dataSource.loadAll()
         .done(resolveWithProcessedItems)
-        .fail((...args) => d.reject(...args));
+        .fail(d.reject as (...args: unknown[]) => void);
     } else {
       d.reject();
     }
