@@ -11,15 +11,13 @@
             return [...coordinate];
         }
         if(source === GEOGRAPHIC_PROJECTION && destination === WEB_MERCATOR_PROJECTION) {
-            return coordinate.map((value) => value * PROJECTION_SCALE);
+            return coordinate.map(value => value * PROJECTION_SCALE);
         }
         if(source === WEB_MERCATOR_PROJECTION && destination === GEOGRAPHIC_PROJECTION) {
-            return coordinate.map((value) => value / PROJECTION_SCALE);
+            return coordinate.map(value => value / PROJECTION_SCALE);
         }
-
         return [...coordinate];
     };
-
     class MockCollection {
         constructor(items) {
             this.items = items;
@@ -42,10 +40,12 @@
         getActive() {
             return this.active;
         }
-
         setActive(active) {
             this.active = active;
-            api.interactionStateChanges.push({ interaction: this, active });
+            api.interactionStateChanges.push({
+                interaction: this,
+                active
+            });
             if(api.onInteractionStateChanged) {
                 api.onInteractionStateChanged();
             }
@@ -57,10 +57,20 @@
             api.zoomControlCreatedCount += 1;
         }
     }
-
+    class MockOverlay {
+        constructor(options) {
+            this.options = options;
+            api.overlayOptions.push(options);
+        }
+        setPosition(position) {
+            this.options.position = position;
+            api.overlayPositionChanges.push(position);
+        }
+    }
     class MockView {
         constructor(options) {
             this.center = options.center;
+            this.eventHandlers = {};
             this.projection = options.projection || WEB_MERCATOR_PROJECTION;
             this.zoom = options.zoom;
             api.viewCenter = options.center;
@@ -75,8 +85,14 @@
         fit(extent, options) {
             api.fittedExtent = extent;
             api.fitOptions = options;
+            this.center = [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
+            api.viewCenter = this.center;
+            if(api.fitZoom !== undefined) {
+                this.zoom = api.fitZoom;
+                api.viewZoom = api.fitZoom;
+            }
+            this.trigger('change:center');
         }
-
         getCenter() {
             return this.center;
         }
@@ -88,30 +104,42 @@
         getZoom() {
             return this.zoom;
         }
-
+        on(type, listener) {
+            this.eventHandlers[type] = this.eventHandlers[type] || [];
+            this.eventHandlers[type].push(listener);
+        }
         setCenter(center) {
             this.center = center;
             api.viewCenter = center;
             api.viewCenterSetCount += 1;
+            this.trigger('change:center');
         }
-
         setZoom(zoom) {
             this.zoom = zoom;
             api.viewZoom = zoom;
             api.viewZoomSetCount += 1;
         }
+        trigger(type) {
+            (this.eventHandlers[type] || []).slice().forEach(handler => handler());
+        }
+        un(type, listener) {
+            const handlers = this.eventHandlers[type] || [];
+            this.eventHandlers[type] = handlers.filter(handler => handler !== listener);
+        }
     }
-
     class MockMap {
         constructor(options) {
             this.options = options;
             this.view = options.view;
             this.eventHandlers = {};
+            this.overlayContainer = document.createElement('div');
+            this.overlayContainerStopEvent = document.createElement('div');
             api.mapCreated = true;
             api.mapInstance = this;
             api.mapOptions = options;
+            api.overlayContainer = this.overlayContainer;
+            api.overlayContainerStopEvent = this.overlayContainerStopEvent;
         }
-
         addControl(control) {
             api.addedControls.push(control);
         }
@@ -120,11 +148,22 @@
             api.tileLayer = layer;
             api.addedTileLayers.push(layer);
         }
-
+        addOverlay(overlay) {
+            api.addedOverlays.push(overlay);
+            if(api.getOverlayRect) {
+                overlay.options.element.getBoundingClientRect = api.getOverlayRect;
+            }
+            this.options.target.appendChild(overlay.options.element);
+        }
         getInteractions() {
             return this.options.interactions;
         }
-
+        getOverlayContainer() {
+            return this.overlayContainer;
+        }
+        getOverlayContainerStopEvent() {
+            return this.overlayContainerStopEvent;
+        }
         getView() {
             return this.view;
         }
@@ -141,7 +180,10 @@
         removeLayer(layer) {
             api.removedLayers.push(layer);
         }
-
+        removeOverlay(overlay) {
+            api.removedOverlays.push(overlay);
+            overlay.options.element.remove();
+        }
         setTarget(target) {
             this.target = target;
             api.mapTarget = target;
@@ -150,17 +192,14 @@
         updateSize() {
             api.mapResized = true;
         }
-
         un(type, listener) {
             const handlers = this.eventHandlers[type] || [];
-            this.eventHandlers[type] = handlers.filter((handler) => handler !== listener);
+            this.eventHandlers[type] = handlers.filter(handler => handler !== listener);
         }
-
         trigger(type, event) {
-            (this.eventHandlers[type] || []).slice().forEach((handler) => handler(event || {}));
+            (this.eventHandlers[type] || []).slice().forEach(handler => handler(event || {}));
         }
     }
-
     class MockImageTile {
         constructor(options) {
             if(api.throwOnTileSource) {
@@ -182,9 +221,9 @@
             api.tileSourceChanges.push(source);
         }
     }
-
     Object.assign(api, {
         Map: MockMap,
+        Overlay: MockOverlay,
         View: MockView,
         control: {
             Zoom: MockZoom,
