@@ -5,38 +5,38 @@
 @use "../../base/mixins" as *;
 @use "../../base/fileUploader" with (
   $fileuploader-file-container-padding: null,
-  $fileuploader-button-margin-left: $file-uploader-button-margin-inline-start,
-  $fileuploader-upload-button-margin-top: $file-uploader-upload-button-margin-block-start,
-  $fileuploader-show-file-list-padding-top: $file-uploader-show-file-list-padding-block-start,
-  $fileuploader-button-width: $file-uploader-button-width,
-  $fileuploader-button-height: $file-uploader-button-height,
-  $fileuploader-button-margin-right: $file-uploader-button-margin-inline-end,
-  $fileuploader-cancel-button-position-end-margin-left: $file-uploader-cancel-button-position-end-margin-inline-start,
-  $fileuploader-file-status-message-height: $file-uploader-file-status-message-height,
-  $fileuploader-progressbar-height: $file-uploader-progress-bar-height,
-  $fileuploader-file-size-padding-left: $file-uploader-file-size-padding-inline-start,
-  $fileuploader-file-icon-padding-right: $file-uploader-file-icon-padding-inline-end,
-  $fileuploader-file-container-button-margin-left: $file-uploader-file-container-button-margin-left,
-  $fileuploader-cancel-button-position-end-margin-right: $file-uploader-cancel-button-position-end-margin-inline-end,
-  $fileuploader-file-size-padding-right: $file-uploader-file-size-padding-inline-end,
-  $fileuploader-file-status-message-line-margin-bottom: $file-uploader-file-status-message-line-margin-block-end,
-  $fileuploader-cancel-button-margin-top: $file-uploader-cancel-button-margin-block-start,
-  $fileuploader-status-message-font-size: $file-uploader-status-message-font-size,
-  $fileuploader-file-size-font-size: $file-uploader-file-size-font-size,
+  $fileuploader-button-margin-left: var(--dx-file-uploader-button-margin-inline-start),
+  $fileuploader-upload-button-margin-top: var(--dx-file-uploader-upload-button-margin-block-start),
+  $fileuploader-show-file-list-padding-top: var(--dx-file-uploader-show-file-list-padding-block-start),
+  $fileuploader-button-width: var(--dx-file-uploader-button-width),
+  $fileuploader-button-height: var(--dx-file-uploader-button-height),
+  $fileuploader-button-margin-right: var(--dx-file-uploader-button-margin-inline-end),
+  $fileuploader-cancel-button-position-end-margin-left: var(--dx-file-uploader-cancel-button-position-end-margin-inline-start),
+  $fileuploader-file-status-message-height: var(--dx-file-uploader-file-status-message-height),
+  $fileuploader-progressbar-height: var(--dx-file-uploader-progress-bar-height),
+  $fileuploader-file-size-padding-left: var(--dx-file-uploader-file-size-padding-inline-start),
+  $fileuploader-file-icon-padding-right: var(--dx-file-uploader-file-icon-padding-inline-end),
+  $fileuploader-file-container-button-margin-left: var(--dx-file-uploader-file-container-button-rtl-margin-inline-end),
+  $fileuploader-cancel-button-position-end-margin-right: var(--dx-file-uploader-cancel-button-position-end-margin-inline-end),
+  $fileuploader-file-size-padding-right: var(--dx-file-uploader-file-size-padding-inline-end),
+  $fileuploader-file-status-message-line-margin-bottom: var(--dx-file-uploader-file-status-message-line-margin-block-end),
+  $fileuploader-cancel-button-margin-top: var(--dx-file-uploader-cancel-button-margin-block-start),
+  $fileuploader-status-message-font-size: var(--dx-file-uploader-status-message-font-size),
+  $fileuploader-file-size-font-size: var(--dx-file-uploader-file-size-font-size),
 );
 
 .dx-fileuploader-wrapper {
-  padding: $file-uploader-padding-block;
+  padding: var(--dx-file-uploader-padding-block);
 }
 
 .dx-fileuploader-content > .dx-fileuploader-upload-button {
-  margin-left: $file-uploader-upload-button-margin-inline-start;
-  margin-right: $file-uploader-upload-button-margin-inline-end;
+  margin-left: var(--dx-file-uploader-upload-button-margin-inline-start);
+  margin-right: var(--dx-file-uploader-upload-button-margin-inline-end);
 }
 
 .dx-fileuploader-input-wrapper {
-  padding: $file-uploader-padding-block 0 $file-uploader-padding-block;
-  border: $file-uploader-file-wrapper-border-width dashed transparent;
+  padding: var(--dx-file-uploader-padding-block) 0 var(--dx-file-uploader-padding-block);
+  border: var(--dx-file-uploader-file-wrapper-border-width) dashed transparent;
 }
 
 .dx-fileuploader.dx-state-disabled .dx-fileuploader-input-label {
@@ -65,41 +65,41 @@
   .dx-fileuploader-input {
     display: block;
     width: 100%;
-    padding-top: calc(#{$file-uploader-padding-block} * 2 + #{$file-uploader-file-wrapper-border-width});
-    padding-right: $file-uploader-file-wrapper-border-width;
+    padding-top: calc(var(--dx-file-uploader-padding-block) * 2 + var(--dx-file-uploader-file-wrapper-border-width));
+    padding-right: var(--dx-file-uploader-file-wrapper-border-width);
 
     // NOTE: height of the widget should be the same in default and drag over states, but not with margin help
-    padding-bottom: calc(#{$file-uploader-padding-block} * 2 + #{$file-uploader-file-wrapper-border-width} + 1px); // dx-px-nudge: +1px over the dragover padding
-    padding-left: $file-uploader-file-wrapper-border-width;
+    padding-bottom: calc(var(--dx-file-uploader-padding-block) * 2 + var(--dx-file-uploader-file-wrapper-border-width) + 1px); // dx-px-nudge: +1px over the dragover padding
+    padding-left: var(--dx-file-uploader-file-wrapper-border-width);
     box-sizing: content-box;
   }
 
   .dx-fileuploader-input-label { // stylelint-disable-line no-duplicate-selectors
-    padding: calc(#{$file-uploader-padding-block} * 2) calc(#{$file-uploader-padding-block} + 2px); // dx-px-nudge: +2px over the padding
-    border: $file-uploader-file-wrapper-border-width dashed;
-    border-color: $file-uploader-border;
+    padding: calc(var(--dx-file-uploader-padding-block) * 2) calc(var(--dx-file-uploader-padding-block) + 2px); // dx-px-nudge: +2px over the padding
+    border: var(--dx-file-uploader-file-wrapper-border-width) dashed;
+    border-color: var(--dx-file-uploader-border);
   }
 }
 
 .dx-fileuploader-file-status-message,
 .dx-fileuploader-file-size {
-  color: $file-uploader-file-name-status-content;
+  color: var(--dx-file-uploader-file-name-status-content);
 }
 
 .dx-fileuploader-input {
-  padding: $file-uploader-padding-block 0;
+  padding: var(--dx-file-uploader-padding-block) 0;
 }
 
 .dx-fileuploader-input-label {
-  padding: calc(#{$file-uploader-padding-block} + (#{$global-font-size} / 2 - #{$file-uploader-padding-block}) / 2 + 1px) calc(#{$file-uploader-padding-block} + 2px); // dx-px-nudge: +1px and +2px over the padding
-  color: $file-uploader-file-name-content;
+  padding: calc(var(--dx-file-uploader-padding-block) + (#{$global-font-size} / 2 - var(--dx-file-uploader-padding-block)) / 2 + 1px) calc(var(--dx-file-uploader-padding-block) + 2px); // dx-px-nudge: +1px and +2px over the padding
+  color: var(--dx-file-uploader-file-name-content);
 
   @include dx-overflow();
 }
 
 .dx-fileuploader-files-container {
   .dx-fileuploader-show-file-list & {
-    padding: $file-uploader-files-container-padding;
+    padding: var(--dx-file-uploader-files-container-padding);
   }
 
   .dx-fileuploader-empty & {
@@ -107,7 +107,7 @@
   }
 
   .dx-invalid & {
-    padding-top: $file-uploader-invalid-padding-block-start;
+    padding-top: var(--dx-file-uploader-invalid-padding-block-start);
   }
 
   .dx-fileuploader-button .dx-button-content {
@@ -115,18 +115,18 @@
   }
 
   .dx-fileuploader-file-container {
-    padding: $file-uploader-file-container-padding;
-    margin-bottom: $file-uploader-file-container-margin-block-end;
-    border-radius: $file-uploader-files-container-border-radius;
-    background-color: $file-uploader-files-container-bg;
-    box-shadow: $file-uploader-file-container-shadow;
+    padding: var(--dx-file-uploader-file-container-padding);
+    margin-bottom: var(--dx-file-uploader-file-container-margin-block-end);
+    border-radius: var(--dx-file-uploader-files-container-border-radius);
+    background-color: var(--dx-file-uploader-files-container-bg);
+    box-shadow: var(--dx-file-uploader-file-container-shadow);
 
     .dx-fileuploader-button-container + .dx-fileuploader-button-container {
       .dx-button {
-        margin-right: $file-uploader-file-container-text-margin;
+        margin-right: var(--dx-file-uploader-file-container-text-margin);
 
         .dx-rtl & {
-          margin-left: $file-uploader-file-container-text-margin;
+          margin-left: var(--dx-file-uploader-file-container-text-margin);
           margin-right: 0;
         }
       }
@@ -139,22 +139,22 @@
     }
 
     .dx-button {
-      height: $file-uploader-file-container-button-size;
-      width: $file-uploader-file-container-button-size;
-      margin-right: $file-uploader-file-container-button-margin;
+      height: var(--dx-file-uploader-file-container-button-size);
+      width: var(--dx-file-uploader-file-container-button-size);
+      margin-right: var(--dx-file-uploader-file-container-button-margin);
 
       &.dx-fileuploader-cancel-button-position-end {
         margin-right: 0;
-        margin-left: $file-uploader-file-cancel-button-margin-inline-start;
+        margin-left: var(--dx-file-uploader-file-cancel-button-margin-inline-start);
       }
 
       .dx-rtl & {
-        margin-left: $file-uploader-file-container-button-margin;
+        margin-left: var(--dx-file-uploader-file-container-button-margin);
         margin-right: 0;
 
         &.dx-fileuploader-cancel-button-position-end {
           margin-left: 0;
-          margin-right: $file-uploader-file-cancel-button-margin-inline-start;
+          margin-right: var(--dx-file-uploader-file-cancel-button-margin-inline-start);
         }
       }
     }
@@ -162,43 +162,43 @@
 }
 
 .dx-fileuploader .dx-progressbar-status {
-  color: $file-uploader-progress-bar-status-content;
+  color: var(--dx-file-uploader-progress-bar-status-content);
 }
 
 .dx-fileuploader-file {
   display: block;
-  padding-top: $file-uploader-file-padding-block-start;
-  line-height: $file-uploader-file-line-height;
+  padding-top: var(--dx-file-uploader-file-padding-block-start);
+  line-height: var(--dx-file-uploader-file-line-height);
 }
 
 .dx-fileuploader-file-icon {
-  color: $file-uploader-file-icon;
-  font-size: $file-uploader-file-icon-font-size;
+  color: var(--dx-file-uploader-file-icon);
+  font-size: var(--dx-file-uploader-file-icon-font-size);
 }
 
 .dx-fileuploader-file-name {
-  padding-bottom: calc(#{$file-uploader-padding-block} / 2);
-  color: $file-uploader-file-name-content;
-  font-weight: $file-uploader-file-name-font-weight;
+  padding-bottom: calc(var(--dx-file-uploader-padding-block) / 2);
+  color: var(--dx-file-uploader-file-name-content);
+  font-weight: var(--dx-file-uploader-file-name-font-weight);
 }
 
 .dx-fileuploader-file-size {
   float: right;
-  padding: $file-uploader-file-size-margin;
-  color: $file-uploader-label-content;
+  padding: var(--dx-file-uploader-file-size-margin);
+  color: var(--dx-file-uploader-label-content);
 }
 
 .dx-fileuploader-invalid {
   .dx-fileuploader-file-status-message {
-    color: $file-uploader-file-status-message-invalid-content;
+    color: var(--dx-file-uploader-file-status-message-invalid-content);
 
     span {
       &:first-child {
-        margin-top: $file-uploader-file-status-message-margin-block-start;
+        margin-top: var(--dx-file-uploader-file-status-message-margin-block-start);
       }
 
       &:last-child {
-        margin-bottom: $file-uploader-file-status-message-margin-block-end;
+        margin-bottom: var(--dx-file-uploader-file-status-message-margin-block-end);
       }
     }
   }

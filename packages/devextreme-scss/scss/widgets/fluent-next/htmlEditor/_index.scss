@@ -11,9 +11,9 @@
 @use "../popup/sizes" as popupSizes;
 @use "../../base/mixins" as *;
 @use "../../base/htmlEditor" with (
-  $htmleditor-code-block-bg: $html-editor-code-block-bg,
-  $htmleditor-placeholder-color: $html-editor-placeholder-content,
-  $htmleditor-aidialog-title-font-weight: $html-editor-ai-dialog-title-font-weight,
+  $htmleditor-code-block-bg: var(--dx-html-editor-code-block-bg),
+  $htmleditor-placeholder-color: var(--dx-html-editor-placeholder-content),
+  $htmleditor-aidialog-title-font-weight: var(--dx-html-editor-ai-dialog-title-font-weight),
 );
 
 .dx-htmleditor {
@@ -21,7 +21,7 @@
   position: relative;
 
   .dx-htmleditor-toolbar-wrapper {
-    padding: 0 $html-editor-toolbar-padding;
+    padding: 0 var(--dx-html-editor-toolbar-padding);
     position: relative;
   }
 
@@ -41,12 +41,12 @@
   &.dx-state-disabled {
     .dx-htmleditor-toolbar-wrapper::before {
       position: absolute;
-      top: $html-editor-toolbar-wrapper-inset-block-start;
-      bottom: $html-editor-toolbar-wrapper-inset-block-end;
-      left: $html-editor-toolbar-wrapper-inset-inline-start;
-      right: $html-editor-toolbar-wrapper-inset-inline-end;
+      top: var(--dx-html-editor-toolbar-wrapper-inset-block-start);
+      bottom: var(--dx-html-editor-toolbar-wrapper-inset-block-end);
+      left: var(--dx-html-editor-toolbar-wrapper-inset-inline-start);
+      right: var(--dx-html-editor-toolbar-wrapper-inset-inline-end);
       z-index: 2;
-      background-color: $html-editor-cover-bg;
+      background-color: var(--dx-html-editor-cover-bg);
       content: "";
       pointer-events: none;
     }
@@ -55,7 +55,7 @@
   &.dx-state-focused,
   &.dx-state-active {
     &::before {
-      border-bottom: $html-editor-border-block-end-active;
+      border-bottom: var(--dx-html-editor-border-block-end-active);
       border-bottom-color: textEditorColors.$text-editor-indicator;
       transform: scale(1);
       transition-property: transform;
@@ -68,7 +68,7 @@
     @include texteditor-outlined-styling();
 
     .dx-htmleditor-content {
-      margin: $html-editor-content-margin;
+      margin: var(--dx-html-editor-content-margin);
       margin-inline-start: 0;
     }
 
@@ -114,7 +114,7 @@
   &.dx-state-focused,
   &.dx-state-active {
     &::before {
-      border-bottom: $html-editor-border-block-end-active;
+      border-bottom: var(--dx-html-editor-border-block-end-active);
       border-bottom-color: textEditorColors.$text-editor-invalid-border-focused;
     }
   }
@@ -122,7 +122,7 @@
 
 .dx-htmleditor-content {
   line-height: var(--dx-global-line-height);
-  padding: $html-editor-padding-block $html-editor-padding-inline;
+  padding: var(--dx-html-editor-padding-block) var(--dx-html-editor-padding-inline);
 
   &.ql-blank::before { // stylelint-disable-line selector-class-pattern
     color: textEditorColors.$text-editor-placeholder;
@@ -130,23 +130,23 @@
 
   code,
   .ql-code-block-container { // stylelint-disable-line selector-class-pattern
-    color: $html-editor-faded-content;
+    color: var(--dx-html-editor-faded-content);
   }
 
   blockquote {
-    color: $html-editor-faded-content;
-    border-inline-start-color: $html-editor-toolbar-border;
+    color: var(--dx-html-editor-faded-content);
+    border-inline-start-color: var(--dx-html-editor-toolbar-border);
   }
 
   .dx-variable {
     & > span {
-      background: $html-editor-variable-bg;
+      background: var(--dx-html-editor-variable-bg);
     }
   }
 
   td,
   th {
-    border-color: $html-editor-table-border;
+    border-color: var(--dx-html-editor-table-border);
   }
 }
 
@@ -183,29 +183,29 @@
   }
 
   &.dx-size-format {
-    width: $html-editor-toolbar-size-editor-width;
+    width: var(--dx-html-editor-toolbar-size-editor-width);
   }
 }
 
 .dx-htmleditor-toolbar-separator {
   height: calc(#{toolbarSizes.$toolbar-height} / 2);
-  border-inline-start-color: $html-editor-toolbar-border;
+  border-inline-start-color: var(--dx-html-editor-toolbar-border);
 }
 
 .dx-htmleditor-toolbar-menu-separator {
-  border-top-color: $html-editor-toolbar-border;
-  margin-top: $html-editor-toolbar-menu-separator-margin;
-  margin-bottom: $html-editor-toolbar-menu-separator-margin;
+  border-top-color: var(--dx-html-editor-toolbar-border);
+  margin-top: var(--dx-html-editor-toolbar-menu-separator-margin);
+  margin-bottom: var(--dx-html-editor-toolbar-menu-separator-margin);
 }
 
 .dx-resize-frame {
-  border-color: $html-editor-resize-frame-border;
+  border-color: var(--dx-html-editor-resize-frame-border);
 
   .dx-resizable-handle-corner-top-right,
   .dx-resizable-handle-corner-top-left,
   .dx-resizable-handle-corner-bottom-right,
   .dx-resizable-handle-corner-bottom-left {
-    background-color: $html-editor-resize-trigger;
+    background-color: var(--dx-html-editor-resize-trigger);
   }
 
   .dx-resizable-handle-top,
@@ -213,23 +213,23 @@
   .dx-resizable-handle-right,
   .dx-resizable-handle-bottom {
     &::after {
-      background-color: $html-editor-resize-trigger;
+      background-color: var(--dx-html-editor-resize-trigger);
     }
   }
 }
 
 .dx-htmleditor-add-image-popup > .dx-overlay-content > .dx-popup-content {
   .dx-collection .dx-field-item:not(.dx-last-col) {
-    padding-inline-end: $html-editor-add-image-dialog-padding-inline-end;
+    padding-inline-end: var(--dx-html-editor-add-image-dialog-padding-inline-end);
   }
 
   .dx-fix-ratio-container {
     .dx-textbox {
-      width: calc(100% - buttonSizes.$button-height - $html-editor-add-image-dialog-padding-inline-end);
+      width: calc(100% - #{buttonSizes.$button-height} - var(--dx-html-editor-add-image-dialog-padding-inline-end));
     }
 
     .dx-buttongroup {
-      margin-inline-start: $html-editor-add-image-dialog-padding-inline-end;
+      margin-inline-start: var(--dx-html-editor-add-image-dialog-padding-inline-end);
       width: buttonSizes.$button-height;
       margin-top: calc((#{$global-inline-widget-height} - #{buttonSizes.$button-height}) / 2);
     }
@@ -240,20 +240,20 @@
   }
 
   .dx-tabs {
-    padding: 0 $html-editor-add-image-dialog-tabs-padding;
+    padding: 0 var(--dx-html-editor-add-image-dialog-tabs-padding);
   }
 
   .dx-fileuploader-input-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: $html-editor-input-wrapper-gap;
-    padding: $html-editor-add-image-dialog-file-uploader-padding;
-    border-width: $html-editor-file-uploader-input-wrapper-border-width;
+    gap: var(--dx-html-editor-input-wrapper-gap);
+    padding: var(--dx-html-editor-add-image-dialog-file-uploader-padding);
+    border-width: var(--dx-html-editor-file-uploader-input-wrapper-border-width);
     border-style: dashed;
-    border-color: $html-editor-file-uploader-input-wrapper-border;
-    border-radius: $html-editor-file-uploader-input-wrapper-border-radius;
-    background-color: $html-editor-file-uploader-input-wrapper-bg;
+    border-color: var(--dx-html-editor-file-uploader-input-wrapper-border);
+    border-radius: var(--dx-html-editor-file-uploader-input-wrapper-border-radius);
+    background-color: var(--dx-html-editor-file-uploader-input-wrapper-bg);
 
     &::after,
     &::before {
@@ -275,7 +275,7 @@
     }
 
     .dx-fileuploader-content {
-      background-color: $html-editor-uploader-cover-bg;
+      background-color: var(--dx-html-editor-uploader-cover-bg);
     }
   }
 }
@@ -285,7 +285,7 @@
 }
 
 .dx-mention {
-  background-color: $html-editor-mention-bg;
+  background-color: var(--dx-html-editor-mention-bg);
 }
 
 .dx-suggestion-list-wrapper {
@@ -295,7 +295,7 @@
 .dx-table-resize-frame {
   > .dx-draggable-dragging + .dx-htmleditor-highlighted-column,
   > .dx-draggable-dragging + .dx-htmleditor-highlighted-row {
-    background-color: $html-editor-highlighted-row-bg;
+    background-color: var(--dx-html-editor-highlighted-row-bg);
   }
 }
 
@@ -304,16 +304,16 @@
 }
 
 .dx-aidialog-controls {
-  gap: $html-editor-ai-dialog-selects-gap;
+  gap: var(--dx-html-editor-ai-dialog-selects-gap);
 
   .dx-selectbox {
-    max-width: calc(50% - $html-editor-ai-dialog-selects-gap * 0.5);
+    max-width: calc(50% - var(--dx-html-editor-ai-dialog-selects-gap) * 0.5);
   }
 }
 
 .dx-aidialog-content {
-  padding: $html-editor-ai-dialog-content-padding;
-  gap: $html-editor-ai-dialog-content-gap;
+  padding: var(--dx-html-editor-ai-dialog-content-padding);
+  gap: var(--dx-html-editor-ai-dialog-content-gap);
 }
 
 .dx-aidialog {
@@ -322,6 +322,6 @@
   }
 
   &.dx-popup-wrapper > .dx-overlay-content {
-    border-radius: $html-editor-ai-dialog-border-radius;
+    border-radius: var(--dx-html-editor-ai-dialog-border-radius);
   }
 }

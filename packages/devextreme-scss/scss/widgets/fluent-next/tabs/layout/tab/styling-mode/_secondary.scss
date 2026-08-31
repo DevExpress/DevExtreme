@@ -8,7 +8,7 @@
 
 .dx-tabs-styling-mode-secondary {
   .dx-tab {
-    border-radius: $tabs-item-secondary-border-radius;
+    border-radius: var(--dx-tabs-item-secondary-border-radius);
   }
 
   &.dx-tab-indicator-position-top {
@@ -29,32 +29,32 @@
   &.dx-tab-indicator-position-bottom {
     .dx-tab {
       &.dx-state-hover .dx-tab-content {
-        @include dx-tabs-indicator-background($tabs-tab-border-hovered);
+        @include dx-tabs-indicator-background(var(--dx-tabs-tab-border-hovered));
       }
 
       &.dx-state-active .dx-tab-content {
-        @include dx-tabs-indicator-background($tabs-tab-border-active);
+        @include dx-tabs-indicator-background(var(--dx-tabs-tab-border-active));
       }
 
       &.dx-tab-selected {
         .dx-tab-content {
-          @include dx-tabs-indicator-background($tabs-tab-basic-border-selected);
+          @include dx-tabs-indicator-background(var(--dx-tabs-tab-basic-border-selected));
         }
 
         &.dx-state-focused .dx-tab-content {
-          @include dx-tabs-indicator-background($tabs-tab-border-selected-focused);
+          @include dx-tabs-indicator-background(var(--dx-tabs-tab-border-selected-focused));
         }
 
         &.dx-state-hover .dx-tab-content {
-          @include dx-tabs-indicator-background($tabs-tab-border-selected-hovered);
+          @include dx-tabs-indicator-background(var(--dx-tabs-tab-border-selected-hovered));
         }
 
         &.dx-state-active .dx-tab-content {
-          @include dx-tabs-indicator-background($tabs-tab-border-selected-active);
+          @include dx-tabs-indicator-background(var(--dx-tabs-tab-border-selected-active));
         }
 
         &.dx-state-disabled .dx-tab-content {
-          @include dx-tabs-indicator-background($tabs-tab-border-disabled);
+          @include dx-tabs-indicator-background(var(--dx-tabs-tab-border-disabled));
         }
       }
     }
@@ -78,31 +78,31 @@
   &.dx-tab-indicator-position-left {
     .dx-tab {
       &.dx-state-hover {
-        @include dx-tabs-indicator-background($tabs-tab-border-hovered);
+        @include dx-tabs-indicator-background(var(--dx-tabs-tab-border-hovered));
       }
 
       &.dx-state-active {
-        @include dx-tabs-indicator-background($tabs-tab-border-active);
+        @include dx-tabs-indicator-background(var(--dx-tabs-tab-border-active));
       }
     }
 
     .dx-tab-selected {
-      @include dx-tabs-indicator-background($tabs-tab-basic-border-selected);
+      @include dx-tabs-indicator-background(var(--dx-tabs-tab-basic-border-selected));
 
       &.dx-state-focused {
-        @include dx-tabs-indicator-background($tabs-tab-border-selected-focused);
+        @include dx-tabs-indicator-background(var(--dx-tabs-tab-border-selected-focused));
       }
 
       &.dx-state-hover {
-        @include dx-tabs-indicator-background($tabs-tab-border-selected-hovered);
+        @include dx-tabs-indicator-background(var(--dx-tabs-tab-border-selected-hovered));
       }
 
       &.dx-state-active {
-        @include dx-tabs-indicator-background($tabs-tab-border-selected-active);
+        @include dx-tabs-indicator-background(var(--dx-tabs-tab-border-selected-active));
       }
 
       &.dx-state-disabled {
-        @include dx-tabs-indicator-background($tabs-tab-border-disabled);
+        @include dx-tabs-indicator-background(var(--dx-tabs-tab-border-disabled));
       }
     }
   }

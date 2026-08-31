@@ -4,7 +4,6 @@ $pivot-grid-area-bg: ds.$color-bg !default;
 $pivot-grid-border: ds.$color-border !default;
 
 $pivot-grid-area-content: ds.$color-content !default;
-$pivot-grid-field-area-box-content: $pivot-grid-area-content !default;
 $pivot-grid-field-area-box-bg: ds.$color-bg-low !default;
 $pivot-grid-data-area-content: ds.$color-content !default;
 
@@ -18,7 +17,6 @@ $pivot-grid-drag-header-border: rgb(from #{ds.$color-border-primary} r g b / 0.5
 $pivot-grid-drag-header-first-shadow: ds.$color-shadow-ambient !default;
 $pivot-grid-drag-header-shadow-key: ds.$color-shadow-key !default;
 $pivot-grid-position-indicator-bg: ds.$color-border-contrast !default;
-$pivot-grid-chevron-icon: $pivot-grid-area-content !default;
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
 $pivot-grid-header-filter-content: ds.$color-content-primary !default;

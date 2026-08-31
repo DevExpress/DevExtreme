@@ -3,8 +3,8 @@
 @use "sizes" as *;
 @use "../../base/timeView/mixins" as *;
 @use "../../base/timeView" with (
-  $timeview-numberbox-width: $time-view-field-number-box-width,
-  $timeview-numberbox-spin-touch-friendly-width: $time-view-field-number-box-spin-touch-friendly-width,
+  $timeview-numberbox-width: var(--dx-time-view-field-number-box-width),
+  $timeview-numberbox-spin-touch-friendly-width: var(--dx-time-view-field-number-box-spin-touch-friendly-width),
 );
 @include clock-action-icons-mixin($time-view-clock-accent-bg, $time-view-clock-bg, $time-view-clock-digits-content);
 
@@ -15,7 +15,7 @@
   .dx-texteditor {
     .dx-texteditor-input {
       padding-inline-end: 0;
-      padding-inline-start: $time-view-input-padding-inline-start;
+      padding-inline-start: var(--dx-time-view-input-padding-inline-start);
     }
 
     .dx-texteditor-container {
@@ -27,26 +27,26 @@
 }
 
 .dx-timeview-clock {
-  margin-bottom: $time-view-clock-margin-block-end;
+  margin-bottom: var(--dx-time-view-clock-margin-block-end);
 }
 
 .dx-timeview-format12 {
-  width: $time-view-format12-width;
-  margin-inline-start: $time-view-time-separator-margin;
+  width: var(--dx-time-view-format12-width);
+  margin-inline-start: var(--dx-time-view-time-separator-margin);
 }
 
 .dx-timeview-time-separator {
-  margin: 0 $time-view-time-separator-margin;
+  margin: 0 var(--dx-time-view-time-separator-margin);
 }
 
 .dx-timeview-field {
-  min-height: $time-view-field-min-height;
+  min-height: var(--dx-time-view-field-min-height);
 }
 
 .dx-timeview-field .dx-numberbox {
-  width: $time-view-format12-width;
+  width: var(--dx-time-view-format12-width);
 
   &.dx-numberbox-spin-touch-friendly {
-    width: $time-view-number-box-spin-touch-friendly-width;
+    width: var(--dx-time-view-number-box-spin-touch-friendly-width);
   }
 }

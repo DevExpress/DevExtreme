@@ -32,16 +32,16 @@
   },
   "additionalProperties": false,
   "$defs": {
-      "frameworkOptions":{
-          "type": "object",
-          "properties": {
-              "ignore": {
-                  "type": "boolean"
-              },
-              "comparison-options": {
-                  "$ref": "../node_modules/devextreme-screenshot-comparer/src/options-schema.json"
-              }
-          }
+    "frameworkOptions": {
+      "type": "object",
+      "properties": {
+        "ignore": {
+          "type": "boolean"
+        },
+        "comparison-options": {
+          "$ref": "../node_modules/devextreme-screenshot-comparer/src/options-schema.json"
+        }
       }
+    }
   }
 }

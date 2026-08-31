@@ -1,0 +1,5 @@
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-map-marker-tooltip-margin: #{$map-marker-tooltip-margin};
+}

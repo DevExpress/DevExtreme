@@ -1,0 +1,41 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-html-editor-add-image-dialog-file-uploader-padding: #{$html-editor-add-image-dialog-file-uploader-padding};
+  --dx-html-editor-add-image-dialog-padding-inline-end: #{$html-editor-add-image-dialog-padding-inline-end};
+  --dx-html-editor-add-image-dialog-tabs-padding: #{$html-editor-add-image-dialog-tabs-padding};
+  --dx-html-editor-ai-dialog-border-radius: #{$html-editor-ai-dialog-border-radius};
+  --dx-html-editor-ai-dialog-content-gap: #{$html-editor-ai-dialog-content-gap};
+  --dx-html-editor-ai-dialog-content-padding: #{$html-editor-ai-dialog-content-padding};
+  --dx-html-editor-ai-dialog-selects-gap: #{$html-editor-ai-dialog-selects-gap};
+  --dx-html-editor-ai-dialog-title-font-weight: #{$html-editor-ai-dialog-title-font-weight};
+  --dx-html-editor-border-block-end-active: #{$html-editor-border-block-end-active};
+  --dx-html-editor-code-block-bg: #{$html-editor-code-block-bg};
+  --dx-html-editor-content-margin: #{$html-editor-content-margin};
+  --dx-html-editor-cover-bg: #{$html-editor-cover-bg};
+  --dx-html-editor-faded-content: #{$html-editor-faded-content};
+  --dx-html-editor-file-uploader-input-wrapper-bg: #{$html-editor-file-uploader-input-wrapper-bg};
+  --dx-html-editor-file-uploader-input-wrapper-border: #{$html-editor-file-uploader-input-wrapper-border};
+  --dx-html-editor-file-uploader-input-wrapper-border-radius: #{$html-editor-file-uploader-input-wrapper-border-radius};
+  --dx-html-editor-file-uploader-input-wrapper-border-width: #{$html-editor-file-uploader-input-wrapper-border-width};
+  --dx-html-editor-highlighted-row-bg: #{$html-editor-highlighted-row-bg};
+  --dx-html-editor-input-wrapper-gap: #{$html-editor-input-wrapper-gap};
+  --dx-html-editor-mention-bg: #{$html-editor-mention-bg};
+  --dx-html-editor-padding-block: #{$html-editor-padding-block};
+  --dx-html-editor-padding-inline: #{$html-editor-padding-inline};
+  --dx-html-editor-placeholder-content: #{$html-editor-placeholder-content};
+  --dx-html-editor-resize-frame-border: #{$html-editor-resize-frame-border};
+  --dx-html-editor-resize-trigger: #{$html-editor-resize-trigger};
+  --dx-html-editor-table-border: #{$html-editor-table-border};
+  --dx-html-editor-toolbar-border: #{$html-editor-toolbar-border};
+  --dx-html-editor-toolbar-menu-separator-margin: #{$html-editor-toolbar-menu-separator-margin};
+  --dx-html-editor-toolbar-padding: var(--dx-html-editor-padding-inline);
+  --dx-html-editor-toolbar-size-editor-width: #{$html-editor-toolbar-size-editor-width};
+  --dx-html-editor-toolbar-wrapper-inset-block-end: #{$html-editor-toolbar-wrapper-inset-block-end};
+  --dx-html-editor-toolbar-wrapper-inset-block-start: #{$html-editor-toolbar-wrapper-inset-block-start};
+  --dx-html-editor-toolbar-wrapper-inset-inline-end: #{$html-editor-toolbar-wrapper-inset-inline-end};
+  --dx-html-editor-toolbar-wrapper-inset-inline-start: #{$html-editor-toolbar-wrapper-inset-inline-start};
+  --dx-html-editor-uploader-cover-bg: #{$html-editor-uploader-cover-bg};
+  --dx-html-editor-variable-bg: #{$html-editor-variable-bg};
+}

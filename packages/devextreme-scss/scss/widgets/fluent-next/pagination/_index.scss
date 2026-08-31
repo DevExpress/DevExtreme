@@ -4,36 +4,36 @@
 @use "../../base/pagination" with (
   $pagination-page-padding-fallback: null,
   $pagination-navigate-button-width-fallback: null,
-  $pagination-page-margin-left: $pagination-page-margin-inline-start,
-  $pagination-page-margin-right: $pagination-page-margin-inline-end,
-  $pagination-separator-padding-left: $pagination-separator-padding-inline-start,
-  $pagination-separator-padding-right: $pagination-separator-padding-inline-end,
-  $pagination-navigate-button-height: $pagination-navigate-button-height,
-  $pagination-first-child-margin-left: $pagination-first-child-margin-inline-start,
-  $pagination-first-child-padding-left: $pagination-first-child-padding-inline-start,
-  $pagination-first-child-padding-right: $pagination-first-child-padding-inline-end,
-  $pagination-first-child-padding-top: $pagination-first-child-padding-block-start,
-  $pagination-first-child-padding-bottom: $pagination-first-child-padding-block-end,
-  $pagination-page-size-margin-left: $pagination-page-size-margin-left,
-  $pagination-page-index-width: $pagination-page-index-width,
-  $pagination-pages-count-padding-left: $pagination-pages-count-padding-inline-start,
-  $pagination-info-opacity: $pagination-info-opacity,
-  $pagination-nav-disabled-opacity: $pagination-nav-opacity-disabled,
-  $pagination-page-horizontal-padding: $pagination-page-padding-inline,
+  $pagination-page-margin-left: var(--dx-pagination-page-margin-inline-start),
+  $pagination-page-margin-right: var(--dx-pagination-page-margin-inline-end),
+  $pagination-separator-padding-left: var(--dx-pagination-separator-padding-inline-start),
+  $pagination-separator-padding-right: var(--dx-pagination-separator-padding-inline-end),
+  $pagination-navigate-button-height: var(--dx-pagination-navigate-button-height),
+  $pagination-first-child-margin-left: var(--dx-pagination-first-child-margin-inline-start),
+  $pagination-first-child-padding-left: var(--dx-pagination-first-child-padding-inline-start),
+  $pagination-first-child-padding-right: var(--dx-pagination-first-child-padding-inline-end),
+  $pagination-first-child-padding-top: var(--dx-pagination-first-child-padding-block-start),
+  $pagination-first-child-padding-bottom: var(--dx-pagination-first-child-padding-block-end),
+  $pagination-page-size-margin-left: var(--dx-pagination-page-size-margin-inline-start),
+  $pagination-page-index-width: var(--dx-pagination-page-index-width),
+  $pagination-pages-count-padding-left: var(--dx-pagination-pages-count-padding-inline-start),
+  $pagination-info-opacity: var(--dx-pagination-info-opacity),
+  $pagination-nav-disabled-opacity: var(--dx-pagination-nav-opacity-disabled),
+  $pagination-page-horizontal-padding: var(--dx-pagination-page-padding-inline),
 );
 @use "../gridBase/sizes" as gridBaseSizes;
 
 .dx-pager,
 .dx-pagination {
-  padding: $pagination-padding gridBaseSizes.$grid-cell-padding-inline;
+  padding: var(--dx-pagination-padding) gridBaseSizes.$grid-cell-padding-inline;
 
   &.dx-light-mode {
     .dx-page-sizes {
-      min-width: $pagination-page-sizes-compact-min-width;
+      min-width: var(--dx-pagination-page-sizes-compact-min-width);
     }
 
     .dx-page-index {
-      min-width: $pagination-page-index-compact-min-width;
+      min-width: var(--dx-pagination-page-index-compact-min-width);
     }
 
     .dx-pages {
@@ -50,19 +50,19 @@
 
   .dx-pages {
     .dx-page {
-      padding: $pagination-page-padding;
-      line-height: $pagination-page-line-height;
+      padding: var(--dx-pagination-page-padding);
+      line-height: var(--dx-pagination-page-line-height);
     }
 
     .dx-separator {
-      padding-left: $pagination-separator-padding;
-      padding-right: $pagination-separator-padding;
+      padding-left: var(--dx-pagination-separator-padding);
+      padding-right: var(--dx-pagination-separator-padding);
     }
 
     .dx-navigate-button {
-      width: $pagination-navigate-button-width;
-      height: $pagination-nav-button-height;
-      padding: $pagination-nav-button-padding;
+      width: var(--dx-pagination-navigate-button-width);
+      height: var(--dx-pagination-nav-button-height);
+      padding: var(--dx-pagination-nav-button-padding);
     }
 
     .dx-prev-button {
@@ -75,19 +75,19 @@
 
     .dx-prev-button,
     .dx-next-button {
-      @include dx-icon-font-centered-sizing($pagination-nav-button-icon-size);
+      @include dx-icon-font-centered-sizing(var(--dx-pagination-nav-button-icon-size));
     }
   }
 
   .dx-page,
   .dx-page-size {
-    font-size: $pagination-page-font-size;
+    font-size: var(--dx-pagination-page-font-size);
 
     &:hover {
-      background-color: $pagination-page-bg-hovered;
+      background-color: var(--dx-pagination-page-bg-hovered);
     }
 
-    border-radius: $pagination-page-border-radius;
+    border-radius: var(--dx-pagination-page-border-radius);
   }
 
   .dx-page-sizes .dx-page-size {
@@ -96,16 +96,16 @@
       margin-left: 0;
     }
 
-    padding: $pagination-page-padding;
-    line-height: $pagination-page-line-height;
+    padding: var(--dx-pagination-page-padding);
+    line-height: var(--dx-pagination-page-line-height);
   }
 
   .dx-pages,
   .dx-page-sizes {
     .dx-selection {
-      font-weight: $pagination-font-weight-selected;
-      background-color: $pagination-page-bg-selected;
-      color: $pagination-page-content-selected;
+      font-weight: var(--dx-pagination-font-weight-selected);
+      background-color: var(--dx-pagination-page-bg-selected);
+      color: var(--dx-pagination-page-content-selected);
     }
   }
 }

@@ -3,5 +3,5 @@
 @use "../../base/drawer";
 
 .dx-drawer-shader {
-  background-color: $drawer-backdrop;
+  background-color: var(--dx-drawer-backdrop);
 }

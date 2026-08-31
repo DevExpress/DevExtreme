@@ -29,4 +29,6 @@ $color-view-color-preview-container-margin: ds.$spacing-10 !default;
  * variables (NAMING.md, O7).
  */
 $color-view-alpha-width: $color-view-palette-width + 4;
-$color-view-hue-scale-height: $color-view-palette-height;
+
+// the wrapper carries the 1px hairline ring on both sides, so it is two pixels taller than the scale
+$color-view-hue-scale-wrapper-height: $color-view-palette-height + 2;

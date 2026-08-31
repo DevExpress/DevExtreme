@@ -3,49 +3,49 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/form" with (
-  $form-first-row-padding-top: $form-first-row-padding-block-start,
-  $form-switch-margin-top: $form-switch-margin-block-start,
-  $form-switch-margin-bottom: $form-switch-margin-block-end,
-  $form-multiview-item-content-padding: $form-multiview-item-content-padding,
-  $form-group-content-padding-top: $form-group-content-padding-block-start,
-  $form-group-content-padding-bottom: $form-group-content-padding-block-end,
-  $form-group-content-margin-top: $form-group-content-margin-block-start,
-  $form-field-item-label-location-left-padding-inline-end: $form-field-item-label-location-left-padding-inline-end,
-  $form-field-item-label-location-right-padding-inline-start: $form-field-item-label-location-right-padding-inline-start,
+  $form-first-row-padding-top: var(--dx-form-first-row-padding-block-start),
+  $form-switch-margin-top: var(--dx-form-switch-margin-block-start),
+  $form-switch-margin-bottom: var(--dx-form-switch-margin-block-end),
+  $form-multiview-item-content-padding: var(--dx-form-multiview-item-content-padding),
+  $form-group-content-padding-top: var(--dx-form-group-content-padding-block-start),
+  $form-group-content-padding-bottom: var(--dx-form-group-content-padding-block-end),
+  $form-group-content-margin-top: var(--dx-form-group-content-margin-block-start),
+  $form-field-item-label-location-left-padding-inline-end: var(--dx-form-field-item-label-location-left-padding-inline-end),
+  $form-field-item-label-location-right-padding-inline-start: var(--dx-form-field-item-label-location-right-padding-inline-start),
 );
 @use "../../base/icon_fonts" as *;
 @use "../scrollable";
 
 .dx-form-group-caption {
-  font-size: $form-group-caption-font-size;
+  font-size: var(--dx-form-group-caption-font-size);
 }
 
 .dx-form-group-with-caption { // stylelint-disable-line no-duplicate-selectors
   & > .dx-form-group-content {
-    border-top: $form-group-content-border-block-start;
-    border-top-color: $form-group-border;
-    padding-bottom: $form-group-content-bottom-padding;
-    padding-top: $form-group-caption-top-padding;
-    margin-top: $form-group-caption-bottom-margin;
+    border-top: var(--dx-form-group-content-border-block-start);
+    border-top-color: var(--dx-form-group-border);
+    padding-bottom: var(--dx-form-group-content-bottom-padding);
+    padding-top: var(--dx-form-group-caption-top-padding);
+    margin-top: var(--dx-form-group-caption-bottom-margin);
   }
 }
 
 .dx-layout-manager {
   .dx-field-item {
     &:not(.dx-last-col) {
-      padding-inline-end: $form-layout-manager-padding-inline;
+      padding-inline-end: var(--dx-form-layout-manager-padding-inline);
     }
 
     &:not(.dx-first-col) {
-      padding-inline-start: $form-layout-manager-padding-inline;
+      padding-inline-start: var(--dx-form-layout-manager-padding-inline);
     }
 
     &:not(.dx-first-row) {
-      padding-top: $form-layout-manager-padding-block;
+      padding-top: var(--dx-form-layout-manager-padding-block);
     }
 
-    padding-bottom: $form-layout-manager-padding-block;
-    font-size: $form-label-font-size;
+    padding-bottom: var(--dx-form-layout-manager-padding-block);
+    font-size: var(--dx-form-label-font-size);
 
     .dx-field-item {
       &.dx-last-row {
@@ -55,21 +55,21 @@
   }
 
   .dx-tabpanel .dx-multiview-item-content {
-    padding: $form-layout-manager-tabpanel-content-padding;
+    padding: var(--dx-form-layout-manager-tabpanel-content-padding);
   }
 }
 
 .dx-form > .dx-layout-manager.dx-layout-manager-one-col {
   .dx-field-item {
     .dx-field-item.dx-last-row:not(.dx-last-col) {
-      padding-bottom: $form-layout-manager-padding-block;
+      padding-bottom: var(--dx-form-layout-manager-padding-block);
     }
   }
 }
 
 .dx-field-item {
   &:not(.dx-field-item-has-group):not(.dx-field-item-has-tabs):not(.dx-first-row):not(.dx-label-v-align) {
-    padding-top: $form-default-top-padding;
+    padding-top: var(--dx-form-default-top-padding);
   }
 
   .dx-switch {
@@ -84,8 +84,8 @@
 }
 
 .dx-field-item-label-location-top {
-  padding: $form-top-label-padding;
-  margin-bottom: $form-top-label-bottom-margin;
+  padding: var(--dx-form-top-label-padding);
+  margin-bottom: var(--dx-form-top-label-bottom-margin);
 
   .dx-form-styling-mode-underlined & {
     padding-left: 0;
@@ -94,13 +94,13 @@
 }
 
 .dx-field-item-label-text {
-  color: $form-field-item-content;
+  color: var(--dx-form-field-item-content);
 }
 
 .dx-field-item-help-text {
-  color: $form-item-help-content;
-  padding-top: $form-field-item-help-text-padding-block-start;
-  font-size: $form-help-text-font-size;
+  color: var(--dx-form-item-help-content);
+  padding-top: var(--dx-form-field-item-help-text-padding-block-start);
+  font-size: var(--dx-form-help-text-font-size);
   font-style: normal;
 
   .dx-form-styling-mode-underlined & {
@@ -111,26 +111,26 @@
 
 .dx-field-item-optional .dx-label > span::after,
 .dx-field-item-optional-mark {
-  color: $form-field-mark-content;
+  color: var(--dx-form-field-mark-content);
 }
 
 .dx-field-item-required .dx-label > span::after,
 .dx-field-item-required-mark {
-  color: $form-field-required-content;
+  color: var(--dx-form-field-required-content);
 }
 
 .dx-field-item-custom-label-content {
   .dx-icon {
-    @include dx-icon-sizing($form-label-icon-size);
+    @include dx-icon-sizing(var(--dx-form-label-icon-size));
     @include dx-icon-margin(calc(#{$global-icon-size} / 3));
   }
 }
 
 .dx-form-group-custom-caption {
-  font-size: $form-group-caption-font-size;
+  font-size: var(--dx-form-group-caption-font-size);
 
   .dx-icon {
     @include dx-icon-sizing($global-icon-size);
-    @include dx-icon-margin($form-group-custom-caption-icon-margin);
+    @include dx-icon-margin(var(--dx-form-group-custom-caption-icon-margin));
   }
 }

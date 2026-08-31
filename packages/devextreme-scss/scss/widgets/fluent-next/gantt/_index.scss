@@ -2,9 +2,9 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/gantt" with (
-  $gantt-toolbar-separator-border-left: $gantt-toolbar-separator-border-inline-start,
-  $gantt-splitter-bar-width: $gantt-splitter-bar-width,
-  $gantt-view-min-width: $gantt-view-min-width,
+  $gantt-toolbar-separator-border-left: var(--dx-gantt-toolbar-separator-border-inline-start),
+  $gantt-splitter-bar-width: var(--dx-gantt-splitter-bar-width),
+  $gantt-view-min-width: var(--dx-gantt-view-min-width),
 );
 @use "../../base/gantt/mixins" as *;
 @use "../gridBase/colors" as gridBaseColors;
@@ -12,30 +12,30 @@
 @use "../splitterBar";
 
 .dx-gantt {
-  border: $gantt-border-width solid;
-  border-color: $gantt-border;
+  border: var(--dx-gantt-border-width) solid;
+  border-color: var(--dx-gantt-border);
 
   .dx-gantt-toolbar-wrapper {
-    padding: $gantt-toolbar-wrapper-padding;
-    border-bottom: $gantt-toolbar-wrapper-border-block-end;
-    border-bottom-color: $gantt-border;
+    padding: var(--dx-gantt-toolbar-wrapper-padding);
+    border-bottom: var(--dx-gantt-toolbar-wrapper-border-block-end);
+    border-bottom-color: var(--dx-gantt-border);
 
     .dx-gantt-toolbar-separator {
-      border-left-color: $gantt-border;
+      border-left-color: var(--dx-gantt-border);
     }
 
     .dx-toolbar .dx-toolbar-items-container {
-      min-height: $gantt-toolbar-items-container-min-height;
+      min-height: var(--dx-gantt-toolbar-items-container-min-height);
     }
   }
 
   .dx-gantt-view {
-    background-color: $gantt-bg;
+    background-color: var(--dx-gantt-bg);
   }
 
   .dx-header-row,
   .dx-treelist-filter-row {
-    height: $gantt-header-item-height;
+    height: var(--dx-gantt-header-item-height);
   }
 
   .dx-gantt-header {
@@ -46,70 +46,70 @@
     .dx-gantt-tsa,
     .dx-gantt-hb,
     .dx-gantt-vb {
-      border-color: $gantt-border;
-      background-color: $gantt-bg;
+      border-color: var(--dx-gantt-border);
+      background-color: var(--dx-gantt-bg);
     }
   }
 
   .dx-gantt-si {
-    padding-left: $gantt-si-padding-inline-start;
-    padding-right: $gantt-si-padding-inline-end;
+    padding-left: var(--dx-gantt-si-padding-inline-start);
+    padding-right: var(--dx-gantt-si-padding-inline-end);
   }
 
   .dx-gantt-tsac,
   .dx-gantt-tsa {
-    border-bottom: $gantt-toolbar-wrapper-border-block-end;
-    border-bottom-color: $gantt-border;
+    border-bottom: var(--dx-gantt-toolbar-wrapper-border-block-end);
+    border-bottom-color: var(--dx-gantt-border);
   }
 
   .dx-gantt-hb {
-    border-top: $gantt-hb-border-block-start;
-    border-top-color: $gantt-border;
+    border-top: var(--dx-gantt-hb-border-block-start);
+    border-top-color: var(--dx-gantt-border);
   }
 
   .dx-gantt-vb {
-    border-left: $gantt-vb-border-inline-start;
-    border-left-color: $gantt-border;
+    border-left: var(--dx-gantt-vb-border-inline-start);
+    border-left-color: var(--dx-gantt-border);
   }
 
   .dx-gantt-taskWrapper {
-    padding-top: $gantt-task-wrapper-padding-block-start;
+    padding-top: var(--dx-gantt-task-wrapper-padding-block-start);
 
     .dx-gantt-task,
     .dx-gantt-titleOut {
-      height: $gantt-task-height;
-      line-height: $gantt-task-height;
+      height: var(--dx-gantt-task-height);
+      line-height: var(--dx-gantt-task-height);
     }
 
     .dx-gantt-task {
-      background-color: $gantt-task-bg;
+      background-color: var(--dx-gantt-task-bg);
       border-radius: $global-border-radius;
 
       .dx-gantt-tPrg {
         border-radius: $global-border-radius;
-        background-color: $gantt-task-progress-bg;
+        background-color: var(--dx-gantt-task-progress-bg);
       }
 
       &.dx-gantt-smallTask {
         border-radius: $global-border-radius;
 
         .dx-gantt-titleIn {
-          padding: $gantt-title-padding;
+          padding: var(--dx-gantt-title-padding);
         }
       }
 
       &.dx-gantt-parent {
-        height: calc(#{$gantt-task-height} - 2px); // dx-px-nudge: -2px off the task height
-        line-height: calc(#{$gantt-task-height} - 2px); // dx-px-nudge: -2px off the task height
-        background-color: $gantt-parent-task-bg;
-        border-left-color: $gantt-parent-task-bg;
-        border-right-color: $gantt-parent-task-bg;
-        border-top-color: $gantt-parent-task-bg;
+        height: calc(var(--dx-gantt-task-height) - 2px); // dx-px-nudge: -2px off the task height
+        line-height: calc(var(--dx-gantt-task-height) - 2px); // dx-px-nudge: -2px off the task height
+        background-color: var(--dx-gantt-parent-task-bg);
+        border-left-color: var(--dx-gantt-parent-task-bg);
+        border-right-color: var(--dx-gantt-parent-task-bg);
+        border-top-color: var(--dx-gantt-parent-task-bg);
         border-bottom-right-radius: 0;
         border-bottom-left-radius: 0;
 
         &:not(.dx-gantt-noPrg) .dx-gantt-tPrg {
-          background-color: $gantt-task-progress-bg;
+          background-color: var(--dx-gantt-task-progress-bg);
         }
 
         &:not(.dx-gantt-smallTask)::before,
@@ -118,8 +118,8 @@
         &:not(.dx-gantt-smallTask).dx-gantt-cmpl .dx-gantt-tPrg::after {
           content: "";
           position: absolute;
-          bottom: $gantt-task-progress-inset-block-end;
-          border-width: $gantt-task-progress-notch-border-width;
+          bottom: var(--dx-gantt-task-progress-inset-block-end);
+          border-width: var(--dx-gantt-task-progress-notch-border-width);
           border-style: solid;
         }
 
@@ -131,8 +131,8 @@
         }
 
         &:not(.dx-gantt-noPrg) .dx-gantt-tPrg::before {
-          border-left-color: $gantt-task-progress-bg;
-          border-top-color: $gantt-task-progress-bg;
+          border-left-color: var(--dx-gantt-task-progress-bg);
+          border-top-color: var(--dx-gantt-task-progress-bg);
         }
 
         &::after,
@@ -143,67 +143,67 @@
         }
 
         &.dx-gantt-cmpl::after {
-          border-right-color: $gantt-task-progress-bg;
-          border-top-color: $gantt-task-progress-bg;
+          border-right-color: var(--dx-gantt-task-progress-bg);
+          border-top-color: var(--dx-gantt-task-progress-bg);
         }
 
         &.dx-gantt-cmpl .dx-gantt-tPrg::after {
-          border-right-color: $gantt-parent-task-bg;
-          border-top-color: $gantt-parent-task-bg;
+          border-right-color: var(--dx-gantt-parent-task-bg);
+          border-top-color: var(--dx-gantt-parent-task-bg);
         }
 
         .dx-gantt-task-edit-frame {
-          height: calc(#{$gantt-task-height} - 2px); // dx-px-nudge: -2px off the task height
+          height: calc(var(--dx-gantt-task-height) - 2px); // dx-px-nudge: -2px off the task height
         }
       }
     }
 
     .dx-gantt-titleIn {
-      color: $gantt-task-res-content;
-      padding: 0 $gantt-task-title-padding-inline-start;
+      color: var(--dx-gantt-task-res-content);
+      padding: 0 var(--dx-gantt-task-title-padding-inline-start);
     }
   }
 
   .dx-gantt-taskRes {
-    height: $gantt-task-height;
-    line-height: $gantt-task-height;
-    color: $gantt-task-res-content;
-    background-color: $gantt-task-res-bg;
+    height: var(--dx-gantt-task-height);
+    line-height: var(--dx-gantt-task-height);
+    color: var(--dx-gantt-task-res-content);
+    background-color: var(--dx-gantt-task-res-bg);
     border-radius: $global-border-radius;
-    margin-left: $gantt-task-margin-inline-start;
-    padding-left: $gantt-task-padding-inline-start;
-    padding-right: $gantt-task-padding-inline-end;
+    margin-left: var(--dx-gantt-task-margin-inline-start);
+    padding-left: var(--dx-gantt-task-padding-inline-start);
+    padding-right: var(--dx-gantt-task-padding-inline-end);
   }
 
   .dx-gantt-titleOut {
-    padding-right: $gantt-title-padding-inline-end;
+    padding-right: var(--dx-gantt-title-padding-inline-end);
   }
 
   .dx-gantt-milestone {
-    background-color: $gantt-content;
-    width: $gantt-milestone-size;
-    height: $gantt-milestone-size;
+    background-color: var(--dx-gantt-content);
+    width: var(--dx-gantt-milestone-size);
+    height: var(--dx-gantt-milestone-size);
   }
 
   .dx-gantt-task-edit-wrapper {
-    padding-top: $gantt-task-wrapper-padding-block-start;
-    padding-left: $gantt-task-edit-wrapper-padding-inline-start;
+    padding-top: var(--dx-gantt-task-wrapper-padding-block-start);
+    padding-left: var(--dx-gantt-task-edit-wrapper-padding-inline-start);
 
     .dx-gantt-task-edit-frame {
       height: 100%;
-      border: $gantt-task-edit-frame-border;
-      border-color: $gantt-accent-border;
+      border: var(--dx-gantt-task-edit-frame-border);
+      border-color: var(--dx-gantt-accent-border);
       border-radius: $global-border-radius;
 
       .dx-gantt-task-edit-progress {
-        border-color: transparent transparent $gantt-accent-border transparent;
+        border-color: transparent transparent var(--dx-gantt-accent-border) transparent;
 
         &::before {
-          width: $gantt-task-edit-progress-width;
-          height: $gantt-task-edit-progress-height;
-          bottom: $gantt-edit-progress-inset-block-end;
-          border: $gantt-task-edit-progress-border;
-          border-color: $gantt-accent-border;
+          width: var(--dx-gantt-task-edit-progress-width);
+          height: var(--dx-gantt-task-edit-progress-height);
+          bottom: var(--dx-gantt-edit-progress-inset-block-end);
+          border: var(--dx-gantt-task-edit-progress-border);
+          border-color: var(--dx-gantt-accent-border);
         }
       }
 
@@ -214,10 +214,10 @@
   }
 
   .dx-gantt-task-edit-wrapper-successor {
-    padding-top: $gantt-task-wrapper-padding-block-start;
+    padding-top: var(--dx-gantt-task-wrapper-padding-block-start);
 
     .dx-gantt-task-edit-frame-successor {
-      height: $gantt-task-height;
+      height: var(--dx-gantt-task-height);
     }
   }
 
@@ -225,11 +225,11 @@
   .dx-gantt-task-edit-successor-dependency-r,
   .dx-gantt-task-edit-dependency-l,
   .dx-gantt-task-edit-successor-dependency-l {
-    background: $gantt-successor-background-color;
-    border: $gantt-task-edit-successor-dependency-l-border;
-    border-color: $gantt-accent-border;
-    width: $gantt-dependency-successor-size;
-    height: $gantt-dependency-successor-size;
+    background: var(--dx-gantt-successor-bg);
+    border: var(--dx-gantt-task-edit-successor-dependency-l-border);
+    border-color: var(--dx-gantt-accent-border);
+    width: var(--dx-gantt-dependency-successor-size);
+    height: var(--dx-gantt-dependency-successor-size);
     margin: auto;
     top: 0;
     bottom: 0;
@@ -237,51 +237,51 @@
 
   .dx-gantt-task-edit-dependency-r,
   .dx-gantt-task-edit-successor-dependency-r {
-    left: calc(-1 * #{$gantt-dependency-successor-size} - 1px); // dx-px-nudge: -1px off the dependency size
+    left: calc(-1 * var(--dx-gantt-dependency-successor-size) - 1px); // dx-px-nudge: -1px off the dependency size
   }
 
   .dx-gantt-task-edit-dependency-l,
   .dx-gantt-task-edit-successor-dependency-l {
-    right: calc(-1 * #{$gantt-dependency-successor-size} - 1px); // dx-px-nudge: -1px off the dependency size
+    right: calc(-1 * var(--dx-gantt-dependency-successor-size) - 1px); // dx-px-nudge: -1px off the dependency size
   }
 
   .dx-gantt-task-edit-dependency-line {
-    background-color: $gantt-content;
+    background-color: var(--dx-gantt-content);
   }
 
   .dx-gantt-sel {
-    background-color: $gantt-selection-bg;
+    background-color: var(--dx-gantt-selection-bg);
   }
 
   .dx-gantt-conn-v {
-    border-left-color: $gantt-content;
+    border-left-color: var(--dx-gantt-content);
   }
 
   .dx-gantt-conn-h {
-    border-top-color: $gantt-content;
+    border-top-color: var(--dx-gantt-content);
   }
 
   .dx-gantt-arrow {
-    border: $gantt-arrow-border;
-    border-color: $gantt-content;
+    border: var(--dx-gantt-arrow-border);
+    border-color: var(--dx-gantt-content);
   }
 
   .dx-gantt-tm {
-    border-left: $gantt-tm-border-inline-start;
-    border-left-color: $gantt-task-bg;
+    border-left: var(--dx-gantt-tm-border-inline-start);
+    border-left-color: var(--dx-gantt-task-bg);
   }
 
   .dx-gantt-ti {
-    border-left: $gantt-tm-border-inline-start;
-    border-left-color: $gantt-task-bg;
-    border-right: $gantt-ti-border-inline-end;
-    border-right-color: $gantt-task-bg;
-    background-color: $gantt-ti-bg;
+    border-left: var(--dx-gantt-tm-border-inline-start);
+    border-left-color: var(--dx-gantt-task-bg);
+    border-right: var(--dx-gantt-ti-border-inline-end);
+    border-right-color: var(--dx-gantt-task-bg);
+    background-color: var(--dx-gantt-ti-bg);
   }
 
   .dx-gantt-altRow,
   .dx-gantt-collapsable-row {
-    background-color: $gantt-collapsable-row-bg;
+    background-color: var(--dx-gantt-collapsable-row-bg);
   }
 }
 
