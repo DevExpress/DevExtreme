@@ -52,13 +52,15 @@ import type {
 import { resolvePaginate, syncPaging } from './utils/paging';
 import { getRefreshOptions } from './utils/refresh';
 import {
+  canDiffColumns,
   convertToUpdateChange,
   getChangedRowIndices,
   getDataRowIndex,
+  getGroupColumnIndices,
   getRowKey,
   getRowOperation,
   indexRowsByKey,
-  isSameGroupRowState,
+  partialUpdateRow,
   pushChangedRow,
   resetChangedRows,
   updateKeptRows,
@@ -863,13 +865,17 @@ export class DataController extends modules.Controller {
       };
     }
 
+    const columnIndices = isPartialUpdate
+      ? this.getUpdatedColumnIndices(oldItem, newItem, visibleRowIndex)
+      : undefined;
+
+    partialUpdateRow(oldItem, newItem, columnIndices);
+
     return {
       changeType: 'update',
       rowIndex: visibleRowIndex,
       item: newItem,
-      columnIndices: isPartialUpdate
-        ? this._partialUpdateRow(oldItem, newItem, visibleRowIndex)
-        : undefined,
+      columnIndices,
     };
   }
 
@@ -973,35 +979,33 @@ export class DataController extends modules.Controller {
   /**
    * @extended: editing_row_based, editing, editing_form_based
    */
-  protected _getChangedColumnIndices(
+  protected getChangedColumnIndices(
     oldItem: ProcessedItem,
     newItem: ProcessedItem,
     visibleRowIndex: number,
     isLiveUpdate?: boolean,
   ): number[] | undefined {
-    if (oldItem.rowType !== newItem.rowType) {
+    if (!canDiffColumns(oldItem, newItem)) {
       return undefined;
     }
 
-    if (newItem.rowType === 'group') {
-      if (!oldItem.cells || !isSameGroupRowState(oldItem, newItem)) {
-        return undefined;
-      }
-
-      return oldItem.cells
-        .map((cell, index) => (cell.column?.type !== 'groupExpand' ? index : -1))
-        .filter((index) => index >= 0);
+    switch (newItem.rowType) {
+      case 'group':
+        return getGroupColumnIndices(oldItem, newItem);
+      case 'detail':
+        return [];
+      default:
+        return this.getChangedColumnIndicesCore(oldItem, newItem, visibleRowIndex, isLiveUpdate);
     }
+  }
 
-    if (newItem.rowType === 'groupFooter') {
-      return undefined;
-    }
-
+  private getChangedColumnIndicesCore(
+    oldItem: ProcessedItem,
+    newItem: ProcessedItem,
+    visibleRowIndex: number,
+    isLiveUpdate?: boolean,
+  ): number[] {
     const columnIndices: number[] = [];
-
-    if (newItem.rowType === 'detail') {
-      return columnIndices;
-    }
 
     for (let columnIndex = 0; columnIndex < oldItem.values.length; columnIndex += 1) {
       if (this._isCellChanged(oldItem, newItem, visibleRowIndex, columnIndex, isLiveUpdate)) {
@@ -1012,43 +1016,21 @@ export class DataController extends modules.Controller {
     return columnIndices;
   }
 
-  private _partialUpdateRow(
+  private getUpdatedColumnIndices(
     oldItem: ProcessedItem,
     newItem: ProcessedItem,
     visibleRowIndex: number,
     isLiveUpdate?: boolean,
   ): number[] | undefined {
-    const changedColumnIndices = this
-      ._getChangedColumnIndices(
-        oldItem,
-        newItem,
-        visibleRowIndex,
-        isLiveUpdate,
-      );
-    const columnIndices = changedColumnIndices?.length && this.option('dataRowTemplate')
-      ? undefined
-      : changedColumnIndices;
+    const changedColumnIndices = this.getChangedColumnIndices(
+      oldItem,
+      newItem,
+      visibleRowIndex,
+      isLiveUpdate,
+    );
+    const hasDataRowTemplate = !!this.option('dataRowTemplate');
 
-    if (columnIndices) {
-      oldItem.cells?.forEach((cell, columnIndex) => {
-        const isCellChanged = columnIndices.includes(columnIndex);
-        if (!isCellChanged && cell?.update) {
-          cell.update(newItem);
-        }
-      });
-
-      newItem.update = oldItem.update;
-      newItem.watch = oldItem.watch;
-      newItem.cells = oldItem.cells;
-
-      if (isLiveUpdate) {
-        newItem.oldValues = oldItem.values;
-      }
-
-      oldItem.update?.(newItem);
-    }
-
-    return columnIndices;
+    return changedColumnIndices?.length && hasDataRowTemplate ? undefined : changedColumnIndices;
   }
 
   /**
@@ -1067,12 +1049,14 @@ export class DataController extends modules.Controller {
     switch (itemChange.type) {
       case 'update': {
         const newItem = itemChange.data;
-        const columnIndices = this._partialUpdateRow(
+        const columnIndices = this.getUpdatedColumnIndices(
           itemChange.oldItem,
           newItem,
           index,
           isLiveUpdate,
         );
+
+        partialUpdateRow(itemChange.oldItem, newItem, columnIndices, isLiveUpdate);
 
         this._items[index] = newItem;
 
