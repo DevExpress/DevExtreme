@@ -542,7 +542,7 @@ export const virtualScrollingDataControllerExtender = (
       return result;
     }
 
-    return dataSource?.viewportSize.apply(dataSource, arguments as unknown as []);
+    return dataSource?.viewportSize.apply(dataSource, arguments as any);
   }
 
   private viewportHeight(height, scrollTop) {
@@ -559,7 +559,7 @@ export const virtualScrollingDataControllerExtender = (
       return result;
     }
 
-    return dataSource?.viewportItemSize.apply(dataSource, arguments as unknown as []);
+    return dataSource?.viewportItemSize.apply(dataSource, arguments as any);
   }
 
   private setViewportPosition() {
@@ -571,7 +571,7 @@ export const virtualScrollingDataControllerExtender = (
       // @ts-expect-error
       rowsScrollController.setViewportPosition.apply(rowsScrollController, arguments);
     } else {
-      dataSource?.setViewportPosition.apply(dataSource, arguments as unknown as []);
+      dataSource?.setViewportPosition.apply(dataSource, arguments as any);
     }
   }
 
@@ -836,7 +836,7 @@ export const virtualScrollingDataControllerExtender = (
     }
 
     const dataSource = this._dataSource;
-    return dataSource?.getItemSize.apply(dataSource, arguments as unknown as []);
+    return dataSource?.getItemSize.apply(dataSource, arguments as any);
   }
 
   private getItemSizes() {
@@ -848,7 +848,7 @@ export const virtualScrollingDataControllerExtender = (
     }
 
     const dataSource = this._dataSource;
-    return dataSource?.getItemSizes.apply(dataSource, arguments as unknown as []);
+    return dataSource?.getItemSizes.apply(dataSource, arguments as any);
   }
 
   private getContentOffset() {
@@ -860,7 +860,7 @@ export const virtualScrollingDataControllerExtender = (
     }
 
     const dataSource = this._dataSource;
-    return dataSource?.getContentOffset.apply(dataSource, arguments as unknown as []);
+    return dataSource?.getContentOffset.apply(dataSource, arguments as any);
   }
 
   public refresh(options?: boolean | RefreshOptions): DeferredObj<unknown> {

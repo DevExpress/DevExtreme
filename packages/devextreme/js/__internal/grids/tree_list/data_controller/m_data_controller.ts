@@ -204,7 +204,7 @@ export class TreeListDataController extends DataController {
   }
 
   private forEachNode() {
-    this._dataSource!.forEachNode.apply(this, arguments as unknown as []);
+    this._dataSource!.forEachNode.apply(this, arguments as any);
   }
 
   // Collect keys by walking the loaded node tree (depth-first, parent before
