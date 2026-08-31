@@ -29,7 +29,7 @@
     .dx-menu-item-content {
       display: flex;
       align-items: center;
-      padding: menuSizes.$menu-padding-block $context-menu-padding-inline;
+      padding: menuSizes.$menu-padding-block var(--dx-context-menu-padding-inline);
       gap: var(--dx-context-menu-item-content-gap);
 
       .dx-menu-item-text {

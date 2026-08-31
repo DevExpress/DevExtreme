@@ -21,26 +21,26 @@
       top: 0;
       right: 0;
       left: 0;
-      width: $tabs-indicator-primary-length;
-      height: $tabs-indicator-primary-thickness;
+      width: var(--dx-tabs-indicator-primary-length);
+      height: var(--dx-tabs-indicator-primary-thickness);
     } @else if $position == right {
       top: 0;
       right: 0;
       bottom: 0;
-      height: $tabs-indicator-primary-length;
-      width: $tabs-indicator-primary-thickness;
+      height: var(--dx-tabs-indicator-primary-length);
+      width: var(--dx-tabs-indicator-primary-thickness);
     } @else if $position == bottom {
       right: 0;
       bottom: 0;
       left: 0;
-      width: $tabs-indicator-primary-length;
-      height: $tabs-indicator-primary-thickness;
+      width: var(--dx-tabs-indicator-primary-length);
+      height: var(--dx-tabs-indicator-primary-thickness);
     } @else if $position == left {
       top: 0;
       bottom: 0;
       left: 0;
-      height: $tabs-indicator-primary-length;
-      width: $tabs-indicator-primary-thickness;
+      height: var(--dx-tabs-indicator-primary-length);
+      width: var(--dx-tabs-indicator-primary-thickness);
     }
   }
 }
@@ -49,7 +49,7 @@
   @include dx-tabs-indicator();
 
   &::after {
-    border-radius: $tabs-indicator-secondary-border-radius;
+    border-radius: var(--dx-tabs-indicator-secondary-border-radius);
   }
 }
 
@@ -57,22 +57,22 @@
   &::after {
     right: 0;
     left: 0;
-    width: $tabs-indicator-secondary-length;
-    height: $tabs-indicator-secondary-thickness;
+    width: var(--dx-tabs-indicator-secondary-length);
+    height: var(--dx-tabs-indicator-secondary-thickness);
 
     @if $position == top {
-      top: calc(-1 * #{$tabs-item-padding-block});
+      top: calc(-1 * var(--dx-tabs-item-padding-block));
     } @else if $position == bottom {
-      bottom: calc(-1 * #{$tabs-item-padding-block});
+      bottom: calc(-1 * var(--dx-tabs-item-padding-block));
     }
   }
 }
 
 @mixin dx-tabs-vertical-indicator-secondary($position) {
   &::after {
-    top: $tabs-item-padding-block;
-    width: $tabs-indicator-secondary-thickness;
-    height: calc($tabs-indicator-secondary-length - 2 * $tabs-item-padding-block);
+    top: var(--dx-tabs-item-padding-block);
+    width: var(--dx-tabs-indicator-secondary-thickness);
+    height: calc(var(--dx-tabs-indicator-secondary-length) - 2 * var(--dx-tabs-item-padding-block));
 
     @if $position == right {
       right: 0;

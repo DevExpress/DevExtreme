@@ -1,0 +1,32 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-color-view-alpha-margin: #{$color-view-alpha-margin};
+  --dx-color-view-alpha-width: #{$color-view-alpha-width};
+  --dx-color-view-bg-box-palette-cell-bg: var(--dx-surface-overlay);
+  --dx-color-view-border: #{$color-view-border};
+  --dx-color-view-color-preview-container-margin: #{$color-view-color-preview-container-margin};
+  --dx-color-view-color-preview-container-padding: #{$color-view-color-preview-container-padding};
+  --dx-color-view-color-preview-height: #{$color-view-color-preview-height};
+  --dx-color-view-container-alpha-label-margin: #{$color-view-container-alpha-label-margin};
+  --dx-color-view-container-alpha-label-width: #{$color-view-container-alpha-label-width};
+  --dx-color-view-container-hex-margin: #{$color-view-container-hex-margin};
+  --dx-color-view-container-line-height: #{$color-view-container-line-height};
+  --dx-color-view-container-margin-block-end: #{$color-view-container-margin-block-end};
+  --dx-color-view-container-textbox-margin: #{$color-view-container-textbox-margin};
+  --dx-color-view-container-textbox-width: #{$color-view-container-textbox-width};
+  --dx-color-view-container-width: #{$color-view-container-width};
+  --dx-color-view-controls-container-margin: #{$color-view-controls-container-margin};
+  --dx-color-view-controls-container-width: #{$color-view-controls-container-width};
+  --dx-color-view-handle-border: #{$color-view-handle-border};
+  --dx-color-view-handle-content: #{$color-view-handle-content};
+  --dx-color-view-hue-scale-height: var(--dx-color-view-palette-height);
+  --dx-color-view-hue-scale-wrapper-height: #{$color-view-hue-scale-wrapper-height};
+  --dx-color-view-hue-scale-margin: #{$color-view-hue-scale-margin};
+  --dx-color-view-hue-scale-width: #{$color-view-hue-scale-width};
+  --dx-color-view-label-content: #{$color-view-label-content};
+  --dx-color-view-palette-height: #{$color-view-palette-height};
+  --dx-color-view-palette-width: #{$color-view-palette-width};
+  --dx-color-view-preview-container-margin: #{$color-view-preview-container-margin};
+}

@@ -43,6 +43,6 @@ $gantt-ti-bg: ds.$color-bg-primary-alpha-hovered !default;
  * Derived values, moved out of _index.scss: a file that emits rules must not declare
  * variables (NAMING.md, O7).
  */
-$gantt-successor-background-color: ds.$color-bg-static-light;
+$gantt-successor-bg: ds.$color-bg-static-light;
 
 $gantt-selection-bg: ds.$color-bg-primary-subtler !default;
