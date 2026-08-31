@@ -41,8 +41,6 @@
     "dx-cardview-card-content",
     "dx-cardview-card-header",
     "dx-cardview-card-selection",
-    "dx-cardview-column-chooser-list",
-    "dx-cardview-column-chooser-plain",
     "dx-cardview-content",
     "dx-cardview-field-caption",
     "dx-cardview-field-template",
@@ -50,7 +48,6 @@
     "dx-cardview-field-value__text-part--highlighted",
     "dx-cardview-header-container",
     "dx-cardview-header-item-container",
-    "dx-cardview-header-item-sort-indicator",
     "dx-cardview-headerpanel-content--with-header-items",
     "dx-cardview-headerpanel-text-empty",
     "dx-cardview-headers",
@@ -64,7 +61,6 @@
     "dx-avatar",
     "dx-chat-alertlist",
     "dx-chat-alertlist-error",
-    "dx-chat-confirmation-popup-wrapper",
     "dx-chat-editing-preview",
     "dx-chat-editing-preview-cancel-button",
     "dx-chat-editing-preview-caption",
@@ -149,16 +145,11 @@
     "dx-dateviewroller-month"
   ],
   "diagram": [
-    "dx-diagram-context-toolbox",
     "dx-diagram-context-toolbox-target",
-    "dx-diagram-contextmenu",
-    "dx-diagram-floating-toolbar-container",
     "dx-diagram-loading-indicator",
     "dx-diagram-mobile-toolbar-color-box-opened",
-    "dx-diagram-properties-popup",
     "dx-diagram-toolbar",
     "dx-diagram-toolbox-panel",
-    "dx-diagram-toolbox-popup",
     "dx-diagram-touchbar",
     "dx-dropdownmenu-popup"
   ],
@@ -215,10 +206,6 @@
     "dx-fileuploader-show-file-list",
     "dx-fileuploader-wrapper",
     "dx-invalid"
-  ],
-  "filter-builder": [
-    "dx-filterbuilder-operations",
-    "dx-filterbuilder-overlay"
   ],
   "form": [
     "dx-field-item",
@@ -311,7 +298,6 @@
     "dx-aidialog-content",
     "dx-aidialog-controls",
     "dx-aidialog-title",
-    "dx-htmleditor-add-image-popup",
     "dx-htmleditor-content",
     "dx-htmleditor-toolbar-format",
     "dx-htmleditor-toolbar-menu-separator",
@@ -328,7 +314,6 @@
   ],
   "list": [
     "dx-list-border-visible",
-    "dx-list-context-menucontent",
     "dx-list-group",
     "dx-list-group-body",
     "dx-list-group-header",
@@ -373,7 +358,6 @@
     "dx-numberbox-spin-up-icon"
   ],
   "pivot-grid": [
-    "dx-pivotgrid-fields-container",
     "dx-pivotgrid-scrollbar-measure-element"
   ],
   "popup": [
@@ -438,7 +422,6 @@
     "dx-scheduler-header-panel",
     "dx-scheduler-header-panel-cell",
     "dx-scheduler-header-panel-empty-cell",
-    "dx-scheduler-overlay-panel",
     "dx-scheduler-sidebar-scrollable",
     "dx-scheduler-small",
     "dx-scheduler-time-panel",
