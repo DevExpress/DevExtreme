@@ -1156,15 +1156,15 @@ export class DataController extends modules.Controller {
       return;
     }
 
-    const items = this._afterProcessItems(this.getProcessedItems(change));
-    const oldItems = this._items.length === items.length ? this._items : null;
+    const newItems = this._afterProcessItems(this.getProcessedItems(change));
+    const oldItems = this._items.length === newItems.length ? this._items : null;
 
-    change.items = items;
+    change.items = newItems;
 
     this._applyChange(change);
 
     syncRowsAfterChange(this._items, {
-      newItems: items,
+      newItems,
       oldItems,
       rowIndexDelta: this.getRowIndexDelta(),
     });
@@ -1179,6 +1179,8 @@ export class DataController extends modules.Controller {
       return this._cachedProcessedItems;
     }
 
+    // change.items at this stage is defined only if virtualScrolling
+    // + legacyScrollingMode enabled
     const dataItems = this._beforeProcessItems(change.items ?? this._dataSource.items());
     const processedItems = this._processItems(dataItems, change);
 
@@ -1206,7 +1208,7 @@ export class DataController extends modules.Controller {
     change: DataChange = { changeType: 'refresh' },
     isDataChanged?: boolean,
   ): void {
-    this.prepareChange(change, isDataChanged);
+    this.fillChangeFlags(change, isDataChanged);
 
     if (this._updateLockCount && !change.cancel) {
       this.changes.push(change);
@@ -1215,12 +1217,14 @@ export class DataController extends modules.Controller {
 
     this._updateItemsCore(change);
 
-    if (change.cancel) return;
+    if (change.cancel) {
+      return;
+    }
 
     this._fireChanged(change);
   }
 
-  private prepareChange(change: DataChange, isDataChanged?: boolean): void {
+  private fillChangeFlags(change: DataChange, isDataChanged?: boolean): void {
     change.isFirstRender = !this.changed.fired();
 
     if (this._repaintChangesOnly !== undefined) {

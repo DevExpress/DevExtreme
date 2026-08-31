@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 
 import type {
-  ChangedRows, DataChange, ItemChange, ProcessedItem, RowWatch, SyncRowsOptions, UpdateChange,
+  ChangedRows, DataChange, ItemChange, ProcessedItem, RowWatch, UpdateChange,
 } from '../../types';
 import {
   canDiffColumns,
@@ -598,7 +598,7 @@ describe('resolveRepaintChangesOnly', () => {
 describe('syncRowsAfterChange', () => {
   const syncRows = (
     items: ProcessedItem[],
-    options: Partial<SyncRowsOptions> = {},
+    options: Partial<Parameters<typeof syncRowsAfterChange>[1]> = {},
   ): void => syncRowsAfterChange(items, {
     newItems: items,
     oldItems: null,

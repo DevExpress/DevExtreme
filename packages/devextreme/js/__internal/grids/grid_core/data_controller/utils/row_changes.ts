@@ -3,7 +3,7 @@ import { equalByValue } from '@js/core/utils/common';
 import type { OperationTypes } from '../../data_source_adapter/types';
 import type {
   ChangedRows, DataChange, ItemChange, ProcessedItem, RowIndexByKey,
-  RowOperation, SyncRowsOptions, UpdateChange, UpdateRowChange,
+  RowOperation, UpdateChange, UpdateRowChange,
 } from '../types';
 
 export function isSameItem(
@@ -274,7 +274,14 @@ export function resolveRepaintChangesOnly(
   return !operationTypes.grouping && !operationTypes.filtering && repaintChangesOnly;
 }
 
-export function syncRowsAfterChange(items: ProcessedItem[], options: SyncRowsOptions): void {
+export function syncRowsAfterChange(
+  items: ProcessedItem[],
+  options: {
+    newItems: ProcessedItem[];
+    oldItems: ProcessedItem[] | null;
+    rowIndexDelta: number;
+  },
+): void {
   const { newItems, oldItems, rowIndexDelta } = options;
 
   items.forEach((item, index) => {
