@@ -1,0 +1,41 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-tree-view-bg-focused: #{$tree-view-bg-focused};
+  --dx-tree-view-bg-hovered: #{$tree-view-bg-hovered};
+  --dx-tree-view-border: #{$tree-view-border};
+  --dx-tree-view-border-padding: #{$tree-view-border-padding};
+  --dx-tree-view-border-visible-border: #{$tree-view-border-visible-border};
+  --dx-tree-view-checkbox-accent-content-focused: #{$tree-view-checkbox-accent-content-focused};
+  --dx-tree-view-checkbox-bg-disabled: #{$tree-view-checkbox-bg-disabled};
+  --dx-tree-view-checkbox-bg-focused: #{$tree-view-checkbox-bg-focused};
+  --dx-tree-view-checkbox-border-disabled: #{$tree-view-checkbox-border-disabled};
+  --dx-tree-view-checkbox-border-focused: #{$tree-view-checkbox-border-focused};
+  --dx-tree-view-checkbox-checked-border-focused: #{$tree-view-checkbox-checked-border-focused};
+  --dx-tree-view-checkbox-container-size: #{$tree-view-checkbox-container-size};
+  --dx-tree-view-checkbox-icon-disabled: #{$tree-view-checkbox-icon-disabled};
+  --dx-tree-view-checkbox-indeterminate-bg-disabled: #{$tree-view-checkbox-indeterminate-bg-disabled};
+  --dx-tree-view-checkbox-offset: #{$tree-view-checkbox-offset};
+  --dx-tree-view-container-with-border-offset: #{$tree-view-container-with-border-offset};
+  --dx-tree-view-content: #{$tree-view-content};
+  --dx-tree-view-content-focused: #{$tree-view-content-focused};
+  --dx-tree-view-item-bg-selected: #{$tree-view-item-bg-selected};
+  --dx-tree-view-item-border-radius: #{$tree-view-item-border-radius};
+  --dx-tree-view-item-content-disabled: #{$tree-view-item-content-disabled};
+  --dx-tree-view-item-content-hovered: #{$tree-view-item-content-hovered};
+  --dx-tree-view-item-content-selected: var(--dx-tree-view-content);
+  --dx-tree-view-item-element-gap: #{$tree-view-item-element-gap};
+  --dx-tree-view-item-margin: #{$tree-view-item-margin};
+  --dx-tree-view-item-padding: #{$tree-view-item-padding};
+  --dx-tree-view-item-padding-inline: #{$tree-view-item-padding-inline};
+  --dx-tree-view-load-indicator-size: #{$tree-view-load-indicator-size};
+  --dx-tree-view-opacity-disabled: #{$tree-view-opacity-disabled};
+  --dx-tree-view-search-box-margin-block-end: #{$tree-view-search-box-margin-block-end};
+  --dx-tree-view-search-editor-height: #{$tree-view-search-editor-height};
+  --dx-tree-view-select-all-item-border-block-end: #{$tree-view-select-all-item-border-block-end};
+  --dx-tree-view-select-all-item-border-visible-padding: #{$tree-view-select-all-item-border-visible-padding};
+  --dx-tree-view-select-all-item-padding: #{$tree-view-select-all-item-padding};
+  --dx-tree-view-spin-icon: #{$tree-view-spin-icon};
+  --dx-tree-view-toggle-item-width: #{$tree-view-toggle-item-width};
+}

@@ -2,44 +2,44 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/speedDialAction" as baseSpeedDialAction with (
-  $speeddialaction-fa-button-label-border-radius: $speed-dial-action-fa-button-label-border-radius,
+  $speeddialaction-fa-button-label-border-radius: var(--dx-speed-dial-action-fa-button-label-border-radius),
 );
 @use "../button/colors" as buttonColors;
 @use "../overlay";
 @include baseSpeedDialAction.dx-fa-button-mixin(
-  $speed-dial-action-main-fa-button-size,
-  $speed-dial-action-fa-button-size,
+  var(--dx-speed-dial-action-main-fa-button-size),
+  var(--dx-speed-dial-action-fa-button-size),
   $global-icon-size,
   $global-font-size,
-  $speed-dial-action-fa-button-label-padding,
-  $speed-dial-action-fa-button-label-offset,
-  $speed-dial-action-content,
-  $speed-dial-action-bg,
-  $speed-dial-action-shadow,
-  $speed-dial-action-backdrop,
-  $speed-dial-action-bg-hovered,
-  $speed-dial-action-bg-active,
-  $speed-dial-action-label-shadow,
-  $speed-dial-action-main-bg,
+  var(--dx-speed-dial-action-fa-button-label-padding),
+  var(--dx-speed-dial-action-fa-button-label-offset),
+  var(--dx-speed-dial-action-content),
+  var(--dx-speed-dial-action-bg),
+  var(--dx-speed-dial-action-shadow),
+  var(--dx-speed-dial-action-backdrop),
+  var(--dx-speed-dial-action-bg-hovered),
+  var(--dx-speed-dial-action-bg-active),
+  var(--dx-speed-dial-action-label-shadow),
+  var(--dx-speed-dial-action-main-bg),
   buttonColors.$button-default-contained-content,
-  $speed-dial-action-main-bg-hovered,
-  $speed-dial-action-main-bg-active
+  var(--dx-speed-dial-action-main-bg-hovered),
+  var(--dx-speed-dial-action-main-bg-active)
 );
 
 .dx-fa-button {
   &.dx-fa-button-main {
     .dx-overlay-content {
       .dx-fa-button-label {
-        padding: $speed-dial-action-main-fa-button-label-padding;
+        padding: var(--dx-speed-dial-action-main-fa-button-label-padding);
         font-size: $global-font-size;
-        font-weight: $speed-dial-action-fa-button-label-font-weight;
+        font-weight: var(--dx-speed-dial-action-fa-button-label-font-weight);
       }
     }
 
     &.dx-fa-button-with-label {
       .dx-overlay-content {
         .dx-fa-button-icon {
-          padding-inline-start: $speed-dial-action-main-fa-button-padding-inline;
+          padding-inline-start: var(--dx-speed-dial-action-main-fa-button-padding-inline);
         }
       }
     }

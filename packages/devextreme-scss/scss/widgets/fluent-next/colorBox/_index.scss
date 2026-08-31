@@ -58,7 +58,7 @@
 
 .dx-colorbox-overlay {
   &.dx-overlay-content {
-    background-color: colorViewColors.$color-view-content-box-overlay-bg;
+    background-color: var(--dx-color-box-overlay-bg);
   }
 
   .dx-popup-content {

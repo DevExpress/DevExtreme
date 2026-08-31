@@ -8,7 +8,7 @@
 
 .dx-tabs {
   padding: 0;
-  background-color: $tabs-tab-bg;
+  background-color: var(--dx-tabs-tab-bg);
 
   .dx-scrollable {
     flex-basis: 100%;
