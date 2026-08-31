@@ -15,8 +15,8 @@ import type { BeforePushEvent } from '@ts/data/types';
 
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
-import type { CustomLoadOptions, CustomLoadResult } from './custom_load_pipeline';
-import { CustomLoadPipeline } from './custom_load_pipeline';
+import type { CustomLoadOptions, CustomLoadResult } from './custom_loader';
+import { CustomLoader } from './custom_loader';
 import {
   calculateOperationTypes,
   cloneItems,
@@ -100,7 +100,7 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private readonly group!: (args?: any) => any;
 
-  private _customLoadPipeline!: CustomLoadPipeline;
+  private customLoader!: CustomLoader;
 
   public init(dataSource?: DataSource): void {
     if (!dataSource) {
@@ -122,7 +122,7 @@ export default class DataSourceAdapter extends modules.Controller {
     that._lastOperationTypes = {};
     that._eventsStrategy = dataSource._eventsStrategy;
     that._totalCountCorrection = 0;
-    that._customLoadPipeline = new CustomLoadPipeline(
+    that.customLoader = new CustomLoader(
       dataSource,
       () => this.option('loadingTimeout'),
       (operation) => this.customizeStoreLoadOptionsHandler(operation),
@@ -803,15 +803,15 @@ export default class DataSourceAdapter extends modules.Controller {
   }
 
   protected loadFromStore(loadOptions: StoreLoadOptions): DeferredObj<unknown> {
-    return this._customLoadPipeline.loadFromStore(loadOptions);
+    return this.customLoader.loadFromStore(loadOptions);
   }
 
   protected isCustomLoading(): boolean {
-    return this._customLoadPipeline.isCustomLoading();
+    return this.customLoader.isLoading();
   }
 
-  protected isLoadingAll(): boolean {
-    return this._customLoadPipeline.isLoadingAll();
+  protected isCustomLoadingAll(): boolean {
+    return this.customLoader.isLoadingAll();
   }
 
   /**
@@ -819,21 +819,21 @@ export default class DataSourceAdapter extends modules.Controller {
    */
   protected load(options?: CustomLoadOptions): DeferredObj<unknown> {
     if (options) {
-      return this._customLoadPipeline.load(options);
+      return this.customLoader.load(options);
     }
 
     return this._dataSource.load() as unknown as DeferredObj<unknown>;
   }
 
-  public loadAll(): DeferredObj<CustomLoadResult> {
-    return this._customLoadPipeline.loadAll();
+  public customLoadAll(): DeferredObj<CustomLoadResult> {
+    return this.customLoader.loadAll();
   }
 
-  public processLoadedData(
+  public customProcessLoadedData(
     data: RawItemData[],
     loadOptions: StoreLoadOptions,
   ): DeferredObj<CustomLoadResult> {
-    return this._customLoadPipeline.processLoadedData(data, loadOptions);
+    return this.customLoader.processLoadedData(data, loadOptions);
   }
 
   /**

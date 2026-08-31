@@ -11,10 +11,19 @@ export type CustomLoadOptions = StoreLoadOptions & { isLoadingAll?: boolean };
 
 export type CustomLoadResult = RawItemData[] | LoadOperation['extra'];
 
-export class CustomLoadPipeline {
-  private customLoading = false;
+/**
+ * Loads data through the adapter's `customizeStoreLoadOptions` and
+ * `customizeLoadResult` stages, but leaves the DataSource's own state alone:
+ * its items, pageIndex, totalCount and load queue stay as they are, and the
+ * result goes to the caller instead.
+ *
+ * Serves what the grid needs beyond the rows it renders: lookups, header
+ * filters, focused row lookups, group counts and `loadAll`.
+ */
+export class CustomLoader {
+  private _isLoading = false;
 
-  private loadingAll = false;
+  private _isLoadingAll = false;
 
   constructor(
     private readonly dataSource: DataSource,
@@ -22,6 +31,14 @@ export class CustomLoadPipeline {
     private readonly customizeStoreLoadOptions: (operation: LoadOperation) => void,
     private readonly customizeLoadResult: (operation: LoadOperation) => void,
   ) {}
+
+  public isLoading(): boolean {
+    return this._isLoading;
+  }
+
+  public isLoadingAll(): boolean {
+    return this._isLoadingAll;
+  }
 
   public load(options: CustomLoadOptions): DeferredObj<CustomLoadResult> {
     const { dataSource } = this;
@@ -42,9 +59,9 @@ export class CustomLoadPipeline {
       }
     });
 
-    this.loadingAll = options.isLoadingAll ?? false;
+    this._isLoadingAll = options.isLoadingAll ?? false;
 
-    this.scheduleCustomLoadCallbacks(d);
+    this.schedulerLoadingCallbacks(d);
     dataSource._scheduleLoadCallbacks(d);
 
     this.customizeStoreLoadOptions(operation);
@@ -85,7 +102,7 @@ export class CustomLoadPipeline {
         dataSource._eventsStrategy.fireEvent('loadError', args);
       })
       .always(() => {
-        this.loadingAll = false;
+        this._isLoadingAll = false;
       })
       .promise() as unknown as DeferredObj<CustomLoadResult>;
   }
@@ -145,19 +162,11 @@ export class CustomLoadPipeline {
     return d;
   }
 
-  public isCustomLoading(): boolean {
-    return this.customLoading;
-  }
-
-  public isLoadingAll(): boolean {
-    return this.loadingAll;
-  }
-
-  private scheduleCustomLoadCallbacks(deferred: DeferredObj<unknown>): void {
-    this.customLoading = true;
+  private schedulerLoadingCallbacks(deferred: DeferredObj<unknown>): void {
+    this._isLoading = true;
 
     deferred.always(() => {
-      this.customLoading = false;
+      this._isLoading = false;
     });
   }
 }
