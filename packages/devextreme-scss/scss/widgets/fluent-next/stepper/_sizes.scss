@@ -2,14 +2,12 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 @use "../button/sizes" as buttonSizes;
-@use "../typography/sizes" as typographySizes;
 
 $stepper-padding: null !default;
 $stepper-step-min-size: null !default;
 $stepper-step-indicator-size: null !default;
 $stepper-step-content-row-gap: null !default;
 $stepper-step-content-column-gap: null !default;
-$stepper-step-optional-mark-font-size: typographySizes.$typography-xs-font-size !default;
 $stepper-step-icon-size: buttonSizes.$button-icon-size !default;
 
 $stepper-step-font-weight-selected: ds.$font-weight-base-strong !default;

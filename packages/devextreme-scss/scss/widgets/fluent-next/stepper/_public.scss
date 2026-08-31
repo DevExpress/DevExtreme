@@ -37,7 +37,7 @@
   --dx-stepper-step-invalid-label-content: #{$stepper-step-invalid-label-content};
   --dx-stepper-step-label-content-selected: #{$stepper-step-label-content-selected};
   --dx-stepper-step-min-size: #{$stepper-step-min-size};
-  --dx-stepper-step-optional-mark-font-size: #{$stepper-step-optional-mark-font-size};
+  --dx-stepper-step-optional-mark-font-size: var(--dx-typography-xs-font-size);
   --dx-stepper-step-shadow: #{$stepper-step-shadow};
   --dx-stepper-step-shadow-disabled: var(--dx-stepper-step-base-bg);
   --dx-stepper-step-transition-duration: #{$stepper-step-transition-duration};
