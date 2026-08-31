@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../../testing/visualtestrc-schema.json",
+  "comment": "Sub-pixel noise, measured 30.08.2026: the group header re-blends a few pixels between runs. The looser comparison lives here, per demo, instead of being the default for every screenshot in every theme.",
+  "comparison-options": {
+    "looksSameComparisonOptions": {
+      "tolerance": 20,
+      "antialiasingTolerance": 20
+    }
+  }
+}

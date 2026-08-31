@@ -1,0 +1,33 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-check-box-arrow-font-size: #{$check-box-arrow-font-size};
+  --dx-check-box-arrow-icon-size: #{$check-box-arrow-icon-size};
+  --dx-check-box-border: #{$check-box-border};
+  --dx-check-box-border-active: #{$check-box-border-active};
+  --dx-check-box-border-disabled: #{$check-box-border-disabled};
+  --dx-check-box-border-hovered: #{$check-box-border-hovered};
+  --dx-check-box-border-width: #{$check-box-border-width};
+  --dx-check-box-icon-bg: #{$check-box-icon-bg};
+  --dx-check-box-icon-bg-disabled: #{$check-box-icon-bg-disabled};
+  --dx-check-box-icon-border-radius: #{$check-box-icon-border-radius};
+  --dx-check-box-icon-checked-bg: #{$check-box-icon-checked-bg};
+  --dx-check-box-icon-checked-bg-focused: #{$check-box-icon-checked-bg-focused};
+  --dx-check-box-icon-checked-bg-hovered: #{$check-box-icon-checked-bg-hovered};
+  --dx-check-box-icon-font-size: #{$check-box-icon-font-size};
+  --dx-check-box-indeterminate-icon-border-radius: #{$check-box-indeterminate-icon-border-radius};
+  --dx-check-box-indeterminate-icon-height: #{$check-box-indeterminate-icon-height};
+  --dx-check-box-indeterminate-icon-width: #{$check-box-indeterminate-icon-width};
+  --dx-check-box-invalid-bg: #{$check-box-invalid-bg};
+  --dx-check-box-invalid-bg-focused: #{$check-box-invalid-bg-focused};
+  --dx-check-box-invalid-bg-hovered: #{$check-box-invalid-bg-hovered};
+  --dx-check-box-invalid-border: #{$check-box-invalid-border};
+  --dx-check-box-invalid-border-focused: #{$check-box-invalid-border-focused};
+  --dx-check-box-invalid-border-hovered: #{$check-box-invalid-border-hovered};
+  --dx-check-box-invalid-mark-bg: #{$check-box-invalid-mark-bg};
+  --dx-check-box-invalid-mark-bg-focused: #{$check-box-invalid-mark-bg-focused};
+  --dx-check-box-invalid-mark-bg-hovered: #{$check-box-invalid-mark-bg-hovered};
+  --dx-check-box-text-padding-inline-end: #{$check-box-text-padding-inline-end};
+  --dx-check-box-text-padding-inline-start: #{$check-box-text-padding-inline-start};
+}

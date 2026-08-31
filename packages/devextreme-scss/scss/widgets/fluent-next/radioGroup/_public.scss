@@ -1,0 +1,7 @@
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-radio-group-collection-column-gap: #{$radio-group-collection-column-gap};
+  --dx-radio-group-collection-horizontal-column-gap: #{$radio-group-collection-horizontal-column-gap};
+  --dx-radio-group-radio-button-margin-block: #{$radio-group-radio-button-margin-block};
+}
