@@ -72,11 +72,13 @@
 @use "tooltip/public" as tooltipPublic;
 @use "treeList/public" as treeListPublic;
 @use "treeView/public" as treeViewPublic;
+@use "typography/public" as typographyPublic;
 @use "validation/public" as validationPublic;
 @use "widget/public" as widgetPublic;
 
 :root {
   @include commonPublic.publish();
+  @include typographyPublic.publish();
 }
 
 .dx-accordion {

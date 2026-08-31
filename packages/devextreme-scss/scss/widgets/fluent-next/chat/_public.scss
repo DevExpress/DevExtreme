@@ -60,7 +60,7 @@
   --dx-chat-message-editing-preview-accent-content: #{$chat-message-editing-preview-accent-content};
   --dx-chat-message-editing-preview-border-width: #{$chat-message-editing-preview-border-width};
   --dx-chat-message-editing-preview-cancel-button-content: #{$chat-message-editing-preview-cancel-button-content};
-  --dx-chat-message-editing-preview-caption-font-size: #{$chat-message-editing-preview-caption-font-size};
+  --dx-chat-message-editing-preview-caption-font-size: var(--dx-typography-xs-font-size);
   --dx-chat-message-editing-preview-content-padding-inline: #{$chat-message-editing-preview-content-padding-inline};
   --dx-chat-message-editing-preview-content-row-gap: #{$chat-message-editing-preview-content-row-gap};
   --dx-chat-message-group-alignment-start-gap: #{$chat-message-group-alignment-start-gap};
