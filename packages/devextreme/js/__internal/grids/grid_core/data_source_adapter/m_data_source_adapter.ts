@@ -15,6 +15,7 @@ import type { BeforePushEvent } from '@ts/data/types';
 
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
+import { CustomLoadPipeline } from './custom_load_pipeline';
 import {
   calculateOperationTypes,
   cloneItems,
@@ -103,6 +104,8 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private readonly group!: (args?: any) => any;
 
+  private _customLoadPipeline!: CustomLoadPipeline;
+
   public init(dataSource?: DataSource): void {
     if (!dataSource) {
       return;
@@ -124,6 +127,7 @@ export default class DataSourceAdapter extends modules.Controller {
     that._eventsStrategy = dataSource._eventsStrategy;
     that._totalCountCorrection = 0;
     that._isLoadingAll = false;
+    that._customLoadPipeline = new CustomLoadPipeline(dataSource);
 
     that.changed = Callbacks();
     that.loadingChanged = Callbacks();
@@ -808,21 +812,7 @@ export default class DataSourceAdapter extends modules.Controller {
   }
 
   protected loadFromStore(loadOptions: StoreLoadOptions): DeferredObj<unknown> {
-    const d = Deferred();
-
-    (this._dataSource
-      .store()
-      .load(loadOptions) as unknown as DeferredObj<unknown>)
-      .done((data: any, extra) => {
-        if (data && !Array.isArray(data) && Array.isArray(data.data)) {
-          extra = data;
-          data = data.data;
-        }
-        d.resolve(data, extra);
-      })
-      .fail((...args: unknown[]) => { d.reject(...args); });
-
-    return d;
+    return this._customLoadPipeline.loadFromStore(loadOptions);
   }
 
   protected isCustomLoading() {
