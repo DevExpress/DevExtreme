@@ -16,6 +16,8 @@ import {
   isSameItem,
   pushChangedRow,
   resetChangedRows,
+  resolveRepaintChangesOnly,
+  syncRowsAfterChange,
   updateKeptRows,
   updateRowCells,
 } from '../row_changes';
@@ -461,5 +463,76 @@ describe('pushChangedRow', () => {
     expect(changedRows.rowIndices).toEqual([5]);
     expect(changedRows.changeTypes).toEqual(['remove']);
     expect(changedRows.columnIndices).toEqual([undefined]);
+  });
+});
+
+describe('resolveRepaintChangesOnly', () => {
+  it('should leave the mode unset when the operation types are unknown', () => {
+    expect(resolveRepaintChangesOnly(undefined, true)).toBeUndefined();
+  });
+
+  it('should turn the mode off for the operations that rebuild the rows', () => {
+    expect(resolveRepaintChangesOnly({ grouping: true }, true)).toBe(false);
+    expect(resolveRepaintChangesOnly({ filtering: true }, true)).toBe(false);
+  });
+
+  it('should keep the option for the other operations', () => {
+    expect(resolveRepaintChangesOnly({ paging: true }, true)).toBe(true);
+    expect(resolveRepaintChangesOnly({ paging: true }, false)).toBe(false);
+    expect(resolveRepaintChangesOnly({ paging: true }, undefined)).toBeUndefined();
+  });
+});
+
+describe('syncRowsAfterChange', () => {
+  const syncRows = (
+    items: ProcessedItem[],
+    options: Partial<Parameters<typeof syncRowsAfterChange>[1]> = {},
+  ): void => syncRowsAfterChange(items, {
+    newItems: items,
+    oldItems: null,
+    rowIndexDelta: 0,
+    ...options,
+  });
+
+  it('should number the rows with their visible indices', () => {
+    const items = [row({ key: 1 }), row({ key: 2 })];
+
+    syncRows(items, { rowIndexDelta: 1 });
+
+    expect(items.map((item) => item.rowIndex)).toEqual([-1, 0]);
+  });
+
+  it('should carry over the cells rendered at the same positions', () => {
+    const cells = [{}];
+    const items = [row({ key: 1 })];
+
+    syncRows(items, { oldItems: [row({ key: 2, cells })] });
+
+    expect(items[0].cells).toBe(cells);
+  });
+
+  it('should give a row with no rendered cells an empty list', () => {
+    const items = [row({ key: 1, cells: [{}] })];
+
+    syncRows(items, { oldItems: [row({ key: 1 })] });
+
+    expect(items[0].cells).toEqual([]);
+  });
+
+  it('should keep the cells when the rows do not line up', () => {
+    const cells = [{}];
+    const items = [row({ key: 1, cells })];
+
+    syncRows(items);
+
+    expect(items[0].cells).toBe(cells);
+  });
+
+  it('should take the load index of the row the change brought', () => {
+    const items = [row({ key: 1, loadIndex: 5 }), row({ key: 2, loadIndex: 6 })];
+
+    syncRows(items, { newItems: [row({ key: 1, loadIndex: 7 })] });
+
+    expect(items.map((item) => item.loadIndex)).toEqual([7, 6]);
   });
 });
