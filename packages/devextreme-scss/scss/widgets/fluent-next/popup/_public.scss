@@ -26,6 +26,6 @@
   --dx-popup-title-padding: #{$popup-title-padding};
   --dx-popup-toolbar-height: #{$popup-toolbar-height};
   --dx-popup-toolbar-item-spacing: #{$popup-toolbar-item-spacing};
-  --dx-popup-toolbar-label-font-size: #{$popup-toolbar-label-font-size};
+  --dx-popup-toolbar-label-font-size: var(--dx-typography-m-font-size);
   --dx-popup-toolbar-padding-inline: #{$popup-toolbar-padding-inline};
 }

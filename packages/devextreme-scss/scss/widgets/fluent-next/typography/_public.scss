@@ -1,0 +1,24 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-typography-bg: #{$typography-bg};
+  --dx-typography-heading-1-font-size: #{$typography-heading-1-font-size};
+  --dx-typography-heading-1-font-weight: #{$typography-heading-1-font-weight};
+  --dx-typography-heading-2-font-size: #{$typography-heading-2-font-size};
+  --dx-typography-heading-2-font-weight: #{$typography-heading-2-font-weight};
+  --dx-typography-heading-3-font-size: #{$typography-heading-3-font-size};
+  --dx-typography-heading-3-font-weight: #{$typography-heading-3-font-weight};
+  --dx-typography-heading-4-font-size: #{$typography-heading-4-font-size};
+  --dx-typography-heading-4-font-weight: #{$typography-heading-4-font-weight};
+  --dx-typography-heading-5-font-size: #{$typography-heading-5-font-size};
+  --dx-typography-heading-5-font-weight: #{$typography-heading-5-font-weight};
+  --dx-typography-heading-6-font-size: #{$typography-heading-6-font-size};
+  --dx-typography-heading-6-font-weight: #{$typography-heading-6-font-weight};
+  --dx-typography-l-font-size: #{$typography-l-font-size};
+  --dx-typography-link-content: #{$typography-link-content};
+  --dx-typography-m-font-size: #{$typography-m-font-size};
+  --dx-typography-s-font-size: #{$typography-s-font-size};
+  --dx-typography-xl-font-size: #{$typography-xl-font-size};
+  --dx-typography-xs-font-size: #{$typography-xs-font-size};
+}
