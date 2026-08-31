@@ -9,6 +9,7 @@ import errors from '@js/ui/widget/ui.errors';
 
 import type {
   LocationOption,
+  MarkerObject,
   MarkerOptions,
   RouteOptions,
 } from './provider.dynamic';
@@ -18,6 +19,7 @@ import type {
   MapEngineBounds,
   MapEngineClickEvent,
   MapEngineMap,
+  MapEngineMarker,
   MapEngineTileLayerOptions,
   MapEngineViewState,
 } from './provider.dynamic.osm.engine';
@@ -30,6 +32,83 @@ import { createOpenLayersEngine } from './provider.dynamic.osm.openlayers';
 const DEFAULT_MAX_ZOOM = 19;
 const DEFAULT_SUBDOMAINS = 'abc';
 const LOCATION_EPSILON = 1e-10;
+const FULL_CIRCLE_DEGREES = 360;
+const HALF_CIRCLE_DEGREES = 180;
+const STALE_OPERATION = Symbol('stale operation');
+
+const getDefaultLocation = (): MapLocation => ({ lat: 0, lng: 0 });
+
+const getLocationOptionKey = (location?: LocationOption | null): string => {
+  if (typeof location === 'string') {
+    return `string:${location}`;
+  }
+  if (Array.isArray(location)) {
+    return `array:${location[0]},${location[1]}`;
+  }
+  if (location) {
+    return `object:${location.lat},${location.lng}`;
+  }
+
+  return String(location);
+};
+
+const normalizeLongitude = (longitude: number): number => {
+  if (longitude >= -HALF_CIRCLE_DEGREES && longitude <= HALF_CIRCLE_DEGREES) {
+    return longitude;
+  }
+
+  const shifted = longitude + HALF_CIRCLE_DEGREES;
+  const positive = (shifted % FULL_CIRCLE_DEGREES) + FULL_CIRCLE_DEGREES;
+
+  return (positive % FULL_CIRCLE_DEGREES) - HALF_CIRCLE_DEGREES;
+};
+
+const createBounds = (locations: MapLocation[]): MapEngineBounds | undefined => {
+  if (!locations.length) {
+    return undefined;
+  }
+
+  const longitudes: number[] = [];
+  let north = locations[0].lat;
+  let south = locations[0].lat;
+
+  locations.forEach(({ lat, lng }) => {
+    longitudes.push(normalizeLongitude(lng));
+    north = Math.max(north, lat);
+    south = Math.min(south, lat);
+  });
+  longitudes.sort((first, second) => first - second);
+  let largestGap = -1;
+  let westIndex = 0;
+
+  longitudes.forEach((longitude, index) => {
+    const nextLongitude = index === longitudes.length - 1
+      ? longitudes[0] + FULL_CIRCLE_DEGREES
+      : longitudes[index + 1];
+    const gap = nextLongitude - longitude;
+
+    if (gap > largestGap) {
+      largestGap = gap;
+      westIndex = (index + 1) % longitudes.length;
+    }
+  });
+
+  return {
+    northEast: {
+      lat: north,
+      lng: longitudes[(westIndex + longitudes.length - 1) % longitudes.length],
+    },
+    southWest: {
+      lat: south,
+      lng: longitudes[westIndex],
+    },
+  };
+};
+
+interface EngineMarkerObject extends MarkerObject {
+  engineMarker: MapEngineMarker;
+  location: MapLocation;
+}
 
 const areLocationsEqual = (
   first: MapLocation | null,
@@ -45,6 +124,29 @@ class OsmProvider extends DynamicProvider {
 
   _currentTileType?: MapType;
 
+  _calculatedLocations = new Map<string, MapLocation>();
+
+  _pendingLocationCalculations = new Map<string, Promise<MapLocation>>();
+
+  _boundLocations: MapLocation[] = [];
+
+  _generation = 0;
+
+  render(markers: MarkerOptions[], routes: RouteOptions[]): Promise<unknown> {
+    const generation = this._generation;
+
+    return super.render(markers, routes).then(
+      (result) => (generation === this._generation ? result : false),
+      (error) => {
+        if (generation !== this._generation) {
+          return false;
+        }
+
+        throw error;
+      },
+    );
+  }
+
   _loadImpl(): Promise<void> {
     const window = getWindow() as Window & { ol?: unknown };
     const engine = getRegisteredMapEngine() ?? createOpenLayersEngine(window.ol);
@@ -59,8 +161,14 @@ class OsmProvider extends DynamicProvider {
   }
 
   _init(): Promise<void> {
+    const optionCenter = this._getLatLng(this._option('center'));
+    const center = optionCenter
+      && Number.isFinite(optionCenter.lat)
+      && Number.isFinite(optionCenter.lng)
+      ? optionCenter
+      : getDefaultLocation();
     const engineMap = this._engine?.createMap(this._$container[0], {
-      center: this._resolveLocation(this._option('center')),
+      center,
       zoom: this._option('zoom') ?? 1,
     });
 
@@ -119,13 +227,74 @@ class OsmProvider extends DynamicProvider {
     return result;
   }
 
-  _resolveLocation(location?: LocationOption | null): MapLocation {
-    return this._getLatLng(location) ?? { lat: 0, lng: 0 };
+  _resolveLocation(location?: LocationOption | null): Promise<MapLocation> {
+    const resolvedLocation = this._getLatLng(location);
+
+    if (resolvedLocation
+      && Number.isFinite(resolvedLocation.lat)
+      && Number.isFinite(resolvedLocation.lng)) {
+      return Promise.resolve(resolvedLocation);
+    }
+
+    return typeof location === 'string'
+      ? this._calculateLocation(location)
+      : Promise.resolve(getDefaultLocation());
+  }
+
+  _calculateLocation(query: string): Promise<MapLocation> {
+    const cachedLocation = this._calculatedLocations.get(query);
+    if (cachedLocation) {
+      return Promise.resolve(cachedLocation);
+    }
+    const pendingCalculation = this._pendingLocationCalculations.get(query);
+    if (pendingCalculation) {
+      return pendingCalculation;
+    }
+
+    const calculateLocation = this._option('providerConfig')?.calculateLocation;
+    if (!calculateLocation) {
+      errors.log('W1031');
+
+      return Promise.resolve(getDefaultLocation());
+    }
+
+    const generation = this._generation;
+
+    const calculation = Promise.resolve()
+      .then(() => calculateLocation(query))
+      .then((location) => {
+        if (location
+          && Number.isFinite(location.lat)
+          && Number.isFinite(location.lng)) {
+          const result = { lat: location.lat, lng: location.lng };
+          if (generation === this._generation) {
+            this._calculatedLocations.set(query, result);
+          }
+
+          return result;
+        }
+
+        return getDefaultLocation();
+      }, () => getDefaultLocation());
+
+    this._pendingLocationCalculations.set(query, calculation);
+
+    return calculation.then((location) => {
+      if (this._pendingLocationCalculations.get(query) === calculation) {
+        this._pendingLocationCalculations.delete(query);
+      }
+
+      return location;
+    });
   }
 
   _attachHandlers(): void {
     this._engineMap?.attachHandlers({
       click: (event) => this._clickActionHandler(event),
+      markerSizeChange: () => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        this._fitBounds();
+      },
       viewChange: (view) => this._viewChangeHandler(view),
     });
   }
@@ -157,7 +326,9 @@ class OsmProvider extends DynamicProvider {
   }
 
   updateDimensions(): Promise<void> {
-    this._engineMap?.updateDimensions();
+    if (this._engineMap?.updateDimensions()) {
+      return this._fitBounds();
+    }
 
     return Promise.resolve();
   }
@@ -186,11 +357,19 @@ class OsmProvider extends DynamicProvider {
   }
 
   updateCenter(): Promise<void> {
-    this._engineMap?.setView({
-      center: this._resolveLocation(this._option('center')),
-    });
+    const engineMap = this._engineMap;
+    const centerOption = this._option('center');
+    const centerOptionKey = getLocationOptionKey(centerOption);
 
-    return Promise.resolve();
+    return this._resolveLocation(centerOption).then((center) => {
+      if (engineMap !== this._engineMap
+        || centerOptionKey !== getLocationOptionKey(this._option('center'))) {
+        return;
+      }
+
+      engineMap?.setView({ center });
+      this._option('center', center);
+    });
   }
 
   updateZoom(): Promise<void> {
@@ -215,16 +394,28 @@ class OsmProvider extends DynamicProvider {
   }
 
   updateBounds(): Promise<void> {
-    const bounds = this._option('bounds');
-    const northEast = this._getLatLng(bounds?.northEast);
-    const southWest = this._getLatLng(bounds?.southWest);
-
-    if (northEast && southWest) {
-      const engineBounds: MapEngineBounds = { northEast, southWest };
-      this._engineMap?.fitBounds(engineBounds);
+    if (!this._areBoundsSet()) {
+      return Promise.resolve();
     }
 
-    return Promise.resolve();
+    const bounds = this._option('bounds');
+    const engineMap = this._engineMap;
+    const northEastOption = bounds?.northEast;
+    const southWestOption = bounds?.southWest;
+    const northEastOptionKey = getLocationOptionKey(northEastOption);
+    const southWestOptionKey = getLocationOptionKey(southWestOption);
+
+    return Promise.all([
+      this._resolveLocation(northEastOption),
+      this._resolveLocation(southWestOption),
+    ]).then(([northEast, southWest]) => {
+      const currentBounds = this._option('bounds');
+      if (engineMap === this._engineMap
+        && northEastOptionKey === getLocationOptionKey(currentBounds?.northEast)
+        && southWestOptionKey === getLocationOptionKey(currentBounds?.southWest)) {
+        engineMap?.fitBounds({ northEast, southWest });
+      }
+    });
   }
 
   updateControls(): Promise<void> {
@@ -234,11 +425,95 @@ class OsmProvider extends DynamicProvider {
   }
 
   adjustViewport(): Promise<void> {
-    return Promise.resolve();
+    return this._fitBounds();
+  }
+
+  _renderMarker(options: MarkerOptions): Promise<EngineMarkerObject> {
+    const engineMap = this._engineMap;
+    if (!engineMap) {
+      return Promise.reject(errors.Error('E1069'));
+    }
+
+    return this._resolveLocation(options.location).then((location) => {
+      if (engineMap !== this._engineMap) {
+        return Promise.reject(STALE_OPERATION);
+      }
+
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      const iconSrc = options.iconSrc || this._option('markerIconSrc');
+      const markerClickAction = options.onClick
+        ? this._mapWidget._createAction(options.onClick)
+        : undefined;
+      const engineMarker = engineMap.addMarker({
+        html: options.html,
+        htmlOffset: options.htmlOffset,
+        iconSrc,
+        location,
+        onClick: markerClickAction
+          ? (): void => markerClickAction({ location })
+          : undefined,
+      });
+
+      return {
+        engineMarker,
+        location,
+        marker: engineMarker.originalMarker,
+      };
+    });
   }
 
   addMarkers(markers: MarkerOptions[]): Promise<[boolean, unknown[]]> {
-    return Promise.resolve([false, markers.map(() => undefined)]);
+    return super.addMarkers(markers).catch((error) => {
+      if (error === STALE_OPERATION) {
+        return [false, []];
+      }
+
+      throw error;
+    });
+  }
+
+  _destroyMarker(marker: EngineMarkerObject): void {
+    marker.engineMarker.dispose();
+  }
+
+  _fitBounds(): Promise<void> {
+    this._updateBounds();
+    this._bounds = createBounds(this._boundLocations) ?? null;
+
+    const engineMap = this._engineMap;
+    if (!engineMap || !this._bounds || !this._option('autoAdjust')) {
+      return Promise.resolve();
+    }
+
+    const zoomBeforeFitting = engineMap.getZoom();
+    engineMap.fitBounds(this._bounds as MapEngineBounds, { includeMarkerPadding: true });
+    const zoomAfterFitting = engineMap.getZoom();
+
+    if (zoomBeforeFitting !== undefined && zoomAfterFitting !== undefined) {
+      if (zoomBeforeFitting < zoomAfterFitting) {
+        engineMap.setView({ zoom: zoomBeforeFitting });
+      } else {
+        this._option('zoom', zoomAfterFitting);
+      }
+    }
+
+    return Promise.resolve();
+  }
+
+  _extendBounds(location: unknown): void {
+    const resolvedLocation = this._getLatLng(location as LocationOption);
+    if (!resolvedLocation
+      || !Number.isFinite(resolvedLocation.lat)
+      || !Number.isFinite(resolvedLocation.lng)) {
+      return;
+    }
+
+    this._boundLocations.push(resolvedLocation);
+  }
+
+  _clearBounds(): void {
+    super._clearBounds();
+    this._boundLocations = [];
   }
 
   addRoutes(routes: RouteOptions[]): Promise<[boolean, unknown[]]> {
@@ -246,6 +521,12 @@ class OsmProvider extends DynamicProvider {
   }
 
   clean(): Promise<void> {
+    this._generation += 1;
+    this._calculatedLocations.clear();
+    this._pendingLocationCalculations.clear();
+    if (this._engineMap) {
+      this._clearMarkers();
+    }
     this._engineMap?.dispose();
     this._engineMap = undefined;
     this._engine = undefined;
