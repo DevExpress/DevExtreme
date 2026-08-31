@@ -10,7 +10,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
 import type { StoreChange } from '@js/data/store';
-import type { ChangingEvent, DataSource } from '@ts/data/data_source/types';
+import type { ChangingEvent, DataSource, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { BeforePushEvent } from '@ts/data/types';
 
 import modules from '../m_modules';
@@ -807,22 +807,20 @@ export default class DataSourceAdapter extends modules.Controller {
     return this._hasLastPage || this._dataSource.totalCount() >= 0;
   }
 
-  protected loadFromStore(loadOptions, store?) {
-    const dataSource = this._dataSource;
-    // @ts-expect-error
-    const d = new Deferred();
+  protected loadFromStore(loadOptions: StoreLoadOptions): DeferredObj<unknown> {
+    const d = Deferred();
 
-    if (!dataSource) return;
-
-    store = store || dataSource.store();
-
-    store.load(loadOptions).done((data, extra) => {
-      if (data && !Array.isArray(data) && Array.isArray(data.data)) {
-        extra = data;
-        data = data.data;
-      }
-      d.resolve(data, extra);
-    }).fail(d.reject);
+    (this._dataSource
+      .store()
+      .load(loadOptions) as unknown as DeferredObj<unknown>)
+      .done((data: any, extra) => {
+        if (data && !Array.isArray(data) && Array.isArray(data.data)) {
+          extra = data;
+          data = data.data;
+        }
+        d.resolve(data, extra);
+      })
+      .fail((...args: unknown[]) => { d.reject(...args); });
 
     return d;
   }
