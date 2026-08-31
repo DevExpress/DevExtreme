@@ -167,7 +167,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
       return;
     }
 
-    if (!isVirtualMode(this) || this.isLoadingAll()) {
+    if (!isVirtualMode(this) || this.isCustomLoadingAll()) {
       this._isLoading = isLoading;
       super.loadingChangedHandler(isLoading);
     }

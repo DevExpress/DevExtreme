@@ -1514,7 +1514,7 @@ export class DataController extends modules.Controller {
     };
 
     if (data) {
-      dataSource.processLoadedData(data, {
+      dataSource.customProcessLoadedData(data, {
         filter: skipFilter ? null : this.getCombinedFilter(),
         group: dataSource.group(),
         sort: dataSource.sort(),
@@ -1522,7 +1522,7 @@ export class DataController extends modules.Controller {
         .done(resolveWithProcessedItems)
         .fail(d.reject as (...args: unknown[]) => void);
     } else if (!dataSource.isLoading()) {
-      dataSource.loadAll()
+      dataSource.customLoadAll()
         .done(resolveWithProcessedItems)
         .fail(d.reject as (...args: unknown[]) => void);
     } else {

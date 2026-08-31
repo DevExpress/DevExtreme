@@ -8,7 +8,7 @@ import PublicDataSource from '@js/data/data_source';
 import { logger } from '@ts/core/utils/m_console';
 import type { DataSource, StoreLoadOptions } from '@ts/data/data_source/types';
 
-import { CustomLoadPipeline } from '../custom_load_pipeline';
+import { CustomLoader } from '../custom_loader';
 import type { LoadOperation } from '../types';
 
 interface SetupOptions {
@@ -52,7 +52,7 @@ const setup = ({
   const customizeStoreLoadOptionsSpy = jest.fn(customizeStoreLoadOptions);
   const customizeLoadResultSpy = jest.fn(customizeLoadResult);
 
-  const pipeline = new CustomLoadPipeline(
+  const pipeline = new CustomLoader(
     dataSource,
     getLoadingTimeout,
     customizeStoreLoadOptionsSpy,
@@ -269,7 +269,7 @@ describe('isCustomLoading', () => {
   it('is false before any load', () => {
     const { pipeline } = setup();
 
-    expect(pipeline.isCustomLoading()).toBe(false);
+    expect(pipeline.isLoading()).toBe(false);
   });
 
   it('is true while a load is pending and false once it settles', () => {
@@ -277,10 +277,10 @@ describe('isCustomLoading', () => {
     const { pipeline } = setup({ storeLoad: () => storeDeferred });
 
     pipeline.load({});
-    expect(pipeline.isCustomLoading()).toBe(true);
+    expect(pipeline.isLoading()).toBe(true);
 
     storeDeferred.resolve([]);
-    expect(pipeline.isCustomLoading()).toBe(false);
+    expect(pipeline.isLoading()).toBe(false);
   });
 
   it('is false once a failed load settles', () => {
@@ -292,7 +292,7 @@ describe('isCustomLoading', () => {
     pipeline.load({});
     storeDeferred.reject(new Error('load failed'));
 
-    expect(pipeline.isCustomLoading()).toBe(false);
+    expect(pipeline.isLoading()).toBe(false);
   });
 });
 
