@@ -53,7 +53,7 @@ const OVERRIDES = {
 
   // System folders whose declarations join the --dx tier (published from <folder>/_public.scss
   // onto rootSelectors[folder]); grammar stays the systemConcerns path, not the component one.
-  systemTier: ['common'],
+  systemTier: ['common', 'typography'],
 
   // component -> folder that is allowed to declare it (O2: exactly one declaration home).
   // Only needed where more than one folder currently declares the component's variables.
@@ -364,7 +364,10 @@ const OVERRIDES = {
     // global utility painted on arbitrary elements (.dx-icon plus per-widget image boxes):
     // :root, the same place Blazor keeps its 24 cross-component names
     icon: [':root'],
-    typography: [], // system tier — publishes .dx-typography-* utility classes, emits no component vars
+    // the type scale is cross-component (chat, stepper and toolbar read it), so it lives on
+    // :root like icon — the surface class .dx-theme-fluent-next-typography is opt-in and would
+    // leave the borrowers outside the values they read
+    typography: [':root'],
   },
 
   // System-tier concerns (common/). Each must map to a non-component token family.
