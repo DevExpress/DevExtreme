@@ -331,8 +331,8 @@ export class DataController extends modules.Controller {
     return !this._isLoading;
   }
 
-  public getDataSource(): DataSource | null | undefined {
-    return this._dataSource?._dataSource;
+  public getDataSource(): DataSource | null {
+    return this._dataSource?._dataSource ?? null;
   }
 
   public getCombinedFilter(returnDataField?: boolean): DataFilter {
