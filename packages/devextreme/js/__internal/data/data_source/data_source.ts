@@ -788,3 +788,21 @@ export class DataSource {
     return this;
   }
 }
+
+/*
+ * `Class.inherit()` defined prototype members as enumerable, and consumers still rely on
+ * that: the grid's DataSourceAdapter copies a data source's members with a `for…in` loop
+ * (see its "remove copying dataSource's members" TODO). ES6 class methods are not
+ * enumerable, so restore the descriptors a data source used to expose.
+ */
+Object.getOwnPropertyNames(DataSource.prototype).forEach((memberName) => {
+  if (memberName === 'constructor') {
+    return;
+  }
+
+  const descriptor = Object.getOwnPropertyDescriptor(DataSource.prototype, memberName);
+
+  if (descriptor) {
+    Object.defineProperty(DataSource.prototype, memberName, { ...descriptor, enumerable: true });
+  }
+});
