@@ -27,17 +27,25 @@ export async function testScreenshot(
 ) {
   const testTheme = process.env.THEME;
 
+  /*
+   * Defaults for every screenshot. `looksSameComparisonOptions` used to live here with
+   * tolerance/antialiasingTolerance 20, which made the comparison looser than the comparator's own
+   * defaults for EVERY demo in EVERY theme — and it hid real drift: a hairline that changed by 9
+   * units, a whole tree shifted by a pixel, an appointment line dropped by a product change, all
+   * passed silently for months (wave H, 28.08.2026).
+   *
+   * A demo that genuinely renders unstable pixels asks for the looser comparison itself, in its own
+   * visualtestrc.json ("comparison-options") or at the call site — so the exception is visible,
+   * greppable and attached to a reason, instead of covering everything.
+   */
   const themeOptions = {
-    looksSameComparisonOptions: {
-      tolerance: 20,
-      antialiasingTolerance: 20,
-    },
     textDiffTreshold: 0.2,
   };
 
+  // per-demo options win: the defaults above must not silently override what a test asked for
   const finalOptions = {
-    ...comparisonOptions,
     ...themeOptions,
+    ...comparisonOptions,
   };
 
   await t

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>fluent-next: runtime reachability audit of the --dx-* tier</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link id="theme" rel="stylesheet" type="text/css" href="../artifacts/css/dx.fluent-next.blue.light.css">
+  <script src="../artifacts/js/jquery.js"></script>
+  <script src="../artifacts/js/dx-gantt.js"></script>
+  <script src="../artifacts/js/dx-diagram.js"></script>
+  <script src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
+  <style>
+    body { font: 13px/1.5 -apple-system, "Segoe UI", sans-serif; margin: 16px; }
+    #report { white-space: pre-wrap; font-family: ui-monospace, Menlo, monospace; background: #f3f5f7; padding: 12px; border-radius: 6px; }
+    #gallery > div { margin: 8px 0; }
+    .fail { color: #b00020; }
+  </style>
+</head>
+<body class="dx-viewport">
+  <h1>Reachability audit: every rule reading var(--dx-…) must see the variable on the elements it matches</h1>
+  <div id="report">initialising…</div>
+  <div id="gallery"></div>
+
+  <script>
+  /*
+   * Method: a CSSOM walk over the bundle — for every rule that reads var(--dx-…) take all the
+   * elements of document.querySelectorAll(selector) and check getComputedStyle(el).getPropertyValue(name):
+   * an empty string means the variable does not arrive (a reachability hole — exactly the htmlEditor bug).
+   * The report is left in window.__auditResult; the page is a standing defence (procedure in TESTING.md).
+   */
+  async function buildGallery() {
+    const g = document.getElementById('gallery');
+    const add = (id, html) => { const d = document.createElement('div'); d.id = id; if (html) d.innerHTML = html; g.appendChild(d); return d; };
+    const widget = (name, options) => { const d = add('w-' + name.toLowerCase()); try { $(d)[name](options ?? {}); } catch (e) { console.warn(name, e.message); } return d; };
+
+    add('m-badge', '<span class="dx-badge">7</span>');
+    add('m-card', '<div class="dx-card" style="width:200px;padding:8px">card</div>');
+    add('m-informer', '<div class="dx-informer"><div class="dx-informer-icon"></div>ok</div>');
+    add('m-field-standalone', '<div class="dx-field"><div class="dx-field-label">Standalone field</div><div class="dx-field-value-static">v</div></div>');
+    add('m-fieldset', '<div class="dx-fieldset"><div class="dx-field"><div class="dx-field-label">L</div><div class="dx-field-value-static">V</div></div></div>');
+    add('m-splitterbar', '<div class="dx-splitter-bar"><div class="dx-splitter-bar-icon"></div></div>');
+
+    widget('dxButton', { text: 'Btn', icon: 'home' });
+    widget('dxButtonGroup', { items: [{ text: 'a' }, { text: 'b' }] });
+    widget('dxTextBox', { label: 'Outlined', stylingMode: 'outlined', value: 'x' });
+    widget('dxTextBox', { mode: 'search', value: 'search' });
+    widget('dxTextArea', { value: 'ta' });
+    widget('dxNumberBox', { showSpinButtons: true, value: 5 });
+    widget('dxSwitch', { value: true });
+    widget('dxRadioGroup', { items: ['a', 'b'], value: 'a' }); // .dx-radiobutton
+    widget('dxProgressBar', { min: 0, max: 100, value: 40 });
+    widget('dxLoadIndicator', {});
+    widget('dxAccordion', { dataSource: [{ title: 't', text: 'x' }], collapsible: true });
+    widget('dxGallery', { dataSource: ['a', 'b'], showIndicator: true, showNavButtons: true, height: 80 });
+    widget('dxTileView', { dataSource: [{ text: 't' }], height: 90 });
+    widget('dxToolbar', { width: 220, items: [
+      { widget: 'dxButton', options: { text: 'A' }, location: 'before' },
+      { widget: 'dxButton', options: { text: 'H1' }, locateInMenu: 'always' },
+    ] });
+    widget('dxMenu', { items: [{ text: 'File', items: [{ text: 'Open' }] }] });
+    widget('dxTabPanel', { dataSource: [{ title: 'tab', text: 'x' }], height: 90 });
+    widget('dxScrollView', { height: 60 }).innerHTML = '<div style="height:200px">scroll</div>'; // .dx-scrollable
+    widget('dxSplitter', { dataSource: [{ text: 'L' }, { text: 'R' }], height: 70, width: 240 });
+    widget('dxDropDownButton', { text: 'dd', items: ['x', 'y'] });
+    widget('dxSelectBox', { items: ['one'], value: 'one' });
+    widget('dxTagBox', { items: ['a', 'b'], value: ['a'] });
+    widget('dxDateBox', { value: new Date(2026, 7, 14) });
+    widget('dxDateRangeBox', { startDate: new Date(2026, 7, 1), endDate: new Date(2026, 7, 14) });
+    widget('dxColorBox', { value: '#0f6cbd' });
+    widget('dxLookup', { items: ['a'], value: 'a' });
+    widget('dxDataGrid', {
+      dataSource: [{ a: 1, b: 'x' }],
+      columns: ['a', 'b'],
+      columnChooser: { enabled: true },
+      filterRow: { visible: true },
+      headerFilter: { visible: true },
+    });
+    widget('dxTreeList', {
+      dataSource: [{ id: 1, a: 'x' }],
+      columns: ['a'],
+      filterRow: { visible: true },
+      headerFilter: { visible: true },
+    });
+    // adaptive menu: the hamburger plus a TreeView in an overlay, which carries no .dx-menu-base
+    const am = add('w-adaptive-menu'); am.style.width = '60px';
+    $(am).dxMenu({ items: [{ text: 'Items 1', items: [{ text: 'Item 1' }, { text: 'Item 2', icon: 'copy' }] }, { text: 'Items 2' }], adaptivityEnabled: true });
+    try { widget('dxCardView', { dataSource: [{ a: 1 }], columns: [{ dataField: 'a', allowHeaderFiltering: true }], headerFilter: { visible: true } }); } catch (e) { console.warn('cardView', e.message); }
+    // validation: an invalid editor with its message
+    const v = widget('dxTextBox', { value: '' });
+    try {
+      $(v).dxValidator({ validationRules: [{ type: 'required' }] });
+      $(v).dxValidator('instance').validate();
+    } catch (e) { console.warn('validator', e.message); } // .dx-invalid-message, .dx-validationsummary
+    try { widget('dxHtmlEditor', { value: '<p>x</p>', stylingMode: 'outlined' }); } catch (e) { console.warn('htmlEditor', e.message); }
+    // synthetic fallback in case Quill is unavailable: the classes are all the CSS needs
+    add('m-htmleditor', '<div class="dx-htmleditor dx-htmleditor-outlined" style="height:40px"></div>');
+
+    // overlays: toast, tooltip, popover, load panel, action sheet, toolbar menu, column chooser, rollers
+    widget('dxToast', { message: 'audit', type: 'info', visible: true, displayTime: 600000, animation: null });
+    const tt = add('m-tt', '<span>target</span>');
+    try { $(add('w-tooltip')).dxTooltip({ target: tt, visible: true, contentTemplate: () => 'tip' }); } catch (e) {}
+    try { $(add('w-popover')).dxPopover({ target: tt, visible: true, contentTemplate: () => 'pop' }); } catch (e) {}
+    try { $(add('w-loadpanel')).dxLoadPanel({ visible: true, message: 'load' }); } catch (e) {}
+    try { $(add('w-actionsheet')).dxActionSheet({ items: [{ text: 'Do' }], visible: true, showCancelButton: true }); } catch (e) {}
+    try { $('#w-dxtoolbar .dx-dropdownmenu-button').trigger('dxclick'); } catch (e) {} // .dx-dropdownmenu-popup-wrapper
+    try { $('#w-dxdatagrid').dxDataGrid('instance').showColumnChooser(); } catch (e) {}
+    // filter menu (operations) in the filter row, header filter, hamburger of the adaptive menu
+    try { $('#w-dxdatagrid .dx-filter-menu .dx-menu-item').first().trigger('dxclick'); } catch (e) {}
+    try { $('#w-dxdatagrid .dx-header-filter').first().trigger('dxclick'); } catch (e) {}
+    try { $('#w-adaptive-menu .dx-menu-hamburger-button, #w-adaptive-menu .dx-button').first().trigger('dxclick'); } catch (e) {}
+    try { $('#w-dxcardview .dx-header-filter, #w-dxcardview .dx-cardview-header-filter-indicator').first().trigger('dxclick'); } catch (e) {}
+    try { $('#w-dxlookup').dxLookup('instance').open(); } catch (e) {}
+    try { $(add('w-rollers')).dxDateBox({ pickerType: 'rollers', value: new Date(2026, 7, 14), opened: true }); } catch (e) {} // .dx-dateview-rollers
+    try { $(add('w-ctx')).dxContextMenu({ items: [{ text: 'i1' }], visible: true, target: 'body', position: { of: tt } }); } catch (e) {}
+    try { $('#w-dxselectbox').dxSelectBox('instance').open(); } catch (e) {} // .dx-dropdownlist-popup-wrapper, .dx-dropdowneditor-overlay (dropDownEditor/dropDownList)
+
+
+    /* ---- wave H: the components that entered the tier in the second pass ---- */
+    widget('dxBox', { direction: 'row', height: 40, items: [{ ratio: 1, text: 'a' }, { ratio: 1, text: 'b' }] });
+    widget('dxCheckBox', { value: true });
+    widget('dxSlider', { min: 0, max: 100, value: 40, width: 200 });
+    widget('dxRangeSlider', { start: 20, end: 60, width: 200 });
+    widget('dxTabs', { dataSource: [{ text: 'one' }, { text: 'two', icon: 'home' }], width: 220 });
+    widget('dxList', { items: ['a', 'b'], height: 90, showSelectionControls: true, selectionMode: 'multiple' });
+    widget('dxCalendar', { value: new Date(2026, 7, 14), showWeekNumbers: true });
+    widget('dxTreeView', { items: [{ text: 'root', expanded: true, items: [{ text: 'leaf' }] }], showCheckBoxesMode: 'normal' });
+    widget('dxForm', { formData: { a: 'x' }, items: [{ dataField: 'a', isRequired: true, helpText: 'help' }] });
+    widget('dxFilterBuilder', { fields: [{ dataField: 'a', dataType: 'string' }], value: ['a', '=', 'x'] });
+    widget('dxFileUploader', { labelText: 'or drop here' });
+    widget('dxColorView', { value: '#0f6cbd', editAlphaChannel: true });
+    widget('dxStepper', { items: [{ text: 'one' }, { text: 'two' }] });
+    widget('dxDrawer', { opened: true, height: 80 });
+    widget('dxRecurrenceEditor', { value: 'FREQ=WEEKLY;BYDAY=MO' });
+    widget('dxChat', { user: { id: 'me' }, items: [
+      { id: 1, timestamp: Date.now(), text: 'hi', author: { id: 'a', name: 'A' } },
+      { id: 2, timestamp: Date.now(), text: 'yo', author: { id: 'me', name: 'Me' } },
+    ] });
+    widget('dxPagination', { pageCount: 12, showInfo: true, showNavigationButtons: true,
+      showPageSizeSelector: true, allowedPageSizes: [5, 10] });
+    widget('dxPivotGrid', { height: 200, fieldChooser: { enabled: true }, fieldPanel: { visible: true },
+      dataSource: { store: [{ a: 'x', b: 1 }], fields: [
+        { dataField: 'a', area: 'row' }, { dataField: 'b', area: 'data', summaryType: 'count' }] } });
+    widget('dxScheduler', { height: 250, views: ['day'], currentView: 'day',
+      currentDate: new Date(2026, 7, 14),
+      dataSource: [{ text: 'appt', startDate: new Date(2026, 7, 14, 9), endDate: new Date(2026, 7, 14, 10) }] });
+    widget('dxFileManager', { height: 250, permissions: { create: true, delete: true, rename: true },
+      fileSystemProvider: [{ name: 'folder', isDirectory: true, items: [] }, { name: 'f.txt', size: 1 }] });
+    widget('dxGantt', { height: 200, tasks: { dataSource: [
+      { id: 1, title: 'task', start: new Date(2026, 7, 10), end: new Date(2026, 7, 14), progress: 30 }] } });
+    widget('dxDiagram', { height: 200 });
+    // roots with no widget of their own here: the map needs the network, the FAB and timeView are host-built
+    add('m-map', '<div class="dx-map-container"><div class="dx-map-shield"></div></div>');
+    add('m-fab', '<div class="dx-fa-button"><div class="dx-fa-button-icon"></div></div>');
+    add('m-timeview', '<div class="dx-timeview"><div class="dx-timeview-clock"></div><div class="dx-timeview-field"></div></div>');
+    add('m-surface', '<div class="dx-surface">surface</div>');
+    /*
+     * A grid's pager and the standalone widget carry MUTUALLY EXCLUSIVE classes (content.tsx, getClasses):
+     * dx-pager in grid-compatibility mode, dx-pagination as a widget of its own. Both must be exercised.
+     */
+    const pagerGrid = add('w-grid-pager');
+    try {
+      $(pagerGrid).dxDataGrid({
+        dataSource: Array.from({ length: 20 }, (_, i) => ({ a: i })), columns: ['a'],
+        paging: { pageSize: 5 },
+        pager: { visible: true, showInfo: true, showPageSizeSelector: true,
+          allowedPageSizes: [5, 10], showNavigationButtons: true },
+      });
+    } catch (e) { console.warn('grid pager', e.message); }
+
+    // openers for the satellites of wave H
+    try { $('#w-dxpivotgrid').dxPivotGrid('instance').getFieldChooserPopup().show(); } catch (e) { console.warn('field chooser', e.message); }
+    try { $('#w-dxfilemanager').dxFileManager('instance').option('permissions.create', true); } catch (e) {}
+
+    // wave H satellites: popups that would otherwise never be built (rootsEmpty reports the remainder)
+    try { $('#w-dxcardview').dxCardView('instance').showColumnChooser(); } catch (e) { console.warn('cardView chooser', e.message); }
+    try { $('#w-dxscheduler').dxScheduler('instance').showAppointmentPopup({ startDate: new Date(2026, 7, 14, 9), endDate: new Date(2026, 7, 14, 10), text: 'appt' }); } catch (e) { console.warn('scheduler popup', e.message); }
+    try { $('#w-dxfilterbuilder .dx-filterbuilder-item-field').first().trigger('dxclick'); } catch (e) {}
+    try { $('#w-dxfilterbuilder .dx-filterbuilder-item-operation').first().trigger('dxclick'); } catch (e) {}
+    try { $('#w-dxlist').dxList('instance').option('menuItems', [{ text: 'Delete' }]); } catch (e) {}
+    addPortals();
+    await new Promise((r) => setTimeout(r, 700));
+  }
+
+  /*
+   * Portals: elements JS creates OUTSIDE the root of its widget, so they see the tier only if the root
+   * is declared on them as well. Drag states are reproduced with markup rather than gestures: the audit
+   * checks that the variable resolves on an element with the right classes in the right place of the
+   * tree — exactly what broke in PR #34774 (the column preview without a background, the row clone
+   * without a shadow, the AI popup with a black border). Classes and placement come from the sources:
+   *   .dx-datagrid-drag-header  — m_columns_resizing_reordering: element().appendTo(swatchContainer)
+   *   .dx-sortable-clone/-dragging, .dx-sortable-placeholder — m_draggable/_createDragElement,
+   *                                m_sortable/_getPlaceholderElement (container = the viewport)
+   *   .dx-ai-chat .dx-aidialog  — grid_core/ai_chat: the wrapperAttr of the Popup
+   */
+  function addPortals() {
+    const viewport = document.querySelector('.dx-viewport') || document.body;
+    const portal = document.createElement('div');
+    portal.id = 'portals';
+    portal.innerHTML = `
+      <div class="dx-datagrid-drag-header">Employee</div>
+      <div class="dx-treelist-drag-header">Employee</div>
+      <div class="dx-sortable-dragging dx-sortable-clone">
+        <div class="dx-datagrid dx-datagrid-dragview"><div class="dx-datagrid-rowsview"><table><tr class="dx-row dx-data-row"><td>row</td></tr></table></div></div>
+      </div>
+      <div class="dx-sortable-placeholder dx-sortable-placeholder-inside"></div>
+      <div class="dx-overlay-wrapper dx-ai-chat dx-aidialog">
+        <div class="dx-overlay-content"><div class="dx-ai-chat dx-ai-chat__content">
+          <div class="dx-ai-chat__message dx-ai-chat__message--success">
+            <div class="dx-ai-chat__message-icon"></div><div class="dx-ai-chat__message-status">ok</div>
+            <div class="dx-ai-chat__action-list"><div class="dx-ai-chat__action-list-item dx-ai-chat__action-list-item--success">done</div></div>
+          </div>
+          <div class="dx-ai-chat__message dx-ai-chat__message--error">
+            <div class="dx-ai-chat__message-icon"></div><div class="dx-ai-chat__message-error-text">err</div>
+            <div class="dx-ai-chat__action-list-item dx-ai-chat__action-list-item--error">failed</div>
+            <div class="dx-ai-chat__action-list-item dx-ai-chat__action-list-item--aborted">aborted</div>
+          </div>
+          <div class="dx-ai-chat__message dx-ai-chat__message--pending">
+            <div class="dx-ai-chat__message-icon"></div><div class="dx-ai-chat__message-status">…</div>
+          </div>
+          <div class="dx-ai-chat__message-regenerate-button"></div>
+          <div class="dx-chat"><div class="dx-chat-messagegroup dx-chat-messagegroup-alignment-start"><div class="dx-chat-messagebubble">bubble</div></div></div>
+          <div class="dx-progressbar dx-ai-prompt-editor__progressbar"><div class="dx-progressbar-animating-container"></div></div>
+        </div></div>
+      </div>
+      <div class="dx-sortable-placeholder dx-cardview-header-item-sort-indicator"></div>
+      <div class="dx-scheduler-overlay-panel">
+        <div class="dx-overlay-content"><div class="dx-list"><div class="dx-list-item">
+          <div class="dx-tooltip-appointment-item">
+            <div class="dx-tooltip-appointment-item-marker"><div class="dx-tooltip-appointment-item-marker-body"></div></div>
+            <div class="dx-tooltip-appointment-item-content">
+              <div class="dx-tooltip-appointment-item-content-subject">Subject</div>
+              <div class="dx-tooltip-appointment-item-content-date">10:00 AM</div>
+            </div>
+            <div class="dx-tooltip-appointment-item-delete-button"><div class="dx-icon"></div></div>
+          </div>
+        </div></div></div>
+      </div>
+      <div class="dx-sortable-dragging dx-sortable-clone">
+        <div class="dx-treeview-item"><span>File.txt</span></div>
+      </div>
+      <div class="dx-sortable-dragging dx-sortable-clone">
+        <div class="dx-cardview-header-item">
+          <span class="dx-cardview-header-item-text">Column</span>
+          <div class="dx-cardview-header-item-sorting-order">1</div>
+          <div class="dx-icon dx-header-filter-icon--selected"></div>
+        </div>
+      </div>
+      <div class="dx-overlay-wrapper dx-aidialog dx-popup-wrapper">
+        <div class="dx-overlay-content">
+          <div class="dx-aidialog-title">title</div>
+          <div class="dx-aidialog-content">body</div>
+          <div class="dx-aidialog-controls"><div class="dx-selectbox"></div></div>
+        </div>
+      </div>
+      <div class="dx-overlay-wrapper">
+        <div class="dx-overlay-content dx-messagelist-context-menu-content">
+          <div class="dx-menu-item dx-state-focused"><div class="dx-icon dx-icon-trash"></div>delete</div>
+        </div>
+      </div>
+      <div class="dx-overlay-wrapper dx-popup-wrapper dx-chat-confirmation-popup-wrapper">
+        <div class="dx-overlay-content"><div class="dx-popup-content">delete?</div>
+          <div class="dx-popup-bottom dx-toolbar"><div class="dx-toolbar-items-container"></div></div></div>
+      </div>
+      <div class="dx-overlay-wrapper dx-popup-wrapper dx-htmleditor-add-image-popup">
+        <div class="dx-overlay-content"><div class="dx-popup-content">
+          <div class="dx-form"><div class="dx-collection"><div class="dx-field-item"><div class="dx-field-item-label-text">URL</div></div></div></div>
+          <div class="dx-fileuploader"><div class="dx-fileuploader-input-wrapper"><div class="dx-fileuploader-input-label">drop</div></div></div>
+        </div></div>
+      </div>
+      <div class="dx-overlay-wrapper dx-popup-wrapper dx-filemanager-dialog-popup dx-filemanager-dialog-name-editor-popup">
+        <div class="dx-overlay-content"><div class="dx-popup-content"><div class="dx-textbox dx-texteditor"></div></div></div>
+      </div>
+      <div class="dx-overlay-wrapper dx-popup-wrapper dx-diagram-properties-popup">
+        <div class="dx-overlay-content"><div class="dx-diagram-properties-panel-group-title">group</div>
+          <div class="dx-diagram-properties-panel-group-toolbar dx-toolbar"><div class="dx-toolbar-item"></div></div></div>
+      </div>
+      <div class="dx-overlay-wrapper dx-popup-wrapper dx-diagram-toolbox-popup">
+        <div class="dx-overlay-content"><div class="dx-diagram-toolbox-input"><div class="dx-button"><div class="dx-button-content"></div><div class="dx-icon"></div></div></div></div>
+      </div>
+      <div class="dx-overlay-content dx-list-context-menucontent"><div class="dx-list-items"></div></div>
+      <div class="dx-cardview-column-chooser-list"><div class="dx-empty-message">empty</div></div>
+      <div class="dx-cardview-column-chooser-plain"><div class="dx-treeview"><div class="dx-treeview-select-all-item"></div></div></div>
+      <div class="dx-datagrid"><table><tr><td class="dx-command-ai-header-button"><div class="dx-button dx-state-focused">AI</div></td></tr></table></div>`;
+    viewport.appendChild(portal);
+  }
+
+  function audit() {
+    const failures = new Map();
+    let rulesChecked = 0;
+    let readsChecked = 0;
+    let notRendered = 0;
+    for (const sheet of document.styleSheets) {
+      let rules;
+      try { rules = sheet.cssRules; } catch (e) { continue; }
+      const walk = (list) => {
+        for (const rule of list) {
+          /* CSS Nesting: style rules ALWAYS have cssRules (even an empty list) — recursing
+             does not replace handling the rule itself, or only the keyframe tail is seen */
+          if (rule.cssRules?.length) walk(rule.cssRules);
+          if (!rule.style || !rule.selectorText) continue;
+          // runtime contract: JS sets these names conditionally (style.setProperty), and with no value
+          // the declaration is meant to disappear — emptiness here is the design, not a hole
+          const RUNTIME_CONTRACT = ['--dx-cardview-cardsperrow', '--dx-cardview-card-min-width',
+            '--dx-cardview-card-max-width', '--dx-cardview-card-cover-ratio',
+            '--dx-cardview-card-cover-max-height', '--dx-scheduler-animation-top'];
+          const reads = [...rule.cssText.matchAll(/var\(\s*(--dx-[a-z0-9-]+)/g)]
+            .map((m) => m[1])
+            .filter((n) => !n.startsWith('--dxds-') && !RUNTIME_CONTRACT.includes(n));
+          if (!reads.length) continue;
+          rulesChecked += 1;
+          let matched;
+          try { matched = document.querySelectorAll(rule.selectorText.replace(/::?[a-z-]+(\([^)]*\))?/g, '') || rule.selectorText); } catch (e) { continue; }
+          for (const el of matched) {
+            /* A closed overlay keeps its content inline (in the source element) and moves it into
+               .dx-*-wrapper only when shown. Such an element paints nothing, so an empty variable on
+               it is not a hole; counted separately so the skip stays visible. */
+            if (!el.getClientRects().length) { notRendered += 1; continue; }
+            const cs = getComputedStyle(el);
+            for (const name of reads) {
+              readsChecked += 1;
+              if (cs.getPropertyValue(name).trim() === '') {
+                const key = `${name} @ ${rule.selectorText.slice(0, 90)}`;
+                if (!failures.has(key)) failures.set(key, el.className.toString().slice(0, 80));
+              }
+            }
+          }
+        }
+      };
+      walk(rules);
+    }
+    /*
+     * The gallery's second illness: a root is declared but no element on the page carries it — there is
+     * nothing to check and the audit is green over an empty set. The roots come from the bundle itself
+     * (a rule declaring --dx-* IS a root), so no registry is needed here.
+     */
+    const rootsEmpty = [];
+    for (const sheet of document.styleSheets) {
+      let rules; try { rules = sheet.cssRules; } catch (e) { continue; }
+      for (const rule of rules) {
+        if (!rule.style || !rule.selectorText) continue;
+        const declares = [...rule.style].some((prop) => prop.startsWith('--dx-') && !prop.startsWith('--dxds-'));
+        if (!declares) continue;
+        for (const sel of rule.selectorText.split(',')) {
+          const one = sel.trim();
+          if (one === ':root') continue;
+          let n = 0; try { n = document.querySelectorAll(one).length; } catch (e) { continue; }
+          if (!n) rootsEmpty.push(one);
+        }
+      }
+    }
+    return { rulesChecked, readsChecked, notRendered, rootsEmpty: [...new Set(rootsEmpty)].sort(),
+      failures: [...failures.entries()] };
+  }
+
+  (async () => {
+    await buildGallery();
+    const result = audit();
+    window.__auditResult = result;
+    const el = document.getElementById('report');
+    el.innerHTML = `rules reading the tier: ${result.rulesChecked}; checks (element × name): ${result.readsChecked}; \nnot rendered (closed overlays, not judged): ${result.notRendered}\n`
+      + (result.rootsEmpty.length
+        ? `<span class="fail">ROOTS WITH NO ELEMENT: ${result.rootsEmpty.length}</span> — the gallery never builds them, so they are checked over an empty set:\n`
+          + result.rootsEmpty.map((s) => `  · ${s}`).join('\n') + '\n'
+        : '✔ every declared root is built by at least one element\n')
+      + (result.failures.length
+        ? `<span class="fail">HOLES: ${result.failures.length}</span>\n` + result.failures.map(([k, cls]) => `✘ ${k}\n    on element: ${cls}`).join('\n')
+        : '✔ no holes: every readable variable is visible to its elements');
+  })();
+  </script>
+</body>
+</html>

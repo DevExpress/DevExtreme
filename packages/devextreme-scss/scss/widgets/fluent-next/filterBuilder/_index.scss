@@ -1,54 +1,54 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/filterBuilder" with (
-  $filterbuilder-action-icon-margin-left: $filter-builder-action-icon-margin-inline-start,
-  $filterbuilder-action-icon-margin-right: $filter-builder-action-icon-margin-inline-end,
-  $filterbuilder-group-content-padding-right: $filter-builder-group-content-padding-inline-end,
-  $filterbuilder-range-separator-margin: $filter-builder-range-separator-margin,
-  $filterbuilder-item-value-text-min-width: $filter-builder-item-value-text-min-width,
-  $filterbuilder-item-value-text-padding: $filter-builder-item-value-text-padding,
-  $filterbuilder-action-icon-padding: $filter-builder-action-icon-padding,
-  $filterbuilder-group-content-padding-left: $filter-builder-group-content-padding-inline-start,
-  $filterbuilder-treeview-item-padding-left: $filter-builder-tree-view-item-padding-inline-start,
-  $filterbuilder-treeview-item-padding-right: $filter-builder-tree-view-item-padding-inline-end,
-  $filterbuilder-treeview-node-margin-left: $filter-builder-tree-view-node-margin-inline-start,
-  $filterbuilder-treeview-node-margin-right: $filter-builder-tree-view-node-margin-inline-end,
-  $filterbuilder-scrollable-max-height: $filter-builder-scrollable-max-height,
-  $filterbuilder-range-separator-opacity: $filter-builder-range-separator-opacity,
-    $filterbuilder-bg: $filter-builder-bg,
-    $filterbuilder-text-color: $filter-builder-content,
-    $filterbuilder-text-focus-color: $filter-builder-text-content-focused,
-    $filterbuilder-group-operation-color: $filter-builder-group-operation-content,
-    $filterbuilder-group-operation-hover-color: $filter-builder-group-operation-content-hovered,
-    $filterbuilder-group-operation-focus-color: $filter-builder-group-operation-content-focused,
-    $filterbuilder-item-operator-color: $filter-builder-item-operator-content,
-    $filterbuilder-item-operator-hover-color: $filter-builder-item-operator-content-hovered,
-    $filterbuilder-item-operator-focus-color: $filter-builder-item-operator-content-focused,
-    $filterbuilder-item-field-color: $filter-builder-item-field-content,
-    $filterbuilder-item-field-hover-color: $filter-builder-item-field-content-hovered,
-    $filterbuilder-item-field-focus-color: $filter-builder-item-field-content-focused,
-    $filterbuilder-item-value-color: $filter-builder-item-value-content,
-    $filterbuilder-item-value-hover-color: $filter-builder-item-value-content-hovered,
-    $filterbuilder-item-value-focus-color: $filter-builder-item-value-content-focused,
-    $filterbuilder-plus-icon-color: $filter-builder-plus-icon,
-    $filterbuilder-plus-icon-hover-color: $filter-builder-plus-icon-content-hovered,
-    $filterbuilder-plus-icon-focus-color: $filter-builder-plus-icon-content-focused,
-    $filterbuilder-remove-icon-color: $filter-builder-remove-icon,
-    $filterbuilder-remove-icon-hover-color: $filter-builder-remove-icon-content-hovered,
-    $filterbuilder-remove-icon-focus-color: $filter-builder-remove-icon-content-focused,
-    $filterbuilder-menu-icon-color: $filter-builder-menu-icon,
+  $filterbuilder-action-icon-margin-left: var(--dx-filter-builder-action-icon-margin-inline-start),
+  $filterbuilder-action-icon-margin-right: var(--dx-filter-builder-action-icon-margin-inline-end),
+  $filterbuilder-group-content-padding-right: var(--dx-filter-builder-group-content-padding-inline-end),
+  $filterbuilder-range-separator-margin: var(--dx-filter-builder-range-separator-margin),
+  $filterbuilder-item-value-text-min-width: var(--dx-filter-builder-item-value-text-min-width),
+  $filterbuilder-item-value-text-padding: var(--dx-filter-builder-item-value-text-padding),
+  $filterbuilder-action-icon-padding: var(--dx-filter-builder-action-icon-padding),
+  $filterbuilder-group-content-padding-left: var(--dx-filter-builder-group-content-padding-inline-start),
+  $filterbuilder-treeview-item-padding-left: var(--dx-filter-builder-tree-view-item-padding-inline-start),
+  $filterbuilder-treeview-item-padding-right: var(--dx-filter-builder-tree-view-item-padding-inline-end),
+  $filterbuilder-treeview-node-margin-left: var(--dx-filter-builder-tree-view-node-margin-inline-start),
+  $filterbuilder-treeview-node-margin-right: var(--dx-filter-builder-tree-view-node-margin-inline-end),
+  $filterbuilder-scrollable-max-height: var(--dx-filter-builder-scrollable-max-height),
+  $filterbuilder-range-separator-opacity: var(--dx-filter-builder-range-separator-opacity),
+  $filterbuilder-bg: var(--dx-filter-builder-bg),
+  $filterbuilder-text-color: var(--dx-filter-builder-content),
+  $filterbuilder-text-focus-color: var(--dx-filter-builder-text-content-focused),
+  $filterbuilder-group-operation-color: var(--dx-filter-builder-group-operation-content),
+  $filterbuilder-group-operation-hover-color: var(--dx-filter-builder-group-operation-content-hovered),
+  $filterbuilder-group-operation-focus-color: var(--dx-filter-builder-group-operation-content-focused),
+  $filterbuilder-item-operator-color: var(--dx-filter-builder-item-operator-content),
+  $filterbuilder-item-operator-hover-color: var(--dx-filter-builder-item-operator-content-hovered),
+  $filterbuilder-item-operator-focus-color: var(--dx-filter-builder-item-operator-content-focused),
+  $filterbuilder-item-field-color: var(--dx-filter-builder-item-field-content),
+  $filterbuilder-item-field-hover-color: var(--dx-filter-builder-item-field-content-hovered),
+  $filterbuilder-item-field-focus-color: var(--dx-filter-builder-item-field-content-focused),
+  $filterbuilder-item-value-color: var(--dx-filter-builder-item-value-content),
+  $filterbuilder-item-value-hover-color: var(--dx-filter-builder-item-value-content-hovered),
+  $filterbuilder-item-value-focus-color: var(--dx-filter-builder-item-value-content-focused),
+  $filterbuilder-plus-icon-color: var(--dx-filter-builder-plus-icon),
+  $filterbuilder-plus-icon-hover-color: var(--dx-filter-builder-plus-icon-content-hovered),
+  $filterbuilder-plus-icon-focus-color: var(--dx-filter-builder-plus-icon-content-focused),
+  $filterbuilder-remove-icon-color: var(--dx-filter-builder-remove-icon),
+  $filterbuilder-remove-icon-hover-color: var(--dx-filter-builder-remove-icon-content-hovered),
+  $filterbuilder-remove-icon-focus-color: var(--dx-filter-builder-remove-icon-content-focused),
+  $filterbuilder-menu-icon-color: var(--dx-filter-builder-menu-icon),
 );
 @use "../textEditor/colors" as textEditorColors;
 
 .dx-filterbuilder {
   .dx-filterbuilder-action-icon {
-    font-size: $filter-builder-action-icon-font-size;
+    font-size: var(--dx-filter-builder-action-icon-font-size);
   }
 
   .dx-filterbuilder-group {
     .dx-filterbuilder-group-item {
       .dx-filterbuilder-action.dx-filterbuilder-action-icon {
-        padding: $filter-builder-icon-padding;
+        padding: var(--dx-filter-builder-icon-padding);
         vertical-align: middle;
       }
     }
@@ -58,14 +58,14 @@
     .dx-editor-filled,
     .dx-editor-outlined {
       .dx-texteditor-input {
-        padding: $filter-builder-filled-editor-padding;
+        padding: var(--dx-filter-builder-filled-editor-padding);
       }
     }
   }
 
   .dx-filterbuilder-text,
   .dx-filterbuilder-item-value-text {
-    border-radius: $filter-builder-text-border-radius;
+    border-radius: var(--dx-filter-builder-text-border-radius);
   }
 }
 
@@ -81,54 +81,54 @@
   &.dx-filterbuilder-operations {
     .dx-rtl {
       .dx-treeview-item {
-        padding-right: $filter-builder-tree-view-item-left-padding;
+        padding-right: var(--dx-filter-builder-tree-view-item-left-padding);
       }
     }
   }
 
   .dx-treeview-node {
     .dx-treeview-node-container-opened {
-      margin-left: $filter-builder-tree-view-item-left-padding;
+      margin-left: var(--dx-filter-builder-tree-view-item-left-padding);
     }
   }
 
   .dx-treeview-item {
-    padding: $filter-builder-tree-view-item-padding;
-    min-height: $filter-builder-tree-view-item-min-height;
+    padding: var(--dx-filter-builder-tree-view-item-padding);
+    min-height: var(--dx-filter-builder-tree-view-item-min-height);
 
     .dx-icon {
-      margin-right: $filter-builder-icon-margin-inline-end;
+      margin-right: var(--dx-filter-builder-icon-margin-inline-end);
     }
   }
 
   .dx-treeview-toggle-item-visibility {
-    left: $filter-builder-tree-view-toggle-inset-inline-start;
+    left: var(--dx-filter-builder-tree-view-toggle-inset-inline-start);
   }
 
   .dx-rtl {
     .dx-treeview-node {
       > .dx-treeview-item {
-        padding-right: calc(#{$filter-builder-tree-view-item-left-padding} * 2);
+        padding-right: calc(var(--dx-filter-builder-tree-view-item-left-padding) * 2);
       }
 
       &.dx-treeview-node-is-leaf > .dx-treeview-item {
-        padding-right: $filter-builder-tree-view-item-left-padding;
+        padding-right: var(--dx-filter-builder-tree-view-item-left-padding);
       }
 
       .dx-treeview-node-container-opened {
-        margin-right: $filter-builder-tree-view-item-left-padding;
+        margin-right: var(--dx-filter-builder-tree-view-item-left-padding);
         margin-left: 0;
       }
     }
 
     .dx-treeview-item {
       .dx-icon {
-        margin-left: $filter-builder-icon-margin-inline-start;
+        margin-left: var(--dx-filter-builder-icon-margin-inline-start);
       }
     }
 
     .dx-treeview-toggle-item-visibility {
-      right: $filter-builder-tree-view-toggle-item-visibility-inset-inline-end;
+      right: var(--dx-filter-builder-tree-view-toggle-item-visibility-inset-inline-end);
     }
   }
 }

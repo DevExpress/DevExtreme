@@ -1,0 +1,37 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-pagination-first-child-margin-inline-start: #{$pagination-first-child-margin-inline-start};
+  --dx-pagination-first-child-padding-block-end: #{$pagination-first-child-padding-block-end};
+  --dx-pagination-first-child-padding-block-start: #{$pagination-first-child-padding-block-start};
+  --dx-pagination-first-child-padding-inline-end: #{$pagination-first-child-padding-inline-end};
+  --dx-pagination-first-child-padding-inline-start: #{$pagination-first-child-padding-inline-start};
+  --dx-pagination-font-weight-selected: #{$pagination-font-weight-selected};
+  --dx-pagination-info-opacity: #{$pagination-info-opacity};
+  --dx-pagination-nav-button-height: #{$pagination-nav-button-height};
+  --dx-pagination-nav-button-icon-size: #{$pagination-nav-button-icon-size};
+  --dx-pagination-nav-button-padding: var(--dx-pagination-page-padding);
+  --dx-pagination-nav-opacity-disabled: #{$pagination-nav-opacity-disabled};
+  --dx-pagination-navigate-button-height: #{$pagination-navigate-button-height};
+  --dx-pagination-navigate-button-width: #{$pagination-navigate-button-width};
+  --dx-pagination-padding: #{$pagination-padding};
+  --dx-pagination-page-bg-hovered: #{$pagination-page-bg-hovered};
+  --dx-pagination-page-bg-selected: #{$pagination-page-bg-selected};
+  --dx-pagination-page-border-radius: #{$pagination-page-border-radius};
+  --dx-pagination-page-content-selected: #{$pagination-page-content-selected};
+  --dx-pagination-page-font-size: #{$pagination-page-font-size};
+  --dx-pagination-page-index-compact-min-width: #{$pagination-page-index-compact-min-width};
+  --dx-pagination-page-index-width: #{$pagination-page-index-width};
+  --dx-pagination-page-line-height: #{$pagination-page-line-height};
+  --dx-pagination-page-margin-inline-end: #{$pagination-page-margin-inline-end};
+  --dx-pagination-page-margin-inline-start: #{$pagination-page-margin-inline-start};
+  --dx-pagination-page-padding: #{$pagination-page-padding};
+  --dx-pagination-page-padding-inline: #{$pagination-page-padding-inline};
+  --dx-pagination-page-size-margin-inline-start: #{$pagination-page-size-margin-inline-start};
+  --dx-pagination-page-sizes-compact-min-width: #{$pagination-page-sizes-compact-min-width};
+  --dx-pagination-pages-count-padding-inline-start: #{$pagination-pages-count-padding-inline-start};
+  --dx-pagination-separator-padding: #{$pagination-separator-padding};
+  --dx-pagination-separator-padding-inline-end: #{$pagination-separator-padding-inline-end};
+  --dx-pagination-separator-padding-inline-start: #{$pagination-separator-padding-inline-start};
+}

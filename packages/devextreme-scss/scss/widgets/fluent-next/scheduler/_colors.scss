@@ -8,7 +8,6 @@ $scheduler-group-separator-border: ds.$color-border-contrast !default;
 $scheduler-accent-border: ds.$color-border !default;
 
 $scheduler-appointment-content: ds.$color-content !default;
-$scheduler-appointment-content-focused: null !default;
 
 $scheduler-appointment-base-content: ds.$color-bg-primary-subtle !default;
 
@@ -24,15 +23,12 @@ $scheduler-workspace-bg: ds.$color-bg !default;
 $scheduler-workspace-accent-content: ds.$color-content-primary !default;
 
 $scheduler-current-time-cell-content: ds.$color-content-primary !default;
-$scheduler-current-time-cell-date-bg: $scheduler-current-time-cell-content !default;
 $scheduler-time-indicator-content: ds.$color-bg-danger !default;
 $scheduler-dd-appointment-content-hovered: ds.$color-content-inverted !default;
 $scheduler-form-icon: ds.$color-content-subtle !default;
 $scheduler-workspace-month-content: ds.$color-content !default;
 $scheduler-workspace-other-month-content: ds.$color-content-subtle !default;
 $scheduler-dropdown-appointment-date-content: ds.$color-content-subtle !default;
-$scheduler-workspace-cell-content-active: $scheduler-accent-border !default;
-$scheduler-workspace-cell-content-hovered: $scheduler-workspace-month-content !default;
 $scheduler-header-bg: ds.$color-bg !default;
 $scheduler-all-day-panel-bg: ds.$color-bg !default;
 $scheduler-appointment-bg-focused: false !default;
@@ -51,7 +47,6 @@ $scheduler-agenda-appointment-content: ds.$color-content !default;
 $scheduler-header-panel-cell-date-content: ds.$color-content-subtle !default;
 
 $scheduler-first-month-cell-bg: rgb(from #{$scheduler-appointment-base-content} r g b / 0.15) !default;
-$scheduler-appointment-content-focused: $scheduler-appointment-content;
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
 $scheduler-appointment-strip-bg: ds.$color-bg-primary !default;
