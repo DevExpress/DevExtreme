@@ -1,0 +1,35 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-form-default-top-padding: #{$form-default-top-padding};
+  --dx-form-field-item-content: #{$form-field-item-content};
+  --dx-form-field-item-help-text-padding-block-start: #{$form-field-item-help-text-padding-block-start};
+  --dx-form-field-item-label-location-left-padding-inline-end: #{$form-field-item-label-location-left-padding-inline-end};
+  --dx-form-field-item-label-location-right-padding-inline-start: #{$form-field-item-label-location-right-padding-inline-start};
+  --dx-form-field-mark-content: var(--dx-form-field-item-content);
+  --dx-form-field-required-content: var(--dx-form-field-item-content);
+  --dx-form-first-row-padding-block-start: #{$form-first-row-padding-block-start};
+  --dx-form-group-border: #{$form-group-border};
+  --dx-form-group-caption-bottom-margin: #{$form-group-caption-bottom-margin};
+  --dx-form-group-caption-font-size: #{$form-group-caption-font-size};
+  --dx-form-group-caption-top-padding: #{$form-group-caption-top-padding};
+  --dx-form-group-content-border-block-start: #{$form-group-content-border-block-start};
+  --dx-form-group-content-bottom-padding: #{$form-group-content-bottom-padding};
+  --dx-form-group-content-margin-block-start: #{$form-group-content-margin-block-start};
+  --dx-form-group-content-padding-block-end: #{$form-group-content-padding-block-end};
+  --dx-form-group-content-padding-block-start: #{$form-group-content-padding-block-start};
+  --dx-form-group-custom-caption-icon-margin: #{$form-group-custom-caption-icon-margin};
+  --dx-form-help-text-font-size: #{$form-help-text-font-size};
+  --dx-form-item-help-content: #{$form-item-help-content};
+  --dx-form-label-font-size: #{$form-label-font-size};
+  --dx-form-label-icon-size: #{$form-label-icon-size};
+  --dx-form-layout-manager-padding-block: #{$form-layout-manager-padding-block};
+  --dx-form-layout-manager-padding-inline: #{$form-layout-manager-padding-inline};
+  --dx-form-layout-manager-tabpanel-content-padding: #{$form-layout-manager-tabpanel-content-padding};
+  --dx-form-multiview-item-content-padding: #{$form-multiview-item-content-padding};
+  --dx-form-switch-margin-block-end: #{$form-switch-margin-block-end};
+  --dx-form-switch-margin-block-start: #{$form-switch-margin-block-start};
+  --dx-form-top-label-bottom-margin: #{$form-top-label-bottom-margin};
+  --dx-form-top-label-padding: #{$form-top-label-padding};
+}

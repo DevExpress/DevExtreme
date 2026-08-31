@@ -24,7 +24,7 @@
     &.dx-datebox {
       &::before {
         border-radius: 0;
-        width: calc(100% - 2 * $date-range-box-active-bar-margin-inline);
+        width: calc(100% - 2 * var(--dx-date-range-box-active-bar-margin-inline));
         margin: 0 var(--dx-date-range-box-active-bar-margin-inline);
       }
     }

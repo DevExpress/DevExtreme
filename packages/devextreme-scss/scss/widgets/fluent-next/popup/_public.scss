@@ -1,0 +1,31 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-popup-border-radius: #{$popup-border-radius};
+  --dx-popup-bottom-bg: var(--dx-popup-title-bg);
+  --dx-popup-bottom-content: #{$popup-bottom-content};
+  --dx-popup-bottom-toolbar-height: #{$popup-bottom-toolbar-height};
+  --dx-popup-button-margin: #{$popup-button-margin};
+  --dx-popup-content-box-shadow: #{$popup-content-box-shadow};
+  --dx-popup-content-box-shadow-focused: #{$popup-content-box-shadow-focused};
+  --dx-popup-content-padding: #{$popup-content-padding};
+  --dx-popup-content-padding-block: #{$popup-content-padding-block};
+  --dx-popup-content-shadow-ambient: #{$popup-content-shadow-ambient};
+  --dx-popup-content-shadow-focused: #{$popup-content-shadow-focused};
+  --dx-popup-content-shadow-key: #{$popup-content-shadow-key};
+  --dx-popup-content-with-title-bottom-padding: #{$popup-content-with-title-bottom-padding};
+  --dx-popup-content-with-title-top-padding: #{$popup-content-with-title-top-padding};
+  --dx-popup-dialog-backdrop: #{$popup-dialog-backdrop};
+  --dx-popup-dialog-message-padding: #{$popup-dialog-message-padding};
+  --dx-popup-title-bg: #{$popup-title-bg};
+  --dx-popup-title-border: #{$popup-title-border};
+  --dx-popup-title-border-block-end: #{$popup-title-border-block-end};
+  --dx-popup-title-content: #{$popup-title-content};
+  --dx-popup-title-min-height: #{$popup-title-min-height};
+  --dx-popup-title-padding: #{$popup-title-padding};
+  --dx-popup-toolbar-height: #{$popup-toolbar-height};
+  --dx-popup-toolbar-item-spacing: #{$popup-toolbar-item-spacing};
+  --dx-popup-toolbar-label-font-size: #{$popup-toolbar-label-font-size};
+  --dx-popup-toolbar-padding-inline: #{$popup-toolbar-padding-inline};
+}

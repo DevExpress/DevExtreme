@@ -25,7 +25,7 @@
  * With no built bundle it exits quietly with zero (the gate cannot judge what does not exist).
  */
 
-import { readFileSync, statSync } from 'fs';
+import { readFileSync, writeFileSync, statSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { createRequire } from 'module';
@@ -103,6 +103,71 @@ if (process.argv.includes('--report')) {
   [...orphans.keys()].sort().forEach((line) => process.stdout.write(`  ${line}\n`));
 }
 
+/* --- 3. gate: a scope outside the root must be a REVIEWED one --------------------------------
+ * What it catches: a rule paints an element the component's root does not reach. "Nested or not"
+ * cannot be decided statically — that is knowledge about the DOM — so the decision is made once and
+ * recorded here, and the gate makes sure NEW such places cannot appear silently.
+ *
+ * That is how 208 screenshots moved in CI: a grid's pager carries dx-pager (never dx-pagination),
+ * cardView's column chooser and the htmlEditor/fileManager dialogs are popups, and the clone of a
+ * dragged pivotGrid field is created in the viewport. Every such place is either a new root in
+ * registries.rootSelectors, or a line here backed by the runtime audit
+ * (playground/tier-reachability-audit.html).
+ *
+ * The key is the component plus the first class of the selector, skipping cross-cutting modifiers
+ * (dx-rtl, dx-state-*, ...): that class is the one answering "which element is this".
+ */
+const GENERIC = /^dx-(rtl|state-|theme-|device-|color-scheme-|widget$|swatch)/;
+const scopesPath = join(here, 'nested-scopes.json');
+const componentOf = (name) => {
+  const bare = name.slice('--dx-'.length);
+  return Object.keys(registries.rootSelectors)
+    .filter((component) => bare === component || bare.startsWith(`${component}-`))
+    .sort((a, b) => b.length - a.length)[0] ?? null;
+};
+const scopeKeyOf = (selector) => {
+  for (const compound of selector.split(/[\s>+~]+/)) {
+    const cls = [...classesOf(compound)].find((one) => !GENERIC.test(one));
+    if (cls) return cls;
+  }
+  return null;
+};
+
+const seenScopes = new Map();
+[...orphans.keys()].forEach((line) => {
+  const [name, selector] = line.split('  @  ');
+  const component = componentOf(name);
+  const scope = scopeKeyOf(selector);
+  if (!component || !scope) return;
+  const key = `${component} :: ${scope}`;
+  if (!seenScopes.has(key)) seenScopes.set(key, `${name}  @  ${selector}`);
+});
+
+const reviewed = JSON.parse(readFileSync(scopesPath, 'utf8'));
+if (process.argv.includes('--update-scopes')) {
+  const next = {};
+  [...seenScopes.keys()].sort().forEach((key) => {
+    const [component, scope] = key.split(' :: ');
+    next[component] = [...(next[component] ?? []), scope];
+  });
+  writeFileSync(scopesPath, `${JSON.stringify(next, null, 2)}\n`);
+  process.stdout.write(`nested-scopes.json rewritten: ${seenScopes.size} scope(s)\n`);
+}
+
+const unreviewed = [...seenScopes.entries()]
+  .filter(([key]) => {
+    const [component, scope] = key.split(' :: ');
+    return !(reviewed[component] ?? []).includes(scope);
+  });
+
+unreviewed.forEach(([key, example]) => {
+  const [component, scope] = key.split(' :: ');
+  process.stdout.write(`✘ scope outside the roots of ${component}: .${scope}\n`);
+  process.stdout.write(`     example: ${example}\n`);
+  process.stdout.write('     cure: either add the root to OVERRIDES.rootSelectors (derive-registries.mjs),\n');
+  process.stdout.write(`     or, having proven nesting with the runtime audit, add "${scope}" to nested-scopes.json["${component}"]\n`);
+});
+
 crossScope.forEach(([key, list]) => {
   const [sel, prop] = key.split('§');
   process.stdout.write(`✘ cross-scope duplicate: ${prop}  @  ${sel}\n`);
@@ -112,6 +177,6 @@ crossScope.forEach(([key, list]) => {
   process.stdout.write('     cure: the value must resolve under any of these roots — take a shared-layer name (gridBase/menuBase), not the name of a single widget\n');
 });
 
-process.stdout.write(`${orphans.size} read(s) outside the root text (material for the runtime-audit gallery), `
-  + `${crossScope.length} cross-scope duplicate(s)\n`);
-process.exit(crossScope.length ? 1 : 0);
+process.stdout.write(`${orphans.size} read(s) outside the root text in ${seenScopes.size} scope(s) `
+  + `(${unreviewed.length} unreviewed), ${crossScope.length} cross-scope duplicate(s)\n`);
+process.exit(crossScope.length || unreviewed.length ? 1 : 0);
