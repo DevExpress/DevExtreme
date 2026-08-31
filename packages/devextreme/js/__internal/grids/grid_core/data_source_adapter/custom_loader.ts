@@ -61,7 +61,7 @@ export class CustomLoader {
 
     this._isLoadingAll = options.isLoadingAll ?? false;
 
-    this.schedulerLoadingCallbacks(d);
+    this.scheduleLoadingCallbacks(d);
     dataSource._scheduleLoadCallbacks(d);
 
     this.customizeStoreLoadOptions(operation);
@@ -162,7 +162,7 @@ export class CustomLoader {
     return d;
   }
 
-  private schedulerLoadingCallbacks(deferred: DeferredObj<unknown>): void {
+  private scheduleLoadingCallbacks(deferred: DeferredObj<unknown>): void {
     this._isLoading = true;
 
     deferred.always(() => {
