@@ -920,6 +920,8 @@
         "dxGantt-dialogStartDateValidation": "Η ημερομηνία έναρξης πρέπει να είναι μετά την {0}",
         "dxGantt-dialogEndDateValidation": "Η ημερομηνία λήξης πρέπει να είναι μετά την {0}",
 
+        "dxMap-markerAriaLabel": "Map marker",
+
         "dxGallery-itemName": "Στοιχείο γκαλερί",
 
         "dxMultiView-elementAriaRoleDescription": "MultiView",

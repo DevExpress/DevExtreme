@@ -920,6 +920,8 @@
         "dxGantt-dialogStartDateValidation": "시작 날짜는 {0} 이후여야 합니다",
         "dxGantt-dialogEndDateValidation": "종료 날짜는 {0} 이후여야 합니다",
 
+        "dxMap-markerAriaLabel": "Map marker",
+
         "dxGallery-itemName": "갤러리 항목",
 
         "dxMultiView-elementAriaRoleDescription": "MultiView",

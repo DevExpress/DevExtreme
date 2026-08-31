@@ -920,6 +920,8 @@
         "dxGantt-dialogStartDateValidation": "La data di inizio deve essere successiva al {0}",
         "dxGantt-dialogEndDateValidation": "La data di fine deve essere successiva al {0}",
 
+        "dxMap-markerAriaLabel": "Map marker",
+
         "dxGallery-itemName": "Elemento galleria",
 
         "dxMultiView-elementAriaRoleDescription": "MultiView",
