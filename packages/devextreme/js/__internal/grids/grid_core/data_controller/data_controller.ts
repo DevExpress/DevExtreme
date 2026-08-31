@@ -13,7 +13,7 @@ import type { StoreChange } from '@js/data/store';
 import errors from '@js/ui/widget/ui.errors';
 import { findChanges } from '@ts/core/utils/m_array_compare';
 import { fromPromise } from '@ts/core/utils/m_deferred';
-import type { ChangingEvent, DataSource, StoreLoadOptions } from '@ts/data/data_source/types';
+import type { ChangingEvent, DataSource } from '@ts/data/data_source/types';
 import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type {
@@ -1496,51 +1496,37 @@ export class DataController extends modules.Controller {
     const d = Deferred<ProcessedItem[]>();
     const dataSource = this._dataSource;
 
-    if (dataSource) {
-      if (data) {
-        const loadOperation: Omit<LoadOperation, 'data'> & Required<Pick<LoadOperation, 'data'>> = {
-          data,
-          isCustomLoading: true,
-          storeLoadOptions: { isLoadingAll: true },
-          loadOptions: {
-            filter: skipFilter ? null : this.getCombinedFilter(),
-            group: dataSource.group(),
-            sort: dataSource.sort(),
-          },
-        };
-        dataSource.customizeLoadResultHandler(loadOperation);
-
-        when<RawItemData[]>(loadOperation.data)
-          .done((loadedData: RawItemData[]): void => {
-            const items = this._processItems(
-              this._beforeProcessItems(loadedData),
-              { changeType: 'loadingAll' },
-            );
-            // @ts-expect-error DataGrid-only summary leaks into grid_core
-            d.resolve(items, loadOperation.extra?.summary);
-          })
-          .fail(d.reject as (...args: unknown[]) => void);
-      } else if (!dataSource.isLoading()) {
-        const loadOptions: StoreLoadOptions & { isLoadingAll: boolean } = {
-          ...dataSource.loadOptions(),
-          isLoadingAll: true,
-          requireTotalCount: false,
-        };
-        dataSource.load(loadOptions)
-          .done((loadedItems: RawItemData[], extra: LoadOperation['extra']): void => {
-            const items = this._processItems(
-              this._beforeProcessItems(loadedItems),
-              { changeType: 'loadingAll' },
-            );
-            // @ts-expect-error DataGrid-only summary leaks into grid_core
-            d.resolve(items, extra?.summary);
-          })
-          .fail(d.reject);
-      } else {
-        d.reject();
-      }
-    } else {
+    if (!dataSource) {
       d.resolve([]);
+      return d;
+    }
+
+    const resolveWithProcessedItems = (
+      loadedData: RawItemData[],
+      extra: LoadOperation['extra'],
+    ): void => {
+      const items = this._processItems(
+        this._beforeProcessItems(loadedData),
+        { changeType: 'loadingAll' },
+      );
+      // @ts-expect-error DataGrid-only summary leaks into grid_core
+      d.resolve(items, extra?.summary);
+    };
+
+    if (data) {
+      dataSource.processLoadedData(data, {
+        filter: skipFilter ? null : this.getCombinedFilter(),
+        group: dataSource.group(),
+        sort: dataSource.sort(),
+      })
+        .done(resolveWithProcessedItems)
+        .fail((...args) => { d.reject(...args); });
+    } else if (!dataSource.isLoading()) {
+      dataSource.loadAll()
+        .done(resolveWithProcessedItems)
+        .fail((...args) => d.reject(...args));
+    } else {
+      d.reject();
     }
 
     return d;
