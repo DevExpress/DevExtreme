@@ -1,5 +1,6 @@
 import { equalByValue } from '@js/core/utils/common';
 
+import type { OperationTypes } from '../../data_source_adapter/types';
 import type {
   ChangedRows, DataChange, ItemChange, ProcessedItem, RowIndexByKey,
   RowOperation, UpdateChange, UpdateRowChange,
@@ -255,4 +256,45 @@ export function partialUpdateRow(
   }
 
   oldItem.update?.(newItem);
+}
+
+/**
+ * Grouping and filtering rebuild the rows, so a diff is pointless there. Missing operation
+ * types leave the mode unset rather than off: a pending `refresh({ changesOnly })` still
+ * fills it in when the change is applied later.
+ */
+export function resolveRepaintChangesOnly(
+  operationTypes: OperationTypes | undefined,
+  repaintChangesOnly: boolean | undefined,
+): boolean | undefined {
+  if (!operationTypes) {
+    return undefined;
+  }
+
+  return !operationTypes.grouping && !operationTypes.filtering && repaintChangesOnly;
+}
+
+export function syncRowsAfterChange(
+  items: ProcessedItem[],
+  options: {
+    newItems: ProcessedItem[];
+    oldItems: ProcessedItem[] | null;
+    rowIndexDelta: number;
+  },
+): void {
+  const { newItems, oldItems, rowIndexDelta } = options;
+
+  items.forEach((item, index) => {
+    item.rowIndex = index - rowIndexDelta;
+
+    if (oldItems) {
+      item.cells = oldItems[index].cells ?? [];
+    }
+
+    const newItem = newItems[index];
+
+    if (newItem) {
+      item.loadIndex = newItem.loadIndex;
+    }
+  });
 }
