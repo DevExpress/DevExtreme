@@ -1,7 +1,6 @@
 @use "../sizes" as *;
 @use "colors" as *;
 @use "../../../_design-system/variables/ds" as ds;
-@use "../typography/sizes" as typographySizes;
 
 // Not a colour: a radius that used to sit in _colors.scss (NAMING.md, O7)
 $popup-border-radius: ds.$border-radius-80 !default;
@@ -64,4 +63,3 @@ $popup-dialog-message-padding: ds.$spacing-100 ds.$spacing-100 ds.$spacing-50 ds
  * Derived values, moved out of _index.scss: a file that emits rules must not declare
  * variables (NAMING.md, O7).
  */
-$popup-toolbar-label-font-size: typographySizes.$typography-m-font-size;

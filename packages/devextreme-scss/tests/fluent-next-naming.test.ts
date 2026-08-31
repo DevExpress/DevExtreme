@@ -1139,17 +1139,19 @@ test('component tier: the collector matches registries.rootSelectors exactly', (
     includedFolders.push(...folders);
     const ruleComponents = new Set(folders
       .map((folder) => (systemTier.includes(folder) ? folder : components[folder])));
-    if (ruleComponents.size !== 1) {
-      offenders.push(`collector rule mixes components: ${[...ruleComponents].join(', ')}`);
-      return;
-    }
-    const [component] = [...ruleComponents];
+    /*
+     * A rule may serve several components — the document root carries every system-tier folder,
+     * and stylelint forbids repeating the same selector. What must hold is narrower than "one
+     * component per rule": each component in the rule owns exactly this selector list.
+     */
     const actual = selectorText.split(',').map((selector) => selector.trim()).filter(Boolean).sort();
-    const expected = [...(registries.rootSelectors[component] ?? [])].sort();
-    if (JSON.stringify(actual) !== JSON.stringify(expected)) {
-      offenders.push(`collector rule for "${component}": selectors [${actual.join(', ')}] != `
-        + `registries.rootSelectors [${expected.join(', ')}]`);
-    }
+    [...ruleComponents].forEach((component) => {
+      const expected = [...(registries.rootSelectors[component] ?? [])].sort();
+      if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+        offenders.push(`collector rule for "${component}": selectors [${actual.join(', ')}] != `
+          + `registries.rootSelectors [${expected.join(', ')}]`);
+      }
+    });
   });
 
   const publicFolders = publicTierFiles.map((file) => sourceLabel(file).split('/')[1]);
