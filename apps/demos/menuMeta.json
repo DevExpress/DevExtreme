@@ -3974,6 +3974,7 @@
           {
             "Name": "Grouping",
             "Equivalents": "",
+            "Badge": "Updated",
             "Demos": [
               {
                 "Title": "Grouping by Resources",
