@@ -4,17 +4,17 @@
 @use "../toolbar/mixins" as *;
 @use "../../base/popup" with (
   $popup-title-min-height-fallback: null,
-  $popup-title-padding: $popup-title-padding,
-  $popup-dialog-message-padding: $popup-dialog-message-padding,
-  $popup-dialog-shader-color: $popup-dialog-backdrop,
+  $popup-title-padding: var(--dx-popup-title-padding),
+  $popup-dialog-message-padding: var(--dx-popup-dialog-message-padding),
+  $popup-dialog-shader-color: var(--dx-popup-dialog-backdrop),
 );
 @use "../overlay";
 
 .dx-popup-wrapper {
   & > .dx-overlay-content {
     background: var(--dx-surface-overlay);
-    box-shadow: $popup-content-box-shadow;
-    border-radius: $popup-border-radius;
+    box-shadow: var(--dx-popup-content-box-shadow);
+    border-radius: var(--dx-popup-border-radius);
   }
 
   & > .dx-popup-fullscreen {
@@ -23,25 +23,25 @@
 
   .dx-state-focused {
     &.dx-overlay-content {
-      box-shadow: $popup-content-box-shadow-focused;
+      box-shadow: var(--dx-popup-content-box-shadow-focused);
     }
   }
 }
 
 .dx-popup-title {
   position: relative;
-  min-height: $popup-title-min-height;
-  border-bottom: $popup-title-border-block-end;
-  border-bottom-color: $popup-title-border;
-  background: $popup-title-bg;
-  color: $popup-title-content;
+  min-height: var(--dx-popup-title-min-height);
+  border-bottom: var(--dx-popup-title-border-block-end);
+  border-bottom-color: var(--dx-popup-title-border);
+  background: var(--dx-popup-title-bg);
+  color: var(--dx-popup-title-content);
 
   &.dx-toolbar {
     @include dx-toolbar-sizing(
-      $popup-toolbar-height,
-      0 $popup-toolbar-padding-inline,
-      $popup-toolbar-label-font-size,
-      $popup-toolbar-item-spacing
+      var(--dx-popup-toolbar-height),
+      0 var(--dx-popup-toolbar-padding-inline),
+      var(--dx-popup-toolbar-label-font-size),
+      var(--dx-popup-toolbar-item-spacing)
     );
 
     box-shadow: none;
@@ -49,30 +49,30 @@
 }
 
 .dx-popup-content {
-  padding: $popup-content-padding-block $popup-content-padding;
+  padding: var(--dx-popup-content-padding-block) var(--dx-popup-content-padding);
 
   & > .dx-button {
-    margin: $popup-button-margin;
+    margin: var(--dx-popup-button-margin);
   }
 }
 
 .dx-popup-bottom {
-  background: $popup-bottom-bg;
-  color: $popup-bottom-content;
+  background: var(--dx-popup-bottom-bg);
+  color: var(--dx-popup-bottom-content);
 
   &.dx-toolbar {
     @include dx-toolbar-sizing(
-      $popup-bottom-toolbar-height,
-      0 $popup-content-with-title-top-padding $popup-content-with-title-bottom-padding,
-      $popup-toolbar-label-font-size,
-      $popup-toolbar-item-spacing
+      var(--dx-popup-bottom-toolbar-height),
+      0 var(--dx-popup-content-with-title-top-padding) var(--dx-popup-content-with-title-bottom-padding),
+      var(--dx-popup-toolbar-label-font-size),
+      var(--dx-popup-toolbar-item-spacing)
     );
   }
 }
 
 .dx-popup-content.dx-dialog-content {
-  min-width: calc(220px - 2 * #{$popup-content-padding}); // dx-fixed-size: 220px dialog min-width
-  padding: $popup-content-padding-block $popup-content-padding;
+  min-width: calc(220px - 2 * var(--dx-popup-content-padding)); // dx-fixed-size: 220px dialog min-width
+  padding: var(--dx-popup-content-padding-block) var(--dx-popup-content-padding);
 }
 
 .dx-dialog-message {

@@ -5,7 +5,6 @@
 $chat-bg: ds.$color-bg !default;
 
 $chat-border: ds.$color-border !default;
-$chat-message-box-border: $chat-border !default;
 $chat-message-box-file-bg: buttonColors.$button-normal-contained-bg-hovered !default;
 $chat-message-box-file-cancel-button-secondary-content: buttonColors.$button-normal-contained-bg-selected !default;
 $chat-message-editing-preview-accent-content: ds.$color-bg-primary !default;
@@ -50,8 +49,6 @@ $chat-file-container-box-shadow: ds.$box-shadow-sm !default;
 $chat-file-secondary-content: ds.$color-content-subtle !default;
 
 $chat-suggestions-box-shadow: ds.$box-shadow-md !default;
-
-$chat-typing-indicator-bubble-bg: $chat-bubble-secondary-bg !default;
 
 $chat-message-list-context-menu-delete-button-content: ds.$color-content-danger !default;
 $chat-message-list-context-menu-delete-button-content-focused: ds.$color-content-danger !default;

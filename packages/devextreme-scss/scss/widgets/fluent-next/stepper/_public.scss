@@ -1,0 +1,44 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-stepper-connector-bg: #{$stepper-connector-bg};
+  --dx-stepper-connector-padding: var(--dx-stepper-padding);
+  --dx-stepper-connector-size: var(--dx-stepper-step-indicator-size);
+  --dx-stepper-connector-thickness: #{$stepper-connector-thickness};
+  --dx-stepper-connector-value-bg: #{$stepper-connector-value-bg};
+  --dx-stepper-padding: #{$stepper-padding};
+  --dx-stepper-step-accent-bg: #{$stepper-step-accent-bg};
+  --dx-stepper-step-accent-bg-hovered: #{$stepper-step-accent-bg-hovered};
+  --dx-stepper-step-base-bg: #{$stepper-step-base-bg};
+  --dx-stepper-step-base-bg-hovered: #{$stepper-step-base-bg-hovered};
+  --dx-stepper-step-base-border: #{$stepper-step-base-border};
+  --dx-stepper-step-base-border-hovered: #{$stepper-step-base-border-hovered};
+  --dx-stepper-step-base-content: #{$stepper-step-base-content};
+  --dx-stepper-step-base-label-content: #{$stepper-step-base-label-content};
+  --dx-stepper-step-bg-disabled: #{$stepper-step-bg-disabled};
+  --dx-stepper-step-bg-selected: var(--dx-stepper-step-accent-bg);
+  --dx-stepper-step-bg-selected-hovered: #{$stepper-step-bg-selected-hovered};
+  --dx-stepper-step-content-column-gap: #{$stepper-step-content-column-gap};
+  --dx-stepper-step-content-disabled: #{$stepper-step-content-disabled};
+  --dx-stepper-step-content-row-gap: #{$stepper-step-content-row-gap};
+  --dx-stepper-step-content-selected: #{$stepper-step-content-selected};
+  --dx-stepper-step-font-weight-selected: #{$stepper-step-font-weight-selected};
+  --dx-stepper-step-icon-size: #{$stepper-step-icon-size};
+  --dx-stepper-step-indicator-size: #{$stepper-step-indicator-size};
+  --dx-stepper-step-invalid-bg: var(--dx-stepper-step-base-bg);
+  --dx-stepper-step-invalid-bg-hovered: var(--dx-stepper-step-base-bg-hovered);
+  --dx-stepper-step-invalid-bg-selected: #{$stepper-step-invalid-bg-selected};
+  --dx-stepper-step-invalid-bg-selected-hovered: #{$stepper-step-invalid-bg-selected-hovered};
+  --dx-stepper-step-invalid-border: var(--dx-stepper-step-base-border);
+  --dx-stepper-step-invalid-border-hovered: var(--dx-stepper-step-base-border-hovered);
+  --dx-stepper-step-invalid-content: #{$stepper-step-invalid-content};
+  --dx-stepper-step-invalid-content-hovered: #{$stepper-step-invalid-content-hovered};
+  --dx-stepper-step-invalid-label-content: #{$stepper-step-invalid-label-content};
+  --dx-stepper-step-label-content-selected: #{$stepper-step-label-content-selected};
+  --dx-stepper-step-min-size: #{$stepper-step-min-size};
+  --dx-stepper-step-optional-mark-font-size: #{$stepper-step-optional-mark-font-size};
+  --dx-stepper-step-shadow: #{$stepper-step-shadow};
+  --dx-stepper-step-shadow-disabled: var(--dx-stepper-step-base-bg);
+  --dx-stepper-step-transition-duration: #{$stepper-step-transition-duration};
+}

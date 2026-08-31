@@ -1,0 +1,23 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-speed-dial-action-backdrop: var(--dx-backdrop-bg);
+  --dx-speed-dial-action-bg: #{$speed-dial-action-bg};
+  --dx-speed-dial-action-bg-active: #{$speed-dial-action-bg-active};
+  --dx-speed-dial-action-bg-hovered: #{$speed-dial-action-bg-hovered};
+  --dx-speed-dial-action-content: #{$speed-dial-action-content};
+  --dx-speed-dial-action-fa-button-label-border-radius: #{$speed-dial-action-fa-button-label-border-radius};
+  --dx-speed-dial-action-fa-button-label-font-weight: #{$speed-dial-action-fa-button-label-font-weight};
+  --dx-speed-dial-action-fa-button-label-offset: #{$speed-dial-action-fa-button-label-offset};
+  --dx-speed-dial-action-fa-button-label-padding: #{$speed-dial-action-fa-button-label-padding};
+  --dx-speed-dial-action-fa-button-size: #{$speed-dial-action-fa-button-size};
+  --dx-speed-dial-action-label-shadow: #{$speed-dial-action-label-shadow};
+  --dx-speed-dial-action-main-bg: #{$speed-dial-action-main-bg};
+  --dx-speed-dial-action-main-bg-active: #{$speed-dial-action-main-bg-active};
+  --dx-speed-dial-action-main-bg-hovered: #{$speed-dial-action-main-bg-hovered};
+  --dx-speed-dial-action-main-fa-button-label-padding: #{$speed-dial-action-main-fa-button-label-padding};
+  --dx-speed-dial-action-main-fa-button-padding-inline: #{$speed-dial-action-main-fa-button-padding-inline};
+  --dx-speed-dial-action-main-fa-button-size: #{$speed-dial-action-main-fa-button-size};
+  --dx-speed-dial-action-shadow: #{$speed-dial-action-shadow};
+}
