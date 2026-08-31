@@ -250,11 +250,13 @@ function collectPackageRootEntries(): Record<string, string> {
       return;
     }
 
-    // Package folders with index.js (e.g. events → events/index.js)
+    // Package folders with index.js (e.g. events → events/index.js), mapped
+    // extensionless for the same reason as the file branch above: artifacts
+    // import them as `../events`, and the server resolves the index itself.
     if (entry.isDirectory()) {
       const indexPath = path.join(ESM_FS_ROOT, entry.name, 'index.js');
       if (fs.existsSync(indexPath)) {
-        entries[entry.name] = `${ESM_ROOT}/${entry.name}/index.js`;
+        entries[entry.name] = `${ESM_ROOT}/${entry.name}`;
       }
     }
   });

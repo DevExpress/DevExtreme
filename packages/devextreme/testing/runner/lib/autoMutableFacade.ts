@@ -6,6 +6,7 @@ import {
   MUTABLE_MODULE_GROUPS,
   type MutableModuleGroup,
 } from './mutableModuleGroups';
+import { NAMESPACE_FACADE_MODULES } from './namespaceFacadeModules';
 
 export type { MutableModuleGroup };
 export { MUTABLE_MODULE_GROUPS };
@@ -468,29 +469,6 @@ function tryRegisterNamespaceDefaultFile(
   return entry;
 }
 
-function walkJsFiles(dir: string, acc: string[] = []): string[] {
-  if (!fs.existsSync(dir)) {
-    return acc;
-  }
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      walkJsFiles(full, acc);
-    } else if (entry.isFile() && entry.name.endsWith('.js')) {
-      acc.push(full);
-    }
-  }
-  return acc;
-}
-
-function isSmallPublicReexportCandidate(filePath: string): boolean {
-  try {
-    return fs.statSync(filePath).size <= 2000;
-  } catch {
-    return false;
-  }
-}
-
 function registerForcedMutableGroups(workspaceRoot: string): void {
   const esmRoot = path.join(
     workspaceRoot,
@@ -520,16 +498,14 @@ export function ensureAutoMutableFacadeIndex(workspaceRoot: string): void {
   facadeIndex.clear();
   registerForcedMutableGroups(workspaceRoot);
 
-  const vizRoot = path.join(
+  const esmRoot = path.join(
     workspaceRoot,
-    'packages/devextreme/artifacts/transpiled-esm-npm/esm/viz',
+    'packages/devextreme/artifacts/transpiled-esm-npm/esm',
   );
 
-  walkJsFiles(vizRoot)
-    .filter((filePath) => isSmallPublicReexportCandidate(filePath))
-    .forEach((filePath) => {
-      tryRegisterNamespaceDefaultFile(workspaceRoot, filePath);
-    });
+  NAMESPACE_FACADE_MODULES.forEach((relativePath) => {
+    tryRegisterNamespaceDefaultFile(workspaceRoot, path.join(esmRoot, relativePath));
+  });
 
   indexBuiltForRoot = workspaceRoot;
 }
@@ -557,25 +533,18 @@ export function findHandWrittenMutableFacade(relativeUrlPath: string): string | 
 }
 
 /**
- * Returns generated facade source for a forced mutable module or a
- * namespace-default public entry, or null when not applicable.
+ * Returns generated facade source for a module registered in
+ * `MUTABLE_MODULE_GROUPS` or `NAMESPACE_FACADE_MODULES`, or null for anything else.
  */
 export function tryBuildAutoMutableFacade(
   relativeUrlPath: string,
-  absoluteFilePath: string,
   workspaceRoot: string,
 ): string | null {
   ensureAutoMutableFacadeIndex(workspaceRoot);
 
-  const esmKey = toEsmRelativePath(relativeUrlPath);
-  let entry = facadeIndex.get(esmKey);
-
+  const entry = facadeIndex.get(toEsmRelativePath(relativeUrlPath));
   if (!entry) {
-    const registered = tryRegisterNamespaceDefaultFile(workspaceRoot, absoluteFilePath);
-    if (!registered) {
-      return null;
-    }
-    entry = registered;
+    return null;
   }
 
   return generateAutoMutableFacadeSource(entry);

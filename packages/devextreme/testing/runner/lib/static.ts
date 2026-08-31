@@ -585,7 +585,6 @@ export function createStaticFileService({
       }
       const autoFacade = tryBuildAutoMutableFacade(
         relativeUrlPath,
-        resolvedFilePath,
         rootDirectory,
       );
       if (autoFacade) {
