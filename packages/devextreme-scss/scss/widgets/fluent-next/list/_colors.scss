@@ -18,7 +18,6 @@ $list-header-indicator-content: ds.$color-content-subtle !default;
 
 $list-item-bg-active: ds.$color-bg-active !default;
 $list-hold-menu-bg: ds.$color-bg !default;
-$list-hold-menu-border: $list-border !default;
 $list-hold-menu-shadow: ds.$color-shadow-ambient !default;
 $list-menu-button-default-content: buttonColors.$button-default-contained-content !default;
 $list-menu-button-default-bg: buttonColors.$button-default-contained-bg !default;
@@ -47,9 +46,6 @@ $list-toggle-delete-icon: null !default;
 $list-base-select-all-separator-bg: ds.$color-border-subtle !default;
 
 $list-group-content: ds.$color-content !default;
-
-$list-expanded-group-content: $list-group-content !default;
-$list-item-content-selected: $list-normal-content !default;
 
 $list-border-disabled: ds.$color-border-disabled !default;
 $list-content-disabled: ds.$color-content-disabled !default;

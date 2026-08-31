@@ -4,18 +4,18 @@
 @use "../sizes" as *;
 @use "../button/mixins" as *;
 @use "../../base/calendar/calendar" with (
-  $calendar-week-day-header-font-size: $calendar-week-day-header-font-size,
-  $calendar-week-day-header-font-weight: $calendar-week-day-header-font-weight,
+  $calendar-week-day-header-font-size: var(--dx-calendar-week-day-header-font-size),
+  $calendar-week-day-header-font-weight: var(--dx-calendar-week-day-header-font-weight),
 );
 @use "../../base/calendar/mixins" as *;
 @include dx-calendar-mixin(
-  $calendar-bg,
+  var(--dx-calendar-bg),
   $calendar-legacy-width,
-  $calendar-legacy-height,
-  $calendar-element-padding,
-  $calendar-footer-button-height,
-  $calendar-invalid-border,
-  $calendar-invalid-border-focused,
+  var(--dx-calendar-legacy-height),
+  var(--dx-calendar-element-padding),
+  var(--dx-calendar-footer-button-height),
+  var(--dx-calendar-invalid-border),
+  var(--dx-calendar-invalid-border-focused),
 );
 
 .dx-calendar-navigator-previous-view,
@@ -24,42 +24,42 @@
 }
 
 @include dx-calendar-navigator-mixin(
-  $calendar-navigator-content,
+  var(--dx-calendar-navigator-content),
 );
 @include dx-calendar-body-mixin(
-  $calendar-week-number-cell-content,
-  $calendar-week-number-cell-bg,
-  $calendar-week-number-border-radius,
-  $calendar-cell-font-size,
-  $calendar-header-content,
+  var(--dx-calendar-week-number-cell-content),
+  var(--dx-calendar-week-number-cell-bg),
+  var(--dx-calendar-week-number-border-radius),
+  var(--dx-calendar-cell-font-size),
+  var(--dx-calendar-header-content),
 );
 @include dx-calendar-cell-mixin(
-  $calendar-cell-contoured-border-radius,
-  $calendar-content,
+  var(--dx-calendar-cell-contoured-border-radius),
+  var(--dx-calendar-content),
   $global-border-radius,
-  $calendar-cell-bg-selected,
-  $calendar-bg-hovered,
-  $calendar-cell-content-hovered,
-  $calendar-cell-bg-active,
-  $calendar-cell-bg-selected,
-  $calendar-cell-content-selected,
-  $calendar-cell-contoured-border,
-  $calendar-cell-other-content,
-  $calendar-cell-other-content-hovered,
-  $calendar-cell-border-hovered,
+  var(--dx-calendar-cell-bg-selected),
+  var(--dx-calendar-bg-hovered),
+  var(--dx-calendar-cell-content-hovered),
+  var(--dx-calendar-cell-bg-active),
+  var(--dx-calendar-cell-bg-selected),
+  var(--dx-calendar-cell-content-selected),
+  var(--dx-calendar-cell-contoured-border),
+  var(--dx-calendar-cell-other-content),
+  var(--dx-calendar-cell-other-content-hovered),
+  var(--dx-calendar-cell-border-hovered),
   999em,
 );
 @include dx-calendar-cell-in-range-mixin(
   "::before",
-  $calendar-bg-hovered,
-  $calendar-cell-border-hovered,
+  var(--dx-calendar-bg-hovered),
+  var(--dx-calendar-cell-border-hovered),
   999em,
   0,
 );
 @include dx-calendar-cell-in-range-mixin(
   "::after",
   inherit,
-  $calendar-cell-border-hovered,
+  var(--dx-calendar-cell-border-hovered),
   999em,
   1px, // dx-line-width: 1px, the range cell border passed to dx-calendar-cell-in-range-mixin
   ".dx-calendar-cell-range-hover",

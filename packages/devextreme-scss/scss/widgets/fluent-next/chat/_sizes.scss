@@ -55,13 +55,8 @@ $chat-message-list-day-header-padding-block-end: ds.$spacing-120 !default;
 $chat-message-list-day-header-first-padding-block-start: ds.$spacing-200 !default;
 $chat-message-list-day-header-font-size: ds.$font-size-caption-md !default;
 
-$chat-typing-indicator-grid-template-columns: $chat-message-group-start-grid-template-columns !default;
-$chat-typing-indicator-padding: null !default;
-$chat-typing-indicator-row-gap: $chat-message-group-gap !default;
-$chat-typing-indicator-font-size: $chat-information-font-size !default;
 $chat-typing-indicator-bubble-padding-block: null !default;
 $chat-typing-indicator-bubble-padding-inline: null !default;
-$chat-typing-indicator-bubble-border-radius: null !default;
 $chat-typing-indicator-bubble-column-gap: ds.$spacing-40 !default;
 $chat-typing-indicator-circle-size: null !default;
 $chat-typing-indicator-circle-center-size: null !default;
@@ -115,8 +110,6 @@ $chat-bubble-gap: ds.$spacing-80 !default;
   $chat-typing-indicator-circle-center-size: math.div(12, 14) * 1em !default;
   $chat-typing-indicator-bubble-padding-block: ds.$spacing-120 !default;
   $chat-typing-indicator-bubble-padding-inline: ds.$spacing-200 !default;
-  $chat-typing-indicator-padding: $chat-message-group-padding !default;
-  $chat-typing-indicator-bubble-border-radius: $chat-bubble-border-radius !default;
 
   $chat-confirmation-popup-toolbar-gap: ds.$spacing-80 !default;
 
@@ -155,8 +148,6 @@ $chat-bubble-gap: ds.$spacing-80 !default;
   $chat-typing-indicator-circle-center-size: math.div(12, 12) * 1em !default;
   $chat-typing-indicator-bubble-padding-block: ds.$spacing-80 !default;
   $chat-typing-indicator-bubble-padding-inline: ds.$spacing-120 !default;
-  $chat-typing-indicator-padding: $chat-message-group-padding !default;
-  $chat-typing-indicator-bubble-border-radius: $chat-bubble-border-radius !default;
 
   $chat-confirmation-popup-toolbar-gap: ds.$spacing-40 !default;
 

@@ -1034,7 +1034,7 @@
   }
 
   .dx-command-ai-header-content {
-    max-width: calc(100% - (buttonSizes.$button-height - $grid-cell-padding-inline + $grid-command-ai-button-max-width));
+    max-width: calc(100% - (buttonSizes.$button-height - var(--dx-grid-cell-padding-inline) + var(--dx-grid-command-ai-button-max-width)));
 
     .dx-#{$widget-name}-text-content {
       padding-left: var(--dx-grid-command-ai-content-padding-inline-start);
