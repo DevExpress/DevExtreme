@@ -932,8 +932,8 @@ export default class DataSourceAdapter extends modules.Controller {
         }).fail((e) => { d.reject(e); });
       }, this.option('loadingTimeout'));
 
-      return d.fail(function () {
-        this._eventsStrategy.fireEvent('loadError', arguments);
+      return d.fail((...args: unknown[]) => {
+        this._eventsStrategy.fireEvent('loadError', args);
       }).always(() => {
         this._isLoadingAll = false;
       }).promise() as unknown as DeferredObj<unknown>;
