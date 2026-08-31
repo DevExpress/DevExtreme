@@ -10,8 +10,13 @@
  * An unmarked value never reaches SCALES.md, so design never sees it and no decision about it
  * exists. The marker is the only channel to the scales card, not decoration.
  *
- * Deliberately out of scope: scss/widgets/base/** (the shared layer belongs to the base owners),
- * and em/% values — those carry the dx-relative marker but have no gate of their own.
+ * The shared layer scss/widgets/base/** is scanned by tests/base-size-markers.test.ts, which points
+ * --root at it and compares against a baseline: 444 places cannot be classified in one commit, and
+ * the layer belongs to the base owners, so there the count ratchets down instead of having to be
+ * zero. The default run stays the theme, where the bar is zero unmarked.
+ *
+ * Deliberately out of scope: em/% values — those carry the dx-relative marker but have no gate of
+ * their own.
  */
 
 import { readFileSync, readdirSync } from 'fs';
@@ -57,6 +62,8 @@ export const scanPxLiterals = (root = themeDir) => {
         file: relative(packageRoot, file),
         line: index + 1,
         literals: [...new Set(literals)],
+        // distinct values drive the report; the raw count is what an inventory of the layer adds up
+        occurrences: literals.length,
         marker,
         text: line.trim(),
       };

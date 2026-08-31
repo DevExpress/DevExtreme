@@ -72,7 +72,7 @@ $scheduler-common-collector-size: null !default;
 }
 
 .dx-scheduler-adaptive {
-  @media (max-width: 450px) {
+  @media (max-width: 450px) { // dx-literal-required: a media condition, var() is invalid here
     .dx-scheduler-view-switcher-label {
       display: none;
     }

@@ -881,7 +881,9 @@ const OVERRIDES = {
       'file', 'file-name', 'file-container', 'files-container', 'suggestions', 'editing-preview',
       'caption', 'delete-button', 'cancel-button', 'context-menu', 'icon', 'box', 'container',
       'alert-list', 'prompt', 'textarea', 'toolbar', 'information', 'author-name', 'timestamp',
-      'typing-indicator', 'circle', 'bubble', 'group'],
+      'typing-indicator', 'circle', 'bubble', 'group',
+      // wave B3: .dx-chat-messagebubble-image is a real <img> box inside a bubble
+      'image'],
     'color-view': ['palette', 'palette-cell', 'hue-scale', 'hue-scale-cell', 'hue-scale-wrapper', 'alpha', 'controls',
       'container', 'label', 'handle', 'color-preview', 'preview', 'textbox', 'hex', 'overlay',
       'content-box', 'bg-box'],
@@ -928,7 +930,10 @@ const OVERRIDES = {
     stepper: [
       // wave H: anatomy the folder needed to enter `migrated`
       'content', 'optional-mark','step', 'step-indicator', 'step-label', 'label', 'connector', 'value', 'icon', 'text',
-      'item', 'container'],
+      'item', 'container',
+      // wave B3: the two box-shadow rings around the indicator — `ring` is the selection ring,
+      // `halo` is the gap the indicator punches in the connector behind it
+      'ring', 'halo'],
     'recurrence-editor': ['switch', 'repeat-end', 'item', 'container', 'label', 'until-date-box',
       'count-number-box', 'interval-number-box', 'number-box', 'button-group', 'radio-group'],
     /*

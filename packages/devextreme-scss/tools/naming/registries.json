@@ -1387,7 +1387,8 @@
       "typing-indicator",
       "circle",
       "bubble",
-      "group"
+      "group",
+      "image"
     ],
     "color-view": [
       "palette",
@@ -1623,7 +1624,9 @@
       "icon",
       "text",
       "item",
-      "container"
+      "container",
+      "ring",
+      "halo"
     ],
     "recurrence-editor": [
       "switch",

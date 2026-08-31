@@ -47,4 +47,7 @@
   var(--dx-stepper-step-content-disabled),
   var(--dx-stepper-step-bg-disabled),
   var(--dx-stepper-step-shadow-disabled),
+  $indicator-ring-inset: var(--dx-stepper-step-indicator-ring-inset),
+  $indicator-ring-size: var(--dx-stepper-step-indicator-ring-size),
+  $indicator-halo-size: var(--dx-stepper-step-indicator-halo-size),
 );

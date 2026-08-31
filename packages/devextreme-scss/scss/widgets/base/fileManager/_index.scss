@@ -81,7 +81,7 @@ $filemanager-drawer-panel-content-width: 30% !default; // dx-relative-%
       min-width: $filemanager-overlay-content-min-width;
       max-width: 93vw;
 
-      @media (min-width: 431px) {
+      @media (min-width: 431px) { // dx-literal-required: a media condition, var() is invalid here
         max-width: $filemanager-overlay-content-max-width;
       }
     }

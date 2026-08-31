@@ -1,9 +1,10 @@
 {
   "comment": [
-    "Size-marker vocabulary for the fluent-next theme. One source, two consumers:",
+    "Size-marker vocabulary. One source, three consumers:",
     "  tools/review/scales.mjs    — builds the SCALES.md / SCALES.html report, a section per entry;",
     "  tools/review/px-audit.mjs  — the gate: a px literal with no marker does not pass",
     "                               (tests/fluent-next-size-markers.test.ts runs it).",
+    "  tests/base-size-markers.test.ts  — the same scan over the shared layer scss/widgets/base/**, against a baseline: that layer cannot be marked in one go, so the count only ratchets down.",
     "The report and the gate cannot drift: this list is the only one.",
     "",
     "Fields: id — section anchor; marker — the token in a `// <marker>: note` comment;",
@@ -118,6 +119,26 @@
       "literals": "px",
       "why": "The number is written where it applies — in a rule, a mixin argument or a derived variable — with no name of its own. Unlike A, a step with that value usually does exist: the step column shows which one.",
       "scale": "spacing"
+    },
+    {
+      "id": "shared",
+      "marker": "dx-base-shared",
+      "source": "sources",
+      "title": "J. Sizes owned by the shared layer",
+      "question": "does the theme get a knob, or does the number stay shared",
+      "literals": "px",
+      "why": "A value in scss/widgets/base/** that every theme compiles. The marker is the record of a decision by the base owners: the number is the same for generic, material, fluent and fluent-next, and opening a knob for one theme would buy nothing. Base-layer marker: in the theme itself there is no shared layer to own a value, so a theme literal marked this way is a mistake.",
+      "scale": "spacing"
+    },
+    {
+      "id": "structural",
+      "marker": "dx-structural",
+      "source": "sources",
+      "title": "K. Not a designed size",
+      "question": "no decision needed — the number is a technique, not a size",
+      "literals": "px",
+      "why": "An off-screen parking coordinate (top: -9999px), a one-pixel probe, a number chosen to be far outside the viewport rather than to be seen. Nobody designs it and no step can replace it: making it a token would only invite someone to tune it. Unlike H, the value is not frozen by a syntax — it is frozen by having no visual meaning.",
+      "scale": null
     }
   ]
 }

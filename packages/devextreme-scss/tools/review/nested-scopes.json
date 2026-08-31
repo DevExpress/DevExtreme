@@ -75,6 +75,7 @@
     "dx-chat-messagebox",
     "dx-chat-messagebox-textarea-container",
     "dx-chat-messagebubble",
+    "dx-chat-messagebubble-image",
     "dx-chat-messagegroup",
     "dx-chat-messagegroup-alignment-end",
     "dx-chat-messagegroup-alignment-start",

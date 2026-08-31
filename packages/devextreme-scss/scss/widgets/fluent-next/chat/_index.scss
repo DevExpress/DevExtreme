@@ -3,6 +3,10 @@
 @use "../../base/chat" with (
   $chat-file-name-font-weight: var(--dx-chat-file-name-font-weight),
   $chat-editing-preview-caption-font-weight: var(--dx-chat-editing-preview-caption-font-weight),
+  $chat-messagebubble-padding-image: var(--dx-chat-bubble-image-padding),
+  $chat-messagebubble-border-radius-image: var(--dx-chat-bubble-image-border-radius),
+  $chat-messagebubble-max-width-image: var(--dx-chat-bubble-image-max-width),
+  $chat-messagebubble-max-height-image: var(--dx-chat-bubble-image-max-height),
 );
 @use "../../base/chat/mixins" as *;
 @use "../common/mixins" as *;

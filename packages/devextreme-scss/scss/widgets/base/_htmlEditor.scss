@@ -137,8 +137,8 @@ $transparent-border: 1px solid transparent;
 }
 
 .ql-clipboard { // stylelint-disable-line selector-class-pattern
-  left: -100000px;
-  height: 1px;
+  left: -100000px; // dx-structural: parks Quill's clipboard element off-screen
+  height: 1px; // dx-structural: collapses the off-screen clipboard element, not a designed height
   overflow-y: hidden;
   position: absolute;
   top: 50%;
