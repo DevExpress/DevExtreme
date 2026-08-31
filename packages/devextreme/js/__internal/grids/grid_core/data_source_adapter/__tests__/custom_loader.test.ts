@@ -52,7 +52,7 @@ const setup = ({
   const customizeStoreLoadOptionsSpy = jest.fn(customizeStoreLoadOptions);
   const customizeLoadResultSpy = jest.fn(customizeLoadResult);
 
-  const pipeline = new CustomLoader(
+  const customLoader = new CustomLoader(
     dataSource,
     getLoadingTimeout,
     customizeStoreLoadOptionsSpy,
@@ -60,7 +60,7 @@ const setup = ({
   );
 
   return {
-    pipeline,
+    customLoader,
     dataSource,
     store: { load, totalCount },
     getLoadingTimeout,
@@ -81,11 +81,11 @@ afterEach(() => {
 describe('load', () => {
   it('builds the store load options from the passed options and the dataSource langParams', () => {
     const langParams = { locale: 'en' };
-    const { pipeline, customizeStoreLoadOptions } = setup({
+    const { customLoader, customizeStoreLoadOptions } = setup({
       dataSourceOptions: { langParams },
     });
 
-    pipeline.load({ skip: 10, take: 5 });
+    customLoader.load({ skip: 10, take: 5 });
 
     const operation = customizeStoreLoadOptions.mock.calls[0][0];
     expect(operation.storeLoadOptions).toMatchObject({ skip: 10, take: 5, langParams });
@@ -93,12 +93,12 @@ describe('load', () => {
   });
 
   it('fills the store custom load options from the dataSource, without overwriting', () => {
-    const { pipeline, customizeStoreLoadOptions } = setup({
+    const { customLoader, customizeStoreLoadOptions } = setup({
       customLoadOptions: ['fromDataSource', 'fromOptions'],
       dataSourceOptions: { fromDataSource: 'ds', fromOptions: 'ds' },
     });
 
-    pipeline.load({ fromOptions: 'own' });
+    customLoader.load({ fromOptions: 'own' });
 
     const { storeLoadOptions } = customizeStoreLoadOptions.mock.calls[0][0];
     expect(storeLoadOptions.fromDataSource).toBe('ds');
@@ -107,37 +107,37 @@ describe('load', () => {
 
   it('customizes the store load options before loading and the result after', () => {
     const order: string[] = [];
-    const { pipeline } = setup({
+    const { customLoader } = setup({
       storeLoad: () => { order.push('load'); return Deferred().resolve([]); },
       customizeStoreLoadOptions: () => { order.push('customizeStoreLoadOptions'); },
       customizeLoadResult: () => { order.push('customizeLoadResult'); },
     });
 
-    pipeline.load({});
+    customLoader.load({});
 
     expect(order).toEqual(['customizeStoreLoadOptions', 'load', 'customizeLoadResult']);
   });
 
   it('resolves with the loaded data and extra', () => {
     const data = [{ id: 1 }];
-    const { pipeline } = setup({
+    const { customLoader } = setup({
       storeLoad: () => Deferred().resolve(data, { totalCount: 42 }),
     });
     const done = jest.fn();
 
-    pipeline.load({}).done(done);
+    customLoader.load({}).done(done);
 
     expect(done).toHaveBeenCalledWith(data, { totalCount: 42 });
   });
 
   it('skips the store when a customizeStoreLoadOptions handler supplies the data', () => {
     const data = [{ id: 1 }];
-    const { pipeline, store } = setup({
+    const { customLoader, store } = setup({
       customizeStoreLoadOptions: (operation) => { operation.data = data; },
     });
     const done = jest.fn();
 
-    pipeline.load({}).done(done);
+    customLoader.load({}).done(done);
 
     expect(store.load).not.toHaveBeenCalled();
     expect(done).toHaveBeenCalledWith(data, expect.anything());
@@ -145,51 +145,51 @@ describe('load', () => {
 
   it('resolves with the data a customizeLoadResult handler put on the operation', () => {
     const transformed = [{ id: 'transformed' }];
-    const { pipeline } = setup({
+    const { customLoader } = setup({
       storeLoad: () => Deferred().resolve([{ id: 1 }]),
       customizeLoadResult: (operation) => { operation.data = transformed; },
     });
     const done = jest.fn();
 
-    pipeline.load({}).done(done);
+    customLoader.load({}).done(done);
 
     expect(done).toHaveBeenCalledWith(transformed, expect.anything());
   });
 
   it('rejects as canceled when the dataSource is disposed before the load runs', () => {
     let dispose = (): void => {};
-    const { dataSource, pipeline, store } = setup({
+    const { dataSource, customLoader, store } = setup({
       customizeStoreLoadOptions: () => { dispose(); },
     });
     const fail = jest.fn();
 
     dispose = (): void => dataSource.dispose();
-    pipeline.load({}).fail(fail);
+    customLoader.load({}).fail(fail);
 
     expect(store.load).not.toHaveBeenCalled();
     expect(fail).toHaveBeenCalledWith('canceled');
   });
 
   it('asks the store for a total count when requireTotalCount is set and the store reported none', () => {
-    const { pipeline, store } = setup({
+    const { customLoader, store } = setup({
       storeLoad: () => Deferred().resolve([{ id: 1 }]),
       storeTotalCount: () => 17,
     });
     const done = jest.fn();
 
-    pipeline.load({ requireTotalCount: true }).done(done);
+    customLoader.load({ requireTotalCount: true }).done(done);
 
     expect(store.totalCount).toHaveBeenCalledTimes(1);
     expect(done).toHaveBeenCalledWith([{ id: 1 }], { totalCount: 17 });
   });
 
   it('keeps the total count the store already reported', () => {
-    const { pipeline, store } = setup({
+    const { customLoader, store } = setup({
       storeLoad: () => Deferred().resolve([{ id: 1 }], { totalCount: 3 }),
     });
     const done = jest.fn();
 
-    pipeline.load({ requireTotalCount: true }).done(done);
+    customLoader.load({ requireTotalCount: true }).done(done);
 
     expect(store.totalCount).not.toHaveBeenCalled();
     expect(done).toHaveBeenCalledWith([{ id: 1 }], { totalCount: 3 });
@@ -197,13 +197,13 @@ describe('load', () => {
 
   it('resolves a deferred total count before resolving the load', () => {
     const totalCount = Deferred<number>();
-    const { pipeline } = setup({
+    const { customLoader } = setup({
       storeLoad: () => Deferred().resolve([{ id: 1 }]),
       storeTotalCount: () => totalCount,
     });
     const done = jest.fn();
 
-    const d = pipeline.load({ requireTotalCount: true }).done(done);
+    const d = customLoader.load({ requireTotalCount: true }).done(done);
     expect(done).not.toHaveBeenCalled();
 
     totalCount.resolve(9);
@@ -216,14 +216,14 @@ describe('load', () => {
     silenceStoreErrorLog();
 
     const error = new Error('load failed');
-    const { pipeline, dataSource } = setup({
+    const { customLoader, dataSource } = setup({
       storeLoad: () => Deferred().reject(error),
     });
     const loadError = jest.fn();
     const fail = jest.fn();
 
     dataSource.on('loadError', loadError);
-    pipeline.load({}).fail(fail);
+    customLoader.load({}).fail(fail);
 
     expect(fail).toHaveBeenCalledWith(error);
     expect(loadError).toHaveBeenCalledWith(error);
@@ -231,9 +231,9 @@ describe('load', () => {
 
   it('holds the dataSource in a loading state until the load settles', () => {
     const storeDeferred = Deferred();
-    const { pipeline, dataSource } = setup({ storeLoad: () => storeDeferred });
+    const { customLoader, dataSource } = setup({ storeLoad: () => storeDeferred });
 
-    pipeline.load({});
+    customLoader.load({});
     expect(dataSource.isLoading()).toBe(true);
 
     storeDeferred.resolve([]);
@@ -241,10 +241,10 @@ describe('load', () => {
   });
 
   it('reads the loading timeout on every load', () => {
-    const { pipeline, getLoadingTimeout } = setup();
+    const { customLoader, getLoadingTimeout } = setup();
 
-    pipeline.load({});
-    pipeline.load({});
+    customLoader.load({});
+    customLoader.load({});
 
     expect(getLoadingTimeout).toHaveBeenCalledTimes(2);
   });
@@ -252,9 +252,9 @@ describe('load', () => {
   it('defers the store load by the loading timeout', () => {
     jest.useFakeTimers();
     try {
-      const { pipeline, store } = setup({ loadingTimeout: 30 });
+      const { customLoader, store } = setup({ loadingTimeout: 30 });
 
-      pipeline.load({});
+      customLoader.load({});
       expect(store.load).not.toHaveBeenCalled();
 
       jest.advanceTimersByTime(30);
@@ -267,64 +267,64 @@ describe('load', () => {
 
 describe('isCustomLoading', () => {
   it('is false before any load', () => {
-    const { pipeline } = setup();
+    const { customLoader } = setup();
 
-    expect(pipeline.isLoading()).toBe(false);
+    expect(customLoader.isLoading()).toBe(false);
   });
 
   it('is true while a load is pending and false once it settles', () => {
     const storeDeferred = Deferred();
-    const { pipeline } = setup({ storeLoad: () => storeDeferred });
+    const { customLoader } = setup({ storeLoad: () => storeDeferred });
 
-    pipeline.load({});
-    expect(pipeline.isLoading()).toBe(true);
+    customLoader.load({});
+    expect(customLoader.isLoading()).toBe(true);
 
     storeDeferred.resolve([]);
-    expect(pipeline.isLoading()).toBe(false);
+    expect(customLoader.isLoading()).toBe(false);
   });
 
   it('is false once a failed load settles', () => {
     silenceStoreErrorLog();
 
     const storeDeferred = Deferred();
-    const { pipeline } = setup({ storeLoad: () => storeDeferred });
+    const { customLoader } = setup({ storeLoad: () => storeDeferred });
 
-    pipeline.load({});
+    customLoader.load({});
     storeDeferred.reject(new Error('load failed'));
 
-    expect(pipeline.isLoading()).toBe(false);
+    expect(customLoader.isLoading()).toBe(false);
   });
 });
 
 describe('isLoadingAll', () => {
   it('is false for a load that is not loading all', () => {
     const storeDeferred = Deferred();
-    const { pipeline } = setup({ storeLoad: () => storeDeferred });
+    const { customLoader } = setup({ storeLoad: () => storeDeferred });
 
-    pipeline.load({});
+    customLoader.load({});
 
-    expect(pipeline.isLoadingAll()).toBe(false);
+    expect(customLoader.isLoadingAll()).toBe(false);
   });
 
   it('is true while a loading-all load is pending and false once it settles', () => {
     const storeDeferred = Deferred();
-    const { pipeline } = setup({ storeLoad: () => storeDeferred });
+    const { customLoader } = setup({ storeLoad: () => storeDeferred });
 
-    pipeline.load({ isLoadingAll: true });
-    expect(pipeline.isLoadingAll()).toBe(true);
+    customLoader.load({ isLoadingAll: true });
+    expect(customLoader.isLoadingAll()).toBe(true);
 
     storeDeferred.resolve([]);
-    expect(pipeline.isLoadingAll()).toBe(false);
+    expect(customLoader.isLoadingAll()).toBe(false);
   });
 });
 
 describe('loadAll', () => {
   it('loads every item, keeping the dataSource load options', () => {
-    const { pipeline, customizeStoreLoadOptions } = setup({
+    const { customLoader, customizeStoreLoadOptions } = setup({
       dataSourceOptions: { filter: ['id', '>', 1], requireTotalCount: true },
     });
 
-    pipeline.loadAll();
+    customLoader.loadAll();
 
     const { storeLoadOptions } = customizeStoreLoadOptions.mock.calls[0][0];
     expect(storeLoadOptions.filter).toEqual(['id', '>', 1]);
@@ -332,23 +332,23 @@ describe('loadAll', () => {
     expect(storeLoadOptions.requireTotalCount).toBe(false);
   });
 
-  it('marks the pipeline as loading all', () => {
+  it('marks the customLoader as loading all', () => {
     const storeDeferred = Deferred();
-    const { pipeline } = setup({ storeLoad: () => storeDeferred });
+    const { customLoader } = setup({ storeLoad: () => storeDeferred });
 
-    pipeline.loadAll();
+    customLoader.loadAll();
 
-    expect(pipeline.isLoadingAll()).toBe(true);
+    expect(customLoader.isLoadingAll()).toBe(true);
   });
 });
 
 describe('processLoadedData', () => {
   it('runs the data through the result stage without touching the store', () => {
     const data = [{ id: 1 }];
-    const { pipeline, store, customizeLoadResult } = setup();
+    const { customLoader, store, customizeLoadResult } = setup();
     const done = jest.fn();
 
-    pipeline.processLoadedData(data, { sort: 'id' }).done(done);
+    customLoader.processLoadedData(data, { sort: 'id' }).done(done);
 
     expect(store.load).not.toHaveBeenCalled();
 
@@ -363,7 +363,7 @@ describe('processLoadedData', () => {
   it('resolves with the data and extra the result stage produced', () => {
     const transformed = [{ id: 'transformed' }];
     const summary = [10];
-    const { pipeline } = setup({
+    const { customLoader } = setup({
       customizeLoadResult: (operation) => {
         operation.data = transformed;
         operation.extra = { summary };
@@ -371,21 +371,21 @@ describe('processLoadedData', () => {
     });
     const done = jest.fn();
 
-    pipeline.processLoadedData([{ id: 1 }], {}).done(done);
+    customLoader.processLoadedData([{ id: 1 }], {}).done(done);
 
     expect(done).toHaveBeenCalledWith(transformed, { summary });
   });
 
   it('waits for data the result stage left deferred', () => {
     const deferredData = Deferred();
-    const { pipeline } = setup({
+    const { customLoader } = setup({
       customizeLoadResult: (operation) => {
         operation.data = deferredData as DeferredObj<never>;
       },
     });
     const done = jest.fn();
 
-    pipeline.processLoadedData([{ id: 1 }], {}).done(done);
+    customLoader.processLoadedData([{ id: 1 }], {}).done(done);
     expect(done).not.toHaveBeenCalled();
 
     deferredData.resolve([{ id: 2 }]);
@@ -394,14 +394,14 @@ describe('processLoadedData', () => {
 
   it('rejects when the result stage rejects the data', () => {
     const error = new Error('E1037');
-    const { pipeline } = setup({
+    const { customLoader } = setup({
       customizeLoadResult: (operation) => {
         operation.data = Deferred().reject(error) as DeferredObj<never>;
       },
     });
     const fail = jest.fn();
 
-    pipeline.processLoadedData([{ id: 1 }], {}).fail(fail);
+    customLoader.processLoadedData([{ id: 1 }], {}).fail(fail);
 
     expect(fail).toHaveBeenCalledWith(error);
   });
@@ -409,10 +409,10 @@ describe('processLoadedData', () => {
 
 describe('loadFromStore', () => {
   it('passes the load options to the store untouched', () => {
-    const { pipeline, store } = setup();
+    const { customLoader, store } = setup();
     const loadOptions: StoreLoadOptions = { skip: 10, take: 5 };
 
-    pipeline.loadFromStore(loadOptions);
+    customLoader.loadFromStore(loadOptions);
 
     expect(store.load).toHaveBeenCalledTimes(1);
     expect(store.load).toHaveBeenCalledWith(loadOptions);
@@ -421,49 +421,49 @@ describe('loadFromStore', () => {
   it('resolves with the data and extra the store reports', () => {
     const data = [{ id: 1 }];
     const extra = { totalCount: 42 };
-    const { pipeline } = setup({ storeLoad: () => Deferred().resolve(data, extra) });
+    const { customLoader } = setup({ storeLoad: () => Deferred().resolve(data, extra) });
     const done = jest.fn();
 
-    pipeline.loadFromStore({}).done(done);
+    customLoader.loadFromStore({}).done(done);
 
     expect(done).toHaveBeenCalledWith(data, extra);
   });
 
   it('unwraps a single `{ data, totalCount }` object into a data/extra pair', () => {
     const result = { data: [{ id: 1 }], totalCount: 42 };
-    const { pipeline } = setup({ storeLoad: () => Deferred().resolve(result) });
+    const { customLoader } = setup({ storeLoad: () => Deferred().resolve(result) });
     const done = jest.fn();
 
-    pipeline.loadFromStore({}).done(done);
+    customLoader.loadFromStore({}).done(done);
 
     expect(done).toHaveBeenCalledWith(result.data, result);
   });
 
   it('leaves an array result alone even when it has a `data` property', () => {
     const data = Object.assign([{ id: 1 }], { data: [{ id: 2 }] });
-    const { pipeline } = setup({ storeLoad: () => Deferred().resolve(data) });
+    const { customLoader } = setup({ storeLoad: () => Deferred().resolve(data) });
     const done = jest.fn();
 
-    pipeline.loadFromStore({}).done(done);
+    customLoader.loadFromStore({}).done(done);
 
     expect(done).toHaveBeenCalledWith(data, undefined);
   });
 
   it('leaves an object whose `data` is not an array alone', () => {
     const result = { data: 'not an array' };
-    const { pipeline } = setup({ storeLoad: () => Deferred().resolve(result) });
+    const { customLoader } = setup({ storeLoad: () => Deferred().resolve(result) });
     const done = jest.fn();
 
-    pipeline.loadFromStore({}).done(done);
+    customLoader.loadFromStore({}).done(done);
 
     expect(done).toHaveBeenCalledWith(result, undefined);
   });
 
   it('resolves with no data when the store reports none', () => {
-    const { pipeline } = setup({ storeLoad: () => Deferred().resolve(undefined, undefined) });
+    const { customLoader } = setup({ storeLoad: () => Deferred().resolve(undefined, undefined) });
     const done = jest.fn();
 
-    pipeline.loadFromStore({}).done(done);
+    customLoader.loadFromStore({}).done(done);
 
     expect(done).toHaveBeenCalledWith(undefined, undefined);
   });
@@ -472,19 +472,19 @@ describe('loadFromStore', () => {
     silenceStoreErrorLog();
 
     const error = new Error('load failed');
-    const { pipeline } = setup({ storeLoad: () => Deferred().reject(error) });
+    const { customLoader } = setup({ storeLoad: () => Deferred().reject(error) });
     const fail = jest.fn();
 
-    pipeline.loadFromStore({}).fail(fail);
+    customLoader.loadFromStore({}).fail(fail);
 
     expect(fail).toHaveBeenCalledWith(error);
   });
 
   it('stays pending while the store load is pending', () => {
     const storeDeferred = Deferred();
-    const { pipeline } = setup({ storeLoad: () => storeDeferred });
+    const { customLoader } = setup({ storeLoad: () => storeDeferred });
 
-    const d = pipeline.loadFromStore({});
+    const d = customLoader.loadFromStore({});
     expect(d.state()).toBe('pending');
 
     storeDeferred.resolve([{ id: 1 }]);
