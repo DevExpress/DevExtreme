@@ -15,13 +15,13 @@ $text-editor-border-hovered: ds.$color-border-hovered !default;
 $text-editor-border-focused: ds.$color-border-active !default;
 
 $text-editor-line: ds.$color-content-subtle !default;
-$text-editor-line-hovered: ds.$color-content-subtle-hovered !default;
-$text-editor-line-focused: ds.$color-content-subtle-hovered !default;
+$text-editor-line-hovered: ds.$color-content !default;
+$text-editor-line-focused: ds.$color-content !default;
 
 $text-editor-indicator: ds.$color-content-primary !default;
 
 $text-editor-clear-button-icon: ds.$color-content-subtle !default;
-$text-editor-invalid-border-focused: ds.$color-border-danger-hovered !default;
+$text-editor-invalid-border-focused: ds.$color-border-danger !default;
 $text-editor-invalid-border: ds.$color-border-danger-shared !default;
 $text-editor-border-disabled: ds.$color-border-disabled !default;
 $text-editor-content-disabled: ds.$color-content-disabled !default;

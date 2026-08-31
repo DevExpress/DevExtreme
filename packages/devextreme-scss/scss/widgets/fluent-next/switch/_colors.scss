@@ -4,7 +4,7 @@ $switch-on-border: ds.$color-bg-primary-shared !default;
 $switch-on-border-hovered: ds.$color-bg-primary-shared-hovered !default;
 $switch-on-border-focused: ds.$color-bg-primary-active !default;
 
-$switch-bg: ds.$color-bg-none !default;
+$switch-bg: ds.$color-none !default;
 
 $switch-handle-off-bg: ds.$color-content-subtle !default;
 
@@ -12,15 +12,19 @@ $switch-on-bg: ds.$color-bg-primary-shared !default;
 
 $switch-handle-on-bg: ds.$color-content-inverted !default;
 $switch-on-bg-disabled: ds.$color-bg-disabled !default;
-$switch-handle-bg-disabled: ds.$color-content-subtle-disabled !default;
-$switch-border-disabled: ds.$color-border-contrast-disabled !default;
+
+/* The handle and the border of a disabled switch were painted by two different tokens that held
+the same colour; 262.15.0 dropped both, and this is the nearest role left — identical in dark,
+one step lighter in light. Keeping one token for both preserves the equality. */
+$switch-handle-bg-disabled: ds.$color-border-disabled !default;
+$switch-border-disabled: ds.$color-border-disabled !default;
 $switch-off-border: ds.$color-border-contrast !default;
 $switch-off-border-hovered: ds.$color-border-contrast-hovered !default;
 $switch-off-border-active: ds.$color-border-contrast-active !default;
 
 $switch-invalid-border: ds.$color-border-danger !default;
-$switch-invalid-border-hovered: ds.$color-border-danger-hovered !default;
-$switch-invalid-border-focused: ds.$color-border-danger-hovered !default;
+$switch-invalid-border-hovered: ds.$color-border-danger !default;
+$switch-invalid-border-focused: ds.$color-border-danger !default;
 
 // Subtle ring around the ON handle; no switch shadow role — relative-color bridge over the handle token (see DIVERGENCES.md)
 $switch-handle-on-shadow: rgb(from #{ds.$color-content-inverted} r g b / 0.1) !default;
