@@ -127,7 +127,12 @@ export default class DataSourceAdapter extends modules.Controller {
     that._eventsStrategy = dataSource._eventsStrategy;
     that._totalCountCorrection = 0;
     that._isLoadingAll = false;
-    that._customLoadPipeline = new CustomLoadPipeline(dataSource);
+    that._customLoadPipeline = new CustomLoadPipeline(
+      dataSource,
+      () => this.option('loadingTimeout'),
+      (operation) => this.customizeStoreLoadOptionsHandler(operation),
+      (operation) => this.customizeLoadResultHandler(operation),
+    );
 
     that.changed = Callbacks();
     that.loadingChanged = Callbacks();
