@@ -1,12 +1,10 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
-@use "../typography/sizes" as typographySizes;
 
 $toolbar-height: null !default;
 
 $toolbar-padding: 0 !default;
 $toolbar-item-spacing: ds.$spacing-40 !default;
-$toolbar-label-font-size: typographySizes.$typography-m-font-size !default;
 $toolbar-section-padding: null !default;
 
 @if $size == "default" {
