@@ -6,10 +6,10 @@
     "marker — the classification comment already on the line, from tools/review/size-markers.json."
   ],
   "summary": {
-    "occurrences": 404,
+    "occurrences": 401,
     "byCategory": {
       "inline": 187,
-      "local-var": 99,
+      "local-var": 96,
       "geometry": 95,
       "calc": 11,
       "mixin-arg": 6,
@@ -34,7 +34,6 @@
       "diagram": 4,
       "treeList": 4,
       "pagination": 3,
-      "recurrenceEditor": 3,
       "colorBox": 3,
       "switch": 3,
       "timeView": 3,
@@ -58,7 +57,7 @@
       "popover": 1,
       "stepper": 1
     },
-    "unmarked": 396,
+    "unmarked": 393,
     "unmarkedByWidget": {
       "gridBase": 75,
       "colorView": 67,
@@ -77,7 +76,6 @@
       "diagram": 4,
       "treeList": 4,
       "pagination": 3,
-      "recurrenceEditor": 3,
       "colorBox": 3,
       "switch": 3,
       "timeView": 3,
@@ -631,42 +629,6 @@
       "marker": null,
       "text": "padding: $pagination-paddings - 1px $pagination-page-horizontal-padding;",
       "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/_recurrenceEditor.scss",
-      "line": 1,
-      "widget": "recurrenceEditor",
-      "literals": [
-        "25px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$recurrence-interval-number-box-margin-top: 25px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/_recurrenceEditor.scss",
-      "line": 2,
-      "widget": "recurrenceEditor",
-      "literals": [
-        "10px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$recurrence-radio-group-item-padding: 10px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/_recurrenceEditor.scss",
-      "line": 3,
-      "widget": "recurrenceEditor",
-      "literals": [
-        "8px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$recurrence-button-group-item-padding: 8px;",
-      "category": "local-var"
     },
     {
       "file": "scss/widgets/base/_resizable.scss",

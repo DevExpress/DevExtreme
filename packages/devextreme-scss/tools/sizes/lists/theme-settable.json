@@ -7,9 +7,9 @@
     "The match is by variable name. A name declared in a nested module is only reachable once the parent forwards it (see base/chat/_index.scss), which is why an \"open\" row can sit next to injected ones from the same widget."
   ],
   "summary": {
-    "occurrences": 373,
-    "variables": 321,
-    "injected": 370,
+    "occurrences": 376,
+    "variables": 324,
+    "injected": 373,
     "open": 0,
     "parameters": 3
   },
@@ -1183,6 +1183,54 @@
       "status": "injected",
       "setBy": "scss/widgets/fluent-next/progressBar/_index.scss",
       "setTo": "var(--dx-progress-bar-status-padding-inline-start)"
+    },
+    {
+      "file": "scss/widgets/base/_recurrenceEditor.scss",
+      "line": 2,
+      "widget": "recurrenceEditor",
+      "literals": [
+        "25px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$recurrence-interval-number-box-margin-top: 25px !default;",
+      "variable": "recurrence-interval-number-box-margin-top",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/recurrenceEditor/_index.scss",
+      "setTo": "var(--dx-recurrence-editor-interval-number-box-margin-block-start)"
+    },
+    {
+      "file": "scss/widgets/base/_recurrenceEditor.scss",
+      "line": 3,
+      "widget": "recurrenceEditor",
+      "literals": [
+        "10px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$recurrence-radio-group-item-padding: 10px !default;",
+      "variable": "recurrence-radio-group-item-padding",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/recurrenceEditor/_index.scss",
+      "setTo": "var(--dx-recurrence-editor-radio-group-item-padding-block-end)"
+    },
+    {
+      "file": "scss/widgets/base/_recurrenceEditor.scss",
+      "line": 4,
+      "widget": "recurrenceEditor",
+      "literals": [
+        "8px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$recurrence-button-group-item-padding: 8px !default;",
+      "variable": "recurrence-button-group-item-padding",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/recurrenceEditor/_index.scss",
+      "setTo": "var(--dx-recurrence-editor-button-group-padding)"
     },
     {
       "file": "scss/widgets/base/_scrollView.scss",

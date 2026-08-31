@@ -14,12 +14,12 @@ and carries a marker saying why.
 | a raw grep of the layer | 782 |
 | …of those, inside comments (commented-out code, prose) | 5 |
 | **in code** | **777** |
-| — the theme can already set from outside | 373 |
-| — nailed into the shared layer | 404 |
+| — the theme can already set from outside | 376 |
+| — nailed into the shared layer | 401 |
 
 ## What the theme can already set
 
-373 occurrences in 321 `!default` variables. fluent-next already passes 370; 0 are open knobs nobody turns.
+376 occurrences in 324 `!default` variables. fluent-next already passes 373; 0 are open knobs nobody turns.
 
 ## What is nailed into the layer
 
@@ -42,7 +42,6 @@ and carries a marker saying why.
 | diagram |  | 1 |  | 3 |  | **4** |
 | treeList |  |  | 1 |  | 3 | **4** |
 | pagination | 1 | 2 |  |  |  | **3** |
-| recurrenceEditor |  | 3 |  |  |  | **3** |
 | colorBox | 1 | 1 |  | 1 |  | **3** |
 | switch | 2 |  | 1 |  |  | **3** |
 | timeView | 2 | 1 |  |  |  | **3** |
@@ -680,15 +679,6 @@ and carries a marker saying why.
   `$pagination-info-paddings: 9px;`
 - `scss/widgets/base/_pagination.scss:81` · inline
   `padding: $pagination-paddings - 1px $pagination-page-horizontal-padding;`
-
-### recurrenceEditor — 3
-
-- `scss/widgets/base/_recurrenceEditor.scss:1` · local-var
-  `$recurrence-interval-number-box-margin-top: 25px;`
-- `scss/widgets/base/_recurrenceEditor.scss:2` · local-var
-  `$recurrence-radio-group-item-padding: 10px;`
-- `scss/widgets/base/_recurrenceEditor.scss:3` · local-var
-  `$recurrence-button-group-item-padding: 8px;`
 
 ### colorBox — 3
 
