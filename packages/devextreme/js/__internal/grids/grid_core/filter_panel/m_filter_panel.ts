@@ -12,14 +12,13 @@ import {
   getCaptionByOperation, getCurrentLookupValueText, getCurrentValueText,
   getCustomOperation, getField, getGroupValue, isCondition, isGroup,
 } from '@ts/filter_builder/m_utils';
-import type { FilterSyncController } from '@ts/grids/grid_core/filter/m_filter_sync';
-
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
-import type { DataController } from '../data_controller/data_controller';
-import { registerKeyboardAction } from '../m_accessibility';
-import modules from '../m_modules';
-import type { ModuleType } from '../m_types';
-import gridUtils from '../m_utils';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/m_filter_sync';
+import { registerKeyboardAction } from '@ts/grids/grid_core/m_accessibility';
+import modules from '@ts/grids/grid_core/m_modules';
+import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import gridUtils from '@ts/grids/grid_core/m_utils';
 
 const FILTER_PANEL_CLASS = 'filter-panel';
 const FILTER_PANEL_TEXT_CLASS = `${FILTER_PANEL_CLASS}-text`;
