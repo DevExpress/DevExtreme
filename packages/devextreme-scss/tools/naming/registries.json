@@ -3,7 +3,7 @@
   "parseRule": "$<component>(-<sub-element>)*(-<modifier>)*-<slot>(-<state>) — parsed right-to-left with longest match. Overlaps between vocabularies competing for DIFFERENT positions are intentional and resolved positionally; see assertParseable() in the generator for the two overlaps that are forbidden.",
   "derivedFrom": {
     "componentTokens": "@devexpress/design-tokens-internal → components/core/theme/fluent",
-    "componentTokenCount": 732,
+    "componentTokenCount": 726,
     "themeFolders": 86
   },
   "components": {
