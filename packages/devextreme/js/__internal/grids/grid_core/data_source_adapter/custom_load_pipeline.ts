@@ -12,6 +12,7 @@ export type CustomLoadOptions = StoreLoadOptions & { isLoadingAll?: boolean };
 // TODO:
 // - use options.delay instead of getLoadingTimeout
 // - modernize the code (remove each, codes-style)
+// - remove proxy methods
 export class CustomLoadPipeline {
   private customLoading = false;
 
