@@ -5074,3 +5074,63 @@ QUnit.module('React async templates rendering', {
         assert.strictEqual(axis._majorTicks[0].templateContainer.attr('visibility'), 'visible', 'label is visible');
     });
 });
+
+QUnit.module('encodeHtml', $.extend({}, moduleSetup, {
+    createChartWithMarkupLikeTexts: function(encodeHtml) {
+        return this.createChart({
+            encodeHtml,
+            dataSource: [{ arg: '<A>', val: 850 }, { arg: 'B', val: 5940 }],
+            series: [{ name: '<North America> | Total' }],
+            tooltip: {
+                enabled: true,
+                customizeTooltip: function(pointInfo) {
+                    return { text: pointInfo.seriesName + ' - ' + pointInfo.valueText };
+                }
+            }
+        });
+    },
+    getTexts: function(selector) {
+        return this.$container.find(selector + ' text').map(function() {
+            return $(this).text();
+        }).get();
+    },
+    getTooltipTextForFirstPoint: function(assert, chart) {
+        const tooltip = chart._tooltip;
+        const point = chart.getAllSeries()[0].getAllPoints()[0];
+
+        sinon.stub(tooltip, '_getCanvas').returns({ left: 0, top: 0, width: 1000, height: 1000, right: 0, bottom: 0 });
+
+        const shown = tooltip.show(point.getTooltipFormatObject(tooltip), { x: 100, y: 100, offset: 0 }, {});
+
+        tooltip._getCanvas.restore();
+        assert.ok(shown, 'tooltip is shown');
+
+        return $(tooltip._text.element).text();
+    }
+}));
+
+QUnit.test('Markup-like texts are treated as html by default (T1334517)', function(assert) {
+    const chart = this.createChartWithMarkupLikeTexts(undefined);
+
+    assert.deepEqual(this.getTexts('.dxc-arg-elements'), ['', 'B'], 'argument axis labels');
+    assert.deepEqual(this.getTexts('.dxc-legend'), [' | Total'], 'legend');
+    assert.strictEqual(this.getTooltipTextForFirstPoint(assert, chart), ' | Total - 850', 'tooltip');
+});
+
+QUnit.test('Markup-like texts are rendered as is when encodeHtml is enabled (T1334517)', function(assert) {
+    const chart = this.createChartWithMarkupLikeTexts(true);
+
+    assert.deepEqual(this.getTexts('.dxc-arg-elements'), ['<A>', 'B'], 'argument axis labels');
+    assert.deepEqual(this.getTexts('.dxc-legend'), ['<North America> | Total'], 'legend');
+    assert.strictEqual(this.getTooltipTextForFirstPoint(assert, chart), '<North America> | Total - 850', 'tooltip');
+});
+
+QUnit.test('encodeHtml is applied on option changing (T1334517)', function(assert) {
+    const chart = this.createChartWithMarkupLikeTexts(undefined);
+
+    chart.option('encodeHtml', true);
+
+    assert.deepEqual(this.getTexts('.dxc-arg-elements'), ['<A>', 'B'], 'argument axis labels');
+    assert.deepEqual(this.getTexts('.dxc-legend'), ['<North America> | Total'], 'legend');
+    assert.strictEqual(this.getTooltipTextForFirstPoint(assert, chart), '<North America> | Total - 850', 'tooltip');
+});
