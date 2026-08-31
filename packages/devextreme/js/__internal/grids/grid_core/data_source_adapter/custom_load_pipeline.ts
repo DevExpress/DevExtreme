@@ -9,7 +9,7 @@ import type { LoadOperation, RawItemData } from './types';
 
 export type CustomLoadOptions = StoreLoadOptions & { isLoadingAll?: boolean };
 
-export type CustomLoadResult = RawItemData[] & LoadOperation['extra'];
+export type CustomLoadResult = RawItemData[] | LoadOperation['extra'];
 
 export class CustomLoadPipeline {
   private customLoading = false;
