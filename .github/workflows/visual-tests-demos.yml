@@ -143,7 +143,7 @@ jobs:
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
   build-devextreme:
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     name: Build DevExtreme
     needs: [check-should-run, determine-framework-tests-scope]
     if: |
@@ -274,7 +274,7 @@ jobs:
           retention-days: 1
   build-vendor-bundles:
     name: Build vendor bundles (React, Vue)
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     timeout-minutes: 15
     needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
     if: |
@@ -335,7 +335,7 @@ jobs:
 
   build-demos:
     name: ${{ matrix.SHARD_TOTAL == 1 && format('Build demos ({0})', matrix.FRAMEWORK) || format('Build demos ({0} {1}/{2})', matrix.FRAMEWORK, matrix.SHARD_INDEX, matrix.SHARD_TOTAL) }}
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     timeout-minutes: 30
     needs: [check-should-run, determine-framework-tests-scope, build-devextreme, build-vendor-bundles]
     if: |
@@ -686,7 +686,7 @@ jobs:
 
   check-generated-demos-all:
     name: Check generated demos
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     timeout-minutes: 20
     needs: [check-should-run, build-devextreme, determine-framework-tests-scope]
     if: |
@@ -764,7 +764,7 @@ jobs:
     env:
       ACCESSIBILITY_TESTCAFE_REPORT_PATH: "accessibility_testcafe_report"
 
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     name: ${{ matrix.CONSTEL }}-${{ matrix.STRATEGY }}-${{ matrix.THEME }}
     timeout-minutes: 30
 
@@ -1320,7 +1320,7 @@ jobs:
       !cancelled() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.build-devextreme.result == 'success'
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     timeout-minutes: 60
 
     steps:
