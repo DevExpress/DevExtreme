@@ -6,12 +6,12 @@
     "marker — the classification comment already on the line, from tools/review/size-markers.json."
   ],
   "summary": {
-    "occurrences": 384,
+    "occurrences": 381,
     "byCategory": {
       "inline": 176,
       "geometry": 91,
-      "local-var": 90,
-      "calc": 11,
+      "local-var": 89,
+      "calc": 9,
       "structural": 8,
       "mixin-arg": 6,
       "media": 2
@@ -30,7 +30,6 @@
       "fileManager": 5,
       "toolbar": 5,
       "sortable": 4,
-      "diagram": 4,
       "treeList": 4,
       "colorBox": 3,
       "icon_fonts": 2,
@@ -46,6 +45,7 @@
       "fileUploader": 1,
       "pagination": 1,
       "validation": 1,
+      "diagram": 1,
       "dropDownButton": 1,
       "gantt": 1,
       "list": 1,
@@ -53,7 +53,7 @@
       "popover": 1,
       "stepper": 1
     },
-    "unmarked": 372,
+    "unmarked": 368,
     "unmarkedByWidget": {
       "gridBase": 75,
       "colorView": 67,
@@ -67,7 +67,6 @@
       "dataGrid": 5,
       "toolbar": 5,
       "sortable": 4,
-      "diagram": 4,
       "treeList": 4,
       "colorBox": 3,
       "icon_fonts": 2,
@@ -1561,50 +1560,14 @@
     },
     {
       "file": "scss/widgets/base/diagram/_index.scss",
-      "line": 18,
-      "widget": "diagram",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$transparent-border: 1px solid transparent;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/diagram/_index.scss",
-      "line": 175,
+      "line": 178,
       "widget": "diagram",
       "literals": [
         "2px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "width: calc(100% - 2px) !important; // stylelint-disable-line declaration-no-important",
-      "category": "calc"
-    },
-    {
-      "file": "scss/widgets/base/diagram/_index.scss",
-      "line": 324,
-      "widget": "diagram",
-      "literals": [
-        "32px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "top: calc(50% - 32px);",
-      "category": "calc"
-    },
-    {
-      "file": "scss/widgets/base/diagram/_index.scss",
-      "line": 325,
-      "widget": "diagram",
-      "literals": [
-        "32px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "left: calc(50% - 32px);",
+      "marker": "dx-px-nudge",
+      "text": "width: calc(100% - 2px) !important; // stylelint-disable-line declaration-no-important -- dx-px-nudge: 2px shaved off a full-width popup",
       "category": "calc"
     },
     {

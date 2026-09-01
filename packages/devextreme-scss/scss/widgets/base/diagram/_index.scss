@@ -1,3 +1,5 @@
+@use "sass:math";
+@use "sass:meta";
 @use "../mixins" as *;
 
 // Design sizing values (parametrizable; fluent-next injects tokens)
@@ -15,7 +17,8 @@ $diagram-context-toolbox-target-height: 1px !default;
 
 $diagram-popup-title-toolbar-bg: rgba(0, 0, 0, 0.05) !default;
 
-$transparent-border: 1px solid transparent;
+$diagram-border-width: 1px !default;
+$transparent-border: $diagram-border-width solid transparent;
 
 $diagram-toolbox-input-font-size: 0.9em !default; // dx-relative
 .dx-diagram {
@@ -172,7 +175,7 @@ $diagram-toolbox-input-font-size: 0.9em !default; // dx-relative
   }
 
   &.dx-diagram-mobile-popup {
-    width: calc(100% - 2px) !important; // stylelint-disable-line declaration-no-important
+    width: calc(100% - 2px) !important; // stylelint-disable-line declaration-no-important -- dx-px-nudge: 2px shaved off a full-width popup
 
     .dx-popup-title {
       border: 0;
@@ -321,8 +324,16 @@ $diagram-toolbox-input-font-size: 0.9em !default; // dx-relative
 
 .dx-diagram-loading-indicator {
   position: absolute;
-  top: calc(50% - 32px);
-  left: calc(50% - 32px);
+  top: if(
+    meta.type-of($diagram-loading-indicator-height) == number,
+    calc(50% - #{math.div($diagram-loading-indicator-height, 2)}),
+    calc(50% - #{$diagram-loading-indicator-height} / 2)
+  );
+  left: if(
+    meta.type-of($diagram-loading-indicator-width) == number,
+    calc(50% - #{math.div($diagram-loading-indicator-width, 2)}),
+    calc(50% - #{$diagram-loading-indicator-width} / 2)
+  );
   width: $diagram-loading-indicator-width;
   height: $diagram-loading-indicator-height;
 }

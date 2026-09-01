@@ -7,9 +7,9 @@
     "The match is by variable name. A name declared in a nested module is only reachable once the parent forwards it (see base/chat/_index.scss), which is why an \"open\" row can sit next to injected ones from the same widget."
   ],
   "summary": {
-    "occurrences": 392,
-    "variables": 340,
-    "injected": 382,
+    "occurrences": 393,
+    "variables": 341,
+    "injected": 383,
     "open": 0,
     "parameters": 10
   },
@@ -2319,7 +2319,7 @@
     },
     {
       "file": "scss/widgets/base/diagram/_index.scss",
-      "line": 4,
+      "line": 6,
       "widget": "diagram",
       "literals": [
         "600px"
@@ -2335,7 +2335,7 @@
     },
     {
       "file": "scss/widgets/base/diagram/_index.scss",
-      "line": 5,
+      "line": 7,
       "widget": "diagram",
       "literals": [
         "350px"
@@ -2351,7 +2351,7 @@
     },
     {
       "file": "scss/widgets/base/diagram/_index.scss",
-      "line": 6,
+      "line": 8,
       "widget": "diagram",
       "literals": [
         "5px"
@@ -2367,7 +2367,7 @@
     },
     {
       "file": "scss/widgets/base/diagram/_index.scss",
-      "line": 7,
+      "line": 9,
       "widget": "diagram",
       "literals": [
         "14px"
@@ -2383,7 +2383,7 @@
     },
     {
       "file": "scss/widgets/base/diagram/_index.scss",
-      "line": 8,
+      "line": 10,
       "widget": "diagram",
       "literals": [
         "8px"
@@ -2399,7 +2399,7 @@
     },
     {
       "file": "scss/widgets/base/diagram/_index.scss",
-      "line": 9,
+      "line": 11,
       "widget": "diagram",
       "literals": [
         "300px"
@@ -2415,7 +2415,7 @@
     },
     {
       "file": "scss/widgets/base/diagram/_index.scss",
-      "line": 10,
+      "line": 12,
       "widget": "diagram",
       "literals": [
         "12px"
@@ -2431,7 +2431,7 @@
     },
     {
       "file": "scss/widgets/base/diagram/_index.scss",
-      "line": 11,
+      "line": 13,
       "widget": "diagram",
       "literals": [
         "64px"
@@ -2447,7 +2447,7 @@
     },
     {
       "file": "scss/widgets/base/diagram/_index.scss",
-      "line": 12,
+      "line": 14,
       "widget": "diagram",
       "literals": [
         "64px"
@@ -2463,7 +2463,7 @@
     },
     {
       "file": "scss/widgets/base/diagram/_index.scss",
-      "line": 13,
+      "line": 15,
       "widget": "diagram",
       "literals": [
         "1px"
@@ -2479,7 +2479,7 @@
     },
     {
       "file": "scss/widgets/base/diagram/_index.scss",
-      "line": 14,
+      "line": 16,
       "widget": "diagram",
       "literals": [
         "1px"
@@ -2492,6 +2492,22 @@
       "status": "injected",
       "setBy": "scss/widgets/fluent-next/diagram/_index.scss",
       "setTo": "var(--dx-diagram-context-toolbox-target-height)"
+    },
+    {
+      "file": "scss/widgets/base/diagram/_index.scss",
+      "line": 20,
+      "widget": "diagram",
+      "literals": [
+        "1px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$diagram-border-width: 1px !default;",
+      "variable": "diagram-border-width",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/diagram/_index.scss",
+      "setTo": "var(--dx-diagram-border-width)"
     },
     {
       "file": "scss/widgets/base/dropDownMenu/_index.scss",
