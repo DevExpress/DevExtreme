@@ -18,6 +18,7 @@ import {
 } from '../../helpers/vizMocks.js';
 import typeUtils from 'core/utils/type';
 import plaqueModule from 'viz/core/plaque';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 import '__internal/viz/vector_map/vector_map';
 
@@ -26,7 +27,7 @@ const stubLayersEnvironment = $.extend({}, environment, {
         environment.beforeEach.apply(this, arguments);
         this.layerCollection.stub('items').returns([]);
         this.tracker.on = sinon.stub().returns(noop);
-        sinon.stub(plaqueModule, 'Plaque').returns({ draw: sinon.stub(), hitTest: sinon.stub(), clear: sinon.stub() });
+        stubSeam(plaqueModule, 'Plaque', 'DEBUG_set_Plaque').returns({ draw: sinon.stub(), hitTest: sinon.stub(), clear: sinon.stub() });
     },
     afterEach: function() {
         plaqueModule.Plaque.restore();

@@ -1,4 +1,5 @@
 /* eslint-disable @stylistic/no-mixed-operators */
+/* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-nested-ternary */
@@ -223,7 +224,7 @@ function getCloudPoints({ width, height }, x, y, anchorX, anchorY, { arrowWidth,
   return buildPath('M', points, 'Z');
 }
 
-export class Plaque {
+export let Plaque = class {
   widget;
 
   options;
@@ -480,4 +481,10 @@ export class Plaque {
     const { width, height } = this._size || {};
     return Math.abs(x - this.x) <= width / 2 && Math.abs(y - this.y) <= height / 2;
   }
+};
+
+/// #DEBUG
+export function DEBUG_set_Plaque(value): void {
+  Plaque = value;
 }
+/// #ENDDEBUG
