@@ -41,6 +41,7 @@
 
   // disabled roles instead, on the toolbar's own text and on the text of its item buttons.
   &.dx-state-disabled {
+    opacity: 1;
     color: var(--dx-toolbar-content-disabled);
 
     // The item widgets are not disabled themselves, so they keep their own colours: paint them
