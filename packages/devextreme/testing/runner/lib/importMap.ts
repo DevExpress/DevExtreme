@@ -77,6 +77,10 @@ function withCacheBuster(url: string, cacheBuster: string): string {
     return url;
   }
 
+  if (url.startsWith(ESM_ROOT)) {
+    return url;
+  }
+
   return `${url}${url.includes('?') ? '&' : '?'}${cacheBuster}`;
 }
 
