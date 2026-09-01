@@ -19,7 +19,6 @@ import type {
   ChangedEvent, DataSourceAdapterProvider, LoadOperation, OperationTypes, RawItemData,
 } from '@ts/grids/grid_core/data_source_adapter/types';
 import { isLocalStore } from '@ts/grids/grid_core/data_source_adapter/utils/store';
-import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/m_filter_sync';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import modules from '@ts/grids/grid_core/m_modules';
 import type {
@@ -137,8 +136,6 @@ export class DataController extends modules.Controller {
   // TODO public controller
   public _rowsScrollController?: VirtualScrollController | null;
 
-  protected _filterSyncController!: FilterSyncController;
-
   private _filterExcludedColumn: Column | null = null;
 
   protected _focusController!: FocusController;
@@ -153,7 +150,6 @@ export class DataController extends modules.Controller {
     this._items = [];
     this._cachedProcessedItems = null;
     this._columnsController = this.getController('columns');
-    this._filterSyncController = this.getController('filterSync');
     this._focusController = this.getController('focus');
 
     this._isPaging = false;
@@ -372,7 +368,7 @@ export class DataController extends modules.Controller {
       || this._columnsController.isAllDataTypesDefined();
 
     if (isColumnsTypesDefined) {
-      const additionalFilter = this._calculateAdditionalFilter();
+      const additionalFilter = this.calculateAdditionalFilter();
 
       combined = additionalFilter
         ? gridCoreUtils.combineFilters([additionalFilter, combined])
@@ -533,7 +529,7 @@ export class DataController extends modules.Controller {
       }
     } else if (changeTypes.columns) {
       if (this.shouldApplyFilter(e)) {
-        this._applyFilter();
+        this.applyFilter();
         filterApplied = true;
       }
 
@@ -546,7 +542,7 @@ export class DataController extends modules.Controller {
         const hasFilterValue = isDefined(column?.filterValue) || isDefined(column?.filterValues);
 
         if (hasFilterValue) {
-          this._applyFilter();
+          this.applyFilter();
           filterApplied = true;
         }
       }
@@ -583,7 +579,7 @@ export class DataController extends modules.Controller {
         this._isDataSourceApplying = false;
 
         const hasAdditionalFilter = (): boolean => {
-          const additionalFilter = this._calculateAdditionalFilter();
+          const additionalFilter = this.calculateAdditionalFilter();
           return Boolean(additionalFilter?.length);
         };
 
@@ -592,7 +588,7 @@ export class DataController extends modules.Controller {
 
         if (needApplyFilter && !this._isAllDataTypesDefined && hasAdditionalFilter()) {
           errors.log('W1005', this.component.NAME);
-          this._applyFilter();
+          this.applyFilter();
         } else {
           this._currentOperationTypes = dataSource.operationTypes();
 
@@ -1295,14 +1291,14 @@ export class DataController extends modules.Controller {
   /**
    * @extended: filter_row, filter_sync, header_filter, search
    */
-  protected _calculateAdditionalFilter(): DataFilter {
+  protected calculateAdditionalFilter(): DataFilter {
     return null;
   }
 
   /**
    * @extended: filter_sync, virtual_scrolling
    */
-  protected _applyFilter(): DeferredObj<unknown> {
+  protected applyFilter(): DeferredObj<unknown> {
     const dataSource = this._dataSource;
 
     if (dataSource) {
@@ -1344,7 +1340,7 @@ export class DataController extends modules.Controller {
     }
 
     this._dataSource?.filter(filterExpr);
-    this._applyFilter();
+    this.applyFilter();
 
     return undefined;
   }
@@ -1364,7 +1360,7 @@ export class DataController extends modules.Controller {
 
     this.component.beginUpdate();
 
-    if (arguments.length > 0) {
+    if (filterName !== undefined) {
       switch (filterName) {
         case 'dataSource':
           this.filter(null);

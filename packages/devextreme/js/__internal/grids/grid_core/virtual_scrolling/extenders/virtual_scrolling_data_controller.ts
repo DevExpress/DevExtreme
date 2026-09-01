@@ -948,10 +948,10 @@ export const virtualScrollingDataControllerExtender = (
     super.reset.apply(this, arguments as any);
   }
 
-  protected _applyFilter(): DeferredObj<unknown> {
+  protected applyFilter(): DeferredObj<unknown> {
     this._dataSource?.loadPageCount(1);
 
-    return super._applyFilter();
+    return super.applyFilter();
   }
 
   private getVirtualContentSize() {

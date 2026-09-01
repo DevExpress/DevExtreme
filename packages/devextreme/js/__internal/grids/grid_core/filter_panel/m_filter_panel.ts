@@ -330,7 +330,7 @@ const data = (Base: ModuleType<DataController>) => class FilterPanelDataControll
   public optionChanged(args) {
     switch (args.name) {
       case 'filterPanel':
-        this._applyFilter();
+        this.applyFilter();
         args.handled = true;
         break;
       default:

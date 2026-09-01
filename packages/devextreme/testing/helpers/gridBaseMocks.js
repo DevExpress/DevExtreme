@@ -31,7 +31,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         }
 
         return {
-            _applyFilter: function() {
+            applyFilter: function() {
                 this._isFilterApplied = true;
             },
 
