@@ -169,12 +169,22 @@ async function waitAndSummarise() {
   const unmeasured = rows.filter((r) => r.vsEnabled === 'unknown');
   const jittery = rows.filter((r) => r.vsEnabled === 'unstable');
 
+  // A case the gallery cannot judge must not be counted as a missing disabled state: a portalled
+  // menu is measured on its host rather than its content, a spinner has nothing to grey, and a
+  // case that renders nothing tells us only that the case is broken.
+  const judgeOf = Object.fromEntries(cases.map((c) => [c.id, c.judge || 'judgeable']));
+  const cannotJudge = dimOnly.filter((r) => judgeOf[r.c.id] !== 'judgeable');
+  const reallyMissing = dimOnly.filter((r) => judgeOf[r.c.id] === 'judgeable');
+
   summary.innerHTML =
     `Remove the blanket dim and <b>${owns.length}</b> of ${cases.length} components keep a disabled look of their own; `
-    + `<span class="same"><b>${dimOnly.length}</b> become indistinguishable from enabled</span>`
+    + `<span class="same"><b>${reallyMissing.length}</b> render no disabled state</span>`
+    + (cannotJudge.length
+      ? `; ${cannotJudge.length} cannot be judged from the host (${cannotJudge.map((r) => `${r.c.id}: ${judgeOf[r.c.id]}`).join(', ')})`
+      : '')
     + (unclear.length ? `; ${unclear.length} render a different number of elements and cannot be judged by colour alone` : '')
     + `.<ul>`
-    + `<li class="same">still carried by the dim - the work list: ${dimOnly.map((r) => r.c.id).join(', ') || '-'}</li>`
+    + `<li class="same">no disabled state of their own: ${reallyMissing.map((r) => r.c.id).join(', ') || '-'}</li>`
     + `<li>already on their own disabled colours: ${owns.map((r) => r.c.id).join(', ') || '-'}</li>`
     + (unclear.length ? `<li>compare by eye: ${unclear.map((r) => r.c.id).join(', ')}</li>` : '')
     + (unmeasured.length ? `<li class="same">NOT MEASURED (reload the page): ${unmeasured.map((r) => r.c.id).join(', ')}</li>` : '')
@@ -182,6 +192,7 @@ async function waitAndSummarise() {
     + (invisibleToday.length ? `<li class="same">disabled is ALREADY indistinguishable from enabled today: ${invisibleToday.map((r) => r.c.id).join(', ')}</li>` : '')
     + `</ul>`;
   window.__compare = { state, dimOnly: dimOnly.map((r) => r.c.id), owns: owns.map((r) => r.c.id),
+    reallyMissing: reallyMissing.map((r) => r.c.id), cannotJudge: cannotJudge.map((r) => `${r.c.id}:${judgeOf[r.c.id]}`),
     unclear: unclear.map((r) => r.c.id), unmeasured: unmeasured.map((r) => r.c.id),
     jittery: jittery.map((r) => r.c.id), invisibleToday: invisibleToday.map((r) => r.c.id) };
 }

@@ -152,7 +152,23 @@ shown.forEach(([id, label, height, build]) => {
   try { build(host, flags); } catch (e) { cap.textContent = label + '  [' + e.message + ']'; }
 });
 
-window.__cases = shown.map(([id, label, height]) => ({ id, label, height }));
+// Whether a case can be judged here at all. A component that renders nothing, has no text and
+// no painted surface of its own, or puts its content in a portal outside the host cannot be
+// compared by looking at the host - reporting it as "no disabled state" would be a guess.
+function judgeability(id) {
+  const host = document.querySelector(`[data-case="${id}"] .host`);
+  if (!host) return 'not-rendered';
+  if (!host.querySelector('*') && !host.textContent.trim()) return 'not-rendered';
+
+  const hasOwnText = [...host.querySelectorAll('*')].some((e) => [...e.childNodes]
+    .some((n) => n.nodeType === 3 && n.textContent.trim()));
+  const portalled = /contextMenu|actionSheet|popup|popover|tooltip|toast/i.test(id);
+
+  if (portalled) return 'portalled';
+  return hasOwnText ? 'judgeable' : 'no-text';
+}
+
+window.__cases = shown.map(([id, label, height]) => ({ id, label, height, judge: judgeability(id) }));
 
 // Colour fingerprint per case. Comparing a generic list of probes turned out to be wrong: it
 // picked up the order and the number of elements, so a component that merely renders one extra
