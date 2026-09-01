@@ -26,6 +26,7 @@ if (window && window.config?.packageConfigPaths) {
   ],
 })
 export class AppComponent {
+  // comment for deletion
   populationData: Population[];
 
   types: DxChartTypes.SeriesType[] = ['area', 'stackedarea', 'fullstackedarea'];
