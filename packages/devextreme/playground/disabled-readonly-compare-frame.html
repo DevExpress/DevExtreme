@@ -12,9 +12,9 @@
 <style>
   html, body { margin: 0; }
   body { font: 12px/1.4 -apple-system, "Segoe UI", sans-serif; }
-  .row { box-sizing: border-box; padding: 10px 12px; border-bottom: 1px solid rgba(128,128,128,.25); overflow: hidden; }
+  .row { box-sizing: border-box; padding: 10px 12px; border-bottom: 1px solid rgba(128,128,128,.25); }
   .row > .label { font-size: 10px; text-transform: uppercase; letter-spacing: .04em; opacity: .5; margin-bottom: 6px; }
-  .host { overflow: hidden; }
+  .host { min-width: 0; }
 </style>
 </head>
 <body class="dx-viewport">
@@ -229,10 +229,11 @@ const gallery = document.getElementById('gallery');
 // others would be worse than not showing it at all.
 const openers = {};
 
-shown.forEach(([id, label, height, build, open]) => {
+function buildGallery() {
+  shown.forEach(([id, label, height, build, open]) => {
   const row = document.createElement('div');
   row.className = 'row';
-  row.style.height = height + 'px';
+  row.style.minHeight = height + 'px';
   row.dataset.case = id;
   const cap = document.createElement('div');
   cap.className = 'label';
@@ -246,9 +247,23 @@ shown.forEach(([id, label, height, build, open]) => {
       openers[id] = () => open(host, flags);
     }
   } catch (e) { cap.textContent = label + '  [' + e.message + ']'; }
-});
+  });
 
-window.__openable = Object.keys(openers);
+  window.__openable = Object.keys(openers);
+  window.__cases = shown.map(([id, label, height]) => ({ id, label, height, judge: judgeability(id) }));
+}
+
+// Row geometry, so the shell can align the columns without any column having to clip. Each
+// column reports what its own rows need; the shell applies the maximum to all of them.
+window.__rowHeights = () => Object.fromEntries([...document.querySelectorAll('.row')]
+  .map((row) => [row.dataset.case, Math.ceil(row.getBoundingClientRect().height)]));
+window.__setRowHeights = (heights) => {
+  document.querySelectorAll('.row').forEach((row) => {
+    const h = heights[row.dataset.case];
+    if (h) row.style.height = `${h}px`;
+  });
+};
+
 window.__open = (id) => {
   const fn = openers[id];
   if (!fn) return false;
@@ -271,7 +286,6 @@ function judgeability(id) {
   return hasOwnText ? 'judgeable' : 'no-text';
 }
 
-window.__cases = shown.map(([id, label, height]) => ({ id, label, height, judge: judgeability(id) }));
 
 // Colour fingerprint per case. Comparing a generic list of probes turned out to be wrong: it
 // picked up the order and the number of elements, so a component that merely renders one extra
@@ -337,8 +351,26 @@ function collect() {
   });
   return fp;
 }
+/* Widgets must not be built before the theme stylesheet has applied. DevExtreme resolves the
+current theme once, at creation, and an unresolved theme falls back to labelMode "outside": the
+label span goes absolute, its wrapper collapses to zero width, and the label reads as missing.
+That is what made the editors in one column look label-less - a load-order race in this page,
+not a defect in either theme. */
+const themeApplied = new Promise((resolve) => {
+  const link = document.getElementById('theme');
+  if (link.sheet) { resolve(); return; }
+  link.addEventListener('load', resolve, { once: true });
+  link.addEventListener('error', resolve, { once: true });
+  setTimeout(resolve, 5000);
+});
+
+const galleryBuilt = themeApplied
+  .then(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))))
+  .then(() => { buildGallery(); });
+
 window.addEventListener('load', () => {
   const settle = async () => {
+    await galleryBuilt;
     await new Promise((r) => setTimeout(r, 1200));
     let prev = collect();
     for (let attempt = 0; attempt < 6; attempt++) {

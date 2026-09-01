@@ -32,7 +32,7 @@
 </head>
 <body>
   <div class="bar">
-    <b>disabled / readonly: before and after</b>
+    <b>fluent-next: disabled / readonly against legacy fluent</b>
     <span>
       <label><input type="radio" name="state" value="disabled" checked> disabled</label>
       <label><input type="radio" name="state" value="readonly"> readonly</label>
@@ -139,6 +139,27 @@ async function buildTriggers() {
   });
 }
 
+// The per-case heights in the frame are a floor, not a lid: a disabled component can be taller
+// than its enabled twin, and the old fixed height simply cut whichever column overflowed. Every
+// column reports what its rows need and all of them are given the tallest, so the rows stay
+// aligned - which is the whole point of the page - without anything being clipped.
+function alignRows() {
+  const perColumn = frames
+    .map(({ el }) => el.contentWindow.__rowHeights?.())
+    .filter(Boolean);
+
+  if (perColumn.length !== frames.length) return;
+
+  const tallest = {};
+  perColumn.forEach((heights) => {
+    Object.entries(heights).forEach(([id, h]) => {
+      tallest[id] = Math.max(tallest[id] ?? 0, h);
+    });
+  });
+
+  frames.forEach(({ el }) => el.contentWindow.__setRowHeights?.(tallest));
+}
+
 function syncScroll() {
   let busy = false;
   frames.forEach(({ el }) => {
@@ -164,6 +185,7 @@ async function waitAndSummarise() {
     await new Promise((r) => setTimeout(r, 250));
   }
   statusEl.textContent = '';
+  alignRows();
   const byKey = Object.fromEntries(frames.map(({ cfg, el }) => [cfg.key, el.contentWindow]));
   if (!byKey.enabled || !byKey.enabled.__fp) { summary.textContent = 'columns did not finish loading'; return; }
 
