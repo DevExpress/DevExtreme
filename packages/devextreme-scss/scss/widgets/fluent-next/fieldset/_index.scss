@@ -141,3 +141,11 @@
   var(--dx-fieldset-header-margin-block),
   var(--dx-fieldset-field-margin-block)
 );
+
+/* DxFormLayout cascades Enabled to its items and its theme paints nothing on the container
+(ds-themes/components/form-layout has no disabled styling at all), so the captions carry the
+state here too - the values are editors and mark themselves. */
+.dx-state-disabled .dx-field-label,
+.dx-state-disabled .dx-field-value-static {
+  color: var(--dx-fieldset-field-label-content-disabled);
+}

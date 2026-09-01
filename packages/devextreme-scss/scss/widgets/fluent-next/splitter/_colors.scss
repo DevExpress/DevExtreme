@@ -9,3 +9,9 @@ $splitter-resize-handle-bg: ds.$color-border !default;
 $splitter-resize-handle-bg-hovered: ds.$color-border-hovered !default;
 
 $splitter-resize-handle-bg-focused: ds.$color-bg-primary !default;
+
+/* The resize handle is the splitter's only chrome of its own - the panes hold the application's
+content. Blazor has no disabled splitter to copy (DxSplitter exposes no such parameter), so the
+handle takes the disabled roles the way any inactive control does. */
+$splitter-resize-handle-content-disabled: ds.$color-content-disabled !default;
+$splitter-resize-handle-bg-disabled: ds.$color-border-disabled !default;
