@@ -162,6 +162,21 @@ describe('DataController row changes', () => {
       expect(updateChange.columnIndices).toEqual([[1]]);
     });
 
+    it('should replace the row in the list after the updaters ran', async () => {
+      const { dataController, log } = await createGridWithCallLog();
+      const oldRow = createOldRow(1, ['Alex', 15], log);
+      const rowsDuringUpdate: ProcessedItem[] = [];
+
+      oldRow.update = (): void => {
+        rowsDuringUpdate.push(dataController._items[0]);
+      };
+      dataController._items = [oldRow];
+
+      dataController.applyChangesOnly(createRefreshChange([createNewRow(1, ['Alex', 16])]));
+
+      expect(rowsDuringUpdate[0]).toBe(oldRow);
+    });
+
     it('should hand over every unchanged row before applying any change', async () => {
       const { dataController, log } = await createGridWithCallLog();
 
@@ -336,6 +351,22 @@ describe('DataController row changes', () => {
       expect(change.changeTypes).toEqual(['update']);
       expect(change.columnIndices).toEqual([[1]]);
       expect(log).toEqual(['cell 1.0 replaceRow', 'row 1']);
+    });
+
+    it('should replace the row in the list before the updaters run', async () => {
+      const { dataController, log } = await createGridWithCallLog();
+      const oldRow = createOldRow(1, ['Alex', 15], log);
+      const newRow = createNewRow(1, ['Alex', 16]);
+      const rowsDuringUpdate: ProcessedItem[] = [];
+
+      oldRow.update = (): void => {
+        rowsDuringUpdate.push(dataController._items[0]);
+      };
+      dataController._items = [oldRow];
+
+      dataController.applyChangeUpdate(createUpdateChange([newRow]));
+
+      expect(rowsDuringUpdate[0]).toBe(newRow);
     });
 
     it('should repaint the whole row when the changes are not tracked', async () => {

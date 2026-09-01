@@ -2,7 +2,7 @@ import { equalByValue } from '@js/core/utils/common';
 
 import type { OperationTypes } from '../../data_source_adapter/types';
 import type {
-  ChangedRows, DataChange, ItemChange, ProcessedItem, RowIndexByKey,
+  DataChange, GetUpdatedColumnIndices, ItemChange, ProcessedItem, RowIndexByKey,
   RowOperation, RowOperationOptions, UpdateChange, UpdateRowChange,
 } from '../types';
 
@@ -169,60 +169,29 @@ export function getRowOperation(
   return newItem ? 'replace' : undefined;
 }
 
-export function initChangedRows(): ChangedRows {
-  return {
-    items: [],
-    rowIndices: [],
-    changeTypes: [],
-    columnIndices: [],
-  };
-}
+export function attachChangedRows(change: UpdateChange, changedRows: UpdateRowChange[]): void {
+  change.items = changedRows
+    .map(({ item }) => item)
+    .filter((item): item is ProcessedItem => !!item);
 
-export function attachChangedRows(change: UpdateChange, changedRows: ChangedRows): void {
-  change.rowIndices = changedRows.rowIndices;
-  change.columnIndices = changedRows.columnIndices;
-  change.changeTypes = changedRows.changeTypes;
-  change.items = changedRows.items;
-}
-
-function toChangedRows(updateRowChanges: UpdateRowChange[]): ChangedRows {
-  return {
-    items: updateRowChanges
-      .map(({ item }) => item)
-      .filter((item): item is ProcessedItem => !!item),
-    rowIndices: updateRowChanges.map(({ rowIndex }) => rowIndex),
-    changeTypes: updateRowChanges.map(({ changeType }) => changeType),
-    columnIndices: updateRowChanges.map(({ columnIndices }) => columnIndices),
-  };
+  change.rowIndices = changedRows.map(({ rowIndex }) => rowIndex);
+  change.changeTypes = changedRows.map(({ changeType }) => changeType);
+  change.columnIndices = changedRows.map(({ columnIndices }) => columnIndices);
 }
 
 export function convertToUpdateChange(
   change: DataChange,
-  updateRowChanges: UpdateRowChange[],
+  changedRows: UpdateRowChange[],
 ): void {
   const updateChange = change as UpdateChange;
 
   updateChange.repaintChangesOnly = true;
   updateChange.changeType = 'update';
 
-  attachChangedRows(updateChange, toChangedRows(updateRowChanges));
+  attachChangedRows(updateChange, changedRows);
 }
 
-export function pushChangedRow(changedRows: ChangedRows, changedRow: UpdateRowChange): void {
-  const {
-    item, rowIndex, changeType, columnIndices,
-  } = changedRow;
-
-  if (item) {
-    changedRows.items.push(item);
-  }
-
-  changedRows.rowIndices.push(rowIndex);
-  changedRows.changeTypes.push(changeType);
-  changedRows.columnIndices.push(columnIndices);
-}
-
-export function partialUpdateRow(
+function partialUpdateRowCore(
   oldItem: ProcessedItem,
   newItem: ProcessedItem,
   columnIndices: number[] | undefined,
@@ -250,27 +219,32 @@ export function partialUpdateRow(
   oldItem.update?.(newItem);
 }
 
-function updateRow(rowIndex: number, options: RowOperationOptions): UpdateRowChange {
+export function partialUpdateRow(
+  rowIndex: number,
+  options: {
+    oldItem: ProcessedItem;
+    newItem: ProcessedItem;
+    rowIndexDelta: number;
+    isLiveUpdate?: boolean;
+    getUpdatedColumnIndices?: GetUpdatedColumnIndices;
+  },
+): UpdateRowChange {
   const {
-    items, newItems, rowIndexDelta, getUpdatedColumnIndices,
+    oldItem,
+    newItem,
+    rowIndexDelta,
+    isLiveUpdate,
+    getUpdatedColumnIndices,
   } = options;
   const visibleRowIndex = rowIndex - rowIndexDelta;
-  const oldItem = items[rowIndex];
-  const newItem = newItems[rowIndex];
+  const columnIndices = getUpdatedColumnIndices?.(
+    oldItem,
+    newItem,
+    visibleRowIndex,
+    isLiveUpdate,
+  );
 
-  items[rowIndex] = newItem;
-
-  if (oldItem.visible !== newItem.visible) {
-    return {
-      changeType: 'update',
-      rowIndex: visibleRowIndex,
-      item: { visible: newItem.visible } as ProcessedItem,
-    };
-  }
-
-  const columnIndices = getUpdatedColumnIndices?.(oldItem, newItem, visibleRowIndex);
-
-  partialUpdateRow(oldItem, newItem, columnIndices);
+  partialUpdateRowCore(oldItem, newItem, columnIndices, isLiveUpdate);
 
   return {
     changeType: 'update',
@@ -284,7 +258,11 @@ function applyRowOperation(
   rowIndex: number,
   options: RowOperationOptions,
 ): UpdateRowChange | undefined {
-  const { items, newItems, rowIndexDelta } = options;
+  const {
+    items,
+    newItems,
+    rowIndexDelta,
+  } = options;
   const visibleRowIndex = rowIndex - rowIndexDelta;
   const item = newItems[rowIndex];
 
@@ -293,8 +271,28 @@ function applyRowOperation(
   }
 
   switch (getRowOperation(items, newItems, rowIndex)) {
-    case 'update':
-      return updateRow(rowIndex, options);
+    case 'update': {
+      if (items[rowIndex].visible !== item.visible) {
+        items[rowIndex] = item;
+
+        return {
+          changeType: 'update',
+          rowIndex: visibleRowIndex,
+          item: { visible: item.visible } as ProcessedItem,
+        };
+      }
+
+      const oldItem = items[rowIndex];
+
+      items[rowIndex] = newItems[rowIndex];
+
+      return partialUpdateRow(rowIndex, {
+        oldItem,
+        newItem: newItems[rowIndex],
+        rowIndexDelta,
+        getUpdatedColumnIndices: options.getUpdatedColumnIndices,
+      });
+    }
     case 'insert':
       items.splice(rowIndex, 0, item);
       return { changeType: 'insert', rowIndex: visibleRowIndex, item };
@@ -312,8 +310,8 @@ function applyRowOperation(
 export function applyRowOperations(
   rowIndices: number[],
   options: RowOperationOptions,
-): ChangedRows {
-  const changedRows = initChangedRows();
+): UpdateRowChange[] {
+  const changedRows: UpdateRowChange[] = [];
   let prevRowIndex = -1;
   let rowIndexCorrection = 0;
 
@@ -332,7 +330,7 @@ export function applyRowOperations(
       return;
     }
 
-    pushChangedRow(changedRows, changedRow);
+    changedRows.push(changedRow);
 
     if (changedRow.changeType === 'insert') {
       rowIndexCorrection += 1;

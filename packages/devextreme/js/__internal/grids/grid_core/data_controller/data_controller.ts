@@ -969,20 +969,17 @@ export class DataController extends modules.Controller {
     switch (itemChange.type) {
       case 'update': {
         const newItem = itemChange.data;
-        const columnIndices = this.getUpdatedColumnIndices(
-          itemChange.oldItem,
+        const result = partialUpdateRow(index, {
+          oldItem: itemChange.oldItem,
           newItem,
-          index,
+          rowIndexDelta: 0,
           isLiveUpdate,
-        );
-
-        partialUpdateRow(itemChange.oldItem, newItem, columnIndices, isLiveUpdate);
+          getUpdatedColumnIndices: this.getUpdatedColumnIndices,
+        });
 
         this._items[index] = newItem;
 
-        return {
-          changeType: 'update', rowIndex: index, item: newItem, columnIndices,
-        };
+        return result;
       }
       case 'insert':
         this._items.splice(index, 0, itemChange.data);
