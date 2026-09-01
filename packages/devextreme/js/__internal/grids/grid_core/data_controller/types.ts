@@ -218,3 +218,17 @@ export type DataFilter = DataFilterExpression
   | MatchNothingFilter
   | null
   | undefined;
+
+/** Arrays for `anyof`/`noneof` and `between`; nested when a header filter groups by interval. */
+export type FilterValueOperand = ScalarFilterValue | FilterValueOperand[];
+
+/** Operation is a plain `string`: `filterBuilder.customOperations` is user-extensible. */
+export type FilterValueCondition = [string, FilterValueOperand]
+  | [string, string, FilterValueOperand];
+
+/** Mirrors `DataFilterExpression`, but over column identifiers (`dataField ?? name`). */
+export type FilterValueExpression = FilterValueCondition
+  | ['!', FilterValueExpression]
+  | [FilterValueExpression, ...(FilterCombiner | FilterValueExpression)[]];
+
+export type FilterValue = FilterValueExpression | null;

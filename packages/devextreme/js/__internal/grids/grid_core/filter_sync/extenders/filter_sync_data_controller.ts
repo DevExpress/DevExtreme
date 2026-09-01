@@ -14,9 +14,15 @@ import { getColumnIdentifier } from '@ts/grids/grid_core/filter_sync/utils';
 import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
+export interface FilterSyncDataControllerExtension {
+  isFilterSyncActive: () => boolean | undefined;
+}
+
 export const filterSyncDataControllerExtender = (
   Base: ModuleType<DataController>,
-): ModuleType<DataController> => class FilterSyncDataControllerExtender extends Base {
+): ModuleType<
+  DataController & FilterSyncDataControllerExtension
+> => class FilterSyncDataControllerExtender extends Base {
   private filterSyncController!: FilterSyncController;
 
   public init(): void {
@@ -60,7 +66,7 @@ export const filterSyncDataControllerExtender = (
     }
   }
 
-  private isFilterSyncActive(): boolean | undefined {
+  public isFilterSyncActive(): boolean | undefined {
     const filterSyncEnabledValue = this.option('filterSyncEnabled');
     return filterSyncEnabledValue === 'auto' ? this.option('filterPanel.visible') : filterSyncEnabledValue;
   }

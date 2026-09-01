@@ -1,28 +1,29 @@
-/* eslint-disable max-classes-per-file */
 import { isDefined } from '@js/core/utils/type';
 import type { CustomOperation } from '@js/ui/filter_builder';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
 import {
   addItem,
-  filterHasField,
   getDefaultOperation,
   getMatchedConditions,
   getNormalizedFilter,
   removeFieldConditionsFromFilter,
   syncFilters,
 } from '@ts/filter_builder/m_utils';
-import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { ColumnUserState } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { FilterValue } from '@ts/grids/grid_core/data_controller/types';
 import {
   FILTER_ROW_OPERATIONS,
   FILTER_TYPES_EXCLUDE,
   FILTER_TYPES_INCLUDE,
 } from '@ts/grids/grid_core/filter_sync/const';
+import type {
+  FilterSyncDataControllerExtension,
+} from '@ts/grids/grid_core/filter_sync/extenders/filter_sync_data_controller';
 import { getColumnIdentifier } from '@ts/grids/grid_core/filter_sync/utils';
 import modules from '@ts/grids/grid_core/m_modules';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
 import { anyOf, noneOf } from './m_filter_custom_operations';
 
@@ -152,25 +153,24 @@ const updateFilterRowCondition = function (columnsController, column, condition)
 export class FilterSyncController extends modules.Controller {
   private skipSyncColumnOptions = false;
 
-  private _dataController!: DataController;
+  private _dataController!: DataController & FilterSyncDataControllerExtension;
 
   private _columnsController!: ColumnsController;
 
-  public init() {
-    this._dataController = this.getController('data');
+  public init(): void {
+    this._dataController = this.getController('data') as DataController & FilterSyncDataControllerExtension;
     this._columnsController = this.getController('columns');
 
-    // @ts-expect-error
     if (this._dataController.isFilterSyncActive()) {
       if (this._columnsController.isAllDataTypesDefined()) {
-        this._initSync();
+        this.initSync();
       } else {
-        this._dataController.dataSourceChanged.add(() => this._initSync());
+        this._dataController.dataSourceChanged.add(() => this.initSync());
       }
     }
   }
 
-  public publicMethods() {
+  public publicMethods(): string[] {
     return ['getCustomFilterOperations'];
   }
 
@@ -187,7 +187,7 @@ export class FilterSyncController extends modules.Controller {
     }
   }
 
-  public syncFilterValue() {
+  public syncFilterValue(): void {
     const columns = this._columnsController.getFilteringColumns();
 
     this.withColumnOptionsSync(() => {
@@ -205,16 +205,18 @@ export class FilterSyncController extends modules.Controller {
     });
   }
 
-  private _initSync() {
+  private initSync(): void {
     const columns = this._columnsController.getColumns();
     const pageIndex = this._dataController.pageIndex();
 
     checkForErrors(columns);
+
     if (!this.option('filterValue')) {
       const filteringColumns = this._columnsController.getFilteringColumns();
       const filterValue = this.getFilterValueFromColumns(filteringColumns);
       this._silentOption('filterValue', filterValue);
     }
+
     this.syncFilterValue();
 
     this._dataController.pageIndex(pageIndex);
@@ -236,30 +238,36 @@ export class FilterSyncController extends modules.Controller {
     return removeFieldConditionsFromFilter(filterValue, getColumnIdentifier(column));
   }
 
-  private getFilterValueFromColumns(columns) {
-    // @ts-expect-error
+  public getFilterValueFromColumns(
+    columns: ColumnUserState[] | undefined,
+  ): FilterValue {
     if (!this._dataController.isFilterSyncActive()) {
       return null;
     }
 
     const filterValue = ['and'];
 
-    columns && columns.forEach((column) => {
+    columns?.forEach((column) => {
       const headerFilter = getConditionFromHeaderFilter(column);
-      const filterRow = getConditionFromFilterRow(column);
+      if (headerFilter) {
+        addItem(headerFilter, filterValue);
+      }
 
-      headerFilter && addItem(headerFilter, filterValue);
-      filterRow && addItem(filterRow, filterValue);
+      const filterRow = getConditionFromFilterRow(column);
+      if (filterRow) {
+        addItem(filterRow, filterValue);
+      }
     });
-    return getNormalizedFilter(filterValue);
+
+    return getNormalizedFilter(filterValue) as FilterValue;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public syncFilterRow(column, filterValue?) {
+  public syncFilterRow(column, filterValue?): void {
     this.option('filterValue', this._getSyncFilterRow(this.option('filterValue'), column));
   }
 
-  public syncHeaderFilter(column) {
+  public syncHeaderFilter(column): void {
     this.option('filterValue', this._getSyncHeaderFilter(this.option('filterValue'), column));
   }
 
@@ -270,29 +278,3 @@ export class FilterSyncController extends modules.Controller {
     return [anyOf(this.component), noneOf(this.component)].concat(filterBuilderCustomOperations) as CustomOperation[];
   }
 }
-
-export const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeadersViewFilterSyncExtender extends Base {
-  public optionChanged(args) {
-    if (args.name === 'filterValue') {
-      // @ts-expect-error
-      this._updateHeaderFilterIndicators();
-    } else {
-      super.optionChanged(args);
-    }
-  }
-
-  private _isHeaderFilterEmpty(column) {
-    // @ts-expect-error
-    if (this._dataController.isFilterSyncActive()) {
-      return !filterHasField(this.option('filterValue'), getColumnIdentifier(column));
-    }
-
-    // @ts-expect-error
-    return super._isHeaderFilterEmpty(column);
-  }
-
-  private _needUpdateFilterIndicators() {
-    // @ts-expect-error
-    return !this._dataController.isFilterSyncActive();
-  }
-};
