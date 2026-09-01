@@ -4,7 +4,7 @@ import {
 
 import type {
   DataChange, GetUpdatedColumnIndices, ItemChange, ProcessedItem,
-  RowWatch, UpdateChange, UpdateItemChange,
+  RowWatch, UpdateChange,
 } from '../../types';
 import {
   attachChangedItems,
@@ -478,18 +478,6 @@ describe('convertToUpdateChange', () => {
 });
 
 describe('partialUpdateItem', () => {
-  const partialUpdate = (
-    oldItem: ProcessedItem,
-    newItem: ProcessedItem,
-    columnIndices: number[] | undefined,
-    isLiveUpdate?: boolean,
-  ): UpdateItemChange => partialUpdateItem(0, {
-    oldItem,
-    newItem,
-    isLiveUpdate,
-    getUpdatedColumnIndices: () => columnIndices,
-  });
-
   it('should ask for the changed columns by the visible row index', () => {
     const oldItem = row({ key: 1 });
     const newItem = row({ key: 1 });
@@ -516,7 +504,12 @@ describe('partialUpdateItem', () => {
     const cellUpdates = [jest.fn(), jest.fn(), jest.fn()];
     const oldItem = row({ key: 1, cells: cellUpdates.map((update) => ({ update })) });
 
-    partialUpdate(oldItem, newItem, [1]);
+    partialUpdateItem(0, {
+      oldItem,
+      newItem,
+      isLiveUpdate: undefined,
+      getUpdatedColumnIndices: () => [1],
+    });
 
     expect(cellUpdates[0]).toHaveBeenCalledWith(newItem);
     expect(cellUpdates[1]).not.toHaveBeenCalled();
@@ -527,7 +520,12 @@ describe('partialUpdateItem', () => {
     const newItem = row({ key: 1 });
     const cellUpdate = jest.fn();
 
-    partialUpdate(row({ key: 1, cells: [{ update: cellUpdate }] }), newItem, []);
+    partialUpdateItem(0, {
+      oldItem: row({ key: 1, cells: [{ update: cellUpdate }] }),
+      newItem,
+      isLiveUpdate: undefined,
+      getUpdatedColumnIndices: () => [],
+    });
 
     expect(cellUpdate).toHaveBeenCalledWith(newItem);
   });
@@ -541,7 +539,12 @@ describe('partialUpdateItem', () => {
       key: 1, update, watch, cells,
     });
 
-    partialUpdate(oldItem, newItem, [0]);
+    partialUpdateItem(0, {
+      oldItem,
+      newItem,
+      isLiveUpdate: undefined,
+      getUpdatedColumnIndices: () => [0],
+    });
 
     expect(newItem.update).toBe(update);
     expect(newItem.watch).toBe(watch);
@@ -554,8 +557,18 @@ describe('partialUpdateItem', () => {
     const liveItem = row({ key: 1 });
     const item = row({ key: 1 });
 
-    partialUpdate(row({ key: 1, values }), liveItem, [0], true);
-    partialUpdate(row({ key: 1, values }), item, [0]);
+    partialUpdateItem(0, {
+      oldItem: row({ key: 1, values }),
+      newItem: liveItem,
+      isLiveUpdate: true,
+      getUpdatedColumnIndices: () => [0],
+    });
+    partialUpdateItem(0, {
+      oldItem: row({ key: 1, values }),
+      newItem: item,
+      isLiveUpdate: undefined,
+      getUpdatedColumnIndices: () => [0],
+    });
 
     expect(liveItem.oldValues).toBe(values);
     expect(item.oldValues).toBeUndefined();
@@ -567,7 +580,12 @@ describe('partialUpdateItem', () => {
     const oldItem = row({ key: 1, update, cells: [{ update: cellUpdate }] });
     const newItem = row({ key: 1 });
 
-    const changedRow = partialUpdate(oldItem, newItem, undefined, true);
+    const changedRow = partialUpdateItem(0, {
+      oldItem,
+      newItem,
+      isLiveUpdate: true,
+      getUpdatedColumnIndices: () => undefined,
+    });
 
     expect(changedRow.columnIndices).toBeUndefined();
     expect(update).not.toHaveBeenCalled();
