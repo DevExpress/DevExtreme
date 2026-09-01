@@ -2,6 +2,7 @@
 @use "sizes" as *;
 
 @mixin publish {
+  --dx-chat-opacity-disabled: #{$chat-opacity-disabled};
   --dx-chat-alert-list-content: #{$chat-alert-list-content};
   --dx-chat-alert-padding-block: #{$chat-alert-padding-block};
   --dx-chat-alerts-padding-block: #{$chat-alerts-padding-block};

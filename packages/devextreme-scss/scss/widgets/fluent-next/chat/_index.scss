@@ -1,6 +1,7 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/chat" with (
+  $chat-disabled-opacity: var(--dx-chat-opacity-disabled),
   $chat-file-name-font-weight: var(--dx-chat-file-name-font-weight),
   $chat-editing-preview-caption-font-weight: var(--dx-chat-editing-preview-caption-font-weight),
   $chat-messagebox-border-block-start-width: var(--dx-chat-message-box-border-block-start-width),
