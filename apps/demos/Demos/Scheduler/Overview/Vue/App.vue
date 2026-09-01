@@ -83,7 +83,7 @@ const dataSource = data;
 .dx-color-scheme-teal-dark {
   --text-color-1: var(--dxds-color-content-subtle, rgba(255, 255, 255, 1));
   --text-color-2: var(--dxds-color-content-inverted, rgba(54, 54, 64, 1));
-  --disabled-color: var(--dxds-color-content-subtle-disabled, rgba(255, 255, 255, 0.38));
+  --disabled-color: var(--dxds-color-content-disabled, rgba(255, 255, 255, 0.38));
   --person-color-1: var(--dxds-color-content-green, rgba(159, 213, 161, 1));
   --person-color-2: var(--dxds-color-content-orange, rgba(255, 181, 127, 1));
 }
