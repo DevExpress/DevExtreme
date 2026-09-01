@@ -16,8 +16,13 @@
  * that prevents double dimming, not a disabled state of its own.
  */
 
-import { readFileSync, readdirSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, readdirSync, existsSync } from 'fs';
 import { join } from 'path';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const registries = require('../tools/naming/registries.json');
+const rootSelectors: Record<string, string[]> = registries.rootSelectors;
+const SYSTEM_FOLDERS: string[] = registries.systemFolders ?? [];
 
 const packageRoot = process.cwd();
 const artifactsCss = join(packageRoot, '..', 'devextreme', 'artifacts', 'css');
@@ -176,4 +181,67 @@ describe.each(bundleNames)('%s', (bundleName) => {
 
     expect(blanket).toBeDefined();
   });
+});
+
+/*
+ * Ratchet: a component must not arrive with no disabled rule of its own.
+ *
+ * This is a static signal and deliberately not the same measurement as the runtime one. It asks
+ * only "does any rule mention this component's root class in a disabled context and paint
+ * something", so it over-reports: a text box is painted through the .dx-texteditor chassis, and
+ * Calendar, Form and TabPanel are covered by the widgets inside them. The runtime comparison in
+ * playground/disabled-readonly-compare.html is the judge of what actually renders - by that
+ * measure five components rely on the blanket dim, not thirty-seven.
+ *
+ * What the ratchet is for is the regression that produced the Toolbar and cardView defects: a
+ * component appearing with nothing of its own and nobody noticing. The list may shrink, never
+ * grow. Bank a drop deliberately:
+ *
+ *   UPDATE_DISABLED_BASELINE=1 pnpm test
+ */
+const baselinePath = join(__dirname, 'disabled-own-rules.baseline.json');
+const updatingBaseline = process.env.UPDATE_DISABLED_BASELINE === '1';
+
+const componentsWithoutOwnDisabledRule = (css: string): string[] => {
+  // Whole class tokens, not a substring of the joined selectors: `.dx-toolbar` would otherwise
+  // look covered by a scheduler rule that happens to mention `.dx-toolbar-item-content`, and the
+  // ratchet would stay silent exactly when a component lost its own rule.
+  const painted = new Set<string>();
+
+  readRules(css)
+    .filter(({ selector, body }) => !selector.startsWith('@')
+      && DISABLED_SELECTOR.test(selector)
+      && /(^|;)\s*(color|background|background-color|border[a-z-]*color|fill|stroke|opacity)\s*:/.test(body))
+    .forEach(({ selector }) => {
+      for (const cls of selector.matchAll(/\.(dx-[a-z0-9-]+)/g)) {
+        painted.add(cls[1]);
+      }
+    });
+
+  return Object.entries(rootSelectors)
+    .filter(([component]) => !SYSTEM_FOLDERS.includes(component))
+    .filter(([, selectors]) => {
+      const classes = (selectors as string[])
+        .filter((s) => s.trim().startsWith('.dx-'))
+        .map((s) => s.trim().slice(1));
+
+      return classes.length > 0 && !classes.some((cls) => painted.has(cls));
+    })
+    .map(([component]) => component)
+    .sort();
+};
+
+test('no component arrives without a disabled rule of its own', () => {
+  const css = readFileSync(join(artifactsCss, 'dx.fluent-next.blue.light.css'), 'utf8');
+  const found = componentsWithoutOwnDisabledRule(css);
+
+  if (updatingBaseline) {
+    writeFileSync(baselinePath, `${JSON.stringify(found, null, 2)}\n`);
+  }
+
+  const baseline: string[] = JSON.parse(readFileSync(baselinePath, 'utf8'));
+  const appeared = found.filter((name) => !baseline.includes(name));
+
+  expect(appeared).toEqual([]);
+  expect(found.length).toBeLessThanOrEqual(baseline.length);
 });
