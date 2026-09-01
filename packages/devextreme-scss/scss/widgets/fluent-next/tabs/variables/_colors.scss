@@ -13,7 +13,9 @@ $tabs-tab-border-selected-focused: ds.$color-content-primary !default;
 $tabs-tab-border-active: ds.$color-border-active !default;
 $tabs-tab-border-hovered: ds.$color-border-hovered !default;
 
-$tabs-tab-border-disabled: ds.$color-border-disabled !default;
+/* item.color.selector.selected-disabled in the package's component tier: the indicator under a
+selected tab is content, not a border, and its disabled step follows the content scale */
+$tabs-tab-border-disabled: ds.$color-content-disabled !default;
 
 $tabs-tab-bg: transparent !default;
 

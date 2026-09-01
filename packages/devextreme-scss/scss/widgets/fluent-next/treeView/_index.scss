@@ -163,4 +163,10 @@
   .dx-treeview-toggle-item-visibility {
     color: var(--dx-tree-view-spin-icon-disabled);
   }
+
+  /* item.color.selected.bg.disabled */
+  .dx-treeview-node.dx-state-selected > .dx-treeview-item,
+  .dx-treeview-item.dx-state-selected {
+    background-color: var(--dx-tree-view-item-bg-selected-disabled);
+  }
 }

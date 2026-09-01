@@ -9,6 +9,9 @@ $menu-content: ds.$color-content !default;
 $menu-item-bg-selected: ds.$color-bg-selected !default;
 $menu-popup-border: ds.$color-border !default;
 $menu-separator-bg: ds.$color-border-subtle !default;
+
+/* menu-list.item.color.separator.disabled in the package's component tier */
+$menu-separator-bg-disabled: ds.$color-border-disabled !default;
 $menu-item-content-selected: ds.$color-content !default;
 $menu-item-link-content: ds.$color-content-primary !default;
 $menu-item-bg-selected-focused: ds.$color-bg-selected-hovered !default;

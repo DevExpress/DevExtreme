@@ -18,6 +18,10 @@ $radio-button-invalid-bg-focused: ds.$color-border-danger-shared-active !default
 
 $radio-button-content-disabled: ds.$color-content-disabled !default;
 
+/* color.unchecked.border.disabled and color.checked.border.disabled in the package's component
+tier. The ring is a border and takes the border scale; the dot inside it stays content. */
+$radio-button-border-disabled: ds.$color-border-disabled !default;
+
 /* Read-only shares the disabled step, but it is not a disabled state: Blazor keeps the two
 apart with variables of their own, and so do we, so either can move without the other. */
 $radio-button-content-read-only: ds.$color-content-disabled !default;

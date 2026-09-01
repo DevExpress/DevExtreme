@@ -79,6 +79,10 @@
 
   .dx-menu-separator {
     background-color: menuColors.$menu-separator-bg;
+
+    .dx-state-disabled & {
+      background-color: var(--dx-menu-separator-bg-disabled);
+    }
   }
 }
 

@@ -110,7 +110,10 @@ const CASES = [
   ['treeList', 'TreeList', 190, (h, f) => $(h).dxTreeList({ dataSource: [{ id: 1, head: 0, name: 'Root' }, { id: 2, head: 1, name: 'Child' }], keyExpr: 'id', parentIdExpr: 'head', autoExpandAll: true, showBorders: true, ...f })],
   ['cardView', 'CardView', 200, (h, f) => $(h).dxCardView({ dataSource: [{ id: 1, name: 'Alpha' }], keyExpr: 'id', headerPanel: { visible: true }, ...f })],
   ['pivotGrid', 'PivotGrid', 200, (h, f) => $(h).dxPivotGrid({ dataSource: { fields: [{ dataField: 'a', area: 'row' }, { dataField: 'v', area: 'data', summaryType: 'sum' }], store: [{ a: 'x', v: 1 }, { a: 'y', v: 2 }] }, height: 170, ...f })],
-  ['splitter', 'Splitter', 130, (h, f) => $(h).dxSplitter({ height: 100, items: [{ text: 'One' }, { text: 'Two' }], ...f })],
+  // resizable panes, otherwise the widget renders no bar and the case shows nothing of what the
+  // package names (bar.color.outer-bg.disabled / inner-bg.disabled)
+  ['splitter', 'Splitter  (resizable, so the bar is rendered)', 130, (h, f) => $(h).dxSplitter({
+    height: 100, items: [{ text: 'One', resizable: true }, { text: 'Two', resizable: true }], ...f })],
   ['scheduler', 'Scheduler', 300, (h, f) => $(h).dxScheduler({ dataSource: [{ text: 'Event', startDate: new Date(2026, 0, 5, 10), endDate: new Date(2026, 0, 5, 11) }], currentDate: new Date(2026, 0, 5), currentView: 'day', height: 260, ...f })],
   ['fileManager', 'FileManager', 300, (h, f) => $(h).dxFileManager({ fileSystemProvider: [{ name: 'Folder', isDirectory: true, items: [{ name: 'file.txt', size: 10 }] }], height: 260, ...f })],
   ['drawer', 'Drawer', 150, (h, f) => $(h).dxDrawer({ opened: true, height: 120, template: () => $('<div>').text('panel'), ...f })],
@@ -453,9 +456,14 @@ const themeApplied = new Promise((resolve) => {
   setTimeout(resolve, 5000);
 });
 
-const galleryBuilt = themeApplied
-  .then(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))))
-  .then(() => { buildGallery(); });
+/* A frame in a hidden tab never gets an animation frame, so waiting on rAF alone leaves the
+gallery unbuilt for as long as the pane is in the background. Whichever comes first wins. */
+const layoutSettled = () => new Promise((resolve) => {
+  requestAnimationFrame(() => requestAnimationFrame(resolve));
+  setTimeout(resolve, 100);
+});
+
+const galleryBuilt = themeApplied.then(layoutSettled).then(() => { buildGallery(); });
 
 window.addEventListener('load', () => {
   const settle = async () => {
