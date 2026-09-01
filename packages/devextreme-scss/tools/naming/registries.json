@@ -1153,7 +1153,8 @@
     "switch": [
       "handle",
       "container",
-      "inner"
+      "inner",
+      "label"
     ],
     "context-menu": [
       "item",

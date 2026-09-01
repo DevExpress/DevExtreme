@@ -7,11 +7,11 @@
     "The match is by variable name. A name declared in a nested module is only reachable once the parent forwards it (see base/chat/_index.scss), which is why an \"open\" row can sit next to injected ones from the same widget."
   ],
   "summary": {
-    "occurrences": 381,
-    "variables": 329,
+    "occurrences": 384,
+    "variables": 332,
     "injected": 378,
     "open": 0,
-    "parameters": 3
+    "parameters": 6
   },
   "places": [
     {
@@ -5384,6 +5384,48 @@
       "marker": null,
       "text": "$indicator-halo-size: 8px,",
       "variable": "indicator-halo-size",
+      "kind": "mixin-parameter",
+      "status": "parameter"
+    },
+    {
+      "file": "scss/widgets/base/switch/_mixins.scss",
+      "line": 17,
+      "widget": "switch",
+      "literals": [
+        "500px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$switch-container-border-radius: 500px,",
+      "variable": "switch-container-border-radius",
+      "kind": "mixin-parameter",
+      "status": "parameter"
+    },
+    {
+      "file": "scss/widgets/base/switch/_mixins.scss",
+      "line": 18,
+      "widget": "switch",
+      "literals": [
+        "4px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$switch-label-padding: 4px 0,",
+      "variable": "switch-label-padding",
+      "kind": "mixin-parameter",
+      "status": "parameter"
+    },
+    {
+      "file": "scss/widgets/base/switch/_mixins.scss",
+      "line": 19,
+      "widget": "switch",
+      "literals": [
+        "10px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$switch-off-padding-bottom: 10px,",
+      "variable": "switch-off-padding-bottom",
       "kind": "mixin-parameter",
       "status": "parameter"
     },

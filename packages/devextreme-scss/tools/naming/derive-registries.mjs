@@ -823,7 +823,8 @@ const OVERRIDES = {
      * on. Compounds (`group-header`, `nav-button`, `pull-down`) are one anatomy level, not two.
      */
     'check-box': ['icon', 'mark', 'arrow', 'arrow-icon', 'container'],
-    switch: ['handle', 'container', 'inner'],
+    // wave B7: .dx-switch-on and .dx-switch-off are the two labels the track slides between
+    switch: ['handle', 'container', 'inner', 'label'],
     /*
      * `menu-items-container` sits next to `items-container` on purpose: base/_contextMenu.scss draws
      * `.dx-context-menu .dx-menu-items-container` with its own parameter, and contextMenu/_index.scss

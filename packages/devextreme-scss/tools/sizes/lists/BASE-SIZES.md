@@ -14,12 +14,12 @@ and carries a marker saying why.
 | a raw grep of the layer | 782 |
 | …of those, inside comments (commented-out code, prose) | 5 |
 | **in code** | **777** |
-| — the theme can already set from outside | 381 |
-| — nailed into the shared layer | 396 |
+| — the theme can already set from outside | 384 |
+| — nailed into the shared layer | 393 |
 
 ## What the theme can already set
 
-381 occurrences in 329 `!default` variables. fluent-next already passes 378; 0 are open knobs nobody turns.
+384 occurrences in 332 `!default` variables. fluent-next already passes 378; 0 are open knobs nobody turns.
 
 ## What is nailed into the layer
 
@@ -42,7 +42,6 @@ and carries a marker saying why.
 | treeList |  | 1 |  |  | 3 | **4** |
 | pagination | 1 |  | 2 |  |  | **3** |
 | colorBox | 1 |  | 1 | 1 |  | **3** |
-| switch | 2 | 1 |  |  |  | **3** |
 | timeView | 2 |  | 1 |  |  | **3** |
 | icon_fonts | 2 |  |  |  |  | **2** |
 | numberBox |  |  | 2 |  |  | **2** |
@@ -669,15 +668,6 @@ and carries a marker saying why.
   `max-width: calc(100% - 25px);`
 - `scss/widgets/base/colorBox/_index.scss:36` · inline
   `margin-top: -7.5px;`
-
-### switch — 3
-
-- `scss/widgets/base/switch/_mixins.scss:45` · geometry
-  `border-radius: 500px;`
-- `scss/widgets/base/switch/_mixins.scss:60` · inline
-  `padding: 4px 0;`
-- `scss/widgets/base/switch/_mixins.scss:74` · inline
-  `padding-bottom: 10px;`
 
 ### timeView — 3
 

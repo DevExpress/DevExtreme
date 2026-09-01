@@ -6,10 +6,10 @@
     "marker — the classification comment already on the line, from tools/review/size-markers.json."
   ],
   "summary": {
-    "occurrences": 396,
+    "occurrences": 393,
     "byCategory": {
-      "inline": 182,
-      "geometry": 95,
+      "inline": 180,
+      "geometry": 94,
       "local-var": 92,
       "calc": 11,
       "structural": 8,
@@ -35,7 +35,6 @@
       "treeList": 4,
       "pagination": 3,
       "colorBox": 3,
-      "switch": 3,
       "timeView": 3,
       "icon_fonts": 2,
       "multiView": 2,
@@ -56,7 +55,7 @@
       "popover": 1,
       "stepper": 1
     },
-    "unmarked": 384,
+    "unmarked": 381,
     "unmarkedByWidget": {
       "gridBase": 75,
       "colorView": 67,
@@ -75,7 +74,6 @@
       "treeList": 4,
       "pagination": 3,
       "colorBox": 3,
-      "switch": 3,
       "timeView": 3,
       "icon_fonts": 2,
       "numberBox": 2,
@@ -3446,42 +3444,6 @@
       "marker": "dx-line-width",
       "text": "border-width: 1px; // dx-line-width: hairline, the same in every theme",
       "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/switch/_mixins.scss",
-      "line": 45,
-      "widget": "switch",
-      "literals": [
-        "500px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "border-radius: 500px;",
-      "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/switch/_mixins.scss",
-      "line": 60,
-      "widget": "switch",
-      "literals": [
-        "4px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "padding: 4px 0;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/switch/_mixins.scss",
-      "line": 74,
-      "widget": "switch",
-      "literals": [
-        "10px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "padding-bottom: 10px;",
-      "category": "inline"
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
