@@ -235,6 +235,55 @@ file-uploader,scheduler,pivot-grid,grid}-content-disabled`.
 `--dx-{grid-text-link,grid-icon-link,list-item,scheduler-appointment,tree-view,tabs-nav-button}-*-disabled`
 и хардкод `opacity: .5` у dxChat в `base/chat/layout/chat/_index.scss`.
 
+## Дыры в палитре пакета, найденные снятием `runOnly: ''` (тёмный режим)
+
+Починка восьми проверок грида вскрыла два места, где контраст не дотягивает до AA. Оба —
+**значения пакета**, а не ошибка маппинга темы. Доказано с трёх сторон: компонентный тир самого
+пакета (`tokens/components/core/theme/fluent.json`), реализация Blazor
+(`Blazor/DevExpress.Blazor.Themes.Fluent/scss/ds-themes/variables/_button.scss`) и перебор ролей.
+
+### `bg-primary-hovered` в тёмном не выдерживает свой же контент
+
+| | светлый | тёмный |
+|---|---|---|
+| rest `bg-primary` + `content-static-dark` | #0f6cbd 5.38 | #0f6cbd 5.38 |
+| **hovered** `bg-primary-hovered` | #005397 **7.82** | #2b7ecf **4.21** |
+
+В светлом ступень hover темнеет, в тёмном — светлеет, и белый контент проваливается. То же у
+`success` (4.18); `danger` проходит впритык (4.73).
+
+- пакет назначает именно эту пару: `button.color.contained.primary.bg.hovered → {color.bg-primary-hovered}`,
+  `…content.rest → {color.content-static-dark}`, и **никакого `content.hovered` у primary нет**
+  (у `warning` есть — значит механизм у вендора существует, для primary он просто не применён);
+- Blazor маппит ровно то же: `$primary-hover-bg: ds.$color-surface-primary-default-hovered`;
+- **ни одна** content-роль пакета не даёт 4.5 на `#2b7ecf`: белый 4.21, чёрный 4.3.
+
+Тема исправить это не может — нужна правка палитры. **Заявка в пакет.**
+
+**Что исправлено здесь:** состояния `focused` у залитых кнопок. Фокуса в компонентном тире
+пакета нет вовсе (только rest/hovered/active/disabled), поэтому фон фокуса — решение темы, и он
+переиспользовал ступень hover. Переведён на `active`: она одинакова в обоих режимах, состояние
+остаётся видимым, контраст 11.17 / 11.83 / 10.59. Это и чинило падение
+`Row editing mode - confirm delete message` — диалог автофокусирует кнопку «Yes».
+
+### `content-danger` в тёмном не проходит на собственном фоне темы
+
+`#e4554f` на `color-bg` `#242424` = **4.22**; на `color-bg-low` `#161616` = 4.92. То есть в гриде
+половина строк проходит, половина нет — какие именно, решают данные.
+
+Пакет назначает эту роль тексту ошибки (`text-input.color.invalid.content.rest`,
+`ai-chat…error.icon.rest`), Blazor использует её же (`color-content-danger-default-rest`).
+Единственная проходящая альтернатива — ступень `-hovered` (5.36), семантически неверная для покоя.
+**Заявка в пакет**; демка `DataGrid-SignalRService` до его правки в списке исключений с замером.
+
+### Дефект легаси-темы: ячейка соседнего месяца под курсором
+
+`.dx-scheduler-date-table-other-month` в `fluent.blue.dark` держала приглушённый `#999999`, пока
+фон под курсором светлел до `#3d3d3d` — **3.81:1**. Правило приглушения (специфичность 0,3,0)
+перебивало общее правило hover, которое само уже ставит белый текст. Починено в слое `fluent`
+собственной переменной темы `$scheduler-workspace-hovered-cell-color`: стало **10.86:1**, покой
+не изменился. fluent-next это не задевало — там те же места дают 6.90 и 11.20.
+
 ## Побочная находка: 7 из 8 a11y-проверок dataGrid не проверяли ничего
 
 `tests/accessibility/dataGrid/common.ts` в восьми местах передавал `runOnly: ''`. axe
