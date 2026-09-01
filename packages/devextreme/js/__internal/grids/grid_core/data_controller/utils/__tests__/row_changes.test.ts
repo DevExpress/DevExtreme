@@ -4,22 +4,22 @@ import {
 
 import type {
   DataChange, GetUpdatedColumnIndices, ItemChange, ProcessedItem,
-  RowOperationOptions, RowWatch, UpdateChange, UpdateRowChange,
+  RowWatch, UpdateChange, UpdateItemChange,
 } from '../../types';
 import {
-  applyRowOperations,
-  attachChangedRows,
+  attachChangedItems,
   canDiffColumns,
   convertToUpdateChange,
   getChangedRowIndices,
   getDataRowIndex,
   getGroupColumnIndices,
+  getItemChange,
   getRowKey,
   getRowOperation,
   indexRowsByKey,
   isSameGroupRowState,
   isSameItem,
-  partialUpdateRow,
+  partialUpdateItem,
   resolveRepaintChangesOnly,
   syncRowsAfterChange,
   updateKeptRows,
@@ -402,7 +402,7 @@ describe('getRowOperation', () => {
   });
 });
 
-describe('attachChangedRows', () => {
+describe('attachChangedItems', () => {
   it('should split the changed rows into a list per field', () => {
     const change = {
       changeType: 'update',
@@ -411,7 +411,7 @@ describe('attachChangedRows', () => {
     } as UpdateChange;
     const item = row({ key: 2 });
 
-    attachChangedRows(change, [{
+    attachChangedItems(change, [{
       changeType: 'update',
       rowIndex: 3,
       item,
@@ -427,7 +427,7 @@ describe('attachChangedRows', () => {
   it('should skip the item when the row is gone from the new list', () => {
     const change = { changeType: 'update' } as UpdateChange;
 
-    attachChangedRows(change, [{ changeType: 'remove', rowIndex: 5 }]);
+    attachChangedItems(change, [{ changeType: 'remove', rowIndex: 5 }]);
 
     expect(change.items).toEqual([]);
     expect(change.rowIndices).toEqual([5]);
@@ -477,16 +477,15 @@ describe('convertToUpdateChange', () => {
   });
 });
 
-describe('partialUpdateRow', () => {
+describe('partialUpdateItem', () => {
   const partialUpdate = (
     oldItem: ProcessedItem,
     newItem: ProcessedItem,
     columnIndices: number[] | undefined,
     isLiveUpdate?: boolean,
-  ): UpdateRowChange => partialUpdateRow(0, {
+  ): UpdateItemChange => partialUpdateItem(0, {
     oldItem,
     newItem,
-    rowIndexDelta: 0,
     isLiveUpdate,
     getUpdatedColumnIndices: () => columnIndices,
   });
@@ -496,10 +495,9 @@ describe('partialUpdateRow', () => {
     const newItem = row({ key: 1 });
     const getUpdatedColumnIndices = jest.fn<GetUpdatedColumnIndices>(() => [1]);
 
-    const changedRow = partialUpdateRow(5, {
+    const changedRow = partialUpdateItem(3, {
       oldItem,
       newItem,
-      rowIndexDelta: 2,
       isLiveUpdate: true,
       getUpdatedColumnIndices,
     });
@@ -584,7 +582,7 @@ describe('partialUpdateRow', () => {
     const oldItem = row({ key: 1, update, cells: [{ update: jest.fn() }] });
     const newItem = row({ key: 1 });
 
-    const changedRow = partialUpdateRow(0, { oldItem, newItem, rowIndexDelta: 0 });
+    const changedRow = partialUpdateItem(0, { oldItem, newItem });
 
     expect(changedRow.columnIndices).toBeUndefined();
     expect(update).not.toHaveBeenCalled();
@@ -592,167 +590,67 @@ describe('partialUpdateRow', () => {
   });
 });
 
-describe('applyRowOperations', () => {
-  const applyRowChanges = (
-    items: ProcessedItem[],
-    newItems: ProcessedItem[],
-    rowIndices: number[],
-    options: Partial<RowOperationOptions> = {},
-  ): UpdateRowChange[] => applyRowOperations(rowIndices, {
-    items,
-    newItems,
-    rowIndexDelta: 0,
-    ...options,
+describe('getItemChange', () => {
+  it('should report an update for the row that stayed', () => {
+    const oldItem = row({ key: 1 });
+    const newItem = row({ key: 1, values: ['Alex'] });
+
+    expect(getItemChange([oldItem], [newItem], 0)).toEqual({
+      type: 'update', index: 0, data: newItem, oldItem,
+    });
   });
 
-  const operations = (
-    changedRows: UpdateRowChange[],
-  ): [UpdateRowChange['changeType'], number][] => changedRows
-    .map(({ changeType, rowIndex }) => [changeType, rowIndex]);
-
-  it('should replace the updated row in place', () => {
-    const items = [row({ key: 1 })];
-    const newItems = [row({ key: 1, values: ['Alex'] })];
-
-    const changedRows = applyRowChanges(items, newItems, [0]);
-
-    expect(items[0]).toBe(newItems[0]);
-    expect(changedRows).toEqual([{ changeType: 'update', rowIndex: 0, item: newItems[0] }]);
-  });
-
-  it('should insert the row that appeared', () => {
-    const oldItem = row({ key: 2 });
-    const items = [oldItem];
+  it('should report an insert for the row that appeared', () => {
     const newItems = [row({ key: 1 }), row({ key: 2 })];
 
-    const changedRows = applyRowChanges(items, newItems, [0]);
-
-    expect(items).toEqual([newItems[0], oldItem]);
-    expect(changedRows).toEqual([{ changeType: 'insert', rowIndex: 0, item: newItems[0] }]);
+    expect(getItemChange([row({ key: 2 })], newItems, 0)).toEqual({
+      type: 'insert', index: 0, data: newItems[0],
+    });
   });
 
-  it('should remove the row that is gone', () => {
-    const keptItem = row({ key: 2 });
-    const items = [row({ key: 1 }), keptItem];
-    const newItems = [row({ key: 2 })];
+  it('should report a remove carrying the row that is gone', () => {
+    const oldItem = row({ key: 1 });
 
-    const changedRows = applyRowChanges(items, newItems, [0]);
-
-    expect(items).toEqual([keptItem]);
-    expect(operations(changedRows)).toEqual([['remove', 0]]);
+    expect(getItemChange([oldItem, row({ key: 2 })], [row({ key: 2 })], 0)).toEqual({
+      type: 'remove', index: 0, oldItem,
+    });
   });
 
-  it('should report an update when another row takes the index', () => {
-    const items = [row({ key: 1 })];
+  it('should report a replace when another row takes the index', () => {
     const newItems = [row({ key: 2 })];
 
-    const changedRows = applyRowChanges(items, newItems, [0]);
+    expect(getItemChange([row({ key: 1 })], newItems, 0)).toEqual({
+      type: 'replace', index: 0, data: newItems[0],
+    });
+  });
 
-    expect(items[0]).toBe(newItems[0]);
-    expect(changedRows).toEqual([{ changeType: 'update', rowIndex: 0, item: newItems[0] }]);
+  it('should report a visibility change on its own', () => {
+    const newItems = [row({ key: 1, visible: false })];
+
+    expect(getItemChange([row({ key: 1, visible: true })], newItems, 0)).toEqual({
+      type: 'visibility', index: 0, data: newItems[0],
+    });
   });
 
   it('should report nothing when the row is missing in both lists', () => {
-    expect(applyRowChanges([], [], [0])).toEqual([]);
+    expect(getItemChange([], [], 0)).toBeUndefined();
   });
 
-  it('should shift the indices that follow an insert', () => {
-    const items = [row({ key: 1 }), row({ key: 2 })];
-    const newItems = [row({ key: 3 }), row({ key: 1 }), row({ key: 2 })];
-
-    const changedRows = applyRowChanges(items, newItems, [0, 1]);
-
-    expect(items).toEqual(newItems);
-    expect(operations(changedRows)).toEqual([['insert', 0], ['update', 2]]);
-  });
-
-  it('should visit the index a remove freed once again', () => {
-    const items = [row({ key: 1 }), row({ key: 2 }), row({ key: 3 })];
-    const newItems = [row({ key: 1 }), row({ key: 3 })];
-
-    const changedRows = applyRowChanges(items, newItems, [1, 2]);
-
-    expect(items[1]).toBe(newItems[1]);
-    expect(operations(changedRows)).toEqual([['remove', 1], ['update', 1]]);
-  });
-
-  it('should apply a duplicated index once', () => {
-    const items = [row({ key: 1 })];
-    const newItems = [row({ key: 1 })];
-
-    const changedRows = applyRowChanges(items, newItems, [0, 0]);
-
-    expect(operations(changedRows)).toEqual([['update', 0]]);
-  });
-
-  it('should take the row by the absolute index and report the visible one', () => {
-    const invisibleItem = row({ key: 1 });
-    const oldItem = row({ key: 2 });
-    const items = [invisibleItem, oldItem];
+  it('should stamp the index on the new row', () => {
     const newItems = [row({ key: 1 }), row({ key: 2 })];
-    const getUpdatedColumnIndices = jest.fn<GetUpdatedColumnIndices>(() => []);
 
-    const changedRows = applyRowChanges(items, newItems, [0], {
-      rowIndexDelta: 1,
-      getUpdatedColumnIndices,
-    });
+    getItemChange([row({ key: 1 }), row({ key: 2 })], newItems, 1);
 
-    expect(items[0]).toBe(invisibleItem);
-    expect(items[1]).toBe(newItems[1]);
     expect(newItems[1].rowIndex).toBe(1);
-    expect(operations(changedRows)).toEqual([['update', 0]]);
-    expect(getUpdatedColumnIndices.mock.calls).toEqual([[oldItem, newItems[1], 0]]);
   });
 
-  it('should not report the update as a live one', () => {
-    const items = [row({ key: 1 })];
-    const newItems = [row({ key: 1 })];
-    const getUpdatedColumnIndices = jest.fn<GetUpdatedColumnIndices>(() => []);
-
-    applyRowChanges(items, newItems, [0], { getUpdatedColumnIndices });
-
-    expect(getUpdatedColumnIndices.mock.calls[0][3]).toBeUndefined();
-  });
-
-  it('should report only the visibility when it changed', () => {
-    const items = [row({ key: 1, visible: true })];
-    const newItems = [row({ key: 1, visible: false })];
-    const getUpdatedColumnIndices = jest.fn<GetUpdatedColumnIndices>(() => []);
-
-    const changedRows = applyRowChanges(items, newItems, [0], { getUpdatedColumnIndices });
-
-    expect(items[0]).toBe(newItems[0]);
-    expect(changedRows).toEqual([{
-      changeType: 'update',
-      rowIndex: 0,
-      item: { visible: false },
-    }]);
-    expect(getUpdatedColumnIndices).not.toHaveBeenCalled();
-  });
-
-  it('should update the cells the updated column indices point at', () => {
-    const oldItem = trackedRow(1);
+  it('should leave the row list alone', () => {
+    const oldItem = row({ key: 1 });
     const items = [oldItem];
-    const newItems = [row({ key: 1 })];
-    const getUpdatedColumnIndices = jest.fn<GetUpdatedColumnIndices>(() => [1]);
 
-    const changedRows = applyRowChanges(items, newItems, [0], { getUpdatedColumnIndices });
+    getItemChange(items, [row({ key: 2 })], 0);
 
-    expect(changedRows[0].columnIndices).toEqual([1]);
-    expect(getUpdatedColumnIndices.mock.calls).toEqual([[oldItem, newItems[0], 0]]);
-    expect(updateOf(oldItem)).toHaveBeenCalledWith(newItems[0]);
-  });
-
-  it('should repaint the whole row when the column indices are not asked for', () => {
-    const oldItem = trackedRow(1);
-    const items = [oldItem];
-    const newItems = [row({ key: 1 })];
-
-    const changedRows = applyRowChanges(items, newItems, [0]);
-
-    expect(changedRows[0].columnIndices).toBeUndefined();
-    expect(updateOf(oldItem)).not.toHaveBeenCalled();
-    expect(newItems[0].cells).toBeUndefined();
+    expect(items).toEqual([oldItem]);
   });
 });
 

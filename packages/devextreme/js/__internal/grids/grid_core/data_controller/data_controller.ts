@@ -37,6 +37,8 @@ import type {
   GeneratedItem,
   GetUpdatedColumnIndices,
   ItemChange,
+  ItemChangeOptions,
+  ItemOperationOptions,
   ItemProcessingOptions,
   PagingChanges,
   PagingDataSource,
@@ -47,22 +49,22 @@ import type {
   RowIndexByKey,
   RowIndexCorrection,
   UpdateChange,
-  UpdateRowChange,
+  UpdateItemChange,
   UserState,
 } from './types';
 import { resolvePaginate, syncPaging } from './utils/paging';
 import { getRefreshOptions } from './utils/refresh';
 import {
-  applyRowOperations,
-  attachChangedRows,
+  attachChangedItems,
   canDiffColumns,
   convertToUpdateChange,
   getChangedRowIndices,
   getDataRowIndex,
   getGroupColumnIndices,
+  getItemChange,
   getRowKey,
   indexRowsByKey,
-  partialUpdateRow,
+  partialUpdateItem,
   resolveRepaintChangesOnly,
   syncRowsAfterChange,
   updateKeptRows,
@@ -849,6 +851,84 @@ export class DataController extends modules.Controller {
     this._items = (change.items ?? []).slice();
   }
 
+  private applyItemOperations(
+    rowIndices: number[],
+    options: ItemOperationOptions,
+  ): UpdateItemChange[] {
+    const changedRows: UpdateItemChange[] = [];
+    let prevRowIndex = -1;
+    let rowIndexCorrection = 0;
+
+    rowIndices.forEach((changedRowIndex) => {
+      const rowIndex = changedRowIndex + rowIndexCorrection + options.rowIndexDelta;
+
+      if (prevRowIndex === rowIndex) {
+        return;
+      }
+
+      prevRowIndex = rowIndex;
+
+      const itemChange = getItemChange(this._items, options.newItems, rowIndex);
+      const changedItem = itemChange && this.applyItemChange(itemChange, options);
+
+      if (!changedItem) {
+        return;
+      }
+
+      changedRows.push(changedItem);
+
+      if (changedItem.changeType === 'insert') {
+        rowIndexCorrection += 1;
+      } else if (changedItem.changeType === 'remove') {
+        rowIndexCorrection -= 1;
+        prevRowIndex = -1;
+      }
+    });
+
+    return changedRows;
+  }
+
+  private applyItemChange(
+    itemChange: ItemChange,
+    options: ItemChangeOptions,
+  ): UpdateItemChange | undefined {
+    const items = this._items;
+    const { index } = itemChange;
+    const rowIndex = index - options.rowIndexDelta;
+
+    switch (itemChange.type) {
+      case 'insert':
+        items.splice(index, 0, itemChange.data);
+        return { changeType: 'insert', rowIndex, item: itemChange.data };
+      case 'remove':
+        items.splice(index, 1);
+        return { changeType: 'remove', rowIndex, item: itemChange.oldItem };
+      case 'replace':
+        items[index] = itemChange.data;
+        return { changeType: 'update', rowIndex, item: itemChange.data };
+      case 'visibility':
+        items[index] = itemChange.data;
+        return {
+          changeType: 'update',
+          rowIndex,
+          item: { visible: itemChange.data.visible } as ProcessedItem,
+        };
+      case 'update':
+        items[index] = itemChange.data;
+
+        return partialUpdateItem(rowIndex, {
+          oldItem: itemChange.oldItem,
+          newItem: itemChange.data,
+          isLiveUpdate: options.isLiveUpdate,
+          getUpdatedColumnIndices: options.isPartialUpdate
+            ? this.getUpdatedColumnIndices
+            : undefined,
+        });
+      default:
+        return undefined;
+    }
+  }
+
   /**
    * @extended: editing
    */
@@ -861,14 +941,13 @@ export class DataController extends modules.Controller {
       change.allowInvisibleRowIndices,
     );
 
-    const changedRows = applyRowOperations(rowIndices, {
-      items: this._items,
+    const changedRows = this.applyItemOperations(rowIndices, {
       newItems: change.items ?? [],
       rowIndexDelta,
-      getUpdatedColumnIndices: isPartialUpdate ? this.getUpdatedColumnIndices : undefined,
+      isPartialUpdate,
     });
 
-    attachChangedRows(change, changedRows);
+    attachChangedItems(change, changedRows);
   }
 
   /**
@@ -960,42 +1039,14 @@ export class DataController extends modules.Controller {
     return JSON.stringify(item1.values) === JSON.stringify(item2.values);
   }
 
-  private applyItemChange(
-    itemChange: ItemChange,
-    isLiveUpdate: boolean,
-  ): UpdateRowChange | undefined {
-    const { index } = itemChange;
-
-    switch (itemChange.type) {
-      case 'update': {
-        const newItem = itemChange.data;
-        const result = partialUpdateRow(index, {
-          oldItem: itemChange.oldItem,
-          newItem,
-          rowIndexDelta: 0,
-          isLiveUpdate,
-          getUpdatedColumnIndices: this.getUpdatedColumnIndices,
-        });
-
-        this._items[index] = newItem;
-
-        return result;
-      }
-      case 'insert':
-        this._items.splice(index, 0, itemChange.data);
-        return { changeType: 'insert', rowIndex: index, item: itemChange.data };
-      case 'remove':
-        this._items.splice(index, 1);
-        return { changeType: 'remove', rowIndex: index, item: itemChange.oldItem };
-      default:
-        return undefined;
-    }
-  }
-
-  private applyItemChanges(itemChanges: ItemChange[], isLiveUpdate: boolean): UpdateRowChange[] {
+  private applyItemChanges(itemChanges: ItemChange[], isLiveUpdate: boolean): UpdateItemChange[] {
     return itemChanges
-      .map((itemChange) => this.applyItemChange(itemChange, isLiveUpdate))
-      .filter((rowChange): rowChange is UpdateRowChange => rowChange !== undefined);
+      .map((itemChange) => this.applyItemChange(itemChange, {
+        rowIndexDelta: 0,
+        isPartialUpdate: true,
+        isLiveUpdate,
+      }))
+      .filter((changedItem): changedItem is UpdateItemChange => changedItem !== undefined);
   }
 
   private getRowIndexCorrection(

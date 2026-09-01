@@ -123,7 +123,7 @@ export type DataChange = | UpdateChange
   | (DataChangeBase & { changeType: 'refresh', event: unknown; virtualColumnsScrolling: boolean })
   | (DataChangeBase & { changeType: 'refresh', useProcessedItemsCache: boolean; cancelEmptyChanges: boolean });
 
-export interface UpdateRowChange {
+export interface UpdateItemChange {
   changeType: RowChangeType;
   rowIndex: number;
   item?: ProcessedItem;
@@ -137,11 +137,14 @@ export type GetUpdatedColumnIndices = (
   isLiveUpdate?: boolean,
 ) => number[] | undefined;
 
-export interface RowOperationOptions {
-  items: ProcessedItem[];
-  newItems: ProcessedItem[];
+export interface ItemChangeOptions {
   rowIndexDelta: number;
-  getUpdatedColumnIndices?: GetUpdatedColumnIndices;
+  isPartialUpdate: boolean;
+  isLiveUpdate?: boolean;
+}
+
+export interface ItemOperationOptions extends ItemChangeOptions {
+  newItems: ProcessedItem[];
 }
 
 export type RowIndexByKey = Record<string, number | undefined>;
@@ -150,7 +153,9 @@ export type RowIndexCorrection = (rowIndex: number) => number;
 
 export type ItemChange = | { type: 'insert'; index: number; data: ProcessedItem }
   | { type: 'update'; index: number; data: ProcessedItem; oldItem: ProcessedItem }
-  | { type: 'remove'; index: number; oldItem: ProcessedItem };
+  | { type: 'remove'; index: number; oldItem: ProcessedItem }
+  | { type: 'replace'; index: number; data: ProcessedItem }
+  | { type: 'visibility'; index: number; data: ProcessedItem };
 
 /** data source */
 

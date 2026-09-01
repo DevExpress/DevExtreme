@@ -2,8 +2,8 @@ import { equalByValue } from '@js/core/utils/common';
 
 import type { OperationTypes } from '../../data_source_adapter/types';
 import type {
-  DataChange, GetUpdatedColumnIndices, ItemChange, ProcessedItem, RowIndexByKey,
-  RowOperation, RowOperationOptions, UpdateChange, UpdateRowChange,
+  DataChange, GetUpdatedColumnIndices, ItemChange, ProcessedItem,
+  RowIndexByKey, RowOperation, UpdateChange, UpdateItemChange,
 } from '../types';
 
 export function isSameItem(
@@ -88,6 +88,16 @@ export function updateRowCells(oldItem: ProcessedItem, newItem: ProcessedItem): 
   });
 }
 
+function getChangedItem(itemChange: ItemChange): ProcessedItem {
+  switch (itemChange.type) {
+    case 'update':
+    case 'remove':
+      return itemChange.oldItem;
+    default:
+      return itemChange.data;
+  }
+}
+
 export function updateKeptRows(
   oldItems: ProcessedItem[],
   newItems: ProcessedItem[],
@@ -97,9 +107,7 @@ export function updateKeptRows(
   const changedItemKeys = new Set<string>();
 
   itemChanges.forEach((itemChange) => {
-    changedItemKeys.add(getRowKey(
-      itemChange.type === 'insert' ? itemChange.data : itemChange.oldItem,
-    ));
+    changedItemKeys.add(getRowKey(getChangedItem(itemChange)));
   });
 
   oldItems.forEach((oldItem) => {
@@ -169,7 +177,39 @@ export function getRowOperation(
   return newItem ? 'replace' : undefined;
 }
 
-export function attachChangedRows(change: UpdateChange, changedRows: UpdateRowChange[]): void {
+export function getItemChange(
+  items: ProcessedItem[],
+  newItems: ProcessedItem[],
+  index: number,
+): ItemChange | undefined {
+  const oldItem = items[index];
+  const newItem = newItems[index];
+
+  if (newItem) {
+    newItem.rowIndex = index;
+  }
+
+  switch (getRowOperation(items, newItems, index)) {
+    case 'update':
+      if (oldItem.visible !== newItem.visible) {
+        return { type: 'visibility', index, data: newItem };
+      }
+
+      return {
+        type: 'update', index, data: newItem, oldItem,
+      };
+    case 'insert':
+      return { type: 'insert', index, data: newItem };
+    case 'remove':
+      return { type: 'remove', index, oldItem };
+    case 'replace':
+      return { type: 'replace', index, data: newItem };
+    default:
+      return undefined;
+  }
+}
+
+export function attachChangedItems(change: UpdateChange, changedRows: UpdateItemChange[]): void {
   change.items = changedRows
     .map(({ item }) => item)
     .filter((item): item is ProcessedItem => !!item);
@@ -181,17 +221,17 @@ export function attachChangedRows(change: UpdateChange, changedRows: UpdateRowCh
 
 export function convertToUpdateChange(
   change: DataChange,
-  changedRows: UpdateRowChange[],
+  changedRows: UpdateItemChange[],
 ): void {
   const updateChange = change as UpdateChange;
 
   updateChange.repaintChangesOnly = true;
   updateChange.changeType = 'update';
 
-  attachChangedRows(updateChange, changedRows);
+  attachChangedItems(updateChange, changedRows);
 }
 
-function partialUpdateRowCore(
+function partialUpdateItemCore(
   oldItem: ProcessedItem,
   newItem: ProcessedItem,
   columnIndices: number[] | undefined,
@@ -219,24 +259,21 @@ function partialUpdateRowCore(
   oldItem.update?.(newItem);
 }
 
-export function partialUpdateRow(
-  rowIndex: number,
+export function partialUpdateItem(
+  visibleRowIndex: number,
   options: {
     oldItem: ProcessedItem;
     newItem: ProcessedItem;
-    rowIndexDelta: number;
     isLiveUpdate?: boolean;
     getUpdatedColumnIndices?: GetUpdatedColumnIndices;
   },
-): UpdateRowChange {
+): UpdateItemChange {
   const {
     oldItem,
     newItem,
-    rowIndexDelta,
     isLiveUpdate,
     getUpdatedColumnIndices,
   } = options;
-  const visibleRowIndex = rowIndex - rowIndexDelta;
   const columnIndices = getUpdatedColumnIndices?.(
     oldItem,
     newItem,
@@ -244,7 +281,7 @@ export function partialUpdateRow(
     isLiveUpdate,
   );
 
-  partialUpdateRowCore(oldItem, newItem, columnIndices, isLiveUpdate);
+  partialUpdateItemCore(oldItem, newItem, columnIndices, isLiveUpdate);
 
   return {
     changeType: 'update',
@@ -252,95 +289,6 @@ export function partialUpdateRow(
     item: newItem,
     columnIndices,
   };
-}
-
-function applyRowOperation(
-  rowIndex: number,
-  options: RowOperationOptions,
-): UpdateRowChange | undefined {
-  const {
-    items,
-    newItems,
-    rowIndexDelta,
-  } = options;
-  const visibleRowIndex = rowIndex - rowIndexDelta;
-  const item = newItems[rowIndex];
-
-  if (item) {
-    item.rowIndex = rowIndex;
-  }
-
-  switch (getRowOperation(items, newItems, rowIndex)) {
-    case 'update': {
-      if (items[rowIndex].visible !== item.visible) {
-        items[rowIndex] = item;
-
-        return {
-          changeType: 'update',
-          rowIndex: visibleRowIndex,
-          item: { visible: item.visible } as ProcessedItem,
-        };
-      }
-
-      const oldItem = items[rowIndex];
-
-      items[rowIndex] = newItems[rowIndex];
-
-      return partialUpdateRow(rowIndex, {
-        oldItem,
-        newItem: newItems[rowIndex],
-        rowIndexDelta,
-        getUpdatedColumnIndices: options.getUpdatedColumnIndices,
-      });
-    }
-    case 'insert':
-      items.splice(rowIndex, 0, item);
-      return { changeType: 'insert', rowIndex: visibleRowIndex, item };
-    case 'remove':
-      items.splice(rowIndex, 1);
-      return { changeType: 'remove', rowIndex: visibleRowIndex, item };
-    case 'replace':
-      items[rowIndex] = item;
-      return { changeType: 'update', rowIndex: visibleRowIndex, item };
-    default:
-      return undefined;
-  }
-}
-
-export function applyRowOperations(
-  rowIndices: number[],
-  options: RowOperationOptions,
-): UpdateRowChange[] {
-  const changedRows: UpdateRowChange[] = [];
-  let prevRowIndex = -1;
-  let rowIndexCorrection = 0;
-
-  rowIndices.forEach((changedRowIndex) => {
-    const rowIndex = changedRowIndex + rowIndexCorrection + options.rowIndexDelta;
-
-    if (prevRowIndex === rowIndex) {
-      return;
-    }
-
-    prevRowIndex = rowIndex;
-
-    const changedRow = applyRowOperation(rowIndex, options);
-
-    if (!changedRow) {
-      return;
-    }
-
-    changedRows.push(changedRow);
-
-    if (changedRow.changeType === 'insert') {
-      rowIndexCorrection += 1;
-    } else if (changedRow.changeType === 'remove') {
-      rowIndexCorrection -= 1;
-      prevRowIndex = -1;
-    }
-  });
-
-  return changedRows;
 }
 
 /**
