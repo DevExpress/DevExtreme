@@ -617,7 +617,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     return baseChanges;
   }
 
-  protected customizeLoadResultHandler(options) {
+  public customizeLoadResultHandler(options) {
     const data = options.data = this._convertDataToPlainStructure(options.data);
     if (!options.remoteOperations.filtering && options.loadOptions.filter) {
       // @ts-expect-error
@@ -773,7 +773,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     this.createAction('onNodesInitialized');
   }
 
-  private getKeyExpr() {
+  public getKeyExpr() {
     const store = this.store();
     const key = store && store.key();
     const keyExpr = this.option('keyExpr');
@@ -787,23 +787,23 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     return key || keyExpr || DEFAULT_KEY_EXPRESSION;
   }
 
-  private keyOf(data) {
+  public keyOf(data) {
     return this._keyGetter && this._keyGetter(data);
   }
 
-  private parentKeyOf(data) {
+  public parentKeyOf(data) {
     return this._parentIdGetter && this._parentIdGetter(data);
   }
 
-  private getRootNode() {
+  public getRootNode() {
     return this._rootNode;
   }
 
-  protected totalItemsCount() {
+  public totalItemsCount() {
     return this._totalItemsCount + this._totalCountCorrection;
   }
 
-  private isRowExpanded(key, cache?) {
+  public isRowExpanded(key, cache?) {
     if (cache) {
       let { isExpandedByKey } = cache;
       if (!isExpandedByKey) {
@@ -836,13 +836,13 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     this.option('expandedRowKeys', expandedRowKeys);
   }
 
-  protected changeRowExpand(key) {
+  public changeRowExpand(key) {
     this._changeRowExpandCore(key);
     // @ts-expect-error
     return this._isNodesInitializing ? new Deferred().resolve() : this.load();
   }
 
-  private getNodeByKey(key) {
+  public getNodeByKey(key) {
     if (this._nodeByKey) {
       return this._nodeByKey[key];
     }
@@ -864,7 +864,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     return result;
   }
 
-  private getChildNodeKeys(parentKey) {
+  public getChildNodeKeys(parentKey) {
     const node = this.getNodeByKey(parentKey);
     const childrenKeys: any[] = [];
 
@@ -875,7 +875,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     return childrenKeys;
   }
 
-  private loadDescendants(keys, childrenOnly) {
+  public loadDescendants(keys, childrenOnly) {
     const that = this;
     // @ts-expect-error
     const d = new Deferred();
@@ -911,7 +911,8 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     return d.promise();
   }
 
-  private forEachNode() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+  public forEachNode(nodeCallback?: (node: any) => void) {
     let nodes = [];
     let callback;
 

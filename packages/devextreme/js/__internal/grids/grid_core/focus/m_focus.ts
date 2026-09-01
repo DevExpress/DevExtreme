@@ -546,7 +546,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExten
       if (notSortedKeys.length) {
         result = result || [];
         if (isLocalOperations) {
-          result.push({ selector: dataSource.getDataIndexGetter(), desc: false });
+          result.push({ selector: dataSource?.getDataIndexGetter(), desc: false });
         } else {
           notSortedKeys.forEach((notSortedKey) => result.push({ selector: notSortedKey, desc: false }));
         }
@@ -708,7 +708,7 @@ const focusDataControllerExtender = (
   }
 
   private getGlobalRowIndexByKey(key) {
-    if (this._dataSource.group()) {
+    if (this._dataSource!.group()) {
       // @ts-expect-error
       return this._calculateGlobalRowIndexByGroupedData(key);
     }
@@ -719,7 +719,7 @@ const focusDataControllerExtender = (
   protected _calculateGlobalRowIndexByFlatData(key, groupFilter, useGroup) {
     // @ts-expect-error
     const deferred = new Deferred();
-    const dataSource = this._dataSource;
+    const dataSource = this._dataSource!;
 
     if (Array.isArray(key) || isNewRowTempKey(key)) {
       return deferred.resolve(-1).promise();
@@ -736,8 +736,8 @@ const focusDataControllerExtender = (
         deferred.resolve(-1);
         return;
       }
-      if (data.length > 0) {
-        filter = this._generateOperationFilterByKey(key, data[0], useGroup);
+      if ((data as unknown[]).length > 0) {
+        filter = this._generateOperationFilterByKey(key, (data as unknown[])[0], useGroup);
         dataSource.load({
           filter: this._concatWithCombinedFilter(filter, groupFilter),
           skip: 0,
@@ -748,7 +748,7 @@ const focusDataControllerExtender = (
             deferred.resolve(-1);
             return;
           }
-          deferred.resolve(extra.totalCount);
+          deferred.resolve((extra as { totalCount: number }).totalCount);
         });
       } else {
         deferred.resolve(-1);
@@ -784,8 +784,8 @@ const focusDataControllerExtender = (
   private _generateOperationFilterByKey(key, rowData, useGroup) {
     const that = this;
     const dateSerializationFormat = that.option('dateSerializationFormat');
-    const isRemoteFiltering = that._dataSource.remoteOperations().filtering;
-    const isRemoteSorting = that._dataSource.remoteOperations().sorting;
+    const isRemoteFiltering = that._dataSource!.remoteOperations().filtering;
+    const isRemoteSorting = that._dataSource!.remoteOperations().sorting;
 
     let filter = that._generateFilterByKey(key, '<');
     // @ts-expect-error
@@ -846,7 +846,7 @@ const focusDataControllerExtender = (
   }
 
   protected _generateFilterByKey(key, operation?) {
-    const dataSourceKey = this._dataSource.key();
+    const dataSourceKey = this._dataSource!.key();
     let filter: any = [];
 
     if (!operation) {

@@ -93,12 +93,14 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
     // @ts-expect-error
     const deferred = new Deferred();
     const isGroupKey = Array.isArray(key);
-    const group = dataSource.group();
 
-    if (isGroupKey) {
+    if (isGroupKey || !dataSource) {
       return deferred.resolve(-1).promise();
     }
 
+    const group = dataSource.group();
+
+    // @ts-expect-error badly typed DataSourceAdapter
     if (!dataSource._grouping._updatePagingOptions) {
       this._calculateGlobalRowIndexByFlatData(key, null, true)
         .done(deferred.resolve)
@@ -110,12 +112,14 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
       filter: this._concatWithCombinedFilter(filter),
       group,
     }).done((data) => {
+      // @ts-expect-error badly typed DataSourceAdapter
       const hasData = isDefined(data) && data.length > 0;
 
       if (this._dataSource !== dataSource || !hasData) {
         return deferred.resolve(-1).promise();
       }
 
+      // @ts-expect-error badly typed DataSourceAdapter
       const groupPath = this._getGroupPath(data, group.length);
 
       this._expandGroupByPath(this, groupPath, 0).done(() => {

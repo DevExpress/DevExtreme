@@ -1,6 +1,6 @@
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 
-interface GroupCountableDataSource {
+export interface GroupCountableDataSource {
   isGroupItemCountable: (data: unknown) => boolean;
 }
 
