@@ -1,2 +1,13 @@
+@use "../../../_design-system/variables/ds" as ds;
+
 // Values hoisted from style-file literals (tokenized)
 $load-indicator-segment-border-width: 0.12em !default; // dx-relative: scales with the parent font-size
+
+// Base-layer sizing injected with design tokens (wave B5)
+$load-indicator-size: ds.$spacing-320 !default;
+
+/*
+ * Derived once and published, so the four centring declarations in the base layer read a var()
+ * instead of each shipping its own calc() (see the tier-published derived sizes of #34927).
+ */
+$load-indicator-offset: calc(#{$load-indicator-size} / -2) !default;

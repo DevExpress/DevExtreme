@@ -14,12 +14,12 @@ and carries a marker saying why.
 | a raw grep of the layer | 782 |
 | …of those, inside comments (commented-out code, prose) | 5 |
 | **in code** | **777** |
-| — the theme can already set from outside | 376 |
-| — nailed into the shared layer | 401 |
+| — the theme can already set from outside | 378 |
+| — nailed into the shared layer | 399 |
 
 ## What the theme can already set
 
-376 occurrences in 324 `!default` variables. fluent-next already passes 373; 0 are open knobs nobody turns.
+378 occurrences in 326 `!default` variables. fluent-next already passes 375; 0 are open knobs nobody turns.
 
 ## What is nailed into the layer
 
@@ -46,7 +46,6 @@ and carries a marker saying why.
 | switch | 2 |  | 1 |  |  | **3** |
 | timeView | 2 | 1 |  |  |  | **3** |
 | icon_fonts | 2 |  |  |  |  | **2** |
-| loadIndicator |  | 2 |  |  |  | **2** |
 | numberBox |  | 2 |  |  |  | **2** |
 | resizable |  | 2 |  |  |  | **2** |
 | slider |  | 2 |  |  |  | **2** |
@@ -713,13 +712,6 @@ and carries a marker saying why.
   `font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes`
 - `scss/widgets/base/_icon_fonts.scss:675` · inline
   `font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes`
-
-### loadIndicator — 2
-
-- `scss/widgets/base/_loadIndicator.scss:3` · local-var
-  `$loadindicator-width: 32px;`
-- `scss/widgets/base/_loadIndicator.scss:4` · local-var
-  `$loadindicator-height: 32px;`
 
 ### numberBox — 2
 

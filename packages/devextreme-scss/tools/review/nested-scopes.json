@@ -337,7 +337,8 @@
   "load-indicator": [
     "dx-loadindicator-content-circle",
     "dx-loadindicator-content-sparkle",
-    "dx-loadindicator-segment-inner"
+    "dx-loadindicator-segment-inner",
+    "dx-loadindicator-wrapper"
   ],
   "lookup": [
     "dx-dropdowneditor-active",

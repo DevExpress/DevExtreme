@@ -1,6 +1,6 @@
 {
   "openKnobs": 0,
-  "unclassified": 393,
+  "unclassified": 391,
   "unclassifiedByWidget": {
     "gridBase": 75,
     "colorView": 67,
@@ -23,7 +23,6 @@
     "switch": 3,
     "timeView": 3,
     "icon_fonts": 2,
-    "loadIndicator": 2,
     "numberBox": 2,
     "resizable": 2,
     "slider": 2,

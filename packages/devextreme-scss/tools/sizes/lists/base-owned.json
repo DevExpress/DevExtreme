@@ -6,11 +6,11 @@
     "marker — the classification comment already on the line, from tools/review/size-markers.json."
   ],
   "summary": {
-    "occurrences": 401,
+    "occurrences": 399,
     "byCategory": {
       "inline": 187,
-      "local-var": 96,
       "geometry": 95,
+      "local-var": 94,
       "calc": 11,
       "mixin-arg": 6,
       "structural": 4,
@@ -38,7 +38,6 @@
       "switch": 3,
       "timeView": 3,
       "icon_fonts": 2,
-      "loadIndicator": 2,
       "multiView": 2,
       "numberBox": 2,
       "resizable": 2,
@@ -57,7 +56,7 @@
       "popover": 1,
       "stepper": 1
     },
-    "unmarked": 393,
+    "unmarked": 391,
     "unmarkedByWidget": {
       "gridBase": 75,
       "colorView": 67,
@@ -80,7 +79,6 @@
       "switch": 3,
       "timeView": 3,
       "icon_fonts": 2,
-      "loadIndicator": 2,
       "numberBox": 2,
       "resizable": 2,
       "slider": 2,
@@ -521,30 +519,6 @@
       "marker": null,
       "text": "font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes",
       "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/_loadIndicator.scss",
-      "line": 3,
-      "widget": "loadIndicator",
-      "literals": [
-        "32px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$loadindicator-width: 32px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/_loadIndicator.scss",
-      "line": 4,
-      "widget": "loadIndicator",
-      "literals": [
-        "32px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$loadindicator-height: 32px;",
-      "category": "local-var"
     },
     {
       "file": "scss/widgets/base/_multiView.scss",

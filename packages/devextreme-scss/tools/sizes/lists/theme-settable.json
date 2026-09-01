@@ -7,9 +7,9 @@
     "The match is by variable name. A name declared in a nested module is only reachable once the parent forwards it (see base/chat/_index.scss), which is why an \"open\" row can sit next to injected ones from the same widget."
   ],
   "summary": {
-    "occurrences": 376,
-    "variables": 324,
-    "injected": 373,
+    "occurrences": 378,
+    "variables": 326,
+    "injected": 375,
     "open": 0,
     "parameters": 3
   },
@@ -701,6 +701,38 @@
       "status": "injected",
       "setBy": "scss/widgets/fluent-next/gallery/_index.scss",
       "setTo": "var(--dx-gallery-indicator-item-margin)"
+    },
+    {
+      "file": "scss/widgets/base/_loadIndicator.scss",
+      "line": 5,
+      "widget": "loadIndicator",
+      "literals": [
+        "32px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$loadindicator-width: 32px !default;",
+      "variable": "loadindicator-width",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/loadIndicator/_index.scss",
+      "setTo": "var(--dx-load-indicator-size)"
+    },
+    {
+      "file": "scss/widgets/base/_loadIndicator.scss",
+      "line": 6,
+      "widget": "loadIndicator",
+      "literals": [
+        "32px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$loadindicator-height: 32px !default;",
+      "variable": "loadindicator-height",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/loadIndicator/_index.scss",
+      "setTo": "var(--dx-load-indicator-size)"
     },
     {
       "file": "scss/widgets/base/_loadPanel.scss",
