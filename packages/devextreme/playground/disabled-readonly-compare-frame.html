@@ -84,7 +84,19 @@ const CASES = [
   ['stepper', 'Stepper', 100, (h, f) => $(h).dxStepper({ items: [{ label: 'One' }, { label: 'Two' }], ...f })],
   ['colorView', 'ColorView', 230, (h, f) => $(h).dxColorView({ value: '#0f6cbd', ...f })],
   ['filterBuilder', 'FilterBuilder', 110, (h, f) => $(h).dxFilterBuilder({ fields: [{ dataField: 'Name', dataType: 'string' }], value: ['Name', 'contains', 'a'], ...f })],
-  ['chat', 'Chat  (hardcoded opacity .5 in base)', 260, (h, f) => $(h).dxChat({ height: 230, width: 280, ...f })],
+  // Chat is the last component still dimmed as a whole. An empty chat hid that: with messages in
+  // it you can see that the dim is all there is - the bubbles, the author line and the send button
+  // carry no disabled colour of their own.
+  ['chat', 'Chat  (whole widget dimmed, no disabled roles)', 300, (h, f) => $(h).dxChat({
+    height: 270,
+    width: 280,
+    user: { id: 'me', name: 'Me' },
+    items: [
+      { id: 1, timestamp: new Date(2026, 0, 1, 10, 0), author: { id: 'ann', name: 'Ann' }, text: 'Incoming message' },
+      { id: 2, timestamp: new Date(2026, 0, 1, 10, 1), author: { id: 'me', name: 'Me' }, text: 'Outgoing message' },
+    ],
+    ...f,
+  })],
 
   // --- the rest of the disable-able surface, so the inventory is complete -------------------
   // dxScrollView is deliberately absent: disabled there is dx-scrollable-disabled, which only
