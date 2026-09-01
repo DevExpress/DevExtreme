@@ -808,6 +808,21 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             cancelAll: commonUtils.noop,
 
+            loadOptions: function() {
+                return {};
+            },
+            beginLoading: commonUtils.noop,
+            endLoading: commonUtils.noop,
+            key: function() {
+                return options.key;
+            },
+            select: function() {
+                return options.select;
+            },
+            cancel: function() {
+                return false;
+            },
+
             on(eventName, eventHandler) {
                 this[eventName].add(eventHandler);
             },

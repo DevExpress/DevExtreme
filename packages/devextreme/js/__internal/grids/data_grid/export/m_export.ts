@@ -701,7 +701,7 @@ export class ExportController extends dataGridCore.ViewController {
 
   private needLoadItemsOnExportingSelectedItems(): boolean {
     return this.option('loadItemsOnExportingSelectedItems')
-      ?? this._dataController._dataSource.remoteOperations().filtering;
+      ?? (this._dataController._dataSource?.remoteOperations().filtering ?? false);
   }
 }
 

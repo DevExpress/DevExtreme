@@ -5,10 +5,13 @@ import { DataController, dataControllerModule } from '@ts/grids/grid_core/data_c
 import type { DataSourceAdapterProvider } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { RowKey } from '@ts/grids/grid_core/m_types';
 
+import type { DataSourceAdapterTreeList } from '../data_source_adapter/m_data_source_adapter';
 import dataSourceAdapterProvider from '../data_source_adapter/m_data_source_adapter';
 import treeListCore from '../m_core';
 
 export class TreeListDataController extends DataController {
+  public declare _dataSource?: DataSourceAdapterTreeList | null;
+
   protected _getDataSourceAdapterProvider(): DataSourceAdapterProvider {
     return dataSourceAdapterProvider;
   }
@@ -36,7 +39,7 @@ export class TreeListDataController extends DataController {
   }
 
   private _loadOnOptionChange() {
-    this._dataSource.load();
+    this._dataSource!.load();
   }
 
   protected isSameRowState(item1, item2): boolean {
@@ -163,6 +166,7 @@ export class TreeListDataController extends DataController {
         break;
       case 'expandedRowKeys':
       case 'onNodesInitialized':
+        // @ts-expect-error badly typed DataSourceAdapter
         if (this._dataSource && !this._dataSource._isNodesInitializing && !equalByValue(args.value, args.previousValue)) {
           this._loadOnOptionChange();
         }
@@ -201,7 +205,7 @@ export class TreeListDataController extends DataController {
   }
 
   private forEachNode() {
-    this._dataSource.forEachNode.apply(this, arguments);
+    this._dataSource!.forEachNode.apply(this, arguments as any);
   }
 
   // Collect keys by walking the loaded node tree (depth-first, parent before
