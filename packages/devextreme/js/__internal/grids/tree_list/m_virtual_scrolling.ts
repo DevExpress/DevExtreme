@@ -35,7 +35,8 @@ virtualScrollingModule.extenders.views.rowsView = (Base: ModuleType<RowsView>) =
 
 virtualScrollingModule.extenders.controllers.data = (Base: ModuleType<DataController>) => class TreeListVirtualScrollingDataControllerExtender extends virtualScrollingDataControllerExtender(Base) {
   protected _loadOnOptionChange() {
-    const virtualScrollController = (this._dataSource as any)?._virtualScrollController;
+    // @ts-expect-error badly typed DataSourceAdapter
+    const virtualScrollController = this._dataSource?._virtualScrollController;
 
     virtualScrollController?.reset();
     // @ts-expect-error

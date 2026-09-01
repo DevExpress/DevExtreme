@@ -166,7 +166,8 @@ export class TreeListDataController extends DataController {
         break;
       case 'expandedRowKeys':
       case 'onNodesInitialized':
-        if (this._dataSource && !(this._dataSource as any)._isNodesInitializing && !equalByValue(args.value, args.previousValue)) {
+        // @ts-expect-error badly typed DataSourceAdapter
+        if (this._dataSource && !this._dataSource._isNodesInitializing && !equalByValue(args.value, args.previousValue)) {
           this._loadOnOptionChange();
         }
         args.handled = true;

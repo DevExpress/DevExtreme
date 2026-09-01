@@ -33,6 +33,7 @@ import {
   VIRTUAL_ROW_CLASS,
 } from './const';
 import { subscribeToExternalScrollers, VirtualScrollController } from './m_virtual_scrolling_core';
+import type { GroupCountableDataSource } from './utils/items';
 import { isItemCountableByDataSource } from './utils/items';
 import { isInfiniteMode, isVirtualMode, isVirtualPaging } from './utils/scrolling_mode';
 
@@ -362,7 +363,8 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     return proxyDataSourceAdapterMethod(this, 'virtualItemsCount', [...arguments]);
   }
 
-  public getContentOffset(): any {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public getContentOffset(type?): any {
     return proxyDataSourceAdapterMethod(this, 'getContentOffset', [...arguments]);
   }
 
@@ -375,7 +377,8 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     return proxyDataSourceAdapterMethod(this, 'setContentItemSizes', [...arguments]);
   }
 
-  public setViewportPosition(): any {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public setViewportPosition(position?): any {
     return proxyDataSourceAdapterMethod(this, 'setViewportPosition', [...arguments]);
   }
 
@@ -392,11 +395,13 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     return proxyDataSourceAdapterMethod(this, 'getItemIndexByPosition', [...arguments]);
   }
 
-  public viewportSize(): any {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public viewportSize(size?): any {
     return proxyDataSourceAdapterMethod(this, 'viewportSize', [...arguments]);
   }
 
-  public viewportItemSize(): any {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public viewportItemSize(size?): any {
     return proxyDataSourceAdapterMethod(this, 'viewportItemSize', [...arguments]);
   }
 
@@ -570,7 +575,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
   }
 
   protected _renderCore(e) {
-    const startRenderTime: any = new Date();
+    const startRenderTime = Date.now();
 
     const deferred = super._renderCore.apply(this, arguments as any);
 
@@ -583,9 +588,11 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
         .viewportSize() || 20;
 
       if (gridCoreUtils.isVirtualRowRendering(this) && itemCount > 0 && this.option(LEGACY_SCROLLING_MODE) !== false) {
-        (dataSource as any)._renderTime = ((new Date()) as any - startRenderTime) * viewportSize / itemCount;
+        // @ts-expect-error badly typed DataSourceAdapter
+        dataSource._renderTime = (Date.now() - startRenderTime) * viewportSize / itemCount;
       } else {
-        (dataSource as any)._renderTime = ((new Date()) as any - startRenderTime);
+        // @ts-expect-error badly typed DataSourceAdapter
+        dataSource._renderTime = Date.now() - startRenderTime;
       }
     }
     return deferred;
@@ -719,7 +726,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
           itemSize = 0;
         }
         lastLoadIndex = currentItem.loadIndex;
-      } else if (isItemCountableByDataSource(currentItem, dataSource as any)) {
+      } else if (isItemCountableByDataSource(currentItem, dataSource as unknown as GroupCountableDataSource)) {
         if (firstCountableItem) {
           firstCountableItem = false;
         } else {

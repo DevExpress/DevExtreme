@@ -85,10 +85,12 @@ const data = (
 
     that.getParentKey(key).done((parentKey) => {
       if (dataSource && parentKey !== undefined && parentKey !== that.option('rootValue')) {
-        (dataSource as any)._isNodesInitializing = true;
+        // @ts-expect-error badly typed DataSourceAdapter
+        dataSource._isNodesInitializing = true;
         // @ts-expect-error
         that.expandRow(parentKey);
-        (dataSource as any)._isNodesInitializing = false;
+        // @ts-expect-error badly typed DataSourceAdapter
+        dataSource._isNodesInitializing = false;
         that.expandAscendants(parentKey).done(d.resolve).fail(d.reject);
       } else {
         d.resolve();
