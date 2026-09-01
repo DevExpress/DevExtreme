@@ -11,15 +11,15 @@ and carries a marker saying why.
 
 | | occurrences |
 |---|---|
-| a raw grep of the layer | 782 |
+| a raw grep of the layer | 781 |
 | …of those, inside comments (commented-out code, prose) | 5 |
-| **in code** | **777** |
-| — the theme can already set from outside | 384 |
-| — nailed into the shared layer | 393 |
+| **in code** | **776** |
+| — the theme can already set from outside | 386 |
+| — nailed into the shared layer | 390 |
 
 ## What the theme can already set
 
-384 occurrences in 332 `!default` variables. fluent-next already passes 378; 0 are open knobs nobody turns.
+386 occurrences in 334 `!default` variables. fluent-next already passes 378; 0 are open knobs nobody turns.
 
 ## What is nailed into the layer
 
@@ -42,7 +42,6 @@ and carries a marker saying why.
 | treeList |  | 1 |  |  | 3 | **4** |
 | pagination | 1 |  | 2 |  |  | **3** |
 | colorBox | 1 |  | 1 | 1 |  | **3** |
-| timeView | 2 |  | 1 |  |  | **3** |
 | icon_fonts | 2 |  |  |  |  | **2** |
 | numberBox |  |  | 2 |  |  | **2** |
 | resizable |  |  | 2 |  |  | **2** |
@@ -668,15 +667,6 @@ and carries a marker saying why.
   `max-width: calc(100% - 25px);`
 - `scss/widgets/base/colorBox/_index.scss:36` · inline
   `margin-top: -7.5px;`
-
-### timeView — 3
-
-- `scss/widgets/base/timeView/_mixins.scss:16` · local-var
-  `$clock-size: 182px;`
-- `scss/widgets/base/timeView/_mixins.scss:30` · inline
-  `width: 10px;`
-- `scss/widgets/base/timeView/_mixins.scss:31` · inline
-  `margin-left: -5px;`
 
 ### icon_fonts — 2
 

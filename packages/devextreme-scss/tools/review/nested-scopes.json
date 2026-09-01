@@ -544,6 +544,8 @@
     "dx-timeview-clock",
     "dx-timeview-field",
     "dx-timeview-format12",
+    "dx-timeview-hourarrow",
+    "dx-timeview-minutearrow",
     "dx-timeview-time-separator"
   ],
   "toast": [

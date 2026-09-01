@@ -7,11 +7,11 @@
     "The match is by variable name. A name declared in a nested module is only reachable once the parent forwards it (see base/chat/_index.scss), which is why an \"open\" row can sit next to injected ones from the same widget."
   ],
   "summary": {
-    "occurrences": 384,
-    "variables": 332,
+    "occurrences": 386,
+    "variables": 334,
     "injected": 378,
     "open": 0,
-    "parameters": 6
+    "parameters": 8
   },
   "places": [
     {
@@ -5476,6 +5476,34 @@
       "status": "injected",
       "setBy": "scss/widgets/fluent-next/timeView/_index.scss",
       "setTo": "var(--dx-time-view-field-number-box-spin-touch-friendly-width)"
+    },
+    {
+      "file": "scss/widgets/base/timeView/_mixins.scss",
+      "line": 20,
+      "widget": "timeView",
+      "literals": [
+        "182px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$clock-size: 182px,",
+      "variable": "clock-size",
+      "kind": "mixin-parameter",
+      "status": "parameter"
+    },
+    {
+      "file": "scss/widgets/base/timeView/_mixins.scss",
+      "line": 21,
+      "widget": "timeView",
+      "literals": [
+        "10px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$arrow-width: 10px,",
+      "variable": "arrow-width",
+      "kind": "mixin-parameter",
+      "status": "parameter"
     },
     {
       "file": "scss/widgets/base/toolbar/_index.scss",

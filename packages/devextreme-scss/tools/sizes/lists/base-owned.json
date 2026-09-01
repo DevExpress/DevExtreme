@@ -6,11 +6,11 @@
     "marker — the classification comment already on the line, from tools/review/size-markers.json."
   ],
   "summary": {
-    "occurrences": 393,
+    "occurrences": 390,
     "byCategory": {
-      "inline": 180,
+      "inline": 178,
       "geometry": 94,
-      "local-var": 92,
+      "local-var": 91,
       "calc": 11,
       "structural": 8,
       "mixin-arg": 6,
@@ -35,7 +35,6 @@
       "treeList": 4,
       "pagination": 3,
       "colorBox": 3,
-      "timeView": 3,
       "icon_fonts": 2,
       "multiView": 2,
       "numberBox": 2,
@@ -55,7 +54,7 @@
       "popover": 1,
       "stepper": 1
     },
-    "unmarked": 381,
+    "unmarked": 378,
     "unmarkedByWidget": {
       "gridBase": 75,
       "colorView": 67,
@@ -74,7 +73,6 @@
       "treeList": 4,
       "pagination": 3,
       "colorBox": 3,
-      "timeView": 3,
       "icon_fonts": 2,
       "numberBox": 2,
       "resizable": 2,
@@ -3784,42 +3782,6 @@
       "occurrences": 1,
       "marker": null,
       "text": "padding: 2px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/timeView/_mixins.scss",
-      "line": 16,
-      "widget": "timeView",
-      "literals": [
-        "182px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$clock-size: 182px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/timeView/_mixins.scss",
-      "line": 30,
-      "widget": "timeView",
-      "literals": [
-        "10px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "width: 10px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/timeView/_mixins.scss",
-      "line": 31,
-      "widget": "timeView",
-      "literals": [
-        "-5px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-left: -5px;",
       "category": "inline"
     },
     {
