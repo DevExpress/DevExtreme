@@ -15,16 +15,17 @@ import type { BeforePushEvent } from '@ts/data/types';
 
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
+import type { CustomLoadOptions, CustomLoadResult } from './custom_loader';
+import { CustomLoader } from './custom_loader';
 import {
   calculateOperationTypes,
   cloneItems,
   createEmptyCachedData,
-  executeTask,
   getPageDataFromCache,
   setPageDataToCache,
 } from './m_data_source_adapter_utils';
 import type {
-  ChangedEvent, LoadOperation, OperationTypes, RemoteOperationsOptions,
+  ChangedEvent, LoadOperation, OperationTypes, RawItemData, RemoteOperationsOptions,
 } from './types';
 import { normalizeRemoteOperations } from './utils/remoteOperations';
 
@@ -53,8 +54,6 @@ export default class DataSourceAdapter extends modules.Controller {
 
   protected _totalCountCorrection: any;
 
-  protected _isLoadingAll: any;
-
   protected _lastLoadOptions: any;
 
   private _dataIndexGetter: any;
@@ -70,8 +69,6 @@ export default class DataSourceAdapter extends modules.Controller {
   protected _lastOperationId: any;
 
   private _operationTypes?: OperationTypes;
-
-  private _isCustomLoading: any;
 
   public changed!: Callback<[ChangedEvent?]>;
 
@@ -99,6 +96,8 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private changingHandlerProxy!: (e: ChangingEvent) => void;
 
+  private customLoader!: CustomLoader;
+
   public init(dataSource?: DataSource): void {
     if (!dataSource) {
       return;
@@ -117,7 +116,12 @@ export default class DataSourceAdapter extends modules.Controller {
     this._lastOperationTypes = {};
     this._eventsStrategy = dataSource._eventsStrategy;
     this._totalCountCorrection = 0;
-    this._isLoadingAll = false;
+    this.customLoader = new CustomLoader(
+      dataSource,
+      () => this.option('loadingTimeout'),
+      (operation) => this.customizeStoreLoadOptionsHandler(operation),
+      (operation) => this.customizeLoadResultHandler(operation),
+    );
 
     this.changed = Callbacks();
     this.loadingChanged = Callbacks();
@@ -762,13 +766,6 @@ export default class DataSourceAdapter extends modules.Controller {
     }
   }
 
-  private _scheduleCustomLoadCallbacks(deferred) {
-    this._isCustomLoading = true;
-    deferred.always(() => {
-      this._isCustomLoading = false;
-    });
-  }
-
   private loadingOperationTypes() {
     return this._loadingOperationTypes;
   }
@@ -858,87 +855,38 @@ export default class DataSourceAdapter extends modules.Controller {
     return this._hasLastPage || this._dataSource.totalCount() >= 0;
   }
 
-  protected loadFromStore(loadOptions, store?) {
-    const dataSource = this._dataSource;
-    // @ts-expect-error
-    const d = new Deferred();
-
-    if (!dataSource) return;
-
-    store = store || dataSource.store();
-
-    store.load(loadOptions).done((data, extra) => {
-      if (data && !Array.isArray(data) && Array.isArray(data.data)) {
-        extra = data;
-        data = data.data;
-      }
-      d.resolve(data, extra);
-    }).fail(d.reject);
-
-    return d;
+  protected loadFromStore(loadOptions: StoreLoadOptions): DeferredObj<unknown> {
+    return this.customLoader.loadFromStore(loadOptions);
   }
 
-  public isCustomLoading() {
-    return !!this._isCustomLoading;
+  public isCustomLoading(): boolean {
+    return this.customLoader.isLoading();
+  }
+
+  protected isCustomLoadingAll(): boolean {
+    return this.customLoader.isLoadingAll();
   }
 
   /**
    * @extended: virtual_scrolling
    */
-  public load(options?): DeferredObj<unknown> {
-    const dataSource = this._dataSource;
-    const d = Deferred();
-
+  public load(options?: CustomLoadOptions): DeferredObj<unknown> {
     if (options) {
-      const store = dataSource.store();
-      const dataSourceLoadOptions = dataSource.loadOptions();
-      const loadResult: any = {
-        storeLoadOptions: extend({}, options, { langParams: dataSourceLoadOptions?.langParams }),
-        isCustomLoading: true,
-      };
-
-      // @ts-expect-error badly typed Store type
-      each(store._customLoadOptions() || [], (_, optionName) => {
-        if (!(optionName in loadResult.storeLoadOptions)) {
-          loadResult.storeLoadOptions[optionName] = dataSourceLoadOptions[optionName];
-        }
-      });
-
-      this._isLoadingAll = options.isLoadingAll;
-
-      this._scheduleCustomLoadCallbacks(d);
-      dataSource._scheduleLoadCallbacks(d);
-
-      this.customizeStoreLoadOptionsHandler(loadResult);
-      executeTask(() => {
-        if (!dataSource.store()) {
-          d.reject('canceled');
-          return;
-        }
-
-        when(loadResult.data || this.loadFromStore(loadResult.storeLoadOptions)).done((data, extra) => {
-          loadResult.data = data;
-          loadResult.extra = extra || {};
-          this.customizeLoadResultHandler(loadResult);
-
-          if (options.requireTotalCount && loadResult.extra.totalCount === undefined) {
-            loadResult.extra.totalCount = store.totalCount(loadResult.storeLoadOptions);
-          }
-          // TODO map function??
-          when(loadResult.data, loadResult.extra.totalCount).done((data, totalCount) => {
-            loadResult.extra.totalCount = totalCount;
-            d.resolve(data, loadResult.extra);
-          }).fail((e) => { d.reject(e); });
-        }).fail((e) => { d.reject(e); });
-      }, this.option('loadingTimeout'));
-
-      return d.fail((...args: unknown[]) => {
-        this._eventsStrategy.fireEvent('loadError', args);
-      }).always(() => {
-        this._isLoadingAll = false;
-      }).promise() as unknown as DeferredObj<unknown>;
+      return this.customLoader.load(options);
     }
-    return dataSource.load() as unknown as DeferredObj<unknown>;
+
+    return this._dataSource.load() as unknown as DeferredObj<unknown>;
+  }
+
+  public customLoadAll(): DeferredObj<CustomLoadResult> {
+    return this.customLoader.loadAll();
+  }
+
+  public customProcessLoadedData(
+    data: RawItemData[],
+    loadOptions: StoreLoadOptions,
+  ): DeferredObj<CustomLoadResult> {
+    return this.customLoader.processLoadedData(data, loadOptions);
   }
 
   /**

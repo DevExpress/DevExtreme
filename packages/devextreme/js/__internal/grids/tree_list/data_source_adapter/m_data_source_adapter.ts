@@ -462,10 +462,12 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
       filter: !needLocalFiltering ? filter : null,
     });
 
-    const store = options.fullData ? new ArrayStore(options.fullData) : this._dataSource.store();
+    const loadBranchItemsDeferred = options.fullData
+      ? new ArrayStore(options.fullData).load(loadOptions)
+      : this.loadFromStore(loadOptions);
 
-    this.loadFromStore(loadOptions, store)
-      .done((loadedData) => {
+    loadBranchItemsDeferred
+      .done((loadedData: any) => {
         if (this._isOperationIdOutdated(options.operationId)) {
           d.reject();
           return;

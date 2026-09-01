@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
-import * as customOperations from '__internal/grids/grid_core/filter/m_filter_custom_operations';
+import * as customOperations from '__internal/grids/grid_core/filter_sync/m_filter_custom_operations';
 import fx from 'common/core/animation/fx';
 import 'ui/data_grid';
 
