@@ -231,4 +231,4 @@ export type FilterValueExpression = FilterValueCondition
   | ['!', FilterValueExpression]
   | [FilterValueExpression, ...(FilterCombiner | FilterValueExpression)[]];
 
-export type FilterValue = FilterValueExpression | null;
+export type FilterValue = FilterValueExpression | null | undefined;

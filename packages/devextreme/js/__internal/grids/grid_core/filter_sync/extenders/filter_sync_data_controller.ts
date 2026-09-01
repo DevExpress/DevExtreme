@@ -143,7 +143,7 @@ export const filterSyncDataControllerExtender = (
     }
 
     if (needSyncFilterRow) {
-      this.filterSyncController.syncFilterRow(column, column.filterValue);
+      this.filterSyncController.syncFilterRow(column);
     }
   }
 

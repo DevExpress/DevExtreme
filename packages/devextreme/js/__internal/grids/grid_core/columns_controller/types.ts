@@ -27,6 +27,7 @@ export interface InternalColumnOptions {
   groupIndex?: number;
   type?: string;
   defaultFilterOperations?: string[];
+  defaultFilterOperation?: string;
   visibleWidth?: string | number;
   hidingPriority?: number;
   ai?: ColumnAIOptions;
