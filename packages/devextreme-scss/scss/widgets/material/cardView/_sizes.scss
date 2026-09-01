@@ -176,14 +176,14 @@ $cardview-material-header-panel__item--hovered__sort-index-text-weight: null !de
 * $type select
 * $type-values 100|200|300|400|500|600|700|800|900
 */
-$cardview-material-header-panel__item--disabled-text-weight: null !default;
+$cardview-material-header-panel__item--drag-source-text-weight: null !default;
 
 /**
 * $name 607. Sort index text weight
 * $type select
 * $type-values 100|200|300|400|500|600|700|800|900
 */
-$cardview-material-header-panel__item--disabled__sort-index-text-weight: null !default;
+$cardview-material-header-panel__item--drag-source__sort-index-text-weight: null !default;
 
 // #endregion
 
@@ -318,8 +318,8 @@ $cardview-material-column-chooser__select-all-item-horizontal-padding: null !def
   $cardview-material-header-panel__item--hovered__sort-index-text-weight: $cardview-material-header-panel__item__sort-index-text-weight !default;
 
   // Header panel item - disabled
-  $cardview-material-header-panel__item--disabled-text-weight: $cardview-material-header-panel__item-text-weight !default;
-  $cardview-material-header-panel__item--disabled__sort-index-text-weight: $cardview-material-header-panel__item__sort-index-text-weight !default;
+  $cardview-material-header-panel__item--drag-source-text-weight: $cardview-material-header-panel__item-text-weight !default;
+  $cardview-material-header-panel__item--drag-source__sort-index-text-weight: $cardview-material-header-panel__item__sort-index-text-weight !default;
 
   // Header panel item - dragged
   $cardview-material-header-panel__item--dragged-text-weight: $cardview-material-header-panel__item-text-weight !default;
@@ -405,8 +405,8 @@ $cardview-material-column-chooser__select-all-item-horizontal-padding: null !def
   $cardview-material-header-panel__item--hovered__sort-index-text-weight: $cardview-material-header-panel__item__sort-index-text-weight !default;
 
   // Header panel item - disabled
-  $cardview-material-header-panel__item--disabled-text-weight: $cardview-material-header-panel__item-text-weight !default;
-  $cardview-material-header-panel__item--disabled__sort-index-text-weight: $cardview-material-header-panel__item__sort-index-text-weight !default;
+  $cardview-material-header-panel__item--drag-source-text-weight: $cardview-material-header-panel__item-text-weight !default;
+  $cardview-material-header-panel__item--drag-source__sort-index-text-weight: $cardview-material-header-panel__item__sort-index-text-weight !default;
 
   // Header panel item - dragged
   $cardview-material-header-panel__item--dragged-text-weight: $cardview-material-header-panel__item-text-weight !default;
@@ -480,8 +480,8 @@ $cardview-header-panel__item__icon-size: $cardview-material-header-panel__item__
 $cardview-header-panel__item--hovered-text-weight: $cardview-material-header-panel__item--hovered-text-weight !default;
 $cardview-header-panel__item--hovered__sort-index-text-weight: $cardview-material-header-panel__item--hovered__sort-index-text-weight !default;
 
-$cardview-header-panel__item--disabled-text-weight: $cardview-material-header-panel__item--disabled-text-weight !default;
-$cardview-header-panel__item--disabled__sort-index-text-weight: $cardview-material-header-panel__item--disabled__sort-index-text-weight !default;
+$cardview-header-panel__item--drag-source-text-weight: $cardview-material-header-panel__item--drag-source-text-weight !default;
+$cardview-header-panel__item--drag-source__sort-index-text-weight: $cardview-material-header-panel__item--drag-source__sort-index-text-weight !default;
 
 $cardview-header-panel__item--dragged-text-weight: $cardview-material-header-panel__item--dragged-text-weight !default;
 

@@ -49,10 +49,14 @@
     }
   }
 
-  &.dx-state-disabled,
-  &.dx-state-readonly {
+  &.dx-state-disabled {
     background-color: transparent;
     border-color: var(--dx-text-editor-border-disabled);
+  }
+
+  &.dx-state-readonly {
+    background-color: transparent;
+    border-color: var(--dx-text-editor-border-read-only);
   }
 
   &.dx-invalid {
@@ -127,10 +131,14 @@
     background-color: var(--dx-text-editor-filled-bg-focused);
   }
 
-  &.dx-state-disabled,
-  &.dx-state-readonly {
+  &.dx-state-disabled {
     background-color: transparent;
     border-color: var(--dx-text-editor-border-disabled);
+  }
+
+  &.dx-state-readonly {
+    background-color: transparent;
+    border-color: var(--dx-text-editor-border-read-only);
   }
 
   &.dx-invalid {

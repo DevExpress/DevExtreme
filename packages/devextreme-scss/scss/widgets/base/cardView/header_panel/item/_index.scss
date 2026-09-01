@@ -57,24 +57,21 @@
     outline-offset: -2px; // dx-fixed-size: the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with
   }
 
+  // The element being dragged is ordinary, active content. It used to be repainted with the
+
+  // disabled colours, which put its text between 1.61 and 2.61 against its own background in
+
+  // every theme. Blazor marks a drag source with a background and elevation and leaves the
+
+  // content alone (ds-themes/components/tabs/layout.scss, list-box/variables.scss); so do we.
   &.dx-sortable-source {
     opacity: 1.0;
-    background-color: $cardview-header-panel__item--disabled-bg-color;
-    border-color: $cardview-header-panel__item--disabled-border-color;
-    color: $cardview-header-panel__item--disabled-text-color;
-    font-weight: $cardview-header-panel__item--disabled-text-weight;
-
-    .dx-icon {
-      color: $cardview-header-panel__item--disabled__icon-color;
-    }
-
-    .dx-header-filter-icon--selected {
-      color: $cardview-header-panel__item--disabled__header-filter-icon--selected-color;
-    }
+    background-color: $cardview-header-panel__item--drag-source-bg-color;
+    border-color: $cardview-header-panel__item--drag-source-border-color;
+    font-weight: $cardview-header-panel__item--drag-source-text-weight;
 
     .dx-cardview-header-item-sorting-order {
-      color: $cardview-header-panel__item--disabled__sort-index-text-color;
-      font-weight: $cardview-header-panel__item--disabled__sort-index-text-weight;
+      font-weight: $cardview-header-panel__item--drag-source__sort-index-text-weight;
     }
   }
 

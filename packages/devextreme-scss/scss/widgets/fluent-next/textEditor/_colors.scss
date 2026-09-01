@@ -24,6 +24,12 @@ $text-editor-clear-button-icon: ds.$color-content-subtle !default;
 $text-editor-invalid-border-focused: ds.$color-border-danger !default;
 $text-editor-invalid-border: ds.$color-border-danger-shared !default;
 $text-editor-border-disabled: ds.$color-border-disabled !default;
+
+/* Read-only shares the disabled border step, but it is not a disabled state and must be
+steerable on its own. Blazor goes further and leaves a read-only editor the ordinary border,
+distinguishing it by the lost fill alone (ds-themes/components/text-edit/states.scss); we keep
+the softer border because it carries the affordance, and the name no longer hides the choice. */
+$text-editor-border-read-only: ds.$color-border-disabled !default;
 $text-editor-content-disabled: ds.$color-content-disabled !default;
 
 $text-editor-label-content-focused: ds.$color-content-primary;

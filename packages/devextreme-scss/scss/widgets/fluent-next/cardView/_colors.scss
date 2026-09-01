@@ -97,17 +97,16 @@ $card-view-header-panel-item-sort-index-content-hovered: var(--dx-card-view-head
 
 // #region HEADER PANEL ITEM (DISABLED)
 
-$card-view-header-panel-item-bg-disabled: var(--dx-card-view-header-panel-item-bg) !default;
+/* The item stays in place while it is dragged, so it needs a mark of its own. Blazor gives a
+drag source a background and leaves the content alone; the subtle fill does that here and
+keeps the text at the ordinary contrast. */
+$card-view-header-panel-item-dragging-bg: ds.$color-bg-low !default;
 
-$card-view-header-panel-item-border-disabled: var(--dx-card-view-header-panel-item-border) !default;
+$card-view-header-panel-item-dragging-border: var(--dx-card-view-header-panel-item-border) !default;
 
-$card-view-header-panel-item-content-disabled: ds.$color-content-disabled !default;
 
-$card-view-header-panel-item-icon-disabled: ds.$color-content-disabled !default;
 
-$card-view-header-panel-item-header-filter-icon-selected-disabled: ds.$color-content-disabled !default;
 
-$card-view-header-panel-item-sort-index-content-disabled: ds.$color-content-disabled !default;
 
 // #endregion
 
@@ -217,12 +216,8 @@ $cardview-header-panel__item--hovered__icon-color: var(--dx-card-view-header-pan
 $cardview-header-panel__item--hovered__header-filter-icon--selected-color: var(--dx-card-view-header-panel-item-header-filter-icon-selected-hovered) !default;
 $cardview-header-panel__item--hovered__sort-index-text-color: var(--dx-card-view-header-panel-item-sort-index-content-hovered) !default;
 
-$cardview-header-panel__item--disabled-bg-color: var(--dx-card-view-header-panel-item-bg-disabled) !default;
-$cardview-header-panel__item--disabled-border-color: var(--dx-card-view-header-panel-item-border-disabled) !default;
-$cardview-header-panel__item--disabled-text-color: var(--dx-card-view-header-panel-item-content-disabled) !default;
-$cardview-header-panel__item--disabled__icon-color: var(--dx-card-view-header-panel-item-icon-disabled) !default;
-$cardview-header-panel__item--disabled__header-filter-icon--selected-color: var(--dx-card-view-header-panel-item-header-filter-icon-selected-disabled) !default;
-$cardview-header-panel__item--disabled__sort-index-text-color: var(--dx-card-view-header-panel-item-sort-index-content-disabled) !default;
+$cardview-header-panel__item--drag-source-bg-color: var(--dx-card-view-header-panel-item-dragging-bg) !default;
+$cardview-header-panel__item--drag-source-border-color: var(--dx-card-view-header-panel-item-dragging-border) !default;
 
 $cardview-header-panel__item--dragged-bg-color: var(--dx-card-view-header-panel-item-dragged-bg) !default;
 $cardview-header-panel__item--dragged-border-color: var(--dx-card-view-header-panel-item-dragged-border) !default;
