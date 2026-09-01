@@ -497,6 +497,9 @@ const OVERRIDES = {
       'small', 'dragging', 'inverted', 'first-month', 'first-of-month', 'other-month',
       // calendar cell states drawn as classes, and the two htmlEditor overlay variants
       'contoured', 'faded', 'noimage', 'highlighted', 'dragged', 'legacy',
+      // .dx-calendar-today marks the current date's cell; .dx-calendar-multiview sits on the
+      // widget root when it shows more than one month at a time
+      'today', 'multiview',
       // `.dx-calendar-other-view` — a cell belonging to the neighbouring month
       'other',
       // the two step appearances Stepper draws, and the two treeView border variants

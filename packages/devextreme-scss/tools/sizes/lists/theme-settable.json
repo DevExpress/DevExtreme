@@ -7,11 +7,11 @@
     "The match is by variable name. A name declared in a nested module is only reachable once the parent forwards it (see base/chat/_index.scss), which is why an \"open\" row can sit next to injected ones from the same widget."
   ],
   "summary": {
-    "occurrences": 388,
-    "variables": 336,
-    "injected": 380,
+    "occurrences": 392,
+    "variables": 340,
+    "injected": 382,
     "open": 0,
-    "parameters": 8
+    "parameters": 10
   },
   "places": [
     {
@@ -1827,7 +1827,39 @@
     },
     {
       "file": "scss/widgets/base/calendar/_calendar.scss",
-      "line": 3,
+      "line": 4,
+      "widget": "calendar",
+      "literals": [
+        "1px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$calendar-border-width: 1px !default;",
+      "variable": "calendar-border-width",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/calendar/_index.scss",
+      "setTo": "var(--dx-calendar-border-width)"
+    },
+    {
+      "file": "scss/widgets/base/calendar/_calendar.scss",
+      "line": 5,
+      "widget": "calendar",
+      "literals": [
+        "10px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$calendar-multiview-table-padding: 0 10px !default;",
+      "variable": "calendar-multiview-table-padding",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/calendar/_index.scss",
+      "setTo": "0 var(--dx-calendar-view-multiview-padding-inline)"
+    },
+    {
+      "file": "scss/widgets/base/calendar/_calendar.scss",
+      "line": 7,
       "widget": "calendar",
       "literals": [
         "10px"
@@ -1840,6 +1872,34 @@
       "status": "injected",
       "setBy": "scss/widgets/fluent-next/calendar/_index.scss",
       "setTo": "var(--dx-calendar-week-day-header-font-size)"
+    },
+    {
+      "file": "scss/widgets/base/calendar/_mixins.scss",
+      "line": 134,
+      "widget": "calendar",
+      "literals": [
+        "2px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$cell-today-border-width: 2px,",
+      "variable": "cell-today-border-width",
+      "kind": "mixin-parameter",
+      "status": "parameter"
+    },
+    {
+      "file": "scss/widgets/base/calendar/_mixins.scss",
+      "line": 135,
+      "widget": "calendar",
+      "literals": [
+        "2px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$cell-contoured-ring-width: 2px,",
+      "variable": "cell-contoured-ring-width",
+      "kind": "mixin-parameter",
+      "status": "parameter"
     },
     {
       "file": "scss/widgets/base/chat/_index.scss",

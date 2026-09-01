@@ -1,6 +1,6 @@
 {
   "openKnobs": 0,
-  "unclassified": 376,
+  "unclassified": 372,
   "unclassifiedByWidget": {
     "gridBase": 75,
     "colorView": 67,
@@ -14,7 +14,6 @@
     "dataGrid": 5,
     "toolbar": 5,
     "sortable": 4,
-    "calendar": 4,
     "diagram": 4,
     "treeList": 4,
     "colorBox": 3,

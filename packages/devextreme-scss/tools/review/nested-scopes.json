@@ -31,6 +31,7 @@
     "dx-calendar-cell",
     "dx-calendar-cell-in-range",
     "dx-calendar-cell-range-hover",
+    "dx-calendar-multiview",
     "dx-calendar-navigator",
     "dx-calendar-week-number-cell"
   ],

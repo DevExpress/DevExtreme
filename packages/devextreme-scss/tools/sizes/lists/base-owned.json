@@ -6,10 +6,10 @@
     "marker — the classification comment already on the line, from tools/review/size-markers.json."
   ],
   "summary": {
-    "occurrences": 388,
+    "occurrences": 384,
     "byCategory": {
-      "inline": 177,
-      "geometry": 94,
+      "inline": 176,
+      "geometry": 91,
       "local-var": 90,
       "calc": 11,
       "structural": 8,
@@ -30,7 +30,6 @@
       "fileManager": 5,
       "toolbar": 5,
       "sortable": 4,
-      "calendar": 4,
       "diagram": 4,
       "treeList": 4,
       "colorBox": 3,
@@ -54,7 +53,7 @@
       "popover": 1,
       "stepper": 1
     },
-    "unmarked": 376,
+    "unmarked": 372,
     "unmarkedByWidget": {
       "gridBase": 75,
       "colorView": 67,
@@ -68,7 +67,6 @@
       "dataGrid": 5,
       "toolbar": 5,
       "sortable": 4,
-      "calendar": 4,
       "diagram": 4,
       "treeList": 4,
       "colorBox": 3,
@@ -806,54 +804,6 @@
       "occurrences": 1,
       "marker": null,
       "text": "border-bottom: 1px dashed;",
-      "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/calendar/_calendar.scss",
-      "line": 15,
-      "widget": "calendar",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "border: 1px solid transparent;",
-      "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/calendar/_calendar.scss",
-      "line": 138,
-      "widget": "calendar",
-      "literals": [
-        "10px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "padding: 0 10px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/calendar/_mixins.scss",
-      "line": 156,
-      "widget": "calendar",
-      "literals": [
-        "2px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "border: 2px solid;",
-      "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/calendar/_mixins.scss",
-      "line": 183,
-      "widget": "calendar",
-      "literals": [
-        "2px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "box-shadow: 0 0 0 2px $cell-contoured-border-color;",
       "category": "geometry"
     },
     {
