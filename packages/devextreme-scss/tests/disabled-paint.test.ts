@@ -263,3 +263,50 @@ test('no component arrives without a disabled rule of its own', () => {
   expect(appeared).toEqual([]);
   expect(found.length).toBeLessThanOrEqual(baseline.length);
 });
+
+/*
+ * Ratchet: Fluent expresses a disabled control by painting it from the disabled roles, not by
+ * making it translucent. Opacity dims the background through the element and cannot state a
+ * contrast, which is why List and TreeView were moved onto their roles - both already had one.
+ *
+ * Nine rules still dim, each for a reason that has not been decided yet:
+ *   - tabs nav button uses opacity 0, which hides rather than dims;
+ *   - scheduler appointments and grid modified-cell links sit on user-supplied colours;
+ *   - chat and the AI chat regenerate button dim a whole composite;
+ *   - the number box spin container dims a pair of arrows.
+ *
+ * The list may shrink, never grow: a new component-scoped dim has to be argued for here first.
+ */
+const ALLOWED_DIMS: Record<string, number> = {
+  '--dx-chat-opacity-disabled': 1,
+  '--dx-global-disabled-opacity': 1,
+  '--dx-grid-icon-link-opacity-disabled': 2,
+  '--dx-grid-text-link-opacity-disabled': 2,
+  '--dx-number-box-spin-opacity': 1,
+  '--dx-scheduler-appointment-opacity-disabled': 1,
+  '--dx-tabs-nav-button-opacity-disabled': 1,
+};
+
+test('no new component dims its disabled state instead of painting it', () => {
+  const css = readFileSync(join(artifactsCss, 'dx.fluent-next.blue.light.css'), 'utf8');
+  const counts: Record<string, number> = {};
+
+  readRules(css)
+    .filter(({ selector }) => !selector.startsWith('@') && DISABLED_SELECTOR.test(selector))
+    .forEach(({ body }) => {
+      const match = /(^|;)\s*opacity\s*:\s*([^;]+)/.exec(body);
+      if (!match || match[2].trim() === '1') {
+        return;
+      }
+      const name = /var\(\s*(--[a-z0-9-]+)/.exec(match[2])?.[1] ?? match[2].trim();
+      counts[name] = (counts[name] ?? 0) + 1;
+    });
+
+  const unlisted = Object.keys(counts).filter((name) => !(name in ALLOWED_DIMS));
+  expect(unlisted).toEqual([]);
+
+  const grown = Object.entries(counts)
+    .filter(([name, n]) => n > ALLOWED_DIMS[name])
+    .map(([name, n]) => `${name}: ${n} > ${ALLOWED_DIMS[name]}`);
+  expect(grown).toEqual([]);
+});

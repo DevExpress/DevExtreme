@@ -2,7 +2,6 @@
 @use "../../../_design-system/variables/ds" as ds;
 
 // Not colours: opacities that used to sit in _colors.scss (NAMING.md, O7)
-$list-item-opacity-disabled: ds.$opacity-60 !default;
 $list-response-wait-opacity: ds.$opacity-50 !default;
 
 $list-padding-block: ds.$spacing-40 !default;

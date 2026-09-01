@@ -133,6 +133,7 @@
 }
 
 .dx-state-disabled {
+  &.dx-radiobutton,
   .dx-radiobutton {
     color: var(--dx-radio-button-content-disabled);
 

@@ -101,7 +101,11 @@ $treeview-searchbox-margin-bottom: null !default;
   }
 
   &.dx-state-disabled {
-    opacity: $treeview-disabled-opacity;
+    /* false opts out of the dim entirely; a `null` here would be overwritten by the `!default`
+    in _index.scss and silently restore it */
+    @if $treeview-disabled-opacity {
+      opacity: $treeview-disabled-opacity;
+    }
   }
 }
 

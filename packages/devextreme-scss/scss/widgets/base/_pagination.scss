@@ -97,7 +97,12 @@ $pagination-navigate-button-padding-block-fallback: $pagination-paddings - 1px !
       box-sizing: content-box;
 
       &.dx-button-disable {
-        opacity: $pagination-nav-disabled-opacity;
+        /* false opts out of the dim; `null` would be overwritten by the `!default` above and
+        silently restore it */
+        @if $pagination-nav-disabled-opacity {
+          opacity: $pagination-nav-disabled-opacity;
+        }
+
         cursor: inherit;
       }
     }

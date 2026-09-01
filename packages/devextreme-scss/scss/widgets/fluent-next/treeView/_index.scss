@@ -5,7 +5,8 @@
 @use "../../base/treeView" as baseTreeView with (
   $treeview-select-all-item-border-bottom: var(--dx-tree-view-select-all-item-border-block-end),
   $treeview-border-visible-border: var(--dx-tree-view-border-visible-border),
-  $treeview-disabled-opacity: var(--dx-tree-view-opacity-disabled),
+  // no dim: .dx-treeview-item-content.dx-state-disabled paints the disabled role instead
+  $treeview-disabled-opacity: false,
   $treeview-searchbox-margin-bottom: var(--dx-tree-view-search-box-margin-block-end),
 );
 @use "../../base/icon_fonts" as *;

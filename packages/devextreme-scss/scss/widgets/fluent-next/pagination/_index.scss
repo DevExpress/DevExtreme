@@ -21,7 +21,8 @@
   $pagination-page-index-width: var(--dx-pagination-page-index-width),
   $pagination-pages-count-padding-left: var(--dx-pagination-pages-count-padding-inline-start),
   $pagination-info-opacity: var(--dx-pagination-info-opacity),
-  $pagination-nav-disabled-opacity: var(--dx-pagination-nav-opacity-disabled),
+  // no dim: the disabled navigation button is painted from the content role below
+  $pagination-nav-disabled-opacity: false,
   $pagination-page-horizontal-padding: var(--dx-pagination-page-padding-inline),
 );
 @use "../gridBase/sizes" as gridBaseSizes;
@@ -66,6 +67,12 @@
       width: var(--dx-pagination-navigate-button-width);
       height: var(--dx-pagination-nav-button-height);
       padding: var(--dx-pagination-nav-button-padding);
+
+      /* at the first or last page this button used to be dimmed to 30%; it is painted from
+      the same content role as the rest of the disabled pagination instead */
+      &.dx-button-disable {
+        color: var(--dx-pagination-content-disabled);
+      }
     }
 
     .dx-prev-button {

@@ -52,6 +52,18 @@ const items = ['Alpha', 'Beta', 'Gamma'];
 const products = [{ ID: 1, Name: 'Alpha' }, { ID: 2, Name: 'Beta' }];
 
 // [id, label, height, builder]. The builder receives the flags of the current column.
+// A portalled case keeps its instance on the host so the opener can toggle it: firing the button
+// twice should close what it opened, not leave four overlays standing.
+const toggleVisible = (h) => h.__inst.option('visible', !h.__inst.option('visible'));
+const anchor = (h, text) => {
+  const el = document.createElement('div');
+  el.className = 'dx-anchor';
+  el.style.cssText = 'padding:4px;display:inline-block';
+  el.textContent = text;
+  h.appendChild(el);
+  return el;
+};
+
 const CASES = [
   // --- components that already own their disabled colours (opacity: 1 + roles) -------------
   ['button', 'Button - contained', 70, (h, f) => $(h).dxButton({ text: 'Button', icon: 'home', ...f })],
@@ -119,13 +131,81 @@ const CASES = [
     $(h).dxSpeedDialAction({ icon: 'add', label: 'Add', ...f });
   }],
   ['contextMenu', 'ContextMenu  (opens on demand)', 140,
-    (h, f) => { h.innerHTML = '<div class="dx-anchor" style="padding:4px">right-click target</div>'; $(h).dxContextMenu({ items: [{ text: 'One' }, { text: 'Two', icon: 'save' }], target: h, ...f }); },
-    (h) => h.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, clientX: 40, clientY: 40 }))],
+    // the widget needs an element of its own: built on the host it swallowed the target markup
+    // and rendered "right-click target" as its items instead of One/Two
+    (h, f) => {
+      const target = anchor(h, 'right-click target');
+      h.__inst = $('<div>').appendTo(h).dxContextMenu({
+        items: [{ text: 'One' }, { text: 'Two', icon: 'save' }],
+        target, position: { my: 'top left', at: 'bottom left', of: target },
+        ...f,
+      }).dxContextMenu('instance');
+    }, toggleVisible],
   ['actionSheet', 'ActionSheet  (opens on demand)', 130,
     // the widget must own the host: putting markup in it makes dxActionSheet treat that markup
     // as its items, which is how this case previously showed "sheet target" twice
     (h, f) => { $(h).dxActionSheet({ items: [{ text: 'Save' }, { text: 'Delete' }], usePopover: false, title: 'Choose', ...f }); },
-    (h) => $(h).dxActionSheet('instance').option('visible', true)],
+    (h) => { h.__inst = h.__inst || $(h).dxActionSheet('instance'); toggleVisible(h); }],
+  // Overlays the blanket dim also reached. They are kept inside their own row (container/position
+  // point at the host) so four columns can be compared side by side instead of overlapping.
+  ['popup', 'Popup  (opens on demand)', 170, (h, f) => {
+    h.__inst = $('<div>').appendTo(h).dxPopup({
+      title: 'Popup title', width: 210, height: 130, shading: false,
+      container: h, position: { my: 'top left', at: 'top left', of: h },
+      contentTemplate: () => $('<div>').text('Popup content'),
+      toolbarItems: [{ widget: 'dxButton', toolbar: 'bottom', options: { text: 'OK', stylingMode: 'contained', type: 'default' } }],
+      ...f,
+    }).dxPopup('instance');
+  }, toggleVisible],
+  ['popover', 'Popover  (opens on demand)', 130, (h, f) => {
+    const target = anchor(h, 'popover target');
+    h.__inst = $('<div>').appendTo(h).dxPopover({
+      target, container: h, width: 190,
+      contentTemplate: () => $('<div>').text('Popover content'),
+      ...f,
+    }).dxPopover('instance');
+  }, toggleVisible],
+  ['tooltip', 'Tooltip  (opens on demand)', 120, (h, f) => {
+    const target = anchor(h, 'tooltip target');
+    h.__inst = $('<div>').appendTo(h).dxTooltip({
+      target, container: h,
+      contentTemplate: () => $('<div>').text('Tooltip content'),
+      ...f,
+    }).dxTooltip('instance');
+  }, toggleVisible],
+  ['loadPanel', 'LoadPanel  (opens on demand)', 130, (h, f) => {
+    h.style.position = 'relative';
+    h.style.minHeight = '100px';
+    h.__inst = $('<div>').appendTo(h).dxLoadPanel({
+      message: 'Loading', shading: false,
+      container: h, position: { of: h },
+      ...f,
+    }).dxLoadPanel('instance');
+  }, toggleVisible],
+  // --- item-level disabled -----------------------------------------------------------------
+  // The gallery above disables whole widgets, but the far more common state is a single disabled
+  // entry inside an enabled collection. Each case below shows an enabled and a disabled item side
+  // by side, so the intended contrast is judged directly rather than inferred.
+  ['listItem', 'List  (2nd item disabled)', 110, (h, f) => $(h).dxList({
+    items: [{ text: 'Enabled item' }, { text: 'Disabled item', disabled: true }], ...f })],
+  ['treeViewItem', 'TreeView  (2nd item disabled)', 110, (h, f) => $(h).dxTreeView({
+    items: [{ text: 'Enabled item' }, { text: 'Disabled item', disabled: true }], ...f })],
+  ['menuItem', 'Menu  (2nd item disabled)', 80, (h, f) => $(h).dxMenu({
+    items: [{ text: 'Enabled' }, { text: 'Disabled', disabled: true }], ...f })],
+  ['tabsItem', 'Tabs  (2nd item disabled)', 90, (h, f) => $(h).dxTabs({
+    items: [{ text: 'Enabled' }, { text: 'Disabled', disabled: true }], ...f })],
+  ['buttonGroupItem', 'ButtonGroup  (2nd item disabled)', 80, (h, f) => $(h).dxButtonGroup({
+    items: [{ text: 'Enabled' }, { text: 'Disabled', disabled: true }], ...f })],
+  ['accordionItem', 'Accordion  (2nd item disabled)', 140, (h, f) => $(h).dxAccordion({
+    dataSource: [{ title: 'Enabled', text: 'A' }, { title: 'Disabled', text: 'B', disabled: true }],
+    ...f })],
+  ['radioGroupItem', 'RadioGroup  (2nd item disabled)', 100, (h, f) => $(h).dxRadioGroup({
+    items: [{ text: 'Enabled' }, { text: 'Disabled', disabled: true }], ...f })],
+  ['toolbarItem', 'Toolbar  (2nd button disabled)', 80, (h, f) => $(h).dxToolbar({ items: [
+    { location: 'before', widget: 'dxButton', options: { text: 'Enabled' } },
+    { location: 'before', widget: 'dxButton', options: { text: 'Disabled', disabled: true } },
+  ], ...f })],
+
   // Markup-only blocks: the dim reached them through .dx-widget just like a real widget.
   ['badge', 'Badge  (markup)', 70, (h, f) => { h.innerHTML = '<span class="dx-badge">7</span>'; h.classList.add('dx-widget'); if (f.disabled) h.classList.add('dx-state-disabled'); }],
   ['card', 'Card  (markup)', 90, (h, f) => { h.innerHTML = '<div class="dx-card" style="width:180px;padding:8px">Card</div>'; h.classList.add('dx-widget'); if (f.disabled) h.classList.add('dx-state-disabled'); }],
@@ -189,7 +269,7 @@ function judgeability(id) {
 
   const hasOwnText = [...host.querySelectorAll('*')].some((e) => [...e.childNodes]
     .some((n) => n.nodeType === 3 && n.textContent.trim()));
-  const portalled = /contextMenu|actionSheet|popup|popover|tooltip|toast/i.test(id);
+  const portalled = /contextMenu|actionSheet|popup|popover|tooltip|toast|loadPanel/i.test(id);
 
   if (portalled) return 'portalled';
   return hasOwnText ? 'judgeable' : 'no-text';
