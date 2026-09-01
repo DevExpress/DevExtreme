@@ -44,6 +44,12 @@ $chat-typing-indicator-circle-center-bg: ds.$color-content-subtle !default;
 
 $chat-typing-indicator-circle-bg: ds.$color-content-disabled !default;
 
+/* The transcript keeps full contrast when the chat is disabled - it is content, and neither the
+package nor Blazor defines a disabled colour for a message. What the state has to show is that
+the input is out of use, so the rule the composing area is separated by takes the disabled
+border role, next to the input text and send icon that already paint themselves. */
+$chat-message-box-border-disabled: ds.$color-border-disabled !default;
+
 $chat-file-container-bg: ds.$color-bg !default;
 $chat-file-container-box-shadow: ds.$box-shadow-sm !default;
 $chat-file-secondary-content: ds.$color-content-subtle !default;

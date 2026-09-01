@@ -2,7 +2,6 @@
 @use "sizes" as *;
 
 @mixin publish {
-  --dx-chat-opacity-disabled: #{$chat-opacity-disabled};
   --dx-chat-alert-list-content: #{$chat-alert-list-content};
   --dx-chat-alert-padding-block: #{$chat-alert-padding-block};
   --dx-chat-alerts-padding-block: #{$chat-alerts-padding-block};
@@ -55,6 +54,7 @@
   --dx-chat-information-timestamp-content: #{$chat-information-timestamp-content};
   --dx-chat-message-box-border-block-start-width: #{$chat-message-box-border-block-start-width};
   --dx-chat-message-box-border: var(--dx-chat-border);
+  --dx-chat-message-box-border-disabled: #{$chat-message-box-border-disabled};
   --dx-chat-message-box-file-bg: #{$chat-message-box-file-bg};
   --dx-chat-message-box-file-cancel-button-secondary-content: #{$chat-message-box-file-cancel-button-secondary-content};
   --dx-chat-message-box-files-container-padding: #{$chat-message-box-files-container-padding};

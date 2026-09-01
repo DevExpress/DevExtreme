@@ -366,6 +366,48 @@ fluent-next она переведена на тематический микси
 нужно решить, чем помечать оставленную на месте фишку поля. Предложение — тот же приём, что у
 грида: снять дим и покрасить `content-subtle`, но выбор за владельцем компонента.
 
+### Что о disabled говорит сам пакет токенов (обзор компонентного тира)
+
+`@devexpress/design-tokens-internal@262.15.0`, `tokens/components/core/theme/fluent.json`:
+**44 компонента, 125 disabled-токенов, из них у 24 компонентов**. Роли, которые пакет назначает:
+
+| роль | сколько |
+|---|---|
+| `content-disabled` | 70 |
+| `border-disabled` | 18 |
+| `bg-disabled` | 13 |
+| `color.none` (явное «ничего») | 10 |
+| `content-on-color-disabled` и прочие on-color | 10 |
+| `bg-alpha-disabled` | 4 |
+
+**20 компонентов не имеют disabled-токенов вовсе**: `drawer`, `form`, `popup`, `popover`,
+`tooltip`, `toolbar`, `toast`, `container-card`, `separator`, `spinner`, `loading-indicator`,
+`backdrop`, `skeleton`, `text-area`, `message-bar`, `scroll-bar`, `empty-item`, `focus-rect`,
+`popover-arrow`, `popover-card`. Это важно: наш список «нет своего disabled-состояния» —
+`drawer`, `box`, `scrollView`, `informer` — с ним согласуется, то есть это не наш пробел.
+
+Тир пакета тема **не потребляет** (решение зафиксировано в DIVERGENCES), но он остаётся
+источником ответов по существу. Два ответа уже применены:
+
+- **switch**: `color.checked.trigger.disabled` и `color.unchecked.trigger.disabled` =
+  `content-disabled`, `unchecked.border.disabled` = `border-disabled`. Ровно то, на что бегунок
+  переведён; выбор подтверждён пакетом, а не только Blazor;
+- **chat**: у пакета нет disabled-токенов для пузыря сообщения, а `ai-chat` имеет их только у
+  `prompt-suggestion-item` (`bg-disabled` + `border-disabled` + `content-disabled`). Blazor чат
+  целиком не гасит вовсе — красит отдельные контролы
+  (`ai-chat/layout.scss`: иконка кнопки очистки → `content-neutral-default-disabled`).
+
+### chat: дим снят, лента остаётся читаемой
+
+Вывод из двух источников: **лента сообщений — это контент, а не контрол**, выключенного состояния
+у неё нет. Выключается composing-область. Замер подтвердил, что она уже красится сама: текст ввода
+и иконка отправки дают `#ababab` и без дима. Добавлено одно правило — граница, отделяющая
+composing-область, уходит в `border-disabled`, иначе у чата не остаётся ни одного собственного
+disabled-правила (это поймал ратчет «без своего правила»).
+
+Было: весь виджет на `opacity: .5`, текст пузыря 3.49:1, поле ввода 1.47:1.
+Стало: дима нет, лента 16.6:1, контролы `#ababab`, граница `#d7d7d7`. Легаси не тронут (0.5).
+
 ### Гейты, которыми это заперто
 
 `packages/devextreme-scss/tests/disabled-paint.test.ts`, по собранным бандлам:

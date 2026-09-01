@@ -272,13 +272,12 @@ test('no component arrives without a disabled rule of its own', () => {
  * Nine rules still dim, each for a reason that has not been decided yet:
  *   - tabs nav button uses opacity 0, which hides rather than dims;
  *   - scheduler appointments and grid modified-cell links sit on user-supplied colours;
- *   - chat and the AI chat regenerate button dim a whole composite;
+ *   - the AI chat regenerate button dims a whole composite;
  *   - the number box spin container dims a pair of arrows.
  *
  * The list may shrink, never grow: a new component-scoped dim has to be argued for here first.
  */
 const ALLOWED_DIMS: Record<string, number> = {
-  '--dx-chat-opacity-disabled': 1,
   '--dx-global-disabled-opacity': 1,
   '--dx-grid-icon-link-opacity-disabled': 2,
   '--dx-grid-text-link-opacity-disabled': 2,
