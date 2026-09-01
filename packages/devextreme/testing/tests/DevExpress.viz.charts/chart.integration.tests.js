@@ -5088,8 +5088,7 @@ QUnit.module('encodeHtml', $.extend({}, moduleSetup, {
         moduleSetup.afterEach.call(this);
     },
     createChartWithMarkupLikeTexts: function(encodeHtml) {
-        return this.createChart({
-            encodeHtml,
+        const options = {
             dataSource: [{ arg: '<A>', val: 850 }, { arg: 'B', val: 5940 }],
             series: [{ name: '<North America> | Total' }],
             tooltip: {
@@ -5098,7 +5097,13 @@ QUnit.module('encodeHtml', $.extend({}, moduleSetup, {
                     return { text: pointInfo.seriesName + ' - ' + pointInfo.valueText };
                 }
             }
-        });
+        };
+
+        if(encodeHtml !== undefined) {
+            options.encodeHtml = encodeHtml;
+        }
+
+        return this.createChart(options);
     },
     checkTexts: function(assert, chart, expected) {
         function getTexts($root) {
