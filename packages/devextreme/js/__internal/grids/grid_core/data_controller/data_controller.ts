@@ -19,7 +19,6 @@ import type {
   ChangedEvent, DataSourceAdapterProvider, LoadOperation, OperationTypes, RawItemData,
 } from '@ts/grids/grid_core/data_source_adapter/types';
 import { isLocalStore } from '@ts/grids/grid_core/data_source_adapter/utils/store';
-import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/m_filter_sync';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import modules from '@ts/grids/grid_core/m_modules';
 import type {
@@ -137,8 +136,6 @@ export class DataController extends modules.Controller {
   // TODO public controller
   public _rowsScrollController?: VirtualScrollController | null;
 
-  protected _filterSyncController!: FilterSyncController;
-
   private _filterExcludedColumn: Column | null = null;
 
   protected _focusController!: FocusController;
@@ -153,7 +150,6 @@ export class DataController extends modules.Controller {
     this._items = [];
     this._cachedProcessedItems = null;
     this._columnsController = this.getController('columns');
-    this._filterSyncController = this.getController('filterSync');
     this._focusController = this.getController('focus');
 
     this._isPaging = false;

@@ -150,7 +150,7 @@ const updateFilterRowCondition = function (columnsController, column, condition)
 };
 
 export class FilterSyncController extends modules.Controller {
-  public _skipSyncColumnOptions?: boolean;
+  private skipSyncColumnOptions = false;
 
   private _dataController!: DataController;
 
@@ -174,22 +174,35 @@ export class FilterSyncController extends modules.Controller {
     return ['getCustomFilterOperations'];
   }
 
+  public isSyncingColumnOptions(): boolean {
+    return this.skipSyncColumnOptions;
+  }
+
+  public withColumnOptionsSync<T>(sync: () => T): T {
+    this.skipSyncColumnOptions = true;
+    try {
+      return sync();
+    } finally {
+      this.skipSyncColumnOptions = false;
+    }
+  }
+
   public syncFilterValue() {
     const columns = this._columnsController.getFilteringColumns();
 
-    this._skipSyncColumnOptions = true;
-    columns.forEach((column) => {
-      const filterConditions = getMatchedConditions(this.option('filterValue'), getColumnIdentifier(column));
-      if (filterConditions.length === 1) {
-        const filterCondition = filterConditions[0];
-        updateHeaderFilterCondition(this._columnsController, column, filterCondition);
-        updateFilterRowCondition(this._columnsController, column, filterCondition);
-      } else {
-        isDefined(column.filterValues) && updateHeaderFilterCondition(this._columnsController, column, null);
-        isDefined(column.filterValue) && updateFilterRowCondition(this._columnsController, column, null);
-      }
+    this.withColumnOptionsSync(() => {
+      columns.forEach((column) => {
+        const filterConditions = getMatchedConditions(this.option('filterValue'), getColumnIdentifier(column));
+        if (filterConditions.length === 1) {
+          const filterCondition = filterConditions[0];
+          updateHeaderFilterCondition(this._columnsController, column, filterCondition);
+          updateFilterRowCondition(this._columnsController, column, filterCondition);
+        } else {
+          isDefined(column.filterValues) && updateHeaderFilterCondition(this._columnsController, column, null);
+          isDefined(column.filterValue) && updateFilterRowCondition(this._columnsController, column, null);
+        }
+      });
     });
-    this._skipSyncColumnOptions = false;
   }
 
   private _initSync() {

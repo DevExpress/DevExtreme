@@ -9,6 +9,7 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataFilter } from '@ts/grids/grid_core/data_controller/types';
 import { FILTER_TYPES_EXCLUDE } from '@ts/grids/grid_core/filter_sync/const';
+import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/m_filter_sync';
 import { getColumnIdentifier } from '@ts/grids/grid_core/filter_sync/utils';
 import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
@@ -16,13 +17,21 @@ import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 export const filterSyncDataControllerExtender = (
   Base: ModuleType<DataController>,
 ): ModuleType<DataController> => class FilterSyncDataControllerExtender extends Base {
+  private filterSyncController!: FilterSyncController;
+
+  public init(): void {
+    this.filterSyncController = this.getController('filterSync');
+
+    super.init();
+  }
+
   public optionChanged(args: OptionChanged): void {
     switch (args.name) {
       case 'filterValue':
         this.applyFilter();
 
         if (this.isFilterSyncActive()) {
-          this._filterSyncController.syncFilterValue();
+          this.filterSyncController.syncFilterValue();
         }
         args.handled = true;
         break;
@@ -33,15 +42,15 @@ export const filterSyncDataControllerExtender = (
         if (this.isFilterSyncActive()) {
           const column: Column = this._columnsController.getColumnByPath(args.fullName);
 
-          if (column && !this._filterSyncController._skipSyncColumnOptions) {
-            this._filterSyncController._skipSyncColumnOptions = true;
-            this.syncColumnOption(
-              column,
-              this.parseColumnPropertyName(args.fullName),
-              args.value,
-              args.previousValue,
-            );
-            this._filterSyncController._skipSyncColumnOptions = false;
+          if (column && !this.filterSyncController.isSyncingColumnOptions()) {
+            this.filterSyncController.withColumnOptionsSync(() => {
+              this.syncColumnOption(
+                column,
+                this.parseColumnPropertyName(args.fullName),
+                args.value,
+                args.previousValue,
+              );
+            });
           }
         }
         super.optionChanged(args);
@@ -57,13 +66,17 @@ export const filterSyncDataControllerExtender = (
   }
 
   private skipCalculateColumnFilters(): boolean | undefined {
-    return (isDefined(this.option('filterValue')) || this._filterSyncController._skipSyncColumnOptions) && this.isFilterSyncActive();
+    const hasFilterValueOrSyncing = isDefined(this.option('filterValue'))
+      || this.filterSyncController.isSyncingColumnOptions();
+
+    return hasFilterValueOrSyncing && this.isFilterSyncActive();
   }
 
   protected calculateAdditionalFilter(): DataFilter {
     const columns = this._columnsController.getFilteringColumns();
+    const isFilterValueDisabled = this.option('filterPanel.filterEnabled') === false;
 
-    if (!columns?.length || this.option('filterPanel.filterEnabled') === false) {
+    if (!columns?.length || isFilterValueDisabled) {
       return super.calculateAdditionalFilter();
     }
 
@@ -81,7 +94,7 @@ export const filterSyncDataControllerExtender = (
       }
     }
 
-    const customOperations = this._filterSyncController.getCustomFilterOperations();
+    const customOperations = this.filterSyncController.getCustomFilterOperations();
     const calculatedFilterValue: DataFilter = getFilterExpression(filterValue, columns, customOperations, 'filterBuilder');
 
     if (calculatedFilterValue) {
@@ -118,13 +131,13 @@ export const filterSyncDataControllerExtender = (
       || propertyName === 'selectedFilterOperation';
 
     if (needSyncHeaderFilter) {
-      this._filterSyncController.syncHeaderFilter(column);
+      this.filterSyncController.syncHeaderFilter(column);
 
       return;
     }
 
     if (needSyncFilterRow) {
-      this._filterSyncController.syncFilterRow(column, column.filterValue);
+      this.filterSyncController.syncFilterRow(column, column.filterValue);
     }
   }
 
@@ -141,7 +154,7 @@ export const filterSyncDataControllerExtender = (
   }
 
   protected applyFilter(): DeferredObj<unknown> {
-    if (this._filterSyncController._skipSyncColumnOptions) {
+    if (this.filterSyncController.isSyncingColumnOptions()) {
       return Deferred().resolve();
     }
 
