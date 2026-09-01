@@ -11,30 +11,43 @@ and carries a marker saying why.
 
 | | occurrences |
 |---|---|
-| a raw grep of the layer | 766 |
-| …of those, inside comments (commented-out code, prose) | 8 |
-| **in code** | **758** |
-| — the theme can already set from outside | 428 |
-| — nailed into the shared layer | 330 |
+| a raw grep of the layer | 771 |
+| …of those, inside comments (commented-out code, prose) | 9 |
+| **in code** | **762** |
+| — the theme can already set from outside | 452 |
+| — nailed into the shared layer | 310 |
 
 ## What the theme can already set
 
-428 occurrences in 372 `!default` variables. fluent-next already passes 404; 0 are open knobs nobody turns.
+452 occurrences in 389 `!default` variables. fluent-next already passes 418; 10 are open knobs nobody turns.
+
+Open knobs — theme-side work, the shared layer stays untouched:
+
+- `$scheduler-workspace-info-font-size` — scss/widgets/base/scheduler/_index.scss:109
+- `$scheduler-small-font-size` — scss/widgets/base/scheduler/_index.scss:110
+- `$scheduler-group-header-table-cell-height` — scss/widgets/base/scheduler/_index.scss:111
+- `$scheduler-month-date-text-size` — scss/widgets/base/scheduler/_index.scss:112
+- `$scheduler-month-date-text-padding` — scss/widgets/base/scheduler/_index.scss:113
+- `$scheduler-workspace-info-font-size` — scss/widgets/base/scheduler/views/_index.scss:45
+- `$scheduler-small-font-size` — scss/widgets/base/scheduler/views/_index.scss:46
+- `$scheduler-group-header-table-cell-height` — scss/widgets/base/scheduler/views/_index.scss:55
+- `$scheduler-month-date-text-size` — scss/widgets/base/scheduler/views/_index.scss:59
+- `$scheduler-month-date-text-padding` — scss/widgets/base/scheduler/views/_index.scss:61
 
 ## What is nailed into the layer
 
-| widget | inline | local-var | geometry | mixin-arg | calc | total |
+| widget | inline | geometry | local-var | mixin-arg | calc | total |
 |---|---|---|---|---|---|---|
-| gridBase | 50 | 18 | 7 |  |  | **75** |
-| colorView | 35 | 8 | 24 |  |  | **67** |
-| scheduler | 9 | 41 | 3 |  | 1 | **54** |
-| pivotGrid | 6 | 8 | 6 |  |  | **20** |
-| cardView | 9 | 1 | 5 |  |  | **15** |
-| htmlEditor | 8 | 1 | 4 |  |  | **13** |
-| dataGrid |  |  | 3 | 2 |  | **5** |
-| treeList |  |  | 1 | 3 |  | **4** |
+| gridBase | 50 | 7 | 18 |  |  | **75** |
+| colorView | 35 | 24 | 8 |  |  | **67** |
+| pivotGrid | 6 | 6 | 8 |  |  | **20** |
+| cardView | 9 | 5 | 1 |  |  | **15** |
+| htmlEditor | 8 | 4 | 1 |  |  | **13** |
+| scheduler | 9 | 3 |  |  | 1 | **13** |
+| dataGrid |  | 3 |  | 2 |  | **5** |
+| treeList |  | 1 |  | 3 |  | **4** |
 | textEditor | 3 |  |  |  |  | **3** |
-| list |  | 1 |  |  |  | **1** |
+| list |  |  | 1 |  |  | **1** |
 
 ## Places, by widget
 
@@ -236,113 +249,6 @@ and carries a marker saying why.
 - `scss/widgets/base/colorView/_mixins.scss:16` · geometry
   `box-shadow: inset 0 -5px 0 3px $handle-color, inset 0 5px 0 3px $handle-color, inset 0 -6px 1px 4px $handle-border-color, inset 0 6px 1px 4px $handle-border-color;`
 
-### scheduler — 54
-
-- `scss/widgets/base/scheduler/_common.scss:4` · local-var
-  `$scheduler-appointment-collector-margin: 3px;`
-- `scss/widgets/base/scheduler/_common.scss:5` · local-var
-  `$scheduler-appointment-collector-height: 22px;`
-- `scss/widgets/base/scheduler/_index.scss:82` · local-var
-  `$scheduler-appointment-min-size: 4px;`
-- `scss/widgets/base/scheduler/_index.scss:83` · local-var
-  `$scheduler-appointment-content-padding: 5px 7px;`
-- `scss/widgets/base/scheduler/_index.scss:84` · local-var
-  `$scheduler-appointment-reduced-content-padding: 40px;`
-- `scss/widgets/base/scheduler/_index.scss:86` · local-var
-  `$scheduler-hovered-appointment-top-shadow-size: 5px;`
-- `scss/widgets/base/scheduler/_index.scss:87` · local-var
-  `$scheduler-focused-cell-shadow: inset 0 0 0 1px $scheduler-appointment-base-color;`
-- `scss/widgets/base/scheduler/_index.scss:89` · local-var
-  `$scheduler-vertical-appointment-resizable-hovering-shadow: inset 0 $scheduler-hovered-appointment-top-shadow-size 0 0 $scheduler-appointment-start-color, inset 0 -2px 0 0 $scheduler-appointment-start-color;`
-- `scss/widgets/base/scheduler/_index.scss:91` · local-var
-  `$scheduler-vertical-appointment-shadow: inset 0 2px 0 0 $scheduler-appointment-start-color;`
-- `scss/widgets/base/scheduler/_index.scss:92` · local-var
-  `$scheduler-vertical-appointment-resizing-shadow: inset 0 -2px 0 0 $scheduler-appointment-start-color, $scheduler-vertical-appointment-shadow;`
-- `scss/widgets/base/scheduler/_index.scss:96` · local-var
-  `$scheduler-horizontal-appointment-resizable-hovering-shadow: inset $scheduler-hovered-appointment-top-shadow-size 0 0 0 $scheduler-appointment-start-color, inset -2px 0 0 0 $scheduler-appointment-start-color;`
-- `scss/widgets/base/scheduler/_index.scss:97` · local-var
-  `$scheduler-horizontal-appointment-resizable-hovering-shadow-rtl: inset (-$scheduler-hovered-appointment-top-shadow-size) 0 0 0 $scheduler-appointment-start-color, inset 2px 0 0 0 $scheduler-appointment-start-color;`
-- `scss/widgets/base/scheduler/_index.scss:100` · local-var
-  `$scheduler-horizontal-appointment-shadow: inset 2px 0 0 0 $scheduler-appointment-start-color;`
-- `scss/widgets/base/scheduler/_index.scss:101` · local-var
-  `$scheduler-horizontal-appointment-shadow-rtl: inset -2px 0 0 0 $scheduler-appointment-start-color;`
-- `scss/widgets/base/scheduler/_index.scss:102` · local-var
-  `$scheduler-horizontal-appointment-resizing-shadow: inset -2px 0 0 0 $scheduler-appointment-start-color, $scheduler-horizontal-appointment-shadow;`
-- `scss/widgets/base/scheduler/_index.scss:104` · local-var
-  `$scheduler-grouped-appointment-month-text-size: 12px;`
-- `scss/widgets/base/scheduler/_index.scss:106` · local-var
-  `$scheduler-base-border: 1px solid;`
-- `scss/widgets/base/scheduler/_index.scss:107` · local-var
-  `$scheduler-transparent-top-border: 1px solid transparent;`
-- `scss/widgets/base/scheduler/_index.scss:108` · local-var
-  `$scheduler-accent-border: 1px solid;`
-- `scss/widgets/base/scheduler/_index.scss:110` · local-var
-  `$scheduler-reduced-icon-offset: 5px;`
-- `scss/widgets/base/scheduler/_index.scss:111` · local-var
-  `$scheduler-recurrence-icon-offset: 20px;`
-- `scss/widgets/base/scheduler/_index.scss:113` · local-var
-  `$scheduler-agenda-appointment-margin: 5px;`
-- `scss/widgets/base/scheduler/_index.scss:114` · local-var
-  `$scheduler-agenda-last-in-date-appointment-margin: 20px;`
-- `scss/widgets/base/scheduler/_index.scss:120` · local-var
-  `$scheduler-time-indicator-font-size: 30px;`
-- `scss/widgets/base/scheduler/_index.scss:121` · local-var
-  `$scheduler-time-indicator-size: 1px;`
-- `scss/widgets/base/scheduler/_index.scss:122` · local-var
-  `$scheduler-time-indicator-top: 14px;`
-- `scss/widgets/base/scheduler/_index.scss:123` · local-var
-  `$scheduler-time-indicator-left: 12px;`
-- `scss/widgets/base/scheduler/_index.scss:126` · local-var
-  `$scheduler-time-indicator-shadow: 0 1px 0 0 $scheduler-time-indicator-shadow-color;`
-- `scss/widgets/base/scheduler/_index.scss:127` · local-var
-  `$scheduler-time-indicator-text-shadow: $scheduler-time-indicator-shadow-color 1px 0 0;`
-- `scss/widgets/base/scheduler/_index.scss:452` · inline
-  `bottom: -1px;`
-- `scss/widgets/base/scheduler/appointment/regular/_index.scss:147` · inline
-  `left: -1px;`
-- `scss/widgets/base/scheduler/layout/_header.scss:9` · inline
-  `margin-bottom: -1px;`
-- `scss/widgets/base/scheduler/views/_index.scss:44` · local-var
-  `$scheduler-timepanel-cell-offset: 20px;`
-- `scss/widgets/base/scheduler/views/_index.scss:45` · local-var
-  `$scheduler-workspace-info-font-size: 20px;`
-- `scss/widgets/base/scheduler/views/_index.scss:46` · local-var
-  `$scheduler-small-font-size: 14px;`
-- `scss/widgets/base/scheduler/views/_index.scss:48` · local-var
-  `$scheduler-current-time-cell-border-size: 2px;`
-- `scss/widgets/base/scheduler/views/_index.scss:50` · local-var
-  `$scheduler-workspace-date-table-cell-height: 50px;`
-- `scss/widgets/base/scheduler/views/_index.scss:54` · local-var
-  `$scheduler-header-panel-table-cell-height: if(meta.type-of($scheduler-workspace-date-table-cell-height) == number, $scheduler-workspace-date-table-cell-height - 10px, calc(#{$scheduler-workspace-date-table-cell-height} - 10px));`
-- `scss/widgets/base/scheduler/views/_index.scss:55` · local-var
-  `$scheduler-group-header-table-cell-height: 30px;`
-- `scss/widgets/base/scheduler/views/_index.scss:57` · local-var
-  `$scheduler-group-header-table-cell-width: 80px;`
-- `scss/widgets/base/scheduler/views/_index.scss:59` · local-var
-  `$scheduler-month-date-text-size: 16px;`
-- `scss/widgets/base/scheduler/views/_index.scss:61` · local-var
-  `$scheduler-month-date-text-padding: 6px;`
-- `scss/widgets/base/scheduler/views/_index.scss:121` · calc
-  `top: if(meta.type-of($scheduler-header-panel-table-cell-height) == number and meta.type-of($scheduler-current-time-cell-border-size) == number, $scheduler-header-panel-table-cell-height - $scheduler-current-time-cell-border-size - 1, calc(#{$scheduler-header-panel-table-cell-height} - #{$scheduler-current-time-cell-border-size} - 1px));`
-- `scss/widgets/base/scheduler/views/_index.scss:405` · inline
-  `padding: 0 5px;`
-- `scss/widgets/base/scheduler/views/_index.scss:697` · inline
-  `margin-top: -13px;`
-- `scss/widgets/base/scheduler/views/_index.scss:707` · inline
-  `bottom: -1px;`
-- `scss/widgets/base/scheduler/views/_index.scss:844` · inline
-  `height: 50px !important; // stylelint-disable-line declaration-no-important`
-- `scss/widgets/base/scheduler/views/_index.scss:855` · inline
-  `height: 50px;`
-- `scss/widgets/base/scheduler/views/_index.scss:870` · geometry
-  `box-shadow: inset 0 -1px 0 $scheduler-base-border-color;`
-- `scss/widgets/base/scheduler/views/day/_index.scss:45` · inline
-  `margin-top: 1px;`
-- `scss/widgets/base/scheduler/views/month/_index.scss:73` · geometry
-  `box-shadow: 0 -2px 0 $scheduler-base-border-color;`
-- `scss/widgets/base/scheduler/views/timelines/_index.scss:188` · geometry
-  `border-bottom: 1px solid;`
-
 ### pivotGrid — 20
 
 - `scss/widgets/base/pivotGrid/_index.scss:56` · local-var
@@ -439,6 +345,35 @@ and carries a marker saying why.
   `border: 1px solid white;`
 - `scss/widgets/base/_htmlEditor.scss:523` · geometry
   `border: 1px solid white;`
+
+### scheduler — 13
+
+- `scss/widgets/base/scheduler/_index.scss:465` · inline
+  `bottom: -1px;`
+- `scss/widgets/base/scheduler/appointment/regular/_index.scss:147` · inline
+  `left: -1px;`
+- `scss/widgets/base/scheduler/layout/_header.scss:9` · inline
+  `margin-bottom: -1px;`
+- `scss/widgets/base/scheduler/views/_index.scss:121` · calc
+  `top: if(meta.type-of($scheduler-header-panel-table-cell-height) == number and meta.type-of($scheduler-current-time-cell-border-size) == number, $scheduler-header-panel-table-cell-height - $scheduler-current-time-cell-border-size - 1, calc(#{$scheduler-header-panel-table-cell-height} - #{$scheduler-current-time-cell-border-size} - 1px));`
+- `scss/widgets/base/scheduler/views/_index.scss:405` · inline
+  `padding: 0 5px;`
+- `scss/widgets/base/scheduler/views/_index.scss:697` · inline
+  `margin-top: -13px;`
+- `scss/widgets/base/scheduler/views/_index.scss:707` · inline
+  `bottom: -1px;`
+- `scss/widgets/base/scheduler/views/_index.scss:844` · inline
+  `height: 50px !important; // stylelint-disable-line declaration-no-important`
+- `scss/widgets/base/scheduler/views/_index.scss:855` · inline
+  `height: 50px;`
+- `scss/widgets/base/scheduler/views/_index.scss:870` · geometry
+  `box-shadow: inset 0 -1px 0 $scheduler-base-border-color;`
+- `scss/widgets/base/scheduler/views/day/_index.scss:45` · inline
+  `margin-top: 1px;`
+- `scss/widgets/base/scheduler/views/month/_index.scss:73` · geometry
+  `box-shadow: 0 -2px 0 $scheduler-base-border-color;`
+- `scss/widgets/base/scheduler/views/timelines/_index.scss:188` · geometry
+  `border-bottom: 1px solid;`
 
 ### dataGrid — 5
 

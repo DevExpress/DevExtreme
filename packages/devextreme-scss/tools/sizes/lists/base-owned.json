@@ -6,11 +6,11 @@
     "marker — the classification comment already on the line, from tools/review/size-markers.json."
   ],
   "summary": {
-    "occurrences": 330,
+    "occurrences": 310,
     "byCategory": {
       "inline": 147,
-      "local-var": 83,
       "geometry": 75,
+      "local-var": 63,
       "calc": 9,
       "structural": 8,
       "mixin-arg": 6,
@@ -19,7 +19,7 @@
     "byWidget": {
       "gridBase": 75,
       "colorView": 67,
-      "scheduler": 55,
+      "scheduler": 35,
       "textEditor": 26,
       "pivotGrid": 21,
       "htmlEditor": 18,
@@ -48,14 +48,14 @@
       "toolbar": 1,
       "treeView": 1
     },
-    "unmarked": 257,
+    "unmarked": 216,
     "unmarkedByWidget": {
       "gridBase": 75,
       "colorView": 67,
-      "scheduler": 54,
       "pivotGrid": 20,
       "cardView": 15,
       "htmlEditor": 13,
+      "scheduler": 13,
       "dataGrid": 5,
       "treeList": 4,
       "textEditor": 3,
@@ -2351,20 +2351,8 @@
         "3px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-appointment-collector-margin: 3px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/_common.scss",
-      "line": 5,
-      "widget": "scheduler",
-      "literals": [
-        "22px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-appointment-collector-height: 22px;",
+      "marker": "dx-fixed-size",
+      "text": "$scheduler-appointment-collector-margin: 3px; // dx-fixed-size: the collector margin, multiplied elsewhere so a var() cannot pass",
       "category": "local-var"
     },
     {
@@ -2381,63 +2369,14 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 82,
-      "widget": "scheduler",
-      "literals": [
-        "4px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-appointment-min-size: 4px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 83,
-      "widget": "scheduler",
-      "literals": [
-        "5px",
-        "7px"
-      ],
-      "occurrences": 2,
-      "marker": null,
-      "text": "$scheduler-appointment-content-padding: 5px 7px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 84,
-      "widget": "scheduler",
-      "literals": [
-        "40px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-appointment-reduced-content-padding: 40px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 86,
+      "line": 88,
       "widget": "scheduler",
       "literals": [
         "5px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-hovered-appointment-top-shadow-size: 5px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 87,
-      "widget": "scheduler",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-focused-cell-shadow: inset 0 0 0 1px $scheduler-appointment-base-color;",
+      "marker": "dx-fixed-size",
+      "text": "$scheduler-hovered-appointment-top-shadow-size: 5px; // dx-fixed-size: negated and composed into shadows, so a var() cannot pass",
       "category": "local-var"
     },
     {
@@ -2445,11 +2384,11 @@
       "line": 89,
       "widget": "scheduler",
       "literals": [
-        "-2px"
+        "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-vertical-appointment-resizable-hovering-shadow: inset 0 $scheduler-hovered-appointment-top-shadow-size 0 0 $scheduler-appointment-start-color, inset 0 -2px 0 0 $scheduler-appointment-start-color;",
+      "marker": "dx-shadow-geometry",
+      "text": "$scheduler-focused-cell-shadow: inset 0 0 0 1px $scheduler-appointment-base-color; // dx-shadow-geometry",
       "category": "local-var"
     },
     {
@@ -2457,71 +2396,59 @@
       "line": 91,
       "widget": "scheduler",
       "literals": [
-        "2px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-vertical-appointment-shadow: inset 0 2px 0 0 $scheduler-appointment-start-color;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 92,
-      "widget": "scheduler",
-      "literals": [
         "-2px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-vertical-appointment-resizing-shadow: inset 0 -2px 0 0 $scheduler-appointment-start-color, $scheduler-vertical-appointment-shadow;",
+      "marker": "dx-shadow-geometry",
+      "text": "$scheduler-vertical-appointment-resizable-hovering-shadow: inset 0 $scheduler-hovered-appointment-top-shadow-size 0 0 $scheduler-appointment-start-color, inset 0 -2px 0 0 $scheduler-appointment-start-color; // dx-shadow-geometry",
       "category": "local-var"
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 96,
-      "widget": "scheduler",
-      "literals": [
-        "-2px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-horizontal-appointment-resizable-hovering-shadow: inset $scheduler-hovered-appointment-top-shadow-size 0 0 0 $scheduler-appointment-start-color, inset -2px 0 0 0 $scheduler-appointment-start-color;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 97,
+      "line": 93,
       "widget": "scheduler",
       "literals": [
         "2px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-horizontal-appointment-resizable-hovering-shadow-rtl: inset (-$scheduler-hovered-appointment-top-shadow-size) 0 0 0 $scheduler-appointment-start-color, inset 2px 0 0 0 $scheduler-appointment-start-color;",
+      "marker": "dx-shadow-geometry",
+      "text": "$scheduler-vertical-appointment-shadow: inset 0 2px 0 0 $scheduler-appointment-start-color; // dx-shadow-geometry",
       "category": "local-var"
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 100,
-      "widget": "scheduler",
-      "literals": [
-        "2px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-horizontal-appointment-shadow: inset 2px 0 0 0 $scheduler-appointment-start-color;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 101,
+      "line": 94,
       "widget": "scheduler",
       "literals": [
         "-2px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-horizontal-appointment-shadow-rtl: inset -2px 0 0 0 $scheduler-appointment-start-color;",
+      "marker": "dx-shadow-geometry",
+      "text": "$scheduler-vertical-appointment-resizing-shadow: inset 0 -2px 0 0 $scheduler-appointment-start-color, $scheduler-vertical-appointment-shadow; // dx-shadow-geometry",
+      "category": "local-var"
+    },
+    {
+      "file": "scss/widgets/base/scheduler/_index.scss",
+      "line": 98,
+      "widget": "scheduler",
+      "literals": [
+        "-2px"
+      ],
+      "occurrences": 1,
+      "marker": "dx-shadow-geometry",
+      "text": "$scheduler-horizontal-appointment-resizable-hovering-shadow: inset $scheduler-hovered-appointment-top-shadow-size 0 0 0 $scheduler-appointment-start-color, inset -2px 0 0 0 $scheduler-appointment-start-color; // dx-shadow-geometry",
+      "category": "local-var"
+    },
+    {
+      "file": "scss/widgets/base/scheduler/_index.scss",
+      "line": 99,
+      "widget": "scheduler",
+      "literals": [
+        "2px"
+      ],
+      "occurrences": 1,
+      "marker": "dx-shadow-geometry",
+      "text": "$scheduler-horizontal-appointment-resizable-hovering-shadow-rtl: inset (-$scheduler-hovered-appointment-top-shadow-size) 0 0 0 $scheduler-appointment-start-color, inset 2px 0 0 0 $scheduler-appointment-start-color; // dx-shadow-geometry",
       "category": "local-var"
     },
     {
@@ -2529,11 +2456,23 @@
       "line": 102,
       "widget": "scheduler",
       "literals": [
+        "2px"
+      ],
+      "occurrences": 1,
+      "marker": "dx-shadow-geometry",
+      "text": "$scheduler-horizontal-appointment-shadow: inset 2px 0 0 0 $scheduler-appointment-start-color; // dx-shadow-geometry",
+      "category": "local-var"
+    },
+    {
+      "file": "scss/widgets/base/scheduler/_index.scss",
+      "line": 103,
+      "widget": "scheduler",
+      "literals": [
         "-2px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-horizontal-appointment-resizing-shadow: inset -2px 0 0 0 $scheduler-appointment-start-color, $scheduler-horizontal-appointment-shadow;",
+      "marker": "dx-shadow-geometry",
+      "text": "$scheduler-horizontal-appointment-shadow-rtl: inset -2px 0 0 0 $scheduler-appointment-start-color; // dx-shadow-geometry",
       "category": "local-var"
     },
     {
@@ -2541,172 +2480,64 @@
       "line": 104,
       "widget": "scheduler",
       "literals": [
-        "12px"
+        "-2px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-grouped-appointment-month-text-size: 12px;",
+      "marker": "dx-shadow-geometry",
+      "text": "$scheduler-horizontal-appointment-resizing-shadow: inset -2px 0 0 0 $scheduler-appointment-start-color, $scheduler-horizontal-appointment-shadow; // dx-shadow-geometry",
       "category": "local-var"
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 106,
-      "widget": "scheduler",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-base-border: 1px solid;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 107,
-      "widget": "scheduler",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-transparent-top-border: 1px solid transparent;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 108,
-      "widget": "scheduler",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-accent-border: 1px solid;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 110,
-      "widget": "scheduler",
-      "literals": [
-        "5px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-reduced-icon-offset: 5px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 111,
-      "widget": "scheduler",
-      "literals": [
-        "20px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-recurrence-icon-offset: 20px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 113,
-      "widget": "scheduler",
-      "literals": [
-        "5px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-agenda-appointment-margin: 5px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 114,
-      "widget": "scheduler",
-      "literals": [
-        "20px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-agenda-last-in-date-appointment-margin: 20px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 120,
-      "widget": "scheduler",
-      "literals": [
-        "30px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-time-indicator-font-size: 30px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 121,
-      "widget": "scheduler",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-time-indicator-size: 1px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 122,
+      "line": 130,
       "widget": "scheduler",
       "literals": [
         "14px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-time-indicator-top: 14px;",
+      "marker": "dx-fixed-size",
+      "text": "$scheduler-time-indicator-top: 14px; // dx-fixed-size: negated at its use site",
       "category": "local-var"
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 123,
+      "line": 131,
       "widget": "scheduler",
       "literals": [
         "12px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-time-indicator-left: 12px;",
+      "marker": "dx-fixed-size",
+      "text": "$scheduler-time-indicator-left: 12px; // dx-fixed-size: negated at its use site",
       "category": "local-var"
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 126,
+      "line": 134,
       "widget": "scheduler",
       "literals": [
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-time-indicator-shadow: 0 1px 0 0 $scheduler-time-indicator-shadow-color;",
+      "marker": "dx-shadow-geometry",
+      "text": "$scheduler-time-indicator-shadow: 0 1px 0 0 $scheduler-time-indicator-shadow-color; // dx-shadow-geometry",
       "category": "local-var"
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 127,
+      "line": 135,
       "widget": "scheduler",
       "literals": [
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-time-indicator-text-shadow: $scheduler-time-indicator-shadow-color 1px 0 0;",
+      "marker": "dx-shadow-geometry",
+      "text": "$scheduler-time-indicator-text-shadow: $scheduler-time-indicator-shadow-color 1px 0 0; // dx-shadow-geometry",
       "category": "local-var"
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 452,
+      "line": 465,
       "widget": "scheduler",
       "literals": [
         "-1px"
@@ -2748,32 +2579,8 @@
         "20px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-timepanel-cell-offset: 20px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 45,
-      "widget": "scheduler",
-      "literals": [
-        "20px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-workspace-info-font-size: 20px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 46,
-      "widget": "scheduler",
-      "literals": [
-        "14px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-small-font-size: 14px;",
+      "marker": "dx-fixed-size",
+      "text": "$scheduler-timepanel-cell-offset: 20px; // dx-fixed-size: multiplied elsewhere, so a var() cannot pass",
       "category": "local-var"
     },
     {
@@ -2784,8 +2591,8 @@
         "2px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-current-time-cell-border-size: 2px;",
+      "marker": "dx-fixed-size",
+      "text": "$scheduler-current-time-cell-border-size: 2px; // dx-fixed-size: multiplied elsewhere, so a var() cannot pass",
       "category": "local-var"
     },
     {
@@ -2796,8 +2603,8 @@
         "50px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-workspace-date-table-cell-height: 50px;",
+      "marker": "dx-fixed-size",
+      "text": "$scheduler-workspace-date-table-cell-height: 50px; // dx-fixed-size: four derived heights multiply it, so a var() cannot pass",
       "category": "local-var"
     },
     {
@@ -2808,20 +2615,8 @@
         "10px"
       ],
       "occurrences": 2,
-      "marker": null,
-      "text": "$scheduler-header-panel-table-cell-height: if(meta.type-of($scheduler-workspace-date-table-cell-height) == number, $scheduler-workspace-date-table-cell-height - 10px, calc(#{$scheduler-workspace-date-table-cell-height} - 10px));",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 55,
-      "widget": "scheduler",
-      "literals": [
-        "30px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-group-header-table-cell-height: 30px;",
+      "marker": "dx-px-nudge",
+      "text": "$scheduler-header-panel-table-cell-height: if(meta.type-of($scheduler-workspace-date-table-cell-height) == number, $scheduler-workspace-date-table-cell-height - 10px, calc(#{$scheduler-workspace-date-table-cell-height} - 10px)); // dx-px-nudge: -10px under the workspace cell height",
       "category": "local-var"
     },
     {
@@ -2832,32 +2627,8 @@
         "80px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-group-header-table-cell-width: 80px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 59,
-      "widget": "scheduler",
-      "literals": [
-        "16px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-month-date-text-size: 16px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 61,
-      "widget": "scheduler",
-      "literals": [
-        "6px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-month-date-text-padding: 6px;",
+      "marker": "dx-fixed-size",
+      "text": "$scheduler-group-header-table-cell-width: 80px; // dx-fixed-size: multiplied elsewhere, so a var() cannot pass",
       "category": "local-var"
     },
     {

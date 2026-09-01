@@ -408,6 +408,8 @@
     "dx-scheduler-appointment-content-date",
     "dx-scheduler-appointment-content-details",
     "dx-scheduler-appointment-recurrence",
+    "dx-scheduler-appointment-recurrence-icon",
+    "dx-scheduler-appointment-reduced",
     "dx-scheduler-appointment-title",
     "dx-scheduler-container",
     "dx-scheduler-date-table-cell",
