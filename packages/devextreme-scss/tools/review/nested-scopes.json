@@ -447,6 +447,7 @@
   ],
   "scroll-view": [
     "dx-scrollable-native",
+    "dx-scrollview-pull-down",
     "dx-scrollview-pull-down-image",
     "dx-scrollview-pull-down-indicator",
     "dx-scrollview-pull-down-text",

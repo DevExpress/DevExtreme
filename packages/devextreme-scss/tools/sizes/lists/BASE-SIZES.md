@@ -14,50 +14,50 @@ and carries a marker saying why.
 | a raw grep of the layer | 782 |
 | …of those, inside comments (commented-out code, prose) | 5 |
 | **in code** | **777** |
-| — the theme can already set from outside | 379 |
-| — nailed into the shared layer | 398 |
+| — the theme can already set from outside | 381 |
+| — nailed into the shared layer | 396 |
 
 ## What the theme can already set
 
-379 occurrences in 327 `!default` variables. fluent-next already passes 376; 0 are open knobs nobody turns.
+381 occurrences in 329 `!default` variables. fluent-next already passes 378; 0 are open knobs nobody turns.
 
 ## What is nailed into the layer
 
-| widget | inline | local-var | geometry | calc | mixin-arg | total |
+| widget | inline | geometry | local-var | calc | mixin-arg | total |
 |---|---|---|---|---|---|---|
-| gridBase | 50 | 18 | 7 |  |  | **75** |
-| colorView | 35 | 8 | 24 |  |  | **67** |
-| scheduler | 9 | 41 | 3 | 1 |  | **54** |
-| textEditor | 20 |  | 20 | 4 |  | **44** |
-| htmlEditor | 22 | 3 | 8 |  |  | **33** |
-| pivotGrid | 6 | 8 | 6 |  |  | **20** |
-| cardView | 9 | 1 | 5 |  |  | **15** |
+| gridBase | 50 | 7 | 18 |  |  | **75** |
+| colorView | 35 | 24 | 8 |  |  | **67** |
+| scheduler | 9 | 3 | 41 | 1 |  | **54** |
+| textEditor | 20 | 20 |  | 4 |  | **44** |
+| htmlEditor | 22 | 8 | 3 |  |  | **33** |
+| pivotGrid | 6 | 6 | 8 |  |  | **20** |
+| cardView | 9 | 5 | 1 |  |  | **15** |
 | ui | 8 |  |  |  |  | **8** |
-| scrollView | 5 | 2 |  |  |  | **7** |
-| dataGrid |  |  | 3 |  | 2 | **5** |
-| toolbar | 1 |  | 4 |  |  | **5** |
-| sortable |  |  | 4 |  |  | **4** |
-| calendar | 1 |  | 3 |  |  | **4** |
-| diagram |  | 1 |  | 3 |  | **4** |
-| treeList |  |  | 1 |  | 3 | **4** |
-| pagination | 1 | 2 |  |  |  | **3** |
-| colorBox | 1 | 1 |  | 1 |  | **3** |
-| switch | 2 |  | 1 |  |  | **3** |
-| timeView | 2 | 1 |  |  |  | **3** |
+| scrollView | 5 |  |  |  |  | **5** |
+| dataGrid |  | 3 |  |  | 2 | **5** |
+| toolbar | 1 | 4 |  |  |  | **5** |
+| sortable |  | 4 |  |  |  | **4** |
+| calendar | 1 | 3 |  |  |  | **4** |
+| diagram |  |  | 1 | 3 |  | **4** |
+| treeList |  | 1 |  |  | 3 | **4** |
+| pagination | 1 |  | 2 |  |  | **3** |
+| colorBox | 1 |  | 1 | 1 |  | **3** |
+| switch | 2 | 1 |  |  |  | **3** |
+| timeView | 2 |  | 1 |  |  | **3** |
 | icon_fonts | 2 |  |  |  |  | **2** |
-| numberBox |  | 2 |  |  |  | **2** |
-| resizable |  | 2 |  |  |  | **2** |
-| slider |  | 2 |  |  |  | **2** |
+| numberBox |  |  | 2 |  |  | **2** |
+| resizable |  |  | 2 |  |  | **2** |
+| slider |  |  | 2 |  |  | **2** |
 | tagBox | 1 |  |  | 1 |  | **2** |
-| chat |  |  | 2 |  |  | **2** |
-| dropDownMenu |  |  | 2 |  |  | **2** |
+| chat |  | 2 |  |  |  | **2** |
+| dropDownMenu |  | 2 |  |  |  | **2** |
 | filterBuilder | 2 |  |  |  |  | **2** |
-| treeView | 1 | 1 |  |  |  | **2** |
+| treeView | 1 |  | 1 |  |  | **2** |
 | fileUploader | 1 |  |  |  |  | **1** |
-| validation |  |  | 1 |  |  | **1** |
+| validation |  | 1 |  |  |  | **1** |
 | dropDownButton | 1 |  |  |  |  | **1** |
 | gantt | 1 |  |  |  |  | **1** |
-| list |  | 1 |  |  |  | **1** |
+| list |  |  | 1 |  |  | **1** |
 | lookup |  |  |  | 1 |  | **1** |
 | popover |  |  |  |  | 1 | **1** |
 
@@ -579,17 +579,13 @@ and carries a marker saying why.
 - `scss/widgets/base/_ui.scss:376` · inline
   `transform: translate3d(0, 10px, 0) scale3d(1.1, 1.1, 1.1);`
 
-### scrollView — 7
+### scrollView — 5
 
-- `scss/widgets/base/_scrollView.scss:17` · local-var
-  `$pulldown-height: 50px;`
-- `scss/widgets/base/_scrollView.scss:18` · local-var
-  `$pulldown-padding: 15px;`
-- `scss/widgets/base/_scrollView.scss:43` · inline
+- `scss/widgets/base/_scrollView.scss:54` · inline
   `margin-left: -20px;`
-- `scss/widgets/base/_scrollView.scss:142` · inline
+- `scss/widgets/base/_scrollView.scss:153` · inline
   `margin: -15px 20px 0 15px;`
-- `scss/widgets/base/_scrollView.scss:223` · inline
+- `scss/widgets/base/_scrollView.scss:234` · inline
   `margin-top: -20px;`
 
 ### dataGrid — 5

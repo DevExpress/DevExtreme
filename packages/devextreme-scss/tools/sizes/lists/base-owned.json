@@ -6,11 +6,11 @@
     "marker — the classification comment already on the line, from tools/review/size-markers.json."
   ],
   "summary": {
-    "occurrences": 398,
+    "occurrences": 396,
     "byCategory": {
       "inline": 182,
       "geometry": 95,
-      "local-var": 94,
+      "local-var": 92,
       "calc": 11,
       "structural": 8,
       "mixin-arg": 6,
@@ -25,7 +25,7 @@
       "pivotGrid": 21,
       "cardView": 15,
       "ui": 8,
-      "scrollView": 7,
+      "scrollView": 5,
       "dataGrid": 5,
       "fileManager": 5,
       "toolbar": 5,
@@ -56,7 +56,7 @@
       "popover": 1,
       "stepper": 1
     },
-    "unmarked": 386,
+    "unmarked": 384,
     "unmarkedByWidget": {
       "gridBase": 75,
       "colorView": 67,
@@ -66,7 +66,7 @@
       "pivotGrid": 20,
       "cardView": 15,
       "ui": 8,
-      "scrollView": 7,
+      "scrollView": 5,
       "dataGrid": 5,
       "toolbar": 5,
       "sortable": 4,
@@ -629,31 +629,7 @@
     },
     {
       "file": "scss/widgets/base/_scrollView.scss",
-      "line": 17,
-      "widget": "scrollView",
-      "literals": [
-        "50px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$pulldown-height: 50px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/_scrollView.scss",
-      "line": 18,
-      "widget": "scrollView",
-      "literals": [
-        "15px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$pulldown-padding: 15px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/_scrollView.scss",
-      "line": 43,
+      "line": 54,
       "widget": "scrollView",
       "literals": [
         "-20px"
@@ -665,7 +641,7 @@
     },
     {
       "file": "scss/widgets/base/_scrollView.scss",
-      "line": 142,
+      "line": 153,
       "widget": "scrollView",
       "literals": [
         "-15px",
@@ -679,7 +655,7 @@
     },
     {
       "file": "scss/widgets/base/_scrollView.scss",
-      "line": 223,
+      "line": 234,
       "widget": "scrollView",
       "literals": [
         "-20px"

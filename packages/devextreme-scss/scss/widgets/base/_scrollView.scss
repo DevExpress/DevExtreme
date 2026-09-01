@@ -1,3 +1,4 @@
+@use "sass:meta";
 @use "./mixins" as *;
 
 // Design sizing values (parametrizable; fluent-next injects tokens)
@@ -13,9 +14,19 @@ $scrollview-scrollbottom-indicator-margin: 0 10px 0 0 !default;
 $scrollview-scrollbottom-indicator-margin-rtl: 0 0 0 10px !default;
 
 $scrollview-pulldown-icon-font-size: 24px !default;
+$pulldown-height: 50px !default;
+$pulldown-padding: 15px !default;
 
-$pulldown-height: 50px;
-$pulldown-padding: 15px;
+/*
+ * The pull-down area is parked directly above the viewport, so the offset is its own height plus
+ * both paddings, negated. A theme that feeds var() into either leaves Sass nothing to add up, so the
+ * offset is a knob of its own: the theme derives it once instead of the browser recomputing it here.
+ */
+$pulldown-top-offset: if(
+  meta.type-of($pulldown-height) == number and meta.type-of($pulldown-padding) == number,
+  -($pulldown-height + $pulldown-padding * 2),
+  calc(-1 * (#{$pulldown-height} + #{$pulldown-padding} * 2))
+) !default;
 
 .dx-scrollable-native {
   &.dx-scrollable-native-generic {
@@ -120,7 +131,7 @@ $pulldown-padding: 15px;
   width: 100%;
   height: $pulldown-height;
   padding: $pulldown-padding 0;
-  top: -($pulldown-height + $pulldown-padding * 2);
+  top: $pulldown-top-offset;
   overflow: hidden;
   transform: translate(0, 0);
   -webkit-user-drag: none;
