@@ -20,7 +20,10 @@ $pivot-grid-position-indicator-bg: ds.$color-border-contrast !default;
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
 $pivot-grid-header-filter-content: ds.$color-content-primary !default;
-$pivot-grid-border-disabled: ds.$color-border-disabled !default;
+
+/* Border of the field boxes in their ordinary state. It reads the disabled border role because
+that is the step the design uses here; nothing on this element is disabled. */
+$pivot-grid-field-area-box-border: ds.$color-border-disabled !default;
 $pivot-grid-content: ds.$color-content !default;
 
 // Color computations hoisted from style files (phase 0.5 layer normalization)

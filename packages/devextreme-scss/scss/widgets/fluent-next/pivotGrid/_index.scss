@@ -60,7 +60,7 @@
     .dx-area-field.dx-area-box {
       background-color: var(--dx-pivot-grid-area-field-bg);
       border: var(--dx-pivot-grid-area-box-border);
-      border-color: var(--dx-pivot-grid-border-disabled);
+      border-color: var(--dx-pivot-grid-field-area-box-border);
       box-shadow: var(--dx-pivot-grid-drag-header-shadow);
     }
   }
@@ -70,7 +70,7 @@
     background-color: var(--dx-pivot-grid-field-area-box-bg);
     border-radius: var(--dx-pivot-grid-area-field-border-radius);
     border: var(--dx-pivot-grid-area-box-border);
-    border-color: var(--dx-pivot-grid-border-disabled);
+    border-color: var(--dx-pivot-grid-field-area-box-border);
     font-size: var(--dx-pivot-grid-headers-font-size);
     font-weight: var(--dx-pivot-grid-field-area-box-font-weight);
     line-height: var(--dx-pivot-grid-area-field-line-height);

@@ -21,7 +21,7 @@ $tree-view-item-content-disabled: ds.$color-content-disabled !default;
 /* Was fed by a *-disabled token holding a neutral grey; 262.15.0 dropped it. The neutral border
 role is the exact colour in light and a more visible one in dark, which suits a focus state. */
 $tree-view-checkbox-border-focused: ds.$color-border !default;
-$tree-view-checkbox-bg-focused: ds.$color-bg-disabled !default;
+$tree-view-checkbox-bg-focused: ds.$color-bg-low !default;
 $tree-view-checkbox-accent-content-focused: ds.$color-bg-primary-hovered !default;
 
 // Base-layer values injected with design tokens (wave B1)

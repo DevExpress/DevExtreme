@@ -2,7 +2,7 @@
 @use "sizes" as *;
 
 @mixin publish {
-  --dx-tag-box-border-disabled: #{$tag-box-border-disabled};
+  --dx-tag-box-tag-border: #{$tag-box-tag-border};
   --dx-tag-box-filled-with-label-padding-block-end: #{$tag-box-filled-with-label-padding-block-end};
   --dx-tag-box-filled-with-label-padding-block-start: #{$tag-box-filled-with-label-padding-block-start};
   --dx-tag-box-list-select-all-border-block-end: #{$tag-box-list-select-all-border-block-end};
