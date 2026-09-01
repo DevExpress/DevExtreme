@@ -146,3 +146,19 @@
     color: var(--dx-filter-builder-content-disabled);
   }
 }
+
+/* The operator and field chips carry semantic tints - danger for the operator, primary for the
+field - and a disabled builder kept them at full strength. */
+.dx-state-disabled .dx-filterbuilder .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-group-operation,
+.dx-filterbuilder.dx-state-disabled .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-group-operation {
+  background-color: var(--dx-filter-builder-group-operation-content-disabled);
+}
+
+.dx-state-disabled .dx-filterbuilder .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-item-field,
+.dx-state-disabled .dx-filterbuilder .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-item-operation,
+.dx-state-disabled .dx-filterbuilder .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-item-value-text,
+.dx-filterbuilder.dx-state-disabled .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-item-field,
+.dx-filterbuilder.dx-state-disabled .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-item-operation,
+.dx-filterbuilder.dx-state-disabled .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-item-value-text {
+  background-color: var(--dx-filter-builder-item-field-content-disabled);
+}

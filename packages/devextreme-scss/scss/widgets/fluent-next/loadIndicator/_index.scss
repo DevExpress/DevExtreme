@@ -130,3 +130,11 @@
   50% { transform: rotate(5deg); }
   to { transform: rotate(-130deg); }
 }
+
+/* The spinner is painted with the accent, which does not inherit anything, so it kept spinning at
+full strength inside a disabled widget. The per-segment rules carry three classes, so the state
+needs the same reach. */
+.dx-state-disabled .dx-loadindicator-content-circle [class*="dx-loadindicator-segment"] .dx-loadindicator-segment-inner {
+  border-color: var(--dx-load-indicator-segment-inner-border-disabled);
+  border-top-color: var(--dx-load-indicator-segment-border-disabled);
+}

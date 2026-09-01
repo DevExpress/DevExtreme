@@ -31,3 +31,7 @@ $pivot-grid-drag-header-shadow: 0 3px 4px ds.$color-shadow-key !default; // dx-s
 $pivot-grid-area-field-bg: rgb(from #{$pivot-grid-field-area-box-bg} r g b / 0.9) !default;
 
 $pivot-grid-content-disabled: ds.$color-content-disabled !default;
+
+/* The field left behind while dragging. Blazor marks its draggable pivot header with colour, and
+so do cardView and the grid here - the field stays readable and says it is the source. */
+$pivot-grid-drag-header-content: ds.$color-content-subtle !default;

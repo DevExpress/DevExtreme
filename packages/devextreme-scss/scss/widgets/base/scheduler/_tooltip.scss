@@ -1,3 +1,5 @@
+$scheduler-tooltip-date-opacity: 0.8 !default;
+
 @use "./mixins" as *;
 
 $scheduler-tooltip-shadow: null !default;
@@ -73,7 +75,13 @@ $scheduler-tooltip-date-font-size: null !default;
       .dx-tooltip-appointment-item-content-date {
         text-align: left;
         font-size: $scheduler-tooltip-date-font-size;
-        opacity: 0.8;
+
+        /* false opts out: the date is secondary text, and a theme that has a role for that says
+        so with a colour rather than by making the line translucent */
+        @if $scheduler-tooltip-date-opacity {
+          opacity: $scheduler-tooltip-date-opacity;
+        }
+
         margin-top: $scheduler-tooltip-remove-margin-top;
       }
     }

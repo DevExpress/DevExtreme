@@ -123,3 +123,11 @@
     color: var(--dx-gallery-content-disabled);
   }
 }
+
+/* The arrow disc is a surface of its own, so it kept full strength next to greyed slides. */
+.dx-gallery.dx-state-disabled .dx-gallery-nav-button-prev::after,
+.dx-gallery.dx-state-disabled .dx-gallery-nav-button-next::after,
+.dx-state-disabled .dx-gallery-nav-button-prev::after,
+.dx-state-disabled .dx-gallery-nav-button-next::after {
+  background-color: var(--dx-gallery-nav-button-bg-disabled);
+}

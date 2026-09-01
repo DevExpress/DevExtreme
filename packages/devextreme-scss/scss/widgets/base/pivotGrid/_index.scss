@@ -1,3 +1,5 @@
+$pivotgrid-drag-source-opacity: 0.5 !default;
+
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $pivotgrid-position-indicator-vertical-height: 2px !default;
 $pivotgrid-position-indicator-horizontal-width: 2px !default;
@@ -150,7 +152,11 @@ $pivotgrid-expand-icon-text-offset: 0;
   }
 
   .dx-drag-source {
-    opacity: 0.5;
+    /* false opts out of the dim; a theme that marks the source with colour instead does not want
+    the field text halved */
+    @if $pivotgrid-drag-source-opacity {
+      opacity: $pivotgrid-drag-source-opacity;
+    }
   }
 
   .dx-column-indicators {

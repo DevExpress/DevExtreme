@@ -10,6 +10,10 @@
   $pivotgrid-focus-outline-offset: var(--dx-focus-rect-outline-offset-inset),
   $pivotgrid-icon-size: var(--dx-pivot-grid-icon-size),
   $pivotgrid-common-field-padding: var(--dx-pivot-grid-field-padding),
+  /* No dim on the field left behind while dragging. The package has no pivot grid, but Blazor
+  marks its draggable header with a background, a border and a colour and never with opacity
+  (pivot/pivot-table/layout.scss), which is also what cardView and the grid do here. */
+  $pivotgrid-drag-source-opacity: false,
   $pivotgrid-common-field-chooser-drag-width: var(--dx-pivot-grid-field-chooser-drag-width),
   $pivotgrid-common-field-chooser-drag-height: var(--dx-pivot-grid-field-chooser-drag-height),
   $pivotgrid-position-indicator-vertical-height: var(--dx-pivot-grid-position-indicator-vertical-height),
@@ -270,5 +274,18 @@ pivot grid root, so the rule above never reached them. */
 .dx-pivotgrid.dx-state-disabled .dx-pivotgrid-area .dx-row-total,
 .dx-pivotgrid.dx-state-disabled .dx-pivotgrid-area .dx-grandtotal,
 .dx-pivotgrid.dx-state-disabled .dx-pivotgrid-area .dx-total {
+  color: var(--dx-pivot-grid-content-disabled);
+}
+
+/* The field a drag started from is marked with colour rather than halved: at 0.5 its text sat at
+about 3.4:1, the same defect cardView had. The disabled pair keeps the own-colour ratchet honest -
+these elements now paint themselves, so a disabled rule has to reach them. */
+.dx-pivotgrid-fields-container .dx-drag-source,
+.dx-pivotgrid-fields-container .dx-drag-source .dx-area-field-content {
+  color: var(--dx-pivot-grid-drag-header-content);
+}
+
+.dx-state-disabled .dx-pivotgrid-fields-container .dx-drag-source,
+.dx-state-disabled .dx-pivotgrid-fields-container .dx-drag-source .dx-area-field-content {
   color: var(--dx-pivot-grid-content-disabled);
 }
