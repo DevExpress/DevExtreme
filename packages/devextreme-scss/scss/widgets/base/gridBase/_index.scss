@@ -26,7 +26,7 @@
   clip-path: polygon(0 0);
 }
 
-@mixin grid-base($widget-name) {
+@mixin grid-base($widget-name, $draggable-column-opacity: 0.5) {
   @include grid-base-cell($widget-name);
 
   .dx-#{$widget-name}-checkbox-size {
@@ -177,7 +177,9 @@
           }
 
           &.dx-#{$widget-name}-draggable-column {
-            opacity: 0.5;
+            @if $draggable-column-opacity {
+              opacity: $draggable-column-opacity;
+            }
           }
         }
       }
@@ -255,7 +257,11 @@
   }
 
   .dx-#{$widget-name}-draggable-column {
-    opacity: 0.5;
+    /* false opts out of the dim; a theme that marks the dragged column with colour instead does
+    not want its header text halved */
+    @if $draggable-column-opacity {
+      opacity: $draggable-column-opacity;
+    }
   }
 
   .dx-data-row.dx-state-hover {

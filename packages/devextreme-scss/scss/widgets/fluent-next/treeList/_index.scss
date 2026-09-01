@@ -7,6 +7,9 @@
 @use "../gridBase/colors" as gridBaseColors;
 @use "../gridBase/sizes" as gridBaseSizes;
 @use "../../base/treeList" as baseTreeList with (
+  /* No dim on the dragged column: it halved the header text to 3.41:1. The column is
+  marked with the drag-source colour instead - the sticky-column case already did that. */
+  $treelist-draggable-column-opacity: false,
   $treelist-expandable-node-line-height: var(--dx-tree-list-empty-space-height),
   $treelist-sticky-column-border: var(--dx-tree-list-sticky-column-border),
   $treelist-cell-focus-outline: var(--dx-tree-list-cell-outline-focused),

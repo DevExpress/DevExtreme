@@ -1114,8 +1114,7 @@
     }
   }
 
-  .dx-#{$widget-name}-sticky-columns .dx-#{$widget-name}-draggable-column {
-    opacity: 1;
+  .dx-#{$widget-name}-draggable-column {
     color: var(--dx-grid-draggable-column-content);
   }
 

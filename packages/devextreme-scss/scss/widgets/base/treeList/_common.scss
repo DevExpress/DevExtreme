@@ -1,6 +1,8 @@
 @use "../mixins" as *;
 @use "../gridBase" as *;
-@include grid-base(treelist);
+$draggable-column-opacity: 0.5 !default;
+
+@include grid-base(treelist, $draggable-column-opacity);
 
 .dx-treelist-container {
   position: relative;

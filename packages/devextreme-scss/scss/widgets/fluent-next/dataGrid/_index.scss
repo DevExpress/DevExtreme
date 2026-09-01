@@ -6,6 +6,9 @@
 @use "../gridBase/colors" as gridBaseColors;
 @use "../gridBase/sizes" as gridBaseSizes;
 @use "../../base/dataGrid" as baseGrid with (
+  /* No dim on the dragged column: it halved the header text to 3.41:1. The column is
+  marked with the drag-source colour instead - the sticky-column case already did that. */
+  $datagrid-draggable-column-opacity: false,
   $datagrid-common-group-min-width: var(--dx-data-grid-group-panel-item-min-width),
   $datagrid-common-addrow-margin-right: var(--dx-data-grid-group-panel-item-margin-inline-end),
   $datagrid-common-addrow-margin-left: var(--dx-data-grid-group-panel-item-sort-margin-inline-start),
