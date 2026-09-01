@@ -42,6 +42,10 @@ const RESET_WITHOUT_PAINT = new Set([
 
 const PAINT_PROPERTIES = /(^|;)\s*(color|background|background-color|border[a-z-]*color|fill|stroke)\s*:/;
 
+// The library spells a disabled element three ways: the shared state class, the pager's own
+// dx-button-disable, and the BEM modifier of the grid's AI chat.
+const DISABLED_SELECTOR = /dx-state-disabled|dx-button-disable|--disabled/;
+
 const bundleNames = existsSync(artifactsCss)
   ? readdirSync(artifactsCss).filter((n) => /^dx\.fluent-next\.[a-z0-9.]+\.css$/.test(n)).sort()
   : [];
@@ -121,12 +125,49 @@ test('the gate catches a component that lifts the dim without painting', () => {
   expect(findOffenders(fixture)).toEqual(['dx-beta']);
 });
 
+// A name ending in -disabled must mark a disabled state. Borrowing one for a resting element -
+// as the ordinary tag border and the pivot grid field boxes did - hides a design decision behind
+// a state that is not there, and it was how the cardView drag source came to be painted with the
+// disabled colours in the first place.
+const findBorrowedNames = (css: string): string[] => {
+  const borrowed = new Set<string>();
+
+  readRules(css).forEach(({ selector, body }) => {
+    if (selector.startsWith('@') || DISABLED_SELECTOR.test(selector)) {
+      return;
+    }
+
+    for (const read of body.matchAll(/var\((--dx-[a-z0-9-]*disabled[a-z0-9-]*)\)/g)) {
+      const name = read[1];
+      // one disabled name defined in terms of another is a chain, not a read in a live rule
+      const chained = new RegExp(`(--dx-[a-z0-9-]+)\\s*:\\s*[^;]*${name}`).exec(body);
+
+      if (!chained || !chained[1].includes('disabled')) {
+        borrowed.add(`${name} in ${selector}`);
+      }
+    }
+  });
+
+  return [...borrowed].sort();
+};
+
+test('the gate catches a disabled name borrowed by a resting element', () => {
+  const fixture = '.dx-alpha{border-color:var(--dx-alpha-border-disabled)}'
+    + '.dx-beta.dx-state-disabled{color:var(--dx-beta-content-disabled)}';
+
+  expect(findBorrowedNames(fixture)).toEqual(['--dx-alpha-border-disabled in .dx-alpha']);
+});
+
 describe.each(bundleNames)('%s', (bundleName) => {
   const css = readFileSync(join(artifactsCss, bundleName), 'utf8');
   const rules = readRules(css);
 
   test('a component that lifts the disabled dim also paints the state', () => {
     expect(findOffenders(css)).toEqual([]);
+  });
+
+  test('a -disabled name is only read where something is disabled', () => {
+    expect(findBorrowedNames(css)).toEqual([]);
   });
 
   test('the blanket dim is still in force for components that do not paint', () => {

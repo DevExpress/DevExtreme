@@ -17,3 +17,7 @@ $radio-button-invalid-bg-hovered: ds.$color-border-danger-shared-hovered !defaul
 $radio-button-invalid-bg-focused: ds.$color-border-danger-shared-active !default;
 
 $radio-button-content-disabled: ds.$color-content-disabled !default;
+
+/* Read-only shares the disabled step, but it is not a disabled state: Blazor keeps the two
+apart with variables of their own, and so do we, so either can move without the other. */
+$radio-button-content-read-only: ds.$color-content-disabled !default;
