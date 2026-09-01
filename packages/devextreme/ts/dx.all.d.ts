@@ -2144,7 +2144,8 @@ declare module DevExpress.common.charts {
     | 'Green Mist'
     | 'Soft Blue'
     | 'Material'
-    | 'Office';
+    | 'Office'
+    | 'Fluent Next';
   export type PaletteColorSet = 'simpleSet' | 'indicatingSet' | 'gradientSet';
   export type PaletteExtensionMode = 'alternate' | 'blend' | 'extrapolate';
   export type PointInteractionMode =
