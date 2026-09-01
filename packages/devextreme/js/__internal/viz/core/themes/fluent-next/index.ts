@@ -1,8 +1,11 @@
+import { getAccentColorScheme } from '@ts/viz/core/themes/shared/accent_color_scheme';
+
 const themes = [
   {
     baseThemeName: 'fluent.blue.light',
     theme: {
       name: 'fluent-next.blue.light',
+      defaultPalette: 'Fluent Next',
     },
   },
   {
@@ -15,6 +18,8 @@ const themes = [
     baseThemeName: 'fluent.blue.dark',
     theme: {
       name: 'fluent-next.blue.dark',
+      defaultPalette: 'Fluent Next',
+      ...getAccentColorScheme('#4B90D9'),
     },
   },
   {
