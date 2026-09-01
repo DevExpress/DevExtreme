@@ -113,9 +113,19 @@ const CASES = [
   // --- the rest of what the blanket dim used to reach, so its whole base is visible here ----
   ['scrollView', 'ScrollView', 130, (h, f) => { h.innerHTML = '<div style="height:200px">scrollable content</div>'; $(h).dxScrollView({ height: 100, ...f }); }],
   ['loadIndicator', 'LoadIndicator', 80, (h, f) => $(h).dxLoadIndicator({ visible: true, ...f })],
-  ['speedDialAction', 'SpeedDialAction', 110, (h, f) => $(h).dxSpeedDialAction({ icon: 'add', ...f })],
-  ['contextMenu', 'ContextMenu', 140, (h, f) => $(h).dxContextMenu({ items: [{ text: 'One' }, { text: 'Two' }], visible: true, target: h, ...f })],
-  ['actionSheet', 'ActionSheet', 130, (h, f) => $(h).dxActionSheet({ items: [{ text: 'One' }, { text: 'Two' }], usePopover: false, ...f })],
+  ['speedDialAction', 'SpeedDialAction', 110, (h, f) => {
+    h.style.position = 'relative';
+    h.style.minHeight = '80px';
+    $(h).dxSpeedDialAction({ icon: 'add', label: 'Add', ...f });
+  }],
+  ['contextMenu', 'ContextMenu  (opens on demand)', 140,
+    (h, f) => { h.innerHTML = '<div class="dx-anchor" style="padding:4px">right-click target</div>'; $(h).dxContextMenu({ items: [{ text: 'One' }, { text: 'Two', icon: 'save' }], target: h, ...f }); },
+    (h) => h.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, clientX: 40, clientY: 40 }))],
+  ['actionSheet', 'ActionSheet  (opens on demand)', 130,
+    // the widget must own the host: putting markup in it makes dxActionSheet treat that markup
+    // as its items, which is how this case previously showed "sheet target" twice
+    (h, f) => { $(h).dxActionSheet({ items: [{ text: 'Save' }, { text: 'Delete' }], usePopover: false, title: 'Choose', ...f }); },
+    (h) => $(h).dxActionSheet('instance').option('visible', true)],
   // Markup-only blocks: the dim reached them through .dx-widget just like a real widget.
   ['badge', 'Badge  (markup)', 70, (h, f) => { h.innerHTML = '<span class="dx-badge">7</span>'; h.classList.add('dx-widget'); if (f.disabled) h.classList.add('dx-state-disabled'); }],
   ['card', 'Card  (markup)', 90, (h, f) => { h.innerHTML = '<div class="dx-card" style="width:180px;padding:8px">Card</div>'; h.classList.add('dx-widget'); if (f.disabled) h.classList.add('dx-state-disabled'); }],
@@ -138,7 +148,12 @@ const shown = SET === 'readonly' ? CASES.filter(([id]) => READONLY_CASES.has(id)
 const flags = STATE === 'disabled' ? { disabled: true } : (STATE === 'readonly' ? { readOnly: true } : {});
 
 const gallery = document.getElementById('gallery');
-shown.forEach(([id, label, height, build]) => {
+// Components that live in a portal cannot be judged while closed, so a case may declare an
+// opener. The shell fires it in every column at once - a menu opened in one column and not the
+// others would be worse than not showing it at all.
+const openers = {};
+
+shown.forEach(([id, label, height, build, open]) => {
   const row = document.createElement('div');
   row.className = 'row';
   row.style.height = height + 'px';
@@ -149,8 +164,20 @@ shown.forEach(([id, label, height, build]) => {
   const host = document.createElement('div');
   host.className = 'host';
   row.appendChild(cap); row.appendChild(host); gallery.appendChild(row);
-  try { build(host, flags); } catch (e) { cap.textContent = label + '  [' + e.message + ']'; }
+  try {
+    build(host, flags);
+    if (open) {
+      openers[id] = () => open(host, flags);
+    }
+  } catch (e) { cap.textContent = label + '  [' + e.message + ']'; }
 });
+
+window.__openable = Object.keys(openers);
+window.__open = (id) => {
+  const fn = openers[id];
+  if (!fn) return false;
+  try { fn(); return true; } catch (e) { return false; }
+};
 
 // Whether a case can be judged here at all. A component that renders nothing, has no text and
 // no painted surface of its own, or puts its content in a portal outside the host cannot be

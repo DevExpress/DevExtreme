@@ -20,6 +20,10 @@
               border-bottom: 1px solid rgba(128,128,128,.35); background: rgba(128,128,128,.08); }
   .col > h2 small { display: block; font-weight: 400; opacity: .6; }
   iframe { flex: 1 1 auto; width: 100%; height: calc(100vh - 210px); border: 0; }
+  #triggers { font-size: 12px; }
+  #triggers button { font: inherit; padding: 3px 10px; border: 1px solid rgba(128,128,128,.5);
+                     border-radius: 4px; background: transparent; color: inherit; cursor: pointer; }
+  #triggers button:hover { background: rgba(128,128,128,.15); }
   #summary { padding: 10px 14px; border-top: 1px solid rgba(128,128,128,.35); font-size: 12px; }
   #summary ul { margin: 6px 0 0; padding-left: 18px; }
   #summary .same { color: #b3261e; }
@@ -41,6 +45,8 @@
   </div>
 
   <div class="note" id="legend"></div>
+
+  <div class="bar" id="triggers"></div>
 
   <div class="cols" id="cols"></div>
 
@@ -101,7 +107,38 @@ function build() {
     return { cfg: c, el: f };
   });
   syncScroll();
+  buildTriggers();
   waitAndSummarise();
+}
+
+// A portalled component shows nothing until it is opened, and opening it in one column only
+// would leave nothing to compare. Each trigger fires the same case in every column.
+async function buildTriggers() {
+  const bar = document.getElementById('triggers');
+  bar.innerHTML = '<span>Portalled components — open in every column:</span>';
+
+  const deadline = Date.now() + 30000;
+  while (Date.now() < deadline
+    && !frames.every(({ el }) => el.contentWindow && el.contentWindow.__openable)) {
+    await new Promise((r) => setTimeout(r, 250));
+  }
+
+  const ids = frames[0]?.el?.contentWindow?.__openable ?? [];
+
+  if (!ids.length) {
+    bar.innerHTML += ' <span style="opacity:.6">none in this set</span>';
+    return;
+  }
+
+  ids.forEach((id) => {
+    const button = document.createElement('button');
+    button.textContent = id;
+    button.addEventListener('click', () => {
+      const opened = frames.filter(({ el }) => el.contentWindow.__open?.(id)).length;
+      button.textContent = `${id} (${opened}/${frames.length})`;
+    });
+    bar.appendChild(button);
+  });
 }
 
 function syncScroll() {
