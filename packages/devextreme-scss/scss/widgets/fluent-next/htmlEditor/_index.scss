@@ -18,9 +18,9 @@
   $blockquote-border-inline-start-width: var(--dx-html-editor-blockquote-border-inline-start-width),
   $table-cell-padding: var(--dx-html-editor-table-cell-padding),
   $placeholder-inset-inline: var(--dx-html-editor-placeholder-inset-inline),
-  $mention-padding-block: var(--dx-html-editor-mention-padding-block),
-  $mention-border-radius: var(--dx-html-editor-mention-border-radius),
-  $mention-margin-inline: var(--dx-html-editor-mention-margin-inline),
+  $mention-padding-block: var(--dx-mention-padding-block),
+  $mention-border-radius: var(--dx-mention-border-radius),
+  $mention-margin-inline: var(--dx-mention-margin-inline),
   $table-resizer-thickness: var(--dx-html-editor-table-resizer-thickness),
   $table-resizer-highlight-thickness: var(--dx-html-editor-table-resizer-highlight-thickness),
   $htmleditor-code-block-bg: var(--dx-html-editor-code-block-bg),
@@ -296,12 +296,9 @@
   text-align: start;
 }
 
-/*
- * Consumers hand-write .dx-mention outside the editor, where the component tier does not
- * reach: without the fallback the whole declaration dies there and the highlight disappears.
- */
+// a mention renders wherever the editor's value is rendered, so it reads the system tier
 .dx-mention {
-  background-color: var(--dx-html-editor-mention-bg, #{$html-editor-mention-bg});
+  background-color: var(--dx-mention-bg);
 }
 
 .dx-suggestion-list-wrapper {

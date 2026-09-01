@@ -396,6 +396,13 @@ const OVERRIDES = {
     // editor family plus fieldset.
     'invalid-badge',
     'valid-badge',
+    // Markup a widget writes into its own value, which consumers then render anywhere: the
+    // htmlEditor emits .dx-mention into the HTML it saves, and the Mentions demo shows that HTML
+    // in a chat log with no editor around it. The base layer already says so — `.dx-mention` is a
+    // bare selector there, while `.dx-variable` is nested under `.dx-htmleditor-content`. A
+    // component-tier token would only resolve inside the editor and the highlight would vanish
+    // everywhere else, so the value is published on :root.
+    'mention',
     'focus-rect', // ds.$focus-rect-color-*
     'shadow', // ds.$color-shadow-* / ds.$box-shadow-*
     'typography', // ds.$font-* / ds.$line-height-*
