@@ -5,7 +5,6 @@ $treeview-disabled-opacity: null !default;
 
 // Sized from base/treeView, which owns the defaults and forwards a theme's values down.
 $treeview-searchbox-margin-bottom: null !default;
-$treeview-item-icon-margin-inline-end: null !default;
 
 .dx-treeview-loadindicator-wrapper {
   text-align: center;
@@ -84,7 +83,7 @@ $treeview-item-icon-margin-inline-end: null !default;
     order: 2;
 
     .dx-icon {
-      margin-inline-end: $treeview-item-icon-margin-inline-end;
+      margin-inline-end: 8px; // dx-fixed-size: demos hand-write this class outside the widget, where a tier var would not reach
     }
 
     .dx-button-has-icon {

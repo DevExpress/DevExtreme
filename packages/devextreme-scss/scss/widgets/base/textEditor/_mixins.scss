@@ -174,7 +174,18 @@
       margin-left: -2px;
       margin-right: -2px;
       border-radius: 1px;
-      clip-path: inset(-$texteditor-label-font-size 1px -1px 1px);
+
+      /*
+       * The clip reaches a whole font-size above the label to uncover the notch. A theme that feeds
+       * a var() here leaves nothing for Sass to negate, and `-var(…)` is not valid CSS: the browser
+       * drops the whole declaration and the notch stops being clipped. Same guard as the transform
+       * below, which had it from the start.
+       */
+      clip-path: inset(#{if(
+        meta.type-of($texteditor-label-font-size) == number,
+        -$texteditor-label-font-size,
+        calc(-1 * #{$texteditor-label-font-size})
+      )} 1px -1px 1px);
 
       span {
         position: relative;

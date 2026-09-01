@@ -6,11 +6,11 @@
     "marker — the classification comment already on the line, from tools/review/size-markers.json."
   ],
   "summary": {
-    "occurrences": 368,
+    "occurrences": 369,
     "byCategory": {
-      "inline": 174,
+      "inline": 178,
       "local-var": 87,
-      "geometry": 82,
+      "geometry": 79,
       "calc": 9,
       "structural": 8,
       "mixin-arg": 6,
@@ -46,7 +46,8 @@
       "lookup": 1,
       "popover": 1,
       "stepper": 1,
-      "toolbar": 1
+      "toolbar": 1,
+      "treeView": 1
     },
     "unmarked": 326,
     "unmarkedByWidget": {
@@ -3288,7 +3289,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 177,
+      "line": 188,
       "widget": "textEditor",
       "literals": [
         "1px",
@@ -3296,12 +3297,12 @@
       ],
       "occurrences": 3,
       "marker": null,
-      "text": "clip-path: inset(-$texteditor-label-font-size 1px -1px 1px);",
-      "category": "geometry"
+      "text": ")} 1px -1px 1px);",
+      "category": "inline"
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 201,
+      "line": 212,
       "widget": "textEditor",
       "literals": [
         "-1px",
@@ -3314,7 +3315,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 216,
+      "line": 227,
       "widget": "textEditor",
       "literals": [
         "-1px",
@@ -3327,7 +3328,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 221,
+      "line": 232,
       "widget": "textEditor",
       "literals": [
         "-1px",
@@ -3340,7 +3341,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 225,
+      "line": 236,
       "widget": "textEditor",
       "literals": [
         "-1px",
@@ -3353,7 +3354,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 239,
+      "line": 250,
       "widget": "textEditor",
       "literals": [
         "3px"
@@ -3365,7 +3366,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 241,
+      "line": 252,
       "widget": "textEditor",
       "literals": [
         "-2px"
@@ -3377,7 +3378,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 303,
+      "line": 314,
       "widget": "textEditor",
       "literals": [
         "1px"
@@ -3389,7 +3390,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 304,
+      "line": 315,
       "widget": "textEditor",
       "literals": [
         "1px"
@@ -3401,7 +3402,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 629,
+      "line": 640,
       "widget": "textEditor",
       "literals": [
         "1px"
@@ -3413,7 +3414,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 630,
+      "line": 641,
       "widget": "textEditor",
       "literals": [
         "1px"
@@ -3425,7 +3426,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 749,
+      "line": 760,
       "widget": "textEditor",
       "literals": [
         "1px"
@@ -3437,7 +3438,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 750,
+      "line": 761,
       "widget": "textEditor",
       "literals": [
         "3px"
@@ -3449,7 +3450,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 757,
+      "line": 768,
       "widget": "textEditor",
       "literals": [
         "1px"
@@ -3461,7 +3462,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 761,
+      "line": 772,
       "widget": "textEditor",
       "literals": [
         "1px"
@@ -3473,7 +3474,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 767,
+      "line": 778,
       "widget": "textEditor",
       "literals": [
         "3px"
@@ -3485,7 +3486,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 775,
+      "line": 786,
       "widget": "textEditor",
       "literals": [
         "2px"
@@ -3497,7 +3498,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 803,
+      "line": 814,
       "widget": "textEditor",
       "literals": [
         "1px"
@@ -3509,7 +3510,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 804,
+      "line": 815,
       "widget": "textEditor",
       "literals": [
         "3px"
@@ -3521,7 +3522,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 811,
+      "line": 822,
       "widget": "textEditor",
       "literals": [
         "1px"
@@ -3533,7 +3534,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 815,
+      "line": 826,
       "widget": "textEditor",
       "literals": [
         "1px"
@@ -3545,7 +3546,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 821,
+      "line": 832,
       "widget": "textEditor",
       "literals": [
         "3px"
@@ -3557,7 +3558,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 829,
+      "line": 840,
       "widget": "textEditor",
       "literals": [
         "2px"
@@ -3626,6 +3627,18 @@
       "marker": null,
       "text": "outline-offset: -2px;",
       "category": "geometry"
+    },
+    {
+      "file": "scss/widgets/base/treeView/_common.scss",
+      "line": 86,
+      "widget": "treeView",
+      "literals": [
+        "8px"
+      ],
+      "occurrences": 1,
+      "marker": "dx-fixed-size",
+      "text": "margin-inline-end: 8px; // dx-fixed-size: demos hand-write this class outside the widget, where a tier var would not reach",
+      "category": "inline"
     }
   ]
 }

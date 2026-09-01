@@ -7,9 +7,9 @@
     "The match is by variable name. A name declared in a nested module is only reachable once the parent forwards it (see base/chat/_index.scss), which is why an \"open\" row can sit next to injected ones from the same widget."
   ],
   "summary": {
-    "occurrences": 404,
-    "variables": 350,
-    "injected": 388,
+    "occurrences": 403,
+    "variables": 349,
+    "injected": 387,
     "open": 0,
     "parameters": 16
   },
@@ -5955,23 +5955,7 @@
     },
     {
       "file": "scss/widgets/base/treeView/_index.scss",
-      "line": 3,
-      "widget": "treeView",
-      "literals": [
-        "8px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$treeview-item-icon-margin-inline-end: 8px !default;",
-      "variable": "treeview-item-icon-margin-inline-end",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/treeView/_index.scss",
-      "setTo": "var(--dx-tree-view-item-icon-margin-inline-end)"
-    },
-    {
-      "file": "scss/widgets/base/treeView/_index.scss",
-      "line": 15,
+      "line": 13,
       "widget": "treeView",
       "literals": [
         "1px"
@@ -5987,7 +5971,7 @@
     },
     {
       "file": "scss/widgets/base/treeView/_index.scss",
-      "line": 16,
+      "line": 14,
       "widget": "treeView",
       "literals": [
         "1px"

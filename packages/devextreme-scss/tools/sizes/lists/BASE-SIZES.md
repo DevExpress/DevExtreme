@@ -14,12 +14,12 @@ and carries a marker saying why.
 | a raw grep of the layer | 778 |
 | …of those, inside comments (commented-out code, prose) | 6 |
 | **in code** | **772** |
-| — the theme can already set from outside | 404 |
-| — nailed into the shared layer | 368 |
+| — the theme can already set from outside | 403 |
+| — nailed into the shared layer | 369 |
 
 ## What the theme can already set
 
-404 occurrences in 350 `!default` variables. fluent-next already passes 388; 0 are open knobs nobody turns.
+403 occurrences in 349 `!default` variables. fluent-next already passes 387; 0 are open knobs nobody turns.
 
 ## What is nailed into the layer
 
@@ -28,7 +28,7 @@ and carries a marker saying why.
 | gridBase | 50 | 18 | 7 |  |  | **75** |
 | colorView | 35 | 8 | 24 |  |  | **67** |
 | scheduler | 9 | 41 | 3 | 1 |  | **54** |
-| textEditor | 20 |  | 20 | 4 |  | **44** |
+| textEditor | 23 |  | 17 | 4 |  | **44** |
 | htmlEditor | 22 | 3 | 8 |  |  | **33** |
 | pivotGrid | 6 | 8 | 6 |  |  | **20** |
 | cardView | 9 | 1 | 5 |  |  | **15** |
@@ -359,51 +359,51 @@ and carries a marker saying why.
   `margin-right: -2px;`
 - `scss/widgets/base/textEditor/_mixins.scss:176` · geometry
   `border-radius: 1px;`
-- `scss/widgets/base/textEditor/_mixins.scss:177` · geometry
-  `clip-path: inset(-$texteditor-label-font-size 1px -1px 1px);`
-- `scss/widgets/base/textEditor/_mixins.scss:201` · geometry
+- `scss/widgets/base/textEditor/_mixins.scss:188` · inline
+  `)} 1px -1px 1px);`
+- `scss/widgets/base/textEditor/_mixins.scss:212` · geometry
   `clip-path: inset(-1px 1px -1px -1px);`
-- `scss/widgets/base/textEditor/_mixins.scss:216` · geometry
+- `scss/widgets/base/textEditor/_mixins.scss:227` · geometry
   `clip-path: inset(-1px -1px -1px 1px);`
-- `scss/widgets/base/textEditor/_mixins.scss:221` · geometry
+- `scss/widgets/base/textEditor/_mixins.scss:232` · geometry
   `clip-path: inset(-1px -1px -1px 1px);`
-- `scss/widgets/base/textEditor/_mixins.scss:225` · geometry
+- `scss/widgets/base/textEditor/_mixins.scss:236` · geometry
   `clip-path: inset(-1px 1px -1px -1px);`
-- `scss/widgets/base/textEditor/_mixins.scss:239` · inline
+- `scss/widgets/base/textEditor/_mixins.scss:250` · inline
   `height: 3px;`
-- `scss/widgets/base/textEditor/_mixins.scss:241` · inline
+- `scss/widgets/base/textEditor/_mixins.scss:252` · inline
   `margin-inline-start: -2px;`
-- `scss/widgets/base/textEditor/_mixins.scss:303` · inline
+- `scss/widgets/base/textEditor/_mixins.scss:314` · inline
   `border-start-end-radius: 1px;`
-- `scss/widgets/base/textEditor/_mixins.scss:304` · inline
+- `scss/widgets/base/textEditor/_mixins.scss:315` · inline
   `border-end-end-radius: 1px;`
-- `scss/widgets/base/textEditor/_mixins.scss:629` · inline
+- `scss/widgets/base/textEditor/_mixins.scss:640` · inline
   `margin-top: 1px;`
-- `scss/widgets/base/textEditor/_mixins.scss:630` · inline
+- `scss/widgets/base/textEditor/_mixins.scss:641` · inline
   `margin-bottom: 1px;`
-- `scss/widgets/base/textEditor/_mixins.scss:749` · inline
+- `scss/widgets/base/textEditor/_mixins.scss:760` · inline
   `margin-top: 1px;`
-- `scss/widgets/base/textEditor/_mixins.scss:750` · inline
-  `margin-bottom: 3px;`
-- `scss/widgets/base/textEditor/_mixins.scss:757` · calc
-  `padding-top: if(meta.type-of($material-button-vertical-padding) == number, $material-button-vertical-padding - 1px, calc(#{$material-button-vertical-padding} - 1px));`
 - `scss/widgets/base/textEditor/_mixins.scss:761` · inline
-  `margin-top: 1px;`
-- `scss/widgets/base/textEditor/_mixins.scss:767` · inline
-  `margin-top: 3px;`
-- `scss/widgets/base/textEditor/_mixins.scss:775` · inline
-  `padding: 2px;`
-- `scss/widgets/base/textEditor/_mixins.scss:803` · inline
-  `margin-top: 1px;`
-- `scss/widgets/base/textEditor/_mixins.scss:804` · inline
   `margin-bottom: 3px;`
-- `scss/widgets/base/textEditor/_mixins.scss:811` · calc
+- `scss/widgets/base/textEditor/_mixins.scss:768` · calc
   `padding-top: if(meta.type-of($material-button-vertical-padding) == number, $material-button-vertical-padding - 1px, calc(#{$material-button-vertical-padding} - 1px));`
-- `scss/widgets/base/textEditor/_mixins.scss:815` · inline
+- `scss/widgets/base/textEditor/_mixins.scss:772` · inline
   `margin-top: 1px;`
-- `scss/widgets/base/textEditor/_mixins.scss:821` · inline
+- `scss/widgets/base/textEditor/_mixins.scss:778` · inline
   `margin-top: 3px;`
-- `scss/widgets/base/textEditor/_mixins.scss:829` · inline
+- `scss/widgets/base/textEditor/_mixins.scss:786` · inline
+  `padding: 2px;`
+- `scss/widgets/base/textEditor/_mixins.scss:814` · inline
+  `margin-top: 1px;`
+- `scss/widgets/base/textEditor/_mixins.scss:815` · inline
+  `margin-bottom: 3px;`
+- `scss/widgets/base/textEditor/_mixins.scss:822` · calc
+  `padding-top: if(meta.type-of($material-button-vertical-padding) == number, $material-button-vertical-padding - 1px, calc(#{$material-button-vertical-padding} - 1px));`
+- `scss/widgets/base/textEditor/_mixins.scss:826` · inline
+  `margin-top: 1px;`
+- `scss/widgets/base/textEditor/_mixins.scss:832` · inline
+  `margin-top: 3px;`
+- `scss/widgets/base/textEditor/_mixins.scss:840` · inline
   `padding: 2px;`
 
 ### htmlEditor — 33
