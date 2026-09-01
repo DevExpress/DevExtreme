@@ -54,16 +54,10 @@ const anchor = (h, text) => {
 
 const CASES = [
   // --- components that already own their disabled colours (opacity: 1 + roles) -------------
-  ['button', 'Button - contained', 70, (h, f) => $(h).dxButton({ text: 'Button', icon: 'home', ...f })],
-  ['buttonOutlined', 'Button - outlined', 70, (h, f) => $(h).dxButton({ text: 'Outlined', stylingMode: 'outlined', ...f })],
-  ['buttonDefault', 'Button - default contained', 70, (h, f) => $(h).dxButton({ text: 'Default', type: 'default', ...f })],
   ['buttonGroup', 'ButtonGroup', 70, (h, f) => $(h).dxButtonGroup({ items: [{ text: 'One' }, { text: 'Two' }], keyExpr: 'text', selectedItemKeys: ['One'], ...f })],
   ['checkBox', 'CheckBox', 70, (h, f) => $(h).dxCheckBox({ value: true, text: 'Checked', ...f })],
   ['radioGroup', 'RadioGroup', 90, (h, f) => $(h).dxRadioGroup({ items: ['One', 'Two'], value: 'One', ...f })],
   ['switch', 'Switch', 70, (h, f) => $(h).dxSwitch({ value: true, ...f })],
-  ['textBoxOutlined', 'TextBox - outlined + label', 90, (h, f) => $(h).dxTextBox({ value: 'Value', label: 'Label', stylingMode: 'outlined', ...f })],
-  ['textBoxFilled', 'TextBox - filled', 90, (h, f) => $(h).dxTextBox({ value: 'Value', label: 'Label', stylingMode: 'filled', ...f })],
-  ['textBoxUnderlined', 'TextBox - underlined', 90, (h, f) => $(h).dxTextBox({ value: 'Value', label: 'Label', stylingMode: 'underlined', ...f })],
   ['textArea', 'TextArea', 100, (h, f) => $(h).dxTextArea({ value: 'Multi\nline', height: 70, ...f })],
   ['numberBox', 'NumberBox - spin buttons', 90, (h, f) => $(h).dxNumberBox({ value: 42, label: 'Count', showSpinButtons: true, ...f })],
   ['selectBox', 'SelectBox', 90, (h, f) => $(h).dxSelectBox({ items, value: items[0], label: 'Choice', ...f })],
@@ -211,9 +205,66 @@ const CASES = [
 ];
 
 // readonly is not a thing for every component: only those with .dx-state-readonly rules
+/* The theme does not have one disabled look for a text editor, it has one per styling mode and
+per label mode: the bundle carries separate disabled rules for dx-editor-outlined / -filled /
+-underlined and for dx-texteditor-with-label / -with-floating-label, plus dx-label-before and
+dx-label-after. A single outlined+static case exercised a fraction of that, so the matrix is
+generated instead - every combination the theme distinguishes, in the same order in every column. */
+const STYLING_MODES = ['outlined', 'filled', 'underlined'];
+const LABEL_MODES = ['static', 'floating', 'hidden', 'outside'];
+
+STYLING_MODES.forEach((stylingMode) => {
+  LABEL_MODES.forEach((labelMode) => {
+    CASES.push([
+      `textBox-${stylingMode}-${labelMode}`,
+      `TextBox - ${stylingMode} / label ${labelMode}`,
+      100,
+      (h, f) => $(h).dxTextBox({ value: 'Value', label: 'Label', stylingMode, labelMode, ...f }),
+    ]);
+  });
+});
+
+// Validation is a separate disabled rule again (dx-invalid), and so is a label put beside the field.
+STYLING_MODES.forEach((stylingMode) => {
+  CASES.push([
+    `textBoxInvalid-${stylingMode}`,
+    `TextBox - ${stylingMode} / invalid`,
+    110,
+    (h, f) => {
+      const editor = $(h).dxTextBox({ value: '', label: 'Required', stylingMode, ...f });
+      editor.dxTextBox('instance').option('isValid', false);
+      editor.dxTextBox('instance').option('validationError', { message: 'Required' });
+    },
+  ]);
+});
+
+CASES.push([
+  'textBoxLabelBefore', 'TextBox - label placed before the field', 90,
+  (h, f) => $(h).dxTextBox({ value: 'Value', label: 'Label', labelMode: 'outside', labelLocation: 'left', ...f }),
+]);
+
+// A disabled tab that is also the selected one has its own rule (dx-tab-selected).
+CASES.push([
+  'tabsSelectedDisabled', 'Tabs - selected item disabled', 90,
+  (h, f) => $(h).dxTabs({ items: [{ text: 'Selected', disabled: true }, { text: 'Plain' }], selectedIndex: 0, ...f }),
+]);
+
+// Button carries a disabled rule per styling mode, not one for the widget.
+['contained', 'outlined', 'text'].forEach((stylingMode) => {
+  ['normal', 'default', 'danger', 'success'].forEach((type) => {
+    CASES.push([
+      `button-${stylingMode}-${type}`,
+      `Button - ${stylingMode} / ${type}`,
+      70,
+      (h, f) => $(h).dxButton({ text: type, icon: 'save', stylingMode, type, ...f }),
+    ]);
+  });
+});
+
 const READONLY_CASES = new Set([
-  'textBoxOutlined', 'textBoxFilled', 'textBoxUnderlined', 'textArea', 'numberBox',
-  'selectBox', 'tagBox', 'dateBox', 'lookup', 'checkBox', 'switch', 'htmlEditor',
+  ...STYLING_MODES.flatMap((sm) => LABEL_MODES.map((lm) => `textBox-${sm}-${lm}`)),
+  'textArea', 'numberBox', 'selectBox', 'tagBox', 'dateBox', 'lookup', 'checkBox',
+  'switch', 'htmlEditor', 'textBoxLabelBefore',
 ]);
 
 // The case SET is chosen by the shell, not derived from the state: in the read-only comparison
