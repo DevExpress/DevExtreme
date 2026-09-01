@@ -24,11 +24,6 @@
  * One column of the disabled / readonly comparison. Query parameters:
  *   theme  - bundle name, e.g. fluent-next.blue.light
  *   state  - enabled | disabled | readonly
- *   dim    - on | off; "off" neutralises the theme's global disabled dim by setting
- *            --dx-global-disabled-opacity to 1, which shows what each component would look
- *            like if the blanket rule were removed and only its own disabled colours remained.
- *            It cannot affect legacy fluent (the dim is a literal there) nor the hardcoded
- *            opacity of dxChat in base/chat/layout/chat/_index.scss.
  * Every column renders the same cases in the same order at the same fixed heights, so the
  * shell can put the columns side by side and scroll them together.
  * window.__cases and window.__fp (per-case colour fingerprint) are read by the shell.
@@ -36,18 +31,11 @@
 const params = new URLSearchParams(location.search);
 const THEME = params.get('theme') || 'fluent-next.blue.light';
 const STATE = params.get('state') || 'disabled';
-const DIM = params.get('dim') || 'on';
 
 // The bundle is a megabyte and the browser caches it hard; without the buster a rebuilt
 // stylesheet is silently ignored and the comparison keeps showing the previous build.
 const BUST = params.get('_') || '';
 document.getElementById('theme').href = `../artifacts/css/dx.${THEME}.css${BUST ? '?_=' + BUST : ''}`;
-if (DIM === 'off') {
-  const s = document.createElement('style');
-  s.textContent = ':root{--dx-global-disabled-opacity:1}';
-  document.head.appendChild(s);
-}
-
 const items = ['Alpha', 'Beta', 'Gamma'];
 const products = [{ ID: 1, Name: 'Alpha' }, { ID: 2, Name: 'Beta' }];
 
@@ -90,18 +78,18 @@ const CASES = [
   ['dropDownButton', 'DropDownButton', 80, (h, f) => $(h).dxDropDownButton({ text: 'Actions', items, ...f })],
   ['htmlEditor', 'HtmlEditor', 150, (h, f) => $(h).dxHtmlEditor({ value: '<p>Rich text</p>', height: 120, toolbar: { items: ['bold', 'italic'] }, ...f })],
 
-  // --- components that rely on the blanket dim ---------------------------------------------
-  ['dataGrid', 'DataGrid  (dim-only)', 190, (h, f) => $(h).dxDataGrid({ dataSource: [{ id: 1, name: 'Alpha', qty: 3 }, { id: 2, name: 'Beta', qty: 7 }], keyExpr: 'id', showBorders: true, filterRow: { visible: true }, ...f })],
-  ['treeView', 'TreeView  (dim-only)', 130, (h, f) => $(h).dxTreeView({ items: [{ text: 'Root', expanded: true, items: [{ text: 'Child' }] }], ...f })],
-  ['menu', 'Menu  (dim-only)', 70, (h, f) => $(h).dxMenu({ items: [{ text: 'File' }, { text: 'Edit' }], ...f })],
-  ['tabs', 'Tabs  (dim-only)', 80, (h, f) => $(h).dxTabs({ items: [{ text: 'One' }, { text: 'Two' }], ...f })],
-  ['calendar', 'Calendar  (dim-only)', 300, (h, f) => $(h).dxCalendar({ value: new Date(2026, 0, 15), ...f })],
-  ['form', 'Form  (dim-only)', 130, (h, f) => $(h).dxForm({ formData: { Name: 'Text', Count: 5 }, items: ['Name', 'Count'], ...f })],
-  ['tileView', 'TileView  (dim-only)', 140, (h, f) => $(h).dxTileView({ dataSource: [{ text: 'One' }, { text: 'Two' }], height: 110, direction: 'horizontal', ...f })],
-  ['gallery', 'Gallery  (dim-only)', 130, (h, f) => $(h).dxGallery({ dataSource: ['Alpha', 'Beta'], height: 100, showIndicator: true, showNavButtons: true, ...f })],
-  ['stepper', 'Stepper  (dim-only)', 100, (h, f) => $(h).dxStepper({ items: [{ label: 'One' }, { label: 'Two' }], ...f })],
-  ['colorView', 'ColorView  (dim-only)', 230, (h, f) => $(h).dxColorView({ value: '#0f6cbd', ...f })],
-  ['filterBuilder', 'FilterBuilder  (dim-only)', 110, (h, f) => $(h).dxFilterBuilder({ fields: [{ dataField: 'Name', dataType: 'string' }], value: ['Name', 'contains', 'a'], ...f })],
+  // --- components that had nothing of their own when the dim was lifted ----------------------
+  ['dataGrid', 'DataGrid', 190, (h, f) => $(h).dxDataGrid({ dataSource: [{ id: 1, name: 'Alpha', qty: 3 }, { id: 2, name: 'Beta', qty: 7 }], keyExpr: 'id', showBorders: true, filterRow: { visible: true }, ...f })],
+  ['treeView', 'TreeView', 130, (h, f) => $(h).dxTreeView({ items: [{ text: 'Root', expanded: true, items: [{ text: 'Child' }] }], ...f })],
+  ['menu', 'Menu', 70, (h, f) => $(h).dxMenu({ items: [{ text: 'File' }, { text: 'Edit' }], ...f })],
+  ['tabs', 'Tabs', 80, (h, f) => $(h).dxTabs({ items: [{ text: 'One' }, { text: 'Two' }], ...f })],
+  ['calendar', 'Calendar', 300, (h, f) => $(h).dxCalendar({ value: new Date(2026, 0, 15), ...f })],
+  ['form', 'Form', 130, (h, f) => $(h).dxForm({ formData: { Name: 'Text', Count: 5 }, items: ['Name', 'Count'], ...f })],
+  ['tileView', 'TileView', 140, (h, f) => $(h).dxTileView({ dataSource: [{ text: 'One' }, { text: 'Two' }], height: 110, direction: 'horizontal', ...f })],
+  ['gallery', 'Gallery', 130, (h, f) => $(h).dxGallery({ dataSource: ['Alpha', 'Beta'], height: 100, showIndicator: true, showNavButtons: true, ...f })],
+  ['stepper', 'Stepper', 100, (h, f) => $(h).dxStepper({ items: [{ label: 'One' }, { label: 'Two' }], ...f })],
+  ['colorView', 'ColorView', 230, (h, f) => $(h).dxColorView({ value: '#0f6cbd', ...f })],
+  ['filterBuilder', 'FilterBuilder', 110, (h, f) => $(h).dxFilterBuilder({ fields: [{ dataField: 'Name', dataType: 'string' }], value: ['Name', 'contains', 'a'], ...f })],
   ['chat', 'Chat  (hardcoded opacity .5 in base)', 260, (h, f) => $(h).dxChat({ height: 230, width: 280, ...f })],
 
   // --- the rest of the disable-able surface, so the inventory is complete -------------------
@@ -122,7 +110,7 @@ const CASES = [
   ['drawer', 'Drawer', 150, (h, f) => $(h).dxDrawer({ opened: true, height: 120, template: () => $('<div>').text('panel'), ...f })],
   ['box', 'Box', 90, (h, f) => $(h).dxBox({ direction: 'row', height: 60, items: [{ ratio: 1, text: 'One' }, { ratio: 1, text: 'Two' }], ...f })],
 
-  // --- the rest of what the blanket dim used to reach, so its whole base is visible here ----
+  // --- the rest of the base the dim used to reach, so it stays visible here ------------------
   ['scrollView', 'ScrollView', 130, (h, f) => { h.innerHTML = '<div style="height:200px">scrollable content</div>'; $(h).dxScrollView({ height: 100, ...f }); }],
   ['loadIndicator', 'LoadIndicator', 80, (h, f) => $(h).dxLoadIndicator({ visible: true, ...f })],
   ['speedDialAction', 'SpeedDialAction', 110, (h, f) => {
@@ -146,7 +134,7 @@ const CASES = [
     // as its items, which is how this case previously showed "sheet target" twice
     (h, f) => { $(h).dxActionSheet({ items: [{ text: 'Save' }, { text: 'Delete' }], usePopover: false, title: 'Choose', ...f }); },
     (h) => { h.__inst = h.__inst || $(h).dxActionSheet('instance'); toggleVisible(h); }],
-  // Overlays the blanket dim also reached. They are kept inside their own row (container/position
+  // Portalled overlays. They are kept inside their own row (container/position
   // point at the host) so four columns can be compared side by side instead of overlapping.
   ['popup', 'Popup  (opens on demand)', 170, (h, f) => {
     h.__inst = $('<div>').appendTo(h).dxPopup({
@@ -206,7 +194,7 @@ const CASES = [
     { location: 'before', widget: 'dxButton', options: { text: 'Disabled', disabled: true } },
   ], ...f })],
 
-  // Markup-only blocks: the dim reached them through .dx-widget just like a real widget.
+  // Markup-only blocks: styled through .dx-widget just like a real widget.
   ['badge', 'Badge  (markup)', 70, (h, f) => { h.innerHTML = '<span class="dx-badge">7</span>'; h.classList.add('dx-widget'); if (f.disabled) h.classList.add('dx-state-disabled'); }],
   ['card', 'Card  (markup)', 90, (h, f) => { h.innerHTML = '<div class="dx-card" style="width:180px;padding:8px">Card</div>'; h.classList.add('dx-widget'); if (f.disabled) h.classList.add('dx-state-disabled'); }],
   ['informer', 'Informer  (markup)', 80, (h, f) => { h.innerHTML = '<div class="dx-informer"><div class="dx-informer-icon"></div>Informer</div>'; h.classList.add('dx-widget'); if (f.disabled) h.classList.add('dx-state-disabled'); }],

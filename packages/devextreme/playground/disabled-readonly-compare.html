@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>fluent-next: disabled / readonly - before and after</title>
+<title>fluent-next: disabled / readonly against legacy fluent</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   :root { color-scheme: light; }
@@ -60,27 +60,25 @@
  */
 const COLUMNS = {
   disabled: [
-    { key: 'enabled', title: 'Enabled', sub: 'fluent-next, the reference', theme: 'fluent-next', state: 'enabled', dim: 'on' },
-    { key: 'dim', title: 'Disabled now', sub: 'fluent-next, blanket dim in force', theme: 'fluent-next', state: 'disabled', dim: 'on' },
-    { key: 'nodim', title: 'Disabled without the dim', sub: 'fluent-next, --dx-global-disabled-opacity: 1', theme: 'fluent-next', state: 'disabled', dim: 'off' },
-    { key: 'legacy', title: 'Legacy fluent', sub: 'the shipped theme, for NFR-1', theme: 'fluent', state: 'disabled', dim: 'on' },
+    { key: 'enabled', title: 'Enabled', sub: 'fluent-next, the reference', theme: 'fluent-next', state: 'enabled' },
+    { key: 'subject', title: 'Disabled', sub: 'fluent-next', theme: 'fluent-next', state: 'disabled' },
+    { key: 'legacy', title: 'Legacy fluent', sub: 'the shipped theme, for NFR-1', theme: 'fluent', state: 'disabled' },
   ],
   readonly: [
-    { key: 'enabled', title: 'Normal', sub: 'fluent-next, the reference', theme: 'fluent-next', state: 'enabled', dim: 'on', set: 'readonly' },
-    { key: 'dim', title: 'Read-only', sub: 'fluent-next', theme: 'fluent-next', state: 'readonly', dim: 'on', set: 'readonly' },
-    { key: 'legacy', title: 'Legacy fluent read-only', sub: 'the shipped theme, for NFR-1', theme: 'fluent', state: 'readonly', dim: 'on', set: 'readonly' },
+    { key: 'enabled', title: 'Normal', sub: 'fluent-next, the reference', theme: 'fluent-next', state: 'enabled', set: 'readonly' },
+    { key: 'subject', title: 'Read-only', sub: 'fluent-next', theme: 'fluent-next', state: 'readonly', set: 'readonly' },
+    { key: 'legacy', title: 'Legacy fluent read-only', sub: 'the shipped theme, for NFR-1', theme: 'fluent', state: 'readonly', set: 'readonly' },
   ],
 };
 
 const LEGEND = {
-  disabled: `The middle pair is the question this page exists for. <b>Disabled now</b> is what ships today:
-    a blanket <code>opacity</code> over the whole widget plus, in about twenty components, their own disabled colours.
-    <b>Disabled without the dim</b> removes only the blanket rule, so a component keeps whatever disabled
-    styling it owns. Where the two right-hand columns look the same as <b>Enabled</b>, the component has
-    <em>no disabled styling of its own</em> and is entirely carried by the dim - that is the work list for
-    moving onto the disabled roles. Legacy fluent is there for NFR-1: the opt-out pattern is inherited from it,
-    the branch did not change it, only the shades come from design tokens now.`,
-  readonly: `Read-only is never dimmed in either theme, so there is no dim column here. The comparison is
+  disabled: `fluent-next has no blanket dim: every component paints its disabled state from the disabled
+    roles, the way Fluent specifies it. So the question here is simply whether <b>Disabled</b> differs from
+    <b>Enabled</b>. Where they look the same, the component paints <em>nothing</em> for the state - that is
+    the work list. Legacy fluent still dims everything at 35% and is here for NFR-1: it shows what the state
+    used to look like, and a component that reads as disabled there but not here is a regression, not a
+    stylistic choice. Cases that live in a portal are opened from the buttons above, in every column at once.`,
+  readonly: `Read-only is not a dimmed state in either theme. The comparison is
     fluent-next against legacy fluent. Note that read-only currently shares the <em>border</em> token with
     disabled (<code>--dx-text-editor-border-disabled</code>) while its text keeps full contrast.`,
 };
@@ -101,7 +99,7 @@ function build() {
     col.className = 'col';
     col.innerHTML = `<h2>${c.title}<small>${c.sub}</small></h2>`;
     const f = document.createElement('iframe');
-    f.src = `disabled-readonly-compare-frame.html?theme=${c.theme}.blue.${mode}&state=${c.state}&dim=${c.dim}&set=${c.set || 'all'}&_=${BUILD}`;
+    f.src = `disabled-readonly-compare-frame.html?theme=${c.theme}.blue.${mode}&state=${c.state}&set=${c.set || 'all'}&_=${BUILD}`;
     col.appendChild(f);
     cols.appendChild(col);
     return { cfg: c, el: f };
@@ -182,7 +180,7 @@ async function waitAndSummarise() {
   };
 
   if (state === 'readonly') {
-    const rows = cases.map((c) => ({ c, v: verdict(byKey.enabled.__fp[c.id], byKey.dim.__fp[c.id]) }));
+    const rows = cases.map((c) => ({ c, v: verdict(byKey.enabled.__fp[c.id], byKey.subject.__fp[c.id]) }));
     const diff = rows.filter((r) => r.v === 'different' || r.v === 'structure');
     const same = rows.filter((r) => r.v === 'same');
     summary.innerHTML = `<b>Read-only:</b> ${diff.length} of ${cases.length} components render differently from their normal state.`
@@ -194,27 +192,23 @@ async function waitAndSummarise() {
   const unstable = new Set(frames.flatMap(({ el }) => el.contentWindow.__unstable || []));
   const rows = cases.map((c) => ({
     c,
-    vsEnabled: unstable.has(c.id) ? 'unstable' : verdict(byKey.enabled.__fp[c.id], byKey.nodim.__fp[c.id]),
-    vsDim: unstable.has(c.id) ? 'unstable' : verdict(byKey.dim.__fp[c.id], byKey.nodim.__fp[c.id]),
+    v: unstable.has(c.id) ? 'unstable' : verdict(byKey.enabled.__fp[c.id], byKey.subject.__fp[c.id]),
   }));
-  const invisibleToday = rows.filter((r) => r.vsDim !== 'unstable'
-    && verdict(byKey.enabled.__fp[c_id(r)], byKey.dim.__fp[c_id(r)]) === 'same');
-  function c_id(r) { return r.c.id; }
-  const dimOnly = rows.filter((r) => r.vsEnabled === 'same');
-  const owns = rows.filter((r) => r.vsEnabled === 'different');
-  const unclear = rows.filter((r) => r.vsEnabled === 'structure');
-  const unmeasured = rows.filter((r) => r.vsEnabled === 'unknown');
-  const jittery = rows.filter((r) => r.vsEnabled === 'unstable');
+  const unpainted = rows.filter((r) => r.v === 'same');
+  const owns = rows.filter((r) => r.v === 'different');
+  const unclear = rows.filter((r) => r.v === 'structure');
+  const unmeasured = rows.filter((r) => r.v === 'unknown');
+  const jittery = rows.filter((r) => r.v === 'unstable');
 
   // A case the gallery cannot judge must not be counted as a missing disabled state: a portalled
   // menu is measured on its host rather than its content, a spinner has nothing to grey, and a
   // case that renders nothing tells us only that the case is broken.
   const judgeOf = Object.fromEntries(cases.map((c) => [c.id, c.judge || 'judgeable']));
-  const cannotJudge = dimOnly.filter((r) => judgeOf[r.c.id] !== 'judgeable');
-  const reallyMissing = dimOnly.filter((r) => judgeOf[r.c.id] === 'judgeable');
+  const cannotJudge = unpainted.filter((r) => judgeOf[r.c.id] !== 'judgeable');
+  const reallyMissing = unpainted.filter((r) => judgeOf[r.c.id] === 'judgeable');
 
   summary.innerHTML =
-    `Remove the blanket dim and <b>${owns.length}</b> of ${cases.length} components keep a disabled look of their own; `
+    `<b>${owns.length}</b> of ${cases.length} components render a disabled state of their own; `
     + `<span class="same"><b>${reallyMissing.length}</b> render no disabled state</span>`
     + (cannotJudge.length
       ? `; ${cannotJudge.length} cannot be judged from the host (${cannotJudge.map((r) => `${r.c.id}: ${judgeOf[r.c.id]}`).join(', ')})`
@@ -226,12 +220,11 @@ async function waitAndSummarise() {
     + (unclear.length ? `<li>compare by eye: ${unclear.map((r) => r.c.id).join(', ')}</li>` : '')
     + (unmeasured.length ? `<li class="same">NOT MEASURED (reload the page): ${unmeasured.map((r) => r.c.id).join(', ')}</li>` : '')
     + (jittery.length ? `<li>still rendering when measured, no verdict: ${jittery.map((r) => r.c.id).join(', ')}</li>` : '')
-    + (invisibleToday.length ? `<li class="same">disabled is ALREADY indistinguishable from enabled today: ${invisibleToday.map((r) => r.c.id).join(', ')}</li>` : '')
     + `</ul>`;
-  window.__compare = { state, dimOnly: dimOnly.map((r) => r.c.id), owns: owns.map((r) => r.c.id),
+  window.__compare = { state, unpainted: unpainted.map((r) => r.c.id), owns: owns.map((r) => r.c.id),
     reallyMissing: reallyMissing.map((r) => r.c.id), cannotJudge: cannotJudge.map((r) => `${r.c.id}:${judgeOf[r.c.id]}`),
     unclear: unclear.map((r) => r.c.id), unmeasured: unmeasured.map((r) => r.c.id),
-    jittery: jittery.map((r) => r.c.id), invisibleToday: invisibleToday.map((r) => r.c.id) };
+    jittery: jittery.map((r) => r.c.id) };
 }
 
 document.querySelectorAll('input').forEach((r) => r.addEventListener('change', build));
