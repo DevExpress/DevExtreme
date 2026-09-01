@@ -80,7 +80,10 @@ const CASES = [
   ['calendar', 'Calendar', 300, (h, f) => $(h).dxCalendar({ value: new Date(2026, 0, 15), ...f })],
   ['form', 'Form', 130, (h, f) => $(h).dxForm({ formData: { Name: 'Text', Count: 5 }, items: ['Name', 'Count'], ...f })],
   ['tileView', 'TileView', 140, (h, f) => $(h).dxTileView({ dataSource: [{ text: 'One' }, { text: 'Two' }], height: 110, direction: 'horizontal', ...f })],
-  ['gallery', 'Gallery', 130, (h, f) => $(h).dxGallery({ dataSource: ['Alpha', 'Beta'], height: 100, showIndicator: true, showNavButtons: true, ...f })],
+  ['gallery', 'Gallery', 140, (h, f) => $(h).dxGallery({
+    dataSource: [{ text: 'Slide one' }, { text: 'Slide two' }],
+    itemTemplate: (item) => $('<div>').css({ padding: '24px', textAlign: 'center' }).text(item.text),
+    height: 110, showIndicator: true, showNavButtons: true, ...f })],
   ['stepper', 'Stepper', 100, (h, f) => $(h).dxStepper({ items: [{ label: 'One' }, { label: 'Two' }], ...f })],
   ['colorView', 'ColorView', 230, (h, f) => $(h).dxColorView({ value: '#0f6cbd', ...f })],
   ['filterBuilder', 'FilterBuilder', 110, (h, f) => $(h).dxFilterBuilder({ fields: [{ dataField: 'Name', dataType: 'string' }], value: ['Name', 'contains', 'a'], ...f })],
@@ -236,6 +239,18 @@ const CASES = [
     (h, f) => $(h).dxProgressBar({ value: 45, min: 0, max: 100, statusFormat: (r) => `${Math.round(r * 100)}%`, ...f })],
   ['badgePkg', 'Badge on a button  (package: bg + content)', 80,
     (h, f) => { h.innerHTML = '<span class="dx-badge">7</span>'; h.classList.add('dx-widget'); if (f.disabled) h.classList.add('dx-state-disabled'); }],
+
+  ['calendarWeekNumbers', 'Calendar  (week numbers shown)', 300,
+    (h, f) => $(h).dxCalendar({ value: new Date(2026, 0, 15), showWeekNumbers: true, ...f })],
+  ['tabsPrimary', 'Tabs - stylingMode primary', 90,
+    (h, f) => $(h).dxTabs({ items: [{ text: 'One' }, { text: 'Two' }], selectedIndex: 0, stylingMode: 'primary', ...f })],
+  ['tabsSecondary', 'Tabs - stylingMode secondary', 90,
+    (h, f) => $(h).dxTabs({ items: [{ text: 'One' }, { text: 'Two' }], selectedIndex: 0, stylingMode: 'secondary', ...f })],
+  ['chatWithFile', 'Chat  (message with an attachment)', 300, (h, f) => $(h).dxChat({
+    height: 270, width: 280, user: { id: 'me', name: 'Me' },
+    items: [{ id: 1, timestamp: new Date(2026, 0, 1, 10, 0), author: { id: 'ann', name: 'Ann' },
+      text: 'With a file', attachments: [{ name: 'report.pdf' }] }],
+    ...f })],
 
   // Markup-only blocks: styled through .dx-widget just like a real widget.
   ['badge', 'Badge  (markup)', 70, (h, f) => { h.innerHTML = '<span class="dx-badge">7</span>'; h.classList.add('dx-widget'); if (f.disabled) h.classList.add('dx-state-disabled'); }],

@@ -48,4 +48,8 @@ $stepper-connector-bg: ds.$color-border-subtle !default;
 
 $stepper-connector-value-bg: ds.$color-bg-primary !default;
 
+/* The filled part of the connector kept the accent when the widget was disabled, so a greyed
+step sat on a bright blue line. */
+$stepper-connector-value-bg-disabled: ds.$color-bg-disabled !default;
+
 $stepper-step-shadow: ds.$color-bg !default;

@@ -76,7 +76,8 @@ theme painted nothing at all: a disabled calendar rendered exactly like an enabl
 blanket dim was lifted. */
 .dx-calendar.dx-state-disabled,
 .dx-state-disabled .dx-calendar {
-  .dx-calendar-cell {
+  .dx-calendar-cell,
+  .dx-calendar-week-number-cell {
     color: var(--dx-calendar-cell-content-disabled);
   }
 

@@ -54,6 +54,10 @@ $chat-file-container-bg: ds.$color-bg !default;
 $chat-file-container-box-shadow: ds.$box-shadow-sm !default;
 $chat-file-secondary-content: ds.$color-content-subtle !default;
 
+/* An attachment is a control sitting inside the transcript: it downloads when clicked, so unlike
+the message text around it, it does go out of use when the chat is disabled. */
+$chat-file-content-disabled: ds.$color-content-disabled !default;
+
 $chat-suggestions-box-shadow: ds.$box-shadow-md !default;
 
 $chat-message-list-context-menu-delete-button-content: ds.$color-content-danger !default;
