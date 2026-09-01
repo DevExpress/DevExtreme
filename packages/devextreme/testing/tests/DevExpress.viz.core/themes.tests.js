@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import themeModule from 'viz/themes';
-import { createPalette } from 'viz/palette';
+import { createPalette, getGradientPalette } from 'viz/palette';
 import uiThemeModule from 'ui/themes';
 
 uiThemeModule.setDefaultTimeout(0);
@@ -374,18 +374,27 @@ QUnit.test('Invalid input data (with color scheme)', function(assert) {
     QUnit.test(`fluent-next theme should color series with the Fluent Next palette: ${theme}`, function(assert) {
         const defaultPalette = themeModule.getTheme(theme).defaultPalette;
 
-        const colors = createPalette(undefined, {}, defaultPalette).generateColors(6);
+        const simpleSet = createPalette(undefined, {}, defaultPalette).generateColors(6);
+        const indicatingSet = createPalette(undefined, { type: 'indicatingSet' }, defaultPalette).generateColors(3);
+        const gradientSet = getGradientPalette(undefined, defaultPalette);
 
-        assert.deepEqual(colors, ['#0078d4', '#c83d3d', '#008f04', '#eaa300', '#e43ba6', '#865cbf']);
+        assert.deepEqual(simpleSet, ['#0078d4', '#c83d3d', '#008f04', '#eaa300', '#e43ba6', '#865cbf'], 'simpleSet');
+        assert.deepEqual(indicatingSet, ['#008f04', '#eaa300', '#c83d3d'], 'indicatingSet');
+        assert.deepEqual([gradientSet.getColor(0), gradientSet.getColor(1)], ['#0078d4', '#008f04'], 'gradientSet');
     });
 
     QUnit.test(`fluent-next theme should accent widgets with its own primary color: ${theme}`, function(assert) {
         const registeredTheme = themeModule.getTheme(theme);
 
-        assert.strictEqual(registeredTheme.rangeSelector.selectedRangeColor, accentColor, 'rangeSelector');
-        assert.strictEqual(registeredTheme.map['layer:marker:dot'].color, accentColor, 'map marker');
+        assert.strictEqual(registeredTheme.rangeSelector.selectedRangeColor, accentColor, 'rangeSelector selected range');
+        assert.strictEqual(registeredTheme.rangeSelector.sliderMarker.color, accentColor, 'rangeSelector slider marker');
+        assert.strictEqual(registeredTheme.rangeSelector.sliderHandle.color, accentColor, 'rangeSelector slider handle');
+        assert.strictEqual(registeredTheme.map['layer:marker:dot'].color, accentColor, 'map dot marker');
+        assert.strictEqual(registeredTheme.map['layer:marker:bubble'].color, accentColor, 'map bubble marker');
+        assert.strictEqual(registeredTheme.map.legend.markerColor, accentColor, 'map legend marker');
         assert.strictEqual(registeredTheme.bullet.color, accentColor, 'bullet');
-        assert.strictEqual(registeredTheme.gauge.valueIndicators.rangebar.color, accentColor, 'gauge');
+        assert.strictEqual(registeredTheme.gauge.valueIndicators.rangebar.color, accentColor, 'gauge rangebar');
+        assert.strictEqual(registeredTheme.gauge.valueIndicators['textcloud'].color, accentColor, 'gauge textcloud');
     });
 });
 
