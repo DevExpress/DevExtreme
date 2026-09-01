@@ -81,6 +81,13 @@ blanket dim was lifted. */
     color: var(--dx-calendar-cell-content-disabled);
   }
 
+  .dx-calendar-cell.dx-calendar-selected-date,
+  .dx-calendar-cell.dx-calendar-selected-date span {
+    background-color: var(--dx-calendar-cell-bg-selected-disabled);
+    color: var(--dx-calendar-cell-content-disabled);
+    box-shadow: none;
+  }
+
   .dx-calendar-navigator .dx-button .dx-icon,
   .dx-calendar-caption-button .dx-button-text {
     color: var(--dx-calendar-cell-content-disabled);

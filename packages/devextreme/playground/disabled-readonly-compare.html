@@ -167,9 +167,14 @@ async function showBuildStamp() {
   const link = frames[0]?.el?.contentDocument?.getElementById('theme');
   if (!link) return;
   try {
-    const text = await (await fetch(link.href)).text();
+    const response = await fetch(link.href);
+    // The Build date comment carries the day only, which cannot tell two builds apart within one
+    // day - exactly the case where the question gets asked. Last-Modified is to the second.
+    const modified = response.headers.get('last-modified');
+    const text = await response.text();
     const stamp = /Build date:\s*([^*\n]+)/.exec(text.slice(0, 2000));
-    statusEl.textContent = stamp ? `stylesheet built ${stamp[1].trim()}` : '';
+    const when = modified ? new Date(modified).toLocaleString() : stamp?.[1]?.trim();
+    statusEl.textContent = when ? `stylesheet built ${when}` : '';
   } catch {
     statusEl.textContent = '';
   }
