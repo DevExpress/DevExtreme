@@ -3,7 +3,7 @@
 @use "../../base/icon_fonts" as *;
 @use "../toolbar/mixins" as *;
 @use "../../base/popup" with (
-  $popup-title-min-height-fallback: null,
+  $popup-title-min-height-fallback: false,
   $popup-title-padding: var(--dx-popup-title-padding),
   $popup-dialog-message-padding: var(--dx-popup-dialog-message-padding),
   $popup-dialog-shader-color: var(--dx-popup-dialog-backdrop),

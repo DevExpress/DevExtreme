@@ -124,7 +124,7 @@ $fileuploader-input-wrapper-vertical-padding: 1em !default; // dx-relative
   align-items: center;
   width: 100%;
 
-  // fluent-next passes null: its own rule paints this box, the base copy would be dead weight
+  // fluent-next passes false (not null: !default would treat that as unset): its own rule paints this
   @if $fileuploader-file-container-padding {
     padding: $fileuploader-file-container-padding;
   }

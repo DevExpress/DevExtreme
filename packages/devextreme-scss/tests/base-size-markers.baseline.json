@@ -1,6 +1,6 @@
 {
   "openKnobs": 0,
-  "unclassified": 378,
+  "unclassified": 376,
   "unclassifiedByWidget": {
     "gridBase": 75,
     "colorView": 67,
@@ -17,7 +17,6 @@
     "calendar": 4,
     "diagram": 4,
     "treeList": 4,
-    "pagination": 3,
     "colorBox": 3,
     "icon_fonts": 2,
     "numberBox": 2,
@@ -29,6 +28,7 @@
     "filterBuilder": 2,
     "treeView": 2,
     "fileUploader": 1,
+    "pagination": 1,
     "validation": 1,
     "dropDownButton": 1,
     "gantt": 1,

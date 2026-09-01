@@ -6,11 +6,11 @@
     "marker — the classification comment already on the line, from tools/review/size-markers.json."
   ],
   "summary": {
-    "occurrences": 390,
+    "occurrences": 388,
     "byCategory": {
-      "inline": 178,
+      "inline": 177,
       "geometry": 94,
-      "local-var": 91,
+      "local-var": 90,
       "calc": 11,
       "structural": 8,
       "mixin-arg": 6,
@@ -33,7 +33,6 @@
       "calendar": 4,
       "diagram": 4,
       "treeList": 4,
-      "pagination": 3,
       "colorBox": 3,
       "icon_fonts": 2,
       "multiView": 2,
@@ -46,6 +45,7 @@
       "filterBuilder": 2,
       "treeView": 2,
       "fileUploader": 1,
+      "pagination": 1,
       "validation": 1,
       "dropDownButton": 1,
       "gantt": 1,
@@ -54,7 +54,7 @@
       "popover": 1,
       "stepper": 1
     },
-    "unmarked": 378,
+    "unmarked": 376,
     "unmarkedByWidget": {
       "gridBase": 75,
       "colorView": 67,
@@ -71,7 +71,6 @@
       "calendar": 4,
       "diagram": 4,
       "treeList": 4,
-      "pagination": 3,
       "colorBox": 3,
       "icon_fonts": 2,
       "numberBox": 2,
@@ -83,6 +82,7 @@
       "filterBuilder": 2,
       "treeView": 2,
       "fileUploader": 1,
+      "pagination": 1,
       "validation": 1,
       "dropDownButton": 1,
       "gantt": 1,
@@ -565,7 +565,7 @@
     },
     {
       "file": "scss/widgets/base/_pagination.scss",
-      "line": 24,
+      "line": 25,
       "widget": "pagination",
       "literals": [
         "8px"
@@ -574,30 +574,6 @@
       "marker": null,
       "text": "$pagination-paddings: 8px;",
       "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/_pagination.scss",
-      "line": 25,
-      "widget": "pagination",
-      "literals": [
-        "9px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$pagination-info-paddings: 9px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/_pagination.scss",
-      "line": 81,
-      "widget": "pagination",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "padding: $pagination-paddings - 1px $pagination-page-horizontal-padding;",
-      "category": "inline"
     },
     {
       "file": "scss/widgets/base/_resizable.scss",

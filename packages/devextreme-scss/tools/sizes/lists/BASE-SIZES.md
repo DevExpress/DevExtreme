@@ -14,12 +14,12 @@ and carries a marker saying why.
 | a raw grep of the layer | 781 |
 | …of those, inside comments (commented-out code, prose) | 5 |
 | **in code** | **776** |
-| — the theme can already set from outside | 386 |
-| — nailed into the shared layer | 390 |
+| — the theme can already set from outside | 388 |
+| — nailed into the shared layer | 388 |
 
 ## What the theme can already set
 
-386 occurrences in 334 `!default` variables. fluent-next already passes 378; 0 are open knobs nobody turns.
+388 occurrences in 336 `!default` variables. fluent-next already passes 380; 0 are open knobs nobody turns.
 
 ## What is nailed into the layer
 
@@ -40,7 +40,6 @@ and carries a marker saying why.
 | calendar | 1 | 3 |  |  |  | **4** |
 | diagram |  |  | 1 | 3 |  | **4** |
 | treeList |  | 1 |  |  | 3 | **4** |
-| pagination | 1 |  | 2 |  |  | **3** |
 | colorBox | 1 |  | 1 | 1 |  | **3** |
 | icon_fonts | 2 |  |  |  |  | **2** |
 | numberBox |  |  | 2 |  |  | **2** |
@@ -52,6 +51,7 @@ and carries a marker saying why.
 | filterBuilder | 2 |  |  |  |  | **2** |
 | treeView | 1 |  | 1 |  |  | **2** |
 | fileUploader | 1 |  |  |  |  | **1** |
+| pagination |  |  | 1 |  |  | **1** |
 | validation |  | 1 |  |  |  | **1** |
 | dropDownButton | 1 |  |  |  |  | **1** |
 | gantt | 1 |  |  |  |  | **1** |
@@ -650,15 +650,6 @@ and carries a marker saying why.
 - `scss/widgets/base/treeList/layout/cell.scss:229` · geometry
   `outline-offset: -2px;`
 
-### pagination — 3
-
-- `scss/widgets/base/_pagination.scss:24` · local-var
-  `$pagination-paddings: 8px;`
-- `scss/widgets/base/_pagination.scss:25` · local-var
-  `$pagination-info-paddings: 9px;`
-- `scss/widgets/base/_pagination.scss:81` · inline
-  `padding: $pagination-paddings - 1px $pagination-page-horizontal-padding;`
-
 ### colorBox — 3
 
 - `scss/widgets/base/colorBox/_index.scss:5` · local-var
@@ -735,6 +726,11 @@ and carries a marker saying why.
 
 - `scss/widgets/base/_fileUploader.scss:213` · inline
   `margin-top: -6px;`
+
+### pagination — 1
+
+- `scss/widgets/base/_pagination.scss:25` · local-var
+  `$pagination-paddings: 8px;`
 
 ### validation — 1
 
