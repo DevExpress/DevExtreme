@@ -6,9 +6,8 @@ import Popup from '@js/ui/popup/ui.popup';
 import ScrollView from '@js/ui/scroll_view';
 import { restoreFocus } from '@js/ui/shared/accessibility';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
-import type { FilterSyncController } from '@ts/grids/grid_core/filter/m_filter_sync';
-
-import modules from '../m_modules';
+import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/m_filter_sync';
+import modules from '@ts/grids/grid_core/m_modules';
 
 export class FilterBuilderView extends modules.View {
   private _filterBuilderPopup: any;

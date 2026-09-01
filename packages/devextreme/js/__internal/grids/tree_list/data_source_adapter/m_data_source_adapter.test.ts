@@ -120,7 +120,7 @@ describe('TreeList DataSourceAdapter - T1311885 Race Condition', () => {
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    (dataSourceAdapter as any).loadFromStore = jest.fn((loadOptions, store) => {
+    (dataSourceAdapter as any).loadFromStore = jest.fn((loadOptions) => {
     // @ts-expect-error
       const deferred = new Deferred();
 

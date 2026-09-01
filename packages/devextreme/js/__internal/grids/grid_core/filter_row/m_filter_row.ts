@@ -12,20 +12,19 @@ import { isDefined } from '@js/core/utils/type';
 import Menu from '@js/ui/menu';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { selectView } from '@js/ui/shared/accessibility';
+import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import type { ColumnsResizerViewController } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
+import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
+import modules from '@ts/grids/grid_core/m_modules';
+import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 import Editor from '@ts/ui/editor/editor';
 import type MenuInternal from '@ts/ui/menu/menu';
-
-import type { ColumnHeadersView } from '../column_headers/m_column_headers';
-import type { Column } from '../columns_controller/types';
-import type { ColumnsResizerViewController } from '../columns_resizing_reordering/m_columns_resizing_reordering';
-import type { DataController } from '../data_controller/data_controller';
-import type { EditingController } from '../editing/m_editing';
-import type { HeaderPanel } from '../header_panel/m_header_panel';
-import modules from '../m_modules';
-import type { ModuleType } from '../m_types';
-import gridCoreUtils from '../m_utils';
 
 const OPERATION_ICONS = {
   '=': 'filter-operation-equals',

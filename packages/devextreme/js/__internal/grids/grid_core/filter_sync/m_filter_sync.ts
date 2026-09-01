@@ -9,13 +9,13 @@ import {
   getDefaultOperation, getFilterExpression, getMatchedConditions, getNormalizedFilter,
   removeFieldConditionsFromFilter, syncFilters,
 } from '@ts/filter_builder/m_utils';
+import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import modules from '@ts/grids/grid_core/m_modules';
+import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
-import type { ColumnHeadersView } from '../column_headers/m_column_headers';
-import type { DataController } from '../data_controller/data_controller';
-import modules from '../m_modules';
-import type { ModuleType } from '../m_types';
-import gridCoreUtils from '../m_utils';
 import { anyOf, noneOf } from './m_filter_custom_operations';
 
 const FILTER_ROW_OPERATIONS = ['=', '<>', '<', '<=', '>', '>=', 'notcontains', 'contains', 'startswith', 'endswith', 'between'];
