@@ -38,6 +38,8 @@
   var(--dx-switch-invalid-border-hovered),
   var(--dx-switch-invalid-border-focused),
   var(--dx-switch-border-disabled),
+
+  $disabled-opacity-reset: null,
 );
 @include dx-switch-rtl(
   calc(var(--dx-switch-handle-height) - var(--dx-switch-handle-margin)),
