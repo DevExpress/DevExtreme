@@ -2,19 +2,25 @@
 @use "sizes" as *;
 @use "../common/mixins" as *;
 @use "../../base/widget";
+@use "../../base/mixins" as *;
 
 .dx-widget {
   @include dx-base-typography();
 }
 
+/* No blanket dim. Every component that has a surface of its own paints its disabled state from
+the disabled roles, the way Fluent does it and the way Blazor's themes do - they carry no global
+rule either, and reserve opacity for a composite that is dimmed as a whole, such as a scheduler
+appointment. What is left here is the part that is not a colour: no text selection and no pointer
+cursor on something that cannot be used. Layout containers - splitter, drawer, box - show nothing
+of their own, which is also what Blazor does: their content is made of components that mark
+themselves. The remaining opacity users are named and listed in DISABLED_STATES.md. */
 .dx-state-disabled {
   &.dx-widget,
   .dx-widget {
-    .dx-widget {
-      opacity: 1;
-    }
+    @include user-select(none);
 
-    @include disabled-widget();
+    cursor: default;
   }
 }
 

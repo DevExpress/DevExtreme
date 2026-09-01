@@ -81,3 +81,14 @@
     background-color: menuColors.$menu-separator-bg;
   }
 }
+
+/* A disabled context menu had nothing of its own once the blanket dim was gone: its items are
+plain markup, not widgets that mark themselves. */
+.dx-context-menu.dx-state-disabled,
+.dx-state-disabled .dx-context-menu {
+  .dx-menu-item-text,
+  .dx-menu-item-content,
+  .dx-menu-item-popout {
+    color: var(--dx-context-menu-content-disabled);
+  }
+}

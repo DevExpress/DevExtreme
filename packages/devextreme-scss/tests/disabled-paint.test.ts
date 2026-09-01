@@ -175,11 +175,25 @@ describe.each(bundleNames)('%s', (bundleName) => {
     expect(findBorrowedNames(css)).toEqual([]);
   });
 
-  test('the blanket dim is still in force for components that do not paint', () => {
-    const blanket = rules.find((r) => /\.dx-state-disabled\.dx-widget(,|\{|$)/.test(`${r.selector}{`)
-      && /opacity\s*:\s*var\(--dx-global-disabled-opacity\)/.test(r.body));
+  // The theme has no blanket dim any more: every component with a surface of its own paints its
+  // disabled state from the roles, the way Fluent specifies it and the way Blazor's themes are
+  // built. A rule that dims whatever it finds would put that back and hide the next gap.
+  test('no rule dims every widget at once', () => {
+    // A blanket selector is one that reaches any widget at all: nothing but the state class and
+    // .dx-widget. A component-scoped rule such as `.dx-timeview .dx-state-disabled .dx-widget`
+    // is not one, and neither is anything that resets the opacity back to 1.
+    const isBlanket = (selector: string): boolean => selector
+      .split(',')
+      .map((part) => part.trim())
+      .some((part) => /^\.dx-state-disabled(\.dx-widget)?( \.dx-widget)?$/.test(part));
 
-    expect(blanket).toBeDefined();
+    const dimming = rules
+      .filter((r) => isBlanket(r.selector))
+      .filter((r) => /(^|;)\s*opacity\s*:\s*([^;]+)/.test(r.body)
+        && !/(^|;)\s*opacity\s*:\s*1\s*(;|$)/.test(r.body))
+      .map((r) => r.selector);
+
+    expect(dimming).toEqual([]);
   });
 });
 
