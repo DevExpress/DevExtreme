@@ -35912,6 +35912,10 @@ declare module DevExpress.viz {
      */
     disabled?: boolean;
     /**
+     * [descr:BaseWidgetOptions.encodeHtml]
+     */
+    encodeHtml?: boolean;
+    /**
      * [descr:BaseWidgetOptions.export]
      */
     export?: BaseWidgetExport;
