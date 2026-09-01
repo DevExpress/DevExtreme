@@ -24,6 +24,7 @@ import sharedFiltering from '@js/ui/shared/filtering';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import { isNumeric } from '@ts/core/utils/m_type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import type { DataFilter } from '@ts/grids/grid_core/data_controller/types';
 import type { ColumnPoint } from '@ts/grids/grid_core/m_types';
 
 import { AI_COLUMN_NAME } from './ai_column/const';
@@ -304,7 +305,7 @@ export default {
     return index;
   },
 
-  combineFilters(filters, operation?): any {
+  combineFilters(filters, operation?): DataFilter {
     let resultFilter: any[] = [];
 
     operation = operation || 'and';
@@ -330,7 +331,7 @@ export default {
       resultFilter = resultFilter[0];
     }
     if (resultFilter.length) {
-      return resultFilter;
+      return resultFilter as DataFilter;
     }
 
     return undefined;
@@ -428,6 +429,7 @@ export default {
           selector: dataField,
           groupInterval: interval,
           isExpanded: index < groupInterval.length - 1,
+          // @ts-ignore
         } : getIntervalSelector.bind(column, interval));
       });
 

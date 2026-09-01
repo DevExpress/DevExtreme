@@ -35,6 +35,7 @@ export function createOffsetFilter(path, storeLoadOptions, lastLevelOnly?) {
     filter.push(gridCore.combineFilters(filterElement));
   }
 
+  // @ts-expect-error
   filter = gridCore.combineFilters(filter, 'or');
 
   return gridCore.combineFilters([filter, storeLoadOptions.filter]);
