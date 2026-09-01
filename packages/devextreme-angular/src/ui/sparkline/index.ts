@@ -156,6 +156,19 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
 
     /**
+     * [descr:BaseWidgetOptions.encodeHtml]
+    
+     */
+    @Input()
+    get encodeHtml(): boolean {
+        return this._getOption('encodeHtml');
+    }
+    set encodeHtml(value: boolean) {
+        this._setOption('encodeHtml', value);
+    }
+
+
+    /**
      * [descr:dxSparklineOptions.firstLastColor]
     
      */
@@ -593,6 +606,13 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() encodeHtmlChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() firstLastColorChange: EventEmitter<string>;
 
     /**
@@ -785,6 +805,7 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
             { emit: 'dataSourceChange' },
             { emit: 'disabledChange' },
             { emit: 'elementAttrChange' },
+            { emit: 'encodeHtmlChange' },
             { emit: 'firstLastColorChange' },
             { emit: 'ignoreEmptyPointsChange' },
             { emit: 'lineColorChange' },
