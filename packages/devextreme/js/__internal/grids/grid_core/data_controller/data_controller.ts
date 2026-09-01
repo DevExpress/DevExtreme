@@ -1454,7 +1454,10 @@ export class DataController extends modules.Controller {
     return this._dataSource?.store();
   }
 
-  public loadAll(data?: RawItemData[], skipFilter = false): DeferredObj<ProcessedItem[]> {
+  public loadAllItems(
+    data?: RawItemData[],
+    skipFilter = false,
+  ): DeferredObj<ProcessedItem[]> {
     const d = Deferred<ProcessedItem[]>();
     const dataSource = this._dataSource;
 
@@ -1476,7 +1479,7 @@ export class DataController extends modules.Controller {
     };
 
     if (data) {
-      dataSource.customProcessLoadedData(data, {
+      dataSource.customLoader.processLoadedData(data, {
         filter: skipFilter ? null : this.getCombinedFilter(),
         group: dataSource.group(),
         sort: dataSource.sort(),
@@ -1485,8 +1488,7 @@ export class DataController extends modules.Controller {
         .done(resolveWithProcessedItems)
         .fail(d.reject as (...args: unknown[]) => void);
     } else if (!dataSource.isLoading()) {
-      dataSource.customLoadAll()
-        // @ts-expect-error badly typed CustomLoadResult
+      dataSource.customLoader.loadAll()
         .done(resolveWithProcessedItems)
         .fail(d.reject as (...args: unknown[]) => void);
     } else {
@@ -1497,7 +1499,7 @@ export class DataController extends modules.Controller {
   }
 
   public async getAllDataRowKeys(): Promise<RowKey[]> {
-    const items = await Promise.resolve(this.loadAll(undefined));
+    const items = await Promise.resolve(this.loadAllItems(undefined));
 
     return items
       .filter((item) => item.rowType === 'data')
@@ -1625,7 +1627,7 @@ export class DataController extends modules.Controller {
   }
 
   public isCustomLoading(): boolean {
-    return this._isCustomLoading || !!this._dataSource?.isCustomLoading();
+    return this._isCustomLoading || !!this._dataSource?.customLoader.isLoading();
   }
 
   public beginCustomLoading(messageText?: string): void {

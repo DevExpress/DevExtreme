@@ -4,9 +4,9 @@ import {
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import CustomStore from '@js/data/custom_store';
-import PublicDataSource from '@js/data/data_source';
 import { logger } from '@ts/core/utils/m_console';
-import type { DataSource, StoreLoadOptions } from '@ts/data/data_source/types';
+import { DataSource } from '@ts/data/data_source/data_source';
+import type { StoreLoadOptions } from '@ts/data/data_source/types';
 
 import { CustomLoader } from '../custom_loader';
 import type { LoadOperation } from '../types';
@@ -43,10 +43,10 @@ const setup = ({
       ._customLoadOptions = (): string[] => customLoadOptions;
   }
 
-  const dataSource = new PublicDataSource({
+  const dataSource = new DataSource({
     store,
     ...dataSourceOptions,
-  }) as unknown as DataSource;
+  });
 
   const getLoadingTimeout = jest.fn(() => loadingTimeout);
   const customizeStoreLoadOptionsSpy = jest.fn(customizeStoreLoadOptions);

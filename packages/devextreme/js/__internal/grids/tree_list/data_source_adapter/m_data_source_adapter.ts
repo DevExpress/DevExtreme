@@ -465,7 +465,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
 
     const loadBranchItemsDeferred = options.fullData
       ? new ArrayStore(options.fullData).load(loadOptions)
-      : this.loadFromStore(loadOptions);
+      : this.customLoader.loadFromStore(loadOptions);
 
     loadBranchItemsDeferred
       .done((loadedData: any) => {
@@ -895,7 +895,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     const loadOptions = that._dataSource._createStoreLoadOptions();
     loadOptions.parentIds = keys;
 
-    that.load(loadOptions)
+    that.customLoader.load(loadOptions)
       .done(() => {
         if (!childrenOnly) {
           const childKeys = getChildKeys(that, keys);

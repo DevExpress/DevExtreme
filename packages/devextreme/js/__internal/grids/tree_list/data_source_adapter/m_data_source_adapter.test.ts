@@ -91,7 +91,6 @@ describe('TreeList DataSourceAdapter - T1311885 Race Condition', () => {
     jest.restoreAllMocks();
     loadCalls = [];
     (dataSourceAdapter as any)._loadDataSource = undefined;
-    (dataSourceAdapter as any).loadFromStore = undefined;
     mockStore = undefined as any;
     dataSourceAdapter = undefined as any;
   });
@@ -120,7 +119,7 @@ describe('TreeList DataSourceAdapter - T1311885 Race Condition', () => {
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    (dataSourceAdapter as any).loadFromStore = jest.fn((loadOptions) => {
+    dataSourceAdapter.customLoader.loadFromStore = jest.fn((loadOptions) => {
     // @ts-expect-error
       const deferred = new Deferred();
 
@@ -136,7 +135,7 @@ describe('TreeList DataSourceAdapter - T1311885 Race Condition', () => {
       options,
     );
 
-    expect((dataSourceAdapter as any).loadFromStore).toHaveBeenCalledTimes(1);
+    expect(dataSourceAdapter.customLoader.loadFromStore).toHaveBeenCalledTimes(1);
     expect(firstLoadDeferred).toBeDefined();
 
     (dataSourceAdapter as any)._cachedStoreData = undefined;

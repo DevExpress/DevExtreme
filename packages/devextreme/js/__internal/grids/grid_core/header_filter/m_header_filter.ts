@@ -272,7 +272,7 @@ export class HeaderFilterController extends Modules.ViewController {
           // TODO remove in 16.1
           options.dataField = column.dataField || column.name;
 
-          dataSource.load(options).done((data) => {
+          dataSource.customLoader.load(options).done((data) => {
             const convertUTCDates = remoteGrouping && isUTCFormat(column.serializationFormat) && cutoffLevel > 3;
             if (convertUTCDates) {
               data = convertDataFromUTCToLocal(data, column);

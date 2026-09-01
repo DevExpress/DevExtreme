@@ -17,7 +17,6 @@ import type { BeforePushEvent } from '@ts/data/types';
 
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
-import type { CustomLoadOptions, CustomLoadResult } from './custom_loader';
 import { CustomLoader } from './custom_loader';
 import {
   calculateOperationTypes,
@@ -27,7 +26,7 @@ import {
   setPageDataToCache,
 } from './m_data_source_adapter_utils';
 import type {
-  ChangedEvent, LoadOperation, OperationTypes, RawItemData, RemoteOperationsOptions,
+  ChangedEvent, LoadOperation, OperationTypes, RemoteOperationsOptions,
 } from './types';
 import { normalizeRemoteOperations } from './utils/remoteOperations';
 
@@ -98,7 +97,7 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private changingHandlerProxy!: (e: ChangingEvent) => void;
 
-  private customLoader!: CustomLoader;
+  public customLoader!: CustomLoader;
 
   public init(dataSource?: DataSource): void {
     if (!dataSource) {
@@ -859,38 +858,11 @@ export default class DataSourceAdapter extends modules.Controller {
     return this._hasLastPage || this._dataSource.totalCount() >= 0;
   }
 
-  protected loadFromStore(loadOptions: StoreLoadOptions): DeferredObj<unknown> {
-    return this.customLoader.loadFromStore(loadOptions);
-  }
-
-  public isCustomLoading(): boolean {
-    return this.customLoader.isLoading();
-  }
-
-  protected isCustomLoadingAll(): boolean {
-    return this.customLoader.isLoadingAll();
-  }
-
   /**
    * @extended: virtual_scrolling
    */
-  public load(options?: CustomLoadOptions): DeferredObj<unknown> {
-    if (options) {
-      return this.customLoader.load(options);
-    }
-
+  public load(): DeferredObj<unknown> {
     return this._dataSource.load() as unknown as DeferredObj<unknown>;
-  }
-
-  public customLoadAll(): DeferredObj<CustomLoadResult> {
-    return this.customLoader.loadAll();
-  }
-
-  public customProcessLoadedData(
-    data: RawItemData[],
-    loadOptions: StoreLoadOptions,
-  ): DeferredObj<CustomLoadResult> {
-    return this.customLoader.processLoadedData(data, loadOptions);
   }
 
   /**

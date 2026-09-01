@@ -108,7 +108,7 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
       return deferred;
     }
 
-    dataSource.load({
+    dataSource.customLoader.load({
       filter: this._concatWithCombinedFilter(filter),
       group,
     }).done((data) => {

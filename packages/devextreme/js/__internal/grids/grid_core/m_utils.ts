@@ -718,7 +718,7 @@ export default {
       } else {
         previousSkip = loadOptions.skip;
         previousTake = loadOptions.take;
-        dataSource.load({
+        dataSource.customLoader.load({
           filter,
           group,
           take: hasGroupPaging ? loadOptions.take : undefined,
