@@ -14,6 +14,7 @@ import titleModule from 'viz/core/title';
 import rendererModule from 'viz/core/renderers/renderer_default';
 import multiAxesSynchronizer from '__internal/viz/chart_components/multi_axes_synchronizer';
 import { Deferred } from 'core/utils/deferred';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const TitleOrig = titleModule.Title;
 
@@ -33,7 +34,7 @@ const environment = {
             getMargins: sinon.stub()
         };
 
-        this.scrollBarStub = sinon.stub(scrollBarModule, 'ScrollBar').callsFake(function(renderer, group) {
+        this.scrollBarStub = stubSeam(scrollBarModule, 'ScrollBar', 'DEBUG_set_ScrollBar').callsFake(function(renderer, group) {
             const scrollBar = new originalScrollBar(renderer, group);
             const originalUpdateSize = scrollBar.updateSize;
 
@@ -49,7 +50,7 @@ const environment = {
         let axisIndex = 0;
         const originalAxis = axisModule.Axis;
 
-        this.axisStub = sinon.stub(axisModule, 'Axis').callsFake(function(renderingSettings) {
+        this.axisStub = stubSeam(axisModule, 'Axis', 'DEBUG_set_Axis').callsFake(function(renderingSettings) {
             const axis = new originalAxis(renderingSettings);
 
             for(const stubName in axesStubs[axisIndex]) {
@@ -62,7 +63,7 @@ const environment = {
         this.title = new Title();
         this.legend = new Legend();
 
-        this.legendStub = sinon.stub(legendModule, 'Legend').callsFake(() =>{
+        this.legendStub = stubSeam(legendModule, 'Legend', '_setLegend').callsFake(() =>{
             this.legend.getTemplatesGroups = sinon.spy(function() {
                 return [];
             });

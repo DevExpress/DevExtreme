@@ -64,12 +64,12 @@ const environment = {
         return chart;
     },
     _stubLayoutManager: function() {
-        this.LayoutManager = sinon.stub(layoutManagerModule, 'LayoutManager').callsFake(function() {
+        this.LayoutManager = stubSeam(layoutManagerModule, 'LayoutManager', 'DEBUG_set_LayoutManager').callsFake(function() {
             return new LayoutManager(arguments);
         });
     },
     _stubLegend: function() {
-        this.Legend = sinon.stub(legendModule, 'Legend').callsFake(function() {
+        this.Legend = stubSeam(legendModule, 'Legend', '_setLegend').callsFake(function() {
             const legend = new Legend();
             legend.getTemplatesGroups = sinon.spy(function() {
                 return [];
@@ -86,7 +86,7 @@ const environment = {
         });
     },
     _stubAxis: function() {
-        this.Axis = sinon.stub(axisModule, 'Axis').callsFake(function() {
+        this.Axis = stubSeam(axisModule, 'Axis', 'DEBUG_set_Axis').callsFake(function() {
             const axis = new Axis();
             axis.updateOptions = sinon.spy(function(options) {
                 axis.name = options.name;
@@ -106,24 +106,24 @@ const environment = {
         });
     },
     _stubRange: function() {
-        sinon.stub(rangeModule, 'Range').callsFake(function(opt) {
+        stubSeam(rangeModule, 'Range', 'DEBUG_set_Range').callsFake(function(opt) {
             const range = new Range();
             $.extend(range, opt);
             return range;
         });
     },
     _stubSeriesAndPoint: function() {
-        sinon.stub(seriesModule, 'Series').callsFake(function() {
+        stubSeam(seriesModule, 'Series', 'DEBUG_set_Series').callsFake(function() {
             const series = new Series();
             return series;
         });
 
-        sinon.stub(pointModule, 'Point').callsFake(function() {
+        stubSeam(pointModule, 'Point', 'DEBUG_set_Point').callsFake(function() {
             return new Point();
         });
     },
     _stubValidateData: function() {
-        this.validateData = sinon.stub(dataValidatorModule, 'validateData');
+        this.validateData = stubSeam(dataValidatorModule, 'validateData', 'DEBUG_set_validateData');
     },
     _restoreValidateData: function() {
         this.validateData.restore();

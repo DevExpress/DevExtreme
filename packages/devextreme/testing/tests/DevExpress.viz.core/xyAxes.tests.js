@@ -9,6 +9,7 @@ import rangeModule from 'viz/translators/range';
 import { Axis } from 'viz/axes/base_axis';
 import { MockSeries } from '../../helpers/chartMocks.js';
 import { patchFontOptions } from 'viz/core/utils';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const Translator2D = translator2DModule.Translator2D;
 
@@ -45,7 +46,7 @@ const environment = {
                 breaks: breaks
             };
         });
-        this.tickGenerator = sinon.stub(tickGeneratorModule, 'tickGenerator').callsFake(function() {
+        this.tickGenerator = stubSeam(tickGeneratorModule, 'tickGenerator', 'DEBUG_set_tickGenerator').callsFake(function() {
             return that.tickGeneratorSpy;
         });
 

@@ -1,4 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
+/* eslint-disable import/no-mutable-exports */
 /* eslint-disable new-cap */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @stylistic/no-mixed-operators */
@@ -1596,7 +1597,7 @@ function projectLineLabel(coordinates) {
   return resultData || [[], []];
 }
 
-export function MapLayerCollection(params) {
+export let MapLayerCollection = function (params) {
   const that = this;
   const renderer = params.renderer;
   that._params = params;
@@ -1609,7 +1610,7 @@ export function MapLayerCollection(params) {
   that._container = renderer.g().attr({ class: 'dxm-layers', 'clip-path': that._clip.id }).append(renderer.root).enableLinks();
   that._subscribeToTracker(params.tracker, renderer, params.eventTrigger);
   that._dataReady = params.dataReady;
-}
+};
 
 MapLayerCollection.prototype = {
   constructor: MapLayerCollection,
@@ -1744,4 +1745,10 @@ export const _TESTS_stub_groupBySize = function (stub) {
 };
 export const _TESTS_groupBySize = groupBySize;
 export const _TESTS_findGroupingIndex = findGroupingIndex;
+/// #ENDDEBUG
+
+/// #DEBUG
+export function DEBUG_set_MapLayerCollection(value: typeof MapLayerCollection): void {
+  MapLayerCollection = value;
+}
 /// #ENDDEBUG

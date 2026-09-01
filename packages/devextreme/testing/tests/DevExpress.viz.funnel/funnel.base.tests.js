@@ -4,6 +4,7 @@ import rendererModule from 'viz/core/renderers/renderer';
 import paletteModule from '__internal/viz/paletteModule';
 
 import themeModule from 'viz/themes';
+import { spySeam } from '../../helpers/moduleSeam.js';
 
 themeModule.registerTheme({
     name: 'test-theme',
@@ -271,7 +272,7 @@ QUnit.test('Resize', function(assert) {
 });
 
 QUnit.test('palette', function(assert) {
-    sinon.spy(paletteModule, 'createPalette');
+    spySeam(paletteModule, 'createPalette', 'DEBUG_set_createPalette');
 
     stubAlgorithm.normalizeValues.returns([1, 1]);
     stubAlgorithm.getFigures.returns([
@@ -452,7 +453,7 @@ QUnit.test('Update inverted option', function(assert) {
 });
 
 QUnit.test('Update palette', function(assert) {
-    sinon.spy(paletteModule, 'createPalette');
+    spySeam(paletteModule, 'createPalette', 'DEBUG_set_createPalette');
 
     stubAlgorithm.normalizeValues.returns([1, 1]);
     stubAlgorithm.getFigures.returns([

@@ -1,4 +1,6 @@
 /* eslint-disable no-return-assign */
+/* eslint-disable import/no-mutable-exports */
+/* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-multi-assign */
@@ -32,7 +34,7 @@ function getThemePart(theme, path) {
   return _theme;
 }
 
-export const BaseThemeManager = Class.inherit({ // TODO: test hack
+export let BaseThemeManager = Class.inherit({ // TODO: test hack
   ctor(options) {
     this._themeSection = options.themeSection;
     this._fontFields = options.fontFields || [];
@@ -115,3 +117,9 @@ export const BaseThemeManager = Class.inherit({ // TODO: test hack
     _extend(font, this._font, _extend({}, font));
   },
 });
+
+/// #DEBUG
+export function DEBUG_set_BaseThemeManager(value: typeof BaseThemeManager): void {
+  BaseThemeManager = value;
+}
+/// #ENDDEBUG

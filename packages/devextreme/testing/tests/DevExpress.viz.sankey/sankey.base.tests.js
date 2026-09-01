@@ -3,6 +3,7 @@ import { testData, createSankey, layoutBuilder, spiesLayoutBuilder, environment,
 import rendererModule from 'viz/core/renderers/renderer';
 import paletteModule from '__internal/viz/paletteModule';
 import themeModule from 'viz/themes';
+import { spySeam } from '../../helpers/moduleSeam.js';
 
 themeModule.registerTheme({
     name: 'test-theme',
@@ -558,7 +559,7 @@ QUnit.test('Resize', function(assert) {
 });
 
 QUnit.test('Palette', function(assert) {
-    sinon.spy(paletteModule, 'createPalette');
+    spySeam(paletteModule, 'createPalette', 'DEBUG_set_createPalette');
 
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
@@ -737,7 +738,7 @@ QUnit.test('Update color of links', function(assert) {
 });
 
 QUnit.test('Update palette', function(assert) {
-    sinon.spy(paletteModule, 'createPalette');
+    spySeam(paletteModule, 'createPalette', 'DEBUG_set_createPalette');
 
     const sankey = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }],

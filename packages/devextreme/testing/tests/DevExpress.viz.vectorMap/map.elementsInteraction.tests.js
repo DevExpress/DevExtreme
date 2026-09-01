@@ -44,7 +44,7 @@ QUnit.test('On zoom', function(assert) {
 
 QUnit.module('Map - event trigger interaction', $.extend({}, environment, {
     createMap: function() {
-        const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+        const spy = spySeam(mapLayerModule, 'MapLayerCollection', 'DEBUG_set_MapLayerCollection');
         environment.createMap.apply(this, arguments);
         this.eventTrigger = spy.lastCall.args[0].eventTrigger;
     },

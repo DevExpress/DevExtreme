@@ -99,7 +99,7 @@ const environmentWithSinonStubPoint = {
     beforeEach: function() {
         environment.beforeEach.call(this);
         let mockPointIndex = 0;
-        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function(series, data) {
+        this.createPoint = stubSeam(pointModule, 'Point', 'DEBUG_set_Point').callsFake(function(series, data) {
             const stub = mockPoints[mockPointIndex++];
             stub.argument = 1;
             stub.angle = -data.argument;

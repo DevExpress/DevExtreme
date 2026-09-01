@@ -540,7 +540,7 @@ QUnit.module('Draw', {
             attributes: { r: 6 },
             symbol: 'circle'
         };
-        this.sinonFactory = sinon.stub(labelModule, 'Label').callsFake(function() {
+        this.sinonFactory = stubSeam(labelModule, 'Label', 'DEBUG_set_Label').callsFake(function() {
             return sinon.createStubInstance(originalLabel);
         });
         this.series = {
@@ -606,7 +606,7 @@ QUnit.module('Label', {
         this.renderer = new Renderer();
         this.group = this.renderer.g();
 
-        this.sinonFactory = sinon.stub(labelModule, 'Label').callsFake(function() {
+        this.sinonFactory = stubSeam(labelModule, 'Label', 'DEBUG_set_Label').callsFake(function() {
             return sinon.createStubInstance(originalLabel);
         });
         this.labelsGroup = {};
@@ -1244,7 +1244,7 @@ QUnit.module('Dispose', {
             attributes: { r: 6 },
             symbol: 'circle'
         };
-        this.sinonFactory = sinon.stub(labelModule, 'Label').callsFake(function() {
+        this.sinonFactory = stubSeam(labelModule, 'Label', 'DEBUG_set_Label').callsFake(function() {
             return sinon.createStubInstance(originalLabel);
         });
         this.series = {
@@ -1355,7 +1355,7 @@ QUnit.module('API', {
             _argumentChecker: function() { return true; },
             _valueChecker: function() { return true; }
         };
-        sinon.spy(labelModule, 'Label');
+        spySeam(labelModule, 'Label', 'DEBUG_set_Label');
     },
     afterEach: function() {
         labelModule.Label.restore();

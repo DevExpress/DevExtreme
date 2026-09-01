@@ -79,7 +79,7 @@ const environmentWithSinonStubPoint = {
     beforeEach: function() {
         environment.beforeEach.call(this);
         let mockPointIndex = 0;
-        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function(params, data) {
+        this.createPoint = stubSeam(pointModule, 'Point', 'DEBUG_set_Point').callsFake(function(params, data) {
             const stub = mockPoints[mockPointIndex++];
             stub.argument = 1;
             stub.hasValue.returns(true);
@@ -181,7 +181,7 @@ const environmentWithSinonStubPoint = {
     QUnit.module('RangeSeries. API', {
         beforeEach: function() {
             environment.beforeEach.call(this);
-            this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function() {
+            this.createPoint = stubSeam(pointModule, 'Point', 'DEBUG_set_Point').callsFake(function() {
                 const stub = sinon.createStubInstance(originalPoint);
                 stub.argument = 1;
                 stub.hasValue.returns(true);
@@ -339,7 +339,7 @@ const environmentWithSinonStubPoint = {
             this.options = {
                 type: 'rangearea'
             };
-            this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function() {
+            this.createPoint = stubSeam(pointModule, 'Point', 'DEBUG_set_Point').callsFake(function() {
                 const stub = sinon.createStubInstance(originalPoint);
                 stub.argument = 1;
                 stub.hasValue.returns(true);

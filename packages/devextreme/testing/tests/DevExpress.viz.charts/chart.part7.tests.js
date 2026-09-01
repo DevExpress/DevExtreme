@@ -15,6 +15,7 @@ import seriesModule from 'viz/series/base_series';
 import dataValidatorModule from 'viz/components/data_validator';
 import { MockSeries, categories, seriesMockData, MockTranslator } from '../../helpers/chartMocks.js';
 import graphicObjects from '__internal/common/m_charts';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const dxErrors = errorsWarnings.ERROR_MESSAGES;
 
@@ -71,7 +72,7 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         const stubSeries = new MockSeries({});
 
         seriesMockData.series.push(stubSeries);
-        seriesModule.Series = function() { return { isUpdated: false }; };
+        seriesModule.DEBUG_set_Series(function() { return { isUpdated: false }; });
 
         const chart = this.createChart({
             series: {
@@ -86,7 +87,7 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
     QUnit.test('dxChart with single series, series type is unknown in option series', function(assert) {
         const stubSeries = new MockSeries({});
         seriesMockData.series.push(stubSeries);
-        seriesModule.Series = function() { return { isUpdated: false }; };
+        seriesModule.DEBUG_set_Series(function() { return { isUpdated: false }; });
 
         const chart = this.createChart({
             series: {
@@ -710,7 +711,7 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
             environment.afterEach.call(this);
         },
         mockValidateData: function() {
-            this.validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function(data) {
+            this.validateData = stubSeam(dataValidatorModule, 'validateData', 'DEBUG_set_validateData').callsFake(function(data) {
                 return { x: data || [] };
             });
         },
@@ -983,7 +984,7 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         const stubSeries = new MockSeries({});
 
         seriesMockData.series.push(stubSeries);
-        seriesModule.Series = function() { return { isUpdated: false }; };
+        seriesModule.DEBUG_set_Series(function() { return { isUpdated: false }; });
 
         const chart = this.createChart({
             series: {
@@ -1005,7 +1006,7 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         const stubSeries = new MockSeries({});
 
         seriesMockData.series.push(stubSeries);
-        seriesModule.Series = function() { return { isUpdated: false }; };
+        seriesModule.DEBUG_set_Series(function() { return { isUpdated: false }; });
 
         const chart = this.createChart({
             series: {
@@ -1027,7 +1028,7 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         const stubSeries = new MockSeries({});
 
         seriesMockData.series.push(stubSeries);
-        seriesModule.Series = function() { return { isUpdated: false }; };
+        seriesModule.DEBUG_set_Series(function() { return { isUpdated: false }; });
 
         const chart = createChartInstance({
             series: {

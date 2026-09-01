@@ -64,7 +64,7 @@ QUnit.test('Background', function(assert) {
 });
 
 QUnit.test('Layer collection', function(assert) {
-    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const spy = spySeam(mapLayerModule, 'MapLayerCollection', 'DEBUG_set_MapLayerCollection');
 
     this.createMap({
         layers: [{ tag: 'layer-1', dataSource: 'data-1' }, { tag: 'layer-2', dataSource: 'data-2' }]
@@ -91,7 +91,7 @@ QUnit.test('Layer collection', function(assert) {
 });
 
 QUnit.test('Set bounds when data ready called. Without bounds in options', function(assert) {
-    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const spy = spySeam(mapLayerModule, 'MapLayerCollection', 'DEBUG_set_MapLayerCollection');
     const layers = [{
         proxy: { tag: 'p1', getBounds: function() { return [0, 0, 10, 10]; } },
         getData: function() { return { count: function() { return 0; } }; }
@@ -114,7 +114,7 @@ QUnit.test('Set bounds when data ready called. Without bounds in options', funct
 });
 
 QUnit.test('Projection by data. Default bounds are include common bounds', function(assert) {
-    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const spy = spySeam(mapLayerModule, 'MapLayerCollection', 'DEBUG_set_MapLayerCollection');
     const layers = [{
         proxy: { tag: 'p1', getBounds: function() { return [0, 0, 10, 10]; } },
         getData: function() { return { count: function() { return 0; } }; }
@@ -135,7 +135,7 @@ QUnit.test('Projection by data. Default bounds are include common bounds', funct
 });
 
 QUnit.test('Projection by data. Without projection in options', function(assert) {
-    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const spy = spySeam(mapLayerModule, 'MapLayerCollection', 'DEBUG_set_MapLayerCollection');
     const layers = [{
         proxy: { tag: 'p1', getBounds: function() { return [0, 0, 10, 10]; } },
         getData: function() { return { count: function() { return 0; } }; }
@@ -158,7 +158,7 @@ QUnit.test('Projection by data. Without projection in options', function(assert)
 });
 
 QUnit.test('Projection by data. Projection in options', function(assert) {
-    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const spy = spySeam(mapLayerModule, 'MapLayerCollection', 'DEBUG_set_MapLayerCollection');
     const layers = [{
         proxy: { tag: 'p1', getBounds: function() { return [0, 0, 10, 10]; } },
         getData: function() { return { count: function() { return 0; } }; }
@@ -179,7 +179,7 @@ QUnit.test('Projection by data. Projection in options', function(assert) {
 });
 
 QUnit.test('Bounds by data. Empty bbox', function(assert) {
-    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const spy = spySeam(mapLayerModule, 'MapLayerCollection', 'DEBUG_set_MapLayerCollection');
     const layers = [];
 
     this.layerCollection.stub('items').returns(layers);
@@ -196,7 +196,7 @@ QUnit.test('Bounds by data. Empty bbox', function(assert) {
 });
 
 QUnit.test('Set bounds when data ready called. With bounds in options', function(assert) {
-    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const spy = spySeam(mapLayerModule, 'MapLayerCollection', 'DEBUG_set_MapLayerCollection');
     const layers = [{
         proxy: { tag: 'p1', getBounds: function() { return [0, 0, 10, 10]; } },
         getData: function() {
@@ -298,7 +298,7 @@ QUnit.test('LayoutControl', function(assert) {
 });
 
 QUnit.test('Tracker', function(assert) {
-    const spy = sinon.spy(trackerModule, 'Tracker');
+    const spy = spySeam(trackerModule, 'Tracker', 'DEBUG_set_Tracker');
 
     this.createMap({
         touchEnabled: 0,
@@ -549,7 +549,7 @@ QUnit.test('Applying bounds by data', function(assert) {
             };
         }
     }];
-    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const spy = spySeam(mapLayerModule, 'MapLayerCollection', 'DEBUG_set_MapLayerCollection');
     this.createMap({
         getBoundsFromData: true
     });
@@ -1020,7 +1020,7 @@ QUnit.module('drawn', stubLayersEnvironment);
 
 QUnit.test('call drawn after layer collection ready', function(assert) {
     const onDrawn = sinon.spy();
-    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const spy = spySeam(mapLayerModule, 'MapLayerCollection', 'DEBUG_set_MapLayerCollection');
     this.createMap({
         onDrawn: onDrawn
     });

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable import/no-mutable-exports */
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable max-depth */
@@ -313,7 +314,7 @@ function getConstantLineSharpDirection(coord, axisCanvas) {
   return Math.max(axisCanvas.start, axisCanvas.end) !== coord ? 1 : -1;
 }
 
-export const Axis = function (renderSettings) {
+export let Axis = function (renderSettings) {
   const that = this;
 
   that._renderer = renderSettings.renderer;
@@ -2839,3 +2840,9 @@ Axis.prototype = {
   shift: _noop,
   /// #ENDDEBUG
 };
+
+/// #DEBUG
+export function DEBUG_set_Axis(value: typeof Axis): void {
+  Axis = value;
+}
+/// #ENDDEBUG

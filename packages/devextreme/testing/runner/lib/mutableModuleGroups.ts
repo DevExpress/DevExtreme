@@ -24,50 +24,12 @@ export const MUTABLE_MODULE_GROUPS: readonly MutableModuleGroup[] = [
     extraKeys: ['viz/core/renderers/renderer'],
   },
   {
-    internal: '__internal/viz/core/renderers/animation.js',
-    also: ['viz/core/renderers/animation.js'],
-  },
-  {
     internal: '__internal/viz/core/utils.js',
     also: ['viz/core/utils.js', 'viz/core/utils_default.js'],
   },
   {
-    internal: '__internal/viz/axes/base_axis.js',
-    extraKeys: ['viz/axes/base_axis'],
-  },
-  {
     internal: '__internal/viz/translators/translator2d.js',
     extraKeys: ['viz/translators/translator2d'],
-  },
-  {
-    internal: '__internal/viz/axes/tick_generator.js',
-    extraKeys: ['viz/axes/tick_generator'],
-  },
-  {
-    internal: '__internal/viz/core/tooltip.js',
-    also: ['viz/core/tooltip.js'],
-  },
-  {
-    internal: '__internal/viz/core/export.js',
-    also: [
-      '__internal/viz/core/exportModule.js',
-      'viz/core/export.js',
-    ],
-  },
-  {
-    internal: '__internal/viz/components/legend.js',
-    also: ['viz/components/legend.js'],
-  },
-  {
-    internal: '__internal/viz/core/loading_indicator.js',
-    also: ['viz/core/loading_indicator.js'],
-  },
-  {
-    // Real named exports live in palette.js; paletteModule.js is only
-    // `import * as PaletteModule from './palette'; export default PaletteModule`.
-    internal: '__internal/viz/palette.js',
-    also: ['__internal/viz/paletteModule.js'],
-    extraKeys: ['viz/palette'],
   },
   {
     internal: '__internal/common/core/animation/frame.js',

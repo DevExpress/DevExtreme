@@ -30,9 +30,9 @@ rendererModule.Renderer = function() {
     return currentTest().renderer;
 };
 
-baseThemeManagerModule.BaseThemeManager = function() {
+baseThemeManagerModule.DEBUG_set_BaseThemeManager(function() {
     return currentTest().themeManager;
-};
+});
 
 StubThemeManager.prototype.setTheme = function() {
     forceThemeOptions(this);

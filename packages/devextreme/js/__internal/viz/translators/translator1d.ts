@@ -1,4 +1,6 @@
 /* eslint-disable prefer-rest-params */
+/* eslint-disable import/no-mutable-exports */
+/* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
@@ -9,9 +11,9 @@
 
 const _Number = Number;
 
-export function Translator1D() {
+export let Translator1D = function () {
   this.setDomain(arguments[0], arguments[1]).setCodomain(arguments[2], arguments[3]).setInverted(false);
-}
+};
 
 Translator1D.prototype = {
   constructor: Translator1D,
@@ -87,3 +89,9 @@ Translator1D.prototype = {
     return result;
   },
 };
+
+/// #DEBUG
+export function DEBUG_set_Translator1D(value: typeof Translator1D): void {
+  Translator1D = value;
+}
+/// #ENDDEBUG

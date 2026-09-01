@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
+/* eslint-disable import/no-mutable-exports */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-param-reassign */
@@ -43,7 +44,7 @@ function compareAndReplace(thisValue, otherValue, setValue, compare) {
   }
 }
 
-export const Range = function (range?) {
+export let Range = function (range?) {
   range && extend(this, range);
 };
 
@@ -156,3 +157,9 @@ _Range.prototype = {
     }
   },
 };
+
+/// #DEBUG
+export function DEBUG_set_Range(value: typeof Range): void {
+  Range = value;
+}
+/// #ENDDEBUG

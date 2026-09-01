@@ -1,4 +1,6 @@
 /* eslint-disable @stylistic/no-mixed-operators */
+/* eslint-disable import/no-mutable-exports */
+/* eslint-disable func-names */
 /* eslint-disable no-continue */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-plusplus */
@@ -122,8 +124,8 @@ function getInnerRadius({ type, innerRadius }) {
   return type === 'pie' ? 0 : _isNumber(innerRadius) ? Number(innerRadius) : DEFAULT_INNER_RADIUS;
 }
 
-function LayoutManager() {
-}
+let LayoutManager = function () {
+};
 
 function getAverageLabelWidth(centerX, radius, canvas, sizeLabels) {
   return (centerX - radius - RADIAL_LABEL_INDENT - canvas.left) / sizeLabels.outerLabelsCount;
@@ -278,3 +280,9 @@ LayoutManager.prototype = {
 };
 
 export { LayoutManager };
+
+/// #DEBUG
+export function DEBUG_set_LayoutManager(value: typeof LayoutManager): void {
+  LayoutManager = value;
+}
+/// #ENDDEBUG

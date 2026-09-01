@@ -49,7 +49,7 @@ $('<div id="test-container"></div>')
 const _LoadingIndicator = loadingIndicatorModule.LoadingIndicator;
 
 titleModule.DEBUG_set_title(Title);
-tooltipModule.Tooltip = Tooltip;
+tooltipModule.DEBUG_set_tooltip(Tooltip);
 loadingIndicatorModule.DEBUG_set_LoadingIndicator(LoadingIndicator);
 
 QUnit.module('Misc', {

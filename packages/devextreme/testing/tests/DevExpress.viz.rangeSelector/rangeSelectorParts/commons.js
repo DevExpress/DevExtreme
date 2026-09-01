@@ -16,6 +16,7 @@ import {
     Renderer,
 } from '../../../helpers/vizMocks.js';
 import '__internal/viz/range_selector/range_selector';
+import { stubSeam } from '../../../helpers/moduleSeam.js';
 
 const StubThemeManager = stubClass(themeManagerModule.BaseThemeManager);
 const StubRangeView = stubClass(rangeViewModule.RangeView);
@@ -76,14 +77,14 @@ export const environment = {
         this.seriesDataSource = new StubSeriesDataSource();
 
         rendererModule.Renderer = returnValue(this.renderer);
-        themeManagerModule.BaseThemeManager = returnValue(this.themeManager);
+        themeManagerModule.DEBUG_set_BaseThemeManager(returnValue(this.themeManager));
         rangeViewModule.DEBUG_set_RangeView(returnValue(this.rangeView));
         slidersControllerModule.DEBUG_set_SlidersController(returnValue(this.slidersController));
         trackerModule.DEBUG_set_Tracker(returnValue(this.tracker));
         seriesDataSourceModule.DEBUG_set_SeriesDataSource(returnValue(this.seriesDataSource));
         translator2DModule.Translator2D = returnValue(this.translator);
 
-        sinon.stub(axisModule, 'Axis');
+        stubSeam(axisModule, 'Axis', 'DEBUG_set_Axis');
         axisModule.Axis.returns(this.axis);
     },
 

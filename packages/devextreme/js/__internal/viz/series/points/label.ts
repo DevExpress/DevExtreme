@@ -1,4 +1,6 @@
 /* eslint-disable @stylistic/no-mixed-operators */
+/* eslint-disable import/no-mutable-exports */
+/* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -290,13 +292,13 @@ function formatText(data, options) {
   return options.customizeText ? options.customizeText.call(data, data) : options.displayFormat ? processDisplayFormat(options.displayFormat, data) : data.valueText;
 }
 
-export function Label(renderSettings) {
+export let Label = function (renderSettings) {
   this._renderer = renderSettings.renderer;
   this._container = renderSettings.labelsGroup;
   this._point = renderSettings.point;
   this._strategy = renderSettings.strategy;
   this._rowCount = 1;
-}
+};
 
 Label.prototype = {
   constructor: Label,
@@ -551,5 +553,12 @@ Label.prototype = {
 };
 
 /// #DEBUG
-Label._DEBUG_formatText = formatText;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(Label as any)._DEBUG_formatText = formatText;
+/// #ENDDEBUG
+
+/// #DEBUG
+export function DEBUG_set_Label(value: typeof Label): void {
+  Label = value;
+}
 /// #ENDDEBUG

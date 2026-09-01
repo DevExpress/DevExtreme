@@ -29,7 +29,7 @@ const environment = {
         this.data = [
             { date: 'arg1', high: 'high1', low: 'low1', open: 'open1', close: 'close1' }
         ];
-        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function() {
+        this.createPoint = stubSeam(pointModule, 'Point', 'DEBUG_set_Point').callsFake(function() {
             const stub = mockPoints[mockPointIndex++];
             stub.argument = 1;
             stub.hasValue.returns(true);

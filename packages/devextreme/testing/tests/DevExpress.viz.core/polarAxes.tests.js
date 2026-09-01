@@ -8,6 +8,7 @@ import tickGeneratorModule from 'viz/axes/tick_generator';
 import rangeModule from 'viz/translators/range';
 import { Axis } from 'viz/axes/base_axis';
 import { extend } from 'core/utils/extend';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const TranslatorStubCtor = new ObjectPool(translator2DModule.Translator2D);
 const RangeStubCtor = new ObjectPool(rangeModule.Range);
@@ -31,7 +32,7 @@ const environment = {
 
         this.renderer = new Renderer();
 
-        this.tickGenerator = sinon.stub(tickGeneratorModule, 'tickGenerator').callsFake(function() {
+        this.tickGenerator = stubSeam(tickGeneratorModule, 'tickGenerator', 'DEBUG_set_tickGenerator').callsFake(function() {
             return sinon.spy(function() {
                 return {
                     ticks: that.generatedTicks || [],

@@ -10,6 +10,7 @@ import translator2DModule from 'viz/translators/translator2d';
 import { Range } from 'viz/translators/range';
 import xyMethods from '__internal/viz/axes/xy_axes';
 import { isFunction, isDeferred } from 'core/utils/type';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const StubTranslator = stubClass(translator2DModule.Translator2D, {
     updateBusinessRange: function(range) {
@@ -29,7 +30,7 @@ const environment = {
                 tickInterval: that.generatedTickInterval
             };
         });
-        this.tickGenerator = sinon.stub(tickGeneratorModule, 'tickGenerator').callsFake(function() {
+        this.tickGenerator = stubSeam(tickGeneratorModule, 'tickGenerator', 'DEBUG_set_tickGenerator').callsFake(function() {
             return that.tickGeneratorSpy;
         });
 

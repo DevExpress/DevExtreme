@@ -66,7 +66,7 @@ const environment = {
         this.seriesGroup = this.renderer.g();
         this.data = [{ arg: 1, val: 10, size: 1 }, { arg: 2, val: 20, size: 1 }, { arg: 3, val: 30, size: 1 }, { arg: 4, val: 40, size: 1 }];
 
-        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function() {
+        this.createPoint = stubSeam(pointModule, 'Point', 'DEBUG_set_Point').callsFake(function() {
             const stub = mockPoints[mockPointIndex++];
             stub.argument = 1;
             stub.hasValue.returns(true);

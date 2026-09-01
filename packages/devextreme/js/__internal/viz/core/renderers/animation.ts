@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
+/* eslint-disable import/no-mutable-exports */
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/no-shadow */
@@ -144,13 +146,13 @@ Animation.prototype = {
   },
 };
 
-export function AnimationController(element) {
+export let AnimationController = function (element) {
   const that = this;
   that._animationCount = 0;
   that._timerId = null;
   that._animations = {};
   that.element = element;
-}
+};
 
 AnimationController.prototype = {
   _loop() {
@@ -239,3 +241,9 @@ AnimationController.prototype = {
     !hasUnstoppableInAnimations && this.stop();
   },
 };
+
+/// #DEBUG
+export function DEBUG_set_AnimationController(value: typeof AnimationController): void {
+  AnimationController = value;
+}
+/// #ENDDEBUG

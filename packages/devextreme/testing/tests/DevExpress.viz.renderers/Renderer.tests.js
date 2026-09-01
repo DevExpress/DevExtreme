@@ -55,7 +55,7 @@ function resetMockElements() {
     });
 }
 
-animationModule.AnimationController = stubClass(animationModule.AnimationController);
+animationModule.DEBUG_set_AnimationController(stubClass(animationModule.AnimationController));
 
 const Renderer = renderers.Renderer;
 

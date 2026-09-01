@@ -38,9 +38,9 @@ rendererModule.Renderer = function() {
     return new Renderer();
 };
 
-baseThemeManagerModule.BaseThemeManager = function() {
+baseThemeManagerModule.DEBUG_set_BaseThemeManager(function() {
     return currentTest().themeManager;
-};
+});
 
 function getSparklineTooltip(sparkline) {
     return sparkline._tooltip;

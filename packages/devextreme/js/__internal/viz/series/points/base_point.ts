@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-dynamic-delete */
+/* eslint-disable import/no-mutable-exports */
+/* eslint-disable func-names */
 /* eslint-disable no-bitwise */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable no-restricted-syntax */
@@ -89,7 +91,7 @@ function isNoneMode(mode) {
   return _normalizeEnum(mode) === 'none';
 }
 
-export function Point(series, dataItem, options) {
+export let Point = function (series, dataItem, options) {
   this.fullState = NORMAL_STATE;
   this.series = series;
   this.update(dataItem, options);
@@ -104,7 +106,7 @@ export function Point(series, dataItem, options) {
     dashStyle: null,
     filter: null,
   };
-}
+};
 // @ts-expect-error
 mixins.symbolPoint = symbolPoint;
 // @ts-expect-error
@@ -547,3 +549,9 @@ Point.prototype = {
     };
   },
 };
+
+/// #DEBUG
+export function DEBUG_set_Point(value: typeof Point): void {
+  Point = value;
+}
+/// #ENDDEBUG

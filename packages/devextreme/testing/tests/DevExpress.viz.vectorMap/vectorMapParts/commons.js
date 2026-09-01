@@ -56,12 +56,12 @@ function stubComponentConstructors(test) {
     projectionModule.DEBUG_set_Projection(returnValue(test.projection));
     controlBarModule.DEBUG_set_ControlBar(returnValue(test.controlBar));
     gestureHandlerModule.DEBUG_set_GestureHandler(returnValue(test.gestureHandler));
-    trackerModule.Tracker = returnValue(test.tracker);
-    themeManagerModule.BaseThemeManager = returnValue(test.themeManager);
+    trackerModule.DEBUG_set_Tracker(returnValue(test.tracker));
+    themeManagerModule.DEBUG_set_BaseThemeManager(returnValue(test.themeManager));
     dataExchangerModule.DEBUG_set_DataExchanger(returnValue(test.dataExchanger));
     legendModule.DEBUG_set_LegendsControl(returnValue(test.legendsControl));
     layoutModule.DEBUG_set_LayoutControl(returnValue(test.layoutControl));
-    mapLayerModule.MapLayerCollection = returnValue(test.layerCollection);
+    mapLayerModule.DEBUG_set_MapLayerCollection(returnValue(test.layerCollection));
     tooltipViewerModule.DEBUG_set_TooltipViewer(returnValue(test.tooltipViewer));
 }
 export { stubComponentConstructors };

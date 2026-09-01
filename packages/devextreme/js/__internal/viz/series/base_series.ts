@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable import/no-mutable-exports */
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable max-depth */
 /* eslint-disable @typescript-eslint/no-dynamic-delete */
 /* eslint-disable no-bitwise */
@@ -179,7 +181,7 @@ function mergePointOptions(base, extra) {
   return options;
 }
 
-export function Series(settings, options) {
+export let Series = function (settings, options) {
   const that = this;
   that.fullState = 0;
   that._extGroups = settings;
@@ -191,7 +193,7 @@ export function Series(settings, options) {
 
   that._legendCallback = _noop;
   that.updateOptions(options, settings);
-}
+};
 
 function getData(pointData) {
   return pointData.data;
@@ -1382,3 +1384,9 @@ Series.prototype = {
 };
 // @ts-expect-error
 export const mixins = seriesNS.mixins;
+
+/// #DEBUG
+export function DEBUG_set_Series(value: typeof Series): void {
+  Series = value;
+}
+/// #ENDDEBUG

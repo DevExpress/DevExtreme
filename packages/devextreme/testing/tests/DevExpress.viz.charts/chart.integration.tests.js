@@ -13,8 +13,7 @@ import { setupSeriesFamily } from '../../helpers/chartMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
 
 const mutableRendererModule = rendererModule.default ?? rendererModule;
-const mutableSeriesFamilyModule = seriesFamilyModule.default ?? seriesFamilyModule;
-const seriesFamilyNativeConstructor = mutableSeriesFamilyModule.SeriesFamily;
+const seriesFamilyNativeConstructor = seriesFamilyModule.SeriesFamily;
 setupSeriesFamily();
 QUnit.testStart(function() {
     const markup =
@@ -2327,7 +2326,7 @@ QUnit.test('check horizontal alignment === center', function(assert) {
 QUnit.module('Auto hide point markers', $.extend({}, moduleSetup, {
     beforeEach: function() {
         moduleSetup.beforeEach.call(this);
-        mutableSeriesFamilyModule.SeriesFamily = seriesFamilyNativeConstructor;
+        seriesFamilyModule.DEBUG_set_SeriesFamily(seriesFamilyNativeConstructor);
         const dataSource = [];
         for(let i = 0; i < 500000; i += 250) {
             const y1 = Math.sin(i);
@@ -4903,7 +4902,7 @@ QUnit.test('Reset axes animation before adjusting position of vertical axes (fix
 QUnit.module('SeriesFamily', $.extend({}, moduleSetup, {
     beforeEach: function() {
         moduleSetup.beforeEach.call(this);
-        mutableSeriesFamilyModule.SeriesFamily = seriesFamilyNativeConstructor;
+        seriesFamilyModule.DEBUG_set_SeriesFamily(seriesFamilyNativeConstructor);
     }
 }));
 

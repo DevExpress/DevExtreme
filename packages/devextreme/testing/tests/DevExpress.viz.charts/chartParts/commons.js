@@ -90,7 +90,7 @@ titleModule.DEBUG_set_title(sinon.spy(function(parameters) {
     return title;
 }));
 
-sinon.stub(legendModule, 'Legend').callsFake((parameters) => {
+stubSeam(legendModule, 'Legend', '_setLegend').callsFake((parameters) => {
     const legend = new Legend(parameters);
     legend.getActionCallback = sinon.spy(function(arg) {
         return arg;
@@ -197,11 +197,11 @@ const environment = {
         that.layoutManager.layoutElements = sinon.spy(function() {
             arguments[2]();
         });
-        this.StubLayoutManager = sinon.stub(layoutManagerModule, 'LayoutManager').callsFake(function() {
+        this.StubLayoutManager = stubSeam(layoutManagerModule, 'LayoutManager', 'DEBUG_set_LayoutManager').callsFake(function() {
             return that.layoutManager;
         });
 
-        sinon.stub(scrollBarClassModule, 'ScrollBar').callsFake(function() {
+        stubSeam(scrollBarClassModule, 'ScrollBar', 'DEBUG_set_ScrollBar').callsFake(function() {
             const ScrollBar = stubClass(ScrollBarClass);
             const scrollBar = new ScrollBar();
             scrollBar.stub('init').returns(scrollBar);
@@ -228,11 +228,11 @@ const environment = {
             }, options.argumentAxis));
             return createChartInstance(options, this.$container);
         };
-        this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager').callsFake(function() {
+        this.createThemeManager = stubSeam(chartThemeManagerModule, 'ThemeManager', 'DEBUG_set_ThemeManager').callsFake(function() {
             return that.themeManager;
         });
         const family = sinon.createStubInstance(seriesFamilyModule.SeriesFamily);
-        this.createSeriesFamily = sinon.stub(seriesFamilyModule, 'SeriesFamily').callsFake(function() {
+        this.createSeriesFamily = stubSeam(seriesFamilyModule, 'SeriesFamily', 'DEBUG_set_SeriesFamily').callsFake(function() {
             family.pane = 'default';
             family.adjustSeriesDimensions = sinon.stub();
             family.adjustSeriesValues = sinon.stub();
@@ -288,7 +288,7 @@ const environment = {
         tooltipModule.DEBUG_set_tooltip(null);
     },
     mockValidateData: function() {
-        this.validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function(data, groupsData) {
+        this.validateData = stubSeam(dataValidatorModule, 'validateData', 'DEBUG_set_validateData').callsFake(function(data, groupsData) {
             const categories = [];
             if(data) {
                 data.forEach(function(item) {
