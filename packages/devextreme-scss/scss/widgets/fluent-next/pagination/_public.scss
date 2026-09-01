@@ -2,6 +2,7 @@
 @use "sizes" as *;
 
 @mixin publish {
+  --dx-pagination-content-disabled: #{$pagination-content-disabled};
   --dx-pagination-first-child-margin-inline-start: #{$pagination-first-child-margin-inline-start};
   --dx-pagination-first-child-padding-block-end: #{$pagination-first-child-padding-block-end};
   --dx-pagination-first-child-padding-block-start: #{$pagination-first-child-padding-block-start};

@@ -1,3 +1,19 @@
 @use 'colors';
 @use 'sizes';
 @use '../../base/cardView/index' as *;
+
+// The widget-level disabled state was carried entirely by the blanket dim, so the component showed
+// nothing of its own once that rule was lifted. It is painted from the disabled content role now.
+// The existing `…header-panel-item-*-disabled` names are not reused here: base applies those to
+// the sortable drag source, not to a disabled state (see DISABLED_STATES.md).
+.dx-cardview.dx-state-disabled {
+  opacity: 1;
+  color: var(--dx-card-view-content-disabled);
+
+  .dx-cardview-field-caption,
+  .dx-cardview-field-value,
+  .dx-cardview-card-content,
+  .dx-cardview-header-item {
+    color: var(--dx-card-view-content-disabled);
+  }
+}

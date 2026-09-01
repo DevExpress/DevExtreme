@@ -51,3 +51,22 @@
   $indicator-ring-size: var(--dx-stepper-step-indicator-ring-size),
   $indicator-halo-size: var(--dx-stepper-step-indicator-halo-size),
 );
+
+// The widget-level disabled state was carried entirely by the blanket dim, so the component showed
+
+// nothing of its own once that rule was lifted. It now paints the same disabled roles that its
+
+// individually disabled items already use.
+.dx-stepper.dx-state-disabled {
+  opacity: 1;
+
+  .dx-step-indicator {
+    color: var(--dx-stepper-step-content-disabled);
+    border-color: var(--dx-stepper-step-bg-disabled);
+    background-color: var(--dx-stepper-step-bg-disabled);
+  }
+
+  .dx-step-caption {
+    color: var(--dx-stepper-step-content-disabled);
+  }
+}

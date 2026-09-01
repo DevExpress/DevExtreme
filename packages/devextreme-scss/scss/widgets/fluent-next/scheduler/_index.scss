@@ -1111,3 +1111,28 @@
 .dx-scheduler-work-space.dx-scheduler-work-space-month .dx-scheduler-date-table-other-month.dx-state-hover {
   color: var(--dx-scheduler-workspace-cell-content-hovered);
 }
+
+// A disabled scheduler was carried entirely by the blanket dim: the work space, the panels and the
+
+// header are its own markup and no child widget paints them.
+.dx-scheduler.dx-state-disabled {
+  opacity: 1;
+  color: var(--dx-scheduler-content-disabled);
+
+  .dx-scheduler-header,
+  .dx-scheduler-navigator-caption,
+  .dx-scheduler-header-panel,
+  .dx-scheduler-time-panel,
+  .dx-scheduler-all-day-title,
+  .dx-scheduler-work-space {
+    color: var(--dx-scheduler-content-disabled);
+  }
+
+  // The header toolbar and the view switcher are widgets of their own and are not disabled, so
+
+  // their text is painted here rather than through their tiers.
+  .dx-button-text,
+  .dx-toolbar-item-content {
+    color: var(--dx-scheduler-content-disabled);
+  }
+}

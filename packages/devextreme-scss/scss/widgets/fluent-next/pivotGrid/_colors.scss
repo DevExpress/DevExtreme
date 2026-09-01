@@ -26,3 +26,5 @@ $pivot-grid-content: ds.$color-content !default;
 // Color computations hoisted from style files (phase 0.5 layer normalization)
 $pivot-grid-drag-header-shadow: 0 3px 4px ds.$color-shadow-key !default; // dx-shadow-geometry: 0 3px 4px
 $pivot-grid-area-field-bg: rgb(from #{$pivot-grid-field-area-box-bg} r g b / 0.9) !default;
+
+$pivot-grid-content-disabled: ds.$color-content-disabled !default;

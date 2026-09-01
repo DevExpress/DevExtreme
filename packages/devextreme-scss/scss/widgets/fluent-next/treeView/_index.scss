@@ -144,3 +144,16 @@
   $tree-view-container-padding,
   var(--dx-tree-view-load-indicator-size),
 );
+
+// The widget-level disabled state was carried entirely by the blanket dim, so the component showed
+
+// nothing of its own once that rule was lifted. It now paints the same disabled roles that its
+
+// individually disabled items already use.
+.dx-treeview.dx-state-disabled {
+  opacity: 1;
+
+  .dx-treeview-item {
+    color: var(--dx-tree-view-item-content-disabled);
+  }
+}

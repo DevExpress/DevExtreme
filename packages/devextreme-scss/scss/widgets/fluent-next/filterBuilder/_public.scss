@@ -2,6 +2,7 @@
 @use "sizes" as *;
 
 @mixin publish {
+  --dx-filter-builder-content-disabled: #{$filter-builder-content-disabled};
   --dx-filter-builder-action-icon-font-size: #{$filter-builder-action-icon-font-size};
   --dx-filter-builder-action-icon-margin-inline-end: #{$filter-builder-action-icon-margin-inline-end};
   --dx-filter-builder-action-icon-margin-inline-start: #{$filter-builder-action-icon-margin-inline-start};

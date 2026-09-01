@@ -2,6 +2,7 @@
 @use "sizes" as *;
 
 @mixin publish {
+  --dx-scheduler-content-disabled: #{$scheduler-content-disabled};
   --dx-scheduler-accent-border: #{$scheduler-accent-border};
   --dx-scheduler-agenda-appointment-allday-padding-inline-end: #{$scheduler-agenda-appointment-allday-padding-inline-end};
   --dx-scheduler-agenda-appointment-bg-active: #{$scheduler-agenda-appointment-bg-active};

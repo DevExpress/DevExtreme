@@ -22,6 +22,19 @@
 .dx-menu {
   color: var(--dx-menu-content);
 
+  &.dx-state-disabled {
+    opacity: 1;
+
+    // The widget-level disabled state was carried entirely by the blanket dim, so the component
+
+    // showed nothing of its own once that rule was lifted. It now paints the same disabled roles
+
+    // that its individually disabled items already use.
+    .dx-menu-item {
+      color: var(--dx-menu-item-content-disabled);
+    }
+  }
+
   .dx-menu-horizontal {
     .dx-menu-item-popout {
       margin-inline-start: var(--dx-menu-item-icon-gap);

@@ -244,3 +244,20 @@
     background-color: var(--dx-pivot-grid-position-indicator-bg);
   }
 }
+
+// A disabled pivot grid was carried entirely by the blanket dim: its areas, headers and field
+
+// chips are its own markup and no child widget paints them.
+.dx-pivotgrid.dx-state-disabled {
+  opacity: 1;
+  color: var(--dx-pivot-grid-content-disabled);
+
+  .dx-pivotgrid-area,
+  .dx-pivotgrid-horizontal-headers,
+  .dx-pivotgrid-vertical-headers,
+  .dx-pivotgrid-fields-area,
+  .dx-area-field,
+  .dx-area-description-cell {
+    color: var(--dx-pivot-grid-content-disabled);
+  }
+}

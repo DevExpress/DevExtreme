@@ -112,3 +112,17 @@
     }
   }
 }
+
+// The widget-level disabled state was carried entirely by the blanket dim, so the component showed
+
+// nothing of its own once that rule was lifted. It is painted from the disabled content role now.
+.dx-pagination.dx-state-disabled {
+  opacity: 1;
+  color: var(--dx-pagination-content-disabled);
+
+  .dx-page,
+  .dx-info,
+  .dx-page-size {
+    color: var(--dx-pagination-content-disabled);
+  }
+}

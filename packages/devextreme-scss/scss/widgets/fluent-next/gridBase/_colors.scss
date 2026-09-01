@@ -2,6 +2,7 @@
 @use "../../../_design-system/variables/ds" as ds;
 
 $grid-content: ds.$color-content !default;
+$grid-content-disabled: ds.$color-content-disabled !default;
 
 $grid-bg: ds.$color-bg !default;
 $grid-border: ds.$color-border !default;

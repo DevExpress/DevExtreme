@@ -111,3 +111,16 @@
     background: var(--dx-gallery-indicator-bg-focused);
   }
 }
+
+// The widget-level disabled state was carried entirely by the blanket dim, so the component showed
+
+// nothing of its own once that rule was lifted. It is painted from the disabled content role now.
+.dx-gallery.dx-state-disabled {
+  opacity: 1;
+  color: var(--dx-gallery-content-disabled);
+
+  .dx-gallery-nav-button-next,
+  .dx-gallery-nav-button-prev {
+    color: var(--dx-gallery-content-disabled);
+  }
+}

@@ -8,3 +8,20 @@
 @use "layout/navigation-button/base" as *;
 @use "../scrollable";
 @use "../badge";
+
+// The widget-level disabled state was carried entirely by the blanket dim, so the component showed
+
+// nothing of its own once that rule was lifted. It now paints the same disabled roles that its
+
+// individually disabled items already use.
+.dx-tabs.dx-state-disabled {
+  opacity: 1;
+
+  .dx-tab {
+    color: var(--dx-tabs-tab-content-disabled);
+
+    .dx-icon {
+      color: var(--dx-tabs-tab-icon-content-disabled);
+    }
+  }
+}

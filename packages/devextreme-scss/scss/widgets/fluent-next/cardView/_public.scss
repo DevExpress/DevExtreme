@@ -2,6 +2,7 @@
 @use "sizes" as *;
 
 @mixin publish {
+  --dx-card-view-content-disabled: #{$card-view-content-disabled};
   --dx-card-view-bg: #{$card-view-bg};
   --dx-card-view-border-radius: #{$card-view-border-radius};
   --dx-card-view-card-bg: #{$card-view-card-bg};

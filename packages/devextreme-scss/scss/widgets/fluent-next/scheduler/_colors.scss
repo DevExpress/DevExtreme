@@ -57,3 +57,5 @@ $scheduler-inverted-content: ds.$color-content-inverted !default;
 // Base-layer values injected with design tokens (wave B1)
 $scheduler-appointment-dragging-shadow: 7px 7px 15px 0 ds.$color-shadow-key !default; // dx-shadow-geometry: 7px 7px 15px
 $scheduler-tooltip-shadow: ds.$box-shadow-md !default;
+
+$scheduler-content-disabled: ds.$color-content-disabled !default;

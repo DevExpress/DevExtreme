@@ -32,6 +32,25 @@
       height: var(--dx-toolbar-height);
     }
   }
+
+  // base/toolbar opts the toolbar out of the blanket disabled dim and puts nothing in its place,
+
+  // and the "do not dim nested widgets" rule clears the dim from the item widgets as well, so a
+
+  // disabled toolbar rendered exactly like an enabled one. The state is painted from the
+
+  // disabled roles instead, on the toolbar's own text and on the text of its item buttons.
+  &.dx-state-disabled {
+    color: var(--dx-toolbar-content-disabled);
+
+    // The item widgets are not disabled themselves, so they keep their own colours: paint them
+
+    // here rather than redeclaring their tier names, which belong to the button component.
+    .dx-button-text,
+    .dx-button .dx-icon {
+      color: var(--dx-toolbar-content-disabled);
+    }
+  }
 }
 
 .dx-toolbar-after {

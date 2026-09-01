@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>fluent-next: disabled / readonly - before and after</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { color-scheme: light; }
+  body { margin: 0; font: 13px/1.5 -apple-system, "Segoe UI", sans-serif; background: #fff; color: #161616; }
+  body.dark { background: #1d1d1d; color: #f5f5f5; color-scheme: dark; }
+  .bar { padding: 10px 14px; display: flex; gap: 18px; align-items: center; flex-wrap: wrap;
+         border-bottom: 1px solid rgba(128,128,128,.35); position: sticky; top: 0; background: inherit; z-index: 2; }
+  .bar b { font-size: 14px; }
+  .bar label { display: inline-flex; gap: 5px; align-items: center; }
+  .note { opacity: .65; font-size: 12px; max-width: 100%; padding: 10px 14px; border-bottom: 1px solid rgba(128,128,128,.35); }
+  .note code { font-family: ui-monospace, Menlo, monospace; }
+  .cols { display: flex; align-items: stretch; overflow-x: auto; }
+  .col { flex: 1 1 0; min-width: 260px; border-right: 1px solid rgba(128,128,128,.35); display: flex; flex-direction: column; }
+  .col > h2 { margin: 0; padding: 8px 12px; font-size: 12px; font-weight: 600;
+              border-bottom: 1px solid rgba(128,128,128,.35); background: rgba(128,128,128,.08); }
+  .col > h2 small { display: block; font-weight: 400; opacity: .6; }
+  iframe { flex: 1 1 auto; width: 100%; height: calc(100vh - 210px); border: 0; }
+  #summary { padding: 10px 14px; border-top: 1px solid rgba(128,128,128,.35); font-size: 12px; }
+  #summary ul { margin: 6px 0 0; padding-left: 18px; }
+  #summary .same { color: #b3261e; }
+  body.dark #summary .same { color: #ff8a80; }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <b>disabled / readonly: before and after</b>
+    <span>
+      <label><input type="radio" name="state" value="disabled" checked> disabled</label>
+      <label><input type="radio" name="state" value="readonly"> readonly</label>
+    </span>
+    <span>
+      <label><input type="radio" name="mode" value="light" checked> light</label>
+      <label><input type="radio" name="mode" value="dark"> dark</label>
+    </span>
+    <span id="status" style="opacity:.6"></span>
+  </div>
+
+  <div class="note" id="legend"></div>
+
+  <div class="cols" id="cols"></div>
+
+  <div id="summary">measuring...</div>
+
+<script>
+/*
+ * Four synchronised columns over the same gallery. Requires the built bundles
+ * (pnpm nx build:ci devextreme-scss) and dx.all.debug.js (pnpm nx build:dev devextreme),
+ * served over http from the repository root.
+ */
+const COLUMNS = {
+  disabled: [
+    { key: 'enabled', title: 'Enabled', sub: 'fluent-next, the reference', theme: 'fluent-next', state: 'enabled', dim: 'on' },
+    { key: 'dim', title: 'Disabled now', sub: 'fluent-next, blanket dim in force', theme: 'fluent-next', state: 'disabled', dim: 'on' },
+    { key: 'nodim', title: 'Disabled without the dim', sub: 'fluent-next, --dx-global-disabled-opacity: 1', theme: 'fluent-next', state: 'disabled', dim: 'off' },
+    { key: 'legacy', title: 'Legacy fluent', sub: 'the shipped theme, for NFR-1', theme: 'fluent', state: 'disabled', dim: 'on' },
+  ],
+  readonly: [
+    { key: 'enabled', title: 'Normal', sub: 'fluent-next, the reference', theme: 'fluent-next', state: 'enabled', dim: 'on', set: 'readonly' },
+    { key: 'dim', title: 'Read-only', sub: 'fluent-next', theme: 'fluent-next', state: 'readonly', dim: 'on', set: 'readonly' },
+    { key: 'legacy', title: 'Legacy fluent read-only', sub: 'the shipped theme, for NFR-1', theme: 'fluent', state: 'readonly', dim: 'on', set: 'readonly' },
+  ],
+};
+
+const LEGEND = {
+  disabled: `The middle pair is the question this page exists for. <b>Disabled now</b> is what ships today:
+    a blanket <code>opacity</code> over the whole widget plus, in about twenty components, their own disabled colours.
+    <b>Disabled without the dim</b> removes only the blanket rule, so a component keeps whatever disabled
+    styling it owns. Where the two right-hand columns look the same as <b>Enabled</b>, the component has
+    <em>no disabled styling of its own</em> and is entirely carried by the dim - that is the work list for
+    moving onto the disabled roles. Legacy fluent is there for NFR-1: the opt-out pattern is inherited from it,
+    the branch did not change it, only the shades come from design tokens now.`,
+  readonly: `Read-only is never dimmed in either theme, so there is no dim column here. The comparison is
+    fluent-next against legacy fluent. Note that read-only currently shares the <em>border</em> token with
+    disabled (<code>--dx-text-editor-border-disabled</code>) while its text keeps full contrast.`,
+};
+
+const BUILD = Date.now();
+const cols = document.getElementById('cols');
+const statusEl = document.getElementById('status');
+let frames = [];
+
+function build() {
+  const state = document.querySelector('input[name=state]:checked').value;
+  const mode = document.querySelector('input[name=mode]:checked').value;
+  document.body.classList.toggle('dark', mode === 'dark');
+  document.getElementById('legend').innerHTML = LEGEND[state];
+  cols.innerHTML = '';
+  frames = COLUMNS[state].map((c) => {
+    const col = document.createElement('div');
+    col.className = 'col';
+    col.innerHTML = `<h2>${c.title}<small>${c.sub}</small></h2>`;
+    const f = document.createElement('iframe');
+    f.src = `disabled-readonly-compare-frame.html?theme=${c.theme}.blue.${mode}&state=${c.state}&dim=${c.dim}&set=${c.set || 'all'}&_=${BUILD}`;
+    col.appendChild(f);
+    cols.appendChild(col);
+    return { cfg: c, el: f };
+  });
+  syncScroll();
+  waitAndSummarise();
+}
+
+function syncScroll() {
+  let busy = false;
+  frames.forEach(({ el }) => {
+    el.addEventListener('load', () => {
+      el.contentWindow.addEventListener('scroll', () => {
+        if (busy) return;
+        busy = true;
+        const top = el.contentWindow.scrollY;
+        frames.forEach(({ el: other }) => { if (other !== el) other.contentWindow.scrollTo(0, top); });
+        busy = false;
+      });
+    });
+  });
+}
+
+async function waitAndSummarise() {
+  const summary = document.getElementById('summary');
+  summary.textContent = 'measuring...';
+  statusEl.textContent = 'loading columns...';
+  const deadline = Date.now() + 45000;
+  while (Date.now() < deadline) {
+    if (frames.every(({ el }) => el.contentWindow && el.contentWindow.__ready)) break;
+    await new Promise((r) => setTimeout(r, 250));
+  }
+  statusEl.textContent = '';
+  const byKey = Object.fromEntries(frames.map(({ cfg, el }) => [cfg.key, el.contentWindow]));
+  if (!byKey.enabled || !byKey.enabled.__fp) { summary.textContent = 'columns did not finish loading'; return; }
+
+  const cases = byKey.enabled.__cases || [];
+  const state = document.querySelector('input[name=state]:checked').value;
+
+  // A signature that is missing or not in the expected shape means "not measured". Returning
+  // 'same' for it would quietly turn a broken column into a clean bill of health.
+  const verdict = (a, b) => {
+    const bad = (x) => !x || typeof x !== 'object' || typeof x.colours !== 'string' || typeof x.count !== 'number';
+    if (bad(a) || bad(b)) return 'unknown';
+    if (a.count !== b.count) return 'structure';
+    return a.colours === b.colours ? 'same' : 'different';
+  };
+
+  if (state === 'readonly') {
+    const rows = cases.map((c) => ({ c, v: verdict(byKey.enabled.__fp[c.id], byKey.dim.__fp[c.id]) }));
+    const diff = rows.filter((r) => r.v === 'different' || r.v === 'structure');
+    const same = rows.filter((r) => r.v === 'same');
+    summary.innerHTML = `<b>Read-only:</b> ${diff.length} of ${cases.length} components render differently from their normal state.`
+      + (same.length ? `<ul><li class="same">no visible read-only styling: ${same.map((r) => r.c.id).join(', ')}</li></ul>` : '');
+    window.__compare = { state, different: diff.map((r) => r.c.id), same: same.map((r) => r.c.id) };
+    return;
+  }
+
+  const unstable = new Set(frames.flatMap(({ el }) => el.contentWindow.__unstable || []));
+  const rows = cases.map((c) => ({
+    c,
+    vsEnabled: unstable.has(c.id) ? 'unstable' : verdict(byKey.enabled.__fp[c.id], byKey.nodim.__fp[c.id]),
+    vsDim: unstable.has(c.id) ? 'unstable' : verdict(byKey.dim.__fp[c.id], byKey.nodim.__fp[c.id]),
+  }));
+  const invisibleToday = rows.filter((r) => r.vsDim !== 'unstable'
+    && verdict(byKey.enabled.__fp[c_id(r)], byKey.dim.__fp[c_id(r)]) === 'same');
+  function c_id(r) { return r.c.id; }
+  const dimOnly = rows.filter((r) => r.vsEnabled === 'same');
+  const owns = rows.filter((r) => r.vsEnabled === 'different');
+  const unclear = rows.filter((r) => r.vsEnabled === 'structure');
+  const unmeasured = rows.filter((r) => r.vsEnabled === 'unknown');
+  const jittery = rows.filter((r) => r.vsEnabled === 'unstable');
+
+  summary.innerHTML =
+    `Remove the blanket dim and <b>${owns.length}</b> of ${cases.length} components keep a disabled look of their own; `
+    + `<span class="same"><b>${dimOnly.length}</b> become indistinguishable from enabled</span>`
+    + (unclear.length ? `; ${unclear.length} render a different number of elements and cannot be judged by colour alone` : '')
+    + `.<ul>`
+    + `<li class="same">still carried by the dim - the work list: ${dimOnly.map((r) => r.c.id).join(', ') || '-'}</li>`
+    + `<li>already on their own disabled colours: ${owns.map((r) => r.c.id).join(', ') || '-'}</li>`
+    + (unclear.length ? `<li>compare by eye: ${unclear.map((r) => r.c.id).join(', ')}</li>` : '')
+    + (unmeasured.length ? `<li class="same">NOT MEASURED (reload the page): ${unmeasured.map((r) => r.c.id).join(', ')}</li>` : '')
+    + (jittery.length ? `<li>still rendering when measured, no verdict: ${jittery.map((r) => r.c.id).join(', ')}</li>` : '')
+    + (invisibleToday.length ? `<li class="same">disabled is ALREADY indistinguishable from enabled today: ${invisibleToday.map((r) => r.c.id).join(', ')}</li>` : '')
+    + `</ul>`;
+  window.__compare = { state, dimOnly: dimOnly.map((r) => r.c.id), owns: owns.map((r) => r.c.id),
+    unclear: unclear.map((r) => r.c.id), unmeasured: unmeasured.map((r) => r.c.id),
+    jittery: jittery.map((r) => r.c.id), invisibleToday: invisibleToday.map((r) => r.c.id) };
+}
+
+document.querySelectorAll('input').forEach((r) => r.addEventListener('change', build));
+build();
+</script>
+</body>
+</html>

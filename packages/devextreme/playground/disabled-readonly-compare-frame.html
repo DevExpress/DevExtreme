@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>disabled / readonly compare frame</title>
+<link id="theme" rel="stylesheet" type="text/css">
+<script src="../artifacts/js/jquery.js"></script>
+<script src="../artifacts/js/dx-quill.js"></script>
+<script src="../artifacts/js/dx-gantt.js"></script>
+<script src="../artifacts/js/dx-diagram.js"></script>
+<script src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
+<style>
+  html, body { margin: 0; }
+  body { font: 12px/1.4 -apple-system, "Segoe UI", sans-serif; }
+  .row { box-sizing: border-box; padding: 10px 12px; border-bottom: 1px solid rgba(128,128,128,.25); overflow: hidden; }
+  .row > .label { font-size: 10px; text-transform: uppercase; letter-spacing: .04em; opacity: .5; margin-bottom: 6px; }
+  .host { overflow: hidden; }
+</style>
+</head>
+<body class="dx-viewport">
+<div id="gallery"></div>
+<script>
+/*
+ * One column of the disabled / readonly comparison. Query parameters:
+ *   theme  - bundle name, e.g. fluent-next.blue.light
+ *   state  - enabled | disabled | readonly
+ *   dim    - on | off; "off" neutralises the theme's global disabled dim by setting
+ *            --dx-global-disabled-opacity to 1, which shows what each component would look
+ *            like if the blanket rule were removed and only its own disabled colours remained.
+ *            It cannot affect legacy fluent (the dim is a literal there) nor the hardcoded
+ *            opacity of dxChat in base/chat/layout/chat/_index.scss.
+ * Every column renders the same cases in the same order at the same fixed heights, so the
+ * shell can put the columns side by side and scroll them together.
+ * window.__cases and window.__fp (per-case colour fingerprint) are read by the shell.
+ */
+const params = new URLSearchParams(location.search);
+const THEME = params.get('theme') || 'fluent-next.blue.light';
+const STATE = params.get('state') || 'disabled';
+const DIM = params.get('dim') || 'on';
+
+// The bundle is a megabyte and the browser caches it hard; without the buster a rebuilt
+// stylesheet is silently ignored and the comparison keeps showing the previous build.
+const BUST = params.get('_') || '';
+document.getElementById('theme').href = `../artifacts/css/dx.${THEME}.css${BUST ? '?_=' + BUST : ''}`;
+if (DIM === 'off') {
+  const s = document.createElement('style');
+  s.textContent = ':root{--dx-global-disabled-opacity:1}';
+  document.head.appendChild(s);
+}
+
+const items = ['Alpha', 'Beta', 'Gamma'];
+const products = [{ ID: 1, Name: 'Alpha' }, { ID: 2, Name: 'Beta' }];
+
+// [id, label, height, builder]. The builder receives the flags of the current column.
+const CASES = [
+  // --- components that already own their disabled colours (opacity: 1 + roles) -------------
+  ['button', 'Button - contained', 70, (h, f) => $(h).dxButton({ text: 'Button', icon: 'home', ...f })],
+  ['buttonOutlined', 'Button - outlined', 70, (h, f) => $(h).dxButton({ text: 'Outlined', stylingMode: 'outlined', ...f })],
+  ['buttonDefault', 'Button - default contained', 70, (h, f) => $(h).dxButton({ text: 'Default', type: 'default', ...f })],
+  ['buttonGroup', 'ButtonGroup', 70, (h, f) => $(h).dxButtonGroup({ items: [{ text: 'One' }, { text: 'Two' }], keyExpr: 'text', selectedItemKeys: ['One'], ...f })],
+  ['checkBox', 'CheckBox', 70, (h, f) => $(h).dxCheckBox({ value: true, text: 'Checked', ...f })],
+  ['radioGroup', 'RadioGroup', 90, (h, f) => $(h).dxRadioGroup({ items: ['One', 'Two'], value: 'One', ...f })],
+  ['switch', 'Switch', 70, (h, f) => $(h).dxSwitch({ value: true, ...f })],
+  ['textBoxOutlined', 'TextBox - outlined + label', 90, (h, f) => $(h).dxTextBox({ value: 'Value', label: 'Label', stylingMode: 'outlined', ...f })],
+  ['textBoxFilled', 'TextBox - filled', 90, (h, f) => $(h).dxTextBox({ value: 'Value', label: 'Label', stylingMode: 'filled', ...f })],
+  ['textBoxUnderlined', 'TextBox - underlined', 90, (h, f) => $(h).dxTextBox({ value: 'Value', label: 'Label', stylingMode: 'underlined', ...f })],
+  ['textArea', 'TextArea', 100, (h, f) => $(h).dxTextArea({ value: 'Multi\nline', height: 70, ...f })],
+  ['numberBox', 'NumberBox - spin buttons', 90, (h, f) => $(h).dxNumberBox({ value: 42, label: 'Count', showSpinButtons: true, ...f })],
+  ['selectBox', 'SelectBox', 90, (h, f) => $(h).dxSelectBox({ items, value: items[0], label: 'Choice', ...f })],
+  ['tagBox', 'TagBox - tags', 90, (h, f) => $(h).dxTagBox({ items, value: [items[0], items[1]], label: 'Products', ...f })],
+  ['dateBox', 'DateBox', 90, (h, f) => $(h).dxDateBox({ value: new Date(2026, 0, 15), label: 'Date', ...f })],
+  ['lookup', 'Lookup', 90, (h, f) => $(h).dxLookup({ items, value: items[0], label: 'Lookup', ...f })],
+  ['accordion', 'Accordion', 110, (h, f) => $(h).dxAccordion({ dataSource: [{ title: 'Title', text: 'Text' }], collapsible: true, ...f })],
+  ['list', 'List', 120, (h, f) => $(h).dxList({ items, height: 100, ...f })],
+  ['progressBar', 'ProgressBar', 70, (h, f) => $(h).dxProgressBar({ value: 40, min: 0, max: 100, ...f })],
+  ['slider', 'Slider', 90, (h, f) => $(h).dxSlider({ value: 40, min: 0, max: 100, label: { visible: true }, ...f })],
+  ['toolbar', 'Toolbar', 80, (h, f) => $(h).dxToolbar({ items: [{ text: 'Toolbar text', location: 'before' }, { widget: 'dxButton', options: { text: 'Btn' }, location: 'after' }], ...f })],
+  ['dropDownButton', 'DropDownButton', 80, (h, f) => $(h).dxDropDownButton({ text: 'Actions', items, ...f })],
+  ['htmlEditor', 'HtmlEditor', 150, (h, f) => $(h).dxHtmlEditor({ value: '<p>Rich text</p>', height: 120, toolbar: { items: ['bold', 'italic'] }, ...f })],
+
+  // --- components that rely on the blanket dim ---------------------------------------------
+  ['dataGrid', 'DataGrid  (dim-only)', 190, (h, f) => $(h).dxDataGrid({ dataSource: [{ id: 1, name: 'Alpha', qty: 3 }, { id: 2, name: 'Beta', qty: 7 }], keyExpr: 'id', showBorders: true, filterRow: { visible: true }, ...f })],
+  ['treeView', 'TreeView  (dim-only)', 130, (h, f) => $(h).dxTreeView({ items: [{ text: 'Root', expanded: true, items: [{ text: 'Child' }] }], ...f })],
+  ['menu', 'Menu  (dim-only)', 70, (h, f) => $(h).dxMenu({ items: [{ text: 'File' }, { text: 'Edit' }], ...f })],
+  ['tabs', 'Tabs  (dim-only)', 80, (h, f) => $(h).dxTabs({ items: [{ text: 'One' }, { text: 'Two' }], ...f })],
+  ['calendar', 'Calendar  (dim-only)', 300, (h, f) => $(h).dxCalendar({ value: new Date(2026, 0, 15), ...f })],
+  ['form', 'Form  (dim-only)', 130, (h, f) => $(h).dxForm({ formData: { Name: 'Text', Count: 5 }, items: ['Name', 'Count'], ...f })],
+  ['tileView', 'TileView  (dim-only)', 140, (h, f) => $(h).dxTileView({ dataSource: [{ text: 'One' }, { text: 'Two' }], height: 110, direction: 'horizontal', ...f })],
+  ['gallery', 'Gallery  (dim-only)', 130, (h, f) => $(h).dxGallery({ dataSource: ['Alpha', 'Beta'], height: 100, showIndicator: true, showNavButtons: true, ...f })],
+  ['stepper', 'Stepper  (dim-only)', 100, (h, f) => $(h).dxStepper({ items: [{ label: 'One' }, { label: 'Two' }], ...f })],
+  ['colorView', 'ColorView  (dim-only)', 230, (h, f) => $(h).dxColorView({ value: '#0f6cbd', ...f })],
+  ['filterBuilder', 'FilterBuilder  (dim-only)', 110, (h, f) => $(h).dxFilterBuilder({ fields: [{ dataField: 'Name', dataType: 'string' }], value: ['Name', 'contains', 'a'], ...f })],
+  ['chat', 'Chat  (hardcoded opacity .5 in base)', 260, (h, f) => $(h).dxChat({ height: 230, width: 280, ...f })],
+
+  // --- the rest of the disable-able surface, so the inventory is complete -------------------
+  // dxScrollView is deliberately absent: disabled there is dx-scrollable-disabled, which only
+  // switches scrolling off and has no visual state, so it has nothing to compare.
+  ['colorBox', 'ColorBox', 90, (h, f) => $(h).dxColorBox({ value: '#0f6cbd', label: 'Colour', ...f })],
+  ['dateRangeBox', 'DateRangeBox', 100, (h, f) => $(h).dxDateRangeBox({ value: [new Date(2026, 0, 1), new Date(2026, 0, 8)], labelMode: 'static', ...f })],
+  ['fileUploader', 'FileUploader', 150, (h, f) => $(h).dxFileUploader({ selectButtonText: 'Select file', labelText: 'or drop file here', ...f })],
+  ['rangeSlider', 'RangeSlider', 90, (h, f) => $(h).dxRangeSlider({ start: 20, end: 60, min: 0, max: 100, ...f })],
+  ['pagination', 'Pagination', 80, (h, f) => $(h).dxPagination({ itemCount: 90, pageSize: 10, pageIndex: 2, showNavigationButtons: true, ...f })],
+  ['tabPanel', 'TabPanel', 160, (h, f) => $(h).dxTabPanel({ dataSource: [{ title: 'One', text: 'A' }, { title: 'Two', text: 'B' }], height: 130, ...f })],
+  ['treeList', 'TreeList', 190, (h, f) => $(h).dxTreeList({ dataSource: [{ id: 1, head: 0, name: 'Root' }, { id: 2, head: 1, name: 'Child' }], keyExpr: 'id', parentIdExpr: 'head', autoExpandAll: true, showBorders: true, ...f })],
+  ['cardView', 'CardView', 200, (h, f) => $(h).dxCardView({ dataSource: [{ id: 1, name: 'Alpha' }], keyExpr: 'id', headerPanel: { visible: true }, ...f })],
+  ['pivotGrid', 'PivotGrid', 200, (h, f) => $(h).dxPivotGrid({ dataSource: { fields: [{ dataField: 'a', area: 'row' }, { dataField: 'v', area: 'data', summaryType: 'sum' }], store: [{ a: 'x', v: 1 }, { a: 'y', v: 2 }] }, height: 170, ...f })],
+  ['recurrenceEditor', 'RecurrenceEditor', 200, (h, f) => $(h).dxRecurrenceEditor({ value: 'FREQ=WEEKLY;BYDAY=MO', startDate: new Date(2026, 0, 5), ...f })],
+  ['splitter', 'Splitter', 130, (h, f) => $(h).dxSplitter({ height: 100, items: [{ text: 'One' }, { text: 'Two' }], ...f })],
+  ['scheduler', 'Scheduler', 300, (h, f) => $(h).dxScheduler({ dataSource: [{ text: 'Event', startDate: new Date(2026, 0, 5, 10), endDate: new Date(2026, 0, 5, 11) }], currentDate: new Date(2026, 0, 5), currentView: 'day', height: 260, ...f })],
+  ['fileManager', 'FileManager', 300, (h, f) => $(h).dxFileManager({ fileSystemProvider: [{ name: 'Folder', isDirectory: true, items: [{ name: 'file.txt', size: 10 }] }], height: 260, ...f })],
+  ['drawer', 'Drawer', 150, (h, f) => $(h).dxDrawer({ opened: true, height: 120, template: () => $('<div>').text('panel'), ...f })],
+  ['box', 'Box', 90, (h, f) => $(h).dxBox({ direction: 'row', height: 60, items: [{ ratio: 1, text: 'One' }, { ratio: 1, text: 'Two' }], ...f })],
+];
+
+// readonly is not a thing for every component: only those with .dx-state-readonly rules
+const READONLY_CASES = new Set([
+  'textBoxOutlined', 'textBoxFilled', 'textBoxUnderlined', 'textArea', 'numberBox',
+  'selectBox', 'tagBox', 'dateBox', 'lookup', 'checkBox', 'switch', 'htmlEditor',
+]);
+
+// The case SET is chosen by the shell, not derived from the state: in the read-only comparison
+// the reference column renders the same twelve components in their normal state, so the columns
+// still line up row by row.
+const SET = params.get('set') || 'all';
+const shown = SET === 'readonly' ? CASES.filter(([id]) => READONLY_CASES.has(id)) : CASES;
+const flags = STATE === 'disabled' ? { disabled: true } : (STATE === 'readonly' ? { readOnly: true } : {});
+
+const gallery = document.getElementById('gallery');
+shown.forEach(([id, label, height, build]) => {
+  const row = document.createElement('div');
+  row.className = 'row';
+  row.style.height = height + 'px';
+  row.dataset.case = id;
+  const cap = document.createElement('div');
+  cap.className = 'label';
+  cap.textContent = label;
+  const host = document.createElement('div');
+  host.className = 'host';
+  row.appendChild(cap); row.appendChild(host); gallery.appendChild(row);
+  try { build(host, flags); } catch (e) { cap.textContent = label + '  [' + e.message + ']'; }
+});
+
+window.__cases = shown.map(([id, label, height]) => ({ id, label, height }));
+
+// Colour fingerprint per case. Comparing a generic list of probes turned out to be wrong: it
+// picked up the order and the number of elements, so a component that merely renders one extra
+// node when disabled looked "repainted". What the eye compares is the multiset of colours, so
+// the signature is every element's colour tuple, sorted, plus the element count. When the counts
+// differ the columns are not comparable by colour alone and the case is reported as such rather
+// than given a verdict.
+function effectiveOpacity(el) {
+  let o = 1;
+  for (let n = el; n && n !== document.body; n = n.parentElement) {
+    const v = parseFloat(getComputedStyle(n).opacity);
+    if (!Number.isNaN(v)) o *= v;
+  }
+  return Math.round(o * 100) / 100;
+}
+// Pseudo-elements have to be read too: Switch paints its whole disabled state on
+// .dx-switch-container::before / .dx-switch-handle::before, HtmlEditor covers its toolbar with a
+// ::before, and underlined editors draw their line with ::after. Reading elements only reported
+// those components as having no disabled styling at all.
+// A fully transparent colour serialises either as rgba(0, 0, 0, 0) or as color(srgb 1 1 1 / 0)
+// depending on how it was computed. They are the same pixel, so they must compare equal:
+// without this the Toolbar looked "repainted" when disabled while being pixel-identical.
+function normColour(c) {
+  const rgb = c.match(/^rgba?\(([^)]+)\)$/);
+  if (rgb) {
+    const parts = rgb[1].split(/[,\s/]+/).filter(Boolean);
+    return parts.length === 4 && parseFloat(parts[3]) === 0 ? 'transparent' : c;
+  }
+  const fn = c.match(/^color\([^)]*\/\s*([\d.]+)\s*\)$/);
+  return fn && parseFloat(fn[1]) === 0 ? 'transparent' : c;
+}
+
+function signature(row) {
+  // The widget is created ON the .host element, so the host IS the widget root: querying
+  // '.host *' alone left every root-level change - the background and border of a text editor,
+  // the dim on the widget root - out of the signature entirely.
+  const host = row.querySelector('.host');
+  const els = [host, ...host.querySelectorAll('*')];
+  const tuples = [];
+  els.forEach((el) => {
+    const own = getComputedStyle(el);
+    if (own.display === 'none' || own.visibility === 'hidden') return;
+    const opacity = effectiveOpacity(el);
+    ['', '::before', '::after'].forEach((pseudo) => {
+      const cs = pseudo ? getComputedStyle(el, pseudo) : own;
+      if (pseudo && cs.content === 'none') return;
+      tuples.push([pseudo, normColour(cs.color), normColour(cs.backgroundColor),
+        normColour(cs.borderTopColor), normColour(cs.borderBottomColor), opacity].join('|'));
+    });
+  });
+  tuples.sort();
+  return { count: tuples.length, colours: tuples.join('\n') };
+}
+// Heavy widgets (scheduler, treeList, fileManager) keep rendering after load, so a single
+// snapshot is not trustworthy: components jumped between verdicts run to run. The signature is
+// therefore taken twice and published only when two consecutive reads agree; a case that never
+// settles is reported as unstable instead of being given a verdict.
+function collect() {
+  const fp = {};
+  document.querySelectorAll('[data-case]').forEach((row) => {
+    if (!row.querySelector('.host .dx-widget, .host.dx-widget') && !row.querySelector('.host > *')) return;
+    fp[row.dataset.case] = signature(row);
+  });
+  return fp;
+}
+window.addEventListener('load', () => {
+  const settle = async () => {
+    await new Promise((r) => setTimeout(r, 1200));
+    let prev = collect();
+    for (let attempt = 0; attempt < 6; attempt++) {
+      await new Promise((r) => setTimeout(r, 700));
+      const next = collect();
+      const unstable = Object.keys(next).filter((k) => !prev[k] || prev[k].colours !== next[k].colours);
+      if (!unstable.length) { window.__fp = next; window.__unstable = []; window.__ready = true; return; }
+      prev = next;
+    }
+    const last = collect();
+    window.__unstable = Object.keys(last).filter((k) => !prev[k] || prev[k].colours !== last[k].colours);
+    window.__fp = last;
+    window.__ready = true;
+  };
+  settle();
+});
+</script>
+</body>
+</html>

@@ -269,6 +269,28 @@
     }
   }
 
+  // A disabled grid was carried entirely by the blanket dim: its own cells, headers and captions
+
+  // are not painted by any child widget, so lifting that rule left the content at full contrast.
+
+  // Two selectors because the widgets differ: treeList carries .dx-treelist on the widget root,
+
+  // dataGrid keeps .dx-datagrid on the container one level below it.
+  .dx-#{$widget-name}.dx-state-disabled,
+  .dx-state-disabled > .dx-#{$widget-name} {
+    opacity: 1;
+    color: var(--dx-grid-content-disabled);
+
+    .dx-#{$widget-name}-headers,
+    .dx-#{$widget-name}-rowsview,
+    .dx-#{$widget-name}-total-footer,
+    .dx-#{$widget-name}-summary-item,
+    .dx-#{$widget-name}-nodata,
+    .dx-#{$widget-name}-text-content {
+      color: var(--dx-grid-content-disabled);
+    }
+  }
+
   .dx-#{$widget-name} {
     line-height: inherit;
 
