@@ -172,7 +172,9 @@ const OVERRIDES = {
     validation: ['text-editor'],
     filterBuilder: ['text-editor'],
     // the file manager's toolbar is a Toolbar
-    fileManager: ['toolbar'],
+    // …and it splits the dirs panel from the items view with a real Splitter, centring the
+    // wrapper on the bar from that widget's own border and bar widths
+    fileManager: ['toolbar', 'splitter-bar'],
     // the editor's spin buttons are real Buttons
     textEditor: ['button'],
   },
@@ -983,6 +985,8 @@ const OVERRIDES = {
       'thumbnails', 'thumbnails-item', 'thumbnails-view-port', 'custom-thumbnail', 'spacer',
       'progress-panel', 'progress-box', 'progress-title', 'progress-bar', 'close-button',
       'large-icon', 'view-mode-button', 'tree-view-item', 'drop-zone-placeholder',
+      // wave B5: .dx-splitter-wrapper is a splitter box the file manager positions itself
+      'splitter-wrapper',
       'cancel-button', 'notification', 'container', 'separator', 'content', 'item', 'menu-item',
       'popup', 'overlay', 'editor', 'button', 'icon', 'text', 'title', 'image', 'placeholder',
       'drop-zone',

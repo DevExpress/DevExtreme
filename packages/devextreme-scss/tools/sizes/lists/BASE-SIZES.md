@@ -14,12 +14,12 @@ and carries a marker saying why.
 | a raw grep of the layer | 782 |
 | …of those, inside comments (commented-out code, prose) | 5 |
 | **in code** | **777** |
-| — the theme can already set from outside | 378 |
-| — nailed into the shared layer | 399 |
+| — the theme can already set from outside | 379 |
+| — nailed into the shared layer | 398 |
 
 ## What the theme can already set
 
-378 occurrences in 326 `!default` variables. fluent-next already passes 375; 0 are open knobs nobody turns.
+379 occurrences in 327 `!default` variables. fluent-next already passes 376; 0 are open knobs nobody turns.
 
 ## What is nailed into the layer
 
@@ -35,7 +35,6 @@ and carries a marker saying why.
 | ui | 8 |  |  |  |  | **8** |
 | scrollView | 5 | 2 |  |  |  | **7** |
 | dataGrid |  |  | 3 |  | 2 | **5** |
-| fileManager | 5 |  |  |  |  | **5** |
 | toolbar | 1 |  | 4 |  |  | **5** |
 | sortable |  |  | 4 |  |  | **4** |
 | calendar | 1 |  | 3 |  |  | **4** |
@@ -605,19 +604,6 @@ and carries a marker saying why.
   `outline-offset: -1px;`
 - `scss/widgets/base/dataGrid/layout/cell.scss:283` · geometry
   `outline-offset: -2px;`
-
-### fileManager — 5
-
-- `scss/widgets/base/fileManager/_index.scss:213` · inline
-  `right: 3px;  // (dx-splitter-border width - dx-splitter-bar width) / 2`
-- `scss/widgets/base/fileManager/_index.scss:299` · inline
-  `top: -5000px;`
-- `scss/widgets/base/fileManager/_index.scss:300` · inline
-  `left: -5000px;`
-- `scss/widgets/base/fileManager/_index.scss:305` · inline
-  `top: -5000px;`
-- `scss/widgets/base/fileManager/_index.scss:306` · inline
-  `left: -5000px;`
 
 ### toolbar — 5
 

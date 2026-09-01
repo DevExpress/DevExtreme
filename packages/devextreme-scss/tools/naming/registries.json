@@ -933,7 +933,8 @@
       "text-editor"
     ],
     "fileManager": [
-      "toolbar"
+      "toolbar",
+      "splitter-bar"
     ],
     "textEditor": [
       "button"
@@ -1794,6 +1795,7 @@
       "view-mode-button",
       "tree-view-item",
       "drop-zone-placeholder",
+      "splitter-wrapper",
       "cancel-button",
       "notification",
       "container",

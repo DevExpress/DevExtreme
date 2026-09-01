@@ -6,14 +6,14 @@
     "marker — the classification comment already on the line, from tools/review/size-markers.json."
   ],
   "summary": {
-    "occurrences": 399,
+    "occurrences": 398,
     "byCategory": {
-      "inline": 187,
+      "inline": 182,
       "geometry": 95,
       "local-var": 94,
       "calc": 11,
+      "structural": 8,
       "mixin-arg": 6,
-      "structural": 4,
       "media": 2
     },
     "byWidget": {
@@ -26,8 +26,8 @@
       "cardView": 15,
       "ui": 8,
       "scrollView": 7,
-      "fileManager": 6,
       "dataGrid": 5,
+      "fileManager": 5,
       "toolbar": 5,
       "sortable": 4,
       "calendar": 4,
@@ -56,7 +56,7 @@
       "popover": 1,
       "stepper": 1
     },
-    "unmarked": 391,
+    "unmarked": 386,
     "unmarkedByWidget": {
       "gridBase": 75,
       "colorView": 67,
@@ -68,7 +68,6 @@
       "ui": 8,
       "scrollView": 7,
       "dataGrid": 5,
-      "fileManager": 5,
       "toolbar": 5,
       "sortable": 4,
       "calendar": 4,
@@ -1748,7 +1747,7 @@
     },
     {
       "file": "scss/widgets/base/fileManager/_index.scss",
-      "line": 84,
+      "line": 88,
       "widget": "fileManager",
       "literals": [
         "431px"
@@ -1760,63 +1759,51 @@
     },
     {
       "file": "scss/widgets/base/fileManager/_index.scss",
-      "line": 213,
-      "widget": "fileManager",
-      "literals": [
-        "3px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "right: 3px;  // (dx-splitter-border width - dx-splitter-bar width) / 2",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/fileManager/_index.scss",
-      "line": 299,
+      "line": 303,
       "widget": "fileManager",
       "literals": [
         "-5000px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "top: -5000px;",
-      "category": "inline"
+      "marker": "dx-structural",
+      "text": "top: -5000px; // dx-structural: parks the container off-screen until it is positioned",
+      "category": "structural"
     },
     {
       "file": "scss/widgets/base/fileManager/_index.scss",
-      "line": 300,
+      "line": 304,
       "widget": "fileManager",
       "literals": [
         "-5000px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "left: -5000px;",
-      "category": "inline"
+      "marker": "dx-structural",
+      "text": "left: -5000px; // dx-structural: parks the container off-screen until it is positioned",
+      "category": "structural"
     },
     {
       "file": "scss/widgets/base/fileManager/_index.scss",
-      "line": 305,
+      "line": 309,
       "widget": "fileManager",
       "literals": [
         "-5000px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "top: -5000px;",
-      "category": "inline"
+      "marker": "dx-structural",
+      "text": "top: -5000px; // dx-structural: parks the container off-screen until it is positioned",
+      "category": "structural"
     },
     {
       "file": "scss/widgets/base/fileManager/_index.scss",
-      "line": 306,
+      "line": 310,
       "widget": "fileManager",
       "literals": [
         "-5000px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "left: -5000px;",
-      "category": "inline"
+      "marker": "dx-structural",
+      "text": "left: -5000px; // dx-structural: parks the container off-screen until it is positioned",
+      "category": "structural"
     },
     {
       "file": "scss/widgets/base/filterBuilder/_common.scss",

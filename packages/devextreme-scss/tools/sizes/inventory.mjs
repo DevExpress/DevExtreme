@@ -44,7 +44,10 @@ const listsDir = join(here, 'lists');
  *   calc       — already inside a calc(); a knob has to keep the arithmetic valid for both forms.
  *   inline     — a plain declaration, the ordinary case.
  */
-const OFF_SCREEN = /-?(?:9999|99999|10000|100000)px/;
+/* A parking coordinate, not a size: nothing anyone designs is a thousand pixels across. */
+const OFF_SCREEN_PX = 1000;
+const isOffScreen = (code) => (code.match(/-?\d*\.?\d+px\b/g) ?? [])
+  .some((literal) => Math.abs(parseFloat(literal)) >= OFF_SCREEN_PX);
 const GEOMETRY = /^(?:box-shadow|outline|outline-offset|outline-width|border|border-\w+|border-\w+-\w+|clip|clip-path)\s*:/;
 
 const codeOf = (text) => {
@@ -56,7 +59,7 @@ const categoryOf = (code) => {
   if (/^\$[\w-]+\s*:/.test(code)) return 'local-var';
   if (code.includes('@media') || code.includes('@container')) return 'media';
   if (code.startsWith('@include') || code.startsWith('@mixin')) return 'mixin-arg';
-  if (OFF_SCREEN.test(code)) return 'structural';
+  if (isOffScreen(code)) return 'structural';
   if (GEOMETRY.test(code)) return 'geometry';
   if (code.includes('calc(')) return 'calc';
   return 'inline';

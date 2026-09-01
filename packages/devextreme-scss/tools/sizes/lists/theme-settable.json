@@ -7,9 +7,9 @@
     "The match is by variable name. A name declared in a nested module is only reachable once the parent forwards it (see base/chat/_index.scss), which is why an \"open\" row can sit next to injected ones from the same widget."
   ],
   "summary": {
-    "occurrences": 378,
-    "variables": 326,
-    "injected": 375,
+    "occurrences": 379,
+    "variables": 327,
+    "injected": 376,
     "open": 0,
     "parameters": 3
   },
@@ -3288,6 +3288,22 @@
       "status": "injected",
       "setBy": "scss/widgets/fluent-next/fileManager/_index.scss",
       "setTo": "var(--dx-file-manager-progress-title-font-size)"
+    },
+    {
+      "file": "scss/widgets/base/fileManager/_index.scss",
+      "line": 66,
+      "widget": "fileManager",
+      "literals": [
+        "3px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$filemanager-splitter-wrapper-right: 3px !default;",
+      "variable": "filemanager-splitter-wrapper-right",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/fileManager/_index.scss",
+      "setTo": "var(--dx-file-manager-splitter-wrapper-inset-inline-end)"
     },
     {
       "file": "scss/widgets/base/filterBuilder/_index.scss",
