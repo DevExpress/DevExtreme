@@ -1,13 +1,13 @@
 {
   "openKnobs": 0,
-  "unclassified": 277,
+  "unclassified": 257,
   "unclassifiedByWidget": {
     "gridBase": 75,
     "colorView": 67,
     "scheduler": 54,
-    "htmlEditor": 33,
     "pivotGrid": 20,
     "cardView": 15,
+    "htmlEditor": 13,
     "dataGrid": 5,
     "treeList": 4,
     "textEditor": 3,

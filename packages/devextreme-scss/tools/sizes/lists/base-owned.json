@@ -6,11 +6,11 @@
     "marker — the classification comment already on the line, from tools/review/size-markers.json."
   ],
   "summary": {
-    "occurrences": 347,
+    "occurrences": 330,
     "byCategory": {
-      "inline": 160,
-      "local-var": 84,
-      "geometry": 78,
+      "inline": 147,
+      "local-var": 83,
+      "geometry": 75,
       "calc": 9,
       "structural": 8,
       "mixin-arg": 6,
@@ -20,9 +20,9 @@
       "gridBase": 75,
       "colorView": 67,
       "scheduler": 55,
-      "htmlEditor": 35,
       "textEditor": 26,
       "pivotGrid": 21,
+      "htmlEditor": 18,
       "cardView": 15,
       "ui": 8,
       "scrollView": 5,
@@ -48,14 +48,14 @@
       "toolbar": 1,
       "treeView": 1
     },
-    "unmarked": 277,
+    "unmarked": 257,
     "unmarkedByWidget": {
       "gridBase": 75,
       "colorView": 67,
       "scheduler": 54,
-      "htmlEditor": 33,
       "pivotGrid": 20,
       "cardView": 15,
+      "htmlEditor": 13,
       "dataGrid": 5,
       "treeList": 4,
       "textEditor": 3,
@@ -77,7 +77,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 14,
+      "line": 20,
       "widget": "htmlEditor",
       "literals": [
         "11px"
@@ -89,31 +89,19 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 15,
+      "line": 21,
       "widget": "htmlEditor",
       "literals": [
         "15px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$touch-resize-handle-size: 15px;",
+      "marker": "dx-fixed-size",
+      "text": "$touch-resize-handle-size: 15px; // dx-fixed-size: the touch variant of the same handle",
       "category": "local-var"
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 19,
-      "widget": "htmlEditor",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$transparent-border: 1px solid transparent;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 133,
+      "line": 153,
       "widget": "htmlEditor",
       "literals": [
         "1px"
@@ -125,7 +113,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 140,
+      "line": 160,
       "widget": "htmlEditor",
       "literals": [
         "-100000px"
@@ -137,7 +125,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 141,
+      "line": 161,
       "widget": "htmlEditor",
       "literals": [
         "1px"
@@ -149,7 +137,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 158,
+      "line": 178,
       "widget": "htmlEditor",
       "literals": [
         "12px",
@@ -162,117 +150,31 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 164,
-      "widget": "htmlEditor",
-      "literals": [
-        "3px",
-        "6px"
-      ],
-      "occurrences": 2,
-      "marker": null,
-      "text": "padding: 3px 6px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 165,
-      "widget": "htmlEditor",
-      "literals": [
-        "8px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "border-radius: 8px;",
-      "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 205,
+      "line": 225,
       "widget": "htmlEditor",
       "literals": [
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "border: 1px solid #000;",
+      "marker": "dx-line-width",
+      "text": "border: 1px solid #000; // dx-line-width: a table hairline; the colour beside it is hard-coded too",
       "category": "geometry"
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 206,
-      "widget": "htmlEditor",
-      "literals": [
-        "2px",
-        "5px"
-      ],
-      "occurrences": 2,
-      "marker": null,
-      "text": "padding: 2px 5px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 322,
-      "widget": "htmlEditor",
-      "literals": [
-        "15px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "left: 15px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 325,
-      "widget": "htmlEditor",
-      "literals": [
-        "15px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "right: 15px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 335,
+      "line": 355,
       "widget": "htmlEditor",
       "literals": [
         "0.1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "height: 0.1px;",
+      "marker": "dx-structural",
+      "text": "height: 0.1px; // dx-structural: a non-zero height the placeholder needs, not a designed size",
       "category": "inline"
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 342,
-      "widget": "htmlEditor",
-      "literals": [
-        "12px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "padding-inline-start: 12px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 343,
-      "widget": "htmlEditor",
-      "literals": [
-        "4px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "border-inline-start: 4px solid;",
-      "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 349,
+      "line": 369,
       "widget": "htmlEditor",
       "literals": [
         "35px"
@@ -284,7 +186,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 358,
+      "line": 378,
       "widget": "htmlEditor",
       "literals": [
         "50px"
@@ -296,7 +198,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 371,
+      "line": 391,
       "widget": "htmlEditor",
       "literals": [
         "360px"
@@ -308,7 +210,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 396,
+      "line": 416,
       "widget": "htmlEditor",
       "literals": [
         "6px"
@@ -320,7 +222,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 403,
+      "line": 423,
       "widget": "htmlEditor",
       "literals": [
         "240px"
@@ -332,7 +234,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 416,
+      "line": 436,
       "widget": "htmlEditor",
       "literals": [
         "3px"
@@ -344,7 +246,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 436,
+      "line": 456,
       "widget": "htmlEditor",
       "literals": [
         "1px"
@@ -356,7 +258,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 447,
+      "line": 467,
       "widget": "htmlEditor",
       "literals": [
         "1px"
@@ -368,7 +270,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 503,
+      "line": 523,
       "widget": "htmlEditor",
       "literals": [
         "1px"
@@ -377,90 +279,6 @@
       "marker": null,
       "text": "border: 1px solid white;",
       "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 568,
-      "widget": "htmlEditor",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "padding: 1px 0;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 569,
-      "widget": "htmlEditor",
-      "literals": [
-        "2px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "border-radius: 2px;",
-      "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 577,
-      "widget": "htmlEditor",
-      "literals": [
-        "2px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin: 0 2px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 592,
-      "widget": "htmlEditor",
-      "literals": [
-        "5px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "width: 5px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 599,
-      "widget": "htmlEditor",
-      "literals": [
-        "3px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "width: 3px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 605,
-      "widget": "htmlEditor",
-      "literals": [
-        "5px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "height: 5px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 612,
-      "widget": "htmlEditor",
-      "literals": [
-        "3px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "height: 3px;",
-      "category": "inline"
     },
     {
       "file": "scss/widgets/base/_icon_fonts.scss",

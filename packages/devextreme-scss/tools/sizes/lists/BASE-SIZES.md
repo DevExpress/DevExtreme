@@ -11,15 +11,15 @@ and carries a marker saying why.
 
 | | occurrences |
 |---|---|
-| a raw grep of the layer | 769 |
+| a raw grep of the layer | 766 |
 | …of those, inside comments (commented-out code, prose) | 8 |
-| **in code** | **761** |
-| — the theme can already set from outside | 414 |
-| — nailed into the shared layer | 347 |
+| **in code** | **758** |
+| — the theme can already set from outside | 428 |
+| — nailed into the shared layer | 330 |
 
 ## What the theme can already set
 
-414 occurrences in 360 `!default` variables. fluent-next already passes 390; 0 are open knobs nobody turns.
+428 occurrences in 372 `!default` variables. fluent-next already passes 404; 0 are open knobs nobody turns.
 
 ## What is nailed into the layer
 
@@ -28,9 +28,9 @@ and carries a marker saying why.
 | gridBase | 50 | 18 | 7 |  |  | **75** |
 | colorView | 35 | 8 | 24 |  |  | **67** |
 | scheduler | 9 | 41 | 3 |  | 1 | **54** |
-| htmlEditor | 22 | 3 | 8 |  |  | **33** |
 | pivotGrid | 6 | 8 | 6 |  |  | **20** |
 | cardView | 9 | 1 | 5 |  |  | **15** |
+| htmlEditor | 8 | 1 | 4 |  |  | **13** |
 | dataGrid |  |  | 3 | 2 |  | **5** |
 | treeList |  |  | 1 | 3 |  | **4** |
 | textEditor | 3 |  |  |  |  | **3** |
@@ -343,69 +343,6 @@ and carries a marker saying why.
 - `scss/widgets/base/scheduler/views/timelines/_index.scss:188` · geometry
   `border-bottom: 1px solid;`
 
-### htmlEditor — 33
-
-- `scss/widgets/base/_htmlEditor.scss:14` · local-var
-  `$resize-handle-size: 11px;`
-- `scss/widgets/base/_htmlEditor.scss:15` · local-var
-  `$touch-resize-handle-size: 15px;`
-- `scss/widgets/base/_htmlEditor.scss:19` · local-var
-  `$transparent-border: 1px solid transparent;`
-- `scss/widgets/base/_htmlEditor.scss:133` · inline
-  `min-height: 1px;`
-- `scss/widgets/base/_htmlEditor.scss:158` · inline
-  `padding: 12px 15px;`
-- `scss/widgets/base/_htmlEditor.scss:164` · inline
-  `padding: 3px 6px;`
-- `scss/widgets/base/_htmlEditor.scss:165` · geometry
-  `border-radius: 8px;`
-- `scss/widgets/base/_htmlEditor.scss:205` · geometry
-  `border: 1px solid #000;`
-- `scss/widgets/base/_htmlEditor.scss:206` · inline
-  `padding: 2px 5px;`
-- `scss/widgets/base/_htmlEditor.scss:322` · inline
-  `left: 15px;`
-- `scss/widgets/base/_htmlEditor.scss:325` · inline
-  `right: 15px;`
-- `scss/widgets/base/_htmlEditor.scss:335` · inline
-  `height: 0.1px;`
-- `scss/widgets/base/_htmlEditor.scss:342` · inline
-  `padding-inline-start: 12px;`
-- `scss/widgets/base/_htmlEditor.scss:343` · geometry
-  `border-inline-start: 4px solid;`
-- `scss/widgets/base/_htmlEditor.scss:349` · inline
-  `min-height: 35px;`
-- `scss/widgets/base/_htmlEditor.scss:358` · inline
-  `min-width: 50px;`
-- `scss/widgets/base/_htmlEditor.scss:371` · inline
-  `min-width: 360px;`
-- `scss/widgets/base/_htmlEditor.scss:396` · inline
-  `gap: 6px;`
-- `scss/widgets/base/_htmlEditor.scss:403` · inline
-  `min-width: 240px;`
-- `scss/widgets/base/_htmlEditor.scss:416` · geometry
-  `border-bottom: 3px solid transparent;`
-- `scss/widgets/base/_htmlEditor.scss:436` · geometry
-  `border: 1px dashed lightslategrey;`
-- `scss/widgets/base/_htmlEditor.scss:447` · geometry
-  `border: 1px solid white;`
-- `scss/widgets/base/_htmlEditor.scss:503` · geometry
-  `border: 1px solid white;`
-- `scss/widgets/base/_htmlEditor.scss:568` · inline
-  `padding: 1px 0;`
-- `scss/widgets/base/_htmlEditor.scss:569` · geometry
-  `border-radius: 2px;`
-- `scss/widgets/base/_htmlEditor.scss:577` · inline
-  `margin: 0 2px;`
-- `scss/widgets/base/_htmlEditor.scss:592` · inline
-  `width: 5px;`
-- `scss/widgets/base/_htmlEditor.scss:599` · inline
-  `width: 3px;`
-- `scss/widgets/base/_htmlEditor.scss:605` · inline
-  `height: 5px;`
-- `scss/widgets/base/_htmlEditor.scss:612` · inline
-  `height: 3px;`
-
 ### pivotGrid — 20
 
 - `scss/widgets/base/pivotGrid/_index.scss:56` · local-var
@@ -475,6 +412,33 @@ and carries a marker saying why.
   `0 1px 3px $cardview-header-panel__item--dragged-box-shadow-color,`
 - `scss/widgets/base/cardView/header_panel/item/_index.scss:88` · inline
   `0 6px 8px $cardview-header-panel__item--dragged-box-shadow-color;`
+
+### htmlEditor — 13
+
+- `scss/widgets/base/_htmlEditor.scss:20` · local-var
+  `$resize-handle-size: 11px;`
+- `scss/widgets/base/_htmlEditor.scss:153` · inline
+  `min-height: 1px;`
+- `scss/widgets/base/_htmlEditor.scss:178` · inline
+  `padding: 12px 15px;`
+- `scss/widgets/base/_htmlEditor.scss:369` · inline
+  `min-height: 35px;`
+- `scss/widgets/base/_htmlEditor.scss:378` · inline
+  `min-width: 50px;`
+- `scss/widgets/base/_htmlEditor.scss:391` · inline
+  `min-width: 360px;`
+- `scss/widgets/base/_htmlEditor.scss:416` · inline
+  `gap: 6px;`
+- `scss/widgets/base/_htmlEditor.scss:423` · inline
+  `min-width: 240px;`
+- `scss/widgets/base/_htmlEditor.scss:436` · geometry
+  `border-bottom: 3px solid transparent;`
+- `scss/widgets/base/_htmlEditor.scss:456` · geometry
+  `border: 1px dashed lightslategrey;`
+- `scss/widgets/base/_htmlEditor.scss:467` · geometry
+  `border: 1px solid white;`
+- `scss/widgets/base/_htmlEditor.scss:523` · geometry
+  `border: 1px solid white;`
 
 ### dataGrid — 5
 

@@ -10,7 +10,10 @@
   --dx-html-editor-ai-dialog-content-padding: #{$html-editor-ai-dialog-content-padding};
   --dx-html-editor-ai-dialog-selects-gap: #{$html-editor-ai-dialog-selects-gap};
   --dx-html-editor-ai-dialog-title-font-weight: #{$html-editor-ai-dialog-title-font-weight};
+  --dx-html-editor-blockquote-border-inline-start-width: #{$html-editor-blockquote-border-inline-start-width};
+  --dx-html-editor-blockquote-padding-inline-start: #{$html-editor-blockquote-padding-inline-start};
   --dx-html-editor-border-block-end-active: #{$html-editor-border-block-end-active};
+  --dx-html-editor-border-width: #{$html-editor-border-width};
   --dx-html-editor-code-block-bg: #{$html-editor-code-block-bg};
   --dx-html-editor-content-margin: #{$html-editor-content-margin};
   --dx-html-editor-cover-bg: #{$html-editor-cover-bg};
@@ -22,12 +25,19 @@
   --dx-html-editor-highlighted-row-bg: #{$html-editor-highlighted-row-bg};
   --dx-html-editor-input-wrapper-gap: #{$html-editor-input-wrapper-gap};
   --dx-html-editor-mention-bg: #{$html-editor-mention-bg};
+  --dx-html-editor-mention-border-radius: #{$html-editor-mention-border-radius};
+  --dx-html-editor-mention-margin-inline: #{$html-editor-mention-margin-inline};
+  --dx-html-editor-mention-padding-block: #{$html-editor-mention-padding-block};
   --dx-html-editor-padding-block: #{$html-editor-padding-block};
   --dx-html-editor-padding-inline: #{$html-editor-padding-inline};
   --dx-html-editor-placeholder-content: #{$html-editor-placeholder-content};
+  --dx-html-editor-placeholder-inset-inline: #{$html-editor-placeholder-inset-inline};
   --dx-html-editor-resize-frame-border: #{$html-editor-resize-frame-border};
   --dx-html-editor-resize-trigger: #{$html-editor-resize-trigger};
   --dx-html-editor-table-border: #{$html-editor-table-border};
+  --dx-html-editor-table-cell-padding: #{$html-editor-table-cell-padding};
+  --dx-html-editor-table-resizer-highlight-thickness: #{$html-editor-table-resizer-highlight-thickness};
+  --dx-html-editor-table-resizer-thickness: #{$html-editor-table-resizer-thickness};
   --dx-html-editor-toolbar-border: #{$html-editor-toolbar-border};
   --dx-html-editor-toolbar-menu-separator-margin: #{$html-editor-toolbar-menu-separator-margin};
   --dx-html-editor-toolbar-padding: var(--dx-html-editor-padding-inline);
@@ -38,4 +48,6 @@
   --dx-html-editor-toolbar-wrapper-inset-inline-start: #{$html-editor-toolbar-wrapper-inset-inline-start};
   --dx-html-editor-uploader-cover-bg: #{$html-editor-uploader-cover-bg};
   --dx-html-editor-variable-bg: #{$html-editor-variable-bg};
+  --dx-html-editor-variable-border-radius: #{$html-editor-variable-border-radius};
+  --dx-html-editor-variable-padding: #{$html-editor-variable-padding};
 }

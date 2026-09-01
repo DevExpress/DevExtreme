@@ -932,7 +932,10 @@ const OVERRIDES = {
     'html-editor': ['toolbar', 'table', 'variable', 'mention', 'resize', 'resize-frame', 'cover',
       'uploader', 'file-uploader', 'input-wrapper', 'wrapper', 'ai-dialog', 'content', 'icon', 'item',
       'highlighted-row', 'code-block', 'placeholder', 'size-editor', 'add-image-dialog', 'separator',
-      'tabs', 'selects', 'title'],
+      'tabs', 'selects', 'title',
+      // wave B14: the quoted block, a table cell, and the bar that resizes a column or row together
+      // with the strip that highlights the one being dragged
+      'blockquote', 'cell', 'resizer', 'highlight'],
     'pivot-grid': ['area', 'area-field', 'fields-area-head', 'fields-area-head-cell', 'field-chooser',
       'field', 'fields', 'expand-icon', 'row', 'column', 'cell', 'last-cell', 'header', 'headers',
       'drag-header', 'total', 'grand-total', 'filter', 'sort', 'icon', 'chevron', 'chevron-icon',

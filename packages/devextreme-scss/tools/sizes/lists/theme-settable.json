@@ -7,9 +7,9 @@
     "The match is by variable name. A name declared in a nested module is only reachable once the parent forwards it (see base/chat/_index.scss), which is why an \"open\" row can sit next to injected ones from the same widget."
   ],
   "summary": {
-    "occurrences": 414,
-    "variables": 360,
-    "injected": 390,
+    "occurrences": 428,
+    "variables": 372,
+    "injected": 404,
     "open": 0,
     "parameters": 24
   },
@@ -701,6 +701,200 @@
       "status": "injected",
       "setBy": "scss/widgets/fluent-next/gallery/_index.scss",
       "setTo": "var(--dx-gallery-indicator-item-margin)"
+    },
+    {
+      "file": "scss/widgets/base/_htmlEditor.scss",
+      "line": 25,
+      "widget": "htmlEditor",
+      "literals": [
+        "1px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$htmleditor-border-width: 1px !default;",
+      "variable": "htmleditor-border-width",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/htmlEditor/_index.scss",
+      "setTo": "var(--dx-html-editor-border-width)"
+    },
+    {
+      "file": "scss/widgets/base/_htmlEditor.scss",
+      "line": 29,
+      "widget": "htmlEditor",
+      "literals": [
+        "3px",
+        "6px"
+      ],
+      "occurrences": 2,
+      "marker": null,
+      "text": "$variable-padding: 3px 6px !default;",
+      "variable": "variable-padding",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/htmlEditor/_index.scss",
+      "setTo": "var(--dx-html-editor-variable-padding)"
+    },
+    {
+      "file": "scss/widgets/base/_htmlEditor.scss",
+      "line": 30,
+      "widget": "htmlEditor",
+      "literals": [
+        "8px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$variable-border-radius: 8px !default;",
+      "variable": "variable-border-radius",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/htmlEditor/_index.scss",
+      "setTo": "var(--dx-html-editor-variable-border-radius)"
+    },
+    {
+      "file": "scss/widgets/base/_htmlEditor.scss",
+      "line": 31,
+      "widget": "htmlEditor",
+      "literals": [
+        "12px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$blockquote-padding-inline-start: 12px !default;",
+      "variable": "blockquote-padding-inline-start",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/htmlEditor/_index.scss",
+      "setTo": "var(--dx-html-editor-blockquote-padding-inline-start)"
+    },
+    {
+      "file": "scss/widgets/base/_htmlEditor.scss",
+      "line": 32,
+      "widget": "htmlEditor",
+      "literals": [
+        "4px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$blockquote-border-inline-start-width: 4px !default;",
+      "variable": "blockquote-border-inline-start-width",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/htmlEditor/_index.scss",
+      "setTo": "var(--dx-html-editor-blockquote-border-inline-start-width)"
+    },
+    {
+      "file": "scss/widgets/base/_htmlEditor.scss",
+      "line": 33,
+      "widget": "htmlEditor",
+      "literals": [
+        "2px",
+        "5px"
+      ],
+      "occurrences": 2,
+      "marker": null,
+      "text": "$table-cell-padding: 2px 5px !default;",
+      "variable": "table-cell-padding",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/htmlEditor/_index.scss",
+      "setTo": "var(--dx-html-editor-table-cell-padding)"
+    },
+    {
+      "file": "scss/widgets/base/_htmlEditor.scss",
+      "line": 34,
+      "widget": "htmlEditor",
+      "literals": [
+        "15px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$placeholder-inset-inline: 15px !default;",
+      "variable": "placeholder-inset-inline",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/htmlEditor/_index.scss",
+      "setTo": "var(--dx-html-editor-placeholder-inset-inline)"
+    },
+    {
+      "file": "scss/widgets/base/_htmlEditor.scss",
+      "line": 35,
+      "widget": "htmlEditor",
+      "literals": [
+        "1px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$mention-padding-block: 1px !default;",
+      "variable": "mention-padding-block",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/htmlEditor/_index.scss",
+      "setTo": "var(--dx-html-editor-mention-padding-block)"
+    },
+    {
+      "file": "scss/widgets/base/_htmlEditor.scss",
+      "line": 36,
+      "widget": "htmlEditor",
+      "literals": [
+        "2px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$mention-border-radius: 2px !default;",
+      "variable": "mention-border-radius",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/htmlEditor/_index.scss",
+      "setTo": "var(--dx-html-editor-mention-border-radius)"
+    },
+    {
+      "file": "scss/widgets/base/_htmlEditor.scss",
+      "line": 37,
+      "widget": "htmlEditor",
+      "literals": [
+        "2px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$mention-margin-inline: 2px !default;",
+      "variable": "mention-margin-inline",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/htmlEditor/_index.scss",
+      "setTo": "var(--dx-html-editor-mention-margin-inline)"
+    },
+    {
+      "file": "scss/widgets/base/_htmlEditor.scss",
+      "line": 38,
+      "widget": "htmlEditor",
+      "literals": [
+        "5px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$table-resizer-thickness: 5px !default;",
+      "variable": "table-resizer-thickness",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/htmlEditor/_index.scss",
+      "setTo": "var(--dx-html-editor-table-resizer-thickness)"
+    },
+    {
+      "file": "scss/widgets/base/_htmlEditor.scss",
+      "line": 39,
+      "widget": "htmlEditor",
+      "literals": [
+        "3px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$table-resizer-highlight-thickness: 3px !default;",
+      "variable": "table-resizer-highlight-thickness",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/htmlEditor/_index.scss",
+      "setTo": "var(--dx-html-editor-table-resizer-highlight-thickness)"
     },
     {
       "file": "scss/widgets/base/_loadIndicator.scss",

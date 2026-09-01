@@ -1571,7 +1571,11 @@
       "separator",
       "tabs",
       "selects",
-      "title"
+      "title",
+      "blockquote",
+      "cell",
+      "resizer",
+      "highlight"
     ],
     "pivot-grid": [
       "area",

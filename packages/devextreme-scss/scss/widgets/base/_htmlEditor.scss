@@ -1,5 +1,6 @@
 @use "sass:list";
 @use "sass:math";
+@use "sass:meta";
 @use "sass:selector";
 
 $htmleditor-code-block-bg: rgba(191, 191, 191, 0.15) !default;
@@ -11,12 +12,31 @@ $list-style-width: 1.2em;
 $list-style-margin: 0.3em;
 $list-style-outer-width: $list-style-margin + $list-style-width;
 $max-indent: 9;
+
+/*
+ * dx-fixed-size: the drag handle's size; its half is negated at twenty positions, so feeding a
+ * var() here would trade one knob nobody retunes for twenty calc() in the bundle.
+ */
 $resize-handle-size: 11px;
-$touch-resize-handle-size: 15px;
+$touch-resize-handle-size: 15px; // dx-fixed-size: the touch variant of the same handle
 $half-resize-handle-size: math.div($resize-handle-size, 2);
 $half-touch-resize-handle-size: math.div($touch-resize-handle-size, 2);
 
-$transparent-border: 1px solid transparent;
+$htmleditor-border-width: 1px !default;
+$transparent-border: $htmleditor-border-width solid transparent;
+
+// Design sizing values (parametrizable; fluent-next injects tokens)
+$variable-padding: 3px 6px !default;
+$variable-border-radius: 8px !default;
+$blockquote-padding-inline-start: 12px !default;
+$blockquote-border-inline-start-width: 4px !default;
+$table-cell-padding: 2px 5px !default;
+$placeholder-inset-inline: 15px !default;
+$mention-padding-block: 1px !default;
+$mention-border-radius: 2px !default;
+$mention-margin-inline: 2px !default;
+$table-resizer-thickness: 5px !default;
+$table-resizer-highlight-thickness: 3px !default;
 
 @function add-counter-reset($counter, $start: 1) {
   @if $counter > $start {
@@ -161,8 +181,8 @@ $transparent-border: 1px solid transparent;
 
   .dx-variable {
     & > span {
-      padding: 3px 6px;
-      border-radius: 8px;
+      padding: $variable-padding;
+      border-radius: $variable-border-radius;
     }
   }
 
@@ -202,8 +222,8 @@ $transparent-border: 1px solid transparent;
 
   td,
   th {
-    border: 1px solid #000;
-    padding: 2px 5px;
+    border: 1px solid #000; // dx-line-width: a table hairline; the colour beside it is hard-coded too
+    padding: $table-cell-padding;
   }
 
   ol {
@@ -319,10 +339,10 @@ $transparent-border: 1px solid transparent;
       color: $htmleditor-placeholder-color;
       content: attr(data-placeholder);
       font-style: italic;
-      left: 15px;
+      left: $placeholder-inset-inline;
       pointer-events: none;
       position: absolute;
-      right: 15px;
+      right: $placeholder-inset-inline;
     }
 
     &::after {
@@ -332,15 +352,15 @@ $transparent-border: 1px solid transparent;
     }
 
     &[data-placeholder] > p {
-      height: 0.1px;
+      height: 0.1px; // dx-structural: a non-zero height the placeholder needs, not a designed size
     }
   }
 
   // stylelint-enable selector-class-pattern
 
   blockquote {
-    padding-inline-start: 12px;
-    border-inline-start: 4px solid;
+    padding-inline-start: $blockquote-padding-inline-start;
+    border-inline-start: $blockquote-border-inline-start-width solid;
   }
 }
 
@@ -565,8 +585,8 @@ $transparent-border: 1px solid transparent;
 }
 
 .dx-mention {
-  padding: 1px 0;
-  border-radius: 2px;
+  padding: $mention-padding-block 0;
+  border-radius: $mention-border-radius;
 
   .dx-template-wrapper {
     white-space: nowrap;
@@ -574,7 +594,7 @@ $transparent-border: 1px solid transparent;
   }
 
   & > span {
-    margin: 0 2px;
+    margin: 0 $mention-margin-inline;
   }
 }
 
@@ -589,27 +609,27 @@ $transparent-border: 1px solid transparent;
   }
 
   .dx-htmleditor-column-resizer {
-    width: 5px;
+    width: $table-resizer-thickness;
     top: 0;
     height: 100%;
     cursor: col-resize;
   }
 
   .dx-htmleditor-highlighted-column {
-    width: 3px;
+    width: $table-resizer-highlight-thickness;
     top: 0;
     height: 100%;
   }
 
   .dx-htmleditor-row-resizer {
-    height: 5px;
+    height: $table-resizer-thickness;
     left: 0;
     width: 100%;
     cursor: row-resize;
   }
 
   .dx-htmleditor-highlighted-row {
-    height: 3px;
+    height: $table-resizer-highlight-thickness;
     left: 0;
     width: 100%;
   }

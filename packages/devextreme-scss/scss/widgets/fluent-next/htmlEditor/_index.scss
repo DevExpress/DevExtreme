@@ -11,6 +11,18 @@
 @use "../popup/sizes" as popupSizes;
 @use "../../base/mixins" as *;
 @use "../../base/htmlEditor" with (
+  $htmleditor-border-width: var(--dx-html-editor-border-width),
+  $variable-padding: var(--dx-html-editor-variable-padding),
+  $variable-border-radius: var(--dx-html-editor-variable-border-radius),
+  $blockquote-padding-inline-start: var(--dx-html-editor-blockquote-padding-inline-start),
+  $blockquote-border-inline-start-width: var(--dx-html-editor-blockquote-border-inline-start-width),
+  $table-cell-padding: var(--dx-html-editor-table-cell-padding),
+  $placeholder-inset-inline: var(--dx-html-editor-placeholder-inset-inline),
+  $mention-padding-block: var(--dx-html-editor-mention-padding-block),
+  $mention-border-radius: var(--dx-html-editor-mention-border-radius),
+  $mention-margin-inline: var(--dx-html-editor-mention-margin-inline),
+  $table-resizer-thickness: var(--dx-html-editor-table-resizer-thickness),
+  $table-resizer-highlight-thickness: var(--dx-html-editor-table-resizer-highlight-thickness),
   $htmleditor-code-block-bg: var(--dx-html-editor-code-block-bg),
   $htmleditor-placeholder-color: var(--dx-html-editor-placeholder-content),
   $htmleditor-aidialog-title-font-weight: var(--dx-html-editor-ai-dialog-title-font-weight),
