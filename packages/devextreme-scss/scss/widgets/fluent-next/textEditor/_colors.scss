@@ -4,6 +4,10 @@ $text-editor-content: ds.$color-content !default;
 
 $text-editor-placeholder: ds.$color-content-subtle !default;
 
+/* text-content.color.default.placeholder.disabled in the package's component tier: a disabled
+placeholder is not the same grey as a resting one */
+$text-editor-placeholder-disabled: ds.$color-content-disabled !default;
+
 $text-editor-outlined-bg: ds.$color-bg !default;
 
 $text-editor-filled-bg: ds.$color-bg-low !default;

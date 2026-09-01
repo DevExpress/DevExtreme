@@ -32,6 +32,13 @@
     .dx-menu-item {
       color: var(--dx-menu-item-content-disabled);
     }
+
+    /* item.color.selected.bg.disabled: a selected item that is disabled keeps neither the
+    selection colour nor nothing at all - the package gives it the disabled background */
+    .dx-menu-item.dx-menu-item-selected,
+    .dx-menu-item.dx-state-selected {
+      background-color: var(--dx-menu-item-bg-selected-disabled);
+    }
   }
 
   .dx-menu-horizontal {

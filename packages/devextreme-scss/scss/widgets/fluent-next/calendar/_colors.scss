@@ -5,6 +5,9 @@ $calendar-content: ds.$color-content !default;
 $calendar-navigator-content: ds.$color-content !default;
 
 $calendar-cell-other-content: ds.$color-content-subtle !default;
+
+/* cell.period.color.text.disabled in the package's component tier */
+$calendar-cell-content-disabled: ds.$color-content-disabled !default;
 $calendar-bg: transparent !default;
 $calendar-bg-hovered: ds.$color-bg-primary-subtler-selected !default;
 

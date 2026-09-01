@@ -416,6 +416,10 @@
     .dx-icon-clear {
       color: var(--dx-text-editor-content-disabled);
     }
+
+    .dx-placeholder::before {
+      color: var(--dx-text-editor-placeholder-disabled);
+    }
   }
 
   &:not(.dx-texteditor-empty) {

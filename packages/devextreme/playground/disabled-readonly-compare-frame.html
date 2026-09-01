@@ -208,6 +208,32 @@ const CASES = [
     { location: 'before', widget: 'dxButton', options: { text: 'Disabled', disabled: true } },
   ], ...f })],
 
+  // --- configurations the token package gives a disabled answer for --------------------------
+  // Each of these is a place the package names in its component tier, so the gallery can show
+  // whether the theme paints it and with which role.
+  ['calendarDisabled', 'Calendar  (package: cell text -> content-disabled)', 300,
+    (h, f) => $(h).dxCalendar({ value: new Date(2026, 0, 15), ...f })],
+  ['placeholderDisabled', 'TextBox - empty, placeholder only', 90,
+    (h, f) => $(h).dxTextBox({ placeholder: 'Placeholder text', ...f })],
+  ['menuSelectedDisabled', 'Menu  (selected item, package: bg-disabled)', 80,
+    (h, f) => $(h).dxMenu({ items: [{ text: 'Selected', selected: true }, { text: 'Plain' }], selectionMode: 'single', ...f })],
+  ['contextMenuSeparator', 'ContextMenu  (with separator)', 140,
+    (h, f) => {
+      const target = anchor(h, 'right-click target');
+      h.__inst = $('<div>').appendTo(h).dxContextMenu({
+        items: [{ text: 'One' }, { text: 'Two', beginGroup: true }],
+        target, position: { my: 'top left', at: 'bottom left', of: target }, ...f,
+      }).dxContextMenu('instance');
+    }, toggleVisible],
+  ['listItemBg', 'List  (selected item, package: bg-alpha-disabled)', 110,
+    (h, f) => $(h).dxList({ items: ['One', 'Two'], selectionMode: 'single', selectedItemKeys: ['One'], ...f })],
+  ['colorBoxSwatch', 'ColorBox  (package: button bg -> bg-disabled)', 90,
+    (h, f) => $(h).dxColorBox({ value: '#0f6cbd', label: 'Colour', ...f })],
+  ['progressBarPkg', 'ProgressBar  (package: track border, indicator content)', 80,
+    (h, f) => $(h).dxProgressBar({ value: 45, min: 0, max: 100, statusFormat: (r) => `${Math.round(r * 100)}%`, ...f })],
+  ['badgePkg', 'Badge on a button  (package: bg + content)', 80,
+    (h, f) => { h.innerHTML = '<span class="dx-badge">7</span>'; h.classList.add('dx-widget'); if (f.disabled) h.classList.add('dx-state-disabled'); }],
+
   // Markup-only blocks: styled through .dx-widget just like a real widget.
   ['badge', 'Badge  (markup)', 70, (h, f) => { h.innerHTML = '<span class="dx-badge">7</span>'; h.classList.add('dx-widget'); if (f.disabled) h.classList.add('dx-state-disabled'); }],
   ['card', 'Card  (markup)', 90, (h, f) => { h.innerHTML = '<div class="dx-card" style="width:180px;padding:8px">Card</div>'; h.classList.add('dx-widget'); if (f.disabled) h.classList.add('dx-state-disabled'); }],

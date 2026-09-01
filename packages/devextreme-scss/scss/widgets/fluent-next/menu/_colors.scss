@@ -17,3 +17,6 @@ $menu-shadow-focused: ds.$box-shadow-md !default;
 
 // Moved here from menuBase/: menu/ is the declaration home of the menu component (O2)
 $menu-item-content-disabled: ds.$color-content-disabled;
+
+/* item.color.selected.bg.disabled in the package's component tier */
+$menu-item-bg-selected-disabled: ds.$color-bg-disabled !default;
