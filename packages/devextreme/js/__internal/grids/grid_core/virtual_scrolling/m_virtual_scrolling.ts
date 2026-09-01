@@ -126,7 +126,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
         return that._dataSource.pageIndex(index);
       },
       isLoading() {
-        return that._dataSource.isLoading() && !that.isCustomLoading();
+        return that._dataSource.isLoading() && !that.customLoader.isLoading();
       },
       pageCount() {
         return that.pageCount();
@@ -168,7 +168,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
       return;
     }
 
-    if (!isVirtualMode(this) || this.isCustomLoadingAll()) {
+    if (!isVirtualMode(this) || this.customLoader.isLoadingAll()) {
       this._isLoading = isLoading;
       super.loadingChangedHandler(isLoading);
     }
@@ -232,9 +232,9 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     return this._virtualScrollController.itemsCount();
   }
 
-  public load(loadOptions) {
-    if (this.option(LEGACY_SCROLLING_MODE) === false || loadOptions) {
-      return super.load(loadOptions);
+  public load() {
+    if (this.option(LEGACY_SCROLLING_MODE) === false) {
+      return super.load();
     }
     return this._virtualScrollController.load();
   }

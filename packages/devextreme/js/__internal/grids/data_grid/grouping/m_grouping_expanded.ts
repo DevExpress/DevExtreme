@@ -16,7 +16,7 @@ const loadTotalCount = function (dataSource, options) {
   const d = new Deferred();
   const loadOptions = extend({ skip: 0, take: 1, requireTotalCount: true }, options);
 
-  dataSource.load(loadOptions).done((data, extra) => {
+  dataSource.customLoader.load(loadOptions).done((data, extra) => {
     d.resolve(extra && extra.totalCount);
   }).fail(d.reject.bind(d));
   return d;

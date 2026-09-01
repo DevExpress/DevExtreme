@@ -727,7 +727,7 @@ const focusDataControllerExtender = (
 
     let filter = this._generateFilterByKey(key);
 
-    dataSource.load({
+    dataSource.customLoader.load({
       filter: this._concatWithCombinedFilter(filter),
       skip: 0,
       take: 1,
@@ -738,7 +738,7 @@ const focusDataControllerExtender = (
       }
       if ((data as unknown[]).length > 0) {
         filter = this._generateOperationFilterByKey(key, (data as unknown[])[0], useGroup);
-        dataSource.load({
+        dataSource.customLoader.load({
           filter: this._concatWithCombinedFilter(filter, groupFilter),
           skip: 0,
           take: 1,

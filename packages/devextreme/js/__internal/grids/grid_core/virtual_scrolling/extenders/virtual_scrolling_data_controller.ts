@@ -781,7 +781,7 @@ export const virtualScrollingDataControllerExtender = (
       this._updateLoadViewportParams();
 
       const loadingItemsStarted = this._loadItems(checkLoading, !viewportIsNotFilled);
-      const isCustomLoading = this._dataSource?.isCustomLoading();
+      const isCustomLoading = this._dataSource?.customLoader.isLoading();
       const isLoading = checkLoading && !isCustomLoading && this._isLoading;
       const needToUpdateItems = !(loadingItemsStarted
                         || isLoading

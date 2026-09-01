@@ -245,7 +245,9 @@ function loadExpandedGroups(that, options, expandedInfo, loadedGroupCount, group
       loadOptions.take = expandedInfo.take;
     }
 
-    const loadResult = loadOptions.take === 0 ? [] : that._dataSource.loadFromStore(loadOptions);
+    const loadResult = loadOptions.take === 0
+      ? []
+      : that._dataSource.customLoader.loadFromStore(loadOptions);
 
     when(loadResult).done((data) => {
       const item = expandedInfo.items[expandedItemIndex];
@@ -296,7 +298,11 @@ function loadLastLevelGroupItems(that, options, expandedInfo, data) {
     loadOptions.take = expandedInfo.take;
   }
 
-  when(expandedInfo.take === 0 ? [] : that._dataSource.loadFromStore(loadOptions)).done((items) => {
+  const loadResult = expandedInfo.take === 0
+    ? []
+    : that._dataSource.customLoader.loadFromStore(loadOptions);
+
+  when(loadResult).done((items) => {
     if (isPagingLocal) {
       items = that._dataSource.sortLastLevelGroupItems(items, groups, expandedInfo.paths);
       items = expandedInfo.skip ? items.slice(expandedInfo.skip) : items;
@@ -321,7 +327,7 @@ const loadGroupTotalCount = function (dataSource, options) {
     skip: 0, take: 1, requireGroupCount: isGrouping, requireTotalCount: !isGrouping,
   }, options, { group: isGrouping ? options.group : null });
 
-  dataSource.load(loadOptions).done((data, extra) => {
+  dataSource.customLoader.load(loadOptions).done((data, extra) => {
     const count = extra && (isGrouping ? extra.groupCount : extra.totalCount);
 
     if (!isFinite(count)) {
