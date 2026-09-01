@@ -6,11 +6,11 @@
     "marker — the classification comment already on the line, from tools/review/size-markers.json."
   ],
   "summary": {
-    "occurrences": 369,
+    "occurrences": 347,
     "byCategory": {
-      "inline": 178,
-      "local-var": 87,
-      "geometry": 79,
+      "inline": 160,
+      "local-var": 84,
+      "geometry": 78,
       "calc": 9,
       "structural": 8,
       "mixin-arg": 6,
@@ -20,8 +20,8 @@
       "gridBase": 75,
       "colorView": 67,
       "scheduler": 55,
-      "textEditor": 44,
       "htmlEditor": 35,
+      "textEditor": 26,
       "pivotGrid": 21,
       "cardView": 15,
       "ui": 8,
@@ -30,16 +30,15 @@
       "fileManager": 5,
       "sortable": 4,
       "treeList": 4,
-      "colorBox": 3,
       "icon_fonts": 2,
       "multiView": 2,
-      "numberBox": 2,
       "resizable": 2,
       "tagBox": 2,
       "filterBuilder": 2,
       "fileUploader": 1,
       "pagination": 1,
       "slider": 1,
+      "colorBox": 1,
       "diagram": 1,
       "gantt": 1,
       "list": 1,
@@ -49,22 +48,18 @@
       "toolbar": 1,
       "treeView": 1
     },
-    "unmarked": 326,
+    "unmarked": 277,
     "unmarkedByWidget": {
       "gridBase": 75,
       "colorView": 67,
       "scheduler": 54,
-      "textEditor": 44,
       "htmlEditor": 33,
       "pivotGrid": 20,
       "cardView": 15,
       "dataGrid": 5,
       "treeList": 4,
-      "colorBox": 3,
-      "numberBox": 2,
-      "tagBox": 2,
-      "list": 1,
-      "lookup": 1
+      "textEditor": 3,
+      "list": 1
     }
   },
   "places": [
@@ -516,30 +511,6 @@
       "category": "structural"
     },
     {
-      "file": "scss/widgets/base/_numberBox.scss",
-      "line": 5,
-      "widget": "numberBox",
-      "literals": [
-        "22px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$spin-container-width: 22px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/_numberBox.scss",
-      "line": 6,
-      "widget": "numberBox",
-      "literals": [
-        "64px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$touch-friendly-spin-container-width: 64px;",
-      "category": "local-var"
-    },
-    {
       "file": "scss/widgets/base/_pagination.scss",
       "line": 25,
       "widget": "pagination",
@@ -648,8 +619,8 @@
         "0.1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "width: 0.1px; // T393423, T437866",
+      "marker": "dx-structural",
+      "text": "width: 0.1px; // T393423, T437866 -- dx-structural: a non-zero width the browsers need, not a designed size",
       "category": "inline"
     },
     {
@@ -660,8 +631,8 @@
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "max-width: calc(100% - 1px);",
+      "marker": "dx-px-nudge",
+      "text": "max-width: calc(100% - 1px); // dx-px-nudge: a pixel off the full width so the tag never overflows",
       "category": "calc"
     },
     {
@@ -920,39 +891,15 @@
     },
     {
       "file": "scss/widgets/base/colorBox/_index.scss",
-      "line": 5,
-      "widget": "colorBox",
-      "literals": [
-        "40px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$colorbox-input-left-padding: 40px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/colorBox/_index.scss",
-      "line": 22,
+      "line": 31,
       "widget": "colorBox",
       "literals": [
         "25px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "max-width: calc(100% - 25px);",
+      "marker": "dx-fixed-size",
+      "text": "max-width: calc(100% - 25px); // dx-fixed-size: room the colour preview and its gap take from the placeholder",
       "category": "calc"
-    },
-    {
-      "file": "scss/widgets/base/colorBox/_index.scss",
-      "line": 36,
-      "widget": "colorBox",
-      "literals": [
-        "-7.5px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-top: -7.5px;",
-      "category": "inline"
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
@@ -2321,8 +2268,8 @@
         "45px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "height: calc(100% - 45px);",
+      "marker": "dx-fixed-size",
+      "text": "height: calc(100% - 45px); // dx-fixed-size: the height the popup toolbar takes from the list",
       "category": "calc"
     },
     {
@@ -3235,61 +3182,13 @@
         "2px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "padding: 0 2px;",
+      "marker": "dx-fixed-size",
+      "text": "padding: 0 2px; // dx-fixed-size: fluent-next does not call this mixin, so the value only reaches the legacy themes",
       "category": "inline"
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 167,
-      "widget": "textEditor",
-      "literals": [
-        "2px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "padding: 0 2px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 174,
-      "widget": "textEditor",
-      "literals": [
-        "-2px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-left: -2px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 175,
-      "widget": "textEditor",
-      "literals": [
-        "-2px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-right: -2px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 176,
-      "widget": "textEditor",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "border-radius: 1px;",
-      "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 188,
+      "line": 201,
       "widget": "textEditor",
       "literals": [
         "1px",
@@ -3302,186 +3201,78 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 212,
+      "line": 225,
       "widget": "textEditor",
       "literals": [
         "-1px",
         "1px"
       ],
       "occurrences": 4,
-      "marker": null,
-      "text": "clip-path: inset(-1px 1px -1px -1px);",
+      "marker": "dx-line-width",
+      "text": "clip-path: inset(-1px 1px -1px -1px); // dx-line-width: the notch is carved at the label border, a hairline that must not thicken with the scale",
       "category": "geometry"
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 227,
+      "line": 240,
       "widget": "textEditor",
       "literals": [
         "-1px",
         "1px"
       ],
       "occurrences": 4,
-      "marker": null,
-      "text": "clip-path: inset(-1px -1px -1px 1px);",
+      "marker": "dx-line-width",
+      "text": "clip-path: inset(-1px -1px -1px 1px); // dx-line-width: the notch is carved at the label border, a hairline that must not thicken with the scale",
       "category": "geometry"
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 232,
+      "line": 245,
       "widget": "textEditor",
       "literals": [
         "-1px",
         "1px"
       ],
       "occurrences": 4,
-      "marker": null,
-      "text": "clip-path: inset(-1px -1px -1px 1px);",
+      "marker": "dx-line-width",
+      "text": "clip-path: inset(-1px -1px -1px 1px); // dx-line-width: the notch is carved at the label border, a hairline that must not thicken with the scale",
       "category": "geometry"
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 236,
+      "line": 249,
       "widget": "textEditor",
       "literals": [
         "-1px",
         "1px"
       ],
       "occurrences": 4,
-      "marker": null,
-      "text": "clip-path: inset(-1px 1px -1px -1px);",
+      "marker": "dx-line-width",
+      "text": "clip-path: inset(-1px 1px -1px -1px); // dx-line-width: the notch is carved at the label border, a hairline that must not thicken with the scale",
       "category": "geometry"
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 250,
-      "widget": "textEditor",
-      "literals": [
-        "3px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "height: 3px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 252,
-      "widget": "textEditor",
-      "literals": [
-        "-2px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-inline-start: -2px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 314,
+      "line": 653,
       "widget": "textEditor",
       "literals": [
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "border-start-end-radius: 1px;",
+      "marker": "dx-fixed-size",
+      "text": "margin-top: 1px; // dx-fixed-size: fluent-next does not call this mixin, so the value only reaches the legacy themes",
       "category": "inline"
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 315,
+      "line": 654,
       "widget": "textEditor",
       "literals": [
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "border-end-end-radius: 1px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 640,
-      "widget": "textEditor",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-top: 1px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 641,
-      "widget": "textEditor",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-bottom: 1px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 760,
-      "widget": "textEditor",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-top: 1px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 761,
-      "widget": "textEditor",
-      "literals": [
-        "3px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-bottom: 3px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 768,
-      "widget": "textEditor",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 2,
-      "marker": null,
-      "text": "padding-top: if(meta.type-of($material-button-vertical-padding) == number, $material-button-vertical-padding - 1px, calc(#{$material-button-vertical-padding} - 1px));",
-      "category": "calc"
-    },
-    {
-      "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 772,
-      "widget": "textEditor",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-top: 1px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 778,
-      "widget": "textEditor",
-      "literals": [
-        "3px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-top: 3px;",
+      "marker": "dx-fixed-size",
+      "text": "margin-bottom: 1px; // dx-fixed-size: fluent-next does not call this mixin, so the value only reaches the legacy themes",
       "category": "inline"
     },
     {
@@ -3489,84 +3280,24 @@
       "line": 786,
       "widget": "textEditor",
       "literals": [
-        "2px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "padding: 2px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 814,
-      "widget": "textEditor",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-top: 1px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 815,
-      "widget": "textEditor",
-      "literals": [
-        "3px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-bottom: 3px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 822,
-      "widget": "textEditor",
-      "literals": [
         "1px"
       ],
       "occurrences": 2,
-      "marker": null,
-      "text": "padding-top: if(meta.type-of($material-button-vertical-padding) == number, $material-button-vertical-padding - 1px, calc(#{$material-button-vertical-padding} - 1px));",
+      "marker": "dx-px-nudge",
+      "text": "padding-top: if(meta.type-of($material-button-vertical-padding) == number, $material-button-vertical-padding - 1px, calc(#{$material-button-vertical-padding} - 1px)); // dx-px-nudge: -1px under the button's own padding",
       "category": "calc"
-    },
-    {
-      "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 826,
-      "widget": "textEditor",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-top: 1px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 832,
-      "widget": "textEditor",
-      "literals": [
-        "3px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-top: 3px;",
-      "category": "inline"
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
       "line": 840,
       "widget": "textEditor",
       "literals": [
-        "2px"
+        "1px"
       ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "padding: 2px;",
-      "category": "inline"
+      "occurrences": 2,
+      "marker": "dx-px-nudge",
+      "text": "padding-top: if(meta.type-of($material-button-vertical-padding) == number, $material-button-vertical-padding - 1px, calc(#{$material-button-vertical-padding} - 1px)); // dx-px-nudge: -1px under the button's own padding",
+      "category": "calc"
     },
     {
       "file": "scss/widgets/base/toolbar/_index.scss",

@@ -640,6 +640,8 @@
       "alternation",
       "with-label",
       "with-icon",
+      "icon-only",
+      "with-text",
       "with-title",
       "on",
       "off",
@@ -2018,7 +2020,9 @@
       "spin-button",
       "custom-button",
       "icon-container",
-      "invalid-badge"
+      "invalid-badge",
+      "backdrop",
+      "icon"
     ]
   },
   "packageElementPaths": [

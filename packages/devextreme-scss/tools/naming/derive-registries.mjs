@@ -482,6 +482,11 @@ const OVERRIDES = {
       'with-label',
       // .dx-menu-item-has-icon: a menu item that reserves room for an icon
       'with-icon',
+      // .dx-button:not(.dx-button-has-text): a button that shows a glyph and nothing else, which
+      // pads itself differently from one carrying a caption
+      'icon-only',
+      // .dx-button-has-text: the same button when it carries a caption beside the glyph
+      'with-text',
       // .dx-popup-title present: the content box loses the padding the title already provides
       'with-title',
       // Switch.value rendered as .dx-switch-on-value / -off-value, and the two label boxes inside
@@ -1051,6 +1056,9 @@ const OVERRIDES = {
     'text-editor': [
       'input', 'label', 'line', 'button', 'clear-button', 'spin-button', 'custom-button',
       'icon-container', 'invalid-badge',
+      // wave B13: the strip the floating label sits on (.dx-label::before) and the glyph inside an
+      // editor button (.dx-button-content .dx-icon) are both real boxes with sizes of their own
+      'backdrop', 'icon',
     ],
   },
 };

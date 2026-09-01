@@ -1,13 +1,22 @@
+@use "sass:math";
+@use "sass:meta";
 @use "../mixins" as *;
 @use "./mixins" as *;
 @use "sass:string" as string;
 
-$colorbox-input-left-padding: 40px;
+$colorbox-input-left-padding: 40px !default;
 
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $colorbox-texteditor-input-container-width: 15px !default;
 $colorbox-texteditor-input-container-height: 15px !default;
 $colorbox-texteditor-input-container-inset-inline-start: 14px !default;
+
+/* The preview is centred on the input, so the offset is half its own height. */
+$colorbox-texteditor-input-container-offset-block-start: if(
+  meta.type-of($colorbox-texteditor-input-container-height) == number,
+  math.div(-$colorbox-texteditor-input-container-height, 2),
+  calc(#{$colorbox-texteditor-input-container-height} / -2)
+) !default;
 $colorbox-overlay-padding: 20px !default;
 $colorbox-toolbar-item-padding-right: 10px !default;
 
@@ -19,7 +28,7 @@ $colorbox-toolbar-item-padding-right: 10px !default;
   }
 
   .dx-placeholder {
-    max-width: calc(100% - 25px);
+    max-width: calc(100% - 25px); // dx-fixed-size: room the colour preview and its gap take from the placeholder
   }
 }
 
@@ -33,7 +42,7 @@ $colorbox-toolbar-item-padding-right: 10px !default;
       z-index: 1;
       width: $colorbox-texteditor-input-container-width;
       height: $colorbox-texteditor-input-container-height;
-      margin-top: -7.5px;
+      margin-top: $colorbox-texteditor-input-container-offset-block-start;
       inset-inline-start: $colorbox-texteditor-input-container-inset-inline-start;
     }
   }

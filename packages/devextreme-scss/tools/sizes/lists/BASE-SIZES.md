@@ -11,34 +11,30 @@ and carries a marker saying why.
 
 | | occurrences |
 |---|---|
-| a raw grep of the layer | 778 |
-| …of those, inside comments (commented-out code, prose) | 6 |
-| **in code** | **772** |
-| — the theme can already set from outside | 403 |
-| — nailed into the shared layer | 369 |
+| a raw grep of the layer | 769 |
+| …of those, inside comments (commented-out code, prose) | 8 |
+| **in code** | **761** |
+| — the theme can already set from outside | 414 |
+| — nailed into the shared layer | 347 |
 
 ## What the theme can already set
 
-403 occurrences in 349 `!default` variables. fluent-next already passes 387; 0 are open knobs nobody turns.
+414 occurrences in 360 `!default` variables. fluent-next already passes 390; 0 are open knobs nobody turns.
 
 ## What is nailed into the layer
 
-| widget | inline | local-var | geometry | calc | mixin-arg | total |
+| widget | inline | local-var | geometry | mixin-arg | calc | total |
 |---|---|---|---|---|---|---|
 | gridBase | 50 | 18 | 7 |  |  | **75** |
 | colorView | 35 | 8 | 24 |  |  | **67** |
-| scheduler | 9 | 41 | 3 | 1 |  | **54** |
-| textEditor | 23 |  | 17 | 4 |  | **44** |
+| scheduler | 9 | 41 | 3 |  | 1 | **54** |
 | htmlEditor | 22 | 3 | 8 |  |  | **33** |
 | pivotGrid | 6 | 8 | 6 |  |  | **20** |
 | cardView | 9 | 1 | 5 |  |  | **15** |
-| dataGrid |  |  | 3 |  | 2 | **5** |
-| treeList |  |  | 1 |  | 3 | **4** |
-| colorBox | 1 | 1 |  | 1 |  | **3** |
-| numberBox |  | 2 |  |  |  | **2** |
-| tagBox | 1 |  |  | 1 |  | **2** |
+| dataGrid |  |  | 3 | 2 |  | **5** |
+| treeList |  |  | 1 | 3 |  | **4** |
+| textEditor | 3 |  |  |  |  | **3** |
 | list |  | 1 |  |  |  | **1** |
-| lookup |  |  |  | 1 |  | **1** |
 
 ## Places, by widget
 
@@ -347,65 +343,6 @@ and carries a marker saying why.
 - `scss/widgets/base/scheduler/views/timelines/_index.scss:188` · geometry
   `border-bottom: 1px solid;`
 
-### textEditor — 44
-
-- `scss/widgets/base/textEditor/_mixins.scss:53` · inline
-  `padding: 0 2px;`
-- `scss/widgets/base/textEditor/_mixins.scss:167` · inline
-  `padding: 0 2px;`
-- `scss/widgets/base/textEditor/_mixins.scss:174` · inline
-  `margin-left: -2px;`
-- `scss/widgets/base/textEditor/_mixins.scss:175` · inline
-  `margin-right: -2px;`
-- `scss/widgets/base/textEditor/_mixins.scss:176` · geometry
-  `border-radius: 1px;`
-- `scss/widgets/base/textEditor/_mixins.scss:188` · inline
-  `)} 1px -1px 1px);`
-- `scss/widgets/base/textEditor/_mixins.scss:212` · geometry
-  `clip-path: inset(-1px 1px -1px -1px);`
-- `scss/widgets/base/textEditor/_mixins.scss:227` · geometry
-  `clip-path: inset(-1px -1px -1px 1px);`
-- `scss/widgets/base/textEditor/_mixins.scss:232` · geometry
-  `clip-path: inset(-1px -1px -1px 1px);`
-- `scss/widgets/base/textEditor/_mixins.scss:236` · geometry
-  `clip-path: inset(-1px 1px -1px -1px);`
-- `scss/widgets/base/textEditor/_mixins.scss:250` · inline
-  `height: 3px;`
-- `scss/widgets/base/textEditor/_mixins.scss:252` · inline
-  `margin-inline-start: -2px;`
-- `scss/widgets/base/textEditor/_mixins.scss:314` · inline
-  `border-start-end-radius: 1px;`
-- `scss/widgets/base/textEditor/_mixins.scss:315` · inline
-  `border-end-end-radius: 1px;`
-- `scss/widgets/base/textEditor/_mixins.scss:640` · inline
-  `margin-top: 1px;`
-- `scss/widgets/base/textEditor/_mixins.scss:641` · inline
-  `margin-bottom: 1px;`
-- `scss/widgets/base/textEditor/_mixins.scss:760` · inline
-  `margin-top: 1px;`
-- `scss/widgets/base/textEditor/_mixins.scss:761` · inline
-  `margin-bottom: 3px;`
-- `scss/widgets/base/textEditor/_mixins.scss:768` · calc
-  `padding-top: if(meta.type-of($material-button-vertical-padding) == number, $material-button-vertical-padding - 1px, calc(#{$material-button-vertical-padding} - 1px));`
-- `scss/widgets/base/textEditor/_mixins.scss:772` · inline
-  `margin-top: 1px;`
-- `scss/widgets/base/textEditor/_mixins.scss:778` · inline
-  `margin-top: 3px;`
-- `scss/widgets/base/textEditor/_mixins.scss:786` · inline
-  `padding: 2px;`
-- `scss/widgets/base/textEditor/_mixins.scss:814` · inline
-  `margin-top: 1px;`
-- `scss/widgets/base/textEditor/_mixins.scss:815` · inline
-  `margin-bottom: 3px;`
-- `scss/widgets/base/textEditor/_mixins.scss:822` · calc
-  `padding-top: if(meta.type-of($material-button-vertical-padding) == number, $material-button-vertical-padding - 1px, calc(#{$material-button-vertical-padding} - 1px));`
-- `scss/widgets/base/textEditor/_mixins.scss:826` · inline
-  `margin-top: 1px;`
-- `scss/widgets/base/textEditor/_mixins.scss:832` · inline
-  `margin-top: 3px;`
-- `scss/widgets/base/textEditor/_mixins.scss:840` · inline
-  `padding: 2px;`
-
 ### htmlEditor — 33
 
 - `scss/widgets/base/_htmlEditor.scss:14` · local-var
@@ -563,35 +500,12 @@ and carries a marker saying why.
 - `scss/widgets/base/treeList/layout/cell.scss:229` · geometry
   `outline-offset: -2px;`
 
-### colorBox — 3
+### textEditor — 3
 
-- `scss/widgets/base/colorBox/_index.scss:5` · local-var
-  `$colorbox-input-left-padding: 40px;`
-- `scss/widgets/base/colorBox/_index.scss:22` · calc
-  `max-width: calc(100% - 25px);`
-- `scss/widgets/base/colorBox/_index.scss:36` · inline
-  `margin-top: -7.5px;`
-
-### numberBox — 2
-
-- `scss/widgets/base/_numberBox.scss:5` · local-var
-  `$spin-container-width: 22px;`
-- `scss/widgets/base/_numberBox.scss:6` · local-var
-  `$touch-friendly-spin-container-width: 64px;`
-
-### tagBox — 2
-
-- `scss/widgets/base/_tagBox.scss:15` · inline
-  `width: 0.1px; // T393423, T437866`
-- `scss/widgets/base/_tagBox.scss:43` · calc
-  `max-width: calc(100% - 1px);`
+- `scss/widgets/base/textEditor/_mixins.scss:201` · inline
+  `)} 1px -1px 1px);`
 
 ### list — 1
 
 - `scss/widgets/base/list/_index.scss:6` · local-var
   `$list-searchbox-margin-bottom: 5px;`
-
-### lookup — 1
-
-- `scss/widgets/base/lookup/_index.scss:10` · calc
-  `height: calc(100% - 45px);`
