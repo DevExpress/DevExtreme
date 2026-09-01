@@ -523,8 +523,10 @@
 
 /* item.color.selected.bg.disabled: a selected item keeps a surface when disabled, but the
 package's alpha one rather than the selection colour. The selector carries .dx-list so it matches
-the specificity of the rule that paints a selected item - one class short and that rule wins. */
+the specificity of the rule that paints a selected item - one class short and that rule wins. The
+content colour needs the same treatment: it is painted for selection and outranked the state. */
 .dx-state-disabled.dx-list .dx-list-item.dx-list-item-selected,
 .dx-list .dx-list-item.dx-list-item-selected.dx-state-disabled {
   background-color: var(--dx-list-item-bg-selected-disabled);
+  color: var(--dx-list-content-disabled);
 }

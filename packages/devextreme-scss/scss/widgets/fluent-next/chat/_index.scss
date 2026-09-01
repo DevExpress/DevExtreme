@@ -173,7 +173,8 @@ click - and follows the state like the composing area does. */
 .dx-chat.dx-state-disabled,
 .dx-state-disabled .dx-chat {
   .dx-chat-file,
-  .dx-chat-file .dx-icon {
+  .dx-chat-file .dx-icon,
+  .dx-chat-file-size {
     color: var(--dx-chat-file-content-disabled);
   }
 }

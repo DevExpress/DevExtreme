@@ -9,6 +9,8 @@
 .dx-cardview.dx-state-disabled {
   color: var(--dx-card-view-content-disabled);
 
+  /* the sort index paints an accent of its own and stayed bright next to greyed headers */
+  .dx-cardview-header-item .dx-cardview-header-item-sorting-order,
   .dx-cardview-field-caption,
   .dx-cardview-field-value,
   .dx-cardview-card-content,

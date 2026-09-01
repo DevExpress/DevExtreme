@@ -8,6 +8,10 @@ $file-manager-dirs-tree-item-content-focused: ds.$color-content !default;
 $file-manager-breadcrumbs-item-bg-focused: ds.$color-bg-active !default;
 $file-manager-breadcrumbs-item-content-focused: ds.$color-content !default;
 $file-manager-custom-thumbnail-content: ds.$color-content-disabled !default;
+
+/* The directory tree paints its own item text, so it kept full contrast inside a disabled file
+manager while everything around it greyed. */
+$file-manager-content-disabled: ds.$color-content-disabled !default;
 $file-manager-file-item-select-content: ds.$color-content-inverted !default;
 $file-manager-file-item-select-bg: rgb(from #{ds.$color-bg-primary} r g b / 0.8) !default;
 $file-manager-file-item-select-content-focused: ds.$color-content-inverted !default;

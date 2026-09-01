@@ -309,3 +309,91 @@ test('no new component dims its disabled state instead of painting it', () => {
     .map(([name, n]) => `${name}: ${n} > ${ALLOWED_DIMS[name]}`);
   expect(grown).toEqual([]);
 });
+
+/*
+ * Ratchet: an element that sets its own colour cannot inherit a disabled one.
+ *
+ * Every defect this branch found after the blanket dim came off had the same mechanism. A
+ * component's disabled rule greys a container, the elements inside it inherit that colour - and
+ * one element does not, because it declares a colour of its own. It then sits at full contrast
+ * next to greyed siblings. That is how the Toolbar items, the TreeView expander, the TreeList
+ * chevron, the Form captions, the stepper connector, the calendar's selected day and the chat
+ * attachment were all missed, each found by eye rather than by a gate.
+ *
+ * So the check is not "does the component have a disabled rule" - the earlier ratchet asks that -
+ * but "is every element that paints its own colour reached by one". It looks at `color` only:
+ * that is the property the argument rests on, since background and border do not inherit and an
+ * element without them is not claiming to be readable.
+ *
+ * The list is long and mostly legitimate - toast variants, popup chrome, theme utility classes,
+ * anything that has no disabled state to speak of - so it is a baseline rather than a hard zero.
+ * It may shrink, never grow. Bank a drop deliberately:
+ *
+ *   UPDATE_OWN_COLOUR_BASELINE=1 pnpm test
+ */
+const ownColourBaselinePath = join(__dirname, 'disabled-own-colour.baseline.json');
+
+const targetClassOf = (selectorPart: string): string | null => {
+  const segments = selectorPart.trim().split(/\s+|(?=>)|(?<=>)/)
+    .filter((segment) => segment && !['>', '+', '~'].includes(segment));
+  const last = segments[segments.length - 1];
+
+  if (!last) {
+    return null;
+  }
+
+  return [...last.matchAll(/\.(dx-[a-z0-9-]+)/g)]
+    .map((match) => match[1])
+    .find((cls) => !/^dx-state-|^dx-button-disable/.test(cls)) ?? null;
+};
+
+const elementsPaintingTheirOwnColour = (css: string): string[] => {
+  const declaresColour = /(^|;)\s*color\s*:/;
+  const own = new Set<string>();
+  const covered = new Set<string>();
+
+  readRules(css)
+    .filter(({ selector, body }) => !selector.startsWith('@') && declaresColour.test(body))
+    .forEach(({ selector, body: _body, ...rest }) => {
+      void _body;
+      void rest;
+      const isDisabled = DISABLED_SELECTOR.test(selector);
+
+      selector.split(',').forEach((part) => {
+        const target = targetClassOf(part);
+
+        if (!target) {
+          return;
+        }
+
+        (isDisabled ? covered : own).add(target);
+      });
+    });
+
+  return [...own].filter((cls) => !covered.has(cls)).sort();
+};
+
+test('an element that paints its own colour is reached by a disabled rule', () => {
+  const css = readFileSync(join(artifactsCss, 'dx.fluent-next.blue.light.css'), 'utf8');
+  const found = elementsPaintingTheirOwnColour(css);
+
+  if (process.env.UPDATE_OWN_COLOUR_BASELINE === '1') {
+    writeFileSync(ownColourBaselinePath, `${JSON.stringify(found, null, 2)}\n`);
+  }
+
+  const baseline: string[] = JSON.parse(readFileSync(ownColourBaselinePath, 'utf8'));
+  const appeared = found.filter((cls) => !baseline.includes(cls));
+
+  expect(appeared).toEqual([]);
+  expect(found.length).toBeLessThanOrEqual(baseline.length);
+});
+
+test('the own-colour ratchet notices an element losing its disabled rule', () => {
+  const fixture = `
+    .dx-alpha-caption { color: #111; }
+    .dx-alpha.dx-state-disabled .dx-alpha-caption { color: #999; }
+    .dx-beta-caption { color: #111; }
+  `;
+
+  expect(elementsPaintingTheirOwnColour(fixture)).toEqual(['dx-beta-caption']);
+});

@@ -77,7 +77,8 @@ blanket dim was lifted. */
 .dx-calendar.dx-state-disabled,
 .dx-state-disabled .dx-calendar {
   .dx-calendar-cell,
-  .dx-calendar-week-number-cell {
+  .dx-calendar-week-number-cell,
+  .dx-calendar-body thead th {
     color: var(--dx-calendar-cell-content-disabled);
   }
 

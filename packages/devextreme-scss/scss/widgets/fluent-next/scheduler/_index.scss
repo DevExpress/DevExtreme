@@ -1134,3 +1134,9 @@
     color: var(--dx-scheduler-content-disabled);
   }
 }
+
+/* The appointment paints its own text, so it kept full contrast inside a disabled scheduler. */
+.dx-state-disabled .dx-scheduler-appointment-title,
+.dx-state-disabled .dx-scheduler-appointment-content-date {
+  color: var(--dx-scheduler-content-disabled);
+}

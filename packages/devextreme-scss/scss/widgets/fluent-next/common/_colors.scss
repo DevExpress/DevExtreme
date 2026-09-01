@@ -39,3 +39,7 @@ $global-content: ds.$color-content !default;
  * and belongs in the system tier, next to invalid-badge.
  */
 $mention-bg: ds.$color-bg-selected !default;
+/* The disabled content step. It is global because it is applied at the widget root, so that text
+painting no colour of its own inherits it - the role the package names for 70 of its 125 disabled
+tokens. */
+$global-content-disabled: ds.$color-content-disabled !default;

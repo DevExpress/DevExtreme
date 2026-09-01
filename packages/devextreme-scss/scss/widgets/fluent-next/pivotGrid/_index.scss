@@ -256,7 +256,19 @@
   .dx-pivotgrid-vertical-headers,
   .dx-pivotgrid-fields-area,
   .dx-area-field,
+
   .dx-area-description-cell {
     color: var(--dx-pivot-grid-content-disabled);
   }
+}
+
+/* Total cells paint their own colour, and the state sits above the table rather than on the
+pivot grid root, so the rule above never reached them. */
+.dx-state-disabled .dx-pivotgrid .dx-pivotgrid-area .dx-row-total,
+.dx-state-disabled .dx-pivotgrid .dx-pivotgrid-area .dx-grandtotal,
+.dx-state-disabled .dx-pivotgrid .dx-pivotgrid-area .dx-total,
+.dx-pivotgrid.dx-state-disabled .dx-pivotgrid-area .dx-row-total,
+.dx-pivotgrid.dx-state-disabled .dx-pivotgrid-area .dx-grandtotal,
+.dx-pivotgrid.dx-state-disabled .dx-pivotgrid-area .dx-total {
+  color: var(--dx-pivot-grid-content-disabled);
 }

@@ -8,18 +8,25 @@
   @include dx-base-typography();
 }
 
-/* No blanket dim. Every component that has a surface of its own paints its disabled state from
-the disabled roles, the way Fluent does it and the way Blazor's themes do - they carry no global
-rule either, and reserve opacity for a composite that is dimmed as a whole, such as a scheduler
-appointment. What is left here is the part that is not a colour: no text selection and no pointer
-cursor on something that cannot be used. Layout containers - splitter, drawer, box - show nothing
-of their own, which is also what Blazor does: their content is made of components that mark
-themselves. The remaining opacity users are named and listed in DISABLED_STATES.md. */
+/* No blanket dim - but a blanket colour, which is a different thing. Opacity dims the background
+through the element and states no contrast; the disabled content role states one, and it is the
+role the package names for 70 of its 125 disabled tokens.
+
+It is applied at the root because that is where the gap was. A component's disabled rule paints
+the parts it knows about, and everything else inherits from .dx-widget, which kept the resting
+content colour - so a disabled checkbox had a black label, a disabled calendar had black weekday
+headers, a disabled splitter had black panes, and each was found by eye rather than by a rule.
+Anything that needs a different disabled colour still says so: those rules are more specific and
+win. Layout containers now carry the state through to their text, which is what was missing.
+
+What is left here that is not a colour: no text selection, and no pointer cursor on something
+that cannot be used. The remaining opacity users are named and listed in DISABLED_STATES.md. */
 .dx-state-disabled {
   &.dx-widget,
   .dx-widget {
     @include user-select(none);
 
+    color: var(--dx-global-content-disabled);
     cursor: default;
   }
 }
