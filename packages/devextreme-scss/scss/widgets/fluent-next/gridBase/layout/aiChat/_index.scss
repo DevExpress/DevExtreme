@@ -3,7 +3,7 @@
 @use "../../../colors" as *;
 @use "../../../button/colors" as buttonColors;
 @use "./sizes" as *;
-@use "../../../../base/widget" as baseWidget;
+@use "../../../common/mixins" as commonMixins;
 @include ai-chat-messagelist-empty(
   buttonColors.$button-default-contained-bg,
   buttonColors.$button-default-outlined-bg-hovered,
@@ -16,5 +16,7 @@
 @include ai-chat-message-icon(var(--dx-grid-ai-chat-message-icon-size));
 
 .dx-ai-chat--disabled .dx-ai-chat__message-regenerate-button {
-  @include baseWidget.disabled-widget();
+  /* The theme's own mixin, not base's: base defaults to 0.3 and this button was the one place
+  that ignored the theme's global disabled opacity. */
+  @include commonMixins.disabled-widget();
 }
