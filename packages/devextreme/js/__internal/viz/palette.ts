@@ -42,6 +42,13 @@ const palettes = {
 
   office: officePalette,
 
+  'fluent next': {
+    simpleSet: ['#0078d4', '#c83d3d', '#008f04', '#eaa300', '#e43ba6', '#865cbf'],
+    indicatingSet: ['#008f04', '#eaa300', '#c83d3d'],
+    gradientSet: ['#0078d4', '#008f04'],
+    accentColor: '#0f6cbd',
+  },
+
   'harmony light': {
     simpleSet: ['#fcb65e', '#679ec5', '#ad79ce', '#7abd5c', '#e18e92', '#b6d623', '#b7abea', '#85dbd5'],
     indicatingSet: ['#b6d623', '#fcb65e', '#e18e92'],
