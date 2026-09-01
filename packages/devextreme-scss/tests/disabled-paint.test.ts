@@ -239,7 +239,11 @@ const componentsWithoutOwnDisabledRule = (css: string): string[] => {
         .filter((s) => s.trim().startsWith('.dx-'))
         .map((s) => s.trim().slice(1));
 
-      return classes.length > 0 && !classes.some((cls) => painted.has(cls));
+      // Prefix, like the paint gate: a component is covered when any painted class belongs to
+      // it, and the painted part is usually a sub-element - ProgressBar paints
+      // .dx-progressbar-container, never .dx-progressbar itself.
+      return classes.length > 0
+        && !classes.some((cls) => [...painted].some((c) => c === cls || c.startsWith(`${cls}-`)));
     })
     .map(([component]) => component)
     .sort();

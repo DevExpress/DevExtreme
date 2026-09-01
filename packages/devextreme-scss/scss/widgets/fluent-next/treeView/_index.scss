@@ -151,8 +151,6 @@
 
 // individually disabled items already use.
 .dx-treeview.dx-state-disabled {
-  opacity: 1;
-
   .dx-treeview-item {
     color: var(--dx-tree-view-item-content-disabled);
   }

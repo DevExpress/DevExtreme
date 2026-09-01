@@ -216,7 +216,6 @@
 
 // nothing of its own once that rule was lifted. It is painted from the disabled content role now.
 .dx-fileuploader.dx-state-disabled {
-  opacity: 1;
 
   // The select-file button is a widget of its own and is not disabled, so its text is painted
 

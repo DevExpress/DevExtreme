@@ -15,8 +15,6 @@
 
 // individually disabled items already use.
 .dx-tabs.dx-state-disabled {
-  opacity: 1;
-
   .dx-tab {
     color: var(--dx-tabs-tab-content-disabled);
 

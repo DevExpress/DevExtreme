@@ -58,8 +58,6 @@
 
 // individually disabled items already use.
 .dx-stepper.dx-state-disabled {
-  opacity: 1;
-
   .dx-step-indicator {
     color: var(--dx-stepper-step-content-disabled);
     border-color: var(--dx-stepper-step-bg-disabled);

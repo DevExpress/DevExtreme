@@ -137,7 +137,6 @@
 
 // nothing of its own once that rule was lifted. It is painted from the disabled content role now.
 .dx-filterbuilder.dx-state-disabled {
-  opacity: 1;
   color: var(--dx-filter-builder-content-disabled);
 
   .dx-filterbuilder-item-field,

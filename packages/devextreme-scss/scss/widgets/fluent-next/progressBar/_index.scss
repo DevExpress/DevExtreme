@@ -46,10 +46,6 @@
 }
 
 .dx-state-disabled {
-  &.dx-progressbar {
-    opacity: 1;
-  }
-
   .dx-progressbar-container {
     background-color: var(--dx-progress-bar-container-bg-disabled);
   }

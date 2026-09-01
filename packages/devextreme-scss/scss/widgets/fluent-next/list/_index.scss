@@ -21,9 +21,11 @@
 
 .dx-state-disabled {
   &.dx-list {
-    opacity: 1;
-
     .dx-list-item {
+
+      // cancels --dx-list-item-opacity-disabled: an item is dimmed on its own, but not when the
+
+      // whole list is disabled - then the list paints the text instead
       opacity: 1;
       color: var(--dx-list-content-disabled);
     }

@@ -249,7 +249,6 @@
 
 // chips are its own markup and no child widget paints them.
 .dx-pivotgrid.dx-state-disabled {
-  opacity: 1;
   color: var(--dx-pivot-grid-content-disabled);
 
   .dx-pivotgrid-area,

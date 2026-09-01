@@ -116,7 +116,6 @@
 
 // nothing of its own once that rule was lifted. It is painted from the disabled content role now.
 .dx-gallery.dx-state-disabled {
-  opacity: 1;
   color: var(--dx-gallery-content-disabled);
 
   .dx-gallery-nav-button-next,

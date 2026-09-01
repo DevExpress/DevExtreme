@@ -28,8 +28,6 @@
 
 // nothing of its own once that rule was lifted. It is painted from the disabled content role now.
 .dx-tileview.dx-state-disabled {
-  opacity: 1;
-
   .dx-tile-content {
     color: var(--dx-tile-view-content-disabled);
   }

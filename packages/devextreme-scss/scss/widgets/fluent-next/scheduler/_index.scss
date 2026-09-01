@@ -1082,7 +1082,6 @@
 
             .dx-tooltip-appointment-item-content-date {
               font-size: var(--dx-scheduler-appointment-tooltip-date-font-size);
-              opacity: 1;
               margin-top: var(--dx-scheduler-tooltip-appointment-item-content-date-margin-block-start);
             }
           }
@@ -1116,7 +1115,6 @@
 
 // header are its own markup and no child widget paints them.
 .dx-scheduler.dx-state-disabled {
-  opacity: 1;
   color: var(--dx-scheduler-content-disabled);
 
   .dx-scheduler-header,

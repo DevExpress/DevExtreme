@@ -79,8 +79,6 @@
 
   &.dx-state-disabled,
   .dx-state-disabled & {
-    opacity: 1;
-
     .dx-checkbox-icon {
       border-color: var(--dx-check-box-border-disabled);
     }
