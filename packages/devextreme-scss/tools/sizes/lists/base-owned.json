@@ -6,11 +6,11 @@
     "marker — the classification comment already on the line, from tools/review/size-markers.json."
   ],
   "summary": {
-    "occurrences": 310,
+    "occurrences": 300,
     "byCategory": {
       "inline": 147,
-      "geometry": 75,
-      "local-var": 63,
+      "geometry": 69,
+      "local-var": 59,
       "calc": 9,
       "structural": 8,
       "mixin-arg": 6,
@@ -21,9 +21,9 @@
       "colorView": 67,
       "scheduler": 35,
       "textEditor": 26,
-      "pivotGrid": 21,
       "htmlEditor": 18,
       "cardView": 15,
+      "pivotGrid": 11,
       "ui": 8,
       "scrollView": 5,
       "dataGrid": 5,
@@ -48,16 +48,13 @@
       "toolbar": 1,
       "treeView": 1
     },
-    "unmarked": 216,
+    "unmarked": 176,
     "unmarkedByWidget": {
       "gridBase": 75,
       "colorView": 67,
-      "pivotGrid": 20,
-      "cardView": 15,
       "htmlEditor": 13,
       "scheduler": 13,
-      "dataGrid": 5,
-      "treeList": 4,
+      "cardView": 4,
       "textEditor": 3,
       "list": 1
     }
@@ -557,8 +554,8 @@
         "2px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "outline: 2px solid;",
+      "marker": "dx-fixed-size",
+      "text": "outline: 2px solid; // dx-fixed-size: the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with",
       "category": "geometry"
     },
     {
@@ -569,8 +566,8 @@
         "-2px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "outline-offset: -2px;",
+      "marker": "dx-fixed-size",
+      "text": "outline-offset: -2px; // dx-fixed-size: the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with",
       "category": "geometry"
     },
     {
@@ -581,8 +578,8 @@
         "12px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "padding: 0 12px;",
+      "marker": "dx-fixed-size",
+      "text": "padding: 0 12px; // dx-fixed-size: the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with",
       "category": "inline"
     },
     {
@@ -593,8 +590,8 @@
         "20px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "width: 20px;",
+      "marker": "dx-fixed-size",
+      "text": "width: 20px; // dx-fixed-size: the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with",
       "category": "inline"
     },
     {
@@ -605,8 +602,8 @@
         "20px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "height: 20px;",
+      "marker": "dx-fixed-size",
+      "text": "height: 20px; // dx-fixed-size: the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with",
       "category": "inline"
     },
     {
@@ -617,8 +614,8 @@
         "999px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "border-radius: 999px;",
+      "marker": "dx-fixed-size",
+      "text": "border-radius: 999px; // dx-fixed-size: a pill radius; the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with",
       "category": "geometry"
     },
     {
@@ -629,8 +626,8 @@
         "6px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$sortable-side-offset: 6px;",
+      "marker": "dx-fixed-size",
+      "text": "$sortable-side-offset: 6px; // dx-fixed-size: the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with",
       "category": "local-var"
     },
     {
@@ -641,8 +638,8 @@
         "4px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "gap: 4px;",
+      "marker": "dx-fixed-size",
+      "text": "gap: 4px; // dx-fixed-size: the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with",
       "category": "inline"
     },
     {
@@ -653,8 +650,8 @@
         "4px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "gap: 4px;",
+      "marker": "dx-fixed-size",
+      "text": "gap: 4px; // dx-fixed-size: the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with",
       "category": "inline"
     },
     {
@@ -665,8 +662,8 @@
         "2px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "outline: 2px solid;",
+      "marker": "dx-fixed-size",
+      "text": "outline: 2px solid; // dx-fixed-size: the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with",
       "category": "geometry"
     },
     {
@@ -677,13 +674,13 @@
         "-2px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "outline-offset: -2px;",
+      "marker": "dx-fixed-size",
+      "text": "outline-offset: -2px; // dx-fixed-size: the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with",
       "category": "geometry"
     },
     {
       "file": "scss/widgets/base/cardView/header_panel/item/_index.scss",
-      "line": 87,
+      "line": 89,
       "widget": "cardView",
       "literals": [
         "1px",
@@ -696,7 +693,7 @@
     },
     {
       "file": "scss/widgets/base/cardView/header_panel/item/_index.scss",
-      "line": 88,
+      "line": 90,
       "widget": "cardView",
       "literals": [
         "6px",
@@ -1202,8 +1199,8 @@
         "-2px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "outline-offset: -2px;",
+      "marker": "dx-fixed-size",
+      "text": "outline-offset: -2px; // dx-fixed-size: the gridBase tier already paints this across the family; a widget-scoped name would collide under the other grid roots",
       "category": "geometry"
     },
     {
@@ -1214,8 +1211,8 @@
         "14px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "@include dx-icon-sizing(14px);",
+      "marker": "dx-fixed-size",
+      "text": "@include dx-icon-sizing(14px); // dx-fixed-size: the gridBase tier already paints this across the family; a widget-scoped name would collide under the other grid roots",
       "category": "mixin-arg"
     },
     {
@@ -1226,8 +1223,8 @@
         "21px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "@include dx-icon-sizing(21px);",
+      "marker": "dx-fixed-size",
+      "text": "@include dx-icon-sizing(21px); // dx-fixed-size: the gridBase tier already paints this across the family; a widget-scoped name would collide under the other grid roots",
       "category": "mixin-arg"
     },
     {
@@ -1238,8 +1235,8 @@
         "-1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "outline-offset: -1px;",
+      "marker": "dx-px-nudge",
+      "text": "outline-offset: -1px; // dx-px-nudge: a one-pixel inset for the sticky-column overlay",
       "category": "geometry"
     },
     {
@@ -1250,8 +1247,8 @@
         "-2px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "outline-offset: -2px;",
+      "marker": "dx-fixed-size",
+      "text": "outline-offset: -2px; // dx-fixed-size: the gridBase tier already paints this across the family; a widget-scoped name would collide under the other grid roots",
       "category": "geometry"
     },
     {
@@ -2104,51 +2101,14 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 56,
+      "line": 60,
       "widget": "pivotGrid",
       "literals": [
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$pivotgrid-drag-header-border: 1px solid;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 57,
-      "widget": "pivotGrid",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$pivotgrid-drag-header-first-shadow: 0 0 1px $pivotgrid-drag-header-first-shadow-color;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 58,
-      "widget": "pivotGrid",
-      "literals": [
-        "1px",
-        "3px"
-      ],
-      "occurrences": 2,
-      "marker": null,
-      "text": "$pivotgrid-drag-header-second-shadow: 0 1px 3px $pivotgrid-drag-header-second-shadow-color;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 59,
-      "widget": "pivotGrid",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$pivotgrid-border-width: 1px;",
+      "marker": "dx-shadow-geometry",
+      "text": "$pivotgrid-drag-header-first-shadow: 0 0 1px $pivotgrid-drag-header-first-shadow-color; // dx-shadow-geometry",
       "category": "local-var"
     },
     {
@@ -2156,179 +2116,96 @@
       "line": 61,
       "widget": "pivotGrid",
       "literals": [
-        "14px"
+        "1px",
+        "3px"
       ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$pivotgrid-icon-size: 14px;",
+      "occurrences": 2,
+      "marker": "dx-shadow-geometry",
+      "text": "$pivotgrid-drag-header-second-shadow: 0 1px 3px $pivotgrid-drag-header-second-shadow-color; // dx-shadow-geometry",
       "category": "local-var"
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 62,
-      "widget": "pivotGrid",
-      "literals": [
-        "2px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$pivotgrid-common-field-padding: 2px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 64,
+      "line": 66,
       "widget": "pivotGrid",
       "literals": [
         "-5px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$pivotgrid-expand-icon-offset: -5px;",
+      "marker": "dx-fixed-size",
+      "text": "$pivotgrid-expand-icon-offset: -5px; // dx-fixed-size: negated at its use site",
       "category": "local-var"
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 72,
+      "line": 74,
       "widget": "pivotGrid",
       "literals": [
         "-4px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "margin-top: -4px;",
+      "marker": "dx-fixed-size",
+      "text": "margin-top: -4px; // dx-fixed-size: pulls the element onto the grid line",
       "category": "inline"
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 73,
+      "line": 75,
       "widget": "pivotGrid",
       "literals": [
         "-1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "margin-left: -1px;",
+      "marker": "dx-fixed-size",
+      "text": "margin-left: -1px; // dx-fixed-size: pulls the element onto the grid line",
       "category": "inline"
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 77,
+      "line": 79,
       "widget": "pivotGrid",
       "literals": [
         "-3px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "margin-top: -3px;",
+      "marker": "dx-fixed-size",
+      "text": "margin-top: -3px; // dx-fixed-size: pulls the element onto the grid line",
       "category": "inline"
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 82,
+      "line": 84,
       "widget": "pivotGrid",
       "literals": [
         "-3px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "margin-left: -3px;",
+      "marker": "dx-fixed-size",
+      "text": "margin-left: -3px; // dx-fixed-size: pulls the element onto the grid line",
       "category": "inline"
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 127,
-      "widget": "pivotGrid",
-      "literals": [
-        "2px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "outline: 2px solid;",
-      "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 129,
-      "widget": "pivotGrid",
-      "literals": [
-        "-2px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "outline-offset: -2px;",
-      "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 169,
-      "widget": "pivotGrid",
-      "literals": [
-        "-2px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "outline-offset: -2px;",
-      "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 176,
-      "widget": "pivotGrid",
-      "literals": [
-        "-2px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "outline-offset: -2px;",
-      "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 184,
-      "widget": "pivotGrid",
-      "literals": [
-        "2px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "outline: 2px solid;",
-      "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 186,
-      "widget": "pivotGrid",
-      "literals": [
-        "-2px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "outline-offset: -2px;",
-      "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 331,
+      "line": 333,
       "widget": "pivotGrid",
       "literals": [
         "-1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "margin-top: -1px;",
+      "marker": "dx-fixed-size",
+      "text": "margin-top: -1px; // dx-fixed-size: pulls the element onto the grid line",
       "category": "inline"
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 602,
+      "line": 604,
       "widget": "pivotGrid",
       "literals": [
         "-3px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "margin-left: -3px;",
+      "marker": "dx-fixed-size",
+      "text": "margin-left: -3px; // dx-fixed-size: pulls the element onto the grid line",
       "category": "inline"
     },
     {
@@ -2908,8 +2785,8 @@
         "14px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "@include dx-icon-sizing(14px);",
+      "marker": "dx-fixed-size",
+      "text": "@include dx-icon-sizing(14px); // dx-fixed-size: the gridBase tier already paints this across the family; a widget-scoped name would collide under the other grid roots",
       "category": "mixin-arg"
     },
     {
@@ -2920,8 +2797,8 @@
         "16px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "@include dx-icon-sizing(16px);",
+      "marker": "dx-fixed-size",
+      "text": "@include dx-icon-sizing(16px); // dx-fixed-size: the gridBase tier already paints this across the family; a widget-scoped name would collide under the other grid roots",
       "category": "mixin-arg"
     },
     {
@@ -2932,8 +2809,8 @@
         "21px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "@include dx-icon-sizing(21px);",
+      "marker": "dx-fixed-size",
+      "text": "@include dx-icon-sizing(21px); // dx-fixed-size: the gridBase tier already paints this across the family; a widget-scoped name would collide under the other grid roots",
       "category": "mixin-arg"
     },
     {
@@ -2944,8 +2821,8 @@
         "-2px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "outline-offset: -2px;",
+      "marker": "dx-fixed-size",
+      "text": "outline-offset: -2px; // dx-fixed-size: the gridBase tier already paints this across the family; a widget-scoped name would collide under the other grid roots",
       "category": "geometry"
     },
     {

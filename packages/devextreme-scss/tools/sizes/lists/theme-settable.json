@@ -7,9 +7,9 @@
     "The match is by variable name. A name declared in a nested module is only reachable once the parent forwards it (see base/chat/_index.scss), which is why an \"open\" row can sit next to injected ones from the same widget."
   ],
   "summary": {
-    "occurrences": 452,
-    "variables": 389,
-    "injected": 418,
+    "occurrences": 457,
+    "variables": 394,
+    "injected": 423,
     "open": 10,
     "parameters": 24
   },
@@ -4481,6 +4481,86 @@
       "status": "injected",
       "setBy": "scss/widgets/fluent-next/pivotGrid/_index.scss",
       "setTo": "var(--dx-pivot-grid-field-chooser-drag-height)"
+    },
+    {
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "line": 56,
+      "widget": "pivotGrid",
+      "literals": [
+        "1px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$pivotgrid-border-width: 1px !default;",
+      "variable": "pivotgrid-border-width",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/pivotGrid/_index.scss",
+      "setTo": "var(--dx-pivot-grid-border-width)"
+    },
+    {
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "line": 57,
+      "widget": "pivotGrid",
+      "literals": [
+        "2px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$pivotgrid-focus-outline-width: 2px !default;",
+      "variable": "pivotgrid-focus-outline-width",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/pivotGrid/_index.scss",
+      "setTo": "var(--dx-focus-rect-outline-width)"
+    },
+    {
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "line": 58,
+      "widget": "pivotGrid",
+      "literals": [
+        "-2px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$pivotgrid-focus-outline-offset: -2px !default;",
+      "variable": "pivotgrid-focus-outline-offset",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/pivotGrid/_index.scss",
+      "setTo": "var(--dx-focus-rect-outline-offset-inset)"
+    },
+    {
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "line": 63,
+      "widget": "pivotGrid",
+      "literals": [
+        "14px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$pivotgrid-icon-size: 14px !default;",
+      "variable": "pivotgrid-icon-size",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/pivotGrid/_index.scss",
+      "setTo": "var(--dx-pivot-grid-icon-size)"
+    },
+    {
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "line": 64,
+      "widget": "pivotGrid",
+      "literals": [
+        "2px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$pivotgrid-common-field-padding: 2px !default;",
+      "variable": "pivotgrid-common-field-padding",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/pivotGrid/_index.scss",
+      "setTo": "var(--dx-pivot-grid-field-padding)"
     },
     {
       "file": "scss/widgets/base/radioGroup/_index.scss",

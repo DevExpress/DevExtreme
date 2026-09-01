@@ -14,6 +14,12 @@ $focus-rect-border-radius: $global-border-radius !default;
 $focus-rect-outline-width: ds.$border-width-20 !default;
 $focus-rect-outline-offset: ds.$spacing-10 !default;
 
+/*
+ * The inset variant: the grids draw the ring inside the cell instead of around it. Derived once
+ * here and published, so ten places read a var() instead of each shipping its own calc().
+ */
+$focus-rect-outline-offset-inset: calc(-1 * #{$focus-rect-outline-width}) !default;
+
 $invalid-badge-size: calc(#{$global-icon-size} - #{ds.$spacing-20}) !default;
 $invalid-badge-padding-inline: calc((#{$global-inline-widget-inner-height} - #{$invalid-badge-size}) / 2) !default;
 $invalid-badge-offset: calc(#{$invalid-badge-padding-inline} / 2) !default;

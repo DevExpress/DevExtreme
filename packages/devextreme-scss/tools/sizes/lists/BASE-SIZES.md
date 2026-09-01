@@ -11,15 +11,15 @@ and carries a marker saying why.
 
 | | occurrences |
 |---|---|
-| a raw grep of the layer | 771 |
+| a raw grep of the layer | 766 |
 | …of those, inside comments (commented-out code, prose) | 9 |
-| **in code** | **762** |
-| — the theme can already set from outside | 452 |
-| — nailed into the shared layer | 310 |
+| **in code** | **757** |
+| — the theme can already set from outside | 457 |
+| — nailed into the shared layer | 300 |
 
 ## What the theme can already set
 
-452 occurrences in 389 `!default` variables. fluent-next already passes 418; 10 are open knobs nobody turns.
+457 occurrences in 394 `!default` variables. fluent-next already passes 423; 10 are open knobs nobody turns.
 
 Open knobs — theme-side work, the shared layer stays untouched:
 
@@ -36,18 +36,15 @@ Open knobs — theme-side work, the shared layer stays untouched:
 
 ## What is nailed into the layer
 
-| widget | inline | geometry | local-var | mixin-arg | calc | total |
-|---|---|---|---|---|---|---|
-| gridBase | 50 | 7 | 18 |  |  | **75** |
-| colorView | 35 | 24 | 8 |  |  | **67** |
-| pivotGrid | 6 | 6 | 8 |  |  | **20** |
-| cardView | 9 | 5 | 1 |  |  | **15** |
-| htmlEditor | 8 | 4 | 1 |  |  | **13** |
-| scheduler | 9 | 3 |  |  | 1 | **13** |
-| dataGrid |  | 3 |  | 2 |  | **5** |
-| treeList |  | 1 |  | 3 |  | **4** |
-| textEditor | 3 |  |  |  |  | **3** |
-| list |  |  | 1 |  |  | **1** |
+| widget | inline | geometry | local-var | calc | total |
+|---|---|---|---|---|---|
+| gridBase | 50 | 7 | 18 |  | **75** |
+| colorView | 35 | 24 | 8 |  | **67** |
+| htmlEditor | 8 | 4 | 1 |  | **13** |
+| scheduler | 9 | 3 |  | 1 | **13** |
+| cardView | 4 |  |  |  | **4** |
+| textEditor | 3 |  |  |  | **3** |
+| list |  |  | 1 |  | **1** |
 
 ## Places, by widget
 
@@ -249,76 +246,6 @@ Open knobs — theme-side work, the shared layer stays untouched:
 - `scss/widgets/base/colorView/_mixins.scss:16` · geometry
   `box-shadow: inset 0 -5px 0 3px $handle-color, inset 0 5px 0 3px $handle-color, inset 0 -6px 1px 4px $handle-border-color, inset 0 6px 1px 4px $handle-border-color;`
 
-### pivotGrid — 20
-
-- `scss/widgets/base/pivotGrid/_index.scss:56` · local-var
-  `$pivotgrid-drag-header-border: 1px solid;`
-- `scss/widgets/base/pivotGrid/_index.scss:57` · local-var
-  `$pivotgrid-drag-header-first-shadow: 0 0 1px $pivotgrid-drag-header-first-shadow-color;`
-- `scss/widgets/base/pivotGrid/_index.scss:58` · local-var
-  `$pivotgrid-drag-header-second-shadow: 0 1px 3px $pivotgrid-drag-header-second-shadow-color;`
-- `scss/widgets/base/pivotGrid/_index.scss:59` · local-var
-  `$pivotgrid-border-width: 1px;`
-- `scss/widgets/base/pivotGrid/_index.scss:61` · local-var
-  `$pivotgrid-icon-size: 14px;`
-- `scss/widgets/base/pivotGrid/_index.scss:62` · local-var
-  `$pivotgrid-common-field-padding: 2px;`
-- `scss/widgets/base/pivotGrid/_index.scss:64` · local-var
-  `$pivotgrid-expand-icon-offset: -5px;`
-- `scss/widgets/base/pivotGrid/_index.scss:72` · inline
-  `margin-top: -4px;`
-- `scss/widgets/base/pivotGrid/_index.scss:73` · inline
-  `margin-left: -1px;`
-- `scss/widgets/base/pivotGrid/_index.scss:77` · inline
-  `margin-top: -3px;`
-- `scss/widgets/base/pivotGrid/_index.scss:82` · inline
-  `margin-left: -3px;`
-- `scss/widgets/base/pivotGrid/_index.scss:127` · geometry
-  `outline: 2px solid;`
-- `scss/widgets/base/pivotGrid/_index.scss:129` · geometry
-  `outline-offset: -2px;`
-- `scss/widgets/base/pivotGrid/_index.scss:169` · geometry
-  `outline-offset: -2px;`
-- `scss/widgets/base/pivotGrid/_index.scss:176` · geometry
-  `outline-offset: -2px;`
-- `scss/widgets/base/pivotGrid/_index.scss:184` · geometry
-  `outline: 2px solid;`
-- `scss/widgets/base/pivotGrid/_index.scss:186` · geometry
-  `outline-offset: -2px;`
-- `scss/widgets/base/pivotGrid/_index.scss:331` · inline
-  `margin-top: -1px;`
-- `scss/widgets/base/pivotGrid/_index.scss:602` · inline
-  `margin-left: -3px;`
-
-### cardView — 15
-
-- `scss/widgets/base/cardView/content_view/content/card/_index.scss:22` · geometry
-  `outline: 2px solid;`
-- `scss/widgets/base/cardView/content_view/content/card/_index.scss:24` · geometry
-  `outline-offset: -2px;`
-- `scss/widgets/base/cardView/content_view/content/card/header/_index.scss:10` · inline
-  `padding: 0 12px;`
-- `scss/widgets/base/cardView/content_view/content/card/header/_index.scss:42` · inline
-  `width: 20px;`
-- `scss/widgets/base/cardView/content_view/content/card/header/_index.scss:43` · inline
-  `height: 20px;`
-- `scss/widgets/base/cardView/content_view/no_data/_index.scss:10` · geometry
-  `border-radius: 999px;`
-- `scss/widgets/base/cardView/header_panel/_index.scss:10` · local-var
-  `$sortable-side-offset: 6px;`
-- `scss/widgets/base/cardView/header_panel/_index.scss:50` · inline
-  `gap: 4px;`
-- `scss/widgets/base/cardView/header_panel/item/_index.scss:9` · inline
-  `gap: 4px;`
-- `scss/widgets/base/cardView/header_panel/item/_index.scss:55` · geometry
-  `outline: 2px solid;`
-- `scss/widgets/base/cardView/header_panel/item/_index.scss:57` · geometry
-  `outline-offset: -2px;`
-- `scss/widgets/base/cardView/header_panel/item/_index.scss:87` · inline
-  `0 1px 3px $cardview-header-panel__item--dragged-box-shadow-color,`
-- `scss/widgets/base/cardView/header_panel/item/_index.scss:88` · inline
-  `0 6px 8px $cardview-header-panel__item--dragged-box-shadow-color;`
-
 ### htmlEditor — 13
 
 - `scss/widgets/base/_htmlEditor.scss:20` · local-var
@@ -375,29 +302,12 @@ Open knobs — theme-side work, the shared layer stays untouched:
 - `scss/widgets/base/scheduler/views/timelines/_index.scss:188` · geometry
   `border-bottom: 1px solid;`
 
-### dataGrid — 5
+### cardView — 4
 
-- `scss/widgets/base/dataGrid/_index.scss:146` · geometry
-  `outline-offset: -2px;`
-- `scss/widgets/base/dataGrid/_index.scss:182` · mixin-arg
-  `@include dx-icon-sizing(14px);`
-- `scss/widgets/base/dataGrid/_index.scss:301` · mixin-arg
-  `@include dx-icon-sizing(21px);`
-- `scss/widgets/base/dataGrid/_index.scss:365` · geometry
-  `outline-offset: -1px;`
-- `scss/widgets/base/dataGrid/layout/cell.scss:283` · geometry
-  `outline-offset: -2px;`
-
-### treeList — 4
-
-- `scss/widgets/base/treeList/_index.scss:168` · mixin-arg
-  `@include dx-icon-sizing(14px);`
-- `scss/widgets/base/treeList/_index.scss:256` · mixin-arg
-  `@include dx-icon-sizing(16px);`
-- `scss/widgets/base/treeList/_index.scss:264` · mixin-arg
-  `@include dx-icon-sizing(21px);`
-- `scss/widgets/base/treeList/layout/cell.scss:229` · geometry
-  `outline-offset: -2px;`
+- `scss/widgets/base/cardView/header_panel/item/_index.scss:89` · inline
+  `0 1px 3px $cardview-header-panel__item--dragged-box-shadow-color,`
+- `scss/widgets/base/cardView/header_panel/item/_index.scss:90` · inline
+  `0 6px 8px $cardview-header-panel__item--dragged-box-shadow-color;`
 
 ### textEditor — 3
 
