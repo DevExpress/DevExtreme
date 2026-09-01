@@ -296,8 +296,12 @@
   text-align: start;
 }
 
+/*
+ * Consumers hand-write .dx-mention outside the editor, where the component tier does not
+ * reach: without the fallback the whole declaration dies there and the highlight disappears.
+ */
 .dx-mention {
-  background-color: var(--dx-html-editor-mention-bg);
+  background-color: var(--dx-html-editor-mention-bg, #{$html-editor-mention-bg});
 }
 
 .dx-suggestion-list-wrapper {

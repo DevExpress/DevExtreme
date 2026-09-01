@@ -573,6 +573,7 @@
     "fluent-next/gridBase/_index.scss: $grid-cell-padding-block",
     "fluent-next/gridBase/_index.scss: $grid-cell-padding-inline",
     "fluent-next/gridBase/_index.scss: $grid-editor-input-padding",
+    "fluent-next/htmlEditor/_index.scss: $html-editor-mention-bg",
     "fluent-next/progressBar/_index.scss: $progress-bar-indeterminate-width",
     "fluent-next/progressBar/_index.scss: $progress-bar-indeterminate-width",
     "fluent-next/scheduler/_index.scss: $scheduler-appointment-15min-height",
