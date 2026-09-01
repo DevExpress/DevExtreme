@@ -160,6 +160,21 @@ function alignRows() {
   frames.forEach(({ el }) => el.contentWindow.__setRowHeights?.(tallest));
 }
 
+// "Did you rebuild?" should not be a question you have to ask. The bundles carry a Build date
+// comment; this reads it out of the stylesheet the first column actually loaded, so the page
+// says which build it is showing.
+async function showBuildStamp() {
+  const link = frames[0]?.el?.contentDocument?.getElementById('theme');
+  if (!link) return;
+  try {
+    const text = await (await fetch(link.href)).text();
+    const stamp = /Build date:\s*([^*\n]+)/.exec(text.slice(0, 2000));
+    statusEl.textContent = stamp ? `stylesheet built ${stamp[1].trim()}` : '';
+  } catch {
+    statusEl.textContent = '';
+  }
+}
+
 function syncScroll() {
   let busy = false;
   frames.forEach(({ el }) => {
@@ -185,6 +200,7 @@ async function waitAndSummarise() {
     await new Promise((r) => setTimeout(r, 250));
   }
   statusEl.textContent = '';
+  showBuildStamp();
   alignRows();
   const byKey = Object.fromEntries(frames.map(({ cfg, el }) => [cfg.key, el.contentWindow]));
   if (!byKey.enabled || !byKey.enabled.__fp) { summary.textContent = 'columns did not finish loading'; return; }

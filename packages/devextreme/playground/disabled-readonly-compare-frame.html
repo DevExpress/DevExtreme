@@ -110,7 +110,11 @@ const CASES = [
   ['rangeSlider', 'RangeSlider', 90, (h, f) => $(h).dxRangeSlider({ start: 20, end: 60, min: 0, max: 100, ...f })],
   ['pagination', 'Pagination', 80, (h, f) => $(h).dxPagination({ itemCount: 90, pageSize: 10, pageIndex: 2, showNavigationButtons: true, ...f })],
   ['tabPanel', 'TabPanel', 160, (h, f) => $(h).dxTabPanel({ dataSource: [{ title: 'One', text: 'A' }, { title: 'Two', text: 'B' }], height: 130, ...f })],
-  ['treeList', 'TreeList', 190, (h, f) => $(h).dxTreeList({ dataSource: [{ id: 1, head: 0, name: 'Root' }, { id: 2, head: 1, name: 'Child' }], keyExpr: 'id', parentIdExpr: 'head', autoExpandAll: true, showBorders: true, ...f })],
+  // without an explicit height the rows never leave the virtual placeholder, and the case showed
+  // a header and nothing else - no rows means no expander to judge
+  ['treeList', 'TreeList  (expander)', 190, (h, f) => $(h).dxTreeList({
+    dataSource: [{ id: 1, head: 0, name: 'Root' }, { id: 2, head: 1, name: 'Child' }],
+    keyExpr: 'id', parentIdExpr: 'head', autoExpandAll: true, showBorders: true, height: 150, ...f })],
   ['cardView', 'CardView', 200, (h, f) => $(h).dxCardView({ dataSource: [{ id: 1, name: 'Alpha' }], keyExpr: 'id', headerPanel: { visible: true }, ...f })],
   ['pivotGrid', 'PivotGrid', 200, (h, f) => $(h).dxPivotGrid({ dataSource: { fields: [{ dataField: 'a', area: 'row' }, { dataField: 'v', area: 'data', summaryType: 'sum' }], store: [{ a: 'x', v: 1 }, { a: 'y', v: 2 }] }, height: 170, ...f })],
   // resizable panes, otherwise the widget renders no bar and the case shows nothing of what the

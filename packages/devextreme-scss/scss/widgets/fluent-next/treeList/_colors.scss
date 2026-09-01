@@ -1,3 +1,8 @@
 @use "../../../_design-system/variables/ds" as ds;
 
 $tree-list-chevron-icon: ds.$color-content-subtle !default;
+
+/* grid.cell-renderer.text.color.icon.disabled in the package's component tier: an icon inside a
+cell follows the state. The expander sets its own colour, so the rule that greys the cell text
+never reached it - a disabled TreeList showed grey rows with full-contrast chevrons. */
+$tree-list-chevron-icon-disabled: ds.$color-content-disabled !default;

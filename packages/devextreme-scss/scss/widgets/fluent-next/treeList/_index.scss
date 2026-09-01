@@ -66,3 +66,11 @@
     }
   }
 }
+
+/* The expander sets its own colour, so the rule that greys a disabled cell never reached it and
+a disabled TreeList showed grey rows with full-contrast chevrons. The widget class is in the
+selector to outrank the resting rule above. */
+.dx-treelist.dx-state-disabled .dx-treelist-rowsview tr .dx-treelist-empty-space,
+.dx-state-disabled .dx-treelist .dx-treelist-rowsview tr .dx-treelist-empty-space {
+  color: var(--dx-tree-list-chevron-icon-disabled);
+}
