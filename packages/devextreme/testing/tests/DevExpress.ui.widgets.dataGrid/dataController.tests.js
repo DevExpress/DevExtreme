@@ -8010,7 +8010,7 @@ QUnit.module('Filtering', {
             }
         });
 
-        this.dataController._applyFilter = function() {
+        this.dataController.applyFilter = function() {
             isApplyFilterCalled = true;
         };
 

@@ -372,7 +372,7 @@ export class DataController extends modules.Controller {
       || this._columnsController.isAllDataTypesDefined();
 
     if (isColumnsTypesDefined) {
-      const additionalFilter = this._calculateAdditionalFilter();
+      const additionalFilter = this.calculateAdditionalFilter();
 
       combined = additionalFilter
         ? gridCoreUtils.combineFilters([additionalFilter, combined])
@@ -533,7 +533,7 @@ export class DataController extends modules.Controller {
       }
     } else if (changeTypes.columns) {
       if (this.shouldApplyFilter(e)) {
-        this._applyFilter();
+        this.applyFilter();
         filterApplied = true;
       }
 
@@ -546,7 +546,7 @@ export class DataController extends modules.Controller {
         const hasFilterValue = isDefined(column?.filterValue) || isDefined(column?.filterValues);
 
         if (hasFilterValue) {
-          this._applyFilter();
+          this.applyFilter();
           filterApplied = true;
         }
       }
@@ -583,7 +583,7 @@ export class DataController extends modules.Controller {
         this._isDataSourceApplying = false;
 
         const hasAdditionalFilter = (): boolean => {
-          const additionalFilter = this._calculateAdditionalFilter();
+          const additionalFilter = this.calculateAdditionalFilter();
           return Boolean(additionalFilter?.length);
         };
 
@@ -592,7 +592,7 @@ export class DataController extends modules.Controller {
 
         if (needApplyFilter && !this._isAllDataTypesDefined && hasAdditionalFilter()) {
           errors.log('W1005', this.component.NAME);
-          this._applyFilter();
+          this.applyFilter();
         } else {
           this._currentOperationTypes = dataSource.operationTypes();
 
@@ -1295,14 +1295,14 @@ export class DataController extends modules.Controller {
   /**
    * @extended: filter_row, filter_sync, header_filter, search
    */
-  protected _calculateAdditionalFilter(): DataFilter {
+  protected calculateAdditionalFilter(): DataFilter {
     return null;
   }
 
   /**
    * @extended: filter_sync, virtual_scrolling
    */
-  protected _applyFilter(): DeferredObj<unknown> {
+  protected applyFilter(): DeferredObj<unknown> {
     const dataSource = this._dataSource;
 
     if (dataSource) {
@@ -1344,7 +1344,7 @@ export class DataController extends modules.Controller {
     }
 
     this._dataSource?.filter(filterExpr);
-    this._applyFilter();
+    this.applyFilter();
 
     return undefined;
   }
@@ -1364,7 +1364,7 @@ export class DataController extends modules.Controller {
 
     this.component.beginUpdate();
 
-    if (arguments.length > 0) {
+    if (filterName !== undefined) {
       switch (filterName) {
         case 'dataSource':
           this.filter(null);

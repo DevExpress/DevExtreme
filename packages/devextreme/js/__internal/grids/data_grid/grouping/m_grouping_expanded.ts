@@ -211,6 +211,7 @@ const createNotGroupFilter = function (path, storeLoadOptions, group) {
     }
     filter.push(dataGridCore.combineFilters(filterElement));
   }
+  // @ts-expect-error
   filter = dataGridCore.combineFilters(filter, 'or');
 
   return dataGridCore.combineFilters([filter, storeLoadOptions.filter]);

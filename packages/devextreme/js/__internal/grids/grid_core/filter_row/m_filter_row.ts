@@ -816,12 +816,12 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterRow
     return false;
   }
 
-  protected _calculateAdditionalFilter() {
+  protected calculateAdditionalFilter() {
     if (this.skipCalculateColumnFilters()) {
-      return super._calculateAdditionalFilter();
+      return super.calculateAdditionalFilter();
     }
 
-    const filters = [super._calculateAdditionalFilter()];
+    const filters = [super.calculateAdditionalFilter()];
     const columns = this._columnsController.getVisibleColumns(null, true);
 
     const excludedColumn = this.getFilterExcludedColumn();

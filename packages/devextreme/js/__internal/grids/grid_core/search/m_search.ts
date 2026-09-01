@@ -50,7 +50,7 @@ const dataController = (
     switch (args.fullName) {
       case 'searchPanel.text':
       case 'searchPanel':
-        this._applyFilter();
+        this.applyFilter();
         args.handled = true;
         break;
       default:
@@ -62,11 +62,11 @@ const dataController = (
     return super.publicMethods().concat(['searchByText']);
   }
 
-  protected _calculateAdditionalFilter(): DataFilter {
+  protected calculateAdditionalFilter(): DataFilter {
     const dataSource = this.getDataSource();
     const langParams = dataSource?.loadOptions?.()?.langParams;
 
-    const filter = super._calculateAdditionalFilter();
+    const filter = super.calculateAdditionalFilter();
     const searchFilter = this.calculateSearchFilter(this.option('searchPanel.text'), langParams);
 
     return gridCoreUtils.combineFilters([filter, searchFilter]);

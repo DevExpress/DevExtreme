@@ -1401,7 +1401,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
             initViews: true
         });
 
-        that.dataController._applyFilter = function() {
+        that.dataController.applyFilter = function() {
             countApplyFilter++;
         };
 
@@ -1970,7 +1970,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
             initViews: true
         });
 
-        that.dataController._applyFilter = function() {
+        that.dataController.applyFilter = function() {
             countApplyFilter++;
         };
 
@@ -2004,7 +2004,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
             initViews: true
         });
 
-        that.dataController._applyFilter = function() {
+        that.dataController.applyFilter = function() {
             countApplyFilter++;
         };
 
