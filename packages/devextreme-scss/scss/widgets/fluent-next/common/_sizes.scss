@@ -11,6 +11,8 @@ $global-line-height: null !default;
 $global-inline-widget-inner-height: calc(#{$global-inline-widget-height} - #{$global-border-width} * 2) !default;
 
 $focus-rect-border-radius: $global-border-radius !default;
+$focus-rect-outline-width: ds.$border-width-20 !default;
+$focus-rect-outline-offset: ds.$spacing-10 !default;
 
 $invalid-badge-size: calc(#{$global-icon-size} - #{ds.$spacing-20}) !default;
 $invalid-badge-padding-inline: calc((#{$global-inline-widget-inner-height} - #{$invalid-badge-size}) / 2) !default;

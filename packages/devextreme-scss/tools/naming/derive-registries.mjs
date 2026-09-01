@@ -865,6 +865,8 @@ const OVERRIDES = {
       'item', 'item-element', 'node', 'checkbox', 'checkbox-container', 'container', 'toggle-item',
       'select-all-item', 'search-box', 'search-editor', 'load-indicator', 'spin', 'border',
       'control',
+      // wave B12: .dx-icon inside an item is a real box the item spaces away from the text
+      'icon',
     ],
     popup: ['title', 'content', 'toolbar', 'toolbar-item', 'toolbar-label', 'dialog', 'message',
       'button'],

@@ -11,6 +11,7 @@
   --dx-chat-avatar-content: #{$chat-avatar-content};
   --dx-chat-avatar-size: #{$chat-avatar-size};
   --dx-chat-bg: #{$chat-bg};
+  --dx-chat-border-width: #{$chat-border-width};
   --dx-chat-border: #{$chat-border};
   --dx-chat-border-radius: #{$chat-border-radius};
   --dx-chat-bubble-border-radius: #{$chat-bubble-border-radius};
@@ -51,6 +52,7 @@
   --dx-chat-information-gap: #{$chat-information-gap};
   --dx-chat-information-icon-size: #{$chat-information-icon-size};
   --dx-chat-information-timestamp-content: #{$chat-information-timestamp-content};
+  --dx-chat-message-box-border-block-start-width: #{$chat-message-box-border-block-start-width};
   --dx-chat-message-box-border: var(--dx-chat-border);
   --dx-chat-message-box-file-bg: #{$chat-message-box-file-bg};
   --dx-chat-message-box-file-cancel-button-secondary-content: #{$chat-message-box-file-cancel-button-secondary-content};

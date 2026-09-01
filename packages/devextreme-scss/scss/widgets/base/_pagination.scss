@@ -22,7 +22,7 @@ $pagination-info-opacity: 0.7 !default;
 $pagination-nav-disabled-opacity: 0.3 !default;
 
 // Not a knob itself: the shared source of the two fallbacks below, which are.
-$pagination-paddings: 8px;
+$pagination-paddings: 8px; // dx-fixed-size: the shared source of the two fallbacks below
 $pagination-info-paddings: 9px !default;
 
 // The pager's own padding and the nav button's, as fallbacks fluent-next switches off with false.

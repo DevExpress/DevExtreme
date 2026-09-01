@@ -6,11 +6,11 @@
     "marker — the classification comment already on the line, from tools/review/size-markers.json."
   ],
   "summary": {
-    "occurrences": 381,
+    "occurrences": 368,
     "byCategory": {
-      "inline": 176,
-      "geometry": 91,
-      "local-var": 89,
+      "inline": 174,
+      "local-var": 87,
+      "geometry": 82,
       "calc": 9,
       "structural": 8,
       "mixin-arg": 6,
@@ -28,7 +28,6 @@
       "scrollView": 5,
       "dataGrid": 5,
       "fileManager": 5,
-      "toolbar": 5,
       "sortable": 4,
       "treeList": 4,
       "colorBox": 3,
@@ -36,24 +35,20 @@
       "multiView": 2,
       "numberBox": 2,
       "resizable": 2,
-      "slider": 2,
       "tagBox": 2,
-      "chat": 2,
-      "dropDownMenu": 2,
       "filterBuilder": 2,
-      "treeView": 2,
       "fileUploader": 1,
       "pagination": 1,
-      "validation": 1,
+      "slider": 1,
       "diagram": 1,
-      "dropDownButton": 1,
       "gantt": 1,
       "list": 1,
       "lookup": 1,
       "popover": 1,
-      "stepper": 1
+      "stepper": 1,
+      "toolbar": 1
     },
-    "unmarked": 368,
+    "unmarked": 326,
     "unmarkedByWidget": {
       "gridBase": 75,
       "colorView": 67,
@@ -62,30 +57,13 @@
       "htmlEditor": 33,
       "pivotGrid": 20,
       "cardView": 15,
-      "ui": 8,
-      "scrollView": 5,
       "dataGrid": 5,
-      "toolbar": 5,
-      "sortable": 4,
       "treeList": 4,
       "colorBox": 3,
-      "icon_fonts": 2,
       "numberBox": 2,
-      "resizable": 2,
-      "slider": 2,
       "tagBox": 2,
-      "chat": 2,
-      "dropDownMenu": 2,
-      "filterBuilder": 2,
-      "treeView": 2,
-      "fileUploader": 1,
-      "pagination": 1,
-      "validation": 1,
-      "dropDownButton": 1,
-      "gantt": 1,
       "list": 1,
-      "lookup": 1,
-      "popover": 1
+      "lookup": 1
     }
   },
   "places": [
@@ -97,8 +75,8 @@
         "-6px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "margin-top: -6px;",
+      "marker": "dx-fixed-size",
+      "text": "margin-top: -6px; // dx-fixed-size: pulls the status text onto the progress line",
       "category": "inline"
     },
     {
@@ -496,8 +474,8 @@
         "14px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes",
+      "marker": "dx-icon-glyph-size",
+      "text": "font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes -- dx-icon-glyph-size: the icon font's own size, no icon scale in the package",
       "category": "inline"
     },
     {
@@ -508,8 +486,8 @@
         "14px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes",
+      "marker": "dx-icon-glyph-size",
+      "text": "font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes -- dx-icon-glyph-size: the icon font's own size, no icon scale in the package",
       "category": "inline"
     },
     {
@@ -568,8 +546,8 @@
         "8px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$pagination-paddings: 8px;",
+      "marker": "dx-fixed-size",
+      "text": "$pagination-paddings: 8px; // dx-fixed-size: the shared source of the two fallbacks below",
       "category": "local-var"
     },
     {
@@ -580,8 +558,8 @@
         "3px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$one-side-handle-size: 3px + $handle-offset;",
+      "marker": "dx-fixed-size",
+      "text": "$one-side-handle-size: 3px + $handle-offset; // dx-fixed-size: handle thickness ($handle-offset is 0)",
       "category": "local-var"
     },
     {
@@ -592,8 +570,8 @@
         "6px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$two-side-handle-size: 6px + $handle-offset;",
+      "marker": "dx-fixed-size",
+      "text": "$two-side-handle-size: 6px + $handle-offset; // dx-fixed-size: handle thickness ($handle-offset is 0)",
       "category": "local-var"
     },
     {
@@ -604,8 +582,8 @@
         "-20px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "margin-left: -20px;",
+      "marker": "dx-fixed-size",
+      "text": "margin-left: -20px; // dx-fixed-size: centres the android pull-down on the pocket",
       "category": "inline"
     },
     {
@@ -618,8 +596,8 @@
         "15px"
       ],
       "occurrences": 3,
-      "marker": null,
-      "text": "margin: -15px 20px 0 15px;",
+      "marker": "dx-fixed-size",
+      "text": "margin: -15px 20px 0 15px; // dx-fixed-size: centres the indicator on its own half-height",
       "category": "inline"
     },
     {
@@ -630,21 +608,9 @@
         "-20px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "margin-top: -20px;",
+      "marker": "dx-fixed-size",
+      "text": "margin-top: -20px; // dx-fixed-size: pulls the text onto the indicator's line",
       "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/_slider.scss",
-      "line": 4,
-      "widget": "slider",
-      "literals": [
-        "28px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$slider-tooltip-content-height: 28px;",
-      "category": "local-var"
     },
     {
       "file": "scss/widgets/base/_slider.scss",
@@ -654,8 +620,8 @@
         "7px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$slider-tooltip-arrow-height: 7px;",
+      "marker": "dx-fixed-size",
+      "text": "$slider-tooltip-arrow-height: 7px; // dx-fixed-size: feeds dx-popover-arrow-size, which divides by sqrt(2)",
       "category": "local-var"
     },
     {
@@ -669,8 +635,8 @@
         "8px"
       ],
       "occurrences": 4,
-      "marker": null,
-      "text": "box-shadow: 0 1px 3px $sortable-clone-shadow-color-first, 0 6px 8px $sortable-clone-shadow-color-second;",
+      "marker": "dx-shadow-geometry",
+      "text": "box-shadow: 0 1px 3px $sortable-clone-shadow-color-first, 0 6px 8px $sortable-clone-shadow-color-second; // dx-shadow-geometry: the theme already takes both colours from roles; whether a whole shadow role replaces this two-layer geometry is design's call",
       "category": "geometry"
     },
     {
@@ -705,8 +671,8 @@
         "-10px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "top: -10px;",
+      "marker": "dx-structural",
+      "text": "top: -10px; // dx-structural: parks the hidden input off-screen",
       "category": "inline"
     },
     {
@@ -717,8 +683,8 @@
         "-10px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "left: -10px;",
+      "marker": "dx-structural",
+      "text": "left: -10px; // dx-structural: parks the hidden input off-screen",
       "category": "inline"
     },
     {
@@ -729,8 +695,8 @@
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "height: 1px;",
+      "marker": "dx-structural",
+      "text": "height: 1px; // dx-structural: the screen-reader-only clipping box, not a designed size",
       "category": "inline"
     },
     {
@@ -741,8 +707,8 @@
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "width: 1px;",
+      "marker": "dx-structural",
+      "text": "width: 1px; // dx-structural: the screen-reader-only clipping box, not a designed size",
       "category": "inline"
     },
     {
@@ -753,8 +719,8 @@
         "150px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "transform: translate3d(0, 150px, 0);",
+      "marker": "dx-fixed-size",
+      "text": "transform: translate3d(0, 150px, 0); // dx-fixed-size: how far the android pop animation travels",
       "category": "inline"
     },
     {
@@ -765,8 +731,8 @@
         "-10px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "transform: rotate3d(1, 0, 0, 10deg) translate3d(0, -10px, 0) scale3d(1.1, 1.1, 1.1);",
+      "marker": "dx-fixed-size",
+      "text": "transform: rotate3d(1, 0, 0, 10deg) translate3d(0, -10px, 0) scale3d(1.1, 1.1, 1.1); // dx-fixed-size: how far the 3d drop animation travels",
       "category": "inline"
     },
     {
@@ -777,8 +743,8 @@
         "-10px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "transform: translate3d(0, -10px, 0) scale3d(1.1, 1.1, 1.1);",
+      "marker": "dx-fixed-size",
+      "text": "transform: translate3d(0, -10px, 0) scale3d(1.1, 1.1, 1.1); // dx-fixed-size: how far the fade drop animation travels",
       "category": "inline"
     },
     {
@@ -789,21 +755,9 @@
         "10px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "transform: translate3d(0, 10px, 0) scale3d(1.1, 1.1, 1.1);",
+      "marker": "dx-fixed-size",
+      "text": "transform: translate3d(0, 10px, 0) scale3d(1.1, 1.1, 1.1); // dx-fixed-size: how far the fade rise animation travels",
       "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/_validation.scss",
-      "line": 85,
-      "widget": "validation",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "border-bottom: 1px dashed;",
-      "category": "geometry"
     },
     {
       "file": "scss/widgets/base/cardView/content_view/content/card/_index.scss",
@@ -962,30 +916,6 @@
       "marker": null,
       "text": "0 6px 8px $cardview-header-panel__item--dragged-box-shadow-color;",
       "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/chat/layout/chat-messagebox/_index.scss",
-      "line": 4,
-      "widget": "chat",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "border-top-width: 1px;",
-      "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/chat/layout/chat/_mixins.scss",
-      "line": 8,
-      "widget": "chat",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "border: 1px solid;",
-      "category": "geometry"
     },
     {
       "file": "scss/widgets/base/colorBox/_index.scss",
@@ -1571,42 +1501,6 @@
       "category": "calc"
     },
     {
-      "file": "scss/widgets/base/dropDownButton/_mixins.scss",
-      "line": 22,
-      "widget": "dropDownButton",
-      "literals": [
-        "4px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-inline-start: 4px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/dropDownMenu/_mixins.scss",
-      "line": 12,
-      "widget": "dropDownMenu",
-      "literals": [
-        "2px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "outline: 2px solid $accent-color;",
-      "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/dropDownMenu/_mixins.scss",
-      "line": 13,
-      "widget": "dropDownMenu",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "outline-offset: 1px;",
-      "category": "geometry"
-    },
-    {
       "file": "scss/widgets/base/fileManager/_index.scss",
       "line": 88,
       "widget": "fileManager",
@@ -1674,8 +1568,8 @@
         "-7px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "margin-top: -7px;",
+      "marker": "dx-fixed-size",
+      "text": "margin-top: -7px; // dx-fixed-size: pulls the row onto the group line",
       "category": "inline"
     },
     {
@@ -1686,8 +1580,8 @@
         "-4px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "margin-bottom: -4px;",
+      "marker": "dx-fixed-size",
+      "text": "margin-bottom: -4px; // dx-fixed-size: pulls the row onto the group line",
       "category": "inline"
     },
     {
@@ -1698,8 +1592,8 @@
         "-1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "margin-top: -1px;",
+      "marker": "dx-px-nudge",
+      "text": "margin-top: -1px; // dx-px-nudge: a one-pixel correction on top of the row height",
       "category": "inline"
     },
     {
@@ -2679,8 +2573,8 @@
         "20px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "@include dx-popover-arrow-size(20px);",
+      "marker": "dx-fixed-size",
+      "text": "@include dx-popover-arrow-size(20px); // dx-fixed-size: the arrow width; the mixin divides it by sqrt(2), so a var() cannot pass",
       "category": "mixin-arg"
     },
     {
@@ -3681,57 +3575,9 @@
         "-5px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "margin: 0 -5px;",
+      "marker": "dx-fixed-size",
+      "text": "margin: 0 -5px; // dx-fixed-size: pulls the items flush with the toolbar edge",
       "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/toolbar/_mixins.scss",
-      "line": 7,
-      "widget": "toolbar",
-      "literals": [
-        "2px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "outline: 2px solid $accent-color;",
-      "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/toolbar/_mixins.scss",
-      "line": 8,
-      "widget": "toolbar",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "outline-offset: 1px;",
-      "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/toolbar/_mixins.scss",
-      "line": 13,
-      "widget": "toolbar",
-      "literals": [
-        "2px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "outline: 2px solid $accent-color;",
-      "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/toolbar/_mixins.scss",
-      "line": 14,
-      "widget": "toolbar",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "outline-offset: 1px;",
-      "category": "geometry"
     },
     {
       "file": "scss/widgets/base/treeList/_index.scss",
@@ -3780,30 +3626,6 @@
       "marker": null,
       "text": "outline-offset: -2px;",
       "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/treeView/_common.scss",
-      "line": 6,
-      "widget": "treeView",
-      "literals": [
-        "5px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$treeview-searchbox-margin-bottom: 5px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/treeView/_common.scss",
-      "line": 85,
-      "widget": "treeView",
-      "literals": [
-        "8px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-inline-end: 8px;",
-      "category": "inline"
     }
   ]
 }

@@ -7,11 +7,11 @@
     "The match is by variable name. A name declared in a nested module is only reachable once the parent forwards it (see base/chat/_index.scss), which is why an \"open\" row can sit next to injected ones from the same widget."
   ],
   "summary": {
-    "occurrences": 393,
-    "variables": 341,
-    "injected": 383,
+    "occurrences": 404,
+    "variables": 350,
+    "injected": 388,
     "open": 0,
-    "parameters": 10
+    "parameters": 16
   },
   "places": [
     {
@@ -1506,6 +1506,22 @@
     },
     {
       "file": "scss/widgets/base/_slider.scss",
+      "line": 4,
+      "widget": "slider",
+      "literals": [
+        "28px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$slider-tooltip-content-height: 28px !default;",
+      "variable": "slider-tooltip-content-height",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/slider/_index.scss",
+      "setTo": "var(--dx-slider-tooltip-height)"
+    },
+    {
+      "file": "scss/widgets/base/_slider.scss",
       "line": 8,
       "widget": "slider",
       "literals": [
@@ -1810,6 +1826,22 @@
       "setTo": "validationSizes.$validation-message-content-padding"
     },
     {
+      "file": "scss/widgets/base/_validation.scss",
+      "line": 6,
+      "widget": "validation",
+      "literals": [
+        "1px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$validation-summary-item-border-bottom-width: 1px !default;",
+      "variable": "validation-summary-item-border-bottom-width",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/common/_mixins.scss",
+      "setTo": "var(--dx-validation-summary-item-border-block-end-width)"
+    },
+    {
       "file": "scss/widgets/base/buttonGroup/_index.scss",
       "line": 4,
       "widget": "buttonGroup",
@@ -1906,6 +1938,22 @@
       "line": 5,
       "widget": "chat",
       "literals": [
+        "1px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$chat-messagebox-border-block-start-width: 1px !default;",
+      "variable": "chat-messagebox-border-block-start-width",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/chat/_index.scss",
+      "setTo": "var(--dx-chat-message-box-border-block-start-width)"
+    },
+    {
+      "file": "scss/widgets/base/chat/_index.scss",
+      "line": 6,
+      "widget": "chat",
+      "literals": [
         "4px"
       ],
       "occurrences": 1,
@@ -1919,7 +1967,7 @@
     },
     {
       "file": "scss/widgets/base/chat/_index.scss",
-      "line": 6,
+      "line": 7,
       "widget": "chat",
       "literals": [
         "8px"
@@ -1935,7 +1983,7 @@
     },
     {
       "file": "scss/widgets/base/chat/_index.scss",
-      "line": 7,
+      "line": 8,
       "widget": "chat",
       "literals": [
         "400px"
@@ -1951,7 +1999,7 @@
     },
     {
       "file": "scss/widgets/base/chat/_index.scss",
-      "line": 8,
+      "line": 9,
       "widget": "chat",
       "literals": [
         "400px"
@@ -1964,6 +2012,20 @@
       "status": "injected",
       "setBy": "scss/widgets/fluent-next/chat/_index.scss",
       "setTo": "var(--dx-chat-bubble-image-max-height)"
+    },
+    {
+      "file": "scss/widgets/base/chat/layout/chat/_mixins.scss",
+      "line": 5,
+      "widget": "chat",
+      "literals": [
+        "1px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$border-width: 1px,",
+      "variable": "border-width",
+      "kind": "mixin-parameter",
+      "status": "parameter"
     },
     {
       "file": "scss/widgets/base/checkBox/_index.scss",
@@ -2510,6 +2572,20 @@
       "setTo": "var(--dx-diagram-border-width)"
     },
     {
+      "file": "scss/widgets/base/dropDownButton/_mixins.scss",
+      "line": 4,
+      "widget": "dropDownButton",
+      "literals": [
+        "4px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$dropdownbutton-icon-right-margin-inline-start: 4px,",
+      "variable": "dropdownbutton-icon-right-margin-inline-start",
+      "kind": "mixin-parameter",
+      "status": "parameter"
+    },
+    {
       "file": "scss/widgets/base/dropDownMenu/_index.scss",
       "line": 2,
       "widget": "dropDownMenu",
@@ -2556,6 +2632,34 @@
       "status": "injected",
       "setBy": "scss/widgets/fluent-next/dropDownMenu/_index.scss",
       "setTo": "var(--dx-drop-down-menu-popup-content-padding)"
+    },
+    {
+      "file": "scss/widgets/base/dropDownMenu/_mixins.scss",
+      "line": 6,
+      "widget": "dropDownMenu",
+      "literals": [
+        "2px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$outline-width: 2px,",
+      "variable": "outline-width",
+      "kind": "mixin-parameter",
+      "status": "parameter"
+    },
+    {
+      "file": "scss/widgets/base/dropDownMenu/_mixins.scss",
+      "line": 7,
+      "widget": "dropDownMenu",
+      "literals": [
+        "1px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$outline-offset: 1px,",
+      "variable": "outline-offset",
+      "kind": "mixin-parameter",
+      "status": "parameter"
     },
     {
       "file": "scss/widgets/base/fileManager/_index.scss",
@@ -5662,6 +5766,34 @@
       "setTo": "var(--dx-toolbar-text-editor-width)"
     },
     {
+      "file": "scss/widgets/base/toolbar/_mixins.scss",
+      "line": 5,
+      "widget": "toolbar",
+      "literals": [
+        "2px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$outline-width: 2px,",
+      "variable": "outline-width",
+      "kind": "mixin-parameter",
+      "status": "parameter"
+    },
+    {
+      "file": "scss/widgets/base/toolbar/_mixins.scss",
+      "line": 6,
+      "widget": "toolbar",
+      "literals": [
+        "1px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$outline-offset: 1px,",
+      "variable": "outline-offset",
+      "kind": "mixin-parameter",
+      "status": "parameter"
+    },
+    {
       "file": "scss/widgets/base/treeList/_index.scss",
       "line": 19,
       "widget": "treeList",
@@ -5807,7 +5939,39 @@
     },
     {
       "file": "scss/widgets/base/treeView/_index.scss",
-      "line": 11,
+      "line": 2,
+      "widget": "treeView",
+      "literals": [
+        "5px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$treeview-searchbox-margin-bottom: 5px !default;",
+      "variable": "treeview-searchbox-margin-bottom",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/treeView/_index.scss",
+      "setTo": "var(--dx-tree-view-search-box-margin-block-end)"
+    },
+    {
+      "file": "scss/widgets/base/treeView/_index.scss",
+      "line": 3,
+      "widget": "treeView",
+      "literals": [
+        "8px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$treeview-item-icon-margin-inline-end: 8px !default;",
+      "variable": "treeview-item-icon-margin-inline-end",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/treeView/_index.scss",
+      "setTo": "var(--dx-tree-view-item-icon-margin-inline-end)"
+    },
+    {
+      "file": "scss/widgets/base/treeView/_index.scss",
+      "line": 15,
       "widget": "treeView",
       "literals": [
         "1px"
@@ -5823,7 +5987,7 @@
     },
     {
       "file": "scss/widgets/base/treeView/_index.scss",
-      "line": 12,
+      "line": 16,
       "widget": "treeView",
       "literals": [
         "1px"

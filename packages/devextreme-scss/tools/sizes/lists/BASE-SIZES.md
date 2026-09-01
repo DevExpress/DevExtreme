@@ -11,51 +11,34 @@ and carries a marker saying why.
 
 | | occurrences |
 |---|---|
-| a raw grep of the layer | 780 |
+| a raw grep of the layer | 778 |
 | …of those, inside comments (commented-out code, prose) | 6 |
-| **in code** | **774** |
-| — the theme can already set from outside | 393 |
-| — nailed into the shared layer | 381 |
+| **in code** | **772** |
+| — the theme can already set from outside | 404 |
+| — nailed into the shared layer | 368 |
 
 ## What the theme can already set
 
-393 occurrences in 341 `!default` variables. fluent-next already passes 383; 0 are open knobs nobody turns.
+404 occurrences in 350 `!default` variables. fluent-next already passes 388; 0 are open knobs nobody turns.
 
 ## What is nailed into the layer
 
-| widget | inline | geometry | local-var | calc | mixin-arg | total |
+| widget | inline | local-var | geometry | calc | mixin-arg | total |
 |---|---|---|---|---|---|---|
-| gridBase | 50 | 7 | 18 |  |  | **75** |
-| colorView | 35 | 24 | 8 |  |  | **67** |
-| scheduler | 9 | 3 | 41 | 1 |  | **54** |
-| textEditor | 20 | 20 |  | 4 |  | **44** |
-| htmlEditor | 22 | 8 | 3 |  |  | **33** |
-| pivotGrid | 6 | 6 | 8 |  |  | **20** |
-| cardView | 9 | 5 | 1 |  |  | **15** |
-| ui | 8 |  |  |  |  | **8** |
-| scrollView | 5 |  |  |  |  | **5** |
-| dataGrid |  | 3 |  |  | 2 | **5** |
-| toolbar | 1 | 4 |  |  |  | **5** |
-| sortable |  | 4 |  |  |  | **4** |
-| treeList |  | 1 |  |  | 3 | **4** |
-| colorBox | 1 |  | 1 | 1 |  | **3** |
-| icon_fonts | 2 |  |  |  |  | **2** |
-| numberBox |  |  | 2 |  |  | **2** |
-| resizable |  |  | 2 |  |  | **2** |
-| slider |  |  | 2 |  |  | **2** |
+| gridBase | 50 | 18 | 7 |  |  | **75** |
+| colorView | 35 | 8 | 24 |  |  | **67** |
+| scheduler | 9 | 41 | 3 | 1 |  | **54** |
+| textEditor | 20 |  | 20 | 4 |  | **44** |
+| htmlEditor | 22 | 3 | 8 |  |  | **33** |
+| pivotGrid | 6 | 8 | 6 |  |  | **20** |
+| cardView | 9 | 1 | 5 |  |  | **15** |
+| dataGrid |  |  | 3 |  | 2 | **5** |
+| treeList |  |  | 1 |  | 3 | **4** |
+| colorBox | 1 | 1 |  | 1 |  | **3** |
+| numberBox |  | 2 |  |  |  | **2** |
 | tagBox | 1 |  |  | 1 |  | **2** |
-| chat |  | 2 |  |  |  | **2** |
-| dropDownMenu |  | 2 |  |  |  | **2** |
-| filterBuilder | 2 |  |  |  |  | **2** |
-| treeView | 1 |  | 1 |  |  | **2** |
-| fileUploader | 1 |  |  |  |  | **1** |
-| pagination |  |  | 1 |  |  | **1** |
-| validation |  | 1 |  |  |  | **1** |
-| dropDownButton | 1 |  |  |  |  | **1** |
-| gantt | 1 |  |  |  |  | **1** |
-| list |  |  | 1 |  |  | **1** |
+| list |  | 1 |  |  |  | **1** |
 | lookup |  |  |  | 1 |  | **1** |
-| popover |  |  |  |  | 1 | **1** |
 
 ## Places, by widget
 
@@ -556,34 +539,6 @@ and carries a marker saying why.
 - `scss/widgets/base/cardView/header_panel/item/_index.scss:88` · inline
   `0 6px 8px $cardview-header-panel__item--dragged-box-shadow-color;`
 
-### ui — 8
-
-- `scss/widgets/base/_ui.scss:13` · inline
-  `top: -10px;`
-- `scss/widgets/base/_ui.scss:14` · inline
-  `left: -10px;`
-- `scss/widgets/base/_ui.scss:41` · inline
-  `height: 1px;`
-- `scss/widgets/base/_ui.scss:42` · inline
-  `width: 1px;`
-- `scss/widgets/base/_ui.scss:226` · inline
-  `transform: translate3d(0, 150px, 0);`
-- `scss/widgets/base/_ui.scss:348` · inline
-  `transform: rotate3d(1, 0, 0, 10deg) translate3d(0, -10px, 0) scale3d(1.1, 1.1, 1.1);`
-- `scss/widgets/base/_ui.scss:362` · inline
-  `transform: translate3d(0, -10px, 0) scale3d(1.1, 1.1, 1.1);`
-- `scss/widgets/base/_ui.scss:376` · inline
-  `transform: translate3d(0, 10px, 0) scale3d(1.1, 1.1, 1.1);`
-
-### scrollView — 5
-
-- `scss/widgets/base/_scrollView.scss:54` · inline
-  `margin-left: -20px;`
-- `scss/widgets/base/_scrollView.scss:153` · inline
-  `margin: -15px 20px 0 15px;`
-- `scss/widgets/base/_scrollView.scss:234` · inline
-  `margin-top: -20px;`
-
 ### dataGrid — 5
 
 - `scss/widgets/base/dataGrid/_index.scss:146` · geometry
@@ -596,24 +551,6 @@ and carries a marker saying why.
   `outline-offset: -1px;`
 - `scss/widgets/base/dataGrid/layout/cell.scss:283` · geometry
   `outline-offset: -2px;`
-
-### toolbar — 5
-
-- `scss/widgets/base/toolbar/_index.scss:101` · inline
-  `margin: 0 -5px;`
-- `scss/widgets/base/toolbar/_mixins.scss:7` · geometry
-  `outline: 2px solid $accent-color;`
-- `scss/widgets/base/toolbar/_mixins.scss:8` · geometry
-  `outline-offset: 1px;`
-- `scss/widgets/base/toolbar/_mixins.scss:13` · geometry
-  `outline: 2px solid $accent-color;`
-- `scss/widgets/base/toolbar/_mixins.scss:14` · geometry
-  `outline-offset: 1px;`
-
-### sortable — 4
-
-- `scss/widgets/base/_sortable.scss:61` · geometry
-  `box-shadow: 0 1px 3px $sortable-clone-shadow-color-first, 0 6px 8px $sortable-clone-shadow-color-second;`
 
 ### treeList — 4
 
@@ -635,13 +572,6 @@ and carries a marker saying why.
 - `scss/widgets/base/colorBox/_index.scss:36` · inline
   `margin-top: -7.5px;`
 
-### icon_fonts — 2
-
-- `scss/widgets/base/_icon_fonts.scss:307` · inline
-  `font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes`
-- `scss/widgets/base/_icon_fonts.scss:675` · inline
-  `font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes`
-
 ### numberBox — 2
 
 - `scss/widgets/base/_numberBox.scss:5` · local-var
@@ -649,79 +579,12 @@ and carries a marker saying why.
 - `scss/widgets/base/_numberBox.scss:6` · local-var
   `$touch-friendly-spin-container-width: 64px;`
 
-### resizable — 2
-
-- `scss/widgets/base/_resizable.scss:2` · local-var
-  `$one-side-handle-size: 3px + $handle-offset;`
-- `scss/widgets/base/_resizable.scss:3` · local-var
-  `$two-side-handle-size: 6px + $handle-offset;`
-
-### slider — 2
-
-- `scss/widgets/base/_slider.scss:4` · local-var
-  `$slider-tooltip-content-height: 28px;`
-- `scss/widgets/base/_slider.scss:5` · local-var
-  `$slider-tooltip-arrow-height: 7px;`
-
 ### tagBox — 2
 
 - `scss/widgets/base/_tagBox.scss:15` · inline
   `width: 0.1px; // T393423, T437866`
 - `scss/widgets/base/_tagBox.scss:43` · calc
   `max-width: calc(100% - 1px);`
-
-### chat — 2
-
-- `scss/widgets/base/chat/layout/chat-messagebox/_index.scss:4` · geometry
-  `border-top-width: 1px;`
-- `scss/widgets/base/chat/layout/chat/_mixins.scss:8` · geometry
-  `border: 1px solid;`
-
-### dropDownMenu — 2
-
-- `scss/widgets/base/dropDownMenu/_mixins.scss:12` · geometry
-  `outline: 2px solid $accent-color;`
-- `scss/widgets/base/dropDownMenu/_mixins.scss:13` · geometry
-  `outline-offset: 1px;`
-
-### filterBuilder — 2
-
-- `scss/widgets/base/filterBuilder/_common.scss:76` · inline
-  `margin-top: -7px;`
-- `scss/widgets/base/filterBuilder/_common.scss:77` · inline
-  `margin-bottom: -4px;`
-
-### treeView — 2
-
-- `scss/widgets/base/treeView/_common.scss:6` · local-var
-  `$treeview-searchbox-margin-bottom: 5px;`
-- `scss/widgets/base/treeView/_common.scss:85` · inline
-  `margin-inline-end: 8px;`
-
-### fileUploader — 1
-
-- `scss/widgets/base/_fileUploader.scss:213` · inline
-  `margin-top: -6px;`
-
-### pagination — 1
-
-- `scss/widgets/base/_pagination.scss:25` · local-var
-  `$pagination-paddings: 8px;`
-
-### validation — 1
-
-- `scss/widgets/base/_validation.scss:85` · geometry
-  `border-bottom: 1px dashed;`
-
-### dropDownButton — 1
-
-- `scss/widgets/base/dropDownButton/_mixins.scss:22` · inline
-  `margin-inline-start: 4px;`
-
-### gantt — 1
-
-- `scss/widgets/base/gantt/_index.scss:60` · inline
-  `margin-top: -1px;`
 
 ### list — 1
 
@@ -732,8 +595,3 @@ and carries a marker saying why.
 
 - `scss/widgets/base/lookup/_index.scss:10` · calc
   `height: calc(100% - 45px);`
-
-### popover — 1
-
-- `scss/widgets/base/popover/_index.scss:2` · mixin-arg
-  `@include dx-popover-arrow-size(20px);`

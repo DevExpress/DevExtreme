@@ -1298,7 +1298,8 @@
       "load-indicator",
       "spin",
       "border",
-      "control"
+      "control",
+      "icon"
     ],
     "popup": [
       "title",

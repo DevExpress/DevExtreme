@@ -3,6 +3,7 @@
 @use "../../base/chat" with (
   $chat-file-name-font-weight: var(--dx-chat-file-name-font-weight),
   $chat-editing-preview-caption-font-weight: var(--dx-chat-editing-preview-caption-font-weight),
+  $chat-messagebox-border-block-start-width: var(--dx-chat-message-box-border-block-start-width),
   $chat-messagebubble-padding-image: var(--dx-chat-bubble-image-padding),
   $chat-messagebubble-border-radius-image: var(--dx-chat-bubble-image-border-radius),
   $chat-messagebubble-max-width-image: var(--dx-chat-bubble-image-max-width),
@@ -14,6 +15,7 @@
   var(--dx-chat-bg),
   var(--dx-chat-border),
   var(--dx-chat-border-radius),
+  $border-width: var(--dx-chat-border-width),
 );
 @include chat-avatar(
   var(--dx-chat-avatar-size),

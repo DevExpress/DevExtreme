@@ -1,6 +1,6 @@
 {
   "openKnobs": 0,
-  "unclassified": 368,
+  "unclassified": 326,
   "unclassifiedByWidget": {
     "gridBase": 75,
     "colorView": 67,
@@ -9,29 +9,12 @@
     "htmlEditor": 33,
     "pivotGrid": 20,
     "cardView": 15,
-    "ui": 8,
-    "scrollView": 5,
     "dataGrid": 5,
-    "toolbar": 5,
-    "sortable": 4,
     "treeList": 4,
     "colorBox": 3,
-    "icon_fonts": 2,
     "numberBox": 2,
-    "resizable": 2,
-    "slider": 2,
     "tagBox": 2,
-    "chat": 2,
-    "dropDownMenu": 2,
-    "filterBuilder": 2,
-    "treeView": 2,
-    "fileUploader": 1,
-    "pagination": 1,
-    "validation": 1,
-    "dropDownButton": 1,
-    "gantt": 1,
     "list": 1,
-    "lookup": 1,
-    "popover": 1
+    "lookup": 1
   }
 }

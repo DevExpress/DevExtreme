@@ -51,7 +51,7 @@ $pulldown-top-offset: if(
       height: 100%;
       width: 100%;
       left: -50%;
-      margin-left: -20px;
+      margin-left: -20px; // dx-fixed-size: centres the android pull-down on the pocket
       padding: 0;
       border-radius: 50%;
 
@@ -150,7 +150,7 @@ $pulldown-top-offset: if(
   left: 0;
   top: 50%;
   display: inline-block;
-  margin: -15px 20px 0 15px;
+  margin: -15px 20px 0 15px; // dx-fixed-size: centres the indicator on its own half-height
   width: $scrollview-pull-down-indicator-width;
   -webkit-user-drag: none;
 }
@@ -231,7 +231,7 @@ $pulldown-top-offset: if(
 
 .dx-scrollview-scrollbottom-text {
   display: inline-block;
-  margin-top: -20px;
+  margin-top: -20px; // dx-fixed-size: pulls the text onto the indicator's line
   vertical-align: middle;
   -webkit-user-drag: none;
 }

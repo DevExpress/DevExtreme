@@ -588,6 +588,7 @@
     "dx-treeview-with-search"
   ],
   "validation": [
-    "dx-validationsummary-item"
+    "dx-validationsummary-item",
+    "dx-validationsummary-item-content"
   ]
 }

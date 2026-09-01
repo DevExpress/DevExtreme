@@ -304,7 +304,7 @@
 }
 
 @mixin dx-font-icon($glyph) {
-  font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes
+  font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes -- dx-icon-glyph-size: the icon font's own size, no icon scale in the package
 
   &::before {
     content: $glyph;
@@ -672,7 +672,7 @@ $icons: (
   }
 
   %icon-font {
-    font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes
+    font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes -- dx-icon-glyph-size: the icon font's own size, no icon scale in the package
   }
 
   @each $key, $glyph in $icons {

@@ -3,7 +3,9 @@ $treeview-disabled-opacity: null !default;
 @use "../mixins" as *;
 @use "../../base/icon_fonts" as *;
 
-$treeview-searchbox-margin-bottom: 5px;
+// Sized from base/treeView, which owns the defaults and forwards a theme's values down.
+$treeview-searchbox-margin-bottom: null !default;
+$treeview-item-icon-margin-inline-end: null !default;
 
 .dx-treeview-loadindicator-wrapper {
   text-align: center;
@@ -82,7 +84,7 @@ $treeview-searchbox-margin-bottom: 5px;
     order: 2;
 
     .dx-icon {
-      margin-inline-end: 8px;
+      margin-inline-end: $treeview-item-icon-margin-inline-end;
     }
 
     .dx-button-has-icon {

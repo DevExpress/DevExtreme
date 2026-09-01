@@ -98,7 +98,7 @@ $toolbar-texteditor-width: 150px !default;
   @include dx-overflow();
 
   // NOTE: Prevent croping of italic text in label (T126187)
-  margin: 0 -5px;
+  margin: 0 -5px; // dx-fixed-size: pulls the items flush with the toolbar edge
   padding: $toolbar-item-padding;
 }
 
