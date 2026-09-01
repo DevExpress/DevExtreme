@@ -20,6 +20,11 @@ const isColorContrastChecked = (options: A11yCheckOptions): boolean => {
   return options.runOnly === undefined || options.runOnly === COLOR_CONTRAST_RULE;
 };
 
+// Whether the given configuration leaves anything for the current theme to check. Call sites
+// use it to declare a test with `test.skip`, so a check that cannot run is visible as skipped
+// instead of counted as passed.
+export const isA11yCheckApplicable = (options: A11yCheckOptions = defaultOptions): boolean => getThemeName() !== 'fluent-next' || isColorContrastChecked(options);
+
 const createFullReport = (results, configuration) => {
   let report = createReport(results.violations);
 
@@ -41,9 +46,14 @@ Promise<void> => {
   // so only color-contrast is re-checked for it — regardless of the caller's config.
   const isColorContrastOnly = getThemeName() === 'fluent-next';
 
-  // Nothing is left to check: the caller excluded the only rule this theme runs.
+  // Returning here used to report the test as passed with no assertion at all. A check that
+  // cannot run has to be declared as skipped where the test is declared, not swallowed here.
   if (isColorContrastOnly && !isColorContrastChecked(options)) {
-    return;
+    throw new Error(
+      'a11yCheck was called on fluent-next with a configuration that excludes color-contrast, '
+      + 'the only rule this theme runs. Nothing would be checked. Either declare the test with '
+      + 'isA11yCheckApplicable() so it is skipped explicitly, or leave color-contrast enabled.',
+    );
   }
 
   const effectiveOptions: A11yCheckOptions = isColorContrastOnly
