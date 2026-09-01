@@ -5074,3 +5074,80 @@ QUnit.module('React async templates rendering', {
         assert.strictEqual(axis._majorTicks[0].templateContainer.attr('visibility'), 'visible', 'label is visible');
     });
 });
+
+QUnit.module('encodeHtml', $.extend({}, moduleSetup, {
+    beforeEach: function() {
+        moduleSetup.beforeEach.call(this);
+        // QUnit keeps the fixture at left: -10000px, and the tooltip is not drawn
+        // when its anchor point is outside the canvas - move the fixture into the viewport
+        this.fixtureCss = $('#qunit-fixture').css(['left', 'top']);
+        $('#qunit-fixture').css({ left: 0, top: 0 });
+    },
+    afterEach: function() {
+        $('#qunit-fixture').css(this.fixtureCss);
+        moduleSetup.afterEach.call(this);
+    },
+    createChartWithMarkupLikeTexts: function(encodeHtml) {
+        const options = {
+            dataSource: [{ arg: '<A>', val: 850 }, { arg: 'B', val: 5940 }],
+            series: [{ name: '<North America> | Total' }],
+            tooltip: {
+                enabled: true,
+                customizeTooltip: function(pointInfo) {
+                    return { text: pointInfo.seriesName + ' - ' + pointInfo.valueText };
+                }
+            }
+        };
+
+        if(encodeHtml !== undefined) {
+            options.encodeHtml = encodeHtml;
+        }
+
+        return this.createChart(options);
+    },
+    checkTexts: function(assert, chart, expected) {
+        function getTexts($root) {
+            return $root.find('text').map(function() {
+                return $(this).text();
+            }).get();
+        }
+
+        chart.getAllSeries()[0].getAllPoints()[0].showTooltip();
+
+        assert.deepEqual(getTexts(this.$container.find('.dxc-arg-elements')), expected.axisLabels, 'argument axis labels');
+        assert.deepEqual(getTexts(this.$container.find('.dxc-legend')), expected.legend, 'legend');
+        assert.strictEqual(getTexts($('.dxc-tooltip')).join(''), expected.tooltip, 'tooltip');
+    }
+}));
+
+QUnit.test('Markup-like texts are treated as html by default (T1334517)', function(assert) {
+    const chart = this.createChartWithMarkupLikeTexts(undefined);
+
+    this.checkTexts(assert, chart, {
+        axisLabels: ['', 'B'],
+        legend: [' | Total'],
+        tooltip: ' | Total - 850'
+    });
+});
+
+QUnit.test('Markup-like texts are rendered as is when encodeHtml is enabled (T1334517)', function(assert) {
+    const chart = this.createChartWithMarkupLikeTexts(true);
+
+    this.checkTexts(assert, chart, {
+        axisLabels: ['<A>', 'B'],
+        legend: ['<North America> | Total'],
+        tooltip: '<North America> | Total - 850'
+    });
+});
+
+QUnit.test('encodeHtml is applied on option changing (T1334517)', function(assert) {
+    const chart = this.createChartWithMarkupLikeTexts(undefined);
+
+    chart.option('encodeHtml', true);
+
+    this.checkTexts(assert, chart, {
+        axisLabels: ['<A>', 'B'],
+        legend: ['<North America> | Total'],
+        tooltip: '<North America> | Total - 850'
+    });
+});
