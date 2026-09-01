@@ -43,6 +43,7 @@ export const summaryDataControllerExtender = (
 
   public getTotalSummaryValue(summaryItemName?: string | number | null): unknown {
     const summaryItemIndex = getSummaryItemIndex(this.option('summary.totalItems'), summaryItemName);
+    // @ts-expect-error badly typed DataSourceAdapter
     const aggregates = this._dataSource.totalAggregates();
 
     if (aggregates.length && summaryItemIndex > -1) {
@@ -293,6 +294,7 @@ export const summaryDataControllerExtender = (
     this._footerItems = [];
 
     if (dataSource && summaryTotalItems?.length) {
+      // @ts-expect-error badly typed DataSourceAdapter
       const totalAggregates = dataSource.totalAggregates();
       const summaryCells = this._getSummaryCells(summaryTotalItems, totalAggregates);
 

@@ -148,17 +148,19 @@ export const groupingDataControllerExtender = (
 
   private collapseAll(groupIndex: number): void {
     const dataSource = this._dataSource;
+    // @ts-expect-error badly typed DataSourceAdapter
     if (dataSource?.collapseAll(groupIndex)) {
-      dataSource.pageIndex(0);
-      dataSource.reload();
+      dataSource?.pageIndex(0);
+      dataSource?.reload();
     }
   }
 
   private expandAll(groupIndex: number): void {
     const dataSource = this._dataSource;
+    // @ts-expect-error badly typed DataSourceAdapter
     if (dataSource?.expandAll(groupIndex)) {
-      dataSource.pageIndex(0);
-      dataSource.reload();
+      dataSource?.pageIndex(0);
+      dataSource?.reload();
     }
   }
 
@@ -199,6 +201,7 @@ export const groupingDataControllerExtender = (
   }
 
   private isRowExpanded(key: RowKey): boolean {
+    // @ts-expect-error badly typed DataSourceAdapter
     return !!this._dataSource?.isRowExpanded(key);
   }
 
