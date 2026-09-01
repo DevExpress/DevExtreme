@@ -32,6 +32,7 @@ import {
 } from '../../../helpers/chartMocks.js';
 import exportModule from '__internal/viz/core/exportModule';
 import { _test_prepareSegmentRectPoints } from 'viz/utils';
+import { stubSeam } from '../../../helpers/moduleSeam.js';
 
 const ThemeManager = stubClass(chartThemeManagerModule.ThemeManager);
 const LayoutManager = stubClass(layoutManagerModule.LayoutManager);
@@ -239,7 +240,7 @@ const environment = {
             return family;
         });
         this.prepareSegmentRectPoints = _test_prepareSegmentRectPoints(function(x, y, w, h, borderOptions) { return { points: [x, y, w, h], pathType: borderOptions }; });
-        this.createCrosshair = sinon.stub(crosshairModule, 'Crosshair').callsFake(function() {
+        this.createCrosshair = stubSeam(crosshairModule, 'Crosshair', 'DEBUG_set_Crosshair').callsFake(function() {
             return sinon.createStubInstance(Crosshair);
         });
 

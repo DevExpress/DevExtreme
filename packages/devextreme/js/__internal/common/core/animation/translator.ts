@@ -1,4 +1,6 @@
 /* eslint-disable func-names */
+/* eslint-disable import/no-mutable-exports */
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { data as elementData, removeData } from '@js/core/element_data';
@@ -124,7 +126,7 @@ export const move = function (
   }
 };
 
-export const resetPosition = function (
+export let resetPosition = function (
   $element: dxElementWrapper | Element | undefined,
   finishTransition?: boolean,
 ): void {
@@ -170,3 +172,9 @@ export const parseTranslate = function (translateString: string): TranslateVecto
     z: parseFloat(result[2]),
   };
 };
+
+/// #DEBUG
+export function DEBUG_set_resetPosition(value: typeof resetPosition): void {
+  resetPosition = value;
+}
+/// #ENDDEBUG

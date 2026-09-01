@@ -1,4 +1,5 @@
 /* eslint-disable import/no-import-module-exports */
+/* eslint-disable import/no-mutable-exports */
 /* eslint-disable new-cap */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @stylistic/no-mixed-operators */
@@ -73,7 +74,7 @@ COMMAND_TO_TYPE_MAP[COMMAND_MOVE_UP] = COMMAND_TO_TYPE_MAP[COMMAND_MOVE_RIGHT] =
 COMMAND_TO_TYPE_MAP[COMMAND_ZOOM_IN] = COMMAND_TO_TYPE_MAP[COMMAND_ZOOM_OUT] = ZoomCommand;
 COMMAND_TO_TYPE_MAP[COMMAND_ZOOM_DRAG] = ZoomDragCommand;
 
-export function ControlBar(parameters) {
+export let ControlBar = function (parameters) {
   const that = this;
   that._params = parameters;
   that._createElements(parameters.renderer, parameters.container, parameters.dataKey);
@@ -81,7 +82,7 @@ export function ControlBar(parameters) {
   that._subscribeToProjection(parameters.projection);
   that._subscribeToTracker(parameters.tracker);
   that._createCallbacks(parameters.projection);
-}
+};
 
 ControlBar.prototype = {
   constructor: ControlBar,
@@ -471,4 +472,10 @@ exports._TESTS_stubCommandToTypeMap = function (map) {
 exports._TESTS_restoreCommandToTypeMap = function () {
   COMMAND_TO_TYPE_MAP = COMMAND_TO_TYPE_MAP__ORIGINAL;
 };
+/// #ENDDEBUG
+
+/// #DEBUG
+export function DEBUG_set_ControlBar(value: typeof ControlBar): void {
+  ControlBar = value;
+}
 /// #ENDDEBUG

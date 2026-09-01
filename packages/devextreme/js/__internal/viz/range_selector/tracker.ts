@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/init-declarations */
+/* eslint-disable import/no-mutable-exports */
+/* eslint-disable func-names */
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
@@ -222,7 +225,7 @@ function initializeSliderEvents(controller, sliders, state, getRootOffsetLeft) {
   return docEvents;
 }
 
-export function Tracker(params) {
+export let Tracker = function (params) {
   const state = this._state = {};
   const targets = params.controller.getTrackerTargets();
   if (msPointerEnabled) {
@@ -242,7 +245,7 @@ export function Tracker(params) {
   function getRootOffsetLeft() {
     return params.renderer.getRootOffset().left;
   }
-}
+};
 
 Tracker.prototype = {
   constructor: Tracker,
@@ -260,3 +263,9 @@ Tracker.prototype = {
     state.manualRangeSelectionEnabled = behavior.manualRangeSelectionEnabled;
   },
 };
+
+/// #DEBUG
+export function DEBUG_set_Tracker(value: typeof Tracker): void {
+  Tracker = value;
+}
+/// #ENDDEBUG

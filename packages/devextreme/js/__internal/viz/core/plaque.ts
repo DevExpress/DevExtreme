@@ -484,7 +484,7 @@ export let Plaque = class {
 };
 
 /// #DEBUG
-export function DEBUG_set_Plaque(value): void {
+export function DEBUG_set_Plaque(value: typeof Plaque): void {
   Plaque = value;
 }
 /// #ENDDEBUG

@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
+/* eslint-disable import/no-mutable-exports */
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-plusplus */
 /* eslint-disable func-names */
@@ -69,13 +71,13 @@ function getLabelCheckerPosition(x, y, isHorizontal, canvas) {
   };
 }
 
-export function Crosshair(renderer, options, params, group) {
+export let Crosshair = function (renderer, options, params, group) {
   const that = this;
   that._renderer = renderer;
   that._crosshairGroup = group;
   that._options = {};
   that.update(options, params);
-}
+};
 
 Crosshair.prototype = {
   constructor: Crosshair,
@@ -323,3 +325,9 @@ Crosshair.prototype = {
     }
   },
 };
+
+/// #DEBUG
+export function DEBUG_set_Crosshair(value: typeof Crosshair): void {
+  Crosshair = value;
+}
+/// #ENDDEBUG

@@ -77,10 +77,10 @@ export const environment = {
 
         rendererModule.Renderer = returnValue(this.renderer);
         themeManagerModule.BaseThemeManager = returnValue(this.themeManager);
-        rangeViewModule.RangeView = returnValue(this.rangeView);
-        slidersControllerModule.SlidersController = returnValue(this.slidersController);
-        trackerModule.Tracker = returnValue(this.tracker);
-        seriesDataSourceModule.SeriesDataSource = returnValue(this.seriesDataSource);
+        rangeViewModule.DEBUG_set_RangeView(returnValue(this.rangeView));
+        slidersControllerModule.DEBUG_set_SlidersController(returnValue(this.slidersController));
+        trackerModule.DEBUG_set_Tracker(returnValue(this.tracker));
+        seriesDataSourceModule.DEBUG_set_SeriesDataSource(returnValue(this.seriesDataSource));
         translator2DModule.Translator2D = returnValue(this.translator);
 
         sinon.stub(axisModule, 'Axis');

@@ -18,7 +18,7 @@ import {
 } from '../../helpers/vizMocks.js';
 import typeUtils from 'core/utils/type';
 import plaqueModule from 'viz/core/plaque';
-import { stubSeam } from '../../helpers/moduleSeam.js';
+import { stubSeam, spySeam } from '../../helpers/moduleSeam.js';
 
 import '__internal/viz/vector_map/vector_map';
 
@@ -233,7 +233,7 @@ QUnit.test('Layer collection - object option', function(assert) {
 });
 
 QUnit.test('Projection', function(assert) {
-    const spy = sinon.spy(projectionModule, 'Projection');
+    const spy = spySeam(projectionModule, 'Projection', 'DEBUG_set_Projection');
 
     this.createMap({
         projection: 'projection',
@@ -257,7 +257,7 @@ QUnit.test('Projection', function(assert) {
 });
 
 QUnit.test('DataExchanger', function(assert) {
-    const spy = sinon.spy(dataExchangerModule, 'DataExchanger');
+    const spy = spySeam(dataExchangerModule, 'DataExchanger', 'DEBUG_set_DataExchanger');
 
     this.createMap();
 
@@ -265,7 +265,7 @@ QUnit.test('DataExchanger', function(assert) {
 });
 
 QUnit.test('GestureHandler', function(assert) {
-    const spy = sinon.spy(gestureHandlerModule, 'GestureHandler');
+    const spy = spySeam(gestureHandlerModule, 'GestureHandler', 'DEBUG_set_GestureHandler');
 
     this.createMap({
         panningEnabled: 1,
@@ -283,7 +283,7 @@ QUnit.test('GestureHandler', function(assert) {
 });
 
 QUnit.test('LayoutControl', function(assert) {
-    const spy = sinon.spy(layoutModule, 'LayoutControl');
+    const spy = spySeam(layoutModule, 'LayoutControl', 'DEBUG_set_LayoutControl');
 
     const map = this.createMap({ layers: {} });
 
@@ -316,7 +316,7 @@ QUnit.test('Tracker', function(assert) {
 });
 
 QUnit.test('Control bar', function(assert) {
-    const spy = sinon.spy(controlBarModule, 'ControlBar');
+    const spy = spySeam(controlBarModule, 'ControlBar', 'DEBUG_set_ControlBar');
     this.themeManager.theme.withArgs('controlBar').returns({ theme: 'control-bar' });
 
     this.createMap({
@@ -340,7 +340,7 @@ QUnit.test('Control bar', function(assert) {
 });
 
 QUnit.test('Legends', function(assert) {
-    const spy = sinon.spy(legendModule, 'LegendsControl');
+    const spy = spySeam(legendModule, 'LegendsControl', 'DEBUG_set_LegendsControl');
 
     const map = this.createMap({
         legends: {
@@ -363,7 +363,7 @@ QUnit.test('Legends', function(assert) {
 });
 
 QUnit.test('TooltipViewer', function(assert) {
-    const spy = sinon.spy(tooltipViewerModule, 'TooltipViewer');
+    const spy = spySeam(tooltipViewerModule, 'TooltipViewer', 'DEBUG_set_TooltipViewer');
 
     this.createMap();
 
@@ -438,8 +438,8 @@ QUnit.test('Should created group for annotations', function(assert) {
 });
 
 QUnit.test('Should created group for annotations before controll bar and legend', function(assert) {
-    const spyLegend = sinon.spy(legendModule, 'LegendsControl');
-    const spyControlBar = sinon.spy(controlBarModule, 'ControlBar');
+    const spyLegend = spySeam(legendModule, 'LegendsControl', 'DEBUG_set_LegendsControl');
+    const spyControlBar = spySeam(controlBarModule, 'ControlBar', 'DEBUG_set_ControlBar');
     this.createMap();
 
     assert.ok(this.renderer.g.returnValues[1].attr.calledBefore(spyControlBar));

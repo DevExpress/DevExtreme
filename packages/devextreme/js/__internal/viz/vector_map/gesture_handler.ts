@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
+/* eslint-disable import/no-mutable-exports */
+/* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-multi-assign */
@@ -8,13 +10,13 @@
 const _ln = Math.log;
 const _LN2 = Math.LN2;
 
-export function GestureHandler(params) {
+export let GestureHandler = function (params) {
   const that = this;
   that._projection = params.projection;
   that._renderer = params.renderer;
   that._x = that._y = 0;
   that._subscribeToTracker(params.tracker);
-}
+};
 
 GestureHandler.prototype = {
   constructor: GestureHandler,
@@ -106,3 +108,9 @@ GestureHandler.prototype = {
     }
   },
 };
+
+/// #DEBUG
+export function DEBUG_set_GestureHandler(value: typeof GestureHandler): void {
+  GestureHandler = value;
+}
+/// #ENDDEBUG

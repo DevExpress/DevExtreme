@@ -1,4 +1,6 @@
 /* eslint-disable max-depth */
+/* eslint-disable import/no-mutable-exports */
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-bitwise */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
@@ -75,7 +77,7 @@ function restoreSetSelectedRange(controller) {
   delete controller.setSelectedRange;
 }
 
-export function SlidersController(params) {
+export let SlidersController = function (params) {
   const that = this;
   const sliderParams = {
     renderer: params.renderer, root: params.root, trackersGroup: params.trackersGroup, translator: params.translator,
@@ -89,7 +91,7 @@ export function SlidersController(params) {
   // It seems that there is no special reasons to suppress first event - it was accidentally suppressed.
   // Let it stay so for now.
   that._processSelectionChanged = dummyProcessSelectionChanged;
-}
+};
 
 SlidersController.prototype = {
   constructor: SlidersController,
@@ -519,3 +521,9 @@ SlidersController.prototype = {
     this._sliders[index].toForeground();
   },
 };
+
+/// #DEBUG
+export function DEBUG_set_SlidersController(value: typeof SlidersController): void {
+  SlidersController = value;
+}
+/// #ENDDEBUG

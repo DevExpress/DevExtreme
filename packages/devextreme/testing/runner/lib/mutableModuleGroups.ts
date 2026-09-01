@@ -63,13 +63,6 @@ export const MUTABLE_MODULE_GROUPS: readonly MutableModuleGroup[] = [
     also: ['viz/core/loading_indicator.js'],
   },
   {
-    internal: '__internal/core/localization/ldml/date.parser.js',
-    also: [
-      '__internal/core/localization/ldml/dateParserModule.js',
-      'common/core/localization/ldml/date.parser.js',
-    ],
-  },
-  {
     // Real named exports live in palette.js; paletteModule.js is only
     // `import * as PaletteModule from './palette'; export default PaletteModule`.
     internal: '__internal/viz/palette.js',

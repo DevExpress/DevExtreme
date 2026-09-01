@@ -27,9 +27,9 @@ titleModule.DEBUG_set_title(stubClass(titleModule.Title, { }));
 tooltipModule.DEBUG_set_tooltip(stubClass(tooltipModule.Tooltip));
 exportMenuModule.DEBUG_set_ExportMenu(stubClass(exportMenuModule.ExportMenu)); // TODO maybe if you test layer - you should create exact layer?
 loadingIndicatorModule.DEBUG_set_LoadingIndicator(stubClass(loadingIndicatorModule.LoadingIndicator));
-controlBarModule.ControlBar = stubClass(controlBarModule.ControlBar);
-legendModule.LegendsControl = stubClass(legendModule.LegendsControl);
-tooltipViewerModule.TooltipViewer = stubClass(tooltipViewerModule.TooltipViewer);
+controlBarModule.DEBUG_set_ControlBar(stubClass(controlBarModule.ControlBar));
+legendModule.DEBUG_set_LegendsControl(stubClass(legendModule.LegendsControl));
+tooltipViewerModule.DEBUG_set_TooltipViewer(stubClass(tooltipViewerModule.TooltipViewer));
 
 const simpleProjection = projection({
     aspectRatio: 4 / 3,

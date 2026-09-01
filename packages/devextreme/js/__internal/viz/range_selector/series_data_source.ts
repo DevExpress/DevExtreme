@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
+/* eslint-disable import/no-mutable-exports */
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-plusplus */
 /* eslint-disable func-names */
@@ -57,7 +59,7 @@ const processSeriesFamilies = function (series, minBubbleSize, maxBubbleSize, ba
   return families;
 };
 
-export const SeriesDataSource = function (options) {
+export let SeriesDataSource = function (options) {
   const that = this;
   const themeManager = that._themeManager = createThemeManager(options.chart);
 
@@ -278,3 +280,9 @@ SeriesDataSource.prototype = {
     return this._themeManager;
   },
 };
+
+/// #DEBUG
+export function DEBUG_set_SeriesDataSource(value: typeof SeriesDataSource): void {
+  SeriesDataSource = value;
+}
+/// #ENDDEBUG

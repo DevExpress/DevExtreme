@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/init-declarations */
+/* eslint-disable import/no-mutable-exports */
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable func-names */
 /* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
@@ -9,9 +11,9 @@
 const TOOLTIP_OFFSET = 12;
 
 // TODO: Somehow it should be merged with the core.Tooltip
-export function TooltipViewer(params) {
+export let TooltipViewer = function (params) {
   this._subscribeToTracker(params.tracker, params.tooltip, params.layerCollection);
-}
+};
 
 TooltipViewer.prototype = {
   constructor: TooltipViewer,
@@ -45,3 +47,9 @@ TooltipViewer.prototype = {
     });
   },
 };
+
+/// #DEBUG
+export function DEBUG_set_TooltipViewer(value: typeof TooltipViewer): void {
+  TooltipViewer = value;
+}
+/// #ENDDEBUG

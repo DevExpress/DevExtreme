@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
+/* eslint-disable import/no-mutable-exports */
 /* eslint-disable max-depth */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
@@ -207,7 +208,7 @@ function applyLayout(canvas, items) {
   }
 }
 
-export function LayoutControl(widget) {
+export let LayoutControl = function (widget) {
   const that = this;
   that._items = [];
   that._suspended = 0;
@@ -215,7 +216,7 @@ export function LayoutControl(widget) {
   that._updateLayout = function () {
     that._update();
   };
-}
+};
 
 LayoutControl.prototype = {
   constructor: LayoutControl,
@@ -266,3 +267,9 @@ LayoutControl.prototype = {
     }
   },
 };
+
+/// #DEBUG
+export function DEBUG_set_LayoutControl(value: typeof LayoutControl): void {
+  LayoutControl = value;
+}
+/// #ENDDEBUG
