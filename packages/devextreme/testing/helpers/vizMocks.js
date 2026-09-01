@@ -2,7 +2,7 @@
 
 import $ from 'jquery';
 import * as tooltipModule from 'viz/core/tooltip';
-import * as titleModule from 'viz/core/title';
+import titleModule from 'viz/core/title';
 import legendModule from 'viz/components/legend';
 import axisModule from 'viz/axes/base_axis';
 import * as pointModule from 'viz/series/points/base_point';

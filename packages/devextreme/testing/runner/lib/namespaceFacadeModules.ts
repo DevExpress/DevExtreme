@@ -19,7 +19,6 @@ export const NAMESPACE_FACADE_MODULES: readonly string[] = [
   'viz/core/renderers/animation.js',
   'viz/core/renderers/renderer_default.js',
   'viz/core/series_family.js',
-  'viz/core/title.js',
   'viz/core/tooltip.js',
   'viz/core/utils_default.js',
   'viz/range_selector/range_view.js',

@@ -5,6 +5,7 @@ import seriesModule from 'viz/series/base_series';
 import pointModule from 'viz/series/points/base_point';
 import axisModule from 'viz/axes/base_axis';
 import titleModule from 'viz/core/title';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 import dataValidatorModule from 'viz/components/data_validator';
 import legendModule from 'viz/components/legend';
 import rangeModule from 'viz/translators/range';
@@ -45,7 +46,6 @@ const environment = {
         layoutManagerModule.LayoutManager.restore();
         seriesModule.Series.restore();
         pointModule.Point.restore();
-
         this.Title.restore();
         this.Legend.restore();
     },
@@ -81,7 +81,7 @@ const environment = {
         });
     },
     _stubTitle: function() {
-        this.Title = sinon.stub(titleModule, 'Title').callsFake(function() {
+        this.Title = stubSeam(titleModule, 'Title', 'DEBUG_set_title').callsFake(function() {
             return new ChartTitle();
         });
     },

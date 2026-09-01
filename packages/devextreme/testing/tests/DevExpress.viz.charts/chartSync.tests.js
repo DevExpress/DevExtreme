@@ -118,13 +118,13 @@ const environment = {
         that.themeManager.getOptions.withArgs('resolveLabelOverlapping').returns(false);
         that.themeManager.getOptions.returns({});
 
-        titleModule.Title = sinon.spy(function(parameters) {
+        titleModule.DEBUG_set_title(sinon.spy(function(parameters) {
             const title = new Title(parameters);
             title.getLayoutOptions = sinon.stub().returns({
                 verticalAlignment: that.titleVerticalAlignment || 'bottom'
             });
             return title;
-        });
+        }));
 
         that.createChart = function(options) {
             options = $.extend(true, {

@@ -48,10 +48,6 @@ export const MUTABLE_MODULE_GROUPS: readonly MutableModuleGroup[] = [
     also: ['viz/core/tooltip.js'],
   },
   {
-    internal: '__internal/viz/core/title.js',
-    also: ['viz/core/title.js'],
-  },
-  {
     internal: '__internal/viz/core/export.js',
     also: [
       '__internal/viz/core/exportModule.js',
