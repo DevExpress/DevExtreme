@@ -1,4 +1,3 @@
-import type { Store } from '@js/common/data';
 import { DataSource as DataSourceClass } from '@js/common/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import type { Callback } from '@js/core/utils/callbacks';
@@ -13,7 +12,9 @@ import type { StoreChange } from '@js/data/store';
 import errors from '@js/ui/widget/ui.errors';
 import { findChanges } from '@ts/core/utils/m_array_compare';
 import { fromPromise } from '@ts/core/utils/m_deferred';
-import type { ChangingEvent, DataSource } from '@ts/data/data_source/types';
+import type Store from '@ts/data/abstract_store';
+import type { DataSource } from '@ts/data/data_source/data_source';
+import type { ChangingEvent } from '@ts/data/data_source/types';
 import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type {
@@ -28,6 +29,7 @@ import type {
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { VirtualScrollController } from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
 
+import type { CustomLoadResult } from '../data_source_adapter/custom_loader';
 import type {
   BinaryDataFilterExpression,
   CallbackFlags,
@@ -1466,16 +1468,14 @@ export class DataController extends modules.Controller {
       return d;
     }
 
-    const resolveWithProcessedItems = (
-      loadedData: RawItemData[],
-      extra: LoadOperation['extra'],
-    ): void => {
+    const resolveWithProcessedItems = (loadResult: CustomLoadResult): void => {
       const items = this._processItems(
-        this._beforeProcessItems(loadedData),
+        this._beforeProcessItems(loadResult.data),
         { changeType: 'loadingAll' },
       );
+
       // @ts-expect-error DataGrid-only summary leaks into grid_core
-      d.resolve(items, extra?.summary);
+      d.resolve(items, loadResult.extra?.summary);
     };
 
     if (data) {
@@ -1484,7 +1484,6 @@ export class DataController extends modules.Controller {
         group: dataSource.group(),
         sort: dataSource.sort(),
       })
-        // @ts-expect-error badly typed CustomLoadResult
         .done(resolveWithProcessedItems)
         .fail(d.reject as (...args: unknown[]) => void);
     } else if (!dataSource.isLoading()) {
@@ -1499,7 +1498,7 @@ export class DataController extends modules.Controller {
   }
 
   public async getAllDataRowKeys(): Promise<RowKey[]> {
-    const items = await Promise.resolve(this.loadAllItems(undefined));
+    const items = await Promise.resolve(this.loadAllItems());
 
     return items
       .filter((item) => item.rowType === 'data')

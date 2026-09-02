@@ -111,7 +111,7 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
     dataSource.customLoader.load({
       filter: this._concatWithCombinedFilter(filter),
       group,
-    }).done((data) => {
+    }).done(({ data }) => {
       const hasData = Array.isArray(data) && data.length > 0;
 
       if (this._dataSource !== dataSource || !hasData) {

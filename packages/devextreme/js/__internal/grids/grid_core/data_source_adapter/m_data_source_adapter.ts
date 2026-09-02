@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-dynamic-delete */
-import type { Store } from '@js/common/data';
 import ArrayStore from '@js/common/data/array_store';
 import { applyBatch } from '@js/common/data/array_utils';
 import type { Callback } from '@js/core/utils/callbacks';
@@ -12,7 +11,9 @@ import { each } from '@js/core/utils/iterator';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import type { StoreChange } from '@js/data/store';
 import type { StoreKey } from '@ts/data/abstract_store';
-import type { ChangingEvent, DataSource, StoreLoadOptions } from '@ts/data/data_source/types';
+import type Store from '@ts/data/abstract_store';
+import type { DataSource } from '@ts/data/data_source/data_source';
+import type { ChangingEvent, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { BeforePushEvent } from '@ts/data/types';
 
 import modules from '../m_modules';
@@ -26,7 +27,7 @@ import {
   setPageDataToCache,
 } from './m_data_source_adapter_utils';
 import type {
-  ChangedEvent, LoadOperation, OperationTypes, RemoteOperationsOptions,
+  ChangedEvent, LoadOperation, OperationTypes, RawItemData, RemoteOperationsOptions,
 } from './types';
 import { normalizeRemoteOperations } from './utils/remoteOperations';
 

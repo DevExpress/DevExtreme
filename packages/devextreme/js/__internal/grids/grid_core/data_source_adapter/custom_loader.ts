@@ -9,7 +9,10 @@ import type { LoadOperation, RawItemData } from './types';
 
 export type CustomStoreLoadOptions = StoreLoadOptions & { isLoadingAll?: boolean };
 
-export type CustomLoadResult = RawItemData[] | LoadOperation['extra'];
+export interface CustomLoadResult {
+  data: RawItemData[],
+  extra?: LoadOperation['extra']
+}
 
 /**
  * Loads data through the adapter's `customizeStoreLoadOptions` and
@@ -41,7 +44,7 @@ export class CustomLoader {
   }
 
   public load(options: CustomStoreLoadOptions): DeferredObj<CustomLoadResult> {
-    const d = Deferred();
+    const d = Deferred<CustomLoadResult>();
 
     this._isLoading = true;
     this._isLoadingAll = options.isLoadingAll ?? false;
@@ -55,6 +58,7 @@ export class CustomLoader {
       const store = this.dataSource.store();
 
       if (!store) {
+        // @ts-expect-error badly type Deferred.reject
         d.reject('canceled');
         return;
       }
@@ -79,10 +83,15 @@ export class CustomLoader {
             .done((resolvedData: RawItemData[], resolvedTotalCount: number) => {
               operation.extra ??= {};
               operation.extra.totalCount = resolvedTotalCount;
-              d.resolve(resolvedData, operation.extra);
+              d.resolve({
+                data: resolvedData,
+                extra: operation.extra,
+              });
             })
+            // @ts-expect-error badly type Deferred.reject
             .fail((e: unknown) => { d.reject(e); });
         })
+        // @ts-expect-error badly type Deferred.reject
         .fail((e: unknown) => { d.reject(e); });
     }, this.getLoadingTimeout());
 
@@ -112,7 +121,7 @@ export class CustomLoader {
     data: RawItemData[],
     loadOptions: StoreLoadOptions,
   ): DeferredObj<CustomLoadResult> {
-    const d = Deferred();
+    const d = Deferred<CustomLoadResult>();
     const operation: LoadOperation = {
       data,
       isCustomLoading: true,
@@ -123,15 +132,22 @@ export class CustomLoader {
     this.customizeLoadResult(operation);
 
     // customizeLoadResult may have replaced operation.data with deferred
-    when(operation.data)
-      .done((loadedData: unknown) => { d.resolve(loadedData, operation.extra); })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    when<any>(operation.data)
+      .done((loadedData: RawItemData[]) => {
+        d.resolve({
+          data: loadedData,
+          extra: operation.extra,
+        });
+      })
+      // @ts-expect-error badly type Deferred.reject
       .fail((...args: unknown[]) => { d.reject(...args); });
 
-    return d as unknown as DeferredObj<CustomLoadResult>;
+    return d;
   }
 
-  public loadFromStore(loadOptions: StoreLoadOptions): DeferredObj<unknown> {
-    const d = Deferred();
+  public loadFromStore(loadOptions: StoreLoadOptions): DeferredObj<CustomLoadResult> {
+    const d = Deferred<CustomLoadResult>();
 
     this.dataSource
       .store()
@@ -142,11 +158,18 @@ export class CustomLoader {
         const result = data as { data?: unknown } | undefined;
 
         if (result && !Array.isArray(result) && Array.isArray(result.data)) {
-          d.resolve(result.data, result);
+          d.resolve({
+            data: result.data,
+            extra: result as LoadOperation['extra'],
+          });
         } else {
-          d.resolve(data, extra);
+          d.resolve({
+            data: data as RawItemData[],
+            extra: extra as LoadOperation['extra'],
+          });
         }
       })
+      // @ts-expect-error badly type Deferred.reject
       .fail((...args: unknown[]) => { d.reject(...args); });
 
     return d;

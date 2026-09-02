@@ -65,8 +65,8 @@ const data = (
     } else {
       dataSource.customLoader.load({
         filter: [dataSource.getKeyExpr(), '=', key],
-      }).done((items) => {
-        const parentData = (items as unknown[])[0];
+      }).done((loadResult) => {
+        const parentData = loadResult.data[0];
 
         if (parentData) {
           d.resolve(dataSource.parentKeyOf(parentData));
@@ -108,7 +108,7 @@ const data = (
     this.expandAscendants(key).done(() => {
       dataSource.customLoader.load({
         parentIds: [],
-      }).done((nodes) => {
+      }).done(({ data: nodes }) => {
         if (this._dataSource !== dataSource) {
           d.resolve(-1);
           return;
