@@ -1,118 +1,190 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
-import KeyboardProcessor from '@js/common/core/events/core/keyboard_processor';
 import { addNamespace as pureAddNamespace } from '@js/common/core/events/utils/index';
+import type { dxElementWrapper } from '@js/core/renderer';
+import type {
+  EngineEvent, EngineTarget, EventHandler, EventsEngineTarget,
+} from '@ts/events/core/events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
+import KeyboardProcessor from '@ts/events/core/keyboard_processor';
 
-function addNamespace(event, namespace) {
-  return namespace ? pureAddNamespace(event, namespace) : event;
+export interface ActionLike<TArguments> {
+  execute: (args: TArguments) => unknown;
 }
 
-function executeAction(action, args) {
+export type ShortAction<TArguments> = ((args: TArguments) => unknown) | ActionLike<TArguments>;
+
+export interface FeedbackActionArguments {
+  event: EngineEvent;
+  element: EngineTarget;
+}
+
+export interface ShortEventOptions {
+  namespace?: string;
+  selector?: string | null;
+}
+
+export type ShortEventHandler<TEvent extends EngineEvent = EngineEvent> = (
+  event: TEvent,
+) => unknown;
+
+export interface FeedbackOptions extends ShortEventOptions {
+  showTimeout?: number;
+  hideTimeout?: number;
+}
+
+function addNamespace(eventName: string, namespace?: string): string {
+  return namespace ? pureAddNamespace(eventName, namespace) : eventName;
+}
+
+function executeAction<TArguments>(
+  action: ShortAction<TArguments>,
+  args: TArguments,
+): unknown {
   return typeof action === 'function' ? action(args) : action.execute(args);
 }
 
 export const active = {
-  on: ($el, active, inactive, opts) => {
-    const {
+  on: (
+    $el: EventsEngineTarget,
+    activeAction: ShortAction<FeedbackActionArguments>,
+    inactiveAction: ShortAction<FeedbackActionArguments>,
+    {
       selector, showTimeout, hideTimeout, namespace,
-    } = opts;
-
+    }: FeedbackOptions,
+  ): void => {
     eventsEngine.on(
       $el,
       addNamespace('dxactive', namespace),
       selector,
       { timeout: showTimeout },
-      // @ts-expect-error
-      (event) => executeAction(active, { event, element: event.currentTarget }),
+      (event) => executeAction(activeAction, { event, element: event.currentTarget }),
     );
     eventsEngine.on(
       $el,
       addNamespace('dxinactive', namespace),
       selector,
       { timeout: hideTimeout },
-      // @ts-expect-error
-      (event) => executeAction(inactive, { event, element: event.currentTarget }),
+      (event) => executeAction(inactiveAction, { event, element: event.currentTarget }),
     );
   },
 
-  off: ($el, { namespace, selector }) => {
+  off: ($el: EventsEngineTarget, { namespace, selector }: ShortEventOptions): void => {
     eventsEngine.off($el, addNamespace('dxactive', namespace), selector);
     eventsEngine.off($el, addNamespace('dxinactive', namespace), selector);
   },
 };
 
 export const resize = {
-  on: ($el, resize, { namespace }: any = {}) => {
-    eventsEngine.on($el, addNamespace('dxresize', namespace), resize);
+  on: <TEvent extends EngineEvent = EngineEvent>(
+    $el: EventsEngineTarget,
+    resizeHandler: EventHandler<TEvent>,
+    { namespace }: ShortEventOptions = {},
+  ): void => {
+    eventsEngine.on($el, addNamespace('dxresize', namespace), resizeHandler);
   },
-  off: ($el, { namespace }: any = {}) => {
+  off: ($el: EventsEngineTarget, { namespace }: ShortEventOptions = {}): void => {
     eventsEngine.off($el, addNamespace('dxresize', namespace));
   },
 };
 
 export const hover = {
-  on: ($el, start, end, { selector, namespace }) => {
-    eventsEngine.on($el, addNamespace('dxhoverend', namespace), selector, (event) => end(event));
+  on: <TEvent extends EngineEvent = EngineEvent>(
+    $el: EventsEngineTarget,
+    start: ShortAction<FeedbackActionArguments>,
+    end: ShortEventHandler<TEvent>,
+    { selector, namespace }: ShortEventOptions,
+  ): void => {
+    eventsEngine.on(
+      $el,
+      addNamespace('dxhoverend', namespace),
+      selector,
+      (event: TEvent) => end(event),
+    );
     eventsEngine.on(
       $el,
       addNamespace('dxhoverstart', namespace),
       selector,
-      (event) => executeAction(start, { element: event.target, event }),
+      (event: TEvent) => executeAction(start, { element: event.target, event }),
     );
   },
 
-  off: ($el, { selector, namespace }) => {
+  off: ($el: EventsEngineTarget, { selector, namespace }: ShortEventOptions): void => {
     eventsEngine.off($el, addNamespace('dxhoverstart', namespace), selector);
     eventsEngine.off($el, addNamespace('dxhoverend', namespace), selector);
   },
 };
 
 export const visibility = {
-  on: ($el, shown, hiding, { namespace }) => {
+  on: <TEvent extends EngineEvent = EngineEvent>(
+    $el: EventsEngineTarget,
+    shown: EventHandler<TEvent>,
+    hiding: EventHandler<TEvent>,
+    { namespace }: ShortEventOptions,
+  ): void => {
     eventsEngine.on($el, addNamespace('dxhiding', namespace), hiding);
     eventsEngine.on($el, addNamespace('dxshown', namespace), shown);
   },
 
-  off: ($el, { namespace }) => {
+  off: ($el: EventsEngineTarget, { namespace }: ShortEventOptions): void => {
     eventsEngine.off($el, addNamespace('dxhiding', namespace));
     eventsEngine.off($el, addNamespace('dxshown', namespace));
   },
 };
 
 export const focus = {
-  on: ($el, focusIn, focusOut, { namespace }) => {
+  on: <TEvent extends EngineEvent = EngineEvent>(
+    $el: EventsEngineTarget,
+    focusIn: EventHandler<TEvent>,
+    focusOut: EventHandler<TEvent>,
+    { namespace }: ShortEventOptions,
+  ): void => {
     eventsEngine.on($el, addNamespace('focusin', namespace), focusIn);
     eventsEngine.on($el, addNamespace('focusout', namespace), focusOut);
   },
 
-  off: ($el, { namespace }) => {
+  off: ($el: EventsEngineTarget, { namespace }: ShortEventOptions): void => {
     eventsEngine.off($el, addNamespace('focusin', namespace));
     eventsEngine.off($el, addNamespace('focusout', namespace));
   },
-  // @ts-expect-error
-  trigger: ($el) => eventsEngine.trigger($el, 'focus'),
+
+  trigger: ($el: EventsEngineTarget): void => eventsEngine.trigger($el, 'focus'),
 };
 
 export const dxClick = {
-  on: ($el, click, { namespace }: any = {}) => {
+  on: <TEvent extends EngineEvent = EngineEvent>(
+    $el: EventsEngineTarget,
+    click: EventHandler<TEvent>,
+    { namespace }: ShortEventOptions = {},
+  ): void => {
     eventsEngine.on($el, addNamespace('dxclick', namespace), click);
   },
-  off: ($el, { namespace }: any = {}) => {
+  off: ($el: EventsEngineTarget, { namespace }: ShortEventOptions = {}): void => {
     eventsEngine.off($el, addNamespace('dxclick', namespace));
   },
 };
 
 export const click = {
-  on: ($el, click, { namespace }: any = {}) => {
-    eventsEngine.on($el, addNamespace('click', namespace), click);
+  on: <TEvent extends EngineEvent = EngineEvent>(
+    $el: EventsEngineTarget,
+    clickHandler: EventHandler<TEvent>,
+    { namespace }: ShortEventOptions = {},
+  ): void => {
+    eventsEngine.on($el, addNamespace('click', namespace), clickHandler);
   },
-  off: ($el, { namespace }: any = {}) => {
+  off: ($el: EventsEngineTarget, { namespace }: ShortEventOptions = {}): void => {
     eventsEngine.off($el, addNamespace('click', namespace));
   },
 };
 
 let index = 0;
-const keyboardProcessors = {};
-const generateListenerId = () => `keyboardProcessorId${index++}`;
+const keyboardProcessors: Record<string, KeyboardProcessor> = {};
+const generateListenerId = (): string => {
+  const listenerId = `keyboardProcessorId${index}`;
+
+  index += 1;
+
+  return listenerId;
+};
 
 const toElements = (value: unknown): Element[] => {
   if (!value) {
@@ -144,9 +216,7 @@ const toElements = (value: unknown): Element[] => {
 
 const processorIdsByNode = new WeakMap<Element, Set<string>>();
 
-const getProcessorNodes = (
-  processor: { _element?: unknown; _focusTarget?: unknown } | undefined,
-): Element[] => [
+const getProcessorNodes = (processor: KeyboardProcessor | undefined): Element[] => [
   ...toElements(processor?._element),
   ...toElements(processor?._focusTarget),
 ];
@@ -179,7 +249,11 @@ const removeProcessorFromIndex = (id: string, nodes: Element[]): void => {
 };
 
 export const keyboard = {
-  on: (element, focusTarget, handler) => {
+  on: (
+    element: Element | dxElementWrapper | null | undefined,
+    focusTarget: Element | Element[] | dxElementWrapper | null | undefined,
+    handler: (event: KeyboardKeyDownEvent) => void,
+  ): string => {
     const listenerId = generateListenerId();
 
     const keyboardProcessor = new KeyboardProcessor({ element, focusTarget, handler });
@@ -190,8 +264,8 @@ export const keyboard = {
     return listenerId;
   },
 
-  off: (listenerId) => {
-    const keyboardProcessor = keyboardProcessors[listenerId];
+  off: (listenerId: string | null | undefined): void => {
+    const keyboardProcessor = listenerId ? keyboardProcessors[listenerId] : undefined;
 
     if (listenerId && keyboardProcessor) {
       const nodes = getProcessorNodes(keyboardProcessor);
@@ -225,5 +299,7 @@ export const keyboard = {
   },
 
   // NOTE: For tests
-  _getProcessor: (listenerId) => keyboardProcessors[listenerId],
+  _getProcessor: (listenerId: string): KeyboardProcessor | undefined => (
+    keyboardProcessors[listenerId]
+  ),
 };

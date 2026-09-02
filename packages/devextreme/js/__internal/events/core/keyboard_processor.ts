@@ -27,7 +27,7 @@ export interface KeyboardKeyDownEvent {
 }
 
 export interface KeyboardProcessorOptions {
-  element?: Element | dxElementWrapper;
+  element?: Element | dxElementWrapper | null;
   focusTarget?: Element | Element[] | dxElementWrapper | null;
   handler?: (event: KeyboardKeyDownEvent) => void;
 }

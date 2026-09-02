@@ -1,6 +1,6 @@
 import errors from '@js/core/errors';
 
-const addNamespace = (eventNames, namespace) => {
+const addNamespace = (eventNames: string | string[], namespace: string): string => {
   if (!namespace) {
     throw errors.Error('E0017');
   }
@@ -11,7 +11,7 @@ const addNamespace = (eventNames, namespace) => {
       .join(' ');
   }
 
-  if (eventNames.indexOf(' ') !== -1) {
+  if (eventNames.includes(' ')) {
     return addNamespace(eventNames.split(/\s+/g), namespace);
   }
 

@@ -1,7 +1,10 @@
 import registerEvent from '@js/common/core/events/core/event_registrator';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, fireEvent } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
+import type {
+  EngineEvent, EngineTarget, EventPropertyBag,
+} from '@ts/events/core/events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
 
 const EVENT_NAME = 'dxmousewheel';
 const EVENT_NAMESPACE = 'dxWheel';
@@ -10,52 +13,46 @@ const NATIVE_EVENT_NAME = 'wheel';
 const PIXEL_MODE = 0;
 const DELTA_MULTIPLIER = 30;
 
-enum DeltaMode {
-  DOM_DELTA_PIXEL = 0,
-  DOM_DELTA_LINE = 1,
-  DOM_DELTA_PAGE = 2,
-}
-
-interface WheelEvent {
-  deltaMode: DeltaMode;
-  deltaX: number;
-  deltaY: number;
-  deltaZ: number;
-}
+type MouseWheelEvent = EngineEvent & { originalEvent: WheelEvent };
 
 const wheel = {
-  setup(element) {
+  setup(element: EngineTarget): void {
     const $element = $(element);
-    eventsEngine.on($element, addNamespace(NATIVE_EVENT_NAME, EVENT_NAMESPACE), wheel._wheelHandler.bind(wheel));
+    eventsEngine.on(
+      $element,
+      addNamespace(NATIVE_EVENT_NAME, EVENT_NAMESPACE),
+      wheel._wheelHandler.bind(wheel),
+    );
   },
 
-  teardown(element) {
+  teardown(element: EngineTarget): void {
     eventsEngine.off(element, `.${EVENT_NAMESPACE}`);
   },
 
-  _wheelHandler(e) {
+  _wheelHandler(e: MouseWheelEvent): void {
     const {
       deltaMode, deltaY, deltaX, deltaZ,
-    }: WheelEvent = e.originalEvent;
+    } = e.originalEvent;
 
     const delta = this._getWheelDelta(deltaY, deltaX);
 
-    fireEvent({
+    const wheelEvent: EventPropertyBag & { originalEvent: EngineEvent } = {
       type: EVENT_NAME,
       originalEvent: e,
-      // @ts-expect-error
       delta: this._normalizeDelta(delta, deltaMode),
       deltaX,
       deltaY,
       deltaZ,
       deltaMode,
       pointerType: 'mouse',
-    });
+    };
+
+    fireEvent(wheelEvent);
 
     e.stopPropagation();
   },
 
-  _normalizeDelta(delta: number, deltaMode = PIXEL_MODE) {
+  _normalizeDelta(delta: number, deltaMode = PIXEL_MODE): number {
     if (deltaMode === PIXEL_MODE) {
       return -delta;
     }
@@ -64,7 +61,7 @@ const wheel = {
     return -DELTA_MULTIPLIER * delta;
   },
 
-  _getWheelDelta(deltaY: number, deltaX: number) {
+  _getWheelDelta(deltaY: number, deltaX: number): number {
     if (deltaY) {
       return deltaY;
     }
