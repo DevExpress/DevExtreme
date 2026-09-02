@@ -55,7 +55,8 @@ $chat-file-container-box-shadow: ds.$box-shadow-sm !default;
 $chat-file-secondary-content: ds.$color-content-subtle !default;
 
 /* An attachment is a control sitting inside the transcript, and the transcript itself greys with
-the rest of the widget - see the note on the reversal in DISABLED_STATES.md. */
+the rest of the widget too - a reading the component owner chose over the other one, that a message
+is content and so has no disabled state. */
 $chat-file-content-disabled: ds.$color-content-disabled !default;
 $chat-content-disabled: ds.$color-content-disabled !default;
 $chat-information-content-disabled: ds.$color-content-disabled !default;

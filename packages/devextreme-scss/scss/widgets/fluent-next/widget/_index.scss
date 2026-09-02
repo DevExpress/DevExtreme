@@ -20,7 +20,8 @@ Anything that needs a different disabled colour still says so: those rules are m
 win. Layout containers now carry the state through to their text, which is what was missing.
 
 What is left here that is not a colour: no text selection, and no pointer cursor on something
-that cannot be used. The remaining opacity users are named and listed in DISABLED_STATES.md. */
+that cannot be used. Nine component-scoped opacity dims still remain, each named with its reason
+in the ratchet in tests/disabled-paint.test.ts. */
 .dx-state-disabled {
   /* The colour is on the state class itself, not only on .dx-widget: item.disabled is inherited
   from the base collection item, so every collection widget can disable a single entry - and that

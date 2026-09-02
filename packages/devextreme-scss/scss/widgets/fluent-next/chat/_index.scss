@@ -169,8 +169,9 @@ so the boundary reads as inactive too. The transcript above it stays legible. */
 }
 
 /* The transcript greys with the rest of the widget. This reverses the earlier reading - that a
-message is content and so has no disabled state - on the owner's instruction; the package and
-Blazor rationale for the other reading is kept in DISABLED_STATES.md so the choice stays visible.
+message is content and so has no disabled state - on the owner's instruction. That other reading
+had the package and Blazor behind it: neither defines a disabled colour for a message bubble, and
+Blazor never dims its chat, it paints the individual controls.
 The attachment was already following the state, being a control that downloads on click. */
 .dx-chat.dx-state-disabled,
 .dx-state-disabled .dx-chat {

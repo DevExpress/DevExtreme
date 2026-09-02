@@ -48,7 +48,7 @@ $button-default-contained-bg-hovered: ds.$color-bg-primary-hovered !default;
 
 // package's own mapping and stays below AA in dark - that is a palette defect, see
 
-// fluent-next/DISABLED_STATES.md.
+// the palette, not the theme.
 $button-default-contained-bg-focused: ds.$color-bg-primary-active !default;
 
 $button-default-contained-bg-active: ds.$color-bg-primary-active !default;

@@ -72,7 +72,7 @@ const getIgnoredRules = (testName) => {
       // 4.92:1 on an alternating row (#161616) but 4.22:1 on a normal one (#242424), so roughly
       // half the rows fail and which ones is decided by the live data. The role is the one the
       // package itself assigns to error text (text-input.color.invalid.content.rest) and the one
-      // Blazor uses, so the fix belongs to the palette. See fluent-next/DISABLED_STATES.md.
+      // Blazor uses, so the fix belongs to the palette rather than to this demo.
       'DataGrid-SignalRService',
       // False positive: contrast rules do not apply to custom orange color
       'CardView-FieldTemplate',

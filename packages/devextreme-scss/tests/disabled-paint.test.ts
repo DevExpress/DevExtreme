@@ -1,5 +1,6 @@
 /*
- * Gate for the theme's disabled-state policy (scss/widgets/fluent-next/DISABLED_STATES.md).
+ * Gate for the theme's disabled-state policy: components paint the state from the disabled roles
+ * rather than dimming, and nothing arrives with no disabled rule of its own.
  *
  * The theme dims a disabled widget with one blanket rule and lets a component opt out of it with
  * `opacity: 1` when it paints the state itself from the disabled roles. Opting out without
