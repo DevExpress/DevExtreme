@@ -38,14 +38,6 @@ that cannot be used. The remaining opacity users are named and listed in DISABLE
   }
 }
 
-/* The chat transcript is content, not a control, and stays readable - the decision is recorded in
-DISABLED_STATES.md. It has to say so again here because the floor above would grey it. */
-.dx-chat.dx-state-disabled .dx-chat-messagelist,
-.dx-state-disabled .dx-chat .dx-chat-messagelist,
-.dx-chat-messagelist.dx-state-disabled {
-  color: var(--dx-global-content);
-}
-
 .dx-surface {
   background-color: var(--dx-widget-bg);
 }

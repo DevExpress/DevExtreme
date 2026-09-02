@@ -162,3 +162,15 @@ field - and a disabled builder kept them at full strength. */
 .dx-filterbuilder.dx-state-disabled .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-item-value-text {
   background-color: var(--dx-filter-builder-item-field-content-disabled);
 }
+
+/* The add and remove icons carry semantic colours - success and danger - which say "you can act"
+and so kept saying it inside a disabled builder. */
+.dx-state-disabled .dx-filterbuilder .dx-icon-plus,
+.dx-filterbuilder.dx-state-disabled .dx-icon-plus {
+  color: var(--dx-filter-builder-plus-icon-content-disabled);
+}
+
+.dx-state-disabled .dx-filterbuilder .dx-icon-remove,
+.dx-filterbuilder.dx-state-disabled .dx-icon-remove {
+  color: var(--dx-filter-builder-remove-icon-content-disabled);
+}

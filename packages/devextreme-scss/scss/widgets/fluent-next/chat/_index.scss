@@ -168,13 +168,28 @@ so the boundary reads as inactive too. The transcript above it stays legible. */
   }
 }
 
-/* The transcript keeps full contrast, but an attachment inside it is a control - it downloads on
-click - and follows the state like the composing area does. */
+/* The transcript greys with the rest of the widget. This reverses the earlier reading - that a
+message is content and so has no disabled state - on the owner's instruction; the package and
+Blazor rationale for the other reading is kept in DISABLED_STATES.md so the choice stays visible.
+The attachment was already following the state, being a control that downloads on click. */
 .dx-chat.dx-state-disabled,
 .dx-state-disabled .dx-chat {
   .dx-chat-file,
   .dx-chat-file .dx-icon,
   .dx-chat-file-size {
     color: var(--dx-chat-file-content-disabled);
+  }
+
+  .dx-chat-messagebubble {
+    color: var(--dx-chat-content-disabled);
+  }
+
+  .dx-chat-messagelist-day-header,
+  .dx-chat-messagegroup-author-name,
+  .dx-chat-messagegroup-time,
+  .dx-chat-message-edited,
+  .dx-chat-messagelist-empty-message,
+  .dx-chat-messagelist-empty-prompt {
+    color: var(--dx-chat-information-content-disabled);
   }
 }

@@ -6,10 +6,12 @@ $filter-builder-content: ds.$color-content !default;
 
 $filter-builder-text-content-focused: ds.$color-content-static-dark !default;
 
+$filter-builder-plus-icon-content-disabled: ds.$color-content-disabled !default;
 $filter-builder-plus-icon: ds.$color-content-success !default;
 $filter-builder-plus-icon-content-hovered: ds.$color-content-success-hovered !default;
 $filter-builder-plus-icon-content-focused: ds.$color-content-success-active !default;
 
+$filter-builder-remove-icon-content-disabled: ds.$color-content-disabled !default;
 $filter-builder-remove-icon: ds.$color-content-danger !default;
 $filter-builder-remove-icon-content-hovered: ds.$color-content-danger-hovered !default;
 $filter-builder-remove-icon-content-focused: ds.$color-content-danger-active !default;

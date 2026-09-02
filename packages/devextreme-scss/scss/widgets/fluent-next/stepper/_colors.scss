@@ -42,6 +42,10 @@ $stepper-step-invalid-bg-selected-hovered: ds.$color-bg-danger-hovered !default;
 
 $stepper-step-bg-disabled: ds.$color-bg-disabled !default;
 
+/* The ring needs a border role, not the background one: painting both with bg-disabled left an
+almost invisible white disc with grey digits floating in it. */
+$stepper-step-border-disabled: ds.$color-border-disabled !default;
+
 $stepper-step-content-disabled: ds.$color-content-disabled !default;
 
 $stepper-connector-bg: ds.$color-border-subtle !default;
