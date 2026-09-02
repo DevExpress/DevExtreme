@@ -76,7 +76,15 @@
 @use "validation/public" as validationPublic;
 @use "widget/public" as widgetPublic;
 
-:root {
+/*
+ * The system tier is declared on the document root and on every element that names a theme mode.
+ * A custom property resolves where it is declared, so a `:root`-only alias onto a role would freeze
+ * at the bundle's mode and ignore a mode class further down (see _design-system.scss).
+ */
+:root,
+.dx-theme-mode-light,
+.dx-theme-mode-dark,
+.dx-theme-mode-inverted {
   @include commonPublic.publish();
   @include typographyPublic.publish();
 }
