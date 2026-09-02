@@ -462,7 +462,7 @@ $scheduler-appointment-content-padding-right: 5px !default;
         right: 0;
 
         /* NOTE: Cell has 1px table cell (<th>) border, so -1px bottom is ok here. */
-        bottom: -1px;
+        bottom: -1px; // dx-px-nudge: sits on the 1px <th> border, see the note above
         height: $scheduler-header-panel-current-time-cell-height;
         background-color: $scheduler-time-indicator-color;
       }

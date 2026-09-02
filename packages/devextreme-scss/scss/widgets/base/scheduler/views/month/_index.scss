@@ -70,7 +70,7 @@ $scheduler-first-month-cell-background-color: null !default;
     }
 
     .dx-scheduler-group-header {
-      box-shadow: 0 -2px 0 $scheduler-base-border-color;
+      box-shadow: 0 -2px 0 $scheduler-base-border-color; // dx-line-width: 2px line standing in for the removed border-bottom
       border-bottom: none;
     }
 

@@ -7,9 +7,9 @@
     "The match is by variable name. A name declared in a nested module is only reachable once the parent forwards it (see base/chat/_index.scss), which is why an \"open\" row can sit next to injected ones from the same widget."
   ],
   "summary": {
-    "occurrences": 457,
-    "variables": 394,
-    "injected": 433,
+    "occurrences": 460,
+    "variables": 396,
+    "injected": 436,
     "open": 0,
     "parameters": 24
   },
@@ -821,6 +821,23 @@
       "line": 35,
       "widget": "htmlEditor",
       "literals": [
+        "12px",
+        "15px"
+      ],
+      "occurrences": 2,
+      "marker": null,
+      "text": "$htmleditor-content-padding: 12px 15px !default;",
+      "variable": "htmleditor-content-padding",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/htmlEditor/_index.scss",
+      "setTo": "var(--dx-html-editor-padding-block) var(--dx-html-editor-padding-inline)"
+    },
+    {
+      "file": "scss/widgets/base/_htmlEditor.scss",
+      "line": 36,
+      "widget": "htmlEditor",
+      "literals": [
         "1px"
       ],
       "occurrences": 1,
@@ -834,7 +851,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 36,
+      "line": 37,
       "widget": "htmlEditor",
       "literals": [
         "2px"
@@ -850,7 +867,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 37,
+      "line": 38,
       "widget": "htmlEditor",
       "literals": [
         "2px"
@@ -866,7 +883,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 38,
+      "line": 39,
       "widget": "htmlEditor",
       "literals": [
         "5px"
@@ -882,7 +899,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 39,
+      "line": 40,
       "widget": "htmlEditor",
       "literals": [
         "3px"
@@ -1353,7 +1370,7 @@
         "9px"
       ],
       "occurrences": 1,
-      "marker": null,
+      "marker": "dx-fixed-size",
       "text": "$pagination-info-paddings: 9px !default;",
       "variable": "pagination-info-paddings",
       "kind": "module-variable",
@@ -1754,7 +1771,7 @@
         "14px"
       ],
       "occurrences": 1,
-      "marker": null,
+      "marker": "dx-fixed-size",
       "text": "$slider-label-position-bottom-padding-bottom: 14px !default;",
       "variable": "slider-label-position-bottom-padding-bottom",
       "kind": "module-variable",
@@ -2059,7 +2076,7 @@
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
+      "marker": "dx-relative",
       "text": "$validation-summary-item-border-bottom-width: 1px !default;",
       "variable": "validation-summary-item-border-bottom-width",
       "kind": "module-variable",
@@ -3783,7 +3800,7 @@
         "3px"
       ],
       "occurrences": 1,
-      "marker": null,
+      "marker": "dx-relative",
       "text": "$filemanager-splitter-wrapper-right: 3px !default;",
       "variable": "filemanager-splitter-wrapper-right",
       "kind": "module-variable",
@@ -4049,6 +4066,22 @@
       "status": "injected",
       "setBy": "scss/widgets/fluent-next/gantt/_index.scss",
       "setTo": "var(--dx-gantt-view-min-width)"
+    },
+    {
+      "file": "scss/widgets/base/list/_index.scss",
+      "line": 6,
+      "widget": "list",
+      "literals": [
+        "5px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$list-searchbox-margin-bottom: 5px !default;",
+      "variable": "list-searchbox-margin-bottom",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/list/_index.scss",
+      "setTo": "var(--dx-list-search-box-margin-block-end)"
     },
     {
       "file": "scss/widgets/base/list/_index.scss",
@@ -4602,7 +4635,7 @@
         "22px"
       ],
       "occurrences": 1,
-      "marker": null,
+      "marker": "dx-fixed-size",
       "text": "$scheduler-appointment-collector-height: 22px !default;",
       "variable": "scheduler-appointment-collector-height",
       "kind": "module-variable",
@@ -4877,7 +4910,7 @@
         "15px"
       ],
       "occurrences": 3,
-      "marker": null,
+      "marker": "dx-shadow-geometry",
       "text": "$scheduler-appointment-dragging-shadow: 7px 7px 15px 0 rgba(50, 50, 50, 0.2) !default;",
       "variable": "scheduler-appointment-dragging-shadow",
       "kind": "module-variable",
@@ -4893,7 +4926,7 @@
         "12px"
       ],
       "occurrences": 1,
-      "marker": null,
+      "marker": "dx-shadow-geometry",
       "text": "$scheduler-grouped-appointment-month-text-size: 12px !default;",
       "variable": "scheduler-grouped-appointment-month-text-size",
       "kind": "module-variable",
@@ -5101,7 +5134,7 @@
         "18px"
       ],
       "occurrences": 1,
-      "marker": null,
+      "marker": "dx-shadow-geometry",
       "text": "$scheduler-appointment-icon-font-size: 18px !default;",
       "variable": "scheduler-appointment-icon-font-size",
       "kind": "module-variable",
@@ -5920,7 +5953,7 @@
         "20px"
       ],
       "occurrences": 1,
-      "marker": null,
+      "marker": "dx-fixed-size",
       "text": "$scheduler-workspace-info-font-size: 20px !default;",
       "variable": "scheduler-workspace-info-font-size",
       "kind": "module-variable",
@@ -5952,7 +5985,7 @@
         "30px"
       ],
       "occurrences": 1,
-      "marker": null,
+      "marker": "dx-px-nudge",
       "text": "$scheduler-group-header-table-cell-height: 30px !default;",
       "variable": "scheduler-group-header-table-cell-height",
       "kind": "module-variable",
@@ -5968,7 +6001,7 @@
         "16px"
       ],
       "occurrences": 1,
-      "marker": null,
+      "marker": "dx-fixed-size",
       "text": "$scheduler-month-date-text-size: 16px !default;",
       "variable": "scheduler-month-date-text-size",
       "kind": "module-variable",

@@ -6,11 +6,11 @@
     "marker — the classification comment already on the line, from tools/review/size-markers.json."
   ],
   "summary": {
-    "occurrences": 300,
+    "occurrences": 295,
     "byCategory": {
-      "inline": 147,
+      "inline": 143,
       "geometry": 69,
-      "local-var": 59,
+      "local-var": 58,
       "calc": 9,
       "structural": 8,
       "mixin-arg": 6,
@@ -19,9 +19,9 @@
     "byWidget": {
       "gridBase": 75,
       "colorView": 67,
-      "scheduler": 35,
+      "scheduler": 33,
       "textEditor": 26,
-      "htmlEditor": 18,
+      "htmlEditor": 16,
       "cardView": 15,
       "pivotGrid": 11,
       "ui": 8,
@@ -41,22 +41,16 @@
       "colorBox": 1,
       "diagram": 1,
       "gantt": 1,
-      "list": 1,
       "lookup": 1,
       "popover": 1,
       "stepper": 1,
       "toolbar": 1,
       "treeView": 1
     },
-    "unmarked": 176,
+    "unmarked": 142,
     "unmarkedByWidget": {
       "gridBase": 75,
-      "colorView": 67,
-      "htmlEditor": 13,
-      "scheduler": 13,
-      "cardView": 4,
-      "textEditor": 3,
-      "list": 1
+      "colorView": 67
     }
   },
   "places": [
@@ -80,7 +74,7 @@
         "11px"
       ],
       "occurrences": 1,
-      "marker": null,
+      "marker": "dx-fixed-size",
       "text": "$resize-handle-size: 11px;",
       "category": "local-var"
     },
@@ -98,19 +92,19 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 153,
+      "line": 154,
       "widget": "htmlEditor",
       "literals": [
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "min-height: 1px;",
+      "marker": "dx-structural",
+      "text": "min-height: 1px; // dx-structural: lets the flex item shrink below its content, not a designed height",
       "category": "inline"
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 160,
+      "line": 161,
       "widget": "htmlEditor",
       "literals": [
         "-100000px"
@@ -122,7 +116,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 161,
+      "line": 162,
       "widget": "htmlEditor",
       "literals": [
         "1px"
@@ -134,20 +128,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 178,
-      "widget": "htmlEditor",
-      "literals": [
-        "12px",
-        "15px"
-      ],
-      "occurrences": 2,
-      "marker": null,
-      "text": "padding: 12px 15px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 225,
+      "line": 226,
       "widget": "htmlEditor",
       "literals": [
         "1px"
@@ -159,7 +140,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 355,
+      "line": 356,
       "widget": "htmlEditor",
       "literals": [
         "0.1px"
@@ -171,110 +152,110 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 369,
+      "line": 370,
       "widget": "htmlEditor",
       "literals": [
         "35px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "min-height: 35px;",
+      "marker": "dx-fixed-size",
+      "text": "min-height: 35px; // dx-fixed-size: the mention suggestion list keeps a row of space while filtering",
       "category": "inline"
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 378,
+      "line": 379,
       "widget": "htmlEditor",
       "literals": [
         "50px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "min-width: 50px;",
+      "marker": "dx-fixed-size",
+      "text": "min-width: 50px; // dx-fixed-size: the narrowest the mention suggestion list may get",
       "category": "inline"
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 391,
+      "line": 392,
       "widget": "htmlEditor",
       "literals": [
         "360px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "min-width: 360px;",
+      "marker": "dx-fixed-size",
+      "text": "min-width: 360px; // dx-fixed-size: the link/image dialog form width",
       "category": "inline"
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 416,
+      "line": 417,
       "widget": "htmlEditor",
       "literals": [
         "6px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "gap: 6px;",
+      "marker": "dx-fixed-size",
+      "text": "gap: 6px; // dx-fixed-size: gap between the AI dialog title icon and its text",
       "category": "inline"
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 423,
+      "line": 424,
       "widget": "htmlEditor",
       "literals": [
         "240px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "min-width: 240px;",
+      "marker": "dx-fixed-size",
+      "text": "min-width: 240px; // dx-fixed-size: the same dialog form once the popup goes fullscreen",
       "category": "inline"
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 436,
+      "line": 437,
       "widget": "htmlEditor",
       "literals": [
         "3px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "border-bottom: 3px solid transparent;",
+      "marker": "dx-line-width",
+      "text": "border-bottom: 3px solid transparent; // dx-line-width: the strip under the colour-format icon that shows the picked colour",
       "category": "geometry"
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 456,
+      "line": 457,
       "widget": "htmlEditor",
       "literals": [
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "border: 1px dashed lightslategrey;",
+      "marker": "dx-line-width",
+      "text": "border: 1px dashed lightslategrey; // dx-line-width: hairline of the image resize frame",
       "category": "geometry"
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 467,
+      "line": 468,
       "widget": "htmlEditor",
       "literals": [
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "border: 1px solid white;",
+      "marker": "dx-line-width",
+      "text": "border: 1px solid white; // dx-line-width: hairline around a resize handle",
       "category": "geometry"
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 523,
+      "line": 524,
       "widget": "htmlEditor",
       "literals": [
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "border: 1px solid white;",
+      "marker": "dx-line-width",
+      "text": "border: 1px solid white; // dx-line-width: hairline around a resize handle // dx-line-width: hairline around a resize handle",
       "category": "geometry"
     },
     {
@@ -687,7 +668,7 @@
         "3px"
       ],
       "occurrences": 2,
-      "marker": null,
+      "marker": "dx-shadow-geometry",
       "text": "0 1px 3px $cardview-header-panel__item--dragged-box-shadow-color,",
       "category": "inline"
     },
@@ -700,7 +681,7 @@
         "8px"
       ],
       "occurrences": 2,
-      "marker": null,
+      "marker": "dx-shadow-geometry",
       "text": "0 6px 8px $cardview-header-panel__item--dragged-box-shadow-color;",
       "category": "inline"
     },
@@ -2064,18 +2045,6 @@
       "category": "local-var"
     },
     {
-      "file": "scss/widgets/base/list/_index.scss",
-      "line": 6,
-      "widget": "list",
-      "literals": [
-        "5px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$list-searchbox-margin-bottom: 5px;",
-      "category": "local-var"
-    },
-    {
       "file": "scss/widgets/base/lookup/_index.scss",
       "line": 10,
       "widget": "lookup",
@@ -2420,8 +2389,8 @@
         "-1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "bottom: -1px;",
+      "marker": "dx-px-nudge",
+      "text": "bottom: -1px; // dx-px-nudge: sits on the 1px <th> border, see the note above",
       "category": "inline"
     },
     {
@@ -2432,8 +2401,8 @@
         "-1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "left: -1px;",
+      "marker": "dx-px-nudge",
+      "text": "left: -1px; // dx-px-nudge: pulls the resize handle onto the appointment's 1px border",
       "category": "inline"
     },
     {
@@ -2444,8 +2413,8 @@
         "-1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "margin-bottom: -1px;",
+      "marker": "dx-px-nudge",
+      "text": "margin-bottom: -1px; // dx-px-nudge: collapses the header border with the row below",
       "category": "inline"
     },
     {
@@ -2516,8 +2485,8 @@
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "top: if(meta.type-of($scheduler-header-panel-table-cell-height) == number and meta.type-of($scheduler-current-time-cell-border-size) == number, $scheduler-header-panel-table-cell-height - $scheduler-current-time-cell-border-size - 1, calc(#{$scheduler-header-panel-table-cell-height} - #{$scheduler-current-time-cell-border-size} - 1px));",
+      "marker": "dx-px-nudge",
+      "text": "top: if(meta.type-of($scheduler-header-panel-table-cell-height) == number and meta.type-of($scheduler-current-time-cell-border-size) == number, $scheduler-header-panel-table-cell-height - $scheduler-current-time-cell-border-size - 1, calc(#{$scheduler-header-panel-table-cell-height} - #{$scheduler-current-time-cell-border-size} - 1px)); // dx-px-nudge: -1px under the derived top offset, so the indicator overlaps the border",
       "category": "calc"
     },
     {
@@ -2528,8 +2497,8 @@
         "5px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "padding: 0 5px;",
+      "marker": "dx-fixed-size",
+      "text": "padding: 0 5px; // dx-fixed-size: horizontal padding of the time panel cell",
       "category": "inline"
     },
     {
@@ -2540,8 +2509,8 @@
         "-13px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "margin-top: -13px;",
+      "marker": "dx-px-nudge",
+      "text": "margin-top: -13px; // dx-px-nudge: lifts the hour label to straddle the cell border",
       "category": "inline"
     },
     {
@@ -2552,32 +2521,8 @@
         "-1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "bottom: -1px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 844,
-      "widget": "scheduler",
-      "literals": [
-        "50px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "height: 50px !important; // stylelint-disable-line declaration-no-important",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 855,
-      "widget": "scheduler",
-      "literals": [
-        "50px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "height: 50px;",
+      "marker": "dx-px-nudge",
+      "text": "bottom: -1px; // dx-px-nudge: sits the time indicator on the cell border",
       "category": "inline"
     },
     {
@@ -2588,8 +2533,8 @@
         "-1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "box-shadow: inset 0 -1px 0 $scheduler-base-border-color;",
+      "marker": "dx-line-width",
+      "text": "box-shadow: inset 0 -1px 0 $scheduler-base-border-color; // dx-line-width: hairline standing in for the removed border-bottom",
       "category": "geometry"
     },
     {
@@ -2600,8 +2545,8 @@
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "margin-top: 1px;",
+      "marker": "dx-px-nudge",
+      "text": "margin-top: 1px; // dx-px-nudge: keeps the ungrouped header panel off the border above",
       "category": "inline"
     },
     {
@@ -2612,8 +2557,8 @@
         "-2px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "box-shadow: 0 -2px 0 $scheduler-base-border-color;",
+      "marker": "dx-line-width",
+      "text": "box-shadow: 0 -2px 0 $scheduler-base-border-color; // dx-line-width: 2px line standing in for the removed border-bottom",
       "category": "geometry"
     },
     {
@@ -2624,8 +2569,8 @@
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "border-bottom: 1px solid;",
+      "marker": "dx-line-width",
+      "text": "border-bottom: 1px solid; // dx-line-width: hairline under the empty header cell",
       "category": "geometry"
     },
     {
@@ -2661,7 +2606,7 @@
         "-1px"
       ],
       "occurrences": 3,
-      "marker": null,
+      "marker": "dx-line-width",
       "text": ")} 1px -1px 1px);",
       "category": "inline"
     },

@@ -18,6 +18,7 @@
   $blockquote-border-inline-start-width: var(--dx-html-editor-blockquote-border-inline-start-width),
   $table-cell-padding: var(--dx-html-editor-table-cell-padding),
   $placeholder-inset-inline: var(--dx-html-editor-placeholder-inset-inline),
+  $htmleditor-content-padding: var(--dx-html-editor-padding-block) var(--dx-html-editor-padding-inline),
   $mention-padding-block: var(--dx-mention-padding-block),
   $mention-border-radius: var(--dx-mention-border-radius),
   $mention-margin-inline: var(--dx-mention-margin-inline),
@@ -134,7 +135,6 @@
 
 .dx-htmleditor-content {
   line-height: var(--dx-global-line-height);
-  padding: var(--dx-html-editor-padding-block) var(--dx-html-editor-padding-inline);
 
   &.ql-blank::before { // stylelint-disable-line selector-class-pattern
     color: textEditorColors.$text-editor-placeholder;

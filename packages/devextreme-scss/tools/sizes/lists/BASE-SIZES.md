@@ -11,27 +11,22 @@ and carries a marker saying why.
 
 | | occurrences |
 |---|---|
-| a raw grep of the layer | 766 |
-| …of those, inside comments (commented-out code, prose) | 9 |
-| **in code** | **757** |
-| — the theme can already set from outside | 457 |
-| — nailed into the shared layer | 300 |
+| a raw grep of the layer | 768 |
+| …of those, inside comments (commented-out code, prose) | 13 |
+| **in code** | **755** |
+| — the theme can already set from outside | 460 |
+| — nailed into the shared layer | 295 |
 
 ## What the theme can already set
 
-457 occurrences in 394 `!default` variables. fluent-next already passes 433; 0 are open knobs nobody turns.
+460 occurrences in 396 `!default` variables. fluent-next already passes 436; 0 are open knobs nobody turns.
 
 ## What is nailed into the layer
 
-| widget | inline | geometry | local-var | calc | total |
-|---|---|---|---|---|---|
-| gridBase | 50 | 7 | 18 |  | **75** |
-| colorView | 35 | 24 | 8 |  | **67** |
-| htmlEditor | 8 | 4 | 1 |  | **13** |
-| scheduler | 9 | 3 |  | 1 | **13** |
-| cardView | 4 |  |  |  | **4** |
-| textEditor | 3 |  |  |  | **3** |
-| list |  |  | 1 |  | **1** |
+| widget | inline | geometry | local-var | total |
+|---|---|---|---|---|
+| gridBase | 50 | 7 | 18 | **75** |
+| colorView | 35 | 24 | 8 | **67** |
 
 ## Places, by widget
 
@@ -232,76 +227,3 @@ and carries a marker saying why.
   `border: 1px solid;`
 - `scss/widgets/base/colorView/_mixins.scss:16` · geometry
   `box-shadow: inset 0 -5px 0 3px $handle-color, inset 0 5px 0 3px $handle-color, inset 0 -6px 1px 4px $handle-border-color, inset 0 6px 1px 4px $handle-border-color;`
-
-### htmlEditor — 13
-
-- `scss/widgets/base/_htmlEditor.scss:20` · local-var
-  `$resize-handle-size: 11px;`
-- `scss/widgets/base/_htmlEditor.scss:153` · inline
-  `min-height: 1px;`
-- `scss/widgets/base/_htmlEditor.scss:178` · inline
-  `padding: 12px 15px;`
-- `scss/widgets/base/_htmlEditor.scss:369` · inline
-  `min-height: 35px;`
-- `scss/widgets/base/_htmlEditor.scss:378` · inline
-  `min-width: 50px;`
-- `scss/widgets/base/_htmlEditor.scss:391` · inline
-  `min-width: 360px;`
-- `scss/widgets/base/_htmlEditor.scss:416` · inline
-  `gap: 6px;`
-- `scss/widgets/base/_htmlEditor.scss:423` · inline
-  `min-width: 240px;`
-- `scss/widgets/base/_htmlEditor.scss:436` · geometry
-  `border-bottom: 3px solid transparent;`
-- `scss/widgets/base/_htmlEditor.scss:456` · geometry
-  `border: 1px dashed lightslategrey;`
-- `scss/widgets/base/_htmlEditor.scss:467` · geometry
-  `border: 1px solid white;`
-- `scss/widgets/base/_htmlEditor.scss:523` · geometry
-  `border: 1px solid white;`
-
-### scheduler — 13
-
-- `scss/widgets/base/scheduler/_index.scss:465` · inline
-  `bottom: -1px;`
-- `scss/widgets/base/scheduler/appointment/regular/_index.scss:147` · inline
-  `left: -1px;`
-- `scss/widgets/base/scheduler/layout/_header.scss:9` · inline
-  `margin-bottom: -1px;`
-- `scss/widgets/base/scheduler/views/_index.scss:121` · calc
-  `top: if(meta.type-of($scheduler-header-panel-table-cell-height) == number and meta.type-of($scheduler-current-time-cell-border-size) == number, $scheduler-header-panel-table-cell-height - $scheduler-current-time-cell-border-size - 1, calc(#{$scheduler-header-panel-table-cell-height} - #{$scheduler-current-time-cell-border-size} - 1px));`
-- `scss/widgets/base/scheduler/views/_index.scss:405` · inline
-  `padding: 0 5px;`
-- `scss/widgets/base/scheduler/views/_index.scss:697` · inline
-  `margin-top: -13px;`
-- `scss/widgets/base/scheduler/views/_index.scss:707` · inline
-  `bottom: -1px;`
-- `scss/widgets/base/scheduler/views/_index.scss:844` · inline
-  `height: 50px !important; // stylelint-disable-line declaration-no-important`
-- `scss/widgets/base/scheduler/views/_index.scss:855` · inline
-  `height: 50px;`
-- `scss/widgets/base/scheduler/views/_index.scss:870` · geometry
-  `box-shadow: inset 0 -1px 0 $scheduler-base-border-color;`
-- `scss/widgets/base/scheduler/views/day/_index.scss:45` · inline
-  `margin-top: 1px;`
-- `scss/widgets/base/scheduler/views/month/_index.scss:73` · geometry
-  `box-shadow: 0 -2px 0 $scheduler-base-border-color;`
-- `scss/widgets/base/scheduler/views/timelines/_index.scss:188` · geometry
-  `border-bottom: 1px solid;`
-
-### cardView — 4
-
-- `scss/widgets/base/cardView/header_panel/item/_index.scss:89` · inline
-  `0 1px 3px $cardview-header-panel__item--dragged-box-shadow-color,`
-- `scss/widgets/base/cardView/header_panel/item/_index.scss:90` · inline
-  `0 6px 8px $cardview-header-panel__item--dragged-box-shadow-color;`
-
-### textEditor — 3
-
-- `scss/widgets/base/textEditor/_mixins.scss:201` · inline
-  `)} 1px -1px 1px);`
-
-### list — 1
-
-- `scss/widgets/base/list/_index.scss:6` · local-var
-  `$list-searchbox-margin-bottom: 5px;`

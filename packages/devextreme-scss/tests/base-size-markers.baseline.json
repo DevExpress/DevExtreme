@@ -1,13 +1,8 @@
 {
   "openKnobs": 0,
-  "unclassified": 176,
+  "unclassified": 142,
   "unclassifiedByWidget": {
     "gridBase": 75,
-    "colorView": 67,
-    "htmlEditor": 13,
-    "scheduler": 13,
-    "cardView": 4,
-    "textEditor": 3,
-    "list": 1
+    "colorView": 67
   }
 }

@@ -49,15 +49,61 @@ const split = (line) => {
   return at === -1 ? { code: line, comment: '' } : { code: line.slice(0, at), comment: line.slice(at) };
 };
 
+const ENDS_STATEMENT = /[;{}]$/;
+const nonBlankAbove = (lines, index) => {
+  for (let at = index - 1; at >= 0; at -= 1) if (lines[at].trim() !== '') return at;
+  return -1;
+};
+
+/*
+ * A marker is written next to the declaration it explains, but a px literal inside a multi-line
+ * declaration lands on a continuation line, where there is no comment to find — the two-layer
+ * box-shadow of cardView's dragged item and the clip-path of textEditor's label both carry a
+ * reviewed marker that the line-by-line lookup could not see. So for a continuation line the
+ * marker is inherited from the declaration: the trailing comments of its earlier lines plus the
+ * comment attached above its first line, block comments included (those are blanked in `code`,
+ * which is why the raw text is passed in separately).
+ *
+ * A line counts as a continuation only when the statement above it is unfinished, so a plain
+ * `min-height: 1px;` never inherits anything from its neighbours.
+ */
+const inheritedComment = (raw, index) => {
+  const above = nonBlankAbove(raw, index);
+  if (above === -1 || ENDS_STATEMENT.test(raw[above].trim())) return '';
+
+  let start = index;
+  while (start > 0) {
+    const previous = nonBlankAbove(raw, start);
+    if (previous === -1 || ENDS_STATEMENT.test(raw[previous].trim())) break;
+    start = previous;
+  }
+
+  // a comment line contributes its whole text (a block comment carries no `//` to split on);
+  // a code line contributes only its trailing comment, so a marker can never be read out of code
+  const isComment = (text) => text.startsWith('//') || text.startsWith('/*')
+    || text.startsWith('*') || text.endsWith('*/');
+  const parts = raw.slice(start, index)
+    .map((line) => (isComment(line.trim()) ? line : split(line).comment));
+  for (let at = start - 1; at >= 0; at -= 1) {
+    const text = raw[at].trim();
+    if (text === '' || !isComment(text)) break;
+    parts.push(text);
+    if (text.startsWith('/*')) break;
+  }
+  return parts.join('\n');
+};
+
 export const scanPxLiterals = (root = themeDir) => {
   const marked = [];
   const unmarked = [];
   scssFiles(root).forEach((file) => {
-    blankBlockComments(readFileSync(file, 'utf8')).split('\n').forEach((line, index) => {
+    const raw = readFileSync(file, 'utf8').split('\n');
+    blankBlockComments(raw.join('\n')).split('\n').forEach((line, index) => {
       const { code, comment } = split(line);
       const literals = code.match(PX_LITERAL);
       if (!literals) return;
-      const marker = MARKERS.find((entry) => comment.includes(entry)) ?? null;
+      const scope = comment || inheritedComment(raw, index);
+      const marker = MARKERS.find((entry) => scope.includes(entry)) ?? null;
       const place = {
         file: relative(packageRoot, file),
         line: index + 1,
