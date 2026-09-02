@@ -912,7 +912,13 @@ const OVERRIDES = {
       'typing-indicator', 'circle', 'bubble', 'group',
       // wave B3: .dx-chat-messagebubble-image is a real <img> box inside a bubble
       'image'],
-    'color-view': ['palette', 'palette-cell', 'hue-scale', 'hue-scale-cell', 'hue-scale-wrapper', 'alpha', 'controls',
+    /*
+     * `alpha` alone was doing three jobs — the alpha row, the alpha cell and the alpha scale are
+     * three different elements with three different sizes, so each gets its own segment and the
+     * bare `alpha` is gone. `apply-button` names the dialog button the base layer sizes.
+     */
+    'color-view': ['palette', 'palette-cell', 'hue-scale', 'hue-scale-cell', 'hue-scale-wrapper', 'controls',
+      'alpha-row', 'alpha-cell', 'alpha-scale', 'alpha-label', 'apply-button',
       'container', 'label', 'handle', 'color-preview', 'preview', 'textbox', 'hex', 'overlay',
       'content-box', 'bg-box'],
     diagram: [
@@ -1071,6 +1077,8 @@ const OVERRIDES = {
       // the last of the base-layer sizes: menu bar and caption, the search panel, the bottom
       // load panel and the rows view, each named after the class the shared layer sizes
       'menu-bar', 'menu-caption', 'search-panel', 'bottom-load-panel', 'rowsview',
+      // .dx-column-indicators: the sort / header-filter icon strip in a column header
+      'column-indicator',
     ],
     // dataGrid's own deltas on top of the chassis: the group panel and the edit-form buttons.
     // `group-panel-item` and `block-separator` are compounds — one anatomy level each, not two.

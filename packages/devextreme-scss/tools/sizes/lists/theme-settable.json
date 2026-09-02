@@ -7,9 +7,9 @@
     "The match is by variable name. A name declared in a nested module is only reachable once the parent forwards it (see base/chat/_index.scss), which is why an \"open\" row can sit next to injected ones from the same widget."
   ],
   "summary": {
-    "occurrences": 516,
-    "variables": 445,
-    "injected": 492,
+    "occurrences": 525,
+    "variables": 454,
+    "injected": 501,
     "open": 0,
     "parameters": 24
   },
@@ -2439,12 +2439,12 @@
       ],
       "occurrences": 1,
       "marker": null,
-      "text": "$color-view-alpha-width: 292px !default;",
-      "variable": "color-view-alpha-width",
+      "text": "$color-view-alpha-cell-width: 292px !default;",
+      "variable": "color-view-alpha-cell-width",
       "kind": "module-variable",
       "status": "injected",
       "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
-      "setTo": "var(--dx-color-view-alpha-width)"
+      "setTo": "var(--dx-color-view-alpha-cell-width)"
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
@@ -2573,7 +2573,7 @@
       "kind": "module-variable",
       "status": "injected",
       "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
-      "setTo": "var(--dx-color-view-alpha-margin)"
+      "setTo": "var(--dx-color-view-alpha-row-margin-block-start)"
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
@@ -2670,6 +2670,54 @@
       "status": "injected",
       "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
       "setTo": "var(--dx-color-view-color-preview-height)"
+    },
+    {
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "line": 36,
+      "widget": "colorView",
+      "literals": [
+        "20px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$color-view-alpha-scale-height: 20px !default;",
+      "variable": "color-view-alpha-scale-height",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
+      "setTo": "var(--dx-color-view-alpha-scale-height)"
+    },
+    {
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "line": 37,
+      "widget": "colorView",
+      "literals": [
+        "6px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$color-view-alpha-cell-margin-block: 6px !default;",
+      "variable": "color-view-alpha-cell-margin-block",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
+      "setTo": "var(--dx-color-view-alpha-cell-margin-block)"
+    },
+    {
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "line": 38,
+      "widget": "colorView",
+      "literals": [
+        "10px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$color-view-apply-button-margin-inline-end: 10px !default;",
+      "variable": "color-view-apply-button-margin-inline-end",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
+      "setTo": "var(--dx-color-view-apply-button-margin-inline-end)"
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
@@ -4358,7 +4406,23 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 2,
+      "line": 4,
+      "widget": "gridBase",
+      "literals": [
+        "7px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$grid-cell-padding: 7px !default;",
+      "variable": "grid-cell-padding",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/gridBase/_index.scss",
+      "setTo": "var(--dx-grid-cell-content-padding)"
+    },
+    {
+      "file": "scss/widgets/base/gridBase/_variables.scss",
+      "line": 5,
       "widget": "gridBase",
       "literals": [
         "32px"
@@ -4374,7 +4438,23 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 4,
+      "line": 8,
+      "widget": "gridBase",
+      "literals": [
+        "14px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$grid-total-footer-padding-block: 14px !default;",
+      "variable": "grid-total-footer-padding-block",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/gridBase/_index.scss",
+      "setTo": "var(--dx-grid-summary-padding-block)"
+    },
+    {
+      "file": "scss/widgets/base/gridBase/_variables.scss",
+      "line": 9,
       "widget": "gridBase",
       "literals": [
         "70px"
@@ -4390,7 +4470,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 5,
+      "line": 10,
       "widget": "gridBase",
       "literals": [
         "100px"
@@ -4406,7 +4486,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 6,
+      "line": 11,
       "widget": "gridBase",
       "literals": [
         "80px"
@@ -4422,7 +4502,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 7,
+      "line": 12,
       "widget": "gridBase",
       "literals": [
         "30px"
@@ -4438,7 +4518,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 8,
+      "line": 13,
       "widget": "gridBase",
       "literals": [
         "36px"
@@ -4454,7 +4534,71 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 13,
+      "line": 14,
+      "widget": "gridBase",
+      "literals": [
+        "14px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$grid-column-header-indicator-width: 14px !default;",
+      "variable": "grid-column-header-indicator-width",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/gridBase/_index.scss",
+      "setTo": "var(--dx-grid-column-indicator-width)"
+    },
+    {
+      "file": "scss/widgets/base/gridBase/_variables.scss",
+      "line": 15,
+      "widget": "gridBase",
+      "literals": [
+        "3px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$grid-text-content-margin: 3px !default;",
+      "variable": "grid-text-content-margin",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/gridBase/_index.scss",
+      "setTo": "var(--dx-grid-header-text-margin-inline)"
+    },
+    {
+      "file": "scss/widgets/base/gridBase/_variables.scss",
+      "line": 16,
+      "widget": "gridBase",
+      "literals": [
+        "12px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$grid-sort-index-width: 12px !default;",
+      "variable": "grid-sort-index-width",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/gridBase/_index.scss",
+      "setTo": "var(--dx-grid-sort-index-width)"
+    },
+    {
+      "file": "scss/widgets/base/gridBase/_variables.scss",
+      "line": 17,
+      "widget": "gridBase",
+      "literals": [
+        "3px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$grid-sort-index-offset: 3px !default;",
+      "variable": "grid-sort-index-offset",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/gridBase/_index.scss",
+      "setTo": "var(--dx-grid-sort-index-offset)"
+    },
+    {
+      "file": "scss/widgets/base/gridBase/_variables.scss",
+      "line": 18,
       "widget": "gridBase",
       "literals": [
         "50px"
@@ -4470,7 +4614,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 16,
+      "line": 21,
       "widget": "gridBase",
       "literals": [
         "7px"
@@ -4486,7 +4630,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 17,
+      "line": 22,
       "widget": "gridBase",
       "literals": [
         "5px"
@@ -4502,7 +4646,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 18,
+      "line": 23,
       "widget": "gridBase",
       "literals": [
         "30px"
@@ -4518,7 +4662,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 19,
+      "line": 24,
       "widget": "gridBase",
       "literals": [
         "5px"
@@ -4534,7 +4678,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 20,
+      "line": 25,
       "widget": "gridBase",
       "literals": [
         "30px"
@@ -4550,7 +4694,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 21,
+      "line": 26,
       "widget": "gridBase",
       "literals": [
         "8px",
@@ -4568,7 +4712,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 22,
+      "line": 27,
       "widget": "gridBase",
       "literals": [
         "6px"
@@ -4584,7 +4728,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 23,
+      "line": 28,
       "widget": "gridBase",
       "literals": [
         "16px"
@@ -4600,7 +4744,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 24,
+      "line": 29,
       "widget": "gridBase",
       "literals": [
         "20px"
@@ -4616,7 +4760,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 25,
+      "line": 30,
       "widget": "gridBase",
       "literals": [
         "10px"
@@ -4632,7 +4776,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 26,
+      "line": 31,
       "widget": "gridBase",
       "literals": [
         "4px"
@@ -4648,7 +4792,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 27,
+      "line": 32,
       "widget": "gridBase",
       "literals": [
         "3px"
@@ -4664,7 +4808,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 28,
+      "line": 33,
       "widget": "gridBase",
       "literals": [
         "10px"
@@ -4680,7 +4824,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 29,
+      "line": 34,
       "widget": "gridBase",
       "literals": [
         "15px"
@@ -4696,7 +4840,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 30,
+      "line": 35,
       "widget": "gridBase",
       "literals": [
         "100px"
@@ -4712,7 +4856,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 31,
+      "line": 36,
       "widget": "gridBase",
       "literals": [
         "10px"
@@ -4728,7 +4872,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 32,
+      "line": 37,
       "widget": "gridBase",
       "literals": [
         "10px"
@@ -4744,7 +4888,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 33,
+      "line": 38,
       "widget": "gridBase",
       "literals": [
         "10px"
@@ -4760,7 +4904,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 34,
+      "line": 39,
       "widget": "gridBase",
       "literals": [
         "7px"

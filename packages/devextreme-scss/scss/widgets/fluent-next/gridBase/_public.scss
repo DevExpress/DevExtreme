@@ -4,6 +4,12 @@
 @use "layout/aiChat/sizes" as *;
 
 @mixin publish {
+  --dx-grid-cell-content-padding: #{$grid-cell-content-padding};
+  --dx-grid-summary-padding-block: #{$grid-summary-padding-block};
+  --dx-grid-column-indicator-width: #{$grid-column-indicator-width};
+  --dx-grid-header-text-margin-inline: #{$grid-header-text-margin-inline};
+  --dx-grid-sort-index-width: #{$grid-sort-index-width};
+  --dx-grid-sort-index-offset: #{$grid-sort-index-offset};
   --dx-grid-context-menu-item-padding-block: #{$grid-context-menu-item-padding-block};
   --dx-grid-context-menu-item-padding-inline-start: #{$grid-context-menu-item-padding-inline-start};
   --dx-grid-context-menu-item-padding-inline-end: #{$grid-context-menu-item-padding-inline-end};

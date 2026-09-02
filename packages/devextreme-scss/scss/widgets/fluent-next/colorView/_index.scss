@@ -5,7 +5,7 @@
   $color-view-container-width: var(--dx-color-view-container-width),
   $color-view-palette-width: var(--dx-color-view-palette-width),
   $color-view-palette-height: var(--dx-color-view-palette-height),
-  $color-view-alpha-width: var(--dx-color-view-alpha-width),
+  $color-view-alpha-cell-width: var(--dx-color-view-alpha-cell-width),
   $color-view-hue-scale-width: var(--dx-color-view-hue-scale-width),
   $color-view-hue-scale-height: var(--dx-color-view-hue-scale-height),
   $color-view-hue-scale-wrapper-height: var(--dx-color-view-hue-scale-wrapper-height),
@@ -15,13 +15,16 @@
   $color-view-alpha-label-width: var(--dx-color-view-container-alpha-label-width),
   $color-view-textbox-width: var(--dx-color-view-container-textbox-width),
   $color-view-textbox-margin: var(--dx-color-view-container-textbox-margin),
-  $color-view-alpha-row-margin-block-start: var(--dx-color-view-alpha-margin),
+  $color-view-alpha-row-margin-block-start: var(--dx-color-view-alpha-row-margin-block-start),
   $color-view-hue-scale-cell-margin-inline-start: var(--dx-color-view-hue-scale-margin),
   $color-view-controls-width: var(--dx-color-view-controls-container-width),
   $color-view-controls-margin-inline-start: var(--dx-color-view-controls-container-margin),
   $color-view-controls-margin-inline-start-rtl: var(--dx-color-view-controls-container-margin),
   $color-view-color-preview-width: 100%,
   $color-view-color-preview-height: var(--dx-color-view-color-preview-height),
+  $color-view-alpha-scale-height: var(--dx-color-view-alpha-scale-height),
+  $color-view-alpha-cell-margin-block: var(--dx-color-view-alpha-cell-margin-block),
+  $color-view-apply-button-margin-inline-end: var(--dx-color-view-apply-button-margin-inline-end),
 );
 @include dx-base-colorview-styles(var(--dx-color-view-handle-content), var(--dx-color-view-handle-border));
 

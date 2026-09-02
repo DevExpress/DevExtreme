@@ -180,3 +180,11 @@ $grid-rowsview-empty-height: ds.$spacing-1000 !default;
 $grid-bottom-load-panel-padding: ds.$spacing-100 !default;
 $grid-filter-panel-checkbox-padding-inline-end: ds.$spacing-100 !default;
 $grid-filter-panel-icon-margin-inline-end: ds.$spacing-70 !default;
+
+// The last of the shared layer's sizes: read in arithmetic, so base goes through its dual-mode helpers
+$grid-cell-content-padding: ds.$spacing-70 !default;
+$grid-summary-padding-block: ds.$spacing-140 !default;
+$grid-column-indicator-width: ds.$spacing-140 !default;
+$grid-header-text-margin-inline: ds.$spacing-30 !default;
+$grid-sort-index-width: ds.$spacing-120 !default;
+$grid-sort-index-offset: ds.$spacing-30 !default;

@@ -6,21 +6,21 @@
     "marker — the classification comment already on the line, from tools/review/size-markers.json."
   ],
   "summary": {
-    "occurrences": 226,
+    "occurrences": 217,
     "byCategory": {
-      "inline": 91,
+      "inline": 88,
       "geometry": 69,
-      "local-var": 41,
+      "local-var": 35,
       "calc": 9,
       "structural": 8,
       "mixin-arg": 6,
       "media": 2
     },
     "byWidget": {
-      "colorView": 45,
+      "colorView": 42,
       "scheduler": 33,
-      "gridBase": 28,
       "textEditor": 26,
+      "gridBase": 22,
       "htmlEditor": 16,
       "cardView": 15,
       "pivotGrid": 11,
@@ -47,11 +47,8 @@
       "toolbar": 1,
       "treeView": 1
     },
-    "unmarked": 9,
-    "unmarkedByWidget": {
-      "gridBase": 6,
-      "colorView": 3
-    }
+    "unmarked": 0,
+    "unmarkedByWidget": {}
   },
   "places": [
     {
@@ -735,19 +732,7 @@
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 68,
-      "widget": "colorView",
-      "literals": [
-        "10px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-right: 10px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 81,
+      "line": 84,
       "widget": "colorView",
       "literals": [
         "1px"
@@ -759,7 +744,7 @@
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 117,
+      "line": 120,
       "widget": "colorView",
       "literals": [
         "-7px"
@@ -771,7 +756,7 @@
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 123,
+      "line": 126,
       "widget": "colorView",
       "literals": [
         "-6px"
@@ -783,7 +768,7 @@
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 141,
+      "line": 144,
       "widget": "colorView",
       "literals": [
         "16px"
@@ -795,7 +780,7 @@
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 142,
+      "line": 145,
       "widget": "colorView",
       "literals": [
         "8px"
@@ -807,7 +792,7 @@
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 146,
+      "line": 149,
       "widget": "colorView",
       "literals": [
         "6px",
@@ -817,30 +802,6 @@
       "occurrences": 3,
       "marker": "dx-fixed-size",
       "text": "background-position: 0 6px, 8px 14px; // dx-fixed-size: the same checkerboard, shifted to sit inside the alpha scale",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 183,
-      "widget": "colorView",
-      "literals": [
-        "20px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "height: 20px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 208,
-      "widget": "colorView",
-      "literals": [
-        "6px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin: 6px 0;",
       "category": "inline"
     },
     {
@@ -1280,78 +1241,6 @@
       "marker": "dx-px-nudge",
       "text": "margin-right: -2px; // dx-px-nudge: RTL mirror — pulls the menu out by its own border",
       "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 1,
-      "widget": "gridBase",
-      "literals": [
-        "7px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$grid-cell-padding: 7px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 3,
-      "widget": "gridBase",
-      "literals": [
-        "7px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$grid-total-footer-paddings: 7px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 9,
-      "widget": "gridBase",
-      "literals": [
-        "14px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$grid-column-header-indicator-width: 14px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 10,
-      "widget": "gridBase",
-      "literals": [
-        "3px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$grid-text-content-margin: 3px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 11,
-      "widget": "gridBase",
-      "literals": [
-        "12px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$grid-sort-index-width: 12px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 12,
-      "widget": "gridBase",
-      "literals": [
-        "3px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$grid-sort-index-offset: 3px;",
-      "category": "local-var"
     },
     {
       "file": "scss/widgets/base/gridBase/layout/aiChat/_mixins.scss",

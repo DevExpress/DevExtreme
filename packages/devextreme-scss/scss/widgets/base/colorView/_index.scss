@@ -3,7 +3,7 @@
 $color-view-container-width: 450px !default;
 $color-view-palette-width: 288px !default;
 $color-view-palette-height: 299px !default;
-$color-view-alpha-width: 292px !default;
+$color-view-alpha-cell-width: 292px !default;
 $color-view-hue-scale-width: 18px !default;
 $color-view-hue-scale-height: $color-view-palette-height !default;
 $color-view-hue-scale-wrapper-height: $color-view-hue-scale-height + 2 !default;
@@ -33,6 +33,9 @@ $color-view-controls-margin-inline-start: 27px !default;
 $color-view-controls-margin-inline-start-rtl: 25px !default;
 $color-view-color-preview-width: 86px !default;
 $color-view-color-preview-height: 40px !default;
+$color-view-alpha-scale-height: 20px !default;
+$color-view-alpha-cell-margin-block: 6px !default;
+$color-view-apply-button-margin-inline-end: 10px !default;
 
 .dx-colorview-container {
   width: $color-view-container-width;
@@ -65,7 +68,7 @@ $color-view-color-preview-height: 40px !default;
     margin-bottom: 0;
 
     &.dx-colorview-apply-button {
-      margin-right: 10px;
+      margin-right: $color-view-apply-button-margin-inline-end;
       margin-left: 0;
     }
 
@@ -180,7 +183,7 @@ $color-view-color-preview-height: 40px !default;
 
 .dx-colorview-alpha-channel-scale {
   width: $color-view-palette-width;
-  height: 20px;
+  height: $color-view-alpha-scale-height;
   position: relative;
 }
 
@@ -205,9 +208,9 @@ $color-view-color-preview-height: 40px !default;
 }
 
 .dx-colorview-alpha-channel-cell {
-  margin: 6px 0;
+  margin: $color-view-alpha-cell-margin-block 0;
   position: relative;
-  width: $color-view-alpha-width;
+  width: $color-view-alpha-cell-width;
 
   .dx-button {
     width: $color-view-controls-width;

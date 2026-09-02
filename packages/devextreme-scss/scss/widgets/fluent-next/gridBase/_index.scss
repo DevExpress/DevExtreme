@@ -58,6 +58,12 @@
   $grid-filter-panel-padding: var(--dx-grid-filter-panel-padding),
   $grid-filter-panel-checkbox-padding-inline-end: var(--dx-grid-filter-panel-checkbox-padding-inline-end),
   $grid-filter-panel-icon-margin-inline-end: var(--dx-grid-filter-panel-icon-margin-inline-end),
+  $grid-cell-padding: var(--dx-grid-cell-content-padding),
+  $grid-total-footer-padding-block: var(--dx-grid-summary-padding-block),
+  $grid-column-header-indicator-width: var(--dx-grid-column-indicator-width),
+  $grid-text-content-margin: var(--dx-grid-header-text-margin-inline),
+  $grid-sort-index-width: var(--dx-grid-sort-index-width),
+  $grid-sort-index-offset: var(--dx-grid-sort-index-offset),
 );
 @use "../../base/gridBase/layout/aiChat/variables" as baseAiChatVariables with (
   $ai-chat-toolbar-item-spacing: var(--dx-grid-ai-chat-toolbar-item-padding-inline-end),

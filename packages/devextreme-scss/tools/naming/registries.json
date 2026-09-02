@@ -1406,8 +1406,12 @@
       "hue-scale",
       "hue-scale-cell",
       "hue-scale-wrapper",
-      "alpha",
       "controls",
+      "alpha-row",
+      "alpha-cell",
+      "alpha-scale",
+      "alpha-label",
+      "apply-button",
       "container",
       "label",
       "handle",
@@ -2002,7 +2006,8 @@
       "menu-caption",
       "search-panel",
       "bottom-load-panel",
-      "rowsview"
+      "rowsview",
+      "column-indicator"
     ],
     "data-grid": [
       "group-panel",

@@ -278,6 +278,8 @@
     "dx-datagrid-summary-item",
     "dx-datagrid-total-footer",
     "dx-editor-cell",
+    "dx-header-row",
+    "dx-highlight-outline",
     "dx-row",
     "dx-treelist-adaptive-more",
     "dx-treelist-borders",

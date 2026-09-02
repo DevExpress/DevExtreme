@@ -1,8 +1,5 @@
 {
   "openKnobs": 0,
-  "unclassified": 9,
-  "unclassifiedByWidget": {
-    "gridBase": 6,
-    "colorView": 3
-  }
+  "unclassified": 0,
+  "unclassifiedByWidget": {}
 }

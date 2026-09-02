@@ -14,42 +14,16 @@ and carries a marker saying why.
 | a raw grep of the layer | 768 |
 | …of those, inside comments (commented-out code, prose) | 26 |
 | **in code** | **742** |
-| — the theme can already set from outside | 516 |
-| — nailed into the shared layer | 226 |
+| — the theme can already set from outside | 525 |
+| — nailed into the shared layer | 217 |
 
 ## What the theme can already set
 
-516 occurrences in 445 `!default` variables. fluent-next already passes 492; 0 are open knobs nobody turns.
+525 occurrences in 454 `!default` variables. fluent-next already passes 501; 0 are open knobs nobody turns.
 
 ## What is nailed into the layer
 
-| widget | local-var | inline | total |
-|---|---|---|---|
-| gridBase | 6 |  | **6** |
-| colorView |  | 3 | **3** |
+| widget |  | total |
+|---||---|
 
 ## Places, by widget
-
-### gridBase — 6
-
-- `scss/widgets/base/gridBase/_variables.scss:1` · local-var
-  `$grid-cell-padding: 7px;`
-- `scss/widgets/base/gridBase/_variables.scss:3` · local-var
-  `$grid-total-footer-paddings: 7px;`
-- `scss/widgets/base/gridBase/_variables.scss:9` · local-var
-  `$grid-column-header-indicator-width: 14px;`
-- `scss/widgets/base/gridBase/_variables.scss:10` · local-var
-  `$grid-text-content-margin: 3px;`
-- `scss/widgets/base/gridBase/_variables.scss:11` · local-var
-  `$grid-sort-index-width: 12px;`
-- `scss/widgets/base/gridBase/_variables.scss:12` · local-var
-  `$grid-sort-index-offset: 3px;`
-
-### colorView — 3
-
-- `scss/widgets/base/colorView/_index.scss:68` · inline
-  `margin-right: 10px;`
-- `scss/widgets/base/colorView/_index.scss:183` · inline
-  `height: 20px;`
-- `scss/widgets/base/colorView/_index.scss:208` · inline
-  `margin: 6px 0;`
