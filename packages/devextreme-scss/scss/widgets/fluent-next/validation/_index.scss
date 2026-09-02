@@ -17,3 +17,10 @@
   var(--dx-validation-message-padding-block),
   var(--dx-validation-message-padding-inline),
 );
+
+/* The message renders into an overlay, so the state is reached through the editor that owns it. */
+.dx-state-disabled .dx-invalid-message .dx-overlay-content,
+.dx-state-disabled.dx-invalid-message .dx-overlay-content {
+  background-color: var(--dx-validation-message-bg-disabled);
+  color: var(--dx-validation-message-content-disabled);
+}
