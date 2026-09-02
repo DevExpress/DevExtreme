@@ -6,7 +6,6 @@ import {
   swipe as swipeEventSwipe,
 } from '@js/common/core/events/swipe';
 import { addNamespace } from '@js/common/core/events/utils/index';
-import { each } from '@js/core/utils/iterator';
 import { name } from '@js/core/utils/public_component';
 import type { NativeEventInfo } from '@js/events';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
@@ -16,7 +15,9 @@ import type { OptionChanged } from '@ts/core/widget/types';
 const DX_SWIPEABLE = 'dxSwipeable';
 const SWIPEABLE_CLASS = 'dx-swipeable';
 
-const ACTION_TO_EVENT_MAP = {
+type SwipeableAction = 'onStart' | 'onUpdated' | 'onEnd' | 'onCancel';
+
+const ACTION_TO_EVENT_MAP: Record<SwipeableAction, string> = {
   onStart: swipeEventStart,
   onUpdated: swipeEventSwipe,
   onEnd: swipeEventEnd,
@@ -69,18 +70,12 @@ class Swipeable extends DOMComponent<Swipeable, SwipeableProperties> {
       return;
     }
 
-    const { NAME } = this;
-
     this._createEventData();
 
-    each(ACTION_TO_EVENT_MAP, (
-      actionName: keyof SwipeableProperties,
-      eventName: SwipeableProperties[keyof SwipeableProperties],
-    ) => {
-      // @ts-expect-error ts-error
-      const action = this._createActionByOption(actionName, { context: this });
-      // @ts-expect-error ts-error
-      const event = addNamespace(eventName, NAME);
+    Object.entries(ACTION_TO_EVENT_MAP).forEach(([actionName, eventName]) => {
+      const action = this._createActionByOption(actionName);
+      const event = addNamespace(eventName, DX_SWIPEABLE);
+
       eventsEngine.on(
         this.$element(),
         event,
@@ -125,7 +120,6 @@ class Swipeable extends DOMComponent<Swipeable, SwipeableProperties> {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _useTemplates(): boolean {
     return false;
   }

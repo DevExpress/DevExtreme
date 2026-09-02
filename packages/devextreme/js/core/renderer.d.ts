@@ -133,6 +133,6 @@ export interface dxElementWrapper {
   length: number;
 }
 
-declare function renderer(selector?: string | Element | Element[] | dxElementWrapper | Document | Window | null): dxElementWrapper;
+declare function renderer(selector?: string | EventTarget | EventTarget[] | dxElementWrapper | null): dxElementWrapper;
 
 export default renderer;

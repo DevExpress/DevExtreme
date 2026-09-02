@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   createEvent, eventData, eventDelta, isDxMouseWheelEvent,
   isMouseEvent, isTouchEvent, needSkipEvent,
@@ -14,6 +13,7 @@ import devices from '@ts/core/m_devices';
 import domUtils from '@ts/core/utils/m_dom';
 import type { EmitterConfigData, EmitterEvent, EventCoords } from '@ts/events/core/emitter';
 import Emitter from '@ts/events/core/emitter';
+import eventsEngine from '@ts/events/core/events_engine';
 
 const ready = readyCallbacks.add;
 const { abs } = Math;
@@ -55,7 +55,6 @@ const setGestureCover = callOnce((): GestureCover => {
   const $cover = $('<div>')
     .addClass(GESTURE_COVER_CLASS)
     .css('pointerEvents', 'none');
-  // @ts-expect-error subscribeGlobal is not declared in the public events engine type
   eventsEngine.subscribeGlobal($cover, 'dxmousewheel', (e) => {
     e.preventDefault();
   });
