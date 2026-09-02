@@ -123,15 +123,28 @@ export type DataChange = | UpdateChange
   | (DataChangeBase & { changeType: 'refresh', event: unknown; virtualColumnsScrolling: boolean })
   | (DataChangeBase & { changeType: 'refresh', useProcessedItemsCache: boolean; cancelEmptyChanges: boolean });
 
-export type ChangedRows = Required<
-  Pick<UpdateChange, 'items' | 'rowIndices' | 'changeTypes' | 'columnIndices'>
->;
-
-export interface UpdateRowChange {
+export interface UpdateItemChange {
   changeType: RowChangeType;
   rowIndex: number;
   item?: ProcessedItem;
   columnIndices?: number[];
+}
+
+export type GetUpdatedColumnIndices = (
+  oldItem: ProcessedItem,
+  newItem: ProcessedItem,
+  visibleRowIndex: number,
+  isLiveUpdate?: boolean,
+) => number[] | undefined;
+
+export interface ItemChangeOptions {
+  rowIndexDelta: number;
+  isPartialUpdate: boolean;
+  isLiveUpdate?: boolean;
+}
+
+export interface ItemOperationOptions extends ItemChangeOptions {
+  newItems: ProcessedItem[];
 }
 
 export type RowIndexByKey = Record<string, number | undefined>;
@@ -140,7 +153,9 @@ export type RowIndexCorrection = (rowIndex: number) => number;
 
 export type ItemChange = | { type: 'insert'; index: number; data: ProcessedItem }
   | { type: 'update'; index: number; data: ProcessedItem; oldItem: ProcessedItem }
-  | { type: 'remove'; index: number; oldItem: ProcessedItem };
+  | { type: 'remove'; index: number; oldItem: ProcessedItem }
+  | { type: 'replace'; index: number; data: ProcessedItem }
+  | { type: 'updateVisibility'; index: number; data: ProcessedItem };
 
 /** data source */
 
