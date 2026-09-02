@@ -82,3 +82,11 @@
     background-color: var(--dx-stepper-connector-value-bg-disabled);
   }
 }
+
+/* The selected step's ring is a box-shadow, not a border, so setting border-color left the accent
+ring in place. Neither the package nor Blazor has a stepper to copy - there is no stepper in
+either - so the disabled ring simply follows the same shape in the disabled scale. */
+.dx-stepper.dx-state-disabled .dx-step.dx-step-selected .dx-step-indicator,
+.dx-state-disabled .dx-stepper .dx-step.dx-step-selected .dx-step-indicator {
+  box-shadow: 0 0 0 2px var(--dx-stepper-step-shadow), 0 0 0 4px var(--dx-stepper-step-bg-selected-disabled), 0 0 0 8px var(--dx-stepper-step-shadow); // dx-shadow-geometry: 2px/4px/8px, the ring radii of the enabled rule
+}

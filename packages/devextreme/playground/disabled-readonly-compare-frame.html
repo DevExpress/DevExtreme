@@ -235,6 +235,17 @@ const CASES = [
     height: 130, ...f })],
   ['splitterItem', 'Splitter  (2nd pane disabled)', 130, (h, f) => $(h).dxSplitter({ height: 100,
     items: [{ text: 'Enabled', resizable: true }, { text: 'Disabled', disabled: true, resizable: true }], ...f })],
+  /* A step has more than two looks: selected carries a ring, completed a tick, invalid a danger
+  fill, and any of them can also be the disabled one. Each is its own case so the disabled scale
+  can be judged against the state it replaces rather than against a plain step. */
+  ['stepperSelected', 'Stepper  (selected step)', 110, (h, f) => $(h).dxStepper({
+    items: [{ label: 'Selected' }, { label: 'Plain' }], selectedIndex: 0, ...f })],
+  ['stepperCompleted', 'Stepper  (completed step)', 110, (h, f) => $(h).dxStepper({
+    items: [{ label: 'Done', completed: true }, { label: 'Next' }], selectedIndex: 1, ...f })],
+  ['stepperInvalid', 'Stepper  (invalid step)', 110, (h, f) => $(h).dxStepper({
+    items: [{ label: 'Invalid', invalid: true }, { label: 'Plain' }], selectedIndex: 0, ...f })],
+  ['stepperInvalidCompleted', 'Stepper  (completed and invalid)', 110, (h, f) => $(h).dxStepper({
+    items: [{ label: 'Both', completed: true, invalid: true }, { label: 'Plain' }], selectedIndex: 1, ...f })],
   ['stepperItem', 'Stepper  (2nd step disabled)', 110, (h, f) => $(h).dxStepper({
     items: [{ label: 'Enabled' }, { label: 'Disabled', disabled: true }], ...f })],
   ['tileViewItem', 'TileView  (2nd tile disabled)', 140, (h, f) => $(h).dxTileView({

@@ -1145,3 +1145,10 @@
     border-radius: 0;
   }
 }
+
+/* The adaptive "more" button paints its own icon colour, so a disabled grid kept it at full
+contrast next to greyed rows. */
+.dx-state-disabled .dx-datagrid-adaptive-more,
+.dx-state-disabled .dx-treelist-adaptive-more {
+  color: var(--dx-grid-content-disabled);
+}
