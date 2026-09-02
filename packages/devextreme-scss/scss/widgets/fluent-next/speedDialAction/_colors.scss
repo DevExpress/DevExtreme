@@ -10,6 +10,8 @@ $speed-dial-action-bg: buttonColors.$button-normal-contained-bg !default;
 $speed-dial-action-bg-hovered: buttonColors.$button-normal-contained-bg-hovered !default;
 $speed-dial-action-bg-active: buttonColors.$button-normal-contained-bg-active !default;
 
+$speed-dial-action-bg-disabled: ds.$color-bg-disabled !default;
+$speed-dial-action-content-disabled: ds.$color-content-disabled !default;
 $speed-dial-action-main-bg: ds.$color-bg-primary !default;
 $speed-dial-action-main-bg-hovered: ds.$color-bg-primary-hovered !default;
 $speed-dial-action-main-bg-active: ds.$color-bg-primary-active !default;

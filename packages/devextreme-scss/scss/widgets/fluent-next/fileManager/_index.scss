@@ -316,6 +316,11 @@
 
 /* The directory tree and the progress panel paint their own text, so a disabled file manager kept
 them at full contrast next to greyed surroundings. */
+.dx-filemanager.dx-state-disabled .dx-treeview .dx-treeview-item .dx-filemanager-dirs-tree-item-text,
+.dx-state-disabled .dx-filemanager .dx-treeview .dx-treeview-item .dx-filemanager-dirs-tree-item-text {
+  color: var(--dx-file-manager-content-disabled);
+}
+
 .dx-filemanager.dx-state-disabled,
 .dx-state-disabled .dx-filemanager,
 .dx-state-disabled {

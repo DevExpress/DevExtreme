@@ -1150,3 +1150,11 @@ appointment colour at 80% opacity, which states no contrast of its own. */
 .dx-state-disabled .dx-tooltip-appointment-item-content-date {
   color: var(--dx-scheduler-content-disabled);
 }
+
+/* The time panel paints its own text, so the hours stayed at full contrast in a disabled
+scheduler while the grid around them greyed. */
+.dx-scheduler.dx-state-disabled .dx-scheduler-time-panel-cell,
+.dx-scheduler.dx-state-disabled .dx-scheduler-time-panel-cell > div,
+.dx-state-disabled .dx-scheduler .dx-scheduler-time-panel-cell > div {
+  color: var(--dx-scheduler-time-panel-content-disabled);
+}
