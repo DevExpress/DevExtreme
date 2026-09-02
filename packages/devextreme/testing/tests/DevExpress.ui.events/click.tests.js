@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import clickEvent from 'common/core/events/click';
+import { removeEvent } from 'common/core/events/remove';
 import domUtils from '__internal/core/utils/m_dom';
 import support from '__internal/core/utils/m_support';
 import devices from '__internal/core/m_devices';
@@ -424,4 +425,22 @@ QUnit.test('dxclick should not be fired twice when \'click\' is triggered from i
 
     pointer.start().down().up();
     $(document).off('dxclick', $.noop);
+});
+
+QUnit.test('foreign dxremove handler on the previously clicked node should survive a dxclick on another node (5025)', function(assert) {
+    const $clicked = $('#first').on('dxclick', noop);
+    const $other = $('#second').on('dxclick', noop);
+    let foreignHandlerCallCount = 0;
+
+    nativePointerMock($clicked).start().click();
+
+    $clicked.on(removeEvent, function() {
+        foreignHandlerCallCount++;
+    });
+
+    nativePointerMock($other).start().click();
+
+    $clicked.triggerHandler({ type: removeEvent });
+
+    assert.equal(foreignHandlerCallCount, 1, `foreign ${removeEvent} handler is still subscribed`);
 });

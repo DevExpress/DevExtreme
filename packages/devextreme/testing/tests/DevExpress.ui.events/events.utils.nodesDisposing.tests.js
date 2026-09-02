@@ -31,7 +31,7 @@ QUnit.test('should clean elementDataMap when using subscribeNodesDisposing and u
         ? afterSubscribeElementData[removeEvent].handleObjects.length
         : 0;
 
-    unsubscribeNodesDisposing(clickEvent, subscriptionData.callback, subscriptionData.nodes);
+    unsubscribeNodesDisposing(clickEvent, subscriptionData.onceCallback, subscriptionData.nodes);
 
     const finalElementData = eventsEngine.elementDataMap.get(document);
     const afterUnsubscribeHandleObjectsCount = finalElementData && finalElementData[removeEvent]
@@ -48,4 +48,31 @@ QUnit.test('should clean elementDataMap when using subscribeNodesDisposing and u
         0,
         `HandleObjects should be removed for "${removeEvent}" event after unsubscribe. HandleObjects count: ${afterUnsubscribeHandleObjectsCount};`
     );
+});
+
+QUnit.test('unsubscribeNodesDisposing should remove only the passed handler (5025)', function(assert) {
+    const testElement = document.getElementById('test-element');
+    let subscribedCallbackCallCount = 0;
+    let foreignHandlerCallCount = 0;
+
+    const clickEvent = eventsEngine.Event('click', {
+        target: testElement,
+        currentTarget: testElement,
+        delegateTarget: testElement
+    });
+
+    const subscriptionData = subscribeNodesDisposing(clickEvent, function() {
+        subscribedCallbackCallCount++;
+    });
+
+    eventsEngine.on(testElement, removeEvent, function() {
+        foreignHandlerCallCount++;
+    });
+
+    unsubscribeNodesDisposing(clickEvent, subscriptionData.onceCallback, subscriptionData.nodes);
+
+    eventsEngine.triggerHandler(testElement, { type: removeEvent });
+
+    assert.equal(foreignHandlerCallCount, 1, `foreign "${removeEvent}" handler should be kept`);
+    assert.equal(subscribedCallbackCallCount, 0, `subscribed "${removeEvent}" handler should be removed`);
 });
