@@ -14,30 +14,26 @@ and carries a marker saying why.
 | a raw grep of the layer | 778 |
 | …of those, inside comments (commented-out code, prose) | 25 |
 | **in code** | **753** |
-| — the theme can already set from outside | 480 |
-| — nailed into the shared layer | 273 |
+| — the theme can already set from outside | 484 |
+| — nailed into the shared layer | 269 |
 
 ## What the theme can already set
 
-480 occurrences in 414 `!default` variables. fluent-next already passes 456; 0 are open knobs nobody turns.
+484 occurrences in 418 `!default` variables. fluent-next already passes 460; 0 are open knobs nobody turns.
 
 ## What is nailed into the layer
 
-| widget | inline | local-var | geometry | total |
-|---|---|---|---|---|
-| gridBase | 50 | 18 | 7 | **75** |
-| colorView | 3 |  |  | **3** |
+| widget | inline | local-var | total |
+|---|---|---|---|
+| gridBase | 41 | 14 | **55** |
+| colorView | 3 |  | **3** |
 
 ## Places, by widget
 
-### gridBase — 75
+### gridBase — 55
 
-- `scss/widgets/base/gridBase/_index.scss:25` · geometry
-  `clip: rect(1px, 1px, 1px, 1px);`
 - `scss/widgets/base/gridBase/_index.scss:37` · inline
   `margin-right: 5px !important; // stylelint-disable-line declaration-no-important`
-- `scss/widgets/base/gridBase/_index.scss:55` · inline
-  `margin-top: -1px;`
 - `scss/widgets/base/gridBase/_index.scss:86` · inline
   `padding-top: 1px;`
 - `scss/widgets/base/gridBase/_index.scss:91` · inline
@@ -54,24 +50,6 @@ and carries a marker saying why.
   `padding-inline-start: 4px;`
 - `scss/widgets/base/gridBase/_index.scss:224` · inline
   `width: 3px;`
-- `scss/widgets/base/gridBase/_index.scss:307` · inline
-  `max-width: 10px;`
-- `scss/widgets/base/gridBase/_index.scss:424` · geometry
-  `border: 2px solid transparent;`
-- `scss/widgets/base/gridBase/_index.scss:426` · inline
-  `left: 1px;`
-- `scss/widgets/base/gridBase/_index.scss:474` · inline
-  `min-height: 1px;`
-- `scss/widgets/base/gridBase/_index.scss:550` · inline
-  `top: -1px;`
-- `scss/widgets/base/gridBase/_index.scss:551` · inline
-  `bottom: -1px;`
-- `scss/widgets/base/gridBase/_index.scss:552` · inline
-  `left: -1px;`
-- `scss/widgets/base/gridBase/_index.scss:553` · inline
-  `right: -1px;`
-- `scss/widgets/base/gridBase/_index.scss:560` · geometry
-  `border-top: 1px solid transparent;`
 - `scss/widgets/base/gridBase/_index.scss:645` · inline
   `padding: 5px;`
 - `scss/widgets/base/gridBase/_index.scss:646` · inline
@@ -92,8 +70,6 @@ and carries a marker saying why.
   `padding: 10px;`
 - `scss/widgets/base/gridBase/_index.scss:894` · inline
   `padding: 7px 5px 7px 30px;`
-- `scss/widgets/base/gridBase/_index.scss:949` · inline
-  `margin-right: -2px;`
 - `scss/widgets/base/gridBase/_index.scss:957` · inline
   `padding: 5px;`
 - `scss/widgets/base/gridBase/_index.scss:958` · inline
@@ -112,16 +88,8 @@ and carries a marker saying why.
   `margin-right: 7px;`
 - `scss/widgets/base/gridBase/_variables.scss:1` · local-var
   `$grid-cell-padding: 7px;`
-- `scss/widgets/base/gridBase/_variables.scss:2` · local-var
-  `$grid-texteditor-input-padding: 32px;`
 - `scss/widgets/base/gridBase/_variables.scss:3` · local-var
   `$grid-total-footer-paddings: 7px;`
-- `scss/widgets/base/gridBase/_variables.scss:4` · local-var
-  `$grid-command-select-column-width: 70px;`
-- `scss/widgets/base/gridBase/_variables.scss:5` · local-var
-  `$grid-command-edit-column-width: 100px;`
-- `scss/widgets/base/gridBase/_variables.scss:6` · local-var
-  `$grid-command-edit-column-with-icons-width: 80px;`
 - `scss/widgets/base/gridBase/_variables.scss:7` · local-var
   `$grid-command-expand-column-width: 30px;`
 - `scss/widgets/base/gridBase/_variables.scss:8` · local-var
@@ -136,8 +104,6 @@ and carries a marker saying why.
   `$grid-sort-index-offset: 3px;`
 - `scss/widgets/base/gridBase/_variables.scss:13` · local-var
   `$grid-ai-assistant-confirm-dialog-button-width: 50px;`
-- `scss/widgets/base/gridBase/layout/aiChat/_mixins.scss:47` · geometry
-  `border-width: 1px;`
 - `scss/widgets/base/gridBase/layout/aiChat/_variables.scss:1` · local-var
   `$ai-chat-toolbar-item-spacing: 4px;`
 - `scss/widgets/base/gridBase/layout/aiChat/_variables.scss:2` · local-var

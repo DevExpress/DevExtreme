@@ -6,18 +6,18 @@
     "marker — the classification comment already on the line, from tools/review/size-markers.json."
   ],
   "summary": {
-    "occurrences": 273,
+    "occurrences": 269,
     "byCategory": {
       "inline": 126,
       "geometry": 69,
-      "local-var": 53,
+      "local-var": 49,
       "calc": 9,
       "structural": 8,
       "mixin-arg": 6,
       "media": 2
     },
     "byWidget": {
-      "gridBase": 75,
+      "gridBase": 71,
       "colorView": 45,
       "scheduler": 33,
       "textEditor": 26,
@@ -47,9 +47,9 @@
       "toolbar": 1,
       "treeView": 1
     },
-    "unmarked": 78,
+    "unmarked": 58,
     "unmarkedByWidget": {
-      "gridBase": 75,
+      "gridBase": 55,
       "colorView": 3
     }
   },
@@ -1107,8 +1107,8 @@
         "1px"
       ],
       "occurrences": 4,
-      "marker": null,
-      "text": "clip: rect(1px, 1px, 1px, 1px);",
+      "marker": "dx-structural",
+      "text": "clip: rect(1px, 1px, 1px, 1px); // dx-structural: clips the a11y live region to nothing while keeping it rendered — the NOTE above; not a size",
       "category": "geometry"
     },
     {
@@ -1131,8 +1131,8 @@
         "-1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "margin-top: -1px;",
+      "marker": "dx-px-nudge",
+      "text": "margin-top: -1px; // dx-px-nudge: pulls the pager up by one border so its top edge overlaps the grid bottom edge",
       "category": "inline"
     },
     {
@@ -1241,8 +1241,8 @@
         "10px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "max-width: 10px;",
+      "marker": "dx-structural",
+      "text": "max-width: 10px; // dx-structural: deliberately tiny so the table sizes to its columns rather than the container — the fixed variant below resets it to none",
       "category": "inline"
     },
     {
@@ -1253,8 +1253,8 @@
         "2px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "border: 2px solid transparent;",
+      "marker": "dx-line-width",
+      "text": "border: 2px solid transparent; // dx-line-width: thickness of the invalid-cell ring, drawn on a pseudo-element",
       "category": "geometry"
     },
     {
@@ -1265,8 +1265,8 @@
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "left: 1px;",
+      "marker": "dx-px-nudge",
+      "text": "left: 1px; // dx-px-nudge: insets that ring by the cell border on the left",
       "category": "inline"
     },
     {
@@ -1277,8 +1277,8 @@
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "min-height: 1px;",
+      "marker": "dx-structural",
+      "text": "min-height: 1px; // dx-structural: one-pixel floor so the headers block keeps layout presence when it has no rows; not a designed height",
       "category": "inline"
     },
     {
@@ -1289,8 +1289,8 @@
         "-1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "top: -1px;",
+      "marker": "dx-px-nudge",
+      "text": "top: -1px; // dx-px-nudge: pulls the focus ring out over the cell border",
       "category": "inline"
     },
     {
@@ -1301,8 +1301,8 @@
         "-1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "bottom: -1px;",
+      "marker": "dx-px-nudge",
+      "text": "bottom: -1px; // dx-px-nudge: pulls the focus ring out over the cell border",
       "category": "inline"
     },
     {
@@ -1313,8 +1313,8 @@
         "-1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "left: -1px;",
+      "marker": "dx-px-nudge",
+      "text": "left: -1px; // dx-px-nudge: pulls the focus ring out over the cell border",
       "category": "inline"
     },
     {
@@ -1325,8 +1325,8 @@
         "-1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "right: -1px;",
+      "marker": "dx-px-nudge",
+      "text": "right: -1px; // dx-px-nudge: pulls the focus ring out over the cell border",
       "category": "inline"
     },
     {
@@ -1337,8 +1337,8 @@
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "border-top: 1px solid transparent;",
+      "marker": "dx-line-width",
+      "text": "border-top: 1px solid transparent; // dx-line-width: hairline placeholder keeping the range-end input aligned with the range-start one",
       "category": "geometry"
     },
     {
@@ -1475,8 +1475,8 @@
         "-2px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "margin-right: -2px;",
+      "marker": "dx-px-nudge",
+      "text": "margin-right: -2px; // dx-px-nudge: RTL mirror — pulls the menu out by its own border",
       "category": "inline"
     },
     {
@@ -1589,18 +1589,6 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 2,
-      "widget": "gridBase",
-      "literals": [
-        "32px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$grid-texteditor-input-padding: 32px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_variables.scss",
       "line": 3,
       "widget": "gridBase",
       "literals": [
@@ -1609,42 +1597,6 @@
       "occurrences": 1,
       "marker": null,
       "text": "$grid-total-footer-paddings: 7px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 4,
-      "widget": "gridBase",
-      "literals": [
-        "70px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$grid-command-select-column-width: 70px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 5,
-      "widget": "gridBase",
-      "literals": [
-        "100px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$grid-command-edit-column-width: 100px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 6,
-      "widget": "gridBase",
-      "literals": [
-        "80px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$grid-command-edit-column-with-icons-width: 80px;",
       "category": "local-var"
     },
     {
@@ -1739,8 +1691,8 @@
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "border-width: 1px;",
+      "marker": "dx-line-width",
+      "text": "border-width: 1px; // dx-line-width: hairline border of the incoming message bubble",
       "category": "geometry"
     },
     {

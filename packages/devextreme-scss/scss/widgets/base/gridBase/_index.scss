@@ -22,7 +22,7 @@
   position: fixed;
   left: 0;
   top: 0;
-  clip: rect(1px, 1px, 1px, 1px);
+  clip: rect(1px, 1px, 1px, 1px); // dx-structural: clips the a11y live region to nothing while keeping it rendered — the NOTE above; not a size
   clip-path: polygon(0 0);
 }
 
@@ -52,7 +52,7 @@
     }
 
     > .dx-pager {
-      margin-top: -1px;
+      margin-top: -1px; // dx-px-nudge: pulls the pager up by one border so its top edge overlaps the grid bottom edge
     }
 
     > .dx-#{$widget-name}-rowsview.dx-last-row-border {
@@ -304,7 +304,7 @@
     border-collapse: collapse;
     border-spacing: 0;
     margin: 0;
-    max-width: 10px;
+    max-width: 10px; // dx-structural: deliberately tiny so the table sizes to its columns rather than the container — the fixed variant below resets it to none
 
     &.dx-#{$widget-name}-table-fixed {
       max-width: none;
@@ -421,9 +421,9 @@
     &::after {
       content: "";
       position: absolute;
-      border: 2px solid transparent;
+      border: 2px solid transparent; // dx-line-width: thickness of the invalid-cell ring, drawn on a pseudo-element
       top: 0;
-      left: 1px;
+      left: 1px; // dx-px-nudge: insets that ring by the cell border on the left
       bottom: 0;
       right: 0;
       pointer-events: none;
@@ -471,7 +471,7 @@
   .dx-#{$widget-name}-headers {
     position: relative;
     outline: 0;
-    min-height: 1px;
+    min-height: 1px; // dx-structural: one-pixel floor so the headers block keeps layout presence when it has no rows; not a designed height
 
     @include user-select(none);
   }
@@ -547,17 +547,17 @@
       &.dx-state-focused::after {
         content: " ";
         position: absolute;
-        top: -1px;
-        bottom: -1px;
-        left: -1px;
-        right: -1px;
+        top: -1px; // dx-px-nudge: pulls the focus ring out over the cell border
+        bottom: -1px; // dx-px-nudge: pulls the focus ring out over the cell border
+        left: -1px; // dx-px-nudge: pulls the focus ring out over the cell border
+        right: -1px; // dx-px-nudge: pulls the focus ring out over the cell border
         z-index: 1;
         pointer-events: none;
       }
     }
 
     .dx-#{$widget-name}-filter-range-end {
-      border-top: 1px solid transparent;
+      border-top: 1px solid transparent; // dx-line-width: hairline placeholder keeping the range-end input aligned with the range-start one
     }
 
     .dx-editor-container {
@@ -946,7 +946,7 @@
         right: 0;
         left: auto;
         margin-left: 0;
-        margin-right: -2px;
+        margin-right: -2px; // dx-px-nudge: RTL mirror — pulls the menu out by its own border
       }
 
       & > td:first-child .dx-menu {

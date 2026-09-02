@@ -21,6 +21,22 @@
 @use "../scrollable";
 @use "../overlay";
 @use "../pagination";
+
+/*
+ * base/gridBase/variables holds no rules, so configuring it here changes no CSS position — and
+ * this is the first load of that module in the graph: the theme's gridBase is used before
+ * base/dataGrid and base/treeList, which are what pull base/gridBase in.
+ *
+ * Only the four whose value the theme already wins on are passed: measured in the browser, the
+ * rendered min-width of the command columns is the theme's (50px / 115px / 93px) and the filter
+ * row input padding is the theme's 40px, so the base literals below them never reach the page.
+ */
+@use "../../base/gridBase/variables" with (
+  $grid-texteditor-input-padding: var(--dx-grid-editor-input-padding),
+  $grid-command-select-column-width: var(--dx-grid-command-select-column-width),
+  $grid-command-edit-column-width: var(--dx-grid-command-edit-column-width),
+  $grid-command-edit-column-with-icons-width: var(--dx-grid-command-edit-column-with-icons-width),
+);
 @use "variables" as *;
 @forward "variables";
 @use "layout/cell" as *;

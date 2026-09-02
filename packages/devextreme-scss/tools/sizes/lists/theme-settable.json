@@ -7,9 +7,9 @@
     "The match is by variable name. A name declared in a nested module is only reachable once the parent forwards it (see base/chat/_index.scss), which is why an \"open\" row can sit next to injected ones from the same widget."
   ],
   "summary": {
-    "occurrences": 480,
-    "variables": 414,
-    "injected": 456,
+    "occurrences": 484,
+    "variables": 418,
+    "injected": 460,
     "open": 0,
     "parameters": 24
   },
@@ -4355,6 +4355,70 @@
       "status": "injected",
       "setBy": "scss/widgets/fluent-next/gantt/_index.scss",
       "setTo": "var(--dx-gantt-view-min-width)"
+    },
+    {
+      "file": "scss/widgets/base/gridBase/_variables.scss",
+      "line": 2,
+      "widget": "gridBase",
+      "literals": [
+        "32px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$grid-texteditor-input-padding: 32px !default;",
+      "variable": "grid-texteditor-input-padding",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/gridBase/_index.scss",
+      "setTo": "var(--dx-grid-editor-input-padding)"
+    },
+    {
+      "file": "scss/widgets/base/gridBase/_variables.scss",
+      "line": 4,
+      "widget": "gridBase",
+      "literals": [
+        "70px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$grid-command-select-column-width: 70px !default;",
+      "variable": "grid-command-select-column-width",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/gridBase/_index.scss",
+      "setTo": "var(--dx-grid-command-select-column-width)"
+    },
+    {
+      "file": "scss/widgets/base/gridBase/_variables.scss",
+      "line": 5,
+      "widget": "gridBase",
+      "literals": [
+        "100px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$grid-command-edit-column-width: 100px !default;",
+      "variable": "grid-command-edit-column-width",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/gridBase/_index.scss",
+      "setTo": "var(--dx-grid-command-edit-column-width)"
+    },
+    {
+      "file": "scss/widgets/base/gridBase/_variables.scss",
+      "line": 6,
+      "widget": "gridBase",
+      "literals": [
+        "80px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$grid-command-edit-column-with-icons-width: 80px !default;",
+      "variable": "grid-command-edit-column-with-icons-width",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/gridBase/_index.scss",
+      "setTo": "var(--dx-grid-command-edit-column-with-icons-width)"
     },
     {
       "file": "scss/widgets/base/list/_index.scss",
