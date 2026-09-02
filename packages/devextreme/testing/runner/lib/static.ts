@@ -575,11 +575,11 @@ export function createStaticFileService({
       );
     }
 
-    // Relative library imports bypass import maps, so hand-written shims are
-    // also served at the artifact URL to keep one module instance.
-    const shimUrl = findHandWrittenShim(relativeUrlPath);
-    if (shimUrl) {
-      return sendShimModule(res, shimUrl);
+    if (!searchParams.has('dx-original')) {
+      const shimUrl = findHandWrittenShim(relativeUrlPath);
+      if (shimUrl) {
+        return sendShimModule(res, shimUrl);
+      }
     }
 
     if (isJs) {
