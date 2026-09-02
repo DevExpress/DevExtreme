@@ -38,6 +38,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             changedArgs: [],
 
             dataSource: function() {
+                const store = function() {
+                    return new ArrayStore(options.items);
+                };
+
                 return {
                     beginLoading: function() {
                     },
@@ -49,11 +53,23 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                     loadOptions: function() {
                         return {};
                     },
-                    store: function() {
-                        return new ArrayStore(options.items);
+                    store: store,
+                    load: function(loadOptions) {
+                        return store().load(loadOptions);
                     },
-                    load: function(options) {
-                        return this.store().load(options);
+                    customLoader: {
+                        load: function(loadOptions) {
+                            return store().load(loadOptions);
+                        },
+                        loadFromStore: function(loadOptions) {
+                            return store().load(loadOptions);
+                        },
+                        isLoading: function() {
+                            return false;
+                        },
+                        isLoadingAll: function() {
+                            return false;
+                        }
                     }
                 };
             },

@@ -92,6 +92,17 @@ describe('load', () => {
     expect(operation.isCustomLoading).toBe(true);
   });
 
+  it('drops load options the caller left undefined', () => {
+    // Selection builds `filter`/`select` unconditionally, so the store must not
+    // see them when there is nothing to send.
+    const { customLoader, store } = setup();
+
+    customLoader.load({ filter: ['id', '=', 1], select: undefined });
+
+    expect(store.load).toHaveBeenCalledTimes(1);
+    expect(store.load.mock.calls[0][0]).not.toHaveProperty('select');
+  });
+
   it('fills the store custom load options from the dataSource, without overwriting', () => {
     const { customLoader, customizeStoreLoadOptions } = setup({
       customLoadOptions: ['fromDataSource', 'fromOptions'],
