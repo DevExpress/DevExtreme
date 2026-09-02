@@ -1,19 +1,21 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import $ from '@js/core/renderer';
+import eventsEngine from '@ts/events/core/events_engine';
 
-const triggerVisibilityChangeEvent = function (eventName) {
-  const VISIBILITY_CHANGE_SELECTOR = '.dx-visibility-change-handler';
+const VISIBILITY_CHANGE_SELECTOR = '.dx-visibility-change-handler';
 
-  return function (element) {
-    const $element = $(element || 'body');
+export type VisibilityChangeTarget = Parameters<typeof $>[0];
 
-    const changeHandlers = $element.filter(VISIBILITY_CHANGE_SELECTOR)
-      .add($element.find(VISIBILITY_CHANGE_SELECTOR));
+const triggerVisibilityChangeEvent = (
+  eventName: string,
+) => (element?: VisibilityChangeTarget): void => {
+  const $element = $(element || 'body');
 
-    for (let i = 0; i < changeHandlers.length; i++) {
-      eventsEngine.triggerHandler(changeHandlers[i], eventName);
-    }
-  };
+  const changeHandlers = $element.filter(VISIBILITY_CHANGE_SELECTOR)
+    .add($element.find(VISIBILITY_CHANGE_SELECTOR));
+
+  changeHandlers.toArray().forEach((changeHandler) => {
+    eventsEngine.triggerHandler(changeHandler, eventName);
+  });
 };
 
 export const triggerShownEvent = triggerVisibilityChangeEvent('dxshown');
