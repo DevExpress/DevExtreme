@@ -869,7 +869,12 @@ export class DataController extends modules.Controller {
       prevRowIndex = rowIndex;
 
       const itemChange = getItemChange(this._items, options.newItems, rowIndex);
-      const changedItem = itemChange && this.applyItemChange(itemChange, options);
+
+      if (!itemChange) {
+        return;
+      }
+
+      const changedItem = this.applyItemChange(itemChange, options);
 
       if (!changedItem) {
         return;
@@ -906,7 +911,7 @@ export class DataController extends modules.Controller {
       case 'replace':
         items[index] = itemChange.data;
         return { changeType: 'update', rowIndex, item: itemChange.data };
-      case 'visibility':
+      case 'updateVisibility':
         items[index] = itemChange.data;
         return {
           changeType: 'update',

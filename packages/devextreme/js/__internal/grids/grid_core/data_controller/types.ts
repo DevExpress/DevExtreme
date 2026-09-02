@@ -155,7 +155,7 @@ export type ItemChange = | { type: 'insert'; index: number; data: ProcessedItem 
   | { type: 'update'; index: number; data: ProcessedItem; oldItem: ProcessedItem }
   | { type: 'remove'; index: number; oldItem: ProcessedItem }
   | { type: 'replace'; index: number; data: ProcessedItem }
-  | { type: 'visibility'; index: number; data: ProcessedItem };
+  | { type: 'updateVisibility'; index: number; data: ProcessedItem };
 
 /** data source */
 

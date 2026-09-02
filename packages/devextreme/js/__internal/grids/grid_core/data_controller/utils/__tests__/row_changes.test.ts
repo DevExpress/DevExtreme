@@ -642,11 +642,11 @@ describe('getItemChange', () => {
     });
   });
 
-  it('should report a visibility change on its own', () => {
+  it('should report a updateVisibility change on its own', () => {
     const newItems = [row({ key: 1, visible: false })];
 
     expect(getItemChange([row({ key: 1, visible: true })], newItems, 0)).toEqual({
-      type: 'visibility', index: 0, data: newItems[0],
+      type: 'updateVisibility', index: 0, data: newItems[0],
     });
   });
 

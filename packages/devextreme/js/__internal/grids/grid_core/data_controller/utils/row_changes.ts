@@ -192,7 +192,7 @@ export function getItemChange(
   switch (getRowOperation(items, newItems, index)) {
     case 'update':
       if (oldItem.visible !== newItem.visible) {
-        return { type: 'visibility', index, data: newItem };
+        return { type: 'updateVisibility', index, data: newItem };
       }
 
       return {
