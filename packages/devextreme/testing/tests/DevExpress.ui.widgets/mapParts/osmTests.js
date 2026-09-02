@@ -1188,11 +1188,11 @@ QUnit.module('OSM: markers', moduleConfig, () => {
                 const markerBody = element.querySelector('.dx-map-marker-default-body');
                 const markerCenter = element.querySelector('.dx-map-marker-default-center');
                 assert.ok(markerBody, 'marker body is rendered');
-                assert.strictEqual(markerBody.getAttribute('fill'), '#2d7fbd', 'marker body color does not depend on the theme');
-                assert.strictEqual(markerBody.getAttribute('stroke'), '#fff', 'marker outline does not depend on the theme');
+                assert.notOk(markerBody.hasAttribute('fill'), 'marker body color is defined by the theme stylesheet');
+                assert.notOk(markerBody.hasAttribute('stroke'), 'marker outline color is defined by the theme stylesheet');
                 assert.strictEqual(markerBody.getAttribute('stroke-width'), '0.5', 'marker outline does not obscure its body');
                 assert.ok(markerCenter, 'marker center is rendered');
-                assert.strictEqual(markerCenter.getAttribute('fill'), '#fff', 'marker center does not depend on the theme');
+                assert.notOk(markerCenter.hasAttribute('fill'), 'marker center color is defined by the theme stylesheet');
                 assert.strictEqual(markerAddedEvent.options, marker, 'marker options are passed to onMarkerAdded');
                 assert.strictEqual(markerAddedEvent.originalMarker, overlay, 'OpenLayers overlay is exposed as originalMarker');
                 done();

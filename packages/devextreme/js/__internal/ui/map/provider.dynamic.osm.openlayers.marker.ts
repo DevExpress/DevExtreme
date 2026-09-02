@@ -7,8 +7,6 @@ export const DEFAULT_MARKER_CLASS = 'dx-map-marker-default';
 
 const DEFAULT_MARKER_WIDTH = 24.5;
 const DEFAULT_MARKER_HEIGHT = 36.5;
-const DEFAULT_MARKER_COLOR = '#2d7fbd';
-const DEFAULT_MARKER_ACCENT_COLOR = '#fff';
 const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
 const DEFAULT_MARKER_VIEW_BOX = '5 2 14 20';
 const DEFAULT_MARKER_BODY_PATH = [
@@ -52,12 +50,9 @@ const createDefaultMarkerElement = (
   svg.style.overflow = 'visible';
   body.setAttribute('class', 'dx-map-marker-default-body');
   body.setAttribute('d', DEFAULT_MARKER_BODY_PATH);
-  body.setAttribute('fill', DEFAULT_MARKER_COLOR);
-  body.setAttribute('stroke', DEFAULT_MARKER_ACCENT_COLOR);
   body.setAttribute('stroke-width', '0.5');
   center.setAttribute('class', 'dx-map-marker-default-center');
   center.setAttribute('d', DEFAULT_MARKER_CENTER_PATH);
-  center.setAttribute('fill', DEFAULT_MARKER_ACCENT_COLOR);
   svg.appendChild(body);
   svg.appendChild(center);
   element.appendChild(svg);
