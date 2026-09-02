@@ -176,8 +176,9 @@ const buildPath = `${path.resolve(dirname, '../../scss/_design-system')}/`;
 const THEME_NAME = 'fluent';
 const THEME_FOLDER = 'fluent-next';
 
-// Kept in step with the @include in widgets/fluent-next/_design-system.scss.
+// Kept in step with the @includes in widgets/fluent-next/_design-system.scss.
 const MODE_ROLES_MIXIN = 'roles';
+const MODE_ALIASES_MIXIN = 'aliases';
 
 const themePath = path.resolve(dirname, `../../scss/widgets/${THEME_FOLDER}`);
 
@@ -235,17 +236,32 @@ const getModeFiles = (mode) => [
 // properties. Absent from the bridge, `ds.$button-color-bg-rest` is now a Sass error.
 const getBridgeFiles = () => getModeFiles('light');
 
-// The mode role layer is the one generated file every bundle needs twice: once for the mode it was
-// built for and once for the opposite one, under the mode classes. A `:root` block cannot be
-// re-scoped on load — `meta.load-css` emits it verbatim and `@use` paths take no interpolation — so
-// the roles ship as a mixin the theme places under the selectors it wants.
+/*
+ * Every bundle needs the mode-dependent declarations more than once: under the mode it was built
+ * for, under the opposite one, and under the relative "inverted" scope. A `:root` block cannot be
+ * re-scoped on load — `meta.load-css` emits it verbatim and `@use` paths take no interpolation — so
+ * these layers ship as mixins the theme places under the selectors it wants.
+ *
+ * Two files use it. The roles carry the mode's own values, one file per mode. The aliases carry the
+ * layers whose TEXT is mode-independent but whose values read a role (`box-shadow.md` is geometry
+ * over `color.shadow-key`): a custom property resolves where it is declared, so leaving them on
+ * `:root` would freeze them at the bundle's mode no matter what class sits below. Same text in
+ * every scope, resolved anew in each.
+ *
+ * Otherwise identical to Style Dictionary's own `css/variables` (lib/common/formats.js) minus the
+ * selector nesting; keep the two in step.
+ */
+// `prefix` belongs to the declaration lines, not to the header comment — upstream drops it before
+// building the header (getFormattingCloneWithoutPrefix), and so must we.
+const headerFormatting = ({ prefix, ...formatting } = {}) => formatting;
+
 StyleDictionary.registerFormat({
-  name: 'dx/mode-roles-mixin',
+  name: 'dx/mode-scoped-mixin',
   format: async ({ dictionary, file, options }) => {
     const {
-      outputReferences, outputReferenceFallbacks, usesDtcg, formatting, sort,
+      outputReferences, outputReferenceFallbacks, usesDtcg, formatting, sort, mixin,
     } = options;
-    const header = await fileHeader({ file, formatting, options });
+    const header = await fileHeader({ file, formatting: headerFormatting(formatting), options });
     const variables = formattedVariables({
       format: 'css',
       dictionary,
@@ -256,7 +272,7 @@ StyleDictionary.registerFormat({
       sort,
     });
 
-    return `${header}@mixin ${MODE_ROLES_MIXIN}() {\n${variables}\n}\n`;
+    return `${header}@mixin ${mixin}() {\n${variables}\n}\n`;
   },
 });
 
@@ -344,8 +360,6 @@ const createModeConfig = (mode) => createConfig(mode, getModeFiles(mode), [
       const filePath = normalizeFilePath(token);
 
       return filePath.includes(`base/colors/utility/${THEME_NAME}.json`)
-        || filePath.includes(`global/${THEME_NAME}.json`)
-        || filePath.includes(`figma-utils/box-shadow/semantic/${THEME_NAME}.json`)
         || filePath.includes(`figma-utils/icon/set/${THEME_NAME}.json`);
     },
     options: FILE_OPTIONS,
@@ -360,21 +374,34 @@ const createModeConfig = (mode) => createConfig(mode, getModeFiles(mode), [
     options: FILE_OPTIONS,
   },
   {
-    destination: `${THEME_NAME}/semantic/box-shadow.scss`,
-    format: 'css/variables',
-    filter: (token) => normalizeFilePath(token).includes(`semantic/box-shadow/${THEME_NAME}.json`),
-    options: FILE_OPTIONS,
-  },
-  {
     destination: `${THEME_NAME}/semantic/colors/${mode}.scss`,
-    format: 'dx/mode-roles-mixin',
+    format: 'dx/mode-scoped-mixin',
     filter: (token) => {
       const filePath = normalizeFilePath(token);
 
       return filePath.includes(`semantic/colors/${THEME_NAME}/${mode}.json`)
         || filePath.includes(`icons/${THEME_NAME}/${mode}.json`);
     },
-    options: FILE_OPTIONS,
+    options: { ...FILE_OPTIONS, mixin: MODE_ROLES_MIXIN },
+  },
+  /*
+   * The three layers that read a colour role without being one: the box-shadow composites and
+   * their Figma layer parts (geometry over `color.shadow-*`) and the global aliases (focus rings
+   * over `color.border-focus*`). Written once, included in every mode scope — see the
+   * dx/mode-scoped-mixin comment for why they cannot stay on `:root`. Both mode configs emit this
+   * file; the sources are mode-independent, so the two writes are byte-identical.
+   */
+  {
+    destination: `${THEME_NAME}/mode-aliases.scss`,
+    format: 'dx/mode-scoped-mixin',
+    filter: (token) => {
+      const filePath = normalizeFilePath(token);
+
+      return filePath.includes(`semantic/box-shadow/${THEME_NAME}.json`)
+        || filePath.includes(`global/${THEME_NAME}.json`)
+        || filePath.includes(`figma-utils/box-shadow/semantic/${THEME_NAME}.json`);
+    },
+    options: { ...FILE_OPTIONS, mixin: MODE_ALIASES_MIXIN },
   },
 ]);
 
