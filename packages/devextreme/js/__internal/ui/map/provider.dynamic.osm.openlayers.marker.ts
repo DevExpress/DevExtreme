@@ -3,8 +3,13 @@ import type { MapEngineMarkerOptions } from './provider.dynamic.osm.engine';
 export const MARKER_FALLBACK_WIDTH = 25;
 export const MARKER_FALLBACK_HEIGHT = 41;
 export const DEFAULT_MARKER_SIZE = 44;
-export const DEFAULT_MARKER_CLASS = 'dx-map-marker-default';
 
+const MARKER_CLASS = 'dx-map-marker';
+export const DEFAULT_MARKER_CLASS = `${MARKER_CLASS}-default`;
+const DEFAULT_MARKER_ICON_CLASS = `${DEFAULT_MARKER_CLASS}-icon`;
+const DEFAULT_MARKER_BODY_CLASS = `${DEFAULT_MARKER_CLASS}-body`;
+const DEFAULT_MARKER_CENTER_CLASS = `${DEFAULT_MARKER_CLASS}-center`;
+const IMAGE_MARKER_CLASS = `${MARKER_CLASS}-image`;
 const DEFAULT_MARKER_WIDTH = 24.5;
 const DEFAULT_MARKER_HEIGHT = 36.5;
 const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
@@ -30,13 +35,13 @@ const createDefaultMarkerElement = (
   const body = ownerDocument.createElementNS(SVG_NAMESPACE, 'path');
   const center = ownerDocument.createElementNS(SVG_NAMESPACE, 'path');
 
-  element.className = `dx-map-marker ${DEFAULT_MARKER_CLASS}`;
+  element.className = `${MARKER_CLASS} ${DEFAULT_MARKER_CLASS}`;
   element.style.alignItems = 'flex-end';
   element.style.display = 'flex';
   element.style.height = `${DEFAULT_MARKER_SIZE}px`;
   element.style.justifyContent = 'center';
   element.style.width = `${DEFAULT_MARKER_SIZE}px`;
-  svg.setAttribute('class', 'dx-map-marker-default-icon');
+  svg.setAttribute('class', DEFAULT_MARKER_ICON_CLASS);
   svg.setAttribute('viewBox', DEFAULT_MARKER_VIEW_BOX);
   svg.setAttribute('width', `${DEFAULT_MARKER_WIDTH}`);
   svg.setAttribute('height', `${DEFAULT_MARKER_HEIGHT}`);
@@ -48,10 +53,10 @@ const createDefaultMarkerElement = (
     'drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.35))',
   ].join(' ');
   svg.style.overflow = 'visible';
-  body.setAttribute('class', 'dx-map-marker-default-body');
+  body.setAttribute('class', DEFAULT_MARKER_BODY_CLASS);
   body.setAttribute('d', DEFAULT_MARKER_BODY_PATH);
   body.setAttribute('stroke-width', '0.5');
-  center.setAttribute('class', 'dx-map-marker-default-center');
+  center.setAttribute('class', DEFAULT_MARKER_CENTER_CLASS);
   center.setAttribute('d', DEFAULT_MARKER_CENTER_PATH);
   svg.appendChild(body);
   svg.appendChild(center);
@@ -77,7 +82,7 @@ export const createMarkerElement = (
 
   if (options.iconSrc) {
     const element = ownerDocument.createElement('img');
-    element.className = 'dx-map-marker dx-map-marker-image';
+    element.className = `${MARKER_CLASS} ${IMAGE_MARKER_CLASS}`;
     element.src = options.iconSrc;
     element.alt = '';
     element.draggable = false;
