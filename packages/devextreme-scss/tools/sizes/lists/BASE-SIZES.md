@@ -19,20 +19,7 @@ and carries a marker saying why.
 
 ## What the theme can already set
 
-457 occurrences in 394 `!default` variables. fluent-next already passes 423; 10 are open knobs nobody turns.
-
-Open knobs — theme-side work, the shared layer stays untouched:
-
-- `$scheduler-workspace-info-font-size` — scss/widgets/base/scheduler/_index.scss:109
-- `$scheduler-small-font-size` — scss/widgets/base/scheduler/_index.scss:110
-- `$scheduler-group-header-table-cell-height` — scss/widgets/base/scheduler/_index.scss:111
-- `$scheduler-month-date-text-size` — scss/widgets/base/scheduler/_index.scss:112
-- `$scheduler-month-date-text-padding` — scss/widgets/base/scheduler/_index.scss:113
-- `$scheduler-workspace-info-font-size` — scss/widgets/base/scheduler/views/_index.scss:45
-- `$scheduler-small-font-size` — scss/widgets/base/scheduler/views/_index.scss:46
-- `$scheduler-group-header-table-cell-height` — scss/widgets/base/scheduler/views/_index.scss:55
-- `$scheduler-month-date-text-size` — scss/widgets/base/scheduler/views/_index.scss:59
-- `$scheduler-month-date-text-padding` — scss/widgets/base/scheduler/views/_index.scss:61
+457 occurrences in 394 `!default` variables. fluent-next already passes 433; 0 are open knobs nobody turns.
 
 ## What is nailed into the layer
 

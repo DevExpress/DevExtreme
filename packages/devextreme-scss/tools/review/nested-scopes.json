@@ -420,6 +420,7 @@
     "dx-scheduler-fixed-appointments",
     "dx-scheduler-group-flex-container",
     "dx-scheduler-group-flex-container-hierarchical",
+    "dx-scheduler-group-header",
     "dx-scheduler-group-row",
     "dx-scheduler-group-table",
     "dx-scheduler-header",

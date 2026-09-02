@@ -9,8 +9,8 @@
   "summary": {
     "occurrences": 457,
     "variables": 394,
-    "injected": 423,
-    "open": 10,
+    "injected": 433,
+    "open": 0,
     "parameters": 24
   },
   "places": [
@@ -830,7 +830,7 @@
       "kind": "module-variable",
       "status": "injected",
       "setBy": "scss/widgets/fluent-next/htmlEditor/_index.scss",
-      "setTo": "var(--dx-html-editor-mention-padding-block)"
+      "setTo": "var(--dx-mention-padding-block)"
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
@@ -846,7 +846,7 @@
       "kind": "module-variable",
       "status": "injected",
       "setBy": "scss/widgets/fluent-next/htmlEditor/_index.scss",
-      "setTo": "var(--dx-html-editor-mention-border-radius)"
+      "setTo": "var(--dx-mention-border-radius)"
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
@@ -862,7 +862,7 @@
       "kind": "module-variable",
       "status": "injected",
       "setBy": "scss/widgets/fluent-next/htmlEditor/_index.scss",
-      "setTo": "var(--dx-html-editor-mention-margin-inline)"
+      "setTo": "var(--dx-mention-margin-inline)"
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
@@ -4929,7 +4929,9 @@
       "text": "$scheduler-workspace-info-font-size: 20px !default;",
       "variable": "scheduler-workspace-info-font-size",
       "kind": "module-variable",
-      "status": "open"
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/scheduler/_index.scss",
+      "setTo": "var(--dx-scheduler-workspace-info-font-size)"
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
@@ -4943,7 +4945,9 @@
       "text": "$scheduler-small-font-size: 14px !default;",
       "variable": "scheduler-small-font-size",
       "kind": "module-variable",
-      "status": "open"
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/scheduler/_index.scss",
+      "setTo": "var(--dx-scheduler-small-font-size)"
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
@@ -4957,7 +4961,9 @@
       "text": "$scheduler-group-header-table-cell-height: 30px !default;",
       "variable": "scheduler-group-header-table-cell-height",
       "kind": "module-variable",
-      "status": "open"
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/scheduler/_index.scss",
+      "setTo": "var(--dx-scheduler-group-header-cell-height)"
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
@@ -4971,7 +4977,9 @@
       "text": "$scheduler-month-date-text-size: 16px !default;",
       "variable": "scheduler-month-date-text-size",
       "kind": "module-variable",
-      "status": "open"
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/scheduler/_index.scss",
+      "setTo": "var(--dx-scheduler-month-date-text-font-size)"
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
@@ -4985,7 +4993,9 @@
       "text": "$scheduler-month-date-text-padding: 6px !default;",
       "variable": "scheduler-month-date-text-padding",
       "kind": "module-variable",
-      "status": "open"
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/scheduler/_index.scss",
+      "setTo": "var(--dx-scheduler-month-date-text-padding)"
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
@@ -5914,7 +5924,9 @@
       "text": "$scheduler-workspace-info-font-size: 20px !default;",
       "variable": "scheduler-workspace-info-font-size",
       "kind": "module-variable",
-      "status": "open"
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/scheduler/_index.scss",
+      "setTo": "var(--dx-scheduler-workspace-info-font-size)"
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
@@ -5928,7 +5940,9 @@
       "text": "$scheduler-small-font-size: 14px !default;",
       "variable": "scheduler-small-font-size",
       "kind": "module-variable",
-      "status": "open"
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/scheduler/_index.scss",
+      "setTo": "var(--dx-scheduler-small-font-size)"
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
@@ -5942,7 +5956,9 @@
       "text": "$scheduler-group-header-table-cell-height: 30px !default;",
       "variable": "scheduler-group-header-table-cell-height",
       "kind": "module-variable",
-      "status": "open"
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/scheduler/_index.scss",
+      "setTo": "var(--dx-scheduler-group-header-cell-height)"
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
@@ -5956,7 +5972,9 @@
       "text": "$scheduler-month-date-text-size: 16px !default;",
       "variable": "scheduler-month-date-text-size",
       "kind": "module-variable",
-      "status": "open"
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/scheduler/_index.scss",
+      "setTo": "var(--dx-scheduler-month-date-text-font-size)"
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
@@ -5970,7 +5988,9 @@
       "text": "$scheduler-month-date-text-padding: 6px !default;",
       "variable": "scheduler-month-date-text-padding",
       "kind": "module-variable",
-      "status": "open"
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/scheduler/_index.scss",
+      "setTo": "var(--dx-scheduler-month-date-text-padding)"
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
