@@ -42,6 +42,18 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                     return new ArrayStore(options.items);
                 };
 
+                const loadCustomResult = (loadOptions) => {
+                    const d = $.Deferred();
+
+                    store().load(loadOptions)
+                        .done((data, extra) => {
+                            d.resolve({ data: data, extra: extra });
+                        })
+                        .fail(d.reject);
+
+                    return d;
+                };
+
                 return {
                     beginLoading: function() {
                     },
@@ -58,12 +70,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                         return store().load(loadOptions);
                     },
                     customLoader: {
-                        load: function(loadOptions) {
-                            return store().load(loadOptions);
-                        },
-                        loadFromStore: function(loadOptions) {
-                            return store().load(loadOptions);
-                        },
+                        load: loadCustomResult,
+                        loadFromStore: loadCustomResult,
                         isLoading: function() {
                             return false;
                         },

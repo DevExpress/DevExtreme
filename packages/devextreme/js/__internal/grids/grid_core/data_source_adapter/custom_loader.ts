@@ -63,8 +63,7 @@ export class CustomLoader {
         return;
       }
 
-      const loadDeferred = operation.data
-        ?? this.loadFromStore(operation.storeLoadOptions);
+      const loadDeferred = operation.data ?? this.loadFromStore(operation.storeLoadOptions);
 
       when<CustomLoadResult | RawItemData[]>(loadDeferred)
         .done((result) => {
@@ -82,9 +81,10 @@ export class CustomLoader {
             totalCount = store.totalCount(operation.storeLoadOptions);
           }
 
+          // customizeLoadResult may have replaced data, so re-resolve it
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           when<any>(operation.data, totalCount)
-            .done((resolvedData: RawItemData[], resolvedTotalCount: number) => {
+            .done((resolvedData: RawItemData[], resolvedTotalCount?: number) => {
               operation.extra ??= {};
               operation.extra.totalCount = resolvedTotalCount;
               d.resolve({
