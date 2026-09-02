@@ -6,6 +6,7 @@ import Color from 'color';
 import pointModule from 'viz/series/points/base_point';
 import SeriesModule from 'viz/series/base_series';
 import { MockAxis, MockTranslator } from '../../helpers/chartMocks.js';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const Series = SeriesModule.Series;
 

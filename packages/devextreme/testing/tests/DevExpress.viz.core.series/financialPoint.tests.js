@@ -6,6 +6,7 @@ import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
 import { MockTranslator, MockSeries } from '../../helpers/chartMocks.js';
 import tooltipModule from 'viz/core/tooltip';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const originalLabel = labelModule.Label;
 
