@@ -118,7 +118,12 @@
     $button-selected-color,
   );
 
-  &.dx-state-disabled {
+  /* The second selector is for a button inside something disabled - a popup, a toolbar, a form.
+  DevExtreme puts the state on the container, not on the button, so matching only the button left
+  a filled one at full accent inside a greyed dialog. Painting the text alone would be worse than
+  either: a filled button needs its surface and its content to move together. */
+  &.dx-state-disabled,
+  .dx-state-disabled & {
     box-shadow: none;
 
     .dx-icon {

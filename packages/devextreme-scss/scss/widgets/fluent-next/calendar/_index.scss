@@ -82,11 +82,11 @@ blanket dim was lifted. */
     color: var(--dx-calendar-cell-content-disabled);
   }
 
-  .dx-calendar-cell.dx-calendar-selected-date,
+  /* Only the span: the round selection is drawn on it, and painting the cell as well put a square
+  behind the circle. box-shadow is left alone for the same reason - it is part of the shape. */
   .dx-calendar-cell.dx-calendar-selected-date span {
     background-color: var(--dx-calendar-cell-bg-selected-disabled);
     color: var(--dx-calendar-cell-content-disabled);
-    box-shadow: none;
   }
 
   .dx-calendar-navigator .dx-button .dx-icon,
