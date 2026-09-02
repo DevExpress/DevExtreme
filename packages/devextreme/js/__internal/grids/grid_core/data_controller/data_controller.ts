@@ -19,13 +19,11 @@ import type {
   ChangedEvent, DataSourceAdapterProvider, LoadOperation, OperationTypes, RawItemData,
 } from '@ts/grids/grid_core/data_source_adapter/types';
 import { isLocalStore } from '@ts/grids/grid_core/data_source_adapter/utils/store';
-import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import modules from '@ts/grids/grid_core/m_modules';
 import type {
   Controllers, Module, OptionChanged, RowKey,
 } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
-import type { VirtualScrollController } from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
 
 import type {
   BinaryDataFilterExpression,
@@ -126,19 +124,10 @@ export class DataController extends modules.Controller {
 
   public rowIndicesChanged!: Callback<[RowIndexCorrection]>;
 
-  protected _lastRenderingPageIndex?: number;
-
-  protected _isPagingByRendering?: boolean;
-
   // TODO public controller
   public _columnsController!: Controllers['columns'];
 
-  // TODO public controller
-  public _rowsScrollController?: VirtualScrollController | null;
-
   private _filterExcludedColumn: Column | null = null;
-
-  protected _focusController!: FocusController;
 
   private loadErrorHandlerProxy!: (e: Error | string) => void;
 
@@ -150,7 +139,6 @@ export class DataController extends modules.Controller {
     this._items = [];
     this._cachedProcessedItems = null;
     this._columnsController = this.getController('columns');
-    this._focusController = this.getController('focus');
 
     this._isPaging = false;
     this._currentOperationTypes = null;
