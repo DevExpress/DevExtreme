@@ -1,3 +1,4 @@
+import type { Store } from '@js/common/data';
 import ArrayStore from '@js/common/data/array_store';
 import { createObjectWithChanges } from '@js/common/data/array_utils';
 import query from '@js/common/data/query';
@@ -80,7 +81,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
   private _createKeyGetter() {
     const keyExpr = this.getKeyExpr();
 
-    return compileGetter(keyExpr);
+    return compileGetter(keyExpr as string);
   }
 
   private _createKeySetter() {
@@ -90,21 +91,21 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
       return keyExpr;
     }
 
-    return compileSetter(keyExpr);
+    return compileSetter(keyExpr as string);
   }
 
-  private createParentIdGetter() {
-    return compileGetter(this.option('parentIdExpr'));
+  public createParentIdGetter(): (data: unknown) => unknown {
+    return compileGetter(this.option('parentIdExpr')) as (data: unknown) => unknown;
   }
 
-  private createParentIdSetter() {
+  public createParentIdSetter(): (data: unknown, value: unknown) => void {
     const parentIdExpr = this.option('parentIdExpr');
 
     if (isFunction(parentIdExpr)) {
-      return parentIdExpr;
+      return parentIdExpr as (data: unknown, value: unknown) => void;
     }
 
-    return compileSetter(parentIdExpr);
+    return compileSetter(parentIdExpr) as (data: unknown, value: unknown) => void;
   }
 
   private _createItemsGetter() {
@@ -513,8 +514,8 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
   protected _getKeyInfo() {
     return {
       key: () => 'key',
-      keyOf: (data) => data.key,
-    };
+      keyOf: (data: { key: unknown }) => data.key,
+    } as Store;
   }
 
   private _processChanges(changes) {

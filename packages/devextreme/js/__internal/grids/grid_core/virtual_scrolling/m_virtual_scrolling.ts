@@ -348,7 +348,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     return super._loadPageSize.apply(this, arguments as any) * this.loadPageCount();
   }
 
-  private beginPageIndex(): any {
+  public beginPageIndex(): number {
     return proxyDataSourceAdapterMethod(this, 'beginPageIndex', [...arguments]);
   }
 

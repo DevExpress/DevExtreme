@@ -47,8 +47,8 @@ virtualScrollingModule.extenders.controllers.data = (Base: ModuleType<DataContro
 };
 
 const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class VirtualScrollingDataSourceAdapterExtender extends virtualScrollingDataSourceAdapterExtender(Base) {
-  public changeRowExpand() {
-    return super.changeRowExpand.apply(this, arguments as any)?.done(() => {
+  public changeRowExpand(path?: unknown) {
+    return super.changeRowExpand(path)?.done(() => {
       const viewportItemIndex = this.getViewportItemIndex();
 
       viewportItemIndex >= 0 && this.setViewportItemIndex(viewportItemIndex);

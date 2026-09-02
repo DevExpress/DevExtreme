@@ -118,7 +118,7 @@ export const virtualScrollingDataControllerExtender = (
         const rowIndex = Math.floor(itemIndex) - rowIndexOffset;
         const { component } = this;
         const scrollable = component.getScrollable && component.getScrollable();
-        const isSortingOperation = this.dataSource().operationTypes().sorting;
+        const isSortingOperation = this.dataSource()?.operationTypes()?.sorting;
 
         if (scrollable && !isSortingOperation && rowIndex >= 0) {
           const rowElement = component.getRowElement(rowIndex);
@@ -256,7 +256,7 @@ export const virtualScrollingDataControllerExtender = (
         let result = that._items;
 
         if (that.option(LEGACY_SCROLLING_MODE)) {
-          const dataSource = that.dataSource();
+          const dataSource = that._dataSource;
           const virtualItemsCount = dataSource?.virtualItemsCount();
           const begin = virtualItemsCount ? virtualItemsCount.begin : 0;
           const rowPageSize = that.getRowPageSize();
@@ -289,7 +289,7 @@ export const virtualScrollingDataControllerExtender = (
       onChanged() {
       },
       changingDuration() {
-        const dataSource = that.dataSource();
+        const dataSource = that._dataSource;
 
         if (dataSource?.isLoading() && that.option(LEGACY_SCROLLING_MODE) !== false) {
           return LOAD_TIMEOUT;
@@ -486,7 +486,7 @@ export const virtualScrollingDataControllerExtender = (
 
   public getRowIndexOffset(byLoadedRows?, needGroupOffset?) {
     let offset = 0;
-    const dataSource = this.dataSource();
+    const dataSource = this._dataSource;
     const rowsScrollController = this._rowsScrollController;
     const newMode = this.option(LEGACY_SCROLLING_MODE) === false;
     const virtualPaging = isVirtualPaging(this);
@@ -506,8 +506,9 @@ export const virtualScrollingDataControllerExtender = (
     } else if (virtualPaging && newMode && dataSource) {
       const lastLoadOptions = dataSource.lastLoadOptions();
 
-      if (needGroupOffset && lastLoadOptions.skips?.length) {
-        offset = lastLoadOptions.skips.reduce((res: number, skip: number) => res + skip, 0);
+      const { skips } = lastLoadOptions as { skips?: number[] };
+      if (needGroupOffset && skips?.length) {
+        offset = skips.reduce((res: number, skip: number) => res + skip, 0);
       } else {
         offset = lastLoadOptions.skip ?? 0;
       }

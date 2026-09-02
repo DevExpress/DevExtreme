@@ -1153,7 +1153,8 @@ export class DataController extends modules.Controller {
 
     // change.items at this stage is defined only if virtualScrolling
     // + legacyScrollingMode enabled
-    const dataItems = this._beforeProcessItems(change.items ?? dataSource.items());
+    const items = (change.items ?? dataSource.items()) as RawItemData[];
+    const dataItems = this._beforeProcessItems(items);
     const processedItems = this._processItems(dataItems, change);
 
     this._cachedProcessedItems = processedItems;
@@ -1214,7 +1215,7 @@ export class DataController extends modules.Controller {
       return;
     }
 
-    const operationTypes: OperationTypes | undefined = this.dataSource().operationTypes();
+    const operationTypes = this.dataSource()?.operationTypes() ?? undefined;
 
     change.isDataChanged = true;
     change.repaintChangesOnly = resolveRepaintChangesOnly(
@@ -1445,13 +1446,12 @@ export class DataController extends modules.Controller {
     return this._dataSource ? this._dataSource.pageCount() : 1;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public dataSource(): any {
-    return this._dataSource;
+  public dataSource(): DataSourceAdapter | undefined {
+    return this._dataSource ?? undefined;
   }
 
   public store(): Store | undefined {
-    return this._dataSource?.store() as Store | undefined;
+    return this._dataSource?.store();
   }
 
   public loadAll(data?: RawItemData[], skipFilter = false): DeferredObj<ProcessedItem[]> {
@@ -1724,7 +1724,7 @@ export class DataController extends modules.Controller {
   }
 
   public getCachedStoreData(): RawItemData[] | undefined {
-    return this._dataSource?.getCachedStoreData() as RawItemData[] | undefined;
+    return this._dataSource?.getCachedStoreData();
   }
 
   /**

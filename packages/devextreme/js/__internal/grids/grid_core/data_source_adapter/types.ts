@@ -52,6 +52,19 @@ export interface LoadOperation extends Omit<BaseLoadOperation, 'operationId'> {
     totalCount?: number;
     summary?: unknown[];
   };
+  cachedData?: {
+    items: Record<string, unknown>;
+    extra?: {
+      totalCount?: number;
+      summary?: unknown[];
+    };
+  };
+  cachedPagingData?: RawItemData[];
+  cachedDataPartBegin?: RawItemData[];
+  cachedDataPartEnd?: RawItemData[];
+  skip?: number;
+  take?: number;
+  mergeStoreLoadData?: boolean;
 }
 
 export interface ChangedEvent extends BaseChangedEvent {
