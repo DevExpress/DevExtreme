@@ -1,18 +1,18 @@
 /* eslint-disable spellcheck/spell-checker */
 export const EMPTY_EVENT_NAME = 'dxEmptyEventType';
-export const NATIVE_EVENTS_TO_SUBSCRIBE = {
+export const NATIVE_EVENTS_TO_SUBSCRIBE: Record<string, string | undefined> = {
   mouseenter: 'mouseover',
   mouseleave: 'mouseout',
   pointerenter: 'pointerover',
   pointerleave: 'pointerout',
 };
-export const NATIVE_EVENTS_TO_TRIGGER = {
+export const NATIVE_EVENTS_TO_TRIGGER: Record<string, string | undefined> = {
   focusin: 'focus',
   focusout: 'blur',
 };
-export const NO_BUBBLE_EVENTS = ['blur', 'focus', 'load'];
+export const NO_BUBBLE_EVENTS: string[] = ['blur', 'focus', 'load'];
 
-export const forcePassiveFalseEventNames = ['touchmove', 'wheel', 'mousewheel', 'touchstart'];
+export const forcePassiveFalseEventNames: string[] = ['touchmove', 'wheel', 'mousewheel', 'touchstart'];
 
 export const EVENT_PROPERTIES = [
   'altKey',

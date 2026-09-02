@@ -205,7 +205,6 @@ class MultiselectDateBox extends DateBox<MultiselectDateBoxProperties> {
 
   _isTargetOutOfComponent(target: EventTarget | null): boolean {
     const $dateRangeBox = $(this._getDateRangeBox().element());
-    // @ts-expect-error Should be fixed on core/renderer level
     const isTargetOutOfDateRangeBox = $(target).closest($dateRangeBox).length === 0;
 
     return super._isTargetOutOfComponent(target) && isTargetOutOfDateRangeBox;

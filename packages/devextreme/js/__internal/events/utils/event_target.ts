@@ -1,4 +1,19 @@
-export const getEventTarget = (event) => {
+interface ShadowHost extends EventTarget {
+  shadowRoot?: ShadowRoot | null;
+}
+
+interface NativeTargetedEvent {
+  target?: ShadowHost | null;
+  path?: EventTarget[];
+  composedPath?: () => EventTarget[];
+}
+
+export interface TargetedEvent {
+  target?: ShadowHost | null;
+  originalEvent?: NativeTargetedEvent | null;
+}
+
+export const getEventTarget = (event: TargetedEvent): EventTarget | null | undefined => {
   const { originalEvent } = event;
 
   if (!originalEvent) {
