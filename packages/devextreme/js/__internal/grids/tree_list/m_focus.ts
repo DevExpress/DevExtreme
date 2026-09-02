@@ -21,6 +21,8 @@ function findIndex(items, callback) {
 const data = (
   Base: ModuleType<DataController>,
 ) => class TreeListDataControllerExtender extends focusModule.extenders.controllers.data(Base) {
+  public declare _dataSource?: DataSourceAdapterTreeList | null;
+
   private changeRowExpand(key) {
     // @ts-expect-error
     if (this.option('focusedRowEnabled') && this.isRowExpanded(key)) {
@@ -52,7 +54,7 @@ const data = (
 
   private getParentKey(key) {
     const that = this;
-    const dataSource = that._dataSource as unknown as DataSourceAdapterTreeList;
+    const dataSource = that._dataSource!;
     // @ts-expect-error
     const node = that.getNodeByKey(key);
     // @ts-expect-error
@@ -79,7 +81,7 @@ const data = (
 
   private expandAscendants(key) {
     const that = this;
-    const dataSource = that._dataSource as unknown as DataSourceAdapterTreeList;
+    const dataSource = that._dataSource;
     // @ts-expect-error
     const d = new Deferred();
 
@@ -99,7 +101,7 @@ const data = (
   }
 
   protected getPageIndexByKey(key) {
-    const dataSource = this._dataSource as unknown as DataSourceAdapterTreeList;
+    const dataSource = this._dataSource!;
     // @ts-expect-error
     const d = new Deferred();
 
@@ -107,7 +109,7 @@ const data = (
       dataSource.load({
         parentIds: [],
       }).done((nodes) => {
-        if ((this._dataSource as unknown) !== (dataSource as unknown)) {
+        if (this._dataSource !== dataSource) {
           d.resolve(-1);
           return;
         }
