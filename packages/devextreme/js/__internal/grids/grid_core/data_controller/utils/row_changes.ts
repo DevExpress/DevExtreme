@@ -33,6 +33,23 @@ export function isSameGroupRowState(item1: ProcessedItem, item2: ProcessedItem):
     && item1.data?.isContinuationOnNextPage === item2.data?.isContinuationOnNextPage;
 }
 
+export function canDiffColumns(oldItem: ProcessedItem, newItem: ProcessedItem): boolean {
+  return oldItem.rowType === newItem.rowType && newItem.rowType !== 'groupFooter';
+}
+
+export function getGroupColumnIndices(
+  oldItem: ProcessedItem,
+  newItem: ProcessedItem,
+): number[] | undefined {
+  if (!oldItem.cells || !isSameGroupRowState(oldItem, newItem)) {
+    return undefined;
+  }
+
+  return oldItem.cells
+    .map((cell, index) => (cell.column?.type !== 'groupExpand' ? index : -1))
+    .filter((index) => index >= 0);
+}
+
 /**
  * Rows of different types may share a key, so the row type is a part of the key
  * the diff is built on.
@@ -252,4 +269,32 @@ export function syncRowsAfterChange(
       item.loadIndex = newItem.loadIndex;
     }
   });
+}
+
+export function partialUpdateRow(
+  oldItem: ProcessedItem,
+  newItem: ProcessedItem,
+  columnIndices: number[] | undefined,
+  isLiveUpdate?: boolean,
+): void {
+  if (!columnIndices) {
+    return;
+  }
+
+  oldItem.cells?.forEach((cell, columnIndex) => {
+    const isCellChanged = columnIndices.includes(columnIndex);
+    if (!isCellChanged && cell?.update) {
+      cell.update(newItem);
+    }
+  });
+
+  newItem.update = oldItem.update;
+  newItem.watch = oldItem.watch;
+  newItem.cells = oldItem.cells;
+
+  if (isLiveUpdate) {
+    newItem.oldValues = oldItem.values;
+  }
+
+  oldItem.update?.(newItem);
 }

@@ -3,17 +3,20 @@ import {
 } from '@jest/globals';
 
 import type {
-  ChangedRows, DataChange, ItemChange, ProcessedItem, UpdateChange,
+  ChangedRows, DataChange, ItemChange, ProcessedItem, RowWatch, UpdateChange,
 } from '../../types';
 import {
+  canDiffColumns,
   convertToUpdateChange,
   getChangedRowIndices,
   getDataRowIndex,
+  getGroupColumnIndices,
   getRowKey,
   getRowOperation,
   indexRowsByKey,
   isSameGroupRowState,
   isSameItem,
+  partialUpdateRow,
   pushChangedRow,
   resetChangedRows,
   resolveRepaintChangesOnly,
@@ -124,6 +127,48 @@ describe('isSameGroupRowState', () => {
       groupRow({ data: { key: 1, isContinuation: false, isContinuationOnNextPage: false } }),
       groupRow({ data: { key: 2, isContinuation: false, isContinuationOnNextPage: false } }),
     )).toBe(true);
+  });
+});
+
+describe('canDiffColumns', () => {
+  it('should allow the diff for the rows of the same type', () => {
+    expect(canDiffColumns(row({ rowType: 'data' }), row({ rowType: 'data' }))).toBe(true);
+  });
+
+  it('should forbid the diff for the rows of different types', () => {
+    expect(canDiffColumns(row({ rowType: 'data' }), row({ rowType: 'detail' }))).toBe(false);
+  });
+
+  it('should forbid the diff for group footers', () => {
+    expect(canDiffColumns(row({ rowType: 'groupFooter' }), row({ rowType: 'groupFooter' })))
+      .toBe(false);
+  });
+});
+
+describe('getGroupColumnIndices', () => {
+  const groupRow = (partial: Partial<ProcessedItem>): ProcessedItem => row({
+    rowType: 'group',
+    isExpanded: true,
+    data: { isContinuation: false, isContinuationOnNextPage: false },
+    ...partial,
+  });
+
+  it('should skip the group expand cell', () => {
+    const oldItem = groupRow({
+      cells: [{ column: { type: 'groupExpand' } }, {}, { column: { dataField: 'name' } }],
+    });
+
+    expect(getGroupColumnIndices(oldItem, groupRow({}))).toEqual([1, 2]);
+  });
+
+  it('should return undefined when the old row has no cells', () => {
+    expect(getGroupColumnIndices(groupRow({}), groupRow({}))).toBeUndefined();
+  });
+
+  it('should return undefined when the group state has changed', () => {
+    const oldItem = groupRow({ cells: [{}] });
+
+    expect(getGroupColumnIndices(oldItem, groupRow({ isExpanded: false }))).toBeUndefined();
   });
 });
 
@@ -534,5 +579,72 @@ describe('syncRowsAfterChange', () => {
     syncRows(items, { newItems: [row({ key: 1, loadIndex: 7 })] });
 
     expect(items.map((item) => item.loadIndex)).toEqual([7, 6]);
+  });
+});
+
+describe('partialUpdateRow', () => {
+  it('should pass the new row to the updaters of the cells the change did not touch', () => {
+    const newItem = row({ key: 1 });
+    const cellUpdates = [jest.fn(), jest.fn(), jest.fn()];
+    const oldItem = row({ key: 1, cells: cellUpdates.map((update) => ({ update })) });
+
+    partialUpdateRow(oldItem, newItem, [1]);
+
+    expect(cellUpdates[0]).toHaveBeenCalledWith(newItem);
+    expect(cellUpdates[1]).not.toHaveBeenCalled();
+    expect(cellUpdates[2]).toHaveBeenCalledWith(newItem);
+  });
+
+  it('should update every cell when no column has changed', () => {
+    const newItem = row({ key: 1 });
+    const cellUpdate = jest.fn();
+
+    partialUpdateRow(row({ key: 1, cells: [{ update: cellUpdate }] }), newItem, []);
+
+    expect(cellUpdate).toHaveBeenCalledWith(newItem);
+  });
+
+  it('should move the updaters and the cells to the new row', () => {
+    const update = jest.fn();
+    const watch: RowWatch = () => () => {};
+    const cells = [{}];
+    const newItem = row({ key: 1 });
+    const oldItem = row({
+      key: 1, update, watch, cells,
+    });
+
+    partialUpdateRow(oldItem, newItem, [0]);
+
+    expect(newItem.update).toBe(update);
+    expect(newItem.watch).toBe(watch);
+    expect(newItem.cells).toBe(cells);
+    expect(update).toHaveBeenCalledWith(newItem);
+  });
+
+  it('should keep the old values only on a live update', () => {
+    const values = [1, 2];
+    const liveItem = row({ key: 1 });
+    const item = row({ key: 1 });
+
+    partialUpdateRow(row({ key: 1, values }), liveItem, [0], true);
+    partialUpdateRow(row({ key: 1, values }), item, [0]);
+
+    expect(liveItem.oldValues).toBe(values);
+    expect(item.oldValues).toBeUndefined();
+  });
+
+  it('should do nothing when the whole row is repainted', () => {
+    const update = jest.fn();
+    const cellUpdate = jest.fn();
+    const oldItem = row({ key: 1, update, cells: [{ update: cellUpdate }] });
+    const newItem = row({ key: 1 });
+
+    partialUpdateRow(oldItem, newItem, undefined, true);
+
+    expect(update).not.toHaveBeenCalled();
+    expect(cellUpdate).not.toHaveBeenCalled();
+    expect(newItem.update).toBeUndefined();
+    expect(newItem.cells).toBeUndefined();
+    expect(newItem.oldValues).toBeUndefined();
   });
 });
