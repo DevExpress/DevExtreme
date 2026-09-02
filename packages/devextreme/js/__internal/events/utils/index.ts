@@ -4,7 +4,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { focused } from '@ts/core/utils/m_selectors';
 
-import mappedAddNamespace from './m_add_namespace';
+import mappedAddNamespace from './add_namespace';
 /* eslint-disable spellcheck/spell-checker */
 const KEY_MAP = {
   backspace: 'backspace',
