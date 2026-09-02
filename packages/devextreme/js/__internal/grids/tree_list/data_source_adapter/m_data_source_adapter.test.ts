@@ -141,7 +141,7 @@ describe('TreeList DataSourceAdapter - T1311885 Race Condition', () => {
     (dataSourceAdapter as any)._cachedStoreData = undefined;
     (dataSourceAdapter as any)._lastOperationId = OPERATION_ID.SECOND;
 
-    firstLoadDeferred.resolve(parentData);
+    firstLoadDeferred.resolve({ data: parentData });
     await Promise.resolve();
 
     process.off('unhandledRejection', unhandledRejectionHandler);

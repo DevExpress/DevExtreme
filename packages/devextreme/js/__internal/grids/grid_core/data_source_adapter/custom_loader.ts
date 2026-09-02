@@ -63,11 +63,15 @@ export class CustomLoader {
         return;
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      when<any>(operation.data ?? this.loadFromStore(operation.storeLoadOptions))
-        .done((data: RawItemData[], extra?: LoadOperation['extra']) => {
-          operation.data = data;
-          operation.extra = extra;
+      const loadDeferred = operation.data
+        ?? this.loadFromStore(operation.storeLoadOptions);
+
+      when<CustomLoadResult | RawItemData[]>(loadDeferred)
+        .done((result) => {
+          const loaded: CustomLoadResult = Array.isArray(result) ? { data: result } : result;
+
+          operation.data = loaded.data;
+          operation.extra = loaded.extra;
 
           this.customizeLoadResult(operation);
 
