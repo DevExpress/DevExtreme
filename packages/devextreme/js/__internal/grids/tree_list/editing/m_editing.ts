@@ -138,7 +138,7 @@ class EditingController extends editingModule.controllers.editing {
     const dataSourceAdapter = this._dataController.dataSource();
     const parentKeyGetter = dataSourceAdapter?.createParentIdGetter();
 
-    parentKey = parentKeyGetter?.(data);
+    parentKey = parentKeyGetter ? parentKeyGetter(data) : parentKey;
 
     // @ts-expect-error
     if (parentKey !== undefined && parentKey !== rootValue && !this._dataController.isRowExpanded(parentKey)) {
