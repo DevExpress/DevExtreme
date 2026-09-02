@@ -34,12 +34,18 @@ export const getColumnIdentifier = (
   // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
 ): string | undefined => column.name || column.dataField;
 
-export const canSyncHeaderFilterWithFilterRow = (column: FilterSyncColumn): boolean => {
-  const filterValues = column.filterValues ?? [];
-  const hasOwnDataSource = Boolean(filterUtils.getGroupInterval(column))
-    || Boolean(column.headerFilter?.dataSource);
+const canSyncHeaderFilterWithFilterRow = (column: FilterSyncColumn): boolean => {
+  const { filterValues } = column;
+  const isOnlyNullFilterValue = filterValues?.length === 1 && filterValues[0] === null;
 
-  return !hasOwnDataSource || (filterValues.length === 1 && filterValues[0] === null);
+  if (isOnlyNullFilterValue) {
+    return true;
+  }
+
+  const hasGroupInterval = Boolean(filterUtils.getGroupInterval(column));
+  const hasOwnDataSource = Boolean(column.headerFilter?.dataSource);
+
+  return !hasGroupInterval && !hasOwnDataSource;
 };
 
 export const checkForErrors = (columns: FilterSyncColumn[]): void => {

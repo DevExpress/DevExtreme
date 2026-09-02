@@ -67,11 +67,12 @@ export class FilterSyncController extends modules.Controller {
 
   public syncFilterValue(): void {
     const columns = this.columnsController.getFilteringColumns();
+    const filterValue = this.option('filterValue');
 
     this.withColumnOptionsSync(() => {
       columns.forEach((column) => {
         const filterConditions = getMatchedConditions(
-          this.option('filterValue'),
+          filterValue,
           getColumnIdentifier(column),
         ) as FilterValueCondition[];
 
