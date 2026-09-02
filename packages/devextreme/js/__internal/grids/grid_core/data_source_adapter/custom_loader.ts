@@ -1,5 +1,6 @@
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
 import type { DataSource } from '@ts/data/data_source/data_source';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
 
@@ -153,11 +154,11 @@ export class CustomLoader {
 
   private createLoadOperation(options: CustomStoreLoadOptions): LoadOperation {
     const dataSourceLoadOptions = this.dataSource.loadOptions();
-    const storeLoadOptions: CustomStoreLoadOptions = { ...options };
-
-    if (dataSourceLoadOptions?.langParams) {
-      storeLoadOptions.langParams = dataSourceLoadOptions.langParams;
-    }
+    const storeLoadOptions: CustomStoreLoadOptions = extend(
+      {},
+      options,
+      { langParams: dataSourceLoadOptions.langParams },
+    );
 
     const customLoadOptions: string[] = this.dataSource.store()._customLoadOptions() ?? [];
 
