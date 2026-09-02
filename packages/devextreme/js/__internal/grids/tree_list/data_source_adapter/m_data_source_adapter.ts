@@ -71,7 +71,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
 
   private _rootNode: any;
 
-  private _isNodesInitializing: any;
+  public _isNodesInitializing = false;
 
   private _totalItemsCount: any;
 

@@ -34,7 +34,7 @@ import {
   LOAD_TIMEOUT,
   VISIBLE_PAGE_INDEX,
 } from '../const';
-import type { dataSourceAdapterExtender } from '../m_virtual_scrolling';
+import type { VirtualScrollingDataSourceAdapter } from '../m_virtual_scrolling';
 import { VirtualScrollController } from '../m_virtual_scrolling_core';
 import type { ChangedLoadParams } from '../types';
 import type { GroupCountableDataSource } from '../utils/items';
@@ -52,8 +52,6 @@ import {
 export interface VirtualScrollingDataControllerExtension {
   virtualItemsCount: () => VirtualItemsCount | undefined;
 }
-
-type VirtualScrollingDataSourceAdapter = InstanceType<ReturnType<typeof dataSourceAdapterExtender>>;
 
 export const virtualScrollingDataControllerExtender = (
   Base: ModuleType<DataController>,
@@ -112,7 +110,6 @@ export const virtualScrollingDataControllerExtender = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public reload(reload?: boolean, changesOnly?: boolean): DeferredObj<unknown> {
     const rowsScrollController = this._rowsScrollController || this._dataSource;
-    // @ts-expect-error badly typed DataSourceAdapter
     const itemIndex = rowsScrollController?.getItemIndexByPosition();
     const result = super.reload.apply(this, arguments as any);
     return result?.done(() => {

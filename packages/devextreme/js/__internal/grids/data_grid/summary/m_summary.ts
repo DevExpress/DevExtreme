@@ -32,6 +32,8 @@ import {
 import type { Aggregate, SummaryOptions } from './types';
 import { getSummaryOptions } from './utils/get_summary_options';
 
+export type SummaryDataSourceAdapter = InstanceType<ReturnType<typeof summaryDataSourceAdapterExtender>>;
+
 export const renderSummaryCell = function (cell, options, setAria) {
   const $cell = $(cell);
   const { column } = options;
@@ -256,7 +258,7 @@ export class FooterView extends ColumnsView {
 
 export const summaryDataSourceAdapterExtender = (
   Base: ModuleType<DataSourceAdapter>,
-): ModuleType<DataSourceAdapter> => class SummaryDataSourceAdapterExtender
+) => class SummaryDataSourceAdapterExtender
   extends Base
   implements EditingControllerRequired {
   private _totalAggregates!: unknown[];
