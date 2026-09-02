@@ -530,16 +530,26 @@ const focusEditorFactoryViewControllerExtender = (
 };
 
 const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExtender extends Base {
+  protected focusController!: FocusController;
+
+  protected dataController!: DataController;
+
+  public init(isApplyingUserState?: boolean): void {
+    this.focusController = this.getController('focus');
+    this.dataController = this.getController('data');
+
+    super.init(isApplyingUserState);
+  }
+
   public getSortDataSourceParameters(_, sortByKey?) {
     // @ts-expect-error
     let result = super.getSortDataSourceParameters.apply(this, arguments);
-    const dataSource = this._dataController._dataSource;
-    const store = this._dataController.store();
-    let key = store && store.key();
+    const dataSource = this.dataController._dataSource;
+    let key = dataSource?.store()?.key();
     const remoteOperations = dataSource && dataSource.remoteOperations() || {};
     const isLocalOperations = Object.keys(remoteOperations).every((operationName) => !remoteOperations[operationName]);
 
-    if (key && (this.option('focusedRowEnabled') && this._focusController.isAutoNavigateToFocusedRow() !== false || sortByKey)) {
+    if (key && (this.option('focusedRowEnabled') && this.focusController.isAutoNavigateToFocusedRow() !== false || sortByKey)) {
       key = Array.isArray(key) ? key : [key];
       const notSortedKeys = key.filter((key) => !this.columnOption(key, 'sortOrder'));
 

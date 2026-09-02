@@ -369,6 +369,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             columnsChanged: $.Callbacks(),
 
+            // Accepted so the real DataController can register from init(); this mock
+            // never runs _updateChanges, so the detector has nothing to drive.
+            setFilterChangeDetector: commonUtils.noop,
+
             getColumns: function() {
                 return columns;
             },
@@ -1170,6 +1174,15 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
         options && options.controllers && $.extend(that._controllers, options.controllers);
         options && options.views && $.extend(that._views, options.views);
+
+        // The real DataController registers this from its init(); a mock has no init(),
+        // so register on its behalf to keep the 'filtering' change type reachable.
+        const mockDataController = that._controllers.data;
+        if(that._controllers.columns && mockDataController && !mockDataController.init) {
+            that._controllers.columns.setFilterChangeDetector(function(lastLoadFilter, langParams) {
+                return !gridCore.equalFilterParameters(lastLoadFilter, mockDataController.getCombinedFilter(), langParams);
+            });
+        }
 
         $.each(that._controllers, function(name) {
             that[name + 'Controller'] = this;

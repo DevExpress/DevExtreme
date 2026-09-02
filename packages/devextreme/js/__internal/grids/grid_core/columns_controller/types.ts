@@ -15,6 +15,10 @@ export type FilterField = Omit<Column, 'filterOperations'> & { filterOperations?
 
 export type AddedColumn = string | (Column & { columns?: (Column | string)[] });
 
+// Both operands stay `unknown`: the point of injecting the detector is that
+// `ColumnsController` answers a boolean question without knowing what a filter is.
+export type FilterChangeDetector = (lastLoadFilter: unknown, langParams: unknown) => boolean;
+
 export interface InternalColumnOptions {
   parseValue?: (text: string) => unknown;
   deserializeValue?: (value: unknown) => unknown;

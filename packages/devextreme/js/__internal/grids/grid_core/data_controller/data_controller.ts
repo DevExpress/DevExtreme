@@ -159,6 +159,13 @@ export class DataController extends modules.Controller {
     this.dataPushedHandlerProxy = this.dataPushedHandler.bind(this);
 
     this._columnsController.columnsChanged.add(this.columnsChangedHandler.bind(this));
+    this._columnsController.setFilterChangeDetector(
+      (lastLoadFilter, langParams) => !gridCoreUtils.equalFilterParameters(
+        lastLoadFilter,
+        this.getCombinedFilter(),
+        langParams,
+      ),
+    );
 
     this._isLoading = false;
     this._isCustomLoading = false;
