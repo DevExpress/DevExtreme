@@ -4397,7 +4397,7 @@ QUnit.module('Validation', {
         this.clock.tick(10);
 
         // assert
-        assert.equal(this.rowsView._adaptiveColumnsController.getHiddenColumns().length, 0, 'has not hidden adaptive columns');
+        assert.equal(this.adaptiveColumnsController.getHiddenColumns().length, 0, 'has not hidden adaptive columns');
     });
 
     QUnit.testInActiveWindow('If columns has the width property then columns width before hiding should be equal to the width of the columns', function(assert) {
@@ -4422,7 +4422,7 @@ QUnit.module('Validation', {
         this.clock.tick(10);
 
         // assert
-        assert.equal(this.rowsView._adaptiveColumnsController.getHiddenColumns().length, 0, 'has not hidden adaptive columns');
+        assert.equal(this.adaptiveColumnsController.getHiddenColumns().length, 0, 'has not hidden adaptive columns');
     });
 
     QUnit.test('The onRowValidating event is not called twice if isValid is set to \'false\'', function(assert) {

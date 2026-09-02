@@ -27,8 +27,8 @@ import Validator from '@js/ui/validator';
 import errors from '@js/ui/widget/ui.errors';
 import { focused } from '@ts/core/utils/m_selectors';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
-import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import { EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR } from '../editing/const';
@@ -37,8 +37,13 @@ import type { NormalizedEditCellOptions } from '../editing/types';
 import modules from '../m_modules';
 import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import {
+  INVALIDATE_CLASS,
+  VALIDATION_CANCELLED,
+  VALIDATION_STATUS,
+  validationResultIsValid,
+} from './const';
 
-const INVALIDATE_CLASS = 'invalid';
 const REVERT_TOOLTIP_CLASS = 'revert-tooltip';
 const INVALID_MESSAGE_CLASS = 'dx-invalid-message';
 const INVALID_MESSAGE_ID = 'dxInvalidMessage';
@@ -64,19 +69,8 @@ const FORM_BASED_MODES = [EDIT_MODE_POPUP, EDIT_MODE_FORM];
 
 const COMMAND_TRANSPARENT = 'transparent';
 
-const VALIDATION_STATUS = {
-  valid: 'valid',
-  invalid: 'invalid',
-  pending: 'pending',
-};
-
 const EDIT_DATA_INSERT_TYPE = 'insert';
 const EDIT_DATA_REMOVE_TYPE = 'remove';
-const VALIDATION_CANCELLED = 'cancel';
-
-const validationResultIsValid = function (result) {
-  return isDefined(result) && result !== VALIDATION_CANCELLED;
-};
 
 const cellValueShouldBeValidated = function (value, rowOptions) {
   return value !== undefined || (value === undefined && rowOptions && !rowOptions.isNewRow);
@@ -147,6 +141,10 @@ export class ValidatingController extends modules.Controller {
     const validationData = this._getValidationData(change?.key);
 
     return !!validationData && !!validationData.validated;
+  }
+
+  public getValidationData(key) {
+    return this._getValidationData(key);
   }
 
   public _getValidationData(key, create?) {
@@ -675,6 +673,14 @@ export class ValidatingController extends modules.Controller {
 }
 
 export const validatingEditingExtender = (Base: ModuleType<EditingController>) => class ValidateEditingControllerExtender extends Base {
+  protected _errorHandlingController!: ErrorHandlingViewController;
+
+  public init(): void {
+    super.init();
+
+    this._errorHandlingController = this.getController('errorHandling');
+  }
+
   protected processDataItemTreeListHack(item) {
     // @ts-expect-error
     super.processDataItem.apply(this, arguments);
@@ -1040,6 +1046,8 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
       $popupContent = this.getPopupContent();
       return this._errorHandlingController && this._errorHandlingController.renderErrorRow(validationData?.errorText, rowIndex, $popupContent);
     }
+
+    return undefined;
   }
 
   public updateFieldValue(e) {
@@ -1519,37 +1527,6 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
   }
 };
 
-export const validatingDataControllerExtender = (Base: ModuleType<DataController>) => class ValidatingDataControllerExtender extends Base {
-  private _getValidationStatus(validationResult) {
-    const validationStatus = validationResultIsValid(validationResult) ? validationResult.status : validationResult;
-
-    return validationStatus || VALIDATION_STATUS.valid;
-  }
-
-  protected _isCellChanged(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
-    const cell = oldRow.cells?.[columnIndex];
-    const oldValidationStatus = this._getValidationStatus({ status: cell?.validationStatus });
-    const validationResult = this._validatingController.getCellValidationResult({
-      rowKey: oldRow.key,
-      columnIndex,
-    });
-    const validationData = this._validatingController._getValidationData(oldRow.key);
-    const newValidationStatus = this._getValidationStatus(validationResult);
-    const rowIsModified = JSON.stringify(newRow.modifiedValues) !== JSON.stringify(oldRow.modifiedValues);
-    const validationStatusChanged = oldValidationStatus !== newValidationStatus && rowIsModified;
-    const cellIsMarkedAsInvalid = $(cell?.cellElement).hasClass(this.addWidgetPrefix(INVALIDATE_CLASS));
-    const hasValidationRules = cell?.column.validationRules?.length;
-    const rowEditStateChanged = oldRow.isEditing !== newRow.isEditing && hasValidationRules;
-    const cellValidationStateChanged = validationStatusChanged || validationData.isValid && cellIsMarkedAsInvalid;
-
-    if (rowEditStateChanged || cellValidationStateChanged) {
-      return true;
-    }
-
-    return super._isCellChanged.apply(this, arguments as any);
-  }
-};
-
 export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class ValidatingRowsViewExtender extends Base {
   public updateFreeSpaceRowHeight($table) {
     const that = this;
@@ -1620,29 +1597,4 @@ export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class 
       }
     });
   }
-};
-
-export const validatingModule = {
-  defaultOptions() {
-    return {
-      editing: {
-        texts: {
-          validationCancelChanges: messageLocalization.format('dxDataGrid-validationCancelChanges'),
-        },
-      },
-    };
-  },
-  controllers: {
-    validating: ValidatingController,
-  },
-  extenders: {
-    controllers: {
-      editing: validatingEditingExtender,
-      editorFactory: validatingEditorFactoryExtender,
-      data: validatingDataControllerExtender,
-    },
-    views: {
-      rowsView: validatingRowsViewExtender,
-    },
-  },
 };

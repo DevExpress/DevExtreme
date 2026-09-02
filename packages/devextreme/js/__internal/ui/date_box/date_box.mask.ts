@@ -15,7 +15,7 @@ import type dxDateBox from '@js/ui/date_box';
 import type { DateLike } from '@js/ui/date_box';
 import dateLocalization from '@ts/core/localization/date';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
 import DateBoxBase from '@ts/ui/date_box/date_box.base';
 import { getDatePartIndexByPosition, renderDateParts } from '@ts/ui/date_box/date_box.mask.parts';
@@ -164,7 +164,7 @@ class DateBoxMask<
 
   _toggleAmPm(): void {
     const currentValue = this._getActivePartProp('text');
-    const periodNames = dateLocalization.getPeriodNames(this._formatPattern);
+    const periodNames = dateLocalization.getPeriodNames();
     const indexOfCurrentValue = periodNames.indexOf(currentValue);
 
     // eslint-disable-next-line no-bitwise
@@ -379,8 +379,9 @@ class DateBoxMask<
     if (isLDMLPattern) {
       this._formatPattern = format;
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      this._formatPattern = getFormat((value) => dateLocalization.format(value, format)) as string;
+      this._formatPattern = getFormat(
+        (value) => dateLocalization.format(value, format) as string,
+      ) as string;
     }
 
     return this._formatPattern;
@@ -487,7 +488,7 @@ class DateBoxMask<
       .split(quantifierRegexp)
       .map((sourcePart) => (quantifierRegexp.test(sourcePart)
         ? sourcePart
-        : numberLocalization.convertDigits(sourcePart, false)) as string)
+        : numberLocalization.convertDigits(sourcePart, false)))
       .join('');
     this._regExpInfo.regexp = new RegExp(convertedSource, flags);
   }

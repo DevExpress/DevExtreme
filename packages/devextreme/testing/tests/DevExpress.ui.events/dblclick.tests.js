@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import dblclickEvent from 'common/core/events/dblclick';
-import { dblClick } from '__internal/events/m_dblclick';
+import { dblClick } from '__internal/events/dblclick';
 import pointerMock from '../../helpers/pointerMock.js';
 
 QUnit.testStart(function() {

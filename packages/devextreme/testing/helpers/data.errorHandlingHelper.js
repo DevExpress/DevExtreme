@@ -1,20 +1,19 @@
 import $ from 'jquery';
-import Class from 'core/class';
 import * as errorsModule from 'common/data/errors';
 
-const __moduleExports = (function($, Class, errorsModule) {
-    return Class.inherit({
+const __moduleExports = (function($, errorsModule) {
+    return class ErrorHandlingHelper {
 
-        ctor: function() {
+        constructor() {
             this.optionalHandler = $.proxy(
                 function(arg) {
                     this.optionalHandlerImpl(arg);
                 },
                 this
             );
-        },
+        }
 
-        run: function(action, done, assert) {
+        run(action, done, assert) {
             const globalFired = $.Deferred();
             const optionalFired = $.Deferred();
             const failFired = $.Deferred();
@@ -67,8 +66,8 @@ const __moduleExports = (function($, Class, errorsModule) {
                 done();
             });
         }
-    });
-})($, Class, errorsModule);
+    };
+})($, errorsModule);
 
 window.DevExpress = window.DevExpress || {};
 window.DevExpress.data = window.DevExpress.data || {};

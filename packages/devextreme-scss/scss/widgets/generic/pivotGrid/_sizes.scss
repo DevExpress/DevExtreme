@@ -1,7 +1,5 @@
 @use "../sizes" as *;
 
-// adduse
-
 $pivotgrid-empty-column-width: null !default;
 $pivotgrid-common-left-right-padding: null !default;
 $pivotgrid-common-top-bottom-padding: null !default;
@@ -32,4 +30,3 @@ $pivotgrid-empty-area-text-padding: null !default;
   $pivotgrid-button-top-padding: 8px;
   $pivotgrid-empty-area-text-padding: 5px !default;
 }
-

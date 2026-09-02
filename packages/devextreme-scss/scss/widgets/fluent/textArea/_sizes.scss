@@ -1,7 +1,5 @@
 @use "../sizes" as *;
 
-// adduse
-
 $textarea-content-line-height: null !default;
 
 @if $size == "default" {

@@ -304,7 +304,7 @@ function testTemplateOption(testedOption: string) {
     act(() => { renderItemTemplate({ text: 'with data' }, undefined, undefined, onRendered); });
 
     jest.runAllTimers();
-    expect(onRendered).toBeCalled();
+    expect(onRendered).toHaveBeenCalled();
   });
 
   it('renders empty template without errors', () => {
@@ -374,7 +374,7 @@ describe('function template', () => {
       </ComponentWithTemplates>,
     );
     act(() => { renderItemTemplate('with data', ref.current); });
-    expect(itemRender).toBeCalled();
+    expect(itemRender).toHaveBeenCalled();
 
     expect(container.querySelector('.template')?.outerHTML).toBe('<div class="template">Template with data</div>');
   });
@@ -394,7 +394,7 @@ describe('function template', () => {
       </ComponentWithTemplates>,
     );
     act(() => { renderItemTemplate(undefined, ref.current, 5); });
-    expect(itemRender).toBeCalled();
+    expect(itemRender).toHaveBeenCalled();
     expect(container.querySelector('.template')?.outerHTML).toBe('<div class="template">Index 5</div>');
   });
 });

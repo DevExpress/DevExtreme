@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
-import * as customOperations from '__internal/grids/grid_core/filter/m_filter_custom_operations';
+import * as customOperations from '__internal/grids/grid_core/filter_sync/m_filter_custom_operations';
 import fx from 'common/core/animation/fx';
 import 'ui/data_grid';
 
@@ -729,12 +729,8 @@ QUnit.module('getCombinedFilter', {
             filterValue: [['Test', 'anyof', [1, 2, 3]], 'and', filterRowFilter]
         });
 
-        this.headerFilterController.getCurrentColumn = function() {
-            return { dataField: 'Test' };
-        };
-
         // assert
-        assert.deepEqual(this.getCombinedFilter(true), undefined, 'combined filter');
+        assert.deepEqual(this.dataController.getCombinedFilterWithExcludedColumn({ dataField: 'Test' }, true), undefined, 'combined filter');
     });
 
     QUnit.test('add currentColumn header filter value when filterSyncEnabled = false', function(assert) {
@@ -749,12 +745,8 @@ QUnit.module('getCombinedFilter', {
             filterValue: [['Test', 'anyof', [1, 2, 3]], 'and', filterRowFilter]
         });
 
-        this.headerFilterController.getCurrentColumn = function() {
-            return { dataField: 'Test' };
-        };
-
         // assert
-        assert.deepEqual(this.getCombinedFilter(true), [
+        assert.deepEqual(this.dataController.getCombinedFilterWithExcludedColumn({ dataField: 'Test' }, true), [
             [
                 ['Test', '=', 1],
                 'or',

@@ -9,7 +9,7 @@ const remoteProvider = new RemoteFileSystemProvider({
 });
 
 export default function App() {
-  const [currentPath, setCurrentPath] = useState('Widescreen');
+  const [currentPath, setCurrentPath] = useState('Places');
   const [popupVisible, setPopupVisible] = useState(false);
   const [imageItemToDisplay, setImageItemToDisplay] = useState<{ name?: string, url?: string }>({});
 

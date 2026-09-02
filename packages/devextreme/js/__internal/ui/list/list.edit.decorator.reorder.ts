@@ -56,7 +56,6 @@ class EditDecoratorReorder extends EditDecorator {
       dragDirection: itemDragging?.group ? 'both' : 'vertical',
       handle: `.${REORDER_HANDLE_CLASS}`,
       dragTemplate: this._dragTemplate,
-      // @ts-expect-error ts-error
       onDragStart: (e: DragStartEvent): void => {
         this._dragStartHandler(e);
       },

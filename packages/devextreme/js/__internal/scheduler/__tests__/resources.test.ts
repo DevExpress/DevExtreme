@@ -1,8 +1,8 @@
 import {
   describe, expect, it,
 } from '@jest/globals';
-import { DataSource } from '@ts/data/data_source/m_data_source';
-import CustomStore from '@ts/data/m_custom_store';
+import CustomStore from '@js/data/custom_store';
+import DataSource from '@js/data/data_source';
 import { createScheduler } from '@ts/scheduler/__tests__/__mock__/create_scheduler';
 
 import { setupSchedulerTestEnvironment } from './__mock__/mock_scheduler';

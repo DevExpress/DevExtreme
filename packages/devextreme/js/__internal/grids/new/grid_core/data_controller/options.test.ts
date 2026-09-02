@@ -4,9 +4,9 @@ import {
   describe, expect, it, jest,
 } from '@jest/globals';
 import { CustomStore } from '@js/common/data';
+import ArrayStore from '@js/data/array_store';
 import DataSource from '@js/data/data_source';
 import { logger } from '@ts/core/utils/m_console';
-import ArrayStore from '@ts/data/m_array_store';
 
 import { getContext } from '../di.test_utils';
 import type { Options } from '../options';
@@ -59,13 +59,13 @@ describe('Options', () => {
         const { store, dataController } = setupForCacheEnabled({
           cacheEnabled: false,
         });
-        expect(store.load).toBeCalledTimes(1);
+        expect(store.load).toHaveBeenCalledTimes(1);
 
         dataController.pageIndex.value = 1;
-        expect(store.load).toBeCalledTimes(2);
+        expect(store.load).toHaveBeenCalledTimes(2);
 
         dataController.pageIndex.value = 0;
-        expect(store.load).toBeCalledTimes(3);
+        expect(store.load).toHaveBeenCalledTimes(3);
       });
     });
 
@@ -153,7 +153,7 @@ describe('Options', () => {
 
       await dataController.waitLoaded();
 
-      expect(onDataErrorOccurred).toBeCalledTimes(1);
+      expect(onDataErrorOccurred).toHaveBeenCalledTimes(1);
       expect(onDataErrorOccurred.mock.calls[0]).toMatchSnapshot([{
         component: expect.any(Object),
       }]);

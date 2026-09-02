@@ -13,8 +13,12 @@ export type ColumnIndex = number | {
 
 export type FilterField = Omit<Column, 'filterOperations'> & { filterOperations?: string[] | null };
 
-export interface Column extends ColumnBase {
+export type AddedColumn = string | (Column & { columns?: (Column | string)[] });
+
+export interface InternalColumnOptions {
   parseValue?: (text: string) => unknown;
+  deserializeValue?: (value: unknown) => unknown;
+  serializeValue?: (value: unknown) => unknown;
   index?: number;
   groupIndex?: number;
   type?: string;
@@ -25,7 +29,13 @@ export interface Column extends ColumnBase {
   command?: string;
   rowspan?: number;
   colspan?: number;
+  lastSortOrder?: ColumnBase['sortOrder'];
+  bufferedFilterValue?: ColumnBase['filterValue'];
+  bufferedSelectedFilterOperation?: ColumnBase['selectedFilterOperation'];
+  added?: AddedColumn;
 }
+
+export type Column = ColumnBase & InternalColumnOptions;
 
 export interface ColumnsChanges {
   changeTypes: {

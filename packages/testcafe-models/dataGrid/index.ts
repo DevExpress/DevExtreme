@@ -178,6 +178,10 @@ export default class DataGrid extends GridCore {
     return this.getHeadersContainer().find(`.${CLASS.scrollContainer}`);
   }
 
+  getHeadersScrollLeft(): Promise<number> {
+    return this.getHeadersScrollContainer().scrollLeft;
+  }
+
   async getHeaderCellWidths(): Promise<number[]> {
     const cells = this.getHeaders().getHeaderRow(0).getHeaderCells();
     const count = await cells.count;

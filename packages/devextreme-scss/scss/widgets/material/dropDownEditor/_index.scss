@@ -1,6 +1,4 @@
-@use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../common/sizes" as *;
@@ -9,9 +7,6 @@
 @use "../../base/icon_fonts" as *;
 @use "../../base/dropDownEditor";
 @use "../../base/dropDownEditor/mixins" as *;
-
-// adduse
-
 
 $material-dropdowneditor-container-button-size: $material-base-icon-size;
 

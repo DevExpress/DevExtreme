@@ -17,7 +17,7 @@ $material-color-theme-modificator: null !default;
 * $name 10. Font family
 * $type text
 */
-$base-font-family: roboto, 'roboto fallback', -apple-system, BlinkMacSystemFont, 'avenir next', avenir, 'segoe ui', 'helvetica neue', 'adwaita sans', cantarell, ubuntu, noto, helvetica, arial, sans-serif !default;
+$base-font-family: roboto, "roboto fallback", -apple-system, BlinkMacSystemFont, "avenir next", avenir, "segoe ui", "helvetica neue", "adwaita sans", cantarell, ubuntu, noto, helvetica, arial, sans-serif !default;
 
 /**
 * $name 20. Text color
@@ -106,7 +106,6 @@ $base-disabled-color: null !default;
 $base-dropdown-shadow-color: null !default;
 $scrollview-pulldown-path: null !default;
 
-
 @if $color == "blue" {
   $material-color-accent-modificator: "blue" !default;
 }
@@ -171,7 +170,7 @@ $scrollview-pulldown-path: null !default;
   $base-inverted-icon-color: $base-inverted-text-color !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
 
-  $scrollview-pulldown-path: data-uri('images/widgets/material/color-schemes/light/pulldown.png') !default;
+  $scrollview-pulldown-path: data-uri("images/widgets/material/color-schemes/light/pulldown.png") !default;
 }
 
 @if $mode == "dark" {
@@ -201,7 +200,7 @@ $scrollview-pulldown-path: null !default;
   $base-inverted-icon-color: $base-inverted-text-color !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
 
-  $scrollview-pulldown-path: data-uri('images/widgets/material/color-schemes/dark/pulldown.png') !default;
+  $scrollview-pulldown-path: data-uri("images/widgets/material/color-schemes/dark/pulldown.png") !default;
 }
 
 /**

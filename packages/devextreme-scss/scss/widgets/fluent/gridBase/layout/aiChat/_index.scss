@@ -1,7 +1,7 @@
-@use '../../../../base/gridBase/layout/aiChat/mixins' as *;
-@use '../../../colors' as *;
-@use '../../../button/colors' as *;
-@use './sizes' as *;
+@use "../../../../base/gridBase/layout/aiChat/mixins" as *;
+@use "../../../colors" as *;
+@use "../../../button/colors" as *;
+@use "./sizes" as *;
 @use "../../../../base/widget" as *;
 @include ai-chat-messagelist-empty(
   $button-default-bg,

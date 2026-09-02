@@ -1,9 +1,6 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../button/colors" as *;
-
-// adduse
 
 /**
 * $name 10. Active color
@@ -78,7 +75,7 @@ $stepper-connector-bg: $base-border-color !default;
 */
 $stepper-connector-value-bg: $base-label-color !default;
 
-@if $mode == 'light' {
+@if $mode == "light" {
   $stepper-step-base-bg: color.adjust($base-bg, $lightness: -38%, $space: hsl) !default;
   $stepper-step-base-hover-bg: color.adjust($base-bg, $lightness: -42%, $space: hsl) !default;
 
@@ -88,7 +85,7 @@ $stepper-connector-value-bg: $base-label-color !default;
   $stepper-step-disabled-bg: color.adjust($base-bg, $lightness: -12%, $space: hsl) !default;
 }
 
-@if $mode == 'dark' {
+@if $mode == "dark" {
   $stepper-step-base-bg: color.adjust($base-bg, $saturation: -5.59%, $lightness: 29.22%, $space: hsl) !default;
   $stepper-step-base-hover-bg: color.adjust($base-bg, $saturation: -5.84%, $lightness: 32.16%, $space: hsl) !default;
 

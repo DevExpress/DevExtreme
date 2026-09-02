@@ -133,10 +133,12 @@ class TextEditorBase<
 
   _enterKeyAction?: ((event?: Record<string, unknown>) => void);
 
-  ctor(element: Element, options: TProperties): void {
-    if (options) {
-      checkButtonsOptionType(options.buttons);
-    }
+  _init(): void {
+    super._init();
+
+    const { buttons } = this.option();
+
+    checkButtonsOptionType(buttons);
 
     this._buttonCollection = new TextEditorButtonCollection(
       this as unknown as TextEditorBase,
@@ -146,8 +148,6 @@ class TextEditorBase<
     this._$beforeButtonsContainer = null;
     this._$afterButtonsContainer = null;
     this._labelContainerElement = null;
-
-    super.ctor(element, options);
   }
 
   _getDefaultOptions(): TProperties {
@@ -401,7 +401,9 @@ class TextEditorBase<
 
   _createInput(): dxElementWrapper {
     const $input = $('<input>');
-    this._applyInputAttributes($input, this.option('inputAttr'));
+    const { inputAttr } = this.option();
+
+    this._applyInputAttributes($input, inputAttr);
     return $input;
   }
 
@@ -951,7 +953,6 @@ class TextEditorBase<
     const input = this._input()[0];
     const activeElement = domAdapter.getActiveElement(input);
 
-    // @ts-expect-error dxElementWrapper
     return this._input().is(activeElement);
   }
 
@@ -1023,9 +1024,12 @@ class TextEditorBase<
         this._updateValue();
         super._optionChanged(args);
         break;
-      case 'inputAttr':
-        this._applyInputAttributes(this._input(), this.option(name));
+      case 'inputAttr': {
+        const { inputAttr } = this.option();
+
+        this._applyInputAttributes(this._input(), inputAttr);
         break;
+      }
       case 'stylingMode':
         this._renderStylingMode();
         this._updateLabelWidth();

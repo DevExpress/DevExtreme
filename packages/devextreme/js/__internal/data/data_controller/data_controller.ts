@@ -80,7 +80,7 @@ class DataController {
         data: items,
       }),
       pageSize: 0,
-    });
+    }) as unknown as DataSourceType;
   }
 
   _disposeDataSource(): void {

@@ -1,0 +1,4 @@
+playwright-report/
+test-results/
+ci-report/
+ci-traces/

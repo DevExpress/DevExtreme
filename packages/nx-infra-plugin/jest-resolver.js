@@ -1,4 +1,5 @@
-const isModuleNotFoundInPnpmSymlinks = (error) => error.code === 'MODULE_NOT_FOUND';
+const isModuleNotFoundInPnpmSymlinks = (error) =>
+  error.code === 'MODULE_NOT_FOUND' || /Cannot find module/.test(error.message);
 
 const resolveWithJest = (request, options) => options.defaultResolver(request, options);
 

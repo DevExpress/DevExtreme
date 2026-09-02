@@ -1,8 +1,6 @@
 @use "../mixins" as *;
 @use "./mixins" as *;
 
-// adduse
-
 .dx-switch {
   display: inline-block;
   cursor: pointer;
@@ -20,7 +18,7 @@
     &::before {
       display: inline-block;
       height: 100%;
-      content: '';
+      content: "";
       vertical-align: middle;
     }
   }

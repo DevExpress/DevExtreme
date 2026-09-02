@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 /**
 * $name 10. Background color
@@ -95,4 +92,3 @@ $radiogroup-readonly-border-color: null !default;
   $radiobutton-focused-border-color: $base-focus-bg !default;
   $radiogroup-readonly-border-color: color.adjust($radiogroup-border-color, $lightness: 9%, $space: hsl) !default;
 }
-

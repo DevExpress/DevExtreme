@@ -18,19 +18,19 @@
   .dx-filemanager-i.dx-icon {
     &.dx-filemanager-i-refresh,
     &.dx-filemanager-i-progress {
-      @include filemanager-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/fileManager/refresh.svg'), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
+      @include filemanager-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/refresh.svg"), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
     }
 
     &.dx-filemanager-i-done {
-      @include filemanager-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/fileManager/done.svg'), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
+      @include filemanager-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/done.svg"), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
     }
 
     &.dx-filemanager-i-danger {
-      @include filemanager-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/fileManager/danger.svg'), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
+      @include filemanager-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/danger.svg"), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
     }
 
     &.dx-filemanager-i-cancel {
-      @include filemanager-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/fileManager/cancel.svg'), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
+      @include filemanager-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/cancel.svg"), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
     }
   }
 }

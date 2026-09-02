@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 $clock-digits-color: null !default;
 $clock-bg-color: null !default;
@@ -41,4 +38,3 @@ $clock-bg-color: null !default;
 }
 
 $clock-bg-color: $base-bg !default; // stylelint-disable-line scss/no-duplicate-dollar-variables
-

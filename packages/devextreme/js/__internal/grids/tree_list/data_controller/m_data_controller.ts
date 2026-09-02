@@ -2,13 +2,17 @@ import { equalByValue } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { DataController, dataControllerModule } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { DataSourceAdapterProvider } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { RowKey } from '@ts/grids/grid_core/m_types';
 
+import type { DataSourceAdapterTreeList } from '../data_source_adapter/m_data_source_adapter';
 import dataSourceAdapterProvider from '../data_source_adapter/m_data_source_adapter';
 import treeListCore from '../m_core';
 
 export class TreeListDataController extends DataController {
-  protected _getDataSourceAdapter() {
+  public declare _dataSource?: DataSourceAdapterTreeList | null;
+
+  protected _getDataSourceAdapterProvider(): DataSourceAdapterProvider {
     return dataSourceAdapterProvider;
   }
 
@@ -35,10 +39,10 @@ export class TreeListDataController extends DataController {
   }
 
   private _loadOnOptionChange() {
-    this._dataSource.load();
+    this._dataSource!.load();
   }
 
-  protected _isItemEquals(item1, item2) {
+  protected isSameRowState(item1, item2): boolean {
     if (item1.isSelected !== item2.isSelected) {
       return false;
     }
@@ -51,7 +55,7 @@ export class TreeListDataController extends DataController {
       return false;
     }
 
-    return super._isItemEquals.apply(this, arguments as any);
+    return super.isSameRowState(item1, item2);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -157,11 +161,12 @@ export class TreeListDataController extends DataController {
       case 'dataStructure':
         this._columnsController.reset();
         this._items = [];
-        this._refreshDataSource();
+        this.resetDataSource();
         args.handled = true;
         break;
       case 'expandedRowKeys':
       case 'onNodesInitialized':
+        // @ts-expect-error badly typed DataSourceAdapter
         if (this._dataSource && !this._dataSource._isNodesInitializing && !equalByValue(args.value, args.previousValue)) {
           this._loadOnOptionChange();
         }
@@ -200,7 +205,7 @@ export class TreeListDataController extends DataController {
   }
 
   private forEachNode() {
-    this._dataSource.forEachNode.apply(this, arguments);
+    this._dataSource!.forEachNode.apply(this, arguments as any);
   }
 
   // Collect keys by walking the loaded node tree (depth-first, parent before
