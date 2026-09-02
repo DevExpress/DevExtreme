@@ -58,7 +58,7 @@ export class CustomLoader {
       const store = this.dataSource.store();
 
       if (!store) {
-        // @ts-expect-error badly type Deferred.reject
+        // @ts-expect-error badly typed Deferred.reject
         d.reject('canceled');
         return;
       }
@@ -92,10 +92,10 @@ export class CustomLoader {
                 extra: operation.extra,
               });
             })
-            // @ts-expect-error badly type Deferred.reject
+            // @ts-expect-error badly typed Deferred.reject
             .fail((e: unknown) => { d.reject(e); });
         })
-        // @ts-expect-error badly type Deferred.reject
+        // @ts-expect-error badly typed Deferred.reject
         .fail((e: unknown) => { d.reject(e); });
     }, this.getLoadingTimeout());
 
@@ -144,7 +144,7 @@ export class CustomLoader {
           extra: operation.extra,
         });
       })
-      // @ts-expect-error badly type Deferred.reject
+      // @ts-expect-error badly typed Deferred.reject
       .fail((...args: unknown[]) => { d.reject(...args); });
 
     return d;
@@ -157,14 +157,16 @@ export class CustomLoader {
       .store()
       .load(loadOptions)
       .done((data: unknown, extra: unknown) => {
-        // A store may resolve with a single `{ data, totalCount }` object
+        // A store may resolve with a single `{ data, ...extra }` object
         // instead of the `(data, extra)` pair the pipeline expects.
-        const result = data as { data?: unknown } | undefined;
+        const result = data as {
+          data?: unknown,
+        } & LoadOperation['extra'] | undefined;
 
         if (result && !Array.isArray(result) && Array.isArray(result.data)) {
           d.resolve({
             data: result.data,
-            extra: result as LoadOperation['extra'],
+            extra: result,
           });
         } else {
           d.resolve({
@@ -173,7 +175,7 @@ export class CustomLoader {
           });
         }
       })
-      // @ts-expect-error badly type Deferred.reject
+      // @ts-expect-error badly typed Deferred.reject
       .fail((...args: unknown[]) => { d.reject(...args); });
 
     return d;

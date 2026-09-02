@@ -6980,7 +6980,7 @@ QUnit.module('Custom Load', {
         // act
         dataSource.customLoader.load({
             filter: ['this', '>', 8]
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7024,7 +7024,7 @@ QUnit.module('Custom Load', {
             group: 'this',
             skip: 2,
             take: 2
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7066,7 +7066,7 @@ QUnit.module('Custom Load', {
             group: 'this',
             skip: 2,
             take: 2
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7105,7 +7105,7 @@ QUnit.module('Custom Load', {
         // act
         dataSource.customLoader.load({
             group: function(data) { return data % 2; }
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7146,7 +7146,7 @@ QUnit.module('Custom Load', {
             group: 'this',
             skip: 2,
             take: 2
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7188,7 +7188,7 @@ QUnit.module('Custom Load', {
             group: 'this',
             skip: 0,
             take: 3
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7230,7 +7230,7 @@ QUnit.module('Custom Load', {
             group: 'this',
             skip: 2,
             take: 2
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7272,7 +7272,7 @@ QUnit.module('Custom Load', {
             group: [{ selector: 'this', groupInterval: 2 }],
             skip: 0,
             take: 3
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7300,7 +7300,7 @@ QUnit.module('Custom Load', {
             filter: ['this', '>=', '5'],
             group: 'this',
             take: 2
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7391,7 +7391,7 @@ QUnit.module('Custom Load', {
             isLoadingAll: true,
             filter: ['this', '>', '5'],
             group: 'this'
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7443,7 +7443,7 @@ QUnit.module('Custom Load', {
             group: 'this',
             skip: 2,
             take: 2
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 

@@ -335,9 +335,9 @@ const loadGroupTotalCount = function (dataSource: DataSourceAdapter, options) {
   }, options, { group: isGrouping ? options.group : null });
 
   dataSource.customLoader.load(loadOptions).done(({ extra }) => {
-    const count = extra && (isGrouping ? extra.groupCount : extra.totalCount);
+    const count: number | undefined = extra && (isGrouping ? extra.groupCount : extra.totalCount);
 
-    if (count && !isFinite(count)) {
+    if (count === undefined || !isFinite(count)) {
       d.reject(dataErrors.Error(isGrouping ? 'E4022' : 'E4021'));
       return;
     }
