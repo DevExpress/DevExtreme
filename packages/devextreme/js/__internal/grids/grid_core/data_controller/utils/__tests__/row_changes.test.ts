@@ -3,22 +3,23 @@ import {
 } from '@jest/globals';
 
 import type {
-  ChangedRows, DataChange, ItemChange, ProcessedItem, RowWatch, UpdateChange,
+  DataChange, GetUpdatedColumnIndices, ItemChange, ProcessedItem,
+  RowWatch, UpdateChange,
 } from '../../types';
 import {
+  attachChangedItems,
   canDiffColumns,
   convertToUpdateChange,
   getChangedRowIndices,
   getDataRowIndex,
   getGroupColumnIndices,
+  getItemChange,
   getRowKey,
   getRowOperation,
   indexRowsByKey,
   isSameGroupRowState,
   isSameItem,
-  partialUpdateRow,
-  pushChangedRow,
-  resetChangedRows,
+  partialUpdateItem,
   resolveRepaintChangesOnly,
   syncRowsAfterChange,
   updateKeptRows,
@@ -32,12 +33,13 @@ const row = (partial: Partial<ProcessedItem>): ProcessedItem => ({
   ...partial,
 } as ProcessedItem);
 
-const emptyChangedRows = (): ChangedRows => ({
-  items: [],
-  rowIndices: [],
-  changeTypes: [],
-  columnIndices: [],
+const trackedRow = (key: number): ProcessedItem => row({
+  key,
+  update: jest.fn(),
+  cells: [{ update: jest.fn() }],
 });
+
+const updateOf = (item: ProcessedItem): jest.Mock => item.update as jest.Mock;
 
 describe('isSameItem', () => {
   it('should return false when one of the rows is missing', () => {
@@ -225,14 +227,6 @@ describe('updateRowCells', () => {
 });
 
 describe('updateKeptRows', () => {
-  const trackedRow = (key: number): ProcessedItem => row({
-    key,
-    update: jest.fn(),
-    cells: [{ update: jest.fn() }],
-  });
-
-  const updateOf = (item: ProcessedItem): jest.Mock => item.update as jest.Mock;
-
   const refreshRows = (
     oldItems: ProcessedItem[],
     newItems: ProcessedItem[],
@@ -408,22 +402,37 @@ describe('getRowOperation', () => {
   });
 });
 
-describe('resetChangedRows', () => {
-  it('should empty the change and keep the very same arrays', () => {
+describe('attachChangedItems', () => {
+  it('should split the changed rows into a list per field', () => {
     const change = {
       changeType: 'update',
       rowIndices: [1, 2],
       items: [row({ key: 1 })],
     } as UpdateChange;
+    const item = row({ key: 2 });
 
-    const changedRows = resetChangedRows(change);
+    attachChangedItems(change, [{
+      changeType: 'update',
+      rowIndex: 3,
+      item,
+      columnIndices: [0, 2],
+    }]);
 
-    expect(change.items).toBe(changedRows.items);
-    expect(change.rowIndices).toBe(changedRows.rowIndices);
-    expect(change.changeTypes).toBe(changedRows.changeTypes);
-    expect(change.columnIndices).toBe(changedRows.columnIndices);
-    expect(changedRows.rowIndices).toEqual([]);
-    expect(changedRows.items).toEqual([]);
+    expect(change.items).toEqual([item]);
+    expect(change.rowIndices).toEqual([3]);
+    expect(change.changeTypes).toEqual(['update']);
+    expect(change.columnIndices).toEqual([[0, 2]]);
+  });
+
+  it('should skip the item when the row is gone from the new list', () => {
+    const change = { changeType: 'update' } as UpdateChange;
+
+    attachChangedItems(change, [{ changeType: 'remove', rowIndex: 5 }]);
+
+    expect(change.items).toEqual([]);
+    expect(change.rowIndices).toEqual([5]);
+    expect(change.changeTypes).toEqual(['remove']);
+    expect(change.columnIndices).toEqual([undefined]);
   });
 });
 
@@ -438,7 +447,10 @@ describe('convertToUpdateChange', () => {
     expect(change).toEqual({
       changeType: 'update',
       repaintChangesOnly: true,
-      ...emptyChangedRows(),
+      items: [],
+      rowIndices: [],
+      changeTypes: [],
+      columnIndices: [],
     });
   });
 
@@ -463,51 +475,200 @@ describe('convertToUpdateChange', () => {
       columnIndices: [[0, 2], undefined],
     });
   });
+});
 
-  it('should skip the item when the row is gone from the new list', () => {
-    const change = refreshChange();
+describe('partialUpdateItem', () => {
+  it('should ask for the changed columns by the visible row index', () => {
+    const oldItem = row({ key: 1 });
+    const newItem = row({ key: 1 });
+    const getUpdatedColumnIndices = jest.fn<GetUpdatedColumnIndices>(() => [1]);
+
+    const changedRow = partialUpdateItem(3, {
+      oldItem,
+      newItem,
+      isLiveUpdate: true,
+      getUpdatedColumnIndices,
+    });
+
+    expect(getUpdatedColumnIndices.mock.calls).toEqual([[oldItem, newItem, 3, true]]);
+    expect(changedRow).toEqual({
+      changeType: 'update',
+      rowIndex: 3,
+      item: newItem,
+      columnIndices: [1],
+    });
+  });
+
+  it('should pass the new row to the updaters of the cells the change did not touch', () => {
+    const newItem = row({ key: 1 });
+    const cellUpdates = [jest.fn(), jest.fn(), jest.fn()];
+    const oldItem = row({ key: 1, cells: cellUpdates.map((update) => ({ update })) });
+
+    partialUpdateItem(0, {
+      oldItem,
+      newItem,
+      isLiveUpdate: undefined,
+      getUpdatedColumnIndices: () => [1],
+    });
+
+    expect(cellUpdates[0]).toHaveBeenCalledWith(newItem);
+    expect(cellUpdates[1]).not.toHaveBeenCalled();
+    expect(cellUpdates[2]).toHaveBeenCalledWith(newItem);
+  });
+
+  it('should update every cell when no column has changed', () => {
+    const newItem = row({ key: 1 });
+    const cellUpdate = jest.fn();
+
+    partialUpdateItem(0, {
+      oldItem: row({ key: 1, cells: [{ update: cellUpdate }] }),
+      newItem,
+      isLiveUpdate: undefined,
+      getUpdatedColumnIndices: () => [],
+    });
+
+    expect(cellUpdate).toHaveBeenCalledWith(newItem);
+  });
+
+  it('should move the updaters and the cells to the new row', () => {
+    const update = jest.fn();
+    const watch: RowWatch = () => () => {};
+    const cells = [{}];
+    const newItem = row({ key: 1 });
+    const oldItem = row({
+      key: 1, update, watch, cells,
+    });
+
+    partialUpdateItem(0, {
+      oldItem,
+      newItem,
+      isLiveUpdate: undefined,
+      getUpdatedColumnIndices: () => [0],
+    });
+
+    expect(newItem.update).toBe(update);
+    expect(newItem.watch).toBe(watch);
+    expect(newItem.cells).toBe(cells);
+    expect(update).toHaveBeenCalledWith(newItem);
+  });
+
+  it('should keep the old values only on a live update', () => {
+    const values = [1, 2];
+    const liveItem = row({ key: 1 });
     const item = row({ key: 1 });
 
-    convertToUpdateChange(change, [
-      { changeType: 'remove', rowIndex: 0 },
-      { changeType: 'update', rowIndex: 1, item },
-    ]);
+    partialUpdateItem(0, {
+      oldItem: row({ key: 1, values }),
+      newItem: liveItem,
+      isLiveUpdate: true,
+      getUpdatedColumnIndices: () => [0],
+    });
+    partialUpdateItem(0, {
+      oldItem: row({ key: 1, values }),
+      newItem: item,
+      isLiveUpdate: undefined,
+      getUpdatedColumnIndices: () => [0],
+    });
 
-    const updateChange = change as UpdateChange;
-    expect(updateChange.items).toEqual([item]);
-    expect(updateChange.rowIndices).toEqual([0, 1]);
-    expect(updateChange.changeTypes).toEqual(['remove', 'update']);
-    expect(updateChange.columnIndices).toEqual([undefined, undefined]);
+    expect(liveItem.oldValues).toBe(values);
+    expect(item.oldValues).toBeUndefined();
+  });
+
+  it('should do nothing when the whole row is repainted', () => {
+    const update = jest.fn();
+    const cellUpdate = jest.fn();
+    const oldItem = row({ key: 1, update, cells: [{ update: cellUpdate }] });
+    const newItem = row({ key: 1 });
+
+    const changedRow = partialUpdateItem(0, {
+      oldItem,
+      newItem,
+      isLiveUpdate: true,
+      getUpdatedColumnIndices: () => undefined,
+    });
+
+    expect(changedRow.columnIndices).toBeUndefined();
+    expect(update).not.toHaveBeenCalled();
+    expect(cellUpdate).not.toHaveBeenCalled();
+    expect(newItem.update).toBeUndefined();
+    expect(newItem.cells).toBeUndefined();
+    expect(newItem.oldValues).toBeUndefined();
+  });
+
+  it('should repaint the whole row when no one asks for the changed columns', () => {
+    const update = jest.fn();
+    const oldItem = row({ key: 1, update, cells: [{ update: jest.fn() }] });
+    const newItem = row({ key: 1 });
+
+    const changedRow = partialUpdateItem(0, { oldItem, newItem });
+
+    expect(changedRow.columnIndices).toBeUndefined();
+    expect(update).not.toHaveBeenCalled();
+    expect(newItem.cells).toBeUndefined();
   });
 });
 
-describe('pushChangedRow', () => {
-  it('should push the changed row to every list', () => {
-    const changedRows = emptyChangedRows();
-    const item = row({ key: 1 });
+describe('getItemChange', () => {
+  it('should report an update for the row that stayed', () => {
+    const oldItem = row({ key: 1 });
+    const newItem = row({ key: 1, values: ['Alex'] });
 
-    pushChangedRow(changedRows, {
-      changeType: 'update',
-      rowIndex: 3,
-      item,
-      columnIndices: [0, 2],
+    expect(getItemChange([oldItem], [newItem], 0)).toEqual({
+      type: 'update', index: 0, data: newItem, oldItem,
     });
-
-    expect(changedRows.items).toEqual([item]);
-    expect(changedRows.rowIndices).toEqual([3]);
-    expect(changedRows.changeTypes).toEqual(['update']);
-    expect(changedRows.columnIndices).toEqual([[0, 2]]);
   });
 
-  it('should skip the item when the row is gone from the new list', () => {
-    const changedRows = emptyChangedRows();
+  it('should report an insert for the row that appeared', () => {
+    const newItems = [row({ key: 1 }), row({ key: 2 })];
 
-    pushChangedRow(changedRows, { changeType: 'remove', rowIndex: 5 });
+    expect(getItemChange([row({ key: 2 })], newItems, 0)).toEqual({
+      type: 'insert', index: 0, data: newItems[0],
+    });
+  });
 
-    expect(changedRows.items).toEqual([]);
-    expect(changedRows.rowIndices).toEqual([5]);
-    expect(changedRows.changeTypes).toEqual(['remove']);
-    expect(changedRows.columnIndices).toEqual([undefined]);
+  it('should report a remove carrying the row that is gone', () => {
+    const oldItem = row({ key: 1 });
+
+    expect(getItemChange([oldItem, row({ key: 2 })], [row({ key: 2 })], 0)).toEqual({
+      type: 'remove', index: 0, oldItem,
+    });
+  });
+
+  it('should report a replace when another row takes the index', () => {
+    const newItems = [row({ key: 2 })];
+
+    expect(getItemChange([row({ key: 1 })], newItems, 0)).toEqual({
+      type: 'replace', index: 0, data: newItems[0],
+    });
+  });
+
+  it('should report a updateVisibility change on its own', () => {
+    const newItems = [row({ key: 1, visible: false })];
+
+    expect(getItemChange([row({ key: 1, visible: true })], newItems, 0)).toEqual({
+      type: 'updateVisibility', index: 0, data: newItems[0],
+    });
+  });
+
+  it('should report nothing when the row is missing in both lists', () => {
+    expect(getItemChange([], [], 0)).toBeUndefined();
+  });
+
+  it('should stamp the index on the new row', () => {
+    const newItems = [row({ key: 1 }), row({ key: 2 })];
+
+    getItemChange([row({ key: 1 }), row({ key: 2 })], newItems, 1);
+
+    expect(newItems[1].rowIndex).toBe(1);
+  });
+
+  it('should leave the row list alone', () => {
+    const oldItem = row({ key: 1 });
+    const items = [oldItem];
+
+    getItemChange(items, [row({ key: 2 })], 0);
+
+    expect(items).toEqual([oldItem]);
   });
 });
 
@@ -579,72 +740,5 @@ describe('syncRowsAfterChange', () => {
     syncRows(items, { newItems: [row({ key: 1, loadIndex: 7 })] });
 
     expect(items.map((item) => item.loadIndex)).toEqual([7, 6]);
-  });
-});
-
-describe('partialUpdateRow', () => {
-  it('should pass the new row to the updaters of the cells the change did not touch', () => {
-    const newItem = row({ key: 1 });
-    const cellUpdates = [jest.fn(), jest.fn(), jest.fn()];
-    const oldItem = row({ key: 1, cells: cellUpdates.map((update) => ({ update })) });
-
-    partialUpdateRow(oldItem, newItem, [1]);
-
-    expect(cellUpdates[0]).toHaveBeenCalledWith(newItem);
-    expect(cellUpdates[1]).not.toHaveBeenCalled();
-    expect(cellUpdates[2]).toHaveBeenCalledWith(newItem);
-  });
-
-  it('should update every cell when no column has changed', () => {
-    const newItem = row({ key: 1 });
-    const cellUpdate = jest.fn();
-
-    partialUpdateRow(row({ key: 1, cells: [{ update: cellUpdate }] }), newItem, []);
-
-    expect(cellUpdate).toHaveBeenCalledWith(newItem);
-  });
-
-  it('should move the updaters and the cells to the new row', () => {
-    const update = jest.fn();
-    const watch: RowWatch = () => () => {};
-    const cells = [{}];
-    const newItem = row({ key: 1 });
-    const oldItem = row({
-      key: 1, update, watch, cells,
-    });
-
-    partialUpdateRow(oldItem, newItem, [0]);
-
-    expect(newItem.update).toBe(update);
-    expect(newItem.watch).toBe(watch);
-    expect(newItem.cells).toBe(cells);
-    expect(update).toHaveBeenCalledWith(newItem);
-  });
-
-  it('should keep the old values only on a live update', () => {
-    const values = [1, 2];
-    const liveItem = row({ key: 1 });
-    const item = row({ key: 1 });
-
-    partialUpdateRow(row({ key: 1, values }), liveItem, [0], true);
-    partialUpdateRow(row({ key: 1, values }), item, [0]);
-
-    expect(liveItem.oldValues).toBe(values);
-    expect(item.oldValues).toBeUndefined();
-  });
-
-  it('should do nothing when the whole row is repainted', () => {
-    const update = jest.fn();
-    const cellUpdate = jest.fn();
-    const oldItem = row({ key: 1, update, cells: [{ update: cellUpdate }] });
-    const newItem = row({ key: 1 });
-
-    partialUpdateRow(oldItem, newItem, undefined, true);
-
-    expect(update).not.toHaveBeenCalled();
-    expect(cellUpdate).not.toHaveBeenCalled();
-    expect(newItem.update).toBeUndefined();
-    expect(newItem.cells).toBeUndefined();
-    expect(newItem.oldValues).toBeUndefined();
   });
 });
