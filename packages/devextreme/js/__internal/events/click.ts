@@ -28,10 +28,11 @@ interface NodesDisposingSubscription {
 
 let prevented: boolean | null = null;
 let lastFiredEvent: NativeClickEvent | null = null;
-const subscriptions = new Map<NativeClickEvent, NodesDisposingSubscription>();
+let lastSubscription: NodesDisposingSubscription | null = null;
 
 const onNodeRemove = (): void => {
   lastFiredEvent = null;
+  lastSubscription = null;
 };
 
 const clickHandler = function (e: EmitterEvent & { originalEvent: NativeClickEvent }): void {
@@ -45,25 +46,19 @@ const clickHandler = function (e: EmitterEvent & { originalEvent: NativeClickEve
       originalEvent.DXCLICK_FIRED = true;
     }
 
-    if (lastFiredEvent && subscriptions.has(lastFiredEvent)) {
-      const {
-        nodes,
-        onceCallback,
-      } = subscriptions.get(lastFiredEvent) as NodesDisposingSubscription;
+    if (lastFiredEvent && lastSubscription) {
+      const { nodes, onceCallback } = lastSubscription;
 
       unsubscribeNodesDisposing(lastFiredEvent, onceCallback, nodes);
 
-      subscriptions.delete(lastFiredEvent);
+      lastSubscription = null;
     }
 
     lastFiredEvent = originalEvent;
 
-    const subscriptionData: NodesDisposingSubscription = subscribeNodesDisposing(
-      lastFiredEvent,
-      onNodeRemove,
-    );
-
-    subscriptions.set(lastFiredEvent, subscriptionData);
+    if (originalEvent) {
+      lastSubscription = subscribeNodesDisposing(originalEvent, onNodeRemove);
+    }
 
     fireEvent({
       type: CLICK_EVENT_NAME,
