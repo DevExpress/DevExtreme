@@ -1199,6 +1199,41 @@ QUnit.module('OSM: markers', moduleConfig, () => {
             }
         });
     });
+    QUnit.test('marker position synchronization follows a replaced OpenLayers view', function(assert) {
+        const engine = createOpenLayersEngine(openLayersMock);
+        const engineMap = engine.createMap(document.createElement('div'));
+        const map = openLayersMock.mapInstance;
+        const initialView = map.getView();
+        engineMap.addMarker({
+            location: {
+                lat: 10,
+                lng: -179
+            }
+        });
+        const replacementView = new openLayersMock.View({
+            center: [179000, 0],
+            projection: 'EPSG:3857',
+            zoom: 1
+        });
+
+        map.setView(replacementView);
+
+        assert.deepEqual(openLayersMock.addedOverlays[0].options.position, [181000, 10000], 'marker moves into the replacement view world');
+        assert.strictEqual(initialView.eventHandlers['change:center'].length, 0, 'old view listener is removed');
+        assert.strictEqual(replacementView.eventHandlers['change:center'].length, 1, 'replacement view listener is added');
+
+        const positionChangeCount = openLayersMock.overlayPositionChanges.length;
+        initialView.setCenter([-179000, 0]);
+        assert.strictEqual(openLayersMock.overlayPositionChanges.length, positionChangeCount, 'old view no longer updates marker positions');
+
+        replacementView.setCenter([-179000, 0]);
+        assert.deepEqual(openLayersMock.addedOverlays[0].options.position, [-179000, 10000], 'replacement view updates marker positions');
+
+        engineMap.dispose();
+
+        assert.strictEqual(map.eventHandlers['change:view'].length, 0, 'view replacement listener is removed on dispose');
+        assert.strictEqual(replacementView.eventHandlers['change:center'].length, 0, 'replacement view listener is removed on dispose');
+    });
     QUnit.test('marker iconSrc takes priority over markerIconSrc', function(assert) {
         const done = assert.async();
         const defaultLocale = localization.locale();

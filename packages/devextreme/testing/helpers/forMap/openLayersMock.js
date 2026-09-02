@@ -188,6 +188,10 @@
             this.target = target;
             api.mapTarget = target;
         }
+        setView(view) {
+            this.view = view;
+            this.trigger('change:view');
+        }
 
         updateSize() {
             api.mapResized = true;

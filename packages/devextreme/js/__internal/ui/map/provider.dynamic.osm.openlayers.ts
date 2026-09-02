@@ -32,6 +32,7 @@ import type {
   Options,
   OverlayLike,
   TileLayerLike,
+  ViewLike,
 } from './provider.dynamic.osm.openlayers.utils';
 import {
   areCoordinatesEqual,
@@ -103,6 +104,8 @@ class OpenLayersMap implements MapEngineMap {
 
   private _markerFitNeedsLayout = false;
 
+  private _subscribedView: ViewLike;
+
   constructor(
     private readonly _api: OpenLayersApi,
     container: Element,
@@ -132,11 +135,26 @@ class OpenLayersMap implements MapEngineMap {
     });
     this.originalMap.getOverlayContainer().setAttribute('dir', 'ltr');
     this.originalMap.getOverlayContainerStopEvent().setAttribute('dir', 'ltr');
-    this.originalMap.getView().on('change:center', this._viewCenterChangeHandler);
+    this._subscribedView = this.originalMap.getView();
+    this._subscribedView.on('change:center', this._viewCenterChangeHandler);
+    this.originalMap.on('change:view', this._viewChangeHandler);
     this._zoomControl = new _api.control.Zoom();
   }
 
   private readonly _viewCenterChangeHandler = (): void => {
+    this._syncMarkerPositions();
+  };
+
+  private readonly _viewChangeHandler = (): void => {
+    const view = this.originalMap.getView();
+
+    if (view === this._subscribedView) {
+      return;
+    }
+
+    this._subscribedView.un('change:center', this._viewCenterChangeHandler);
+    this._subscribedView = view;
+    this._subscribedView.on('change:center', this._viewCenterChangeHandler);
     this._syncMarkerPositions();
   };
 
@@ -435,7 +453,8 @@ class OpenLayersMap implements MapEngineMap {
 
     this._disposed = true;
     this._detachHandlers();
-    this.originalMap.getView().un('change:center', this._viewCenterChangeHandler);
+    this.originalMap.un('change:view', this._viewChangeHandler);
+    this._subscribedView.un('change:center', this._viewCenterChangeHandler);
     this._removeOwnedInert();
     [...this._markers].forEach((marker) => marker.dispose());
     this.setControls(false);
