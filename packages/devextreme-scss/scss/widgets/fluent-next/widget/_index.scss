@@ -22,6 +22,13 @@ win. Layout containers now carry the state through to their text, which is what 
 What is left here that is not a colour: no text selection, and no pointer cursor on something
 that cannot be used. The remaining opacity users are named and listed in DISABLED_STATES.md. */
 .dx-state-disabled {
+  /* The colour is on the state class itself, not only on .dx-widget: item.disabled is inherited
+  from the base collection item, so every collection widget can disable a single entry - and that
+  entry is an item, not a widget. Scoped to .dx-widget it missed a disabled box pane, gallery
+  slide, splitter pane, tile, form item and scheduler appointment. At one class it is a floor:
+  anything a component says about its own disabled colour is more specific and wins. */
+  color: var(--dx-global-content-disabled);
+
   &.dx-widget,
   .dx-widget {
     @include user-select(none);
@@ -29,6 +36,14 @@ that cannot be used. The remaining opacity users are named and listed in DISABLE
     color: var(--dx-global-content-disabled);
     cursor: default;
   }
+}
+
+/* The chat transcript is content, not a control, and stays readable - the decision is recorded in
+DISABLED_STATES.md. It has to say so again here because the floor above would grey it. */
+.dx-chat.dx-state-disabled .dx-chat-messagelist,
+.dx-state-disabled .dx-chat .dx-chat-messagelist,
+.dx-chat-messagelist.dx-state-disabled {
+  color: var(--dx-global-content);
 }
 
 .dx-surface {

@@ -11,6 +11,12 @@
   border-color: var(--dx-tile-view-border);
   text-align: left;
 
+  /* A tile paints its own colour, so a disabled one kept it: the rule the theme has matches a
+  disabled TileView, and item.disabled puts the state on the tile itself. */
+  &.dx-state-disabled {
+    color: var(--dx-tile-view-content-disabled);
+  }
+
   &.dx-state-focused,
   &.dx-state-hover {
     background-color: var(--dx-tile-view-bg-hovered);

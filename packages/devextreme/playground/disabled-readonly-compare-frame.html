@@ -218,6 +218,53 @@ const CASES = [
     { location: 'before', widget: 'dxButton', options: { text: 'Disabled', disabled: true } },
   ], ...f })],
 
+  /* Every collection widget inherits item.disabled from the base collection item, so the
+  item-level state is not a property of a few components - it is available on all of them. These
+  are the ones the gallery did not have. */
+  ['actionSheetItem', 'ActionSheet  (2nd item disabled)', 130,
+    (h, f) => { h.__inst = $(h).dxActionSheet({ items: [{ text: 'Enabled' }, { text: 'Disabled', disabled: true }], usePopover: false, title: 'Choose', ...f }).dxActionSheet('instance'); },
+    toggleVisible],
+  ['boxItem', 'Box  (2nd item disabled)', 90, (h, f) => $(h).dxBox({ direction: 'row', height: 60,
+    items: [{ ratio: 1, text: 'Enabled' }, { ratio: 1, text: 'Disabled', disabled: true }], ...f })],
+  ['galleryItem', 'Gallery  (2nd item disabled)', 140, (h, f) => $(h).dxGallery({
+    dataSource: [{ text: 'Enabled' }, { text: 'Disabled', disabled: true }],
+    itemTemplate: (item) => $('<div>').css({ padding: '24px', textAlign: 'center' }).text(item.text),
+    height: 110, showIndicator: true, ...f })],
+  ['tabPanelItem', 'TabPanel  (2nd item disabled)', 160, (h, f) => $(h).dxTabPanel({
+    dataSource: [{ title: 'Enabled', text: 'A' }, { title: 'Disabled', text: 'B', disabled: true }],
+    height: 130, ...f })],
+  ['splitterItem', 'Splitter  (2nd pane disabled)', 130, (h, f) => $(h).dxSplitter({ height: 100,
+    items: [{ text: 'Enabled', resizable: true }, { text: 'Disabled', disabled: true, resizable: true }], ...f })],
+  ['stepperItem', 'Stepper  (2nd step disabled)', 110, (h, f) => $(h).dxStepper({
+    items: [{ label: 'Enabled' }, { label: 'Disabled', disabled: true }], ...f })],
+  ['tileViewItem', 'TileView  (2nd tile disabled)', 140, (h, f) => $(h).dxTileView({
+    dataSource: [{ text: 'Enabled' }, { text: 'Disabled', disabled: true }], height: 110, direction: 'horizontal', ...f })],
+  ['contextMenuItem', 'ContextMenu  (2nd item disabled)', 140,
+    (h, f) => {
+      const target = anchor(h, 'right-click target');
+      h.__inst = $('<div>').appendTo(h).dxContextMenu({
+        items: [{ text: 'Enabled' }, { text: 'Disabled', disabled: true }],
+        target, position: { my: 'top left', at: 'bottom left', of: target }, ...f,
+      }).dxContextMenu('instance');
+    }, toggleVisible],
+  ['dropDownButtonItem', 'DropDownButton  (2nd item disabled)', 90, (h, f) => $(h).dxDropDownButton({
+    text: 'Actions', items: [{ text: 'Enabled' }, { text: 'Disabled', disabled: true }], ...f })],
+  ['formItem', 'Form  (2nd item disabled)', 140, (h, f) => $(h).dxForm({
+    formData: { Name: 'Text', Count: 5 },
+    items: ['Name', { dataField: 'Count', disabled: true }], ...f })],
+  ['formTabbedItem', 'Form  (tabbed item, 2nd tab disabled)', 190, (h, f) => $(h).dxForm({
+    formData: { Name: 'Text', Count: 5 },
+    items: [{ itemType: 'tabbed', tabs: [
+      { title: 'Enabled', items: ['Name'] },
+      { title: 'Disabled', disabled: true, items: ['Count'] },
+    ] }], ...f })],
+  ['schedulerAppointment', 'Scheduler  (appointment disabled)', 300, (h, f) => $(h).dxScheduler({
+    dataSource: [
+      { text: 'Enabled', startDate: new Date(2026, 0, 5, 10), endDate: new Date(2026, 0, 5, 11) },
+      { text: 'Disabled', startDate: new Date(2026, 0, 5, 12), endDate: new Date(2026, 0, 5, 13), disabled: true },
+    ],
+    currentDate: new Date(2026, 0, 5), currentView: 'day', height: 260, ...f })],
+
   // --- configurations the token package gives a disabled answer for --------------------------
   // Each of these is a place the package names in its component tier, so the gallery can show
   // whether the theme paints it and with which role.
