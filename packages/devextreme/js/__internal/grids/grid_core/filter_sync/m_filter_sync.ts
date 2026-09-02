@@ -67,7 +67,7 @@ export class FilterSyncController extends modules.Controller {
 
   public syncFilterValue(): void {
     const columns = this.columnsController.getFilteringColumns();
-    const filterValue = this.option('filterValue');
+    const filterValue = this.option('filterValue') ?? null;
 
     this.withColumnOptionsSync(() => {
       columns.forEach((column) => {
@@ -154,13 +154,15 @@ export class FilterSyncController extends modules.Controller {
   }
 
   public syncFilterRow(column: Column): void {
-    const syncedFilterValue = getFilterValueWithFilterRow(this.option('filterValue'), column);
+    const filterValue = this.option('filterValue');
+    const syncedFilterValue = getFilterValueWithFilterRow(filterValue, column);
 
     this.option('filterValue', syncedFilterValue);
   }
 
   public syncHeaderFilter(column: Column): void {
-    const syncedFilterValue = getFilterValueWithHeaderFilter(this.option('filterValue'), column);
+    const filterValue = this.option('filterValue');
+    const syncedFilterValue = getFilterValueWithHeaderFilter(filterValue, column);
 
     this.option('filterValue', syncedFilterValue);
   }

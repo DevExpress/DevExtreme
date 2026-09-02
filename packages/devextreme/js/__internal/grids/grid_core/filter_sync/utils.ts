@@ -102,6 +102,9 @@ const getEmptyFilterValues = (): HeaderFilterState => ({
   filterValues: undefined,
 });
 
+// A short `[field, value]` condition clears the column state instead of syncing it.
+// Building the data filter rewrites it in place into `[field, '=', value]` first, so it
+// only reaches here when that filter is skipped, e.g. `filterPanel.filterEnabled: false`.
 export const getHeaderFilterFromCondition = (
   condition: FilterValueCondition | null,
   column: FilterSyncColumn,
@@ -129,6 +132,9 @@ export const getHeaderFilterFromCondition = (
   };
 };
 
+// A short `[field, value]` condition clears the column state instead of syncing it.
+// Building the data filter rewrites it in place into `[field, '=', value]` first, so it
+// only reaches here when that filter is skipped, e.g. `filterPanel.filterEnabled: false`.
 export const getFilterRowOptionsFromCondition = (
   condition: FilterValueCondition | null,
   column: FilterSyncColumn,
