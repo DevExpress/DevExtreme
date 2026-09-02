@@ -46,12 +46,12 @@ const clickHandler = function (e: EmitterEvent & { originalEvent: NativeClickEve
     }
 
     if (lastFiredEvent && subscriptions.has(lastFiredEvent)) {
-      // @ts-expect-error the subscription stores onceCallback, not callback, so this
-      // destructured callback is always undefined and off() drops every dxremove
-      // handler from the nodes
-      const { nodes, callback } = subscriptions.get(lastFiredEvent) as NodesDisposingSubscription;
+      const {
+        nodes,
+        onceCallback,
+      } = subscriptions.get(lastFiredEvent) as NodesDisposingSubscription;
 
-      unsubscribeNodesDisposing(lastFiredEvent, callback, nodes);
+      unsubscribeNodesDisposing(lastFiredEvent, onceCallback, nodes);
 
       subscriptions.delete(lastFiredEvent);
     }
