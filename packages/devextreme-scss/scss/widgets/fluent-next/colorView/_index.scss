@@ -1,74 +1,50 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/colorView/mixins" as *;
-@use "../../base/colorView";
+@use "../../base/colorView" with (
+  $color-view-container-width: var(--dx-color-view-container-width),
+  $color-view-palette-width: var(--dx-color-view-palette-width),
+  $color-view-palette-height: var(--dx-color-view-palette-height),
+  $color-view-alpha-width: var(--dx-color-view-alpha-width),
+  $color-view-hue-scale-width: var(--dx-color-view-hue-scale-width),
+  $color-view-hue-scale-height: var(--dx-color-view-hue-scale-height),
+  $color-view-hue-scale-wrapper-height: var(--dx-color-view-hue-scale-wrapper-height),
+  $color-view-label-hex-margin: var(--dx-color-view-container-hex-margin),
+  $color-view-alpha-label-margin-inline-start: var(--dx-color-view-container-alpha-label-margin),
+  $color-view-alpha-label-margin-inline-start-rtl: var(--dx-color-view-container-alpha-label-margin),
+  $color-view-alpha-label-width: var(--dx-color-view-container-alpha-label-width),
+  $color-view-textbox-width: var(--dx-color-view-container-textbox-width),
+  $color-view-textbox-margin: var(--dx-color-view-container-textbox-margin),
+  $color-view-alpha-row-margin-block-start: var(--dx-color-view-alpha-margin),
+  $color-view-hue-scale-cell-margin-inline-start: var(--dx-color-view-hue-scale-margin),
+  $color-view-controls-width: var(--dx-color-view-controls-container-width),
+  $color-view-controls-margin-inline-start: var(--dx-color-view-controls-container-margin),
+  $color-view-controls-margin-inline-start-rtl: var(--dx-color-view-controls-container-margin),
+  $color-view-color-preview-width: 100%,
+  $color-view-color-preview-height: var(--dx-color-view-color-preview-height),
+);
 @include dx-base-colorview-styles(var(--dx-color-view-handle-content), var(--dx-color-view-handle-border));
 
 .dx-colorview-container {
-  width: var(--dx-color-view-container-width);
-
   label {
     line-height: var(--dx-color-view-container-line-height);
     display: flex;
     align-items: center;
     margin-bottom: var(--dx-color-view-container-margin-block-end);
 
-    &.dx-colorview-label-hex {
-      margin: var(--dx-color-view-container-hex-margin);
-    }
-
+    /*
+     * Kept as a whole declaration on purpose: it also resets the margin-bottom above, which the
+     * base rule — it sets margin-inline-start alone — would leave in place.
+     */
     &.dx-colorview-alpha-channel-label {
       margin: 0 0 0 var(--dx-color-view-container-alpha-label-margin);
-      width: var(--dx-color-view-container-alpha-label-width);
-    }
-
-    .dx-texteditor {
-      width: var(--dx-color-view-container-textbox-width);
-      margin: var(--dx-color-view-container-textbox-margin);
     }
   }
 }
 
-.dx-colorview-hue-scale-cell {
-  margin-left: var(--dx-color-view-hue-scale-margin);
-}
-
-.dx-colorview-palette {
-  width: var(--dx-color-view-palette-width);
-  height: var(--dx-color-view-palette-height);
-}
-
-.dx-colorview-alpha-channel-scale {
-  width: var(--dx-color-view-palette-width);
-}
-
 .dx-colorview-container-row.dx-colorview-alpha-channel-row {
-  margin-top: var(--dx-color-view-alpha-margin);
   display: flex;
   align-items: center;
-}
-
-.dx-colorview-hue-scale {
-  width: var(--dx-color-view-hue-scale-width);
-  height: var(--dx-color-view-hue-scale-height);
-}
-
-.dx-colorview-alpha-channel-cell {
-  width: var(--dx-color-view-alpha-width);
-}
-
-.dx-colorview-hue-scale-wrapper {
-  height: var(--dx-color-view-hue-scale-wrapper-height);
-}
-
-.dx-colorview-color-preview {
-  width: 100%;
-  height: var(--dx-color-view-color-preview-height);
-}
-
-.dx-colorview-controls-container {
-  width: var(--dx-color-view-controls-container-width);
-  margin-left: var(--dx-color-view-controls-container-margin);
 }
 
 .dx-colorview-container label { // stylelint-disable-line no-duplicate-selectors
@@ -88,25 +64,4 @@
 
 .dx-colorview-color-preview-container {
   margin-bottom: var(--dx-color-view-preview-container-margin);
-}
-
-.dx-rtl {
-  .dx-colorview-controls-container {
-    margin-left: 0;
-    margin-right: var(--dx-color-view-controls-container-margin);
-  }
-
-  .dx-colorview-hue-scale-cell {
-    margin-left: 0;
-    margin-right: var(--dx-color-view-hue-scale-margin);
-  }
-
-  .dx-colorview-container {
-    label {
-      &.dx-colorview-alpha-channel-label {
-        margin-left: 0;
-        margin-right: var(--dx-color-view-container-alpha-label-margin);
-      }
-    }
-  }
 }

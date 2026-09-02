@@ -7,9 +7,9 @@
     "The match is by variable name. A name declared in a nested module is only reachable once the parent forwards it (see base/chat/_index.scss), which is why an \"open\" row can sit next to injected ones from the same widget."
   ],
   "summary": {
-    "occurrences": 460,
-    "variables": 396,
-    "injected": 436,
+    "occurrences": 480,
+    "variables": 414,
+    "injected": 456,
     "open": 0,
     "parameters": 24
   },
@@ -1370,7 +1370,7 @@
         "9px"
       ],
       "occurrences": 1,
-      "marker": "dx-fixed-size",
+      "marker": null,
       "text": "$pagination-info-paddings: 9px !default;",
       "variable": "pagination-info-paddings",
       "kind": "module-variable",
@@ -1771,7 +1771,7 @@
         "14px"
       ],
       "occurrences": 1,
-      "marker": "dx-fixed-size",
+      "marker": null,
       "text": "$slider-label-position-bottom-padding-bottom: 14px !default;",
       "variable": "slider-label-position-bottom-padding-bottom",
       "kind": "module-variable",
@@ -2076,7 +2076,7 @@
         "1px"
       ],
       "occurrences": 1,
-      "marker": "dx-relative",
+      "marker": null,
       "text": "$validation-summary-item-border-bottom-width: 1px !default;",
       "variable": "validation-summary-item-border-bottom-width",
       "kind": "module-variable",
@@ -2381,6 +2381,295 @@
       "status": "injected",
       "setBy": "scss/widgets/fluent-next/colorBox/_index.scss",
       "setTo": "var(--dx-color-box-toolbar-item-padding-inline-end)"
+    },
+    {
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "line": 3,
+      "widget": "colorView",
+      "literals": [
+        "450px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$color-view-container-width: 450px !default;",
+      "variable": "color-view-container-width",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
+      "setTo": "var(--dx-color-view-container-width)"
+    },
+    {
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "line": 4,
+      "widget": "colorView",
+      "literals": [
+        "288px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$color-view-palette-width: 288px !default;",
+      "variable": "color-view-palette-width",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
+      "setTo": "var(--dx-color-view-palette-width)"
+    },
+    {
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "line": 5,
+      "widget": "colorView",
+      "literals": [
+        "299px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$color-view-palette-height: 299px !default;",
+      "variable": "color-view-palette-height",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
+      "setTo": "var(--dx-color-view-palette-height)"
+    },
+    {
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "line": 6,
+      "widget": "colorView",
+      "literals": [
+        "292px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$color-view-alpha-width: 292px !default;",
+      "variable": "color-view-alpha-width",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
+      "setTo": "var(--dx-color-view-alpha-width)"
+    },
+    {
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "line": 7,
+      "widget": "colorView",
+      "literals": [
+        "18px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$color-view-hue-scale-width: 18px !default;",
+      "variable": "color-view-hue-scale-width",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
+      "setTo": "var(--dx-color-view-hue-scale-width)"
+    },
+    {
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "line": 23,
+      "widget": "colorView",
+      "literals": [
+        "10px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$color-view-label-hex-margin: 10px 0 0 0 !default;",
+      "variable": "color-view-label-hex-margin",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
+      "setTo": "var(--dx-color-view-container-hex-margin)"
+    },
+    {
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "line": 24,
+      "widget": "colorView",
+      "literals": [
+        "43px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$color-view-alpha-label-margin-inline-start: 43px !default;",
+      "variable": "color-view-alpha-label-margin-inline-start",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
+      "setTo": "var(--dx-color-view-container-alpha-label-margin)"
+    },
+    {
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "line": 25,
+      "widget": "colorView",
+      "literals": [
+        "41px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$color-view-alpha-label-margin-inline-start-rtl: 41px !default;",
+      "variable": "color-view-alpha-label-margin-inline-start-rtl",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
+      "setTo": "var(--dx-color-view-container-alpha-label-margin)"
+    },
+    {
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "line": 26,
+      "widget": "colorView",
+      "literals": [
+        "115px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$color-view-alpha-label-width: 115px !default;",
+      "variable": "color-view-alpha-label-width",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
+      "setTo": "var(--dx-color-view-container-alpha-label-width)"
+    },
+    {
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "line": 27,
+      "widget": "colorView",
+      "literals": [
+        "69px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$color-view-textbox-width: 69px !default;",
+      "variable": "color-view-textbox-width",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
+      "setTo": "var(--dx-color-view-container-textbox-width)"
+    },
+    {
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "line": 28,
+      "widget": "colorView",
+      "literals": [
+        "1px",
+        "10px"
+      ],
+      "occurrences": 3,
+      "marker": null,
+      "text": "$color-view-textbox-margin: 1px 1px 10px 0 !default;",
+      "variable": "color-view-textbox-margin",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
+      "setTo": "var(--dx-color-view-container-textbox-margin)"
+    },
+    {
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "line": 29,
+      "widget": "colorView",
+      "literals": [
+        "10px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$color-view-alpha-row-margin-block-start: 10px !default;",
+      "variable": "color-view-alpha-row-margin-block-start",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
+      "setTo": "var(--dx-color-view-alpha-margin)"
+    },
+    {
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "line": 30,
+      "widget": "colorView",
+      "literals": [
+        "19px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$color-view-hue-scale-cell-margin-inline-start: 19px !default;",
+      "variable": "color-view-hue-scale-cell-margin-inline-start",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
+      "setTo": "var(--dx-color-view-hue-scale-margin)"
+    },
+    {
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "line": 31,
+      "widget": "colorView",
+      "literals": [
+        "90px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$color-view-controls-width: 90px !default;",
+      "variable": "color-view-controls-width",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
+      "setTo": "var(--dx-color-view-controls-container-width)"
+    },
+    {
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "line": 32,
+      "widget": "colorView",
+      "literals": [
+        "27px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$color-view-controls-margin-inline-start: 27px !default;",
+      "variable": "color-view-controls-margin-inline-start",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
+      "setTo": "var(--dx-color-view-controls-container-margin)"
+    },
+    {
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "line": 33,
+      "widget": "colorView",
+      "literals": [
+        "25px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$color-view-controls-margin-inline-start-rtl: 25px !default;",
+      "variable": "color-view-controls-margin-inline-start-rtl",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
+      "setTo": "var(--dx-color-view-controls-container-margin)"
+    },
+    {
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "line": 34,
+      "widget": "colorView",
+      "literals": [
+        "86px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$color-view-color-preview-width: 86px !default;",
+      "variable": "color-view-color-preview-width",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
+      "setTo": "100%"
+    },
+    {
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "line": 35,
+      "widget": "colorView",
+      "literals": [
+        "40px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$color-view-color-preview-height: 40px !default;",
+      "variable": "color-view-color-preview-height",
+      "kind": "module-variable",
+      "status": "injected",
+      "setBy": "scss/widgets/fluent-next/colorView/_index.scss",
+      "setTo": "var(--dx-color-view-color-preview-height)"
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
@@ -3800,7 +4089,7 @@
         "3px"
       ],
       "occurrences": 1,
-      "marker": "dx-relative",
+      "marker": null,
       "text": "$filemanager-splitter-wrapper-right: 3px !default;",
       "variable": "filemanager-splitter-wrapper-right",
       "kind": "module-variable",
@@ -4635,7 +4924,7 @@
         "22px"
       ],
       "occurrences": 1,
-      "marker": "dx-fixed-size",
+      "marker": null,
       "text": "$scheduler-appointment-collector-height: 22px !default;",
       "variable": "scheduler-appointment-collector-height",
       "kind": "module-variable",
@@ -4910,7 +5199,7 @@
         "15px"
       ],
       "occurrences": 3,
-      "marker": "dx-shadow-geometry",
+      "marker": null,
       "text": "$scheduler-appointment-dragging-shadow: 7px 7px 15px 0 rgba(50, 50, 50, 0.2) !default;",
       "variable": "scheduler-appointment-dragging-shadow",
       "kind": "module-variable",
@@ -4926,7 +5215,7 @@
         "12px"
       ],
       "occurrences": 1,
-      "marker": "dx-shadow-geometry",
+      "marker": null,
       "text": "$scheduler-grouped-appointment-month-text-size: 12px !default;",
       "variable": "scheduler-grouped-appointment-month-text-size",
       "kind": "module-variable",
@@ -5134,7 +5423,7 @@
         "18px"
       ],
       "occurrences": 1,
-      "marker": "dx-shadow-geometry",
+      "marker": null,
       "text": "$scheduler-appointment-icon-font-size: 18px !default;",
       "variable": "scheduler-appointment-icon-font-size",
       "kind": "module-variable",
@@ -5953,7 +6242,7 @@
         "20px"
       ],
       "occurrences": 1,
-      "marker": "dx-fixed-size",
+      "marker": null,
       "text": "$scheduler-workspace-info-font-size: 20px !default;",
       "variable": "scheduler-workspace-info-font-size",
       "kind": "module-variable",
@@ -5985,7 +6274,7 @@
         "30px"
       ],
       "occurrences": 1,
-      "marker": "dx-px-nudge",
+      "marker": null,
       "text": "$scheduler-group-header-table-cell-height: 30px !default;",
       "variable": "scheduler-group-header-table-cell-height",
       "kind": "module-variable",
@@ -6001,7 +6290,7 @@
         "16px"
       ],
       "occurrences": 1,
-      "marker": "dx-fixed-size",
+      "marker": null,
       "text": "$scheduler-month-date-text-size: 16px !default;",
       "variable": "scheduler-month-date-text-size",
       "kind": "module-variable",

@@ -50,6 +50,12 @@ const split = (line) => {
 };
 
 const ENDS_STATEMENT = /[;{}]$/;
+/*
+ * Tested against the code half of the line: a declaration that carries a trailing marker still
+ * ends its statement, and without stripping the comment the walk below sails past it and lets a
+ * later declaration inherit a marker that was never written for it.
+ */
+const endsStatement = (line) => ENDS_STATEMENT.test(split(line).code.trim());
 const nonBlankAbove = (lines, index) => {
   for (let at = index - 1; at >= 0; at -= 1) if (lines[at].trim() !== '') return at;
   return -1;
@@ -69,12 +75,12 @@ const nonBlankAbove = (lines, index) => {
  */
 const inheritedComment = (raw, index) => {
   const above = nonBlankAbove(raw, index);
-  if (above === -1 || ENDS_STATEMENT.test(raw[above].trim())) return '';
+  if (above === -1 || endsStatement(raw[above])) return '';
 
   let start = index;
   while (start > 0) {
     const previous = nonBlankAbove(raw, start);
-    if (previous === -1 || ENDS_STATEMENT.test(raw[previous].trim())) break;
+    if (previous === -1 || endsStatement(raw[previous])) break;
     start = previous;
   }
 

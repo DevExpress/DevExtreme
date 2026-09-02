@@ -6,11 +6,11 @@
     "marker — the classification comment already on the line, from tools/review/size-markers.json."
   ],
   "summary": {
-    "occurrences": 295,
+    "occurrences": 273,
     "byCategory": {
-      "inline": 143,
+      "inline": 126,
       "geometry": 69,
-      "local-var": 58,
+      "local-var": 53,
       "calc": 9,
       "structural": 8,
       "mixin-arg": 6,
@@ -18,7 +18,7 @@
     },
     "byWidget": {
       "gridBase": 75,
-      "colorView": 67,
+      "colorView": 45,
       "scheduler": 33,
       "textEditor": 26,
       "htmlEditor": 16,
@@ -47,10 +47,10 @@
       "toolbar": 1,
       "treeView": 1
     },
-    "unmarked": 142,
+    "unmarked": 78,
     "unmarkedByWidget": {
       "gridBase": 75,
-      "colorView": 67
+      "colorView": 3
     }
   },
   "places": [
@@ -699,164 +699,43 @@
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 3,
-      "widget": "colorView",
-      "literals": [
-        "450px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$color-view-container-width: 450px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 4,
-      "widget": "colorView",
-      "literals": [
-        "288px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$color-view-palette-width: 288px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 5,
-      "widget": "colorView",
-      "literals": [
-        "299px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$color-view-palette-height: 299px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 6,
-      "widget": "colorView",
-      "literals": [
-        "292px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$color-view-alpha-width: 292px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 7,
-      "widget": "colorView",
-      "literals": [
-        "18px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$color-view-hue-scale-width: 18px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 10,
+      "line": 16,
       "widget": "colorView",
       "literals": [
         "28px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$colorview-palette-handle-size: 28px;",
+      "marker": "dx-fixed-size",
+      "text": "$colorview-palette-handle-size: 28px; // dx-fixed-size: diameter of the round palette handle, drawn as rings at 6/7/12/13px",
       "category": "local-var"
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 13,
+      "line": 19,
       "widget": "colorView",
       "literals": [
         "36px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$colorview-handle-first-side-size: 36px;",
+      "marker": "dx-fixed-size",
+      "text": "$colorview-handle-first-side-size: 36px; // dx-fixed-size: long side of the scale handles, drawn by the inset shadows",
       "category": "local-var"
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 14,
+      "line": 20,
       "widget": "colorView",
       "literals": [
         "17px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "$colorview-handle-second-side-size: 17px;",
+      "marker": "dx-fixed-size",
+      "text": "$colorview-handle-second-side-size: 17px; // dx-fixed-size: short side of the scale handles, drawn by the inset shadows",
       "category": "local-var"
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 27,
-      "widget": "colorView",
-      "literals": [
-        "10px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin: 10px 0 0 0;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 31,
-      "widget": "colorView",
-      "literals": [
-        "43px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-left: 43px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 32,
-      "widget": "colorView",
-      "literals": [
-        "115px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "width: 115px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 36,
-      "widget": "colorView",
-      "literals": [
-        "69px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "width: 69px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 38,
-      "widget": "colorView",
-      "literals": [
-        "1px",
-        "10px"
-      ],
-      "occurrences": 3,
-      "marker": null,
-      "text": "margin: 1px 1px 10px 0;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 47,
+      "line": 68,
       "widget": "colorView",
       "literals": [
         "10px"
@@ -868,79 +747,67 @@
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 60,
+      "line": 81,
       "widget": "colorView",
       "literals": [
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "padding: 1px 0;",
+      "marker": "dx-line-width",
+      "text": "padding: 1px 0; // dx-line-width: room for the 1px hairline ring the cells inside carry, which overflow: hidden would clip",
       "category": "inline"
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 67,
-      "widget": "colorView",
-      "literals": [
-        "10px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-top: 10px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 96,
+      "line": 117,
       "widget": "colorView",
       "literals": [
         "-7px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "left: -7px;",
+      "marker": "dx-px-nudge",
+      "text": "left: -7px; // dx-px-nudge: centres the handle across the hue scale, counting its own border",
       "category": "inline"
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 102,
+      "line": 123,
       "widget": "colorView",
       "literals": [
         "-6px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "top: -6px;",
+      "marker": "dx-px-nudge",
+      "text": "top: -6px; // dx-px-nudge: centres the handle across the alpha scale, counting its own border",
       "category": "inline"
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 120,
+      "line": 141,
       "widget": "colorView",
       "literals": [
         "16px"
       ],
       "occurrences": 2,
-      "marker": null,
-      "text": "background-size: 16px 16px;",
+      "marker": "dx-fixed-size",
+      "text": "background-size: 16px 16px; // dx-fixed-size: tile of the transparency checkerboard, drawn by two offset gradients",
       "category": "inline"
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 121,
+      "line": 142,
       "widget": "colorView",
       "literals": [
         "8px"
       ],
       "occurrences": 2,
-      "marker": null,
-      "text": "background-position: 0 0, 8px 8px;",
+      "marker": "dx-fixed-size",
+      "text": "background-position: 0 0, 8px 8px; // dx-fixed-size: half the tile, which is what makes the two gradients read as a checkerboard",
       "category": "inline"
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 125,
+      "line": 146,
       "widget": "colorView",
       "literals": [
         "6px",
@@ -948,13 +815,13 @@
         "14px"
       ],
       "occurrences": 3,
-      "marker": null,
-      "text": "background-position: 0 6px, 8px 14px;",
+      "marker": "dx-fixed-size",
+      "text": "background-position: 0 6px, 8px 14px; // dx-fixed-size: the same checkerboard, shifted to sit inside the alpha scale",
       "category": "inline"
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 162,
+      "line": 183,
       "widget": "colorView",
       "literals": [
         "20px"
@@ -966,67 +833,7 @@
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 167,
-      "widget": "colorView",
-      "literals": [
-        "19px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-left: 19px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 177,
-      "widget": "colorView",
-      "literals": [
-        "90px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "width: 90px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 178,
-      "widget": "colorView",
-      "literals": [
-        "27px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-left: 27px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 182,
-      "widget": "colorView",
-      "literals": [
-        "86px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "width: 86px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 183,
-      "widget": "colorView",
-      "literals": [
-        "40px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "height: 40px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 187,
+      "line": 208,
       "widget": "colorView",
       "literals": [
         "6px"
@@ -1034,54 +841,6 @@
       "occurrences": 1,
       "marker": null,
       "text": "margin: 6px 0;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 192,
-      "widget": "colorView",
-      "literals": [
-        "90px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "width: 90px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 204,
-      "widget": "colorView",
-      "literals": [
-        "19px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-right: 19px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 211,
-      "widget": "colorView",
-      "literals": [
-        "41px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-right: 41px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 222,
-      "widget": "colorView",
-      "literals": [
-        "25px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-right: 25px;",
       "category": "inline"
     },
     {
@@ -1096,8 +855,8 @@
         "13px"
       ],
       "occurrences": 5,
-      "marker": null,
-      "text": "background: radial-gradient(transparent 5px, $handle-border-color 6px, $handle-color 7px, $handle-color 12px, $handle-border-color 13px);",
+      "marker": "dx-fixed-size",
+      "text": "background: radial-gradient(transparent 5px, $handle-border-color 6px, $handle-color 7px, $handle-color 12px, $handle-border-color 13px); // dx-fixed-size: the handle is drawn, not laid out — a transparent core to 5px, a 1px ring at 6px, fill to 12px and a 1px ring at 13px, inside the 28px diameter",
       "category": "inline"
     },
     {
@@ -1108,8 +867,8 @@
         "1px"
       ],
       "occurrences": 2,
-      "marker": null,
-      "text": "box-shadow: 0 1px 1px 0 $handle-border-color;",
+      "marker": "dx-shadow-geometry",
+      "text": "box-shadow: 0 1px 1px 0 $handle-border-color; // dx-shadow-geometry: lifts the round handle off the palette",
       "category": "geometry"
     },
     {
@@ -1120,8 +879,8 @@
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "border: 1px solid;",
+      "marker": "dx-line-width",
+      "text": "border: 1px solid; // dx-line-width: hairline outline of the handle",
       "category": "geometry"
     },
     {
@@ -1138,8 +897,8 @@
         "6px"
       ],
       "occurrences": 10,
-      "marker": null,
-      "text": "box-shadow: inset -5px 0 0 3px $handle-color, inset 5px 0 0 3px $handle-color, inset -6px 0 1px 4px $handle-border-color, inset 6px 0 1px 4px $handle-border-color;",
+      "marker": "dx-shadow-geometry",
+      "text": "box-shadow: inset -5px 0 0 3px $handle-color, inset 5px 0 0 3px $handle-color, inset -6px 0 1px 4px $handle-border-color, inset 6px 0 1px 4px $handle-border-color; // dx-shadow-geometry: the grip is drawn entirely with inset shadows — 5px bars inset from both sides, each edged by a 1px ring at 6px",
       "category": "geometry"
     },
     {
@@ -1150,8 +909,8 @@
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "border: 1px solid;",
+      "marker": "dx-line-width",
+      "text": "border: 1px solid; // dx-line-width: hairline outline of the handle",
       "category": "geometry"
     },
     {
@@ -1168,8 +927,8 @@
         "6px"
       ],
       "occurrences": 10,
-      "marker": null,
-      "text": "box-shadow: inset 0 -5px 0 3px $handle-color, inset 0 5px 0 3px $handle-color, inset 0 -6px 1px 4px $handle-border-color, inset 0 6px 1px 4px $handle-border-color;",
+      "marker": "dx-shadow-geometry",
+      "text": "box-shadow: inset 0 -5px 0 3px $handle-color, inset 0 5px 0 3px $handle-color, inset 0 -6px 1px 4px $handle-border-color, inset 0 6px 1px 4px $handle-border-color; // dx-shadow-geometry: the same grip turned 90deg for the horizontal scale",
       "category": "geometry"
     },
     {

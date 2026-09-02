@@ -11,22 +11,22 @@ and carries a marker saying why.
 
 | | occurrences |
 |---|---|
-| a raw grep of the layer | 768 |
-| …of those, inside comments (commented-out code, prose) | 13 |
-| **in code** | **755** |
-| — the theme can already set from outside | 460 |
-| — nailed into the shared layer | 295 |
+| a raw grep of the layer | 778 |
+| …of those, inside comments (commented-out code, prose) | 25 |
+| **in code** | **753** |
+| — the theme can already set from outside | 480 |
+| — nailed into the shared layer | 273 |
 
 ## What the theme can already set
 
-460 occurrences in 396 `!default` variables. fluent-next already passes 436; 0 are open knobs nobody turns.
+480 occurrences in 414 `!default` variables. fluent-next already passes 456; 0 are open knobs nobody turns.
 
 ## What is nailed into the layer
 
-| widget | inline | geometry | local-var | total |
+| widget | inline | local-var | geometry | total |
 |---|---|---|---|---|
-| gridBase | 50 | 7 | 18 | **75** |
-| colorView | 35 | 24 | 8 | **67** |
+| gridBase | 50 | 18 | 7 | **75** |
+| colorView | 3 |  |  | **3** |
 
 ## Places, by widget
 
@@ -149,81 +149,11 @@ and carries a marker saying why.
 - `scss/widgets/base/gridBase/layout/aiChat/_variables.scss:5` · local-var
   `$ai-chat-message-regenerate-button-border-radius: 4px;`
 
-### colorView — 67
+### colorView — 3
 
-- `scss/widgets/base/colorView/_index.scss:3` · local-var
-  `$color-view-container-width: 450px;`
-- `scss/widgets/base/colorView/_index.scss:4` · local-var
-  `$color-view-palette-width: 288px;`
-- `scss/widgets/base/colorView/_index.scss:5` · local-var
-  `$color-view-palette-height: 299px;`
-- `scss/widgets/base/colorView/_index.scss:6` · local-var
-  `$color-view-alpha-width: 292px;`
-- `scss/widgets/base/colorView/_index.scss:7` · local-var
-  `$color-view-hue-scale-width: 18px;`
-- `scss/widgets/base/colorView/_index.scss:10` · local-var
-  `$colorview-palette-handle-size: 28px;`
-- `scss/widgets/base/colorView/_index.scss:13` · local-var
-  `$colorview-handle-first-side-size: 36px;`
-- `scss/widgets/base/colorView/_index.scss:14` · local-var
-  `$colorview-handle-second-side-size: 17px;`
-- `scss/widgets/base/colorView/_index.scss:27` · inline
-  `margin: 10px 0 0 0;`
-- `scss/widgets/base/colorView/_index.scss:31` · inline
-  `margin-left: 43px;`
-- `scss/widgets/base/colorView/_index.scss:32` · inline
-  `width: 115px;`
-- `scss/widgets/base/colorView/_index.scss:36` · inline
-  `width: 69px;`
-- `scss/widgets/base/colorView/_index.scss:38` · inline
-  `margin: 1px 1px 10px 0;`
-- `scss/widgets/base/colorView/_index.scss:47` · inline
+- `scss/widgets/base/colorView/_index.scss:68` · inline
   `margin-right: 10px;`
-- `scss/widgets/base/colorView/_index.scss:60` · inline
-  `padding: 1px 0;`
-- `scss/widgets/base/colorView/_index.scss:67` · inline
-  `margin-top: 10px;`
-- `scss/widgets/base/colorView/_index.scss:96` · inline
-  `left: -7px;`
-- `scss/widgets/base/colorView/_index.scss:102` · inline
-  `top: -6px;`
-- `scss/widgets/base/colorView/_index.scss:120` · inline
-  `background-size: 16px 16px;`
-- `scss/widgets/base/colorView/_index.scss:121` · inline
-  `background-position: 0 0, 8px 8px;`
-- `scss/widgets/base/colorView/_index.scss:125` · inline
-  `background-position: 0 6px, 8px 14px;`
-- `scss/widgets/base/colorView/_index.scss:162` · inline
-  `height: 20px;`
-- `scss/widgets/base/colorView/_index.scss:167` · inline
-  `margin-left: 19px;`
-- `scss/widgets/base/colorView/_index.scss:177` · inline
-  `width: 90px;`
-- `scss/widgets/base/colorView/_index.scss:178` · inline
-  `margin-left: 27px;`
-- `scss/widgets/base/colorView/_index.scss:182` · inline
-  `width: 86px;`
 - `scss/widgets/base/colorView/_index.scss:183` · inline
-  `height: 40px;`
-- `scss/widgets/base/colorView/_index.scss:187` · inline
+  `height: 20px;`
+- `scss/widgets/base/colorView/_index.scss:208` · inline
   `margin: 6px 0;`
-- `scss/widgets/base/colorView/_index.scss:192` · inline
-  `width: 90px;`
-- `scss/widgets/base/colorView/_index.scss:204` · inline
-  `margin-right: 19px;`
-- `scss/widgets/base/colorView/_index.scss:211` · inline
-  `margin-right: 41px;`
-- `scss/widgets/base/colorView/_index.scss:222` · inline
-  `margin-right: 25px;`
-- `scss/widgets/base/colorView/_mixins.scss:3` · inline
-  `background: radial-gradient(transparent 5px, $handle-border-color 6px, $handle-color 7px, $handle-color 12px, $handle-border-color 13px);`
-- `scss/widgets/base/colorView/_mixins.scss:4` · geometry
-  `box-shadow: 0 1px 1px 0 $handle-border-color;`
-- `scss/widgets/base/colorView/_mixins.scss:8` · geometry
-  `border: 1px solid;`
-- `scss/widgets/base/colorView/_mixins.scss:10` · geometry
-  `box-shadow: inset -5px 0 0 3px $handle-color, inset 5px 0 0 3px $handle-color, inset -6px 0 1px 4px $handle-border-color, inset 6px 0 1px 4px $handle-border-color;`
-- `scss/widgets/base/colorView/_mixins.scss:14` · geometry
-  `border: 1px solid;`
-- `scss/widgets/base/colorView/_mixins.scss:16` · geometry
-  `box-shadow: inset 0 -5px 0 3px $handle-color, inset 0 5px 0 3px $handle-color, inset 0 -6px 1px 4px $handle-border-color, inset 0 6px 1px 4px $handle-border-color;`

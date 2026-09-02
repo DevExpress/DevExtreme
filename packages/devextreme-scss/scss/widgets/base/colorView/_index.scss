@@ -1,17 +1,38 @@
 @use "../mixins" as *;
 
-$color-view-container-width: 450px;
-$color-view-palette-width: 288px;
-$color-view-palette-height: 299px;
-$color-view-alpha-width: 292px;
-$color-view-hue-scale-width: 18px;
-$color-view-hue-scale-height: $color-view-palette-height;
+$color-view-container-width: 450px !default;
+$color-view-palette-width: 288px !default;
+$color-view-palette-height: 299px !default;
+$color-view-alpha-width: 292px !default;
+$color-view-hue-scale-width: 18px !default;
+$color-view-hue-scale-height: $color-view-palette-height !default;
+$color-view-hue-scale-wrapper-height: $color-view-hue-scale-height + 2 !default;
 
-$colorview-palette-handle-size: 28px;
+/*
+ * The handle is a drawing, not a box: its size is interlocked with the ring radii of the
+ * radial-gradient and the inset shadows in _mixins.scss. Changing one without redrawing the
+ * others breaks the handle, so these stay fixed rather than becoming knobs.
+ */
+$colorview-palette-handle-size: 28px; // dx-fixed-size: diameter of the round palette handle, drawn as rings at 6/7/12/13px
 $colorview-transparent-background-color: #ccc;
 
-$colorview-handle-first-side-size: 36px;
-$colorview-handle-second-side-size: 17px;
+$colorview-handle-first-side-size: 36px; // dx-fixed-size: long side of the scale handles, drawn by the inset shadows
+$colorview-handle-second-side-size: 17px; // dx-fixed-size: short side of the scale handles, drawn by the inset shadows
+
+// Design sizing values (parametrizable; fluent-next injects tokens)
+$color-view-label-hex-margin: 10px 0 0 0 !default;
+$color-view-alpha-label-margin-inline-start: 43px !default;
+$color-view-alpha-label-margin-inline-start-rtl: 41px !default;
+$color-view-alpha-label-width: 115px !default;
+$color-view-textbox-width: 69px !default;
+$color-view-textbox-margin: 1px 1px 10px 0 !default;
+$color-view-alpha-row-margin-block-start: 10px !default;
+$color-view-hue-scale-cell-margin-inline-start: 19px !default;
+$color-view-controls-width: 90px !default;
+$color-view-controls-margin-inline-start: 27px !default;
+$color-view-controls-margin-inline-start-rtl: 25px !default;
+$color-view-color-preview-width: 86px !default;
+$color-view-color-preview-height: 40px !default;
 
 .dx-colorview-container {
   width: $color-view-container-width;
@@ -24,18 +45,18 @@ $colorview-handle-second-side-size: 17px;
     white-space: normal;
 
     &.dx-colorview-label-hex {
-      margin: 10px 0 0 0;
+      margin: $color-view-label-hex-margin;
     }
 
     &.dx-colorview-alpha-channel-label {
-      margin-left: 43px;
-      width: 115px;
+      margin-left: $color-view-alpha-label-margin-inline-start;
+      width: $color-view-alpha-label-width;
     }
 
     .dx-texteditor {
-      width: 69px;
+      width: $color-view-textbox-width;
       float: right;
-      margin: 1px 1px 10px 0;
+      margin: $color-view-textbox-margin;
     }
   }
 
@@ -57,14 +78,14 @@ $colorview-handle-second-side-size: 17px;
 
 .dx-colorview-container-row {
   overflow: hidden;
-  padding: 1px 0;
+  padding: 1px 0; // dx-line-width: room for the 1px hairline ring the cells inside carry, which overflow: hidden would clip
 
   &:first-child {
     margin-top: 0;
   }
 
   &.dx-colorview-alpha-channel-row {
-    margin-top: 10px;
+    margin-top: $color-view-alpha-row-margin-block-start;
   }
 }
 
@@ -93,13 +114,13 @@ $colorview-handle-second-side-size: 17px;
   width: $colorview-handle-first-side-size;
   height: $colorview-handle-second-side-size;
   top: 0;
-  left: -7px;
+  left: -7px; // dx-px-nudge: centres the handle across the hue scale, counting its own border
 }
 
 .dx-colorview-alpha-channel-handle {
   width: $colorview-handle-second-side-size;
   height: $colorview-handle-first-side-size;
-  top: -6px;
+  top: -6px; // dx-px-nudge: centres the handle across the alpha scale, counting its own border
   left: 0;
 }
 
@@ -117,12 +138,12 @@ $colorview-handle-second-side-size: 17px;
 .dx-colorview-alpha-channel-wrapper,
 .dx-colorbox-input-container::after {
   background-image: linear-gradient(45deg, $colorview-transparent-background-color 25%, transparent 25%, transparent 74%, $colorview-transparent-background-color 75%, $colorview-transparent-background-color), linear-gradient(45deg, $colorview-transparent-background-color 25%, transparent 25%, transparent 74%, $colorview-transparent-background-color 75%, $colorview-transparent-background-color);
-  background-size: 16px 16px;
-  background-position: 0 0, 8px 8px;
+  background-size: 16px 16px; // dx-fixed-size: tile of the transparency checkerboard, drawn by two offset gradients
+  background-position: 0 0, 8px 8px; // dx-fixed-size: half the tile, which is what makes the two gradients read as a checkerboard
 }
 
 .dx-colorview-alpha-channel-wrapper {
-  background-position: 0 6px, 8px 14px;
+  background-position: 0 6px, 8px 14px; // dx-fixed-size: the same checkerboard, shifted to sit inside the alpha scale
 }
 
 .dx-colorbox-input-container {
@@ -164,23 +185,23 @@ $colorview-handle-second-side-size: 17px;
 }
 
 .dx-colorview-hue-scale-cell {
-  margin-left: 19px;
+  margin-left: $color-view-hue-scale-cell-margin-inline-start;
   position: relative;
 }
 
 .dx-colorview-hue-scale-wrapper {
-  height: $color-view-hue-scale-height + 2;
+  height: $color-view-hue-scale-wrapper-height;
 }
 
 .dx-colorview-controls-container {
   position: relative;
-  width: 90px;
-  margin-left: 27px;
+  width: $color-view-controls-width;
+  margin-left: $color-view-controls-margin-inline-start;
 }
 
 .dx-colorview-color-preview {
-  width: 86px;
-  height: 40px;
+  width: $color-view-color-preview-width;
+  height: $color-view-color-preview-height;
 }
 
 .dx-colorview-alpha-channel-cell {
@@ -189,7 +210,7 @@ $colorview-handle-second-side-size: 17px;
   width: $color-view-alpha-width;
 
   .dx-button {
-    width: 90px;
+    width: $color-view-controls-width;
   }
 }
 
@@ -201,14 +222,14 @@ $colorview-handle-second-side-size: 17px;
   }
 
   .dx-colorview-hue-scale-cell {
-    margin-right: 19px;
+    margin-right: $color-view-hue-scale-cell-margin-inline-start;
     margin-left: 0;
   }
 
   .dx-colorview-container {
     label {
       &.dx-colorview-alpha-channel-label {
-        margin-right: 41px;
+        margin-right: $color-view-alpha-label-margin-inline-start-rtl;
         margin-left: 0;
       }
 
@@ -219,7 +240,7 @@ $colorview-handle-second-side-size: 17px;
   }
 
   .dx-colorview-controls-container {
-    margin-right: 25px;
+    margin-right: $color-view-controls-margin-inline-start-rtl;
     margin-left: 0;
   }
 
